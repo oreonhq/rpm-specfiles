@@ -1,0 +1,62 @@
+From 62e1e7b396797c1d5b0411ba17190af68bcb988f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 25 Jul 2024 16:08:53 +0200
+Subject: [PATCH] Adapt tests to perl 5.40.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+After upgrading perl from 5.38.2 to 5.40.0, t/012_safe.t test failed:
+
+    not ok 8 - COMPARTMENT
+    #   Failed test 'COMPARTMENT'
+    #   at t/012_safe.t line 110.
+    # died: *** Eval::Context code ***
+    # #line 0 'Anonymous_called_at_t_012_safe.t:109'
+    # # PRE_CODE
+    #
+    # #line 0 'Anonymous_called_at_t_012_safe.t:109'
+    # # CODE
+    # eval "1 + 1" ;
+    # # POST_CODE
+    #
+    # #end of context 'Anonymous_called_at_t_012_safe.t:109'
+    #
+    # *** Error below ***
+    # 'eval hints' trapped by operation mask at 'Anonymous_called_at_t_012_safe.t:109' line 1.
+    #  at lib/Eval/Context.pm line 601.
+    #       Eval::Context::__ANON__() called at lib/Eval/Context.pm line 767
+    #       Eval::Context::eval() called at t/012_safe.t line 109
+    #       Test::Exception::lives_ok() called at t/012_safe.t line 110
+
+It seems that something has changes how perl compiles evals as "entereval" is
+not enough any longer:
+
+    $ perl -MSafe -e 'my $c=Safe->new; $c->permit(q{entereval}); $c->reval(q{eval}); print $@;'
+    'eval hints' trapped by operation mask at (eval 7) line 1.
+
+This patch permits the newly employed "hintseval" opcode.
+
+CPAN RT#153484
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/012_safe.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/t/012_safe.t b/t/012_safe.t
+index f529571..a5fdf13 100644
+--- a/t/012_safe.t
++++ b/t/012_safe.t
+@@ -104,7 +104,7 @@ lives_ok
+ lives_ok
+ 	{
+ 	my $compartment = new Safe('ABC') ;
+-	$compartment->permit('entereval') ;
++	$compartment->permit('entereval', 'hintseval') ;
+ 		
+ 	$context->eval(PACKAGE => 'ABC', CODE => 'eval "1 + 1" ;', SAFE => {COMPARTMENT => $compartment}) ;
+ 	} 'COMPARTMENT' ;
+-- 
+2.45.2
+

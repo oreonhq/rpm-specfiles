@@ -1,0 +1,328 @@
+commit d409ffa2a64cac3fc2abe2bb86ec3a80cb34d0a6
+Author: Jim Klimov <jimklimov+nut@gmail.com>
+Date:   Wed Aug 31 11:40:01 2022 +0200
+
+    configure.ac, src/nut.c: detect int types required by NUT API we build against
+
+    Either use the stricter int types required by NUT headers since v2.8.0 release,
+    or the relaxed (arch-dependent) types required by older NUT releases - depending
+    on which NUT API version the collectd is building against at the moment.
+
+    Inspired by discussion at https://github.com/networkupstools/nut/issues/1638
+
+diff --git a/configure b/configure
+index 50b90e69c403a882..1ba94a737e1428e0 100755
+--- a/configure
++++ b/configure
+@@ -107590,6 +107590,159 @@ fi
+   CPPFLAGS="$SAVE_CPPFLAGS"
+ fi
+ 
++if test "x$with_libupsclient" = "xyes"; then
++                  ac_ext=c
++ac_cpp='$CPP $CPPFLAGS'
++ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_c_compiler_gnu
++
++  SAVE_CPPFLAGS="$CPPFLAGS"
++  SAVE_LDFLAGS="$LDFLAGS"
++  SAVE_CFLAGS="$CFLAGS"
++  CPPFLAGS="$CPPFLAGS $with_libupsclient_cflags"
++  LDFLAGS="$LDFLAGS $with_libupsclient_libs"
++  CFLAGS="$CFLAGS $with_libupsclient_cflags"
++  if test "x$GCC" = "xyes"; then
++    CFLAGS="$CFLAGS -Wall -Werror"
++  fi
++
++        { $as_echo "$as_me:${as_lineno-$LINENO}: checking int type of port argument for NUT upscli_splitname" >&5
++$as_echo_n "checking int type of port argument for NUT upscli_splitname... " >&6; }
++if ${collectd_cv_func_upscli_splitname_args+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++
++     collectd_cv_func_upscli_splitname_args="unknown"
++     for port_arg in 'uint16_t' 'int' ; do
++        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++
++
++#include <upsclient.h>
++/* int upscli_splitname(const char *buf, char **upsname, char **hostname, <port_arg> *port); */
++
++int
++main ()
++{
++
++const char *origname = "ups@localhost:3493";
++$port_arg port=0;
++char *hostname;
++char *upsname;
++int res = upscli_splitname(origname, &upsname, &hostname, &port);
++return(res);
++
++  ;
++  return 0;
++}
++
++_ACEOF
++if ac_fn_c_try_compile "$LINENO"; then :
++
++            collectd_cv_func_upscli_splitname_args="$port_arg"
++            break
++
++fi
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++     done
++
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $collectd_cv_func_upscli_splitname_args" >&5
++$as_echo "$collectd_cv_func_upscli_splitname_args" >&6; }
++
++  if test x"$collectd_cv_func_upscli_splitname_args" = xunknown; then :
++  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Can not find proper port type for upscli_splitname()" >&5
++$as_echo "$as_me: WARNING: Can not find proper port type for upscli_splitname()" >&2;}
++     with_libupsclient="no (required data types for NUT API were not detected)"
++else
++
++cat >>confdefs.h <<_ACEOF
++#define NUT_PORT_TYPE $collectd_cv_func_upscli_splitname_args
++_ACEOF
++
++
++fi
++
++
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking int type of length/numbering arguments for NUT upscli_list_next" >&5
++$as_echo_n "checking int type of length/numbering arguments for NUT upscli_list_next... " >&6; }
++if ${collectd_cv_func_upscli_list_next_args+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++
++     collectd_cv_func_upscli_list_next_args="unknown"
++     for size_arg in 'size_t' 'unsigned int' 'int' ; do
++        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++
++
++#include <upsclient.h>
++/* int upscli_list_next(UPSCONN_t *ups, <size_arg> numq, const char **query, <size_arg> *numa, char ***answer); */
++
++#if HAVE_UPSCONN_T
++typedef UPSCONN_t collectd_upsconn_t;
++#elif HAVE_UPSCONN
++typedef UPSCONN collectd_upsconn_t;
++#else
++#error "Unable to determine the UPS connection type."
++#endif
++
++int
++main ()
++{
++
++$size_arg query_num=0;
++$size_arg answer_num=0;
++const char * query;
++char** answer;
++collectd_upsconn_t ups;
++int res = upscli_list_next(&ups, query_num, &query, &answer_num, &answer);
++return(res);
++
++  ;
++  return 0;
++}
++
++_ACEOF
++if ac_fn_c_try_compile "$LINENO"; then :
++
++            collectd_cv_func_upscli_list_next_args="$size_arg"
++            break
++
++fi
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++     done
++
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $collectd_cv_func_upscli_list_next_args" >&5
++$as_echo "$collectd_cv_func_upscli_list_next_args" >&6; }
++
++  if test x"$collectd_cv_func_upscli_list_next_args" = xunknown; then :
++  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Can not find proper type for array sizes and string lengths used by upscli_list_next()" >&5
++$as_echo "$as_me: WARNING: Can not find proper type for array sizes and string lengths used by upscli_list_next()" >&2;}
++     with_libupsclient="no (required data types for NUT API were not detected)"
++else
++
++cat >>confdefs.h <<_ACEOF
++#define NUT_SIZE_TYPE $collectd_cv_func_upscli_list_next_args
++_ACEOF
++
++
++fi
++
++
++  CPPFLAGS="$SAVE_CPPFLAGS"
++  LDFLAGS="$SAVE_LDFLAGS"
++  CFLAGS="$SAVE_CFLAGS"
++  ac_ext=c
++ac_cpp='$CPP $CPPFLAGS'
++ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_c_compiler_gnu
++
++fi
++
+ if test "x$with_libupsclient" = "xyes"; then
+   BUILD_WITH_LIBUPSCLIENT_CFLAGS="$with_libupsclient_cflags"
+   BUILD_WITH_LIBUPSCLIENT_LIBS="$with_libupsclient_libs"
+diff --git a/configure.ac b/configure.ac
+index 183e74a0c6171381..9fec20039b3681c7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -5790,6 +5790,106 @@ if test "x$with_libupsclient" = "xyes"; then
+   CPPFLAGS="$SAVE_CPPFLAGS"
+ fi
+ 
++if test "x$with_libupsclient" = "xyes"; then
++  dnl The m4 script logic below is modelled after NUT_FUNC_GETNAMEINFO_ARGTYPES
++  dnl further originating in curl autoconf scripts or beyond. See there for an
++  dnl example of general-case logic to handle matching of numerous possible
++  dnl data types for each argument in supported API variants.
++  dnl Note: techically compiler complains here not about int types themselves,
++  dnl but about pointers to such data. We know "out of band" that e.g. NUT
++  dnl change to "size_t" happened at once for all arguments in the API, so
++  dnl simplify the handling here and now with that assumption.
++  AC_LANG_PUSH([C])
++  SAVE_CPPFLAGS="$CPPFLAGS"
++  SAVE_LDFLAGS="$LDFLAGS"
++  SAVE_CFLAGS="$CFLAGS"
++  CPPFLAGS="$CPPFLAGS $with_libupsclient_cflags"
++  LDFLAGS="$LDFLAGS $with_libupsclient_libs"
++  CFLAGS="$CFLAGS $with_libupsclient_cflags"
++  if test "x$GCC" = "xyes"; then
++    CFLAGS="$CFLAGS -Wall -Werror"
++  fi
++
++  dnl upscli_splitname() *is* there forever (2007 or older)
++  dnl but int types e.g. "port" changed in NUT 2.8.0
++  dnl Also this is the UPSCONN_t::port field type:
++  AC_CACHE_CHECK([int type of port argument for NUT upscli_splitname],
++    [collectd_cv_func_upscli_splitname_args], [
++     collectd_cv_func_upscli_splitname_args="unknown"
++     for port_arg in 'uint16_t' 'int' ; do
++        AC_COMPILE_IFELSE([
++            AC_LANG_PROGRAM([
++#include <upsclient.h>
++/* int upscli_splitname(const char *buf, char **upsname, char **hostname, <port_arg> *port); */
++            ],[
++const char *origname = "ups@localhost:3493";
++$port_arg port=0;
++char *hostname;
++char *upsname;
++int res = upscli_splitname(origname, &upsname, &hostname, &port);
++return(res);
++            ])
++        ],[
++            collectd_cv_func_upscli_splitname_args="$port_arg"
++            break
++        ])
++     done
++    ])
++
++  AS_IF([test x"$collectd_cv_func_upscli_splitname_args" = xunknown],
++    [AC_MSG_WARN([Can not find proper port type for upscli_splitname()])
++     with_libupsclient="no (required data types for NUT API were not detected)"],
++    [AC_DEFINE_UNQUOTED(NUT_PORT_TYPE, $collectd_cv_func_upscli_splitname_args,
++        [Define to the integer type for TCP/IP ports used by NUT API we build against])
++    ])
++
++
++  AC_CACHE_CHECK([int type of length/numbering arguments for NUT upscli_list_next],
++    [collectd_cv_func_upscli_list_next_args], [
++     collectd_cv_func_upscli_list_next_args="unknown"
++     for size_arg in 'size_t' 'unsigned int' 'int' ; do
++        AC_COMPILE_IFELSE([
++            AC_LANG_PROGRAM([
++#include <upsclient.h>
++/* int upscli_list_next(UPSCONN_t *ups, <size_arg> numq, const char **query, <size_arg> *numa, char ***answer); */
++
++#if HAVE_UPSCONN_T
++typedef UPSCONN_t collectd_upsconn_t;
++#elif HAVE_UPSCONN
++typedef UPSCONN collectd_upsconn_t;
++#else
++#error "Unable to determine the UPS connection type."
++#endif
++            ],[
++$size_arg query_num=0;
++$size_arg answer_num=0;
++const char * query;
++char** answer;
++collectd_upsconn_t ups;
++int res = upscli_list_next(&ups, query_num, &query, &answer_num, &answer);
++return(res);
++            ])
++        ],[
++            collectd_cv_func_upscli_list_next_args="$size_arg"
++            break
++        ])
++     done
++    ])
++
++  AS_IF([test x"$collectd_cv_func_upscli_list_next_args" = xunknown],
++    [AC_MSG_WARN([Can not find proper type for array sizes and string lengths used by upscli_list_next()])
++     with_libupsclient="no (required data types for NUT API were not detected)"],
++    [AC_DEFINE_UNQUOTED(NUT_SIZE_TYPE, $collectd_cv_func_upscli_list_next_args,
++        [Define to the integer type for array sizes and string lengths used by NUT API we build against])
++    ])
++
++
++  CPPFLAGS="$SAVE_CPPFLAGS"
++  LDFLAGS="$SAVE_LDFLAGS"
++  CFLAGS="$SAVE_CFLAGS"
++  AC_LANG_POP([C])
++fi
++
+ if test "x$with_libupsclient" = "xyes"; then
+   BUILD_WITH_LIBUPSCLIENT_CFLAGS="$with_libupsclient_cflags"
+   BUILD_WITH_LIBUPSCLIENT_LIBS="$with_libupsclient_libs"
+diff --git a/src/config.h.in b/src/config.h.in
+index 009bbcf2d90ada1d..ef4bb8c101c6411d 100644
+--- a/src/config.h.in
++++ b/src/config.h.in
+@@ -1566,6 +1566,14 @@
+ /* Define if NAN can be defined as (0.0 / 0.0) */
+ #undef NAN_ZERO_ZERO
+ 
++/* Define to the integer type for TCP/IP ports used by NUT API we build
++   against */
++#undef NUT_PORT_TYPE
++
++/* Define to the integer type for array sizes and string lengths used by NUT
++   API we build against */
++#undef NUT_SIZE_TYPE
++
+ /* Name of package */
+ #undef PACKAGE
+ 
+diff --git a/src/nut.c b/src/nut.c
+index 579ecb7ccc780c55..a06f201aa737801d 100644
+--- a/src/nut.c
++++ b/src/nut.c
+@@ -46,7 +46,7 @@ struct nut_ups_s {
+   collectd_upsconn_t *conn;
+   char *upsname;
+   char *hostname;
+-  int port;
++  NUT_PORT_TYPE port;
+   nut_ups_t *next;
+ };
+ 
+@@ -250,7 +250,7 @@ static int nut_read(user_data_t *user_data) {
+   const char *query[3] = {"VAR", ups->upsname, NULL};
+   unsigned int query_num = 2;
+   char **answer;
+-  unsigned int answer_num;
++  NUT_SIZE_TYPE answer_num;
+   int status;
+ 
+   /* (Re-)Connect if we have no connection */

@@ -1,0 +1,13 @@
+diff --git a/contrib/requirements/requirements.txt b/contrib/requirements/requirements.txt
+index 49e720f..aafb7ad 100644
+--- a/contrib/requirements/requirements.txt
++++ b/contrib/requirements/requirements.txt
+@@ -6,7 +6,7 @@ protobuf
+ jsonrpclib-pelix
+ PySocks>=1.6.6
+ qdarkstyle>=2.8
+-python-dateutil<2.9
++python-dateutil
+ stem>=1.8.0
+ certifi
+ pathvalidate

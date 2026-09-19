@@ -1,0 +1,11 @@
+--- values.h~	2009-10-10 13:00:18.000000000 -0500
++++ values.h	2016-01-03 13:10:40.869634570 -0600
+@@ -4,7 +4,7 @@
+ /* Can be licensed under the terms of GPL v3 or above */
+ 
+ #define WIDTH 80
+-#define HEIGHT 24
++#define HEIGHT 23
+ #define DESTROY 7
+ #define MINSIZE 0
+ #define MAXSIZE 20

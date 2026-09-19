@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 5b46b0841757ee498fd3c55ad3d01d5e3d3f40d0c8039b3b2e16a9e459dd9b4b
 
 Name:           kweathercore
-Version:        26.04.2
+Version:        26.04.3
 Release:        1%{?dist}
 License:        LGPL-2.0-or-later
 Summary:        Library to facilitate retrieval of weather information
@@ -33,13 +33,6 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %{summary}.
 
 
-%package        doc
-Summary:        Developer Documentation files for %{name}
-Obsoletes:      kweathercore-docs < 0.8.0-4
-BuildArch:      noarch
-
-%description    doc
-Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
@@ -69,12 +62,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_libdir}/cmake/KWeatherCore/
 %{_kf6_libdir}/libKWeatherCore.so
 %{_kf6_archdatadir}/mkspecs/modules/qt_KWeatherCore.pri
-%{_qt6_docdir}/KWeatherCore.tags
-
-%files doc
-%{_qt6_docdir}/KWeatherCore.qch
-
-
 %changelog
 %autochangelog
 

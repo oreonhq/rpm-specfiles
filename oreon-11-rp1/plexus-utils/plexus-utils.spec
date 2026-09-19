@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           plexus-utils
-Version:        3.5.1
+Version:        3.6.2
 Release:        %autorelease
 Summary:        Plexus Common Utilities
 # ASL 1.1: several files in src/main/java/org/codehaus/plexus/util/
@@ -28,7 +28,7 @@ BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.5.1-21
+Obsoletes:      %{name}-javadoc < 3.6.2-21
 
 %description
 The Plexus project seeks to create end-to-end developer tools for

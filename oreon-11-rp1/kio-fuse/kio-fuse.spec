@@ -16,7 +16,7 @@
 
 Name:           kio-fuse
 Version:        5.1.1
-Release:        5%{?dist}
+Release:        1%{?dist}
 Summary:        KIO FUSE
 
 License:        GPL-3.0-or-later
@@ -93,6 +93,9 @@ dbus-launch --exit-with-session \
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 5.1.1-1
+- Latest upstream release
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.1-5
 - Rebuild
 

@@ -1,0 +1,97 @@
+From ceb7565baa9ea94a9ba33880354a86de10ea46f0 Mon Sep 17 00:00:00 2001
+From: Benson Muite <bkmgit@noreply.githubusers.com>
+Date: Thu, 16 Jan 2025 21:34:36 +0300
+Subject: [PATCH] Replace gethostbyname by getaddrinfo
+
+---
+ src/blogc/sysinfo.c         | 18 ++++++++++++++----
+ tests/blogc/CMakeLists.txt  |  2 +-
+ tests/blogc/check_sysinfo.c | 27 ++++++++++++++++++---------
+ 3 files changed, 33 insertions(+), 14 deletions(-)
+
+diff --git a/src/blogc/sysinfo.c b/src/blogc/sysinfo.c
+index 3eee530..232c31d 100644
+--- a/src/blogc/sysinfo.c
++++ b/src/blogc/sysinfo.c
+@@ -32,15 +32,25 @@ blogc_sysinfo_get_hostname(void)
+ #ifndef HAVE_SYSINFO_HOSTNAME
+     return NULL;
+ #else
+-    char buf[1024];  // could be 256 according to gethostname(2), but *shrug*.
++    char buf[1024];  // at most 256 according to gettaddrinfo/posix, but *shrug*.
+     buf[1023] = '\0';
+     if (-1 == gethostname(buf, 1024))
+         return NULL;
+ 
+ #ifdef HAVE_NETDB_H
+-    struct hostent *h = gethostbyname(buf);
+-    if (h != NULL && h->h_name != NULL)
+-        return bc_strdup(h->h_name);
++    int status;
++    struct addrinfo hints = { 0 };
++    struct addrinfo *h = NULL;
++
++    hints.ai_family = AF_UNSPEC;
++    hints.ai_socktype = SOCK_STREAM;
++    hints.ai_flags = AI_CANONNAME;
++    status = getaddrinfo(buf, NULL, &hints, &h);
++    if (status == 0){
++      if (h != NULL &&  h->ai_canonname != NULL)
++	strcpy(buf, h->ai_canonname);
++      freeaddrinfo(h);
++    }
+ #endif
+ 
+     // FIXME: return FQDN instead of local host name
+diff --git a/tests/blogc/CMakeLists.txt b/tests/blogc/CMakeLists.txt
+index 0156d7a..b46f215 100644
+--- a/tests/blogc/CMakeLists.txt
++++ b/tests/blogc/CMakeLists.txt
+@@ -22,7 +22,7 @@ blogc_executable_test(blogc sysinfo
+     WRAP
+         bc_file_get_contents
+         getenv
+-        gethostbyname
++        getaddrinfo
+         gethostname
+         gmtime
+         time
+diff --git a/tests/blogc/check_sysinfo.c b/tests/blogc/check_sysinfo.c
+index 134c4a9..5bca3cc 100644
+--- a/tests/blogc/check_sysinfo.c
++++ b/tests/blogc/check_sysinfo.c
+@@ -19,16 +19,25 @@
+ #ifdef HAVE_NETDB_H
+ #include <netdb.h>
+ 
+-static struct hostent h = {
+-    .h_name = "bola.example.com",
+-};
+-
+-struct hostent*
+-__wrap_gethostbyname(const char *name)
++int
++__wrap_getaddrinfo(const char *name,
++		   const char *service,
++                   const struct addrinfo *hints,
++                   struct addrinfo **res)
+ {
+-    if (0 == strcmp(name, "bola"))
+-        return &h;
+-    return NULL;
++  if (0 == strcmp(name, "bola")) {
++    struct addrinfo *out;
++    *res = (struct addrinfo *)malloc(sizeof(struct addrinfo*));
++    out = (struct addrinfo *)malloc(sizeof(struct addrinfo));
++    out->ai_flags = AI_CANONNAME;
++    out->ai_family = AF_INET;
++    out->ai_socktype = SOCK_STREAM;
++    out->ai_canonname = malloc(255 + 1);
++    strcpy(out->ai_canonname, "bola.example.com");
++    *res = out;
++  }
++  
++  return 0;
+ }
+ #endif
+ 

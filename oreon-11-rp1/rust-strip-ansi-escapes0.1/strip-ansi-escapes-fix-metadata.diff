@@ -1,0 +1,8 @@
+--- strip-ansi-escapes-0.1.1/Cargo.toml	1970-01-01T00:00:00+00:00
++++ strip-ansi-escapes-0.1.1/Cargo.toml	2025-10-25T20:59:40.904682+00:00
+@@ -22,4 +22,4 @@
+ license = "Apache-2.0/MIT"
+ repository = "https://github.com/luser/strip-ansi-escapes"
+ [dependencies.vte]
+-version = "0.10"
++version = "0.15"

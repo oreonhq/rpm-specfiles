@@ -1,0 +1,28 @@
+From 16a732ce084018c6acaeaae3096d7188c321096c Mon Sep 17 00:00:00 2001
+From: Michel Lind <salimma@fedoraproject.org>
+Date: Fri, 1 Aug 2025 10:15:55 -0700
+Subject: [PATCH] metadata.js: mark GNOME 49 as supported
+
+Fixes #172
+
+Signed-off-by: Michel Lind <salimma@fedoraproject.org>
+---
+ argos@pew.worldwidemann.com/metadata.json | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/argos@pew.worldwidemann.com/metadata.json b/argos@pew.worldwidemann.com/metadata.json
+index eafc3f1..8ff2fa1 100644
+--- a/argos@pew.worldwidemann.com/metadata.json
++++ b/argos@pew.worldwidemann.com/metadata.json
+@@ -7,6 +7,7 @@
+     "45",
+     "46",
+     "47",
+-    "48"
++    "48",
++    "49"
+   ]
+ }
+-- 
+2.49.0
+

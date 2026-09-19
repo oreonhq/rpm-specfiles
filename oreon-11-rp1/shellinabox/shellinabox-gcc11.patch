@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 05ab1bb..56e3b6a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -65,7 +65,7 @@ AC_TRY_LINK([#ifndef _XOPEN_SOURCE
+ dnl Apparently, some systems define sigwait() but fail to implement it
+ AC_TRY_LINK([#include <pthread.h>
+              #include <signal.h>],
+-            [sigset_t s; int n; sigwait(&s, &n);],
++            [sigset_t s; int n; sigemptyset (&s); sigwait(&s, &n);],
+             [AC_DEFINE(HAVE_SIGWAIT, 1,
+                        Define to 1 if you have a working sigwait)])
+ 

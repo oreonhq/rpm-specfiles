@@ -1,0 +1,38 @@
+--- a/packages/nlp/CMakeLists.txt
++++ b/packages/nlp/CMakeLists.txt
+@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.5)
+ project(swipl-nlp)
+ 
+ include("../cmake/PrologPackage.cmake")
+-add_subdirectory(libstemmer_c)
++AC_CHECK_HEADERS(libstemmer.h)
++if(HAVE_LIBSTEMMER_H)
+ 
+ AC_CHECK_FUNCS(wcsdup)
+ 
+@@ -27,7 +28,7 @@ swipl_plugin(
+ swipl_plugin(
+     snowball
+     C_SOURCES snowball.c
+-    THREADED C_LIBS libstemmer
++    THREADED C_LIBS stemmer
+     PL_LIBS snowball.pl)
+ 
+ add_custom_target(nlp)
+@@ -37,4 +38,5 @@ pkg_doc(nlp
+ 	SECTION
+ 	    snowball.pl isub.pl)
+ 
++endif(HAVE_LIBSTEMMER_H)
+ test_libs(nlp)
+--- a/packages/nlp/snowball.c
++++ b/packages/nlp/snowball.c
+@@ -35,7 +35,7 @@
+ #include <config.h>
+ #include <SWI-Prolog.h>
+ #include <SWI-Stream.h>
+-#include "libstemmer_c/include/libstemmer.h"
++#include <libstemmer.h>
+ #include <pthread.h>
+ #include <string.h>
+ #include <assert.h>

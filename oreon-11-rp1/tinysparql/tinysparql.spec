@@ -13,8 +13,8 @@
 %endif
 
 Name:           tinysparql
-Version:        3.10.1
-Release:        3%{?dist}
+Version:        3.12.0
+Release:        1%{?dist}
 Summary:        Desktop-neutral metadata database and search tool
 
 License:        GPL-2.0-or-later

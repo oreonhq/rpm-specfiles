@@ -1,0 +1,17 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Thu, 13 Sep 2018 10:50:47 +0300
+Subject: [PATCH] Load cuttlefish schemas from noarch dir as well
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/riak_core_cli_registry.erl b/src/riak_core_cli_registry.erl
+index d7bcfcb..cf36fb8 100644
+--- a/src/riak_core_cli_registry.erl
++++ b/src/riak_core_cli_registry.erl
+@@ -50,5 +50,5 @@ load_schema() ->
+         {ok, Directories} ->
+             ok = clique_config:load_schema(Directories);
+         _ ->
+-            ok = clique_config:load_schema([code:lib_dir() ++ "/*/priv/"])
++            ok = clique_config:load_schema([code:lib_dir() ++ "/*/priv/", "/usr/share/erlang/lib" ++ "/*/priv/"])
+     end.

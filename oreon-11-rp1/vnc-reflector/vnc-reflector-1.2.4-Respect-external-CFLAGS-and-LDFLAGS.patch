@@ -1,0 +1,48 @@
+From 74c6acdb8c748d6e8efe6995cb558cd2b80a09da Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 7 Mar 2018 16:21:44 +0100
+Subject: [PATCH] Respect external CFLAGS and LDFLAGS
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This allows calling make with CFLAGS= or LDFLAGS= arguments.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 0f3397b..b0f4452 100644
+--- a/Makefile
++++ b/Makefile
+@@ -17,19 +17,20 @@
+ IFLAGS =	-I.
+ 
+ # Production
+-CFLAGS =	-O2 $(IFLAGS)
++CFLAGS = -O2
++override CFLAGS +=	 $(IFLAGS)
+ # Debug (strict)
+-#CFLAGS =	-g -pedantic -Wall $(IFLAGS)
++#CFLAGS +=	-g -pedantic -Wall $(IFLAGS)
+ # Debug (profiling)
+-#CFLAGS =	-g -pg $(IFLAGS)
++#CFLAGS +=	-g -pg $(IFLAGS)
+ # Debug (normal)
+-#CFLAGS =	-g $(IFLAGS)
++#CFLAGS +=	-g $(IFLAGS)
+ 
+ # Use poll(2) syscall in async I/O instead of select(2)
+ CONFFLAGS =	-DUSE_POLL
+ 
+ # Link with zlib and JPEG libraries
+-LDFLAGS =	-L/usr/local/lib -lz -ljpeg
++override LDFLAGS += -L/usr/local/lib -lz -ljpeg
+ 
+ PROG = 	vncreflector
+ 
+-- 
+2.13.6
+

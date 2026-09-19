@@ -1,0 +1,33 @@
+.\" Written by Domenico Andreoli for Debian GNU/Linux.
+.\" Do whatever you want with this file.
+.\" NO warranty is provided.
+.TH libnet10-config 1 "18 January 2002" "Libnet 1.0.2a" "libnet10-config manual"
+.SH NAME
+libnet10-config \- Get information about a libnet installation
+.SH SYNOPSIS
+.B libnet10-config [options]
+.SH DESCRIPTION
+.B libnet10-config
+displays information about a previous libnet installation.
+.SH OPTIONS
+.IP "--cflags"
+Set of compiler options (CFLAGS) to use when compiling files that use
+libnet.
+.IP "--libs"
+Shows the complete set of libs and other linker options you will need in order
+to link your application with libnet.
+.IP "--defines"
+Set of compiler defines used to compile libnet.
+.SH "EXAMPLES"
+What linker options do I need when I link with libnet?
+
+  libnet10-config --libs
+
+What compiler options do I need when I compile using libnet functions?
+
+  libnet10-config --cflags
+.SH SEE ALSO
+.BR libnet10 (3)
+.SH AUTHOR
+This manual page was written by Domenico Andreoli <cavok@debian.org>
+for the Debian GNU/Linux system (but may be used by others).

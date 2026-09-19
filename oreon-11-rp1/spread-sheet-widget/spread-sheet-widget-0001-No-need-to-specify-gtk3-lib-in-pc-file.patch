@@ -1,0 +1,26 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 13 Feb 2019 14:03:15 +0300
+Subject: [PATCH] No need to specify gtk3 lib in pc-file
+
+No need to specify gtk3 lib in pc-file - pkg-config will pick it up
+automatically (based on 'requires' section).
+
+See the output of pkg-config with and w/o -lgtk-3 added.
+
+$ pkg-config spread-sheet-widget.pc --libs
+-L/usr/local/lib -lspread-sheet-widget -lgtk-3 -lgdk-3 -lpangocairo-1.0 -lpango-1.0 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0
+$
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/spread-sheet-widget.pc.in b/spread-sheet-widget.pc.in
+index 53ff30d..2b68fce 100644
+--- a/spread-sheet-widget.pc.in
++++ b/spread-sheet-widget.pc.in
+@@ -7,5 +7,5 @@ Name: spread-sheet-widget
+ Description: A spreadsheet widget for Gtk+
+ Version: @VERSION@
+ Requires: @glib_dependency@ @gtk_dependency@
+-Libs: -L${libdir} -lspread-sheet-widget -lgtk-3
++Libs: -L${libdir} -lspread-sheet-widget
+ Cflags: -I${includedir}

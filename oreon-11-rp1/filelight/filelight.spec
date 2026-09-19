@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b3fb2947253566bda42a15c111ccf1df0cff7003e90c29acfa05f50ac9bc03f6
 
 %global stable_kf6 stable
 
@@ -9,7 +9,7 @@ ExcludeArch: %{ix86}
 Name:    filelight
 Summary: Graphical disk usage statistics
 Epoch:   1
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # KDE e.V. may determine that future GPL versions are accepted

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Mars" basedir="." default="all">
+	<target name="all">
+		<mkdir dir="build"/>
+		<javac destdir="build" includeantruntime="false" debug="true" encoding="windows-1252">
+			<src path="."/>
+		</javac>
+		<copy todir="build">
+			<fileset dir="." includes="*.properties,*.txt,docs/**,help/**,images/**"/>
+		</copy>
+		<jar destfile="Mars.jar">
+			<fileset dir="build"/>
+		</jar>
+	</target>
+</project>

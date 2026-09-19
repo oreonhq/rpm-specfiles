@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Andika Compact</target>
+    <like>
+      <family>Andika New Basic</family>
+      <family>Andika</family>
+      <family>Andika AmArea</family>
+      <family>Andika Mali</family>
+      <family>Andika Tat</family>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>
+

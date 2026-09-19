@@ -1,4 +1,4 @@
-%global source0_hash 2cb0196ee3bb1b60be9bad14b4d04dfaf53b3d0017cd459083035c715910551b
+%global source0_hash 484002b1da719c72e6b6859422cf0d4351fbb61665aab04c3c2451edc320946b
 
 # Disable X11 for RHEL
 %bcond x11 %[%{undefined rhel}]
@@ -6,10 +6,10 @@
 %global		framework kidletime
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.30.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 integration module for idle time detection
 License:	CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
@@ -93,6 +93,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

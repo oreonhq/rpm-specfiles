@@ -1,0 +1,7 @@
+# s390x: Folly is known not to work on big-endian CPUs
+# https://bugzilla.redhat.com/show_bug.cgi?id=1892151
+
+# 32-bit arches: upstream does not test on these, causing repeated failures, and
+# with F37 dropping armv7hl, and %{ix86} being optional, drop these
+
+%folly_arches x86_64 aarch64 ppc64le

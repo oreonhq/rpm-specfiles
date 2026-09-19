@@ -1,0 +1,33 @@
+--- color-backtrace-0.7.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ color-backtrace-0.7.2/Cargo.toml	2025-10-29T11:09:30.935787+00:00
+@@ -40,7 +40,6 @@
+     "use-backtrace-crate",
+ ]
+ use-backtrace-crate = ["dep:backtrace"]
+-use-btparse-crate = ["dep:btparse"]
+ 
+ [lib]
+ name = "color_backtrace"
+@@ -60,11 +59,6 @@
+ required-features = ["use-backtrace-crate"]
+ 
+ [[example]]
+-name = "fmt_to_string_std"
+-path = "examples/fmt_to_string_std.rs"
+-required-features = ["use-btparse-crate"]
+-
+-[[example]]
+ name = "force_color"
+ path = "examples/force_color.rs"
+ 
+@@ -80,10 +74,6 @@
+ version = "0.3.57"
+ optional = true
+ 
+-[dependencies.btparse]
+-version = "0.2.0"
+-optional = true
+-
+ [dependencies.regex]
+ version = "1.4.6"
+ optional = true

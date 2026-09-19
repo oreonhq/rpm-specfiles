@@ -1,0 +1,31 @@
+Invoke decode_error separately with the correct argument types for
+each variant.  This avoids an int-conversion error.
+
+diff --git a/schedtool.c b/schedtool.c
+index d55f9ce7efe27db2..b61f5108c8d867c0 100644
+--- a/schedtool.c
++++ b/schedtool.c
+@@ -422,19 +422,14 @@ int set_process(pid_t pid, int policy, int prio)
+ 	struct sched_param p;
+ 	int ret;
+ 
+-	char *msg1="could not set PID %d to %s";
+-	char *msg2="could not set PID %d to raw policy #%d";
+-
+ 	p.sched_priority=prio;
+ 
+ 	/* anything other than 0 indicates error */
+ 	if((ret=sched_setscheduler(pid, policy, &p))) {
+-
+-                /* la la pointer mismatch .. lala */
+-		decode_error((CHECK_RANGE_POLICY(policy) ? msg1 : msg2),
+-			     pid,
+-			     (CHECK_RANGE_POLICY(policy) ? TAB[policy] : policy)
+-			    );
++		if (CHECK_RANGE_POLICY(policy))
++			decode_error("could not set PID %d to %s", pid, TAB[policy]);
++		else
++			decode_error("could not set PID %d to raw policy #%d", pid, policy);
+ 		return(ret);
+ 	}
+ 	return(0);

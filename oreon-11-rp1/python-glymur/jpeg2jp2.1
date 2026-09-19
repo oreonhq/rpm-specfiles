@@ -1,0 +1,129 @@
+.TH JPEG2JP2 "1" "April 2025" "" "User Commands"
+.SH NAME
+.B jpeg2jp2
+\(en convert JPEG to JPEG 2000
+.SH SYNOPSIS
+.B jpeg2jp2
+.RB [ \-\-capture\-resolution\ \fIVRESC\fR\ \fIHRESC ]
+.RB [ \-\-display\-resolution\ \fIVRESD\fR\ \fIHRESD ]
+.RB [ \-\-cratio \  \fICRATIO \ [ \fICRATIO \ ...]]
+.RB [ \-\-psnr \  \fIPSNR \ [ \fIPSNR \ ...]]
+.RB [ \-\-codeblocksize\ \fIcblkh\fR\ \fIcblkw ]
+.RB [ \-\-numres\ \fINUMRES ]
+.RB [ \-\-prog\  { lrcp , rlcp , rpcl , prcl , cprl }]
+.RB [ \-\-irreversible ]
+.RB [ \-\-eph ]
+.RB [ \-\-plt ]
+.RB [ \-\-sop ]
+.RB [ \-\-num\-threads\ \fINUM_THREADS ]
+.RB [ \-\-tilesize\ \fINROWS\fR\ \fINCOLS ]
+.RB [ \-\-include\-icc\-profile ]
+.RB [ \-\-help ]
+.RB [ \-\-verbosity\  { critical , error , warning , info , debug }]
+.I jpeg
+.I jp2k
+.SH OPTIONS
+.TP
+.BR \-h ,\  \-\-help
+Show a help message and exit.
+.TP
+.BR \-\-verbosity\  { critical , error , warning , info , debug }
+Logging level, one of
+.RB \(lq critical \(rq,
+.RB \(lq error \(rq,
+.RB \(lq warning \(rq,
+.RB \(lq info \(rq,
+or
+.RB \(lq debug \(rq.
+(default:
+.BR warning )
+.SS "JP2K"
+Pass-through arguments to Jp2k.
+.TP
+.B \-\-capture\-resolution\ \fIVRESC\fR\ \fIHRESC
+Capture resolution parameters
+(default:
+.BR None )
+.TP
+.B \-\-display\-resolution\ \fIVRESD\fR\ \fIHRESD
+Display resolution parameters
+(default:
+.BR None )
+.TP
+.B \-\-cratio\ \fICRATIO\fR\ [\fICRATIO\fR\ ...]
+Compression ratio for successive layers.
+(default:
+.BR None )
+.TP
+.B \-\-psnr\ \fIPSNR\fR\ [\fIPSNR\fR\ ...]
+PSNR for successive layers.
+(default:
+.BR None )
+.TP
+.B \-\-codeblocksize\ \fIcblkh\fR\ \fIcblkw
+Codeblock size.
+(default:
+.BR None )
+.TP
+.B \-\-numres\ \fINUMRES
+Number of decomposition levels.
+(default:
+.BR 6 )
+.TP
+.BR \-\-prog\  { lrcp , rlcp , rpcl , prcl , cprl }
+Progression order.
+(default:
+.BR lrcp )
+.TP
+.B \-\-irreversible
+Use irreversible 9x7 transform.
+(default:
+.BR False )
+.TP
+.B \-\-eph
+Generate EPH markers.
+(default:
+.BR False )
+.TP
+.B \-\-plt
+Generate PLT markers.
+(default:
+.BR False )
+.TP
+.B \-\-sop
+Generate SOP markers.
+(default:
+.BR False )
+.TP
+.B \-\-num\-threads\ \fINUM_THREADS
+Use this many threads/cores.
+(default:
+.BR 1 )
+.TP
+.B \-\-tilesize\ \fINROWS\fR\ \fINCOLS
+Dimensions of JP2K tile.
+If not provided, the JPEG2000 image will be written as a single tile.
+(default:
+.BR None )
+.SS "JPEG"
+Arguments specific to conversion of JPEG imagery.
+.B \-\-include\-icc\-profile
+If specified, subsume any ICC profile
+(tag 34675) from the TIFF IFD
+found in an
+.B APP2
+segment(s)
+into the colour specification box.
+This will involve a file copy
+and is therefore a potentially costly operation.
+(default:
+.BR False )
+.TP
+.I jpeg
+Input JPEG file.
+.TP
+.I jp2k
+Output JPEG 2000 file.
+.SH "SEE ALSO"
+.BR jp2dump (1),
+.BR tiff2jp2 (1)

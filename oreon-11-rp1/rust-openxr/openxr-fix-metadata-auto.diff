@@ -1,0 +1,12 @@
+--- openxr-0.19.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ openxr-0.19.0/Cargo.toml	2024-08-12T18:11:32.000149+00:00
+@@ -104,8 +104,6 @@
+     "linked",
+ ]
+ 
+-[target.'cfg(target_os = "android")'.dependencies.ndk-context]
+-version = "0.1"
+-
+ [badges.maintenance]
+ status = "experimental"
++

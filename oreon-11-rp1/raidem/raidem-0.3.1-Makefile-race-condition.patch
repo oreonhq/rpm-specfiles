@@ -1,0 +1,13 @@
+Index: raidem-0.3.1-src/Makefile
+===================================================================
+--- raidem-0.3.1-src.orig/Makefile
++++ raidem-0.3.1-src/Makefile
+@@ -317,7 +317,7 @@ $(ZZIPLIB) :
+ 	$(MAKE) -C lib/zziplib
+ 
+ 
+-$(GAME) : $(GAME-OBJS) $(CANDIES) $(MAP-EDITOR-OBJS) $(PROJECTILES) $(SEB-OBJS) $(UNITS) $(ICON)
++$(GAME) : $(LIBLOADPNG) $(GAME-OBJS) $(CANDIES) $(MAP-EDITOR-OBJS) $(PROJECTILES) $(SEB-OBJS) $(UNITS) $(ICON)
+ 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS) -lm $(LDFLAGS)
+ 
+ obj/%.o : %.c

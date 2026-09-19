@@ -1,0 +1,44 @@
+From 95c6342fa4794a5e12dd53408d29e2daba8216b5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 20 Feb 2024 18:06:23 +0100
+Subject: [PATCH] Test Test95.xls from t/excel_files
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+t/01_parse.t used sample/Excel/Test95.xls, while there was
+a completely identical t/excel_files/Test95.xls file.
+
+To make the tests self-contained this patch changes the test to use
+the file from t/excel_files directory.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/01_parse.t | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/t/01_parse.t b/t/01_parse.t
+index 1626d48..3e3f9b4 100644
+--- a/t/01_parse.t
++++ b/t/01_parse.t
+@@ -34,7 +34,7 @@ BEGIN { $tests += 1; }
+ 
+ my $workbook_1;
+ {
+-    my $workbook = Spreadsheet::ParseExcel::Workbook->Parse('sample/Excel/Test95.xls');
++    my $workbook = Spreadsheet::ParseExcel::Workbook->Parse('t/excel_files/Test95.xls');
+     $workbook_1 = $workbook;
+     use Data::Dumper;
+     #diag Dumper $excel;
+@@ -67,7 +67,7 @@ my $workbook_1;
+ 
+     is($workbook->{Version}, 1280);
+     is($workbook->{BIFFVersion}, 8);
+-    is($workbook->{File}, 'sample/Excel/Test95.xls');
++    is($workbook->{File}, 't/excel_files/Test95.xls');
+     is($workbook->{Author}, 'kawait');
+ 
+ 
+-- 
+2.43.2
+

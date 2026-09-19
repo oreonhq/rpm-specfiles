@@ -1,0 +1,89 @@
+.TH OVERRGB "1" "April 2021" "" "User Commands"
+.SH NAME
+overrgb \- composites an RGBA nrrd over a background color (or image)
+.SH SYNOPSIS
+.B overrgb
+.B \-i
+.RI < nin >
+.RB [ \-c
+.RI < contrast >]
+.RB [ \-cfp
+.RI < fixed\ point >]
+.RB [ \-g
+.RI < gamma >]
+.RB [ \-b
+.RI < background >]
+.RB [ \-bi
+.RI < nbg >]
+.B \-o
+.RI < filename >
+.SH DESCRIPTION
+.P
+Composites an RGBA nrrd over a background color (or image), after doing gamma
+correction, then quantizes to an 8-bit image.
+Actually, the input nrrd can have more than 4 values per pixel, but only the
+first four are used.
+If the RGBA nrrd is floating point, the values are taken at face value; if it
+is fixed point, the values interpreted as having been quantized (so that 8-bit
+RGBA images will act as you expect).
+When compositing with a background image, the given background image does not
+have to be the same size as the input image; it will be resampled (with linear
+interpolation) to fit.
+.SH OPTIONS
+.TP
+.B \-i\fR <\fInin\fR>
+input nrrd to composite
+.RI ( nrrd )
+.TP
+.B \-c\fR <\fIcontrast\fR>
+contrast to apply to RGB values, before gamma.
+.RB \(lq 0.0 \(rq
+means no change,
+.RB \(lq 1.0 \(rq
+means thresholding,
+.RB \(lq \-1.0 \(rq
+means a complete washout.
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-cfp\fR <\fIfixed\ point\fR>
+component level that doesn\(cqt change with contrast
+.RI ( double );
+default:
+.RB \(lq 0.5 \(rq
+.TP
+.B \-g\fR <\fIgamma\fR>
+gamma to apply to image data, after contrast
+.RI ( double );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-b\fR <\fIbackground\fR>
+background color to composite against; white is
+.BR 1\ 1\ 1 ,
+not
+.BR 255\ 255\ 255 .
+(3 \fIdouble\fRs); default:
+.RB \(lq 0\ 0\ 0 \(rq
+.TP
+.B \-bi\fR <\fInbg\fR>
+8-bit RGB background image to composite against
+.RI ( nrrd );
+default: \(lq\(rq
+.TP
+.B \-o\fR <\fIfilename\fR>
+file to write output PPM image to
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR gprobe (1),
+.BR ilk (1),
+.BR mrender (1),
+.BR miter (1),
+.BR nrrdSanity (1),
+.BR puller (1),
+.BR tend (1),
+.BR unu (1),
+.BR vprobe (1)

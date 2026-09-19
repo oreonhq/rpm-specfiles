@@ -1,0 +1,43 @@
+From 073beb715aa85a36c87cfe3c9e72c192fa640e8d Mon Sep 17 00:00:00 2001
+From: Patrick Spendrin <ps_ml@gmx.de>
+Date: Fri, 28 Aug 2015 15:24:55 +0200
+Subject: [PATCH 18/31] find libical from the Config files if possible
+
+this makes it possible to find newer versions of libical (1.0+) directly
+---
+ cmake/modules/FindLibical.cmake | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/cmake/modules/FindLibical.cmake b/cmake/modules/FindLibical.cmake
+index a37db81..6c92482 100644
+--- a/cmake/modules/FindLibical.cmake
++++ b/cmake/modules/FindLibical.cmake
+@@ -16,6 +16,17 @@ if(NOT LIBICAL_MIN_VERSION)
+   set(LIBICAL_MIN_VERSION "0.33")
+ endif()
+ 
++find_package(LibIcal QUIET CONFIG)
++if(LibIcal_FOUND)
++  set(LIBICAL_FOUND ${LibIcal_FOUND})
++  set(LIBICAL_INCLUDE_DIRS ${LibIcal_INCLUDE_DIR})
++  set(LIBICAL_LIBRARIES ${LibIcal_LIBRARIES})
++  set(LIBICAL_VERSION ${LibIcal_VERSION})
++  set(LIBICAL_MAJOR_VERSION ${LibIcal_VERSION_MAJOR})
++  set(LIBICAL_MINOR_VERSION ${LibIcal_VERSION_MINOR})
++
++else()
++
+ if (WIN32)
+   file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _program_FILES_DIR)
+ endif()
+@@ -91,6 +102,7 @@ if(LIBICAL_INCLUDE_DIRS AND LIBICAL_LIBRARIES)
+   endif()
+ 
+ endif()
++endif()
+ 
+ include(FindPackageHandleStandardArgs)
+ FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBICAL DEFAULT_MSG LIBICAL_LIBRARIES LIBICAL_INCLUDE_DIRS)
+-- 
+2.5.0
+

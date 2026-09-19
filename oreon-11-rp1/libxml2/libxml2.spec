@@ -4,8 +4,8 @@
 %global source3_hash 09bdf9f81f381ebf9bc158a9472e498e896f7a02eb7461146e9abe1b9493ca17
 
 Name:           libxml2
-Version:        2.12.10
-Release:        6%{?dist}
+Version:        2.15.4
+Release:        1%{?dist}
 Summary:        Library providing XML and HTML support
 
 # list.c, dict.c and few others use ISC-Veillard

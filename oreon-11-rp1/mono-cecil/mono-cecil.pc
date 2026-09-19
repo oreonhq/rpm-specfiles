@@ -1,0 +1,7 @@
+assemblies_dir=/usr/lib/mono
+Libraries=${assemblies_dir}/Mono.Cecil/Mono.Cecil.dll
+
+Name: Mono Cecil
+Description: Library to generate and inspect programs and libraries in the ECMA CIL form
+Version: 0.10.4.0
+Libs: -r:Mono.Cecil.dll

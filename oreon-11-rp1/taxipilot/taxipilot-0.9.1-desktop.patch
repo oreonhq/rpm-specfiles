@@ -1,0 +1,19 @@
+diff -up taxipilot-0.9.2/taxipilot/taxipilot.desktop.desktop taxipilot-0.9.2/taxipilot/taxipilot.desktop
+--- taxipilot-0.9.2/taxipilot/taxipilot.desktop.desktop	2006-03-01 11:38:30.000000000 +0100
++++ taxipilot-0.9.2/taxipilot/taxipilot.desktop	2007-10-22 09:23:11.000000000 +0200
+@@ -2,11 +2,10 @@
+ [Desktop Entry]
+ Type=Application
+ Exec=taxipilot -caption "%c" %i %m  
+-Icon=taxipilot.png
+-MiniIcon=taxipilot.png
++Icon=taxipilot
+ DocPath=taxipilot/index.html
+-Comment=
+-Comment[de]=
+-Terminal=0
++Comment=pilot a taxi through space
++Terminal=false
+ Name=Taxipilot
+ Name[de]=Taxipilot
++Categories=Game;ActionGame;

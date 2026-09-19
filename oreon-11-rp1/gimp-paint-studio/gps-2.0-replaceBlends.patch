@@ -1,0 +1,154 @@
+From 0c220b77a926c654b60817e345ae05477762a780 Mon Sep 17 00:00:00 2001
+From: "FeRD (Frank Dana)" <ferdnyc@gmail.com>
+Date: Mon, 3 Jan 2022 05:42:02 -0500
+Subject: [PATCH 2/2] Resave BlendOptions presets as GradientOptions
+
+---
+ tool-presets/GPS-Fx/Flare-Glow-Radial.gtp     |  9 +++++----
+ tool-presets/GPS-Fx/Haze.gtp                  |  6 +++---
+ tool-presets/GPS-Fx/Radial-Softlight.gtp      | 12 +++++++-----
+ tool-presets/GPS-Fx/Red-Halo-Ring.gtp         | 11 ++++++-----
+ tool-presets/GPS-Fx/Steel-Bars.gtp            | 13 +++++++------
+ tool-presets/GPS-Set1/FX-Radial-Softlight.gtp |  6 +++---
+ 6 files changed, 31 insertions(+), 26 deletions(-)
+
+diff --git a/tool-presets/GPS-Fx/Flare-Glow-Radial.gtp b/tool-presets/GPS-Fx/Flare-Glow-Radial.gtp
+index 694102f..656ebbb 100644
+--- a/tool-presets/GPS-Fx/Flare-Glow-Radial.gtp
++++ b/tool-presets/GPS-Fx/Flare-Glow-Radial.gtp
+@@ -1,14 +1,15 @@
+ # GIMP tool preset file
+ 
+-(stock-id "gimp-tool-blend")
++(icon-name "gimp-tool-gradient")
+ (name "Flare Glow Radial (Sel.Gradient)")
+-(tool-options "GimpBlendOptions"
+-    (tool "gimp-blend-tool")
+-    (foreground (color-rgb 0.925341 0.925341 0.925341))
++(tool-options "GimpGradientOptions"
++    (tool "gimp-gradient-tool")
++    (foreground (color-rgb 0.92534099999999997 0.92534099999999997 0.92534099999999997))
+     (gradient "Flare Glow Radial 1")
+     (dynamics-expanded yes)
+     (gradient-type radial))
+ (use-fg-bg yes)
++(use-opacity-paint-mode yes)
+ (use-brush no)
+ (use-dynamics no)
+ (use-gradient yes)
+diff --git a/tool-presets/GPS-Fx/Haze.gtp b/tool-presets/GPS-Fx/Haze.gtp
+index 192e90d..9dab18c 100644
+--- a/tool-presets/GPS-Fx/Haze.gtp
++++ b/tool-presets/GPS-Fx/Haze.gtp
+@@ -1,9 +1,9 @@
+ # GIMP tool preset file
+ 
+-(stock-id "gimp-tool-blend")
++(stock-id "gimp-tool-gradient")
+ (name "Haze (FG color)")
+-(tool-options "GimpBlendOptions"
+-    (tool "gimp-blend-tool")
++(tool-options "GimpGradientOptions"
++    (tool "gimp-gradient-tool")
+     (foreground (color-rgb 0.859796 0.941499 0.950569))
+     (opacity 0.466216)
+     (gradient "GPS Haze and Atmosphere")
+diff --git a/tool-presets/GPS-Fx/Radial-Softlight.gtp b/tool-presets/GPS-Fx/Radial-Softlight.gtp
+index f5f5c9a..0371f22 100644
+--- a/tool-presets/GPS-Fx/Radial-Softlight.gtp
++++ b/tool-presets/GPS-Fx/Radial-Softlight.gtp
+@@ -1,15 +1,17 @@
+ # GIMP tool preset file
+ 
+-(stock-id "gimp-tool-blend")
++(icon-name "gimp-tool-gradient")
+ (name "FX Radial Softlight")
+-(tool-options "GimpBlendOptions"
+-    (tool "gimp-blend-tool")
+-    (foreground (color-rgb 0.925341 0.925341 0.925341))
+-    (paint-mode softlight-mode)
++(tool-options "GimpGradientOptions"
++    (tool "gimp-gradient-tool")
++    (foreground (color-rgb 0.92500000000000004 0.92500000000000004 0.92500000000000004))
++    (background (color-rgb 0 0 0))
++    (paint-mode softlight)
+     (gradient "FG to Transparent")
+     (dynamics-expanded yes)
+     (gradient-type radial))
+ (use-fg-bg no)
++(use-opacity-paint-mode yes)
+ (use-brush no)
+ (use-dynamics no)
+ (use-gradient yes)
+diff --git a/tool-presets/GPS-Fx/Red-Halo-Ring.gtp b/tool-presets/GPS-Fx/Red-Halo-Ring.gtp
+index 2ac60ad..731f869 100644
+--- a/tool-presets/GPS-Fx/Red-Halo-Ring.gtp
++++ b/tool-presets/GPS-Fx/Red-Halo-Ring.gtp
+@@ -1,15 +1,16 @@
+ # GIMP tool preset file
+ 
+-(stock-id "gimp-tool-blend")
++(icon-name "gimp-tool-gradient")
+ (name "Red Halo Ring")
+-(tool-options "GimpBlendOptions"
+-    (tool "gimp-blend-tool")
+-    (foreground (color-rgb 1.000000 1.000000 1.000000))
+-    (background (color-rgb 0.000000 0.000000 0.000000))
++(tool-options "GimpGradientOptions"
++    (tool "gimp-gradient-tool")
++    (foreground (color-rgb 1 1 1))
++    (background (color-rgb 0 0 0))
+     (gradient "Flare Radial 102")
+     (offset 7.344633)
+     (gradient-type radial))
+ (use-fg-bg yes)
++(use-opacity-paint-mode yes)
+ (use-brush no)
+ (use-dynamics no)
+ (use-gradient yes)
+diff --git a/tool-presets/GPS-Fx/Steel-Bars.gtp b/tool-presets/GPS-Fx/Steel-Bars.gtp
+index 56a08da..2dd50b6 100644
+--- a/tool-presets/GPS-Fx/Steel-Bars.gtp
++++ b/tool-presets/GPS-Fx/Steel-Bars.gtp
+@@ -1,14 +1,15 @@
+ # GIMP tool preset file
+ 
+-(stock-id "gimp-tool-blend")
++(icon-name "gimp-tool-gradient")
+ (name "Steel Bars")
+-(tool-options "GimpBlendOptions"
+-    (tool "gimp-blend-tool")
+-    (foreground (color-rgb 0.686275 0.694118 0.772549))
++(tool-options "GimpGradientOptions"
++    (tool "gimp-gradient-tool")
++    (foreground (color-rgb 0.68627499999999997 0.69411800000000001 0.77254900000000004))
+     (gradient "GPS Steel Bars")
+-    (gradient-view-size 38)
+-    (gradient-repeat sawtooth))
++    (gradient-repeat sawtooth)
++    (gradient-view-size 38))
+ (use-fg-bg yes)
++(use-opacity-paint-mode yes)
+ (use-brush no)
+ (use-dynamics no)
+ (use-gradient yes)
+diff --git a/tool-presets/GPS-Set1/FX-Radial-Softlight.gtp b/tool-presets/GPS-Set1/FX-Radial-Softlight.gtp
+index 71b5af4..7c4c09b 100644
+--- a/tool-presets/GPS-Set1/FX-Radial-Softlight.gtp
++++ b/tool-presets/GPS-Set1/FX-Radial-Softlight.gtp
+@@ -1,9 +1,9 @@
+ # GIMP tool preset file
+ 
+-(stock-id "gimp-tool-blend")
++(stock-id "gimp-tool-gradient")
+ (name "Radial Softlight")
+-(tool-options "GimpBlendOptions"
+-    (tool "gimp-blend-tool")
++(tool-options "GimpGradientOptions"
++    (tool "gimp-gradient-tool")
+     (foreground (color-rgb 0.824897 0.218598 0.218598))
+     (paint-mode softlight-mode)
+     (dynamics-expanded yes)
+-- 
+2.33.1
+

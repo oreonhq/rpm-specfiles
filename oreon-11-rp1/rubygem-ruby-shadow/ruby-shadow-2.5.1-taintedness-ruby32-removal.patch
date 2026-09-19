@@ -1,0 +1,72 @@
+commit 7b450355b540df43bab2617fe25437dc3dde12af
+Author: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date:   Thu Dec 1 12:54:31 2022 +0900
+
+    Replace taintedness function with generic one
+    
+    Taintedness is deprecated from ruby 2.7.0 and is removed on ruby3.2.0preview3.
+    To keep compatibility with ruby older than 2.7, introduce -DRUBY30 compilation
+    flag from ruby3.0 and onwards, and replace taintedness function with generic one
+    when RUBY30 is defined (i.e. from ruby3.0 and onwards)
+
+diff --git a/extconf.rb b/extconf.rb
+index d17f926..04f8f97 100644
+--- a/extconf.rb
++++ b/extconf.rb
+@@ -10,7 +10,7 @@ require 'rbconfig'
+ $CFLAGS = case RUBY_VERSION
+           when /^1\.9/; '-DRUBY19'
+           when /^2\./; '-DRUBY19'
+-          when /^3\./; '-DRUBY19'
++          when /^[34]\./; '-DRUBY19 -DRUBY30'
+           else; ''
+           end
+ 
+diff --git a/pwd/shadow.c b/pwd/shadow.c
+index eeb96d4..e73e0db 100644
+--- a/pwd/shadow.c
++++ b/pwd/shadow.c
+@@ -56,8 +56,13 @@ static VALUE convert_pw_struct( struct passwd *entry )
+ {
+   /* Hmm. Why custom pw_change instead of sp_lstchg? */
+   return rb_struct_new(rb_sPasswdEntry,
++#if defined(RUBY30)
++         rb_str_new2(entry->pw_name), /* sp_namp */
++         rb_str_new2(entry->pw_passwd), /* sp_pwdp, encryped password */
++#else
+          rb_tainted_str_new2(entry->pw_name), /* sp_namp */
+          rb_tainted_str_new2(entry->pw_passwd), /* sp_pwdp, encryped password */
++#endif
+          Qnil, /* sp_lstchg, date when the password was last changed (in days since Jan 1, 1970) */
+          Qnil, /* sp_min, days that password must stay same */
+          Qnil, /* sp_max, days until password changes. */
+@@ -66,7 +71,11 @@ static VALUE convert_pw_struct( struct passwd *entry )
+          INT2FIX(difftime(entry->pw_change, 0) / (24*60*60)), /* pw_change */
+          INT2FIX(difftime(entry->pw_expire, 0) / (24*60*60)), /* sp_expire */
+          Qnil, /* sp_flag */
++#if defined(RUBY30)
++         rb_str_new2(entry->pw_class), /* sp_loginclass, user access class */
++#else
+          rb_tainted_str_new2(entry->pw_class), /* sp_loginclass, user access class */
++#endif
+          NULL);
+ }
+ 
+diff --git a/shadow/shadow.c b/shadow/shadow.c
+index 35a77a1..5202ce5 100644
+--- a/shadow/shadow.c
++++ b/shadow/shadow.c
+@@ -34,8 +34,13 @@ static VALUE rb_eFileLock;
+ static VALUE convert_pw_struct( struct spwd *entry ) 
+ {
+   return rb_struct_new(rb_sPasswdEntry,
++#if defined(RUBY30)
++		      rb_str_new2(entry->sp_namp),
++		      rb_str_new2(entry->sp_pwdp),
++#else
+ 		      rb_tainted_str_new2(entry->sp_namp),
+ 		      rb_tainted_str_new2(entry->sp_pwdp),
++#endif
+ 		      INT2FIX(entry->sp_lstchg),
+ 		      INT2FIX(entry->sp_min),
+ 		      INT2FIX(entry->sp_max),

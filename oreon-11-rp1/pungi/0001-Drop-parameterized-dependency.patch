@@ -1,0 +1,1868 @@
+From a9c11c6dfd1e8ec4e401f20ee1b6948c81386ac1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Lubom=C3=ADr=20Sedl=C3=A1=C5=99?= <lsedlar@redhat.com>
+Date: Thu, 13 Nov 2025 08:45:21 +0100
+Subject: [PATCH] Drop parameterized dependency
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+There were 4 files using this library. Since we already require pytest
+to run the tests, we can migrate the tests to use
+pytest.mark.parametrize to achieve the same thing with one less library
+being pulled in.
+
+However, the pytest approach is not compatible with tests based on
+`unittest.TestCase`. The relevant tests are thus rewritten to be purely
+pytest based.
+
+Assisted-By: claude-sonnet-4-5@20250929
+Fixes: https://pagure.io/pungi/issue/1884
+Signed-off-by: Lubomír Sedlář <lsedlar@redhat.com>
+---
+ tests/test_config_utils.py     |  67 ++--
+ tests/test_createiso_script.py | 672 +++++++++++++++++----------------
+ tests/test_module_util.py      | 323 ++++++++--------
+ tests/test_scm.py              | 354 +++++++++--------
+ tox.ini                        |   1 +
+ 6 files changed, 721 insertions(+), 697 deletions(-)
+
+diff --git a/tests/test_config_utils.py b/tests/test_config_utils.py
+index bc019f8c..09b25506 100644
+--- a/tests/test_config_utils.py
++++ b/tests/test_config_utils.py
+@@ -1,40 +1,43 @@
+ # -*- coding: utf-8 -*-
+ 
+ import argparse
+-import unittest
+ 
+-from parameterized import parameterized
++import pytest
+ 
+ from pungi_utils import config_utils
+ 
+ 
+-class TestDefineHelpers(unittest.TestCase):
+-    @parameterized.expand(
+-        [
+-            ([], {}),
+-            (["foo=bar", "baz=quux"], {"foo": "bar", "baz": "quux"}),
+-            (["foo="], {"foo": ""}),
+-            (["foo==bar"], {"foo": "=bar"}),
+-        ]
+-    )
+-    def test_extract_defines(self, input, expected):
+-        self.assertEqual(config_utils.extract_defines(input), expected)
+-
+-    @parameterized.expand(["foo=bar", "foo=", "foo==bar"])
+-    def test_validate_define_correct(self, value):
+-        self.assertEqual(config_utils.validate_definition(value), value)
+-
+-    @parameterized.expand(["foo", "=", "=foo", "1=2"])
+-    def test_validate_define_incorrect(self, value):
+-        with self.assertRaises(argparse.ArgumentTypeError):
+-            config_utils.validate_definition(value)
+-
+-    def test_remove_unknown(self):
+-        conf = {"foo": "bar"}
+-        config_utils.remove_unknown(conf, ["foo"])
+-        self.assertEqual(conf, {})
+-
+-    def test_remove_known(self):
+-        conf = {"release_name": "bar"}
+-        config_utils.remove_unknown(conf, ["release_name"])
+-        self.assertEqual(conf, {"release_name": "bar"})
++@pytest.mark.parametrize(
++    "input,expected",
++    [
++        ([], {}),
++        (["foo=bar", "baz=quux"], {"foo": "bar", "baz": "quux"}),
++        (["foo="], {"foo": ""}),
++        (["foo==bar"], {"foo": "=bar"}),
++    ],
++)
++def test_extract_defines(input, expected):
++    assert config_utils.extract_defines(input) == expected
++
++
++@pytest.mark.parametrize("value", ["foo=bar", "foo=", "foo==bar"])
++def test_validate_define_correct(value):
++    assert config_utils.validate_definition(value) == value
++
++
++@pytest.mark.parametrize("value", ["foo", "=", "=foo", "1=2"])
++def test_validate_define_incorrect(value):
++    with pytest.raises(argparse.ArgumentTypeError):
++        config_utils.validate_definition(value)
++
++
++def test_remove_unknown():
++    conf = {"foo": "bar"}
++    config_utils.remove_unknown(conf, ["foo"])
++    assert conf == {}
++
++
++def test_remove_known():
++    conf = {"release_name": "bar"}
++    config_utils.remove_unknown(conf, ["release_name"])
++    assert conf == {"release_name": "bar"}
+diff --git a/tests/test_createiso_script.py b/tests/test_createiso_script.py
+index 807092f6..6138a6d7 100644
+--- a/tests/test_createiso_script.py
++++ b/tests/test_createiso_script.py
+@@ -4,363 +4,385 @@ import os
+ from io import StringIO
+ from unittest import mock
+ 
+-from parameterized import parameterized
++import pytest
+ 
+ from tests import helpers
+ from pungi import createiso
+ 
+ 
+-class CreateIsoScriptTest(helpers.PungiTestCase):
+-    def setUp(self):
+-        super(CreateIsoScriptTest, self).setUp()
+-        self.outdir = os.path.join(self.topdir, "isos")
+-        self.out = StringIO()
+-        self.maxDiff = None
++@pytest.fixture
++def topdir(tmp_path):
++    return str(tmp_path)
+ 
+-    def assertScript(self, cmds):
+-        script = self.out.getvalue().strip().split("\n")
+-        self.assertEqual(script[:3], ["#!/bin/bash", "set -ex", "cd %s" % self.outdir])
+-        self.assertEqual(script[3:], cmds)
+ 
+-    def test_minimal_run(self):
+-        createiso.write_script(
+-            createiso.CreateIsoOpts(
+-                output_dir=self.outdir,
+-                iso_name="DP-1.0-20160405.t.3-x86_64.iso",
+-                volid="DP-1.0-20160405.t.3",
+-                graft_points="graft-list",
+-                arch="x86_64",
++@pytest.fixture
++def outdir(topdir):
++    return os.path.join(topdir, "isos")
++
++
++@pytest.fixture
++def out():
++    return StringIO()
++
++
++def assertScript(out, outdir, cmds):
++    script = out.getvalue().strip().split("\n")
++    assert script[:3] == ["#!/bin/bash", "set -ex", "cd %s" % outdir]
++    assert script[3:] == cmds
++
++
++def test_minimal_run(outdir, out):
++    createiso.write_script(
++        createiso.CreateIsoOpts(
++            output_dir=outdir,
++            iso_name="DP-1.0-20160405.t.3-x86_64.iso",
++            volid="DP-1.0-20160405.t.3",
++            graft_points="graft-list",
++            arch="x86_64",
++        ),
++        out,
++    )
++    assertScript(
++        out,
++        outdir,
++        [
++            " ".join(
++                [
++                    "/usr/bin/genisoimage",
++                    "-untranslated-filenames",
++                    "-volid",
++                    "DP-1.0-20160405.t.3",
++                    "-J",
++                    "-joliet-long",
++                    "-rational-rock",
++                    "-translation-table",
++                    "-input-charset",
++                    "utf-8",
++                    "-x",
++                    "./lost+found",
++                    "-o",
++                    "DP-1.0-20160405.t.3-x86_64.iso",
++                    "-graft-points",
++                    "-path-list",
++                    "graft-list",
++                ]
+             ),
+-            self.out,
+-        )
+-        self.assertScript(
+-            [
+-                " ".join(
+-                    [
+-                        "/usr/bin/genisoimage",
+-                        "-untranslated-filenames",
+-                        "-volid",
+-                        "DP-1.0-20160405.t.3",
+-                        "-J",
+-                        "-joliet-long",
+-                        "-rational-rock",
+-                        "-translation-table",
+-                        "-input-charset",
+-                        "utf-8",
+-                        "-x",
+-                        "./lost+found",
+-                        "-o",
+-                        "DP-1.0-20160405.t.3-x86_64.iso",
+-                        "-graft-points",
+-                        "-path-list",
+-                        "graft-list",
+-                    ]
+-                ),
+-                " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-x86_64.iso"]),
+-                "isoinfo -R -f -i DP-1.0-20160405.t.3-x86_64.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-x86_64.iso.manifest",  # noqa: E501
+-            ]
+-        )
++            " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-x86_64.iso"]),
++            "isoinfo -R -f -i DP-1.0-20160405.t.3-x86_64.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-x86_64.iso.manifest",  # noqa: E501
++        ],
++    )
+ 
+-    def test_bootable_run(self):
+-        createiso.write_script(
+-            createiso.CreateIsoOpts(
+-                output_dir=self.outdir,
+-                iso_name="DP-1.0-20160405.t.3-x86_64.iso",
+-                volid="DP-1.0-20160405.t.3",
+-                graft_points="graft-list",
+-                arch="x86_64",
+-                buildinstall_method="lorax",
++
++def test_bootable_run(outdir, out):
++    createiso.write_script(
++        createiso.CreateIsoOpts(
++            output_dir=outdir,
++            iso_name="DP-1.0-20160405.t.3-x86_64.iso",
++            volid="DP-1.0-20160405.t.3",
++            graft_points="graft-list",
++            arch="x86_64",
++            buildinstall_method="lorax",
++        ),
++        out,
++    )
++
++    assertScript(
++        out,
++        outdir,
++        [
++            createiso.FIND_TEMPLATE_SNIPPET,
++            " ".join(
++                [
++                    "/usr/bin/genisoimage",
++                    "-untranslated-filenames",
++                    "-volid",
++                    "DP-1.0-20160405.t.3",
++                    "-J",
++                    "-joliet-long",
++                    "-rational-rock",
++                    "-translation-table",
++                    "-input-charset",
++                    "utf-8",
++                    "-x",
++                    "./lost+found",
++                    "-b",
++                    "isolinux/isolinux.bin",
++                    "-c",
++                    "isolinux/boot.cat",
++                    "-no-emul-boot",
++                    "-boot-load-size",
++                    "4",
++                    "-boot-info-table",
++                    "-eltorito-alt-boot",
++                    "-e",
++                    "images/efiboot.img",
++                    "-no-emul-boot",
++                    "-o",
++                    "DP-1.0-20160405.t.3-x86_64.iso",
++                    "-graft-points",
++                    "-path-list",
++                    "graft-list",
++                ]
+             ),
+-            self.out,
+-        )
++            " ".join(
++                ["/usr/bin/isohybrid", "--uefi", "DP-1.0-20160405.t.3-x86_64.iso"]
++            ),
++            " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-x86_64.iso"]),
++            "isoinfo -R -f -i DP-1.0-20160405.t.3-x86_64.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-x86_64.iso.manifest",  # noqa: E501
++        ],
++    )
+ 
+-        self.assertScript(
+-            [
+-                createiso.FIND_TEMPLATE_SNIPPET,
+-                " ".join(
+-                    [
+-                        "/usr/bin/genisoimage",
+-                        "-untranslated-filenames",
+-                        "-volid",
+-                        "DP-1.0-20160405.t.3",
+-                        "-J",
+-                        "-joliet-long",
+-                        "-rational-rock",
+-                        "-translation-table",
+-                        "-input-charset",
+-                        "utf-8",
+-                        "-x",
+-                        "./lost+found",
+-                        "-b",
+-                        "isolinux/isolinux.bin",
+-                        "-c",
+-                        "isolinux/boot.cat",
+-                        "-no-emul-boot",
+-                        "-boot-load-size",
+-                        "4",
+-                        "-boot-info-table",
+-                        "-eltorito-alt-boot",
+-                        "-e",
+-                        "images/efiboot.img",
+-                        "-no-emul-boot",
+-                        "-o",
+-                        "DP-1.0-20160405.t.3-x86_64.iso",
+-                        "-graft-points",
+-                        "-path-list",
+-                        "graft-list",
+-                    ]
+-                ),
+-                " ".join(
+-                    ["/usr/bin/isohybrid", "--uefi", "DP-1.0-20160405.t.3-x86_64.iso"]
+-                ),
+-                " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-x86_64.iso"]),
+-                "isoinfo -R -f -i DP-1.0-20160405.t.3-x86_64.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-x86_64.iso.manifest",  # noqa: E501
+-            ]
+-        )
+ 
+-    def test_bootable_run_on_i386(self):
+-        # This will call isohybrid, but not with --uefi switch
+-        createiso.write_script(
+-            createiso.CreateIsoOpts(
+-                output_dir=self.outdir,
+-                iso_name="DP-1.0-20160405.t.3-i386.iso",
+-                volid="DP-1.0-20160405.t.3",
+-                graft_points="graft-list",
+-                arch="i386",
+-                buildinstall_method="lorax",
++def test_bootable_run_on_i386(outdir, out):
++    # This will call isohybrid, but not with --uefi switch
++    createiso.write_script(
++        createiso.CreateIsoOpts(
++            output_dir=outdir,
++            iso_name="DP-1.0-20160405.t.3-i386.iso",
++            volid="DP-1.0-20160405.t.3",
++            graft_points="graft-list",
++            arch="i386",
++            buildinstall_method="lorax",
++        ),
++        out,
++    )
++
++    assertScript(
++        out,
++        outdir,
++        [
++            createiso.FIND_TEMPLATE_SNIPPET,
++            " ".join(
++                [
++                    "/usr/bin/genisoimage",
++                    "-untranslated-filenames",
++                    "-volid",
++                    "DP-1.0-20160405.t.3",
++                    "-J",
++                    "-joliet-long",
++                    "-rational-rock",
++                    "-translation-table",
++                    "-input-charset",
++                    "utf-8",
++                    "-x",
++                    "./lost+found",
++                    "-b",
++                    "isolinux/isolinux.bin",
++                    "-c",
++                    "isolinux/boot.cat",
++                    "-no-emul-boot",
++                    "-boot-load-size",
++                    "4",
++                    "-boot-info-table",
++                    "-o",
++                    "DP-1.0-20160405.t.3-i386.iso",
++                    "-graft-points",
++                    "-path-list",
++                    "graft-list",
++                ]
+             ),
+-            self.out,
+-        )
++            " ".join(["/usr/bin/isohybrid", "DP-1.0-20160405.t.3-i386.iso"]),
++            " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-i386.iso"]),
++            "isoinfo -R -f -i DP-1.0-20160405.t.3-i386.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-i386.iso.manifest",  # noqa: E501
++        ],
++    )
+ 
+-        self.assertScript(
+-            [
+-                createiso.FIND_TEMPLATE_SNIPPET,
+-                " ".join(
+-                    [
+-                        "/usr/bin/genisoimage",
+-                        "-untranslated-filenames",
+-                        "-volid",
+-                        "DP-1.0-20160405.t.3",
+-                        "-J",
+-                        "-joliet-long",
+-                        "-rational-rock",
+-                        "-translation-table",
+-                        "-input-charset",
+-                        "utf-8",
+-                        "-x",
+-                        "./lost+found",
+-                        "-b",
+-                        "isolinux/isolinux.bin",
+-                        "-c",
+-                        "isolinux/boot.cat",
+-                        "-no-emul-boot",
+-                        "-boot-load-size",
+-                        "4",
+-                        "-boot-info-table",
+-                        "-o",
+-                        "DP-1.0-20160405.t.3-i386.iso",
+-                        "-graft-points",
+-                        "-path-list",
+-                        "graft-list",
+-                    ]
+-                ),
+-                " ".join(["/usr/bin/isohybrid", "DP-1.0-20160405.t.3-i386.iso"]),
+-                " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-i386.iso"]),
+-                "isoinfo -R -f -i DP-1.0-20160405.t.3-i386.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-i386.iso.manifest",  # noqa: E501
+-            ]
+-        )
+ 
+-    def test_bootable_run_ppc64(self):
+-        createiso.write_script(
+-            createiso.CreateIsoOpts(
+-                output_dir=self.outdir,
+-                iso_name="DP-1.0-20160405.t.3-ppc64.iso",
+-                volid="DP-1.0-20160405.t.3",
+-                graft_points="graft-list",
+-                arch="ppc64",
+-                buildinstall_method="lorax",
++def test_bootable_run_ppc64(outdir, out):
++    createiso.write_script(
++        createiso.CreateIsoOpts(
++            output_dir=outdir,
++            iso_name="DP-1.0-20160405.t.3-ppc64.iso",
++            volid="DP-1.0-20160405.t.3",
++            graft_points="graft-list",
++            arch="ppc64",
++            buildinstall_method="lorax",
++        ),
++        out,
++    )
++
++    assertScript(
++        out,
++        outdir,
++        [
++            createiso.FIND_TEMPLATE_SNIPPET,
++            " ".join(
++                [
++                    "/usr/bin/genisoimage",
++                    "-untranslated-filenames",
++                    "-volid",
++                    "DP-1.0-20160405.t.3",
++                    "-J",
++                    "-joliet-long",
++                    "-rational-rock",
++                    "-translation-table",
++                    "-x",
++                    "./lost+found",
++                    "-part",
++                    "-hfs",
++                    "-r",
++                    "-l",
++                    "-sysid",
++                    "PPC",
++                    "-no-desktop",
++                    "-allow-multidot",
++                    "-chrp-boot",
++                    "-map",
++                    "$TEMPLATE/config_files/ppc/mapping",
++                    "-hfs-bless",
++                    "/ppc/mac",
++                    "-o",
++                    "DP-1.0-20160405.t.3-ppc64.iso",
++                    "-graft-points",
++                    "-path-list",
++                    "graft-list",
++                ]
+             ),
+-            self.out,
+-        )
++            " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-ppc64.iso"]),
++            "isoinfo -R -f -i DP-1.0-20160405.t.3-ppc64.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-ppc64.iso.manifest",  # noqa: E501
++        ],
++    )
+ 
+-        self.assertScript(
+-            [
+-                createiso.FIND_TEMPLATE_SNIPPET,
+-                " ".join(
+-                    [
+-                        "/usr/bin/genisoimage",
+-                        "-untranslated-filenames",
+-                        "-volid",
+-                        "DP-1.0-20160405.t.3",
+-                        "-J",
+-                        "-joliet-long",
+-                        "-rational-rock",
+-                        "-translation-table",
+-                        "-x",
+-                        "./lost+found",
+-                        "-part",
+-                        "-hfs",
+-                        "-r",
+-                        "-l",
+-                        "-sysid",
+-                        "PPC",
+-                        "-no-desktop",
+-                        "-allow-multidot",
+-                        "-chrp-boot",
+-                        "-map",
+-                        "$TEMPLATE/config_files/ppc/mapping",
+-                        "-hfs-bless",
+-                        "/ppc/mac",
+-                        "-o",
+-                        "DP-1.0-20160405.t.3-ppc64.iso",
+-                        "-graft-points",
+-                        "-path-list",
+-                        "graft-list",
+-                    ]
+-                ),
+-                " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-ppc64.iso"]),
+-                "isoinfo -R -f -i DP-1.0-20160405.t.3-ppc64.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-ppc64.iso.manifest",  # noqa: E501
+-            ]
+-        )
+ 
+-    def test_bootable_run_on_s390x(self):
+-        createiso.write_script(
+-            createiso.CreateIsoOpts(
+-                output_dir=self.outdir,
+-                iso_name="DP-1.0-20160405.t.3-s390x.iso",
+-                volid="DP-1.0-20160405.t.3",
+-                graft_points="graft-list",
+-                arch="s390x",
+-                buildinstall_method="lorax",
++def test_bootable_run_on_s390x(outdir, out):
++    createiso.write_script(
++        createiso.CreateIsoOpts(
++            output_dir=outdir,
++            iso_name="DP-1.0-20160405.t.3-s390x.iso",
++            volid="DP-1.0-20160405.t.3",
++            graft_points="graft-list",
++            arch="s390x",
++            buildinstall_method="lorax",
++        ),
++        out,
++    )
++
++    assertScript(
++        out,
++        outdir,
++        [
++            createiso.FIND_TEMPLATE_SNIPPET,
++            " ".join(
++                [
++                    "/usr/bin/genisoimage",
++                    "-untranslated-filenames",
++                    "-volid",
++                    "DP-1.0-20160405.t.3",
++                    "-J",
++                    "-joliet-long",
++                    "-rational-rock",
++                    "-translation-table",
++                    "-input-charset",
++                    "utf-8",
++                    "-x",
++                    "./lost+found",
++                    "-eltorito-boot images/cdboot.img",
++                    "-no-emul-boot",
++                    "-o",
++                    "DP-1.0-20160405.t.3-s390x.iso",
++                    "-graft-points",
++                    "-path-list",
++                    "graft-list",
++                ]
+             ),
+-            self.out,
+-        )
++            " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-s390x.iso"]),
++            "isoinfo -R -f -i DP-1.0-20160405.t.3-s390x.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-s390x.iso.manifest",  # noqa: E501
++        ],
++    )
+ 
+-        self.assertScript(
+-            [
+-                createiso.FIND_TEMPLATE_SNIPPET,
+-                " ".join(
+-                    [
+-                        "/usr/bin/genisoimage",
+-                        "-untranslated-filenames",
+-                        "-volid",
+-                        "DP-1.0-20160405.t.3",
+-                        "-J",
+-                        "-joliet-long",
+-                        "-rational-rock",
+-                        "-translation-table",
+-                        "-input-charset",
+-                        "utf-8",
+-                        "-x",
+-                        "./lost+found",
+-                        "-eltorito-boot images/cdboot.img",
+-                        "-no-emul-boot",
+-                        "-o",
+-                        "DP-1.0-20160405.t.3-s390x.iso",
+-                        "-graft-points",
+-                        "-path-list",
+-                        "graft-list",
+-                    ]
+-                ),
+-                " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-s390x.iso"]),
+-                "isoinfo -R -f -i DP-1.0-20160405.t.3-s390x.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-s390x.iso.manifest",  # noqa: E501
+-            ]
+-        )
+ 
+-    @mock.patch("sys.stderr")
+-    @mock.patch("kobo.shortcuts.run")
+-    def test_run_with_jigdo_bad_args(self, run, stderr):
+-        with self.assertRaises(RuntimeError):
+-            createiso.write_script(
+-                createiso.CreateIsoOpts(
+-                    output_dir=self.outdir,
+-                    iso_name="DP-1.0-20160405.t.3-x86_64.iso",
+-                    volid="DP-1.0-20160405.t.3",
+-                    graft_points="graft-list",
+-                    arch="x86_64",
+-                    jigdo_dir="%s/jigdo" % self.topdir,
+-                ),
+-                self.out,
+-            )
+-
+-    @mock.patch("kobo.shortcuts.run")
+-    def test_run_with_jigdo(self, run):
++@mock.patch("sys.stderr")
++@mock.patch("kobo.shortcuts.run")
++def test_run_with_jigdo_bad_args(run, stderr, outdir, out, topdir):
++    with pytest.raises(RuntimeError):
+         createiso.write_script(
+             createiso.CreateIsoOpts(
+-                output_dir=self.outdir,
++                output_dir=outdir,
+                 iso_name="DP-1.0-20160405.t.3-x86_64.iso",
+                 volid="DP-1.0-20160405.t.3",
+                 graft_points="graft-list",
+                 arch="x86_64",
+-                jigdo_dir="%s/jigdo" % self.topdir,
+-                os_tree="%s/os" % self.topdir,
++                jigdo_dir="%s/jigdo" % topdir,
+             ),
+-            self.out,
++            out,
+         )
+ 
+-        self.assertScript(
+-            [
+-                " ".join(
+-                    [
+-                        "/usr/bin/genisoimage",
+-                        "-untranslated-filenames",
+-                        "-volid",
+-                        "DP-1.0-20160405.t.3",
+-                        "-J",
+-                        "-joliet-long",
+-                        "-rational-rock",
+-                        "-translation-table",
+-                        "-input-charset",
+-                        "utf-8",
+-                        "-x",
+-                        "./lost+found",
+-                        "-o",
+-                        "DP-1.0-20160405.t.3-x86_64.iso",
+-                        "-graft-points",
+-                        "-path-list",
+-                        "graft-list",
+-                    ]
+-                ),
+-                " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-x86_64.iso"]),
+-                "isoinfo -R -f -i DP-1.0-20160405.t.3-x86_64.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-x86_64.iso.manifest",  # noqa: E501
+-                " ".join(
+-                    [
+-                        "jigdo-file",
+-                        "make-template",
+-                        "--force",
+-                        "--image=%s/isos/DP-1.0-20160405.t.3-x86_64.iso" % self.topdir,
+-                        "--jigdo=%s/jigdo/DP-1.0-20160405.t.3-x86_64.iso.jigdo"
+-                        % self.topdir,
+-                        "--template=%s/jigdo/DP-1.0-20160405.t.3-x86_64.iso.template"
+-                        % self.topdir,
+-                        "--no-servers-section",
+-                        "--report=noprogress",
+-                        self.topdir + "/os//",
+-                    ]
+-                ),
+-            ]
+-        )
+ 
+-    @parameterized.expand(
+-        [("644", 0o644), ("664", 0o664), ("666", 0o666), ("2644", 0o2644)]
++@mock.patch("kobo.shortcuts.run")
++def test_run_with_jigdo(run, outdir, out, topdir):
++    createiso.write_script(
++        createiso.CreateIsoOpts(
++            output_dir=outdir,
++            iso_name="DP-1.0-20160405.t.3-x86_64.iso",
++            volid="DP-1.0-20160405.t.3",
++            graft_points="graft-list",
++            arch="x86_64",
++            jigdo_dir="%s/jigdo" % topdir,
++            os_tree="%s/os" % topdir,
++        ),
++        out,
+     )
+-    def test_get_perms_non_executable(self, test_name, mode):
+-        path = helpers.touch(os.path.join(self.topdir, "f"), mode=mode)
+-        self.assertEqual(createiso._get_perms(path), 0o444)
+ 
+-    @parameterized.expand(
++    assertScript(
++        out,
++        outdir,
+         [
+-            ("544", 0o544),
+-            ("554", 0o554),
+-            ("555", 0o555),
+-            ("744", 0o744),
+-            ("755", 0o755),
+-            ("774", 0o774),
+-            ("775", 0o775),
+-            ("777", 0o777),
+-            ("2775", 0o2775),
+-        ]
++            " ".join(
++                [
++                    "/usr/bin/genisoimage",
++                    "-untranslated-filenames",
++                    "-volid",
++                    "DP-1.0-20160405.t.3",
++                    "-J",
++                    "-joliet-long",
++                    "-rational-rock",
++                    "-translation-table",
++                    "-input-charset",
++                    "utf-8",
++                    "-x",
++                    "./lost+found",
++                    "-o",
++                    "DP-1.0-20160405.t.3-x86_64.iso",
++                    "-graft-points",
++                    "-path-list",
++                    "graft-list",
++                ]
++            ),
++            " ".join(["/usr/bin/implantisomd5", "DP-1.0-20160405.t.3-x86_64.iso"]),
++            "isoinfo -R -f -i DP-1.0-20160405.t.3-x86_64.iso | grep -v '/TRANS.TBL$' | sort >> DP-1.0-20160405.t.3-x86_64.iso.manifest",  # noqa: E501
++            " ".join(
++                [
++                    "jigdo-file",
++                    "make-template",
++                    "--force",
++                    "--image=%s/isos/DP-1.0-20160405.t.3-x86_64.iso" % topdir,
++                    "--jigdo=%s/jigdo/DP-1.0-20160405.t.3-x86_64.iso.jigdo" % topdir,
++                    "--template=%s/jigdo/DP-1.0-20160405.t.3-x86_64.iso.template"
++                    % topdir,
++                    "--no-servers-section",
++                    "--report=noprogress",
++                    topdir + "/os//",
++                ]
++            ),
++        ],
+     )
+-    def test_get_perms_executable(self, test_name, mode):
+-        path = helpers.touch(os.path.join(self.topdir, "f"), mode=mode)
+-        self.assertEqual(createiso._get_perms(path), 0o555)
++
++
++@pytest.mark.parametrize(
++    "mode",
++    [0o644, 0o664, 0o666, 0o2644],
++    ids=["644", "664", "666", "2644"],
++)
++def test_get_perms_non_executable(mode, topdir):
++    path = helpers.touch(os.path.join(topdir, "f"), mode=mode)
++    assert createiso._get_perms(path) == 0o444
++
++
++@pytest.mark.parametrize(
++    "mode",
++    [0o544, 0o554, 0o555, 0o744, 0o755, 0o774, 0o775, 0o777, 0o2775],
++    ids=["544", "554", "555", "744", "755", "774", "775", "777", "2775"],
++)
++def test_get_perms_executable(mode, topdir):
++    path = helpers.touch(os.path.join(topdir, "f"), mode=mode)
++    assert createiso._get_perms(path) == 0o555
+diff --git a/tests/test_module_util.py b/tests/test_module_util.py
+index d879655c..16e92310 100644
+--- a/tests/test_module_util.py
++++ b/tests/test_module_util.py
+@@ -1,189 +1,198 @@
+ import os
+ 
+-import unittest
++import pytest
+ 
+-from parameterized import parameterized
+ from pungi import module_util
+ from pungi.module_util import Modulemd
+ 
+ from tests import helpers
+ 
+ 
+-@unittest.skipUnless(Modulemd, "Skipped test, no module support.")
+-class TestModuleUtil(helpers.PungiTestCase):
+-    def _get_stream(self, mod_name, stream_name):
+-        stream = Modulemd.ModuleStream.new(
+-            Modulemd.ModuleStreamVersionEnum.TWO, mod_name, stream_name
+-        )
+-        stream.props.version = 42
+-        stream.props.context = "deadbeef"
+-        stream.props.arch = "x86_64"
++pytestmark = pytest.mark.skipif(not Modulemd, reason="Skipped test, no module support.")
+ 
+-        return stream
+ 
+-    def _write_obsoletes(self, defs):
+-        for mod_name, stream, obsoleted_by in defs:
++def _get_stream(mod_name, stream_name):
++    stream = Modulemd.ModuleStream.new(
++        Modulemd.ModuleStreamVersionEnum.TWO, mod_name, stream_name
++    )
++    stream.props.version = 42
++    stream.props.context = "deadbeef"
++    stream.props.arch = "x86_64"
++
++    return stream
++
++
++def _write_obsoletes(topdir, defs):
++    for mod_name, stream, obsoleted_by in defs:
++        mod_index = Modulemd.ModuleIndex.new()
++        mmdobs = Modulemd.Obsoletes.new(1, 10993435, mod_name, stream, "testmsg")
++        mmdobs.set_obsoleted_by(obsoleted_by[0], obsoleted_by[1])
++        mod_index.add_obsoletes(mmdobs)
++        filename = "%s:%s.yaml" % (mod_name, stream)
++        with open(os.path.join(topdir, filename), "w") as f:
++            f.write(mod_index.dump_to_string())
++
++
++def _write_defaults(topdir, defs):
++    for mod_name, streams in defs.items():
++        for stream in streams:
+             mod_index = Modulemd.ModuleIndex.new()
+-            mmdobs = Modulemd.Obsoletes.new(1, 10993435, mod_name, stream, "testmsg")
+-            mmdobs.set_obsoleted_by(obsoleted_by[0], obsoleted_by[1])
+-            mod_index.add_obsoletes(mmdobs)
+-            filename = "%s:%s.yaml" % (mod_name, stream)
+-            with open(os.path.join(self.topdir, filename), "w") as f:
++            mmddef = Modulemd.DefaultsV1.new(mod_name)
++            mmddef.set_default_stream(stream)
++            mod_index.add_defaults(mmddef)
++            filename = "%s-%s.yaml" % (mod_name, stream)
++            with open(os.path.join(topdir, filename), "w") as f:
+                 f.write(mod_index.dump_to_string())
+ 
+-    def _write_defaults(self, defs):
+-        for mod_name, streams in defs.items():
+-            for stream in streams:
+-                mod_index = Modulemd.ModuleIndex.new()
+-                mmddef = Modulemd.DefaultsV1.new(mod_name)
+-                mmddef.set_default_stream(stream)
+-                mod_index.add_defaults(mmddef)
+-                filename = "%s-%s.yaml" % (mod_name, stream)
+-                with open(os.path.join(self.topdir, filename), "w") as f:
+-                    f.write(mod_index.dump_to_string())
+-
+-    @parameterized.expand(
+-        [
+-            (
+-                "MULTIPLE",
+-                [
+-                    ("httpd", "1.22.1", ("httpd-new", "3.0")),
+-                    ("httpd", "10.4", ("httpd", "11.1.22")),
+-                ],
+-            ),
+-            (
+-                "NORMAL",
+-                [
+-                    ("gdb", "2.8", ("gdb", "3.0")),
+-                    ("nginx", "12.7", ("nginx-nightly", "13.3")),
+-                ],
+-            ),
+-        ]
++
++@pytest.mark.parametrize(
++    "test_name,data",
++    [
++        (
++            "MULTIPLE",
++            [
++                ("httpd", "1.22.1", ("httpd-new", "3.0")),
++                ("httpd", "10.4", ("httpd", "11.1.22")),
++            ],
++        ),
++        (
++            "NORMAL",
++            [
++                ("gdb", "2.8", ("gdb", "3.0")),
++                ("nginx", "12.7", ("nginx-nightly", "13.3")),
++            ],
++        ),
++    ],
++)
++def test_merged_module_obsoletes_idx(test_name, data, tmp_path):
++    topdir = str(tmp_path)
++    _write_obsoletes(topdir, data)
++
++    mod_index = module_util.get_module_obsoletes_idx(topdir, [])
++
++    if test_name == "MULTIPLE":
++        # Multiple obsoletes are allowed
++        mod = mod_index.get_module("httpd")
++        assert len(mod.get_obsoletes()) == 2
++    else:
++        mod = mod_index.get_module("gdb")
++        assert len(mod.get_obsoletes()) == 1
++        mod_obsolete = mod.get_obsoletes()
++        assert mod_obsolete is not None
++        assert mod_obsolete[0].get_obsoleted_by_module_stream() == "3.0"
++
++
++def test_collect_module_defaults_with_index(tmp_path):
++    topdir = str(tmp_path)
++    stream = _get_stream("httpd", "1")
++    mod_index = Modulemd.ModuleIndex()
++    mod_index.add_module_stream(stream)
++
++    defaults_data = {"httpd": ["1.44.2"], "python": ["3.6", "3.5"]}
++    _write_defaults(topdir, defaults_data)
++
++    mod_index = module_util.collect_module_defaults(
++        topdir, defaults_data.keys(), mod_index
+     )
+-    def test_merged_module_obsoletes_idx(self, test_name, data):
+-        self._write_obsoletes(data)
+ 
+-        mod_index = module_util.get_module_obsoletes_idx(self.topdir, [])
++    for module_name in defaults_data.keys():
++        mod = mod_index.get_module(module_name)
++        assert mod is not None
++
++        mod_defaults = mod.get_defaults()
++        assert mod_defaults is not None
+ 
+-        if test_name == "MULTIPLE":
+-            # Multiple obsoletes are allowed
+-            mod = mod_index.get_module("httpd")
+-            self.assertEqual(len(mod.get_obsoletes()), 2)
++        if module_name == "httpd":
++            assert mod_defaults.get_default_stream() == "1.44.2"
+         else:
+-            mod = mod_index.get_module("gdb")
+-            self.assertEqual(len(mod.get_obsoletes()), 1)
+-            mod_obsolete = mod.get_obsoletes()
+-            self.assertIsNotNone(mod_obsolete)
+-            self.assertEqual(mod_obsolete[0].get_obsoleted_by_module_stream(), "3.0")
+-
+-    def test_collect_module_defaults_with_index(self):
+-        stream = self._get_stream("httpd", "1")
++            # Can't have multiple defaults for one stream
++            assert mod_defaults.get_default_stream() is None
++
++
++def test_handles_non_defaults_file_without_validation(tmp_path):
++    topdir = str(tmp_path)
++    _write_defaults(topdir, {"httpd": ["1"], "python": ["3.6"]})
++    helpers.touch(
++        os.path.join(topdir, "boom.yaml"),
++        "\n".join(
++            [
++                "document: modulemd",
++                "version: 2",
++                "data:",
++                "  summary: dummy module",
++                "  description: dummy module",
++                "  license:",
++                "    module: [GPL]",
++                "    content: [GPL]",
++            ]
++        ),
++    )
++
++    idx = module_util.collect_module_defaults(topdir)
++
++    assert len(idx.get_module_names()) == 0
++
++
++@pytest.mark.parametrize("no_index,mod_list", [(False, ["httpd"]), (False, ["python"])])
++def test_collect_module_obsoletes(no_index, mod_list, tmp_path):
++    topdir = str(tmp_path)
++    if not no_index:
++        stream = _get_stream(mod_list[0], "1.22.1")
+         mod_index = Modulemd.ModuleIndex()
+         mod_index.add_module_stream(stream)
++    else:
++        mod_index = None
+ 
+-        defaults_data = {"httpd": ["1.44.2"], "python": ["3.6", "3.5"]}
+-        self._write_defaults(defaults_data)
+-
+-        mod_index = module_util.collect_module_defaults(
+-            self.topdir, defaults_data.keys(), mod_index
+-        )
+-
+-        for module_name in defaults_data.keys():
+-            mod = mod_index.get_module(module_name)
+-            self.assertIsNotNone(mod)
+-
+-            mod_defaults = mod.get_defaults()
+-            self.assertIsNotNone(mod_defaults)
+-
+-            if module_name == "httpd":
+-                self.assertEqual(mod_defaults.get_default_stream(), "1.44.2")
+-            else:
+-                # Can't have multiple defaults for one stream
+-                self.assertEqual(mod_defaults.get_default_stream(), None)
+-
+-    def test_handles_non_defaults_file_without_validation(self):
+-        self._write_defaults({"httpd": ["1"], "python": ["3.6"]})
+-        helpers.touch(
+-            os.path.join(self.topdir, "boom.yaml"),
+-            "\n".join(
+-                [
+-                    "document: modulemd",
+-                    "version: 2",
+-                    "data:",
+-                    "  summary: dummy module",
+-                    "  description: dummy module",
+-                    "  license:",
+-                    "    module: [GPL]",
+-                    "    content: [GPL]",
+-                ]
+-            ),
+-        )
+-
+-        idx = module_util.collect_module_defaults(self.topdir)
+-
+-        self.assertEqual(len(idx.get_module_names()), 0)
+-
+-    @parameterized.expand([(False, ["httpd"]), (False, ["python"])])
+-    def test_collect_module_obsoletes(self, no_index, mod_list):
+-        if not no_index:
+-            stream = self._get_stream(mod_list[0], "1.22.1")
+-            mod_index = Modulemd.ModuleIndex()
+-            mod_index.add_module_stream(stream)
+-        else:
+-            mod_index = None
+-
+-        data = [
+-            ("httpd", "1.22.1", ("httpd-new", "3.0")),
+-            ("httpd", "10.4", ("httpd", "11.1.22")),
+-        ]
+-        self._write_obsoletes(data)
+-
+-        mod_index = module_util.collect_module_obsoletes(
+-            self.topdir, mod_list, mod_index
+-        )
+-
+-        # Obsoletes should not me merged without corresponding module
+-        # if module list is present
+-        if "python" in mod_list:
+-            mod = mod_index.get_module("httpd")
+-            self.assertIsNone(mod)
++    data = [
++        ("httpd", "1.22.1", ("httpd-new", "3.0")),
++        ("httpd", "10.4", ("httpd", "11.1.22")),
++    ]
++    _write_obsoletes(topdir, data)
++
++    mod_index = module_util.collect_module_obsoletes(topdir, mod_list, mod_index)
++
++    # Obsoletes should not me merged without corresponding module
++    # if module list is present
++    if "python" in mod_list:
++        mod = mod_index.get_module("httpd")
++        assert mod is None
++    else:
++        mod = mod_index.get_module("httpd")
++
++        # No modules
++        if "httpd" not in mod_list:
++            assert mod.get_obsoletes() is None
+         else:
+-            mod = mod_index.get_module("httpd")
++            assert mod is not None
++            obsoletes_from_orig = mod.get_newest_active_obsoletes("1.22.1", None)
+ 
+-            # No modules
+-            if "httpd" not in mod_list:
+-                self.assertIsNone(mod.get_obsoletes())
+-            else:
+-                self.assertIsNotNone(mod)
+-                obsoletes_from_orig = mod.get_newest_active_obsoletes("1.22.1", None)
++            assert obsoletes_from_orig.get_obsoleted_by_module_name() == "httpd-new"
+ 
+-                self.assertEqual(
+-                    obsoletes_from_orig.get_obsoleted_by_module_name(), "httpd-new"
+-                )
+ 
+-    def test_collect_module_obsoletes_without_modlist(self):
+-        stream = self._get_stream("nginx", "1.22.1")
+-        mod_index = Modulemd.ModuleIndex()
+-        mod_index.add_module_stream(stream)
++def test_collect_module_obsoletes_without_modlist(tmp_path):
++    topdir = str(tmp_path)
++    stream = _get_stream("nginx", "1.22.1")
++    mod_index = Modulemd.ModuleIndex()
++    mod_index.add_module_stream(stream)
+ 
+-        data = [
+-            ("httpd", "1.22.1", ("httpd-new", "3.0")),
+-            ("nginx", "10.4", ("nginx", "11.1.22")),
+-            ("nginx", "11.1.22", ("nginx", "66")),
+-        ]
+-        self._write_obsoletes(data)
++    data = [
++        ("httpd", "1.22.1", ("httpd-new", "3.0")),
++        ("nginx", "10.4", ("nginx", "11.1.22")),
++        ("nginx", "11.1.22", ("nginx", "66")),
++    ]
++    _write_obsoletes(topdir, data)
+ 
+-        mod_index = module_util.collect_module_obsoletes(self.topdir, [], mod_index)
++    mod_index = module_util.collect_module_obsoletes(topdir, [], mod_index)
+ 
+-        # All obsoletes are merged into main Index when filter is empty
+-        self.assertEqual(len(mod_index.get_module_names()), 2)
++    # All obsoletes are merged into main Index when filter is empty
++    assert len(mod_index.get_module_names()) == 2
+ 
+-        mod = mod_index.get_module("httpd")
+-        self.assertIsNotNone(mod)
++    mod = mod_index.get_module("httpd")
++    assert mod is not None
+ 
+-        self.assertEqual(len(mod.get_obsoletes()), 1)
++    assert len(mod.get_obsoletes()) == 1
+ 
+-        mod = mod_index.get_module("nginx")
+-        self.assertIsNotNone(mod)
++    mod = mod_index.get_module("nginx")
++    assert mod is not None
+ 
+-        self.assertEqual(len(mod.get_obsoletes()), 2)
++    assert len(mod.get_obsoletes()) == 2
+diff --git a/tests/test_scm.py b/tests/test_scm.py
+index a6e8e156..11d5cfd5 100644
+--- a/tests/test_scm.py
++++ b/tests/test_scm.py
+@@ -4,32 +4,33 @@ from unittest import mock
+ import os
+ import random
+ import shutil
+-import tempfile
+-import unittest
+ import http.server
+ import threading
+ 
+-from parameterized import parameterized
++import pytest
+ 
+ from pungi.wrappers import scm
+ from tests.helpers import touch, GIT_WITH_CREDS
+ from kobo.shortcuts import run
+ 
+ 
+-class SCMBaseTest(unittest.TestCase):
+-    def setUp(self):
+-        self.destdir = tempfile.mkdtemp()
++class SCMBaseTest:
++    """Pytest-compatible base class for SCM tests."""
+ 
+-    def tearDown(self):
+-        shutil.rmtree(self.destdir)
++    @pytest.fixture(autouse=True)
++    def setup(self, tmp_path_factory):
++        self.destdir = str(tmp_path_factory.mktemp("topdir") / "destdir")
++        os.makedirs(self.destdir)
++        yield
++        # Cleanup handled automatically by tmp_path_factory fixture
+ 
+     def assertStructure(self, returned, expected):
+         # Check we returned the correct files
+-        self.assertCountEqual(returned, expected)
++        assert set(returned) == set(expected)
+ 
+         # Each file must exist
+         for f in expected:
+-            self.assertTrue(os.path.isfile(os.path.join(self.destdir, f)))
++            assert os.path.isfile(os.path.join(self.destdir, f))
+ 
+         # Only expected files should exist
+         found = []
+@@ -37,11 +38,12 @@ class SCMBaseTest(unittest.TestCase):
+             for f in files:
+                 p = os.path.relpath(os.path.join(root, f), self.destdir)
+                 found.append(p)
+-        self.assertCountEqual(expected, found)
++        assert set(expected) == set(found)
+ 
+ 
+ class FileSCMTestCase(SCMBaseTest):
+-    def setUp(self):
++    @pytest.fixture(autouse=True)
++    def setup_files(self, tmp_path):
+         """
+         Prepares a source structure and destination directory.
+ 
+@@ -51,15 +53,13 @@ class FileSCMTestCase(SCMBaseTest):
+              +- first
+              +- second
+         """
+-        super(FileSCMTestCase, self).setUp()
+-        self.srcdir = tempfile.mkdtemp()
++        self.srcdir = str(tmp_path / "srcdir")
++        os.makedirs(self.srcdir)
+         touch(os.path.join(self.srcdir, "in_root"))
+         touch(os.path.join(self.srcdir, "subdir", "first"))
+         touch(os.path.join(self.srcdir, "subdir", "second"))
+-
+-    def tearDown(self):
+-        super(FileSCMTestCase, self).tearDown()
+-        shutil.rmtree(self.srcdir)
++        yield
++        # Cleanup handled by tmp_path
+ 
+     def test_get_file_by_name(self):
+         file = os.path.join(self.srcdir, "in_root")
+@@ -89,47 +89,47 @@ class FileSCMTestCase(SCMBaseTest):
+         self.assertStructure(retval, ["first", "second"])
+ 
+     def test_get_missing_file(self):
+-        with self.assertRaises(RuntimeError) as ctx:
++        with pytest.raises(RuntimeError, match="No files matched"):
+             scm.get_file_from_scm(
+                 {"scm": "file", "repo": None, "file": "this-is-really-not-here.txt"},
+                 self.destdir,
+             )
+ 
+-        self.assertIn("No files matched", str(ctx.exception))
+-
+     def test_get_missing_dir(self):
+-        with self.assertRaises(RuntimeError) as ctx:
++        with pytest.raises(RuntimeError, match="No directories matched"):
+             scm.get_dir_from_scm(
+                 {"scm": "file", "repo": None, "dir": "this-is-really-not-here"},
+                 self.destdir,
+             )
+ 
+-        self.assertIn("No directories matched", str(ctx.exception))
+-
+ 
+ CREDENTIALS_CONFIG = {"credential_helper": "!ch"}
+ 
+ 
+ class GitSCMTestCase(SCMBaseTest):
+-    def tearDown(self):
+-        shutil.rmtree("/tmp/pungi-temp-git-repos-%s" % os.getpid())
+-        super(GitSCMTestCase, self).tearDown()
++    @pytest.fixture(autouse=True)
++    def setup_teardown(self, tmp_path_factory):
++        try:
++            yield
++        finally:
++            # Cleanup temp git repos directory
++            temp_dir = "/tmp/pungi-temp-git-repos-%s" % os.getpid()
++            if os.path.exists(temp_dir):
++                shutil.rmtree(temp_dir)
+ 
+     def assertCalls(self, mock_run, url, branch, command=None, with_creds=False):
+         git = GIT_WITH_CREDS if with_creds else ["git"]
+         command = [command] if command else []
+-        self.assertEqual(
+-            [call[0][0] for call in mock_run.call_args_list],
+-            [
+-                ["git", "init"],
+-                git + ["fetch", "--depth=1", url, branch],
+-                ["git", "checkout", "FETCH_HEAD"],
+-            ]
+-            + command,
+-        )
+-
+-    @parameterized.expand([("without_creds", {}), ("with_creds", CREDENTIALS_CONFIG)])
+-    def test_get_file(self, _name, config):
++        assert [call[0][0] for call in mock_run.call_args_list] == [
++            ["git", "init"],
++            git + ["fetch", "--depth=1", url, branch],
++            ["git", "checkout", "FETCH_HEAD"],
++        ] + command
++
++    @pytest.mark.parametrize(
++        "config", [{}, CREDENTIALS_CONFIG], ids=["without_creds", "with_creds"]
++    )
++    def test_get_file(self, config):
+         def process(cmd, workdir=None, **kwargs):
+             touch(os.path.join(workdir, "some_file.txt"))
+             touch(os.path.join(workdir, "other_file.txt"))
+@@ -170,11 +170,13 @@ class GitSCMTestCase(SCMBaseTest):
+             os.path.join(self.destdir, destination),
+             compose=compose,
+         )
+-        self.assertEqual(retval, destination)
++        assert retval == destination
+         self.assertCalls(run, "git://example.com/git/repo.git", "master")
+ 
+-    @parameterized.expand([("without_creds", {}), ("with_creds", CREDENTIALS_CONFIG)])
+-    def test_get_file_fetch_fails(self, _name, config):
++    @pytest.mark.parametrize(
++        "config", [{}, CREDENTIALS_CONFIG], ids=["without_creds", "with_creds"]
++    )
++    def test_get_file_fetch_fails(self, config):
+         url = "git://example.com/git/repo.git"
+         git = GIT_WITH_CREDS if config else ["git"]
+ 
+@@ -194,23 +196,20 @@ class GitSCMTestCase(SCMBaseTest):
+             )
+ 
+         self.assertStructure(retval, ["some_file.txt"])
+-        self.assertEqual(
+-            [call[0][0] for call in run.call_args_list],
+-            [
+-                ["git", "init"],
+-                git
+-                + [
+-                    "fetch",
+-                    "--depth=1",
+-                    "git://example.com/git/repo.git",
+-                    "master",
+-                ],
+-                ["git", "init"],
+-                ["git", "remote", "add", "origin", url],
+-                git + ["remote", "update", "origin"],
+-                ["git", "checkout", "master"],
++        assert [call[0][0] for call in run.call_args_list] == [
++            ["git", "init"],
++            git
++            + [
++                "fetch",
++                "--depth=1",
++                "git://example.com/git/repo.git",
++                "master",
+             ],
+-        )
++            ["git", "init"],
++            ["git", "remote", "add", "origin", url],
++            git + ["remote", "update", "origin"],
++            ["git", "checkout", "master"],
++        ]
+ 
+     @mock.patch("pungi.wrappers.scm.run")
+     def test_get_file_generated_by_command(self, run):
+@@ -243,7 +242,7 @@ class GitSCMTestCase(SCMBaseTest):
+ 
+         run.side_effect = process
+ 
+-        with self.assertRaises(RuntimeError) as ctx:
++        with pytest.raises(RuntimeError, match="'make' failed with exit code 1"):
+             scm.get_file_from_scm(
+                 {
+                     "scm": "git",
+@@ -254,10 +253,10 @@ class GitSCMTestCase(SCMBaseTest):
+                 self.destdir,
+             )
+ 
+-        self.assertEqual(str(ctx.exception), "'make' failed with exit code 1")
+-
+-    @parameterized.expand([("without_creds", {}), ("with_creds", CREDENTIALS_CONFIG)])
+-    def test_get_dir(self, _name, config):
++    @pytest.mark.parametrize(
++        "config", [{}, CREDENTIALS_CONFIG], ids=["without_creds", "with_creds"]
++    )
++    def test_get_dir(self, config):
+         def process(cmd, workdir=None, **kwargs):
+             touch(os.path.join(workdir, "subdir", "first"))
+             touch(os.path.join(workdir, "subdir", "second"))
+@@ -303,10 +302,14 @@ class GitSCMTestCase(SCMBaseTest):
+ 
+ 
+ class GitSCMTestCaseRealBase(SCMBaseTest):
+-    def setUp(self):
+-        super(GitSCMTestCaseRealBase, self).setUp()
++    """Pytest-compatible base class for real git SCM tests."""
++
++    @pytest.fixture(autouse=True)
++    def setup_git_repo(self, tmp_path_factory):
++        # Set up git repo in a separate temp directory (like original)
++        # Note: destdir is already set up by parent's setup fixture
+         self.compose = mock.Mock(conf={})
+-        self.gitRepositoryLocation = tempfile.mkdtemp()
++        self.gitRepositoryLocation = tmp_path_factory.mktemp("git_repo")
+         git_dir = os.path.join(self.gitRepositoryLocation, ".git")
+         run(
+             [
+@@ -355,13 +358,11 @@ class GitSCMTestCaseRealBase(SCMBaseTest):
+             ],
+             workdir=self.gitRepositoryLocation,
+         )
++        yield
++        # Cleanup of git repository handled by tmp_path_factory
+ 
+-    def tearDown(self):
+-        super(GitSCMTestCaseRealBase, self).tearDown()
+-        shutil.rmtree(self.gitRepositoryLocation)
+ 
+-
+-class GitSCMTestCaseReal(GitSCMTestCaseRealBase):
++class GitSCMRealTestCase(GitSCMTestCaseRealBase):
+     def test_get_file_function(self):
+         sourceFileLocation = random.choice(list(self.files.keys()))
+         sourceFilename = os.path.basename(sourceFileLocation)
+@@ -375,15 +376,15 @@ class GitSCMTestCaseReal(GitSCMTestCaseRealBase):
+             os.path.join(self.destdir, destinationFileLocation),
+             compose=self.compose,
+         )
+-        self.assertEqual(destinationFileActualLocation, destinationFileLocation)
+-        self.assertTrue(os.path.isfile(destinationFileActualLocation))
++        assert destinationFileActualLocation == destinationFileLocation
++        assert os.path.isfile(destinationFileActualLocation)
+ 
+         # Comparing the contents of source to the destination file.
+         with open(sourceFileLocation) as sourceFileHandle:
+             sourceFileContent = sourceFileHandle.read()
+         with open(destinationFileActualLocation) as destinationFileHandle:
+             destinationFileContent = destinationFileHandle.read()
+-        self.assertEqual(sourceFileContent, destinationFileContent)
++        assert sourceFileContent == destinationFileContent
+ 
+     def test_get_file_function_with_overwrite(self):
+         sourceFileLocation = random.choice(list(self.files.keys()))
+@@ -403,8 +404,8 @@ class GitSCMTestCaseReal(GitSCMTestCaseRealBase):
+             compose=self.compose,
+             overwrite=True,
+         )
+-        self.assertEqual(destinationFileActualLocation, destinationFileLocation)
+-        self.assertTrue(os.path.isfile(destinationFileActualLocation))
++        assert destinationFileActualLocation == destinationFileLocation
++        assert os.path.isfile(destinationFileActualLocation)
+ 
+         # Reading the contents of both files to compare later.
+         with open(sourceFileLocation) as sourceFileHandle:
+@@ -412,14 +413,15 @@ class GitSCMTestCaseReal(GitSCMTestCaseRealBase):
+         with open(destinationFileActualLocation) as destinationFileHandle:
+             destinationFileContent = destinationFileHandle.read()
+         # Ensuring that the file was in fact overwritten
+-        self.assertNotEqual(preExistingContent, destinationFileContent)
++        assert preExistingContent != destinationFileContent
+         # Comparing the contents of source to the destination file.
+-        self.assertEqual(sourceFileContent, destinationFileContent)
++        assert sourceFileContent == destinationFileContent
+ 
+ 
+-class GitSCMTestCaseRealSubmodule(GitSCMTestCaseRealBase):
++class GitSCMRealSubmoduleTestCase(GitSCMTestCaseRealBase):
+ 
+-    def setUp(self):
++    @pytest.fixture(autouse=True)
++    def setup_submodule(self, tmp_path_factory):
+         # This gets a little complicated. The test sets up a git repo with a
+         # submodule and tries to obtain a file from the submodule. However,
+         # submodules over file:// are restricted for security reasons. The test
+@@ -427,8 +429,8 @@ class GitSCMTestCaseRealSubmodule(GitSCMTestCaseRealBase):
+         # issues we instead start a one-off HTTP server to serve the repository
+         # on localhost.
+         # The server runs in a separate thread.
+-        super(GitSCMTestCaseRealSubmodule, self).setUp()
+-        self.main_repo_path = tempfile.mkdtemp()
++        # Note: parent's setup_git_repo fixture already ran
++        self.main_repo_path = str(tmp_path_factory.mktemp("main_repo"))
+         submodule_path = self.gitRepositoryLocation
+ 
+         run(["git", "update-server-info"], workdir=submodule_path)
+@@ -468,14 +470,14 @@ class GitSCMTestCaseRealSubmodule(GitSCMTestCaseRealBase):
+                 "Add submodule",
+             ],
+         ]
+-        for cmd in cmds:
+-            run(cmd, workdir=self.main_repo_path)
++        try:
++            for cmd in cmds:
++                run(cmd, workdir=self.main_repo_path)
+ 
+-    def tearDown(self):
+-        super(GitSCMTestCaseRealSubmodule, self).tearDown()
+-        self.thread_done = True
+-        self.t.join()
+-        shutil.rmtree(self.main_repo_path)
++            yield
++        finally:
++            self.thread_done = True
++            self.t.join()
+ 
+     def test_get_file(self):
+         sourceFileLocation = random.choice(list(self.files.keys()))
+@@ -490,8 +492,8 @@ class GitSCMTestCaseRealSubmodule(GitSCMTestCaseRealBase):
+             destinationFileLocation,
+             compose=self.compose,
+         )
+-        self.assertEqual(destinationFileActualLocation, destinationFileLocation)
+-        self.assertTrue(os.path.isfile(destinationFileActualLocation))
++        assert destinationFileActualLocation == destinationFileLocation
++        assert os.path.isfile(destinationFileActualLocation)
+ 
+         # Reading the contents of both files to compare later.
+         with open(sourceFileLocation) as sourceFileHandle:
+@@ -499,13 +501,14 @@ class GitSCMTestCaseRealSubmodule(GitSCMTestCaseRealBase):
+         with open(destinationFileActualLocation) as destinationFileHandle:
+             destinationFileContent = destinationFileHandle.read()
+         # Comparing the contents of source to the destination file.
+-        self.assertEqual(sourceFileContent, destinationFileContent)
++        assert sourceFileContent == destinationFileContent
+ 
+ 
+ class RpmSCMTestCase(SCMBaseTest):
+-    def setUp(self):
+-        super(RpmSCMTestCase, self).setUp()
+-        self.tmpdir = tempfile.mkdtemp()
++    @pytest.fixture(autouse=True)
++    def setup_rpms(self, tmp_path):
++        self.tmpdir = str(tmp_path / "rpms")
++        os.makedirs(self.tmpdir)
+         self.exploded = set()
+         self.rpms = [self.tmpdir + "/whatever.rpm", self.tmpdir + "/another.rpm"]
+         self.numbered = [
+@@ -514,10 +517,8 @@ class RpmSCMTestCase(SCMBaseTest):
+         ]
+         for rpm in self.rpms + self.numbered:
+             touch(rpm)
+-
+-    def tearDown(self):
+-        super(RpmSCMTestCase, self).tearDown()
+-        shutil.rmtree(self.tmpdir)
++        yield
++        # Cleanup handled by tmp_path
+ 
+     def _explode_rpm(self, path, dest):
+         self.exploded.add(path)
+@@ -541,7 +542,7 @@ class RpmSCMTestCase(SCMBaseTest):
+         )
+ 
+         self.assertStructure(retval, ["some-file.txt"])
+-        self.assertEqual(self.exploded, set([self.rpms[0]]))
++        assert self.exploded == set([self.rpms[0]])
+ 
+     @mock.patch("pungi.wrappers.scm.explode_rpm_package")
+     def test_get_more_files(self, explode):
+@@ -557,7 +558,7 @@ class RpmSCMTestCase(SCMBaseTest):
+         )
+ 
+         self.assertStructure(retval, ["some-file.txt", "foo.txt"])
+-        self.assertEqual(self.exploded, set([self.rpms[0]]))
++        assert self.exploded == set([self.rpms[0]])
+ 
+     @mock.patch("pungi.wrappers.scm.explode_rpm_package")
+     def test_get_whole_dir(self, explode):
+@@ -568,7 +569,7 @@ class RpmSCMTestCase(SCMBaseTest):
+         )
+ 
+         self.assertStructure(retval, ["subdir/foo.txt", "subdir/bar.txt"])
+-        self.assertEqual(self.exploded, set([self.rpms[0]]))
++        assert self.exploded == set([self.rpms[0]])
+ 
+     @mock.patch("pungi.wrappers.scm.explode_rpm_package")
+     def test_get_dir_contents(self, explode):
+@@ -579,7 +580,7 @@ class RpmSCMTestCase(SCMBaseTest):
+         )
+ 
+         self.assertStructure(retval, ["foo.txt", "bar.txt"])
+-        self.assertEqual(self.exploded, set([self.rpms[0]]))
++        assert self.exploded == set([self.rpms[0]])
+ 
+     @mock.patch("pungi.wrappers.scm.explode_rpm_package")
+     def test_get_files_from_two_rpms(self, explode):
+@@ -595,7 +596,7 @@ class RpmSCMTestCase(SCMBaseTest):
+         )
+ 
+         self.assertStructure(retval, ["some-file-1.txt", "some-file-2.txt"])
+-        self.assertCountEqual(self.exploded, self.rpms)
++        assert set(self.exploded) == set(self.rpms)
+ 
+     @mock.patch("pungi.wrappers.scm.explode_rpm_package")
+     def test_get_files_from_glob_rpms(self, explode):
+@@ -619,7 +620,7 @@ class RpmSCMTestCase(SCMBaseTest):
+                 "some-file-4.txt",
+             ],
+         )
+-        self.assertCountEqual(self.exploded, self.numbered)
++        assert set(self.exploded) == set(self.numbered)
+ 
+     @mock.patch("pungi.wrappers.scm.explode_rpm_package")
+     def test_get_dir_from_two_rpms(self, explode):
+@@ -630,7 +631,7 @@ class RpmSCMTestCase(SCMBaseTest):
+         )
+ 
+         self.assertStructure(retval, ["common/foo-1.txt", "common/foo-2.txt"])
+-        self.assertCountEqual(self.exploded, self.rpms)
++        assert set(self.exploded) == set(self.rpms)
+ 
+     @mock.patch("pungi.wrappers.scm.explode_rpm_package")
+     def test_get_dir_from_glob_rpms(self, explode):
+@@ -648,7 +649,7 @@ class RpmSCMTestCase(SCMBaseTest):
+         self.assertStructure(
+             retval, ["foo-1.txt", "foo-2.txt", "foo-3.txt", "foo-4.txt"]
+         )
+-        self.assertCountEqual(self.exploded, self.numbered)
++        assert set(self.exploded) == set(self.numbered)
+ 
+ 
+ class CvsSCMTestCase(SCMBaseTest):
+@@ -668,10 +669,9 @@ class CvsSCMTestCase(SCMBaseTest):
+             self.destdir,
+         )
+         self.assertStructure(retval, ["some_file.txt"])
+-        self.assertEqual(
+-            commands,
+-            ["/usr/bin/cvs -q -d http://example.com/cvs export -r HEAD some_file.txt"],
+-        )
++        assert commands == [
++            "/usr/bin/cvs -q -d http://example.com/cvs export -r HEAD some_file.txt"
++        ]
+ 
+     @mock.patch("pungi.wrappers.scm.run")
+     def test_get_dir(self, run):
+@@ -691,10 +691,9 @@ class CvsSCMTestCase(SCMBaseTest):
+         )
+         self.assertStructure(retval, ["first", "second"])
+ 
+-        self.assertEqual(
+-            commands,
+-            ["/usr/bin/cvs -q -d http://example.com/cvs export -r HEAD subdir"],
+-        )
++        assert commands == [
++            "/usr/bin/cvs -q -d http://example.com/cvs export -r HEAD subdir"
++        ]
+ 
+ 
+ @mock.patch("pungi.wrappers.scm.urlretrieve")
+@@ -702,28 +701,26 @@ class KojiSCMTestCase(SCMBaseTest):
+     def test_without_koji_profile(self, dl):
+         compose = mock.Mock(conf={})
+ 
+-        with self.assertRaises(RuntimeError) as ctx:
++        with pytest.raises(RuntimeError, match="Koji profile must be configured"):
+             scm.get_file_from_scm(
+                 {"scm": "koji", "repo": "my-build-1.0-2", "file": "*"},
+                 self.destdir,
+                 compose=compose,
+             )
+-        self.assertIn("Koji profile must be configured", str(ctx.exception))
+-        self.assertEqual(dl.mock_calls, [])
++        assert dl.mock_calls == []
+ 
+     @mock.patch("pungi.wrappers.scm.KojiWrapper")
+     def test_doesnt_get_dirs(self, KW, dl):
+         compose = mock.Mock(conf={"koji_profile": "koji"})
+ 
+-        with self.assertRaises(RuntimeError) as ctx:
++        with pytest.raises(RuntimeError, match="Only files can be exported"):
+             scm.get_dir_from_scm(
+                 {"scm": "koji", "repo": "my-build-1.0-2", "dir": "*"},
+                 self.destdir,
+                 compose=compose,
+             )
+-        self.assertIn("Only files can be exported", str(ctx.exception))
+-        self.assertEqual(KW.mock_calls, [mock.call(compose)])
+-        self.assertEqual(dl.mock_calls, [])
++        assert KW.mock_calls == [mock.call(compose)]
++        assert dl.mock_calls == []
+ 
+     def _setup_koji_wrapper(self, KW, build_id, files):
+         KW.return_value.koji_module.config.topdir = "/mnt/koji"
+@@ -753,19 +750,15 @@ class KojiSCMTestCase(SCMBaseTest):
+             compose=compose,
+         )
+         self.assertStructure(retval, ["abc.tar"])
+-        self.assertEqual(
+-            KW.mock_calls,
+-            [
+-                mock.call(compose),
+-                mock.call().koji_proxy.getBuild("my-build-1.0-2"),
+-                mock.call().koji_proxy.listArchives(123),
+-                mock.call().koji_module.pathinfo.typedir({"build_id": 123}, "image"),
+-            ],
+-        )
+-        self.assertEqual(
+-            dl.call_args_list,
+-            [mock.call("http://koji.local/koji/images/abc.tar", mock.ANY)],
+-        )
++        assert KW.mock_calls == [
++            mock.call(compose),
++            mock.call().koji_proxy.getBuild("my-build-1.0-2"),
++            mock.call().koji_proxy.listArchives(123),
++            mock.call().koji_module.pathinfo.typedir({"build_id": 123}, "image"),
++        ]
++        assert dl.call_args_list == [
++            mock.call("http://koji.local/koji/images/abc.tar", mock.ANY)
++        ]
+ 
+     @mock.patch("pungi.wrappers.scm.KojiWrapper")
+     def test_get_from_latest_build(self, KW, dl):
+@@ -784,42 +777,39 @@ class KojiSCMTestCase(SCMBaseTest):
+             compose=compose,
+         )
+         self.assertStructure(retval, ["abc.tar"])
+-        self.assertEqual(
+-            KW.mock_calls,
+-            [
+-                mock.call(compose),
+-                mock.call().koji_proxy.listTagged(
+-                    "images", package="my-build", inherit=True, latest=True
+-                ),
+-                mock.call().koji_proxy.listArchives(123),
+-                mock.call().koji_module.pathinfo.typedir({"build_id": 123}, "image"),
+-            ],
+-        )
+-        self.assertEqual(
+-            dl.call_args_list,
+-            [mock.call("http://koji.local/koji/images/abc.tar", mock.ANY)],
+-        )
++        assert KW.mock_calls == [
++            mock.call(compose),
++            mock.call().koji_proxy.listTagged(
++                "images", package="my-build", inherit=True, latest=True
++            ),
++            mock.call().koji_proxy.listArchives(123),
++            mock.call().koji_module.pathinfo.typedir({"build_id": 123}, "image"),
++        ]
++        assert dl.call_args_list == [
++            mock.call("http://koji.local/koji/images/abc.tar", mock.ANY)
++        ]
+ 
+ 
+ IMAGE_URL = "example.com/image"
+ 
+ 
+-class ContainerImageScmWrapperTest(SCMBaseTest):
++class ContainerImageScmWrapperTestCase(SCMBaseTest):
+     def test_get_dir_is_not_implemented(self):
+-        with self.assertRaises(RuntimeError):
++        with pytest.raises(RuntimeError):
+             scm.get_dir_from_scm(
+                 {"scm": "container-image", "repo": IMAGE_URL, "dir": ""}, self.destdir
+             )
+ 
+-    @parameterized.expand(
++    @pytest.mark.parametrize(
++        "real_arch,translated_arch",
+         [
+             ("x86_64", "amd64"),
+             ("aarch64", "arm64"),
+             ("s390x", "s390x"),
+-        ]
++        ],
+     )
+     @mock.patch("pungi.wrappers.scm.run")
+-    def test_get_file(self, real_arch, translated_arch, mock_run):
++    def test_get_file(self, mock_run, real_arch, translated_arch):
+         scm.get_file_from_scm(
+             {
+                 "scm": "container-image",
+@@ -841,30 +831,30 @@ class ContainerImageScmWrapperTest(SCMBaseTest):
+             arch=real_arch,
+         )
+ 
+-        self.assertCountEqual(
+-            mock_run.mock_calls,
+-            [
+-                mock.call(
+-                    [
+-                        "skopeo",
+-                        f"--override-arch={translated_arch}",
+-                        "copy",
+-                        IMAGE_URL + ":latest",
+-                        f"oci:{self.destdir}",
+-                        "--remove-signatures",
+-                    ],
+-                    can_fail=False,
+-                ),
+-                mock.call(
+-                    [
+-                        "skopeo",
+-                        f"--override-arch={translated_arch}",
+-                        "copy",
+-                        IMAGE_URL + ":prev",
+-                        f"oci:{self.destdir}",
+-                        "--remove-signatures",
+-                    ],
+-                    can_fail=False,
+-                ),
+-            ],
+-        )
++        expected_calls = [
++            mock.call(
++                [
++                    "skopeo",
++                    f"--override-arch={translated_arch}",
++                    "copy",
++                    IMAGE_URL + ":latest",
++                    f"oci:{self.destdir}",
++                    "--remove-signatures",
++                ],
++                can_fail=False,
++            ),
++            mock.call(
++                [
++                    "skopeo",
++                    f"--override-arch={translated_arch}",
++                    "copy",
++                    IMAGE_URL + ":prev",
++                    f"oci:{self.destdir}",
++                    "--remove-signatures",
++                ],
++                can_fail=False,
++            ),
++        ]
++        assert len(mock_run.mock_calls) == len(expected_calls)
++        for call in expected_calls:
++            assert call in mock_run.mock_calls
+diff --git a/tox.ini b/tox.ini
+index 74c0e78c..84e3478c 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -52,4 +52,5 @@ max-line-length = 88
+ ignore = E402,H301,H306,E226,W503,E203
+ 
+ [pytest]
++python_classes = Test* *TestCase
+ addopts = --ignore=tests/_composes
+-- 
+2.51.1
+

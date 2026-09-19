@@ -1,0 +1,29 @@
+Description: Remove the data_files from the setup.cfg file since the
+ Debian package can't rely on setuptools 40.5.0 or higher.
+ Instead the custom logic in setup.py will handle these file for the
+ Debian package.
+ The custom logic doesn't work for a wheel though and therefore can't be
+ used generically.
+Author: Dirk Thomas <web@dirk-thomas.net>
+
+--- a/setup.cfg   2019-01-04 11:11:11.000000000 -0800
++++ b/setup.cfg   2019-01-04 11:11:11.000000000 -0800
+@@ -45,11 +45,13 @@
+   scspell3k>=2.2
+ zip_safe = false
+ 
+-[options.data_files]
+-# distutils replaces dashes in keys with underscores
+-share/colcon_argcomplete/hook =
+-    completion/colcon-argcomplete.bash
+-    completion/colcon-argcomplete.zsh
++# the Fedora package can't rely on a recent setuptools version
++# which is necessary to support this option
++# [options.data_files]
++# # distutils replaces dashes in keys with underscores
++# share/colcon_argcomplete/hook =
++#     completion/colcon-argcomplete.bash
++#     completion/colcon-argcomplete.zsh
+ 
+ [tool:pytest]
+ filterwarnings =

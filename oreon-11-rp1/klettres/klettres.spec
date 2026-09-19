@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7e52d8215df8cd47c91b64f70df474658b783258060aa61e7fffa25b1b1150c1
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    klettres
 Summary: Learn the alphabet and read some syllables in different languages
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -47,7 +47,7 @@ very first sounds of a new language, for children or for adults.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n klettres-26.04.1
+%autosetup -p1 -n %{name}-%{version}
 
 
 %build

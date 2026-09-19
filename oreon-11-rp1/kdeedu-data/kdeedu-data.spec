@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash e7b7f90aa23ee5b2b5943003a376f96fa75591716cb7d99a22b5ef08020fa519
 
 Name:    kdeedu-data
 Summary: Shared icons, artwork and data files for educational applications
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.

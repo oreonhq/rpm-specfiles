@@ -1,0 +1,27 @@
+--- sequoia-sop-0.37.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ sequoia-sop-0.37.3/Cargo.toml	2025-12-11T13:49:27.522393+00:00
+@@ -38,6 +38,9 @@
+ ]
+ license = "GPL-2.0-or-later"
+ repository = "https://gitlab.com/sequoia-pgp/sequoia-sop"
++exclude = [
++    "/openpgp-policy.toml",
++]
+ 
+ [badges.gitlab]
+ repository = "sequoia-pgp/sequoia-sop"
+@@ -54,13 +57,10 @@
+     "sop/cliv",
+     "dep:sequoia-policy-config",
+ ]
+-crypto-botan = ["sequoia-openpgp/crypto-botan"]
+-crypto-botan2 = ["sequoia-openpgp/crypto-botan2"]
+-crypto-cng = ["sequoia-openpgp/crypto-cng"]
+ crypto-nettle = ["sequoia-openpgp/crypto-nettle"]
+ crypto-openssl = ["sequoia-openpgp/crypto-openssl"]
+ crypto-rust = ["sequoia-openpgp/crypto-rust"]
+-default = ["crypto-nettle"]
++default = ["crypto-openssl"]
+ 
+ [lib]
+ name = "sequoia_sop"

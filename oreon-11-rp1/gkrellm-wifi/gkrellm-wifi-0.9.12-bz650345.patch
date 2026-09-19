@@ -1,0 +1,16 @@
+diff -up gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c~ gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c
+--- gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c~	2010-11-07 16:52:51.000000000 +0100
++++ gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c	2010-11-07 17:21:01.195851005 +0100
+@@ -321,8 +321,10 @@ get_quality_max (const gchar *interface)
+         }
+       else
+         {
+-          g_message (_("Could not get range for %s: %s"),
+-                     interface, g_strerror (errno));
++          /* HDG some cards just do not support this, don't flood the log with
++             errors */
++          /* g_message (_("Could not get range for %s: %s"),
++                        interface, g_strerror (errno)); */
+ 
+           ret = DEFAULT_QUALITY_MAX;
+         }

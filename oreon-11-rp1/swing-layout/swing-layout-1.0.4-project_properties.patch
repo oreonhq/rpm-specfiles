@@ -1,0 +1,13 @@
+--- nbproject/project.properties	2009-10-27 17:54:48.000000000 +0100
++++ nbproject/project.properties-gil	2012-12-09 10:41:50.618599320 +0100
+@@ -30,8 +30,8 @@
+ # Space-separated list of extra javac options
+ javac.compilerargs=-g:lines
+ javac.deprecation=false
+-javac.source=1.4
+-javac.target=1.4
++javac.source=1.8
++javac.target=1.8
+ javac.test.classpath=\
+     ${javac.classpath}:\
+     ${build.classes.dir}:\

@@ -1,0 +1,28 @@
+From 9b37df5f8c656c9aaca3a8315b4afc685623e42c Mon Sep 17 00:00:00 2001
+From: Samuel Williams <samuel.williams@oriontransfer.co.nz>
+Date: Thu, 28 Nov 2019 15:51:34 +0900
+Subject: [PATCH] Rewrite `File.exists?` -> `File.exist?`.
+
+---
+ build_tools/aws-sdk-code-generator/spec/spec_helper.rb | 2 +-
+ build_tools/changelog.rb                               | 2 +-
+ build_tools/custom_service.rb                          | 2 +-
+ build_tools/file_writer.rb                             | 2 +-
+ build_tools/services.rb                                | 4 ++--
+ gems/aws-sdk-core/features/features_helper.rb          | 2 +-
+ gems/aws-sigv4/spec/suite_spec.rb                      | 2 +-
+ 7 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/gems/aws-sigv4/spec/suite_spec.rb b/gems/aws-sigv4/spec/suite_spec.rb
+index 1e744352c9..c1646eb383 100644
+--- a/gems/aws-sigv4/spec/suite_spec.rb
++++ b/gems/aws-sigv4/spec/suite_spec.rb
+@@ -7,7 +7,7 @@ module Sigv4
+         Dir.glob(File.expand_path('../suite/**', __FILE__)).each do |path|
+ 
+           prefix = File.join(path, File.basename(path))
+-          next unless File.exists?("#{prefix}.req")
++          next unless File.exist?("#{prefix}.req")
+ 
+           describe(File.basename(prefix)) do
+ 

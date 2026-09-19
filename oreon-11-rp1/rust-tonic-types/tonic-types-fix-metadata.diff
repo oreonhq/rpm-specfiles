@@ -1,0 +1,35 @@
+--- tonic-types-0.12.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ tonic-types-0.12.3/Cargo.toml	2024-10-08T08:53:46.612098+00:00
+@@ -17,7 +17,7 @@
+     "Lucio Franco <luciofranco14@gmail.com>",
+     "Rafael Lemos <flemos.rafael.dev@gmail.com>",
+ ]
+-build = false
++build = "build.rs"
+ autobins = false
+ autoexamples = false
+ autotests = false
+@@ -38,7 +38,7 @@
+     "network-programming",
+     "asynchronous",
+ ]
+-license = "MIT"
++license = "MIT AND Apache-2.0"
+ repository = "https://github.com/hyperium/tonic"
+ 
+ [package.metadata.cargo_check_external_types]
+@@ -52,6 +52,14 @@
+ name = "tonic_types"
+ path = "src/lib.rs"
+ 
++[build-dependencies.tempfile]
++version = "3.8.0"
++
++[build-dependencies.tonic-build]
++version = "0.12"
++default-features = false
++features = ["prost"]
++
+ [dependencies.prost]
+ version = "0.13"
+ 

@@ -1,0 +1,24 @@
+diff -up ./common/ktikz.kcfg.orig ./common/ktikz.kcfg
+--- ./common/ktikz.kcfg.orig	2018-03-11 16:29:13.000000000 +0100
++++ ./common/ktikz.kcfg	2018-03-19 17:24:52.192651956 +0100
+@@ -45,7 +45,7 @@
+    <label>The text in the template file which is replaced by the TikZ code before typesetting.</label>
+   </entry>
+   <entry key="TemplateEditor" type="Path">
+-   <default>kwrite</default>
++   <default>xdg-open</default>
+    <label>The path to the editor command used for editing templates.</label>
+   </entry>
+  </group>
+diff -up ./qmake/qtikzdefaults.pri.orig ./qmake/qtikzdefaults.pri
+--- ./qmake/qtikzdefaults.pri.orig	2018-03-11 16:29:13.000000000 +0100
++++ ./qmake/qtikzdefaults.pri	2018-03-19 17:24:59.774712347 +0100
+@@ -9,7 +9,7 @@ unix:!macx {
+ 	isEmpty(MIME_INSTALL_DIR): MIME_INSTALL_DIR = /usr/share/mime/packages
+ 	isEmpty(MAN_INSTALL_DIR): MAN_INSTALL_DIR = $${PREFIX}/share/man
+ 	isEmpty(RESOURCES_INSTALL_DIR): RESOURCES_INSTALL_DIR = $${PREFIX}/share/qtikz
+-	isEmpty(TEMPLATE_EDITOR): TEMPLATE_EDITOR_DEFAULT = kwrite
++	isEmpty(TEMPLATE_EDITOR): TEMPLATE_EDITOR_DEFAULT = xdg-open
+ }
+ macx { # untested
+ 	CONFIG += link_prl

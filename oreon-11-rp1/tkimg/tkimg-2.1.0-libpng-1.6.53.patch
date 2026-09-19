@@ -1,0 +1,17 @@
+diff -up Img-2.1.0/compat/libpng/scripts/pnglibconf.h.prebuilt.libpng1.6.53 Img-2.1.0/compat/libpng/scripts/pnglibconf.h.prebuilt
+--- Img-2.1.0/compat/libpng/scripts/pnglibconf.h.prebuilt.libpng1.6.53	2025-12-18 18:42:25.129761195 -0500
++++ Img-2.1.0/compat/libpng/scripts/pnglibconf.h.prebuilt	2025-12-18 18:42:50.433717171 -0500
+@@ -208,10 +208,10 @@
+ #define PNG_GAMMA_THRESHOLD_FIXED 5000
+ #define PNG_IDAT_READ_SIZE PNG_ZBUF_SIZE
+ #define PNG_INFLATE_BUF_SIZE 1024
+-#define PNG_LINKAGE_API extern
+-#define PNG_LINKAGE_CALLBACK extern
++#define PNG_LINKAGE_API
++#define PNG_LINKAGE_CALLBACK
+ #define PNG_LINKAGE_DATA extern
+-#define PNG_LINKAGE_FUNCTION extern
++#define PNG_LINKAGE_FUNCTION
+ #define PNG_MAX_GAMMA_8 11
+ #define PNG_QUANTIZE_BLUE_BITS 5
+ #define PNG_QUANTIZE_GREEN_BITS 5

@@ -1,0 +1,35 @@
+# Wordpress
+
+location = /wordpress {
+    alias /usr/share/wordpress/;
+}
+
+location /wordpress/ {
+    root /usr/share;
+    index index.php;
+
+    location ~ ^/wordpress/wp-content/uploads/(.+)\.php$ {
+        # Deny access to any php file in the uploads directory
+        deny all;
+    }
+    location ~ ^/wordpress/wp-content/plugins/akismet/(.+)\.php$ {
+        # Deny access to any php file in the akismet directory
+        deny all;
+    }
+
+    # Access is only allowed via local access
+    # Change this once configured
+    location ~ ^/wordpress/(.+\.php)$ {
+        allow 127.0.0.1;
+        allow ::1;
+        deny all;
+
+        try_files $uri =404;
+        fastcgi_intercept_errors on;
+        include        fastcgi_params;
+        fastcgi_param  SERVER_NAME      $host;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        fastcgi_pass   php-fpm;
+    }
+}
+

@@ -1,0 +1,14 @@
+--- duff-0.5.2-orig/src/Makefile.am	2012-11-01 02:02:01.826361340 -0430
++++ duff-0.5.2/src/Makefile.am	2012-11-01 02:05:44.127476440 -0430
+@@ -3,8 +3,8 @@
+ 
+ bin_PROGRAMS = duff
+ 
+-duff_SOURCES = duff.c duffdriver.c dufffile.c duffstring.c duffutil.c sha1.c sha256.c sha384.c sha512.c
+-duff_LDADD = @LIBINTL@
++duff_SOURCES = duff.c duffdriver.c dufffile.c duffstring.c duffutil.c 
++duff_LDADD = -Llibsha.so -lsha
+ 
+-noinst_HEADERS = duff.h duffstring.h sha1.h sha256.h sha384.h sha512.h
++noinst_HEADERS = duff.h duffstring.h 
+ 

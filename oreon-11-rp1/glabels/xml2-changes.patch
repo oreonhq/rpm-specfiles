@@ -1,0 +1,11 @@
+diff -up glabels-3.4.1/libglabels/lgl-xml.h.xml2-changes glabels-3.4.1/libglabels/lgl-xml.h
+--- glabels-3.4.1/libglabels/lgl-xml.h.xml2-changes	2023-12-01 12:23:50.383000000 +0100
++++ glabels-3.4.1/libglabels/lgl-xml.h	2023-12-01 12:23:52.711000000 +0100
+@@ -22,6 +22,7 @@
+ #define __LGL_XML_H__
+ 
+ #include <glib.h>
++#include <libxml/parser.h>
+ #include <libxml/tree.h>
+ 
+ #include "lgl-units.h"

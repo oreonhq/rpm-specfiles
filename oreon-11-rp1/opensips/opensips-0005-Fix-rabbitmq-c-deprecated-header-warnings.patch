@@ -1,0 +1,469 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sun, 26 Oct 2025 15:29:04 +0100
+Subject: [PATCH] Fix rabbitmq-c deprecated header warnings
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+During compilation of event_rabbitmq module, several warnings appear:
+
+```
+Compiling rabbitmq_consumer.c
+gcc -fPIC -DPIC -O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Wno-complain-wrong-lang -Werror=format-security -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -DMOD_NAME='rabbitmq_consumer' -DPKG_MALLOC  -DSHM_MMAP  -DUSE_MCAST  -DDISABLE_NAGLE  -DSTATISTICS  -DHAVE_RESOLV_RES  -DF_MALLOC  -DQ_MALLOC  -DHP_MALLOC  -DDBG_MALLOC  -DF_PARALLEL_MALLOC  -DHAVE_STDATOMIC -DHAVE_GENERICS  -DNAME='"opensips"' -DVERSION='"3.6.2"' -DARCH='"x86_64"' -DOS='"linux"' -DCOMPILER='"gcc 15"' -D__CPU_x86_64 -D__OS_linux -D__SMP_yes -DCFG_DIR='"/etc/opensips/"'  -DVERSIONTYPE='"git"' -DTHISREVISION='"994bcd690"' -DFAST_LOCK -DADAPTIVE_WAIT -DADAPTIVE_WAIT_LOOPS=1024 -DHAVE_GETHOSTBYNAME2 -DHAVE_UNION_SEMUN -DHAVE_MSG_NOSIGNAL -DHAVE_MSGHDR_MSG_CONTROL -DHAVE_ALLOCA_H -DHAVE_TIMEGM -DHAVE_EPOLL -DHAVE_SIGIO_RT -DHAVE_SELECT  -c rabbitmq_consumer.c -o rabbitmq_consumer.o
+In file included from rmq_connection.h:25,
+                 from rabbitmq_consumer.c:25:
+/usr/include/amqp.h:10:5: warning: #warning "amqp.h is deprecated, use rabbitmq-c/amqp.h instead." [-Wcpp]
+   10 | #   warning "amqp.h is deprecated, use rabbitmq-c/amqp.h instead."
+      |     ^~~~~~~
+In file included from rmq_connection.h:26:
+/usr/include/amqp_tcp_socket.h:10:5: warning: #warning "amqp_tcp_socket.h is deprecated, use rabbitmq-c/tcp_socket.h instead." [-Wcpp]
+   10 | #   warning "amqp_tcp_socket.h is deprecated, use rabbitmq-c/tcp_socket.h instead."
+      |     ^~~~~~~
+In file included from rmq_connection.h:27:
+/usr/include/amqp_ssl_socket.h:12:5: warning: #warning "amqp_ssl_socket.h is deprecated, use rabbitmq-c/ssl_socket.h instead." [-Wcpp]
+   12 | #   warning "amqp_ssl_socket.h is deprecated, use rabbitmq-c/ssl_socket.h instead."
+      |     ^~~~~~~
+rabbitmq_consumer.c: In function ‘mod_init’:
+rabbitmq_consumer.c:99:17: warning: ‘amqp_set_initialize_ssl_library’ is deprecated [-Wdeprecated-declarations]
+   99 |                 amqp_set_initialize_ssl_library(0);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/amqp_ssl_socket.h:15:
+/usr/include/rabbitmq-c/ssl_socket.h:250:16: note: declared here
+  250 | void AMQP_CALL amqp_set_initialize_ssl_library(amqp_boolean_t do_initialize);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+The rabbitmq-c library reorganized headers into a rabbitmq-c/
+subdirectory in version 0.8.0 (2017). The old top-level headers remain
+as deprecated wrappers that emit warnings. Additionally, the function
+amqp_set_initialize_ssl_library() was deprecated in version 0.13.0
+(2022) as SSL initialization became automatic.
+
+Changes made:
+
+1. Removed obsolete version guard for rabbitmq-c 0.4.0:
+   The guard checking AMQP_VERSION >= 0x00040000 and defining
+   AMQP_VERSION_v04 was needed for ancient versions (2013). All currently
+   supported distributions ship rabbitmq-c >= 0.9.0, making this check
+   unnecessary.
+
+2. Updated header includes to use rabbitmq-c/ subdirectory:
+   - Changed: #include <amqp.h>
+   - To:      #include <rabbitmq-c/amqp.h>
+   - Applied to: amqp.h, amqp_framing.h, amqp_tcp_socket.h, amqp_ssl_socket.h
+
+3. Added version guard for amqp_set_initialize_ssl_library():
+   This function is called with argument 0 to tell rabbitmq-c NOT to
+   initialize OpenSSL, since OpenSIPS manages its own SSL/TLS stack at a
+   higher level. The function is needed for rabbitmq-c < 0.13.0 but was
+   deprecated in 0.13.0 when the library made SSL initialization behavior
+   configurable by default.
+
+   Changed:
+     amqp_set_initialize_ssl_library(0);
+   To:
+     #if AMQP_VERSION < AMQP_VERSION_CODE(0, 13, 0, 0)
+         amqp_set_initialize_ssl_library(0);
+     #endif
+
+Note: The existing version guard for AMQP_VERSION < 0.10.0 (ssl_lock) was
+preserved as it handles real API differences between 0.9.x and 0.10.0+
+versions still present in current distributions.
+
+Compatibility analysis:
+
+Survey of actively supported distributions shows all ship rabbitmq-c >= 0.9.0:
+
+- RHEL/Rocky/Alma 8/9: >= 0.9.0
+- Ubuntu 20.04/22.04/24.04: >= 0.9.0
+- Debian 11/12: >= 0.9.0
+- Fedora 39/40/41: >= 0.13.0
+- macOS Homebrew: 0.15.0
+- macOS MacPorts: 0.11.0
+
+The 0.4.0 compatibility code (from 2013) is no longer needed. The 0.13.0
+guard is necessary as some LTS distributions still ship 0.9.x-0.12.x.
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+Assisted-by: Claude (Anthropic) <https://claude.ai>
+
+diff --git a/modules/event_rabbitmq/README b/modules/event_rabbitmq/README
+index 698fbf63d..7f742d833 100644
+--- a/modules/event_rabbitmq/README
++++ b/modules/event_rabbitmq/README
+@@ -130,7 +130,7 @@ Chapter 1. Admin Guide
+ 
+    The following libraries or applications must be installed
+    before running OpenSIPS with this module loaded:
+-     * librabbitmq-dev
++     * librabbitmq-dev ver. 0.9 or higher
+ 
+ 1.5. Exported Parameters
+ 
+diff --git a/modules/event_rabbitmq/doc/event_rabbitmq_admin.xml b/modules/event_rabbitmq/doc/event_rabbitmq_admin.xml
+index 438967541..6d4619ce5 100644
+--- a/modules/event_rabbitmq/doc/event_rabbitmq_admin.xml
++++ b/modules/event_rabbitmq/doc/event_rabbitmq_admin.xml
+@@ -131,7 +131,7 @@
+ 			<itemizedlist>
+ 			<listitem>
+ 			<para>
+-				<emphasis>librabbitmq-dev</emphasis>
++				<emphasis>librabbitmq-dev ver. 0.9 or higher</emphasis>
+ 			</para>
+ 			</listitem>
+ 			</itemizedlist>
+diff --git a/modules/event_rabbitmq/event_rabbitmq.c b/modules/event_rabbitmq/event_rabbitmq.c
+index 619ee750c..143f381f0 100644
+--- a/modules/event_rabbitmq/event_rabbitmq.c
++++ b/modules/event_rabbitmq/event_rabbitmq.c
+@@ -50,9 +50,7 @@ static unsigned int heartbeat = 0;
+ static int rmq_connect_timeout = RMQ_DEFAULT_CONNECT_TIMEOUT;
+ static int rmq_timeout = 0;
+ struct timeval conn_timeout_tv;
+-#if defined AMQP_VERSION && AMQP_VERSION >= 0x00090000
+ struct timeval rpc_timeout_tv;
+-#endif
+ int use_tls;
+ struct tls_mgm_binds tls_api;
+ struct openssl_binds openssl_api;
+@@ -201,24 +199,14 @@ static int mod_init(void)
+ 	conn_timeout_tv.tv_sec = rmq_connect_timeout/1000;
+ 	conn_timeout_tv.tv_usec = (rmq_connect_timeout%1000)*1000;
+ 
+-#if defined AMQP_VERSION && AMQP_VERSION >= 0x00090000
+ 	if (rmq_timeout < 0) {
+ 		LM_WARN("invalid value for 'timeout' %d; fallback to blocking mode\n", rmq_timeout);
+ 		rmq_timeout = 0;
+ 	}
+ 	rpc_timeout_tv.tv_sec = rmq_timeout/1000;
+ 	rpc_timeout_tv.tv_usec = (rmq_timeout%1000)*1000;
+-#else
+-	if (rmq_timeout != 0)
+-		LM_WARN("setting the timeout without support for it; fallback to blocking mode\n");
+-#endif
+ 
+ 	if (use_tls) {
+-		#ifndef AMQP_VERSION_v04
+-		LM_ERR("TLS not supported for librabbitmq version lower than 0.4.0\n");
+-		return -1;
+-		#endif
+-
+ 		if (load_tls_openssl_api(&openssl_api)) {
+ 			LM_DBG("Failed to load openssl API\n");
+ 			return -1;
+@@ -241,7 +229,9 @@ static int mod_init(void)
+ 		}
+ 		#endif
+ 
++#if AMQP_VERSION < AMQP_VERSION_CODE(0, 13, 0, 0)
+ 		amqp_set_initialize_ssl_library(0);
++#endif
+ 	}
+ 
+ 	return 0;
+diff --git a/modules/event_rabbitmq/event_rabbitmq.h b/modules/event_rabbitmq/event_rabbitmq.h
+index 5b1158e16..b27c2ad64 100644
+--- a/modules/event_rabbitmq/event_rabbitmq.h
++++ b/modules/event_rabbitmq/event_rabbitmq.h
+@@ -27,13 +27,10 @@
+ #ifndef _EV_RMQ_H_
+ #define _EV_RMQ_H_
+ 
+-#include <amqp.h>
+-#include <amqp_framing.h>
+-#if defined AMQP_VERSION && AMQP_VERSION >= 0x00040000
+-  #define AMQP_VERSION_v04
+-#include <amqp_tcp_socket.h>
+-#include <amqp_ssl_socket.h>
+-#endif
++#include <rabbitmq-c/amqp.h>
++#include <rabbitmq-c/framing.h>
++#include <rabbitmq-c/tcp_socket.h>
++#include <rabbitmq-c/ssl_socket.h>
+ 
+ #include "../tls_mgm/api.h"
+ #include "rmq_servers.h"
+diff --git a/modules/event_rabbitmq/rmq_servers.c b/modules/event_rabbitmq/rmq_servers.c
+index d920e599d..d1f6a19ab 100644
+--- a/modules/event_rabbitmq/rmq_servers.c
++++ b/modules/event_rabbitmq/rmq_servers.c
+@@ -33,61 +33,7 @@
+ 
+ #include "rmq_servers.h"
+ #include "rabbitmq_send.h"
+-#include <amqp_framing.h>
+-
+-#ifdef AMQP_VERSION_v04
+-#define rmq_parse_rm amqp_parse_url
+-#else
+-#include "../../db/db_id.h"
+-#warning "You are using an old, unsupported RabbitMQ library version - compile on your own risk!"
+-/* ugly hack to move ptr from id to rmq_uri */
+-#define PTR_MOVE(_from, _to) \
+-	do { \
+-		(_to) = (_from); \
+-		(_from) = NULL; \
+-	} while(0)
+-static inline int rmq_parse_rm(char *url, rmq_uri *uri)
+-{
+-	str surl;
+-	struct db_id *id;
+-
+-	surl.s = url;
+-	surl.len = strlen(url);
+-
+-	if ((id = new_db_id(&surl)) == NULL)
+-		return -1;
+-
+-	if (strcmp(id->scheme, "amqps") == 0)
+-		uri->ssl = 1;
+-
+-	/* there might me a pkg leak compared to the newer version, but parsing
+-	 * only happends at startup, so we should not worry about this now */
+-	if (id->username)
+-		PTR_MOVE(id->username, uri->user);
+-	else
+-		uri->user = "guest";
+-	if (id->password)
+-		PTR_MOVE(id->password, uri->password);
+-	else
+-		uri->password = "guest";
+-	if (id->host)
+-		PTR_MOVE(id->host, uri->host);
+-	else
+-		uri->host = "localhost";
+-	if (id->database)
+-		PTR_MOVE(id->database, uri->vhost);
+-	else
+-		uri->vhost = "/";
+-	if (id->port)
+-		uri->port = id->port;
+-	else if (uri->ssl)
+-		uri->port = 5671;
+-	else
+-		uri->port = 5672;
+-	free_db_id(id);
+-	return 0;
+-}
+-#endif
++#include <rabbitmq-c/framing.h>
+ 
+ static OSIPS_LIST_HEAD(rmq_servers);
+ 
+@@ -117,9 +63,6 @@ int rmq_error(char const *context, amqp_rpc_reply_t x)
+ {
+ 	amqp_connection_close_t *mconn;
+ 	amqp_channel_close_t *mchan;
+-#ifndef AMQP_VERSION_v04
+-	char *errorstr;
+-#endif
+ 
+ 	switch (x.reply_type) {
+ 		case AMQP_RESPONSE_NORMAL:
+@@ -130,13 +73,7 @@ int rmq_error(char const *context, amqp_rpc_reply_t x)
+ 			break;
+ 
+ 		case AMQP_RESPONSE_LIBRARY_EXCEPTION:
+-#ifndef AMQP_VERSION_v04
+-			errorstr = amqp_error_string(x.library_error);
+-			LM_ERR("%s: %s\n", context, errorstr);
+-			free(errorstr);
+-#else
+ 			LM_ERR("%s: %s\n", context, amqp_error_string2(x.library_error));
+-#endif
+ 			break;
+ 
+ 		case AMQP_RESPONSE_SERVER_EXCEPTION:
+@@ -170,9 +107,7 @@ int rmq_error(char const *context, amqp_rpc_reply_t x)
+  */
+ int rmq_server_reconnect(rmq_connection_t *conn, char *address, int port, int max_frames, str cid)
+ {
+-#if defined AMQP_VERSION_v04
+ 	amqp_socket_t *amqp_sock;
+-#endif
+ 	int socket;
+ 
+ 	switch (conn->state) {
+@@ -182,7 +117,6 @@ int rmq_server_reconnect(rmq_connection_t *conn, char *address, int port, int ma
+ 			LM_ERR("cannot create amqp connection!\n");
+ 			return -1;
+ 		}
+-#if defined AMQP_VERSION_v04
+ 		if (use_tls && (conn->uri.ssl || (conn->flags&RMQ_PARAM_TLS))) {
+ 			if (!conn->tls_dom) {
+ 				conn->tls_dom = tls_api.find_client_domain_name(&conn->tls_dom_name);
+@@ -314,16 +248,6 @@ int rmq_server_reconnect(rmq_connection_t *conn, char *address, int port, int ma
+ 				amqp_set_rpc_timeout(conn->conn, &rpc_timeout_tv) < 0)
+ 			LM_ERR("setting RPC timeout - going blocking\n");
+ #endif
+-
+-#else
+-		socket = amqp_open_socket_noblock(address, port,
+-				&conn_timeout_tv);
+-		if (socket < 0) {
+-			LM_ERR("cannot open AMQP socket\n");
+-			return -1;
+-		}
+-		amqp_set_sockfd(conn->conn, socket);
+-#endif
+ 		conn->state = RMQS_INIT;
+ 		/* fall through */
+ 	case RMQS_INIT:
+@@ -568,7 +492,7 @@ no_value:
+ 	memcpy(uri, suri.s, suri.len);
+ 	uri[suri.len] = 0;
+ 
+-	if (rmq_parse_rm(uri, &srv->conn.uri) != 0) {
++	if (amqp_parse_url(uri, &srv->conn.uri) != 0) {
+ 		LM_ERR("[%.*s] cannot parse rabbitmq uri: %s\n", cid.len, cid.s, uri);
+ 		goto free;
+ 	}
+@@ -605,7 +529,7 @@ no_value:
+ 		}
+ 		memcpy(srv->conn.exchange.bytes, exchange.s, exchange.len);
+ 	} else
+-		srv->conn.exchange = RMQ_EMPTY;
++		srv->conn.exchange = amqp_empty_bytes;
+ 
+ 	srv->conn.state = RMQS_OFF;
+ 	srv->cid = cid;
+@@ -677,16 +601,6 @@ void rmq_connect_servers(void)
+ 
+ int amqp_check_status(rmq_connection_t *conn, int r, int *retry, str cid)
+ {
+-#ifndef AMQP_VERSION_v04
+-	if (r != 0) {
+-		LM_ERR("[%.*s] unknown AMQP error [%d] while sending\n",
+-				srv->cid.len, srv->cid.s, r);
+-		/* we close the connection here to be able to re-connect later */
+-		/* TODO: close the connection */
+-		return r;
+-	}
+-	return 0;
+-#else
+ 	switch (r) {
+ 		case AMQP_STATUS_OK:
+ 			return 0;
+@@ -741,7 +655,6 @@ no_close:
+ 		return 1;
+ 	}
+ 	return r;
+-#endif
+ }
+ 
+ int rmq_basic_server_publish(rmq_connection_t *conn, int max_frames,
+diff --git a/modules/event_rabbitmq/rmq_servers.h b/modules/event_rabbitmq/rmq_servers.h
+index a700d8004..0d853f8f2 100644
+--- a/modules/event_rabbitmq/rmq_servers.h
++++ b/modules/event_rabbitmq/rmq_servers.h
+@@ -40,7 +40,7 @@
+ 
+ #include "../tls_openssl/openssl_api.h"
+ #include "../tls_mgm/api.h"
+-#include <amqp.h>
++#include <rabbitmq-c/amqp.h>
+ #include "../../lib/list.h"
+ 
+ #if AMQP_VERSION < AMQP_VERSION_CODE(0, 10, 0, 0)
+@@ -49,30 +49,8 @@
+ extern gen_lock_t *ssl_lock;
+ #endif
+ 
+-/* AMQP_VERSION was only added in v0.4.0 - there is no way to check the
+- * version of the library before this, so we consider everything beyond v0.4.0
+- * as old and inneficient */
+-#if defined AMQP_VERSION && AMQP_VERSION >= AMQP_VERSION_CODE(0, 4, 0, 0)
+-  #define AMQP_VERSION_v04
+-#include <amqp_tcp_socket.h>
+-#include <amqp_ssl_socket.h>
+-#define rmq_uri struct amqp_connection_info
+-#define RMQ_EMPTY amqp_empty_bytes
+-#else
+-/* although struct amqp_connection_info was added in v0.2.0, there is no way
+- * to check against that version, so we assume it does not exist until v0.4.0
+- */
+-typedef struct _rmq_uri {
+-	char *user;
+-	char *password;
+-	char *host;
+-	char *vhost;
+-	int port;
+-	int ssl;
+-} rmq_uri;
+-#define RMQ_EMPTY AMQP_EMPTY_BYTES
+-#endif
+-
++#include <rabbitmq-c/tcp_socket.h>
++#include <rabbitmq-c/ssl_socket.h>
+ 
+ enum rmq_server_state { RMQS_OFF, RMQS_INIT, RMQS_CONN, RMQS_ON, RMQS_PREINIT };
+ 
+@@ -82,7 +60,7 @@ enum rmq_server_state { RMQS_OFF, RMQS_INIT, RMQS_CONN, RMQS_ON, RMQS_PREINIT };
+ 
+ typedef struct rmq_connection {
+ 	enum rmq_server_state state;
+-	rmq_uri uri;
++	struct amqp_connection_info uri;
+ 	unsigned flags;
+ 	int heartbeat;
+ 	str tls_dom_name;
+diff --git a/modules/rabbitmq_consumer/README b/modules/rabbitmq_consumer/README
+index aed3bf49f..6c760d554 100644
+--- a/modules/rabbitmq_consumer/README
++++ b/modules/rabbitmq_consumer/README
+@@ -72,8 +72,8 @@ Chapter 1. Admin Guide
+    before running OpenSIPS with this module loaded:
+      * librabbitmq-dev
+ 
+-   NOte that the module is not compatible with versions 0.4 or
+-   below of the librabbitmq-dev library.
++   Note that the module is not compatible with versions below 0.9
++   of the librabbitmq-dev library.
+ 
+ 1.3. Exported Parameters
+ 
+diff --git a/modules/rabbitmq_consumer/doc/rabbitmq_consumer_admin.xml b/modules/rabbitmq_consumer/doc/rabbitmq_consumer_admin.xml
+index a8da3cb2a..856ed7395 100644
+--- a/modules/rabbitmq_consumer/doc/rabbitmq_consumer_admin.xml
++++ b/modules/rabbitmq_consumer/doc/rabbitmq_consumer_admin.xml
+@@ -50,7 +50,7 @@
+ 			</listitem>
+ 			</itemizedlist>
+ 		<para>
+-			NOte that the module is not compatible with versions 0.4 or below of
++			Note that the module is not compatible with versions below 0.9 of
+ 			the librabbitmq-dev library.
+ 		</para>
+ 	</section>
+diff --git a/modules/rabbitmq_consumer/rabbitmq_consumer.c b/modules/rabbitmq_consumer/rabbitmq_consumer.c
+index 6462f5708..c6cf2417d 100644
+--- a/modules/rabbitmq_consumer/rabbitmq_consumer.c
++++ b/modules/rabbitmq_consumer/rabbitmq_consumer.c
+@@ -96,7 +96,9 @@ static int mod_init(void)
+ 			return -1;
+ 		}
+ 
++#if AMQP_VERSION_MAJOR == 0 && AMQP_VERSION_MINOR < 13
+ 		amqp_set_initialize_ssl_library(0);
++#endif // AMQP_VERSION_MAJOR == 0 && AMQP_VERSION_MINOR < 13
+ 	}
+ 
+ 	return 0;
+diff --git a/modules/rabbitmq_consumer/rmq_connection.h b/modules/rabbitmq_consumer/rmq_connection.h
+index 8aea48710..a34a0deb5 100644
+--- a/modules/rabbitmq_consumer/rmq_connection.h
++++ b/modules/rabbitmq_consumer/rmq_connection.h
+@@ -22,9 +22,9 @@
+ #ifndef _RMQ_CONNECTION_H_
+ #define _RMQ_CONNECTION_H_
+ 
+-#include <amqp.h>
+-#include <amqp_tcp_socket.h>
+-#include <amqp_ssl_socket.h>
++#include <rabbitmq-c/amqp.h>
++#include <rabbitmq-c/tcp_socket.h>
++#include <rabbitmq-c/ssl_socket.h>
+ 
+ #include "../../lib/list.h"
+ #include "../../evi/evi_params.h"

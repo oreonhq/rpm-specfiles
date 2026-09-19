@@ -1,0 +1,17 @@
+Fixes this UBSAN warning:
+
+src/sha256.c:98:30: runtime error: left shift of 128 by 24 places cannot be represented in type 'int'
+
+--- src/sha256.c.orig	2025-10-17 17:53:30.000000000 -0600
++++ src/sha256.c	2026-03-13 14:34:10.101176213 -0600
+@@ -95,8 +95,8 @@ static void be32decode(UInt4 * dst, cons
+ {
+     UInt i;
+     for (i = 0; i < (len >> 2); i++) {
+-        dst[i] = (src[i * 4] << 24) | (src[i * 4 + 1] << 16) |
+-                 (src[i * 4 + 2] << 8) | (src[i * 4 + 3]);
++        dst[i] = (((UInt4)src[i * 4]) << 24) | (((UInt4)src[i * 4 + 1]) << 16) |
++                 (((UInt4)src[i * 4 + 2]) << 8) | ((UInt4)src[i * 4 + 3]);
+     }
+ }
+ 

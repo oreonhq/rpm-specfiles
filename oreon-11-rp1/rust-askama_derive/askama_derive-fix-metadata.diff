@@ -1,0 +1,11 @@
+--- askama_derive-0.14.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ askama_derive-0.14.0/Cargo.toml	2025-08-18T09:56:05.927182+00:00
+@@ -110,7 +110,7 @@
+ default-features = false
+ 
+ [dev-dependencies.console]
+-version = "0.15.8"
++version = "0.16.0"
+ 
+ [dev-dependencies.prettyplease]
+ version = "0.2.20"

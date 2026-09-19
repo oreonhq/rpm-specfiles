@@ -1,0 +1,19 @@
+diff -up alex4src/alex4.ini~ alex4src/alex4.ini
+--- alex4src/alex4.ini~	2003-07-26 12:55:26.000000000 +0200
++++ alex4src/alex4.ini	2017-09-08 11:50:17.095282921 +0200
+@@ -1,12 +1,11 @@
+ ##############################################################
+ #
+-# Configuration file for Alex 4 (v1.1)
++# Example configuration file for Alex 4 (v1.1)
+ #
+ ##############################################################
+ #
+-# If you lose control of the contents of this file
+-# and wants to restore to the defaults, you will have
+-# to reinstall the game. Conclusion: Handle with care!
++# To make cchanges to alex4's configuration copy this file to
++#  ~/.alex4/alex4.ini and edit it.
+ #
+ ##############################################################
+ 

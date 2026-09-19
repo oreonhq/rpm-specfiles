@@ -1,0 +1,14 @@
+cmake_minimum_required (VERSION 2.6)
+project (polyglot)
+
+set(EXE polyglot)
+
+find_package(PkgConfig)
+pkg_search_module(LEVELDB REQUIRED leveldb)
+include_directories(LEVELDB_INCLUDE_PATH)
+
+aux_source_directory(. SOURCES)
+
+add_executable(${EXE} ${SOURCES})
+
+target_link_libraries(${EXE} ${LEVELDB_LIBRARIES})

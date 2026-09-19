@@ -1,0 +1,26 @@
+From 3f6a88875748ec9619d3fb9dca56d471ebb2b3e1 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Mon, 12 Aug 2024 16:05:16 +0200
+Subject: [PATCH] fix invalid code block syntax in documentation
+
+---
+ src/v1_30/apimachinery/pkg/api/resource/quantity.rs | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/v1_30/apimachinery/pkg/api/resource/quantity.rs b/src/v1_30/apimachinery/pkg/api/resource/quantity.rs
+index fc5595f..803f543 100644
+--- a/src/v1_30/apimachinery/pkg/api/resource/quantity.rs
++++ b/src/v1_30/apimachinery/pkg/api/resource/quantity.rs
+@@ -4,7 +4,8 @@
+ ///
+ /// The serialization format is:
+ ///
+-/// ``` \<quantity\>        ::= \<signedNumber\>\<suffix\>
++/// ```ignore
++///   \<quantity\>        ::= \<signedNumber\>\<suffix\>
+ ///
+ ///   (Note that \<suffix\> may be empty, from the "" case in \<decimalSI\>.)
+ ///
+-- 
+2.46.0
+

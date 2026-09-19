@@ -36,7 +36,7 @@
 # rpm -ba|--rebuild --define 'no_gtk3 1'
 %{?no_gtk3:%global gtk3 0}
 
-%global openssh_ver 10.3p1
+%global openssh_ver 10.5p1
 
 Summary: An open source implementation of SSH protocol version 2
 Name: openssh

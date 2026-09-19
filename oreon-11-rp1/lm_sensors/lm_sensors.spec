@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name: lm_sensors
-Version: 3.6.0
-Release: 24%{?dist}
+Version: 3-6-2
+Release: 1%{?dist}
 Summary: Hardware monitoring tools
 
 %define upstream_version %(echo %{version} | sed -e 's/\\./-/g')

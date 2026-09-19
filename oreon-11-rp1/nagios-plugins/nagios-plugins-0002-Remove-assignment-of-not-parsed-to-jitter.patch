@@ -1,0 +1,11 @@
+diff -up ./plugins-scripts/check_ntp.pl.not_parsed ./plugins-scripts/check_ntp.pl
+--- ./plugins-scripts/check_ntp.pl.not_parsed	2017-01-16 12:24:03.000000000 -0500
++++ ./plugins-scripts/check_ntp.pl	2017-07-12 15:29:20.311215673 -0400
+@@ -314,7 +314,6 @@ if ($have_ntpq) {
+ 				}
+ 			} else {
+ 				print "No match!\n" if $verbose;
+-				$jitter = '(not parsed)';
+ 			}
+ 			
+ 		}

@@ -1,0 +1,41 @@
+From d1ee5570aaedf71e94752684fbb2aa0c6b4a7ab8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 8 Nov 2018 17:01:24 +0100
+Subject: [PATCH] test: Sort query fields
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+t/02_input.t failed randomly:
+
+	#   Failed test 'read all'
+	#   at t/TestModPSGI.pm line 151.
+	#          got: 'b=2&a=1'
+	#     expected: 'a=1&b=2'
+	# Looks like you failed 1 test of 13.
+
+This because of the query string fields are processes as hash keys and their
+serialization is non-derteministic. This patch fixes the test to provide
+expected order.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/02_input.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/t/02_input.t b/t/02_input.t
+index 9d37deb..924f99d 100644
+--- a/t/02_input.t
++++ b/t/02_input.t
+@@ -44,7 +44,7 @@ content: f
+ method: POST
+ code: |
+   $env->{'psgi.input'}->read(my $buf, $env->{CONTENT_LENGTH});
+-  $buf;
++  join('&', sort split('&', $buf))
+ args:
+   - a: 1
+     b: 2
+-- 
+2.17.2
+

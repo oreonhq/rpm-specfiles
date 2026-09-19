@@ -1,0 +1,12 @@
+diff --git a/src/plugins/jcm800pre.cpp b/trunk/src/plugins/jcm800pre.cpp
+index 8b7d602d..3edc3fc7 100644
+--- a/src/plugins/jcm800pre.cpp
++++ b/src/plugins/jcm800pre.cpp
+@@ -2,6 +2,7 @@
+ // DO NOT MODIFY!
+ #include <iostream>
+ #include <cmath>
++#include <cassert>
+ 
+ #include <float.h>
+ #pragma GCC diagnostic push

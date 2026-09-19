@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           google-gson
-Version:        2.12.1
+Version:        2.14.0
 Release:        %autorelease
 Summary:        Java lib for conversion of Java objects into JSON representation
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
@@ -22,7 +22,7 @@ BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(javax.annotation:jsr250-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.12.1-3
+Obsoletes:      %{name}-javadoc < 2.14.0-3
 
 %description
 Gson is a Java library that can be used to convert a Java object into its

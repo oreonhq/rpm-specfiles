@@ -1,0 +1,69 @@
+From 6b0518c8a98a55776ebeaac75f08a617dcfbbfda Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Tue, 10 Mar 2026 16:48:44 +0100
+Subject: [PATCH] Clear PS0 in bash REPL wrapper
+
+Three of the bash REPL tests fail when I do a local build in a
+terminal on my system (Fedora 43). The errors don't occur when I do a
+build in a mock chroot or on the Fedora koji build service (which also
+uses mock).
+
+My login shell uses TERM=xterm-256color, whereas the mock chroot sets
+TERM=vt100. If I set TERM=vt100 before starting the tests in the local
+build, two of the failing tests no longer fail, though one test still
+does.
+
+The bash REPL sets TERM=dumb, but only after the shell is started and
+the initialisaton of the PSx variables is done. It overrides PS1 and
+PS2 with values suitable for the wrapper, but assumes that PS0 was not
+set by the initialisation. If it was the tests fail.
+
+Here is the end of the output of "pytest tests/test_replwrap*" without
+the changes proposed here:
+
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_replwrap_helpers.py:23: powershell() is only meaningful on Windows
+FAILED tests/test_replwrap.py::REPLWrapTestCase::test_bracketed_paste - AssertionError: Lists differ: ['\x1b]133;C\x1b\\', '\x1b]666;vte.shell.pree...
+FAILED tests/test_replwrap.py::REPLWrapTestCase::test_existing_spawn - Assertion/home/ellert
+FAILED tests/test_replwrap.py::REPLWrapTestCase::test_multiline - AssertionError: Lists differ: ['\x1b]133;C\x1b\\', '\x1b]666;vte.shell.pree...
+=================== 3 failed, 47 passed, 1 skipped in 9.57s ====================
+
+And with proposed changes applied:
+
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_replwrap_helpers.py:23: powershell() is only meaningful on Windows
+======================== 50 passed, 1 skipped in 9.61s ===============
+---
+ metakernel/replwrap.py | 2 +-
+ tests/test_replwrap.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/metakernel/replwrap.py b/metakernel/replwrap.py
+index acc4be8..85a0f97 100644
+--- a/metakernel/replwrap.py
++++ b/metakernel/replwrap.py
+@@ -327,7 +327,7 @@ def bash(command: str = "bash", prompt_regex: str = "[$#]") -> REPLWrapper:
+     # environment variable, but not when bash displays the prompt.
+     ps1 = PEXPECT_PROMPT[:5] + r"\[\]" + PEXPECT_PROMPT[5:]
+     ps2 = PEXPECT_CONTINUATION_PROMPT[:5] + r"\[\]" + PEXPECT_CONTINUATION_PROMPT[5:]
+-    prompt_change_cmd: str | None = f"PS1='{ps1}' PS2='{ps2}' PROMPT_COMMAND=''"
++    prompt_change_cmd: str | None = f"PS0='' PS1='{ps1}' PS2='{ps2}' PROMPT_COMMAND=''"
+ 
+     if os.name == "nt":
+         prompt_regex = "__repl_ready__"
+diff --git a/tests/test_replwrap.py b/tests/test_replwrap.py
+index a7f000c..125994b 100644
+--- a/tests/test_replwrap.py
++++ b/tests/test_replwrap.py
+@@ -74,7 +74,7 @@ class REPLWrapTestCase(unittest.TestCase):
+         repl = replwrap.REPLWrapper(
+             child,
+             re.compile("[$#]"),
+-            "PS1='{0}' PS2='{1}' PROMPT_COMMAND='' TERM='dumb'",
++            "PS0='' PS1='{0}' PS2='{1}' PROMPT_COMMAND='' TERM='dumb'",
+         )
+ 
+         res = repl.run_command("echo $HOME")
+-- 
+2.53.0
+

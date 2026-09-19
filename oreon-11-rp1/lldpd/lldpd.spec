@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:     lldpd
-Version:  1.0.18
-Release:  6%{?dist}
+Version:  1.0.22
+Release:  1%{?dist}
 Summary:  ISC-licensed implementation of LLDP
 License:  ISC
 

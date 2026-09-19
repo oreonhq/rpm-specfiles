@@ -1,0 +1,10 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index a18614c..2b78f38 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -33,4 +33,5 @@ changelog = "https://github.com/jiffyclub/palettable/blob/master/CHANGELOG.rst"
+ version = {attr = "palettable.VERSION"}
+ 
+ [tool.setuptools.packages.find]
++include = ["palettable*"]
+ exclude = ["*.test"]

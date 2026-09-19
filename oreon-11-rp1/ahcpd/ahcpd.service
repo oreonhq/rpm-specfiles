@@ -1,0 +1,9 @@
+[Unit]
+Description=ahcpd network configuration daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/ahcpd -d 5 -t 300 -c /etc/ahcpd.conf p2p1
+
+[Install]
+WantedBy=multi-user.target

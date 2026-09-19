@@ -1,0 +1,22 @@
+From 3def24834f1411afa1d03cf4b23f54a5327f9418 Mon Sep 17 00:00:00 2001
+From: Richard Russon <rich@flatcap.org>
+Date: Wed, 1 Jun 2016 21:38:43 +0100
+Subject: neomutt-system_certs
+
+---
+ conn/config.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/conn/config.c b/conn/config.c
+index 5afcbcb94..8f164b496 100644
+--- a/conn/config.c
++++ b/conn/config.c
+@@ -107,7 +107,7 @@ static struct ConfigDef ConnVarsSsl[] = {
+  */
+ static struct ConfigDef ConnVarsGnutls[] = {
+   // clang-format off
+-  { "ssl_ca_certificates_file", DT_PATH|D_PATH_FILE, 0, 0, NULL,
++  { "ssl_ca_certificates_file", DT_PATH|D_PATH_FILE, IP "/etc/ssl/certs/ca-bundle.crt", 0, NULL,
+     "File containing trusted CA certificates"
+   },
+   { "ssl_min_dh_prime_bits", DT_NUMBER|D_INTEGER_NOT_NEGATIVE, 0, 0, NULL,

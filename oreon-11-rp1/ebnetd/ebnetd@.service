@@ -1,0 +1,9 @@
+[Unit]
+Description=EB Library Server
+After=local-fs.target
+PartOf=ebnetd-instances.target
+
+[Service]
+Environment=HOME=/var/run/ebnetd
+ExecStart=/usr/sbin/ebnetd --inetd
+StandardInput=socket

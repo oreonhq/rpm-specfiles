@@ -1,13 +1,13 @@
-%global source0_hash 404e064114c95eca0ef759b96ca4e0ba5f9b8bc563138574358270963f3f5554
+%global source0_hash cfb2bc59a293dd4895dc07504b6b80ce29855222206fcc76d9c4ff8f4be5c5ec
 
 %global framework kunitconversion
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 2 addon for unit conversions
 
@@ -20,7 +20,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6I18n) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 
@@ -79,6 +79,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

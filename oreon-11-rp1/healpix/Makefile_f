@@ -1,0 +1,166 @@
+HEALPIX         = $(PWD)
+SHARPLDIR=$(PWD)/src/common_libraries/libsharp/.libs
+SHLIB_SUFFIX    = ".so.0"
+F90_FLAGNAMELIB = "-Wl,-soname,"
+
+# ------------------------------ variables for F90 --------------------------
+F90_BINDIR	= $(HEALPIX)/binf
+F90_INCDIR	= $(HEALPIX)/includef
+F90_LIBDIR	= $(HEALPIX)/libf
+F90_BUILDDIR	= $(HEALPIX)/buildf
+FITSDIR	= /usr/lib64
+LIBFITS	= cfitsio
+
+F90_FFTSRC  =
+
+F90_PARALL  =
+
+F90_FC	= gfortran
+F90_FFLAGS	= -O3 -I$(F90_INCDIR) -fopenmp -fPIC
+F90_CC	= gcc
+F90_CFLAGS	= -O3 -std=c99 -I$(HEALPIX)/include -fopenmp -fPIC
+F90_LDFLAGS	= -L$(F90_LIBDIR) -L$(FITSDIR) -L$(SHARPLDIR) -lhealpix -lhpxgif -lsharp -l$(LIBFITS) -lcurl
+F90_AR        = gfortran -fPIC -shared -o 
+F90_PPFLAGS	= 
+F90_I8FLAG  = -fdefault-integer-8
+F90_LIBSUFFIX = ".so.0"
+F90_FLAGNAMELIB = -Wl,-soname,
+
+F90_PGFLAG  = 
+F90_PGLIBS  = 
+
+F90_MOD	= mod
+F90_MODDIR	= "-J"
+
+F90_OS	= Linux
+
+F90_MKFLAGS	= FC="$(F90_FC)" FFLAGS="$(F90_FFLAGS)" LDFLAGS="$(F90_LDFLAGS)" \
+	CC="$(F90_CC)" CFLAGS="$(F90_CFLAGS)" MOD="$(F90_MOD)" MODDIR=$(F90_MODDIR) \
+	OS="$(F90_OS)" HEALPIX=$(HEALPIX) LIBSUFFIX="$(F90_LIBSUFFIX)"\
+	LIBDIR=$(F90_LIBDIR) INCDIR=$(F90_INCDIR) BINDIR=$(F90_BINDIR) BUILDDIR=$(F90_BUILDDIR) \
+	FFTSRC=$(F90_FFTSRC) PARALL="$(F90_PARALL)" AR="$(F90_AR)" FLAGNAMELIB="$(F90_FLAGNAMELIB)"\
+	PPFLAGS="$(F90_PPFLAGS)" PGFLAG="$(F90_PGFLAG)" PGLIBS="$(F90_PGLIBS)" FI8FLAG="$(F90_I8FLAG)"
+
+
+f90-progs = map2gif anafast smoothing synfast ud_grade hotspot plmgen alteralm median_filter ngsims_full_sky process_mask
+f90-libs  = f90-modules f90-libgif
+
+f90-all: $(f90-libs) $(f90-progs)
+
+# itemized list instead of loop to allow parallel compiling
+
+# libraries
+f90-modules:
+	@cd src/f90/mod; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+f90-libgif: f90-modules
+	@cd src/f90/lib; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+# visualization code
+map2gif: $(f90-libs)
+	@cd src/f90/$@; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+# processing codes
+anafast: $(f90-libs)
+	@cd src/f90/$@; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+smoothing: $(f90-libs)
+	@cd src/f90/$@; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+synfast: $(f90-libs)
+	@cd src/f90/$@; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+ud_grade: $(f90-libs)
+	@cd src/f90/$@; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+hotspot: $(f90-libs)
+	@cd src/f90/$@; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+plmgen: $(f90-libs)
+	@cd src/f90/$@; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+alteralm: $(f90-libs)
+	@cd src/f90/$@; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+median_filter: $(f90-libs)
+	@cd src/f90/$@; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+ngsims_full_sky: $(f90-libs)
+	@cd src/f90/$@; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+process_mask: $(f90-libs)
+	@cd src/f90/$@; \
+	$(MAKE) $(F90_MKFLAGS); \
+	cd $(TOPDIR)
+
+f90-test: f90-all
+	@cd test; \
+	$(RM) test*; \
+	$(F90_BINDIR)/synfast syn.par; \
+	$(F90_BINDIR)/map2gif -inp test_map.fits -out test_map.gif -bar t -ttl 'CMB Map'; \
+	$(F90_BINDIR)/smoothing smo.par; \
+	$(F90_BINDIR)/map2gif -inp test_sm.fits -out test_sm.gif -bar t -ttl 'Smoothed CMB Map'; \
+	$(F90_BINDIR)/ud_grade udg.par; \
+	$(F90_BINDIR)/map2gif -inp test_LOres.fits -out test_LOres.gif -bar t -ttl 'Degraded Map'; \
+	$(F90_BINDIR)/hotspot hot.par; \
+	$(F90_BINDIR)/map2gif -inp test_ext.fits -out test_ext.gif -bar t -ttl 'Extrema Only Map'; \
+	$(F90_BINDIR)/anafast ana.par; \
+        $(F90_BINDIR)/anafast ana2maps.par; \
+        $(F90_BINDIR)/anafast ana_w2.par; \
+	$(F90_BINDIR)/alteralm alt.par; \
+	$(F90_BINDIR)/median_filter med.par; \
+	$(F90_BINDIR)/map2gif -inp test_mf.fits -out test_mf.gif -bar t -ttl 'Median Filtered Map'; \
+	$(F90_BINDIR)/sky_ng_sim ngfs.par; \
+	$(F90_BINDIR)/map2gif -inp test_ngfs.fits -out test_ngfs.gif -bar t -ttl 'Non-Gaussian Map'; \
+	$(F90_BINDIR)/process_mask prmask.par; \
+	$(F90_BINDIR)/map2gif -inp test_distmask.fits -out test_distmask.gif -bar t -ttl 'Distance to mask border'; \
+	echo "Healpix F90 tests done"; \
+	echo "success rate: `ls -1 test*fits | wc -l`/12"
+
+f90-clean:
+	for p in $(f90-progs) lib mod; do \
+	$(RM) src/f90/$$p/*.o src/f90/$$p/*.$(F90_MOD) src/f90/$$p/lib*.a src/f90/$$p/*.pc src/f90/$$p/*.pcl src/f90/$$p/*.il; \
+	done
+	$(RM) -r $(F90_BUILDDIR)
+
+f90-vclean: f90-clean
+	for p in $(f90-progs); do \
+	$(RM) $(F90_BINDIR)/$$p; \
+	done
+	$(RM) $(F90_BINDIR)/sky_ng_sim*
+	$(RM) $(F90_INCDIR)/*.$(F90_MOD)
+	$(RM) $(F90_INCDIR)/*.pc $(F90_INCDIR)/*.pcl $(F90_LIBDIR)/*.pc
+	$(RM) $(F90_LIBDIR)/*.a $(F90_LIBDIR)/*$(F90_LIBSUFFIX) $(F90_LIBDIR)/*.so $(F90_LIBDIR)/*.dylib 
+
+f90-tidy: f90-vclean
+	$(RM) Makefile.bak test/test*
+
+f90-distclean: f90-tidy
+	$(RM) Makefile
+	$(RM) -r $(F90_BINDIR) $(F90_INCDIR) $(F90_LIBDIR)
+
+f90-void:

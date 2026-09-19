@@ -1,0 +1,30 @@
+--- ugene-40.1/src/plugins/smith_waterman/src/SmithWatermanAlgorithmSSE2.cpp.sse_2	2021-11-11 15:42:19.591500062 +0900
++++ ugene-40.1/src/plugins/smith_waterman/src/SmithWatermanAlgorithmSSE2.cpp	2021-11-11 15:42:26.385496818 +0900
+@@ -23,6 +23,7 @@
+  * MA 02110-1301, USA.
+  */
+ 
++#if defined(__SSE2__)
+ #include <emmintrin.h>
+ #include <iostream>
+ 
+@@ -1214,3 +1215,4 @@
+ }
+ 
+ }  // namespace U2
++#endif
+--- ugene-40.1/src/plugins/smith_waterman/src/SmithWatermanAlgorithmSSE2.h.sse_2	2021-11-11 15:42:19.592500061 +0900
++++ ugene-40.1/src/plugins/smith_waterman/src/SmithWatermanAlgorithmSSE2.h	2021-11-11 15:42:26.385496818 +0900
+@@ -21,6 +21,7 @@
+ 
+ #pragma once
+ 
++#if defined(__SSE2__)
+ #include <emmintrin.h>
+ 
+ #include "SmithWatermanAlgorithm.h"
+@@ -52,3 +53,4 @@
+ };
+ 
+ }  // namespace U2
++#endif

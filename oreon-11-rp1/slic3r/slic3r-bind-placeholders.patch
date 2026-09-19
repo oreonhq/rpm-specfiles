@@ -1,0 +1,88 @@
+--- Slic3r-1.3.0/xs/src/libslic3r/GCodeSender.hpp~	2020-06-02 21:57:22.366027571 +0100
++++ Slic3r-1.3.0/xs/src/libslic3r/GCodeSender.hpp	2020-06-02 21:57:25.402028503 +0100
+@@ -7,7 +7,7 @@
+ #include <string>
+ #include <vector>
+ #include <boost/asio.hpp>
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/thread.hpp>
+ #include <boost/core/noncopyable.hpp>
+ 
+@@ -15,6 +15,9 @@
+ 
+ namespace asio = boost::asio;
+ 
++using boost::placeholders::_1;
++using boost::placeholders::_2;
++
+ class GCodeSender : private boost::noncopyable {
+     public:
+     GCodeSender();
+--- Slic3r-1.3.0/xs/src/libslic3r/GCodeTimeEstimator.cpp~	2020-06-02 22:32:22.480733519 +0100
++++ Slic3r-1.3.0/xs/src/libslic3r/GCodeTimeEstimator.cpp	2020-06-02 22:32:25.806734748 +0100
+@@ -1,9 +1,12 @@
+ #include "GCodeTimeEstimator.hpp"
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <cmath>
+ 
+ namespace Slic3r {
+ 
++using boost::placeholders::_1;
++using boost::placeholders::_2;
++
+ void
+ GCodeTimeEstimator::parse(const std::string &gcode)
+ {
+--- Slic3r-1.3.0/xs/src/libslic3r/PrintObject.cpp~	2020-06-02 22:10:25.204272253 +0100
++++ Slic3r-1.3.0/xs/src/libslic3r/PrintObject.cpp	2020-06-02 22:11:39.803295580 +0100
+@@ -2,11 +2,14 @@
+ #include "BoundingBox.hpp"
+ #include "ClipperUtils.hpp"
+ #include "Geometry.hpp"
++#include <boost/bind/bind.hpp>
+ #include <algorithm>
+ #include <vector>
+ 
+ namespace Slic3r {
+ 
++using boost::placeholders::_1;
++
+ PrintObject::PrintObject(Print* print, ModelObject* model_object, const BoundingBoxf3 &modobj_bbox)
+ :   layer_height_spline(model_object->layer_height_spline),
+     typed_slices(false),
+--- Slic3r-1.3.0/xs/src/libslic3r/SLAPrint.cpp~	2020-06-02 22:25:43.439589772 +0100
++++ Slic3r-1.3.0/xs/src/libslic3r/SLAPrint.cpp	2020-06-02 22:26:00.324595850 +0100
+@@ -7,9 +7,12 @@
+ #include <iostream>
+ #include <complex>
+ #include <cstdio>
++#include <boost/bind/bind.hpp>
+ 
+ namespace Slic3r {
+ 
++using boost::placeholders::_1;
++
+ void
+ SLAPrint::slice()
+ {
+--- Slic3r-1.3.0/xs/src/libslic3r/TriangleMesh.cpp~	2020-06-02 22:18:32.071434546 +0100
++++ Slic3r-1.3.0/xs/src/libslic3r/TriangleMesh.cpp	2020-06-02 22:19:16.409450504 +0100
+@@ -14,6 +14,7 @@
+ #include <stdexcept>
+ #include <boost/config.hpp>
+ #include <boost/nowide/convert.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #ifdef SLIC3R_DEBUG
+ #include "SVG.hpp"
+@@ -21,6 +22,8 @@
+ 
+ namespace Slic3r {
+ 
++using boost::placeholders::_1;
++
+ TriangleMesh::TriangleMesh()
+     : repaired(false)
+ {

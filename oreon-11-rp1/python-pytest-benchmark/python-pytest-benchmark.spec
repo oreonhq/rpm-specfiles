@@ -1,59 +1,62 @@
-%global source0_hash 85418c186ac26a9f3cc15d255cd40bb145f8681d0fca044768dd50fa05c8aafe
+%global source0_hash none
 
-%global srcname pytest-benchmark
+Name:           python-pytest-benchmark
+Version:        5.3.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A __pytest__ fixture for benchmarking code. It will group the tests into rounds that are calibrated to the chosen timer.
 
-Name: python-%{srcname}
-Version: 5.1.0
-Release: 5%{?dist}
-Summary: A py.test fixture for benchmarking code
-# Automatically converted from old format: BSD - review is highly recommended.
-License: LicenseRef-Callaway-BSD
-URL: https://pytest-benchmark.readthedocs.io
-Source:        https://github.com/ionelmc/%{srcname}/archive/refs/tags/v%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
-BuildArch: noarch
-BuildRequires: python3-devel
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-2-Clause
+URL:            https://pytest-benchmark.readthedocs.io/en/latest/changelog.html
+Source:         %{pypi_source pytest_benchmark}
 
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This plugin provides a benchmark fixture. This fixture is a callable object
-that will benchmark any function passed to it.
-
-Notable features and goals:
-
-  - Sensible defaults and automatic calibration for microbenchmarks
-  - Good integration with pytest
-  - Comparison and regression tracking
-  - Exhausive statistics
-  - JSON export}
+This is package 'pytest-benchmark' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary: %summary
-Requires: python3-pytest
-Requires: python3-cpuinfo
+%package -n     python3-pytest-benchmark
+Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-pytest-benchmark %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytest-benchmark aspect,elasticsearch,histogram
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{srcname}-%{version}
+%autosetup -p1 -n pytest_benchmark-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x aspect,elasticsearch,histogram
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l pytest_benchmark
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Tests disabled due to missing dependencies
-#%%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst CHANGELOG.rst CONTRIBUTING.rst AUTHORS.rst
+
+%files -n python3-pytest-benchmark -f %{pyproject_files}
 %{_bindir}/py.test-benchmark
 %{_bindir}/pytest-benchmark
 

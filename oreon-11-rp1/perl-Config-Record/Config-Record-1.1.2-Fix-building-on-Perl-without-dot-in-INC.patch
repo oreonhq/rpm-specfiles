@@ -1,0 +1,32 @@
+diff -up Config-Record-1.1.2/Config-Record.spec.PL.orig Config-Record-1.1.2/Config-Record.spec.PL
+--- Config-Record-1.1.2/Config-Record.spec.PL.orig	2017-05-16 12:45:00.427695983 +0200
++++ Config-Record-1.1.2/Config-Record.spec.PL	2017-05-16 12:45:26.496585667 +0200
+@@ -7,10 +7,10 @@ use warnings;
+ 
+ die unless (scalar @ARGV == 1);
+ 
+-unless (do 'lib/Config/Record.pm')
++unless (do './lib/Config/Record.pm')
+   {
+     if ($@) { die $@ };
+-    die "lib/Config/Record.pm: $!";
++    die "./lib/Config/Record.pm: $!";
+   }
+ 
+ local $/ = undef;
+diff -up Config-Record-1.1.2/META.yml.PL.orig Config-Record-1.1.2/META.yml.PL
+--- Config-Record-1.1.2/META.yml.PL.orig	2017-05-16 12:47:54.221960540 +0200
++++ Config-Record-1.1.2/META.yml.PL	2017-05-16 12:48:08.215901321 +0200
+@@ -5,10 +5,10 @@ use warnings;
+ 
+ die unless (scalar @ARGV == 1);
+ 
+-unless (do "lib/Config/Record.pm")
++unless (do "./lib/Config/Record.pm")
+   {
+     if ($@) { die $@ }
+-    die "lib/Config/Record.pm: $!"
++    die "./lib/Config/Record.pm: $!"
+   }
+ 
+ local $/ = undef;

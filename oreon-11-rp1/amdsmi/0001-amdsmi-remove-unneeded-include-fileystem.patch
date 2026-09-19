@@ -1,0 +1,24 @@
+From 91491f518114d0cccacfd421fb5d2912c099e298 Mon Sep 17 00:00:00 2001
+From: Tom Rix <Tom.Rix@amd.com>
+Date: Wed, 19 Nov 2025 06:45:26 -0800
+Subject: [PATCH] amdsmi remove unneeded include fileystem
+
+---
+ rocm_smi/include/rocm_smi/rocm_smi_dyn_gpu_metrics.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/rocm_smi/include/rocm_smi/rocm_smi_dyn_gpu_metrics.h b/rocm_smi/include/rocm_smi/rocm_smi_dyn_gpu_metrics.h
+index ec923a0cc2ba..9b9f20a4506c 100644
+--- a/rocm_smi/include/rocm_smi/rocm_smi_dyn_gpu_metrics.h
++++ b/rocm_smi/include/rocm_smi/rocm_smi_dyn_gpu_metrics.h
+@@ -55,7 +55,6 @@
+ #include <condition_variable>
+ #include <cstddef>
+ #include <cstdint>
+-#include <filesystem>
+ #include <fstream>
+ #include <iostream>
+ #include <map>
+-- 
+2.51.1
+

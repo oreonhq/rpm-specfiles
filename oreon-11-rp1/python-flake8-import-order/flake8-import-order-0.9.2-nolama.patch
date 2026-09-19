@@ -1,0 +1,12 @@
+diff --git flake8_import_order-0.19.0/setup.cfg~ flake8_import_order-0.19.0/setup.cfg
+index fdb7785afe..8249466245 100644
+--- flake8_import_order-0.19.0/setup.cfg~
++++ flake8_import_order-0.19.0/setup.cfg
+@@ -31,7 +31,6 @@ tests_require =
+ 	pytest
+ 	flake8
+ 	pycodestyle
+-	pylama
+ zip_safe = False
+ 
+ [options.packages.find]

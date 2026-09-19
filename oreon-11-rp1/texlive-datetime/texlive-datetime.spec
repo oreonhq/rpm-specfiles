@@ -1,5 +1,5 @@
-%global source0_hash d49a5892022e6dfe4e00bfea0876ded20a061d0e8d13448aeebb7bc8d544ac34
-%global source1_hash 9cc126e9dc4f10ab1823c348a2b210a546e2c673ad1249405271015d5d46b8d7
+%global source0_hash 3d033ee164d52f7085bffdc12f2062be7e94a644d9ed731b4d1b97a3a46838dabadcf6687063e165c65fc938a51a4adf8078339b720a305175d6cd6a3b889f07
+%global source1_hash 510449d17b09d9207b76e732b5d426121888cf653f29bb3be8872b74a243596ac339f09d11a14a4a3007f8818171aab28727cd1713ee35c8908d2d168a57d9b0
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
 Name:           texlive-datetime
@@ -10,8 +10,8 @@ Summary:        Change format of dates and times
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/datetime.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/datetime.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/datetime.tar.xz#/datetime.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/datetime.doc.tar.xz#/datetime.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-datetime-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-datetime-doc <= 11:%{version}
@@ -69,8 +69,8 @@ Provides:       tex(dt-welsh.def)
 %description
 Change format of dates and times.
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %build
 %install
 mkdir -p %{buildroot}%{_texmf_main}

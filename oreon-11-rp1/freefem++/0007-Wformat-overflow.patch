@@ -1,0 +1,39 @@
+From 7d4cd715fd85a105edfc0d1d06bde2add483a63b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Tue, 11 Dec 2018 06:58:17 +0100
+Subject: [PATCH 07/18] Wformat-overflow
+
+---
+ src/medit/bbfile.c | 2 +-
+ src/medit/status.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/medit/bbfile.c b/src/medit/bbfile.c
+index 1ad5e2103..3b1f9cd18 100644
+--- a/src/medit/bbfile.c
++++ b/src/medit/bbfile.c
+@@ -66,7 +66,7 @@ int bbfile(pMesh mesh) {
+   double a, b, c, lambda[3], eigv[3][3], m[6], vp[2][2];
+   float dummy;
+   int j, k, l, dim, np, nf, i1, i2, i3, err, iord, ret;
+-  char *ptr, data[128], tmp[128];
++  char *ptr, data[128+4], tmp[128];
+   ubyte bigbb;
+ 
+   /* default */
+diff --git a/src/medit/status.c b/src/medit/status.c
+index 681c51ee9..92b781860 100644
+--- a/src/medit/status.c
++++ b/src/medit/status.c
+@@ -140,7 +140,7 @@ void redrawStatusBar(pScene sc) {
+   /* clip eqn */
+   if (clip->active & C_ON && !(clip->active & C_HIDE)) {
+     double dd;
+-    char buf[128], tmpbuf[128];
++    char buf[128+10], tmpbuf[128];
+ 
+     sprintf(buf, "Eqn: ");
+     strcpy(tmpbuf, buf);
+-- 
+2.47.1
+

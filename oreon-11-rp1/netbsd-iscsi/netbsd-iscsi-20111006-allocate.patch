@@ -1,0 +1,45 @@
+From c6e9e0f32491ca9a24158f1a0af0c422bffc58a7 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 29 Aug 2017 12:12:38 +0200
+Subject: [PATCH] Avoid attempting to allocate space by overwriting the last
+ block
+
+It seems to just create a hole.
+---
+ src/lib/disk.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/lib/disk.c b/src/lib/disk.c
+index 8d31746b25d689b9..db9c08fedbd6435c 100644
+--- a/src/lib/disk.c
++++ b/src/lib/disk.c
+@@ -700,6 +700,7 @@ device_set_var(const char *var, const char *arg)
+ 	}
+ }
+ 
++#if 0
+ /* allocate some space for a disk/extent, using an lseek, read and
+ * write combination */
+ static int
+@@ -750,6 +751,7 @@ allocate_space(disc_target_t *tp)
+ 	}
+ 	return 0;
+ }
++#endif
+ 
+ /* copy src to dst, of size `n' bytes, padding any extra with `pad' */
+ static void
+@@ -877,11 +879,13 @@ device_init(iscsi_target_t *tgt, targv_t *tvp, disc_target_t *tp)
+ 			"error opening \"%s\"\n", idisk->filename);
+ 		return -1;
+ 	}
++#if 0
+ 	if (!(tp->flags & TARGET_READONLY) && !allocate_space(tp)) {
+ 		iscsi_err(__FILE__, __LINE__,
+ 			"error allocating space for \"%s\"\n", tp->target);
+ 		return -1;
+ 	}
++#endif
+ 	printf("%" PRIu64 " MB %sdisk storage for \"%s\"\n",
+ 		(de_getsize(&tp->de) / MB(1)),
+ 		(tp->flags & TARGET_READONLY) ? "readonly " : "",

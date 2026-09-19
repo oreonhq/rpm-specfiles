@@ -6,8 +6,8 @@
 Summary:	LZMA compression utilities
 Name:		xz
 Epoch:		1
-Version:	5.8.2
-Release:	2%{?dist}
+Version:	5.8.4
+Release:	1%{?dist}
 
 # liblzma - 0BSD
 # xz{,dec}, lzma{dec,info} - 0BSD

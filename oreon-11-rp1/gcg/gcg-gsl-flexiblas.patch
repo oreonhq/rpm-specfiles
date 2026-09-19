@@ -1,0 +1,20 @@
+--- gcg-4.0.0/src/CMakeLists.txt.orig	2025-11-20 03:01:09.000000000 -0700
++++ gcg-4.0.0/src/CMakeLists.txt	2025-11-25 19:40:29.211487541 -0700
+@@ -513,7 +513,7 @@ target_link_libraries(libgcg
+     ${CPLEX_LIBRARIES}
+     $<$<BOOL:${OPENMP_FOUND}>:OpenMP::OpenMP_C>
+     $<$<BOOL:${OPENMP_FOUND}>:OpenMP::OpenMP_CXX>
+-    $<$<BOOL:${GSL_FOUND}>:GSL::gsl>
++    -lgsl -lflexiblas
+     $<$<BOOL:${JANSSON_FOUND}>:jansson::jansson>
+     $<$<BOOL:${HIGHS_FOUND}>:highs::highs>)
+ 
+@@ -552,7 +552,7 @@ target_link_libraries(gcg
+     ${CPLEX_LIBRARIES}
+     $<$<BOOL:${OPENMP_FOUND}>:OpenMP::OpenMP_C>
+     $<$<BOOL:${OPENMP_FOUND}>:OpenMP::OpenMP_CXX>
+-    $<$<BOOL:${GSL_FOUND}>:GSL::gsl>
++    -lgsl -lflexiblas
+     $<$<BOOL:${JANSSON_FOUND}>:jansson::jansson>
+     $<$<BOOL:${HIGHS_FOUND}>:highs::highs>)
+ 

@@ -1,0 +1,49 @@
+From b79f8ecd30a1aa39a7d56d5497d0404edb3711c9 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 19 Jun 2024 11:36:41 -0400
+Subject: [PATCH 1/2] =?UTF-8?q?Fix=20a=20missing=20word=20in=20the=20examp?=
+ =?UTF-8?q?le=E2=80=99s=20description?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ qdarkstyle/example/__main__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/qdarkstyle/example/__main__.py b/qdarkstyle/example/__main__.py
+index 5686e3f8..598acc93 100755
+--- a/qdarkstyle/example/__main__.py
++++ b/qdarkstyle/example/__main__.py
+@@ -3,7 +3,7 @@
+ 
+ """Example of qdarkstyle use for Python and Qt applications.
+ 
+-This module a main window with every item that could be created with
++This module implements a main window with every item that could be created with
+ Qt Design (common ones) in the basic states (enabled/disabled), and
+ (checked/unchecked) for those who has this attribute.
+ 
+
+From 9a7a7530ef15d9dd71a338454dbe7c05d6e6fc38 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 19 Jun 2024 11:38:19 -0400
+Subject: [PATCH 2/2] Slightly improved phrasing in example description
+
+---
+ qdarkstyle/example/__main__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/qdarkstyle/example/__main__.py b/qdarkstyle/example/__main__.py
+index 598acc93..3a7c1e97 100755
+--- a/qdarkstyle/example/__main__.py
++++ b/qdarkstyle/example/__main__.py
+@@ -5,7 +5,7 @@
+ 
+ This module implements a main window with every item that could be created with
+ Qt Design (common ones) in the basic states (enabled/disabled), and
+-(checked/unchecked) for those who has this attribute.
++(checked/unchecked) for those that have this attribute.
+ 
+ Requirements:
+ 

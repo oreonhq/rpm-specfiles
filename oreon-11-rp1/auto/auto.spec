@@ -2,8 +2,8 @@
 
 Name:           auto
 Summary:        Collection of source code generators for Java
-Version:        1.6.1
-Release:        17%{?dist}
+Version:        1.11.1
+Release:        1%{?dist}
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 

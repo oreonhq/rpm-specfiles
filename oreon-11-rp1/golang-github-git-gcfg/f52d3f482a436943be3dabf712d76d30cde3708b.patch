@@ -1,0 +1,40 @@
+From f52d3f482a436943be3dabf712d76d30cde3708b Mon Sep 17 00:00:00 2001
+From: Michael Hudson-Doyle <michael.hudson@canonical.com>
+Date: Mon, 13 Jul 2020 21:14:22 +1200
+Subject: [PATCH] fix tests to match behavior of strconv.ParseInt since Go 1.13
+ (#20)
+
+Fixes #17
+---
+ types/int_test.go  | 4 ++--
+ types/scan_test.go | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/types/int_test.go b/types/int_test.go
+index b63dbcb..833a0db 100644
+--- a/types/int_test.go
++++ b/types/int_test.go
+@@ -24,8 +24,8 @@ func TestParseInt(t *testing.T) {
+ 		{"a", Hex, int(0xa), true},
+ 		{"10", Hex, int(0x10), true},
+ 		{"-0xa", Hex, int(-0xa), true},
+-		{"0x", Hex, int(0x0), true},  // Scanf doesn't require digit behind 0x
+-		{"-0x", Hex, int(0x0), true}, // Scanf doesn't require digit behind 0x
++		{"0x", Hex, int(0x0), false},
++		{"-0x", Hex, int(0x0), false},
+ 		{"-a", Hex, int(-0xa), true},
+ 		{"-10", Hex, int(-0x10), true},
+ 		{"x", Hex, int(0), false},
+diff --git a/types/scan_test.go b/types/scan_test.go
+index a8083e0..b74b90e 100644
+--- a/types/scan_test.go
++++ b/types/scan_test.go
+@@ -13,7 +13,7 @@ func TestScanFully(t *testing.T) {
+ 		ok   bool
+ 	}{
+ 		{"a", 'v', int(0), false},
+-		{"0x", 'v', int(0), true},
++		{"0x", 'v', int(0), false},
+ 		{"0x", 'd', int(0), false},
+ 	} {
+ 		d := reflect.New(reflect.TypeOf(tt.res)).Interface()

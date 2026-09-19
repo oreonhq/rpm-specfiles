@@ -1,0 +1,23 @@
+commit b824c0a3c51aeae40ad07d2601b8b8348a5e32df
+Author: Andrew Cagney <cagney@gnu.org>
+Date:   Fri Sep 6 12:28:24 2019 -0400
+
+    fix fsteptester indentation
+    
+    make gcc happy
+    
+    frysk-0.4-steptester-indentation.patch
+
+diff --git a/frysk-core/frysk/pkglibdir/funit-rt-steptester.c b/frysk-core/frysk/pkglibdir/funit-rt-steptester.c
+index ccb67d892..0effca488 100644
+--- a/frysk-core/frysk/pkglibdir/funit-rt-steptester.c
++++ b/frysk-core/frysk/pkglibdir/funit-rt-steptester.c
+@@ -93,7 +93,7 @@ last ()
+   else
+     --dummy;										// _lineStepIfFailFinish_
+     
+-    return;											// _lineStepFunctionReturn_
++  return;											// _lineStepFunctionReturn_
+ }
+ 
+ volatile int a;

@@ -1,0 +1,606 @@
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/factorization/bigint/sf_mpqs.cc.orig	2014-10-04 13:31:04.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/factorization/bigint/sf_mpqs.cc	2018-10-09 14:24:33.608772108 -0600
+@@ -489,13 +489,13 @@ namespace LiDIA {
+               memset(faktor, 0, STLEN);
+                   
+               if(exp[1] != 0) {
+-                sprintf(faktor, "%s 1 1", faktor);
++                strncat(faktor, " 1 1", STLEN - strlen(faktor));
+                 H2.negate();
+               }
+                   
+               for(i = 2; i < size_exp; i++) {
+                 if(exp[i] != 0) {
+-                  sprintf(faktor, "%s %d %d", faktor, exp[i], i);
++                  snprintf(&faktor[strlen(faktor)], STLEN - strlen(faktor), " %d %d", exp[i], i);
+                           
+                   if(exp[i] > 0) {
+                     power(H3, bigint(FB[i]), exp[i]);
+@@ -1686,10 +1686,10 @@ namespace LiDIA {
+                      intvector const& FB, bool info) {
+       FILE *faktorenmatrix;
+       bigint X_quad, Y_quad, hilf, hilf2;
+-      int counter = 0, end_FB = FB[0] + 2, e;
++      int end_FB = FB[0] + 2, e;
+       bool erg1, erg2;
+       bool found = false;
+-      size_t i, zeilenindex = 0;
++      size_t i, counter, zeilenindex = 0;
+       char zeile[STLEN], Hstring[STLEN], Hstring2[STLEN], rest[STLEN];
+       long exp_i;
+       char *p, *pp, *s1;
+@@ -1834,7 +1834,7 @@ namespace LiDIA {
+       
+         no_solution++;
+       
+-        for(i = 2; i <= end_FB; i++) {
++        for(i = 2; static_cast<int>(i) <= end_FB; i++) {
+           exp_i = expo[i];
+           
+ #ifdef DEBUG
+@@ -2014,7 +2014,7 @@ namespace LiDIA {
+     lidia_size_t index_i;
+     lidia_size_t added_relations; 
+     char *s1;
+-    unsigned long last_cnt;
++    unsigned long last_cnt = 0;
+   
+     qs_param_record const& params = qs_read_par(stellenzahl);
+     double T = params.T;
+@@ -2224,8 +2224,8 @@ namespace LiDIA {
+         }
+       }
+           
+-      if((static_cast < long >(smalls) + counter_treff) >
+-         (static_cast < long >(size_FB) + added_relations) ) {
++      if(smalls + counter_treff >
++         size_FB + added_relations) {
+         // start solving linear system, enough relations found
+         // note: 50 is necessary since there may be multiple rel.
+               
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/include/LiDIA/base/poly_intern.cc.orig	2009-05-09 09:25:17.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/include/LiDIA/base/poly_intern.cc	2018-10-09 14:30:21.731604065 -0600
+@@ -932,7 +932,7 @@ void base_polynomial< T >::read_verbose(
+ #ifdef POLYREAD_DEBUG
+ 		std::cout << "\n 1) Now looking at " << c;
+ #endif
+-		if (c >= '0' && c <= '9' || c == '(') {
++		if ((c >= '0' && c <= '9') || c == '(') {
+ 			s.putback(c);
+ 			s >> tmp;
+ 			coeff_tmp *= tmp;
+@@ -997,7 +997,7 @@ void base_polynomial< T >::read_verbose(
+ 			std::cout << "\n 6) Now looking at " << c;
+ #endif
+ 
+-			if (c >= '0' && c <= '9' || c == '(') {
++			if ((c >= '0' && c <= '9') || c == '(') {
+ 				s.putback(c);
+ 				s >> tmp;
+ #ifdef POLYREAD_DEBUG
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/include/LiDIA/hash_table.cc.orig	2009-05-09 09:25:17.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/include/LiDIA/hash_table.cc	2018-10-09 14:27:13.061946920 -0600
+@@ -105,7 +105,7 @@ hash_table< T >::assign (const hash_tabl
+ 	debug_handler("hash_table", "assign");
+ 
+ 	lidia_size_t i;
+-	hentry< T > *ptr, *newone;
++	hentry< T > *ptr;
+ 	T *tptr;
+ 
+ 	// initialize new table
+@@ -113,7 +113,6 @@ hash_table< T >::assign (const hash_tabl
+ 	this->key = old_table.key;
+ 
+ 	// perform linked list traversal, and hash each element into the new table
+-	newone = NULL;
+ 	for (i = 0; i < old_table.size; ++i) {
+ 		ptr = old_table.buckets[i];
+ 		while (ptr) {
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/include/LiDIA/lanczos.h.orig	2009-05-09 09:25:17.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/include/LiDIA/lanczos.h	2016-05-01 11:20:19.124685165 -0600
+@@ -102,7 +102,7 @@ public:
+   {
+     printf("\nIndex_List:\t");
+     for (size_type i = 0; i < length; i++)
+-      printf(" [%ld] %ld\n", i, list[i]);
++      printf(" [%zu] %ld\n", i, list[i]);
+   }
+   
+   void clear()
+@@ -236,6 +236,7 @@ public:
+   const lanczos_small_matrix& operator= (const lanczos_small_matrix& matrix)
+   {
+     memcpy(rows, matrix.rows, WordSize * sizeof(value_type));
++    return *this;
+   }
+ 
+   void put_row(const size_type pos, const value_type row)
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/include/LiDIA/warning.h.orig	2009-05-09 09:25:17.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/include/LiDIA/warning.h	2018-10-09 14:06:57.363507782 -0600
+@@ -29,10 +29,10 @@ namespace LiDIA {
+ 
+ 
+ 
+-typedef void (*warning_handler_ptr)(char *, char *);
++typedef void (*warning_handler_ptr)(const char *, const char *);
+ 
+ extern warning_handler_ptr lidia_warning_handler;
+-void default_warning_handler(char *, char *);
++void default_warning_handler(const char *, const char *);
+ warning_handler_ptr set_warning_handler(warning_handler_ptr);
+ 
+ #ifdef LIDIA_WARNINGS
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/include/LiDIA/xdouble.h.orig	2009-05-09 09:25:17.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/include/LiDIA/xdouble.h	2018-10-09 15:51:25.419396599 -0600
+@@ -136,7 +136,7 @@ public:
+ 	inline xdouble();
+ 	inline xdouble(const xdouble&);
+ 	inline xdouble(double x, double y = 0.0);
+-	xdouble(char *);
++	xdouble(const char *);
+ 
+ 	//
+ 	// Conversions
+@@ -164,7 +164,7 @@ public:
+ 	xdouble& operator = (const unsigned long&); // Get funny errors without this
+ 	xdouble& operator = (const double&);
+ 	xdouble& operator = (const xdouble&);
+-	xdouble& operator = (char*);
++	xdouble& operator = (const char*);
+ 
+ 	//
+ 	// Unary minus
+@@ -337,7 +337,7 @@ public:
+ 	//
+ 	// member functions
+ 	//
+-	void dump(char *); // debugging use only
++	void dump(const char *); // debugging use only
+ 
+ 	//
+ 	// non inline functions (defined in xdouble.c)
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/bigint/bigint_share.cc.orig	2009-05-09 09:25:37.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/bigint/bigint_share.cc	2018-10-09 14:31:16.810628180 -0600
+@@ -288,7 +288,7 @@ bigint::print (std::ostream & out, char
+ 		out << s;
+ 	}
+ 	else {
+-		int l = strlen(s);
++		size_t l = strlen(s);
+ 		std::vector<char> v(s, s + l + 1); // keep '\0'
+ 		
+ 		std::vector<char>::size_type start, end;
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/bigint/cornacchia.cc.orig	2009-05-09 09:25:37.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/bigint/cornacchia.cc	2018-10-09 14:32:01.993827618 -0600
+@@ -142,7 +142,7 @@ bool cornacchia_prime_power( bigint & x,
+ //  if( ! is_prime(p)  || ! p.is_positive() || p == 2)
+ //    lidia_error_handler("cornacchia_prime_power","p no odd prime number");
+   
+-  if( exp <= 0 || ( exp & 1 == 0 ) )
++  if( exp <= 0 || ( (exp & 1) == 0 ) )
+ 	  lidia_error_handler("cornacchia_prime_power","exp no odd integer");
+ 
+   power( modulus, p, exp );
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/factorization/mpqs.cc.orig	2009-05-09 09:25:38.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/factorization/mpqs.cc	2018-10-09 14:38:30.894996718 -0600
+@@ -493,7 +493,7 @@ static void zusam (unsigned int size_exp
+ 		  
+ 		  if (exp[1] != 0)
+ 		    {
+-		      sprintf (faktor, "%s 1 1", faktor);
++                      strncat (faktor, " 1 1", STLEN - strlen(faktor));
+ 		      H2.negate();
+ 		    }
+ 		  
+@@ -501,7 +501,7 @@ static void zusam (unsigned int size_exp
+ 		    {
+ 		      if (exp[i] != 0)
+ 			{
+-			  sprintf (faktor, "%s %d %d", faktor, exp[i], i);
++                          snprintf (&faktor[strlen(faktor)], STLEN - strlen(faktor), " %d %d", exp[i], i);
+ 			  
+ 			  if (exp[i] > 0)
+ 			    {
+@@ -1367,10 +1367,9 @@ qs_build_factors (const bigint & N,
+   rf_single_factor fact;
+   FILE *faktorenmatrix;
+   bigint X_quad, Y_quad, hilf, hilf2;
+-  int counter = 0, k, end_FB = FB[0] + 2, e;
+-  bool erg1, erg2;
++  int end_FB = FB[0] + 2, e;
+   bool found = false;
+-  size_t i, zeilenindex = 0;
++  size_t i, counter, zeilenindex = 0;
+   char zeile[STLEN], Hstring[STLEN], Hstring2[STLEN], rest[STLEN];
+   long *expo;
+   long exp_i;
+@@ -1534,7 +1533,7 @@ qs_build_factors (const bigint & N,
+       no_solution ++;
+ 
+       
+-      for (i = 2; i <= end_FB; i++) 
++      for (i = 2; static_cast<int>(i) <= end_FB; i++) 
+ 	{
+ 	  exp_i = expo[i];
+ 	  
+@@ -1903,8 +1902,8 @@ rational_factorization & rational_factor
+ 				       "mpqs::can't open file NEW_PARTIALS");
+ 	    }
+ 
+-	  if ((static_cast < long >(smalls) + counter_treff) > 
+-	      (static_cast < long >(size_FB) + added_relations) )
++	  if (smalls + counter_treff > 
++	      size_FB + added_relations)
+ 	    {
+ 	      fflush (fppart);
+ 	      fflush (fpfull);
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/lanczos/lanczos.cc.orig	2009-05-09 09:25:35.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/lanczos/lanczos.cc	2018-10-09 14:46:26.536654637 -0600
+@@ -211,7 +211,7 @@ lanczos::compute_result()
+   //*****************************************************
+   
+   i = 0;
+-  while (i < M)
++  while (static_cast<size_type>(i) < M)
+     {
+       j = 0;
+       h = A.get_vector(i).get_number_of_entries();
+@@ -228,9 +228,9 @@ lanczos::compute_result()
+     }
+   
+   i = 0;
+-  while ((i < M) && (V->get_row(i++) == 0));
++  while ((static_cast<size_type>(i) < M) && (V->get_row(i++) == 0));
+   
+-  if ((i != M) || (V->get_row(i-1) != 0)) {
++  if ((static_cast<size_type>(i) != M) || (V->get_row(i-1) != 0)) {
+     //*************************************************************
+     // now : dummy1_vec = B * (X-Y), dummy2_vec = B * V_m
+     // compute basis of zero space of BZ with Gauss' algorithm
+@@ -242,7 +242,7 @@ lanczos::compute_result()
+     muster1 = One_mask;
+     muster2 = One_mask;
+ 
+-    while ((j >= WordSize) && (!fertig)) {
++    while ((j >= static_cast<long>(WordSize)) && (!fertig)) {
+       maske2 = Bit_mask(j-WordSize);
+       
+ #ifdef DEBUG
+@@ -262,8 +262,8 @@ lanczos::compute_result()
+       }
+       else {
+         max = j;
+-        while ((max >= WordSize) && !pivot) {
+-          if (!(dummy2_vec->get_row(i) & Bit_mask(max - WordSize)))
++        while ((max >= static_cast<long>(WordSize)) && !pivot) {
++          if (!(dummy2_vec->get_row(i) & Bit_mask(max - static_cast<long>(WordSize))))
+             max --;
+           else {
+             pivot = true; // Pivotelement in Zeile i Spalte max
+@@ -283,7 +283,7 @@ lanczos::compute_result()
+           }
+         }
+         if (max != j) {
+-          for (k = 0; k < M; k++)
++          for (k = 0; static_cast<size_type>(k) < M; k++)
+             {
+               if (dummy2_vec->get_row(k) & maske2) {
+                 if (!(ph1->get_row(k) & maske1)) {
+@@ -299,7 +299,7 @@ lanczos::compute_result()
+                                       get_row(k)|maske2);
+                 }
+             }
+-          for (k = 0; k < M; k++) {
++          for (k = 0; static_cast<size_type>(k) < M; k++) {
+             if (V->get_row(k) & maske2) {
+               if (!(phh1->get_row(k) & maske1)) {
+                 phh1->put_row (k, phh1->get_row(k) | maske1);
+@@ -316,7 +316,7 @@ lanczos::compute_result()
+         muster2 ^= maske2;
+ 
+         if (dummy2_vec->get_row(i) & muster2)
+-          while (max >= WordSize) {
++          while (max >= static_cast<long>(WordSize)) {
+             if (dummy2_vec->get_row(i) &
+                 Bit_mask(max - WordSize)) {
+               for (k = i; k >= 0; k--)
+@@ -324,7 +324,7 @@ lanczos::compute_result()
+                     Bit_mask(j - WordSize))
+                   dummy2_vec->bitwise_xor(k, Bit_mask(max-WordSize));
+               
+-              for (k = 0; k < M; k++)
++              for (k = 0; static_cast<size_type>(k) < M; k++)
+                 if (V->get_row(k) & Bit_mask(j - WordSize))
+                   V->bitwise_xor(k, Bit_mask(max - WordSize));
+             }
+@@ -339,7 +339,7 @@ lanczos::compute_result()
+                     & Bit_mask(j - WordSize))
+                   dummy1_vec->bitwise_xor(k, Bit_mask(max));
+               
+-              for (k = 0; k < M; k++)
++              for (k = 0; static_cast<size_type>(k) < M; k++)
+                 if (V->get_row(k) & Bit_mask(j - WordSize))
+                   X->bitwise_xor(k, Bit_mask(max));
+             }
+@@ -376,7 +376,7 @@ lanczos::compute_result()
+           }
+         }
+         if (max != j) {
+-          for (k = 0; k < M; k++) {
++          for (k = 0; static_cast<size_type>(k) < M; k++) {
+             if (dummy1_vec->get_row(k) & maske2) {
+               dummy1_vec->bitwise_or(k, maske1);
+               dummy1_vec->bitwise_and(k, maske2);
+@@ -385,7 +385,7 @@ lanczos::compute_result()
+               if (dummy1_vec->get_row(k) & maske1)
+                 dummy1_vec->bitwise_xor(k, maske1);
+           }
+-          for (k = 0; k < M; k++) {
++          for (k = 0; static_cast<size_type>(k) < M; k++) {
+             if (X->get_row(k) & maske2) {
+               X->bitwise_or(k, maske1);
+               X->bitwise_xor(k, maske2);
+@@ -400,7 +400,7 @@ lanczos::compute_result()
+         if (dummy1_vec->get_row(i) & muster1) {
+           while (max >= 0) {
+             if (dummy1_vec->get_row(i) & Bit_mask(max)) {
+-              for (k = 0; k < M; k++) {
++              for (k = 0; static_cast<size_type>(k) < M; k++) {
+                 if (X->get_row(k) & Bit_mask(j)) {
+                   if (X->get_row(k) & Bit_mask(max))
+                     X->bitwise_xor(k, Bit_mask(max));
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/lanczos/lanczos_spmatrix.cc.orig	2009-05-09 09:25:35.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/lanczos/lanczos_spmatrix.cc	2018-10-09 14:48:23.126609811 -0600
+@@ -142,7 +142,7 @@ lanczos_sparse_matrix::write(const char
+     {
+       for (sn = 0; sn < number_of_columns(); sn++) {
+ 	number = entries[sn].get_number_of_entries();
+-	fprintf(fp, "%ld %ld %d ", sn+1, number*2, 0);
++	fprintf(fp, "%ld %zu %d ", sn+1, number*2, 0);
+ 	for (i = 0; i < number; i++)
+ 	  fprintf(fp, "1 %ld ", entries[sn].get_entry(i));
+ 	fprintf(fp, "0\n");
+@@ -186,13 +186,13 @@ lanczos_sparse_matrix::delete_rows(const
+ 	    index = entries[j].get_entry(i);
+ 	    if (count < row_list.number())
+ 	      while ((count < row_list.number()) &&
+-		     (index > row_list.get(count)))
++		     (index > static_cast<size_type>(row_list.get(count))))
+ 		count++;
+ 	    if (count < row_list.number())
+ 	      count_max = count;
+ 	    else
+ 	      count_max = count-1;
+-	    if (index == row_list.get(count_max))
++	    if (index == static_cast<size_type>(row_list.get(count_max)))
+ 	      {
+ 		lidia_error_handler("lanczos_sparse_matrix",
+ 				    "deleting none zero");
+@@ -222,7 +222,7 @@ lanczos_sparse_matrix::print() const
+ {
+   for (size_type i = 0; i < columns; i++)
+     {
+-      printf("%ld: ", i);
++      printf("%zu: ", i);
+       entries[i].print();
+   }
+ }
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/lanczos/process.cc.orig	2009-05-09 09:25:35.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/lanczos/process.cc	2018-10-09 14:50:12.654688784 -0600
+@@ -145,7 +145,7 @@ preprocess::process (lanczos_sparse_matr
+ 		}
+ 
+ 		// Loesche die letzten Vektoren
+-		for (size_type i = 0; i < counter; i++)
++		for (long i = 0; i < counter; i++)
+ 			matrix.delete_vector(matrix.number_of_columns()-i-1);
+ 		// Setze Columns neu
+ 		matrix.put_columns(matrix.number_of_columns()-counter);
+@@ -203,7 +203,7 @@ postprocess::process(const lanczos_vecto
+ 	for (size_type i = 0; i < vector.get_length(); ++i) {
+ 
+ 		while ((count < list.number()) &&
+-		       (i+count >= list.get(count)))
++		       (static_cast<long>(i+count) >= list.get(count)))
+ 			count++;
+ 
+ 		result->put_row(i+count, vector.get_row(i));
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/xdouble/xdouble.cc.orig	2009-05-09 09:25:34.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/simple_classes/xdouble/xdouble.cc	2018-10-09 15:51:50.522947888 -0600
+@@ -251,7 +251,7 @@ xdouble_to_string (const xdouble& xd, ch
+ //
+ // Constructor from string
+ //
+-xdouble::xdouble (char *s)
++xdouble::xdouble (const char *s)
+ {
+ 	xdouble y;
+ 	string_to_xdouble(s, y);
+@@ -265,7 +265,7 @@ xdouble::xdouble (char *s)
+ // xdouble = string
+ //
+ xdouble &
+-xdouble::operator = (char *s)
++xdouble::operator = (const char *s)
+ {
+ 	xdouble y;
+ 	string_to_xdouble(s, y);
+@@ -280,7 +280,7 @@ xdouble::operator = (char *s)
+ // Debugging use
+ //
+ void
+-xdouble::dump (char *s = "")
++xdouble::dump (const char *s = "")
+ {
+ 	std::cerr << s << "xdouble(" << hi << ", " << lo << ")\n";
+ }
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/system/random_generator.cc.orig	2009-05-09 09:25:28.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/system/random_generator.cc	2018-10-09 14:55:34.739007726 -0600
+@@ -49,7 +49,7 @@ bool random_generator::initialized = fal
+ void
+ random_generator::seed ()
+ {
+-	unsigned int	s;
++	unsigned int	s = static_cast<unsigned int>(-1);
+ #ifdef HAVE_POSIX_TIMES
+ 	struct tms	t_info;
+ #endif
+--- lidia-2.3.0+latte-patches-2014-10-04/src/base/system/warning.cc.orig	2009-05-09 09:25:28.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/base/system/warning.cc	2018-10-09 14:07:32.890876890 -0600
+@@ -30,7 +30,7 @@ namespace LiDIA {
+ 
+ 
+ 
+-void default_warning_handler(char *f, char *m)
++void default_warning_handler(const char *f, const char *m)
+ {
+ 	std::cout << "\n warning_handler";
+ 	std::cout << "::" << f;
+--- lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/Fp_polynomial/Fp_polynomial.cc.orig	2009-05-09 09:24:38.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/Fp_polynomial/Fp_polynomial.cc	2018-10-09 14:56:39.001874235 -0600
+@@ -937,7 +937,7 @@ void Fp_polynomial::pretty_read(std::ist
+ 				c = s.get();
+ 			} while (isspace(c) && c != '\n');
+ 		}
+-		if (c >= '0' && c <= '9' || c == '(') {
++		if ((c >= '0' && c <= '9') || c == '(') {
+ 			s.putback(c);
+ 			s >> tmp;
+ 			coeff_tmp *= tmp;
+@@ -1002,7 +1002,7 @@ void Fp_polynomial::pretty_read(std::ist
+ 				} while (isspace(c) && c != '\n');
+ 			}
+ 
+-			if (c >= '0' && c <= '9' || c == '(') {
++			if ((c >= '0' && c <= '9') || c == '(') {
+ 				s.putback(c);
+ 				s >> tmp;
+ 				coeff_tmp *= tmp;
+--- lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/Fp_polynomial/gcd.cc.orig	2009-05-09 09:24:38.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/Fp_polynomial/gcd.cc	2018-10-09 14:57:55.001533712 -0600
+@@ -544,7 +544,7 @@ void resultant (bigint &r, const Fp_poly
+ 		swap(f, g);
+ 
+ 		m = g.degree();
+-		if ((f.degree() & 1 == 1) && (m & 1) == 1)
++		if (((f.degree() & 1) == 1) && (m & 1) == 1)
+ 			subtract(r, p, r);
+ 	} while (true);
+ 
+--- lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/Fp_rational_function/Fp_rational_function.cc.orig	2009-05-09 09:24:28.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/Fp_rational_function/Fp_rational_function.cc	2018-10-09 14:58:59.784391045 -0600
+@@ -897,7 +897,7 @@ Fp_rational_function::pretty_read(std::i
+ 				c = s.get();
+ 			} while (isspace(c) && c != '\n');
+ 		}
+-		if (c >= '0' && c <= '9' || c == '(') {
++		if ((c >= '0' && c <= '9') || c == '(') {
+ 			s.putback(c);
+ 			s >> tmp;
+ 			multiply(coeff_tmp, coeff_tmp, tmp);
+@@ -963,7 +963,7 @@ Fp_rational_function::pretty_read(std::i
+ 				} while (isspace(c) && c != '\n');
+ 			}
+ 
+-			if (c >= '0' && c <= '9' || c == '(') {
++			if ((c >= '0' && c <= '9') || c == '(') {
+ 				s.putback(c);
+ 				s >> tmp;
+ 				multiply(coeff_tmp, coeff_tmp, tmp);
+@@ -1031,7 +1031,7 @@ Fp_rational_function::pretty_read(std::i
+ 				c = s.get();
+ 			} while (isspace(c) && c != '\n');
+ 		}
+-		if (c >= '0' && c <= '9' || c == '(') {
++		if ((c >= '0' && c <= '9') || c == '(') {
+ 			s.putback(c);
+ 			s >> tmp;
+ 			multiply(coeff_tmp, coeff_tmp, tmp);
+@@ -1096,7 +1096,7 @@ Fp_rational_function::pretty_read(std::i
+ 				} while (isspace(c) && c != '\n');
+ 			}
+ 
+-			if (c >= '0' && c <= '9' || c == '(') {
++			if ((c >= '0' && c <= '9') || c == '(') {
+ 				s.putback(c);
+ 				s >> tmp;
+ 				multiply(coeff_tmp, coeff_tmp, tmp);
+--- lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/gfpn/gf_rep_GF2n.cc.orig	2009-05-09 09:24:39.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/gfpn/gf_rep_GF2n.cc	2018-10-09 15:02:42.156468749 -0600
+@@ -432,7 +432,7 @@ void galois_field_rep::set_pol_rep_GF2n(
+ 	udigit *ap = static_cast<udigit*>(a.rep);
+ 	for (i = 0; i < static_cast<int>(I2.anzBI); i++) {
+ 		tmp = 0;
+-		for (j = 0; j < BITS_PER_LONG; j++)
++		for (j = 0; j < static_cast<int>(BITS_PER_LONG); j++)
+ 			if (!(*pol)[i*BITS_PER_LONG+j].is_zero())
+ 				tmp |= (1 << j);
+ 		ap[i] = tmp;
+--- lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/gf_polynomial/gf_pol_arith.cc.orig	2009-05-09 09:24:27.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/gf_polynomial/gf_pol_arith.cc	2018-10-09 15:00:40.542613826 -0600
+@@ -316,7 +316,7 @@ void div_rem(gf_polynomial &q, gf_polyno
+ 	}
+ 
+ 	if (K.characteristic() == 2
+-	    && (K.degree() > 1 || K.degree() == 1 && deg_a < 2*deg_b))
++	    && (K.degree() > 1 || (K.degree() == 1 && deg_a < 2*deg_b)))
+ 	{
+ 		//"classical" version
+ 		q.ffield = K;
+--- lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/include/LiDIA/finite_fields/base_sparse_power_series.cc.orig	2009-05-09 09:24:32.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/include/LiDIA/finite_fields/base_sparse_power_series.cc	2018-10-09 15:03:53.342213141 -0600
+@@ -959,7 +959,7 @@ randomize (base_sparse_power_series< T >
+ 
+ template< class T >
+ void
+-base_sparse_power_series< T >::init_test (char * mess) const
++base_sparse_power_series< T >::init_test (const char * mess) const
+ {
+ 	if (this->coeff->capacity() == 0) {
+ 		char errmess[256];
+--- lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/include/LiDIA/finite_fields/base_sparse_power_series.h.orig	2009-05-09 09:24:32.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/finite_fields/include/LiDIA/finite_fields/base_sparse_power_series.h	2018-10-09 15:03:27.869662440 -0600
+@@ -87,7 +87,7 @@ protected :
+ 					     "invalid structure: please, use sort()");
+ 	}
+ 
+-	void init_test (char * mess) const;
++	void init_test (const char * mess) const;
+ 	void rebuild ();
+ 
+ 
+--- lidia-2.3.0+latte-patches-2014-10-04/src/portability/bytes_to_int_flag_generator.cc.orig	2009-05-09 09:24:18.000000000 -0600
++++ lidia-2.3.0+latte-patches-2014-10-04/src/portability/bytes_to_int_flag_generator.cc	2018-10-09 14:05:05.052502183 -0600
+@@ -58,11 +58,11 @@ struct compute_bytes_to_int_flag {
+   ResultT
+   operator()(int idx) {
+     assert(0 <= idx);
+-    assert(idx < sizeof(IntT));
++    assert(idx < static_cast<int>(sizeof(IntT)));
+     assert(sizeof(IntT) <= sizeof(ResultT));
+     
+     unsigned char bytes[sizeof(IntT)];
+-    for(int i = 0; i < sizeof(IntT); ++i) {
++    for(int i = 0; i < static_cast<int>(sizeof(IntT)); ++i) {
+       bytes[i] = (i == idx) ? 0xff : 0x00;
+     }
+     
+@@ -77,7 +77,7 @@ bytes_to_int_flag_specializations(std::o
+   compute_bytes_to_int_flag<ValueT, IntT> generator;
+   std::string const& type = type_to_name::apply<IntT>::value;
+ 
+-  for(int idx = 0; idx < sizeof(IntT); ++idx) {
++  for(int idx = 0; idx < static_cast<int>(sizeof(IntT)); ++idx) {
+     unsigned long value = generator(idx); 
+     os << "  template<>\n"
+        << "  struct bytes_to_int_flag<" << type << ", " << idx << "> {\n"
+@@ -233,7 +233,7 @@ template<typename IntT>
+ IntT
+ compute_mask(unsigned char bytemask) {
+   IntT result = 0;
+-  for(int i = 0; i < sizeof(IntT); ++i) {
++  for(int i = 0; i < static_cast<int>(sizeof(IntT)); ++i) {
+     result <<= 8;
+     result |= bytemask;
+   }

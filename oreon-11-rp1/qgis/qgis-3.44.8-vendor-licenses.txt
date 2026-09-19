@@ -1,0 +1,26 @@
+yarn run v1.22.22
+$ /tmpnode_modules/.bin/license-checker --summary
+├─ MIT: 1056
+├─ ISC: 78
+├─ BSD-3-Clause: 34
+├─ BSD-2-Clause: 29
+├─ Apache-2.0: 25
+├─ MIT*: 4
+├─ (MIT OR CC0-1.0): 4
+├─ Unlicense: 3
+├─ (MIT OR Apache-2.0): 2
+├─ CC0-1.0: 2
+├─ (MIT AND CC-BY-3.0): 2
+├─ 0BSD: 2
+├─ UNLICENSED: 1
+├─ Python-2.0: 1
+├─ CC-BY-4.0: 1
+├─ BSD*: 1
+├─ (BSD-3-Clause OR GPL-2.0): 1
+├─ (WTFPL OR MIT): 1
+├─ MIT,Apache2: 1
+├─ (MIT AND BSD-3-Clause): 1
+├─ CC-BY-3.0: 1
+└─ MPL-2.0: 1
+
+Done in 2.69s.

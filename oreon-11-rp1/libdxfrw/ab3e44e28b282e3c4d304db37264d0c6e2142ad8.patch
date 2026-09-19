@@ -1,0 +1,57 @@
+From ab3e44e28b282e3c4d304db37264d0c6e2142ad8 Mon Sep 17 00:00:00 2001
+From: Dongxu Li <dongxuli2011@gmail.com>
+Date: Fri, 3 May 2024 22:13:55 -0400
+Subject: [PATCH] Merging qt6
+
+---
+ libraries/libdxfrw/src/intern/dwgbuffer.cpp   |   6 +-
+ libraries/libdxfrw/src/intern/dxfreader.cpp   |   4 +-
+
+diff --git a/libraries/libdxfrw/src/intern/dwgbuffer.cpp b/libraries/libdxfrw/src/intern/dwgbuffer.cpp
+index 9e4d6faaac..adccb768d3 100644
+--- a/src/intern/dwgbuffer.cpp
++++ b/src/intern/dwgbuffer.cpp
+@@ -429,7 +429,7 @@ DRW_Coord dwgBuffer::get2RawDouble(){
+ }
+ 
+ 
+-/**Reads raw int 32 bits little-endian order, returns a unsigned int (RL) **/
++/**Reads raw int 32 bits little-endian order, returns a unsigned (RL) **/
+ duint32 dwgBuffer::getRawLong32(){
+     duint16 tmp1 = getRawShort16();
+     duint16 tmp2 = getRawShort16();
+@@ -447,7 +447,7 @@ duint64 dwgBuffer::getRawLong64(){
+     return ret;
+ }
+ 
+-/**Reads modular unsigner int, char based, compressed form, little-endian order, returns a unsigned int (U-MC) **/
++/**Reads modular unsigner int, char based, compressed form, little-endian order, returns a unsigned (U-MC) **/
+ duint32 dwgBuffer::getUModularChar(){
+     std::vector<duint8> buffer;
+     duint32 result =0;
+@@ -495,7 +495,7 @@ dint32 dwgBuffer::getModularChar(){
+     return result;
+ }
+ 
+-/**Reads modular int, short based, compressed form, little-endian order, returns a unsigned int (MC) **/
++/**Reads modular int, short based, compressed form, little-endian order, returns a unsigned (MC) **/
+ dint32 dwgBuffer::getModularShort(){
+ //    bool negative = false;
+     std::vector<dint16> buffer;
+diff --git a/libraries/libdxfrw/src/intern/dxfreader.cpp b/libraries/libdxfrw/src/intern/dxfreader.cpp
+index 94f48516e8..f82cbff9ff 100644
+--- a/src/intern/dxfreader.cpp
++++ b/src/intern/dxfreader.cpp
+@@ -164,10 +164,10 @@ bool dxfReaderBinary::readInt16() {
+ 
+ bool dxfReaderBinary::readInt32() {
+     type = INT32;
+-    unsigned int *int32p;
++    unsigned *int32p;
+     char buffer[4];
+     filestr->read(buffer,4);
+-    int32p = (unsigned int *) buffer;
++    int32p = (unsigned *) buffer;
+     intData = *int32p;
+     DRW_DBG(intData); DRW_DBG("\n");
+     return (filestr->good());

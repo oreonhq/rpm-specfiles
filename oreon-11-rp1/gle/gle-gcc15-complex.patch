@@ -1,0 +1,88 @@
+diff --git a/src/gle/f2c.h b/src/gle/f2c.h
+index 3576dd4..ff48b1f 100644
+--- a/src/gle/f2c.h
++++ b/src/gle/f2c.h
+@@ -50,7 +50,7 @@ typedef char *address;
+ typedef short int shortint;
+ typedef float real;
+ typedef double doublereal;
+-typedef struct { real r, i; } complex;
++typedef struct { real r, i; } mycomplex;
+ typedef struct { doublereal r, i; } doublecomplex;
+ typedef int logical;
+ typedef short int shortlogical;
+@@ -158,7 +158,7 @@ union Multitype {	/* for multiple entry points */
+ 	integer i;
+ 	real r;
+ 	doublereal d;
+-	complex c;
++	mycomplex c;
+ 	doublecomplex z;
+ 	};
+ 
+diff --git a/src/gle/fitcf.h b/src/gle/fitcf.h
+index 3895b3e..681f1fc 100644
+--- a/src/gle/fitcf.h
++++ b/src/gle/fitcf.h
+@@ -50,7 +50,7 @@ typedef char *address;
+ typedef short int shortint;
+ typedef float real;
+ typedef double doublereal;
+-typedef struct { real r, i; } complex;
++typedef struct { real r, i; } mycomplex;
+ typedef struct { doublereal r, i; } doublecomplex;
+ typedef int logical;
+ typedef short int shortlogical;
+@@ -158,7 +158,7 @@ union Multitype {	/* for multiple entry points */
+ 	integer i;
+ 	real r;
+ 	doublereal d;
+-	complex c;
++	mycomplex c;
+ 	doublecomplex z;
+ 	};
+ 
+diff --git a/src/gle/letzfitz/f2c.h b/src/gle/letzfitz/f2c.h
+index 2b88ae8..e4f2de6 100644
+--- a/src/gle/letzfitz/f2c.h
++++ b/src/gle/letzfitz/f2c.h
+@@ -50,7 +50,7 @@ typedef char *address;
+ typedef short int shortint;
+ typedef double real;
+ typedef double doublereal;
+-typedef struct { real r, i; } complex;
++typedef struct { real r, i; } mycomplex;
+ typedef struct { doublereal r, i; } doublecomplex;
+ typedef int logical;
+ typedef short int shortlogical;
+@@ -158,7 +158,7 @@ union Multitype {	/* for multiple entry points */
+ 	integer i;
+ 	real r;
+ 	doublereal d;
+-	complex c;
++	mycomplex c;
+ 	doublecomplex z;
+ 	};
+ 
+diff --git a/src/gle/surface/f2c.h b/src/gle/surface/f2c.h
+index 2b88ae8..e4f2de6 100644
+--- a/src/gle/surface/f2c.h
++++ b/src/gle/surface/f2c.h
+@@ -50,7 +50,7 @@ typedef char *address;
+ typedef short int shortint;
+ typedef double real;
+ typedef double doublereal;
+-typedef struct { real r, i; } complex;
++typedef struct { real r, i; } mycomplex;
+ typedef struct { doublereal r, i; } doublecomplex;
+ typedef int logical;
+ typedef short int shortlogical;
+@@ -158,7 +158,7 @@ union Multitype {	/* for multiple entry points */
+ 	integer i;
+ 	real r;
+ 	doublereal d;
+-	complex c;
++	mycomplex c;
+ 	doublecomplex z;
+ 	};
+ 

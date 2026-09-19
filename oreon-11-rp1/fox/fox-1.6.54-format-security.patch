@@ -1,0 +1,31 @@
+--- fox-1.6.54/adie/TextWindow.cpp.debug	2014-05-14 13:32:40.000000000 +0900
++++ fox-1.6.54/adie/TextWindow.cpp	2017-05-03 22:27:05.550482650 +0900
+@@ -1421,7 +1421,7 @@
+ // Reopen file
+ long TextWindow::onCmdReopen(FXObject*,FXSelector,void*){
+   if(isModified()){
+-    if(FXMessageBox::question(this,MBOX_YES_NO,tr("Document was changed"),tr("Discard changes to this document?"))==MBOX_CLICKED_NO) return 1;
++    if(FXMessageBox::question(this,MBOX_YES_NO,tr("Document was changed"),"%s",tr("Discard changes to this document?"))==MBOX_CLICKED_NO) return 1;
+     }
+   loadFile(filename);
+   return 1;
+--- fox-1.6.54/src/FXGLViewer.cpp.debug	2014-05-14 13:32:40.000000000 +0900
++++ fox-1.6.54/src/FXGLViewer.cpp	2017-05-03 22:26:30.998637130 +0900
+@@ -2420,7 +2420,7 @@
+ 
+       // Try open printer
+       if(!pdc.beginPrint(printer)){
+-        FXMessageBox::error(this,MBOX_OK,tr("Printer Error"),tr("Unable to print."));
++        FXMessageBox::error(this,MBOX_OK,tr("Printer Error"),"%s",tr("Unable to print."));
+         return 1;
+         }
+ 
+@@ -2595,7 +2595,7 @@
+     dlg.getPrinter(printer);
+     FXDCPrint pdc(getApp());
+     if(!pdc.beginPrint(printer)){
+-      FXMessageBox::error(this,MBOX_OK,tr("Printer Error"),tr("Unable to print."));
++      FXMessageBox::error(this,MBOX_OK,tr("Printer Error"),"%s",tr("Unable to print."));
+       return 1;
+       }
+ 

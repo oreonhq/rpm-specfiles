@@ -1,0 +1,12 @@
+diff -Naur old/source/build.xml new/source/build.xml
+--- old/source/build.xml	2022-03-28 17:29:56.000000000 -0400
++++ new/source/build.xml	2022-05-30 09:01:12.038023625 -0400
+@@ -14,7 +14,7 @@
+     <!-- First, ensure the build directory exists. -->
+     <mkdir dir="${build.dir}" />
+     <!-- Build everything; add debug="on" to debug -->
+-    <javac srcdir="./ij" destdir="${build.dir}" optimize="on" source="1.6" target="1.6" debug="on" includeantruntime="false" encoding="utf-8">
++    <javac srcdir="./ij" destdir="${build.dir}" optimize="on" source="1.8" target="1.8" debug="on" includeantruntime="false" encoding="utf-8">
+     </javac>
+   </target>
+ 

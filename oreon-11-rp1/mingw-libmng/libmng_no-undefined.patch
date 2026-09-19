@@ -1,0 +1,12 @@
+diff -rupN libmng-2.0.2/Makefile.am libmng-2.0.2-new/Makefile.am
+--- libmng-2.0.2/Makefile.am	2013-12-27 01:17:12.311493219 +0100
++++ libmng-2.0.2-new/Makefile.am	2013-12-27 01:16:37.971080504 +0100
+@@ -9,7 +9,7 @@ EXTRA_DIST = makefiles doc contrib
+ 
+ # libmng release @VERSION@
+ libmng_la_LDFLAGS = \
+-	-version-number @MNG_MAJOR_NR@:@MNG_MINOR_NR@:@MNG_RELEASE_NR@
++	-version-number @MNG_MAJOR_NR@:@MNG_MINOR_NR@:@MNG_RELEASE_NR@ -no-undefined
+ 
+ lib_LTLIBRARIES = libmng.la
+ 

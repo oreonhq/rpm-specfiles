@@ -1,0 +1,11 @@
+--- a/gpr/gpr.gpr
++++ b/gpr/gpr.gpr
+@@ -39,7 +39,7 @@
+ 
+    for Source_Dirs use ("src");
+ 
+-   for Library_Name use "gpr";
++   for Library_Name use "gnatprj";
+    for Object_Dir use "libobj/" & Bld & "/" & Gnat_Lib_Type;
+    for Library_Dir use "lib/" & Bld & "/" & Gnat_Lib_Type;
+ 

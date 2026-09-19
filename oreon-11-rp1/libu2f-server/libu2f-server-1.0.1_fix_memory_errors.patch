@@ -1,0 +1,52 @@
+From 5d74f88b278ca1df6c69d7328be2a8035ca7976c Mon Sep 17 00:00:00 2001
+From: Joe Watkins <krakjoe@php.net>
+Date: Fri, 9 Dec 2016 14:26:51 +0000
+Subject: [PATCH] valgrind shows memory errors around this code, because the
+ reference counts of objects are not managed properly
+
+---
+ u2f-server/core.c | 24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
+
+Index: libu2f-server-1.0.1/u2f-server/core.c
+===================================================================
+--- libu2f-server-1.0.1.orig/u2f-server/core.c
++++ libu2f-server-1.0.1/u2f-server/core.c
+@@ -409,10 +409,13 @@ static int registration_challenge_json(c
+     rc = U2FS_OK;
+ 
+ done:
+-  json_object_put(json_challenge);
+-  json_object_put(json_version);
+-  json_object_put(json_appid);
+-  json_object_put(json_output);
++  if (json_output) {
++    json_object_put(json_output);
++  } else {
++    json_object_put(json_challenge);
++    json_object_put(json_version);
++    json_object_put(json_appid);
++  }
+ 
+   return rc;
+ }
+@@ -980,11 +983,14 @@ static int authentication_challenge_json
+     rc = U2FS_OK;
+ 
+ done:
+-  json_object_put(json_challenge);
+-  json_object_put(json_key);
+-  json_object_put(json_version);
+-  json_object_put(json_appid);
+-  json_object_put(json_output);
++  if (json_output) {
++    json_object_put(json_output);
++  } else {
++    json_object_put(json_challenge);
++    json_object_put(json_key);
++    json_object_put(json_version);
++    json_object_put(json_appid);
++  }
+ 
+   return rc;
+ }

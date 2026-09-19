@@ -1,0 +1,27 @@
+--- maxminddb-0.26.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ maxminddb-0.26.0/Cargo.toml	2025-09-21T13:36:17.718690+00:00
+@@ -55,13 +55,8 @@
+ name = "maxminddb"
+ path = "src/maxminddb/lib.rs"
+ 
+-[[bench]]
+-name = "lookup"
+-path = "benches/lookup.rs"
+-harness = false
+-
+ [dependencies.ipnetwork]
+-version = "0.21.1"
++version = ">=0.20,<0.22"
+ 
+ [dependencies.log]
+ version = "0.4"
+@@ -84,9 +79,6 @@
+ [dependencies.thiserror]
+ version = "2.0"
+ 
+-[dev-dependencies.criterion]
+-version = "0.5"
+-
+ [dev-dependencies.env_logger]
+ version = "0.11"
+ 

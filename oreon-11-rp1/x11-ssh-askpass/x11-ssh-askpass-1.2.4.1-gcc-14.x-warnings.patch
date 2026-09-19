@@ -1,0 +1,34 @@
+diff -up x11-ssh-askpass-1.2.4.1/dynlist.c.orig x11-ssh-askpass-1.2.4.1/dynlist.c
+--- x11-ssh-askpass-1.2.4.1/dynlist.c.orig	2024-06-03 10:49:57.507301439 -0400
++++ x11-ssh-askpass-1.2.4.1/dynlist.c	2024-06-03 10:58:55.209151568 -0400
+@@ -92,7 +92,7 @@ int append_to_buf(char **buf, unsigned c
+         {
+           return(APPEND_FAILURE);
+         }
+-       *buf_rnd = tmp_buf;
++       *buf_rnd = (unsigned char *) tmp_buf;
+ #ifdef DEBUG
+        printf("-->Allocated buffer of size %d\n", *buflen);
+ #endif /* DEBUG */
+diff -up x11-ssh-askpass-1.2.4.1/x11-ssh-askpass.c.orig x11-ssh-askpass-1.2.4.1/x11-ssh-askpass.c
+--- x11-ssh-askpass-1.2.4.1/x11-ssh-askpass.c.orig	2024-06-03 10:49:57.507301439 -0400
++++ x11-ssh-askpass-1.2.4.1/x11-ssh-askpass.c	2024-06-03 10:54:21.186737584 -0400
+@@ -38,6 +38,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <err.h>
+ 
+ /* For (get|set)rlimit() ... */
+ #include <sys/time.h>
+@@ -1453,7 +1454,9 @@ initRandom()
+    unsigned int	seed;
+ 
+    if (fd!=-1) {
+-     read(fd, &seed, sizeof seed);
++     if (read(fd, &seed, sizeof seed) == -1) {
++       warn("read");
++     }
+      close(fd);
+    }
+ 

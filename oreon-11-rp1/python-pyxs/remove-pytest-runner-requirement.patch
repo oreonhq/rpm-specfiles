@@ -1,0 +1,11 @@
+diff -Nurp pyxs-0.4.1.orig/setup.py pyxs-0.4.1/setup.py
+--- pyxs-0.4.1.orig/setup.py	2016-05-10 16:11:11.000000000 -0500
++++ pyxs-0.4.1/setup.py	2017-07-25 16:26:30.265116680 -0500
+@@ -31,7 +31,6 @@ CLASSIFIERS = (
+ setup(name="pyxs",
+       version="0.4.1",
+       packages=["pyxs"],
+-      setup_requires=["pytest-runner"],
+       tests_require=["pytest"],
+       platforms=["any"],
+ 

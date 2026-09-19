@@ -1,0 +1,8 @@
+diff -up DBIx-Class-TimeStamp-0.14/Makefile.PL.orig DBIx-Class-TimeStamp-0.14/Makefile.PL
+--- DBIx-Class-TimeStamp-0.14/Makefile.PL.orig	2017-05-29 08:40:29.811913108 +0200
++++ DBIx-Class-TimeStamp-0.14/Makefile.PL	2017-05-29 08:41:08.306689907 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install 1.00;
+ 
+ perl_version '5.008001';

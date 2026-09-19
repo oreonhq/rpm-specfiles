@@ -1,0 +1,11 @@
+--- a/src/soundmodule.cpp
++++ b/src/soundmodule.cpp
+@@ -70,7 +70,7 @@
+ /** No descriptions */
+ void SoundModule::loadfile(QString file){
+   stop();
+-  QTimerEvent * e; // e(QEvent::Timer) ;
++  QTimerEvent * e = NULL; // e(QEvent::Timer) ;
+   KURL pathfile(path_sound + file );
+ 
+   if ( musicEngine->load(pathfile) )

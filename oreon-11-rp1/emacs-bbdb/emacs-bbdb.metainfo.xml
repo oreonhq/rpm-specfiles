@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>emacs-bbdb</id>
+  <extends>emacs.desktop</extends>
+  <name>Insidious Big Brother Database</name>
+  <summary>A contact management utility</summary>
+  <url type="homepage">http://savannah.nongnu.org/projects/bbdb/</url>
+  <url type="bugtracker">http://savannah.nongnu.org/bugs/?group=bbdb</url>
+  <metadata_license>CC-BY-SA-4.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+</component>

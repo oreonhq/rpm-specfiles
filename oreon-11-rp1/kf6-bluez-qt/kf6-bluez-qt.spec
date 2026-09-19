@@ -1,14 +1,14 @@
-%global source0_hash 3e22c1f71f3d93f572c2a1126edc2aa16151f8bad10f9f1ddb7e41dd372aee70
+%global source0_hash 15e2ae85d0e3e205cd17c3c5f079d2263abc4a341fbf223b2561510f69382a2b
 
 %global framework bluez-qt
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
  
 Name:           kf6-%{framework}
 Summary:        A Qt wrapper for Bluez
-Version:        6.27.0
+Version:        6.30.0
 Release:        1%{?dist}
  
 License:        CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only
@@ -68,6 +68,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

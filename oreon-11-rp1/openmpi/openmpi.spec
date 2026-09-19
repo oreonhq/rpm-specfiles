@@ -29,7 +29,10 @@
 %bcond_with java
 %endif
 
-%if %{defined rhel} || (0%{?oreon} >= 11)
+%if 0%{?oreon} >= 11
+%bcond_with orangefs
+%bcond_with sphinx
+%elif %{defined rhel}
 %bcond_with orangefs
 %bcond_with sphinx
 %else
@@ -54,7 +57,7 @@
 %bcond autogen 0
 
 Name:           openmpi%{?_cc_name_suffix}
-Version:        5.0.9
+Version:        5.0.11
 Release:        %autorelease
 Summary:        Open Message Passing Interface
 # Automatically converted from old format: BSD and MIT and Romio - review is highly recommended.

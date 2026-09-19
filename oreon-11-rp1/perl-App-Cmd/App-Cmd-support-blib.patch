@@ -1,0 +1,12 @@
+diff -up ./t/tester-exit.t.orig ./t/tester-exit.t
+--- ./t/tester-exit.t.orig	2025-03-02 10:17:39.991689544 +0100
++++ ./t/tester-exit.t	2025-03-02 10:18:41.362623198 +0100
+@@ -16,7 +16,7 @@ for my $exit_with (0, 5) {
+   my ($stdout, $stderr, $got_exit) = capture {
+     system(
+       $^X,
+-      (-d 'blib' ? '-Mblib' : ('-I', File::Spec->rel2abs('lib'))),
++      '-I', File::Spec->rel2abs('blib'),
+       $helper_fn, $exit_with);
+   };
+ 

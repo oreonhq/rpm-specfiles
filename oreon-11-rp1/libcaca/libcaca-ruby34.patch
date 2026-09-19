@@ -1,0 +1,35 @@
+diff --git a/ruby/caca-canvas.c b/ruby/caca-canvas.c
+index 5dc66ab..2f92af1 100644
+--- a/ruby/caca-canvas.c
++++ b/ruby/caca-canvas.c
+@@ -742,7 +742,7 @@ void Init_caca_canvas(VALUE mCaca)
+     rb_define_method(cCanvas, "put_str", put_str, 3);
+     rb_define_method(cCanvas, "printf", cprintf, -1);
+ 
+-    rb_define_method(cCanvas, "get_attr", get_attr, 3);
++    rb_define_method(cCanvas, "get_attr", get_attr, 2);
+     rb_define_method(cCanvas, "attr=", set_attr, 1);
+     rb_define_method(cCanvas, "set_attr", set_attr2, 1);
+     rb_define_method(cCanvas, "put_attr", put_attr, 3);
+@@ -773,7 +773,7 @@ void Init_caca_canvas(VALUE mCaca)
+     rb_define_method(cCanvas, "draw_triangle", draw_triangle, 7);
+     rb_define_method(cCanvas, "draw_thin_triangle", draw_thin_triangle, 6);
+     rb_define_method(cCanvas, "fill_triangle", fill_triangle, 7);
+-    rb_define_method(cCanvas, "fill_triangle_textured", fill_triangle_textured, 4);
++    rb_define_method(cCanvas, "fill_triangle_textured", fill_triangle_textured, 3);
+     rb_define_method(cCanvas, "dither_bitmap", dither_bitmap, 6);
+ 
+     rb_define_method(cCanvas, "frame_count", get_frame_count, 0);
+diff --git a/ruby/common.h b/ruby/common.h
+index 6c7d6fc..63013be 100644
+--- a/ruby/common.h
++++ b/ruby/common.h
+@@ -16,7 +16,7 @@
+ #define _SELF  (DATA_PTR(self))
+ 
+ #define get_singleton_double_list(x)                      \
+-static VALUE x##_list(void)                     \
++static VALUE x##_list(VALUE self)               \
+ {                                               \
+     VALUE ary, ary2;                            \
+     char const* const* list;                    \

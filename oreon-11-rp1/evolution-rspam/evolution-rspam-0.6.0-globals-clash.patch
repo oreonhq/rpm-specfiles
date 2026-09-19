@@ -1,0 +1,215 @@
+diff -up evolution-rspam-0.6.0/src/rspam.c.globals-clash evolution-rspam-0.6.0/src/rspam.c
+--- evolution-rspam-0.6.0/src/rspam.c.globals-clash	2013-05-02 12:26:05.778186154 +0200
++++ evolution-rspam-0.6.0/src/rspam.c	2013-05-02 12:32:34.814957711 +0200
+@@ -121,17 +121,13 @@
+ #define d(x)
+ 
+ #if EVOLUTION_VERSION >= 30101
+-EMailBackend *backend;
+-EMailSession *session;
+-EShellBackend *shell_backend;
+-#else
+-#if EVOLUTION_VERSION >= 22900 //kb//
+-extern CamelSession *session;
+-#endif
++static EMailBackend *backend;
++static EMailSession *session;
++static EShellBackend *shell_backend;
+ #endif
+ 
+ #if EVOLUTION_VERSION >= 22900 //kb//
+-EShellView *main_shell_view;
++static EShellView *main_shell_view;
+ #endif
+ 
+ 
+@@ -190,29 +186,29 @@ gchar *rspam_lookup_uri_by_folder_name(g
+ //colaborative network	spam command line		ham command line	gconf flag name
+ //		name
+ #if EVOLUTION_VERSION < 30304
+-const char *cnets[CNETS][4] = {
++static const char *cnets[CNETS][4] = {
+ 	{"razor",	"razor-report -f -d",		"razor-revoke -f -d",	GCONF_KEY_ENABLE_RAZOR},
+ 	{"dcc",	"dccproc -H -t many -x 0",	NULL,			GCONF_KEY_ENABLE_DCC},
+ 	{"spamcop",(gchar *)spamcop_report,	NULL,			GCONF_KEY_ENABLE_SPAMCOP},
+ 	{"pyzor",  "pyzor -d report",		"pyzor -d whitelist",	GCONF_KEY_ENABLE_PYZOR}};
+ #else
+-const char *cnets[CNETS][4] = {
++static const char *cnets[CNETS][4] = {
+ 	{"razor",	"razor-report -f -d",		"razor-revoke -f -d",	CONF_KEY_ENABLE_RAZOR},
+ 	{"dcc",	"dccproc -H -t many -x 0",	NULL,			CONF_KEY_ENABLE_DCC},
+ 	{"spamcop",(gchar *)spamcop_report,	NULL,			CONF_KEY_ENABLE_SPAMCOP},
+ 	{"pyzor",  "pyzor -d report",		"pyzor -d whitelist",	CONF_KEY_ENABLE_PYZOR}};
+ #endif
+ 
+-gchar *pyzor_status = NULL;
++static gchar *pyzor_status = NULL;
+ #if EVOLUTION_VERSION < 30304
+ GConfClient *rspam_gconf;
+ #else
+-GSettings *settings;
++static GSettings *rspam_settings;
+ #endif
+-struct rspam_stuff *stuff;
+-gboolean rspam_online;
+-GList *tlist = NULL;
+-GPtrArray *spamuids = NULL;
++static struct rspam_stuff *stuff;
++static gboolean rspam_online;
++static GList *tlist = NULL;
++static GPtrArray *spamuids = NULL;
+ 
+ static void
+ readrazorconfig(gpointer data);
+@@ -324,7 +320,7 @@ rspam_command(CamelMimeMessage *msg, gch
+ #if EVOLUTION_VERSION < 30304
+ 		if (gconf_client_get_bool (rspam_gconf, cnets[i][3], NULL)) {
+ #else
+-		if (g_settings_get_boolean (settings, cnets[i][3])) {
++		if (g_settings_get_boolean (rspam_settings, cnets[i][3])) {
+ #endif
+ 			g_print("%s is enabled.\n", cnets[i][0]);
+ 			if (command) {	/*spam*/
+@@ -335,7 +331,7 @@ rspam_command(CamelMimeMessage *msg, gch
+ #if EVOLUTION_VERSION < 30304
+ 						if (!gconf_client_get_bool(rspam_gconf, GCONF_KEY_DRY_RUN, NULL)) {
+ #else
+-						if (!g_settings_get_boolean(settings, CONF_KEY_DRY_RUN)) {
++						if (!g_settings_get_boolean(rspam_settings, CONF_KEY_DRY_RUN)) {
+ #endif
+ 							cmdp = g_strconcat(cnets[i][1], " < %s &", NULL);
+ 							cmd = g_strdup_printf(cmdp, name);
+@@ -356,7 +352,7 @@ rspam_command(CamelMimeMessage *msg, gch
+ #if EVOLUTION_VERSION < 30304
+ 						if (!gconf_client_get_bool(rspam_gconf, GCONF_KEY_DRY_RUN, NULL)) {
+ #else
+-						if (!g_settings_get_boolean(settings, CONF_KEY_DRY_RUN)) {
++						if (!g_settings_get_boolean(rspam_settings, CONF_KEY_DRY_RUN)) {
+ #endif
+ 							cmdp = g_strconcat(cnets[i][2], " < %s", NULL);
+ 							cmd = g_strdup_printf(cmdp, name);
+@@ -595,7 +591,7 @@ spamcop_report(CamelMimeMessage *msg, gc
+ 				NULL);
+ #else
+ 		sc_email = g_settings_get_string(
+-				settings,
++				rspam_settings,
+ 				CONF_KEY_SPAMCOP_EMAIL);
+ #endif
+ 		camel_address_decode(
+@@ -723,7 +719,7 @@ spamcop_report(CamelMimeMessage *msg, gc
+ #if EVOLUTION_VERSION < 30304
+ 	if (!gconf_client_get_bool(rspam_gconf, GCONF_KEY_DRY_RUN, NULL)) {
+ #else
+-	if (!g_settings_get_boolean(settings, CONF_KEY_DRY_RUN)) {
++	if (!g_settings_get_boolean(rspam_settings, CONF_KEY_DRY_RUN)) {
+ #endif
+ #if (DATASERVER_VERSION >= 2031001)
+ 		camel_medium_set_content(
+@@ -927,7 +923,7 @@ org_gnome_sa_rspam(GtkAction *action, ES
+ #if EVOLUTION_VERSION < 30304
+ 	if (!gconf_client_get_bool (rspam_gconf, GCONF_KEY_MOVE_JUNK, NULL)) {
+ #else
+-	if (!g_settings_get_boolean (settings, CONF_KEY_MOVE_JUNK)) {
++	if (!g_settings_get_boolean (rspam_settings, CONF_KEY_MOVE_JUNK)) {
+ #endif
+ 		gchar *uri;
+ #if EVOLUTION_VERSION >= 30303
+@@ -944,7 +940,7 @@ org_gnome_sa_rspam(GtkAction *action, ES
+ #if EVOLUTION_VERSION < 30304
+ 		uri = gconf_client_get_string (rspam_gconf, GCONF_KEY_MOVE_FOLDER, NULL);
+ #else
+-		uri = g_settings_get_string (settings, CONF_KEY_MOVE_FOLDER);
++		uri = g_settings_get_string (rspam_settings, CONF_KEY_MOVE_FOLDER);
+ #endif
+ 		if (uri && g_ascii_strcasecmp(uri, _("Select...")) && spamuids->len) {
+ 			mail_transfer_messages (
+@@ -1022,7 +1018,7 @@ org_gnome_sa_revoke (GtkAction *action,
+ #if EVOLUTION_VERSION < 30304
+ 	if (gconf_client_get_bool (rspam_gconf, GCONF_KEY_MOVE_JUNK, NULL))
+ #else
+-	if (g_settings_get_boolean (settings, CONF_KEY_MOVE_JUNK))
++	if (g_settings_get_boolean (rspam_settings, CONF_KEY_MOVE_JUNK))
+ #endif
+ 		camel_folder_set_message_flags(
+ 			folder, g_ptr_array_index(uids, i),
+@@ -1281,7 +1277,7 @@ enable_movejunk_cb (GtkWidget *widget, g
+ 	gconf_client_set_bool (
+ 		stuff->target->gconf, GCONF_KEY_MOVE_JUNK, active, NULL);
+ #else
+-	g_settings_set_boolean(settings, CONF_KEY_MOVE_JUNK, active);
++	g_settings_set_boolean(rspam_settings, CONF_KEY_MOVE_JUNK, active);
+ #endif
+ }
+ 
+@@ -1332,7 +1328,7 @@ readrazorconfig(gpointer data)
+ #if EVOLUTION_VERSION < 30304
+ 	rspam_gconf = gconf_client_get_default();
+ #else
+-	settings = g_settings_new(CONF_SCHEMA);
++	rspam_settings = g_settings_new(CONF_SCHEMA);
+ #endif
+ 
+ 	//we might had razor before, so try to fetch it's home
+@@ -1342,7 +1338,7 @@ readrazorconfig(gpointer data)
+ 		rspam_gconf, GCONF_KEY_RAZOR_HOME, NULL);
+ #else
+ 	key = g_settings_get_string(
+-		settings, CONF_KEY_RAZOR_HOME);
++		rspam_settings, CONF_KEY_RAZOR_HOME);
+ #endif
+ 	if (!key || !strlen(key)) {
+ 		str = g_build_filename(
+@@ -1353,7 +1349,7 @@ readrazorconfig(gpointer data)
+ 			rspam_gconf, GCONF_KEY_RAZOR_HOME, tmp, NULL);
+ #else
+ 		g_settings_set_string (
+-			settings, CONF_KEY_RAZOR_HOME, tmp);
++			rspam_settings, CONF_KEY_RAZOR_HOME, tmp);
+ #endif
+ 		g_free(tmp);
+ #if EVOLUTION_VERSION < 30304
+@@ -1361,7 +1357,7 @@ readrazorconfig(gpointer data)
+ 			rspam_gconf, GCONF_KEY_RAZOR_HOME, NULL);
+ #else
+ 		key = g_settings_get_string(
+-			settings, CONF_KEY_RAZOR_HOME);
++			rspam_settings, CONF_KEY_RAZOR_HOME);
+ #endif
+ 	} else {
+ 		//we  have a razor home stored
+@@ -1896,7 +1892,7 @@ rspam_folder_cb (GtkWidget *widget, gpoi
+ 			GCONF_KEY_MOVE_FOLDER, uri, NULL);
+ #else
+ 		g_settings_set_string (
+-			settings,
++			rspam_settings,
+ 			CONF_KEY_MOVE_FOLDER, uri);
+ #endif
+ 	}
+@@ -1996,14 +1992,14 @@ rs_online(CamelObject *o, void *event_da
+ #if EVOLUTION_VERSION < 30304
+ 		if (gconf_client_get_bool (rspam_gconf, GCONF_KEY_ENABLE_PYZOR, NULL))
+ #else
+-		if (g_settings_get_boolean (settings, CONF_KEY_ENABLE_PYZOR))
++		if (g_settings_get_boolean (rspam_settings, CONF_KEY_ENABLE_PYZOR))
+ #endif
+ 			pyzor_status = pyzor_discover_cb(NULL, NULL);
+ 		/*discover razor*/
+ #if EVOLUTION_VERSION < 30304
+ 		if (gconf_client_get_bool (rspam_gconf, GCONF_KEY_ENABLE_RAZOR, NULL))
+ #else
+-		if (g_settings_get_boolean (settings, CONF_KEY_ENABLE_RAZOR))
++		if (g_settings_get_boolean (rspam_settings, CONF_KEY_ENABLE_RAZOR))
+ #endif
+ 			discover_cb(NULL, stuff);
+ 		taskbar_pop_message();
+@@ -2135,7 +2131,7 @@ e_plugin_lib_enable(EPlugin *ep, int ena
+ #if EVOLUTION_VERSION < 30304
+ 		rspam_gconf = gconf_client_get_default();
+ #else
+-		settings = g_settings_new(CONF_SCHEMA);
++		rspam_settings = g_settings_new(CONF_SCHEMA);
+ #endif
+ 		/* A structure to pass some stuff around */
+ 		stuff = g_new0 (struct rspam_stuff, 100);

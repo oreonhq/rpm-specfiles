@@ -5,7 +5,7 @@
 
 Name: gnu-efi
 Epoch: 1
-Version: 3.0.18
+Version: 4.0.4
 Release: %autorelease
 Summary: Development Libraries and headers for EFI
 License: BSD-2-Clause AND BSD-2-Clause-Patent AND BSD-3-Clause AND BSD-4-Clause AND GPL-2.0-or-later AND GPL-2.0-only

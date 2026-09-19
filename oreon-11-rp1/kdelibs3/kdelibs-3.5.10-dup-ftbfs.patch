@@ -1,0 +1,13 @@
+diff -up kdelibs-3.5.10/kimgio/jp2.cpp.me kdelibs-3.5.10/kimgio/jp2.cpp
+--- kdelibs-3.5.10/kimgio/jp2.cpp.me	2020-09-15 10:31:41.874769189 +0200
++++ kdelibs-3.5.10/kimgio/jp2.cpp	2020-09-15 10:32:38.515076930 +0200
+@@ -12,6 +12,9 @@
+ #ifdef HAVE_STDINT_H
+ #include <stdint.h>
+ #endif
++
++#include <unistd.h>
++
+ #include <ktempfile.h>
+ #include <qcolor.h>
+ #include <qcstring.h>

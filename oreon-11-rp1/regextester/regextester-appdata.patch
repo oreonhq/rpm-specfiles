@@ -1,0 +1,22 @@
+--- data/meson.build~	2021-03-24 07:24:30.000000000 -0500
++++ data/meson.build	2023-03-01 12:52:56.304056801 -0600
+@@ -31,7 +31,7 @@
+   test (
+     'Validate appdata file',
+     appstreamcli,
+-    args: ['validate', join_paths(meson.current_build_dir (), meson.project_name() + '.appdata.xml')]
++    args: ['validate-relax', '--nonet', join_paths(meson.current_build_dir (), meson.project_name() + '.appdata.xml')]
+   )
+ endif
+ 
+--- data/meson.build~	2023-03-01 12:54:43.633328079 -0600
++++ data/meson.build	2023-03-01 12:56:09.037748218 -0600
+@@ -25,7 +25,7 @@
+   )
+ endif
+ 
+-appstreamcli = find_program(['appstreamcli', 'appstream-util'], required:false)
++appstreamcli = find_program(['appstream-util'], required:false)
+ 
+ if appstreamcli.found()
+   test (

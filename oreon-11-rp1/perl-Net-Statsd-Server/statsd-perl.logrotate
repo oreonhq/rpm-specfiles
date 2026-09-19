@@ -1,0 +1,8 @@
+/var/log/statsd-perl/statsd-perl.log {
+    daily
+    rotate 28
+    delaycompress
+    compress
+    notifempty
+    missingok
+}

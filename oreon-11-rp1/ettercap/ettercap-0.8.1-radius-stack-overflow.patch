@@ -1,0 +1,22 @@
+From c2a3c99af956146570d7883e4b540b9d0c0a3c46 Mon Sep 17 00:00:00 2001
+From: NickSampanis <nicksampanis@gmail.com>
+Date: Fri, 17 Oct 2014 20:50:46 +0300
+Subject: [PATCH] Fix radius stack overflow
+
+---
+ src/dissectors/ec_radius.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/dissectors/ec_radius.c b/src/dissectors/ec_radius.c
+index 3b98652..3f673e3 100644
+--- a/src/dissectors/ec_radius.c
++++ b/src/dissectors/ec_radius.c
+@@ -203,7 +203,7 @@ static u_char * radius_get_attribute(u_int8 attr, u_int16 *attr_len, u_char *beg
+    while (begin < end) {
+ 
+       /* get the len of the attribute and subtract the header len */
+-      *attr_len = *(begin + 1) - 2;
++      *attr_len = (u_char)*(begin + 1) - 2;
+      
+       /* we have found our attribute */
+       if (*begin == attr) {

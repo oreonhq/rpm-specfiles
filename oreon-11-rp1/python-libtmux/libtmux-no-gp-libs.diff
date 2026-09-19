@@ -1,0 +1,10 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -206,7 +206,6 @@ addopts = [
+   "--tb=short",
+   "--no-header",
+   "--showlocals",
+-  "--doctest-docutils-modules",
+   "-p no:doctest",
+   "--reruns=2"
+ ]

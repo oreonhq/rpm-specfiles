@@ -1,0 +1,27 @@
+From c9d279f310b56ae20919836d9530363f5b6e510c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Tue, 22 Apr 2025 18:32:48 +0200
+Subject: [PATCH] Add test
+
+---
+ test/test_basic.py | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 test/test_basic.py
+
+diff --git a/test/test_basic.py b/test/test_basic.py
+new file mode 100644
+index 0000000..8ea9f41
+--- /dev/null
++++ b/test/test_basic.py
+@@ -0,0 +1,8 @@
++from unittest import TestCase
++
++class BasicTest(TestCase):
++    def test_basic(self):
++        from pyfzf.pyfzf import FzfPrompt
++        fzf = FzfPrompt()
++        assert True
++
+-- 
+2.49.0
+

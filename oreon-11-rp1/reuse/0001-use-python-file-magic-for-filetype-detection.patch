@@ -1,0 +1,38 @@
+From b3616d4b49a83f21bf6e3bbca7b524edb56c8bdc Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Wed, 29 Oct 2025 15:43:09 +0100
+Subject: [PATCH] use python-file-magic for filetype detection
+
+Signed-off-by: rpm-build <rpm-build>
+---
+ pyproject.toml | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index e2b8112..3599a38 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -70,16 +70,17 @@ click = ">=8.1"
+ # used as fallback, in the below order. If you do not want a dependency on
+ # python-magic, you can patch out this requirement and instead hard-require one
+ # of the fallbacks.
+-python-magic = ">=0.4.12"
++#python-magic = ">=0.4.12"
+ # Annoyingly, file-magic has the same module namespace as python-magic
+ # ('magic'). If both are installed simultaneously, it is not self-evident which
+ # of the two is imported. file-magic is the 'official' magic module.
+-file-magic = { version = ">=0.4.1", optional = true }
++file-magic = { version = ">=0.4", optional = false }
+ charset-normalizer = { version = ">=2.0.5", optional = true }
+ chardet = { version = ">=3.0.2", optional = true }
+ 
+ [tool.poetry.extras]
+-file-magic = ["file-magic"]
++# mark this as non-extra so the dependency generator picks it up
++#file-magic = ["file-magic"]
+ charset-normalizer = ["charset-normalizer"]
+ chardet = ["chardet"]
+ 
+-- 
+2.51.0
+

@@ -1,0 +1,12 @@
+diff -rupN iax-0.2.3/src/iax2-parser.c iax-0.2.3-new/src/iax2-parser.c
+--- iax-0.2.3/src/iax2-parser.c	2014-08-10 16:36:22.000000000 +0200
++++ iax-0.2.3-new/src/iax2-parser.c	2014-08-10 17:03:39.707412208 +0200
+@@ -52,7 +52,7 @@ static unsigned short get_uint16(unsigne
+ 
+ static void internaloutput(const char *str)
+ {
+-	printf(str);
++	printf("%s", str);
+ }
+ 
+ static void internalerror(const char *str)

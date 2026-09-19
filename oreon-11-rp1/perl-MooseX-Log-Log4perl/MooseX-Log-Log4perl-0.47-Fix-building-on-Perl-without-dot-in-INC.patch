@@ -1,0 +1,8 @@
+diff -up MooseX-Log-Log4perl-0.47/Makefile.PL.orig MooseX-Log-Log4perl-0.47/Makefile.PL
+--- MooseX-Log-Log4perl-0.47/Makefile.PL.orig	2017-05-23 16:36:52.911640548 +0200
++++ MooseX-Log-Log4perl-0.47/Makefile.PL	2017-05-23 16:36:41.823704798 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install '0.85';
+ 
+ name 'MooseX-Log-Log4perl';

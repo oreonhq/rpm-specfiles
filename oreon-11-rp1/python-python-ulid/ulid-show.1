@@ -1,0 +1,49 @@
+.TH ULID\-SHOW "1" "February 2024" "" "User Commands"
+.SH NAME
+.B ulid\-show
+\(en show properties of a ULID
+.SH SYNOPSIS
+.B ulid\ show
+.RB [ \-h ]
+.RB [ \-\-uuid ]
+.RB [ \-\-uuid4 ]
+.RB [ \-\-hex ]
+.RB [ \-\-int ]
+.RB [ \-\-timestamp ]
+.RB [ \-\-datetime ]
+.I ulid
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I ulid
+the ULID to inspect.
+The special value
+.B \-
+reads from
+.I stdin
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-\-uuid
+convert to fully random UUID
+.TP
+.B \-\-uuid4
+convert to RFC 4122 compliant UUIDv4
+.TP
+.B \-\-hex
+convert to hex
+.TP
+.B \-\-int
+convert to int
+.TP
+.B \-\-timestamp\fR,\ \fB\-\-ts
+show timestamp
+.TP
+.B \-\-datetime\fR,\ \fB\-\-dt
+show datetime
+.SH "SEE\ ALSO"
+.BR ulid (1)
+.P
+.BR ulid\-build (1)

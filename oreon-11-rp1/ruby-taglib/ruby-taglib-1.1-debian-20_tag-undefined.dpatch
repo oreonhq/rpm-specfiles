@@ -1,0 +1,22 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 20_tag-undefined.dpatch by Lucas Nussbaum <lucas@lucas-nussbaum.net>
+## 
+## Initialize @tag and @audio to avoid a warning with ruby -w.
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad trunk~/lib/taglib.rb trunk/lib/taglib.rb
+--- trunk~/lib/taglib.rb	2006-05-09 16:39:37.000000000 +0200
++++ trunk/lib/taglib.rb	2008-01-21 07:12:40.000000000 +0100
+@@ -104,6 +104,9 @@
+ 			raise BadPath.new
+ 		end
+ 
++    @tag = nil
++    @audio = nil
++
+ 		if MAHORO_PRESENT
+ 			mahoro = Mahoro.new
+ 			mahoro.flags = Mahoro::NONE

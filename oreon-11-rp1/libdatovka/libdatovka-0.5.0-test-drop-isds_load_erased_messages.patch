@@ -1,0 +1,158 @@
+diff --git a/test/offline/Makefile.am b/test/offline/Makefile.am
+index 1c13040..f1c5d24 100644
+--- a/test/offline/Makefile.am
++++ b/test/offline/Makefile.am
+@@ -29,7 +29,7 @@ TESTS = prepare_environment \
+ 		isds_DbOwnerInfo_free isds_DbOwnerInfoExt2_free \
+ 		isds_DbUserInfo_free isds_DbUserInfoExt2_free isds_event_free \
+ 		isds_envelope_free isds_document_free \
+-		isds_load_erased_messages isds_message_free \
++		isds_message_free \
+ 		isds_message_copy_free isds_message_status_change_free isds_approval_free \
+ 		isds_commercial_permission_free isds_credentials_delivery_free \
+ 		isds_credit_event_free isds_fulltext_result_free \
+@@ -209,7 +209,6 @@ isds_DbUserInfoExt2_free_SOURCES	= isds_DbUserInfoExt2_free.c $(common)
+ isds_event_free_SOURCES 	= isds_event_free.c $(common)
+ isds_envelope_free_SOURCES 	= isds_envelope_free.c $(common)
+ isds_document_free_SOURCES 	= isds_document_free.c $(common)
+-isds_load_erased_messages_SOURCES = isds_load_erased_messages.c $(common)
+ isds_message_free_SOURCES 	= isds_message_free.c $(common)
+ isds_message_copy_free_SOURCES 	= isds_message_copy_free.c $(common)
+ isds_message_status_change_free_SOURCES	= isds_message_status_change_free.c \
+diff --git a/test/offline/Makefile.in b/test/offline/Makefile.in
+index cc1898f..ce23242 100644
+--- a/test/offline/Makefile.in
++++ b/test/offline/Makefile.in
+@@ -102,7 +102,7 @@ TESTS = prepare_environment$(EXEEXT) b64decode$(EXEEXT) \
+ 	isds_DbUserInfo_free$(EXEEXT) \
+ 	isds_DbUserInfoExt2_free$(EXEEXT) isds_event_free$(EXEEXT) \
+ 	isds_envelope_free$(EXEEXT) isds_document_free$(EXEEXT) \
+-	isds_load_erased_messages$(EXEEXT) isds_message_free$(EXEEXT) \
++	isds_message_free$(EXEEXT) \
+ 	isds_message_copy_free$(EXEEXT) \
+ 	isds_message_status_change_free$(EXEEXT) \
+ 	isds_approval_free$(EXEEXT) \
+@@ -201,7 +201,7 @@ am__EXEEXT_2 = prepare_environment$(EXEEXT) b64decode$(EXEEXT) \
+ 	isds_DbUserInfo_free$(EXEEXT) \
+ 	isds_DbUserInfoExt2_free$(EXEEXT) isds_event_free$(EXEEXT) \
+ 	isds_envelope_free$(EXEEXT) isds_document_free$(EXEEXT) \
+-	isds_load_erased_messages$(EXEEXT) isds_message_free$(EXEEXT) \
++	isds_message_free$(EXEEXT) \
+ 	isds_message_copy_free$(EXEEXT) \
+ 	isds_message_status_change_free$(EXEEXT) \
+ 	isds_approval_free$(EXEEXT) \
+@@ -1518,33 +1518,6 @@ am_isds_list_free_OBJECTS = isds_list_free.$(OBJEXT) $(am__objects_6)
+ isds_list_free_OBJECTS = $(am_isds_list_free_OBJECTS)
+ isds_list_free_LDADD = $(LDADD)
+ isds_list_free_DEPENDENCIES =
+-am__isds_load_erased_messages_SOURCES_DIST =  \
+-	isds_load_erased_messages.c ../test.c ../test.h \
+-	../test-tools.h $(INCLUDEDIR)/libdatovka/isds.h \
+-	$(MULTIPART_PARSER_ROOT)/multipart_parser.c \
+-	$(MULTIPART_PARSER_ROOT)/multipart_parser.h \
+-	$(LIBDIR)/cdecode.c $(LIBDIR)/cdecode.h $(LIBDIR)/cencode.c \
+-	$(LIBDIR)/cencode.h $(LIBDIR)/compiler.h $(LIBDIR)/crypto.h \
+-	$(LIBDIR)/gettext.h $(LIBDIR)/internal_types.h \
+-	$(LIBDIR)/isds.c $(LIBDIR)/isds_priv.h \
+-	$(LIBDIR)/multipart_intermediate.c \
+-	$(LIBDIR)/multipart_intermediate.h $(LIBDIR)/multipart_parts.c \
+-	$(LIBDIR)/multipart_parts.h $(LIBDIR)/physxml.c \
+-	$(LIBDIR)/physxml.h $(LIBDIR)/time_conversion.c \
+-	$(LIBDIR)/time_conversion.h $(LIBDIR)/utils.c \
+-	$(LIBDIR)/utils.h $(LIBDIR)/utils_memory.c \
+-	$(LIBDIR)/utils_memory.h $(LIBDIR)/validator.c \
+-	$(LIBDIR)/validator.h $(LIBDIR)/crypto_openssl.c \
+-	$(LIBDIR)/crypto_gpg.c $(LIBDIR)/soap.c $(LIBDIR)/soap.h \
+-	$(LIBDIR)/time_conversion_win32.c $(LIBDIR)/win32.c \
+-	$(LIBDIR)/win32.h $(LIBDIR)/time_conversion_unix.c \
+-	$(LIBDIR)/unix.c $(LIBDIR)/unix.h
+-am_isds_load_erased_messages_OBJECTS =  \
+-	isds_load_erased_messages.$(OBJEXT) $(am__objects_6)
+-isds_load_erased_messages_OBJECTS =  \
+-	$(am_isds_load_erased_messages_OBJECTS)
+-isds_load_erased_messages_LDADD = $(LDADD)
+-isds_load_erased_messages_DEPENDENCIES =
+ am__isds_message_copy_free_SOURCES_DIST = isds_message_copy_free.c \
+ 	../test.c ../test.h ../test-tools.h \
+ 	$(INCLUDEDIR)/libdatovka/isds.h \
+@@ -1849,7 +1822,6 @@ am__depfiles_remade = ./$(DEPDIR)/b64decode.Po \
+ 	./$(DEPDIR)/isds_fulltext_result_free.Po \
+ 	./$(DEPDIR)/isds_hash_free.Po ./$(DEPDIR)/isds_init.Po \
+ 	./$(DEPDIR)/isds_list_free.Po \
+-	./$(DEPDIR)/isds_load_erased_messages.Po \
+ 	./$(DEPDIR)/isds_message_copy_free.Po \
+ 	./$(DEPDIR)/isds_message_free.Po \
+ 	./$(DEPDIR)/isds_message_status_change_free.Po \
+@@ -1922,7 +1894,6 @@ SOURCES = $(b64decode_SOURCES) $(b64encode_SOURCES) \
+ 	$(isds_event_free_SOURCES) \
+ 	$(isds_fulltext_result_free_SOURCES) $(isds_hash_free_SOURCES) \
+ 	$(isds_init_SOURCES) $(isds_list_free_SOURCES) \
+-	$(isds_load_erased_messages_SOURCES) \
+ 	$(isds_message_copy_free_SOURCES) $(isds_message_free_SOURCES) \
+ 	$(isds_message_status_change_free_SOURCES) \
+ 	$(isds_pki_credentials_free_SOURCES) $(load_raw_SOURCES) \
+@@ -1978,7 +1949,6 @@ DIST_SOURCES = $(am__b64decode_SOURCES_DIST) \
+ 	$(am__isds_hash_free_SOURCES_DIST) \
+ 	$(am__isds_init_SOURCES_DIST) \
+ 	$(am__isds_list_free_SOURCES_DIST) \
+-	$(am__isds_load_erased_messages_SOURCES_DIST) \
+ 	$(am__isds_message_copy_free_SOURCES_DIST) \
+ 	$(am__isds_message_free_SOURCES_DIST) \
+ 	$(am__isds_message_status_change_free_SOURCES_DIST) \
+@@ -2470,7 +2440,6 @@ isds_DbUserInfoExt2_free_SOURCES = isds_DbUserInfoExt2_free.c $(common)
+ isds_event_free_SOURCES = isds_event_free.c $(common)
+ isds_envelope_free_SOURCES = isds_envelope_free.c $(common)
+ isds_document_free_SOURCES = isds_document_free.c $(common)
+-isds_load_erased_messages_SOURCES = isds_load_erased_messages.c $(common)
+ isds_message_free_SOURCES = isds_message_free.c $(common)
+ isds_message_copy_free_SOURCES = isds_message_copy_free.c $(common)
+ isds_message_status_change_free_SOURCES = isds_message_status_change_free.c \
+@@ -2767,10 +2736,6 @@ isds_list_free$(EXEEXT): $(isds_list_free_OBJECTS) $(isds_list_free_DEPENDENCIES
+ 	@rm -f isds_list_free$(EXEEXT)
+ 	$(AM_V_CCLD)$(LINK) $(isds_list_free_OBJECTS) $(isds_list_free_LDADD) $(LIBS)
+ 
+-isds_load_erased_messages$(EXEEXT): $(isds_load_erased_messages_OBJECTS) $(isds_load_erased_messages_DEPENDENCIES) $(EXTRA_isds_load_erased_messages_DEPENDENCIES) 
+-	@rm -f isds_load_erased_messages$(EXEEXT)
+-	$(AM_V_CCLD)$(LINK) $(isds_load_erased_messages_OBJECTS) $(isds_load_erased_messages_LDADD) $(LIBS)
+-
+ isds_message_copy_free$(EXEEXT): $(isds_message_copy_free_OBJECTS) $(isds_message_copy_free_DEPENDENCIES) $(EXTRA_isds_message_copy_free_DEPENDENCIES) 
+ 	@rm -f isds_message_copy_free$(EXEEXT)
+ 	$(AM_V_CCLD)$(LINK) $(isds_message_copy_free_OBJECTS) $(isds_message_copy_free_LDADD) $(LIBS)
+@@ -2872,7 +2837,6 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isds_hash_free.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isds_init.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isds_list_free.Po@am__quote@ # am--include-marker
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isds_load_erased_messages.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isds_message_copy_free.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isds_message_free.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isds_message_status_change_free.Po@am__quote@ # am--include-marker
+@@ -3572,13 +3536,6 @@ isds_document_free.log: isds_document_free$(EXEEXT)
+ 	--log-file $$b.log --trs-file $$b.trs \
+ 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+ 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+-isds_load_erased_messages.log: isds_load_erased_messages$(EXEEXT)
+-	@p='isds_load_erased_messages$(EXEEXT)'; \
+-	b='isds_load_erased_messages'; \
+-	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+-	--log-file $$b.log --trs-file $$b.trs \
+-	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+-	"$$tst" $(AM_TESTS_FD_REDIRECT)
+ isds_message_free.log: isds_message_free$(EXEEXT)
+ 	@p='isds_message_free$(EXEEXT)'; \
+ 	b='isds_message_free'; \
+@@ -3963,7 +3920,6 @@ distclean: distclean-am
+ 	-rm -f ./$(DEPDIR)/isds_hash_free.Po
+ 	-rm -f ./$(DEPDIR)/isds_init.Po
+ 	-rm -f ./$(DEPDIR)/isds_list_free.Po
+-	-rm -f ./$(DEPDIR)/isds_load_erased_messages.Po
+ 	-rm -f ./$(DEPDIR)/isds_message_copy_free.Po
+ 	-rm -f ./$(DEPDIR)/isds_message_free.Po
+ 	-rm -f ./$(DEPDIR)/isds_message_status_change_free.Po
+@@ -4088,7 +4044,6 @@ maintainer-clean: maintainer-clean-am
+ 	-rm -f ./$(DEPDIR)/isds_hash_free.Po
+ 	-rm -f ./$(DEPDIR)/isds_init.Po
+ 	-rm -f ./$(DEPDIR)/isds_list_free.Po
+-	-rm -f ./$(DEPDIR)/isds_load_erased_messages.Po
+ 	-rm -f ./$(DEPDIR)/isds_message_copy_free.Po
+ 	-rm -f ./$(DEPDIR)/isds_message_free.Po
+ 	-rm -f ./$(DEPDIR)/isds_message_status_change_free.Po

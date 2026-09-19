@@ -1,0 +1,25 @@
+From 82ec7ef1bae92649090e38e9132eef8ae432cc59 Mon Sep 17 00:00:00 2001
+From: Igor Raits <igor.raits@gmail.com>
+Date: Sat, 18 May 2024 17:12:43 +0200
+Subject: [PATCH 2/6] Enable tcp_fastopen in bundled libhttpserver
+
+We have kernel 3.6+ for years and the condition is wrong.
+---
+ deps/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/deps/Makefile b/deps/Makefile
+index 7d1a76fe..23c4f894 100644
+--- a/deps/Makefile
++++ b/deps/Makefile
+@@ -79,6 +79,7 @@ libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a: libmicrohttpd/libmi
+ 	cd libhttpserver/libhttpserver && patch -p1 < ../empty_uri_log_crash.patch
+ 	cd libhttpserver/libhttpserver && patch -p0 < ../expose_raw_url.patch
+ 	cd libhttpserver/libhttpserver && patch -p0 < ../replace_static_global_strings.patch
++	sed -i -e 's|is_fastopen_supported=no|is_fastopen_supported=yes|' libhttpserver/libhttpserver/configure.ac
+ ifeq ($(UNAME_S),FreeBSD)
+ 	sed -i -e 's/\/bin\/bash/\/usr\/local\/bin\/bash/' libhttpserver/libhttpserver/bootstrap
+ endif
+-- 
+2.45.0
+

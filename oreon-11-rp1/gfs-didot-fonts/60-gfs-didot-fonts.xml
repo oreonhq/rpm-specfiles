@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>GFS Didot</target>
+    <like>
+      <family>URW Palladio L</family>
+      <family>TeX Gyre Pagella</family>
+      <family>Palatino</family>
+      <family>Palatino Std</family>
+      <family>Palatino Pro</family>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

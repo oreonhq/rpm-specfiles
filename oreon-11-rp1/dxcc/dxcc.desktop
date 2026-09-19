@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=dxcc
+GenericName=dxcc
+Comment=Small utility which determines the ARRL DXCC entity of a ham radio callsign
+Exec=dxcc-gui
+Icon=dxcc
+Terminal=false
+Type=Application
+Categories=Network;HamRadio;
+Version=1.0

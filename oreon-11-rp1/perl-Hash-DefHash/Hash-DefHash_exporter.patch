@@ -1,0 +1,12 @@
+diff -rupN --no-dereference Hash-DefHash-0.072/lib/Hash/DefHash.pm Hash-DefHash-0.072-new/lib/Hash/DefHash.pm
+--- Hash-DefHash-0.072/lib/Hash/DefHash.pm	2021-07-21 16:11:13.000000000 +0200
++++ Hash-DefHash-0.072-new/lib/Hash/DefHash.pm	2021-07-24 15:36:50.280711093 +0200
+@@ -15,7 +15,7 @@ use Regexp::Pattern::DefHash;
+ use Scalar::Util qw(blessed);
+ use String::Trim::More qw(trim_blank_lines);
+ 
+-use Exporter qw(import);
++use Exporter 5.57 qw(import);
+ our @EXPORT = qw(defhash);
+ 
+ our $re_prop = $Regexp::Pattern::DefHash::RE{prop}{pat};

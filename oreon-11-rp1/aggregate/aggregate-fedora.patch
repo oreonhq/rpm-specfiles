@@ -1,0 +1,29 @@
+diff -ur aggregate-1.6/Makefile.in aggregate-1.6.fedora/Makefile.in
+--- aggregate-1.6/Makefile.in	2002-03-06 18:59:37.000000000 +0200
++++ aggregate-1.6.fedora/Makefile.in	2011-05-20 17:40:32.719987024 +0300
+@@ -25,8 +25,8 @@
+ INSTALL = @INSTALL@
+ DEFS = @DEFS@
+ LIBS = @LIBS@
+-CFLAGS = -O
+-LDFLAGS = -s
++CFLAGS = @CFLAGS@
++LDFLAGS = @LDFLAGS@
+ prefix = @prefix@
+ 
+ SHELL = /bin/sh
+@@ -41,10 +41,10 @@
+ 	rm -f *.o
+ 
+ install: $(PROGS)
+-	$(INSTALL) -m 0755 aggregate $(prefix)/bin/
+-	$(INSTALL) -m 0644 aggregate.1 $(prefix)/man/man1/
+-	$(INSTALL) -m 0755 aggregate-ios $(prefix)/bin/
+-	$(INSTALL) -m 0644 aggregate-ios.1 $(prefix)/man/man1/
++	$(INSTALL) -D -m 0755 aggregate $(DESTDIR)$(prefix)/bin/aggregate
++	$(INSTALL) -p -D -m 0644 aggregate.1 $(DESTDIR)$(prefix)/share/man/man1/aggregate.1
++	$(INSTALL) -D -m 0755 aggregate-ios $(DESTDIR)$(prefix)/bin/aggregate-ios
++	$(INSTALL) -p -D -m 0644 aggregate-ios.1 $(DESTDIR)$(prefix)/share/man/man1/aggregate-ios.1
+ 
+ .c.o:
+ 	$(CC) -c $(CPPFLAGS) $(DEFS) $(CFLAGS) $<

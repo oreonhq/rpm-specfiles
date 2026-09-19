@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 3 Sep 2024 08:33:20 +0200
+Subject: [PATCH] Don't override C(XX)FLAGS
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/pyproject.toml b/pyproject.toml
+index aaf0588..eed44c1 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -75,7 +75,7 @@ wheel.packages = []
+ install.strip = false
+ 
+ [tool.scikit-build.cmake.define]
+-CMAKE_BUILD_TYPE = "Release"
++CMAKE_BUILD_TYPE = "None"
+ # Coincurve build options - This may be better extracted from the ENV by the CMake directly?
+ PROJECT_IGNORE_SYSTEM_LIB = { env = "COINCURVE_IGNORE_SYSTEM_LIB", default = "OFF" }
+ PROJECT_CROSS_COMPILE_TARGET = { env = "COINCURVE_CROSS_HOST", default = "" }

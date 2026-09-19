@@ -1,0 +1,1786 @@
+From 9a566e1964546bcf743b24fa67fd053ec1b2f24a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?I=C3=B1aki=20=C3=9Acar?= <iucar@fedoraproject.org>
+Date: Wed, 7 Jan 2026 18:29:02 +0100
+Subject: [PATCH] Unbundle uuid
+
+---
+ MD5                            |  21 --
+ R/uuid.R                       |   5 -
+ src/CMakeLists.txt             |   1 -
+ src/Makevars.in                |   6 +-
+ src/cpp11.cpp                  |   2 -
+ src/sources-glue-c.mk          |   2 +-
+ src/sources-igraph.mk          |   2 +-
+ src/uuid.c                     |  29 --
+ src/uuid.dd                    |   3 -
+ src/vendor/uuid/CMakeLists.txt |  22 --
+ src/vendor/uuid/COPYING        |  28 --
+ src/vendor/uuid/Makevars.in    |   2 -
+ src/vendor/uuid/Makevars.win   |   1 -
+ src/vendor/uuid/clear.c        |  43 ---
+ src/vendor/uuid/compare.c      |  55 ----
+ src/vendor/uuid/config.h       |   2 -
+ src/vendor/uuid/config.h.in    |  82 -----
+ src/vendor/uuid/copy.c         |  45 ---
+ src/vendor/uuid/gen_uuid.c     | 536 ---------------------------------
+ src/vendor/uuid/isnull.c       |  48 ---
+ src/vendor/uuid/pack.c         |  69 -----
+ src/vendor/uuid/parse.c        |  79 -----
+ src/vendor/uuid/unpack.c       |  63 ----
+ src/vendor/uuid/unparse.c      |  76 -----
+ src/vendor/uuid/uuid.h         | 104 -------
+ src/vendor/uuid/uuidP.h        |  63 ----
+ src/vendor/uuid/uuidd.h        |  54 ----
+ src/vendor/uuid/win32/config.h |  84 ------
+ 28 files changed, 6 insertions(+), 1521 deletions(-)
+ delete mode 100644 src/uuid.c
+ delete mode 100644 src/uuid.dd
+ delete mode 100644 src/vendor/uuid/CMakeLists.txt
+ delete mode 100644 src/vendor/uuid/COPYING
+ delete mode 100644 src/vendor/uuid/Makevars.in
+ delete mode 100644 src/vendor/uuid/Makevars.win
+ delete mode 100644 src/vendor/uuid/clear.c
+ delete mode 100644 src/vendor/uuid/compare.c
+ delete mode 100644 src/vendor/uuid/config.h
+ delete mode 100644 src/vendor/uuid/config.h.in
+ delete mode 100644 src/vendor/uuid/copy.c
+ delete mode 100644 src/vendor/uuid/gen_uuid.c
+ delete mode 100644 src/vendor/uuid/isnull.c
+ delete mode 100644 src/vendor/uuid/pack.c
+ delete mode 100644 src/vendor/uuid/parse.c
+ delete mode 100644 src/vendor/uuid/unpack.c
+ delete mode 100644 src/vendor/uuid/unparse.c
+ delete mode 100644 src/vendor/uuid/uuid.h
+ delete mode 100644 src/vendor/uuid/uuidP.h
+ delete mode 100644 src/vendor/uuid/uuidd.h
+ delete mode 100644 src/vendor/uuid/win32/config.h
+
+diff --git a/igraph/MD5 b/igraph/MD5
+index cefd059..15e2995 100644
+--- a/igraph/MD5
++++ b/igraph/MD5
+@@ -806,8 +806,6 @@ aaa2a5bbb002c397b2f64cd2ae463954 *src/rrandom.h
+ 4553207e09f2ffc033bce3bea5f4ea62 *src/sources-glue-cpp.mk
+ 5ff080ac61093d05c9a2ada823c7c23d *src/sources-igraph.mk
+ ac5ffa02fa766b53cc6ff13f05e035f4 *src/sources-mini-gmp.mk
+-9ebc7cc7640a7a594bf7456489c6d121 *src/uuid.c
+-a446770b7a0114e658f5cd004ee95614 *src/uuid.dd
+ ae2b99c6930b9d78a067b9f304e4d021 *src/vendor/arpack/debug.h
+ bc623b699b4c2d87ac2c4a0b82002276 *src/vendor/arpack/dgetv0.f
+ ae7917a56c25a07b9860819bebf32f40 *src/vendor/arpack/dlaqrb.f
+@@ -2119,25 +2117,6 @@ dc312c8337bad1b31afdf169f3e9e194 *src/vendor/simpleraytracer/Triangle.cpp
+ c422300a2a528aa3da4ec98ed2dd1c8f *src/vendor/simpleraytracer/Triangle.h
+ fc6fc5c9aa5a5187e6a2b1643f72ed4a *src/vendor/simpleraytracer/unit_limiter.cpp
+ 10c5f89c9426685c966b72e159221f1a *src/vendor/simpleraytracer/unit_limiter.h
+-2d20a04b337be135f1c73c291bdb17c0 *src/vendor/uuid/CMakeLists.txt
+-cfb66084ea2bfc7648ab47ed1018e8a4 *src/vendor/uuid/COPYING
+-c733862ac29e8bbd01a49b5ac7d4a780 *src/vendor/uuid/Makevars.in
+-81a759562546aeea16d466fece227601 *src/vendor/uuid/Makevars.win
+-137be172372dd9bfeb50ed7aa2869b3e *src/vendor/uuid/clear.c
+-d2b39a0b3d72632db235a9c6d36ef344 *src/vendor/uuid/compare.c
+-a601f6610a5ae74a26d90e85ca750d10 *src/vendor/uuid/config.h
+-76087d772af7d37cab53b1a56cf72ade *src/vendor/uuid/config.h.in
+-d0026e30bb2f3feb7ac1db9827dd4820 *src/vendor/uuid/copy.c
+-f9ea1dca0e2aad3075fdf2b4ae6938ff *src/vendor/uuid/gen_uuid.c
+-7374a713629b202c4fb82d650e510acb *src/vendor/uuid/isnull.c
+-b671656493c2119636a4e981e9aad857 *src/vendor/uuid/pack.c
+-dcc91eb622c08bf2fca11680c71b92cc *src/vendor/uuid/parse.c
+-bededb71c0c869f06c3275a79781ed17 *src/vendor/uuid/unpack.c
+-2bd888ee5f8a798961fb49a7531c8d5a *src/vendor/uuid/unparse.c
+-35a97c82d22737936a4ba8fb6924bcd4 *src/vendor/uuid/uuid.h
+-84c21b1a1c769a488f5ff52e91be798a *src/vendor/uuid/uuidP.h
+-aad9fd83e8f3cc7eb80e2ab0b2c4f84c *src/vendor/uuid/uuidd.h
+-9e16418d043b96a6061ffb43150c5abd *src/vendor/uuid/win32/config.h
+ 69ac2fe32f6046d4f6bb82ac12d76d42 *tests/testthat.R
+ 348667c547670084e7fef097fba9761d *tests/testthat/_snaps/aaa-auto.md
+ 5c7727db77398ca68a35aa866423fe98 *tests/testthat/_snaps/adjacency.md
+diff --git a/igraph/R/uuid.R b/igraph/R/uuid.R
+index 0abee1c..60af6dd 100644
+--- a/igraph/R/uuid.R
++++ b/igraph/R/uuid.R
+@@ -1,8 +1,3 @@
+-generate_uuid <- function(use_time = NA) {
+-  .Call(UUID_gen, as.logical(use_time))
+-}
+-
+-
+ get_graph_id <- function(graph) {
+   if (!warn_version(graph)) {
+     .Call(R_igraph_get_graph_id, graph)
+diff --git a/igraph/src/CMakeLists.txt b/igraph/src/CMakeLists.txt
+index 2100f3e..761de62 100644
+--- a/igraph/src/CMakeLists.txt
++++ b/igraph/src/CMakeLists.txt
+@@ -26,4 +26,3 @@ set(IGRAPH_USE_INTERNAL_GMP OFF)
+ add_subdirectory(vendor/cigraph)
+ 
+ add_subdirectory(vendor/simpleraytracer)
+-add_subdirectory(vendor/uuid)
+diff --git a/igraph/src/Makevars.in b/igraph/src/Makevars.in
+index a49ad9a..cf62015 100644
+--- a/igraph/src/Makevars.in
++++ b/igraph/src/Makevars.in
+@@ -26,8 +26,10 @@ PKG_CPPFLAGS=-DUSING_R -I. -Ivendor -Ivendor/cigraph/src -Ivendor/cigraph/includ
+     -DNDEBUG -DNTIMER -DNPRINT -DIGRAPH_THREAD_LOCAL= \
+     -DPRPACK_IGRAPH_SUPPORT \
+     -DHAVE_GFORTRAN=1 \
+-    -D_GNU_SOURCE=1
++    -D_GNU_SOURCE=1 \
++    $(shell pkg-config --cflags uuid)
+ 
+-PKG_LIBS = @libs@ $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
++PKG_LIBS = @libs@ $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) \
++    $(shell pkg-config --libs uuid)
+ 
+ OBJECTS=@objects@
+diff --git a/igraph/src/cpp11.cpp b/igraph/src/cpp11.cpp
+index 61d8955..ce12f87 100644
+--- a/igraph/src/cpp11.cpp
++++ b/igraph/src/cpp11.cpp
+@@ -496,7 +496,6 @@ extern SEXP R_igraph_write_graph_leda(SEXP, SEXP, SEXP, SEXP);
+ extern SEXP R_igraph_write_graph_lgl(SEXP, SEXP, SEXP, SEXP, SEXP);
+ extern SEXP R_igraph_write_graph_ncol(SEXP, SEXP, SEXP, SEXP);
+ extern SEXP R_igraph_write_graph_pajek(SEXP, SEXP);
+-extern SEXP UUID_gen(SEXP);
+ 
+ static const R_CallMethodDef CallEntries[] = {
+     {"R_igraph_add_edges",                                  (DL_FUNC) &R_igraph_add_edges,                                   2},
+@@ -973,7 +972,6 @@ static const R_CallMethodDef CallEntries[] = {
+     {"R_igraph_write_graph_lgl",                            (DL_FUNC) &R_igraph_write_graph_lgl,                             5},
+     {"R_igraph_write_graph_ncol",                           (DL_FUNC) &R_igraph_write_graph_ncol,                            4},
+     {"R_igraph_write_graph_pajek",                          (DL_FUNC) &R_igraph_write_graph_pajek,                           2},
+-    {"UUID_gen",                                            (DL_FUNC) &UUID_gen,                                             1},
+     {"_igraph_getsphere",                                   (DL_FUNC) &_igraph_getsphere,                                    7},
+     {"_igraph_igraph_hcass2",                               (DL_FUNC) &_igraph_igraph_hcass2,                                3},
+     {NULL, NULL, 0}
+diff --git a/igraph/src/sources-glue-c.mk b/igraph/src/sources-glue-c.mk
+index 4801852..289c8bc 100644
+--- a/igraph/src/sources-glue-c.mk
++++ b/igraph/src/sources-glue-c.mk
+@@ -1 +1 @@
+-GLUE_C_SOURCES=rinterface.o rinterface_extra.o rrandom.o uuid.o
++GLUE_C_SOURCES=rinterface.o rinterface_extra.o rrandom.o
+diff --git a/igraph/src/sources-igraph.mk b/igraph/src/sources-igraph.mk
+index dcc41db..499b3c3 100644
+--- a/igraph/src/sources-igraph.mk
++++ b/igraph/src/sources-igraph.mk
+@@ -1 +1 @@
+-IGRAPH_SOURCES=vendor/arpack/dgetv0.o vendor/arpack/dlaqrb.o vendor/arpack/dmout.o vendor/arpack/dnaitr.o vendor/arpack/dnapps.o vendor/arpack/dnaup2.o vendor/arpack/dnaupd.o vendor/arpack/dnconv.o vendor/arpack/dneigh.o vendor/arpack/dneupd.o vendor/arpack/dngets.o vendor/arpack/dsaitr.o vendor/arpack/dsapps.o vendor/arpack/dsaup2.o vendor/arpack/dsaupd.o vendor/arpack/dsconv.o vendor/arpack/dseigt.o vendor/arpack/dsesrt.o vendor/arpack/dseupd.o vendor/arpack/dsgets.o vendor/arpack/dsortc.o vendor/arpack/dsortr.o vendor/arpack/dstatn.o vendor/arpack/dstats.o vendor/arpack/dstqrb.o vendor/arpack/dvout.o vendor/arpack/ivout.o vendor/arpack/second.o vendor/arpack/wrap.o vendor/cigraph/src/centrality/betweenness.o vendor/cigraph/src/centrality/centrality_other.o vendor/cigraph/src/centrality/centralization.o vendor/cigraph/src/centrality/closeness.o vendor/cigraph/src/centrality/coreness.o vendor/cigraph/src/centrality/eigenvector.o vendor/cigraph/src/centrality/hub_authority.o vendor/cigraph/src/centrality/pagerank.o vendor/cigraph/src/centrality/prpack.o vendor/cigraph/src/centrality/prpack/prpack_base_graph.o vendor/cigraph/src/centrality/prpack/prpack_igraph_graph.o vendor/cigraph/src/centrality/prpack/prpack_preprocessed_ge_graph.o vendor/cigraph/src/centrality/prpack/prpack_preprocessed_gs_graph.o vendor/cigraph/src/centrality/prpack/prpack_preprocessed_scc_graph.o vendor/cigraph/src/centrality/prpack/prpack_preprocessed_schur_graph.o vendor/cigraph/src/centrality/prpack/prpack_result.o vendor/cigraph/src/centrality/prpack/prpack_solver.o vendor/cigraph/src/centrality/prpack/prpack_utils.o vendor/cigraph/src/centrality/truss.o vendor/cigraph/src/cliques/cliquer/cliquer.o vendor/cigraph/src/cliques/cliquer/cliquer_graph.o vendor/cigraph/src/cliques/cliquer/reorder.o vendor/cigraph/src/cliques/cliquer_wrapper.o vendor/cigraph/src/cliques/cliques.o vendor/cigraph/src/cliques/glet.o vendor/cigraph/src/cliques/maximal_cliques.o vendor/cigraph/src/community/community_misc.o vendor/cigraph/src/community/edge_betweenness.o vendor/cigraph/src/community/fast_modularity.o vendor/cigraph/src/community/fluid.o vendor/cigraph/src/community/infomap/infomap.o vendor/cigraph/src/community/infomap/infomap_FlowGraph.o vendor/cigraph/src/community/infomap/infomap_Greedy.o vendor/cigraph/src/community/label_propagation.o vendor/cigraph/src/community/leading_eigenvector.o vendor/cigraph/src/community/leiden.o vendor/cigraph/src/community/louvain.o vendor/cigraph/src/community/modularity.o vendor/cigraph/src/community/optimal_modularity.o vendor/cigraph/src/community/spinglass/NetDataTypes.o vendor/cigraph/src/community/spinglass/NetRoutines.o vendor/cigraph/src/community/spinglass/clustertool.o vendor/cigraph/src/community/spinglass/pottsmodel_2.o vendor/cigraph/src/community/voronoi.o vendor/cigraph/src/community/walktrap/walktrap.o vendor/cigraph/src/community/walktrap/walktrap_communities.o vendor/cigraph/src/community/walktrap/walktrap_graph.o vendor/cigraph/src/community/walktrap/walktrap_heap.o vendor/cigraph/src/connectivity/cohesive_blocks.o vendor/cigraph/src/connectivity/components.o vendor/cigraph/src/connectivity/percolation.o vendor/cigraph/src/connectivity/reachability.o vendor/cigraph/src/connectivity/separators.o vendor/cigraph/src/constructors/adjacency.o vendor/cigraph/src/constructors/atlas.o vendor/cigraph/src/constructors/basic_constructors.o vendor/cigraph/src/constructors/circulant.o vendor/cigraph/src/constructors/de_bruijn.o vendor/cigraph/src/constructors/famous.o vendor/cigraph/src/constructors/full.o vendor/cigraph/src/constructors/generalized_petersen.o vendor/cigraph/src/constructors/kautz.o vendor/cigraph/src/constructors/lattices.o vendor/cigraph/src/constructors/lcf.o vendor/cigraph/src/constructors/linegraph.o vendor/cigraph/src/constructors/mycielskian.o vendor/cigraph/src/constructors/prufer.o vendor/cigraph/src/constructors/regular.o vendor/cigraph/src/constructors/trees.o vendor/cigraph/src/core/array.o vendor/cigraph/src/core/bitset.o vendor/cigraph/src/core/bitset_list.o vendor/cigraph/src/core/buckets.o vendor/cigraph/src/core/cutheap.o vendor/cigraph/src/core/dqueue.o vendor/cigraph/src/core/error.o vendor/cigraph/src/core/estack.o vendor/cigraph/src/core/fixed_vectorlist.o vendor/cigraph/src/core/genheap.o vendor/cigraph/src/core/grid.o vendor/cigraph/src/core/heap.o vendor/cigraph/src/core/indheap.o vendor/cigraph/src/core/interruption.o vendor/cigraph/src/core/marked_queue.o vendor/cigraph/src/core/matrix.o vendor/cigraph/src/core/matrix_list.o vendor/cigraph/src/core/memory.o vendor/cigraph/src/core/printing.o vendor/cigraph/src/core/progress.o vendor/cigraph/src/core/psumtree.o vendor/cigraph/src/core/set.o vendor/cigraph/src/core/sparsemat.o vendor/cigraph/src/core/stack.o vendor/cigraph/src/core/statusbar.o vendor/cigraph/src/core/strvector.o vendor/cigraph/src/core/trie.o vendor/cigraph/src/core/vector.o vendor/cigraph/src/core/vector_list.o vendor/cigraph/src/core/vector_ptr.o vendor/cigraph/src/cycles/simple_cycles.o vendor/cigraph/src/flow/flow.o vendor/cigraph/src/flow/flow_conversion.o vendor/cigraph/src/flow/st-cuts.o vendor/cigraph/src/games/barabasi.o vendor/cigraph/src/games/callaway_traits.o vendor/cigraph/src/games/chung_lu.o vendor/cigraph/src/games/citations.o vendor/cigraph/src/games/correlated.o vendor/cigraph/src/games/degree_sequence.o vendor/cigraph/src/games/degree_sequence_vl/gengraph_degree_sequence.o vendor/cigraph/src/games/degree_sequence_vl/gengraph_graph_molloy_hash.o vendor/cigraph/src/games/degree_sequence_vl/gengraph_graph_molloy_optimized.o vendor/cigraph/src/games/degree_sequence_vl/gengraph_mr-connected.o vendor/cigraph/src/games/degree_sequence_vl/gengraph_random.o vendor/cigraph/src/games/dotproduct.o vendor/cigraph/src/games/erdos_renyi.o vendor/cigraph/src/games/establishment.o vendor/cigraph/src/games/forestfire.o vendor/cigraph/src/games/grg.o vendor/cigraph/src/games/growing_random.o vendor/cigraph/src/games/islands.o vendor/cigraph/src/games/k_regular.o vendor/cigraph/src/games/preference.o vendor/cigraph/src/games/recent_degree.o vendor/cigraph/src/games/sbm.o vendor/cigraph/src/games/static_fitness.o vendor/cigraph/src/games/tree.o vendor/cigraph/src/games/watts_strogatz.o vendor/cigraph/src/graph/adjlist.o vendor/cigraph/src/graph/attributes.o vendor/cigraph/src/graph/basic_query.o vendor/cigraph/src/graph/caching.o vendor/cigraph/src/graph/cattributes.o vendor/cigraph/src/graph/graph_list.o vendor/cigraph/src/graph/iterators.o vendor/cigraph/src/graph/type_common.o vendor/cigraph/src/graph/type_indexededgelist.o vendor/cigraph/src/graph/visitors.o vendor/cigraph/src/hrg/hrg.o vendor/cigraph/src/hrg/hrg_types.o vendor/cigraph/src/internal/glpk_support.o vendor/cigraph/src/internal/hacks.o vendor/cigraph/src/internal/lsap.o vendor/cigraph/src/internal/qsort.o vendor/cigraph/src/internal/qsort_r.o vendor/cigraph/src/internal/utils.o vendor/cigraph/src/internal/zeroin.o vendor/cigraph/src/io/dimacs.o vendor/cigraph/src/io/dl.o vendor/cigraph/src/io/dot.o vendor/cigraph/src/io/edgelist.o vendor/cigraph/src/io/gml-tree.o vendor/cigraph/src/io/gml.o vendor/cigraph/src/io/graphdb.o vendor/cigraph/src/io/graphml.o vendor/cigraph/src/io/leda.o vendor/cigraph/src/io/lgl.o vendor/cigraph/src/io/ncol.o vendor/cigraph/src/io/pajek.o vendor/cigraph/src/io/parse_utils.o vendor/cigraph/src/isomorphism/bliss.o vendor/cigraph/src/isomorphism/bliss/defs.o vendor/cigraph/src/isomorphism/bliss/graph.o vendor/cigraph/src/isomorphism/bliss/heap.o vendor/cigraph/src/isomorphism/bliss/orbit.o vendor/cigraph/src/isomorphism/bliss/partition.o vendor/cigraph/src/isomorphism/bliss/uintseqhash.o vendor/cigraph/src/isomorphism/bliss/utils.o vendor/cigraph/src/isomorphism/isoclasses.o vendor/cigraph/src/isomorphism/isomorphism_misc.o vendor/cigraph/src/isomorphism/lad.o vendor/cigraph/src/isomorphism/queries.o vendor/cigraph/src/isomorphism/vf2.o vendor/cigraph/src/layout/align.o vendor/cigraph/src/layout/circular.o vendor/cigraph/src/layout/davidson_harel.o vendor/cigraph/src/layout/drl/DensityGrid.o vendor/cigraph/src/layout/drl/DensityGrid_3d.o vendor/cigraph/src/layout/drl/drl_graph.o vendor/cigraph/src/layout/drl/drl_graph_3d.o vendor/cigraph/src/layout/drl/drl_layout.o vendor/cigraph/src/layout/drl/drl_layout_3d.o vendor/cigraph/src/layout/drl/drl_parse.o vendor/cigraph/src/layout/fruchterman_reingold.o vendor/cigraph/src/layout/gem.o vendor/cigraph/src/layout/graphopt.o vendor/cigraph/src/layout/kamada_kawai.o vendor/cigraph/src/layout/large_graph.o vendor/cigraph/src/layout/layout_bipartite.o vendor/cigraph/src/layout/layout_grid.o vendor/cigraph/src/layout/layout_random.o vendor/cigraph/src/layout/mds.o vendor/cigraph/src/layout/merge_dla.o vendor/cigraph/src/layout/merge_grid.o vendor/cigraph/src/layout/reingold_tilford.o vendor/cigraph/src/layout/sugiyama.o vendor/cigraph/src/layout/umap.o vendor/cigraph/src/linalg/arpack.o vendor/cigraph/src/linalg/blas.o vendor/cigraph/src/linalg/eigen.o vendor/cigraph/src/linalg/lapack.o vendor/cigraph/src/math/complex.o vendor/cigraph/src/math/safe_intop.o vendor/cigraph/src/math/utils.o vendor/cigraph/src/misc/bipartite.o vendor/cigraph/src/misc/chordality.o vendor/cigraph/src/misc/cocitation.o vendor/cigraph/src/misc/coloring.o vendor/cigraph/src/misc/conversion.o vendor/cigraph/src/misc/cycle_bases.o vendor/cigraph/src/misc/degree_sequence.o vendor/cigraph/src/misc/embedding.o vendor/cigraph/src/misc/feedback_arc_set.o vendor/cigraph/src/misc/graphicality.o vendor/cigraph/src/misc/matching.o vendor/cigraph/src/misc/microscopic_update.o vendor/cigraph/src/misc/mixing.o vendor/cigraph/src/misc/motifs.o vendor/cigraph/src/misc/order_cycle.o vendor/cigraph/src/misc/other.o vendor/cigraph/src/misc/power_law_fit.o vendor/cigraph/src/misc/scan.o vendor/cigraph/src/misc/sir.o vendor/cigraph/src/misc/spanning_trees.o vendor/cigraph/src/operators/add_edge.o vendor/cigraph/src/operators/complementer.o vendor/cigraph/src/operators/compose.o vendor/cigraph/src/operators/connect_neighborhood.o vendor/cigraph/src/operators/contract.o vendor/cigraph/src/operators/difference.o vendor/cigraph/src/operators/disjoint_union.o vendor/cigraph/src/operators/intersection.o vendor/cigraph/src/operators/join.o vendor/cigraph/src/operators/misc_internal.o vendor/cigraph/src/operators/permute.o vendor/cigraph/src/operators/products.o vendor/cigraph/src/operators/reverse.o vendor/cigraph/src/operators/rewire.o vendor/cigraph/src/operators/rewire_edges.o vendor/cigraph/src/operators/simplify.o vendor/cigraph/src/operators/subgraph.o vendor/cigraph/src/operators/union.o vendor/cigraph/src/paths/all_shortest_paths.o vendor/cigraph/src/paths/astar.o vendor/cigraph/src/paths/bellman_ford.o vendor/cigraph/src/paths/dijkstra.o vendor/cigraph/src/paths/distances.o vendor/cigraph/src/paths/eulerian.o vendor/cigraph/src/paths/floyd_warshall.o vendor/cigraph/src/paths/histogram.o vendor/cigraph/src/paths/johnson.o vendor/cigraph/src/paths/random_walk.o vendor/cigraph/src/paths/shortest_paths.o vendor/cigraph/src/paths/simple_paths.o vendor/cigraph/src/paths/sparsifier.o vendor/cigraph/src/paths/unweighted.o vendor/cigraph/src/paths/voronoi.o vendor/cigraph/src/paths/widest_paths.o vendor/cigraph/src/properties/basic_properties.o vendor/cigraph/src/properties/complete.o vendor/cigraph/src/properties/constraint.o vendor/cigraph/src/properties/convergence_degree.o vendor/cigraph/src/properties/dag.o vendor/cigraph/src/properties/degrees.o vendor/cigraph/src/properties/ecc.o vendor/cigraph/src/properties/girth.o vendor/cigraph/src/properties/loops.o vendor/cigraph/src/properties/multiplicity.o vendor/cigraph/src/properties/neighborhood.o vendor/cigraph/src/properties/perfect.o vendor/cigraph/src/properties/rich_club.o vendor/cigraph/src/properties/spectral.o vendor/cigraph/src/properties/trees.o vendor/cigraph/src/properties/triangles.o vendor/cigraph/src/random/random.o vendor/cigraph/src/random/rng_glibc2.o vendor/cigraph/src/random/rng_mt19937.o vendor/cigraph/src/random/rng_pcg32.o vendor/cigraph/src/random/rng_pcg64.o vendor/cigraph/src/version.o vendor/cigraph/vendor/cs/cs_add.o vendor/cigraph/vendor/cs/cs_amd.o vendor/cigraph/vendor/cs/cs_chol.o vendor/cigraph/vendor/cs/cs_cholsol.o vendor/cigraph/vendor/cs/cs_compress.o vendor/cigraph/vendor/cs/cs_counts.o vendor/cigraph/vendor/cs/cs_cumsum.o vendor/cigraph/vendor/cs/cs_dfs.o vendor/cigraph/vendor/cs/cs_dmperm.o vendor/cigraph/vendor/cs/cs_droptol.o vendor/cigraph/vendor/cs/cs_dropzeros.o vendor/cigraph/vendor/cs/cs_dupl.o vendor/cigraph/vendor/cs/cs_entry.o vendor/cigraph/vendor/cs/cs_ereach.o vendor/cigraph/vendor/cs/cs_etree.o vendor/cigraph/vendor/cs/cs_fkeep.o vendor/cigraph/vendor/cs/cs_gaxpy.o vendor/cigraph/vendor/cs/cs_happly.o vendor/cigraph/vendor/cs/cs_house.o vendor/cigraph/vendor/cs/cs_ipvec.o vendor/cigraph/vendor/cs/cs_leaf.o vendor/cigraph/vendor/cs/cs_load.o vendor/cigraph/vendor/cs/cs_lsolve.o vendor/cigraph/vendor/cs/cs_ltsolve.o vendor/cigraph/vendor/cs/cs_lu.o vendor/cigraph/vendor/cs/cs_lusol.o vendor/cigraph/vendor/cs/cs_malloc.o vendor/cigraph/vendor/cs/cs_maxtrans.o vendor/cigraph/vendor/cs/cs_multiply.o vendor/cigraph/vendor/cs/cs_norm.o vendor/cigraph/vendor/cs/cs_permute.o vendor/cigraph/vendor/cs/cs_pinv.o vendor/cigraph/vendor/cs/cs_post.o vendor/cigraph/vendor/cs/cs_print.o vendor/cigraph/vendor/cs/cs_pvec.o vendor/cigraph/vendor/cs/cs_qr.o vendor/cigraph/vendor/cs/cs_qrsol.o vendor/cigraph/vendor/cs/cs_randperm.o vendor/cigraph/vendor/cs/cs_reach.o vendor/cigraph/vendor/cs/cs_scatter.o vendor/cigraph/vendor/cs/cs_scc.o vendor/cigraph/vendor/cs/cs_schol.o vendor/cigraph/vendor/cs/cs_spsolve.o vendor/cigraph/vendor/cs/cs_sqr.o vendor/cigraph/vendor/cs/cs_symperm.o vendor/cigraph/vendor/cs/cs_tdfs.o vendor/cigraph/vendor/cs/cs_transpose.o vendor/cigraph/vendor/cs/cs_updown.o vendor/cigraph/vendor/cs/cs_usolve.o vendor/cigraph/vendor/cs/cs_util.o vendor/cigraph/vendor/cs/cs_utsolve.o vendor/cigraph/vendor/pcg/pcg-advance-128.o vendor/cigraph/vendor/pcg/pcg-advance-64.o vendor/cigraph/vendor/pcg/pcg-output-128.o vendor/cigraph/vendor/pcg/pcg-output-32.o vendor/cigraph/vendor/pcg/pcg-output-64.o vendor/cigraph/vendor/pcg/pcg-rngs-128.o vendor/cigraph/vendor/pcg/pcg-rngs-64.o vendor/cigraph/vendor/plfit/gss.o vendor/cigraph/vendor/plfit/hzeta.o vendor/cigraph/vendor/plfit/kolmogorov.o vendor/cigraph/vendor/plfit/lbfgs.o vendor/cigraph/vendor/plfit/mt.o vendor/cigraph/vendor/plfit/options.o vendor/cigraph/vendor/plfit/plfit.o vendor/cigraph/vendor/plfit/plfit_error.o vendor/cigraph/vendor/plfit/rbinom.o vendor/cigraph/vendor/plfit/sampling.o vendor/io/dl-lexer.o vendor/io/dl-parser.o vendor/io/gml-lexer.o vendor/io/gml-parser.o vendor/io/lgl-lexer.o vendor/io/lgl-parser.o vendor/io/ncol-lexer.o vendor/io/ncol-parser.o vendor/io/pajek-lexer.o vendor/io/pajek-parser.o vendor/simpleraytracer/Color.o vendor/simpleraytracer/Light.o vendor/simpleraytracer/Point.o vendor/simpleraytracer/Ray.o vendor/simpleraytracer/RayTracer.o vendor/simpleraytracer/RayVector.o vendor/simpleraytracer/Shape.o vendor/simpleraytracer/Sphere.o vendor/simpleraytracer/Triangle.o vendor/simpleraytracer/unit_limiter.o vendor/uuid/clear.o vendor/uuid/compare.o vendor/uuid/copy.o vendor/uuid/gen_uuid.o vendor/uuid/isnull.o vendor/uuid/pack.o vendor/uuid/parse.o vendor/uuid/unpack.o vendor/uuid/unparse.o
++IGRAPH_SOURCES=vendor/arpack/dgetv0.o vendor/arpack/dlaqrb.o vendor/arpack/dmout.o vendor/arpack/dnaitr.o vendor/arpack/dnapps.o vendor/arpack/dnaup2.o vendor/arpack/dnaupd.o vendor/arpack/dnconv.o vendor/arpack/dneigh.o vendor/arpack/dneupd.o vendor/arpack/dngets.o vendor/arpack/dsaitr.o vendor/arpack/dsapps.o vendor/arpack/dsaup2.o vendor/arpack/dsaupd.o vendor/arpack/dsconv.o vendor/arpack/dseigt.o vendor/arpack/dsesrt.o vendor/arpack/dseupd.o vendor/arpack/dsgets.o vendor/arpack/dsortc.o vendor/arpack/dsortr.o vendor/arpack/dstatn.o vendor/arpack/dstats.o vendor/arpack/dstqrb.o vendor/arpack/dvout.o vendor/arpack/ivout.o vendor/arpack/second.o vendor/arpack/wrap.o vendor/cigraph/src/centrality/betweenness.o vendor/cigraph/src/centrality/centrality_other.o vendor/cigraph/src/centrality/centralization.o vendor/cigraph/src/centrality/closeness.o vendor/cigraph/src/centrality/coreness.o vendor/cigraph/src/centrality/eigenvector.o vendor/cigraph/src/centrality/hub_authority.o vendor/cigraph/src/centrality/pagerank.o vendor/cigraph/src/centrality/prpack.o vendor/cigraph/src/centrality/prpack/prpack_base_graph.o vendor/cigraph/src/centrality/prpack/prpack_igraph_graph.o vendor/cigraph/src/centrality/prpack/prpack_preprocessed_ge_graph.o vendor/cigraph/src/centrality/prpack/prpack_preprocessed_gs_graph.o vendor/cigraph/src/centrality/prpack/prpack_preprocessed_scc_graph.o vendor/cigraph/src/centrality/prpack/prpack_preprocessed_schur_graph.o vendor/cigraph/src/centrality/prpack/prpack_result.o vendor/cigraph/src/centrality/prpack/prpack_solver.o vendor/cigraph/src/centrality/prpack/prpack_utils.o vendor/cigraph/src/centrality/truss.o vendor/cigraph/src/cliques/cliquer/cliquer.o vendor/cigraph/src/cliques/cliquer/cliquer_graph.o vendor/cigraph/src/cliques/cliquer/reorder.o vendor/cigraph/src/cliques/cliquer_wrapper.o vendor/cigraph/src/cliques/cliques.o vendor/cigraph/src/cliques/glet.o vendor/cigraph/src/cliques/maximal_cliques.o vendor/cigraph/src/community/community_misc.o vendor/cigraph/src/community/edge_betweenness.o vendor/cigraph/src/community/fast_modularity.o vendor/cigraph/src/community/fluid.o vendor/cigraph/src/community/infomap/infomap.o vendor/cigraph/src/community/infomap/infomap_FlowGraph.o vendor/cigraph/src/community/infomap/infomap_Greedy.o vendor/cigraph/src/community/label_propagation.o vendor/cigraph/src/community/leading_eigenvector.o vendor/cigraph/src/community/leiden.o vendor/cigraph/src/community/louvain.o vendor/cigraph/src/community/modularity.o vendor/cigraph/src/community/optimal_modularity.o vendor/cigraph/src/community/spinglass/NetDataTypes.o vendor/cigraph/src/community/spinglass/NetRoutines.o vendor/cigraph/src/community/spinglass/clustertool.o vendor/cigraph/src/community/spinglass/pottsmodel_2.o vendor/cigraph/src/community/voronoi.o vendor/cigraph/src/community/walktrap/walktrap.o vendor/cigraph/src/community/walktrap/walktrap_communities.o vendor/cigraph/src/community/walktrap/walktrap_graph.o vendor/cigraph/src/community/walktrap/walktrap_heap.o vendor/cigraph/src/connectivity/cohesive_blocks.o vendor/cigraph/src/connectivity/components.o vendor/cigraph/src/connectivity/percolation.o vendor/cigraph/src/connectivity/reachability.o vendor/cigraph/src/connectivity/separators.o vendor/cigraph/src/constructors/adjacency.o vendor/cigraph/src/constructors/atlas.o vendor/cigraph/src/constructors/basic_constructors.o vendor/cigraph/src/constructors/circulant.o vendor/cigraph/src/constructors/de_bruijn.o vendor/cigraph/src/constructors/famous.o vendor/cigraph/src/constructors/full.o vendor/cigraph/src/constructors/generalized_petersen.o vendor/cigraph/src/constructors/kautz.o vendor/cigraph/src/constructors/lattices.o vendor/cigraph/src/constructors/lcf.o vendor/cigraph/src/constructors/linegraph.o vendor/cigraph/src/constructors/mycielskian.o vendor/cigraph/src/constructors/prufer.o vendor/cigraph/src/constructors/regular.o vendor/cigraph/src/constructors/trees.o vendor/cigraph/src/core/array.o vendor/cigraph/src/core/bitset.o vendor/cigraph/src/core/bitset_list.o vendor/cigraph/src/core/buckets.o vendor/cigraph/src/core/cutheap.o vendor/cigraph/src/core/dqueue.o vendor/cigraph/src/core/error.o vendor/cigraph/src/core/estack.o vendor/cigraph/src/core/fixed_vectorlist.o vendor/cigraph/src/core/genheap.o vendor/cigraph/src/core/grid.o vendor/cigraph/src/core/heap.o vendor/cigraph/src/core/indheap.o vendor/cigraph/src/core/interruption.o vendor/cigraph/src/core/marked_queue.o vendor/cigraph/src/core/matrix.o vendor/cigraph/src/core/matrix_list.o vendor/cigraph/src/core/memory.o vendor/cigraph/src/core/printing.o vendor/cigraph/src/core/progress.o vendor/cigraph/src/core/psumtree.o vendor/cigraph/src/core/set.o vendor/cigraph/src/core/sparsemat.o vendor/cigraph/src/core/stack.o vendor/cigraph/src/core/statusbar.o vendor/cigraph/src/core/strvector.o vendor/cigraph/src/core/trie.o vendor/cigraph/src/core/vector.o vendor/cigraph/src/core/vector_list.o vendor/cigraph/src/core/vector_ptr.o vendor/cigraph/src/cycles/simple_cycles.o vendor/cigraph/src/flow/flow.o vendor/cigraph/src/flow/flow_conversion.o vendor/cigraph/src/flow/st-cuts.o vendor/cigraph/src/games/barabasi.o vendor/cigraph/src/games/callaway_traits.o vendor/cigraph/src/games/chung_lu.o vendor/cigraph/src/games/citations.o vendor/cigraph/src/games/correlated.o vendor/cigraph/src/games/degree_sequence.o vendor/cigraph/src/games/degree_sequence_vl/gengraph_degree_sequence.o vendor/cigraph/src/games/degree_sequence_vl/gengraph_graph_molloy_hash.o vendor/cigraph/src/games/degree_sequence_vl/gengraph_graph_molloy_optimized.o vendor/cigraph/src/games/degree_sequence_vl/gengraph_mr-connected.o vendor/cigraph/src/games/degree_sequence_vl/gengraph_random.o vendor/cigraph/src/games/dotproduct.o vendor/cigraph/src/games/erdos_renyi.o vendor/cigraph/src/games/establishment.o vendor/cigraph/src/games/forestfire.o vendor/cigraph/src/games/grg.o vendor/cigraph/src/games/growing_random.o vendor/cigraph/src/games/islands.o vendor/cigraph/src/games/k_regular.o vendor/cigraph/src/games/preference.o vendor/cigraph/src/games/recent_degree.o vendor/cigraph/src/games/sbm.o vendor/cigraph/src/games/static_fitness.o vendor/cigraph/src/games/tree.o vendor/cigraph/src/games/watts_strogatz.o vendor/cigraph/src/graph/adjlist.o vendor/cigraph/src/graph/attributes.o vendor/cigraph/src/graph/basic_query.o vendor/cigraph/src/graph/caching.o vendor/cigraph/src/graph/cattributes.o vendor/cigraph/src/graph/graph_list.o vendor/cigraph/src/graph/iterators.o vendor/cigraph/src/graph/type_common.o vendor/cigraph/src/graph/type_indexededgelist.o vendor/cigraph/src/graph/visitors.o vendor/cigraph/src/hrg/hrg.o vendor/cigraph/src/hrg/hrg_types.o vendor/cigraph/src/internal/glpk_support.o vendor/cigraph/src/internal/hacks.o vendor/cigraph/src/internal/lsap.o vendor/cigraph/src/internal/qsort.o vendor/cigraph/src/internal/qsort_r.o vendor/cigraph/src/internal/utils.o vendor/cigraph/src/internal/zeroin.o vendor/cigraph/src/io/dimacs.o vendor/cigraph/src/io/dl.o vendor/cigraph/src/io/dot.o vendor/cigraph/src/io/edgelist.o vendor/cigraph/src/io/gml-tree.o vendor/cigraph/src/io/gml.o vendor/cigraph/src/io/graphdb.o vendor/cigraph/src/io/graphml.o vendor/cigraph/src/io/leda.o vendor/cigraph/src/io/lgl.o vendor/cigraph/src/io/ncol.o vendor/cigraph/src/io/pajek.o vendor/cigraph/src/io/parse_utils.o vendor/cigraph/src/isomorphism/bliss.o vendor/cigraph/src/isomorphism/bliss/defs.o vendor/cigraph/src/isomorphism/bliss/graph.o vendor/cigraph/src/isomorphism/bliss/heap.o vendor/cigraph/src/isomorphism/bliss/orbit.o vendor/cigraph/src/isomorphism/bliss/partition.o vendor/cigraph/src/isomorphism/bliss/uintseqhash.o vendor/cigraph/src/isomorphism/bliss/utils.o vendor/cigraph/src/isomorphism/isoclasses.o vendor/cigraph/src/isomorphism/isomorphism_misc.o vendor/cigraph/src/isomorphism/lad.o vendor/cigraph/src/isomorphism/queries.o vendor/cigraph/src/isomorphism/vf2.o vendor/cigraph/src/layout/align.o vendor/cigraph/src/layout/circular.o vendor/cigraph/src/layout/davidson_harel.o vendor/cigraph/src/layout/drl/DensityGrid.o vendor/cigraph/src/layout/drl/DensityGrid_3d.o vendor/cigraph/src/layout/drl/drl_graph.o vendor/cigraph/src/layout/drl/drl_graph_3d.o vendor/cigraph/src/layout/drl/drl_layout.o vendor/cigraph/src/layout/drl/drl_layout_3d.o vendor/cigraph/src/layout/drl/drl_parse.o vendor/cigraph/src/layout/fruchterman_reingold.o vendor/cigraph/src/layout/gem.o vendor/cigraph/src/layout/graphopt.o vendor/cigraph/src/layout/kamada_kawai.o vendor/cigraph/src/layout/large_graph.o vendor/cigraph/src/layout/layout_bipartite.o vendor/cigraph/src/layout/layout_grid.o vendor/cigraph/src/layout/layout_random.o vendor/cigraph/src/layout/mds.o vendor/cigraph/src/layout/merge_dla.o vendor/cigraph/src/layout/merge_grid.o vendor/cigraph/src/layout/reingold_tilford.o vendor/cigraph/src/layout/sugiyama.o vendor/cigraph/src/layout/umap.o vendor/cigraph/src/linalg/arpack.o vendor/cigraph/src/linalg/blas.o vendor/cigraph/src/linalg/eigen.o vendor/cigraph/src/linalg/lapack.o vendor/cigraph/src/math/complex.o vendor/cigraph/src/math/safe_intop.o vendor/cigraph/src/math/utils.o vendor/cigraph/src/misc/bipartite.o vendor/cigraph/src/misc/chordality.o vendor/cigraph/src/misc/cocitation.o vendor/cigraph/src/misc/coloring.o vendor/cigraph/src/misc/conversion.o vendor/cigraph/src/misc/cycle_bases.o vendor/cigraph/src/misc/degree_sequence.o vendor/cigraph/src/misc/embedding.o vendor/cigraph/src/misc/feedback_arc_set.o vendor/cigraph/src/misc/graphicality.o vendor/cigraph/src/misc/matching.o vendor/cigraph/src/misc/microscopic_update.o vendor/cigraph/src/misc/mixing.o vendor/cigraph/src/misc/motifs.o vendor/cigraph/src/misc/order_cycle.o vendor/cigraph/src/misc/other.o vendor/cigraph/src/misc/power_law_fit.o vendor/cigraph/src/misc/scan.o vendor/cigraph/src/misc/sir.o vendor/cigraph/src/misc/spanning_trees.o vendor/cigraph/src/operators/add_edge.o vendor/cigraph/src/operators/complementer.o vendor/cigraph/src/operators/compose.o vendor/cigraph/src/operators/connect_neighborhood.o vendor/cigraph/src/operators/contract.o vendor/cigraph/src/operators/difference.o vendor/cigraph/src/operators/disjoint_union.o vendor/cigraph/src/operators/intersection.o vendor/cigraph/src/operators/join.o vendor/cigraph/src/operators/misc_internal.o vendor/cigraph/src/operators/permute.o vendor/cigraph/src/operators/products.o vendor/cigraph/src/operators/reverse.o vendor/cigraph/src/operators/rewire.o vendor/cigraph/src/operators/rewire_edges.o vendor/cigraph/src/operators/simplify.o vendor/cigraph/src/operators/subgraph.o vendor/cigraph/src/operators/union.o vendor/cigraph/src/paths/all_shortest_paths.o vendor/cigraph/src/paths/astar.o vendor/cigraph/src/paths/bellman_ford.o vendor/cigraph/src/paths/dijkstra.o vendor/cigraph/src/paths/distances.o vendor/cigraph/src/paths/eulerian.o vendor/cigraph/src/paths/floyd_warshall.o vendor/cigraph/src/paths/histogram.o vendor/cigraph/src/paths/johnson.o vendor/cigraph/src/paths/random_walk.o vendor/cigraph/src/paths/shortest_paths.o vendor/cigraph/src/paths/simple_paths.o vendor/cigraph/src/paths/sparsifier.o vendor/cigraph/src/paths/unweighted.o vendor/cigraph/src/paths/voronoi.o vendor/cigraph/src/paths/widest_paths.o vendor/cigraph/src/properties/basic_properties.o vendor/cigraph/src/properties/complete.o vendor/cigraph/src/properties/constraint.o vendor/cigraph/src/properties/convergence_degree.o vendor/cigraph/src/properties/dag.o vendor/cigraph/src/properties/degrees.o vendor/cigraph/src/properties/ecc.o vendor/cigraph/src/properties/girth.o vendor/cigraph/src/properties/loops.o vendor/cigraph/src/properties/multiplicity.o vendor/cigraph/src/properties/neighborhood.o vendor/cigraph/src/properties/perfect.o vendor/cigraph/src/properties/rich_club.o vendor/cigraph/src/properties/spectral.o vendor/cigraph/src/properties/trees.o vendor/cigraph/src/properties/triangles.o vendor/cigraph/src/random/random.o vendor/cigraph/src/random/rng_glibc2.o vendor/cigraph/src/random/rng_mt19937.o vendor/cigraph/src/random/rng_pcg32.o vendor/cigraph/src/random/rng_pcg64.o vendor/cigraph/src/version.o vendor/cigraph/vendor/cs/cs_add.o vendor/cigraph/vendor/cs/cs_amd.o vendor/cigraph/vendor/cs/cs_chol.o vendor/cigraph/vendor/cs/cs_cholsol.o vendor/cigraph/vendor/cs/cs_compress.o vendor/cigraph/vendor/cs/cs_counts.o vendor/cigraph/vendor/cs/cs_cumsum.o vendor/cigraph/vendor/cs/cs_dfs.o vendor/cigraph/vendor/cs/cs_dmperm.o vendor/cigraph/vendor/cs/cs_droptol.o vendor/cigraph/vendor/cs/cs_dropzeros.o vendor/cigraph/vendor/cs/cs_dupl.o vendor/cigraph/vendor/cs/cs_entry.o vendor/cigraph/vendor/cs/cs_ereach.o vendor/cigraph/vendor/cs/cs_etree.o vendor/cigraph/vendor/cs/cs_fkeep.o vendor/cigraph/vendor/cs/cs_gaxpy.o vendor/cigraph/vendor/cs/cs_happly.o vendor/cigraph/vendor/cs/cs_house.o vendor/cigraph/vendor/cs/cs_ipvec.o vendor/cigraph/vendor/cs/cs_leaf.o vendor/cigraph/vendor/cs/cs_load.o vendor/cigraph/vendor/cs/cs_lsolve.o vendor/cigraph/vendor/cs/cs_ltsolve.o vendor/cigraph/vendor/cs/cs_lu.o vendor/cigraph/vendor/cs/cs_lusol.o vendor/cigraph/vendor/cs/cs_malloc.o vendor/cigraph/vendor/cs/cs_maxtrans.o vendor/cigraph/vendor/cs/cs_multiply.o vendor/cigraph/vendor/cs/cs_norm.o vendor/cigraph/vendor/cs/cs_permute.o vendor/cigraph/vendor/cs/cs_pinv.o vendor/cigraph/vendor/cs/cs_post.o vendor/cigraph/vendor/cs/cs_print.o vendor/cigraph/vendor/cs/cs_pvec.o vendor/cigraph/vendor/cs/cs_qr.o vendor/cigraph/vendor/cs/cs_qrsol.o vendor/cigraph/vendor/cs/cs_randperm.o vendor/cigraph/vendor/cs/cs_reach.o vendor/cigraph/vendor/cs/cs_scatter.o vendor/cigraph/vendor/cs/cs_scc.o vendor/cigraph/vendor/cs/cs_schol.o vendor/cigraph/vendor/cs/cs_spsolve.o vendor/cigraph/vendor/cs/cs_sqr.o vendor/cigraph/vendor/cs/cs_symperm.o vendor/cigraph/vendor/cs/cs_tdfs.o vendor/cigraph/vendor/cs/cs_transpose.o vendor/cigraph/vendor/cs/cs_updown.o vendor/cigraph/vendor/cs/cs_usolve.o vendor/cigraph/vendor/cs/cs_util.o vendor/cigraph/vendor/cs/cs_utsolve.o vendor/cigraph/vendor/pcg/pcg-advance-128.o vendor/cigraph/vendor/pcg/pcg-advance-64.o vendor/cigraph/vendor/pcg/pcg-output-128.o vendor/cigraph/vendor/pcg/pcg-output-32.o vendor/cigraph/vendor/pcg/pcg-output-64.o vendor/cigraph/vendor/pcg/pcg-rngs-128.o vendor/cigraph/vendor/pcg/pcg-rngs-64.o vendor/cigraph/vendor/plfit/gss.o vendor/cigraph/vendor/plfit/hzeta.o vendor/cigraph/vendor/plfit/kolmogorov.o vendor/cigraph/vendor/plfit/lbfgs.o vendor/cigraph/vendor/plfit/mt.o vendor/cigraph/vendor/plfit/options.o vendor/cigraph/vendor/plfit/plfit.o vendor/cigraph/vendor/plfit/plfit_error.o vendor/cigraph/vendor/plfit/rbinom.o vendor/cigraph/vendor/plfit/sampling.o vendor/io/dl-lexer.o vendor/io/dl-parser.o vendor/io/gml-lexer.o vendor/io/gml-parser.o vendor/io/lgl-lexer.o vendor/io/lgl-parser.o vendor/io/ncol-lexer.o vendor/io/ncol-parser.o vendor/io/pajek-lexer.o vendor/io/pajek-parser.o vendor/simpleraytracer/Color.o vendor/simpleraytracer/Light.o vendor/simpleraytracer/Point.o vendor/simpleraytracer/Ray.o vendor/simpleraytracer/RayTracer.o vendor/simpleraytracer/RayVector.o vendor/simpleraytracer/Shape.o vendor/simpleraytracer/Sphere.o vendor/simpleraytracer/Triangle.o vendor/simpleraytracer/unit_limiter.o
+diff --git a/igraph/src/uuid.c b/igraph/src/uuid.c
+deleted file mode 100644
+index d2078c8..0000000
+--- a/igraph/src/uuid.c
++++ /dev/null
+@@ -1,29 +0,0 @@
+-#include "vendor/uuid/uuid.h"
+-
+-#include <Rinternals.h>
+-
+-#define RNG_BEGIN()    GetRNGstate()
+-#define RNG_END()      PutRNGstate()
+-void GetRNGstate(void);
+-void PutRNGstate(void);
+-
+-SEXP UUID_gen(SEXP sTime) {
+-
+-    RNG_BEGIN();
+-
+-    uuid_t u;
+-    char c[40];
+-    int use_time = asInteger(sTime);
+-    if (use_time == TRUE)
+-        uuid_generate_time(u);
+-    else if (use_time == FALSE)
+-        uuid_generate_random(u);
+-    else
+-        uuid_generate(u);
+-    uuid_unparse_lower(u, c);
+-
+-    RNG_END();
+-
+-    return mkString(c);
+-}
+-
+diff --git a/igraph/src/uuid.dd b/igraph/src/uuid.dd
+deleted file mode 100644
+index 272f3e7..0000000
+--- a/igraph/src/uuid.dd
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Generated by deps.mk, do not edit by hand and do not add dependencies to system headers
+-uuid.o: \
+-  uuid.c \
+diff --git a/igraph/src/vendor/uuid/CMakeLists.txt b/igraph/src/vendor/uuid/CMakeLists.txt
+deleted file mode 100644
+index 994356d..0000000
+--- a/igraph/src/vendor/uuid/CMakeLists.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-set(SOURCES
+-  R.c
+-  clear.c
+-  compare.c
+-  copy.c
+-  gen_uuid.c
+-  isnull.c
+-  pack.c
+-  parse.c
+-  unpack.c
+-  unparse.c
+-)
+-
+-add_library(uuid ${SOURCES})
+-target_include_directories(uuid PRIVATE ${igraph_BINARY_DIR}/include ${rigraph_SOURCE_DIR})
+-
+-install(
+-  TARGETS uuid
+-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+-)
+diff --git a/igraph/src/vendor/uuid/COPYING b/igraph/src/vendor/uuid/COPYING
+deleted file mode 100644
+index e7a8054..0000000
+--- a/igraph/src/vendor/uuid/COPYING
++++ /dev/null
+@@ -1,28 +0,0 @@
+-This library is free software; you can redistribute it and/or
+-modify it under the terms of the Modified BSD License:
+-
+-Redistribution and use in source and binary forms, with or without
+-modification, are permitted provided that the following conditions
+-are met:
+-1. Redistributions of source code must retain the above copyright
+-   notice, and the entire permission notice in its entirety,
+-   including the disclaimer of warranties.
+-2. Redistributions in binary form must reproduce the above copyright
+-   notice, this list of conditions and the following disclaimer in the
+-   documentation and/or other materials provided with the distribution.
+-3. The name of the author may not be used to endorse or promote
+-   products derived from this software without specific prior
+-   written permission.
+-
+-THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+-WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+-OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+-WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+-LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+-OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+-BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+-USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+-DAMAGE.
+diff --git a/igraph/src/vendor/uuid/Makevars.in b/igraph/src/vendor/uuid/Makevars.in
+deleted file mode 100644
+index 0ab302b..0000000
+--- a/igraph/src/vendor/uuid/Makevars.in
++++ /dev/null
+@@ -1,2 +0,0 @@
+-PKG_CPPFLAGS=@CPPFLAGS@
+-PKG_LIBS=@LIBS@
+diff --git a/igraph/src/vendor/uuid/Makevars.win b/igraph/src/vendor/uuid/Makevars.win
+deleted file mode 100644
+index 248e1ce..0000000
+--- a/igraph/src/vendor/uuid/Makevars.win
++++ /dev/null
+@@ -1 +0,0 @@
+-PKG_CPPFLAGS=-Iwin32
+diff --git a/igraph/src/vendor/uuid/clear.c b/igraph/src/vendor/uuid/clear.c
+deleted file mode 100644
+index ad1f066..0000000
+--- a/igraph/src/vendor/uuid/clear.c
++++ /dev/null
+@@ -1,43 +0,0 @@
+-/*
+- * clear.c -- Clear a UUID
+- *
+- * Copyright (C) 1996, 1997 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-#include <string.h>
+-
+-#include "uuidP.h"
+-
+-void uuid_clear(uuid_t uu)
+-{
+-	memset(uu, 0, 16);
+-}
+-
+diff --git a/igraph/src/vendor/uuid/compare.c b/igraph/src/vendor/uuid/compare.c
+deleted file mode 100644
+index 8f3437a..0000000
+--- a/igraph/src/vendor/uuid/compare.c
++++ /dev/null
+@@ -1,55 +0,0 @@
+-/*
+- * compare.c --- compare whether or not two UUIDs are the same
+- *
+- * Returns 0 if the two UUIDs are different, and 1 if they are the same.
+- *
+- * Copyright (C) 1996, 1997 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-#include "uuidP.h"
+-#include <string.h>
+-
+-#define UUCMP(u1,u2) if (u1 != u2) return((u1 < u2) ? -1 : 1);
+-
+-int uuid_compare(const uuid_t uu1, const uuid_t uu2)
+-{
+-	struct uuid	uuid1, uuid2;
+-
+-	uuid_unpack(uu1, &uuid1);
+-	uuid_unpack(uu2, &uuid2);
+-
+-	UUCMP(uuid1.time_low, uuid2.time_low);
+-	UUCMP(uuid1.time_mid, uuid2.time_mid);
+-	UUCMP(uuid1.time_hi_and_version, uuid2.time_hi_and_version);
+-	UUCMP(uuid1.clock_seq, uuid2.clock_seq);
+-	return memcmp(uuid1.node, uuid2.node, 6);
+-}
+-
+diff --git a/igraph/src/vendor/uuid/config.h b/igraph/src/vendor/uuid/config.h
+deleted file mode 100644
+index ddb75b0..0000000
+--- a/igraph/src/vendor/uuid/config.h
++++ /dev/null
+@@ -1,2 +0,0 @@
+-// https://github.com/igraph/rigraph/pull/840#issuecomment-1696078490
+-#define HAVE_UNISTD_H 1
+diff --git a/igraph/src/vendor/uuid/config.h.in b/igraph/src/vendor/uuid/config.h.in
+deleted file mode 100644
+index b6f72b3..0000000
+--- a/igraph/src/vendor/uuid/config.h.in
++++ /dev/null
+@@ -1,82 +0,0 @@
+-/* src/config.h.in.  Generated from configure.ac by autoheader.  */
+-
+-/* Define to 1 if you have the <inttypes.h> header file. */
+-#undef HAVE_INTTYPES_H
+-
+-/* Define to 1 if you have the `jrand48' function. */
+-#undef HAVE_JRAND48
+-
+-/* Define to 1 if you have the <memory.h> header file. */
+-#undef HAVE_MEMORY_H
+-
+-/* Define to 1 if you have the <netinet/in.h> header file. */
+-#undef HAVE_NETINET_IN_H
+-
+-/* Define to 1 if you have the <net/if_dl.h> header file. */
+-#undef HAVE_NET_IF_DL_H
+-
+-/* Define to 1 if you have the <net/if.h> header file. */
+-#undef HAVE_NET_IF_H
+-
+-/* Define if struct sockaddr contains sa_len */
+-#undef HAVE_SA_LEN
+-
+-/* Define to 1 if you have the <stdint.h> header file. */
+-#undef HAVE_STDINT_H
+-
+-/* Define to 1 if you have the <stdlib.h> header file. */
+-#undef HAVE_STDLIB_H
+-
+-/* Define to 1 if you have the <strings.h> header file. */
+-#undef HAVE_STRINGS_H
+-
+-/* Define to 1 if you have the <string.h> header file. */
+-#undef HAVE_STRING_H
+-
+-/* Define to 1 if you have the <sys/file.h> header file. */
+-#undef HAVE_SYS_FILE_H
+-
+-/* Define to 1 if you have the <sys/ioctl.h> header file. */
+-#undef HAVE_SYS_IOCTL_H
+-
+-/* Define to 1 if you have the <sys/socket.h> header file. */
+-#undef HAVE_SYS_SOCKET_H
+-
+-/* Define to 1 if you have the <sys/sockio.h> header file. */
+-#undef HAVE_SYS_SOCKIO_H
+-
+-/* Define to 1 if you have the <sys/stat.h> header file. */
+-#undef HAVE_SYS_STAT_H
+-
+-/* Define to 1 if you have the <sys/syscall.h> header file. */
+-#undef HAVE_SYS_SYSCALL_H
+-
+-/* Define to 1 if you have the <sys/time.h> header file. */
+-#undef HAVE_SYS_TIME_H
+-
+-/* Define to 1 if you have the <sys/types.h> header file. */
+-#undef HAVE_SYS_TYPES_H
+-
+-/* Define to 1 if you have the <sys/un.h> header file. */
+-#undef HAVE_SYS_UN_H
+-
+-/* Define to 1 if you have the <unistd.h> header file. */
+-#undef HAVE_UNISTD_H
+-
+-/* Define to the address where bug reports for this package should be sent. */
+-#undef PACKAGE_BUGREPORT
+-
+-/* Define to the full name of this package. */
+-#undef PACKAGE_NAME
+-
+-/* Define to the full name and version of this package. */
+-#undef PACKAGE_STRING
+-
+-/* Define to the one symbol short name of this package. */
+-#undef PACKAGE_TARNAME
+-
+-/* Define to the version of this package. */
+-#undef PACKAGE_VERSION
+-
+-/* Define to 1 if you have the ANSI C header files. */
+-#undef STDC_HEADERS
+diff --git a/igraph/src/vendor/uuid/copy.c b/igraph/src/vendor/uuid/copy.c
+deleted file mode 100644
+index ead33aa..0000000
+--- a/igraph/src/vendor/uuid/copy.c
++++ /dev/null
+@@ -1,45 +0,0 @@
+-/*
+- * copy.c --- copy UUIDs
+- *
+- * Copyright (C) 1996, 1997 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-#include "uuidP.h"
+-
+-void uuid_copy(uuid_t dst, const uuid_t src)
+-{
+-	unsigned char		*cp1;
+-	const unsigned char	*cp2;
+-	int			i;
+-
+-	for (i=0, cp1 = dst, cp2 = src; i < 16; i++)
+-		*cp1++ = *cp2++;
+-}
+diff --git a/igraph/src/vendor/uuid/gen_uuid.c b/igraph/src/vendor/uuid/gen_uuid.c
+deleted file mode 100644
+index 4bc6143..0000000
+--- a/igraph/src/vendor/uuid/gen_uuid.c
++++ /dev/null
+@@ -1,536 +0,0 @@
+-/*
+- * gen_uuid.c --- generate a DCE-compatible uuid
+- *
+- * Copyright (C) 1996, 1997, 1998, 1999 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-/*
+- * Force inclusion of SVID stuff since we need it if we're compiling in
+- * gcc-wall wall mode
+- */
+-#define _DEFAULT_SOURCE
+-
+-#include "config.h"
+-
+-#ifdef _WIN32
+-#define _WIN32_WINNT 0x0500
+-#include <windows.h>
+-#define UUID MYUUID
+-#endif
+-#include <stdio.h>
+-#ifdef HAVE_UNISTD_H
+-#include <unistd.h>
+-#endif
+-#ifdef HAVE_STDLIB_H
+-#include <stdlib.h>
+-#endif
+-#include <string.h>
+-#include <fcntl.h>
+-#include <errno.h>
+-#include <limits.h>
+-#include <sys/types.h>
+-#ifdef HAVE_SYS_TIME_H
+-#include <sys/time.h>
+-#endif
+-#include <sys/stat.h>
+-#ifdef HAVE_SYS_FILE_H
+-#include <sys/file.h>
+-#endif
+-#ifdef HAVE_SYS_IOCTL_H
+-#include <sys/ioctl.h>
+-#endif
+-#ifdef HAVE_SYS_SOCKET_H
+-#include <sys/socket.h>
+-#endif
+-#ifdef HAVE_SYS_UN_H
+-#include <sys/un.h>
+-#endif
+-#ifdef HAVE_SYS_SOCKIO_H
+-#include <sys/sockio.h>
+-#endif
+-#ifdef HAVE_NET_IF_H
+-#include <net/if.h>
+-#endif
+-#ifdef HAVE_NETINET_IN_H
+-#include <netinet/in.h>
+-#endif
+-#ifdef HAVE_NET_IF_DL_H
+-#include <net/if_dl.h>
+-#endif
+-#if defined(__linux__) && defined(HAVE_SYS_SYSCALL_H)
+-#include <sys/syscall.h>
+-#endif
+-
+-#include "uuidP.h"
+-#include "uuidd.h"
+-
+-#ifdef USING_R
+-#include "igraph_random.h"
+-#define srand(x) ;
+-#define rand() RNG_INTEGER(0, RAND_MAX)
+-#endif
+-
+-#ifdef HAVE_TLS
+-#define THREAD_LOCAL static __thread
+-#else
+-#define THREAD_LOCAL static
+-#endif
+-
+-#ifdef _WIN32
+-#if 0 /* MinGW has gettimeofday so we don't need this */
+-static int gettimeofday (struct timeval *tv, void *dummy)
+-{
+-	FILETIME	ftime;
+-	uint64_t	n;
+-
+-	GetSystemTimeAsFileTime (&ftime);
+-	n = (((uint64_t) ftime.dwHighDateTime << 32)
+-	     + (uint64_t) ftime.dwLowDateTime);
+-	if (n) {
+-		n /= 10;
+-		n -= ((369 * 365 + 89) * (uint64_t) 86400) * 1000000;
+-	}
+-
+-	tv->tv_sec = n / 1000000;
+-	tv->tv_usec = n % 1000000;
+-}
+-#endif
+-
+-#ifdef __MINGW32__
+-int gettimeofday (struct timeval *tv, void *dummy);
+-#endif
+-#ifdef __MINGW64__
+-int gettimeofday (struct timeval *tv, void *dummy);
+-#endif
+-
+-static int getuid (void)
+-{
+-	return 1;
+-}
+-#endif
+-
+-/*
+- * Get the ethernet hardware address, if we can find it...
+- *
+- * XXX for a windows version, probably should use GetAdaptersInfo:
+- * http://www.codeguru.com/cpp/i-n/network/networkinformation/article.php/c5451
+- * commenting out get_node_id just to get gen_uuid to compile under windows
+- * is not the right way to go!
+- */
+-static int get_node_id(unsigned char *node_id)
+-{
+-#ifdef HAVE_NET_IF_H
+-	int		sd;
+-	struct ifreq	ifr, *ifrp;
+-	struct ifconf	ifc;
+-	char buf[1024];
+-	int		n, i;
+-	unsigned char	*a;
+-#ifdef HAVE_NET_IF_DL_H
+-	struct sockaddr_dl *sdlp;
+-#endif
+-
+-/*
+- * BSD 4.4 defines the size of an ifreq to be
+- * max(sizeof(ifreq), sizeof(ifreq.ifr_name)+ifreq.ifr_addr.sa_len
+- * However, under earlier systems, sa_len isn't present, so the size is
+- * just sizeof(struct ifreq)
+- */
+-#ifdef HAVE_SA_LEN
+-#define max(x, y) (((x) > (y)) ? (x) : (y))
+-#define ifreq_size(i) max(sizeof(struct ifreq),\
+-     sizeof((i).ifr_name)+(i).ifr_addr.sa_len)
+-#else
+-#define ifreq_size(i) sizeof(struct ifreq)
+-#endif /* HAVE_SA_LEN */
+-
+-	sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+-	if (sd < 0) {
+-		return -1;
+-	}
+-	memset(buf, 0, sizeof(buf));
+-	ifc.ifc_len = sizeof(buf);
+-	ifc.ifc_buf = buf;
+-	if (ioctl (sd, SIOCGIFCONF, (char *)&ifc) < 0) {
+-		close(sd);
+-		return -1;
+-	}
+-	n = ifc.ifc_len;
+-	for (i = 0; i < n; i+= ifreq_size(*ifrp) ) {
+-		ifrp = (struct ifreq *)((char *) ifc.ifc_buf+i);
+-		strncpy(ifr.ifr_name, ifrp->ifr_name, IFNAMSIZ);
+-#if defined(SIOCGIFHWADDR) && (!defined(__sun__))
+-		if (ioctl(sd, SIOCGIFHWADDR, &ifr) < 0)
+-			continue;
+-		a = (unsigned char *) &ifr.ifr_hwaddr.sa_data;
+-#else
+-#ifdef SIOCGENADDR
+-		if (ioctl(sd, SIOCGENADDR, &ifr) < 0)
+-			continue;
+-		a = (unsigned char *) ifr.ifr_enaddr;
+-#else
+-#ifdef HAVE_NET_IF_DL_H
+-		sdlp = (struct sockaddr_dl *) &ifrp->ifr_addr;
+-		if ((sdlp->sdl_family != AF_LINK) || (sdlp->sdl_alen != 6))
+-			continue;
+-		a = (unsigned char *) &sdlp->sdl_data[sdlp->sdl_nlen];
+-#else
+-		/*
+-		 * XXX we don't have a way of getting the hardware
+-		 * address
+-		 */
+-		close(sd);
+-		return 0;
+-#endif /* HAVE_NET_IF_DL_H */
+-#endif /* SIOCGENADDR */
+-#endif /* SIOCGIFHWADDR */
+-		if (!a[0] && !a[1] && !a[2] && !a[3] && !a[4] && !a[5])
+-			continue;
+-		if (node_id) {
+-			memcpy(node_id, a, 6);
+-			close(sd);
+-			return 1;
+-		}
+-	}
+-	close(sd);
+-#endif
+-	return 0;
+-}
+-
+-#if defined(__linux__) && defined(__NR_gettid) && defined(HAVE_JRAND48)
+-#define DO_JRAND_MIX
+-static unsigned short ul_jrand_seed[3];
+-#endif
+-
+-static int random_get_fd(void)
+-{
+-    int i, fd = -1;
+-    struct timeval  tv;
+-
+-    gettimeofday(&tv, NULL);
+-#ifndef _WIN32
+-    fd = open("/dev/urandom", O_RDONLY);
+-    if (fd == -1)
+-	fd = open("/dev/random", O_RDONLY | O_NONBLOCK);
+-    if (fd >= 0) {
+-	i = fcntl(fd, F_GETFD);
+-	if (i >= 0)
+-	    fcntl(fd, F_SETFD, i | FD_CLOEXEC);
+-    }
+-#endif
+-    srand((getpid() << 16) ^ getuid() ^ tv.tv_sec ^ tv.tv_usec);
+-
+-#ifdef DO_JRAND_MIX
+-    ul_jrand_seed[0] = getpid() ^ (tv.tv_sec & 0xFFFF);
+-    ul_jrand_seed[1] = getppid() ^ (tv.tv_usec & 0xFFFF);
+-    ul_jrand_seed[2] = (tv.tv_sec ^ tv.tv_usec) >> 16;
+-#endif
+-    /* Crank the random number generator a few times */
+-    gettimeofday(&tv, NULL);
+-    for (i = (tv.tv_sec ^ tv.tv_usec) & 0x1F; i > 0; i--)
+-	rand();
+-    return fd;
+-}
+-
+-/*
+- * Generate a stream of random nbytes into buf.
+- * Use /dev/urandom if possible, and if not,
+- * use glibc pseudo-random functions.
+- */
+-static void random_get_bytes(void *buf, size_t nbytes)
+-{
+-    size_t i, n = nbytes;
+-    int fd = random_get_fd();
+-    int lose_counter = 0;
+-    unsigned char *cp = (unsigned char *) buf;
+-
+-    if (fd >= 0) {
+-	while (n > 0) {
+-	    ssize_t x = read(fd, cp, n);
+-	    if (x <= 0) {
+-		if (lose_counter++ > 16)
+-		    break;
+-		continue;
+-	    }
+-	    n -= x;
+-	    cp += x;
+-	    lose_counter = 0;
+-	}
+-
+-	close(fd);
+-    }
+-
+-    /*
+-     * We do this all the time, but this is the only source of
+-     * randomness if /dev/random/urandom is out to lunch.
+-     */
+-    for (cp = buf, i = 0; i < nbytes; i++)
+-	*cp++ ^= (rand() >> 7) & 0xFF;
+-
+-#ifdef DO_JRAND_MIX
+-    {
+-	unsigned short tmp_seed[3];
+-
+-	memcpy(tmp_seed, ul_jrand_seed, sizeof(tmp_seed));
+-	ul_jrand_seed[2] = ul_jrand_seed[2] ^ syscall(__NR_gettid);
+-	for (cp = buf, i = 0; i < nbytes; i++)
+-	    *cp++ ^= (jrand48(tmp_seed) >> 7) & 0xFF;
+-	memcpy(ul_jrand_seed, tmp_seed,
+-	       sizeof(ul_jrand_seed)-sizeof(unsigned short));
+-    }
+-#endif
+-
+-    return;
+-}
+-
+-/* Assume that the gettimeofday() has microsecond granularity */
+-#define MAX_ADJUSTMENT 10
+-
+-/*
+- * Get clock from global sequence clock counter.
+- *
+- * Return -1 if the clock counter could not be opened/locked (in this case
+- * pseudorandom value is returned in @ret_clock_seq), otherwise return 0.
+- */
+-static int get_clock(uint32_t *clock_high, uint32_t *clock_low,
+-		     uint16_t *ret_clock_seq, int *num)
+-{
+-	THREAD_LOCAL int		adjustment = 0;
+-	THREAD_LOCAL struct timeval	last = {0, 0};
+-	THREAD_LOCAL int		state_fd = -2;
+-	THREAD_LOCAL FILE		*state_f;
+-	THREAD_LOCAL uint16_t		clock_seq;
+-	struct timeval			tv;
+-	uint64_t			clock_reg;
+-	mode_t				save_umask;
+-	int				len;
+-	int				ret = 0;
+-
+-	if (state_fd == -2) {
+-		save_umask = umask(0);
+-		state_fd = open(LIBUUID_CLOCK_FILE, O_RDWR|O_CREAT, 0660);
+-		(void) umask(save_umask);
+-		if (state_fd != -1) {
+-			state_f = fdopen(state_fd, "r+");
+-			if (!state_f) {
+-				close(state_fd);
+-				state_fd = -1;
+-				ret = -1;
+-			}
+-		}
+-		else
+-			ret = -1;
+-	}
+-	if (state_fd >= 0) {
+-		rewind(state_f);
+-	}
+-	if (state_fd >= 0) {
+-		unsigned int cl;
+-		unsigned long tv1, tv2;
+-		int a;
+-
+-		if (fscanf(state_f, "clock: %04x tv: %lu %lu adj: %d\n",
+-			   &cl, &tv1, &tv2, &a) == 4) {
+-			clock_seq = cl & 0x3FFF;
+-			last.tv_sec = tv1;
+-			last.tv_usec = tv2;
+-			adjustment = a;
+-		}
+-	}
+-
+-	if ((last.tv_sec == 0) && (last.tv_usec == 0)) {
+-		random_get_bytes(&clock_seq, sizeof(clock_seq));
+-		clock_seq &= 0x3FFF;
+-		gettimeofday(&last, NULL);
+-		last.tv_sec--;
+-	}
+-
+-try_again:
+-	gettimeofday(&tv, NULL);
+-	if ((tv.tv_sec < last.tv_sec) ||
+-	    ((tv.tv_sec == last.tv_sec) &&
+-	     (tv.tv_usec < last.tv_usec))) {
+-		clock_seq = (clock_seq+1) & 0x3FFF;
+-		adjustment = 0;
+-		last = tv;
+-	} else if ((tv.tv_sec == last.tv_sec) &&
+-	    (tv.tv_usec == last.tv_usec)) {
+-		if (adjustment >= MAX_ADJUSTMENT)
+-			goto try_again;
+-		adjustment++;
+-	} else {
+-		adjustment = 0;
+-		last = tv;
+-	}
+-
+-	clock_reg = tv.tv_usec*10 + adjustment;
+-	clock_reg += ((uint64_t) tv.tv_sec)*10000000;
+-	clock_reg += (((uint64_t) 0x01B21DD2) << 32) + 0x13814000;
+-
+-	if (num && (*num > 1)) {
+-		adjustment += *num - 1;
+-		last.tv_usec += adjustment / 10;
+-		adjustment = adjustment % 10;
+-		last.tv_sec += last.tv_usec / 1000000;
+-		last.tv_usec = last.tv_usec % 1000000;
+-	}
+-
+-	if (state_fd >= 0) {
+-		rewind(state_f);
+-		len = fprintf(state_f,
+-			      "clock: %04x tv: %016lu %08lu adj: %08d\n",
+-			      clock_seq, (unsigned long) last.tv_sec, (unsigned long) last.tv_usec, adjustment);
+-		fflush(state_f);
+-		if (ftruncate(state_fd, len) < 0) {
+-			fprintf(state_f, "                   \n");
+-			fflush(state_f);
+-		}
+-		rewind(state_f);
+-	}
+-
+-	*clock_high = clock_reg >> 32;
+-	*clock_low = clock_reg;
+-	*ret_clock_seq = clock_seq;
+-	return ret;
+-}
+-
+-
+-int __uuid_generate_time(uuid_t out, int *num)
+-{
+-	static unsigned char node_id[6];
+-	static int has_init = 0;
+-	struct uuid uu;
+-	uint32_t	clock_mid;
+-	int ret;
+-
+-	if (!has_init) {
+-		if (get_node_id(node_id) <= 0) {
+-			random_get_bytes(node_id, 6);
+-			/*
+-			 * Set multicast bit, to prevent conflicts
+-			 * with IEEE 802 addresses obtained from
+-			 * network cards
+-			 */
+-			node_id[0] |= 0x01;
+-		}
+-		has_init = 1;
+-	}
+-	ret = get_clock(&clock_mid, &uu.time_low, &uu.clock_seq, num);
+-	uu.clock_seq |= 0x8000;
+-	uu.time_mid = (uint16_t) clock_mid;
+-	uu.time_hi_and_version = ((clock_mid >> 16) & 0x0FFF) | 0x1000;
+-	memcpy(uu.node, node_id, 6);
+-	uuid_pack(&uu, out);
+-	return ret;
+-}
+-
+-/*
+- * Generate time-based UUID and store it to @out
+- *
+- * Since there is no daemon here, use fall-back right away
+- */
+-static int uuid_generate_time_generic(uuid_t out) {
+-	return __uuid_generate_time(out, 0);
+-}
+-
+-/*
+- * Generate time-based UUID and store it to @out.
+- *
+- * Discards return value from uuid_generate_time_generic()
+- */
+-void uuid_generate_time(uuid_t out)
+-{
+-	(void)uuid_generate_time_generic(out);
+-}
+-
+-
+-int uuid_generate_time_safe(uuid_t out)
+-{
+-	return uuid_generate_time_generic(out);
+-}
+-
+-
+-void __uuid_generate_random(uuid_t out, int *num)
+-{
+-	uuid_t	buf;
+-	struct uuid uu;
+-	int i, n;
+-
+-	if (!num || !*num)
+-		n = 1;
+-	else
+-		n = *num;
+-
+-	for (i = 0; i < n; i++) {
+-		random_get_bytes(buf, sizeof(buf));
+-		uuid_unpack(buf, &uu);
+-
+-		uu.clock_seq = (uu.clock_seq & 0x3FFF) | 0x8000;
+-		uu.time_hi_and_version = (uu.time_hi_and_version & 0x0FFF)
+-			| 0x4000;
+-		uuid_pack(&uu, out);
+-		out += sizeof(uuid_t);
+-	}
+-}
+-
+-void uuid_generate_random(uuid_t out)
+-{
+-	int	num = 1;
+-	/* No real reason to use the daemon for random uuid's -- yet */
+-
+-	__uuid_generate_random(out, &num);
+-}
+-
+-/*
+- * Check whether good random source (/dev/random or /dev/urandom)
+- * is available.
+- */
+-static int have_random_source(void)
+-{
+-	struct stat s;
+-
+-	return (!stat("/dev/random", &s) || !stat("/dev/urandom", &s));
+-}
+-
+-
+-/*
+- * This is the generic front-end to uuid_generate_random and
+- * uuid_generate_time.  It uses uuid_generate_random only if
+- * /dev/urandom is available, since otherwise we won't have
+- * high-quality randomness.
+- */
+-void uuid_generate(uuid_t out)
+-{
+-	if (have_random_source())
+-		uuid_generate_random(out);
+-	else
+-		uuid_generate_time(out);
+-}
+diff --git a/igraph/src/vendor/uuid/isnull.c b/igraph/src/vendor/uuid/isnull.c
+deleted file mode 100644
+index 931e7e7..0000000
+--- a/igraph/src/vendor/uuid/isnull.c
++++ /dev/null
+@@ -1,48 +0,0 @@
+-/*
+- * isnull.c --- Check whether or not the UUID is null
+- *
+- * Copyright (C) 1996, 1997 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-#include "uuidP.h"
+-
+-/* Returns 1 if the uuid is the NULL uuid */
+-int uuid_is_null(const uuid_t uu)
+-{
+-	const unsigned char 	*cp;
+-	int			i;
+-
+-	for (i=0, cp = uu; i < 16; i++)
+-		if (*cp++)
+-			return 0;
+-	return 1;
+-}
+-
+diff --git a/igraph/src/vendor/uuid/pack.c b/igraph/src/vendor/uuid/pack.c
+deleted file mode 100644
+index 6e12476..0000000
+--- a/igraph/src/vendor/uuid/pack.c
++++ /dev/null
+@@ -1,69 +0,0 @@
+-/*
+- * Internal routine for packing UUIDs
+- *
+- * Copyright (C) 1996, 1997 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-#include <string.h>
+-#include "uuidP.h"
+-
+-void uuid_pack(const struct uuid *uu, uuid_t ptr)
+-{
+-	uint32_t	tmp;
+-	unsigned char	*out = ptr;
+-
+-	tmp = uu->time_low;
+-	out[3] = (unsigned char) tmp;
+-	tmp >>= 8;
+-	out[2] = (unsigned char) tmp;
+-	tmp >>= 8;
+-	out[1] = (unsigned char) tmp;
+-	tmp >>= 8;
+-	out[0] = (unsigned char) tmp;
+-
+-	tmp = uu->time_mid;
+-	out[5] = (unsigned char) tmp;
+-	tmp >>= 8;
+-	out[4] = (unsigned char) tmp;
+-
+-	tmp = uu->time_hi_and_version;
+-	out[7] = (unsigned char) tmp;
+-	tmp >>= 8;
+-	out[6] = (unsigned char) tmp;
+-
+-	tmp = uu->clock_seq;
+-	out[9] = (unsigned char) tmp;
+-	tmp >>= 8;
+-	out[8] = (unsigned char) tmp;
+-
+-	memcpy(out+10, uu->node, 6);
+-}
+-
+diff --git a/igraph/src/vendor/uuid/parse.c b/igraph/src/vendor/uuid/parse.c
+deleted file mode 100644
+index 074383e..0000000
+--- a/igraph/src/vendor/uuid/parse.c
++++ /dev/null
+@@ -1,79 +0,0 @@
+-/*
+- * parse.c --- UUID parsing
+- *
+- * Copyright (C) 1996, 1997 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-#include <stdlib.h>
+-#include <stdio.h>
+-#include <ctype.h>
+-#include <string.h>
+-
+-#include "uuidP.h"
+-
+-int uuid_parse(const char *in, uuid_t uu)
+-{
+-	struct uuid	uuid;
+-	int 		i;
+-	const char	*cp;
+-	char		buf[3];
+-
+-	if (strlen(in) != 36)
+-		return -1;
+-	for (i=0, cp = in; i <= 36; i++,cp++) {
+-		if ((i == 8) || (i == 13) || (i == 18) ||
+-		    (i == 23)) {
+-			if (*cp == '-')
+-				continue;
+-			else
+-				return -1;
+-		}
+-		if (i== 36)
+-			if (*cp == 0)
+-				continue;
+-		if (!isxdigit(*cp))
+-			return -1;
+-	}
+-	uuid.time_low = strtoul(in, NULL, 16);
+-	uuid.time_mid = strtoul(in+9, NULL, 16);
+-	uuid.time_hi_and_version = strtoul(in+14, NULL, 16);
+-	uuid.clock_seq = strtoul(in+19, NULL, 16);
+-	cp = in+24;
+-	buf[2] = 0;
+-	for (i=0; i < 6; i++) {
+-		buf[0] = *cp++;
+-		buf[1] = *cp++;
+-		uuid.node[i] = strtoul(buf, NULL, 16);
+-	}
+-
+-	uuid_pack(&uuid, uu);
+-	return 0;
+-}
+diff --git a/igraph/src/vendor/uuid/unpack.c b/igraph/src/vendor/uuid/unpack.c
+deleted file mode 100644
+index beaaff3..0000000
+--- a/igraph/src/vendor/uuid/unpack.c
++++ /dev/null
+@@ -1,63 +0,0 @@
+-/*
+- * Internal routine for unpacking UUID
+- *
+- * Copyright (C) 1996, 1997 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-#include <string.h>
+-#include "uuidP.h"
+-
+-void uuid_unpack(const uuid_t in, struct uuid *uu)
+-{
+-	const uint8_t	*ptr = in;
+-	uint32_t		tmp;
+-
+-	tmp = *ptr++;
+-	tmp = (tmp << 8) | *ptr++;
+-	tmp = (tmp << 8) | *ptr++;
+-	tmp = (tmp << 8) | *ptr++;
+-	uu->time_low = tmp;
+-
+-	tmp = *ptr++;
+-	tmp = (tmp << 8) | *ptr++;
+-	uu->time_mid = tmp;
+-
+-	tmp = *ptr++;
+-	tmp = (tmp << 8) | *ptr++;
+-	uu->time_hi_and_version = tmp;
+-
+-	tmp = *ptr++;
+-	tmp = (tmp << 8) | *ptr++;
+-	uu->clock_seq = tmp;
+-
+-	memcpy(uu->node, ptr, 6);
+-}
+-
+diff --git a/igraph/src/vendor/uuid/unparse.c b/igraph/src/vendor/uuid/unparse.c
+deleted file mode 100644
+index 2845710..0000000
+--- a/igraph/src/vendor/uuid/unparse.c
++++ /dev/null
+@@ -1,76 +0,0 @@
+-/*
+- * unparse.c -- convert a UUID to string
+- *
+- * Copyright (C) 1996, 1997 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-#include <stdio.h>
+-
+-#include "uuidP.h"
+-
+-static const char *fmt_lower =
+-	"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x";
+-
+-static const char *fmt_upper =
+-	"%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X";
+-
+-#ifdef UUID_UNPARSE_DEFAULT_UPPER
+-#define FMT_DEFAULT fmt_upper
+-#else
+-#define FMT_DEFAULT fmt_lower
+-#endif
+-
+-static void uuid_unparse_x(const uuid_t uu, char *out, const char *fmt)
+-{
+-	struct uuid uuid;
+-
+-	uuid_unpack(uu, &uuid);
+-	snprintf(out, 37, fmt,
+-		uuid.time_low, uuid.time_mid, uuid.time_hi_and_version,
+-		uuid.clock_seq >> 8, uuid.clock_seq & 0xFF,
+-		uuid.node[0], uuid.node[1], uuid.node[2],
+-		uuid.node[3], uuid.node[4], uuid.node[5]);
+-}
+-
+-void uuid_unparse_lower(const uuid_t uu, char *out)
+-{
+-	uuid_unparse_x(uu, out,	fmt_lower);
+-}
+-
+-void uuid_unparse_upper(const uuid_t uu, char *out)
+-{
+-	uuid_unparse_x(uu, out,	fmt_upper);
+-}
+-
+-void uuid_unparse(const uuid_t uu, char *out)
+-{
+-	uuid_unparse_x(uu, out, FMT_DEFAULT);
+-}
+diff --git a/igraph/src/vendor/uuid/uuid.h b/igraph/src/vendor/uuid/uuid.h
+deleted file mode 100644
+index 874d65a..0000000
+--- a/igraph/src/vendor/uuid/uuid.h
++++ /dev/null
+@@ -1,104 +0,0 @@
+-/*
+- * Public include file for the UUID library
+- *
+- * Copyright (C) 1996, 1997, 1998 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-#ifndef _UUID_UUID_H
+-#define _UUID_UUID_H
+-
+-#include <sys/types.h>
+-#ifndef _WIN32
+-#include <sys/time.h>
+-#endif
+-#include <time.h>
+-
+-typedef unsigned char uuid_t[16];
+-
+-/* UUID Variant definitions */
+-#define UUID_VARIANT_NCS	0
+-#define UUID_VARIANT_DCE	1
+-#define UUID_VARIANT_MICROSOFT	2
+-#define UUID_VARIANT_OTHER	3
+-
+-/* UUID Type definitions */
+-#define UUID_TYPE_DCE_TIME   1
+-#define UUID_TYPE_DCE_RANDOM 4
+-
+-/* Allow UUID constants to be defined */
+-#ifdef __GNUC__
+-#define UUID_DEFINE(name,u0,u1,u2,u3,u4,u5,u6,u7,u8,u9,u10,u11,u12,u13,u14,u15) \
+-	static const uuid_t name __attribute__ ((unused)) = {u0,u1,u2,u3,u4,u5,u6,u7,u8,u9,u10,u11,u12,u13,u14,u15}
+-#else
+-#define UUID_DEFINE(name,u0,u1,u2,u3,u4,u5,u6,u7,u8,u9,u10,u11,u12,u13,u14,u15) \
+-	static const uuid_t name = {u0,u1,u2,u3,u4,u5,u6,u7,u8,u9,u10,u11,u12,u13,u14,u15}
+-#endif
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+-/* clear.c */
+-void uuid_clear(uuid_t uu);
+-
+-/* compare.c */
+-int uuid_compare(const uuid_t uu1, const uuid_t uu2);
+-
+-/* copy.c */
+-void uuid_copy(uuid_t dst, const uuid_t src);
+-
+-/* gen_uuid.c */
+-void uuid_generate(uuid_t out);
+-void uuid_generate_random(uuid_t out);
+-void uuid_generate_time(uuid_t out);
+-int uuid_generate_time_safe(uuid_t out);
+-
+-/* isnull.c */
+-int uuid_is_null(const uuid_t uu);
+-
+-/* parse.c */
+-int uuid_parse(const char *in, uuid_t uu);
+-
+-/* unparse.c */
+-void uuid_unparse(const uuid_t uu, char *out);
+-void uuid_unparse_lower(const uuid_t uu, char *out);
+-void uuid_unparse_upper(const uuid_t uu, char *out);
+-
+-/* uuid_time.c */
+-time_t uuid_time(const uuid_t uu, struct timeval *ret_tv);
+-int uuid_type(const uuid_t uu);
+-int uuid_variant(const uuid_t uu);
+-
+-#ifdef __cplusplus
+-}
+-#endif
+-
+-#endif /* _UUID_UUID_H */
+diff --git a/igraph/src/vendor/uuid/uuidP.h b/igraph/src/vendor/uuid/uuidP.h
+deleted file mode 100644
+index 604d8bf..0000000
+--- a/igraph/src/vendor/uuid/uuidP.h
++++ /dev/null
+@@ -1,63 +0,0 @@
+-/*
+- * uuid.h -- private header file for uuids
+- *
+- * Copyright (C) 1996, 1997 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-#include <inttypes.h>
+-#include <sys/types.h>
+-
+-#include "config.h"
+-
+-#include "uuid.h"
+-
+-#define LIBUUID_CLOCK_FILE	"/var/lib/libuuid/clock.txt"
+-
+-/*
+- * Offset between 15-Oct-1582 and 1-Jan-70
+- */
+-#define TIME_OFFSET_HIGH 0x01B21DD2
+-#define TIME_OFFSET_LOW  0x13814000
+-
+-struct uuid {
+-	uint32_t	time_low;
+-	uint16_t	time_mid;
+-	uint16_t	time_hi_and_version;
+-	uint16_t	clock_seq;
+-	uint8_t	node[6];
+-};
+-
+-
+-/*
+- * prototypes
+- */
+-void uuid_pack(const struct uuid *uu, uuid_t ptr);
+-void uuid_unpack(const uuid_t in, struct uuid *uu);
+diff --git a/igraph/src/vendor/uuid/uuidd.h b/igraph/src/vendor/uuid/uuidd.h
+deleted file mode 100644
+index 2f70968..0000000
+--- a/igraph/src/vendor/uuid/uuidd.h
++++ /dev/null
+@@ -1,54 +0,0 @@
+-/*
+- * Definitions used by the uuidd daemon
+- *
+- * Copyright (C) 2007 Theodore Ts'o.
+- *
+- * %Begin-Header%
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
+- * %End-Header%
+- */
+-
+-#ifndef _UUID_UUIDD_H
+-#define _UUID_UUIDD_H
+-
+-#define UUIDD_DIR		_PATH_LOCALSTATEDIR "/uuidd"
+-#define UUIDD_SOCKET_PATH	UUIDD_DIR "/request"
+-#define UUIDD_PIDFILE_PATH	UUIDD_DIR "/uuidd.pid"
+-#define UUIDD_PATH		"/usr/sbin/uuidd"
+-
+-#define UUIDD_OP_GETPID			0
+-#define UUIDD_OP_GET_MAXOP		1
+-#define UUIDD_OP_TIME_UUID		2
+-#define UUIDD_OP_RANDOM_UUID		3
+-#define UUIDD_OP_BULK_TIME_UUID		4
+-#define UUIDD_OP_BULK_RANDOM_UUID	5
+-#define UUIDD_MAX_OP			UUIDD_OP_BULK_RANDOM_UUID
+-
+-extern int __uuid_generate_time(uuid_t out, int *num);
+-extern void __uuid_generate_random(uuid_t out, int *num);
+-
+-#endif /* _UUID_UUID_H */
+diff --git a/igraph/src/vendor/uuid/win32/config.h b/igraph/src/vendor/uuid/win32/config.h
+deleted file mode 100644
+index ffb2aba..0000000
+--- a/igraph/src/vendor/uuid/win32/config.h
++++ /dev/null
+@@ -1,84 +0,0 @@
+-/* src/config.h.  Generated from config.h.in by configure.  */
+-/* src/config.h.in.  Generated from configure.ac by autoheader.  */
+-/* -- reflects MinGW + Win32 -- */
+-
+-/* Define to 1 if you have the <inttypes.h> header file. */
+-#define HAVE_INTTYPES_H 1
+-
+-/* Define to 1 if you have the `jrand48' function. */
+-/* #undef HAVE_JRAND48 */
+-
+-/* Define to 1 if you have the <memory.h> header file. */
+-#define HAVE_MEMORY_H 1
+-
+-/* Define to 1 if you have the <netinet/in.h> header file. */
+-/* #undef HAVE_NETINET_IN_H */
+-
+-/* Define to 1 if you have the <net/if_dl.h> header file. */
+-/* #undef HAVE_NET_IF_DL_H */
+-
+-/* Define to 1 if you have the <net/if.h> header file. */
+-/* #undef HAVE_NET_IF_H */
+-
+-/* Define if struct sockaddr contains sa_len */
+-/* #undef HAVE_SA_LEN */
+-
+-/* Define to 1 if you have the <stdint.h> header file. */
+-#define HAVE_STDINT_H 1
+-
+-/* Define to 1 if you have the <stdlib.h> header file. */
+-#define HAVE_STDLIB_H 1
+-
+-/* Define to 1 if you have the <strings.h> header file. */
+-#define HAVE_STRINGS_H 1
+-
+-/* Define to 1 if you have the <string.h> header file. */
+-#define HAVE_STRING_H 1
+-
+-/* Define to 1 if you have the <sys/file.h> header file. */
+-#define HAVE_SYS_FILE_H 1
+-
+-/* Define to 1 if you have the <sys/ioctl.h> header file. */
+-/* #undef HAVE_SYS_IOCTL_H */
+-
+-/* Define to 1 if you have the <sys/socket.h> header file. */
+-/* #undef HAVE_SYS_SOCKET_H */
+-
+-/* Define to 1 if you have the <sys/sockio.h> header file. */
+-/* #undef HAVE_SYS_SOCKIO_H */
+-
+-/* Define to 1 if you have the <sys/stat.h> header file. */
+-#define HAVE_SYS_STAT_H 1
+-
+-/* Define to 1 if you have the <sys/syscall.h> header file. */
+-/* #undef HAVE_SYS_SYSCALL_H */
+-
+-/* Define to 1 if you have the <sys/time.h> header file. */
+-#define HAVE_SYS_TIME_H 1
+-
+-/* Define to 1 if you have the <sys/types.h> header file. */
+-#define HAVE_SYS_TYPES_H 1
+-
+-/* Define to 1 if you have the <sys/un.h> header file. */
+-/* #undef HAVE_SYS_UN_H */
+-
+-/* Define to 1 if you have the <unistd.h> header file. */
+-#define HAVE_UNISTD_H 1
+-
+-/* Define to the address where bug reports for this package should be sent. */
+-#define PACKAGE_BUGREPORT "Simon.Urbanek@r-project.org"
+-
+-/* Define to the full name of this package. */
+-#define PACKAGE_NAME "uuid"
+-
+-/* Define to the full name and version of this package. */
+-#define PACKAGE_STRING "uuid 0.1"
+-
+-/* Define to the one symbol short name of this package. */
+-#define PACKAGE_TARNAME "uuid"
+-
+-/* Define to the version of this package. */
+-#define PACKAGE_VERSION "0.1"
+-
+-/* Define to 1 if you have the ANSI C header files. */
+-#define STDC_HEADERS 1
+-- 
+2.51.1
+

@@ -1,0 +1,93 @@
+Fix historic C99 compatibility issues.  No need to upstream this
+because re-running autoconf will make these issues go away.
+
+diff --git a/aclocal.m4 b/aclocal.m4
+index 61a1935a56e8ee7c..35ebc2887a62e613 100644
+--- a/aclocal.m4
++++ b/aclocal.m4
+@@ -724,10 +724,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -741,7 +737,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }]
+ EOF
+   if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} 2>/dev/null; then
+diff --git a/configure b/configure
+index 74b6c86c2daf1cc2..bcbcc9ec076e3781 100755
+--- a/configure
++++ b/configure
+@@ -3826,8 +3826,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext
+@@ -6804,10 +6804,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -6821,7 +6817,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -6902,10 +6898,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -6919,7 +6911,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -7801,8 +7793,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

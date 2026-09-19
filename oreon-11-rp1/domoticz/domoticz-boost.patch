@@ -1,0 +1,333 @@
+From 322515894b064e3ba71975bf192ba06beb4dfa79 Mon Sep 17 00:00:00 2001
+From: Arjen de Korte <build+github@de-korte.org>
+Date: Tue, 23 Dec 2025 20:35:47 +0100
+Subject: [PATCH] Replace deprecated deadline_timer with steady_timer
+
+---
+ hardware/ASyncTCP.cpp                 |  4 ++--
+ hardware/ASyncTCP.h                   |  5 ++---
+ hardware/Pinger.cpp                   | 11 +++++------
+ hardware/plugins/PluginTransports.cpp |  8 ++++----
+ hardware/plugins/PluginTransports.h   |  5 ++---
+ webserver/cWebem.cpp                  |  4 ++--
+ webserver/cWebem.h                    |  3 +--
+ webserver/connection.cpp              | 24 ++++++++----------------
+ webserver/connection.hpp              |  5 ++---
+ 9 files changed, 28 insertions(+), 41 deletions(-)
+
+diff --git a/hardware/ASyncTCP.cpp b/hardware/ASyncTCP.cpp
+index 1819352c1f..8d3aded54c 100644
+--- a/hardware/ASyncTCP.cpp
++++ b/hardware/ASyncTCP.cpp
+@@ -186,7 +186,7 @@ void ASyncTCP::reconnect_start_timer()
+ 	{
+ 		m_bIsReconnecting = true;
+ 
+-		m_ReconnectTimer.expires_from_now(boost::posix_time::seconds(m_iReconnectDelay));
++		m_ReconnectTimer.expires_after(std::chrono::seconds(m_iReconnectDelay));
+ 		m_ReconnectTimer.async_wait(
+ 			[this](const boost::system::error_code& error) {
+ 				cb_reconnect_start(error);
+@@ -398,7 +398,7 @@ void ASyncTCP::timeout_start_timer()
+ 		return;
+ 	}
+ 	timeout_cancel_timer();
+-	m_TimeoutTimer.expires_from_now(boost::posix_time::seconds(m_iTimeoutDelay));
++	m_TimeoutTimer.expires_after(std::chrono::seconds(m_iTimeoutDelay));
+ 	m_TimeoutTimer.async_wait(
+ 		[this](const boost::system::error_code& error) {
+ 			timeout_handler(error);
+diff --git a/hardware/ASyncTCP.h b/hardware/ASyncTCP.h
+index 27e18f25d8..cefe5c0752 100644
+--- a/hardware/ASyncTCP.h
++++ b/hardware/ASyncTCP.h
+@@ -2,7 +2,6 @@
+ 
+ #include <stddef.h>
+ #include <deque>
+-#include <boost/asio/deadline_timer.hpp>
+ #include <boost/asio/io_context.hpp>
+ #include <boost/asio/strand.hpp>
+ #include <boost/asio/ip/tcp.hpp>
+@@ -76,8 +75,8 @@ class ASyncTCP
+ 
+ 	int m_iReconnectDelay = DEFAULT_RECONNECT_TIME;
+ 	int m_iTimeoutDelay = 0;
+-	boost::asio::deadline_timer m_ReconnectTimer;
+-	boost::asio::deadline_timer m_TimeoutTimer;
++	boost::asio::steady_timer m_ReconnectTimer;
++	boost::asio::steady_timer m_TimeoutTimer;
+ 
+ 	std::shared_ptr<std::thread> m_Tcpthread;
+ 	std::optional<boost::asio::executor_work_guard<boost::asio::io_context::executor_type>> m_Tcpwork;
+diff --git a/hardware/Pinger.cpp b/hardware/Pinger.cpp
+index faa8cc42e7..01c9505ae4 100644
+--- a/hardware/Pinger.cpp
++++ b/hardware/Pinger.cpp
+@@ -12,7 +12,6 @@
+ #include <json/json.h>
+ 
+ #include <boost/asio.hpp>
+-#include <boost/asio/deadline_timer.hpp>
+ 
+ #include "pinger/icmp_header.h"
+ #include "pinger/ipv4_header.h"
+@@ -68,11 +67,11 @@ class pinger
+ 		os << echo_request << body;
+ 
+ 		// Send the request.
+-		time_sent_ = boost::posix_time::microsec_clock::universal_time();
++		time_sent_ = std::chrono::steady_clock::now();
+ 		socket_.send_to(request_buffer.data(), destination_);
+ 
+ 		num_replies_ = 0;
+-		timer_.expires_at(time_sent_ + boost::posix_time::milliseconds(PingTimeoutms_));
++		timer_.expires_at(time_sent_ + std::chrono::milliseconds(PingTimeoutms_));
+ 		timer_.async_wait([this](auto err) { handle_timeout(err); });
+ 	}
+ 
+@@ -83,7 +82,7 @@ class pinger
+ 			if (num_replies_ == 0)
+ 			{
+ 				m_PingState = false;
+-				timer_.expires_at(time_sent_ + boost::posix_time::milliseconds(PingTimeoutms_));
++				timer_.expires_at(time_sent_ + std::chrono::milliseconds(PingTimeoutms_));
+ 				num_tries_++;
+ 				if (num_tries_ > 4)
+ 				{
+@@ -150,9 +149,9 @@ class pinger
+ 	boost::asio::ip::icmp::resolver resolver_;
+ 	boost::asio::ip::icmp::endpoint destination_;
+ 	boost::asio::ip::icmp::socket socket_;
+-	boost::asio::deadline_timer timer_;
++	boost::asio::steady_timer timer_;
+ 	unsigned short sequence_number_;
+-	boost::posix_time::ptime time_sent_;
++	std::chrono::time_point<std::chrono::steady_clock> time_sent_;
+ 	boost::asio::streambuf reply_buffer_;
+ };
+ 
+diff --git a/hardware/plugins/PluginTransports.cpp b/hardware/plugins/PluginTransports.cpp
+index f7ace0f7aa..ff874eb653 100644
+--- a/hardware/plugins/PluginTransports.cpp
++++ b/hardware/plugins/PluginTransports.cpp
+@@ -24,9 +24,9 @@ namespace Plugins {
+ 			// Set up timeout if one was requested
+ 			if (!m_Timer)
+ 			{
+-				m_Timer = new boost::asio::deadline_timer(ios);
++				m_Timer = new boost::asio::steady_timer(ios);
+ 			}
+-			m_Timer->expires_from_now(boost::posix_time::milliseconds(m_pConnection->Timeout));
++			m_Timer->expires_after(std::chrono::milliseconds(m_pConnection->Timeout));
+ 			m_Timer->async_wait([this](const boost::system::error_code &ec) { handleTimeout(ec); });
+ 		}
+ 		else
+@@ -989,9 +989,9 @@ namespace Plugins {
+ 		// Reset timeout if one is set or set one
+ 		if (!m_Timer)
+ 		{
+-			m_Timer = new boost::asio::deadline_timer(ios);
++			m_Timer = new boost::asio::steady_timer(ios);
+ 		}
+-		m_Timer->expires_from_now(boost::posix_time::seconds(5));
++		m_Timer->expires_after(std::chrono::seconds(5));
+ 		m_Timer->async_wait([this](auto &&err) { handleTimeout(err); });
+ 
+ 		// Create an ICMP header for an echo request.
+diff --git a/hardware/plugins/PluginTransports.h b/hardware/plugins/PluginTransports.h
+index e2bab2fbe9..fc459faf12 100644
+--- a/hardware/plugins/PluginTransports.h
++++ b/hardware/plugins/PluginTransports.h
+@@ -2,7 +2,6 @@
+ 
+ #include "../ASyncSerial.h"
+ #include <boost/asio.hpp>
+-#include <boost/asio/deadline_timer.hpp>
+ #include <ctime>
+ 
+ namespace Plugins {
+@@ -26,7 +25,7 @@ namespace Plugins {
+ 		CConnection *	m_pConnection;
+ 
+ 	protected:
+-		boost::asio::deadline_timer *m_Timer;
++		boost::asio::steady_timer *m_Timer;
+ 		virtual void configureTimeout();
+ 
+ 	      public:
+@@ -164,7 +163,7 @@ namespace Plugins {
+ 	  boost::asio::ip::icmp::resolver m_Resolver;
+ 	  boost::asio::ip::icmp::socket *m_Socket;
+ 	  boost::asio::ip::icmp::endpoint m_Endpoint;
+-	  boost::asio::deadline_timer *m_Timer;
++	  boost::asio::steady_timer *m_Timer;
+ 
+ 	  clock_t m_Clock;
+ 	  int m_SequenceNo;
+diff --git a/webserver/cWebem.cpp b/webserver/cWebem.cpp
+index 04a0d39025..ba159efec3 100644
+--- a/webserver/cWebem.cpp
++++ b/webserver/cWebem.cpp
+@@ -48,7 +48,7 @@ namespace http {
+ 			// Rene, make sure we initialize m_sessions first, before starting a server
+ 			, myServer(server_factory::create(settings, myRequestHandler))
+ 			, m_io_context()
+-			, m_session_clean_timer(m_io_context, boost::posix_time::minutes(1))
++			, m_session_clean_timer(m_io_context, std::chrono::minutes(1))
+ 		{
+ 			// associate handler to timer and schedule the first iteration
+ 			m_session_clean_timer.async_wait([this](auto &&) { CleanSessions(); });
+@@ -894,7 +894,7 @@ namespace http {
+ 				mySessionStore->CleanSessions();
+ 			}
+ 			// Schedule next cleanup
+-			m_session_clean_timer.expires_from_now(boost::posix_time::minutes(15));
++			m_session_clean_timer.expires_after(std::chrono::minutes(15));
+ 			m_session_clean_timer.async_wait([this](auto &&) { CleanSessions(); });
+ 		}
+ 
+diff --git a/webserver/cWebem.h b/webserver/cWebem.h
+index 86a8c3f636..681c229dcb 100644
+--- a/webserver/cWebem.h
++++ b/webserver/cWebem.h
+@@ -1,7 +1,6 @@
+ #pragma once
+ 
+ #include <boost/asio.hpp>
+-#include <boost/asio/deadline_timer.hpp>
+ #include <boost/thread.hpp>
+ #include "server.hpp"
+ #include "session_store.hpp"
+@@ -260,7 +259,7 @@ namespace http
+ 			/// sessions management
+ 			std::mutex m_sessionsMutex;
+ 			boost::asio::io_context m_io_context;
+-			boost::asio::deadline_timer m_session_clean_timer;
++			boost::asio::steady_timer m_session_clean_timer;
+ 			std::shared_ptr<std::thread> m_io_context_thread;
+ 		};
+ 
+diff --git a/webserver/connection.cpp b/webserver/connection.cpp
+index 3a70924f19..cc3593f3bc 100644
+--- a/webserver/connection.cpp
++++ b/webserver/connection.cpp
+@@ -25,10 +25,10 @@ namespace http {
+ 		connection::connection(boost::asio::io_context &io_context, connection_manager &manager, request_handler &handler, int read_timeout)
+ 			: send_buffer_(nullptr)
+ 			, read_timeout_(read_timeout)
+-			, read_timer_(io_context, boost::posix_time::seconds(read_timeout))
++			, read_timer_(io_context, std::chrono::seconds(read_timeout))
+ 			, default_abandoned_timeout_(20 * 60)
+ 			// 20mn before stopping abandoned connection
+-			, abandoned_timer_(io_context, boost::posix_time::seconds(default_abandoned_timeout_))
++			, abandoned_timer_(io_context, std::chrono::seconds(default_abandoned_timeout_))
+ 			, connection_manager_(manager)
+ 			, request_handler_(handler)
+ 			, status_(INITIALIZING)
+@@ -47,10 +47,10 @@ namespace http {
+ 		connection::connection(boost::asio::io_context &io_context, connection_manager &manager, request_handler &handler, int read_timeout, boost::asio::ssl::context &context)
+ 			: send_buffer_(nullptr)
+ 			, read_timeout_(read_timeout)
+-			, read_timer_(io_context, boost::posix_time::seconds(read_timeout))
++			, read_timer_(io_context, std::chrono::seconds(read_timeout))
+ 			, default_abandoned_timeout_(20 * 60)
+ 			// 20mn before stopping abandoned connection
+-			, abandoned_timer_(io_context, boost::posix_time::seconds(default_abandoned_timeout_))
++			, abandoned_timer_(io_context, std::chrono::seconds(default_abandoned_timeout_))
+ 			, connection_manager_(manager)
+ 			, request_handler_(handler)
+ 			, status_(INITIALIZING)
+@@ -597,18 +597,14 @@ namespace http {
+ 
+ 		// schedule read timeout timer
+ 		void connection::set_read_timeout() {
+-			read_timer_.expires_from_now(boost::posix_time::seconds(read_timeout_));
++			read_timer_.expires_after(std::chrono::seconds(read_timeout_));
+ 			read_timer_.async_wait([self = shared_from_this()](auto &&err) { self->handle_read_timeout(err); });
+ 		}
+ 
+ 		/// simply cancel read timeout timer
+ 		void connection::cancel_read_timeout() {
+ 			try {
+-				boost::system::error_code ignored_ec;
+-				read_timer_.cancel(ignored_ec);
+-				if (ignored_ec) {
+-					_log.Log(LOG_ERROR, "%s -> exception thrown while canceling read timeout : %s", host_remote_endpoint_address_.c_str(), ignored_ec.message().c_str());
+-				}
++				read_timer_.cancel();
+ 			}
+ 			catch (...) {
+ 				_log.Log(LOG_ERROR, "%s -> exception thrown while canceling read timeout", host_remote_endpoint_address_.c_str());
+@@ -640,18 +636,14 @@ namespace http {
+ 
+ 		/// schedule abandoned timeout timer
+ 		void connection::set_abandoned_timeout() {
+-			abandoned_timer_.expires_from_now(boost::posix_time::seconds(default_abandoned_timeout_));
++			abandoned_timer_.expires_after(std::chrono::seconds(default_abandoned_timeout_));
+ 			abandoned_timer_.async_wait([self = shared_from_this()](auto &&err) { self->handle_abandoned_timeout(err); });
+ 		}
+ 
+ 		/// simply cancel abandoned timeout timer
+ 		void connection::cancel_abandoned_timeout() {
+ 			try {
+-				boost::system::error_code ignored_ec;
+-				abandoned_timer_.cancel(ignored_ec);
+-				if (ignored_ec) {
+-					_log.Log(LOG_ERROR, "%s -> exception thrown while canceling abandoned timeout : %s", host_remote_endpoint_address_.c_str(), ignored_ec.message().c_str());
+-				}
++				abandoned_timer_.cancel();
+ 			}
+ 			catch (...) {
+ 				_log.Log(LOG_ERROR, "%s -> exception thrown while canceling abandoned timeout", host_remote_endpoint_address_.c_str());
+diff --git a/webserver/connection.hpp b/webserver/connection.hpp
+index b9c5f9fa36..ed025d0e2d 100644
+--- a/webserver/connection.hpp
++++ b/webserver/connection.hpp
+@@ -12,7 +12,6 @@
+ #define HTTP_CONNECTION_HPP
+ 
+ #include <boost/asio.hpp>
+-#include <boost/asio/deadline_timer.hpp>
+ #include <deque>
+ #include <fstream>
+ #include "reply.hpp"
+@@ -128,12 +127,12 @@ namespace http {
+ 			int read_timeout_;
+ 
+ 			/// Read timeout timer
+-			boost::asio::deadline_timer read_timer_;
++			boost::asio::steady_timer read_timer_;
+ 
+ 			/// Abandoned connection timeout (in seconds)
+ 			long default_abandoned_timeout_;
+ 			/// Abandoned timeout timer
+-			boost::asio::deadline_timer abandoned_timer_;
++			boost::asio::steady_timer abandoned_timer_;
+ 
+ 			/// The manager for this connection.
+ 			connection_manager& connection_manager_;
+From 356e71e6707a2e6f55b499497b6f620ce035a67d Mon Sep 17 00:00:00 2001
+From: Arjen de Korte <build+github@de-korte.org>
+Date: Sat, 20 Dec 2025 15:24:55 +0100
+Subject: [PATCH] Fix post call to use io_context_ for handle_stop
+
+Could it be this is missing? Up to (and including) Boost 1.89.0 this didn't seem to be a problem, but starting with Boost 1.90.0 I get compilation errors on this line, which seem to be fixed with this patch.
+---
+ tcpserver/TCPServer.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tcpserver/TCPServer.cpp b/tcpserver/TCPServer.cpp
+index b43b2e774d..47f222c99a 100644
+--- a/tcpserver/TCPServer.cpp
++++ b/tcpserver/TCPServer.cpp
+@@ -59,7 +59,7 @@ namespace tcp {
+ 			// Post a call to the stop function so that server::stop() is safe to call
+ 			// from any thread.
+ 			flghandle_stop_Completed=false;
+-			boost::asio::post([this] { handle_stop(); });
++			boost::asio::post(io_context_, [this] { handle_stop(); });
+ 		}
+ 
+ 		void CTCPServerInt::handle_stop()
+

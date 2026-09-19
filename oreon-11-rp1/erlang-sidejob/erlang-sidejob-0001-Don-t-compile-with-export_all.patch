@@ -1,0 +1,45 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 17 Aug 2018 15:16:48 +0300
+Subject: [PATCH] Don't compile with export_all
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/test/sidejob_eqc.erl b/test/sidejob_eqc.erl
+index b826594..18270ff 100644
+--- a/test/sidejob_eqc.erl
++++ b/test/sidejob_eqc.erl
+@@ -4,8 +4,6 @@
+ %%% Created     : 13 May 2013 by Ulf Norell
+ -module(sidejob_eqc).
+ 
+--compile(export_all).
+-
+ -ifdef(EQC).
+ -include_lib("eqc/include/eqc_statem.hrl").
+ -include_lib("eqc/include/eqc.hrl").
+diff --git a/test/supervisor_eqc.erl b/test/supervisor_eqc.erl
+index 3b44cc9..399795f 100644
+--- a/test/supervisor_eqc.erl
++++ b/test/supervisor_eqc.erl
+@@ -4,8 +4,6 @@
+ %%% Created     : 15 May 2013 by Ulf Norell
+ -module(supervisor_eqc).
+ 
+--compile(export_all).
+-
+ -ifdef(EQC).
+ -include_lib("eqc/include/eqc_statem.hrl").
+ -include_lib("eqc/include/eqc.hrl").
+diff --git a/test/worker.erl b/test/worker.erl
+index 160ef2e..a470b30 100644
+--- a/test/worker.erl
++++ b/test/worker.erl
+@@ -4,8 +4,6 @@
+ %%% Created     : 13 May 2013 by Ulf Norell
+ -module(worker).
+ 
+--compile(export_all).
+-
+ -behaviour(gen_server).
+ 
+ %% API

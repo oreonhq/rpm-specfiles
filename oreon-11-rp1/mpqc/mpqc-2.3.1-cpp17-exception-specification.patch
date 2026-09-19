@@ -1,0 +1,91 @@
+diff --git a/src/lib/chemistry/qc/mbptr12/transform_ijxy.cc b/src/lib/chemistry/qc/mbptr12/transform_ijxy.cc
+index 2b45d3b..a25e5f9 100644
+--- a/src/lib/chemistry/qc/mbptr12/transform_ijxy.cc
++++ b/src/lib/chemistry/qc/mbptr12/transform_ijxy.cc
+@@ -174,7 +174,7 @@ TwoBodyMOIntsTransform_ijxy::init_acc()
+ }
+ 
+ void
+-TwoBodyMOIntsTransform_ijxy::check_int_symm(double threshold) const throw (ProgrammingError)
++TwoBodyMOIntsTransform_ijxy::check_int_symm(double threshold) const /*throw (ProgrammingError)*/
+ {
+   Ref<R12IntsAcc> iacc = ints_acc();
+   if (!iacc->is_committed())
+diff --git a/src/lib/chemistry/qc/mbptr12/transform_ijxy.h b/src/lib/chemistry/qc/mbptr12/transform_ijxy.h
+index 3407cb3..ecb61c6 100644
+--- a/src/lib/chemistry/qc/mbptr12/transform_ijxy.h
++++ b/src/lib/chemistry/qc/mbptr12/transform_ijxy.h
+@@ -70,7 +70,7 @@ public:
+   /// Computes transformed integrals
+   void compute();
+   /// Check symmetry of transformed integrals
+-  void check_int_symm(double threshold = TwoBodyMOIntsTransform::zero_integral) const throw (ProgrammingError);
++  void check_int_symm(double threshold = TwoBodyMOIntsTransform::zero_integral) const /*throw (ProgrammingError)*/;
+ };
+ 
+ }
+diff --git a/src/lib/chemistry/qc/mbptr12/transform_ikjy.cc b/src/lib/chemistry/qc/mbptr12/transform_ikjy.cc
+index ccb8d45..43c2fb6 100644
+--- a/src/lib/chemistry/qc/mbptr12/transform_ikjy.cc
++++ b/src/lib/chemistry/qc/mbptr12/transform_ikjy.cc
+@@ -175,7 +175,7 @@ TwoBodyMOIntsTransform_ikjy::init_acc()
+ }
+ 
+ void
+-TwoBodyMOIntsTransform_ikjy::check_int_symm(double threshold) const throw (ProgrammingError)
++TwoBodyMOIntsTransform_ikjy::check_int_symm(double threshold) const /*throw (ProgrammingError)*/
+ {
+   Ref<R12IntsAcc> iacc = ints_acc();
+   if (!iacc->is_committed())
+diff --git a/src/lib/chemistry/qc/mbptr12/transform_ikjy.h b/src/lib/chemistry/qc/mbptr12/transform_ikjy.h
+index 5697813..4be38e4 100644
+--- a/src/lib/chemistry/qc/mbptr12/transform_ikjy.h
++++ b/src/lib/chemistry/qc/mbptr12/transform_ikjy.h
+@@ -70,7 +70,7 @@ public:
+   /// Computes transformed integrals
+   void compute();
+   /// Check symmetry of transformed integrals
+-  void check_int_symm(double threshold = TwoBodyMOIntsTransform::zero_integral) const throw (ProgrammingError);
++  void check_int_symm(double threshold = TwoBodyMOIntsTransform::zero_integral) const /*throw (ProgrammingError)*/;
+ };
+ 
+ }
+diff --git a/src/lib/chemistry/qc/mbptr12/transform_ixjy.cc b/src/lib/chemistry/qc/mbptr12/transform_ixjy.cc
+index 2548296..b4f08cd 100644
+--- a/src/lib/chemistry/qc/mbptr12/transform_ixjy.cc
++++ b/src/lib/chemistry/qc/mbptr12/transform_ixjy.cc
+@@ -182,7 +182,7 @@ TwoBodyMOIntsTransform_ixjy::init_acc()
+ }
+ 
+ void
+-TwoBodyMOIntsTransform_ixjy::check_int_symm(double threshold) const throw (ProgrammingError)
++TwoBodyMOIntsTransform_ixjy::check_int_symm(double threshold) const /*throw (ProgrammingError)*/
+ {
+   Ref<R12IntsAcc> iacc = ints_acc();
+   if (!iacc->is_committed())
+diff --git a/src/lib/chemistry/qc/mbptr12/transform_ixjy.h b/src/lib/chemistry/qc/mbptr12/transform_ixjy.h
+index 8fda231..a10e4ef 100644
+--- a/src/lib/chemistry/qc/mbptr12/transform_ixjy.h
++++ b/src/lib/chemistry/qc/mbptr12/transform_ixjy.h
+@@ -71,7 +71,7 @@ public:
+   /// Computes transformed integrals
+   void compute();
+   /// Check symmetry of transformed integrals
+-  void check_int_symm(double threshold = TwoBodyMOIntsTransform::zero_integral) const throw (ProgrammingError);
++  void check_int_symm(double threshold = TwoBodyMOIntsTransform::zero_integral) const /*throw (ProgrammingError)*/;
+ };
+ 
+ }
+diff --git a/src/lib/chemistry/qc/mbptr12/transform_tbint.h b/src/lib/chemistry/qc/mbptr12/transform_tbint.h
+index 731a53c..57e4e19 100644
+--- a/src/lib/chemistry/qc/mbptr12/transform_tbint.h
++++ b/src/lib/chemistry/qc/mbptr12/transform_tbint.h
+@@ -196,7 +196,7 @@ public:
+   /// Computes transformed integrals
+   virtual void compute() = 0;
+   /// Check symmetry of transformed integrals
+-  virtual void check_int_symm(double threshold = TwoBodyMOIntsTransform::zero_integral) const throw (ProgrammingError) =0;
++  virtual void check_int_symm(double threshold = TwoBodyMOIntsTransform::zero_integral) const /*throw (ProgrammingError)*/ =0;
+   /// Make the transform obsolete. Next call to compute() will recompute
+   virtual void obsolete();
+ 

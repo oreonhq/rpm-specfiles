@@ -1,0 +1,33 @@
+From 5015baa7e1a3d9e5bd13a74338e52a1686f4dca0 Mon Sep 17 00:00:00 2001
+From: Karolina Surma <33810531+befeleme@users.noreply.github.com>
+Date: Wed, 24 Apr 2024 09:29:01 +0200
+Subject: [PATCH] Support Python 3.13
+
+What's new in Python 3.13 states:
+"logging: Remove undocumented and untested Logger.warn() and LoggerAdapter.warn() methods and logging.warn() function. Deprecated since Python 3.3, they were aliases to the logging.Logger.warning() method, logging.LoggerAdapter.warning() method and logging.warning() function. (Contributed by Victor Stinner in gh-105376.)"
+---
+ src/etcd/lock.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/etcd/lock.py b/src/etcd/lock.py
+index 013bc23..2f790dd 100644
+--- a/src/etcd/lock.py
++++ b/src/etcd/lock.py
+@@ -35,7 +35,7 @@ def uuid(self, value):
+         old_uuid = self._uuid
+         self._uuid = value
+         if not self._find_lock():
+-            _log.warn("The hand-set uuid was not found, refusing")
++            _log.warning("The hand-set uuid was not found, refusing")
+             self._uuid = old_uuid
+             raise ValueError("Inexistent UUID")
+ 
+@@ -51,7 +51,7 @@ def is_acquired(self):
+             self.client.read(self.lock_key)
+             return True
+         except etcd.EtcdKeyNotFound:
+-            _log.warn("Lock was supposedly taken, but we cannot find it")
++            _log.warning("Lock was supposedly taken, but we cannot find it")
+             self.is_taken = False
+             return False
+ 

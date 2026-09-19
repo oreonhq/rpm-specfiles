@@ -1,0 +1,55 @@
+From 0e67f1ec9cd61a7cbf03bedf79083bce7c227b8e Mon Sep 17 00:00:00 2001
+From: Tomas Tomecek <ttomecek@redhat.com>
+Date: Fri, 24 Jun 2016 11:38:32 +0200
+Subject: [PATCH] install-py: add distribution argument
+
+---
+ install.py | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/install.py b/install.py
+index b48dbe4..a7307c4 100755
+--- a/install.py
++++ b/install.py
+@@ -104,6 +104,10 @@ def parse_arguments():  # noqa
+         '-s', '--system', action='store_true', default=False,
+         help='install system wide for all users',
+     )
++    parser.add_argument(
++        '--distribution', action="store_true", default=False,
++        help='enable installation to a distribution'
++    )
+ 
+     args = parser.parse_args()
+ 
+@@ -187,8 +191,10 @@ def main(args):
+         print('Installing autojump to %s ...' % args.destdir)
+ 
+     bin_dir = os.path.join(args.destdir, args.prefix, 'bin')
++    root_etc_dir = os.path.join('/', 'etc', 'profile.d')
+     etc_dir = os.path.join(args.destdir, 'etc', 'profile.d')
+     doc_dir = os.path.join(args.destdir, args.prefix, 'share', 'man', 'man1')
++    root_share_dir = os.path.join('/', args.prefix, 'share', 'autojump')
+     share_dir = os.path.join(args.destdir, args.prefix, 'share', 'autojump')
+     zshshare_dir = os.path.join(args.destdir, args.zshshare)
+ 
+@@ -227,9 +233,15 @@ def main(args):
+         cp('./bin/_j', zshshare_dir, args.dryrun)
+ 
+         if args.custom_install:
+-            modify_autojump_sh(etc_dir, share_dir, args.dryrun)
++            if args.distribution:
++                modify_autojump_sh(etc_dir, root_share_dir, args.dryrun)
++            else:
++                modify_autojump_sh(etc_dir, share_dir, args.dryrun)
+ 
+-    show_post_installation_message(etc_dir, share_dir, bin_dir)
++    if args.distribution:
++        show_post_installation_message(root_etc_dir, root_share_dir, bin_dir)
++    else:
++        show_post_installation_message(etc_dir, share_dir, bin_dir)
+ 
+ 
+ if __name__ == '__main__':
+-- 
+2.9.0

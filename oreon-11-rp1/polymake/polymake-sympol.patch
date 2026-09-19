@@ -1,0 +1,87 @@
+--- bundled/sympol/external/sympol/CMakeLists.txt.orig	2024-09-24 03:32:47.000000000 -0600
++++ bundled/sympol/external/sympol/CMakeLists.txt	2025-06-09 16:44:14.377955169 -0600
+@@ -22,8 +22,6 @@ enable_testing()
+ add_test(NAME perltest WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/contrib COMMAND perl test-sympol.pl ${PROJECT_BINARY_DIR})
+ 
+ add_subdirectory(sympol)
+-add_subdirectory(external/lrslib-042c)
+-add_subdirectory(external/cddlib-094f)
+ add_subdirectory(test)
+ 
+ exec_program( ${CMAKE_COMMAND} ARGS -E copy_directory ${PROJECT_SOURCE_DIR}/data ${PROJECT_BINARY_DIR}/data )
+--- bundled/sympol/external/sympol/sympol/CMakeLists.txt.orig	2024-09-24 03:32:47.000000000 -0600
++++ bundled/sympol/external/sympol/sympol/CMakeLists.txt	2025-06-09 16:45:30.217033043 -0600
+@@ -73,7 +73,7 @@ set_target_properties(sympol PROPERTIES
+ add_executable(sympolbin sympol.cpp)
+ set_target_properties(sympolbin PROPERTIES OUTPUT_NAME sympol)
+ 
+-set(TARGET_LIBS ${TARGET_LIBS} lrsgmp cddgmp ${GMP_LIBRARIES} ${Boost_LIBRARIES})
++set(TARGET_LIBS ${TARGET_LIBS} lrs cddgmp ${GMP_LIBRARIES} ${Boost_LIBRARIES})
+ target_link_libraries(sympol ${TARGET_LIBS})
+ target_link_libraries(sympolbin sympol)
+ 
+--- bundled/sympol/external/sympol/sympol/symmetrygroupconstruction/graphconstructionbliss.cpp.orig	2024-09-24 03:32:47.000000000 -0600
++++ bundled/sympol/external/sympol/sympol/symmetrygroupconstruction/graphconstructionbliss.cpp	2025-06-09 16:50:40.989143096 -0600
+@@ -8,6 +8,7 @@
+ #if HAVE_BLISS
+ 
+ #include <bliss/graph.hh>
++#include <cmath>
+ 
+ using namespace sympol;
+ using namespace yal;
+@@ -20,28 +21,23 @@ static LoggerPtr logger(Logger::getLogge
+ struct BlissData {
+ 	unsigned int T;
+ 	std::list<Permutation::ptr> generators;
++
++	BlissData(unsigned int n) : T(n) {}
++	void blisshook(unsigned int n, const unsigned int *aut);
+ };
+ 
+ 
+ /// bliss callback for graph automorphism generators
+-static
+-void blisshook(
+-	void*                 user_param,
+-	unsigned int          n,
+-	const unsigned int*   aut
+-	)
++void BlissData::blisshook(unsigned int n, const unsigned int* aut)
+ {
+-	BOOST_ASSERT( user_param != 0 );
+-	BlissData* bliss = reinterpret_cast<BlissData*>(user_param);
+-	
+-	BOOST_ASSERT( n % bliss->T == 0 );
+-	Permutation::perm proj(n / bliss->T);
++	BOOST_ASSERT( n % T == 0 );
++	Permutation::perm proj(n / T);
+ 	for (unsigned int i = 0; i < proj.size(); ++i) {
+ 		proj[i] = aut[i];
+ 		BOOST_ASSERT( aut[i] < proj.size() );
+ 	}
+ 	Permutation::ptr p(new Permutation(proj));
+-	bliss->generators.push_back(p);
++	generators.push_back(p);
+ }
+ 
+ 
+@@ -71,14 +67,15 @@ boost::shared_ptr<sympol::PermutationGro
+ 	YALLOG_DEBUG(logger, "start graph automorphism search with bliss");
+ 	
+ 	bliss::Stats stats;
+-	BlissData data;
+-	data.T = T;
++	BlissData data(T);
+ 	/* Prefer splitting partition cells corresponding to nodes with color 0 or 1,
+ 	 * so that we obtain a group basis beginning with them. */
+ 	G.set_splitting_heuristic(bliss::Graph::shs_f);
+ 	// disable component recursion as advised by Tommi Junttila from bliss
+ 	G.set_component_recursion(false);
+-	G.find_automorphisms(stats, blisshook, &data);
++	std::function<void(unsigned int, const unsigned int *)> report =
++		std::bind(&BlissData::blisshook, data, std::placeholders::_1, std::placeholders::_2);
++	G.find_automorphisms(stats, report);
+ 	if (yal::DEBUG <= yal::ReportLevel::get())
+ 		stats.print(stdout);
+ 	else 

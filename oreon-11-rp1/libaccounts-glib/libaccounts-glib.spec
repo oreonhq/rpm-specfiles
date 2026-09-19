@@ -1,8 +1,8 @@
 %global source0_hash 47d4b2a5cf4f17f52550aa65b34030fbd1a242e1a233f248a5871620e0ff4c11
 
 Name:           libaccounts-glib
-Version:        1.25
-Release:        24%{?dist}
+Version:        1.27
+Release:        1%{?dist}
 Summary:        Accounts framework for Linux and POSIX based platforms
 # Automatically converted from old format: LGPLv2 - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2

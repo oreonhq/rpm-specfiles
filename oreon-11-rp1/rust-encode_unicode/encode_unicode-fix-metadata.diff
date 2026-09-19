@@ -1,0 +1,13 @@
+--- encode_unicode-1.0.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ encode_unicode-1.0.0/Cargo.toml	2023-08-07T20:07:36.318487+00:00
+@@ -44,10 +44,6 @@
+ optional = true
+ default-features = false
+ 
+-[dev-dependencies.minreq]
+-version = "^2.6"
+-features = ["https-native"]
+-
+ [features]
+ default = ["std"]
+ std = []

@@ -1,0 +1,12 @@
+diff -up ./php-cs-fixer.rpm ./php-cs-fixer
+--- ./php-cs-fixer.rpm	2022-01-14 15:01:36.281743286 +0100
++++ ./php-cs-fixer	2022-01-14 15:01:59.983646138 +0100
+@@ -81,7 +81,7 @@ set_error_handler(static function ($seve
+ 
+     if ($require) {
+         // OK, it's not, let give Composer autoloader a try!
+-        $possibleFiles = [__DIR__.'/../../autoload.php', __DIR__.'/../autoload.php', __DIR__.'/vendor/autoload.php'];
++        $possibleFiles = ['/usr/share/php-cs-fixer/vendor/autoload.php'];
+         $file = null;
+         foreach ($possibleFiles as $possibleFile) {
+             if (file_exists($possibleFile)) {

@@ -1,0 +1,123 @@
+Author: HIGUCHI Daisuke (VDR dai) <dai@debian.org>
+Description: fix FTBFS with ruby-rspec 3.12
+Bug-Debian: https://bugs.debian.org/1027092
+Last-Update: 2023-01-03
+
+
+
+Index: ruby-stomp/spec/client_spec.rb
+===================================================================
+--- ruby-stomp.orig/spec/client_spec.rb
++++ ruby-stomp/spec/client_spec.rb
+@@ -136,13 +136,13 @@ describe Stomp::Client do
+     end
+ 
+     it "should properly parse the URL provided" do
+-      expect(Stomp::Connection).to receive(:new).with(:hosts => [{:login => 'testlogin',
++      expect(Stomp::Connection).to receive(:new).with({:hosts => [{:login => 'testlogin',
+                                                               :passcode => 'testpassword',
+                                                               :host => 'localhost',
+                                                               :port => 12345}],
+                                                   :logger => null_logger,
+                                                   :reliable => false,
+-												:client_main => @cli_thread)
++												:client_main => @cli_thread})
+       Stomp::Client.new('testlogin', 'testpassword', 'localhost', '12345', false)
+     end
+ 
+@@ -157,13 +157,13 @@ describe Stomp::Client do
+     end
+ 
+     it "should properly parse the URL provided" do
+-      expect(Stomp::Connection).to receive(:new).with(:hosts => [{:login => '',
++      expect(Stomp::Connection).to receive(:new).with({:hosts => [{:login => '',
+                                                               :passcode => '',
+                                                               :host => 'foobar',
+                                                               :port => 12345}],
+                                                   :logger => null_logger,
+                                                   :reliable => false,
+-												:client_main => @cli_thread)
++												:client_main => @cli_thread})
+       Stomp::Client.new('stomp://foobar:12345')
+     end
+ 
+@@ -179,13 +179,13 @@ describe Stomp::Client do
+     end
+ 
+     it "should properly parse the URL provided" do
+-      expect(Stomp::Connection).to receive(:new).with(:hosts => [{:login => '',
++      expect(Stomp::Connection).to receive(:new).with({:hosts => [{:login => '',
+                                                               :passcode => '',
+                                                               :host => 'foo-bar',
+                                                               :port => 12345}],
+                                                   :logger => null_logger,
+                                                   :reliable => false,
+-												:client_main => @cli_thread)
++												:client_main => @cli_thread})
+       Stomp::Client.new('stomp://foo-bar:12345')
+     end
+ 
+@@ -201,13 +201,13 @@ describe Stomp::Client do
+     end
+ 
+     it "should properly parse the URL provided" do
+-      expect(Stomp::Connection).to receive(:new).with(:hosts => [{:login => 'test-login',
++      expect(Stomp::Connection).to receive(:new).with({:hosts => [{:login => 'test-login',
+                                                               :passcode => 'testpasscode',
+                                                               :host => 'foobar',
+                                                               :port => 12345}],
+                                                   :logger => null_logger,
+                                                   :reliable => false,
+-												:client_main => @cli_thread)
++												:client_main => @cli_thread})
+       Stomp::Client.new('stomp://test-login:testpasscode@foobar:12345')
+     end
+ 
+@@ -223,13 +223,13 @@ describe Stomp::Client do
+     end
+ 
+     it "should properly parse the URL provided" do
+-      expect(Stomp::Connection).to receive(:new).with(:hosts => [{:login => 'test-login',
++      expect(Stomp::Connection).to receive(:new).with({:hosts => [{:login => 'test-login',
+                                                               :passcode => 'testpasscode',
+                                                               :host => 'foo-bar',
+                                                               :port => 12345}],
+                                                   :logger => null_logger,
+                                                   :reliable => false,
+-												:client_main => @cli_thread)
++												:client_main => @cli_thread})
+       Stomp::Client.new('stomp://test-login:testpasscode@foo-bar:12345')
+     end
+ 
+@@ -248,13 +248,13 @@ describe Stomp::Client do
+     end
+ 
+     it "should properly parse the URL provided" do
+-      expect(Stomp::Connection).to receive(:new).with(:hosts => [{:login => '',
++      expect(Stomp::Connection).to receive(:new).with({:hosts => [{:login => '',
+                                                               :passcode => '',
+                                                               :host => 'host.foobar.com',
+                                                               :port => 12345}],
+                                                   :logger => null_logger,
+                                                   :reliable => false,
+-												:client_main => @cli_thread)
++												:client_main => @cli_thread})
+       Stomp::Client.new('stomp://host.foobar.com:12345')
+     end
+ 
+@@ -270,13 +270,13 @@ describe Stomp::Client do
+     end
+ 
+     it "should properly parse the URL provided" do
+-      expect(Stomp::Connection).to receive(:new).with(:hosts => [{:login => 'testlogin',
++      expect(Stomp::Connection).to receive(:new).with({:hosts => [{:login => 'testlogin',
+                                                               :passcode => 'testpasscode',
+                                                               :host => 'host.foobar.com',
+                                                               :port => 12345}],
+                                                   :logger => null_logger,
+                                                   :reliable => false,
+-												:client_main => @cli_thread)
++												:client_main => @cli_thread})
+       Stomp::Client.new('stomp://testlogin:testpasscode@host.foobar.com:12345')
+     end
+ 

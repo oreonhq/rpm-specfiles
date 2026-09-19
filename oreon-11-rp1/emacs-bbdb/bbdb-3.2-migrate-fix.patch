@@ -1,0 +1,11 @@
+--- bbdb/lisp/bbdb.el~	2020-10-13 13:46:31.000000000 +0200
++++ bbdb/lisp/bbdb.el	2020-10-13 14:16:35.000000000 +0200
+@@ -3461,7 +3461,7 @@
+               (bbdb-overwrite-record-internal record))
+             ;; update file format
+             (goto-char (point-min))
+-            (if (re-search-forward (format "^;;; file-\\(version\\|format\\): %d$"
++            (if (re-search-forward (format "^;;;? file-\\(version\\|format\\): %d$"
+                                            file-format)
+                                    nil t)
+                 (replace-match (format ";;; file-format: %d" bbdb-file-format))))

@@ -3,8 +3,8 @@
 Summary: A utility for creating TTY dialog boxes
 Name: dialog
 %global dialogsubversion 20250116
-Version: 1.3
-Release: 57.%{dialogsubversion}%{?dist}
+Version: 1.3-20260721-20260721
+Release: 1.%{dialogsubversion}%{?dist}
 License: LGPL-2.1-only
 URL: https://invisible-island.net/dialog/dialog.html
 Source0:        https://invisible-mirror.net/archives/dialog/dialog-%{version}-%{dialogsubversion}.tgz

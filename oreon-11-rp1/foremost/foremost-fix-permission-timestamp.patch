@@ -1,0 +1,15 @@
+--- SOURCES/foremost-1.5.7/Makefile	2010-04-05 11:53:36.858410948 -0300
++++ SOURCES/foremost-1.5.7/Makefile	2010-04-05 11:54:09.910407558 -0300
+@@ -118,9 +118,9 @@
+ #---------------------------------------------------------------------
+ 
+ install: goals
+-	install -m 755 $(NAME) $(BIN)
+-	install -m 444 $(MAN_PAGES) $(MAN)
+-	install -m 444 foremost.conf $(CONF)
++	install -p -m 755 $(NAME) $(BIN)
++	install -p -m 644 $(MAN_PAGES) $(MAN)
++	install -p -m 644 foremost.conf $(CONF)
+ macinstall: BIN = /usr/local/bin/
+ macinstall: MAN = /usr/share/man/man1/
+ macinstall: CONF = /usr/local/etc/

@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash a2a552ed56fc044ff03917115ee52ecfee7d6a62ef2d7253919dfdbaf1e91c17
 
 %global stable_kf6 stable
 
 
 Name:    korganizer
 Summary: Personal Organizer
-Version: 26.03.80
+Version: 26.08.1
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -132,6 +132,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

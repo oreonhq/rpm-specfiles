@@ -1,0 +1,340 @@
+--- vst3sdk-3.8.0_build_66/CMakeLists.txt.orig	2025-10-20 10:56:06.000000000 -0600
++++ vst3sdk-3.8.0_build_66/CMakeLists.txt	2025-11-22 13:48:57.269805879 -0700
+@@ -102,9 +102,9 @@ include(SMTG_CustomModuleTarget)
+ 
+ set_property(
+     TARGET
+-        sdk
+-        sdk_common
+-        sdk_hosting
++        vst3sdk
++        vst3sdk_common
++        vst3sdk_hosting
+         base
+         pluginterfaces
+         cmake_modules
+--- vst3sdk-3.8.0_build_66/cmake/modules/SMTG_ExportedSymbols.cmake.orig	2025-10-20 10:55:02.000000000 -0600
++++ vst3sdk-3.8.0_build_66/cmake/modules/SMTG_ExportedSymbols.cmake	2025-11-22 12:11:17.210023783 -0700
+@@ -4,9 +4,9 @@
+ #
+ # Puts symbol visibility to default hidden. 
+ macro(smtg_setup_symbol_visibility)
+-    set(CMAKE_C_VISIBILITY_PRESET hidden)
+-    set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+-    set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
++    set(CMAKE_C_VISIBILITY_PRESET default)
++    set(CMAKE_CXX_VISIBILITY_PRESET default)
++    set(CMAKE_VISIBILITY_INLINES_HIDDEN 0)
+ endmacro(smtg_setup_symbol_visibility)
+ 
+ #------------------------------------------------------------------------
+--- vst3sdk-3.8.0_build_66/cmake/modules/SMTG_VST3_SDK.cmake.orig	2025-10-20 10:55:02.000000000 -0600
++++ vst3sdk-3.8.0_build_66/cmake/modules/SMTG_VST3_SDK.cmake	2025-11-24 16:05:48.280955680 -0700
+@@ -19,7 +19,7 @@ include(SMTG_AddVST3Options)
+ function(smtg_create_lib_base_target)
+ 
+     add_library(base
+-        STATIC
++        OBJECT
+             ${SDK_ROOT}/base/source/baseiids.cpp
+             ${SDK_ROOT}/base/source/classfactoryhelpers.h
+             ${SDK_ROOT}/base/source/fbuffer.cpp
+@@ -45,6 +45,7 @@ function(smtg_create_lib_base_target)
+             ${SDK_ROOT}/base/thread/source/fcondition.cpp
+             ${SDK_ROOT}/base/thread/source/flock.cpp
+     )
++    set_target_properties(base PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+ 
+     target_include_directories(base
+         PUBLIC
+@@ -92,7 +93,7 @@ endfunction()
+ function(smtg_create_pluginterfaces_target)
+ 
+     add_library(pluginterfaces
+-        STATIC
++        OBJECT
+             ${SDK_ROOT}/pluginterfaces/base/conststringtable.cpp
+             ${SDK_ROOT}/pluginterfaces/base/conststringtable.h
+             ${SDK_ROOT}/pluginterfaces/base/coreiids.cpp
+@@ -153,6 +154,7 @@ function(smtg_create_pluginterfaces_targ
+             ${SDK_ROOT}/pluginterfaces/vst/vstspeaker.h
+             ${SDK_ROOT}/pluginterfaces/vst/vsttypes.h
+     )
++    set_target_properties(pluginterfaces PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+     
+     # check for C11 atomic header
+     include(CheckSourceCompiles)
+@@ -199,11 +201,13 @@ endfunction()
+ #------------------------------------------------------------------------
+ function(smtg_create_public_sdk_common_target)
+ 
+-    add_library(sdk_common
+-        STATIC
++    add_library(vst3sdk_common
++        SHARED
+             ${SDK_ROOT}/public.sdk/source/common/commoniids.cpp
+             ${SDK_ROOT}/public.sdk/source/common/commonstringconvert.cpp
+             ${SDK_ROOT}/public.sdk/source/common/commonstringconvert.h
++            ${SDK_ROOT}/public.sdk/source/common/memorystream.cpp
++            ${SDK_ROOT}/public.sdk/source/common/memorystream.h
+             ${SDK_ROOT}/public.sdk/source/common/openurl.cpp
+             ${SDK_ROOT}/public.sdk/source/common/openurl.h
+             ${SDK_ROOT}/public.sdk/source/common/systemclipboard.h
+@@ -217,9 +221,10 @@ function(smtg_create_public_sdk_common_t
+             ${SDK_ROOT}/public.sdk/source/vst/vstpresetfile.cpp
+             ${SDK_ROOT}/public.sdk/source/vst/vstpresetfile.h
+     )
++    set_target_properties(vst3sdk_common PROPERTIES VERSION 0.0.0 SOVERSION 0)
+ 
+     if(SMTG_MAC)
+-        target_sources(sdk_common 
++        target_sources(vst3sdk_common 
+             PRIVATE
+                 ${SDK_ROOT}/public.sdk/source/common/threadchecker_mac.mm
+                 ${SDK_ROOT}/public.sdk/source/common/systemclipboard_mac.mm
+@@ -227,24 +232,24 @@ function(smtg_create_public_sdk_common_t
+     endif(SMTG_MAC)
+ 
+     # add dependencies
+-    target_link_libraries(sdk_common 
++    target_link_libraries(vst3sdk_common 
+         PUBLIC 
+             base
+             pluginterfaces
+     )
+-    target_include_directories(sdk_common
++    target_include_directories(vst3sdk_common
+         PUBLIC
+             ${SDK_ROOT}
+     )
+-    smtg_target_setup_universal_binary(sdk_common)
++    smtg_target_setup_universal_binary(vst3sdk_common)
+ 
+     if(SMTG_MAC AND XCODE AND SMTG_ENABLE_IOS_TARGETS)
+-        smtg_create_ios_target_from_target(sdk_common)
+-        set_target_properties(sdk_common_ios
++        smtg_create_ios_target_from_target(vst3sdk_common)
++        set_target_properties(vst3sdk_common_ios
+             PROPERTIES
+                 ${SDK_IDE_LIBS_FOLDER}
+         )
+-        target_link_libraries(sdk_common_ios 
++        target_link_libraries(vst3sdk_common_ios 
+             PUBLIC 
+                 base_ios
+                 pluginterfaces_ios
+@@ -256,13 +261,14 @@ endfunction()
+ #------------------------------------------------------------------------
+ function(smtg_create_public_sdk_target)
+ 
+-    add_library(sdk
+-        STATIC 
++    add_library(vst3sdk
++        SHARED 
+             ${SDK_ROOT}/public.sdk/source/common/pluginview.cpp
+             ${SDK_ROOT}/public.sdk/source/common/pluginview.h
+             ${SDK_ROOT}/public.sdk/source/main/pluginfactory.cpp
+             ${SDK_ROOT}/public.sdk/source/main/pluginfactory.h
+             ${SDK_ROOT}/public.sdk/source/main/pluginfactory_constexpr.h
++            ${SDK_ROOT}/public.sdk/source/main/linuxmain.cpp
+             ${SDK_ROOT}/public.sdk/source/main/moduleinit.cpp
+             ${SDK_ROOT}/public.sdk/source/main/moduleinit.h
+             ${SDK_ROOT}/public.sdk/source/vst/utility/alignedalloc.h
+@@ -270,6 +276,8 @@ function(smtg_create_public_sdk_target)
+             ${SDK_ROOT}/public.sdk/source/vst/utility/dataexchange.cpp
+             ${SDK_ROOT}/public.sdk/source/vst/utility/dataexchange.h
+             ${SDK_ROOT}/public.sdk/source/vst/utility/memoryibstream.h
++            ${SDK_ROOT}/public.sdk/source/vst/utility/mpeprocessor.cpp
++            ${SDK_ROOT}/public.sdk/source/vst/utility/mpeprocessor.h
+             ${SDK_ROOT}/public.sdk/source/vst/utility/processcontextrequirements.h
+             ${SDK_ROOT}/public.sdk/source/vst/utility/processdataslicer.h
+             ${SDK_ROOT}/public.sdk/source/vst/utility/ringbuffer.h
+@@ -304,34 +312,35 @@ function(smtg_create_public_sdk_target)
+             ${SDK_ROOT}/public.sdk/source/vst/vstrepresentation.cpp
+             ${SDK_ROOT}/public.sdk/source/vst/vstrepresentation.h
+     )
++    set_target_properties(vst3sdk PROPERTIES VERSION 0.0.0 SOVERSION 0)
+ 
+-    target_compile_features(sdk
++    target_compile_features(vst3sdk
+         PUBLIC
+             cxx_std_17
+     )
+     
+     # add dependencies
+-    target_link_libraries(sdk 
++    target_link_libraries(vst3sdk
+         PUBLIC 
+-            sdk_common
++            vst3sdk_common
+     )
+-    target_include_directories(sdk
++    target_include_directories(vst3sdk
+         PUBLIC
+             ${SDK_ROOT}
+     )
+-    smtg_target_setup_universal_binary(sdk)
+-    get_target_property(sdk_SOURCES sdk SOURCES)
++    smtg_target_setup_universal_binary(vst3sdk)
++    get_target_property(sdk_SOURCES vst3sdk SOURCES)
+     
+     # iOS target
+     if(SMTG_MAC AND XCODE AND SMTG_ENABLE_IOS_TARGETS)
+-        smtg_create_ios_target_from_target(sdk)
+-        set_target_properties(sdk_ios
++        smtg_create_ios_target_from_target(vst3sdk)
++        set_target_properties(vst3sdk_ios
+             PROPERTIES
+                 ${SDK_IDE_LIBS_FOLDER}
+         )
+-        target_link_libraries(sdk_ios
++        target_link_libraries(vst3sdk_ios
+             PUBLIC 
+-                sdk_common_ios
++                vst3sdk_common_ios
+         )
+     endif(SMTG_MAC AND XCODE AND SMTG_ENABLE_IOS_TARGETS)
+ 
+@@ -340,20 +349,25 @@ endfunction()
+ #------------------------------------------------------------------------
+ function(smtg_create_public_sdk_hosting_target)
+ 
+-    add_library(sdk_hosting 
+-        STATIC
++    add_library(vst3sdk_hosting 
++        SHARED
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/connectionproxy.cpp
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/connectionproxy.h
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/eventlist.cpp
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/eventlist.h
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/hostclasses.cpp
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/hostclasses.h
++            ${SDK_ROOT}/public.sdk/source/vst/hosting/hostdataexchangehandler.cpp
++            ${SDK_ROOT}/public.sdk/source/vst/hosting/hostdataexchangehandler.h
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/module.cpp
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/module.h
++            ${SDK_ROOT}/public.sdk/source/vst/hosting/module_linux.cpp
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/parameterchanges.cpp
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/parameterchanges.h
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/pluginterfacesupport.cpp
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/pluginterfacesupport.h
++            ${SDK_ROOT}/public.sdk/source/vst/hosting/plugprovider.cpp
++            ${SDK_ROOT}/public.sdk/source/vst/hosting/plugprovider.h
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/processdata.cpp
+             ${SDK_ROOT}/public.sdk/source/vst/hosting/processdata.h
+             ${SDK_ROOT}/public.sdk/source/vst/utility/optional.h
+@@ -363,29 +377,30 @@ function(smtg_create_public_sdk_hosting_
+             ${SDK_ROOT}/public.sdk/source/vst/utility/versionparser.h
+             ${SDK_ROOT}/public.sdk/source/vst/vstinitiids.cpp
+     )
++    set_target_properties(vst3sdk_hosting PROPERTIES VERSION 0.0.0 SOVERSION 0)
+     # add dependencies
+-    target_link_libraries(sdk_hosting 
++    target_link_libraries(vst3sdk_hosting 
+         PUBLIC 
+-            sdk_common
++            vst3sdk_common
+     )
+-    target_include_directories(sdk_hosting
++    target_include_directories(vst3sdk_hosting
+         PUBLIC
+             ${SDK_ROOT}
+     )
+-    smtg_target_setup_universal_binary(sdk_hosting)
++    smtg_target_setup_universal_binary(vst3sdk_hosting)
+ 
+     # iOS target for hosting
+     if(SMTG_MAC AND XCODE AND SMTG_ENABLE_IOS_TARGETS)
+-        smtg_create_ios_target_from_target(sdk_hosting)
+-        set_target_properties(sdk_hosting_ios
++        smtg_create_ios_target_from_target(vst3sdk_hosting)
++        set_target_properties(vst3sdk_hosting_ios
+             PROPERTIES
+                 ${SDK_IDE_LIBS_FOLDER}
+         )
+-        target_link_libraries(sdk_hosting_ios 
++        target_link_libraries(vst3sdk_hosting_ios 
+             PUBLIC 
+-                sdk_common_ios
++                vst3sdk_common_ios
+         )
+-        target_include_directories(sdk_hosting_ios
++        target_include_directories(vst3sdk_hosting_ios
+             PUBLIC
+                 ${SDK_ROOT}
+         )
+--- vst3sdk-3.8.0_build_66/public.sdk/samples/vst-hosting/validator/CMakeLists.txt.orig	2025-10-20 10:55:25.000000000 -0600
++++ vst3sdk-3.8.0_build_66/public.sdk/samples/vst-hosting/validator/CMakeLists.txt	2025-11-24 15:53:22.297475323 -0700
+@@ -1,6 +1,5 @@
+ 
+ set(validator_sources
+-    ${SDK_ROOT}/public.sdk/source/common/memorystream.cpp
+     ${SDK_ROOT}/public.sdk/source/main/moduleinit.cpp
+     ${SDK_ROOT}/public.sdk/source/main/moduleinit.h
+     ${SDK_ROOT}/public.sdk/source/vst/moduleinfo/moduleinfoparser.cpp
+@@ -11,8 +10,6 @@ set(validator_sources
+     ${SDK_ROOT}/public.sdk/source/vst/hosting/test/parameterchangestest.cpp
+     ${SDK_ROOT}/public.sdk/source/vst/hosting/test/pluginterfacesupporttest.cpp
+     ${SDK_ROOT}/public.sdk/source/vst/hosting/test/processdatatest.cpp
+-    ${SDK_ROOT}/public.sdk/source/vst/hosting/plugprovider.cpp
+-    ${SDK_ROOT}/public.sdk/source/vst/hosting/plugprovider.h
+     ${SDK_ROOT}/public.sdk/source/vst/testsuite/bus/busactivation.cpp
+     ${SDK_ROOT}/public.sdk/source/vst/testsuite/bus/busactivation.h
+     ${SDK_ROOT}/public.sdk/source/vst/testsuite/bus/busconsistency.cpp
+@@ -128,7 +125,8 @@ target_compile_features(${target}
+ )
+ target_link_libraries(${target}
+     PRIVATE
+-        sdk_hosting
++        vst3sdk_hosting
++        vst3sdk_common
+ )
+ smtg_target_codesign(${target})
+ smtg_target_setup_universal_binary(${target})
+--- vst3sdk-3.8.0_build_66/public.sdk/samples/vst-utilities/moduleinfotool/CMakeLists.txt.orig	2025-10-20 10:55:25.000000000 -0600
++++ vst3sdk-3.8.0_build_66/public.sdk/samples/vst-utilities/moduleinfotool/CMakeLists.txt	2025-11-22 13:49:30.732344434 -0700
+@@ -47,7 +47,8 @@ target_compile_features(${target}
+ )
+ target_link_libraries(${target}
+     PRIVATE
+-        sdk_hosting
++        vst3sdk_hosting
++        vst3sdk_common
+ )
+ smtg_target_codesign(${target})
+ smtg_target_setup_universal_binary(${target})
+--- vst3sdk-3.8.0_build_66/public.sdk/source/main/linuxmain.cpp.orig	2025-10-20 10:55:25.000000000 -0600
++++ vst3sdk-3.8.0_build_66/public.sdk/source/main/linuxmain.cpp	2025-11-24 15:57:26.214697431 -0700
+@@ -17,11 +17,11 @@
+ 
+ #include "pluginterfaces/base/fplatform.h"
+ 
+-void* moduleHandle = nullptr;
++void* __attribute__((weak)) moduleHandle = nullptr;
+ 
+ //------------------------------------------------------------------------
+-bool InitModule ();		///< must be provided by plug-in: called when the library is loaded
+-bool DeinitModule ();	///< must be provided by plug-in: called when the library is unloaded
++bool __attribute__((weak)) InitModule ();		///< must be provided by plug-in: called when the library is loaded
++bool __attribute__((weak)) DeinitModule ();	///< must be provided by plug-in: called when the library is unloaded
+ 
+ //------------------------------------------------------------------------
+ extern "C"
+@@ -36,7 +36,7 @@ static int moduleCounter {0}; // countin
+ //------------------------------------------------------------------------
+ /** must be called from host right after loading dll
+ Note: this could be called more than one time! */
+-bool ModuleEntry (void* sharedLibraryHandle)
++bool __attribute__((weak)) ModuleEntry (void* sharedLibraryHandle)
+ {
+ 	if (++moduleCounter == 1)
+ 	{
+@@ -49,7 +49,7 @@ bool ModuleEntry (void* sharedLibraryHan
+ //------------------------------------------------------------------------
+ /** must be called from host right before unloading dll
+ Note: this could be called more than one time! */
+-bool ModuleExit (void)
++bool __attribute__((weak)) ModuleExit (void)
+ {
+ 	if (--moduleCounter == 0)
+ 	{

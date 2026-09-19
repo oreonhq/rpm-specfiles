@@ -7,7 +7,7 @@
 %endif
 
 Name:           cppcheck
-Version:        2.20.0
+Version:        2.21.1
 Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPL-3.0-or-later

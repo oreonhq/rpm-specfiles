@@ -1,0 +1,13 @@
+diff -rup sctk-adwaita-0.5.4.orig/src/title/ab_glyph_renderer.rs sctk-adwaita-0.5.4/src/title/ab_glyph_renderer.rs
+--- sctk-adwaita-0.5.4.orig/src/title/ab_glyph_renderer.rs	2006-07-23 18:21:28.000000000 -0700
++++ sctk-adwaita-0.5.4/src/title/ab_glyph_renderer.rs	2023-05-01 20:40:49.050087834 -0700
+@@ -9,7 +9,8 @@ use ab_glyph::{point, Font, FontRef, Gly
+ use std::{fs::File, process::Command};
+ use tiny_skia::{Color, Pixmap, PremultipliedColorU8};
+ 
+-const CANTARELL: &[u8] = include_bytes!("Cantarell-Regular.ttf");
++const CANTARELL: &[u8] =
++    include_bytes!("/usr/share/fonts/abattis-cantarell-fonts/Cantarell-Regular.otf");
+ 
+ #[derive(Debug)]
+ pub struct AbGlyphTitleText {

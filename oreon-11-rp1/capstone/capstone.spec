@@ -1,7 +1,7 @@
 %global source0_hash 240ebc834c51aae41ca9215d3190cc372fd132b9c5c8aa2d5f19ca0c325e28f9
 
 Name:           capstone
-Version:        5.0.6
+Version:        5.0.9
 Release:        %autorelease
 Summary:        A lightweight multi-platform, multi-architecture disassembly framework
 License:        BSD-3-Clause AND BSD-4-Clause AND APSL-2.0 AND NCSA AND MIT
@@ -174,7 +174,8 @@ The ocaml-%{name} package contains OCaml bindings for %{name}.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }# autosetup -n %%{gitname}-%%{commit} -S git
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# autosetup -n %%{gitname}-%%{commit} -S git
 %autosetup -n %{gitname}-%{version} -p1
 
 %if %{with python3}

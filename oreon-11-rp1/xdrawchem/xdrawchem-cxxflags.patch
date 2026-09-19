@@ -1,0 +1,11 @@
+diff -up xdrawchem-qt5/xdrawchem.pro.orig xdrawchem-qt5/xdrawchem.pro
+--- xdrawchem-qt5/xdrawchem.pro.orig	2017-01-09 13:25:32.000000000 +0100
++++ xdrawchem-qt5/xdrawchem.pro	2019-11-27 12:57:54.007081078 +0100
+@@ -45,7 +45,6 @@ ringdir.files = ring/*
+ doc.path = $${PREFIX}/share/xdrawchem/doc
+ doc.files = doc/*
+ INSTALLS += ringdir doc
+-QMAKE_CXXFLAGS_DEBUG += -O0 -g3
+ 
+ CONFIG += debug
+ QT += xml network core widgets printsupport network gui

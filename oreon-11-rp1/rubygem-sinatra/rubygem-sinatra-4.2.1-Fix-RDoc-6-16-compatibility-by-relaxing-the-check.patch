@@ -1,0 +1,56 @@
+From c4d92ccf5cd3e686faba99aabdcdbca377d4ab8d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Wed, 3 Dec 2025 15:52:08 +0100
+Subject: [PATCH] Fix RDoc 6.16+ compatibility by relaxing the check
+
+With RDoc 6.16.0, the following test started to fail:
+
+~~~
+  1) Failure:
+RdocTest#test_renders_inline_rdoc_strings_0 [test/rdoc_test.rb:19]:
+Expected /<h1[^>]*>Hiya(<span><a href=\"#label-Hiya\">&para;<\/a> <a href=\"#(documentation|top)\">&uarr;<\/a><\/span>)?<\/h1>/ to match # encoding: ASCII-8BIT
+#    valid: true
+"\n<h1 id=\"label-Hiya\"><a href=\"#label-Hiya\">Hiya</a></h1>\n".
+
+  2) Failure:
+RdocTest#test_renders_rdoc_files_in_views_path_0 [test/rdoc_test.rb:25]:
+Expected /<h1[^>]*>Hello From RDoc(<span><a href=\"#label-Hello\+From\+RDoc\">&para;<\/a> <a href=\"#(documentation|top)\">&uarr;<\/a><\/span>)?<\/h1>/ to match # encoding: ASCII-8BIT
+#    valid: true
+"\n<h1 id=\"label-Hello+From+RDoc\"><a href=\"#label-Hello+From+RDoc\">Hello From RDoc</a></h1>\n".
+~~~
+
+and it is caused by this change: https://github.com/ruby/rdoc/pull/1465
+
+The error happens due to over-prescriptive RDoc check, it seems. Looking
+into history, it seems the intention was just to check if RDoc works.
+However, the check later started to look too much into details of
+rendering.
+
+Therefore, relax the check to look only for know text and basic
+formatting and leave the rest as RDoc implementation detail.
+
+Fixes #2131
+---
+ test/rdoc_test.rb | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/test/rdoc_test.rb b/test/rdoc_test.rb
+index 33e7479861..52ab962ace 100644
+--- a/test/rdoc_test.rb
++++ b/test/rdoc_test.rb
+@@ -16,13 +16,13 @@ def rdoc_app(&block)
+   it 'renders inline rdoc strings' do
+     rdoc_app { rdoc '= Hiya' }
+     assert ok?
+-    assert_body(/<h1[^>]*>Hiya(<span><a href=\"#label-Hiya\">&para;<\/a> <a href=\"#(documentation|top)\">&uarr;<\/a><\/span>)?<\/h1>/)
++    assert_body(/<h1[^>]*>(<.*>)?Hiya(<.*>)?<\/h1>/)
+   end
+ 
+   it 'renders .rdoc files in views path' do
+     rdoc_app { rdoc :hello }
+     assert ok?
+-    assert_body(/<h1[^>]*>Hello From RDoc(<span><a href=\"#label-Hello\+From\+RDoc\">&para;<\/a> <a href=\"#(documentation|top)\">&uarr;<\/a><\/span>)?<\/h1>/)
++    assert_body(/<h1[^>]*>(<.*>)?Hello From RDoc(<.*>)?<\/h1>/)
+   end
+ 
+   it "raises error if template not found" do

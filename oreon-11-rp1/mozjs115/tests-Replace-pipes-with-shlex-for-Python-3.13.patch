@@ -1,0 +1,32 @@
+From dae1848488117166227b00cd7dcadf704b770339 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Franti=C5=A1ek=20Zatloukal?= <fzatlouk@redhat.com>
+Date: Wed, 12 Jun 2024 15:56:03 +0200
+Subject: [PATCH] tests: Replace pipes with shlex for Python 3.13
+
+---
+ js/src/tests/lib/results.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/js/src/tests/lib/results.py b/js/src/tests/lib/results.py
+index f902060..ba0c7c6 100644
+--- a/js/src/tests/lib/results.py
++++ b/js/src/tests/lib/results.py
+@@ -1,5 +1,5 @@
+ import json
+-import pipes
++import shlex
+ import re
+ 
+ from .progressbar import NullProgressBar, ProgressBar
+@@ -9,7 +9,7 @@ from .structuredlog import TestLogger
+ 
+ 
+ def escape_cmdline(args):
+-    return " ".join([pipes.quote(a) for a in args])
++    return " ".join([shlex.quote(a) for a in args])
+ 
+ 
+ class TestOutput:
+-- 
+2.45.1
+

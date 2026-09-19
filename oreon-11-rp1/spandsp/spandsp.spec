@@ -2,7 +2,7 @@
 
 Name:           spandsp
 Summary:        A DSP library for telephony
-Version:        0.0.6
+Version:        3.0.0
 Release:        1%{?dist}
 License:        LGPL-2.1-only AND GPL-2.0-only
 URL:            https://www.soft-switch.org

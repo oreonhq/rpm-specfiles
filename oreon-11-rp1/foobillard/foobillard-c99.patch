@@ -1,0 +1,15 @@
+Avoid an implicit int to improve compatibility with future compilers.
+
+diff --git a/src/billmove.c b/src/billmove.c
+index 447e31a6736fddf7..0182dc2bcad87998 100644
+--- a/src/billmove.c
++++ b/src/billmove.c
+@@ -409,7 +409,7 @@ void record_move_log_event( enum event_type event,
+ }
+ 
+ 
+-int my_rand(nr)
++int my_rand(int nr)
+ {
+     return rand()%nr;
+ }

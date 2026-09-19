@@ -1,0 +1,43 @@
+diff -rupN --no-dereference glew-2.3.1/build/cmake/CMakeLists.txt glew-2.3.1-new/build/cmake/CMakeLists.txt
+--- glew-2.3.1/build/cmake/CMakeLists.txt	2026-01-24 00:00:13.000000000 +0100
++++ glew-2.3.1-new/build/cmake/CMakeLists.txt	2026-01-30 23:12:01.840839713 +0100
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.16)
++cmake_minimum_required(VERSION 3.5)
+ project(glew LANGUAGES C)
+ 
+ if ( NOT DEFINED CMAKE_BUILD_TYPE )
+@@ -163,11 +163,8 @@ foreach(t glew glew_s)
+ endforeach()
+ 
+ set(targets_to_install "")
+-if(BUILD_SHARED_LIBS)
+-  list(APPEND targets_to_install glew)
+-else ()
+-  list(APPEND targets_to_install glew_s)
+-endif()
++list(APPEND targets_to_install glew)
++list(APPEND targets_to_install glew_s)
+ 
+ install ( TARGETS ${targets_to_install}
+           EXPORT glew-targets
+@@ -220,8 +217,8 @@ set (libname ${GLEW_LIB_NAME})
+ set (cflags)
+ set (requireslib glu)
+ 
+-#  Mac OSX has no glu.pc unless optional X11/GLX is installed
+-if (APPLE)
++#  Mac OSX / MINGW has no glu.pc unless optional X11/GLX is installed
++if (APPLE OR MINGW)
+   set (requireslib)
+ endif ()
+ 
+diff -rupN --no-dereference glew-2.3.1/build/cmake/testbuild/CMakeLists.txt glew-2.3.1-new/build/cmake/testbuild/CMakeLists.txt
+--- glew-2.3.1/build/cmake/testbuild/CMakeLists.txt	2026-01-24 00:00:13.000000000 +0100
++++ glew-2.3.1-new/build/cmake/testbuild/CMakeLists.txt	2026-01-30 23:12:01.841305949 +0100
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.16)
++cmake_minimum_required(VERSION 3.5)
+ project(glew-cmake-test LANGUAGES C)
+ 
+ find_package(GLEW REQUIRED CONFIG)

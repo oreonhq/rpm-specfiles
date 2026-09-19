@@ -1,106 +1,62 @@
-%global source0_hash 6662cb624886ed31eb94daf61e27583b5144ebc7383a17bae076f8f4f59088fb
+%global source0_hash none
 
-%bcond_without tests
-
-%global srcname progressbar2
-
-%global desc %{expand: \
-A text progress bar is typically used to display the progress of a long running
-operation, providing a visual cue that processing is underway.
-
-The ProgressBar class manages the current progress, and the format of the line
-is given by a number of widgets.
-
-The progressbar module is very easy to use, yet very powerful. It will also
-automatically enable features like auto-resizing when the system supports it.}
-
-Name:           python-%{srcname}
-Version:        4.5.0
+Name:           python-progressbar2
+Version:        4.6.0
 Release:        %autorelease
-Summary:        Library to provide visual progress to long running operations
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Python Progressbar library to provide visual _yet text based_ progress to long running operations.
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://github.com/WoLpH/python-progressbar
-Source0:        %pypi_source
+URL:            https://github.com/wolph/python-progressbar/
+Source:         %{pypi_source progressbar2}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description
-%{desc}
 
-%package -n python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'progressbar2' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-progressbar2
 Summary:        %{summary}
-Requires:       %{py3_dist python-utils}
-Requires:       %{py3_dist six}
-BuildRequires:  %{py3_dist python-utils}
-BuildRequires:  %{py3_dist six}
-BuildRequires:  %{py3_dist setuptools}
-BuildRequires:  %{py3_dist sphinx}
-BuildRequires:  %{py3_dist pytest}
-%if %{with tests}
-BuildRequires:  %{py3_dist freezegun} >= 0.3.10
-%endif
 
-# obsolete python-progressbar
-Obsoletes:      python3-progressbar < 2.3-14
-Provides:       python3-progressbar == %{version}
+%description -n python3-progressbar2 %_description
 
-%{?python_provide:%python_provide python3-%{srcname}}
-
-%description -n python3-%{srcname}
-%{desc}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-progressbar2 docs,docs-tests,fast,tests
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n progressbar2-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
-rm -rfv %{srcname}.egg-info
-
-find . -name '*.pyc' -print -delete
-find . -name '*.swp' -print -delete
-rm -rfv tests/__pycache__/
-
-# do not run coverage in pytest
-sed -i -E '/--(no-)?cov/d' pytest.ini
-
-# remove linters etc from requirements
-sed -i \
-    -e '/flake8/ d' \
-    -e '/pytest-cov/ d' \
-    -e '/pytest-mypy/ d' \
-    -e '/sphinx/ d' \
-    -e '/pywin32/ d' \
-    pyproject.toml
-
-cat pyproject.toml
-
-# required for tests, but not included in deps, and apparently no way to
-# include stuff from "project.optional-dependencies" using
-# pyproject_buildrequires..
-cat > requirements.txt << EOF
-dill
-EOF
-cat requirements.txt
 
 %generate_buildrequires
-%pyproject_buildrequires requirements.txt
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,docs-tests,fast,tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l progressbar
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-PYTHONPATH=. %pytest tests
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
+
+%files -n python3-progressbar2 -f %{pyproject_files}
 %{_bindir}/progressbar
 
 %changelog

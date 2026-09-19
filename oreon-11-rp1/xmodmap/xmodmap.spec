@@ -1,8 +1,8 @@
 %global source0_hash 9a2f8168f7b0bc382828847403902cb6bf175e17658b36189eac87edda877e81
 
 Name:       xmodmap
-Version:    1.0.11
-Release:    10%{?dist}
+Version:    1.0.12
+Release:    1%{?dist}
 Summary:    Edit and display the X11 core keyboard map
 
 License:    MIT AND MIT-open-group

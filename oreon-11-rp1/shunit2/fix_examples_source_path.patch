@@ -1,0 +1,45 @@
+diff -Nrup shunit2-2.1.6/examples/equality_test.sh shunit2-2.1.6.examples/examples/equality_test.sh
+--- shunit2-2.1.6/examples/equality_test.sh	2011-03-16 06:43:01.000000000 +0800
++++ shunit2-2.1.6.examples/examples/equality_test.sh	2011-05-17 12:02:47.558082114 +0800
+@@ -7,4 +7,4 @@ testEquality()
+ }
+ 
+ # load shunit2
+-. ../src/shunit2
++. /usr/share/shunit2/shunit2
+diff -Nrup shunit2-2.1.6/examples/lineno_test.sh shunit2-2.1.6.examples/examples/lineno_test.sh
+--- shunit2-2.1.6/examples/lineno_test.sh	2011-05-02 04:10:33.000000000 +0800
++++ shunit2-2.1.6.examples/examples/lineno_test.sh	2011-05-17 12:02:59.799086942 +0800
+@@ -13,4 +13,4 @@ testLineNo()
+ }
+ 
+ # load shunit2
+-. ../src/shunit2
++. /usr/share/shunit2/shunit2
+diff -Nrup shunit2-2.1.6/examples/math_test.sh shunit2-2.1.6.examples/examples/math_test.sh
+--- shunit2-2.1.6/examples/math_test.sh	2011-03-16 06:43:01.000000000 +0800
++++ shunit2-2.1.6.examples/examples/math_test.sh	2011-05-17 12:03:25.352146197 +0800
+@@ -24,4 +24,4 @@ oneTimeSetUp()
+ }
+ 
+ # load and run shUnit2
+-. ../src/shunit2
++. /usr/share/shunit2/shunit2
+diff -Nrup shunit2-2.1.6/examples/mkdir_test.sh shunit2-2.1.6.examples/examples/mkdir_test.sh
+--- shunit2-2.1.6/examples/mkdir_test.sh	2011-03-17 05:08:17.000000000 +0800
++++ shunit2-2.1.6.examples/examples/mkdir_test.sh	2011-05-17 12:03:25.415099535 +0800
+@@ -86,4 +86,4 @@ tearDown()
+ 
+ # load and run shUnit2
+ [ -n "${ZSH_VERSION:-}" ] && SHUNIT_PARENT=$0
+-. ../src/shunit2
++. /usr/share/shunit2/shunit2
+diff -Nrup shunit2-2.1.6/examples/party_test.sh shunit2-2.1.6.examples/examples/party_test.sh
+--- shunit2-2.1.6/examples/party_test.sh	2011-03-16 06:43:01.000000000 +0800
++++ shunit2-2.1.6.examples/examples/party_test.sh	2011-05-17 12:03:25.457081863 +0800
+@@ -14,4 +14,4 @@ testPartyLikeItIs1999()
+ }
+ 
+ # load shunit2
+-. ../src/shunit2
++. /usr/share/shunit2/shunit2

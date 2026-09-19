@@ -1,0 +1,10 @@
+[Unit]
+Description=Web interface to a Pinto repository
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/sysconfig/pintod
+ExecStart=/usr/bin/pintod $PINTOD_OPTIONS
+
+[Install]
+WantedBy=default.target

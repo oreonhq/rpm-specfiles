@@ -1,0 +1,11 @@
+--- cursive_core-0.4.6/Cargo.toml	1970-01-01T00:00:01+00:00
++++ cursive_core-0.4.6/Cargo.toml	2025-04-25T06:02:18.221693+00:00
+@@ -55,7 +55,7 @@
+ optional = true
+ 
+ [dependencies.compact_str]
+-version = "0.8.0"
++version = ">=0.8.0,<0.10.0"
+ 
+ [dependencies.crossbeam-channel]
+ version = "0.5"

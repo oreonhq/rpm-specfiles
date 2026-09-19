@@ -1,0 +1,27 @@
+From 1d9688e7059d0a93c27bf4e74f26ad3cf1120837 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Mon, 4 Nov 2024 20:06:47 +0100
+Subject: [PATCH 5/5] First loop might contain non integer input
+
+---
+ gmond/python_modules/network/netstats.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/gmond/python_modules/network/netstats.py b/gmond/python_modules/network/netstats.py
+index 3805f4b..76f6b68 100644
+--- a/gmond/python_modules/network/netstats.py
++++ b/gmond/python_modules/network/netstats.py
+@@ -52,6 +52,10 @@ def get_metrics():
+                         continue
+                     new_metrics[metric_group] = dict()
+                     for value in metrics:
++                        try:
++                            value = int(value)
++                        except ValueError:
++                            value = -1
+                         # Skip first
+                         if count > 0 and value >= 0 and count in stats_pos[metric_group]:
+                             metric_name = stats_pos[metric_group][count]
+-- 
+2.47.0
+

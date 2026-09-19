@@ -1,0 +1,44 @@
+diff --git a/refind-install b/refind-install
+index dfb8781..b9b932c 100755
+--- a/refind-install
++++ b/refind-install
+@@ -285,13 +285,24 @@ DeterminePlatform() {
+       esac
+       ;;
+    linux*)
++      local EfiSize
++      if [[ -e /sys/firmware/efi/fw_platform_size ]]; then
++          EfiSize=$(cat /sys/firmware/efi/fw_platform_size)
++      fi
+       CpuType=$(uname -m)
+       case "$CpuType" in
+       aarch64)
+          Platform="aa64"
+          ;;
+       x86_64)
+-         Platform="x64"
++         case "$EfiSize" in
++         32)
++             Platform="ia32"
++             ;;
++         *)
++             Platform="x64"
++             ;;
++         esac
+          ;;
+       i?86)
+          Platform="ia32"
+@@ -299,13 +310,6 @@ DeterminePlatform() {
+          # abort. Not in BIOS mode, though, since that could be used on an emergency
+          # disc to try to recover a troubled Linux installation.
+          if [[ -d /sys/firmware/efi ]] ; then
+-            if [[ "$ShimSource" != "none" && "$TargetDir" != "/BOOT/EFI" ]] ; then
+-               echo ""
+-               echo "CAUTION: shim does not currently supports 32-bit systems, so you should not"
+-               echo "use the --shim option to install on such systems. Aborting!"
+-               echo ""
+-               exit 1
+-            fi
+             echo
+             echo "CAUTION: This Linux installation uses a 32-bit kernel. 32-bit EFI-based"
+             echo "computers are VERY RARE. If you've installed a 32-bit version of Linux"

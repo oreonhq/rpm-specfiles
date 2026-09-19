@@ -1,0 +1,32 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 23 Apr 2024 22:38:26 +0200
+Subject: [PATCH] erlang:get_stacktrace() was deprecated long time ago
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/mi_buffer_converter.erl b/src/mi_buffer_converter.erl
+index 2bf3c93..b865ffe 100644
+--- a/src/mi_buffer_converter.erl
++++ b/src/mi_buffer_converter.erl
+@@ -61,18 +61,16 @@ convert(Parent, Server, Root, Buffer) ->
+         mi_server:buffer_to_segment(Server, Buffer, SegmentWO),
+         exit(normal)
+     catch
+-        error:Reason ->
++        error:Reason:Stacktrace ->
+             case mi_buffer:exists(Buffer) of
+                 false ->
+                     lager:warning("conversion for buffer ~p failed, probably"
+                                   " because the buffer has been dropped ~p",
+-                                  [mi_buffer:filename(Buffer),
+-                                   erlang:get_stacktrace()]),
++                                  [mi_buffer:filename(Buffer), Stacktrace]),
+                     exit(normal);
+                 true ->
+                     lager:error("conversion for buffer ~p failed with trace ~p",
+-                                [mi_buffer:filename(Buffer),
+-                                 erlang:get_stacktrace()]),
++                                [mi_buffer:filename(Buffer), Stacktrace]),
+                     exit({error, Reason})
+             end
+     end.

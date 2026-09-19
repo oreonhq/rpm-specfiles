@@ -1,0 +1,99 @@
+diff -up cronolog-1.6.2/src/cronolog.c.c99 cronolog-1.6.2/src/cronolog.c
+--- cronolog-1.6.2/src/cronolog.c	2025-01-26 06:41:00.649826216 +0100
++++ cronolog-1.6.2/src/cronolog.c	2025-01-26 06:55:50.336453862 +0100
+@@ -211,7 +211,7 @@
+ 	case 'P':
+ 	    if (linkname == NULL)
+ 	    {
+-		fprintf(stderr, "A current log symlink is needed to mantain a symlink to the previous log\n", argv[0]);
++		fprintf(stderr, "%s: a current log symlink is needed to mantain a symlink to the previous log\n", argv[0]);
+ 		exit(1);
+ 	    }
+ 	    prevlinkname = optarg;
+@@ -225,12 +225,12 @@
+ 	case 'p':
+ 	    periodicity = parse_timespec(optarg, &period_multiple);
+ 	    if (   (periodicity == INVALID_PERIOD)
+-		|| (periodicity == PER_SECOND) && (60 % period_multiple)
+-		|| (periodicity == PER_MINUTE) && (60 % period_multiple)
+-		|| (periodicity == HOURLY)     && (24 % period_multiple)
+-		|| (periodicity == DAILY)      && (period_multiple > 365)
+-		|| (periodicity == WEEKLY)     && (period_multiple > 52)
+-		|| (periodicity == MONTHLY)    && (12 % period_multiple)) {
++		|| ((periodicity == PER_SECOND) && (60 % period_multiple))
++		|| ((periodicity == PER_MINUTE) && (60 % period_multiple))
++		|| ((periodicity == HOURLY)     && (24 % period_multiple))
++		|| ((periodicity == DAILY)      && (period_multiple > 365))
++		|| ((periodicity == WEEKLY)     && (period_multiple > 52))
++		|| ((periodicity == MONTHLY)    && (12 % period_multiple))) {
+ 		fprintf(stderr, "%s: invalid explicit period specification (%s)\n", argv[0], start_time);
+ 		exit(1);
+ 	    }		
+@@ -299,7 +299,7 @@
+ 	if (   (period_delay_units > periodicity)
+ 	    || (   period_delay_units == periodicity
+ 		&& abs(period_delay)  >= period_multiple)) {
+-	    fprintf(stderr, "%s: period delay cannot be larger than the rollover period\n", argv[0], start_time);
++	    fprintf(stderr, "%s: period delay cannot be larger than the rollover period (%s)\n", argv[0], start_time);
+ 	    exit(1);
+ 	}		
+ 	period_delay *= period_seconds[period_delay_units];
+diff -up cronolog-1.6.2/src/cronotest.c.c99 cronolog-1.6.2/src/cronotest.c
+--- cronolog-1.6.2/src/cronotest.c	2001-05-03 18:26:44.000000000 +0200
++++ cronolog-1.6.2/src/cronotest.c	2025-01-26 06:49:30.097700514 +0100
+@@ -158,12 +158,12 @@
+ 	case 'p':
+ 	    periodicity = parse_timespec(optarg, &period_multiple);
+ 	    if (   (periodicity == INVALID_PERIOD)
+-		|| (periodicity == PER_SECOND) && (60 % period_multiple)
+-		|| (periodicity == PER_MINUTE) && (60 % period_multiple)
+-		|| (periodicity == HOURLY)     && (24 % period_multiple)
+-		|| (periodicity == DAILY)      && (period_multiple > 365)
+-		|| (periodicity == WEEKLY)     && (period_multiple > 52)
+-		|| (periodicity == MONTHLY)    && (12 % period_multiple)) {
++		|| ((periodicity == PER_SECOND) && (60 % period_multiple))
++		|| ((periodicity == PER_MINUTE) && (60 % period_multiple))
++		|| ((periodicity == HOURLY)     && (24 % period_multiple))
++		|| ((periodicity == DAILY)      && (period_multiple > 365))
++		|| ((periodicity == WEEKLY)     && (period_multiple > 52))
++		|| ((periodicity == MONTHLY)    && (12 % period_multiple))) {
+ 		fprintf(stderr, "%s: invalid explicit period specification (%s)\n", argv[0], start_time);
+ 		exit(1);
+ 	    }		
+@@ -299,7 +299,7 @@
+ 	if (   (period_delay_units > periodicity)
+ 	    || (   period_delay_units == periodicity
+ 		&& abs(period_delay)  >= period_multiple)) {
+-	    fprintf(stderr, "%s: period delay cannot be larger than the rollover period\n", argv[0], start_time);
++	    fprintf(stderr, "%s: period delay cannot be larger than the rollover period (%s)\n", argv[0], start_time);
+ 	    exit(1);
+ 	}		
+ 	period_delay *= period_seconds[period_delay_units];
+diff -up cronolog-1.6.2/src/cronoutils.c.c99 cronolog-1.6.2/src/cronoutils.c
+--- cronolog-1.6.2/src/cronoutils.c	2025-01-26 06:41:00.658826499 +0100
++++ cronolog-1.6.2/src/cronoutils.c	2025-01-26 06:59:27.636345421 +0100
+@@ -198,6 +198,7 @@
+ 	    const char *prevlinkname)
+ {
+     struct stat		stat_buf;
++    int			result;
+     
+     if (stat(prevlinkname, &stat_buf) == 0)
+     {
+@@ -215,11 +216,14 @@
+ #ifndef _WIN32
+     if (linktype == S_IFLNK)
+     {
+-	symlink(pfilename, linkname);
++	result = symlink(pfilename, linkname);
+     }
+     else
+     {
+-	link(pfilename, linkname);
++	result = link(pfilename, linkname);
++    }
++    if (result != 0) {
++	fprintf(stderr, "Creating link from %s to %s not successful (%d)", pfilename, linkname, errno);
+     }
+ #else
+     fprintf(stderr, "Creating link from %s to %s not supported", pfilename, linkname);

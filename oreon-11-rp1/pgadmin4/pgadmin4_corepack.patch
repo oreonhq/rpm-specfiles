@@ -1,0 +1,11 @@
+diff -rupN --no-dereference pgadmin4-9.10/web/package.json pgadmin4-9.10-new/web/package.json
+--- pgadmin4-9.10/web/package.json	2025-11-10 10:27:20.000000000 +0100
++++ pgadmin4-9.10-new/web/package.json	2025-11-16 17:35:08.555093941 +0100
+@@ -179,7 +179,6 @@
+     "auditpy": "safety check --full-report -i 51668 -i 52495",
+     "audit-all": "yarn run auditjs && yarn run auditpy"
+   },
+-  "packageManager": "yarn@4.9.2",
+   "browserslist": [
+     "defaults and fully supports es6-module"
+   ]

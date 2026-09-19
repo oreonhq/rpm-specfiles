@@ -1,0 +1,26 @@
+HOW TO USE THE Z88SDK WITH FUSE
+-------------------------------
+
+Using the Z88 SDK with fuse is a very simple operation. Grab a copy of the rpm,
+install and write your code, as you would, in C.
+
+Next, compile and target the ZX Spectrum
+
+zcc +zx <your-source>.c -o <output-name>.bin -lndos
+
+Assuming all is well, your code will be generated. THIS IS NOT AN EXECUTABLE!
+
+Load up Fuse. Click on File, move to "Open Binary Data". The usual filer window
+opens. Select the file you've just compiled and click "Open". The filer closes
+and you're presented with another window asking for a start address. You can
+enter any number from about 25000. For this explaination, I will use 32768.
+Click OK. Your .bin file is now in memory.
+
+To run the code, press the following keys
+
+T, ctrl + shift (the cursor turns to a white on black E), L 32768 return.
+
+On screen you will see the words RANDOMISE USR 32768 before you press return.
+When you press return, the code will be executed.
+
+That's about it!

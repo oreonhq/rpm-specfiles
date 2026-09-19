@@ -1,0 +1,40 @@
+From 6accdc4c4a7fe4d808b674a97fb5474e12621504 Mon Sep 17 00:00:00 2001
+From: Adrian Sampson <adrian@radbox.org>
+Date: Sat, 23 Sep 2023 18:56:29 -0400
+Subject: [PATCH 5/5] Bump minimum Python versions
+
+Followup to #72.
+---
+ README.rst | 2 +-
+ setup.cfg  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/README.rst b/README.rst
+index 191ba98..986c24d 100644
+--- a/README.rst
++++ b/README.rst
+@@ -18,7 +18,7 @@ Synopsis
+ --------
+ 
+ MediaFile is available `on PyPI`_. Install it by typing ``pip install
+-mediafile``. It works on Python 2.7 and Python 3.4 or later. Then:
++mediafile``. It works on Python 3.7 or later. Then:
+ 
+ .. code:: python
+ 
+diff --git a/setup.cfg b/setup.cfg
+index 98d931f..36d7505 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -4,7 +4,7 @@ logging-clear-handlers=1
+ eval-attr="!=slow"
+ 
+ [flake8]
+-min-version=2.7
++min-version=3.7
+ # Default pyflakes errors we ignore:
+ # - E241: missing whitespace after ',' (used to align visually)
+ # - E221: multiple spaces before operator (used to align visually)
+-- 
+2.47.0
+

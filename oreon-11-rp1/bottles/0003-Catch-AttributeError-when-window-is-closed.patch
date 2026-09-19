@@ -1,0 +1,33 @@
+From 3001aaba2b1ea6488b69f8714171eff635043b53 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Sat, 9 Nov 2024 13:42:00 +0100
+Subject: [PATCH 3/3] Catch AttributeError when window is closed
+
+In certain situations Bottles crashes with:
+
+__quit:AttributeError: 'Bottles' object has no attribute 'win'
+
+This should allow Bottles to exit without error.
+---
+ bottles/frontend/main.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/bottles/frontend/main.py b/bottles/frontend/main.py
+index f6a07b15..ea3d7ad1 100644
+--- a/bottles/frontend/main.py
++++ b/bottles/frontend/main.py
+@@ -267,7 +267,10 @@ class Bottles(Adw.Application):
+         logging.info(
+             _("[Quit] request received."),
+         )
+-        self.win.on_close_request()
++        try:
++            self.win.on_close_request()
++        except AttributeError:
++            pass
+         quit()
+ 
+     @staticmethod
+-- 
+2.51.0
+

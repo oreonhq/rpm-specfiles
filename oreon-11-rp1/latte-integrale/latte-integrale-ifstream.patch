@@ -1,0 +1,252 @@
+Fixes errors such as this:
+
+ReadingFile.cpp: In function ‘void CheckInputFileCDDRep4(const char*)’:
+ReadingFile.cpp:413:10: error: no match for ‘operator>>’ (operand types are ‘std::ifstream’ {aka ‘std::basic_ifstream<char>’} and ‘char*’)
+  413 |       in >> tmpString;
+      |       ~~ ^~ ~~~~~~~~~
+      |       |     |
+      |       |     char*
+      |       std::ifstream {aka std::basic_ifstream<char>}
+  • there are 35 candidates
+    ReadingFile.cpp:413:10:
+      413 |       in >> tmpString;
+          |       ~~~^~~~~~~~~~~~
+In file included from /usr/include/c++/16/iostream:44,
+                 from /usr/include/NTL/tools.h:14,
+                 from /usr/include/NTL/ZZ.h:19,
+                 from latte_ntl.h:31,
+                 from rational.h:27,
+                 from cone.h:28,
+                 from ReadingFile.cpp:26:
+    • candidate 1: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(bool&) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’ (near match)
+      /usr/include/c++/16/istream:176:7:
+        176 |       operator>>(bool& __n)
+            |       ^~~~~~~~
+      • conversion of argument 1 would be ill-formed:
+      • error: cannot bind non-const lvalue reference of type ‘bool&’ to a value of type ‘char*’
+        ReadingFile.cpp:413:13:
+          413 |       in >> tmpString;
+              |             ^~~~~~~~~
+    • candidate 2: ‘std::basic_istream<_CharT, _Traits>& std::basic_istream<_CharT, _Traits>::operator>>(short int&) [with _CharT = char; _Traits = std::char_traits<char>]’ (near match)
+      /usr/include/c++/16/istream:180:7:
+        180 |       operator>>(short& __n);
+            |       ^~~~~~~~
+      • conversion of argument 1 would be ill-formed:
+      • error: invalid conversion from ‘char*’ to ‘short int’ [-fpermissive]
+        ReadingFile.cpp:413:13:
+          413 |       in >> tmpString;
+              |             ^~~~~~~~~
+              |             |
+              |             char*
+      • error: cannot bind rvalue ‘(short int)tmpString’ to ‘short int&’
+    • candidate 3: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(short unsigned int&) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’ (near match)
+      /usr/include/c++/16/istream:183:7:
+        183 |       operator>>(unsigned short& __n)
+            |       ^~~~~~~~
+      • conversion of argument 1 would be ill-formed:
+      • error: invalid conversion from ‘char*’ to ‘short unsigned int’ [-fpermissive]
+        ReadingFile.cpp:413:13:
+          413 |       in >> tmpString;
+              |             ^~~~~~~~~
+              |             |
+              |             char*
+      • error: cannot bind rvalue ‘(short unsigned int)tmpString’ to ‘short unsigned int&’
+    • candidate 4: ‘std::basic_istream<_CharT, _Traits>& std::basic_istream<_CharT, _Traits>::operator>>(int&) [with _CharT = char; _Traits = std::char_traits<char>]’ (near match)
+      /usr/include/c++/16/istream:187:7:
+        187 |       operator>>(int& __n);
+            |       ^~~~~~~~
+      • conversion of argument 1 would be ill-formed:
+      • error: invalid conversion from ‘char*’ to ‘int’ [-fpermissive]
+        ReadingFile.cpp:413:13:
+          413 |       in >> tmpString;
+              |             ^~~~~~~~~
+              |             |
+              |             char*
+      • error: cannot bind rvalue ‘(int)tmpString’ to ‘int&’
+    • candidate 5: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(unsigned int&) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’ (near match)
+      /usr/include/c++/16/istream:190:7:
+        190 |       operator>>(unsigned int& __n)
+            |       ^~~~~~~~
+      • conversion of argument 1 would be ill-formed:
+      • error: invalid conversion from ‘char*’ to ‘unsigned int’ [-fpermissive]
+        ReadingFile.cpp:413:13:
+          413 |       in >> tmpString;
+              |             ^~~~~~~~~
+              |             |
+              |             char*
+      • error: cannot bind rvalue ‘(unsigned int)tmpString’ to ‘unsigned int&’
+    • candidate 6: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(long int&) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’ (near match)
+      /usr/include/c++/16/istream:194:7:
+        194 |       operator>>(long& __n)
+            |       ^~~~~~~~
+      • conversion of argument 1 would be ill-formed:
+      • error: invalid conversion from ‘char*’ to ‘long int’ [-fpermissive]
+        ReadingFile.cpp:413:13:
+          413 |       in >> tmpString;
+              |             ^~~~~~~~~
+              |             |
+              |             char*
+      • error: cannot bind rvalue ‘(long int)tmpString’ to ‘long int&’
+    • candidate 7: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(long unsigned int&) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’ (near match)
+      /usr/include/c++/16/istream:198:7:
+        198 |       operator>>(unsigned long& __n)
+            |       ^~~~~~~~
+      • conversion of argument 1 would be ill-formed:
+      • error: invalid conversion from ‘char*’ to ‘long unsigned int’ [-fpermissive]
+        ReadingFile.cpp:413:13:
+          413 |       in >> tmpString;
+              |             ^~~~~~~~~
+              |             |
+              |             char*
+      • error: cannot bind rvalue ‘(long unsigned int)tmpString’ to ‘long unsigned int&’
+    • candidate 8: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(long long int&) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’ (near match)
+      /usr/include/c++/16/istream:205:7:
+        205 |       operator>>(long long& __n)
+            |       ^~~~~~~~
+      • conversion of argument 1 would be ill-formed:
+      • error: invalid conversion from ‘char*’ to ‘long long int’ [-fpermissive]
+        ReadingFile.cpp:413:13:
+          413 |       in >> tmpString;
+              |             ^~~~~~~~~
+              |             |
+              |             char*
+      • error: cannot bind rvalue ‘(long long int)tmpString’ to ‘long long int&’
+    • candidate 9: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(long long unsigned int&) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’ (near match)
+      /usr/include/c++/16/istream:209:7:
+        209 |       operator>>(unsigned long long& __n)
+            |       ^~~~~~~~
+      • conversion of argument 1 would be ill-formed:
+      • error: invalid conversion from ‘char*’ to ‘long long unsigned int’ [-fpermissive]
+        ReadingFile.cpp:413:13:
+          413 |       in >> tmpString;
+              |             ^~~~~~~~~
+              |             |
+              |             char*
+      • error: cannot bind rvalue ‘(long long unsigned int)tmpString’ to ‘long long unsigned int&’
+    • candidate 10: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(void*&) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’ (near match)
+      /usr/include/c++/16/istream:334:7:
+        334 |       operator>>(void*& __p)
+            |       ^~~~~~~~
+      • conversion of argument 1 would be ill-formed:
+      • error: cannot bind non-const lvalue reference of type ‘void*&’ to an rvalue of type ‘void*’
+        ReadingFile.cpp:413:13:
+          413 |       in >> tmpString;
+              |             ^~~~~~~~~
+    • candidate 11: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(float&) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’
+      /usr/include/c++/16/istream:225:7:
+        225 |       operator>>(float& __f)
+            |       ^~~~~~~~
+      • no known conversion for argument 1 from ‘char*’ to ‘float&’
+        /usr/include/c++/16/istream:225:25:
+          225 |       operator>>(float& __f)
+              |                  ~~~~~~~^~~
+    • candidate 12: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(double&) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’
+      /usr/include/c++/16/istream:229:7:
+        229 |       operator>>(double& __f)
+            |       ^~~~~~~~
+      • no known conversion for argument 1 from ‘char*’ to ‘double&’
+        /usr/include/c++/16/istream:229:26:
+          229 |       operator>>(double& __f)
+              |                  ~~~~~~~~^~~
+    • candidate 13: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(long double&) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’
+      /usr/include/c++/16/istream:233:7:
+        233 |       operator>>(long double& __f)
+            |       ^~~~~~~~
+      • no known conversion for argument 1 from ‘char*’ to ‘long double&’
+        /usr/include/c++/16/istream:233:31:
+          233 |       operator>>(long double& __f)
+              |                  ~~~~~~~~~~~~~^~~
+    • candidate 14: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(__istream_type& (*)(__istream_type&)) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’
+      /usr/include/c++/16/istream:128:7:
+        128 |       operator>>(__istream_type& (*__pf)(__istream_type&))
+            |       ^~~~~~~~
+      • no known conversion for argument 1 from ‘char*’ to ‘std::basic_istream<char>::__istream_type& (*)(std::basic_istream<char>::__istream_type&)’ {aka ‘std::basic_istream<char>& (*)(std::basic_istream<char>&)’}
+        /usr/include/c++/16/istream:128:36:
+          128 |       operator>>(__istream_type& (*__pf)(__istream_type&))
+              |                  ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+    • candidate 15: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(__ios_type& (*)(__ios_type&)) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>; __ios_type = std::basic_ios<char>]’
+      /usr/include/c++/16/istream:132:7:
+        132 |       operator>>(__ios_type& (*__pf)(__ios_type&))
+            |       ^~~~~~~~
+      • no known conversion for argument 1 from ‘char*’ to ‘std::basic_istream<char>::__ios_type& (*)(std::basic_istream<char>::__ios_type&)’ {aka ‘std::basic_ios<char>& (*)(std::basic_ios<char>&)’}
+        /usr/include/c++/16/istream:132:32:
+          132 |       operator>>(__ios_type& (*__pf)(__ios_type&))
+              |                  ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+    • candidate 16: ‘std::basic_istream<_CharT, _Traits>::__istream_type& std::basic_istream<_CharT, _Traits>::operator>>(std::ios_base& (*)(std::ios_base&)) [with _CharT = char; _Traits = std::char_traits<char>; __istream_type = std::basic_istream<char>]’
+      /usr/include/c++/16/istream:139:7:
+        139 |       operator>>(ios_base& (*__pf)(ios_base&))
+            |       ^~~~~~~~
+      • no known conversion for argument 1 from ‘char*’ to ‘std::ios_base& (*)(std::ios_base&)’
+        /usr/include/c++/16/istream:139:30:
+          139 |       operator>>(ios_base& (*__pf)(ios_base&))
+              |                  ~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+    • candidate 17: ‘std::basic_istream<_CharT, _Traits>& std::basic_istream<_CharT, _Traits>::operator>>(__streambuf_type*) [with _CharT = char; _Traits = std::char_traits<char>; __streambuf_type = std::basic_streambuf<char>]’
+      /usr/include/c++/16/istream:358:7:
+        358 |       operator>>(__streambuf_type* __sb);
+            |       ^~~~~~~~
+      • no known conversion for argument 1 from ‘char*’ to ‘std::basic_istream<char>::__streambuf_type*’ {aka ‘std::basic_streambuf<char>*’}
+        /usr/include/c++/16/istream:358:36:
+          358 |       operator>>(__streambuf_type* __sb);
+              |                  ~~~~~~~~~~~~~~~~~~^~~~
+    • candidate 18: ‘std::istream& NTL::operator>>(std::istream&, ZZ&)’
+      /usr/include/NTL/ZZ.h:1706:18:
+       1706 | NTL_SNS istream& operator>>(NTL_SNS istream& s, ZZ& x);
+            |                  ^~~~~~~~
+      • no known conversion for argument 2 from ‘char*’ to ‘NTL::ZZ&’
+        /usr/include/NTL/ZZ.h:1706:53:
+         1706 | NTL_SNS istream& operator>>(NTL_SNS istream& s, ZZ& x);
+              |                                                 ~~~~^
+
+--- code/latte/ReadingFile.cpp.orig	2021-03-18 09:29:32.265177280 -0600
++++ code/latte/ReadingFile.cpp	2026-01-17 10:04:51.850301810 -0700
+@@ -401,7 +401,7 @@ void CheckInputFileCDDRep4(const char *I
+   int dim, constrains;
+   string tmp;
+   ZZ zztmp;
+-  char* tmpString = new char[200];
++  char tmpString[200];
+   while(tmp != "begin") getline(in, tmp);
+   in >> zztmp;
+   conv(constrains, zztmp);
+@@ -437,7 +437,6 @@ void CheckInputFileCDDRep4(const char *I
+     cerr << "Your input file contains non-number!" << endl;
+     exit (1);
+   }
+-  delete [] tmpString;
+   return ;
+ }
+ 
+@@ -453,7 +452,7 @@ void CheckInputFile(const char *InputFil
+   
+   ifstream in(InputFile);
+   int i, len, flag = 0;
+-  char* tmpString = new char[200];
++  char tmpString[200];
+   while(in >> tmpString)
+     {
+       len = strlen(tmpString);
+@@ -482,7 +481,6 @@ void CheckInputFile(const char *InputFil
+     cerr << "Your input file contains non-number!" << endl;
+     exit (1);
+   }
+-  delete [] tmpString;
+   return ;
+ }
+ /* ----------------------------------------------------------------- */
+@@ -496,7 +494,7 @@ void CheckInputFileVrep(const char *Inpu
+   
+   ifstream in(InputFile);
+   int i, len, flag = 0;
+-  char* tmpString = new char[200];
++  char tmpString[200];
+   while(in >> tmpString)
+     {
+       len = strlen(tmpString);
+@@ -524,7 +522,6 @@ void CheckInputFileVrep(const char *Inpu
+     cerr << "Your input file contains non-number!" << endl;
+     exit (1);
+   }
+-  delete [] tmpString;
+   return ;
+ }
+ 

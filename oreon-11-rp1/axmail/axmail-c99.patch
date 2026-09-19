@@ -1,0 +1,32 @@
+Add missing prototypes to avoid implicit function declarations.
+Future compilers are likely to reject them by default.
+
+Also include <grp.h> in axmail.c for a declaration of setgroups.
+
+Submitted upstream: <https://sourceforge.net/p/axmail/tickets/1/>
+
+diff --git a/axmail.c b/axmail.c
+index 1fd716c1500bbea0..b777ca5b6e196189 100644
+--- a/axmail.c
++++ b/axmail.c
+@@ -8,6 +8,7 @@
+ #include <signal.h>
+ #include <time.h>
+ #include <syslog.h>
++#include <grp.h>
+ #include <pwd.h>
+ #include <crypt.h>
+ #include <error.h>
+diff --git a/utils.h b/utils.h
+index 69380a597ac05461..4a655ee05121c829 100644
+--- a/utils.h
++++ b/utils.h
+@@ -1,6 +1,8 @@
+ 
+ extern void prompt(void);
+ 
++extern void getaddy(char *forward);
++extern void getsig(char *signature);
+ extern void getname(char *uname);
+ extern void getstr(char *str, int len, char *prompt);
+ 

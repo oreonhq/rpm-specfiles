@@ -1,0 +1,26 @@
+Avoid an implicit declaration of exit, to prevent build failures with
+future compilers.
+
+diff -ur kdebase-3.5.10.orig/admin/libtool.m4.in kdebase-3.5.10/admin/libtool.m4.in
+--- kdebase-3.5.10.orig/admin/libtool.m4.in	2023-04-14 08:02:09.459678889 +0200
++++ kdebase-3.5.10/admin/libtool.m4.in	2023-04-14 08:03:43.256675209 +0200
+@@ -760,10 +760,6 @@
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -777,7 +773,7 @@
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }]
+ EOF
+   if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} 2>/dev/null; then

@@ -1,0 +1,16 @@
+This is needed for the declaration of the safe_print_string function.
+Submitted to what seems to be a maintained fork of upstream:
+
+  <https://github.com/mej/Eterm/pull/5>
+
+diff -ur Eterm-0.9.6.orig/src/libscream.c Eterm-0.9.6/src/libscream.c
+--- Eterm-0.9.6.orig/src/libscream.c	2009-11-21 04:58:10.000000000 +0100
++++ Eterm-0.9.6/src/libscream.c	2022-11-27 18:08:03.757615244 +0100
+@@ -44,6 +44,7 @@
+ 
+ #include "config.h"
+ #include "feature.h"
++#include "misc.h"
+ 
+ /* use libast if we have it */
+ #ifdef DEBUG_ESCREEN

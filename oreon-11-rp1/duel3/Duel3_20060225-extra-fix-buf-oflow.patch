@@ -1,0 +1,13 @@
+--- Duel3_20060225_src/Source/Player.cpp	2011-10-31 16:04:27.822637813 +0000
++++ Duel3_20060225_src/Source/Player.cpp	2011-10-31 16:06:37.410633539 +0000
+@@ -32,8 +32,8 @@
+     else
+         sprintf(ammo_left,"",ship.retWepName()); 
+     
+-    sprintf(shield_percent,"%d%%",(int)ship.retSheildHealth());  
+-    sprintf(armour_percent,"%d%%",(int)ship.retArmorHealth());
++    snprintf(shield_percent,5,"%d%%",(int)ship.retSheildHealth());  
++    snprintf(armour_percent,5,"%d%%",(int)ship.retArmorHealth());
+ 
+     if(lives>0) 
+         sprintf(lives_left,"%d",lives); 

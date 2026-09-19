@@ -1,0 +1,15 @@
+diff -up evolution-rspam-0.6.0/configure.ac.evo3136 evolution-rspam-0.6.0/configure.ac
+--- evolution-rspam-0.6.0/configure.ac.evo3136	2014-09-22 17:31:56.303287105 +0200
++++ evolution-rspam-0.6.0/configure.ac	2014-09-22 17:33:16.333283934 +0200
+@@ -160,7 +160,11 @@ AM_GLIB_DEFINE_LOCALEDIR(GNOMELOCALEDIR)
+ LOCALEDIR=$localedir
+ AC_SUBST(LOCALEDIR)
+ 
++if test "$EVOLUTION_VERSION" -ge "3013006"; then
++privdatadir='${datadir}'/evolution
++else
+ privdatadir='${datadir}'/evolution/$EVOLUTION_EXEC_VERSION
++fi
+ AC_SUBST(privdatadir)
+ 
+ uidir="$privdatadir/ui"

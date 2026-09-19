@@ -3,7 +3,7 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Name:		gperftools
-Version:	2.18.1
+Version:	2.18.90
 Release:	1%{?dist}
 License:	BSD-3-Clause
 Summary:	Very fast malloc and performance analysis tools

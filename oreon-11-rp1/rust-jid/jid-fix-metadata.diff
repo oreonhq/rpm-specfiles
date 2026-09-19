@@ -1,0 +1,13 @@
+--- jid-0.12.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ jid-0.12.1/Cargo.toml	2026-01-23T07:04:04.211582+00:00
+@@ -55,10 +55,6 @@
+ [dependencies.memchr]
+ version = "2.5"
+ 
+-[dependencies.minidom]
+-version = "0.18"
+-optional = true
+-
+ [dependencies.proc-macro2]
+ version = "1.0"
+ optional = true

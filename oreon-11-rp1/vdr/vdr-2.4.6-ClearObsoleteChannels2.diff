@@ -1,0 +1,58 @@
+diff -Nurp vdr-2.4.6.orig/channels.c vdr-2.4.6/channels.c
+--- vdr-2.4.6.orig/channels.c	2020-04-11 11:22:05.000000000 +0200
++++ vdr-2.4.6/channels.c	2021-01-07 10:05:06.503383738 +0100
+@@ -1145,3 +1145,23 @@ cString ChannelString(const cChannel *Ch
+      snprintf(buffer, sizeof(buffer), "%s", tr("*** Invalid Channel ***"));
+   return buffer;
+ }
++
++// --- cChannel cont. --------------------------------------------------------
++
++bool cChannel::ClearObsoleteChannel(void)
++{
++  bool ChannelsModified = false;
++  if (time(NULL) - Seen() <= CHANNELTIMEOBSOLETE && endswith(name, CHANNELMARKOBSOLETE)) {
++     int mlen = strlen(CHANNELMARKOBSOLETE);
++     int e = strlen(name) - mlen - 1;
++     name[e] = '\0';
++     cString clrname = cString::sprintf("%s", name);
++     name[e] = ' ';
++
++     int OldShowChannelNamesWithSource = Setup.ShowChannelNamesWithSource;
++     Setup.ShowChannelNamesWithSource = 0;
++     ChannelsModified |= SetName(clrname, shortName, provider + mlen + 1);
++     Setup.ShowChannelNamesWithSource = OldShowChannelNamesWithSource;
++     }
++  return ChannelsModified;
++}
+diff -Nurp vdr-2.4.6.orig/channels.h vdr-2.4.6/channels.h
+--- vdr-2.4.6.orig/channels.h	2020-06-10 16:00:36.000000000 +0200
++++ vdr-2.4.6/channels.h	2021-01-06 22:35:28.224118499 +0100
+@@ -202,6 +202,7 @@ public:
+   void SetRefChannel(cChannel *RefChannel);
+   bool SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *CompositionPageIds, uint16_t *AncillaryPageIds);
+   void SetSeen(void);
++  bool ClearObsoleteChannel(void);
+   void DelLinkChannel(cChannel *LinkChannel);
+   };
+ 
+diff -Nurp vdr-2.4.6.orig/pat.c vdr-2.4.6/pat.c
+--- vdr-2.4.6.orig/pat.c	2020-12-18 15:51:57.000000000 +0100
++++ vdr-2.4.6/pat.c	2021-01-07 10:34:00.956778138 +0100
+@@ -489,6 +499,7 @@ void cPatFilter::Process(u_short Pid, u_
+         SwitchToNextPmtPid();
+      cChannel *Channel = Channels->GetByServiceID(Source(), Transponder(), pmt.getServiceId());
+      if (Channel) {
++        Channel->SetSeen();
+         SI::CaDescriptor *d;
+         cCaDescriptors *CaDescriptors = new cCaDescriptors(Channel->Source(), Channel->Transponder(), Channel->Sid(), Pid);
+         // Scan the common loop:
+@@ -718,6 +729,8 @@ void cPatFilter::Process(u_short Pid, u_
+                    }
+                }
+             }
++        if (Setup.UpdateChannels == 1 || Setup.UpdateChannels >= 3)
++           ChannelsModified |= Channel->ClearObsoleteChannel();
+         if (Setup.UpdateChannels >= 2) {
+            ChannelsModified |= Channel->SetPids(Vpid, Ppid, Vtype, Apids, Atypes, ALangs, Dpids, Dtypes, DLangs, Spids, SLangs, Tpid);
+            ChannelsModified |= Channel->SetCaIds(CaDescriptors->CaIds());

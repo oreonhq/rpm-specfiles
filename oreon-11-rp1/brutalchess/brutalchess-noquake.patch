@@ -1,0 +1,44 @@
+From: Markus Koschany <apo@gambaru.de>
+Date: Sat, 21 Dec 2013 13:56:00 +0100
+Subject: disable quake pieces
+
+The quake pieces were never officially shipped by upstream because they are
+copyrighted. This patch disables the -p quake option because it is useless and
+causes a segmentation fault.
+
+Bug: http://bugs.debian.org/732227
+---
+ src/utils.cpp | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/src/utils.cpp b/src/utils.cpp
+index e1ccb4b..8138118 100644
+--- a/src/utils.cpp
++++ b/src/utils.cpp
+@@ -38,8 +38,6 @@ void printUsage()
+ 	cerr << " -l PLAYER1 PLAYER2  --player1=PLAYER1\t\t Set your player and opponent. Choices are brutal,\n";
+ 	cerr << "                     --player2=PLAYER2\t\t faile, human, random, test, xboard.";
+ 	cerr << endl << endl;
+-	cerr << " -p PIECE_SET  --pieces=PIECE_SET\t\t Select the piece set. Choices are basic, quake.";
+-	cerr << endl << endl;
+ 	cerr << " -r  --reflections=on|off\t\t\t Turn off reflections, on by default.";
+ 	cerr << endl << endl;
+ 	cerr << " -s  --shadows=on|off\t\t\t\t Turn off shadows, on by default.";
+@@ -156,8 +154,6 @@ void parseCommandLine(int argc, char* argv[])
+ 				opts->pieces = BASIC;
+ 			} else if(args[i+1] == "debug") {
+ 				opts->pieces = DEBUG;
+-			} else if(args[i+1] == "quake") {
+-				opts->pieces = QUAKE;
+ 			} else {
+ 				printUsage();
+ 			}
+@@ -167,8 +163,6 @@ void parseCommandLine(int argc, char* argv[])
+ 				opts->pieces = BASIC;
+ 			} else if(args[i].substr(9, args[i].size()) == "debug") {
+ 				opts->pieces = DEBUG;
+-			} else if(args[i].substr(9, args[i].size()) == "quake") {
+-				opts->pieces = QUAKE;
+ 			} else {
+ 				printUsage();
+ 			}

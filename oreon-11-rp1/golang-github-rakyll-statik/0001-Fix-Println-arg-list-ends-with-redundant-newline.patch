@@ -1,0 +1,35 @@
+From 998bfd24c152d1baa3f81f4a910de0133b6984f3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?=
+ <30413512+eclipseo@users.noreply.github.com>
+Date: Wed, 23 Feb 2022 20:24:34 +0100
+Subject: [PATCH] Fix "Println arg list ends with redundant newline"
+
+---
+ statik.go | 4 +---
+ 1 file changed, 2 insertion(+), 4 deletions(-)
+
+diff --git a/statik.go b/statik.go
+index 0b0ad29..dcb8fa1 100644
+--- a/statik.go
++++ b/statik.go
+@@ -79,8 +79,7 @@ if there is already an existing package.
+ Generates a statik package only with the ".js" files
+ from the ./public directory.
+ 
+-   $ statik -include=*.js
+-`
++   $ statik -include=*.js`
+ 
+ // mtimeDate holds the arbitrary mtime that we assign to files when
+ // flagNoMtime is set.
+@@ -278,9 +277,7 @@ package %s
+ 
+ import (
+ 	"github.com/rakyll/statik/fs"
+-)
+-
+-`, tags, comment, namePackage)
++)`, tags, comment, namePackage)
+ 	if !fs.IsDefaultNamespace(assetNamespace) {
+ 		fmt.Fprintf(&qb, `
+ const %s = "%s" // static asset namespace

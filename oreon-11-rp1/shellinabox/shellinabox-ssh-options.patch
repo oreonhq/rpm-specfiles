@@ -1,0 +1,15 @@
+diff -Naur shellinabox-2.20.old/shellinabox/service.c shellinabox-2.20/shellinabox/service.c
+--- shellinabox-2.20.old/shellinabox/service.c	2017-12-07 16:51:32.422058845 +0100
++++ shellinabox-2.20/shellinabox/service.c	2017-12-07 16:52:51.979540100 +0100
+@@ -175,9 +175,9 @@
+           "-oHostbasedAuthentication=no -oIdentitiesOnly=yes "
+           "-oKbdInteractiveAuthentication=yes -oPasswordAuthentication=yes "
+           "-oPreferredAuthentications=keyboard-interactive,password "
+-          "-oPubkeyAuthentication=no -oRhostsRSAAuthentication=no "
+-          "-oRSAAuthentication=no -oStrictHostKeyChecking=no -oTunnel=no "
++          "-oPubkeyAuthentication=no -oStrictHostKeyChecking=no -oTunnel=no "
+           "-oUserKnownHostsFile=/dev/null -oVerifyHostKeyDNS=no "
++          "-oProxyCommand=none "
+ // beewoolie-2012.03.30: while it would be nice to disable this
+ //          feature, we cannot be sure that it is available on the
+ //          target server.  Removing it for the sake of Centos.

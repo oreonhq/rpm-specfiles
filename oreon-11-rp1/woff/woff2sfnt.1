@@ -1,0 +1,33 @@
+.TH woff2sfnt "1" "November 2020" woff2sfnt "User Commands"
+.SH NAME
+woff2sfnt \- decode WOFF file
+.IR woff ,
+writing OpenType data to
+.B stdout
+.SH SYNOPSIS
+woff2sfnt
+.RB [ \-v \ |\  \-m \ |\  \-p ]
+.I woff
+.SH DESCRIPTION
+.PP
+Decodes WOFF file
+.IR woff ,
+writing OpenType data to
+.BR stdout .
+.SH OPTIONS
+.TP
+.B \-v
+write font version to
+.B stdout
+.TP
+.B \-m
+write WOFF metadata block to
+.B stdout
+.TP
+.B \-p
+write private data block to
+.B stdout
+.SH NOTES
+Only one of \fB\-v\fR, \fB\-m\fR, \fB\-p\fR may be used at a time.
+.SH "SEE ALSO"
+.BR sfnt2woff (1)

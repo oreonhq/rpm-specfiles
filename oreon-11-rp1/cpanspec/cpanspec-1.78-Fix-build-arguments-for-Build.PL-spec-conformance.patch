@@ -1,0 +1,32 @@
+From ce89117d8dc4ad7ef66b7f6e2b8579cefbd51643 Mon Sep 17 00:00:00 2001
+From: Leon Timmermans <fawaka@gmail.com>
+Date: Mon, 20 May 2013 15:08:38 +0200
+Subject: [PATCH] Fix build arguments for Build.PL spec conformance
+
+This makes it compatible with tools such as Module::Build::Tiny
+---
+ cpanspec | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cpanspec b/cpanspec
+index 2f8377e..d972d1c 100755
+--- a/cpanspec
++++ b/cpanspec
+@@ -1214,7 +1214,7 @@ END
+ 
+     if ($usebuildpl) {
+         print $spec <<END;
+-\%{__perl} Build.PL installdirs=vendor@{[$noarch ? '' : qq{ optimize="$macro{optimize}"} ]}
++\%{__perl} Build.PL --installdirs=vendor@{[$noarch ? '' : qq{ --optimize="$macro{optimize}"} ]}
+ ./Build
+ END
+     } else {
+@@ -1240,7 +1240,7 @@ END
+ 
+     if ($usebuildpl) {
+         print $spec
+-            "./Build install destdir=$macro{buildroot} create_packlist=0\n";
++            "./Build install --destdir=$macro{buildroot} --create_packlist=0\n";
+     } else {
+         print $spec <<END;
+ make pure_install PERL_INSTALL_ROOT=$macro{buildroot}

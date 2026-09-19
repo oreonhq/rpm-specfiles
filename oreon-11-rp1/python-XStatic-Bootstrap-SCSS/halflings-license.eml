@@ -1,0 +1,136 @@
+Return-Path: glyphicons@gmail.com
+Received: from zmta06.collab.prod.int.phx2.redhat.com (LHLO
+ zmta06.collab.prod.int.phx2.redhat.com) (10.5.81.13) by
+ zmail17.collab.prod.int.phx2.redhat.com with LMTP; Thu, 17 Nov 2016
+ 14:46:50 -0500 (EST)
+Received: from int-mx11.intmail.prod.int.phx2.redhat.com (int-mx11.intmail.prod.int.phx2.redhat.com [10.5.11.24])
+	by zmta06.collab.prod.int.phx2.redhat.com (Postfix) with ESMTP id 4E703169605
+	for <sgallagh@mail.corp.redhat.com>; Thu, 17 Nov 2016 14:46:50 -0500 (EST)
+Received: from mx1.redhat.com (ext-mx04.extmail.prod.ext.phx2.redhat.com [10.5.110.28])
+	by int-mx11.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id uAHJkoq3016770
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
+	for <sgallagh@redhat.com>; Thu, 17 Nov 2016 14:46:50 -0500
+Received: from mail-wm0-f49.google.com (mail-wm0-f49.google.com [74.125.82.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mx1.redhat.com (Postfix) with ESMTPS id D881080088
+	for <sgallagh@redhat.com>; Thu, 17 Nov 2016 19:46:48 +0000 (UTC)
+Received: by mail-wm0-f49.google.com with SMTP id a197so332518655wmd.0
+        for <sgallagh@redhat.com>; Thu, 17 Nov 2016 11:46:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20120113;
+        h=from:content-transfer-encoding:mime-version:subject:date:references
+         :to:in-reply-to:message-id;
+        bh=EAC2rp246Km9miHzTmjmf76fbCblkTJb+WuZyNkfK5M=;
+        b=P62IqUBlKuqhqaVNl1SqGC/QDh44CHrBgVdNnEPCq9dOngSPHkuB/rG5MrXomX+yGK
+         xgDIASbtk9ycG3C8K1SymW8vqwURvunM/5ZwPKF66/wkJiFU8YTY1wB5en1RfqYDJFh3
+         DcUn5IENutHKFv3jbT1pTbFLZ0oqUyNUiYlTcuN8495C/V4J8XNHkU9KjAePBmMsiwz7
+         svwOxnGqsE/K1WCwMFSVRo1BIRHNjfAQBvLf3z5eDxtdZxtrDf4W7f4VtL0uBPjG8Hun
+         oNipTU2viwt+mib7ct7MTq+LstxqNRoSTdZ811vocv8w6+l02fggx5HaLlD1pf0fGa20
+         9o+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20130820;
+        h=x-gm-message-state:from:content-transfer-encoding:mime-version
+         :subject:date:references:to:in-reply-to:message-id;
+        bh=EAC2rp246Km9miHzTmjmf76fbCblkTJb+WuZyNkfK5M=;
+        b=EQs3EIrDoS2rBh+2IRSfa1ujFsSRMHfP5uoaG0eVCNl6pcUf9KZ8RiO+ynHimKKidD
+         2uMVNjmYj81aDtpWNoV+J9O6v60oeFrKFwgyxmyGH6vwZ/A+C6pNvB7nGAEWAWw6emIv
+         1aI8fPIZ9dCRV1FDRY11LIp4Xy/UZhwRjXpgj7y7uBBPLtcVlxWEruAgQ6WrdoE0fbuW
+         CdScC4fVZE2arcWZspqkHaXqyeu7ZfAdBE7BRYu2vHz1oyWVwUhHcW2nIfaLKauhZuwk
+         zxt0R9y/jZhmdzhzPOAO5VsHZY/nOdj00l+bN1eGr3ZxJsIKBiXU3MEXjcNwju8qVihK
+         TgBA==
+X-Gm-Message-State: ABUngvejapMEhWtgihRaaIHgqrHwsEAxBv30/EIsO7HP6asMqzvMiQhy4wk1CpVu1BCeCg==
+X-Received: by 10.28.128.198 with SMTP id b189mr17631587wmd.105.1479412007213;
+        Thu, 17 Nov 2016 11:46:47 -0800 (PST)
+Received: from [192.168.0.113] ([178.22.115.177])
+        by smtp.gmail.com with ESMTPSA id b7sm4897348wjm.39.2016.11.17.11.46.46
+        for <sgallagh@redhat.com>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Nov 2016 11:46:46 -0800 (PST)
+From: =?utf-8?B?SmFuIEtvdmHFmcOtaw==?= <glyphicons@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 10.1 \(3251\))
+Subject: Re: License of Glyphicons Halflings font for Bootstrap
+Date: Thu, 17 Nov 2016 20:46:45 +0100
+References: <f4c11146-74a1-1f8b-b446-332071ee126e@redhat.com>
+ <E5DC4484-595E-4F59-B643-7D057C3253DD@gmail.com>
+ <850b73c2-60ee-2077-883e-823c8f61e732@redhat.com>
+To: Stephen Gallagher <sgallagh@redhat.com>
+In-Reply-To: <850b73c2-60ee-2077-883e-823c8f61e732@redhat.com>
+Message-Id: <CE5FB16B-7D75-4883-BAD7-1115279A21B2@gmail.com>
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Thu, 17 Nov 2016 19:46:49 +0000 (UTC)
+X-Greylist: inspected by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Thu, 17 Nov 2016 19:46:49 +0000 (UTC) for IP:'74.125.82.49' DOMAIN:'mail-wm0-f49.google.com' HELO:'mail-wm0-f49.google.com' FROM:'glyphicons@gmail.com' RCPT:''
+X-RedHat-Spam-Score: 0.77  (BAYES_50,DCC_REPUT_00_12,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_SORBS_SPAM,SPF_PASS) 74.125.82.49 mail-wm0-f49.google.com 74.125.82.49 mail-wm0-f49.google.com <glyphicons@gmail.com>
+X-Scanned-By: MIMEDefang 2.68 on 10.5.11.24
+X-Scanned-By: MIMEDefang 2.78 on 10.5.110.28
+
+Hi again Stephen,=20
+
+you have my explicit permission to distribute the Halflings font v =
+1.9.2. under the license:=20
+
+Attribution-ShareAlike 4.0 International:
+https://creativecommons.org/licenses/by-sa/4.0/
+
+I'd rather use this license if it's ok and kept the icons really free.=20=
+
+
+Jan Kova=C5=99=C3=ADk
+--
+www.jankovarik.net
+www.glyphicons.com
+=09
+
+> On 17 Nov 2016, at 20:18, Stephen Gallagher <sgallagh@redhat.com> =
+wrote:
+>=20
+> On 11/17/2016 12:21 PM, Jan Kova=C5=99=C3=ADk wrote:
+>> Hi Stephen,=20
+>>=20
+>> yes, current version of Halflings font is really "Free of cost" and =
+"freely available for redistribution" as it is writen on Bootstrap page =
+(http://getbootstrap.com/components/#glyphicons) and in my license text =
+on the bottom of this page: =
+http://glyphicons.com/license/#halflingsbootstrap where is explicitely =
+this: "GLYPHICONS Halflings font is also released as an extension of a =
+Bootstrap www.getbootstrap.com for free and it is released under the =
+same license as Bootstrap."=20
+>>=20
+>> If it's enough to write it just here:=20
+>> "You're free to use Hallfings font (v 1.9.2.) in Fedora Project for =
+free as long as you want. I'm also sending you a this last version of =
+Halflings in attached ZIP file."
+>>=20
+>> Currently I'm working on an new update and version of GLYPHICONS =
+Halflings font with new icons and improved ones. I'm not sure which =
+license to choose for a new version, since I'm kind of lost in all these =
+"licenses" (all suggestions are welcome), but I'm sure Halflings will be =
+released again for free.
+>>=20
+>> Let me know if you have any other questions.
+>>=20
+>> Jan Kova=C5=99=C3=ADk
+>=20
+>=20
+> Thanks for your answer. Would it be possible for you to give us =
+explicit
+> permission (via email is fine) to distribute the Halflings font with =
+Bootstrap
+> under the terms of either:
+>=20
+> * The Creative Commons Attribution 3.0 Unported license:
+>  http://creativecommons.org/licenses/by/3.0/deed.en
+>=20
+> or
+>=20
+> * The Apache 2.0 license:
+>  https://www.apache.org/licenses/LICENSE-2.0
+>=20
+> If neither of those licenses is acceptable to you, please let us know, =
+and we
+> would be happy to suggest other license possibilities.
+>=20
+>=20
+>=20
+

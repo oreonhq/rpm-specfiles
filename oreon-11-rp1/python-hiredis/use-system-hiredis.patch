@@ -1,0 +1,20 @@
+diff -ruN hiredis-py-2.2.3/setup.py hiredis-py-2.2.3-patched/setup.py
+--- hiredis-py-2.2.3/setup.py	2023-05-04 12:10:35.000000000 +0200
++++ hiredis-py-2.2.3-patched/setup.py	2023-12-14 22:44:04.537468489 +0100
+@@ -19,14 +19,14 @@
+ 
+ def get_sources():
+     hiredis_sources = ("alloc", "async", "hiredis", "net", "read", "sds", "sockcompat")
+-    return sorted(glob.glob("src/*.c") + ["vendor/hiredis/%s.c" % src for src in hiredis_sources])
++    return sorted(glob.glob("src/*.c"))
+ 
+ 
+ def get_linker_args():
+     if 'win32' in sys.platform or 'darwin' in sys.platform:
+         return []
+     else:
+-        return ["-Wl,-Bsymbolic", ]
++        return ["-Wl,-Bsymbolic", "-lhiredis"]
+ 
+ 
+ def get_compiler_args():

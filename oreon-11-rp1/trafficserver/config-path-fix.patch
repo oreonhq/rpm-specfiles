@@ -1,0 +1,17 @@
+--- cmake/install_configs.cmake.orig	2024-11-16 02:43:07.720184512 +0000
++++ cmake/install_configs.cmake	2024-11-16 02:43:26.701401672 +0000
+@@ -21,12 +21,12 @@
+ # If the config file already exists, the source config file is copied with the '.default' extension
+ 
+ file(GLOB CONFIG_FILES ${CONFIG_SOURCE_GLOBS})
+-file(MAKE_DIRECTORY "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${CONFIG_DEST_PATH}")
++file(MAKE_DIRECTORY "$ENV{DESTDIR}${CONFIG_DEST_PATH}")
+ 
+ foreach(CONFIG_FILE ${CONFIG_FILES})
+   # remove the '.default' extension from the path
+   cmake_path(GET CONFIG_FILE STEM LAST_ONLY CONFIG_FILE_NAME)
+-  set(DEST_FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${CONFIG_DEST_PATH}/${CONFIG_FILE_NAME}")
++  set(DEST_FILE "$ENV{DESTDIR}${CONFIG_DEST_PATH}/${CONFIG_FILE_NAME}")
+   if(EXISTS ${DEST_FILE})
+     set(DEST_FILE "${DEST_FILE}.default")
+   endif()

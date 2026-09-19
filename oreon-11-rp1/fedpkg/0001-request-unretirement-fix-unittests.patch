@@ -1,0 +1,66 @@
+From 452024234ee0722e5a062af37b9ce8a3c2232986 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Nosek?= <onosek@redhat.com>
+Date: Wed, 26 Nov 2025 06:27:05 +0100
+Subject: [PATCH] `request-unretirement`: fix unittests
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Relates: https://pagure.io/fedpkg/pull-request/558
+
+JIRA: RHELCMP-14989
+
+Signed-off-by: Ondřej Nosek <onosek@redhat.com>
+---
+ test/test_cli.py | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/test/test_cli.py b/test/test_cli.py
+index 2103a46..155151b 100644
+--- a/test/test_cli.py
++++ b/test/test_cli.py
+@@ -2614,7 +2614,8 @@ class TestRequestUnretirement(CliTestCase):
+ 
+         self.run_cmd(['git', 'checkout', '-b', 'f40'], cwd=self.cloned_repo_path)
+ 
+-        cli_cmd = ['fedpkg-stage', '--path', self.cloned_repo_path, 'request-unretirement']
++        cli_cmd = ['fedpkg-stage', '--path', self.cloned_repo_path, '--user', 'root',
++                   'request-unretirement']
+ 
+         cli = self.get_cli(cli_cmd)
+         cli.request_unretirement()
+@@ -2729,8 +2730,8 @@ class TestRequestUnretirement(CliTestCase):
+         self.run_cmd(['git', 'checkout', '-b', 'f40'], cwd=self.cloned_repo_path)
+ 
+         cli_cmd = [
+-            'fedpkg-stage', '--path', self.cloned_repo_path, 'request-unretirement',
+-            '--bz_bug_id', '1234567']
++            'fedpkg-stage', '--path', self.cloned_repo_path, '--user', 'root',
++            'request-unretirement', '--bz_bug_id', '1234567']
+ 
+         cli = self.get_cli(cli_cmd)
+         cli.request_unretirement()
+@@ -2778,7 +2779,8 @@ class TestRequestUnretirement(CliTestCase):
+         self.run_cmd(['git', 'checkout', '-b', 'f40'], cwd=self.cloned_repo_path)
+ 
+         cli_cmd = [
+-            'fedpkg-stage', '--path', self.cloned_repo_path, 'request-unretirement',
++            'fedpkg-stage', '--path', self.cloned_repo_path, '--user', 'root',
++            'request-unretirement',
+             '--bz_bug_id', 'https://bugzilla.redhat.com/show_bug.cgi?id=1234567']
+ 
+         cli = self.get_cli(cli_cmd)
+@@ -2825,8 +2827,8 @@ class TestRequestUnretirement(CliTestCase):
+ 
+         self.run_cmd(['git', 'checkout', '-b', 'f40'], cwd=self.cloned_repo_path)
+         cli_cmd = [
+-            'fedpkg-stage', '--path', self.cloned_repo_path, 'request-unretirement',
+-            '--repo', 'belusha'
++            'fedpkg-stage', '--path', self.cloned_repo_path, '--user', 'root',
++            'request-unretirement', '--repo', 'belusha'
+         ]
+         cli = self.get_cli(cli_cmd)
+         cli.request_unretirement()
+-- 
+2.51.1
+

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d0bab9b0182480a41fe0c677a1f5d4d1c3088e0f3aa6883a0bc25423d94ecfd0
 
 %global stable_kf6 stable
 
@@ -7,8 +7,8 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-workspace-wallpapers
-Version:        6.7.2
-Release: 2%{?dist}
+Version:        6.7.5
+Release: 1%{?dist}
 Summary: Additional wallpapers for Plasma workspace
 # Automatically converted from old format: LGPLv3 - review is highly recommended.
 License: LGPL-3.0-only
@@ -90,6 +90,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/wallpapers/Orionids/
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.7.4-1
+- Latest upstream release
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

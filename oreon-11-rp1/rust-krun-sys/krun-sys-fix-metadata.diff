@@ -1,0 +1,11 @@
+--- krun-sys-1.10.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ krun-sys-1.10.1/Cargo.toml	2026-01-26T22:59:37.304226+00:00
+@@ -34,7 +34,7 @@
+ path = "src/lib.rs"
+ 
+ [build-dependencies.bindgen]
+-version = "0.69.4"
++version = "0.72.1"
+ default-features = false
+ 
+ [build-dependencies.pkg-config]

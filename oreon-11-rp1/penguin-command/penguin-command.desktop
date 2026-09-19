@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Penguin Command
+Comment=Save the planet
+Exec=penguin-command
+Icon=penguin-command.xpm
+Terminal=false
+Type=Application
+Categories=Game;ArcadeGame;

@@ -1,12 +1,12 @@
-%global source0_hash daa03acc40eec873bb450fd8116ae7c788b86a7ceebc9fa555b4a166feeb7983
+%global source0_hash 66a47fc170ea074cce8b916fa313f309d7c9497bd2132e0598d4b63bbad2ac88
 
 %global framework kwallet
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution for password management
 
@@ -19,7 +19,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  cmake(Qca-qt6)
 BuildRequires:  cmake(Qt6Core5Compat)
 
-BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6ConfigWidgets) >= %{version}
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
@@ -29,19 +29,19 @@ BuildRequires:  qt6-qtbase-devel
 
 BuildRequires:  cmake(Qt6Core5Compat)
 
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6DocTools)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6DBusAddons) >= %{version}
+BuildRequires:  cmake(KF6DocTools) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6Notifications) >= %{version}
+BuildRequires:  cmake(KF6Service) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
+BuildRequires:  cmake(KF6Crash) >= %{version}
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6ColorScheme) >= %{version}
 BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  cmake(Gpgmepp)
 BuildRequires:  pkgconfig(libsecret-1)
@@ -97,7 +97,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/qlogging-categories6/%{framework}*
 %{_kf6_datadir}/xdg-desktop-portal/portals/kwallet.portal
 %{_mandir}/man1/kwallet-query.1*
-
+/usr/share/config.kcfg/kwalletsettings.kcfg
 %files libs
 %{_kf6_libdir}/libKF6Wallet.so.*
 %{_libdir}/libKF6WalletBackend.so.*
@@ -110,6 +110,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-10
 - Rebuild
 

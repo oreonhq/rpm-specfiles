@@ -1,0 +1,11 @@
+--- libtwin-0.0.2/libtwin/twin_feature.c~	2007-04-01 20:14:52.000000000 -0400
++++ libtwin-0.0.2/libtwin/twin_feature.c	2007-04-05 14:17:47.000000000 -0400
+@@ -55,7 +55,7 @@ static int _twin_have_altivec(void)
+ }
+ 
+ #else
+-#define _twin_have_altivec()
++#define _twin_have_altivec() (0)
+ #endif /* HAVE_ALTIVEC */
+ 
+ int twin_has_feature(unsigned int feature)

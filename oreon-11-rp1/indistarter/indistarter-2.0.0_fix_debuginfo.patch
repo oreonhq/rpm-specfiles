@@ -1,0 +1,14 @@
+diff -U 3 -dHrN -- a/install.sh b/install.sh
+--- a/install.sh	2019-06-02 10:39:48.000000000 +0200
++++ b/install.sh	2019-06-07 09:19:37.860342360 +0200
+@@ -23,8 +23,8 @@
+ install -m 755 -d $destdir/share/icons/hicolor/48x48/apps
+ install -m 755 -d $destdir/share/metainfo
+ 
+-install -v -m 755 -s indistarter  $destdir/bin/indistarter
+-install -v -m 755 -s indigui  $destdir/bin/indigui
++install -v -m 755 indistarter  $destdir/bin/indistarter
++install -v -m 755 indigui  $destdir/bin/indigui
+ install -v -m 644 system_integration/Linux/share/applications/indistarter.desktop $destdir/share/applications/indistarter.desktop
+ install -v -m 644 system_integration/Linux/share/applications/indigui.desktop $destdir/share/applications/indigui.desktop
+ install -v -m 644 system_integration/Linux/share/metainfo/indistarter.appdata.xml $destdir/share/metainfo/indistarter.appdata.xml

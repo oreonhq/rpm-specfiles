@@ -1,0 +1,289 @@
+From 51d74ebc4ab782f9e272fa4f135ee2375c991a5b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=BD=D0=B0=D0=B1?= <nabijaczleweli@nabijaczleweli.xyz>
+Date: Wed, 18 Dec 2024 03:58:27 +0100
+Subject: [PATCH 1/4] Fix segfault due to https://bugs.debian.org/785795
+
+There are probably many more
+---
+ woff.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/woff.c b/woff.c
+index dc77c42..934bf7d 100644
+--- a/woff.c
++++ b/woff.c
+@@ -177,6 +177,8 @@ woffEncode(const uint8_t * sfntData, uint32_t sfntLen,
+       }
+       head = (const sfntHeadTable *)(sfntData +
+                                      READ32BE(sfntDir[tableIndex].offset));
++      if ((uint8_t *)(head + 1) >= sfntData + sfntLen)
++       FAIL(eWOFF_invalid);
+     }
+   }
+   if (!head) {
+@@ -752,7 +754,7 @@ woffDecodeToBufferInternal(const uint8_t * woffData, uint32_t woffLen,
+   newHeader = (sfntHeader *) (sfntData);
+   newHeader->version = header->flavor;
+   newHeader->numTables = READ16BE(numTables);
+-  
++
+   /* calculate header fields for binary search */
+   searchRange = numTables;
+   searchRange |= (searchRange >> 1);
+@@ -1015,7 +1017,7 @@ woffGetMetadata(const uint8_t * woffData, uint32_t woffLen,
+   if (pStatus) {
+     *pStatus = status;
+   }
+-  return NULL;    
++  return NULL;
+ }
+ 
+ const uint8_t *
+@@ -1070,7 +1072,7 @@ woffGetPrivateData(const uint8_t * woffData, uint32_t woffLen,
+   if (pStatus) {
+     *pStatus = status;
+   }
+-  return NULL;    
++  return NULL;
+ }
+ 
+ void
+
+From 00a9139dc24044e7d804e7357c950615b04afa3f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=BD=D0=B0=D0=B1?= <nabijaczleweli@nabijaczleweli.xyz>
+Date: Thu, 11 Apr 2013 05:13:16 +0200
+Subject: [PATCH 2/4] Add arithmetic overflow checks in woff encoding routines
+
+Found-at: debian/patches/add-overflow-checks.patch
+Origin: mozilla-central, https://hg.mozilla.org/mozilla-central/rev/69eb050f2c0a
+---
+ woff.c | 42 ++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 38 insertions(+), 4 deletions(-)
+
+diff --git a/woff.c b/woff.c
+index 934bf7d..8cd1417 100644
+--- a/woff.c
++++ b/woff.c
+@@ -91,10 +91,15 @@ calcChecksum(const sfntDirEntry * dirEntry,
+   const uint32_t * csumPtr;
+   const uint32_t * csumEnd;
+   uint32_t csum = 0;
+-  uint32_t length = LONGALIGN(READ32BE(dirEntry->length));
++  uint32_t length = READ32BE(dirEntry->length);
+   uint32_t offset = READ32BE(dirEntry->offset);
+   uint32_t tag;
+-  if ((offset & 3) != 0) {
++  if (LONGALIGN(length) < length) { /* overflow */
++    return csum;
++  } else {
++    length = LONGALIGN(length);
++  }
++  if ((offset & 3) != 0) { /* invalid - not properly aligned */
+     return csum;
+   }
+   if (length > sfntLen || offset > sfntLen - length) {
+@@ -229,6 +234,9 @@ woffEncode(const uint8_t * sfntData, uint32_t sfntLen,
+       if (tag == TABLE_TAG_DSIG) {
+         status |= eWOFF_warn_removed_DSIG;
+         removedDsigSize = READ32BE(sfntDir[tableIndex].length);
++        if (LONGALIGN(removedDsigSize) < removedDsigSize) {
++          FAIL(eWOFF_invalid);
++        }
+         continue;
+       }
+     }
+@@ -240,6 +248,7 @@ woffEncode(const uint8_t * sfntData, uint32_t sfntLen,
+   qsort(tableOrder, numTables, sizeof(tableOrderRec), compareOffsets);
+ 
+   /* initially, allocate space for header and directory */
++  /* cannot be too big because numTables is 16-bit */
+   tableOffset = sizeof(woffHeader) + numTables * sizeof(woffDirEntry);
+   woffData = (uint8_t *) malloc(tableOffset);
+   if (!woffData) {
+@@ -296,13 +305,19 @@ woffEncode(const uint8_t * sfntData, uint32_t sfntLen,
+       /* compressed table was smaller */
+       woffData = (uint8_t *) realloc(woffData, tableOffset + LONGALIGN(destLen));
+       memcpy(woffData + tableOffset, dest, destLen);
+-      tableOffset += destLen;
++      tableOffset += destLen; /* checked for potential overflow above */
+       WOFFDIR[newIndex].compLen = READ32BE(destLen);
+     } else {
+       /* compression didn't make it smaller, so store original data instead */
++      if (LONGALIGN(sourceLen) < sourceLen) {
++        FAIL(eWOFF_invalid); /* overflow, bail out */
++      }
+       destLen = sourceLen;
+       /* reallocate to ensure enough space for the table,
+          plus potential padding after it */
++      if (tableOffset + LONGALIGN(sourceLen) < tableOffset) {
++        FAIL(eWOFF_invalid); /* overflow, bail out */
++      }
+       woffData = (uint8_t *) realloc(woffData,
+                                      tableOffset + LONGALIGN(sourceLen));
+       if (!woffData) {
+@@ -311,6 +326,9 @@ woffEncode(const uint8_t * sfntData, uint32_t sfntLen,
+       /* copy the original data into place */
+       memcpy(woffData + tableOffset,
+              sfntData + READ32BE(sfntDir[oldIndex].offset), sourceLen);
++      if (tableOffset + sourceLen < tableOffset) {
++        FAIL(eWOFF_invalid); /* overflow, bail out */
++      }
+       tableOffset += sourceLen;
+       WOFFDIR[newIndex].compLen = WOFFDIR[newIndex].origLen;
+     }
+@@ -323,7 +341,13 @@ woffEncode(const uint8_t * sfntData, uint32_t sfntLen,
+     }
+ 
+     /* update total size of uncompressed OpenType with table size */
++    if (totalSfntSize + sourceLen < totalSfntSize) {
++      FAIL(eWOFF_invalid); /* overflow, bail out */
++    }
+     totalSfntSize += sourceLen;
++    if (LONGALIGN(totalSfntSize) < totalSfntSize) {
++      FAIL(eWOFF_invalid);
++    }
+     totalSfntSize = LONGALIGN(totalSfntSize);
+   }
+ 
+@@ -450,10 +474,20 @@ rebuildWoff(const uint8_t * woffData, uint32_t * woffLen,
+ 
+   totalSize = tableLimit; /* already long-aligned */
+   if (metaCompLen) {
++    if (totalSize + metaCompLen < totalSize) {
++      FAIL(eWOFF_invalid);
++    }
+     totalSize += metaCompLen;
+   }
+   if (privLen) {
+-    totalSize = LONGALIGN(totalSize) + privLen;
++    if (LONGALIGN(totalSize) < totalSize) {
++      FAIL(eWOFF_invalid);
++    }
++    totalSize = LONGALIGN(totalSize);
++    if (totalSize + privLen < totalSize) {
++      FAIL(eWOFF_invalid);
++    }
++    totalSize += privLen;
+   }
+   newData = malloc(totalSize);
+   if (!newData) {
+
+From cd6664cea40701fa4f3a1112c3a4a6ab974c3b65 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=BD=D0=B0=D0=B1?= <nabijaczleweli@nabijaczleweli.xyz>
+Date: Tue, 9 Apr 2013 05:13:32 +0200
+Subject: [PATCH 3/4] Fix CVE-2010-1028: WOFF heap corruption due to integer
+ overflow
+
+Found-at: debian/patches/CVE-2010-1028.patch
+Origin: mozilla-central, https://hg.mozilla.org/releases/mozilla-1.9.2/rev/827a6883442f
+---
+ woff.c | 12 ++++++------
+ woff.h |  1 +
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/woff.c b/woff.c
+index 8cd1417..18e3566 100644
+--- a/woff.c
++++ b/woff.c
+@@ -662,7 +662,7 @@ sanityCheck(const uint8_t * woffData, uint32_t woffLen)
+   const woffHeader * header;
+   uint16_t numTables, i;
+   const woffDirEntry * dirEntry;
+-  uint32_t tableTotal = 0;
++  uint64_t tableTotal = 0;
+ 
+   if (!woffData || !woffLen) {
+     return eWOFF_bad_parameter;
+@@ -688,17 +688,17 @@ sanityCheck(const uint8_t * woffData, uint32_t woffLen)
+ 
+   dirEntry = (const woffDirEntry *) (woffData + sizeof(woffHeader));
+   for (i = 0; i < numTables; ++i) {
+-    uint32_t offs = READ32BE(dirEntry->offset);
+-    uint32_t orig = READ32BE(dirEntry->origLen);
+-    uint32_t comp = READ32BE(dirEntry->compLen);
++    uint64_t offs = READ32BE(dirEntry->offset);
++    uint64_t orig = READ32BE(dirEntry->origLen);
++    uint64_t comp = READ32BE(dirEntry->compLen);
+     if (comp > orig || comp > woffLen || offs > woffLen - comp) {
+       return eWOFF_invalid;
+     }
+     orig = (orig + 3) & ~3;
+-    if (tableTotal > 0xffffffffU - orig) {
++    tableTotal += orig;
++    if (tableTotal > 0xffffffffU) {
+       return eWOFF_invalid;
+     }
+-    tableTotal += orig;
+     ++dirEntry;
+   }
+ 
+diff --git a/woff.h b/woff.h
+index e792526..5891f09 100644
+--- a/woff.h
++++ b/woff.h
+@@ -48,6 +48,7 @@ typedef int            int32_t;
+ typedef unsigned char  uint8_t;
+ typedef unsigned short uint16_t;
+ typedef unsigned int   uint32_t;
++typedef unsigned __int64  uint64_t;
+ #else
+ #include <inttypes.h>
+ #endif
+
+From 2778164c63d539464eacd22d89ab76bc5508293d Mon Sep 17 00:00:00 2001
+From: Dmitry Shachnev <mitya57@gmail.com>
+Date: Thu, 11 Apr 2013 05:13:43 +0200
+Subject: [PATCH 4/4] fix some compiler and cppcheck warnings
+
+Remove two unused variables;
+Fix a memory leak when realloc() fails.
+
+Found-at: debian/patches/fix-compiler-and-cppcheck-warnings.patch
+Forwarded: no
+---
+ woff.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/woff.c b/woff.c
+index 18e3566..4ddf337 100644
+--- a/woff.c
++++ b/woff.c
+@@ -130,6 +130,7 @@ woffEncode(const uint8_t * sfntData, uint32_t sfntLen,
+            uint32_t * pStatus)
+ {
+   uint8_t * woffData = NULL;
++  uint8_t * woffDataNew = NULL;
+   tableOrderRec * tableOrder = NULL;
+ 
+   uint32_t tableOffset;
+@@ -140,7 +141,6 @@ woffEncode(const uint8_t * sfntData, uint32_t sfntLen,
+   uint16_t tableIndex;
+   uint16_t order;
+   const sfntDirEntry * sfntDir;
+-  uint32_t tableBase;
+   uint32_t checkSumAdjustment = 0;
+   woffHeader * newHeader;
+   uint32_t tag = 0;
+@@ -318,9 +318,11 @@ woffEncode(const uint8_t * sfntData, uint32_t sfntLen,
+       if (tableOffset + LONGALIGN(sourceLen) < tableOffset) {
+         FAIL(eWOFF_invalid); /* overflow, bail out */
+       }
+-      woffData = (uint8_t *) realloc(woffData,
+-                                     tableOffset + LONGALIGN(sourceLen));
+-      if (!woffData) {
++      woffDataNew = (uint8_t *) realloc(woffData,
++                                        tableOffset + LONGALIGN(sourceLen));
++      if (woffDataNew) {
++        woffData = woffDataNew;
++      } else {
+         FAIL(eWOFF_out_of_memory);
+       }
+       /* copy the original data into place */
+@@ -435,7 +437,6 @@ rebuildWoff(const uint8_t * woffData, uint32_t * woffLen,
+   const woffHeader * origHeader;
+   const woffDirEntry * woffDir;
+   uint8_t * newData = NULL;
+-  uint8_t * tableData = NULL;
+   woffHeader * newHeader;
+   uint16_t numTables;
+   uint32_t tableLimit, totalSize, offset;

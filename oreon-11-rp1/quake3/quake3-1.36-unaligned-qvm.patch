@@ -1,0 +1,103 @@
+diff -up quake3-1.36/code/qcommon/vm.c~ quake3-1.36/code/qcommon/vm.c
+--- quake3-1.36/code/qcommon/vm.c~	2011-07-28 10:55:29.000000000 +0200
++++ quake3-1.36/code/qcommon/vm.c	2015-12-04 20:06:27.438606467 +0100
+@@ -35,6 +35,7 @@ and one exported function: Perform
+ 
+ #include "vm_local.h"
+ 
++static cvar_t *qvm_unaligned;
+ 
+ vm_t	*currentVM = NULL;
+ vm_t	*lastVM    = NULL;
+@@ -74,6 +75,8 @@ void VM_Init( void ) {
+ 	Cvar_Get( "vm_game", "2", CVAR_ARCHIVE );	// !@# SHIP WITH SET TO 2
+ 	Cvar_Get( "vm_ui", "2", CVAR_ARCHIVE );		// !@# SHIP WITH SET TO 2
+ 
++	qvm_unaligned = Cvar_Get ("qvm_unaligned", "0", 0);
++
+ 	Cmd_AddCommand ("vmprofile", VM_VmProfile_f );
+ 	Cmd_AddCommand ("vminfo", VM_VmInfo_f );
+ 
+@@ -616,6 +619,12 @@ vm_t *VM_Create( const char *module, int
+ 
+ 	vm->compiled = qfalse;
+ 
++	if ( qvm_unaligned->integer ) {
++		vm->unaligned = qtrue;
++		/* Only the interpreter supports unaligned mode */
++		interpret = VMI_BYTECODE;
++	}
++
+ #ifdef NO_VM_COMPILED
+ 	if(interpret >= VMI_COMPILED) {
+ 		Com_Printf("Architecture doesn't have a bytecode compiler, using interpreter\n");
+diff -up quake3-1.36/code/qcommon/vm_interpreted.c~ quake3-1.36/code/qcommon/vm_interpreted.c
+--- quake3-1.36/code/qcommon/vm_interpreted.c~	2011-07-28 10:55:29.000000000 +0200
++++ quake3-1.36/code/qcommon/vm_interpreted.c	2015-12-04 20:05:10.330624764 +0100
+@@ -443,21 +443,37 @@ nextInstruction2:
+ 				return 0;
+ 			}
+ #endif
+-			r0 = opStack[opStackOfs] = *(int *) &image[r0 & dataMask & ~3 ];
++			if (vm->unaligned) {
++				r0 = opStack[opStackOfs] = *(int *) &image[r0 & dataMask ];
++			} else {
++				r0 = opStack[opStackOfs] = *(int *) &image[r0 & dataMask & ~3 ];
++			}
+ 			goto nextInstruction2;
+ 		case OP_LOAD2:
+-			r0 = opStack[opStackOfs] = *(unsigned short *)&image[ r0&dataMask&~1 ];
++			if (vm->unaligned) {
++				r0 = opStack[opStackOfs] = *(unsigned short *)&image[ r0&dataMask ];
++			} else {
++				r0 = opStack[opStackOfs] = *(unsigned short *)&image[ r0&dataMask&~1 ];
++			}
+ 			goto nextInstruction2;
+ 		case OP_LOAD1:
+ 			r0 = opStack[opStackOfs] = image[ r0&dataMask ];
+ 			goto nextInstruction2;
+ 
+ 		case OP_STORE4:
+-			*(int *)&image[ r1&(dataMask & ~3) ] = r0;
++			if (vm->unaligned) {
++				*(int *)&image[ r1&(dataMask) ] = r0;
++			} else {
++				*(int *)&image[ r1&(dataMask & ~3) ] = r0;
++			}
+ 			opStackOfs -= 2;
+ 			goto nextInstruction;
+ 		case OP_STORE2:
+-			*(short *)&image[ r1&(dataMask & ~1) ] = r0;
++			if (vm->unaligned) {
++				*(short *)&image[ r1&(dataMask) ] = r0;
++			} else {
++				*(short *)&image[ r1&(dataMask & ~1) ] = r0;
++			}
+ 			opStackOfs -= 2;
+ 			goto nextInstruction;
+ 		case OP_STORE1:
+@@ -467,7 +483,11 @@ nextInstruction2:
+ 
+ 		case OP_ARG:
+ 			// single byte offset from programStack
+-			*(int *)&image[ (codeImage[programCounter] + programStack)&dataMask&~3 ] = r0;
++			if (vm->unaligned) {
++				*(int *)&image[ (codeImage[programCounter] + programStack)&dataMask ] = r0;
++			} else {
++				*(int *)&image[ (codeImage[programCounter] + programStack)&dataMask&~3 ] = r0;
++			}
+ 			opStackOfs--;
+ 			programCounter += 1;
+ 			goto nextInstruction;
+diff -up quake3-1.36/code/qcommon/vm_local.h~ quake3-1.36/code/qcommon/vm_local.h
+--- quake3-1.36/code/qcommon/vm_local.h~	2011-07-28 10:55:29.000000000 +0200
++++ quake3-1.36/code/qcommon/vm_local.h	2015-12-04 20:06:44.798152081 +0100
+@@ -174,6 +174,8 @@ struct vm_s {
+ 
+ 	byte		*jumpTableTargets;
+ 	int			numJumpTableTargets;
++
++	qboolean		unaligned;		// If set do not align loads and stores
+ };
+ 
+ 

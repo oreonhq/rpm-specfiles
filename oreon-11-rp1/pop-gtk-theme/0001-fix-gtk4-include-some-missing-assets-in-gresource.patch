@@ -1,0 +1,30 @@
+From 894ef0493642f99780c78f263a576d2551984669 Mon Sep 17 00:00:00 2001
+From: Ian Santopietro <isantop@gmail.com>
+Date: Tue, 27 Sep 2022 16:10:23 -0600
+Subject: [PATCH] fix(gtk4): include some missing assets in gresource
+
+---
+ gtk/src/light/gtk-4.0/meson.build | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/gtk/src/light/gtk-4.0/meson.build b/gtk/src/light/gtk-4.0/meson.build
+index e3271376..14b0fa73 100644
+--- a/gtk/src/light/gtk-4.0/meson.build
++++ b/gtk/src/light/gtk-4.0/meson.build
+@@ -25,10 +25,13 @@ gtk3_scss_dependencies = [
+ gtk3_assets = [
+   'assets/bullet-symbolic.svg',
+   'assets/bullet-symbolic.symbolic.png',
++  'assets/bullet@2-symbolic.symbolic.png',
+   'assets/check-symbolic.svg',
+   'assets/check-symbolic.symbolic.png',
++  'assets/check@2-symbolic.symbolic.png',
+   'assets/dash-symbolic.svg',
+   'assets/dash-symbolic.symbolic.png',
++  'assets/dash@2-symbolic.symbolic.png',
+   'assets/slider-horz-scale-has-marks-above@2.png',
+   'assets/slider-horz-scale-has-marks-above-active@2.png',
+   'assets/slider-horz-scale-has-marks-above-active-dark@2.png',
+-- 
+2.41.0
+

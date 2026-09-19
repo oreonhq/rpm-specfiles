@@ -1,0 +1,48 @@
+diff -rupN --no-dereference flask-babel-4.1.0/tests/test_gettext.py flask-babel-4.1.0-new/tests/test_gettext.py
+--- flask-babel-4.1.0/tests/test_gettext.py	2024-06-19 08:45:00.000000000 +0200
++++ flask-babel-4.1.0-new/tests/test_gettext.py	2026-01-31 11:29:17.457430607 +0100
+@@ -91,11 +91,11 @@ def test_list_translations():
+     b = babel.Babel(app, default_locale="de_DE")
+ 
+     with app.app_context():
+-        translations = b.list_translations()
++        translations = sorted(b.list_translations(), key=str)
+         assert len(translations) == 3
+         assert str(translations[0]) == "de"
+-        assert str(translations[1]) == "ja"
+-        assert str(translations[2]) == "de_DE"
++        assert str(translations[1]) == "de_DE"
++        assert str(translations[2]) == "ja"
+ 
+ 
+ def test_list_translations_default_locale_exists():
+@@ -103,7 +103,7 @@ def test_list_translations_default_local
+     b = babel.Babel(app, default_locale="de")
+ 
+     with app.app_context():
+-        translations = b.list_translations()
++        translations = sorted(b.list_translations(), key=str)
+         assert len(translations) == 2
+         assert str(translations[0]) == "de"
+         assert str(translations[1]) == "ja"
+diff -rupN --no-dereference flask-babel-4.1.0/tests/test_integration.py flask-babel-4.1.0-new/tests/test_integration.py
+--- flask-babel-4.1.0/tests/test_integration.py	2024-06-19 08:45:00.000000000 +0200
++++ flask-babel-4.1.0-new/tests/test_integration.py	2026-01-31 11:29:17.457626748 +0100
+@@ -38,13 +38,13 @@ def test_multiple_directories():
+     b.init_app(app)
+ 
+     with app.test_request_context():
+-        translations = b.list_translations()
++        translations = sorted(b.list_translations(), key=str)
+ 
+         assert len(translations) == 4
+         assert str(translations[0]) == "de"
+-        assert str(translations[1]) == "ja"
+-        assert str(translations[2]) == "de"
+-        assert str(translations[3]) == "de_DE"
++        assert str(translations[1]) == "de"
++        assert str(translations[2]) == "de_DE"
++        assert str(translations[3]) == "ja"
+ 
+         assert gettext("Hello %(name)s!", name="Peter") == "Hallo Peter!"
+ 

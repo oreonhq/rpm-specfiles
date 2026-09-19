@@ -1,0 +1,55 @@
+From 49c517adf67cccb8cb9d94a8536bc053c3b83954 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 5 Jan 2018 13:36:09 +0100
+Subject: [PATCH] Canonize shebangs
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+/usr/bin/env is not good because it does not pin-point the script to
+perl that was used at build time (if there are more perls in the
+system).
+
+The patched form is automatically rewritten by the build script to the
+real path.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ bin/attean_parse        | 2 +-
+ bin/attean_query        | 2 +-
+ bin/canonicalize_bgp.pl | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/bin/attean_parse b/bin/attean_parse
+index e552577..45bf5d4 100755
+--- a/bin/attean_parse
++++ b/bin/attean_parse
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!perl
+ 
+ use v5.14;
+ use autodie;
+diff --git a/bin/attean_query b/bin/attean_query
+index 2d2e414..406d626 100755
+--- a/bin/attean_query
++++ b/bin/attean_query
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!perl
+ 
+ use v5.14;
+ use warnings;
+diff --git a/bin/canonicalize_bgp.pl b/bin/canonicalize_bgp.pl
+index 83efb01..07d551f 100755
+--- a/bin/canonicalize_bgp.pl
++++ b/bin/canonicalize_bgp.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!perl
+ 
+ use v5.14;
+ use warnings;
+-- 
+2.13.6
+

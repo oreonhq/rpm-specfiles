@@ -1,0 +1,15 @@
+========================================================================
+User Information for the Fedora **terminus-fonts-legacy-x11** package
+========================================================================
+
+The **terminus-fonts-legacy-x11** package registers the Terminus font
+with both fonts-conf(5) and the newer /etc/X11/fontpath.d mechanism
+used by newer libXfont and xfs(1) versions.
+
+This makes the font available for both
+
+  * traditional programs using libXfont or xfs (like xterm, xfontsel,
+    and older GNU Emacs)
+
+  * slightly more modern programs using fontconfig but not OpenType
+    yet (like GNU Emacs 26).

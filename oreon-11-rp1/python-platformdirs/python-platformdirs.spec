@@ -1,47 +1,39 @@
-%global source0_hash f310f16e89c4e29117805d8328f7c10876eeff36c94eac879532812110f7d39f
-
-%bcond tests 1
+%global source0_hash none
 
 Name:           python-platformdirs
-Version:        4.9.1
+Version:        4.11.9
 Release:        %autorelease
-Summary:        A small Python package for determining appropriate platform-specific dirs
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A small Python package for determining appropriate platform-specific dirs, e.g. a _user data dir_.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/platformdirs/platformdirs
+URL:            https://github.com/tox-dev/platformdirs
 Source:         %{pypi_source platformdirs}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global common_description %{expand:
-When writing desktop application, finding the right location to store user data
-and configuration varies per platform.  Even for single-platform apps, there
-may by plenty of nuances in figuring out the right location.  This kind of
-thing is what the platformdirs package is for.}
 
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'platformdirs' generated automatically by pyp2spec.}
 
-%description %{common_description}
+%description %_description
 
-
-%package -n python3-platformdirs
+%package -n     python3-platformdirs
 Summary:        %{summary}
-BuildRequires:  python3-devel
 
-
-%description -n python3-platformdirs %{common_description}
+%description -n python3-platformdirs %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n platformdirs-%{version}
-
-%if %{with tests}
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-sed -i '/covdefaults/d; /diff-cover/d; /pytest-cov/d' pyproject.toml
-%endif
+%autosetup -p1 -n platformdirs-%{version}
 
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-g test}
+%pyproject_buildrequires
 
 
 %build
@@ -50,22 +42,16 @@ sed -i '/covdefaults/d; /diff-cover/d; /pytest-cov/d' pyproject.toml
 
 %install
 %pyproject_install
-%pyproject_save_files -l platformdirs
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%if %{with tests}
-# Upstream uses tox, but we don’t use it, to avoid a build dependency loop
-# platformdirs <- virtualenv <- tox
-%pytest
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
 %files -n python3-platformdirs -f %{pyproject_files}
-%doc README.md
-
 
 %changelog
 %autochangelog

@@ -1,0 +1,37 @@
+From bc8698a20ea11c676e2f6dc11a53d59918d0c69a Mon Sep 17 00:00:00 2001
+From: Tim Flink <tflink@fedoraproject.org>
+Date: Tue, 27 Aug 2024 09:34:54 -0600
+Subject: [PATCH] patch 0001-A-better-cuda-version.patch
+
+---
+ torchvision/csrc/vision.cpp | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/torchvision/csrc/vision.cpp b/torchvision/csrc/vision.cpp
+index 806e870a83..ff4147bebc 100644
+--- a/torchvision/csrc/vision.cpp
++++ b/torchvision/csrc/vision.cpp
+@@ -2,9 +2,6 @@
+ 
+ #include <torch/library.h>
+ 
+-#ifdef WITH_CUDA
+-#include <cuda.h>
+-#endif
+ #ifdef WITH_HIP
+ #include <hip/hip_runtime.h>
+ #endif
+@@ -19,8 +16,8 @@ void* PyInit__C(void) {
+ 
+ namespace vision {
+ int64_t cuda_version() {
+-#ifdef WITH_CUDA
+-  return CUDA_VERSION;
++#if defined(WITH_HIP)
++  return TORCH_HIP_VERSION;
+ #else
+   return -1;
+ #endif
+-- 
+2.46.0
+

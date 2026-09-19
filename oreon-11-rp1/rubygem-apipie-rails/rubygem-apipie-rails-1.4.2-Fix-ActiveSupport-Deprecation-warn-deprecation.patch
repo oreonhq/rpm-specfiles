@@ -1,0 +1,110 @@
+From b83808ce5d2f19255fc491ecce9ba4448a1112a4 Mon Sep 17 00:00:00 2001
+From: Jonathan Biolaz <jbiolaz@gmail.com>
+Date: Fri, 30 Aug 2024 15:10:28 +0200
+Subject: [PATCH 1/4] Fix ActiveSupport::Deprecation.warn deprecation
+
+---
+ lib/apipie/generator/swagger/config.rb | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/apipie/generator/swagger/config.rb b/lib/apipie/generator/swagger/config.rb
+index d77df5be3..665581bdb 100644
+--- a/lib/apipie/generator/swagger/config.rb
++++ b/lib/apipie/generator/swagger/config.rb
+@@ -17,7 +17,7 @@ class Config
+         CONFIG_ATTRIBUTES.each do |attribute|
+           old_setter_method = "swagger_#{attribute}="
+           define_method(old_setter_method) do |value|
+-            ActiveSupport::Deprecation.warn(
++            ActiveSupport::Deprecation.new.warn(
+               <<~HEREDOC
+                 config.#{old_setter_method}#{value} is deprecated.
+                 config.generator.swagger.#{attribute} instead.
+@@ -29,7 +29,7 @@ class Config
+ 
+           old_setter_method = "swagger_#{attribute}"
+           define_method(old_setter_method) do
+-            ActiveSupport::Deprecation.warn(
++            ActiveSupport::Deprecation.new.warn(
+               <<~HEREDOC
+                 config.#{old_setter_method} is deprecated.
+                 Use config.generator.swagger.#{attribute} instead.
+
+From 2164b4bd8bc59123c9994879055e24064414cc09 Mon Sep 17 00:00:00 2001
+From: Jonathan Biolaz <jbiolaz@gmail.com>
+Date: Fri, 20 Sep 2024 10:30:17 +0200
+Subject: [PATCH 2/4] Remove one more deprecation
+
+---
+ lib/apipie/application.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/apipie/application.rb b/lib/apipie/application.rb
+index 5399b0bb3..8637ea11f 100644
+--- a/lib/apipie/application.rb
++++ b/lib/apipie/application.rb
+@@ -380,7 +380,7 @@ def active_dsl?
+ 
+     # @deprecated Use {#get_resource_id} instead
+     def get_resource_name(klass)
+-      ActiveSupport::Deprecation.warn(
++      ActiveSupport::Deprecation.new.warn(
+         <<~HEREDOC
+           Apipie::Application.get_resource_name is deprecated.
+           Use `Apipie::Application.get_resource_id instead.
+
+From 65e2cdaad503a16d0183f79584933c05a4661c65 Mon Sep 17 00:00:00 2001
+From: Jonathan Biolaz <jbiolaz@gmail.com>
+Date: Mon, 6 Jan 2025 15:30:12 +0100
+Subject: [PATCH 3/4] Update lib/apipie/application.rb
+
+Co-authored-by: Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+---
+ lib/apipie/application.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/apipie/application.rb b/lib/apipie/application.rb
+index 8637ea11f..e0a6a5cf3 100644
+--- a/lib/apipie/application.rb
++++ b/lib/apipie/application.rb
+@@ -380,7 +380,7 @@ def active_dsl?
+ 
+     # @deprecated Use {#get_resource_id} instead
+     def get_resource_name(klass)
+-      ActiveSupport::Deprecation.new.warn(
++      ActiveSupport::Deprecation.new('2.0', 'apipie-rails').warn(
+         <<~HEREDOC
+           Apipie::Application.get_resource_name is deprecated.
+           Use `Apipie::Application.get_resource_id instead.
+
+From 8aa21f3dd949d481e61a183cd046230f38d9a179 Mon Sep 17 00:00:00 2001
+From: Jonathan Biolaz <jbiolaz@gmail.com>
+Date: Tue, 7 Jan 2025 10:00:38 +0100
+Subject: [PATCH 4/4] Add specific deprecation horizon
+
+---
+ lib/apipie/generator/swagger/config.rb | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/apipie/generator/swagger/config.rb b/lib/apipie/generator/swagger/config.rb
+index 665581bdb..d6d73949d 100644
+--- a/lib/apipie/generator/swagger/config.rb
++++ b/lib/apipie/generator/swagger/config.rb
+@@ -17,7 +17,7 @@ class Config
+         CONFIG_ATTRIBUTES.each do |attribute|
+           old_setter_method = "swagger_#{attribute}="
+           define_method(old_setter_method) do |value|
+-            ActiveSupport::Deprecation.new.warn(
++            ActiveSupport::Deprecation.new('2.0', 'apipie-rails').warn(
+               <<~HEREDOC
+                 config.#{old_setter_method}#{value} is deprecated.
+                 config.generator.swagger.#{attribute} instead.
+@@ -29,7 +29,7 @@ class Config
+ 
+           old_setter_method = "swagger_#{attribute}"
+           define_method(old_setter_method) do
+-            ActiveSupport::Deprecation.new.warn(
++            ActiveSupport::Deprecation.new('2.0', 'apipie-rails').warn(
+               <<~HEREDOC
+                 config.#{old_setter_method} is deprecated.
+                 Use config.generator.swagger.#{attribute} instead.

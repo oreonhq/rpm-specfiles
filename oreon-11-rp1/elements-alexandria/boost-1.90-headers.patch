@@ -1,0 +1,24 @@
+--- Alexandria-2.32.0/Table/src/lib/Row.cpp~	2025-05-16 14:43:59.000000000 +0100
++++ Alexandria-2.32.0/Table/src/lib/Row.cpp	2026-01-15 03:32:21.524704960 +0000
+@@ -32,6 +32,7 @@
+ #include <boost/units/detail/utility.hpp>
+ using boost::units::detail::demangle;
+ #else
++#include <boost/core/demangle.hpp>
+ using boost::core::demangle;
+ #endif
+ 
+--- Alexandria-2.32.0/NdArray/tests/src/TestHelper.h~	2025-05-16 14:43:59.000000000 +0100
++++ Alexandria-2.32.0/NdArray/tests/src/TestHelper.h	2026-01-15 03:36:36.592416200 +0000
+@@ -19,9 +19,10 @@
+ #ifndef NDARRAY_TEST_H
+ #define NDARRAY_TEST_H
+ 
++#define BOOST_PROCESS_VERSION 1
+ #include "ElementsKernel/Temporary.h"
+ #include <boost/filesystem/path.hpp>
+-#include <boost/process.hpp>
++#include <boost/process/v1.hpp>
+ #include <boost/test/unit_test.hpp>
+ #include <sstream>
+ 

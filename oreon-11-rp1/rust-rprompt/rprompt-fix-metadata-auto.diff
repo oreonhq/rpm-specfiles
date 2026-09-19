@@ -1,0 +1,15 @@
+--- rprompt-2.2.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ rprompt-2.2.0/Cargo.toml	2025-11-28T17:40:39.026460+00:00
+@@ -38,12 +38,3 @@
+ [dependencies.rtoolbox]
+ version = "0.0"
+ 
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.59"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_Security",
+-    "Win32_Storage_FileSystem",
+-    "Win32_System_Console",
+-    "Win32_System_SystemServices",
+-]

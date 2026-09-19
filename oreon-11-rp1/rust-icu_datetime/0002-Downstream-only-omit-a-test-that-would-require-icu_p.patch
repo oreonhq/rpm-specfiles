@@ -1,0 +1,25 @@
+From d9bd94c7c5b04c5e13fbe86cd800013c981afb3d Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 10 Mar 2026 06:20:47 +0000
+Subject: [PATCH 2/2] Downstream-only: omit a test that would require
+ icu_provider_blob
+
+---
+ src/provider/time_zones.rs | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/provider/time_zones.rs b/src/provider/time_zones.rs
+index 112c4f555e..a5e47d2e35 100644
+--- a/src/provider/time_zones.rs
++++ b/src/provider/time_zones.rs
+@@ -383,6 +383,7 @@ pub(crate) mod legacy {
+     }
+ 
+     #[test]
++    #[cfg(false)]
+     fn test_metazone_timezone_compat() {
+         use icu_locale::subtags::subtag;
+         use icu_time::ZonedDateTime;
+-- 
+2.53.0
+

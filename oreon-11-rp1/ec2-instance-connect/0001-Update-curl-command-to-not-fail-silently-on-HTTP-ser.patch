@@ -1,0 +1,25 @@
+From 086f148e3e2c34759ecf203f6b13a4d726572975 Mon Sep 17 00:00:00 2001
+From: "Author: Vishrutha Konappa Reddy" <vishruthareddy46@gmail.com>
+Date: Thu, 9 Jun 2022 19:55:47 -0400
+Subject: [PATCH] Update curl command to not fail silently on HTTP server error
+
+---
+ src/bin/eic_curl_authorized_keys | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/bin/eic_curl_authorized_keys b/src/bin/eic_curl_authorized_keys
+index 667ec7a..25e0a8e 100755
+--- a/src/bin/eic_curl_authorized_keys
++++ b/src/bin/eic_curl_authorized_keys
+@@ -87,7 +87,7 @@ if [ "${id_exit}" -ne 0 ] ; then
+ fi
+ 
+ # Verify that we have active keys.  Fast-exit if we do not.
+-keys_status="$(/usr/bin/curl -s -f -m 1 -H "${IMDS_TOKEN_HEADER}" -o /dev/null -I -w %{http_code} "${IMDS}/managed-ssh-keys/active-keys/${1}/")"
++keys_status="$(/usr/bin/curl -s -m 1 -H "${IMDS_TOKEN_HEADER}" -o /dev/null -I -w %{http_code} "${IMDS}/managed-ssh-keys/active-keys/${1}/")"
+ if [ "${keys_status}" != "200" ]
+ then
+     # No keys for this user.   Nothing to do.
+-- 
+2.44.0
+

@@ -1,0 +1,13 @@
+Patch by <bdefreese@debian2.bddebian.com> for dsniff >= 2.4b1, which adds
+a memset to correctly 0 out the C struct.
+
+--- dsniff-2.4/msgsnarf.c		2011-10-09 18:13:49.000000000 +0200
++++ dsniff-2.4/msgsnarf.c.segfault	2011-10-09 18:25:26.000000000 +0200
+@@ -584,6 +584,7 @@
+ 		if (i == 0) {
+ 			if ((c = malloc(sizeof(*c))) == NULL)
+ 				nids_params.no_mem("sniff_msgs");
++			memset(c, 0, sizeof(*c));
+ 			c->ip = ts->addr.saddr;
+ 			c->nick = strdup("unknown");
+ 			SLIST_INSERT_HEAD(&client_list, c, next);

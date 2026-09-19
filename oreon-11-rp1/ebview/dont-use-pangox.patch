@@ -1,0 +1,97 @@
+From: Emilio Pozuelo Monfort <pochu@debian.org>
+Date: Wed, 27 Feb 2013 21:22:24 +0100
+Subject: Don't check for pangox, it's not needed.
+
+Bug-Debian: https://bugs.debian.org/701840
+---
+ configure.in     |  6 +++---
+ src/Makefile.am  |  6 +++---
+ src/preference.c | 26 +++++---------------------
+ 3 files changed, 11 insertions(+), 27 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index 450ceb8..1a36f99 100644
+--- a/configure.in
++++ b/configure.in
+@@ -21,9 +21,9 @@ PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.0.0)
+ AC_SUBST(GTK_CFLAGS)
+ AC_SUBST(GTK_LIBS)
+ 
+-PKG_CHECK_MODULES(PANGOX, pangox)
+-AC_SUBST(PANGOX_CFLAGS)
+-AC_SUBST(PANGOX_LIBS)
++PKG_CHECK_MODULES(PANGO, pango)
++AC_SUBST(PANGO_CFLAGS)
++AC_SUBST(PANGO_LIBS)
+            
+ eb_LIB_EB4
+ 
+diff --git a/src/Makefile.am b/src/Makefile.am
+index aee2509..31241b7 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -2,9 +2,9 @@ bin_PROGRAMS = ebview
+ 
+ AM_CPPFLAGS= @EBCONF_PTHREAD_CPPFLAGS@ @EBCONF_EBINCS@ \
+              @EBCONF_ZLIBINCS@ @EBCONF_INTLINCS@
+-AM_CFLAGS = @PANGOX_CFLAGS@ @GTK_CFLAGS@ @EBCONF_PTHREAD_CFLAGS@  @CYGWIN_CFLAGS@ -Wall
+-AM_CXXFLAGS = @PANGOX_CFLAGS@ @GTK_CFLAGS@ @EBCONF_PTHREAD_CFLAGS@
+-ebview_LDADD = @PANGOX_LIBS@ @GTK_LIBS@ @THREAD_LIBS@ @CYGWIN_CFLAGS@ \
++AM_CFLAGS = @PANGO_CFLAGS@ @GTK_CFLAGS@ @EBCONF_PTHREAD_CFLAGS@  @CYGWIN_CFLAGS@ -Wall
++AM_CXXFLAGS = @PANGO_CFLAGS@ @GTK_CFLAGS@ @EBCONF_PTHREAD_CFLAGS@
++ebview_LDADD = @PANGO_LIBS@ @GTK_LIBS@ @THREAD_LIBS@ @CYGWIN_CFLAGS@ \
+                @EBCONF_EBLIBS@ @EBCONF_ZLIBLIBS@ @EBCONF_INTLLIBS@ @RES_FILE@ @EXTRA_LIBS@
+ ebview_LDFLAGS = @EBCONF_PTHREAD_LDFLAGS@
+ 
+diff --git a/src/preference.c b/src/preference.c
+index cf9b1d7..d592414 100644
+--- a/src/preference.c
++++ b/src/preference.c
+@@ -24,11 +24,7 @@
+ #include <langinfo.h>
+ #endif
+ 
+-#ifdef __WIN32__
+-#include <pango/pangowin32.h>
+-#else
+-#include <pango/pangox.h>
+-#endif
++#include <pango/pango.h>
+ 
+ #include "dictbar.h"
+ #include "selection.h"
+@@ -420,30 +416,18 @@ void  calculate_font_size(){
+ 	desc = pango_font_description_from_string(fontset_normal);
+ 	lang =  pango_language_from_string("ja");
+ 
+-#ifdef __WIN32__
+-	fontmap = pango_win32_font_map_for_display();
+-#else
+-	display = gdk_x11_drawable_get_xdisplay(main_window->window);
+-	if(display == NULL){
+-		LOG(LOG_INFO, "display == NULL");
++	context = gtk_widget_get_pango_context(main_window);
++	if(context == NULL){
++		LOG(LOG_INFO, "context == NULL");
+ 		return;
+ 	}
+ 
+-	fontmap = pango_x_font_map_for_display(display);
+-#endif
+-
++	fontmap = pango_context_get_font_map (context);
+ 	if(fontmap == NULL){
+ 		LOG(LOG_INFO, "fontmap == NULL");
+ 		return;
+ 	}
+ 
+-
+-	context = gtk_widget_get_pango_context(main_window);
+-	if(context == NULL){
+-		LOG(LOG_INFO, "context == NULL");
+-		return;
+-	}
+-
+ 	fontset = pango_font_map_load_fontset(fontmap,
+ 					      context,
+ 					      desc,

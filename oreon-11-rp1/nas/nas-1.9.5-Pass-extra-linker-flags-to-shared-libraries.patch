@@ -1,0 +1,40 @@
+From bca39b4bb87dce64343ef87a45a9150e9553340a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 8 Feb 2023 16:22:50 +0100
+Subject: [PATCH] Pass extra linker flags to shared libraries
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It turned out that shared libraries were linked without
+EXTRA_LDOPTIONS linker flags in Linux. The cause is that imake's
+SharedLibtoolLibraryTarget() uses SHLIBGLOBALSFLAGS variable instead
+of EXTRA_LDOPTIONS for passing linker flags.
+
+This patch copies EXTRA_LDOPTIONS to SHLIBGLOBALSFLAGS so that
+distribution linker flags are applied not only to programs, but also
+to shared libraries.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ config/NetAudio.tmpl | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/config/NetAudio.tmpl b/config/NetAudio.tmpl
+index 530e4d9..6921168 100644
+--- a/config/NetAudio.tmpl
++++ b/config/NetAudio.tmpl
+@@ -153,6 +153,10 @@ EXTRA_LOAD_FLAGS=/link /nodefaultlib:libc /*/force:multiple /debug:full /debugty
+ /*
+  * Shared library support is unfortunatly different on every machine
+  */
++
++/* Respect EXTRA_LDOPTIONS in SharedLibtoolLibraryTarget() */
++SHLIBGLOBALSFLAGS = $(EXTRA_LDOPTIONS)
++
+ /* 
+  * If not AuUseInstalled, search audio source area before installed area.
+  * That way, the binary will use the source area library if invoked
+-- 
+2.39.1
+

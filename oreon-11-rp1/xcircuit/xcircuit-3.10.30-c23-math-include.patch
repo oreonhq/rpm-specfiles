@@ -1,0 +1,24 @@
+diff --git a/elements.c b/elements.c
+index c7705f4..ac599f8 100644
+--- a/elements.c
++++ b/elements.c
+@@ -10,6 +10,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <math.h>
+ 
+ #ifndef XC_WIN32
+ #include <X11/Intrinsic.h>
+@@ -54,8 +55,6 @@ extern colorindex *colorlist;
+ extern Pixmap dbuf;
+ #endif
+ 
+-extern double atan2();
+-
+ /*------------------------------------------------------------------------*/
+ /* Declarations of global variables                                       */
+ /*------------------------------------------------------------------------*/
+diff --git a/examples/xc_remote.sh b/examples/xc_remote.sh
+old mode 100755
+new mode 100644

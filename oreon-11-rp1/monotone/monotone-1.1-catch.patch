@@ -1,0 +1,111 @@
+Do not catch exceptions of polymorphic type by value, as that requires the
+compiler to slice the exceptions.  Catching them by reference allows the
+compiler to emit more efficient code.
+
+--- monotone-1.1/src/dates.cc.orig	2014-05-04 03:15:16.000000000 -0600
++++ monotone-1.1/src/dates.cc	2020-06-30 12:15:35.765139561 -0600
+@@ -652,7 +652,7 @@ date_t::date_t(string const & s)
+ 
+       d = our_timegm(t);
+     }
+-  catch (std::out_of_range)
++  catch (std::out_of_range &)
+     {
+       E(false, origin::user,
+         F("unrecognized date (monotone only understands ISO 8601 format)"));
+--- monotone-1.1/src/key_packet.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/key_packet.cc	2020-06-30 12:14:15.581206185 -0600
+@@ -139,7 +139,7 @@ namespace
+         }
+       // since we do not want to prompt for a password to decode it finally,
+       // we ignore all other exceptions
+-      catch (Botan::Invalid_Argument) {}
++      catch (Botan::Invalid_Argument &) {}
+     }
+     void validate_no_more_args(istringstream & iss) const
+     {
+--- monotone-1.1/src/key_store.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/key_store.cc	2020-06-30 12:14:36.965188418 -0600
+@@ -622,7 +622,7 @@ key_store_state::decrypt_private_key(key
+             break;
+           }
+ #if BOTAN_VERSION_CODE >= BOTAN_VERSION_CODE_FOR(1,9,4)
+-        catch (Botan::Invalid_Argument)
++        catch (Botan::Invalid_Argument &)
+ #else
+         catch (Botan::Exception & e)
+ #endif
+--- monotone-1.1/src/network/session.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/network/session.cc	2020-06-30 12:15:10.949160179 -0600
+@@ -362,7 +362,7 @@ bool session::do_work(transaction_guard
+                                              % errmsg.substr(4));
+                           }
+                       }
+-                    catch (boost::bad_lexical_cast)
++                    catch (boost::bad_lexical_cast &)
+                       { // ok, so it wasn't a number
+                       }
+                   }
+--- monotone-1.1/src/option.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/option.cc	2020-06-30 12:12:46.420100297 -0600
+@@ -522,7 +522,7 @@ void concrete_option_set::from_command_l
+                     o.resetter();
+                 }
+             }
+-          catch (boost::bad_lexical_cast)
++          catch (boost::bad_lexical_cast &)
+             {
+               throw bad_arg(o.longname, arg);
+             }
+@@ -567,7 +567,7 @@ void concrete_option_set::from_key_value
+                 o.resetter();
+             }
+         }
+-      catch (boost::bad_lexical_cast)
++      catch (boost::bad_lexical_cast &)
+         {
+           throw bad_arg(o.longname, value);
+         }
+--- monotone-1.1/src/packet.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/packet.cc	2020-06-30 12:13:54.197195613 -0600
+@@ -192,9 +192,9 @@ namespace
+       // since we do not want to prompt for a password to decode it finally,
+       // we ignore all other exceptions
+ #if BOTAN_VERSION_CODE >= BOTAN_VERSION_CODE_FOR(1,9,11)
+-      catch (Passphrase_Required) {}
++      catch (Passphrase_Required &) {}
+ #else
+-      catch (Botan::Invalid_Argument) {}
++      catch (Botan::Invalid_Argument &) {}
+ #endif
+     }
+     void validate_certname(string const & cn) const
+--- monotone-1.1/src/paths.hh.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/paths.hh	2020-06-30 12:12:29.845076986 -0600
+@@ -424,7 +424,7 @@ bool safe_compose(T const & p, char cons
+       result = p / path_component(s);
+       return true;
+     }
+-  catch (std::logic_error)
++  catch (std::logic_error &)
+     {
+       report_failed_path_composition(p, s, isdir);
+       return false;
+--- monotone-1.1/src/sanity.cc.orig	2020-06-30 09:32:43.994207307 -0600
++++ monotone-1.1/src/sanity.cc	2020-06-30 12:13:32.165164632 -0600
+@@ -433,13 +433,13 @@ sanity::gasp()
+           (*i)->gasp(tmp);
+           out << tmp;
+         }
+-      catch (logic_error)
++      catch (logic_error &)
+         {
+           out << tmp;
+           out << "<caught logic_error>\n";
+           L(FL("ignoring error trigged by saving work set to debug log"));
+         }
+-      catch (recoverable_failure)
++      catch (recoverable_failure &)
+         {
+           out << tmp;
+           out << "<caught informative_failure>\n";

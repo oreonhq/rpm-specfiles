@@ -1,0 +1,12 @@
+diff -up qstat-546fed9a83b84501d54f471862ded3855b2d579b/packet_manip.c.c23 qstat-546fed9a83b84501d54f471862ded3855b2d579b/packet_manip.c
+--- qstat-546fed9a83b84501d54f471862ded3855b2d579b/packet_manip.c.c23	2025-03-03 11:09:40.109188587 -0500
++++ qstat-546fed9a83b84501d54f471862ded3855b2d579b/packet_manip.c	2025-03-03 11:09:46.089729468 -0500
+@@ -131,7 +131,7 @@ combine_packets(struct qserver *server)
+ 		}
+ 		// Call the server's packet processing method flagging as a combine call
+ 		server->combined = 1;
+-		ret = ((int (*)())server->type->packet_func)(server, combined, datalen);
++		ret = (server->type->packet_func)(server, combined, datalen);
+ 		free(combined);
+ 		server->combined = 0;
+ 

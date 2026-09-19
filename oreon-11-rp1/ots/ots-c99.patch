@@ -1,0 +1,16 @@
+Include <math.h> for a declaration of the log function.  This looks
+like an actual bug fix: The implicitly declared function returns int,
+not double, so the previous code produced a garbage result.
+
+diff --git a/src/grader-tf.c b/src/grader-tf.c
+index d05b19c8524dd205..0de4687ed456f2e7 100644
+--- a/src/grader-tf.c
++++ b/src/grader-tf.c
+@@ -21,6 +21,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <math.h>
+ #include "libots.h"
+ 
+ /*Grader - using the Term frequency algorithm. Will give each line a score*/

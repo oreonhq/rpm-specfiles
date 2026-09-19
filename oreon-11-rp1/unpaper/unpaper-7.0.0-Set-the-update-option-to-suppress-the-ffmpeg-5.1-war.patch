@@ -1,0 +1,44 @@
+From a2a88fe837fd6770ac94f08b2eb841f0dc9d2430 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Diego=20Elio=20Petten=C3=B2?= <flameeyes@flameeyes.com>
+Date: Sat, 8 Oct 2022 10:14:46 +0100
+Subject: [PATCH] Set the `update` option to suppress the ffmpeg 5.1 warning.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This addresses Issue #113, the spurious warning coming from ffmpeg 5.1+
+about the filename not being an image sequence (we do our own sequencing
+so we do not want it to be seen by ffmpeg at all!)
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ file.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/file.c b/file.c
+index fc24a4c..53ef727 100644
+--- a/file.c
++++ b/file.c
+@@ -13,6 +13,7 @@
+ #include <libavcodec/avcodec.h>
+ #include <libavformat/avformat.h>
+ #include <libavutil/avutil.h>
++#include <libavutil/opt.h>
+ 
+ #include "tools.h"
+ #include "unpaper.h"
+@@ -142,6 +143,11 @@ void saveImage(char *filename, AVFrame *input, int outputPixFmt) {
+     errOutput("unable to allocate output context.");
+   }
+ 
++  if ((ret = av_opt_set(out_ctx->priv_data, "update", "true", 0)) < 0) {
++    av_strerror(ret, errbuff, sizeof(errbuff));
++    errOutput("unable to configure update option: %s", errbuff);
++  }
++
+   switch (outputPixFmt) {
+   case AV_PIX_FMT_RGB24:
+     output_codec = AV_CODEC_ID_PPM;
+-- 
+2.37.3
+

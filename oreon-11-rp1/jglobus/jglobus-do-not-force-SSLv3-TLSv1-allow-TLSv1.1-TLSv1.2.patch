@@ -1,0 +1,39 @@
+From 58ed0c5c1f3ad9183cb820e18079bebcde4fb7bd Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Tue, 30 Oct 2018 05:01:23 +0100
+Subject: [PATCH] Do not force SSLv3/TLSv1 - allow TLSv1.1/TLSv1.2
+
+---
+ .../java/org/globus/gsi/gssapi/GlobusGSSContextImpl.java | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSContextImpl.java b/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSContextImpl.java
+index 1503579..61734ce 100644
+--- a/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSContextImpl.java
++++ b/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSContextImpl.java
+@@ -136,11 +136,6 @@ public class GlobusGSSContextImpl implements ExtendedGSSContext {
+ 
+     private static final int GSI_MESSAGE_DIGEST_PADDING = 12;
+ 
+-    private static final String [] ENABLED_PROTOCOLS = {"TLSv1", "SSLv3"};
+-    // TODO: Delete this once GRAM server is fixed and we no longer
+-    //       would be talking to old GRAM servers.
+-    private static final String [] GRAM_PROTOCOLS = {"SSLv3"};
+-
+ /*DEL
+     private static final short [] NO_ENCRYPTION = {SSLPolicyInt.TLS_RSA_WITH_NULL_MD5};
+ */
+@@ -1306,10 +1301,6 @@ done:      do {
+             throw new GlobusGSSException(GSSException.FAILURE, e);
+         }
+ 
+-	if (this.forceSSLv3AndConstrainCipherSuitesForGram.booleanValue())
+-           this.sslEngine.setEnabledProtocols(GRAM_PROTOCOLS);
+-        else
+-           this.sslEngine.setEnabledProtocols(ENABLED_PROTOCOLS);
+ 	logger.debug("SUPPORTED PROTOCOLS: " +
+                     Arrays.toString(this.sslEngine.getSupportedProtocols()) +
+                     "; ENABLED PROTOCOLS: " +
+-- 
+2.17.2
+

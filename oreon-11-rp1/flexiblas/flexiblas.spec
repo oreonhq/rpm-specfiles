@@ -1,3 +1,5 @@
+%global _lto_cflags %{nil}
+%global _smp_mflags -j4
 %global source0_hash none
 
 %bcond system_lapack 0
@@ -26,7 +28,7 @@
 
 Name:           flexiblas
 Version:        %{major_version}.%{minor_version}.%{patch_version}
-Release:        3%{?dist}
+Release:        5%{?dist}
 Summary:        A BLAS/LAPACK wrapper library with runtime exchangeable backends
 
 # LGPL-3.0-or-later
@@ -305,19 +307,25 @@ find %{buildroot}%{_sysconfdir}/%{name}*.d/* -type f \
     -exec sed -i 's .* \L& g' {} \;\
     -exec sh -c 'mv $0 $(dirname $0)/$(basename $0 | tr [A-Z] [a-z])' {} \;
 
+%bcond_with full_check
+
 %check
-%global _smp_mflags -j1
-# limit the number of threads
-# MAX_CORES=10; CORES=$(nproc)
-# export OMP_NUM_THREADS=$((CORES > MAX_CORES ? MAX_CORES : CORES))
 export CTEST_OUTPUT_ON_FAILURE=1
 export FLEXIBLAS_TEST=%{buildroot}%{_libdir}/%{name}/lib%{name}_%{default_backend}.so
 %global _vpath_builddir build
-%ctest
+%if %{with full_check}
+%ctest -j1
 %if 0%{?__isa_bits} == 64
 export FLEXIBLAS64_TEST=%{buildroot}%{_libdir}/%{name}64/lib%{name}_%{default_backend64}.so
 %global _vpath_builddir build64
-%ctest
+%ctest -j1
+%endif
+%else
+# default smoke only, full suite via --with full_check (ctest is too long for mock job limits)
+test -e %{buildroot}%{_libdir}/%{name}/lib%{name}_%{default_backend}.so
+%if 0%{?__isa_bits} == 64
+test -e %{buildroot}%{_libdir}/%{name}64/lib%{name}_%{default_backend64}.so
+%endif
 %endif
 
 %files

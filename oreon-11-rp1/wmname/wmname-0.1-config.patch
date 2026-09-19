@@ -1,0 +1,36 @@
+diff --git a/Makefile b/Makefile
+index fc14296..d902583 100644
+--- a/Makefile
++++ b/Makefile
+@@ -23,7 +23,6 @@ ${OBJ}: config.mk
+ wmname: ${OBJ}
+ 	@echo LD $@
+ 	@${LD} -o $@ ${OBJ} ${LDFLAGS}
+-	@strip $@
+ 
+ clean:
+ 	@echo cleaning
+diff --git a/config.mk b/config.mk
+index ca6d6c4..c204300 100644
+--- a/config.mk
++++ b/config.mk
+@@ -4,7 +4,7 @@ VERSION = 0.1
+ # Customize below to fit your system
+ 
+ # paths
+-PREFIX = /usr/local
++PREFIX?= /usr/local
+ MANPREFIX = ${PREFIX}/share/man
+ 
+ X11INC = /usr/X11R6/include
+@@ -16,8 +16,8 @@ LIBS = -L/usr/lib -lc -L${X11LIB} -lX11
+ 
+ # flags
+ CPPFLAGS = -DVERSION=\"${VERSION}\"
+-CFLAGS = -std=c99 -pedantic -Wall -Os ${INCS} ${CPPFLAGS}
+-LDFLAGS = -s ${LIBS}
++CFLAGS = -std=c99 ${RPM_OPT_FLAGS} ${INCS} ${CPPFLAGS}
++LDFLAGS = ${LIBS}
+ 
+ # compiler and linker
+ CC = cc

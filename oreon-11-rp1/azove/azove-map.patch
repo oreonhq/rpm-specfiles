@@ -1,0 +1,81 @@
+--- azove.cpp.orig	2020-03-18 16:24:44.740182853 -0600
++++ azove.cpp	2020-03-18 16:36:01.379150406 -0600
+@@ -212,8 +212,8 @@ azove::~azove(){
+     delete[] sigMDDnodeBase;
+   for(vector<conBDD*>::iterator Vit = conBDDs.begin(); Vit != conBDDs.end(); ++Vit)
+     delete *Vit;
+-  for(vector<__gnu_cxx::hash_multimap<unsigned long int, andBDDnode*> >::iterator Vit = levels.begin(); Vit != levels.end(); ++Vit)
+-    for(__gnu_cxx::hash_multimap<unsigned long int, andBDDnode*>::iterator Lit = Vit->begin(); Lit != Vit->end(); ++Lit)
++  for(vector<unordered_multimap<unsigned long int, andBDDnode*> >::iterator Vit = levels.begin(); Vit != levels.end(); ++Vit)
++    for(unordered_multimap<unsigned long int, andBDDnode*>::iterator Lit = Vit->begin(); Lit != Vit->end(); ++Lit)
+       delete Lit->second;
+ }
+ 
+@@ -422,7 +422,7 @@ void azove::countPathsToLeaf1(void){
+     rootNode->counter *= 2;
+   
+   for(unsigned int l=0; l<dim; ++l){
+-    for(__gnu_cxx::hash_multimap<unsigned long int, andBDDnode*>::iterator it = levels[l].begin(); it != levels[l].end(); ++it){
++    for(unordered_multimap<unsigned long int, andBDDnode*>::iterator it = levels[l].begin(); it != levels[l].end(); ++it){
+       it->second->zeroEdge->counter += it->second->counter / 2;
+       it->second->oneEdge->counter += it->second->counter / 2;
+     }
+@@ -437,9 +437,9 @@ void azove::countPathsToLeaf1(void){
+ andBDDnode* azove::findNodeWithSameSuccessors(const int actLevel, const andBDDnode* actZeroEdge, const andBDDnode* actOneEdge){
+   andBDDnode* foundNode = NULL;
+   
+-  pair<__gnu_cxx::hash_multimap<unsigned long int, andBDDnode*>::iterator, __gnu_cxx::hash_multimap<unsigned long int, andBDDnode*>::iterator> sameZeroSonsRange = levels[actLevel].equal_range((unsigned long int)actZeroEdge);
++  pair<unordered_multimap<unsigned long int, andBDDnode*>::iterator, unordered_multimap<unsigned long int, andBDDnode*>::iterator> sameZeroSonsRange = levels[actLevel].equal_range((unsigned long int)actZeroEdge);
+   
+-  for(__gnu_cxx::hash_multimap<unsigned long int, andBDDnode*>::iterator searchIt = sameZeroSonsRange.first; searchIt != sameZeroSonsRange.second; ++searchIt){
++  for(unordered_multimap<unsigned long int, andBDDnode*>::iterator searchIt = sameZeroSonsRange.first; searchIt != sameZeroSonsRange.second; ++searchIt){
+     if(actOneEdge == searchIt->second->oneEdge){
+       foundNode = searchIt->second;
+       break;
+@@ -465,7 +465,7 @@ void azove::outputBDD(void){
+   cerr<<"levels of BDD"<<endl;
+   for(unsigned int l=0; l<=dim; ++l){
+     cerr<<"========= level "<<l<<" ==========="<<endl;
+-    for(__gnu_cxx::hash_multimap<unsigned long int, andBDDnode*>::const_iterator it = levels[l].begin(); it != levels[l].end(); ++it)
++    for(unordered_multimap<unsigned long int, andBDDnode*>::const_iterator it = levels[l].begin(); it != levels[l].end(); ++it)
+       cerr<<*(it->second);
+   }
+ }
+@@ -597,7 +597,7 @@ void azove::outputDotFile(const char* fi
+   for(unsigned int l=0; l<dim; ++l){
+     unsigned int abusedCounter = 0;
+     of<<"{ rank = same; \" "<<level2index[l]<<" \";"<<endl;
+-    for(__gnu_cxx::hash_multimap<unsigned long int, andBDDnode*>::iterator it = levels[l].begin(); it != levels[l].end(); ++it){
++    for(unordered_multimap<unsigned long int, andBDDnode*>::iterator it = levels[l].begin(); it != levels[l].end(); ++it){
+       it->second->counter = abusedCounter++;
+       of<<"\""<<l<<"_"<<it->second->counter<<"\";"<<endl;
+     }
+@@ -611,7 +611,7 @@ void azove::outputDotFile(const char* fi
+     <<"}"<<endl;
+   
+   for(unsigned int l=0; l<dim; ++l){
+-    for(__gnu_cxx::hash_multimap<unsigned long int, andBDDnode*>::iterator it = levels[l].begin(); it != levels[l].end(); ++it){
++    for(unordered_multimap<unsigned long int, andBDDnode*>::iterator it = levels[l].begin(); it != levels[l].end(); ++it){
+       of<<"\""<<it->second->level<<"_"<<it->second->counter<<"\" -> ";
+       if(it->second->oneEdge == leaf0Node)
+         of<<"\"leaf0\"";
+--- azove.hpp.orig	2007-03-01 09:12:27.000000000 -0700
++++ azove.hpp	2020-03-18 16:39:17.921850480 -0600
+@@ -25,7 +25,7 @@
+ #include <stdio.h>
+ #include <vector>
+ #include <list>
+-#include <ext/hash_map>
++#include <unordered_map>
+ #include <numeric>
+ 
+ #include "conBDD.hpp"
+@@ -75,7 +75,7 @@ private:
+   unsigned long int sigMDDnodeBaseCounter;
+   
+   //data structure for the andBDD  
+-  std::vector<__gnu_cxx::hash_multimap<unsigned long int, andBDDnode*> > levels;
++  std::vector<std::unordered_multimap<unsigned long int, andBDDnode*> > levels;
+ 
+   andBDDnode* rootNode;
+   andBDDnode* leaf0Node;

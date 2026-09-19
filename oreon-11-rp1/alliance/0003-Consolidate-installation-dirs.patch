@@ -1,0 +1,151 @@
+From 9397e394dfbb0162236e85d6046862fb7e9bae58 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Mon, 29 Feb 2016 14:49:22 +0100
+Subject: [PATCH 03/10] Consolidate installation dirs
+
+---
+ alliance/src/cells/src/dp_sxlib/Makefile.am |  2 +-
+ alliance/src/cells/src/mpxlib/Makefile.am   |  2 +-
+ alliance/src/cells/src/msxlib/Makefile.am   |  2 +-
+ alliance/src/cells/src/padlib/Makefile.am   |  2 +-
+ alliance/src/cells/src/pxlib/Makefile.am    |  2 +-
+ alliance/src/cells/src/ramlib/Makefile.am   |  2 +-
+ alliance/src/cells/src/rf2lib/Makefile.am   |  2 +-
+ alliance/src/cells/src/rflib/Makefile.am    |  2 +-
+ alliance/src/cells/src/romlib/Makefile.am   |  2 +-
+ alliance/src/cells/src/sxlib/Makefile.am    | 14 +++++++-------
+ 10 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/alliance/src/cells/src/dp_sxlib/Makefile.am b/alliance/src/cells/src/dp_sxlib/Makefile.am
+index 58fa1a2..5d1b32f 100644
+--- a/alliance/src/cells/src/dp_sxlib/Makefile.am
++++ b/alliance/src/cells/src/dp_sxlib/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.4 2002/05/08 21:07:13 jpc Exp $
+ 
+-dp_sxlibdir=$(prefix)/cells/dp_sxlib
++dp_sxlibdir=$(pkgdatadir)/cells/dp_sxlib
+ 
+ dp_sxlib_DATA=CATAL dp_dff_scan_x4.ap dp_dff_scan_x4.vbe dp_dff_scan_x4_buf.ap dp_dff_scan_x4_buf.vbe dp_dff_x4.ap dp_dff_x4.vbe dp_dff_x4_buf.ap dp_dff_x4_buf.vbe dp_mux_x2.ap dp_mux_x2.vbe dp_mux_x2_buf.ap dp_mux_x2_buf.vbe dp_mux_x4.ap dp_mux_x4.vbe dp_mux_x4_buf.ap dp_mux_x4_buf.vbe dp_nmux_x1.ap dp_nmux_x1.vbe dp_nmux_x1_buf.ap dp_nmux_x1_buf.vbe dp_nts_x2.ap dp_nts_x2.vbe dp_nts_x2_buf.ap dp_nts_x2_buf.vbe dp_rom2_buf.ap dp_rom2_buf.vbe dp_rom4_buf.ap dp_rom4_buf.vbe dp_rom4_nxr2_x4.ap dp_rom4_nxr2_x4.vbe dp_rom4_xr2_x4.ap dp_rom4_xr2_x4.vbe dp_sff_scan_x4.ap dp_sff_scan_x4.vbe dp_sff_scan_x4_buf.ap dp_sff_scan_x4_buf.vbe dp_sff_x4.ap dp_sff_x4.vbe dp_sff_x4_buf.ap dp_sff_x4_buf.vbe dp_sxlib.lef dp_ts_x4.ap dp_ts_x4.vbe dp_ts_x4_buf.ap dp_ts_x4_buf.vbe dp_ts_x8.ap dp_ts_x8.vbe dp_ts_x8_buf.ap dp_ts_x8_buf.vbe
+ 
+diff --git a/alliance/src/cells/src/mpxlib/Makefile.am b/alliance/src/cells/src/mpxlib/Makefile.am
+index 9469aab..47166af 100644
+--- a/alliance/src/cells/src/mpxlib/Makefile.am
++++ b/alliance/src/cells/src/mpxlib/Makefile.am
+@@ -1,5 +1,5 @@
+ 
+-mpxlibdir=$(prefix)/cells/mpxlib
++mpxlibdir=$(pkgdatadir)/cells/mpxlib
+ 
+ mpxlib_DATA=CATAL \
+             pck_mpx.ap \
+diff --git a/alliance/src/cells/src/msxlib/Makefile.am b/alliance/src/cells/src/msxlib/Makefile.am
+index d67fc5b..5300de0 100644
+--- a/alliance/src/cells/src/msxlib/Makefile.am
++++ b/alliance/src/cells/src/msxlib/Makefile.am
+@@ -1,5 +1,5 @@
+ 
+-msxlibdir=$(prefix)/cells/msxlib
++msxlibdir=$(pkgdatadir)/cells/msxlib
+ 
+ msxlib_DATA=CATAL \
+             an2_x05.ap \
+diff --git a/alliance/src/cells/src/padlib/Makefile.am b/alliance/src/cells/src/padlib/Makefile.am
+index 9b14265..b28a371 100644
+--- a/alliance/src/cells/src/padlib/Makefile.am
++++ b/alliance/src/cells/src/padlib/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.4 2002/05/08 21:07:24 jpc Exp $
+ 
+-padlibdir=$(prefix)/cells/padlib
++padlibdir=$(pkgdatadir)/cells/padlib
+ 
+ padlib_DATA=CATAL corner_sp.ap corner_sp.vbe padreal.ap padreal.cif padsymb.db palck_sp.ap pali_sp.ap paliot_sp.ap paliotw_sp.ap palo_sp.ap palot_sp.ap palotw_sp.ap palow_sp.ap palvdde_sp.ap palvddeck_sp.ap palvddi_sp.ap palvddick_sp.ap palvsse_sp.ap palvsseck_sp.ap palvssi_sp.ap palvssick_sp.ap pck_sp.al pck_sp.ap pck_sp.vbe pi_sp.al pi_sp.ap pi_sp.vbe piot_sp.al piot_sp.ap piot_sp.vbe piotw_sp.al piotw_sp.ap piotw_sp.vbe po_sp.al po_sp.ap po_sp.vbe pot_sp.al pot_sp.ap pot_sp.vbe potw_sp.al potw_sp.ap potw_sp.vbe pow_sp.al pow_sp.ap pow_sp.vbe pvdde_sp.al pvdde_sp.ap pvdde_sp.vbe pvddeck_sp.al pvddeck_sp.ap pvddeck_sp.vbe pvddi_sp.al pvddi_sp.ap pvddi_sp.vbe pvddick_sp.al pvddick_sp.ap pvddick_sp.vbe pvsse_sp.al pvsse_sp.ap pvsse_sp.vbe pvsseck_sp.al pvsseck_sp.ap pvsseck_sp.vbe pvssi_sp.al pvssi_sp.ap pvssi_sp.vbe pvssick_sp.al pvssick_sp.ap pvssick_sp.vbe
+ 
+diff --git a/alliance/src/cells/src/pxlib/Makefile.am b/alliance/src/cells/src/pxlib/Makefile.am
+index 3a2ed65..d0f631f 100644
+--- a/alliance/src/cells/src/pxlib/Makefile.am
++++ b/alliance/src/cells/src/pxlib/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.2 2005/11/08 10:13:51 franck Exp $
+ 
+-pxlibdir=$(prefix)/cells/pxlib
++pxlibdir=$(pkgdatadir)/cells/pxlib
+ 
+ pxlib_DATA=CATAL \
+            pck_px.ap \
+diff --git a/alliance/src/cells/src/ramlib/Makefile.am b/alliance/src/cells/src/ramlib/Makefile.am
+index 66febd9..63a92ff 100644
+--- a/alliance/src/cells/src/ramlib/Makefile.am
++++ b/alliance/src/cells/src/ramlib/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.1 2002/07/15 22:23:32 jpc Exp $
+ 
+-ramlibdir   = $(prefix)/cells/ramlib
++ramlibdir   = $(pkgdatadir)/cells/ramlib
+ 
+ ramlib_DATA = ramlib.lef \
+               CATAL \
+diff --git a/alliance/src/cells/src/rf2lib/Makefile.am b/alliance/src/cells/src/rf2lib/Makefile.am
+index fd9318a..fc80cd3 100644
+--- a/alliance/src/cells/src/rf2lib/Makefile.am
++++ b/alliance/src/cells/src/rf2lib/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.2 2004/09/29 21:50:28 jpc Exp $
+ 
+-rf2libdir=$(prefix)/cells/rf2lib
++rf2libdir=$(pkgdatadir)/cells/rf2lib
+ 
+ rf2lib_DATA=CATAL \
+     rf2lib.lef \
+diff --git a/alliance/src/cells/src/rflib/Makefile.am b/alliance/src/cells/src/rflib/Makefile.am
+index 33ee5ac..6f8ffa7 100644
+--- a/alliance/src/cells/src/rflib/Makefile.am
++++ b/alliance/src/cells/src/rflib/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.4 2002/05/08 21:07:24 jpc Exp $
+ 
+-rflibdir=$(prefix)/cells/rflib
++rflibdir=$(pkgdatadir)/cells/rflib
+ 
+ rflib_DATA=CATAL rf_dec_bufad0.ap rf_dec_bufad0.vbe rf_dec_bufad1.ap rf_dec_bufad1.vbe rf_dec_bufad2.ap rf_dec_bufad2.vbe rf_dec_nand2.ap rf_dec_nand2.vbe rf_dec_nand3.ap rf_dec_nand3.vbe rf_dec_nand4.ap rf_dec_nand4.vbe rf_dec_nao3.ap rf_dec_nao3.vbe rf_dec_nbuf.ap rf_dec_nbuf.vbe rf_dec_nor3.ap rf_dec_nor3.vbe rf_fifo_buf.ap rf_fifo_buf.vbe rf_fifo_clock.ap rf_fifo_clock.vbe rf_fifo_empty.ap rf_fifo_empty.vbe rf_fifo_full.ap rf_fifo_full.vbe rf_fifo_inc.ap rf_fifo_inc.vbe rf_fifo_nop.ap rf_fifo_nop.vbe rf_fifo_ok.ap rf_fifo_ok.vbe rf_fifo_orand4.ap rf_fifo_orand4.vbe rf_fifo_orand5.ap rf_fifo_orand5.vbe rf_fifo_ptreset.ap rf_fifo_ptreset.vbe rf_fifo_ptset.ap rf_fifo_ptset.vbe rf_inmux_buf_2.ap rf_inmux_buf_2.vbe rf_inmux_buf_4.ap rf_inmux_buf_4.vbe rf_inmux_mem.ap rf_inmux_mem.vbe rf_mid_buf_2.ap rf_mid_buf_2.vbe rf_mid_buf_4.ap rf_mid_buf_4.vbe rf_mid_mem.ap rf_mid_mem.vbe rf_mid_mem_r0.ap rf_mid_mem_r0.vbe rf_out_buf_2.ap rf_out_buf_2.vbe rf_out_buf_4.ap rf_out_buf_4.vbe rf_out_mem.ap rf_out_mem.vbe rflib.lef
+ 
+diff --git a/alliance/src/cells/src/romlib/Makefile.am b/alliance/src/cells/src/romlib/Makefile.am
+index 578081e..b9ae364 100644
+--- a/alliance/src/cells/src/romlib/Makefile.am
++++ b/alliance/src/cells/src/romlib/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.2 2006/06/07 19:20:03 jpc Exp $
+ 
+-romlibdir   = $(prefix)/cells/romlib
++romlibdir   = $(pkgdatadir)/cells/romlib
+ 
+ romlib_DATA = romlib.lef \
+               CATAL \
+diff --git a/alliance/src/cells/src/sxlib/Makefile.am b/alliance/src/cells/src/sxlib/Makefile.am
+index fdadefe..ef8957c 100644
+--- a/alliance/src/cells/src/sxlib/Makefile.am
++++ b/alliance/src/cells/src/sxlib/Makefile.am
+@@ -1,12 +1,12 @@
+ # $Id: Makefile.am,v 1.5 2002/05/08 21:07:24 jpc Exp $
+ 
+-sxlibvbedir=$(prefix)/cells/sxlib
+-sxlibapdir=$(prefix)/cells/sxlib
+-sxlibaldir=$(prefix)/cells/sxlib
+-sxlibdatdir=$(prefix)/cells/sxlib
+-sxlibvhddir=$(prefix)/cells/sxlib
+-sxlibetcdir=$(prefix)/cells/sxlib
+-sxlibsymdir=$(prefix)/cells/sxlib
++sxlibvbedir=$(pkgdatadir)/cells/sxlib
++sxlibapdir=$(pkgdatadir)/cells/sxlib
++sxlibaldir=$(pkgdatadir)/cells/sxlib
++sxlibdatdir=$(pkgdatadir)/cells/sxlib
++sxlibvhddir=$(pkgdatadir)/cells/sxlib
++sxlibetcdir=$(pkgdatadir)/cells/sxlib
++sxlibsymdir=$(pkgdatadir)/cells/sxlib
+ 
+ sxlibvbe_DATA = a2_x2.vbe a2_x4.vbe a3_x2.vbe a3_x4.vbe \
+ a4_x2.vbe a4_x4.vbe an12_x1.vbe an12_x4.vbe ao22_x2.vbe \
+-- 
+2.5.0
+

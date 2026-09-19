@@ -6,8 +6,8 @@
 %define _hardened_build 1
 
 Name:           nss-pam-ldapd
-Version:        0.9.10
-Release:        22%{?dist}
+Version:        0.9.13
+Release:        1%{?dist}
 Summary:        An nsswitch module which uses directory servers
 License:        LGPL-2.0-or-later
 URL:            http://arthurdejong.org/nss-pam-ldapd/

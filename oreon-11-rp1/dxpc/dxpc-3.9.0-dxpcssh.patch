@@ -1,0 +1,30 @@
+--- Makefile.in.dxpcssh	2007-01-22 15:26:16.000000000 -0500
++++ Makefile.in	2007-01-22 22:18:19.000000000 -0500
+@@ -26,6 +26,7 @@
+ 	$(CXX) $(CPPFLAGS) -c $(CXXFLAGS) $<
+ 
+ TARGET=	dxpc$(EXEEXT)
++TARGETSSH = dxpcssh
+ 
+ # The mingw build results in two targets, the console mode and windows mode
+ # app.
+@@ -69,7 +70,7 @@
+ depends:
+ 	makedepend -f Makefile $(SRCS)
+ 
+-install: install.bin install.man
++install: install.bin install.man install.scripts
+ 
+ install.bin:	$(TARGET)
+ 	$(srcdir)/mkinstalldirs $(bindir)
+@@ -79,6 +80,10 @@
+ 	$(srcdir)/mkinstalldirs $(mandir)/man1
+ 	$(INSTALL_DATA) $(TARGET).man $(mandir)/man1/$(TARGET).1
+ 
++install.scripts:
++	$(srcdir)/mkinstalldirs $(mandir)/man1
++	$(INSTALL) $(TARGETSSH) $(bindir)/$(TARGETSSH)
++
+ clean:
+ 	-rm -f *~ *.o $(TARGET) pure_* quant_* *.bak core gmon.out
+ 

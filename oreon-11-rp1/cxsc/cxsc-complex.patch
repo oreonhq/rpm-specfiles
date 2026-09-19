@@ -1,0 +1,77 @@
+Fixes errors such as this:
+
+In file included from Modules/cpoly.cpp:53:
+Modules/cpoly.hpp:67:5: error: reference to ‘complex’ is ambiguous
+   67 |     complex& operator[] ( int i ) { return coeff[i]; }
+      |     ^~~~~~~
+
+--- CToolbox/Modules/cpoly.hpp.orig	2014-01-30 10:49:26.000000000 -0700
++++ CToolbox/Modules/cpoly.hpp	2025-06-04 08:45:35.312426064 -0600
+@@ -64,7 +64,7 @@ class CPolynomial {
+   public:
+     CPolynomial ( int );
+     CPolynomial ( const CPolynomial& );
+-    complex& operator[] ( int i ) { return coeff[i]; }
++    cxsc::complex& operator[] ( int i ) { return coeff[i]; }
+ 
+     friend int Deg ( const CPolynomial& );
+     friend istream& operator>> ( istream&, CPolynomial& );
+--- CToolbox/Modules/cpzero.cpp.orig	2014-01-30 10:49:26.000000000 -0700
++++ CToolbox/Modules/cpzero.cpp	2025-06-04 08:52:58.818838446 -0600
+@@ -115,14 +115,14 @@ static real MaxNorm ( CPolynomial p )
+ //    'z' of polynomial 'p', as well as for the coefficients 'q' of the
+ //    deflated polynomial.
+ //----------------------------------------------------------------------------
+-static void Approximation ( CPolynomial  p, complex& z,
++static void Approximation ( CPolynomial  p, cxsc::complex& z,
+                             CPolynomial& q, int&     Err )
+ {
+   const int      kmax  = 50;              // Maximum number of iteration steps
+   const real     eps   = 1E-9;            // Relative error of approximation
+ 
+   int            stop, k, i, n = Deg(p);
+-  complex        t;
++  cxsc::complex  t;
+   cdotprecision  accu;
+   CPolynomial    delta(n-1), d(n-1), w(n-1), qHlp(n-2);
+ 
+@@ -208,7 +208,7 @@ static void Approximation ( CPolynomial
+ //    well as for the coefficients of the deflated polynomial.
+ //----------------------------------------------------------------------------
+ static void IntervalIteration ( CPolynomial p,  CPolynomial   q,
+-                                complex     z,  CIPolynomial& qq,
++                                cxsc::complex z,  CIPolynomial& qq,
+                                 cinterval&  zz, int&    Err       )
+ {
+   const int       kmax = 10;              // Maximum number of iteration steps
+@@ -334,7 +334,7 @@ static void IntervalIteration ( CPolynom
+ //    computed, and then verified enclosures for a root and for a deflated
+ //    polynomial are returned.
+ //----------------------------------------------------------------------------
+-void CPolyZero ( CPolynomial   p,  complex    z,
++void CPolyZero ( CPolynomial   p,  cxsc::complex z,
+                  CIPolynomial& qq, cinterval& zz, int& Err )
+ {
+   int  n = Deg(p);
+--- CToolbox/Modules/cpzero.hpp.orig	2014-01-30 10:49:26.000000000 -0700
++++ CToolbox/Modules/cpzero.hpp	2025-06-04 08:49:14.941766793 -0600
+@@ -39,7 +39,7 @@ using namespace cxsc;
+ using namespace std;
+ 
+ extern char* CPolyZeroErrMsg ( int );
+-extern void  CPolyZero ( CPolynomial, complex,
++extern void  CPolyZero ( CPolynomial, cxsc::complex,
+                          CIPolynomial&, cinterval&, int& );
+ #endif
+ 
+--- CToolbox/Programs/cpz_ex.cpp.orig	2014-01-30 10:49:30.000000000 -0700
++++ CToolbox/Programs/cpz_ex.cpp	2025-06-04 08:57:10.056039428 -0600
+@@ -27,7 +27,7 @@ using namespace std;
+ int main ( )
+ {
+   int       Err, n;
+-  complex   z;
++  cxsc::complex z;
+   cinterval zz;
+ 
+   do {

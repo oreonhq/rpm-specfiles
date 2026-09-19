@@ -1,0 +1,55 @@
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/core/CMakeLists.txt bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/core/CMakeLists.txt
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/core/CMakeLists.txt	2025-10-19 18:01:23.923977084 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/core/CMakeLists.txt	2025-10-19 18:01:23.928406590 +0200
+@@ -87,10 +87,12 @@ IF(CUDA_FOUND)
+ 		${bcd_core_include_folder}/CudaUtils.h
+ 	)
+ 	CUDA_INCLUDE_DIRECTORIES(${bcd_core_include_folder}) # sadly, the TARGET_INCLUDE_DIRECTORIES a few lines below does not work with CUDA, see https://cmake.org/Bug/view.php?id=14201
+-	CUDA_ADD_LIBRARY(${target_name} ${src_files} ${header_files} ${header_implementation_files} STATIC)
++	CUDA_ADD_LIBRARY(${target_name} ${src_files} ${header_files} ${header_implementation_files} SHARED)
+ 	TARGET_COMPILE_DEFINITIONS(${target_name} PRIVATE FOUND_CUDA)
+ ELSE(CUDA_FOUND)
+-	ADD_LIBRARY(${target_name} STATIC ${src_files} ${header_files} ${header_implementation_files})
++	ADD_LIBRARY(${target_name} SHARED ${src_files} ${header_files} ${header_implementation_files})
++	set_property(TARGET ${target_name} PROPERTY VERSION "0.0.0")
++	set_property(TARGET ${target_name} PROPERTY SOVERSION 0 )
+ ENDIF(CUDA_FOUND)
+ 
+ 
+@@ -100,8 +102,8 @@ SET_TARGET_PROPERTIES(${target_name} PRO
+ if (OPENMP_FOUND)
+ TARGET_LINK_LIBRARIES(${target_name} PUBLIC OpenMP)
+ endif (OPENMP_FOUND)
+-TARGET_LINK_LIBRARIES(${target_name} PRIVATE eigen)
++#TARGET_LINK_LIBRARIES(${target_name} PRIVATE eigen3)
+ 
+-INSTALL(TARGETS ${target_name} ARCHIVE DESTINATION lib)
++INSTALL(TARGETS ${target_name} ARCHIVE DESTINATION lib${LIB_SUFFIX})
+ 
+ 
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/io/CMakeLists.txt bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/io/CMakeLists.txt
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/io/CMakeLists.txt	2025-10-19 18:01:23.924558640 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/io/CMakeLists.txt	2025-10-19 18:01:23.928663969 +0200
+@@ -63,7 +63,10 @@ SET(header_files
+ SET(header_implementation_files
+ )
+ 
+-ADD_LIBRARY(${target_name} STATIC ${src_files} ${header_files} ${header_implementation_files})
++ADD_LIBRARY(${target_name} SHARED ${src_files} ${header_files} ${header_implementation_files})
++TARGET_LINK_LIBRARIES(${target_name} PRIVATE ${OPENEXR_LDFLAGS} -lIlmImf -lImath -lHalf -lIex -lIexMath -lIlmThread )
++set_property(TARGET ${target_name} PROPERTY VERSION "0.0.0")
++set_property(TARGET ${target_name} PROPERTY SOVERSION 0 )
+ 
+ 
+ TARGET_INCLUDE_DIRECTORIES(${target_name} PUBLIC "${bcd_include_folder}/io")
+@@ -72,8 +75,8 @@ TARGET_INCLUDE_DIRECTORIES(${target_name
+ 
+ SET_TARGET_PROPERTIES(${target_name} PROPERTIES CXX_STANDARD 14)
+ TARGET_LINK_LIBRARIES(${target_name} PUBLIC ${lib_bcd_core})
+-TARGET_LINK_LIBRARIES(${target_name} PRIVATE OpenExr)
+-TARGET_LINK_LIBRARIES(${target_name} PRIVATE Json)
++TARGET_LINK_LIBRARIES(${target_name} PRIVATE ${OPENEXR_LDFLAGS})
++TARGET_LINK_LIBRARIES(${target_name} PRIVATE ${JSONCPP_LDFLAGS})
+ 
+ INSTALL(TARGETS ${target_name} ARCHIVE DESTINATION lib)
+ 

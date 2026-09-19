@@ -1,0 +1,36 @@
+From 72c1910a399e3418b74dbc25def1a4719636c972 Mon Sep 17 00:00:00 2001
+From: firefly-cpp <iztok@iztok-jr-fister.eu>
+Date: Thu, 24 Nov 2022 18:20:42 +0100
+Subject: [PATCH] Move dev dependencies
+
+---
+ setup.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 3a08b4f..0cbb9ca 100644
+--- a/setup.py
++++ b/setup.py
+@@ -14,11 +14,7 @@
+     url="https://github.com/gugarosa/opytimark",
+     license="Apache 2.0",
+     install_requires=[
+-        "coverage>=5.5",
+         "numpy>=1.19.5",
+-        "pre-commit>=2.17.0",
+-        "pylint>=2.7.2",
+-        "pytest>=6.2.2",
+     ],
+     extras_require={
+         "tests": [
+@@ -26,6 +22,10 @@
+             "pytest",
+             "pytest-pep8",
+         ],
++        "dev": [
++            "pre-commit>=2.17.0",
++            "pylint>=2.7.2",
++        ],
+     },
+     classifiers=[
+         "Development Status :: 5 - Production/Stable",

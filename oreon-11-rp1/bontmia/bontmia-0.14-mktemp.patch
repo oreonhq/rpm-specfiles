@@ -1,0 +1,119 @@
+--- bontmia-0.14/bontmia~	2004-07-26 00:16:10.000000000 +0200
++++ bontmia-0.14/bontmia	2007-06-13 13:33:18.000000000 +0200
+@@ -182,12 +182,23 @@
+     rm -f "${tmpdir}/is_running.lock"
+ }
+ 
++create_private_tmpdir()
++{
++    tmpdir=$(mktemp -d /tmp/bontmia-tmpdir.XXXXXX) || exit 1
++    echo $tmpdir
++}
++
++clean_private_tmpdir()
++{
++    rm -rf $private_tmpdir
++}
+ 
+ lock_destination()
+ {
++    local TMPFILE
+     # Ensure that there is no other bontmia running against the same destination
+-    touch /tmp/bontmia_lock_file.$$
+-    echo "no" | mv -i /tmp/bontmia_lock_file.$$ "${tmpdir}"/is_running.lock 2>&1 | \
++    TMPFILE=$(mktemp $private_tmpdir/bontmia_lock_file.XXXXXX) || exit 1
++    echo "no" | mv -i $TMPFILE "${tmpdir}"/is_running.lock 2>&1 | \
+ 	grep "overwrite" >/dev/null 2>&1 && {
+ 	echo "Bontmia is already doing a backup on this tmpdir:"
+ 	echo "    ${tmpdir}"
+@@ -321,6 +332,7 @@
+ 
+ make_backup()
+ {
++    local TMPFILE TMPFILE2
+     this_backup=$(date +%Y)/$(date +%m)/$(date +%d)/$(date +%H\:%M)
+ 
+     do_the_backup_exist "$this_backup"
+@@ -349,21 +361,23 @@
+ 
+ 	if test "x$dryrun" == "xno"; then
+ 	    mkdir -p "$tmpdir/unfinished_backup/$this_backup/$hostname"
++            TMPFILE=$(mktemp $private_tmpdir/bontmia_rsync_output.XXXXXX) || exit 1
++            TMPFILE2=$(mktemp $private_tmpdir/bontmia_rsync_output.2.XXXXXX) || exit 1
+ 
+-	    rsync ${rsync_options} -e "ssh -p $port" "${dir}" "${tmpdir}/unfinished_backup/$this_backup/${hostname}" 2>&1 >/tmp/bontmia_rsync_output.$$ || {
++	    rsync ${rsync_options} -e "ssh -p $port" "${dir}" "${tmpdir}/unfinished_backup/$this_backup/${hostname}" 2>&1 >$TMPFILE || {
+ 		echo
+ 		echo "  Caught an error doing rsync (return code $?)"
+ 		echo "  The last 10 lines of output from rsync:"
+-		tail -10 /tmp/bontmia_rsync_output.$$
++		tail -10 $TMPFILE
+ 		echo
+ 		echo "  Retrying rsync..."
+-		rsync ${rsync_options} -e "ssh -p $port" "${dir}" "${tmpdir}/unfinished_backup/$this_backup/${hostname}" 2>&1 >/tmp/bontmia_rsync_output.$$ || {
++		rsync ${rsync_options} -e "ssh -p $port" "${dir}" "${tmpdir}/unfinished_backup/$this_backup/${hostname}" 2>&1 >$TMPFILE2 || {
+ 		    echo
+ 		    echo "  Still no luck.  Rsync failed with returncode $?"
+ 		    echo "  $dir"
+ 		    echo "  Please check that there is room for all the data"
+ 		    echo "  The last 10 lines of output from rsync:"
+-		    tail -10 /tmp/bontmia_rsync_output.$$.2
++		    tail -10 $TMPFILE2
+ 		    echo
+ 		    echo
+ 		    echo "  Continuing with the next backup source"
+@@ -562,27 +576,32 @@
+ 	exit 1
+     }
+     check_program cp
+-    touch /tmp/bontmia_test_cp_file.$$ || {
+-	echo "Could not create a temporary file on /tmp"
+-	echo "Please make sure that /tmp is writable"
++    
++    TESTTMP=$(mktemp $private_tmpdir/bontmia.test.tmp.XXXXXX) || {
++	echo "Could not create a temporary file on /tmp/$private_tmpdir"
++	echo "Please make sure that /tmp and /tmp/$private_tmpdir is writable"
+ 	echo "Aborting"
+ 	unlock_destination
+ 	exit 1
+     }
+-    cp -l /tmp/bontmia_test_cp_file.$$ /tmp/bontmia_test_cp_file.$$.2 >/dev/null 2>&1 || {
++    
++    TMPFILE=$(mktemp $private_tmpdir/bontmia_test_cp_file.XXXXXX) || exit 1
++    cp -l $TMPFILE $TMPFILE.hardlink >/dev/null 2>&1 || {
+ 	echo "cp on your system does not support the -l option"
+ 	echo "You might not have the GNU version of 'cp'"
+ 	echo "Aborting"
+ 	unlock_destination
+ 	exit 1
+     }
+-    rm -f /tmp/bontmia_test_cp_file.$$ /tmp/bontmia_test_cp_file.$$.2
++    rm -f $TESTTMP $TMPFILE $TMPFILE.hardlink 
+ }
+ 
+ 
+ #################################################################
+ 
+ 
++LC_ALL=C
++
+ if test "x$*" == x; then
+     print_usage
+ fi
+@@ -693,6 +712,8 @@
+     esac
+ done
+ 
++private_tmpdir=$(create_private_tmpdir)
++
+ check_for_programs
+ 
+ tmpdir=${tmpdir:-"$backup_destination"}
+@@ -737,4 +758,7 @@
+ fi
+ 
+ unlock_destination
++clean_private_tmpdir
++
+ exit $exit_status
++

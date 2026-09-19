@@ -1,0 +1,34 @@
+From 429f81caf8af998e59075c86b777b2ecef7956cf Mon Sep 17 00:00:00 2001
+From: Jacob Mealey <jacobmealey.maine@gmail.com>
+Date: Sun, 28 Sep 2025 20:14:18 -0400
+Subject: [PATCH] Fix build for gcc 15
+
+This patch comes from the downstream debian and was
+authored by Andreas Beckmann <anbe@debian.org> here:
+
+https://salsa.debian.org/debian/rc/-/blob/main/debian/patches/gcc-15.patch?ref_type=heads
+
+Fixes #113
+---
+ rc.h | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/rc.h b/rc.h
+index be4a6b5..b22344d 100644
+--- a/rc.h
++++ b/rc.h
+@@ -47,9 +47,14 @@ typedef enum ecodes {
+ 	eError, eBreak, eReturn, eVarstack, eArena, eFifo, eFd
+ } ecodes;
+ 
++#if __STDC_VERSION__ >= 202311L
++#define FALSE false
++#define TRUE true
++#else
+ typedef enum bool {
+ 	FALSE, TRUE
+ } bool;
++#endif
+ 
+ typedef enum redirtype {
+ 	rFrom, rCreate, rAppend, rHeredoc, rHerestring

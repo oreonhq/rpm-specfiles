@@ -1,0 +1,138 @@
+diff --git a/gui.pro b/gui.pro
+index 191182b..e62311b 100644
+--- a/gui.pro
++++ b/gui.pro
+@@ -19,7 +19,6 @@ linux {
+ }
+ 
+ include(src/QtAwesome/QtAwesome/QtAwesome.pri)
+-include(src/QSimpleUpdater/QSimpleUpdater.pri)
+ 
+ CONFIG(use_system_qzxing) {
+     LIBS += -lQZXing
+diff --git a/src/AppGui.cpp b/src/AppGui.cpp
+index 2c9939f..8a328c8 100755
+--- a/src/AppGui.cpp
++++ b/src/AppGui.cpp
+@@ -18,7 +18,6 @@
+  ******************************************************************************/
+ #include "AppGui.h"
+ #include "version.h"
+-#include "QSimpleUpdater.h"
+ #include "DbMasterController.h"
+ #include "PromptWidget.h"
+ #include "SystemNotifications/SystemNotification.h"
+@@ -85,7 +84,6 @@ bool AppGui::initialize()
+ 
+     setupLanguage();
+ 
+-    QSimpleUpdater::getInstance();
+ 
+ #ifdef Q_OS_WIN
+     SystemNotification::instance();
+@@ -276,7 +274,6 @@ bool AppGui::initialize()
+ 
+     startSSHAgent();
+ 
+-    connect(QSimpleUpdater::getInstance(), &QSimpleUpdater::updateAvailable, this, &AppGui::updateAvailableReceived);
+ 
+     QTimer::singleShot(15000, [this]() {
+         checkUpdate(false);
+@@ -643,24 +640,6 @@ void AppGui::daemonLogRead()
+ 
+ void AppGui::updateAvailableReceived(QString version, QString changesetURL)
+ {
+-    const QString NEWVERSION_STRING = tr("%1 version has been released!").arg(version);
+-    SystemNotification::instance().createNotification(NEWVERSION_STRING, tr("Open MC client to download it."));
+-
+-    const auto onAccept = []()
+-    {
+-        QSimpleUpdater::getInstance()->downloadFile(GITHUB_UPDATE_URL);
+-    };
+-
+-    const auto onReject = [this]()
+-    {
+-        win->hidePrompt();
+-    };
+-
+-    PromptMessage *message = new PromptMessage("<b>" + NEWVERSION_STRING + "</b><br>" +
+-                                                  tr("Would you like to download the update now?") + "<br>" +
+-                                                  "<a href=\"" + changesetURL + "\">" + tr("Open changelog") + "</a>",
+-                                               onAccept, onReject);
+-    win->showPrompt(message);
+ }
+ 
+ void AppGui::displayStatusWarningNotification()
+@@ -738,23 +717,6 @@ void AppGui::restartDaemon()
+ 
+ void AppGui::checkUpdate(bool displayMessage)
+ {
+-    if (QStringLiteral(APP_VERSION) == "git" ||
+-        QStringLiteral(APP_TYPE) == "deb")
+-        return;
+-
+-    auto u = QSimpleUpdater::getInstance();
+-    u->setModuleVersion(GITHUB_UPDATE_URL, APP_VERSION);
+-    u->setNotifyOnUpdate(GITHUB_UPDATE_URL, true);
+-    u->setDownloaderEnabled(GITHUB_UPDATE_URL, true);
+-    u->setNotifyOnFinish(GITHUB_UPDATE_URL, displayMessage);
+-    u->setDisplayDialog(GITHUB_UPDATE_URL, false);
+-    u->setPlatformKey(GITHUB_UPDATE_URL, APP_TYPE);
+-
+-    u->checkForUpdates(GITHUB_UPDATE_URL);
+-
+-    //Recheck in at least 30minutes plus some random time
+-    if (!displayMessage)
+-        QTimer::singleShot(1000 * 60 * 60 * 30 + Common::getRand() % 240, [this]() { checkUpdate(false); });
+ }
+ 
+ QString AppGui::getDataDirPath()
+diff --git a/tests/main.cpp b/tests/main.cpp
+index 9a07905..87ddff2 100644
+--- a/tests/main.cpp
++++ b/tests/main.cpp
+@@ -1,7 +1,6 @@
+ #include <QtTest>
+ 
+ #include "FilesCacheTests.h"
+-#include "UpdaterTests.h"
+ #include "DbBackupsTrackerTests.h"
+ #include "TestTreeItem.h"
+ #include "TestCredentialModel.h"
+diff --git a/tests/tests.pro b/tests/tests.pro
+index 3ff2b5c..7ba6482 100644
+--- a/tests/tests.pro
++++ b/tests/tests.pro
+@@ -4,7 +4,7 @@
+ #
+ #-------------------------------------------------
+ 
+-QT       += testlib
++QT       += testlib widgets network
+ 
+ QT       -= gui
+ 
+@@ -27,7 +27,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
+ # You can also select to disable deprecated APIs only up to a certain version of Qt.
+ #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+ 
+-include (../src/QSimpleUpdater/QSimpleUpdater.pri)
+ 
+ INCLUDEPATH += $$PWD/../src $$PWD/../src/SimpleCrypt
+ 
+@@ -48,7 +47,6 @@ SOURCES += \
+     ../src/DeviceDetector.cpp \
+     main.cpp \
+     FilesCacheTests.cpp \
+-    UpdaterTests.cpp \
+     DbBackupsTrackerTests.cpp \
+     TestTreeItem.cpp \
+     TestCredentialModel.cpp \
+@@ -71,7 +69,6 @@ HEADERS += \
+     ../src/DbBackupChangeNumbersComparator.h \
+     ../src/ParseDomain.h \
+     ../src/DeviceDetector.h \
+-    UpdaterTests.h \
+     FilesCacheTests.h \
+     DbBackupsTrackerTests.h \
+     TestTreeItem.h \

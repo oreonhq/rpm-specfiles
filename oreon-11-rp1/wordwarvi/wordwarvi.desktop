@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Word War vi
+Comment=Side-scrolling shoot 'em up '80s style arcade game
+Exec=wordwarvi
+Icon=wordwarvi
+Terminal=false
+Type=Application
+Categories=Game;ArcadeGame;
+Keywords=Game;Arcade;80s;wordwarvi;Shooter;Scroller;Retro;

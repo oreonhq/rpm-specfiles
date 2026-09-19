@@ -1,0 +1,34 @@
+From 767620dba806c0cf55eac888de49f79c54bad3f6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Mon, 10 Jun 2024 11:03:00 +0200
+Subject: [PATCH] test: do not compare sys.path in test executions
+
+This fails in various ways, e.g.:
+___ TestCommandLine.test_module_execution_details[pyinstrument_invocation0] ____
+...
+E       AssertionError: assert '__name__ __m...n_details_0\n' == '__name__ __m...n_details_0\n'
+E           __name__ __main__
+E           sys.argv ['/tmp/pytest-of-mockbuild/pytest-1/test_module_execution_details_0/test_module/__main__.py', 'arg1', 'arg2']
+E         - sys.path ['/tmp/pytest-of-mockbuild/pytest-1/test_module_execution_details_0', '/builddir/build/BUILD/pyinstrument-4.6.2-bui
+ld/BUILDROOT/usr/lib64/python3.12/site-packages', '/builddir/build/BUILD/pyinstrument-4.6.2-build/BUILDROOT/usr/lib/python3.12/site-pack
+ages', '/usr/lib64/python312.zip', '/usr/lib64/python3.12', '/usr/lib64/python3.12/lib-dynload', '/usr/lib64/python3.12/site-packages',
+'/usr/lib/python3.12/site-packages']
+E         + s...
+E
+E         ...Full output truncated (3 lines hidden), use '-vv' to show
+---
+ test/test_cmdline.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/test/test_cmdline.py b/test/test_cmdline.py
+index d718a2c837..163033db28 100644
+--- a/test/test_cmdline.py
++++ b/test/test_cmdline.py
+@@ -14,7 +14,6 @@ EXECUTION_DETAILS_SCRIPT = f"""
+ import sys, os
+ print('__name__', __name__, file=sys.stderr)
+ print('sys.argv', sys.argv, file=sys.stderr)
+-print('sys.path', sys.path, file=sys.stderr)
+ print('sys.executable', os.path.realpath(sys.executable), file=sys.stderr)
+ print('os.getcwd()', os.getcwd(), file=sys.stderr)
+ """.strip()

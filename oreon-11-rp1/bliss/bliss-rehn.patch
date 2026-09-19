@@ -1,0 +1,40 @@
+--- include/bliss/abstractgraph.hh.orig	2022-06-17 07:24:11.000000000 -0600
++++ include/bliss/abstractgraph.hh	2023-02-01 09:32:06.289384074 -0700
+@@ -493,10 +493,14 @@ protected:
+    */
+   unsigned int cr_component_elements;
+ 
++  std::vector<PathInfo> first_path_info;
+ 
++public:
+ 
+-
+-
++  /**
++   * Get an information vector about the first path.
++   */
++  std::vector<PathInfo> get_first_path_info() { return first_path_info; }
+ 
+ };
+ 
+--- src/abstractgraph.cc.orig	2022-06-17 07:24:11.000000000 -0600
++++ src/abstractgraph.cc	2023-02-01 09:31:50.377694086 -0700
+@@ -745,7 +745,6 @@ AbstractGraph::search(const bool canonic
+   initialize_certificate();
+ 
+   std::vector<TreeNode> search_stack;
+-  std::vector<PathInfo> first_path_info;
+   std::vector<PathInfo> best_path_info;
+ 
+   search_stack.clear();
+--- src/graph.cc.orig	2022-06-17 07:24:11.000000000 -0600
++++ src/graph.cc	2023-02-01 09:32:06.290384054 -0700
+@@ -1551,7 +1551,7 @@ Graph::nucr_find_first_component(const u
+   component.clear();
+   component_elements = 0;
+   sh_return = 0;
+-  unsigned int sh_first  = 0;
++  unsigned int sh_first  = 1 << 31;
+   unsigned int sh_size   = 0;
+   unsigned int sh_nuconn = 0;
+ 

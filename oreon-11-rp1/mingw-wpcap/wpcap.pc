@@ -1,0 +1,13 @@
+# Package Information for pkg-config
+
+prefix=/usr/i686-w64-mingw32/sys-root/mingw
+exec_prefix=/usr/i686-w64-mingw32/sys-root/mingw
+libdir=/usr/i686-w64-mingw32/sys-root/mingw/lib
+includedir=/usr/i686-w64-mingw32/sys-root/mingw/include
+
+Name: WPCAP
+Description: Windows Packet Capture Library
+Version: 4.1.final2
+Libs: -L${libdir} -lpacket -lwpcap
+Libs.private: 
+Cflags: -I${includedir}/wpcap

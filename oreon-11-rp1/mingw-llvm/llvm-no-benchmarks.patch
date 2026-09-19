@@ -1,0 +1,12 @@
+diff -rupN --no-dereference llvm-project-21.1.8.src/llvm/CMakeLists.txt llvm-project-21.1.8.src-new/llvm/CMakeLists.txt
+--- llvm-project-21.1.8.src/llvm/CMakeLists.txt	2025-12-12 11:35:47.000000000 +0100
++++ llvm-project-21.1.8.src-new/llvm/CMakeLists.txt	2025-12-27 19:49:03.758241999 +0100
+@@ -877,7 +877,7 @@ option(LLVM_INSTALL_GTEST
+ 
+ option(LLVM_BUILD_BENCHMARKS "Add LLVM benchmark targets to the list of default
+ targets. If OFF, benchmarks still could be built using Benchmarks target." OFF)
+-option(LLVM_INCLUDE_BENCHMARKS "Generate benchmark targets. If OFF, benchmarks can't be built." ON)
++option(LLVM_INCLUDE_BENCHMARKS "Generate benchmark targets. If OFF, benchmarks can't be built." OFF)
+ 
+ option (LLVM_BUILD_DOCS "Build the llvm documentation." OFF)
+ option (LLVM_INCLUDE_DOCS "Generate build targets for llvm documentation." ON)

@@ -1,0 +1,59 @@
+diff -urN lib.orig/hiera/backend/vault_backend.rb lib/hiera/backend/vault_backend.rb
+--- a/lib/hiera/backend/vault_backend.rb	2017-08-17 04:04:36.000000000 -0700
++++ b/lib/hiera/backend/vault_backend.rb	2020-03-02 12:52:00.886619581 -0800
+@@ -43,6 +43,20 @@
+           @vault = nil
+           Hiera.warn("[hiera-vault] Skipping backend. Configuration error: #{e}")
+         end
++
++        # Check vault kv version
++        if (@config[:kv_version]).nil?
++          @api_path = ""
++          Hiera.debug("[hiera-vault] kv engine version not set using default: 1")
++        elsif @config[:kv_version] == 1
++          @api_path = ""
++          Hiera.debug("[hiera-vault] Using kv engine version: #{@config[:kv_version]}")
++        elsif @config[:kv_version] == 2
++          @api_path = "data/"
++          Hiera.debug("[hiera-vault] Using kv engine version: #{@config[:kv_version]}")
++        else
++          Hiera.warn("[hiera-vault] Not supported kv engine version: #{@config[:kv_version]}")
++        end
+       end
+ 
+       def lookup(key, scope, order_override, resolution_type)
+@@ -58,7 +72,7 @@
+           path = Backend.parse_string(mount, scope, { 'key' => key })
+           Backend.datasources(scope, order_override) do |source|
+             Hiera.debug("Looking in path #{path}/#{source}/")
+-            new_answer = lookup_generic("#{path}/#{source}/#{key}", scope)
++            new_answer = lookup_generic("#{path}/#{@api_path}#{source}/#{key}", scope)
+             #Hiera.debug("[hiera-vault] Answer: #{new_answer}:#{new_answer.class}")
+             next if new_answer.nil?
+             case resolution_type
+@@ -92,12 +106,12 @@
+           end
+ 
+           return nil if secret.nil?
+-
++          sd = @config[:kv_version] == 2 ? secret.data[:data] : secret.data
+           Hiera.debug("[hiera-vault] Read secret: #{key}")
+-          if @config[:default_field] and (@config[:default_field_behavior] == 'ignore' or (secret.data.has_key?(@config[:default_field].to_sym) and secret.data.length == 1))
+-            return nil if not secret.data.has_key?(@config[:default_field].to_sym)
++          if @config[:default_field] and (@config[:default_field_behavior] == 'ignore' or (sd.has_key?(@config[:default_field].to_sym) and sd.length == 1))
++            return nil if not sd.has_key?(@config[:default_field].to_sym)
+             # Return just our default_field
+-            data = secret.data[@config[:default_field].to_sym]
++            data = sd[@config[:default_field].to_sym]
+             if @config[:default_field_parse] == 'json'
+               begin
+                 data = JSON.parse(data)
+@@ -107,7 +121,7 @@
+             end
+           else
+             # Turn secret's hash keys into strings
+-            data = secret.data.inject({}) { |h, (k, v)| h[k.to_s] = v; h }
++            data = sd.inject({}) { |h, (k, v)| h[k.to_s] = v; h }
+           end
+           #Hiera.debug("[hiera-vault] Data: #{data}:#{data.class}")
+ 

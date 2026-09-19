@@ -1,0 +1,28 @@
+From 0ff83fc1dabb0ba0fd42f12ba4fa7f401006315f Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 29 Nov 2022 10:29:18 -0500
+Subject: [PATCH] Fix a possible double free in woffEncode()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The tableOrder is freed after the header is wrtten. If a decoding or
+encoding failure occurs thereafter, resulting in a jump to the “failure”
+label, the tableOrder can be freed again. Set the tableOrder pointer
+null when freeing it to prevent this.
+---
+ woff.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/woff.c b/woff.c
+index dc77c42..6da832e 100644
+--- a/woff.c
++++ b/woff.c
+@@ -359,6 +359,7 @@ woffEncode(const uint8_t * sfntData, uint32_t sfntLen,
+   newHeader->privLen = 0;
+ 
+   free(tableOrder);
++  tableOrder = 0;
+ 
+   if ((status & eWOFF_warn_checksum_mismatch) != 0) {
+     /* The original font had checksum errors, so we now decode our WOFF data

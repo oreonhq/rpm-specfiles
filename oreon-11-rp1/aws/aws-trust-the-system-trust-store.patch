@@ -1,0 +1,36 @@
+--- a/docs/source/using_aws.rst
++++ b/docs/source/using_aws.rst
+@@ -2116,10 +2116,9 @@
+ starting the server::
+ 
+   AWS.Net.SSL.Initialize_Default_Config
+-     Security_Mode       => AWS.Net.SSL.TLS_Server,
++    (Security_Mode       => AWS.Net.SSL.TLS_Server,
+      Server_Certificate  => "aws-server.crt",
+-     Server_Key          => "aws-server.key",
+-     Trusted_CA_Filename => "/etc/ssl/certs/ca-certificates.crt");
++     Server_Key          => "aws-server.key");
+ 
+ Or by using a configuration object::
+ 
+@@ -2134,7 +2133,7 @@
+      Security_Mode       => AWS.Net.SSL.TLS_Server,
+      Server_Certificate  => "aws-server.crt",
+      Server_Key          => "aws-server.key",
+-     Trusted_CA_Filename => "/etc/ssl/certs/ca-certificates.crt");
++     Trusted_CA_Filename => "/usr/local/etc/example/additional-ca.crt");
+ 
+   Server.Set_SSL_Config (HTTP, Config);
+ 
+--- a/src/core/aws-default.ads
++++ b/src/core/aws-default.ads
+@@ -174,8 +174,7 @@
+    Client_Certificate              : constant String  := "cert.pem";
+    Exchange_Certificate            : constant Boolean := True;
+    Check_Certificate               : constant Boolean := True;
+-   Trusted_CA                      : constant String  :=
+-                                       "/etc/ssl/certs/ca-certificates.crt";
++   Trusted_CA                      : constant String  := "";
+    CRL_File                        : constant String  := "";
+    Check_URL_Validity              : constant Boolean := True;
+    SSL_Session_Cache_Size          : constant         := 16#4000#;

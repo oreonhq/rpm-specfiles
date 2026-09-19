@@ -1,0 +1,28 @@
+--- projects/generate_prj.sh	2010-09-25 22:47:31.000000000 +0200
++++ projects/generate_prj.sh	2011-05-03 19:16:47.000000000 +0200
+@@ -3,7 +3,7 @@
+ module=${1:-}
+ bindir="$2"
+ incdir="$3"
+-libdir="$4"
++libdir="\" & Directories.Libdir & \""
+ libsubdir_static="$5"
+ libsubdir_shared="$6"
+ alisubdir_static="$7"
+@@ -33,7 +33,7 @@
+    if [ "$lcmodule" = "gtkada" ]; then
+       previous=""
+       for lib in $libs; do
+-         if [ "$lib" != "-lgtkada" ]; then
++         if [[ "$lib" != "-lgtkada" && "$lib" != -L/usr/lib* ]]; then
+             if [ x"$previous" != x"" ]; then
+                 echo "        \"$previous\","
+             fi
+@@ -78,6 +78,7 @@
+   default=$3
+ 
+   cat <<EOF > ${lc}.gpr
++with "directories";
+ project ${uc} is
+ 
+    type Gtkada_Kind_Type is ("static", "relocatable");

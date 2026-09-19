@@ -1,0 +1,22 @@
+--- a/stdlibs/fetch.py
++++ b/stdlibs/fetch.py
+@@ -9,7 +9,7 @@ from typing import List, Optional, Set
+ 
+ import libcst as cst
+ import libcst.matchers as m
+-import toml
++import tomllib as toml
+ 
+ BASE_DIR = (Path.cwd() / Path(__file__)).parent
+ KNOWN_FILE = BASE_DIR / "known.py"
+--- a/stdlibs/fetch_releases.py
++++ b/stdlibs/fetch_releases.py
+@@ -7,7 +7,7 @@ from pprint import pprint
+ from typing import Dict, List
+ from urllib.request import urlopen
+ 
+-import toml
++import tomllib as toml
+ from packaging.version import Version
+ 
+ BASE_DIR = (Path.cwd() / Path(__file__)).parent

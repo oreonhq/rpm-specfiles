@@ -1,0 +1,25 @@
+diff: a/cameras/playerone/linux/arm32/libPlayerOneCamera.so: File o directory non esistente
+diff: a/cameras/playerone/linux/arm32/libPlayerOneCamera.so.3: File o directory non esistente
+diff: a/cameras/playerone/linux/arm32/libPlayerOneCamera.so.3.7: File o directory non esistente
+diff: a/cameras/playerone/linux/arm64/libPlayerOneCamera.so: File o directory non esistente
+diff: a/cameras/playerone/linux/arm64/libPlayerOneCamera.so.3: File o directory non esistente
+diff: a/cameras/playerone/linux/arm64/libPlayerOneCamera.so.3.7: File o directory non esistente
+diff: a/cameras/playerone/linux/x64/libPlayerOneCamera.so: File o directory non esistente
+diff: a/cameras/playerone/linux/x64/libPlayerOneCamera.so.3: File o directory non esistente
+diff: a/cameras/playerone/linux/x64/libPlayerOneCamera.so.3.7: File o directory non esistente
+diff: a/cameras/playerone/linux/x86/libPlayerOneCamera.so: File o directory non esistente
+diff: a/cameras/playerone/linux/x86/libPlayerOneCamera.so.3: File o directory non esistente
+diff: a/cameras/playerone/linux/x86/libPlayerOneCamera.so.3.7: File o directory non esistente
+diff -U 3 -dHrN a/thirdparty/thirdparty.cmake b/thirdparty/thirdparty.cmake
+--- a/thirdparty/thirdparty.cmake	2025-12-10 05:46:14.000000000 +0100
++++ b/thirdparty/thirdparty.cmake	2025-12-14 09:44:56.704446893 +0100
+@@ -384,6 +384,9 @@
+   set(EIGEN_SRC ${VCPKG_INCLUDE}/eigen3)
+ else()
+   find_package(Eigen3 REQUIRED)
++  if(TARGET Eigen3::Eigen)
++    get_target_property(EIGEN3_INCLUDE_DIR Eigen3::Eigen INTERFACE_INCLUDE_DIRECTORIES)
++  endif()
+   set(EIGEN_SRC ${EIGEN3_INCLUDE_DIR})
+   message(STATUS "Using system's Eigen3.")
+ endif()

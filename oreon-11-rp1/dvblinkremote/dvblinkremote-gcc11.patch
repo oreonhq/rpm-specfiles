@@ -1,0 +1,13 @@
+diff --git a/dvblinkremote/src/program.cpp b/dvblinkremote/src/program.cpp
+index 8652c40..79ef5c6 100644
+--- a/dvblinkremote/src/program.cpp
++++ b/dvblinkremote/src/program.cpp
+@@ -123,7 +123,7 @@ int main(int argc, char * argv[])
+     argClientId = GetCmdOption(argv, argv + argc, "-cid");
+   }
+ 
+-  if (!argHostName || argPort <= 0 || !argUsername || !argPassword || !argClientId) {
++  if (!argHostName || argPort == 0 || !argUsername || !argPassword || !argClientId) {
+     PrintUsage();
+     return 0;
+   }

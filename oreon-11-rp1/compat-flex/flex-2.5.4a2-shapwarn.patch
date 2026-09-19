@@ -1,0 +1,92 @@
+diff -Burp flex-2.5.4/gen.c flex-2.5.4shap/gen.c
+--- flex-2.5.4/gen.c	1997-07-26 22:32:18.000000000 -0400
++++ flex-2.5.4shap/gen.c	2006-01-15 11:49:20.000000000 -0500
+@@ -1437,7 +1437,7 @@ void make_tables()
+ 		indent_puts( "if ( yy_act == 0 )" );
+ 		indent_up();
+ 		indent_puts( C_plus_plus ?
+-			"cerr << \"--scanner backing up\\n\";" :
++			"std::cerr << \"--scanner backing up\\n\";" :
+ 			"fprintf( stderr, \"--scanner backing up\\n\" );" );
+ 		indent_down();
+ 
+@@ -1448,7 +1448,7 @@ void make_tables()
+ 		if ( C_plus_plus )
+ 			{
+ 			indent_puts(
+-	"cerr << \"--accepting rule at line \" << yy_rule_linenum[yy_act] <<" );
++	"std::cerr << \"--accepting rule at line \" << yy_rule_linenum[yy_act] <<" );
+ 			indent_puts(
+ 			"         \"(\\\"\" << yytext << \"\\\")\\n\";" );
+ 			}
+@@ -1470,7 +1470,7 @@ void make_tables()
+ 		if ( C_plus_plus )
+ 			{
+ 			indent_puts(
+-"cerr << \"--accepting default rule (\\\"\" << yytext << \"\\\")\\n\";" );
++"std::cerr << \"--accepting default rule (\\\"\" << yytext << \"\\\")\\n\";" );
+ 			}
+ 		else
+ 			{
+@@ -1486,7 +1486,7 @@ void make_tables()
+ 		indent_up();
+ 
+ 		indent_puts( C_plus_plus ?
+-			"cerr << \"--(end of buffer or a NUL)\\n\";" :
++			"std::cerr << \"--(end of buffer or a NUL)\\n\";" :
+ 		"fprintf( stderr, \"--(end of buffer or a NUL)\\n\" );" );
+ 
+ 		indent_down();
+@@ -1498,7 +1498,7 @@ void make_tables()
+ 		if ( C_plus_plus )
+ 			{
+ 			indent_puts(
+-	"cerr << \"--EOF (start condition \" << YY_START << \")\\n\";" );
++	"std::cerr << \"--EOF (start condition \" << YY_START << \")\\n\";" );
+ 			}
+ 		else
+ 			{
+diff -Burp flex-2.5.4/skel.c flex-2.5.4shap/skel.c
+--- flex-2.5.4/skel.c	2006-01-14 22:53:17.000000000 -0500
++++ flex-2.5.4shap/skel.c	2006-01-15 11:56:59.000000000 -0500
+@@ -146,6 +146,15 @@ const char *skel[] = {
+   "",
+   "#define unput(c) yyunput( c, yytext_ptr )",
+   "",
++  "/* Some routines like yy_flex_realloc() are emitted as static but are",
++  "   not called by all lexers. This generates warnings in some compilers,",
++  "   notably GCC. Arrange to suppress these. */",
++  "#ifdef __GNUC__",
++  "#define YY_MAY_BE_UNUSED __attribute__((unused))",
++  "#else",
++  "#define YY_MAY_BE_UNUSED",
++  "#endif",
++  "",
+   "/* The following is because we cannot portably get our hands on size_t",
+   " * (without autoconf's help, which isn't available because we want",
+   " * flex-generated scanners to compile on their own).",
+@@ -260,7 +269,7 @@ const char *skel[] = {
+   "%*",
+   "",
+   "static void *yy_flex_alloc YY_PROTO(( yy_size_t ));",
+-  "static void *yy_flex_realloc YY_PROTO(( void *, yy_size_t ));",
++  "static void *yy_flex_realloc YY_PROTO(( void *, yy_size_t )) YY_MAY_BE_UNUSED;",
+   "static void yy_flex_free YY_PROTO(( void * ));",
+   "",
+   "#define yy_new_buffer yy_create_buffer",
+@@ -1541,15 +1550,5 @@ const char *skel[] = {
+   "	return 0;",
+   "	}",
+   "#endif",
+-  "",
+-  "/* Some people want warning-free code, and under certain #define",
+-  "   conditions, gcc will warn for unusedness of some functions.  This",
+-  "   function is provided merely to silent these warnings.  It's not",
+-  "   static itself, so it will clutter exports, but it has at least",
+-  "   urandom name so that clashes won't occur.*/",
+-  "void _yy_dummy_uses_of_static_functions_b2f4_517d_02ff_b30c_3e5a_47d7_aaa3_3b5d_()",
+-  "{",
+-  "  yy_flex_realloc ((void*)0, 0);",
+-  "}",
+   0
+ };

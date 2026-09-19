@@ -1,0 +1,13 @@
+diff -rupN qhexedit2-0.9.0/src/qhexedit.pro qhexedit2-0.9.0-new/src/qhexedit.pro
+--- qhexedit2-0.9.0/src/qhexedit.pro	2025-03-09 13:55:46.000000000 +0100
++++ qhexedit2-0.9.0-new/src/qhexedit.pro	2025-07-27 11:57:47.718016417 +0200
+@@ -19,8 +19,7 @@ SOURCES = \
+     commands.cpp \
+     color_manager.cpp
+ 
+-Release:TARGET = qhexedit
+-Debug:TARGET = qhexeditd
++TARGET = qhexedit-$$(QT_VER)
+ 
+ 
+ unix {

@@ -1,0 +1,29 @@
+From: William Desportes <williamdes@wdes.fr>
+Date: Tue, 31 Dec 2024 17:54:35 +0100
+Subject: Stop using xml_set_object for PHP 8.4
+
+Same fix as https://github.com/tecnickcom/TCPDF/pull/734
+
+Origin: vendor
+Forwarded: no
+---
+ lib/xml2array.php | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/lib/xml2array.php b/lib/xml2array.php
+index d260c9e..4b10b70 100644
+--- a/lib/xml2array.php
++++ b/lib/xml2array.php
+@@ -33,10 +33,9 @@ class xml2array {
+ 
+ 	public function parseXML($strInputXML,$filename) {
+ 		$this->resParser = xml_parser_create();
+-		xml_set_object($this->resParser,$this);
+-		xml_set_element_handler($this->resParser,'tagOpen','tagClosed');
++		xml_set_element_handler($this->resParser, [$this, 'tagOpen'], [$this, 'tagClosed']);
+ 
+-		xml_set_character_data_handler($this->resParser,'tagData');
++		xml_set_character_data_handler($this->resParser, [$this, 'tagData']);
+ 
+ 		$this->push_pos($this->arrOutput);
+ 

@@ -1,0 +1,418 @@
+From 05c0f3bd865aae21f453965a504d215a63a02782 Mon Sep 17 00:00:00 2001
+From: sand1024 <sand72@mail.ru>
+Date: Thu, 22 Aug 2024 17:38:55 +0300
+Subject: [PATCH] Improved preview on actions, copy/paste, shortcuts etc.
+ (#1840)
+
+* Support of snapping to relative point on mouse move (with SHIFT Pressed) for point selection states + minor cleanups
+
+* improved preview on mouse move by highlighting entity to provide better indication of source entity (especially if one is part of polyline)
+
+* improved preview on mouse move by highlighting entity for drawlinetangent1
+
+* improved preview on mouse move by highlighting original entity for drawlineparallel
+
+* draw line tangent1 cleanup
+
+* circle preview improvments
+
+* ellipse actions preview improvements, angle snap for major axis
+
+* interim commit - snap to angle where needed, snap to rel point, highlights support, reference points in actions, coordinate widget update fixes, cleanups
+
+* interim commit - enhanced preview mode for most of actions (except some modify ones), reworked action options widgets (to action's ownership mode), code cleanup, minor improvements
+
+* angle options quick fix
+
+* initial fix for cmd widget height
+
+* Revert "initial fix for cmd widget height"
+
+This reverts commit 543f1c579a97ba39a19172f4f9fcc1f519874153.
+
+* trim action preview improvement
+
+* interim commit
+
+* support of UI hints for keyboard modifiers supported by actions
+
+* moving method up
+
+* moving ref improvement (preview, line/arc lengthen mode)
+
+* setting mouse cursor cleanup, initial support for mouseReleaseEvents methods
+
+* Update build-appimg.sh
+
+(cherry picked from commit c1555958c06d0febcee8ace429bd4b193eb9398e)
+
+* Update build-appimg.sh
+
+(cherry picked from commit 06e5398efd7d50c20567c318317ea13f88c7fe32)
+
+* Update build-appimg.sh
+
+(cherry picked from commit a0769dd98161e203aa6fa70ee32be1fa67d3fe6b)
+
+* Issue #1791: AppImage fixes
+
+(cherry picked from commit 935acf5b9b6baa4232320d410cf411c9347b5dfc)
+
+* Update build-appimg.sh
+
+libQt6Svg
+
+(cherry picked from commit 78fae71ec43b7b7f9aabb51ddb7ac622744866cb)
+
+* Update build-appimg.sh
+
+(cherry picked from commit b2d7e3fb6f5525117c7bd8ba60b661c92db2dbfe)
+
+* Update build-appimg.sh
+
+(cherry picked from commit a7841a416122fcdf2f09e1697a1502b15de8bd34)
+
+* Update build-all.yml
+
+(cherry picked from commit 27e931032f05da2c0aef8086865e577af035b1d5)
+
+* Revert "Update build-all.yml"
+
+This reverts commit 6e3df30843fb16393c3782642baeb8420301dd0d.
+
+* Revert "Update build-appimg.sh"
+
+This reverts commit df9ae0de9b30c9830f7cbddff542ec622253b6a1.
+
+* Revert "Update build-appimg.sh"
+
+This reverts commit 862e41412a44863744a168e3008f2b235f131401.
+
+* Revert "Update build-appimg.sh"
+
+This reverts commit 3835a5c32745993952706df27e82480d41c15cfc.
+
+* Revert "Issue #1791: AppImage fixes"
+
+This reverts commit 6b4a4cf755207b9e4e8f85afa81d3d22d53ef7bb.
+
+* Revert "Update build-appimg.sh"
+
+This reverts commit 31b13c31aa99fabcb0a307ce7273827d32e34e41.
+
+* Revert "Update build-appimg.sh"
+
+This reverts commit e96b8f1756a55038b63a2d6deeb28d6d75204afc.
+
+* Revert "Update build-appimg.sh"
+
+This reverts commit 82d6ed175f398f57b323145a933e880d06607d89.
+
+* mouse release processing
+
+* merge fix
+
+* fix for "chord length" command (->"chordlen")
+
+* option for angle snap step value in UI and support of settings-based step in actions
+
+* size fix
+
+* minor cleanup
+
+* select window explicit cross
+
+* generic selection-aware action, expand action, revert direction action
+
+* hover highlighting improvement, displaying ref points on hover, options dialog
+
+* cleanup
+
+* unchecking ui action if action is finished after key event, cleanup
+
+* explode text to letters, modify actions
+
+* modify actions
+
+* modify offset
+
+* option widgets cleanup
+
+* modify offset and modify move actions (intermediate commit)
+
+* chahge the order of cycles for multiple copies for modify operations, cleanup
+
+* modify move and modify mirror operations
+
+* modify offset options ui
+
+* mirror options  ui adjustment
+
+* modify move-rotate action
+
+* modify duplicate preview improvement
+
+* commandEvent() cleanup for uniform support of "help", options for block insert, library insert and image
+
+* code cleanup (qaction, eof)
+
+* simplification of creating options widget in actions
+
+* PrintPreview - disabling UI for actions and widgets
+
+* code cleanup
+
+* action factory simplification
+
+* cleanup
+
+* merge corrections
+
+* action factory simplification, redockwidgets() moved to main window
+
+* 1) fix for leaking options widgets in toolbar 2) disabling not relevant UI for print preview 3) disabling ui if no file, 3) rework of ownership for snap options widgets, 4) options for location of displaying snap options; 5) displaying snap options in snap toolbar
+
+* 1) fix for leaking options widgets in toolbar 2) disabling not relevant UI for print preview 3) disabling ui if no file, 3) rework of ownership for snap options widgets, 4) options for location of displaying snap options; 5) displaying snap options in snap toolbar
+
+* image options cleanup finalization
+
+* comments after rename operation cleanup
+
+* generic options dialog - ui improvement - added buttons for selection translations, hatches and fonts folder via selection dialog
+
+* sanity check
+
+* entity to point hits, overall code cleanup
+
+* fix for fitToPage() so now it actually fits to ONE page (not to set pages number), code cleanup
+
+* fix for vertical/horizontal scrolling (so scroll is based on vertical mouse wheel only, not by vertical and horizontal weels
+
+* additional modifiers wrapper macros
+
+* changes in actions entity highlighting
+
+* actions keyboard modifiers indication simplification
+
+* angle values in options parsing fix
+
+* mouse hint fix
+
+* rotate2 action
+
+* code cleanup
+
+* code cleanup
+
+* multiple paste support
+
+* edit-copy-paste, multiple pasting
+
+* paste transform operation, initial commit
+
+* paste transform operation, initial commit
+
+* quick copy/paste operations, better undo support for paste transform, shortcuts
+
+* paste-transform options ui usability improvement
+
+* mouse widget layout, icons
+
+* cleanup
+
+* cleanup
+
+* cleanup
+
+* fix for snap to angle case on mouse release
+
+* modify scale action
+
+* localizable strings restored
+
+* tmp printPreview
+
+* interim commit (modify rotate)
+
+* modify rotate action
+
+* angle 3 points action
+
+* angle 3 points action
+
+* refactoring (commandEvent, headers cleanup, initToPrevious())
+
+* refactoring (mouse events, base methods visibility)
+
+* opimizing selection-based actions, eliminated selection-based loops
+
+* fix for displaying correct information in selection widget if layer is toggled
+
+* option widgets margin adjusmtents, tooltips
+
+* pattern matching fix (substring search)
+
+* margins update
+
+* support of free base angle in Rect1Point
+
+* pen palette styling fix (white bg)
+
+* option widgets ui separators
+
+* move-rotate free angle UI consistency
+
+* Pen pallete bg styling
+
+* layertree widget styling (white bg)
+
+* block list widget styling (white bg)
+
+* layer list widget styling (white bg)
+
+* parabola actions preview
+
+* optimizing reference entities enabling/disabling, code cleanup
+
+* code cleanup
+
+* code cleanup
+
+* minor cleanup and notes
+
+* readme moved, internal commit for print preview
+
+* print preview cleanup, ui, tiled
+
+* interim commit - shortcuts settings dialog, shortcuts in tooltips, inital codebase relayout
+
+* restored translations supports, snap actions moved from snap toolbar
+
+* removed actions creation, hidden restrict nothing
+
+* shortcuts management
+
+* shortcuts dialog
+
+* intermediate commit - actions sources relayout
+
+* intermediate commit - ui sources relayout
+
+* hide restrict nothing action from shortcuts editor
+
+* moving not used classes
+
+* settings syntax sugar
+
+* restored copyrights
+
+* shortcuts-related refactoring, updating tooltips on options change, tooltip update
+
+* shortcuts dialog collisions check on save
+
+* restored QTCreator build, code cleanup
+
+* actions code cleanup (includes, warnings etc)
+
+* code cleanup
+
+* merge corrections
+
+* merge corrections
+
+* merge corrections, optimizing line grid PR
+
+* merge corrections, cleanup, qrc files updates in ui for designer
+
+* code cleanup, settings names cleanup, explicit connect in settings
+
+* action check cleanup
+
+* margin fix on preview
+
+* various cleanups
+
+* initial non-invoked action for focusing options widgets...
+
+* Minor cleanup (unused, etc.)
+
+* missing copyright notes added
+
+---------
+
+Co-authored-by: sand1024 <sand1024@gmail.com>
+Co-authored-by: Dongxu Li <dongxuli2011@gmail.com>
+---
+ libraries/libdxfrw/src/drw_base.h             |    5 +-
+ libraries/libdxfrw/src/drw_classes.h          |    5 +-
+ libraries/libdxfrw/src/drw_entities.h         |    5 +-
+ libraries/libdxfrw/src/drw_header.h           |    3 -
+ libraries/libdxfrw/src/drw_objects.h          |    5 +-
+
+diff --git a/libraries/libdxfrw/src/drw_base.h b/libraries/libdxfrw/src/drw_base.h
+index c0c52e9760..399b73ba24 100644
+--- a/src/drw_base.h
++++ b/src/drw_base.h
+@@ -507,7 +507,4 @@ class DRW_LW_Conv{
+     }
+ };
+ 
+-#endif
+-
+-// EOF
+-
++#endif
+\ No newline at end of file
+diff --git a/libraries/libdxfrw/src/drw_classes.h b/libraries/libdxfrw/src/drw_classes.h
+index 55cc5dc722..838885063a 100644
+--- a/src/drw_classes.h
++++ b/src/drw_classes.h
+@@ -52,7 +52,4 @@ class DRW_Class {
+     int dwgType;
+ };
+ 
+-#endif
+-
+-// EOF
+-
++#endif
+\ No newline at end of file
+diff --git a/libraries/libdxfrw/src/drw_entities.h b/libraries/libdxfrw/src/drw_entities.h
+index db5223322f..889806f9f7 100644
+--- a/src/drw_entities.h
++++ b/src/drw_entities.h
+@@ -1404,7 +1404,4 @@ class DRW_Viewport : public DRW_Point {
+ //DRW::ShadowMode shadow;    /*!< shadow mode, code 284 */
+ //bool haveExtrusion;        /*!< set to true if the entity have extrusion*/
+ 
+-#endif
+-
+-// EOF
+-
++#endif
+\ No newline at end of file
+diff --git a/libraries/libdxfrw/src/drw_header.h b/libraries/libdxfrw/src/drw_header.h
+index d6da9154e2..3690dd6288 100644
+--- a/src/drw_header.h
++++ b/src/drw_header.h
+@@ -136,6 +136,3 @@ class DRW_Header {
+ };
+ 
+ #endif
+-
+-// EOF
+-
+diff --git a/libraries/libdxfrw/src/drw_objects.h b/libraries/libdxfrw/src/drw_objects.h
+index b7d7afe5ac..0cd9d5fb8c 100644
+--- a/src/drw_objects.h
++++ b/src/drw_objects.h
+@@ -798,7 +798,4 @@ const unsigned char dxfColors[][3] = {
+ 
+ }
+ 
+-#endif
+-
+-// EOF
+-
++#endif
+\ No newline at end of file

@@ -1,0 +1,287 @@
+.TH MITER "1" "April 2021" "" "User Commands"
+.SH NAME
+miter \- a simple but effective little volume renderer
+.SH SYNOPSIS
+.B miter
+.RI [ @file \ ...]
+.RB [ \-i
+.RI < nsin >]
+.RB [ \-vi
+.RI < nvin >]
+.RB [ \-ti
+.RI < ntin >]
+.B \-txf
+.RI < nin \ ...>
+.B \-fr
+.RI < eye\ pos >
+.RB [ \-at
+.RI < at\ pos >]
+.RB [ \-up
+.RI < up\ dir >]
+.RB [ \-rh ]
+.RB [ \-or ]
+.B \-dn
+.RI < near >
+.B \-di
+.RI < image >
+.B \-df
+.RI < far >
+.RB [ \-ar ]
+.RB [ \-ur
+.RI < uMin\fR\ \fIuMax >]
+.RB [ \-vr
+.RI < vMin\fR\ \fIvMax >]
+.RB [ \-fv
+.RI < field\ of\ view >]
+.RB [ \-offfr ]
+.RB [ \-fr
+.RI < fake\ from >]
+.RB [ \-turn
+.RI < angle >]
+.RB [ \-am
+.RI < ambient >]
+.RB [ \-ld
+.RI < light\ pos >]
+.RB [ \-is
+.RI < image\ size >]
+.RB [ \-iss
+.RI < scale >]
+.RB [ \-ads
+.RI < ka\fR\ \fIkd\fR\ \fIks >]
+.RB [ \-sp
+.RI < spec\ pow >]
+.RB [ \-k00
+.RI < kernel >]
+.RB [ \-k11
+.RI < kernel >]
+.RB [ \-k22
+.RI < kernel >]
+.RB [ \-ss
+.RI < shading\ spec >]
+.RB [ \-ns
+.RI < normal\ spec >]
+.RB [ \-side
+.RI < normal\ side >]
+.RB [ \-rn ]
+.RB [ \-gmc
+.RI < min\ gradmag >]
+.RB [ \-step
+.RI < size >]
+.RB [ \-ref
+.RI < size >]
+.RB [ \-vp
+.RI < verbose pixel >]
+.RB [ \-n1
+.RI < near1 >]
+.RB [ \-nt
+.RI < #\ threads >]
+.RB [ \-o
+.RI < filename >]
+.SH OPTIONS
+.TP
+.IR @file \ ...\:
+response file(s) containing command-line arguments
+.TP
+.B \-i\fR <\fInsin\fR>
+input scalar volume to render
+.RI ( nrrd );
+default: \(lq\(rq
+.TP
+.B \-vi\fR <\fInvin\fR>
+input vector volume to render
+.RI ( nrrd );
+default: \(lq\(rq
+.TP
+.B \-ti\fR <\fIntin\fR>
+input tensor volume to render
+.RI ( nrrd );
+default: \(lq\(rq
+.TP
+.B \-txf\fR <\fInin\fR\ ...>
+one or more transfer functions (1 or more
+.IR nrrd s)
+.TP
+.B \-fr\fR <\fIeye\ pos\fR>
+camera eye point (3 \fIdouble\fRs)
+.TP
+.B \-at\fR <\fIat\ pos\fR>
+camera look-at point (3 \fIdouble\fRs); default:
+.RB \(lq 0\ 0\ 0 \(rq
+.TP
+.B \-up\fR <\fIup\ dir\fR>
+camera pseudo-up vector (3 \fIdouble\fRs); default:
+.RB \(lq 0\ 0\ 1 \(rq
+.TP
+.B \-rh
+use a right-handed UVN frame (V points down)
+.TP
+.B \-or
+orthogonal (not perspective) projection
+.TP
+.B \-dn\fR <\fInear\fR>
+distance to near clipping plane
+.RI ( double )
+.TP
+.B \-di\fR <\fIimage\fR>
+distance to image plane
+.RI ( double )
+.TP
+.B \-df\fR <\fIfar\fR>
+distance to far clipping plane
+.RI ( double )
+.TP
+.B \-ur\fR <\fIuMin\fR\ \fIuMax\fR>
+range in U direction of image plane (2
+.IR double s)
+.TP
+.B \-vr\fR <\fIvMin\fR\ \fIvMax\fR>
+range in V direction of image plane (2
+.IR double s)
+.TP
+.B \-fv\fR <\fIfield\ of\ view\fR>
+angle (in degrees) vertically subtended by view window
+.RI ( double );
+default:
+.RB \(lq 20 \(rq
+.TP
+.B \-offfr
+the given eye point
+.RB (\(lq \-fr \(rq)
+is to be interpreted as an offset from the at point.
+.TP
+.B \-ffr\fR <\fIfake\ from\fR>
+eye point to use for view-dependent transfer functions.
+By default (not using this option), the point used is the normally specified
+camera eye point. (3 \fIdouble\fRs)
+.TP
+.B \-turn\fR <\fIangle\fR>
+angle (degrees) by which to rotate the from point around true up, for making
+stereo pairs.
+Positive means move towards positive U (the right)
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-am\fR <\fIambient\fR>
+ambient light color (3 \fIfloat\fRs); default:
+.RB \(lq 1\ 1\ 1 \(rq
+.TP
+.B \-ld\fR <\fIlight\ pos\fR>
+view space light position (extended to infinity) (3 \fIfloat\fRs); default:
+.RB \(lq 0\ 0\ \-1 \(rq
+.TP
+.B \-is\fR <\fIimage\ size\fR>
+image dimensions (2 \fIint\fRs); default:
+.RB \(lq 256\ 256 \(rq
+.TP
+.B \-iss\fR <\fIscale\fR>
+scaling of image size (from
+.RB \(lq \-is \(rq)
+.RI ( float );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-ads\fR <\fIka\fR\ \fIkd\fR\ \fIks\fR>
+phong components (3 \fIfloat\fRs); default:
+.RB \(lq 0.1\ 0.6\ 0.3 \(rq
+.TP
+.B \-sp\fR <\fIka\fR\ \fIkd\fR\ \fIks\fR>
+phong specular power
+.RI ( double ); default:
+.RB \(lq 30 \(rq
+.TP
+.B \-k00\fR <\fIkernel\fR>
+value reconstruction kernel (\fIkernel specification\fR); default:
+.RB \(lq tent \(rq
+.TP
+.B \-k11\fR <\fIkernel\fR>
+first derivative kernel (\fIkernel specification\fR); default:
+.RB \(lq cubicd:1,0 \(rq
+.TP
+.B \-k22\fR <\fIkernel\fR>
+second derivative kernel (\fIkernel specification\fR); default:
+.RB \(lq cubicdd:1,0 \(rq
+.TP
+.B \-ss\fR <\fIshading\ spec\fR>
+how to do shading
+.RI ( string );
+default:
+.RB \(lq phong:gage(scalar:n) \(rq
+.TP
+.B \-ns\fR <\fInormal\ spec\fR>
+\(lqnormal\(rq to use for those miteVal\(cqs that need one
+.RI ( string );
+default: \(lq\(rq
+.TP
+.B \-side\fR <\fInormal\ side\fR>
+how to interpret gradients as normals:
+.RS +7n
+.IP \(bu 2
+.RB \(lq 1 \(rq:
+normal points to lower values (higher == more \(lqinside\(rq)
+.IP \(bu 2
+.RB \(lq 0 \(rq:
+\(lqtwo-sided\(rq: dot-products are \fBabs()\fR\(cqed
+.IP \(bu 2
+.RB \(lq \-1 \(rq:
+normal points to higher values (lower == more \(lqinside\(rq)
+.P
+default:
+.RB \(lq 1 \(rq
+.RE
+.TP
+.B \-rn
+renormalize kernel weights at each new sample location.
+\(lqAccurate\(rq kernels don\(cqt need this; doing it always makes things go
+slower
+.B \-gmc\fR\ <\fImin\ gradmag\fR>
+For curvature-based transfer functions, set curvature to zero when gradient
+magnitude is below this
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-step\fR\ <\fIsize\fR>
+step size along ray in world space
+.RI ( double );
+default:
+.RB \(lq 0.01 \(rq
+.TP
+.B \-ref\fR\ <\fIsize\fR>
+\(lqreference\(rq step size (world space) for doing opacity correction in
+compositing
+.RI ( double );
+default:
+.RB \(lq 0.01 \(rq
+.TP
+.B \-vp\fR\ <\fIverbose\ pixel\fR>
+pixel for which to turn on verbose messages (2 \fIint\fRs); default:
+.RB \(lq \-1\ \-1 \(rq
+.TP
+.B \-n1\fR\ <\fInear1\fR>
+opacity close enough to 1.0 to terminate ray
+.RI ( double );
+default:
+.RB \(lq 0.99 \(rq
+.TP
+.B \-nt\fR\ <\fI#\ threads\fR>
+number of threads hoover should use
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-o\fR <\fIfilename\fR>
+file to write output nrrd to
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR gprobe (1),
+.BR ilk (1),
+.BR mrender (1),
+.BR nrrdSanity (1),
+.BR overrgb (1),
+.BR puller (1),
+.BR tend (1),
+.BR unu (1),
+.BR vprobe (1)

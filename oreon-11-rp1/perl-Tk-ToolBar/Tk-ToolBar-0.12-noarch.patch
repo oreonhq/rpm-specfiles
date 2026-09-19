@@ -1,0 +1,16 @@
+diff --git a/Makefile.PL b/Makefile.PL
+index c270704..5d12468 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -30,11 +30,6 @@ WriteMakefile1(
+             TARFLAGS => '-c -C -f',
+         },
+     ) : (),
+-	PM               => {
+-		'lib/Tk/ToolBar.pm'       => '$(INST_LIB)/Tk/ToolBar.pm',
+-		'toolbar.pl'       => ($] >= 5.005 ? '$(INST_ARCHLIB)' : '$(INST_LIB)') . '/Tk/demos/widtrib/toolbar.pl',
+-		'ToolBar/tkIcons'  => '$(INST_LIB)/Tk/ToolBar/tkIcons',
+-	},
+ );
+ 
+ sub WriteMakefile1 {  #Written by Alexandr Ciornii, version 0.21. Added by eumm-upgrade.

@@ -17,8 +17,8 @@
 %global run_tests 0
 
 Name:           mingw-openssl
-Version:        3.2.4
-Release:        4%{?dist}
+Version:        4.0.2
+Release:        1%{?dist}
 Summary:        MinGW port of the OpenSSL toolkit
 
 License:        OpenSSL

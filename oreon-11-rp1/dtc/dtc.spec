@@ -9,8 +9,8 @@
 %undefine _auto_set_build_flags
 
 Name:          dtc
-Version:       1.7.2
-Release:       9%{?dist}
+Version:       1.8.1
+Release:       1%{?dist}
 Summary:       Device Tree Compiler
 License:       GPL-2.0-or-later
 URL:           https://devicetree.org/

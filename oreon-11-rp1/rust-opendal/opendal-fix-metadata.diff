@@ -1,0 +1,54 @@
+--- opendal-0.55.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ opendal-0.55.0/Cargo.toml	2026-01-22T18:21:38.933649+00:00
+@@ -611,41 +611,8 @@
+ ]
+ optional = true
+ 
+-[dev-dependencies.criterion]
+-version = "0.7"
+-features = [
+-    "async",
+-    "async_tokio",
+-]
+-
+-[dev-dependencies.divan]
+-version = "0.1"
+-
+ [dev-dependencies.dotenvy]
+ version = "0.15"
+-
+-[dev-dependencies.fastrace]
+-version = "0.7"
+-features = ["enable"]
+-
+-[dev-dependencies.fastrace-jaeger]
+-version = "0.7"
+-
+-[dev-dependencies.libtest-mimic]
+-version = "0.8"
+-
+-[dev-dependencies.opentelemetry]
+-version = "0.31.0"
+-features = ["trace"]
+-default-features = false
+-
+-[dev-dependencies.opentelemetry-otlp]
+-version = "0.31.0"
+-features = ["grpc-tonic"]
+-
+-[dev-dependencies.opentelemetry_sdk]
+-version = "0.31.0"
+-features = ["rt-tokio"]
+ 
+ [dev-dependencies.pretty_assertions]
+ version = "1"
+@@ -667,9 +634,6 @@
+     "rt-multi-thread",
+ ]
+ 
+-[dev-dependencies.tracing-opentelemetry]
+-version = "0.32.0"
+-
+ [dev-dependencies.tracing-subscriber]
+ version = "0.3"
+ features = [

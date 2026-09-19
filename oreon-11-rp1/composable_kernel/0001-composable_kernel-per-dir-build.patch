@@ -1,0 +1,199 @@
+From efae23ce303a72680787ac347dbca040791be473 Mon Sep 17 00:00:00 2001
+From: Tom Rix <Tom.Rix@amd.com>
+Date: Sat, 15 Nov 2025 09:19:03 -0800
+Subject: [PATCH] composable_kernel per dir build
+
+---
+ CMakeLists.txt                                | 10 +++
+ Config.cmake.in                               |  8 +--
+ .../gpu/CMakeLists.txt                        | 63 +++++++++++++++----
+ 3 files changed, 65 insertions(+), 16 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 19c036e1a538..9e4d7a615ccc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,6 +4,14 @@ if(POLICY CMP0140)
+   cmake_policy(SET CMP0140 NEW)
+ endif()
+ 
++option(CK_BUILD_PROFILER "Build profiler" OFF)
++option(CK_BUILD_DEVICE_OTHER "Build device other" OFF)
++option(CK_BUILD_DEVICE_GEMM "Build device gemm" OFF)
++option(CK_BUILD_DEVICE_CONV "Build device conv" OFF)
++option(CK_BUILD_DEVICE_MHA "Build device mha" OFF)
++option(CK_BUILD_DEVICE_CONTRACTION "Build device contraction" OFF)
++option(CK_BUILD_DEVICE_REDUCTION "Build device reduction" OFF)
++
+ get_property(_GENERATOR_IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+ 
+ # This has to be initialized before the project() command appears
+@@ -659,6 +667,7 @@ if(NOT GPU_ARCHS AND USER_GPU_TARGETS AND NOT MIOPEN_REQ_LIBS_ONLY)
+    endif()
+ endif()
+ 
++if (CK_BUILD_PROFILER)
+ if (NOT MIOPEN_REQ_LIBS_ONLY)
+     rocm_package_setup_component(profiler
+         LIBRARY_NAME composablekernel
+@@ -666,6 +675,7 @@ if (NOT MIOPEN_REQ_LIBS_ONLY)
+     )
+     add_subdirectory(profiler)
+ endif()
++endif() 
+ 
+ if(CK_USE_CODEGEN AND (SUPPORTED_GPU_TARGETS MATCHES "gfx9" OR GPU_ARCHS))
+   add_subdirectory(codegen)
+diff --git a/Config.cmake.in b/Config.cmake.in
+index 2861a28f4968..9ac68c58f884 100644
+--- a/Config.cmake.in
++++ b/Config.cmake.in
+@@ -2,10 +2,8 @@
+ 
+ set(_composable_kernel_supported_components device_other_operations device_gemm_operations device_conv_operations device_mha_operations device_contraction_operations device_reduction_operations utility)
+ 
+-foreach(_comp ${composable_kernel_FIND_COMPONENTS})
+-	if(NOT _comp IN_LIST _composable_kernel_supported_components)
+-		set(composable_kernel_FOUND False)
+-		set(composable_kernel_NOT_FOUND_MESSAGE "Unsupported component: ${_comp}")
++foreach(_comp IN LISTS _composable_kernel_supported_components)
++	if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/composable_kernel${_comp}Targets.cmake)
++  	        include("${CMAKE_CURRENT_LIST_DIR}/composable_kernel${_comp}Targets.cmake")
+ 	endif()
+-	include("${CMAKE_CURRENT_LIST_DIR}/composable_kernel${_comp}Targets.cmake")
+ endforeach()
+diff --git a/library/src/tensor_operation_instance/gpu/CMakeLists.txt b/library/src/tensor_operation_instance/gpu/CMakeLists.txt
+index 1eaaa7e6bab2..837c243f93d7 100644
+--- a/library/src/tensor_operation_instance/gpu/CMakeLists.txt
++++ b/library/src/tensor_operation_instance/gpu/CMakeLists.txt
+@@ -319,6 +319,34 @@ FOREACH(subdir_path ${dir_list})
+             endif()
+         endif()
+ 
++        if((add_inst EQUAL 1))
++          if("${cmake_instance}" MATCHES "gemm")
++	    if(NOT CK_BUILD_DEVICE_GEMM)
++	      set(add_inst 0)
++	    endif()
++          elseif("${cmake_instance}" MATCHES "conv")
++	    if(NOT CK_BUILD_DEVICE_CONV)
++	      set(add_inst 0)
++	    endif()
++          elseif("${cmake_instance}" MATCHES "mha")
++	    if(NOT CK_BUILD_DEVICE_MHA)
++	      set(add_inst 0)
++	    endif()
++          elseif("${cmake_instance}" MATCHES "contr")
++	    if(NOT CK_BUILD_DEVICE_CONTRACTION)
++	      set(add_inst 0)
++	    endif()
++          elseif("${cmake_instance}" MATCHES "reduce")
++	    if(NOT CK_BUILD_DEVICE_REDUCTION)
++	      set(add_inst 0)
++	    endif()
++          else()
++	    if(NOT CK_BUILD_DEVICE_OTHER)
++	      set(add_inst 0)
++	    endif()
++          endif()
++        endif()
++
+         if((add_inst EQUAL 1))
+             get_filename_component(target_dir ${subdir_path} NAME)
+             add_subdirectory(${target_dir})
+@@ -342,9 +370,7 @@ FOREACH(subdir_path ${dir_list})
+     ENDIF()
+ ENDFOREACH()
+ 
+-
+-
+-if(CK_DEVICE_OTHER_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY)
++if(CK_DEVICE_OTHER_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY AND CK_BUILD_DEVICE_OTHER)
+         add_library(device_other_operations ${CK_DEVICE_OTHER_INSTANCES})
+         add_library(composablekernels::device_other_operations ALIAS device_other_operations)
+         set_target_properties(device_other_operations PROPERTIES POSITION_INDEPENDENT_CODE ON)
+@@ -380,7 +406,8 @@ if(CK_DEVICE_OTHER_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY)
+             DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/composable_kernel
+         )
+ endif()
+-if(CK_DEVICE_GEMM_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY)
++
++if(CK_DEVICE_GEMM_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY AND CK_BUILD_DEVICE_GEMM)
+         add_library(device_gemm_operations ${CK_DEVICE_GEMM_INSTANCES})
+         add_library(composablekernels::device_gemm_operations ALIAS device_gemm_operations)
+         target_compile_features(device_gemm_operations PUBLIC)
+@@ -400,8 +427,9 @@ if(CK_DEVICE_GEMM_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY)
+             NAMESPACE composable_kernel::
+             DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/composable_kernel
+         )
+-endif()
+-if(CK_DEVICE_CONV_INSTANCES)
++endif()      
++
++if(CK_DEVICE_CONV_INSTANCES AND CK_BUILD_DEVICE_CONV)
+         add_library(device_conv_operations ${CK_DEVICE_CONV_INSTANCES})
+         add_library(composablekernels::device_conv_operations ALIAS device_conv_operations)
+         target_compile_features(device_conv_operations PUBLIC)
+@@ -425,8 +453,9 @@ if(CK_DEVICE_CONV_INSTANCES)
+             NAMESPACE composable_kernel::
+             DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/composable_kernel
+         )
+-endif()
+-if(CK_DEVICE_MHA_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY AND BUILD_MHA_LIB)
++endif()      
++
++if(CK_DEVICE_MHA_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY AND BUILD_MHA_LIB AND CK_BUILD_DEVICE_MHA)
+         set(gpu_list ${INST_TARGETS})
+         if(gpu_list MATCHES "gfx94" OR gpu_list MATCHES "gfx90a" OR gpu_list MATCHES "gfx95")
+             add_library(device_mha_operations ${CK_DEVICE_MHA_INSTANCES})
+@@ -448,7 +477,8 @@ if(CK_DEVICE_MHA_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY AND BUILD_MHA_LIB)
+             )
+         endif()
+ endif()
+-if(CK_DEVICE_CONTRACTION_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY)
++
++if(CK_DEVICE_CONTRACTION_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY AND CK_BUILD_DEVICE_CONTRACTION)
+         add_library(device_contraction_operations ${CK_DEVICE_CONTRACTION_INSTANCES})
+         add_library(composablekernels::device_contraction_operations ALIAS device_contraction_operations)
+         target_compile_features(device_contraction_operations PUBLIC)
+@@ -470,7 +500,8 @@ if(CK_DEVICE_CONTRACTION_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY)
+             DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/composable_kernel
+         )
+ endif()
+-if(CK_DEVICE_REDUCTION_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY)
++
++if(CK_DEVICE_REDUCTION_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY AND CK_BUILD_DEVICE_REDUCTION)
+         add_library(device_reduction_operations ${CK_DEVICE_REDUCTION_INSTANCES})
+         add_library(composablekernels::device_reduction_operations ALIAS device_reduction_operations)
+         target_compile_features(device_reduction_operations PUBLIC)
+@@ -490,16 +521,26 @@ if(CK_DEVICE_REDUCTION_INSTANCES AND NOT MIOPEN_REQ_LIBS_ONLY)
+             NAMESPACE composable_kernel::
+             DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/composable_kernel
+         )
+-endif()
++endif()      
+ 
+ if(NOT MIOPEN_REQ_LIBS_ONLY)
+     add_library(device_operations INTERFACE)
+     target_link_libraries(device_operations INTERFACE
++if(CK_BUILD_DEVICE_CONTRACTION)
+         device_contraction_operations
++endif()  
++if(CK_BUILD_DEVICE_CONV)
+         device_conv_operations
++endif()
++if(CK_BUILD_DEVICE_GEMM)
+         device_gemm_operations
++endif()
++if(CK_BUILD_DEVICE_OTHER)
+         device_other_operations
++endif()
++if(CK_BUILD_DEVICE_REDUCTION)
+         device_reduction_operations
++endif()
+         utility)
+ endif()
+ 
+-- 
+2.51.0
+

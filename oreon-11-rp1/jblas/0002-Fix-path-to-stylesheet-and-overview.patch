@@ -1,0 +1,31 @@
+From daf2dacb065662394dd1b2d1078f30a337db4860 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Thu, 26 Jan 2017 11:02:43 -0500
+Subject: [PATCH 2/2] Fix path to stylesheet and overview
+
+---
+ build.xml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/build.xml b/build.xml
+index 247d455200..78d5c9d4de 100644
+--- a/build.xml
++++ b/build.xml
+@@ -218,7 +218,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+                  sourcepath="${src}" defaultexcludes="yes"
+                  destdir="${doc}" author="true" version="true"
+                  use="true" windowtitle="jblas" linksource="yes"
+-                 stylesheetfile="javadoc.css" overview="${src}/overview.html">
++                 stylesheetfile="src/main/javadoc/stylesheet.css"
++                 overview="src/main/javadoc/overview.html">
+             <doctitle>
+                 <![CDATA[ <h1>jblas - Linear Algebra for Java (version ${version})</h1> ]]>
+             </doctitle>
+@@ -273,7 +274,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+                 <include name="INSTALL" />
+                 <include name="COPYING" />
+                 <include name="AUTHORS" />
+-                <include name="javadoc.css" />
+                 <include name="javadoc/**" />
+                 <include name="nbproject/**" />
+                 <include name="native/jblas_arch_flavor.c" />

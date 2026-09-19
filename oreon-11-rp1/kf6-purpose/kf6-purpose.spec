@@ -1,14 +1,14 @@
-%global source0_hash c4e348fa5ac990a77b3926105c62bc4f2dddaf8d7554c43ee4f18de3d16a3699
+%global source0_hash 743445e6a1b3aee156aec6e84ac8d36161124784f9e5730b69b868fdd6fb79c2
 
 %global framework purpose
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 Name:    kf6-purpose
 Summary: Framework for providing abstractions to get the developer's purposes fulfilled
-Version: 6.27.0
+Version: 6.29.0
 Release:        1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
@@ -25,22 +25,21 @@ BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: cmake
 BuildRequires: kf6-rpm-macros
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(KF6Kirigami2)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(KF6Notifications)
+BuildRequires: cmake(KF6Config) >= %{version}
+BuildRequires: cmake(KF6CoreAddons) >= %{version}
+BuildRequires: cmake(KF6I18n) >= %{version}
+BuildRequires: cmake(KF6KIO) >= %{version}
+BuildRequires: cmake(KF6Kirigami2) >= %{version}
+BuildRequires: cmake(KF6Notifications) >= %{version}
 BuildRequires: cmake(KAccounts6)
 BuildRequires: pkgconfig(Qt6Network)
 BuildRequires: pkgconfig(Qt6Qml)
 
 BuildRequires: accounts-qml-module-qt6
 Requires:      accounts-qml-module-qt6
-BuildRequires: cmake(KF6Declarative)
+BuildRequires: cmake(KF6Declarative) >= %{version}
 Requires:      kf6-kdeclarative
-BuildRequires: cmake(KF6Prison)
+BuildRequires: cmake(KF6Prison) >= %{version}
 Requires:      kf6-prison
 BuildRequires: kf6-kitemmodels
 Requires:      qt6qml(org.kde.kitemmodels)
@@ -101,6 +100,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 
@@ -115,4 +117,3 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

@@ -1,0 +1,37 @@
+#!/bin/sh
+# name this script 'pbuilder-xenial', 'pbuilder-bionic', 'pbuilder-focal', 'pbuilder-jammy' etc.
+
+OPERATION=$1
+DISTRIBUTION=`basename $0 | cut -f2 -d '-'`
+PROCEED=false
+BASE_DIR="/var/cache/pbuilder/"
+REPO="http://old-releases.ubuntu.com/ubuntu/"
+REPO2="http://old-releases.ubuntu.com/ubuntu"
+COMPONENTS="main restricted universe multiverse"
+case $OPERATION in
+   create|update|build|clean|login|execute )
+      PROCEED=true
+      ;;
+esac
+if ( $PROCEED == true ) then
+   shift 
+   sudo pbuilder $OPERATION \
+   --mirror $REPO \
+   --debootstrapopts "--include=wget,nano,net-tools" \
+   --debootstrapopts "--keyring=/usr/share/keyrings/ubuntu-archive-removed-keys.gpg" \
+   --components "$COMPONENTS" \
+   --othermirror "deb-src $REPO $DISTRIBUTION $COMPONENTS|deb $REPO2 $DISTRIBUTION-security $COMPONENTS|deb-src $REPO2 $DISTRIBUTION-security $COMPONENTS|deb-src $REPO $DISTRIBUTION-updates $COMPONENTS|deb $REPO $DISTRIBUTION-updates $COMPONENTS|deb-src $REPO2 $DISTRIBUTION-security $COMPONENTS" \
+   --distribution $DISTRIBUTION \
+   --basetgz $BASE_DIR/base-$DISTRIBUTION.tgz \
+   --architecture amd64 --override-config  $@
+else
+   echo "Invalid command..."
+   echo "Valid commands are:"
+   echo "   create"
+   echo "   update"
+   echo "   build"
+   echo "   clean"
+   echo "   login"
+   echo "   execute"
+   exit 1
+fi

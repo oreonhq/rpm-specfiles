@@ -1,0 +1,73 @@
+Add another header file to add additional function prototypes shared
+between the generated lexer and parser.  This avoids implicit
+function declarations, for improived C99 compatibility.
+
+The lexer and parser are not regenerated because it is unclear
+whether the sources are compatible with current versions.
+
+diff --git a/bib2html.c b/bib2html.c
+index 062dcff2d9a40d7e..a60a894c10cf1205 100644
+--- a/bib2html.c
++++ b/bib2html.c
+@@ -445,6 +445,7 @@ char *yytext;
+   #define YYSTYPE char* /* this doesn't make it into bib2html.h on its own */
+   #define BUFSIZE 512
+   #include "bib2html.h" /* interface to yacc */
++  #include "global.h"
+   extern int yydebug;
+   void clean(char* str);
+   char* find_string(char* str);
+diff --git a/bib2html.l b/bib2html.l
+index 87aeacba28205883..7583634327744ae1 100644
+--- a/bib2html.l
++++ b/bib2html.l
+@@ -13,6 +13,7 @@
+   #define YYSTYPE char* /* this doesn't make it into bib2html.h on its own */
+   #define BUFSIZE 512
+   #include "bib2html.h" /* interface to yacc */
++  #include "global.h"
+   extern int yydebug;
+   void clean(char* str);
+   char* find_string(char* str);
+diff --git a/bib2html.tab.c b/bib2html.tab.c
+index fcf08585a6c0aef5..de49293aa734e8e9 100644
+--- a/bib2html.tab.c
++++ b/bib2html.tab.c
+@@ -51,9 +51,11 @@
+   #define YYDEBUG 1
+   #define BUFSIZE 512
+   #include <stdio.h>
++  #include <stdlib.h>
+   #include <string.h>
+   #include <assert.h>
+   #include "bibentry.h"
++  #include "global.h"
+ 
+   extern FILE* fout;
+   extern int linenumber;
+diff --git a/bib2html.tab.y b/bib2html.tab.y
+index c2de43fe2d5ca785..e94287f324db6c6c 100644
+--- a/bib2html.tab.y
++++ b/bib2html.tab.y
+@@ -3,9 +3,11 @@
+   #define YYDEBUG 1
+   #define BUFSIZE 512
+   #include <stdio.h>
++  #include <stdlib.h>
+   #include <string.h>
+   #include <assert.h>
+   #include "bibentry.h"
++  #include "global.h"
+ 
+   extern FILE* fout;
+   extern int linenumber;
+diff --git a/global.h b/global.h
+new file mode 100644
+index 0000000000000000..6244acf06fe6173e
+--- /dev/null
++++ b/global.h
+@@ -0,0 +1,4 @@
++/* Declarations shared by parser and lexer.  */
++
++int yylex (void);
++int yyparse (void);

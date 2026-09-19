@@ -1,0 +1,142 @@
+--- fake-4.4.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ fake-4.4.0/Cargo.toml	2025-12-14T15:06:18.023494+00:00
+@@ -47,34 +47,14 @@
+     "bigdecimal-rs",
+     "rust_decimal",
+ ]
+-bson_oid = ["bson"]
+-cli = [
+-    "dep:clap",
+-    "random_color",
+-    "chrono",
+-    "http",
+-]
+ default = ["either"]
+ derive = ["dummy"]
+ either = ["dep:either"]
+-geo = [
+-    "geo-types",
+-    "num-traits",
+-]
+-http = [
+-    "dep:http",
+-    "url-escape",
+-]
+ maybe-non-empty-collections = ["always-true-rng"]
+ 
+ [lib]
+ name = "fake"
+ path = "src/lib.rs"
+-
+-[[bin]]
+-name = "fake"
+-path = "src/bin/cli/main.rs"
+-required-features = ["cli"]
+ 
+ [[example]]
+ name = "basic"
+@@ -84,18 +64,6 @@
+ [[example]]
+ name = "collections"
+ path = "examples/collections.rs"
+-
+-[[example]]
+-name = "derive"
+-path = "examples/derive.rs"
+-required-features = [
+-    "derive",
+-    "http",
+-    "chrono",
+-    "uuid",
+-    "random_color",
+-    "rust_decimal",
+-]
+ 
+ [[example]]
+ name = "fakers"
+@@ -140,10 +108,6 @@
+ default-features = false
+ package = "bigdecimal"
+ 
+-[dependencies.bson]
+-version = "2"
+-optional = true
+-
+ [dependencies.chrono]
+ version = "0.4"
+ features = ["std"]
+@@ -152,11 +116,6 @@
+ 
+ [dependencies.chrono-tz]
+ version = "0.10"
+-optional = true
+-
+-[dependencies.clap]
+-version = "4.0.32"
+-features = ["cargo"]
+ optional = true
+ 
+ [dependencies.deunicode]
+@@ -170,40 +129,8 @@
+ version = "1"
+ optional = true
+ 
+-[dependencies.email_address]
+-version = "0.2"
+-optional = true
+-
+-[dependencies.ferroid]
+-version = "0.6"
+-features = [
+-    "std",
+-    "alloc",
+-    "snowflake",
+-    "ulid",
+-    "base32",
+-]
+-optional = true
+-
+-[dependencies.geo-types]
+-version = "0.7"
+-optional = true
+-default-features = false
+-
+-[dependencies.glam]
+-version = "0.30.1"
+-optional = true
+-
+-[dependencies.http]
+-version = "1"
+-optional = true
+-
+ [dependencies.indexmap]
+ version = "2"
+-optional = true
+-
+-[dependencies.num-traits]
+-version = "0.2"
+ optional = true
+ 
+ [dependencies.rand]
+@@ -211,10 +138,6 @@
+ 
+ [dependencies.rand_core]
+ version = "0.9"
+-optional = true
+-
+-[dependencies.random_color]
+-version = "1"
+ optional = true
+ 
+ [dependencies.rust_decimal]
+@@ -241,10 +164,6 @@
+ 
+ [dependencies.url]
+ version = "2"
+-optional = true
+-
+-[dependencies.url-escape]
+-version = "0.1"
+ optional = true
+ 
+ [dependencies.uuid]

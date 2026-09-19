@@ -2,8 +2,8 @@
 
 Summary:	Open audio/video container format library
 Name:		libmatroska
-Version:	1.7.1
-Release:	13%{?dist}
+Version:	1.7.2
+Release:	1%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:	LicenseRef-Callaway-LGPLv2+
 URL:		https://www.matroska.org/

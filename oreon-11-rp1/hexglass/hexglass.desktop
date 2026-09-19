@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=HexGlass
+GenericName=Block falling game
+GenericName[de]=Puzzlespiel mit fallenden Blöcken
+Comment=Tetris-like puzzle game based on a hexagonal grid
+Comment[de]=Tetris-ähnliches Puzzlespiel auf einem sechseckigen Raster
+Exec=hexglass
+Icon=hexglass
+Terminal=false
+Type=Application
+Categories=Game;LogicGame;

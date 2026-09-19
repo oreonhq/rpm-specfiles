@@ -1,0 +1,29 @@
+From 40fef2e0bf7afbc168d1e4737dc3d494a52bb81e Mon Sep 17 00:00:00 2001
+Message-ID: <40fef2e0bf7afbc168d1e4737dc3d494a52bb81e.1769800831.git.mjg@fedoraproject.org>
+From: Michael J Gruber <mjg@fedoraproject.org>
+Date: Thu, 11 May 2023 16:40:03 +0200
+Subject: [PATCH] test_pixmap: adjust to turbojpeg
+
+Apparantly, different jpeg libraries decode the test jpg differently.
+Adjust to turbojpeg's color count until upstream uses an invariant
+format.
+---
+ tests/test_pixmap.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/test_pixmap.py b/tests/test_pixmap.py
+index 76e564c0..d48589fa 100644
+--- a/tests/test_pixmap.py
++++ b/tests/test_pixmap.py
+@@ -105,7 +105,7 @@ def test_color_count():
+     e.g. in Linux system installs.
+     '''
+     pm = pymupdf.Pixmap(imgfile)
+-    assert pm.color_count() == 40624
++    assert pm.color_count() == 39912
+ 
+ def test_memoryview():
+     pm = pymupdf.Pixmap(imgfile)
+-- 
+2.53.0.rc1.285.g12662c75d7
+

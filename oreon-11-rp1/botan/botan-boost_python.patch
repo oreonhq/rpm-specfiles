@@ -1,0 +1,20 @@
+diff -up Botan-1.10.13/src/build-data/makefile/python.in.orig Botan-1.10.13/src/build-data/makefile/python.in
+--- Botan-1.10.13/src/build-data/makefile/python.in.orig	2016-04-28 15:27:08.000000000 +0200
++++ Botan-1.10.13/src/build-data/makefile/python.in	2016-06-30 16:12:04.001859858 +0200
+@@ -15,13 +15,15 @@ BOTAN_PYTHON_MODDIR = %{python_obj_dir}
+ 
+ PYTHON_OBJS   = %{python_objs}
+ 
++BOOST_PYTHON = boost_python
++
+ all: $(BOTAN_PYTHON_MODDIR)/_botan.so
+ 
+ %{python_build_cmds}
+ 
+ $(BOTAN_PYTHON_MODDIR)/_botan.so: $(PYTHON_OBJS)
+ 	cp %{python_dir}/*.py $(BOTAN_PYTHON_MODDIR)
+-	$(CXX) -shared -Wl,-soname,$@ $(PYTHON_OBJS) -L. -L$(PYTHON_ROOT) $(LDFLAGS) -lbotan-$(SERIES) -lboost_python -o $@
++	$(CXX) -shared -Wl,-soname,$@ $(PYTHON_OBJS) -L. -L$(PYTHON_ROOT) $(LDFLAGS) -lbotan-$(SERIES) -l$(BOOST_PYTHON) -o $@
+ 
+ clean:
+ 	rm -rf $(BOTAN_PYTHON_MODDIR)/*

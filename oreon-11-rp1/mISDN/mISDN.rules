@@ -1,0 +1,1 @@
+SUBSYSTEM=="mISDN-objects", KERNEL=="obj-0", NAME="mISDN", OWNER="misdn", GROUP="misdn", MODE="0660"

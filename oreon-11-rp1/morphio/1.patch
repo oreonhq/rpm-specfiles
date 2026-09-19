@@ -1,0 +1,178 @@
+From 6d66f5dde8fbf7d9249a20f1634846a26794e7d2 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 15 Jan 2025 12:53:19 -0500
+Subject: [PATCH] Include <cstdint> for fixed-width integers in API headers
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+At least in the API headers, include <cstdint> everywhere that
+fixed-width integer types `int32_t`, `uint32_t`, or `uint64_t` are used.
+Including headers everywhere they are used avoids relying on indirectly
+including them via the C++ standard library, which tends to break with
+new compiler versions. This change doesn’t implement that idea
+project-wide even for `<cstdint>`, let alone in general, but it is
+enough to fix failure to build with GCC 15.
+---
+ include/morphio/mitochondria.h              | 1 +
+ include/morphio/morphology.h                | 2 ++
+ include/morphio/mut/endoplasmic_reticulum.h | 2 ++
+ include/morphio/mut/glial_cell.h            | 2 ++
+ include/morphio/mut/mitochondria.h          | 1 +
+ include/morphio/mut/morphology.h            | 1 +
+ include/morphio/mut/section.h               | 2 ++
+ include/morphio/properties.h                | 2 +-
+ include/morphio/vasc/properties.h           | 1 +
+ include/morphio/vasc/section.h              | 1 +
+ include/morphio/vasc/vasculature.h          | 1 +
+ include/morphio/warning_handling.h          | 1 +
+ 12 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/include/morphio/mitochondria.h b/include/morphio/mitochondria.h
+index b43bcea..a740db2 100644
+--- a/include/morphio/mitochondria.h
++++ b/include/morphio/mitochondria.h
+@@ -4,6 +4,7 @@
+  */
+ #pragma once
+ 
++#include <cstdint>  // uint32_t
+ #include <memory>
+ #include <vector>
+ 
+diff --git a/include/morphio/morphology.h b/include/morphio/morphology.h
+index 81efb25..01d0d1e 100644
+--- a/include/morphio/morphology.h
++++ b/include/morphio/morphology.h
+@@ -4,6 +4,8 @@
+  */
+ #pragma once
+ 
++#include <cstdint>  // uint32_t
++
+ #include <highfive/H5Group.hpp>
+ 
+ #include <morphio/properties.h>
+diff --git a/include/morphio/mut/endoplasmic_reticulum.h b/include/morphio/mut/endoplasmic_reticulum.h
+index 9d460e1..e892328 100644
+--- a/include/morphio/mut/endoplasmic_reticulum.h
++++ b/include/morphio/mut/endoplasmic_reticulum.h
+@@ -4,6 +4,8 @@
+  */
+ #pragma once
+ 
++#include <cstdint>  // uint32_t
++
+ #include <morphio/properties.h>
+ #include <morphio/types.h>
+ 
+diff --git a/include/morphio/mut/glial_cell.h b/include/morphio/mut/glial_cell.h
+index 39ab8e5..468e6dd 100644
+--- a/include/morphio/mut/glial_cell.h
++++ b/include/morphio/mut/glial_cell.h
+@@ -4,6 +4,8 @@
+  */
+ #pragma once
+ 
++#include <cstdint>  // uint32_t
++
+ #include <string>  // std::string
+ 
+ #include <morphio/mut/morphology.h>  // mut::Morphology
+diff --git a/include/morphio/mut/mitochondria.h b/include/morphio/mut/mitochondria.h
+index 80942ea..b38b2e4 100644
+--- a/include/morphio/mut/mitochondria.h
++++ b/include/morphio/mut/mitochondria.h
+@@ -4,6 +4,7 @@
+  */
+ #pragma once
+ 
++#include <cstdint>  // uint32_t
+ #include <map>
+ #include <memory>
+ 
+diff --git a/include/morphio/mut/morphology.h b/include/morphio/mut/morphology.h
+index 9a31571..a2cebec 100644
+--- a/include/morphio/mut/morphology.h
++++ b/include/morphio/mut/morphology.h
+@@ -4,6 +4,7 @@
+  */
+ #pragma once
+ 
++#include <cstdint>  // uint32_t
+ #include <map>
+ #include <memory>
+ #include <string>
+diff --git a/include/morphio/mut/section.h b/include/morphio/mut/section.h
+index d7cca8c..ff8b088 100644
+--- a/include/morphio/mut/section.h
++++ b/include/morphio/mut/section.h
+@@ -4,6 +4,8 @@
+  */
+ #pragma once
+ 
++#include <cstdint>  // uint32_t
++
+ #include <morphio/properties.h>
+ #include <morphio/section.h>
+ #include <morphio/types.h>
+diff --git a/include/morphio/properties.h b/include/morphio/properties.h
+index f5a3c4f..9ec9075 100644
+--- a/include/morphio/properties.h
++++ b/include/morphio/properties.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ 
+-#include <cstdint>  // uint32_t
++#include <cstdint>  // int32_t, uint32_t
+ 
+ #include <array>
+ #include <map>
+diff --git a/include/morphio/vasc/properties.h b/include/morphio/vasc/properties.h
+index 30aa4e8..03e69c2 100644
+--- a/include/morphio/vasc/properties.h
++++ b/include/morphio/vasc/properties.h
+@@ -4,6 +4,7 @@
+  */
+ #pragma once
+ 
++#include <cstdint>  // uint32_t
+ #include <map>
+ #include <string>  // std::string
+ #include <vector>  // std::vector
+diff --git a/include/morphio/vasc/section.h b/include/morphio/vasc/section.h
+index e79a150..c0c1853 100644
+--- a/include/morphio/vasc/section.h
++++ b/include/morphio/vasc/section.h
+@@ -4,6 +4,7 @@
+  */
+ #pragma once
+ 
++#include <cstdint>  // uint32_t
+ #include <iosfwd>  // std::ostream
+ #include <memory>  // std::shared_ptr
+ #include <vector>  // std::vector
+diff --git a/include/morphio/vasc/vasculature.h b/include/morphio/vasc/vasculature.h
+index a2f38e0..8652d5e 100644
+--- a/include/morphio/vasc/vasculature.h
++++ b/include/morphio/vasc/vasculature.h
+@@ -4,6 +4,7 @@
+  */
+ #pragma once
+ 
++#include <cstdint>  // uint32_t
+ #include <memory>  // std::shared_ptr
+ #include <string>  // std::string
+ #include <vector>  // std::vector
+diff --git a/include/morphio/warning_handling.h b/include/morphio/warning_handling.h
+index 0c8ef28..2a6aef7 100644
+--- a/include/morphio/warning_handling.h
++++ b/include/morphio/warning_handling.h
+@@ -4,6 +4,7 @@
+  */
+ #pragma once
+ 
++#include <cstdint>  // int32_t, uint32_t, uint64_t
+ #include <iostream>
+ #include <memory>
+ #include <set>

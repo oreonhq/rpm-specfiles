@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+RUN=1
+
+MESSAGE="\
+Select display mode and where to store save files and high scores."
+
+
+if [[ "$DESKTOP_SESSION" == "gnome" ]]; then
+    RESULT=$(zenity \
+        --title "Angband" \
+        --text "$MESSAGE" \
+        --question \
+        --cancel-label "Quit" \
+        --ok-label "X11 Home" \
+        --extra-button "X11 System" \
+        --extra-button "SDL2 Home")
+    RUN=$?
+else
+    RESULT=$(zenity \
+        --title "Angband" \
+        --text "$MESSAGE" \
+        --question \
+        --cancel-label "Quit" \
+        --ok-label "X11 Home" \
+        --extra-button "X11 System" \
+        --extra-button "SDL2 Home" \
+        --extra-button "SDL2 System")
+    RUN=$?
+fi
+
+if [[ "$RUN" == "1" ]]; then
+    if [[ "$RESULT" == "SDL2 System" ]]; then
+        angband -msdl2 $@
+    elif [[ "$RESULT" == "SDL2 Home" ]]; then
+        angband_homedir -msdl2 $@
+    elif [[ "$RESULT" == "X11 System" ]]; then
+        angband -mx11 $@
+    fi
+elif [[ "$RUN" == "0" ]]; then
+    angband_homedir -mx11 $@
+fi

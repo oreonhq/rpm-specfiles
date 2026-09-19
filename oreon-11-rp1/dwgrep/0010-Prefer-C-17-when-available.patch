@@ -1,0 +1,30 @@
+From d6fabb644df38204783c8e4aff110bb61df299e4 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 12 Oct 2025 22:24:02 +0100
+Subject: [PATCH 10/10] Prefer C++17 when available
+
+GoogleTest 1.17 requires C++17.
+---
+ CMakeLists.txt | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4dd1ae2..0a87ede 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,8 +16,11 @@ INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR})
+ SET (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+ 
+ INCLUDE (CheckCXXCompilerFlag)
++CHECK_CXX_COMPILER_FLAG ("-std=c++17" COMPILER_SUPPORTS_CXX17)
+ CHECK_CXX_COMPILER_FLAG ("-std=c++14" COMPILER_SUPPORTS_CXX14)
+-IF (COMPILER_SUPPORTS_CXX14)
++IF (COMPILER_SUPPORTS_CXX17)
++  SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
++ELSEIF (COMPILER_SUPPORTS_CXX14)
+   SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+ ELSE ()
+   MESSAGE (FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support.")
+-- 
+2.51.0
+

@@ -1,0 +1,52 @@
+From 866a8f5c1725e306408b179d292a9358504590c2 Mon Sep 17 00:00:00 2001
+From: Thomas Moschny <thomas.moschny@gmx.de>
+Date: Sat, 30 Aug 2025 15:46:05 +0200
+Subject: [PATCH] Fix signature of signal handler.
+
+---
+ src/core.c    | 6 ++++++
+ src/core.h    | 1 +
+ src/httperf.c | 2 +-
+ 3 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/core.c b/src/core.c
+index 2bcdd73..c8fa0c7 100755
+--- a/src/core.c
++++ b/src/core.c
+@@ -1708,3 +1708,9 @@ core_exit(void)
+ 	}
+ #endif
+ }
++
++void
++core_exit_sighandler(int signum)
++{
++    core_exit();
++}
+diff --git a/src/core.h b/src/core.h
+index b6d4dad..c99f172 100755
+--- a/src/core.h
++++ b/src/core.h
+@@ -45,5 +45,6 @@ extern void core_close (Conn *conn);
+ 
+ extern void core_loop (void);
+ extern void core_exit (void);
++extern void core_exit_sighandler (int signum);
+ 
+ #endif /* core_h */
+diff --git a/src/httperf.c b/src/httperf.c
+index 5dbba07..249be9c 100755
+--- a/src/httperf.c
++++ b/src/httperf.c
+@@ -1381,7 +1381,7 @@ main(int argc, char **argv)
+ 	}
+ 	core_init();
+ 
+-	signal(SIGINT, (void (*)()) core_exit);
++	signal(SIGINT, core_exit_sighandler);
+ 
+ 	for (i = 0; i < num_stats; ++i)
+ 		(*stat[i]->init) ();
+-- 
+2.51.0
+

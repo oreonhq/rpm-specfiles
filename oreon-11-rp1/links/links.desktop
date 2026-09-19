@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Links
+Comment=Simple Web Browser
+Exec=links2 -g %u
+Icon=links
+Categories=Network;WebBrowser;
+Type=Application
+MimeType=text/html;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;

@@ -6,7 +6,24 @@ export LC_ALL=C
 # Prevent elfutils from trying to download debuginfos
 unset DEBUGINFOD_URLS
 
-for module in $(grep -E '/lib/modules/.+\.ko(\.gz|\.bz2|\.xz|\.zst)?$') "$@"; do
+for module in $(grep -E '/lib/modules/.+\.ko(\.gz|\.bz2|\.xz|\.zst)?$|/lib/modules/.+/modules[^/]+\.ksyms\.prov$' || true) "$@"; do
+    [ -n "$module" ] || continue
+    [ -f "$module" ] || continue
+
+    # kernel package precomputes Provides into modules*.ksyms.prov
+    case "$module" in
+    *.ksyms.prov)
+        cat -- "$module"
+        continue
+        ;;
+    esac
+
+    # skip in-tree modules (bulk prov files cover these). out-of-tree under
+    # updates/extra/weak-updates still go through per-.ko scanning.
+    if printf '%s' "$module" | grep -qE '/lib/modules/[^/]+/(kernel|internal|partner)/'; then
+        continue
+    fi
+
     dep_pfx="ksym"
     # For built-in kmods, "kernel()" syntax is used instead of "ksym()"
     printf "%s" "$module" | grep -v "^${RPM_BUILD_ROOT}/\?lib/modules/[1-9][^/]*/kernel" > /dev/null \

@@ -1,0 +1,26 @@
+diff --git a/test/test_events_be.py b/test/test_events_be.py
+index d911ee1..92f9e43 100644
+--- a/test/test_events_be.py
++++ b/test/test_events_be.py
+@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.normpath(os.path.join(__file__, '../..')))
+ import unittest
+ from Xlib.protocol import request, event
+ from . import BigEndianTest as EndianTest
+-from . import DummyDisplay
++from . import DummyDisplay, tohex
+ 
+ dummy_display = DummyDisplay()
+ 
+diff --git a/test/test_requests_be.py b/test/test_requests_be.py
+index e41ccfc..bf37c87 100644
+--- a/test/test_requests_be.py
++++ b/test/test_requests_be.py
+@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.normpath(os.path.join(__file__, '../..')))
+ import unittest
+ from Xlib.protocol import request, event
+ from . import BigEndianTest as EndianTest
+-from . import DummyDisplay
++from . import DummyDisplay, tohex
+ 
+ dummy_display = DummyDisplay()
+ 

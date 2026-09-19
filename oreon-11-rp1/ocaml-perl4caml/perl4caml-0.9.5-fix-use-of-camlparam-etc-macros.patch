@@ -1,0 +1,41 @@
+From 36b9a44ab49471646b7a3548d1e2d28c015063ad Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Sun, 6 Nov 2016 19:09:58 +0000
+Subject: [PATCH] Fix use of CAMLparam etc macros.
+
+This was broken previously, and OCaml 4.04 revealed it.
+---
+ perl_c.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/perl_c.c b/perl_c.c
+index 66f2959..ce53667 100644
+--- a/perl_c.c
++++ b/perl_c.c
+@@ -719,11 +719,13 @@ perl4caml_get_hv (value optcreate, value name)
+ static inline void
+ check_perl_failure ()
+ {
++  CAMLparam0 ();
++  CAMLlocal1 (errv);
++
+   SV *errsv = get_sv ("@", TRUE);
+ 
+   if (SvTRUE (errsv))		/* Equivalent of $@ in Perl. */
+     {
+-      CAMLlocal1 (errv);
+       STRLEN n_a;
+       const char *err = SvPV (errsv, n_a);
+ 
+@@ -731,6 +733,8 @@ check_perl_failure ()
+ 
+       caml_raise_with_arg (*caml_named_value ("perl4caml_perl_failure"), errv);
+     }
++
++  CAMLreturn0;
+ }
+ 
+ CAMLprim value
+-- 
+2.9.3
+

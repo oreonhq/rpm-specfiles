@@ -1,0 +1,12 @@
+diff -rupN --no-dereference gtk+-2.24.33/gtk/gtkuimanager.c gtk+-2.24.33-new/gtk/gtkuimanager.c
+--- gtk+-2.24.33/gtk/gtkuimanager.c	2020-12-18 06:29:40.000000000 +0100
++++ gtk+-2.24.33-new/gtk/gtkuimanager.c	2024-07-24 11:24:35.482736814 +0200
+@@ -503,7 +503,7 @@ gtk_ui_manager_buildable_construct_child
+   g_signal_connect (widget, "hierarchy-changed",
+ 		    G_CALLBACK (child_hierarchy_changed_cb),
+ 		    GTK_UI_MANAGER (buildable));
+-  return g_object_ref (widget);
++  return G_OBJECT (g_object_ref (widget));
+ }
+ 
+ static void

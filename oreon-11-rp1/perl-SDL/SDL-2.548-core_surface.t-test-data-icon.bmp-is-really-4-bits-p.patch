@@ -1,0 +1,29 @@
+From 39c0ab8fc0b2277ece593b9b50f79f6e1ccd1fc5 Mon Sep 17 00:00:00 2001
+From: Daniel Kamil Kozar <dkk089@gmail.com>
+Date: Thu, 12 Jun 2025 21:43:54 +0200
+Subject: [PATCH] core_surface.t: test/data/icon.bmp is really 4 bits per pixel
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/core_surface.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/t/core_surface.t b/t/core_surface.t
+index 897536b6..baa962aa 100644
+--- a/t/core_surface.t
++++ b/t/core_surface.t
+@@ -51,7 +51,7 @@ is( $image->h, 32, 'image has height' );
+ 
+ my $pixel_format = $image->format;
+ isa_ok( $pixel_format, 'SDL::PixelFormat' );
+-is( $pixel_format->BitsPerPixel,  8,   ' BitsPerPixel' );
++is( $pixel_format->BitsPerPixel,  4,   ' BitsPerPixel' );
+ is( $pixel_format->BytesPerPixel, 1,   ' BytesPerPixel' );
+ is( $pixel_format->Rloss,         8,   ' Rloss' );
+ is( $pixel_format->Gloss,         8,   ' Gloss' );
+-- 
+2.50.1
+

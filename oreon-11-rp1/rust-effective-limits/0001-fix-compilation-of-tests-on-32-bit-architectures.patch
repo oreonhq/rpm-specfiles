@@ -1,0 +1,25 @@
+From a201f7b3937790ca4eb846ca589e83bcbf4c6720 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Sun, 5 Nov 2023 01:33:17 +0100
+Subject: [PATCH] fix compilation of tests on 32-bit architectures
+
+---
+ src/lib.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index f7fda6f..dab9586 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -377,7 +377,7 @@ mod tests {
+                     unsafe {
+                         cmd.pre_exec(move || {
+                             let lim = libc::rlimit {
+-                                rlim_cur: ulimit,
++                                rlim_cur: ulimit as _,
+                                 rlim_max: libc::RLIM_INFINITY,
+                             };
+                             match libc::setrlimit(rlimit_as, &lim as *const libc::rlimit) {
+-- 
+2.41.0
+

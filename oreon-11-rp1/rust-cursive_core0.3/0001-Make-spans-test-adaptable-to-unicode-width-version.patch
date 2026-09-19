@@ -1,0 +1,87 @@
+From 3fe4889f1d252ae70ffeb79d000d7efead51e4b6 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Tue, 8 Oct 2024 22:59:45 +0200
+Subject: [PATCH] Make spans test adaptable to unicode-width version
+
+Backport of upstream commit:
+https://github.com/gyscos/cursive/commit/a0e405e
+---
+ src/utils/lines/spans/chunk_iterator.rs | 17 +++++++++++------
+ src/utils/lines/spans/tests.rs          |  5 ++++-
+ 2 files changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/src/utils/lines/spans/chunk_iterator.rs b/src/utils/lines/spans/chunk_iterator.rs
+index 13fc350..de13e75 100644
+--- a/src/utils/lines/spans/chunk_iterator.rs
++++ b/src/utils/lines/spans/chunk_iterator.rs
+@@ -110,10 +110,11 @@ where
+                     // We didn't know it was a hard-stop at the time.
+                     // But now we do, so let's omit the last character from
+                     // that segment.
+-                    if let Some(to_remove) =
+-                        prev_text.graphemes(true).next_back().map(|g| g.len())
+-                    {
+-                        segments.last_mut().unwrap().end -= to_remove;
++                    if let Some(last_grapheme) = prev_text.graphemes(true).next_back() {
++                        segments.last_mut().unwrap().end -= last_grapheme.len();
++                        // Before unicode-segmentation 0.1.13, newlines were width=0.
++                        // They are now width=1.
++                        segments.last_mut().unwrap().width -= last_grapheme.width();
+                     }
+                 }
+ 
+@@ -135,6 +136,7 @@ where
+                 total_width += width;
+                 let to_remove = if hard_stop {
+                     let text = &span_text[self.offset..pos];
++                    // Remove the last grapheme.
+                     text.graphemes(true)
+                         .next_back()
+                         .map(|g| g.len())
+@@ -146,7 +148,7 @@ where
+                     span_id: self.current_span,
+                     start: self.offset,
+                     end: pos - to_remove,
+-                    width,
++                    width: width - span_text[pos - to_remove..pos].width(),
+                 });
+             }
+ 
+@@ -176,7 +178,10 @@ where
+                     if span_text.ends_with('\n') {
+                         // This is basically a hard-stop here.
+                         // Easy, just remove 1 byte.
+-                        segments.last_mut().unwrap().end -= 1;
++                        segments.last_mut().unwrap().end -= "\n".len();
++
++                        // With unicode-width 0.1.13, "\n" now has width 1.
++                        segments.last_mut().unwrap().width -= "\n".width();
+                     }
+ 
+                     return Some(Chunk {
+diff --git a/src/utils/lines/spans/tests.rs b/src/utils/lines/spans/tests.rs
+index 6e484eb..39e8e42 100644
+--- a/src/utils/lines/spans/tests.rs
++++ b/src/utils/lines/spans/tests.rs
+@@ -18,6 +18,8 @@ fn input() -> StyledString {
+ 
+ #[test]
+ fn test_next_line_char() {
++    use unicode_width::UnicodeWidthStr;
++
+     // From https://github.com/gyscos/cursive/issues/489
+     let d: Vec<u8> = vec![194, 133, 45, 127, 29, 127, 127];
+     let text = std::str::from_utf8(&d).unwrap();
+@@ -31,7 +33,8 @@ fn test_next_line_char() {
+             vec![Span {
+                 content: "-\u{7f}\u{1d}\u{7f}\u{7f}",
+                 attr: &Style::none(),
+-                width: 1,
++                // This is 1 with unicode_width < 1.1.13, 5 after.
++                width: "-\u{7f}\u{1d}\u{7f}\u{7f}".width(),
+             }],
+         ],
+     );
+-- 
+2.46.2
+

@@ -1,0 +1,82 @@
+--- manedit-1.1.1/manedit/main.c.tmppath	2008-06-17 15:00:00.000000000 +0900
++++ manedit-1.1.1/manedit/main.c	2008-07-03 16:28:49.000000000 +0900
+@@ -4,6 +4,7 @@
+ #include <locale.h>
+ #include <gtk/gtk.h>
+ #include <gdk/gdkx.h>
++#include <unistd.h>
+ 
+ #include "../include/disk.h"
+ #include "../include/string.h"
+@@ -199,5 +200,12 @@
+ 	CDialogShutdown();
+ 	FPromptShutdown();
+ 
++	/* clean up */
++	{
++		gchar *tmpdir = MECreateTemporaryDirectory(NULL);
++		if (tmpdir) rmdir (tmpdir);
++		free(tmpdir);
++	}
++
+ 	return(0);
+ }
+--- manedit-1.1.1/manedit/me_op.c.tmppath	2008-06-17 15:00:00.000000000 +0900
++++ manedit-1.1.1/manedit/me_op.c	2008-07-03 16:22:59.000000000 +0900
+@@ -1,3 +1,5 @@
++#define _BSD_SOURCE
++
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -275,11 +277,19 @@
+  *	The returned pointer needs to be deleted by the calling
+  *	function.
+  */
++
++#define TMP_DIR_MAX_LEN  1024
++
+ gchar *MECreateTemporaryDirectory(me_core_struct *core)
+ {
+ 	const gchar	*user_name,
+ 			*tmp_path;
+ 	gchar *tmp_dir_rtn;
++
++	static gchar tmp_dir_memory[TMP_DIR_MAX_LEN] = "";
++	if (*tmp_dir_memory) return g_strdup(tmp_dir_memory);
++	if (!core) return NULL;
++
+ 	CfgList *cfg_list = core->cfg_list;
+ 
+ 	/* Get the tempory directory */
+@@ -303,6 +313,7 @@
+ 	    user_name = "anon";
+ 
+ 	/* Format the return temporary directory path */
++#if 0
+ 	tmp_dir_rtn = g_strconcat(
+ 	    tmp_path,
+ 	    G_DIR_SEPARATOR_S,
+@@ -328,6 +339,22 @@
+ 	}
+ 
+ 	return(tmp_dir_rtn);
++#else
++	snprintf(tmp_dir_memory, TMP_DIR_MAX_LEN -1,
++		"%s%s%s%s%s",
++		tmp_path,
++		G_DIR_SEPARATOR_S,
++		"manedit-",
++		user_name,
++		".XXXXXX"
++		);
++
++	if (!mkdtemp(tmp_dir_memory)){
++		fprintf(stderr, "Could not create temporary directory\n");
++		exit(1);
++	}
++	return g_strdup(tmp_dir_memory);
++#endif
+ }
+ 
+ 

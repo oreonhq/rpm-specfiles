@@ -5,7 +5,7 @@
 %bcond qt %[%{undefined rhel} || 0%{?rhel} < 10]
 
 Name:		thermald
-Version:	2.5.9
+Version:	2.15.10
 Release:	%autorelease
 Summary:	Thermal Management daemon
 

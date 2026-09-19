@@ -1,0 +1,39 @@
+--- a/include/mps/types.h	2020-06-12 00:14:57.000000000 -0600
++++ b/include/mps/types.h	2021-08-16 09:41:06.647144314 -0600
+@@ -6,8 +6,13 @@ typedef const char * mps_string;
+ 
+ /* Boolean type used in MPSolve */
+ #ifndef __MPS_NOT_DEFINE_BOOL
+-typedef enum
+-{ false = 0, true = 1 } mps_boolean;
++typedef _Bool mps_boolean;
++#ifndef false
++#define false 0
++#endif
++#ifndef true
++#define true 1
++#endif
+ #else
+ /* Small workaround to make matlab module work; there is,
+  * int matlab headers, already a false keyword defined, so
+--- a/src/libmps/monomial/yacc-parser.y	2020-06-12 00:14:57.000000000 -0600
++++ b/src/libmps/monomial/yacc-parser.y	2021-08-16 11:37:20.217706251 -0600
+@@ -1,8 +1,7 @@
+-%pure-parser
++%define api.pure true
+ %parse-param { void * scanner }
+ %parse-param { void * data }
+ %lex-param { void * scanner }
+-%lex-param { void * data }
+ 
+ %{
+ 
+@@ -35,7 +34,7 @@
+   } _mps_yacc_parser_data;
+   #endif
+ 
+-  extern int yylex(void * yylval, void * scanner, void * data);
++  extern int yylex(void * yylval, void * scanner);
+   extern int yyerror(void*,void*,const char*);
+ 
+ %}

@@ -1,0 +1,147 @@
+--- config.c	2003-09-17 20:52:02.000000000 +0200
++++ config.c	2008-06-16 21:28:03.000000000 +0200
+@@ -441,7 +441,7 @@ void Save_Game_Configuration( game_confi
+ 	sprintf(newfilename,"%sgamedata/game.cfg",g_DataPath);
+ 
+ 
+-     fp = fopen( newfilename, "r" );
++     fp = fopen( newfilename, "w" );
+ 
+ 
+      switch( game_configuration->serial_com_port )
+
+--- menu.c	2008-06-16 21:28:03.000000000 +0200
++++ menu.c	2008-06-16 21:29:49.000000000 +0200
+@@ -25,6 +25,7 @@
+ */
+ 
+ #include <string.h>
++#include <ctype.h>
+ #include "menu.h"
+ #include "types.h"
+ #include "prim.h"
+@@ -7670,7 +7671,7 @@ void view_stats_menu_return_key()
+         
+         for( i = 0; i < 1000; i++ ) {
+         
+-            sprintf( filename, "%sSTATS/OVER%03d.TXT", g_DataPath, i );
++            sprintf( filename, "%sstats/over%03d.txt", g_DataPath, i );
+             
+             if( (fp = fopen( filename, "r" ) ) == NULL ) {
+             
+@@ -7696,6 +7697,10 @@ void view_stats_menu_return_key()
+                      menu_stuff.menu_text.xpixels + 1,
+                      menu_stuff.menu_text.ypixels + 1, SELECTED_TEXT_COLOR );
+                      
++        /* string_blit cannot display lowercase text!! */
++        for (i = 0; filename[i]; i++)
++          filename[i] = toupper(filename[i]);
++
+         string_blit( filename, 75, 85,
+                      menu_stuff.menu_text.buffer,
+                      menu_stuff.menu_text.xpixels + 1,
+@@ -9822,7 +9827,7 @@ void custom_game_stat_menu_return_key()
+         
+         for( i = 0; i < 1000; i++ ) {
+                 
+-            sprintf( filename, "%sSTATS/CUST%03d.TXT", g_DataPath, i );
++            sprintf( filename, "%sstats/cust%03d.txt", g_DataPath, i );
+             
+             if( (fp = fopen( filename, "r" ) ) == NULL ) {
+             
+@@ -9848,6 +9853,10 @@ void custom_game_stat_menu_return_key()
+                      menu_stuff.menu_text.xpixels + 1,
+                      menu_stuff.menu_text.ypixels + 1, SELECTED_TEXT_COLOR );
+                      
++        /* string_blit cannot display lowercase text!! */
++        for (i = 0; filename[i]; i++)
++          filename[i] = toupper(filename[i]);
++
+         string_blit( filename, 75, 85,
+                      menu_stuff.menu_text.buffer,
+                      menu_stuff.menu_text.xpixels + 1,
+@@ -10234,7 +10243,7 @@ void tournament_game_stat_menu_return_ke
+         
+         for( i = 0; i < 1000; i++ ) {
+                 
+-            sprintf( filename, "%sSTATS/TOUR%03d.TXT", g_DataPath, i );
++            sprintf( filename, "%sstats/tour%03d.txt", g_DataPath, i );
+             
+             if( (fp = fopen( filename, "r" ) ) == NULL ) {
+             
+@@ -10260,6 +10269,10 @@ void tournament_game_stat_menu_return_ke
+                      menu_stuff.menu_text.xpixels + 1,
+                      menu_stuff.menu_text.ypixels + 1, SELECTED_TEXT_COLOR );
+                      
++        /* string_blit cannot display lowercase text!! */
++        for (i = 0; filename[i]; i++)
++          filename[i] = toupper(filename[i]);
++
+         string_blit( filename, 75, 85,
+                      menu_stuff.menu_text.buffer,
+                      menu_stuff.menu_text.xpixels + 1,
+
+--- stats.c	2008-06-16 21:28:03.000000000 +0200
++++ stats.c	2008-06-16 21:28:03.000000000 +0200
+@@ -254,23 +254,57 @@ int Save_Overall_Stats_Text( overall_sta
+ } /* End of Save_Overall_Stats_Text() */
+ 
+ 
++/* Write overal stats as a binary dump of overall_stats_type on i386,
++   do this in an arch independent way.
++   
++   Note we use the same brillaint error handling as the original fwrite
++   call: none :) */
++void write_overall_stats(overall_stats_type *overall_stats, PACKFILE *fp)
++{
++   union {
++      int i;
++      float f;
++   } u;
++
++   pack_fwrite(overall_stats->name, 80, fp);
++   pack_iputl(overall_stats->number_of_games, fp);
++   pack_iputl(overall_stats->victories, fp);
++   pack_iputl(overall_stats->defeats, fp);
++
++   u.f = overall_stats->win_percentage;
++   pack_iputl(u.i, fp);
++
++   pack_iputl(overall_stats->kills, fp);
++   pack_iputl(overall_stats->times_killed, fp);
++   pack_iputl(overall_stats->shots_fired, fp);
++   pack_iputl(overall_stats->enemy_hits, fp);
++   pack_iputl(overall_stats->friendly_hits, fp);
++   pack_iputl(overall_stats->misses, fp);
++   pack_iputl(overall_stats->times_hit, fp);
++
++   u.f = overall_stats->hit_percentage;
++   pack_iputl(u.i, fp);
++
++   pack_iputl(overall_stats->pylons_grabbed, fp);
++}
++
+ int Save_Overall_Stats_Binary( overall_stats_type *overall_stats, char *filename )
+     {
+-     FILE *fp;
++     PACKFILE *fp;
+ 	char newfilename[512];
+ 
+ 	sprintf(newfilename,"%s%s",g_DataPath,filename);
+ 
+ 
+ 
+-     fp = fopen( newfilename, "wb" );
++     fp = pack_fopen( newfilename, "w" );
+ 
+      if( fp == NULL )
+          return(0);
+ 
+-     fwrite( overall_stats, sizeof(overall_stats_type), 1, fp );
++     write_overall_stats( overall_stats, fp );
+ 
+-     fclose(fp);
++     pack_fclose(fp);
+ 
+      return(1);
+     } /* End of Save_Overall_Stats_Binary() */

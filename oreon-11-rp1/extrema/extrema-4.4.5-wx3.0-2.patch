@@ -1,0 +1,11 @@
+diff -up extrema-4.4.5/src/wxForms/VisualizationWindow.cpp.wx3 extrema-4.4.5/src/wxForms/VisualizationWindow.cpp
+--- extrema-4.4.5/src/wxForms/VisualizationWindow.cpp.wx3	2018-08-28 23:17:35.516411081 -0400
++++ extrema-4.4.5/src/wxForms/VisualizationWindow.cpp	2018-08-28 23:27:22.138827850 -0400
+@@ -302,6 +302,7 @@ void VisualizationWindow::SavePS( wxStri
+ 
+ void VisualizationWindow::ResetPages()
+ {
++  if ( !notebook_ ) return;
+   GraphicsPage *currentPage = static_cast<GraphicsPage*>(notebook_->GetCurrentPage());
+   Layout();
+   

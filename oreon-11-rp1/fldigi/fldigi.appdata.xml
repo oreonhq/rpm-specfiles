@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Richard Shaw <hobbes1069@gmail.com -->
+<application>
+  <id type="desktop">fldigi.desktop</id>
+  <metadata_license>CC0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <name>Fldigi</name>
+  <summary>Amateur Radio Sound Card Communications</summary>
+  <description>
+    <p>
+Fldigi is a modem program which supports most of the digital modes used by
+ham radio operators today. You can also use the program for calibrating your
+sound card to WWV or doing a frequency measurement test. The program also comes
+with a CW decoder. fldigi is written with the help of the Fast Light Toolkit X
+GUI. Fldigi is a fast moving project many added features with each update.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">https://hobbes1069.fedorapeople.org/screenshots/fldigi.png</screenshot>
+  </screenshots>
+  <url type="homepage">http://www.w1hkj.com/</url>
+  <updatecontact>hobbes1069_at_gmail.com</updatecontact>
+</application>

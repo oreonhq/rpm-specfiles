@@ -1,0 +1,335 @@
+From 4ffb732409536618bc4422a8cfac81ff83760388 Mon Sep 17 00:00:00 2001
+From: dschwoerer <5637662+dschwoerer@users.noreply.github.com>
+Date: Thu, 5 Jun 2025 10:03:47 +0000
+Subject: [PATCH 01/11] Add PETSc version guards for function cast
+
+---
+ include/bout/petsc_interface.hxx         |  9 +++++++++
+ src/solver/impls/imex-bdf2/imex-bdf2.cxx | 20 +++++++++++---------
+ src/solver/impls/snes/snes.cxx           |  1 +
+ 3 files changed, 21 insertions(+), 9 deletions(-)
+
+diff --git a/include/bout/petsc_interface.hxx b/include/bout/petsc_interface.hxx
+index 8e7d44c67d..670d91b2ec 100644
+--- a/include/bout/petsc_interface.hxx
++++ b/include/bout/petsc_interface.hxx
+@@ -615,6 +615,15 @@ PetscVector<T> operator*(const PetscMatrix<T>& mat, const PetscVector<T>& vec) {
+   return PetscVector<T>(vec, result);
+ }
+ 
++// Compatibility wrappers
++// For < 3.24
++#if PETSC_VERSION_GE(3, 24, 0) \
++    || (PETSC_VERSION_GE(3, 23, 0) && PETSC_VERSION_RELEASE != 0)
++// Nothing to do
++#else
++using MatFDColoringFn = PetscErrorCode (*)();
++#endif
++
+ #endif // BOUT_HAS_PETSC
+ 
+ #endif // __PETSC_INTERFACE_H__
+diff --git a/src/solver/impls/imex-bdf2/imex-bdf2.cxx b/src/solver/impls/imex-bdf2/imex-bdf2.cxx
+index adafbb71c5..3629965b87 100644
+--- a/src/solver/impls/imex-bdf2/imex-bdf2.cxx
++++ b/src/solver/impls/imex-bdf2/imex-bdf2.cxx
+@@ -9,6 +9,7 @@
+ #include <bout/boutexception.hxx>
+ #include <bout/mesh.hxx>
+ #include <bout/msg_stack.hxx>
++#include <bout/petsc_interface.hxx>
+ #include <bout/utils.hxx>
+ 
+ #include <cmath>
+@@ -116,7 +117,7 @@ static PetscErrorCode FormFunctionForDifferencing(void* ctx, Vec x, Vec f) {
+  *
+  * This can be a linearised and simplified form of FormFunction
+  */
+-static PetscErrorCode FormFunctionForColoring(SNES UNUSED(snes), Vec x, Vec f,
++static PetscErrorCode FormFunctionForColoring(void* UNUSED(snes), Vec x, Vec f,
+                                               void* ctx) {
+   return static_cast<IMEXBDF2*>(ctx)->snes_function(x, f, true);
+ }
+@@ -654,9 +655,15 @@ void IMEXBDF2::constructSNES(SNES* snesIn) {
+       // Create data structure for SNESComputeJacobianDefaultColor
+       MatFDColoringCreate(Jmf, iscoloring, &fdcoloring);
+       // Set the function to difference
+-      MatFDColoringSetFunction(
+-          fdcoloring, reinterpret_cast<PetscErrorCode (*)()>(FormFunctionForColoring),
+-          this);
++#if PETSC_VERSION_GE(3, 24, 0) \
++    || (PETSC_VERSION_GE(3, 23, 0) && PETSC_VERSION_RELEASE == 0)
++#define FUNC_MAYBE_CAST(func) func
++#else
++#define FUNC_MAYBE_CAST(func) reinterpret_cast<MatFDColoringFn>(func)
++#endif
++      MatFDColoringSetFunction(fdcoloring, FUNC_MAYBE_CAST(FormFunctionForColoring),
++                               this);
++#undef FUNC_MAYBE_CAST
+       MatFDColoringSetFromOptions(fdcoloring);
+       MatFDColoringSetUp(Jmf, iscoloring, fdcoloring);
+       ISColoringDestroy(&iscoloring);
+@@ -680,12 +687,7 @@ void IMEXBDF2::constructSNES(SNES* snesIn) {
+           0, // Number of nonzeros per row in off-diagonal portion of local submatrix
+           nullptr, &Jmf);
+ 
+-#if PETSC_VERSION_GE(3, 4, 0)
+       SNESSetJacobian(*snesIn, Jmf, Jmf, SNESComputeJacobianDefault, this);
+-#else
+-      // Before 3.4
+-      SNESSetJacobian(*snesIn, Jmf, Jmf, SNESDefaultComputeJacobian, this);
+-#endif
+ 
+       MatSetOption(Jmf, MAT_NEW_NONZERO_ALLOCATION_ERR, PETSC_FALSE);
+     }
+diff --git a/src/solver/impls/snes/snes.cxx b/src/solver/impls/snes/snes.cxx
+index 2143aad96a..b1db03f80a 100644
+--- a/src/solver/impls/snes/snes.cxx
++++ b/src/solver/impls/snes/snes.cxx
+@@ -7,6 +7,7 @@
+ #include <bout/boutcomm.hxx>
+ #include <bout/boutexception.hxx>
+ #include <bout/msg_stack.hxx>
++#include <bout/petsc_interface.hxx>
+ #include <bout/utils.hxx>
+ 
+ #include <array>
+
+From 1bc99e5c42ef94f4f93ccdbf651101417125611f Mon Sep 17 00:00:00 2001
+From: David Bold <dave@ipp.mpg.de>
+Date: Fri, 6 Jun 2025 11:41:57 +0200
+Subject: [PATCH 02/11] Update docs for what PETSc we support
+
+3.23 has been tested in CI so is expected to work.
+---
+ manual/RELEASE_HOWTO.md                      | 1 +
+ manual/sphinx/user_docs/advanced_install.rst | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/manual/RELEASE_HOWTO.md b/manual/RELEASE_HOWTO.md
+index 4103e6f197..d8ced2afb5 100644
+--- a/manual/RELEASE_HOWTO.md
++++ b/manual/RELEASE_HOWTO.md
+@@ -51,6 +51,7 @@ Before merging PR:
+     - [ ]  [`manual/doxygen/Doxyfile_readthedocs`][Doxyfile_readthedocs]: `PROJECT_NUMBER`
+     - [ ]  [`manual/doxygen/Doxyfile`][Doxyfile]: `PROJECT_NUMBER`
+     - [ ]  [`CMakeLists.txt`][CMakeLists]: `_bout_previous_version`, `_bout_next_version`
++- [ ] Update what version of PETSc and SUNDIALS we support (upper bound)
+ 
+ 
+ After PR is merged:
+diff --git a/manual/sphinx/user_docs/advanced_install.rst b/manual/sphinx/user_docs/advanced_install.rst
+index 428666dbd7..91d2fa898b 100644
+--- a/manual/sphinx/user_docs/advanced_install.rst
++++ b/manual/sphinx/user_docs/advanced_install.rst
+@@ -480,7 +480,7 @@ BOUT++ can use PETSc https://www.mcs.anl.gov/petsc/ for time-integration
+ and for solving elliptic problems, such as inverting Poisson and
+ Helmholtz equations.
+ 
+-Currently, BOUT++ supports PETSc versions 3.7 - 3.19. More recent versions may
++Currently, BOUT++ supports PETSc versions 3.7 - 3.23. More recent versions may
+ well work, but the PETSc API does sometimes change in backward-incompatible
+ ways, so this is not guaranteed. To install PETSc version 3.19, use the
+ following steps::
+
+From 63a868339eddcb8bb843b9fba66424eeb87fd08b Mon Sep 17 00:00:00 2001
+From: Peter Hill <peter.hill@york.ac.uk>
+Date: Tue, 17 Jun 2025 16:55:24 +0100
+Subject: [PATCH 03/11] Fix PETSc version check for MatFDColoringFn typedef
+
+---
+ include/bout/petsc_interface.hxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/bout/petsc_interface.hxx b/include/bout/petsc_interface.hxx
+index 670d91b2ec..1538fb5b8e 100644
+--- a/include/bout/petsc_interface.hxx
++++ b/include/bout/petsc_interface.hxx
+@@ -618,7 +618,7 @@ PetscVector<T> operator*(const PetscMatrix<T>& mat, const PetscVector<T>& vec) {
+ // Compatibility wrappers
+ // For < 3.24
+ #if PETSC_VERSION_GE(3, 24, 0) \
+-    || (PETSC_VERSION_GE(3, 23, 0) && PETSC_VERSION_RELEASE != 0)
++    || (PETSC_VERSION_GE(3, 23, 0) && PETSC_VERSION_RELEASE == 0)
+ // Nothing to do
+ #else
+ using MatFDColoringFn = PetscErrorCode (*)();
+
+From 8e5a037b92f8a465a0bb00254ae7681725ae8565 Mon Sep 17 00:00:00 2001
+From: Peter Hill <peter.hill@york.ac.uk>
+Date: Tue, 17 Jun 2025 17:04:13 +0100
+Subject: [PATCH 04/11] Move "maybe cast" macro to header for reuse
+
+---
+ include/bout/petsc_interface.hxx         |  3 ++-
+ src/solver/impls/imex-bdf2/imex-bdf2.cxx | 11 ++---------
+ src/solver/impls/snes/snes.cxx           |  2 +-
+ 3 files changed, 5 insertions(+), 11 deletions(-)
+
+diff --git a/include/bout/petsc_interface.hxx b/include/bout/petsc_interface.hxx
+index 1538fb5b8e..a38938488c 100644
+--- a/include/bout/petsc_interface.hxx
++++ b/include/bout/petsc_interface.hxx
+@@ -619,9 +619,10 @@ PetscVector<T> operator*(const PetscMatrix<T>& mat, const PetscVector<T>& vec) {
+ // For < 3.24
+ #if PETSC_VERSION_GE(3, 24, 0) \
+     || (PETSC_VERSION_GE(3, 23, 0) && PETSC_VERSION_RELEASE == 0)
+-// Nothing to do
++#define BOUT_CAST_MATFDCOLORINGFN(func) func
+ #else
+ using MatFDColoringFn = PetscErrorCode (*)();
++#define BOUT_CAST_MATFDCOLORINGFN(func) reinterpret_cast<MatFDColoringFn>(func)
+ #endif
+ 
+ #endif // BOUT_HAS_PETSC
+diff --git a/src/solver/impls/imex-bdf2/imex-bdf2.cxx b/src/solver/impls/imex-bdf2/imex-bdf2.cxx
+index 3629965b87..f374d06356 100644
+--- a/src/solver/impls/imex-bdf2/imex-bdf2.cxx
++++ b/src/solver/impls/imex-bdf2/imex-bdf2.cxx
+@@ -655,15 +655,8 @@ void IMEXBDF2::constructSNES(SNES* snesIn) {
+       // Create data structure for SNESComputeJacobianDefaultColor
+       MatFDColoringCreate(Jmf, iscoloring, &fdcoloring);
+       // Set the function to difference
+-#if PETSC_VERSION_GE(3, 24, 0) \
+-    || (PETSC_VERSION_GE(3, 23, 0) && PETSC_VERSION_RELEASE == 0)
+-#define FUNC_MAYBE_CAST(func) func
+-#else
+-#define FUNC_MAYBE_CAST(func) reinterpret_cast<MatFDColoringFn>(func)
+-#endif
+-      MatFDColoringSetFunction(fdcoloring, FUNC_MAYBE_CAST(FormFunctionForColoring),
+-                               this);
+-#undef FUNC_MAYBE_CAST
++      MatFDColoringSetFunction(fdcoloring,
++                               BOUT_CAST_MATFDCOLORINGFN(FormFunctionForColoring), this);
+       MatFDColoringSetFromOptions(fdcoloring);
+       MatFDColoringSetUp(Jmf, iscoloring, fdcoloring);
+       ISColoringDestroy(&iscoloring);
+diff --git a/src/solver/impls/snes/snes.cxx b/src/solver/impls/snes/snes.cxx
+index b1db03f80a..a2630ad56d 100644
+--- a/src/solver/impls/snes/snes.cxx
++++ b/src/solver/impls/snes/snes.cxx
+@@ -42,7 +42,7 @@ static PetscErrorCode FormFunctionForDifferencing(void* ctx, Vec x, Vec f) {
+  *
+  * This can be a linearised and simplified form of FormFunction
+  */
+-static PetscErrorCode FormFunctionForColoring(SNES UNUSED(snes), Vec x, Vec f,
++static PetscErrorCode FormFunctionForColoring(void* UNUSED(snes), Vec x, Vec f,
+                                               void* ctx) {
+   return static_cast<SNESSolver*>(ctx)->snes_function(x, f, true);
+ }
+
+From b5aa5d0ea2fe8d656a4921573efbdfd34acdddeb Mon Sep 17 00:00:00 2001
+From: Peter Hill <peter.hill@york.ac.uk>
+Date: Tue, 17 Jun 2025 18:08:05 +0100
+Subject: [PATCH 05/11] Convert macro to constexpr template function
+
+Removes some clang-tidy warnings and silences one about reinterpret_cast
+---
+ include/bout/petsc_interface.hxx         | 14 ++++++++++++--
+ src/solver/impls/imex-bdf2/imex-bdf2.cxx |  2 +-
+ src/solver/impls/snes/snes.cxx           |  5 ++---
+ 3 files changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/include/bout/petsc_interface.hxx b/include/bout/petsc_interface.hxx
+index a38938488c..2e55534e68 100644
+--- a/include/bout/petsc_interface.hxx
++++ b/include/bout/petsc_interface.hxx
+@@ -619,10 +619,20 @@ PetscVector<T> operator*(const PetscMatrix<T>& mat, const PetscVector<T>& vec) {
+ // For < 3.24
+ #if PETSC_VERSION_GE(3, 24, 0) \
+     || (PETSC_VERSION_GE(3, 23, 0) && PETSC_VERSION_RELEASE == 0)
+-#define BOUT_CAST_MATFDCOLORINGFN(func) func
++namespace bout {
++template <class T>
++constexpr auto cast_MatFDColoringFn(T func) {
++  return func;
++}
++} // namespace bout
+ #else
+ using MatFDColoringFn = PetscErrorCode (*)();
+-#define BOUT_CAST_MATFDCOLORINGFN(func) reinterpret_cast<MatFDColoringFn>(func)
++namespace bout {
++template <class T>
++constexpr auto cast_MatFDColoringFn(T func) {
++  return reinterpret_cast<MatFDColoringFn>(func); // NOLINT(*-reinterpret-cast)
++}
++} // namespace bout
+ #endif
+ 
+ #endif // BOUT_HAS_PETSC
+diff --git a/src/solver/impls/imex-bdf2/imex-bdf2.cxx b/src/solver/impls/imex-bdf2/imex-bdf2.cxx
+index f374d06356..dad9a8b3b0 100644
+--- a/src/solver/impls/imex-bdf2/imex-bdf2.cxx
++++ b/src/solver/impls/imex-bdf2/imex-bdf2.cxx
+@@ -656,7 +656,7 @@ void IMEXBDF2::constructSNES(SNES* snesIn) {
+       MatFDColoringCreate(Jmf, iscoloring, &fdcoloring);
+       // Set the function to difference
+       MatFDColoringSetFunction(fdcoloring,
+-                               BOUT_CAST_MATFDCOLORINGFN(FormFunctionForColoring), this);
++                               bout::cast_MatFDColoringFn(FormFunctionForColoring), this);
+       MatFDColoringSetFromOptions(fdcoloring);
+       MatFDColoringSetUp(Jmf, iscoloring, fdcoloring);
+       ISColoringDestroy(&iscoloring);
+diff --git a/src/solver/impls/snes/snes.cxx b/src/solver/impls/snes/snes.cxx
+index a2630ad56d..a68aa43c38 100644
+--- a/src/solver/impls/snes/snes.cxx
++++ b/src/solver/impls/snes/snes.cxx
+@@ -585,9 +585,8 @@ int SNESSolver::init() {
+       // Create data structure for SNESComputeJacobianDefaultColor
+       MatFDColoringCreate(Jmf, iscoloring, &fdcoloring);
+       // Set the function to difference
+-      MatFDColoringSetFunction(
+-          fdcoloring, reinterpret_cast<PetscErrorCode (*)()>(FormFunctionForColoring),
+-          this);
++      MatFDColoringSetFunction(fdcoloring,
++                               bout::cast_MatFDColoringFn(FormFunctionForColoring), this);
+       MatFDColoringSetFromOptions(fdcoloring);
+       MatFDColoringSetUp(Jmf, iscoloring, fdcoloring);
+       ISColoringDestroy(&iscoloring);
+diff --git a/src/solver/impls/petsc/petsc.cxx b/src/solver/impls/petsc/petsc.cxx
+index 1b81ca36b6..b502fcef10 100644
+--- a/src/solver/impls/petsc/petsc.cxx
++++ b/src/solver/impls/petsc/petsc.cxx
+@@ -515,9 +515,7 @@ int PetscSolver::init() {
+   CHKERRQ(ierr);
+   ierr = ISColoringDestroy(&iscoloring);
+   CHKERRQ(ierr);
+-  ierr = MatFDColoringSetFunction(matfdcoloring,
+-                                  reinterpret_cast<PetscErrorCode (*)()>(solver_f), this);
+-  CHKERRQ(ierr);
++  throw BoutException("Coloring is not working");
+   ierr = SNESSetJacobian(snes, J, J, SNESComputeJacobianDefaultColor, matfdcoloring);
+   CHKERRQ(ierr);
+ 
+
+From ced312785cd2586b86b0c31c54ba84ad2dde14e4 Mon Sep 17 00:00:00 2001
+From: David Bold <dave@ipp.mpg.de>
+Date: Mon, 21 Oct 2024 14:13:10 +0200
+Subject: [PATCH 10/11] Try to do the right thing for linking netCDF::netcdf
+
+---
+ CMakeLists.txt | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 60d34e1ad7..55b84cd765 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -789,8 +789,15 @@ foreach (flag ${CONFIG_LDFLAGS_LIST})
+       # message("${flag} is a file")
+       set(_CONFIG_LDFLAGS "${_CONFIG_LDFLAGS} ${flag}")
+     else()
+-      message("Fixing ${flag} to -l${flag}")
+-      set(_CONFIG_LDFLAGS "${_CONFIG_LDFLAGS} -l${flag}")
++      string(FIND "${flag}" "::" hascolcol)
++      if (${hascolcol} EQUAL -1)
++	message("Fixing ${flag} to -l${flag}")
++	set(_CONFIG_LDFLAGS "${_CONFIG_LDFLAGS} -l${flag}")
++      else()
++	string(REGEX MATCH "[^:]*$" flag2 "${flag}")
++	message("Fixing ${flag} to -l${flag2}")
++	set(_CONFIG_LDFLAGS "${_CONFIG_LDFLAGS} -l${flag2}")
++      endif()
+     endif()
+   endif()
+ endforeach()

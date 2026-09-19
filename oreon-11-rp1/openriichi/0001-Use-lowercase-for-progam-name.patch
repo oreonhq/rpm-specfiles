@@ -1,0 +1,44 @@
+From 3b7de22cfa0bbc59dee5746b1cc6c00e535ac920 Mon Sep 17 00:00:00 2001
+From: Julien Rische <jrische@redhat.com>
+Date: Sat, 12 Feb 2022 01:09:42 +0100
+Subject: [PATCH] Use lowercase for progam name
+
+---
+ meson.build | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index a8e3c67..9e15afb 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1,10 +1,10 @@
+-project('OpenRiichi', 'vala', 'c')
++project('openriichi', 'vala', 'c')
+ 
+ # We use subdir instead of subproject so we don't have to recompile everything when we change something in libengine
+ subdir('Engine')
+ 
+-dataDir = get_option('prefix') / get_option('datadir') / 'OpenRiichi'
+-add_project_arguments('-DOPENRIICHI_SEARCH_DIR="' + dataDir +  '"', language: 'c')
++dataDir = get_option('prefix') / get_option('datadir') / 'openriichi'
++add_project_arguments('-DOPENRIICHI_SEARCH_DIR="/usr/share/openriichi"', language: 'c')
+ 
+ dependencies = [
+     valac.find_library('os', dirs: meson.current_source_dir() + '/vapi', required: false)
+@@ -98,10 +98,10 @@ sources = files(
+ 
+ includes = [include_directories('include'), engine_includes]
+ 
+-executable('OpenRiichi', sources,
++executable('openriichi', sources,
+     dependencies: dependencies,
+     include_directories: includes,
+     gui_app: true,
+     install: true
+ )
+-install_subdir('bin/Data', install_dir: dataDir)
+\ No newline at end of file
++install_subdir('bin/Data', install_dir: dataDir)
+-- 
+2.34.1
+

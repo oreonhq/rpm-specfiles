@@ -1,0 +1,13 @@
+--- glib2-3.5.1/test/test-spawn.rb.env	2022-01-23 13:23:35.823775546 +0900
++++ glib2-3.5.1/test/test-spawn.rb	2022-01-23 13:25:04.325532503 +0900
+@@ -37,7 +37,9 @@ class TestGLibSpawn < Test::Unit::TestCa
+     only_not_windows
+     only_not_scl
+ 
+-    if RbConfig.respond_to?(:ruby)
++    if File.exist?('/usr/bin/ruby-mri')
++      ruby = '/usr/bin/ruby-mri'
++    elsif RbConfig.respond_to?(:ruby)
+       ruby = RbConfig.ruby
+     else
+       ruby = File.join(RbConfig::CONFIG['bindir'],

@@ -2,8 +2,8 @@
 
 Name:     libpcap
 Epoch:    14
-Version:  1.10.6
-Release:  2%{?dist}
+Version:  1.11.0
+Release:  1%{?dist}
 Summary:  A system-independent interface for user-level packet capture
 License:  ISC AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause-UC
 URL:      https://www.tcpdump.org/

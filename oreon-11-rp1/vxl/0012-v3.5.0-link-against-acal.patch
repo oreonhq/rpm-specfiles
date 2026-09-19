@@ -1,0 +1,45 @@
+From 0cee9d18cd8a652145684ac0c74d905b810e5e0c Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 24 Oct 2023 12:16:41 +0100
+Subject: [PATCH 12/18] v3.5.0: link against acal
+
+To fix:
+```
+/usr/bin/ld: ../../../../../lib/libbsgm.so.3.5.0.0: undefined reference to `acal_f_utils::read_affine_cameras(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::map<unsigned long, vpgl_affine_camera<double>, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, vpgl_affine_camera<double> > > >&)'
+/usr/bin/ld: ../../../../../lib/libbsgm.so.3.5.0.0: undefined reference to `acal_f_utils::datetime_from_iname(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dtime&)'
+/usr/bin/ld: ../../../../../lib/libbsgm.so.3.5.0.0: undefined reference to `dtime::time_diff(dtime const&, dtime const&)'
+collect2: error: ld returned 1 exit status
+```
+---
+ contrib/brl/bseg/bsgm/CMakeLists.txt         | 2 +-
+ contrib/brl/bseg/bsgm/bsgm_pair_selector.cxx | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/contrib/brl/bseg/bsgm/CMakeLists.txt b/contrib/brl/bseg/bsgm/CMakeLists.txt
+index 44c4637af2..975ed5364c 100644
+--- a/contrib/brl/bseg/bsgm/CMakeLists.txt
++++ b/contrib/brl/bseg/bsgm/CMakeLists.txt
+@@ -16,7 +16,7 @@ aux_source_directory(Templates bsgm_sources)
+ 
+ vxl_add_library(LIBRARY_NAME bsgm LIBRARY_SOURCES ${bsgm_sources})
+ 
+-target_link_libraries( bsgm vidl_pro ${VXL_LIB_PREFIX}bpgl_algo ${VXL_LIB_PREFIX}brip ${VXL_LIB_PREFIX}bsta ${VXL_LIB_PREFIX}bjson ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl)
++target_link_libraries( bsgm vidl_pro ${VXL_LIB_PREFIX}acal ${VXL_LIB_PREFIX}bpgl_algo ${VXL_LIB_PREFIX}brip ${VXL_LIB_PREFIX}bsta ${VXL_LIB_PREFIX}bjson ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl)
+ 
+ add_subdirectory( app )
+ 
+diff --git a/contrib/brl/bseg/bsgm/bsgm_pair_selector.cxx b/contrib/brl/bseg/bsgm/bsgm_pair_selector.cxx
+index 6320d290ff..e97e318428 100644
+--- a/contrib/brl/bseg/bsgm/bsgm_pair_selector.cxx
++++ b/contrib/brl/bseg/bsgm/bsgm_pair_selector.cxx
+@@ -4,6 +4,7 @@
+ #include <algorithm>
+ #include <fstream>
+ #include <bpgl/acal/acal_metadata.h>
++#include <bpgl/acal/acal_f_utils.h>
+ 
+ std::string bsgm_pair_selector::remove_crop_postfix(std::string const& iname)
+ {
+-- 
+2.46.1
+

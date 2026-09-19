@@ -1,13 +1,13 @@
-%global source0_hash eeb067fab001dd24735ad56e8ec4808fca76e5ecdf003cf614246c9abe1c3e19
+%global source0_hash 883e0139fcbc692070287e47de5368c78eb91c8bdbb52fb6f8398183f6aace8f
 
 %global framework knotifications
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 2 solution with abstraction for system notifications
 
@@ -25,7 +25,7 @@ BuildRequires:  cmake(Qt6Gui)
 BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6Qml)
 BuildRequires:  libcanberra-devel
-BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6Config) >= %{version}
 
 # required for pyside6 python bindings
 BuildRequires:  python3-devel
@@ -39,11 +39,6 @@ BuildRequires:  cmake(PySide6)
 %description
 KDE Frameworks 6 Tier 3 solution with abstraction for system
 notifications.
-
-%package        -n python3-%{name}
-Summary:        Qt for Python bindings for %{name}
-%description    -n python3-%{name}
-The package contains the pyside6 bindings library for %{name}
 
 %package        devel
 Summary:        Development files for %{name}
@@ -59,15 +54,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n %{framework}-%{version} -p1
 
 %build
-%cmake_kf6
+%cmake_kf6 -DBUILD_PYTHON_BINDINGS=OFF
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
-%find_lang_kf6 knotifications6_qt
 # We own the folder
 mkdir -p %{buildroot}/%{_kf6_datadir}/knotifications6
 
-%files -f knotifications6_qt.lang
+%files
 %doc README.md
 %license LICENSES/*.txt
 %{_kf6_datadir}/qlogging-categories6/%{framework}.*
@@ -78,9 +72,6 @@ mkdir -p %{buildroot}/%{_kf6_datadir}/knotifications6
 %{_libdir}/qt6/qml/org/kde/notification/libknotificationqmlplugin.so
 %{_libdir}/qt6/qml/org/kde/notification/qmldir
 
-%files -n python3-%{name}
-%{python3_sitearch}/KNotifications.cpython-%{python3_version_nodots}*.so
-
 %files devel
 %{_kf6_includedir}/KNotifications/
 %{_kf6_libdir}/libKF6Notifications.so
@@ -88,18 +79,7 @@ mkdir -p %{buildroot}/%{_kf6_datadir}/knotifications6
 
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- inline cmake --build (no qt6 prepare_docs pass)
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
 
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Qt6 qdoc: -html file list via find, tags/index in -devel
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
-
+%autochangelog

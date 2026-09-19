@@ -1,21 +1,21 @@
-%global source0_hash e0af4190960d65f5c8475f01213ea4e68a07763ffeaa6766de4b7f50529e0498
+%global source0_hash b645d5d17c967fd09c3d7abdfc262740a95870dd66bd3e5f4c0382da097d8510
 
 %global framework kdav
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 20.04.3
 Release:        1%{?dist}
 Summary: A DAV protocol implementation with KJobs
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/stable/release-service/%{version}/src/%{framework}-%{version}.tar.xz
+Source1:        https://download.kde.org/stable/release-service/%{version}/src/%{framework}-%{version}.tar.xz.sig
 
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
@@ -24,13 +24,10 @@ BuildRequires:  kf6-rpm-macros
 
 BuildRequires:  cmake(Qt6Gui)
 
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6KIO) >= %{version}
 BuildRequires:  pkgconfig(xkbcommon)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6KIO)
 
 Requires:  kf6-filesystem
 
@@ -71,18 +68,4 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- inline cmake --build (no qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Qt6 qdoc: -html file list via find, tags/index in -devel
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
-
+%autochangelog

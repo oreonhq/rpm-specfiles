@@ -1,13 +1,13 @@
-%global source0_hash d7daa74e9fe81b674e54e6e979feb85d3d2f4216bf6d9c02bfaa2c021fe1ac2d
+%global source0_hash ec5943b4d7efdc18c506ea0db543acdcd5313452615c66d72a1d5ff8d428296a
 
 %global framework kirigami
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.29.0
 Release:        1%{?dist}
 Summary:        QtQuick plugins to build user interfaces based on the KDE UX guidelines
 License:        BSD-3-Clause AND CC0-1.0 AND FSFAP AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
@@ -124,6 +124,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-9
 - bump release (retry failed build)
 

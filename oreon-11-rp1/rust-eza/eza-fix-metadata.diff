@@ -1,0 +1,77 @@
+--- eza-0.23.4/Cargo.toml	1970-01-01T00:00:01+00:00
++++ eza-0.23.4/Cargo.toml	2026-01-17T17:44:56.262381+00:00
+@@ -17,10 +17,15 @@
+ authors = ["Christina Sørensen <christina@cafkafk.com>"]
+ build = "build.rs"
+ exclude = [
++    "/completions",
+     "/docs/",
+     "/devtools/",
++    "/man",
+     "/snap/",
+     "/tests/",
++    "/cliff.toml",
++    "/deb.asc",
++    "/deny.toml",
+     "/.config/",
+     "/.github/",
+     "/deb.asc",
+@@ -109,11 +114,6 @@
+ name = "eza"
+ path = "src/main.rs"
+ 
+-[[bench]]
+-name = "my_benchmark"
+-path = "benches/my_benchmark.rs"
+-harness = false
+-
+ [dependencies.ansi-width]
+ version = "0.1.0"
+ 
+@@ -159,7 +159,7 @@
+ version = "0.4"
+ 
+ [dependencies.palette]
+-version = "0.7.6"
++version = "0.7.5"
+ features = ["std"]
+ default-features = false
+ 
+@@ -170,7 +170,7 @@
+ version = "2.3.1"
+ 
+ [dependencies.phf]
+-version = "0.12.1"
++version = "0.13.1"
+ features = ["macros"]
+ 
+ [dependencies.plist]
+@@ -198,14 +198,7 @@
+ version = "0.2"
+ 
+ [dependencies.uutils_term_grid]
+-version = "0.7.0"
+-
+-[dev-dependencies.criterion]
+-version = "0.5.1"
+-features = ["html_reports"]
+-
+-[dev-dependencies.trycmd]
+-version = "0.15"
++version = "0.6.0"
+ 
+ [build-dependencies.chrono]
+ version = "0.4.40"
+@@ -215,12 +208,6 @@
+ [features]
+ default = ["git"]
+ git = ["git2"]
+-nix = []
+-nix-generated = []
+-nix-local = []
+-powertest = []
+-vendored-libgit2 = ["git2/vendored-libgit2"]
+-vendored-openssl = ["git2/vendored-openssl"]
+ 
+ [target.'cfg(target_os = "linux")'.dependencies.proc-mounts]
+ version = "0.3"

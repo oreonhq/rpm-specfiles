@@ -1,0 +1,13 @@
+[Unit]
+Description=Remote Machine Logged In User Lister
+Requires=network.target
+Wants=network-online.target
+After=syslog.target network-online.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/rwhod
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target

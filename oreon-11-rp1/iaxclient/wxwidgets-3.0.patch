@@ -1,0 +1,204 @@
+diff -up iaxclient-2.1beta3/simpleclient/iaxcomm/calls.cc.wx3 iaxclient-2.1beta3/simpleclient/iaxcomm/calls.cc
+--- iaxclient-2.1beta3/simpleclient/iaxcomm/calls.cc.wx3	2008-04-07 12:05:34.000000000 -0400
++++ iaxclient-2.1beta3/simpleclient/iaxcomm/calls.cc	2018-08-28 20:17:29.496494108 -0400
+@@ -274,7 +274,7 @@ int CallList::HandleStateEvent(struct ia
+                 if(!str.IsSameAs(ws)) {
+                     // Add to phone book if not there already
+                     str.Printf(_T("%s/Extension"), wxString(c.remote_name, *(wxGetApp().ConvIax)).c_str());
+-                    config->Write(str, c.remote);
++                    config->Write(str, wxString(c.remote));
+                 } else {
+                     // Since they're in the phone book, look for ringtone
+                     str.Printf(_T("%s/RingTone"), wxString(c.remote_name, *(wxGetApp().ConvIax)).c_str());
+diff -up iaxclient-2.1beta3/simpleclient/iaxcomm/devices.cc.wx3 iaxclient-2.1beta3/simpleclient/iaxcomm/devices.cc
+--- iaxclient-2.1beta3/simpleclient/iaxcomm/devices.cc.wx3	2008-04-07 12:05:34.000000000 -0400
++++ iaxclient-2.1beta3/simpleclient/iaxcomm/devices.cc	2018-08-28 19:56:46.175797499 -0400
+@@ -141,12 +141,12 @@ void DevicesDialog::GetAudioDevices()
+     // validated).  Invalid input to SetAudioDevices selects defaults
+ 
+     devname = wxGetApp().SpkInputDevice;
+-    if(devname) {
++    if(!devname.IsEmpty()) {
+         SpkInputDevice->SetSelection(SpkInputDevice->FindString(devname));
+     }
+ 
+     devname = wxGetApp().SpkOutputDevice;
+-    if(devname) {
++    if(!devname.IsEmpty()) {
+         SpkOutputDevice->SetSelection(SpkOutputDevice->FindString(devname));
+     }
+ 
+diff -up iaxclient-2.1beta3/simpleclient/iaxcomm/directory.cc.wx3 iaxclient-2.1beta3/simpleclient/iaxcomm/directory.cc
+--- iaxclient-2.1beta3/simpleclient/iaxcomm/directory.cc.wx3	2008-04-07 12:05:34.000000000 -0400
++++ iaxclient-2.1beta3/simpleclient/iaxcomm/directory.cc	2018-08-28 20:00:58.154154971 -0400
+@@ -373,7 +373,7 @@ void AddPhoneListDialog::OnBrowse(wxComm
+     wxString dirHome;
+     wxGetHomeDir(&dirHome);
+ 
+-    wxFileDialog where(NULL, _("Raw sound file"), dirHome, _T(""), _T("*.*"), wxOPEN );
++    wxFileDialog where(NULL, _("Raw sound file"), dirHome, _T(""), _T("*.*"), wxFD_OPEN );
+     where.ShowModal();
+ 
+     RingTone->SetValue(where.GetPath());
+diff -up iaxclient-2.1beta3/simpleclient/iaxcomm/Makefile.am.wx3 iaxclient-2.1beta3/simpleclient/iaxcomm/Makefile.am
+--- iaxclient-2.1beta3/simpleclient/iaxcomm/Makefile.am.wx3	2008-04-07 12:05:34.000000000 -0400
++++ iaxclient-2.1beta3/simpleclient/iaxcomm/Makefile.am	2018-08-28 20:30:57.926972522 -0400
+@@ -30,7 +30,7 @@ rc/logo.xpm $(XRCS)
+ 
+ CLEANFILES = $(BUILT_SOURCES)
+ 
+-AM_CPPFLAGS = -I$(top_srcdir)/lib $(WX_CPPFLAGS) -DIAXCOMM_VERSION=\"$(IAXCOMM_VERSION)\" -DXRCDIRECTORY=\"$(iaxcommdatadir)/rc\" -DDATADIR=\"$(iaxcommdatadir)\"
++AM_CPPFLAGS = -I$(top_srcdir)/lib $(WX_CPPFLAGS) -DIAXCOMM_VERSION=\"$(IAXCOMM_VERSION)\" -DXRCDIRECTORY=\"$(iaxcommdatadir)/rc\" -DDATADIR=\"$(iaxcommdatadir)\" -DNDEBUG
+ AM_CXXFLAGS = $(GDK2_CFLAGS) $(GTK_CFLAGS) $(WX_CXXFLAGS_ONLY)
+ 
+ LDADD = $(top_builddir)/lib/libiaxclient.la $(GTK_LIBS) $(WX_LIBS)	\
+diff -up iaxclient-2.1beta3/simpleclient/iaxcomm/prefs.cc.wx3 iaxclient-2.1beta3/simpleclient/iaxcomm/prefs.cc
+--- iaxclient-2.1beta3/simpleclient/iaxcomm/prefs.cc.wx3	2008-04-07 12:05:34.000000000 -0400
++++ iaxclient-2.1beta3/simpleclient/iaxcomm/prefs.cc	2018-08-28 20:00:27.769991328 -0400
+@@ -318,7 +318,7 @@ void PrefsDialog::OnBrowse(wxCommandEven
+     wxString dirHome;
+     wxGetHomeDir(&dirHome);
+ 
+-    wxFileDialog where(NULL, _("Raw sound file"), dirHome, _T(""), _T("*.*"), wxOPEN );
++    wxFileDialog where(NULL, _("Raw sound file"), dirHome, _T(""), _T("*.*"), wxFD_OPEN );
+     where.ShowModal();
+ 
+     if(event.GetId() == XRCID("BrowseRingBack"))
+diff -up iaxclient-2.1beta3/simpleclient/iaxcomm/rc/panel.xrc.wx3 iaxclient-2.1beta3/simpleclient/iaxcomm/rc/panel.xrc
+--- iaxclient-2.1beta3/simpleclient/iaxcomm/rc/panel.xrc.wx3	2008-04-07 12:05:32.000000000 -0400
++++ iaxclient-2.1beta3/simpleclient/iaxcomm/rc/panel.xrc	2018-08-28 22:13:26.791498044 -0400
+@@ -889,7 +889,7 @@
+                 </object>
+                 <minsize>44,30</minsize>
+               </object>
+-              <growablecols>0,1,2,3</growablecols>
++              <growablecols>0,1</growablecols>
+             </object>
+             <flag>wxGROW</flag>
+           </object>
+@@ -904,7 +904,7 @@
+                 </object>
+                 <minsize>64,30</minsize>
+               </object>
+-              <growablecols>0,1,2,3</growablecols>
++              <growablecols>0,1,2</growablecols>
+               <object class="sizeritem">
+                 <flag>wxALL|wxGROW|wxALIGN_CENTRE</flag>
+                 <border>1</border>
+@@ -1032,11 +1032,11 @@
+           <object class="sizeritem">
+             <object class="wxFlexGridSizer">
+               <cols>2</cols>
+-              <growablecols>0,1,2,3</growablecols>
++              <growablecols>0,1</growablecols>
+               <object class="sizeritem">
+                 <object class="wxFlexGridSizer">
+                   <cols>1</cols>
+-                  <growablecols>0,1,2,3</growablecols>
++                  <growablecols>0</growablecols>
+                   <object class="sizeritem">
+                     <object class="wxButton" name="0">
+                       <label> </label>
+@@ -1083,7 +1083,7 @@
+               <object class="sizeritem">
+                 <object class="wxFlexGridSizer">
+                   <cols>1</cols>
+-                  <growablecols>0,1,2,3</growablecols>
++                  <growablecols>0</growablecols>
+                   <object class="sizeritem">
+                     <object class="wxButton" name="5">
+                       <label></label>
+@@ -1138,4 +1138,4 @@
+       <growablerows>1</growablerows>
+     </object>
+   </object>
+-</resource>
+\ No newline at end of file
++</resource>
+diff -up iaxclient-2.1beta3/simpleclient/iaxphone/iaxphone.cc.wx3 iaxclient-2.1beta3/simpleclient/iaxphone/iaxphone.cc
+--- iaxclient-2.1beta3/simpleclient/iaxphone/iaxphone.cc.wx3	2018-08-22 23:48:33.066285080 -0400
++++ iaxclient-2.1beta3/simpleclient/iaxphone/iaxphone.cc	2018-08-24 20:46:02.494650605 -0400
+@@ -424,7 +424,7 @@ void IAXFrame::CheckPTT()
+ 
+ void IAXFrame::OnDTMF(wxCommandEvent &evt)
+ {
+-    iaxc_send_dtmf(*buttonlabels[evt.m_id]);
++    iaxc_send_dtmf(*buttonlabels[evt.GetId()]);
+ }
+ 
+ void IAXFrame::OnDial(wxCommandEvent &evt)
+@@ -643,7 +643,7 @@ void IAXFrame::DialBySpeedDialName(wxStr
+     } else {
+         Destination = name;
+     }
+-    iaxc_call((char *)Destination.c_str());
++    iaxc_call((const char *)Destination.c_str());
+ }
+ 
+ BEGIN_EVENT_TABLE(IAXFrame, wxFrame)
+@@ -763,7 +763,7 @@ bool IAXClient::OnInit()
+     }
+     
+     if(!optDestination.IsEmpty()) 
+-        iaxc_call((char *)optDestination.c_str());
++        iaxc_call((const char *)optDestination.c_str());
+     
+     return true; 
+ }
+@@ -818,7 +818,7 @@ extern "C" {
+ AudioDialog::AudioDialog(wxWindow *parent, const wxString& title,
+                          const wxPoint& pos, const wxSize& size, const long WXUNUSED(style)) :
+                          wxDialog(parent, ID_AUDIO, title, 
+-                         pos, size, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
++                         pos, size, wxDEFAULT_DIALOG_STYLE)
+ {
+     wxBoxSizer        *dialogSizer =  new wxBoxSizer(wxHORIZONTAL);
+     wxFlexGridSizer   *controlSizer = new wxFlexGridSizer(3,3,10,10);
+@@ -968,7 +968,7 @@ END_EVENT_TABLE()
+ ServerDialog::ServerDialog(wxWindow *parent, const wxString& title,
+                            const wxPoint& pos, const wxSize& size, const long WXUNUSED(style)) :
+                            wxDialog(parent, ID_SERVER, title, 
+-                           pos, size, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
++                           pos, size, wxDEFAULT_DIALOG_STYLE)
+ {
+     wxBoxSizer      *dialogSizer  = new wxBoxSizer(wxHORIZONTAL);
+     wxFlexGridSizer *controlSizer = new wxFlexGridSizer(3,3,10,10);
+@@ -1099,7 +1099,7 @@ END_EVENT_TABLE()
+ DialDialog::DialDialog(wxWindow *parent, const wxString& title,
+                        const wxPoint& pos, const wxSize& size, const long WXUNUSED(style)) :
+                        wxDialog(parent, ID_DIAL, title,
+-                       pos, size, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
++                       pos, size, wxDEFAULT_DIALOG_STYLE)
+ {
+ 
+     wxBoxSizer      *dialogSizer  = new wxBoxSizer(wxHORIZONTAL);
+diff -up iaxclient-2.1beta3/simpleclient/wx/wx.cc.wx3 iaxclient-2.1beta3/simpleclient/wx/wx.cc
+--- iaxclient-2.1beta3/simpleclient/wx/wx.cc.wx3	2008-04-07 12:05:35.000000000 -0400
++++ iaxclient-2.1beta3/simpleclient/wx/wx.cc	2018-08-28 19:49:23.491412552 -0400
+@@ -556,7 +556,7 @@ void IAXFrame::CheckPTT()
+ void IAXFrame::OnDTMF(wxCommandEvent &evt)
+ {
+ 
+-	iaxc_send_dtmf(*buttonlabels[evt.m_id]);
++	iaxc_send_dtmf(*buttonlabels[evt.GetId()]);
+ }
+ 
+ void IAXFrame::OnDial(wxCommandEvent& evt)
+@@ -607,7 +607,7 @@ void IAXFrame::OnRegisterMenu(wxCommandE
+ 	wxTextEntryDialog dialog(this,
+ 	    wxString("Register with a remote asterisk server",wxConvUTF8),
+ 	    wxString("Format is user:password@hostname",wxConvUTF8),
+-	    wxString(wxGetApp().optRegistration,wxConvUTF8),
++	    wxGetApp().optRegistration,
+ 	    wxOK | wxCANCEL);
+ 
+ 	if(dialog.ShowModal() == wxID_OK)
+@@ -813,7 +813,7 @@ bool IAXClient::OnInit()
+ 	}
+     
+ 	if(!optDestination.IsEmpty()) 
+-	    iaxc_call((char *)optDestination.c_str());
++	    iaxc_call((const char *)optDestination.c_str());
+     
+ 
+ 	return true; 

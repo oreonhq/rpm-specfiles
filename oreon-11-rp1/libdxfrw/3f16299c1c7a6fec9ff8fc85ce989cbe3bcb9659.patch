@@ -1,0 +1,41 @@
+From 3f16299c1c7a6fec9ff8fc85ce989cbe3bcb9659 Mon Sep 17 00:00:00 2001
+From: dongxuli-concord-design
+ <102729580+dongxuli-concord-design@users.noreply.github.com>
+Date: Mon, 14 Jul 2025 11:40:03 -0400
+Subject: [PATCH] static-analysis warnings
+
+---
+ libraries/libdxfrw/src/drw_header.cpp       | 2 +-
+ libraries/libdxfrw/src/intern/dwgreader.cpp | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/libraries/libdxfrw/src/drw_header.cpp b/libraries/libdxfrw/src/drw_header.cpp
+index b898dfab71..2ee0981302 100644
+--- a/src/drw_header.cpp
++++ b/src/drw_header.cpp
+@@ -2404,7 +2404,7 @@ bool DRW_Header::parseDwg(DRW::Version version, dwgBuffer *buf, dwgBuffer *hBbuf
+     }
+ 
+     //temporary code to show header end sentinel
+-    duint64 sz= 0; //buf->size()-1;
++    [[maybe_unused]] duint64 sz= 0; //buf->size()-1;
+     if (version < DRW::AC1018) {//pre 2004
+         sz= buf->size()-16;
+         buf->setPosition(sz);
+diff --git a/libraries/libdxfrw/src/intern/dwgreader.cpp b/libraries/libdxfrw/src/intern/dwgreader.cpp
+index c704bcc8ab..fe119f8e36 100644
+--- a/src/intern/dwgreader.cpp
++++ b/src/intern/dwgreader.cpp
+@@ -681,10 +681,12 @@ bool dwgReader::readDwgTables(DRW_Header& hdr, dwgBuffer *dbuf) {
+                 DRW_ObjControl vpEntHeaderCtrl;
+                 dbuf->setPosition(oc.loc);
+                 int size = dbuf->getModularShort();
++                /*  avoid static-analysis warning, unused bs values
+                 if (version > DRW::AC1021) //2010+
+                     bs = dbuf->getUModularChar();
+                 else
+                     bs = 0;
++                */
+                 tmpByteStr.resize(size);
+                 dbuf->getBytes(tmpByteStr.data(), size);
+                 dwgBuffer buff(tmpByteStr.data(), size, &decoder);

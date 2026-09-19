@@ -1,0 +1,88 @@
+From 0876cd74f992aa3859e579b844e6b7c6e50fb30f Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 16 Jan 2025 14:20:01 -0500
+Subject: [PATCH 1/2] Update old-style (K&R/pre-ANSI) definition of ParseArgv()
+
+Today, such old-style definitions cause compiler warnings by default.
+---
+ libcommon/ParseArgv.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/libcommon/ParseArgv.c b/libcommon/ParseArgv.c
+index 260f5745..51ef699c 100644
+--- a/libcommon/ParseArgv.c
++++ b/libcommon/ParseArgv.c
+@@ -111,6 +111,16 @@ ParseLong(const char *argPtr, char **endPtr)
+  *	Process an argv array according to a table of expected
+  *	command-line options.  See the manual page for more details.
+  *
++ * argcPtr: Number of arguments in argv.  Modified to hold # args left in argv
++ *          at end.
++ *
++ * argv: Array of arguments.  Modified to hold those that couldn't be processed
++ *       here.
++ *
++ * argTable: Array of option descriptions
++ *
++ * flags: Or'ed combination of various flag bits, such as ARGV_NO_DEFAULTS.
++ *
+  * Results:
+  *	The return value is a Boolean value with non-zero indicating an 
+  *      error.  
+@@ -126,14 +136,7 @@ ParseLong(const char *argPtr, char **endPtr)
+  */
+ 
+ int
+-ParseArgv(argcPtr, argv, argTable, flags)
+-    int *argcPtr;		/* Number of arguments in argv.  Modified
+-				 * to hold # args left in argv at end. */
+-    char **argv;		/* Array of arguments.  Modified to hold
+-				 * those that couldn't be processed here. */
+-    ArgvInfo *argTable;	/* Array of option descriptions */
+-    int flags;			/* Or'ed combination of various flag bits,
+-				 * such as ARGV_NO_DEFAULTS. */
++ParseArgv(int *argcPtr, char **argv, ArgvInfo *argTable, int flags)
+ {
+    ArgvInfo *infoPtr;
+ 				/* Pointer to the current entry in the
+
+From 5b39cd2cb6e3d62cd5ac7474a28d5e8cb4497f18 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 16 Jan 2025 14:33:35 -0500
+Subject: [PATCH 2/2] =?UTF-8?q?Don=E2=80=99t=20use=20pointers-to-functions?=
+ =?UTF-8?q?-with-unspecified=20arguments?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+These are obsolescent, and C23 (the default for GCC 15) interprets the
+syntax as pointers to functions with no arguments, causing a compiler
+error.
+---
+ libcommon/ParseArgv.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/libcommon/ParseArgv.c b/libcommon/ParseArgv.c
+index 51ef699c..47cfe716 100644
+--- a/libcommon/ParseArgv.c
++++ b/libcommon/ParseArgv.c
+@@ -318,7 +318,8 @@ ParseArgv(int *argcPtr, char **argv, ArgvInfo *argTable, int flags)
+          }
+          break;
+       case ARGV_FUNC: {
+-         int (*handlerProc)() =  (int (*)())(uintptr_t)infoPtr->src;
++         typedef int (*handlerProcType)(void*, const char*, char*);
++         handlerProcType handlerProc = (handlerProcType)(uintptr_t)infoPtr->src;
+ 		
+          if ((*handlerProc)(infoPtr->dst, infoPtr->key,
+                             argv[srcIndex])) {
+@@ -328,7 +329,8 @@ ParseArgv(int *argcPtr, char **argv, ArgvInfo *argTable, int flags)
+          break;
+       }
+       case ARGV_GENFUNC: {
+-         int (*handlerProc)() = (int (*)())(uintptr_t)infoPtr->src;
++         typedef int (*handlerProcType)(void*, const char*, int, char**);
++         handlerProcType handlerProc = (handlerProcType)(uintptr_t)infoPtr->src;
+ 
+          argc = (*handlerProc)(infoPtr->dst, infoPtr->key,
+                                argc, argv+srcIndex);

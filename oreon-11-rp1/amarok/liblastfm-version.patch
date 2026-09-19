@@ -1,0 +1,14 @@
+diff -up ./CMakeLists.txt.orig ./CMakeLists.txt
+--- ./CMakeLists.txt.orig	2025-10-23 13:37:33.366264984 -0400
++++ ./CMakeLists.txt	2025-10-23 14:05:34.305924931 -0400
+@@ -199,8 +199,8 @@ endif()
+ add_definitions(-DQT_NO_URL_CAST_FROM_STRING -DQT_NO_CAST_TO_ASCII)
+ 
+ if( WITH_LASTFM )
+-    find_package( LibLastFm 1.2.0 )
+-    set( LIBLASTFM_MIN_VERSION "1.2.0" )
++    find_package( LibLastFm 1.1.0 )
++    set( LIBLASTFM_MIN_VERSION "1.1.0" )
+     if( LIBLASTFM_FOUND )
+         if ( ${LIBLASTFM_MIN_VERSION} VERSION_LESS ${LIBLASTFM_VERSION} )
+             set( LIBLASTFM_FOUND TRUE )

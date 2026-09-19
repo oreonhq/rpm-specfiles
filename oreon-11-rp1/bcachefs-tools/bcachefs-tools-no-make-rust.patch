@@ -1,0 +1,34 @@
+From aa62f8d2e404f5aba951bcd3d0255837d7a497d0 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa@fedoraproject.org>
+Date: Thu, 18 Sep 2025 05:51:45 -0400
+Subject: [PATCH] Makefile: Do not run Rust builds
+
+We are going to run it separately.
+---
+ Makefile | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 83c225c0..2b7accc5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -146,7 +146,7 @@ BCACHEFS_DEPS=libbcachefs.a
+ RUST_SRCS:=$(shell find src bch_bindgen/src -type f -iname '*.rs')
+ 
+ bcachefs: $(BCACHEFS_DEPS) $(RUST_SRCS)
+-	$(Q)$(CARGO_BUILD)
++	@echo "    [RUST]   Skipped"
+ 
+ libbcachefs.a: $(OBJS)
+ 	@echo "    [AR]     $@"
+@@ -200,7 +200,6 @@ install_dkms: dkms/dkms.conf
+ clean:
+ 	@echo "Cleaning all"
+ 	$(Q)$(RM) libbcachefs.a c_src/libbcachefs.a .version dkms/dkms.conf *.tar.xz $(OBJS) $(DEPS) $(DOCGENERATED)
+-	$(Q)$(CARGO_CLEAN)
+ 	$(Q)$(RM) -f $(built_scripts)
+ 
+ .PHONY: deb
+-- 
+2.51.0
+

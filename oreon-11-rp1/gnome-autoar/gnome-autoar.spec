@@ -1,8 +1,8 @@
 %global source0_hash 838c5306fc38bfaa2f23abe24262f4bf15771e3303fb5dcb74f5b9c7a615dabe
 
 Name:           gnome-autoar
-Version:        0.4.5
-Release:        4%{?dist}
+Version:        0.5.2
+Release:        1%{?dist}
 Summary:        Archive library
 
 License:        LGPL-2.1-or-later

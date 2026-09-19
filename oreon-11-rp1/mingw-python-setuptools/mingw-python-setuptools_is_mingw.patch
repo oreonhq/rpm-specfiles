@@ -1,0 +1,12 @@
+diff -rupN --no-dereference setuptools-80.10.2/setuptools/_distutils/util.py setuptools-80.10.2-new/setuptools/_distutils/util.py
+--- setuptools-80.10.2/setuptools/_distutils/util.py	2026-01-25 23:37:53.000000000 +0100
++++ setuptools-80.10.2-new/setuptools/_distutils/util.py	2026-01-30 23:08:11.688016119 +0100
+@@ -510,7 +510,7 @@ def is_mingw() -> bool:
+     Python compiled with Mingw-w64 has sys.platform == 'win32' and
+     get_platform() starts with 'mingw'.
+     """
+-    return sys.platform == 'win32' and get_platform().startswith('mingw')
++    return get_platform().startswith('mingw')
+ 
+ 
+ def is_freethreaded():

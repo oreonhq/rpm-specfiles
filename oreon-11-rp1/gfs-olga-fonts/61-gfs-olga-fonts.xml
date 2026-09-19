@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>GFS Olga</target>
+    <match>
+      <family>GFS Olga</family>
+      <prepend-keyword>Italic</prepend-keyword>
+    </match>
+    <axis>
+      <name>slant</name>
+      <step>
+        <name>Italic</name>
+        <value>100</value>
+      </step>
+    </axis>
+    <like>
+      <family>GFS Didot</family>
+      <family>fantasy</family>
+    </like>
+  </group>
+</fontconfig>
+

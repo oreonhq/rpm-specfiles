@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>vim-fugitive-gitlab</id>
+  <extends>gvim.desktop</extends>
+  <name>VIm Fugitive for GitLab</name>
+  <summary>GitLab support for vim-fugitive plugin</summary>
+  <url type="homepage">https://github.com/shumphrey/fugitive_gitlab.vim</url>
+  <url type="bugtracker">https://github.com/shumphrey/fugitive-gitlab.vim/issues/new</url>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>MIT</project_license>
+</component>

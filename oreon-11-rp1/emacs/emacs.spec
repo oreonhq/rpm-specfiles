@@ -11,7 +11,7 @@
 Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
-Version:       30.2
+Version:       31.1
 Release:       %autorelease
 License:       GPL-3.0-or-later AND CC0-1.0
 URL:           https://www.gnu.org/software/emacs/
@@ -272,7 +272,7 @@ License:       GPL-3.0-or-later AND GFDL-1.3-no-invariants-or-later AND BSD-3-Cl
 Requires(preun): /usr/sbin/alternatives
 Requires(posttrans): /usr/sbin/alternatives
 Requires:      /usr/bin/readlink
-Requires:      %{name}-filesystem >= 1:30.2
+Requires:      %{name}-filesystem >= 1:31.1
 Requires:      emacsclient
 Requires:      libgccjit
 Recommends:    emacs = %{epoch}:%{version}-%{release}

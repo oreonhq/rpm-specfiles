@@ -1,0 +1,30 @@
+From 84cdc697c39839a332c8cfcf8c711e4c2fbc3128 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Fri, 31 Oct 2025 13:42:01 +0900
+Subject: [PATCH] bugfix: support ruby3.5.0dev Ractor change
+
+With https://github.com/ruby/ruby/pull/13445
+Ractor#take is removed in favor of #value .
+
+Fixes #85 .
+---
+ spec/parser_spec.rb | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/spec/parser_spec.rb b/spec/parser_spec.rb
+index 9277c0f..d2fbcf3 100644
+--- a/spec/parser_spec.rb
++++ b/spec/parser_spec.rb
+@@ -47,7 +47,11 @@
+         "World"
+       done
+     }
+-    expect(r.take).to be true
++    if r.respond_to?(:value) # ruby 3.5
++      expect(r.value).to be true
++    else
++      expect(r.take).to be true
++    end
+   end
+ 
+   it "should allow us to set the header value type" do

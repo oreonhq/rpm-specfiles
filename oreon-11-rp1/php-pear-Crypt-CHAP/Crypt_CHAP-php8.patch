@@ -1,0 +1,76 @@
+diff -up ./CHAP.php.php8 ./CHAP.php
+--- ./CHAP.php.php8	2021-04-07 14:09:32.095768893 +0200
++++ ./CHAP.php	2021-04-07 14:10:52.476326364 +0200
+@@ -199,7 +199,7 @@ class Crypt_CHAP_MSv1 extends Crypt_CHAP
+         $uni = '';
+         $str = (string) $str;
+         for ($i = 0; $i < strlen($str); $i++) {
+-            $a = ord($str{$i}) << 8;
++            $a = ord($str[$i]) << 8;
+             $uni .= sprintf("%X", $a);
+         }
+         return pack('H*', $uni);
+@@ -259,23 +259,23 @@ class Crypt_CHAP_MSv1 extends Crypt_CHAP
+             $hash .= "\0";
+         }
+ 
+-        $td = mcrypt_module_open(MCRYPT_DES, '', MCRYPT_MODE_ECB, '');
+-        $iv = mcrypt_create_iv (mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
++        $td = @mcrypt_module_open(MCRYPT_DES, '', MCRYPT_MODE_ECB, '');
++        $iv = @mcrypt_create_iv (mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
+         $key = $this->_desAddParity(substr($hash, 0, 7));
+-        mcrypt_generic_init($td, $key, $iv);
+-        $resp1 = mcrypt_generic($td, $this->challenge);
+-        mcrypt_generic_deinit($td);
++        @mcrypt_generic_init($td, $key, $iv);
++        $resp1 = @mcrypt_generic($td, $this->challenge);
++        @mcrypt_generic_deinit($td);
+ 
+         $key = $this->_desAddParity(substr($hash, 7, 7));
+-        mcrypt_generic_init($td, $key, $iv);
+-        $resp2 = mcrypt_generic($td, $this->challenge);
+-        mcrypt_generic_deinit($td);
++        @mcrypt_generic_init($td, $key, $iv);
++        $resp2 = @mcrypt_generic($td, $this->challenge);
++        @mcrypt_generic_deinit($td);
+ 
+         $key = $this->_desAddParity(substr($hash, 14, 7));
+-        mcrypt_generic_init($td, $key, $iv);
+-        $resp3 = mcrypt_generic($td, $this->challenge);
+-        mcrypt_generic_deinit($td);
+-        mcrypt_module_close($td);
++        @mcrypt_generic_init($td, $key, $iv);
++        $resp3 = @mcrypt_generic($td, $this->challenge);
++        @mcrypt_generic_deinit($td);
++        @mcrypt_module_close($td);
+ 
+         return $resp1 . $resp2 . $resp3;
+     }
+@@ -307,12 +307,12 @@ class Crypt_CHAP_MSv1 extends Crypt_CHAP
+     function _desHash($plain)
+     {
+         $key = $this->_desAddParity($plain);
+-        $td = mcrypt_module_open(MCRYPT_DES, '', MCRYPT_MODE_ECB, '');
+-        $iv = mcrypt_create_iv (mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
+-        mcrypt_generic_init($td, $key, $iv);
+-        $hash = mcrypt_generic($td, 'KGS!@#$%');
+-        mcrypt_generic_deinit($td);
+-        mcrypt_module_close($td);
++        $td = @mcrypt_module_open(MCRYPT_DES, '', MCRYPT_MODE_ECB, '');
++        $iv = @mcrypt_create_iv (mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
++        @mcrypt_generic_init($td, $key, $iv);
++        $hash = @mcrypt_generic($td, 'KGS!@#$%');
++        @mcrypt_generic_deinit($td);
++        @mcrypt_module_close($td);
+         return $hash;
+     }
+ 
+@@ -345,7 +345,7 @@ class Crypt_CHAP_MSv1 extends Crypt_CHAP
+ 
+         $bin = '';
+         for ($i = 0; $i < strlen($key); $i++) {
+-            $bin .= sprintf('%08s', decbin(ord($key{$i})));
++            $bin .= sprintf('%08s', decbin(ord($key[$i])));
+         }
+ 
+         $str1 = explode('-', substr(chunk_split($bin, 7, '-'), 0, -1));

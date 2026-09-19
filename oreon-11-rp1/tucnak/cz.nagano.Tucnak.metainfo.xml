@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>cz.nagano.Tucnak</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+
+  <name>Tucnak</name>
+  <summary>HF/VHF contest logging program</summary>
+  <description>
+    <p>
+      Tucnak is HF/VHF/UHF/SHF log for hamradio contests. It supports multi bands, free input, networking, voice and CW keyer, WWL database and much more.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">tucnak.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>QSOs window</caption>
+      <image>https://tucnak.nagano.cz/wiki/images/8/88/Qsos.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Polar map</caption>
+      <image>https://tucnak.nagano.cz/wiki/images/4/43/Map.png</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://tucnak.nagano.cz</url>
+
+  <content_rating type="oars-1.1" />
+</component>

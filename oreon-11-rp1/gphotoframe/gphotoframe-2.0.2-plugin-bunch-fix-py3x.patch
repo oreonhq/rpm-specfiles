@@ -1,0 +1,240 @@
+diff -urp '--exclude=*pycache*' '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/history/html.py gphotoframe-2.0.2-hg2084299dffb6/lib/history/html.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/history/html.py	2019-08-21 01:32:43.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/history/html.py	2021-03-15 12:07:27.124202401 +0900
+@@ -45,7 +45,7 @@ class HistoryHTML(object):
+ 
+         template = Template(template_format)
+         html = template.safe_substitute(keyword)
+-        html = html.encode('utf-8')
++        #html = html.encode('utf-8')
+ 
+         with open(self.html_file,'w') as fh:
+             fh.write(html)
+diff -urp '--exclude=*pycache*' '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/image/geocoding.py gphotoframe-2.0.2-hg2084299dffb6/lib/image/geocoding.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/image/geocoding.py	2019-08-21 00:35:07.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/image/geocoding.py	2024-08-28 23:11:41.000000000 +0900
+@@ -1,4 +1,4 @@ class GeoNamesGeoCoder(GeoCoderBase):
+-import urllib
++import urllib.parse
+ import json
+ import locale
+ import pprint
+@@ -90,7 +90,7 @@ class GeoNamesGeoCoder(GeoCoderBase):
+     def get_url(self, lat, lon):
+         url = 'http://ws.geonames.org/findNearbyPlaceNameJSON?'
+         values = { 'lat': lat, 'lng': lon, "username": "gphotoframe", }
+-        url += urllib.urlencode(values)
++        url += urllib.parse.urlencode(values)
+         return url
+ 
+     def get_location(self, obj):
+@@ -115,7 +115,7 @@ class FindsJPGeoCoder(GeoCoderBase):
+     def get_url(self, lat, lon):
+         url = 'http://www.finds.jp/ws/rgeocode.php?'
+         values = { 'lat': lat, 'lon': lon, 'jsonp': '' }
+-        url += urllib.urlencode(values)
++        url += urllib.parse.urlencode(values)
+         return url
+ 
+     def get_location(self, obj):
+@@ -142,7 +142,7 @@ class GoogleGeoCoder(GeoCoderBase):
+         values = { 'language': 'ja',
+                    'sensor': 'false',
+                    'latlng': "%s,%s" % (lat, lon) }
+-        url += urllib.urlencode(values)
++        url += urllib.parse.urlencode(values)
+         return url
+ 
+     def get_location(self, obj):
+diff -urp '--exclude=*pycache*' '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/facebook/authdialog.py gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/facebook/authdialog.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/facebook/authdialog.py	2017-03-31 15:17:43.243296343 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/facebook/authdialog.py	2021-03-15 11:50:53.657388208 +0900
+@@ -124,12 +124,12 @@ class FacebookWebKitScrolledWindow(Gtk.S
+                    'response_type': 'token',
+                    'scope': 'user_photos,friends_photos,read_stream,offline_access',
+                    'display': 'popup'}
+-        uri = 'https://www.facebook.com/dialog/oauth?' + urllib.urlencode(values)
++        uri = 'https://www.facebook.com/dialog/oauth?' + urllib.parse.urlencode(values)
+ 
+-        w = WebKit.WebView.new()
++        w = WebKit2.WebView.new()
+         w.set_vexpand(True)
+         w.load_uri(uri)
+-        w.connect("document-load-finished", self._get_document_cb)
++        w.connect("load-changed", self._get_document_cb)
+ 
+         self.add(w)
+         self.show_all()
+diff -urp '--exclude=*pycache*' '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/flickr/auth.py gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/flickr/auth.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/flickr/auth.py	2021-03-15 11:35:16.952620554 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/flickr/auth.py	2021-03-15 11:57:45.916726062 +0900
+@@ -16,7 +16,7 @@ def add_api_sig(values, secret):
+         args += key + str(values[key])
+ 
+     api_sig_raw = "%s%s" % (secret, args)
+-    api_sig = hashlib.md5(api_sig_raw).hexdigest()
++    api_sig = hashlib.md5(api_sig_raw.encode('utf-8')).hexdigest()
+     values['api_sig'] = api_sig
+ 
+     return values
+@@ -36,7 +36,7 @@ class FlickrAuth(object):
+                    'api_key' : self.api_key, }
+ 
+         values = add_api_sig(values, self.secret)
+-        url = base_url + urllib.urlencode(values)
++        url = base_url + urllib.parse.urlencode(values)
+ 
+         print ("_"*80)
+         print (url)
+@@ -55,7 +55,7 @@ class FlickrAuth(object):
+                    'frob'    : self.frob, }
+ 
+         values = add_api_sig(values, self.secret)
+-        url = base_url + urllib.urlencode(values)
++        url = base_url + urllib.parse.urlencode(values)
+ 
+         Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
+ 
+@@ -68,7 +68,7 @@ class FlickrAuth(object):
+                    'frob'    : self.frob, }
+ 
+         values = add_api_sig(values, self.secret)
+-        url = base_url + urllib.urlencode(values)
++        url = base_url + urllib.parse.urlencode(values)
+ 
+         d = urlget_with_autoproxy(url, cb=self.parse_token)
+         d.addCallback(cb)
+@@ -99,7 +99,7 @@ class FlickrAuth(object):
+                    'auth_token' : auth_token, }
+ 
+         values = add_api_sig(values, self.secret)
+-        url = base_url + urllib.urlencode(values)
++        url = base_url + urllib.parse.urlencode(values)
+         urlget_with_autoproxy(url, cb=_check_cb)
+ 
+ if __name__ == "__main__":
+diff -urp '--exclude=*pycache*' '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/flickr/authdialog.py gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/flickr/authdialog.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/flickr/authdialog.py	2019-08-21 00:59:13.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/flickr/authdialog.py	2021-03-15 12:00:23.313855040 +0900
+@@ -109,6 +109,6 @@ process on Flickr.com and click the \"Co
+         self.auth_token = SETTINGS_FLICKR.get_string('auth-token')
+ 
+     def _write_conf(self, dic):
+-        for key, value in dic.iteritems():
++        for key, value in dic.items():
+             SETTINGS_FLICKR.set_string('%s' % key, value)
+         self._update_auth_status(dic['user-name']) # in plugin treeview
+diff -urp '--exclude=*pycache*' '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/tumblr/__init__.py gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/tumblr/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/tumblr/__init__.py	2019-08-21 00:37:14.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/tumblr/__init__.py	2021-03-15 12:03:10.802992290 +0900
+@@ -97,7 +97,7 @@ class TumblrPhotoList(base.PhotoList, Tu
+             return
+ 
+         # print url
+-        result = self._get_url_with_twisted(str(url) + urllib.urlencode(values))
++        result = self._get_url_with_twisted(str(url) + urllib.parse.urlencode(values))
+         interval_min = SETTINGS_TUMBLR.get_int('interval') \
+              if result else 5
+         self._start_timer(interval_min)
+@@ -178,7 +178,7 @@ class TumblrFav(FlickrFav):
+ 
+     def _get_url(self):
+         api = 'unlike' if self.fav else 'like'
+-        url = "http://www.tumblr.com/api/%s?" % api + urllib.urlencode(self.arg)
++        url = "http://www.tumblr.com/api/%s?" % api + urllib.parse.urlencode(self.arg)
+         return url
+ 
+ class TumblrTrash(trash.Ban):
+diff -urp '--exclude=*pycache*' '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/tumblr/account.py gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/tumblr/account.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/tumblr/account.py	2021-03-13 14:03:58.424097489 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/tumblr/account.py	2021-03-16 11:54:03.955200042 +0900
+@@ -40,7 +40,7 @@ class Tumblr(object):
+         url = str('http://api.tumblr.com/v2/user/dashboard')
+ 
+         if params:
+-            url += '?'+urllib.urlencode(params)
++            url += '?'+urllib.parse.urlencode(params)
+         headers = self.make_oauth_header('GET', url, params)
+ 
+         return urlget_with_autoproxy(url, cb=cb, headers=headers)
+diff -urp '--exclude=*pycache*' '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/keyring.py gphotoframe-2.0.2-hg2084299dffb6/lib/utils/keyring.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/keyring.py	2021-03-15 11:35:16.955620557 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/utils/keyring.py	2021-03-15 11:52:43.930478586 +0900
+@@ -24,7 +24,7 @@ class Keyring(object):
+         secrets = self.proxy.GetSecrets('(aoo)', unlocked, session)
+ 
+         password = []
+-        for item_path, secret in secrets.iteritems():
++        for item_path, secret in secrets.items():
+             password.append(''.join([chr(x) for x in secret[2]]))
+ 
+         return (user_name, password[0]) if password else []
+diff -urp '--exclude=*pycache*' '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/oauth/oauth.py gphotoframe-2.0.2-hg2084299dffb6/lib/utils/oauth/oauth.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/oauth/oauth.py	2019-08-21 00:47:48.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/utils/oauth/oauth.py	2021-03-16 11:56:25.815333765 +0900
+@@ -132,7 +132,7 @@ class OAuthToken(object):
+         }
+         if self.callback_confirmed is not None:
+             data['oauth_callback_confirmed'] = self.callback_confirmed
+-        return urllib.urlencode(data)
++        return urllib.parse.urlencode(data)
+  
+     def from_string(s):
+         """ Returns a token from something like:
+@@ -193,7 +193,7 @@ class OAuthRequest(object):
+     def get_nonoauth_parameters(self):
+         """Get any non-OAuth parameters."""
+         parameters = {}
+-        for k, v in self.parameters.iteritems():
++        for k, v in self.parameters.items():
+             # Ignore oauth parameters.
+             if k.find('oauth_') < 0:
+                 parameters[k] = v
+@@ -204,7 +204,7 @@ class OAuthRequest(object):
+         auth_header = 'OAuth realm="%s"' % realm
+         # Add the oauth parameters.
+         if self.parameters:
+-            for k, v in self.parameters.iteritems():
++            for k, v in self.parameters.items():
+                 if k[:6] == 'oauth_':
+                     auth_header += ', %s="%s"' % (k, escape(str(v)))
+         return {'Authorization': auth_header}
+@@ -212,7 +212,7 @@ class OAuthRequest(object):
+     def to_postdata(self):
+         """Serialize as post data for a POST request."""
+         return '&'.join(['%s=%s' % (escape(str(k)), escape(str(v))) \
+-            for k, v in self.parameters.iteritems()])
++            for k, v in self.parameters.items()])
+ 
+     def to_url(self):
+         """Serialize as a URL for a GET request."""
+@@ -361,7 +361,7 @@ class OAuthRequest(object):
+     def _split_url_string(param_str):
+         """Turn URL string into parameters."""
+         parameters = cgi.parse_qs(param_str, keep_blank_values=False)
+-        for k, v in parameters.iteritems():
++        for k, v in parameters.items():
+             parameters[k] = urllib.unquote(v[0])
+         return parameters
+     _split_url_string = staticmethod(_split_url_string)
+diff -urp '--exclude=*pycache*' '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/urlgetautoproxy.py gphotoframe-2.0.2-hg2084299dffb6/lib/utils/urlgetautoproxy.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/urlgetautoproxy.py	2021-03-15 11:35:16.955620557 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/utils/urlgetautoproxy.py	2021-03-15 12:03:02.656985614 +0900
+@@ -34,7 +34,7 @@ class UrlGetWithAutoProxy(UrlGetWithProx
+ 
+ def urlget_with_autoproxy(url, arg=None, cb=None, **kargs):
+     if arg:
+-        url += urllib.urlencode(arg)
++        url += urllib.parse.urlencode(arg)
+     client = UrlGetWithAutoProxy(url)
+     d = client.getPage(url, **kargs)
+     if cb:
+@@ -49,7 +49,7 @@ def urlpost_with_autoproxy(url, arg, cb=
+     content_type = {'Content-Type' : 'application/x-www-form-urlencoded'}
+ 
+     d = client.getPage(url, method='POST',
+-                       postdata = urllib.urlencode(arg),
++                       postdata = urllib.parse.urlencode(arg),
+                        headers = content_type)
+     if cb:
+         d.addCallback(cb)

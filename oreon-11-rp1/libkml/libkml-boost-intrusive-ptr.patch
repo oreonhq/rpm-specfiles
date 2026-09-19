@@ -1,0 +1,23 @@
+--- a/src/kml/dom/kml_ptr.h
++++ b/src/kml/dom/kml_ptr.h
+@@ -29,1 +29,20 @@
++namespace kmlbase {
++class Referent;
++void intrusive_ptr_add_ref(Referent* r);
++void intrusive_ptr_release(Referent* r);
++}
++
++namespace kmldom {
++template <typename T>
++inline void intrusive_ptr_add_ref(T* r) {
++  kmlbase::intrusive_ptr_add_ref(
++      reinterpret_cast<kmlbase::Referent*>(r));
++}
++template <typename T>
++inline void intrusive_ptr_release(T* r) {
++  kmlbase::intrusive_ptr_release(
++      reinterpret_cast<kmlbase::Referent*>(r));
++}
++}
++
+ #include "boost/intrusive_ptr.hpp"

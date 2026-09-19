@@ -1,0 +1,33 @@
+Add missing Forward declarations for rename_area and remove_area and fix a call-site.
+
+Upstream issue tracked here:
+https://sourceforge.net/p/slashem/bugs/963/
+
+https://fedoraproject.org/wiki/Toolchain/PortingToModernC
+
+diff --git a/include/extern.h b/include/extern.h
+index 8a839db..55a9829 100644
+--- a/include/extern.h
++++ b/include/extern.h
+@@ -2274,6 +2274,8 @@ E FILE *FDECL(freopen_area, (const char *,const char *,const char *, FILE *));
+ E int FDECL(chmod_area, (const char *, const char *, int));
+ E int FDECL(open_area, (const char *, const char *, int, int));
+ E int FDECL(creat_area, (const char *, const char *, int));
++E int FDECL(rename_area, (const char *,const char *,const char *));
++E int FDECL(remove_area, (const char *,const char *));
+ E boolean FDECL(lock_file_area, (const char *, const char *,int));
+ E void FDECL(unlock_file_area, (const char *, const char *));
+ #endif
+diff --git a/src/files.c b/src/files.c
+index 469a23f..09738c8 100644
+--- a/src/files.c
++++ b/src/files.c
+@@ -566,7 +566,7 @@ int lev;
+ 	if (lev == 0 || (level_info[lev].flags & LFILE_EXISTS)) {
+ 		set_levelfile_name(lock, lev);
+ #ifdef FILE_AREAS
+-		(void) remove_area(FILE_AREA_LEVL, lock, 0);
++		(void) remove_area(FILE_AREA_LEVL, lock);
+ #else
+ # ifdef HOLD_LOCKFILE_OPEN
+ 		if (lev == 0) really_close();

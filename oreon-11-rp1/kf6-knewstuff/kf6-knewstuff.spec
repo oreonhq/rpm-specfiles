@@ -1,13 +1,13 @@
-%global source0_hash 8c19df7ba5940c36ff15051703acd3a16c664b4a570817b6770fafc7ab59d6de
+%global source0_hash 30e59a8f2c592177b255034c6320da9f3211377e97a8fdbe16be8bef3a356567
 
 %global framework knewstuff
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.29.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 module for downloading application assets
 License: BSD-2-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -18,25 +18,25 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6Attica)
-BuildRequires:  cmake(KF6Archive)
-BuildRequires:  cmake(KF6Package)
-BuildRequires:  cmake(KF6TextWidgets)
+BuildRequires:  cmake(KF6Attica) >= %{version}
+BuildRequires:  cmake(KF6Archive) >= %{version}
+BuildRequires:  cmake(KF6Package) >= %{version}
+BuildRequires:  cmake(KF6TextWidgets) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtdeclarative-devel
-BuildRequires:  cmake(KF6Completion)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6ItemViews)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6Completion) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6IconThemes) >= %{version}
+BuildRequires:  cmake(KF6ItemViews) >= %{version}
+BuildRequires:  cmake(KF6Service) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
 BuildRequires:  cmake(Qt6UiPlugin)
-BuildRequires:  cmake(KF6Kirigami2)
-BuildRequires:  cmake(KF6Syndication)
+BuildRequires:  cmake(KF6Kirigami2) >= %{version}
+BuildRequires:  cmake(KF6Syndication) >= %{version}
 BuildRequires:  pkgconfig(xkbcommon)
 Requires:  kf6-filesystem
 
@@ -91,6 +91,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

@@ -1,0 +1,4 @@
+#Type Name            ID  GECOS                        Home directory  Shell
+u     traced          -   "Perfetto traced"            /run/perfetto   /sbin/nologin
+g     traced-consumer -
+m     traced          traced-consumer

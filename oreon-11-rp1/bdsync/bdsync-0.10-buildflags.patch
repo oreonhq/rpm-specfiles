@@ -1,0 +1,26 @@
+# Use Fedora build flags when building RPM
+
+diff -up bdsync-0.10.2/Makefile.orig bdsync-0.10.2/Makefile
+--- bdsync-0.10.2/Makefile.orig	2017-12-31 12:28:30.000000000 -0500
++++ bdsync-0.10.2/Makefile	2019-02-08 12:55:23.459203232 -0500
+@@ -1,19 +1,10 @@
+-ifeq ($(CRYPTO),gnutls)
+-CRYPTO_DEF=-DHAVE_GNUTLS
+-CRYPTO_LDFLAGS=-lgnutls
+-else
+-CRYPTO_DEF=
+-CRYPTO_LDFLAGS=-lcrypto
+-endif
+-CFLAGS=-O3
+-
+ all: bdsync bdsync.1
+ 
+ bdsync.txt.2: bdsync.txt
+ 	sed 's/^/"/;s/$$/\\n"/' bdsync.txt > bdsync.txt.2
+ 
+ bdsync: bdsync.c checkzero.c bdsync.txt.2
+-	$(CC) -Wall $(CFLAGS) $(CRYPTO_DEF) -o bdsync bdsync.c checkzero.c $(CRYPTO_LDFLAGS)
++	$(CC) -Wall $(CFLAGS) -o bdsync bdsync.c checkzero.c -lcrypto $(LDFLAGS)
+ 
+ bdsync.1: README.md
+ 	pandoc -s -t man README.md -o bdsync.1

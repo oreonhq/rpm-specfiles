@@ -1,0 +1,57 @@
+--- kitutuki-0.9.5/Makefile.in.mk	2010-02-23 21:36:49.000000000 +0900
++++ kitutuki-0.9.5/Makefile.in	2010-02-23 22:46:20.000000000 +0900
+@@ -30,8 +30,8 @@
+ all: kitutuki $(CYGWIN_DLL) libkitutuki.so.1.0 kitutuki.kio
+ 	rm -f install
+ 
+-kitutuki.kio: kitutuki.ksh
+-	./kitutuki -rn -c 'compile kitutuki.ksh'
++kitutuki.kio: kitutuki.ksh kitutuki
++	env LD_LIBRARY_PATH=$(shell pwd) ./kitutuki -rn -c 'compile kitutuki.ksh'
+ 
+ clean:
+ 	rm -f kitutuki *.o $(CYGWIN_DLL) libkitutuki* kitutuki.kio
+@@ -39,8 +39,8 @@
+ distclean:
+ 	rm -f kitutuki *.o $(CYGWIN_DLL) libkitutuki* config.h Makefile kitutuki.kio
+ 
+-kitutuki: config.h main.c cmdline.o $(OBJ)
+-	$(CC) -o kitutuki main.c cmdline.o -DDATADIR=\"$(datadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" -DSYSTEM_MIGEMODIR=\"$(SYSTEM_MIGEMODIR)\" $(OBJ) $(LIBS) $(CFLAGS)
++kitutuki: config.h main.c cmdline.o libkitutuki.so
++	$(CC) -o kitutuki main.c cmdline.o -DDATADIR=\"$(datadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" -DSYSTEM_MIGEMODIR=\"$(SYSTEM_MIGEMODIR)\" -L. -lkitutuki $(LIBS) $(CFLAGS)
+ 
+ kitutuki.o: kitutuki.c
+ 	$(CC) -c kitutuki.c -DDATADIR=\"$(datadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" -DDOCDIR=\"$(docdir)\" $(CFLAGS)
+@@ -49,13 +49,17 @@
+ # kitutuki ライブラリ
+ ###########################################################################
+ libkitutuki.so.1.0: $(OBJ)
+-	gcc -shared -Wl,-soname,libkitutuki.so.1 -o libkitutuki.so.1.0 kitutuki.o minato_vector.o minato_string.o minato_curses.o minato_hash.o minato_debug.o minato_list.o minato_kanji.o minato_extra.o minato_buffer.o -lc $(LIBS)
++	gcc -shared -Wl,-soname,libkitutuki.so.1 -o libkitutuki.so.1.0 $(OBJ) -lc $(LIBS)
++
++libkitutuki.so: libkitutuki.so.1.0
++	ln -sf libkitutuki.so.1.0 libkitutuki.so.1
++	ln -sf libkitutuki.so.1.0 libkitutuki.so
+ 
+ ###########################################################################
+ # cygwin dll
+ ###########################################################################
+-$(CYGWIN_DLL):
+-	gcc -shared -o kitutuki.dll kitutuki.o minato_vector.o minato_string.o minato_curses.o minato_hash.o minato_debug.o minato_list.o minato_kanji.o minato_extra.o minato_buffer.o -lcurses -lonig -liconv
++$(CYGWIN_DLL): $(OBJ)
++	gcc -shared -o kitutuki.dll $(OBJ) -lcurses -lonig -liconv
+ 
+ ###########################################################################
+ # インストール
+@@ -78,8 +82,9 @@
+ 	install kitutuki.h -m 644 "$(includedir)"
+ 	install usage.ja.txt -m 644 "$(docdir)"
+ 	install usage.en.txt -m 644 "$(docdir)"
+-	install libkitutuki.so.1.0 -s -m 644 "$(libdir)"
+-	ln -s -f "$(libdir)"/libkitutuki.so.1.0 "$(libdir)"/libkitutuki.so
++	install libkitutuki.so.1.0 -s -m 755 "$(libdir)"
++	ln -s -f libkitutuki.so.1.0 "$(libdir)"/libkitutuki.so.1
++	ln -s -f libkitutuki.so.1.0 "$(libdir)"/libkitutuki.so
+ 	rm -f $(bindir)/kitutuki; install kitutuki -s -m 755 "$(bindir)"
+ 	if [ -e "$(CYGWIN_DLL)" ]; then install kitutuki.dll -s -m 644 "$(libdir)"; fi
+ 	install kitutuki.ksh -m 644 $(sysconfdir)

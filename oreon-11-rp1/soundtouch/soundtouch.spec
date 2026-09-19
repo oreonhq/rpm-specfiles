@@ -1,8 +1,8 @@
 %global source0_hash 3dda3c9ab1e287f15028c010a66ab7145fa855dfa62763538f341e70b4d10abd
 
 Name:           soundtouch
-Version:        2.4.0
-Release:        3%{?dist}
+Version:        2.4.1
+Release:        1%{?dist}
 Summary:        Audio Processing library for changing Tempo, Pitch and Playback Rates
 License:        LGPL-2.1-or-later
 URL:            http://www.surina.net/soundtouch/

@@ -1,0 +1,58 @@
+From 9449244c3e67bec2e1efc9f991b468687be0691f Mon Sep 17 00:00:00 2001
+From: Aleksei Bavshin <alebastr89@gmail.com>
+Date: Sat, 8 Mar 2025 14:03:11 -0800
+Subject: [PATCH] CMake 4.x compatibility
+
+---
+ CMakeLists.txt | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7570b48..06a9fb6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
+ 
+ PROJECT(seadrive-gui)
+ 
+@@ -398,7 +398,7 @@ FUNCTION(ADD_SC_LIBRARY name)
+     ADD_LIBRARY(${name} STATIC ${ARG_UNPARSED_ARGUMENTS}
+       ${MOC_OUTPUT} ${UI_OUTPUT})
+ 
+-    TARGET_LINK_LIBRARIES(${name} ${QT_LIBRARIES}
++    TARGET_LINK_LIBRARIES(${name} PRIVATE ${QT_LIBRARIES}
+         ${SQLITE3_LIBRARIES} ${JANSSON_LIBRARIES}
+         ${EXTRA_LIBS} -lglib-2.0 ${ARG_LINK_LIBS})
+ ENDFUNCTION(ADD_SC_LIBRARY)
+@@ -540,7 +540,7 @@ ADD_EXECUTABLE(seadrive-gui ${GUI_TYPE}
+ 
+ INSTALL(TARGETS seadrive-gui DESTINATION bin)
+ 
+-TARGET_LINK_LIBRARIES(seadrive-gui
++TARGET_LINK_LIBRARIES(seadrive-gui PRIVATE
+   ${SPARKLE_LIBS}
+   ${SC_LIBS}
+ 
+@@ -556,7 +556,7 @@ TARGET_LINK_LIBRARIES(seadrive-gui
+ 
+ IF(QT_VERSION_MAJOR EQUAL 6)
+     FIND_PACKAGE(Qt6 COMPONENTS Core Gui Widgets Network ${WEBKIT_WIDGETS_NAME} ${WEBENGINE_CORE}  REQUIRED)
+-    TARGET_LINK_LIBRARIES(seadrive-gui Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::${WEBKIT_WIDGETS_NAME} Qt6::${WEBENGINE_CORE} Qt6::Core5Compat)
++    TARGET_LINK_LIBRARIES(seadrive-gui PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::${WEBKIT_WIDGETS_NAME} Qt6::${WEBENGINE_CORE} Qt6::Core5Compat)
+ 
+ ELSE()
+     QT5_USE_MODULES(seadrive-gui Core Gui Widgets Network)
+@@ -569,7 +569,7 @@ IF(QT_VERSION_MAJOR EQUAL 6)
+     FIND_PACKAGE(Qt6 COMPONENTS DBus REQUIRED)
+     TARGET_LINK_LIBRARIES(seadrive-gui PRIVATE Qt6::DBus)
+ ELSE()
+-    TARGET_LINK_LIBRARIES(seadrive-gui ${QT_QTDBUS_LIBRARIES})
++    TARGET_LINK_LIBRARIES(seadrive-gui PRIVATE ${QT_QTDBUS_LIBRARIES})
+     QT5_USE_MODULES(seadrive-gui ${USE_QT_LIBRARIES})
+ ENDIF()
+ 
+-- 
+2.48.1
+

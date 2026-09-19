@@ -1,0 +1,110 @@
+diff -up SolarModel_src/GameMain.cpp.Fedora SolarModel_src/GameMain.cpp
+--- SolarModel_src/GameMain.cpp.Fedora	2008-06-01 06:29:58.000000000 -0400
++++ SolarModel_src/GameMain.cpp	2010-05-18 14:32:35.345827475 -0400
+@@ -3,7 +3,7 @@
+ 
+ void GameSetup()
+ {
+-	GameConfig::Load("config.dat", &Game);
++	GameConfig::Load("/usr/share/SolarModel/config.dat", &Game);
+ }
+ 
+ const float distances[] = { // array of distances from the Sun
+@@ -109,7 +109,7 @@ void GameInit()
+ 
+ 	// Maps setup
+ 
+-	Game.FS->addZipFileArchive("data.dat", true, false);
++	Game.FS->addZipFileArchive("/usr/share/SolarModel/data.dat", true, false);
+ 
+ 	Game.Map->Load("maps/sun.xml");
+ 	Game.Map->Load("maps/mercury.xml");
+@@ -479,7 +479,7 @@ void ProcessEvent_GUI_ButtonClicked_Opti
+ 	// reading options from config file
+ 
+ 	GameStruct conf;
+-	GameConfig::Load("config.dat", &conf);
++	GameConfig::Load("/usr/share/SolarModel/config.dat", &conf);
+ 
+ 	// creating window
+ 
+@@ -1174,7 +1174,7 @@ void ProcessSysInfo()
+ 	Game.OS->getSystemMemory(&mem_total, &mem_avail);
+ 
+ 	wchar_t ss[1024];
+-	_snwprintf(ss, sizeof(ss),
++	swprintf(ss, (sizeof(ss)/sizeof(ss[0])),
+ 		L"FPS:  %03u            "
+ 		L"POLYGONS DRAWN:  %06u            "
+ 		L"RENDERER:  %ls\n"
+@@ -1384,4 +1384,4 @@ void GameDone()
+ {
+ 	if (mapdesc) delete mapdesc;
+ 	gameMeasurer.Done();
+-}
+\ No newline at end of file
++}
+diff -up SolarModel_src/GameMeasurer.cpp.Fedora SolarModel_src/GameMeasurer.cpp
+--- SolarModel_src/GameMeasurer.cpp.Fedora	2008-05-31 01:34:54.000000000 -0400
++++ SolarModel_src/GameMeasurer.cpp	2010-05-18 14:30:04.006828154 -0400
+@@ -298,23 +298,23 @@ core::stringw GameMeasurer::GetDistanceA
+ 
+ 	if (distanceKM < 100)
+ 	{
+-		_snwprintf(s, sizeof(s), L"%.0lf m", distanceKM*1000.0f);
++		swprintf(s, (sizeof(s)/sizeof(s[0])), L"%.0lf m", distanceKM*1000.0f);
+ 	}
+ 	else
+ 	{
+ 		// 1 au == 149,597,871 km
+ 		wchar_t au[512];
+-		_snwprintf(au, sizeof(au), L" (%.3lf au)",
++		swprintf(au, (sizeof(au)/sizeof(au[0])), L" (%.3lf au)",
+ 			distanceKM/149597871.0f);
+ 
+ 		// 1 ly == 9,460,730,472,581 km
+ 		wchar_t ly[512];
+-		_snwprintf(ly, sizeof(ly), L" (%.3lf ly)",
++		swprintf(ly, (sizeof(ly)/sizeof(ly[0])), L" (%.3lf ly)",
+ 			distanceKM/9460730472581.0f);
+ 
+-		_snwprintf(s, sizeof(s), L"%.0lf km%s%s",
+-			distanceKM, distanceKM>149598?au:L"", distanceKM>9460730473?ly:L"");
++		swprintf(s, (sizeof(s)/sizeof(s[0])), L"%.0lf km%s%s",
++			distanceKM, distanceKM>149598?au:L"", distanceKM>9460730473LL?ly:L"");
+ 	}
+ 
+ 	return core::stringw(s);
+-}
+\ No newline at end of file
++}
+diff -up SolarModel_src/Makefile.Fedora SolarModel_src/Makefile
+--- SolarModel_src/Makefile.Fedora	2008-05-31 02:29:00.000000000 -0400
++++ SolarModel_src/Makefile	2010-05-18 14:30:04.007827665 -0400
+@@ -1,14 +1,11 @@
+ # Makefile for SolarModel
+ 
+ Target = SolarModel
+-Sources = GameAnimatedMeshObject.cpp GameBillboardObject.cpp GameConfig.cpp GameCore.cpp GameEventReceiver.cpp GameGlobals.cpp GameLightObject.cpp GameMain.cpp GameMap.cpp GameMapDescription.cpp GameObject.cpp GameSkyBoxObject.cpp GamePointcloudObject.cpp GameMeshObject.cpp GameMeasurer.cpp
+-
+-# Paths
+-IRRLICHT_HOME = $(HOME)/irrlicht/svn-plain
++Sources = GameAnimatedMeshObject.cpp GameBillboardObject.cpp GameConfig.cpp GameCore.cpp GameEventReceiver.cpp GameGlobals.cpp GameLightObject.cpp GameMain.cpp GameMap.cpp GameMapDescription.cpp GameObject.cpp GameSkyboxObject.cpp GamePointcloudObject.cpp GameMeshObject.cpp GameMeasurer.cpp
+ 
+ # general compiler settings
+-CPPFLAGS = -I$(IRRLICHT_HOME)/include -I/usr/X11R6/include
+-CXXFLAGS = -O3 -ffast-math
++CPPFLAGS = -I/usr/include/irrlicht
++CXXFLAGS = -ffast-math $(RPM_OPT_FLAGS)
+ #CXXFLAGS = -g -Wall
+ 
+ #default target is Linux
+@@ -19,7 +16,7 @@ LIBSELECT=64
+ endif
+ 
+ # target specific settings
+-all_linux: LDFLAGS = -L/usr/X11R6/lib$(LIBSELECT) -L$(IRRLICHT_HOME)/lib/Linux -lIrrlicht -lGL -lGLU -lXxf86vm -lXext -lX11
++all_linux: LDFLAGS = -lIrrlicht -lGL -lGLU -lXxf86vm -lXext -lX11
+ all_linux clean_linux: SYSTEM=Linux
+ all_win32: LDFLAGS = -L$(IRRLICHT_HOME)/lib/Win32-gcc -lIrrlicht -lopengl32 -lglu32 -lm
+ all_win32 clean_win32: SYSTEM=Win32-gcc

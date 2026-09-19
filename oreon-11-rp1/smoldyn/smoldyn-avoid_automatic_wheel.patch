@@ -1,0 +1,32 @@
+--- source/python/CMakeLists.origin.txt	2021-06-02 19:24:03.389265000 +0200
++++ source/python/CMakeLists.txt	2021-06-02 19:27:04.725010640 +0200
+@@ -23,11 +23,13 @@
+ target_link_libraries(_pysmoldyn PUBLIC ${PYTHON_LIBRARIES})
+ 
+ # A custom target to install dependencies. Useful on various CI
++if(WINDOWS_BUILD)
+ add_custom_target(install_deps
+     COMMAND ${Python3_EXECUTABLE} -m pip install wheel numpy setuptools --user
+     COMMENT "Installing Python modules for testing"
+     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+     VERBATIM)
++endif()
+ 
+ # FIXME: If it comes in your way, comment it out.
+ # FIXME: FOllowing runs on github actions and other CI (for Windows only).
+@@ -124,6 +128,7 @@
+ #
+ # Install target
+ #
++if(WINDOWS_BUILD)
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/install_wheel.py.in
+     ${CMAKE_BINARY_DIR}/install_wheel.py)
+ 
+@@ -131,6 +136,7 @@
+     COMMAND ${Python3_EXECUTABLE} install_wheel.py
+     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+     )")
++endif()
+ 
+ ###  python tests ###
+ enable_testing()

@@ -1,0 +1,23 @@
+From a9dd2c405c532f3f34bdfcc9d1fff521785b8494 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 25 Feb 2024 14:29:54 -0500
+Subject: [PATCH] Exclude tests from packages
+
+Fixes tests installed at the top level in site-packages
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 297746d..554072e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -83,7 +83,7 @@ def __str__(self):
+ 
+ setup(
+     name='pyspike',
+-    packages=find_packages(exclude=['doc']),
++    packages=find_packages(exclude=['doc', 'test*']),
+     version='0.8.0',
+     cmdclass=cmdclass,
+     ext_modules=ext_modules,

@@ -1,0 +1,32 @@
+From 17511f7d547ad29409334f9547d936d5f163c5b6 Mon Sep 17 00:00:00 2001
+From: Shengjing Zhu <zhsj@debian.org>
+Date: Thu, 11 Nov 2021 01:10:56 +0800
+Subject: [PATCH] Reject comma in time format
+
+Retain behavior with Go1.16
+---
+ format_checkers.go | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/format_checkers.go b/format_checkers.go
+index 1e77046..bb9788f 100644
+--- a/format_checkers.go
++++ b/format_checkers.go
+@@ -267,8 +267,15 @@ func (f TimeFormatChecker) IsFormat(input interface{}) bool {
+ 		return true
+ 	}
+ 
+-	_, err := time.Parse("15:04:05", asString)
+-	return err == nil
++	parsed, err := time.Parse("15:04:05", asString)
++	if err != nil {
++		return false
++	}
++
++	// Go1.17 accepts comma "," as a separator for fractional seconds,
++	// But RFC3339 doesn't.
++
++	return parsed.Format("15:04:05") == asString
+ }
+ 
+ // IsFormat checks if input is correctly formatted  URI with a valid Scheme per RFC3986

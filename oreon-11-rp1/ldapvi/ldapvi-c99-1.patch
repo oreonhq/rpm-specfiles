@@ -1,0 +1,18 @@
+Declare fdcp in common.h, so that it can be called in sasl.c.
+
+Submitted upstream:
+
+  <http://lists.askja.de/pipermail/ldapvi/2022-December/000129.html>
+
+diff --git a/common.h b/common.h
+index 680766e7e17fba5e..b53f9d8318ee736d 100644
+--- a/common.h
++++ b/common.h
+@@ -263,6 +263,7 @@ typedef struct dialog {
+ 
+ int carray_cmp(GArray *a, GArray *b);
+ int carray_ptr_cmp(const void *aa, const void *bb);
++void fdcp(int fdsrc, int fddst);
+ void cp(char *src, char *dst, off_t skip, int append);
+ void fcopy(FILE *src, FILE *dst);
+ char choose(char *prompt, char *charbag, char *help);

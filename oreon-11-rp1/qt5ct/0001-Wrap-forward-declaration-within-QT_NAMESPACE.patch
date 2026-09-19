@@ -1,0 +1,255 @@
+From 6be06e7a05efe963bfe1385aaf86ea19283c470c Mon Sep 17 00:00:00 2001
+From: Zephyr Lykos <git@mochaa.ws>
+Date: Fri, 23 Aug 2024 05:07:43 +0800
+Subject: [PATCH 1/6] Wrap forward declaration within QT_NAMESPACE
+
+---
+ qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.h | 4 ++++
+ qt5ct/src/qt5ct/appearancepage.h              | 4 ++++
+ qt5ct/src/qt5ct/fontconfigdialog.h            | 4 ++++
+ qt5ct/src/qt5ct/fontspage.h                   | 4 ++++
+ qt5ct/src/qt5ct/iconthemepage.h               | 4 ++++
+ qt5ct/src/qt5ct/interfacepage.h               | 4 ++++
+ qt5ct/src/qt5ct/mainwindow.h                  | 4 ++++
+ qt5ct/src/qt5ct/paletteeditdialog.h           | 4 ++++
+ qt5ct/src/qt5ct/qsseditordialog.h             | 4 ++++
+ qt5ct/src/qt5ct/qsspage.h                     | 4 ++++
+ qt5ct/src/qt5ct/troubleshootingpage.h         | 4 ++++
+ 11 files changed, 44 insertions(+)
+
+diff --git a/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.h b/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.h
+index 1a4d393..9dd64d1 100644
+--- a/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.h
++++ b/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.h
+@@ -38,6 +38,8 @@
+ #include <QIcon>
+ #include <QFileInfo>
+ 
++QT_BEGIN_NAMESPACE
++
+ #if !defined(QT_NO_DBUS) && defined(QT_DBUS_LIB)
+ 
+ #if !defined(QT_NO_SYSTEMTRAYICON)
+@@ -57,6 +59,8 @@ class QPlatformSystemTrayIcon;
+ class QPlatformMenuBar;
+ #endif
+ 
++QT_END_NAMESPACE
++
+ class Qt5CTPlatformTheme : public QObject, public QPlatformTheme
+ {
+     Q_OBJECT
+diff --git a/qt5ct/src/qt5ct/appearancepage.h b/qt5ct/src/qt5ct/appearancepage.h
+index e9c8105..1394949 100644
+--- a/qt5ct/src/qt5ct/appearancepage.h
++++ b/qt5ct/src/qt5ct/appearancepage.h
+@@ -31,6 +31,8 @@
+ 
+ #include "tabpage.h"
+ 
++QT_BEGIN_NAMESPACE
++
+ namespace Ui {
+ class AppearancePage;
+ class PreviewForm;
+@@ -39,6 +41,8 @@ class PreviewForm;
+ class QStyle;
+ class QAction;
+ 
++QT_END_NAMESPACE
++
+ class AppearancePage : public TabPage
+ {
+     Q_OBJECT
+diff --git a/qt5ct/src/qt5ct/fontconfigdialog.h b/qt5ct/src/qt5ct/fontconfigdialog.h
+index 00bf52b..f62712d 100644
+--- a/qt5ct/src/qt5ct/fontconfigdialog.h
++++ b/qt5ct/src/qt5ct/fontconfigdialog.h
+@@ -31,12 +31,16 @@
+ 
+ #include <QDialog>
+ 
++QT_BEGIN_NAMESPACE
++
+ namespace Ui {
+ class FontConfigDialog;
+ }
+ 
+ class QXmlStreamWriter;
+ 
++QT_END_NAMESPACE
++
+ class FontConfigDialog : public QDialog
+ {
+     Q_OBJECT
+diff --git a/qt5ct/src/qt5ct/fontspage.h b/qt5ct/src/qt5ct/fontspage.h
+index 703e4cf..f6b4cef 100644
+--- a/qt5ct/src/qt5ct/fontspage.h
++++ b/qt5ct/src/qt5ct/fontspage.h
+@@ -31,6 +31,8 @@
+ 
+ #include "tabpage.h"
+ 
++QT_BEGIN_NAMESPACE
++
+ namespace Ui {
+ class FontsPage;
+ }
+@@ -38,6 +40,8 @@ class FontsPage;
+ class QLabel;
+ class QSettings;
+ 
++QT_END_NAMESPACE
++
+ class FontsPage : public TabPage
+ {
+     Q_OBJECT
+diff --git a/qt5ct/src/qt5ct/iconthemepage.h b/qt5ct/src/qt5ct/iconthemepage.h
+index 0a17f4c..79d47cd 100644
+--- a/qt5ct/src/qt5ct/iconthemepage.h
++++ b/qt5ct/src/qt5ct/iconthemepage.h
+@@ -34,6 +34,8 @@
+ #include <atomic>
+ #include "tabpage.h"
+ 
++QT_BEGIN_NAMESPACE
++
+ namespace Ui {
+ class IconThemePage;
+ }
+@@ -41,6 +43,8 @@ class IconThemePage;
+ class QTreeWidgetItem;
+ class QProgressBar;
+ 
++QT_END_NAMESPACE
++
+ class IconThemePage : public TabPage
+ {
+     Q_OBJECT
+diff --git a/qt5ct/src/qt5ct/interfacepage.h b/qt5ct/src/qt5ct/interfacepage.h
+index f6a3a10..0e97ec2 100644
+--- a/qt5ct/src/qt5ct/interfacepage.h
++++ b/qt5ct/src/qt5ct/interfacepage.h
+@@ -31,10 +31,14 @@
+ 
+ #include "tabpage.h"
+ 
++QT_BEGIN_NAMESPACE
++
+ namespace Ui {
+ class InterfacePage;
+ }
+ 
++QT_END_NAMESPACE
++
+ class InterfacePage : public TabPage
+ {
+     Q_OBJECT
+diff --git a/qt5ct/src/qt5ct/mainwindow.h b/qt5ct/src/qt5ct/mainwindow.h
+index 35f870c..f8dc0e5 100644
+--- a/qt5ct/src/qt5ct/mainwindow.h
++++ b/qt5ct/src/qt5ct/mainwindow.h
+@@ -32,12 +32,16 @@
+ #include <QWidget>
+ #include <QStringList>
+ 
++QT_BEGIN_NAMESPACE
++
+ class QAbstractButton;
+ 
+ namespace Ui {
+ class MainWindow;
+ }
+ 
++QT_END_NAMESPACE
++
+ class MainWindow : public QWidget
+ {
+     Q_OBJECT
+diff --git a/qt5ct/src/qt5ct/paletteeditdialog.h b/qt5ct/src/qt5ct/paletteeditdialog.h
+index 53022a6..19b753c 100644
+--- a/qt5ct/src/qt5ct/paletteeditdialog.h
++++ b/qt5ct/src/qt5ct/paletteeditdialog.h
+@@ -32,6 +32,8 @@
+ #include <QDialog>
+ #include <QPalette>
+ 
++QT_BEGIN_NAMESPACE
++
+ class QTableWidgetItem;
+ class QStyle;
+ 
+@@ -39,6 +41,8 @@ namespace Ui {
+ class PaletteEditDialog;
+ }
+ 
++QT_END_NAMESPACE
++
+ class PaletteEditDialog : public QDialog
+ {
+     Q_OBJECT
+diff --git a/qt5ct/src/qt5ct/qsseditordialog.h b/qt5ct/src/qt5ct/qsseditordialog.h
+index 1c4f346..8af2856 100644
+--- a/qt5ct/src/qt5ct/qsseditordialog.h
++++ b/qt5ct/src/qt5ct/qsseditordialog.h
+@@ -32,12 +32,16 @@
+ #include <QDialog>
+ #include <QString>
+ 
++QT_BEGIN_NAMESPACE
++
+ namespace Ui {
+ class QSSEditorDialog;
+ }
+ 
+ class QAbstractButton;
+ 
++QT_END_NAMESPACE
++
+ class QSSEditorDialog : public QDialog
+ {
+     Q_OBJECT
+diff --git a/qt5ct/src/qt5ct/qsspage.h b/qt5ct/src/qt5ct/qsspage.h
+index 6063853..c8278a2 100644
+--- a/qt5ct/src/qt5ct/qsspage.h
++++ b/qt5ct/src/qt5ct/qsspage.h
+@@ -31,6 +31,8 @@
+ 
+ #include "tabpage.h"
+ 
++QT_BEGIN_NAMESPACE
++
+ namespace Ui {
+ class QSSPage;
+ }
+@@ -38,6 +40,8 @@ class QSSPage;
+ class QListWidgetItem;
+ class QMenu;
+ 
++QT_END_NAMESPACE
++
+ class QSSPage : public TabPage
+ {
+     Q_OBJECT
+diff --git a/qt5ct/src/qt5ct/troubleshootingpage.h b/qt5ct/src/qt5ct/troubleshootingpage.h
+index 254b0b1..1adc65d 100644
+--- a/qt5ct/src/qt5ct/troubleshootingpage.h
++++ b/qt5ct/src/qt5ct/troubleshootingpage.h
+@@ -32,10 +32,14 @@
+ #include <QObject>
+ #include "tabpage.h"
+ 
++QT_BEGIN_NAMESPACE
++
+ namespace Ui {
+ class TroubleshootingPage;
+ }
+ 
++QT_END_NAMESPACE
++
+ class TroubleshootingPage : public TabPage
+ {
+     Q_OBJECT
+-- 
+2.51.0
+

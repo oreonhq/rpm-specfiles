@@ -1,0 +1,15 @@
+--- a/tests/harness/mock.h
++++ b/tests/harness/mock.h
+@@ -78,10 +78,10 @@ void bf_test_filepath_free(char **path);
+     })
+ 
+ #define bf_test_mock_will_return(mock, value)                                  \
+-    _will_return((mock).wrap_name, __FILE__, __LINE__, ((uintmax_t)(value)), 1)
++    _will_return((mock).wrap_name, __FILE__, __LINE__, "uintmax_t", assign_uint_to_cmocka_value((uintmax_t)(value)), 1)
+ 
+ #define bf_test_mock_will_return_always(mock, value)                           \
+-    _will_return((mock).wrap_name, __FILE__, __LINE__, ((uintmax_t)(value)), -1)
++    _will_return((mock).wrap_name, __FILE__, __LINE__, "uintmax_t", assign_uint_to_cmocka_value((uintmax_t)(value)), -1)
+ 
+ #define bf_test_mock_real(mock) __real_##mock
+ #define bf_test_mock_define(ret, x, args)                                      \

@@ -1,0 +1,325 @@
+diff -urp '--exclude=*~' '--exclude=redhat-linux-build' olive-617ff87.orig/app/audio/audioprocessor.cpp olive-617ff87/app/audio/audioprocessor.cpp
+--- olive-617ff87.orig/app/audio/audioprocessor.cpp	2024-08-25 07:23:57.000000000 +0900
++++ olive-617ff87/app/audio/audioprocessor.cpp	2024-10-30 23:39:44.551059786 +0900
+@@ -66,7 +66,7 @@ bool AudioProcessor::Open(const AudioPar
+            from.sample_rate(),
+            from.sample_rate(),
+            from_fmt_,
+-           from.channel_layout());
++           from.channel_layout().u.mask);
+ 
+   int r;
+ 
+@@ -116,14 +116,14 @@ bool AudioProcessor::Open(const AudioPar
+   }
+ 
+   // Create conversion filter
+-  if (from.sample_rate() != to.sample_rate() || from.channel_layout() != to.channel_layout() || from.format() != to.format()
++  if (from.sample_rate() != to.sample_rate() || from.channel_layout().u.mask != to.channel_layout().u.mask || from.format() != to.format()
+       || (to.format().is_planar() && create_tempo)) { // Tempo processor automatically converts to packed,
+                                                   // so if the desired output is planar, it'll need
+                                                   // to be converted
+     snprintf(filter_args, 200, "sample_fmts=%s:sample_rates=%d:channel_layouts=0x%" PRIx64,
+              av_get_sample_fmt_name(to_fmt_),
+              to.sample_rate(),
+-             to.channel_layout());
++             to.channel_layout().u.mask);
+ 
+     AVFilterContext *c;
+     r = avfilter_graph_create_filter(&c, avfilter_get_by_name("aformat"), "fmt", filter_args, nullptr, filter_graph_);
+@@ -169,8 +169,9 @@ bool AudioProcessor::Open(const AudioPar
+   if (in_frame_) {
+     in_frame_->sample_rate = from.sample_rate();
+     in_frame_->format = from_fmt_;
+-    in_frame_->channel_layout = from.channel_layout();
+-    in_frame_->channels = from.channel_count();
++    AVChannelLayout from_ch_layout = from.channel_layout();
++    av_channel_layout_copy(&in_frame_->ch_layout, &from_ch_layout);
++    //in_frame_->ch_layout.nb_channels = from.channel_count();
+     in_frame_->pts = 0;
+   } else {
+     qCritical() << "Failed to allocate input frame";
+diff -urp '--exclude=*~' '--exclude=redhat-linux-build' olive-617ff87.orig/app/codec/conformmanager.cpp olive-617ff87/app/codec/conformmanager.cpp
+--- olive-617ff87.orig/app/codec/conformmanager.cpp	2024-08-25 07:23:57.000000000 +0900
++++ olive-617ff87/app/codec/conformmanager.cpp	2024-10-30 23:37:18.724871412 +0900
+@@ -66,7 +66,7 @@ QVector<QString> ConformManager::GetConf
+                                                                    QString::number(stream.stream()),
+                                                                    QString::number(params.sample_rate()),
+                                                                    QString::number(params.format()),
+-                                                                   QString::number(params.channel_layout()),
++                                                                   QString::number(params.channel_layout().u.mask),
+                                                                    QString::number(i));
+ 
+     filenames[i] = QDir(cache_path).filePath(index_fn);
+diff -urp '--exclude=*~' '--exclude=redhat-linux-build' olive-617ff87.orig/app/codec/encoder.cpp olive-617ff87/app/codec/encoder.cpp
+--- olive-617ff87.orig/app/codec/encoder.cpp	2024-08-25 07:23:57.000000000 +0900
++++ olive-617ff87/app/codec/encoder.cpp	2024-10-30 23:40:34.856133771 +0900
+@@ -256,7 +256,7 @@ void EncodingParams::Save(QXmlStreamWrit
+   if (audio_enabled_) {
+     writer->writeTextElement(QStringLiteral("codec"), QString::number(audio_codec_));
+     writer->writeTextElement(QStringLiteral("samplerate"), QString::number(audio_params_.sample_rate()));
+-    writer->writeTextElement(QStringLiteral("channellayout"), QString::number(audio_params_.channel_layout()));
++    writer->writeTextElement(QStringLiteral("channellayout"), QString::number(audio_params_.channel_layout().u.mask));
+     writer->writeTextElement(QStringLiteral("format"), QString::fromStdString(audio_params_.format().to_string()));
+     writer->writeTextElement(QStringLiteral("bitrate"), QString::number(audio_bit_rate_));
+   }
+diff -urp '--exclude=*~' '--exclude=redhat-linux-build' olive-617ff87.orig/app/codec/ffmpeg/ffmpegdecoder.cpp olive-617ff87/app/codec/ffmpeg/ffmpegdecoder.cpp
+--- olive-617ff87.orig/app/codec/ffmpeg/ffmpegdecoder.cpp	2024-08-25 07:23:57.000000000 +0900
++++ olive-617ff87/app/codec/ffmpeg/ffmpegdecoder.cpp	2024-10-30 23:37:18.725871413 +0900
+@@ -439,9 +439,11 @@ FootageDescription FFmpegDecoder::Probe(
+         } else if (avstream->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
+ 
+           // Create an audio stream object
+-          uint64_t channel_layout = avstream->codecpar->channel_layout;
++          uint64_t channel_layout = avstream->codecpar->ch_layout.u.mask;
+           if (!channel_layout) {
+-            channel_layout = static_cast<uint64_t>(av_get_default_channel_layout(avstream->codecpar->channels));
++            AVChannelLayout ch_layout;
++            av_channel_layout_default(&ch_layout, avstream->codecpar->ch_layout.nb_channels);
++            channel_layout = ch_layout.u.mask;
+           }
+ 
+           if (avstream->duration == AV_NOPTS_VALUE || duration_guessed_from_bitrate) {
+@@ -558,15 +560,21 @@ bool FFmpegDecoder::ConformAudioInternal
+   }
+ 
+   // Create resampling context
+-  SwrContext* resampler = swr_alloc_set_opts(nullptr,
+-                                             params.channel_layout(),
++  SwrContext* resampler = nullptr;
++  {
++    AVChannelLayout out_ch_layout = params.channel_layout();
++    AVChannelLayout in_ch_layout({});
++    av_channel_layout_from_mask(&in_ch_layout, channel_layout);
++    swr_alloc_set_opts2(&resampler,
++                                             &out_ch_layout,
+                                              FFmpegUtils::GetFFmpegSampleFormat(params.format()),
+                                              params.sample_rate(),
+-                                             channel_layout,
++                                             &in_ch_layout,
+                                              static_cast<AVSampleFormat>(instance_.avstream()->codecpar->format),
+                                              instance_.avstream()->codecpar->sample_rate,
+                                              0,
+                                              nullptr);
++  }
+ 
+   swr_init(resampler);
+ 
+@@ -691,11 +699,13 @@ int FFmpegDecoder::GetNativeChannelCount
+ 
+ uint64_t FFmpegDecoder::ValidateChannelLayout(AVStream* stream)
+ {
+-  if (stream->codecpar->channel_layout) {
+-    return stream->codecpar->channel_layout;
++  if (stream->codecpar->ch_layout.u.mask) {
++    return stream->codecpar->ch_layout.u.mask;
+   }
+ 
+-  return av_get_default_channel_layout(stream->codecpar->channels);
++  AVChannelLayout ch_layout;
++  av_channel_layout_default(&ch_layout, stream->codecpar->ch_layout.nb_channels);
++  return ch_layout.u.mask;
+ }
+ 
+ const char *FFmpegDecoder::GetInterlacingModeInFFmpeg(VideoParams::Interlacing interlacing)
+diff -urp '--exclude=*~' '--exclude=redhat-linux-build' olive-617ff87.orig/app/codec/ffmpeg/ffmpegencoder.cpp olive-617ff87/app/codec/ffmpeg/ffmpegencoder.cpp
+--- olive-617ff87.orig/app/codec/ffmpeg/ffmpegencoder.cpp	2024-08-25 07:23:57.000000000 +0900
++++ olive-617ff87/app/codec/ffmpeg/ffmpegencoder.cpp	2024-10-30 23:37:18.726871414 +0900
+@@ -334,7 +334,7 @@ bool FFmpegEncoder::WriteAudioData(const
+   int output_sample_count = input_sample_count ? swr_get_out_samples(audio_resample_ctx_, input_sample_count) : 102400;
+   uint8_t** output_data = nullptr;
+   int output_linesize;
+-  av_samples_alloc_array_and_samples(&output_data, &output_linesize, audio_stream_->codecpar->channels,
++  av_samples_alloc_array_and_samples(&output_data, &output_linesize, audio_stream_->codecpar->ch_layout.nb_channels,
+                                      output_sample_count, static_cast<AVSampleFormat>(audio_stream_->codecpar->format), 0);
+ 
+   // Perform conversion
+@@ -349,7 +349,7 @@ bool FFmpegEncoder::WriteAudioData(const
+ 
+       av_samples_copy(audio_frame_->data, output_data, audio_frame_offset_, i,
+                       copy_length,
+-                      audio_frame_->channels, static_cast<AVSampleFormat>(audio_frame_->format));
++                      audio_frame_->ch_layout.nb_channels, static_cast<AVSampleFormat>(audio_frame_->format));
+ 
+       audio_frame_offset_ += copy_length;
+       i += copy_length;
+@@ -690,8 +690,8 @@ bool FFmpegEncoder::InitializeStream(AVM
+ 
+     // Assume audio stream
+     codec_ctx->sample_rate = params().audio_params().sample_rate();
+-    codec_ctx->channel_layout = params().audio_params().channel_layout();
+-    codec_ctx->channels = av_get_channel_layout_nb_channels(codec_ctx->channel_layout);
++    AVChannelLayout in_ch_layout = params().audio_params().channel_layout();
++    av_channel_layout_copy(&codec_ctx->ch_layout, &in_ch_layout);
+     codec_ctx->sample_fmt = FFmpegUtils::GetFFmpegSampleFormat(params().audio_params().format());
+     codec_ctx->time_base = {1, codec_ctx->sample_rate};
+ 
+@@ -829,15 +830,19 @@ bool FFmpegEncoder::InitializeResampleCo
+   }
+ 
+   // Create resample context
+-  audio_resample_ctx_ = swr_alloc_set_opts(nullptr,
+-                                           static_cast<int64_t>(audio_codec_ctx_->channel_layout),
++  audio_resample_ctx_ = nullptr;
++  {
++    AVChannelLayout in_ch_layout = audio.channel_layout();
++    swr_alloc_set_opts2(&audio_resample_ctx_,
++                                           &audio_codec_ctx_->ch_layout,
+                                            audio_codec_ctx_->sample_fmt,
+                                            audio_codec_ctx_->sample_rate,
+-                                           static_cast<int64_t>(audio.channel_layout()),
++                                           &in_ch_layout,
+                                            FFmpegUtils::GetFFmpegSampleFormat(audio.format()),
+                                            audio.sample_rate(),
+                                            0,
+                                            nullptr);
++  }
+   if (!audio_resample_ctx_) {
+     return false;
+   }
+@@ -865,7 +870,7 @@ bool FFmpegEncoder::InitializeResampleCo
+     return false;
+   }
+ 
+-  audio_frame_->channel_layout = audio_codec_ctx_->channel_layout;
++  av_channel_layout_copy(&audio_frame_->ch_layout, &audio_codec_ctx_->ch_layout);
+   audio_frame_->format = audio_codec_ctx_->sample_fmt;
+   audio_frame_->nb_samples = audio_max_samples_;
+ 
+diff -urp '--exclude=*~' '--exclude=redhat-linux-build' olive-617ff87.orig/app/dialog/export/export.cpp olive-617ff87/app/dialog/export/export.cpp
+--- olive-617ff87.orig/app/dialog/export/export.cpp	2024-08-25 07:23:57.000000000 +0900
++++ olive-617ff87/app/dialog/export/export.cpp	2024-10-30 23:37:18.726871414 +0900
+@@ -630,7 +630,7 @@ void ExportDialog::SetDefaults()
+   video_tab_->interlaced_combobox()->SetInterlaceMode(vp.interlacing());
+   audio_tab_->sample_rate_combobox()->SetSampleRate(ap.sample_rate());
+   audio_tab_->sample_format_combobox()->SetAttemptToRestoreFormat(false);
+-  audio_tab_->channel_layout_combobox()->SetChannelLayout(ap.channel_layout());
++  audio_tab_->channel_layout_combobox()->SetChannelLayout(ap.channel_layout().u.mask);
+   subtitles_enabled_->setChecked(SequenceHasSubtitles());
+   subtitle_tab_->SetSidecarFormat(ExportFormat::kFormatSRT);
+ }
+@@ -749,7 +749,7 @@ void ExportDialog::SetParams(const Encod
+   audio_enabled_->setChecked(e.audio_enabled());
+   if (e.audio_enabled()) {
+     audio_tab_->sample_rate_combobox()->SetSampleRate(e.audio_params().sample_rate());
+-    audio_tab_->channel_layout_combobox()->SetChannelLayout(e.audio_params().channel_layout());
++    audio_tab_->channel_layout_combobox()->SetChannelLayout(e.audio_params().channel_layout().u.mask);
+     audio_tab_->sample_format_combobox()->SetSampleFormat(e.audio_params().format());
+ 
+     audio_tab_->SetCodec(e.audio_codec());
+diff -urp '--exclude=*~' '--exclude=redhat-linux-build' olive-617ff87.orig/app/dialog/sequence/sequencedialogparametertab.cpp olive-617ff87/app/dialog/sequence/sequencedialogparametertab.cpp
+--- olive-617ff87.orig/app/dialog/sequence/sequencedialogparametertab.cpp	2024-08-25 07:23:57.000000000 +0900
++++ olive-617ff87/app/dialog/sequence/sequencedialogparametertab.cpp	2024-10-30 23:37:18.727871415 +0900
+@@ -94,7 +94,7 @@ SequenceDialogParameterTab::SequenceDial
+   preview_format_field_->SetPixelFormat(vp.format());
+   preview_autocache_field_->setChecked(sequence->IsVideoAutoCacheEnabled());
+   audio_sample_rate_field_->SetSampleRate(ap.sample_rate());
+-  audio_channels_field_->SetChannelLayout(ap.channel_layout());
++  audio_channels_field_->SetChannelLayout(ap.channel_layout().u.mask);
+ 
+   connect(preview_resolution_field_, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+           this, &SequenceDialogParameterTab::UpdatePreviewResolutionLabel);
+diff -urp '--exclude=*~' '--exclude=redhat-linux-build' olive-617ff87.orig/app/node/output/viewer/viewer.cpp olive-617ff87/app/node/output/viewer/viewer.cpp
+--- olive-617ff87.orig/app/node/output/viewer/viewer.cpp	2024-08-25 07:23:57.000000000 +0900
++++ olive-617ff87/app/node/output/viewer/viewer.cpp	2024-10-30 23:41:06.561181896 +0900
+@@ -555,7 +555,7 @@ void ViewerOutput::set_parameters_from_f
+ 
+     if (!audio_streams.isEmpty()) {
+       const AudioParams& s = audio_streams.first();
+-      SetAudioParams(AudioParams(s.sample_rate(), s.channel_layout(), kDefaultSampleFormat));
++      SetAudioParams(AudioParams(s.sample_rate(), s.channel_layout().u.mask, kDefaultSampleFormat));
+     }
+   }
+ }
+diff -urp '--exclude=*~' '--exclude=redhat-linux-build' olive-617ff87.orig/app/node/project/serializer/typeserializer.cpp olive-617ff87/app/node/project/serializer/typeserializer.cpp
+--- olive-617ff87.orig/app/node/project/serializer/typeserializer.cpp	2024-08-25 07:23:57.000000000 +0900
++++ olive-617ff87/app/node/project/serializer/typeserializer.cpp	2024-10-30 23:43:39.824414560 +0900
+@@ -52,7 +52,7 @@ AudioParams TypeSerializer::LoadAudioPar
+ void TypeSerializer::SaveAudioParams(QXmlStreamWriter *writer, const AudioParams &a)
+ {
+   writer->writeTextElement(QStringLiteral("samplerate"), QString::number(a.sample_rate()));
+-  writer->writeTextElement(QStringLiteral("channellayout"), QString::number(a.channel_layout()));
++  writer->writeTextElement(QStringLiteral("channellayout"), QString::number(a.channel_layout().u.mask));
+   writer->writeTextElement(QStringLiteral("format"), QString::fromStdString(a.format().to_string()));
+   writer->writeTextElement(QStringLiteral("enabled"), QString::number(a.enabled()));
+   writer->writeTextElement(QStringLiteral("streamindex"), QString::number(a.stream_index()));
+diff -urp '--exclude=*~' '--exclude=redhat-linux-build' olive-617ff87.orig/ext/core/include/olive/core/render/audioparams.h olive-617ff87/ext/core/include/olive/core/render/audioparams.h
+--- olive-617ff87.orig/ext/core/include/olive/core/render/audioparams.h	2023-02-17 11:04:25.000000000 +0900
++++ olive-617ff87/ext/core/include/olive/core/render/audioparams.h	2024-10-30 23:41:37.305228568 +0900
+@@ -37,7 +37,7 @@ class AudioParams {
+ public:
+   AudioParams() :
+     sample_rate_(0),
+-    channel_layout_(0),
++    channel_layout_({}),
+     format_(SampleFormat::INVALID)
+   {
+     set_default_footage_parameters();
+@@ -48,10 +48,11 @@ public:
+ 
+   AudioParams(const int& sample_rate, const uint64_t& channel_layout, const SampleFormat& format) :
+     sample_rate_(sample_rate),
+-    channel_layout_(channel_layout),
++    channel_layout_({}),
+     format_(format)
+   {
+     set_default_footage_parameters();
++    av_channel_layout_from_mask(&channel_layout_, channel_layout);
+     timebase_ = sample_rate_as_time_base();
+ 
+     // Cache channel count
+@@ -68,14 +69,14 @@ public:
+     sample_rate_ = sample_rate;
+   }
+ 
+-  uint64_t channel_layout() const
++  AVChannelLayout channel_layout() const
+   {
+     return channel_layout_;
+   }
+ 
+   void set_channel_layout(uint64_t channel_layout)
+   {
+-    channel_layout_ = channel_layout;
++    av_channel_layout_from_mask(&channel_layout_, channel_layout);
+     calculate_channel_count();
+   }
+ 
+@@ -169,7 +170,7 @@ private:
+ 
+   int sample_rate_;
+ 
+-  uint64_t channel_layout_;
++  AVChannelLayout channel_layout_;
+ 
+   int channel_count_;
+ 
+diff -urp '--exclude=*~' '--exclude=redhat-linux-build' olive-617ff87.orig/ext/core/src/render/audioparams.cpp olive-617ff87/ext/core/src/render/audioparams.cpp
+--- olive-617ff87.orig/ext/core/src/render/audioparams.cpp	2023-02-17 11:04:25.000000000 +0900
++++ olive-617ff87/ext/core/src/render/audioparams.cpp	2024-10-30 23:42:13.540283579 +0900
+@@ -50,7 +50,7 @@ bool AudioParams::operator==(const Audio
+   return (format() == other.format()
+           && sample_rate() == other.sample_rate()
+           && time_base() == other.time_base()
+-          && channel_layout() == other.channel_layout());
++          && channel_layout().u.mask == other.channel_layout().u.mask);
+ }
+ 
+ bool AudioParams::operator!=(const AudioParams &other) const
+@@ -152,14 +152,14 @@ int AudioParams::bits_per_sample() const
+ bool AudioParams::is_valid() const
+ {
+   return (!time_base().isNull()
+-          && channel_layout() > 0
++          && channel_layout().u.mask > 0
+           && format_ > SampleFormat::INVALID
+           && format_ < SampleFormat::COUNT);
+ }
+ 
+ void AudioParams::calculate_channel_count()
+ {
+-  channel_count_ = av_get_channel_layout_nb_channels(channel_layout());
++  channel_count_ = channel_layout().nb_channels;
+ }
+ 
+ }

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=NTK CHTHEME
+Comment=NTK GUI Theme Chooser
+Exec=ntk-chtheme
+Terminal=false
+Type=Application
+Categories=Development;GUIDesigner;

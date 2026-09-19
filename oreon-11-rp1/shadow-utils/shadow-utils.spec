@@ -2,13 +2,13 @@
 
 Summary: Utilities for managing accounts and shadow password files
 Name: shadow-utils
-Version: 4.19.3
+Version: 4.20.2
 Release: 1%{?dist}
 Epoch: 2
 License: BSD-3-Clause AND GPL-2.0-or-later
 URL: https://github.com/shadow-maint/shadow
-Source0: https://github.com/shadow-maint/shadow/releases/download/4.19.3/shadow-4.19.3.tar.xz
-Source1: https://github.com/shadow-maint/shadow/releases/download/4.19.3/shadow-4.19.3.tar.xz.asc
+Source0: https://github.com/shadow-maint/shadow/releases/download/4.20.2/shadow-4.19.3.tar.xz
+Source1: https://github.com/shadow-maint/shadow/releases/download/4.20.2/shadow-4.19.3.tar.xz.asc
 Source2: shadow-utils.useradd
 Source3: shadow-utils.login.defs
 Source4: shadow-bsd.txt

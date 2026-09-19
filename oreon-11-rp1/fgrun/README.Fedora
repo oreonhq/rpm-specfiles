@@ -1,0 +1,17 @@
+To automatically download new scenery files, with terrasync:
+
+ - start fgrun
+ - click on "Prev"
+ - add a new FG_SCENERY directory where you have write access
+   (for example /home/user/.fgfs/Scenery)
+ - click on "Terrasync directory" so your newly created scenery
+   directory will be used by terrasync
+ - click on "Next", then select an aircraft
+ - click "Next" twice (skip the "Select a location" menu)
+ - activate "Terrasync" on its default port (5505)
+ - come back to the "Select a location" menu, click on "Scenery Prefetch"
+ - choose the four letter airport code of the place your want to start
+   from : http://en.wikipedia.org/wiki/List_of_airports_by_ICAO_code
+ - leave the "Log Window" in background
+ - click on "Refresh", the airports from the newly downloaded scenery
+   should be added to the global list

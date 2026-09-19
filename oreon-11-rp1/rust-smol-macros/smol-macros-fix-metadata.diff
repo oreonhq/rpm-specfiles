@@ -1,0 +1,11 @@
+--- smol-macros-0.1.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ smol-macros-0.1.1/Cargo.toml	2026-03-02T08:37:17.689330+00:00
+@@ -54,8 +54,3 @@
+ 
+ [dev-dependencies.macro_rules_attribute]
+ version = "0.2.0"
+-
+-[dev-dependencies.unsend]
+-version = "0.2.1"
+-features = ["alloc"]
+-default-features = false

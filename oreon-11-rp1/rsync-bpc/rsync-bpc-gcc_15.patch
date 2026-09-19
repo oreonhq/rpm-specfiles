@@ -1,0 +1,26 @@
+Index: rsync-bpc-3.1.3.0/hlink.c
+===================================================================
+--- rsync-bpc-3.1.3.0.orig/hlink.c
++++ rsync-bpc-3.1.3.0/hlink.c
+@@ -121,7 +121,7 @@ static void match_gnums(int32 *ndx_list,
+ 	int32 gnum, gnum_next;
+ 
+ 	qsort(ndx_list, ndx_count, sizeof ndx_list[0],
+-	     (int (*)()) hlink_compare_gnum);
++	     (int (*)(const void*, const void*)) hlink_compare_gnum);
+ 
+         if ( inc_recurse && prior_hlinks && hlink_nlinks ) {
+             for (from = 0; from < ndx_count; from++) {
+Index: rsync-bpc-3.1.3.0/lib/pool_alloc.c
+===================================================================
+--- rsync-bpc-3.1.3.0.orig/lib/pool_alloc.c
++++ rsync-bpc-3.1.3.0/lib/pool_alloc.c
+@@ -9,7 +9,7 @@ struct alloc_pool
+ 	size_t			size;		/* extent size		*/
+ 	size_t			quantum;	/* allocation quantum	*/
+ 	struct pool_extent	*extents;	/* top extent is "live" */
+-	void			(*bomb)();	/* function to call if
++	void			(*bomb)(const char *);	/* function to call if
+ 						 * malloc fails		*/
+ 	int			flags;
+ 

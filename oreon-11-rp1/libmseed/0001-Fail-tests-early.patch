@@ -1,0 +1,35 @@
+From bcfd1ae1d08830ae7be2846ae0a4c825979ad5e9 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Fri, 3 Mar 2017 05:06:07 -0500
+Subject: [PATCH] Fail tests early.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ test/Makefile | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/test/Makefile b/test/Makefile
+index fe67726..2995909 100644
+--- a/test/Makefile
++++ b/test/Makefile
+@@ -41,13 +41,10 @@ $(BINS) : % : %.c
+ # Run test scripts, create %.test.out files and compare to %.test.ref references
+ $(TESTOUTS) : %.test.out : %.test $(BINS) FORCE
+ 	@$(eval TESTCOUNT=$(shell echo $$(($(TESTCOUNT)+1))))
+-	@$(shell ./$< > $@ 2>&1)
+-	@diff $<.ref $@ >/dev/null; \
+-          if [ $$? -eq 0 ]; \
+-            then printf '$(PASSED) Test $<\n'; \
+-            else printf '$(FAILED) Test $<, Compare $<.ref $@\n'; \
+-	    exit 0; \
+-          fi
++	@echo -n $<
++	@./$< > $@ 2>&1
++	@diff $<.ref $@
++	@printf ' $(PASSED)\n'
+ 
+ clean:
+ 	@rm -f $(BINS) $(TESTOUTS)
+-- 
+2.9.3
+

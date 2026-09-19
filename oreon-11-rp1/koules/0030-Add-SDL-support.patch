@@ -1,0 +1,1235 @@
+From 08f2abe116fde1d7b0c28cc990da1113a2a511a8 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:51 +0200
+Subject: [PATCH 30/41] Add SDL support
+
+---
+ INSTALLATION    |   8 ++
+ Makefile.sdl    | 125 ++++++++++++++++++
+ README          |  25 +++-
+ menu.c          |   6 +
+ rcfiles.c       |   4 +
+ sdl/draw.c      | 281 ++++++++++++++++++++++++++++++++++++++++
+ sdl/init.c      | 390 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ sdl/input.c     | 154 ++++++++++++++++++++++
+ sdl/interface.h | 109 ++++++++++++++++
+ 9 files changed, 1096 insertions(+), 6 deletions(-)
+ create mode 100644 Makefile.sdl
+ create mode 100644 sdl/draw.c
+ create mode 100644 sdl/init.c
+ create mode 100644 sdl/input.c
+ create mode 100644 sdl/interface.h
+
+diff --git a/INSTALLATION b/INSTALLATION
+index 0d8c358..e203ab9 100644
+--- a/INSTALLATION
++++ b/INSTALLATION
+@@ -21,6 +21,14 @@ Edit the Makefile.svgalib for your computer and type:
+ 	make -f Makefile.svgalib
+ 	make -f Makefile.svgalib install
+ 
++For SDL:
++========
++
++You MUST be 'root' to install the game.
++Edit the Makefile.sdl for your computer and type:
++	make -f Makefile.sdl
++	make -f Makefile.sdl install
++
+ For HP-UX wo imake:
+ ===================
+ 
+diff --git a/Makefile.sdl b/Makefile.sdl
+new file mode 100644
+index 0000000..f1c694b
+--- /dev/null
++++ b/Makefile.sdl
+@@ -0,0 +1,125 @@
++#edit this for your architecture!
++#ARCH=-m386
++#ARCH=-m486
++#ARCH=-mpentium
++#uncoment following for joystick support
++#JOYSTICK = -D JOYSTICK	#requires joystick toolkit installed!
++#uncoment following to enable network support
++NET = -D NETSUPPORT
++#uncoment following three lines for linux sound support
++SOUND = -D SOUND
++SOUNDSERVER = koules.sndsrv.linux
++INSTALLSOUND = True
++#uncoment following for mouse support
++MOUSE = -D MOUSE
++#don`t add / and spaces at end of path!
++#directories
++SOUNDDIR = /usr/local/lib/koules
++BINDIR = /usr/local/bin
++MANDIR = /usr/local/man/man6
++
++SOUNDOBJS = sound.o
++SOUNDDEV = /dev/dsp
++
++INSTBINFLAGS=-m a=rxs,u=rwxs
++INSTALL = install
++
++SDL_gfx_CFLAGS = $(shell pkg-config --cflags SDL_gfx)
++SDL_gfx_LIBS = $(shell pkg-config --libs SDL_gfx)
++
++CC	 = gcc
++OPTIMIZE = -fomit-frame-pointer -O3 -ffast-math -s -Dlinux -Wall
++OPTIMIZE1 = -fomit-frame-pointer -O6  -ffast-math -funroll-loops -finline-functions   -s -Dlinux -Wall
++CFLAGS	 = -Isdl -DHAVEUSLEEP $(DEFINES) $(SDL_gfx_CFLAGS) $(ARCH) $(JOYSTICK) -DSOUNDDIR="\"$(SOUNDDIR)\"" $(SOUND) $(MOUSE) $(NET)\
++	-DSOUNDSERVER=\"$(SOUNDDIR)/$(SOUNDSERVER)\" \
++	-DSOUNDDIR=\"$(SOUNDDIR)\" \
++	-DSOUNDDEV=\"$(SOUNDDEV)\" \
++	-DNODIRECT -DSDLSUPPORT
++
++LFLAGS   =
++
++PROGS    = koules.sdl
++PROGS_O  = koules.o sound.o menu.o gameplan.o font.o intro.o sdl/init.o sdl/draw.o sdl/input.o framebuffer.o cmap.o rcfiles.o server.o client.o sock.o objectsio.o
++LIBS     = $(SDL_gfx_LIBS)
++
++
++all:	progs $(SOUNDSERVER)
++
++progs : $(PROGS)
++
++objs:	$(PROGS_O)
++
++.c.o:
++	$(CC) $(CFLAGS) $(OPTIMIZE) -Wall -c -o $*.o $<
++
++.c.s:
++	$(CC) $(CFLAGS) $(OPTIMIZE) -S -o $*.s $<
++
++.o:
++	$(CC) $(CFLAGS) $(OPTIMIZE1) $(LFLAGS) -o $* $*.o $(LIBS)
++	chmod a+rs,go-w $*
++
++font.o: font.c
++	@echo please be patient.
++	@echo the font.c is big and ugly i ripped it from zgv.
++	@echo do you know about better one?
++	$(CC) $(OPTIMIZE1) $(CFLAGS) -c  $<
++
++koules.sndsrv.linux.o: koules.sndsrv.linux.c
++	$(CC) $(OPTIMIZE1) $(CFLAGS) -c  $<
++
++koules.o: koules.c
++	$(CC) $(OPTIMIZE1) $(CFLAGS) -Wall -c  $<
++
++koules.sdl: $(PROGS_O)
++	$(CC) $(OPTIMIZE1) $(CFLAGS) $(LFLAGS) -o koules.sdl $(PROGS_O) $(LIBS) -lm
++
++install:: $(PROG) $(SOUNDSERVER)
++	@echo "Koules directory is " $(BINDIR)
++	@:
++	@echo "Instalin man page to " $(MANDIR)
++	$(INSTALL) -c $(INSTMANFLAGS) koules.sdl.6 $(MANDIR);
++	@:
++	@echo "Creating directory " $(BINDIR)
++	@if [ ! -d $(BINDIR) ]; then mkdir $(BINDIR); fi
++	$(INSTALL) -c -s $(INSTBINFLAGS) koules.sdl $(BINDIR)
++	@:
++	@if [ "$(INSTALLSOUND)" = "True" ]; 				\
++	 then								\
++		echo "Creating directory " $(SOUNDDIR); 		\
++		if [ ! -d $(SOUNDDIR) ]; then mkdir $(SOUNDDIR); fi;    \
++		echo "Copying sound server to directory " $(SOUNDDIR); \
++		$(INSTALL) -c -s $(INSTBIN1FLAGS) $(SOUNDSERVER) $(SOUNDDIR); \
++		echo "Copying sound files into directory " $(SOUNDDIR); \
++		cd ./sounds; set -x;					\
++		for file in *.raw; do					\
++		    $(INSTALL) -c $(INSTDATFLAGS) $$file $(SOUNDDIR);	\
++		done;   						\
++	 fi
++	@echo "Don't forget to remove your old koules from /usr/games/koules "
++	@echo "and /usr/games/kouleslib "
++
++
++clean:
++	rm -f koules.sdl $(SOUNDSERVER)
++	rm -f core `find . -name '*.[oas]' -print`
++	rm -f core `find . -name '*~' -print`
++	rm -f core `find . -type f -name 'core' -print`
++
++indent:
++	indent -di16 *.c *.h sdl/*.c sdl/*.h xlib/*.c xlib/*.h
++
++lint:
++	export LARCH_PATH=/usr/lib/lclint LCLIMPORTDIR=/usr/lib/lclint;\
++	lclint -weak $(SDL_gfx_CFLAGS) $(DEFINES) *.c sdl/*.c xlib/*.c 2>lint.out;\
++	lclint -weak -Ixlib xlib/*.c 2>>lint.out
++
++dep:
++	rm -f .depend
++	make .depend
++
++.depend:
++	echo '# Program dependencies' >.depend
++	gcc $(SDL_gfx_CFLAGS) $(DEFINES) -MM $(patsubst %.o,%.c,$(PROGS_O)) >>.depend
++
++include .depend
+diff --git a/README b/README
+index ecd140f..788c228 100644
+--- a/README
++++ b/README
+@@ -34,18 +34,19 @@
+         .           *    Programming   by  Jan  Hubicka
+ 	                Joystick support by Ludvik Tesar
+              .         HP-UX    sound    by  Lutz  Vieweg                 
+-                      OS/2 version  by Thomas  A. K. Kjaer         .
+-      *              Story by  Kamil Toman and Jan  Hubicka
+- *                  Script by Kamil  Toman  and  Jan Hubicka            .
+-                   English  Spelling checked by  Thomas Marsh
+-                  SGI sound and  creator effect  by Rick Sayre         .
++                      OS/2 version  by Thomas  A. K. Kjaer       .
++          .          SDL   version    by   Lubomir   Rintel        *
++      *             Story by  Kamil Toman  and  Jan  Hubicka
++ *                 Script  by  Kamil  Toman  and  Jan Hubicka          .
++                  English  Spelling  checked  by  Thomas Marsh
++                 SGI  sound  and  creator effect  by Rick Sayre       .
+ 	         Sound servers  by Joe  Rumsey  and S. M. Patel
+ 	        /                                              \
+       .        /                  INTRODUCTION:                 \
+               /                  ---------------                 \
+     *        Koules is a fast action arcade-style game for UNIX and
+             OS/2. This version supports X window system, SVGAlib for
+-	   Linux  and  OS/2. It works  in  fine  resolution.  (up  to
++	   Linux, SDL and OS/2. It works in fine resolution.  (up  to
+ 	  900x620) with cool 256 color graphics,  multi-player mode up
+ 	 to 5 players,  full  sound  and, of  course, network  support.
+         Koules  is an original  idea. The  first  version of Koules  was
+@@ -83,6 +84,14 @@ Edit the Makefile.svgalib for your computer and type:
+         make -f Makefile.svgalib
+         make -f Makefile.svgalib install
+ 
++For SDL:
++========
++
++You MUST be 'root' to install the game.
++Edit the Makefile.sdl for your computer and type:
++        make -f Makefile.sdl
++        make -f Makefile.sdl install
++
+ For HP-UX wo imake:
+ ===================
+ 
+@@ -469,6 +478,10 @@ There is bug in my svgalib.1.2.8 and earlier:
+ switch to another console, switch back and press enter it will crash your
+ computer.It is not koules bug!!! Test it on svgalib/demos/keytest!
+ 
++SDL_gfx prior to 2.0.24 draws thick lines inaccurately resulting in
++ugly artifacts in star wars screen. Make sure your SDL_gfx is recent enough
++when running the SDL version.
++
+ Koules from the top:
+ 
+                              .              
+diff --git a/menu.c b/menu.c
+index 91bfe39..f4ff173 100644
+--- a/menu.c
++++ b/menu.c
+@@ -651,6 +651,9 @@ draw_menu (CONST int draw)
+ #ifdef __OS2__
+       DrawBlackMaskedText (MAPWIDTH / 2 - 28 * 4, 41, "OS/2 Warp VERSION BY T.A.K.K");
+ #endif
++#ifdef SDLSUPPORT
++      DrawBlackMaskedText (MAPWIDTH / 2 - 20 * 4, 41, "SDL Version by Lubko");
++#endif
+       DrawWhiteMaskedText (MAPWIDTH / 2 - 8 * 4, 0, "THE GAME");
+       DrawWhiteMaskedText (MAPWIDTH / 2 - 10 * 4, 10, "K O U L E S");
+       DrawWhiteMaskedText (MAPWIDTH / 2 - 2 * 4, 20, "BY");
+@@ -659,6 +662,9 @@ draw_menu (CONST int draw)
+ #ifdef __OS2__
+       DrawWhiteMaskedText (MAPWIDTH / 2 - 28 * 4, 40, "OS/2 Warp VERSION BY T.A.K.K");
+ #endif
++#ifdef SDLSUPPORT
++      DrawWhiteMaskedText (MAPWIDTH / 2 - 20 * 4, 40, "SDL Version by Lubko");
++#endif
+       for (i = 0; i < nnumbers; i++)
+ 	{
+ 	  Line (minim[i].x, minim[i].y + 3, minim[i].x + 6, minim[i].y + 3, ball (2));
+diff --git a/rcfiles.c b/rcfiles.c
+index f3bc03d..6a205c4 100644
+--- a/rcfiles.c
++++ b/rcfiles.c
+@@ -25,12 +25,16 @@
+ #ifdef XSUPPORT
+ static CONST char *name = ".xkoules-controls";
+ #else
++#ifdef SDLSUPPORT
++static CONST char *name = ".koules.sdl-controls";
++#else
+ #ifdef OS2DIVE
+ static CONST char *name = "koules.cfg";
+ #else
+ static CONST char *name = ".koules.svga-controls";
+ #endif
+ #endif
++#endif
+ 
+ #ifdef OS2DIVE
+ static CONST char *levelsname = "koules.lev";
+diff --git a/sdl/draw.c b/sdl/draw.c
+new file mode 100644
+index 0000000..07a9c65
+--- /dev/null
++++ b/sdl/draw.c
+@@ -0,0 +1,281 @@
++/***********************************************************
++*                      K O U L E S                         *
++*----------------------------------------------------------*
++*  C2013 Lubomir Rintel                                    *
++*        Polivkova 10                                      *
++*        612 00 Brno                                       *
++*        Czech Republic                                    *
++*        Phone: 0041-739-669-116                           *
++*        eMail: lkundrak@v3.sk                             *
++*----------------------------------------------------------*
++*   Copyright(c)2013 by Lubomir Rintel.See README for      *
++*                     Liecnece details.                    *
++*----------------------------------------------------------*
++*  sdl/draw.c drawing routines using SDL and SDL_gfx       *
++***********************************************************/
++
++#include <interface.h>
++#include <stdlib.h>
++#include <stdio.h>
++#include <stdbool.h>
++
++#include <SDL_gfxPrimitives.h>
++
++VScreenType     backscreen;
++VScreenType     background;
++VScreenType     starbackground;
++
++VScreenType     current;
++Uint32          palette[COLORS];
++bool            clipping;
++
++/* Allocate surface for sprites (balls). */
++RawBitmapType
++CreateBitmap (const int xv, const int yv)
++{
++  RawBitmapType   bitmap;
++
++  if (sdl_screen)
++    {
++      /* HW surface should make create_bitmaps () during initialization,
++       * but supposedly speeds up subsequent blitting. */
++      bitmap = SDL_CreateRGBSurface (SDL_HWSURFACE, xv, yv,
++				     sdl_screen->format->BitsPerPixel,
++				     sdl_screen->format->Rmask,
++				     sdl_screen->format->Gmask,
++				     sdl_screen->format->Bmask,
++				     sdl_screen->format->Amask);
++    }
++  else
++    {
++      /* Create a pixmap when we don't have a screen yet. No attempts at
++       * matching the pixel format, this is likely a window icon. */
++      bitmap = SDL_CreateRGBSurface (SDL_SWSURFACE, xv, yv,
++				     32, 0xff000000, 0x00ff0000, 0x0000ff00,
++				     0x00000000);
++    }
++
++  if (bitmap == NULL)
++    {
++      fprintf (stderr, "%s\n", SDL_GetError ());
++      return NULL;
++    }
++
++  /* Use a color that's not in the palette as transparent.
++   * Anything not divisible by 4 will do. */
++  if (SDL_SetColorKey (bitmap, SDL_SRCCOLORKEY | SDL_RLEACCEL,
++		       SDL_MapRGB (bitmap->format, 1, 1, 1)))
++    {
++      fprintf (stderr, "%s\n", SDL_GetError ());
++      SDL_FreeSurface (bitmap);
++      return NULL;
++    }
++  SDL_FillRect (bitmap, NULL, SDL_MapRGB (bitmap->format, 1, 1, 1));
++
++  return bitmap;
++}
++
++/* Do nothing: the bitmaps are pre-rendered on surfaces in blittable form
++ * already. */
++BitmapType
++CompileBitmap (const int x, const int y, const RawBitmapType bitmap)
++{
++  return bitmap;
++}
++
++/* Switch current surface that's being drawn onto. */
++void
++SetScreen (VScreenType screen)
++{
++  current = screen;
++}
++
++/* Fill screen with solid black. */
++void
++ClearScreen (void)
++{
++  SDL_FillRect (current, NULL, SDL_MapRGB (current->format, 0, 0, 0));
++}
++
++/* Blit a surface onto physical screen surface and make sure it's
++ * rendered. */
++void
++CopyToScreen (VScreenType source)
++{
++  SDL_BlitSurface (source, NULL, sdl_screen, NULL);
++  SDL_UpdateRect (sdl_screen, 0, 0, 0, 0);
++}
++
++/* Blit a surface onto another one. */
++void
++CopyVSToVS (VScreenType source, VScreenType destination)
++{
++  SDL_BlitSurface (source, NULL, destination, NULL);
++}
++
++/* Turn on clipping so that out-of-bounds draws are safely discarded.
++ * We do not optimize anything for disabled clipping yet. */
++void
++EnableClipping (void)
++{
++  clipping = true;
++}
++
++/* Turn off clipping to allow for faster rendering when we're sure that
++ * there are not out-of-bound draw attempts.
++ * We do not optimize anything for disabled clipping yet. */
++void
++DisableClipping (void)
++{
++  clipping = false;
++}
++
++/* Set a pixel of a ball sprite. c=0 is transparent.
++ * Called with clipping both enabled and disabled. */
++void
++BSetPixel (RawBitmapType bitmap, int x, int y, int c)
++{
++  if (c)
++    pixelColor (bitmap, x, y, palette[c]);
++}
++
++/* Draw a pixel of a player as it builds up in the game area.
++ * Called with clipping both enabled and disabled. */
++void
++SMySetPixel (VScreenType screen, int x, int y, int c)
++{
++  pixelColor (screen, x, y >> 8, palette[c]);
++}
++
++/* Draw a sprite onto the current screen surface. */
++void
++PutBitmap (const int x, const int y, const int xsize, const int ysize,
++	   const BitmapType bitmap)
++{
++  SDL_Rect        dst;
++  dst.x = x;
++  dst.y = y;
++
++  SDL_BlitSurface (bitmap, NULL, current, &dst);
++}
++
++/* Get a color of a pixel in current surface. Only used to draw the blue
++ * background screen. */
++int
++SGetPixel (int x, int y)
++{
++  int             c = 0;
++  Uint8           r, g, b;
++  Uint32          color;
++  Uint32         *pixels = current->pixels;
++  SDL_GetRGB (pixels[y * current->w + x], current->format, &r, &g, &b);
++
++  color = 0x000000ff;
++  color |= r << 24;
++  color |= g << 16;
++  color |= b << 8;
++
++  do
++    {
++      if (palette[c] == color)
++	return c;
++    }
++  while (c++ <= COLORS);
++
++  return 0;
++}
++
++/* This is used to draw blue pixels on a background screen.
++ * Called with clipping both enabled and disabled. */
++void
++SPutPixel (int x, int y, int c)
++{
++  pixelColor (current, x, y, palette[c]);
++}
++
++/* Draw text. Used to draw the "Sector #" message between levels. */
++void
++DrawText (int x, int y, char *text)
++{
++  stringColor (current, x, y, text, 0xffffffff);
++}
++
++/* Draw black text. Used to draw shadow in menu text beneath white text. */
++void
++DrawBlackMaskedText (int x, int y, char *text)
++{
++  stringColor (current, x, y, text, 0x000000ff);
++}
++
++/* Draw white text, on top of black shadow in menu screen and the
++ * level/lives counter. */
++void
++DrawWhiteMaskedText (int x, int y, char *text)
++{
++  stringColor (current, x, y, text, 0xffffffff);
++}
++
++/* Draw the selection rectangle in menu screen. */
++void
++DrawRectangle (int x1, int y1, int x2, int y2, int color)
++{
++  rectangleColor (current, x1, y1, x2, y2, palette[color]);
++}
++
++/* A straight line. Used to delimit menu or play area from the lives/level
++ * counter. */
++void
++Line (int x1, int y1, int x2, int y2, int c)
++{
++  lineColor (current, x1, y1, x2, y2, palette[c]);
++}
++
++/* Draw a point in the background on the starwars screen.
++ * Only called with clipping disabled, coords are safe. */
++void
++SSetPixel (int x, int y, int c)
++{
++  pixelColor (current, x, y, palette[c]);
++}
++
++/* Draw thick line with perspective, for starwars screen. */
++void
++Line1 (int x1, int y1, int x2, int y2, int c)
++{
++  x1 = (MAPWIDTH / 2 + (x1) * 220 / (1000 - (y1)) / DIV);
++  y1 = (int) (MAPHEIGHT / 3 + MAPWIDTH * 220 / (1000 - (y1)));
++  x2 = (int) (MAPWIDTH / 2 + (x2) * 220 / (1000 - (y2)) / DIV);
++  y2 = (int) (MAPHEIGHT / 3 + MAPWIDTH * 220 / (1000 - (y2)));
++
++  thickLineColor (current, x1, y1, x2, y2, 2, palette[c]);
++}
++
++/* Possibly optimized horizontal line version of the above.
++ * Not actually. */
++void
++HLine (int x1, int y1, int x2, int c)
++{
++  Line1 (x1, y1, x2, y1, c);
++}
++
++/* Do nothing. Guarranteed to be bug-free. */
++void
++WaitRetrace (void)
++{
++}
++
++/* Construct a SDL_gfx friendly 32-bit pallette from 80bit cmap (see
++ * cmap.c). */
++void
++SetPalette (Palette * pal)
++{
++  int             i = 0;
++  do
++    {
++      palette[i] = 0x000000ff;
++      palette[i] |= (pal->color[i].red * 4) << 24;
++      palette[i] |= (pal->color[i].green * 4) << 16;
++      palette[i] |= (pal->color[i].blue * 4) << 8;
++    }
++  while (++i <= COLORS);
++}
+diff --git a/sdl/init.c b/sdl/init.c
+new file mode 100644
+index 0000000..417f391
+--- /dev/null
++++ b/sdl/init.c
+@@ -0,0 +1,390 @@
++/***********************************************************
++*                      K O U L E S                         *
++*----------------------------------------------------------*
++*  C2013 Lubomir Rintel                                    *
++*        Polivkova 10                                      *
++*        612 00 Brno                                       *
++*        Czech Republic                                    *
++*        Phone: 0041-739-669-116                           *
++*        eMail: lkundrak@v3.sk                             *
++*----------------------------------------------------------*
++*   Copyright(c)2013 by Lubomir Rintel.See README for      *
++*                     Liecnece details.                    *
++*----------------------------------------------------------*
++*  sdl/init.c SDL backend support routines                 *
++***********************************************************/
++
++#include <interface.h>
++#include <stdlib.h>
++#include <time.h>
++#include <signal.h>
++
++#include <SDL.h>
++#include <SDL_gfxPrimitives.h>
++#include <SDL_gfxPrimitives_font.h>
++
++#include "../koules.h"
++#include "../server.h"
++#include "../client.h"
++#include "../net.h"
++#include "../framebuffer.h"
++
++/* TODO: move these to a common header. */
++extern void     starwars ();
++extern void     game ();
++extern void     setcustompalette (int, float);
++
++/* Game plan. */
++#define WIDTH 640
++#define HEIGHT 460
++#define DIVISOR 1
++int             DIV = DIVISOR;
++int             MAPWIDTH = WIDTH;
++int             MAPHEIGHT = HEIGHT;
++int             GAMEWIDTH = WIDTH * DIVISOR;
++int             GAMEHEIGHT = HEIGHT * DIVISOR;
++
++SDL_Surface    *sdl_screen = NULL;
++
++static SDL_Surface *
++create_icon ()
++{
++  char            radius = 32 / 2;
++  unsigned char   color = 4 * 32;
++  RawBitmapType   img;
++  int             x, y, r;
++
++  img = CreateBitmap (radius * 2, radius * 2);
++  if (img == NULL)
++    return NULL;
++
++  for (y = 0; y < radius * 2; y++)
++    for (x = 0; x < radius * 2; x++)
++      {
++	if ((x - radius) * (x - radius) + (y - radius) * (y - radius)
++	    < (radius - 0.5) * (radius - 0.5))
++	  {
++	    r = (x - 3 * radius / 4) * (x - 3 * radius / 4) +
++	      (y - radius / 4) * (y - radius / 4);
++	    r = r * 32 / (1.5 * radius) / (1.5 * radius);
++	    if (r > 31)
++	      r = 31;
++	    BSetPixel (img, x, y, color + r);
++	  }
++	else
++	  {
++	    BSetPixel (img, x, y, 0);
++	  }
++      }
++  return img;
++}
++
++/* Tear down. */
++void
++uninitialize (void)
++{
++  SDL_Quit ();
++}
++
++/* Create screen surfaces, a window and set the global font. */
++static int
++initialize (void)
++{
++  int             ret;
++
++#ifdef SOUND
++  if (sndinit)
++    init_sound ();
++#endif
++
++  ret = SDL_Init (SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE);
++  if (ret != 0)
++    {
++      fprintf (stderr, "%s\n", SDL_GetError ());
++      return ret;
++    }
++
++  SDL_WM_SetIcon (create_icon (), NULL);
++  sdl_screen = SDL_SetVideoMode (MAPWIDTH, MAPHEIGHT + 20, 32, 0);
++  if (sdl_screen == NULL)
++    {
++      fprintf (stderr, "%s\n", SDL_GetError ());
++      return -1;
++    }
++  SDL_WM_SetCaption ("Koules for SDL version 1.4 by Jan Hubicka", "Koules");
++
++  backscreen = SDL_CreateRGBSurface (SDL_HWSURFACE,
++				     sdl_screen->w, sdl_screen->h,
++				     sdl_screen->format->BitsPerPixel,
++				     sdl_screen->format->Rmask,
++				     sdl_screen->format->Gmask,
++				     sdl_screen->format->Bmask,
++				     sdl_screen->format->Amask);
++  if (backscreen == NULL)
++    {
++      fprintf (stderr, "%s\n", SDL_GetError ());
++      return -1;
++    }
++
++  background = SDL_CreateRGBSurface (SDL_HWSURFACE,
++				     sdl_screen->w, sdl_screen->h,
++				     sdl_screen->format->BitsPerPixel,
++				     sdl_screen->format->Rmask,
++				     sdl_screen->format->Gmask,
++				     sdl_screen->format->Bmask,
++				     sdl_screen->format->Amask);
++  if (background == NULL)
++    {
++      fprintf (stderr, "%s\n", SDL_GetError ());
++      return -1;
++    }
++
++  starbackground = SDL_CreateRGBSurface (SDL_HWSURFACE,
++					 sdl_screen->w, sdl_screen->h,
++					 sdl_screen->format->BitsPerPixel,
++					 sdl_screen->format->Rmask,
++					 sdl_screen->format->Gmask,
++					 sdl_screen->format->Bmask,
++					 sdl_screen->format->Amask);
++  if (starbackground == NULL)
++    {
++      fprintf (stderr, "%s\n", SDL_GetError ());
++      return -1;
++    }
++
++  gfxPrimitivesSetFont (gfxPrimitivesFontdata, 8, 8);
++  SDL_ShowCursor (SDL_DISABLE);
++
++  return 0;
++}
++
++static void
++uninitializes (int num)
++{
++  char            s[256];
++  CQuit (s);
++  uninitialize ();
++  exit (1);
++}
++
++/* Start the ball rolling. */
++int
++main (int argc, char *argv[])
++{
++  char            c;
++
++  nrockets = 1;
++  drawpointer = 1;
++
++  while ((c = getopt (argc, argv, "KWD:P:L:SC:slExMmdh")) != EOF)
++    {
++      switch (c)
++	{
++#ifdef NETSUPPORT
++	case 'K':
++	  server = 1;
++	  servergameplan = DEATHMATCH;
++	  break;
++	case 'W':
++	  server = 1;
++	  GAMEHEIGHT = 360;
++	  break;
++	case 'D':
++	  {
++	    int             p;
++	    server = 1;
++	    if (sscanf (optarg, "%i", &p) != 1 || p < 0 || p > 4)
++	      {
++		printf ("-D : invalid difficulty\n");
++		exit (0);
++	      }
++	    difficulty = p;
++	  }
++	  break;
++	case 'P':
++	  {
++	    int             p;
++	    if (sscanf (optarg, "%i", &p) != 1 || p < 0)
++	      {
++		printf ("-P : invalid port number\n");
++		exit (0);
++	      }
++	    initport = p;
++	  }
++	  break;
++	case 'L':
++	  {
++	    int             p;
++	    server = 1;
++	    if (sscanf (optarg, "%i", &p) != 1 || p < 1 || p > 100)
++	      {
++		printf ("-L : invalid level number\n");
++		exit (0);
++	      }
++	    serverstartlevel = p - 1;
++	  }
++	  break;
++	case 'S':
++	  server = 1;
++	  break;
++	case 'C':
++	  strcpy (servername, optarg);
++	  client = 1;
++	  break;
++#else
++	case 'K':
++	case 'W':
++	case 'P':
++	case 'L':
++	case 'D':
++	case 'S':
++	case 'C':
++	case 'E':
++	  printf ("Network option but no network support compiled\n");
++	  break;
++#endif
++
++#ifdef NETSUPPORT
++	case 'E':
++	  server = 1;
++	  GAMEWIDTH = 900;
++	  GAMEHEIGHT = 600;
++	  MAPWIDTH = 900;
++	  MAPHEIGHT = 600;
++	  DIV = 2;
++	  break;
++#endif
++	case 's':
++	  GAMEWIDTH = 640;
++	  GAMEHEIGHT = 360;
++	  MAPWIDTH = 320;
++	  MAPHEIGHT = 180;
++	  DIV = 2;
++	  break;
++	case 'l':
++	  if (GAMEHEIGHT == 360)
++	    GAMEHEIGHT = MAPHEIGHT = 360;
++	  else
++	    MAPHEIGHT = GAMEHEIGHT = 460;
++	  GAMEWIDTH = 640;
++	  MAPWIDTH = 640;
++	  DIV = 1;
++	  break;
++	case 'x':
++	  GAMEWIDTH = 640;
++	  GAMEHEIGHT = 440;
++	  MAPWIDTH = 320;
++	  MAPHEIGHT = 220;
++	  break;
++#ifdef MOUSE
++	case 'M':
++	  nomouse = 1;
++	  drawpointer = 0;
++	  break;
++#endif
++#ifdef SOUND
++	case 'd':
++	  sndinit = 0;
++	  break;
++#endif
++	default:
++	  printf ("USAGE:\n"
++		  " -h for help\n"
++		  " -s for small display(320x200)\n"
++		  " -l for large display(640x480)\n"
++#ifdef SOUND
++		  " -d Disable sound support\n"
++#endif
++#ifdef MOUSE
++		  " -M disable mouse support\n"
++#endif
++#ifdef NETSUPPORT
++		  " -S run koules as network server\n"
++		  " -C<host> run koules as network client\n"
++		  " -P<port> select port. Default is:%i\n"
++		  " -W run server in width mode-support for 320x200 svgalib and OS/2 clients\n"
++		  " -L<level> select level for server\n"
++		  " -D<number> select dificulty for server:\n"
++		  "     0: nightmare\n"
++		  "     1: hard\n"
++		  "     2: medium(default and recomended)\n"
++		  "     3: easy\n"
++		  "     4: very easy\n"
++		  " -K run server in deathmatch mode\n", DEFAULTINITPORT
++#endif
++	    );
++	  exit (2);
++	}
++    }
++  srand (time (NULL));
++#ifdef NETSUPPORT
++  if (server)
++    {
++      init_server ();
++      server_loop ();
++    }
++  if (client)
++    {
++      init_client ();
++      atexit (uninitialize);
++      signal (SIGHUP, uninitializes);
++      signal (SIGINT, uninitializes);
++      signal (SIGTRAP, uninitializes);
++      signal (SIGABRT, uninitializes);
++      signal (SIGSEGV, uninitializes);
++      signal (SIGQUIT, uninitializes);
++      signal (SIGFPE, uninitializes);
++      signal (SIGTERM, uninitializes);
++      signal (SIGBUS, uninitializes);
++      signal (SIGIOT, uninitializes);
++      signal (SIGILL, uninitializes);
++      MAPWIDTH = GAMEWIDTH / DIV;
++      MAPHEIGHT = GAMEHEIGHT / DIV;
++
++    }
++#endif
++
++  setcustompalette (0, 1);
++
++  printf ("Starting MS-DOS...\n\n\n");
++  if (initialize () != 0)
++    return 1;
++
++  create_bitmap ();
++
++#ifdef SOUND
++  sound = sndinit;
++#endif
++  gamemode = MENU;
++
++  printf ("HIMEM is testing extended memory...");
++  fflush (stdout);
++  drawbackground ();
++  printf ("done.\n");
++  printf ("\n");
++  drawstarbackground ();
++  printf ("A:\\>");
++  fflush (stdout);
++
++  keys[0][0] = SDLK_UP;
++  keys[0][1] = SDLK_DOWN;
++  keys[0][2] = SDLK_LEFT;
++  keys[0][3] = SDLK_RIGHT;
++
++  keys[1][0] = SDLK_w;
++  keys[1][1] = SDLK_s;
++  keys[1][2] = SDLK_a;
++  keys[1][3] = SDLK_d;
++
++  starwars ();
++
++#ifdef NETSUPPORT
++  if (client)
++    client_loop ();
++  else
++#endif
++    game ();
++
++  uninitialize ();
++  return 0;
++}
+diff --git a/sdl/input.c b/sdl/input.c
+new file mode 100644
+index 0000000..74233ba
+--- /dev/null
++++ b/sdl/input.c
+@@ -0,0 +1,155 @@
++/***********************************************************
++*                      K O U L E S                         *
++*----------------------------------------------------------*
++*  C2013 Lubomir Rintel                                    *
++*        Polivkova 10                                      *
++*        612 00 Brno                                       *
++*        Czech Republic                                    *
++*        Phone: 0041-739-669-116                           *
++*        eMail: lkundrak@v3.sk                             *
++*----------------------------------------------------------*
++*   Copyright(c)2013 by Lubomir Rintel.See README for      *
++*                     Liecnece details.                    *
++*----------------------------------------------------------*
++*  sdl/input.c input routines using SDL                    *
++***********************************************************/
++
++#include <interface.h>
++#include <stdlib.h>
++#include <stdio.h>
++#include <stdbool.h>
++
++#include <SDL.h>
++
++int             pressed[SDLK_LAST];
++int             n_pressed = 0;
++int             last_pressed;
++
++void
++UpdateInput (void)
++{
++  SDL_Event       event;
++  int             val = -1;
++
++  if (!SDL_PollEvent (&event))
++    return;
++
++  switch (event.type)
++    {
++    case SDL_KEYDOWN:
++      val = 1;
++      last_pressed = event.key.keysym.sym;
++      break;
++    case SDL_KEYUP:
++      val = 0;
++      last_pressed = 0;
++      break;
++    case SDL_MOUSEBUTTONDOWN:
++      n_pressed++;
++      break;
++    case SDL_MOUSEBUTTONUP:
++      n_pressed--;
++      break;
++    default:
++      return;
++    }
++
++  if (val >= 0)
++    {
++      n_pressed += val ? 1 : -1;
++      pressed[event.key.keysym.sym] = val;
++    }
++}
++
++int
++GetKey (void)
++{
++  int             key = last_pressed;
++
++  last_pressed = 0;
++  return key;
++}
++
++bool
++Pressed (void)
++{
++  return n_pressed != 0;
++}
++
++bool
++IsPressed (int key)
++{
++  return pressed[key] > 0;
++}
++
++int
++IsPressedUp (void)
++{
++  return pressed[SDLK_UP];
++}
++
++int
++IsPressedDown (void)
++{
++  return pressed[SDLK_DOWN];
++}
++
++int
++IsPressedLeft (void)
++{
++  return pressed[SDLK_LEFT];
++}
++
++int
++IsPressedRight (void)
++{
++  return pressed[SDLK_RIGHT];
++}
++
++int
++IsPressedEnter (void)
++{
++  return pressed[SDLK_RETURN] || pressed[SDLK_KP_ENTER];
++}
++
++int
++IsPressedEsc (void)
++{
++  return pressed[SDLK_ESCAPE];
++}
++
++int
++IsPressedH (void)
++{
++  return pressed[SDLK_h];
++}
++
++int
++IsPressedP (void)
++{
++  return pressed[SDLK_p];
++}
++
++#ifdef MOUSE
++int
++MouseX (void)
++{
++  int             x;
++  SDL_GetMouseState (&x, NULL);
++  return x;
++}
++
++int
++MouseY (void)
++{
++  int             y;
++  SDL_GetMouseState (NULL, &y);
++  return y;
++}
++
++int
++MouseButtons (void)
++{
++  return SDL_GetMouseState (NULL, NULL);
++}
++#endif
+diff --git a/sdl/interface.h b/sdl/interface.h
+new file mode 100644
+index 0000000..2d208d0
+--- /dev/null
++++ b/sdl/interface.h
+@@ -0,0 +1,109 @@
++/***********************************************************
++*                      K O U L E S                         *
++*----------------------------------------------------------*
++*  C2013 Lubomir Rintel                                    *
++*        Polivkova 10                                      *
++*        612 00 Brno                                       *
++*        Czech Republic                                    *
++*        Phone: 0041-739-669-116                           *
++*        eMail: lkundrak@v3.sk                             *
++*----------------------------------------------------------*
++*   Copyright(c)2013 by Lubomir Rintel.See README for      *
++*                     Liecnece details.                    *
++*----------------------------------------------------------*
++*  sdl/interface.h common definitions for SDL backend      *
++***********************************************************/
++
++#ifndef _KOULES_SDL_INTERFACE_H
++#define _KOULES_SDL_INTERFACE_H
++
++#include <stdbool.h>
++#include <SDL.h>
++
++typedef SDL_Surface *BitmapType;
++typedef SDL_Surface *VScreenType;
++typedef SDL_Surface *RawBitmapType;
++
++extern SDL_Surface *sdl_screen;
++
++#define COLORS 256
++typedef struct
++{
++  struct
++  {
++    Uint8           red;
++    Uint8           green;
++    Uint8           blue;
++  }
++  color[COLORS];
++}
++Palette;
++
++extern VScreenType background;
++extern VScreenType backscreen;
++extern VScreenType starbackground;
++
++extern int      GAMEWIDTH;
++extern int      GAMEHEIGHT;
++extern int      MAPWIDTH;
++extern int      MAPHEIGHT;
++extern int      DIV;
++
++#define EYE_RADIUS (DIV==1?5:6)
++#define MOUSE_RADIUS 4
++
++RawBitmapType   CreateBitmap (const int, const int);
++BitmapType      CompileBitmap (const int, const int, const RawBitmapType);
++void            ClearScreen (void);
++void            SetScreen (VScreenType screen);
++void            CopyToScreen (VScreenType);
++void            CopyVSToVS (VScreenType, VScreenType);
++
++void            UpdateInput (void);
++int             GetKey (void);
++bool            Pressed (void);
++bool            IsPressed (int);
++int             IsPressedDown (void);
++int             IsPressedEnter (void);
++int             IsPressedEsc (void);
++int             IsPressedH (void);
++int             IsPressedLeft (void);
++int             IsPressedP (void);
++int             IsPressedRight (void);
++int             IsPressedUp (void);
++
++void            BSetPixel (RawBitmapType bitmap, int, int, int);
++void            SMySetPixel (VScreenType, int, int, int);
++int             SGetPixel (int, int);
++void            SPutPixel (int, int, int);
++void            SSetPixel (int, int, int);
++void            DrawText (int, int, char *);
++void            DrawBlackMaskedText (int, int, char *);
++void            DrawWhiteMaskedText (int, int, char *);
++void            DrawRectangle (int, int, int, int, int);
++void            HLine (int, int, int, int);
++void            Line (int, int, int, int, int);
++void            Line1 (int, int, int, int, int);
++void            PutBitmap (const int, const int, const int, const int,
++			   const BitmapType);
++
++void            EnableClipping (void);
++void            DisableClipping (void);
++
++void            WaitRetrace (void);
++void            SetPalette (Palette * pal);
++
++void            myusleep (unsigned long);
++void            uninitialize (void);
++
++void            fadeout (void);
++void            fadein (void);
++void            fadein1 (void);
++
++#ifdef MOUSE
++int             MouseX (void);
++int             MouseY (void);
++int             MouseButtons (void);
++#endif
++
++#endif /* _KOULES_SDL_INTERFACE_H */
+-- 
+2.5.0
+

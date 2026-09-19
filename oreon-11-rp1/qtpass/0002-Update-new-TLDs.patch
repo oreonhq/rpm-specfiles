@@ -1,0 +1,26 @@
+From 1780fa7b1beab3bc5a062b215eb833e41484da44 Mon Sep 17 00:00:00 2001
+From: Chuyen Vo <73516+vdchuyen@users.noreply.github.com>
+Date: Tue, 30 Apr 2024 12:31:17 +0700
+Subject: [PATCH 2/3] Update new TLDs
+
+There are so many new LTLDs with longer than 4 chars: https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains
+---
+ src/keygendialog.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/keygendialog.cpp b/src/keygendialog.cpp
+index ba1efdb0..cae73ff8 100644
+--- a/src/keygendialog.cpp
++++ b/src/keygendialog.cpp
+@@ -145,7 +145,7 @@ void KeygenDialog::done(int r) {
+     // check email
+     static const QRegularExpression mailre(
+         QRegularExpression::anchoredPattern(
+-            R"(\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b)"),
++            R"(\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b)"),
+         QRegularExpression::CaseInsensitiveOption);
+     if (!mailre.match(ui->email->text()).hasMatch()) {
+       QMessageBox::critical(
+-- 
+2.47.0
+

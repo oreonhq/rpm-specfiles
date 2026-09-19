@@ -1,0 +1,179 @@
+----------------------------
+revision 1.26
+date: 2004/03/28 00:09:46;  author: juri;  state: Exp;  lines: +1 -16
+ - and another documentation cleanup
+----------------------------
+revision 1.25
+date: 2004/03/27 23:19:46;  author: juri;  state: Exp;  lines: +18 -151
+ - bumped the version
+ - cleaned up the introduction
+ - removed the changelog entries (will be in a seperate file)
+----------------------------
+revision 1.24
+date: 2004/03/24 21:02:15;  author: juri;  state: Exp;  lines: +11 -3
+ - fix handling of leading and/or trailing white space in mbox names;
+   thanks to Ian Gulliver
+----------------------------
+revision 1.23
+date: 2004/03/22 22:37:04;  author: juri;  state: Exp;  lines: +58 -4
+ - new option "-l <mboxlist>": UW-Imapd creates a list that holds the name
+   of all subscibed mailboxes; this can be used to select which mbox files
+   to convert - just give mb2md the option "-l" and specify the list file;
+   thanks to Isaac Saldana for this one
+----------------------------
+revision 1.22
+date: 2004/03/22 22:09:34;  author: juri;  state: Exp;  lines: +35 -12
+ - make the use of the Content-Length header not the default - use the
+   new option "-c" to enable this behaviour, because results may be
+   unreliable if the header has wrong entries, which happens quite often
+ - small documentation cleanup
+----------------------------
+revision 1.21
+date: 2004/03/22 21:44:23;  author: juri;  state: Exp;  lines: +11 -5
+ - cleaned up the handling of CRLF-delimited files;
+   we now remove all CR from all lines so thaz we get real
+   unix files as output
+----------------------------
+revision 1.20
+date: 2004/03/20 01:57:50;  author: juri;  state: Exp;  lines: +12 -13
+ - fix a regexp to get just the date of From_ line,
+----------------------------
+revision 1.19
+date: 2004/03/19 23:05:25;  author: juri;  state: Exp;  lines: +61 -4
+ - added support for the infamous mboxcl2 format (Content-Length: header)
+   used by mutt; thanks to Chris Dunlop!
+----------------------------
+revision 1.18
+date: 2004/03/19 18:34:23;  author: juri;  state: Exp;  lines: +5 -2
+ - we ignore files that start with an empty line for now
+   (reportedly Evolution may create such files - hope to
+   support this violation of the mbox format later)
+----------------------------
+revision 1.17
+date: 2004/03/19 17:59:52;  author: juri;  state: Exp;  lines: +11 -4
+ - minor code cleanup
+----------------------------
+revision 1.16
+date: 2004/03/19 17:33:00;  author: juri;  state: Exp;  lines: +27 -1
+ - added support for Ximian Evolution's local mbox files (untested, as
+   I don't have any Evolution mailboxes).
+   Thanks to Jacob Barde for this one.
+ - forgot the credit for the last commited patch (CRLF):
+   Thanks goes to Martijn Polak!
+----------------------------
+revision 1.15
+date: 2004/03/19 17:11:20;  author: juri;  state: Exp;  lines: +9 -6
+ - we can now also handle mbox files in Windows format (CRLF delimited)
+----------------------------
+revision 1.14
+date: 2004/03/19 16:41:35;  author: juri;  state: Exp;  lines: +2 -2
+ - corrected a typo in the cvs Log tag
+----------------------------
+revision 1.13
+date: 2004/03/19 16:39:42;  author: juri;  state: Exp;  lines: +13 -1
+ - added change log entries for the last two fixes
+----------------------------
+revision 1.12
+date: 2004/03/19 16:35:57;  author: juri;  state: Exp;  lines: +3 -0
+ - added two cvs flags: $Id and $Logs
+----------------------------
+revision 1.11
+date: 2004/03/19 16:31:11;  author: juri;  state: Exp;  lines: +4 -8
+ - bug fix: follow the Maildir spec more closely:
+   put all converted mail into the cur/ directory instead of new/
+   resolves problems with Courier-POP3d and bincimap
+   Thanks to Richard Boulton.
+----------------------------
+revision 1.10
+date: 2004/03/19 15:44:08;  author: juri;  state: Exp;  lines: +10 -1
+ - bug fix: The program assumes that the environment setting $MAIL exists.
+   No error checking is done, and no meaningful error is generated.
+   Submitted by Glen Harris via the Debian package maintainer Noel Koethe
+----------------------------
+revision 1.9
+date: 2004/03/11 01:24:13;  author: juri;  state: Exp;  lines: +10 -4
+ - if specifying just a single file with -s, check whether it is a valid
+   mbox file - if not, skip it
+----------------------------
+revision 1.8
+date: 2003/11/11 14:49:26;  author: juri;  state: Exp;  lines: +37 -33
+ - bugfix: if dummy message is present the last converted mail wasn't
+   touched with the parsed date
+ - patch by Wayne Davison:
+   use Date::Parse from the TimeDate package to parse the From date
+   and use the perl function utime() instead of touch; minor code
+   cleanups
+----------------------------
+revision 1.7
+date: 2003/11/11 14:47:26;  author: juri;  state: Exp;  lines: +19 -55
+ - ripped out Geoffroy's changes concerning touch and FreeBSD and
+   replaced it with a generic way that should work on all *BSD and Linux
+   unfortunately you now need the Perl libwww package :(
+----------------------------
+revision 1.6
+date: 2003/11/11 14:44:39;  author: juri;  state: Exp;  lines: +7 -1
+ - bugfix: $unamecmd was set to /usr/bin/touch; grmbl cut-n-paste bug
+   thanks to Nick Triantos
+----------------------------
+revision 1.5
+date: 2003/11/11 14:43:22;  author: juri;  state: Exp;  lines: +79 -33
+ - fixed a bug where dots (.) in foldernames weren't converted to '_'
+ - fixed a bug where an empty file was created if we have a folder
+   that has just a dummy message in it
+ - incoorperated changes by Kjetil Torgrim Homme:
+   handle "From " correctly
+ - incoorperated changes by Ludovic Robinot:
+   also use X-Mozilla-Status flags (local Mozilla mailboxes)
+----------------------------
+revision 1.4
+date: 2003/11/11 14:41:56;  author: juri;  state: Exp;  lines: +256 -121
+ changes by Geoffroy DESVERNAY:
+ - added the '-R' switch, to permit 'one-pass conversion'
+ - added a isamailboxfile() function to skip some 'address-book' or other
+   files I found in users's 'Mail' directory
+ - added a convertit() function to permit recursion
+ - added a maildirmake() function to create empty folders (used the same code
+   that used to create it)
+ - added a '/bin/date' call in convert() to convert the date in case of *BSD
+   system : it's now  usable for a FreeBSD 4.7 system
+ - added a $touchtimeswitch variable (*BSD touch need '-t' instead of '-d')
+ - I tried not to change the default behaviour... hope it worked !
+
+changes by Juri Haberland:
+- minor cleanups
+----------------------------
+revision 1.3
+date: 2003/11/11 14:39:21;  author: juri;  state: Exp;  lines: +227 -328
+ Changes by Jeff Williams:
+ - put the mbox to maildir conversion into it's own function
+ - made it possible to specify a source mbox file, rather
+   than just the directory
+ - destination can now be an absolute path instead of relative
+   to the users home directory
+ - the users mail directory for -m is found from $ENV{MAIL}
+   rather than assumed to be in /var/spool/mail/$user
+ - mbox files with .'s in their name have them converted to -'s
+ - cleaned up a lot of the code and removed some unnecessary
+   variables. Added the use strict pragma.
+----------------------------
+revision 1.2
+date: 2002/10/23 14:26:27;  author: juri;  state: Exp;  lines: +126 -85
+ Juri's collected changes:
+ - fixed a bug in handling multiple source dirs
+ - fixed a bug with zero-sized mailboxes
+ - fixed a bug in handling "From:" headers that have a time zone
+ - added optional absolute path names for the source dir
+ - added the possibility to strip an extension from the mailboxes
+ - added the command line interface to be more standard like
+----------------------------
+revision 1.1
+date: 2002/10/23 13:41:24;  author: juri;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2002/10/23 13:41:24;  author: juri;  state: Exp;  lines: +0 -0
+ - initial import
+   including Robins's latest version 2.01
+
+=============================================================================

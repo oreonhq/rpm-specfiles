@@ -1,0 +1,135 @@
+From c90ae13b7bf611e2c28d04fd831d4fb8d65ad653 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 10 Mar 2023 16:53:56 +0100
+Subject: [PATCH] Unbundle Gentium Book Basic regular font
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This replaces the bundled GenBasR.ttf font file with a path to
+a system-provided font. Deleting the font file is left to a spec file.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Build.PL         | 4 ----
+ MANIFEST         | 1 -
+ lib/SDLx/Text.pm | 3 +--
+ t/sdlx_text.t    | 3 +--
+ t/ttf.t          | 5 +----
+ t/ttf_font.t     | 5 +----
+ 6 files changed, 4 insertions(+), 17 deletions(-)
+
+diff --git a/Build.PL b/Build.PL
+index 7c706fc..777c708 100644
+--- a/Build.PL
++++ b/Build.PL
+@@ -571,7 +571,6 @@ my $build = $package->new(
+ 		'ExtUtils::CBuilder' => '0.260301',
+ 		'Alien::SDL'         => '1.446',
+ 		'File::Find'         => '0',
+-		'File::ShareDir'     => '1.0',
+ 		'Tie::Simple'        => '0',
+ 		"Module::Build"      => '0.40',
+ 		'Capture::Tiny'      => '0',
+@@ -582,18 +581,15 @@ my $build = $package->new(
+ 		'Test::Most'        => '0.21',
+ 		'Alien::SDL'        => '1.446',
+ 		'File::Find'        => '0',
+-		'File::ShareDir'    => '1.0',
+ 		'Tie::Simple'       => '0',
+ 		'Scalar::Util'      => '0',
+ 	},
+ 	requires => {
+ 		'Scalar::Util'   => '0',
+ 		'Tie::Simple'    => '0',
+-		'File::ShareDir' => '1.0',
+ 		'CPAN'           => '1.92',
+ 		'perl'           => '5.008000',
+ 	},
+-	share_dir => 'share',
+ 
+ 	build_recommends => {
+ 		'Pod::ToDemo' => '0.20',
+diff --git a/MANIFEST b/MANIFEST
+index 6f86b79..dfa4982 100644
+--- a/MANIFEST
++++ b/MANIFEST
+@@ -193,7 +193,6 @@ scripts/MultiThreadPOC.pl
+ scripts/sdl_const.pl
+ scripts/sdl_module_maker.pl
+ scripts/SDLpp.pl
+-share/GenBasR.ttf
+ src/Core/Audio.xs
+ src/Core/CDROM.xs
+ src/Core/Events.xs
+diff --git a/lib/SDLx/Text.pm b/lib/SDLx/Text.pm
+index e29ccd9..8727cbb 100644
+--- a/lib/SDLx/Text.pm
++++ b/lib/SDLx/Text.pm
+@@ -20,8 +20,7 @@ sub new {
+ 	}  
+ 	my $file = $options{'font'};
+     if (!$file) {
+-        require File::ShareDir;
+-        $file = File::ShareDir::dist_file('SDL', 'GenBasR.ttf');
++        $file = '/usr/share/fonts/sil-gentium-basic-book-fonts/GenBkBasR.ttf';
+     }
+ 
+ 	my $color = defined $options{'color'} ? $options{'color'} : [255, 255, 255];
+diff --git a/t/sdlx_text.t b/t/sdlx_text.t
+index 0727b79..1343860 100644
+--- a/t/sdlx_text.t
++++ b/t/sdlx_text.t
+@@ -21,9 +21,8 @@ use_ok( 'SDLx::Text' );
+ my $videodriver = $ENV{SDL_VIDEODRIVER};
+ $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+ 
+-use File::Spec;
+ my $score = SDLx::Text->new(
+-       font => File::Spec->catfile($FindBin::Bin, '..', 'share', 'GenBasR.ttf')
++    '/usr/share/fonts/sil-gentium-basic-book-fonts/GenBkBasR.ttf'
+ );
+ 
+ isa_ok( $score, 'SDLx::Text');
+diff --git a/t/ttf.t b/t/ttf.t
+index 18bdca1..d6c7496 100644
+--- a/t/ttf.t
++++ b/t/ttf.t
+@@ -27,10 +27,7 @@ use SDL::RWOps;
+ use SDL::Version;
+ use Encode;
+ 
+-use File::Spec;
+-my $font_filename = File::Spec->catfile(
+-        $FindBin::Bin, '..', 'share', 'GenBasR.ttf'
+-);
++my $font_filename = '/usr/share/fonts/sil-gentium-basic-book-fonts/GenBkBasR.ttf';
+ 
+ my $videodriver = $ENV{SDL_VIDEODRIVER};
+ $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+diff --git a/t/ttf_font.t b/t/ttf_font.t
+index e5a05ca..dfabc9c 100644
+--- a/t/ttf_font.t
++++ b/t/ttf_font.t
+@@ -6,7 +6,6 @@ use SDL::Config;
+ 
+ BEGIN {
+ 	use FindBin;
+-	use File::Spec;
+ 	use Test::More;
+ 	use lib 't/lib';
+ 	use SDL::TestTool;
+@@ -19,9 +18,7 @@ BEGIN {
+ use SDL::TTF;
+ use SDL::TTF::Font;
+ use SDL::Version;
+-my $font_filename = File::Spec->catfile(
+-        $FindBin::Bin, '..', 'share', 'GenBasR.ttf'
+-);
++my $font_filename = '/usr/share/fonts/sil-gentium-basic-book-fonts/GenBkBasR.ttf';
+ 
+ my $lv = SDL::TTF::linked_version();
+ my $cv = SDL::TTF::compile_time_version();
+-- 
+2.39.2
+

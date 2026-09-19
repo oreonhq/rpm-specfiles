@@ -1,0 +1,33 @@
+From 25ce53ead4baefe182703a86796cd369e113199f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 28 Jan 2019 17:27:15 +0100
+Subject: [PATCH] Fix "make install"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Makefile.PL already generates install target. The explicit one does
+not work and masks the generated one.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 31907d8..46e8919 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -227,9 +227,6 @@ iptables/iptables.o iptables/xshared.o: iptables/*.c
+ 	make -C iptables/ all PREFIX=\"\$(PREFIX)\" IPTABLES_VERSION=\"\$(IPTABLES_VERSION)\" XTABLES_LIBDIR=\"\$(XTABLES_LIBDIR)\" IPTABLES_VERSION_CODE=\"\$(IPTABLES_VERSION_CODE)\" EXTRALIBS=\"\$(EXTRALIBS)\"
+ 
+ 
+-install::
+-	make -C iptables/ install
+-
+ clean::
+ 	make -C iptables/ clean
+ #	make -C library_iptc/ clean
+-- 
+2.17.2
+

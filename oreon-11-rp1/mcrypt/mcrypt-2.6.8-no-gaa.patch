@@ -1,0 +1,14 @@
+diff -up mcrypt-2.6.8/src/Makefile.in.no-gaa mcrypt-2.6.8/src/Makefile.in
+--- mcrypt-2.6.8/src/Makefile.in.no-gaa	2012-09-07 12:49:01.351522013 -0400
++++ mcrypt-2.6.8/src/Makefile.in	2012-09-07 12:49:06.163523470 -0400
+@@ -518,8 +518,8 @@ uninstall-am: uninstall-binPROGRAMS
+ 
+ gaaout.o: gaaout.c
+ 	$(CC) -o gaaout.o -c gaaout.c $(INCLUDES) $(CFLAGS) $(CPPFLAGS) -I. -I..
+-gaaout.c: mcrypt.gaa
+-	gaa -o gaaout.c -i gaa.h mcrypt.gaa
++# gaaout.c: mcrypt.gaa
++#	gaa -o gaaout.c -i gaa.h mcrypt.gaa
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:

@@ -1,0 +1,38 @@
+diff -up Botan-1.10.17/doc/conf.py.orig Botan-1.10.17/doc/conf.py
+--- Botan-1.10.17/doc/conf.py.orig	2017-10-02 08:00:00.000000000 +0200
++++ Botan-1.10.17/doc/conf.py	2021-09-11 17:57:38.159934955 +0200
+@@ -40,10 +40,10 @@ version.
+ def check_sphinx_version():
+     import sphinx
+ 
+-    version = map(int, sphinx.__version__.split('.'))
++    version = list(map(int, sphinx.__version__.split('.')))
+     if version[0] == 1 and version[1] == 0 and version[2] < 7:
+         # Exit rather than throwing to avoid a confusing backtrace
+-        print "This Sphinx is too old - upgrade to at least 1.0.7"
++        print("This Sphinx is too old - upgrade to at least 1.0.7")
+         import sys
+         sys.exit(1)
+ 
+@@ -66,8 +66,8 @@ source_suffix = '.txt'
+ master_doc = 'contents'
+ 
+ # General information about the project.
+-project = u'botan'
+-copyright = u'2000-2011, Jack Lloyd'
++project = 'botan'
++copyright = '2000-2011, Jack Lloyd'
+ 
+ # The version info for the project you're documenting, acts as replacement for
+ # |version| and |release|, also used in various other places throughout the
+@@ -214,8 +214,8 @@ htmlhelp_basename = 'botandoc'
+ # Grouping the document tree into LaTeX files. List of tuples
+ # (source start file, target name, title, author, documentclass [howto/manual]).
+ latex_documents = [
+-  ('contents', 'botan.tex', u'botan Reference Manual',
+-   u'Jack Lloyd', 'manual'),
++  ('contents', 'botan.tex', 'botan Reference Manual',
++   'Jack Lloyd', 'manual'),
+ ]
+ 
+ # The name of an image file (relative to this directory) to place at the top of

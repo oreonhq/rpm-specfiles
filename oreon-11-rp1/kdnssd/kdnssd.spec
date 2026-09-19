@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash cf57e9c5cd7248fd74a59fc318e8554a6a2198756f4440fb577648a09659f38d
 
 %global stable_kf6 stable
 
@@ -11,7 +11,7 @@ ExcludeArch: %{ix86}
 
 Name:    kdnssd
 Summary: KDE Network Monitor for DNS-SD services (Zeroconf)
-Version: 26.03.80
+Version: 26.08.0
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later AND LGPL-2.0-only
@@ -72,6 +72,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

@@ -1,0 +1,14 @@
+Include <string.h> for the strcpy function.  This avoids an implicit
+function declaration and a build failure with future compilers.
+
+diff -ur BL_SRC.orig/ImageLib/src/png/hpng.c BL_SRC/ImageLib/src/png/hpng.c
+--- BL_SRC.orig/ImageLib/src/png/hpng.c	2023-01-02 10:09:31.917784085 +0100
++++ BL_SRC/ImageLib/src/png/hpng.c	2023-01-02 10:10:30.527196194 +0100
+@@ -1,6 +1,7 @@
+ #include <malloc.h>
+ #include <math.h>
+ #include <png.h>
++#include <string.h>
+ #include "hpng.h"
+ 
+ char PngErrorMessage[1024];

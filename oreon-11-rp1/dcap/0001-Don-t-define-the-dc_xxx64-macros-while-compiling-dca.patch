@@ -1,0 +1,61 @@
+From 01fbf652c9dbe161e0164b396e382da00cda5632 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Mon, 11 Mar 2024 16:05:22 +0100
+Subject: [PATCH 1/2] Don't define the dc_xxx64 macros while compiling dcap
+ Unset _FILE_OFFSET_BITS and _TIME_BITS when compiling the 32 bit preload
+ wrapper.
+
+---
+ src/Makefile.am    | 2 +-
+ src/dcap.h         | 2 +-
+ src/dcap_preload.c | 8 ++++++++
+ 3 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 6427abe..7574ad0 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -117,7 +117,7 @@ dcap_preload64.c
+ library_includedir="$(includedir)"
+ 
+ 
+-AM_CPPFLAGS = -I$(includedir) -DLOCALEDIR=\"$(localedir)\"
++AM_CPPFLAGS = -I$(includedir) -DLOCALEDIR=\"$(localedir)\" -DDCAP_BUILD
+ 
+ 
+ 
+diff --git a/src/dcap.h b/src/dcap.h
+index 2b4df62..2e225b1 100644
+--- a/src/dcap.h
++++ b/src/dcap.h
+@@ -47,7 +47,7 @@
+ extern "C" {
+ #endif
+ 
+-#if defined(_FILE_OFFSET_BITS) &&  _FILE_OFFSET_BITS == 64
++#if !defined(DCAP_BUILD) && defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64
+ 
+ #define dc_lseek    dc_lseek64
+ #define dc_stat     dc_stat64
+diff --git a/src/dcap_preload.c b/src/dcap_preload.c
+index 90526bd..488f5dd 100644
+--- a/src/dcap_preload.c
++++ b/src/dcap_preload.c
+@@ -14,6 +14,14 @@
+ /*
+  * $Id: dcap_preload.c,v 1.39 2006-09-26 07:47:27 tigran Exp $
+  */
++
++#ifdef _FILE_OFFSET_BITS
++#undef _FILE_OFFSET_BITS
++#endif
++#ifdef _TIME_BITS
++#undef _TIME_BITS
++#endif
++
+ #include <sys/types.h>
+ #include <sys/mman.h>
+ #include <fcntl.h>
+-- 
+2.44.0
+

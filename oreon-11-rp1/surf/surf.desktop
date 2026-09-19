@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=surf
+Comment=small and simple browser
+Categories=Network;GTK;WebBrowser;
+Exec=surf
+Icon=surf
+Terminal=false
+Type=Application

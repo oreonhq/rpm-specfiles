@@ -1,0 +1,24 @@
+From c38211d386c24afa3371b7099f14a0699293da7b Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Wed, 21 Jan 2026 10:36:12 +0000
+Subject: [PATCH 3/4] fix: set C++23 for poppler usage
+
+---
+ CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 38c65d116..9c39c842a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -335,6 +335,7 @@ mark_as_advanced(
+ option(GDCM_USE_SYSTEM_POPPLER "Use system poppler (pdf)" OFF)
+ if(GDCM_USE_SYSTEM_POPPLER)
+   find_package(Poppler REQUIRED)
++  set(CMAKE_CXX_STANDARD 23)
+ endif()
+ mark_as_advanced(GDCM_USE_SYSTEM_POPPLER)
+ 
+-- 
+2.52.0
+

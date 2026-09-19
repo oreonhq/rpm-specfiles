@@ -1,0 +1,33 @@
+--- CVector-1.0.3.1/Makefile.orig	2010-09-01 23:10:52.000000000 +0900
++++ CVector-1.0.3.1/Makefile	2010-09-02 11:43:23.000000000 +0900
+@@ -39,6 +39,8 @@
+ VERSION = 2:0:0
+ RELEASE = 1.0.3
+ 
++# get OSTYPE
++OSTYPE=$(shell uname -s)
+ 
+ #
+ # Compiler and compilation flags
+@@ -56,7 +58,11 @@
+ #
+ #LIBTOOL = $(HOME)/bin/libtool
+ ifndef LIBTOOL
+-  LIBTOOL = libtool
++ifeq ($(OSTYPE),Darwin)
++LIBTOOL = glibtool
++else
++LIBTOOL = libtool
++endif
+ endif
+ 
+ #
+@@ -92,7 +98,7 @@
+ COMPILE_COMMAND        =  $(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c
+ LIBRARY_LINK_COMMAND   =  $(LIBTOOL) --mode=link  $(CC) -version-info $(VERSION) -release $(RELEASE) -no-undefined -rpath $(INSTALL_PREFIX)/lib
+ BUILD_COMMAND_LOCAL    =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(INCLUDES)
+-BUILD_COMMAND_DYNAMIC  =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -dynamic -I $(INSTALL_PREFIX)/include
++BUILD_COMMAND_DYNAMIC  =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -rdynamic -I $(INSTALL_PREFIX)/include
+ BUILD_COMMAND_STATIC   =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -static -I $(INSTALL_PREFIX)/include
+ INSTALL_COMMAND        =  $(LIBTOOL) --mode=install cp
+ INSTALL_FINISH_COMMAND =  $(LIBTOOL) --mode=finish

@@ -1,0 +1,21 @@
+From 7cf1408247e1c03aba86ddebd951d1e413c26fa3 Mon Sep 17 00:00:00 2001
+From: Dongxu Li <dongxuli2011@gmail.com>
+Date: Sun, 5 May 2024 15:58:55 -0400
+Subject: [PATCH] Compiler warnings
+
+---
+ libraries/libdxfrw/src/drw_header.cpp         |  2 +-
+
+diff --git a/libraries/libdxfrw/src/drw_header.cpp b/libraries/libdxfrw/src/drw_header.cpp
+index 9c73d7d180..b898dfab71 100644
+--- a/src/drw_header.cpp
++++ b/src/drw_header.cpp
+@@ -2404,7 +2404,7 @@ bool DRW_Header::parseDwg(DRW::Version version, dwgBuffer *buf, dwgBuffer *hBbuf
+     }
+ 
+     //temporary code to show header end sentinel
+-    duint64 sz= buf->size()-1;
++    duint64 sz= 0; //buf->size()-1;
+     if (version < DRW::AC1018) {//pre 2004
+         sz= buf->size()-16;
+         buf->setPosition(sz);

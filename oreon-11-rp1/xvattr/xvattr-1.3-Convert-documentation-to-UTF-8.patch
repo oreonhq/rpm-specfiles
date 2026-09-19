@@ -1,0 +1,76 @@
+From aac7c4e1028a74ff03d7a855bb300afa789ca8a4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 26 Oct 2015 13:24:59 +0100
+Subject: [PATCH] Convert documentation to UTF-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr PÃ­saÅ™ <ppisar@redhat.com>
+---
+ AUTHORS       | 4 ++--
+ ChangeLog     | 4 ++--
+ xvattr.pod.in | 6 ++++--
+ 3 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/AUTHORS b/AUTHORS
+index ec0e8d3..f68e848 100644
+--- a/AUTHORS
++++ b/AUTHORS
+@@ -1,5 +1,5 @@
+-Björn Englund <d4bjorn@dtek.chalmers.se> (xvattr)
+-Martin Norbäck <d95mback@dtek.chalmers.se> (gxvattr)
++BjÃ¶rn Englund <d4bjorn@dtek.chalmers.se> (xvattr)
++Martin NorbÃ¤ck <d95mback@dtek.chalmers.se> (gxvattr)
+ R. Bernstein <rocky@panix.com> (automake/autoconf/man-page)
+ Greetings to Billy Biggs who hacked together a very similar program
+ (with the same name) a week before this program was created.
+diff --git a/ChangeLog b/ChangeLog
+index 03b3ac3..c34a8a0 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,9 +1,9 @@
+-2001-11-09  Björn Englund  <d4bjorn@dtek.chalmers.se>
++2001-11-09  BjÃ¶rn Englund  <d4bjorn@dtek.chalmers.se>
+ 
+ 	* xvattr.c: version 1.1
+ 	Tell when the Xv extension is not found.
+ 	Do not list the values of attributes that are not gettable.
+ 
+-2001-11-08  Björn Englund  <d4bjorn@dtek.chalmers.se>
++2001-11-08  BjÃ¶rn Englund  <d4bjorn@dtek.chalmers.se>
+ 
+ 	* xvattr.c: version 1.0
+diff --git a/xvattr.pod.in b/xvattr.pod.in
+index c8bebb6..679a640 100644
+--- a/xvattr.pod.in
++++ b/xvattr.pod.in
+@@ -1,5 +1,7 @@
+ =pod
+ 
++=encoding utf8
++
+ =head1 NAME
+ 
+ @PACKAGE@ - Query/Set X11 XVideo Setting(s)
+@@ -103,7 +105,7 @@ Example:
+ 
+ =head1 AUTHOR
+ 
+-Björn Englund. Send bug reports to C<d4bjorn@dtek.chalmers.se>
++BjÃ¶rn Englund. Send bug reports to C<d4bjorn@dtek.chalmers.se>
+ C<rocky@panix.com> turned the README into this document.
+ 
+ 
+@@ -114,7 +116,7 @@ and L<XvGetPortAttribute>.
+ 
+ =head1 COPYRIGHT
+ 
+-  Copyright (C) 2001-2002 Björn Englund
++  Copyright (C) 2001-2002 BjÃ¶rn Englund
+ 
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+-- 
+2.4.3
+

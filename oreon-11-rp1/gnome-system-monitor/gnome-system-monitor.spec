@@ -7,7 +7,7 @@
 %global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           gnome-system-monitor
-Version:        50.0
+Version:        51.0
 Release:        1%{?dist}
 Summary:        Process and resource monitor
 

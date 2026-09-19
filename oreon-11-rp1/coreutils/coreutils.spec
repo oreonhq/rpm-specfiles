@@ -4,8 +4,8 @@
 
 Summary: A set of basic GNU tools commonly used in shell scripts
 Name:    coreutils
-Version: 9.10
-Release: 3%{?dist}
+Version: 9.12
+Release: 1%{?dist}
 # some used parts of gnulib are under various variants of LGPL
 License: GPL-3.0-or-later AND GFDL-1.3-no-invariants-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 Url:     https://www.gnu.org/software/coreutils/
@@ -89,10 +89,8 @@ BuildRequires: perl(Expect)
 BuildRequires: python3-inotify
 %endif
 
-%if 23 < 0%{?fedora} || 7 < 0%{?rhel}
 # needed by i18n test-cases
 BuildRequires: glibc-all-langpacks
-%endif
 
 Requires: %{name}-common = %{version}-%{release}
 

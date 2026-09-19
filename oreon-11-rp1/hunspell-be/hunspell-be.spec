@@ -8,8 +8,8 @@
 
 Name: hunspell-be
 Summary: Belarusian hunspell dictionaries
-Version: 25.2.3
-Release: 34%{?dist}
+Version: 26.8.0.3
+Release: 1%{?dist}
 License: GPL-1.0-or-later AND LGPL-2.1-or-later
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/be_BY
 Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz

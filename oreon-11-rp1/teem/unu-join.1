@@ -1,0 +1,89 @@
+.TH UNU\-JOIN "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-join \- connect slices and/or slabs into a bigger
+.I nrrd
+.SH SYNOPSIS
+.B unu\ join
+.RI [ @file \ ...]
+.BR \-i , \-\-input
+.RI < nin0 \ ...>
+.BR \-a , \-\-axis
+.RI < axis >
+.RB [ \-incr ]
+.RB [ \-l , \-\-label
+.RI < label >]
+.RB [ \-mm , \-\-minmax
+.RI < min \  max >]
+.RB [ \-sp , \-\-spacing
+.RI < spc >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Connect slices and/or slabs into a bigger
+.IR nrrd .
+Can stich images into volumes, or tile images side by side, or attach images
+onto volumes.
+If
+there are many many files to name in the
+.RB \(lq \-i \(rq
+option, and using wildcards won\(cqt work, consider putting the list of
+filenames into a separate text file (e.g.
+.RB \(lq slices.txt \(rq),
+and then name this file as a response file (e.g.
+.RB \(lq \-i\ s@lices.txt \(rq).
+This command now allows you to set the same pieces of
+information that previously had to be set with
+.BR unu\-axinfo (1):
+label, spacing, and min/max.
+These can be use whether the join axis is new (because of
+.RB \(lq \-incr \(rq)
+or not.
+.IP \(bu +2n
+Uses
+.B nrrdJoin
+.SH OPTIONS
+.TP
+.IR @file \ ...
+response file(s) containing command-line arguments
+.TP
+.B \-i\fR\ <\fInin0\fR\ ...>\ ,\ \fB\-\-input\fR\ <\fInin0\fR\ ...>
+everything to be joined together (1 or more
+.IR nrrd s)
+.TP
+.B \-a\fR\ <\fIaxis\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxis\fR>
+axis to join along
+.RI ( unsigned\ int )
+.TP
+.B \-incr
+in situations where the join axis is
+.B not
+among the existing axes of the input
+.IR nrrd s,
+then this flag signifies that the join axis should be
+.BR inserted ,
+and the output dimension should be one greater than input dimension.
+Without this flag, the
+.IR nrrd s
+are joined side-by-side, along an existing axis.
+.TP
+.B \-l\fR\ <\fIlabel\fR>\ ,\ \fB\-\-label\fR\ <\fIlabel\fR>
+label to associate with join axis
+.RI ( string )
+.TP
+.B \-mm\fR\ <\fImin\fR\ \fImax\fR>\ ,\ \fB\-\-minmax\fR\ <\fImin\fR\ \fImax\fR>
+min and max values along join axis (2
+.IR double s)
+.TP
+.B \-sp\fR\ <\fIspc\fR>\ ,\ \fB\-\-spacing\fR\ <\fIspc\fR>
+spacing between samples along join axis
+.RI ( double )
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- (rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-axinfo (1)

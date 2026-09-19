@@ -1,0 +1,12 @@
+diff -up ballbuster-1.0/CImage.cpp~ ballbuster-1.0/CImage.cpp
+--- ballbuster-1.0/CImage.cpp~	2016-02-14 19:32:23.000000000 +0100
++++ ballbuster-1.0/CImage.cpp	2016-02-14 19:45:32.415484199 +0100
+@@ -34,7 +34,7 @@ void CImage::load()
+ 	this->topborder= new CL_Surface(DATADIR "imgs/topborder.png");
+ 	this->bgtile= new CL_Surface(DATADIR "imgs/bg1.jpg");
+ 
+-	CL_ResourceManager spritesSrc(DATADIR "imgs/sprites.scr", false);
++	CL_ResourceManager spritesSrc(DATADIR "imgs/sprites.scr", NULL);
+ 
+ 	this->ball = new CL_Sprite("ball", &spritesSrc);
+ 	this->fireball= new CL_Sprite("fireball", &spritesSrc);

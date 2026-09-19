@@ -1,0 +1,50 @@
+diff -urN foobillard/data/Makefile.in foobillard-3.0a/data/Makefile.in
+--- foobillard/data/Makefile.in	2004-04-24 03:30:26.000000000 +0200
++++ foobillard-3.0a/data/Makefile.in	2008-07-19 22:27:11.000000000 +0200
+@@ -121,14 +121,12 @@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+ pkgdata_DATA = blende.png \
+-               bluebold.ttf \
+                cue_shadow.png \
+                foobillard.gif \
+                foobillard.png \
+                full_symbol.png \
+                fullhalf_symbol.png \
+                half_symbol.png \
+-               iomanoid.ttf \
+                lightflare.png \
+                place_cue_ball.png \
+                queue.png \
+@@ -142,7 +140,6 @@
+                table-frame.png \
+                tabletex_fB_128x128.png \
+                tabletex_fB_256x256.png \
+-               youregon.ttf \
+                ball_ball.raw \
+                posx.png \
+                posy.png \
+diff -urN foobillard/src/options.h foobillard-3.0a/src/options.h
+--- foobillard/src/options.h	2003-11-27 04:32:54.000000000 +0100
++++ foobillard-3.0a/src/options.h	2008-07-19 22:20:14.000000000 +0200
+@@ -96,13 +96,13 @@
+ //#define options_player_fontname  "/usr/X11/lib/X11/fonts/win-ttf/tahomabd.ttf"
+ #define options_shared_data_path   "/usr/local/shared/foobillard"
+ 
+-#define options_player_fontname    "iomanoid.ttf"
+-#define options_help_fontname      "youregon.ttf"
+-#define options_menu_fontname      "youregon.ttf"
+-#define options_winner_fontname    "youregon.ttf"
+-#define options_ball_fontname      "bluebold.ttf"
+-#define options_score_fontname     "bluebold.ttf"
+-#define options_roster_fontname    "bluebold.ttf"
++#define options_player_fontname    "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans.ttf"
++#define options_help_fontname      "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf"
++#define options_menu_fontname      "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf"
++#define options_winner_fontname    "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf"
++#define options_ball_fontname      "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf"
++#define options_score_fontname     "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf"
++#define options_roster_fontname    "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf"
+ 
+ #define options_snd_volume 1.0
+ 

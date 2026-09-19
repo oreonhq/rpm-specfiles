@@ -1,0 +1,35 @@
+diff -up ./Bugzilla/Constants.pm.rw-paths ./Bugzilla/Constants.pm
+--- ./Bugzilla/Constants.pm.rw-paths	2019-02-14 20:42:11.280492600 +0100
++++ ./Bugzilla/Constants.pm	2019-02-14 20:44:39.281581534 +0100
+@@ -700,7 +700,7 @@ sub _bz_locations {
+     $datadir     = "data";
+   }
+ 
+-  $datadir = "$libpath/$datadir";
++  $datadir = "/var/lib/bugzilla/$datadir";
+ 
+   # We have to return absolute paths for mod_perl.
+   # That means that if you modify these paths, they must be absolute paths.
+@@ -714,11 +714,11 @@ sub _bz_locations {
+     'templatedir'    => "$libpath/template",
+     'template_cache' => "$datadir/template",
+     'project'        => $project,
+-    'localconfig'    => "$libpath/$localconfig",
++    'localconfig'    => "/etc/bugzilla/$localconfig",
+     'datadir'        => $datadir,
+     'attachdir'      => "$datadir/attachments",
+     'skinsdir'       => "$libpath/skins",
+-    'graphsdir'      => "$libpath/graphs",
++    'graphsdir'      => "/var/lib/bugzilla/graphs",
+ 
+     # $webdotdir must be in the web server's tree somewhere. Even if you use a
+     # local dot, we output images to there. Also, if $webdotdir is
+@@ -728,7 +728,7 @@ sub _bz_locations {
+     # The script should really generate these graphs directly...
+     'webdotdir'     => "$datadir/webdot",
+     'extensionsdir' => "$libpath/extensions",
+-    'assetsdir'     => "$datadir/assets",
++    'assetsdir'     => "$libpath/assets",
+   };
+ }
+ 

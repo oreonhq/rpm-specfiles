@@ -1,0 +1,13 @@
+diff --git a/charset/CMakeLists.txt b/charset/CMakeLists.txt
+index 06eae77..bb85947 100644
+--- a/charset/CMakeLists.txt
++++ b/charset/CMakeLists.txt
+@@ -5,7 +5,7 @@
+ # string handling abilities to read the list out of Makefile.am
+ # alongside it.
+ 
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.5)
+ project(libcharset LANGUAGES C)
+ 
+ file(READ ${CMAKE_CURRENT_SOURCE_DIR}/Makefile.am MAKEFILE_AM)

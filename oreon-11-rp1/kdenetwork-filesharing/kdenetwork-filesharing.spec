@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f563502143e294633a69ddd8fecc9bed91af6c6894ca831e60937edf6b05583b
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kdenetwork-filesharing
 Summary: Network filesharing
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 # KDE e.V. may determine that future GPL versions are accepted
@@ -49,7 +49,7 @@ Recommends: samba-usershares
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n kdenetwork-filesharing-26.04.1
+%autosetup -p1 -n %{name}-%{version}
 
 
 %build

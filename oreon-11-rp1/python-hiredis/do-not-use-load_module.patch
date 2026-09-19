@@ -1,0 +1,47 @@
+From f746928e007c2e2627ba5cbdf9a0d10b37ff334e Mon Sep 17 00:00:00 2001
+From: Thomas A Caswell <tcaswell@gmail.com>
+Date: Wed, 31 Dec 2025 21:48:57 -0500
+Subject: [PATCH] MNT: do not use deprecated load_module method
+
+The load_module method has been deprecated from py34 and will be removed in
+py315 [1] (it is already gone on CPython main).
+
+The recommended replacement is exec_module, however the documentation [2]
+suggests to use a simpler approach than using the loaders directly and runpy
+[3] seemed better than sys.path hacking.
+
+Given that this is a one-line file simply reading the file and parsing it 'by
+hand' is an option.
+
+[1] https://docs.python.org/3/library/importlib.html#importlib.abc.Loader.load_module
+[2] https://docs.python.org/3/library/importlib.html#importing-a-source-file-directly
+[3] https://docs.python.org/3/library/runpy.html#runpy.run_path
+---
+ setup.py | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 93e5a37..77e84ce 100644
+--- a/setup.py
++++ b/setup.py
+@@ -4,17 +4,14 @@
+     from setuptools import setup, Extension
+ except ImportError:
+     from distutils.core import setup, Extension
+-import importlib
++import runpy
+ import glob
+ import io
+ import sys
+ 
+ 
+ def version():
+-    loader = importlib.machinery.SourceFileLoader(
+-        "hiredis.version", "hiredis/version.py")
+-    module = loader.load_module()
+-    return module.__version__
++    return runpy.run_path("hiredis/version.py")["__version__"]
+ 
+ 
+ def get_sources():
+

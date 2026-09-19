@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 04aeda7b16205c3cd1f65a0e4a9c99c8cdf5897ac72494db55dec01b729c7bb3
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:          kontrast
-Version:       26.03.80
+Version:       26.04.3
 Release:       1%{?dist}
 Summary:       Color contrast checker
 # BSD, CC0 are only for build files

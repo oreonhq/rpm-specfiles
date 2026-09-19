@@ -1,0 +1,47 @@
+From 8c047693e8be7a6c69bcbc2a3e57a3c8fd265817 Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <ignatenkobrain@fedoraproject.org>
+Date: Sat, 16 Jun 2018 14:48:24 -0700
+Subject: [PATCH 1/2] don't show information about 3rd-party licenses
+
+We have unbundled those..
+
+Signed-off-by: Igor Gnatenko <ignatenkobrain@fedoraproject.org>
+---
+ resources.qrc          | 4 ----
+ src/ui/aboutdialog.cpp | 4 +---
+ 2 files changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/resources.qrc b/resources.qrc
+index 8eeb38e..4808e2b 100644
+--- a/resources.qrc
++++ b/resources.qrc
+@@ -11,11 +11,7 @@
+         <file alias="nitrokey_it.qm">i18n/nitrokey_it.qm</file>
+     </qresource>
+     <qresource prefix="/license">
+-        <file alias="General">3RDPARTY.txt</file>
+         <file alias="Nitrokey-App">LICENSES/GPLv3</file>
+-        <file alias="Qt-framework">LICENSES/GPLv3</file>
+-        <file alias="libnitrokey">LICENSES/LGPLv3</file>
+-        <file alias="cppcodec">LICENSES/MIT</file>
+     </qresource>
+     <qresource prefix="/">
+         <file>images/new/icon_about_nitrokey.svg</file>
+diff --git a/src/ui/aboutdialog.cpp b/src/ui/aboutdialog.cpp
+index d11805f..f21fee5 100644
+--- a/src/ui/aboutdialog.cpp
++++ b/src/ui/aboutdialog.cpp
+@@ -102,9 +102,7 @@ void AboutDialog::on_ButtonOK_clicked() { done(TRUE); }
+ 
+ void AboutDialog::on_btn_3rdparty_clicked(){
+   QString line;
+-  std::vector<QString> filenames {"General","Nitrokey-App",
+-                                  "Qt-framework",
+-                                  "libnitrokey","cppcodec"};
++  std::vector<QString> filenames {"Nitrokey-App"};
+   for (auto filename : filenames) {
+     QFile file(":license/" + filename);
+     if (!file.exists()) {
+-- 
+2.18.0.rc2
+

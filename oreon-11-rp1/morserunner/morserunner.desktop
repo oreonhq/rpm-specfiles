@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=MorseRunner
+Exec=MorseRunner
+Icon=morserunner
+Terminal=false
+Type=Application
+Categories=Education;HamRadio;
+Comment=Amateur radio morse code contest simulator

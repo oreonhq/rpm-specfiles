@@ -1,0 +1,16 @@
+Avoid implicit declaration of the Move_point function in
+Wall_in_between_points in suibotdef.c.
+
+diff --git a/src/server/server.h b/src/server/server.h
+index 5c0cdd66de1db008..30b7f7d0a8fb09e4 100644
+--- a/src/server/server.h
++++ b/src/server/server.h
+@@ -151,6 +151,8 @@ void Groups_init(void);
+ void Walls_init(void);
+ void Treasure_init(void);
+ void Move_init(void);
++struct collans;
++void Move_point(const move_t *move, struct collans *answer);
+ void Move_object(object_t *obj);
+ void Move_player(player_t *pl);
+ void Turn_player(player_t *pl, bool push);

@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 3d0368e992388fce0015e3622778062a67827b660bae6ab551e873ae18a3045c
 
 %global stable_kf6 stable
 
 
 Name:           ocean-sound-theme
 Summary:        Ocean Sound Theme for Plasma
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 BuildArch:      noarch
 

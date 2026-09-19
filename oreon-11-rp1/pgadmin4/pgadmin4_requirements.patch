@@ -1,0 +1,108 @@
+--- pgadmin4-9.13/requirements.txt	2026-03-03 05:27:05.000000000 +0100
++++ pgadmin4-9.13-new/requirements.txt	2026-03-08 00:16:42.656095214 +0100
+@@ -12,54 +12,54 @@
+ # relevant packages.
+ ###############################################################################
+ 
+-Authlib==1.6.8
+-azure-identity==1.25.2
+-azure-mgmt-rdbms==10.1.1
+-azure-mgmt-resource==25.0.0
+-azure-mgmt-subscription==3.1.1
+-bcrypt==5.0.*
+-boto3==1.42.*
+-certifi==2026.1.4
+-cryptography==46.0.*
+-Flask-Babel==4.0.*
+-Flask-Compress==1.*
+-Flask-Login==0.*
+-Flask-Mail==0.*
+-Flask-Migrate==4.*
+-Flask-Paranoid==0.*
+-Flask-Security-Too==5.4.*; python_version <= '3.9'
+-Flask-Security-Too==5.7.*; python_version > '3.9'
+-Flask-SocketIO==5.6.*
+-Flask-SQLAlchemy==3.1.*
+-Flask-WTF==1.2.*
+-Flask==3.1.*
+-google-api-python-client==2.*
+-google-auth-oauthlib==1.2.4
+-gssapi==1.11.*
+-jsonformatter~=0.3.4
+-keyring==25.*
+-ldap3==2.*
+-libgravatar==1.0.*
+-paramiko==3.5.1
+-passlib==1.*
+-psutil==7.2.*
+-psycopg[c]==3.2.13; python_version < '3.10'
+-psycopg[c]==3.3.3; python_version >= '3.10'
+-pyotp==2.*
+-python-dateutil==2.*
+-pytz==2025.*
++Authlib>=1.5.2
++azure-identity>=1.17.1
++azure-mgmt-rdbms>=10.1.1
++azure-mgmt-resource>=24.0.0
++azure-mgmt-subscription>=3.0.0
++bcrypt>=4.3.0
++boto3>=1.42.0
++certifi>=2026.1.4
++cryptography>=46.0.0
++Flask-Babel>=4.0.0
++Flask-Compress>=1.0
++Flask-Login>=0.0
++Flask-Mail>=0.0
++Flask-Migrate>=4.0
++Flask-Paranoid>=0.0
++Flask-Security-Too>=5.4.0; python_version <= '3.9'
++Flask-Security-Too>=5.6.2; python_version > '3.9'
++Flask-SocketIO>=5.6.0
++Flask-SQLAlchemy>=3.0.5
++Flask-WTF>=1.2.0
++Flask>=3.1.0
++google-api-python-client>=2.0
++google-auth-oauthlib>=1.2.4
++gssapi>=1.7.3
++jsonformatter>=0.3.4
++keyring>=25.0
++ldap3>=2.0
++libgravatar>=1.0.0
++paramiko>=3.5.1
++passlib>=1.0
++psutil>=7.0.0
++psycopg>=3.2.13; python_version < '3.10'
++psycopg>=3.3.3; python_version >= '3.10'
++pyotp>=2.0
++python-dateutil>=2.0
++pytz>=2025.0
+ # pinned for https://github.com/andfoy/pywinpty/issues/545
+ pywinpty==2.0.*; sys_platform=="win32"
+-qrcode[pil]==8.*
+-setuptools==82.*
+-SQLAlchemy==2.*
+-sqlparse==0.*
+-sshtunnel==0.*
+-typer[all]==0.23.*; python_version <= '3.9'
+-typer[all]==0.24.*; python_version > '3.9'
+-urllib3==1.26.*; python_version <= '3.9'
+-urllib3==2.6.*;  python_version > '3.9'
+-user-agents==2.2.0
+-Werkzeug==3.1.*
+-WTForms==3.1.*; python_version <= '3.9'
+-WTForms==3.2.*; python_version > '3.9'
+\ No newline at end of file
++qrcode[pil]>=8.0
++setuptools>=80.10.2
++SQLAlchemy>=2.0
++sqlparse>=0.0
++sshtunnel>=0.0
++typer>=0.23.0; python_version <= '3.9'
++typer>=0.24.0; python_version > '3.9'
++urllib3>=1.26.0; python_version <= '3.9'
++urllib3>=2.6.0;  python_version > '3.9'
++user-agents>=2.2.0
++Werkzeug>=3.1.0
++WTForms>=3.0.1; python_version <= '3.9'
++WTForms>=3.0.1; python_version > '3.9'
+\ No newline at end of file

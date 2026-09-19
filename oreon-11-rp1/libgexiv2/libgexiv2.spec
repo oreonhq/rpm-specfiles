@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           libgexiv2
-Version:        0.16.0
-Release:        3%{?dist}
+Version:        0.16.2
+Release:        1%{?dist}
 Summary:        Gexiv2 is a GObject-based wrapper around the Exiv2 library
 
 # GNOME mirror path is sources/gexiv2/MAJOR.MINOR/ not full %%{version}

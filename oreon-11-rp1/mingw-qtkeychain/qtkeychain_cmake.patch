@@ -1,0 +1,15 @@
+diff -rupN --no-dereference qtkeychain-0.15.0/qtkeychain/CMakeLists.txt qtkeychain-0.15.0-new/qtkeychain/CMakeLists.txt
+--- qtkeychain-0.15.0/qtkeychain/CMakeLists.txt	2025-01-16 12:53:01.000000000 +0100
++++ qtkeychain-0.15.0-new/qtkeychain/CMakeLists.txt	2025-12-27 21:58:09.575646851 +0100
+@@ -31,7 +31,10 @@ if(WIN32)
+     endif()
+ 
+     set(CMAKE_CXX_STANDARD 17)
+-    add_definitions( /utf-8 -DUNICODE )
++    add_definitions( -DUNICODE )
++    if(MSVC)
++      add_definitions( /utf-8 )
++    endif()
+ endif()
+ 
+ if(APPLE)

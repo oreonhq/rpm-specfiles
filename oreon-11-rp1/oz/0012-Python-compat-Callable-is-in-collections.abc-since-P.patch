@@ -1,0 +1,39 @@
+From 743dfced8adffbb5103867cd44857bdcbb8eb2a8 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Tue, 23 Jan 2024 15:10:02 -0800
+Subject: [PATCH 12/26] Python compat: Callable is in collections.abc since
+ Python 3.3
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ oz/ozutil.py | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/oz/ozutil.py b/oz/ozutil.py
+index 5e90797..689559f 100644
+--- a/oz/ozutil.py
++++ b/oz/ozutil.py
+@@ -19,7 +19,10 @@
+ Miscellaneous utility functions.
+ """
+ 
+-import collections
++try:
++    from collections.abc import Callable
++except ImportError:
++    from collections import Callable
+ try:
+     import configparser
+ except ImportError:
+@@ -536,7 +539,7 @@ def copy_modify_file(inname, outname, subfunc):
+         raise Exception("output filename is None")
+     if subfunc is None:
+         raise Exception("subfunction is None")
+-    if not isinstance(subfunc, collections.Callable):
++    if not isinstance(subfunc, Callable):
+         raise Exception("subfunction is not callable")
+ 
+     infile = open(inname, 'r')
+-- 
+2.46.2
+

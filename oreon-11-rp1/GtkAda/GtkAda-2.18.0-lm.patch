@@ -1,0 +1,11 @@
+--- testgtk/Makefile.in	2011-08-11 00:54:31.000000000 +0200
++++ testgtk/Makefile.in	2011-08-11 00:54:31.000000000 +0200
+@@ -24,7 +24,7 @@
+ 
+ ifeq ($(HAVE_OPENGL),True)
+ OPENGL_C_OBJECTS=lw.o
+-OPENGL_LIBS= @GL_LIBS@
++OPENGL_LIBS= @GL_LIBS@ -lm
+ GTKADA_GL_LIBS=-lgtkada_gl
+ else
+ OPENGL_C_OBJECTS=

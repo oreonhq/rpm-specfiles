@@ -1,0 +1,11 @@
+--- object.c	2008-11-26 10:29:49.000000000 -0600
++++ object.c	2008-11-26 10:29:49.000000000 -0600
+@@ -1077,7 +1077,7 @@
+ 
+     /* open up the file */
+ 
+-    if( (fp = fopen( newfilename, "r" )) <= 0 ) {
++    if( (fp = fopen( newfilename, "r" )) == NULL ) {
+ 	printf("get_object(): Invalid filname '%s'!\n", newfilename);
+ 	Kill_Keys();
+ 	exit(1);

@@ -1,7 +1,7 @@
 %global source0_hash 21d974b3275cb5dcf5b8aa1d9a3fc80e7edca706935f6fbd004c79787138f8c7
 
 Name:          gupnp-av
-Version:       0.14.4
+Version:       0.14.5
 Release:       %autorelease
 Summary:       A collection of helpers for building UPnP AV applications
 

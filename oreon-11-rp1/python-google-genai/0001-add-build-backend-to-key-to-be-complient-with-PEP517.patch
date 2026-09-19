@@ -1,0 +1,23 @@
+From da05eb7b23763ed962c14b6fa4f141ce4bfa0707 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miroslav=20Such=C3=BD?= <msuchy@redhat.com>
+Date: Tue, 30 Dec 2025 18:18:11 +0100
+Subject: [PATCH] add build-backend to key to be complient with PEP517
+
+---
+ pyproject.toml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 099b417..6525095 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,5 +1,6 @@
+ [build-system]
+ requires = ["setuptools", "wheel", "twine>=6.1.0", "packaging>=24.2", "pkginfo>=1.12.0"]
++build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "google-genai"
+-- 
+2.52.0
+

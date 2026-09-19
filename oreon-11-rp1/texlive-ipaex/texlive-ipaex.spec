@@ -1,5 +1,5 @@
-%global source0_hash 7db75b91663a5fa711d72fba2d1934580e0570c58d2937f5f54aa3ac7cf43e15
-%global source1_hash fc62df329dea13ec25279afcb8676edeb2016af034a2138d8cdb2ac1982089af
+%global source0_hash dec0527223fdb0f897ccf54e96691cd68b933ac61de4c036e21fd35bff93d32766444fe6971492ce64328f92621bd2949ebb669ab33b6b6f4ede88280351292d
+%global source1_hash c53cf11bc81d9a8f5aa19c264a1970d4819400ceaffa20b688d0709546113f932b82b6b6d12cf9fb31b2a3d2c0d45b6b33ee3cb3bd0060c961360389839b1475
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        IPAex fonts for Japanese
 License:        IPA
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ipaex.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ipaex.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ipaex.tar.xz#/ipaex.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ipaex.doc.tar.xz#/ipaex.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-ipaex-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-ipaex-doc <= 11:%{version}
@@ -23,8 +23,8 @@ Provides:       texlive-ipaex = %{epoch}:%{version}-%{release}
 IPAex fonts for Japanese.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

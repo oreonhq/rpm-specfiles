@@ -1,0 +1,2 @@
+#Type  Name    ID  GECOS                        Home directory     Shell
+u      coturn  -   "Coturn TURN Server daemon"  /usr/share/coturn  -

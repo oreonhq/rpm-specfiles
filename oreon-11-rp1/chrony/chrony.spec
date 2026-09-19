@@ -11,8 +11,8 @@
 %endif
 
 Name:           chrony
-Version:        4.8
-Release:        6%{?dist}
+Version:        4.9
+Release:        1%{?dist}
 Summary:        An NTP client/server
 
 License:        GPL-2.0-only

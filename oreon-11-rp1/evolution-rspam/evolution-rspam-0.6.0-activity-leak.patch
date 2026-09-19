@@ -1,0 +1,51 @@
+diff -up evolution-rspam-0.6.0/configure.ac.activity-leak evolution-rspam-0.6.0/configure.ac
+--- evolution-rspam-0.6.0/configure.ac.activity-leak	2016-06-30 17:36:12.548888516 +0200
++++ evolution-rspam-0.6.0/configure.ac	2016-06-30 17:36:12.550888516 +0200
+@@ -79,7 +79,7 @@ if test "$EVOLUTION_VERSION" -gt "300300
+ 	fi
+ fi
+ if test "$EVOLUTION_VERSION" -gt "3011090"; then
+-	EVOLUTION_PLUGIN=evolution-shell
++	EVOLUTION_PLUGIN=evolution-mail
+ fi
+ 
+ PKG_CHECK_MODULES(RSPAM_EPLUGIN,
+diff -up evolution-rspam-0.6.0/src/Makefile.am.activity-leak evolution-rspam-0.6.0/src/Makefile.am
+--- evolution-rspam-0.6.0/src/Makefile.am.activity-leak	2012-08-12 10:50:10.000000000 +0200
++++ evolution-rspam-0.6.0/src/Makefile.am	2016-06-30 17:36:12.550888516 +0200
+@@ -27,6 +27,7 @@ plugin_LTLIBRARIES = liborg-gnome-sa-rsp
+ 
+ liborg_gnome_sa_rspam_la_SOURCES = rspam.c
+ liborg_gnome_sa_rspam_la_LDFLAGS = -module -avoid-version
++liborg_gnome_sa_rspam_la_LIBADD = $(RSPAM_EPLUGIN_LIBS)
+ 
+ @INTLTOOL_SCHEMAS_RULE@
+ 
+diff -up evolution-rspam-0.6.0/src/rspam.c.activity-leak evolution-rspam-0.6.0/src/rspam.c
+--- evolution-rspam-0.6.0/src/rspam.c.activity-leak	2016-06-30 17:36:12.549888516 +0200
++++ evolution-rspam-0.6.0/src/rspam.c	2016-06-30 17:36:12.550888516 +0200
+@@ -839,7 +839,11 @@ void rspam_action_do (CamelFolder *folde
+ 		return;
+ 	}
+ 
+-	g_return_if_fail (CAMEL_IS_MIME_MESSAGE (msg));
++	g_warn_if_fail (CAMEL_IS_MIME_MESSAGE (msg));
++	if (!CAMEL_IS_MIME_MESSAGE (msg)) {
++		rss_closure_free (closure);
++		return;
++	}
+ #endif
+ 
+ 	name = save_message(msg);
+@@ -847,6 +851,11 @@ void rspam_action_do (CamelFolder *folde
+ 		rspam_command(msg, name, 1);
+ 		g_free(name);
+ 	}
++
++#if EVOLUTION_VERSION >= 30101
++	rss_closure_free (closure);
++	g_object_unref (msg);
++#endif
+ }
+ 
+ void

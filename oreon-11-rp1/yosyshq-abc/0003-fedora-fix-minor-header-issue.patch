@@ -1,0 +1,37 @@
+From 55dd69f9e23b56cf4be73fa93c35c6701a21f818 Mon Sep 17 00:00:00 2001
+From: Gabriel Somlo <gsomlo@gmail.com>
+Date: Fri, 4 Aug 2023 11:20:05 -0400
+Subject: [PATCH 3/7] fedora: fix minor header issue
+
+---
+ src/sat/glucose/Glucose.cpp   | 1 +
+ src/sat/glucose2/Glucose2.cpp | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/src/sat/glucose/Glucose.cpp b/src/sat/glucose/Glucose.cpp
+index d878e0d17..58470e420 100644
+--- a/src/sat/glucose/Glucose.cpp
++++ b/src/sat/glucose/Glucose.cpp
+@@ -33,6 +33,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
+ #include "sat/glucose/Solver.h"
+ #include "sat/glucose/Constants.h"
+ #include "sat/glucose/System.h"
++#include "misc/util/abc_global.h"
+ 
+ ABC_NAMESPACE_IMPL_START
+ 
+diff --git a/src/sat/glucose2/Glucose2.cpp b/src/sat/glucose2/Glucose2.cpp
+index d345cd0a1..98df64870 100644
+--- a/src/sat/glucose2/Glucose2.cpp
++++ b/src/sat/glucose2/Glucose2.cpp
+@@ -34,6 +34,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
+ #include "sat/glucose2/Solver.h"
+ 
+ #include "sat/glucose2/CGlucose.h"
++#include "misc/util/abc_global.h"
+ 
+ ABC_NAMESPACE_IMPL_START
+ 
+-- 
+2.52.0
+

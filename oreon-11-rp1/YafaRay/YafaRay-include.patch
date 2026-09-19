@@ -1,0 +1,11 @@
+diff -up libYafaRay-3.5.1/include/core_api/session.h.include libYafaRay-3.5.1/include/core_api/session.h
+--- libYafaRay-3.5.1/include/core_api/session.h.include	2020-07-13 02:15:40.000000000 -0600
++++ libYafaRay-3.5.1/include/core_api/session.h	2023-02-12 18:03:26.259708921 -0700
+@@ -23,6 +23,7 @@
+ #ifndef Y_SESSION_H
+ #define Y_SESSION_H
+ 
++#include <string>
+ #include <yafray_constants.h>
+ #include <utilities/threadUtils.h>
+ 

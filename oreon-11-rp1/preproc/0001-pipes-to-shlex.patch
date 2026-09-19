@@ -1,0 +1,42 @@
+diff -urN rpkg-util-preproc-orig/preproc rpkg-util-preproc/preproc
+--- rpkg-util-preproc-orig/preproc	2022-08-06 08:08:56.990976147 +0200
++++ rpkg-util-preproc/preproc	2022-08-06 08:09:12.022647218 +0200
+@@ -5,7 +5,7 @@
+ import subprocess
+ import tempfile
+ import argparse
+-import pipes
++import shlex
+ import re
+ 
+ 
+@@ -16,7 +16,7 @@
+     quoted_items = []
+ 
+     for i in range(len(cmd)):
+-        quoted_items.append(pipes.quote(cmd[i]))
++        quoted_items.append(shlex.quote(cmd[i]))
+ 
+     return ' '.join(quoted_items)
+ 
+diff -urN rpkg-util-preproc-orig/preproc-pyparsing rpkg-util-preproc/preproc-pyparsing
+--- rpkg-util-preproc-orig/preproc-pyparsing	2022-08-06 08:08:56.991976126 +0200
++++ rpkg-util-preproc/preproc-pyparsing	2022-08-06 08:09:18.289510084 +0200
+@@ -5,7 +5,7 @@
+ import subprocess
+ import tempfile
+ import argparse
+-import pipes
++import shlex
+ 
+ from pyparsing import Combine, CharsNotIn, Regex, ZeroOrMore, Suppress, Literal
+ 
+@@ -17,7 +17,7 @@
+     quoted_items = []
+ 
+     for i in range(len(cmd)):
+-        quoted_items.append(pipes.quote(cmd[i]))
++        quoted_items.append(shlex.quote(cmd[i]))
+ 
+     return ' '.join(quoted_items)
+ 

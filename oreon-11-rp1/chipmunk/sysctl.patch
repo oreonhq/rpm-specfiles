@@ -1,0 +1,11 @@
+--- src/cpHastySpace.c~	2019-06-07 10:59:45.000000000 -0500
++++ src/cpHastySpace.c	2020-08-04 08:46:59.642129785 -0500
+@@ -8,7 +8,7 @@
+ 
+ //#include <sys/param.h >
+ #ifndef _WIN32
+-#include <sys/sysctl.h>
++//#include <sys/sysctl.h>
+ #include <pthread.h>
+ #else
+ #ifndef WIN32_LEAN_AND_MEAN

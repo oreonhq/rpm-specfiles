@@ -1,0 +1,923 @@
+From 26d548e302e9fa1bcc2986ba91f12313ccb00829 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Thu, 15 Nov 2018 15:20:08 +0000
+Subject: [PATCH 02/18] v3.5.0 Use Fedora expat and expatpp
+
+---
+ CMakeLists.txt                                |  2 +
+ config/cmake/fedora-modules/FindEXPATPP.cmake | 37 +++++++++++++++++
+ contrib/brl/b3p/expat/CMakeLists.txt          |  3 +-
+ contrib/brl/b3p/expatpp/CMakeLists.txt        | 22 +---------
+ contrib/brl/bbas/bhdfs/pro/CMakeLists.txt     |  3 +-
+ contrib/brl/bbas/bkml/CMakeLists.txt          |  2 +-
+ contrib/brl/bbas/bocl/pro/CMakeLists.txt      |  3 +-
+ contrib/brl/bbas/bvgl/CMakeLists.txt          |  3 +-
+ contrib/brl/bbas/bvgl/bvgl_labelme_parser.h   |  2 +-
+ contrib/brl/bbas/bvgl/tests/CMakeLists.txt    |  3 +-
+ contrib/brl/bbas/bwm/CMakeLists.txt           |  3 +-
+ contrib/brl/bbas/bwm/io/CMakeLists.txt        |  3 +-
+ contrib/brl/bbas/bwm/pro/CMakeLists.txt       |  3 +-
+ contrib/brl/bbas/bwm/video/CMakeLists.txt     |  3 +-
+ contrib/brl/bbas/bwm/video/exe/CMakeLists.txt |  3 +-
+ contrib/brl/bbas/bxml/CMakeLists.txt          |  9 ++--
+ contrib/brl/bbas/volm/CMakeLists.txt          |  3 +-
+ contrib/brl/bbas/volm/volm_osm_parser.h       |  2 +-
+ contrib/brl/bmods/FindEXPAT.cmake             | 41 ++-----------------
+ contrib/brl/bpro/CMakeLists.txt               |  3 +-
+ contrib/brl/bpro/bprb/tests/CMakeLists.txt    |  6 ++-
+ contrib/brl/bseg/bbgm/pro/CMakeLists.txt      |  3 +-
+ contrib/brl/bseg/bbgm_batch/CMakeLists.txt    |  3 +-
+ contrib/brl/bseg/betr_batch/CMakeLists.txt    |  3 +-
+ contrib/brl/bseg/bmdl/pro/CMakeLists.txt      |  3 +-
+ contrib/brl/bseg/bmdl_batch/CMakeLists.txt    |  3 +-
+ contrib/brl/bseg/boxm2/CMakeLists.txt         |  3 +-
+ .../bseg/boxm2/boxm2_bounding_box_parser.h    |  2 +-
+ contrib/brl/bseg/boxm2/boxm2_scene_parser.h   |  2 +-
+ contrib/brl/bseg/boxm2/pro/CMakeLists.txt     |  3 +-
+ .../boxm2_ingest_convex_mesh_process.cxx      |  4 +-
+ contrib/brl/bseg/boxm2/volm/CMakeLists.txt    |  3 +-
+ .../brl/bseg/boxm2/volm/pro/CMakeLists.txt    |  3 +-
+ contrib/brl/bseg/boxm2_batch/CMakeLists.txt   |  3 +-
+ .../brl/bseg/boxm2_multi/pro/CMakeLists.txt   |  3 +-
+ contrib/brl/bseg/brec_batch/CMakeLists.txt    |  3 +-
+ contrib/brl/bseg/bstm/CMakeLists.txt          |  3 +-
+ contrib/brl/bseg/bstm/bstm_scene_parser.h     |  2 +-
+ contrib/brl/bseg/bstm_batch/CMakeLists.txt    |  3 +-
+ contrib/brl/bseg/bstm_multi/CMakeLists.txt    |  3 +-
+ .../bseg/bstm_multi/space_time_scene_parser.h |  2 +-
+ contrib/brl/bseg/bvpl/functors/CMakeLists.txt |  3 +-
+ contrib/brl/bseg/bvpl/kernels/CMakeLists.txt  |  3 +-
+ .../brl/bseg/bvpl/kernels/pro/CMakeLists.txt  |  3 +-
+ contrib/brl/bseg/bvpl/pro/CMakeLists.txt      |  3 +-
+ contrib/brl/bseg/bvpl_batch/CMakeLists.txt    |  3 +-
+ contrib/brl/bseg/bvxm/CMakeLists.txt          |  3 +-
+ contrib/brl/bseg/bvxm/algo/pro/CMakeLists.txt |  3 +-
+ .../brl/bseg/bvxm/bvxm_world_params_parser.h  |  2 +-
+ contrib/brl/bseg/bvxm/grid/pro/CMakeLists.txt |  3 +-
+ contrib/brl/bseg/bvxm/pro/CMakeLists.txt      |  3 +-
+ contrib/brl/bseg/bvxm_batch/CMakeLists.txt    |  2 +
+ contrib/brl/bseg/bvxm_bridge/CMakeLists.txt   |  3 +-
+ contrib/brl/bseg/vcon/CMakeLists.txt          |  3 +-
+ 54 files changed, 144 insertions(+), 109 deletions(-)
+ create mode 100644 config/cmake/fedora-modules/FindEXPATPP.cmake
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e5de354156..e52a8c0abb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -75,6 +75,8 @@ SET(VXL_API_VERSION "${VXL_VERSION_MAJOR}.${VXL_VERSION_MINOR}")
+ SET(VXL_LIBRARY_PROPERTIES ${VXL_LIBRARY_PROPERTIES} VERSION "${VXL_VERSION}"
+     SOVERSION "${VXL_API_VERSION}")
+ 
++set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/config/cmake/fedora-modules")
++
+ include(CMakeDependentOption)
+ include(${CMAKE_CURRENT_SOURCE_DIR}/config/cmake/VXLInitializeBuildType.cmake)
+ 
+diff --git a/config/cmake/fedora-modules/FindEXPATPP.cmake b/config/cmake/fedora-modules/FindEXPATPP.cmake
+new file mode 100644
+index 0000000000..88a29681aa
+--- /dev/null
++++ b/config/cmake/fedora-modules/FindEXPATPP.cmake
+@@ -0,0 +1,37 @@
++# Adapted from https://github.com/jirihnidek/verse-ply-uploader/blob/master/build_files/cmake/modules/FindEXPATPP.cmake
++# This module tries to find EXPATPP library and include files
++#
++# EXPATPP_INCLUDE_DIR, where to find verse.h
++# EXPATPP_LIBRARY_DIR, where to find libverse.so
++# EXPATPP_LIBRARIES, the library to link against
++# EXPATPP_FOUND, IF false, do not try to use Verse
++#
++
++FIND_PATH ( EXPATPP_INCLUDE_DIR expatpp.h
++    /usr/include
++    /usr/include/expatpp
++    /usr/local/include
++    /usr/local/include/expatpp
++)
++
++FIND_LIBRARY ( EXPATPP_LIBRARIES
++    NAMES expatpp libexpatpp
++    PATHS /usr/local/lib /usr/local/lib64 /usr/lib /usr/lib64
++)
++
++GET_FILENAME_COMPONENT( EXPATPP_LIBRARY_DIR ${EXPATPP_LIBRARIES} PATH )
++
++SET ( EXPATPP_FOUND "NO" )
++IF ( EXPATPP_INCLUDE_DIR )
++    IF ( EXPATPP_LIBRARIES )
++        SET ( EXPATPP_LIBRARY ${EXPATPP_LIBRARIES} )
++        SET ( EXPATPP_FOUND "YES" )
++    ENDIF ( EXPATPP_LIBRARIES )
++ENDIF ( EXPATPP_INCLUDE_DIR )
++
++MARK_AS_ADVANCED (
++    EXPATPP_LIBRARY_DIR
++    EXPATPP_INCLUDE_DIR
++    EXPATPP_LIBRARIES
++    EXPATPP_LIBRARY
++)
+diff --git a/contrib/brl/b3p/expat/CMakeLists.txt b/contrib/brl/b3p/expat/CMakeLists.txt
+index dad475e211..d64a8f3832 100644
+--- a/contrib/brl/b3p/expat/CMakeLists.txt
++++ b/contrib/brl/b3p/expat/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ project(expat C)
+ #include_regular_expression("^.*$")
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(NOT VXL_USING_NATIVE_EXPAT)
+ 
+   if(WIN32)
+diff --git a/contrib/brl/b3p/expatpp/CMakeLists.txt b/contrib/brl/b3p/expatpp/CMakeLists.txt
+index 4959c123c3..f25323d0de 100644
+--- a/contrib/brl/b3p/expatpp/CMakeLists.txt
++++ b/contrib/brl/b3p/expatpp/CMakeLists.txt
+@@ -1,22 +1,4 @@
+ #This is brl/b3p/expatpp
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+-if( EXPAT_FOUND )
+-
+-  if( VXL_USING_NATIVE_EXPAT )
+-    include_directories( ${EXPAT_INCLUDE_DIR} )
+-  else()
+-    include_directories( ${BRL_BINARY_DIR}/b3p/expat )
+-  endif()
+-
+-  set( expatpp_sources expatpp.h expatpp.cpp expatpplib.h )
+-
+-  vxl_add_library(LIBRARY_NAME expatpp LIBRARY_SOURCES ${expatpp_sources} )
+-  target_link_libraries( expatpp ${EXPAT_LIBRARIES} )
+-
+-  if( BUILD_TESTING )
+-    add_subdirectory(tests)
+-  endif()
+-
+-
+-endif()
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+diff --git a/contrib/brl/bbas/bhdfs/pro/CMakeLists.txt b/contrib/brl/bbas/bhdfs/pro/CMakeLists.txt
+index 11e9d815c3..5797910273 100644
+--- a/contrib/brl/bbas/bhdfs/pro/CMakeLists.txt
++++ b/contrib/brl/bbas/bhdfs/pro/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # bhdfs's Process Library
+ 
+ # bprb depends on expat and bhdfs_pro depends on bprb primarily
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${BRL_INCLUDE_DIR}/bpro )
+   include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+diff --git a/contrib/brl/bbas/bkml/CMakeLists.txt b/contrib/brl/bbas/bkml/CMakeLists.txt
+index 6328cfd419..bb6a65f96d 100644
+--- a/contrib/brl/bbas/bkml/CMakeLists.txt
++++ b/contrib/brl/bbas/bkml/CMakeLists.txt
+@@ -5,7 +5,7 @@ set(bkml_sources
+   bkml_write.h bkml_write.cxx
+ )
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
+ 
+ if(EXPAT_FOUND)
+  if(EXPATPP_FOUND)
+diff --git a/contrib/brl/bbas/bocl/pro/CMakeLists.txt b/contrib/brl/bbas/bocl/pro/CMakeLists.txt
+index 96e947876d..ba6ba1deb8 100644
+--- a/contrib/brl/bbas/bocl/pro/CMakeLists.txt
++++ b/contrib/brl/bbas/bocl/pro/CMakeLists.txt
+@@ -1,5 +1,6 @@
+ # bprb depends on expat and boxm_ocl_pro depends on bprb primarily
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${BRL_INCLUDE_DIR}/bpro )
+   include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+diff --git a/contrib/brl/bbas/bvgl/CMakeLists.txt b/contrib/brl/bbas/bvgl/CMakeLists.txt
+index c4da5b9d28..260bcf1d88 100644
+--- a/contrib/brl/bbas/bvgl/CMakeLists.txt
++++ b/contrib/brl/bbas/bvgl/CMakeLists.txt
+@@ -37,7 +37,8 @@ aux_source_directory(Templates bvgl_sources)
+ 
+ 
+ #find expatpp library for
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${EXPAT_INCLUDE_DIR} )
+   include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
+diff --git a/contrib/brl/bbas/bvgl/bvgl_labelme_parser.h b/contrib/brl/bbas/bvgl/bvgl_labelme_parser.h
+index afa5d22968..40327fb9ea 100644
+--- a/contrib/brl/bbas/bvgl/bvgl_labelme_parser.h
++++ b/contrib/brl/bbas/bvgl/bvgl_labelme_parser.h
+@@ -14,7 +14,7 @@
+ #include <string>
+ #include <iostream>
+ #include <sstream>
+-#include <expatpplib.h>
++#include <expatpp.h>
+ #ifdef _MSC_VER
+ #  include <vcl_msvc_warnings.h>
+ #endif
+diff --git a/contrib/brl/bbas/bvgl/tests/CMakeLists.txt b/contrib/brl/bbas/bvgl/tests/CMakeLists.txt
+index 76995137ed..1cb0736454 100644
+--- a/contrib/brl/bbas/bvgl/tests/CMakeLists.txt
++++ b/contrib/brl/bbas/bvgl/tests/CMakeLists.txt
+@@ -16,7 +16,8 @@ set(bvgl_test_sources
+ )
+ 
+ #Make sure expat library is found
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ 
+ if(EXPAT_FOUND)
+   set(bvgl_test_sources ${bvgl_test_sources} test_bvgl_labelme_parser.cxx)
+diff --git a/contrib/brl/bbas/bwm/CMakeLists.txt b/contrib/brl/bbas/bwm/CMakeLists.txt
+index 4a16a57d9e..72ea30dc37 100644
+--- a/contrib/brl/bbas/bwm/CMakeLists.txt
++++ b/contrib/brl/bbas/bwm/CMakeLists.txt
+@@ -26,7 +26,8 @@ endif()
+ 
+ include( ${BRL_MODULE_PATH}/FindSHAPELIB.cmake )
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ 
+ # Set CMake options for using vgui
+ include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+diff --git a/contrib/brl/bbas/bwm/io/CMakeLists.txt b/contrib/brl/bbas/bwm/io/CMakeLists.txt
+index 918c196161..f0ea9a69c9 100644
+--- a/contrib/brl/bbas/bwm/io/CMakeLists.txt
++++ b/contrib/brl/bbas/bwm/io/CMakeLists.txt
+@@ -8,7 +8,8 @@ set(bwm_io_sources
+ )
+ aux_source_directory(Templates bwm_io_sources)
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ 
+ if(EXPAT_FOUND)
+  if(EXPATPP_FOUND)
+diff --git a/contrib/brl/bbas/bwm/pro/CMakeLists.txt b/contrib/brl/bbas/bwm/pro/CMakeLists.txt
+index 920f31413c..21949a782c 100644
+--- a/contrib/brl/bbas/bwm/pro/CMakeLists.txt
++++ b/contrib/brl/bbas/bwm/pro/CMakeLists.txt
+@@ -9,7 +9,8 @@ set(bwm_pro_sources
+     bwm_register.h    bwm_register.cxx
+ )
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ 
+ if(EXPAT_FOUND)
+  if(EXPATPP_FOUND)
+diff --git a/contrib/brl/bbas/bwm/video/CMakeLists.txt b/contrib/brl/bbas/bwm/video/CMakeLists.txt
+index 5408fe77a7..0787b9a74e 100644
+--- a/contrib/brl/bbas/bwm/video/CMakeLists.txt
++++ b/contrib/brl/bbas/bwm/video/CMakeLists.txt
+@@ -11,7 +11,8 @@ set(bwm_video_sources
+                                  bwm_video_site_io_defs.h
+ )
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ 
+ if(EXPAT_FOUND)
+  if(EXPATPP_FOUND)
+diff --git a/contrib/brl/bbas/bwm/video/exe/CMakeLists.txt b/contrib/brl/bbas/bwm/video/exe/CMakeLists.txt
+index ca3c490d5e..d232649ccb 100644
+--- a/contrib/brl/bbas/bwm/video/exe/CMakeLists.txt
++++ b/contrib/brl/bbas/bwm/video/exe/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # This is contrib/bwm/exe/CMakeLists.txt
+ # World Modeling GUI executables
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ 
+ if(EXPAT_FOUND)
+   if(EXPATPP_FOUND)
+diff --git a/contrib/brl/bbas/bxml/CMakeLists.txt b/contrib/brl/bbas/bxml/CMakeLists.txt
+index c027dfaa28..72fed69f82 100644
+--- a/contrib/brl/bbas/bxml/CMakeLists.txt
++++ b/contrib/brl/bbas/bxml/CMakeLists.txt
+@@ -12,7 +12,8 @@ set( bxml_sources
+     bxml_find.cxx                bxml_find.h
+ )
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ 
+ if(EXPAT_FOUND)
+  if(EXPATPP_FOUND)
+@@ -28,13 +29,15 @@ aux_source_directory(Templates bxml_sources)
+ 
+ vxl_add_library(LIBRARY_NAME bxml LIBRARY_SOURCES ${bxml_sources})
+ 
+-target_link_libraries( bxml ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl )
+ if(EXPAT_FOUND)
+  if(EXPATPP_FOUND)
+-  target_link_libraries( bxml ${EXPATPP_LIBRARIES})
++  target_link_libraries( bxml ${EXPATPP_LIBRARIES} ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl )
+  endif()
++else()
++  target_link_libraries( bxml ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl )
+ endif()
+ 
++
+ add_subdirectory(bsvg)
+ 
+ if( BUILD_TESTING )
+diff --git a/contrib/brl/bbas/volm/CMakeLists.txt b/contrib/brl/bbas/volm/CMakeLists.txt
+index 72b3b217ea..fe8cf45b75 100644
+--- a/contrib/brl/bbas/volm/CMakeLists.txt
++++ b/contrib/brl/bbas/volm/CMakeLists.txt
+@@ -6,7 +6,8 @@
+ include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+ if(HAS_GEOTIFF)
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   if(EXPATPP_FOUND)
+ 
+diff --git a/contrib/brl/bbas/volm/volm_osm_parser.h b/contrib/brl/bbas/volm/volm_osm_parser.h
+index 82283250dd..289d5d5265 100644
+--- a/contrib/brl/bbas/volm/volm_osm_parser.h
++++ b/contrib/brl/bbas/volm/volm_osm_parser.h
+@@ -20,7 +20,7 @@
+ #include <map>
+ #include <vector>
+ #include <utility>
+-#include <expatpplib.h>
++#include <expatpp.h>
+ #ifdef _MSC_VER
+ #  include <vcl_msvc_warnings.h>
+ #endif
+diff --git a/contrib/brl/bmods/FindEXPAT.cmake b/contrib/brl/bmods/FindEXPAT.cmake
+index 2be7c9a963..cefa9c0a0e 100644
+--- a/contrib/brl/bmods/FindEXPAT.cmake
++++ b/contrib/brl/bmods/FindEXPAT.cmake
+@@ -27,6 +27,10 @@ if(NOT EXPAT_FOUND)
+     if(EXPAT_FOUND)
+       set(VXL_USING_NATIVE_EXPAT "YES")
+     endif()
++    find_package(EXPATPP)
++    if(EXPATPP_FOUND)
++      set(VXL_USING_NATIVE_EXPATPP "YES")
++    endif()
+   endif()
+ 
+ 
+@@ -48,40 +52,3 @@ if(NOT EXPAT_FOUND)
+ 
+ endif()
+ #mark_as_advanced(EXPAT_INCLUDE_DIR EXPAT_LIBRARY)
+-
+-if(EXPAT_FOUND) # EXPATPP requires EXPAT
+-  find_path(EXPATPP_SYSTEM_INCLUDE_DIR NAMES expatpp.h )
+-  find_library(EXPATPP_SYSTEM_LIBRARY NAMES expatpp libexpatpp )
+-
+-  if( EXPATPP_SYSTEM_INCLUDE_DIR AND EXPATPP_SYSTEM_LIBRARY )
+-    set(VXL_USING_NATIVE_EXPATPP "YES")
+-    set(EXPATPP_LIBRARIES ${EXPATPP_SYSTEM_LIBRARY})
+-    set(EXPATPP_INCLUDE_DIRS ${EXPATPP_SYSTEM_INCLUDE_DIR})
+-  else()
+-    set(VXL_USING_NATIVE_EXPATPP NO)
+-    if(EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/brl/b3p/expatpp/expatpp.h)
+-      set( EXPATPP_FOUND YES )
+-      set( EXPATPP_LIBRARIES expatpp )
+-      set( EXPATPP_LIBRARY expatpp )
+-      set( EXPATPP_INCLUDE_DIRS ${VXL_ROOT_SOURCE_DIR}/contrib/brl/b3p/expatpp ${BRL_BINARY_DIR}/b3p/expatpp )
+-      set( EXPATPP_INCLUDE_DIR ${VXL_ROOT_SOURCE_DIR}/contrib/brl/b3p/expatpp ${BRL_BINARY_DIR}/b3p/expatpp )
+-      set( EXPATPP_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/expatpp)
+-    else()
+-      unset(EXPATPP_SYSTEM_INCLUDE_DIR) #If not found, keep out of cmake window
+-      unset(EXPATPP_SYSTEM_LIBRARY)  # If not found, keep out of cmake window
+-      unset(EXPATPP_LIBRARIES)
+-      unset(EXPATPP_INCLUDE_DIRS)
+-      unset(EXPAT_FOUND)
+-      unset(EXPATPP_FOUND)
+-    endif()
+-  endif()
+-
+-  include(FindPackageHandleStandardArgs)
+-  # FOUND_VAR EXPATPP_FOUND  not supported in cmake 2.8.9
+-  FIND_PACKAGE_HANDLE_STANDARD_ARGS( EXPATPP
+-             REQUIRED_VARS EXPATPP_LIBRARY EXPATPP_INCLUDE_DIR
+-             FAIL_MESSAGE "MISSING: "
+-     )
+-endif()
+-mark_as_advanced(EXPATPP_SYSTEM_INCLUDE_DIR EXPATPP_SYSTEM_LIBRARY)
+-mark_as_advanced(EXPATPP_INCLUDE_DIR EXPATPP_LIBRARY)
+diff --git a/contrib/brl/bpro/CMakeLists.txt b/contrib/brl/bpro/CMakeLists.txt
+index 637c1ecfa8..bb3562f59d 100644
+--- a/contrib/brl/bpro/CMakeLists.txt
++++ b/contrib/brl/bpro/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # brl/bpro/CMakeLists.txt
+ # main package for processing operations
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+ 
+ # Basic process classes
+diff --git a/contrib/brl/bpro/bprb/tests/CMakeLists.txt b/contrib/brl/bpro/bprb/tests/CMakeLists.txt
+index cfb865611a..954315f1bd 100644
+--- a/contrib/brl/bpro/bprb/tests/CMakeLists.txt
++++ b/contrib/brl/bpro/bprb/tests/CMakeLists.txt
+@@ -1,6 +1,10 @@
+ # brl/bpro/bprb/tests/CMakeLists.txt
+ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/params.xml
+                 ${CMAKE_CURRENT_BINARY_DIR}/params.xml)
++
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
++
+ if(EXPAT_FOUND)
+  if(EXPATPP_FOUND)
+ 
+@@ -10,7 +14,7 @@ if(EXPAT_FOUND)
+    test_process_params.cxx
+    bprb_test_process.h bprb_test_process.cxx
+   )
+-  target_link_libraries( bprb_test_all bprb ${VXL_LIB_PREFIX}testlib expat expatpp)
++  target_link_libraries( bprb_test_all bprb ${VXL_LIB_PREFIX}testlib ${EXPAT_LIBRARIES} ${EXPATPP_LIBRARIES})
+ 
+   add_test( NAME bprb_test_process COMMAND $<TARGET_FILE:bprb_test_all> test_process )
+   add_test( NAME bprb_test_process_params COMMAND $<TARGET_FILE:bprb_test_all> test_process_params )
+diff --git a/contrib/brl/bseg/bbgm/pro/CMakeLists.txt b/contrib/brl/bseg/bbgm/pro/CMakeLists.txt
+index 013afc8146..365ef65b67 100644
+--- a/contrib/brl/bseg/bbgm/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/bbgm/pro/CMakeLists.txt
+@@ -1,6 +1,7 @@
+ # brl/bseg/bbgm/pro/CMakeLists.txt
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+ 
+ include_directories( ${BRL_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/bbgm_batch/CMakeLists.txt b/contrib/brl/bseg/bbgm_batch/CMakeLists.txt
+index fb0836b415..0dfcfc9795 100644
+--- a/contrib/brl/bseg/bbgm_batch/CMakeLists.txt
++++ b/contrib/brl/bseg/bbgm_batch/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # contrib/brl/bseg/bbgm_batch/CMakeLists.txt
+ 
+ if( PYTHONLIBS_FOUND )
+-  include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++  FIND_PACKAGE(EXPAT REQUIRED)
++  FIND_PACKAGE(EXPATPP REQUIRED)
+   if( EXPAT_FOUND )
+     if(EXPATPP_FOUND)
+     include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+diff --git a/contrib/brl/bseg/betr_batch/CMakeLists.txt b/contrib/brl/bseg/betr_batch/CMakeLists.txt
+index 20df829930..5321bd017e 100644
+--- a/contrib/brl/bseg/betr_batch/CMakeLists.txt
++++ b/contrib/brl/bseg/betr_batch/CMakeLists.txt
+@@ -2,7 +2,8 @@
+ project( betr_batch )
+ 
+ if( PYTHONLIBS_FOUND )
+-  include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++  FIND_PACKAGE(EXPAT REQUIRED)
++  FIND_PACKAGE(EXPATPP REQUIRED)
+   if( EXPAT_FOUND )
+     include_directories( ${PYTHON_INCLUDE_DIRS} )
+     include_directories( ${BRL_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/bmdl/pro/CMakeLists.txt b/contrib/brl/bseg/bmdl/pro/CMakeLists.txt
+index 76fe0891b7..7c73fe1bb0 100644
+--- a/contrib/brl/bseg/bmdl/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/bmdl/pro/CMakeLists.txt
+@@ -9,7 +9,8 @@ if(ZLIB_FOUND)
+ endif()
+ 
+ # bprb depends on expat and bmdl_prodepends on bprb primarily
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+   if(TIFF_FOUND)
+diff --git a/contrib/brl/bseg/bmdl_batch/CMakeLists.txt b/contrib/brl/bseg/bmdl_batch/CMakeLists.txt
+index fb7fcb176d..52aa721a3f 100644
+--- a/contrib/brl/bseg/bmdl_batch/CMakeLists.txt
++++ b/contrib/brl/bseg/bmdl_batch/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # contrib/brl/bseg/bmdl_batch/CMakeLists.txt
+ 
+ if( PYTHONLIBS_FOUND )
+-  include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++  FIND_PACKAGE(EXPAT REQUIRED)
++  FIND_PACKAGE(EXPATPP REQUIRED)
+   if( EXPAT_FOUND )
+    if(EXPATPP_FOUND)
+     include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+diff --git a/contrib/brl/bseg/boxm2/CMakeLists.txt b/contrib/brl/bseg/boxm2/CMakeLists.txt
+index 4475e418be..476d43b151 100644
+--- a/contrib/brl/bseg/boxm2/CMakeLists.txt
++++ b/contrib/brl/bseg/boxm2/CMakeLists.txt
+@@ -21,7 +21,8 @@ set(boxm2_sources
+     boxm2_blocks_vis_graph.h          boxm2_blocks_vis_graph.cxx
+    )
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+ 
+   include_directories( ${EXPAT_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/boxm2/boxm2_bounding_box_parser.h b/contrib/brl/bseg/boxm2/boxm2_bounding_box_parser.h
+index d87dc359fe..94f764c61d 100644
+--- a/contrib/brl/bseg/boxm2/boxm2_bounding_box_parser.h
++++ b/contrib/brl/bseg/boxm2/boxm2_bounding_box_parser.h
+@@ -4,7 +4,7 @@
+ #include <string>
+ #include <iostream>
+ #include <map>
+-#include <expatpplib.h>
++#include <expatpp.h>
+ 
+ #include <boxm2/basic/boxm2_block_id.h>
+ #include <boxm2/boxm2_block_metadata.h>
+diff --git a/contrib/brl/bseg/boxm2/boxm2_scene_parser.h b/contrib/brl/bseg/boxm2/boxm2_scene_parser.h
+index 963a8a803d..b697652f36 100644
+--- a/contrib/brl/bseg/boxm2/boxm2_scene_parser.h
++++ b/contrib/brl/bseg/boxm2/boxm2_scene_parser.h
+@@ -4,7 +4,7 @@
+ #include <string>
+ #include <iostream>
+ #include <map>
+-#include <expatpplib.h>
++#include <expatpp.h>
+ 
+ #include <boxm2/basic/boxm2_block_id.h>
+ #include <boxm2/boxm2_block_metadata.h>
+diff --git a/contrib/brl/bseg/boxm2/pro/CMakeLists.txt b/contrib/brl/bseg/boxm2/pro/CMakeLists.txt
+index ca91150930..7c2ec1d9c3 100644
+--- a/contrib/brl/bseg/boxm2/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/boxm2/pro/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # boxm2's Process Library
+ 
+ # bprb depends on expat and boxm2_pro depends on bprb primarily
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+   include_directories( ${BRL_INCLUDE_DIR}/bpro )
+diff --git a/contrib/brl/bseg/boxm2/pro/processes/boxm2_ingest_convex_mesh_process.cxx b/contrib/brl/bseg/boxm2/pro/processes/boxm2_ingest_convex_mesh_process.cxx
+index 082696b982..605e90bb61 100644
+--- a/contrib/brl/bseg/boxm2/pro/processes/boxm2_ingest_convex_mesh_process.cxx
++++ b/contrib/brl/bseg/boxm2/pro/processes/boxm2_ingest_convex_mesh_process.cxx
+@@ -31,8 +31,8 @@
+ #include <bmsh3d/bmsh3d_mesh.h>
+ #include <bmsh3d/algo/bmsh3d_fileio.h>
+ #include <bmsh3d/bmsh3d_mesh_mc.h>
+-#include "vgl/vgl_intersection.h"
+-#include <expatpplib.h>
++#include <vgl/vgl_intersection.h>
++#include <expatpp.h>
+ #include <boxm2/boxm2_bounding_box_parser.h>
+ 
+ namespace boxm2_ingest_convex_mesh_process_globals
+diff --git a/contrib/brl/bseg/boxm2/volm/CMakeLists.txt b/contrib/brl/bseg/boxm2/volm/CMakeLists.txt
+index 923e37f35f..064003f994 100644
+--- a/contrib/brl/bseg/boxm2/volm/CMakeLists.txt
++++ b/contrib/brl/bseg/boxm2/volm/CMakeLists.txt
+@@ -1,6 +1,7 @@
+ # This is contrib/brl/bseg/boxm2/volm/CMakeLists
+ # volm depends on bkml and expat
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   if(EXPATPP_FOUND)
+ 
+diff --git a/contrib/brl/bseg/boxm2/volm/pro/CMakeLists.txt b/contrib/brl/bseg/boxm2/volm/pro/CMakeLists.txt
+index 6ad0bdde83..265cd5d066 100644
+--- a/contrib/brl/bseg/boxm2/volm/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/boxm2/volm/pro/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # boxm2's Process Library
+ 
+ # bprb depends on expat and boxm2_pro depends on bprb primarily
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+   include_directories( ${BRL_INCLUDE_DIR}/bpro )
+diff --git a/contrib/brl/bseg/boxm2_batch/CMakeLists.txt b/contrib/brl/bseg/boxm2_batch/CMakeLists.txt
+index 9e1c59a967..c7eb640d55 100644
+--- a/contrib/brl/bseg/boxm2_batch/CMakeLists.txt
++++ b/contrib/brl/bseg/boxm2_batch/CMakeLists.txt
+@@ -7,7 +7,8 @@ include( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
+ include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+ 
+ if( PYTHONLIBS_FOUND )
+-  include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++  FIND_PACKAGE(EXPAT REQUIRED)
++  FIND_PACKAGE(EXPATPP REQUIRED)
+   if( EXPAT_FOUND )
+     include_directories( ${PYTHON_INCLUDE_DIRS} )
+     include_directories( ${BRL_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/boxm2_multi/pro/CMakeLists.txt b/contrib/brl/bseg/boxm2_multi/pro/CMakeLists.txt
+index c0330db1e2..68ab30dffc 100644
+--- a/contrib/brl/bseg/boxm2_multi/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/boxm2_multi/pro/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # boxm2 multi gpu or cpu Process Library
+ 
+ # bprb depends on expat and boxm2_multi_pro depends on bprb primarily
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${BRL_INCLUDE_DIR}/bseg )
+   set(boxm2_multi_pro_sources
+diff --git a/contrib/brl/bseg/brec_batch/CMakeLists.txt b/contrib/brl/bseg/brec_batch/CMakeLists.txt
+index a3ab77b316..e228152f4b 100644
+--- a/contrib/brl/bseg/brec_batch/CMakeLists.txt
++++ b/contrib/brl/bseg/brec_batch/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # contrib/brl/bseg/brec_batch/CMakeLists.txt
+ 
+ if( PYTHONLIBS_FOUND )
+-  include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++  FIND_PACKAGE(EXPAT REQUIRED)
++  FIND_PACKAGE(EXPATPP REQUIRED)
+   if( EXPAT_FOUND )
+     include_directories( ${PYTHON_INCLUDE_DIRS} )
+     include_directories( ${BRL_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/bstm/CMakeLists.txt b/contrib/brl/bseg/bstm/CMakeLists.txt
+index 977d68fdab..77205c2e6b 100644
+--- a/contrib/brl/bseg/bstm/CMakeLists.txt
++++ b/contrib/brl/bseg/bstm/CMakeLists.txt
+@@ -15,7 +15,8 @@ set(bstm_sources bstm_block_metadata.h bstm_block_metadata.cxx
+                  bstm_time_block.h bstm_time_block.cxx
+                  bstm_util.cxx bstm_util.h)
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${EXPAT_INCLUDE_DIR} )
+   include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
+diff --git a/contrib/brl/bseg/bstm/bstm_scene_parser.h b/contrib/brl/bseg/bstm/bstm_scene_parser.h
+index 325aee9239..f1b519d12f 100644
+--- a/contrib/brl/bseg/bstm/bstm_scene_parser.h
++++ b/contrib/brl/bseg/bstm/bstm_scene_parser.h
+@@ -4,7 +4,7 @@
+ #include <string>
+ #include <iostream>
+ #include <map>
+-#include <expatpplib.h>
++#include <expatpp.h>
+ 
+ #include <bstm/basic/bstm_block_id.h>
+ #include <bstm/bstm_block_metadata.h>
+diff --git a/contrib/brl/bseg/bstm_batch/CMakeLists.txt b/contrib/brl/bseg/bstm_batch/CMakeLists.txt
+index e548807de5..b2b047f3b6 100644
+--- a/contrib/brl/bseg/bstm_batch/CMakeLists.txt
++++ b/contrib/brl/bseg/bstm_batch/CMakeLists.txt
+@@ -10,7 +10,8 @@ if(DIRECTSHOW_FOUND)
+ endif()
+ 
+ if( PYTHONLIBS_FOUND )
+-  include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++  FIND_PACKAGE(EXPAT REQUIRED)
++  FIND_PACKAGE(EXPATPP REQUIRED)
+   if( EXPAT_FOUND )
+     include_directories( ${PYTHON_INCLUDE_DIRS} )
+     include_directories( ${BRL_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/bstm_multi/CMakeLists.txt b/contrib/brl/bseg/bstm_multi/CMakeLists.txt
+index ba8815fe6b..1f57d0d958 100644
+--- a/contrib/brl/bseg/bstm_multi/CMakeLists.txt
++++ b/contrib/brl/bseg/bstm_multi/CMakeLists.txt
+@@ -15,7 +15,8 @@ set(bstm_multi_sources
+   space_time_scene_parser.h space_time_scene_parser.hxx
+   )
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if (EXPAT_FOUND)
+   include_directories( ${EXPAT_INCLUDE_DIR} )
+   include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
+diff --git a/contrib/brl/bseg/bstm_multi/space_time_scene_parser.h b/contrib/brl/bseg/bstm_multi/space_time_scene_parser.h
+index 062a2eda8f..c5108c1018 100644
+--- a/contrib/brl/bseg/bstm_multi/space_time_scene_parser.h
++++ b/contrib/brl/bseg/bstm_multi/space_time_scene_parser.h
+@@ -20,7 +20,7 @@
+ #include <map>
+ #include <string>
+ #include <vector>
+-#include <expatpplib.h>
++#include <expatpp.h>
+ 
+ #ifdef _MSC_VER
+ #  include <vcl_msvc_warnings.h>
+diff --git a/contrib/brl/bseg/bvpl/functors/CMakeLists.txt b/contrib/brl/bseg/bvpl/functors/CMakeLists.txt
+index 25433e56f2..f3659d5390 100644
+--- a/contrib/brl/bseg/bvpl/functors/CMakeLists.txt
++++ b/contrib/brl/bseg/bvpl/functors/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # This is contrib/brl/bseg/bvpl/kernels/CMakeLists.txt
+ # The kernel-related files for Brown Voxel Processing Library (BVPL)
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+ 
+ include_directories( ${EXPAT_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/bvpl/kernels/CMakeLists.txt b/contrib/brl/bseg/bvpl/kernels/CMakeLists.txt
+index 0672b5d3d8..615f02e3fa 100644
+--- a/contrib/brl/bseg/bvpl/kernels/CMakeLists.txt
++++ b/contrib/brl/bseg/bvpl/kernels/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # This is contrib/brl/bseg/bvpl/kernels/CMakeLists.txt
+ # The kernel-related files for Brown Voxel Processing Library (BVPL)
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+ 
+ include_directories( ${EXPAT_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/bvpl/kernels/pro/CMakeLists.txt b/contrib/brl/bseg/bvpl/kernels/pro/CMakeLists.txt
+index 82ce0655e0..3e7108103d 100644
+--- a/contrib/brl/bseg/bvpl/kernels/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/bvpl/kernels/pro/CMakeLists.txt
+@@ -2,7 +2,8 @@
+ # BVPL kenel's related processes
+ 
+ # bprb depends on expat and bvxm_pro depends on bprb primarily
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${BRL_INCLUDE_DIR}/bpro )
+   include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+diff --git a/contrib/brl/bseg/bvpl/pro/CMakeLists.txt b/contrib/brl/bseg/bvpl/pro/CMakeLists.txt
+index 3f4b2b26bc..03b7df907e 100644
+--- a/contrib/brl/bseg/bvpl/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/bvpl/pro/CMakeLists.txt
+@@ -2,7 +2,8 @@
+ # bvpl's Process Library
+ 
+ # bprb depends on expat and bvpl_pro depends on bprb primarily
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${BRL_INCLUDE_DIR}/bpro )
+   include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+diff --git a/contrib/brl/bseg/bvpl_batch/CMakeLists.txt b/contrib/brl/bseg/bvpl_batch/CMakeLists.txt
+index 754741a408..9c629d4e5e 100644
+--- a/contrib/brl/bseg/bvpl_batch/CMakeLists.txt
++++ b/contrib/brl/bseg/bvpl_batch/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # contrib/brl/bseg/bvpl_batch/CMakeLists.txt
+ 
+ if( PYTHONLIBS_FOUND )
+-  include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++  FIND_PACKAGE(EXPAT REQUIRED)
++  FIND_PACKAGE(EXPATPP REQUIRED)
+   if( EXPAT_FOUND )
+     include_directories( ${PYTHON_INCLUDE_DIRS} )
+     include_directories( ${BRL_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/bvxm/CMakeLists.txt b/contrib/brl/bseg/bvxm/CMakeLists.txt
+index d637fead62..caa2ff3f35 100644
+--- a/contrib/brl/bseg/bvxm/CMakeLists.txt
++++ b/contrib/brl/bseg/bvxm/CMakeLists.txt
+@@ -38,7 +38,8 @@ set(bvxm_sources
+ aux_source_directory(Templates bvxm_sources)
+ 
+ #find expatpp library for bvxm_world_params parser
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${EXPAT_INCLUDE_DIR} )
+   include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
+diff --git a/contrib/brl/bseg/bvxm/algo/pro/CMakeLists.txt b/contrib/brl/bseg/bvxm/algo/pro/CMakeLists.txt
+index e07b20ebb7..3a0824d257 100644
+--- a/contrib/brl/bseg/bvxm/algo/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/bvxm/algo/pro/CMakeLists.txt
+@@ -1,7 +1,8 @@
+ # bvxm_algo Process Library
+ 
+ # bprb depends on expat and this process library depends on bprb
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+  if(EXPAT_FOUND)
+  if(EXPATPP_FOUND)
+   include_directories( ${BRL_INCLUDE_DIR}/bpro )
+diff --git a/contrib/brl/bseg/bvxm/bvxm_world_params_parser.h b/contrib/brl/bseg/bvxm/bvxm_world_params_parser.h
+index e58cf620f5..d707da04db 100644
+--- a/contrib/brl/bseg/bvxm/bvxm_world_params_parser.h
++++ b/contrib/brl/bseg/bvxm/bvxm_world_params_parser.h
+@@ -6,7 +6,7 @@
+ #include <string>
+ #include <iostream>
+ #include <sstream>
+-#include <expatpplib.h>
++#include <expatpp.h>
+ #ifdef _MSC_VER
+ #  include <vcl_msvc_warnings.h>
+ #endif
+diff --git a/contrib/brl/bseg/bvxm/grid/pro/CMakeLists.txt b/contrib/brl/bseg/bvxm/grid/pro/CMakeLists.txt
+index c2901f9c90..a41c67e514 100644
+--- a/contrib/brl/bseg/bvxm/grid/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/bvxm/grid/pro/CMakeLists.txt
+@@ -2,7 +2,8 @@
+ # bvxm's Process Library
+ 
+ # bprb depends on expat and bvxm_pro depends on bprb primarily
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${BRL_INCLUDE_DIR}/bpro )
+   include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+diff --git a/contrib/brl/bseg/bvxm/pro/CMakeLists.txt b/contrib/brl/bseg/bvxm/pro/CMakeLists.txt
+index 6c98f11cc3..e5b88b5aff 100644
+--- a/contrib/brl/bseg/bvxm/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/bvxm/pro/CMakeLists.txt
+@@ -2,7 +2,8 @@
+ # bvxm's Process Library
+ 
+ # bprb depends on expat and bvxm_pro depends on bprb primarily
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   include_directories( ${EXPAT_INCLUDE_DIR} )
+   include_directories( ${BRL_INCLUDE_DIR}/bpro )
+diff --git a/contrib/brl/bseg/bvxm_batch/CMakeLists.txt b/contrib/brl/bseg/bvxm_batch/CMakeLists.txt
+index fee846b6d0..2044353da0 100644
+--- a/contrib/brl/bseg/bvxm_batch/CMakeLists.txt
++++ b/contrib/brl/bseg/bvxm_batch/CMakeLists.txt
+@@ -3,6 +3,8 @@ if(HAS_GEOTIFF)
+ 
+ if( PYTHONLIBS_FOUND )
+   include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++  FIND_PACKAGE(EXPAT REQUIRED)
++  FIND_PACKAGE(EXPATPP REQUIRED)
+   if( EXPAT_FOUND )
+     include_directories( ${PYTHON_INCLUDE_DIRS} )
+     include_directories( ${BRL_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/bvxm_bridge/CMakeLists.txt b/contrib/brl/bseg/bvxm_bridge/CMakeLists.txt
+index 76defad7a7..1cfd293103 100644
+--- a/contrib/brl/bseg/bvxm_bridge/CMakeLists.txt
++++ b/contrib/brl/bseg/bvxm_bridge/CMakeLists.txt
+@@ -5,7 +5,8 @@ if(OpenCL_FOUND)
+   include_directories( ${MUL_INCLUDE_DIR} )
+ 
+   #find expatpp library
+-  include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++  FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+   if(EXPAT_FOUND)
+     include_directories( ${EXPAT_INCLUDE_DIR} )
+     include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
+diff --git a/contrib/brl/bseg/vcon/CMakeLists.txt b/contrib/brl/bseg/vcon/CMakeLists.txt
+index 26504576be..ed189bccd7 100644
+--- a/contrib/brl/bseg/vcon/CMakeLists.txt
++++ b/contrib/brl/bseg/vcon/CMakeLists.txt
+@@ -4,7 +4,8 @@
+ include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+ if(HAS_GEOTIFF)
+ 
+-include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
++FIND_PACKAGE(EXPAT REQUIRED)
++FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+   if(EXPATPP_FOUND)
+     include_directories( ${BRL_INCLUDE_DIR} )
+-- 
+2.46.1
+

@@ -1,0 +1,26 @@
+From 831c59996fabb4844e5525bd0703f09a309b97b2 Mon Sep 17 00:00:00 2001
+From: Zephyr Lykos <git@mochaa.ws>
+Date: Mon, 13 Oct 2025 20:09:54 +0800
+Subject: [PATCH] Fix creating default event loop on Python 3.14+
+
+Closes #9107
+---
+ kittens/tui/loop.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/kittens/tui/loop.py b/kittens/tui/loop.py
+index fb9a413ff96..fe0f9912cc0 100644
+--- a/kittens/tui/loop.py
++++ b/kittens/tui/loop.py
+@@ -227,7 +227,10 @@ def __init__(
+             self.asyncio_loop: asyncio.AbstractEventLoop = asyncio.SelectorEventLoop(selectors.SelectSelector())
+             asyncio.set_event_loop(self.asyncio_loop)
+         else:
+-            self.asyncio_loop = asyncio.get_event_loop()
++            try:
++                self.asyncio_loop = asyncio.get_event_loop()
++            except RuntimeError:
++                self.asyncio_loop = asyncio.new_event_loop()
+         self.return_code = 0
+         self.overlay_ready_reported = False
+         self.optional_actions = optional_actions

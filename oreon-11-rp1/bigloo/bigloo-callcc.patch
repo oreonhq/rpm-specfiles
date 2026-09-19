@@ -1,0 +1,11 @@
+--- runtime/Clib/callcc.c.orig	2018-12-18 16:52:51.177402754 -0700
++++ runtime/Clib/callcc.c	2019-01-19 09:18:23.532808135 -0700
+@@ -283,7 +283,7 @@ call_cc( obj_t proc ) {
+       flush_regs_in_stack();
+ 
+       /* on recupere l'adresse du sommet de pile */
+-      stack_top = (char *)bgl_get_top_of_stack();
++      stack_top = (char *)((unsigned long)bgl_get_top_of_stack() & 0xFFFFFFFFFFFFFC00UL);
+       
+       /* on calcule la taille de la pile, en prevoyant que le GC peut */
+       /* flusher les registres dans la pile (REGISTER_SAVE_BUFFER)    */

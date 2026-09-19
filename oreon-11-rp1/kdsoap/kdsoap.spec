@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           kdsoap
-Version:        2.2.0
+Version:        2.3.0
 Release:        %autorelease
 Summary:        A Qt-based client-side and server-side SOAP component
 

@@ -1,0 +1,51 @@
+From 7c85eaa724bf2ed29972a9ce5a0d9da566eff7cc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Rapha=C3=ABl=20Droz?= <raphael.droz@gmail.com>
+Date: Tue, 21 Jan 2025 00:47:49 -0300
+Subject: [PATCH 3/8] optional datafile rewrite (omitted if no change
+ happened), introduced in d7371920, is now actually enabled for all builds,
+ bug #3
+
+---
+ BUGS       | 3 +--
+ database.c | 7 +++----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/BUGS b/BUGS
+index 381bf0d..596e954 100644
+--- a/BUGS
++++ b/BUGS
+@@ -17,8 +17,7 @@ known bugs in abook
+ 
+ * file format is not tolerant for character set changes
+ 
+-* datafile is always removed and rewritten from scratch (symlinks don't work,
+-  timestamp is always updated, comments are removed)
++* comments are removed when datafile is rewritten
+ 
+ * comma (,) is not allowed in lists and is converted to _
+ 
+diff --git a/database.c b/database.c
+index 217f836..7f87cb7 100644
+--- a/database.c
++++ b/database.c
+@@ -390,14 +390,13 @@ int
+ save_database(int force_save)
+ {
+ 
+-	// officialize this the day we are sure that db_need_save cover all possible
+-	// modifications of the database using the UI
+-#ifdef DEBUG
+ 	if(! db_need_save && force_save != 1) {
++#ifdef DEBUG
+ 		fprintf(stderr, "[debug] database unmodified, request to write on-disk ignored\n");
++#endif
+ 		return 0;
+ 	}
+-#endif
++
+ 
+ 	FILE *out;
+ 	int ret = 0;
+-- 
+2.53.0
+

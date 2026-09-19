@@ -1,0 +1,29 @@
+From bf573fe98b5073e2a5285e3866541ea9e3d54d05 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 10 Jul 2019 16:11:22 +0200
+Subject: [PATCH] Port to libtirpc
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ mon.d/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mon.d/Makefile b/mon.d/Makefile
+index af216dc..6f20a00 100644
+--- a/mon.d/Makefile
++++ b/mon.d/Makefile
+@@ -18,7 +18,7 @@ PROGS = rpc.monitor dialin.monitor.wrap
+ all: $(PROGS)
+ 
+ rpc.monitor: rpc.monitor.c
+-	$(CC) -o rpc.monitor $(CFLAGS) $(LDFLAGS) rpc.monitor.c $(LDLIBS)
++	$(CC) -o rpc.monitor $(CFLAGS) `pkg-config --cflags --libs libtirpc` $(LDFLAGS) rpc.monitor.c $(LDLIBS)
+ 
+ dialin.monitor.wrap: dialin.monitor.wrap.c
+ 	$(CC) -o dialin.monitor.wrap $(CFLAGS) $(LDFLAGS) \
+-- 
+2.20.1
+

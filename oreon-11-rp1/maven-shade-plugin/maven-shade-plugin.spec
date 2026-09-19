@@ -1,8 +1,8 @@
 %global source0_hash 2c2d767373f7fe00a45507ddc6db5cbfda1e11f4d9a900980e1b0b6be33d4590
 
 Name:           maven-shade-plugin
-Version:        3.6.1
-Release:        2%{?dist}
+Version:        3.6.2
+Release:        1%{?dist}
 Summary:        Maven plugin for packaging artifacts in an uber-jar
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

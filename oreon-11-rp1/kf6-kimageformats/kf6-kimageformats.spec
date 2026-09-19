@@ -1,13 +1,13 @@
-%global source0_hash 6a9f40936ba946279063cbdaea473b9eb735b53047b0124c88aca7db17ccabac
+%global source0_hash 87014461a9a8ae8f110864a9ccd3002080fe395b5ff164b11f0c6ed01f1c426b
 
 %undefine __cmake_in_source_build
 %global framework kimageformats
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.30.0
 Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 addon with additional image plugins for QtGui
 
@@ -24,7 +24,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  cmake(Qt6Gui)
-BuildRequires:  cmake(KF6Archive)
+BuildRequires:  cmake(KF6Archive) >= %{version}
 BuildRequires:  cmake(Qt6PrintSupport)
 BuildRequires:  pkgconfig(cups)
 BuildRequires:  openexr-devel >= 3.2
@@ -82,6 +82,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/cmake/KF6ImageFormats/
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-10
 - Rebuild
 

@@ -1,14 +1,14 @@
-%global source0_hash 5ad0228aa4872f6238b93827e99d263aebcc7e0bfc4f28ba3cf39c0fd2add7a9
+%global source0_hash 36fd747bd0c8a22e3e542a4d0f05e4a85101953e19d80839a3c9cd67b5d1ac9f
 
 %global framework kuserfeedback
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 Name:    kf6-%{framework}
 Summary: Framework for collecting user feedback for apps via telemetry and surveys
-Version: 6.27.0
+Version: 6.29.0
 Release:        1%{?dist}
 
 License: MIT AND CC0-1.0 AND BSD-3-Clause
@@ -113,6 +113,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kuserfeedback
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

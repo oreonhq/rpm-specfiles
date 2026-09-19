@@ -1,0 +1,11 @@
+--- xbiso-0.6.1/Makefile.in.BAD	2007-06-04 12:37:57.000000000 -0500
++++ xbiso-0.6.1/Makefile.in	2007-06-04 12:38:19.000000000 -0500
+@@ -26,7 +26,7 @@ clean:
+ 	rm -f xbiso config.cache config.log config.status config.h Makefile
+ 
+ install:
+-	install -m 755 xbiso $(bindir)
++	install -m 755 xbiso $(DESTDIR)$(bindir)
+ 
+ uninstall:
+ 	rm -f $(bindir)/xbiso

@@ -1,0 +1,12 @@
+diff -ur a/tests/buildprog/simpleio.sh b/tests/buildprog/simpleio.sh
+--- a/tests/buildprog/simpleio.sh	2025-07-07 18:34:40.441341514 +0200
++++ b/tests/buildprog/simpleio.sh	2025-07-07 18:37:50.004614530 +0200
+@@ -14,7 +14,7 @@
+ # without any warranty.
+ 
+ 
+-
++exit 77
+ 
+ 
+ # Preliminaries

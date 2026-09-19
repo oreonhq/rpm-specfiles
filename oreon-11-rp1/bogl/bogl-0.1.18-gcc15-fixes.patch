@@ -1,0 +1,36 @@
+diff -up bogl-0.1.18/bogl.c.orig bogl-0.1.18/bogl.c
+--- bogl-0.1.18/bogl.c.orig	2025-01-21 10:34:33.082093637 +0100
++++ bogl-0.1.18/bogl.c	2025-01-21 10:34:33.085093644 +0100
+@@ -240,7 +240,7 @@ init_fb (void)
+   if (type == FB_TYPE_VGA_PLANES)
+     {
+       bogl_set_palette = bogl_fb_set_palette;
+-      return bogl_vga16_init (fb);
++      return bogl_vga16_init ();
+     }
+ #endif
+ 
+diff -up bogl-0.1.18/bogl-pcfb.h.orig bogl-0.1.18/bogl-pcfb.h
+--- bogl-0.1.18/bogl-pcfb.h.orig	2001-12-01 18:04:42.000000000 +0100
++++ bogl-0.1.18/bogl-pcfb.h	2025-01-21 10:34:33.085093644 +0100
+@@ -21,7 +21,7 @@
+ 
+ #include <stddef.h>
+ 
+-size_t bogl_pcfb_init ();
++size_t bogl_pcfb_init (int fb, int new_bpp);
+ 
+ void bogl_pcfb_pixel (int x, int y, int c);
+ void bogl_pcfb_hline (int x1, int x2, int y, int c);
+diff -up bogl-0.1.18/bogl-tcfb.h.orig bogl-0.1.18/bogl-tcfb.h
+--- bogl-0.1.18/bogl-tcfb.h.orig	2025-01-21 10:35:31.262235352 +0100
++++ bogl-0.1.18/bogl-tcfb.h	2025-01-21 10:35:46.878273389 +0100
+@@ -21,7 +21,7 @@
+ 
+ #include <stddef.h>
+ 
+-size_t bogl_tcfb_init ();
++size_t bogl_tcfb_init (int fb, int new_bpp);
+ 
+ void bogl_tcfb_pixel (int x, int y, int c);
+ void bogl_tcfb_hline (int x1, int x2, int y, int c);

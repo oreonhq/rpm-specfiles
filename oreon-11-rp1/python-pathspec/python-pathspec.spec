@@ -1,47 +1,44 @@
-%global source0_hash 0210e2ae8a21a9137c0d470578cb0e595af87edaa6ebf12ff176f14a02e0e645
+%global source0_hash none
 
 Name:           python-pathspec
-Version:        1.0.4
+Version:        1.1.1
 Release:        %autorelease
-Summary:        Utility library for gitignore style pattern matching of file paths
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Utility library for gitignore style pattern matching of file paths.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
-URL:            https://github.com/cpburnz/python-path-specification
-Source:        https://files.pythonhosted.org/packages/source/p/pathspec/pathspec-1.0.4.tar.gz
+URL:            https://github.com/cpburnz/python-pathspec
+Source:         %{pypi_source pathspec}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-# Tests require pytest which requires python-iniconfig, which in turn
-# requires python-hatchling, requiring python-pathspec
-# Conditionalize to make new Python bootstrap possible
-%bcond tests 1
 
-%if %{with tests}
-BuildRequires:  python3-pytest
-%endif
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pathspec' generated automatically by pyp2spec.}
 
-%description
-Path Specification (pathspec) is a utility library for pattern matching of file
-paths. So far this only includes Git's wildmatch pattern matching which itself
-is derived from Rsync's wildmatch. Git uses wildmatch for its gitignore files.
-
+%description %_description
 
 %package -n     python3-pathspec
 Summary:        %{summary}
 
-%description -n python3-pathspec
-Path Specification (pathspec) is a utility library for pattern matching of file
-paths. So far this only includes Git's wildmatch pattern matching which itself
-is derived from Rsync's wildmatch. Git uses wildmatch for its gitignore files.
+%description -n python3-pathspec %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pathspec hyperscan,optional,re2
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n pathspec-%{version}
+%autosetup -p1 -n pathspec-%{version}
 
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x hyperscan,optional,re2
 
 
 %build
@@ -50,20 +47,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %pyproject_install
-%pyproject_save_files pathspec
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pyproject_check_import
-%if %{with tests}
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
 %files -n python3-pathspec -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
-
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.4-1

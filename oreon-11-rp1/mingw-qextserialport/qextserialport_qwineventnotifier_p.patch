@@ -1,0 +1,12 @@
+diff -rupN qextserialport-1.2rc/src/qextserialport_win.cpp qextserialport-1.2rc-new/src/qextserialport_win.cpp
+--- qextserialport-1.2rc/src/qextserialport_win.cpp	2012-12-13 06:23:03.000000000 +0100
++++ qextserialport-1.2rc-new/src/qextserialport_win.cpp	2017-04-21 21:51:20.787876047 +0200
+@@ -40,7 +40,7 @@
+ #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+ #  include <QtCore/QWinEventNotifier>
+ #else
+-#  include <QtCore/private/qwineventnotifier_p.h>
++#  include "qwineventnotifier_p.h"
+ #endif
+ void QextSerialPortPrivate::platformSpecificInit()
+ {

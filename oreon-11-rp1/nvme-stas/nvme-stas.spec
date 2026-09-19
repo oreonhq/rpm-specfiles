@@ -2,8 +2,8 @@
 
 Name:    nvme-stas
 Summary: NVMe STorage Appliance Services
-Version: 2.4.1
-Release: 6%{?dist}
+Version: 3.0
+Release: 1%{?dist}
 License: Apache-2.0
 URL:     https://github.com/linux-nvme/nvme-stas
 Source0:        https://github.com/linux-nvme/nvme-stas/archive/refs/tags/v2.4.1.tar.gz#/nvme-stas-2.4.1.tar.gz

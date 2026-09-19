@@ -1,0 +1,13 @@
+[Unit]
+Description = URONode Server
+Requires = uronode.socket
+After = network.target
+
+[Service]
+Type = simple
+ExecStart = /usr/sbin/uronode
+StandardInput = socket
+
+[Install]
+Also = uronode.socket
+WantedBy = multi-user.target

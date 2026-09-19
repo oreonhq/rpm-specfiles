@@ -1,0 +1,26 @@
+From 3bd8b233055be95901f1d449f8d56ac13007ac31 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Fri, 2 Oct 2020 23:34:53 +0100
+Subject: [PATCH 4/5] Make bundled rudeconfig also follow all flags
+
+---
+ rudeconfig/Makefile.am | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/rudeconfig/Makefile.am b/rudeconfig/Makefile.am
+index 06074b1..9039194 100644
+--- a/rudeconfig/Makefile.am
++++ b/rudeconfig/Makefile.am
+@@ -58,7 +58,8 @@ librudeconfig_la_SOURCES = src/AbstractData.cpp \
+ 	src/Writer.h \
+         src/SourceDest.h
+ 
+-librudeconfig_la_LDFLAGS = -version-info 5:1:2
++librudeconfig_la_LDFLAGS =  $(LDFLAGS) -version-info 5:1:2
++librudeconfig_la_CXXFLAGS = $(CXXFLAGS) $(CFLAGS)
+ 
+ #pkginclude_HEADERS = src/config.h
+ #pkgincludedir = $(includedir)/rude
+-- 
+2.43.0
+

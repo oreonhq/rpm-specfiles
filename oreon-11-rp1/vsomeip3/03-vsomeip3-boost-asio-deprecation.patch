@@ -1,0 +1,63 @@
+--- vsomeip-3.5.11/implementation/endpoints/src/local_tcp_client_endpoint_impl.cpp~	2025-11-14 14:12:07.000000000 +0000
++++ vsomeip-3.5.11/implementation/endpoints/src/local_tcp_client_endpoint_impl.cpp	2026-01-22 14:24:46.309463004 +0000
+@@ -25,6 +25,10 @@
+ #include "../../protocol/include/protocol.hpp"
+ #include "../../routing/include/routing_host.hpp"
+ 
++// boost::asio::io_context::strand::wrap is deprecated
++// and should be replaced with boost::asio::bind_executor
++#pragma GCC diagnostic warning "-Wdeprecated-declarations"
++
+ namespace vsomeip_v3 {
+ 
+ local_tcp_client_endpoint_impl::local_tcp_client_endpoint_impl(const std::shared_ptr<endpoint_host>& _endpoint_host,
+--- vsomeip-3.5.11/implementation/endpoints/src/tcp_client_endpoint_impl.cpp~	2025-11-14 14:12:07.000000000 +0000
++++ vsomeip-3.5.11/implementation/endpoints/src/tcp_client_endpoint_impl.cpp	2026-01-22 14:33:44.323383593 +0000
+@@ -20,6 +20,10 @@
+ #include "../../utility/include/utility.hpp"
+ #include "../../utility/include/bithelper.hpp"
+ 
++// boost::asio::io_context::strand::wrap is deprecated
++// and should be replaced with boost::asio::bind_executor
++#pragma GCC diagnostic warning "-Wdeprecated-declarations"
++
+ namespace vsomeip_v3 {
+ 
+ tcp_client_endpoint_impl::tcp_client_endpoint_impl(const std::shared_ptr<endpoint_host>& _endpoint_host,
+--- vsomeip-3.5.11/implementation/endpoints/src/local_uds_client_endpoint_impl.cpp~	2025-11-14 14:12:07.000000000 +0000
++++ vsomeip-3.5.11/implementation/endpoints/src/local_uds_client_endpoint_impl.cpp	2026-01-22 14:36:48.259884673 +0000
+@@ -21,6 +21,10 @@
+ #include "../../protocol/include/protocol.hpp"
+ #include "../../routing/include/routing_host.hpp"
+ 
++// boost::asio::io_context::strand::wrap is deprecated
++// and should be replaced with boost::asio::bind_executor
++#pragma GCC diagnostic warning "-Wdeprecated-declarations"
++
+ namespace vsomeip_v3 {
+ 
+ local_uds_client_endpoint_impl::local_uds_client_endpoint_impl(const std::shared_ptr<endpoint_host>& _endpoint_host,
+--- vsomeip-3.5.11/implementation/endpoints/src/udp_client_endpoint_impl.cpp~	2025-11-14 14:12:07.000000000 +0000
++++ vsomeip-3.5.11/implementation/endpoints/src/udp_client_endpoint_impl.cpp	2026-01-22 14:39:16.849000928 +0000
+@@ -19,6 +19,10 @@
+ #include "../../utility/include/utility.hpp"
+ #include "../../utility/include/bithelper.hpp"
+ 
++// boost::asio::io_context::strand::wrap is deprecated
++// and should be replaced with boost::asio::bind_executor
++#pragma GCC diagnostic warning "-Wdeprecated-declarations"
++
+ namespace vsomeip_v3 {
+ 
+ udp_client_endpoint_impl::udp_client_endpoint_impl(const std::shared_ptr<endpoint_host>& _endpoint_host,
+--- vsomeip-3.5.11/implementation/routing/src/routing_manager_impl.cpp~	2025-11-14 14:12:07.000000000 +0000
++++ vsomeip-3.5.11/implementation/routing/src/routing_manager_impl.cpp	2026-01-22 14:42:04.516589196 +0000
+@@ -1421,7 +1421,7 @@
+     if (is_forwarded) {
+         trace::header its_header;
+         const boost::asio::ip::address_v4 its_remote_address =
+-                _remote_address.is_v4() ? _remote_address.to_v4() : boost::asio::ip::address_v4::from_string("6.6.6.6");
++                _remote_address.is_v4() ? _remote_address.to_v4() : boost::asio::ip::make_address_v4("6.6.6.6");
+         trace::protocol_e its_protocol = _receiver->is_local() ? trace::protocol_e::local
+                 : _receiver->is_reliable()                     ? trace::protocol_e::tcp
+                                                                : trace::protocol_e::udp;

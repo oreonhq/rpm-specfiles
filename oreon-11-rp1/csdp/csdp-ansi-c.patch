@@ -1,0 +1,1803 @@
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/include/declarations.h.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/include/declarations.h	2025-01-16 16:45:53.129076759 -0700
+@@ -28,15 +28,15 @@ void alloc_mat_packed(struct blockmatrix
+ 
+ void free_mat_packed(struct blockmatrix A);
+ 
+-int structnnz(int n, int k, struct blockmatrix C, struct constraintmatrix *constraints);
++int structnnz(int n, int k, struct blockmatrix C, const struct constraintmatrix *constraints);
+ 
+-int actnnz(int n, int lda, double *A);
++int actnnz(int n, int lda, const double *A);
+ 
+-int bandwidth(int n, int lda, double *A);
++int bandwidth(int n, int lda, const double *A);
+ 
+ void qreig(int n, double *maindiag, double *offdiag);
+ 
+-void sort_entries(int k, struct blockmatrix C, struct constraintmatrix *constraints);
++void sort_entries(int k, struct blockmatrix C, const struct constraintmatrix *constraints);
+ 
+ double norm2(int n, double *x);
+ 
+@@ -67,30 +67,30 @@ double linesearch(int n, struct blockmat
+ 		  double *q, double *z, double *workvec,
+ 		  double stepfrac,double start, int printlevel);
+ 
+-double pinfeas(int k, struct constraintmatrix *constraints,
++double pinfeas(int k, const struct constraintmatrix *constraints,
+ 	       struct blockmatrix X, double *a, double *workvec);
+ 
+ double dinfeas(int k, struct blockmatrix C, 
+-	       struct constraintmatrix *constraints, double *y, 
++	       const struct constraintmatrix *constraints, const double *y, 
+ 	       struct blockmatrix Z, struct blockmatrix work1, double nrmC);
+ 
+ double dimacserr3(int k, struct blockmatrix C, 
+-	       struct constraintmatrix *constraints, double *y, 
++	       const struct constraintmatrix *constraints, const double *y, 
+ 	       struct blockmatrix Z, struct blockmatrix work1);
+ 
+-void op_a(int k, struct constraintmatrix *constraints,
++void op_a(int k, const struct constraintmatrix *constraints,
+ 	  struct blockmatrix X, double *result);
+ 
+-void op_at(int k, double *y, struct constraintmatrix *constraints,
++void op_at(int k, const double *y, const struct constraintmatrix *constraints,
+ 	   struct blockmatrix result);
+ 
+ void makefill(int k, struct blockmatrix C, 
+-	      struct constraintmatrix *constraints, 
++	      const struct constraintmatrix *constraints, 
+ 	      struct constraintmatrix *pfill, struct blockmatrix work1, 
+ 	      int printlevel);
+ 
+-void op_o(int k, struct constraintmatrix *constraints,
+-	  struct sparseblock **byblocks, struct blockmatrix Zi, 
++void op_o(int k, const struct constraintmatrix *constraints,
++	  const struct sparseblock **byblocks, struct blockmatrix Zi, 
+           struct blockmatrix X, double *O, struct blockmatrix work1, 
+           struct blockmatrix work2);
+ 
+@@ -140,9 +140,9 @@ void mat_mult_rawatlas(int n, double sca
+ 
+ void matvec(struct blockmatrix A, double *x, double *y);
+ 
+-void matvecR(struct blockmatrix A, double *x, double *y);
++void matvecR(struct blockmatrix A, const double *x, double *y);
+ 
+-void matvecRT(struct blockmatrix A, double *x, double *y);
++void matvecRT(struct blockmatrix A, const double *x, double *y);
+ 
+ void matvecsym(struct blockmatrix A, double *x, double *y);
+ 
+@@ -157,7 +157,7 @@ void free_mat(struct blockmatrix A);
+ void initparams(struct paramstruc *params, int *pprintlevel);
+ 
+ void initsoln(int n, int k, struct blockmatrix C, double *a, 
+-	      struct constraintmatrix *constraints, struct blockmatrix *pX0,
++	      const struct constraintmatrix *constraints, struct blockmatrix *pX0,
+ 	      double **py0, struct blockmatrix *pZ0);
+ 
+ void trans(struct blockmatrix A);
+@@ -168,30 +168,30 @@ int chol(struct blockmatrix A);
+ 
+ int solvesys(int m, int ldam, double *A, double *rhs);
+ 
+-int user_exit(int n, int k, struct blockmatrix C, double *a, double dobj,
++int user_exit(int n, int k, struct blockmatrix C, const double *a, double dobj,
+ 	      double pobj, double constant_offset, 
+-	      struct constraintmatrix *constraints, struct blockmatrix X,
+-	      double *y, struct blockmatrix Z, struct paramstruc params);
++	      const struct constraintmatrix *constraints, struct blockmatrix X,
++	      const double *y, struct blockmatrix Z, struct paramstruc params);
+ 
+-int read_sol(char *fname, int n, int k, struct blockmatrix C, 
++int read_sol(const char *fname, int n, int k, struct blockmatrix C, 
+ 	     struct blockmatrix *pX, double **py, struct blockmatrix *pZ);
+ 
+-int read_prob(char *fname, int *pn, int *pk, struct blockmatrix *pC,
++int read_prob(const char *fname, int *pn, int *pk, struct blockmatrix *pC,
+ 	      double **pa, struct constraintmatrix **pconstraints,
+ 	      int printlevel);
+ 
+-int write_prob(char *fname, int n, int k, struct blockmatrix C,
+-	       double *a, struct constraintmatrix *constraints);
++int write_prob(const char *fname, int n, int k, struct blockmatrix C,
++	       const double *a, const struct constraintmatrix *constraints);
+ 
+-int write_sol(char *fname, int n, int k, struct blockmatrix X,
+-	      double *y, struct blockmatrix Z);
++int write_sol(const char *fname, int n, int k, struct blockmatrix X,
++	      const double *y, struct blockmatrix Z);
+ 
+ void free_prob(int n, int k, struct blockmatrix C, double *a, 
+ 	       struct constraintmatrix *constraints, struct blockmatrix X,
+ 	       double *y, struct blockmatrix Z);
+ 
+ int sdp(int n, int k, struct blockmatrix C, double *a, double constant_offset,
+-	struct constraintmatrix *constraints, struct sparseblock **byblocks,
++	const struct constraintmatrix *constraints, const struct sparseblock **byblocks,
+ 	struct constraintmatrix fill, struct blockmatrix X, double *y, 
+ 	struct blockmatrix Z, struct blockmatrix cholxinv,
+ 	struct blockmatrix cholzinv, double *pobj, double *dobj, 
+@@ -199,7 +199,7 @@ int sdp(int n, int k, struct blockmatrix
+ 	struct blockmatrix work3,
+ 	double *workvec1, double *workvec2,
+ 	double *workvec3, double *workvec4, double *workvec5,
+-	double *workvec6, double *workvec7, double *workvec8, 
++	double *workvec6, const double *workvec7, double *workvec8, 
+ 	double *diagO, struct blockmatrix bestx, double *besty,
+ 	struct blockmatrix bestz, struct blockmatrix Zi, double *O,
+ 	double *rhs, struct blockmatrix dZ, struct blockmatrix dX, 
+@@ -207,16 +207,16 @@ int sdp(int n, int k, struct blockmatrix
+ 	struct paramstruc parameters);
+ 
+ int easy_sdp(int n, int k, struct blockmatrix C, double *a, 
+-	     struct constraintmatrix *constraints, double constant_offset,
+-	     struct blockmatrix *pX, double **py, struct blockmatrix *pZ,
++	     const struct constraintmatrix *constraints, double constant_offset,
++	     const struct blockmatrix *pX, double **py, const struct blockmatrix *pZ,
+ 	     double *ppobj, double *pdobj);
+ 
+ int checkconstraints(int n, int k, struct blockmatrix C,
+-		     struct constraintmatrix *constraints, int printlevel);
++		     const struct constraintmatrix *constraints, int printlevel);
+ 
+ int checkc(int n, struct blockmatrix C, int printlevel);
+   
+-void tweakgap(int n, int k, double *a, struct constraintmatrix *constraints,
++void tweakgap(int n, int k, double *a, const struct constraintmatrix *constraints,
+ 	      double gap, struct blockmatrix Z, struct blockmatrix dZ, 
+ 	      double *y, double *dy, struct blockmatrix work1, 
+ 	      struct blockmatrix work2, struct blockmatrix work3, 
+@@ -227,6 +227,7 @@ int bisect_(int *n, double *eps1, double
+ 	    double *lb, double *ub, int *mm, int *m, double *w, int *ind, 
+ 	    int *ierr, double *rv4, double *rv5);
+ 
++#ifdef CSDP_NEED_BLAS
+ /*
+   BLAS and LINPACK stuff.
+   */
+@@ -234,86 +235,14 @@ int bisect_(int *n, double *eps1, double
+ /*
+   First, BLAS routines.
+  */
+-
+-#ifdef CAPSBLAS
+-#ifdef NOUNDERBLAS
+-double DNRM2();
+-double DASUM();
+-double DDOT();
+-int IDAMAX();
+-void DGEMM();
+-void DGEMV();
+-void DGER();
+-void DTRSM();
+-void DTRMV();
+-void DSYMV();
+-#else
+-double DNRM2_();
+-double DASUM_();
+-double DDOT_();
+-int IDAMAX_();
+-void DGEMM_();
+-void DGEMV_();
+-void DGER_();
+-void DTRSM_();
+-void DTRMV_();
+-void DSYMV_();
+-#endif
+-#else
+-#ifdef NOUNDERBLAS
+-double dnrm2();
+-double dasum();
+-double ddot();
+-int idamax();
+-void dgemm();
+-void dgemv();
+-void dger();
+-void dtrsm();
+-void dtrmv();
+-void dsymv();
+-#else
+-double dnrm2_();
+-double dasum_();
+-double ddot_();
+-int idamax_();
+-void dgemm_();
+-void dgemv_();
+-void dger_();
+-void dtrsm_();
+-void dtrmv_();
+-void dsymv_();
+-#endif
+-#endif
++#include <stddef.h>
++#include <blas_gnu.h>
+ 
+ /*
+   LAPACK next.
+  */
+ 
+-#ifdef CAPSLAPACK
+-#ifdef NOUNDERLAPACK
+-void DPOTRF();
+-void DPOTRS();
+-void DPOTRI();
+-void DTRTRI();
+-#else
+-void DPOTRF_();
+-void DPOTRS_();
+-void DPOTRI_();
+-void DTRTRI_();
+-#endif
+-#else
+-#ifdef NOUNDERLAPACK
+-void dpotrf();
+-void dpotrs();
+-void dpotri();
+-void dtrtri();
+-#else
+-void dpotrf_();
+-void dpotrs_();
+-void dpotri_();
+-void dtrtri_();
+-#endif
++#include <lapack.h>
+ #endif
+ 
+-
+ #endif
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/add_mat.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/add_mat.c	2025-01-16 15:44:45.863179418 -0700
+@@ -6,9 +6,9 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-void add_mat(A,B)
+-     struct blockmatrix A;
+-     struct blockmatrix B;
++void add_mat(
++    struct blockmatrix A,
++    struct blockmatrix B)
+ {
+   int blk;
+   int i,j;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/addscaledmat.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/addscaledmat.c	2025-01-16 15:45:57.766235377 -0700
+@@ -10,11 +10,11 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-void addscaledmat(A,scale,B,C)
+-     struct blockmatrix A;
+-     double scale;
+-     struct blockmatrix B;
+-     struct blockmatrix C;
++void addscaledmat(
++    struct blockmatrix A,
++    double scale,
++    struct blockmatrix B,
++    struct blockmatrix C)
+ {
+   int blk;
+   int i,j;
+@@ -51,9 +51,9 @@ void addscaledmat(A,scale,B,C)
+  * Just add scale*I to A.  
+  */
+ 
+-void addscaledI(A,scale)
+-     struct blockmatrix A;
+-     double scale;
++void addscaledI(
++    struct blockmatrix A,
++    double scale)
+ {
+   int blk;
+   int i;
+@@ -86,10 +86,10 @@ void addscaledI(A,scale)
+  * Rather than 0 out A, we can simply put a scaled copy of B into C.
+  */
+ 
+-void scalemat(scale,B,C)
+-     double scale;
+-     struct blockmatrix B;
+-     struct blockmatrix C;
++void scalemat(
++    double scale,
++    struct blockmatrix B,
++    struct blockmatrix C)
+ {
+   int blk;
+   int i,j;
+@@ -127,11 +127,11 @@ void scalemat(scale,B,C)
+  * where we don't need the full result.
+  */
+ 
+-void addscaledmatut(A,scale,B,C)
+-     struct blockmatrix A;
+-     double scale;
+-     struct blockmatrix B;
+-     struct blockmatrix C;
++void addscaledmatut(
++    struct blockmatrix A,
++    double scale,
++    struct blockmatrix B,
++    struct blockmatrix C)
+ {
+   int blk;
+   int i,j;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/allocmat.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/allocmat.c	2025-01-16 15:46:32.501779320 -0700
+@@ -8,9 +8,9 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-void alloc_mat(A,pB)
+-     struct blockmatrix A;
+-     struct blockmatrix *pB;
++void alloc_mat(
++    struct blockmatrix A,
++    struct blockmatrix *pB)
+ {
+   int blk;
+ 
+@@ -63,8 +63,8 @@ void alloc_mat(A,pB)
+ }
+ 
+ 
+-void free_mat(A)
+-     struct blockmatrix A;
++void free_mat(
++    struct blockmatrix A)
+ {
+   int blk;
+ 
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/calc_dobj.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/calc_dobj.c	2025-01-16 15:46:52.053522610 -0700
+@@ -4,11 +4,11 @@
+ 
+ #include "declarations.h"
+ 
+-double calc_dobj(k,a,y,constant_offset)
+-     int k;
+-     double *a;
+-     double *y;
+-     double constant_offset;
++double calc_dobj(
++    int k,
++    double *a,
++    double *y,
++    double constant_offset)
+ {
+   double s;
+   int incx=1;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/calc_pobj.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/calc_pobj.c	2025-01-16 15:47:18.341177466 -0700
+@@ -8,10 +8,10 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-double calc_pobj(C,X,constant_offset)
+-     struct blockmatrix C;
+-     struct blockmatrix X;
+-     double constant_offset;
++double calc_pobj(
++    struct blockmatrix C,
++    struct blockmatrix X,
++    double constant_offset)
+ {
+   double pobj;
+ 
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/chol.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/chol.c	2025-01-16 15:48:35.708161677 -0700
+@@ -9,10 +9,10 @@
+ #include <math.h>
+ #include "declarations.h"
+ 
+-int chol_blk(n,lda,A)
+-     int n;
+-     int lda;
+-     double *A;
++int chol_blk(
++    int n,
++    int lda,
++    double *A)
+ {
+   int info;
+   int i;
+@@ -63,9 +63,9 @@ int chol_blk(n,lda,A)
+ 
+ }
+ 
+-int chol_diag(n,A)
+-     int n;
+-     double *A;
++int chol_diag(
++    int n,
++    double *A)
+ {
+   double ent;
+   int i;
+@@ -94,8 +94,8 @@ int chol_diag(n,A)
+  * Find the Cholesky factor of a block structured matrix.
+  */
+ 
+-int chol(A)
+-     struct blockmatrix A;
++int chol(
++    struct blockmatrix A)
+ {
+   int blk;
+   int ret;
+@@ -122,8 +122,8 @@ int chol(A)
+ }
+ 
+ 
+-void trans(A)
+-     struct blockmatrix A;
++void trans(
++    struct blockmatrix A)
+ {
+   int i,j;
+   int blk;
+@@ -159,8 +159,9 @@ void trans(A)
+    in work.  Note that the original Cholesky factor in A is not destroyed.  
+  */
+ 
+-void chol_inv(A,work)
+-     struct blockmatrix A,work;
++void chol_inv(
++    struct blockmatrix A,
++    struct blockmatrix work)
+ {
+   int i;
+   int info;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/copy_mat.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/copy_mat.c	2025-01-16 15:49:27.675479374 -0700
+@@ -6,8 +6,9 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-void copy_mat(A,B)
+-     struct blockmatrix A,B;
++void copy_mat(
++    struct blockmatrix A,
++    struct blockmatrix B)
+ {
+   int blk,i,j;
+   double *p;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/easysdp.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/easysdp.c	2025-01-16 16:16:30.751204763 -0700
+@@ -12,18 +12,18 @@
+ #include <math.h>
+ #include "declarations.h"
+ 
+-int easy_sdp(n,k,C,a,constraints,constant_offset,pX,py,pZ,ppobj,pdobj)
+-     int n;
+-     int k;
+-     struct blockmatrix C;
+-     double *a;
+-     struct constraintmatrix *constraints;
+-     double constant_offset;
+-     struct blockmatrix *pX;
+-     double **py;
+-     struct blockmatrix *pZ;
+-     double *ppobj;
+-     double *pdobj;
++int easy_sdp(
++    int n,
++    int k,
++    struct blockmatrix C,
++    double *a,
++    const struct constraintmatrix *constraints,
++    double constant_offset,
++    const struct blockmatrix *pX,
++    double **py,
++    const struct blockmatrix *pZ,
++    double *ppobj,
++    double *pdobj)
+ {
+   int ret;
+   struct constraintmatrix fill;
+@@ -466,7 +466,7 @@ int easy_sdp(n,k,C,a,constraints,constan
+     *  Now, call sdp().
+     */
+ 
+-   ret=sdp(n,k,C,a,constant_offset,constraints,byblocks,fill,*pX,*py,*pZ,
++   ret=sdp(n,k,C,a,constant_offset,constraints,(const struct sparseblock **)byblocks,fill,*pX,*py,*pZ,
+ 	   cholxinv,cholzinv,ppobj,pdobj,work1,work2,work3,workvec1,
+ 	   workvec2,workvec3,workvec4,workvec5,workvec6,workvec7,workvec8,
+ 	   diagO,bestx,besty,bestz,Zi,O,rhs,dZ,dX,dy,dy1,Fp,
+@@ -590,11 +590,11 @@ int easy_sdp(n,k,C,a,constraints,constan
+ 
+ }
+ 
+-int structnnz(n,k,C,constraints)
+-     int n;
+-     int k;
+-     struct blockmatrix C;
+-     struct constraintmatrix *constraints;
++int structnnz(
++    int n,
++    int k,
++    struct blockmatrix C,
++    const struct constraintmatrix *constraints)
+ {
+   int i,j;
+   int ii,jj;
+@@ -648,10 +648,7 @@ int structnnz(n,k,C,constraints)
+   return(nnz);
+ }
+ 
+-int actnnz(n,lda,A)
+-     int n;
+-     int lda;
+-     double A[];
++int actnnz(int n, int lda, const double *A)
+ {
+   int i,j;
+   int nnz;
+@@ -674,10 +671,10 @@ int actnnz(n,lda,A)
+   return(nnz);
+ }
+ 
+-int bandwidth(n,lda,A)
+-     int n;
+-     int lda;
+-     double A[];
++int bandwidth(
++    int n,
++    int lda,
++    const double *A)
+ {
+   int i;
+   int j;
+@@ -759,12 +756,12 @@ int checkc(int n,struct blockmatrix C,in
+  * Sanity tests on the constraints data structure.
+  */
+ 
+-int checkconstraints(n,k,C,constraints,printlevel)
+-     int n;
+-     int k;
+-     struct blockmatrix C;
+-     struct constraintmatrix *constraints;
+-     int printlevel;
++int checkconstraints(
++    int n,
++    int k,
++    struct blockmatrix C,
++    const struct constraintmatrix *constraints,
++    int printlevel)
+ {
+   int i,j;
+   struct sparseblock *p;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/Fnorm.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/Fnorm.c	2025-01-16 15:53:04.408633795 -0700
+@@ -8,8 +8,8 @@
+ #include <math.h>
+ #include "declarations.h"
+ 
+-double Fnorm(A)
+-     struct blockmatrix A;
++double Fnorm(
++    struct blockmatrix A)
+ {
+   int blk;
+   double nrm;
+@@ -53,8 +53,8 @@ double Fnorm(A)
+  * The Knorm is the sum of the Fnorms of the blocks.
+  */
+ 
+-double Knorm(A)
+-     struct blockmatrix A;
++double Knorm(
++    struct blockmatrix A)
+ {
+   int blk;
+   double nrm;
+@@ -85,8 +85,8 @@ double Knorm(A)
+ }
+ 
+ 
+-double mat1norm(A)
+-     struct blockmatrix A;
++double mat1norm(
++    struct blockmatrix A)
+ {
+   int blk;
+   double nrm;
+@@ -117,8 +117,8 @@ double mat1norm(A)
+ }
+ 
+ 
+-double matinfnorm(A)
+-     struct blockmatrix A;
++double matinfnorm(
++    struct blockmatrix A)
+ {
+   int blk;
+   int i;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/freeprob.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/freeprob.c	2025-01-16 15:53:36.504212395 -0700
+@@ -5,15 +5,15 @@
+ #include <stdlib.h>
+ #include "declarations.h"
+ 
+-void free_prob(n,k,C,a,constraints,X,y,Z)
+-     int n;
+-     int k;
+-     struct blockmatrix C;
+-     double *a;
+-     struct constraintmatrix *constraints;
+-     struct blockmatrix X;
+-     double *y;
+-     struct blockmatrix Z;
++void free_prob(
++    int n,
++    int k,
++    struct blockmatrix C,
++    double *a,
++    struct constraintmatrix *constraints,
++    struct blockmatrix X,
++    double *y,
++    struct blockmatrix Z)
+ {
+   int i;
+   struct sparseblock *ptr;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/initparams.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/initparams.c	2025-01-16 15:54:02.479871354 -0700
+@@ -6,9 +6,9 @@
+ #include <strings.h>
+ #include "declarations.h"
+ 
+-void initparams(params,pprintlevel)
+-     struct paramstruc *params;
+-     int *pprintlevel;
++void initparams(
++    struct paramstruc *params,
++    int *pprintlevel)
+ {
+   FILE *paramfile;
+   int ret;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/initsoln.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/initsoln.c	2025-01-16 15:54:36.615423166 -0700
+@@ -7,15 +7,15 @@
+ #include <math.h>
+ #include "declarations.h"
+ 
+-void initsoln(n,k,C,a,constraints,pX0,py0,pZ0)
+-     int n;
+-     int k;
+-     struct blockmatrix C;
+-     double *a;
+-     struct constraintmatrix *constraints;
+-     struct blockmatrix *pX0;
+-     double **py0;
+-     struct blockmatrix *pZ0;
++void initsoln(
++    int n,
++    int k,
++    struct blockmatrix C,
++    double *a,
++    const struct constraintmatrix *constraints,
++    struct blockmatrix *pX0,
++    double **py0,
++    struct blockmatrix *pZ0)
+ {
+   int i,j,blk;
+   double xi,eta;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/linesearch.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/linesearch.c	2025-01-16 15:55:39.047603463 -0700
+@@ -11,16 +11,19 @@
+ 
+ #define LANCZOSITS 30
+ 
+-double linesearch(n,dX,work1,work2,work3,cholinv,q,z,workvec,
+-		  stepfrac,start,printlevel)
+-     int n;
+-     struct blockmatrix dX,work1,work2,work3,cholinv;
+-     double *q;
+-     double *z;
+-     double *workvec;
+-     double stepfrac;
+-     double start;
+-     int printlevel;
++double linesearch(
++    int n,
++    struct blockmatrix dX,
++    struct blockmatrix work1,
++    struct blockmatrix work2,
++    struct blockmatrix work3,
++    struct blockmatrix cholinv,
++    double *q,
++    double *z,
++    double *workvec,
++    double stepfrac,
++    double start,
++    int printlevel)
+ {
+   int i,j,jj;
+   double alpha;
+@@ -175,7 +178,7 @@ double linesearch(n,dX,work1,work2,work3
+       inc=1;
+ 
+ #ifdef HIDDENSTRLEN
+-      dgemv_("T",&n,&j,&scale1,lanczosvectors,&n,z+1,&inc,&scale2,reorth+1,&inc,1,1);
++      dgemv_("T",&n,&j,&scale1,lanczosvectors,&n,z+1,&inc,&scale2,reorth+1,&inc,1);
+ #else
+ #ifdef NOUNDERBLAS
+ #ifdef CAPSBLAS
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/makefill.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/makefill.c	2025-01-16 15:56:04.598267994 -0700
+@@ -12,13 +12,13 @@
+ #include <math.h>
+ #include "declarations.h"
+ 
+-void makefill(k,C,constraints,pfill,work1,printlevel)
+-     int k;
+-     struct blockmatrix C;
+-     struct constraintmatrix *constraints;
+-     struct constraintmatrix *pfill;
+-     struct blockmatrix work1;
+-     int printlevel;
++void makefill(
++    int k,
++    struct blockmatrix C,
++    const struct constraintmatrix *constraints,
++    struct constraintmatrix *pfill,
++    struct blockmatrix work1,
++    int printlevel)
+ {
+   int i,j,p,q,blk,blksize;
+   struct sparseblock *ptr;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/make_i.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/make_i.c	2025-01-16 15:56:27.101972537 -0700
+@@ -6,8 +6,8 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-void make_i(A)
+-     struct blockmatrix A;
++void make_i(
++    struct blockmatrix A)
+ {
+   int blk,i,j;
+   double *p;
+@@ -43,9 +43,9 @@ void make_i(A)
+ 
+ 
+ 
+-void make_scaled_i(A,mu)
+-     struct blockmatrix A;
+-     double mu;
++void make_scaled_i(
++    struct blockmatrix A,
++    double mu)
+ {
+   int blk,i,j;
+   double *p;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/mat_mult.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/mat_mult.c	2025-01-16 15:57:19.813280469 -0700
+@@ -16,9 +16,12 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-void mat_mult(scale1,scale2,A,B,C)
+-     double scale1,scale2;
+-     struct blockmatrix A,B,C;
++void mat_mult(
++    double scale1,
++    double scale2,
++    struct blockmatrix A,
++    struct blockmatrix B,
++    struct blockmatrix C)
+ {
+   int blk,i,n;
+   double *ap;
+@@ -87,13 +90,13 @@ void mat_mult(scale1,scale2,A,B,C)
+     };
+ }
+ 
+-void mat_mult_raw(n,scale1,scale2,ap,bp,cp)
+-     int n;
+-     double scale1;
+-     double scale2;
+-     double *ap;
+-     double *bp;
+-     double *cp;
++void mat_mult_raw(
++    int n,
++    double scale1,
++    double scale2,
++    double *ap,
++    double *bp,
++    double *cp)
+ {
+ 
+ #ifdef HIDDENSTRLEN
+@@ -118,13 +121,13 @@ void mat_mult_raw(n,scale1,scale2,ap,bp,
+ #ifdef USEATLAS
+ 
+ 
+-void mat_mult_rawatlas(n,scale1,scale2,ap,bp,cp)
+-     int n;
+-     double scale1;
+-     double scale2;
+-     double *ap;
+-     double *bp;
+-     double *cp;
++void mat_mult_rawatlas(
++    int n,
++    double scale1,
++    double scale2,
++    double *ap,
++    double *bp,
++    double *cp)
+ {
+ enum CBLAS_ORDER {CblasRowMajor=101, CblasColMajor=102 };
+ enum CBLAS_TRANSPOSE {CblasNoTrans=111, CblasTrans=112, CblasConjTrans=113,
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/mat_multsp.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/mat_multsp.c	2025-01-16 15:58:39.916230574 -0700
+@@ -43,10 +43,13 @@
+ #define SPARSELIMC 0.01
+ #endif
+ 
+-void mat_multspb(scale1,scale2,A,B,C,fill)
+-     double scale1,scale2;
+-     struct blockmatrix A,B,C;
+-     struct constraintmatrix fill;
++void mat_multspb(
++    double scale1,
++    double scale2,
++    struct blockmatrix A,
++    struct blockmatrix B,
++    struct blockmatrix C,
++    struct constraintmatrix fill)
+ {
+   int blk,i,ii,j;
+   int blksize,p,q;
+@@ -280,10 +283,13 @@ void mat_multspb(scale1,scale2,A,B,C,fil
+  *  This version of mat_mult is specialized for sparse A matrices.
+  */
+ 
+-void mat_multspa(scale1,scale2,A,B,C,fill)
+-     double scale1,scale2;
+-     struct blockmatrix A,B,C;
+-     struct constraintmatrix fill;
++void mat_multspa(
++    double scale1,
++    double scale2,
++    struct blockmatrix A,
++    struct blockmatrix B,
++    struct blockmatrix C,
++    struct constraintmatrix fill)
+ {
+   int blk,i,j,ii;
+   int blksize,p,q;
+@@ -525,10 +531,13 @@ void mat_multspa(scale1,scale2,A,B,C,fil
+  *  to elements described in fill.  
+  */
+ 
+-void mat_multspc(scale1,scale2,A,B,C,fill)
+-     double scale1,scale2;
+-     struct blockmatrix A,B,C;
+-     struct constraintmatrix fill;
++void mat_multspc(
++    double scale1,
++    double scale2,
++    struct blockmatrix A,
++    struct blockmatrix B,
++    struct blockmatrix C,
++    struct constraintmatrix fill)
+ {
+   int blk,i,j,ii;
+   int blksize,p,q;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/matvec.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/matvec.c	2025-01-16 15:59:37.276479434 -0700
+@@ -9,10 +9,10 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-void matvec(A,x,y)
+-     struct blockmatrix A;
+-     double *x;
+-     double *y;
++void matvec(
++    struct blockmatrix A,
++    double *x,
++    double *y)
+ {
+   int blk,i,n;
+   int p;
+@@ -85,10 +85,10 @@ void matvec(A,x,y)
+  * Since DGEMV is memory bound, DSYMV is about twice as fast.
+  */
+ 
+-void matvecsym(A,x,y)
+-     struct blockmatrix A;
+-     double *x;
+-     double *y;
++void matvecsym(
++    struct blockmatrix A,
++    double *x,
++    double *y)
+ {
+   int blk,i,n;
+   int p;
+@@ -161,10 +161,10 @@ void matvecsym(A,x,y)
+  * triangular.  Since DGEMV is memory bound, DTRMV is about twice as fast.
+  */
+ 
+-void matvecR(A,x,y)
+-     struct blockmatrix A;
+-     double *x;
+-     double *y;
++void matvecR(
++    struct blockmatrix A,
++    const double *x,
++    double *y)
+ {
+   int blk,i,n;
+   int p;
+@@ -242,10 +242,10 @@ void matvecR(A,x,y)
+  * triangular.  Since DGEMV is memory bound, DTRMV is about twice as fast.
+  */
+ 
+-void matvecRT(A,x,y)
+-     struct blockmatrix A;
+-     double *x;
+-     double *y;
++void matvecRT(
++    struct blockmatrix A,
++    const double *x,
++    double *y)
+ {
+   int blk,i,n;
+   int p;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/norms.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/norms.c	2025-01-16 16:00:07.195087661 -0700
+@@ -5,9 +5,9 @@
+ #include <math.h>
+ #include "declarations.h"
+ 
+-double norm2(n,x)
+-     int n;
+-     double *x;
++double norm2(
++    int n,
++    double *x)
+ {
+   double nrm;
+   int incx=1;
+@@ -29,9 +29,9 @@ double norm2(n,x)
+   return(nrm);
+ }
+ 
+-double norm1(n,x)
+-     int n;
+-     double *x;
++double norm1(
++    int n,
++    double *x)
+ {
+   double nrm;
+   int incx=1;
+@@ -53,9 +53,9 @@ double norm1(n,x)
+   return(nrm);
+ }
+ 
+-double norminf(n,x)
+-     int n;
+-     double *x;
++double norminf(
++    int n,
++    double *x)
+ {
+   int i;
+   double nrm;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/op_a.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/op_a.c	2025-01-16 16:00:38.107682859 -0700
+@@ -6,11 +6,11 @@
+ #include "declarations.h"
+ 
+ 
+-void op_a(k,constraints,X,result)
+-     int k;
+-     struct constraintmatrix *constraints;
+-     struct blockmatrix X;
+-     double *result;
++void op_a(
++    int k,
++    const struct constraintmatrix *constraints,
++    struct blockmatrix X,
++    double *result)
+ {
+   int i,j;
+   int p,q;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/op_at.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/op_at.c	2025-01-16 16:01:04.435338091 -0700
+@@ -6,11 +6,11 @@
+ #include "declarations.h"
+ 
+ 
+-void op_at(k,y,constraints,result)
+-     int k;
+-     double *y;
+-     struct constraintmatrix *constraints;
+-     struct blockmatrix result;
++void op_at(
++    int k,
++    const double *y,
++    const struct constraintmatrix *constraints,
++    struct blockmatrix result)
+ {
+   int i,j;
+ #ifndef BIT64
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/op_o.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/op_o.c	2025-01-16 16:01:37.689902649 -0700
+@@ -18,15 +18,15 @@
+ 
+ 
+ void
+-op_o(k, constraints, byblocks, Zi, X, O, work1, work2)
+-  int             k;
+-  struct constraintmatrix *constraints;
+-  struct sparseblock **byblocks;
+-  struct blockmatrix Zi;
+-  struct blockmatrix X;
+-  double         *O;
+-  struct blockmatrix work1;
+-  struct blockmatrix work2;
++op_o(
++    int k,
++    const struct constraintmatrix *constraints,
++    const struct sparseblock **byblocks,
++    struct blockmatrix Zi,
++    struct blockmatrix X,
++    double *O,
++    struct blockmatrix work1,
++    struct blockmatrix work2)
+ {
+   int             i, j;
+   int             ii, jj;
+@@ -34,7 +34,7 @@ op_o(k, constraints, byblocks, Zi, X, O,
+   int             p, q, r, s;
+ 
+   struct sparseblock *ptri;
+-  struct sparseblock *ptrj;
++  const struct sparseblock *ptrj;
+ 
+   int             blocknum;
+   int             blocksize;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/packed.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/packed.c	2025-01-16 16:02:30.121216038 -0700
+@@ -7,8 +7,9 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-void store_packed(A,B)
+-     struct blockmatrix A,B;
++void store_packed(
++    struct blockmatrix A,
++    struct blockmatrix B)
+ {
+   int blk,i,j,n;
+   double *p;
+@@ -42,8 +43,9 @@ void store_packed(A,B)
+ 
+ }
+ 
+-void store_unpacked(A,B)
+-     struct blockmatrix A,B;
++void store_unpacked(
++    struct blockmatrix A,
++    struct blockmatrix B)
+ {
+   int blk,i,j,n;
+   double *p;
+@@ -90,9 +92,9 @@ void store_unpacked(A,B)
+ 
+ 
+ 
+-void alloc_mat_packed(A,pB)
+-     struct blockmatrix A;
+-     struct blockmatrix *pB;
++void alloc_mat_packed(
++    struct blockmatrix A,
++    struct blockmatrix *pB)
+ {
+   int blk,n;
+ 
+@@ -149,8 +151,8 @@ void alloc_mat_packed(A,pB)
+ }
+ 
+ 
+-void free_mat_packed(A)
+-     struct blockmatrix A;
++void free_mat_packed(
++    struct blockmatrix A)
+ {
+   int blk;
+ 
+@@ -183,8 +185,8 @@ void free_mat_packed(A)
+ 
+ }
+ 
+-void triu(A)
+-     struct blockmatrix A;
++void triu(
++    struct blockmatrix A)
+ {
+   int i,j,n;
+   int blk;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/psd_feas.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/psd_feas.c	2025-01-16 16:03:32.793395331 -0700
+@@ -9,12 +9,12 @@
+ /*
+  * This routine computes the relative primal infeasibility.
+  */
+-double pinfeas(k,constraints,X,a,workvec)
+-     int k;
+-     struct constraintmatrix *constraints;
+-     struct blockmatrix X;
+-     double *a;
+-     double *workvec;
++double pinfeas(
++    int k,
++    const struct constraintmatrix *constraints,
++    struct blockmatrix X,
++    double *a,
++    double *workvec)
+ {
+   double nrme;
+   double nrma;
+@@ -35,14 +35,14 @@ double pinfeas(k,constraints,X,a,workvec
+ }
+ 
+ 
+-double dinfeas(k,C,constraints,y,Z,work1,nrmC)
+-     int k;
+-     struct blockmatrix C;
+-     struct constraintmatrix *constraints;
+-     double *y;
+-     struct blockmatrix Z;
+-     struct blockmatrix work1;
+-     double nrmC;
++double dinfeas(
++    int k,
++    struct blockmatrix C,
++    const struct constraintmatrix *constraints,
++    const double *y,
++    struct blockmatrix Z,
++    struct blockmatrix work1,
++    double nrmC)
+ {
+   double nrme;
+ 
+@@ -66,13 +66,13 @@ double dinfeas(k,C,constraints,y,Z,work1
+ 
+ }
+ 
+-double dimacserr3(k,C,constraints,y,Z,work1)
+-     int k;
+-     struct blockmatrix C;
+-     struct constraintmatrix *constraints;
+-     double *y;
+-     struct blockmatrix Z;
+-     struct blockmatrix work1;
++double dimacserr3(
++    int k,
++    struct blockmatrix C,
++    const struct constraintmatrix *constraints,
++    const double *y,
++    struct blockmatrix Z,
++    struct blockmatrix work1)
+ {
+   double nrme;
+ 
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/qreig.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/qreig.c	2025-01-16 16:03:48.256192852 -0700
+@@ -7,10 +7,10 @@
+ #include <math.h>
+ #define EPS 1.0e-6
+ 
+-void qreig(n,d,e2)
+-     int n;
+-     double *d;
+-     double *e2;
++void qreig(
++    int n,
++    double *d,
++    double *e2)
+ {
+   int i,k,m;
+   double b,b2,f,g,h,p2,r2,s2;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/readprob.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/readprob.c	2025-01-16 16:05:24.486932728 -0700
+@@ -9,20 +9,19 @@
+ #include <limits.h>
+ #include "declarations.h"
+ 
+-void skip_to_end_of_line();
+-int get_line();
+-void countentry();
+-int addentry();
++void skip_to_end_of_line(FILE *);
++int get_line(FILE *, char *, int);
++void countentry(struct constraintmatrix *, int, int, int);
++int addentry(const struct constraintmatrix *, int, int, int, int, double);
+ 
+-int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
+-     char *fname;
+-     int *pn;
+-     int *pk;
+-     struct blockmatrix *pC;
+-     double **pa;
+-     struct constraintmatrix **pconstraints;
+-     int printlevel;
+-     
++int read_prob(
++    const char *fname,
++    int *pn,
++    int *pk,
++    struct blockmatrix *pC,
++    double **pa,
++    struct constraintmatrix **pconstraints,
++    int printlevel)
+ {
+   struct constraintmatrix *myconstraints;
+   FILE *fid;
+@@ -762,8 +761,8 @@ b	       */
+  *  file fid.
+  */
+ 
+-void skip_to_end_of_line(fid)
+-     FILE *fid;
++void skip_to_end_of_line(
++    FILE *fid)
+ {
+   char c;
+  
+@@ -778,10 +777,10 @@ void skip_to_end_of_line(fid)
+  *
+  */
+ 
+-int get_line(fid,buffer,bufsiz)
+-     FILE *fid;
+-     char *buffer;
+-     int bufsiz;
++int get_line(
++    FILE *fid,
++    char *buffer,
++    int bufsiz)
+ {
+   int k;
+   char c;
+@@ -820,11 +819,11 @@ int get_line(fid,buffer,bufsiz)
+ }
+   
+ 
+-void countentry(constraints,matno,blkno,blocksize)
+-     struct constraintmatrix *constraints;
+-     int matno;
+-     int blkno;
+-     int blocksize;
++void countentry(
++    struct constraintmatrix *constraints,
++    int matno,
++    int blkno,
++    int blocksize)
+ {
+   struct sparseblock *p;
+   struct sparseblock *q;
+@@ -911,13 +910,13 @@ void countentry(constraints,matno,blkno,
+ 
+ }
+ 
+-int addentry(constraints,matno,blkno,indexi,indexj,ent)
+-     struct constraintmatrix *constraints;
+-     int matno;
+-     int blkno;
+-     int indexi;
+-     int indexj;
+-     double ent;
++int addentry(
++    const struct constraintmatrix *constraints,
++    int matno,
++    int blkno,
++    int indexi,
++    int indexj,
++    double ent)
+ {
+   struct sparseblock *p;
+   int itemp;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/readsol.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/readsol.c	2025-01-16 16:05:51.135583739 -0700
+@@ -6,16 +6,16 @@
+ #include <stdlib.h>
+ #include "declarations.h"
+ 
+-void skip_to_end_of_line();
++void skip_to_end_of_line(FILE *);
+ 
+-int read_sol(fname,n,k,C,pX,py,pZ)
+-     char *fname;
+-     int n;
+-     int k;
+-     struct blockmatrix C;
+-     struct blockmatrix *pX;
+-     double **py;
+-     struct blockmatrix *pZ;
++int read_sol(
++    const char *fname,
++    int n,
++    int k,
++    struct blockmatrix C,
++    struct blockmatrix *pX,
++    double **py,
++    struct blockmatrix *pZ)
+ {
+   FILE *fid;
+   int i;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/sdp.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/sdp.c	2025-01-16 16:08:42.534339280 -0700
+@@ -65,50 +65,47 @@ double endtime=0.0;
+ 
+ #endif
+ 
+-int sdp(n,k,C,a,constant_offset,constraints,byblocks,fill,X,y,Z,cholxinv,
+-	cholzinv,pobj,dobj,work1,work2,work3,workvec1,workvec2,workvec3,
+-	workvec4,workvec5,workvec6,workvec7,workvec8,diagO,bestx,besty,bestz,
+-	Zi,O,rhs,dZ,dX,dy,dy1,Fp,printlevel,parameters)
+-     int n;
+-     int k;
+-     struct blockmatrix C;
+-     double *a;
+-     double constant_offset;
+-     struct constraintmatrix *constraints;
+-     struct sparseblock **byblocks;
+-     struct constraintmatrix fill;
+-     struct blockmatrix X;
+-     double *y;
+-     struct blockmatrix Z;     
+-     struct blockmatrix cholxinv;
+-     struct blockmatrix cholzinv;
+-     double *pobj;
+-     double *dobj;
+-     struct blockmatrix work1;     
+-     struct blockmatrix work2;     
+-     struct blockmatrix work3;     
+-     double *workvec1;
+-     double *workvec2;
+-     double *workvec3;
+-     double *workvec4;
+-     double *workvec5;
+-     double *workvec6;
+-     double *workvec7;
+-     double *workvec8;
+-     double *diagO;
+-     struct blockmatrix bestx;
+-     double *besty;
+-     struct blockmatrix bestz;
+-     struct blockmatrix Zi;
+-     double *O;
+-     double *rhs;
+-     struct blockmatrix dZ;
+-     struct blockmatrix dX;
+-     double *dy;
+-     double *dy1;
+-     double *Fp;
+-     int printlevel;
+-     struct paramstruc parameters;
++int sdp(
++    int n,
++    int k,
++    struct blockmatrix C,
++    double *a,
++    double constant_offset,
++    const struct constraintmatrix *constraints,
++    const struct sparseblock **byblocks,
++    struct constraintmatrix fill,
++    struct blockmatrix X,
++    double *y,
++    struct blockmatrix Z,
++    struct blockmatrix cholxinv,
++    struct blockmatrix cholzinv,
++    double *pobj,
++    double *dobj,
++    struct blockmatrix work1,
++    struct blockmatrix work2,
++    struct blockmatrix work3,
++    double *workvec1,
++    double *workvec2,
++    double *workvec3,
++    double *workvec4,
++    double *workvec5,
++    double *workvec6,
++    const double *workvec7,
++    double *workvec8,
++    double *diagO,
++    struct blockmatrix bestx,
++    double *besty,
++    struct blockmatrix bestz,
++    struct blockmatrix Zi,
++    double *O,
++    double *rhs,
++    struct blockmatrix dZ,
++    struct blockmatrix dX,
++    double *dy,
++    double *dy1,
++    double *Fp,
++    int printlevel,
++    struct paramstruc parameters)
+ {
+   double gap;
+   double relgap;
+@@ -147,7 +144,7 @@ int sdp(n,k,C,a,constant_offset,constrai
+   /*
+    * Stuff for instrumentation of iterative refinement.
+    */
+-  double relerr1;
++  double relerr1=0.0;
+   double relerr2=0.0;
+ 
+   int refinements;
+@@ -771,6 +768,9 @@ int sdp(n,k,C,a,constant_offset,constrai
+ 	   t1=(double)tp.tv_sec+(1.0e-6)*tp.tv_usec;
+ #endif
+ 
++#ifdef HIDDENSTRLEN
++	   dpotrf_("U",&m,O,&ldam,&info,1);
++#else
+ #ifdef NOUNDERLAPACK
+   #ifdef CAPSLAPACK
+ 	   DPOTRF("U",&m,O,&ldam,&info);
+@@ -784,6 +784,7 @@ int sdp(n,k,C,a,constant_offset,constrai
+ 	   dpotrf_("U",&m,O,&ldam,&info);
+   #endif
+ #endif
++#endif
+ 
+ #ifdef USEGETTIME
+ 	   gettimeofday(&tp,NULL);
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/solvesys.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/solvesys.c	2025-01-16 16:08:59.141121828 -0700
+@@ -8,11 +8,11 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-int solvesys(m,ldam,A,rhs)
+-     int m;
+-     int ldam;
+-     double *A;
+-     double *rhs;
++int solvesys(
++    int m,
++    int ldam,
++    double *A,
++    double *rhs)
+ {
+   int incx;
+   int info;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/sortentries.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/sortentries.c	2025-01-16 16:09:25.116781674 -0700
+@@ -41,10 +41,10 @@ int mycompare(const void *p1, const void
+ 
+ }
+ 
+-void sort_entries(k,C,constraints)
+-     int k;
+-     struct blockmatrix C;
+-     struct constraintmatrix *constraints;
++void sort_entries(
++    int k,
++    struct blockmatrix C,
++    const struct constraintmatrix *constraints)
+ {
+   int i,j;
+   struct sparseblock *ptr;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/sym_mat.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/sym_mat.c	2025-01-16 16:09:35.156650187 -0700
+@@ -6,8 +6,8 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-void sym_mat(A)
+-     struct blockmatrix A;
++void sym_mat(
++    struct blockmatrix A)
+ {
+   int i;
+   int j;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/trace_prod.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/trace_prod.c	2025-01-16 16:10:02.236295571 -0700
+@@ -15,9 +15,9 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-double trace_prod(A,B)
+-     struct blockmatrix A;
+-     struct blockmatrix B;
++double trace_prod(
++    struct blockmatrix A,
++    struct blockmatrix B)
+ {
+   int blk;
+   double sum;
+@@ -55,8 +55,8 @@ double trace_prod(A,B)
+   return(sum);
+ }
+ 
+-double trace(A)
+-     struct blockmatrix A;
++double trace(
++    struct blockmatrix A)
+ {
+   int blk;
+   double sum;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/tweakgap.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/tweakgap.c	2025-01-16 16:10:45.747725801 -0700
+@@ -20,18 +20,25 @@
+ #include "declarations.h"
+ 
+ 
+-void tweakgap(n,k,a,constraints,gap,Z,dZ,y,dy,work1,work2,work3,work4,workvec1,
+-	      workvec2,workvec3,workvec4,printlevel)
+-     int n;
+-     int k;
+-     double *a;
+-     struct constraintmatrix *constraints;
+-     double gap;
+-     struct blockmatrix Z,dZ;
+-     double *y,*dy;
+-     struct blockmatrix work1,work2,work3,work4;
+-     double *workvec1,*workvec2,*workvec3,*workvec4;
+-     int printlevel;
++void tweakgap(
++    int n,
++    int k,
++    double *a,
++    const struct constraintmatrix *constraints,
++    double gap,
++    struct blockmatrix Z,
++    struct blockmatrix dZ,
++    double *y,
++    double *dy,
++    struct blockmatrix work1,
++    struct blockmatrix work2,
++    struct blockmatrix work3,
++    struct blockmatrix work4,
++    double *workvec1,
++    double *workvec2,
++    double *workvec3,
++    double *workvec4,
++    int printlevel)
+ {
+   int i;
+   double norma;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/user_exit.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/user_exit.c	2025-01-16 16:12:21.114476960 -0700
+@@ -22,8 +22,8 @@ int sigterm_signaled=0;
+  * user_exit runs, it will see this and return 1, so CSDP will stop.
+  */
+ 
+-void catch_sigterm(signal)
+-     int signal;
++void catch_sigterm(
++    int signal)
+ {
+   printf("Process stopped by signal.\n");
+   sigterm_signaled=1;
+@@ -33,8 +33,8 @@ void catch_sigterm(signal)
+  * This version is used for the sigxcpu signal to give us more time. 
+  */
+ 
+-void catch_sigxcpu(signal)
+-     int signal;
++void catch_sigxcpu(
++    int signal)
+ {
+   struct rlimit rlim;
+ 
+@@ -52,19 +52,19 @@ void catch_sigxcpu(signal)
+ 
+ }
+ 
+-int user_exit(n,k,C,a,dobj,pobj,constant_offset,constraints,X,y,Z,params)
+-     int n;
+-     int k;
+-     struct blockmatrix C;
+-     double *a;
+-     double dobj;
+-     double pobj;
+-     double constant_offset;
+-     struct constraintmatrix *constraints;
+-     struct blockmatrix X;
+-     double *y;
+-     struct blockmatrix Z;     
+-     struct paramstruc params;
++int user_exit(
++    int n,
++    int k,
++    struct blockmatrix C,
++    const double *a,
++    double dobj,
++    double pobj,
++    double constant_offset,
++    const struct constraintmatrix *constraints,
++    struct blockmatrix X,
++    const double *y,
++    struct blockmatrix Z,
++    struct paramstruc params)
+ {
+   /*
+    * Stop on any of the following signals.  SIGTERM, SIGXCPU, SIGINT, SIGQUIT
+@@ -105,19 +105,19 @@ int user_exit(n,k,C,a,dobj,pobj,constant
+ 
+ #else
+ 
+-int user_exit(n,k,C,a,dobj,pobj,constant_offset,constraints,X,y,Z,params)
+-     int n;
+-     int k;
+-     struct blockmatrix C;
+-     double *a;
+-     double dobj;
+-     double pobj;
+-     double constant_offset;
+-     struct constraintmatrix *constraints;
+-     struct blockmatrix X;
+-     double *y;
+-     struct blockmatrix Z;     
+-     struct paramstruc params;
++int user_exit(
++    int n,
++    int k,
++    struct blockmatrix C,
++    const double *a,
++    double dobj,
++    double pobj,
++    double constant_offset,
++    const struct constraintmatrix *constraints,
++    struct blockmatrix X,
++    const double *y,
++    struct blockmatrix Z,
++    struct paramstruc params)
+ {
+   /*
+    * This will tell CSDP to continue.
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/writeprob.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/writeprob.c	2025-01-16 16:12:51.194083070 -0700
+@@ -6,13 +6,13 @@
+ #include <stdlib.h>
+ #include "declarations.h"
+ 
+-int write_prob(fname,n,k,C,a,constraints)
+-     char *fname;
+-     int n;
+-     int k;
+-     struct blockmatrix C;
+-     double *a;
+-     struct constraintmatrix *constraints;
++int write_prob(
++    const char *fname,
++    int n,
++    int k,
++    struct blockmatrix C,
++    const double *a,
++    const struct constraintmatrix *constraints)
+ {
+   FILE *fid;
+   int i;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/writesol.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/writesol.c	2025-01-16 16:13:10.969824120 -0700
+@@ -6,13 +6,13 @@
+ #include <stdlib.h>
+ #include "declarations.h"
+ 
+-int write_sol(fname,n,k,X,y,Z)
+-     char *fname;
+-     int n;
+-     int k;
+-     struct blockmatrix X;
+-     double *y;
+-     struct blockmatrix Z;
++int write_sol(
++    const char *fname,
++    int n,
++    int k,
++    struct blockmatrix X,
++    const double *y,
++    struct blockmatrix Z)
+ {
+   FILE *fid;
+   int i;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/zero_mat.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/lib/zero_mat.c	2025-01-16 16:13:33.425530049 -0700
+@@ -6,8 +6,8 @@
+ #include <stdio.h>
+ #include "declarations.h"
+ 
+-void zero_mat(A)
+-     struct blockmatrix A;
++void zero_mat(
++    struct blockmatrix A)
+ {
+   int i,j;
+   int blk;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/solver/csdp.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/solver/csdp.c	2025-01-16 16:13:52.721277371 -0700
+@@ -29,9 +29,9 @@ extern double endtime;
+ 
+ #endif
+ 
+-int main(argc,argv)
+-     int argc;
+-     char *argv[];
++int main(
++    int argc,
++    char *argv[])
+ {
+   int ret;
+   int n;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/theta/complement.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/theta/complement.c	2025-01-16 16:14:07.568082965 -0700
+@@ -12,9 +12,9 @@
+ #include <stdlib.h>
+ #include "declarations.h"
+ 
+-int main(argc,argv)
+-     int argc;
+-     char *argv[];
++int main(
++    int argc,
++    char *argv[])
+ {
+   FILE *fidin;
+   FILE *fidout;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/theta/graphtoprob.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/theta/graphtoprob.c	2025-01-16 16:14:21.360902357 -0700
+@@ -22,9 +22,9 @@
+ #include <string.h>
+ #include "declarations.h"
+ 
+-int main(argc,argv)
+-     int argc;
+-     char *argv[];
++int main(
++    int argc,
++    char *argv[])
+ {
+   int i;
+   int j;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/theta/rand_graph.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/theta/rand_graph.c	2025-01-16 16:14:34.008736723 -0700
+@@ -23,9 +23,9 @@
+ #define RAND_MAX 32768
+ #endif
+ 
+-int main(argc,argv)
+-     int argc;
+-     char *argv[];
++int main(
++    int argc,
++    char *argv[])
+ {
+   FILE *fidout;
+   int i;
+--- Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/theta/theta.c.orig	2018-10-18 15:11:56.000000000 -0600
++++ Csdp-0dcf187a159c365b6d4e4e0ed5849f7b706da408/theta/theta.c	2025-01-16 16:14:46.568572242 -0700
+@@ -22,9 +22,9 @@
+ #include <string.h>
+ #include "declarations.h"
+ 
+-int main(argc,argv)
+-     int argc;
+-     char *argv[];
++int main(
++    int argc,
++    char *argv[])
+ {
+   int i;
+   int j;

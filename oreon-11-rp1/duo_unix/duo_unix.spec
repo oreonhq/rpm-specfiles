@@ -1,0 +1,176 @@
+%global source0_hash b7b3016383f4373e26dc566fecb94e7b8b97eb7d9b54647dcca372790018c03e
+
+%global selinuxtype targeted
+%global moduletype contrib
+%global modulename authlogin_duo
+
+# Disable by default as the tests require root and write to /etc/pam.d
+%bcond_with tests
+
+Name:           duo_unix
+Version:        2.2.3
+Release:        %autorelease
+Summary:        Duo two-factor authentication for UNIX systems
+
+# GPL-2.0-with-classpath-exception: https://gitlab.com/fedora/legal/fedora-license-data/-/issues/714
+# URLEnc-MIT: https://gitlab.com/fedora/legal/fedora-license-data/-/issues/715
+License:        GPL-2.0-with-classpath-exception AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND FSFAP AND FSFULLR AND GPL-1.0-only AND LicenseRef-URLEnc-MIT AND MIT AND SSH-short
+URL:            https://duo.com/
+Source:         https://dl.duosecurity.com/%{name}-%{version}.tar.gz
+
+Suggests:       %{name}-doc = %{version}-%{release}
+
+BuildRequires:  bzip2
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  pam-devel
+BuildRequires:  selinux-policy-devel
+BuildRequires:  zlib-devel
+BuildRequires:  pkgconfig
+
+%if %{with tests}
+BuildRequires:  python3
+%endif
+
+# The third-party Duo package provided by the vendor ships pam_duo in the
+# duo_unix package; we recommend the subpackage here to avoid lockout issues
+# for systems accidentally being upgraded from the vendor package to this one
+Recommends:     pam_duo = %{version}-%{release}
+
+%description
+Duo provides simple two-factor authentication as a service via:
+
+    1.  Phone callback
+    2.  SMS-delivered one-time passcode
+    3.  Duo mobile app to generate one-time passcode
+    4.  Duo mobile app for smartphone push authentication
+    5.  Duo hardware token to generate one-time passcode
+
+This package allows an admin (or ordinary user) to quickly add Duo
+authentication to any UNIX login without setting up secondary user
+accounts, directory synchronization, servers, or hardware.
+
+%package        doc
+Summary:        Documentation and license files for %{name}
+BuildArch:      noarch
+
+%description    doc
+Documentation and license files for %{name}
+
+%package -n     pam_duo
+Summary:        A PAM module for duo authentication
+Suggests:       %{name}-doc = %{version}-%{release}
+Requires:       pam
+Requires:       (%{name}-selinux if selinux-policy-%{selinuxtype})
+
+%description -n pam_duo
+A PAM module for duo authentication
+
+%package        devel
+Summary:        Development files and documentation for duo_unix
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       pam_duo%{?_isa} = %{version}-%{release}
+
+%description    devel
+Development files and documentation for duo_unix
+
+%package        selinux
+Summary:        SELinux rules for %{name}
+Requires:       selinux-policy-%{selinuxtype}
+Requires(post): selinux-policy-%{selinuxtype}
+Requires:       pam_duo%{?_isa} = %{version}-%{release}
+%{?selinux_requires}
+
+%description    selinux
+%{summary}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%setup -q
+
+%build
+%configure \
+  --with-pam=%{_libdir}/security \
+  --sysconfdir=%{_sysconfdir}/duo \
+  --includedir=%{_includedir}/duo \
+  --with-debug=yes \
+  %{nil}
+%make_build
+%make_build -C pam_duo semodule
+
+%install
+%make_install
+%make_install -C pam_duo semodule-install
+
+rm -r %{buildroot}%{_datadir}/LICENSES/
+rm %{buildroot}%{_libdir}/security/pam_duo.la
+
+%if %{with tests}
+%check
+make check
+%endif
+
+%files
+%license LICENSES/*.txt
+%dir %{_sysconfdir}/duo
+# This generates a non-readable rpmlint error, but this permission set is
+# required for security. The Duo secrets are set in this file and allowing
+# broader access risks exposing the secrets to other users on the system.
+# sshd is the owner here since that user will run login_duo for SSH connections
+# (the typical case) and this allows read access if capabilities aren't
+# correctly set.
+%attr(0600, sshd, root) %config(noreplace) %{_sysconfdir}/duo/login_duo.conf
+%attr(0755, root, root) %caps(cap_dac_read_search=ep) %{_sbindir}/login_duo
+# This will generate no-manual-page-for-binary but Duo does not provide any
+# manual page. This is intended to be run when seeking support from Duo.
+%{_sbindir}/duo_unix_support.sh
+%{_mandir}/man8/login_duo.8*
+
+%files -n pam_duo
+%license LICENSES/*.txt
+%dir %{_sysconfdir}/duo
+%dir %{_libdir}/security
+%{_libdir}/security/pam_duo.so
+# This generates a non-readable rpmlint error, but this permission set is
+# required for security. The Duo secrets are set in this file and allowing
+# broader access risks exposing the secrets to other users on the system.
+%config(noreplace) %attr(0600, root, root) %{_sysconfdir}/duo/pam_duo.conf
+%{_mandir}/man8/pam_duo.8*
+
+%files doc
+%license LICENSES/*.txt
+%doc README.md AUTHORS CHANGES
+%doc %{_defaultdocdir}/%{name}
+
+%files devel
+%exclude %{_includedir}/duo/unity.h
+%exclude %{_includedir}/duo/duo_private.h
+%exclude %{_includedir}/duo/common_ini_test.h
+%dir %{_includedir}/duo
+%{_includedir}/duo/duo.h
+%{_includedir}/duo/util.h
+%{_includedir}/duo/shell.h
+%{_libdir}/pkgconfig/libduo.pc
+%{_mandir}/man3/duo.3*
+
+%files selinux
+%{_datadir}/selinux/packages/%{modulename}.pp.bz2
+
+%pre selinux
+%selinux_relabel_pre -s %{selinuxtype}
+
+%post selinux
+%selinux_modules_install %{_datadir}/selinux/packages/%{modulename}.pp.bz2
+
+%postun selinux
+if [ $1 -eq 0 ]; then
+    %selinux_modules_uninstall %{_datadir}/selinux/packages/%{modulename}.pp.bz2
+fi
+
+%posttrans selinux
+%selinux_relabel_post -s %{selinuxtype}
+
+%changelog
+%autochangelog

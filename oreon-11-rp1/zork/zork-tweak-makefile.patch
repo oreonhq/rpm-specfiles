@@ -1,0 +1,57 @@
+From ce241188ca387a42c3ab09454c881acfe30c955e Mon Sep 17 00:00:00 2001
+From: "Justin W. Flory" <git@jwf.io>
+Date: Tue, 30 Apr 2019 15:36:07 -0400
+Subject: [PATCH 1/1] Makefile: Change compile options for Fedora RPM package
+
+---
+ Makefile | 6 +++---
+ dinit.c  | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 88305ce..aae1916 100644
+--- a/Makefile
++++ b/Makefile
+@@ -42,7 +42,7 @@ TERMFLAG =
+ # Uncomment the following line if you want to have access to the game
+ # debugging tool.  This is invoked by typing "gdt".  It is not much
+ # use except for debugging.
+-GDTFLAG = -DALLOW_GDT
++# GDTFLAG = -DALLOW_GDT
+ 
+ # Compilation flags
+ CFLAGS = -g #-static
+@@ -69,7 +69,7 @@ dungeon: $(OBJS) dtextc.dat
+ 	$(CC) $(CFLAGS) -o zork $(OBJS) $(LIBS)
+ 
+ install: zork dtextc.dat
+-	mkdir -p $(BINDIR) $(LIBDIR) $(MANDIR)/man6
++	mkdir -p $(BINDIR) $(DATADIR) $(LIBDIR) $(MANDIR)/man6
+ 	cp zork $(BINDIR)
+ 	cp dtextc.dat $(DATADIR)
+ 	cp dungeon.6 $(MANDIR)/man6/
+@@ -93,7 +93,7 @@ local.o: local.c funcs.h vars.h
+ 	$(CC) $(CFLAGS) $(GDTFLAG) -c local.c
+ 
+ supp.o: supp.c funcs.h vars.h
+-	$(CC) $(CFLAGS) $(TERMFLAG) -c supp.c	
++	$(CC) $(CFLAGS) $(TERMFLAG) -c supp.c
+ 
+ actors.o: funcs.h vars.h
+ ballop.o: funcs.h vars.h
+diff --git a/dinit.c b/dinit.c
+index d687cf4..cda5878 100644
+--- a/dinit.c
++++ b/dinit.c
+@@ -24,7 +24,7 @@ FILE *dbfile;
+ #define TEXTFILE "lib:dtextc.dat"
+ #else /* ! __AMOS__ */
+ #ifdef unix
+-#define TEXTFILE "/usr/games/lib/dunlib/dtextc.dat"
++#define TEXTFILE "/usr/share/zork/dtextc.dat"
+ #else /* ! unix */
+  I need a definition for TEXTFILE
+ #endif /* ! unix */
+-- 
+2.20.1
+

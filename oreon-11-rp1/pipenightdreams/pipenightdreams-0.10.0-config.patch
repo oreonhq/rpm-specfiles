@@ -1,0 +1,11 @@
+diff -Nrup a/configure b/configure
+--- a/configure	2019-12-19 22:20:13.297314380 -0700
++++ b/configure	2019-12-19 22:34:40.901669132 -0700
+@@ -759,6 +759,7 @@ cat > conftest.$ac_ext <<EOF
+ #line 760 "configure"
+ #include "confdefs.h"
+ `cat $LEX_OUTPUT_ROOT.c`
++extern __attribute__ ((used)) int yywrap ( void );
+ int main() {
+ 
+ ; return 0; }

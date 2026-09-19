@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=World of Padman
+Comment=World of Padman launcher, will automatically download the needed data-files
+Exec=worldofpadman
+Icon=wop
+Terminal=false
+Type=Application
+Categories=Game;ActionGame;
+Keywords=game;fps;first;person;shooter;urban;world;padman;

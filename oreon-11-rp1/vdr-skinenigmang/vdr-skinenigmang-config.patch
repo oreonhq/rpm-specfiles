@@ -1,0 +1,33 @@
+--- vdr-plugin-skinenigmang-0.1.4/README.orig	2022-10-10 09:35:57.753785342 +0200
++++ vdr-plugin-skinenigmang-0.1.4/README	2022-10-10 09:37:50.224564820 +0200
+@@ -93,10 +93,10 @@
+ -------
+ 
+   -i path, --epgimages=path
+-      Path to the epgimages (Default: <logodir>/epgimages).
++      Path to the epgimages (Default: /var/cache/vdr/epgimages).
+ 
+   -l path, --logodir=path
+-      Path to the logos (Default: <vdrconfdir>/plugins/skinenigmang).
++      Path to the logos (Default: /usr/share/vdr).
+ 
+ 
+ Usage
+--- vdr-plugin-skinenigmang-0.1.4/skinenigmang.c.orig	2022-10-10 09:38:12.903500399 +0200
++++ vdr-plugin-skinenigmang-0.1.4/skinenigmang.c	2022-10-10 09:39:59.407083862 +0200
+@@ -121,13 +121,13 @@
+ 
+   if (!fLogodirSet) {
+     // set logo directory
+-    EnigmaConfig.SetLogoDir(cPlugin::ConfigDirectory(PLUGIN_NAME_I18N));
++    EnigmaConfig.SetLogoDir("/usr/share/vdr");
+     fLogodirSet = true;
+   }
+   if (!fImagesDirSet) {
+     // set epgimages directory
+     char *dir = NULL;
+-    if (-1 != asprintf(&dir, "%s/epgimages", cPlugin::ConfigDirectory(PLUGIN_NAME_I18N))) {
++    if (-1 != asprintf(&dir, "%s/epgimages", "/var/cache/vdr")) {
+       EnigmaConfig.SetImagesDir(dir);
+       fImagesDirSet = true;
+       free(dir);

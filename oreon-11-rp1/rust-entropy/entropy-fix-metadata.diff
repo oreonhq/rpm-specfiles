@@ -1,0 +1,9 @@
+--- entropy-0.4.3/Cargo.toml	2006-07-24T01:21:28+00:00
++++ entropy-0.4.3/Cargo.toml	2026-02-12T21:24:30.683013+00:00
+@@ -45,6 +45,3 @@
+ harness = false
+ 
+ [dependencies]
+-
+-[dev-dependencies.criterion]
+-version = "0.8.1"

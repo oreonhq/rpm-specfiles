@@ -3,7 +3,7 @@
 %undefine __cmake_in_source_build
 
 Name:           sdbus-cpp
-Version:        2.2.1
+Version:        2.3.1
 Release:        1%{?dist}
 Summary:        High-level C++ D-Bus library built on sd-bus
 

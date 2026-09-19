@@ -29,11 +29,11 @@
 %endif
 
 %define min_ndctl_ver 60.1
-%define upstreamversion 2.1.0
+%define upstreamversion 2.1.4
 
 Name:		nvml
 Version:	%{upstreamversion}
-Release:	5%{?dist}
+Release:	1%{?dist}
 Summary:	Persistent Memory Development Kit (formerly NVML)
 License:	BSD-3-Clause
 URL:		http://pmem.io/pmdk

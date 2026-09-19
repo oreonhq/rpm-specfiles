@@ -1,0 +1,11 @@
+--- starplot-0.95.5/src/classes/specclass.cc.at	2008-03-05 05:15:02.000000000 +0900
++++ starplot-0.95.5/src/classes/specclass.cc	2021-12-06 08:09:17.633875647 +0900
+@@ -118,7 +118,7 @@ void SpecClass::initialize()
+ 
+   if (begin >= sSpecstring.size() || begin == end) return;
+   sMKtype = roman_to_int(sSpecstring.substr(begin, end - begin));
+-  if (sSpecstring[end] == '/' || sSpecstring[end] == '-') {
++  if ((end < sSpecstring.size()) && (sSpecstring[end] == '/' || sSpecstring[end] == '-')) {
+     flagsplit = true;
+     end++;
+   }

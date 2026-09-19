@@ -1,0 +1,29 @@
+From 2c49b1239bde5c789aea1a03beb098539ee01e49 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Sat, 3 Jan 2026 17:36:44 +0900
+Subject: [PATCH] Workaround to restore space / pageup button behavior in
+ recent GTK
+
+---
+ mcomix/mcomix/keybindings.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/mcomix/mcomix/keybindings.py b/mcomix/mcomix/keybindings.py
+index 02c586f..725cc82 100644
+--- a/mcomix/mcomix/keybindings.py
++++ b/mcomix/mcomix/keybindings.py
+@@ -165,7 +165,10 @@ class _KeybindingManager(object):
+         # so limit possible states to begin with?
+         for stored_binding, action in self._binding_to_action.items():
+             stored_keycode, stored_flags = stored_binding
+-            if stored_keycode == keybinding[0] and stored_flags & keybinding[1]:
++            if stored_keycode == keybinding[0] and (
++                (stored_flags & keybinding[1]) or
++                ((not stored_flags) and (not keybinding[1]))
++              ):
+                 func, args, kwargs = self._action_to_callback[action]
+                 self._window.stop_emission_by_name('key_press_event')
+                 return func(*args, **kwargs)
+-- 
+2.52.0
+

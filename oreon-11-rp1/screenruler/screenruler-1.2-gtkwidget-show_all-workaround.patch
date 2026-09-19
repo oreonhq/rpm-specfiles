@@ -1,0 +1,14 @@
+Only in screenruler-upstream-1.2: ruler_window.rb~
+diff -urp screenruler-upstream-1.2.orig/screenruler.rb screenruler-upstream-1.2/screenruler.rb
+--- screenruler-upstream-1.2.orig/screenruler.rb	2022-07-11 03:02:22.000000000 +0900
++++ screenruler-upstream-1.2/screenruler.rb	2024-04-17 21:34:52.684817344 +0900
+@@ -91,6 +91,8 @@ puts _('Reading settings...')
+ 
+ puts _('Presenting ruler...')
+ 	$ruler_window.present
++	$ruler_window.show_all
++	$ruler_window.queue_draw
+ 
+ begin
+ 	Gtk.main
+Only in screenruler-upstream-1.2: screenruler.rb~

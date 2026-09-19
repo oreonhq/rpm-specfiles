@@ -1,0 +1,20 @@
+--- a/src/qxtlibs.pri.orig	2017-11-21 14:57:33.596795862 +0100
++++ b/src/qxtlibs.pri	2017-11-21 14:59:09.153802782 +0100
+@@ -9,6 +9,7 @@
+     INCLUDEPATH = $$QMAKE_INCDIR_QT/$$1 $$INCLUDEPATH
+ 
+     LIB_NAME = $$1
++    LIB_NAME = $${LIB_NAME}-qt5
+     unset(LINKAGE)
+     mac {
+        CONFIG(qt_framework, qt_framework|qt_no_framework) { #forced
+--- a/src/qxtbase.pri.orig	2017-11-21 15:15:42.988874751 +0100
++++ b/src/qxtbase.pri	2017-11-21 15:16:06.065876422 +0100
+@@ -17,6 +17,7 @@
+ defineReplace(qxtLibraryTarget) {
+    unset(LIBRARY_NAME)
+    LIBRARY_NAME = $$1
++   LIBRARY_NAME = $${LIBRARY_NAME}-qt5
+    mac:!static:contains(QT_CONFIG, qt_framework) {
+       QMAKE_FRAMEWORK_BUNDLE_NAME = $$LIBRARY_NAME
+       export(QMAKE_FRAMEWORK_BUNDLE_NAME)

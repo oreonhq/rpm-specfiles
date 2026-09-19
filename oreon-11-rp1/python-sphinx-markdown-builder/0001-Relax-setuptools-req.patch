@@ -1,0 +1,25 @@
+From 4e491437b1466d474e4647facf96fe9fdb08515d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Sun, 7 Dec 2025 17:47:11 +0100
+Subject: [PATCH] Relax setuptools req
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index b0b4daa..13df5d2 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,7 @@
+ # sphinx-markdown-builder
+ 
+ [build-system]
+-requires = ["setuptools>=80.9.0", "wheel>=0.45.1"]
++requires = ["setuptools>=78.0.0", "wheel>=0.45.1"]
+ build-backend = "setuptools.build_meta"
+ 
+ [project]
+-- 
+2.52.0
+

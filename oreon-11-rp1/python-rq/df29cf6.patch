@@ -1,0 +1,96 @@
+From df29cf63550a253fe7b7161235b8f66be68e95d4 Mon Sep 17 00:00:00 2001
+From: Selwin Ong <selwin.ong@gmail.com>
+Date: Sun, 4 Jan 2026 21:39:45 +0700
+Subject: [PATCH] Add Python 3.14 to test matrix (#2349)
+
+* Add Python 3.14 to test matrix
+
+* Fix tests on Python 3.14
+---
+ .github/workflows/valkey.yml   |  2 +-
+ .github/workflows/workflow.yml |  2 +-
+ pyproject.toml                 |  1 +
+ tests/test_worker.py           | 13 ++++++++++---
+ 4 files changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/.github/workflows/valkey.yml b/.github/workflows/valkey.yml
+index 5c2727628..0f02ae5e8 100644
+--- a/.github/workflows/valkey.yml
++++ b/.github/workflows/valkey.yml
+@@ -37,7 +37,7 @@ jobs:
+ 
+     strategy:
+       matrix:
+-        python-version: ["3.12", "3.13"]
++        python-version: ["3.12", "3.13", "3.14"]
+         valkey-version: ["7.2", "8.0"]
+         redis-py-version: ["5", "6"]
+ 
+diff --git a/.github/workflows/workflow.yml b/.github/workflows/workflow.yml
+index a323869e9..c516c589d 100644
+--- a/.github/workflows/workflow.yml
++++ b/.github/workflows/workflow.yml
+@@ -37,7 +37,7 @@ jobs:
+     timeout-minutes: 10
+     strategy:
+       matrix:
+-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
++        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+         redis-version: [5, 6, 7]
+         redis-py-version: [5, 6]
+ 
+diff --git a/pyproject.toml b/pyproject.toml
+index 5573ca093..4a4721985 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -31,6 +31,7 @@ classifiers = [
+   "Programming Language :: Python :: 3.11",
+   "Programming Language :: Python :: 3.12",
+   "Programming Language :: Python :: 3.13",
++  "Programming Language :: Python :: 3.14",
+   "Topic :: Internet",
+   "Topic :: Scientific/Engineering",
+   "Topic :: Software Development :: Libraries :: Python Modules",
+diff --git a/tests/test_worker.py b/tests/test_worker.py
+index bbca3330d..00d1422ad 100644
+--- a/tests/test_worker.py
++++ b/tests/test_worker.py
+@@ -1,4 +1,5 @@
+ import json
++import multiprocessing
+ import os
+ import shutil
+ import signal
+@@ -1597,7 +1598,9 @@ def tearDown(self):
+     @slow
+     def test_immediate_shutdown(self):
+         """Heroku work horse shutdown with immediate (0 second) kill"""
+-        p = Process(target=run_dummy_heroku_worker, args=(self.sandbox, 0, self.connection))
++        # Use 'fork' context to avoid pickling issues with Redis connections in Python 3.14+
++        ForkProcess = multiprocessing.get_context('fork').Process
++        p = ForkProcess(target=run_dummy_heroku_worker, args=(self.sandbox, 0, self.connection))
+         p.start()
+         time.sleep(0.5)
+ 
+@@ -1611,7 +1614,9 @@ def test_immediate_shutdown(self):
+     @slow
+     def test_1_sec_shutdown(self):
+         """Heroku work horse shutdown with 1 second kill"""
+-        p = Process(target=run_dummy_heroku_worker, args=(self.sandbox, 1, self.connection))
++        # Use 'fork' context to avoid pickling issues with Redis connections in Python 3.14+
++        ForkProcess = multiprocessing.get_context('fork').Process
++        p = ForkProcess(target=run_dummy_heroku_worker, args=(self.sandbox, 1, self.connection))
+         p.start()
+         time.sleep(0.5)
+ 
+@@ -1627,7 +1632,9 @@ def test_1_sec_shutdown(self):
+     @slow
+     def test_shutdown_double_sigrtmin(self):
+         """Heroku work horse shutdown with long delay but SIGRTMIN sent twice"""
+-        p = Process(target=run_dummy_heroku_worker, args=(self.sandbox, 10, self.connection))
++        # Use 'fork' context to avoid pickling issues with Redis connections in Python 3.14+
++        ForkProcess = multiprocessing.get_context('fork').Process
++        p = ForkProcess(target=run_dummy_heroku_worker, args=(self.sandbox, 10, self.connection))
+         p.start()
+         time.sleep(0.5)
+ 

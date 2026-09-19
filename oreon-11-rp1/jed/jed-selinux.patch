@@ -1,0 +1,102 @@
+--- jed-0.99-19.org/autoconf/configure.ac	2010-01-16 12:38:55.849789880 +0530
++++ jed-0.99-19/autoconf/configure.ac	2010-01-16 13:01:16.504723535 +0530
+@@ -46,6 +46,8 @@
+ 
+ AC_CHECK_LIB(util,openpty)
+ 
++AC_CHECK_LIB(selinux, is_selinux_enabled)
++
+ AC_CHECK_FUNCS(\
+ memset \
+ memcpy \
+--- jed-0.99-19.org/src/file.c	2010-01-16 12:38:55.843785342 +0530
++++ jed-0.99-19/src/file.c	2010-01-16 13:39:11.576728495 +0530
+@@ -104,6 +104,11 @@
+ # define O_BINARY	0
+ #endif
+ 
++#ifdef HAVE_LIBSELINUX
++int copy_security_context(const char *from_file, const char *to_file);
++int set_default_security_context(const char *file);
++#endif
++
+ /*}}}*/
+ /*{{{ local inclue files */
+ 
+@@ -1084,6 +1089,10 @@
+    (void) utime (to, &ut);
+ #endif
+ 
++#ifdef HAVE_LIBSELINUX
++   copy_security_context(from,to);
++#endif
++	
+    return ret;
+ }
+ /*}}}*/
+@@ -1231,6 +1240,9 @@
+ #endif
+ 	  }
+ 	
++#ifdef HAVE_LIBSELINUX
++	set_default_security_context(dirfile);
++#endif
+ 	/* Since we wrote the buffer to the file, it is not modified. */
+ 	if (CBuf == find_file_buffer (dirfile))
+ 	  CBuf->flags &= ~FILE_MODIFIED;
+@@ -1292,6 +1304,7 @@
+ 	     flush_message("autosaving..."); 
+ 	     (void) sys_delete_file(tmp);
+ 	     (void) write_file_internal (tmp, _JED_OPEN_CREATE_EXCL);
++	     copy_security_context(b->dirfile,tmp);
+ 	     message("autosaving...done");
+ 	  }
+       }
+--- jed-0.99-19.org/src/config.hin	2010-01-16 12:38:55.832785334 +0530
++++ jed-0.99-19/src/config.hin	2010-01-16 13:01:16.507723384 +0530
+@@ -114,6 +114,8 @@
+ /* Undefine this to disable floating point support. */
+ #define FLOAT_TYPE
+ 
++#undef HAVE_LIBSELINUX
++
+ #if defined(ultrix) && !defined(__GNUC__)
+ # ifndef NO_PROTOTYPES
+ #  define NO_PROTOTYPES
+--- jed-0.99-19.org/src/modules.unx	2010-01-16 12:38:55.844785513 +0530
++++ jed-0.99-19/src/modules.unx	2010-01-16 13:37:42.429789149 +0530
+@@ -31,3 +31,4 @@
+ version		vterm.h      
+ hooks		window.h     
+ colors
++selinux
+--- jed-0.99-19.org/src/Makefile.in	2010-01-16 12:38:55.829785417 +0530
++++ jed-0.99-19/src/Makefile.in	2010-01-16 14:03:00.905722962 +0530
+@@ -110,7 +110,7 @@
+   screen.o paste.o ledit.o line.o search.o text.o keymap.o replace.o \
+   window.o undo.o vfile.o intrin.o syntax.o abbrev.o indent.o \
+   jprocess.o lineattr.o blocal.o mouse.o userinfo.o lock.o \
+-  version.o hooks.o colors.o main.o
++  version.o hooks.o colors.o main.o selinux.o
+ COMMON_OBJS = $(OBJDIR)/buffer.o $(OBJDIR)/cmds.o $(OBJDIR)/misc.o \
+   $(OBJDIR)/file.o $(OBJDIR)/ins.o $(OBJDIR)/sig.o $(OBJDIR)/sysdep.o \
+   $(OBJDIR)/screen.o $(OBJDIR)/paste.o $(OBJDIR)/ledit.o $(OBJDIR)/line.o \
+@@ -120,7 +120,7 @@
+   $(OBJDIR)/jprocess.o $(OBJDIR)/lineattr.o $(OBJDIR)/blocal.o \
+   $(OBJDIR)/mouse.o $(OBJDIR)/menu.o $(OBJDIR)/userinfo.o $(OBJDIR)/lock.o \
+   $(OBJDIR)/version.o $(OBJDIR)/hooks.o $(OBJDIR)/colors.o \
+-  $(OBJDIR)/main.o
++  $(OBJDIR)/main.o $(OBJDIR)/selinux.o
+ main_C_FLAGS = -DJED_ROOT='"$(JED_ROOT)"'
+ main_O_DEP = Makefile
+ jprocess_O_DEP = $(SRCDIR)/pty.c
+@@ -329,6 +329,9 @@
+ $(OBJDIR)/file.o : $(SRCDIR)/file.c $(DOT_O_DEPS) $(file_O_DEP)
+ 	cd $(OBJDIR); $(COMPILE_CMD) $(file_C_FLAGS) $(SRCDIR)/file.c
+ 
++$(OBJDIR)/selinux.o : $(SRCDIR)/selinux.c $(DOT_O_DEPS) $(file_O_DEP)
++	cd $(OBJDIR); $(COMPILE_CMD) $(file_C_FLAGS) $(SRCDIR)/selinux.c
++
+ $(OBJDIR)/main.o : $(SRCDIR)/main.c $(DOT_O_DEPS) $(main_O_DEP)
+ 	cd $(OBJDIR); $(COMPILE_CMD) $(main_C_FLAGS) $(SRCDIR)/main.c
+ 

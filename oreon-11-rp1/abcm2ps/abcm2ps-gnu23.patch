@@ -1,0 +1,47 @@
+diff -up ./abcm2ps-8.14.15/format.c.gnu23 ./abcm2ps-8.14.15/format.c
+--- ./abcm2ps-8.14.15/format.c.gnu23	2024-01-08 02:15:18.000000000 -0500
++++ ./abcm2ps-8.14.15/format.c	2025-01-24 16:13:01.068045837 -0500
+@@ -1158,13 +1158,13 @@ void interpret_fmt_line(char *w,		/* key
+ 		}
+ 		if (strcmp(w, "writehistory") == 0) {	/* compatibility */
+ 			struct SYMBOL *s;
+-			int bool;
++			int ibool;
+ 			unsigned u;
+ 
+-			bool = get_bool(p);
++			ibool = get_bool(p);
+ 			for (s = info['I' - 'A']; s != 0; s = s->next) {
+ 				u = s->text[0] - 'A';
+-				if (bool)
++				if (ibool)
+ 					cfmt.fields[0] |= (1 << u);
+ 				else
+ 					cfmt.fields[0] &= ~(1 << u);
+@@ -1215,7 +1215,7 @@ void interpret_fmt_line(char *w,		/* key
+ 			}
+ 			break;
+ 		case 1:	{			/* %%writefields */
+-			int bool;
++			int ibool;
+ 			unsigned u;
+ 
+ 			q = p;
+@@ -1223,7 +1223,7 @@ void interpret_fmt_line(char *w,		/* key
+ 				p++;
+ 			while (isspace((unsigned char) *p))
+ 				p++;
+-			bool = get_bool(p);
++			ibool = get_bool(p);
+ 			while (*q != '\0' && !isspace((unsigned char) *q)) {
+ 				u = *q - 'A';
+ 				if (u < 26) {
+@@ -1235,7 +1235,7 @@ void interpret_fmt_line(char *w,		/* key
+ 					else
+ 						break;	/*fixme: error */
+ 				}
+-				if (bool)
++				if (ibool)
+ 					cfmt.fields[i] |= (1 << u);
+ 				else
+ 					cfmt.fields[i] &= ~(1 << u);

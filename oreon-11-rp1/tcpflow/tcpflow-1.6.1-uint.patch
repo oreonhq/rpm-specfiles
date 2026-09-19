@@ -1,0 +1,12 @@
+diff --git a/src/netviz/plot_view.h b/src/netviz/plot_view.h
+index 21be05c..fda2fc7 100644
+--- a/src/netviz/plot_view.h
++++ b/src/netviz/plot_view.h
+@@ -26,6 +26,7 @@
+ #include <vector>
+ #include <string>
+ #include <math.h>
++#include <cstdint>
+ 
+ #ifndef M_PI
+ #define M_PI		3.14159265358979323846

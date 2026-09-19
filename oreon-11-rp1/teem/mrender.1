@@ -1,0 +1,294 @@
+.TH MRENDER "1" "April 2021" "" "User Commands"
+.SH NAME
+mrender \- a demonstration of hoover, gage, and nrrd measures
+.SH SYNOPSIS
+.B mrender
+.RI [ @file \ ...]
+.RB [ \-i
+.RI < nin >]
+.B \-k
+.RI < kind >
+.B \-fr
+.RI < eye\ pos >
+.RB [ \-at
+.RI < at\ pos >]
+.RB [ \-up
+.RI < up\ dir >]
+.RB [ \-rh ]
+.RB [ \-or ]
+.B \-dn
+.RI < near >
+.B \-di
+.RI < image >
+.B \-df
+.RI < far >
+.RB [ \-ar ]
+.RB [ \-ur
+.RI < uMin\fR\ \fIuMax >]
+.RB [ \-vr
+.RI < vMin\fR\ \fIvMax >]
+.RB [ \-fv
+.RI < field\ of\ view >]
+.RB [ \-offfr ]
+.RB [ \-turn
+.RI < angle >]
+.RB [ \-is
+.RI < image\ size >]
+.RB [ \-iss
+.RI < scale >]
+.RB [ \-k00
+.RI < kernel >]
+.RB [ \-k11
+.RI < kernel >]
+.RB [ \-k22
+.RI < kernel >]
+.RB [ \-rn ]
+.B \-q
+.RI < query >
+.B \-m
+.RI < measure >
+.RB [ \-gmc
+.RI < min\ gradmag >]
+.RB [ \-fn
+.RI < from\ nan >]
+.RB [ \-step
+.RB [ \-nt
+.RI < #\ threads >]
+.RB [ \-vp
+.RI < img\ coords >]
+.RB [ \-o
+.RI < filename >]
+.SH DESCRIPTION
+.P
+Uses hoover to cast rays through a volume (scalar, vector, or tensor), gage to
+measure one of various quantities along the rays, and a specified
+.I nrrd
+measure to reduce all the values along a ray down to one scalar, which is saved
+in the output
+.RI ( double )
+image.
+.SH OPTIONS
+.TP
+.IR @file \ ...\:
+response file(s) containing command-line arguments
+.TP
+.B \-i\fR <\fInin\fR>
+input
+.I nrrd
+to render
+.RI ( nrrd );
+default: \(lq\(rq
+.TP
+.B \-k\fR <\fIkind\fR>
+\(lqkind\(rq of volume
+.RB (\(lq scalar \(rq,
+.RB \(lq vector \(rq,
+or
+.RB \(lq tensor \(rq)
+.RI ( gageKind )
+.TP
+.B \-fr\fR <\fIeye\ pos\fR>
+camera eye point (3 \fIdouble\fRs)
+.TP
+.B \-at\fR <\fIat\ pos\fR>
+camera look-at point (3 \fIdouble\fRs); default:
+.RB \(lq 0\ 0\ 0 \(rq
+.TP
+.B \-up\fR <\fIup\ dir\fR>
+camera pseudo-up vector (3 \fIdouble\fRs); default:
+.RB \(lq 0\ 0\ 1 \(rq
+.TP
+.B \-rh
+use a right-handed UVN frame (V points down)
+.TP
+.B \-or
+orthogonal (not perspective) projection
+.TP
+.B \-dn\fR <\fInear\fR>
+distance to near clipping plane
+.RI ( double )
+.TP
+.B \-di\fR <\fIimage\fR>
+distance to image plane
+.RI ( double )
+.TP
+.B \-df\fR <\fIfar\fR>
+distance to far clipping plane
+.RI ( double )
+.TP
+.B \-ar
+near, image, and far plane distances are relative to the
+.B at
+point, instead of the eye point
+.TP
+.B \-ur\fR <\fIuMin\fR\ \fIuMax\fR>
+range in U direction of image plane (2
+.IR double s);
+default:
+.RB \(lq nan\ nan \(rq
+.TP
+.B \-vr\fR <\fIvMin\fR\ \fIvMax\fR>
+range in V direction of image plane (2
+.IR double s);
+default:
+.RB \(lq nan\ nan \(rq
+.TP
+.B \-fv\fR <\fIfield\ of\ view\fR>
+angle (in degrees) vertically subtended by view window
+.RI ( double );
+default:
+.RB \(lq 20 \(rq
+.TP
+.B \-offfr
+the given eye point
+.RB (\(lq \-fr \(rq)
+is to be interpreted as an offset from the at point.
+.TP
+.B \-turn\fR <\fIangle\fR>
+angle (degrees) by which to rotate the from point around true up, for making
+stereo pairs.
+Positive means move towards positive U (the right)
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-is\fR <\fIimage\ size\fR>
+image dimensions (2 \fIint\fRs); default:
+.RB \(lq 256\ 256 \(rq
+.TP
+.B \-iss\fR <\fIscale\fR>
+scaling of image size (from
+.RB \(lq \-is \(rq)
+.RI ( float );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-k00\fR <\fIkernel\fR>
+value reconstruction kernel (\fIkernel specification\fR); default:
+.RB \(lq tent \(rq
+.TP
+.B \-k11\fR <\fIkernel\fR>
+first derivative kernel (\fIkernel specification\fR); default:
+.RB \(lq cubicd:1,0 \(rq
+.TP
+.B \-k22\fR <\fIkernel\fR>
+second derivative kernel (\fIkernel specification\fR); default:
+.RB \(lq cubicdd:1,0 \(rq
+.TP
+.B \-rn
+renormalize kernel weights at each new sample location.
+\(lqAccurate\(rq kernels don\(cqt need this; doing it always makes things go
+slower
+.TP
+.B \-q\fR <\fIquery\fR>
+the quantity
+.RB ( scalar ,
+.BR vector ,
+or
+.BR matrix)
+to learn by probing
+.RI ( string )
+.TP
+.B \-m\fR <\fImeasure\fR>
+how to collapse list of ray samples into one scalar.
+Possibilities include:
+.RS +7n
+.IP \(bu 2
+.RB \(lq min \(rq,
+.RB \(lq max \(rq,
+.RB \(lq mean \(rq,
+.RB \(lq median \(rq,
+.RB \(lq mode \(rq,
+.RB \(lq variance \(rq,
+.RB \(lq skew \(rq:
+(self-explanatory)
+.IP \(bu 2
+.RB \(lq intc \(rq,
+.RB \(lq slope \(rq,
+.RB \(lq error \(rq:
+intercept, slope, and error from line fitting
+.IP \(bu 2
+.RB \(lq stdv \(rq:
+standard deviation
+.IP \(bu 2
+.RB \(lq cov \(rq:
+coefficient of variation
+.IP \(bu 2
+.RB \(lq product \(rq,
+.RB \(lq sum \(rq:
+product or sum of all values
+.IP \(bu 2
+.RB \(lq L1 \(rq,
+.RB \(lq L2 \(rq,
+.RB \(lq NL2 \(rq,
+.RB \(lq RMS \(rq,
+.RB \(lq Linf \(rq:
+different norms
+.IP \(bu 2
+.RB \(lq histo\-min \(rq,
+.RB \(lq histo\-max \(rq,
+.RB \(lq histo\-mean \(rq,
+.RB \(lq histo\-median \(rq,
+.RB \(lq histo\-mode \(rq,
+.RB \(lq histo\-product \(rq,
+.RB \(lq histo\-l2 \(rq,
+.RB \(lq histo\-sum \(rq,
+.RB \(lq histo\-variance \(rq,
+.RB \(lq histo\-sd \(rq:
+same measures, but for situations where we\(cqre given not the original values,
+but a histogram of them.
+.RI ( measure )
+.TP
+.B \-gmc\fR\ <\fImin\ gradmag\fR>
+For curvature-based queries, set answer to zero when gradient magnitude is
+below this
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-fn\fR\ <\fIfrom\ nan\fR>
+When histo-based measures generate
+.B NaN
+answers, the value that should be substituted for
+.BR NaN .
+.RI ( double );
+default:
+.RB \(lq nan \(rq
+.TP
+.B \-step\fR\ <\fIsize\fR>
+step size along ray in world space
+.RI ( double );
+default:
+.RB \(lq 0.01 \(rq
+.TP
+.B \-nt\fR\ <\fI#\ threads\fR>
+number of threads hoover should use
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-vp\fR\ <\fIimg\ coords\fR>
+pixel coordinates for which to turn on verbose debugging messages, or
+.RB \(lq \-1\ \-1 \(rq
+to disable this.
+(2 \fIint\fRs);
+default:
+.RB \(lq \-1\ \-1 \(rq
+.TP
+.B \-o\fR <\fIfilename\fR>
+file to write output
+.I nrrd
+to
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR gprobe (1),
+.BR ilk (1),
+.BR miter (1),
+.BR nrrdSanity (1),
+.BR overrgb (1),
+.BR puller (1),
+.BR tend (1),
+.BR unu (1),
+.BR vprobe (1)

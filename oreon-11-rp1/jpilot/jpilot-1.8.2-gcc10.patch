@@ -1,0 +1,25 @@
+diff --git a/jpilot-merge.c b/jpilot-merge.c
+index e69feaa..7522cc5 100644
+--- a/jpilot-merge.c
++++ b/jpilot-merge.c
+@@ -57,6 +57,7 @@
+  * The variables below are global variables in jpilot.c which are unused in
+  * this code but must be instantiated for the code to compile.  
+  * The same is true of the functions which are only used in GUI mode. */
++int pipe_to_parent = 0;
+ pid_t jpilot_master_pid = -1;
+ GtkWidget *glob_dialog;
+ GtkWidget *glob_date_label;
+diff --git a/log.c b/log.c
+index fd99fff..4bdbdc6 100644
+--- a/log.c
++++ b/log.c
+@@ -46,7 +46,7 @@
+ #define WRITE_MAX_BUF 4096
+ 
+ /******************************* Global vars **********************************/
+-int pipe_to_parent;
++extern int pipe_to_parent;
+ 
+ int glob_log_file_mask;
+ int glob_log_stdout_mask;

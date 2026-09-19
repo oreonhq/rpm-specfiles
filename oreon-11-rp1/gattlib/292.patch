@@ -1,0 +1,163 @@
+From 95ff48e7b22b8c17aa57c1b77d64a3de25119bc7 Mon Sep 17 00:00:00 2001
+From: Benson Muite <bkmgit@users.noreply.github.com>
+Date: Mon, 31 Mar 2025 11:06:22 +0300
+Subject: [PATCH] Link to libpcre2-8 instead of libpcre
+
+---
+ CrossCompilation.cmake                          | 2 +-
+ examples/ble_scan/CMakeLists.txt                | 4 ++--
+ examples/discover/CMakeLists.txt                | 4 ++--
+ examples/gatttool/CMakeLists.txt                | 4 ++--
+ examples/nordic_uart/CMakeLists.txt             | 4 ++--
+ examples/notification/CMakeLists.txt            | 4 ++--
+ examples/read_write/CMakeLists.txt              | 4 ++--
+ examples/read_write_memory/CMakeLists.txt       | 4 ++--
+ tests/test_continuous_connection/CMakeLists.txt | 4 ++--
+ 9 files changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/CrossCompilation.cmake b/CrossCompilation.cmake
+index 5ce4ee8f..97303c6f 100644
+--- a/CrossCompilation.cmake
++++ b/CrossCompilation.cmake
+@@ -70,7 +70,7 @@ endif()
+ include_directories($ENV{SYSROOT}/usr/include $ENV{SYSROOT}/usr/include/${TOOLCHAIN_MACHINE})
+ 
+ # Workaround as some library are installed in $ENV{SYSROOT}/lib/${TOOLCHAIN_MACHINE}
+-# such as libpcre.so (required by glib-2.0)
++# such as libpcre2-8.so (required by glib-2.0)
+ link_directories($ENV{SYSROOT}/lib/${TOOLCHAIN_MACHINE})
+ link_directories($ENV{SYSROOT}/usr/lib/${TOOLCHAIN_MACHINE})
+ 
+diff --git a/examples/ble_scan/CMakeLists.txt b/examples/ble_scan/CMakeLists.txt
+index 39c781b9..4c88847c 100644
+--- a/examples/ble_scan/CMakeLists.txt
++++ b/examples/ble_scan/CMakeLists.txt
+@@ -24,9 +24,9 @@ cmake_minimum_required(VERSION 3.22.0)
+ find_package(PkgConfig REQUIRED)
+ 
+ pkg_search_module(GATTLIB REQUIRED gattlib)
+-pkg_search_module(PCRE REQUIRED libpcre)
++pkg_search_module(PCRE2-8 REQUIRED libpcre2-8)
+ 
+ set(ble_scan_SRCS ble_scan.c)
+ 
+ add_executable(ble_scan ${ble_scan_SRCS})
+-target_link_libraries(ble_scan ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${PCRE_LIBRARIES} pthread)
++target_link_libraries(ble_scan ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${PCRE2-8_LIBRARIES} pthread)
+diff --git a/examples/discover/CMakeLists.txt b/examples/discover/CMakeLists.txt
+index 0eecc75e..4b1cac3b 100644
+--- a/examples/discover/CMakeLists.txt
++++ b/examples/discover/CMakeLists.txt
+@@ -24,9 +24,9 @@ cmake_minimum_required(VERSION 3.22.0)
+ find_package(PkgConfig REQUIRED)
+ 
+ pkg_search_module(GATTLIB REQUIRED gattlib)
+-pkg_search_module(PCRE REQUIRED libpcre)
++pkg_search_module(PCRE2-8 REQUIRED libpcre2-8)
+ 
+ set(discover_SRCS discover.c)
+ 
+ add_executable(discover ${discover_SRCS})
+-target_link_libraries(discover ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${PCRE_LIBRARIES} pthread)
++target_link_libraries(discover ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${PCRE2-8_LIBRARIES} pthread)
+diff --git a/examples/gatttool/CMakeLists.txt b/examples/gatttool/CMakeLists.txt
+index 56b1df01..b897bfb1 100644
+--- a/examples/gatttool/CMakeLists.txt
++++ b/examples/gatttool/CMakeLists.txt
+@@ -25,7 +25,7 @@ find_package(PkgConfig REQUIRED)
+ 
+ pkg_search_module(GATTLIB REQUIRED gattlib)
+ pkg_search_module(GLIB REQUIRED glib-2.0)
+-pkg_search_module(PCRE REQUIRED libpcre)
++pkg_search_module(PCRE2-8 REQUIRED libpcre2-8)
+ 
+ include_directories(${CMAKE_SOURCE_DIR}/common ${GLIB_INCLUDE_DIRS})
+ 
+@@ -52,4 +52,4 @@ endif()
+ set(gatttool_SRCS gatttool.c interactive.c utils.c)
+ 
+ add_executable(gatttool ${gatttool_SRCS})
+-target_link_libraries(gatttool ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${GLIB_LDFLAGS} ${PCRE_LIBRARIES} readline tinfo pthread)
++target_link_libraries(gatttool ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${GLIB_LDFLAGS} ${PCRE2-8_LIBRARIES} readline tinfo pthread)
+diff --git a/examples/nordic_uart/CMakeLists.txt b/examples/nordic_uart/CMakeLists.txt
+index 6fe58096..6107fab2 100644
+--- a/examples/nordic_uart/CMakeLists.txt
++++ b/examples/nordic_uart/CMakeLists.txt
+@@ -24,9 +24,9 @@ cmake_minimum_required(VERSION 3.22.0)
+ find_package(PkgConfig REQUIRED)
+ 
+ pkg_search_module(GATTLIB REQUIRED gattlib)
+-pkg_search_module(PCRE REQUIRED libpcre)
++pkg_search_module(PCRE2-8 REQUIRED libpcre2-8)
+ 
+ set(nordic_uart_SRCS nordic_uart.c)
+ 
+ add_executable(nordic_uart ${nordic_uart_SRCS})
+-target_link_libraries(nordic_uart ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${PCRE_LIBRARIES} pthread)
++target_link_libraries(nordic_uart ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${PCRE2-8_LIBRARIES} pthread)
+diff --git a/examples/notification/CMakeLists.txt b/examples/notification/CMakeLists.txt
+index 3958aaa4..cd9fe7be 100644
+--- a/examples/notification/CMakeLists.txt
++++ b/examples/notification/CMakeLists.txt
+@@ -25,10 +25,10 @@ find_package(PkgConfig REQUIRED)
+ 
+ pkg_search_module(GATTLIB REQUIRED gattlib)
+ pkg_search_module(GLIB REQUIRED glib-2.0)
+-pkg_search_module(PCRE REQUIRED libpcre)
++pkg_search_module(PCRE2-8 REQUIRED libpcre2-8)
+ 
+ include_directories(${GLIB_INCLUDE_DIRS})
+ set(notification_SRCS notification.c)
+ 
+ add_executable(notification ${notification_SRCS})
+-target_link_libraries(notification ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${GLIB_LDFLAGS} ${PCRE_LIBRARIES} pthread)
++target_link_libraries(notification ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${GLIB_LDFLAGS} ${PCRE2-8_LIBRARIES} pthread)
+diff --git a/examples/read_write/CMakeLists.txt b/examples/read_write/CMakeLists.txt
+index 7e9ad356..2c4e5cef 100644
+--- a/examples/read_write/CMakeLists.txt
++++ b/examples/read_write/CMakeLists.txt
+@@ -24,9 +24,9 @@ cmake_minimum_required(VERSION 3.22.0)
+ find_package(PkgConfig REQUIRED)
+ 
+ pkg_search_module(GATTLIB REQUIRED gattlib)
+-pkg_search_module(PCRE REQUIRED libpcre)
++pkg_search_module(PCRE2-8 REQUIRED libpcre2-8)
+ 
+ set(read_write_SRCS read_write.c)
+ 
+ add_executable(read_write ${read_write_SRCS})
+-target_link_libraries(read_write ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${PCRE_LIBRARIES} pthread)
++target_link_libraries(read_write ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${PCRE2-8_LIBRARIES} pthread)
+diff --git a/examples/read_write_memory/CMakeLists.txt b/examples/read_write_memory/CMakeLists.txt
+index 6d6eea42..b48cb10e 100644
+--- a/examples/read_write_memory/CMakeLists.txt
++++ b/examples/read_write_memory/CMakeLists.txt
+@@ -25,10 +25,10 @@ find_package(PkgConfig REQUIRED)
+ 
+ pkg_search_module(GATTLIB REQUIRED gattlib)
+ pkg_search_module(GLIB REQUIRED glib-2.0)
+-pkg_search_module(PCRE REQUIRED libpcre)
++pkg_search_module(PCRE2-8 REQUIRED libpcre2-8)
+ 
+ include_directories(${GLIB_INCLUDE_DIRS})
+ set(read_write_memory_SRCS read_write_memory.c)
+ 
+ add_executable(read_write_memory ${read_write_memory_SRCS})
+-target_link_libraries(read_write_memory ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${GLIB_LDFLAGS} ${PCRE_LIBRARIES} pthread)
++target_link_libraries(read_write_memory ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${GLIB_LDFLAGS} ${PCRE2-8_LIBRARIES} pthread)
+diff --git a/tests/test_continuous_connection/CMakeLists.txt b/tests/test_continuous_connection/CMakeLists.txt
+index 8b47e805..1bb5bd08 100644
+--- a/tests/test_continuous_connection/CMakeLists.txt
++++ b/tests/test_continuous_connection/CMakeLists.txt
+@@ -24,9 +24,9 @@ cmake_minimum_required(VERSION 3.22.0)
+ find_package(PkgConfig REQUIRED)
+ 
+ pkg_search_module(GATTLIB REQUIRED gattlib)
+-pkg_search_module(PCRE REQUIRED libpcre)
++pkg_search_module(PCRE2-8 REQUIRED libpcre2-8)
+ pkg_search_module(GLIB REQUIRED glib-2.0)
+ 
+ add_executable(test_continuous_connection test_continuous_connection.c)
+ target_include_directories(test_continuous_connection PRIVATE ${GLIB_INCLUDE_DIRS})
+-target_link_libraries(test_continuous_connection ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${PCRE_LIBRARIES} ${GLIB_LDFLAGS} pthread)
++target_link_libraries(test_continuous_connection ${GATTLIB_LIBRARIES} ${GATTLIB_LDFLAGS} ${PCRE2-8_LIBRARIES} ${GLIB_LDFLAGS} pthread)

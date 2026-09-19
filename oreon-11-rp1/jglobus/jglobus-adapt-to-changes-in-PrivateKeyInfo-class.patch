@@ -1,0 +1,27 @@
+From 56107f807a4f2d1c4430e68cbfa883dbff926c70 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Fri, 8 Feb 2019 17:09:49 +0100
+Subject: [PATCH] Adapt to changes in PrivateKeyInfo class
+
+---
+ .../main/java/org/globus/gsi/bc/BouncyCastleOpenSSLKey.java   | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleOpenSSLKey.java b/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleOpenSSLKey.java
+index e7a7ede..ed62523 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleOpenSSLKey.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleOpenSSLKey.java
+@@ -152,8 +152,8 @@ public class BouncyCastleOpenSSLKey extends OpenSSLKey {
+ 			try {
+ 				ASN1Primitive keyInfo = BouncyCastleUtil.toASN1Primitive(key
+ 						.getEncoded());
+-				PrivateKeyInfo pkey = new PrivateKeyInfo((ASN1Sequence) keyInfo);
+-				ASN1Primitive derKey = pkey.getPrivateKey();
++				PrivateKeyInfo pkey = PrivateKeyInfo.getInstance(keyInfo);
++				ASN1Primitive derKey = pkey.parsePrivateKey().toASN1Primitive();
+ 				return BouncyCastleUtil.toByteArray(derKey);
+ 			} catch (IOException e) {
+ 				// that should never happen
+-- 
+2.20.1
+

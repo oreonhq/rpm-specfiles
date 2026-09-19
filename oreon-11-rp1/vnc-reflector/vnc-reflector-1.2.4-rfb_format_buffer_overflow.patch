@@ -1,0 +1,18 @@
+r192 | const_k | 2003-07-30 20:22:07 +0200 (St, 30 čec 2003) | 2 lines
+A one-byte buffer overflow has been fixed.
+
+Petr Pisar: CVS IDs removed
+
+Index: host_connect.c
+===================================================================
+--- host_connect.c	(revision 191)
++++ host_connect.c	(revision 192)
+@@ -237,7 +237,7 @@
+   char *buf = (char *)cur_slot->readbuf;
+   int major = 3, minor = 3;
+   int remote_major, remote_minor;
+-  char ver_msg[12];
++  char ver_msg[16];
+ 
+   if ( strncmp(buf, "RFB ", 4) != 0 || !isdigit(buf[4]) ||
+        !isdigit(buf[4]) || !isdigit(buf[5]) || !isdigit(buf[6]) ||

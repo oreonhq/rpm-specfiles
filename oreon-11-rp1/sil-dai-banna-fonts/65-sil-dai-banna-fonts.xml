@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Dai Banna SIL</target>
+    <match>
+      <family>Dai Banna SIL Book</family>
+      <change>
+        <style>Bold</style>
+        <into>Black</into>
+      </change>
+      <change>
+        <style>Bold Italic</style>
+        <into>Black Italic</into>
+      </change>
+      <change>
+        <style>Italic</style>
+        <into>Medium Italic</into>
+      </change>
+      <change>
+        <style>Regular</style>
+        <into>Medium</into>
+      </change>
+    </match>
+    <match>
+      <family>Dai Banna SIL Light</family>
+      <change>
+        <style>Bold</style>
+        <into>Medium</into>
+      </change>
+      <change>
+        <style>Bold Italic</style>
+        <into>Medium Italic</into>
+      </change>
+      <change>
+        <style>Italic</style>
+        <into>Light Italic</into>
+      </change>
+      <change>
+        <style>Regular</style>
+        <into>Light</into>
+      </change>
+    </match>
+    <axis>
+      <name>weight</name>
+      <step>
+        <name>Light</name>
+        <value>50</value>
+      </step>
+      <step>
+        <name>Medium</name>
+        <value>100</value>
+      </step>
+      <step>
+        <name>Bold</name>
+        <value>200</value>
+      </step>
+      <step>
+        <name>Black</name>
+        <value>210</value>
+      </step>
+    </axis>
+    <like>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

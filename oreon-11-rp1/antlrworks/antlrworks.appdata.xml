@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Richard Hughes <richard@hughsie.com> -->
+<component type="desktop">
+  <id>antlrworks.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>BSD</project_license>
+  <name>ANTLRWorks</name>
+  <summary>Grammar development environment for ANTLR v3 grammars</summary>
+  <description>
+    <p>
+      ANTLRWorks is a novel grammar development environment for ANTLR v3
+      grammars written by Jean Bovet (with suggested use cases from Terence
+      Parr). It combines an excellent grammar-aware editor with an interpreter
+      for rapid prototyping and a language-agnostic debugger for isolating
+      grammar errors. ANTLRWorks helps eliminate grammar nondeterminisms, one of
+      the most difficult problems for beginners and experts alike, by
+      highlighting nondeterministic paths in the syntax diagram associated with
+      a grammar. ANTLRWorks' goal is to make grammars more accessible to the
+      average programmer, improve maintainability and readability of grammars by
+      providing excellent grammar navigation and refactoring tools, and address
+      the most common questions and problems encountered by grammar developers.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://www.antlr3.org/works/screenshots/editor.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image>http://www.antlr3.org/works/screenshots/interpreter.png</image>
+    </screenshot>
+    <screenshot>
+      <image>http://www.antlr3.org/works/screenshots/debugger.png</image>
+    </screenshot>
+    <screenshot>
+      <image>http://www.antlr3.org/works/screenshots/ambiguouspath.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image>http://www.antlr3.org/works/screenshots/decisiondfa.jpg</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">http://www.antlr3.org/works/</url>
+  <update_contact>melmorabity_at_fedoraproject.org</update_contact>
+</component>

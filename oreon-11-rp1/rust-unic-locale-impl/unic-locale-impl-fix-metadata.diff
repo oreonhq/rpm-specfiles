@@ -1,0 +1,12 @@
+--- unic-locale-impl-0.9.6/Cargo.toml	1970-01-01T00:00:01+00:00
++++ unic-locale-impl-0.9.6/Cargo.toml	2025-05-15T14:29:00.414722+00:00
+@@ -71,9 +71,6 @@
+ [dependencies.unic-langid-impl]
+ version = "0.9.6"
+ 
+-[dev-dependencies.criterion]
+-version = "0.5"
+-
+ [dev-dependencies.serde]
+ version = "1.0"
+ features = ["derive"]

@@ -1,0 +1,25 @@
+From a72c6cc3b83209c446394528e36cc69b45cb9132 Mon Sep 17 00:00:00 2001
+From: npwoods <npwoods@mess.org>
+Date: Sun, 27 Nov 2022 06:33:26 -0500
+Subject: [PATCH] Avoid method deprecated in Qt 6.4.0
+
+---
+ src/hash.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/hash.cpp b/src/hash.cpp
+index ad8c28b..74d59f2 100644
+--- a/src/hash.cpp
++++ b/src/hash.cpp
+@@ -65,7 +65,11 @@ std::optional<Hash> Hash::calculate(QIODevice &stream, const CalculateCallback &
+ 			crc32 = s_crcTable[(crc32 ^ buffer[i]) & 0xFF] ^ (crc32 >> 8);
+ 
+ 		// SHA-1 processing
++#if QT_VERSION < 0x060300
+ 		cryptographicHash.addData(buffer, len);
++#else // !QT_VERSION < 0x060300
++		cryptographicHash.addData(QByteArrayView(buffer, len));
++#endif // QT_VERSION < 0x060300
+ 
+ 		// invoke callback if appropriate
+ 		if (callback(bytesProcessed))

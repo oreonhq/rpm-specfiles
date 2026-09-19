@@ -1,0 +1,46 @@
+#!/bin/sh
+# Based on Ogre-Samples by Alexey Torkhov shipped with ogre-samples package.
+
+DATADIR=/usr/share
+
+runSample()
+{
+  sample=$1
+  echo "Running $sample..."
+  $DATADIR/MYGUI/Tools/$sample
+}
+
+set -e
+
+mkdir -p $HOME/.mygui-tools
+cd $HOME/.mygui-tools
+
+for i in resources.xml; do
+  cp -f $DATADIR/MYGUI/Tools/$i .
+done
+
+set +e
+
+if [ "$1" = "-a" ]; then
+  for i in `(cd $DATADIR/MYGUI/Tools/; find -type f -perm /111 | sort)`; do
+    runSample `echo $i | sed 's|./||'`
+  done
+elif [ $# -ge 1 ]; then
+  while [ $# -ge 1 ]; do
+    runSample $1
+    shift
+  done
+else
+  echo "Usage:" `basename $0` "[-a] [tool [...]]"
+  echo "  -a     : Run all tools installed to $DATADIR/MYGUI/Tools/"
+  echo "  sample : Run the tool(s) named 'tool' (see list bellow)"
+  echo
+  echo "tool - Runs specified tool from list"
+  echo
+  echo -n "Available tools:"
+  echo
+  for i in `(cd $DATADIR/MYGUI/Tools/; find -type f -perm /111 | sort)`; do
+    echo "  * $i" | sed 's|./||'
+  done
+  echo
+fi

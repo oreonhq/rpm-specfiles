@@ -1,0 +1,379 @@
+From 09a4953b3ad99aa48d8f2e7741c40233755ae2e6 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 29 Aug 2017 11:39:43 +0200
+Subject: [PATCH 1/6] Add a missing include for uint*_t types
+
+---
+ src/target/iscsi-target.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/target/iscsi-target.c b/src/target/iscsi-target.c
+index b48d554..a5ee0c8 100644
+--- a/src/target/iscsi-target.c
++++ b/src/target/iscsi-target.c
+@@ -30,6 +30,8 @@
+  */
+ #include "config.h"
+ 
++#include <stdint.h>
++
+ #ifdef HAVE_SIGNAL_H
+ #include <signal.h>
+ #endif
+-- 
+2.13.5
+
+From b8f78d3f28862ca4048ac1797389be91268e3927 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 29 Aug 2017 11:54:29 +0200
+Subject: [PATCH 2/6] Bound duplicate defines
+
+---
+ include/iscsiutil.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/include/iscsiutil.h b/include/iscsiutil.h
+index 0f3d1fe..61640dc 100644
+--- a/include/iscsiutil.h
++++ b/include/iscsiutil.h
+@@ -170,9 +170,17 @@ void	iscsi_print_buffer(const char *, const size_t);
+ #include <machine/endian.h>
+ #endif
+ 
++#ifndef __BYTE_ORDER
+ #define __BYTE_ORDER    _BYTE_ORDER
++#endif
++
++#ifndef __BIG_ENDIAN
+ #define __BIG_ENDIAN    _BIG_ENDIAN
++#endif
++
++#ifndef __LITTLE_ENDIAN
+ #define __LITTLE_ENDIAN _LITTLE_ENDIAN
++#endif
+ 
+ #define ISCSI_NTOHLL(a)	ISCSI_BE64TOH(a)
+ #define ISCSI_HTONLL(a)	ISCSI_HTOBE64(a)
+-- 
+2.13.5
+
+From 1bebbedfc378beff46de88cf1573847882ce29f6 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 29 Aug 2017 11:46:15 +0200
+Subject: [PATCH 3/6] Add a missing header for ntohl
+
+---
+ include/iscsiutil.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/iscsiutil.h b/include/iscsiutil.h
+index 61640dc..dc6be3e 100644
+--- a/include/iscsiutil.h
++++ b/include/iscsiutil.h
+@@ -45,6 +45,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <arpa/inet.h>
+ 
+ #ifdef HAVE_STDINT_H
+ #include <stdint.h>
+-- 
+2.13.5
+
+From e34aa4318af9f39f544533695fd7602110b87787 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 29 Aug 2017 11:46:22 +0200
+Subject: [PATCH 4/6] Add a missing compat include for strlcpy()
+
+---
+ src/initiator/iscsi-initiator.c | 2 ++
+ src/initiator/virtdir.c         | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/src/initiator/iscsi-initiator.c b/src/initiator/iscsi-initiator.c
+index 4ae08e9..231c6a0 100644
+--- a/src/initiator/iscsi-initiator.c
++++ b/src/initiator/iscsi-initiator.c
+@@ -46,6 +46,8 @@
+ 
+ #include "virtdir.h"
+ 
++#include "compat.h"
++
+ #if defined(__NetBSD__) && defined(USE_LIBKMOD)
+ #include "libkmod.h"
+ #endif
+diff --git a/src/initiator/virtdir.c b/src/initiator/virtdir.c
+index 2482f2e..5d7c0a8 100644
+--- a/src/initiator/virtdir.c
++++ b/src/initiator/virtdir.c
+@@ -37,6 +37,7 @@
+ 
+ #include "virtdir.h"
+ #include "defs.h"
++#include "compat.h"
+ 
+  /* utility comparison routine for sorting and searching */
+ static int
+diff --git a/src/lib/conffile.c b/src/lib/conffile.c
+index a8eb904..a7b4f3c 100644
+--- a/src/lib/conffile.c
++++ b/src/lib/conffile.c
+@@ -27,6 +27,9 @@
+  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
++
++#include "compat.h"
++
+ #include <sys/types.h>
+ #include <sys/param.h>
+ #include <sys/stat.h>
+diff --git a/src/lib/initiator.c b/src/lib/initiator.c
+index f2b87cc..1210232 100644
+--- a/src/lib/initiator.c
++++ b/src/lib/initiator.c
+@@ -39,6 +39,7 @@
+  * SUCH DAMAGE.
+  */
+ #include "config.h"
++#include "compat.h"
+ 
+ #include <sys/types.h>
+ 
+diff --git a/src/lib/netmask.c b/src/lib/netmask.c
+index fa722ec..9cc2557 100644
+--- a/src/lib/netmask.c
++++ b/src/lib/netmask.c
+@@ -28,6 +28,7 @@
+  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ #include "config.h"
++#include "compat.h"
+ 
+ #include <sys/types.h>
+ #include <sys/param.h>
+diff --git a/src/lib/storage.c b/src/lib/storage.c
+index 56da516..c81086a 100644
+--- a/src/lib/storage.c
++++ b/src/lib/storage.c
+@@ -29,6 +29,7 @@
+  * POSSIBILITY OF SUCH DAMAGE.
+  */
+ #include "config.h"
++#include "compat.h"
+ 
+ #include <sys/types.h>
+ #include <sys/stat.h>
+diff --git a/src/lib/target.c b/src/lib/target.c
+index 35efce5..d89d864 100644
+--- a/src/lib/target.c
++++ b/src/lib/target.c
+@@ -39,6 +39,7 @@
+  * SUCH DAMAGE.
+  */
+ #include "config.h"
++#include "compat.h"
+ 
+ #include <sys/types.h>
+ #include <sys/param.h>
+-- 
+2.13.5
+
+From f9813a2408573d4a529ea2a6451c2f2634ec5eaf Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 29 Aug 2017 11:51:13 +0200
+Subject: [PATCH 5/6] Properly bound the kmod build
+
+---
+ src/initiator/libkmod.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/initiator/libkmod.c b/src/initiator/libkmod.c
+index 1174757..62371d5 100644
+--- a/src/initiator/libkmod.c
++++ b/src/initiator/libkmod.c
+@@ -26,6 +26,8 @@
+  * POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
++#ifdef USE_LIBKMOD
++
+ #include <sys/cdefs.h>
+ #ifndef lint
+ __RCSID("$NetBSD: libkmod.c,v 1.2 2009/06/30 02:44:52 agc Exp $");
+@@ -45,8 +47,6 @@ __RCSID("$NetBSD: libkmod.c,v 1.2 2009/06/30 02:44:52 agc Exp $");
+ 
+ #include "libkmod.h"
+ 
+-#ifdef USE_LIBKMOD
+-
+ static const char *classes[] = {
+ 	"any",
+ 	"misc",
+-- 
+2.13.5
+
+From 0f27261beee81f96e34e243781bb6ceff97504cb Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 29 Aug 2017 11:52:28 +0200
+Subject: [PATCH 6/6] Link to fuse instead of refuse
+
+---
+ src/initiator/Makefile.am | 2 +-
+ src/initiator/Makefile.in | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/initiator/Makefile.am b/src/initiator/Makefile.am
+index 938d519..1e32cc6 100644
+--- a/src/initiator/Makefile.am
++++ b/src/initiator/Makefile.am
+@@ -8,7 +8,7 @@ iscsi_initiator_SOURCES	= iscsi-initiator.c libkmod.c virtdir.c
+ 
+ iscsi_initiator_CPPFLAGS= -I$(top_srcdir)/include
+ 
+-iscsi_initiator_LDADD	= ../lib/libiscsi.la -lrefuse
++iscsi_initiator_LDADD	= ../lib/libiscsi.la -lfuse
+ 
+ man8_MANS		= iscsi-initiator.8
+ 
+diff --git a/src/initiator/Makefile.in b/src/initiator/Makefile.in
+index 1ba43a4..ce5d557 100644
+--- a/src/initiator/Makefile.in
++++ b/src/initiator/Makefile.in
+@@ -211,7 +211,7 @@ top_srcdir = @top_srcdir@
+ AM_CFLAGS = $(WARNCFLAGS)
+ iscsi_initiator_SOURCES = iscsi-initiator.c libkmod.c virtdir.c
+ iscsi_initiator_CPPFLAGS = -I$(top_srcdir)/include
+-iscsi_initiator_LDADD = ../lib/libiscsi.la -lrefuse
++iscsi_initiator_LDADD = ../lib/libiscsi.la -lfuse
+ man8_MANS = iscsi-initiator.8
+ dist_man_MANS = iscsi-initiator.8
+ all: all-am
+-- 
+2.13.5
+
+From 8a77b5ad6890618e9c12558431660f8d0b4cd9d6 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 29 Aug 2017 12:04:29 +0200
+Subject: [PATCH 2/2] Add a missing header
+
+---
+ src/lib/uuid.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/lib/uuid.c b/src/lib/uuid.c
+index 421fc5f..be430cd 100644
+--- a/src/lib/uuid.c
++++ b/src/lib/uuid.c
+@@ -47,6 +47,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <time.h>
+ 
+ #include "storage.h"
+ #include "compat.h"
+-- 
+2.13.5
+
+From 27d800f41d06e107e39a447967e25be5bbb8eb76 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 29 Aug 2017 12:19:39 +0200
+Subject: [PATCH] Avoid installing the manuals twice
+
+---
+ src/initiator/Makefile    | 2 +-
+ src/initiator/Makefile.am | 2 +-
+ src/initiator/Makefile.in | 2 +-
+ src/lib/Makefile          | 2 +-
+ src/lib/Makefile.am       | 2 +-
+ src/lib/Makefile.in       | 2 +-
+ src/target/Makefile       | 4 ++--
+ src/target/Makefile.am    | 4 ++--
+ src/target/Makefile.in    | 4 ++--
+ 9 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/src/initiator/Makefile.am b/src/initiator/Makefile.am
+index 1e32cc6..aacc097 100644
+--- a/src/initiator/Makefile.am
++++ b/src/initiator/Makefile.am
+@@ -10,6 +10,6 @@ iscsi_initiator_CPPFLAGS= -I$(top_srcdir)/include
+ 
+ iscsi_initiator_LDADD	= ../lib/libiscsi.la -lfuse
+ 
+-man8_MANS		= iscsi-initiator.8
++#man8_MANS		= iscsi-initiator.8
+ 
+ dist_man_MANS		= iscsi-initiator.8
+diff --git a/src/initiator/Makefile.in b/src/initiator/Makefile.in
+index ce5d557..a286ce6 100644
+--- a/src/initiator/Makefile.in
++++ b/src/initiator/Makefile.in
+@@ -212,7 +212,7 @@ AM_CFLAGS = $(WARNCFLAGS)
+ iscsi_initiator_SOURCES = iscsi-initiator.c libkmod.c virtdir.c
+ iscsi_initiator_CPPFLAGS = -I$(top_srcdir)/include
+ iscsi_initiator_LDADD = ../lib/libiscsi.la -lfuse
+-man8_MANS = iscsi-initiator.8
++#man8_MANS = iscsi-initiator.8
+ dist_man_MANS = iscsi-initiator.8
+ all: all-am
+ 
+diff --git a/src/lib/Makefile.am b/src/lib/Makefile.am
+index 1d2c716..587a080 100644
+--- a/src/lib/Makefile.am
++++ b/src/lib/Makefile.am
+@@ -25,6 +25,6 @@ libiscsi_la_SOURCES	= \
+ 	util.c \
+ 	uuid.c
+ 
+-man3_MANS		= libiscsi.3
++#man3_MANS		= libiscsi.3
+ 
+ dist_man_MANS		= libiscsi.3
+diff --git a/src/lib/Makefile.in b/src/lib/Makefile.in
+index 98d6bb5..c64a57c 100644
+--- a/src/lib/Makefile.in
++++ b/src/lib/Makefile.in
+@@ -231,7 +231,7 @@ libiscsi_la_SOURCES = \
+ 	util.c \
+ 	uuid.c
+ 
+-man3_MANS = libiscsi.3
++#man3_MANS = libiscsi.3
+ dist_man_MANS = libiscsi.3
+ all: all-am
+ 
+diff --git a/src/target/Makefile.am b/src/target/Makefile.am
+index fe7f7c9..3a4f673 100644
+--- a/src/target/Makefile.am
++++ b/src/target/Makefile.am
+@@ -10,7 +10,7 @@ iscsi_target_CPPFLAGS	= -I$(top_srcdir)/include
+ 
+ iscsi_target_LDADD	= ../lib/libiscsi.la -lpthread
+ 
+-man8_MANS		= iscsi-target.8
+-man5_MANS		= targets.5
++#man8_MANS		= iscsi-target.8
++#man5_MANS		= targets.5
+ 
+ dist_man_MANS		= iscsi-target.8 targets.5
+diff --git a/src/target/Makefile.in b/src/target/Makefile.in
+index 3a04fe0..cbc4d33 100644
+--- a/src/target/Makefile.in
++++ b/src/target/Makefile.in
+@@ -211,8 +211,8 @@ AM_CFLAGS = $(WARNCFLAGS) -pthread
+ iscsi_target_SOURCES = iscsi-target.c
+ iscsi_target_CPPFLAGS = -I$(top_srcdir)/include
+ iscsi_target_LDADD = ../lib/libiscsi.la -lpthread
+-man8_MANS = iscsi-target.8
+-man5_MANS = targets.5
++#man8_MANS = iscsi-target.8
++#man5_MANS = targets.5
+ dist_man_MANS = iscsi-target.8 targets.5
+ all: all-am
+ 
+-- 
+2.13.5
+

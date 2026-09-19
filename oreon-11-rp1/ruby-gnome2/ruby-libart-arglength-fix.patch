@@ -1,0 +1,46 @@
+--- ruby-gnome2-all-0.90.4/libart/src/rbart_rect.c.rb25	2008-12-10 21:05:00.000000000 +0900
++++ ruby-gnome2-all-0.90.4/libart/src/rbart_rect.c	2018-02-14 18:21:31.394950062 +0900
+@@ -141,16 +141,16 @@ TARGET ## _to_s(VALUE self)
+   rb_str_cat2(ret, ":");                                    \
+   rb_str_cat2(ret, " x0:");                                 \
+   rb_str_append(ret, rb_funcall(TARGET ## _x0(self),        \
+-                                to_s, 0, 0));               \
++                                to_s, 0));               \
+   rb_str_cat2(ret, " y0:");                                 \
+   rb_str_append(ret, rb_funcall(TARGET ## _y0(self),        \
+-                                to_s, 0, 0));               \
++                                to_s, 0));               \
+   rb_str_cat2(ret, " x1:");                                 \
+   rb_str_append(ret, rb_funcall(TARGET ## _x1(self),        \
+-                                to_s, 0, 0));               \
++                                to_s, 0));               \
+   rb_str_cat2(ret, " y1:");                                 \
+   rb_str_append(ret, rb_funcall(TARGET ## _y1(self),        \
+-                                to_s, 0, 0));               \
++                                to_s, 0));               \
+   rb_str_cat2(ret, ">");                                    \
+                                                             \
+   return ret;                                               \
+--- ruby-gnome2-all-0.90.4/libart/src/rbart_uta.c.rb25	2007-10-23 21:51:27.000000000 +0900
++++ ruby-gnome2-all-0.90.4/libart/src/rbart_uta.c	2018-02-14 18:20:47.986796928 +0900
+@@ -115,15 +115,15 @@ uta_to_s(self)
+   rb_str_cat2(ret, rb_class2name(CLASS_OF(self)));
+   rb_str_cat2(ret, ":"); 
+   rb_str_cat2(ret, " x0:"); 
+-  rb_str_append(ret, rb_funcall(uta_get_x0(self), to_s, 0, 0));
++  rb_str_append(ret, rb_funcall(uta_get_x0(self), to_s, 0));
+   rb_str_cat2(ret, " y0:");
+-  rb_str_append(ret, rb_funcall(uta_get_y0(self), to_s, 0, 0));
++  rb_str_append(ret, rb_funcall(uta_get_y0(self), to_s, 0));
+   rb_str_cat2(ret, " width:"); 
+-  rb_str_append(ret, rb_funcall(uta_get_width(self), to_s, 0, 0));
++  rb_str_append(ret, rb_funcall(uta_get_width(self), to_s, 0));
+   rb_str_cat2(ret, " height:");
+-  rb_str_append(ret, rb_funcall(uta_get_height(self), to_s, 0, 0));
++  rb_str_append(ret, rb_funcall(uta_get_height(self), to_s, 0));
+   rb_str_cat2(ret, " utiles:");
+-  rb_str_append(ret, rb_funcall(uta_utiles(self), rb_intern("inspect"), 0, 0));
++  rb_str_append(ret, rb_funcall(uta_utiles(self), rb_intern("inspect"), 0));
+   rb_str_cat2(ret, ">");
+ 
+   return ret;

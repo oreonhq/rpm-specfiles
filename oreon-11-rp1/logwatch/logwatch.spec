@@ -3,7 +3,7 @@
 %global _unitdir /usr/lib/systemd/system
 Summary: Analyzes and Reports on system logs
 Name: logwatch
-Version: 7.14
+Version: 7.15
 Release: 1%{?dist}
 License: MIT
 URL: https://sourceforge.net/projects/logwatch/

@@ -1,0 +1,44 @@
+From e36781f60cbbe37273304155878b85f99929e059 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 6 Mar 2026 15:59:26 +0100
+Subject: [PATCH] Drop unused annotations for mutation testing
+
+---
+ src/accept_language.rs | 6 ------
+ src/path_parser.rs     | 3 ---
+ 2 files changed, 9 deletions(-)
+
+diff --git a/src/accept_language.rs b/src/accept_language.rs
+index cfdf08a..23d001b 100644
+--- a/src/accept_language.rs
++++ b/src/accept_language.rs
+@@ -78,12 +78,6 @@ enum AcceptLanguageError {
+ impl error::Error for AcceptLanguageError {}
+ 
+ impl fmt::Display for AcceptLanguageError {
+-    // Skipped for mutation testing.  This is just an error formatter.  In the public API,
+-    // `Language::AcceptLanguage(AcceptLanguage)` is constructible via
+-    // `AcceptLanguage::parse()`, which returns `Result<Self, String>`.  These strings go
+-    // there, but librsvg makes no promises about their contents.  Below, we do have tests
+-    // for `AcceptLanguageError` being computed correctly.
+-    #[mutants::skip]
+     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+         match self {
+             Self::NoElements => write!(f, "no language tags in list"),
+diff --git a/src/path_parser.rs b/src/path_parser.rs
+index e522ec0..037f724 100644
+--- a/src/path_parser.rs
++++ b/src/path_parser.rs
+@@ -853,9 +853,6 @@ impl ParseError {
+ use crate::path_parser::ErrorKind::*;
+ 
+ impl fmt::Display for ParseError {
+-    // Skipped for mutation testing; this is just an error formatter.  These errors are just
+-    // surfaced as log messages.
+-    #[mutants::skip]
+     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+         let description = match self.kind {
+             UnexpectedToken(_t) => "unexpected token",
+-- 
+2.53.0
+

@@ -1,0 +1,318 @@
+--- kdebase-3.3.92/kwin/kcmkwin/kwindecoration/kwindecoration.cpp.kper	2005-01-03 15:51:05.000000000 +0100
++++ kdebase-3.3.92/kwin/kcmkwin/kwindecoration/kwindecoration.cpp	2005-02-15 15:14:24.065146611 +0100
+@@ -431,7 +431,7 @@
+ 
+ 	oldLibraryName = currentLibraryName;
+ 	currentLibraryName = conf->readEntry("PluginLib",
+-					((QPixmap::defaultDepth() > 8) ? "kwin_plastik" : "kwin_quartz"));
++					((QPixmap::defaultDepth() > 8) ? "kwin_bluecurve" : "kwin_quartz"));
+ 	QString decoName = decorationName( currentLibraryName );
+ 
+ 	// If we are using the "default" kde client, use the "default" entry.
+--- kdebase-3.3.92/kpersonalizer/kstylepage.h.kper	2004-09-25 13:31:51.000000000 +0200
++++ kdebase-3.3.92/kpersonalizer/kstylepage.h	2005-02-15 15:14:24.070145873 +0100
+@@ -77,6 +77,7 @@
+ 	QColor link;
+ 	QColor visitedLink;
+ 
++	QListViewItem * bluecurve;
+ 	QListViewItem * kde;
+ 	QListViewItem * classic;
+ 	QListViewItem * keramik;
+@@ -88,14 +89,14 @@
+ 
+ 	// widget-style existence
+ 	bool kde_hc_exist, kde_def_exist, kde_keramik_exist, kde_light_exist,
+-		cde_exist, win_exist, platinum_exist, kde_plastik_exist;
++		cde_exist, win_exist, platinum_exist, kde_plastik_exist, bluecurve_exist;
+ 
+ 	// kwin-style-existence
+ 	bool kwin_keramik_exist, kwin_default_exist, kwin_system_exist,
+-		kwin_win_exist, kwin_cde_exist, kwin_quartz_exist, kwin_plastik_exist;
++		kwin_win_exist, kwin_cde_exist, kwin_quartz_exist, kwin_plastik_exist, kwin_bluecurve_exist;
+ 
+ 	// icon-theme-existence
+-	bool icon_crystalsvg_exist, icon_kdeclassic_exist, icon_Locolor_exist;
++	bool icon_crystalsvg_exist, icon_kdeclassic_exist, icon_Locolor_exist, icon_bluecurve_exist;
+ 
+ public slots: // Public slots
+ 	/** to be connected to the OS page. Catches either KDE, CDE, win or mac and pre-sets the style.  */
+--- kdebase-3.3.92/kpersonalizer/kstylepage.cpp.kper	2004-09-25 13:31:51.000000000 +0200
++++ kdebase-3.3.92/kpersonalizer/kstylepage.cpp	2005-02-15 15:14:24.071145725 +0100
+@@ -51,6 +51,10 @@
+ 	klv_styles->addColumn( i18n( "Description" ) );
+ 	klv_styles->setAllColumnsShowFocus(true);
+ 
++	bluecurve = new QListViewItem( klv_styles);
++	bluecurve->setText( 0, i18n( "Bluecurve" ));
++	bluecurve->setText( 1, i18n( "Red Hat Linux ® default style" ) );
++
+ 	kde = new QListViewItem( klv_styles);
+ 	kde->setText( 0, QPixmap::defaultDepth() > 8 ? i18n( "Plastik" ) : i18n( "Light" ) );
+ 	kde->setText( 1, i18n( "KDE default style" ) );
+@@ -80,7 +84,7 @@
+ 
+ 	// Note: if the default is changed here it needs to be changed in kdebase/kwin/plugins.cpp
+ 	//       and kdebase/kwin/kcmkwin/kwindecoration/kwindecoration.cpp as well.
+-	defaultKWinStyle = QPixmap::defaultDepth() > 8 ? "kwin_plastik" : "kwin_quartz";
++	defaultKWinStyle = QPixmap::defaultDepth() > 8 ? "kwin_bluecurve" : "kwin_quartz";
+ 	appliedStyle = NULL;
+ 
+ 	getAvailability();
+@@ -133,6 +137,8 @@
+ 			else if (kwin_quartz_exist)
+ 				kdf = new KDesktopFile(kstd->findResource("data", "kwin/quartz.desktop"));
+ 		}
++		else if (bluecurve->isSelected())
++			kdf = new KDesktopFile(kstd->findResource("data", "kwin/bluecurve.desktop"));
+ 
+ 		if (kdf) {
+ 			kdf->setGroup("Desktop Entry");
+@@ -228,6 +234,8 @@
+ 		else if ( (classic->isSelected() || cde->isSelected() || win->isSelected())
+ 			&& (QColor::numBitPlanes() <= 8) && icon_Locolor_exist)
+ 				theme = "Locolor";
++		else if (bluecurve->isSelected() && icon_bluecurve_exist)
++				theme = "Bluecurve";
+ 	}
+ 	// save, what we got
+ 	KGlobal::config()->setGroup("Icons");
+@@ -308,9 +316,10 @@
+ 		klv_styles->setSelected(cde,true);
+ 	else if(style=="win" && win_exist)
+ 		klv_styles->setSelected(win,true);
+-	else if(style=="mac") {
++	else if(style=="mac")
+ 		klv_styles->setSelected(platinum,true);
+-	}
++	else if(style=="Bluecurve" && bluecurve_exist)
++		klv_styles->setSelected(bluecurve,true);
+ }
+ 
+ /** set the defaults for this page */
+@@ -361,6 +370,12 @@
+ 			set->usrCol2.setNamedColor("#6C8BB9");
+ 			set->colorFile=locate("colors","EveX.kcsrc");
+ 		}
++		else if(bluecurve->isSelected()){
++			set->bgMode="VerticalGradient";
++			set->usrCol1.setNamedColor("#8a94c6");
++			set->usrCol2.setNamedColor("#687096");
++			set->colorFile=locate("colors","Bluecurve.kcsrc");
++		}
+ 		set->contrast=7;
+ 		config = new KSimpleConfig(set->colorFile, true);
+ 		config->setGroup("Color Scheme");
+@@ -413,7 +428,7 @@
+ void KStylePage::getAvailability() {
+ 	// test, wich styles are available
+ 	kde_keramik_exist = kde_hc_exist = kde_def_exist = cde_exist
+-		= kde_plastik_exist = win_exist = platinum_exist = false;
++		= kde_plastik_exist = win_exist = platinum_exist = bluecurve_exist = false;
+ 	QStringList styles = QStyleFactory::keys();
+ 	for (QStringList::iterator it = styles.begin(); it != styles.end(); it++) {
+ 		if (*it == "Keramik") kde_keramik_exist = true;
+@@ -424,6 +439,7 @@
+ 		else if (*it == "Windows") win_exist = true;
+ 		else if (*it == "Platinum") platinum_exist = true;
+ 		else if (*it == "Light, 3rd revision") kde_light_exist = true;
++		else if (*it == "Bluecurve") bluecurve_exist = true;
+ 	}
+ 	// and disable the ListItems, if they are not.
+ 	if ( !(kde_plastik_exist || kde_light_exist) ) kde->setVisible(false);
+@@ -432,6 +448,7 @@
+ 	if (!cde_exist) cde->setVisible(false);
+ 	if (!win_exist) win->setVisible(false);
+ 	if (!platinum_exist) platinum->setVisible(false);
++	if (!bluecurve_exist) bluecurve->setVisible(false);
+ 
+ 	// test, wich KWin-styles are available
+ 	kwin_keramik_exist = kwin_system_exist = kwin_plastik_exist
+@@ -450,10 +467,12 @@
+ 		kwin_cde_exist = true;
+ 	if (!kstd->findResource("data", "kwin/quartz.desktop").isNull())
+ 		kwin_quartz_exist = true;
++	if (!kstd->findResource("data", "kwin/bluecurve.desktop").isNull())
++		kwin_bluecurve_exist = true;
+ 	kwin_default_exist = true;	// we can't check for a .desktop-file for the old default because there is none
+ 
+ 	// check, wich Icon-themes are available
+-	icon_crystalsvg_exist = icon_kdeclassic_exist = icon_Locolor_exist = false;
++	icon_crystalsvg_exist = icon_kdeclassic_exist = icon_Locolor_exist = icon_bluecurve_exist = false;
+ 	QStringList icons(KIconTheme::list());
+ 	for (QStringList::iterator it=icons.begin(); it != icons.end(); it++) {
+ 		KIconTheme icontheme(*it);
+@@ -461,6 +480,7 @@
+ 		if (*it == "crystalsvg") icon_crystalsvg_exist = true;
+ 		else if (*it == "kdeclassic") icon_kdeclassic_exist = true;
+ 		else if (*it == "Locolor") icon_Locolor_exist = true;
++		else if (*it == "Bluecurve") icon_bluecurve_exist = true;
+ 	}
+ }
+ 
+--- kdebase-3.3.92/kpersonalizer/kospage.h.kper	2005-02-04 00:19:05.000000000 +0100
++++ kdebase-3.3.92/kpersonalizer/kospage.h	2005-02-15 15:14:24.071145725 +0100
+@@ -32,6 +32,7 @@
+ 	~KOSPage();
+ 	void save(bool currSettings=true);
+ 	void saveCheckState(bool currSettings);
++	void writeBluecurve();
+ 	void writeKDE();
+ 	void writeUNIX();
+ 	void writeWindows();
+@@ -41,6 +42,7 @@
+ 	void writeUserDefaults();
+ 	/** retrieve the user's local values */
+ 	void getUserDefaults();
++	void slotBluecurveDescription();
+ 	void slotMacDescription();
+ 	void slotWindowsDescription();
+ 	void slotUnixDescription();
+--- kdebase-3.3.92/kpersonalizer/kospagedlg.ui.kper	2005-02-04 00:19:05.000000000 +0100
++++ kdebase-3.3.92/kpersonalizer/kospagedlg.ui	2005-02-15 15:14:24.067146316 +0100
+@@ -73,13 +73,25 @@
+                 </property>
+                 <widget class="QRadioButton" row="0" column="0">
+                     <property name="name">
++                        <cstring>rb_bluecurve</cstring>
++                    </property>
++                    <property name="text">
++                        <string>Bluecurve (R)</string>
++                    </property>
++                    <property name="checked">
++                        <bool>true</bool>
++                    </property>
++                </widget>
++
++                <widget class="QRadioButton">
++                    <property name="name">
+                         <cstring>rb_kde</cstring>
+                     </property>
+                     <property name="text">
+                         <string>KDE (TM)</string>
+                     </property>
+                     <property name="checked">
+-                        <bool>true</bool>
++                        <bool>false</bool>
+                     </property>
+                 </widget>
+                 <widget class="QRadioButton" row="1" column="0">
+@@ -183,6 +195,12 @@
+ </widget>
+ <connections>
+     <connection>
++        <sender>rb_bluecurve</sender>
++        <signal>clicked()</signal>
++        <receiver>KOSPageDlg</receiver>
++        <slot>slotBluecurveDescription()</slot>
++    </connection>
++    <connection>
+         <sender>rb_kde</sender>
+         <signal>clicked()</signal>
+         <receiver>KOSPageDlg</receiver>
+@@ -208,6 +226,7 @@
+     </connection>
+ </connections>
+ <slots>
++    <slot>slotBluecurveDescription()</slot>
+     <slot>slotWindowsDescription()</slot>
+     <slot>slotKDEDescription()</slot>
+     <slot>slotMacDescription()</slot>
+--- kdebase-3.3.92/kpersonalizer/kospage.cpp.kper	2005-02-04 00:19:05.000000000 +0100
++++ kdebase-3.3.92/kpersonalizer/kospage.cpp	2005-02-15 15:17:57.105666576 +0100
+@@ -37,7 +37,7 @@
+ KOSPage::KOSPage(QWidget *parent, const char *name ) : KOSPageDlg(parent,name) {
+ 	px_osSidebar->setPixmap(UserIcon("step2.png"));
+ 	// initialize the textview with the default description - KDE of course
+-	slotKDEDescription();
++	slotBluecurveDescription();
+ 	// Set the configfiles
+ 	cglobal = new KConfig("kdeglobals");
+ 	claunch = new KConfig("klaunchrc", false, false);
+@@ -105,7 +105,10 @@
+ 		// Set the path for the keysscheme resource files
+ 		KGlobal::dirs()->addResourceType("keys", KStandardDirs::kde_default("data")+"kcmkeys");
+ 		// write the settings to the configfiles, depending on wich radiobutton is checked
+-		if(rb_kde->isChecked()){
++		if(rb_bluecurve->isChecked()) {
++			writeBluecurve();
++			emit selectedOS("Bluecurve");
++		} else if(rb_kde->isChecked()){
+ 			writeKDE();
+ 			emit selectedOS("KDE");	// send a signal to be caught by the KStylePage to set the according style by default depending on the OS selection
+ 		}
+@@ -131,6 +134,46 @@
+ 	}
+ }
+ 
++/* Write Bluecurve behaviour */
++void KOSPage::writeBluecurve() {
++	kdDebug() << "KOSPage::writeBluecurve()" << endl;
++
++	ckcmdisplay->setGroup("Bluecurve");
++	ckcmdisplay->writeEntry("macStyle", false, true, true);
++
++	cglobal->setGroup("Bluecurve");
++	cglobal->writeEntry("SingleClick", false, true, true);
++
++	claunch->setGroup("FeedbackStyle");
++	claunch->writeEntry("BusyCursor", false);
++
++	cwin->setGroup("Windows");
++	cwin->writeEntry("TitlebarDoubleClickCommand", "Shade");
++	cwin->writeEntry("FocusPolicy", "ClickToFocus");
++	cwin->writeEntry("AltTabStyle", "KDE");
++	cwin->setGroup( "MouseBindings");
++	cwin->writeEntry("CommandActiveTitlebar2", "Lower");
++	cwin->writeEntry("CommandActiveTitlebar3", "Operations menu");
++
++	cdesktop->setGroup( "Menubar" );
++	cdesktop->writeEntry("ShowMenubar", false);
++	cdesktop->setGroup( "Mouse Buttons" );
++	cdesktop->writeEntry("Middle", "WindowListMenu");
++	cdesktop->setGroup( "FMSettings" );
++	cdesktop->writeEntry("UnderlineLinks", true);
++
++	ckonqueror->setGroup( "FMSettings" );
++	ckonqueror->writeEntry("UnderlineLinks", true);
++
++	ckcminput->setGroup("KDE");
++	ckcminput->writeEntry("ChangeCursor", true, true, true );
++
++	cklipper->setGroup("General");
++	cklipper->writeEntry("SynchronizeClipboards", false);
++
++	writeKeyEntrys(locate("keys", "bluecurve.kksrc"));
++}
++
+ 
+ 	/** write the settings for KDE-Behavior (called by saveCheckStatus) */
+ void KOSPage::writeKDE(){
+@@ -343,6 +386,18 @@
+ 	delete defScheme;
+ }
+ 
++void KOSPage::slotBluecurveDescription(){
++	kdDebug() << "slotBluecurveDescription()" << endl;
++	textview_ospage->setText("");
++	textview_ospage->setText(i18n(
++	"<b>Window activation:</b> <i>Focus on click</i><br>"
++	"<b>Titlebar double-click:</b> <i>Shade window</i><br>"
++	"<b>Mouse selection:</b> <i>Double click</i><br>"
++	"<b>Application startup notification:</b> <i>busy cursor</i><br>"
++	"<b>Keyboard scheme:</b> <i>Bluecurve</i><br>"
++	));
++}
++
+ void KOSPage::slotKDEDescription(){
+ 	kdDebug() << "slotKDEDescription()" << endl;
+ 	textview_ospage->setText("");
+@@ -498,7 +553,7 @@
+ 
+ 	/** resets the radio button selected to kde */
+ void KOSPage::setDefaults(){
+-    rb_kde->setChecked(true);
++    rb_bluecurve->setChecked(true);
+     cb_gestures->setChecked(false);
+ }
+ 

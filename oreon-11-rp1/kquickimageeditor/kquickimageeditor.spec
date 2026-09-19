@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:    kquickimageeditor
-Version: 0.6.0
-Release: 6%{?dist}
+Version: 0.7.0.1
+Release: 1%{?dist}
 Summary: QtQuick components providing basic image editing capabilities
 License: BSD-2-Clause AND CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only
 URL:     https://invent.kde.org/libraries/%{name}

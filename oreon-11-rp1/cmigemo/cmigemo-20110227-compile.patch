@@ -1,0 +1,10 @@
+--- cmigemo-1.3e-rev176_trunk/src/wordbuf.c.compile	2010-04-22 01:16:17.000000000 +0900
++++ cmigemo-1.3e-rev176_trunk/src/wordbuf.c	2010-04-22 03:23:13.000000000 +0900
+@@ -9,6 +9,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <limits.h>
+ #include "wordbuf.h"
+ 
+ #define WORDLEN_DEF 64

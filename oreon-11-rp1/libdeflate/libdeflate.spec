@@ -3,7 +3,7 @@
 %bcond mingw 1
 
 Name:          libdeflate
-Version:       1.25
+Version:       1.26
 Release:       1%{?dist}
 Summary:       Fast implementation of DEFLATE, gzip, and zlib
 

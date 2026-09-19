@@ -1,0 +1,32 @@
+From 8b4274385a030ab4e650e33b3b8aa50f9909f50e Mon Sep 17 00:00:00 2001
+From: Fabrice Bellet <fabrice@bellet.info>
+Date: Sun, 22 Sep 2013 12:52:15 +0200
+Subject: [PATCH] Fix a crash when setting defaults
+
+---
+ src/wizard_funcs.cxx | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/src/wizard_funcs.cxx b/src/wizard_funcs.cxx
+index 52fa801..6d6ca9b 100644
+--- a/src/wizard_funcs.cxx
++++ b/src/wizard_funcs.cxx
+@@ -1284,7 +1284,6 @@ Wizard::~Wizard()
+     aircraft->clear();
+ 
+     delete logwin;
+-    delete win;
+     delete adv;
+ }
+ 
+@@ -2274,7 +2273,6 @@ Wizard::reset_settings()
+     prefs.set( "time_of_day_value", "noon" );
+ 
+     aircraft->value( 0 );
+-    preview->make_current();
+     preview->clear();
+     preview->redraw();
+ 
+-- 
+2.5.0
+

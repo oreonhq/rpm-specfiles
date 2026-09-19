@@ -4,8 +4,8 @@
 %global selinux_ver 3.9
 
 Name:           setools
-Version:        4.6.0
-Release:        5%{?dist}
+Version:        4.7.1
+Release:        1%{?dist}
 Summary:        Policy analysis tools for SELinux
 
 License:        GPL-2.0-only AND LGPL-2.1-only

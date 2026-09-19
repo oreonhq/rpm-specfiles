@@ -21,7 +21,7 @@
 %global modname numpy
 
 Name:           numpy
-Version:        2.4.6
+Version:        2.5.3
 Release:        1%{?dist}
 Epoch:          1
 Summary:        A fast multidimensional array facility for Python
@@ -35,7 +35,7 @@ Summary:        A fast multidimensional array facility for Python
 License:        BSD-3-Clause AND MIT AND Apache-2.0 AND (Zlib OR BSL-1.0)
 URL:            http://www.numpy.org/
 Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
-Source1:        https://numpy.org/doc/%(echo 2.4.6 | cut -d. -f1-2)/numpy-html.zip
+Source1:        https://numpy.org/doc/%(echo 2.5.3 | cut -d. -f1-2)/numpy-html.zip
 
 # Fix FTBFS with GCC 16
 # Sent upstream:

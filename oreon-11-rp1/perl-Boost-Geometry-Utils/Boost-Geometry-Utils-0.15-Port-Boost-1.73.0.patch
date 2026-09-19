@@ -1,0 +1,51 @@
+From da6ac96bdb585c4f50651a215b2d7291cba8d1cf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 27 Jul 2020 11:03:27 +0200
+Subject: [PATCH] Port Boost 1.73.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fix a missing BOOST_AUTO definition:
+
+g++ -I/usr/lib64/perl5/CORE -DVERSION="0.15" -DXS_VERSION="0.15" -fPIC -xc++ -DHAS_BOOL -Isrc -Ibuildtmp -c -D_REENTRANT -D_GNU_SOURCE -O2
+-fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib
+/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -m64 -mtune=generic -fasynchronous-u
+nwind-tables -fstack-clash-protection -fcf-protection -fwrapv -fno-strict-aliasing -I/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_
+BITS=64 -g -o buildtmp/Utils.o buildtmp/Utils.c
+In file included from src/myinit.h:56,
+                 from src/line2av.h:4,
+                 from src/myinit.h:54,
+                 from src/point2av.h:4,
+                 from src/myinit.h:53,
+                 from src/mline2av.h:4,
+                 from src/myinit.h:52,
+                 from src/poly2av.h:5,
+                 from src/myinit.h:51,
+                 from buildtmp/Utils.c:183:
+src/voronoi2perl.h: In function ‘void builder_segments_from_ring(const RingLike&, VBT&)’:
+src/voronoi2perl.h:310:14: error: ‘it’ was not declared in this scope; did you mean ‘io’?
+  310 |   BOOST_AUTO(it, boost::begin(my_ring));
+      |              ^~
+      |              io
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/voronoi2perl.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/voronoi2perl.h b/src/voronoi2perl.h
+index 88fb225..9f1bfe1 100644
+--- a/src/voronoi2perl.h
++++ b/src/voronoi2perl.h
+@@ -4,6 +4,7 @@
+ #include <cstdio>
+ #include <map>
+ #include <cmath>
++#include <boost/typeof/typeof.hpp>
+ 
+ using namespace boost::polygon;
+ 
+-- 
+2.25.4
+

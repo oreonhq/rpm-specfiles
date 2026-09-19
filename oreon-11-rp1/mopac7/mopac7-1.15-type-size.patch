@@ -1,0 +1,53 @@
+diff --git a/fortran/libmopac7.c b/fortran/libmopac7.c
+index bc93829..10dfc3f 100644
+--- a/fortran/libmopac7.c
++++ b/fortran/libmopac7.c
+@@ -3,6 +3,13 @@
+ 
+ #include "mopac7f2c.h"
+ 
++/* these come from SIZES */
++#define MAXHEV (60)
++#define MAXLIT (60)
++#define MAXORB (4*MAXHEV+MAXLIT)
++#define MPACK ((MAXORB*(MAXORB+1))/2)
++#define NPULAY (MPACK)
++
+ /* these come from MOPAC7/compfg.c */
+ 
+ struct {
+@@ -67,6 +74,9 @@ union {
+ 	doublereal potpt[150000]	/* was [3][50000] */, es[50000],
+ 		esp[50000], work1d[100000];
+     } _3;
++    struct {
++     doublereal array[21 * NPULAY];
++    } _4;
+ } work1_;
+ 
+ #define work1_1 (work1_._1)
+diff --git a/fortran/mopac7f2c.h b/fortran/mopac7f2c.h
+index 246ab3a..9360f89 100644
+--- a/fortran/mopac7f2c.h
++++ b/fortran/mopac7f2c.h
+@@ -7,15 +7,17 @@
+ #ifndef F2C_INCLUDE
+ #define F2C_INCLUDE
+ 
+-typedef long int integer;
+-typedef unsigned long int uinteger;
++#include <stdint.h>
++
++typedef int32_t integer;
++typedef uint32_t uinteger;
+ typedef char *address;
+ typedef short int shortint;
+ typedef float real;
+ typedef double doublereal;
+ typedef struct { real r, i; } complex;
+ typedef struct { doublereal r, i; } doublecomplex;
+-typedef long int logical;
++typedef int32_t logical;
+ typedef short int shortlogical;
+ typedef char logical1;
+ typedef char integer1;

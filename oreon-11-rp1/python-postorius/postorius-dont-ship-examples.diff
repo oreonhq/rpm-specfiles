@@ -1,0 +1,10 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -52,7 +52,6 @@ path = "src/postorius/__init__.py"
+ 
+ [tool.pdm.build]
+ includes = [
+-    "example_project/",
+     "src/",
+ ]
+ source-includes = [

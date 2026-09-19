@@ -1,0 +1,90 @@
+.TH JSONNNET "1" "June 2021" "" "User Commands"
+.SH NAME
+jsonnetfmt \- jsonnet reformatter
+.SH SYNOPSIS
+.B jsonnetfmt
+.RI [ option \ ...]
+.RI [ filename ]
+.SH OPTIONS
+In all cases:
+.RS +3n
+.IP \(bu 2
+.I filename
+can be
+.B \-
+(stdin)
+.IP \(bu 2
+Multichar options are expanded e.g. \fB\-abc\fR becomes
+.BR \-a\ \-b\ \-c .
+.IP \(bu 2
+The
+.B \--
+option suppresses option processing for subsequent arguments.
+.IP \(bu 2
+Note that since filenames and jsonnet programs can begin with
+.BR - ,
+it is advised to use
+.B \-\-
+if the argument is unknown, e.g. \fBjsonnet\ \-\-\ "$\fIFILENAME\fB"\fR.
+.RE
+.SS "AVAILABLE OPTIONS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+Print a usage message
+.TP
+.B \-e\fR,\ \fB\-\-exec
+Treat
+.I filename
+as code
+.TP
+.B \-o\fR,\ \fB\-\-output\-file \fIfile
+Write to the output file rather than stdout
+.TP
+.B \-i\fR,\ \fB\-\-in\-place
+Update the Jsonnet file(s) in place
+.TP
+.B \-\-test
+Exit with failure if reformatting changed the file(s)
+.TP
+.B \-n\fR,\ \-\-indent\ \fIn
+Number of spaces to indent by (default
+.BR 2 ,
+.B 0
+means no change)
+.TP
+.B \-\-string\-style\ \fR[\fBd\fR|\fBs\fR|\fBl\fR]
+Enforce
+.IR d ouble,
+.IR s ingle
+(default) quotes or
+.RI \(oq l eave\(cq
+.TP
+.B \-\-comment\-style\ \fR[\fBh\fR|\fBs\fR|\fBl\fR]
+.BI #\ ( h )\fR,
+.BI //\ ( s )
+(default), or \(oq\fIl\fReave\(cq
+.TP
+.BR \-\- [ no\- ] pretty\-field\-names
+Use syntax sugar for fields and indexing (on by default)
+.TP
+.BR \-\- [ no\- ] pad\-arrays
+.B [\ 1,\ 2,\ 3\ ]
+instead of
+.B [1,\ 2,\ 3]
+.TP
+.BR \-\- [ no\- ] pad\-objects
+.B {\ x:\ 1,\ y:\ 2\ }
+instead of
+.B {x:\ 1,\ y:\ 2}
+(on by default)
+.TP
+.BR \-\- [ no\- ] sort\-imports
+Sorting of imports (on by default)
+.TP
+.B \-\-debug\-desugaring
+Unparse the desugared AST without executing it
+.TP
+.B \-\-version
+Print version
+.SH "SEE\ ALSO"
+.BR jsonnet (1)

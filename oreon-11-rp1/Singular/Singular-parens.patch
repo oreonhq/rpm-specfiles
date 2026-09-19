@@ -1,0 +1,11 @@
+--- Singular-4.4.0p2/omalloc/omAllocDecl.h.orig	2024-05-29 07:06:00.000000000 -0600
++++ Singular-4.4.0p2/omalloc/omAllocDecl.h	2024-06-17 10:54:28.108044459 -0600
+@@ -114,7 +114,7 @@
+ #define omfreeSize(addr,size)   _omDebugFree(addr,(void*)(long)(size),OM_FSIZE|OM_FSLOPPY|_OM_FKEEP,OM_CFL)
+ #else
+ #define omFreeSize(addr,size)   __omFreeSize(addr,size)
+-#define omfreeSize(addr,size)   do {if (addr && size) omFreeSize(addr, size);} while (0)
++#define omfreeSize(addr,size)   do {if ((addr) != NULL && (size) != 0) omFreeSize(addr, size);} while (0)
+ #endif
+ 
+ #if !defined(OM_T_FREE3)

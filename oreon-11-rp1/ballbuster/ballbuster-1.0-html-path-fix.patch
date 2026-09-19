@@ -1,0 +1,183 @@
+diff -up ballbuster-1.0/html/powerups.html~ ballbuster-1.0/html/powerups.html
+--- ballbuster-1.0/html/powerups.html~	2017-01-23 15:43:31.725729405 +0100
++++ ballbuster-1.0/html/powerups.html	2017-01-23 15:43:31.724729399 +0100
+@@ -21,7 +21,7 @@
+ 						Bonus/Penalty</th>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pu100.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pu100.png"><br>
+ 						<b>100 points</b></td>
+ 					<td>A little score booster</td>
+ 					<td align="center" valign="middle">100</td>
+@@ -30,7 +30,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pu250.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pu250.png"><br>
+ 						<b>250 points</b></td>
+ 					<td>Increase your score! Rack those points up baby, yeah!</td>
+ 					<td align="center" valign="middle">250</td>
+@@ -39,7 +39,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pu500.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pu500.png"><br>
+ 						<b>500 points</b></td>
+ 					<td>Woah, that's like breaking 50 blocks!</td>
+ 					<td align="center" valign="middle">500</td>
+@@ -48,7 +48,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pu1000.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pu1000.png"><br>
+ 						<b>1000 points</b></td>
+ 					<td>A whopping 1000 points! Hot mama!</td>
+ 					<td align="center" valign="middle">1000</td>
+@@ -57,7 +57,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pu1up.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pu1up.png"><br>
+ 						<b>1 Up</b></td>
+ 					<td>Grabbing this icon will increase your extra lives by one.</td>
+ 					<td align="center" valign="middle">50</td>
+@@ -66,7 +66,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/publaster.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/publaster.png"><br>
+ 						<b>Super Blaster</b></td>
+ 					<td>Grabbing this icon will give your paddle the ability to shoot balls! Click away 
+ 						on your mouse until all of the blocks are destroyed!</td>
+@@ -78,7 +78,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pufireball.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pufireball.png"><br>
+ 						<b>Fireball</b></td>
+ 					<td>Grabbing this icon will set your balls on fire! Balls that are on fire will 
+ 						effortlessly destroy all blocks in their path, with the exception of steel and 
+@@ -90,7 +90,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pumultiball.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pumultiball.png"><br>
+ 						<b>Multi Ball</b></td>
+ 					<td>Grabbing this icon will give you balls.... four in fact.</td>
+ 					<td align="center" valign="middle">50</td>
+@@ -101,7 +101,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pupaddlebig.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pupaddlebig.png"><br>
+ 						<b>Large Paddle</b></td>
+ 					<td>Grabbing this icon will increase the size of your paddle.</td>
+ 					<td align="center" valign="middle">50</td>
+@@ -113,7 +113,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pupaddleregular.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pupaddleregular.png"><br>
+ 						<b>Regular Paddle</b></td>
+ 					<td>Grabbing this icon will return your paddle to it's original size.</td>
+ 					<td align="center" valign="middle">50</td>
+@@ -122,7 +122,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pupaddlesmall.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pupaddlesmall.png"><br>
+ 						<b>Small Paddle</b></td>
+ 					<td>Grabbing this icon will decrease the size of your paddle.</td>
+ 					<td align="center" valign="middle">50</td>
+@@ -135,7 +135,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pureset.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pureset.png"><br>
+ 						<b>Reset</b></td>
+ 					<td>Grabbing this icon will undo any power ups you've acquired.</td>
+ 					<td align="center" valign="middle">50<br>
+@@ -146,7 +146,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/puslowball.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/puslowball.png"><br>
+ 						<b>Slow Ball</b></td>
+ 					<td>Grabbing this icon will cause your ball to move slowly.</td>
+ 					<td align="center" valign="middle">50</td>
+@@ -158,7 +158,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/puregularspeed.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/puregularspeed.png"><br>
+ 						<b>Speed Limit</b></td>
+ 					<td>Grabbing this icon will return your ball to it's original speed.</td>
+ 					<td align="center" valign="middle">50</td>
+@@ -167,7 +167,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pufastball.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pufastball.png"><br>
+ 						<b>Fast Ball</b></td>
+ 					<td>Grabbing this icon will increase the speed of your ball.</td>
+ 					<td align="center" valign="middle">50</td>
+@@ -180,7 +180,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pusticky.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pusticky.png"><br>
+ 						<b>Magnet</b></td>
+ 					<td>Grabbing this icon will allow balls to stick to your paddle. Click to shoot 
+ 						them off or wait 5 seconds.</td>
+@@ -190,7 +190,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pusupersticky.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pusupersticky.png"><br>
+ 						<b>Super Magnet</b></td>
+ 					<td>
+ 						An upgrade for the magnet! Grabbing this icon will not only allow balls to 
+@@ -203,7 +203,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pucatchblue.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pucatchblue.png"><br>
+ 						<b>Catch-all Blue</b></td>
+ 					<td>Grabbing this powerup will cause you to automatically obtain all blue powerups 
+ 						that drop. However, it only lasts 30 seconds. Blue powerups are usually helpful 
+@@ -214,7 +214,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/pucatchred.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/pucatchred.png"><br>
+ 						<b>Catch-all Red</b></td>
+ 					<td>Grabbing this powerup will cause you to automatically obtain all red powerups 
+ 						that drop. Fortunately, it only lasts 30 seconds. Red powerups are usually the 
+@@ -228,7 +228,7 @@
+ 					<td colspan="4">&nbsp;</td>
+ 				</tr>
+ 				<tr>
+-					<td align="center"><img src="../imgs/purandom.png"><br>
++					<td align="center"><img src="/usr/share/ballbuster/imgs/purandom.png"><br>
+ 						<b>Random</b></td>
+ 					<td>Some other powerup is hidden behind this falling question mark. This powerup 
+ 						counts as both blue and red, if you have either of the two above powerups.<br>

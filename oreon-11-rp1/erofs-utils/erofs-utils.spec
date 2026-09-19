@@ -19,7 +19,7 @@
 %bcond zstd     1
 
 Name:           erofs-utils
-Version:        1.9.1
+Version:        1.9.4
 Release:        1%{?dist}
 
 Summary:        Utilities for working with EROFS

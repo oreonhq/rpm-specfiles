@@ -1,0 +1,50 @@
+From be66bf446c466c9c6fc9d43d620ecc46e7269a8b Mon Sep 17 00:00:00 2001
+From: hannes <hannes@fedoraproject.org>
+Date: Sat, 4 Feb 2023 16:26:57 +0100
+Subject: [PATCH] update
+
+---
+ src/configdialog.ui   | 6 ++++++
+ src/configmanager.cpp | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/src/configdialog.ui b/src/configdialog.ui
+index e1a08c6..61f4435 100644
+--- a/src/configdialog.ui
++++ b/src/configdialog.ui
+@@ -593,6 +593,9 @@
+                     <property name="value">
+                      <number>7</number>
+                     </property>
++		   <property name="readOnly"> 
++		   <bool>true</bool>
++		   </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+@@ -600,6 +603,9 @@
+                     <property name="text">
+                      <string>Automatically check every</string>
+                     </property>
++                    <property name="checkable">
++                     <bool>false</bool>
++	           </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="5">
+diff --git a/src/configmanager.cpp b/src/configmanager.cpp
+index 40bfaae..1d2a885 100644
+--- a/src/configmanager.cpp
++++ b/src/configmanager.cpp
+@@ -504,7 +504,7 @@ ConfigManager::ConfigManager(QObject *parent): QObject (parent),
+     registerOption("Macros/RepositoryURL", &URLmacroRepository, "https://api.github.com/repos/texstudio-org/texstudio-macro/contents/", nullptr);
+ 
+ 	//updates
+-	registerOption("Update/AutoCheck", &autoUpdateCheck, true, &pseudoDialog->checkBoxAutoUpdateCheck);
++	registerOption("Update/AutoCheck", &autoUpdateCheck, false, &pseudoDialog->checkBoxAutoUpdateCheck);
+ 	registerOption("Update/UpdateLevel", &updateLevel, 0, &pseudoDialog->comboBoxUpdateLevel);
+ 	registerOption("Update/AutoCheckInvervalDays", &autoUpdateCheckIntervalDays, 7, &pseudoDialog->spinBoxAutoUpdateCheckIntervalDays);
+ 	registerOption("Update/LastCheck", &lastUpdateCheck, QDateTime());
+-- 
+2.39.1
+

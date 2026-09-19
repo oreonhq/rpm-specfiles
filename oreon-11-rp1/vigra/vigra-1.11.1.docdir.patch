@@ -1,0 +1,8 @@
+--- vigra-1.11.1/config/vigra-config.in	2017-12-16 14:34:37.544633998 -0600
++++ vigra-1.11.1/config/vigra-config.in	2017-12-16 14:38:16.297616754 -0600
+@@ -93,4 +93,4 @@ if op.include_path: # was: --include_pat
+     print('@CMAKE_INSTALL_PREFIX@/include')
+ 
+ if op.docdir:
+-    print('@DOCDIR@')
++    print('@CMAKE_INSTALL_PREFIX@/@DOCINSTALL@')

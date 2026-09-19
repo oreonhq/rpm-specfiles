@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>GFS Decker</target>
+    <match>
+      <family>GFS Decker</family>
+      <change>
+        <style>Normal</style>
+        <into>Regular</into>
+      </change>
+    </match>
+    <like>
+      <family>sans</family>
+    </like>
+  </group>
+</fontconfig>
+

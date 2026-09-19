@@ -1,0 +1,31 @@
+From 1a9d0cefe859555ef8f275a346515ca879fb0d57 Mon Sep 17 00:00:00 2001
+From: Nicolas Chauvet <kwizart@gmail.com>
+Date: Fri, 16 May 2025 09:31:15 +0200
+Subject: [PATCH] ctlrender: Add missing  Half/Iex libraries at link time
+
+ctlrender uses symbol from theses libraries
+
+/usr/bin/ld: CMakeFiles/ctlrender.dir/aces_file.cc.o: undefined reference to symbol '_ZN4half5_eLutE'
+/usr/bin/ld: /usr/lib64/libHalf-2_5.so.25: error adding symbols: DSO missing from command line
+
+/usr/bin/ld: CMakeFiles/ctlrender.dir/main.cc.o: undefined reference to symbol '_Z13iex_debugTrapv'
+/usr/bin/ld: /usr/lib64/libIex-2_5.so.25: error adding symbols: DSO missing from command line
+---
+ ctlrender/CMakeLists.txt       | 2 ++
+ unittest/IlmCtl/CMakeLists.txt | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/ctlrender/CMakeLists.txt b/ctlrender/CMakeLists.txt
+index e6917d84104b..ecd2a3073a51 100644
+--- a/ctlrender/CMakeLists.txt
++++ b/ctlrender/CMakeLists.txt
+@@ -16,6 +16,8 @@ target_include_directories(ctlrender
+ )
+ target_link_libraries(ctlrender
+ 	PRIVATE
++		Half
++		Iex
+ 		IlmCtlSimd
+ 		IlmCtlMath
+ 		IlmCtl
+

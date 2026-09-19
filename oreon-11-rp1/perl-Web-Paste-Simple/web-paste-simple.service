@@ -1,0 +1,14 @@
+[Unit]
+Description=Simple PSGI-based pastebin-like web site
+Documentation=man:Web::Paste::Simple(3)
+After=network.target
+
+[Service]
+PrivateDevices=yes
+User=webpastesimple
+Group=webpastesimple
+Type=simple
+ExecStart=/usr/bin/web-paste-simple.psgi
+
+[Install]
+WantedBy=multi-user.target

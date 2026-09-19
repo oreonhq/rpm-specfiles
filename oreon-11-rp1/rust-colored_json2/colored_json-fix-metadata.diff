@@ -1,0 +1,12 @@
+--- colored_json-2.1.0/Cargo.toml	1970-01-01T00:00:00+00:00
++++ colored_json-2.1.0/Cargo.toml	2026-02-21T10:32:46.202840+00:00
+@@ -27,9 +27,6 @@
+ [dependencies.ansi_term]
+ version = "0.12"
+ 
+-[dependencies.atty]
+-version = "0.2"
+-
+ [dependencies.serde]
+ version = "1"
+ 

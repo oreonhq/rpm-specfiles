@@ -1,0 +1,128 @@
+From 7ded5073e8bff541ed0ee09b0c3a66fd495a2d58 Mon Sep 17 00:00:00 2001
+From: Lumir Balhar <lbalhar@redhat.com>
+Date: Thu, 31 Oct 2024 10:05:52 +0100
+Subject: [PATCH] drop dependencies and fix dynamic version
+
+---
+ pyproject.toml   | 32 ++------------------------------
+ util/metadata.py | 16 ----------------
+ 2 files changed, 2 insertions(+), 46 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 66f018e..a45637b 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -9,6 +9,8 @@
+ 
+ # Name of the Python distribution to build.
+ name = "python-daemon"
++version = "VERSION_PLACEHOLDER"
++description = "Library to implement a well-behaved Unix daemon process."
+ 
+ # Keywords to categorise this project.
+ keywords = ["daemon", "fork", "unix"]
+@@ -30,10 +32,6 @@ requires-python = ">= 3.7"
+ # Core dependencies required for the package to operate.
+ dependencies = [
+ 
+-    # Framework for working with Python packages.
+-    # Documentation: <URL:https://setuptools.pypa.io/>.
+-    "setuptools >= 62.4.0",
+-
+     # Platform-independent file locking module.
+     # Documentation: <URL:http://docs.openstack.org/developer/pylockfile>.
+     "lockfile >= 0.10",
+@@ -48,13 +46,6 @@ authors = [
+     { name = "Ben Finney", email = "ben+python@benfinney.id.au" },
+     ]
+ 
+-# Names of fields that must be dynamically computed by the build system.
+-dynamic = [
+-    "description",
+-    "readme",
+-    "version",
+-    "maintainers",
+-    ]
+ 
+ [project.optional-dependencies]
+ 
+@@ -106,16 +97,9 @@ build = [
+     # Documentation: <URL:https://docutils.sourceforge.io/docs/>.
+     "docutils",
+ 
+-    # Parser library for project Change Log documents.
+-    # Documentation: <URL:https://packaging.pypa.io/>.
+-    "changelog-chug",
+-
+     ]
+ 
+ test = [
+-
+-    "python-daemon[static-analysis,build]",
+-
+     # Extensions to the Python ‘unittest’ framework.
+     # Documentation: <URL:https://testtools.readthedocs.org/>.
+     "testtools",
+@@ -124,10 +108,6 @@ test = [
+     # Documentation: <URL:https://pypi.org/project/testscenarios/>.
+     "testscenarios >= 0.4",
+ 
+-    # Code coverage measurement.
+-    # Documentation: <URL:https://coverage.readthedocs.io/>.
+-    "coverage",
+-
+     ]
+ 
+ dist = [
+@@ -166,14 +146,6 @@ requires = [
+     # Documentation: <URL:https://setuptools.pypa.io/>.
+     "setuptools >= 62.4.0",
+ 
+-    # Python Documentation Utilities.
+-    # Documentation: <URL:https://docutils.sourceforge.io/docs/>.
+-    "docutils",
+-
+-    # Parser library for project Change Log documents.
+-    # Documentation: <URL:https://packaging.pypa.io/>.
+-    "changelog-chug",
+-
+     ]
+ 
+ # Path to the Python object to perform the build.
+diff --git a/util/metadata.py b/util/metadata.py
+index 6da93c0..38a7df7 100644
+--- a/util/metadata.py
++++ b/util/metadata.py
+@@ -16,8 +16,6 @@ import inspect
+ import pydoc
+ import re
+ 
+-import chug.parsers.rest
+-
+ 
+ rfc822_person_regex = re.compile(
+         r"^(?P<name>[^<]+) <(?P<email>[^>]+)>$")
+@@ -110,20 +108,6 @@ def synopsis_and_description_from_docstring(docstring):
+     (synopsis, long_description) = pydoc.splitdoc(docstring)
+     return (synopsis, long_description)
+ 
+-
+-def get_latest_changelog_entry(infile_path):
+-    """ Get the latest entry data from the changelog at `infile_path`.
+-
+-        :param infile_path: The filesystem path (text) from which to read the
+-            change log document.
+-        :return: The most recent change log entry, as a `chug.ChangeLogEntry`.
+-        """
+-    document_text = chug.parsers.get_changelog_document_text(infile_path)
+-    document = chug.parsers.rest.parse_rest_document_from_text(document_text)
+-    entries = chug.parsers.rest.make_change_log_entries_from_document(
+-        document)
+-    latest_entry = entries[0]
+-    return latest_entry
+ 
+ 
+ # Copyright © 2008–2024 Ben Finney <ben+python@benfinney.id.au>
+-- 
+2.47.0
+

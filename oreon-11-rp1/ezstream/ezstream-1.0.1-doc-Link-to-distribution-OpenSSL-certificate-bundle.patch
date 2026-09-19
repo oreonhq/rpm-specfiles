@@ -1,0 +1,29 @@
+From 9a195628f12f65cc949bc6b1801895c48a58893a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 24 Feb 2020 11:27:53 +0100
+Subject: [PATCH] doc: Link to distribution OpenSSL certificate bundle
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ examples/ezstream-full.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/examples/ezstream-full.xml b/examples/ezstream-full.xml
+index 0987124..6042b91 100644
+--- a/examples/ezstream-full.xml
++++ b/examples/ezstream-full.xml
+@@ -67,7 +67,7 @@
+         One of the <ca_dir /> or <ca_file /> settings must be enabled for
+         certificate verification to succeed.
+         -->
+-      <!-- <ca_file>/etc/ssl/certs/ca-certificates.crt</ca_file> -->
++      <!-- <ca_file>/etc/ssl/certs/ca-bundle.crt</ca_file> -->
+ 
+       <!--
+         X.503 client certificate, in PEM format, containing both certificate
+-- 
+2.21.1
+

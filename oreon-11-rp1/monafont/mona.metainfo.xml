@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>monafont</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Mona</name>
+  <summary>Japanese font for text arts</summary>
+  <description>
+    <p>
+      Mona Font is a Japanese proportional font which allows you to view \
+      Japanese text arts correctly.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://monafont.sourceforge.net/</url>
+</component>
+

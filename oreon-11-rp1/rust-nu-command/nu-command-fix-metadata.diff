@@ -1,0 +1,147 @@
+--- nu-command-0.99.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ nu-command-0.99.1/Cargo.toml	2026-03-27T00:34:28.534005+00:00
+@@ -32,7 +32,7 @@
+ version = "0.1.2"
+ 
+ [dependencies.brotli]
+-version = "5.0"
++version = ">=7.0, <9.0"
+ 
+ [dependencies.byteorder]
+ version = "1.5"
+@@ -60,7 +60,7 @@
+ version = "0.2.3"
+ 
+ [dependencies.chrono-tz]
+-version = "0.8"
++version = ">= 0.8, < 0.11"
+ 
+ [dependencies.crossterm]
+ version = "0.28.1"
+@@ -88,7 +88,7 @@
+ version = "0.8"
+ 
+ [dependencies.fancy-regex]
+-version = "0.13"
++version = "0.16"
+ 
+ [dependencies.filesize]
+ version = "0.2"
+@@ -103,7 +103,7 @@
+ version = "2.6"
+ 
+ [dependencies.indicatif]
+-version = "0.17"
++version = ">=0.17, <0.19"
+ 
+ [dependencies.itertools]
+ version = "0.13"
+@@ -112,7 +112,7 @@
+ version = "0.4"
+ 
+ [dependencies.lscolors]
+-version = "0.17"
++version = ">=0.17,<0.22"
+ features = ["nu-ansi-term"]
+ default-features = false
+ 
+@@ -207,7 +207,7 @@
+ version = "0.6"
+ 
+ [dependencies.quick-xml]
+-version = "0.32.0"
++version = ">= 0.33.0, < 0.38.0"
+ 
+ [dependencies.rand]
+ version = "0.8"
+@@ -222,12 +222,11 @@
+ version = "0.8"
+ 
+ [dependencies.roxmltree]
+-version = "0.19"
++version = ">= 0.19, < 0.21"
+ 
+ [dependencies.rusqlite]
+ version = "0.31"
+ features = [
+-    "bundled",
+     "backup",
+     "chrono",
+ ]
+@@ -262,7 +261,7 @@
+ version = "0.3"
+ 
+ [dependencies.titlecase]
+-version = "2.0"
++version = "3.0"
+ 
+ [dependencies.toml]
+ version = "0.8"
+@@ -288,22 +287,22 @@
+ version = "2.2"
+ 
+ [dependencies.uu_cp]
+-version = "0.0.27"
++version = ">=0.0.27,<0.8"
+ 
+ [dependencies.uu_mkdir]
+-version = "0.0.27"
++version = ">=0.0.27,<0.8"
+ 
+ [dependencies.uu_mktemp]
+-version = "0.0.27"
++version = ">=0.0.27,<0.8"
+ 
+ [dependencies.uu_mv]
+-version = "0.0.27"
++version = ">=0.0.27,<0.8"
+ 
+ [dependencies.uu_uname]
+-version = "0.0.27"
++version = ">=0.0.27,<0.8"
+ 
+ [dependencies.uu_whoami]
+-version = "0.0.27"
++version = ">=0.0.27,<0.8"
+ 
+ [dependencies.uuid]
+ version = "1.10.0"
+@@ -316,10 +315,10 @@
+ version = "0.6"
+ 
+ [dependencies.which]
+-version = "6.0.0"
++version = ">= 6.0.0, < 9.0.0"
+ 
+ [dev-dependencies.dirs]
+-version = "5.0"
++version = ">=5.0, <7.0"
+ 
+ [dev-dependencies.mockito]
+ version = "1.5"
+@@ -344,7 +343,7 @@
+ version = "0.3.1"
+ 
+ [dev-dependencies.rstest]
+-version = "0.18"
++version = "0.26.0"
+ default-features = false
+ 
+ [dev-dependencies.tempfile]
+@@ -356,14 +355,14 @@
+ trash-support = ["trash"]
+ 
+ [target."cfg(any(target_os = \"linux\", target_os = \"android\"))".dependencies.procfs]
+-version = "0.16.0"
++version = ">= 0.16.0, < 0.19.0"
+ 
+ [target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies.trash]
+ version = "3.3"
+ optional = true
+ 
+ [target."cfg(not(windows))".dependencies.uucore]
+-version = "0.0.27"
++version = ">=0.0.27,<0.8"
+ features = ["mode"]
+ 
+ [target."cfg(unix)".dependencies.nix]

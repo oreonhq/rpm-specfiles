@@ -1,0 +1,13 @@
+diff -Naur c4log-b8b86f33fc7539661e302171ee6dcc4a17859e67-original/CMakeLists.txt c4log-b8b86f33fc7539661e302171ee6dcc4a17859e67/CMakeLists.txt
+--- c4log-b8b86f33fc7539661e302171ee6dcc4a17859e67-original/CMakeLists.txt	2020-11-04 19:04:25.000000000 -0500
++++ c4log-b8b86f33fc7539661e302171ee6dcc4a17859e67/CMakeLists.txt	2022-01-13 12:51:43.990557096 -0500
+@@ -6,9 +6,6 @@
+ c4_project(VERSION 0.0.1
+     AUTHOR "Joao Paulo Magalhaes <dev@jpmag.me>")
+ 
+-c4_require_subproject(c4core
+-    SUBDIRECTORY ${C4LOG_EXT_DIR}/c4core)
+-
+ c4_add_library(c4log
+     SOURCE_ROOT ${C4LOG_SRC_DIR}
+     SOURCES

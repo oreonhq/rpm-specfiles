@@ -1,0 +1,50 @@
+.TH QDARKSTYLE.EXAMPLE "1" "June 2024" "" "User Commands"
+.SH NAME
+.B qdarkstyle.example
+\(en Example of qdarkstyle use for Python and Qt applications
+.SH SYNOPSIS
+.B python3\ \-m\ qdarkstyle.example
+.RB [ \-h ]
+.RB [ \-\-palette\  { dark , light , none }]
+.RB [ \-\-qt_from\  { pyqt6 , pyqt5 , pyqt , pyside6 , pyside2 , pyside , qtpy , pyqtgraph , qt.py }]
+.RB [ \-\-test ]
+.RB [ \-\-screenshots ]
+.RB [ \-\-offscreen ]
+.RB [ \-\-reset ]
+.SH DESCRIPTION
+This module implements a main window
+with every item that could be created with Qt Design (common ones)
+in the basic states (enabled/disabled),
+and (checked/unchecked) for those that have this attribute.
+.SH OPTIONS
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit.
+.TP
+.B \-\-palette\ \fR{\fBdark\fR,\fBlight\fR,\fBnone\fR}
+Palette to display.
+Using
+.B none
+there is no style sheet applied, OS-like.
+.TP
+.B \-\-qt_from\ \fR{\fBpyqt6\fR,\fBpyqt5\fR,\fBpyqt\fR,\fBpyside6\fR,\fBpyside2\fR,\fBpyside\fR,\fBqtpy\fR,\fBpyqtgraph\fR,\fBqt.py\fR}
+Choose which binding and/or abstraction
+is to be used to run the example.
+Default is
+.BR qtpy .
+.TP
+.B \-\-test
+Auto close window after 2s.
+.TP
+.B \-\-screenshots
+Generate screenshots in images folder.
+.TP
+.B \-\-offscreen
+Do not try to show the screen (running on server).
+.TP
+.B \-\-reset
+Reset GUI settings (position, size), then open.
+.SH "SEE\ ALSO"
+.BR qdarkstyle (1)
+.P
+.BR qdarkstyle.utils (1)

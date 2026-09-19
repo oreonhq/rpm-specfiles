@@ -1,0 +1,31 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 12 Dec 2025 12:12:33 +0100
+Subject: [PATCH] Go back to a pure python to_checksum_address
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/eth_pydantic_types/address.py b/eth_pydantic_types/address.py
+index eaa46bb..78b5221 100644
+--- a/eth_pydantic_types/address.py
++++ b/eth_pydantic_types/address.py
+@@ -1,7 +1,7 @@
+ from functools import cached_property
+ from typing import TYPE_CHECKING, Annotated, Any, ClassVar
+ 
+-from cchecksum import to_checksum_address
++from eth_utils import to_checksum_address
+ from eth_typing import ChecksumAddress
+ from pydantic_core.core_schema import (
+     ValidationInfo,
+diff --git a/pyproject.toml b/pyproject.toml
+index cfe0a11..7babb17 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -33,7 +33,6 @@ classifiers = [
+ ]
+ requires-python = ">=3.10,<4"
+ dependencies = [
+-    "cchecksum>=0.0.3,<1",
+     "hexbytes>=0.3.1,<2",
+     "eth-utils>=2.3.1,<6",
+     "eth-typing>=3.5.2,<6",

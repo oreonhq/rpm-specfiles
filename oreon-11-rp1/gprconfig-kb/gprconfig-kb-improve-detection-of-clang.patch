@@ -1,0 +1,61 @@
+--- a/db/compilers.xml
++++ b/db/compilers.xml
+@@ -316,10 +316,8 @@
+     <name>C_LLVM</name>
+     <executable>clang</executable>
+     <version>
+-      <external>clang --version</external>
+-
+-      <!--  '...clang version 6.0.0...'  -->
+-      <grep regexp="clang version (\S+)" group="1"></grep>
++      <external>clang -dumpversion</external>
++      <grep regexp="[^\r\n]+"></grep>
+     </version>
+     <languages>C</languages>
+     <target>llvm</target>
+@@ -330,10 +328,8 @@
+     <name>C++_LLVM</name>
+     <executable>clang\+\+</executable>
+     <version>
+-      <external>clang++ --version</external>
+-
+-      <!--  '...clang version 6.0.0...'  -->
+-      <grep regexp="clang version (\S+)" group="1"></grep>
++      <external>clang\+\+ -dumpversion</external>
++      <grep regexp="[^\r\n]+"></grep>
+     </version>
+     <languages>C++</languages>
+     <target>llvm</target>
+@@ -549,8 +545,8 @@
+     <name>CLANG-C</name>
+     <executable prefix="1">((.*-elf-|.*-linux-gnu-|.*-xcoff-.*-|.*mingw32.*)?)clang</executable>
+     <version>
+-      <external>$EXEC -v</external>
+-      <grep regexp=".*(LLVM|clang) version ([0-9.]*)" group="2"></grep>
++      <external>$EXEC -dumpversion</external>
++      <grep regexp="[^\r\n]+"></grep>
+     </version>
+     <languages>C</languages>
+     <target>
+@@ -565,8 +561,8 @@
+     <name>CLANG-C++</name>
+     <executable prefix="1">((.*-elf-|.*-linux-gnu-)?)clang\+\+</executable>
+     <version>
+-      <external>$EXEC -v</external>
+-      <grep regexp=".*(LLVM|clang) version ([0-9.]*)" group="2"></grep>
++      <external>$EXEC -dumpversion</external>
++      <grep regexp="[^\r\n]+"></grep>
+     </version>
+     <languages>C++</languages>
+     <target>
+@@ -580,8 +576,8 @@
+     <name>CLANG-ASM</name>
+     <executable prefix="1">((.*-elf-|.*-linux-gnu-)?)clang</executable>
+     <version>
+-      <external>$EXEC -v</external>
+-      <grep regexp=".*(LLVM|clang) version ([0-9.]*)" group="2"></grep>
++      <external>$EXEC -dumpversion</external>
++      <grep regexp="[^\r\n]+"></grep>
+     </version>
+     <languages>Asm,Asm_Cpp,Asm2</languages>
+     <target>

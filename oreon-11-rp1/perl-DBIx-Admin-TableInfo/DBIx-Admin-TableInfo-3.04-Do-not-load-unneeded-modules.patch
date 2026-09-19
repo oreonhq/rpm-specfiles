@@ -1,0 +1,52 @@
+From f6118f831a066d8aa2146da58a4412476ff6051c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 5 Feb 2021 13:23:40 +0100
+Subject: [PATCH] Do not load unneeded modules
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Those are only loaded in tests to report their version.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/00.versions.t | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/t/00.versions.t b/t/00.versions.t
+index 93e5ef7..bbd978e 100644
+--- a/t/00.versions.t
++++ b/t/00.versions.t
+@@ -9,14 +9,8 @@ use DBIx::Admin::TableInfo; # For the version #.
+ 
+ use Test::More;
+ 
+-use Data::Dumper::Concise;
+-use DBI;
+-use DBIx::Admin::CreateTable;
+-use DBIx::Admin::DSNManager;
+-use Lingua::EN::PluralToSingular;
+ use Moo;
+ use strict;
+-use Text::Table::Manifold;
+ use warnings;
+ 
+ # ----------------------
+@@ -25,14 +19,8 @@ pass('All external modules loaded');
+ 
+ my(@modules) = qw
+ /
+-	Data::Dumper::Concise
+-	DBI
+-	DBIx::Admin::CreateTable
+-	DBIx::Admin::DSNManager
+-	Lingua::EN::PluralToSingular
+ 	Moo
+ 	strict
+-	Text::Table::Manifold
+ 	warnings
+ /;
+ 
+-- 
+2.26.2
+

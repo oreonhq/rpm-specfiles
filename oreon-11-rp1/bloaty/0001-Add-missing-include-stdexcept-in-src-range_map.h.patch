@@ -1,0 +1,27 @@
+From 1bb4f178ec145ba9bb0d612a7a455fe97618a259 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 11 Jan 2026 09:37:41 +0000
+Subject: [PATCH] Add missing `#include <stdexcept>` in `src/range_map.h`
+
+This was satisfied indirectly/implicitly via abseil-cpp prior to version
+20260107; the missing include was fixed upstream in refactoring commit
+5b8d313c8783e669db096e8101a757e98d975f9456c7d968dc42d98a4591036c.
+---
+ src/range_map.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/range_map.h b/src/range_map.h
+index 9faa9e8..9aed8ed 100644
+--- a/src/range_map.h
++++ b/src/range_map.h
+@@ -34,6 +34,7 @@
+ 
+ #include <exception>
+ #include <map>
++#include <stdexcept>
+ #include <vector>
+ 
+ #include "absl/strings/str_cat.h"
+-- 
+2.52.0
+

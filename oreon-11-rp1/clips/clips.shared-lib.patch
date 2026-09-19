@@ -1,0 +1,88 @@
+diff --color -urN clips_core_source_631/core/clips-6.pc clips_core_source_631.shared-lib/core/clips-6.pc
+--- clips_core_source_631/core/clips-6.pc	1970-01-01 01:00:00.000000000 +0100
++++ clips_core_source_631.shared-lib/core/clips-6.pc	2022-06-29 10:44:13.873909429 +0200
+@@ -0,0 +1,29 @@
++#############################################################################
++##   Copyright (C) 2004 by Rick L. Vinyard, Jr.                            ##
++##   rvinyard@cs.nmsu.edu                                                  ##
++##                                                                         ##
++##   This program is free software; you can redistribute it and/or modify  ##
++##   it under the terms of the GNU General Public License as               ##
++##   published by the Free Software Foundation version 2.                  ##
++##                                                                         ##
++##   This program is distributed in the hope that it will be useful,       ##
++##   but WITHOUT ANY WARRANTY; without even the implied warranty of        ##
++##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ##
++##   GNU General Public License for more details.                          ##
++##                                                                         ##
++##   You should have received a copy of the GNU General Public             ##
++##   License along with this library; if not, write to the                 ##
++##   Free Software Foundation, Inc.,                                       ##
++##   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA              ##
++#############################################################################
++prefix=/usr
++exec_prefix=/usr
++libdir=/usr/lib64
++includedir=/usr/include
++
++Name: clips
++Description: CLIPS library for developing expert systems
++Requires: 
++Version: 6.30.0.20090722svn
++Libs: -lm -lncurses -ltermcap -lrt -L${libdir} -lclips
++Cflags: -I${includedir}/clips -DLINUX -DALLOW_ENVIRONMENT_GLOBALS
+diff --color -urN clips_core_source_631/core/makefile clips_core_source_631.shared-lib/core/makefile
+--- clips_core_source_631/core/makefile	2022-06-29 10:59:58.776785373 +0200
++++ clips_core_source_631.shared-lib/core/makefile	2022-06-29 11:10:59.692019285 +0200
+@@ -61,17 +61,17 @@
+ all: release
+ 
+ debug : CC = gcc
+-debug : CFLAGS = -std=c99 -O0 -g
++debug : CFLAGS = -std=c99 -O0 -g -fPIC -DALLOW_ENVIRONMENT_GLOBALS
+ debug : LDLIBS = -lm
+ debug : clips
+ 
+ release : CC = gcc
+-release : CFLAGS = -std=c99 -O3 -fno-strict-aliasing
++release : CFLAGS = -g -std=c99 -O3 -fno-strict-aliasing -fPIC -DALLOW_ENVIRONMENT_GLOBALS
+ release : LDLIBS = -lm
+ release : clips
+ 
+ debug_cpp : CC = g++
+-debug_cpp : CFLAGS = -x c++ -std=c++11 -O0 -g
++debug_cpp : CFLAGS = -x c++ -std=c++11 -O0 -g -DALLOW_ENVIRONMENT_GLOBALS
+ ifeq ($(PLATFORM),Darwin) # macOS
+ debug_cpp : WARNINGS += -Wcast-qual
+ endif
+@@ -79,7 +79,7 @@
+ debug_cpp : clips
+ 
+ release_cpp : CC = g++
+-release_cpp : CFLAGS = -x c++ -std=c++11 -O3 -fno-strict-aliasing
++release_cpp : CFLAGS = -x c++ -g -std=c++11 -O3 -fno-strict-aliasing -DALLOW_ENVIRONMENT_GLOBALS
+ ifeq ($(PLATFORM),Darwin) # macOS
+ release_cpp : WARNINGS += -Wcast-qual
+ endif
+@@ -89,16 +89,16 @@
+ .c.o :
+ 	$(CC) -c -D$(CLIPS_OS) $(CFLAGS) $(WARNINGS) $<
+ 
+-clips : main.o libclips.a
++clips : main.o libclips.so.2
+ 	$(CC) -o clips main.o -L. -lclips $(LDLIBS)
+ 	
+-libclips.a : $(OBJS)
+-	rm -f $@   
+-	ar cq $@ $(OBJS)   
++libclips.so.2 : $(OBJS)
++	$(CC) $(OBJS) -shared -Wl,-soname,libclips.so.2  -o $@
++	ln -s $@ libclips.so
+ 
+ clean : 
+ 	-rm -f main.o $(OBJS)
+-	-rm -f clips libclips.a
++	-rm -f clips libclips.a libclips.so.2 libclips.so
+ 	
+ .PHONY : all clips clean debug release debug_cpp release_cpp
+ 

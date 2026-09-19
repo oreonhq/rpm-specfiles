@@ -1,0 +1,23 @@
+From 1ca163a0014c47ebd491d04758121bc6e340f701 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 10 Feb 2017 13:56:50 +0100
+Subject: [PATCH] Build without Module::Package::RDF
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 01e5b33..4e29aa4 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1 +1 @@
+-use inc::Module::Package 'RDF:standard';
++use inc::Module::Package;
+-- 
+2.7.4
+

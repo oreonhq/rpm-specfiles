@@ -1,0 +1,2051 @@
+From da8df48049aa20240103f6da054d5245faa88c04 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Mon, 23 Oct 2023 11:31:49 +0100
+Subject: [PATCH 08/18] v3.5.0: remove bits using triangle
+
+---
+ contrib/brl/bbas/imesh/algo/CMakeLists.txt    |  11 -
+ .../bbas/imesh/algo/imesh_generate_mesh.cxx   | 282 ------
+ .../brl/bbas/imesh/algo/imesh_generate_mesh.h |  34 -
+ .../brl/bbas/imesh/algo/tests/CMakeLists.txt  |  10 -
+ .../brl/bbas/imesh/algo/tests/test_driver.cxx |  12 -
+ .../imesh/algo/tests/test_generate_mesh.cxx   |  53 --
+ .../bbas/imesh/algo/tests/test_include.cxx    |   1 -
+ contrib/brl/bseg/boxm2/pro/boxm2_processes.h  |   1 -
+ contrib/brl/bseg/boxm2/pro/boxm2_register.cxx |   1 -
+ .../processes/boxm2_texture_mesh_process.cxx  | 842 ------------------
+ contrib/brl/bseg/sdet/CMakeLists.txt          |   1 -
+ contrib/brl/bseg/sdet/sdet_image_mesh.cxx     | 327 -------
+ contrib/brl/bseg/sdet/sdet_image_mesh.h       |  63 --
+ contrib/brl/bseg/sdet/tests/test_include.cxx  |   1 -
+ contrib/gel/gtrl/CMakeLists.txt               |  13 -
+ contrib/gel/gtrl/examples/.NoDartCoverage     |   0
+ contrib/gel/gtrl/examples/CMakeLists.txt      |   2 -
+ contrib/gel/gtrl/examples/triangulate.cxx     |  45 -
+ contrib/gel/gtrl/gtrl_triangulation.cxx       | 110 ---
+ contrib/gel/gtrl/gtrl_triangulation.h         |  31 -
+ contrib/gel/gtrl/tests/test_include.cxx       |   1 -
+ 21 files changed, 1841 deletions(-)
+ delete mode 100644 contrib/brl/bbas/imesh/algo/imesh_generate_mesh.cxx
+ delete mode 100644 contrib/brl/bbas/imesh/algo/imesh_generate_mesh.h
+ delete mode 100644 contrib/brl/bbas/imesh/algo/tests/test_driver.cxx
+ delete mode 100644 contrib/brl/bbas/imesh/algo/tests/test_generate_mesh.cxx
+ delete mode 100644 contrib/brl/bseg/boxm2/pro/processes/boxm2_texture_mesh_process.cxx
+ delete mode 100644 contrib/brl/bseg/sdet/sdet_image_mesh.cxx
+ delete mode 100644 contrib/brl/bseg/sdet/sdet_image_mesh.h
+ delete mode 100644 contrib/gel/gtrl/examples/.NoDartCoverage
+ delete mode 100644 contrib/gel/gtrl/examples/CMakeLists.txt
+ delete mode 100644 contrib/gel/gtrl/examples/triangulate.cxx
+ delete mode 100644 contrib/gel/gtrl/gtrl_triangulation.cxx
+ delete mode 100644 contrib/gel/gtrl/gtrl_triangulation.h
+
+diff --git a/contrib/brl/bbas/imesh/algo/CMakeLists.txt b/contrib/brl/bbas/imesh/algo/CMakeLists.txt
+index cdf5af2819..38efa0d264 100644
+--- a/contrib/brl/bbas/imesh/algo/CMakeLists.txt
++++ b/contrib/brl/bbas/imesh/algo/CMakeLists.txt
+@@ -16,20 +16,9 @@ set(imesh_algo_sources
+    )
+ aux_source_directory(Templates imesh_algo_sources)
+ 
+-if(NETLIB_FOUND)
+-  include_directories( ${NETLIB_INCLUDE_DIR} )
+-  set(imesh_algo_sources ${imesh_algo_sources}
+-      imesh_generate_mesh.cxx     imesh_generate_mesh.h)
+-endif()
+-
+ vxl_add_library(LIBRARY_NAME imesh_algo LIBRARY_SOURCES ${imesh_algo_sources} )
+ 
+-if(NETLIB_FOUND)
+-
+-target_link_libraries( imesh_algo imesh ${VXL_LIB_PREFIX}vpgl bpgl bpgl_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil netlib)
+-else()
+ target_link_libraries( imesh_algo imesh ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil )
+-endif()
+ 
+ 
+ if( BUILD_TESTING )
+diff --git a/contrib/brl/bbas/imesh/algo/imesh_generate_mesh.cxx b/contrib/brl/bbas/imesh/algo/imesh_generate_mesh.cxx
+deleted file mode 100644
+index 423a673bb3..0000000000
+--- a/contrib/brl/bbas/imesh/algo/imesh_generate_mesh.cxx
++++ /dev/null
+@@ -1,282 +0,0 @@
+-// This is brl/bbas/imesh/algo/imesh_generate_mesh.cxx
+-#include <iostream>
+-#include "imesh_generate_mesh.h"
+-//:
+-// \file
+-extern "C" {
+-#include <triangle.h>
+-}
+-#include <cassert>
+-#include "vgl/vgl_point_2d.h"
+-#include "vgl/vgl_line_segment_2d.h"
+-#include "vgl/vgl_box_2d.h"
+-#ifdef _MSC_VER
+-#  include "vcl_msvc_warnings.h"
+-#endif
+-#include "vil/vil_image_view.h"
+-#define GRID_SIZE 1000 // defined by the tolerance for equal vertices
+-
+-// a grid index to find coincident vertices
+-class point_index
+-{
+- public:
+-  point_index(vgl_box_2d<double> const&  bb)
+-  : vi_(0), x_min_(bb.min_x()), y_min_(bb.min_y()),
+-    x_size_(bb.width()), y_size_(bb.height())
+-  {
+-    img_.set_size(GRID_SIZE, GRID_SIZE);
+-    img_.fill(-1);//no vert at location
+-  }
+-
+-  void pt_to_img(vgl_point_2d<double> const& pt, unsigned& i, unsigned& j)
+-  {
+-    double xi = pt.x()-x_min_, yi = pt.y()-y_min_;
+-    i = static_cast<unsigned>((xi*GRID_SIZE)/x_size_);
+-    j = static_cast<unsigned>((yi*GRID_SIZE)/y_size_);
+-    if (i>=GRID_SIZE) i=GRID_SIZE-1;
+-    if (j>=GRID_SIZE) j=GRID_SIZE-1;
+-  }
+-
+-  void insert_point(vgl_point_2d<double> const& pt)
+-  {
+-    unsigned i=0, j=0;
+-    pt_to_img(pt, i, j);
+-    if (img_(i,j)>=0)
+-      return;//point already exists
+-    //insert vertex index
+-    img_(i,j) = vi_++;
+-  }
+-
+-  int vert_index(vgl_point_2d<double> const& pt)
+-  {
+-    unsigned i=0, j=0;
+-    pt_to_img(pt, i, j);
+-    int index = img_(i,j);
+-    assert(index>=0);
+-    return index;
+-  }
+-
+-  unsigned size() const {return vi_;}
+-
+- private:
+-  unsigned vi_;
+-  double x_min_;
+-  double y_min_;
+-  double x_size_;
+-  double y_size_;
+-  vil_image_view<int> img_;
+-};
+-
+-void
+-imesh_generate_mesh_2d(std::vector<vgl_point_2d<double> > const& convex_hull,
+-                       std::vector<vgl_line_segment_2d<double> > const& segs,
+-                       imesh_mesh& mesh)
+-{
+-  // form a grid to store vertex indices in order to detect
+-  // shared vertices
+-  unsigned nch = convex_hull.size();
+-  vgl_box_2d<double> bb;
+-  for (unsigned i = 0; i<nch; ++i)
+-    bb.add(convex_hull[i]);
+-  //insert all points into a grid index
+-  point_index pindx(bb);
+-  for (unsigned i =0; i<nch; ++i)
+-    pindx.insert_point(convex_hull[i]);
+-  unsigned nsegs = segs.size();
+-  for (unsigned i = 0; i<nsegs; ++i) {
+-    pindx.insert_point(segs[i].point1());
+-    pindx.insert_point(segs[i].point2());
+-  }
+-  // pindx now contains a single vertex pointer for each pair
+-  // of coincident line segment endpoints as well as for each
+-  // isolated endpoint
+-  unsigned npts = pindx.size();
+-  //set up the Delunay constrained triangulation input parameters
+-  struct triangulateio in, out, vorout;
+-  in.numberofholes = 0;
+-  in.numberofregions = 0;
+-  in.numberofpointattributes = 0;
+-  in.numberofpoints = npts;
+-  in.pointlist = (REAL *) malloc(in.numberofpoints * 2 * sizeof(REAL));
+-  for (unsigned i = 0; i<nch; ++i) {
+-    unsigned pi = pindx.vert_index(convex_hull[i]);
+-    in.pointlist[2*pi]=convex_hull[i].x();
+-    in.pointlist[2*pi+1]=convex_hull[i].y();
+-  }
+-  // line segments to be inserted into the triangulation
+-  in.numberofsegments = nsegs;
+-  in.segmentlist = (int *) malloc(in.numberofsegments * 2 * sizeof(int));
+-  unsigned m = 0;
+-  for (unsigned i = 0; i<nsegs; ++i) {
+-    unsigned pi1 = pindx.vert_index(segs[i].point1());
+-    unsigned pi2 = pindx.vert_index(segs[i].point2());
+-    in.pointlist[2*pi1]   = segs[i].point1().x();
+-    in.pointlist[2*pi1+1] = segs[i].point1().y();
+-    in.pointlist[2*pi2]   = segs[i].point2().x();
+-    in.pointlist[2*pi2+1] = segs[i].point2().y();
+-    in.segmentlist[m]=pi1;     in.segmentlist[m+1]=pi2;
+-  }
+-  //attributes and markers are not used in this algorithm
+-  in.pointattributelist = nullptr;
+-  in.pointmarkerlist = (int*)malloc(in.numberofpoints * sizeof(int));
+-  for (int i = 0; i<in.numberofpoints; ++i)
+-    in.pointmarkerlist[i]=0;
+-  in.segmentmarkerlist = (int *) malloc(in.numberofsegments * sizeof(int));;
+-  for (int i = 0; i<in.numberofsegments; ++i)
+-    in.segmentmarkerlist[i]=0;
+-
+-  out.pointlist = (REAL *) nullptr;            // Not needed if -N switch used.
+-  // Not needed if -N switch used or number of point attributes is zero:
+-  out.pointattributelist = (REAL *) nullptr;
+-  out.pointmarkerlist = (int *) nullptr; // Not needed if -N or -B switch used.
+-  out.trianglelist = (int *) nullptr;          // Not needed if -E switch used.
+-  out.neighborlist = (int *) nullptr;         // Needed only if -n switch used.
+-  // Needed only if segments are output (-p or -c) and -P not used:
+-  out.segmentlist = (int *) (REAL *) malloc(in.numberofsegments * 2 * sizeof(REAL)); // Suspicious. Why the double cast? and why sizeof(REAL) if it's really int*?
+-  // Needed only if segments are output (-p or -c) and -P and -B not used:
+-  out.segmentmarkerlist = (int *) nullptr;
+-  out.edgelist = (int *) nullptr;             // Needed only if -e switch used.
+-  out.edgemarkerlist = (int *) nullptr;   // Needed if -e used and -B not used.
+-
+-  //A string of switch characters must be provided
+-  // Triangulate the points.  Switches are chosen to read and write a
+-  //   PSLG (p), preserve the convex hull (c), number everything from
+-  //   zero (z), produce an edge list (e), and a triangle neighbor list (n)
+-
+-  triangulate("Qpczen", &in, &out, &vorout);
+-
+-  // construct the imesh data structure
+-  //construct vertices
+-  auto* verts = new imesh_vertex_array<2>();
+-  unsigned k = 0;
+-  for (unsigned i = 0; i<npts; ++i, k+=2)
+-    verts->push_back(imesh_vertex<2>(out.pointlist[k], out.pointlist[k+1]));
+-  std::unique_ptr<imesh_vertex_array_base> v(verts);
+-  mesh.set_vertices(std::move(v));
+-  //construct triangular faces
+-  auto ntri = static_cast<unsigned>(out.numberoftriangles);
+-  auto* faces = new imesh_regular_face_array<3>();
+-  for (unsigned t = 0; t<ntri; ++t)
+-  {
+-    imesh_tri tri(out.trianglelist[t*3],
+-                  out.trianglelist[t*3+1],
+-                  out.trianglelist[t*3+2]);
+-    faces->push_back(tri);
+-  }
+-  //set the faces on the mesh
+-  std::unique_ptr<imesh_face_array_base> f(faces);
+-  mesh.set_faces(std::move(f));
+-}
+-
+-
+-void
+-imesh_generate_mesh_2d_2(std::vector<vgl_point_2d<double> > const& convex_hull,
+-                         std::vector<vgl_line_segment_2d<double> > const& segs,
+-                         std::vector<vgl_point_2d<double> > const & points,
+-                         imesh_mesh& mesh)
+-{
+-  // form a grid to store vertex indices in order to detect
+-  // shared vertices
+-  unsigned nch = convex_hull.size();
+-  vgl_box_2d<double> bb;
+-  for (unsigned i = 0; i<nch; ++i)
+-    bb.add(convex_hull[i]);
+-  //insert all points into a grid index
+-  point_index pindx(bb);
+-  for (unsigned i =0; i<nch; ++i)
+-    pindx.insert_point(convex_hull[i]);
+-  unsigned nsegs = segs.size();
+-  for (unsigned i = 0; i<nsegs; ++i) {
+-    pindx.insert_point(segs[i].point1());
+-    pindx.insert_point(segs[i].point2());
+-  }
+-
+-  for (auto point : points) {
+-      pindx.insert_point(point);
+-  }
+-  // pindx now contains a single vertex pointer for each pair
+-  // of coincident line segment endpoints as well as for each
+-  // isolated endpoint
+-  unsigned npts = pindx.size();
+-  //set up the Delunay constrained triangulation input parameters
+-  struct triangulateio in, out, vorout;
+-  in.numberofholes = 0;
+-  in.numberofregions = 0;
+-  in.numberofpointattributes = 0;
+-  in.numberofpoints = npts;
+-  in.pointlist = (REAL *) malloc(in.numberofpoints * 2 * sizeof(REAL));
+-  for (unsigned i = 0; i<nch; ++i) {
+-    unsigned pi = pindx.vert_index(convex_hull[i]);
+-    in.pointlist[2*pi]=convex_hull[i].x();
+-    in.pointlist[2*pi+1]=convex_hull[i].y();
+-  }
+-  for (auto point : points) {
+-    unsigned pi = pindx.vert_index(point);
+-    in.pointlist[2*pi]=point.x();
+-    in.pointlist[2*pi+1]=point.y();
+-  }
+-
+-  // line segments to be inserted into the triangulation
+-  in.numberofsegments = nsegs;
+-  in.segmentlist = (int *) malloc(in.numberofsegments * 2 * sizeof(int));
+-  unsigned m = 0;
+-  for (unsigned i = 0; i<nsegs; ++i) {
+-    unsigned pi1 = pindx.vert_index(segs[i].point1());
+-    unsigned pi2 = pindx.vert_index(segs[i].point2());
+-    in.pointlist[2*pi1]   = segs[i].point1().x();
+-    in.pointlist[2*pi1+1] = segs[i].point1().y();
+-    in.pointlist[2*pi2]   = segs[i].point2().x();
+-    in.pointlist[2*pi2+1] = segs[i].point2().y();
+-    in.segmentlist[m]=pi1;     in.segmentlist[m+1]=pi2;
+-  }
+-  //attributes and markers are not used in this algorithm
+-  in.pointattributelist = nullptr;
+-  in.pointmarkerlist = (int*)malloc(in.numberofpoints * sizeof(int));
+-  for (int i = 0; i<in.numberofpoints; ++i)
+-    in.pointmarkerlist[i]=0;
+-  in.segmentmarkerlist = (int *) malloc(in.numberofsegments * sizeof(int));;
+-  for (int i = 0; i<in.numberofsegments; ++i)
+-    in.segmentmarkerlist[i]=0;
+-
+-  out.pointlist = (REAL *) nullptr;            // Not needed if -N switch used.
+-  // Not needed if -N switch used or number of point attributes is zero:
+-  out.pointattributelist = (REAL *) nullptr;
+-  out.pointmarkerlist = (int *) nullptr; // Not needed if -N or -B switch used.
+-  out.trianglelist = (int *) nullptr;          // Not needed if -E switch used.
+-  out.neighborlist = (int *) nullptr;         // Needed only if -n switch used.
+-  // Needed only if segments are output (-p or -c) and -P not used:
+-  out.segmentlist = (int *) (REAL *) malloc(in.numberofsegments * 2 * sizeof(REAL)); // Suspicious. Why the double cast? and why sizeof(REAL) if it's really int*?
+-  // Needed only if segments are output (-p or -c) and -P and -B not used:
+-  out.segmentmarkerlist = (int *) nullptr;
+-  out.edgelist = (int *) nullptr;             // Needed only if -e switch used.
+-  out.edgemarkerlist = (int *) nullptr;   // Needed if -e used and -B not used.
+-
+-  //A string of switch characters must be provided
+-  // Triangulate the points.  Switches are chosen to read and write a
+-  //   PSLG (p), preserve the convex hull (c), number everything from
+-  //   zero (z), produce an edge list (e), and a triangle neighbor list (n)
+-
+-  triangulate("Qpczen", &in, &out, &vorout);
+-
+-  // construct the imesh data structure
+-  //construct vertices
+-  auto* verts = new imesh_vertex_array<2>();
+-  unsigned k = 0;
+-  for (unsigned i = 0; i<npts; ++i, k+=2)
+-    verts->push_back(imesh_vertex<2>(out.pointlist[k], out.pointlist[k+1]));
+-  std::unique_ptr<imesh_vertex_array_base> v(verts);
+-  mesh.set_vertices(std::move(v));
+-  //construct triangular faces
+-  auto ntri = static_cast<unsigned>(out.numberoftriangles);
+-  auto* faces = new imesh_regular_face_array<3>();
+-  for (unsigned t = 0; t<ntri; ++t)
+-  {
+-    imesh_tri tri(out.trianglelist[t*3],
+-                  out.trianglelist[t*3+1],
+-                  out.trianglelist[t*3+2]);
+-    faces->push_back(tri);
+-  }
+-  //set the faces on the mesh
+-  std::unique_ptr<imesh_face_array_base> f(faces);
+-  mesh.set_faces(std::move(f));
+-}
+diff --git a/contrib/brl/bbas/imesh/algo/imesh_generate_mesh.h b/contrib/brl/bbas/imesh/algo/imesh_generate_mesh.h
+deleted file mode 100644
+index 9736c69aad..0000000000
+--- a/contrib/brl/bbas/imesh/algo/imesh_generate_mesh.h
++++ /dev/null
+@@ -1,34 +0,0 @@
+-// This is brl/bbas/imesh/algo/imesh_generate_mesh.h
+-#ifndef imesh_generate_mesh_h_
+-#define imesh_generate_mesh_h_
+-//:
+-// \file
+-// \brief mesh generation functions
+-// \author J.L. Mundy
+-// \date March 16, 2011
+-//
+-// \verbatim
+-//  Modifications
+-//   <none yet>
+-// \endverbatim
+-
+-#include <iostream>
+-#include <vector>
+-#include <imesh/imesh_mesh.h>
+-#ifdef _MSC_VER
+-#  include <vcl_msvc_warnings.h>
+-#endif
+-#include <vgl/vgl_fwd.h>
+-
+-//: Fill the convex hull with triangles, constrained by the line segments
+-void
+-imesh_generate_mesh_2d(std::vector<vgl_point_2d<double> > const& convex_hull,
+-                       std::vector< vgl_line_segment_2d<double> > const & segs,
+-                       imesh_mesh& mesh);
+-void
+-imesh_generate_mesh_2d_2(std::vector<vgl_point_2d<double> > const& convex_hull,
+-                       std::vector<vgl_line_segment_2d<double> > const& segs,
+-                       std::vector<vgl_point_2d<double> > const & points,
+-                       imesh_mesh& mesh);
+-
+-#endif // imesh_generate_mesh_h_
+diff --git a/contrib/brl/bbas/imesh/algo/tests/CMakeLists.txt b/contrib/brl/bbas/imesh/algo/tests/CMakeLists.txt
+index fe15f6b4a2..7d58eba683 100644
+--- a/contrib/brl/bbas/imesh/algo/tests/CMakeLists.txt
++++ b/contrib/brl/bbas/imesh/algo/tests/CMakeLists.txt
+@@ -5,13 +5,3 @@ add_executable( imesh_algo_test_template_include test_template_include.cxx )
+ target_link_libraries( imesh_algo_test_template_include imesh_algo)
+ 
+ include( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
+-if(NETLIB_FOUND)
+-add_executable( imesh_algo_test_all
+-  test_driver.cxx
+-  test_generate_mesh.cxx
+-)
+-target_link_libraries( imesh_algo_test_all imesh imesh_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}testlib )
+-if( VXL_RUN_FAILING_TESTS ) ## This test always fails in travis builds, segfault during memory free operation
+-add_test( NAME imesh_test_generate_mesh COMMAND $<TARGET_FILE:imesh_algo_test_all> test_generate_mesh)
+-endif()
+-endif()
+diff --git a/contrib/brl/bbas/imesh/algo/tests/test_driver.cxx b/contrib/brl/bbas/imesh/algo/tests/test_driver.cxx
+deleted file mode 100644
+index d21c4aefc0..0000000000
+--- a/contrib/brl/bbas/imesh/algo/tests/test_driver.cxx
++++ /dev/null
+@@ -1,12 +0,0 @@
+-#include "testlib/testlib_register.h"
+-
+-
+-DECLARE( test_generate_mesh );
+-
+-void
+-register_tests()
+-{
+-  REGISTER( test_generate_mesh );
+-}
+-
+-DEFINE_MAIN;
+diff --git a/contrib/brl/bbas/imesh/algo/tests/test_generate_mesh.cxx b/contrib/brl/bbas/imesh/algo/tests/test_generate_mesh.cxx
+deleted file mode 100644
+index 94f57f46ef..0000000000
+--- a/contrib/brl/bbas/imesh/algo/tests/test_generate_mesh.cxx
++++ /dev/null
+@@ -1,53 +0,0 @@
+-#include <vector>
+-#include <iostream>
+-#include "testlib/testlib_test.h"
+-#include <imesh/algo/imesh_generate_mesh.h>
+-#include "vgl/vgl_point_2d.h"
+-#include "vgl/vgl_line_segment_2d.h"
+-#ifdef _MSC_VER
+-#  include "vcl_msvc_warnings.h"
+-#endif
+-
+-static void test_generate_mesh()
+-{
+-  vgl_point_2d<double> p0(0.0, 0.0);
+-  vgl_point_2d<double> p1(1.0, 0.0);
+-  vgl_point_2d<double> p2(1.0, 10.0);
+-  vgl_point_2d<double> p3(0.0, 10.0);
+-  vgl_point_2d<double> p4(0.25, 5.0);
+-  vgl_point_2d<double> p5(0.75, 5.0);
+-  std::vector<vgl_point_2d<double> > c_hull;
+-  c_hull.push_back(p0);   c_hull.push_back(p1);
+-  c_hull.push_back(p2);   c_hull.push_back(p3);
+-  vgl_line_segment_2d<double> ls(p4, p5);
+-  std::vector<vgl_line_segment_2d<double> > segs;
+-  segs.push_back(ls);
+-  imesh_mesh mesh;
+-  imesh_generate_mesh_2d(c_hull, segs, mesh);
+-  TEST("num_verts, num_faces", mesh.num_verts()*mesh.num_faces(), 36);
+-  const imesh_face_array_base& faces = mesh.faces();
+-  TEST("face verts", faces(0,0)+faces(0,1)+faces(0,2), 7);
+-  vgl_point_2d<double> p6(0.25, 1);
+-  vgl_point_2d<double> p7(0.75, 1);
+-  vgl_line_segment_2d<double> l2(p5, p7);
+-  segs.push_back(l2);
+-  imesh_mesh mesh2;
+-  imesh_generate_mesh_2d(c_hull, segs,mesh2);
+-  unsigned nverts = mesh2.num_verts();
+-  unsigned ntris =  mesh2.num_faces();
+-  TEST("two segs", nverts*ntris, 56);
+-#if 0
+-  const imesh_regular_face_array<3>& tris =
+-    static_cast<const imesh_regular_face_array<3>&>(mesh2.faces());
+-  const imesh_vertex_array<2>& verts = mesh2.vertices<2>();
+-  std::cout << "verts\n";
+-  for (unsigned i = 0; i< nverts; ++i)
+-    std::cout << "v[" << i << "](" << verts[i][0] << ' ' << verts[i][1] << ")\n";
+-  std::cout << "faces\n";
+-  for (unsigned i = 0; i< ntris; ++i)
+-    std::cout << "f[" << i << "](" << tris[i][0]<< ' ' << tris[i][1]
+-             << ' ' << tris[i][2] << ")\n";
+-#endif
+-}
+-
+-TESTMAIN(test_generate_mesh);
+diff --git a/contrib/brl/bbas/imesh/algo/tests/test_include.cxx b/contrib/brl/bbas/imesh/algo/tests/test_include.cxx
+index bc7bcd02e4..bc5f817ebe 100644
+--- a/contrib/brl/bbas/imesh/algo/tests/test_include.cxx
++++ b/contrib/brl/bbas/imesh/algo/tests/test_include.cxx
+@@ -1,5 +1,4 @@
+ #include <imesh/algo/imesh_detect.h>
+-#include <imesh/algo/imesh_generate_mesh.h>
+ #include <imesh/algo/imesh_imls_surface.h>
+ #include <imesh/algo/imesh_intersect.h>
+ #include <imesh/algo/imesh_kd_tree.h>
+diff --git a/contrib/brl/bseg/boxm2/pro/boxm2_processes.h b/contrib/brl/bseg/boxm2/pro/boxm2_processes.h
+index feae6ae9b2..4d68be95b0 100644
+--- a/contrib/brl/bseg/boxm2/pro/boxm2_processes.h
++++ b/contrib/brl/bseg/boxm2/pro/boxm2_processes.h
+@@ -15,7 +15,6 @@ DECLARE_FUNC_CONS(boxm2_write_scene_xml_process);
+ DECLARE_FUNC_CONS(boxm2_add_block_process);
+ DECLARE_FUNC_CONS(boxm2_export_textured_mesh_process);
+ DECLARE_FUNC_CONS(boxm2_export_mesh_process);
+-DECLARE_FUNC_CONS(boxm2_texture_mesh_process);
+ DECLARE_FUNC_CONS(boxm2_describe_scene_process);
+ DECLARE_FUNC_CONS(boxm2_create_stream_cache_process);
+ DECLARE_FUNC_CONS(boxm2_roi_init_process);
+diff --git a/contrib/brl/bseg/boxm2/pro/boxm2_register.cxx b/contrib/brl/bseg/boxm2/pro/boxm2_register.cxx
+index ea5dfbd6e5..a05b9e5c58 100644
+--- a/contrib/brl/bseg/boxm2/pro/boxm2_register.cxx
++++ b/contrib/brl/bseg/boxm2/pro/boxm2_register.cxx
+@@ -35,7 +35,6 @@ void boxm2_register::register_process()
+   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_add_block_process,       "boxm2AddBlockProcess");
+   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_export_textured_mesh_process,"boxm2ExportTexturedMeshProcess");
+   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_export_mesh_process,"boxm2ExportMeshProcess");
+-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_texture_mesh_process,"boxm2TextureMeshProcess");
+   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_describe_scene_process,"boxm2DescribeSceneProcess");
+   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_stream_cache_process, "boxm2CreateStreamCacheProcess");
+   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_roi_init_process, "boxm2RoiInitProcess");
+diff --git a/contrib/brl/bseg/boxm2/pro/processes/boxm2_texture_mesh_process.cxx b/contrib/brl/bseg/boxm2/pro/processes/boxm2_texture_mesh_process.cxx
+deleted file mode 100644
+index 8254869a0d..0000000000
+--- a/contrib/brl/bseg/boxm2/pro/processes/boxm2_texture_mesh_process.cxx
++++ /dev/null
+@@ -1,842 +0,0 @@
+-// This is brl/bseg/boxm2/pro/processes/boxm2_texture_mesh_process.cxx
+-#include <iostream>
+-#include <fstream>
+-#include <bprb/bprb_func_process.h>
+-//:
+-// \file
+-// \brief  A process for exporting a texture mapped mesh of a scene
+-//
+-// \author Vishal Jain
+-// \date Mar 15, 2011
+-
+-#ifdef _MSC_VER
+-#  include "vcl_msvc_warnings.h"
+-#endif
+-#include "vul/vul_file.h"
+-#include "vul/vul_timer.h"
+-#include "vnl/vnl_random.h"
+-#include <boxm2/boxm2_scene.h>
+-#include <boxm2/boxm2_util.h>
+-
+-//vil includes
+-#include "vil/vil_image_view.h"
+-#include "vil/vil_save.h"
+-#include <vil/algo/vil_gauss_filter.h>
+-
+-//vgl
+-#include "vgl/vgl_distance.h"
+-#include "vgl/vgl_triangle_scan_iterator.h"
+-#include <bvgl/bvgl_triangle_interpolation_iterator.h>
+-
+-//vpgl camera stuff
+-#include "vpgl/vpgl_perspective_camera.h"
+-// for loading cameras from directory
+-#include <bpgl/bpgl_camera_utils.h>
+-
+-//det and imesh includes
+-#include <sdet/sdet_image_mesh.h>
+-#include <sdet/sdet_image_mesh_params.h>
+-#include <imesh/imesh_fileio.h>
+-#include <imesh/algo/imesh_render.h>
+-
+-namespace boxm2_texture_mesh_process_globals
+-{
+-  constexpr unsigned n_inputs_ = 4;
+-  constexpr unsigned n_outputs_ = 0;
+-
+-  //struct for passing 3d triangles (couldn't find a 3d triangle in VGL...)
+-  struct triangle_3d {
+-    vgl_point_3d<double> points[3];
+-    unsigned face_id;
+-  };
+-
+-  //aux data structures (norm images, vis images)
+-  std::vector<vil_image_view<int>* > vis_images_;
+-  std::vector<vil_image_view<float>* > normx_, normy_, normz_;
+-
+-  //main helper method - fills out a map of imesh_mesh's, each texture mapped with a separate image
+-  void boxm2_texture_mesh_from_imgs(const std::string& im_dir,
+-                                    const std::string& cam_dir,
+-                                    const std::string& out_dir,
+-                                    imesh_mesh& in_mesh,
+-                                    std::map<std::string, imesh_mesh>& meshes);
+-
+-  //populates a vector of visibility images (by face id int)
+-  void boxm2_visible_faces( std::vector<vpgl_perspective_camera<double>* >& cameras,
+-                            imesh_mesh& in_mesh,  unsigned int ni, unsigned int nj);
+-
+-  //stores a norm image (3d face norm) for each of the texture images
+-  void compute_norm_images( std::vector<vpgl_perspective_camera<double>* >& cameras,
+-                            imesh_mesh& in_mesh,unsigned int ni, unsigned int nj);
+-
+-  //smooths the vector of norm images above
+-  void smooth_norm_images(double sigma);
+-
+-  //checks if a triangle in UV space is visible.  us and vs are double buffers of length 3
+-  bool face_is_visible( vpgl_perspective_camera<double>* cam,
+-                        vil_image_view<int>* vis_img,
+-                        triangle_3d& world_tri);
+-
+-  //matches textures
+-  void boxm2_match_textures(std::vector<vpgl_perspective_camera<double>* >& cameras,
+-                            std::vector<std::string>& imfiles,
+-                            imesh_mesh& in_mesh,
+-                            std::map<std::string, std::vector<unsigned> >& app_faces,
+-                            std::map<std::string, vpgl_perspective_camera<double>* >& texture_cams);
+-
+-  //returns a list of visible triangles given a camera,
+-  //visibility image, and world coordinate 3d triangle
+-  std::vector<triangle_3d> get_visible_triangles(vpgl_perspective_camera<double>* cam,
+-                                                vil_image_view<int>* vis_img,
+-                                                triangle_3d& world_tri);
+-
+-  //given revised lists of visible images, norms, etc, return the index of the best view
+-  int get_best_view(std::vector<vpgl_perspective_camera<double>* >& cams,
+-                    std::vector<vil_image_view<int>* >& vis_images,
+-                    std::vector<vil_image_view<float>* >& normx,
+-                    std::vector<vil_image_view<float>* >& normy,
+-                    std::vector<vil_image_view<float>* >& normz,
+-                    triangle_3d& world_tri );
+-
+-  vgl_vector_3d<double> calc_smooth_norm( vpgl_perspective_camera<double>* cam,
+-                                          vil_image_view<int>* vis_img,
+-                                          vil_image_view<float>* normx,
+-                                          vil_image_view<float>* normy,
+-                                          vil_image_view<float>* normz,
+-                                          triangle_3d& world_tri);
+-}
+-
+-bool boxm2_texture_mesh_process_cons(bprb_func_process& pro)
+-{
+-  using namespace boxm2_texture_mesh_process_globals;
+-
+-  //process takes 2 inputs
+-  int i=0;
+-  std::vector<std::string> input_types_(n_inputs_);
+-  input_types_[i++] = "imesh_mesh_sptr";  //depth image
+-  input_types_[i++] = "vcl_string";       //directory of scene images
+-  input_types_[i++] = "vcl_string";       //directory of corresponding cams
+-  input_types_[i++] = "vcl_string";       //output dir of saved mesh
+-
+-  // process has 1 output
+-  std::vector<std::string>  output_types_(n_outputs_);
+-  //output_types_[0] = "boxm2_scene_sptr";
+-
+-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+-}
+-
+-bool boxm2_texture_mesh_process(bprb_func_process& pro)
+-{
+-  using namespace boxm2_texture_mesh_process_globals;
+-  if ( pro.n_inputs() < n_inputs_ ) {
+-    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
+-    return false;
+-  }
+-  unsigned argIdx = 0;
+-  imesh_mesh_sptr mesh = pro.get_input<imesh_mesh_sptr>(argIdx++);
+-  std::string img_dir = pro.get_input<std::string>(argIdx++);
+-  std::string cam_dir = pro.get_input<std::string>(argIdx++);
+-  std::string out_dir = pro.get_input<std::string>(argIdx++);
+-
+-  //create the mesh directory
+-  if (out_dir != "") {
+-    if (!vul_file::make_directory_path(out_dir.c_str())) {
+-      std::cout<<"Couldn't make directory path "<<out_dir<<std::endl;
+-      return false;
+-    }
+-  }
+-
+-  //////////////////////////////////////////////////////////////////////////////
+-  //Texture map the mesh
+-  //////////////////////////////////////////////////////////////////////////////
+-  vul_timer t;
+-  std::map<std::string, imesh_mesh> meshes;
+-  boxm2_texture_mesh_from_imgs(img_dir, cam_dir, out_dir, *mesh, meshes);
+-
+-  ////////////////////////////////////////////////////////////////////////////////
+-  //// Write out in VRML format
+-  ////////////////////////////////////////////////////////////////////////////////
+-  //output file and stream
+-  std::string vrfile = out_dir + "/vrmesh.wrl";
+-  std::ofstream os(vrfile.c_str());
+-
+-  //write each submesh into one file
+-  std::map<std::string, imesh_mesh>::iterator subMesh;
+-  for (subMesh = meshes.begin(); subMesh != meshes.end(); ++subMesh)
+-  {
+-    imesh_mesh& sMesh = subMesh->second;
+-    std::cout<<"Writing sub mesh: "<<sMesh.tex_source()<<" has "<<sMesh.num_faces()<<" faces"<<std::endl;
+-    imesh_write_vrml(os, sMesh);
+-  }
+-  os.close();
+-  std::cout<<"Texture Mapping Mesh Time: "<<t.all()<<"ms"<<std::endl;
+-
+-  return true;
+-}
+-
+-
+-//: Given a directory of images, dir cams, an input mesh, this function creates a map of textured meshes
+-// (imesh doesn't ostensibly handle meshes from multiple textures)
+-void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(const std::string& im_dir,
+-                                                                      const std::string& cam_dir,
+-                                                                      const std::string& out_dir,
+-                                                                      imesh_mesh& in_mesh,
+-                                                                      std::map<std::string, imesh_mesh>& meshes)
+-{
+-  ////////////////////////////////////////////////////////////////////////////////
+-  // BEGIN TEXTURE MAPPING
+-  // Gather cameras and iamges that will contribute to the texture
+-  ////////////////////////////////////////////////////////////////////////////////
+-  std::vector<std::string> allims = boxm2_util::images_from_directory(im_dir);
+-
+-  //create blank texturemap image
+-  vil_image_view_base_sptr first_im = boxm2_util::prepare_input_image(allims[0]);
+-  auto* imptr = (vil_image_view<vil_rgba<vxl_byte> >*) first_im.ptr();
+-  vil_rgba<vxl_byte> mean = boxm2_util::mean_pixel(*imptr);
+-  vil_image_view<vil_rgba<vxl_byte> > def(4,4);
+-  def.fill( mean );
+-  vil_save(def, (out_dir + "/empty.png").c_str());
+-
+-  //chop paths to make mesh portable
+-  for (auto & allim : allims) {
+-    std::string full_path = allim;
+-    std::string rel_path = vul_file::basename(full_path);
+-    allim = rel_path;
+-  }
+-  std::vector<vpgl_perspective_camera<double>* > allcams = bpgl_camera_utils::cameras_from_directory(cam_dir);
+-  if (allims.size() != allcams.size()) {
+-    std::cout<<"Texture images are not 1 to 1 with cameras:: dirs "<<im_dir<<" and "<<cam_dir<<std::endl;
+-    return;
+-  }
+-
+-  //choose a few random images
+-  std::vector<std::string> imfiles;
+-  std::vector<vpgl_perspective_camera<double>* > cameras;
+-
+-  //unsigned int handpicked[] = {0,1,13,25,33,40,51,64,73,82,96,105,109,114,125,133,140,147,153,164,175};
+-  //int handpicked[] = { 0,1,13,25,33,51,73,96,109,114,133,147,164};
+-  //int handpicked[] = {0,12,18};
+-  //int handpicked[] = {0, 1, 26, 33, 56, 96, 114, 133 };
+-  //int handpicked[] = {0, 8, 16, 23 };
+-  for (unsigned int i=0; i<allims.size(); ++i) {
+-      imfiles.push_back(allims[i]);
+-      cameras.push_back(allcams[i]);
+-      std::cout<<"added image: "<<imfiles[i]<<std::endl;
+-  }
+-#if 0
+-  vnl_random rand(9667566);
+-  for (int i=0; i<5; ++i) {
+-    unsigned filenum = rand.lrand32(1, allims.size()-1);
+-    imfiles.push_back(allims[filenum]);
+-    cameras.push_back(allcams[filenum]);
+-  }
+-#endif
+-
+-  ////////////////////////////////////////////////////////////////////////////////
+-  // make sure mesh has computed vertex normals
+-  ////////////////////////////////////////////////////////////////////////////////
+-  in_mesh.compute_face_normals();
+-
+-  ////////////////////////////////////////////////////////////////////////////////
+-  // Render Visibility Images
+-  ////////////////////////////////////////////////////////////////////////////////
+-  std::cout<<"calculating visibility images (for each textured image)"<<std::endl;
+-  boxm2_visible_faces(cameras, in_mesh,first_im->ni(),first_im->nj());
+-
+-  ////////////////////////////////////////////////////////////////////////////////
+-  // Render norm images (and then smooth them)
+-  ////////////////////////////////////////////////////////////////////////////////
+-  std::cout<<"calculating norm images (for each texture image)"<<std::endl;
+-  compute_norm_images(cameras, in_mesh,first_im->ni(),first_im->nj());
+-  smooth_norm_images(30.0);
+-
+-  ////////////////////////////////////////////////////////////////////////////////
+-  // match each face to best image, store a list for each texture image
+-  ////////////////////////////////////////////////////////////////////////////////
+-  std::cout<<"Populating faces for each texture"<<std::endl;
+-  std::map<std::string, std::vector<unsigned> > app_faces; //image_name to face_list
+-  std::map<std::string, vpgl_perspective_camera<double>* > texture_cams;
+-  boxm2_match_textures(cameras, imfiles, in_mesh, app_faces, texture_cams);
+-
+-  ////////////////////////////////////////////////////////////////////////////////
+-  // For each image/appearance:
+-  //   - create a vert list
+-  //   - create a face list
+-  //   - create a sub mesh that is textured
+-  ////////////////////////////////////////////////////////////////////////////////
+-  auto& in_faces = (imesh_face_array&) in_mesh.faces();
+-  imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
+-  //for each appearance (texture image), create an imesh_mesh (subMesh);
+-  std::cout<<"Creating Sub Meshes for each texture"<<std::endl;
+-  std::map<std::string, std::vector<unsigned> >::iterator apps;
+-  for (apps = app_faces.begin(); apps != app_faces.end(); ++apps)
+-  {
+-    //for each appearance, we're creating a whole new mesh
+-    // first create the face list
+-    auto* flist = new imesh_face_array();
+-
+-    //now create the vertex list
+-    auto* verts3 = new imesh_vertex_array<3>();
+-
+-    //get faces list corresponding to this texture
+-    std::vector<unsigned>& face_list = apps->second;
+-    for (unsigned int i=0; i<face_list.size(); ++i) {
+-      //get old face
+-      unsigned old_fIdx = face_list[i];
+-
+-      //old face vertices
+-      unsigned v1 = in_faces[old_fIdx][0];
+-      unsigned v2 = in_faces[old_fIdx][1];
+-      unsigned v3 = in_faces[old_fIdx][2];
+-
+-      //push these vertices onto the new vert list
+-      verts3->push_back( imesh_vertex<3>(in_verts[v1][0], in_verts[v1][1], in_verts[v1][2]) );
+-      verts3->push_back( imesh_vertex<3>(in_verts[v2][0], in_verts[v2][1], in_verts[v2][2]) );
+-      verts3->push_back( imesh_vertex<3>(in_verts[v3][0], in_verts[v3][1], in_verts[v3][2]) );
+-
+-      imesh_tri tri(3*i, 3*i+1, 3*i+2);
+-      flist->push_back(tri);
+-    }
+-
+-    //create the submesh using the auto ptrs
+-    std::unique_ptr<imesh_vertex_array_base> v3(verts3);
+-    std::unique_ptr<imesh_face_array_base> f3(flist);
+-    imesh_mesh subMesh(std::move(v3), std::move(f3));
+-
+-    std::cout<<"Setting tex source: "<<apps->first<<std::endl;
+-    meshes[apps->first] = subMesh;
+-    meshes[apps->first].set_tex_source(apps->first);
+-  }
+-
+-  //////////////////////////////////////////////////////////////////////////////
+-  //For each mesh, map each vertex
+-  //////////////////////////////////////////////////////////////////////////////
+-  std::cout<<"Mapping sub meshes for each texture"<<std::endl;
+-  std::map<std::string, imesh_mesh>::iterator subMesh;
+-  auto txCam = texture_cams.begin();
+-  for (subMesh = meshes.begin(); subMesh != meshes.end(); ++subMesh, ++txCam)
+-  {
+-    imesh_mesh& mesh = subMesh->second;
+-    imesh_vertex_array<3>& verts = mesh.vertices<3>();
+-    unsigned nverts = mesh.num_verts();
+-
+-    //texture map the non empty appearances
+-    if (txCam->first != "empty.png")
+-    {
+-      std::vector<vgl_point_2d<double> > tex_coords(nverts, vgl_point_2d<double>(0.0,0.0));
+-      for (unsigned iv = 0; iv<nverts; ++iv)
+-      {
+-        //find camera corresponding to this texture
+-        vpgl_perspective_camera<double>* closest = txCam->second;
+-        vgl_point_2d<double> principal_point = closest->get_calibration().principal_point();
+-        double ni = principal_point.x()*2.0;
+-        double nj = principal_point.y()*2.0;
+-
+-        //project the vertex onto the camera, store the texture coordinate
+-        double x = verts[iv][0];
+-        double y = verts[iv][1];
+-        double z = verts[iv][2];
+-        double u,v;
+-        closest->project(x, y, z, u, v);
+-
+-        //flip v about the y axis
+-        v=nj-v;
+-
+-        //store the tex_coordinate
+-        vgl_point_2d<double> uv(u/ni,v/nj);
+-        tex_coords[iv] = uv;
+-      }
+-      mesh.set_tex_coords(tex_coords);
+-    }
+-    else {
+-      //otherwise put in default texture (grey)
+-      std::vector<vgl_point_2d<double> > tex_coords(nverts, vgl_point_2d<double>(0.0,0.0));
+-      for (unsigned iv = 0; iv<nverts; ++iv) {
+-        tex_coords[iv] = vgl_point_2d<double>(.5, .5);
+-      }
+-      mesh.set_tex_coords(tex_coords);
+-    }
+-  }
+-}
+-
+-
+-//image_name to face_list
+-void boxm2_texture_mesh_process_globals::boxm2_match_textures(std::vector<vpgl_perspective_camera<double>* >& cameras,
+-                                                              std::vector<std::string>& imfiles,
+-                                                              imesh_mesh& in_mesh,
+-                                                              std::map<std::string, std::vector<unsigned> >& app_faces,
+-                                                              std::map<std::string, vpgl_perspective_camera<double>* >& texture_cams)
+-{
+-  //grab faces and vertices from the mesh
+-  auto& in_faces = (imesh_face_array&) in_mesh.faces();
+-  unsigned nfaces = in_mesh.num_faces();
+-  imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
+-
+-  //for each face, determine which view is best
+-  for (unsigned iface = 0; iface<nfaces; ++iface)
+-  {
+-    //make a triangle_3d out of this face
+-    triangle_3d world_tri;
+-    world_tri.face_id = iface;
+-    for (int i=0; i<3; ++i) {
+-      unsigned vertexId = in_faces[iface][i];
+-      double x = in_verts[vertexId][0];
+-      double y = in_verts[vertexId][1];
+-      double z = in_verts[vertexId][2];
+-      world_tri.points[i] = vgl_point_3d<double>(x,y,z);
+-    }
+-
+-    //create list of cameras from which you can see this face
+-    std::vector<std::string> visible_imfiles;
+-    std::vector<vpgl_perspective_camera<double>* > visible_views;
+-    std::vector<vil_image_view<int>* > vis_images;
+-    std::vector<vil_image_view<float>* > normx, normy, normz;
+-    for (unsigned int i=0; i<vis_images_.size(); ++i) {
+-      if ( face_is_visible( cameras[i], vis_images_[i], world_tri) ) {
+-        visible_imfiles.push_back(imfiles[i]);
+-        visible_views.push_back(cameras[i]);
+-        vis_images.push_back(vis_images_[i]);
+-        normx.push_back(normx_[i]);
+-        normy.push_back(normy_[i]);
+-        normz.push_back(normz_[i]);
+-      }
+-    }
+-
+-    //now compare the normal to each of the visible view cameras
+-#ifdef DEBUG
+-    vgl_vector_3d<double>& normal = in_faces.normal(iface);
+-    std::cout<<"Face "<<iface<<" normal: "<<normal<<std::endl;
+-#endif
+-
+-    //find camera with the closest look vector to this normal
+-    //int closeIdx = boxm2_util::find_nearest_cam(normal, visible_views);
+-    int closeIdx = get_best_view(visible_views, vis_images, normx, normy, normz, world_tri);
+-    vpgl_perspective_camera<double>* closest = nullptr;
+-    std::string im_name = "empty.png";
+-    if (closeIdx >= 0) {
+-      closest = visible_views[closeIdx];
+-      im_name = visible_imfiles[closeIdx];
+-    }
+-
+-    //grab appropriate face list (create it if it's not there)
+-    auto iter = app_faces.find(im_name);
+-    if ( iter == app_faces.end() ) {
+-      std::cout<<"boxm2_match_textures:: Adding image "<<im_name<<" to texture list"<<std::endl;
+-      std::vector<unsigned> faceList;
+-      faceList.push_back(iface);
+-      app_faces[im_name] = faceList;
+-
+-      //keep track of the camera
+-      texture_cams[im_name] = closest;
+-    }
+-    else {
+-      app_faces[im_name].push_back(iface);
+-    }
+-  }
+-
+-#if 0
+-  ////////////////////////////////////////////////////////////////////////////////
+-  // Now there is a set of faces without textures,
+-  // for each face
+-  //    for each image
+-  //      - find visible portions of these faces, record area and angle from dist
+-  //    find angle < 60 degrees AND largest area patch
+-  //    cut the face such that the patch is exposed (patch may be some arbitrary polygon)
+-  //    triangulate the n-gon into n triangles
+-  //    add the *new* points to the mesh, as well as the new faces
+-  //    remember to not leave the old face in the mesh...
+-  ////////////////////////////////////////////////////////////////////////////////
+-  for (unsigned iface = 0; iface<nfaces; ++iface)
+-  {
+-    //whole first chunk figures out which set of triangles this face should be broken into
+-    double max_area = 0.0;
+-    double max_img = -1;
+-    std::vector<triangle_3d> final_triangles;
+-    for (int imIdx=0; imIdx<vis_images.size(); ++imIdx) {
+-      //if this angle is too large, just pass over it
+-      double midAngle = angle(in_faces.normal(iface), -1*cameras[imIdx]->principal_axis()); // return acos(cos_angle(a,b));
+-      if (midAngle > vnl_math::pi/3) continue;
+-
+-      //find visible portion of iface on this image, record area (make a 3d tri out of it first)
+-      triangle_3d world_tri;
+-      world_tri.face_id = iface;
+-      for (int i=0; i<3; ++i) {
+-        unsigned vertexId = in_faces[iface][i];
+-        double x = in_verts[vertexId][0];
+-        double y = in_verts[vertexId][1];
+-        double z = in_verts[vertexId][2];
+-        world_tri.points[i] = vgl_point_3d<double>(x,y,z);
+-      }
+-      std::vector<triangle_3d> vis_tris = get_visible_triangles(cameras[imIdx], vis_images[imIdx], world_tri);
+-
+-      //get the total area of the triangles
+-      double totalArea = 0;
+-      for (int tri_i = 0; tri_i < vis_tris.size(); ++tri_i) {
+-        totalArea+= vgl_triangle_3d_area(vis_tris[tri_i].points[0],
+-                                         vis_tris[tri_i].points[1],
+-                                         vis_tris[tri_i].points[2]);
+-      }
+-
+-      //store it if it's the biggest patch so far
+-      if (totalArea > max_area) {
+-        max_area = totalArea;
+-        max_img = imIdx;
+-        final_triangles = vis_tris;
+-      }
+-    }
+-
+-    //now that you have the visible triangles that will be mapped in your mesh...
+-    // 1. add the new vertices
+-    // 2. add the new faces
+-
+-    // 3. add the new faces to the correct texture list
+-    std::string im_name =
+-    app_faces[im_name].push_back(iface);
+-  }
+-
+-  //Be wary of this interpolation iterator - didn't match up with the imesh one
+-  bvgl_triangle_interpolation_iterator(double *verts_x, double *verts_y, T *values, unsigned int v0 = 0, unsigned int v1 = 1, unsigned int v2 = 2);
+-
+-  // Create a new face list with the faces split by visibility
+-  imesh_regular_face_array<3>* newFaces = new imesh_regular_face_array<3>();
+-#endif
+-}
+-
+-//: Compares each visible camera with the average normal from each norm image, chooses the one that most closely matches
+-int boxm2_texture_mesh_process_globals::get_best_view(std::vector<vpgl_perspective_camera<double>* >& cams,
+-                                                      std::vector<vil_image_view<int>* >& vis_images,
+-                                                      std::vector<vil_image_view<float>* >& normx,
+-                                                      std::vector<vil_image_view<float>* >& normy,
+-                                                      std::vector<vil_image_view<float>* >& normz,
+-                                                      triangle_3d& world_tri)
+-{
+-  if (cams.empty()) {
+-    return -1;
+-  }
+-
+-  //find minimal dot product amongst cams/images
+-  double minAngle = 10e20;
+-  int minCam = -1;
+-  for (unsigned int i=0; i<cams.size(); ++i) {
+-    //get the smooth norm corresponding to this camera view
+-    vgl_vector_3d<double> normal = calc_smooth_norm( cams[i], vis_images[i], normx[i], normy[i], normz[i], world_tri);
+-    //std::cout<<"   face "<<world_tri.face_id<<" image "<<i<<" normal: "<<normal<<std::endl;
+-
+-    double dotProd = dot_product( normal, -1*cams[i]->principal_axis());
+-    double ang = std::acos(dotProd);
+-#ifdef DEBUG
+-    if ( std::fabs(normal.z()) > .8 ) {
+-      std::cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<'\n'
+-              <<" and angle: " <<ang * vnl_math::deg_per_rad<<std::endl;
+-    }
+-#endif
+-    if (ang < minAngle && ang < vnl_math::pi/2.0) {
+-      minAngle = ang;
+-      minCam = i;
+-    }
+-  }
+-
+-  //return the min cam
+-  return minCam;
+-}
+-
+-vgl_vector_3d<double>
+-boxm2_texture_mesh_process_globals::calc_smooth_norm( vpgl_perspective_camera<double>* cam,
+-                                                      vil_image_view<int>* vis_img,
+-                                                      vil_image_view<float>* normx,
+-                                                      vil_image_view<float>* normy,
+-                                                      vil_image_view<float>* normz,
+-                                                      triangle_3d& world_tri)
+-{
+-  //project triangle
+-  double us[3], vs[3];
+-  for (int vIdx=0; vIdx<3; ++vIdx) {
+-    //project these verts into UV
+-    double x = world_tri.points[vIdx].x();
+-    double y = world_tri.points[vIdx].y();
+-    double z = world_tri.points[vIdx].z();
+-    double u,v;
+-    cam->project(x, y, z, u, v);
+-    us[vIdx] = u;
+-    vs[vIdx] = v;
+-  }
+-
+-  //now create a polygon, and find the integer image coordinates (U,V) that this polygon covers
+-  int ni = vis_img->ni();
+-  int nj = vis_img->nj();
+-  double nx=0.0, ny=0.0, nz=0.0; //initialize normal
+-  int numNormals = 0;
+-
+-  vgl_triangle_scan_iterator<double> tsi;
+-  tsi.a.x = us[0];  tsi.a.y = vs[0];
+-  tsi.b.x = us[1];  tsi.b.y = vs[1];
+-  tsi.c.x = us[2];  tsi.c.y = vs[2];
+-  for (tsi.reset(); tsi.next(); ) {
+-    int y = tsi.scany();
+-    if (y<0 || y>=nj) continue;
+-    int min_x = tsi.startx();
+-    int max_x = tsi.endx();
+-    if (min_x >= ni || max_x < 0)
+-      continue;
+-    if (min_x < 0) min_x = 0;
+-    if (max_x >= ni) max_x = ni-1;
+-    for (int x = min_x; x <= max_x; ++x) {
+-      if ( (*vis_img)(x,y) == int(world_tri.face_id) ) {
+-        nx += (*normx)(x,y);
+-        ny += (*normy)(x,y);
+-        nz += (*normz)(x,y);
+-        numNormals++;
+-      }
+-    }
+-  }
+-  return {nx/numNormals, ny/numNormals, nz/numNormals};
+-}
+-
+-
+-//:
+-// returns a list of visible triangles given a camera,
+-// visibility image, and world coordinate 3d triangle
+-std::vector<boxm2_texture_mesh_process_globals::triangle_3d>
+-boxm2_texture_mesh_process_globals::get_visible_triangles(vpgl_perspective_camera<double>* /*cam*/,
+-                                                          vil_image_view<int>* /*vis_img*/,
+-                                                          triangle_3d& /*world_tri*/)
+-{
+-  std::cerr << "TODO: boxm2_texture_mesh_process_globals::get_visible_triangles is not yet implemented\n";
+-  return std::vector<triangle_3d>();
+-}
+-
+-
+-//:
+-// given a camera, and an image with ID faces, this method returns true if the entire
+-// triangle (id face_id) is unoccluded from this point of view
+-bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camera<double>* cam,
+-                                                          vil_image_view<int>* vis_img,
+-                                                          triangle_3d& world_tri)
+-{
+-  //project triangle
+-  double us[3], vs[3];
+-  for (int vIdx=0; vIdx<3; ++vIdx) {
+-    //project these verts into UV
+-    double x = world_tri.points[vIdx].x();
+-    double y = world_tri.points[vIdx].y();
+-    double z = world_tri.points[vIdx].z();
+-    double u,v;
+-    cam->project(x, y, z, u, v);
+-    us[vIdx] = u;
+-    vs[vIdx] = v;
+-  }
+-
+-  //now create a polygon, and find the integer image coordinates (U,V) that this polygon covers
+-  int ni = vis_img->ni();
+-  int nj = vis_img->nj();
+-  unsigned int numPixels = 0;
+-  unsigned int numMatches = 0;
+-
+-  vgl_triangle_scan_iterator<double> tsi;
+-  tsi.a.x = us[0];  tsi.a.y = vs[0];
+-  tsi.b.x = us[1];  tsi.b.y = vs[1];
+-  tsi.c.x = us[2];  tsi.c.y = vs[2];
+-  for (tsi.reset(); tsi.next(); ) {
+-    int y = tsi.scany();
+-    if (y<0 || y>=nj) continue;
+-    int min_x = tsi.startx();
+-    int max_x = tsi.endx();
+-    if (min_x >= ni || max_x < 0)
+-      continue;
+-    if (min_x < 0) min_x = 0;
+-    if (max_x >= ni) max_x = ni-1;
+-    for (int x = min_x; x <= max_x; ++x) {
+-      ++numPixels;
+-      if ( (*vis_img)(x,y) == int(world_tri.face_id) )
+-        ++numMatches;
+-    }
+-  }
+-
+-  //if the majority match, it's visible
+-  if ( (double) numMatches / (double) numPixels > .99)
+-    return true;
+-  else
+-    return false;
+-}
+-
+-//: Constructs vector of visibility images - images that identify which triangle is visible at which pixel.
+-// Function is more or less complete - not much more to it.
+-void boxm2_texture_mesh_process_globals::boxm2_visible_faces( std::vector<vpgl_perspective_camera<double>* >& cameras,
+-                                                              imesh_mesh& in_mesh, unsigned int ni=1024, unsigned int nj=768)
+-{
+-  auto& in_faces = (imesh_face_array&) in_mesh.faces();
+-
+-  unsigned nfaces = in_mesh.num_faces();
+-  imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
+-
+-  // iterate over each camera, creating a visibility image for each
+-  for (auto pcam : cameras)
+-  {
+-    //// get the principal point of the cam for image size
+-    //std::cout<<(*pcam);
+-    //vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
+-    //unsigned ni = (unsigned) (principal_point.x()*2.0);
+-    //unsigned nj = (unsigned) (principal_point.y()*2.0);
+-
+-    // render the face_id/distance image
+-    vil_image_view<double> depth_im(ni, nj);
+-    auto*   face_im = new vil_image_view<int>(ni, nj);
+-    depth_im.fill(10e100);  //Initial depth is huge,
+-    face_im->fill(-1); //initial face id is -1
+-    for (unsigned iface = 0; iface<nfaces; ++iface)
+-    {
+-      // get the vertices from the face, project into UVs
+-      double us[3], vs[3], dists[3];
+-
+-      for (int vIdx=0; vIdx<3; ++vIdx) {
+-        unsigned vertIdx = in_faces[iface][vIdx];
+-        // project these verts into UV
+-        double x = in_verts[vertIdx][0], y = in_verts[vertIdx][1], z = in_verts[vertIdx][2];
+-        double u,v;
+-        pcam->project(x, y, z, u, v);
+-        us[vIdx] = u;
+-        vs[vIdx] = v;
+-        // keep track of distance to each vertex
+-        dists[vIdx] = vgl_distance(vgl_point_3d<double>(x,y,z), pcam->get_camera_center());
+-      }
+-
+-      // render the triangle label onto the label image, using the depth image
+-      vgl_point_3d<double> v1(us[0], vs[0], dists[0]);
+-      vgl_point_3d<double> v2(us[1], vs[1], dists[1]);
+-      vgl_point_3d<double> v3(us[2], vs[2], dists[2]);
+-      imesh_render_triangle_label<int>(v1, v2, v3, (int) iface, (*face_im), depth_im);
+-    } //end for iface
+-
+-    // keep the vis_image just calculated
+-    vis_images_.push_back(face_im);
+-  }
+-}
+-
+-//: Constructs vector of visibility images - images that identify which triangle is visible at which pixel.
+-// Function is more or less complete - not much more to it.
+-void boxm2_texture_mesh_process_globals::compute_norm_images( std::vector<vpgl_perspective_camera<double>* >& cameras,
+-                                                              imesh_mesh& in_mesh,unsigned int ni, unsigned int nj)
+-{
+-  auto& in_faces = (imesh_face_array&) in_mesh.faces();
+-  unsigned nfaces = in_mesh.num_faces();
+-
+-  for (unsigned int i=0; i<vis_images_.size(); ++i) {
+-#if 0
+-    // get the principal point/ni,nj
+-    vpgl_perspective_camera<double>* pcam = cameras[i];
+-    vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
+-    unsigned ni = (unsigned) (principal_point.x()*2.0);
+-    unsigned nj = (unsigned) (principal_point.y()*2.0);
+-#endif // 0
+-    // create a norm x,y, and z image for each visibility image
+-    vil_image_view<int>* vis = vis_images_[i];
+-    auto* nx = new vil_image_view<float>(ni, nj);
+-    auto* ny = new vil_image_view<float>(ni, nj);
+-    auto* nz = new vil_image_view<float>(ni, nj);
+-    vgl_vector_3d<double> paxis = cameras[i]->principal_axis();
+-    nx->fill( (float) paxis.x());
+-    ny->fill( (float) paxis.y());
+-    nz->fill( (float) paxis.z());
+-    for (unsigned int x=0; x<ni; ++x) {
+-      for (unsigned int y=0; y<nj; ++y) {
+-        int face_id = (*vis)(x,y);
+-        if (face_id >= 0 && face_id < (int)nfaces) {
+-          vgl_vector_3d<double> fnorm = in_faces.normal(face_id);
+-          (*nx)(x,y) = (float) fnorm.x();
+-          (*ny)(x,y) = (float) fnorm.y();
+-          (*nz)(x,y) = (float) fnorm.z();
+-        }
+-      }
+-    }
+-
+-    //keep the vis_image just calculated
+-    normx_.push_back(nx);
+-    normy_.push_back(ny);
+-    normz_.push_back(nz);
+-  }
+-
+-#if 0 // commented out ...
+-  imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
+-  //iterate over each camera, creating a visibility image for each
+-  for (unsigned int i=0; i<cameras.size(); ++i)
+-  {
+-    //get the principal point of the cam for image size
+-    vpgl_perspective_camera<double>* pcam = cameras[i];
+-    vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
+-    unsigned ni = (unsigned) (principal_point.x()*2.0);
+-    unsigned nj = (unsigned) (principal_point.y()*2.0);
+-
+-    // render the norm images in each dimension
+-    vil_image_view<float>* nx = new vil_image_view<float>(ni, nj);
+-    vil_image_view<float>* ny = new vil_image_view<float>(ni, nj);
+-    vil_image_view<float>* nz = new vil_image_view<float>(ni, nj);
+-    vgl_vector_3d<double> paxis = cameras[i]->principal_axis();
+-    nx->fill( (float) paxis.x());
+-    ny->fill( (float) paxis.y());
+-    nz->fill( (float) paxis.z());
+-    vil_image_view<double> depth_im(ni, nj);
+-    depth_im.fill(10e100);
+-    for (unsigned iface = 0; iface<nfaces; ++iface)
+-    {
+-      //get face normal - this will be the "ID"
+-      vgl_vector_3d<double> fnorm = in_faces.normal(iface);
+-
+-      //get the vertices from the face, project into UVs
+-      double us[3], vs[3], dists[3];
+-      for (int vIdx=0; vIdx<3; ++vIdx) {
+-        unsigned vertIdx = in_faces[iface][vIdx];
+-
+-        //project these verts into UV
+-        double x = in_verts[vertIdx][0], y = in_verts[vertIdx][1], z = in_verts[vertIdx][2];
+-        double u,v;
+-        pcam->project(x, y, z, u, v);
+-        us[vIdx] = u;
+-        vs[vIdx] = v;
+-
+-        //keep track of distance to each vertex
+-        dists[vIdx] = vgl_distance(vgl_point_3d<double>(x,y,z), pcam->get_camera_center());
+-      }
+-
+-      //render the triangle label onto the label image, using the depth image
+-      vgl_point_3d<double> v1(us[0], vs[0], dists[0]);
+-      vgl_point_3d<double> v2(us[1], vs[1], dists[1]);
+-      vgl_point_3d<double> v3(us[2], vs[2], dists[2]);
+-      imesh_render_triangle_label<float>(v1, v2, v3, (float) fnorm.x(), (*nx), depth_im);
+-      imesh_render_triangle_label<float>(v1, v2, v3, (float) fnorm.y(), (*ny), depth_im);
+-      imesh_render_triangle_label<float>(v1, v2, v3, (float) fnorm.z(), (*nz), depth_im);
+-    } //end for iface
+-
+-    //keep the vis_image just calculated
+-    normx_.push_back(nx);
+-    normy_.push_back(ny);
+-    normz_.push_back(nz);
+-  }
+-#endif // 0
+-}
+-
+-void boxm2_texture_mesh_process_globals::smooth_norm_images(double sigma)
+-{
+-  vil_gauss_filter_5tap_params params(sigma); //set SIGMA
+-  for (unsigned int i=0; i<normx_.size(); ++i) {
+-    vil_image_view<float>* currX = normx_[i];
+-    auto* newX = new vil_image_view<float>(currX->ni(), currX->nj());
+-    vil_gauss_filter_5tap(*currX, *newX, params);
+-    //store the filtered image
+-    delete currX;
+-    normx_[i] = newX;
+-
+-    //repeat for y
+-    vil_image_view<float>* currY = normy_[i];
+-    auto* newY = new vil_image_view<float>(currY->ni(), currY->nj());
+-    vil_gauss_filter_5tap(*currY, *newY, params);
+-    delete currY;
+-    normy_[i] = newY;
+-
+-    //z
+-    vil_image_view<float>* currZ = normz_[i];
+-    auto* newZ = new vil_image_view<float>(currZ->ni(), currZ->nj());
+-    vil_gauss_filter_5tap(*currZ, *newZ, params);
+-    delete currZ;
+-    normz_[i] = newZ;
+-  }
+-}
+diff --git a/contrib/brl/bseg/sdet/CMakeLists.txt b/contrib/brl/bseg/sdet/CMakeLists.txt
+index 60a1da2706..081a0a6452 100644
+--- a/contrib/brl/bseg/sdet/CMakeLists.txt
++++ b/contrib/brl/bseg/sdet/CMakeLists.txt
+@@ -39,7 +39,6 @@ set(sdet_sources
+     sdet_nms.cxx                         sdet_nms.h
+     sdet_third_order_edge_det_params.cxx sdet_third_order_edge_det_params.h
+     sdet_third_order_edge_det.cxx        sdet_third_order_edge_det.h
+-    sdet_image_mesh.cxx                  sdet_image_mesh.h
+     sdet_image_mesh_params.cxx           sdet_image_mesh_params.h
+     sdet_denoise_mrf.cxx                 sdet_denoise_mrf.h
+     sdet_denoise_mrf_params.cxx          sdet_denoise_mrf_params.h
+diff --git a/contrib/brl/bseg/sdet/sdet_image_mesh.cxx b/contrib/brl/bseg/sdet/sdet_image_mesh.cxx
+deleted file mode 100644
+index 81af9ebb83..0000000000
+--- a/contrib/brl/bseg/sdet/sdet_image_mesh.cxx
++++ /dev/null
+@@ -1,327 +0,0 @@
+-// This is brl/bseg/sdet/sdet_image_mesh.cxx
+-#include "sdet_image_mesh.h"
+-#include "vgl/vgl_point_2d.h"
+-#include "vgl/vgl_line_segment_2d.h"
+-#include "vil/vil_image_view.h"
+-#include "vil/vil_math.h"
+-#include "vil/vil_convert.h"
+-#include "vil/vil_new.h"
+-#include "vil/vil_pixel_format.h"
+-#include "vil/vil_save.h"
+-#include <vtol/vtol_edge_2d_sptr.h>
+-#include <vsol/vsol_line_2d.h>
+-#include <vtol/vtol_edge_2d.h>
+-#include <vdgl/vdgl_digital_curve.h>
+-#include <vdgl/vdgl_interpolator.h>
+-#include <vdgl/vdgl_interpolator_sptr.h>
+-#include <vdgl/vdgl_edgel_chain.h>
+-#include <vdgl/vdgl_edgel_chain_sptr.h>
+-
+-#include <brip/brip_vil_float_ops.h>
+-#include <brip/brip_line_generator.h>
+-
+-#include <sdet/sdet_detector_params.h>
+-#include <sdet/sdet_detector.h>
+-#include <sdet/sdet_fit_lines_params.h>
+-#include <sdet/sdet_fit_lines.h>
+-#include <bil/algo/bil_cedt.h>
+-#include <bvgl/bvgl_triangle_interpolation_iterator.h>
+-#include <imesh/algo/imesh_generate_mesh.h>
+-
+-//note: this method is somewhat of a hack and should be replaced by
+-// a computed step function transition width, e.g. by a 2nd derivative
+-// operator
+-bool sdet_image_mesh:: step_boundary(vgl_line_segment_2d<double> const& parent,
+-                                     vgl_line_segment_2d<double>& child0,
+-                                     vgl_line_segment_2d<double>& child1)
+-{
+-  if (! resc_ ) return false;
+-  unsigned ni = resc_->ni(), nj = resc_->nj();
+-  vgl_vector_2d<double> n = parent.normal();
+-  vgl_point_2d<double> p1 = parent.point1();
+-  vgl_point_2d<double> p2 = parent.point2();
+-  vgl_point_2d<double> p10 = p1 - step_half_width_*n;
+-  vgl_point_2d<double> p11 = p1 + step_half_width_*n;
+-  vgl_point_2d<double> p20 = p2 - step_half_width_*n;
+-  vgl_point_2d<double> p21 = p2 + step_half_width_*n;
+-  if (p10.x()<0 || p10.y()<0||p20.x()<0||p20.y()<0||
+-      p10.x()>=ni ||p10.y()>=nj||p20.x()>=ni||p20.y()>=nj)
+-    return false;
+-  else
+-    child0 = vgl_line_segment_2d<double>(p10, p20);
+-  if (p11.x()<0 || p11.y()<0||p21.x()<0||p21.y()<0||
+-      p11.x()>=ni ||p11.y()>=nj||p21.x()>=ni||p21.y()>=nj)
+-    return false;
+-  else
+-    child1 = vgl_line_segment_2d<double>(p11, p21);
+-  return true;
+-}
+-
+-//---------------------------------------------------------------
+-// Constructors
+-//
+-//----------------------------------------------------------------
+-
+-// constructor from a parameter block (the only way)
+-sdet_image_mesh::sdet_image_mesh(sdet_image_mesh_params& imp)
+-  : sdet_image_mesh_params(imp), mesh_valid_(false), resc_(nullptr)
+-{
+-}
+-
+-// Destructor
+-sdet_image_mesh::~sdet_image_mesh()
+-= default;
+-
+-bool sdet_image_mesh::compute_line_segments(vil_image_resource_sptr const& resc,
+-                                            std::vector<vgl_line_segment_2d<double> > & segs)
+-{
+-  if (!resc) return false;
+-  mesh_valid_ = false;
+-  sdet_detector_params dp;
+-  dp.smooth= smooth_;
+-  dp.noise_multiplier = thresh_;
+-  dp.aggressive_junction_closure=0;
+-  dp.junctionp=false;
+-  sdet_detector det(dp);
+-  det.SetImage(resc);
+-  det.DoContour();
+-  std::vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+-  if (!edges) {
+-    std::cout<<"sdet_image_mesh:: could not detect edges in buffer"<<std::endl;
+-    return false;
+-  }
+-
+-  //fit lines on edges
+-  sdet_fit_lines_params flp;
+-  flp.min_fit_length_ = min_fit_length_;
+-  flp.rms_distance_ = rms_distance_;
+-  sdet_fit_lines fl(flp);
+-  fl.set_edges(*edges);
+-  bool fit_worked = fl.fit_lines();
+-  if (!fit_worked) {
+-    std::cout<<"sdet_image_mesh:: could not fit lines on edges"<<std::endl;
+-    return false;
+-  }
+-
+-  fl.get_line_segs(segs);
+-  return true;
+-}
+-
+-bool sdet_image_mesh::compute_mesh()
+-{
+-  vil_image_view<unsigned char> line_img(resc_->ni(),resc_->nj());//some resource
+-  line_img.fill(255);
+-
+-  std::vector<vgl_line_segment_2d<double> > segs, segs_pair;
+-  sdet_detector_params dp;
+-  dp.smooth= smooth_;
+-  dp.noise_multiplier = thresh_;
+-  dp.aggressive_junction_closure=0;
+-  dp.junctionp=false;
+-  sdet_detector det(dp);
+-  det.SetImage(resc_);
+-  det.DoContour();
+-  std::vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+-  for (auto & edge : *edges)
+-  {
+-    vsol_curve_2d_sptr c = edge->curve();
+-    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
+-    if (!dc)
+-      continue;
+-    vdgl_interpolator_sptr intp = dc->get_interpolator();
+-    vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
+-    int nedgl = ec->size();
+-    for (int i=0; i<nedgl; i++)
+-    {
+-      // anchor_points_.push_back(vgl_point_2d<double>((*ec)[i].x(),(*ec)[i].y()));
+-      line_img((int)(*ec)[i].x(),(int) (*ec)[i].y())=0;
+-    }
+-  }
+-
+- bil_cedt dt(line_img);
+- if (!dt.compute_cedt())
+-  std::cout<<"Error in computing DT"<<std::endl;
+-
+- vil_image_view<float> dtimg=dt.cedtimg();
+- vil_image_view<unsigned char> dtimg_threshed(dtimg.ni(),dtimg.nj());dtimg_threshed.fill(0);
+- for (unsigned i=0;i<dtimg.ni();i++)
+-   for (unsigned j=0;j<dtimg.nj();j++)
+-     if (dtimg(i,j)<2.0)
+-       dtimg_threshed(i,j)=255;
+- vil_save(dtimg_threshed,"F:/visdt/dt_thresh.png");
+-
+- //segs_pair.clear();
+- std::vector<vgl_line_segment_2d<double> > lines;
+- this->compute_line_segments(vil_new_image_resource_of_view(dtimg_threshed),lines);
+- segs_pair.insert(segs_pair.end(),lines.begin(),lines.end());
+- line_img.fill(255);
+-
+- for (auto & i : segs_pair)
+- {
+-   bool init = true;
+-   float xs= float(i.point1().x());
+-   float ys= float(i.point1().y());
+-   float xe= float(i.point2().x());
+-   float ye= float(i.point2().y());
+-   float x=0.0f;
+-   float y=0.0f;
+-   while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))
+-   {
+-     int xi = (int)x;
+-     int yi = (int)y; //convert the pixel location to integer
+-     line_img(xi, yi)=0;
+-   }
+- }
+- vil_save(line_img,"F:/visdt/line_img_more.png");
+-
+- bil_cedt dt1(line_img);
+- if (!dt1.compute_cedt())
+-   std::cout<<"Error in computing DT"<<std::endl;
+-
+-  //generate a 2d mesh based on the edges
+-  vgl_point_2d<double> ul(0.0, 0.0), ur(resc_->ni()-1,0.0);
+-  vgl_point_2d<double> lr(resc_->ni()-1, resc_->nj()-1), ll(0.0, resc_->nj()-1);
+-
+-  std::vector<vgl_point_2d<double> > convex_hull;
+-  convex_hull.push_back(ul);   convex_hull.push_back(ur);
+-  convex_hull.push_back(lr);   convex_hull.push_back(ll);
+-  std::vector<vgl_point_2d<double> > cvexh = convex_hull;
+-  imesh_mesh mesh_one;
+-  imesh_generate_mesh_2d_2(convex_hull, segs_pair,anchor_points_, mesh_one);
+-
+-  //lift vertices to 3-d
+-  const imesh_vertex_array<2>& verts = mesh_one.vertices<2>();
+-  auto* verts3 = new imesh_vertex_array<3>();
+-
+-  // convert image to float
+-  vil_image_view<float> view = brip_vil_float_ops::convert_to_float(resc_);
+-  unsigned ni = view.ni(), nj = view.nj();
+-  float minv=0, maxv=0;
+-  vil_math_value_range(view, minv, maxv);
+-  unsigned nverts = mesh_one.num_verts();
+-  for (unsigned iv = 0; iv<nverts; ++iv)
+-  {
+-    auto i = static_cast<unsigned>(verts[iv][0]);
+-    auto j = static_cast<unsigned>(verts[iv][1]);
+-    double height =maxv;
+-    if (i<ni && j<nj)
+-      height = static_cast<double>(view(i,j));
+-    height = maxv-height;
+-    imesh_vertex<3> v3(verts[iv][0], verts[iv][1], height);
+-    verts3->push_back(v3);
+-  }
+-  std::unique_ptr<imesh_vertex_array_base> v3(verts3);
+-  mesh_one.set_vertices(std::move(v3));
+-  //mesh_valid_ = true;
+-
+-  ///////////////////////////////////////////////////////
+-  //compute anchor points, and rerun generate_mesh_2d_2
+-  ///////////////////////////////////////////////////////
+-  this->set_anchor_points(mesh_one,dt1.cedtimg());
+-
+-  std::cout<<"Number of anchor points: "<<anchor_points_.size()<<std::endl;
+-  imesh_generate_mesh_2d_2(cvexh, segs_pair, anchor_points_, mesh_);
+-  const imesh_vertex_array<2>& verts2 = mesh_.vertices<2>();
+-  auto* newVerts = new imesh_vertex_array<3>();
+-
+-  // convert image to float
+-  ni = view.ni(), nj = view.nj();
+-  vil_math_value_range(view, minv, maxv);
+-  nverts = mesh_.num_verts();
+-  for (unsigned iv = 0; iv<nverts; ++iv)
+-  {
+-    auto i = static_cast<unsigned>(verts2[iv][0]);
+-    auto j = static_cast<unsigned>(verts2[iv][1]);
+-    double height =maxv;
+-    if (i<ni && j<nj)
+-      height = static_cast<double>(view(i,j));
+-    height = maxv-height;
+-    imesh_vertex<3> v3(verts2[iv][0], verts2[iv][1], height);
+-    newVerts->push_back(v3);
+-  }
+-  std::unique_ptr<imesh_vertex_array_base> v3_ptr(newVerts);
+-  mesh_.set_vertices(std::move(v3_ptr));
+-  mesh_valid_ = true;
+-
+-  return true;
+-}
+-
+-//takes the 3d mesh, calculates depth disparity map (from top)
+-void sdet_image_mesh::set_anchor_points(imesh_mesh& mesh, vil_image_view<float> dt_img)
+-{
+-  //create a tri_depth image
+-  int ni = resc_->ni();
+-  int nj = resc_->nj();
+-  vil_image_view<float> tri_depth(ni, nj);
+-
+-  //find the range of triangles in the Z direction
+-  auto& faces = (imesh_regular_face_array<3>&) mesh.faces();
+-  imesh_vertex_array<3>& verts = mesh.vertices<3>();
+-  unsigned nfaces = mesh.num_faces();
+-  for (unsigned iface = 0; iface<nfaces; ++iface)
+-  {
+-    unsigned v1 = faces[iface][0];
+-    unsigned v2 = faces[iface][1];
+-    unsigned v3 = faces[iface][2];
+-    double verts_x[] = { verts[v1][0], verts[v2][0], verts[v3][0] };
+-    double verts_y[] = { verts[v1][1], verts[v2][1], verts[v3][1] };
+-    double verts_z[] = { verts[v1][2], verts[v2][2], verts[v3][2] };
+-    bvgl_triangle_interpolation_iterator<double> tsi(verts_x, verts_y, verts_z);
+-
+-    //scan the triangle, storing the depth
+-    for (tsi.reset(); tsi.next(); ) {
+-      int y = tsi.scany();
+-      if (y<0 || y>=nj) continue;
+-      int min_x = tsi.startx();
+-      int max_x = tsi.endx();
+-      if (min_x >= ni || max_x < 0)
+-        continue;
+-      if (min_x < 0) min_x = 0;
+-      if (max_x >= ni) max_x = ni-1;
+-      for (int x = min_x; x <= max_x; ++x) {
+-        tri_depth(x,y) = (float) tsi.value_at(x);
+-      }
+-    }
+-  }
+-
+-  //get range of triangle depths
+-  float minz, maxz;
+-  vil_math_value_range(tri_depth, minz, maxz);
+-
+-  //maximum z diff allowed for a triangle is 1/512 of the total z range
+-  vil_image_view<float> z_img = brip_vil_float_ops::convert_to_float(resc_);
+-
+-  //for ( unsigned niter=1;niter<16;niter*=2)
+-  {
+-    double max_z_diff = (maxz-minz)/64.0;
+-    for (int i=0; i<ni; i+=4)
+-      for (int j=0; j<nj; j+=4)
+-        if ( std::fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j) >= 3.5 )
+-          anchor_points_.emplace_back(i,j);
+-  }
+-}
+-
+-//ensure the image is a byte image (between 0 and 255)
+-void sdet_image_mesh::set_image(vil_image_resource_sptr const& resource)
+-{
+-  resc_ = resource;
+-  if (resc_->pixel_format() != VIL_PIXEL_FORMAT_BYTE )
+-  {
+-    std::cout<<"Converting image from "<<resc_->pixel_format()<<" to vxl_byte image"<<std::endl;
+-
+-    //make the float image on the range of [0,1];
+-    vil_image_view_base_sptr stretched = vil_convert_stretch_range( float(0.0f), resc_->get_view());
+-
+-    //makvil_image_view_base_sptr byte_img = vil_convert_cast<vxl_byte>(0, stretched*255.0f);
+-    vil_image_view_base_sptr dest_sptr = new vil_image_view<float>(stretched->ni(), stretched->nj());
+-    auto* dest = (vil_image_view<float>*) dest_sptr.ptr();
+-    auto* stf  = (vil_image_view<float>*) stretched.ptr();
+-    vil_convert_stretch_range<float>( *stf, *dest, 0.0f, 255.0f);
+-
+-    //now turn em into bytes
+-    vil_image_view_base_sptr converted = vil_convert_cast<vxl_byte>(0, dest_sptr);
+-
+-    //create new resource sptr
+-    resc_ = vil_new_image_resource_of_view(*converted.ptr());
+-  }
+-}
+diff --git a/contrib/brl/bseg/sdet/sdet_image_mesh.h b/contrib/brl/bseg/sdet/sdet_image_mesh.h
+deleted file mode 100644
+index 3f5a1129ef..0000000000
+--- a/contrib/brl/bseg/sdet/sdet_image_mesh.h
++++ /dev/null
+@@ -1,63 +0,0 @@
+-// This is brl/bseg/sdet/sdet_image_mesh.h
+-#ifndef sdet_image_mesh_h_
+-#define sdet_image_mesh_h_
+-//---------------------------------------------------------------------
+-//:
+-// \file
+-// \brief a processor for triangulating a images based on detected line segments
+-//
+-//  This algorithm triangulates an image into a 3-d mesh based on
+-//  detected line segments. The line segments are fit to edge detection
+-//  contour chains.
+-//
+-// \author
+-//  J.L. Mundy - March 21, 2011
+-//
+-// \verbatim
+-//  Modifications
+-//   <none>
+-// \endverbatim
+-//
+-//-------------------------------------------------------------------------
+-#include <iostream>
+-#include <vector>
+-#ifdef _MSC_VER
+-#  include <vcl_msvc_warnings.h>
+-#endif
+-#include <vgl/vgl_line_segment_2d.h>
+-#include <sdet/sdet_image_mesh_params.h>
+-#include <imesh/imesh_mesh.h>
+-#include <vil/vil_image_resource.h>
+-#include <vil/vil_image_view.h>
+-
+-class sdet_image_mesh : public sdet_image_mesh_params
+-{
+- public:
+-  // === Constructors/destructor ===
+-  sdet_image_mesh(sdet_image_mesh_params& imp);
+-  ~sdet_image_mesh() override;
+-
+-  // === Process methods ===
+-  void set_image(vil_image_resource_sptr const& resource);
+-  bool compute_mesh();
+-
+-  // === Accessors ===
+-  imesh_mesh& get_mesh() { return mesh_; }
+-  bool mesh_valid() const { return mesh_valid_; }
+-
+- protected:
+-  // === protected methods ===
+-  bool step_boundary(vgl_line_segment_2d<double> const& parent,
+-                     vgl_line_segment_2d<double>& child0,
+-                     vgl_line_segment_2d<double>& child1);
+-  void set_anchor_points(imesh_mesh& mesh, vil_image_view<float> dt_img);
+-  bool compute_line_segments(vil_image_resource_sptr const& resc,
+-                             std::vector<vgl_line_segment_2d<double> >& segs);
+-
+-  // === members ===
+-  bool mesh_valid_;      //: process state flag
+-  vil_image_resource_sptr resc_;
+-  imesh_mesh mesh_;
+-};
+-
+-#endif // sdet_image_mesh_h_
+diff --git a/contrib/brl/bseg/sdet/tests/test_include.cxx b/contrib/brl/bseg/sdet/tests/test_include.cxx
+index 01ca358991..0e4bcaf1f9 100644
+--- a/contrib/brl/bseg/sdet/tests/test_include.cxx
++++ b/contrib/brl/bseg/sdet/tests/test_include.cxx
+@@ -22,7 +22,6 @@
+ #include <sdet/sdet_grid_finder_params.h>
+ #include <sdet/sdet_harris_detector.h>
+ #include <sdet/sdet_harris_detector_params.h>
+-#include <sdet/sdet_image_mesh.h>
+ #include <sdet/sdet_image_mesh_params.h>
+ #include <sdet/sdet_img_edge.h>
+ #include <sdet/sdet_mrf_bp.h>
+diff --git a/contrib/gel/gtrl/CMakeLists.txt b/contrib/gel/gtrl/CMakeLists.txt
+index 13562bb93c..709e5b6b55 100644
+--- a/contrib/gel/gtrl/CMakeLists.txt
++++ b/contrib/gel/gtrl/CMakeLists.txt
+@@ -14,21 +14,8 @@ set(gtrl_sources
+ 
+ aux_source_directory(Templates gtrl_sources)
+ 
+-include( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
+-
+-if(NETLIB_FOUND)
+-  include_directories(${NETLIB_INCLUDE_DIR})
+-
+-  set(gtrl_sources ${gtrl_sources}
+-    gtrl_triangulation.cxx gtrl_triangulation.h
+-  )
+-endif()
+-
+ vxl_add_library(LIBRARY_NAME gtrl LIBRARY_SOURCES ${gtrl_sources})
+ target_link_libraries(gtrl ${VXL_LIB_PREFIX}vbl)
+-if(NETLIB_FOUND)
+-  target_link_libraries(gtrl ${NETLIB_LIBRARIES})
+-endif()
+ 
+ if( BUILD_TESTING )
+   add_subdirectory(tests)
+diff --git a/contrib/gel/gtrl/examples/.NoDartCoverage b/contrib/gel/gtrl/examples/.NoDartCoverage
+deleted file mode 100644
+index e69de29bb2..0000000000
+diff --git a/contrib/gel/gtrl/examples/CMakeLists.txt b/contrib/gel/gtrl/examples/CMakeLists.txt
+deleted file mode 100644
+index ee97397685..0000000000
+--- a/contrib/gel/gtrl/examples/CMakeLists.txt
++++ /dev/null
+@@ -1,2 +0,0 @@
+-add_executable( triangulate triangulate.cxx )
+-target_link_libraries( triangulate gtrl )
+diff --git a/contrib/gel/gtrl/examples/triangulate.cxx b/contrib/gel/gtrl/examples/triangulate.cxx
+deleted file mode 100644
+index fa8a0577b3..0000000000
+--- a/contrib/gel/gtrl/examples/triangulate.cxx
++++ /dev/null
+@@ -1,45 +0,0 @@
+-//:
+-// \file
+-// Simple example program to demonstrate the use of the gtrl_triangulation class
+-// \author Peter Vanroose
+-// \date   8 October 2002
+-
+-#include <iostream>
+-#include <gtrl/gtrl_triangulation.h>
+-#ifdef _MSC_VER
+-#  include "vcl_msvc_warnings.h"
+-#endif
+-
+-inline std::ostream& operator<<(std::ostream& os, gtrl_vertex const& v)
+-{
+-  return os << '(' << v.x() << ',' << v.y() << ')';
+-}
+-
+-inline std::ostream& operator<<(std::ostream& os, gtrl_triangle const& t)
+-{
+-  return os << '[' << *(t.p1()) << ',' << *(t.p2()) << ',' << *(t.p3()) << ']';
+-}
+-
+-int main()
+-{
+-  std::vector<gtrl_vertex_sptr> v(4);
+-  v[0] = new gtrl_vertex( 1.0, 1.0);
+-  v[1] = new gtrl_vertex(50.0, 1.0);
+-  v[2] = new gtrl_vertex(50.0,50.0);
+-  v[3] = new gtrl_vertex( 1.0,50.0);
+-  gtrl_polygon poly(v);
+-  gtrl_triangulation tri(poly); tri.run();
+-
+-  std::vector<gtrl_vertex_sptr> p = tri.get_points();
+-  std::vector<gtrl_triangle_sptr> t = tri.get_triangles();
+-
+-  std::cout << p.size() << " triangle points:\n";
+-  for (auto & i : p)
+-    std::cout << ' ' << *i << '\n';
+-
+-  std::cout << t.size() << " triangles:\n";
+-  for (auto & i : t)
+-    std::cout << ' ' << *i << '\n';
+-
+-  return 0;
+-}
+diff --git a/contrib/gel/gtrl/gtrl_triangulation.cxx b/contrib/gel/gtrl/gtrl_triangulation.cxx
+deleted file mode 100644
+index 52103988f8..0000000000
+--- a/contrib/gel/gtrl/gtrl_triangulation.cxx
++++ /dev/null
+@@ -1,110 +0,0 @@
+-// This is gel/gtrl/gtrl_triangulation.cxx
+-//:
+-// \file
+-// \author crossge@crd.ge.com
+-
+-#include <utility>
+-#include "gtrl_triangulation.h"
+-#ifdef _MSC_VER
+-#  include "vcl_msvc_warnings.h"
+-#endif
+-
+-// UNIX specific timer close
+-#ifdef _WIN32
+-#define NO_TIMER
+-#endif
+-
+-// triangulation library
+-extern "C" {
+-#ifdef SINGLE
+-#define REAL float
+-#else /* not SINGLE */
+-#define REAL double
+-#endif /* not SINGLE */
+-
+-#include <triangle.h> // from netlib, for triangulate()
+-}
+-
+-
+-gtrl_triangulation::gtrl_triangulation( gtrl_polygon poly)
+-  : poly_(std::move( poly))
+-{
+-}
+-
+-void gtrl_triangulation::run()
+-{
+-  REAL *points= new REAL[poly_.size()*2];
+-  int *markers= new int[poly_.size()];
+-
+-  // for some reason, the markers don't seem to
+-  //   like starting at 0
+-  constexpr int offset = 100;
+-
+-  std::vector<gtrl_vertex_sptr> pointlist;
+-
+-  for (int i=0; i< poly_.size(); i++)
+-    {
+-      gtrl_vertex_sptr p= poly_[i];
+-      pointlist.push_back( p);
+-
+-      points[i*2]  = p->x();
+-      points[i*2+1]= p->y();
+-      markers[i]= i+offset;
+-    }
+-
+-  // input
+-  triangulateio in;
+-  in.numberofpoints= poly_.size();
+-  in.pointlist= points;
+-  in.pointmarkerlist= markers;
+-  in.numberofpointattributes= 0;
+-  in.numberofholes= 0;
+-  in.trianglelist= nullptr;
+-
+-  // output
+-  triangulateio out;
+-  out.pointlist= nullptr;
+-  out.trianglelist= nullptr;
+-  out.pointmarkerlist= nullptr;
+-  out.numberofpointattributes= 0;
+-  out.numberofholes= 0;
+-  out.numberoftriangleattributes= 0;
+-
+-  // do triangulation
+-  triangulate( "-z -i -q", &in, &out, nullptr);
+-
+-  // create any new points that are necessary
+-  for (int i=0; i< out.numberofpoints; i++)
+-    {
+-      if (out.pointmarkerlist[i]< offset)
+-        {
+-          pointlist.push_back( new gtrl_vertex( out.pointlist[i*2],
+-                                                out.pointlist[i*2+1]));
+-
+-          out.pointmarkerlist[i]= pointlist.size()-1+ offset;
+-        }
+-    }
+-
+-  // clean up from previous triangulation
+-  tris_.clear();
+-
+-  // create the triangles
+-  for (int i=0; i< out.numberoftriangles; i++)
+-    {
+-      gtrl_triangle_sptr triangle= new gtrl_triangle( pointlist[ out.pointmarkerlist[ out.trianglelist[i*3]]- offset],
+-                                                     pointlist[ out.pointmarkerlist[ out.trianglelist[i*3+1]]- offset],
+-                                                     pointlist[ out.pointmarkerlist[ out.trianglelist[i*3+2]]- offset]);
+-
+-      if (poly_.inside( triangle->mid_point()))
+-        tris_.push_back( triangle);
+-    }
+-
+-  pts_= pointlist;
+-
+-  // clean memory
+-  delete[] out.pointlist;
+-  delete[] out.pointmarkerlist;
+-  delete[] out.trianglelist;
+-  delete[] points;
+-  delete[] markers;
+-}
+diff --git a/contrib/gel/gtrl/gtrl_triangulation.h b/contrib/gel/gtrl/gtrl_triangulation.h
+deleted file mode 100644
+index 5f63552278..0000000000
+--- a/contrib/gel/gtrl/gtrl_triangulation.h
++++ /dev/null
+@@ -1,31 +0,0 @@
+-// This is gel/gtrl/gtrl_triangulation.h
+-#ifndef gtrl_triangulation_h_
+-#define gtrl_triangulation_h_
+-//:
+-// \file
+-// \author crossge@crd.ge.com
+-
+-#include <gtrl/gtrl_polygon.h>
+-#include <gtrl/gtrl_triangle.h>
+-
+-//: triangulates holeless polygons
+-
+-class gtrl_triangulation
+-{
+- public:
+-  // constructors / destructors
+-  gtrl_triangulation( gtrl_polygon poly);
+-
+-  // implementation
+-  void run();
+-  std::vector<gtrl_triangle_sptr> get_triangles() const { return tris_; }
+-  std::vector<gtrl_vertex_sptr> get_points() const { return pts_; }
+-
+- protected:
+-  gtrl_polygon poly_;
+-
+-  std::vector<gtrl_triangle_sptr> tris_;
+-  std::vector<gtrl_vertex_sptr>   pts_;
+-};
+-
+-#endif // gtrl_triangulation_h_
+diff --git a/contrib/gel/gtrl/tests/test_include.cxx b/contrib/gel/gtrl/tests/test_include.cxx
+index df3ed4bd29..f3e98fca4c 100644
+--- a/contrib/gel/gtrl/tests/test_include.cxx
++++ b/contrib/gel/gtrl/tests/test_include.cxx
+@@ -1,5 +1,4 @@
+ #include <gtrl/gtrl_triangle.h>
+-#include <gtrl/gtrl_triangulation.h>
+ #include <gtrl/gtrl_vertex.h>
+ #include <gtrl/gtrl_polygon.h>
+ 
+-- 
+2.46.1
+

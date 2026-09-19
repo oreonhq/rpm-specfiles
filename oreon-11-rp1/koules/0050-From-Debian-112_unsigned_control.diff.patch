@@ -1,0 +1,15 @@
+Description: Specify that control is unsigned everywhere
+Author: Stephen Kitt <skitt@debian.org>
+Origin: http://bugs.debian.org/749207
+
+--- a/koules.h
++++ b/koules.h
+@@ -237,7 +237,7 @@
+ extern Point    point[MAXPOINT];
+ extern int      gameplan;
+ extern int      rotation[MAXROCKETS];
+-extern char     control[MAXROCKETS];
++extern unsigned char     control[MAXROCKETS];
+ extern struct control controls[5];
+ extern int      lastlevel, maxlevel;
+ #ifdef NETSUPPORT

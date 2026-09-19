@@ -1,0 +1,39 @@
+From b77d1c7569e6f5f361bea4850829ae4e70e193ec Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Va=CC=81clav=20Slavi=CC=81k?= <vaclav@slavik.io>
+Date: Thu, 3 Apr 2025 18:39:55 +0200
+Subject: [PATCH] Fix compilation with clang-17
+
+Fix typos in Set<T>::swap() and Collection<T>::swap().
+
+Apparently, no compiler ever tried to compile these methods before.
+---
+ include/lucene++/Collection.h | 2 +-
+ include/lucene++/Set.h        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/lucene++/Collection.h b/include/lucene++/Collection.h
+index 0263f3f1..aeefda5f 100644
+--- a/include/lucene++/Collection.h
++++ b/include/lucene++/Collection.h
+@@ -167,7 +167,7 @@ class Collection : public LuceneSync {
+     }
+ 
+     void swap(this_type& other) {
+-        container.swap(other->container);
++        container.swap(other.container);
+     }
+ 
+     TYPE& operator[] (int32_t pos) {
+diff --git a/include/lucene++/Set.h b/include/lucene++/Set.h
+index 7282cc96..b211d881 100644
+--- a/include/lucene++/Set.h
++++ b/include/lucene++/Set.h
+@@ -108,7 +108,7 @@ class Set : public LuceneSync {
+     }
+ 
+     void swap(this_type& other) {
+-        setContainer.swap(other->setContainer);
++        setContainer.swap(other.setContainer);
+     }
+ 
+     operator bool() const {

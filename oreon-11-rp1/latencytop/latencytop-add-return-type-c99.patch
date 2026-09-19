@@ -1,0 +1,21 @@
+Add a missing return type for C99 compliance.
+
+No upstream bug tracker so tracked here:
+https://bugzilla.redhat.com/show_bug.cgi?id=2160588
+
+https://fedoraproject.org/wiki/Toolchain/PortingToModernC
+
+
+diff --git a/gtk_display.c b/gtk_display.c
+index 14d79f8..057d349 100644
+--- a/gtk_display.c
++++ b/gtk_display.c
+@@ -594,7 +594,7 @@ static void create_targets_window(void)
+ 			 G_CALLBACK(freeze_toggled), NULL);
+ }
+ 
+-static load_icons(void)
++static void load_icons(void)
+ {
+ 	GError *err;
+ 

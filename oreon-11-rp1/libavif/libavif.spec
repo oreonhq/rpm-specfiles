@@ -6,8 +6,8 @@
 %global libargparse_commit ee74d1b53bd680748af14e737378de57e2a0a954
 
 Name:           libavif
-Version:        1.3.0
-Release:        9%{?dist}
+Version:        1.4.2
+Release:        1%{?dist}
 Summary:        Library for encoding and decoding AVIF images
 License:        BSD-2-Clause
 URL:            https://github.com/AOMediaCodec/libavif
@@ -19,6 +19,7 @@ BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
+BuildRequires:  pkgconfig(aom)
 BuildRequires:  pkgconfig(dav1d)
 BuildRequires:  pkgconfig(libjpeg)
 BuildRequires:  pkgconfig(libpng)
@@ -64,7 +65,7 @@ patch -p1 --fuzz=0 -d ext/libargparse < ext/libargparse.patch
 
 %cmake \
   -GNinja \
-  -DAVIF_CODEC_AOM=OFF \
+  -DAVIF_CODEC_AOM=SYSTEM \
   -DAVIF_CODEC_RAV1E=OFF \
   -DAVIF_CODEC_SVT=OFF \
   -DAVIF_CODEC_DAV1D=SYSTEM \

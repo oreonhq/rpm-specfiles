@@ -1,0 +1,17 @@
+--- doxygen.conf	2008-05-21 04:43:25.000000000 +1000
++++ doxygen.conf.apu	2008-07-02 10:31:16.000000000 +1000
+@@ -18,6 +18,14 @@
+            "APR_DECLARE_INHERIT_SET(x)=apr_status_t apr_##x##_inherit_set(apr_##x##_t *the##x)" \
+            "APR_DECLARE_INHERIT_UNSET(x)=apr_status_t apr_##x##_inherit_unset(apr_##x##_t *the##x)" \
+            "APR_HAS_THREADS" \
++           "APU_DECLARE(x)=x" \
++           "APU_DECLARE_NONSTD(x)=x" \
++           "APU_DECLARE_DATA" \
++           "APU_MODULE_DECLARE_DATA" \
++           "APU_DECLARE_LDAP(x)=x" \
++           "APR_HAS_MMAP" \
++           "APR_HAS_XLATE" \
++           "APR_HAS_LDAP" \
+            "__attribute__(x)=" \
+            DOXYGEN=
+ 

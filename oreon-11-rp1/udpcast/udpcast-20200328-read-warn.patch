@@ -1,0 +1,14 @@
+diff -druN udpcast-20200328.old/console.c udpcast-20200328/console.c
+--- udpcast-20200328.old/console.c	2020-04-05 15:25:54.000000000 +0300
++++ udpcast-20200328/console.c	2021-11-24 12:53:51.944291221 +0200
+@@ -86,7 +86,9 @@
+ 
+     /* If key pressed, consume it. If letter is q, quit */
+     if(doConsume) {
+-      read(c->fd, &ch, 1);
++	if (1 != read(c->fd, &ch, 1)) {
++	    ch='\0';
++	}
+     }
+ 
+     if(c->needRestore && tcsetattr(c->fd, TCSAFLUSH, &c->oldtio) < 0) {

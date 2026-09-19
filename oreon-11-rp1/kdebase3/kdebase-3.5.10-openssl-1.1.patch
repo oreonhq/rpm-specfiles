@@ -1,0 +1,225 @@
+diff -ur kdebase-3.5.10/kcontrol/crypto/crypto.cpp kdebase-3.5.10-openssl-1.1/kcontrol/crypto/crypto.cpp
+--- kdebase-3.5.10/kcontrol/crypto/crypto.cpp	2006-10-01 19:31:49.000000000 +0200
++++ kdebase-3.5.10-openssl-1.1/kcontrol/crypto/crypto.cpp	2018-01-06 15:19:31.409401290 +0100
+@@ -878,6 +878,10 @@
+ 
+   config->setGroup("SSLv2");
+   mUseSSLv2->setChecked(config->readBoolEntry("Enabled", true));
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L || defined(OPENSSL_NO_SSL2)
++  mUseSSLv2->setChecked(false);
++  mUseSSLv2->setEnabled(false);
++#endif
+ 
+   config->setGroup("SSLv3");
+   mUseSSLv3->setChecked(config->readBoolEntry("Enabled", true));
+@@ -929,7 +933,11 @@
+       item = static_cast<CipherItem *>(item->nextSibling());
+   }
+ 
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L || defined(OPENSSL_NO_SSL2)
++  SSLv2Box->setEnabled( false );
++#else
+   SSLv2Box->setEnabled( mUseSSLv2->isChecked() );
++#endif
+   SSLv3Box->setEnabled( mUseSSLv3->isChecked() );
+ 
+   QStringList groups = policies->groupList();
+@@ -1042,7 +1050,11 @@
+   config->writeEntry("Enabled", mUseTLS->isChecked());
+ 
+   config->setGroup("SSLv2");
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L || defined(OPENSSL_NO_SSL2)
++  config->writeEntry("Enabled", false);
++#else
+   config->writeEntry("Enabled", mUseSSLv2->isChecked());
++#endif
+ 
+   config->setGroup("SSLv3");
+   config->writeEntry("Enabled", mUseSSLv3->isChecked());
+@@ -1262,7 +1274,11 @@
+   }
+ 
+   mUseTLS->setChecked(true);
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L || defined(OPENSSL_NO_SSL2)
++  mUseSSLv2->setChecked(false);
++#else
+   mUseSSLv2->setChecked(true);
++#endif
+   mUseSSLv3->setChecked(true);
+   configChanged();
+   #endif
+@@ -1319,7 +1335,11 @@
+   }
+ 
+   mUseTLS->setChecked(true);
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L || defined(OPENSSL_NO_SSL2)
++  mUseSSLv2->setChecked(false);
++#else
+   mUseSSLv2->setChecked(true);
++#endif
+   mUseSSLv3->setChecked(true);
+   configChanged();
+   #endif
+@@ -1836,9 +1856,6 @@
+         return;
+ 
+ #ifdef HAVE_SSL
+-#define sk_free KOSSL::self()->sk_free
+-#define sk_num KOSSL::self()->sk_num
+-#define sk_value KOSSL::self()->sk_value
+ 
+ 	// First try to load using the OpenSSL method
+ 	X509_STORE *certStore = KOSSL::self()->X509_STORE_new();
+@@ -1848,13 +1865,14 @@
+ 	    KOSSL::self()->X509_LOOKUP_load_file(certLookup,
+ 		                                 certFile.local8Bit(),
+ 						 X509_FILETYPE_PEM)) {
+-		for (int i = 0; i < sk_X509_OBJECT_num(certStore->objs); i++) {
+-			X509_OBJECT* x5o = sk_X509_OBJECT_value(certStore->objs, i);
++		STACK_OF(X509_OBJECT) *certStore_objs = KOSSL::self()->X509_STORE_get0_objects(certStore);
++		for (int i = 0; i < KOSSL::self()->OPENSSL_sk_num(certStore_objs); i++) {
++			X509_OBJECT* x5o = reinterpret_cast<X509_OBJECT*>(KOSSL::self()->OPENSSL_sk_value(certStore_objs, i));
+ 			if (!x5o) continue;
+ 
+-			if (x5o->type != X509_LU_X509) continue;
++			if (KOSSL::self()->X509_OBJECT_get_type(x5o) != X509_LU_X509) continue;
+ 
+-			X509 *x5 = x5o->data.x509;
++			X509 *x5 = KOSSL::self()->X509_OBJECT_get0_X509(x5o);
+ 			if (!x5) continue;
+ 
+ 			// Easier to use in this form
+@@ -1918,7 +1936,7 @@
+ 		qf.open(IO_ReadOnly);
+ 		qf.readLine(certtext, qf.size());
+ 
+-		if (certStore) { KOSSL::self()->X509_STORE_free(certStore);
++		if (certStore) { KOSSL::self()->OPENSSL_sk_free(certStore);
+ 				certStore = NULL; }
+ 
+ 		if (certtext.contains("-----BEGIN CERTIFICATE-----")) {
+@@ -1990,12 +2008,9 @@
+ 	}
+ 
+ 
+-	if (certStore) KOSSL::self()->X509_STORE_free(certStore);
++	if (certStore) KOSSL::self()->OPENSSL_sk_free(certStore);
+ 
+ 	configChanged();
+-#undef sk_free
+-#undef sk_num
+-#undef sk_value
+ #endif
+ 
+         offerImportToKMail( certFile );
+@@ -2318,69 +2333,72 @@
+ #ifdef HAVE_SSL
+ // This gets all the available ciphers from OpenSSL
+ bool KCryptoConfig::loadCiphers() {
+-unsigned int i;
++unsigned int i, cnt;
+ SSL_CTX *ctx;
+ SSL *ssl;
+ SSL_METHOD *meth;
++STACK_OF(SSL_CIPHER)* sk;
+ 
+   SSLv2Box->clear();
+   SSLv3Box->clear();
++  CipherItem *item;
+ 
+-  meth = SSLv2_client_method();
+-  SSLeay_add_ssl_algorithms();
+-  ctx = SSL_CTX_new(meth);
++#if OPENSSL_VERSION_NUMBER < 0x10100000L && !defined(OPENSSL_NO_SSL2)
++  meth = KOSSL::self()->SSLv2_client_method();
++  ctx = KOSSL::self()->SSL_CTX_new(meth);
+   if (ctx == NULL) return false;
+ 
+-  ssl = SSL_new(ctx);
++  ssl = KOSSL::self()->SSL_new(ctx);
+   if (!ssl) return false;
++  sk = KOSSL::self()->SSL_get_ciphers(ssl);
++  cnt = KOSSL::self()->OPENSSL_sk_num(sk);
+ 
+-  CipherItem *item;
+-  for (i=0; ; i++) {
++  for (i = 0; i < cnt; i++) {
+     int j, k;
+-    SSL_CIPHER *sc;
+-    sc = (meth->get_cipher)(i);
++    SSL_CIPHER *sc = reinterpret_cast<SSL_CIPHER*>(KOSSL::self()->OPENSSL_sk_value(sk, i));
+     if (!sc)
+       break;
+     // Leak of sc*?
+-    QString scn(sc->name);
++    QString scn(KOSSL::self()->SSL_CIPHER_get_name(sc));
+     if (scn.contains("ADH-") || scn.contains("NULL-") || scn.contains("DES-CBC3-SHA") || scn.contains("FZA-")) {
+       continue;
+     }
+-    k = SSL_CIPHER_get_bits(sc, &j);
++    k = KOSSL::self()->SSL_CIPHER_get_bits(sc, &j);
+ 
+-    item = new CipherItem( SSLv2Box, sc->name, k, j, this );
++    item = new CipherItem( SSLv2Box, scn, k, j, this );
+   }
+ 
+-  if (ctx) SSL_CTX_free(ctx);
+-  if (ssl) SSL_free(ssl);
++  if (ctx) KOSSL::self()->SSL_CTX_free(ctx);
++  if (ssl) KOSSL::self()->SSL_free(ssl);
++#endif
+ 
+   // We repeat for SSLv3
+-  meth = SSLv3_client_method();
+-  SSLeay_add_ssl_algorithms();
+-  ctx = SSL_CTX_new(meth);
++  meth = KOSSL::self()->SSLv3_client_method();
++  ctx = KOSSL::self()->SSL_CTX_new(meth);
+   if (ctx == NULL) return false;
+ 
+-  ssl = SSL_new(ctx);
++  ssl = KOSSL::self()->SSL_new(ctx);
+   if (!ssl) return false;
++  sk = KOSSL::self()->SSL_get_ciphers(ssl);
++  cnt = KOSSL::self()->OPENSSL_sk_num(sk);
+ 
+-  for (i=0; ; i++) {
++  for (i = 0; i < cnt; i++) {
+     int j, k;
+-    SSL_CIPHER *sc;
+-    sc = (meth->get_cipher)(i);
++    SSL_CIPHER *sc = reinterpret_cast<SSL_CIPHER*>(KOSSL::self()->OPENSSL_sk_value(sk, i));
+     if (!sc)
+       break;
+     // Leak of sc*?
+-    QString scn(sc->name);
++    QString scn(KOSSL::self()->SSL_CIPHER_get_name(sc));
+     if (scn.contains("ADH-") || scn.contains("NULL-") || scn.contains("DES-CBC3-SHA") || scn.contains("FZA-")) {
+       continue;
+     }
+-    k = SSL_CIPHER_get_bits(sc, &j);
++    k = KOSSL::self()->SSL_CIPHER_get_bits(sc, &j);
+ 
+-    item = new CipherItem( SSLv3Box, sc->name, k, j, this );
++    item = new CipherItem( SSLv3Box, scn, k, j, this );
+   }
+ 
+-  if (ctx) SSL_CTX_free(ctx);
+-  if (ssl) SSL_free(ssl);
++  if (ctx) KOSSL::self()->SSL_CTX_free(ctx);
++  if (ssl) KOSSL::self()->SSL_free(ssl);
+ 
+ return true;
+ }
+diff -ur kdebase-3.5.10/kcontrol/crypto/Makefile.am kdebase-3.5.10-openssl-1.1/kcontrol/crypto/Makefile.am
+--- kdebase-3.5.10/kcontrol/crypto/Makefile.am	2007-10-08 11:51:15.000000000 +0200
++++ kdebase-3.5.10-openssl-1.1/kcontrol/crypto/Makefile.am	2018-01-06 15:06:22.239737925 +0100
+@@ -6,7 +6,7 @@
+ AM_CXXFLAGS = $(CXXFLAGS) -DLIBDIR=$(libdir)
+ 
+ kcm_crypto_la_LDFLAGS  = $(KDE_RPATH) $(all_libraries) $(SSL_LDFLAGS) -module -avoid-version -no-undefined
+-kcm_crypto_la_LIBADD = -lkdeui $(LIB_KIO) $(LIBSSL)
++kcm_crypto_la_LIBADD = -lkdeui $(LIB_KIO)
+ 
+ METASOURCES = AUTO
+ 

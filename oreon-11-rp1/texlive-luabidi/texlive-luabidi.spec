@@ -1,5 +1,5 @@
-%global source0_hash 83dc49aa4c113c8a0569e780616126252780fb134e1b409281a0445cce1a3b35
-%global source1_hash 2111baa763d9406fb709ec3418ddc9dfc62b427ea51bad4cdbee6723d9adbb81
+%global source0_hash f363ae3399fa129cdb34825c81df24458468aa3a3bc629223c12e0b13894e5662d1d3774a48049f64a5a55edeb957b7a5da5cf033da9fbd4c733467dcdcacb62
+%global source1_hash c758b54d0c97c715c0ce2dff07ab7c85144bf782c515b553414505811ce0413f979a34201df5b6b7cc4e9c0a7a0d0e7cb1b7e742a8ebf4174cdacfd2f1ed84d3
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Bidi functions for LuaTeX
 License:        LPPL-1.3c AND MIT
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luabidi.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luabidi.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/luabidi.tar.xz#/luabidi.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/luabidi.doc.tar.xz#/luabidi.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-luabidi-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-luabidi-doc <= 11:%{version}
@@ -23,8 +23,8 @@ Provides:       tex(luabidi.sty)
 Bidi functions for LuaTeX.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

@@ -1,9 +1,9 @@
-%global source0_hash none
+%global source0_hash 08e918a91ea438d0d30f6acc5167451e57199dc4b5b7beac51805c9c4904f703
 
 %global stable_kf6 stable
 %global maj_ver_kf6 26
-%global min_ver_kf6 03
-%global bug_ver_kf6 80
+%global min_ver_kf6 04
+%global bug_ver_kf6 3
 
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
@@ -11,7 +11,7 @@ ExcludeArch: %{ix86}
 
 Name:    dolphin-plugins
 Summary: Dolphin plugins
-Version: 26.03.80
+Version: 26.08.0
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later
@@ -76,7 +76,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_datadir}/config.kcfg/fileviewhgpluginsettings.kcfg
 
 
+/usr/lib64/qt6/plugins/kf6/overlayicon/mountedisooverlay.so
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

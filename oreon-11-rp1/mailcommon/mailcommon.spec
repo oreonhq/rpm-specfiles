@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 9aa486a65f311c4e6b4013fa446780f08bc889658724e0c51c479bdf9d945a7b
 
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:    mailcommon
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: Mail applications support library
 

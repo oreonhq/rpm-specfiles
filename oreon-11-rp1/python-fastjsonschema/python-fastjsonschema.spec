@@ -1,23 +1,24 @@
-%global source0_hash 3757b049728580d516c0af50e11eed050c8e2c1815b221954c635bde455dcc78
+%global source0_hash none
 
 Name:           python-fastjsonschema
-Version:        2.21.2
-Release:        4%{?dist}
+Version:        2.22.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Fastest Python implementation of JSON schema
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://github.com/horejsek/%{name}
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+URL:            https://github.com/horejsek/python-fastjsonschema
+Source:         %{pypi_source fastjsonschema}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  pyproject-rpm-macros
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-fastjsonschema implements validation of JSON documents by JSON schema.
-The library implements JSON schema drafts 04, 06 and 07.
-The main purpose is to have a really fast implementation.}
+This is package 'fastjsonschema' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -26,27 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-fastjsonschema %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fastjsonschema devel
 
-%autosetup -p1 -n %{name}-%{version}
+
+%prep
+%autosetup -p1 -n fastjsonschema-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x devel
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files fastjsonschema
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -m "not benchmark"
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-fastjsonschema -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
 
 %changelog
 %autochangelog

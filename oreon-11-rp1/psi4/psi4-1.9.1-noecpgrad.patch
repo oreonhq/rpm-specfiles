@@ -1,0 +1,12 @@
+diff -up psi4-1.9.1/tests/scf-ecp/input.dat.noecpgrad psi4-1.9.1/tests/scf-ecp/input.dat
+--- psi4-1.9.1/tests/scf-ecp/input.dat.noecpgrad	2024-02-08 21:08:35.000000000 +0000
++++ psi4-1.9.1/tests/scf-ecp/input.dat	2024-09-03 18:05:45.842596421 +0000
+@@ -20,8 +20,3 @@ set = {
+ e = energy('scf')
+ compare_values(nucenergy, arwater.nuclear_repulsion_energy(), 9, "Nuclear repulsion energy")   #TEST
+ compare_values(refenergy, e, 9, "SCF energy with ECP")                                        #TEST
+-
+-agrad = gradient('scf')
+-set points 5
+-ngrad = gradient('scf', dertype=0)
+-compare_matrices(agrad, ngrad, 8, "SCF ECP finite-diff (5-pt) vs. analytic gradient to 10^-8") #TEST

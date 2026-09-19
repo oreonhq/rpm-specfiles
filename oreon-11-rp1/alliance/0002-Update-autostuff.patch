@@ -1,0 +1,191 @@
+From c4b1cb8e7cbf8e36282f42b9307fe46b6cc6a92f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Sun, 28 Feb 2016 10:07:48 +0100
+Subject: [PATCH 02/10] Update autostuff
+
+---
+ alliance/src/Makefile.am |   2 +
+ alliance/src/autostuff   | 123 ++++++++++++++++++++++++-----------------------
+ 2 files changed, 66 insertions(+), 59 deletions(-)
+
+diff --git a/alliance/src/Makefile.am b/alliance/src/Makefile.am
+index 061389e..e23b5c2 100644
+--- a/alliance/src/Makefile.am
++++ b/alliance/src/Makefile.am
+@@ -1,3 +1,5 @@
++ACLOCAL_AMFLAGS = -I.
++
+ SUBDIRS = @TOOLSDIRS@
+ 
+ EXTRA_DIST = autostuff alliance.m4 motif.m4 oldgcc.m4 xpm.m4 build depcomp \
+diff --git a/alliance/src/autostuff b/alliance/src/autostuff
+index 53083eb..2955c8b 100755
+--- a/alliance/src/autostuff
++++ b/alliance/src/autostuff
+@@ -89,38 +89,40 @@ ordered_dirs="$ordered_dirs $dirs"
+ 
+ AC_OUTPUT=`find $ordered_dirs -name Makefile.am | sed "s,\.am,,"`
+ 
+-rm -f configure.in
+-echo ""                                      >> configure.in
+-echo "AC_INIT(./autostuff)"                  >> configure.in
+-echo "AM_INIT_AUTOMAKE(alliance, 5.0)"       >> configure.in
+-echo ""                                      >> configure.in
+-echo "AM_PROG_LEX"                           >> configure.in
+-echo "AM_PROG_LIBTOOL"                       >> configure.in
+-echo "AC_CHECK_HEADERS(fcntl.h malloc.h strings.h sys/time.h unistd.h)" >>  configure.in
+-echo "AC_CHECK_HEADERS(strings.h unistd.h)"  >> configure.in
+-echo "AC_CHECK_LIB(gen, basename)"           >> configure.in
+-echo "AC_CHECK_LIB(iberty, basename)"        >> configure.in
+-echo "AC_CHECK_LIB(m, exp)"                  >> configure.in
+-echo "AC_CHECK_LIB(m, floor)"                >> configure.in
+-echo "AC_CHECK_LIB(m, pow)"                  >> configure.in
+-echo "AC_CHECK_LIB(m, sqrt)"                 >> configure.in
+-echo "AC_CHECK_PROG(SED, sed, sed)"          >> configure.in
+-echo "AC_CHECK_PROGS(SED, gsed sed)"         >> configure.in
+-echo "AC_C_CONST"                            >> configure.in
+-echo "AC_FUNC_VFORK"                         >> configure.in
+-echo "AC_HEADER_STDC"                        >> configure.in
+-echo "AC_HEADER_SYS_WAIT"                    >> configure.in
+-echo "AC_PATH_XTRA"                          >> configure.in
+-echo "AC_PROG_CC"                            >> configure.in
+-echo "AC_PROG_CPP"                           >> configure.in
+-echo "AC_PROG_CXX"                           >> configure.in
+-echo "AC_PROG_INSTALL"                       >> configure.in
+-echo "AC_PROG_MAKE_SET"                      >> configure.in
+-echo "AC_PROG_LIBTOOL"                       >> configure.in
+-echo "AC_PROG_YACC"                          >> configure.in
+-echo "AC_TYPE_SIGNAL"                        >> configure.in
++rm -f configure.ac
++echo ""                                      >> configure.ac
++echo "AC_INIT(alliance,5.0)"                 >> configure.ac
++echo "AC_CONFIG_SRCDIR(./autostuff)"         >> configure.ac
++echo "AM_INIT_AUTOMAKE(foreign)"             >> configure.ac
++echo "AC_CONFIG_MACRO_DIRS([.])"             >> configure.ac
++echo ""                                      >> configure.ac
++echo "AM_PROG_LEX"                           >> configure.ac
++echo "AM_PROG_LIBTOOL"                       >> configure.ac
++echo "AC_CHECK_HEADERS(fcntl.h malloc.h strings.h sys/time.h unistd.h)" >>  configure.ac
++echo "AC_CHECK_HEADERS(strings.h unistd.h)"  >> configure.ac
++echo "AC_CHECK_LIB(gen, basename)"           >> configure.ac
++echo "AC_CHECK_LIB(iberty, basename)"        >> configure.ac
++echo "AC_CHECK_LIB(m, exp)"                  >> configure.ac
++echo "AC_CHECK_LIB(m, floor)"                >> configure.ac
++echo "AC_CHECK_LIB(m, pow)"                  >> configure.ac
++echo "AC_CHECK_LIB(m, sqrt)"                 >> configure.ac
++echo "AC_CHECK_PROG(SED, sed, sed)"          >> configure.ac
++echo "AC_CHECK_PROGS(SED, gsed sed)"         >> configure.ac
++echo "AC_C_CONST"                            >> configure.ac
++echo "AC_FUNC_VFORK"                         >> configure.ac
++echo "AC_HEADER_STDC"                        >> configure.ac
++echo "AC_HEADER_SYS_WAIT"                    >> configure.ac
++echo "AC_PATH_XTRA"                          >> configure.ac
++echo "AC_PROG_CC"                            >> configure.ac
++echo "AC_PROG_CPP"                           >> configure.ac
++echo "AC_PROG_CXX"                           >> configure.ac
++echo "AC_PROG_INSTALL"                       >> configure.ac
++echo "AC_PROG_MAKE_SET"                      >> configure.ac
++echo "AC_PROG_LIBTOOL"                       >> configure.ac
++echo "AC_PROG_YACC"                          >> configure.ac
++echo "AC_TYPE_SIGNAL"                        >> configure.ac
+ 
+-cat >> configure.in <<"EOF"
++cat >> configure.ac <<"EOF"
+ dnl
+ dnl Check for X stuff
+ dnl
+@@ -283,60 +285,63 @@ LDFLAGS="$ice_save_LDFLAGS"
+ fi
+ EOF
+ 
+-echo "AM_ALLIANCE"                                 >> configure.in
+-echo "AM_CONDITIONAL([ALLIANCE_BUILD],[(exit 0)])" >> configure.in
++echo "AM_ALLIANCE"                                 >> configure.ac
++echo "AM_CONDITIONAL([ALLIANCE_BUILD],[(exit 0)])" >> configure.ac
+ 
+ find $ordered_dirs -name configure.in | while read config; do
+   echo "Scanning $config"
+-  echo "" >> configure.in
+-  echo "dnl Infos extracted from $config"  >> configure.in
++  echo "" >> configure.ac
++  echo "dnl Infos extracted from $config"  >> configure.ac
+ 
+   for version_line in  `grep -ah _CUR= $config`; do
+-    echo "$version_line"  >> configure.in
++    echo "$version_line"  >> configure.ac
+     version_name=`echo $version_line | sed 's,=.*,,'`
+-    echo "AC_SUBST($version_name)" >> configure.in
++    echo "AC_SUBST($version_name)" >> configure.ac
+   done
+   for version_line in  `grep -ah _REV= $config`; do
+-    echo "$version_line"  >> configure.in
++    echo "$version_line"  >> configure.ac
+     version_name=`echo $version_line | sed 's,=.*,,'`
+-    echo "AC_SUBST($version_name)" >> configure.in
++    echo "AC_SUBST($version_name)" >> configure.ac
+   done
+   for version_line in  `grep -ah _REL= $config`; do
+-    echo "$version_line"  >> configure.in
++    echo "$version_line"  >> configure.ac
+     version_name=`echo $version_line | sed 's,=.*,,'`
+-    echo "AC_SUBST($version_name)" >> configure.in
++    echo "AC_SUBST($version_name)" >> configure.ac
+   done
+ 
+   for dll_line in `grep -ah _DLL_VERSION= $config`; do
+-    echo "$dll_line"  >> configure.in
++    echo "$dll_line"  >> configure.ac
+     dll_name=`echo $dll_line | sed 's,=.*,,'`
+-    echo "AC_SUBST($dll_name)" >> configure.in
++    echo "AC_SUBST($dll_name)" >> configure.ac
+   done
+   for version_line in  `grep -ah _VERSION= $config | grep -v DLL`; do
+-    echo "$version_line"  >> configure.in
++    echo "$version_line"  >> configure.ac
+     version_name=`echo $version_line | sed 's,=.*,,'`
+-    echo "AC_SUBST($version_name)" >> configure.in
++    echo "AC_SUBST($version_name)" >> configure.ac
+   done
+ done
+ 
+-echo ""                                      >> configure.in
+-echo "TOOLSDIRS=\"$ordered_dirs\""           >> configure.in
+-echo "AC_SUBST(TOOLSDIRS)"                   >> configure.in
++echo ""                                      >> configure.ac
++echo "TOOLSDIRS=\"$ordered_dirs\""           >> configure.ac
++echo "AC_SUBST(TOOLSDIRS)"                   >> configure.ac
+ 
+-echo ""                                      >> configure.in
+-echo "AC_OUTPUT(["                           >> configure.in
+-echo "Makefile"                              >> configure.in
+-echo "distrib/etc/alc_env.sh"                >> configure.in
+-echo "distrib/etc/alc_env.csh"               >> configure.in
++echo ""                                      >> configure.ac
++echo "# HACK: Set to empty."                 >> configure.ac
++echo "AC_SUBST([ALLIANCE_LIB],[ ])"          >> configure.ac
++echo "AC_SUBST([ALLIANCE_CFLAGS],[ ])"	     >> configure.ac
++echo "AC_SUBST([ALLIANCE_TOP],[ ])"          >> configure.ac
++
++echo ""                                      >> configure.ac
++echo "AC_OUTPUT(["                           >> configure.ac
++echo "Makefile"                              >> configure.ac
++echo "distrib/etc/alc_env.sh"                >> configure.ac
++echo "distrib/etc/alc_env.csh"               >> configure.ac
+ for template in $AC_OUTPUT; do
+-  echo "$template"                           >> configure.in
++  echo "$template"                           >> configure.ac
+ done
+-echo "])"                                    >> configure.in
++echo "])"                                    >> configure.ac
+ 
+ 
+-aclocal -I .
+-libtoolize --force --copy --automake
+-automake --foreign --add-missing --copy
+-autoconf
++autoreconf -fi
+ 
+ exit 0
+-- 
+2.5.0
+

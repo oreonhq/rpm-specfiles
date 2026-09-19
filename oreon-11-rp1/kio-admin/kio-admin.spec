@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4d7dfe712004f1041481cc0a752c01c494983adf87f6df78568ba7198f7dc5f6
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           kio-admin
-Version:        26.04.1
+Version:        26.08.0
 Release:        1%{?dist}
 Summary:        Manage files as administrator using the admin:// KIO protocol
 License:        (GPL-2.0-only or GPL-3.0-only) and BSD-3-Clause and CC0-1.0 and FSFAP
@@ -39,7 +39,7 @@ operations in root-scope.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n kio-admin-26.04.1
+%autosetup -p1 -n %{name}-%{version}
 
 %build
 %cmake_kf6 \
@@ -65,5 +65,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_datadir}/polkit-1/actions/org.kde.kio.admin.policy
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.04.1-1
 - Import

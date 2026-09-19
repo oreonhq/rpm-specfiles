@@ -1,0 +1,297 @@
+From e247928573ba2715db690b44b9e5a73c31faff93 Mon Sep 17 00:00:00 2001
+From: Jake Lishman <jake.lishman@ibm.com>
+Date: Wed, 7 Jan 2026 17:43:44 +0000
+Subject: [PATCH 1/4] Add ownership-moving variants of `readonly` and
+ `readwrite`
+
+The additional `PyArray` methods `try_into_readonly` and
+`try_into_readwrite` allow directly moving the ownership of the `Bound`
+pointer backing a `PyArray` into the relevant view type.  This both a)
+avoids reference counting overhead and b) allows methods on
+`PyReadwriteArray` (like `resize`) that _require_ unique pointer
+referencing, not just unique active borrows to function without the user
+having to manually drop the base guard.
+---
+ src/array.rs      | 67 ++++++++++++++++++++++++++++++++++++++++++++---
+ src/borrow/mod.rs | 11 +++++---
+ tests/borrow.rs   |  2 +-
+ 3 files changed, 73 insertions(+), 7 deletions(-)
+
+diff --git a/src/array.rs b/src/array.rs
+index 8ab548653..a301ef1b3 100644
+--- a/src/array.rs
++++ b/src/array.rs
+@@ -714,7 +714,7 @@ unsafe fn clone_elements<T: Element>(py: Python<'_>, elems: &[T], data_ptr: &mut
+ 
+ /// Implementation of functionality for [`PyArray<T, D>`].
+ #[doc(alias = "PyArray")]
+-pub trait PyArrayMethods<'py, T, D>: PyUntypedArrayMethods<'py> {
++pub trait PyArrayMethods<'py, T, D>: PyUntypedArrayMethods<'py> + Sized {
+     /// Access an untyped representation of this array.
+     fn as_untyped(&self) -> &Bound<'py, PyUntypedArray>;
+ 
+@@ -956,12 +956,33 @@ pub trait PyArrayMethods<'py, T, D>: PyUntypedArrayMethods<'py> {
+         T: Element,
+         D: Dimension;
+ 
++    /// Consume `self` into an immutable borrow of the NumPy array
++    fn try_into_readonly(self) -> Result<PyReadonlyArray<'py, T, D>, BorrowError>
++    where
++        T: Element,
++        D: Dimension;
++
+     /// Get an immutable borrow of the NumPy array
+     fn try_readonly(&self) -> Result<PyReadonlyArray<'py, T, D>, BorrowError>
+     where
+         T: Element,
+         D: Dimension;
+ 
++    /// Consume `self` into an immutable borrow of the NumPy array
++    ///
++    /// # Panics
++    ///
++    /// Panics if the allocation backing the array is currently mutably borrowed.
++    ///
++    /// For a non-panicking variant, use [`try_readonly`][Self::try_into_readonly].
++    fn into_readonly(self) -> PyReadonlyArray<'py, T, D>
++    where
++        T: Element,
++        D: Dimension,
++    {
++        self.try_into_readonly().unwrap()
++    }
++
+     /// Get an immutable borrow of the NumPy array
+     ///
+     /// # Panics
+@@ -977,12 +998,36 @@ pub trait PyArrayMethods<'py, T, D>: PyUntypedArrayMethods<'py> {
+         self.try_readonly().unwrap()
+     }
+ 
++    /// Consume `self` into an mutable borrow of the NumPy array
++    fn try_into_readwrite(self) -> Result<PyReadwriteArray<'py, T, D>, BorrowError>
++    where
++        T: Element,
++        D: Dimension;
++
+     /// Get a mutable borrow of the NumPy array
+     fn try_readwrite(&self) -> Result<PyReadwriteArray<'py, T, D>, BorrowError>
+     where
+         T: Element,
+         D: Dimension;
+ 
++    /// Consume `self` into an mutable borrow of the NumPy array
++    ///
++    /// # Panics
++    ///
++    /// Panics if the allocation backing the array is currently borrowed or
++    /// if the array is [flagged as][flags] not writeable.
++    ///
++    /// For a non-panicking variant, use [`try_readwrite`][Self::try_readwrite].
++    ///
++    /// [flags]: https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flags.html
++    fn into_readwrite(self) -> PyReadwriteArray<'py, T, D>
++    where
++        T: Element,
++        D: Dimension,
++    {
++        self.try_into_readwrite().unwrap()
++    }
++
+     /// Get a mutable borrow of the NumPy array
+     ///
+     /// # Panics
+@@ -1467,12 +1512,28 @@ impl<'py, T, D> PyArrayMethods<'py, T, D> for Bound<'py, PyArray<T, D>> {
+         slice.map(|slc| T::vec_from_slice(self.py(), slc))
+     }
+ 
++    fn try_into_readonly(self) -> Result<PyReadonlyArray<'py, T, D>, BorrowError>
++    where
++        T: Element,
++        D: Dimension,
++    {
++        PyReadonlyArray::try_new(self)
++    }
++
+     fn try_readonly(&self) -> Result<PyReadonlyArray<'py, T, D>, BorrowError>
+     where
+         T: Element,
+         D: Dimension,
+     {
+-        PyReadonlyArray::try_new(self.clone())
++        self.clone().try_into_readonly()
++    }
++
++    fn try_into_readwrite(self) -> Result<PyReadwriteArray<'py, T, D>, BorrowError>
++    where
++        T: Element,
++        D: Dimension,
++    {
++        PyReadwriteArray::try_new(self)
+     }
+ 
+     fn try_readwrite(&self) -> Result<PyReadwriteArray<'py, T, D>, BorrowError>
+@@ -1480,7 +1541,7 @@ impl<'py, T, D> PyArrayMethods<'py, T, D> for Bound<'py, PyArray<T, D>> {
+         T: Element,
+         D: Dimension,
+     {
+-        PyReadwriteArray::try_new(self.clone())
++        self.clone().try_into_readwrite()
+     }
+ 
+     unsafe fn as_array(&self) -> ArrayView<'_, T, D>
+diff --git a/src/borrow/mod.rs b/src/borrow/mod.rs
+index 86d7110f9..7ac582948 100644
+--- a/src/borrow/mod.rs
++++ b/src/borrow/mod.rs
+@@ -606,6 +606,11 @@ where
+     ///
+     /// Safe wrapper for [`PyArray::resize`].
+     ///
++    /// Note that as this mutates a pointed-to object, you cannot hold multiple
++    /// pointers to the array simultaneously; if you begin with a [`PyArray`],
++    /// you will need to use [`PyArrayMethods::into_readwrite`] instead of
++    /// the shared-reference variant.
++    ///
+     /// # Example
+     ///
+     /// ```
+@@ -616,7 +621,7 @@ where
+     ///     let pyarray = PyArray::arange(py, 0, 10, 1);
+     ///     assert_eq!(pyarray.len(), 10);
+     ///
+-    ///     let pyarray = pyarray.readwrite();
++    ///     let pyarray = pyarray.into_readwrite();
+     ///     let pyarray = pyarray.resize(100).unwrap();
+     ///     assert_eq!(pyarray.len(), 100);
+     /// });
+@@ -722,7 +727,7 @@ mod tests {
+                 .cast_into::<PyArray1<f64>>()
+                 .unwrap();
+ 
+-            let exclusive = array.readwrite();
++            let exclusive = array.into_readwrite();
+             assert!(exclusive.resize(100).is_err());
+         });
+     }
+@@ -732,7 +737,7 @@ mod tests {
+         Python::attach(|py| {
+             let array = PyArray::<f64, _>::zeros(py, 10, false);
+ 
+-            let exclusive = array.readwrite();
++            let exclusive = array.into_readwrite();
+             assert!(exclusive.resize(10).is_ok());
+         });
+     }
+diff --git a/tests/borrow.rs b/tests/borrow.rs
+index 49bf59d61..c53418e5c 100644
+--- a/tests/borrow.rs
++++ b/tests/borrow.rs
+@@ -341,7 +341,7 @@ fn resize_using_exclusive_borrow() {
+         let array = PyArray::<f64, _>::zeros(py, 3, false);
+         assert_eq!(array.shape(), [3]);
+ 
+-        let mut array = array.readwrite();
++        let mut array = array.into_readwrite();
+         assert_eq!(array.as_slice_mut().unwrap(), &[0.0; 3]);
+ 
+         let mut array = array.resize(5).unwrap();
+
+From adb0811f8d79b37bbb82de58505c3f80bbaaeaf9 Mon Sep 17 00:00:00 2001
+From: Jake Lishman <jake.lishman@ibm.com>
+Date: Wed, 7 Jan 2026 21:09:08 +0000
+Subject: [PATCH 2/4] Add changelog entry
+
+---
+# CHANGELOG.md | 1 +
+# 1 file changed, 1 insertion(+)
+#
+#diff --git a/CHANGELOG.md b/CHANGELOG.md
+#index 97707dc45..a5815358b 100644
+#--- a/CHANGELOG.md
+#+++ b/CHANGELOG.md
+#@@ -1,6 +1,7 @@
+# # Changelog
+# - v0.28.0
+#   - Fix mismatched behavior between `PyArrayLike1` and `PyArrayLike2` when used with floats ([#520](https://github.com/PyO3/rust-numpy/pull/520))
+#+  - Add ownership-moving conversions into `PyReadonlyArray` and `PyReadwriteArray` ([#524](https://github.com/PyO3/rust-numpy/pull/524))
+# 
+# - v0.27.1
+#   - Bump ndarray dependency to v0.17. ([#516](https://github.com/PyO3/rust-numpy/pull/516))
+#
+#From bac582161ea8479129041cfd7167cd6cc676e9fd Mon Sep 17 00:00:00 2001
+#From: Jake Lishman <jake.lishman@ibm.com>
+#Date: Wed, 7 Jan 2026 21:14:38 +0000
+#Subject: [PATCH 3/4] Update documentation
+#
+---
+ src/array.rs      |  4 ++--
+ src/borrow/mod.rs | 10 ++++++----
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/src/array.rs b/src/array.rs
+index a301ef1b3..737101e9a 100644
+--- a/src/array.rs
++++ b/src/array.rs
+@@ -974,7 +974,7 @@ pub trait PyArrayMethods<'py, T, D>: PyUntypedArrayMethods<'py> + Sized {
+     ///
+     /// Panics if the allocation backing the array is currently mutably borrowed.
+     ///
+-    /// For a non-panicking variant, use [`try_readonly`][Self::try_into_readonly].
++    /// For a non-panicking variant, use [`try_into_readonly`][Self::try_into_readonly].
+     fn into_readonly(self) -> PyReadonlyArray<'py, T, D>
+     where
+         T: Element,
+@@ -1017,7 +1017,7 @@ pub trait PyArrayMethods<'py, T, D>: PyUntypedArrayMethods<'py> + Sized {
+     /// Panics if the allocation backing the array is currently borrowed or
+     /// if the array is [flagged as][flags] not writeable.
+     ///
+-    /// For a non-panicking variant, use [`try_readwrite`][Self::try_readwrite].
++    /// For a non-panicking variant, use [`try_into_readwrite`][Self::try_into_readwrite].
+     ///
+     /// [flags]: https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flags.html
+     fn into_readwrite(self) -> PyReadwriteArray<'py, T, D>
+diff --git a/src/borrow/mod.rs b/src/borrow/mod.rs
+index 7ac582948..c08b74017 100644
+--- a/src/borrow/mod.rs
++++ b/src/borrow/mod.rs
+@@ -606,10 +606,12 @@ where
+     ///
+     /// Safe wrapper for [`PyArray::resize`].
+     ///
+-    /// Note that as this mutates a pointed-to object, you cannot hold multiple
+-    /// pointers to the array simultaneously; if you begin with a [`PyArray`],
+-    /// you will need to use [`PyArrayMethods::into_readwrite`] instead of
+-    /// the shared-reference variant.
++    /// Note that as this mutates a pointed-to object, the [`PyReadwriteArray`] must be the only
++    /// Python reference to the object.  There cannot be `PyArray` pointers or even `Bound<PyAny>`
++    /// pointing to the same object; this means for example that an object received from a PyO3
++    /// `pyfunction` cannot call this method, since the PyO3 wrapper maintains a reference itself.
++    /// Attempting to call this method when there are other Python references is still safe; NumPy
++    /// will raise a Python-space exception.
+     ///
+     /// # Example
+     ///
+
+From be438e7b7dd0d387c58403556beb88055143cafc Mon Sep 17 00:00:00 2001
+From: Jake Lishman <jake.lishman@ibm.com>
+Date: Wed, 7 Jan 2026 21:15:37 +0000
+Subject: [PATCH 4/4] Add minor test coverage of `into_readonly`
+
+---
+ tests/borrow.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/borrow.rs b/tests/borrow.rs
+index c53418e5c..52c1ad8fb 100644
+--- a/tests/borrow.rs
++++ b/tests/borrow.rs
+@@ -31,7 +31,7 @@ fn multiple_shared_borrows() {
+         let array = PyArray::<f64, _>::zeros(py, (1, 2, 3), false);
+ 
+         let shared1 = array.readonly();
+-        let shared2 = array.readonly();
++        let shared2 = array.into_readonly();
+ 
+         assert_eq!(shared2.shape(), [1, 2, 3]);
+         assert_eq!(shared1.shape(), [1, 2, 3]);

@@ -1,0 +1,22 @@
+diff -up epienbroek-mail-notification-9ae8768/src/mn-mailboxes.gob.libxml2 epienbroek-mail-notification-9ae8768/src/mn-mailboxes.gob
+--- epienbroek-mail-notification-9ae8768/src/mn-mailboxes.gob.libxml2	2013-12-31 16:31:59.000000000 +0100
++++ epienbroek-mail-notification-9ae8768/src/mn-mailboxes.gob	2023-12-04 11:38:04.420756018 +0100
+@@ -30,6 +30,7 @@
+ #include <errno.h>
+ #include <glib/gi18n.h>
+ #include <libxml/parser.h>
++#include <libxml/xmlsave.h>
+ #include <libxml/tree.h>
+ #include "mn-conf.h"
+ #include "mn-message.h"
+diff -up epienbroek-mail-notification-9ae8768/src/mn-shell.gob.libxml2 epienbroek-mail-notification-9ae8768/src/mn-shell.gob
+--- epienbroek-mail-notification-9ae8768/src/mn-shell.gob.libxml2	2023-12-04 11:38:21.285964945 +0100
++++ epienbroek-mail-notification-9ae8768/src/mn-shell.gob	2023-12-04 11:38:37.676167987 +0100
+@@ -36,6 +36,7 @@
+ #include <signal.h>
+ #include <glib/gi18n.h>
+ #include <libxml/tree.h>
++#include <libxml/xmlsave.h>
+ #include "mn-properties-dialog.h"
+ #include "mn-util.h"
+ #include "mn-conf.h"

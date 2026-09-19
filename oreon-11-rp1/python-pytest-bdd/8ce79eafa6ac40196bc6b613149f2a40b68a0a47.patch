@@ -1,0 +1,33 @@
+From 8ce79eafa6ac40196bc6b613149f2a40b68a0a47 Mon Sep 17 00:00:00 2001
+From: Alessio Bogon <778703+youtux@users.noreply.github.com>
+Date: Sun, 8 Dec 2024 12:10:36 +0100
+Subject: [PATCH] Less strict `gherkin-official` version requirement
+
+---
+ poetry.lock    | 2 +-
+ pyproject.toml | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/poetry.lock b/poetry.lock
+index bf8f8df2..955a1056 100644
+--- a/poetry.lock
++++ b/poetry.lock
+@@ -1316,4 +1316,4 @@ type = ["pytest-mypy"]
+ [metadata]
+ lock-version = "2.0"
+ python-versions = ">=3.9"
+-content-hash = "c14dd53bbf4f9bc1284da14ba9fab7b96c05be005ef3565a53a26d203a745397"
++content-hash = "5ae97a9f6abf8b7b030d2d845f384785c0681b063e3fa5fd4b2cd69c16c8c00d"
+diff --git a/pyproject.toml b/pyproject.toml
+index 81b49a22..f196671b 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -41,7 +41,7 @@ parse-type = "*"
+ pytest = ">=7.0.0"
+ typing-extensions = "*"
+ packaging = "*"
+-gherkin-official = "^29.0.0"
++gherkin-official = ">=29.0.0"
+ 
+ [tool.poetry.group.dev.dependencies]
+ tox = ">=4.11.3"

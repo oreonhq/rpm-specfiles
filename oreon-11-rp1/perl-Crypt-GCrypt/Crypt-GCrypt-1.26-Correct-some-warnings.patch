@@ -1,0 +1,50 @@
+From 1d4c44e18950dc44805328df285ae91dea575761 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 24 Sep 2015 17:01:50 +0200
+Subject: [PATCH] Correct some warnings
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+GCC 5 warns about casting pointer to integer and about possible
+undefined variable. This patch corrects it.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ GCrypt.xs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/GCrypt.xs b/GCrypt.xs
+index 51f30f2..3646e89 100644
+--- a/GCrypt.xs
++++ b/GCrypt.xs
+@@ -94,7 +94,7 @@ int find_padding (Crypt_GCrypt gcr, unsigned char *string, size_t string_len) {
+             p = memchr((char *) string, '\0', string_len);
+             if (p == NULL) return -1;
+             
+-            offset = (int) p - (int) string;
++            offset = p - (void *)string;
+             for (i = offset; i < string_len; ++i) {
+                 if (string[string_len-i] != '\0') return -1;
+             }
+@@ -104,7 +104,7 @@ int find_padding (Crypt_GCrypt gcr, unsigned char *string, size_t string_len) {
+             p = memchr((char *) string, '\32', string_len);
+             if (p == NULL) return -1;
+             
+-            offset = (int) p - (int) string;
++            offset = p - (void *)string;
+             for (i = offset; i < string_len; ++i) {
+                 if (string[string_len-i] != '\32') return -1;
+             }
+@@ -204,7 +204,7 @@ Crypt_GCrypt
+ cg_new(...)
+     PROTOTYPE: @
+     INIT:
+-        char *s, *algo_s, *mode_s, *key_s;
++        char *s, *algo_s = NULL, *mode_s, *key_s;
+         int i, algo, mode;
+         unsigned int c_flags, ac_flags, md_flags;
+ /*
+-- 
+2.4.3
+

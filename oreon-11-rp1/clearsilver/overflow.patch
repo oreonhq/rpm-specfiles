@@ -1,0 +1,11 @@
+--- a/perl/ClearSilver.xs~	2007-07-11 20:31:34.000000000 -0500
++++ b/perl/ClearSilver.xs	2026-01-08 16:58:01.714399921 -0600
+@@ -439,7 +439,7 @@
+     CODE:
+ 	do {
+ 	    len = strlen(in_str);
+-	    cs_str = (char *)malloc(len);
++	    cs_str = (char *)malloc(len+1);
+ 	    if (!cs_str) {
+ 	        RETVAL = 0;
+ 		break;

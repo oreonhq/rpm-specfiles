@@ -1,8 +1,8 @@
 %global source0_hash 61f520e7c1664ae9301fa36a2b8e90cf4680887a71f456c290d5d8b879f1e2e6
 
 Name:           wireguard-tools
-Version:        1.0.20250521
-Release:        3%{?dist}
+Version:        1.0.20260223
+Release:        1%{?dist}
 URL:            https://www.wireguard.com/
 Summary:        Fast, modern, secure VPN tunnel
 # Automatically converted from old format: GPLv2 - review is highly recommended.

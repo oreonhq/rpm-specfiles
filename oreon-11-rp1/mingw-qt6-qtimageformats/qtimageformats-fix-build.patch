@@ -1,0 +1,13 @@
+diff -rupN --no-dereference qtimageformats-everywhere-src-6.10.0/CMakeLists.txt qtimageformats-everywhere-src-6.10.0-new/CMakeLists.txt
+--- qtimageformats-everywhere-src-6.10.0/CMakeLists.txt	2025-08-17 21:32:20.000000000 +0200
++++ qtimageformats-everywhere-src-6.10.0-new/CMakeLists.txt	2025-09-02 19:01:03.188909273 +0200
+@@ -19,4 +19,9 @@ if(NOT TARGET Qt::Gui)
+     message(NOTICE "Skipping the build as the condition \"TARGET Qt::Gui\" is not met.")
+     return()
+ endif()
++if (NOT TARGET Threads::Threads)
++    find_package(Threads)
++endif()
++qt_internal_disable_find_package_global_promotion(Threads::Threads)
++
+ qt_build_repo()

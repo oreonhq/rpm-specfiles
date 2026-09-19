@@ -1,0 +1,24 @@
+diff -uNr drbd-utils-9.28.0.orig/documentation/common/Makefile_v84_com.in drbd-utils-9.28.0/documentation/common/Makefile_v84_com.in
+--- drbd-utils-9.28.0.orig/documentation/common/Makefile_v84_com.in	2024-04-18 09:20:31.000000000 +0200
++++ drbd-utils-9.28.0/documentation/common/Makefile_v84_com.in	2024-08-24 22:50:06.157000000 +0200
+@@ -49,7 +49,7 @@
+ HTML_STYLESHEET ?= $(STYLESHEET_PREFIX)/xhtml/docbook.xsl
+ FO_STYLESHEET ?= $(STYLESHEET_PREFIX)/fo/docbook.xsl
+ 
+-XSLTPROC_OPTIONS ?= --xinclude
++XSLTPROC_OPTIONS ?= --nonet --xinclude
+ XSLTPROC_OPTIONS += --stringparam variablelist.term.break.after 1
+ #XSLTPROC_OPTIONS += --stringparam variablelist.term.separator ""
+ XSLTPROC_MANPAGES_OPTIONS ?= $(XSLTPROC_OPTIONS)
+diff -uNr drbd-utils-9.28.0.orig/documentation/common/Makefile_v9_com.in drbd-utils-9.28.0/documentation/common/Makefile_v9_com.in
+--- drbd-utils-9.28.0.orig/documentation/common/Makefile_v9_com.in	2024-04-18 09:20:31.000000000 +0200
++++ drbd-utils-9.28.0/documentation/common/Makefile_v9_com.in	2024-08-24 22:50:09.065000000 +0200
+@@ -50,7 +50,7 @@
+ HTML_STYLESHEET ?= $(STYLESHEET_PREFIX)/xhtml/docbook.xsl
+ FO_STYLESHEET ?= $(STYLESHEET_PREFIX)/fo/docbook.xsl
+ 
+-XSLTPROC_OPTIONS ?= --xinclude
++XSLTPROC_OPTIONS ?= --nonet --xinclude
+ XSLTPROC_OPTIONS += --stringparam variablelist.term.break.after 1
+ #XSLTPROC_OPTIONS += --stringparam variablelist.term.separator ""
+ XSLTPROC_MANPAGES_OPTIONS ?= $(XSLTPROC_OPTIONS)

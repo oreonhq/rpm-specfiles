@@ -1,0 +1,77 @@
+--- librep_0.92.7/src/gh.c.orig	2025-01-27 15:49:28.184704111 +0200
++++ librep_0.92.7/src/gh.c	2025-01-27 15:51:18.209994773 +0200
+@@ -107,62 +107,62 @@
+ 
+ repv gh_new_procedure0_0(const char *proc_name, repv (*fn)(void))
+ {
+-    return gh_new_procedure (proc_name, fn, 0, 0, 0);
++    UNIMP_RET;
+ }
+ 
+ repv gh_new_procedure0_1(const char *proc_name, repv (*fn)(repv))
+ {
+-    return gh_new_procedure (proc_name, fn, 0, 1, 0);
++    UNIMP_RET;
+ }
+ 
+ repv gh_new_procedure0_2(const char *proc_name, repv (*fn)(repv, repv))
+ {
+-    return gh_new_procedure (proc_name, fn, 0, 2, 0);
++    UNIMP_RET;
+ }
+ 
+ repv gh_new_procedure1_0(const char *proc_name, repv (*fn)(repv))
+ {
+-    return gh_new_procedure (proc_name, fn, 1, 0, 0);
++    UNIMP_RET;
+ }
+ 
+ repv gh_new_procedure1_1(const char *proc_name, repv (*fn)(repv, repv))
+ {
+-    return gh_new_procedure (proc_name, fn, 1, 1, 0);
++    UNIMP_RET;
+ }
+ 
+ repv gh_new_procedure1_2(const char *proc_name, repv (*fn)(repv, repv, repv))
+ {
+-    return gh_new_procedure (proc_name, fn, 1, 2, 0);
++    UNIMP_RET;
+ }
+ 
+ repv gh_new_procedure2_0(const char *proc_name, repv (*fn)(repv, repv))
+ {
+-    return gh_new_procedure (proc_name, fn, 2, 0, 0);
++    UNIMP_RET;
+ }
+ 
+ repv gh_new_procedure2_1(const char *proc_name, repv (*fn)(repv, repv, repv))
+ {
+-    return gh_new_procedure (proc_name, fn, 2, 1, 0);
++    UNIMP_RET;
+ }
+ 
+ repv gh_new_procedure2_2(const char *proc_name, repv (*fn)(repv, repv, repv, repv))
+ {
+-    return gh_new_procedure (proc_name, fn, 2, 2, 0);
++    UNIMP_RET;
+ }
+ 
+ repv gh_new_procedure3_0(const char *proc_name, repv (*fn)(repv, repv, repv))
+ {
+-    return gh_new_procedure (proc_name, fn, 3, 0, 0);
++    UNIMP_RET;
+ }
+ 
+ repv gh_new_procedure4_0(const char *proc_name, repv (*fn)(repv, repv, repv, repv))
+ {
+-    return gh_new_procedure (proc_name, fn, 4, 0, 0);
++    UNIMP_RET;
+ }
+ 
+ repv gh_new_procedure5_0(const char *proc_name, repv (*fn)(repv, repv, repv, repv, repv))
+ {
+-    return gh_new_procedure (proc_name, fn, 5, 0, 0);
++    UNIMP_RET;
+ }
+ 
+ /* C to Scheme conversion */

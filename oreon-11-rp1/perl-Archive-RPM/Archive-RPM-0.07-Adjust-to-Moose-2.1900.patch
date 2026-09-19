@@ -1,0 +1,47 @@
+From 2e8b14b7f07f6a37711bbbd16b313768696fcc14 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 16 Feb 2017 11:43:10 +0100
+Subject: [PATCH] Adjust to Moose-2.1900
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Archive::RPM failed to compile since Moose-2.1900 because new
+Moose inlines delegation and that does work nice with overloaded '<=>'
+operator provided by RPM2::Header.
+
+This patch reimplements the handles option by code reference that can
+cope with it in contrast to regular expression.
+
+<https://rt.cpan.org/Public/Bug/Display.html?id=120270>
+<https://rt.cpan.org/Public/Bug/Display.html?id=118808>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Archive/RPM.pm | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/lib/Archive/RPM.pm b/lib/Archive/RPM.pm
+index 913ce8c..548679c 100644
+--- a/lib/Archive/RPM.pm
++++ b/lib/Archive/RPM.pm
+@@ -70,8 +70,14 @@ has _header => (
+     isa        => 'RPM2::Header', 
+     lazy_build => 1,
+     
+-    # http://www.perlmonks.org/?node_id=588315 kick ass!
+-    handles => qr/^(?!(?s:.*)^(files|changelog|nvr)$)/,
++    handles => sub {
++        return map { $_ => $_ }
++        grep { $_ ne 'files' && $_ ne 'changelog' && $_ ne 'nvr' &&
++            # Skip overloaded operators like '<=>' that blast Moose-2.1900
++            # https://rt.cpan.org/Public/Bug/Display.html?id=120270
++            $_ =~ /^[a-zA-Z]/
++        } $_[1]->get_all_method_names;
++    },
+ );
+ 
+ sub _build__header { RPM2->open_package(shift->rpm) }
+-- 
+2.7.4
+

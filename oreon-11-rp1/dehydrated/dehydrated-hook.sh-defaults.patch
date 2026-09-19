@@ -1,0 +1,52 @@
+diff -up dehydrated-0.7.1/docs/examples/hook.sh.orig dehydrated-0.7.1/docs/examples/hook.sh
+--- dehydrated-0.7.1/docs/examples/hook.sh.orig	2022-10-31 15:12:38.000000000 +0100
++++ dehydrated-0.7.1/docs/examples/hook.sh	2023-05-31 03:12:35.312025334 +0200
+@@ -21,7 +21,7 @@ deploy_challenge() {
+   #   be found in the $TOKEN_FILENAME file.
+ 
+   # Simple example: Use nsupdate with local named
+-  # printf 'server 127.0.0.1\nupdate add _acme-challenge.%s 300 IN TXT "%s"\nsend\n' "${DOMAIN}" "${TOKEN_VALUE}" | nsupdate -k /var/run/named/session.key
++  # printf 'server 127.0.0.1\nupdate add _acme-challenge.%s 30 IN TXT "%s"\nsend\n' "${DOMAIN}" "${TOKEN_VALUE}" | nsupdate -k /etc/named/session.key
+ }
+ 
+ clean_challenge() {
+@@ -34,7 +34,7 @@ clean_challenge() {
+   # The parameters are the same as for deploy_challenge.
+ 
+   # Simple example: Use nsupdate with local named
+-  # printf 'server 127.0.0.1\nupdate delete _acme-challenge.%s TXT "%s"\nsend\n' "${DOMAIN}" "${TOKEN_VALUE}" | nsupdate -k /var/run/named/session.key
++  # printf 'server 127.0.0.1\nupdate delete _acme-challenge.%s TXT "%s"\nsend\n' "${DOMAIN}" "${TOKEN_VALUE}" | nsupdate -k /etc/named/session.key
+ }
+ 
+ sync_cert() {
+@@ -86,8 +86,14 @@ deploy_cert() {
+   #   Timestamp when the specified certificate was created.
+ 
+   # Simple example: Copy file to nginx config
+-  # cp "${KEYFILE}" "${FULLCHAINFILE}" /etc/nginx/ssl/; chown -R nginx: /etc/nginx/ssl
+-  # systemctl reload nginx
++  # umask=$(umask)	# save original umask
++  # umask 077		# use secure umask for key file creation
++  # cat "${KEYFILE}" > /etc/pki/tls/private/${DOMAIN}.key
++  # touch --reference="${KEYFILE}" /etc/pki/tls/private/${DOMAIN}.key
++  # umask 022		# wider permission for certificates
++  # cat "${FULLCHAINFILE}" > /etc/pki/tls/certs/${DOMAIN}.crt
++  # umask ${umask}	# restore umask
++  # systemctl reload nginx.service
+ }
+ 
+ deploy_ocsp() {
+@@ -214,6 +220,13 @@ exit_hook() {
+   #   Contains error message if dehydrated exits with error
+ }
+ 
++# Include local overrides for hook.sh functions
++if [ -d /etc/dehydrated/hook.d ]; then
++    for localhook in $(ls -1 /etc/dehydrated/hook.d/*.sh 2>/dev/null); do
++        . "${localhook}"
++    done
++fi
++
+ HANDLER="$1"; shift
+ if [[ "${HANDLER}" =~ ^(deploy_challenge|clean_challenge|sync_cert|deploy_cert|deploy_ocsp|unchanged_cert|invalid_challenge|request_failure|generate_csr|startup_hook|exit_hook)$ ]]; then
+   "$HANDLER" "$@"

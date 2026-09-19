@@ -1,0 +1,2 @@
+# You can specify the target name here, such as:
+# NETBSD_ISCSI_OPTS="-t iqn.2008-07.fedoraproject.org"

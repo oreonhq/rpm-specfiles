@@ -1,0 +1,12 @@
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CImageLoaderPNG.cpp~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CImageLoaderPNG.cpp
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CImageLoaderPNG.cpp~	2011-12-14 09:59:39.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CImageLoaderPNG.cpp	2011-12-14 11:02:13.931050272 +0100
+@@ -42,7 +42,7 @@ void user_read_data_fcn(png_structp png_
+    png_size_t check; 
+ 
+    // changed by zola { 
+-   irr::io::IReadFile* file=(irr::io::IReadFile*)png_ptr->io_ptr; 
++   irr::io::IReadFile* file=(irr::io::IReadFile*)png_get_io_ptr(png_ptr); 
+    check=(png_size_t) file->read((void*)data,length); 
+    // } 
+ 

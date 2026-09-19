@@ -1,0 +1,17 @@
+diff -up xgalaga-2.0.34/libsprite/makewindow.c~ xgalaga-2.0.34/libsprite/makewindow.c
+--- xgalaga-2.0.34/libsprite/makewindow.c~	2009-09-11 08:48:44.000000000 +0200
++++ xgalaga-2.0.34/libsprite/makewindow.c	2009-09-11 08:50:50.000000000 +0200
+@@ -642,6 +642,13 @@ void W_ToggleFullscreen(_win)
+       }
+     }
+         
++    /* Warp the pointer to the upper left corner (where our fs_window is),
++       this is necessary as the: XF86VidModeSetViewPort() call below does
++       not seem to do anything on newer Xorg servers, instead the viewport
++       seems to always be centered at the last mouse cursor position. */
++    XWarpPointer(W_Display, None, XDefaultRootWindow(W_Display),
++                 0, 0, 0, 0, 0, 0);
++
+     /* Switch video mode.  */
+     if ((i >= 0) &&
+         ((modes[i]->hdisplay != mode.hdisplay) ||

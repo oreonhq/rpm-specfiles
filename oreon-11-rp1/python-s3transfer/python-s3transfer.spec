@@ -1,56 +1,61 @@
-%global source0_hash 8e990f13268025792229cd52fa10cb7163744bf56e719e0b9cb925ab79abf920
+%global source0_hash none
 
-%global srcname s3transfer
-%global _description \
-S3transfer is a Python library for managing Amazon S3 transfers.
+Name:           python-s3transfer
+Version:        0.19.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An Amazon S3 Transfer Manager
 
-Name:           python-%{srcname}
-Version:        0.16.0
-Release:        2%{?dist}
-Summary:        Amazon S3 Transfer Manager
-
-License:        Apache-2.0
-URL:            https://pypi.org/project/s3transfer/
-Source0:        https://files.pythonhosted.org/packages/source/s/s3transfer/s3transfer-0.16.0.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/boto/s3transfer
+Source:         %{pypi_source s3transfer}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description %{_description}
 
-%package -n python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 's3transfer' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-s3transfer
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-# required to run the test suite
-BuildRequires:  python3dist(botocore) >= 1.12.36
-BuildRequires:  python3dist(botocore) < 2.0
-BuildRequires:  python3dist(pytest)
+%description -n python3-s3transfer %_description
 
-%description -n python3-%{srcname} %{_description}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-s3transfer crt
 
-Python 3 version.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{srcname}-%{version} -p1
+%autosetup -p1 -n s3transfer-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x crt
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest tests/unit tests/functional
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE.txt
-%doc README.rst
 
+%files -n python3-s3transfer -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.16.0-2

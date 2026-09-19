@@ -1,0 +1,14 @@
+--- runtime-decompiler/src/plugins/CfrDecompilerWrapper.json
++++ runtime-decompiler/src/plugins/CfrDecompilerWrapper.json
+@@ -1,8 +1,8 @@
+ {
+   "Name": "Cfr",
+-  "WrapperURL": "file://${XDG_CONFIG_HOME}/plugins/CfrDecompilerWrapper.java",
++  "WrapperURL": "file:/etc/java-runtime-decompiler/plugins/CfrDecompilerWrapper.java",
+   "DependencyURL": [
+-    "file://${HOME}/.m2/repository/org/benf/cfr/0.152/cfr-0.152.jar"
++    "file:/usr/share/java/CFR/cfr.jar"
+   ],
+   "DecompilerDownloadURL": "https://www.benf.org/other/cfr/faq.html"
+ }
+

@@ -1,0 +1,26 @@
+diff --git a/gtk3/theme/3.20/gtk-widgets.css.em b/gtk3/theme/3.20/gtk-widgets.css.em
+index 2e6ef60..ce86e69 100644
+--- a/gtk3/theme/3.20/gtk-widgets.css.em
++++ b/gtk3/theme/3.20/gtk-widgets.css.em
+@@ -422,7 +422,7 @@ menu {
+ }
+ 
+ menuitem {
+-    padding: $(subcell_size)px $((subcell_size * 3 - font_height) / 2)px;
++    padding: $(subcell_size)px @((subcell_size * 3 - font_height) / 2)px;
+ }
+ 
+ menuitem:hover,
+diff --git a/gtk3/theme/gtk-widgets.css.em b/gtk3/theme/gtk-widgets.css.em
+index fe1189d..8411bfd 100644
+--- a/gtk3/theme/gtk-widgets.css.em
++++ b/gtk3/theme/gtk-widgets.css.em
+@@ -489,7 +489,7 @@ SugarPaletteWindow SugarGroupBox *:insensitive {
+ }
+ 
+ .menuitem {
+-    padding: $(subcell_size)px $((subcell_size * 3 - font_height) / 2)px;
++    padding: $(subcell_size)px @((subcell_size * 3 - font_height) / 2)px;
+ }
+ 
+ .menuitem:prelight, .menuitem:hover {

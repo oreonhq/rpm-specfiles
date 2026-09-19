@@ -1,0 +1,17 @@
+Add missing include directives for make_dashed, set_cursor_busy.
+
+Submitted upstream: <https://sourceforge.net/p/xournal/patches/93/>
+
+diff --git a/src/xo-image.c b/src/xo-image.c
+index c16f8f40897e064e..5624a46c3a35d287 100644
+--- a/src/xo-image.c
++++ b/src/xo-image.c
+@@ -25,6 +25,8 @@
+ #include "xo-support.h"
+ #include "xo-image.h"
+ #include "xo-misc.h"
++#include "xo-selection.h"
++#include "xo-paint.h"
+ 
+ // create pixbuf from buffer, or return NULL on failure
+ GdkPixbuf *pixbuf_from_buffer(const gchar *buf, gsize buflen)

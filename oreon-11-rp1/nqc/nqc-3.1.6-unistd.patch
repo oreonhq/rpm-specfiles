@@ -1,0 +1,20 @@
+--- compiler/lexer.cpp.unistd	2013-02-23 22:51:16.440528408 -0500
++++ compiler/lexer.cpp	2013-02-23 22:51:37.621341444 -0500
+@@ -15,7 +15,7 @@
+ #if defined(__MWERKS__) && !__MACH__ && !YY_NEVER_INTERACTIVE
+ #include <unix.h>
+ #endif
+-
++#include <unistd.h>
+ 
+ /* cfront 1.2 defines "c_plusplus" instead of "__cplusplus" */
+ #ifdef c_plusplus
+@@ -1857,7 +1857,7 @@ YY_BUFFER_STATE b;
+ 
+ #ifndef YY_ALWAYS_INTERACTIVE
+ #ifndef YY_NEVER_INTERACTIVE
+-extern int isatty YY_PROTO(( int ));
++//extern int isatty YY_PROTO(( int ));
+ #endif
+ #endif
+ 

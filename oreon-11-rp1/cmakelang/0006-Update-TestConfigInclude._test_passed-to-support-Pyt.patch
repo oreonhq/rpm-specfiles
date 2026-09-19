@@ -1,0 +1,38 @@
+From: Ian Campbell <ijc@debian.org>
+Date: Sun, 8 Jan 2023 08:11:28 +0000
+Subject: Update TestConfigInclude._test_passed to support Python 3.11
+
+Update snippet from linked page
+
+Forwarded: https://github.com/cheshirekow/cmake_format/pull/304
+---
+ cmakelang/test/config_include_test.py | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/cmakelang/test/config_include_test.py b/cmakelang/test/config_include_test.py
+index 45da0bd..8219e7a 100644
+--- a/cmakelang/test/config_include_test.py
++++ b/cmakelang/test/config_include_test.py
+@@ -25,15 +25,13 @@ class TestConfigInclude(unittest.TestCase):
+ 
+   def _test_passed(self):
+     # Taken from https://stackoverflow.com/a/39606065/141023
+-    if hasattr(self, '_outcome'):  # Python 3.4+
+-      # these 2 methods have no side effects
+-      result = self.defaultTestResult()
+-      # pylint: disable=no-member
+-      self._feedErrorsToResult(result, self._outcome.errors)
+-    else:  # Python 3.2 - 3.3 or 3.0 - 3.1 and 2.7
+-      result = getattr(
+-          self, '_outcomeForDoCleanups',
+-          self._resultForDoCleanups)  # pylint: disable=no-member
++    if hasattr(self._outcome, 'errors'):
++        # Python 3.4 - 3.10  (These two methods have no side effects)
++        result = self.defaultTestResult()
++        self._feedErrorsToResult(result, self._outcome.errors)
++    else:
++        # Python 3.11+
++        result = self._outcome.result
+ 
+     error = self._list2reason(result.errors)
+     failure = self._list2reason(result.failures)

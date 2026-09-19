@@ -1,0 +1,27 @@
+--- img2pdf-0.5.1/src/img2pdf_test.py.orig	2024-09-08 20:41:48.379173360 +0200
++++ img2pdf-0.5.1/src/img2pdf_test.py	2024-09-08 21:55:33.381512253 +0200
+@@ -77,12 +77,9 @@
+ if not HAVE_PDFIMAGES_CMYK:
+     warnings.warn("pdfimages >= 0.42.0 not available, skipping CMYK checks...")
+ 
+-for prog in ["convert", "compare", "identify"]:
+-    try:
+-        subprocess.check_call([prog] + ["-version"], stderr=subprocess.STDOUT)
+-        globals()[prog.upper()] = [prog]
+-    except subprocess.CalledProcessError:
+-        globals()[prog.upper()] = ["magick", prog]
++for prog in ["compare", "identify"]:
++    globals()[prog.upper()] = ["magick", prog]
++globals()['CONVERT'] = ['magick']
+ 
+ HAVE_IMAGEMAGICK_MODERN = True
+ HAVE_EXACT_CMYK8 = True
+@@ -5546,7 +5543,7 @@
+     )
+     jpg_rot_png = tmpdir / "jpg_rot.png"
+     subprocess.check_call(
+-        CONVERT + ["-rotate", "90", str(jpg_rot_pnm), str(jpg_rot_png)]
++        CONVERT + [str(jpg_rot_pnm), "-rotate", "90", str(jpg_rot_png)]
+     )
+     jpg_rot_pnm.unlink()
+     compare_ghostscript(tmpdir, jpg_rot_png, jpg_rot_pdf)

@@ -1,0 +1,12 @@
+diff -rupN --no-dereference libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b/CMakeLists.txt libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b-new/CMakeLists.txt
+--- libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b/CMakeLists.txt	2025-11-08 16:34:42.000000000 +0100
++++ libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b-new/CMakeLists.txt	2025-11-23 20:04:03.537843204 +0100
+@@ -5,7 +5,7 @@
+ #
+ #
+ ###############################################################################
+-cmake_minimum_required(VERSION 2.8.11)
++cmake_minimum_required(VERSION 3.5)
+ 
+ # libLAS general settings
+ project(libLAS)

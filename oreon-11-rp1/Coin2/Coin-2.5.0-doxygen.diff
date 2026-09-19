@@ -1,0 +1,11 @@
+diff -Naur Coin-2.5.0.man3/docs/doxygen/footer.html Coin-2.5.0.doxygen/docs/doxygen/footer.html
+--- Coin-2.5.0.man3/docs/doxygen/footer.html	2007-10-01 03:23:11.000000000 +0200
++++ Coin-2.5.0.doxygen/docs/doxygen/footer.html	2011-11-08 02:44:21.625231025 +0100
+@@ -1,6 +1,6 @@
+ <hr noshade>
+ <p align="right">Copyright &copy 1998-2007 by <a href="http://www.sim.no/">Systems in Motion AS</a>. All rights reserved.</p>
+ <address style="align: right;"><small>
+-Generated on $datetime for $projectname by <a href="http://www.doxygen.org/index.html">Doxygen.</a> $doxygenversion</small></address>
++Generated on $date for $projectname by <a href="http://www.doxygen.org/index.html">Doxygen.</a> $doxygenversion</small></address>
+ </body>
+ </html>

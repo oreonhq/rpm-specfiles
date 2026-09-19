@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 37abc38d7f1931842d2b910ee28f8788b40d8a021a926c4a1b9b7f0aedd05fa4
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    step
 Summary: Interactive Physics Simulator 
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later

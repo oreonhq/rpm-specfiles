@@ -1,0 +1,84 @@
+From 6c95a24f959d35a2c09ca2316a185b7b57ae2e08 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Marc-Andr=C3=A9=20Lureau?= <marcandre.lureau@redhat.com>
+Date: Mon, 2 Feb 2026 13:00:53 +0400
+Subject: [PATCH] build-sys: add 'introspection' option
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com>
+---
+ govirt/meson.build | 24 +++++++++++++-----------
+ meson.build        |  8 ++++++++
+ meson.options      |  5 +++++
+ 3 files changed, 26 insertions(+), 11 deletions(-)
+ create mode 100644 meson.options
+
+diff --git a/govirt/meson.build b/govirt/meson.build
+index b75d1e1..3444820 100644
+--- a/govirt/meson.build
++++ b/govirt/meson.build
+@@ -108,17 +108,19 @@ govirt_introspection_sources = [
+     govirt_sources,
+ ]
+ 
+-gnome.generate_gir(govirt_lib,
+-                   build_by_default : true,
+-                   sources : govirt_introspection_sources,
+-                   namespace : 'GoVirt',
+-                   nsversion : '1.0',
+-                   identifier_prefix : 'Ovirt',
+-                   symbol_prefix : 'ovirt',
+-                   export_packages : 'govirt-1.0',
+-                   includes : ['Gio-2.0', 'GObject-2.0', 'Rest-1.0' ],
+-                   install : true,
+-                   extra_args : ['--c-include=govirt/govirt.h'])
++if build_gir
++  gnome.generate_gir(govirt_lib,
++                     build_by_default : true,
++                     sources : govirt_introspection_sources,
++                     namespace : 'GoVirt',
++                     nsversion : '1.0',
++                     identifier_prefix : 'Ovirt',
++                     symbol_prefix : 'ovirt',
++                     export_packages : 'govirt-1.0',
++                     includes : ['Gio-2.0', 'GObject-2.0', 'Rest-1.0' ],
++                     install : true,
++                     extra_args : ['--c-include=govirt/govirt.h'])
++endif
+ 
+ #
+ # write govirt-1.0.pc
+diff --git a/meson.build b/meson.build
+index ee3739d..748e62b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -20,6 +20,14 @@ govirt_includedir = get_option('prefix') / get_option('includedir')
+ govirt_include_subdir = 'govirt-1.0' / 'govirt'
+ govirt_deps = []
+ 
++gir = find_program('g-ir-scanner', required : get_option('introspection'))
++
++if not gir.found() and get_option('introspection').enabled()
++  error('Introspection enabled, but g-ir-scanner not found.')
++endif
++
++build_gir = gir.found() and get_option('introspection').enabled()
++
+ # libtool versioning - this applies to libgovirt
+ #
+ # See http://sources.redhat.com/autobook/autobook/autobook_91.html#SEC91
+diff --git a/meson.options b/meson.options
+new file mode 100644
+index 0000000..55e828b
+--- /dev/null
++++ b/meson.options
+@@ -0,0 +1,5 @@
++option('introspection',
++       type: 'feature',
++       value: 'auto',
++       yield: true,
++       description : 'Build introspection data (requires gobject-introspection)')
+-- 
+2.52.0
+

@@ -1,0 +1,153 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sun, 26 Oct 2025 16:50:53 +0100
+Subject: [PATCH] Fix uninitialized variable warnings in SQL API functions
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+During compilation of sqlops module with GCC 15, warnings appear about
+potentially uninitialized variables:
+
+```
+Compiling sqlops_db.c
+gcc -fPIC -DPIC -O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Wno-complain-wrong-lang -Werror=format-security -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -DMOD_NAME='sqlops' -DPKG_MALLOC  -DSHM_MMAP  -DUSE_MCAST  -DDISABLE_NAGLE  -DSTATISTICS  -DHAVE_RESOLV_RES  -DF_MALLOC  -DQ_MALLOC  -DHP_MALLOC  -DDBG_MALLOC  -DF_PARALLEL_MALLOC  -DHAVE_STDATOMIC -DHAVE_GENERICS  -DNAME='"opensips"' -DVERSION='"3.6.2"' -DARCH='"x86_64"' -DOS='"linux"' -DCOMPILER='"gcc 15"' -D__CPU_x86_64 -D__OS_linux -D__SMP_yes -DCFG_DIR='"/etc/opensips/"'  -DVERSIONTYPE='"git"' -DTHISREVISION='"994bcd690"' -DFAST_LOCK -DADAPTIVE_WAIT -DADAPTIVE_WAIT_LOOPS=1024 -DHAVE_GETHOSTBYNAME2 -DHAVE_UNION_SEMUN -DHAVE_MSG_NOSIGNAL -DHAVE_MSGHDR_MSG_CONTROL -DHAVE_ALLOCA_H -DHAVE_TIMEGM -DHAVE_EPOLL -DHAVE_SIGIO_RT -DHAVE_SELECT -c sqlops_db.c -o sqlops_db.o
+In file included from ../../mem/mem.h:30,
+                 from sqlops_db.c:27:
+sqlops_db.c: In function ‘sql_api_delete’:
+../../mem/../dprint.h:454:33: warning: ‘id’ may be used uninitialized [-Wmaybe-uninitialized]
+  454 |                                 dprint(_log_level, _log_facility, \
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  455 |                                         LOG_PREFIX_UTIL(MOD_NAME), __DP_FUNC, \
+      |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  456 |                                         _stderr_prefix LOG_PREFIX _fmt, \
+      |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  457 |                                         (char *)"%s" _syslog_prefix LOG_PREFIX _fmt, \
+      |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  458 |                                         (char *)_fmt, \
+      |                                         ~~~~~~~~~~~~~~~
+  459 |                                         dp_time(), dp_my_pid(), log_prefix, __DP_FUNC, ## args) \
+      |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sqlops_db.c:921:14: note: ‘id’ was declared here
+  921 |         str *id;
+      |              ^~
+```
+
+In sql_api_select(), sql_api_update(), sql_api_insert(),
+sql_api_delete(), and sql_api_replace() functions, the 'id' pointer
+variable (used for prepared statement identifiers) is declared but could
+be uninitialized.
+
+Let's ensure that:
+
+- The variable is always initialized (prevents undefined behavior)
+- Debug logging only occurs when a prepared statement ID was actually
+  generated
+- The code is safe even when no filter keys are provided
+
+Note: This was a real bug, not just a spurious compiler warning. In
+scenarios where DB_CAP_PREPARED_STMT is supported, _query_id_start()
+succeeds, but no filter keys exist, the code would dereference an
+uninitialized pointer.
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+Assisted-by: Claude (Anthropic) <https://claude.ai>
+
+diff --git a/modules/sqlops/sqlops_db.c b/modules/sqlops/sqlops_db.c
+index 5de7b5599..cf364593f 100644
+--- a/modules/sqlops/sqlops_db.c
++++ b/modules/sqlops/sqlops_db.c
+@@ -713,7 +713,7 @@ int sql_api_select(struct db_url *url, struct sip_msg* msg, cJSON *Jcols,
+ 	db_op_t *ops;
+ 	db_val_t *vals;
+ 	int nk, nc;
+-	str *id;
++	str *id = NULL;
+ 	db_ps_t *my_ps;
+ 
+ 	/* convert JSON to COLs */
+@@ -752,7 +752,8 @@ int sql_api_select(struct db_url *url, struct sip_msg* msg, cJSON *Jcols,
+ 	(keys && (id=_query_id_add_filter(keys,ops,nk))==NULL) ) {
+ 		LM_DBG("not using PS\n");
+ 	} else {
+-		LM_DBG("PS id is <%.*s>\n",id->len,id->s);
++		if(id)
++			LM_DBG("PS id is <%.*s>\n",id->len,id->s);
+ 		if (ps_map!=NULL || (ps_map=map_create(0))!=NULL) {
+ 			if ( (my_ps=map_get( ps_map, *id ))!=NULL) {
+ 				LM_DBG("using PS %p\n",*my_ps);
+@@ -804,7 +805,7 @@ int sql_api_update(struct db_url *url, struct sip_msg* msg, cJSON *Jcols,
+ 	db_op_t *uops, *ops;
+ 	db_val_t *uvals, *vals;
+ 	int nk, unk;
+-	str *id;
++	str *id = NULL;
+ 	db_ps_t *my_ps;
+ 
+ 	/* convert JSON to COLs */
+@@ -838,7 +839,8 @@ int sql_api_update(struct db_url *url, struct sip_msg* msg, cJSON *Jcols,
+ 	(keys && (id=_query_id_add_filter(keys,ops,nk))==NULL) ) {
+ 		LM_DBG("not using PS\n");
+ 	} else {
+-		LM_DBG("PS id is <%.*s>\n",id->len,id->s);
++		if(id)
++			LM_DBG("PS id is <%.*s>\n",id->len,id->s);
+ 		if (ps_map!=NULL || (ps_map=map_create(0))!=NULL) {
+ 			if ( (my_ps=map_get( ps_map, *id ))!=NULL) {
+ 				LM_DBG("using PS %p\n",*my_ps);
+@@ -868,7 +870,7 @@ int sql_api_insert(struct db_url *url, struct sip_msg* msg, str *table,
+ 	db_op_t *uops;
+ 	db_val_t *uvals;
+ 	int unk;
+-	str *id;
++	str *id = NULL;
+ 	db_ps_t *my_ps;
+ 
+ 	/* convert JSON to COLs */
+@@ -888,7 +890,8 @@ int sql_api_insert(struct db_url *url, struct sip_msg* msg, str *table,
+ 	(id=_query_id_add_filter(ukeys,uops,unk))==NULL ) {
+ 		LM_DBG("not using PS\n");
+ 	} else {
+-		LM_DBG("PS id is <%.*s>\n",id->len,id->s);
++		if(id)
++			LM_DBG("PS id is <%.*s>\n",id->len,id->s);
+ 		if (ps_map!=NULL || (ps_map=map_create(0))!=NULL) {
+ 			if ( (my_ps=map_get( ps_map, *id ))!=NULL) {
+ 				LM_DBG("using PS %p\n",*my_ps);
+@@ -918,7 +921,7 @@ int sql_api_delete(struct db_url *url, struct sip_msg* msg,
+ 	db_op_t *ops;
+ 	db_val_t *vals;
+ 	int nk;
+-	str *id;
++	str *id = NULL;
+ 	db_ps_t *my_ps;
+ 
+ 	/* convert JSON to keys */
+@@ -945,7 +948,8 @@ int sql_api_delete(struct db_url *url, struct sip_msg* msg,
+ 	(keys && (id=_query_id_add_filter(keys,ops,nk))==NULL) ) {
+ 		LM_DBG("not using PS\n");
+ 	} else {
+-		LM_DBG("PS id is <%.*s>\n",id->len,id->s);
++		if(id)
++			LM_DBG("PS id is <%.*s>\n",id->len,id->s);
+ 		if (ps_map!=NULL || (ps_map=map_create(0))!=NULL) {
+ 			if ( (my_ps=map_get( ps_map, *id ))!=NULL) {
+ 				LM_DBG("using PS %p\n",*my_ps);
+@@ -975,7 +979,7 @@ int sql_api_replace(struct db_url *url, struct sip_msg* msg, str *table,
+ 	db_op_t *uops;
+ 	db_val_t *uvals;
+ 	int unk;
+-	str *id;
++	str *id = NULL;
+ 	db_ps_t *my_ps;
+ 
+ 	/* convert JSON to COLs */
+@@ -995,7 +999,8 @@ int sql_api_replace(struct db_url *url, struct sip_msg* msg, str *table,
+ 	(id=_query_id_add_filter(ukeys,uops,unk))==NULL ) {
+ 		LM_DBG("not using PS\n");
+ 	} else {
+-		LM_DBG("PS id is <%.*s>\n",id->len,id->s);
++		if(id)
++			LM_DBG("PS id is <%.*s>\n",id->len,id->s);
+ 		if (ps_map!=NULL || (ps_map=map_create(0))!=NULL) {
+ 			if ( (my_ps=map_get( ps_map, *id ))!=NULL) {
+ 				LM_DBG("using PS %p\n",*my_ps);

@@ -1,0 +1,10 @@
+[Unit]
+Description=Wide DHCPv6 client
+Documentation=man:dhcp6c(8) man:dhcp6c.conf(5)
+
+[Service]
+ExecStart=/usr/sbin/dhcp6c -f eth0
+
+[Install]
+WantedBy=network.target
+

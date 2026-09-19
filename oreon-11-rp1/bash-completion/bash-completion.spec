@@ -7,8 +7,8 @@
 %define upstream_version 2.17.0
 
 Name:           bash-completion
-Version:        2.17
-Release:        2%{?dist}
+Version:        2.18.0
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 

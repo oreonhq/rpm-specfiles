@@ -11,7 +11,7 @@
 
 Summary: Qt6 - SerialPort component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.11.2
 Release: 1%{?dist}
 
 # See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively, for exception details

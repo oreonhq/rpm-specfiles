@@ -6,8 +6,8 @@
 %global gitversion 58abea394
 
 Name:           libinput
-Version:        1.31.0
-Release:        2%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version:        1.32.0
+Release:        1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 Summary:        Input device library
 
 # SPDX

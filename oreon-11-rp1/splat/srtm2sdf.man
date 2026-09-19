@@ -1,0 +1,45 @@
+.\" Man page for srtm2sdf
+.\" Created by copying text from utils/README  
+.TH man 1 "09 December 2007" "1.0" "srtm2sdf"
+.SH NAME
+srtm2sdf \- Generate SPLAT Data Files (SDFs) from 3-arc second STS-99 Space Shuttle Topography Mission (SRTM-3) elevation data files.
+.SH SYNOPSIS
+.B srtm2sdf
+[options] 
+file
+.SH DESCRIPTION
+.B srtm2sdf
+is a utility that generates SPLAT Data Files (SDFs) from 3-arc second STS-99 Space Shuttle Topography Mission (SRTM-3) elevation data files. This data is of a much higher quality than that contained in older USGS Digital Elevation Models of the same resolution. However, many SRTM-3 Version 2 elevation models contain data "voids" and "wells" that are the consequence of the radar mapping process.
+.P
+The srtm2sdf utility has the ability to detect and replace SRTM data outliers with equivalent SDF data created through the usgs2sdf utility (below). If equivalent USGS-derived SPLAT Data Files are not available, SRTM outliers are handled either through adjacent pixel averaging, or by threshold limiting using user-specified limits. Of all three methods, the USGS-derived SDF replacement method yields the best results. 
+ 
+.SH OPTIONS
+The srtm2sdf utility accepts command-line options as follows:
+.P
+.IP -d
+used to specify the directory path to the location of existing SDF files The -d option overridesthe default path specified in your $HOME/.splat_path file.
+.P
+.IP -n 
+used to specify the elevation (in meters) below which SRTM data is replaced. Below this limit, SRTM elevation data is either replaced using existing SDF equivalent files, or averaged among adjacent elevation data points. The default threshold for the replacement limit is sea-level (0 meters).  Unless elevations below sea-level are known to exist for the region being processed by the srtm2sdf utility, the -n option need not be specified. 
+.SH EXAMPLES
+srtm2sdf \ N40W074.hgt
+.P
+srtm2sdf \-d /cdrom/sdf N40W074.hgt
+.P
+srtm2sdf \-d /dev/null N40W074.hgt
+.P (/dev/null prevents USGS data replacement from taking place)
+srtm2sdf \-n \-5 N40W074.hgt 
+
+.SH FILES
+.P 
+.I /usr/bin/srtm2sdf
+.SH SEE ALSO
+.BR splat (1), 
+.SH BUGS
+No known bugs at this time. 
+.SH AUTHOR
+.nf
+Sindre Pedersen Bjordal (foolish@guezz.net)
+.fi
+.SH HISTORY
+2007 \- Text copyed from README

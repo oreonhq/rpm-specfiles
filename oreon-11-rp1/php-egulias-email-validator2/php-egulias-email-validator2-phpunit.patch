@@ -1,0 +1,36 @@
+diff -up ./tests/EmailValidator/Validation/MultipleValidationWithAndTest.php.old ./tests/EmailValidator/Validation/MultipleValidationWithAndTest.php
+--- ./tests/EmailValidator/Validation/MultipleValidationWithAndTest.php.old	2020-08-11 11:42:35.142594018 +0200
++++ ./tests/EmailValidator/Validation/MultipleValidationWithAndTest.php	2020-08-11 11:43:45.452483997 +0200
+@@ -28,11 +28,9 @@ class MultipleValidationWithAndTest exte
+         $this->assertFalse($multipleValidation->isValid("exmpale@example.com", $lexer));
+     }
+ 
+-    /**
+-     * @expectedException \Egulias\EmailValidator\Validation\Exception\EmptyValidationList
+-     */
+     public function testEmptyListIsNotAllowed()
+-    {
++    {        
++        $this->expectException(\Egulias\EmailValidator\Validation\Exception\EmptyValidationList::class);
+         new MultipleValidationWithAnd([]);
+     }
+ 
+diff -up ./tests/EmailValidator/Validation/RFCValidationTest.php.old ./tests/EmailValidator/Validation/RFCValidationTest.php
+--- ./tests/EmailValidator/Validation/RFCValidationTest.php.old	2020-08-11 11:41:25.030703727 +0200
++++ ./tests/EmailValidator/Validation/RFCValidationTest.php	2020-08-11 11:41:32.397692197 +0200
+@@ -49,13 +49,13 @@ class RFCValidationTest extends TestCase
+      */
+     protected $lexer;
+ 
+-    protected function setUp()
++    protected function setUp(): void
+     {
+         $this->validator = new RFCValidation();
+         $this->lexer = new EmailLexer();
+     }
+ 
+-    protected function tearDown()
++    protected function tearDown(): void
+     {
+         $this->validator = null;
+     }

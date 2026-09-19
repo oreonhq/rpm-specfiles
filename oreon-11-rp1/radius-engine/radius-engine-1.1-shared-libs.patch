@@ -1,0 +1,507 @@
+diff -up radius-engine-1.1/configure.in.shared radius-engine-1.1/configure.in
+--- radius-engine-1.1/configure.in.shared	2012-02-21 21:06:57.000000000 -0500
++++ radius-engine-1.1/configure.in	2012-09-04 16:25:32.383728227 -0400
+@@ -1,13 +1,16 @@
+ AC_INIT([Radius Engine], [1.1], [deraj@users.sourceforge.net], [radius-engine], [http://radius-engine.sourceforge.net/])
++AC_CANONICAL_TARGET
+ AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+ 
+ AC_CANONICAL_BUILD
+-AC_CANONICAL_TARGET
+ AC_CANONICAL_HOST
+ 
+ AC_PROG_CC
+ AC_PROG_INSTALL
+-AC_PROG_RANLIB
++AC_PROG_LIBTOOL
++
++LIBRADIUSENGINE_LIBRARY_VERSION=1:1:0
++AC_SUBST(LIBRADIUSENGINE_LIBRARY_VERSION)
+ 
+ dnl Check for dependencies
+ AM_PATH_OPENGL(:, [AC_MSG_ERROR([*** OpenGL not found! ***])])
+diff -up radius-engine-1.1/Makefile.am.shared radius-engine-1.1/Makefile.am
+--- radius-engine-1.1/Makefile.am.shared	2012-02-04 18:29:26.000000000 -0500
++++ radius-engine-1.1/Makefile.am	2012-09-04 16:24:11.904731103 -0400
+@@ -1,7 +1,7 @@
+ include_HEADERS = radius.h
+ 
+-lib_LIBRARIES = libradius-engine.a
+-libradius_engine_a_SOURCES = \
++lib_LTLIBRARIES = libradius-engine.la
++libradius_engine_la_SOURCES = \
+                              r_assert.h \
+                              r_audio.c \
+                              r_audio.h \
+@@ -93,6 +93,8 @@ libradius_engine_a_SOURCES = \
+                              radius.c \
+                              radius.h
+ 
++libradius_engine_la_LDFLAGS = -version-info $(LIBRADIUSENGINE_LIBRARY_VERSION)
++
+ dist_noinst_HEADERS = r_platform_defs_windows.h \
+                       r_platform_windows.h
+ 
+diff -up radius-engine-1.1/Makefile.in.shared radius-engine-1.1/Makefile.in
+--- radius-engine-1.1/Makefile.in.shared	2012-02-21 21:07:34.000000000 -0500
++++ radius-engine-1.1/Makefile.in	2012-09-04 16:31:51.143714680 -0400
+@@ -41,7 +41,8 @@ subdir = .
+ DIST_COMMON = $(am__configure_deps) $(dist_noinst_HEADERS) \
+ 	$(include_HEADERS) $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+ 	$(srcdir)/radius-engine.pc.in $(top_srcdir)/configure \
+-	ChangeLog config.guess config.sub depcomp install-sh missing
++	ChangeLog config.guess config.sub depcomp install-sh ltmain.sh \
++	missing
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
+ 	$(top_srcdir)/configure.in
+@@ -75,42 +76,47 @@ am__base_list = \
+   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)" \
+ 	"$(DESTDIR)$(includedir)"
+-LIBRARIES = $(lib_LIBRARIES)
+-AR = ar
+-ARFLAGS = cru
+-libradius_engine_a_AR = $(AR) $(ARFLAGS)
+-libradius_engine_a_LIBADD =
+-am_libradius_engine_a_OBJECTS = r_audio.$(OBJEXT) \
+-	r_audio_clip_cache.$(OBJEXT) r_audio_clip_manager.$(OBJEXT) \
+-	r_audio_decoder.$(OBJEXT) r_capture.$(OBJEXT) \
+-	r_capture_format.$(OBJEXT) r_collision_detector.$(OBJEXT) \
+-	r_collision_tree.$(OBJEXT) r_color.$(OBJEXT) \
+-	r_element.$(OBJEXT) r_element_list.$(OBJEXT) \
+-	r_entity.$(OBJEXT) r_entity_list.$(OBJEXT) r_event.$(OBJEXT) \
+-	r_event_keys.$(OBJEXT) r_file.$(OBJEXT) \
+-	r_file_internal.$(OBJEXT) r_file_system.$(OBJEXT) \
+-	r_hash_table.$(OBJEXT) r_image_cache.$(OBJEXT) \
+-	r_layer.$(OBJEXT) r_layer_stack.$(OBJEXT) r_list.$(OBJEXT) \
+-	r_log.$(OBJEXT) r_mesh.$(OBJEXT) r_object.$(OBJEXT) \
+-	r_object_enum.$(OBJEXT) r_object_id_list.$(OBJEXT) \
+-	r_object_list.$(OBJEXT) r_object_ref.$(OBJEXT) \
+-	r_platform.$(OBJEXT) r_resource_cache.$(OBJEXT) \
+-	r_script.$(OBJEXT) r_script_lib.$(OBJEXT) r_state.$(OBJEXT) \
+-	r_stream_async.$(OBJEXT) r_string.$(OBJEXT) \
+-	r_string_buffer.$(OBJEXT) r_transform2d.$(OBJEXT) \
+-	r_video.$(OBJEXT) r_video_font.$(OBJEXT) r_zlist.$(OBJEXT) \
+-	radius.$(OBJEXT)
+-libradius_engine_a_OBJECTS = $(am_libradius_engine_a_OBJECTS)
++LIBRARIES = $(lib_LTLIBRARIES)
++libradius_engine_la_LIBADD =
++am_libradius_engine_la_OBJECTS = r_audio.lo \
++        r_audio_clip_cache.lo r_audio_clip_manager.lo \
++        r_audio_decoder.lo r_capture.lo \
++        r_capture_format.lo r_collision_detector.lo \
++        r_collision_tree.lo r_color.lo \
++        r_element.lo r_element_list.lo \
++        r_entity.lo r_entity_list.lo r_event.lo \
++        r_event_keys.lo r_file.lo \
++        r_file_internal.lo r_file_system.lo \
++        r_hash_table.lo r_image_cache.lo \
++        r_layer.lo r_layer_stack.lo r_list.lo \
++        r_log.lo r_mesh.lo r_object.lo \
++        r_object_enum.lo r_object_id_list.lo \
++        r_object_list.lo r_object_ref.lo \
++        r_platform.lo r_resource_cache.lo \
++        r_script.lo r_script_lib.lo r_state.lo \
++        r_stream_async.lo r_string.lo \
++        r_string_buffer.lo r_transform2d.lo \
++        r_video.lo r_video_font.lo r_zlist.lo \
++        radius.lo
++libradius_engine_la_OBJECTS = $(am_libradius_engine_la_OBJECTS)
++libradius_engine_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(libradius_engine_la_LDFLAGS) $(LDFLAGS) -o $@
+ DEFAULT_INCLUDES = -I.@am__isrc@
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
++LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
++	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
++	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-SOURCES = $(libradius_engine_a_SOURCES)
+-DIST_SOURCES = $(libradius_engine_a_SOURCES)
++LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
++	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
++	$(LDFLAGS) -o $@
++SOURCES = $(libradius_engine_la_SOURCES)
++DIST_SOURCES = $(libradius_engine_la_SOURCES)
+ DATA = $(pkgconfig_DATA)
+ HEADERS = $(dist_noinst_HEADERS) $(include_HEADERS)
+ ETAGS = etags
+@@ -128,6 +134,7 @@ distuninstallcheck_listfiles = find . -t
+ distcleancheck_listfiles = find . -type f -print
+ ACLOCAL = @ACLOCAL@
+ AMTAR = @AMTAR@
++AR = @AR@
+ AUTOCONF = @AUTOCONF@
+ AUTOHEADER = @AUTOHEADER@
+ AUTOMAKE = @AUTOMAKE@
+@@ -140,11 +147,14 @@ CPPFLAGS = @CPPFLAGS@
+ CYGPATH_W = @CYGPATH_W@
+ DEFS = @DEFS@
+ DEPDIR = @DEPDIR@
++DSYMUTIL = @DSYMUTIL@
++DUMPBIN = @DUMPBIN@
+ ECHO_C = @ECHO_C@
+ ECHO_N = @ECHO_N@
+ ECHO_T = @ECHO_T@
+ EGREP = @EGREP@
+ EXEEXT = @EXEEXT@
++FGREP = @FGREP@
+ GL_CFLAGS = @GL_CFLAGS@
+ GL_LIBS = @GL_LIBS@
+ GREP = @GREP@
+@@ -153,15 +163,25 @@ INSTALL_DATA = @INSTALL_DATA@
+ INSTALL_PROGRAM = @INSTALL_PROGRAM@
+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
++LD = @LD@
+ LDFLAGS = @LDFLAGS@
+ LIBOBJS = @LIBOBJS@
++LIBRADIUSENGINE_LIBRARY_VERSION = @LIBRADIUSENGINE_LIBRARY_VERSION@
+ LIBS = @LIBS@
++LIBTOOL = @LIBTOOL@
++LIPO = @LIPO@
++LN_S = @LN_S@
+ LTLIBOBJS = @LTLIBOBJS@
+ LUA_CFLAGS = @LUA_CFLAGS@
+ LUA_LIBS = @LUA_LIBS@
+ MAKEINFO = @MAKEINFO@
+ MKDIR_P = @MKDIR_P@
++NM = @NM@
++NMEDIT = @NMEDIT@
++OBJDUMP = @OBJDUMP@
+ OBJEXT = @OBJEXT@
++OTOOL = @OTOOL@
++OTOOL64 = @OTOOL64@
+ PACKAGE = @PACKAGE@
+ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
+ PACKAGE_NAME = @PACKAGE_NAME@
+@@ -173,6 +193,8 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
+ PHYSFS_CFLAGS = @PHYSFS_CFLAGS@
+ PHYSFS_LIBS = @PHYSFS_LIBS@
+ PKG_CONFIG = @PKG_CONFIG@
++PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
++PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
+ PNG_CFLAGS = @PNG_CFLAGS@
+ PNG_LIBS = @PNG_LIBS@
+ RADIUS_ENGINE_CFLAGS = @RADIUS_ENGINE_CFLAGS@
+@@ -183,6 +205,7 @@ SDL_CONFIG = @SDL_CONFIG@
+ SDL_LIBS = @SDL_LIBS@
+ SDL_SOUND_CFLAGS = @SDL_SOUND_CFLAGS@
+ SDL_SOUND_LIBS = @SDL_SOUND_LIBS@
++SED = @SED@
+ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+ STRIP = @STRIP@
+@@ -197,6 +220,7 @@ abs_srcdir = @abs_srcdir@
+ abs_top_builddir = @abs_top_builddir@
+ abs_top_srcdir = @abs_top_srcdir@
+ ac_ct_CC = @ac_ct_CC@
++ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+ am__include = @am__include@
+ am__leading_dot = @am__leading_dot@
+ am__quote = @am__quote@
+@@ -247,8 +271,8 @@ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ include_HEADERS = radius.h
+-lib_LIBRARIES = libradius-engine.a
+-libradius_engine_a_SOURCES = \
++lib_LTLIBRARIES = libradius-engine.la
++libradius_engine_la_SOURCES = \
+                              r_assert.h \
+                              r_audio.c \
+                              r_audio.h \
+@@ -340,6 +364,7 @@ libradius_engine_a_SOURCES = \
+                              radius.c \
+                              radius.h
+ 
++libradius_engine_la_LDFLAGS = -version-info $(LIBRADIUSENGINE_LIBRARY_VERSION)
+ dist_noinst_HEADERS = r_platform_defs_windows.h \
+                       r_platform_windows.h
+ 
+@@ -348,7 +373,7 @@ pkgconfig_DATA = radius-engine.pc
+ all: all-am
+ 
+ .SUFFIXES:
+-.SUFFIXES: .c .o .obj
++.SUFFIXES: .c .lo .o .obj
+ am--refresh:
+ 	@:
+ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
+@@ -385,42 +410,39 @@ $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
+ $(am__aclocal_m4_deps):
+ radius-engine.pc: $(top_builddir)/config.status $(srcdir)/radius-engine.pc.in
+ 	cd $(top_builddir) && $(SHELL) ./config.status $@
+-install-libLIBRARIES: $(lib_LIBRARIES)
++install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+ 	@$(NORMAL_INSTALL)
+ 	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
+-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
++	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
+ 	list2=; for p in $$list; do \
+ 	  if test -f $$p; then \
+ 	    list2="$$list2 $$p"; \
+ 	  else :; fi; \
+ 	done; \
+ 	test -z "$$list2" || { \
+-	  echo " $(INSTALL_DATA) $$list2 '$(DESTDIR)$(libdir)'"; \
+-	  $(INSTALL_DATA) $$list2 "$(DESTDIR)$(libdir)" || exit $$?; }
+-	@$(POST_INSTALL)
+-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
+-	for p in $$list; do \
+-	  if test -f $$p; then \
+-	    $(am__strip_dir) \
+-	    echo " ( cd '$(DESTDIR)$(libdir)' && $(RANLIB) $$f )"; \
+-	    ( cd "$(DESTDIR)$(libdir)" && $(RANLIB) $$f ) || exit $$?; \
+-	  else :; fi; \
+-	done
++	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(libdir)'"; \
++	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(libdir)"; \
++	}
+ 
+-uninstall-libLIBRARIES:
++uninstall-libLTLIBRARIES:
+ 	@$(NORMAL_UNINSTALL)
+-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
+-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+-	test -n "$$files" || exit 0; \
+-	echo " ( cd '$(DESTDIR)$(libdir)' && rm -f "$$files" )"; \
+-	cd "$(DESTDIR)$(libdir)" && rm -f $$files
++	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
++	for p in $$list; do \
++	  $(am__strip_dir) \
++	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$f'"; \
++	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$f"; \
++	done
+ 
+-clean-libLIBRARIES:
+-	-test -z "$(lib_LIBRARIES)" || rm -f $(lib_LIBRARIES)
+-libradius-engine.a: $(libradius_engine_a_OBJECTS) $(libradius_engine_a_DEPENDENCIES) 
+-	-rm -f libradius-engine.a
+-	$(libradius_engine_a_AR) libradius-engine.a $(libradius_engine_a_OBJECTS) $(libradius_engine_a_LIBADD)
+-	$(RANLIB) libradius-engine.a
++clean-libLTLIBRARIES:
++	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
++	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
++	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
++	  test "$$dir" != "$$p" || dir=.; \
++	  echo "rm -f \"$${dir}/so_locations\""; \
++	  rm -f "$${dir}/so_locations"; \
++	done
++libradius-engine.la: $(libradius_engine_la_OBJECTS) $(libradius_engine_la_DEPENDENCIES) 
++	$(libradius_engine_la_LINK) -rpath $(libdir) $(libradius_engine_la_OBJECTS) $(libradius_engine_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:
+ 	-rm -f *.$(OBJEXT)
+@@ -428,49 +450,49 @@ mostlyclean-compile:
+ distclean-compile:
+ 	-rm -f *.tab.c
+ 
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_audio.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_audio_clip_cache.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_audio_clip_manager.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_audio_decoder.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_capture.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_capture_format.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_collision_detector.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_collision_tree.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_color.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_element.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_element_list.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_entity.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_entity_list.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_event.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_event_keys.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_file.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_file_internal.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_file_system.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_hash_table.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_image_cache.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_layer.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_layer_stack.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_list.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_log.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_mesh.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_object.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_object_enum.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_object_id_list.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_object_list.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_object_ref.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_platform.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_resource_cache.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_script.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_script_lib.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_state.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_stream_async.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_string.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_string_buffer.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_transform2d.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_video.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_video_font.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_zlist.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/radius.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_audio.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_audio_clip_cache.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_audio_clip_manager.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_audio_decoder.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_capture.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_capture_format.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_collision_detector.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_collision_tree.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_color.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_element.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_element_list.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_entity.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_entity_list.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_event.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_event_keys.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_file.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_file_internal.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_file_system.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_hash_table.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_image_cache.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_layer.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_layer_stack.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_list.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_log.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_mesh.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_object.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_object_enum.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_object_id_list.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_object_list.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_object_ref.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_platform.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_resource_cache.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_script.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_script_lib.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_state.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_stream_async.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_string.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_string_buffer.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_transform2d.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_video.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_video_font.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/r_zlist.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/radius.Plo@am__quote@
+ 
+ .c.o:
+ @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@@ -485,6 +507,22 @@ distclean-compile:
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
++
++.c.lo:
++@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
++@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
++
++mostlyclean-libtool:
++	-rm -f *.lo
++
++clean-libtool:
++	-rm -rf .libs _libs
++
++distclean-libtool:
++	-rm -f libtool config.lt
+ install-pkgconfigDATA: $(pkgconfig_DATA)
+ 	@$(NORMAL_INSTALL)
+ 	test -z "$(pkgconfigdir)" || $(MKDIR_P) "$(DESTDIR)$(pkgconfigdir)"
+@@ -727,7 +765,7 @@ distcleancheck: distclean
+ 	       exit 1; } >&2
+ check-am: all-am
+ check: check-am
+-all-am: Makefile $(LIBRARIES) $(DATA) $(HEADERS)
++all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
+ installdirs:
+ 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+@@ -759,14 +797,15 @@ maintainer-clean-generic:
+ 	@echo "it deletes files that may require special tools to rebuild."
+ clean: clean-am
+ 
+-clean-am: clean-generic clean-libLIBRARIES mostlyclean-am
++clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
++	mostlyclean-am
+ 
+ distclean: distclean-am
+ 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+ 	-rm -rf ./$(DEPDIR)
+ 	-rm -f Makefile
+ distclean-am: clean-am distclean-compile distclean-generic \
+-	distclean-tags
++	distclean-libtool distclean-tags
+ 
+ dvi: dvi-am
+ 
+@@ -786,7 +825,7 @@ install-dvi: install-dvi-am
+ 
+ install-dvi-am:
+ 
+-install-exec-am: install-libLIBRARIES
++install-exec-am: install-libLTLIBRARIES
+ 
+ install-html: install-html-am
+ 
+@@ -817,7 +856,8 @@ maintainer-clean-am: distclean-am mainta
+ 
+ mostlyclean: mostlyclean-am
+ 
+-mostlyclean-am: mostlyclean-compile mostlyclean-generic
++mostlyclean-am: mostlyclean-compile mostlyclean-generic \
++	mostlyclean-libtool
+ 
+ pdf: pdf-am
+ 
+@@ -827,27 +867,28 @@ ps: ps-am
+ 
+ ps-am:
+ 
+-uninstall-am: uninstall-includeHEADERS uninstall-libLIBRARIES \
++uninstall-am: uninstall-includeHEADERS uninstall-libLTLIBRARIES \
+ 	uninstall-pkgconfigDATA
+ 
+ .MAKE: install-am install-strip
+ 
+ .PHONY: CTAGS GTAGS all all-am am--refresh check check-am clean \
+-	clean-generic clean-libLIBRARIES ctags dist dist-all \
+-	dist-bzip2 dist-gzip dist-lzma dist-shar dist-tarZ dist-xz \
+-	dist-zip distcheck distclean distclean-compile \
+-	distclean-generic distclean-tags distcleancheck distdir \
+-	distuninstallcheck dvi dvi-am html html-am info info-am \
+-	install install-am install-data install-data-am install-dvi \
+-	install-dvi-am install-exec install-exec-am install-html \
+-	install-html-am install-includeHEADERS install-info \
+-	install-info-am install-libLIBRARIES install-man install-pdf \
+-	install-pdf-am install-pkgconfigDATA install-ps install-ps-am \
+-	install-strip installcheck installcheck-am installdirs \
+-	maintainer-clean maintainer-clean-generic mostlyclean \
+-	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
++	clean-generic clean-libLTLIBRARIES clean-libtool ctags dist \
++	dist-all dist-bzip2 dist-gzip dist-lzma dist-shar dist-tarZ \
++	dist-xz dist-zip distcheck distclean distclean-compile \
++	distclean-generic distclean-libtool distclean-tags \
++	distcleancheck distdir distuninstallcheck dvi dvi-am html \
++	html-am info info-am install install-am install-data \
++	install-data-am install-dvi install-dvi-am install-exec \
++	install-exec-am install-html install-html-am \
++	install-includeHEADERS install-info install-info-am \
++	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
++	install-pkgconfigDATA install-ps install-ps-am install-strip \
++	installcheck installcheck-am installdirs maintainer-clean \
++	maintainer-clean-generic mostlyclean mostlyclean-compile \
++	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+ 	tags uninstall uninstall-am uninstall-includeHEADERS \
+-	uninstall-libLIBRARIES uninstall-pkgconfigDATA
++	uninstall-libLTLIBRARIES uninstall-pkgconfigDATA
+ 
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.

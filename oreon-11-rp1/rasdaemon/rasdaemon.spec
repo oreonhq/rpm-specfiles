@@ -1,8 +1,8 @@
 %global source0_hash e53474b0a3de73ced570c3f2f605bedf88960c03773178ec763963d21cdb1bf6
 
 Name:			rasdaemon
-Version:		0.8.0
-Release:		9%{?dist}
+Version:		0.9.92
+Release:		1%{?dist}
 Summary:		Utility to receive RAS error tracings
 Group:			Applications/System
 # Automatically converted from old format: GPLv2 - review is highly recommended.

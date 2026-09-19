@@ -1,0 +1,23 @@
+From 3e1b2dffc507b3791b95dbd455683dde4ac0e15d Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Thu, 13 Nov 2014 00:18:40 +0100
+Subject: [PATCH 32/41] Fix an off-by-one error
+
+---
+ sdl/draw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sdl/draw.c b/sdl/draw.c
+index 07a9c65..da48ee8 100644
+--- a/sdl/draw.c
++++ b/sdl/draw.c
+@@ -277,5 +277,5 @@ SetPalette (Palette * pal)
+       palette[i] |= (pal->color[i].green * 4) << 16;
+       palette[i] |= (pal->color[i].blue * 4) << 8;
+     }
+-  while (++i <= COLORS);
++  while (++i < COLORS);
+ }
+-- 
+2.5.0
+

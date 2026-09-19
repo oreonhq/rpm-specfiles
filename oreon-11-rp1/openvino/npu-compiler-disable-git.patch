@@ -1,0 +1,22 @@
+--- a/cmake/flatbuffers.cmake	2025-04-10 09:12:29.077773814 +0300
++++ b/cmake/flatbuffers.cmake	2025-04-10 09:12:57.012364853 +0300
+@@ -64,7 +64,7 @@
+ 
+ endfunction()
+ 
+-find_package(Git REQUIRED)
++#find_package(Git REQUIRED)
+ function(vpux_gf_version_generate SRC_DIR DST_DIR)
+ 
+     execute_process(
+--- a/src/vpux_compiler/CMakeLists.txt	2025-04-08 21:10:11.545626446 +0300
++++ b/src/vpux_compiler/CMakeLists.txt	2025-04-08 21:10:52.600509266 +0300
+@@ -51,7 +51,7 @@
+ # Embed VPUNN models
+ #
+ 
+-find_package(Git REQUIRED)
++#find_package(Git REQUIRED)
+ 
+ execute_process(
+     COMMAND ${GIT_EXECUTABLE} lfs pull

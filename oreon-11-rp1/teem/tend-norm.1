@@ -1,0 +1,48 @@
+.TH TEND\-NORM "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-norm \- normalize tensor size
+.SH SYNOPSIS
+.B tend\ norm
+.B \-w
+.RI < w0 \  w1 \  w2 >
+.RB [ \-a
+.RI < amount >]
+.RB [ \-t
+.RI < target >]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH OPTIONS
+.TP
+.B \-w\fR <\fIw0\fR\ \fIw1\fR\ \fIw2\fR>
+relative weights to put on major, medium, and minor eigenvalue when performing
+normalization (internally rescaled to have a 1.0 L1 norm).
+These weightings determine the tensors\(cqs \(lqsize\(rq.
+(3
+.IR double s)
+.TP
+.B \-a\fR <\fIamount\fR>
+how much of the normalization to perform
+.RI ( float )
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-t\fR <\fItarget\fR>
+target size, post normalization
+.RI ( float )
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

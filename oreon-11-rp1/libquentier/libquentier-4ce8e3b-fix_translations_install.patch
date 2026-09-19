@@ -1,0 +1,19 @@
+diff -up libquentier-4ce8e3b76bd9bedd75fe8cb398ddf2a91556b59a/CMakeLists.txt.fix_translation_install libquentier-4ce8e3b76bd9bedd75fe8cb398ddf2a91556b59a/CMakeLists.txt
+--- libquentier-4ce8e3b76bd9bedd75fe8cb398ddf2a91556b59a/CMakeLists.txt.fix_translation_install	2018-03-01 04:45:49.000000000 +0100
++++ libquentier-4ce8e3b76bd9bedd75fe8cb398ddf2a91556b59a/CMakeLists.txt	2018-03-05 22:22:03.781596229 +0100
+@@ -886,14 +886,7 @@ endforeach()
+ 
+ # install translations
+ foreach(QM_FILE ${${PROJECT_NAME}_QM_FILES})
+-  install(CODE "
+-          set(QM_FILE \"${QM_FILE})\")
+-          if(EXISTS \"${QM_FILE}\")
+-            get_filename_component(QM_FILE_BASE_NAME \"${QM_FILE}\" NAME)
+-            message(STATUS \"Installing: \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_TRANSLATIONSDIR}/\${QM_FILE_BASE_NAME}\")
+-            file(COPY \"${QM_FILE}\" DESTINATION \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_TRANSLATIONSDIR}\")
+-          endif()
+-          " COMPONENT Runtime)
++  install(FILES ${QM_FILE} DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_TRANSLATIONSDIR})
+ endforeach()
+ 
+ # install cmake files

@@ -1,0 +1,96 @@
+.TH HATCH\-RUN "1" "August 2024" "" "User Commands"
+.SH NAME
+.B hatch\ run
+\(en Run commands within project environments
+.SH SYNOPSIS
+.B hatch\ run
+.RI [ OPTIONS ]
+.RI [ ENV :] ARGS ...
+.SH DESCRIPTION
+This is a convenience wrapper around the
+.BR hatch\-env\-run (1)
+command.
+.P
+If the first argument contains a colon,
+then the preceding component will be
+interpreted as the name of the environment to target,
+overriding the
+.BR \-e / \-\-env
+root option and the
+.B HATCH_ENV
+environment variable.
+.P
+If the environment provides matrices,
+then you may also provide leading arguments
+starting with a
+.B +
+or
+.B \-
+to select or exclude certain variables,
+optionally followed by specific comma-separated values.
+.SH NOTES
+Inclusions are treated as an intersection
+while exclusions are treated as a union
+i.e. an environment must match all of the included variables
+to be selected
+while matching any of the excluded variables
+will prevent selection.
+.SH EXAMPLES
+For example, if you have the following configuration:
+.TP
+.in +4n
+.I pyproject.toml
+.EX
+.B [[tool.hatch.envs.test.matrix]]
+.B python\ =\ ["3.9",\ "3.10"]
+.B version\ =\ ["42",\ "3.14",\ "9000"]
+.EE
+.in
+.TP
+.in +4n
+.I hatch.toml
+.EX
+.B [[envs.test.matrix]]
+.B python\ =\ ["3.9",\ "3.10"]
+.B version\ =\ ["42",\ "3.14",\ "9000"]
+.EE
+.in
+.P
+then running:
+.P
+.in +4n
+.EX
+.B hatch\ run\ +py=3.10\ \-version=9000\ test:pytest
+.EE
+.in
+.P
+would execute
+.B pytest
+in the environments
+.B test.py3.10\-42
+and
+.BR test.py3.10\-3.14 .
+Note that
+.B py
+may be used as an alias for
+.BR python .
+.SH "SEE ALSO"
+.BR hatch\-build (1),
+.BR hatch\-clean (1),
+.BR hatch\-config (1),
+.BR hatch\-dep (1),
+.BR hatch\-env (1),
+.BR hatch\-fmt (1),
+.BR hatch\-new (1),
+.BR hatch\-project (1),
+.BR hatch\-publish (1),
+.BR hatch\-python (1),
+.BR hatch\-self (1),
+.BR hatch\-shell (1),
+.BR hatch\-status (1),
+.BR hatch\-test (1),
+.BR hatch\-version (1)
+.P
+.BR hatch (1)
+.P
+.BR hatch\-env\-run (1)

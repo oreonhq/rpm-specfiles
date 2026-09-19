@@ -1,0 +1,22 @@
+From de16280bdde930cea590c4fe65b17baa859816b9 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 24 Feb 2026 20:32:52 +0000
+Subject: [PATCH] Do not upper-bound the version of packaging
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index c9ab299..dd17ee5 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ version = "1.22.0"
+ description = "Common functions and classes for Snakemake and its plugins"
+ readme = "README.md"
+ requires-python = ">=3.8"
+-dependencies = ["argparse-dataclass>=2.0.0", "ConfigArgParse>=1.7", "packaging >=24.0,<26.0"]
++dependencies = ["argparse-dataclass>=2.0.0", "ConfigArgParse>=1.7", "packaging >=24.0"]
+ 
+ [[project.authors]]
+ name = "Johannes Koester"

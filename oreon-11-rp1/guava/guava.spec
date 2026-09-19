@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           guava
-Version:        33.5.0
+Version:        33.7.1
 Release:        %autorelease
 Summary:        Google Core Libraries for Java
 # Most of the code is under Apache-2.0

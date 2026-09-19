@@ -5,8 +5,8 @@
 Name:           jaxen
 Summary:        An XPath engine written in Java
 Epoch:          0
-Version:        1.2.0
-Release:        23%{?dist}
+Version:        2.0.6
+Release:        1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 

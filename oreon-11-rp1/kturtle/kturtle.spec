@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d5736efad2344a6936ee18367e0cd2c1b0f98cbb6ed89106144a0a7d5047ecf7
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kturtle
 Summary: Educational Programming Environment 
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -45,7 +45,7 @@ BuildRequires: cmake(KF6DocTools)
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n kturtle-26.04.1
+%autosetup -p1 -n %{name}-%{version}
 
 
 %build

@@ -1,0 +1,27 @@
+--- examples/readsdpa.c.orig	2005-10-21 13:31:14.000000000 -0600
++++ examples/readsdpa.c	2019-12-09 11:47:34.346905327 -0700
+@@ -87,7 +87,7 @@ int ReadSDPAFile(int argc,char *argv[]){
+   double   ddobj,ppobj,scl,dpot;
+   char     problemname[100],thisline[100], filename[300],savefile[100];
+   char     directory[100]="/home/benson/sdpexamples/sdplib/";
+-  char     outputfile[50]="",suffix[20]=".dat-s", tablename[20]="results-dsdp-5.8";
++  char     outputfile[50]="",suffix[20]=".dat-s", tablename[90]="results-dsdp-5.8";
+   char     success='s',sformat;
+   FILE     *fp1=0,*fp2=0,*fout;
+   DSDPData dddd;
+@@ -106,12 +106,12 @@ int ReadSDPAFile(int argc,char *argv[]){
+     if (strncmp(argv[i],"-benchmark",8)==0){
+       strncpy(thisline,argv[i+1],90); fp1=fopen(thisline,"r");runbenchmark=1; justone=0;
+     };
+-    if (strncmp(argv[i],"-directory",8)==0){strncpy(directory,argv[i+1],90);}
++    if (strncmp(argv[i],"-directory",8)==0){strncpy(directory,argv[i+1],100);}
+     if (strncmp(argv[i],"-table",4)==0){strncpy(tablename,argv[i+1],90);};
+     if (strncmp(argv[i],"-suffix",4)==0){strncpy(suffix,argv[i+1],20);};
+-    if (strncmp(argv[i],"-save",5)==0){ strncpy(savefile,argv[i+1],40);saveit=1;};
++    if (strncmp(argv[i],"-save",5)==0){ strncpy(savefile,argv[i+1],100);saveit=1;};
+     if (strncmp(argv[i],"-dlogsummary",8)==0){printsummary=atoi(argv[i+1]);}
+-    if (rank==0&&strncmp(argv[i],"-fout",5)==0){ strncpy(outputfile,argv[i+1],45);fileout=1;};
++    if (rank==0&&strncmp(argv[i],"-fout",5)==0){ strncpy(outputfile,argv[i+1],50);fileout=1;};
+   }
+ 
+   if (runbenchmark || argc>2){

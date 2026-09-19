@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=QCad
+GenericName=QCad
+Comment=Powerful 2D CAD system
+Exec=qcad %U
+Icon=qcad
+Terminal=false
+Type=Application
+StartupNotify=true
+StartupWMClass=qcad

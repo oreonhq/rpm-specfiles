@@ -1,0 +1,61 @@
+diff -up spindown-0.4.0/src/disk.cpp.orig spindown-0.4.0/src/disk.cpp
+--- spindown-0.4.0/src/disk.cpp.orig	2009-04-18 12:32:59.000000000 -0400
++++ spindown-0.4.0/src/disk.cpp	2024-05-30 13:31:25.270211392 -0400
+@@ -25,6 +25,7 @@
+ #include <stddef.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <iniparser/iniparser.h>
+ 
+ #include <iostream>
+ #include <string>
+@@ -38,7 +39,6 @@ using std::ostringstream;
+ #include "general.h"
+ #include "log.h"
+ #include "exceptions.h"
+-#include "ininiparser3.0b/iniparser.h"
+ 
+ #include "disk.h"
+ 
+diff -up spindown-0.4.0/src/disk.h.orig spindown-0.4.0/src/disk.h
+--- spindown-0.4.0/src/disk.h.orig	2009-04-18 12:32:59.000000000 -0400
++++ spindown-0.4.0/src/disk.h	2024-05-30 13:39:01.583311861 -0400
+@@ -28,7 +28,7 @@
+ #ifndef DISC_CLASS_H
+ #define DISC_CLASS_H
+ 
+-#include "ininiparser3.0b/iniparser.h"
++#include <iniparser/iniparser.h>
+ 
+ #include <string>
+ using std::string;
+diff -up spindown-0.4.0/src/spindownd.cpp.orig spindown-0.4.0/src/spindownd.cpp
+--- spindown-0.4.0/src/spindownd.cpp.orig	2009-04-18 12:32:59.000000000 -0400
++++ spindown-0.4.0/src/spindownd.cpp	2024-05-30 13:32:16.962107796 -0400
+@@ -25,6 +25,9 @@
+ #include <errno.h>
+ #include <sys/stat.h>
+ 
++#include <iniparser/iniparser.h>
++#include <iniparser/dictionary.h>
++
+ #include <string>
+ #include <iostream>
+ #include <fstream>
+@@ -41,9 +44,6 @@ using std::ofstream;
+ #include "diskset.h"
+ #include "spindown.h"
+ 
+-#include "ininiparser3.0b/iniparser.h"
+-#include "ininiparser3.0b/dictionary.h"
+-
+ #include "spindownd.h"
+ 
+ string Spindownd::fifoPath;
+@@ -339,4 +339,4 @@ string Spindownd::relToAbs( string path
+         path.insert( 0, runPath+"/" );
+ 
+     return path;
+-}
+\ No newline at end of file
++}

@@ -1,0 +1,46 @@
+diff -up iaxclient-2.1beta3/simpleclient/tkphone/iaxcli.c.BAD iaxclient-2.1beta3/simpleclient/tkphone/iaxcli.c
+--- iaxclient-2.1beta3/simpleclient/tkphone/iaxcli.c.BAD	2008-06-10 13:11:28.000000000 -0400
++++ iaxclient-2.1beta3/simpleclient/tkphone/iaxcli.c	2008-06-10 13:11:34.000000000 -0400
+@@ -413,7 +413,7 @@ int main(int argc, char **argv) {
+ #endif
+ 
+     atexit(iaxc_shutdown); /* activate the exit handler */
+-    if (iaxc_initialize(AUDIO_INTERNAL_PA,1)) {
++    if (iaxc_initialize(1)) {
+ 	fatal_error("cannot initialize iaxclient!");
+     }
+ 
+diff -up iaxclient-2.1beta3/simpleclient/tkphone/Makefile.am.BAD iaxclient-2.1beta3/simpleclient/tkphone/Makefile.am
+--- iaxclient-2.1beta3/simpleclient/tkphone/Makefile.am.BAD	2008-06-10 13:13:44.000000000 -0400
++++ iaxclient-2.1beta3/simpleclient/tkphone/Makefile.am	2008-06-10 13:13:49.000000000 -0400
+@@ -1,5 +1,5 @@
+ # Should support LINUX MACOSX WIN32 SOLARIS FREEBSD
+-bin_SCRIPTS = tkphone
++bin_SCRIPTS = tkiaxphone
+ 
+ iaxcli_PROGRAMS=iaxcli
+ iaxcli_SOURCES = iaxcli.c tones.c tones.h
+diff -up iaxclient-2.1beta3/simpleclient/tkphone/Makefile.in.BAD iaxclient-2.1beta3/simpleclient/tkphone/Makefile.in
+--- iaxclient-2.1beta3/simpleclient/tkphone/Makefile.in.BAD	2008-06-10 13:13:29.000000000 -0400
++++ iaxclient-2.1beta3/simpleclient/tkphone/Makefile.in	2008-06-10 13:13:33.000000000 -0400
+@@ -251,7 +251,7 @@ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ 
+ # Should support LINUX MACOSX WIN32 SOLARIS FREEBSD
+-bin_SCRIPTS = tkphone
++bin_SCRIPTS = tkiaxphone
+ iaxcli_SOURCES = iaxcli.c tones.c tones.h
+ iaxclidir = ${libdir}/iaxclient/tkphone
+ iaxcli_SCRIPTS = tkiaxphone
+diff -up iaxclient-2.1beta3/simpleclient/tkphone/tones.c.BAD iaxclient-2.1beta3/simpleclient/tkphone/tones.c
+--- iaxclient-2.1beta3/simpleclient/tkphone/tones.c.BAD	2008-06-10 13:12:03.000000000 -0400
++++ iaxclient-2.1beta3/simpleclient/tkphone/tones.c	2008-06-10 13:12:09.000000000 -0400
+@@ -32,7 +32,7 @@
+ #ifdef TONES_MAIN
+ #  include <stdio.h>
+ #endif
+-#include <strings.h>
++#include <string.h>
+ #include <stdlib.h>
+ #include <math.h>
+ #include "tones.h"

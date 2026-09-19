@@ -3,8 +3,8 @@
 %global source2_hash a47ae67e65375cedf0e0af830db4f29b29365283c1c3661a47d3d67601b9eada
 %global source2_key_fpr 5D46CB0F763405A7053556F47A75A648B3F9220C
 
-Version: 3.8.12
-Release: 2%{?dist}
+Version: 3.8.13
+Release: 1%{?dist}
 
 # FIPS --with-fips140-module-version uses this. The old Lua macro ran cat on every
 # Source/Patch under %%_specdir at parse time, which breaks rpmspec and any prep

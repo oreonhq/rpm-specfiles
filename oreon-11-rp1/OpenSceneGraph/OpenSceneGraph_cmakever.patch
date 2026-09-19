@@ -1,0 +1,12 @@
+diff -rupN --no-dereference OpenSceneGraph-OpenSceneGraph-3.6.5/CMakeLists.txt OpenSceneGraph-OpenSceneGraph-3.6.5-new/CMakeLists.txt
+--- OpenSceneGraph-OpenSceneGraph-3.6.5/CMakeLists.txt	2025-07-20 16:14:39.957233717 +0200
++++ OpenSceneGraph-OpenSceneGraph-3.6.5-new/CMakeLists.txt	2025-07-20 16:14:40.400063234 +0200
+@@ -13,7 +13,7 @@ SET(OPENSCENEGRAPH_RELEASE_CANDIDATE 0)
+ set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
+ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+ 
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5.0 FATAL_ERROR)
+ 
+ if(COMMAND cmake_policy)
+     # Works around warnings libraries linked against that don't

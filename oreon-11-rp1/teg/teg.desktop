@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=T.E.G. client
+Name[es]=Cliente T.E.G.
+Name[de]=T.E.G. Client
+Comment=Tenes Empanadas Graciela client
+Comment[es]=Cliente del Tenes Empanadas Graciela
+Comment[de]=Client für Tenes Empanadas Graciela
+Exec=tegclient
+Icon=teg
+Terminal=false
+Type=Application
+Categories=Game;StrategyGame;
+Encoding=UTF-8
+X-Desktop-File-Install-Version=0.12

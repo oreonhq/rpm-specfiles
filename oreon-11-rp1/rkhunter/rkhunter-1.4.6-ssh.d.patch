@@ -1,0 +1,43 @@
+diff --color -Nur rkhunter-1.4.6.orig/files/rkhunter rkhunter-1.4.6/files/rkhunter
+--- rkhunter-1.4.6.orig/files/rkhunter	2021-02-07 13:58:43.355270731 -0800
++++ rkhunter-1.4.6/files/rkhunter	2021-02-07 14:02:41.551554134 -0800
+@@ -17379,6 +17379,12 @@
+ 			fi
+ 		done
+ 
++			if [ -d "${SSH_CONFIG_FILE}.d" ];then
++				SSH_CONFIG_FILE="${SSH_CONFIG_FILE} ${SSH_CONFIG_FILE}.d/*"
++			else
++				:
++			fi
++
+ 		if [ -n "${SSH_CONFIG_FILE}" ]; then
+ 			display --to SCREEN+LOG --type PLAIN --result FOUND --color GREEN --log-indent 2 --screen-indent 4 SYSTEM_CONFIGS_FILE_SSH
+ 
+@@ -17396,7 +17402,7 @@
+ 			# First we check for allowed root access.
+ 			#
+ 
+-			RKHTMPVAR=`grep -i '^[ 	]*PermitRootLogin[ 	=]' "${SSH_CONFIG_FILE}" 2>/dev/null | tail ${TAIL_OPT}1`
++			RKHTMPVAR=`grep -ih '^[         ]*PermitRootLogin[      =]' ${SSH_CONFIG_FILE} 2>/dev/null | tail ${TAIL_OPT}1`
+ 
+ 			if [ -n "${RKHTMPVAR}" ]; then
+ 				#
+@@ -17427,7 +17433,7 @@
+ 			# Next we check to see if protocol version 1 is allowed.
+ 			#
+ 
+-			RKHTMPVAR=`grep -i '^[ 	]*Protocol[ 	=]' "${SSH_CONFIG_FILE}" 2>/dev/null | tail ${TAIL_OPT}1`
++			RKHTMPVAR=`grep -i '^[ 	]*Protocol[ 	=]' ${SSH_CONFIG_FILE} 2>/dev/null | tail ${TAIL_OPT}1`
+ 
+ 			if [ -n "${RKHTMPVAR}" ]; then
+ 				#
+@@ -17467,7 +17473,7 @@
+ 			# First check for the Ebury backdoor.
+ 			#
+ 
+-			RKHTMPVAR=`grep -i '^[ 	]*AuthorizedKeysFile[ 	=]' "${SSH_CONFIG_FILE}" 2>/dev/null | tail ${TAIL_OPT}1`
++			RKHTMPVAR=`grep -i '^[ 	]*AuthorizedKeysFile[ 	=]' ${SSH_CONFIG_FILE} 2>/dev/null | tail ${TAIL_OPT}1`
+ 
+ 			if [ -n "${RKHTMPVAR}" ]; then
+ 				RKHTMPVAR2=`echo ${RKHTMPVAR} | sed -e 's/^[^ 	=]*[ 	]*=*[ 	]*\([^ 	#]*\).*$/\1/'`

@@ -15,6 +15,8 @@ BuildArch:      noarch
 
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  pyproject-rpm-macros
+BuildRequires:	python3dist(pytest-xdist)
+BuildRequires:	python3dist(tox) >= 3.28
 
 %description
 The tox-current-env plugin allows to run tests in current Python environment.
@@ -22,6 +24,7 @@ The tox-current-env plugin allows to run tests in current Python environment.
 %package -n     python%{python3_pkgversion}-tox-current-env
 Summary:        %{summary}
 %{?python_provide:%python_provide python%{python3_pkgversion}-tox-current-env}
+Requires:       python%{python3_pkgversion}dist(tox) >= 3.28
 
 %description -n python%{python3_pkgversion}-tox-current-env
 The tox-current-env plugin allows to run tests in current Python environment.

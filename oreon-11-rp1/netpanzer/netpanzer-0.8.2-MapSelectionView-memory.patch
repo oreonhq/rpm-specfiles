@@ -1,0 +1,10 @@
+--- src/NetPanzer/Views/MainMenu/Multi/MapSelectionView.cpp	2008-01-10 08:56:59.000000000 -0600
++++ src/NetPanzer/Views/MainMenu/Multi/MapSelectionView.cpp	2008-01-10 08:56:59.000000000 -0600
+@@ -28,6 +28,7 @@
+ #include "Util/FileStream.hpp"
+ #include "Util/Exception.hpp"
+ #include "Util/Log.hpp"
++#include <memory>
+ 
+ std::vector<MapInfo*> MapSelectionView::mapList;
+ int MapSelectionView::curMap = 0;

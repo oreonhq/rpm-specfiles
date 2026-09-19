@@ -1,0 +1,35 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -51,18 +51,18 @@
+ all:
+ 
+ ifeq (${BUILD_STATIC}, yes)
+-all tools tests: static
++all: static
+ install: install/static
+ endif
+ 
+ ifeq (${BUILD_STATIC_PIC}, yes)
+-all tools tests: build_library_type/static-pic
++all: build_library_type/static-pic
+ install: install/static-pic
+ LIBRARY_TYPE_FOR_TOOLS=static-pic
+ endif
+ 
+ ifeq (${BUILD_SHARED},yes)
+-all tools tests: relocatable
++all: relocatable
+ install: install/relocatable
+ LIBRARY_TYPE_FOR_TOOLS=relocatable
+ endif
+--- a/src/tools/tools.gpr
++++ b/src/tools/tools.gpr
+@@ -21,7 +21,7 @@
+ --                                                                          --
+ ------------------------------------------------------------------------------
+ 
+-with "../gtkada";
++with "gtkada";
+ with "../../gtkada_shared";
+ 
+ project Tools is

@@ -1,0 +1,73 @@
+.TH GEOTILER\-LINT "1" "November 2021" "" "User Commands"
+.SH NAME
+.B geotiler\-lint
+\(en request map of specified coverage and save it as an image
+.SH SYNOPSIS
+.B geotiler\-lint
+.RB [ \-h ]
+.RB [ \-v ]
+.RB [ \-c\ \fICENTER\fB\ \fICENTER\fR]
+.RB [ \-e\ \fIEXTENT\fB\ \fIEXTENT\fB\ \fIEXTENT\fB\ \fIEXTENT\fR]
+.RB [ \-z\ \fIZOOM ]
+.RB [ \-s\ \fISIZE\fB\ \fISIZE\fR]
+.RB [ \-p\  {}]
+.RB [ \-\-cache\  { redis }]
+.I output
+.SH DESCRIPTION
+Request map of specified coverage and save it as an image.
+There are three ways to set a map coverage area:
+.IP 1) 7n
+Center, zoom, and size:
+create a map of the specified size,
+centered on a given geographical point at a given zoom level.
+.IP 2) 7n
+Extent and size:
+create a map of the specified size
+that adequately covers the given geographical extent.
+.IP 3) 7n
+Extent and zoom:
+create a map at the given zoom level
+that covers the precise geographical extent,
+at whatever pixel size is necessary.
+.SH OPTIONS
+.SS "POSITIONAL ARGUMENTS"
+.TP
+.I output
+Output file
+.SS "OPTIONAL ARGUMENTS"
+.TP
+.BR \-h ,\  \-\-help
+Show a help message and exit
+.TP
+.BR \-v ,\  \-\-verbose
+Make a bunch of noise
+.TP
+.BI \-c\  CENTER \  CENTER\fR, \ \-\-center\  CENTER \  CENTER
+center of the map (lon, lat), e.g.:
+.in +7n
+.EX
+.B \-122.263\ 37.804
+.EE
+.in
+.TP
+.BI \-e\  EXTENT \  EXTENT \  EXTENT \  EXTENT\fR, \ \-\-extent\  EXTENT \  EXTENT \  EXTENT \  EXTENT
+Geographical map extent.
+Two
+.IR lat ,
+.I lon
+pairs
+.TP
+.BI \-z\  ZOOM\fR, \ \-\-zoom\  ZOOM
+Zoom level
+.TP
+.BI \-s\  SIZE \  SIZE\fR, \ \-\-size\  SIZE \  SIZE
+size of map image
+.TP
+.BR \-p\  {},\  \-\-provider\  {}
+map provider id
+.TP
+.BR \-\-cache\  { redis }
+specify caching strategy
+.SH "SEE ALSO"
+.BR geotiler\-fetch (1),
+.BR geotiler\-route (1)

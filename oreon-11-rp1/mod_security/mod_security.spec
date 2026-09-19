@@ -13,8 +13,8 @@
 
 Summary: Security module for the Apache HTTP Server
 Name: mod_security
-Version: 2.9.11
-Release: 3%{?dist}
+Version: 4.0.0.0
+Release: 1%{?dist}
 License: Apache-2.0
 URL: http://www.modsecurity.org/
 Source:        https://github.com/owasp-modsecurity/ModSecurity/releases/download/v%{version}/modsecurity-v%{version}.tar.gz

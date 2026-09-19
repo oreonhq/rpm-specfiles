@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=XCircuit Schematic
+Comment=ASIC Schematic Editor
+Exec=xcircuit
+Icon=xcircuit
+Type=Application
+Terminal=false
+GenericName=Xcircuit Schematic
+Categories=Electronics;Engineering;

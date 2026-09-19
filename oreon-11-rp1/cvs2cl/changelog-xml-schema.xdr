@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="changelog-schema" xmlns="urn:schemas-microsoft-com:xml-data" xmlns:dt="urn:schemas-microsoft-com:datatypes">
+	<ElementType name="author" model="closed" content="textOnly" dt:type="string"/>
+	<ElementType name="branch" model="closed" content="textOnly" dt:type="string"/>
+	<ElementType name="branchroot" model="closed" content="textOnly" dt:type="string"/>
+	<ElementType name="changelog" model="closed" content="eltOnly" order="seq">
+		<AttributeType name="xmlns" dt:type="string"/>
+		<attribute type="xmlns"/>
+		<element type="entry" minOccurs="1" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="commondir" model="closed" content="textOnly" dt:type="string"/>
+	<ElementType name="date" model="closed" content="textOnly" dt:type="date"/>
+	<ElementType name="entry" model="closed" content="eltOnly" order="seq">
+		<element type="date" minOccurs="1" maxOccurs="1"/>
+		<element type="weekday" minOccurs="1" maxOccurs="1"/>
+		<element type="time" minOccurs="1" maxOccurs="1"/>
+		<element type="author" minOccurs="1" maxOccurs="1"/>
+		<element type="file" minOccurs="1" maxOccurs="*"/>
+		<element type="utag" minOccurs="0" maxOccurs="*"/>
+		<element type="commondir" minOccurs="0" maxOccurs="1"/>
+		<element type="msg" minOccurs="1" maxOccurs="1"/>
+	</ElementType>
+	<ElementType name="file" model="closed" content="eltOnly" order="seq">
+		<element type="name" minOccurs="1" maxOccurs="1"/>
+		<element type="revision" minOccurs="1" maxOccurs="1"/>
+		<element type="branch" minOccurs="0" maxOccurs="1"/>
+		<element type="tag" minOccurs="0" maxOccurs="*"/>
+		<element type="branchroot" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="msg" model="closed" content="textOnly" dt:type="string"/>
+	<ElementType name="name" model="closed" content="textOnly" dt:type="string"/>
+	<ElementType name="revision" model="closed" content="textOnly" dt:type="string"/>
+	<ElementType name="tag" model="closed" content="textOnly" dt:type="string"/>
+	<ElementType name="time" model="closed" content="textOnly" dt:type="time.tz"/>
+	<ElementType name="utag" model="closed" content="textOnly" dt:type="string"/>
+	<ElementType name="weekday" model="closed" content="textOnly" dt:type="string"/>
+</Schema>

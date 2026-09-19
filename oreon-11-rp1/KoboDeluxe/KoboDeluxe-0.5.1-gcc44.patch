@@ -1,0 +1,12 @@
+diff -up KoboDeluxe-0.5.1/graphics/window.cpp~ KoboDeluxe-0.5.1/graphics/window.cpp
+--- KoboDeluxe-0.5.1/graphics/window.cpp~	2007-12-14 10:13:24.000000000 +0100
++++ KoboDeluxe-0.5.1/graphics/window.cpp	2009-03-09 11:16:04.000000000 +0100
+@@ -398,7 +398,7 @@ void window_t::center_token_fxp(int _x, 
+ 		 */
+ 		if(token)
+ 		{
+-			char *tok = strchr(txt, token);
++			const char *tok = strchr(txt, token);
+ 			if(tok)
+ 				tokpos = tok-txt;
+ 			else

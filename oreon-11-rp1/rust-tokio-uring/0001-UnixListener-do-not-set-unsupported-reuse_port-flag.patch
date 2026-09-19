@@ -1,0 +1,54 @@
+From 22056c8127d6286c3d4872c0d120ffca830375a1 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 21 Feb 2025 17:22:25 +0100
+Subject: [PATCH] UnixListener: do not set unsupported reuse_port flag
+
+It looks like this never worked as expected for Unix domain sockets
+and the linux kernel just silently ignored it. As of Linux 6.12.9+,
+an EOPNOTSUPP error is returned instead, so setting this option for
+Unix domain sockets needs to be avoided.
+---
+ src/driver/socket.rs | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/src/driver/socket.rs b/src/driver/socket.rs
+index f55fab3..641b230 100644
+--- a/src/driver/socket.rs
++++ b/src/driver/socket.rs
+@@ -86,6 +86,7 @@ impl Socket {
+             socket_addr.into(),
+             get_domain(socket_addr).into(),
+             socket_type.into(),
++            true,
+         )
+     }
+ 
+@@ -94,7 +95,7 @@ impl Socket {
+         socket_type: libc::c_int,
+     ) -> io::Result<Socket> {
+         let addr = socket2::SockAddr::unix(path.as_ref())?;
+-        Self::bind_internal(addr, libc::AF_UNIX.into(), socket_type.into())
++        Self::bind_internal(addr, libc::AF_UNIX.into(), socket_type.into(), false)
+     }
+ 
+     pub(crate) fn from_std<T: IntoRawFd>(socket: T) -> Socket {
+@@ -110,10 +111,15 @@ impl Socket {
+         socket_addr: socket2::SockAddr,
+         domain: socket2::Domain,
+         socket_type: socket2::Type,
++        reuse_port: bool,
+     ) -> io::Result<Socket> {
+         let sys_listener = socket2::Socket::new(domain, socket_type, None)?;
+ 
+-        sys_listener.set_reuse_port(true)?;
++        if reuse_port {
++            // linux 6.12.9+ raises an error when this option is used
++            // on an unsupported socket type instead of ignoring it
++            sys_listener.set_reuse_port(true)?;
++        }
+         sys_listener.set_reuse_address(true)?;
+ 
+         // TODO: config for buffer sizes
+-- 
+2.48.1
+

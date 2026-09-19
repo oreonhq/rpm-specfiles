@@ -1,0 +1,33 @@
+diff -up koules1.4/koules.c.formatoverflow koules1.4/koules.c
+--- koules1.4/koules.c.formatoverflow	1998-03-08 16:06:00.000000000 -0500
++++ koules1.4/koules.c	2024-04-21 15:17:25.815762520 -0400
+@@ -606,7 +606,7 @@ draw_objects (CONST int draw)
+       EnableClipping ();
+       if (gameplan == COOPERATIVE && gamemode == GAME && DIV == 1)
+ 	{
+-	  sprintf (s, "level: %3i", lastlevel + 1);
++	  sprintf (s, "level: %3hhu", (unsigned char)lastlevel + 1);
+ 	  DrawWhiteMaskedText ((MAPWIDTH / 2 - 38 * 4) / 2 - strlen (s) * 4, MAPHEIGHT + 2, s);
+ 	}
+       sprintf (s, " lives: %6i%6i%6i%6i%6i",
+diff -up koules1.4/menu.c.formatoverflow koules1.4/menu.c
+--- koules1.4/menu.c.formatoverflow	2024-04-21 13:09:14.962705595 -0400
++++ koules1.4/menu.c	2024-04-21 15:22:09.645263018 -0400
+@@ -278,7 +278,7 @@ playerchange ()
+ static void
+ levelchange ()
+ {
+-  sprintf (leveltext, "LEVEL  %03i ", lastlevel + 1);
++  sprintf (leveltext, "LEVEL  %03hhu ", (unsigned char)lastlevel + 1);
+ }
+ 
+ 
+@@ -941,7 +941,7 @@ draw_joy (CONST int draw)
+   if (!draw)
+     return;
+   nmenu = 4;
+-  sprintf (s, "JOYSTICK:%i", joystick + 1);
++  sprintf (s, "JOYSTICK:%hhu", (unsigned char)joystick + 1);
+   DrawWhiteMaskedText ((int) (MAPWIDTH / 2 - 4 * strlen (s)), (int) YPOSITION (0), s);
+   DrawWhiteMaskedText ((int) (MAPWIDTH / 2 - 4 * strlen (mess[joypos])), (int) YPOSITION (1), mess[joypos]);
+   DrawWhiteMaskedText ((int) (MAPWIDTH / 2 - 4 * 33), (int) YPOSITION (2), "and press either button or enter");

@@ -1,0 +1,39 @@
+--- mfiler4-1.3.1/src/filer.c.implicit	2022-07-22 10:47:16.759666979 +0900
++++ mfiler4-1.3.1/src/filer.c	2022-07-22 10:48:59.524044240 +0900
+@@ -1,3 +1,7 @@
++/* for wcswidth */
++#define _XOPEN_SOURCE
++#define _DEFAULT_SOURCE
++
+ #include "common.h"
+ 
+ #include "config.h"
+@@ -9,6 +13,8 @@
+ #elif defined(HAVE_NCURSES_NCURSES_H)
+ #include <ncurses/ncurses.h>
+ #endif
++/* for wcswidth */
++#include <wchar.h>
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+--- mfiler4-1.3.1/src/isearch.c.implicit	2022-07-22 10:47:16.762666960 +0900
++++ mfiler4-1.3.1/src/isearch.c	2022-07-22 10:49:03.168022159 +0900
+@@ -9,6 +9,7 @@
+ #elif defined(HAVE_NCURSES_NCURSES_H)
+ #include <ncurses/ncurses.h>
+ #endif
++#include <ctype.h>
+ 
+ #if defined(HAVE_MIGEMO_H)
+ #include <migemo.h>
+--- mfiler4-1.3.1/src/termbuf.c.implicit	2013-12-29 22:36:45.000000000 +0900
++++ mfiler4-1.3.1/src/termbuf.c	2022-07-22 10:49:22.657904049 +0900
+@@ -14,6 +14,7 @@
+ #include <unistd.h>
+ 
+ #include "config.h"
++#include "common.h"
+ 
+ #if defined(HAVE_CURSES_H)
+ #include <curses.h>

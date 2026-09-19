@@ -1,0 +1,20 @@
+-- This build project file for TestGTK was added in the RPM package.
+-- Copyright 2015 – 2020 B. Persson, Bjorn@Rombobeorn.se
+--
+-- This project file is free software: you can redistribute it and/or modify it
+-- under the terms of the GNU General Public License as published by the Free
+-- Software Foundation, either version 3 of the License, or (at your option)
+-- any later version.
+
+
+with "gtkada.gpr";
+
+project TestGTK is
+
+   for Languages use ("Ada");
+   for Main use ("testgtk.adb", "test_rtree.adb");
+   for Source_Dirs use (".", "task_project/src");
+   for Object_Dir use "obj";
+   for Exec_Dir use ".";
+
+end TestGTK;

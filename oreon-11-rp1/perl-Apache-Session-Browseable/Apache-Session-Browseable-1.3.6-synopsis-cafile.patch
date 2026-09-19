@@ -1,0 +1,11 @@
+--- lib/Apache/Session/Browseable/LDAP.pm
++++ lib/Apache/Session/Browseable/LDAP.pm
+@@ -182,7 +182,7 @@ Apache::Session::Browseable::LDAP - An i
+     ldapAttributeContent => 'description',
+     ldapAttributeIndex   => 'ou',
+     ldapVerify           => 'require',
+-    ldapCAFile           => '/etc/ssl/certs/ca-certificates.crt',
++    ldapCAFile           => '/etc/pki/tls/certs/ca-bundle.crt',
+   };
+ 
+ =head1 DESCRIPTION

@@ -1,0 +1,42 @@
+diff -Naurw pam-0.7.0.orig/examples/spawn_bash.rs pam-0.7.0/examples/spawn_bash.rs
+--- pam-0.7.0.orig/examples/spawn_bash.rs	2024-11-20 21:20:33.305525562 +0000
++++ pam-0.7.0/examples/spawn_bash.rs	2024-11-20 21:21:28.606413771 +0000
+@@ -3,7 +3,7 @@
+ use std::process::Command;
+ 
+ use pam::Authenticator;
+-use users::get_user_by_name;
++use uzers::get_user_by_name;
+ use rpassword::read_password_from_tty;
+ 
+ // A simple program that requests a login and a password and then spawns /bin/bash as the
+diff -Naurw pam-0.7.0.orig/src/authenticator.rs pam-0.7.0/src/authenticator.rs
+--- pam-0.7.0.orig/src/authenticator.rs	2024-11-20 21:20:33.309525626 +0000
++++ pam-0.7.0/src/authenticator.rs	2024-11-20 21:22:08.747060104 +0000
+@@ -2,7 +2,7 @@
+     acct_mgmt, authenticate, close_session, end, getenv, open_session, putenv, setcred, start,
+ };
+ use pam_sys::{PamFlag, PamHandle, PamReturnCode};
+-use users;
++use uzers;
+ 
+ use std::{env, ptr};
+ 
+@@ -127,7 +127,7 @@
+     // Initialize the client environment with common variables.
+     // Currently always called from Authenticator.open_session()
+     fn initialize_environment(&mut self) -> PamResult<()> {
+-        use users::os::unix::UserExt;
++        use uzers::os::unix::UserExt;
+ 
+         // Set PAM environment in the local process
+         if let Some(mut env_list) = get_pam_env(self.handle) {
+@@ -137,7 +137,7 @@
+             }
+         }
+ 
+-        let user = users::get_user_by_name(self.converse.username()).unwrap_or_else(|| {
++        let user = uzers::get_user_by_name(self.converse.username()).unwrap_or_else(|| {
+             panic!("Could not get user by name: {:?}", self.converse.username())
+         });
+ 

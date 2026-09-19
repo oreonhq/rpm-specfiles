@@ -1,0 +1,12 @@
+diff -rupN --no-dereference qbs-src-3.1.2/CMakeLists.txt qbs-src-3.1.2-new/CMakeLists.txt
+--- qbs-src-3.1.2/CMakeLists.txt	2025-11-24 11:12:49.000000000 +0100
++++ qbs-src-3.1.2-new/CMakeLists.txt	2025-12-13 11:08:53.569138119 +0100
+@@ -36,7 +36,7 @@ if(WITH_TESTS)
+ endif()
+ 
+ find_package(Qt${QT_VERSION_MAJOR}
+-    COMPONENTS Concurrent Core Gui Network Widgets Xml ${QT_TEST_COMPONENT}
++    COMPONENTS Concurrent Core CorePrivate Gui Network Widgets Xml ${QT_TEST_COMPONENT}
+     REQUIRED
+     )
+ 

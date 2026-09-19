@@ -1,0 +1,146 @@
+diff -ur gsoap-2.8.139.rnd/gsoap/samples/autotest/Makefile.am gsoap-2.8.139/gsoap/samples/autotest/Makefile.am
+--- gsoap-2.8.139.rnd/gsoap/samples/autotest/Makefile.am	2025-09-25 16:39:01.707189056 +0200
++++ gsoap-2.8.139/gsoap/samples/autotest/Makefile.am	2025-09-25 15:58:39.404070660 +0200
+@@ -5,35 +5,35 @@
+ ## you have all needed files, that a GNU package needs
+ AUTOMAKE_OPTIONS = subdir-objects foreign 1.4
+ 
+-SOAP=$(top_srcdir)/gsoap/src/soapcpp2$(EXEEXT)
+-WSDL=$(top_srcdir)/gsoap/wsdl/wsdl2h$(EXEEXT)
++SOAP=$(top_builddir)/gsoap/src/soapcpp2$(EXEEXT)
++WSDL=$(top_builddir)/gsoap/wsdl/wsdl2h$(EXEEXT)
+ WSDL_FLAGS=-d -P -t $(srcdir)/typemap.dat
+ SOAP_FLAGS=-SL -T -I$(top_srcdir)/gsoap/import -I$(top_srcdir)/gsoap/custom
+-WSDLINPUT=$(srcdir)/examples.wsdl
++WSDLINPUT=examples.wsdl
+ SOAPHEADER=examples.h
+ SOAP_CPP_SRC=soapC.cpp soapServer.cpp soapTester.cpp
+ SOAP_CPP_LIB=$(top_builddir)/gsoap/libgsoap++.a
+ 
+ $(SOAPHEADER) : $(WSDLINPUT)
+-	$(WSDL) $(WSDL_FLAGS) $(WSDLINPUT)
+-	$(SOAP) $(SOAP_FLAGS) $(SOAPHEADER)
++	$(WSDL) $(WSDL_FLAGS) $< -o $@
++	$(SOAP) $(SOAP_FLAGS) $@
+ 
+ $(SOAP_CPP_SRC) soapH.h : $(SOAPHEADER)
+ 
+ duration.cpp : ../../custom/duration.c
+-	ln -s ../../custom/duration.c duration.cpp
++	ln -s $< $@
+ autotest-duration.$(OBJEXT) : soapH.h
+ 
+ long_time.cpp : ../../custom/long_time.c
+-	ln -s ../../custom/long_time.c long_time.cpp
++	ln -s $< $@
+ autotest-long_time.$(OBJEXT) : soapH.h
+ 
+ struct_tm.cpp : ../../custom/struct_tm.c
+-	ln -s ../../custom/struct_tm.c struct_tm.cpp
++	ln -s $< $@
+ autotest-struct_tm.$(OBJEXT) : soapH.h
+ 
+ struct_tm_date.cpp : ../../custom/struct_tm_date.c
+-	ln -s ../../custom/struct_tm_date.c struct_tm_date.cpp
++	ln -s $< $@
+ autotest-struct_tm_date.$(OBJEXT) : soapH.h
+ 
+ #LIBS=
+diff -ur gsoap-2.8.139.rnd/gsoap/samples/chaining/Makefile.am gsoap-2.8.139/gsoap/samples/chaining/Makefile.am
+--- gsoap-2.8.139.rnd/gsoap/samples/chaining/Makefile.am	2025-07-14 19:28:14.000000000 +0200
++++ gsoap-2.8.139/gsoap/samples/chaining/Makefile.am	2025-09-25 06:13:52.391169095 +0200
+@@ -9,7 +9,7 @@
+ # include ../Makefile.c_rules
+ 
+ envC.c:		env.h
+-	$(SOAP) -c -CS -penv -I$(top_srcdir)/gsoap/import:$(top_srcdir)/gsoap $(SOAP_FLAGS) $<
++	$(SOAP) -c -CS -penv -I$(top_srcdir)/gsoap/import:$(top_srcdir)/gsoap -I$(srcdir) $(SOAP_FLAGS) $<
+ qServerLib.c:	quote.h
+ 	$(SOAP) -c -S -np q -I$(top_srcdir)/gsoap/import:$(top_srcdir)/gsoap $(SOAP_FLAGS) $<
+ cServerLib.c:	calc.h
+diff -ur gsoap-2.8.139.rnd/gsoap/samples/chaining++/Makefile.am gsoap-2.8.139/gsoap/samples/chaining++/Makefile.am
+--- gsoap-2.8.139.rnd/gsoap/samples/chaining++/Makefile.am	2025-07-14 19:28:14.000000000 +0200
++++ gsoap-2.8.139/gsoap/samples/chaining++/Makefile.am	2025-09-25 06:30:55.871813940 +0200
+@@ -8,7 +8,7 @@
+ include ../Makefile.defines
+ 
+ envC.cpp:		env.h
+-	$(SOAP) -CS -penv -I$(top_srcdir)/gsoap/import:$(top_srcdir)/gsoap $(SOAP_FLAGS) $<
++	$(SOAP) -CS -penv -I$(top_srcdir)/gsoap/import:$(top_srcdir)/gsoap $(SOAP_FLAGS) -I$(srcdir) $<
+ QuotequoteService.cpp:	quote.h
+ 	$(SOAP) -iS -qQuote -I$(top_srcdir)/gsoap/import:$(top_srcdir)/gsoap $(SOAP_FLAGS) $<
+ CalccalcService.cpp:	calc.h
+diff -ur gsoap-2.8.139.rnd/gsoap/samples/databinding/Makefile.am gsoap-2.8.139/gsoap/samples/databinding/Makefile.am
+--- gsoap-2.8.139.rnd/gsoap/samples/databinding/Makefile.am	2025-09-25 16:39:01.707767274 +0200
++++ gsoap-2.8.139/gsoap/samples/databinding/Makefile.am	2025-09-25 15:58:38.540078791 +0200
+@@ -5,18 +5,18 @@
+ ## you have all needed files, that a GNU package needs
+ AUTOMAKE_OPTIONS = subdir-objects foreign 1.4
+ 
+-SOAP=$(top_srcdir)/gsoap/src/soapcpp2$(EXEEXT)
+-WSDL=$(top_srcdir)/gsoap/wsdl/wsdl2h$(EXEEXT)
++SOAP=$(top_builddir)/gsoap/src/soapcpp2$(EXEEXT)
++WSDL=$(top_builddir)/gsoap/wsdl/wsdl2h$(EXEEXT)
+ WSDL_FLAGS=-g -t $(srcdir)/addresstypemap.dat
+ SOAP_FLAGS=-0 -CS -p address -I$(top_srcdir)/gsoap/import
+-WSDLINPUT=$(srcdir)/address.xsd
++WSDLINPUT=address.xsd
+ SOAPHEADER=address.h
+ SOAP_CPP_SRC=addressC.cpp
+ SOAP_CPP_LIB=$(top_builddir)/gsoap/libgsoap++.a
+ 
+ $(SOAPHEADER) : $(WSDLINPUT)
+-	$(WSDL) $(WSDL_FLAGS) $(WSDLINPUT)
+-	$(SOAP) $(SOAP_FLAGS) $(SOAPHEADER)
++	$(WSDL) $(WSDL_FLAGS) $< -o $@
++	$(SOAP) $(SOAP_FLAGS) $@
+ 
+ $(SOAP_CPP_SRC) addressH.h : $(SOAPHEADER)
+ 
+diff -ur gsoap-2.8.139.rnd/gsoap/samples/googleapi/Makefile.am gsoap-2.8.139/gsoap/samples/googleapi/Makefile.am
+--- gsoap-2.8.139.rnd/gsoap/samples/googleapi/Makefile.am	2025-07-14 19:28:14.000000000 +0200
++++ gsoap-2.8.139/gsoap/samples/googleapi/Makefile.am	2025-09-25 06:42:46.078592506 +0200
+@@ -5,6 +5,7 @@
+ 
+ noinst_PROGRAMS = gdm gdx
+ SOAPHEADER = gdm.hpp
++SOAP_FLAGS = -I$(srcdir)
+ 
+ include ../Makefile.defines
+ include ../Makefile.cpp_rules
+diff -ur gsoap-2.8.139.rnd/gsoap/samples/Makefile.cpp_rules gsoap-2.8.139/gsoap/samples/Makefile.cpp_rules
+--- gsoap-2.8.139.rnd/gsoap/samples/Makefile.cpp_rules	2025-07-14 19:28:14.000000000 +0200
++++ gsoap-2.8.139/gsoap/samples/Makefile.cpp_rules	2025-09-25 06:37:50.128962396 +0200
+@@ -4,7 +4,7 @@
+ SOAP_CPP_SRC = $(SOAP_CPP_CLIENT) soapServer.cpp $(SOAP_H_FILES) $(SOAP_NS)
+ 
+ $(SOAP_CPP_SRC) : $(SOAPHEADER)
+-	$(SOAP) -L -I$(top_srcdir)/gsoap/import:$(top_srcdir)/gsoap $(SOAP_FLAGS) $(SOAPHEADER)
++	$(SOAP) -L -I$(top_srcdir)/gsoap/import:$(top_srcdir)/gsoap $(SOAP_FLAGS) $<
+ 
+ LDADD = $(SOAP_CPP_LIB) $(SAMPLE_EXTRA_LIBS)
+ BUILT_SOURCES = $(SOAP_CPP_SRC) 
+diff -ur gsoap-2.8.139.rnd/gsoap/samples/Makefile.c_rules gsoap-2.8.139/gsoap/samples/Makefile.c_rules
+--- gsoap-2.8.139.rnd/gsoap/samples/Makefile.c_rules	2025-07-14 19:28:14.000000000 +0200
++++ gsoap-2.8.139/gsoap/samples/Makefile.c_rules	2025-09-25 06:37:27.828169737 +0200
+@@ -4,7 +4,7 @@
+ SOAP_C_SRC = $(SOAP_C_CLIENT) soapServer.c $(SOAP_H_FILES) $(SOAP_NS)
+ 
+ $(SOAP_C_SRC) : $(SOAPHEADER)
+-	$(SOAP) -cL -I$(top_srcdir)/gsoap/import:$(top_srcdir)/gsoap  $(SOAP_FLAGS) $(SOAPHEADER)
++	$(SOAP) -cL -I$(top_srcdir)/gsoap/import:$(top_srcdir)/gsoap $(SOAP_FLAGS) $<
+ 
+ LDADD = $(SOAP_C_LIB) $(SAMPLE_EXTRA_LIBS)
+ BUILT_SOURCES = $(SOAP_C_SRC) 
+diff -ur gsoap-2.8.139.rnd/gsoap/samples/Makefile.defines gsoap-2.8.139/gsoap/samples/Makefile.defines
+--- gsoap-2.8.139.rnd/gsoap/samples/Makefile.defines	2025-07-14 19:28:14.000000000 +0200
++++ gsoap-2.8.139/gsoap/samples/Makefile.defines	2025-09-24 11:39:33.038722965 +0200
+@@ -4,7 +4,7 @@
+ AM_CFLAGS=-D$(platform)
+ AM_CXXFLAGS=-D$(platform)
+ AM_CPPFLAGS=$(SAMPLE_INCLUDES) -I$(top_srcdir)/gsoap -I$(top_srcdir)/gsoap/plugin $(SOAPCPP2_NO_C_LOCALE)
+-SOAP=$(top_srcdir)/gsoap/src/soapcpp2
++SOAP=$(top_builddir)/gsoap/src/soapcpp2
+ 
+ SOAP_NS_DEF=ns.nsmap ns.wsdl
+ 

@@ -1,0 +1,35 @@
+From 600c296f4d429ffeb8203feb54efeacc2bbea0f7 Mon Sep 17 00:00:00 2001
+From: Alexander Volkov <a.volkov@rusbitech.ru>
+Date: Wed, 14 Dec 2016 00:00:48 +0300
+Subject: [PATCH 18/23] Fix build with Qt >= 5.8.0
+
+platformsupport-private was modularized in Qt 5.8.
+Use the appropriate theme_support-private module
+to build QGtk2Theme.
+
+Change-Id: I56c8b4c83ca483206baf09cb744d93e2e3c6ff39
+Reviewed-by: Dmitry Shachnev <mitya57@gmail.com>
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@qt.io>
+---
+ src/plugins/platformthemes/gtk2/gtk2.pro | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/plugins/platformthemes/gtk2/gtk2.pro b/src/plugins/platformthemes/gtk2/gtk2.pro
+index 296bbf8..7ee872e 100644
+--- a/src/plugins/platformthemes/gtk2/gtk2.pro
++++ b/src/plugins/platformthemes/gtk2/gtk2.pro
+@@ -1,6 +1,10 @@
+ TARGET = qgtk2
+ 
+-QT += core-private gui-private platformsupport-private
++QT += core-private gui-private
++greaterThan(QT_MAJOR_VERSION, 5)|greaterThan(QT_MINOR_VERSION, 7): \
++    QT += theme_support-private
++else: \
++    QT += platformsupport-private
+ 
+ CONFIG += X11
+ CONFIG += link_pkgconfig
+-- 
+2.9.3
+

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=UltimateStunts
+GenericName=UltimateStunts
+Comment=3D racing game
+Exec=ustunts
+#Icon=ustunts.png
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;SportsGame;

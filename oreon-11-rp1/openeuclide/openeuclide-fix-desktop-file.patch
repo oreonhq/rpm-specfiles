@@ -1,0 +1,16 @@
+diff -up ./openeuclide.desktop.fix ./openeuclide.desktop
+--- ./openeuclide.desktop.fix	2010-10-16 15:04:01.263922233 +0530
++++ ./openeuclide.desktop	2010-10-16 18:46:01.647670430 +0530
+@@ -1,7 +1,10 @@
+ [Desktop Entry]
+-Version=0.5
++Version=1.0
+ Type=Application
+ Name=OpenEuclide
+ Comment=2D dynamical geometry software
+ TryExec=openeuclide
+ Exec=openeuclide %F
++Icon=/usr/share/pixmaps/openeuclide.png
++MimeType=image/x-png;
++Categories=Education;
+\ No newline at end of file

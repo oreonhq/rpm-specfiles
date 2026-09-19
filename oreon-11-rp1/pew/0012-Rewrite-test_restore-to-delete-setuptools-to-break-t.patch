@@ -1,0 +1,66 @@
+From 2ad75887c7f584c52c7aa2e9de2af2eee3139b21 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Jane=C5=BE?= <tadej.j@nez.si>
+Date: Mon, 13 Sep 2021 22:49:48 +0200
+Subject: [PATCH 12/15] Rewrite test_restore to delete setuptools to break test
+ virtualenv
+
+Previoulsy, test_restore test relied on breaking the test virtualenv by
+removing the site.py from the test virtualenv.
+
+Since virtualenv 20+ doesn't inject its own site.py when creating a
+Python 3 virtualenv anymore, reling on removing the site.py from the
+testing virtualenv no longer works.
+
+Deleting everything related to setuptools seems like a good way to break
+the 'import setuptools' statement.
+---
+ tests/test_restore.py | 30 +++++++++++++++++++++---------
+ 1 file changed, 21 insertions(+), 9 deletions(-)
+
+diff --git a/tests/test_restore.py b/tests/test_restore.py
+index 80304d5..fe28977 100644
+--- a/tests/test_restore.py
++++ b/tests/test_restore.py
+@@ -1,18 +1,30 @@
+ from itertools import chain
++import os
++import shutil
+ 
+ from pew._utils import invoke_pew as invoke
+ 
+ 
+ def test_restore(workon_home, env1):
+-    patterns = ['lib*/*/site.py*', 'Lib/site.py*']
+-    to_be_deleted = set(chain(*((workon_home / 'env1').glob(pat) for pat in patterns)))
+-    for site in to_be_deleted:
++    # Break the test virtualenv by deleting all setuptools-related files and
++    # directories.
++    setuptools_patterns = ['lib*/**/setuptools*', 'Lib/**/setuptools*']
++    to_be_deleted = set(chain(*((workon_home / 'env1').glob(pat) for pat in setuptools_patterns)))
++    for file_path in to_be_deleted:
+         try:
+-            site.unlink()
++            if os.path.isfile(file_path) or os.path.islink(file_path):
++                os.unlink(file_path)
++            elif os.path.isdir(file_path):
++                shutil.rmtree(file_path)
+         except FileNotFoundError:
+-            pass # multiple links to the same file might appear in to_be_deleted
+-    result = invoke('in', 'env1', 'python', '-vc', '')
+-    assert 'Error' in result.err or 'fail' in result.err
++            # NOTE: The to_be_deleted list can contain multiple links to the
++            # same file so the file could already be deleted.
++            pass
++    # Importing setuptools in the broken test virtualenv should fail.
++    result = invoke('in', 'env1', 'python', '-c', 'import setuptools')
++    assert 'ModuleNotFoundError' in result.err
++    # Re-create the test virtualenv.
+     invoke('restore', 'env1')
+-    result = invoke('in', 'env1', 'python', '-vc', '')
+-    assert 'Error' not in result.err and 'fail' not in result.err
++    # Importing setuptools in the re-created test virtualenv should not fail.
++    result = invoke('in', 'env1', 'python', '-c', 'import setuptools')
++    assert 'Error' not in result.err
+-- 
+2.31.1
+

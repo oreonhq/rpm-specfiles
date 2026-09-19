@@ -1,0 +1,32 @@
+From 34b1ca63aac10adf9434bb60fd3c45a8f6b6669d Mon Sep 17 00:00:00 2001
+From: Artem Pelenitsyn <a.pelenitsyn@gmail.com>
+Date: Thu, 3 Feb 2022 19:16:44 +0100
+Subject: [PATCH] prepare for MonadFail/ST instance removal from base
+
+---
+ src/Data/UnionFind/ST.hs | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/src/Data/UnionFind/ST.hs b/src/Data/UnionFind/ST.hs
+index 80241ae..d208ab4 100644
+--- a/src/Data/UnionFind/ST.hs
++++ b/src/Data/UnionFind/ST.hs
+@@ -130,10 +130,14 @@ union' p1 p2 update = do
+   point2@(Pt link_ref2) <- repr p2
+   -- The precondition ensures that we don't create cyclic structures.
+   when (point1 /= point2) $ do
+-    Info info_ref1 <- readSTRef link_ref1
+-    Info info_ref2 <- readSTRef link_ref2
+-    MkInfo w1 d1 <- readSTRef info_ref1 -- d1 is discarded
+-    MkInfo w2 d2 <- readSTRef info_ref2
++    ir1 <- readSTRef link_ref1
++    let Info info_ref1 = ir1
++    ir2 <- readSTRef link_ref2
++    let Info info_ref2 = ir2
++    i1 <- readSTRef info_ref1 -- d1 is discarded
++    let MkInfo w1 d1 = i1
++    i2 <- readSTRef info_ref2
++    let MkInfo w2 d2 = i2
+     d2' <- update d1 d2
+     -- Make the smaller tree a a subtree of the bigger one.  The idea
+     -- is this: We increase the path length of one set by one.

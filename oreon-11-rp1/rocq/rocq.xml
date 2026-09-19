@@ -1,0 +1,8 @@
+<mime-info>
+  <mime-type type="application/x-rocq">
+    <sub-class-of type="text/plain"/>
+    <comment>Rocq theory files</comment>
+    <glob pattern="*.v"/>
+    <icon name="rocqfile"/>
+  </mime-type>
+</mime-info>

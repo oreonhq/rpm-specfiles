@@ -1,0 +1,49 @@
+From dd074be79c61545a1f5d0ed9f6d0363c1a154a2b Mon Sep 17 00:00:00 2001
+From: Stephen Smoogen <ssmoogen@redhat.com>
+Date: Wed, 17 Jan 2024 18:05:42 -0500
+Subject: [PATCH] Squashed commit of the following:
+
+    Begin work to get phytool ready for Fedora inclusion.
+
+    - Fedora and other distros add a lot of flags to uncover possible
+      problems with code. Added in an error check on asprintf as it could
+      fail and cause problems.
+
+    - when getting code in from other tree, I somehow added all kinds of
+      whitespace which 'compiled' but was not good code. Remove the
+      whitespace. Convert back to tabs to match other code.
+
+Signed-off-by: Stephen Smoogen <ssmoogen@redhat.com>
+---
+ phytool.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/phytool.c b/phytool.c
+index 1255068..e7a49c9 100644
+--- a/phytool.c
++++ b/phytool.c
+@@ -275,13 +275,19 @@ static int mv6tool_parse_loc_if(char *dev, char *addr, char *reg,
+ 
+ 	strncpy(loc->ifnam, dev, IFNAMSIZ - 1);
+ 
+-	asprintf(&path, "/sys/class/net/%s/phys_switch_id", dev);
++	err = asprintf(&path, "/sys/class/net/%s/phys_switch_id", dev);
++	if (err == -1 )
++		return -ENOMEM;
++
+ 	err = sysfs_readu(path, &phy_port);
+ 	free(path);
+ 	if (err)
+ 		return -ENOSYS;
+ 
+-	asprintf(&path, "/sys/class/net/%s/phys_port_id", dev);
++	err =asprintf(&path, "/sys/class/net/%s/phys_port_id", dev);
++	if (err == -1 )
++		return -ENOMEM;
++
+ 	err = sysfs_readu(path, &phy_dev);
+ 	free(path);
+ 	if (err)
+-- 
+2.43.0
+

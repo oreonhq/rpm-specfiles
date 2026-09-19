@@ -1,0 +1,6 @@
+
+/usr/sbin/ladvd	--	gen_context(system_u:object_r:ladvd_exec_t,s0)
+
+/usr/lib/systemd/system/ladvd.*	--	gen_context(system_u:object_r:ladvd_unit_file_t,s0)
+
+/run/ladvd(/.*)?			gen_context(system_u:object_r:ladvd_run_t,s0)

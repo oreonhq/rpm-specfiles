@@ -1,0 +1,53 @@
+diff -up kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/xsldbg.cpp.me kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/xsldbg.cpp
+--- kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/xsldbg.cpp.me	2013-03-08 17:43:18.396187560 +0100
++++ kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/xsldbg.cpp	2013-03-08 17:43:44.315120188 +0100
+@@ -82,9 +82,6 @@
+ #include <libxml/xmlerror.h>
+ #include <libxml/HTMLtree.h>
+ #include <libxml/xmlIO.h>
+-#ifdef LIBXML_DOCB_ENABLED
+-#include <libxml/DOCBparser.h>
+-#endif
+ #ifdef LIBXML_XINCLUDE_ENABLED
+ #include <libxml/xinclude.h>
+ #endif
+@@ -973,13 +970,6 @@ xsldbgLoadXmlData(void)
+                             NULL);
+     else
+ #endif
+-#ifdef LIBXML_DOCB_ENABLED
+-    if (optionsGetIntOption(OPTIONS_DOCBOOK))
+-        doc = docbParseFile((char *)
+-                            optionsGetStringOption(OPTIONS_DATA_FILE_NAME),
+-                            NULL);
+-    else
+-#endif
+ 
+ #if LIBXML_VERSION >= 20600
+         doc = xmlSAXParseFile(&mySAXHandler,
+@@ -1025,11 +1015,6 @@ xsldbgLoadXmlTemporary(const xmlChar * p
+         doc = htmlParseFile((char *) path, NULL);
+     else
+ #endif
+-#ifdef LIBXML_DOCB_ENABLED
+-    if (optionsGetIntOption(OPTIONS_DOCBOOK))
+-        doc = docbParseFile((char *) path, NULL);
+-    else
+-#endif
+         doc = xmlSAXParseFile(&mySAXhdlr, (char *) path, 0);
+     if (doc == NULL) {
+         xsldbgGenericErrorFunc(i18n("Error: Unable to parse file %1.\n").arg(xsldbgUrl(path)));
+diff -up kdewebdev-3.5.10/kxsldbg/xsldbgmain.cpp.me kdewebdev-3.5.10/kxsldbg/xsldbgmain.cpp
+--- kdewebdev-3.5.10/kxsldbg/xsldbgmain.cpp.me	2013-03-08 17:44:00.780077549 +0100
++++ kdewebdev-3.5.10/kxsldbg/xsldbgmain.cpp	2013-03-08 17:44:06.587062539 +0100
+@@ -73,10 +73,6 @@ static const KCmdLineOptions options[] =
+     { "html", 		I18N_NOOP("The input document is(are) an HTML file(s)"), 0},
+ #endif
+ 
+-#ifdef LIBXML_DOCB_ENABLED
+-    { "docbook", 	I18N_NOOP("The input document is SGML docbook"), 0},
+-#endif
+-
+     { "nonet", 		I18N_NOOP("Disable the fetching DTDs or entities over network"), 0},
+ 
+ #ifdef LIBXML_CATALOG_ENABLED

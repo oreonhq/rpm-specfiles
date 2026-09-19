@@ -1,0 +1,32 @@
+diff --git a/wfserver.pro b/wfserver.pro
+index dae8778..dceb5f4 100644
+--- a/wfserver.pro
++++ b/wfserver.pro
+@@ -35,11 +35,9 @@ CONFIG(debug, release|debug) {
+   }
+ } else {
+   # For Release builds only:
+-  linux:QMAKE_CXXFLAGS += -s
+   linux:QMAKE_CXXFLAGS += -fvisibility=hidden
+   linux:QMAKE_CXXFLAGS += -fvisibility-inlines-hidden
+   linux:QMAKE_CXXFLAGS += -faligned-new
+-  linux:QMAKE_LFLAGS += -O2 -s
+ 
+   win32 {
+     contains(QMAKE_TARGET.arch, x86_64) {
+diff --git a/wfview.pro b/wfview.pro
+index d67225c..d9cab8d 100644
+--- a/wfview.pro
++++ b/wfview.pro
+@@ -31,11 +31,9 @@ CONFIG(debug, release|debug) {
+     win32:DESTDIR = wfview-release
+ } else {
+     # For Release builds only:
+-    linux:QMAKE_CXXFLAGS += -s
+     linux:QMAKE_CXXFLAGS += -fvisibility=hidden
+     linux:QMAKE_CXXFLAGS += -fvisibility-inlines-hidden
+     linux:QMAKE_CXXFLAGS += -faligned-new
+-    linux:QMAKE_LFLAGS += -O2 -s
+     win32:DESTDIR = wfview-debug
+ }
+ 

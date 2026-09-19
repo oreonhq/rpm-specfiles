@@ -1,0 +1,17 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -111,14 +111,6 @@
+ 
+ [tool.pytest.ini_options]
+ addopts = [
+-    "--numprocesses=logical",
+-    "--maxprocesses=4",
+-    "--cov=src/docket",
+-    "--cov=tests",
+-    "--cov-report=term-missing:skip-covered",
+-    "--cov-branch",
+-    "--cov-fail-under=100",
+-    "--timeout=30",
+     "--import-mode=importlib",
+ ]
+ asyncio_mode = "auto"

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>IBM Plex Sans Hebrew</target>
+    <match>
+      <family>IBM Plex Sans Hebrew</family>
+      <good-lang>he</good-lang>
+      <good-lang>yi</good-lang>
+    </match>
+    <like>
+      <family>IBM Plex Sans</family>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>

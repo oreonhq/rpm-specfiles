@@ -1,0 +1,135 @@
+.TH UNU\-QUANTIZE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-quantize \- quantize values to 8, 16, or 32 bits
+.SH SYNOPSIS
+.B unu\ quantize
+.BR \-b , \-\-bits
+.RI < bits >
+.RB [ \-min , \-\-minimum
+.RI < value >]
+.RB [ \-max , \-\-maximum
+.RI < value >]
+.RB [ \-hb , \-\-bins
+.RI < bins >]
+.RB [ \-blind8
+.RI < bool >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Quantize values to 8, 16, or 32 bits.
+Input values can be fixed point (e.g. quantizing ushorts down to uchars) or
+floating point.
+Values are clamped to the min and max before they are quantized, so there is no
+risk of getting
+.B 255
+where you expect
+.B 0
+(with
+.I unsigned char
+output, for example).
+The min and max can be specified explicitly (as a regular number), or in terms
+of percentiles (a number suffixed with
+.RB \(lq % \(rq,
+no space in between).
+This does only linear quantization.
+See also
+.BR unu\-convert (1),
+.BR unu\-2op (1) \ x ,
+and
+.BR unu\-3op (1) \ clamp .
+.IP \(bu +2n
+Uses
+.B nrrdQuantize
+.SH OPTIONS
+.TP
+.B \-b\fR\ <\fIbits\fR>\ ,\ \fB\-\-bits\fR\ <\fIbits\fR>
+Number of bits to quantize down to; determines the type of the output
+.IR nrrd :
+.RS +7n
+.IP \(bu 2
+.RB \(lq 8 \(rq:
+.I unsigned char
+.IP \(bu 2
+.RB \(lq 16 \(rq:
+.I unsigned short
+.IP \(bu 2
+.RB \(lq 32 \(rq:
+.I unsigned int
+.RE
+.TP
+.B \-min\fR\ <\fIvalue\fR>\ ,\ \fB\-\-minimum\fR\ <\fIvalue\fR>
+The value to map to zero, given explicitly as a regular number,
+.BR or ,
+if the number is given with a
+.RB \(lq % \(rq
+suffix, this minimum is specified in terms of the percentage of samples in
+input that are lower.
+.RB \(lq 0% \(rq
+means the lowest input value is used,
+.RB \(lq 1% \(rq
+means that the 1% of the lowest values are all mapped to zero.
+By default (not using this option), the lowest input value is used.
+.RI ( string );
+default:
+.RB \(lq nan \(rq
+.TP
+.B \-max\fR\ <\fIvalue\fR>\ ,\ \fB\-\-maximum\fR\ <\fIvalue\fR>
+The value to map to the highest unsigned integral value, given explicitly as a
+regular number,
+.BR or ,
+if the number is given with a
+.RB \(lq % \(rq
+suffix, this maximum is specified in terms of the percentage of samples in
+input that are higher.
+.RB \(lq 0% \(rq
+means the highest input value is used, which is also the default behavior (same
+as not using this option).
+.RI ( string );
+default:
+.RB \(lq nan \(rq
+.TP
+.B \-hb\fR\ <\fIbins\fR>\ ,\ \fB\-\-bins\fR\ <\fIbins\fR>
+number of bins in histogram of values, for determining min or max by
+percentiles.
+This has to be large enough so that any errant very high or very low values do
+not compress the interesting part of the histogram to an inscrutably small
+number of bins.
+.RI ( unsigned\ int );
+default:
+.RB \(lq 5000 \(rq
+.TP
+.B \-blind8\fR\ <\fIbins\fR>
+if not using
+.RB \(lq \-min \(rq
+or
+.RB \(lq \-max \(rq,
+whether to know the range of 8-bit data blindly
+.RI ( uchar
+is always
+.BR [0,255] ,
+.I signed char
+is
+.BR [-128,127] )
+.RI ( bool );
+default:
+.RB \(lq true \(rq,
+"true"
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-unquantize (1),
+.BR unu\-convert (1),
+.BR unu\-2op (1) \ x ,
+.BR unu\-3op (1) \ clamp

@@ -1,0 +1,2039 @@
+From 1da718e296dc8ed516b2a7cbe8cd7c6d4416d858 Mon Sep 17 00:00:00 2001
+From: Jeremy Evans <code@jeremyevans.net>
+Date: Thu, 19 Mar 2026 19:40:07 -0700
+Subject: [PATCH] Assume Tk 8.* code applies to Tk 9.* as well
+
+Remove code for Tk 4.*. Tk 8.0 was released in 1997.
+
+Fixes #81
+---
+ lib/tk.rb                  |  13 +--
+ lib/tk/canvas.rb           |   7 +-
+ lib/tk/font.rb             | 168 ++++++-------------------------
+ lib/tk/itemconfig.rb       |   7 +-
+ lib/tk/listbox.rb          |   7 +-
+ lib/tk/menu.rb             |   7 +-
+ lib/tk/text.rb             |  14 +--
+ lib/tk/texttag.rb          |   7 +-
+ lib/tk/xim.rb              |   6 +-
+ sample/demos-en/arrow.rb   |  18 +---
+ sample/demos-en/cscroll.rb |  36 ++-----
+ sample/demos-en/ctext.rb   |  32 ++----
+ sample/demos-en/floor.rb   |  69 +++++--------
+ sample/demos-en/floor2.rb  |  69 +++++--------
+ sample/demos-en/hello      |   4 -
+ sample/demos-en/items.rb   |  46 +++------
+ sample/demos-en/sayings.rb |  23 ++---
+ sample/demos-en/style.rb   |  43 ++------
+ sample/demos-en/twind.rb   |   6 +-
+ sample/demos-en/widget     | 166 ++++++++++++-------------------
+ sample/demos-jp/arrow.rb   |  18 +---
+ sample/demos-jp/cscroll.rb |  36 ++-----
+ sample/demos-jp/ctext.rb   |  33 ++----
+ sample/demos-jp/floor.rb   |  69 +++++--------
+ sample/demos-jp/floor2.rb  |  69 +++++--------
+ sample/demos-jp/items.rb   |  46 +++------
+ sample/demos-jp/plot.rb    |   6 +-
+ sample/demos-jp/sayings.rb |  23 ++---
+ sample/demos-jp/style.rb   |  43 ++------
+ sample/demos-jp/twind.rb   |   6 +-
+ sample/demos-jp/widget     | 199 +++++++++++++------------------------
+ 31 files changed, 378 insertions(+), 918 deletions(-)
+
+diff --git a/lib/tk.rb b/lib/tk.rb
+index 1d84d93f..bc8c1e83 100644
+--- a/lib/tk.rb
++++ b/lib/tk.rb
+@@ -2396,7 +2396,7 @@ def Tk.strictMotif(mode=None)
+ 
+   def Tk.show_kinsoku(mode='both')
+     begin
+-      if /^8\.*/ === TK_VERSION  && JAPANIZED_TK
++      if JAPANIZED_TK
+         tk_split_simplelist(tk_call('kinsoku', 'show', mode))
+       end
+     rescue
+@@ -2404,7 +2404,7 @@ def Tk.show_kinsoku(mode='both')
+   end
+   def Tk.add_kinsoku(chars, mode='both')
+     begin
+-      if /^8\.*/ === TK_VERSION  && JAPANIZED_TK
++      if JAPANIZED_TK
+         tk_split_simplelist(tk_call('kinsoku', 'add', mode,
+                                     *(chars.split(''))))
+       else
+@@ -2416,7 +2416,7 @@ def Tk.add_kinsoku(chars, mode='both')
+   end
+   def Tk.delete_kinsoku(chars, mode='both')
+     begin
+-      if /^8\.*/ === TK_VERSION  && JAPANIZED_TK
++      if JAPANIZED_TK
+         tk_split_simplelist(tk_call('kinsoku', 'delete', mode,
+                             *(chars.split(''))))
+       end
+@@ -3813,12 +3813,7 @@ def __cget_core(slot)
+       unless fnt.kind_of?(TkFont)
+         fnt = fontobj(fontkey)
+       end
+-      if fontcode == 'kanji' && JAPANIZED_TK && TK_VERSION =~ /^4\.*/
+-        # obsolete; just for compatibility
+-        fnt.kanji_font
+-      else
+-        fnt
+-      end
++      fnt
+ 
+     when /^(#{__tkvariable_optkeys.join('|')})$/
+       v = tk_call_without_enc(*(__cget_cmd << "-#{slot}"))
+diff --git a/lib/tk/canvas.rb b/lib/tk/canvas.rb
+index cd6c70cf..9cc115bd 100644
+--- a/lib/tk/canvas.rb
++++ b/lib/tk/canvas.rb
+@@ -301,12 +301,7 @@ def itemcget(tagOrId, option)
+       unless fnt.kind_of?(TkFont)
+         fnt = tagfontobj(tagid(tagOrId), fnt)
+       end
+-      if option.to_s == 'kanjifont' && JAPANIZED_TK && TK_VERSION =~ /^4\.*/
+-        # obsolete; just for compatibility
+-        fnt.kanji_font
+-      else
+-        fnt
+-      end
++      fnt
+     else
+       tk_tcl2ruby(_fromUTF8(tk_send_without_enc('itemcget', tagid(tagOrId),
+                                                 "-#{option}")))
+diff --git a/lib/tk/font.rb b/lib/tk/font.rb
+index c76481cb..e9d884a6 100644
+--- a/lib/tk/font.rb
++++ b/lib/tk/font.rb
+@@ -52,10 +52,6 @@ def SYSTEM_FONT_NAMES.include?(name)
+ 
+   # set default font
+   case Tk::TK_VERSION
+-  when /^4\..*/
+-    DEFAULT_LATIN_FONT_NAME = 'a14'.freeze
+-    DEFAULT_KANJI_FONT_NAME = 'k14'.freeze
+-
+   when /^8\.[0-4]/
+     if JAPANIZED_TK
+       begin
+@@ -122,7 +118,7 @@ def SYSTEM_FONT_NAMES.include?(name)
+     DEFAULT_LATIN_FONT_NAME = ltn.freeze
+     DEFAULT_KANJI_FONT_NAME = knj.freeze
+ 
+-  when /^8\.[5-9]/, /^9\..*/
++  else
+     if tk_call('font', 'names') =~ /\bTkDefaultFont\b/
+       DEFAULT_LATIN_FONT_NAME = 'TkDefaultFont'.freeze
+       DEFAULT_KANJI_FONT_NAME = 'TkDefaultFont'.freeze
+@@ -130,11 +126,6 @@ def SYSTEM_FONT_NAMES.include?(name)
+       DEFAULT_LATIN_FONT_NAME = 'Helvetica'.freeze
+       DEFAULT_KANJI_FONT_NAME = 'mincho'.freeze
+     end
+-
+-  else # unknown version
+-    DEFAULT_LATIN_FONT_NAME = 'Helvetica'.freeze
+-    DEFAULT_KANJI_FONT_NAME = 'mincho'.freeze
+-
+   end
+ 
+   if $DEBUG
+@@ -346,34 +337,15 @@ def TkFont.metrics_hash_displayof(fnt, win, option=nil)
+   end
+ 
+   def TkFont.families(win=nil)
+-    case (Tk::TK_VERSION)
+-    when /^4\..*/
+-      ['fixed']
+-
+-    when /^8\..*/
+-      if win
+-        tk_split_simplelist(tk_call('font', 'families', '-displayof', win))
+-      else
+-        tk_split_simplelist(tk_call('font', 'families'))
+-      end
++    if win
++      tk_split_simplelist(tk_call('font', 'families', '-displayof', win))
++    else
++      tk_split_simplelist(tk_call('font', 'families'))
+     end
+   end
+ 
+   def TkFont.names
+-    case (Tk::TK_VERSION)
+-    when /^4\..*/
+-      r = ['fixed']
+-      r += ['a14', 'k14'] if JAPANIZED_TK
+-      Tk_FontNameTBL.mutex.synchronize{
+-        Tk_FontNameTBL.each_value{|obj| r.push(obj)}
+-      }
+-      #r | []
+-      r.uniq
+-
+-    when /^8\..*/
+-      tk_split_simplelist(tk_call('font', 'names'))
+-
+-    end
++    tk_split_simplelist(tk_call('font', 'names'))
+   end
+ 
+   def TkFont.create_copy(font)
+@@ -406,32 +378,6 @@ def TkFont.init_widget_font(pathname, *args)
+     path = [win, tag, key].join(';')
+ 
+     case (Tk::TK_VERSION)
+-    when /^4\..*/
+-      regexp = /^-(|kanji)#{key} /
+-
+-      conf_list = tk_split_simplelist(tk_call(*args)).
+-        find_all{|prop| prop =~ regexp}.
+-        collect{|prop| tk_split_simplelist(prop)}
+-
+-      if conf_list.size == 0
+-        raise RuntimeError, "the widget may not support 'font' option"
+-      end
+-
+-      args << {}
+-
+-      ltn_key = "-#{key}"
+-      knj_key = "-kanji#{key}"
+-
+-      ltn_info = conf_list.find{|conf| conf[0] == ltn_key}
+-      ltn = ltn_info[-1]
+-      ltn = nil if ltn == [] || ltn == ""
+-
+-      knj_info = conf_list.find{|conf| conf[0] == knj_key}
+-      knj = knj_info[-1]
+-      knj = nil if knj == [] || knj == ""
+-
+-      TkFont.new(ltn, knj).call_font_configure([path, key], *args)
+-
+     when /^8\.[0-4]/
+       regexp = /^-#{key} /
+ 
+@@ -479,7 +425,7 @@ def TkFont.init_widget_font(pathname, *args)
+         end
+       end
+ 
+-    when /^8\.[5-9]/, /^9\..*/
++    else
+       regexp = /^-#{key} /
+ 
+       conf_list = tk_split_simplelist(tk_call(*args)).
+@@ -527,7 +473,7 @@ def TkFont.used_on(path=nil)
+ 
+   def TkFont.failsafe(font)
+     begin
+-      if /^8\..*/ === Tk::TK_VERSION  && JAPANIZED_TK
++      if JAPANIZED_TK
+         tk_call('font', 'failsafe', font)
+       end
+     rescue
+@@ -552,36 +498,23 @@ def init_dummy_fontobj
+     # @kanji_desscendant = nil
+     @descendant = [nil, nil] # [latin, kanji]
+ 
+-    case (Tk::TK_VERSION)
+-    when /^4\..*/
+-      @latinfont = ""
+-      @kanjifont = ""
+-      if JAPANIZED_TK
+-        @compoundfont = [[@latinfont], [@kanjifont]]
+-        @fontslot = {'font'=>@latinfont, 'kanjifont'=>@kanjifont}
+-      else
+-        @compoundfont = @latinfont
+-        @fontslot = {'font'=>@latinfont}
+-      end
+-    else
+-      @latinfont = @id + 'l'
+-      @kanjifont = @id + 'k'
+-      @compoundfont = @id + 'c'
+-
+-      if JAPANIZED_TK
+-        tk_call('font', 'create', @latinfont, '-charset', 'iso8859')
+-        tk_call('font', 'create', @kanjifont, '-charset', 'jisx0208.1983')
+-        tk_call('font', 'create', @compoundfont,
+-                '-compound', [@latinfont, @kanjifont])
+-      else
+-        tk_call('font', 'create', @latinfont)
+-        tk_call('font', 'create', @kanjifont)
+-        tk_call('font', 'create', @compoundfont)
+-      end
++    @latinfont = @id + 'l'
++    @kanjifont = @id + 'k'
++    @compoundfont = @id + 'c'
+ 
+-      @fontslot = {'font'=>@compoundfont}
++    if JAPANIZED_TK
++      tk_call('font', 'create', @latinfont, '-charset', 'iso8859')
++      tk_call('font', 'create', @kanjifont, '-charset', 'jisx0208.1983')
++      tk_call('font', 'create', @compoundfont,
++              '-compound', [@latinfont, @kanjifont])
++    else
++      tk_call('font', 'create', @latinfont)
++      tk_call('font', 'create', @kanjifont)
++      tk_call('font', 'create', @compoundfont)
+     end
+ 
++    @fontslot = {'font'=>@compoundfont}
++
+     self
+   end
+ 
+@@ -637,11 +570,7 @@ def initialize(ltn=nil, knj=nil, keys=nil)
+ 
+     if ltn
+       if JAPANIZED_TK && !knj
+-        if Tk::TK_VERSION =~ /^4..*/
+-          knj = DEFAULT_KANJI_FONT_NAME
+-        else
+-          knj = ltn
+-        end
++        knj = ltn
+       end
+     else
+       ltn = DEFAULT_LATIN_FONT_NAME
+@@ -1586,7 +1515,7 @@ def kanji_metrics_hash_displayof(win, option=nil)
+ 
+   def reset_pointadjust
+     begin
+-      if /^8\..*/ === Tk::TK_VERSION  && JAPANIZED_TK
++      if JAPANIZED_TK
+         configure('pointadjust' => latin_actual.assoc('size')[1].to_f /
+                                       kanji_actual.assoc('size')[1].to_f )
+       end
+@@ -1599,11 +1528,6 @@ def reset_pointadjust
+   # private alias
+   ###################################
+   case (Tk::TK_VERSION)
+-  when /^4\..*/
+-    alias create_latinfont        create_latinfont_tk4x
+-    alias create_kanjifont        create_kanjifont_tk4x
+-    alias create_compoundfont     create_compoundfont_tk4x
+-
+   when /^8\.[0-5]/
+     alias create_latinfont        create_latinfont_tk8x
+     alias create_kanjifont        create_kanjifont_tk8x
+@@ -2188,41 +2112,15 @@ def metrics_core_tk8x(font, win, option=nil)
+   ###################################
+   # private alias
+   ###################################
+-  case (Tk::TK_VERSION)
+-  when /^4\..*/
+-    alias actual_core             actual_core_tk4x
+-    alias configure_core          configure_core_tk4x
+-    alias configinfo_core         configinfo_core_tk4x
+-    alias current_configinfo_core current_configinfo_core_tk4x
+-    alias delete_core             delete_core_tk4x
+-    alias latin_replace_core      latin_replace_core_tk4x
+-    alias kanji_replace_core      kanji_replace_core_tk4x
+-    alias measure_core            measure_core_tk4x
+-    alias metrics_core            metrics_core_tk4x
+-
+-  when /^8\.[0-9]/
+-    alias actual_core             actual_core_tk8x
+-    alias configure_core          configure_core_tk8x
+-    alias configinfo_core         configinfo_core_tk8x
+-    alias current_configinfo_core current_configinfo_core_tk8x
+-    alias delete_core             delete_core_tk8x
+-    alias latin_replace_core      latin_replace_core_tk8x
+-    alias kanji_replace_core      kanji_replace_core_tk8x
+-    alias measure_core            measure_core_tk8x
+-    alias metrics_core            metrics_core_tk8x
+-
+-  else
+-    alias actual_core             actual_core_tk8x
+-    alias configure_core          configure_core_tk8x
+-    alias configinfo_core         configinfo_core_tk8x
+-    alias current_configinfo_core current_configinfo_core_tk8x
+-    alias delete_core             delete_core_tk8x
+-    alias latin_replace_core      latin_replace_core_tk8x
+-    alias kanji_replace_core      kanji_replace_core_tk8x
+-    alias measure_core            measure_core_tk8x
+-    alias metrics_core            metrics_core_tk8x
+-
+-  end
++  alias actual_core             actual_core_tk8x
++  alias configure_core          configure_core_tk8x
++  alias configinfo_core         configinfo_core_tk8x
++  alias current_configinfo_core current_configinfo_core_tk8x
++  alias delete_core             delete_core_tk8x
++  alias latin_replace_core      latin_replace_core_tk8x
++  alias kanji_replace_core      kanji_replace_core_tk8x
++  alias measure_core            measure_core_tk8x
++  alias metrics_core            metrics_core_tk8x
+ end
+ 
+ class TkFont
+diff --git a/lib/tk/itemconfig.rb b/lib/tk/itemconfig.rb
+index 1275822e..7121be9a 100644
+--- a/lib/tk/itemconfig.rb
++++ b/lib/tk/itemconfig.rb
+@@ -239,12 +239,7 @@ def __itemcget_core(tagOrId, option)
+       unless fnt.kind_of?(TkFont)
+         fnt = tagfontobj(tagid(tagOrId), fontkey)
+       end
+-      if fontcode == 'kanji' && JAPANIZED_TK && TK_VERSION =~ /^4\.*/
+-        # obsolete; just for compatibility
+-        fnt.kanji_font
+-      else
+-        fnt
+-      end
++      fnt
+     else
+       tk_tcl2ruby(tk_call_without_enc(*(__item_cget_cmd(tagid(tagOrId)) << "-#{option}")), true)
+     end
+diff --git a/lib/tk/listbox.rb b/lib/tk/listbox.rb
+index 34a94c1f..820caa6f 100644
+--- a/lib/tk/listbox.rb
++++ b/lib/tk/listbox.rb
+@@ -116,12 +116,7 @@ def itemcget(index, key)
+       unless fnt.kind_of?(TkFont)
+         fnt = tagfontobj(index, fnt)
+       end
+-      if key.to_s == 'kanjifont' && JAPANIZED_TK && TK_VERSION =~ /^4\.*/
+-        # obsolete; just for compatibility
+-        fnt.kanji_font
+-      else
+-        fnt
+-      end
++      fnt
+     else
+       tk_tcl2ruby(_fromUTF8(tk_send_without_enc('itemcget', index, "-#{key}")))
+     end
+diff --git a/lib/tk/menu.rb b/lib/tk/menu.rb
+index 55ff88e9..0be71013 100644
+--- a/lib/tk/menu.rb
++++ b/lib/tk/menu.rb
+@@ -224,12 +224,7 @@ def entrycget(index, key)
+       unless fnt.kind_of?(TkFont)
+         fnt = tagfontobj(index, fnt)
+       end
+-      if key.to_s == 'kanjifont' && JAPANIZED_TK && TK_VERSION =~ /^4\.*/
+-        # obsolete; just for compatibility
+-        fnt.kanji_font
+-      else
+-        fnt
+-      end
++      fnt
+     else
+       tk_tcl2ruby(_fromUTF8(tk_send_without_enc('entrycget', _get_eval_enc_str(index), "-#{key}")))
+     end
+diff --git a/lib/tk/text.rb b/lib/tk/text.rb
+index ebb7705e..90e6eedb 100644
+--- a/lib/tk/text.rb
++++ b/lib/tk/text.rb
+@@ -814,12 +814,7 @@ def tag_cget(tag, key)
+       unless fnt.kind_of?(TkFont)
+         fnt = tagfontobj(tag, fnt)
+       end
+-      if key.to_s == 'kanjifont' && JAPANIZED_TK && TK_VERSION =~ /^4\.*/
+-        # obsolete; just for compatibility
+-        fnt.kanji_font
+-      else
+-        fnt
+-      end
++      fnt
+     else
+       tk_tcl2ruby(_fromUTF8(tk_call_without_enc(@path,'tag','cget',_get_eval_enc_str(tag),"-#{key}")))
+     end
+@@ -1039,12 +1034,7 @@ def window_cget(index, slot)
+       unless fnt.kind_of?(TkFont)
+         fnt = tagfontobj(index, fnt)
+       end
+-      if slot.to_s == 'kanjifont' && JAPANIZED_TK && TK_VERSION =~ /^4\.*/
+-        # obsolete; just for compatibility
+-        fnt.kanji_font
+-      else
+-        fnt
+-      end
++      fnt
+     else
+       tk_tcl2ruby(_fromUTF8(tk_send_without_enc('window', 'cget', _get_eval_enc_str(index), "-#{slot}")))
+     end
+diff --git a/lib/tk/texttag.rb b/lib/tk/texttag.rb
+index e4fc3840..22373cb7 100644
+--- a/lib/tk/texttag.rb
++++ b/lib/tk/texttag.rb
+@@ -151,12 +151,7 @@ def cget(key)
+       unless fnt.kind_of?(TkFont)
+         fnt = tagfontobj(@id, fnt)
+       end
+-      if key.to_s == 'kanjifont' && JAPANIZED_TK && TK_VERSION =~ /^4\.*/
+-        # obsolete; just for compatibility
+-        fnt.kanji_font
+-      else
+-        fnt
+-      end
++      fnt
+     else
+       tk_tcl2ruby(_fromUTF8(tk_call_without_enc(@t.path, 'tag', 'cget',
+                                                 @id, "-#{key}")))
+diff --git a/lib/tk/xim.rb b/lib/tk/xim.rb
+index 240e7da7..c396ede2 100644
+--- a/lib/tk/xim.rb
++++ b/lib/tk/xim.rb
+@@ -48,7 +48,7 @@ def TkXIM.caret(win, keys=nil)
+ 
+   def TkXIM.configure(win, slot, value=None)
+     begin
+-      if /^8\.*/ === Tk::TK_VERSION  && JAPANIZED_TK
++      if JAPANIZED_TK
+         if slot.kind_of? Hash
+           tk_call('imconfigure', win, *hash_kv(slot))
+         else
+@@ -62,7 +62,7 @@ def TkXIM.configure(win, slot, value=None)
+   def TkXIM.configinfo(win, slot=nil)
+     if TkComm::GET_CONFIGINFOwoRES_AS_ARRAY
+       begin
+-        if /^8\.*/ === Tk::TK_VERSION  && JAPANIZED_TK
++        if JAPANIZED_TK
+           if slot
+             conf = tk_split_list(tk_call('imconfigure', win, "-#{slot}"))
+             conf[0] = conf[0][1..-1]
+@@ -86,7 +86,7 @@ def TkXIM.configinfo(win, slot=nil)
+ 
+   def TkXIM.current_configinfo(win, slot=nil)
+     begin
+-      if /^8\.*/ === Tk::TK_VERSION  && JAPANIZED_TK
++      if JAPANIZED_TK
+         if slot
+           conf = tk_split_list(tk_call('imconfigure', win, "-#{slot}"))
+           { conf[0][1..-1] => conf[1] }
+diff --git a/sample/demos-en/arrow.rb b/sample/demos-en/arrow.rb
+index 46229668..832168a2 100644
+--- a/sample/demos-en/arrow.rb
++++ b/sample/demos-en/arrow.rb
+@@ -78,19 +78,11 @@ def arrowSetup(c)
+               'arrow'=>'both', 'arrowshape'=>v.smallTips)
+   TkcText.new(c, v.x2-5*v.b, tmp+5, 'text'=>v.b, 'anchor'=>'n')
+ 
+-  if $tk_version =~ /^4.*/
+-    TkcText.new(c, v.x1, 310, 'text'=>"'width'=>#{v.width}", 'anchor'=>'w',
+-                'font'=>'-*-Helvetica-Medium-R-Normal--*-180-*-*-*-*-*-*')
+-    TkcText.new(c, v.x1, 330,
+-                'text'=>"'arrowshape'=>[#{v.a}, #{v.b}, #{v.c}]",'anchor'=>'w',
+-                'font'=>'-*-Helvetica-Medium-R-Normal--*-180-*-*-*-*-*-*')
+-  else
+-    TkcText.new(c, v.x1, 310, 'text'=>"'width'=>#{v.width}", 'anchor'=>'w',
+-                'font'=>'Helvetica 18')
+-    TkcText.new(c, v.x1, 330,
+-                'text'=>"'arrowshape'=>[#{v.a}, #{v.b}, #{v.c}]",
+-                'anchor'=>'w', 'font'=>'Helvetica 18')
+-  end
++  TkcText.new(c, v.x1, 310, 'text'=>"'width'=>#{v.width}", 'anchor'=>'w',
++              'font'=>'Helvetica 18')
++  TkcText.new(c, v.x1, 330,
++              'text'=>"'arrowshape'=>[#{v.a}, #{v.b}, #{v.c}]",
++              'anchor'=>'w', 'font'=>'Helvetica 18')
+ 
+   v.count += 1
+ end
+diff --git a/sample/demos-en/cscroll.rb b/sample/demos-en/cscroll.rb
+index eac615d0..e0efa9cd 100644
+--- a/sample/demos-en/cscroll.rb
++++ b/sample/demos-en/cscroll.rb
+@@ -47,45 +47,31 @@
+ $cscroll_buttons.pack('side'=>'bottom', 'fill'=>'x', 'pady'=>'2m')
+ 
+ # frame
+-unless $tk_version =~ /^4\.[01]/
+-  $cscroll_grid = TkFrame.new(base_frame) {
+-    pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
+-  }
+-  TkGrid.rowconfigure($cscroll_grid, 0, 'weight'=>1, 'minsize'=>0)
+-  TkGrid.columnconfigure($cscroll_grid, 0, 'weight'=>1, 'minsize'=>0)
+-end
++$cscroll_grid = TkFrame.new(base_frame) {
++  pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
++}
++TkGrid.rowconfigure($cscroll_grid, 0, 'weight'=>1, 'minsize'=>0)
++TkGrid.columnconfigure($cscroll_grid, 0, 'weight'=>1, 'minsize'=>0)
+ 
+ # canvas
+ $cscroll_canvas = TkCanvas.new(base_frame,
+                                'relief'=>'sunken', 'borderwidth'=>2,
+                                'scrollregion'=>['-11c', '-11c', '50c', '20c']
+                                ) {|c|
+-  if $tk_version =~ /^4\.[01]/
+-    pack('expand'=>'yes', 'fill'=>'both')
+-  else
+-    grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
+-         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-  end
++  grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
++       'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+ 
+   TkScrollbar.new(base_frame, 'command'=>proc{|*args| c.yview(*args)}) {|vs|
+     c.yscrollcommand(proc{|first,last| vs.set first,last})
+-    if $tk_version =~ /^4\.[01]/
+-      pack('side'=>'right', 'fill'=>'y')
+-    else
+-      grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    end
++    grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+   }
+ 
+   TkScrollbar.new(base_frame, 'orient'=>'horiz',
+                   'command'=>proc{|*args| c.xview(*args)}) {|hs|
+     c.xscrollcommand(proc{|first,last| hs.set first,last})
+-    if $tk_version =~ /^4\.[01]/
+-      pack('side'=>'bottom', 'fill'=>'x')
+-    else
+-      grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    end
++    grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+   }
+ }
+ 
+diff --git a/sample/demos-en/ctext.rb b/sample/demos-en/ctext.rb
+index fdb2f423..995733c6 100644
+--- a/sample/demos-en/ctext.rb
++++ b/sample/demos-en/ctext.rb
+@@ -59,11 +59,7 @@
+ $ctext_canvas.pack('side'=>'top', 'expand'=>'yes', 'fill'=>'both')
+ 
+ # font
+-if $tk_version =~ /^4.*/
+-  textFont = '-*-Helvetica-Medium-R-Normal--*-240-*-*-*-*-*-*'
+-else
+-  textFont = 'Helvetica 24'
+-end
++textFont = 'Helvetica 24'
+ 
+ # canvas
+ TkcRectangle.new($ctext_canvas, 245, 195, 255, 205,
+@@ -73,11 +69,7 @@
+   'text'=>"This is just a string of text to demonstrate the text facilities of canvas widgets. Bindings have been been defined to support editing (see above).",
+   'width'=>440, 'anchor'=>'n', 'justify'=>'left'
+ }
+-if $tk_version =~ /^4.*/
+-  ctag_text_param['font'] = '-*-Helvetica-Medium-R-Normal--*-240-*-*-*-*-*-*'
+-else
+-  ctag_text_param['font'] = 'Helvetica 24'
+-end
++ctag_text_param['font'] = 'Helvetica 24'
+ 
+ $ctag_text = TkcTag.new($ctext_canvas)
+ $ctag_text.withtag(TkcText.new($ctext_canvas, 250, 200, ctag_text_param))
+@@ -122,14 +114,8 @@ def mkTextConfig(w,x,y,option,value,color)
+ item = TkcRectangle.new($ctext_canvas, x+40, y+40, x+50, y+50,
+                         'outline'=>'black', 'fill'=>'red')
+ item.bind('1', proc{$ctag_text.configure 'anchor', 'center'})
+-if $tk_version =~ /^4.*/
+-  TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Text Position',
+-              'font'=>'-*-times-medium-r-normal--*-240-*-*-*-*-*-*',
+-              'anchor'=>'s', 'fill'=>'brown')
+-else
+-  TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Text Position',
+-              'font'=>'Times 24', 'anchor'=>'s', 'fill'=>'brown')
+-end
++TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Text Position',
++            'font'=>'Times 24', 'anchor'=>'s', 'fill'=>'brown')
+ 
+ # Lastly, create some items that allow the text's justification to be
+ # changed.
+@@ -140,14 +126,8 @@ def mkTextConfig(w,x,y,option,value,color)
+ mkTextConfig $ctext_canvas, x, y, 'justify', 'left', color
+ mkTextConfig $ctext_canvas, x+30, y, 'justify', 'center', color
+ mkTextConfig $ctext_canvas, x+60, y, 'justify', 'right', color
+-if $tk_version =~ /^4.*/
+-  TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Justification',
+-              'font'=>'-*-times-medium-r-normal--*-240-*-*-*-*-*-*',
+-              'anchor'=>'s', 'fill'=>'brown')
+-else
+-  TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Justification',
+-              'font'=>'Times 24', 'anchor'=>'s', 'fill'=>'brown')
+-end
++TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Justification',
++            'font'=>'Times 24', 'anchor'=>'s', 'fill'=>'brown')
+ 
+ $ctext_canvas.itembind('config', 'Enter', proc{textEnter $ctext_canvas})
+ $ctext_canvas.itembind('config', 'Leave',
+diff --git a/sample/demos-en/floor.rb b/sample/demos-en/floor.rb
+index 4b77ea6a..76687cc2 100644
+--- a/sample/demos-en/floor.rb
++++ b/sample/demos-en/floor.rb
+@@ -1622,58 +1622,37 @@ def floor_fg3(w,color)
+ $floorItems = {}
+ 
+ # canvas
+-if $tk_version =~ /^4\.[01]/
+-  $floor_canvas_frame = TkFrame.new(base_frame,'bd'=>2,'relief'=>'sunken',
+-                                    'highlightthickness'=>2)
+-  $floor_canvas = TkCanvas.new($floor_canvas_frame,
+-                               'width'=>900, 'height'=>500, 'borderwidth'=>0,
+-                               'highlightthickness'=>0) {|c|
+-    TkScrollbar.new(base_frame, 'orient'=>'horiz',
+-                    'command'=>proc{|*args| c.xview(*args)}){|hs|
+-      c.xscrollcommand(proc{|first,last| hs.set first,last})
+-      pack('side'=>'bottom', 'fill'=>'x')
+-    }
+-    TkScrollbar.new(base_frame, 'command'=>proc{|*args| c.yview(*args)}){|vs|
+-      c.yscrollcommand(proc{|first,last| vs.set first,last})
+-      pack('side'=>'right', 'fill'=>'y')
+-    }
+-  }
+-  $floor_canvas_frame.pack('side'=>'top','fill'=>'both', 'expand'=>'yes')
+-  $floor_canvas.pack('expand'=>'yes', 'fill'=>'both')
+-
+-else
+-  TkFrame.new(base_frame) {|f|
+-    pack('side'=>'top', 'fill'=>'both', 'expand'=>'yes')
++TkFrame.new(base_frame) {|f|
++  pack('side'=>'top', 'fill'=>'both', 'expand'=>'yes')
+ 
+-    h = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'horizontal')
+-    v = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'vertical')
++  h = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'horizontal')
++  v = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'vertical')
+ 
+-    TkFrame.new(f, 'bd'=>2, 'relief'=>'sunken') {|f1|
+-      $floor_canvas = TkCanvas.new(f1, 'width'=>900, 'height'=>500,
+-                                   'borderwidth'=>0,
+-                                   'highlightthickness'=>0) {
+-        xscrollcommand(proc{|first,last| h.set first,last})
+-        yscrollcommand(proc{|first,last| v.set first,last})
+-        pack('expand'=>'yes', 'fill'=>'both')
+-      }
+-      grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  TkFrame.new(f, 'bd'=>2, 'relief'=>'sunken') {|f1|
++    $floor_canvas = TkCanvas.new(f1, 'width'=>900, 'height'=>500,
++                                 'borderwidth'=>0,
++                                 'highlightthickness'=>0) {
++      xscrollcommand(proc{|first,last| h.set first,last})
++      yscrollcommand(proc{|first,last| v.set first,last})
++      pack('expand'=>'yes', 'fill'=>'both')
+     }
++    grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  }
+ 
+-    v.grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    h.grid('padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  v.grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  h.grid('padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+ 
+-    TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+-    TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++  TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++  TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+ 
+-    pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
++  pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
+ 
+-    v.command(proc{|*args| $floor_canvas.yview(*args)})
+-    h.command(proc{|*args| $floor_canvas.xview(*args)})
+-  }
+-end
++  v.command(proc{|*args| $floor_canvas.yview(*args)})
++  h.command(proc{|*args| $floor_canvas.xview(*args)})
++}
+ 
+ 
+ # Create an entry for displaying and typing in current room.
+diff --git a/sample/demos-en/floor2.rb b/sample/demos-en/floor2.rb
+index 518dd3b0..4aab509d 100644
+--- a/sample/demos-en/floor2.rb
++++ b/sample/demos-en/floor2.rb
+@@ -1622,58 +1622,37 @@ def floor2_fg3(w,color)
+ $floorItems2 = {}
+ 
+ # canvas
+-if $tk_version =~ /^4\.[01]/
+-  $floor2_canvas_frame = TkFrame.new(base_frame,'bd'=>2,'relief'=>'sunken',
+-                                    'highlightthickness'=>2)
+-  $floor2_canvas = TkCanvas.new($floor2_canvas_frame,
+-                               'width'=>900, 'height'=>500, 'borderwidth'=>0,
+-                               'highlightthickness'=>0) {|c|
+-    TkScrollbar.new(base_frame, 'orient'=>'horiz',
+-                    'command'=>proc{|*args| c.xview(*args)}){|hs|
+-      c.xscrollcommand(proc{|first,last| hs.set first,last})
+-      pack('side'=>'bottom', 'fill'=>'x')
+-    }
+-    TkScrollbar.new(base_frame, 'command'=>proc{|*args| c.yview(*args)}){|vs|
+-      c.yscrollcommand(proc{|first,last| vs.set first,last})
+-      pack('side'=>'right', 'fill'=>'y')
+-    }
+-  }
+-  $floor2_canvas_frame.pack('side'=>'top','fill'=>'both', 'expand'=>'yes')
+-  $floor2_canvas.pack('expand'=>'yes', 'fill'=>'both')
+-
+-else
+-  TkFrame.new(base_frame) {|f|
+-    pack('side'=>'top', 'fill'=>'both', 'expand'=>'yes')
++TkFrame.new(base_frame) {|f|
++  pack('side'=>'top', 'fill'=>'both', 'expand'=>'yes')
+ 
+-    h = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'horizontal')
+-    v = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'vertical')
++  h = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'horizontal')
++  v = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'vertical')
+ 
+-    TkFrame.new(f, 'bd'=>2, 'relief'=>'sunken') {|f1|
+-      $floor2_canvas = TkCanvas.new(f1, 'width'=>900, 'height'=>500,
+-                                   'borderwidth'=>0,
+-                                   'highlightthickness'=>0) {
+-        xscrollcommand(proc{|first,last| h.set first,last})
+-        yscrollcommand(proc{|first,last| v.set first,last})
+-        pack('expand'=>'yes', 'fill'=>'both')
+-      }
+-      grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  TkFrame.new(f, 'bd'=>2, 'relief'=>'sunken') {|f1|
++    $floor2_canvas = TkCanvas.new(f1, 'width'=>900, 'height'=>500,
++                                 'borderwidth'=>0,
++                                 'highlightthickness'=>0) {
++      xscrollcommand(proc{|first,last| h.set first,last})
++      yscrollcommand(proc{|first,last| v.set first,last})
++      pack('expand'=>'yes', 'fill'=>'both')
+     }
++    grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  }
+ 
+-    v.grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    h.grid('padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  v.grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  h.grid('padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+ 
+-    TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+-    TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++  TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++  TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+ 
+-    pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
++  pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
+ 
+-    v.command(proc{|*args| $floor2_canvas.yview(*args)})
+-    h.command(proc{|*args| $floor2_canvas.xview(*args)})
+-  }
+-end
++  v.command(proc{|*args| $floor2_canvas.yview(*args)})
++  h.command(proc{|*args| $floor2_canvas.xview(*args)})
++}
+ 
+ 
+ # Create an entry for displaying and typing in current room.
+diff --git a/sample/demos-en/hello b/sample/demos-en/hello
+index 5e86ad7e..5abe02ac 100644
+--- a/sample/demos-en/hello
++++ b/sample/demos-en/hello
+@@ -1,10 +1,6 @@
+ #!/usr/bin/env ruby
+ require 'tk'
+ 
+-#unless /^8\.[1-9]/ =~ Tk::TCL_VERSION && !Tk::JAPANIZED_TK
+-#  require 'tkencoding'
+-#end
+-
+ TkButton.new(nil,
+ 	'text'=>"Hello Ruby world!",
+ 	'font'=>TkFont.new('k14'),
+diff --git a/sample/demos-en/items.rb b/sample/demos-en/items.rb
+index d6de1e55..d2540f33 100644
+--- a/sample/demos-en/items.rb
++++ b/sample/demos-en/items.rb
+@@ -70,22 +70,14 @@
+       c.yscrollcommand proc{|first,last| s.set first,last}
+     }
+ 
+-    if $tk_version =~ /^4\.[01]/
+-      hs.pack('side'=>'bottom', 'fill'=>'x')
+-      vs.pack('side'=>'right', 'fill'=>'y')
+-      c.pack('in'=>cf, 'expand'=>'yes', 'fill'=>'both')
+-
+-    else
+-      c.grid('in'=>cf, 'row'=>0, 'column'=>0,
+-             'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-      vs.grid('row'=>0, 'column'=>1,
+-              'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-      hs.grid('row'=>1, 'column'=>0,
+-              'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-      TkGrid.rowconfigure(cf, 0, 'weight'=>1, 'minsize'=>0)
+-      TkGrid.columnconfigure(cf, 0, 'weight'=>1, 'minsize'=>0)
+-
+-    end
++    c.grid('in'=>cf, 'row'=>0, 'column'=>0,
++           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++    vs.grid('row'=>0, 'column'=>1,
++            'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++    hs.grid('row'=>1, 'column'=>0,
++            'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++    TkGrid.rowconfigure(cf, 0, 'weight'=>1, 'minsize'=>0)
++    TkGrid.columnconfigure(cf, 0, 'weight'=>1, 'minsize'=>0)
+ 
+   }
+ }.pack('side'=>'top', 'fill'=>'both', 'expand'=>'yes')
+@@ -97,13 +89,8 @@
+ TkcLine.new(cvs, '10c', '0c', '10c', '24c', 'width'=>2)
+ TkcLine.new(cvs, '20c', '0c', '20c', '24c', 'width'=>2)
+ 
+-if $tk_version =~ /^4.*/
+-  font1 = '-Adobe-Helvetica-Medium-R-Normal--*-120-*-*-*-*-*-*'
+-  font2 = '-Adobe-Helvetica-Bold-R-Normal--*-240-*-*-*-*-*-*'
+-else
+-  font1 = 'Helvetica 12'
+-  font2 = 'Helvetica 24 bold'
+-end
++font1 = 'Helvetica 12'
++font2 = 'Helvetica 24 bold'
+ if TkWinfo.depth($root).to_i > 1
+   blue   = 'DeepSkyBlue3'
+   red    = 'red'
+@@ -194,16 +181,9 @@
+ TkcText.new(cvs, '25.5c', '11c', 'anchor'=>'w', 'font'=>font1, 'fill'=>blue,
+             'text'=>"Several lines,\n each centered\nindividually,\nand all anchored\nat the left edge.", 'justify'=>'center', 'tags'=>$tag_item )
+ TkcRectangle.new(cvs, '24.9c','13.9c','25.1c','14.1c')
+-if $tk_version =~ /^4\.[01]/
+-  TkcText.new(cvs, '25c', '14c', 'anchor'=>'c', 'font'=>font2, 'fill'=>red,
+-              'stipple'=>'@' + [$demo_dir, '..',
+-                                'images', 'grey.5'].join(File::Separator),
+-              'text'=>'Stippled characters', 'tags'=>$tag_item )
+-else
+-  TkcText.new(cvs, '25c', '14c', 'anchor'=>'c', 'font'=>font2, 'fill'=>red,
+-              'stipple'=>'gray50', 'text'=>'Stippled characters',
+-              'tags'=>$tag_item )
+-end
++TkcText.new(cvs, '25c', '14c', 'anchor'=>'c', 'font'=>font2, 'fill'=>red,
++            'stipple'=>'gray50', 'text'=>'Stippled characters',
++            'tags'=>$tag_item )
+ 
+ TkcText.new(cvs, '5c', '16.2c', 'text'=>'Arcs', 'anchor'=>'n')
+ TkcArc.new(cvs, '0.5c','17c','7c','20c', 'fill'=>green, 'outline'=>'black',
+diff --git a/sample/demos-en/sayings.rb b/sample/demos-en/sayings.rb
+index e7ddfe5b..ac1540e2 100644
+--- a/sample/demos-en/sayings.rb
++++ b/sample/demos-en/sayings.rb
+@@ -65,21 +65,14 @@
+   sv.command(proc{|*args| sayings_lbox.yview(*args)})
+   sh.command(proc{|*args| sayings_lbox.xview(*args)})
+ 
+-  if $tk_version =~ /^4\.[01]/
+-    sv.pack('side'=>'right', 'fill'=>'y')
+-    sh.pack('side'=>'bottom', 'fill'=>'x')
+-    sayings_lbox.pack('expand'=>'yes', 'fill'=>'y')
+-
+-  else
+-    sayings_lbox.grid('row'=>0, 'column'=>0,
+-                      'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    sv.grid('row'=>0, 'column'=>1,
+-            'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    sh.grid('row'=>1, 'column'=>0,
+-            'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    TkGrid.rowconfigure(w, 0, 'weight'=>1, 'minsize'=>0)
+-    TkGrid.columnconfigure(w, 0, 'weight'=>1, 'minsize'=>0)
+-  end
++  sayings_lbox.grid('row'=>0, 'column'=>0,
++                    'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  sv.grid('row'=>0, 'column'=>1,
++          'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  sh.grid('row'=>1, 'column'=>0,
++          'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  TkGrid.rowconfigure(w, 0, 'weight'=>1, 'minsize'=>0)
++  TkGrid.columnconfigure(w, 0, 'weight'=>1, 'minsize'=>0)
+ 
+ }.pack('side'=>'top', 'expand'=>'yes', 'fill'=>'y')
+ 
+diff --git a/sample/demos-en/style.rb b/sample/demos-en/style.rb
+index 60185ed8..2b1d60a4 100644
+--- a/sample/demos-en/style.rb
++++ b/sample/demos-en/style.rb
+@@ -57,24 +57,11 @@
+   #
+   family = 'Courier'
+ 
+-  if $tk_version =~ /^4.*/
+-    style_tag_bold = TkTextTag.new(t, 'font'=>'-*-Courier-Bold-O-Normal--*-120-*-*-*-*-*-*')
+-    style_tag_big = TkTextTag.new(t, 'font'=>'-*-Courier-Bold-R-Normal--*-140-*-*-*-*-*-*', 'kanjifont'=>$msg_kanji_font)
+-    style_tag_verybig = TkTextTag.new(t, 'font'=>'-*-Helvetica-Bold-R-Normal--*-240-*-*-*-*-*-*')
+-    #    style_tag_small = TkTextTag.new(t, 'font'=>'-Adobe-Helvetica-Bold-R-Normal-*-100-*', 'kanjifont'=>$kanji_font)
+-    style_tag_small = TkTextTag.new(t, 'font'=>'-Adobe-Helvetica-Bold-R-Normal-*-100-*')
+-  else
+-    style_tag_bold = TkTextTag.new(t, 'font'=>[family, 12, :bold, :italic])
+-    style_tag_big = TkTextTag.new(t, 'font'=>[family, 14, :bold])
+-    style_tag_verybig = TkTextTag.new(t, 'font'=>['Helvetica', 24, :bold])
+-    style_tag_small = TkTextTag.new(t, 'font'=>'Times 8 bold')
+-  end
++  style_tag_bold = TkTextTag.new(t, 'font'=>[family, 12, :bold, :italic])
++  style_tag_big = TkTextTag.new(t, 'font'=>[family, 14, :bold])
++  style_tag_verybig = TkTextTag.new(t, 'font'=>['Helvetica', 24, :bold])
++  style_tag_small = TkTextTag.new(t, 'font'=>'Times 8 bold')
+ ###
+-#  case($tk_version)
+-#  when /^4.*/
+-#    style_tag_big = TkTextTag.new(t, 'font'=>'-*-Courier-Bold-R-Normal--*-140-*-*-*-*-*-*', 'kanjifont'=>$msg_kanji_font)
+-#    style_tag_small = TkTextTag.new(t, 'font'=>'-Adobe-Helvetica-Bold-R-Normal-*-100-*', 'kanjifont'=>$kanji_font)
+-#  when /^8.*/
+ #    unless $style_demo_do_first
+ #      $style_demo_do_first = true
+ #      Tk.tk_call('font', 'create', '@bigascii',
+@@ -88,7 +75,6 @@
+ #    end
+ #    style_tag_big = TkTextTag.new(t, 'font'=>'@cBigFont')
+ #    style_tag_small = TkTextTag.new(t, 'font'=>'@cSmallFont')
+-#  end
+ 
+   #
+   if TkWinfo.depth($root).to_i > 1
+@@ -108,27 +94,16 @@
+   end
+ 
+   #
+-  if $tk_version =~ /^4\.[01]/
+-    style_tag_bgstipple = TkTextTag.new(t, 'background'=>'black',
+-                                        'borderwidth'=>0,
+-                                        'bgstipple'=>'gray25')
+-  else
+-    style_tag_bgstipple = TkTextTag.new(t, 'background'=>'black',
+-                                        'borderwidth'=>0,
+-                                        'bgstipple'=>'gray12')
+-  end
++  style_tag_bgstipple = TkTextTag.new(t, 'background'=>'black',
++                                      'borderwidth'=>0,
++                                      'bgstipple'=>'gray12')
+   style_tag_fgstipple = TkTextTag.new(t, 'fgstipple'=>'gray50')
+   style_tag_underline = TkTextTag.new(t, 'underline'=>'on')
+   style_tag_overstrike = TkTextTag.new(t, 'overstrike'=>'on')
+   style_tag_right  = TkTextTag.new(t, 'justify'=>'right')
+   style_tag_center = TkTextTag.new(t, 'justify'=>'center')
+-  if $tk_version =~ /^4.*/
+-    style_tag_super = TkTextTag.new(t, 'offset'=>'4p', 'font'=>'-Adobe-Courier-Medium-R-Normal--*-100-*-*-*-*-*-*')
+-    style_tag_sub = TkTextTag.new(t, 'offset'=>'-2p', 'font'=>'-Adobe-Courier-Medium-R-Normal--*-100-*-*-*-*-*-*')
+-  else
+-    style_tag_super = TkTextTag.new(t, 'offset'=>'4p', 'font'=>[family, 10])
+-    style_tag_sub = TkTextTag.new(t, 'offset'=>'-2p', 'font'=>[family, 10])
+-  end
++  style_tag_super = TkTextTag.new(t, 'offset'=>'4p', 'font'=>[family, 10])
++  style_tag_sub = TkTextTag.new(t, 'offset'=>'-2p', 'font'=>[family, 10])
+   style_tag_margins = TkTextTag.new(t, 'lmargin1'=>'12m', 'lmargin2'=>'6m',
+                                     'rmargin'=>'10m')
+   style_tag_spacing = TkTextTag.new(t, 'spacing1'=>'10p', 'spacing2'=>'2p',
+diff --git a/sample/demos-en/twind.rb b/sample/demos-en/twind.rb
+index a709f0d1..e9100143 100644
+--- a/sample/demos-en/twind.rb
++++ b/sample/demos-en/twind.rb
+@@ -209,11 +209,7 @@ def textWindPlot (t)
+     cursor 'top_left_arrow'
+   }
+ 
+-  if $tk_version =~ /^4.*/
+-    font = '-Adobe-Helvetica-Medium-R-Normal--*-180-*-*-*-*-*-*'
+-  else
+-    font = 'Helvetica 18'
+-  end
++  font = 'Helvetica 18'
+ 
+   TkcLine.new($twind_plot, 100, 250, 400, 250, 'width'=>2)
+   TkcLine.new($twind_plot, 100, 250, 100,  50, 'width'=>2)
+diff --git a/sample/demos-en/widget b/sample/demos-en/widget
+index 8bd314e4..643e404b 100644
+--- a/sample/demos-en/widget
++++ b/sample/demos-en/widget
+@@ -38,12 +38,7 @@ $tk_patchlevel = Tk::TK_PATCHLEVEL
+ $tk_platform = TkVarAccess.new('tcl_platform')
+ 
+ #
+-case($tk_version)
+-when /^4.*/
+-  $font = TkFont.new('-*-Helvetica-Medium-R-Normal--*-140-*-*-*-*-*-*', nil)
+-else
+-  $font = TkFont.new('Helvetica -12')
+-end
++$font = TkFont.new('Helvetica -12')
+ 
+ # images
+ $image = {}
+@@ -136,72 +131,49 @@ TkFrame.new($root){|frame|
+ =end
+ 
+ #
+-if $tk_version =~ /^4\.[01]/
+-  scr = TkScrollbar.new($root, 'orient'=>'vertical')
+-  txt = TkText.new($root) {
+-    wrap 'word'
+-    width 70
+-    height 30
+-    font $font
+-    setgrid 'yes'
+-    yscrollcommand proc{|first,last| scr.set first,last}
+-  }
+-  scr.command(proc{|*args| txt.yview(*args)})
+-  scr.pack('side'=>'right', 'fill'=>'y')
+-  txt.pack('expand'=>'yes', 'fill'=>'both')
+-else
+-  textFrame = TkFrame.new($root)
+-  scr = TkScrollbar.new($root, 'orient'=>'vertical',
+-                        'highlightthickness'=>0, 'takefocus'=>1) {
+-    pack('in'=>textFrame, 'side'=>'right', 'fill'=>'y', 'padx'=>1)
+-  }
+-  txt = TkText.new($root) {
+-    wrap 'word'
+-    width 70
+-    height 30
+-    font $font
+-    setgrid 'yes'
+-    highlightthickness 0
+-    padx 4
+-    pady 2
+-    takefocus 0
+-    bd 1
+-    yscrollcommand proc{|first,last| scr.set first,last}
+-  }
+-  scr.command(proc{|*args| txt.yview(*args)})
++textFrame = TkFrame.new($root)
++scr = TkScrollbar.new($root, 'orient'=>'vertical',
++                      'highlightthickness'=>0, 'takefocus'=>1) {
++  pack('in'=>textFrame, 'side'=>'right', 'fill'=>'y', 'padx'=>1)
++}
++txt = TkText.new($root) {
++  wrap 'word'
++  width 70
++  height 30
++  font $font
++  setgrid 'yes'
++  highlightthickness 0
++  padx 4
++  pady 2
++  takefocus 0
++  bd 1
++  yscrollcommand proc{|first,last| scr.set first,last}
++}
++scr.command(proc{|*args| txt.yview(*args)})
+ #  txt.pack('in'=>textFrame, 'expand'=>'yes', 'fill'=>'both', 'padx'=>1)
+ #  txt.pack('in'=>textFrame, 'expand'=>'yes', 'fill'=>'both')
+ #  textFrame.pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>2)
+-  textFrame.pack('expand'=>'yes', 'fill'=>'both')
+-  #  $root.withdraw.deiconify
+-  Tk.update_idletasks
+-  txt.pack('in'=>textFrame, 'expand'=>'yes', 'fill'=>'both')
+-
+-  statusBar = TkFrame.new($root) {|f|
+-    if $tk_version =~ /^4.*/
+-      statusfont = '-*-Helvetica-Medium-R-Normal--*-120-*-*-*-*-*-*'
+-    else
+-      statusfont = 'Helvetica 10'
+-    end
+-    $statusBarLabel = \
+-    TkLabel.new(f, 'text'=>"   ", 'relief'=>'sunken', 'bd'=>1, 'anchor'=>'w',
+-                'font'=>statusfont) \
+-        .pack('side'=>'left', 'padx'=>2, 'expand'=>'yes', 'fill'=>'both')
+-    TkLabel.new(f, 'width'=>8, 'relief'=>'sunken', 'bd'=>1, 'anchor'=>'w',
+-                'font'=>statusfont) \
+-        .pack('side'=>'left', 'padx'=>2)
+-  }.pack('side'=>'bottom', 'fill'=>'x', 'pady'=>2)
+-end
++textFrame.pack('expand'=>'yes', 'fill'=>'both')
++#  $root.withdraw.deiconify
++Tk.update_idletasks
++txt.pack('in'=>textFrame, 'expand'=>'yes', 'fill'=>'both')
++
++statusBar = TkFrame.new($root) {|f|
++  statusfont = 'Helvetica 10'
++  $statusBarLabel = \
++  TkLabel.new(f, 'text'=>"   ", 'relief'=>'sunken', 'bd'=>1, 'anchor'=>'w',
++              'font'=>statusfont) \
++      .pack('side'=>'left', 'padx'=>2, 'expand'=>'yes', 'fill'=>'both')
++  TkLabel.new(f, 'width'=>8, 'relief'=>'sunken', 'bd'=>1, 'anchor'=>'w',
++              'font'=>statusfont) \
++      .pack('side'=>'left', 'padx'=>2)
++}.pack('side'=>'bottom', 'fill'=>'x', 'pady'=>2)
+ 
+ # Create a bunch of tags to use in the text widget, such as those for
+ # section titles and demo descriptions.  Also define the bindings for
+ # tags.
+ 
+-if $tk_version =~ /^4.*/
+-  tag_title = TkTextTag.new(txt, 'font'=>'-*-Helvetica-Bold-R-Normal--*-180-*-*-*-*-*-*')
+-else
+-  tag_title = TkTextTag.new(txt, 'font'=>'Helvetica 18 bold')
+-end
++tag_title = TkTextTag.new(txt, 'font'=>'Helvetica 18 bold')
+ 
+ # We put some "space" characters to the left and right of each demo description
+ # so that the descriptions are highlighted only when the mouse cursor
+@@ -510,11 +482,7 @@ def showVars1(parent, *args)
+       text "Variable values:"
+       width 20
+       anchor 'center'
+-      if $tk_version =~ /^4.*/
+-        font '-Adobe-helvetica-medium-r-normal--*-180-*-*-*-*-*-*'
+-      else
+-        font 'Helvetica 14'
+-      end
++      font 'Helvetica 14'
+     }.pack('side'=>'top', 'fill'=>'x')
+     len = 1
+     args.each{|vnam,vbody|
+@@ -786,49 +754,37 @@ def showCode1(demo)
+ 
+     f.pack('side'=>'bottom', 'expand'=>'true', 'fill'=>'x')
+ 
+-    if $tk_version =~ /^4\.[01]/
+-      s = TkScrollbar.new($code_window, 'orient'=>'vertical')
+-      $code_text = TkText.new($code_window) {
++    TkFrame.new($code_window) {|f|
++      pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
++
++      hs = TkScrollbar.new($code_window, 'highlightthickness'=>0,
++                           'orient'=>'horizontal')
++      vs = TkScrollbar.new($code_window, 'highlightthickness'=>0,
++                           'orient'=>'vertical')
++      $code_text = TkText.new($code_window) {|t|
+         height 40
++        wrap 'word'
++        xscrollcommand proc{|first,last| hs.set first,last}
++        yscrollcommand proc{|first,last| vs.set first,last}
+         setgrid 'yes'
+-        yscrollcommand proc{|first,last| s.set first,last}
++        highlightthickness 0
++        pady 2
++        padx 3
++        hs.command(proc{|*args| $code_text.xview(*args)})
++        vs.command(proc{|*args| $code_text.yview(*args)})
+       }
+-      s.command(proc{|*args| $code_text.yview(*args)})
+-      s.pack('side'=>'right', 'fill'=>'y')
+-      $code_text.pack('side'=>'left', 'expand'=>'yes', 'fill'=>'both')
+-    else
+-      TkFrame.new($code_window) {|f|
+-        pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
+-
+-        hs = TkScrollbar.new($code_window, 'highlightthickness'=>0,
+-                             'orient'=>'horizontal')
+-        vs = TkScrollbar.new($code_window, 'highlightthickness'=>0,
+-                             'orient'=>'vertical')
+-        $code_text = TkText.new($code_window) {|t|
+-          height 40
+-          wrap 'word'
+-          xscrollcommand proc{|first,last| hs.set first,last}
+-          yscrollcommand proc{|first,last| vs.set first,last}
+-          setgrid 'yes'
+-          highlightthickness 0
+-          pady 2
+-          padx 3
+-          hs.command(proc{|*args| $code_text.xview(*args)})
+-          vs.command(proc{|*args| $code_text.yview(*args)})
+-        }
+-
+-        $code_text.grid('in'=>f, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
+-                        'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-        vs.grid('in'=>f, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
+-                'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++
++      $code_text.grid('in'=>f, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
++                      'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++      vs.grid('in'=>f, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
++              'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+ #       xs.grid('in'=>f, 'padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
+ #               'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+ 
+ # JKC 2001-07-26: segfaults under 1.7.1 (2001-06-19) [i686-linux]
+-        TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+-        TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+-      }
+-    end
++      TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++      TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++    }
+ 
+     btag = TkBindTag.new
+ 
+diff --git a/sample/demos-jp/arrow.rb b/sample/demos-jp/arrow.rb
+index 12ab4af2..554ab359 100644
+--- a/sample/demos-jp/arrow.rb
++++ b/sample/demos-jp/arrow.rb
+@@ -75,19 +75,11 @@ def arrowSetup(c)
+               'arrow'=>'both', 'arrowshape'=>v.smallTips)
+   TkcText.new(c, v.x2-5*v.b, tmp+5, 'text'=>v.b, 'anchor'=>'n')
+ 
+-  if $tk_version =~ /^4.*/
+-    TkcText.new(c, v.x1, 310, 'text'=>"'width'=>#{v.width}", 'anchor'=>'w',
+-                'font'=>'-*-Helvetica-Medium-R-Normal--*-180-*-*-*-*-*-*')
+-    TkcText.new(c, v.x1, 330,
+-                'text'=>"'arrowshape'=>[#{v.a}, #{v.b}, #{v.c}]",'anchor'=>'w',
+-                'font'=>'-*-Helvetica-Medium-R-Normal--*-180-*-*-*-*-*-*')
+-  else
+-    TkcText.new(c, v.x1, 310, 'text'=>"'width'=>#{v.width}", 'anchor'=>'w',
+-                'font'=>'Helvetica 18')
+-    TkcText.new(c, v.x1, 330,
+-                'text'=>"'arrowshape'=>[#{v.a}, #{v.b}, #{v.c}]",
+-                'anchor'=>'w', 'font'=>'Helvetica 18')
+-  end
++  TkcText.new(c, v.x1, 310, 'text'=>"'width'=>#{v.width}", 'anchor'=>'w',
++              'font'=>'Helvetica 18')
++  TkcText.new(c, v.x1, 330,
++              'text'=>"'arrowshape'=>[#{v.a}, #{v.b}, #{v.c}]",
++              'anchor'=>'w', 'font'=>'Helvetica 18')
+ 
+   v.count += 1
+ end
+diff --git a/sample/demos-jp/cscroll.rb b/sample/demos-jp/cscroll.rb
+index 6cce3d43..ff952ab0 100644
+--- a/sample/demos-jp/cscroll.rb
++++ b/sample/demos-jp/cscroll.rb
+@@ -45,45 +45,31 @@
+ $cscroll_buttons.pack('side'=>'bottom', 'fill'=>'x', 'pady'=>'2m')
+ 
+ # frame 設定
+-unless $tk_version =~ /^4\.[01]/
+-  $cscroll_grid = TkFrame.new(base_frame) {
+-    pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
+-  }
+-  TkGrid.rowconfigure($cscroll_grid, 0, 'weight'=>1, 'minsize'=>0)
+-  TkGrid.columnconfigure($cscroll_grid, 0, 'weight'=>1, 'minsize'=>0)
+-end
++$cscroll_grid = TkFrame.new(base_frame) {
++  pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
++}
++TkGrid.rowconfigure($cscroll_grid, 0, 'weight'=>1, 'minsize'=>0)
++TkGrid.columnconfigure($cscroll_grid, 0, 'weight'=>1, 'minsize'=>0)
+ 
+ # canvas 設定
+ $cscroll_canvas = TkCanvas.new(base_frame,
+                                'relief'=>'sunken', 'borderwidth'=>2,
+                                'scrollregion'=>['-11c', '-11c', '50c', '20c']
+                                ) {|c|
+-  if $tk_version =~ /^4\.[01]/
+-    pack('expand'=>'yes', 'fill'=>'both')
+-  else
+-    grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
+-         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-  end
++  grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
++       'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+ 
+   TkScrollbar.new(base_frame, 'command'=>proc{|*args| c.yview(*args)}) {|vs|
+     c.yscrollcommand(proc{|first,last| vs.set first,last})
+-    if $tk_version =~ /^4\.[01]/
+-      pack('side'=>'right', 'fill'=>'y')
+-    else
+-      grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    end
++    grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+   }
+ 
+   TkScrollbar.new(base_frame, 'orient'=>'horiz',
+                   'command'=>proc{|*args| c.xview(*args)}) {|hs|
+     c.xscrollcommand(proc{|first,last| hs.set first,last})
+-    if $tk_version =~ /^4\.[01]/
+-      pack('side'=>'bottom', 'fill'=>'x')
+-    else
+-      grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    end
++    grid('in'=>$cscroll_grid, 'padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+   }
+ }
+ 
+diff --git a/sample/demos-jp/ctext.rb b/sample/demos-jp/ctext.rb
+index 15ec84b4..ae20533a 100644
+--- a/sample/demos-jp/ctext.rb
++++ b/sample/demos-jp/ctext.rb
+@@ -56,11 +56,7 @@
+ $ctext_canvas.pack('side'=>'top', 'expand'=>'yes', 'fill'=>'both')
+ 
+ # font 設定
+-if $tk_version =~ /^4.*/
+-  textFont = '-*-Helvetica-Medium-R-Normal--*-240-*-*-*-*-*-*'
+-else
+-  textFont = 'Helvetica 24'
+-end
++textFont = 'Helvetica 24'
+ 
+ # canvas 設定
+ TkcRectangle.new($ctext_canvas, 245, 195, 255, 205,
+@@ -70,12 +66,7 @@
+   'text'=>"これはキャンバスwidgetのテキスト機能をデモするための文字列です。\n上で述べたような編集を可能とするためのバインディングを施しています。",
+   'width'=>440, 'anchor'=>'n', 'justify'=>'left'
+ }
+-if $tk_version =~ /^4.*/
+-  ctag_text_param['font'] = '-*-Helvetica-Medium-R-Normal--*-240-*-*-*-*-*-*'
+-  ctag_text_param['kanjifont'] = '-*-r-*--24-*-jisx0208.1983-0'
+-else
+-  ctag_text_param['font'] = 'Helvetica 24'
+-end
++ctag_text_param['font'] = 'Helvetica 24'
+ $ctag_text = TkcTag.new($ctext_canvas)
+ $ctag_text.withtag(TkcText.new($ctext_canvas, 250, 200, ctag_text_param))
+ 
+@@ -119,14 +110,8 @@ def mkTextConfig(w,x,y,option,value,color)
+ item = TkcRectangle.new($ctext_canvas, x+40, y+40, x+50, y+50,
+                         'outline'=>'black', 'fill'=>'red')
+ item.bind('1', proc{$ctag_text.configure 'anchor', 'center'})
+-if $tk_version =~ /^4.*/
+-  TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Text Position',
+-              'font'=>'-*-times-medium-r-normal--*-240-*-*-*-*-*-*',
+-              'anchor'=>'s', 'fill'=>'brown')
+-else
+-  TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Text Position',
+-              'font'=>'Times 24', 'anchor'=>'s', 'fill'=>'brown')
+-end
++TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Text Position',
++            'font'=>'Times 24', 'anchor'=>'s', 'fill'=>'brown')
+ 
+ # Lastly, create some items that allow the text's justification to be
+ # changed.
+@@ -137,14 +122,8 @@ def mkTextConfig(w,x,y,option,value,color)
+ mkTextConfig $ctext_canvas, x, y, 'justify', 'left', color
+ mkTextConfig $ctext_canvas, x+30, y, 'justify', 'center', color
+ mkTextConfig $ctext_canvas, x+60, y, 'justify', 'right', color
+-if $tk_version =~ /^4.*/
+-  TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Justification',
+-              'font'=>'-*-times-medium-r-normal--*-240-*-*-*-*-*-*',
+-              'anchor'=>'s', 'fill'=>'brown')
+-else
+-  TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Justification',
+-              'font'=>'Times 24', 'anchor'=>'s', 'fill'=>'brown')
+-end
++TkcText.new($ctext_canvas, x+45, y-5, 'text'=>'Justification',
++            'font'=>'Times 24', 'anchor'=>'s', 'fill'=>'brown')
+ 
+ $ctext_canvas.itembind('config', 'Enter', proc{textEnter $ctext_canvas})
+ $ctext_canvas.itembind('config', 'Leave',
+diff --git a/sample/demos-jp/floor.rb b/sample/demos-jp/floor.rb
+index 8a079035..cb826739 100644
+--- a/sample/demos-jp/floor.rb
++++ b/sample/demos-jp/floor.rb
+@@ -1620,58 +1620,37 @@ def floor_fg3(w,color)
+ $floorItems = {}
+ 
+ # canvas 設定
+-if $tk_version =~ /^4\.[01]/
+-  $floor_canvas_frame = TkFrame.new(base_frame,'bd'=>2,'relief'=>'sunken',
+-                                    'highlightthickness'=>2)
+-  $floor_canvas = TkCanvas.new($floor_canvas_frame,
+-                               'width'=>900, 'height'=>500, 'borderwidth'=>0,
+-                               'highlightthickness'=>0) {|c|
+-    TkScrollbar.new(base_frame, 'orient'=>'horiz',
+-                    'command'=>proc{|*args| c.xview(*args)}){|hs|
+-      c.xscrollcommand(proc{|first,last| hs.set first,last})
+-      pack('side'=>'bottom', 'fill'=>'x')
+-    }
+-    TkScrollbar.new(base_frame, 'command'=>proc{|*args| c.yview(*args)}){|vs|
+-      c.yscrollcommand(proc{|first,last| vs.set first,last})
+-      pack('side'=>'right', 'fill'=>'y')
+-    }
+-  }
+-  $floor_canvas_frame.pack('side'=>'top','fill'=>'both', 'expand'=>'yes')
+-  $floor_canvas.pack('expand'=>'yes', 'fill'=>'both')
+-
+-else
+-  TkFrame.new(base_frame) {|f|
+-    pack('side'=>'top', 'fill'=>'both', 'expand'=>'yes')
++TkFrame.new(base_frame) {|f|
++  pack('side'=>'top', 'fill'=>'both', 'expand'=>'yes')
+ 
+-    h = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'horizontal')
+-    v = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'vertical')
++  h = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'horizontal')
++  v = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'vertical')
+ 
+-    TkFrame.new(f, 'bd'=>2, 'relief'=>'sunken') {|f1|
+-      $floor_canvas = TkCanvas.new(f1, 'width'=>900, 'height'=>500,
+-                                   'borderwidth'=>0,
+-                                   'highlightthickness'=>0) {
+-        xscrollcommand(proc{|first,last| h.set first,last})
+-        yscrollcommand(proc{|first,last| v.set first,last})
+-        pack('expand'=>'yes', 'fill'=>'both')
+-      }
+-      grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  TkFrame.new(f, 'bd'=>2, 'relief'=>'sunken') {|f1|
++    $floor_canvas = TkCanvas.new(f1, 'width'=>900, 'height'=>500,
++                                 'borderwidth'=>0,
++                                 'highlightthickness'=>0) {
++      xscrollcommand(proc{|first,last| h.set first,last})
++      yscrollcommand(proc{|first,last| v.set first,last})
++      pack('expand'=>'yes', 'fill'=>'both')
+     }
++    grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  }
+ 
+-    v.grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    h.grid('padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  v.grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  h.grid('padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+ 
+-    TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+-    TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++  TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++  TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+ 
+-    pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
++  pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
+ 
+-    v.command(proc{|*args| $floor_canvas.yview(*args)})
+-    h.command(proc{|*args| $floor_canvas.xview(*args)})
+-  }
+-end
++  v.command(proc{|*args| $floor_canvas.yview(*args)})
++  h.command(proc{|*args| $floor_canvas.xview(*args)})
++}
+ 
+ 
+ # Create an entry for displaying and typing in current room.
+diff --git a/sample/demos-jp/floor2.rb b/sample/demos-jp/floor2.rb
+index 7f294ce8..c20da464 100644
+--- a/sample/demos-jp/floor2.rb
++++ b/sample/demos-jp/floor2.rb
+@@ -1620,58 +1620,37 @@ def floor2_fg3(w,color)
+ $floorItems2 = {}
+ 
+ # canvas 設定
+-if $tk_version =~ /^4\.[01]/
+-  $floor2_canvas_frame = TkFrame.new(base_frame,'bd'=>2,'relief'=>'sunken',
+-                                    'highlightthickness'=>2)
+-  $floor2_canvas = TkCanvas.new($floor2_canvas_frame,
+-                               'width'=>900, 'height'=>500, 'borderwidth'=>0,
+-                               'highlightthickness'=>0) {|c|
+-    TkScrollbar.new(base_frame, 'orient'=>'horiz',
+-                    'command'=>proc{|*args| c.xview(*args)}){|hs|
+-      c.xscrollcommand(proc{|first,last| hs.set first,last})
+-      pack('side'=>'bottom', 'fill'=>'x')
+-    }
+-    TkScrollbar.new(base_frame, 'command'=>proc{|*args| c.yview(*args)}){|vs|
+-      c.yscrollcommand(proc{|first,last| vs.set first,last})
+-      pack('side'=>'right', 'fill'=>'y')
+-    }
+-  }
+-  $floor2_canvas_frame.pack('side'=>'top','fill'=>'both', 'expand'=>'yes')
+-  $floor2_canvas.pack('expand'=>'yes', 'fill'=>'both')
+-
+-else
+-  TkFrame.new(base_frame) {|f|
+-    pack('side'=>'top', 'fill'=>'both', 'expand'=>'yes')
++TkFrame.new(base_frame) {|f|
++  pack('side'=>'top', 'fill'=>'both', 'expand'=>'yes')
+ 
+-    h = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'horizontal')
+-    v = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'vertical')
++  h = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'horizontal')
++  v = TkScrollbar.new(f, 'highlightthickness'=>0, 'orient'=>'vertical')
+ 
+-    TkFrame.new(f, 'bd'=>2, 'relief'=>'sunken') {|f1|
+-      $floor2_canvas = TkCanvas.new(f1, 'width'=>900, 'height'=>500,
+-                                   'borderwidth'=>0,
+-                                   'highlightthickness'=>0) {
+-        xscrollcommand(proc{|first,last| h.set first,last})
+-        yscrollcommand(proc{|first,last| v.set first,last})
+-        pack('expand'=>'yes', 'fill'=>'both')
+-      }
+-      grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  TkFrame.new(f, 'bd'=>2, 'relief'=>'sunken') {|f1|
++    $floor2_canvas = TkCanvas.new(f1, 'width'=>900, 'height'=>500,
++                                 'borderwidth'=>0,
++                                 'highlightthickness'=>0) {
++      xscrollcommand(proc{|first,last| h.set first,last})
++      yscrollcommand(proc{|first,last| v.set first,last})
++      pack('expand'=>'yes', 'fill'=>'both')
+     }
++    grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  }
+ 
+-    v.grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    h.grid('padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
+-           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  v.grid('padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  h.grid('padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
++         'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+ 
+-    TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+-    TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++  TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++  TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+ 
+-    pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
++  pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
+ 
+-    v.command(proc{|*args| $floor2_canvas.yview(*args)})
+-    h.command(proc{|*args| $floor2_canvas.xview(*args)})
+-  }
+-end
++  v.command(proc{|*args| $floor2_canvas.yview(*args)})
++  h.command(proc{|*args| $floor2_canvas.xview(*args)})
++}
+ 
+ # Create an entry for displaying and typing in current room.
+ 
+diff --git a/sample/demos-jp/items.rb b/sample/demos-jp/items.rb
+index 9fef0bed..dc0acae5 100644
+--- a/sample/demos-jp/items.rb
++++ b/sample/demos-jp/items.rb
+@@ -68,22 +68,14 @@
+       c.yscrollcommand proc{|first,last| s.set first,last}
+     }
+ 
+-    if $tk_version =~ /^4\.[01]/
+-      hs.pack('side'=>'bottom', 'fill'=>'x')
+-      vs.pack('side'=>'right', 'fill'=>'y')
+-      c.pack('in'=>cf, 'expand'=>'yes', 'fill'=>'both')
+-
+-    else
+-      c.grid('in'=>cf, 'row'=>0, 'column'=>0,
+-             'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-      vs.grid('row'=>0, 'column'=>1,
+-              'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-      hs.grid('row'=>1, 'column'=>0,
+-              'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-      TkGrid.rowconfigure(cf, 0, 'weight'=>1, 'minsize'=>0)
+-      TkGrid.columnconfigure(cf, 0, 'weight'=>1, 'minsize'=>0)
+-
+-    end
++    c.grid('in'=>cf, 'row'=>0, 'column'=>0,
++           'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++    vs.grid('row'=>0, 'column'=>1,
++            'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++    hs.grid('row'=>1, 'column'=>0,
++            'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++    TkGrid.rowconfigure(cf, 0, 'weight'=>1, 'minsize'=>0)
++    TkGrid.columnconfigure(cf, 0, 'weight'=>1, 'minsize'=>0)
+ 
+   }
+ }.pack('side'=>'top', 'fill'=>'both', 'expand'=>'yes')
+@@ -95,13 +87,8 @@
+ TkcLine.new(cvs, '10c', '0c', '10c', '24c', 'width'=>2)
+ TkcLine.new(cvs, '20c', '0c', '20c', '24c', 'width'=>2)
+ 
+-if $tk_version =~ /^4.*/
+-  font1 = '-Adobe-Helvetica-Medium-R-Normal--*-120-*-*-*-*-*-*'
+-  font2 = '-Adobe-Helvetica-Bold-R-Normal--*-240-*-*-*-*-*-*'
+-else
+-  font1 = 'Helvetica 12'
+-  font2 = 'Helvetica 24 bold'
+-end
++font1 = 'Helvetica 12'
++font2 = 'Helvetica 24 bold'
+ if TkWinfo.depth($root).to_i > 1
+   blue   = 'DeepSkyBlue3'
+   red    = 'red'
+@@ -192,16 +179,9 @@
+ TkcText.new(cvs, '25.5c', '11c', 'anchor'=>'w', 'font'=>font1, 'fill'=>blue,
+             'text'=>"いくつかの行。\nそれぞれ独立に\n行揃え。\n全て左端がアンカーされている。", 'justify'=>'center', 'tags'=>$tag_item )
+ TkcRectangle.new(cvs, '24.9c','13.9c','25.1c','14.1c')
+-if $tk_version =~ /^4\.[01]/
+-  TkcText.new(cvs, '25c', '14c', 'anchor'=>'c', 'font'=>font2, 'fill'=>red,
+-              'stipple'=>'@' + [$demo_dir, '..',
+-                                'images', 'grey.5'].join(File::Separator),
+-              'text'=>'Stippled characters', 'tags'=>$tag_item )
+-else
+-  TkcText.new(cvs, '25c', '14c', 'anchor'=>'c', 'font'=>font2, 'fill'=>red,
+-              'stipple'=>'gray50', 'text'=>'Stippled characters',
+-              'tags'=>$tag_item )
+-end
++TkcText.new(cvs, '25c', '14c', 'anchor'=>'c', 'font'=>font2, 'fill'=>red,
++            'stipple'=>'gray50', 'text'=>'Stippled characters',
++            'tags'=>$tag_item )
+ 
+ TkcText.new(cvs, '5c', '16.2c', 'text'=>'弧', 'anchor'=>'n')
+ TkcArc.new(cvs, '0.5c','17c','7c','20c', 'fill'=>green, 'outline'=>'black',
+diff --git a/sample/demos-jp/plot.rb b/sample/demos-jp/plot.rb
+index 85970bb5..d6d6d374 100644
+--- a/sample/demos-jp/plot.rb
++++ b/sample/demos-jp/plot.rb
+@@ -45,11 +45,7 @@
+ $plot_buttons.pack('side'=>'bottom', 'fill'=>'x', 'pady'=>'2m')
+ 
+ # font 設定
+-  if $tk_version =~ /^4.*/
+-    plotFont = '-*-Helvetica-Medium-R-Normal--*-180-*-*-*-*-*-*'
+-  else
+-    font = 'Helvetica 18'
+-  end
++font = 'Helvetica 18'
+ 
+ # canvas 設定
+ $plot_canvas = TkCanvas.new(base_frame,'relief'=>'raised','width'=>450,'height'=>300)
+diff --git a/sample/demos-jp/sayings.rb b/sample/demos-jp/sayings.rb
+index a60b0bf2..811b3f56 100644
+--- a/sample/demos-jp/sayings.rb
++++ b/sample/demos-jp/sayings.rb
+@@ -62,21 +62,14 @@
+   sv.command(proc{|*args| sayings_lbox.yview(*args)})
+   sh.command(proc{|*args| sayings_lbox.xview(*args)})
+ 
+-  if $tk_version =~ /^4\.[01]/
+-    sv.pack('side'=>'right', 'fill'=>'y')
+-    sh.pack('side'=>'bottom', 'fill'=>'x')
+-    sayings_lbox.pack('expand'=>'yes', 'fill'=>'y')
+-
+-  else
+-    sayings_lbox.grid('row'=>0, 'column'=>0,
+-                      'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    sv.grid('row'=>0, 'column'=>1,
+-            'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    sh.grid('row'=>1, 'column'=>0,
+-            'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-    TkGrid.rowconfigure(w, 0, 'weight'=>1, 'minsize'=>0)
+-    TkGrid.columnconfigure(w, 0, 'weight'=>1, 'minsize'=>0)
+-  end
++  sayings_lbox.grid('row'=>0, 'column'=>0,
++                    'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  sv.grid('row'=>0, 'column'=>1,
++          'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  sh.grid('row'=>1, 'column'=>0,
++          'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++  TkGrid.rowconfigure(w, 0, 'weight'=>1, 'minsize'=>0)
++  TkGrid.columnconfigure(w, 0, 'weight'=>1, 'minsize'=>0)
+ 
+ }.pack('side'=>'top', 'expand'=>'yes', 'fill'=>'y')
+ 
+diff --git a/sample/demos-jp/style.rb b/sample/demos-jp/style.rb
+index 737c9f89..cb4a206c 100644
+--- a/sample/demos-jp/style.rb
++++ b/sample/demos-jp/style.rb
+@@ -57,24 +57,11 @@
+   # テキストタグ設定 (フォント関連)
+   family = 'Courier'
+ 
+-  if $tk_version =~ /^4.*/
+-    style_tag_bold = TkTextTag.new(t, 'font'=>'-*-Courier-Bold-O-Normal--*-120-*-*-*-*-*-*')
+-    style_tag_big = TkTextTag.new(t, 'font'=>'-*-Courier-Bold-R-Normal--*-140-*-*-*-*-*-*', 'kanjifont'=>$msg_kanji_font)
+-    style_tag_verybig = TkTextTag.new(t, 'font'=>'-*-Helvetica-Bold-R-Normal--*-240-*-*-*-*-*-*')
+-    # style_tag_small = TkTextTag.new(t, 'font'=>'-Adobe-Helvetica-Bold-R-Normal-*-100-*', 'kanjifont'=>$kanji_font)
+-    style_tag_small = TkTextTag.new(t, 'font'=>'-Adobe-Helvetica-Bold-R-Normal-*-100-*')
+-  else
+-    style_tag_bold = TkTextTag.new(t, 'font'=>[family, 12, :bold, :italic])
+-    style_tag_big = TkTextTag.new(t, 'font'=>[family, 14, :bold])
+-    style_tag_verybig = TkTextTag.new(t, 'font'=>['Helvetica', 24, :bold])
+-    style_tag_small = TkTextTag.new(t, 'font'=>'Times 8 bold')
+-  end
++  style_tag_bold = TkTextTag.new(t, 'font'=>[family, 12, :bold, :italic])
++  style_tag_big = TkTextTag.new(t, 'font'=>[family, 14, :bold])
++  style_tag_verybig = TkTextTag.new(t, 'font'=>['Helvetica', 24, :bold])
++  style_tag_small = TkTextTag.new(t, 'font'=>'Times 8 bold')
+ ###
+-#  case($tk_version)
+-#  when /^4.*/
+-#    style_tag_big = TkTextTag.new(t, 'font'=>'-*-Courier-Bold-R-Normal--*-140-*-*-*-*-*-*', 'kanjifont'=>$msg_kanji_font)
+-#    style_tag_small = TkTextTag.new(t, 'font'=>'-Adobe-Helvetica-Bold-R-Normal-*-100-*', 'kanjifont'=>$kanji_font)
+-#  when /^8.*/
+ #    unless $style_demo_do_first
+ #      $style_demo_do_first = true
+ #      Tk.tk_call('font', 'create', '@bigascii',
+@@ -88,7 +75,6 @@
+ #    end
+ #    style_tag_big = TkTextTag.new(t, 'font'=>'@cBigFont')
+ #    style_tag_small = TkTextTag.new(t, 'font'=>'@cSmallFont')
+-#  end
+ 
+   # テキストタグ設定 (色，レリーフ関連)
+   if TkWinfo.depth($root).to_i > 1
+@@ -108,27 +94,16 @@
+   end
+ 
+   # テキストタグ設定 (その他)
+-  if $tk_version =~ /^4\.[01]/
+-    style_tag_bgstipple = TkTextTag.new(t, 'background'=>'black',
+-                                        'borderwidth'=>0,
+-                                        'bgstipple'=>'gray25')
+-  else
+-    style_tag_bgstipple = TkTextTag.new(t, 'background'=>'black',
+-                                        'borderwidth'=>0,
+-                                        'bgstipple'=>'gray12')
+-  end
++  style_tag_bgstipple = TkTextTag.new(t, 'background'=>'black',
++                                      'borderwidth'=>0,
++                                      'bgstipple'=>'gray12')
+   style_tag_fgstipple = TkTextTag.new(t, 'fgstipple'=>'gray50')
+   style_tag_underline = TkTextTag.new(t, 'underline'=>'on')
+   style_tag_overstrike = TkTextTag.new(t, 'overstrike'=>'on')
+   style_tag_right  = TkTextTag.new(t, 'justify'=>'right')
+   style_tag_center = TkTextTag.new(t, 'justify'=>'center')
+-  if $tk_version =~ /^4.*/
+-    style_tag_super = TkTextTag.new(t, 'offset'=>'4p', 'font'=>'-Adobe-Courier-Medium-R-Normal--*-100-*-*-*-*-*-*')
+-    style_tag_sub = TkTextTag.new(t, 'offset'=>'-2p', 'font'=>'-Adobe-Courier-Medium-R-Normal--*-100-*-*-*-*-*-*')
+-  else
+-    style_tag_super = TkTextTag.new(t, 'offset'=>'4p', 'font'=>[family, 10])
+-    style_tag_sub = TkTextTag.new(t, 'offset'=>'-2p', 'font'=>[family, 10])
+-  end
++  style_tag_super = TkTextTag.new(t, 'offset'=>'4p', 'font'=>[family, 10])
++  style_tag_sub = TkTextTag.new(t, 'offset'=>'-2p', 'font'=>[family, 10])
+   style_tag_margins = TkTextTag.new(t, 'lmargin1'=>'12m', 'lmargin2'=>'6m',
+                                     'rmargin'=>'10m')
+   style_tag_spacing = TkTextTag.new(t, 'spacing1'=>'10p', 'spacing2'=>'2p',
+diff --git a/sample/demos-jp/twind.rb b/sample/demos-jp/twind.rb
+index 7db7576c..cb3bb2d2 100644
+--- a/sample/demos-jp/twind.rb
++++ b/sample/demos-jp/twind.rb
+@@ -210,11 +210,7 @@ def textWindPlot (t)
+     cursor 'top_left_arrow'
+   }
+ 
+-  if $tk_version =~ /^4.*/
+-    font = '-Adobe-Helvetica-Medium-R-Normal--*-180-*-*-*-*-*-*'
+-  else
+-    font = 'Helvetica 18'
+-  end
++  font = 'Helvetica 18'
+ 
+   TkcLine.new($twind_plot, 100, 250, 400, 250, 'width'=>2)
+   TkcLine.new($twind_plot, 100, 250, 100,  50, 'width'=>2)
+diff --git a/sample/demos-jp/widget b/sample/demos-jp/widget
+index a62b0886..4a35f8eb 100644
+--- a/sample/demos-jp/widget
++++ b/sample/demos-jp/widget
+@@ -32,36 +32,11 @@ $tk_platform = TkVarAccess.new('tcl_platform')
+ 
+ # フォント設定
+ #######
+-case($tk_version)
+-when /^4.*/
+-  $font = TkFont.new('-*-Helvetica-Medium-R-Normal--*-140-*-*-*-*-*-*', nil)
+-  knjfont = '-*--16-*-jisx0208.1983-0'
+-  $kanji_font = TkFont.new('-*-Helvetica-Medium-R-Normal--*-140-*-*-*-*-*-*',
+-                           knjfont)
+-  TkOption.add('*kanjiFont', knjfont, 'startupFile')
+-  $msg_kanji_font=TkFont.new('-*-Helvetica-Medium-R-Normal--*-140-*-*-*-*-*-*',
+-                             '-*--24-*-jisx0208.1983-0')
+-
+-#when '8.0'
+-#  $font = TkFont.new('Helvetica -12')
+-#  $kanji_font = TkFont.new('Helvetica -12', 'Mincho -12')
+-#  TkOption.add('*kanjiFont', knjfont, 'startupFile')
+-#  $msg_kanji_font=TkFont.new('Helvetica 16', 'Gothic 16 bold')
+-
+-when /^8.*/
+-  $font = TkFont.new('Helvetica -12')
+-  $kanji_font = TkFont.new('Helvetica -12', 'Mincho -12')
+-  TkOption.add('*kanjiFont', knjfont, 'startupFile')
+-  $msg_kanji_font=TkFont.new('Helvetica 14 bold', 'Gothic 14 bold')
+-
+-else
+-  $font = TkFont.new('Helvetica 14', nil)
+-  knjfont = '-*--16-*-jisx0208.1983-0'
+-  $kanji_font = TkFont.new('Helvetic 14', knjfont)
+-  TkOption.add('*kanjiFont', knjfont, 'startupFile')
+-  $msg_kanji_font=TkFont.new('Helvetica 14',
+-                             '-*--24-*-jisx0208.1983-0')
+-end
++$font = TkFont.new('Helvetica -12')
++$kanji_font = TkFont.new('Helvetica -12', 'Mincho -12')
++knjfont = '-*--16-*-jisx0208.1983-0'
++TkOption.add('*kanjiFont', knjfont, 'startupFile')
++$msg_kanji_font=TkFont.new('Helvetica 14 bold', 'Gothic 14 bold')
+ #######
+ 
+ # イメージ設定
+@@ -155,72 +130,48 @@ TkFrame.new($root){|frame|
+ =end
+ 
+ # テキストボックスの生成
+-if $tk_version =~ /^4\.[01]/
+-  scr = TkScrollbar.new($root, 'orient'=>'vertical')
+-  txt = TkText.new($root) {
+-    #wrap 'word'
+-    wrap 'char'
+-    width 70
+-    height 30
+-    font $font
+-    setgrid 'yes'
+-    yscrollcommand proc{|first,last| scr.set first,last}
+-  }
+-  scr.command(proc{|*args| txt.yview(*args)})
+-  scr.pack('side'=>'right', 'fill'=>'y')
+-  txt.pack('expand'=>'yes', 'fill'=>'both')
+-else
+-  textFrame = TkFrame.new($root)
+-  scr = TkScrollbar.new($root, 'orient'=>'vertical',
+-                        'highlightthickness'=>0, 'takefocus'=>1) {
+-    pack('in'=>textFrame, 'side'=>'right', 'fill'=>'y', 'padx'=>1)
+-  }
+-  txt = TkText.new($root) {
+-    #wrap 'word'
+-    wrap 'char'
+-    width 70
+-    height 30
+-    font $font
+-    setgrid 'yes'
+-    highlightthickness 0
+-    padx 4
+-    pady 2
+-    takefocus 0
+-    bd 1
+-    yscrollcommand proc{|first,last| scr.set first,last}
+-  }
+-  scr.command(proc{|*args| txt.yview(*args)})
++textFrame = TkFrame.new($root)
++scr = TkScrollbar.new($root, 'orient'=>'vertical',
++                      'highlightthickness'=>0, 'takefocus'=>1) {
++  pack('in'=>textFrame, 'side'=>'right', 'fill'=>'y', 'padx'=>1)
++}
++txt = TkText.new($root) {
++  #wrap 'word'
++  wrap 'char'
++  width 70
++  height 30
++  font $font
++  setgrid 'yes'
++  highlightthickness 0
++  padx 4
++  pady 2
++  takefocus 0
++  bd 1
++  yscrollcommand proc{|first,last| scr.set first,last}
++}
++scr.command(proc{|*args| txt.yview(*args)})
+ 
+ #  txt.pack('in'=>textFrame, 'expand'=>'yes', 'fill'=>'both', 'padx'=>1)
+ #  txt.pack('in'=>textFrame, 'expand'=>'yes', 'fill'=>'both')
+ #  textFrame.pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>2)
+-  textFrame.pack('expand'=>'yes', 'fill'=>'both')
+-  #  $root.withdraw.deiconify
+-  Tk.update_idletasks
+-  txt.pack('in'=>textFrame, 'expand'=>'yes', 'fill'=>'both')
+-
+-  statusBar = TkFrame.new($root) {|f|
+-    if $tk_version =~ /^4.*/
+-      statusfont = '-*-Helvetica-Medium-R-Normal--*-120-*-*-*-*-*-*'
+-    else
+-      statusfont = 'Helvetica 10'
+-    end
+-    $statusBarLabel = \
+-    TkLabel.new(f, 'text'=>"   ", 'relief'=>'sunken', 'bd'=>1, 'anchor'=>'w',
+-                'font'=>statusfont) \
+-    .pack('side'=>'left', 'padx'=>2, 'expand'=>'yes', 'fill'=>'both')
+-    TkLabel.new(f, 'width'=>8, 'relief'=>'sunken', 'bd'=>1, 'anchor'=>'w',
+-                'font'=>statusfont) \
+-    .pack('side'=>'left', 'padx'=>2)
+-  }.pack('side'=>'bottom', 'fill'=>'x', 'pady'=>2)
+-end
++textFrame.pack('expand'=>'yes', 'fill'=>'both')
++#  $root.withdraw.deiconify
++Tk.update_idletasks
++txt.pack('in'=>textFrame, 'expand'=>'yes', 'fill'=>'both')
++
++statusBar = TkFrame.new($root) {|f|
++  statusfont = 'Helvetica 10'
++  $statusBarLabel = \
++  TkLabel.new(f, 'text'=>"   ", 'relief'=>'sunken', 'bd'=>1, 'anchor'=>'w',
++              'font'=>statusfont) \
++  .pack('side'=>'left', 'padx'=>2, 'expand'=>'yes', 'fill'=>'both')
++  TkLabel.new(f, 'width'=>8, 'relief'=>'sunken', 'bd'=>1, 'anchor'=>'w',
++              'font'=>statusfont) \
++  .pack('side'=>'left', 'padx'=>2)
++}.pack('side'=>'bottom', 'fill'=>'x', 'pady'=>2)
+ 
+ # テキストタグ設定
+-if $tk_version =~ /^4.*/
+-  tag_title = TkTextTag.new(txt, 'font'=>'-*-Helvetica-Bold-R-Normal--*-180-*-*-*-*-*-*')
+-else
+-  tag_title = TkTextTag.new(txt, 'font'=>'Helvetica 18 bold')
+-end
++tag_title = TkTextTag.new(txt, 'font'=>'Helvetica 18 bold')
+ #tag_kanji_title = TkTextTag.new(txt, 'kanjifont'=>$msg_kanji_font)
+ #tag_middle = TkTextTag.new(txt, 'kanjifont'=>$kanji_font)
+ tag_kanji_title = TkTextTag.new(txt, 'font'=>$msg_kanji_font)
+@@ -567,11 +518,7 @@ def showVars1(parent, *args)
+       text "変数値:"
+       width 20
+       anchor 'center'
+-      if $tk_version =~ /^4.*/
+-        font '-Adobe-helvetica-medium-r-normal--*-180-*-*-*-*-*-*'
+-      else
+-        font 'Helvetica 14'
+-      end
++      font 'Helvetica 14'
+     }.pack('side'=>'top', 'fill'=>'x')
+     len = 1
+     args.each{|vnam,vbody|
+@@ -827,48 +774,36 @@ def showCode1(demo)
+ 
+     f.pack('side'=>'bottom', 'expand'=>'true', 'fill'=>'x')
+ 
+-    if $tk_version =~ /^4\.[01]/
+-      s = TkScrollbar.new($code_window, 'orient'=>'vertical')
+-      $code_text = TkText.new($code_window) {
++    TkFrame.new($code_window) {|f|
++      pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
++
++      hs = TkScrollbar.new($code_window, 'highlightthickness'=>0,
++                           'orient'=>'horizontal')
++      vs = TkScrollbar.new($code_window, 'highlightthickness'=>0,
++                           'orient'=>'vertical')
++      $code_text = TkText.new($code_window) {|t|
+         height 40
++        #wrap 'word'
++        wrap 'char'
++        xscrollcommand proc{|first,last| hs.set first,last}
++        yscrollcommand proc{|first,last| vs.set first,last}
+         setgrid 'yes'
+-        yscrollcommand proc{|first,last| s.set first,last}
++        highlightthickness 0
++        pady 2
++        padx 3
++        hs.command(proc{|*args| $code_text.xview(*args)})
++        vs.command(proc{|*args| $code_text.yview(*args)})
+       }
+-      s.command(proc{|*args| $code_text.yview(*args)})
+-      s.pack('side'=>'right', 'fill'=>'y')
+-      $code_text.pack('side'=>'left', 'expand'=>'yes', 'fill'=>'both')
+-    else
+-      TkFrame.new($code_window) {|f|
+-        pack('expand'=>'yes', 'fill'=>'both', 'padx'=>1, 'pady'=>1)
+-
+-        hs = TkScrollbar.new($code_window, 'highlightthickness'=>0,
+-                             'orient'=>'horizontal')
+-        vs = TkScrollbar.new($code_window, 'highlightthickness'=>0,
+-                             'orient'=>'vertical')
+-        $code_text = TkText.new($code_window) {|t|
+-          height 40
+-          #wrap 'word'
+-          wrap 'char'
+-          xscrollcommand proc{|first,last| hs.set first,last}
+-          yscrollcommand proc{|first,last| vs.set first,last}
+-          setgrid 'yes'
+-          highlightthickness 0
+-          pady 2
+-          padx 3
+-          hs.command(proc{|*args| $code_text.xview(*args)})
+-          vs.command(proc{|*args| $code_text.yview(*args)})
+-        }
+-
+-        $code_text.grid('in'=>f, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
+-                        'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-        vs.grid('in'=>f, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
+-                'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++
++      $code_text.grid('in'=>f, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>0,
++                      'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
++      vs.grid('in'=>f, 'padx'=>1, 'pady'=>1, 'row'=>0, 'column'=>1,
++              'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+ #       xs.grid('in'=>f, 'padx'=>1, 'pady'=>1, 'row'=>1, 'column'=>0,
+ #               'rowspan'=>1, 'columnspan'=>1, 'sticky'=>'news')
+-        TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+-        TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
+-      }
+-    end
++      TkGrid.rowconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++      TkGrid.columnconfigure(f, 0, 'weight'=>1, 'minsize'=>0)
++    }
+ 
+     btag = TkBindTag.new
+ 

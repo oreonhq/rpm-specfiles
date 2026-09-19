@@ -1,0 +1,48 @@
+diff -up Zasx/src/gamemenu.c~ Zasx/src/gamemenu.c
+--- Zasx/src/gamemenu.c~	2014-06-16 21:29:36.000000000 +0200
++++ Zasx/src/gamemenu.c	2014-06-16 21:31:41.057900628 +0200
+@@ -370,8 +370,8 @@ void DoMenu() {
+ 				for (i = 2; i < 7; i++)
+ 					sprintf(ControlItems[i], ConfigKeyName[i], get_input_name(dev, KeyConfig[i - 2], buf, 14));
+ 
+-				sprintf(ControlItems[7], ConfigKeyName[7]);
+-				sprintf(ControlItems[8], ConfigKeyName[8]);
++				sprintf(ControlItems[7], "%s", ConfigKeyName[7]);
++				sprintf(ControlItems[8], "%s", ConfigKeyName[8]);
+ 				
+ 				CurMenu = 2;
+ 			}
+@@ -395,8 +395,8 @@ void DoMenu() {
+ 				for (i = 2; i < 7; i++)
+ 					sprintf(ControlItems[i], ConfigKeyName[i], get_input_name(dev, KeyConfig[i - 2], buf, 14));
+ 
+-				sprintf(ControlItems[7], ConfigKeyName[7]);
+-				sprintf(ControlItems[8], ConfigKeyName[8]);
++				sprintf(ControlItems[7], "%s", ConfigKeyName[7]);
++				sprintf(ControlItems[8], "%s", ConfigKeyName[8]);
+ 
+ 				CurMenu = 2;
+ 
+@@ -483,8 +483,8 @@ void DoMenu() {
+ 				for (i = 2; i < 7; i++)
+ 					sprintf(ControlItems[i], ConfigKeyName[i], get_input_name(ConfigDevice, KeyConfig[i - 2], buf, 14));
+ 
+-				sprintf(ControlItems[7], ConfigKeyName[7]);
+-				sprintf(ControlItems[8], ConfigKeyName[8]);
++				sprintf(ControlItems[7], "%s", ConfigKeyName[7]);
++				sprintf(ControlItems[8], "%s", ConfigKeyName[8]);
+ 			}
+ 		}
+ 		else if (CurMenu == 3) {
+diff -up Zasx/src/log.c~ Zasx/src/log.c
+--- Zasx/src/log.c~	2001-08-02 01:37:38.000000000 +0200
++++ Zasx/src/log.c	2014-06-16 21:30:46.019232946 +0200
+@@ -26,7 +26,7 @@ void Log(const char *format, ...) {
+ 	memset(indent, '\t', LogIndent);
+ 	indent[LogIndent] = 0;
+ 
+-	fprintf(f, indent);
++	fprintf(f, "%s", indent);
+ 	vfprintf(f, format, args);
+ 
+ 	fflush(f);

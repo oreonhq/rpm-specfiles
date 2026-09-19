@@ -1,0 +1,36 @@
+From 9ea4b562d5be69ade2e2e6c3ae24d82991ed0072 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa@fedoraproject.org>
+Date: Sun, 22 Feb 2026 16:29:19 -0500
+Subject: [PATCH] Downgrade dnf5 dependency to 5.2.17.0
+
+This makes it compatible with older releases still shipping the
+plugin configuration in /etc.
+---
+ meson.build | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index ee5dfb8..4f5b2cd 100644
+--- a/meson.build
++++ b/meson.build
+@@ -29,7 +29,7 @@ foreach cppflag : test_cppflags
+ endforeach
+ 
+ libdnf_plugin_libdir = join_paths(get_option('prefix'), get_option('libdir'), 'libdnf5', 'plugins')
+-libdnf_plugin_confdir = join_paths(get_option('prefix'), get_option('datadir'), 'dnf5', 'libdnf.plugins.conf.d')
++libdnf_plugin_confdir = join_paths(get_option('prefix'), get_option('sysconfdir'), 'dnf', 'libdnf5-plugins')
+ 
+ libdnf_plugin_version = meson.project_version().split('.')
+ 
+@@ -40,7 +40,7 @@ add_project_arguments(
+     language : 'cpp',
+ )
+ 
+-libdnf = dependency('libdnf5', version : '>=5.4.0.0')
++libdnf = dependency('libdnf5', version : '>=5.2.17.0')
+ tukit = dependency('tukit', version : '>=3.6.2')
+ 
+ libdnf_plugin_src = files(
+-- 
+2.53.0
+

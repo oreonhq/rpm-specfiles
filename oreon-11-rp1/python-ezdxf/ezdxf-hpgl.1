@@ -1,0 +1,97 @@
+.TH EZDXF\-HPGL "1" "May 2024" "" "User Commands"
+.B ezdxf\ hpgl
+View and/or convert HPGL/2 plot files to various formats
+.SH SYNOPSIS
+.B ezdxf\ hpgl
+.RB [ \-h ]
+.RB [ \-e\ \fIFORMAT ]
+.RB [ \-r\ \fR{\fB0\fR,\fB90\fR,\fB180\fR,\fB270\fR }]
+.RB [ \-x ]
+.RB [ \-y ]
+.RB [ \-m\ \fR{\fB0\fR,\fB1\fR,\fB2\fR }]
+.RB [ \-f ]
+.RB [ \-\-aci ]
+.RB [ \-\-dpi\ \fIDPI ]
+.RI [ FILE ]
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I FILE
+view and/or convert HPGL/2 plot files;
+wildcards
+.RB ( * ,
+.BR ? )
+supported in command line mode
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-e\ \fIFORMAT\fR, \fB\-\-export\ \fIFORMAT
+convert HPGL/2 plot file to
+SVG, PDF or DXF
+from the command line
+(no gui)
+.TP
+.B \-r\ \fR{\fB0\fR,\fB90\fR,\fB180\fR,\fB270\fR}, \fB\-\-rotate\ \fR{\fB0\fR,\fB90\fR,\fB180\fR,\fB270\fR}
+rotate page about
+.BR 90 ,
+.B 180
+or
+.B 270
+degrees
+(no gui)
+.TP
+.B \-x\fR, \fB\-\-mirror_x
+mirror page in x-axis direction
+(no gui)
+.TP
+.B \-y\fR, \fB\-\-mirror_y
+mirror page in y-axis direction
+(no gui)
+.TP
+.B \-m\ \fR{\fB0\fR,\fB1\fR,\fB2\fR}, \fB\-\-merge_control\ \fR{\fB0\fR,\fB1\fR,\fB2\fR}
+provides control over the order of filled polygons,
+                        0=off (print order), 1=luminance (order by luminance),
+                        2=auto (default)
+.B 0\fR=off
+(print order),
+.B 1\fR=luminance
+(order by luminance),
+.B 2\fR=auto
+(default)
+.TP
+.B \-f\fR, \fB\-\-force
+inserts the mandatory
+\(oqenter HPGL/2 mode\(cq
+escape sequence into the data stream;
+use this flag when no HPGL/2 data was found
+and you are sure the file is a HPGL/2 plot file
+.TP
+.B \-\-aci
+use pen numbers as ACI colors
+and assign colors by layer
+(DXF only)
+.TP
+.B \-\-dpi\ \fIDPI
+pixel density in dots per inch
+(PNG only)
+.SH ENVIRONMENT
+See
+.BR ezdxf (1).
+.SH FILES
+See
+.BR ezdxf (1).
+.SH NOTES
+Note that plot files are intended to be plotted on white paper.
+.SH "SEE\ ALSO"
+.BR ezdxf (1)
+.P
+.BR ezdxf\-audit (1),
+.BR ezdxf\-draw (1),
+.BR ezdxf\-view (1),
+.BR ezdxf\-browse (1),
+.BR ezdxf\-browse\-acis (1),
+.BR ezdxf\-strip (1),
+.BR ezdxf\-config (1),
+.BR ezdxf\-info (1)

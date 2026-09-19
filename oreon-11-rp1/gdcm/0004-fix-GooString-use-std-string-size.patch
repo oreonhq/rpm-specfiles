@@ -1,0 +1,42 @@
+From a7e2f8d0d2ee63012652c7f1a46ad5529ed55cad Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Wed, 21 Jan 2026 10:37:03 +0000
+Subject: [PATCH 4/4] fix(GooString): use std::string::size
+
+Required for poppler rebase to 26.01.0
+
+Reference: https://gitlab.freedesktop.org/poppler/poppler/-/commit/f6dcd06445b6b7795b4c8f654206c5aef3d79100
+---
+ Applications/Cxx/gdcminfo.cxx | 2 +-
+ Applications/Cxx/gdcmpdf.cxx  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Applications/Cxx/gdcminfo.cxx b/Applications/Cxx/gdcminfo.cxx
+index fc82e869a..d27df0911 100644
+--- a/Applications/Cxx/gdcminfo.cxx
++++ b/Applications/Cxx/gdcminfo.cxx
+@@ -297,7 +297,7 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
+       isUnicode = false;
+       i = 0;
+       }
+-    while (i < obj.getString()->getLength())
++    while (i < obj.getString()->size())
+       {
+       if (isUnicode)
+         {
+diff --git a/Applications/Cxx/gdcmpdf.cxx b/Applications/Cxx/gdcmpdf.cxx
+index 5a98d28aa..a106f2b7c 100644
+--- a/Applications/Cxx/gdcmpdf.cxx
++++ b/Applications/Cxx/gdcmpdf.cxx
+@@ -148,7 +148,7 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
+       isUnicode = false;
+       i = 0;
+       }
+-    while (i < obj.getString()->getLength())
++    while (i < obj.getString()->size())
+       {
+       if (isUnicode)
+         {
+-- 
+2.52.0
+

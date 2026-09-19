@@ -1,0 +1,24 @@
+From e24639c8f96faf98e9b0843d8d1e64a8da2df468 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20Men=C5=A1=C3=ADk?= <pemensik@redhat.com>
+Date: Mon, 19 Jan 2026 21:26:19 +0100
+Subject: [PATCH] Update CMake policy to minimal version 3.12
+
+Even RHEL8 has more recent version, it is safe to use higher minimal
+version.
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bd4232d..9f3dd36 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.12..4.0)
+ project(mdns VERSION 1.4.2 LANGUAGES C)
+ 
+ option(MDNS_BUILD_EXAMPLE "build example" ON)
+-- 
+2.52.0
+

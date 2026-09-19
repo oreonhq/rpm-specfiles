@@ -1,0 +1,61 @@
+diff -rup a/configure b/configure
+--- a/configure	2023-03-10 16:56:02.358855729 -0500
++++ b/configure	2023-03-10 18:01:48.415564391 -0500
+@@ -4001,8 +4001,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+ 	|| toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext
+@@ -5080,6 +5080,9 @@ cat >>conftest.$ac_ext <<_ACEOF
+ #if HAVE_UNISTD_H
+ # include <unistd.h>
+ #endif
++#if HAVE_STDLIB_H
++#include <stdlib.h>
++#endif
+ 
+ int
+ main ()
+@@ -5551,6 +5554,7 @@ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ 
++#include <stdio.h>
+ int
+ main ()
+ {
+@@ -5602,6 +5606,7 @@ _ACEOF
+ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
++#include <stdio.h>
+ 
+ int
+ main ()
+diff -rup a/configure.in b/configure.in
+--- a/configure.in	2023-03-10 16:56:02.359855766 -0500
++++ b/configure.in	2023-03-10 17:00:27.592711745 -0500
+@@ -136,7 +136,7 @@ AC_MSG_RESULT($enableval);
+ 
+ dnl Checks predeclared identifers of function names
+ AC_MSG_CHECKING(ANSI predeclared __func__)
+-AC_TRY_COMPILE([],
++AC_TRY_COMPILE([#include <stdio.h>],
+ [void func(void) {printf("%s\n", __func__);}],
+ 	[AC_MSG_RESULT(yes)
+ 	 pred_func_id=ansi],
+@@ -144,7 +144,7 @@ AC_TRY_COMPILE([],
+ 	 pred_func_id=no])
+ if test $pred_func_id = no; then
+ AC_MSG_CHECKING(gcc predelcared __FUNCTION__)
+-	AC_TRY_COMPILE([],
++	AC_TRY_COMPILE([#include <stdio.h>],
+ 	[void func(void) {printf("%s\n", __FUNCTION__);}],
+ 		[AC_MSG_RESULT(yes)
+ 		 pred_func_id=gcc],

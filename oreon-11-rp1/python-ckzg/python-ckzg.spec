@@ -1,0 +1,39 @@
+%global source0_hash a0c61c5fd573af0267bcb435ef0f499911289ceb05e863480779ea284a3bb928
+
+%global pypi_name ckzg
+
+Name:          python-%{pypi_name}
+Version:       2.1.7
+Release:       %autorelease
+Summary:       An implementation of the Polynomial Commitments API for EIP-4844/7594
+License:       Apache-2.0
+URL:           https://github.com/ethereum/c-kzg-4844
+VCS:           git:%{url}.git
+Source0:       %{pypi_source %pypi_name}
+# https://github.com/supranational/blst/pull/109
+Patch:         blst-0001-Support-64-bit-limbs-on-no-asm-platforms.patch
+BuildRequires: gcc
+BuildRequires: python3-pytest
+BuildSystem:   pyproject
+BuildOption(install): -l %{pypi_name}
+# https://github.com/supranational/blst
+Provides:      bundled(blst) = 0.3.16
+
+%description
+%{summary}.
+
+%package -n python3-%{pypi_name}
+Summary: %{summary}
+
+%description -n python3-%{pypi_name}
+%{summary}.
+
+%check -a
+cd src
+make test
+
+%files -n python3-%{pypi_name} -f %{pyproject_files}
+%doc README.md
+
+%changelog
+%autochangelog

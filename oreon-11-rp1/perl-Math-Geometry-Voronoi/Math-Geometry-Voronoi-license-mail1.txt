@@ -1,0 +1,254 @@
+                                                                                                                                                                                                                                                               
+Delivered-To: miro@hroncok.cz
+Received: by 10.66.254.169 with SMTP id aj9csp460014pad;
+        Wed, 12 Dec 2012 11:07:55 -0800 (PST)
+Received: by 10.194.78.162 with SMTP id c2mr3793610wjx.46.1355339274347;
+        Wed, 12 Dec 2012 11:07:54 -0800 (PST)
+Return-Path: <steven.fortune@alcatel-lucent.com>
+Received: from smail6.alcatel.fr (smail6.alcatel.fr. [64.208.49.42])
+        by mx.google.com with ESMTPS id fa6si21226355wid.27.2012.12.12.11.07.53
+        (version=TLSv1/SSLv3 cipher=OTHER);
+        Wed, 12 Dec 2012 11:07:54 -0800 (PST)
+Received-SPF: neutral (google.com: 64.208.49.42 is neither permitted nor denied by best guess record for domain of steven.fortune@alcatel-lucent.com) client-ip=64.208.49.42;
+Authentication-Results: mx.google.com; spf=neutral (google.com: 64.208.49.42 is neither permitted nor denied by best guess record for domain of steven.fortune@alcatel-lucent.com) smtp.mail=steven.fortune@alcatel-lucent.com
+Received: from FRMRSSXCHHUB02.dc-m.alcatel-lucent.com (FRMRSSXCHHUB02.dc-m.alcatel-lucent.com [135.120.45.62])
+	by smail6.alcatel.fr (8.14.3/8.14.3/ICT) with ESMTP id qBCJ7hRt024433
+	(version=TLSv1/SSLv3 cipher=RC4-MD5 bits=128 verify=NOT)
+	for <miro@hroncok.cz>; Wed, 12 Dec 2012 20:07:53 +0100
+Received: from US70UWXCHHUB01.zam.alcatel-lucent.com (135.5.2.48) by
+ FRMRSSXCHHUB02.dc-m.alcatel-lucent.com (135.120.45.62) with Microsoft SMTP
+ Server (TLS) id 8.3.213.0; Wed, 12 Dec 2012 20:07:47 +0100
+Received: from US70TWXCHMBA11.zam.alcatel-lucent.com ([169.254.5.14]) by
+ US70UWXCHHUB01.zam.alcatel-lucent.com ([135.5.2.48]) with mapi id
+ 14.02.0247.003; Wed, 12 Dec 2012 14:07:46 -0500
+From: "Fortune, Steven (Steven)" <steven.fortune@alcatel-lucent.com>
+To: Miro Hroncok <miro@hroncok.cz>
+Subject: RE: Voronoi license
+Thread-Topic: Voronoi license
+Thread-Index: AQHNwhacPerWGBXS6kGupKB75JYS3pgVs4iw
+Date: Wed, 12 Dec 2012 19:07:46 +0000
+Message-ID: <AACD007559A5A846B81A9E43B1E2B69C03D17D@US70TWXCHMBA11.zam.alcatel-lucent.com>
+References: <CAG7fsRQ8SJsfkwudjDgktTOQD0=WaN4F7jbs3x2uzei6k1=TjA@mail.gmail.com>
+	<AACD007559A5A846B81A9E43B1E2B69C01A225@US70TWXCHMBA11.zam.alcatel-lucent.com>
+	<CAG7fsRStwUSJf4UX1iTrAr0dmPvzbqLC2A-L+v9NpGLThJz_nw@mail.gmail.com>
+	<AACD007559A5A846B81A9E43B1E2B69C01A253@US70TWXCHMBA11.zam.alcatel-lucent.com>
+	<CAG7fsRS=r-A4jbYsTiRC1JdfXNu_TYzRhZ7YrA+6Nr2rAOYVHA@mail.gmail.com>
+	<CAG7fsRTnGs1TpLJA5NYz==QAWZo+CDWdgc=0Bde_-JEgTYSAsg@mail.gmail.com>
+	<AACD007559A5A846B81A9E43B1E2B69C01A631@US70TWXCHMBA11.zam.alcatel-lucent.com>
+ <CAG7fsRSXxCF7djYzNuyU0774fmw4c-JeXvGrr8bgD4RjiV87aQ@mail.gmail.com>
+In-Reply-To: <CAG7fsRSXxCF7djYzNuyU0774fmw4c-JeXvGrr8bgD4RjiV87aQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+x-originating-ip: [135.5.27.16]
+Content-Type: multipart/mixed;
+	boundary="_002_AACD007559A5A846B81A9E43B1E2B69C03D17DUS70TWXCHMBA11zam_"
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.69 on 155.132.188.84
+
+--_002_AACD007559A5A846B81A9E43B1E2B69C03D17DUS70TWXCHMBA11zam_
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Miro:
+The lawyers finally came through. The license, attached, will be distribute=
+d with the Voronoi software in the future.
+I hope it is sufficient for your needs.
+--Steve Fortune
+
+
+-----Original Message-----
+From: Miro Hroncok [mailto:miro@hroncok.cz]
+Sent: Tuesday, November 13, 2012 10:18 PM
+To: Fortune, Steven (Steven)
+Subject: Re: Voronoi license
+
+Hi again,
+hope you are ding well.
+
+Is there any progress with your lawyers?
+
+
+Thank you very much,
+Miro Hron=E8ok
+
+Jabber: miro@hroncok.cz
+Telefon: +420777974800
+
+
+2012/10/8 Fortune, Steven (Steven) <steven.fortune@alcatel-lucent.com>:
+> Hi Miro:
+> Times have changed.
+>
+> Well, since you asked your lawyers, I have to ask mine.  I don't see that=
+ there
+> will be an issue; I will try to get back to you quickly.
+> --Steve
+>
+>
+> -----Original Message-----
+> From: Miro Hroncok [mailto:miro@hroncok.cz]
+> Sent: Saturday, October 06, 2012 12:03 PM
+> To: Fortune, Steven (Steven)
+> Subject: Re: Voronoi license
+>
+> Hello again,
+> I am sorry to disturb you, but unfortunately I am not able to use you
+> parmmision to include your software in Fedora.
+>
+> This is what I got from Fedora legal mailing list:
+>
+> Unfortunately, no. His wording is inconsistent and confusing. Saying
+> something is unlicensed means that we only have the minimum permissions
+> granted by copyright law, which is not enough for us to include it in
+> Fedora. If we ignore that (which we can't), his statement of permission
+> to use the code in any way we choose is also incomplete, because "use"
+> has a specific legal meaning, and it does not include things like
+> modification or distribution (although, the latter is somewhat implied
+> in his "permission" to attempt to sell the code for a profit).
+>
+> I would ask him politely if he would be willing to permit us to
+> distribute his code under the terms of the MIT license (extremely
+> permissive terms):
+>
+>   Permission is hereby granted, free of charge, to any person obtaining
+>   a copy of this software and associated documentation files (the
+>   "Software"), to deal in the Software without restriction, including
+>   without limitation the rights to use, copy, modify, merge, publish,
+>   distribute, sublicense, and/or sell copies of the Software, and to
+>   permit persons to whom the Software is furnished to do so, subject to
+>   the following conditions:
+>
+>   The above copyright notice and this permission notice shall be
+>   included in all copies or substantial portions of the Software.
+>
+>   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+>   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+>   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+>   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+>   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+>   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+>   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+>
+> He can grant us this permission without needing to change his code,
+> since he is the copyright holder, and it will make this software
+> permissible in Fedora.
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> So I am asking you, if you could grant me a permission to distribude
+> the code under the terms of MIT license (above) - you don't have to
+> change anything in code.
+>
+> Thanks,
+> Miro Hron=E8ok
+>
+> Jabber: miro@hroncok.cz
+> Telefon: +420777974800
+>
+>
+> 2012/10/5 Miro Hron=E8ok <miro@hroncok.cz>:
+>> OK, thanks.
+>>
+>> Miro Hron=E8ok
+>>
+>> Jabber: miro@hroncok.cz
+>> Telefon: +420777974800
+>>
+>>
+>> 2012/10/5 Fortune, Steven (Steven) <steven.fortune@alcatel-lucent.com>:
+>>> It's unlicensed.  I just gave you permission to use it.
+>>> --Steve Fortune
+>>>
+>>>
+>>> -----Original Message-----
+>>> From: Miro Hroncok [mailto:miro@hroncok.cz]
+>>> Sent: Friday, October 05, 2012 8:13 AM
+>>> To: Fortune, Steven (Steven)
+>>> Subject: Re: Voronoi license
+>>>
+>>> Could you please write me an exact permission to use it and package it
+>>> under the terms of some existing licence licence?
+>>>
+>>> GNU GPL, WTFPL, MIT, BSD, I don't care. If you don't care, WTFPL would =
+be great.
+>>>
+>>> Thank you,
+>>> Miro Hron=E8ok
+>>>
+>>> Jabber: miro@hroncok.cz
+>>> Telefon: +420777974800
+>>>
+>>>
+>>> 2012/10/5 Fortune, Steven (Steven) <steven.fortune@alcatel-lucent.com>:
+>>>> Hi Miro:
+>>>> You are free to use the code in any way you choose, including attempti=
+ng to sell it for
+>>>> a profit (I think people have).  The code was written long before lice=
+nses became standardized.
+>>>> Best regards,
+>>>> Steve Fortune
+>>>>
+>>>>
+>>>> -----Original Message-----
+>>>> From: Miro Hroncok [mailto:miro@hroncok.cz]
+>>>> Sent: Thursday, October 04, 2012 6:03 PM
+>>>> To: Fortune, Steven (Steven)
+>>>> Subject: Voronoi license
+>>>>
+>>>> Hello,
+>>>> I am currently packaging this perl module for Fedora:
+>>>> http://search.cpan.org/~samtregar/Math-Geometry-Voronoi-1.3/lib/Math/G=
+eometry/Voronoi.pm
+>>>>
+>>>> As the License part says:
+>>>>
+>>>>> As far as I can tell the underlying C code used here never had a lice=
+nse attached to it, or if it did I couldn't find any trace of it. If this w=
+orries you please contact Steve and Derek through the links above.
+>>>>
+>>>> As for a package in Fedora, I need the know the license, or the
+>>>> package cannot be used, could you please specify it at least in mail?
+>>>> Thank you very much.
+>>>>
+>>>> Any GPL compatible licese will do the job, as the Perl module is
+>>>> licensed as Perl itselfs (GPL or Artistic).
+>>>>
+>>>>
+>>>> Thank you very much for your help,
+>>>> Miro Hron=E8ok
+>>>>
+>>>> Jabber: miro@hroncok.cz
+>>>> Telefon: +420777974800
+
+--_002_AACD007559A5A846B81A9E43B1E2B69C03D17DUS70TWXCHMBA11zam_
+Content-Type: text/plain; name="license.txt"
+Content-Description: license.txt
+Content-Disposition: attachment; filename="license.txt"; size=1111;
+	creation-date="Thu, 06 Dec 2012 20:08:45 GMT";
+	modification-date="Wed, 12 Dec 2012 16:25:53 GMT"
+Content-Transfer-Encoding: base64
+
+Q29weXJpZ2h0IChjKSA8MTk4Nz4gPEFsY2F0ZWwtTHVjZW50LCBhcyBzdWNjZXNzb3IgdG8gQVQm
+VCBCZWxsIExhYm9yYXRvcmllcywgSW5jLj4NClBlcm1pc3Npb24gaXMgaGVyZWJ5IGdyYW50ZWQs
+IGZyZWUgb2YgY2hhcmdlLCB0byBhbnkgcGVyc29uIG9idGFpbmluZyBhIGNvcHkgb2YgdGhpcyBz
+b2Z0d2FyZSBhbmQgYXNzb2NpYXRlZCBkb2N1bWVudGF0aW9uIGZpbGVzICh0aGUgIlNvZnR3YXJl
+IiksIHRvIGRlYWwgaW4gdGhlIFNvZnR3YXJlIHdpdGhvdXQgcmVzdHJpY3Rpb24sIGluY2x1ZGlu
+ZyB3aXRob3V0IGxpbWl0YXRpb24gdGhlIHJpZ2h0cyB0byB1c2UsIGNvcHksIG1vZGlmeSwgbWVy
+Z2UsIHB1Ymxpc2gsIGRpc3RyaWJ1dGUsIHN1YmxpY2Vuc2UsIGFuZC9vciBzZWxsIGNvcGllcyBv
+ZiB0aGUgU29mdHdhcmUsIGFuZCB0byBwZXJtaXQgcGVyc29ucyB0byB3aG9tIHRoZSBTb2Z0d2Fy
+ZSBpcyBmdXJuaXNoZWQgdG8gZG8gc28sIHN1YmplY3QgdG8gdGhlIGZvbGxvd2luZyBjb25kaXRp
+b25zOg0KVGhlIGFib3ZlIGNvcHlyaWdodCBub3RpY2UgYW5kIHRoaXMgcGVybWlzc2lvbiBub3Rp
+Y2Ugc2hhbGwgYmUgaW5jbHVkZWQgaW4gYWxsIGNvcGllcyBvciBzdWJzdGFudGlhbCBwb3J0aW9u
+cyBvZiB0aGUgU29mdHdhcmUuDQpUSEUgU09GVFdBUkUgSVMgUFJPVklERUQgIkFTIElTIiwgV0lU
+SE9VVCBXQVJSQU5UWSBPRiBBTlkgS0lORCwgRVhQUkVTUyBPUiBJTVBMSUVELCBJTkNMVURJTkcg
+QlVUIE5PVCBMSU1JVEVEIFRPIFRIRSBXQVJSQU5USUVTIE9GIE1FUkNIQU5UQUJJTElUWSwgRklU
+TkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UgQU5EIE5PTklORlJJTkdFTUVOVC4gSU4gTk8g
+RVZFTlQgU0hBTEwgVEhFIEFVVEhPUlMgT1IgQ09QWVJJR0hUIEhPTERFUlMgQkUgTElBQkxFIEZP
+UiBBTlkgQ0xBSU0sIERBTUFHRVMgT1IgT1RIRVIgTElBQklMSVRZLCBXSEVUSEVSIElOIEFOIEFD
+VElPTiBPRiBDT05UUkFDVCwgVE9SVCBPUiBPVEhFUldJU0UsIEFSSVNJTkcgRlJPTSwgT1VUIE9G
+IE9SIElOIENPTk5FQ1RJT04gV0lUSCBUSEUgU09GVFdBUkUgT1IgVEhFIFVTRSBPUiBPVEhFUiBE
+RUFMSU5HUyBJTiBUSEUgU09GVFdBUkUuDQoNCg==
+
+--_002_AACD007559A5A846B81A9E43B1E2B69C03D17DUS70TWXCHMBA11zam_--

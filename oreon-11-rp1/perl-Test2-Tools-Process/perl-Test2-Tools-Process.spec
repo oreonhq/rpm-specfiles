@@ -1,0 +1,144 @@
+%global source0_hash 859fb75ff4b5c87323d814b21809b25ccd8c671eef54d4c7e16d2c8f12930744
+
+# Test with executing real programs
+%bcond_without perl_Test2_Tools_Process_enables_extended_test
+
+Name:           perl-Test2-Tools-Process
+Version:        0.07
+Release:        9%{?dist}
+Summary:        Unit tests for code that calls exit, exec, system or qx()
+License:        GPL-1.0-or-later OR Artistic-1.0-Perl
+URL:            https://metacpan.org/release/Test2-Tools-Process
+Source0:        https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Test2-Tools-Process-%{version}.tar.gz
+BuildArch:      noarch
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  perl(:VERSION) >= 5.10
+BuildRequires:  perl(Config)
+BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+# Run-time:
+BuildRequires:  perl(base)
+BuildRequires:  perl(Capture::Tiny)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Class::Tiny)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(Ref::Util)
+BuildRequires:  perl(Return::MultiLevel)
+BuildRequires:  perl(Test2::API) >= 1.302015
+BuildRequires:  perl(Test2::Compare) >= 0.000121
+BuildRequires:  perl(Test2::Compare::Array) >= 0.000121
+BuildRequires:  perl(Test2::Compare::Custom) >= 0.000121
+BuildRequires:  perl(Test2::Compare::Number) >= 0.000121
+BuildRequires:  perl(Test2::Compare::String) >= 0.000121
+BuildRequires:  perl(Test2::Compare::Wildcard) >= 0.000121
+BuildRequires:  perl(Test2::Tools::Compare) >= 0.000121
+%if %{with perl_Test2_Tools_Process_enables_extended_test}
+BuildRequires:  bash
+# coreutils for /usr/bin/true
+%endif
+# Tests:
+BuildRequires:  perl(Test::More) >= 0.98
+BuildRequires:  perl(Test2::V0) >= 0.000121
+Requires:       perl(Config)
+Requires:       perl(Test2::API) >= 1.302015
+Requires:       perl(Test2::Compare) >= 0.000121
+Requires:       perl(Test2::Compare::Array) >= 0.000121
+Requires:       perl(Test2::Compare::Custom) >= 0.000121
+Requires:       perl(Test2::Compare::Number) >= 0.000121
+Requires:       perl(Test2::Compare::String) >= 0.000121
+Requires:       perl(Test2::Compare::Wildcard) >= 0.000121
+Requires:       perl(Test2::Tools::Compare) >= 0.000121
+# Replaces perl-Test-Exec
+Provides:       perl-Test-Exec = %{version}-%{release}
+Obsoletes:      perl-Test-Exec < 0.04-12
+
+# Remove under-specified dependencies
+%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((Test::More|Test2::API|Test2::Compare(|::Array|::Custom|::Number|::String|::Wildcard)|Test2::Tools::Compare|Test2::V0)\\)$
+
+%description
+This set of testing tools is intended for writing unit tests for code that
+interacts with other processes without using real processes that might have
+unwanted side effects. It also lets you test code that exits program flow
+without actually terminating your test. So far it allows you to test and/or
+mock exit, exec, system, readpipe and qx//. Other process related tests
+will be added in the future.
+
+%package tests
+Summary:        Tests for %{name}
+Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       perl-Test-Harness
+Requires:       perl(Test::More) >= 0.98
+Requires:       perl(Test2::V0) >= 0.000121
+%if %{with perl_Test2_Tools_Process_enables_extended_test}
+Requires:       bash
+# coreutils for /usr/bin/true
+Requires:       coreutils
+%endif
+
+%description tests
+Tests from %{name}. Execute them
+with "%{_libexecdir}/%{name}/test".
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%setup -q -n Test2-Tools-Process-%{version}
+%if !%{with perl_Test2_Tools_Process_enables_extended_test}
+rm t/test2_tools_process__live.t
+perl -i -ne 'print $_ unless m{\A\Qt/test2_tools_process__live.t\E\b}' MANIFEST
+%endif
+# Help generators to recognize Perl scripts
+for F in t/*.t; do
+    perl -i -MConfig -ple 'print $Config{startperl} if $. == 1 && !s{\A#!\s*perl}{$Config{startperl}}' "$F"
+    chmod +x "$F"
+done
+
+%build
+perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
+%{make_build}
+
+%install
+%{make_install}
+%{_fixperms} %{buildroot}/*
+# Install tests
+mkdir -p %{buildroot}%{_libexecdir}/%{name}
+cp -a t %{buildroot}%{_libexecdir}/%{name}
+cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
+#!/bin/sh
+unset CIPSOMETHING RETURN_MULTILEVEL_DEBUG
+%if %{with perl_Test2_Tools_Process_enables_extended_test}
+export CIPSOMETHING=true
+%endif
+cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
+EOF
+chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+
+%check
+unset CIPSOMETHING RETURN_MULTILEVEL_DEBUG
+%if %{with perl_Test2_Tools_Process_enables_extended_test}
+export CIPSOMETHING=true
+%endif
+export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
+make test
+
+%files
+%license LICENSE
+%doc Changes Changes.Test-Exec README
+%dir %{perl_vendorlib}/Test
+%{perl_vendorlib}/Test/Exec.pm
+%dir %{perl_vendorlib}/Test2
+%dir %{perl_vendorlib}/Test2/Tools
+%{perl_vendorlib}/Test2/Tools/Process.pm
+%{_mandir}/man3/Test::Exec.*
+%{_mandir}/man3/Test2::Tools::Process.*
+
+%files tests
+%{_libexecdir}/%{name}
+
+%changelog
+%autochangelog

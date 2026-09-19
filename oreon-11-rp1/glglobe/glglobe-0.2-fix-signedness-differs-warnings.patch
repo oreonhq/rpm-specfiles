@@ -1,0 +1,29 @@
+--- glglobe/globe.c	2001-09-23 02:33:13.000000000 +1000
++++ glglobe-patched/globe.c	2006-05-31 23:31:25.000000000 +1000
+@@ -416,7 +416,7 @@
+     int globe_id;
+     int allw,allh,alld;
+     char * alldata;
+-    static int texbind[10000];
++    static unsigned int texbind[10000];
+ 
+     load_png( filename, &allw, &allh, &alld, &alldata );
+ 
+@@ -497,7 +497,7 @@
+     int globe_id;
+     int allw,allh,alld;
+     unsigned char * alldata;
+-    static int texbind[10000];
++    static unsigned int texbind[10000];
+ 
+     if      ( strcasecmp(&filename[strlen(filename)-4],".jpg")==0 ){
+         allw=1536;  allh=768;
+@@ -633,7 +633,7 @@
+     int allw,allh,alld;
+     int nth, nph;
+     unsigned char * alldata;
+-    static int texbind[10000];
++    static unsigned int texbind[10000];
+     static int texnr=0;
+     double x_new,y_new, x_d,y_d, val;
+     int ic, allw_new, allh_new;

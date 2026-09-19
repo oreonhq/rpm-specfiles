@@ -1,0 +1,37 @@
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/core/SamplesAccumulator.cpp bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/core/SamplesAccumulator.cpp
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/core/SamplesAccumulator.cpp	2018-06-10 17:18:29.000000000 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/core/SamplesAccumulator.cpp	2025-10-19 18:01:23.607137232 +0200
+@@ -9,8 +9,10 @@
+ #include "SamplesAccumulator.h"
+ #include "CovarianceMatrix.h"
+ 
++#include <math.h>
+ 
+ #include <cassert>
++#include <iomanip>
+ 
+ using namespace std;
+ 
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/core/SpikeRemovalFilter.cpp bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/core/SpikeRemovalFilter.cpp
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/core/SpikeRemovalFilter.cpp	2018-06-10 17:18:29.000000000 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/core/SpikeRemovalFilter.cpp	2025-10-19 18:01:23.607405297 +0200
+@@ -6,6 +6,8 @@
+ // All rights reserved. Use of this source code is governed by a
+ // BSD-style license that can be found in the LICENSE.txt file.
+ 
++#include <math.h>
++
+ #include "SpikeRemovalFilter.h"
+ 
+ #include "DeepImage.h"
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/io/ParametersIO.cpp bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/io/ParametersIO.cpp
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/io/ParametersIO.cpp	2018-06-10 17:18:29.000000000 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/io/ParametersIO.cpp	2025-10-19 18:01:23.607624433 +0200
+@@ -13,6 +13,7 @@
+ #include "json.hpp"
+ 
+ #include <iostream>
++#include <iomanip>
+ #include <fstream>
+ 
+ using namespace std;

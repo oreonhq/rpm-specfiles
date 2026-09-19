@@ -1,0 +1,32 @@
+--- sdljava-0.9.1/src/org/gljava/opengl/native/ftgl/post-process.rb~	2005-02-20 23:19:13.000000000 +0100
++++ sdljava-0.9.1/src/org/gljava/opengl/native/ftgl/post-process.rb	2012-07-26 12:45:18.738168697 +0200
+@@ -1,7 +1,7 @@
+ #!/usr/bin/ruby -w
+ 
+ require "find"
+-require "ftools"
++require "fileutils"
+ 
+ # temporary hack until I can figure out a better way to do this
+ #    process the given files, change the methods names to start
+@@ -101,16 +101,16 @@ Find.find(".") do |path|
+ 
+   f = File.new("#{path}.tmp", "w+")
+   
+-  f << lines
++  f.puts(lines)
+   
+-  f << post if not post == nil
++  f.puts(post) if not post == nil
+ 
+-  f << "\n}"
++  f.puts("\n}")
+ 
+   f.close
+ 
+   # move it to the actual file now
+-  File.move("#{path}.tmp", path)
++  FileUtils.move("#{path}.tmp", path)
+ end
+ 
+ 

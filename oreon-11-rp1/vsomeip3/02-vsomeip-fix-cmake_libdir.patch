@@ -1,0 +1,47 @@
+diff -up ./CMakeLists.txt.fix_libdir ./CMakeLists.txt
+--- ./CMakeLists.txt.fix_libdir	2025-08-18 09:38:17.000000000 -0400
++++ ./CMakeLists.txt	2025-08-26 13:32:23.642057100 -0400
+@@ -31,14 +31,14 @@ endif()
+ ###################################################################################################
+ 
+ # Offer the user the choice of overriding the installation directories
+-set (INSTALL_LIB_DIR lib CACHE PATH "Installation directory for libraries")
++set (INSTALL_LIB_DIR lib64 CACHE PATH "Installation directory for libraries")
+ set (INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
+ set (INSTALL_INCLUDE_DIR include CACHE PATH "Installation directory for header files")
+ 
+ if (WIN32 AND NOT CYGWIN)
+     set (DEF_INSTALL_CMAKE_DIR CMake)
+ else ()
+-    set (DEF_INSTALL_CMAKE_DIR lib/cmake/${VSOMEIP_NAME})
++    set (DEF_INSTALL_CMAKE_DIR lib64/cmake/${VSOMEIP_NAME})
+ endif ()
+ 
+ set (INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH "Installation directory for CMake files")
+@@ -543,7 +543,7 @@ export (PACKAGE ${VSOMEIP_COMPAT_NAME})
+ configure_file (vsomeipConfig.cmake.in "${PROJECT_BINARY_DIR}/vsomeipConfig.cmake" @ONLY)
+ configure_file (vsomeipConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/vsomeipConfigVersion.cmake" @ONLY)
+ 
+-set (COMPAT_INSTALL_CMAKE_DIR "lib/cmake/${VSOMEIP_COMPAT_NAME}")
++set (COMPAT_INSTALL_CMAKE_DIR "lib64/cmake/${VSOMEIP_COMPAT_NAME}")
+ 
+ install (
+     EXPORT vsomeipTargets
+@@ -560,7 +560,7 @@ install (
+ )
+ 
+ configure_file(vsomeip.pc.in ${PROJECT_BINARY_DIR}/vsomeip.pc @ONLY)
+-install(FILES ${PROJECT_BINARY_DIR}/vsomeip.pc DESTINATION lib/pkgconfig)
++install(FILES ${PROJECT_BINARY_DIR}/vsomeip.pc DESTINATION lib64/pkgconfig)
+ 
+ endif ()
+ 
+@@ -648,7 +648,7 @@ endif()
+ # create pkg-config file
+ if(NOT WIN32)
+         configure_file(${VSOMEIP_NAME}.pc.in ${PROJECT_BINARY_DIR}/${VSOMEIP_NAME}.pc @ONLY)
+-        install(FILES ${PROJECT_BINARY_DIR}/${VSOMEIP_NAME}.pc DESTINATION lib/pkgconfig)
++        install(FILES ${PROJECT_BINARY_DIR}/${VSOMEIP_NAME}.pc DESTINATION lib64/pkgconfig)
+ endif()
+ 
+ ##############################################################################

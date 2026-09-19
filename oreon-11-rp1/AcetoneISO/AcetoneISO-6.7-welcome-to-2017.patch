@@ -1,0 +1,460 @@
+diff -up AcetoneISO-6.7/AcetoneISO-6.7/AcetoneISO.kmdr.fixup AcetoneISO-6.7/AcetoneISO-6.7/AcetoneISO.kmdr
+--- AcetoneISO-6.7/AcetoneISO-6.7/AcetoneISO.kmdr.fixup	2017-06-02 11:35:28.853808719 -0400
++++ AcetoneISO-6.7/AcetoneISO-6.7/AcetoneISO.kmdr	2017-06-02 11:37:09.315144669 -0400
+@@ -492,7 +492,7 @@ then
+ 
+ 			else
+ 
+-			kdesu -n -d -i /usr/share/pixmaps/aiso.png "umount $HOME/Desktop/Acetone-Mounted" 
++			kdesu -n -d -i /usr/share/pixmaps/aiso.png -c "umount $HOME/Desktop/Acetone-Mounted" 
+ 			rm -r -f $HOME/Desktop/Acetone-Mounted
+ 						if test -e $HOME/Desktop/Acetone-Mounted
+ 						then kdialog --error "Sorry, AcetoneISO wasn't able to Umount ~/Desktop/Acetone-Mounted/"
+@@ -507,7 +507,7 @@ then
+ 
+    				mkdir $HOME/Desktop/Acetone-Mounted &amp;&amp;  
+ 
+-  				kdesu -n -d -i /usr/share/pixmaps/aiso.png "mount -o loop -t iso9660 $HOME/Desktop/*.iso $HOME/Desktop/Acetone-Mounted" 
++  				kdesu -n -d -i /usr/share/pixmaps/aiso.png -c "mount -o loop -t iso9660 $HOME/Desktop/*.iso $HOME/Desktop/Acetone-Mounted" 
+ 							if test -w $HOME/Desktop/Acetone-Mounted
+ 							then kdialog --error "Sorry, AcetoneISO wasn't able to Mount the Image"
+ 							rm -r -f $HOME/Desktop/Acetone-Mounted
+@@ -706,12 +706,12 @@ fi</string>
+ if test -e /opt/acetoneiso/bin/poweriso
+ then
+ 
+-OPENFILE=`kdialog --icon /usr/share/pixmaps/aiso.png --caption "Select Image to Extract" --getopenfilename $HOME/ "*.iso *.bin *.daa *.mdf *.nrg *.img"`
++OPENFILE=`kdialog --icon /usr/share/pixmaps/aiso.png --title "Select Image to Extract" --getopenfilename $HOME/ "*.iso *.bin *.daa *.mdf *.nrg *.img"`
+ 		if test -z "$OPENFILE"
+ 		then exit
+ 		else
+ 
+-		VAROUT=`kdialog --caption "Select Folder where the ISO will be extracted" --getexistingdirectory $HOME/ `
++		VAROUT=`kdialog --title "Select Folder where the ISO will be extracted" --getexistingdirectory $HOME/ `
+ 			if test -z "$VAROUT"
+ 			then exit
+ 			else
+@@ -774,7 +774,7 @@ exit
+                     <string>#!/bin/bash
+ 
+ rm -r -f $HOME/acetoneiso-browse
+-VARIN=`kdialog --icon /usr/share/pixmaps/aiso.png --caption "Select ISO to Browse" --getopenfilename $HOME/ "*.iso *.daa *.bin *.mdf *.nrg *.img" `
++VARIN=`kdialog --icon /usr/share/pixmaps/aiso.png --title "Select ISO to Browse" --getopenfilename $HOME/ "*.iso *.daa *.bin *.mdf *.nrg *.img" `
+  if test -z "$VARIN"
+  then exit
+  else
+@@ -828,13 +828,13 @@ exit
+  
+ 
+ 
+-VARIN=`kdialog --icon /usr/share/pixmaps/aiso.png --caption "Select ISO to be Mounted" --getopenfilename $HOME/ "*.iso *.mdf *.nrg"`
++VARIN=`kdialog --icon /usr/share/pixmaps/aiso.png --title "Select ISO to be Mounted" --getopenfilename $HOME/ "*.iso *.mdf *.nrg"`
+ 
+ if test -z "$VARIN"
+ then exit
+ else
+ 
+-  VAROUT=`kdialog --icon /usr/share/pixmaps/aiso.png --caption "Select Folder to Mount" --getexistingdirectory $HOME/ `
++  VAROUT=`kdialog --icon /usr/share/pixmaps/aiso.png --title "Select Folder to Mount" --getexistingdirectory $HOME/ `
+   if test -z "$VAROUT"
+   then exit
+   else
+@@ -844,7 +844,7 @@ else
+ 
+   	if `kdialog --title "AcetoneISO warning dialog" --warningyesno "ATTENTION!\nThere is already an ISO mounted in $VAROUT. Do you want to Umount it so I can Mount it for You?"`
+   	then
+-  	 kdesu -n -d -i /usr/share/pixmaps/aiso.png "umount '$VAROUT' &amp;&amp; mount -o loop -t iso9660 '$VARIN' '$VAROUT'" 
++  	 kdesu -n -d -i /usr/share/pixmaps/aiso.png -c "umount '$VAROUT' &amp;&amp; mount -o loop -t iso9660 '$VARIN' '$VAROUT'" 
+ 								if test -w "$VAROUT"
+ 								then kdialog --error "Sorry, AcetoneISO wasn't able to Mount the Image"
+ 								else
+@@ -858,7 +858,7 @@ else
+ 
+ 			else
+ 
+-    		        kdesu -n -d -i /usr/share/pixmaps/aiso.png "mount -o loop -t iso9660 '$VARIN' '$VAROUT'"
++    		        kdesu -n -d -i /usr/share/pixmaps/aiso.png -c "mount -o loop -t iso9660 '$VARIN' '$VAROUT'"
+ 					if test -w "$VAROUT"
+ 					then kdialog --error "Sorry, AcetoneISO wasn't able to Mount the Image"
+ 					else
+@@ -896,17 +896,17 @@ exit</string>
+ 
+ 
+ 
+-VAROUT=`kdialog --caption "Select Folder to Unmount" --getexistingdirectory $HOME/ `
++VAROUT=`kdialog --title "Select Folder to Unmount" --getexistingdirectory $HOME/ `
+ if test -z "$VAROUT"
+ then exit
+ else
+ 
+ if test -w "$VAROUT"
+-then kdialog --caption "AcetoneISO Message" --msgbox "The folder $VAROUT is not mounted by any ISO!"
++then kdialog --title "AcetoneISO Message" --msgbox "The folder $VAROUT is not mounted by any ISO!"
+ exit 
+ else
+ 
+-kdesu -n -d -i /usr/share/pixmaps/aiso.png "umount '$VAROUT'" 
++kdesu -n -d -i /usr/share/pixmaps/aiso.png -c "umount '$VAROUT'" 
+ 					
+ 		if test -w "$VAROUT"
+ 		then
+@@ -924,7 +924,7 @@ kdesu -n -d -i /usr/share/pixmaps/aiso.p
+ 	exit
+ 	fi
+ 		else
+-		kgialog --caption "AcetoneISO Message" --sorry "Sorry, AcetoneISO wasn't able to Umount the folder"
++		kdialog --title "AcetoneISO Message" --sorry "Sorry, AcetoneISO wasn't able to Umount the folder"
+ 		fi
+ 					
+ 
+@@ -1222,14 +1222,14 @@ exit))
+ 
+ if test -e /dev/dvd.acetone
+ then
+-kdialog --caption "AcetoneISO ERROR Message!" --error "ATTENTION!\nYou have already an ISO DVD Mounted.You MUST Unmount it using the Unmount DVD-Movie ISO Button."
++kdialog --title "AcetoneISO ERROR Message!" --error "ATTENTION!\nYou have already an ISO DVD Mounted.You MUST Unmount it using the Unmount DVD-Movie ISO Button."
+ exit
+ else
+ 
+-kdialog --caption "AcetoneISO Message" --msgbox "Before Mounting be sure there isn't CD/DVD in Device!\n After viewing Your DVD-Movie make sure You Unmount the ISO using the Unmount DVD-Movie ISO option before inserting any media in device!"
++kdialog --title "AcetoneISO Message" --msgbox "Before Mounting be sure there isn't CD/DVD in Device!\n After viewing Your DVD-Movie make sure You Unmount the ISO using the Unmount DVD-Movie ISO option before inserting any media in device!"
+ 
+ 
+-VARIN=`kdialog --caption "Select ISO to be Mounted" --getopenfilename $HOME/ "*.iso *.nrg *.mdf"`
++VARIN=`kdialog --title "Select ISO to be Mounted" --getopenfilename $HOME/ "*.iso *.nrg *.mdf"`
+ 
+ if test -z "$VARIN"
+ then exit
+@@ -1237,7 +1237,7 @@ else
+ 
+ 
+ 
+-kdesu -n -d -i /usr/share/pixmaps/aiso.png "cd /dev/ &amp;&amp; mv dvd dvd.acetone &amp;&amp; mkdir dvd &amp;&amp; mount -o loop -t iso9660 '$VARIN' /dev/dvd"
++kdesu -n -d -i /usr/share/pixmaps/aiso.png -c "cd /dev/ &amp;&amp; mv dvd dvd.acetone &amp;&amp; mkdir dvd &amp;&amp; mount -o loop -t iso9660 '$VARIN' /dev/dvd"
+ 
+ 			if test -e /dev/dvd.acetone
+ 			then
+@@ -1247,7 +1247,7 @@ kdesu -n -d -i /usr/share/pixmaps/aiso.p
+ fi
+ 			if test -z $PLAYER
+ 			then
+-kdialog --caption "AcetoneISO Message" --sorry "ATTENTION! Your ISO DVD has been Mounted anyways.\nIf this wasn't what You wanted, be sure to Unmount it using the Unmount DVD-Movie ISO button"
++kdialog --title "AcetoneISO Message" --sorry "ATTENTION! Your ISO DVD has been Mounted anyways.\nIf this wasn't what You wanted, be sure to Unmount it using the Unmount DVD-Movie ISO button"
+ else
+ 
+ 				if test $PLAYER = kaffeine
+@@ -1312,7 +1312,7 @@ if test -e /dev/dvd.acetone
+ 
+ then
+ 
+-kdesu -n -d -i /usr/share/pixmaps/aiso.png "umount /dev/dvd/ &amp;&amp; cd /dev/ &amp;&amp; rm -rf dvd &amp;&amp; mv dvd.acetone dvd" &amp;&amp;
++kdesu -n -d -i /usr/share/pixmaps/aiso.png -c "umount /dev/dvd/ &amp;&amp; cd /dev/ &amp;&amp; rm -rf dvd &amp;&amp; mv dvd.acetone dvd" &amp;&amp;
+ 
+ kdialog --msgbox "DVD ISO Succesfully Unmounted!"
+ 
+@@ -1636,7 +1636,7 @@ exit</string>
+                             <string>#!/bin/bash
+ 
+ 
+-OPENFILE=`kdialog --caption "Select Image to Generate CUE" --getopenfilename $HOME/ "*.img *.bin"`
++OPENFILE=`kdialog --title "Select Image to Generate CUE" --getopenfilename $HOME/ "*.img *.bin"`
+ if test -z "$OPENFILE"
+ then exit
+ else
+@@ -1705,7 +1705,7 @@ exit</string>
+ 
+ umount /dev/cdrom
+ 
+-SAVE=`kdialog --caption "Select where to Save the PSX Image and Name!" --getsavefilename $HOME/ `
++SAVE=`kdialog --title "Select where to Save the PSX Image and Name!" --getsavefilename $HOME/ `
+ if test -z "$SAVE"
+ then exit
+ else
+@@ -1767,11 +1767,11 @@ exit</string>
+                             <string>#!/bin/bash
+ if test -e /opt/acetoneiso/bin/mdf2iso
+ then
+-OPENFILE=`kdialog --caption "Select Image to Convert" --getopenfilename $HOME/ "*.mdf *.img *.bin *.nrg *.cdi *.b5i *.bwi *.xbx *.pdi *.daa"`
++OPENFILE=`kdialog --title "Select Image to Convert" --getopenfilename $HOME/ "*.mdf *.img *.bin *.nrg *.cdi *.b5i *.bwi *.xbx *.pdi *.daa"`
+ 											if test -z "$OPENFILE"
+ 											then exit
+ 											else
+-SAVE=`kdialog --caption "Select where to Save ISO and Name!" --getsavefilename $HOME/ "*.iso"`
++SAVE=`kdialog --title "Select where to Save ISO and Name!" --getsavefilename $HOME/ "*.iso"`
+ 													if test -z "$SAVE"
+ 													then exit
+ 													else
+@@ -1826,7 +1826,7 @@ fi	fi	fi	fi	fi	fi	fi	fi	fi	fi
+ 									
+ 											fi		fi
+ else
+-	kdialog --caption "AcetoneISO2 Message" --error "Sorry, the Converters Haven't been found in /opt/acetoneiso/bin/"
++	kdialog --title "AcetoneISO2 Message" --error "Sorry, the Converters Haven't been found in /opt/acetoneiso/bin/"
+ fi
+ exit 
+ </string>
+@@ -1935,7 +1935,7 @@ exit
+ 
+ 
+ 
+-OPENFILE=`kdialog --caption "Select Image to Compress" --getopenfilename $HOME/ "*.iso *.bin *.mdf *.nrg *.img *.daa"`
++OPENFILE=`kdialog --title "Select Image to Compress" --getopenfilename $HOME/ "*.iso *.bin *.mdf *.nrg *.img *.daa"`
+ 
+ if test -z "$OPENFILE"
+ 	then exit
+@@ -1946,7 +1946,7 @@ if test -z "$OPENFILE"
+ 
+ 		if test -e /usr/bin/7z
+ 		then
+-		SAVE7Z=`kdialog --caption "Select where to Save Compressed ISO!" --getsavefilename $HOME/ "*.7z"`
++		SAVE7Z=`kdialog --title "Select where to Save Compressed ISO!" --getsavefilename $HOME/ "*.7z"`
+ 		if test -z "$SAVE7Z"
+ 		then exit
+ 		else
+@@ -1969,7 +1969,7 @@ sevz=`kdialog --combobox "Select a Metho
+ 		fi
+ 		exit
+ 		else
+-		kdialog --caption "AcetoneISO" --sorry "ATTENTION!\n The file 7z hasn't been found in Your System. Install p7zip."
++		kdialog --title "AcetoneISO" --sorry "ATTENTION!\n The file 7z hasn't been found in Your System. Install p7zip."
+ 		fi
+ 
+ 
+@@ -2035,12 +2035,12 @@ exit</string>
+ 
+ 
+ 
+-OPENFILE7=`kdialog --caption "Select file to Extract" --getopenfilename $HOME/ "*.7z"`
++OPENFILE7=`kdialog --title "Select file to Extract" --getopenfilename $HOME/ "*.7z"`
+ if test -z "$OPENFILE7"
+ 	then exit
+ 	else
+ 
+-  	VAROUT7=`kdialog --caption "Select where to Extract ISO" --getexistingdirectory $HOME/ `
++  	VAROUT7=`kdialog --title "Select where to Extract ISO" --getexistingdirectory $HOME/ `
+ 		if test -z "$VAROUT7"
+ 		then exit
+ 		else
+@@ -2102,11 +2102,11 @@ exit</string>
+                             <stringlist>
+                                 <string>#!/bin/bash
+ 
+-kdialog  --caption "AcetoneISO Warning Message" --msgbox "NOTE:This tool only works for normal DATA CD. It won't work with Audio CD and Game CopyProtected cd's\nWARNING!This operation may take some time depending on your CD/DVD dimension" &amp;&amp;
++kdialog  --title "AcetoneISO Warning Message" --msgbox "NOTE:This tool only works for normal DATA CD. It won't work with Audio CD and Game CopyProtected cd's\nWARNING!This operation may take some time depending on your CD/DVD dimension" &amp;&amp;
+ 
+-kdesu "umount /dev/cdrom" 
++kdesu -c "umount /dev/cdrom" 
+ 
+-VARIN=`kdialog --caption "Select where to Save ISO and Name!" --getsavefilename $HOME/ "*.iso"`
++VARIN=`kdialog --title "Select where to Save ISO and Name!" --getsavefilename $HOME/ "*.iso"`
+ if test -z "$VARIN"
+ then exit
+ else
+@@ -2173,12 +2173,12 @@ exit</string>
+ 
+ 
+ 
+-VARIN=`kdialog --caption "Select Folder to be Converted" --getexistingdirectory $HOME/ `
++VARIN=`kdialog --title "Select Folder to be Converted" --getexistingdirectory $HOME/ `
+ 
+ 	if test -z "$VARIN"
+ 	then exit
+ 	else
+-	VAROUT=`kdialog --caption "Select where to Save ISO and Name!" --getsavefilename $HOME/ "*.iso"`
++	VAROUT=`kdialog --title "Select where to Save ISO and Name!" --getsavefilename $HOME/ "*.iso"`
+ 	
+ 
+ 		if test -z "$VAROUT"
+@@ -2357,9 +2357,9 @@ exit
+                                     <string>#!/bin/bash
+ 
+ 
+-kdialog  --caption "AcetoneISO Warning Message" --msgbox "WARNING!This operation may take some time \n depending on your file dimension" &amp;&amp;
++kdialog  --title "AcetoneISO Warning Message" --msgbox "WARNING!This operation may take some time \n depending on your file dimension" &amp;&amp;
+ 
+-DIALOG=`kdialog --caption "AcetoneISO MD5SUM" --getopenfilename $HOME/ "*.iso *.bin *.dat *.mdf *.nrg *.img *.daa"`
++DIALOG=`kdialog --title "AcetoneISO MD5SUM" --getopenfilename $HOME/ "*.iso *.bin *.dat *.mdf *.nrg *.img *.daa"`
+ 
+ 	if test -z "$DIALOG"
+ 	then exit
+@@ -2367,7 +2367,7 @@ DIALOG=`kdialog --caption "AcetoneISO MD
+ 
+ 	VAR=`md5sum -b "$DIALOG"` &amp;&amp;
+ 
+-	kdialog --caption "AcetoneISO MD5SUM" --msgbox "md5sum for the selected image is:\n $VAR"
++	kdialog --title "AcetoneISO MD5SUM" --msgbox "md5sum for the selected image is:\n $VAR"
+ 	fi
+ exit</string>
+                                 </stringlist>
+@@ -2423,7 +2423,7 @@ exit</string>
+                                     <string>#!/bin/bash
+ 
+ 
+-VAR=`kdialog --caption "Select Image to Burn!" --getopenfilename $HOME/ "*.iso *.cue *.toc"` 
++VAR=`kdialog --title "Select Image to Burn!" --getopenfilename $HOME/ "*.iso *.cue *.toc"` 
+ 	if test -z "$VAR"
+ 	then exit
+ 	else
+@@ -2494,12 +2494,12 @@ exit</string>
+                                 <stringlist>
+                                     <string>#!/bin/bash
+ 
+-VARIN=`kdialog --caption "Select ISO to Generate Md5sum File" --getopenfilename $HOME/ "*.iso *.bin *.mdf *.nrg *.daa *.img"`
++VARIN=`kdialog --title "Select ISO to Generate Md5sum File" --getopenfilename $HOME/ "*.iso *.bin *.mdf *.nrg *.daa *.img"`
+ if test -z "$VARIN"
+ then exit
+ else
+ 
+-OUTPUT=`kdialog --caption "Select where to Save Generated Md5um File!" --getsavefilename $HOME/ "*.md5"`
++OUTPUT=`kdialog --title "Select where to Save Generated Md5um File!" --getsavefilename $HOME/ "*.md5"`
+ 
+ 		if test -z "$OUTPUT"
+ 		then exit
+@@ -2607,15 +2607,15 @@ exit</string>
+ 
+ 
+ 
+-kdialog --caption "AcetoneISO Message" --msgbox "WARNING!This operation may take some time depending on your file dimension." &amp;&amp;
++kdialog --title "AcetoneISO Message" --msgbox "WARNING!This operation may take some time depending on your file dimension." &amp;&amp;
+ 
+-VARIN=`kdialog --caption "Select ISO to be Splitted" --getopenfilename $HOME/ "*.iso *.bin *.mdf *.nrg *.img *.daa" `
++VARIN=`kdialog --title "Select ISO to be Splitted" --getopenfilename $HOME/ "*.iso *.bin *.mdf *.nrg *.img *.daa" `
+ 
+ 	if test -z "$VARIN"
+ 	then exit
+ 	else
+ 
+-	OUT=`kdialog --caption "Select Folder in wich put your splitted files" --getexistingdirectory $HOME/ `
++	OUT=`kdialog --title "Select Folder in wich put your splitted files" --getexistingdirectory $HOME/ `
+ 	
+ 		if test -z "$OUT"
+ 		then exit
+@@ -2630,7 +2630,7 @@ VARIN=`kdialog --caption "Select ISO to
+ 
+ 			cd "$OUT" &amp;&amp; split -b $DIM "$VARIN" &amp;&amp;
+ 
+-			kdialog --caption "AcetoneISO Message" --msgbox "Your ISO has been succesfully splitted! Find it in $OUT" 
++			kdialog --title "AcetoneISO Message" --msgbox "Your ISO has been succesfully splitted! Find it in $OUT" 
+ 			fi
+ 		fi
+ 	fi
+@@ -2689,22 +2689,22 @@ exit</string>
+ 
+ 
+ 
+-kdialog --caption "AcetoneISO Message" --msgbox "Remember to choose All files xaa xab xa* to be Merged\nWARNING!This operation may take some time depending on your file dimension." &amp;&amp;
++kdialog --title "AcetoneISO Message" --msgbox "Remember to choose All files xaa xab xa* to be Merged\nWARNING!This operation may take some time depending on your file dimension." &amp;&amp;
+ 
+ 
+-VARIN=`kdialog --caption "Select files to be Merged to ISO" --multiple --getopenfilename $HOME/ `
++VARIN=`kdialog --title "Select files to be Merged to ISO" --multiple --getopenfilename $HOME/ `
+ 
+ 	if test -z "$VARIN"
+ 	then exit
+ 	else
+-	VAROUT=`kdialog --caption "Select where to Save ISO and Name!" --getsavefilename $HOME/ "*.iso"`
++	VAROUT=`kdialog --title "Select where to Save ISO and Name!" --getsavefilename $HOME/ "*.iso"`
+ 	
+ 		if test -z $VAROUT
+ 		then exit 
+ 		else
+ 		cat $VARIN &gt; "$VAROUT" &amp;&amp;
+ 
+-		kdialog --caption "AcetoneISO Message" --msgbox "Your ISO has been succesfully Merged! Find it in $VAROUT" 
++		kdialog --title "AcetoneISO Message" --msgbox "Your ISO has been succesfully Merged! Find it in $VAROUT" 
+ 		fi
+ 	fi
+ exit</string>
+@@ -2802,9 +2802,9 @@ exit</string>
+                                         <stringlist>
+                                             <string>#!/bin/bash
+ 
+-kdialog  --caption "AcetoneISO Warning Message" --msgbox "Be sure You have first added at least one GPG key!\nWARNING!This operation may take some time depending on your file dimension." &amp;&amp;
++kdialog  --title "AcetoneISO Warning Message" --msgbox "Be sure You have first added at least one GPG key!\nWARNING!This operation may take some time depending on your file dimension." &amp;&amp;
+ 
+-OPENFILE=`kdialog --caption "Select ISO to be Encrypted" --getopenfilename $HOME/ "*.iso *.mdf *.nrg *.bin *.daa *.img"`
++OPENFILE=`kdialog --title "Select ISO to be Encrypted" --getopenfilename $HOME/ "*.iso *.mdf *.nrg *.bin *.daa *.img"`
+ 
+ 	if test -z "$OPENFILE"
+ 	then exit
+@@ -2875,10 +2875,10 @@ exit</string>
+                                         <stringlist>
+                                             <string>#!/bin/bash
+ 
+-kdialog  --caption "AcetoneISO Warning Message" --msgbox "WARNING!This operation may take some time depending on your file dimension." &amp;&amp;
++kdialog  --title "AcetoneISO Warning Message" --msgbox "WARNING!This operation may take some time depending on your file dimension." &amp;&amp;
+ 
+ 
+-OPENFILE=`kdialog --caption "Select ISO to be Encrypted" --getopenfilename $HOME/ "*.gpg"`
++OPENFILE=`kdialog --title "Select ISO to be Encrypted" --getopenfilename $HOME/ "*.gpg"`
+ 
+ 	if test -z "$OPENFILE"
+ 	then exit
+@@ -3004,7 +3004,7 @@ kgpg -k
+ 
+ else
+ 
+-kdialog  --caption "AcetoneISO Warning Message" --sorry "AcetoneISO couldn't find KGPG Installed.\nYou will only be able to view Your keys!" &amp;&amp;
++kdialog  --title "AcetoneISO Warning Message" --sorry "AcetoneISO couldn't find KGPG Installed.\nYou will only be able to view Your keys!" &amp;&amp;
+  
+ konsole --noclose -e gpg --list-keys
+ fi
+diff -up AcetoneISO-6.7/AcetoneISO-6.7/acetoneiso-mount.desktop.fixup AcetoneISO-6.7/AcetoneISO-6.7/acetoneiso-mount.desktop
+--- AcetoneISO-6.7/AcetoneISO-6.7/acetoneiso-mount.desktop.fixup	2017-06-02 11:39:09.749955702 -0400
++++ AcetoneISO-6.7/AcetoneISO-6.7/acetoneiso-mount.desktop	2017-06-02 11:39:16.322781661 -0400
+@@ -6,7 +6,7 @@ X-KDE-Submenu=AcetoneISO
+ [Desktop Action mountiso]
+ Name=Mount ISO
+ Icon=/usr/share/pixmaps/aiso.png
+-Exec= kdesu -n -d -i /usr/share/pixmaps/aiso.png "mount -o loop -t iso9660 '%F' `kdialog --caption "Select Folder where the ISO will be Mounted!No Spaces in Path!" --getexistingdirectory $HOME/`" && kdialog --msgbox "ISO MOUNTED!\n Find it in %F"
++Exec= kdesu -n -d -i /usr/share/pixmaps/aiso.png -c "mount -o loop -t iso9660 '%F' `kdialog --title "Select Folder where the ISO will be Mounted!No Spaces in Path!" --getexistingdirectory $HOME/`" && kdialog --msgbox "ISO MOUNTED!\n Find it in %F"
+ 
+ [Desktop Action turbo-mount-smount]
+ Name=Turbo Mount/Umount ISO located on Desktop
+@@ -17,13 +17,13 @@ Exec=/opt/acetoneiso/./turbo.sh
+ [Desktop Action cdrom-iso]
+ Name=Create ISO from CD/DVD
+ Icon=/usr/share/pixmaps/aiso.png
+-Exec=kdialog  --caption "AcetoneISO Warning Message" --msgbox "WARNING!This operation may take some time \n depending on your CD/DVD dimension" && kdesu "umount /dev/cdrom" && dd if=/dev/cdrom of=`kdialog --caption "Select where to Save ISO and Name!" --getsavefilename $HOME/Desktop/ "*.iso"` bs=1024 &&  kdialog --msgbox "Your CD/DVD was Succesfully Converted to ISO"
++Exec=kdialog  --title "AcetoneISO Warning Message" --msgbox "WARNING!This operation may take some time \n depending on your CD/DVD dimension" && kdesu -c "umount /dev/cdrom" && dd if=/dev/cdrom of=`kdialog --title "Select where to Save ISO and Name!" --getsavefilename $HOME/Desktop/ "*.iso"` bs=1024 &&  kdialog --msgbox "Your CD/DVD was Succesfully Converted to ISO"
+ 
+ 
+ [Desktop Action play-kaffeine]
+ Name=Play DVD-Movie ISO with Kaffeine
+ Icon=/usr/share/pixmaps/aiso.png
+-Exec=kdialog --caption "AcetoneISO Message" --msgbox "Before Mounting be sure there isn't CD/DVD in Device or a DVD ISO already mounted!\n After viewing Your DVD-Movie make sure You Unmount the ISO using the Unmount DVD-Movie ISO option before inserting any media in device!" && kdesu -n -d -i /usr/share/pixmaps/aiso.png "cd /dev/ && mv dvd dvd.acetone && mkdir dvd && mount -o loop -t iso9660 '%F' /dev/dvd" && kaffeine dvd
++Exec=kdialog --title "AcetoneISO Message" --msgbox "Before Mounting be sure there isn't CD/DVD in Device or a DVD ISO already mounted!\n After viewing Your DVD-Movie make sure You Unmount the ISO using the Unmount DVD-Movie ISO option before inserting any media in device!" && kdesu -n -d -i /usr/share/pixmaps/aiso.png -c "cd /dev/ && mv dvd dvd.acetone && mkdir dvd && mount -o loop -t iso9660 '%F' /dev/dvd" && kaffeine dvd
+ 
+ 
+ [Desktop Action unmount-kaffeine]
+diff -up AcetoneISO-6.7/AcetoneISO-6.7/acetoneiso-umount.desktop.fixup AcetoneISO-6.7/AcetoneISO-6.7/acetoneiso-umount.desktop
+--- AcetoneISO-6.7/AcetoneISO-6.7/acetoneiso-umount.desktop.fixup	2017-06-02 11:39:25.245545397 -0400
++++ AcetoneISO-6.7/AcetoneISO-6.7/acetoneiso-umount.desktop	2017-06-02 11:40:13.594265180 -0400
+@@ -1,15 +1,15 @@
+ [Desktop Action cdrom-iso]
+-Exec=kdialog  --caption "AcetoneISO Warning Message" --msgbox "WARNING!This operation may take some time \n depending on your CD/DVD dimension" && kdesu "umount /dev/cdrom" && dd if=/dev/cdrom of=`kdialog --caption "Select where to Save ISO and Name!No Spaces in Path and File name!" --getsavefilename $HOME/ "*.iso"` bs=1024 &&  kdialog --msgbox "Your CD/DVD was Succesfully Converted to ISO"
++Exec=kdialog  --title "AcetoneISO Warning Message" --msgbox "WARNING!This operation may take some time \n depending on your CD/DVD dimension" && kdesu -c "umount /dev/cdrom" && dd if=/dev/cdrom of=`kdialog --title "Select where to Save ISO and Name!No Spaces in Path and File name!" --getsavefilename $HOME/ "*.iso"` bs=1024 &&  kdialog --msgbox "Your CD/DVD was Succesfully Converted to ISO"
+ Icon=/usr/share/pixmaps/aiso.png
+ Name=Create ISO from CD/DVD
+ 
+ [Desktop Action iso-folder]
+-Exec=konsole --noclose -e mkisofs -ldots -allow-multidot -relaxed-filenames -iso-level 3 -allow-lowercase -o `kdialog --caption "Select where to Save ISO and Name!No Spaces in Path and File name!" --getsavefilename $HOME/ "*.iso"` '%F'
++Exec=konsole --noclose -e mkisofs -ldots -allow-multidot -relaxed-filenames -iso-level 3 -allow-lowercase -o `kdialog --title "Select where to Save ISO and Name!No Spaces in Path and File name!" --getsavefilename $HOME/ "*.iso"` '%F'
+ Icon=/usr/share/pixmaps/aiso.png
+ Name=Create ISO of This Folder
+ 
+ [Desktop Action mount-iso-here]
+-Exec=kdesu -n -d -i /usr/share/pixmaps/aiso.png "mount -o loop -t iso9660 `kdialog --caption "Select ISO to be Mounted!No Spaces in Path and File name!" --getopenfilename $HOME/ "*.iso *.mdf"` '%F'" && kdialog --msgbox "ISO MOUNTED!\n The Folder %F is Mounted!"
++Exec=kdesu -n -d -i /usr/share/pixmaps/aiso.png -c "mount -o loop -t iso9660 `kdialog --title "Select ISO to be Mounted!No Spaces in Path and File name!" --getopenfilename $HOME/ "*.iso *.mdf"` '%F'" && kdialog --msgbox "ISO MOUNTED!\n The Folder %F is Mounted!"
+ Icon=/usr/share/pixmaps/aiso.png
+ Name=Mount an ISO in This Folder
+ 
+@@ -19,7 +19,7 @@ Icon=keditbookmarks
+ Name=Turbo Mount/Umount ISO located on Desktop
+ 
+ [Desktop Action umount]
+-Exec=kdesu -n -d -i /usr/share/pixmaps/aiso.png "umount '%F'" && kdialog --msgbox "ISO UNMOUNTED!\n The Folder %F was Unmounted!"
++Exec=kdesu -n -d -i /usr/share/pixmaps/aiso.png -c "umount '%F'" && kdialog --msgbox "ISO UNMOUNTED!\n The Folder %F was Unmounted!"
+ Icon=/usr/share/pixmaps/aiso.png
+ Name=Unmount Folder
+ 

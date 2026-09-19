@@ -1,0 +1,43 @@
+.TH TEND\-BMAT "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-bmat \- calculate B-matrix given gradient directions
+.SH SYNOPSIS
+.B tend\ bmat
+.B \-i
+.RI < grads >
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+.P
+Calculate B-matrix given gradient directions, assuming no diffusion weighting
+from the other imaging gradients.
+The input is a 3-by-N array of floats or doubles, each row being one of the
+gradient directions used for diffusion-weighted imaging.
+A plain text file with one gradient per line, no punctuation, is an easy way to
+specify this information.
+The gradient vector coefficients are used as is, without normalization (since
+different gradient strengths are sometimes desired).
+The output has one row of the
+B-matrix per line, with coefficient ordering
+.BR Bxx ,
+.BR Bxy ,
+.BR Bxz ,
+.BR Byy ,
+.BR Byz ,
+.BR Bzz ,
+and with the off-diagonal elements NOT pre-multiplied by 2.
+.SH OPTIONS
+.TP
+.B \-i\fR <\fIgrads\fR>
+array of gradient directions
+.TP
+.B \-o\fR <\fInout\fR>
+output B matrix
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1),
+.BR tend\-estim (1),
+.BR tend\-msim (1),
+.BR tend\-sim (1)

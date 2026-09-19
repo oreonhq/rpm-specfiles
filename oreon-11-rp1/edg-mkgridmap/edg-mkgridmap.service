@@ -1,0 +1,15 @@
+# This unit has no install section by design
+# Enable timer instead
+# systemctl enable --now edg-mkgridmap.service
+
+[Unit]
+Description=Run edg-mkgridmap once
+After=syslog.target
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+EnvironmentFile=-/etc/sysconfig/fetch-crl
+ExecStart=/usr/bin/edg-mkgridmap --output --safe --cache
+TimeoutSec=10m
+

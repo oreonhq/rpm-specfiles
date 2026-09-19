@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 258fe4690f6eeab33df247912805c13e66f9e49a4c118b3d956621b1ebc5f7ff
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           kongress
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 # Automatically converted from old format: CC0 and CC-BY-SA and BSD and GPLv3+ - review is highly recommended.
 License:        CC0-1.0 AND LicenseRef-Callaway-CC-BY-SA AND LicenseRef-Callaway-BSD AND GPL-3.0-or-later

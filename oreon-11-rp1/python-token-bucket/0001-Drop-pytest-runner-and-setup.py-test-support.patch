@@ -1,0 +1,23 @@
+From ad374beaac38cecdad786ea0a7eceb3f7ad2614c Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 4 Mar 2025 14:48:23 -0500
+Subject: [PATCH] Drop pytest-runner and "setup.py test" support
+
+---
+ setup.py | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 127dbd5..353cd2f 100644
+--- a/setup.py
++++ b/setup.py
+@@ -42,6 +42,4 @@ setup(
+     packages=find_packages(exclude=['tests']),
+     python_requires='>=3.5',
+     install_requires=[],
+-    setup_requires=['pytest-runner'],
+-    tests_require=['pytest'],
+ )
+-- 
+2.48.1
+

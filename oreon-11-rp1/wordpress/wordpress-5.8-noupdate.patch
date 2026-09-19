@@ -1,0 +1,91 @@
+diff -up wordpress/wp-admin/includes/admin-filters.php.noupdate wordpress/wp-admin/includes/admin-filters.php
+--- wordpress/wp-admin/includes/admin-filters.php.noupdate	2021-07-21 13:55:03.381224813 +0200
++++ wordpress/wp-admin/includes/admin-filters.php	2021-07-21 13:55:11.920208285 +0200
+@@ -113,7 +113,6 @@ add_action( 'personal_options_update', '
+ add_action( 'load-plugins.php', 'wp_plugin_update_rows', 20 ); // After wp_update_plugins() is called.
+ add_action( 'load-themes.php', 'wp_theme_update_rows', 20 ); // After wp_update_themes() is called.
+ 
+-add_action( 'admin_notices', 'update_nag', 3 );
+ add_action( 'admin_notices', 'deactivated_plugins_notice', 5 );
+ add_action( 'admin_notices', 'paused_plugins_notice', 5 );
+ add_action( 'admin_notices', 'paused_themes_notice', 5 );
+diff -up wordpress/wp-admin/includes/class-core-upgrader.php.noupdate wordpress/wp-admin/includes/class-core-upgrader.php
+--- wordpress/wp-admin/includes/class-core-upgrader.php.noupdate	2021-06-19 23:37:57.000000000 +0200
++++ wordpress/wp-admin/includes/class-core-upgrader.php	2021-07-21 13:55:03.381224813 +0200
+@@ -271,6 +271,9 @@ class Core_Upgrader extends WP_Upgrader
+ 	 * @return bool True if we should update to the offered version, otherwise false.
+ 	 */
+ 	public static function should_update_to_version( $offered_ver ) {
++		// RPM: nether allow core update
++		return false;
++
+ 		require ABSPATH . WPINC . '/version.php'; // $wp_version; // x.y.z
+ 
+ 		$current_branch = implode( '.', array_slice( preg_split( '/[.-]/', $wp_version ), 0, 2 ) ); // x.y
+diff -up wordpress/wp-admin/includes/class-wp-automatic-updater.php.noupdate wordpress/wp-admin/includes/class-wp-automatic-updater.php
+--- wordpress/wp-admin/includes/class-wp-automatic-updater.php.noupdate	2021-04-16 14:01:15.000000000 +0200
++++ wordpress/wp-admin/includes/class-wp-automatic-updater.php	2021-07-21 13:55:03.381224813 +0200
+@@ -38,7 +38,7 @@ class WP_Automatic_Updater {
+ 		}
+ 
+ 		// More fine grained control can be done through the WP_AUTO_UPDATE_CORE constant and filters.
+-		$disabled = defined( 'AUTOMATIC_UPDATER_DISABLED' ) && AUTOMATIC_UPDATER_DISABLED;
++		$disabled = !defined( 'AUTOMATIC_UPDATER_DISABLED' ) || AUTOMATIC_UPDATER_DISABLED;
+ 
+ 		/**
+ 		 * Filters whether to entirely disable background updates.
+diff -up wordpress/wp-admin/includes/file.php.noupdate wordpress/wp-admin/includes/file.php
+--- wordpress/wp-admin/includes/file.php.noupdate	2021-05-24 21:24:57.000000000 +0200
++++ wordpress/wp-admin/includes/file.php	2021-07-21 13:55:03.381224813 +0200
+@@ -1992,7 +1992,7 @@ function WP_Filesystem( $args = false, $
+  */
+ function get_filesystem_method( $args = array(), $context = '', $allow_relaxed_file_ownership = false ) {
+ 	// Please ensure that this is either 'direct', 'ssh2', 'ftpext', or 'ftpsockets'.
+-	$method = defined( 'FS_METHOD' ) ? FS_METHOD : false;
++	$method = defined( 'FS_METHOD' ) ? FS_METHOD : 'direct';
+ 
+ 	if ( ! $context ) {
+ 		$context = WP_CONTENT_DIR;
+diff -up wordpress/wp-admin/includes/update.php.noupdate wordpress/wp-admin/includes/update.php
+--- wordpress/wp-admin/includes/update.php.noupdate	2021-05-17 19:04:01.000000000 +0200
++++ wordpress/wp-admin/includes/update.php	2021-07-21 13:55:03.381224813 +0200
+@@ -341,12 +341,7 @@ function update_right_now_message() {
+ 		$cur = get_preferred_from_update_core();
+ 
+ 		if ( isset( $cur->response ) && 'upgrade' === $cur->response ) {
+-			$msg .= sprintf(
+-				'<a href="%s" class="button" aria-describedby="wp-version">%s</a> ',
+-				network_admin_url( 'update-core.php' ),
+-				/* translators: %s: WordPress version number, or 'Latest' string. */
+-				sprintf( __( 'Update to %s' ), $cur->current ? $cur->current : __( 'Latest' ) )
+-			);
++			$msg .= '';
+ 		}
+ 	}
+ 
+diff -up wordpress/wp-includes/load.php.noupdate wordpress/wp-includes/load.php
+--- wordpress/wp-includes/load.php.noupdate	2021-06-23 21:05:57.000000000 +0200
++++ wordpress/wp-includes/load.php	2021-07-21 13:55:03.381224813 +0200
+@@ -1579,7 +1579,7 @@ function wp_is_file_mod_allowed( $contex
+ 	 * @param bool   $file_mod_allowed Whether file modifications are allowed.
+ 	 * @param string $context          The usage context.
+ 	 */
+-	return apply_filters( 'file_mod_allowed', ! defined( 'DISALLOW_FILE_MODS' ) || ! DISALLOW_FILE_MODS, $context );
++	return apply_filters( 'file_mod_allowed', defined( 'DISALLOW_FILE_MODS' ) && ! DISALLOW_FILE_MODS, $context );
+ }
+ 
+ /**
+diff -up wordpress/wp-includes/update.php.noupdate wordpress/wp-includes/update.php
+--- wordpress/wp-includes/update.php.noupdate	2021-05-17 19:04:01.000000000 +0200
++++ wordpress/wp-includes/update.php	2021-07-21 13:55:03.381224813 +0200
+@@ -926,10 +926,6 @@ function _maybe_update_themes() {
+  * @since 3.1.0
+  */
+ function wp_schedule_update_checks() {
+-	if ( ! wp_next_scheduled( 'wp_version_check' ) && ! wp_installing() ) {
+-		wp_schedule_event( time(), 'twicedaily', 'wp_version_check' );
+-	}
+-
+ 	if ( ! wp_next_scheduled( 'wp_update_plugins' ) && ! wp_installing() ) {
+ 		wp_schedule_event( time(), 'twicedaily', 'wp_update_plugins' );
+ 	}

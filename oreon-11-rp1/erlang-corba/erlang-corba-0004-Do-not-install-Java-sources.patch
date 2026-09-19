@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sat, 19 Jun 2010 09:25:18 +0400
+Subject: [PATCH] Do not install Java sources
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/lib/ic/java_src/com/ericsson/otp/ic/Makefile b/lib/ic/java_src/com/ericsson/otp/ic/Makefile
+index 39ca396..2b0b969 100644
+--- a/lib/ic/java_src/com/ericsson/otp/ic/Makefile
++++ b/lib/ic/java_src/com/ericsson/otp/ic/Makefile
+@@ -114,8 +114,6 @@ docs:
+ include $(ERL_TOP)/make/otp_release_targets.mk
+ 
+ release_spec: opt
+-	$(INSTALL_DIR) "$(RELSYSDIR)/java_src/com/ericsson/otp/ic"
+-	$(INSTALL_DATA) $(JAVA_FILES) "$(RELSYSDIR)/java_src/com/ericsson/otp/ic"
+ 	$(INSTALL_DIR) "$(RELSYSDIR)/priv"
+ 	$(INSTALL_DATA) $(JAVA_DEST_ROOT)$(JARFILE) "$(RELSYSDIR)/priv"
+ 

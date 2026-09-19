@@ -1,0 +1,30 @@
+--- a/configure.in	2019-07-12 21:12:03.170353429 +0200
++++ b/configure.in	2019-07-12 21:12:51.831190394 +0200
+@@ -154,6 +154,8 @@
+ 
+ CECIL_ASM=`pkg-config --variable=Libraries cecil`
+ AC_SUBST(CECIL_ASM)
++SHARPZIPLIB_LIBS=`pkg-config --libs sharpziplib`
++AC_SUBST(SHARPZIPLIB_LIBS)
+ 
+ dnl Intl
+ GETTEXT_PACKAGE=mono-tools
+--- a/gendarme/rules/Gendarme.Rules.Portability/Makefile.in	2019-07-12 20:35:52.749144103 +0200
++++ b/gendarme/rules/Gendarme.Rules.Portability/Makefile.in	2019-07-12 20:39:38.532982367 +0200
+@@ -226,6 +226,7 @@
+ CC = @CC@
+ CCDEPMODE = @CCDEPMODE@
+ CECIL_ASM = @CECIL_ASM@
++SHARPZIPLIB_LIBS = @SHARPZIPLIB_LIBS@
+ CFLAGS = @CFLAGS@
+ CPP = @CPP@
+ CPPFLAGS = @CPPFLAGS@
+@@ -371,7 +372,7 @@
+ TESTS_OPTIONS := $(COMMON_OPTIONS) -warn:0
+ SUBDIRS = Test
+ EXTRA_RULES_OPTIONS := $(GENDARME_OPTIONS) \
+-	-r:ICSharpCode.SharpZipLib.dll -r:System.Web.Services.dll
++	$(SHARPZIPLIB_LIBS) -r:System.Web.Services.dll
+ EXTRA_TESTS_OPTIONS := $(TESTS_OPTIONS) -o-
+ console_runner = ../../bin/gendarme.exe
+ framework = ../../bin/Gendarme.Framework.dll

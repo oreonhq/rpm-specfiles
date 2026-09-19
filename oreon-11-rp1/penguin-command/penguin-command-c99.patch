@@ -1,0 +1,14 @@
+Include "gfx.h" for the ComplainAndExit function.  This improves
+compatibility with future compilers which reject implicit function
+declarations by default.
+
+diff --git a/src/joystick.c b/src/joystick.c
+index 549950adcb564ac7..6d71ae20a0eed0bb 100644
+--- a/src/joystick.c
++++ b/src/joystick.c
+@@ -1,4 +1,5 @@
+ #include <SDL.h>
++#include "gfx.h"
+ #include "joystick.h"
+ 
+ static SDL_Joystick *joy=NULL;

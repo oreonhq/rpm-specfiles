@@ -1,0 +1,33 @@
+.TH FASTAPI\-CLOUD\-ENV\-SET "1" "January 2026" "" "User Commands"
+.SH NAME
+.B fastapi\ cloud\ env\ set
+\(en Set an environment variable for the app.
+.SH SYNOPSIS
+.B fastapi\ cloud\ env\ set
+.RI [ OPTIONS ]
+.RI [ NAME ]
+.RI [ VALUE ]
+.RI [ PATH ]
+.SH OPTIONS
+.TP
+.B \-\-help\fR, \fB\-h
+Show a help message and exit.
+.SS "ARGUMENTS"
+.TP
+.I NAME
+The name of the environment variable to set.
+.TP
+.I VALUE
+The value of the environment variable to set.
+.TP
+.I PATH
+A path to the folder containing the app you want to deploy.
+.SH "SEE ALSO"
+.BR fastapi\-cloud\-env\-list (1),
+.BR fastapi\-cloud\-env\-delete (1)
+.P
+.BR fastapi\-cloud\-env (1)
+.P
+.BR fastapi\-cloud (1)
+.P
+.BR fastapi (1)

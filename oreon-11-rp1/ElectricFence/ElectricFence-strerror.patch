@@ -1,0 +1,13 @@
+diff --git a/page.c b/page.c
+index 95d9b06..bc999a0 100644
+--- a/page.c
++++ b/page.c
+@@ -40,7 +40,7 @@ stringErrorReport(void)
+ {
+ #if ( defined(sgi) )
+ 	return strerror(oserror());
+-#elif ( defined(_AIX) )
++#elif ( defined(_AIX) ) || ( defined(__linux) )
+ 	return strerror(errno);
+ #else
+ 	if ( errno > 0 && errno < sys_nerr )

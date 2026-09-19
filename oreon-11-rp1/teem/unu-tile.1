@@ -1,0 +1,57 @@
+.TH UNU\-TILE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-tile \- tile slices of one axis into two other axes
+.SH SYNOPSIS
+.B unu\ tile
+.BR \-a , \-\-axis
+.RI < axSplit \  ax0 \  ax1 >
+.BR \-s , \-\-size
+.RI < fast \  slow >
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Tile slices of one axis into two other axes.
+Tiling an array means splitting one axis into fast and slow parts, and then
+interleaving those parts into other (existing) axes by doing two axis merges,
+which combine an existing axis with part of the split axis.
+This reduces the dimension by one.
+The three axis arguments all identify axes in the input array as is.
+This provides, for example, a simple way of viewing the 128 slices along the
+slow axis of a 3\-D volume as a 16x8 tiled array of 2\-D slices, as with
+.RB \(lq \-a\ 2\ 0\ 1\ \-s\ 16\ 8 \(rq.
+.IP \(bu +2n
+Uses
+.B nrrdTile2D
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIaxSplit\fR\ \fIax0\fR\ \fIax1\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxSplit\fR\ \fIax0\fR\ \fIax1\fR>
+.I axSplit
+is divided and merged with
+.I ax0
+and
+.I ax1
+(3
+.IR unsigned\ int s)
+.TP
+.B \-s\fR\ <\fIfast\fR\ \fIslow\fR>\ ,\ \fB\-\-size\fR\ <\fIfast\fR\ \fIslow\fR>
+fast and slow axis sizes to produce as result of splitting the
+.I axSplit
+ axis.
+(2
+.IR size_t s)
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-untile (1)

@@ -1,7 +1,7 @@
 %global source0_hash 8ee295b26b608450bc0c47ba199b34cf92f7f9ec4c81a62363e6450da76b6739
 
 %global forgeurl https://github.com/oracle/ktls-utils
-%global baseversion 1.3.0
+%global baseversion 1.4.0
 
 Name:           ktls-utils
 Version:        %{baseversion}

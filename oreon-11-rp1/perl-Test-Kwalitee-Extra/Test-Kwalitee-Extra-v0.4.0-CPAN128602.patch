@@ -1,0 +1,20 @@
+--- t/05-build_prereq_matches_use.t
++++ t/05-build_prereq_matches_use.t
+@@ -32,4 +32,7 @@ test_diag("  Remedy: $bremedy");
+ require Test::Kwalitee::Extra;
+ Test::Kwalitee::Extra->import(qw(:no_plan !:core !:optional build_prereq_matches_use));
+ 
++TODO: {
++local $TODO = "Test breaks with Module::CPANTS::Analyse ≥ 1.00 (CPAN RT#128602)";
+ test_test('expected failure of build_prereq_matches_use');
++}
+--- t/06-minperlver.t
++++ t/06-minperlver.t
+@@ -26,4 +26,7 @@ test_diag("  Remedy: $bremedy");
+ require Test::Kwalitee::Extra;
+ Test::Kwalitee::Extra->import(qw(:no_plan :minperlver 5.005 !:core !:optional build_prereq_matches_use));
+ 
++TODO: {
++local $TODO = "Test breaks with Module::CPANTS::Analyse ≥ 1.00 (CPAN RT#128602)";
+ test_test('expected failure of build_prereq_matches_use');
++}

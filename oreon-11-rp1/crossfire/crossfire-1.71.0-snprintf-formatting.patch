@@ -1,0 +1,11 @@
+--- server/c_chat.c~	2014-04-05 17:30:49.000000000 -0500
++++ server/c_chat.c	2016-03-01 10:15:58.576275572 -0600
+@@ -645,7 +645,7 @@
+ 
+     if (*params == '\0') {
+         if (emotion > EMOTE_FIRST && emotion < EMOTE_LAST && single_emotes[emotion - 1][0] != NULL) {
+-            snprintf(buf, sizeof(buf), single_emotes[emotion - 1][0]);
++            snprintf(buf, sizeof(buf), "%s", single_emotes[emotion - 1][0]);
+             snprintf(buf2, sizeof(buf2), single_emotes[emotion - 1][1], op->name);
+         } else {
+             snprintf(buf, sizeof(buf), "You are a nut.");

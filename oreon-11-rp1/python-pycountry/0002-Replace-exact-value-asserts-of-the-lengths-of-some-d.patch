@@ -1,0 +1,59 @@
+From a18d5319f89c400c1c5558870d3d502856a3b63d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Mon, 4 Jul 2022 12:23:41 +0200
+Subject: [PATCH 2/3] Replace exact-value asserts of the lengths of some data
+ with approximates
+
+With iso-codes 4.10+, the number of subdivisions and currencies changed
+the tests have asserts for exact values. Debian removed the asserts.
+Instead, we change the asserts to be approximates.
+If this proves to be too problematic in the future, we can go the Debian way.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ src/pycountry/tests/test_general.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/pycountry/tests/test_general.py b/src/pycountry/tests/test_general.py
+index d19064d..b7a3206 100644
+--- a/src/pycountry/tests/test_general.py
++++ b/src/pycountry/tests/test_general.py
+@@ -116,7 +116,7 @@ def test_country_missing_attribute(countries):
+ 
+ 
+ def test_subdivisions_directly_accessible(countries):
+-    assert len(pycountry.subdivisions) == 5046
++    assert len(pycountry.subdivisions) == pytest.approx(5046, rel=0.1)
+     assert isinstance(list(pycountry.subdivisions)[0], pycountry.db.Data)
+ 
+     de_st = pycountry.subdivisions.get(code="DE-ST")
+@@ -144,7 +144,7 @@ def test_query_subdivisions_of_country():
+ 
+ 
+ def test_scripts():
+-    assert len(pycountry.scripts) == 226
++    assert len(pycountry.scripts) == pytest.approx(226, rel=0.25)
+     assert isinstance(list(pycountry.scripts)[0], pycountry.db.Data)
+ 
+     latin = pycountry.scripts.get(name="Latin")
+@@ -154,7 +154,7 @@ def test_scripts():
+ 
+ 
+ def test_currencies():
+-    assert len(pycountry.currencies) == 178
++    assert len(pycountry.currencies) == pytest.approx(178, rel=0.1)
+     assert isinstance(list(pycountry.currencies)[0], pycountry.db.Data)
+ 
+     argentine_peso = pycountry.currencies.get(alpha_3="ARS")
+@@ -164,7 +164,7 @@ def test_currencies():
+ 
+ 
+ def test_languages():
+-    assert len(pycountry.languages) == 7923
++    assert len(pycountry.languages) == pytest.approx(7923, rel=0.1)
+     assert isinstance(list(pycountry.languages)[0], pycountry.db.Data)
+ 
+     aragonese = pycountry.languages.get(alpha_2="an")
+-- 
+2.53.0
+

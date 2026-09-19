@@ -1,0 +1,76 @@
+diff -up conda_sphinx_theme/static/css/style.css.fonts conda-sphinx-theme-0.3.0/conda_sphinx_theme/static/css/style.css
+--- conda_sphinx_theme/static/css/style.css.fonts	2025-06-11 01:29:04.000000000 -0600
++++ conda_sphinx_theme/static/css/style.css	2025-10-13 20:27:20.948422523 -0600
+@@ -39,64 +39,56 @@ html[data-theme="dark"] {
+ 
+ @font-face {
+   font-family: open-sans;
+-  src: url("../fonts/opensans-bolditalic-webfont.woff2") format("woff2");
+-  src: url("../fonts/opensans-bolditalic-webfont.woff") format("woff");
++  src: url("/usr/share/fonts/open-sans/OpenSans-BoldItalic.ttf") format("ttf");
+   font-weight: bold;
+   font-style: italic;
+ }
+ 
+ @font-face {
+   font-family: open-sans;
+-  src: url("../fonts/opensans-italic-webfont.woff2") format("woff2");
+-  src: url("../fonts/opensans-italic-webfont.woff") format("woff");
++  src: url("/usr/share/fonts/open-sans/OpenSans-Italic.ttf") format("ttf");
+   font-weight: normal;
+   font-style: italic;
+ }
+ 
+ @font-face {
+   font-family: open-sans;
+-  src: url("../fonts/opensans-regular-webfont.woff2") format("woff2");
+-  src: url("../fonts/opensans-regular-webfont.woff") format("woff");
++  src: url("/usr/share/fonts/open-sans/OpenSans-Regular.ttf") format("ttf");
+   font-weight: normal;
+   font-style: normal;
+ }
+ 
+ @font-face {
+   font-family: open-sans;
+-  src: url("../fonts/opensans-bold-webfont.woff2") format("woff2");
+-  src: url("../fonts/opensans-bold-webfont.woff") format("woff");
++  src: url("/usr/share/fonts/open-sans/OpenSans-Bold.ttf") format("ttf");
+   font-weight: bold;
+   font-style: normal;
+ }
+ 
+ @font-face {
+   font-family: nunito;
+-  src: url("../fonts/nunito-bolditalic-webfont.woff2") format("woff2");
+-  src: url("../fonts/nunito-bolditalic-webfont.woff") format("woff");
++  src: url("/usr/share/fonts/vernnobile-nunito-fonts/Nunito-BoldItalic.otf") format("otf");
+   font-weight: bold;
+   font-style: italic;
+ }
+ 
+ @font-face {
+   font-family: nunito;
+-  src: url("../fonts/nunito-italic-webfont.woff2") format("woff2");
+-  src: url("../fonts/nunito-italic-webfont.woff") format("woff");
++  src: url("/usr/share/fonts/vernnobile-nunito-fonts/Nunito-Italic.otf") format("otf");
+   font-weight: normal;
+   font-style: italic;
+ }
+ 
+ @font-face {
+   font-family: nunito;
+-  src: url("../fonts/nunito-regular-webfont.woff2") format("woff2");
+-  src: url("../fonts/nunito-regular-webfont.woff") format("woff");
++  src: url("/usr/share/fonts/vernnobile-nunito-fonts/Nunito-Regular.otf") format("otf");
+   font-weight: normal;
+   font-style: normal;
+ }
+ 
+ @font-face {
+   font-family: nunito;
+-  src: url("../fonts/nunito-bold-webfont.woff2") format("woff2");
+-  src: url("../fonts/nunito-bold-webfont.woff") format("woff");
++  src: url("/usr/share/fonts/vernnobile-nunito-fonts/Nunito-Bold.otf") format("otf");
+   font-weight: bold;
+   font-style: normal;
+ }

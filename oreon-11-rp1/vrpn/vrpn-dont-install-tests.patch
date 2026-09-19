@@ -1,0 +1,76 @@
+diff -Naur a/client_src/CMakeLists.txt b/client_src/CMakeLists.txt
+--- a/client_src/CMakeLists.txt	2022-05-30 10:26:37.000000000 -0700
++++ b/client_src/CMakeLists.txt	2023-10-28 09:05:05.727862781 -0700
+@@ -76,9 +76,6 @@
+ 			target_link_libraries(${APP} ${VRPN_CLIENT_LIBRARY})
+ 
+ 			set_target_properties(${APP} PROPERTIES FOLDER Tests)
+-			if(VRPN_INSTALL)
+-				install(TARGETS ${APP} RUNTIME DESTINATION bin COMPONENT tests)
+-			endif()
+ 		endforeach()
+ 
+     add_test(test_imager test_imager)
+@@ -98,16 +95,6 @@
+ 				${OPENGL_LIBRARIES})
+ 			set_target_properties(testimager_client PROPERTIES FOLDER Tests)
+ 
+-			if(VRPN_INSTALL)
+-				install(TARGETS
+-					testimager_client
+-					RUNTIME
+-					DESTINATION
+-					bin
+-					COMPONENT
+-					tests)
+-			endif()
+-
+ 			if(VRPN_GLUT_IS_STATIC_FREEGLUT)
+ 				set_property(TARGET
+ 					testimager_client
+@@ -154,17 +141,6 @@
+ 
+ 	set_target_properties(c_interface_example PROPERTIES FOLDER Tests)
+ 
+-	if(VRPN_INSTALL)
+-		install(TARGETS
+-			c_interface_example
+-			RUNTIME
+-			DESTINATION
+-			bin
+-			COMPONENT
+-			tests)
+-	endif()
+-
+-
+ 	###
+ 	# Clients
+ 	###
+diff -Naur a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2023-10-28 09:03:46.843029423 -0700
++++ b/CMakeLists.txt	2023-10-28 09:05:27.864096634 -0700
+@@ -1458,9 +1458,6 @@
+ 		add_executable(${APP} ${SOURCE})
+ 		target_link_libraries(${APP} vrpnserver)
+ 		set_target_properties(${APP} PROPERTIES FOLDER Tests)
+-		if(VRPN_INSTALL)
+-			install(TARGETS ${APP} RUNTIME DESTINATION bin COMPONENT tests)
+-		endif()
+ 	endforeach()
+ endif()
+ 
+diff -Naur a/server_src/CMakeLists.txt b/server_src/CMakeLists.txt
+--- a/server_src/CMakeLists.txt	2023-10-28 09:03:46.845029444 -0700
++++ b/server_src/CMakeLists.txt	2023-10-28 09:05:16.033971660 -0700
+@@ -217,11 +217,6 @@
+ 		add_executable(${APP} ${SOURCE})
+ 		target_link_libraries(${APP} ${VRPN_SERVER_LIBRARY})
+ 		set_target_properties(${APP} PROPERTIES FOLDER Tests)
+-
+-		if(VRPN_INSTALL)
+-			install(TARGETS ${APP}
+-				RUNTIME DESTINATION bin COMPONENT tests)
+-		endif()
+ 	endforeach()
+ 	add_test(test_vrpn test_vrpn)
+ 	add_test(test_loopback test_loopback)

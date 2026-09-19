@@ -1,0 +1,11 @@
+--- configure	2024-12-03 01:59:51.000000000 +0700
++++ configure.soname	2025-08-15 16:24:35.011397057 +0700
+@@ -7538,7 +7538,7 @@ fi
+ 
+ 	    # TEA specific: use LDFLAGS_DEFAULT instead of LDFLAGS
+ 	    SHLIB_LD='${CC} ${CFLAGS} ${LDFLAGS_DEFAULT} -shared'
+-	    LDFLAGS="$LDFLAGS -Wl,--export-dynamic"
++	    LDFLAGS="$LDFLAGS -Wl,--export-dynamic -Wl,-soname,\${@}"
+ 
+ 	    case $system in
+ 	    DragonFly-*|FreeBSD-*)

@@ -1,0 +1,26 @@
+diff --git a/src/csymbol.cc b/src/csymbol.cc
+index 1e854cf..77033ce 100644
+--- a/src/csymbol.cc
++++ b/src/csymbol.cc
+@@ -69,7 +69,7 @@ CSymbol::~CSymbol( void )
+ 	- functor used by set to order symbols	
+ *********************************************************/
+ 
+-bool CSymbol::SymbolCompare::operator() ( CSymbol* const& lhs, CSymbol* const& rhs )
++bool CSymbol::SymbolCompare::operator() ( CSymbol* const& lhs, CSymbol* const& rhs ) const
+ {
+     if( lhs->hash != rhs->hash ) {
+ 	return lhs->hash < rhs->hash;
+diff --git a/src/csymbol.h b/src/csymbol.h
+index 329d870..6d2aab9 100644
+--- a/src/csymbol.h
++++ b/src/csymbol.h
+@@ -45,7 +45,7 @@ class CSymbol : public CObject
+ {
+ private:
+ 	struct SymbolCompare {
+-	    bool operator()( CSymbol* const& lhs, CSymbol* const& rhs );
++	    bool operator()( CSymbol* const& lhs, CSymbol* const& rhs ) const;
+ 	};
+ 	static set<CSymbol*,SymbolCompare> hashTable;
+ 	static CSymbol* 	freeSymbol;		  ///< single element free list

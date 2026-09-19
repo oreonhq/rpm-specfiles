@@ -1,0 +1,196 @@
+.TH TEND\-ESTIM "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-estim \- estimate tensors from a set of DW images
+.SH SYNOPSIS
+.B tend\ estim
+.RB [ \-old ]
+.RB [ \-sigma
+.RI < sigma >]
+.RB [ \-v
+.RI < verbose >]
+.RB [ \-est
+.RI < estimate\ method >]
+.RB [ \-wlsi
+.RI < WLS\ iters >]
+.RB [ \-fixneg ]
+.RB [ \-ee
+.RI < filename >]
+.RB [ \-eb
+.RI < filename >]
+.RB [ \-t
+.RI < thresh >]
+.RB [ \-soft
+.RI < soft >]
+.RB [ \-scale
+.RI < scale >]
+.RB [ \-mv
+.RI < min\ val >]
+.B \-B
+.RI < B\-list >
+.RB [ \-b
+.RI < b >]
+.B \-knownB0
+.RI < bool >
+.RB [ \-i
+.RI < dwi0\fR\ \fIdwi1\fR\ ...>]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+.P
+Estimate tensors from a set of DW images.
+The tensor coefficient weightings associated with each of the DWIs, the
+B-matrix, is given either as a separate array, (see
+.BR tend\-bmat (1) for
+details), or by the key-value pairs in the DWI
+.I nrrd
+header.
+A \(lqconfidence\(rq value is computed with the tensor, based on a soft
+thresholding of the sum of all the DWIs, according to the threshold and
+softness parameters.
+.SH OPTIONS
+.TP
+.B \-old
+instead of the new
+.B tenEstimateContext
+code, use the old
+.B tenEstimateLinear
+code
+.TP
+.B \-sigma\fR <\fIsigma\fR>
+Rician noise parameter
+.RI ( float )
+.TP
+.B \-v\fR <\fIverbose\fR>
+verbosity level
+.RI ( int )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-est\fR <\fIestimate\ method\fR>
+estimation method to use.
+.RB \(lq lls \(rq:
+linear-least squares; default:
+.RB \(lq lls \(rq
+.TP
+.B \-wlsi\fR <\fIWLS\ iters\fR>
+when using weighted-least-squares
+.RB (\(lq \-est\ wls \(rq),
+how many iterations to do after the initial weighted fit.
+.RI ( unsigned\ int )
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-fixneg
+after estimating the tensor, ensure that there are no negative eigenvalues by
+adding (to all eigenvalues) the amount by which the smallest is negative
+(corresponding to increasing the non-DWI image value).
+.TP
+.B \-ee\fR <\fIfilename\fR>
+Giving a filename here allows you to save out the tensor estimation error: a
+value which measures how much error there is between the tensor model and the
+given diffusion weighted measurements for each sample.
+By default, no such error calculation is saved.
+.RI ( string )
+.TP
+.B \-eb\fR <\fIfilename\fR>
+In those cases where there is no B=0 reference image given
+.RB (\(lq \-knownB0\ false \(rq),
+giving a filename here allows you to save out the
+.B B=0
+image which is estimated from the data.
+By default, this image value is estimated but not saved.
+.RI ( string )
+.TP
+.B \-t\fR <\fIthresh\fR>
+value at which to threshold the mean DWI value per pixel in order to generate
+the \(lqconfidence\(rq mask.
+By default, the threshold value is calculated automatically, based on histogram
+analysis.
+.RI ( double )
+.TP
+.B \-soft\fR <\fIsoft\fR>
+how fuzzy the confidence boundary should be.
+By default, confidence boundary is perfectly sharp
+.RI ( float )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-scale\fR <\fIscale\fR>
+After estimating the tensor, scale all of its elements (but not the confidence
+value) by this amount.
+Can help with downstream numerical precision if values are very large or small.
+.RI ( float )
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-mv\fR <\fImin\ val\fR>
+minimum plausible value (especially important for linear least squares
+estimation)
+.RI ( double )
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-B\fR <\fIB\-list\fR>
+6-by-N list of B-matrices characterizing the diffusion weighting for each
+image.
+.BR tend\-bmat (1)
+is one source for such a matrix; see its usage info for specifics on how the
+coefficients of the B-matrix are ordered.
+An unadorned plain text file is a great way to specify the B-matrix.
+.IP
+.B OR
+.IP
+Can say just
+.RB \(lq \-B\ kvp \(rq
+to try to learn B matrices from key/value pair information in input images.
+.IP
+.RI ( string )
+.TP
+.B \-b\fR <\fIb\fR>
+\(lqb\(rq diffusion-weighting factor (units of sec/mm^2)
+.RI ( double )
+.TP
+.B \-knownB0\fR <\fIbool\fR>
+Indicates if the
+.B B=0
+non-diffusion-weighted reference image is known, or if it has to be estimated
+along with the tensor elements
+.RS +7n
+.IP \(bu 2
+if
+.RB \(lq true \(rq:
+in the given list of diffusion gradients or B-matrices, there are one or more
+with zero norm, which are simply averaged to find the
+.B B=0
+reference image value
+.IP \(bu 2
+if
+.RB \(lq false \(rq:
+there may or may not be diffusion-weighted images among the input; the
+.B B=0
+image value is going to be estimated along with the diffusion model
+.P
+.RI ( bool )
+.RE
+.TP
+.B \-i\fR <\fIdwi0\fR\ \fIdwi1\fR\ ...>
+all the diffusion-weighted images (DWIs), as separate 3D
+.IR nrrd s,
+.BR OR :
+One 4D
+.I nrrd
+of all DWIs stacked along axis 0 (1 or more
+.IR nrrd s);
+default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output tensor volume
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)
+.BR tend\-bmat (1),
+.BR tend\-msim (1),
+.BR tend\-sim (1)

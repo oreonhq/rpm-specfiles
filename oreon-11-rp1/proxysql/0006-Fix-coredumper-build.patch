@@ -1,0 +1,56 @@
+From c9f4bbee05cdcb920e69428017993ffbabab6039 Mon Sep 17 00:00:00 2001
+From: Igor Raits <igor.raits@gmail.com>
+Date: Sat, 18 May 2024 19:59:16 +0200
+Subject: [PATCH 6/6] Fix coredumper build
+
+---
+ deps/Makefile                                 |  1 +
+ .../0001-Include-unistd.h-for-getpid.patch    | 24 +++++++++++++++++++
+ 2 files changed, 25 insertions(+)
+ create mode 100644 deps/coredumper/0001-Include-unistd.h-for-getpid.patch
+
+diff --git a/deps/Makefile b/deps/Makefile
+index 703b3edd..b83008d7 100644
+--- a/deps/Makefile
++++ b/deps/Makefile
+@@ -94,6 +94,7 @@ coredumper/coredumper/src/libcoredumper.
+ 	cd coredumper && rm -rf coredumper-*/ || true
+ 	cd coredumper && tar -zxf coredumper-*.tar.gz
+ 	cd coredumper/coredumper && patch -p1 < ../includes.patch
++	patch -d coredumper/coredumper -p1 -i ../0001-Include-unistd.h-for-getpid.patch
+ 	cd coredumper/coredumper && cmake . -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug
+ 	cd coredumper/coredumper && CC=${CC} CXX=${CXX} ${MAKE}
+ coredumper: coredumper/coredumper/src/libcoredumper.a
+diff --git a/deps/coredumper/0001-Include-unistd.h-for-getpid.patch b/deps/coredumper/0001-Include-unistd.h-for-getpid.patch
+new file mode 100644
+index 00000000..386bf4be
+--- /dev/null
++++ b/deps/coredumper/0001-Include-unistd.h-for-getpid.patch
+@@ -0,0 +1,24 @@
++From cb0b6bcde64b3d108f5f9adb429af57890e0bcee Mon Sep 17 00:00:00 2001
++From: Igor Raits <igor.raits@gmail.com>
++Date: Sat, 18 May 2024 19:57:19 +0200
++Subject: [PATCH] Include unistd.h for getpid()
++
++---
++ src/thread_lister.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/thread_lister.c b/src/thread_lister.c
++index 15fedac..48cb4e4 100644
++--- a/src/thread_lister.c
+++++ b/src/thread_lister.c
++@@ -34,6 +34,7 @@
++ #include "thread_lister.h"
++ 
++ #include <stdio.h> /* needed for NULL on some powerpc platforms (?!) */
+++#include <unistd.h> /* getpid() */
++ #include <sys/prctl.h>
++ 
++ #include "linuxthreads.h"
++-- 
++2.45.0
++
+-- 
+2.45.0
+

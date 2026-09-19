@@ -1,0 +1,13 @@
+--- pipewalker-1.1--orig/meson.build	2024-05-31 06:47:31.000000000 +0200
++++ pipewalker-1.1--patched/meson.build	2024-06-02 21:01:17.268210063 +0200
+@@ -33,9 +33,9 @@
+   install_bin_dir = get_option('prefix') / f'PipeWalker-@version@'
+   install_data_dir = install_bin_dir / 'data'
+ else
+   install_bin_dir = get_option('bindir')
+-  install_data_dir = get_option('datadir') / 'games' / meson.project_name()
++  install_data_dir = get_option('datadir') / meson.project_name()
+ endif
+ 
+ # installation
+ install_data(

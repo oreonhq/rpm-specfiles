@@ -1,0 +1,23 @@
+#
+# newer GNU Make versions (3.82, maybe older) get confused by something in this 
+# area; we never installed the HTML docs anyway, so simply remove the section
+#
+diff -Naru websec-1.9.0.org/Makefile websec-1.9.0/Makefile
+--- websec-1.9.0.org/Makefile	2003-05-18 09:37:00.000000000 +0200
++++ websec-1.9.0/Makefile	2011-06-22 18:54:11.674124020 +0200
+@@ -55,15 +55,3 @@
+ 
+ $(CONFMAN) : %.5 : %
+ 	pod2man --section 5 $< > $@
+-
+-install_html: html
+-	install -m 0644 $(HTMLFILES) $(DEST)
+-
+-html: $(CONFMANHTML) $(PROGMANHTML)
+-
+-$(CONFMANHTML) : %(5).html : %
+-	pod2html --htmlroot . --podroot . --podpath . --infile "$<" --outfile "$@"
+-
+-$(PROGMANHTML) : %(1).html : %
+-	-rm -f pod2htm*
+-	pod2html --htmlroot . --podroot . --podpath . --infile "$<" --outfile "$@"

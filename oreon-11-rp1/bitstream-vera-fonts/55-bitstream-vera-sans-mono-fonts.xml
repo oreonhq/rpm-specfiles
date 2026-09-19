@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Bitstream Vera Sans Mono</target>
+    <match>
+      <family>Bitstream Vera Sans Mono</family>
+      <change>
+        <style>Roman</style>
+        <into>Regular</into>
+      </change>
+    </match>
+    <like>
+      <family>DejaVu Sans Mono</family>
+      <family>DejaVu LGC Sans Mono</family>
+      <family>Prima Sans Mono</family>
+      <family>monospace</family>
+    </like>
+  </group>
+</fontconfig>
+

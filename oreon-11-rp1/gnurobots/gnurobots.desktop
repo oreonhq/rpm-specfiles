@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Gnurobots
+GenericName=A robot programming game
+Comment=Program your robot and watch it explore
+Exec=gnurobots
+Icon=/usr/share/gnurobots/xpm/robot.xpm
+Terminal=true
+Type=Application
+Categories=Game;LogicGame;

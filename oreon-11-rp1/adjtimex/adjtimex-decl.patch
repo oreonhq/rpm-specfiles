@@ -1,0 +1,12 @@
+diff -up adjtimex-1.29/adjtimex.c.decl adjtimex-1.29/adjtimex.c
+--- adjtimex-1.29/adjtimex.c.decl	2025-01-07 10:50:34.218356076 +0100
++++ adjtimex-1.29/adjtimex.c	2025-01-07 10:50:42.286350666 +0100
+@@ -185,7 +185,7 @@ static void cmos_read_time (time_t *cmos
+ static void busywait_uip_fall(struct timeval *timestamp);
+ static void busywait_second_change(struct tm *cmos, struct timeval *timestamp);
+ static void compare(void);
+-static void failntpdate();
++static void failntpdate(char *s);
+ static void reset_time_status(void);
+ static struct cmos_adj *get_cmos_adjustment(void);
+ static void log_times(void);

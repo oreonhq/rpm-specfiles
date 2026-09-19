@@ -1,0 +1,12 @@
+diff -up rocksndiamonds-4.4.1.0/src/game_bd/bd_cave.h.fix rocksndiamonds-4.4.1.0/src/game_bd/bd_cave.h
+--- rocksndiamonds-4.4.1.0/src/game_bd/bd_cave.h.fix	2025-12-20 17:37:13.219776967 -0500
++++ rocksndiamonds-4.4.1.0/src/game_bd/bd_cave.h	2025-12-20 17:37:18.228763197 -0500
+@@ -758,7 +758,7 @@ void gd_drawcave_game(const GdCave *cave
+ // function to copy a GdString
+ static inline char *gd_strcpy(GdString dest, const char *src)
+ {
+-    return strncpy(dest, src, sizeof(GdString));
++    return strncpy(dest, src, sizeof(GdString) - 1);
+ }
+ 
+ int gd_cave_time_show(const GdCave *cave, int internal_time);

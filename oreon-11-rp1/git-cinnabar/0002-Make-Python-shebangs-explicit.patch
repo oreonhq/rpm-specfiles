@@ -1,0 +1,87 @@
+From f5a986a65b97ca65cdeb1b9fe809279697e420d6 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Fri, 14 Feb 2020 23:13:41 -0500
+Subject: [PATCH 2/3] Make Python shebangs explicit.
+
+As a package, we need to be specific about which version of Python is
+being used.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ git-cinnabar  | 27 +--------------------------
+ git-remote-hg | 27 +--------------------------
+ 2 files changed, 2 insertions(+), 52 deletions(-)
+
+diff --git a/git-cinnabar b/git-cinnabar
+index 97b2ed9..7249d2b 100755
+--- a/git-cinnabar
++++ b/git-cinnabar
+@@ -1,29 +1,4 @@
+-#!/bin/sh
+-''':'
+-py="$GIT_CINNABAR_PYTHON"
+-if test -z "$py"; then
+-  for py in python3 python python2.7 python2; do
+-    "$py" -c "from mercurial import hg" >/dev/null 2>&1 && break
+-    py=
+-  done
+-fi
+-if test -z "$py"; then
+-  for py in python3 python python2.7 python2 "py -3" "py -2"; do
+-    # Make sure this Python actually works. On Windows, python.exe, etc. might
+-    # try to run the Windows Store app even if it's not installed.
+-    $py -c "import sys" >/dev/null 2>&1 && break
+-    py=python3
+-  done
+-fi
+-if test -n "$GIT_CINNABAR_PYTHON"; then
+-  # $GIT_CINNABAR_PYTHON is an executable which might contain spaces.
+-  exec "$GIT_CINNABAR_PYTHON" "$0" "$@"
+-else
+-  # If $py contains spaces, these will be arguments.
+-  exec $py "$0" "$@"
+-fi
+-exit 1
+-'''
++#!/usr/bin/python3
+ 
+ import os
+ import sys
+diff --git a/git-remote-hg b/git-remote-hg
+index 72abc06..6d4c3ff 100755
+--- a/git-remote-hg
++++ b/git-remote-hg
+@@ -1,29 +1,4 @@
+-#!/bin/sh
+-''':'
+-py="$GIT_CINNABAR_PYTHON"
+-if test -z "$py"; then
+-  for py in python3 python python2.7 python2; do
+-    "$py" -c "from mercurial import hg" >/dev/null 2>&1 && break
+-    py=
+-  done
+-fi
+-if test -z "$py"; then
+-  for py in python3 python python2.7 python2 "py -3" "py -2"; do
+-    # Make sure this Python actually works. On Windows, python.exe, etc. might
+-    # try to run the Windows Store app even if it's not installed.
+-    $py -c "import sys" >/dev/null 2>&1 && break
+-    py=python3
+-  done
+-fi
+-if test -n "$GIT_CINNABAR_PYTHON"; then
+-  # $GIT_CINNABAR_PYTHON is an executable which might contain spaces.
+-  exec "$GIT_CINNABAR_PYTHON" "$0" "$@"
+-else
+-  # If $py contains spaces, these will be arguments.
+-  exec $py "$0" "$@"
+-fi
+-exit 1
+-'''
++#!/usr/bin/python3
+ 
+ from __future__ import division
+ import os
+-- 
+2.36.1
+

@@ -1,0 +1,20 @@
+diff -urp '--exclude=*~' shoulda-context-2.0.0.orig/test/shoulda/context_test.rb shoulda-context-2.0.0/test/shoulda/context_test.rb
+--- shoulda-context-2.0.0.orig/test/shoulda/context_test.rb	2025-12-31 15:12:42.080418564 +0900
++++ shoulda-context-2.0.0/test/shoulda/context_test.rb	2025-12-31 16:36:19.943280284 +0900
+@@ -348,8 +348,14 @@ class ShouldMatcherTest < PARENT_TEST_CA
+     end
+ 
+     def run
+-      @suite.run(@result) do |event, name|
+-        # do nothing
++      begin
++        # test-unit 3.7.4 and above
++        worker_context = Test::Unit::WorkerContext.new(nil, nil, @result)
++        @suite.run(worker_context) {}
++      rescue NameError
++        @suite.run(@result) do |event, name|
++          # do nothing
++        end
+       end
+     end
+ 

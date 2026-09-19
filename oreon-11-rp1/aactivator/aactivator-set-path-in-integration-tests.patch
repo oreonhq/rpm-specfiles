@@ -1,0 +1,14 @@
+diff --git a/tests/integration_test.py b/tests/integration_test.py
+index 6375856..aa65a57 100644
+--- a/tests/integration_test.py
++++ b/tests/integration_test.py
+@@ -32,7 +32,8 @@ def get_proc(shell, homedir):
+             'PS1': PS1,
+             'TOP': os.environ.get('TOP', ''),
+             'HOME': str(homedir),
+-            'PATH': os.path.dirname(sys.executable) + os.defpath
++            'PATH': os.environ['PATH'],
++            'PYTHONPATH': os.environ['PYTHONPATH'],
+         },
+     )
+ 

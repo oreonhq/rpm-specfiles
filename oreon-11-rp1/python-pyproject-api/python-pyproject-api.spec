@@ -1,20 +1,24 @@
-%global source0_hash c2b2726bd7aa9217b6c50b621fef5b2ae5def4d55b779c9e0694c15e0a8517ba
+%global source0_hash none
 
 Name:           python-pyproject-api
-Version:        1.10.1
+Version:        1.11.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        API to interact with the python pyproject.toml based projects
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pyproject-api.readthedocs.org
+URL:            https://pyproject-api.readthedocs.io
 Source:         %{pypi_source pyproject_api}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-API to interact with the python pyproject.toml based projects.}
+This is package 'pyproject-api' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -23,33 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-pyproject-api %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n pyproject_api-%{version}
-# Remove unneeded testing deps
-sed -i "/covdefaults/d;/pytest-cov/d" pyproject.toml
-# Remove version constraints
-sed -i 's/"setuptools>=.*"/"setuptools"/' pyproject.toml
-sed -i 's/"pytest>=.*"/"pytest"/' pyproject.toml
-sed -i 's/"pytest-mock>=.*"/"pytest-mock"/' pyproject.toml
+%autosetup -p1 -n pyproject_api-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -g test
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pyproject_api
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Skip test_setuptools_prepare_metadata_for_build_wheel
-# see https://github.com/tox-dev/pyproject-api/issues/153
-%pytest -k "not test_setuptools_prepare_metadata_for_build_wheel"
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pyproject-api -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

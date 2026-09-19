@@ -1,0 +1,50 @@
+diff --git a/docs/conf.py b/docs/conf.py
+index d1d875c..0ed42ba 100644
+--- a/docs/conf.py
++++ b/docs/conf.py
+@@ -35,11 +35,6 @@ extlinks = {
+     'issue': ('https://github.com/ansasaki/abimap/issues/%s', '#'),
+     'pr': ('https://github.com/ansasaki/abimap/pull/%s', 'PR #'),
+ }
+-# on_rtd is whether we are on readthedocs.org
+-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+-
+-if not on_rtd:  # only set the theme if we're building docs locally
+-    html_theme = 'sphinx_rtd_theme'
+ 
+ html_use_smartypants = True
+ html_last_updated_fmt = '%b %d, %Y'
+diff --git a/pyproject.toml b/pyproject.toml
+index d41b890..454a11d 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -28,7 +28,7 @@ keywords = ["symver", "abimap", "symbol", "version", "versioning", "linker", "sc
+ dependencies = ["setuptools"]
+ 
+ [project.optional-dependencies]
+-dev = ["flake8", "build", "sphinx>=6.0.0", "sphinx-rtd-theme>=1.2.0", "watchdog>=2.0.0"]
++dev = ["flake8", "build", "sphinx>=6.0.0", "watchdog>=2.0.0"]
+ test = ["pytest", "pyyaml", "pytest-cov"]
+ 
+ [project.scripts]
+diff --git a/requirements-ci.txt b/requirements-ci.txt
+index 698294a..621a458 100644
+--- a/requirements-ci.txt
++++ b/requirements-ci.txt
+@@ -24,4 +24,3 @@ flake8>=6.0.0
+ 
+ # Documentation building (for CI docs job)
+ sphinx>=6.0.0
+-sphinx-rtd-theme>=1.2.0
+diff --git a/requirements-test.txt b/requirements-test.txt
+index 2c091b7..d1c9d8e 100644
+--- a/requirements-test.txt
++++ b/requirements-test.txt
+@@ -19,7 +19,6 @@ build>=0.10.0
+ 
+ # Documentation tools
+ sphinx>=6.0.0
+-sphinx-rtd-theme>=1.2.0
+ watchdog>=2.0.0
+ 
+ # Install package in development mode for testing

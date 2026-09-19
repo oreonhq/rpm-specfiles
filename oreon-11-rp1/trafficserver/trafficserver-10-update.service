@@ -1,0 +1,11 @@
+[Unit]
+Description=One-time config update for trafficserver 10
+
+ConditionPathExists=/etc/trafficserver/records.config.rpmsave
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+
+ExecStart=/usr/libexec/trafficserver/convert2yaml.py -f /etc/trafficserver/records.config.rpmsave -o /etc/trafficserver/records.yaml -m
+ExecStart=/usr/bin/mv /etc/trafficserver/records.config.rpmsave /etc/trafficserver/records.config.orig

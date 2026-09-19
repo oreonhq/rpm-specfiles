@@ -1,0 +1,11 @@
+--- a/src/pxplot.f
++++ b/src/pxplot.f
+@@ -44,7 +44,7 @@
+ C
+ C
+ C---- Check for dump file on command line
+-      CALL GETARG0(NARG,FNAME)
++      CALL GETARG0(1,FNAME)
+       IF(FNAME.NE.' ') GO TO 40
+ C
+ C=======================================================

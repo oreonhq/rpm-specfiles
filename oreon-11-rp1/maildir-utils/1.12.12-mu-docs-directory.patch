@@ -1,0 +1,13 @@
+diff --git a/meson.build b/meson.build
+index 19a5933..b7950a8 100644
+--- a/meson.build
++++ b/meson.build
+@@ -301,7 +301,7 @@ configure_file(input: join_paths(build_aux, 'fdl.texi'),
+ ################################################################################
+ # install some data files
+ install_data('NEWS.org', 'IDEAS.org',
+-             install_dir : join_paths(datadir, 'doc', 'mu'))
++             install_dir : join_paths(datadir, 'doc', 'maildir-utils'))
+ 
+ ################################################################################
+ # subdirs

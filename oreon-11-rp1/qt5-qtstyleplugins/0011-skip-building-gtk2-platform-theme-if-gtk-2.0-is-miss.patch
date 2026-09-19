@@ -1,0 +1,27 @@
+From ecb33b42996c07860f75dadc9fa72f8ff1b183b1 Mon Sep 17 00:00:00 2001
+From: Alexander Volkov <a.volkov@rusbitech.ru>
+Date: Wed, 5 Oct 2016 17:28:26 +0300
+Subject: [PATCH 11/12] skip building gtk2 platform theme if gtk+-2.0 is
+ missing
+
+Change-Id: I35e648023168155e28790045f9a74a1d4c609a00
+Reviewed-by: Dmitry Shachnev <mitya57@gmail.com>
+Reviewed-by: J-P Nurmi <jpnurmi@qt.io>
+---
+ src/plugins/platformthemes/platformthemes.pro | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/plugins/platformthemes/platformthemes.pro b/src/plugins/platformthemes/platformthemes.pro
+index 064880e..fedc8f7 100644
+--- a/src/plugins/platformthemes/platformthemes.pro
++++ b/src/plugins/platformthemes/platformthemes.pro
+@@ -1,2 +1,5 @@
+ TEMPLATE = subdirs
+-SUBDIRS = gtk2
++
++packagesExist(gtk+-2.0) {
++    SUBDIRS += gtk2
++}
+-- 
+2.7.4
+

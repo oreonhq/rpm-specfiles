@@ -1,0 +1,8 @@
+/var/log/direwolf/*.log {
+    missingok
+    daily
+    rotate 30
+    minage 7
+    maxage 30
+    compress
+}

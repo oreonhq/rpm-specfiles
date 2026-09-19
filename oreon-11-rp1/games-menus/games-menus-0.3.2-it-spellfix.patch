@@ -1,0 +1,12 @@
+diff -up games-menus-0.3.2/desktop-directories/games-rpg.directory~ games-menus-0.3.2/desktop-directories/games-rpg.directory
+--- games-menus-0.3.2/desktop-directories/games-rpg.directory~	2008-12-01 16:13:09.000000000 +0100
++++ games-menus-0.3.2/desktop-directories/games-rpg.directory	2008-12-01 16:13:09.000000000 +0100
+@@ -3,7 +3,7 @@ Encoding=UTF-8
+ Type=Directory
+ Name=Role Playing Games
+ Name[fr]=Jeux de rôles
+-Name[it]=Giochi di ruoloa
++Name[it]=Giochi di ruolo
+ Name[nb]=Rollespill
+ Name[nl]=Rollenspellen
+ Name[pl]=Gry RPG

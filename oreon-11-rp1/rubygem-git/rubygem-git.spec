@@ -1,0 +1,123 @@
+%global source0_hash 5e8200521400d6695e6c0e20e0741a0a8e43a18e2fed2188ee12d958ad06d243
+
+# Generated from git-1.3.0.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name git
+
+Name: rubygem-%{gem_name}
+Version: 4.3.0
+Release: %autorelease
+Summary: Ruby/Git is a Ruby library that can be used to create, read and manipulate Git repositories by wrapping system calls to the git binary
+License: MIT
+URL: http://github.com/schacon/ruby-git
+Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
+
+# SOURCE1 contains the upstream tag of the project from github
+# in particular this includes the tests and bin directory which was not
+# included in the gemfile.
+Source1: https://github.com/ruby-git/ruby-git/archive/v%{version}/ruby-git-%{version}.tar.gz
+
+BuildRequires: ruby(release)
+BuildRequires: rubygems-devel
+BuildRequires: ruby >= 1.9
+BuildRequires: rubygem(test-unit)
+BuildRequires: git-core
+BuildRequires: rubygem(mocha)
+BuildRequires: rubygem(activesupport)
+BuildRequires: rubygem(rchardet)
+BuildRequires: rubygem(process_executer) >= 4.0.0
+BuildRequires: rubygem(addressable)
+BuildArch: noarch
+Requires:  git-core
+%description
+Ruby/Git is a Ruby library that can be used to create, read and manipulate Git
+repositories by wrapping system calls to the git binary.
+
+%package doc
+Summary: Documentation for %{name}
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%setup -q -n %{gem_name}-%{version}
+
+# unpack only the test files from SOURCE1.
+tar zxf %{SOURCE1} ruby-git-%{version}/tests --strip-components 1
+tar zxf %{SOURCE1} ruby-git-%{version}/bin --strip-components 1
+
+# Some tests require rubygem-minitar - skip them.
+# https://bugzilla.redhat.com/show_bug.cgi?id=2181580
+rm -f tests/units/test_archive.rb
+sed -i 's/^.*minitar.*//' tests/test_helper.rb
+# Requires writing to home directory with a generated gpg key ignore
+rm -f tests/units/test_signed_commits.rb
+
+%build
+# Create the gem as gem install only works on a gem file
+gem build ../%{gem_name}-%{version}.gemspec
+
+# %%gem_install compiles any C extensions and installs the gem into ./%%gem_dir
+# by default, so that we can move it into the buildroot in %%install
+%gem_install
+
+%install
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
+
+%check
+# The following polutes home directoy so need to find a better way
+# git fails fatally if it cannot guess an email adress
+# as is the case inside mock.
+git config --global init.defaultBranch main
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+ruby  -Ilib -I. -Itests -e 'Dir.glob "tests/**/*.rb", &method(:require)'
+
+%files
+%dir %{gem_instdir}
+%{gem_instdir}/MAINTAINERS.md
+%{gem_libdir}
+%{gem_spec}
+%exclude %{gem_instdir}/LICENSE
+%exclude %{gem_cache}
+%exclude %{gem_instdir}/.github
+%exclude %{gem_instdir}/.gitignore
+%exclude %{gem_instdir}/.yardopts
+%exclude %{gem_instdir}/Gemfile
+%exclude %{gem_instdir}/Rakefile
+%exclude %{gem_instdir}/git.gemspec
+%exclude %{gem_instdir}/.commitlintrc.yml
+%exclude %{gem_instdir}/.husky/commit-msg
+%exclude %{gem_instdir}/.release-please-manifest.json
+%exclude %{gem_instdir}/package.json
+%exclude %{gem_instdir}/release-please-config.json
+%exclude %{gem_instdir}/.rubocop.yml
+%exclude %{gem_instdir}/.rubocop_todo.yml
+%exclude %{gem_instdir}/redesign/1_architecture_existing.md
+%exclude %{gem_instdir}/redesign/2_architecture_redesign.md
+%exclude %{gem_instdir}/redesign/3_architecture_implementation.md
+%exclude %{gem_instdir}/tasks/gem_tasks.rake
+%exclude %{gem_instdir}/tasks/rubocop.rake
+%exclude %{gem_instdir}/tasks/test.rake
+%exclude %{gem_instdir}/tasks/test_gem.rake
+%exclude %{gem_instdir}/tasks/yard.rake
+%exclude %{gem_instdir}/redesign/index.md
+
+%license LICENSE
+
+%files doc
+%doc %{gem_docdir}
+%doc %{gem_instdir}/README.md
+%doc %{gem_instdir}/CHANGELOG.md
+%doc %{gem_instdir}/CONTRIBUTING.md
+%doc %{gem_instdir}/AI_POLICY.md
+%doc %{gem_instdir}/CODE_OF_CONDUCT.md
+%doc %{gem_instdir}/GOVERNANCE.md
+
+%changelog
+%autochangelog

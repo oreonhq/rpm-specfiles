@@ -1,0 +1,13 @@
+diff --git a/scm/meson.build b/scm/meson.build
+index d0a4b2a..ef58e05 100644
+--- a/scm/meson.build
++++ b/scm/meson.build
+@@ -13,7 +13,7 @@
+ ## You should have received a copy of the GNU General Public License
+ ## along with this program; if not, write to the Free Software Foundation,
+ ## Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+-mu_scm_dir=join_paths(datadir, 'mu', 'scm')
++mu_scm_dir=join_paths(datadir, 'maildir-utils', 'scm')
+ mu_scm_dir_arg='-DMU_SCM_DIR="' + mu_scm_dir + '"'
+ 
+ lib_mu_scm=static_library(

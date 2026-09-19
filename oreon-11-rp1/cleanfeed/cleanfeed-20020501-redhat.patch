@@ -1,0 +1,12 @@
+diff -up cleanfeed-20020501/cleanfeed.BAD cleanfeed-20020501/cleanfeed
+--- cleanfeed-20020501/cleanfeed.BAD	2008-08-06 16:11:40.000000000 -0400
++++ cleanfeed-20020501/cleanfeed	2008-08-06 16:12:04.000000000 -0400
+@@ -11,7 +11,7 @@
+ # Directory where cleanfeed.local and the other configuration files live.
+ # Set this to undef to not use any external file.
+ 
+-$config_dir = '/news/bin/filter';
++$config_dir = '/etc/news';
+ 
+ ##############################################################################
+ # Server configuration

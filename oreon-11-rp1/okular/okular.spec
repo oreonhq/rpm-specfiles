@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 235e8e761f949b81953582e3ff6e45b8832d0d551b71bd1b5098c1ad663511e4
 
 ## uncomment to enable bootstrap mode
 #global bootstrap 1
@@ -16,8 +16,8 @@
 
 Name:    okular
 Summary: A document viewer
-Version: 26.03.80
-Release: 2%{?dist}
+Version: 26.08.1
+Release: 1%{?dist}
 
 License: GPL-2.0-only
 URL:     https://www.kde.org/applications/graphics/okular/
@@ -232,6 +232,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.ok
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

@@ -1,0 +1,54 @@
+From fa05a61c087872a27f1e9b60989022d29d3096c2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Mon, 17 Jul 2023 09:50:55 +0200
+Subject: [PATCH 2/2] setup: fix git invocation for exlinks, add override
+
+The 'tree' would be bytes, so we'd end up with an url like
+https://github.com/DEAP/deap/blob/b'0123456'/examples/.
+
+While at it, allow the user to override the detect hash. This is particularly
+useful when there are local modifications, and HEAD hash doesn't yet exist on
+github, and it's nicer to link to some other commit, or even 'master'.
+---
+ doc/conf.py | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/doc/conf.py b/doc/conf.py
+index 37827cbf17..caeb9a5af5 100644
+--- a/doc/conf.py
++++ b/doc/conf.py
+@@ -11,7 +11,7 @@
+ # All configuration values have a default; values that are commented out
+ # serve to show the default.
+ 
+-import sys, time
++import sys, time, os
+ 
+ # If extensions (or modules to document with autodoc) are in another directory,
+ # add these directories to sys.path here. If the directory is relative to the
+@@ -128,13 +128,15 @@ plot_html_show_formats = True
+ 
+ # -- Options for extlinks extension ----------------------------------------------
+ import subprocess
+-try:
+-    tree = subprocess.check_output(["git", "rev-parse", "HEAD"]).strip()
+-except OSError:
+-    import warnings
+-    warnings.warn("Cannot link examples because we cannot retrieve the git version", Warning)
+-else:
+-    extlinks = {'example': ('https://github.com/DEAP/deap/blob/{tree}/examples/%s.py'.format(tree=tree), "examples/")}
++tree = os.getenv('GITHUB_COMMIT')
++if tree is None:
++    try:
++        tree = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
++    except OSError:
++        import warnings
++        warnings.warn("Cannot link examples because we cannot retrieve the git version", Warning)
++if tree:
++    extlinks = {'example': ('https://github.com/DEAP/deap/blob/{tree}/examples/%s.py'.format(tree=tree), "examples/%s")}
+ # -- Options for HTML output ---------------------------------------------------
+ 
+ # Add any paths that contain custom themes here, relative to this directory.
+-- 
+2.41.0
+

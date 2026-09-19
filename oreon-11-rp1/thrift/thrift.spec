@@ -72,8 +72,8 @@
 # NOTE: thrift versions their libraries by package version, so each version
 # change is a SONAME change and dependencies need to be rebuilt
 Name:    thrift
-Version: 0.20.0
-Release: 11%{?dist}
+Version: 0.24.0
+Release: 1%{?dist}
 Summary: Software framework for cross-language services development
 
 # Parts of the source are used under the BSD and zlib licenses, but

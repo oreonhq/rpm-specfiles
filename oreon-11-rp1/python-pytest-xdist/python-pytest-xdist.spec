@@ -1,29 +1,27 @@
-%global source0_hash f9248c99a7c15b7d2f90715df93610353a485827bc06eefb6566d23f6400f126
-%global pypi_name pytest_xdist
+%global source0_hash none
 
 Name:           python-pytest-xdist
-Version:        3.7.0
+Version:        3.8.0
 Release:        %autorelease
-Summary:        pytest plugin for distributed testing and loop-on-failing modes
+# Fill in the actual package summary to submit package to Fedora
+Summary:        pytest xdist plugin for distributed testing, most importantly across multiple CPUs
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pytest-dev/pytest-xdist
-Source0:        https://files.pythonhosted.org/packages/source/p/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
-Patch:          44f4bea.patch
-Patch:          0c98447.patch
-BuildArch:      noarch
+Source:         %{pypi_source pytest_xdist}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The pytest-xdist plugin extends pytest with new test execution modes,
-the most used being distributing tests across multiple CPUs
-to speed up test execution:
+This is package 'pytest-xdist' generated automatically by pyp2spec.}
 
-    pytest -n auto
-
-With this call, pytest will spawn a number of workers processes equal
-to the number of available CPUs, and distribute the tests randomly across them.}
+Patch:          44f4bea.patch
+Patch:          0c98447.patch
 
 %description %_description
 
@@ -32,27 +30,36 @@ Summary:        %{summary}
 
 %description -n python3-pytest-xdist %_description
 
-%pyproject_extras_subpkg -n python3-pytest-xdist psutil setproctitle
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytest-xdist psutil,setproctitle,testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{pypi_name}-%{version} -p 1
+%autosetup -p1 -n pytest_xdist-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -t -x testing -x psutil -x setproctitle
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x psutil,setproctitle,testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l xdist
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pytest-xdist -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

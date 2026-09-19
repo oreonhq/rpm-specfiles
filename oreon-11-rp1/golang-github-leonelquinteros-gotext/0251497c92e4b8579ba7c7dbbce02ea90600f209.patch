@@ -1,0 +1,39 @@
+From 0251497c92e4b8579ba7c7dbbce02ea90600f209 Mon Sep 17 00:00:00 2001
+From: Todd Lunter <todd.lunter@lightspeedhq.com>
+Date: Wed, 6 Aug 2025 14:58:44 -0400
+Subject: [PATCH] Subvert go-vet's printf concern with a non-variadic function
+
+go-vet is complaining because it can recognize that we are calling
+`.Get` and ending that call chain with a call to a Printf-like function.
+
+One way to subvert this is to actually call a non-variadic function
+before calling Printf.
+
+This error only shows up because we're passing a single non-constant
+string to the Printf-like call.
+---
+ helper.go | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/helper.go b/helper.go
+index 91ea255..dd0eb4a 100644
+--- a/helper.go
++++ b/helper.go
+@@ -31,12 +31,16 @@ func SimplifiedLocale(lang string) string {
+ // FormatString applies text formatting only when needed to parse variables.
+ func FormatString(str string, vars ...interface{}) string {
+ 	if len(vars) > 0 {
+-		return fmt.Sprintf(str, vars...)
++		return FormatStringWithArgs(str, vars)
+ 	}
+ 
+ 	return str
+ }
+ 
++func FormatStringWithArgs(str string, vars []interface{}) string {
++	return fmt.Sprintf(str, vars...)
++}
++
+ // Appendf applies text formatting only when needed to parse variables.
+ func Appendf(b []byte, str string, vars ...interface{}) []byte {
+ 	if len(vars) > 0 {

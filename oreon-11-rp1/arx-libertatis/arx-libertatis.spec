@@ -1,0 +1,91 @@
+%global source0_hash aafd8831ee2d187d7647ad671a03aabd2df3b7248b0bac0b3ac36ffeb441aedf
+
+Name:          arx-libertatis
+Version:       1.2.1
+Release:       10%{?dist}
+Summary:       Cross-platform, open source port of the Arx Fatalis RPG
+
+# Main source - GPLv3+
+# data/core/misc/dejavusansmono.ttf - Bitstream Vera
+# data/core/misc/icons.ttf - OFL
+# src/util/HandleType.h - BSL-1.0
+# src/util/cmdline - BSL-1.0
+# tools/crashreporter/qhexedit - LGPLv2+, but not used
+# src/math/GtxFunctions.h - MIT
+# src/util/MD5.cpp - Public Domain
+# cmake/SDL-2.0.9/SDL_syswm.h - zlib
+License:       GPLv3+ and Bitstream Vera and OFL and BSL-1.0 and MIT and zlib
+URL:           https://arx-libertatis.org/
+Source0:       https://arx-libertatis.org/files/%{name}-%{version}.tar.xz
+
+BuildRequires: gcc
+BuildRequires: gcc-c++
+BuildRequires: cmake
+BuildRequires: ninja-build
+BuildRequires: zlib-devel
+BuildRequires: boost-devel
+BuildRequires: glm-devel
+BuildRequires: freetype-devel
+BuildRequires: openal-soft-devel
+BuildRequires: SDL2-devel
+BuildRequires: libepoxy-devel
+BuildRequires: desktop-file-utils
+Requires: hicolor-icon-theme
+Provides: bundled(dejavu-fonts) = 0
+Provides: bundled(google-noto-fonts) = 0
+
+%description
+Cross-platform port of Arx Fatalis, a first-person role-playing game
+
+Arx Libertatis is based on the publicly released Arx Fatalis source code.
+
+%package devel
+Summary: Header files and libraries for Arx Libertatis development
+Requires: %{name}%{_isa} = %{version}-%{release}
+
+%description devel
+The arx-libertatis-devel package contains header files asnd libraries needed
+to develop programs that use Arx Libertatis.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1
+
+%build
+%cmake -G Ninja
+%cmake_build
+
+%install
+%cmake_install
+
+%check
+desktop-file-validate %{buildroot}%{_datadir}/applications/arx-libertatis.desktop
+
+%files
+%doc AUTHORS CHANGELOG CONTRIBUTING.md README.md
+%license COPYING LICENSE LICENSE.DejaVu
+%{_bindir}/arx
+%{_bindir}/arx-install-data
+%{_bindir}/arxsavetool
+%{_bindir}/arxunpak
+%{_libdir}/libArxIO.so.*
+%{_libexecdir}/arxtool
+%{_datadir}/applications/arx-libertatis.desktop
+%{_datadir}/games/arx/
+%{_datadir}/icons/hicolor/*/apps/arx-libertatis.png
+%{_mandir}/man1/arx-install-data.1.gz
+%{_mandir}/man1/arxsavetool.1.gz
+%{_mandir}/man1/arxunpak.1.gz
+%{_mandir}/man6/arx.6.gz
+
+%files devel
+%{_libdir}/libArxIO.so
+%{_includedir}/ArxIO.h
+%dir %{_datadir}/blender
+%dir %{_datadir}/blender/scripts
+%dir %{_datadir}/blender/scripts/addons
+%{_datadir}/blender/scripts/addons/arx
+
+%changelog
+%autochangelog

@@ -1,0 +1,76 @@
+--- src/asm.c~	2000-12-24 18:49:07.000000000 -0600
++++ src/asm.c	2014-02-10 12:10:04.739013581 -0600
+@@ -652,7 +652,7 @@
+   macputs(str);
+ #else
+   if (!inCdb)
+-    fprintf(stderr, str);
++    fprintf(stderr, "%s", str);
+ #if defined DOSALLGRAPHX
+   else {
+     if (displayMode == TEXT)
+@@ -823,7 +823,7 @@
+ #ifdef __MAC__
+     textout(notEnoughMemErr);
+ #else
+-    fprintf(stderr, notEnoughMemErr);
++    fprintf(stderr, "%s", notEnoughMemErr);
+ #endif
+     Exit(MEMERR);
+     break;
+@@ -906,7 +906,7 @@
+   }
+ 
+   if (ierr >= ERRMAX) {
+-    sprintf(outs, tooManyMsgErr);
++    sprintf(outs, "%s", tooManyMsgErr);
+ #ifndef VMS
+     textout(outs);
+ #else
+--- src/cdb.c~	2000-12-24 18:49:07.000000000 -0600
++++ src/cdb.c	2014-02-10 12:18:37.335027697 -0600
+@@ -2582,7 +2582,7 @@
+       fprintf(outp, nameByAuthorScores, warrior[idxV[i]].name, warrior[idxV[i]].authorName,
+               scrV[idxV[i]]);
+       if (warriors > 2) {
+-        fprintf(outp, resultsAre);
++        fprintf(outp, "%s", resultsAre);
+         for (j = 0; j < warriors; ++j) {
+           fprintf(outp, " %d", warrior[idxV[i]].score[j]);
+         }
+--- src/xwindisp.c~	2000-09-28 06:03:56.000000000 -0500
++++ src/xwindisp.c	2014-02-10 12:23:36.490035935 -0600
+@@ -253,7 +253,7 @@
+ my_err(s)
+   char   *s;
+ {
+-  fprintf(stderr, s);
++  fprintf(stderr, "%s", s);
+   Exit(1);
+ }
+ 
+--- src/clparse.c~	2000-12-24 18:49:08.000000000 -0600
++++ src/clparse.c	2014-02-10 12:28:14.270043584 -0600
+@@ -289,7 +289,7 @@
+               if (next_input(filep, inputs)) {
+                 if (!strcmp(inputs, "-")) {
+                   newFile = stdin;
+-                  fprintf(stderr, readingStdin);
++                  fprintf(stderr, "%s", readingStdin);
+                 } else {
+                   if ((newFile = fopen(inputs, "r")) == NULL) {
+                     code = FILENAME;        /* command file not found */
+@@ -430,11 +430,11 @@
+     errout(outs);
+     break;
+   case MEMORY:
+-    sprintf(outs, outOfMemory);
++    sprintf(outs, "%s", outOfMemory);
+     errout(outs);
+     break;
+   case FILENAME:
+-    sprintf(outs, cannotOpenParameterFile);
++    sprintf(outs, "%s", cannotOpenParameterFile);
+     errout(outs);
+     break;
+   }

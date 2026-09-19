@@ -1,0 +1,25 @@
+--- a/Makefile
++++ b/Makefile
+@@ -64,7 +64,6 @@
+ 	(cd .temp;g++  -c -fdump-ada-spec -C x.c)
+ 	python rename.py .temp/zmq_h.ads
+ 	cp .temp/zmq_h.ads src/gen/zmq-low_level.ads
+-	gnatpp -rf  -M128  --comments-special src/gen/*.ads
+ 	sed "s-Zmq.Low_Level-ZMQ.Low_Level-" -i src/gen/zmq-low_level.ads
+ 	chmod -w src/gen/*.ads
+ clean:
+@@ -85,7 +84,7 @@
+ 
+ helpers/getinfo:$(wildcard src/*.ads)
+ 	cd helpers;gprbuild -p
+-	
++
+ tag:helpers/getinfo
+ 	@if [ -n "`git status --porcelain`" ] ; then \
+ 		echo "Folder is not clean";\
+@@ -94,5 +93,3 @@
+ 	fi
+ 	@(VERSION=`helpers/getinfo --binding-version`-`date +%Y%m%d`;\
+ 	git tag $${VERSION})
+-	
+-	

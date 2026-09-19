@@ -1,0 +1,112 @@
+From 387fa9208ac14665a5d81f88e47ef52710eeeb65 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Tue, 22 Jul 2025 03:57:05 -0700
+Subject: [PATCH] Adjust test usage of get_event_loop() for Python 3.14 changes
+ (#2361)
+
+As of Python 3.14, get_event_loop() no longer automatically sets
+up a new loop if there currently isn't one, instead it raises a
+RuntimeError. This adjusts several usages of get_event_loop() in
+the tests to work with the change. It also adds a loop setup step
+to learn.py - currently it doesn't have one, but calls
+asyncio.create_task, so it is implicitly relying on an earlier
+test having set up an event loop. If you run learn.py alone, it
+fails because of this.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ testing/analysis.py     | 6 +++++-
+ testing/ficsmanagers.py | 6 +++++-
+ testing/learn.py        | 6 ++++++
+ testing/polyglot.py     | 6 +++++-
+ testing/savegame.py     | 6 +++++-
+ 5 files changed, 26 insertions(+), 4 deletions(-)
+
+diff --git a/testing/analysis.py b/testing/analysis.py
+index 40b4da66..2aba0145 100755
+--- a/testing/analysis.py
++++ b/testing/analysis.py
+@@ -78,7 +78,11 @@ class CECPTests(EmittingTestCase):
+         self.assertEqual(results, ([(ply, moves, score, depth, nps)],))
+ 
+     def setUp(self):
+-        self.loop = asyncio.get_event_loop()
++        try:
++            self.loop = asyncio.get_event_loop()
++        except RuntimeError:
++            self.loop = asyncio.new_event_loop()
++            asyncio.set_event_loop(self.loop)
+ 
+         self.engineA, self.analyzerA = self._setupengine(ANALYZING)
+         self.engineI, self.analyzerI = self._setupengine(INVERSE_ANALYZING)
+diff --git a/testing/ficsmanagers.py b/testing/ficsmanagers.py
+index 1004f3a5..bcd0c779 100755
+--- a/testing/ficsmanagers.py
++++ b/testing/ficsmanagers.py
+@@ -139,7 +139,11 @@ class EmittingTestCase(unittest.TestCase):
+     Warning: Strong connection to fics managers"""
+ 
+     def setUp(self):
+-        self.loop = asyncio.get_event_loop()
++        try:
++            self.loop = asyncio.get_event_loop()
++        except RuntimeError:
++            self.loop = asyncio.new_event_loop()
++            asyncio.set_event_loop(self.loop)
+ 
+         self.connection = DummyConnection()
+         self.connection.players = FICSPlayers(self.connection)
+diff --git a/testing/learn.py b/testing/learn.py
+index c7f6b96c..faa68cb3 100644
+--- a/testing/learn.py
++++ b/testing/learn.py
+@@ -23,6 +23,12 @@ discoverer.pre_discover()
+ 
+ class LearnTests(unittest.TestCase):
+     def setUp(self):
++        try:
++            self.loop = asyncio.get_event_loop()
++        except RuntimeError:
++            self.loop = asyncio.new_event_loop()
++            asyncio.set_event_loop(self.loop)
++
+         widgets = uistuff.GladeWidgets("PyChess.glade")
+         gamewidget.setWidgets(widgets)
+         perspective_manager.set_widgets(widgets)
+diff --git a/testing/polyglot.py b/testing/polyglot.py
+index 9abd9c24..9d66188d 100644
+--- a/testing/polyglot.py
++++ b/testing/polyglot.py
+@@ -157,7 +157,11 @@ class PolyglotTestCase(unittest.TestCase):
+ 
+             await event.wait()
+ 
+-        loop = asyncio.get_event_loop()
++        try:
++            loop = asyncio.get_event_loop()
++        except RuntimeError:
++            loop = asyncio.new_event_loop()
++            asyncio.set_event_loop(loop)
+         loop.set_debug(enabled=True)
+ 
+         loop.run_until_complete(coro())
+diff --git a/testing/savegame.py b/testing/savegame.py
+index 3d2fec3d..051a38a4 100644
+--- a/testing/savegame.py
++++ b/testing/savegame.py
+@@ -54,7 +54,11 @@ class DatabaseTests(unittest.TestCase):
+     def test1(self):
+         """Play and save Human-Human 1 min game"""
+ 
+-        loop = asyncio.get_event_loop()
++        try:
++            loop = asyncio.get_event_loop()
++        except RuntimeError:
++            loop = asyncio.new_event_loop()
++            asyncio.set_event_loop(loop)
+         loop.set_debug(enabled=True)
+ 
+         async def coro():
+-- 
+2.50.1
+

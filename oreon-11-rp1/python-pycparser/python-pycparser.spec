@@ -1,78 +1,57 @@
-%global source0_hash b074c239ee828fcb9c97774b942f3ce51f0d2edc00809f49c3c3ef0f3baaf9c1
-
-%bcond_without tests
+%global source0_hash none
 
 Name:           python-pycparser
-Summary:        C parser and AST generator written in Python
-Version:        2.22
+Version:        3.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        C parser in Python
 
-# pycparser: BSD-3-Clause
-# bundled ply: BSD-3-Clause
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-
-URL:            http://github.com/eliben/pycparser
-Source0:        https://github.com/eliben/pycparser/archive/release_v2.22.tar.gz#/python-pycparser-2.22.tar.gz
-Source1:        pycparser-0.91.1-remove-relative-sys-path.py
+URL:            https://github.com/eliben/pycparser
+Source:         %{pypi_source pycparser}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-# for unit tests
-%if %{with tests}
-BuildRequires:  gcc
-%endif
 
-%description
-pycparser is a complete parser for the C language, written in pure Python.
-It is a module designed to be easily integrated into applications that
-need to parse C source code.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pycparser' generated automatically by pyp2spec.}
 
-%package -n python3-pycparser
+%description %_description
+
+%package -n     python3-pycparser
 Summary:        %{summary}
 
-# pycaparser bundles ply,
-# which is the preferred upstream for both upstreams.
-# See https://github.com/eliben/pycparser/pull/589
-%global         ply_version 3.9
-Provides:       bundled(python3dist(ply)) = %{ply_version}
+%description -n python3-pycparser %_description
 
-%description -n python3-pycparser
-pycparser is a complete parser for the C language, written in pure Python.
-It is a module designed to be easily integrated into applications that
-need to parse C source code.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n pycparser-release_v%{version}
+%autosetup -p1 -n pycparser-%{version}
 
-# Remove relative sys.path from the examples
-%{python3} %{SOURCE1} examples
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
-pushd pycparser
-%{python3} _build_tables.py
-popd
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l pycparser
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-export %{py3_test_envvars}
-%if %{with tests}
-%{python3} -m unittest discover
-%endif
-%{python3} -c 'import pycparser; assert pycparser.ply.__version__ == "%{ply_version}"'
- 
+%_pyproject_check_import_allow_no_modules -t
+
+
 %files -n python3-pycparser -f %{pyproject_files}
-%doc examples
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.22-1

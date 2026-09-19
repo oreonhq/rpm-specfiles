@@ -1,0 +1,53 @@
+--- src/check.cpp.orig	2019-09-09 09:09:42.511584867 -0600
++++ src/check.cpp	2019-09-09 09:10:28.396752570 -0600
+@@ -33,7 +33,7 @@ std::vector<Expr *> ascHoles;
+ 
+ Trie<pair<Expr *, Expr *> > *symbols = new Trie<pair<Expr *, Expr *> >;
+ 
+-hash_map<string, bool> imports;
++std::unordered_map<string, bool> imports;
+ std::map<SymExpr *, int> mark_map;
+ std::vector<std::pair<std::string, std::pair<Expr *, Expr *> > >
+     local_sym_names;
+--- src/check.h.orig	2019-08-08 13:50:19.000000000 -0600
++++ src/check.h	2019-09-09 09:09:42.511584867 -0600
+@@ -8,7 +8,7 @@
+ #include <stdio.h>
+ #include <hash_map>
+ #else
+-#include <ext/hash_map>
++#include <unordered_map>
+ #endif
+ 
+ #include <cstddef>
+@@ -158,8 +158,8 @@ inline const char *prefix_id(bool skip_w
+ typedef std::hash_map<std::string, Expr *> symmap;
+ typedef std::hash_map<std::string, SymExpr *> symmap2;
+ #else
+-typedef __gnu_cxx::hash_map<std::string, Expr *> symmap;
+-typedef __gnu_cxx::hash_map<std::string, SymExpr *> symmap2;
++typedef std::unordered_map<std::string, Expr *> symmap;
++typedef std::unordered_map<std::string, SymExpr *> symmap2;
+ #endif
+ extern symmap2 progs;
+ extern std::vector<Expr *> ascHoles;
+@@ -171,19 +171,6 @@ extern std::map<SymExpr *, int> mark_map
+ extern std::vector<std::pair<std::string, std::pair<Expr *, Expr *> > >
+     local_sym_names;
+ 
+-#ifndef _MSC_VER
+-namespace __gnu_cxx {
+-template <>
+-struct hash<std::string>
+-{
+-  size_t operator()(const std::string &x) const
+-  {
+-    return hash<const char *>()(x.c_str());
+-  }
+-};
+-}  // namespace __gnu_cxx
+-#endif
+-
+ extern Expr *statMpz;
+ extern Expr *statMpq;
+ extern Expr *statType;

@@ -1,8 +1,8 @@
 %global source0_hash f99d1c13aa5fa296898a181dff9b82fb25f6cc0933dbaa7a475d8109bd54209d
 
 Name:           graphite2
-Version:        1.3.14
-Release:        20%{?dist}
+Version:        1.3.15
+Release:        1%{?dist}
 Summary:        Font rendering capabilities for complex non-Roman writing systems
 
 # As per COPYING file this library is tri-licensed

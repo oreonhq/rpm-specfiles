@@ -1,0 +1,26 @@
+From 3ec654110e501c7bcf30c2986b550521bd347ce6 Mon Sep 17 00:00:00 2001
+From: Raymond Wooninck <tittiatcoke@gmail.com>
+Date: Tue, 19 Aug 2014 14:55:43 +0200
+Subject: [PATCH 9/9] Set also QT_QTGUI_LIBARARY as that this variable is
+ actually the one being used.
+
+---
+ cmake/modules/ECMQt4To5Porting.cmake | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/cmake/modules/ECMQt4To5Porting.cmake b/cmake/modules/ECMQt4To5Porting.cmake
+index 7d6458a..97f659f 100644
+--- a/cmake/modules/ECMQt4To5Porting.cmake
++++ b/cmake/modules/ECMQt4To5Porting.cmake
+@@ -39,6 +39,8 @@ set(QT_QTGUI_LIBRARIES
+   ${Qt5Svg_LIBRARIES}
+ )
+ 
++set(QT_QTGUI_LIBRARY ${QT_QTGUI_LIBRARIES})
++
+ set(QT_INCLUDES
+     ${Qt5Gui_INCLUDE_DIRS}
+     ${Qt5Widgets_INCLUDE_DIRS}
+-- 
+2.5.0
+

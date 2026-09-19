@@ -1,0 +1,36 @@
+diff -up frysk-0.4/frysk-core/frysk/scopes/Scope.java.skipdecl frysk-0.4/frysk-core/frysk/scopes/Scope.java
+--- frysk-0.4/frysk-core/frysk/scopes/Scope.java.skipdecl	2010-03-30 14:04:28.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/scopes/Scope.java	2010-03-30 14:02:55.000000000 -0400
+@@ -48,6 +48,7 @@ import lib.dwfl.DwarfDie;
+ import frysk.debuginfo.DebugInfoFrame;
+ import frysk.debuginfo.TypeFactory;
+ import frysk.value.ObjectDeclaration;
++import lib.dwfl.DwAt;
+ 
+ /**
+  * A class to represent a Scope.
+@@ -215,14 +216,24 @@ public class Scope
+   public ObjectDeclaration getDeclaredObjectByName(String name){
+       
+       ObjectDeclaration objectDeclaration = null;
++      ObjectDeclaration declaration = null;
+       
+       Iterator iterator = this.getObjectDeclarations().iterator();
+       while (iterator.hasNext()) {
+ 	objectDeclaration = (ObjectDeclaration) iterator.next();
+ 	if(objectDeclaration.getName().equals(name)){
++	    if (objectDeclaration instanceof Variable
++		&& ((Variable)objectDeclaration).getVariableDie().getAttrBoolean(DwAt.DECLARATION)) {
++		// If it is only a declaration keep searching;
++		// hopefully there's also a definition.
++		declaration = objectDeclaration;
++		continue;
++	    }
+ 	    return objectDeclaration;
+ 	}
+       }
++      if (declaration != null)
++	  return declaration;
+       
+       iterator = this.getEnums().iterator();
+       while (iterator.hasNext()) {

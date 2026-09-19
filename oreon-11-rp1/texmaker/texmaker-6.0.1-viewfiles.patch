@@ -1,0 +1,34 @@
+--- src/texmaker.cpp.orig	2022-05-03 07:26:20.198440252 -0500
++++ src/texmaker.cpp	2022-05-03 07:27:55.747347581 -0500
+@@ -5234,28 +5234,10 @@
+ metapost_command=config->value("Tools/Metapost","mpost --interaction nonstopmode ").toString();
+ // xdvi %.dvi  -sourceposition @:%.tex
+ // kdvi "file:%.dvi#src:@ %.tex"
+-switch (desktop_env)
+-	{
+-	case 1:
+-		{
+-		viewdvi_command=config->value("Tools/Dvi","xdg-open %.dvi").toString();
+-		viewps_command=config->value("Tools/Ps","xdg-open %.ps").toString();
+-		viewpdf_command=config->value("Tools/Pdf","xdg-open %.pdf").toString();
+-		}break;
+-	case 2:
+-		{
+-		viewdvi_command=config->value("Tools/Dvi","kdvi %.dvi").toString();
+-		viewps_command=config->value("Tools/Ps","kghostview %.ps").toString();
+-		viewpdf_command=config->value("Tools/Pdf","kpdf %.pdf").toString();
+-		}break;
+-	case 3:
+-		{
+-		viewdvi_command=config->value("Tools/Dvi","okular %.dvi").toString();
+-		viewps_command=config->value("Tools/Ps","okular %.ps").toString();
+-		viewpdf_command=config->value("Tools/Pdf","okular %.pdf").toString();
+-		}break;
+-	}
+ 
++viewdvi_command=config->value("Tools/Dvi","xdg-open %.dvi").toString();
++viewps_command=config->value("Tools/Ps","xdg-open %.ps").toString();
++viewpdf_command=config->value("Tools/Pdf","xdg-open %.pdf").toString();
+ 
+ 
+ ghostscript_command=config->value("Tools/Ghostscript","gs").toString();

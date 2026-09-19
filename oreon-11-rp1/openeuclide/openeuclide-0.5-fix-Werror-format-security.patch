@@ -1,0 +1,53 @@
+diff -up ./src/diaBase.cc.orig ./src/diaBase.cc
+--- ./src/diaBase.cc.orig	2014-06-29 18:57:47.940592868 -0700
++++ ./src/diaBase.cc	2014-06-29 18:58:56.473959564 -0700
+@@ -93,13 +93,13 @@ bool errBase::run( bool bAsk ) {
+ 				     GTK_DIALOG_DESTROY_WITH_PARENT,
+ 				     GTK_MESSAGE_QUESTION,
+ 				     GTK_BUTTONS_YES_NO,
+-				     str.c_str());
++				     "%s", str.c_str());
+   else 
+     dialog = gtk_message_dialog_new (NULL,
+ 				     GTK_DIALOG_DESTROY_WITH_PARENT,
+ 				     GTK_MESSAGE_ERROR,
+ 				     GTK_BUTTONS_OK,
+-				     str.c_str());
++				     "%s", str.c_str());
+   g_signal_connect (GTK_OBJECT (dialog),
+ 		    "response",
+ 		    G_CALLBACK (dia_errBase_rt_func),
+diff -up ./src/euclideMain.cc.orig ./src/euclideMain.cc
+--- ./src/euclideMain.cc.orig	2014-06-29 18:55:58.278006102 -0700
++++ ./src/euclideMain.cc	2014-06-29 18:56:31.168182086 -0700
+@@ -33,7 +33,7 @@
+ 
+ using namespace std;
+ 
+-char *buttonFiles[] = {"point.png","pointonline.png","","lineintersect.png","linecircleintersect.png","circleintersect.png","",
++const char *buttonFiles[] = {"point.png","pointonline.png","","lineintersect.png","linecircleintersect.png","circleintersect.png","",
+ 		       "barycenter.png","center.png","","vector.png","rotatehomothetic.png","projectcircle.png","projectline.png",
+ 		       "projectorthogonal.png","symetric.png","","line.png","segment.png","lineorthogonal.png",
+ 		       "lineparallel.png","bissect.png",
+diff -up ./src/icon.xpm.orig ./src/icon.xpm
+--- ./src/icon.xpm.orig	2014-06-29 18:55:58.278006102 -0700
++++ ./src/icon.xpm	2014-06-29 18:56:39.834228455 -0700
+@@ -1,5 +1,5 @@
+ /* XPM */
+-static char * icon_xpm[] = {
++const static char * icon_xpm[] = {
+ "48 48 1318 2",
+ "  	c None",
+ ". 	c #BEBBA0",
+diff -up ./src/mlstring.cc.orig ./src/mlstring.cc
+--- ./src/mlstring.cc.orig	2014-06-29 18:55:58.278006102 -0700
++++ ./src/mlstring.cc	2014-06-29 18:57:04.993363072 -0700
+@@ -134,7 +134,7 @@ int mlString::nbElementsMenu() {
+ 
+ void mlString::select() {
+ 
+-  char* name = config::getString( "language" );
++  const char* name = config::getString( "language" );
+   if ( !name ) {
+     mlFileName = "english.multilanguage";
+     config::setString( "language", mlFileName.c_str() );

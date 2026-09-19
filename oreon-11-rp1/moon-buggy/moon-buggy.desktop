@@ -1,0 +1,9 @@
+[Desktop Entry]
+Categories=Game;ArcadeGame;
+Name=moon-buggy
+Type=Application
+Terminal=true
+Exec=moon-buggy
+Icon=moon-buggy
+Comment=Drive and jump with some kind of car across the moon
+Encoding=UTF-8

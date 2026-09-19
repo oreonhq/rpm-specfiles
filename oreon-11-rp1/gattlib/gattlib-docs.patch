@@ -1,0 +1,12 @@
+diff -Naur gattlib-0.7.2.old/docs/CMakeLists.txt gattlib-0.7.2/docs/CMakeLists.txt
+--- gattlib-0.7.2.old/docs/CMakeLists.txt	2024-04-24 14:37:28.000000000 +0200
++++ gattlib-0.7.2/docs/CMakeLists.txt	2025-03-26 11:03:33.615197118 +0100
+@@ -16,7 +16,7 @@
+ configure_file(${DOXYFILE_IN} ${DOXYFILE_OUT} @ONLY)
+ 
+ # Create Doxygen output directory
+-file(MAKE_DIRECTORY ${DOXYGEN_OUTPUT_DIR})
++file(MAKE_DIRECTORY ${DOXYGEN_OUTPUT_DIR}/xml)
+ 
+ add_custom_command(OUTPUT ${DOXYGEN_INDEX_FILE}
+                    DEPENDS ${DOXYGEN_INPUT_DEPENDENCIES}

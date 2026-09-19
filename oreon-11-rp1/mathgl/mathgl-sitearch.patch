@@ -1,0 +1,15 @@
+Index: mathgl-2x/lang/CMakeLists.txt
+===================================================================
+--- mathgl-2x/lang/CMakeLists.txt	(revision 1772)
++++ mathgl-2x/lang/CMakeLists.txt	(working copy)
+@@ -63,8 +63,8 @@
+ 	)
+ 	add_custom_target(mgl_python_module ALL DEPENDS mathgl mathgl.pyc)
+ 
+-	install(FILES ${MathGL2_BINARY_DIR}/lang/mathgl.py DESTINATION ${Python_SITELIB})
+-	install(FILES ${MathGL2_BINARY_DIR}/lang/__pycache__/mathgl.cpython-${Python_VERSION_MAJOR}${Python_VERSION_MINOR}.pyc DESTINATION ${Python_SITELIB}/__pycache__)
++	install(FILES ${MathGL2_BINARY_DIR}/lang/mathgl.py DESTINATION ${Python_SITEARCH})
++	install(FILES ${MathGL2_BINARY_DIR}/lang/__pycache__/mathgl.cpython-${Python_VERSION_MAJOR}${Python_VERSION_MINOR}.pyc DESTINATION ${Python_SITEARCH}/__pycache__)
+ 	install (TARGETS mathgl LIBRARY DESTINATION ${Python_SITEARCH})
+ 	set(mgl_clean_files ${mgl_clean_files} mathgl.py)
+ 

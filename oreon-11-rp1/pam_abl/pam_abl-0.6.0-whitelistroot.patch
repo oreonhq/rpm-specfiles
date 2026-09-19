@@ -1,0 +1,10 @@
+diff -up pam_abl-0.6.0/conf/pam_abl.conf.whitelistroot pam_abl-0.6.0/conf/pam_abl.conf
+--- pam_abl-0.6.0/conf/pam_abl.conf.whitelistroot	2013-08-29 14:52:11.000000000 -0600
++++ pam_abl-0.6.0/conf/pam_abl.conf	2013-09-20 12:10:21.720843571 -0600
+@@ -10,5 +10,4 @@ host_block_cmd=[logger] [block] [host] [
+ user_clear_cmd=[logger] [clear] [user] [%u]
+ user_block_cmd=[logger] [block] [user] [%u]
+ limits=1000-1200
+-host_whitelist=1.1.1.1/24;2.1.1.1
+-user_whitelist=danta;chris
++user_whitelist=root

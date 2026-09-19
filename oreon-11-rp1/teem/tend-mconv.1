@@ -1,0 +1,39 @@
+.TH TEND\-MCONV "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-mconv \- convert from one model to another
+.SH SYNOPSIS
+.B tend\ mconv
+.B \-mo
+.RI < model >
+.RB [ \-mi
+.RI < model >]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH OPTIONS
+.TP
+.B \-mo\fR <\fImodel\fR>
+which model to convert to
+.RI ( string )
+.TP
+.B \-mi\fR <\fImodel\fR>
+model converting from; if not set, will try to determine from input
+.I nrrd
+.RI ( string )
+.TP
+.B \-i\fR <\fInin\fR>
+input
+.I nrrd
+of model parms; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output
+.I nrrd
+of model parms
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

@@ -1,0 +1,47 @@
+From 038e82acfb289293255a43993d05d2e4f00939b3 Mon Sep 17 00:00:00 2001
+From: Y <julia.roznova@intel.com>
+Date: Thu, 27 Jun 2024 05:52:13 -0500
+Subject: [PATCH 1/3] fix compiler warnings for gcc
+
+(cherry picked from commit 89d769f295d860824e57a3973a2038bcca8a5f33)
+---
+ src_c/IMB_chk_diff.c | 6 ++++--
+ src_c/IMB_output.c   | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/src_c/IMB_chk_diff.c b/src_c/IMB_chk_diff.c
+index da0b8986620a..899cf7700f68 100644
+--- a/src_c/IMB_chk_diff.c
++++ b/src_c/IMB_chk_diff.c
+@@ -1062,8 +1062,10 @@ Output variables:
+         if (pos2 - pos1 + 1 == lengths[i])
+             c_info->reccnt[rank]++;
+         else if (i < Npos) {
+-            if (ranks[i + 1] == rank && pos2 - pos1 + 1 == (lengths[i] + (lengths[i + 1])))
+-                c_info->reccnt[rank]++; i++;
++            if (ranks[i + 1] == rank && ((pos2 - pos1 + 1) == (lengths[i] + lengths[i + 1]))) {
++                c_info->reccnt[rank]++;
++                i++;
++            }
+         }
+ 
+         i++;
+diff --git a/src_c/IMB_output.c b/src_c/IMB_output.c
+index bad342b15920..c5eba8159cb6 100644
+--- a/src_c/IMB_output.c
++++ b/src_c/IMB_output.c
+@@ -343,9 +343,9 @@ Input variables:
+ 
+             case SAMPLE_FAILED_INT_OVERFLOW:
+ #ifdef MPI1
+-                sprintf(aux_string + offset, " int-overflow; The production rank*size caused int overflow for given sample; use flag \"-data_type double\"");
++                sprintf(aux_string + offset, " int-overflow; The production rank*size caused int overflow; use \"-data_type double\"");
+ #else
+-                sprintf(aux_string + offset, " int-overflow; The production rank*size caused int overflow for given sample");
++                sprintf(aux_string + offset, " int-overflow; The production rank*size caused int overflow;");
+ #endif
+                 break;
+             case SAMPLE_FAILED_TIME_OUT:
+-- 
+2.45.2
+

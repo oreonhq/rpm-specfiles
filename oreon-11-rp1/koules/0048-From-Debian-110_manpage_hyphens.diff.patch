@@ -1,0 +1,31 @@
+Description: Escape minus signs in the manpage
+Author: Stephen Kitt <steve@sk2.org>
+
+--- koules-1.4.orig/xkoules.6
++++ koules-1.4/xkoules.6
+@@ -4,7 +4,7 @@
+ xkoules \- Action game for X11
+ 
+ .SH SYNOPSIS
+-xkoules [-SxslMmpdh]
++xkoules [\-SxslMmpdh]
+ 
+ .SH KOULES FROM THE TOP:
+ .br
+@@ -133,14 +133,14 @@
+ .br
+   Eat extension            :  +10
+ .br
+-  Eat thief                :  -30
++  Eat thief                :  \-30
+ .br
+   Eat friend               :  +30
+ .B  At end of level
+ .br
+   every live               :  +20
+ .br
+-  every lost level         :  -100
++  every lost level         :  \-100
+ .br
+ .B  In deathmatch mode
+ .br

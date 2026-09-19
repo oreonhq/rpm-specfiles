@@ -1,0 +1,11 @@
+--- a/zmq.gpr
++++ b/zmq.gpr
+@@ -31,7 +31,7 @@
+ ------------------------------------------------------------------------------
+ with "libzmq.gpr";
+ project ZMQ is
+-   for Languages use ("Ada", "Makefile", "Python");
++   for Languages use ("Ada");
+ 
+    type ZMQ_Kind_Type is ("static", "relocatable");
+    ZMQ_Kind : ZMQ_Kind_Type := external ("LIBRARY_TYPE", "static");

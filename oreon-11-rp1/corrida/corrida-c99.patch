@@ -1,0 +1,98 @@
+Add additional internal includes and a few more declarations with
+proper types, to avoid implicit ints and implicit function
+declarations.  This prepares for future compilers which do not accept
+these historic C features by default.
+
+Fix the signature of internal_data_init to be consistent with its
+caller.
+
+diff --git a/corrida/forms.c b/corrida/forms.c
+index dc5073b56c278b4a..70193bbca16e832f 100755
+--- a/corrida/forms.c
++++ b/corrida/forms.c
+@@ -1,4 +1,5 @@
+ #include "forms.h"
++#include "gui.h"
+ 
+ GArray *observations_runs_list;
+ GArray *meteors_list;
+diff --git a/corrida/gui.h b/corrida/gui.h
+index fbc9aca2be207bf2..dc6ef12c0d6c2053 100755
+--- a/corrida/gui.h
++++ b/corrida/gui.h
+@@ -271,4 +271,7 @@ void draw_arrow( GdkPixmap *pixmap,
+ 		 guint x1, guint y1, guint x2, guint y2,
+ 		 char *string );
+ 
++extern GtkWidget *main_window;
++extern GtkWidget *charts_window;
++
+ #endif
+diff --git a/corrida/gui_about.c b/corrida/gui_about.c
+index 328435d296871284..e0fc9b52876e6214 100755
+--- a/corrida/gui_about.c
++++ b/corrida/gui_about.c
+@@ -4,7 +4,6 @@ void menubar_about_clicked_cb( GtkMenuItem *menuitem,
+ 			       gpointer user_data )
+ 
+ {
+-  extern *main_window;
+   GtkWidget *dialog;
+   GtkWidget *vbox;
+   GtkWidget *image;
+diff --git a/corrida/gui_callbacks.c b/corrida/gui_callbacks.c
+index 4d06e4137b89addd..e4f42d09d632468e 100755
+--- a/corrida/gui_callbacks.c
++++ b/corrida/gui_callbacks.c
+@@ -1,4 +1,5 @@
+ #include "gui.h"
++#include "gui_open_form.h"
+ 
+ GtkCellRendererText *current_observations_runs_cell = NULL;
+ GtkCellRendererText *current_meteors_cell = NULL;
+@@ -763,7 +764,6 @@ gint chart_mouse_button_pressed_cb( GtkWidget      *widget,
+ gint charts_accept_button_pressed_cb( GtkWidget      *widget,
+ 				      gpointer        data)
+ {
+-  extern *charts_window;
+   extern gint edition_status;
+   extern corrida_charts_meteor_record current_meteor;
+   extern GtkWidget *meteor_position_entry[4];
+diff --git a/corrida/internal_data.c b/corrida/internal_data.c
+index d2c287704f4e5c74..ca7c14c8e98ac9ee 100755
+--- a/corrida/internal_data.c
++++ b/corrida/internal_data.c
+@@ -2,8 +2,7 @@
+ 
+ static internal_data internal_data_container;
+ 
+-void internal_data_init( int  *argc,
+-			 char ***argv )
++void internal_data_init( void )
+ {
+   extern internal_data internal_data_container;
+   gchar path[MAX_CORRIDA_PATH_STRLEN];
+diff --git a/corrida/internal_data.h b/corrida/internal_data.h
+index f2ff58332d535c04..587311120797c6d1 100755
+--- a/corrida/internal_data.h
++++ b/corrida/internal_data.h
+@@ -30,8 +30,7 @@ typedef struct _internal_data {
+   gchar *charts_path;     /* directory with charts */
+ } internal_data;
+ 
+-void internal_data_init( int  *argc,
+-			 char ***argv );
++void internal_data_init( void );
+ 
+ void internal_data_set_edition_stat( gint edition_stat );
+ gint internal_data_get_edition_stat( void );
+diff --git a/corrida/misc.c b/corrida/misc.c
+index cab8fbec1dd54e25..dc0eb9648527dc48 100755
+--- a/corrida/misc.c
++++ b/corrida/misc.c
+@@ -1,4 +1,5 @@
+ #include "misc.h"
++#include "gui.h"
+ 
+ /* corrida_init: init corrida services */
+ void corrida_init( int  *argc,

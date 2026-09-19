@@ -1,0 +1,211 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for libnet >= 1.0.2a, which changes the
+configure and Makefiles that way, that a shared library is available and the whole package
+is called libnet10 rather libnet.
+
+--- Libnet-1.0.2a/configure.in				2001-01-17 21:59:30.000000000 +0100
++++ Libnet-1.0.2a/configure.in.fedora			2009-04-18 19:05:06.000000000 +0200
+@@ -8,6 +8,14 @@
+ 
+ AC_INIT(src/libnet_build_ip.c)
+ 
++dnl
++dnl Determine hosttype and set the root install directory.
++dnl
++AC_CANONICAL_SYSTEM
++AC_PREFIX_DEFAULT(/usr)
++
++AM_INIT_AUTOMAKE(libnet, 1.0.2a)
++
+ VER=`cat VERSION`
+ AC_MSG_RESULT(Beginning autoconfiguration process for libnet-$VER...)
+ 
+@@ -25,16 +33,14 @@
+ AC_SUBST(LIBNET_CONFIG_LIBS)
+ AC_SUBST(LIBNET_CONFIG_CFLAGS)
+ 
+-dnl
+-dnl Determine hosttype and set the root install directory.
+-dnl
+-AC_CANONICAL_SYSTEM
+-AC_PREFIX_DEFAULT(/usr)
+-
+ if test "$prefix" = "NONE"; then
+     prefix="/usr"
+ fi
+ 
++if test "$mandir" = "NONE"; then
++    mandir="$prefix/man"
++fi
++
+ dnl
+ dnl Check compiler type.
+ dnl
+@@ -51,7 +57,7 @@
+ dnl
+ if test $ac_cv_prog_gcc = yes; then
+ dnl if test -z $CFLAGS; then 
+-    CCOPTS='-O2 -funroll-loops -fomit-frame-pointer -Wall'
++    CCOPTS="-O2 -funroll-loops -fomit-frame-pointer -Wall $CFLAGS"
+     CFLAGS="$CCOPTS"
+ dnl fi
+ fi
+@@ -74,6 +80,8 @@
+ AC_CHECK_PROGS(AR, ar, @true)
+ AC_CHECK_PROGS(LN, ln, @true)
+ 
++AC_PROG_LIBTOOL
++
+ dnl
+ dnl Check for library functions.
+ dnl
+@@ -110,7 +118,7 @@
+     AC_DEFINE(HAVE_DLPI)
+ elif test -r /usr/include/linux/socket.h ; then
+     LL_INT_TYPE=sockpacket
+-    AC_MSG_RESULT(found SOCK_PACKET)
++    AC_MSG_RESULT(found linux primitives)
+     if test $with_pf_packet = yes; then
+          AC_LIBNET_CHECK_PF_PACKET
+     fi
+@@ -147,7 +155,7 @@
+     LIBNET_CONFIG_DEFINES="-D_BSD_SOURCE -D__BSD_SOURCE -D__FAVOR_BSD"
+     AC_CHECK_HEADERS(net/ethernet.h, \
+         LIBNET_CONFIG_DEFINES="$LIBNET_CONFIG_DEFINES -DHAVE_NET_ETHERNET_H")
+-    MAN_PREFIX="$prefix/man/man3/"
++    MAN_PREFIX="$mandir/man3/"
+     LIB_PREFIX="$prefix/lib/"
+     INC_PREFIX="$prefix/include/"
+     BIN_PREFIX="$prefix/bin/"
+@@ -258,9 +266,6 @@
+ 
+ AC_CHECK_HEADERS(sys/sockio.h)
+ AC_CONFIG_HEADER(include/config.h)
+-AC_OUTPUT(Makefile test/Makefile test/TCP/Makefile test/Ethernet/Makefile \
+-    test/UDP/Makefile test/ICMP/Makefile test/Random/Makefile \
+-    test/OSPF/Makefile util/Makefile util/Get-mac/Makefile example/Makefile \
+-    libnet-config, chmod +x libnet-config)
++AC_OUTPUT(Makefile src/Makefile include/Makefile include/libnet/Makefile libnet-config)
+ 
+ dnl EOF
+--- Libnet-1.0.2a/acconfig.h				2000-12-12 19:31:39.000000000 +0100
++++ Libnet-1.0.2a/acconfig.h.fedora			2009-04-18 18:49:55.000000000 +0200
+@@ -1,15 +1,17 @@
+-dnl $Id: acconfig.h,v 1.1.1.1 2000/05/25 00:28:49 route Exp $
+-dnl
+-dnl Libnet autoconfiguration acconfig.h file
+-dnl Copyright (c) 1998 - 2001 Mike D. Schiffman <mike@infonexus.com>
+-dnl All rights reserved.
+-dnl
+-dnl Process this file with autoheader to produce a config.h file.
+-dnl
++/* $Id: acconfig.h,v 1.1.1.1 2000/05/25 00:28:49 route Exp $
++ *
++ * Libnet autoconfiguration acconfig.h file
++ * Copyright (c) 1998 - 2001 Mike D. Schiffman <mike@infonexus.com>
++ * All rights reserved.
++ *
++ * Process this file with autoheader to produce a config.h file.
++ */
+ 
+ #undef LIBNET_BSDISH_OS
+ #undef LIBNET_BSD_BYTE_SWAP
+ #undef DLPI_DEV_PREFIX
++#undef LIBNET_FAST_X86_CHECK
++#undef HAVE_SOLARIS
+ #undef HAVE_DEV_DLPI
+ #undef HAVE_SOCKADDR_SA_LEN
+ #undef HAVE_DLPI
+@@ -23,5 +25,3 @@
+ #undef __FAVOR_BSD
+ #undef LIBNET_BIG_ENDIAN
+ #undef LIBNET_LIL_ENDIAN
+-
+-dnl EOF
+--- Libnet-1.0.2a/Makefile.am				1970-01-01 01:00:00.000000000 +0100
++++ Libnet-1.0.2a/Makefile.am.fedora			2009-04-18 18:41:15.000000000 +0200
+@@ -0,0 +1,7 @@
++AUTOMAKE_OPTIONS = foreign no-dependencies
++DISTCLEANFILES = *~
++SUBDIRS = src include
++EXTRA_DIST = Makefile.am.common
++bin_SCRIPTS = libnet-config
++version.h: VERSION
++	sed -e 's/.*/#define VERSION "&"/' < $< > $@
+--- Libnet-1.0.2a/src/Makefile.am			1970-01-01 01:00:00.000000000 +0100
++++ Libnet-1.0.2a/src/Makefile.am.fedora		2009-04-18 18:43:52.000000000 +0200
+@@ -0,0 +1,33 @@
++AUTOMAKE_OPTIONS = foreign no-dependencies
++DISTCLEANFILES = *~
++lib_LTLIBRARIES = libnet10.la
++libnet10_la_SOURCES = \
++	libnet_resolve.c \
++	libnet_socket.c \
++	libnet_checksum.c \
++	libnet_prand.c \
++	libnet_version.c \
++	libnet_write_ip.c \
++	libnet_insert_ipo.c \
++	libnet_insert_tcpo.c \
++	libnet_error.c \
++	libnet_link_@LL_INT_TYPE@.c \
++	libnet_packet_mem.c \
++	libnet_build_ip.c \
++	libnet_build_tcp.c \
++	libnet_build_udp.c \
++	libnet_build_arp.c \
++	libnet_build_ethernet.c \
++	libnet_build_icmp.c \
++	libnet_build_igmp.c \
++	libnet_build_dns.c \
++	libnet_build_snmp.c \
++	libnet_build_rip.c \
++	libnet_build_ospf.c \
++	libnet_build_vrrp.c \
++	libnet_asn1.c \
++	libnet_hex_dump.c \
++	libnet_if_addr.c \
++	libnet_port_list.c
++libnet10_la_LIBADD = @LTLIBOBJS@
++libnet10_la_LDFLAGS = -version-info 0:0:0 # CURRENT[:REVISION[:AGE]]
+--- Libnet-1.0.2a/include/Makefile.am			1970-01-01 01:00:00.000000000 +0100
++++ Libnet-1.0.2a/include/Makefile.am.fedora		2009-04-18 18:41:05.000000000 +0200
+@@ -0,0 +1,4 @@
++AUTOMAKE_OPTIONS = foreign no-dependencies
++DISTCLEANFILES = *~
++SUBDIRS = libnet
++include_HEADERS = libnet.h
+--- Libnet-1.0.2a/include/libnet/Makefile.am		1970-01-01 01:00:00.000000000 +0100
++++ Libnet-1.0.2a/include/libnet/Makefile.am.fedora	2009-04-18 18:42:02.000000000 +0200
+@@ -0,0 +1,9 @@
++AUTOMAKE_OPTIONS = foreign no-dependencies
++DISTCLEANFILES = *~
++pkginclude_HEADERS = \
++	libnet-asn1.h \
++	libnet-functions.h \
++	libnet-headers.h \
++	libnet-macros.h \
++	libnet-ospf.h \
++	libnet-structures.h
+--- Libnet-1.0.2a/version.h				1970-01-01 01:00:00.000000000 +0100
++++ Libnet-1.0.2a/version.h.fedora			2009-04-18 18:56:15.000000000 +0200
+@@ -0,0 +1 @@
++#define VERSION "1.0.2a"
+--- Libnet-1.0.2a/libnet-config.in			2000-12-12 19:33:42.000000000 +0100
++++ Libnet-1.0.2a/libnet-config.in.fedora		2009-04-18 21:30:00.000000000 +0200
+@@ -8,13 +8,13 @@
+ #   @configure_input@
+ 
+ libnet_defines="@LIBNET_CONFIG_DEFINES@"
+-libnet_cflags="@LIBNET_CONFIG_CFLAGS@"
+-libnet_libs="@LIBNET_CONFIG_LIBS@ -lnet"
++libnet_cflags="@LIBNET_CONFIG_CFLAGS@ -I@includedir@/libnet10"
++libnet_libs="@LIBNET_CONFIG_LIBS@ -lnet10"
+ 
+ usage()
+ {
+         cat <<EOF
+-Usage: libnet-config [OPTIONS]
++Usage: libnet10-config [OPTIONS]
+ Options:
+         [--libs]
+         [--cflags]

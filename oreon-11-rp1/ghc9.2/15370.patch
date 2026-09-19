@@ -1,0 +1,78 @@
+Modified for ghc9.2
+
+From ab11d412f542c92c01273be4caf99ad905c168ba Mon Sep 17 00:00:00 2001
+From: Cheng Shao <terrorjack@type.dance>
+Date: Sat, 17 Jan 2026 13:56:25 +0100
+Subject: [PATCH] hadrian: remove the horrible i386 speedHack
+
+When hadrian builds certain rts objects for i386, there's a horrible
+speedHack that forces -fno-PIC even for dynamic ways of those objects.
+This is not compatible with newer versions of gcc/binutils as well as
+clang/lld, and this patch removes it. Fixes #26792.
+---
+ hadrian/src/Settings/Packages.hs | 51 --------------------------------
+ 1 file changed, 51 deletions(-)
+
+--- ghc-9.4.8/hadrian/src/Settings/Packages.hs~	2023-11-08 04:07:04.000000000 +0800
++++ ghc-9.4.8/hadrian/src/Settings/Packages.hs	2026-02-01 20:40:52.959944017 +0800
+@@ -359,17 +359,6 @@
+ 
+             , inputs ["**/Evac.c", "**/Evac_thr.c"] ? arg "-funroll-loops"
+ 
+-            , speedHack ?
+-              inputs [ "**/Evac.c", "**/Evac_thr.c"
+-                     , "**/Scav.c", "**/Scav_thr.c"
+-                     , "**/Compact.c", "**/GC.c" ] ? arg "-fno-PIC"
+-            -- @-static@ is necessary for these bits, as otherwise the NCG
+-            -- generates dynamic references.
+-            , speedHack ?
+-              inputs [ "**/Updates.c", "**/StgMiscClosures.c"
+-                     , "**/PrimOps.c", "**/Apply.c"
+-                     , "**/AutoApply.c" ] ? pure ["-fno-PIC", "-static"]
+-
+             -- inlining warnings happen in Compact
+             , inputs ["**/Compact.c"] ? arg "-Wno-inline"
+ 
+@@ -375,42 +375,6 @@
+         , builder HsCpp ? flag WithLibdw ? arg "-DUSE_LIBDW"
+         , builder HsCpp ? flag HaveLibMingwEx ? arg "-DHAVE_LIBMINGWEX" ]
+ 
+--- Compile various performance-critical pieces *without* -fPIC -dynamic
+--- even when building a shared library.  If we don't do this, then the
+--- GC runs about 50% slower on x86 due to the overheads of PIC.  The
+--- cost of doing this is a little runtime linking and less sharing, but
+--- not much.
+---
+--- On x86_64 this doesn't work, because all objects in a shared library
+--- must be compiled with -fPIC (since the 32-bit relocations generated
+--- by the default small memory can't be resolved at runtime).  So we
+--- only do this on i386.
+---
+--- This apparently doesn't work on OS X (Darwin) nor on Solaris.
+--- On Darwin we get errors of the form
+---
+---  ld: absolute addressing (perhaps -mdynamic-no-pic) used in _stg_ap_0_fast
+---      from rts/dist/build/Apply.dyn_o not allowed in slidable image
+---
+--- and lots of these warnings:
+---
+---  ld: warning codegen in _stg_ap_pppv_fast (offset 0x0000005E) prevents image
+---      from loading in dyld shared cache
+---
+--- On Solaris we get errors like:
+---
+--- Text relocation remains                         referenced
+---     against symbol                  offset      in file
+--- .rodata (section)                   0x11        rts/dist/build/Apply.dyn_o
+---   ...
+--- ld: fatal: relocations remain against allocatable but non-writable sections
+--- collect2: ld returned 1 exit status
+-speedHack :: Action Bool
+-speedHack = do
+-    i386   <- anyTargetArch ["i386"]
+-    goodOS <- not <$> anyTargetOs ["darwin", "solaris2"]
+-    return $ i386 && goodOS
+-
+ -- See @rts/ghc.mk@.
+ rtsWarnings :: Args
+ rtsWarnings = mconcat

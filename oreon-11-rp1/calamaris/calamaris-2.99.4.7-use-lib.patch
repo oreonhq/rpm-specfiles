@@ -1,0 +1,41 @@
+--- calamaris-2.99.4.7/calamaris			2021-12-25 14:31:08.000000000 +0100
++++ calamaris-2.99.4.7/calamaris.use-lib		2021-12-25 17:38:56.418854461 +0100
+@@ -4654,8 +4654,6 @@
+   I searched it in @INC: $!\n\n";
+ 	  $usage_err = 1;
+         }
+-        use FindBin;
+-	use lib "$FindBin::Bin/..";
+         unless (eval "require calamaris::calBars3d") {
+       	  print STDERR "$0: You need package calamaris::calBars3d for -F 'graph'-Option,
+   I searched it in @INC: $!\n\n";
+--- calamaris-2.99.4.7/calAxestype.pm			2021-12-25 14:31:08.000000000 +0100
++++ calamaris-2.99.4.7/calAxestype.pm.use-lib		2021-12-25 17:39:07.684931101 +0100
+@@ -42,7 +42,6 @@
+ 
+ use strict;
+  
+-use lib '/usr/local';
+ use GD::Graph;
+ use GD::Graph::utils qw(:all);
+ use Carp;
+--- calamaris-2.99.4.7/calAxestype3d.pm			2021-12-25 14:31:08.000000000 +0100
++++ calamaris-2.99.4.7/calAxestype3d.pm.use-lib		2021-12-25 17:39:04.109906781 +0100
+@@ -39,7 +39,6 @@
+ 
+ use strict;
+  
+-use lib '/usr/local';
+ use GD::Graph;
+ use calamaris::calAxestype;
+ use GD::Graph::utils qw(:all);
+--- calamaris-2.99.4.7/calBars3d.pm			2021-12-25 14:31:08.000000000 +0100
++++ calamaris-2.99.4.7/calBars3d.pm.use-lib		2021-12-25 17:39:11.702958435 +0100
+@@ -39,7 +39,6 @@
+ 
+ use strict;
+ 
+-use lib '/usr/local';
+ use calamaris::calAxestype3d;
+ use GD::Graph::bars;
+ use GD::Graph::utils qw(:all);

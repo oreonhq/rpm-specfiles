@@ -1,0 +1,105 @@
+diff -rupN magicpoint-1.13a/image/gif.c magicpoint-1.13a-new/image/gif.c
+--- magicpoint-1.13a/image/gif.c	2018-01-23 00:03:20.104053476 +0100
++++ magicpoint-1.13a-new/image/gif.c	2018-02-11 23:45:01.983204432 +0100
+@@ -32,6 +32,14 @@ static int InterlacedOffset[] = { 0, 4,
+ /* be read - offsets and jumps... */
+ static int InterlacedJumps[] = { 8, 8, 4, 2 };
+ 
++static void printGifError(int errorCode)
++{
++	const char* giflib_error_str = (const char*) GifErrorString(errorCode);
++	if (giflib_error_str == NULL)
++		giflib_error_str = "Unknown error";
++	fprintf(stderr, "GIFLIB: %s\n", giflib_error_str);
++}
++
+ Image *
+ gifLoad(fullname, name, verbose)
+ 	char *fullname, *name;
+@@ -50,7 +58,7 @@ gifLoad(fullname, name, verbose)
+ 	ColorMapObject *ColorMap;
+ 	GifColorType *ColorMapEntry;
+ 
+-	GifFile = DGifOpenFileName(fullname);
++	GifFile = DGifOpenFileName(fullname, NULL);
+ 	if (GifFile == NULL)
+ 		return NULL;
+ 
+@@ -87,13 +95,13 @@ gifLoad(fullname, name, verbose)
+ 	/* Scan the content of the GIF file and load the image(s) in: */
+ 	do {
+ 		if (DGifGetRecordType(GifFile, &RecordType) == GIF_ERROR) {
+-			PrintGifError();
++			printGifError(GifFile->Error);
+ 			exit(-1);
+ 		}
+ 		switch (RecordType) {
+ 		case IMAGE_DESC_RECORD_TYPE:
+ 			if (DGifGetImageDesc(GifFile) == GIF_ERROR) {
+-				PrintGifError();
++				printGifError(GifFile->Error);
+ 				exit(-1);
+ 			}
+ 			Row = GifFile->Image.Top; /* Image Position relative to Screen. */
+@@ -113,7 +121,7 @@ gifLoad(fullname, name, verbose)
+ 							     j += InterlacedJumps[i]) {
+ 					if (DGifGetLine(GifFile, &ScreenBuffer[j][Col],
+ 					    Width) == GIF_ERROR) {
+-					    PrintGifError();
++					    printGifError(GifFile->Error);
+ 					    exit(-1);
+ 					}
+ 				}
+@@ -122,7 +130,7 @@ gifLoad(fullname, name, verbose)
+ 				for (i = 0; i < Height; i++) {
+ 					if (DGifGetLine(GifFile, &ScreenBuffer[Row++][Col],
+ 					    Width) == GIF_ERROR) {
+-						PrintGifError();
++						printGifError(GifFile->Error);
+ 						exit(-1);
+ 					}
+ 				}
+@@ -131,7 +139,7 @@ gifLoad(fullname, name, verbose)
+ 		case EXTENSION_RECORD_TYPE:
+ 			/* Skip any extension blocks in file: */
+ 			if (DGifGetExtension(GifFile, &ExtCode, &Extension) == GIF_ERROR) {
+-				PrintGifError();
++				printGifError(GifFile->Error);
+ 				exit(-1);
+ 			}
+ 			/* very adhoc transparency support */
+@@ -141,7 +149,7 @@ gifLoad(fullname, name, verbose)
+ 			}
+ 			while (Extension != NULL) {
+ 				if (DGifGetExtensionNext(GifFile, &Extension) == GIF_ERROR) {
+-					PrintGifError();
++					printGifError(GifFile->Error);
+ 					exit(-1);
+ 				}
+ 			}
+@@ -179,8 +187,8 @@ gifLoad(fullname, name, verbose)
+ 			pixline[x] = GifRow[x];
+ 	}
+ 
+-	if (DGifCloseFile(GifFile) == GIF_ERROR) {
+-		PrintGifError();
++	if (DGifCloseFile(GifFile, NULL) == GIF_ERROR) {
++		printGifError(GifFile->Error);
+ 		exit(-1);
+ 	}
+ 
+@@ -196,12 +204,12 @@ gifIdent(fullname, name)
+ 	GifFileType *gifp;
+ 	int ret;
+ 
+-	gifp = DGifOpenFileName(fullname);
++	gifp = DGifOpenFileName(fullname, NULL);
+ 	if (gifp == NULL)
+ 		ret = 0;
+ 	else {
+ 		tellAboutImage(name, gifp);
+-		DGifCloseFile(gifp);
++		DGifCloseFile(gifp, NULL);
+ 		ret = 1;
+ 	}
+ 	return ret;

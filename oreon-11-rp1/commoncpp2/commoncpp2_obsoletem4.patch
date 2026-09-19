@@ -1,0 +1,15 @@
+diff -rupN --no-dereference commoncpp2-1.8.1/configure.ac commoncpp2-1.8.1-new/configure.ac
+--- commoncpp2-1.8.1/configure.ac	2010-10-31 23:10:07.000000000 +0100
++++ commoncpp2-1.8.1-new/configure.ac	2020-02-04 23:56:43.265896501 +0100
+@@ -89,9 +89,9 @@ AC_PROG_CXX
+ OST_PROG_CC_POSIX
+ NP_PROG_MSC
+ AC_LIBTOOL_WIN32_DLL
+-AM_PROG_LIBTOOL
++LT_INIT()
+ AM_INIT_AUTOMAKE(commoncpp2, [$VERSION])
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADERS([config.h])
+ 
+ AC_C_RESTRICT
+ AC_C_VOLATILE

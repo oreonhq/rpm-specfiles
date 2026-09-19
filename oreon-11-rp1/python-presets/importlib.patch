@@ -1,0 +1,13 @@
+--- setup.py~	2017-05-19 10:36:19.000000000 -0500
++++ setup.py	2024-04-02 16:28:17.417292017 -0500
+@@ -1,8 +1,8 @@
+ from setuptools import setup, find_packages
+ 
+-import imp
++import importlib
+ 
+-version = imp.load_source('presets.version', 'presets/version.py')
++version = importlib.import_module('presets.version', 'presets/version.py')
+ 
+ setup(
+     name='presets',

@@ -1,0 +1,203 @@
+diff -rupN --no-dereference krename-5.0.2/cmake/modules/FindPoDoFo.cmake krename-5.0.2-new/cmake/modules/FindPoDoFo.cmake
+--- krename-5.0.2/cmake/modules/FindPoDoFo.cmake	2023-07-19 10:40:22.968326087 +0200
++++ krename-5.0.2-new/cmake/modules/FindPoDoFo.cmake	2023-07-19 10:40:22.973326132 +0200
+@@ -1,58 +1,66 @@
+-# - Try to find the PoDoFo library
++# SPDX-FileCopyrightText: 2016 Pino Toscano <pino@kde.org>
++# SPDX-FileCopyrightText: 2023 Heiko Becker <heiko.becker@kde.org>
+ #
+-# Windows users MUST set when building:
+-#
+-# PoDoFo_USE_SHARED - whether use PoDoFo as shared library
+-#
+-# Once done this will define:
+-#
+-# PoDoFo_FOUND - system has the PoDoFo library
+-# PoDoFo_INCLUDE_DIRS - the PoDoFo include directory
+-# PoDoFo_LIBRARIES - the libraries needed to use PoDoFo
+-# PoDoFo_DEFINITIONS - the definitions needed to use PoDoFo
+-#
+-# Copyright 2016 Pino Toscano <pino@kde.org>
+-#
+-# Redistribution and use in source and binary forms, with or without
+-# modification, are permitted provided that the following conditions
+-# are met:
+-#
+-# 1. Redistributions of source code must retain the copyright
+-#    notice, this list of conditions and the following disclaimer.
+-# 2. Redistributions in binary form must reproduce the copyright
+-#    notice, this list of conditions and the following disclaimer in the
+-#    documentation and/or other materials provided with the distribution.
+-# 3. The name of the author may not be used to endorse or promote products
+-#    derived from this software without specific prior written permission.
+-#
+-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-
+-include(FindPkgConfig)
+-pkg_search_module(PoDoFo libpodofo libpodofo-0)
+-
+-set(PoDoFo_DEFINITIONS)
+-if(PoDoFo_FOUND)
+-  if(WIN32)
+-    if(NOT DEFINED PoDoFo_USE_SHARED)
+-      message(SEND_ERROR "Win32 users MUST set PoDoFo_USE_SHARED")
+-      message(SEND_ERROR "Set -DPoDoFo_USE_SHARED=0 if linking to a static library PoDoFo")
+-      message(SEND_ERROR "or -DPoDoFo_USE_SHARED=1 if linking to a DLL build of PoDoFo")
+-      message(FATAL_ERROR "PoDoFo_USE_SHARED unset on win32 build")
+-    else()
+-      if(PoDoFo_USE_SHARED)
+-        set(PoDoFo_DEFINITIONS "${PoDoFo_DEFINITIONS} -DUSING_SHARED_PODOFO")
+-      endif(PoDoFo_USE_SHARED)
+-    endif()
+-  endif()
++# SPDX-License-Identifier: BSD-3-Clause
++
++
++#[=======================================================================[.rst:
++FindPoDoFo
++------------
++
++Try to find PoDoFo, a C++ library to work with the PDF file format
++
++This will define the following variables:
++
++``PoDoFo_FOUND``
++    True if PoDoFo is available
++``PoDoFo_VERSION``
++    The version of PoDoFo
++``PoDoFo_LIBRARIES``
++    The libraries of PoDoFofor use with target_link_libraries()
++``PoDoFo_INCLUDE_DIRS``
++    The include dirs of PoDoFo for use with target_include_directories()
++
++If ``PoDoFo_FOUND`` is TRUE, it will also define the following imported
++target:
++
++``PoDoFo::PoDoFo``
++    The PoDoFo library
++
++In general we recommend using the imported target, as it is easier to use.
++Bear in mind, however, that if the target is in the link interface of an
++exported library, it must be made available by the package config file.
++
++#]=======================================================================]
++
++find_package(PkgConfig QUIET)
++pkg_search_module(PC_PoDoFo QUIET libpodofo libpodofo-0)
++
++find_library(PoDoFo_LIBRARIES
++    NAMES podofo
++    HINTS ${PC_PoDoFo_LIBRARY_DIRS}
++)
++
++find_path(PoDoFo_INCLUDE_DIRS
++    NAMES podofo.h
++    HINTS ${PC_PoDoFo_INCLUDE_DIRS}
++)
++
++if(PoDoFo_INCLUDE_DIRS)
++  # NOTE: I have no idea if that's still needed and no possibility to test on
++  # Windows.
++  #if(WIN32)
++  #  if(NOT DEFINED PoDoFo_USE_SHARED)
++  #    message(SEND_ERROR "Win32 users MUST set PoDoFo_USE_SHARED")
++  #    message(SEND_ERROR "Set -DPoDoFo_USE_SHARED=0 if linking to a static library PoDoFo")
++  #    message(SEND_ERROR "or -DPoDoFo_USE_SHARED=1 if linking to a DLL build of PoDoFo")
++  #    message(FATAL_ERROR "PoDoFo_USE_SHARED unset on win32 build")
++  #  else()
++  #    if(PoDoFo_USE_SHARED)
++  #      set(PoDoFo_DEFINITIONS "${PoDoFo_DEFINITIONS} -DUSING_SHARED_PODOFO")
++  #    endif(PoDoFo_USE_SHARED)
++  #  endif()
++  #endif()
+ 
+   find_file(PoDoFo_CONFIG podofo_config.h PATHS ${PoDoFo_INCLUDE_DIRS} PATH_SUFFIXES auxiliary base)
+   file(STRINGS "${PoDoFo_CONFIG}" PoDoFo_MAJOR_VER_LINE REGEX "^#define[ \t]+PODOFO_VERSION_MAJOR[ \t]+[0-9]+$")
+@@ -80,7 +88,37 @@ if(PoDoFo_FOUND)
+ endif()
+ 
+ if(PoDoFo_VERSION VERSION_GREATER_EQUAL 0.10.0)
+-  set(CMAKE_CXX_STANDARD 17)
++    set(CMAKE_CXX_STANDARD 17)
++endif()
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(PoDoFo
++    FOUND_VAR
++        PoDoFo_FOUND
++    REQUIRED_VARS
++        PoDoFo_LIBRARIES
++        PoDoFo_INCLUDE_DIRS
++    VERSION_VAR
++        PoDoFo_VERSION
++)
++
++if(PoDoFo_FOUND AND NOT TARGET PoDoFo::PoDoFo)
++    add_library(PoDoFo::PoDoFo UNKNOWN IMPORTED)
++    set_target_properties(PoDoFo::PoDoFo PROPERTIES
++        IMPORTED_LOCATION "${PoDoFo_LIBRARIES}"
++        INTERFACE_COMPILE_OPTIONS "${PC_PoDoFo_CFLAGS}"
++        INTERFACE_INCLUDE_DIRECTORIES "${PoDoFo_INCLUDE_DIRS}"
++    )
++    if(TARGET PkgConfig::PC_PoDoFo)
++        target_link_libraries(PoDoFo::PoDoFo INTERFACE PkgConfig::PC_PoDoFo)
++    endif()
+ endif()
+ 
+-mark_as_advanced(PoDoFo_INCLUDE_DIRS PoDoFo_LIBRARIES PoDoFo_DEFINITIONS)
++mark_as_advanced(PoDoFo_LIBRARIES PoDoFo_INCLUDE_DIRS PoDoFo_VERSION)
++
++include(FeatureSummary)
++set_package_properties(PoDoFo PROPERTIES
++    DESCRIPTION "A C++ libary to work with the PDF file format"
++    URL "https://github.com/podofo/podofo"
++)
++
+diff -rupN --no-dereference krename-5.0.2/CMakeLists.txt krename-5.0.2-new/CMakeLists.txt
+--- krename-5.0.2/CMakeLists.txt	2022-08-31 23:22:38.000000000 +0200
++++ krename-5.0.2-new/CMakeLists.txt	2023-07-19 10:40:22.973326132 +0200
+@@ -63,10 +63,7 @@ endif()
+ 
+ # Find podofo
+ find_package(PoDoFo)
+-set_package_properties(PoDoFo PROPERTIES
+-    DESCRIPTION "A library to access PDF metadata"
+-    URL "http://podofo.sourceforge.net/"
+-    TYPE OPTIONAL)
++set_package_properties(PoDoFo PROPERTIES TYPE OPTIONAL)
+ 
+ # Find freetype
+ find_package(Freetype)
+diff -rupN --no-dereference krename-5.0.2/src/CMakeLists.txt krename-5.0.2-new/src/CMakeLists.txt
+--- krename-5.0.2/src/CMakeLists.txt	2022-08-31 23:22:21.000000000 +0200
++++ krename-5.0.2-new/src/CMakeLists.txt	2023-07-19 10:40:22.974326141 +0200
+@@ -14,11 +14,6 @@ if(EXIV2_FOUND)
+     include_directories(${EXIV2_INCLUDE_DIR})
+ endif()
+ 
+-if(PoDoFo_FOUND)
+-    include_directories(${PoDoFo_INCLUDE_DIRS})
+-    add_definitions(${PoDoFo_DEFINITIONS})
+-endif()
+-
+ if(FREETYPE_FOUND)
+     include_directories(${FREETYPE_INCLUDE_DIRS})
+ endif()
+@@ -138,7 +133,7 @@ if(LibExiv2_FOUND)
+ endif()
+ if(PoDoFo_FOUND)
+     target_link_libraries(krename
+-        ${PoDoFo_LIBRARIES}
++        PoDoFo::PoDoFo
+     )
+ endif()
+ if(FREETYPE_FOUND)

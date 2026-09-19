@@ -1,0 +1,11 @@
+diff -Naur a/woff.c b/woff.c
+--- a/woff.c	2009-09-25 09:54:13.000000000 -0400
++++ b/woff.c	2022-11-29 10:09:15.091798523 -0500
+@@ -354,6 +354,7 @@
+   newHeader->privLen = 0;
+ 
+   free(tableOrder);
++  tableOrder = 0;
+ 
+   if ((status & eWOFF_warn_checksum_mismatch) != 0) {
+     /* The original font had checksum errors, so we now decode our WOFF data

@@ -1,0 +1,47 @@
+From 8a9f47e1bc25b123e2d8d2de92228bd3ed9efc0d Mon Sep 17 00:00:00 2001
+From: Julio Faracco <jcfaracco@gmail.com>
+Date: Tue, 14 Oct 2025 11:59:20 -0300
+Subject: [PATCH 1/4] tests: Remove unused variable `work_time` from
+ `stress_cpu` function
+
+This `work_time` variable is not being used in the `stress_cpu`
+function. It can be removed to avoid issues with the compiler.
+
+Signed-off-by: Julio Faracco <jcfaracco@gmail.com>
+---
+ tests/integration/ProcDumpTestApplication.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/tests/integration/ProcDumpTestApplication.c b/tests/integration/ProcDumpTestApplication.c
+index 949767c..9103ce3 100644
+--- a/tests/integration/ProcDumpTestApplication.c
++++ b/tests/integration/ProcDumpTestApplication.c
+@@ -82,7 +82,7 @@ void* ThreadProc(void *input)
+ 
+ // CPU stress function - consumes specified percentage of CPU
+ void stress_cpu(int target_cpu_percentage) {
+-    struct timespec work_time, sleep_time;
++    struct timespec sleep_time;
+     long work_usec, sleep_usec;
+     
+     // Calculate work and sleep times for desired CPU percentage
+@@ -90,9 +90,6 @@ void stress_cpu(int target_cpu_percentage) {
+     work_usec = (10000 * target_cpu_percentage) / 100;
+     sleep_usec = 10000 - work_usec;
+     
+-    work_time.tv_sec = work_usec / 1000000;
+-    work_time.tv_nsec = (work_usec % 1000000) * 1000;
+-    
+     sleep_time.tv_sec = sleep_usec / 1000000;
+     sleep_time.tv_nsec = (sleep_usec % 1000000) * 1000;
+     
+@@ -282,4 +279,4 @@ int main(int argc, char *argv[])
+         printf("No arguments specified.\n");
+         exit(1);
+     }
+-}
+\ No newline at end of file
++}
+-- 
+2.50.1
+

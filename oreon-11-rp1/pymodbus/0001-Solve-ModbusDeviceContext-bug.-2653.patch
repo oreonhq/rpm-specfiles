@@ -1,0 +1,29 @@
+From eb84cfef92ddab8780652bd420479b9cb0a4a026 Mon Sep 17 00:00:00 2001
+From: jan iversen <jancasacondor@gmail.com>
+Date: Tue, 29 Apr 2025 20:00:02 +0200
+Subject: [PATCH] Solve ModbusDeviceContext bug. (#2653)
+
+---
+ pymodbus/datastore/context.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/pymodbus/datastore/context.py b/pymodbus/datastore/context.py
+index a7c8043a..9826867d 100644
+--- a/pymodbus/datastore/context.py
++++ b/pymodbus/datastore/context.py
+@@ -93,9 +93,9 @@ class ModbusDeviceContext(ModbusBaseDeviceContext):
+         """Initialize the datastores."""
+         self.store = {}
+         self.store["d"] = di if di is not None else ModbusSequentialDataBlock.create()
+-        self.store["c"] = co if di is not None else ModbusSequentialDataBlock.create()
+-        self.store["i"] = ir if di is not None else ModbusSequentialDataBlock.create()
+-        self.store["h"] = hr if di is not None else ModbusSequentialDataBlock.create()
++        self.store["c"] = co if co is not None else ModbusSequentialDataBlock.create()
++        self.store["i"] = ir if ir is not None else ModbusSequentialDataBlock.create()
++        self.store["h"] = hr if hr is not None else ModbusSequentialDataBlock.create()
+ 
+     def __str__(self):
+         """Return a string representation of the context.
+-- 
+2.50.0
+

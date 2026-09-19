@@ -1,0 +1,24 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index ca524b7..2ece29a 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -7,7 +7,7 @@ authors = [
+ maintainers = [
+     { name = "Holger Mueller", email = "zarath@gmx.de" }
+ ]
+-requires-python = ">=3.10,<3.13"
++requires-python = ">=3.10"
+ license = {text = "GPL-3.0-or-later"}
+ readme = "README.rst"
+ 
+@@ -28,8 +28,8 @@ version = "0.7.3"
+ dependencies=[
+   'pyserial~=3.5',
+   'pyside6~=6.8',
+-  'numpy~=2.1',
+-  'scipy~=1.14',
++  'numpy>=1.26',
++  'scipy>=1.11',
+ ]
+ 
+ [dependency-groups]

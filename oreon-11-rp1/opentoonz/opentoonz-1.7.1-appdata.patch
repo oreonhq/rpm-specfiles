@@ -1,0 +1,15 @@
+diff --git a/toonz/sources/xdg-data/io.github.OpenToonz.appdata.xml b/toonz/sources/xdg-data/io.github.OpenToonz.appdata.xml
+index 4f631a7e..7bfa1e39 100644
+--- a/toonz/sources/xdg-data/io.github.OpenToonz.appdata.xml
++++ b/toonz/sources/xdg-data/io.github.OpenToonz.appdata.xml
+@@ -18,6 +18,10 @@
+       Dwango launched the OpenToonz project in cooperation
+       with Digital Video and Studio Ghibli.
+     </p>
++    <p>
++      This version was packaged for Fedora using the latest stable libraries
++      available in the distribution, in exchange some features were disabled.
++    </p>
+   </description>
+   <url type="homepage">https://opentoonz.github.io/e/</url>
+   <url type="bugtracker">https://github.com/opentoonz/opentoonz/issues</url>

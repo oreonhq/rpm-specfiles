@@ -1,0 +1,772 @@
+commit b76503511d7689d2d0cebbe241df3789088488e0
+Author: Andrew Cagney <cagney@gnu.org>
+Date:   Tue Apr 12 16:10:01 2016 -0400
+
+    Fix compiler warnings.
+
+diff --git a/frysk-common/Makefile.gen.sh b/frysk-common/Makefile.gen.sh
+index c83a85e..d5d7e74 100755
+--- a/frysk-common/Makefile.gen.sh
++++ b/frysk-common/Makefile.gen.sh
+@@ -1,8 +1,8 @@
+ #!/bin/sh -eu
+ # This file is part of the program FRYSK.
+ #
+-# Copyright 2016, Andrew Cagney
+ # Copyright 2005, 2006, 2007, 2008, Red Hat Inc.
++# Copyright 2016, Andrew Cagney
+ #
+ # FRYSK is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+diff --git a/frysk-common/Makefile.rules b/frysk-common/Makefile.rules
+index 92e4c3d..9ba8775 100644
+--- a/frysk-common/Makefile.rules
++++ b/frysk-common/Makefile.rules
+@@ -321,9 +321,12 @@ SUFFIXES += .xml-in
+ # When compiling the test runner be sure to include the current
+ # directories classes.
+ 
+-TestRunner.jar: TestRunner.java
++TestRunner.jar: TestRunner.java $(GEN_DIRNAME).jar
+ 	rm -f $@.tmp $*.class
+-	$(JAVAC) `echo $(JAVACFLAGS) | sed -e 's/-classpath /-classpath $(GEN_DIRNAME).jar:/'` $*.java
++	$(JAVAC) $(JAVACFLAGS) $(WERROR_JAVACFLAGS) \
++		$(if $(SOURCEPATH),-sourcepath $(SOURCEPATH)) \
++		-classpath $(GEN_DIRNAME).jar$(if $(CLASSPATH),:$(CLASSPATH)) \
++		$*.java
+ 	$(JAR) cf $@.tmp $*.class
+ 	rm -f $*.class
+ 	mv $@.tmp $@
+@@ -522,11 +525,10 @@ SUFFIXES += .antlred .g
+ 		echo "Parsing compiler warnings from $$b..." ; \
+ 		rm -f $$t/*.antlr-fixes ; \
+ 	        rm -rf $$t/classes ; mkdir -p $$t/classes ; \
+-		( $(JAVAC) \
++		( $(JAVAC) $(JAVACFLAGS) $(WERROR_JAVACFLAGS) \
+                         -d $$t/classes \
+-			-warn:+semicolon \
+-			-sourcepath  $$t:$(SOURCEPATH) \
+-			-classpath $(CLASSPATH) \
++			-sourcepath $$t$(if $(SOURCEPATH),:$(SOURCEPATH)) \
++			$(if $(CLASSPATH),-classpath $(CLASSPATH)) \
+ 			$$t/$$d/$$b.java \
+ 			2>&1 || true ) | ( \
+ 		    cd $$t ; \
+@@ -647,7 +649,10 @@ files-java.list: files.list
+ ${GEN_DIRNAME}.jar: files-java.list $(GEN_CLASSPATH)
+ 	rm -rf $(JAVAROOT)
+ 	mkdir -p $(JAVAROOT)
+-	$(JAVAC) -d $(JAVAROOT) $(JAVACFLAGS) \
++	$(JAVAC) $(JAVACFLAGS) $(WERROR_JAVACFLAGS) \
++		-d $(JAVAROOT) \
++		$(if $(SOURCEPATH),-sourcepath $(SOURCEPATH)) \
++		$(if $(CLASSPATH),-classpath $(CLASSPATH)) \
+ 		@$(top_builddir)/files-java.list
+ 	cd $(JAVAROOT) ; \
+ 		find * -name '*.class' -print | sort > classes.list ; \
+diff --git a/frysk-common/frysk-common.ac b/frysk-common/frysk-common.ac
+index a112cfb..c6893e5 100644
+--- a/frysk-common/frysk-common.ac
++++ b/frysk-common/frysk-common.ac
+@@ -2,6 +2,7 @@
+ #
+ # Copyright 2005, 2006, 2007, 2008, Red Hat Inc.
+ # Copyright 2007 Oracle Corporation.
++# Copyright 2016, Andrew Cagney
+ #
+ # FRYSK is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -75,37 +76,6 @@ fi
+ AM_PROG_AS
+ AM_PROG_GCJ
+ 
+-# Check for the ECJ compiler.
+-
+-AC_MSG_CHECKING([ecj.jar])
+-ECJ_JAR=${ECJ_JAR:-/usr/share/java/eclipse-ecj.jar}
+-AC_SUBST([ECJ_JAR])
+-AC_MSG_RESULT(${ECJ_JAR})
+-
+-
+-# autoconf doesn't yet know about JAVAC, so define it ourselves.
+-
+-AC_LANG_DEFINE([Java], [java], [JAVA], [JAVAC], [],
+-[ac_ext=java
+-ac_objext=class
+-ac_compile='$JAVAC $JAVACFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+-ac_java_werror_flag=no
+-])
+-AC_DEFUN([AC_LANG_COMPILER(Java)], [])
+-AU_DEFUN([AC_LANG_JAVAC], [AC_LANG(Java)])
+-AC_LANG(Java)
+-
+-JAVAC='$(JAVA) -cp $(ECJ_JAR):$(CLASSPATH) org.eclipse.jdt.internal.compiler.batch.Main -1.4'
+-JAVACFLAGS='-warn:+semicolon $(if $(SOURCEPATH),-sourcepath $(SOURCEPATH)) $(if $(CLASSPATH),-classpath $(CLASSPATH))'
+-AC_SUBST([JAVAC])
+-AC_SUBST([JAVACFLAGS])
+-
+-JAVA="${JAVA:-java}"
+-AC_SUBST([JAVA])
+-
+-AC_CHECK_PROGS([JAR], [fastjar4 fastjar jar], [fastjar])
+-# Check for the availablity of fig2dev
+-
+ AC_PATH_PROG(FIG2DEV, fig2dev)
+ test "x$FIG2DEV" = x && AC_MSG_ERROR([no fig2dev binary is found in \$(PATH)])
+ 
+@@ -169,3 +139,30 @@ AC_SUBST([lib64dir])
+ FRYSK_DO_ARCH32_TEST
+ FRYSK_WERROR
+ FRYSK_COVERAGE
++
++# autoconf doesn't yet know about JAVAC, so define it ourselves.
++
++AC_LANG_DEFINE([Java], [java], [JAVA], [JAVAC], [],
++[ac_ext=java
++ac_objext=class
++ac_compile='$JAVAC $JAVACFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
++ac_java_werror_flag=no
++])
++AC_DEFUN([AC_LANG_COMPILER(Java)], [])
++AU_DEFUN([AC_LANG_JAVAC], [AC_LANG(Java)])
++AC_LANG(Java)
++
++JAVAC='javac -source 1.4'
++AS_IF([test x"$enable_werror" = xyes],
++      [WERROR_JAVACFLAGS='-Werror -Xlint:all -Xlint:-options -Xlint:-cast'],
++      [WERROR_JAVACFLAGS=])
++AC_SUBST([JAVAC])
++AC_SUBST([JAVACFLAGS])
++AC_SUBST([WERROR_JAVACFLAGS])
++
++JAVA="${JAVA:-java}"
++AC_SUBST([JAVA])
++
++AC_CHECK_PROGS([JAR], [fastjar4 fastjar jar], [fastjar])
++# Check for the availablity of fig2dev
++
+diff --git a/frysk-core/frysk/debuginfo/MemoryPiece.java b/frysk-core/frysk/debuginfo/MemoryPiece.java
+index 122b834..ddbccd9 100644
+--- a/frysk-core/frysk/debuginfo/MemoryPiece.java
++++ b/frysk-core/frysk/debuginfo/MemoryPiece.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -131,5 +132,9 @@ public class MemoryPiece
+     {
+ 	return (this.memory == ((MemoryPiece)p).memory 
+ 		&& this.size == ((MemoryPiece)p).size);
+-    }	
+-}
+\ No newline at end of file
++    }
++
++    public int hashCode() {
++	return (int) this.memory;
++    }
++}
+diff --git a/frysk-core/frysk/debuginfo/RegisterPiece.java b/frysk-core/frysk/debuginfo/RegisterPiece.java
+index 376d7cf..fc3c90e 100644
+--- a/frysk-core/frysk/debuginfo/RegisterPiece.java
++++ b/frysk-core/frysk/debuginfo/RegisterPiece.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -90,7 +91,11 @@ public class RegisterPiece
+ 	return ( this.size == ((RegisterPiece)p).size 
+ 		&& register.equals(((RegisterPiece)p).register) );
+     }	
+-    
++
++    public int hashCode() {
++	return this.register.hashCode();
++    }
++
+     protected void toPrint(PrintWriter writer)
+     {
+ 	writer.print("Register ");
+diff --git a/frysk-core/frysk/debuginfo/UnavailablePiece.java b/frysk-core/frysk/debuginfo/UnavailablePiece.java
+index 00bfe81..506f5ce 100644
+--- a/frysk-core/frysk/debuginfo/UnavailablePiece.java
++++ b/frysk-core/frysk/debuginfo/UnavailablePiece.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -57,7 +58,11 @@ public class UnavailablePiece
+     {
+ 	return (this.size == ((UnavailablePiece)p).size);
+     }
+-    
++
++    public int hashCode() {
++	return (int) this.size;
++    }
++
+     protected Piece slice (long offset, long length)
+     {
+ 	return new UnavailablePiece(length);
+@@ -80,4 +85,4 @@ public class UnavailablePiece
+ 	writer.print(size);
+ 	writer.print(" byte(s)");
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/frysk-core/frysk/ftrace/MemoryMapping.java b/frysk-core/frysk/ftrace/MemoryMapping.java
+index 817c9e9..2c19268 100644
+--- a/frysk-core/frysk/ftrace/MemoryMapping.java
++++ b/frysk-core/frysk/ftrace/MemoryMapping.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, 2008, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -84,6 +85,10 @@ class MemoryMapping
+ 		&& permExecute == p.permExecute;
+ 	}
+ 
++	public int hashCode() {
++	    return (int)this.addressLow;
++	}
++
+ 	public String toString()
+ 	{
+ 	    return "<0x" + Long.toHexString(addressLow)
+diff --git a/frysk-core/frysk/hpd/ProcData.java b/frysk-core/frysk/hpd/ProcData.java
+index ad06be8..177d8ee 100644
+--- a/frysk-core/frysk/hpd/ProcData.java
++++ b/frysk-core/frysk/hpd/ProcData.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -83,5 +84,7 @@ class ProcData
+ 	  return true;
+         }
+ 	
+-
++    public int hashCode() {
++	return id;
++    }
+ }
+diff --git a/frysk-core/frysk/hpd/ProcTasks.java b/frysk-core/frysk/hpd/ProcTasks.java
+index 1206c2e..51290bd 100644
+--- a/frysk-core/frysk/hpd/ProcTasks.java
++++ b/frysk-core/frysk/hpd/ProcTasks.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -150,5 +151,7 @@ class ProcTasks
+ 	  return true;
+         }
+ 	
+-	
++    public int hashCode() {
++	return this.proc.hashCode();
++    }
+ }
+diff --git a/frysk-core/frysk/isa/syscalls/Syscall.java b/frysk-core/frysk/isa/syscalls/Syscall.java
+index 8542e8e..22da117 100644
+--- a/frysk-core/frysk/isa/syscalls/Syscall.java
++++ b/frysk-core/frysk/isa/syscalls/Syscall.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, 2007, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -224,8 +225,9 @@ public abstract class Syscall {
+ 	case 'i':
+ 	    if ((int)retVal < 0)
+ 		return "-1 ERRNO=" + (-(int)retVal);
++	    else
++		return "" + retVal;		
+ 
+-	    // fall-through
+ 	default:
+ 	    return "" + retVal;
+ 	}
+diff --git a/frysk-core/frysk/pkglibdir/funit-complex-struct.cxx b/frysk-core/frysk/pkglibdir/funit-complex-struct.cxx
+index d535ac9..32b7744 100644
+--- a/frysk-core/frysk/pkglibdir/funit-complex-struct.cxx
++++ b/frysk-core/frysk/pkglibdir/funit-complex-struct.cxx
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -37,6 +38,8 @@
+ // version and license this file solely under the GPL without
+ // exception.
+ 
++#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
++
+ struct complexStruct {
+ 	int x;
+ 	int y;
+diff --git a/frysk-core/frysk/pkglibdir/funit-simple-struct.cxx b/frysk-core/frysk/pkglibdir/funit-simple-struct.cxx
+index 882ab72..98a7e0e 100644
+--- a/frysk-core/frysk/pkglibdir/funit-simple-struct.cxx
++++ b/frysk-core/frysk/pkglibdir/funit-simple-struct.cxx
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -37,6 +38,8 @@
+ // version and license this file solely under the GPL without
+ // exception.
+ 
++#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
++
+ struct simpleStruct {
+ 	int x;
+ 	int y;
+diff --git a/frysk-core/frysk/pkglibdir/hpd-c.c b/frysk-core/frysk/pkglibdir/hpd-c.c
+index e66cdb8..91d194c 100644
+--- a/frysk-core/frysk/pkglibdir/hpd-c.c
++++ b/frysk-core/frysk/pkglibdir/hpd-c.c
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, 2006, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -37,6 +38,8 @@
+ // version and license this file solely under the GPL without
+ // exception.
+ 
++#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
++
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <stdarg.h>
+diff --git a/frysk-core/frysk/rt/UpdatingDisplayValue.java b/frysk-core/frysk/rt/UpdatingDisplayValue.java
+index 601ad6a..c4ca406 100644
+--- a/frysk-core/frysk/rt/UpdatingDisplayValue.java
++++ b/frysk-core/frysk/rt/UpdatingDisplayValue.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, 2008, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -190,6 +191,10 @@ public class UpdatingDisplayValue extends DisplayValue {
+ 	return true;
+     }
+ 
++    public int hashCode() {
++	return 0; /* unhashable? */
++    }
++
+     /**
+      * Disables the display, stopping all notification of changes to the
+      * underlying expression.
+diff --git a/frysk-sys/frysk/junit/KernelVersion.java b/frysk-sys/frysk/junit/KernelVersion.java
+index c79241f..4e13c65 100644
+--- a/frysk-sys/frysk/junit/KernelVersion.java
++++ b/frysk-sys/frysk/junit/KernelVersion.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -154,7 +155,11 @@ public class KernelVersion
+     else
+       return false;
+   }
+-  
++
++    public int hashCode() {
++	return this.version; /* anything */
++    }
++
+   /**
+    * Tests if this kernel version is more recent than kv.
+    * @param kv the KernelVersion to test against.
+diff --git a/frysk-sys/frysk/sys/termios/Speed.java b/frysk-sys/frysk/sys/termios/Speed.java
+index e0ac0f7..a9ab62d 100644
+--- a/frysk-sys/frysk/sys/termios/Speed.java
++++ b/frysk-sys/frysk/sys/termios/Speed.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, 2008, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -56,6 +57,9 @@ public class Speed implements Comparable {
+     public boolean equals(Object o) {
+ 	return (o instanceof Speed) && ((Speed)o).b == b;
+     }
++    public int hashCode() {
++	return this.b;
++    }
+     public int compareTo(Object rhs) {
+ 	return this.b - ((Speed)rhs).b;
+     }
+diff --git a/frysk-sys/lib/dwfl/ElfCommand.java b/frysk-sys/lib/dwfl/ElfCommand.java
+index 129bbbd..5dac6ab 100644
+--- a/frysk-sys/lib/dwfl/ElfCommand.java
++++ b/frysk-sys/lib/dwfl/ElfCommand.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -89,6 +90,10 @@ public class ElfCommand
+ 		
+     return ((ElfCommand)obj).value == this.value;
+   }
++
++    public int hashCode() {
++	return this.value;
++    }
+ 	
+   protected int getValue()
+   {
+diff --git a/frysk-sys/lib/dwfl/ElfFlags.java b/frysk-sys/lib/dwfl/ElfFlags.java
+index d909d90..85a6d8f 100644
+--- a/frysk-sys/lib/dwfl/ElfFlags.java
++++ b/frysk-sys/lib/dwfl/ElfFlags.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -77,7 +78,11 @@ public class ElfFlags {
+ 	public boolean equals(Object obj){
+ 		return ((obj instanceof ElfFlags) && ((ElfFlags) obj).value == value);
+ 	}
+-	
++
++    public int hashCode() {
++	return this.value;
++    }
++
+ 	protected int getValue(){
+ 		return value;
+ 	}
+diff --git a/frysk-sys/lib/dwfl/ElfKind.java b/frysk-sys/lib/dwfl/ElfKind.java
+index 3d110d5..84caafa 100644
+--- a/frysk-sys/lib/dwfl/ElfKind.java
++++ b/frysk-sys/lib/dwfl/ElfKind.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -62,7 +63,11 @@ public class ElfKind {
+ 		
+ 		return ((ElfKind)obj).value == this.value;
+ 	}
+-	
++
++    public int hashCode() {
++	return this.value;
++    }
++
+ 	protected int getValue(){
+ 		return this.value;
+ 	}
+diff --git a/frysk-sys/lib/dwfl/ElfNhdrType.java b/frysk-sys/lib/dwfl/ElfNhdrType.java
+index c15a92c..45c83cf 100644
+--- a/frysk-sys/lib/dwfl/ElfNhdrType.java
++++ b/frysk-sys/lib/dwfl/ElfNhdrType.java
+@@ -1,6 +1,7 @@
+ //This file is part of the program FRYSK.
+ 
+ //Copyright 2006, 2007, IBM Inc.
++//Copyright 2016, Andrew Cagney
+ 
+ //FRYSK is free software; you can redistribute it and/or modify it
+ //under the terms of the GNU General Public License as published by
+@@ -89,7 +90,11 @@ public class ElfNhdrType
+         
+         return ((ElfNhdrType)obj).value == this.value;
+     }
+-    
++
++    public int hashCode() {
++	return this.value;
++    }
++
+     public int getValue()
+     {
+         return this.value;
+diff --git a/frysk-sys/lib/dwfl/ElfSymbolBinding.java b/frysk-sys/lib/dwfl/ElfSymbolBinding.java
+index 17a61f1..aa2384a 100644
+--- a/frysk-sys/lib/dwfl/ElfSymbolBinding.java
++++ b/frysk-sys/lib/dwfl/ElfSymbolBinding.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -88,6 +89,10 @@ public class ElfSymbolBinding
+     return ((ElfSymbolBinding)obj).value == this.value;
+   }
+ 
++    public int hashCode() {
++	return this.value;
++    }
++
+   /**
+    * Returns true if this binding is from OS-specific range.
+    */
+diff --git a/frysk-sys/lib/dwfl/ElfSymbolType.java b/frysk-sys/lib/dwfl/ElfSymbolType.java
+index 38e40a5..99674d4 100644
+--- a/frysk-sys/lib/dwfl/ElfSymbolType.java
++++ b/frysk-sys/lib/dwfl/ElfSymbolType.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -112,6 +113,10 @@ public class ElfSymbolType
+     return ((ElfSymbolType)obj).value == this.value;
+   }
+ 
++    public int hashCode() {
++	return this.value;
++    }
++
+   /**
+    * Returns true if this type is from OS-specific range.
+    */
+diff --git a/frysk-sys/lib/dwfl/ElfSymbolVersion.java b/frysk-sys/lib/dwfl/ElfSymbolVersion.java
+index 745f959..7590de9 100644
+--- a/frysk-sys/lib/dwfl/ElfSymbolVersion.java
++++ b/frysk-sys/lib/dwfl/ElfSymbolVersion.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -87,6 +88,10 @@ public abstract class ElfSymbolVersion
+       return this.name.equals(def.name)
+ 	&& this.base == def.base;
+     }
++
++      public int hashCode() {
++	  return this.name.hashCode();
++      }
+   }
+ 
+   /**
+@@ -123,5 +128,10 @@ public abstract class ElfSymbolVersion
+ 	&& this.filename.equals(need.filename)
+ 	&& this.weak == need.weak;
+     }
++
++      public int hashCode() {
++	  return this.name.hashCode();
++      }
++
+   }
+ }
+diff --git a/frysk-sys/lib/dwfl/ElfSymbolVisibility.java b/frysk-sys/lib/dwfl/ElfSymbolVisibility.java
+index 25af18a..f2e9553 100644
+--- a/frysk-sys/lib/dwfl/ElfSymbolVisibility.java
++++ b/frysk-sys/lib/dwfl/ElfSymbolVisibility.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -70,6 +71,10 @@ public class ElfSymbolVisibility
+     return ((ElfSymbolVisibility)obj).value == this.value;
+   }
+ 
++    public int hashCode() {
++	return this.value;
++    }
++
+   protected int getValue()
+   {
+     return this.value;
+diff --git a/frysk-sys/lib/dwfl/ElfType.java b/frysk-sys/lib/dwfl/ElfType.java
+index 633b2f8..56e8e9a 100644
+--- a/frysk-sys/lib/dwfl/ElfType.java
++++ b/frysk-sys/lib/dwfl/ElfType.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -89,7 +90,11 @@ public class ElfType {
+ 		
+ 		return ((ElfType)obj).value == this.value;
+ 	}
+-	
++
++    public int hashCode() {
++	return this.value;
++    }
++
+ 	protected int getValue(){
+ 		return this.value;
+ 	}
+diff --git a/frysk-sys/lib/dwfl/jni/DwarfDie.cxx b/frysk-sys/lib/dwfl/jni/DwarfDie.cxx
+index 1225e26..cbb0cb1 100644
+--- a/frysk-sys/lib/dwfl/jni/DwarfDie.cxx
++++ b/frysk-sys/lib/dwfl/jni/DwarfDie.cxx
+@@ -435,11 +435,10 @@ lib::dwfl::DwarfDie::get_data_member_location(jnixx::env env, jlong var_die) {
+   Dwarf_Die *die = (Dwarf_Die*) var_die;
+   Dwarf_Attribute loc_attr;
+   Dwarf_Op *fb_expr;
+-  int code;
+   size_t fb_len;
+   
+   if (dwarf_attr_integrate (die, DW_AT_data_member_location, &loc_attr) >= 0) {
+-    code = dwarf_getlocation (&loc_attr, &fb_expr, &fb_len);
++    dwarf_getlocation (&loc_attr, &fb_expr, &fb_len);
+     if (fb_len > 0 && fb_expr[0].atom == DW_OP_plus_uconst)
+       return fb_expr[0].number;
+   }
+diff --git a/frysk-sys/lib/dwfl/jni/DwflModule.cxx b/frysk-sys/lib/dwfl/jni/DwflModule.cxx
+index c525350..d645edf 100644
+--- a/frysk-sys/lib/dwfl/jni/DwflModule.cxx
++++ b/frysk-sys/lib/dwfl/jni/DwflModule.cxx
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, 2008, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -152,7 +153,6 @@ lib::dwfl::DwflModule::getPLTEntries(jnixx::env env,
+     return;
+ 
+   bool have_dynamic = false;
+-  ::GElf_Off off_dynamic;
+   for (GElf_Half i = 0; i < ehdr.e_phnum; ++i) {
+     ::GElf_Phdr ph;
+     if (::gelf_getphdr (elf, i, &ph) == NULL)
+@@ -160,7 +160,6 @@ lib::dwfl::DwflModule::getPLTEntries(jnixx::env env,
+     if (ph.p_type == PT_DYNAMIC)
+       {
+ 	have_dynamic = true;
+-	off_dynamic = ph.p_offset;
+ 	break;
+       }
+   }
+diff --git a/frysk-sys/lib/dwfl/jni/Elf.cxx b/frysk-sys/lib/dwfl/jni/Elf.cxx
+index 82aaeb7..cc16245 100644
+--- a/frysk-sys/lib/dwfl/jni/Elf.cxx
++++ b/frysk-sys/lib/dwfl/jni/Elf.cxx
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, 2007, 2008, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -284,7 +285,7 @@ jlong
+ lib::dwfl::Elf::elf_getshnum(jnixx::env env) {
+   size_t count;
+   /* XXX: What to do if this fails */
+-  ::elf_getshnum(ELF_POINTER, &count);
++  ::elf_getshdrnum(ELF_POINTER, &count);
+   return count;
+ }
+ 
+@@ -292,7 +293,7 @@ jlong
+ lib::dwfl::Elf::elf_getshstrndx(jnixx::env env) {
+   size_t index;
+   /* XXX: What to do if this fails */
+-  ::elf_getshstrndx(ELF_POINTER, &index);
++  ::elf_getshdrstrndx(ELF_POINTER, &index);
+   return index;
+ }
+ 
+diff --git a/frysk-sys/lib/unwind/jni/UnwindH.hxx b/frysk-sys/lib/unwind/jni/UnwindH.hxx
+index 5efc541..509cc92 100644
+--- a/frysk-sys/lib/unwind/jni/UnwindH.hxx
++++ b/frysk-sys/lib/unwind/jni/UnwindH.hxx
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2007, 2008, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -512,7 +513,7 @@ get_eh_frame_hdr_addr(jnixx::env env, unw_proc_info_t *pi,
+ 
+   Elf_Data *debug_frame_data = NULL;
+   size_t shstrndx;
+-  if (elf_getshstrndx (elf, &shstrndx) >= 0) {
++  if (elf_getshdrstrndx (elf, &shstrndx) >= 0) {
+       Elf_Scn *scn = NULL;
+       while ((scn = elf_nextscn (elf, scn)) != NULL
+ 	     && debug_frame_data == NULL) {

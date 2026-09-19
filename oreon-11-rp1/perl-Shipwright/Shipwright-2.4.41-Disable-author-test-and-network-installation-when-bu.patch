@@ -1,0 +1,33 @@
+From d91f5e2737774b445e16d1f08f6884c558401972 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 12 Jun 2015 10:38:21 +0200
+Subject: [PATCH] Disable author test and network installation when building
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This does not affect run time features. It only disables things we do
+not want to do when building this package. Mainly because they bring
+unnecessary dependencies.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 7e321e3..d6b44cb 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -46,8 +46,6 @@ no_index( directory => 'xt' );
+ install_script('bin/shipwright');
+ install_script('bin/shipwright-generate');
+ install_share;
+-auto_install;
+ 
+ tests('t/*.t t/*/*.t');
+-recursive_author_tests('xt/');
+ WriteAll;
+-- 
+2.1.0
+

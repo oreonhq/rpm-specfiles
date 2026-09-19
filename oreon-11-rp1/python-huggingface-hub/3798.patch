@@ -1,0 +1,25 @@
+From 23418d58736bc35d8ae6a0db7da7211ef5aae713 Mon Sep 17 00:00:00 2001
+From: Cursor Agent <cursoragent@cursor.com>
+Date: Wed, 11 Feb 2026 14:37:33 +0000
+Subject: [PATCH] Remove shellingham from install_requires
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Co-authored-by: célina <hanouticelina@users.noreply.github.com>
+---
+ setup.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index e3a2181ef7..64cefabc0c 100644
+--- a/setup.py
++++ b/setup.py
+@@ -23,7 +23,6 @@ def get_version() -> str:
+     "httpx>=0.23.0, <1",
+     "packaging>=20.9",
+     "pyyaml>=5.1",
+-    "shellingham",
+     "tqdm>=4.42.1",
+     "typer",
+     "typing-extensions>=4.1.0",  # to be able to import TypeAlias, dataclass_transform

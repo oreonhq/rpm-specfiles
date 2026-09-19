@@ -1,0 +1,12 @@
+[Unit]
+Description=MySQL MMM Monitor
+After=network.target mysqld.service
+
+[Service]
+Type=forking
+PIDFile=/run/mysql-mmm-monitor.pid
+ExecStart=/usr/bin/mmm_mond
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

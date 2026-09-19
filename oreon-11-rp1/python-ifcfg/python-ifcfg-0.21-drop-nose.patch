@@ -1,0 +1,328 @@
+diff -uNr a/tests/ifconfig_tests.py b/tests/ifconfig_tests.py
+--- a/tests/ifconfig_tests.py	2020-02-14 16:48:06.000000000 -0600
++++ b/tests/ifconfig_tests.py	2025-03-24 20:59:07.147362498 -0500
+@@ -3,7 +3,6 @@
+ 
+ import ifcfg
+ from ifcfg.parser import LinuxParser, NullParser
+-from nose.tools import eq_, ok_, raises
+ 
+ from . import ifconfig_out
+ from .base import IfcfgTestCase
+@@ -15,19 +14,18 @@
+         ifcfg.distro = 'Linux'
+         ifcfg.Parser = LinuxParser
+         interfaces = ifcfg.interfaces(ifconfig=ifconfig_out.LINUX)
+-        res = len(interfaces) > 0
+-        ok_(res)
++        assert len(interfaces) > 0
+ 
+     def test_unknown(self):
+         ifcfg.distro = 'Bogus'
+         ifcfg.Parser = ifcfg.get_parser_class()
+         self.assertTrue(issubclass(ifcfg.Parser, NullParser))
+ 
+-    @raises(RuntimeError)
+     def test_illegal(self):
+         ifcfg.distro = 'Linux'
+         ifcfg.Parser = LinuxParser
+-        ifcfg.get_parser(ifconfig=ifconfig_out.ILLEGAL_OUTPUT)
++        with self.assertRaises(RuntimeError):
++            ifcfg.get_parser(ifconfig=ifconfig_out.ILLEGAL_OUTPUT)
+ 
+     def test_linux(self):
+         ifcfg.distro = 'Linux'
+@@ -35,10 +33,10 @@
+         parser = ifcfg.get_parser(ifconfig=ifconfig_out.LINUX)
+         interfaces = parser.interfaces
+         self.assertEqual(len(interfaces.keys()), 2)
+-        eq_(interfaces['eth0']['ether'], '1a:2b:3c:4d:5e:6f')
+-        eq_(interfaces['eth0']['inet'], '192.168.0.1')
+-        eq_(interfaces['eth0']['broadcast'], '192.168.0.255')
+-        eq_(interfaces['eth0']['netmask'], '255.255.255.0')
++        assert interfaces['eth0']['ether'] == '1a:2b:3c:4d:5e:6f'
++        assert interfaces['eth0']['inet'] == '192.168.0.1'
++        assert interfaces['eth0']['broadcast'] == '192.168.0.255'
++        assert interfaces['eth0']['netmask'] == '255.255.255.0'
+ 
+     def test_linux2(self):
+         ifcfg.distro = 'Linux'
+@@ -46,10 +44,10 @@
+         parser = ifcfg.get_parser(ifconfig=ifconfig_out.LINUX2)
+         interfaces = parser.interfaces
+         self.assertEqual(len(interfaces.keys()), 2)
+-        eq_(interfaces['eth0']['ether'], '1a:2b:3c:4d:5e:6f')
+-        eq_(interfaces['eth0']['inet'], '192.168.0.1')
+-        eq_(interfaces['eth0']['broadcast'], '192.168.0.255')
+-        eq_(interfaces['eth0']['netmask'], '255.255.255.0')
++        assert interfaces['eth0']['ether'] == '1a:2b:3c:4d:5e:6f'
++        assert interfaces['eth0']['inet'] == '192.168.0.1'
++        assert interfaces['eth0']['broadcast'] == '192.168.0.255'
++        assert interfaces['eth0']['netmask'] == '255.255.255.0'
+ 
+     def test_linux3(self):
+         ifcfg.distro = 'Linux'
+@@ -57,10 +55,10 @@
+         parser = ifcfg.get_parser(ifconfig=ifconfig_out.LINUX3)
+         interfaces = parser.interfaces
+         self.assertEqual(len(interfaces.keys()), 2)
+-        eq_(interfaces['eth0']['ether'], '1a:2b:3c:4d:5e:6f')
+-        eq_(interfaces['eth0']['inet'], '192.168.0.1')
+-        eq_(interfaces['eth0']['broadcast'], '192.168.0.255')
+-        eq_(interfaces['eth0']['netmask'], '255.255.255.0')
++        assert interfaces['eth0']['ether'] == '1a:2b:3c:4d:5e:6f'
++        assert interfaces['eth0']['inet'] == '192.168.0.1'
++        assert interfaces['eth0']['broadcast'] == '192.168.0.255'
++        assert interfaces['eth0']['netmask'] == '255.255.255.0'
+ 
+     def test_linuxdocker(self):
+         ifcfg.distro = 'Linux'
+@@ -68,14 +66,14 @@
+         parser = ifcfg.get_parser(ifconfig=ifconfig_out.LINUXDOCKER)
+         interfaces = parser.interfaces
+         self.assertEqual(len(interfaces.keys()), 7)
+-        eq_(interfaces['enp0s31f6']['ether'], '54:e1:ad:76:c8:cb')
+-        eq_(interfaces['enp0s31f6']['inet'], '192.168.1.94')
+-        eq_(interfaces['enp0s31f6']['broadcast'], '192.168.1.255')
+-        eq_(interfaces['enp0s31f6']['netmask'], '255.255.255.0')
+-        eq_(interfaces['br-736aa253dd57']['ether'], '02:42:9c:fe:60:db')
+-        eq_(interfaces['br-736aa253dd57']['inet'], '172.19.0.1')
+-        eq_(interfaces['br-736aa253dd57']['broadcast'], '0.0.0.0')
+-        eq_(interfaces['br-736aa253dd57']['netmask'], '255.255.0.0')
++        assert interfaces['enp0s31f6']['ether'] == '54:e1:ad:76:c8:cb'
++        assert interfaces['enp0s31f6']['inet'] == '192.168.1.94'
++        assert interfaces['enp0s31f6']['broadcast'] == '192.168.1.255'
++        assert interfaces['enp0s31f6']['netmask'] == '255.255.255.0'
++        assert interfaces['br-736aa253dd57']['ether'] == '02:42:9c:fe:60:db'
++        assert interfaces['br-736aa253dd57']['inet'] == '172.19.0.1'
++        assert interfaces['br-736aa253dd57']['broadcast'] == '0.0.0.0'
++        assert interfaces['br-736aa253dd57']['netmask'] == '255.255.0.0'
+ 
+     def test_vlan(self):
+         """
+@@ -86,7 +84,7 @@
+         parser = ifcfg.get_parser(ifconfig=ifconfig_out.LINUX_VLAN)
+         interfaces = parser.interfaces
+         self.assertEqual(len(interfaces.keys()), 9)
+-        eq_(interfaces['eth2.2']['ether'], '08:00:27:7c:6d:9d')
++        assert interfaces['eth2.2']['ether'] == '08:00:27:7c:6d:9d'
+ 
+     def test_macosx(self):
+         ifcfg.distro = 'MacOSX'
+@@ -94,10 +92,10 @@
+         parser = ifcfg.get_parser(ifconfig=ifconfig_out.MACOSX)
+         interfaces = parser.interfaces
+         self.assertEqual(len(interfaces.keys()), 2)
+-        eq_(interfaces['en0']['ether'], '1a:2b:3c:4d:5e:6f')
+-        eq_(interfaces['en0']['inet'], '192.168.0.1')
+-        eq_(interfaces['en0']['broadcast'], '192.168.0.255')
+-        eq_(interfaces['en0']['netmask'], '255.255.255.0')
++        assert interfaces['en0']['ether'] == '1a:2b:3c:4d:5e:6f'
++        assert interfaces['en0']['inet'] == '192.168.0.1'
++        assert interfaces['en0']['broadcast'] == '192.168.0.255'
++        assert interfaces['en0']['netmask'] == '255.255.255.0'
+ 
+     def test_macosx2(self):
+         ifcfg.distro = 'MacOSX'
+@@ -105,15 +103,14 @@
+         parser = ifcfg.get_parser(ifconfig=ifconfig_out.MACOSX2)
+         interfaces = parser.interfaces
+         self.assertEqual(len(interfaces.keys()), 9)
+-        eq_(interfaces['lo0']['inet'], '127.0.0.1')
+-        eq_(interfaces['lo0']['inet4'], ['127.0.0.1', '127.0.1.99'])
+-        eq_(interfaces['lo0']['netmask'], '255.0.0.0')
++        assert interfaces['lo0']['inet'] == '127.0.0.1'
++        assert interfaces['lo0']['inet4'] == ['127.0.0.1', '127.0.1.99']
++        assert interfaces['lo0']['netmask'] == '255.0.0.0'
+ 
+     def test_default_interface(self):
+         ifcfg.distro = 'Linux'
+         ifcfg.Parser = LinuxParser
+         route_output = ifconfig_out.ROUTE_OUTPUT
+-        res = ifcfg.default_interface(
++        assert ifcfg.default_interface(
+             ifconfig=ifconfig_out.LINUX3, route_output=route_output
+         )
+-        ok_(res)
+diff -uNr a/tests/ipconfig_tests.py b/tests/ipconfig_tests.py
+--- a/tests/ipconfig_tests.py	2020-02-14 16:48:06.000000000 -0600
++++ b/tests/ipconfig_tests.py	2025-03-24 20:59:14.483353635 -0500
+@@ -8,7 +8,6 @@
+ import mock
+ from ifcfg import tools
+ from ifcfg.parser import WindowsParser
+-from nose.tools import eq_, ok_
+ 
+ from . import ipconfig_out
+ from .base import IfcfgTestCase
+@@ -19,8 +18,7 @@
+     def test_interfaces(self):
+         ifcfg.Parser = WindowsParser
+         interfaces = ifcfg.interfaces(ifconfig=ipconfig_out.WINDOWS_10_ETH)
+-        res = len(interfaces) > 0
+-        ok_(res)
++        assert len(interfaces) > 0
+ 
+     def test_windows10(self):
+         ifcfg.distro = "Windows"
+@@ -40,8 +38,8 @@
+ 
+         self.assertEqual(len(interfaces.keys()), 6)
+ 
+-        eq_(interfaces['Ethernet adapter Ethernet']['inet'], '192.168.1.2')
+-        eq_(interfaces['Ethernet adapter Ethernet']['ether'], '11:11:11:11:a1:fa')
++        assert interfaces['Ethernet adapter Ethernet']['inet'] == '192.168.1.2'
++        assert interfaces['Ethernet adapter Ethernet']['ether'] == '11:11:11:11:a1:fa'
+ 
+ 
+     def test_windows10_w_2_ethernets(self):
+@@ -66,14 +64,14 @@
+         # Check that properties of both adapters are correct
+ 
+         # Adapter 1
+-        eq_(interfaces['Ethernet adapter Ethernet']['inet'], '10.0.2.15')
+-        eq_(interfaces['Ethernet adapter Ethernet']['ether'], '08:00:27:cc:be:af')
+-        eq_(interfaces['Ethernet adapter Ethernet']['inet6'], [])
++        assert interfaces['Ethernet adapter Ethernet']['inet'] == '10.0.2.15'
++        assert interfaces['Ethernet adapter Ethernet']['ether'] == '08:00:27:cc:be:af'
++        assert interfaces['Ethernet adapter Ethernet']['inet6'] == []
+ 
+         # Adapter 2
+-        eq_(interfaces['Ethernet adapter Ethernet 2']['inet'], '192.168.56.101')
+-        eq_(interfaces['Ethernet adapter Ethernet 2']['ether'], '08:00:27:0d:9a:0b')
+-        eq_(interfaces['Ethernet adapter Ethernet 2']['inet6'], [])
++        assert interfaces['Ethernet adapter Ethernet 2']['inet'] == '192.168.56.101'
++        assert interfaces['Ethernet adapter Ethernet 2']['ether'] == '08:00:27:0d:9a:0b'
++        assert interfaces['Ethernet adapter Ethernet 2']['inet6'] == []
+ 
+     def test_windows7vm(self):
+         ifcfg.distro = "Windows"
+@@ -90,7 +88,7 @@
+ 
+         self.assertEqual(len(interfaces.keys()), 3)
+ 
+-        eq_(interfaces['Ethernet adapter Local Area Connection 2']['inet'], '10.0.2.15')
++        assert interfaces['Ethernet adapter Local Area Connection 2']['inet'] == '10.0.2.15'
+         self.assertEqual(
+             len(interfaces['Ethernet adapter Local Area Connection 2']['inet6']),
+             0
+@@ -121,7 +119,7 @@
+ 
+         self.assertEqual(len(interfaces.keys()), 3)
+ 
+-        eq_(interfaces['Ethernet adapter Local Area Connection 2']['inet'], '10.0.2.15')
++        assert interfaces['Ethernet adapter Local Area Connection 2']['inet'] == '10.0.2.15'
+         self.assertEqual(
+             len(interfaces['Ethernet adapter Local Area Connection 2']['inet6']),
+             0
+@@ -151,7 +149,7 @@
+ 
+         self.assertEqual(len(interfaces.keys()), 3)
+ 
+-        eq_(interfaces['Ethernet adapter Local Area Connection 2']['inet'], '10.0.2.15')
++        assert interfaces['Ethernet adapter Local Area Connection 2']['inet'] == '10.0.2.15'
+         self.assertEqual(
+             len(interfaces['Ethernet adapter Local Area Connection 2']['inet6']),
+             0
+diff -uNr a/tests/ip_tests.py b/tests/ip_tests.py
+--- a/tests/ip_tests.py	2020-02-14 16:48:06.000000000 -0600
++++ b/tests/ip_tests.py	2025-03-24 21:01:33.702184347 -0500
+@@ -3,7 +3,6 @@
+ 
+ import ifcfg
+ from ifcfg.parser import UnixIPParser
+-from nose.tools import eq_, ok_
+ 
+ from . import ip_out
+ from .base import IfcfgTestCase
+@@ -15,48 +14,46 @@
+         ifcfg.distro = 'Linux'
+         ifcfg.Parser = UnixIPParser
+         interfaces = ifcfg.interfaces(ifconfig=ip_out.LINUX)
+-        res = len(interfaces) > 0
+-        ok_(res)
++        assert len(interfaces) > 0
+ 
+     def test_linux(self):
+         ifcfg.Parser = UnixIPParser
+         parser = ifcfg.get_parser(ifconfig=ip_out.LINUX)
+         interfaces = parser.interfaces
+         # Unconnected interface
+-        eq_(interfaces['enp0s25']['ether'], 'a0:00:00:00:00:00')
+-        eq_(interfaces['enp0s25']['inet'], None)
++        assert interfaces['enp0s25']['ether'] == 'a0:00:00:00:00:00'
++        assert interfaces['enp0s25']['inet'] is None
+         # Connected interface
+-        eq_(interfaces['wlp3s0']['ether'], 'a0:00:00:00:00:00')
+-        eq_(interfaces['wlp3s0']['inet'], '192.168.12.34')
+-        eq_(interfaces['wlp3s0']['inet4'], ['192.168.12.34'])
+-        eq_(interfaces['wlp3s0']['inet6'], ['fd37:a521:ada9::869', 'fd37:a521:ada9:0:b9f7:44f8:bb19:c78c', 'fd37:a521:ada9:0:9073:a91:d14f:8087', 'fe80::205f:5d09:d0da:7aed'])
+-        eq_(interfaces['wlp3s0']['broadcast'], '192.168.12.255')
+-        eq_(interfaces['wlp3s0']['netmask'], '/24')
+-        eq_(interfaces['wlp3s0']['mtu'], '1500')
++        assert interfaces['wlp3s0']['ether'] == 'a0:00:00:00:00:00'
++        assert interfaces['wlp3s0']['inet'] == '192.168.12.34'
++        assert interfaces['wlp3s0']['inet4'] == ['192.168.12.34']
++        assert interfaces['wlp3s0']['inet6'] == ['fd37:a521:ada9::869', 'fd37:a521:ada9:0:b9f7:44f8:bb19:c78c', 'fd37:a521:ada9:0:9073:a91:d14f:8087', 'fe80::205f:5d09:d0da:7aed']
++        assert interfaces['wlp3s0']['broadcast'] == '192.168.12.255'
++        assert interfaces['wlp3s0']['netmask'] == '/24'
++        assert interfaces['wlp3s0']['mtu'] == '1500'
+         # Connected interface
+-        eq_(interfaces['enp6s0.2']['ether'], '00:73:00:5c:09:9a')
+-        eq_(interfaces['enp6s0.2']['inet'], '10.2.2.253')
+-        eq_(interfaces['enp6s0.2']['mtu'], '1500')
+-        eq_(interfaces['enp6s0.2']['inet4'], ['10.2.2.253', '10.1.1.253'])
+-        eq_(interfaces['enp6s0.2']['inet6'], [])
++        assert interfaces['enp6s0.2']['ether'] == '00:73:00:5c:09:9a'
++        assert interfaces['enp6s0.2']['inet'] == '10.2.2.253'
++        assert interfaces['enp6s0.2']['mtu'] == '1500'
++        assert interfaces['enp6s0.2']['inet4'] == ['10.2.2.253', '10.1.1.253']
++        assert interfaces['enp6s0.2']['inet6'] == []
+ 
+     def test_linux_multi_inet4(self):
+         ifcfg.Parser = UnixIPParser
+         parser = ifcfg.get_parser(ifconfig=ip_out.LINUX_MULTI_IPV4)
+         interfaces = parser.interfaces
+         # Connected interface
+-        eq_(interfaces['eth0']['ether'], 'b8:27:eb:50:39:69')
+-        eq_(interfaces['eth0']['inet'], '192.168.13.1')
+-        eq_(interfaces['eth0']['inet4'], ['192.168.13.1', '192.168.10.3'])
+-        eq_(interfaces['eth0']['broadcast'], '192.168.13.255')
+-        eq_(interfaces['eth0']['netmask'], '/24')
+-        eq_(interfaces['eth0']['mtu'], '1500')
++        assert interfaces['eth0']['ether'] == 'b8:27:eb:50:39:69'
++        assert interfaces['eth0']['inet'] == '192.168.13.1'
++        assert interfaces['eth0']['inet4'] == ['192.168.13.1', '192.168.10.3']
++        assert interfaces['eth0']['broadcast'] == '192.168.13.255'
++        assert interfaces['eth0']['netmask'] == '/24'
++        assert interfaces['eth0']['mtu'] == '1500'
+ 
+     def test_default_interface(self):
+         ifcfg.distro = 'Linux'
+         ifcfg.Parser = UnixIPParser
+-        res = ifcfg.default_interface(
++        assert ifcfg.default_interface(
+             ifconfig=ip_out.LINUX,
+             route_output=ip_out.ROUTE_OUTPUT_IPROUTE
+         )
+-        ok_(res)
+diff -uNr a/tests/tools_tests.py b/tests/tools_tests.py
+--- a/tests/tools_tests.py	2020-02-14 16:48:06.000000000 -0600
++++ b/tests/tools_tests.py	2025-03-24 21:01:51.748000329 -0500
+@@ -8,7 +8,6 @@
+ 
+ import ifcfg
+ from ifcfg.tools import exec_cmd
+-from nose.tools import eq_
+ 
+ 
+ class IfcfgToolsTestCase(unittest.TestCase):
+@@ -16,7 +15,7 @@
+     def test_minimal_logger(self):
+         os.environ['IFCFG_DEBUG'] = '1'
+         log = ifcfg.tools.minimal_logger(__name__)
+-        eq_(log.level, logging.DEBUG)
++        assert log.level ==  logging.DEBUG
+         os.environ['IFCFG_DEBUG'] = '0'
+ 
+     def test_command(self):

@@ -1,0 +1,179 @@
+Subject: Add support for few new metadata types
+From: Vlastimil Holer <vlastimil.holer@GOODDATA.COM>
+
+diff -pur Net-Amazon-EC2-Metadata-0.10/lib/Net/Amazon/EC2/Metadata.pm Net-Amazon-EC2-Metadata-0.10a/lib/Net/Amazon/EC2/Metadata.pm
+--- Net-Amazon-EC2-Metadata-0.10/lib/Net/Amazon/EC2/Metadata.pm	2008-01-22 20:28:59.000000000 +0100
++++ Net-Amazon-EC2-Metadata-0.10a/lib/Net/Amazon/EC2/Metadata.pm	2009-04-20 10:38:06.000000000 +0200
+@@ -9,27 +9,27 @@ use LWP::Simple;
+ # http://developer.amazonwebservices.com/connect/entry.jspa?externalID=1085&categoryID=100
+ 
+ #Docs
+-#http://docs.amazonwebservices.com/AWSEC2/2007-08-29/DeveloperGuide/AESDG-chapter-instancedata.html
+-
++#http://docs.amazonwebservices.com/AWSEC2/latest/DeveloperGuide/index.html?AESDG-chapter-instancedata.html
+ 
+ ### Metadata
+-# ami-id	The AMI ID used to launch the instance.	1.0
+-# ami-manifest-path	The manifest path of the AMI with which the instance was launched.	1.0
+-# ami-launch-index	The index of this instance in the reservation (per AMI).	1.0
+-# ancestor-ami-ids	The AMI IDs of any instances that were rebundled to create this AMI.	2007-10-10
+-# instance-id	The ID of this instance.	1.0
+-# instance-type	The type of instance to launch. For more information, see Selecting Instance Types.	2007-08-29
+-# local-hostname	The local hostname of the instance.	2007-01-19
+-# public-hostname	The public hostname of the instance.	2007-01-19
+-# local-ipv4	Public IP address if launched with direct addressing; private IP address if launched with public addressing.	1.0
+-# public-ipv4	NATted public IP Address	2007-01-19
+-# public-keys/	Public keys. Only available if supplied at instance launch time	1.0
+-# reservation-id	ID of the reservation.	1.0
+-# security-groups	Names of the security groups the instance is launched in. Only available if supplied at instance launch time	1.0
+-# product-codes	 Product codes associated with this instance.	2007-03-01
+-
+-
+-
++# ami-id                  The AMI ID used to launch the instance.                                         1.0
++# ami-launch-index        The index of this instance in the reservation (per AMI).                        1.0
++# ami-manifest-path       The manifest path of the AMI with which the instance was launched.              1.0
++# ancestor-ami-ids        The AMI IDs of any instances that were rebundled to create this AMI.            2007-10-10
++# block-device-mapping    Defines native device names to use when exposing virtual devices.               2007-10-10
++# instance-id             The ID of this instance.                                                        1.0
++# instance-type           The type of instance to launch. For more information, see Instance Types.       2007-08-29
++# local-hostname          The local hostname of the instance.                                             2007-01-19
++# local-ipv4              Public IP address if launched with direct addressing; private IP address if launched with public addressing.    1.0
++# kernel-id               The ID of the kernel launched with this instance, if applicable.                2008-02-01
++# placement/availability-zone     The Availability Zone in which the instance launched.                   2008-02-01
++# product-codes           Product codes associated with this instance.                                    2007-03-01
++# public-hostname         The public hostname of the instance.                                            2007-01-19
++# public-ipv4             The public IP address                                                           2007-01-19
++# public-keys/            Public keys. Only available if supplied at instance launch time                 1.0
++# ramdisk-id              The ID of the RAM disk launched with this instance, if applicable.              2008-02-01
++# reservation-id          ID of the reservation.                                                          1.0
++# security-groups         Names of the security groups the instance is launched in. Only available if supplied at instance launch time    1.0
+ 
+ my $data = {};
+ my $baseurl='http://169.254.169.254/latest/';
+@@ -40,21 +40,19 @@ my @data = qw(ami_id ami_manifest_path a
+                   ancestor_ami_ids instance_id  instance_type
+                   local_hostname public_hostname
+                   local_ipv4 public_ipv4
++                  kernel_id ramdisk_id
+                   reservation_id
+                   security_groups
+-                  product_codes	
++                  product_codes 
+                );
+ 
+ 
+-
+-
+-
+ for my $item (@data)  {
+     no strict 'refs';
+     *{"$item"} = sub {
+         return $data->{$item}  if $data->{$item};
+         my $path = $item;
+-        $path =~ s/_/-/;
++        $path =~ s/_/-/g;
+         $data->{$item} = get($metaurl.$path);
+         return $data->{$item};
+     }
+@@ -71,26 +69,24 @@ sub new{
+ # returns a hash of all the data
+ #
+ sub available_data{
+-    return [@data, 'user_data', 'public_keys'];
++    return [@data, 'user_data', 'public_keys', 'placement', 'block_device_mapping'];
+ }
+ 
+ sub all_data{
+     my $data={};
+-    for  (@data, 'user_data', 'public_keys' )      {
++    for  (@data, 'user_data', 'public_keys', 'placement', 'block_device_mapping' )      {
+         no strict 'refs';        
+         $data->{$_}= $_->();
+     }
+     return $data;
+ }
+ 
+-
+-
+ sub public_keys{
+     my $self = shift;
+     my $key  = shift;
+     my $item = 'public_keys';    
+     my $path = $item;
+-    $path =~ s/_/-/;
++    $path =~ s/_/-/g;
+     if ($key)     {
+         $path .=  "/$key";
+         $item .=  "/$key";
+@@ -113,24 +109,38 @@ sub user_data{
+     return $data->{$item};
+ }
+ 
++sub placement {
++    my $self = shift;
++    my $item = 'placement';
+ 
++    for ('availability_zone') {
++        my $path = $item.'/'.$_;
++        $path =~ s/_/-/g;
++        $data->{$item}->{$_} = get($metaurl.$path);
++    }
+ 
++    return $data->{$item};
++}
+ 
++sub block_device_mapping {
++    my $self = shift;
++    my $item = 'block_device_mapping';
++    my $path = $item;
++    $path =~ s/_/-/g;
+ 
++	$data->{$item}={};
++    my $devs = get($metaurl.$path);
++    for my $dev (split(/\n/,$devs)) {
++        $data->{$item}->{$dev} = get($metaurl.$path.'/'.$dev);
++    }
+ 
+-
+-
+-
+-
+-
++    return $data->{$item};
++}
+ 
+ 1;
+ 
+  # Magic true value required at end of module
+ 
+-
+-
+-
+ __END__
+ 
+ 
+@@ -193,6 +203,14 @@ A listing of all the meta_data and user_
+ 
+ =item instance_type
+ 
++=item kernel_id
++
++=item ramdisk_id
++
++=item placement
++
++=item block_device_mapping
++
+ =item local_hostname 
+ 
+ =item public_hostname
+@@ -238,6 +256,6 @@ Copyright (c) 2008 Nathan McFarland. Thi
+ =head1 SEE ALSO
+ 
+ 
+- Amazon EC2 Documentation: L<http://docs.amazonwebservices.com/AWSEC2/2007-08-29/DeveloperGuide/>
+- Amazon EC2 Metadata Documentation: L<http://docs.amazonwebservices.com/AWSEC2/2007-08-29/DeveloperGuide/AESDG-chapter-instancedata.html>
++ Amazon EC2 Documentation: Lhttp://docs.amazonwebservices.com/AWSEC2/latest/DeveloperGuide/index.html>
++ Amazon EC2 Metadata Documentation: L<http://docs.amazonwebservices.com/AWSEC2/latest/DeveloperGuide/index.html?AESDG-chapter-instancedata.html>
+  Amazon Tutorial on EC2 Metadata: L<http://developer.amazonwebservices.com/connect/entry.jspa?externalID=1085&categoryID=100>

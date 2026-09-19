@@ -1,0 +1,27 @@
+From 077f2ad403bfc47ceb4e4961ad9a4fb1e883d904 Mon Sep 17 00:00:00 2001
+From: mcomix3 Fedora maintainer <mcomix3-owner@fedoraproject.org>
+Date: Wed, 20 Aug 2025 17:20:58 +0900
+Subject: [PATCH] sqlite3.py: support python 3.14
+
+ref: https://github.com/python/cpython/issues/93370
+sqlite3.version is deprecated
+---
+ mcomix/mcomix/sqlite3.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mcomix/mcomix/sqlite3.py b/mcomix/mcomix/sqlite3.py
+index 212cc84..58608bf 100644
+--- a/mcomix/mcomix/sqlite3.py
++++ b/mcomix/mcomix/sqlite3.py
+@@ -2,7 +2,7 @@ from mcomix import log
+ 
+ try:
+     import sqlite3
+-    log.debug(f'SQLite: {sqlite3.sqlite_version} sqlite3 version: {sqlite3.version}')
++    log.debug(f'SQLite: {sqlite3.sqlite_version} sqlite3 version: {sqlite3.sqlite_version}')
+ except ImportError:
+     log.warning( _('! Could find sqlite3.') )
+     sqlite3 = None
+-- 
+2.50.1
+

@@ -1,0 +1,40 @@
+diff -urp '--exclude=*~' '--exclude=*pycache*' gphotoframe-2.0.2-hg2084299dffb6/lib/utils/urlget.py gphotoframe-2.0.2-hg2084299dffb6.new/lib/utils/urlget.py
+--- gphotoframe-2.0.2-hg2084299dffb6/lib/utils/urlget.py	2019-08-21 17:15:57.289292947 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.new/lib/utils/urlget.py	2021-03-17 00:02:28.218427525 +0900
+@@ -42,14 +42,20 @@ class UrlGetWithProxy(object):
+         self.use_proxy = bool(self.proxy_host and self.proxy_port)
+ 
+     def getPage(self, url, contextFactory=None, *args, **kwargs):
+-       # FIXME
+-        factory = client.HTTPClientFactory(url.encode('utf-8'), *args, **kwargs)
++        # FIXME
++        if type(url) is str:
++            url = url.encode('utf-8')
++        # FIXME
++        factory = client.HTTPClientFactory(url, *args, **kwargs)
+         d = self._urlget(factory, url, contextFactory)
+         return d
+ 
+     def downloadPage(self, url, file, contextFactory=None, *args, **kwargs):
+         # FIXME
+-        factory = client.HTTPDownloader(url.encode('utf-8'), file, *args, **kwargs)
++        if type(url) is str:
++            url = url.encode('utf-8')
++        # FIXME
++        factory = client.HTTPDownloader(url, file, *args, **kwargs)
+         d = self._urlget(factory, url, contextFactory)
+         return d
+ 
+@@ -83,7 +89,10 @@ class UrlGetWithProxy(object):
+         """
+         url = url.strip()
+         # FIXME
+-        parsed = http.urlparse(url.encode('utf-8')).decode('utf-8')
++        if type(url) is str:
++            url = url.encode('utf-8')
++        # FIXME
++        parsed = http.urlparse(url).decode('utf-8')
+         scheme = parsed[0]
+         path = urlunparse(('', '') + parsed[2:])
+     
+

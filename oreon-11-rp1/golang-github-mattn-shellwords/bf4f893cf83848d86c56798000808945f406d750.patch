@@ -1,0 +1,42 @@
+From bf4f893cf83848d86c56798000808945f406d750 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Mon, 27 Jan 2025 04:54:45 -0500
+Subject: [PATCH] Fix non-constant format strings
+
+Go 1.24 now has a vet check about this that causes go test to fail:
+https://github.com/golang/go/issues/60529
+---
+ shellwords_test.go | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/shellwords_test.go b/shellwords_test.go
+index aac84cc..e8ff005 100644
+--- a/shellwords_test.go
++++ b/shellwords_test.go
+@@ -358,7 +358,7 @@ func TestHaveMore(t *testing.T) {
+ 	line := "echo 🍺; seq 1 10"
+ 	args, err := parser.Parse(line)
+ 	if err != nil {
+-		t.Fatalf(err.Error())
++		t.Fatal(err)
+ 	}
+ 	expected := []string{"echo", "🍺"}
+ 	if !reflect.DeepEqual(args, expected) {
+@@ -372,7 +372,7 @@ func TestHaveMore(t *testing.T) {
+ 	line = string([]rune(line)[parser.Position+1:])
+ 	args, err = parser.Parse(line)
+ 	if err != nil {
+-		t.Fatalf(err.Error())
++		t.Fatal(err)
+ 	}
+ 	expected = []string{"seq", "1", "10"}
+ 	if !reflect.DeepEqual(args, expected) {
+@@ -391,7 +391,7 @@ func TestHaveRedirect(t *testing.T) {
+ 	line := "ls -la 2>foo"
+ 	args, err := parser.Parse(line)
+ 	if err != nil {
+-		t.Fatalf(err.Error())
++		t.Fatal(err)
+ 	}
+ 	expected := []string{"ls", "-la"}
+ 	if !reflect.DeepEqual(args, expected) {

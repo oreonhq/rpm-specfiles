@@ -1,0 +1,53 @@
+From e6d5d53ac1400475562a779485fba615488680f1 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 10 Apr 2025 06:15:57 -0400
+Subject: [PATCH] drop tests that require unshipped support code
+
+---
+ src/blocker.rs         | 2 ++
+ src/filters/network.rs | 2 ++
+ src/lib.rs             | 2 ++
+ 3 files changed, 6 insertions(+)
+
+diff --git a/src/blocker.rs b/src/blocker.rs
+index 1a3a9ff..dcd5e65 100644
+--- a/src/blocker.rs
++++ b/src/blocker.rs
+@@ -2153,6 +2153,8 @@ mod placeholder_string_tests {
+     }
+ }
+ 
++// Downstream patch: these tests require support code not shipped in the crate
++#[cfg(any())]
+ #[cfg(test)]
+ mod legacy_rule_parsing_tests {
+     use crate::test_utils::rules_from_lists;
+diff --git a/src/filters/network.rs b/src/filters/network.rs
+index 6dd2e82..736db96 100644
+--- a/src/filters/network.rs
++++ b/src/filters/network.rs
+@@ -3405,6 +3405,8 @@ mod match_tests {
+     }
+ }
+ 
++// Downstream patch: these tests require support code not shipped in the crate
++#[cfg(any())]
+ #[cfg(test)]
+ mod hash_collision_tests {
+     use super::*;
+diff --git a/src/lib.rs b/src/lib.rs
+index 956f082..2a57278 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -37,6 +37,8 @@ pub use engine::Engine;
+ #[doc(inline)]
+ pub use lists::FilterSet;
+ 
++// Downstream patch: these tests require support code not shipped in the crate
++#[cfg(any())]
+ #[cfg(test)]
+ #[path = "../tests/test_utils.rs"]
+ mod test_utils;
+-- 
+2.49.0
+

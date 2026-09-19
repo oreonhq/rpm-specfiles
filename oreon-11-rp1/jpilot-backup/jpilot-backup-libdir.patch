@@ -1,0 +1,48 @@
+diff -up jpilot-backup-0.60/configure.in.libdir jpilot-backup-0.60/configure.in
+--- jpilot-backup-0.60/configure.in.libdir	2009-02-25 09:24:53.000000000 +0200
++++ jpilot-backup-0.60/configure.in	2009-02-25 09:25:56.000000000 +0200
+@@ -64,7 +64,7 @@ pilotlibs=${FORCE_PILOT_LIBS:-no}
+ PILOT_LIBS="-lpisock"
+ 
+ if test $pilotlibs = no ; then
+-for pilot_libs in $pilot_prefix/lib /usr/lib /usr/local/lib/ \
++for pilot_libs in $pilot_prefix/lib $pilot_prefix/lib64 /usr/lib /usr/lib64 /usr/local/lib/ \
+   /usr/extra/pilot/lib ; do
+    if test -r $pilot_libs/libpisock.so >/dev/null 2>&1 ; then
+       pilotlibs=yes
+diff -up jpilot-backup-0.60/configure.libdir jpilot-backup-0.60/configure
+--- jpilot-backup-0.60/configure.libdir	2009-02-25 09:24:46.000000000 +0200
++++ jpilot-backup-0.60/configure	2009-02-25 09:26:22.000000000 +0200
+@@ -19764,7 +19764,7 @@ pilotlibs=${FORCE_PILOT_LIBS:-no}
+ PILOT_LIBS="-lpisock"
+ 
+ if test $pilotlibs = no ; then
+-for pilot_libs in $pilot_prefix/lib /usr/lib /usr/local/lib/ \
++for pilot_libs in $pilot_prefix/lib $pilot_prefix/lib64 /usr/lib /usr/lib64 /usr/local/lib/ \
+   /usr/extra/pilot/lib ; do
+    if test -r $pilot_libs/libpisock.so >/dev/null 2>&1 ; then
+       pilotlibs=yes
+diff -up jpilot-backup-0.60/src/Makefile.am.libdir jpilot-backup-0.60/src/Makefile.am
+--- jpilot-backup-0.60/src/Makefile.am.libdir	2007-06-12 05:19:24.000000000 +0300
++++ jpilot-backup-0.60/src/Makefile.am	2009-02-25 09:23:52.000000000 +0200
+@@ -12,7 +12,7 @@ libbackup_la_SOURCES = \
+ 
+ libbackup_la_LDFLAGS = -avoid-version
+ libbackup_la_LIBADD = @LIBS@ @PILOT_LIBS@ @GTK_LIBS@
+-libdir = $(prefix)/lib/jpilot/plugins
++libdir = $(prefix)@libdir@
+ 
+ AM_CFLAGS = -Wall @PILOT_FLAGS@ @GTK_CFLAGS@
+ 
+diff -up jpilot-backup-0.60/src/Makefile.in.libdir jpilot-backup-0.60/src/Makefile.in
+--- jpilot-backup-0.60/src/Makefile.in.libdir	2009-02-07 21:50:02.000000000 +0200
++++ jpilot-backup-0.60/src/Makefile.in	2009-02-25 09:23:52.000000000 +0200
+@@ -171,7 +171,7 @@ htmldir = @htmldir@
+ includedir = @includedir@
+ infodir = @infodir@
+ install_sh = @install_sh@
+-libdir = $(prefix)/lib/jpilot/plugins
++libdir = $(prefix)@libdir@
+ libexecdir = @libexecdir@
+ localedir = @localedir@
+ localstatedir = @localstatedir@

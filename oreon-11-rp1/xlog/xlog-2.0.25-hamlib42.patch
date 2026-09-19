@@ -1,0 +1,22 @@
+--- xlog-2.0.25.orig/src/hamlib-utils.c	2021-10-03 14:38:22.000000000 -0300
++++ xlog-2.0.25/src/hamlib-utils.c	2024-12-25 19:12:18.209526859 -0300
+@@ -49,6 +49,10 @@
+ #define FILPATHLEN 150
+ #endif
+ 
++#ifndef HAMLIB_FILPATHLEN
++#define HAMLIB_FILPATHLEN FILEPATHLEN
++#endif
++
+ struct rig_id {
+ 	const gint modelnr;
+ 	const gchar *modelname;
+@@ -173,7 +177,7 @@
+ 		}
+ 	}
+ 
+-	strncpy (myrig->state.rigport.pathname, device, FILPATHLEN);
++	strncpy (myrig->state.rigport.pathname, device, HAMLIB_FILPATHLEN);
+ 	retcode = rig_open (myrig);
+ 
+ 	if (retcode != RIG_OK)

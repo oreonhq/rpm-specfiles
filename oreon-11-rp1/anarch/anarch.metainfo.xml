@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+<id>anarch-LIB_SUFFIX.desktop</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>CC0-1.0</project_license>
+	<name>Anarch (LIB_NAME)</name>
+	<summary>Suckless, anarcho-pacifist, 90s-style Doom clone that runs everywhere</summary>
+	<description>
+		<p>
+			Anarch is an extremely small, completely public domain, no-dependency, no-file, portable suckless anarcho-pacifist from-scratch 90s-style Doom clone that runs everywhere, made for the benefit of all living beings.
+		</p>
+		<p>
+			This version of the game is based on the LIB_NAME library.
+		</p>
+	</description>
+	<screenshots>
+		<screenshot>
+			<image>https://drummyfish.gitlab.io/anarch/media/screenshot1.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://drummyfish.gitlab.io/anarch/media/screenshot3.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://drummyfish.gitlab.io/anarch/media/screenshot4.png</image>
+		</screenshot>
+		<screenshot type="default">
+			<image>https://drummyfish.gitlab.io/anarch/media/screenshot5.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://drummyfish.gitlab.io/anarch/media/screenshot6.png</image>
+		</screenshot>
+	</screenshots>
+	<url type="homepage">https://drummyfish.gitlab.io/anarch/</url>
+	<url type="bugtracker">https://gitlab.com/drummyfish/anarch/-/issues</url>
+</component>

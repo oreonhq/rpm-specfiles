@@ -1,0 +1,29 @@
+Description: Use pytest instead of nose
+Author: Emanuele Rocca <ema@debian.org>
+Origin: Debian
+
+Index: python-anyjson/tests/test_implementations.py
+===================================================================
+--- python-anyjson.orig/tests/test_implementations.py
++++ python-anyjson/tests/test_implementations.py
+@@ -1,4 +1,4 @@
+-from nose.tools import assert_raises
++import pytest
+ import anyjson
+ 
+ modnames = [e[0] for e in anyjson._modules]
+@@ -42,10 +42,10 @@ def test_exceptions():
+         except ImportError:
+             continue # module can't be tested, try next
+ 
+-        assert_raises(TypeError, anyjson.dumps, [object()])
+-        assert_raises(TypeError, anyjson.serialize, [object()])
+-        assert_raises(ValueError, anyjson.loads, "[")
+-        assert_raises(ValueError, anyjson.deserialize, "[")
++        pytest.raises(TypeError, anyjson.dumps, [object()])
++        pytest.raises(TypeError, anyjson.serialize, [object()])
++        pytest.raises(ValueError, anyjson.loads, "[")
++        pytest.raises(ValueError, anyjson.deserialize, "[")
+ 
+ 
+ def test_json_loads_unicode():

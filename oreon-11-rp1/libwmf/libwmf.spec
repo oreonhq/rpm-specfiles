@@ -2,8 +2,8 @@
 
 Summary: Windows MetaFile Library
 Name: libwmf
-Version: 0.2.13
-Release: 9%{?dist}
+Version: 0.2.16
+Release: 1%{?dist}
 #libwmf is under the LGPLv2+, however...
 #1. The tarball contains an old version of the urw-fonts under GPL+.
 #   Those fonts are not installed

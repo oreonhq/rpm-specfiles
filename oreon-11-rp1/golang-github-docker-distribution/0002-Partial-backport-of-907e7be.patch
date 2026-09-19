@@ -1,0 +1,33 @@
+From e4028a3b8b5b93a97bea2bb6c7a0dce42860823a Mon Sep 17 00:00:00 2001
+From: Mikel Olasagasti Uranga <mikel@olasagasti.info>
+Date: Sun, 29 Dec 2024 15:19:46 +0100
+Subject: [PATCH 2/2] Partial backport of 907e7be
+
+---
+ registry/registry.go | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/registry/registry.go b/registry/registry.go
+index 527b5337..734e97e5 100644
+--- a/registry/registry.go
++++ b/registry/registry.go
+@@ -19,6 +19,7 @@ import (
+ 	"github.com/bugsnag/bugsnag-go"
+ 	"github.com/docker/go-metrics"
+ 	gorhandlers "github.com/gorilla/handlers"
++	"github.com/sirupsen/logrus"
+ 	log "github.com/sirupsen/logrus"
+ 	"github.com/spf13/cobra"
+ 	"github.com/yvasiyarov/gorelic"
+@@ -359,7 +360,7 @@ func configureLogging(ctx context.Context, config *configuration.Configuration)
+ 		})
+ 	case "logstash":
+ 		log.SetFormatter(&logstash.LogstashFormatter{
+-			TimestampFormat: time.RFC3339Nano,
++			Formatter: &logrus.JSONFormatter{TimestampFormat: time.RFC3339Nano},
+ 		})
+ 	default:
+ 		// just let the library use default on empty string.
+-- 
+2.47.1
+

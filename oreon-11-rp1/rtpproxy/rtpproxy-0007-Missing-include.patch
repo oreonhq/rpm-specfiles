@@ -1,0 +1,46 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sat, 15 Jun 2024 18:06:55 +0200
+Subject: [PATCH] Missing include
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/pertools/udp_contention/udp_contention.c b/pertools/udp_contention/udp_contention.c
+index 2105eab1..b4ca508c 100644
+--- a/pertools/udp_contention/udp_contention.c
++++ b/pertools/udp_contention/udp_contention.c
+@@ -14,6 +14,7 @@
+ #include <stdint.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <errno.h>
+ #include <time.h>
+ #include <unistd.h>
+ 
+@@ -42,9 +43,9 @@ srandomdev(void)
+     if (fd >= 0) {
+         rlen = read(fd, &junk, sizeof(junk));
+         if (rlen < 0) {
+-            warn("read(\"/dev/urandom\")");
++            fprintf(stderr, "read(\"/dev/urandom\"): %s", strerror(errno));
+         } else if (rlen < sizeof(junk)) {
+-            warnx("read(\"/dev/urandom\": short read %d bytes not %d)",
++            fprintf(stderr, "read(\"/dev/urandom\": short read %d bytes not %d)",
+               rlen, sizeof(junk));
+         }
+         close(fd);
+diff --git a/pertools/udp_storm/udp_storm.c b/pertools/udp_storm/udp_storm.c
+index badbb627..ad0c4f2b 100644
+--- a/pertools/udp_storm/udp_storm.c
++++ b/pertools/udp_storm/udp_storm.c
+@@ -126,6 +126,11 @@ void receiver(void *prt)
+     }
+ }
+ 
++#define errx(exitcode, format, args...) \
++  { warnx(format, ## args); exit(exitcode); }
++#define warnx(format, args...) \
++  fprintf(stderr, format "\n", ## args)
++
+ int main(int argc, char **argv)
+ {
+     int min_port, max_port, nthreads;

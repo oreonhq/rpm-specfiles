@@ -1,0 +1,92 @@
+From 5591532e1e7732a089a2353da4b2b8a77bc617e4 Mon Sep 17 00:00:00 2001
+From: Scott K Logan <logans@cottsay.net>
+Date: Fri, 14 Sep 2018 14:50:02 -0700
+Subject: [PATCH] More python 3 compatibility
+
+---
+ TileStache/Goodies/AreaServer.py          | 2 +-
+ TileStache/Goodies/Caches/LimitedDisk.py  | 8 ++++----
+ TileStache/Goodies/Providers/MirrorOSM.py | 4 ++--
+ TileStache/Goodies/StatusServer.py        | 2 +-
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/TileStache/Goodies/AreaServer.py b/TileStache/Goodies/AreaServer.py
+index 22cf13f0..55f109c0 100644
+--- a/TileStache/Goodies/AreaServer.py
++++ b/TileStache/Goodies/AreaServer.py
+@@ -86,6 +86,6 @@ def __call__(self, environ, start_response):
+             start_response('200 OK', headers)
+             return output.getvalue()
+ 
+-        except KnownUnknown, e:
++        except KnownUnknown as e:
+             start_response('400 Bad Request', [('Content-Type', 'text/plain')])
+             return str(e)
+diff --git a/TileStache/Goodies/Caches/LimitedDisk.py b/TileStache/Goodies/Caches/LimitedDisk.py
+index 96fe7b6b..18d7fc53 100644
+--- a/TileStache/Goodies/Caches/LimitedDisk.py
++++ b/TileStache/Goodies/Caches/LimitedDisk.py
+@@ -46,7 +46,7 @@
+ 
+ class Cache:
+ 
+-    def __init__(self, path, limit, umask=0022):
++    def __init__(self, path, limit, umask=0o022):
+         self.cachepath = path
+         self.dbpath = pathjoin(self.cachepath, 'stache.db')
+         self.umask = umask
+@@ -167,8 +167,8 @@ def _write(self, body, path, format):
+ 
+         try:
+             umask_old = os.umask(self.umask)
+-            os.makedirs(dirname(fullpath), 0777&~self.umask)
+-        except OSError, e:
++            os.makedirs(dirname(fullpath), 0o777&~self.umask)
++        except OSError as e:
+             if e.errno != 17:
+                 raise
+         finally:
+@@ -184,7 +184,7 @@ def _write(self, body, path, format):
+             os.unlink(fullpath)
+             os.rename(tmp_path, fullpath)
+ 
+-        os.chmod(fullpath, 0666&~self.umask)
++        os.chmod(fullpath, 0o666&~self.umask)
+         
+         stat = os.stat(fullpath)
+         size = stat.st_size
+diff --git a/TileStache/Goodies/Providers/MirrorOSM.py b/TileStache/Goodies/Providers/MirrorOSM.py
+index 5c847c1c..50c132d8 100644
+--- a/TileStache/Goodies/Providers/MirrorOSM.py
++++ b/TileStache/Goodies/Providers/MirrorOSM.py
+@@ -173,7 +173,7 @@ def create_tables(db, prefix, tmp_prefix):
+         try:
+             db.execute('CREATE TABLE %(prefix)s_%(table)s ( LIKE %(tmp_prefix)s_%(table)s )' % locals())
+ 
+-        except ProgrammingError, e:
++        except ProgrammingError as e:
+             db.execute('ROLLBACK')
+ 
+             if e.pgcode != '42P07':
+@@ -347,7 +347,7 @@ def renderTile(self, width, height, srs, coord):
+ 
+             return ConfirmationResponse(coord, message, True)
+         
+-        except Exception, e:
++        except Exception as e:
+             message = 'Error in tile %d/%d/%d: %s' % (coord.zoom, coord.column, coord.row, e)
+             
+             raise NoTileLeftBehind(ConfirmationResponse(coord, message, False))
+diff --git a/TileStache/Goodies/StatusServer.py b/TileStache/Goodies/StatusServer.py
+index 0382b41f..16d52027 100644
+--- a/TileStache/Goodies/StatusServer.py
++++ b/TileStache/Goodies/StatusServer.py
+@@ -216,7 +216,7 @@ def __call__(self, environ, start_response):
+             update_status('Finished %s in %.3f seconds' % (environ['PATH_INFO'], time() - start), **self.redis_kwargs)
+             return response
+         
+-        except Exception, e:
++        except Exception as e:
+             update_status('Error: %s after %.3f seconds' % (str(e), time() - start), **self.redis_kwargs)
+             raise
+         

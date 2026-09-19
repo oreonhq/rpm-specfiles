@@ -1,0 +1,34 @@
+From b358a894ebd1c6d08160f12824f0cae474b44370 Mon Sep 17 00:00:00 2001
+From: Scott K Logan <logans@cottsay.net>
+Date: Mon, 3 Aug 2020 15:01:34 -0700
+Subject: [PATCH] Fix a failing test with Python 3.9
+
+`pytest.raises()` is returning an `ExceptionInfo` instance, not an
+`Execption` instance. In Python 3.9, it appears that the string
+representation of an `ExceptionInfo` instance is no longer the same as
+the string representation of the value it describes, making this test
+fail.
+
+Specifically referencing the exception value property resolves the
+issue. I also changed the name of the variable to make it more clear
+that this is not an `Exception` instance.
+---
+ test/test_package_identification_bazel.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/test/test_package_identification_bazel.py b/test/test_package_identification_bazel.py
+index 855e361..6cdc161 100644
+--- a/test/test_package_identification_bazel.py
++++ b/test/test_package_identification_bazel.py
+@@ -48,9 +48,9 @@ def test_identify():
+         assert desc.type == 'bazel'
+ 
+         desc.name = 'other-name'
+-        with pytest.raises(RuntimeError) as e:
++        with pytest.raises(RuntimeError) as einfo:
+             extension.identify(desc)
+-        assert str(e).endswith('Package name already set to different value')
++        assert str(einfo.value).endswith('Package name already set to different value')
+ 
+         (basepath / 'BUILD.bazel').write_text(
+             'java_binary(\n'

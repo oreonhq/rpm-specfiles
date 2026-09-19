@@ -1,0 +1,11 @@
+ATTENTION!
+
+Due to Fedora policy, this version of FBZX has been packaged WITHOUT the ROMs. 
+These are available from RPM Fusion: http://rpmfusion.org/
+
+If you have RPM Fusion nonfree repository enabled, simply install the 'spectrum-roms' package.
+
+Otherwise download FBZX tarball from: http://www.rastersoft.com/fbzx.html. Then 
+extract the ROMs from the 'spectrum-roms' subdirectory and copy them in 
+'/usr/share/spectrum-roms/'.
+

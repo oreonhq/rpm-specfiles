@@ -1,0 +1,28 @@
+[Unit]
+Description=coturn
+Documentation=man:coturn(1) man:turnadmin(1) man:turnserver(1)
+After=syslog.target
+After=network-online.target
+
+[Service]
+User=coturn
+Group=coturn
+Type=notify
+ExecStart=/usr/bin/turnserver -c /etc/coturn/turnserver.conf --pidfile /run/coturn/turnserver.pid --no-stdout-log
+Restart=on-abort
+ExecReload=/bin/kill -HUP $MAINPID
+
+LimitCORE=infinity
+LimitNOFILE=999999
+LimitNPROC=60000
+LimitRTPRIO=infinity
+LimitRTTIME=7000000
+CPUSchedulingPolicy=other
+UMask=0007
+
+# Only required to bind coturn to privileged ports (ports < 1024),
+# e.g. port 80 or 443 to handle restrictive corporate firewalls.
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+[Install]
+WantedBy=multi-user.target

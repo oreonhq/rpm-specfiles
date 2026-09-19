@@ -1,0 +1,23 @@
+From e407f6b316c56fd6d735dfdbfac7eb5e028b0e48 Mon Sep 17 00:00:00 2001
+From: Jules Lallouette <jules@lallouette.fr>
+Date: Mon, 12 May 2025 18:52:27 +0900
+Subject: [PATCH] Fix outdated cython code
+
+---
+ pysteps/cysteps_geom.pyx | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/pysteps/cysteps_geom.pyx b/pysteps/cysteps_geom.pyx
+index 26a5df8..4266f40 100644
+--- a/pysteps/cysteps_geom.pyx
++++ b/pysteps/cysteps_geom.pyx
+@@ -3386,9 +3386,6 @@ cdef class _py_SDiffBoundary(_py__base):
+ 
+         """
+ 
+-        if not isinstance(id, bytes):
+-            id = id.encode()
+-
+         self.ptr().setID(to_std_string(id))
+ 
+     def getContainer(self, ):

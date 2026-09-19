@@ -1,0 +1,163 @@
+.TH TEND\-FIBER "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-fiber \- fiber tractography, from one or more seeds
+.SH SYNOPSIS
+.B tend\ fiber
+.RB [ \-i
+.RI < nin >]
+.RB [ \-dwi ]
+.RB [ \-s
+.RI < seed\ point >]
+.RB [ \-ns
+.RI < seed\ nrrd >]
+.RB [ \-wsp ]
+.RB [ \-t
+.RI < type >]
+.RB [ \-n
+.RI < intg >]
+.RB [ \-k
+.RI < kernel >]
+.RB [ \-wp
+.RI < which >]
+.RB [ \-ap ]
+.RB [ \-wspo ]
+.RB [ \-step
+.RI < step\ size >]
+.B \-stop
+.RI < stop1 \ ...>
+.RB [ \-v
+.RI < verbose >]
+.RB [ \-nmat
+.RI < transform >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Fiber tractography, from one or more seeds.
+A fairly complete command-line interface to the
+.B tenFiber
+API.
+.SH OPTIONS
+.TP
+.B \-i\fR <\fInin\fR>
+input volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-dwi
+input volume is a DWI volume, not a single tensor volume
+.TP
+.B \-s\fR <\fIseed\ point\fR>
+seed point for fiber; it will propogate in two opposite directions starting
+from here (3
+.IR double s);
+default:
+.RB \(lq 0\ 0\ 0 \(rq
+.TP
+.B \-ns\fR <\fIseed\ nrrd\fR>
+3-by-N
+.I nrrd
+of seedpoints; default: \(lq\(rq
+.TP
+.B \-wsp
+define seedpoint and output path in worldspace.
+Otherwise, (without using this option) everything is in index space
+.TP
+.B \-t\fR <\fItype\fR>
+fiber type; defaults to something
+.RI ( string )
+.TP
+.B \-n\fR <\fIintg\fR>
+integration method for fiber tracking; default:
+.RB \(lq rk4 \(rq
+.TP
+.B \-k\fR <\fIkernel\fR>
+kernel for reconstructing tensor field; default:
+.RB \(lq tent \(rq
+.TP
+.B \-wp\fR <\fIwhich\fR>
+when doing multi-tensor tracking, index of path to follow (made moot by
+.RB \(lq \-ap \(rq)
+.RI ( unsigned\ int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-ap
+follow all paths from (all) seedpoint(s), output will be
+.IR polydata ,
+rather than a single 3-by-N
+.IR nrrd ,
+even if only a single path is generated
+.TP
+.B \-wspo
+output should be in worldspace, even if input is not (this feature is unstable
+and/or confusing)
+.TP
+.B \-s\fR <\fIstep\ size\fR>
+stepsize along fiber, in world space
+.RI ( double );
+default:
+.RB \(lq 0.01 \(rq
+.TP
+.B \-stop\fR <\fIstop1\fR\ ...>
+the conditions that should signify the end of a fiber, or when to discard a
+fiber that is done propagating.
+Multiple stopping criteria are logically OR-ed and tested at every point along
+the fiber.
+Possibilities include:
+.RS +7n
+.IP \(bu 2
+.RB \(lq aniso:\fR<\fItype\fR>\fB,\fR<\fIthresh >\(rq:
+require anisotropy to be above the given threshold.
+Which anisotropy type is given as with 
+.BR tend-anvol (1)
+.IP \(bu 2
+.RB \(lq len:\fR<\fIlength >\(rq:
+limits the length, in world space, of each fiber half
+.IP \(bu 2
+.RB \(lq steps:\fR<\fIN >\(rq:
+the number of steps in each fiber half is capped at
+.I N
+.IP \(bu 2
+.RB \(lq conf:\fR<\fIthresh >\(rq:
+requires the tensor confidence value to be above the given
+.I thresh
+.IP \(bu 2
+.RB \(lq radius:\fR<\fIthresh >\(rq:
+requires that the radius of curvature of the fiber stay above given
+.I thresh
+.IP \(bu 2
+.RB \(lq frac:\fR<\fIF >\(rq:
+in multi-tensor tracking, the fraction of the tracked component must stay above
+.I F
+.IP \(bu 2
+.RB \(lq minlen:\fR<\fIlen >\(rq:
+discard fiber if its final whole length is below
+.I len
+(not really a termination criterion)
+.IP \(bu 2
+.RB \(lq minsteps:\fR<\fIN >\(rq:
+discard fiber if its final number of steps is below
+.I N
+(not really a termination criterion)
+(1 or more fiber stops)
+.RE
+.TP
+.B \-v\fR <\fIverbose\fR>
+verbosity level
+.RI ( int )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-nmat\fR <\fItransform\fR>
+a 4x4 homogenous transform matrix (as a
+.IR nrrd ,
+or just a text file) given with this option will be applied to the output
+tractography vertices just prior to output; default: \(lq\(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output fiber(s)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1),
+.BR tend\-anvol (1)

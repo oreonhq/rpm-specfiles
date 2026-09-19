@@ -1,0 +1,21 @@
+--- mrbs/web/lib/autoload.inc	2023-07-03 16:10:37.000000000 +0200
++++ mrbs/web/lib/autoload.inc	2024-08-19 15:38:00.800178823 +0200
+@@ -8,12 +8,12 @@
+   // Append '.php'
+   $file = str_replace('\\', '/', $class) . '.php';
+ 
+-  // Special treatment for some vendors
+-  $pathinfo = pathinfo($file);
+-  if ($pathinfo['dirname'] == 'PHPMailer/PHPMailer')
+-  {
+-    $file = 'PHPMailer/src/' . $pathinfo['basename'];
+-  }
++//  // Special treatment for some vendors
++//  $pathinfo = pathinfo($file);
++//  if ($pathinfo['dirname'] == 'PHPMailer/PHPMailer')
++//  {
++//    $file = 'PHPMailer/src/' . $pathinfo['basename'];
++//  }
+ 
+   $file = $base_dir . $file;
+   if (is_readable($file))

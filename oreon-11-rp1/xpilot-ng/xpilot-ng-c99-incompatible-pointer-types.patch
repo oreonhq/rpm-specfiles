@@ -1,0 +1,114 @@
+diff --git a/src/mapedit/proto.h b/src/mapedit/proto.h
+index b4f19f7d25cfe63d..d6222f5c7aa02e83 100644
+--- a/src/mapedit/proto.h
++++ b/src/mapedit/proto.h
+@@ -73,15 +73,15 @@ int NewMap(HandlerInfo_t info);
+ int ResizeWidth(HandlerInfo_t info);
+ int ResizeHeight(HandlerInfo_t info);
+ int OpenPreferencesPopup(HandlerInfo_t info);
+-int OpenMapInfoPopup(void);
+-int OpenRobotsPopup(void);
+-int OpenVisibilityPopup(void);
+-int OpenCannonsPopup(void);
+-int OpenRoundsPopup(void);
+-int OpenInitItemsPopup(void);
+-int OpenMaxItemsPopup(void);
+-int OpenProbsPopup(void);
+-int OpenScoringPopup(void);
++int OpenMapInfoPopup(HandlerInfo_t info);
++int OpenRobotsPopup(HandlerInfo_t info);
++int OpenVisibilityPopup(HandlerInfo_t info);
++int OpenCannonsPopup(HandlerInfo_t info);
++int OpenRoundsPopup(HandlerInfo_t info);
++int OpenInitItemsPopup(HandlerInfo_t info);
++int OpenMaxItemsPopup(HandlerInfo_t info);
++int OpenProbsPopup(HandlerInfo_t info);
++int OpenScoringPopup(HandlerInfo_t info);
+ int ValidateCoordHandler(HandlerInfo_t info);
+ int ShowHoles(HandlerInfo_t info);
+ char MapData(int x, int y);
+diff --git a/src/mapedit/tools.c b/src/mapedit/tools.c
+index b99840a257dfa6f6..24a3ca0693e7bb02 100644
+--- a/src/mapedit/tools.c
++++ b/src/mapedit/tools.c
+@@ -747,7 +747,7 @@ int OpenPreferencesPopup(HandlerInfo_t info)
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenMapInfoPopup()
++int OpenMapInfoPopup(HandlerInfo_t info)
+ {
+     Window *temp;
+ 
+@@ -790,7 +790,7 @@ int OpenMapInfoPopup()
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenRobotsPopup()
++int OpenRobotsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, robots);
+     return 0;
+@@ -801,7 +801,7 @@ int OpenRobotsPopup()
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenVisibilityPopup()
++int OpenVisibilityPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, visibility);
+     return 0;
+@@ -812,7 +812,7 @@ int OpenVisibilityPopup()
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenCannonsPopup()
++int OpenCannonsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, cannons);
+     return 0;
+@@ -823,7 +823,7 @@ int OpenCannonsPopup()
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenRoundsPopup()
++int OpenRoundsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, rounds);
+     return 0;
+@@ -834,7 +834,7 @@ int OpenRoundsPopup()
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenInitItemsPopup()
++int OpenInitItemsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, inititems);
+     return 0;
+@@ -845,7 +845,7 @@ int OpenInitItemsPopup()
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenMaxItemsPopup()
++int OpenMaxItemsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, maxitems);
+     return 0;
+@@ -856,7 +856,7 @@ int OpenMaxItemsPopup()
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenProbsPopup()
++int OpenProbsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, probs);
+     return 0;
+@@ -867,7 +867,7 @@ int OpenProbsPopup()
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenScoringPopup()
++int OpenScoringPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, scoring);
+     return 0;

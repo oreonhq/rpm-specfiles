@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=The Professor is Missing
+Comment=AGI adventure game
+Exec=professor-is-missing-wrapper.sh
+Icon=professor-is-missing.xpm
+Terminal=false
+Categories=Game;AdventureGame;

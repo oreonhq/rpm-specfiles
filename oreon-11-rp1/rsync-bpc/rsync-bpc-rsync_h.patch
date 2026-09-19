@@ -1,0 +1,11 @@
+--- a/rsync.h.orig 2020-10-08 21:07:39.000000000 +0000
++++ b/rsync.h 2020-10-27 23:52:03.132000114 +0000
+@@ -712,7 +712,7 @@
+ #define ACLS_NEED_MASK 1
+ #endif
+
+-#if 0
++#if defined HAVE_FALLOCATE || HAVE_SYS_FALLOCATE
+ #ifdef HAVE_LINUX_FALLOC_H
+ #include <linux/falloc.h>
+ #endif

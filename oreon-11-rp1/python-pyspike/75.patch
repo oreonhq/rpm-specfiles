@@ -1,0 +1,27 @@
+From 98a554a8fd0cd440ca69d72999c25909e91f50d0 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 25 Feb 2024 14:23:00 -0500
+Subject: [PATCH] Adapt numpy_include proxy for Cython 3 by making it an
+ os.PathLike
+
+- Fixes #70.
+---
+ setup.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 297746d..1a3f829 100644
+--- a/setup.py
++++ b/setup.py
+@@ -21,9 +21,9 @@
+     use_cython = True
+ 
+ 
+-class numpy_include(object):
++class numpy_include(os.PathLike):
+     """Defers import of numpy until install_requires is through"""
+-    def __str__(self):
++    def __fspath__(self):
+         import numpy
+         return numpy.get_include()
+ 

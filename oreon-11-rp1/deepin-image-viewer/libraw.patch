@@ -1,0 +1,11 @@
+--- a/qimage-plugins/libraw/rawiohandler.cpp~	2021-07-13 00:53:54.000000000 -0500
++++ a/qimage-plugins/libraw/rawiohandler.cpp	2022-12-20 15:53:29.906690099 -0600
+@@ -84,7 +84,7 @@
+ 
+     stream = new Datastream(device);
+     raw = new LibRaw;
+-    raw->imgdata.params.use_rawspeed = 1;
++    raw->imgdata.rawparams.use_rawspeed = 1;
+     if (raw->open_datastream(stream) != LIBRAW_SUCCESS) {
+         delete raw;
+         raw = nullptr;

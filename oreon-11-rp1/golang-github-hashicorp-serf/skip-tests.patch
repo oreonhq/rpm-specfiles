@@ -1,0 +1,43 @@
+From 382bdc72d283ae2b4c117ad09bf4bb87843e34f6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Alejandro=20S=C3=A1ez?= <asm@redhat.com>
+Date: Thu, 3 Apr 2025 14:31:41 +0200
+Subject: [PATCH] Skip tests
+
+---
+ cmd/serf/command/agent/command_test.go | 1 +
+ cmd/serf/command/agent/syslog_test.go  | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/cmd/serf/command/agent/command_test.go b/cmd/serf/command/agent/command_test.go
+index ee098b7..9c784be 100644
+--- a/cmd/serf/command/agent/command_test.go
++++ b/cmd/serf/command/agent/command_test.go
+@@ -254,6 +254,7 @@ func TestCommandRun_advertiseAddr(t *testing.T) {
+ }
+ 
+ func TestCommandRun_mDNS(t *testing.T) {
++	t.Skip("This test requires IPv6 unicast, which does not work in RPM environment")
+ 	if os.Getenv("CI") != "" {
+ 		t.Skip("This test requires IPv6 unicast, which does not work in CircleCI environment")
+ 	}
+diff --git a/cmd/serf/command/agent/syslog_test.go b/cmd/serf/command/agent/syslog_test.go
+index 16e771b..ff1d86a 100644
+--- a/cmd/serf/command/agent/syslog_test.go
++++ b/cmd/serf/command/agent/syslog_test.go
+@@ -7,11 +7,12 @@ import (
+ 	"runtime"
+ 	"testing"
+ 
+-	"github.com/hashicorp/go-syslog"
++	gsyslog "github.com/hashicorp/go-syslog"
+ 	"github.com/hashicorp/logutils"
+ )
+ 
+ func TestSyslogFilter(t *testing.T) {
++	t.Skip("This test fails in RPM environments")
+ 	if runtime.GOOS == "windows" {
+ 		t.SkipNow()
+ 	}
+-- 
+2.49.0
+

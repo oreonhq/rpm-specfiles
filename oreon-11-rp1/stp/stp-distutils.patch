@@ -1,0 +1,25 @@
+From 23a6af263dd41259d3430aadee15ba41883c27ba Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Tue, 18 Oct 2022 11:58:54 -0600
+Subject: [PATCH] Use sysconfig, not distutils, to find python root
+
+---
+ bindings/python/stp/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bindings/python/stp/CMakeLists.txt b/bindings/python/stp/CMakeLists.txt
+index c62c726c..40d16e6c 100644
+--- a/bindings/python/stp/CMakeLists.txt
++++ b/bindings/python/stp/CMakeLists.txt
+@@ -59,7 +59,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/__init__.py.in
+ # Try to guess the right place by asking the current python interpreter for its
+ # Python library directory
+ execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
+-                        "from distutils.sysconfig import get_python_lib; print(get_python_lib())"
++                        "import sys; import sysconfig; print(sysconfig.get_path('purelib', vars={'base': sys.base_prefix}))"
+                  RESULT_VARIABLE RETURN_CODE
+                  OUTPUT_VARIABLE PYTHON_LIB_DIR_DETECTED
+                  OUTPUT_STRIP_TRAILING_WHITESPACE
+-- 
+2.37.3
+

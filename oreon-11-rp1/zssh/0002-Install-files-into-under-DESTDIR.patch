@@ -1,0 +1,27 @@
+From: Bart Martens <bartm@knars.be>
+Date: Sun, 20 May 2007 11:00:41 +0200
+Subject: Install files into under $(DESTDIR).
+
+This patch forces all installed files under $(DESTDIR) to cooperate
+with Debian's build system.
+---
+ Makefile.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 6e46a93..69f68d7 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -75,9 +75,9 @@ ztelnet : $(NAME)
+ 
+ install :
+ 	strip $(NAME)
+-	$(INSTALL) -m 0711 zssh @bindir@
+-	ln -f @bindir@/zssh  @bindir@/ztelnet
+-	$(INSTALL) -m 0644 $(MANS) @mandir@/man1
++	$(INSTALL) -m 0711 zssh $(DESTDIR)/@bindir@
++	ln -f $(DESTDIR)/@bindir@/zssh  $(DESTDIR)/@bindir@/ztelnet
++	$(INSTALL) -m 0644 $(MANS) $(DESTDIR)/@mandir@/man1
+ 
+ uninstall :
+ 	-cd @bindir@      && rm $(PRGS)

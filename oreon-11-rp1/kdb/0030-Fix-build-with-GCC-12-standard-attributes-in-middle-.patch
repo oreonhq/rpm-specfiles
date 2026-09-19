@@ -1,0 +1,70 @@
+From 1b1807bb65c2f1415f4c10cea2f1982706b1905e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C3=96mer=20Fad=C4=B1l=20Usta?= <omerusta@gmail.com>
+Date: Thu, 12 May 2022 04:51:01 +0000
+Subject: [PATCH] Fix build with GCC 12 (standard attributes in middle of decl-specifiers)
+
+---
+ src/KDbConnection.h                     | 2 +-
+ src/drivers/mysql/MysqlConnection_p.h   | 4 ++--
+ src/drivers/sqlite/SqliteConnection_p.h | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/KDbConnection.h b/src/KDbConnection.h
+index a6968cf8..1a9cf748 100644
+--- a/src/KDbConnection.h
++++ b/src/KDbConnection.h
+@@ -1191,7 +1191,7 @@ protected:
+      @todo Add support for nested transactions,
+            e.g. KDbTransactionData* beginTransaction(KDbTransactionData *parent)
+     */
+-    virtual Q_REQUIRED_RESULT KDbTransactionData *drv_beginTransaction();
++    Q_REQUIRED_RESULT virtual KDbTransactionData *drv_beginTransaction();
+ 
+     /*! Note for driver developers: begins new transaction
+      and returns handle to it. Default implementation just
+diff --git a/src/drivers/mysql/MysqlConnection_p.h b/src/drivers/mysql/MysqlConnection_p.h
+index 05d3da00..c9bbf5ef 100644
+--- a/src/drivers/mysql/MysqlConnection_p.h
++++ b/src/drivers/mysql/MysqlConnection_p.h
+@@ -166,7 +166,7 @@ public:
+         return data ? mysql_num_fields(data) : 0;
+     }
+ 
+-    inline Q_REQUIRED_RESULT KDbSqlField *field(int index) override {
++    Q_REQUIRED_RESULT inline KDbSqlField *field(int index) override {
+         if (!fields) {
+             if (!data) {
+                 return nullptr;
+@@ -178,7 +178,7 @@ public:
+ 
+     Q_REQUIRED_RESULT KDbField *createField(const QString &tableName, int index) override;
+ 
+-    inline Q_REQUIRED_RESULT QSharedPointer<KDbSqlRecord> fetchRecord() override
++    Q_REQUIRED_RESULT inline QSharedPointer<KDbSqlRecord> fetchRecord() override
+     {
+         QSharedPointer<KDbSqlRecord> record;
+         MYSQL_ROW row = data ? mysql_fetch_row(data) : nullptr;
+diff --git a/src/drivers/sqlite/SqliteConnection_p.h b/src/drivers/sqlite/SqliteConnection_p.h
+index 841abbd3..a9492827 100644
+--- a/src/drivers/sqlite/SqliteConnection_p.h
++++ b/src/drivers/sqlite/SqliteConnection_p.h
+@@ -140,14 +140,14 @@ public:
+         return sqlite3_column_count(prepared_st);
+     }
+ 
+-    inline Q_REQUIRED_RESULT KDbSqlField *field(int index) override
++    Q_REQUIRED_RESULT inline KDbSqlField *field(int index) override
+     {
+         return prepared_st ? new SqliteSqlField(prepared_st, index) : nullptr;
+     }
+ 
+     Q_REQUIRED_RESULT KDbField *createField(const QString &tableName, int index) override;
+ 
+-    inline Q_REQUIRED_RESULT QSharedPointer<KDbSqlRecord> fetchRecord() override
++    Q_REQUIRED_RESULT inline QSharedPointer<KDbSqlRecord> fetchRecord() override
+     {
+         SqliteSqlRecord *record;
+         const int res = sqlite3_step(prepared_st);
+-- 
+2.35.3
+

@@ -1,0 +1,13 @@
+--- pygsl-2.6.2/meson.build.orig	2025-04-11 00:02:29.000000000 -0600
++++ pygsl-2.6.2/meson.build	2025-04-21 20:56:50.120316089 -0600
+@@ -13,8 +13,8 @@ py = import('python').find_installation(
+ 
+ 
+ # - GSL Library -----------------------------------------
+-gsl_dep = dependency('gsl')
+-gsl_includedir = gsl_dep.get_variable('includedir')
++gsl_includedir = '/usr/include'
++gsl_dep = declare_dependency(include_directories: gsl_includedir, link_args: ['-lgsl', '-lflexiblas'])
+ message('gsl: include path(s)', gsl_includedir)
+ # - END GSL Library -------------------------------------
+ swig_typemaps_dir = include_directories('typemaps')

@@ -1,0 +1,24 @@
+From 72827148e15294308c20c06d3a5b9654d8b24a7f Mon Sep 17 00:00:00 2001
+From: Colomban Wendling <cwendling@hypra.fr>
+Date: Wed, 15 May 2024 22:03:06 +0200
+Subject: [PATCH 5/6] mate-screensaver-preferences: Add tooltip for lock-delay
+
+---
+ data/mate-screensaver-preferences.ui | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/data/mate-screensaver-preferences.ui b/data/mate-screensaver-preferences.ui
+index a6918a8..e5ef573 100644
+--- a/data/mate-screensaver-preferences.ui
++++ b/data/mate-screensaver-preferences.ui
+@@ -441,6 +441,7 @@
+                                             <property name="halign">start</property>
+                                             <property name="hexpand">False</property>
+                                             <property name="label" translatable="yes">Time before l_ocking:</property>
++                                            <property name="tooltip-text" translatable="yes">Delay before locking the screen after the screensaver activated</property>
+                                             <property name="use_underline">True</property>
+                                           </object>
+                                           <packing>
+-- 
+2.49.0
+

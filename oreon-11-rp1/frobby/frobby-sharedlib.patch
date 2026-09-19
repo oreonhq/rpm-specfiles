@@ -1,0 +1,39 @@
+--- frobby-0.9.6/CMakeLists.txt.orig	2025-12-22 06:57:17.000000000 -0700
++++ frobby-0.9.6/CMakeLists.txt	2025-12-22 10:04:18.360602678 -0700
+@@ -29,8 +29,7 @@ add_compile_options(
+   -Wno-uninitialized -Wno-unused-parameter
+   )
+ 
+-add_library(frobby STATIC
+-  src/main.cpp
++add_library(frobby SHARED
+   src/display.cpp
+   src/dynamicFrobeniusAlgorithm.cpp
+   src/error.cpp
+@@ -198,6 +197,7 @@ add_library(frobby STATIC
+   src/test/asserts.cpp
+   src/test/macroes.cpp
+   )
++set_target_properties(frobby PROPERTIES POSITION_INDEPENDENT_CODE ON VERSION 0.0.0 SOVERSION 0)
+ 
+ target_link_libraries(frobby ${GMP_LIBRARIES})
+ target_include_directories(frobby PUBLIC
+@@ -209,8 +209,9 @@ target_include_directories(frobby SYSTEM
+   )
+ 
+ set_target_properties(frobby PROPERTIES PUBLIC_HEADER src/frobby.h)
+-install(TARGETS frobby LIBRARY DESTINATION lib)
++install(TARGETS frobby LIBRARY DESTINATION lib${LIB_SUFFIX})
+ install(FILES GPL-header COPYING DESTINATION licenses/frobby)
++install(FILES src/frobby.h src/stdinc.h DESTINATION ${INCLUDE_INSTALL_DIR}/frobby)
+ 
+ add_executable(frobby-executable src/main.cpp)
+ set_target_properties(frobby-executable PROPERTIES OUTPUT_NAME frobby)
+@@ -220,6 +221,7 @@ install(TARGETS frobby-executable)
+ include(CTest)
+ if(BUILD_TESTING)
+   add_executable(frobby-tests
++    src/main.cpp
+     src/ArenaTest.cpp
+     src/IdealTest.cpp
+     src/LibAlexanderDualTest.cpp

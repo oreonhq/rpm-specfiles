@@ -1,0 +1,54 @@
+Fix compile time warnings to make it possible to build package with -Werror.
+
+main.c: In function 'random_seed':
+main.c:100:3: warning: ignoring return value of 'read', declared with attribute warn_unused_result [-Wunused-result]
+   read (fd, &seed, sizeof(seed));
+   ^
+
+If required number of seed bytes can not be read from the random device, fall
+back to using using predictable, but frequently changing seed.  The macchanger
+does not require high quality randomness, and the predictable seed method is
+already fallback for cases when no random device is available.
+
+mac.c: In function 'mc_mac_read_string':
+mac.c:116:3: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'size_t' [-Werror=format=]
+   fprintf (stderr, "[ERROR] Incorrect format: MAC length should be 17. %s(%lu)\n", string, strlen(string));
+   ^
+
+Fix format string to use %z.  Required for 32bit architectures.
+
+diff -pruN macchanger-1.7.0.orig/src/main.c macchanger-1.7.0/src/main.c
+--- macchanger-1.7.0.orig/src/main.c	2014-07-04 09:44:29.505142598 +0200
++++ macchanger-1.7.0/src/main.c	2014-07-04 10:16:32.238186470 +0200
+@@ -93,13 +93,17 @@ random_seed (void)
+ 	int            fd;
+ 	struct timeval tv;
+ 	unsigned int   seed;
++	int            have_seed = 0;
+ 
+ 	if ((fd = open("/dev/urandom", O_RDONLY)) >= 0 ||
+ 	    (fd = open("/dev/random", O_RDONLY)) >= 0)
+ 	{
+-		read (fd, &seed, sizeof(seed));
++		have_seed = ( read (fd, &seed, sizeof(seed)) == sizeof(seed) );
+ 		close (fd);
+-	} else {
++	}
++	
++	/* Use predictable non-constant seed as fallback */
++	if (!have_seed) {
+ 		gettimeofday (&tv, NULL);
+ 		seed = (getpid() << 16) ^ tv.tv_sec ^ tv.tv_usec;
+ 	}
+diff -pruN macchanger-1.7.0.orig/src/mac.c macchanger-1.7.0/src/mac.c
+--- macchanger-1.7.0.orig/src/mac.c	2013-04-18 07:27:17.000000000 +0200
++++ macchanger-1.7.0/src/mac.c	2014-07-04 10:37:13.074214783 +0200
+@@ -113,7 +113,7 @@ mc_mac_read_string (mac_t *mac, char *st
+ 
+ 	/* Check the format */
+ 	if (strlen(string) != 17) {
+-		fprintf (stderr, "[ERROR] Incorrect format: MAC length should be 17. %s(%lu)\n", string, strlen(string));
++		fprintf (stderr, "[ERROR] Incorrect format: MAC length should be 17. %s(%zu)\n", string, strlen(string));
+ 		return -1;
+ 	}
+ 

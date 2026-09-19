@@ -1,0 +1,8 @@
+diff -up Kwiki-Users-Remote-0.04/Makefile.PL.orig Kwiki-Users-Remote-0.04/Makefile.PL
+--- Kwiki-Users-Remote-0.04/Makefile.PL.orig	2017-05-22 15:43:16.569604633 +0200
++++ Kwiki-Users-Remote-0.04/Makefile.PL	2017-05-22 15:43:29.152528517 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ name('Kwiki-Users-Remote');

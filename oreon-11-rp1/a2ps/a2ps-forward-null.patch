@@ -1,0 +1,19 @@
+diff -up a2ps-4.15.5/liba2ps/pathwalk.c.forward-null a2ps-4.15.5/liba2ps/pathwalk.c
+--- a2ps-4.15.5/liba2ps/pathwalk.c.forward-null	2023-07-25 18:17:35.906486748 +0200
++++ a2ps-4.15.5/liba2ps/pathwalk.c	2023-07-25 18:18:16.767767587 +0200
+@@ -335,12 +335,12 @@ xpw_find_included_file (char * const *pa
+     /* Relative.  Give its root. */
+     dir = dir_name (including_file);
+ 
+-  res = ALLOCA (char, (strlen (dir)
++  res = ALLOCA (char, ((dir ? strlen (dir) : 0)
+ 		       + strlen (name)
+ 		       + (suffix ? strlen (suffix) : 0)
+ 		       + 2));
+-  sprintf (res, "%s%c%s%s", dir, DIRECTORY_SEPARATOR,
+-	   name, suffix ? suffix : "");
++  sprintf (res, "%s%c%s%s", dir ? dir : "", DIRECTORY_SEPARATOR,
++	   dir ? name : name + 1, suffix ? suffix : "");
+   if (stat (res, &statbuf) == 0)
+     return xstrdup (res);
+ 

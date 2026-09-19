@@ -3,7 +3,7 @@
 %global daemon_name intel_lpmd
 
 Name:		intel-lpmd
-Version:	0.0.9
+Version:	0.1.0
 Release:	%autorelease
 Summary:	Intel Low Power Mode Daemon
 

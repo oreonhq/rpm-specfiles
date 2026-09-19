@@ -1,156 +1,65 @@
-%global source0_hash 590d2574a7711de78c1d4d5bfed92fad11c08248482724b772ceb8401421f634
-
-%bcond_without tests
-
-%if %{defined rhel} || (0%{?oreon} >= 11)
-# The cli and ghostwriter extras require black, which is not currently in
-# RHEL/EPEL 10.  It was requested in rhbz#2319803, but the maintainer doesn't
-# think it's a good fit due to the fact that black doesn't have a stable Python
-# API.
-%bcond_with cli
-%bcond_with ghostwriter
-# The django extra requires django, which is not currently in RHEL/EPEL 10.
-# It has been requested in rhbz#2319809.
-%bcond_with django
-# The codemods extra requires libcst, which is not currently in RHEL/EPEL 10.
-# It has been requested in rhbz#2319805.
-%bcond_with codemods
-# Building the docs need several sphinx extensions (sphinx-hoverxref,
-# sphinx-jsonschema, sphinx-rtd-theme, sphinx_selective_exclude) that are not
-# currently in RHEL/EPEL 10.
-%bcond_with doc
-%else
-%bcond_without cli
-%bcond_without ghostwriter
-%bcond_without django
-%bcond_without codemods
-%bcond_without doc
-%endif
+%global source0_hash none
 
 Name:           python-hypothesis
-Version:        6.123.0
+Version:        6.168.0
 Release:        %autorelease
-Summary:        Library for property based testing
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The property-based testing library for Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
-URL:            https://github.com/HypothesisWorks/hypothesis
-Source:        https://github.com/HypothesisWorks/hypothesis/archive/refs/tags/hypothesis-python-6.123.0.tar.gz#/hypothesis-6.123.0.tar.gz
-# Patch to use the version of attrs that works with Python 3.14
-# see https://github.com/python-attrs/attrs/pull/1329
-#     https://github.com/python-attrs/attrs/commit/7373d88f9bef8a2ff70972f81e8d8b9dfb7c5653
+URL:            https://hypothesis.works
+Source:         %{pypi_source hypothesis}
+
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'hypothesis' generated automatically by pyp2spec.}
+
 Patch:          hypothesis-attrs-py314.diff
 
-BuildArch:      noarch
+%description %_description
 
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  pyproject-rpm-macros >= 0-43
-
-%if %{with tests}
-# optional test dependencies:
-BuildRequires:  %{py3_dist typing_extensions}
-%endif
-
-%if %{with doc}
-BuildRequires:  %{_bindir}/sphinx-build
-BuildRequires:  %{py3_dist sphinx-hoverxref}
-BuildRequires:  %{py3_dist sphinx-jsonschema}
-BuildRequires:  %{py3_dist sphinx-rtd-theme}
-BuildRequires:  %{py3_dist sphinx_selective_exclude}
-%endif
-
-
-%global _description %{expand:
-Hypothesis is a library for testing your Python code against a much
-larger range of examples than you would ever want to write by
-hand. It’s based on the Haskell library, Quickcheck, and is designed
-to integrate seamlessly into your existing Python unit testing work
-flow.}
-
-%description %{_description}
-
-
-%package     -n python%{python3_pkgversion}-hypothesis
+%package -n     python3-hypothesis
 Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-hypothesis %{_description}
+%description -n python3-hypothesis %_description
 
-
-%global extras pytz,dateutil,lark,numpy,pandas,pytest,redis,zoneinfo%{?with_cli:,cli}%{?with_ghostwriter:,ghostwriter}%{?with_django:,django}%{?with_codemods:,codemods}
-# extras with missing deps:
-#  dpcontracts: dpcontracts
-#  crosshair: hypothesis-crosshair, crosshair-tool
-# extras with missing deps on RHEL/EPEL:
-#  cli: black, rich
-#  ghostwriter: black
-#  django: django
-#  codemods: libcst
-%{pyproject_extras_subpkg -n python%{python3_pkgversion}-hypothesis %{extras}}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-hypothesis all,cli,codemods,crosshair,dateutil,django,dpcontracts,ghostwriter,lark,numpy,pandas,pytest,pytz,redis,watchdog,zoneinfo
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n hypothesis-hypothesis-python-%{version}/hypothesis-python -N
-# make it possible to patch files outside hypothesis-python
-pushd ..
-%autopatch -p1
-popd
-# disable Sphinx extensions that require Internet access
-sed -i -e '/sphinx.ext.intersphinx/d' docs/conf.py
-# disable Sphinx non-available extensions
-sed -i -e '/sphinx_codeautolink/d' docs/conf.py
-# disable Sphinx pinning
-sed -i -e 's/needs_sphinx/no_needs_sphinx/' docs/conf.py
+%autosetup -p1 -n hypothesis-%{version}
 
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:../requirements/test.in -x %{extras}}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,cli,codemods,crosshair,dateutil,django,dpcontracts,ghostwriter,lark,numpy,pandas,pytest,pytz,redis,watchdog,zoneinfo
 
 
 %build
 %pyproject_wheel
 
-%if %{with doc}
-PYTHONPATH=src READTHEDOCS=True sphinx-build -b man docs docs/_build/man
-%endif
-
 
 %install
 %pyproject_install
-%pyproject_save_files -l hypothesis '_hypothesis_*'
-
-%if %{with doc}
-install -Dpm0644 -t %{buildroot}%{_mandir}/man1 docs/_build/man/hypothesis.1
-%endif
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
-%if %{with tests}
 %check
-k=""
-%pytest -v -n auto -k "$k" \
-%if %{without ghostwriter}
-  --ignore tests/ghostwriter \
-%endif
-%if %{without codemods}
-  --ignore tests/codemods --ignore tests/patching \
-%endif
-  --ignore tests/dpcontracts \
-  --ignore tests/redis \
-
-# The BRP that handles bytecompilation already run at the end of %%install.
-# This autogenerated file gets re-generated during tests,
-# the tests asserts the content is identical, but the mtime is changed anyway.
-# Since %%pytest disables byte-compilation, we need to update the pycs manually:
-%py_byte_compile %{python3} %{buildroot}%{python3_sitelib}/hypothesis/internal/conjecture/shrinking/learned_dfas.py
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python%{python3_pkgversion}-hypothesis -f %{pyproject_files}
-%doc README.rst
+%files -n python3-hypothesis -f %{pyproject_files}
 %{_bindir}/hypothesis
-%if %{with doc}
-%{_mandir}/man1/hypothesis.1*
-%endif
-
 
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.123.0-1

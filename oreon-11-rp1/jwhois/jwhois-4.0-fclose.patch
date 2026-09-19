@@ -1,0 +1,15 @@
+diff -up jwhois-4.0/src/init.c.orig jwhois-4.0/src/init.c
+--- jwhois-4.0/src/init.c.orig	2007-06-26 08:59:17.000000000 +0200
++++ jwhois-4.0/src/init.c	2016-08-08 12:39:53.020192525 +0200
+@@ -281,7 +281,10 @@ parse_args(int *argc, char ***argv)
+ 	config = SYSCONFDIR "/jwhois.conf";
+     }
+   if (in)
+-    jconfig_parse_file(in);
++    {
++      jconfig_parse_file(in);
++      fclose(in);
++    }
+ 
+   if (verbose>1)
+     {

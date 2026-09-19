@@ -1,0 +1,28 @@
+.TH TEND\-MAKE "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-make \- create DT volume from confidence and eigensystem
+.SH SYNOPSIS
+.B tend\ make
+.B \-i
+.RI < conf \  evals \  evecs >
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Create DT volume from confidence and eigensystem.
+The input is in the form of three
+.IR nrrd s,
+one for confidence values (3D), one for eigenvalues (4D, three evals per
+voxel), and one for eigenvectors (4D, nine evec components per voxel).
+.SH OPTIONS
+.TP
+.B \-i\fR <\fIconf\fR\ \fIevals\fR\ \fIevecs\fR>
+input diffusion tensor volume (3
+.IR nrrd s)
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

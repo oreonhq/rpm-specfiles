@@ -1,0 +1,11 @@
+diff -up cmt/src/makefile~ cmt/src/makefile
+--- cmt/src/makefile~	2007-09-16 10:48:29.000000000 +0200
++++ cmt/src/makefile	2007-09-16 10:48:29.000000000 +0200
+@@ -73,7 +73,6 @@ $(PLUGIN_LIB):	$(PLUGIN_OBJECTS)
+ 		$(PLUGIN_OBJECTS)					
+ 
+ install:	$(PLUGIN_LIB)
+-	-strip $(PLUGIN_LIB)
+ 	cp $(PLUGIN_LIB) $(INSTALL_PLUGINS_DIR)
+ 
+ test:	/tmp/test.wav ../../ladspa_sdk/snd/noise.wav always

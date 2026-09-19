@@ -1,0 +1,51 @@
+.TH TEND\-STEN "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-sten \- calculate structure tensors from a scalar field
+.SH SYNOPSIS
+.B tend\ sten
+.RB [ \-ds
+.RI < diff.\ scale >]
+.RB [ \-is
+.RI < int.\ scale >]
+.RB [ \-df
+.RI < downsample\ factor >]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Calculate structure tensors from a scalar field.
+Not a diffusion tensor, but it is symmetric and positive-definite.
+.SH OPTIONS
+.TP
+.B \-ds\fR <\fIdiff.\ scale\fR>
+differentiation scale, in pixels: the radius of the kernel used for
+differentation to compute gradient vectors
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-is\fR <\fIint.\ scale\fR>
+integration scale, in pixels: the radius of the kernel used for blurring outer
+products of gradients in order compute structure tensors
+.RI ( int );
+default:
+.RB \(lq 2 \(rq
+.TP
+.B \-df\fR <\fIdownsample\ factor\fR>
+the factor by which to downsample when creating volume of structure tensors
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-i\fR <\fInin\fR>
+input scalar volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output filename
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

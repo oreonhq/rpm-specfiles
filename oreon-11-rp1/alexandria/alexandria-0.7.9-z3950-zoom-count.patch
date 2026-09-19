@@ -1,0 +1,15 @@
+--- alexandria-book-collection-manager-0.7.4/lib/alexandria/book_providers/z3950_provider.rb.zoom_count	2019-10-25 01:20:07.000000000 +0900
++++ alexandria-book-collection-manager-0.7.4/lib/alexandria/book_providers/z3950_provider.rb	2020-01-04 13:59:39.224201295 +0900
+@@ -149,7 +149,11 @@ module Alexandria
+ 
+         conn.preferred_record_syntax = prefs["record_syntax"]
+         conn.element_set_name = "F"
+-        conn.count = conn_count
++        #conn.count = conn_count
++        #conn.count must be string, ZOOM's "define_zoom_option" calls rbz_connection_get_option,
++        #conn.count must be string, ZOOM's "define_zoom_option" calls rbz_connection_get_option,
++        #which calls ZOOM_connection_option_get, and it expects that conn.count is string.
++        conn.count = conn_count.to_s
+         attr = case type
+                when SEARCH_BY_ISBN     then [7]
+                when SEARCH_BY_TITLE    then [4]

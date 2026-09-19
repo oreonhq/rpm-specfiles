@@ -1,0 +1,60 @@
+--- breakid-3.1.1/src/CMakeLists.txt.orig	2024-01-28 14:12:44.000000000 -0700
++++ breakid-3.1.1/src/CMakeLists.txt	2024-01-28 16:32:05.090137515 -0700
+@@ -18,8 +18,6 @@
+ # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ # THE SOFTWARE.
+ 
+-add_subdirectory(bliss)
+-
+ include_directories( ${PROJECT_SOURCE_DIR} )
+ 
+ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/GitSHA1.cpp.in" "${CMAKE_CURRENT_BINARY_DIR}/GitSHA1.cpp" @ONLY)
+@@ -34,10 +32,11 @@ set(breakid_lib_files
+     breakid.cpp
+     ${CMAKE_CURRENT_BINARY_DIR}/GitSHA1.cpp
+     breakid_c.cpp
+-    $<TARGET_OBJECTS:bliss>
+ )
+ add_library(breakid ${breakid_lib_files})
+ 
++target_link_libraries(breakid -lbliss)
++
+ if (NOT WIN32)
+     set_target_properties(breakid PROPERTIES
+         PUBLIC_HEADER "${breakid_public_headers}"
+--- breakid-3.1.1/src/Graph.cpp.orig	2024-01-28 14:12:44.000000000 -0700
++++ breakid-3.1.1/src/Graph.cpp	2024-01-28 16:30:51.021155644 -0700
+@@ -133,11 +133,9 @@ uint32_t Graph::getColorOf(uint32_t node
+ ///This method is given to BLISS as a polymorphic consumer
+ ///of the detected generator permutations
+ static void addBlissPermutation(
+-    void* param, const unsigned int n,
++    Graph *g, const unsigned int n,
+     const unsigned int* aut)
+ {
+-    Graph* g = (Graph*)param;
+-
+     shared_ptr<Permutation> permu = std::make_shared<Permutation>(g->conf);
+     for (unsigned i = 0; i < n; ++i) {
+         if (i != aut[i]) {
+@@ -153,12 +151,17 @@ void Graph::getSymmetryGeneratorsInterna
+     , int64_t* out_steps_lim
+ ) {
+     bliss::Stats stats;
+-    stats.max_num_steps = steps_lim;
+     //bliss_g->set_splitting_heuristic(bliss::Graph::SplittingHeuristic::shs_fl); //TODO: to decide
+ 
+-    bliss_g->find_automorphisms(stats, &addBlissPermutation, (void*)this);
++    auto addblisspermut = [this](unsigned int n, const unsigned int *aut) -> void {
++        addBlissPermutation(this, n, aut);
++    };
++    auto terminate = [&steps_lim]() -> bool {
++        return steps_lim-- <= 0;
++    };
++    bliss_g->find_automorphisms(stats, addblisspermut, terminate);
+     if (out_steps_lim) {
+-        *out_steps_lim = stats.max_num_steps;
++        *out_steps_lim = steps_lim;
+     }
+ 
+     std::swap(out_perms, perms);

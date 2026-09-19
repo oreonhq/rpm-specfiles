@@ -1,0 +1,56 @@
+diff -up nogravity-2.00/rlx32/include/gx_flc.h~ nogravity-2.00/rlx32/include/gx_flc.h
+--- nogravity-2.00/rlx32/include/gx_flc.h~	2015-06-19 16:04:34.000000000 +0200
++++ nogravity-2.00/rlx32/include/gx_flc.h	2015-06-19 16:09:48.758061934 +0200
+@@ -27,6 +27,8 @@ Prepared for public release: 02/24/2004
+ #ifndef __GX_FLC_H
+ #define __GX_FLC_H
+ 
++#include <stdint.h>
++
+ // Load format
+ enum {
+     FLI_DIRECTFROMDISK = 0x0, 
+diff -up nogravity-2.00/rlx32/src/gx_csp.c~ nogravity-2.00/rlx32/src/gx_csp.c
+--- nogravity-2.00/rlx32/src/gx_csp.c~	2015-06-19 16:04:34.000000000 +0200
++++ nogravity-2.00/rlx32/src/gx_csp.c	2015-06-19 16:09:24.614670704 +0200
+@@ -24,6 +24,7 @@ Prepared for public release: 02/24/2004
+ */
+ //-------------------------------------------------------------------------
+ #include <string.h>
++#include <stdint.h>
+ #include <stdio.h>
+ #include "_rlx32.h"
+ #include "systools.h"
+diff -up nogravity-2.00/rlx32/src/systools.c~ nogravity-2.00/rlx32/src/systools.c
+--- nogravity-2.00/rlx32/src/systools.c~	2015-06-19 16:04:34.000000000 +0200
++++ nogravity-2.00/rlx32/src/systools.c	2015-06-19 16:09:05.816144705 +0200
+@@ -24,6 +24,7 @@ Prepared for public release: 02/24/2004
+ */
+ //-------------------------------------------------------------------------
+ #include <stdlib.h>
++#include <stdint.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <ctype.h>
+diff -up nogravity-2.00/rlx32/src/v3xsoft.c~ nogravity-2.00/rlx32/src/v3xsoft.c
+--- nogravity-2.00/rlx32/src/v3xsoft.c~	2015-06-19 16:04:34.000000000 +0200
++++ nogravity-2.00/rlx32/src/v3xsoft.c	2015-06-19 16:10:19.877277270 +0200
+@@ -24,6 +24,7 @@ Prepared for public release: 02/24/2004
+ */
+ //-------------------------------------------------------------------------
+ #include <stdlib.h>
++#include <stdint.h>
+ #include <stdio.h>
+ #include "_rlx32.h"
+ #include "sysresmx.h"
+diff -up nogravity-2.00/src/console.c~ nogravity-2.00/src/console.c
+--- nogravity-2.00/src/console.c~	2015-06-19 16:04:34.000000000 +0200
++++ nogravity-2.00/src/console.c	2015-06-19 16:10:50.482505565 +0200
+@@ -24,6 +24,7 @@ Prepared for public release: 02/24/2004
+ */
+ //-------------------------------------------------------------------------
+ 
++#include <stdint.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdarg.h>

@@ -1,0 +1,12 @@
+[Unit]
+Description=Gitit
+After=network.target
+
+[Service]
+User = gitit
+WorkingDirectory = /var/lib/gitit/wiki
+ExecStart = /usr/bin/gitit -f /etc/gitit/gitit.conf
+Restart = on-failure
+
+[Install]
+WantedBy=multi-user.target

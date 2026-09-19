@@ -1,0 +1,174 @@
+--- opengl-0.10.0/ext/opengl/gl-1.0-1.1.c.types	2024-02-23 11:59:46.379472357 +0900
++++ opengl-0.10.0/ext/opengl/gl-1.0-1.1.c	2024-02-23 12:20:08.317748271 +0900
+@@ -203,8 +203,9 @@ struct gl_endisable_args {
+   };
+ 
+ static VALUE
+-gl_Enable1(struct gl_endisable_args *args)
++gl_Enable1(VALUE val)
+ {
++  struct gl_endisable_args *args = (struct gl_endisable_args *)val;
+   long i;
+   VALUE obj = args->obj;
+   DECL_GL_FUNC_PTR(void,glEnable,(GLenum cap));
+@@ -220,9 +221,10 @@ gl_Enable1(struct gl_endisable_args *arg
+ }
+ 
+ static VALUE
+-gl_Enable0(struct gl_endisable_args *args)
++gl_Enable0(VALUE val)
+ {
+-  gl_Enable1(args);
++  struct gl_endisable_args *args = (struct gl_endisable_args *)val;
++  gl_Enable1((VALUE)args);
+ 
+   if (rb_block_given_p())
+     rb_yield(Qundef);
+@@ -231,8 +233,9 @@ gl_Enable0(struct gl_endisable_args *arg
+ }
+ 
+ static VALUE
+-gl_Disable1(struct gl_endisable_args *args)
++gl_Disable1(VALUE val)
+ {
++  struct gl_endisable_args *args = (struct gl_endisable_args *)val;
+   long i;
+   VALUE obj = args->obj;
+   DECL_GL_FUNC_PTR(void,glDisable,(GLenum cap));
+@@ -248,9 +251,10 @@ gl_Disable1(struct gl_endisable_args *ar
+ }
+ 
+ static VALUE
+-gl_Disable0(struct gl_endisable_args *args)
++gl_Disable0(VALUE val)
+ {
+-  gl_Disable1(args);
++  struct gl_endisable_args *args = (struct gl_endisable_args *)val;
++  gl_Disable1((VALUE)args);
+ 
+   if (rb_block_given_p())
+     rb_yield(Qundef);
+@@ -279,7 +283,7 @@ gl_Enable(int argc, VALUE *argv, VALUE o
+     return rb_ensure(gl_Enable0, (VALUE)&enargs, gl_Disable1, (VALUE)&disargs);
+   } else {
+     struct gl_endisable_args args = { obj, caps };
+-    gl_Enable0(&args);
++    gl_Enable0((VALUE)&args);
+   }
+ 
+   return Qnil;
+@@ -306,7 +310,7 @@ gl_Disable(int argc, VALUE *argv, VALUE
+     return rb_ensure(gl_Disable0, (VALUE)&disargs, gl_Enable1, (VALUE)&enargs);
+   } else {
+     struct gl_endisable_args args = { obj, caps };
+-    gl_Disable0(&args);
++    gl_Disable0((VALUE)&args);
+   }
+ 
+   return Qnil;
+@@ -318,8 +322,9 @@ struct gl_client_state_args {
+   };
+ 
+ static VALUE
+-gl_EnableClientState1(struct gl_client_state_args *args)
++gl_EnableClientState1(VALUE val)
+ {
++  struct gl_client_state_args *args = (struct gl_client_state_args *)val;
+   long i;
+   VALUE obj = args->obj;
+   DECL_GL_FUNC_PTR(void,glEnableClientState,(GLenum cap));
+@@ -335,9 +340,10 @@ gl_EnableClientState1(struct gl_client_s
+ }
+ 
+ static VALUE
+-gl_EnableClientState0(struct gl_client_state_args *args)
++gl_EnableClientState0(VALUE val)
+ {
+-  gl_EnableClientState1(args);
++  struct gl_client_state_args *args = (struct gl_client_state_args *)val;
++  gl_EnableClientState1((VALUE)args);
+ 
+   if (rb_block_given_p())
+     rb_yield(Qundef);
+@@ -346,8 +352,9 @@ gl_EnableClientState0(struct gl_client_s
+ }
+ 
+ static VALUE
+-gl_DisableClientState1(struct gl_client_state_args *args)
++gl_DisableClientState1(VALUE val)
+ {
++  struct gl_client_state_args *args = (struct gl_client_state_args *)val;
+   long i;
+   VALUE obj = args->obj;
+   DECL_GL_FUNC_PTR(void,glDisableClientState,(GLenum cap));
+@@ -363,9 +370,10 @@ gl_DisableClientState1(struct gl_client_
+ }
+ 
+ static VALUE
+-gl_DisableClientState0(struct gl_client_state_args *args)
++gl_DisableClientState0(VALUE val)
+ {
+-  gl_DisableClientState1(args);
++  struct gl_client_state_args *args = (struct gl_client_state_args *)val;
++  gl_DisableClientState1((VALUE)args);
+ 
+   if (rb_block_given_p())
+     rb_yield(Qundef);
+@@ -394,7 +402,7 @@ gl_EnableClientState(int argc, VALUE *ar
+     return rb_ensure(gl_EnableClientState0, (VALUE)&enargs, gl_DisableClientState1, (VALUE)&disargs);
+   } else {
+     struct gl_client_state_args args = { obj, ary };
+-    gl_EnableClientState0(&args);
++    gl_EnableClientState0((VALUE)&args);
+   }
+ 
+   return Qnil;
+@@ -421,7 +429,7 @@ gl_DisableClientState(int argc, VALUE *a
+     return rb_ensure(gl_DisableClientState0, (VALUE)&disargs, gl_EnableClientState1, (VALUE)&enargs);
+   } else {
+     struct gl_client_state_args args = { obj, ary };
+-    gl_DisableClientState0(&args);
++    gl_DisableClientState0((VALUE)&args);
+   }
+ 
+   return Qnil;
+@@ -433,8 +441,9 @@ struct gl_begin0_args {
+   };
+ 
+ static VALUE
+-gl_Begin0(struct gl_begin0_args *args)
++gl_Begin0(VALUE val)
+ {
++  struct gl_begin0_args *args = (struct gl_begin0_args *)val;
+   VALUE obj = args->obj;
+   DECL_GL_FUNC_PTR(void,glBegin,(GLenum mode));
+ 
+@@ -472,7 +481,7 @@ gl_Begin(VALUE obj, VALUE mode)
+   if (rb_block_given_p())
+     return rb_ensure(gl_Begin0, (VALUE)&args, gl_End, obj);
+   else
+-    gl_Begin0(&args);
++    gl_Begin0((VALUE)&args);
+ 
+   return Qnil;
+ }
+@@ -525,8 +534,9 @@ struct gl_list_args {
+ };
+ 
+ static VALUE
+-gl_NewList0(struct gl_list_args *args)
++gl_NewList0(VALUE val)
+ {
++  struct gl_list_args *args = (struct gl_list_args *) val;
+   GLuint list;
+   GLenum mode;
+   VALUE obj = args->obj;
+@@ -563,7 +573,7 @@ gl_NewList(VALUE obj, VALUE list, VALUE
+   if (rb_block_given_p())
+     return rb_ensure(gl_NewList0, (VALUE)&args, gl_EndList, obj);
+   else
+-    gl_NewList0(&args);
++    gl_NewList0((VALUE)&args);
+ 
+   return Qnil;
+ }

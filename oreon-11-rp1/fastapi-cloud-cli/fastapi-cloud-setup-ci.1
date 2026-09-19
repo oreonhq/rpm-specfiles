@@ -1,0 +1,72 @@
+.TH FASTAPI\-CLOUD\-SETUP\-CI "1" "March 2026" "" "User Commands"
+.SH NAME
+.B fastapi\ cloud\ setup\-ci
+\(en Configures a GitHub Actions workflow for deploying the app
+on push to the specified branch.
+.SH SYNOPSIS
+.B fastapi\ cloud\ setup\-ci
+.RI [ OPTIONS ]
+.RI [ PATH ]
+.SH OPTIONS
+.TP
+.B \-\-branch, \-b\ \fITEXT
+Branch that triggers deploys
+(defaults to the repo\(cqs default branch).
+.TP
+.B \-\-secrets\-only, \-s
+Provisions token and sets secrets,
+skips writing the workflow file.
+.TP
+.B \-\-dry\-run, \-d
+Prints steps that would be taken without actually performing them.
+.TP
+.B \-\-file, \-f\ \fITEXT
+Custom workflow filename
+(written to
+.BR .github/workflows/ )
+.TP
+.B \-\-help\fR, \fB\-h
+Show a help message and exit.
+.SS "ARGUMENTS"
+.TP
+.I PATH
+Path to the folder containing the app (defaults to current directory).
+.SH EXAMPLES
+.EX
+.B #\ Provisions\ token,\ sets\ secrets,\ and\ writes\ workflow\ file\ for\ the\ \(oqmain\(cq
+.B #\ branch
+.B fastapi\ cloud\ setup\-ci
+.EE
+.P
+.EX
+.B #\ Same\ as\ above\ but\ for\ the \(oqdevelop\(cq\ branch
+.B fastapi\ cloud\ setup\-ci\ \-\-branch\ develop
+.EE
+.P
+.EX
+.B #\ Only\ provisions\ token\ and\ sets\ secrets,\ does\ not\ write\ workflow\ file
+.B fastapi\ cloud\ setup\-ci\ \-\-secrets\-only
+.EE
+.P
+.EX
+.B #\ Prints\ the\ steps\ that\ would\ be\ taken\ without\ performing\ them
+.B fastapi\ cloud\ setup\-ci\ \-\-dry\-run
+.EE
+.P
+.EX
+.B #\ Writes\ workflow\ to\ .github/workflows/ci.yml
+.B fastapi\ cloud\ setup\-ci\ \-\-file\ ci.yml
+.EE
+.SH "SEE ALSO"
+.BR fastapi\-cloud\-deploy (1),
+.BR fastapi\-cloud\-link (1),
+.BR fastapi\-cloud\-login (1),
+.BR fastapi\-cloud\-logs (1),
+.BR fastapi\-cloud\-logout (1),
+.BR fastapi\-cloud\-whoami (1),
+.BR fastapi\-cloud\-unlink (1),
+.BR fastapi\-cloud\-env (1)
+.P
+.BR fastapi\-cloud (1)
+.P
+.BR fastapi (1)

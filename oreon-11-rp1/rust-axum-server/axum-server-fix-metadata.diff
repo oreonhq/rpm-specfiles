@@ -1,0 +1,11 @@
+--- axum-server-0.7.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ axum-server-0.7.3/Cargo.toml	2025-11-30T09:46:07.511391+00:00
+@@ -63,7 +63,7 @@
+ ]
+ tls-rustls = [
+     "tls-rustls-no-provider",
+-    "rustls/aws-lc-rs",
++    "rustls/ring",
+ ]
+ tls-rustls-no-provider = [
+     "arc-swap",

@@ -1,0 +1,29 @@
+diff -up ./data/Makefile.am.fix ./data/Makefile.am
+--- ./data/Makefile.am.fix	2019-05-07 23:22:53.711657417 +1200
++++ ./data/Makefile.am	2019-05-07 23:23:01.270639754 +1200
+@@ -1,6 +1,6 @@
+ SUBDIRS = icons
+ 
+-appdatadir = $(datarootdir)/appdata
++appdatadir = $(datarootdir)/metainfo
+ desktopdir = $(datadir)/applications
+ desktop_DATA = nitrogen.desktop
+ appdata_DATA = nitrogen.appdata.xml
+diff -up ./data/nitrogen.appdata.xml.fix ./data/nitrogen.appdata.xml
+--- ./data/nitrogen.appdata.xml.fix	2019-05-07 23:22:48.368669900 +1200
++++ ./data/nitrogen.appdata.xml	2019-05-07 23:22:46.349674617 +1200
+@@ -23,10 +23,10 @@
+   </description>
+ 
+   <screenshots>
+-    <screenshot type="default" width="352" height="524">http://projects.l3ib.org/nitrogen/images/nitrogen-shot1.png</screenshot>
+-    <screenshot width="475" height="560">http://projects.l3ib.org/nitrogen/images/nitrogen-ss-2.png</screenshot>
++    <screenshot type="default" width="352" height="524">https://jamesnz.fedorapeople.org/nitrogen/screenshots/nitrogen_shot1.png</screenshot>
++    <screenshot width="588" height="664">https://jamesnz.fedorapeople.org/nitrogen/screenshots/nitrogen_shot2.png</screenshot>
+   </screenshots>
+ 
+-  <url type="homepage">http://projects.l3ib.org/nitrogen/</url>
+-  <updatecontact>jwrigley7@gmail.com</updatecontact>
++  <url type="homepage">http://github.com/l3ib/nitrogen/</url>
++  <updatecontact>jamesnz@fedoraproject.org</updatecontact>
+ </application>

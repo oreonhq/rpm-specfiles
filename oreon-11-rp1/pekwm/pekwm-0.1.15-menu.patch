@@ -1,0 +1,45 @@
+--- data/menu.orig	2012-09-24 12:28:13.455160142 -0300
++++ data/menu	2012-09-24 12:32:46.468106910 -0300
+@@ -26,10 +26,10 @@
+ 	}
+ 	Submenu = "Filemanager" {
+ 		Entry = "dolphin" { Actions = "Exec dolphin" }
++		Entry = "emelfm2" { Actions = "Exec emelfm2" }
+ 		Entry = "mc" { Actions = "Exec $TERM -e mc" }
+ 		Entry = "nautilus" { Actions = "Exec nautilus" }
+ 		Entry = "pcmanfm" { Actions = "Exec pcmanfm" }
+-		Entry = "rox" { Actions = "Exec rox" }
+ 		Entry = "thunar" { Actions = "Exec thunar" }
+ 	}
+ 	Submenu = "Graphics" {
+@@ -52,11 +52,11 @@
+ 		Entry = "psi" { Actions = "Exec psi" }
+ 	}
+ 	Submenu = "Multimedia" {
+-		Entry = "vlc" { Actions = "Exec vlc" }
+ 		Entry = "amarok" { Actions = "Exec amarok" }
+ 		Entry = "banshee" { Actions = "Exec banshee" }
++		Entry = "parole" { Actions = "Exec parole" }
+ 		Entry = "rhythmbox" { Actions = "Exec rhythmbox" }
+-		Entry = "smplayer" { Actions = "Exec smplayer" }
++		Entry = "totem" { Actions = "Exec totem" }
+ 		Entry = "alsamixer" { Actions = "Exec $TERM -title alsamixer -e alsamixer" }
+ 	}
+ 	Submenu = "Office" {
+@@ -67,13 +67,12 @@
+ 	}
+ 	Submenu = "VoIP" {
+ 		Entry = "ekiga" { Actions = "Exec ekiga" }
+-		Entry = "jitsi" { Actions = "Exec jitsi" }
+-		Entry = "sflphone" { Actions = "Exec sflphone" }
++		Entry = "linphone" { Actions = "Exec linphone" }
+ }
+ 	Submenu = "WWW" {
++		Entry = "epiphany" { Actions = "Exec epiphany" }
+ 		Entry = "firefox" { Actions = "Exec firefox" }
+-		Entry = "chromium" { Actions = "Exec chromium" }
+-		Entry = "opera" { Actions = "Exec opera" }
++		Entry = "midori" { Actions = "Exec midori" }
+ 	}
+ 
+ 	Separator {}

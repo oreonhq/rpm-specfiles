@@ -1,0 +1,326 @@
+Include "util.h" for declarations of string_replace, verify_path,
+xml_escape, and "util-gtk.h" for geometry_tie, jam_win_set_size,
+jam_warning jam_dialog_set_contents, scroll_wrap.  Include "network.h"
+for net_ctx_gtk_new.  Fix a type of html_mark_subscript in
+"html_markup.h".  Include "config.h" early, to ensure that HAVE_GTK
+etc. are defined as appropriate.
+
+This avoids build failures with future compilers which do not support
+implicit function declarations.
+
+Submitted upstream: <https://github.com/andy-shev/LogJam/pull/6>
+
+diff --git a/src/about.c b/src/about.c
+index 9cdccd0343e20b91..8245a18069ac58e8 100644
+--- a/src/about.c
++++ b/src/about.c
+@@ -13,6 +13,7 @@
+ #include "icons.h"
+ #include "thanks.h"
+ #include "spawn.h"
++#include "util-gtk.h"
+ 
+ /* magic number, defines how long the name will stay centered before scrolling off. */
+ #define COUNTER_DELAY 20
+diff --git a/src/account.c b/src/account.c
+index bb5f1e2cb6ba95a8..f459b702166cf686 100644
+--- a/src/account.c
++++ b/src/account.c
+@@ -11,6 +11,7 @@
+ #include "conf_xml.h"
+ #include "jam_xml.h"
+ #include "account.h"
++#include "util.h"
+ 
+ static GObjectClass *jam_account_parent_class = NULL;
+ 
+diff --git a/src/checkfriends-gtk.c b/src/checkfriends-gtk.c
+index 2ea109fa36228540..3c9b8c084deb4acb 100644
+--- a/src/checkfriends-gtk.c
++++ b/src/checkfriends-gtk.c
+@@ -13,6 +13,7 @@
+ #include "spawn.h"
+ #include "menu.h"
+ #include "settings.h"
++#include "util-gtk.h"
+ 
+ #include "throbber.h"
+ #include "checkfriends.h"
+diff --git a/src/checkfriends.c b/src/checkfriends.c
+index 50da5977dbbd34db..37fd1483c00e87b9 100644
+--- a/src/checkfriends.c
++++ b/src/checkfriends.c
+@@ -23,6 +23,7 @@
+ #include "account.h"
+ #include "conf.h"
+ #include "network.h"
++#include "util.h"
+ 
+ enum {
+ 	ACCOUNT_CHANGED,
+diff --git a/src/conf.c b/src/conf.c
+index a660465b8458e74c..d4bd65b16dc1fdd2 100644
+--- a/src/conf.c
++++ b/src/conf.c
+@@ -18,6 +18,7 @@
+ #include "conf_xml.h"
+ #include "conf.h"
+ #include "account.h"
++#include "util.h"
+ 
+ Configuration conf;
+ Application app;
+diff --git a/src/datesel.c b/src/datesel.c
+index 66c1cb875b9d13d0..8fe8298ab0bed527 100644
+--- a/src/datesel.c
++++ b/src/datesel.c
+@@ -10,6 +10,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <livejournal/livejournal.h>
++#include "util-gtk.h"
+ 
+ #include "datesel.h"
+ 
+diff --git a/src/draftstore.c b/src/draftstore.c
+index b7f1da896ba7f025..ae2aaf40e56d6998 100644
+--- a/src/draftstore.c
++++ b/src/draftstore.c
+@@ -23,6 +23,7 @@
+ 
+ #include "draftstore.h"
+ #include "conf.h"
++#include "util.h"
+ 
+ struct _DraftStore {
+ 	char *path;
+diff --git a/src/friendedit.c b/src/friendedit.c
+index 36d2f3272de67cce..00b0c9d5dd01d7e9 100644
+--- a/src/friendedit.c
++++ b/src/friendedit.c
+@@ -18,6 +18,7 @@
+ #include "conf.h"
+ #include "util-gtk.h"
+ #include "account.h"
++#include "util.h"
+ 
+ #include "friendedit.h"
+ 
+diff --git a/src/friendgroupedit.c b/src/friendgroupedit.c
+index daf587fb89271bce..c90bc2d3e1417f70 100644
+--- a/src/friendgroupedit.c
++++ b/src/friendgroupedit.c
+@@ -18,6 +18,7 @@
+ #include "friendgroupedit.h"
+ #include "network.h"
+ #include "util-gtk.h"
++#include "util.h"
+ 
+ typedef struct {
+ 	GtkWidget *win;
+diff --git a/src/history_recent.c b/src/history_recent.c
+index 166c0c05545c6621..fe1e668cdde0c17e 100644
+--- a/src/history_recent.c
++++ b/src/history_recent.c
+@@ -14,6 +14,7 @@
+ #include "util-gtk.h"
+ #include "history.h"
+ #include "network.h"
++#include "util.h"
+ 
+ /* how many entries to load each time "load more..." is clicked. */
+ #define HISTORY_LOAD_BATCH 20
+diff --git a/src/host.c b/src/host.c
+index fd09a16fcd461ada..f422d83d2f5893d9 100644
+--- a/src/host.c
++++ b/src/host.c
+@@ -13,6 +13,7 @@
+ #include "account.h"
+ #include "jam_xml.h"
+ #include "conf_xml.h"
++#include "util.h"
+ 
+ const char*
+ jam_host_get_stock_icon(JamHost *host) {
+diff --git a/src/html_markup.h b/src/html_markup.h
+index 53fa9a9a0063cce6..a11d29fb0f3a89f6 100644
+--- a/src/html_markup.h
++++ b/src/html_markup.h
+@@ -20,7 +20,7 @@ void html_mark_blockquote  (JamDoc *doc);
+ void html_mark_big         (JamDoc *doc);
+ void html_mark_small       (JamDoc *doc);
+ void html_mark_superscript (JamDoc *doc);
+-void html_mark_sbuscript   (JamDoc *doc);
++void html_mark_subscript   (JamDoc *doc);
+ void html_mark_ulist       (JamDoc *doc);
+ void html_mark_olist       (JamDoc *doc);
+ void html_mark_listitem    (JamDoc *doc);
+diff --git a/src/imagelink.c b/src/imagelink.c
+index 6db1332a9a51d508..c9c382689d4c2d11 100644
+--- a/src/imagelink.c
++++ b/src/imagelink.c
+@@ -10,6 +10,7 @@
+ #include "util-gtk.h"
+ #include "conf.h"
+ #include "jamdoc.h"
++#include "util.h"
+ 
+ typedef struct {
+ 	GtkWidget *dlg;
+diff --git a/src/jamdoc.c b/src/jamdoc.c
+index fee01a081683919a..4e25d361b52e319e 100644
+--- a/src/jamdoc.c
++++ b/src/jamdoc.c
+@@ -14,6 +14,7 @@
+ #include "jamdoc.h"
+ #include "account.h"
+ #include "conf.h"
++#include "util.h"
+ 
+ #ifdef HAVE_GTK
+ #include "get_cmd_out.h"
+diff --git a/src/journalstore-sqlite.c b/src/journalstore-sqlite.c
+index c41cb5ff3ee45408..f3341b6618bc77fe 100644
+--- a/src/journalstore-sqlite.c
++++ b/src/journalstore-sqlite.c
+@@ -12,6 +12,7 @@
+ 
+ #include "conf.h"
+ #include "journalstore.h"
++#include "util.h"
+ 
+ struct _JournalStore {
+ 	JamAccount *account;
+diff --git a/src/link-journal.c b/src/link-journal.c
+index 8264ba9b58a70f4e..1f2d0cbe8a33dc5c 100644
+--- a/src/link-journal.c
++++ b/src/link-journal.c
+@@ -9,6 +9,7 @@
+ #include "gtk-all.h"
+ #include "jamdoc.h"
+ #include "util-gtk.h"
++#include "util.h"
+ 
+ static GtkWidget*
+ add_menu_item(GtkMenuShell *ms, const gchar *id, const gchar *text) {
+diff --git a/src/link.c b/src/link.c
+index e7165e366318133e..79ffe05babb117f1 100644
+--- a/src/link.c
++++ b/src/link.c
+@@ -13,6 +13,7 @@
+ #include "util-gtk.h"
+ #include "conf.h"
+ #include "jamdoc.h"
++#include "util.h"
+ 
+ typedef struct {
+ 	GtkWidget *dlg;
+diff --git a/src/livejournal.c b/src/livejournal.c
+index 74a04c295f386920..2a286514581482e9 100644
+--- a/src/livejournal.c
++++ b/src/livejournal.c
+@@ -14,6 +14,7 @@
+ #include "jam_xml.h"
+ #include "conf_xml.h"
+ #include "network.h"
++#include "util.h"
+ 
+ struct _JamHostLJ {
+ 	JamHost host;
+diff --git a/src/manager.c b/src/manager.c
+index 451dc5bc31f49158..f1a5f497306bae04 100644
+--- a/src/manager.c
++++ b/src/manager.c
+@@ -16,6 +16,7 @@
+ #include "checkfriends.h"
+ #include "security.h"
+ #include "groupedbox.h"
++#include "util.h"
+ 
+ /* manager:
+  *  - host
+diff --git a/src/pollcreator.c b/src/pollcreator.c
+index 401b539a959cff39..e0d4dd14c09ed153 100644
+--- a/src/pollcreator.c
++++ b/src/pollcreator.c
+@@ -12,6 +12,7 @@
+ #include "poll.h"
+ #include "pollcreator.h"
+ #include "util-gtk.h"
++#include "util.h"
+ 
+ typedef struct _PollDlg PollDlg;
+ 
+diff --git a/src/security.c b/src/security.c
+index 6444bf3e65b7fe87..680431e4eaf051ee 100644
+--- a/src/security.c
++++ b/src/security.c
+@@ -14,6 +14,7 @@
+ #include "conf.h"
+ #include "network.h"
+ #include "icons.h"
++#include "util-gtk.h"
+ 
+ struct _SecMgr {
+ 	GtkOptionMenu omenu;
+diff --git a/src/settings.c b/src/settings.c
+index 2a63937463a4f187..32311b738c2be5c8 100644
+--- a/src/settings.c
++++ b/src/settings.c
+@@ -25,6 +25,7 @@
+ #include "account.h"
+ #include "jamview.h"
+ #include "lj_dbus.h"
++#include "util.h"
+ 
+ /* what's this?  all of these funny structures in the settings box?
+  * well, instead of creating and tearing down all of these widgets, i
+diff --git a/src/spawn.c b/src/spawn.c
+index a6934543dadd5bd0..9ad4fc2854642784 100644
+--- a/src/spawn.c
++++ b/src/spawn.c
+@@ -8,6 +8,7 @@
+ 
+ #include "glib-all.h"
+ #include <stdio.h>
++#include "util-gtk.h"
+ 
+ #ifndef G_OS_WIN32
+ #include <unistd.h>
+diff --git a/src/tags.c b/src/tags.c
+index e9275726d100427b..d670a2a4e23d1979 100644
+--- a/src/tags.c
++++ b/src/tags.c
+@@ -3,6 +3,8 @@
+  * vim: tabstop=4 shiftwidth=4 noexpandtab :
+  */
+ 
++#include "config.h"
++
+ #include "gtk-all.h"
+ 
+ #include <livejournal/livejournal.h>
+diff --git a/src/tie.c b/src/tie.c
+index b43fe1356a1b51c8..62b087e1e1ba2311 100644
+--- a/src/tie.c
++++ b/src/tie.c
+@@ -8,6 +8,7 @@
+ 
+ #include "gtk-all.h"
+ #include "util-gtk.h"
++#include "util.h"
+ 
+ static void
+ tie_toggle_cb(GtkToggleButton *toggle, gboolean *data) {
+diff --git a/src/tools.c b/src/tools.c
+index cae87b22b422063f..801adb5d55400930 100644
+--- a/src/tools.c
++++ b/src/tools.c
+@@ -12,6 +12,7 @@
+ 
+ #include "tools.h"
+ #include "util-gtk.h"
++#include "util.h"
+ 
+ typedef struct {
+ 	gunichar c;

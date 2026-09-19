@@ -1,0 +1,12 @@
+diff -rupN ZRTPCPP-4.6.6/cmake/Modules/GeneratePackage.cmake ZRTPCPP-4.6.6-new/cmake/Modules/GeneratePackage.cmake
+--- ZRTPCPP-4.6.6/cmake/Modules/GeneratePackage.cmake	2017-06-02 09:05:34.000000000 +0200
++++ ZRTPCPP-4.6.6-new/cmake/Modules/GeneratePackage.cmake	2025-07-17 14:03:54.296922887 +0200
+@@ -56,7 +56,7 @@ MACRO(GENERATE_PACKAGING PACKAGE VERSION
+ #  SPECFILE()
+ 
+   ADD_CUSTOM_TARGET(svncheck
+-    COMMAND cd $(CMAKE_SOURCE_DIR) && LC_ALL=C git status | grep -q "nothing to commit .working directory clean.")
++    COMMAND cd ${CMAKE_SOURCE_DIR} && LC_ALL=C git status | grep -q "nothing to commit .working directory clean.")
+ 
+   SET(AUTOBUILD_COMMAND
+     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/*.tar.bz2

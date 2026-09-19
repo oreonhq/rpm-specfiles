@@ -1,0 +1,53 @@
+diff -Nrup a/src/ActionHandler.cc b/src/ActionHandler.cc
+--- a/src/ActionHandler.cc	2013-05-26 06:01:18.000000000 -0600
++++ b/src/ActionHandler.cc	2019-09-24 13:18:46.171667611 -0600
+@@ -583,24 +583,24 @@ ActionHandler::actionSendToWorkspace(PDe
+         row_max = Workspaces::getRowMax();
+ 
+     switch (direction) {
+-    case WORKSPACE_LEFT:
+-    case WORKSPACE_PREV:
++    case int(WORKSPACE_LEFT):
++    case int(WORKSPACE_PREV):
+         if (cur_act > row_min) {
+             decor->setWorkspace(cur_act - 1);
+         } else if (static_cast<uint>(direction) == WORKSPACE_PREV) {
+             decor->setWorkspace(row_max);
+         }
+         break;
+-    case WORKSPACE_NEXT:
+-    case WORKSPACE_RIGHT:
++    case int(WORKSPACE_NEXT):
++    case int(WORKSPACE_RIGHT):
+         if (cur_act < row_max) {
+             decor->setWorkspace(cur_act + 1);
+         } else if (static_cast<uint>(direction) == WORKSPACE_NEXT) {
+             decor->setWorkspace(row_min);
+         }
+         break;
+-    case WORKSPACE_PREV_V:
+-    case WORKSPACE_UP:
++    case int(WORKSPACE_PREV_V):
++    case int(WORKSPACE_UP):
+         if (cur_act >= per_row) {
+             decor->setWorkspace(cur_act - per_row);
+         } else if (static_cast<uint>(direction) == WORKSPACE_PREV_V) {
+@@ -609,15 +609,15 @@ ActionHandler::actionSendToWorkspace(PDe
+                                 + cur_act - cur_row * per_row);
+         }
+         break;
+-    case WORKSPACE_NEXT_V:
+-    case WORKSPACE_DOWN:
++    case int(WORKSPACE_NEXT_V):
++    case int(WORKSPACE_DOWN):
+         if ((cur_act + per_row) < Workspaces::size()) {
+             decor->setWorkspace(cur_act + per_row);
+         } else if (static_cast<uint>(direction) == WORKSPACE_NEXT_V) {
+             decor->setWorkspace(cur_act - cur_row * per_row);
+         }
+         break;
+-    case WORKSPACE_LAST:
++    case int(WORKSPACE_LAST):
+         decor->setWorkspace(Workspaces::getPrevious());
+         break;
+     default:

@@ -1,0 +1,13 @@
+diff --git a/src/level/player_profile.cpp b/src/level/player_profile.cpp
+index 9abd20a8..c342cdae 100644
+--- a/src/level/player_profile.cpp
++++ b/src/level/player_profile.cpp
+@@ -134,7 +134,7 @@ std::string CPlayerProfile::GetLastName()
+     std::string name;
+ 
+     if(!GetConfigFile().GetStringProperty("Gamer", "LastName", name) || name.empty())
+-        GetResource(RES_TEXT, RT_NAME_DEFAULT, name);
++        name = "Player";
+ 
+     return name;
+ }

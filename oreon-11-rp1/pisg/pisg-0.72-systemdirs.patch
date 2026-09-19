@@ -1,0 +1,32 @@
+diff -up pisg-0.72/pisg.orig pisg-0.72/pisg
+--- pisg-0.72/pisg.orig	2008-08-08 02:18:01.000000000 +0200
++++ pisg-0.72/pisg	2008-08-08 02:49:52.000000000 +0200
+@@ -29,11 +29,14 @@ sub main
+     # If the script was executed as ./pisg - then we just remove
+     # everything after the last slash, if it was executed as 'perl pisg'
+     # we assume that we are executing in the current dir.
+-    if ($script_dir =~ m/\/[^\/]*$/) {
+-        $script_dir =~ s/\/[^\/]*$//;
+-    } else {
+-        $script_dir = ".";
+-    }
++#    if ($script_dir =~ m/\/[^\/]*$/) {
++#        $script_dir =~ s/\/[^\/]*$//;
++#    } else {
++#        $script_dir = ".";
++#    }
++
++#for Fedora, use shared datadir
++    $script_dir = "/usr/share/pisg/";
+ 
+     if (!-t STDOUT) { # we are not writing to a terminal
+ 	push @ARGV, "--silent";
+@@ -79,6 +82,8 @@ sub get_cmdline_options
+         modules_dir => "$script_dir/modules/",     # Module search path
+         logfile => [],
+         logdir => [],
++#for Fedora, used system dirs
++	    configfile => "/etc/pisg.cfg"
+     );
+ 
+     # Commandline options

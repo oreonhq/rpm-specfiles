@@ -1,0 +1,9 @@
+--- aiostream-0.6.1/pyproject.toml.orig	2024-06-20 11:45:56.423751296 +0200
++++ aiostream-0.6.1/pyproject.toml	2024-06-20 11:46:08.060896492 +0200
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ["setuptools >= 69.5"]
++requires = ["setuptools >= 69.0"]
+ build-backend = "setuptools.build_meta"
+ 
+ [project]

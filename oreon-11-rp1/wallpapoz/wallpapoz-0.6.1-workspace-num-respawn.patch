@@ -1,0 +1,74 @@
+--- wallpapoz-0.6.1/share/wallpapoz/lib/wallpapoz_system.py.respawn	2011-10-16 23:40:03.000000000 +0900
++++ wallpapoz-0.6.1/share/wallpapoz/lib/wallpapoz_system.py	2011-12-30 16:07:01.000000000 +0900
+@@ -25,15 +25,27 @@
+ # achieve goal by calling external program
+ 
+ import os
++import sys
+ import string
+ 
+ class WallpapozSystem:
+ 
++  # Define static variable to save the initial value of
++  # workspaces
++  static_finding_total_workspaces_called_p = False
++  static_total_workspaces = 0
++
+   def __init__(self):
+     self.finding_screen_resolution()
+     self.finding_total_workspaces()
+     self.finding_desktop_environment()
+ 
++    # Check if total_workspaces changed only here
++    if WallpapozSystem.static_total_workspaces != self.total_workspaces:
++      print "daemon_wallpapoz: the number of total workspaces changed during initialization process."
++      print "daemon_wallpapoz: respawning daemon_wallpapoz."
++      self.respawn_system()
++
+   def set_style(self, style):
+     self.wallpaper_style = style
+ 
+@@ -69,6 +81,11 @@
+   def finding_total_workspaces(self):
+     self.total_workspaces = int(os.popen("xprop -root _NET_NUMBER_OF_DESKTOPS").read()[36:38])
+ 
++    # Save this total_workspaces value
++    if not WallpapozSystem.static_finding_total_workspaces_called_p:
++      WallpapozSystem.static_finding_total_workspaces_called = True
++      WallpapozSystem.static_total_workspaces = self.total_workspaces
++
+   ## class method to find how many rows and columns of workspaces
+   def finding_row_and_column(self):
+     self.row_workspaces = self.geometry_height / self.screen_height
+@@ -117,3 +134,11 @@
+       return True
+     else:
+       return False
++
++  def respawn_system(self):
++    new_argv = []
++    new_argv.extend(sys.argv)
++    os.execvp('daemon_wallpapoz', new_argv)
++    print "os.execvp failed, exiting..."
++    sys.exit(1)
++
+--- wallpapoz-0.6.1/src/daemon_wallpapoz.respawn	2011-07-24 00:54:43.000000000 +0900
++++ wallpapoz-0.6.1/src/daemon_wallpapoz	2011-12-30 16:06:07.000000000 +0900
+@@ -145,11 +145,16 @@
+     if wallpapozxml.get_type() == "workspace":
+       while True:
+         # don't get rush
+-        time.sleep(1)
++        # sleep a bit more
++        time.sleep(2)
+ 
+         # what workspace we are in now?
+         cur_desk = wallpapoz_system.current_desktop()
+ 
++        if cur_desk >= wallpapoz_system.get_total_workspaces():
++            # ignore
++            continue
++
+         # requirement for changing wallpaper
+         # 1. we change workspace
+         # 2. index of wallpaper list change

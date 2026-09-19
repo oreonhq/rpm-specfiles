@@ -1,0 +1,23 @@
+diff -up VirtualGL-2.5.2/client/vglconnect.in.redhatpathfix VirtualGL-2.5.2/client/vglconnect.in
+--- VirtualGL-2.5.2/client/vglconnect.in.redhatpathfix	2018-05-14 16:45:05.210266328 -0400
++++ VirtualGL-2.5.2/client/vglconnect.in	2018-05-14 16:59:19.955947662 -0400
+@@ -54,7 +54,7 @@ usage()
+ }
+ 
+ if [ -z $VGL_BINDIR ]; then
+-	VGL_BINDIR=@CMAKE_INSTALL_DEFAULT_PREFIX@/bin
++	VGL_BINDIR=/usr/bin
+ fi
+ 
+ while [ $# -gt 0 ]
+@@ -97,8 +97,8 @@ if [ ! "$VGL_PORT" = "" -a "$__VGL_SSHTU
+ else
+ 	VGLCLIENT=`dirname $0`/vglclient
+ 	if [ ! -x $VGLCLIENT ]; then
+-		if [ -x @CMAKE_INSTALL_DEFAULT_PREFIX@/bin/vglclient ]; then
+-			VGLCLIENT=@CMAKE_INSTALL_DEFAULT_PREFIX@/bin/vglclient
++		if [ -x /usr/bin/vglclient ]; then
++			VGLCLIENT=/usr/bin/vglclient
+ 		else
+ 			VGLCLIENT=vglclient
+ 		fi

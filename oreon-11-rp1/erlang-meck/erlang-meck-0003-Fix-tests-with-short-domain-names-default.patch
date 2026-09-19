@@ -1,0 +1,22 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sun, 1 Feb 2026 23:58:02 +0100
+Subject: [PATCH] Fix tests with short domain names (default)
+
+THis change was introduced in commit
+dfb47c544bdf14b5c26ff2651cf9339dbbe2f50e and likely just an oversight.
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/test/meck_tests.erl b/test/meck_tests.erl
+index 0c33988..8891372 100644
+--- a/test/meck_tests.erl
++++ b/test/meck_tests.erl
+@@ -1372,7 +1372,7 @@ remote_meck_test_() ->
+ 
+ remote_setup() ->
+     [] = os:cmd("epmd -daemon"),
+-    net_kernel:start([meck_eunit_test]),
++    net_kernel:start([meck_eunit_test, shortnames]),
+     {ok, Pid, Node} = peer:start_link(#{
+         name => meck_remote_test,
+         args => ["-pa", test_dir()]

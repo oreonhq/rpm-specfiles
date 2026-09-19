@@ -1,0 +1,28 @@
+--- a/tests/zmq-tests.gpr
++++ b/tests/zmq-tests.gpr
+@@ -1,7 +1,7 @@
+ with "zmq.gpr";
+ with "aunit.gpr";
+-with "helpers/zmq-helpers.gpr";
+-with "examples/zmq-examples.gpr";
++with "gnatcoll_core.gpr";
++with "../examples/zmq-examples.gpr";
+ 
+ project ZMQ.Tests is
+ 
+@@ -19,15 +19,8 @@
+       for Default_Switches ("ada") use ("-k", "-j0");
+    end Builder;
+ 
+-   package Compiler is
+-      for Default_Switches ("ada") use Zmq.Compiler'Default_Switches ("ada") & ("-gnaty-s", "-gnata");
+-   end Compiler;
+-
+    package Binder is
+       for Default_Switches ("ada") use ("-E");
+    end Binder;
+ 
+-   package Ide renames Zmq.Ide;
+-
+ end ZMQ.Tests;
+-

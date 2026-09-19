@@ -10,7 +10,7 @@
 
 Summary:   Package management service
 Name:      PackageKit
-Version:   1.3.4
+Version:   1.4.0
 Release:   %autorelease
 License:   GPL-2.0-or-later AND LGPL-2.1-or-later AND FSFAP
 URL:       http://www.freedesktop.org/software/PackageKit/

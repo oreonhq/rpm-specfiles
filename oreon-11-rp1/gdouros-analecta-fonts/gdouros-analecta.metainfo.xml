@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Alexander Ploumistos <alexpl@fedoraproject.org> -->
+<component type="font">
+	<id>gdouros-analecta</id>
+	<metadata_license> CC0-1.0</metadata_license>
+	<name>Analecta</name>
+	<summary>An ecclesiastic scripts font</summary>
+	<description>
+		<p>
+			Analecta is an ecclesiastic scripts font, covering Basic Latin, Greek and
+			Coptic, some Punctuation and other Symbols, Coptic, typographica varia,
+			Specials, Gothic and Deseret.
+			
+			It was created by George Douros.
+		</p>
+	</description>
+	<url type="homepage">http://users.teilar.gr/~g1951d/</url>
+	<updatecontact>alexpl@fedoraproject.org</updatecontact>
+</component>

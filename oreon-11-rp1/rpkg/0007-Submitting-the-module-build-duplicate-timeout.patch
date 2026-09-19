@@ -1,0 +1,35 @@
+From 7ccbd04656ca09617fb6b422365e0f35babd62ad Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Nosek?= <onosek@redhat.com>
+Date: Thu, 11 Dec 2025 17:29:39 +0100
+Subject: [PATCH] Submitting the module build - duplicate timeout
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The change was suggested by a static code checker, but it caused
+duplicate timeout argument that was passed in kwargs.
+
+Fixes: #766
+JIRA: RHELCMP-15058
+
+Signed-off-by: Ondřej Nosek <onosek@redhat.com>
+---
+ pyrpkg/__init__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyrpkg/__init__.py b/pyrpkg/__init__.py
+index 8df338c..6f4d63b 100644
+--- a/pyrpkg/__init__.py
++++ b/pyrpkg/__init__.py
+@@ -4199,7 +4199,7 @@ class Commands(object):
+                 data = body
+             auth = requests_gssapi.HTTPSPNEGOAuth(
+                 mutual_authentication=requests_gssapi.OPTIONAL)
+-            resp = requests.request(verb, url, data=data, auth=auth, timeout=1800, **kwargs)
++            resp = requests.request(verb, url, data=data, auth=auth, **kwargs)  # noqa: S113
+             if resp.status_code == 401:
+                 raise rpkgError('MBS authentication using Kerberos failed. '
+                                 'Make sure you have a valid Kerberos ticket.')
+-- 
+2.52.0
+

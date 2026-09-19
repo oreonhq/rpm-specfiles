@@ -1,0 +1,30 @@
+diff -rupN --no-dereference fcgi2-2.4.7/libfcgi/os_win32.c fcgi2-2.4.7-new/libfcgi/os_win32.c
+--- fcgi2-2.4.7/libfcgi/os_win32.c	2025-11-26 12:24:53.000000000 +0100
++++ fcgi2-2.4.7-new/libfcgi/os_win32.c	2025-11-27 07:07:36.560582745 +0100
+@@ -234,7 +234,7 @@ static void StdinThread(void * startup)
+          * Block until a request to read from stdin comes in or a
+          * request to terminate the thread arrives (fd = -1).
+          */
+-        if (!GetQueuedCompletionStatus(hStdinCompPort, &bytesRead, &fd,
++        if (!GetQueuedCompletionStatus(hStdinCompPort, &bytesRead, (PULONG_PTR)&fd,
+ 	    (LPOVERLAPPED *)&pOv, (DWORD)-1) && !pOv) {
+             doIo = 0;
+             break;
+@@ -1490,7 +1490,7 @@ int OS_DoIo(struct timeval *tmo)
+     while (ms >= 0) {
+ 	if(tmo && (ms = tmo->tv_sec*1000 + tmo->tv_usec/1000)> 100)
+ 	    ms = 100;
+-	if (!GetQueuedCompletionStatus(hIoCompPort, &bytes, &fd,
++	if (!GetQueuedCompletionStatus(hIoCompPort, &bytes, (PULONG_PTR)&fd,
+ 	    (LPOVERLAPPED *)&pOv, ms) && !pOv) {
+ 	    err = WSAGetLastError();
+ 	    return 0; /* timeout */
+@@ -1546,7 +1546,7 @@ static int CALLBACK isAddrOKCallback(LPW
+                                      LPWSABUF  dc3,
+                                      LPWSABUF  dc4,
+                                      GROUP     *dc5,
+-                                     DWORD     data)
++                                     DWORD_PTR data)
+ {
+     struct sockaddr_in *sockaddr = (struct sockaddr_in *) lpCallerId->buf;
+ 

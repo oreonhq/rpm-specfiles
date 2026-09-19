@@ -1,0 +1,46 @@
+From fcfdfe06a3105b154d0cfa04353bb73b64701fea Mon Sep 17 00:00:00 2001
+From: Tom Rix <Tom.Rix@amd.com>
+Date: Sun, 21 Sep 2025 14:28:44 -0700
+Subject: [PATCH] hipfort remove build type check
+
+---
+ cmake/Modules/SetFortranFlags.cmake | 23 -----------------------
+ 1 file changed, 23 deletions(-)
+
+diff --git a/cmake/Modules/SetFortranFlags.cmake b/cmake/Modules/SetFortranFlags.cmake
+index c47cab7f2f4c..5c4d4dc34011 100644
+--- a/cmake/Modules/SetFortranFlags.cmake
++++ b/cmake/Modules/SetFortranFlags.cmake
+@@ -7,29 +7,6 @@
+ ####################################################################
+ INCLUDE(${CMAKE_MODULE_PATH}/SetCompileFlag.cmake)
+ 
+-# Make sure the build type is uppercase
+-STRING(TOUPPER "${CMAKE_BUILD_TYPE}" BT)
+-
+-IF(BT STREQUAL "RELEASE")
+-    SET(CMAKE_BUILD_TYPE RELEASE CACHE STRING
+-      "Choose the type of build, options are DEBUG, RELEASE, or TESTING."
+-      FORCE)
+-ELSEIF(BT STREQUAL "DEBUG")
+-    SET (CMAKE_BUILD_TYPE DEBUG CACHE STRING
+-      "Choose the type of build, options are DEBUG, RELEASE, or TESTING."
+-      FORCE)
+-ELSEIF(BT STREQUAL "TESTING")
+-    SET (CMAKE_BUILD_TYPE TESTING CACHE STRING
+-      "Choose the type of build, options are DEBUG, RELEASE, or TESTING."
+-      FORCE)
+-ELSEIF(NOT BT)
+-    SET(CMAKE_BUILD_TYPE RELEASE CACHE STRING
+-      "Choose the type of build, options are DEBUG, RELEASE, or TESTING."
+-      FORCE)
+-    MESSAGE(STATUS "CMAKE_BUILD_TYPE not given, defaulting to RELEASE")
+-ELSE()
+-    MESSAGE(FATAL_ERROR "CMAKE_BUILD_TYPE not valid, choices are DEBUG, RELEASE, or TESTING")
+-ENDIF(BT STREQUAL "RELEASE")
+ 
+ #########################################################
+ # If the compiler flags have already been set, return now
+-- 
+2.51.0
+

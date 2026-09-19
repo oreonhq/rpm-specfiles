@@ -1,0 +1,47 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0b18ef5..0484789 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1036,7 +1036,6 @@ if(USE_FOLLY_LITE)
+   list(APPEND THIRDPARTY_LIBS glog)
+ endif()
+ 
+-set(ROCKSDB_STATIC_LIB rocksdb${ARTIFACT_SUFFIX})
+ set(ROCKSDB_SHARED_LIB rocksdb-shared${ARTIFACT_SUFFIX})
+ 
+ 
+@@ -1105,11 +1104,6 @@ string(REGEX REPLACE "[^0-9: /-]+" "" GIT_DATE "${GIT_DATE}")
+ set(BUILD_VERSION_CC ${CMAKE_BINARY_DIR}/build_version.cc)
+ configure_file(util/build_version.cc.in ${BUILD_VERSION_CC} @ONLY)
+ 
+-add_library(${ROCKSDB_STATIC_LIB} STATIC ${SOURCES} ${BUILD_VERSION_CC})
+-target_include_directories(${ROCKSDB_STATIC_LIB} PUBLIC
+-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
+-target_link_libraries(${ROCKSDB_STATIC_LIB} PRIVATE
+-  ${THIRDPARTY_LIBS} ${SYSTEM_LIBS})
+ 
+ if(ROCKSDB_BUILD_SHARED)
+   add_library(${ROCKSDB_SHARED_LIB} SHARED ${SOURCES} ${BUILD_VERSION_CC})
+@@ -1138,8 +1132,6 @@ endif()
+ 
+ if(ROCKSDB_BUILD_SHARED AND NOT WIN32)
+   set(ROCKSDB_LIB ${ROCKSDB_SHARED_LIB})
+-else()
+-  set(ROCKSDB_LIB ${ROCKSDB_STATIC_LIB})
+ endif()
+ 
+ option(WITH_JNI "build with JNI" OFF)
+@@ -1204,13 +1196,6 @@ if(NOT WIN32 OR ROCKSDB_INSTALL_ON_WINDOWS)
+ 
+   install(DIRECTORY "${PROJECT_SOURCE_DIR}/cmake/modules" COMPONENT devel DESTINATION ${package_config_destination})
+ 
+-  install(
+-    TARGETS ${ROCKSDB_STATIC_LIB}
+-    EXPORT RocksDBTargets
+-    COMPONENT devel
+-    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+-  )
+ 
+   if(ROCKSDB_BUILD_SHARED)
+     install(

@@ -1,0 +1,142 @@
+diff -Naur imapsync-imapsync-2.229.old/imapsync imapsync-imapsync-2.229/imapsync
+--- imapsync-imapsync-2.229.old/imapsync	2022-10-25 04:21:25.000000000 +0200
++++ imapsync-imapsync-2.229/imapsync	2023-04-12 10:01:35.230619384 +0200
+@@ -1001,7 +1001,6 @@
+ use Getopt::Long (  ) ;
+ use IO::File ;
+ use IO::Socket qw( :crlf SOL_SOCKET SO_KEEPALIVE ) ;
+-use IO::Socket::INET6 ;
+ use IO::Socket::SSL ;
+ use IO::Tee ;
+ use IPC::Open3 'open3' ;
+@@ -7075,7 +7074,6 @@
+                 'HTML::Entities'        => sub { $HTML::Entities::VERSION },
+                 'IO::Socket'            => sub { $IO::Socket::VERSION },
+                 'IO::Socket::INET'      => sub { $IO::Socket::INET::VERSION },
+-                'IO::Socket::INET6'     => sub { $IO::Socket::INET6::VERSION },
+                 'IO::Socket::IP'        => sub { $IO::Socket::IP::VERSION },
+                 'IO::Socket::SSL'       => sub { $IO::Socket::SSL::VERSION },
+                 'IO::Tee'               => sub { $IO::Tee::VERSION },
+@@ -7870,13 +7868,14 @@
+                         skip( 'Tests avoided on CUILLERE/pcHPDV7-HP/macosx.polarhome.com/docker cannot do ipv6', 2 ) ;
+                 }
+ 
+-                $socket = IO::Socket::INET6->new(
+-                        PeerAddr => 'ks6ipv6.lamiral.info',
++                $socket = IO::Socket::IP->new(
++                        PeerHost => 'ks6ipv6.lamiral.info',
+                         PeerPort => 143,
++                        V6Only => 1,
+                 ) ;
+ 
+ 
+-                ok( $imap = connect_socket( $socket ), 'connect_socket: ks6ipv6.lamiral.info port 143 IO::Socket::INET6' ) ;
++                ok( $imap = connect_socket( $socket ), 'connect_socket: ks6ipv6.lamiral.info port 143 IO::Socket::IP' ) ;
+                 #$imap->Debug( 1 ) ;
+                 # myprint( $imap->capability(  ) ) ;
+                 if ( $imap ) {
+diff -Naur imapsync-imapsync-2.229.old/INSTALL.d/Dockerfile imapsync-imapsync-2.229/INSTALL.d/Dockerfile
+--- imapsync-imapsync-2.229.old/INSTALL.d/Dockerfile	2022-10-25 04:21:25.000000000 +0200
++++ imapsync-imapsync-2.229/INSTALL.d/Dockerfile	2023-04-12 10:04:50.856895739 +0200
+@@ -56,7 +56,6 @@
+   libfile-tail-perl \
+   libio-compress-perl \
+   libio-socket-ssl-perl \
+-  libio-socket-inet6-perl \
+   libio-tee-perl \
+   libhtml-parser-perl \
+   libjson-webtoken-perl \
+diff -Naur imapsync-imapsync-2.229.old/INSTALL.d/INSTALL.ArchLinux.txt imapsync-imapsync-2.229/INSTALL.d/INSTALL.ArchLinux.txt
+--- imapsync-imapsync-2.229.old/INSTALL.d/INSTALL.ArchLinux.txt	2022-10-25 04:21:25.000000000 +0200
++++ imapsync-imapsync-2.229/INSTALL.d/INSTALL.ArchLinux.txt	2023-04-12 10:04:56.860996802 +0200
+@@ -48,7 +48,6 @@
+    extra/perl-digest-hmac \
+    community/perl-dist-checkconflicts \
+    extra/perl-file-copy-recursive \
+-   extra/perl-io-socket-inet6 \
+    extra/perl-io-socket-ssl \
+    community/perl-io-tee \
+    community/perl-json \
+diff -Naur imapsync-imapsync-2.229.old/INSTALL.d/INSTALL.AWS_EC2.txt imapsync-imapsync-2.229/INSTALL.d/INSTALL.AWS_EC2.txt
+--- imapsync-imapsync-2.229.old/INSTALL.d/INSTALL.AWS_EC2.txt	2022-10-25 04:21:25.000000000 +0200
++++ imapsync-imapsync-2.229/INSTALL.d/INSTALL.AWS_EC2.txt	2023-04-12 10:04:03.604100367 +0200
+@@ -72,7 +72,6 @@
+ perl-ExtUtils-Embed      \
+ perl-File-Copy-Recursive \
+ perl-File-Tail       \
+-perl-IO-Socket-INET6 \
+ perl-IO-Socket-SSL   \
+ perl-JSON            \
+ perl-HTML-Parser     \
+diff -Naur imapsync-imapsync-2.229.old/INSTALL.d/INSTALL.Debian.txt imapsync-imapsync-2.229/INSTALL.d/INSTALL.Debian.txt
+--- imapsync-imapsync-2.229.old/INSTALL.d/INSTALL.Debian.txt	2022-10-25 04:21:25.000000000 +0200
++++ imapsync-imapsync-2.229/INSTALL.d/INSTALL.Debian.txt	2023-04-12 10:05:08.576193252 +0200
+@@ -74,7 +74,6 @@
+   libencode-imaputf7-perl     \
+   libfile-copy-recursive-perl \
+   libfile-tail-perl        \
+-  libio-socket-inet6-perl  \
+   libio-socket-ssl-perl    \
+   libio-tee-perl           \
+   libhtml-parser-perl      \
+@@ -164,7 +163,6 @@
+   libencode-imaputf7-perl     \
+   libfile-copy-recursive-perl \
+   libfile-tail-perl        \
+-  libio-socket-inet6-perl  \
+   libio-socket-ssl-perl    \
+   libio-tee-perl           \
+   libhtml-parser-perl      \
+@@ -239,7 +237,6 @@
+   libfile-copy-recursive-perl \
+   libfile-tail-perl        \
+   libio-compress-perl     \
+-  libio-socket-inet6-perl \
+   libio-socket-ssl-perl   \
+   libio-tee-perl          \
+   libmail-imapclient-perl \
+diff -Naur imapsync-imapsync-2.229.old/INSTALL.d/INSTALL.Docker_build.txt imapsync-imapsync-2.229/INSTALL.d/INSTALL.Docker_build.txt
+--- imapsync-imapsync-2.229.old/INSTALL.d/INSTALL.Docker_build.txt	2022-10-25 04:21:25.000000000 +0200
++++ imapsync-imapsync-2.229/INSTALL.d/INSTALL.Docker_build.txt	2023-04-12 10:05:11.812247516 +0200
+@@ -70,7 +70,6 @@
+   libfile-tail-perl \
+   libio-compress-perl \
+   libio-socket-ssl-perl \
+-  libio-socket-inet6-perl \
+   libio-tee-perl \
+   libhtml-parser-perl \
+   libjson-webtoken-perl \
+diff -Naur imapsync-imapsync-2.229.old/INSTALL.d/INSTALL.Ubuntu.txt imapsync-imapsync-2.229/INSTALL.d/INSTALL.Ubuntu.txt
+--- imapsync-imapsync-2.229.old/INSTALL.d/INSTALL.Ubuntu.txt	2022-10-25 04:21:25.000000000 +0200
++++ imapsync-imapsync-2.229/INSTALL.d/INSTALL.Ubuntu.txt	2023-04-12 10:05:14.503292641 +0200
+@@ -26,7 +26,6 @@
+ libfile-copy-recursive-perl \
+ libfile-tail-perl       \
+ libio-compress-perl     \
+-libio-socket-inet6-perl \
+ libio-socket-ssl-perl   \
+ libio-tee-perl          \
+ libjson-webtoken-perl   \
+diff -Naur imapsync-imapsync-2.229.old/INSTALL.d/prerequisites_imapsync imapsync-imapsync-2.229/INSTALL.d/prerequisites_imapsync
+--- imapsync-imapsync-2.229.old/INSTALL.d/prerequisites_imapsync	2022-10-25 04:21:25.000000000 +0200
++++ imapsync-imapsync-2.229/INSTALL.d/prerequisites_imapsync	2023-04-12 10:03:03.806093826 +0200
+@@ -20,7 +20,6 @@
+ File::Copy::Recursive
+ File::Tail
+ IO::Socket::INET
+-IO::Socket::INET6
+ IO::Socket::SSL
+ IO::Tee
+ JSON
+diff -Naur imapsync-imapsync-2.229.old/Makefile imapsync-imapsync-2.229/Makefile
+--- imapsync-imapsync-2.229.old/Makefile	2022-10-25 04:21:25.000000000 +0200
++++ imapsync-imapsync-2.229/Makefile	2023-04-12 10:03:53.085923321 +0200
+@@ -716,7 +716,7 @@
+ 	imapsync ; \
+ 	}
+ 	# Maybe add -M Test2::Event::Info Mail::IMAPClient \
+-	#-M Net::SSLeay -M IO::Socket -M IO::Socket::INET6 -M IO::Socket::SSL \
++	#-M Net::SSLeay -M IO::Socket -M IO::Socket::SSL \
+ 	#-M Digest::MD5 -M Digest::HMAC_MD5 -M Term::ReadKey \
+ 	#-M Authen::NTLM -M HTML::Entities -M JSON::WebToken \
+ 	#-M Test2::Event -M Test2::Formatter -M Test2::Formatter::TAP \

@@ -1,0 +1,667 @@
+diff -r -U4 cozy-1.3.0--orig/cozy/app_controller.py cozy-1.3.0--patched/cozy/app_controller.py
+--- cozy-1.3.0--orig/cozy/app_controller.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/app_controller.py	2024-03-03 11:51:34.062151406 +0100
+@@ -1,7 +1,7 @@
+ from gi.repository import Gio
+ 
+-import cozy.ext.inject as inject
++import inject
+ from peewee import SqliteDatabase
+ 
+ from cozy.control.offline_cache import OfflineCache
+ from cozy.media.files import Files
+diff -r -U4 cozy-1.3.0--orig/cozy/application_settings.py cozy-1.3.0--patched/cozy/application_settings.py
+--- cozy-1.3.0--orig/cozy/application_settings.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/application_settings.py	2024-03-03 11:52:23.623579214 +0100
+@@ -1,8 +1,8 @@
+ from gi.repository import Gio
+ 
+ from cozy.architecture.event_sender import EventSender
+-from cozy.ext import inject
++import inject
+ 
+ 
+ class ApplicationSettings(EventSender):
+     _settings: Gio.Settings = inject.attr(Gio.Settings)
+diff -r -U4 cozy-1.3.0--orig/cozy/control/artwork_cache.py cozy-1.3.0--patched/cozy/control/artwork_cache.py
+--- cozy-1.3.0--orig/cozy/control/artwork_cache.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/control/artwork_cache.py	2024-03-03 11:52:23.625579231 +0100
+@@ -6,9 +6,9 @@
+ 
+ from cozy.application_settings import ApplicationSettings
+ from cozy.control.application_directories import get_cache_dir
+ from cozy.db.artwork_cache import ArtworkCache as ArtworkCacheModel
+-from cozy.ext import inject
++import inject
+ from cozy.media.importer import Importer, ScanStatus
+ from cozy.report import reporter
+ 
+ log = logging.getLogger("artwork_cache")
+diff -r -U4 cozy-1.3.0--orig/cozy/control/filesystem_monitor.py cozy-1.3.0--patched/cozy/control/filesystem_monitor.py
+--- cozy-1.3.0--orig/cozy/control/filesystem_monitor.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/control/filesystem_monitor.py	2024-03-03 11:51:34.062151406 +0100
+@@ -1,8 +1,8 @@
+ import logging
+ from typing import List
+ 
+-import cozy.ext.inject as inject
++import inject
+ from gi.repository import Gio
+ 
+ from cozy.architecture.event_sender import EventSender
+ from cozy.model.book import Book
+diff -r -U4 cozy-1.3.0--orig/cozy/control/mpris.py cozy-1.3.0--patched/cozy/control/mpris.py
+--- cozy-1.3.0--orig/cozy/control/mpris.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/control/mpris.py	2024-03-03 11:52:23.625579231 +0100
+@@ -15,9 +15,9 @@
+ from gi.repository import Gio, GLib
+ 
+ from cozy.application_settings import ApplicationSettings
+ from cozy.control.artwork_cache import ArtworkCache
+-from cozy.ext import inject
++import inject
+ from cozy.media.player import NS_TO_SEC, US_TO_SEC, Player
+ from cozy.model.book import Book
+ from cozy.report import reporter
+ 
+diff -r -U4 cozy-1.3.0--orig/cozy/control/offline_cache.py cozy-1.3.0--patched/cozy/control/offline_cache.py
+--- cozy-1.3.0--orig/cozy/control/offline_cache.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/control/offline_cache.py	2024-03-03 11:52:23.624579222 +0100
+@@ -12,9 +12,9 @@
+ 
+ from cozy.db.file import File
+ from cozy.db.offline_cache import OfflineCache as OfflineCacheModel
+ from cozy.db.track_to_file import TrackToFile
+-from cozy.ext import inject
++import inject
+ from cozy.model.book import Book
+ from cozy.model.chapter import Chapter
+ from cozy.report import reporter
+ from cozy.view_model.settings_view_model import SettingsViewModel
+diff -r -U4 cozy-1.3.0--orig/cozy/media/files.py cozy-1.3.0--patched/cozy/media/files.py
+--- cozy-1.3.0--orig/cozy/media/files.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/media/files.py	2024-03-03 11:52:23.626579240 +0100
+@@ -5,9 +5,9 @@
+ 
+ from gi.repository import Gio
+ 
+ from cozy.architecture.event_sender import EventSender
+-from cozy.ext import inject
++import inject
+ from cozy.media.importer import Importer
+ from cozy.model.settings import Settings
+ from cozy.report import reporter
+ from cozy.ui.toaster import ToastNotifier
+diff -r -U4 cozy-1.3.0--orig/cozy/media/importer.py cozy-1.3.0--patched/cozy/media/importer.py
+--- cozy-1.3.0--orig/cozy/media/importer.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/media/importer.py	2024-03-03 11:52:23.626579240 +0100
+@@ -9,9 +9,9 @@
+ 
+ from cozy.architecture.event_sender import EventSender
+ from cozy.architecture.profiler import timing
+ from cozy.control.filesystem_monitor import FilesystemMonitor, StorageNotFound
+-from cozy.ext import inject
++import inject
+ from cozy.media.media_detector import MediaDetector, NotAnAudioFile, AudioFileCouldNotBeDiscovered
+ from cozy.media.media_file import MediaFile
+ from cozy.model.database_importer import DatabaseImporter
+ from cozy.model.library import Library
+diff -r -U4 cozy-1.3.0--orig/cozy/media/player.py cozy-1.3.0--patched/cozy/media/player.py
+--- cozy-1.3.0--orig/cozy/media/player.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/media/player.py	2024-03-03 11:52:23.626579240 +0100
+@@ -9,9 +9,9 @@
+ 
+ from cozy.application_settings import ApplicationSettings
+ from cozy.architecture.event_sender import EventSender
+ from cozy.control.offline_cache import OfflineCache
+-from cozy.ext import inject
++import inject
+ from cozy.media.gst_player import GstPlayer, GstPlayerState
+ from cozy.model.book import Book
+ from cozy.model.chapter import Chapter
+ from cozy.model.library import Library
+diff -r -U4 cozy-1.3.0--orig/cozy/model/book.py cozy-1.3.0--patched/cozy/model/book.py
+--- cozy-1.3.0--orig/cozy/model/book.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/model/book.py	2024-03-03 11:52:23.624579222 +0100
+@@ -10,9 +10,9 @@
+ from cozy.db.collation import collate_natural
+ from cozy.db.book import Book as BookModel
+ from cozy.db.track import Track as TrackModel
+ from cozy.db.track_to_file import TrackToFile
+-from cozy.ext import inject
++import inject
+ from cozy.model.chapter import Chapter
+ from cozy.model.settings import Settings
+ from cozy.model.track import Track, TrackInconsistentData
+ 
+diff -r -U4 cozy-1.3.0--orig/cozy/model/database_importer.py cozy-1.3.0--patched/cozy/model/database_importer.py
+--- cozy-1.3.0--orig/cozy/model/database_importer.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/model/database_importer.py	2024-03-03 11:52:23.624579222 +0100
+@@ -6,9 +6,9 @@
+ from cozy.db.book import Book as BookModel
+ from cozy.db.file import File
+ from cozy.db.track import Track
+ from cozy.db.track_to_file import TrackToFile
+-from cozy.ext import inject
++import inject
+ from cozy.extensions.is_same_book import is_same_book
+ from cozy.media.media_file import MediaFile
+ from cozy.model.book import Book, BookIsEmpty
+ 
+diff -r -U4 cozy-1.3.0--orig/cozy/model/library.py cozy-1.3.0--patched/cozy/model/library.py
+--- cozy-1.3.0--orig/cozy/model/library.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/model/library.py	2024-03-03 11:52:23.624579222 +0100
+@@ -6,9 +6,9 @@
+ from cozy.architecture.event_sender import EventSender
+ from cozy.architecture.profiler import timing
+ from cozy.db.book import Book as BookModel
+ from cozy.db.file import File
+-from cozy.ext import inject
++import inject
+ from cozy.extensions.set import split_strings_to_set
+ from cozy.model.book import Book, BookIsEmpty
+ from cozy.model.chapter import Chapter
+ from cozy.model.settings import Settings
+diff -r -U4 cozy-1.3.0--orig/cozy/model/settings.py cozy-1.3.0--patched/cozy/model/settings.py
+--- cozy-1.3.0--orig/cozy/model/settings.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/model/settings.py	2024-03-03 11:51:34.061151397 +0100
+@@ -3,9 +3,9 @@
+ 
+ import peewee
+ from peewee import SqliteDatabase
+ 
+-import cozy.ext.inject as inject
++import inject
+ from cozy.db.book import Book
+ from cozy.db.settings import Settings as SettingsModel
+ from cozy.db.storage import Storage as StorageModel
+ from cozy.model.storage import InvalidPath, Storage
+diff -r -U4 cozy-1.3.0--orig/cozy/power_manager.py cozy-1.3.0--patched/cozy/power_manager.py
+--- cozy-1.3.0--orig/cozy/power_manager.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/power_manager.py	2024-03-03 11:52:23.627579248 +0100
+@@ -1,9 +1,9 @@
+ import logging
+ 
+ from gi.repository import Gtk
+ 
+-from cozy.ext import inject
++import inject
+ from cozy.media.player import Player
+ 
+ log = logging.getLogger("power_mgr")
+ 
+diff -r -U4 cozy-1.3.0--orig/cozy/report/report_to_loki.py cozy-1.3.0--patched/cozy/report/report_to_loki.py
+--- cozy-1.3.0--orig/cozy/report/report_to_loki.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/report/report_to_loki.py	2024-03-03 11:52:23.625579231 +0100
+@@ -6,9 +6,9 @@
+ import distro
+ import platform
+ 
+ from cozy.application_settings import ApplicationSettings
+-from cozy.ext import inject
++import inject
+ from cozy.report.log_level import LogLevel
+ from cozy.version import __version__ as CozyVersion
+ from peewee import __version__ as PeeweeVersion
+ from mutagen import version_string as MutagenVersion
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/app_view.py cozy-1.3.0--patched/cozy/ui/app_view.py
+--- cozy-1.3.0--orig/cozy/ui/app_view.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/app_view.py	2024-03-03 11:52:23.629579266 +0100
+@@ -1,7 +1,7 @@
+ from gi.repository import Gtk, Adw
+ 
+-from cozy.ext import inject
++import inject
+ from cozy.view_model.app_view_model import AppViewModel
+ from cozy.view import View
+ 
+ LIBRARY = "main"
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/book_detail_view.py cozy-1.3.0--patched/cozy/ui/book_detail_view.py
+--- cozy-1.3.0--orig/cozy/ui/book_detail_view.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/book_detail_view.py	2024-03-03 11:52:23.630579274 +0100
+@@ -5,9 +5,9 @@
+ 
+ import gi
+ 
+ from cozy.control.artwork_cache import ArtworkCache
+-from cozy.ext import inject
++import inject
+ from cozy.model.book import Book
+ from cozy.model.chapter import Chapter
+ from cozy.report import reporter
+ from cozy.ui.chapter_element import ChapterElement
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/delete_book_view.py cozy-1.3.0--patched/cozy/ui/delete_book_view.py
+--- cozy-1.3.0--orig/cozy/ui/delete_book_view.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/delete_book_view.py	2024-03-03 11:52:23.629579266 +0100
+@@ -1,7 +1,7 @@
+ from gi.repository import Adw, Gtk
+ 
+-from cozy.ext import inject
++import inject
+ from cozy.model.book import Book
+ from cozy.ui.widgets.book_row import BookRow
+ 
+ 
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/file_not_found_dialog.py cozy-1.3.0--patched/cozy/ui/file_not_found_dialog.py
+--- cozy-1.3.0--orig/cozy/ui/file_not_found_dialog.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/file_not_found_dialog.py	2024-03-03 11:52:23.627579248 +0100
+@@ -1,9 +1,9 @@
+ from pathlib import Path
+ 
+ from gi.repository import Adw, Gio, GLib, Gtk
+ 
+-from cozy.ext import inject
++import inject
+ from cozy.media.importer import Importer
+ from cozy.model.chapter import Chapter
+ 
+ 
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/headerbar.py cozy-1.3.0--patched/cozy/ui/headerbar.py
+--- cozy-1.3.0--orig/cozy/ui/headerbar.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/headerbar.py	2024-03-03 11:52:23.631579283 +0100
+@@ -1,15 +1,15 @@
+ import logging
+ 
+ import gi
+ 
+-from cozy.ext import inject
++import inject
+ from cozy.ui.widgets.progress_popover import ProgressPopover
+ from cozy.view_model.headerbar_view_model import HeaderbarViewModel, HeaderBarState
+ 
+ from gi.repository import Adw, Gtk, GObject
+ 
+-from cozy.ext import inject
++import inject
+ from cozy.ui.widgets.progress_popover import ProgressPopover
+ from cozy.view_model.headerbar_view_model import HeaderBarState, HeaderbarViewModel
+ 
+ log = logging.getLogger("Headerbar")
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/import_failed_dialog.py cozy-1.3.0--patched/cozy/ui/import_failed_dialog.py
+--- cozy-1.3.0--orig/cozy/ui/import_failed_dialog.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/import_failed_dialog.py	2024-03-03 11:52:23.630579274 +0100
+@@ -1,9 +1,9 @@
+ from gettext import gettext as _
+ 
+ from gi.repository import Adw, Gtk
+ 
+-from cozy.ext import inject
++import inject
+ 
+ 
+ HEADER = _("This can have multiple reasons:")
+ POSSIBILITIES = "\n     • ".join((  # yes, it is a hack, because \t would be too wide
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/library_view.py cozy-1.3.0--patched/cozy/ui/library_view.py
+--- cozy-1.3.0--orig/cozy/ui/library_view.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/library_view.py	2024-03-03 11:52:23.629579266 +0100
+@@ -2,9 +2,9 @@
+ from typing import Optional
+ 
+ from gi.repository import Adw, Gtk
+ 
+-from cozy.ext import inject
++import inject
+ from cozy.ui.widgets.book_element import BookElement
+ from cozy.ui.delete_book_view import DeleteBookView
+ from cozy.ui.widgets.filter_list_box import FilterListBox
+ from cozy.view_model.library_view_model import LibraryViewModel, LibraryViewMode
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/main_view.py cozy-1.3.0--patched/cozy/ui/main_view.py
+--- cozy-1.3.0--orig/cozy/ui/main_view.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/main_view.py	2024-03-03 11:51:34.062151406 +0100
+@@ -6,9 +6,9 @@
+ 
+ from gi.repository import Adw, Gdk, Gio, GLib, Gtk
+ 
+ import cozy.control.filesystem_monitor as fs_monitor
+-import cozy.ext.inject as inject
++import inject
+ import cozy.report.reporter as report
+ from cozy.application_settings import ApplicationSettings
+ from cozy.architecture.event_sender import EventSender
+ from cozy.architecture.singleton import Singleton
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/media_controller.py cozy-1.3.0--patched/cozy/ui/media_controller.py
+--- cozy-1.3.0--orig/cozy/ui/media_controller.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/media_controller.py	2024-03-03 11:52:23.631579283 +0100
+@@ -3,9 +3,9 @@
+ import gi
+ 
+ from cozy.control.artwork_cache import ArtworkCache
+ from cozy.db.book import Book
+-from cozy.ext import inject
++import inject
+ from cozy.ui.widgets.playback_speed_popover import PlaybackSpeedPopover
+ from cozy.ui.widgets.seek_bar import SeekBar
+ from cozy.ui.widgets.sleep_timer import SleepTimer
+ from cozy.view_model.playback_control_view_model import PlaybackControlViewModel
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/preferences_view.py cozy-1.3.0--patched/cozy/ui/preferences_view.py
+--- cozy-1.3.0--orig/cozy/ui/preferences_view.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/preferences_view.py	2024-03-03 11:52:23.630579274 +0100
+@@ -1,8 +1,8 @@
+ from typing import Any
+ from gi.repository import Adw, Gio, Gtk
+ 
+-from cozy.ext import inject
++import inject
+ from cozy.ui.widgets.error_reporting import ErrorReporting
+ 
+ from cozy.ui.widgets.storages import StorageLocations
+ from cozy.view_model.settings_view_model import SettingsViewModel
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/search_view.py cozy-1.3.0--patched/cozy/ui/search_view.py
+--- cozy-1.3.0--orig/cozy/ui/search_view.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/search_view.py	2024-03-03 11:52:23.631579283 +0100
+@@ -2,9 +2,9 @@
+ from typing import Callable, Sequence
+ 
+ from gi.repository import Adw, Gtk
+ 
+-from cozy.ext import inject
++import inject
+ from cozy.model.book import Book
+ from cozy.ui.headerbar import Headerbar
+ from cozy.ui.widgets.book_row import BookRow
+ from cozy.ui.widgets.search_results import ArtistResultRow
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/toaster.py cozy-1.3.0--patched/cozy/ui/toaster.py
+--- cozy-1.3.0--orig/cozy/ui/toaster.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/toaster.py	2024-03-03 11:52:23.631579283 +0100
+@@ -1,7 +1,7 @@
+ from gi.repository import Adw, Gtk
+ 
+-from cozy.ext import inject
++import inject
+ 
+ 
+ class ToastNotifier:
+     _builder: Gtk.Builder = inject.attr("MainWindowBuilder")
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/widgets/album_element.py cozy-1.3.0--patched/cozy/ui/widgets/album_element.py
+--- cozy-1.3.0--orig/cozy/ui/widgets/album_element.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/widgets/album_element.py	2024-03-03 11:52:23.627579248 +0100
+@@ -4,9 +4,9 @@
+ import cairo
+ 
+ from cozy.control.artwork_cache import ArtworkCache
+ from cozy.model.book import Book
+-from cozy.ext import inject
++import inject
+ 
+ from gi.repository import Gtk, GObject, Gdk
+ 
+ ALBUM_ART_SIZE = 200
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/widgets/book_row.py cozy-1.3.0--patched/cozy/ui/widgets/book_row.py
+--- cozy-1.3.0--orig/cozy/ui/widgets/book_row.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/widgets/book_row.py	2024-03-03 11:52:23.628579257 +0100
+@@ -2,9 +2,9 @@
+ 
+ from gi.repository import Adw, Gtk
+ 
+ from cozy.control.artwork_cache import ArtworkCache
+-from cozy.ext import inject
++import inject
+ from cozy.model.book import Book
+ 
+ BOOK_ICON_SIZE = 52
+ 
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/widgets/error_reporting.py cozy-1.3.0--patched/cozy/ui/widgets/error_reporting.py
+--- cozy-1.3.0--orig/cozy/ui/widgets/error_reporting.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/widgets/error_reporting.py	2024-03-03 11:52:23.628579257 +0100
+@@ -2,9 +2,9 @@
+ 
+ import gi
+ 
+ from cozy.application_settings import ApplicationSettings
+-from cozy.ext import inject
++import inject
+ 
+ from gi.repository import Gtk
+ 
+ LEVELS = [
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/widgets/playback_speed_popover.py cozy-1.3.0--patched/cozy/ui/widgets/playback_speed_popover.py
+--- cozy-1.3.0--orig/cozy/ui/widgets/playback_speed_popover.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/widgets/playback_speed_popover.py	2024-03-03 11:52:23.628579257 +0100
+@@ -1,5 +1,5 @@
+-from cozy.ext import inject
++import inject
+ from cozy.view_model.playback_speed_view_model import PlaybackSpeedViewModel
+ 
+ from gi.repository import Gtk
+ 
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/widgets/sleep_timer.py cozy-1.3.0--patched/cozy/ui/widgets/sleep_timer.py
+--- cozy-1.3.0--orig/cozy/ui/widgets/sleep_timer.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/widgets/sleep_timer.py	2024-03-03 11:52:23.627579248 +0100
+@@ -1,5 +1,5 @@
+-from cozy.ext import inject
++import inject
+ from cozy.view_model.sleep_timer_view_model import SleepTimerViewModel, SystemPowerControl
+ 
+ from gi.repository import Gtk
+ 
+diff -r -U4 cozy-1.3.0--orig/cozy/ui/widgets/storages.py cozy-1.3.0--patched/cozy/ui/widgets/storages.py
+--- cozy-1.3.0--orig/cozy/ui/widgets/storages.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/ui/widgets/storages.py	2024-03-03 11:52:23.628579257 +0100
+@@ -1,9 +1,9 @@
+ from typing import Callable
+ 
+ from gi.repository import Adw, Gio, GLib, GObject, Gtk
+ 
+-from cozy.ext import inject
++import inject
+ from cozy.model.storage import Storage
+ from cozy.view_model.storages_view_model import StoragesViewModel
+ 
+ 
+diff -r -U4 cozy-1.3.0--orig/cozy/view_model/book_detail_view_model.py cozy-1.3.0--patched/cozy/view_model/book_detail_view_model.py
+--- cozy-1.3.0--orig/cozy/view_model/book_detail_view_model.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/view_model/book_detail_view_model.py	2024-03-03 11:52:23.623579214 +0100
+@@ -3,9 +3,9 @@
+ from cozy.architecture.event_sender import EventSender
+ from cozy.architecture.observable import Observable
+ from cozy.control.filesystem_monitor import FilesystemMonitor
+ from cozy.control.offline_cache import OfflineCache
+-from cozy.ext import inject
++import inject
+ from cozy.media.player import Player
+ from cozy.model.book import Book
+ from cozy.model.chapter import Chapter
+ from cozy.model.library import Library
+diff -r -U4 cozy-1.3.0--orig/cozy/view_model/headerbar_view_model.py cozy-1.3.0--patched/cozy/view_model/headerbar_view_model.py
+--- cozy-1.3.0--orig/cozy/view_model/headerbar_view_model.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/view_model/headerbar_view_model.py	2024-03-03 11:52:23.623579214 +0100
+@@ -2,9 +2,9 @@
+ 
+ from cozy.architecture.event_sender import EventSender
+ from cozy.architecture.observable import Observable
+ from cozy.control.offline_cache import OfflineCache
+-from cozy.ext import inject
++import inject
+ from cozy.media.files import Files
+ from cozy.media.importer import Importer, ScanStatus
+ from cozy.model.library import Library
+ from cozy.open_view import OpenView
+diff -r -U4 cozy-1.3.0--orig/cozy/view_model/library_view_model.py cozy-1.3.0--patched/cozy/view_model/library_view_model.py
+--- cozy-1.3.0--orig/cozy/view_model/library_view_model.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/view_model/library_view_model.py	2024-03-03 11:51:34.061151397 +0100
+@@ -2,9 +2,9 @@
+ import os
+ from enum import Enum, auto
+ from typing import Optional
+ 
+-import cozy.ext.inject as inject
++import inject
+ from cozy.application_settings import ApplicationSettings
+ from cozy.architecture.event_sender import EventSender
+ from cozy.architecture.observable import Observable
+ from cozy.control.filesystem_monitor import FilesystemMonitor
+diff -r -U4 cozy-1.3.0--orig/cozy/view_model/playback_control_view_model.py cozy-1.3.0--patched/cozy/view_model/playback_control_view_model.py
+--- cozy-1.3.0--orig/cozy/view_model/playback_control_view_model.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/view_model/playback_control_view_model.py	2024-03-03 11:52:23.622579205 +0100
+@@ -1,7 +1,7 @@
+ from cozy.architecture.event_sender import EventSender
+ from cozy.architecture.observable import Observable
+-from cozy.ext import inject
++import inject
+ from cozy.media.player import Player
+ from cozy.model.book import Book
+ from cozy.open_view import OpenView
+ 
+diff -r -U4 cozy-1.3.0--orig/cozy/view_model/playback_speed_view_model.py cozy-1.3.0--patched/cozy/view_model/playback_speed_view_model.py
+--- cozy-1.3.0--orig/cozy/view_model/playback_speed_view_model.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/view_model/playback_speed_view_model.py	2024-03-03 11:52:23.622579205 +0100
+@@ -1,8 +1,8 @@
+ from cozy.architecture.event_sender import EventSender
+ from cozy.architecture.observable import Observable
+ from cozy.db.book import Book
+-from cozy.ext import inject
++import inject
+ from cozy.media.player import Player
+ 
+ 
+ class PlaybackSpeedViewModel(Observable, EventSender):
+diff -r -U4 cozy-1.3.0--orig/cozy/view_model/search_view_model.py cozy-1.3.0--patched/cozy/view_model/search_view_model.py
+--- cozy-1.3.0--orig/cozy/view_model/search_view_model.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/view_model/search_view_model.py	2024-03-03 11:51:34.061151397 +0100
+@@ -1,9 +1,9 @@
+ from typing import Callable
+ 
+ from gi.repository import GLib
+ 
+-import cozy.ext.inject as inject
++import inject
+ from cozy.application_settings import ApplicationSettings
+ from cozy.architecture.event_sender import EventSender
+ from cozy.architecture.observable import Observable
+ from cozy.control.filesystem_monitor import FilesystemMonitor
+diff -r -U4 cozy-1.3.0--orig/cozy/view_model/settings_view_model.py cozy-1.3.0--patched/cozy/view_model/settings_view_model.py
+--- cozy-1.3.0--orig/cozy/view_model/settings_view_model.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/view_model/settings_view_model.py	2024-03-03 11:52:23.621579196 +0100
+@@ -4,9 +4,9 @@
+ 
+ from cozy.application_settings import ApplicationSettings
+ from cozy.architecture.event_sender import EventSender
+ from cozy.architecture.observable import Observable
+-from cozy.ext import inject
++import inject
+ from cozy.media.importer import Importer
+ from cozy.model.settings import Settings
+ 
+ log = logging.getLogger("settings_view_model")
+diff -r -U4 cozy-1.3.0--orig/cozy/view_model/sleep_timer_view_model.py cozy-1.3.0--patched/cozy/view_model/sleep_timer_view_model.py
+--- cozy-1.3.0--orig/cozy/view_model/sleep_timer_view_model.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/view_model/sleep_timer_view_model.py	2024-03-03 11:52:23.622579205 +0100
+@@ -5,9 +5,9 @@
+ 
+ from cozy import tools
+ from cozy.application_settings import ApplicationSettings
+ from cozy.architecture.observable import Observable
+-from cozy.ext import inject
++import inject
+ from cozy.media.player import Player
+ from cozy.tools import IntervalTimer
+ 
+ log = logging.getLogger("sleep_timer_view_model")
+diff -r -U4 cozy-1.3.0--orig/cozy/view_model/storages_view_model.py cozy-1.3.0--patched/cozy/view_model/storages_view_model.py
+--- cozy-1.3.0--orig/cozy/view_model/storages_view_model.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/cozy/view_model/storages_view_model.py	2024-03-03 11:52:23.621579196 +0100
+@@ -6,9 +6,9 @@
+ from cozy.application_settings import ApplicationSettings
+ from cozy.architecture.event_sender import EventSender
+ from cozy.architecture.observable import Observable
+ from cozy.control.filesystem_monitor import FilesystemMonitor
+-from cozy.ext import inject
++import inject
+ from cozy.media.importer import Importer
+ from cozy.model.library import Library
+ from cozy.model.settings import Settings
+ from cozy.model.storage import Storage
+diff -r -U4 cozy-1.3.0--orig/test/cozy/media/test_importer.py cozy-1.3.0--patched/test/cozy/media/test_importer.py
+--- cozy-1.3.0--orig/test/cozy/media/test_importer.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/test/cozy/media/test_importer.py	2024-03-03 11:52:23.633579300 +0100
+@@ -2,9 +2,9 @@
+ 
+ import pytest
+ from peewee import SqliteDatabase
+ 
+-from cozy.ext import inject
++import inject
+ from cozy.media.media_file import MediaFile
+ from cozy.model.library import Library
+ 
+ 
+diff -r -U4 cozy-1.3.0--orig/test/cozy/media/test_player.py cozy-1.3.0--patched/test/cozy/media/test_player.py
+--- cozy-1.3.0--orig/test/cozy/media/test_player.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/test/cozy/media/test_player.py	2024-03-03 11:52:23.633579300 +0100
+@@ -3,9 +3,9 @@
+ import pytest
+ from peewee import SqliteDatabase
+ 
+ from cozy.application_settings import ApplicationSettings
+-from cozy.ext import inject
++import inject
+ from cozy.media.gst_player import GstPlayer
+ from cozy.model.library import Library
+ from cozy.model.settings import Settings
+ 
+diff -r -U4 cozy-1.3.0--orig/test/cozy/model/storage_block_list.py cozy-1.3.0--patched/test/cozy/model/storage_block_list.py
+--- cozy-1.3.0--orig/test/cozy/model/storage_block_list.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/test/cozy/model/storage_block_list.py	2024-03-03 11:52:23.632579291 +0100
+@@ -1,8 +1,8 @@
+ import pytest
+ from peewee import SqliteDatabase
+ 
+-from cozy.ext import inject
++import inject
+ 
+ 
+ @pytest.fixture(autouse=True)
+ def setup_inject(peewee_database_storage):
+diff -r -U4 cozy-1.3.0--orig/test/cozy/model/test_book.py cozy-1.3.0--patched/test/cozy/model/test_book.py
+--- cozy-1.3.0--orig/test/cozy/model/test_book.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/test/cozy/model/test_book.py	2024-03-03 11:52:23.633579300 +0100
+@@ -1,9 +1,9 @@
+ import pytest
+ from peewee import SqliteDatabase
+ 
+ from cozy.application_settings import ApplicationSettings
+-from cozy.ext import inject
++import inject
+ from test.cozy.mocks import ApplicationSettingsMock
+ 
+ 
+ @pytest.fixture(autouse=True)
+diff -r -U4 cozy-1.3.0--orig/test/cozy/model/test_database_importer.py cozy-1.3.0--patched/test/cozy/model/test_database_importer.py
+--- cozy-1.3.0--orig/test/cozy/model/test_database_importer.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/test/cozy/model/test_database_importer.py	2024-03-03 11:52:23.632579291 +0100
+@@ -1,8 +1,8 @@
+ import pytest
+ from peewee import SqliteDatabase
+ 
+-from cozy.ext import inject
++import inject
+ 
+ 
+ @pytest.fixture(autouse=True)
+ def setup_inject(peewee_database):
+diff -r -U4 cozy-1.3.0--orig/test/cozy/model/test_library.py cozy-1.3.0--patched/test/cozy/model/test_library.py
+--- cozy-1.3.0--orig/test/cozy/model/test_library.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/test/cozy/model/test_library.py	2024-03-03 11:52:23.632579291 +0100
+@@ -1,9 +1,9 @@
+ import pytest
+ from peewee import SqliteDatabase
+ 
+ from cozy.application_settings import ApplicationSettings
+-from cozy.ext import inject
++import inject
+ from cozy.extensions.set import split_strings_to_set
+ from cozy.model.settings import Settings
+ from test.cozy.mocks import ApplicationSettingsMock
+ 
+diff -r -U4 cozy-1.3.0--orig/test/cozy/model/test_settings.py cozy-1.3.0--patched/test/cozy/model/test_settings.py
+--- cozy-1.3.0--orig/test/cozy/model/test_settings.py	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/test/cozy/model/test_settings.py	2024-03-03 11:51:34.063151414 +0100
+@@ -1,7 +1,7 @@
+ import pytest
+ 
+-import cozy.ext.inject as inject
++import inject
+ from peewee import SqliteDatabase
+ 
+ 
+ @pytest.fixture(autouse=True)

@@ -1,0 +1,14 @@
+[Unit]
+Description=TetriNET server
+Requires=systemd-resolved.service
+After=network.target systemd-resolved.service
+
+[Service]
+Type=forking
+User=tetrinetx
+TimeoutStartSec=10
+ExecStart=/usr/bin/tetrinetx
+PIDFile=/run/tetrinetx/game.pid
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,32 @@
+From 15714690400a82f2f7bf5b2c63f8be6450b55833 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 15 Oct 2015 14:47:48 +0200
+Subject: [PATCH] Work around "Module::Install only supports 5.005" bug
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Having "use 5.004" triggers bug in Module::Install resulting in error:
+
+Module::Install only supports 5.005 or newer (use ExtUtils::MakeMaker)
+
+CPAN RT#58518
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/LWP/Authen/Wsse.pm | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/lib/LWP/Authen/Wsse.pm b/lib/LWP/Authen/Wsse.pm
+index a5d9046..3eb25e5 100644
+--- a/lib/LWP/Authen/Wsse.pm
++++ b/lib/LWP/Authen/Wsse.pm
+@@ -1,5 +1,4 @@
+ package LWP::Authen::Wsse;
+-use 5.004;
+ use strict;
+ use warnings;
+ use English qw( -no_match_vars );
+-- 
+2.4.3
+

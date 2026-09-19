@@ -1,0 +1,37 @@
+diff --color -Nur collectd-5.12.0.orig/aclocal.m4 collectd-5.12.0/aclocal.m4
+--- collectd-5.12.0.orig/aclocal.m4	2020-09-03 08:13:40.278219192 -0700
++++ collectd-5.12.0/aclocal.m4	2025-01-04 11:46:43.917816421 -0800
+@@ -308,10 +308,10 @@
+ # generated from the m4 files accompanying Automake X.Y.
+ # (This private macro should not be called outside this file.)
+ AC_DEFUN([AM_AUTOMAKE_VERSION],
+-[am__api_version='1.16'
++[am__api_version='1.18'
+ dnl Some users find AM_AUTOMAKE_VERSION and mistake it for a way to
+ dnl require some minimum version.  Point them to the right macro.
+-m4_if([$1], [1.16.1], [],
++m4_if([$1], [1.18.1], [],
+       [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
+ ])
+ 
+@@ -327,7 +327,7 @@
+ # Call AM_AUTOMAKE_VERSION and AM_AUTOMAKE_VERSION so they can be traced.
+ # This function is AC_REQUIREd by AM_INIT_AUTOMAKE.
+ AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION],
+-[AM_AUTOMAKE_VERSION([1.16.1])dnl
++[AM_AUTOMAKE_VERSION([1.18.1])dnl
+ m4_ifndef([AC_AUTOCONF_VERSION],
+   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
+ _AM_AUTOCONF_VERSION(m4_defn([AC_AUTOCONF_VERSION]))])
+diff --color -Nur collectd-5.12.0.orig/configure collectd-5.12.0/configure
+--- collectd-5.12.0.orig/configure	2025-01-04 11:43:16.212432911 -0800
++++ collectd-5.12.0/configure	2025-01-04 11:45:51.675030771 -0800
+@@ -12959,7 +12959,7 @@
+ 
+ 
+ 
+-am__api_version='1.16'
++am__api_version='1.18'
+ 
+ # Find a good install program.  We prefer a C program (faster),
+ # so one script is as good as another.  But avoid the broken or

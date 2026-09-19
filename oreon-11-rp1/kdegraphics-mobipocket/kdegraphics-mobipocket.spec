@@ -1,11 +1,11 @@
-%global source0_hash de353837314402f4983893226483a88a9026266b53ddf64b07ef234d149ff7bd
+%global source0_hash 26cf058d441ec1a23768a47026960a0b7b77ca40dc7de51c89a9b4d463851f92
 
 %global stable_kf6 stable
 
 
 Name:    kdegraphics-mobipocket
 Summary: A collection of plugins to handle mobipocket files
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later AND CC0-1.0 AND LGPL-2.1-or-later

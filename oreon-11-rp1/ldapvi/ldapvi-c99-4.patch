@@ -1,0 +1,18 @@
+Include <openssl/rand.h> for the RAND_bytes function.
+
+Submitted upstream:
+
+  <http://lists.askja.de/pipermail/ldapvi/2022-December/000126.html>
+
+diff --git a/port.c b/port.c
+index a2d8f20aa8b8e4c4..5a0f100c6fe18e0a 100644
+--- a/port.c
++++ b/port.c
+@@ -36,6 +36,7 @@
+ #if defined(HAVE_OPENSSL)
+ #include <openssl/sha.h>
+ #include <openssl/md5.h>
++#include <openssl/rand.h>
+ #elif defined(HAVE_GNUTLS)
+ #include <gnutls/gnutls.h>
+ #include <gnutls/openssl.h>

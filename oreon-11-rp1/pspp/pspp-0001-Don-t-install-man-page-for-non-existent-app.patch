@@ -1,0 +1,18 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 6 Sep 2022 12:13:06 +0200
+Subject: [PATCH] Don't install man-page for non-existent app
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/utilities/automake.mk b/utilities/automake.mk
+index 047180bf4..601eccf88 100644
+--- a/utilities/automake.mk
++++ b/utilities/automake.mk
+@@ -15,7 +15,6 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ noinst_PROGRAMS += utilities/pspp-dump-sav
+-dist_man_MANS += utilities/pspp-dump-sav.1
+ utilities_pspp_dump_sav_SOURCES = \
+ 	src/libpspp/integer-format.c \
+ 	src/libpspp/float-format.c \

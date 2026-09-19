@@ -1,0 +1,86 @@
+From e99a9d0b08b0ac78f18718e1a1cbf15c40aee442 Mon Sep 17 00:00:00 2001
+From: Eric Berquist <eric.berquist@gmail.com>
+Date: Thu, 20 Jun 2024 21:05:27 -0400
+Subject: [PATCH 1/4] unpin versioningit upper bound
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 302852598..e49b139cd 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -64,7 +64,7 @@ dev = ["cclib[bridges,docs,test]"]
+ all = ["cclib[bridges]"]
+ 
+ [build-system]
+-requires = ["setuptools >= 61.0", "versioningit~=2.0"]
++requires = ["setuptools >= 61.0", "versioningit>=2.0"]
+ build-backend = "setuptools.build_meta"
+ 
+ [tool.setuptools]
+
+From f569078345f8c39846bf6d0fab20861e61cc4c9f Mon Sep 17 00:00:00 2001
+From: Eric Berquist <eric.berquist@gmail.com>
+Date: Thu, 20 Jun 2024 21:06:06 -0400
+Subject: [PATCH 2/4] pyyaml is a direct dependency of conftest.py
+
+---
+ pyproject.toml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index e49b139cd..588d4a53a 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -59,6 +59,7 @@ test = [
+     "pytest",
+     "coverage",
+     "pytest-cov",
++    "pyyaml",
+ ]
+ dev = ["cclib[bridges,docs,test]"]
+ all = ["cclib[bridges]"]
+
+From df72de1065a032eb78baf9974fe7225dcb007dc2 Mon Sep 17 00:00:00 2001
+From: Eric Berquist <eric.berquist@gmail.com>
+Date: Thu, 20 Jun 2024 21:13:35 -0400
+Subject: [PATCH 3/4] hide Open Babel type annotations
+
+---
+ cclib/bridge/cclib2openbabel.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cclib/bridge/cclib2openbabel.py b/cclib/bridge/cclib2openbabel.py
+index 197a39280..9577d2f1a 100644
+--- a/cclib/bridge/cclib2openbabel.py
++++ b/cclib/bridge/cclib2openbabel.py
+@@ -27,7 +27,7 @@ def _check_openbabel(found_openbabel: bool) -> None:
+         raise ImportError("You must install `openbabel` to use this function")
+ 
+ 
+-def makecclib(mol: ob.OBMol) -> ccData:
++def makecclib(mol: "ob.OBMol") -> ccData:
+     """Create cclib attributes and return a ccData from an OpenBabel molecule.
+ 
+     Beyond the numbers, masses and coordinates, we could also set the total charge
+@@ -50,7 +50,7 @@ def makeopenbabel(
+     atomnos: Optional[np.ndarray] = None,
+     charge: int = 0,
+     mult: int = 1,
+-) -> ob.OBMol:
++) -> "ob.OBMol":
+     """Create an Open Babel molecule."""
+     _check_openbabel(_found_openbabel)
+     if atomcoords is None and atomnos is None:
+
+From 077a1995a2d7acc57044b3d25639eb6075f54244 Mon Sep 17 00:00:00 2001
+From: Eric Berquist <eric.berquist@gmail.com>
+Date: Thu, 20 Jun 2024 21:19:51 -0400
+Subject: [PATCH 4/4] check installation with Python 3.7
+
+---
+ .github/workflows/test_and_package.yml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+

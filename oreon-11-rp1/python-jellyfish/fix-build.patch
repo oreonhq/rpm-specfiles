@@ -1,0 +1,18 @@
+diff -up jellyfish-0.8.2/setup.py.orig jellyfish-0.8.2/setup.py
+--- jellyfish-0.8.2/setup.py.orig	2020-12-01 16:07:01.761188090 +0100
++++ jellyfish-0.8.2/setup.py	2020-12-01 16:07:28.519534901 +0100
+@@ -139,13 +139,4 @@ def run_setup(build_c):
+     )
+ 
+ 
+-try:
+-    run_setup(not IS_PYPY)
+-except BuildFailed:
+-    print("*" * 75)
+-    print("WARNING: C extension could not be compiled, falling back to pure Python.")
+-    print("*" * 75)
+-    run_setup(False)
+-    print("*" * 75)
+-    print("WARNING: C extension could not be compiled, falling back to pure Python.")
+-    print("*" * 75)
++run_setup(False)

@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           xmlunit
-Version:        2.10.0
+Version:        2.13.0
 Release:        %autorelease
 Summary:        Provides classes to do asserts on xml
 # The whole package is ASL 2.0 except for xmlunit-legacy which is BSD
@@ -34,7 +34,7 @@ BuildRequires:  mvn(org.hamcrest:hamcrest-library)
 BuildRequires:  mvn(org.mockito:mockito-core)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.10.0-8
+Obsoletes:      %{name}-javadoc < 2.13.0-8
 
 %description
 XMLUnit provides you with the tools to verify the XML you emit is the one you

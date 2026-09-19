@@ -1,0 +1,32 @@
+From 6e8b947c89c034749fe5164bd285143d2af18fa4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 1 Jul 2021 16:16:20 +0200
+Subject: [PATCH] Symlink gscan2pdf.svg files
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This file is installed twice. ExtUtils::MakeMaker does not support
+symbolic links. Thus use ln -s directly.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index ba8133b..4754a93 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -136,7 +136,7 @@ icon_install : $(TLD).$(VENDOR).$(NAME).desktop $(ICONS) $(TLD).$(VENDOR).$(NAME
+                $(DESTDIR)$(SHAREDIR)/metainfo
+ 	$(CP) $(TLD).$(VENDOR).$(NAME).desktop $(DESTDIR)$(SHAREDIR)/applications
+ 	$(CP) $(ICONS) $(DESTDIR)$(SHAREDIR)/$(NAME)
+-	$(CP) icons/$(NAME).svg $(DESTDIR)$(SHAREDIR)/pixmaps
++	ln -s "$$(realpath --relative-to=$(DESTDIR)$(SHAREDIR)/pixmaps $(DESTDIR)$(SHAREDIR)/$(NAME)/$(NAME).svg)" $(DESTDIR)$(SHAREDIR)/pixmaps
+ 	$(CP) $(TLD).$(VENDOR).$(NAME).appdata.xml $(DESTDIR)$(SHAREDIR)/metainfo
+ 
+ # remove the =for html sections to satisfy lintian
+-- 
+2.35.3
+

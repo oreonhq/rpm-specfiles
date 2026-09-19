@@ -1,0 +1,25 @@
+diff -urp yagf-0.9.5/src/core/qipgrayscaleimage.cpp yagf-0.9.5-nothreads/src/core/qipgrayscaleimage.cpp
+--- yagf-0.9.5/src/core/qipgrayscaleimage.cpp	2015-02-17 07:50:24.000000000 +0600
++++ yagf-0.9.5-nothreads/src/core/qipgrayscaleimage.cpp	2017-03-22 10:47:47.082433808 +0700
+@@ -335,7 +335,8 @@ QIPGrayscaleImage QIPGrayscaleImage::cop
+     r1.x1 = x1;
+     r1.x2 = x2;
+     r1.y1 = y1;
+-    r1.y2 = (y2 - y1)/2;
++//    r1.y2 = (y2 - y1)/2;
++    r1.y2 = y2;
+     IntRect r2;
+     r2.x1 = x1;
+     r2.x2 = x2;
+@@ -354,9 +355,9 @@ QIPGrayscaleImage QIPGrayscaleImage::cop
+ #endif
+ #ifdef IPRIT_MULTITHREADING
+     QFuture<void> future1 = QtConcurrent::run(this, &QIPGrayscaleImage::copyInternal2, r1, s, d);
+-    QFuture<void> future2 = QtConcurrent::run(this, &QIPGrayscaleImage::copyInternal2, r2, s, d);
++//    QFuture<void> future2 = QtConcurrent::run(this, &QIPGrayscaleImage::copyInternal2, r2, s, d);
+     future1.waitForFinished();
+-    future2.waitForFinished();
++//    future2.waitForFinished();
+ #endif
+ 
+     return result;

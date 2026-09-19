@@ -1,0 +1,86 @@
+Index: CMakeLists.txt
+===================================================================
+--- CMakeLists.txt	(Revision 0)
++++ CMakeLists.txt	(Arbeitskopie)
+@@ -0,0 +1,58 @@
++cmake_minimum_required(VERSION 2.6)
++file(STRINGS "TARGET" TARGET LIMIT_COUNT 1)
++file(STRINGS "VERSION" VERSION LIMIT_COUNT 1)
++project(${TARGET})
++
++set(PLATFORM PC)
++#set(PLATFORM PWIN32)
++#set(PLATFORM GP2X)
++#set(PLATFORM CAANOO)
++#set(PLATFORM PZAURUS)
++#set(PLATFORM FREMANTLE)
++#set(PLATFORM PSP)
++
++set(PREFIX ${CMAKE_INSTALL_PREFIX})
++set(BIN_DIR ${PREFIX}/bin)
++set(DATA_DIR ${PREFIX}/share/${TARGET})
++set(DOC_DIR ${PREFIX}/share/doc/${TARGET})
++
++option(USE_TTF "Build with SDL_ttf library" ON)
++option(DISABLE_MUSIC "Disable music" OFF)
++option(DISABLE_DESIGNER "Disable designer" OFF)
++
++aux_source_directory(. SOURCES)
++
++add_definitions(-DPACKAGE_DATA_DIR="${DATA_DIR}")
++add_definitions(-DVERSION="${VERSION}")
++add_definitions(-DPLATFORM_${PLATFORM})
++
++if(USE_TTF)
++ add_definitions(-DUSE_PIXMAP_FONT)
++endif()
++if(NOT DISABLE_MUSIC)
++ add_definitions(-DHAVE_MUSIC)
++endif()
++if(NOT DISABLE_DESIGNER)
++ add_definitions(-DHAVE_DESIGNER)
++endif()
++
++add_executable(${TARGET} ${SOURCES})
++
++find_package(SDL REQUIRED)
++find_package(SDL_mixer REQUIRED)
++find_package(SDL_image REQUIRED)
++include_directories(${SDL_INCLUDE_DIR} ${SDL_MIXER_INCLUDE_DIR} ${SDL_IMAGE_INCLUDE_DIR})
++target_link_libraries(${TARGET} ${SDL_LIBRARY} ${SDL_MIXER_LIBRARY} ${SDL_IMAGE_LIBRARY})
++if(USE_TTF)
++ include(FindSDL_ttf)
++ include_directories(${SDL_TTF_INCLUDE_DIR})
++ target_link_libraries(${TARGET} ${SDL_TTF_LIBRARY})
++endif()
++
++find_library(M_LIB m)
++target_link_libraries(${TARGET} ${M_LIB})
++
++install(TARGETS ${TARGET} DESTINATION ${BIN_DIR})
++install(FILES ChangeLog NEWS COPYING README LICENSE-sound DESTINATION ${DOC_DIR})
++
++add_subdirectory(data)
+Index: data/CMakeLists.txt
+===================================================================
+--- data/CMakeLists.txt	(Revision 0)
++++ data/CMakeLists.txt	(Arbeitskopie)
+@@ -0,0 +1,18 @@
++install(DIRECTORY levels DESTINATION ${DATA_DIR})
++install(DIRECTORY sounds/default DESTINATION ${DATA_DIR}/sounds)
++install(DIRECTORY sounds/free DESTINATION ${DATA_DIR}/sounds)
++install(DIRECTORY sounds/oily DESTINATION ${DATA_DIR}/sounds)
++install(DIRECTORY sounds/skins DESTINATION ${DATA_DIR}/sounds)
++install(DIRECTORY rob DESTINATION ${DATA_DIR})
++
++install(DIRECTORY skins/original DESTINATION ${DATA_DIR}/skins PATTERN "*.ttf" EXCLUDE)
++install(DIRECTORY skins/tronic DESTINATION ${DATA_DIR}/skins PATTERN "*.ttf" EXCLUDE)
++install(DIRECTORY skins/oily DESTINATION ${DATA_DIR}/skins PATTERN "*.ttf" EXCLUDE)
++if(USE_TTF)
++ install(FILES skins/original/robbo.ttf DESTINATION ${DATA_DIR}/skins/original)
++ install(FILES skins/tronic/robbo.ttf DESTINATION ${DATA_DIR}/skins/tronic)
++ install(FILES skins/oily/robbo.ttf DESTINATION ${DATA_DIR}/skins/oily)
++ install(FILES ../LICENSE-ttf DESTINATION ${DOC_DIR})
++endif()
++
++install(DIRECTORY locales DESTINATION ${DATA_DIR})

@@ -7,7 +7,7 @@
 %global crate futures-task
 
 Name:           rust-futures-task
-Version:        0.3.32
+Version:        0.3.34
 Release:        %autorelease
 Summary:        Tools for working with tasks
 

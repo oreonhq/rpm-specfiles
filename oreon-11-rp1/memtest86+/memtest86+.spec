@@ -13,7 +13,7 @@ Memtest86+.
 %global mt_isa x64
 
 Name:          memtest86+
-Version:       8.00
+Version:       8.10
 Release:       %autorelease
 Summary:       Stand-alone memory tester for x86-64 computers
 License:       GPL-2.0-only

@@ -1,0 +1,45 @@
+Breakdown of files by license:
+
+Most files are LGPL-2.1-only.  We do not build or distribute anything in the
+ivette directory.  The remaining non LGPL-2.1-only files are as follows:
+
+BSD-3-Clause:
+src/kernel_internals/parsing/cparser.mly
+src/plugins/e-acsl/share/e-acsl/internals/e_acsl_rtl_io.c
+src/plugins/e-acsl/share/e-acsl/internals/e_acsl_rtl_io.h
+
+CC-BY-SA-4.0:
+man/frama-c.1
+
+CC0-1.0:
+src/plugins/e-acsl/contrib/libdlmalloc/dlmalloc.c
+
+CDDL-1.0:
+share/analysis-scripts/flamegraph.pl: not included in the binary RPM
+
+GPL-2.0-only:
+tests/spec/purse.c: not included in the binary RPM
+
+GPL-2.0-or-later:
+src/plugins/wp/doc/coqdoc/coq2tex/coq2html.mll
+src/plugins/wp/doc/coqdoc/coq2tex/coq2latex.mll
+tests/idct/idct.c: not included in the binary RPM
+tests/idct/ieee_1180_1990.c: not included in the binary RPM
+
+LGPL-2.0-only WITH OCaml-LGPL-linking-exception:
+src/libraries/utils/rangemap.ml: GNU Lesser General Public License
+src/libraries/utils/rangemap.mli: GNU Lesser General Public License
+
+LGPL-2.1-or-later:
+share/libc/byteswap.h
+share/libc/endian.h
+
+MIT:
+tests/libc/string_c_generic.c: not included in the binary RPM
+tests/libc/string_c_strchr.c: not included in the binary RPM
+tests/libc/string_c_strstr.c: not included in the binary RPM
+
+QPL-1.0-INRIA-2004 WITH QPL-1.0-INRIA-2004-exception:
+src/libraries/utils/hptmap.ml
+src/libraries/utils/hptmap.mli
+src/libraries/utils/hptmap_sig.mli

@@ -1,0 +1,12 @@
+diff -up frozen-bubble-2.2.1-beta1/inc/My/Builder.pm.orig frozen-bubble-2.2.1-beta1/inc/My/Builder.pm
+--- frozen-bubble-2.2.1-beta1/inc/My/Builder.pm.orig	2024-05-06 10:59:53.637978092 +0200
++++ frozen-bubble-2.2.1-beta1/inc/My/Builder.pm	2024-05-06 11:00:10.886123628 +0200
+@@ -8,7 +8,7 @@ use File::Copy qw(move);
+ use File::Slurp qw(read_file write_file);
+ use File::Spec::Functions qw(catdir catfile rootdir);
+ use IO::File qw();
+-use Module::Build '0.36' => qw();
++use Module::Build 0.36 qw();
+ use autodie qw(:all move read_file write_file);
+ use parent 'Module::Build';
+ use Locale::Maketext::Extract;

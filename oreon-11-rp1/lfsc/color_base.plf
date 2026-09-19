@@ -1,0 +1,62 @@
+(declare color type)
+(declare A color)
+(declare B color)
+
+; formula f is an interpolant for (A,B)
+(declare interpolant (! f formula type))
+
+; input formula f is from "c", where c is A|B
+(declare color_atom (! c color (! f formula type)))
+
+; simplify interpolant
+    
+(program simplify_f ((f formula)) formula
+  (match f 
+    ((and f1 f2) 
+      (let f1' (simplify_f f1)
+      (match f1'
+        (true (simplify_f f2))
+        (false false)
+        (default 
+          (let f2' (simplify_f f2)
+          (match f2'
+            (true f1')
+            (false false)
+            (default (and f1' f2'))))))))
+    ((or f1 f2) 
+      (let f1' (simplify_f f1)
+      (match f1'
+        (true true)
+        (false (simplify_f f2))
+        (default 
+          (let f2' (simplify_f f2)
+          (match f2'
+            (true true)
+            (false f1')
+            (default (or f1' f2'))))))))
+    ((impl f1 f2) 
+      (let f1' (simplify_f f1)
+      (match f1'
+        (true (simplify_f f2))
+        (false true)
+        (default 
+          (let f2' (simplify_f f2)
+          (match f2'
+            (true true)
+            (false (match f1'
+                     ((not f1'') f1'')
+                     (default (not f1'))))
+            (default (impl f1' f2'))))))))
+    ((not f1)
+      (let f1' (simplify_f f1)
+      (match f1'
+        ((not f1'') f1'')
+        (default (not f1')))))
+    (default f)))
+    
+(declare simplify_interpolant
+  (! f formula
+  (! f' formula
+  (! i (interpolant f)
+  (! u (^ (simplify_f f) f')
+    (interpolant f'))))))

@@ -1,0 +1,17 @@
+.\" Manpage for updateloaderentries.sh
+.TH man 8 "17 Oct 2022" "1.0" "updateloaderentries.sh man page"
+.SH NAME
+updateloaderentries.sh \- Merge /etc/kernel/cmdline options into loader entries
+.SH SYNOPSIS
+updateloaderentries.sh
+.SH DESCRIPTION
+updateloaderentries.sh, merges the kernel command line options in /etc/kernel/cmdline
+into the /boot/efi/loader/entries/ files utilized by systemd-boot (and others) while
+stripping install and anaconda specific boot options.
+.SH OPTIONS
+The updateloaderentries.sh does not take any options.
+.SH SEE ALSO
+systemd-boot(7), loader.conf(5)
+.SH BUGS
+No known bugs.
+

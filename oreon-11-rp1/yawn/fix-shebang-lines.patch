@@ -1,0 +1,18 @@
+diff -up yawn-20140318/scripts/yawn.py.orig yawn-20140318/scripts/yawn.py
+--- yawn-20140318/scripts/yawn.py.orig	2013-01-18 11:14:45.000000000 +0100
++++ yawn-20140318/scripts/yawn.py	2019-02-18 13:49:23.708720635 +0100
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ """
+ Script for launching YAWN as a standalone web broswer.
+ Note that this is rather for testing purposes, then for production.
+diff -up yawn-20140318/scripts/yawn.wsgi.orig yawn-20140318/scripts/yawn.wsgi
+--- yawn-20140318/scripts/yawn.wsgi.orig	2013-01-18 11:14:45.000000000 +0100
++++ yawn-20140318/scripts/yawn.wsgi	2019-02-18 13:49:04.332696776 +0100
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ 
+ """
+ Wrapper for running YAWN application under web server like

@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 10_so-name.dpatch by Romain Francoise <rfrancoise@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix so name in taglib.rb.
+
+@DPATCH@
+diff -urNad ruby-taglib-1.1~/lib/taglib.rb ruby-taglib-1.1/lib/taglib.rb
+--- ruby-taglib-1.1~/lib/taglib.rb	2006-05-09 16:39:37.000000000 +0200
++++ ruby-taglib-1.1/lib/taglib.rb	2006-10-08 16:18:10.000000000 +0200
+@@ -40,7 +40,7 @@
+ extend DL::Importable
+ 
+ begin
+-	dlload 'libtag_c.so'
++	dlload 'libtag_c.so.0'
+ rescue
+ 	begin
+ 		dlload 'libtag_c.dylib'

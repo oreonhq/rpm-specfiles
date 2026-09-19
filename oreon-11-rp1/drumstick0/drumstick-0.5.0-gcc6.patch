@@ -1,0 +1,50 @@
+diff --git a/library/src/qove.cpp b/library/src/qove.cpp
+index 54f942c..99d9486 100644
+--- a/library/src/qove.cpp
++++ b/library/src/qove.cpp
+@@ -11356,7 +11356,7 @@ void QOve::convertSignatures() {
+ 				OVE::MeasureData* measureData = d->ove.getMeasureData(i, j, k);
+ 				QList<OVE::MusicData*> tempoPtrs = measureData->getMusicDatas(OVE::MusicData_Tempo);
+ 
+-				if (k == 0 || (k > 0 && abs(measure->getTypeTempo()	- d->ove.getMeasure(k - 1)->getTypeTempo()) > 0.01)) {
++				if (k == 0 || (k > 0 && std::abs(measure->getTypeTempo()	- d->ove.getMeasure(k - 1)->getTypeTempo()) > 0.01)) {
+ 					int tick = d->mtt.getTick(k, 0);
+ 					int tempo = (int) measure->getTypeTempo();
+ 					tempos[tick] = tempo;
+@@ -11739,7 +11739,7 @@ void QOve::convertNotes(int trackNo, int measureTick, OVE::NoteContainer* contai
+ 				}
+ 				case OVE::Articulation_Arpeggio: {
+ 					//if( art->getChangeSoundEffect() ) {
+-						unsigned int soundEffect = abs(art->getSoundEffect().first) + abs(art->getSoundEffect().second);
++						unsigned int soundEffect = std::abs(art->getSoundEffect().first) + std::abs(art->getSoundEffect().second);
+ 						int tickAmount = (soundEffect / notes.size()) * ((notes.size() - i) - 1);
+ 						startTick -= tickAmount;
+ 					//}
+diff --git a/utils/buildsmf/buildsmf.cpp b/utils/buildsmf/buildsmf.cpp
+index b1df587..176a00a 100644
+--- a/utils/buildsmf/buildsmf.cpp
++++ b/utils/buildsmf/buildsmf.cpp
+@@ -53,8 +53,8 @@ void QSMFBuilder::trackHandler(int )
+     m_engine->writeKeySignature(0, 2, major_mode); // D major (2 sharps)
+ 
+     // system exclusive event
+-    static char gsreset[] = { 0xf0, 0x41, 0x10, 0x42, 0x12, 
+-                              0x40, 0x00, 0x7f, 0x00, 0x41, 0xf7 };
++    static char gsreset[] = { '\xf0', '\x41', '\x10', '\x42', '\x12',
++                              '\x40', '\x00', '\x7f', '\x00', '\x41', '\xf7' };
+     m_engine->writeMidiEvent(0, system_exclusive, sizeof(gsreset), gsreset);
+ 
+     // some note events
+diff --git a/utils/testevents/testevents.cpp b/utils/testevents/testevents.cpp
+index b859e06..32fd5b9 100644
+--- a/utils/testevents/testevents.cpp
++++ b/utils/testevents/testevents.cpp
+@@ -262,7 +262,7 @@ void QTestEvents::run()
+     dumpEvent(new KeyPressEvent(5, 60, 124));
+     dumpEvent(new ChanPressEvent(6, 111));
+     dumpEvent(new PitchBendEvent(7, 1234));
+-    char sysex[] = {0xf0, 0x41, 0x10, 0x42, 0x12, 0x40, 0, 0x7f, 0, 0x41, 0xf7};
++    char sysex[] = {'\xf0', '\x41', '\x10', '\x42', '\x12', '\x40', '\0', '\x7f', '\0', '\x41', '\xf7'};
+     dumpEvent(new SysExEvent(QByteArray(sysex, sizeof(sysex))));
+     QString text = "This can be a copyright, song name, instrument, lyric...";
+     TextEvent te(text, 3);

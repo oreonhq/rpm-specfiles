@@ -1,0 +1,42 @@
+From 2b2777785d97d0160e0e57e917ebab0c3b7a0a67 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Thu, 22 Aug 2019 16:52:26 +0200
+Subject: [PATCH] Move the NetworkManager dispatcher script out of /etc
+
+It's not user configuration and shouldn't ever have been there. Except for that
+it used to be the only location NetworkManager looked into. With NetworkManager
+1.20 that is no longer the case and the dispatcher scripts can be moved to
+/usr/lib.
+---
+Removed changes to the bundled .spec file since they're not needed
+and they caused the patch to fail to apply.
+  - Artur Iwicki <fedora@svgames.pl>, 2020-08-02
+
+ src/scripts/Makefile                   | 2 +-
+ src/scripts/meson.build                | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/scripts/Makefile b/src/scripts/Makefile
+index c54513b..f4e8ef8 100644
+--- a/src/scripts/Makefile
++++ b/src/scripts/Makefile
+@@ -1,6 +1,6 @@
+ include ../../Makefile_h
+ 
+-NMDISPDIR     = /etc/NetworkManager/dispatcher.d
++NMDISPDIR     = $(PREFIX)/lib/NetworkManager/dispatcher.d
+ 
+ install:
+ 	mkdir -p $(INSTALLPREFIX)$(DESTDIR)$(NMDISPDIR)
+diff --git a/src/scripts/meson.build b/src/scripts/meson.build
+index 9bb33a7..94bbdee 100644
+--- a/src/scripts/meson.build
++++ b/src/scripts/meson.build
+@@ -1,3 +1,3 @@
+-nmdispdir = join_paths([ get_option('prefix'), get_option('sysconfdir'), 'NetworkManager', 'dispatcher.d' ])
++nmdispdir = join_paths([ get_option('prefix'), 'lib', 'NetworkManager', 'dispatcher.d' ])
+ 
+ install_data('95-mmgui-timestamp-notifier', install_mode : 'rwxr-xr-x', install_dir: nmdispdir)
+-- 
+2.23.0
+

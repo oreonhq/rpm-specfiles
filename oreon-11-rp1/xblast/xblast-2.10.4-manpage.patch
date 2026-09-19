@@ -1,0 +1,32 @@
+--- xblast-2.10.4/xblast.man~	2007-03-01 10:50:54.000000000 +0100
++++ xblast-2.10.4/xblast.man	2007-03-01 10:50:54.000000000 +0100
+@@ -1,4 +1,4 @@
+-.TH xblast 6x "Release 2.10.0 (Februar 27th 2005)"
++.TH xblast 6 "Release 2.10.4 (Juni 16th 2006)"
+ .SH NAME
+ XBlast (TNT) \- Multi-player "Blast the Others" game
+ .PP
+@@ -11,12 +11,8 @@
+ 
+ .SH DESCRIPTION
+ .PP
+-XBlast is a multi-player arcade game for X11R5/R6. The game can be played
+-with at least two players and up to six players. It was inspired by
+-the video/computer game Bomberman/Dynablaster which was to my
+-knowledge first programmed for NEC's PC Engine/Turbo Grafx. Other
+-(commercial) versions of the original game exist for IBM-PC, Atari ST,
+-Amiga, NES, GameBoy and Super NES.
++XBlast is a multi-player arcade game available for both SDL and X11R5/R6. The
++game can be played with at least two players and up to six players.
+ .PP
+ 
+ 
+@@ -142,7 +138,7 @@
+ Go to previous menu.
+ .PP
+ Please note that since \fIXBlast 2.7.x\fP the keybindings can be customised
+-via Options Menu Controls (see also \fxhttp://blast.sf.net/ \fP).
++via Options Menu Controls (see also \fxhttp://xblast.sf.net/ \fP).
+ .PP
+ 
+ 

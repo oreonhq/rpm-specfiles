@@ -1,0 +1,37 @@
+From 529dba879c206c0b8adbedc4f24fdd4f4a680f99 Mon Sep 17 00:00:00 2001
+From: Petr Pisar <ppisar@redhat.com>
+Date: Tue, 7 Jan 2020 19:28:40 +0100
+Subject: [PATCH] Allow contemporary gettext version
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+configure.ac required exact 0.19.4 gettext version. That version is
+incompatible with current autoconf or gettext M4 scripts: It fails to
+inline po/Makevars into po/Makefile. As a result "make -C po" had
+undefined $(top_builddir) and attempted to search config.status in /.
+
+This patch relaxes the gettext version to use any more recent
+available version.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index a67755b..576774e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -37,7 +37,7 @@ AC_SUBST(PACKAGE_LIBS)
+ 
+ # i18n stuff
+ AM_GNU_GETTEXT([external])
+-AM_GNU_GETTEXT_VERSION([0.19.4])
++AM_GNU_GETTEXT_REQUIRE_VERSION([0.19.4])
+ 
+ GETTEXT_PACKAGE=goocanvas2
+ AC_SUBST(GETTEXT_PACKAGE)
+-- 
+2.49.0
+

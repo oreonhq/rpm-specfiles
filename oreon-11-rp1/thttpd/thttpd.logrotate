@@ -1,0 +1,10 @@
+/var/log/thttpd.log {
+    compress
+    missingok
+    notifempty
+    postrotate
+        # For some reason, the documented -HUP doesn't work
+        systemctl condrestart thttpd.service > /dev/null
+    endscript
+}
+

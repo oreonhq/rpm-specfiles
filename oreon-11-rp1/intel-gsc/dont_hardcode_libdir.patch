@@ -1,0 +1,24 @@
+commit ba6f2afbd96385fcb6b2a6e3c8e459727c8401fa
+Author: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Date:   Fri Mar 14 11:19:24 2025 +0100
+
+    igsc: cmake: Don't hardcode LIBDIR for installed cmake files
+
+    Use CMAKE_INSTALL_LIBDIR to get the correct prefix for the installed
+    cmake files.
+
+    Signed-off-by: Patrik Jakobsson <pjakobsson@suse.de>
+
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index 3672c35..45e4906 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -86,7 +86,7 @@ configure_file(cmake/${PROJECT_NAME}Config.cmake
+   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}Config.cmake"
+   COPYONLY
+ )
+-set(ConfigPackageLocation lib/cmake/${PROJECT_NAME})
++set(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+ install(EXPORT ${PROJECT_NAME}Targets
+   FILE ${PROJECT_NAME}Targets.cmake
+   NAMESPACE ${PROJECT_NAME}::

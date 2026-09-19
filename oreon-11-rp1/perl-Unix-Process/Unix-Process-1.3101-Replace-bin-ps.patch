@@ -1,0 +1,78 @@
+From 03428d8d7441ed0d6150ea6194bf4cb0ec3c6f12 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 21 Jul 2017 13:47:58 +0200
+Subject: [PATCH] Replace /bin/ps
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 4 ++--
+ Process.pm  | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index dc1c433..c4081f5 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -2,7 +2,7 @@
+ 
+ use ExtUtils::MakeMaker;
+ 
+-my $ps = $ENV{PS_PATH} || "/bin/ps";
++my $ps = $ENV{PS_PATH} || "XXX";
+ 
+ my $worked = 0;
+ if( -x $ps ) {
+@@ -15,7 +15,7 @@ if( -x $ps ) {
+ }
+ 
+ unless( $worked ) {
+-    warn "this module assumes you have a ps program in /bin/ps\n";
++    warn "this module assumes you have a ps program in XXX\n";
+     warn "you can override it by setting an environment variable,\n";
+     warn "  e.g. PS_PATH=/usr/local/bin/ps; export PS_PATH\n";
+     exit 0;
+diff --git a/Process.pm b/Process.pm
+index 5b36fdc..109d6eb 100644
+--- a/Process.pm
++++ b/Process.pm
+@@ -6,7 +6,7 @@ use Carp;
+ use IPC::System::Simple qw(capturex);
+ 
+ our $VERSION    = '1.3101';
+-our $PS_PROGRAM = $ENV{PS_PATH} || '/bin/ps';
++our $PS_PROGRAM = $ENV{PS_PATH} || 'XXX';
+ our $AUTOLOAD;
+ 
+ 1;
+@@ -38,7 +38,7 @@ __END__
+ 
+ =head1 NAME
+ 
+-Unix::Process - Perl extension to get pid info from (/bin/ps).
++Unix::Process - Perl extension to get pid info from (XXX).
+ 
+ =head1 SYNOPSIS
+ 
+@@ -53,14 +53,14 @@ All fields from the ps command can be fetched by calling a function of their
+ name (see SYNOPSIS).  If the pid is not given as an argument to the function,
+ $$ (cur pid) is assumed.
+ 
+-This module is really just a giant AUTOLOAD to interact with the /bin/ps
++This module is really just a giant AUTOLOAD to interact with the XXX
+ command.  I suppose I could be talked into doing something real with it some
+ day.
+ 
+ You can manually set the C<$Unix::Process::PS_PROGRAM = "/opt/bin/ps"> by hand,
+ or you can set C<$ENV{PS_PATH} = "/usr/local/bin/ps">, but you must somehow 
+ instruct Unix::Process on the location of ps.  Otherwise, it will guess
+-C<"/bin/ps">.
++C<"XXX">.
+ 
+ =head1 AUTHOR
+ 
+-- 
+2.9.4
+

@@ -1,0 +1,85 @@
+--- a/crawl-ref/crawl-tiles/Makefile.orig	2016-05-05 17:37:55.000000000 +0200
++++ b/crawl-ref/crawl-tiles/Makefile	2016-06-03 21:19:03.840066325 +0200
+@@ -131,7 +131,7 @@
+ # Which C++ standard to support
+ STDFLAG = -std=c++11
+ 
+-CFOTHERS := -pipe $(EXTERNAL_FLAGS)
++CFOTHERS := $(EXTERNAL_FLAGS)
+ # Build with FORCE_SSE=y to get better seed stability on 32 bit x86 builds. It
+ # is not recommended to do this unless you are building with contrib lua.
+ # On any 64bit  builds where the arch supports it, (at least) sse2 is implied.
+@@ -140,7 +140,7 @@
+ endif
+ 
+ CFWARN :=
+-CFWARN_L := -Wall -Wformat-security -Wundef
++CFWARN_L := -Wundef
+ 
+ # Exceptions:
+ #  -Wmissing-field-initializers: need c++14 to set default struct fields
+@@ -423,7 +423,7 @@
+ ifneq ($(patsubst %/,%,$(prefix)),/usr)
+ bin_prefix    := bin
+ else
+-bin_prefix    := games
++bin_prefix    := bin
+ endif
+ endif
+ 
+@@ -435,6 +435,8 @@
+ # SAVEDIR := saves/
+ # DATADIR := data/
+ ifneq (,$(FHS))
++LICENSEDIR    := share/licenses/crawl
++DOCDIR        := share/doc/crawl
+ DATADIR       := share/crawl
+ SAVEDIR       := ~/.crawl
+ endif
+@@ -558,7 +560,7 @@
+ # Some very good optimization flags.
+   CFOPTIMIZE := -O2 -parallel
+ else
+-  CFOPTIMIZE := -O2
++  CFOPTIMIZE :=
+ endif
+ 
+ # Define this to automatically generate code optimized for your machine
+@@ -1548,9 +1550,8 @@
+ 	for LANG in $(LANGUAGES); \
+ 		do mkdir -p $(datadir_fp)/dat/descript/$$LANG; \
+ 	done
+-	mkdir -p $(datadir_fp)/docs/develop
+-	mkdir -p $(datadir_fp)/docs/develop/levels
+-	mkdir -p $(datadir_fp)/docs/license
++	mkdir -p $(DESTDIR)$(prefix)/$(DOCDIR)/develop
++	mkdir -p $(DESTDIR)$(prefix)/$(DOCDIR)/develop/levels
+ 	mkdir -p $(datadir_fp)/settings
+ 	$(COPY_R) dat/des/* $(datadir_fp)/dat/des/
+ 	$(COPY_R) dat/dlua/* $(datadir_fp)/dat/dlua/
+@@ -1569,12 +1570,11 @@
+ 	done
+ 	mkdir -p $(datadir_fp)/dat/dist_bones
+ 	$(COPY) dat/dist_bones/* $(datadir_fp)/dat/dist_bones/
+-	$(COPY) ../docs/*.txt $(datadir_fp)/docs/
+-	$(COPY) ../docs/*.md $(datadir_fp)/docs/
+-	$(COPY) ../docs/develop/*.txt $(datadir_fp)/docs/develop/
+-	$(COPY) ../docs/develop/levels/*.txt $(datadir_fp)/docs/develop/levels/
+-	$(COPY) ../docs/license/*.txt $(datadir_fp)/docs/license/
+-	$(COPY) ../CREDITS.txt $(datadir_fp)/docs/
++	$(COPY) ../docs/*.txt $(DESTDIR)$(prefix)/$(DOCDIR)/
++	$(COPY) ../docs/*.md $(DESTDIR)$(prefix)/$(DOCDIR)/
++	$(COPY) ../docs/develop/*.txt $(DESTDIR)$(prefix)/$(DOCDIR)/develop/
++	$(COPY) ../docs/develop/levels/*.txt $(DESTDIR)$(prefix)/$(DOCDIR)/develop/levels/
++	$(COPY) ../CREDITS.txt $(DESTDIR)$(prefix)/$(DOCDIR)/
+ 	$(COPY_R) ../settings/* $(datadir_fp)/settings/
+ ifeq ($(GAME),crawl.exe)
+ 	$(SED) -i 's/$$/\r/' `find $(datadir_fp) -iname '*.txt' -or -iname '*.des'`
+@@ -1641,7 +1641,6 @@
+ install: all install-data
+ 	[ -d $(prefix_fp)/$(bin_prefix) ] || mkdir -p $(prefix_fp)/$(bin_prefix)
+ 	$(COPY) $(GAME) $(prefix_fp)/$(bin_prefix)/
+-	$(STRIP) $(prefix_fp)/$(bin_prefix)/$(GAME)
+ ifeq ($(USE_DGAMELAUNCH),)
+ 	$(CHOWN) $(INSTALL_UGRP) $(prefix_fp)/$(bin_prefix)/$(GAME) || true
+ 	$(CHMOD) $(MCHMOD) $(prefix_fp)/$(bin_prefix)/$(GAME) || true

@@ -1,0 +1,22 @@
+From 3b2476c266ba53262352153104ca3501722823a4 Mon Sep 17 00:00:00 2001
+From: Nicholas Bollweg <nick.bollweg@gmail.com>
+Date: Tue, 8 Mar 2022 08:24:56 -0600
+Subject: [PATCH] replace use of Arrow.replace with shift
+
+---
+ jinja2_time/jinja2_time.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/jinja2_time/jinja2_time.py b/jinja2_time/jinja2_time.py
+index ce713cb..8859655 100755
+--- a/jinja2_time/jinja2_time.py
++++ b/jinja2_time/jinja2_time.py
+@@ -23,7 +23,7 @@ def _datetime(self, timezone, operator, offset, datetime_format):
+         for param in offset.split(','):
+             interval, value = param.split('=')
+             replace_params[interval.strip()] = float(operator + value.strip())
+-        d = d.replace(**replace_params)
++        d = d.shift(**replace_params)
+ 
+         if datetime_format is None:
+             datetime_format = self.environment.datetime_format

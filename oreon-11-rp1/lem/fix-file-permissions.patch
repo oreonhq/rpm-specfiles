@@ -1,0 +1,11 @@
+--- a/src/process_file.ml	2025-03-13 22:02:17.000000000 +0800
++++ b/src/process_file.ml	2025-10-24 18:07:53.280566823 +0800
+@@ -88,7 +88,7 @@
+ type instances = Types.instance list Types.Pfmap.t
+ 
+ let open_output_with_check dir file_name =
+-  let (temp_file_name, o) = Filename.open_temp_file "lem_temp" "" in
++  let (temp_file_name, o) = Filename.open_temp_file ~perms:0o666 "lem_temp" "" in
+   (o, (o, temp_file_name, Filename.concat dir file_name)) 
+ 
+ let always_replace_files = ref true 

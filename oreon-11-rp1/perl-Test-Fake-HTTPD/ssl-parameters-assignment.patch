@@ -1,0 +1,21 @@
+* Adds SSL key and certificate assignment support (denis@fateyev.com)
+--- lib/Test/Fake/HTTPD.pm	2017-03-07 00:56:31.668734375 +0600
++++ lib/Test/Fake/HTTPD.pm	2017-03-07 00:59:00.704881840 +0600
+@@ -36,7 +36,7 @@
+     no warnings 'redefine';
+     *run_https_server = sub (&) {
+         my $app = shift;
+-        __PACKAGE__->new(scheme => 'https')->run($app);
++        __PACKAGE__->new(scheme => 'https', cert_file => 'certs/server-cert.pem', key_file => 'certs/server-key.pem')->run($app);
+     };
+ }
+ 
+@@ -74,6 +74,8 @@
+                     Timeout   => $self->{timeout},
+                     Proto     => 'tcp',
+                     Listen    => $self->{listen},
++                    (($self->{scheme} eq 'https') ? (SSL_cert_file => $self->{cert_file}) : ()),
++                    (($self->{scheme} eq 'https') ? (SSL_key_file => $self->{key_file}) : ()),
+                     ($self->_is_win32 ? () : (ReuseAddr => 1)),
+                     %extra_daemon_args,
+                 ) and last;

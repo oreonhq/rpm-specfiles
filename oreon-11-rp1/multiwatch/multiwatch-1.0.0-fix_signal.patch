@@ -1,0 +1,31 @@
+From bdd50b7910ebfd04f70e39cb688e3a4851505ac4 Mon Sep 17 00:00:00 2001
+From: Tyler Stubenvoll <tstubenv@fastmail.fm>
+Date: Sat, 21 Jul 2018 13:59:10 -0700
+Subject: [PATCH] Taught multiwatch to send the correct signal when using
+ --signal
+
+When the --signal flag was enabled, multiwatch was sending the
+index of signal in the sig_actions array instead of the correct
+signal number. So, when multiwatch was told to send a SIGTERM,
+the application was actually being sent a SIGQUIT, which caused
+the application to coredump as ordered.
+
+The fix is to change the loop to return the signal number
+stored at the index.
+---
+ multiwatch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/multiwatch.c b/multiwatch.c
+index 30dcb97..1dcdf2e 100644
+--- a/multiwatch.c
++++ b/multiwatch.c
+@@ -94,7 +94,7 @@ static gint signame2num(const char *name) {
+ 
+ 	for (i = 0; signal_actions[i].signame; i++) {
+ 		if (0 == strcmp(signal_actions[i].signame, name)) {
+-			return i;
++			return signal_actions[i].signum;
+ 		}
+ 	}
+ 

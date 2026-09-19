@@ -1,0 +1,26 @@
+From: cpan [...] zoffix.com
+
+Fix warnings with recent Moose.
+
+CPAN RT#92396
+diff -Naur Test-Able-0.11_orig/lib/Test/Able/Role/Meta/Class.pm Test-Able-0.11/lib/Test/Able/Role/Meta/Class.pm
+--- Test-Able-0.11_orig/lib/Test/Able/Role/Meta/Class.pm	2014-01-22 20:25:19.709623125 -0500
++++ Test-Able-0.11/lib/Test/Able/Role/Meta/Class.pm	2014-01-22 20:26:11.485623804 -0500
+@@ -156,7 +156,7 @@
+ 
+ =cut
+ 
+-enum 'Test::Able::MethodPlanFailAction' => qw( die log );
++enum 'Test::Able::MethodPlanFailAction' => [qw( die log )];
+ 
+ has 'on_method_plan_fail' => (
+     is => 'rw', isa => 'Test::Able::MethodPlanFailAction', default => 'log',
+@@ -195,7 +195,7 @@
+ 
+ =cut
+ 
+-enum 'Test::Able::MethodExceptionAction' => qw( continue continue_at_level );
++enum 'Test::Able::MethodExceptionAction' => [qw( continue continue_at_level )];
+ 
+ has 'on_method_exception' => (
+     is => 'rw', isa => 'Test::Able::MethodExceptionAction',

@@ -1,0 +1,55 @@
+--- a/configure	2023-06-24 09:02:14.000000000 -0600
++++ b/configure	2023-07-18 16:14:04.812013683 -0600
+@@ -37,7 +37,7 @@ unsat=no
+ passtocompiler=""
+ passtolinker=""
+ 
+-goals="libkissat.a kissat"
++goals="kissat"
+ 
+ usage () {
+ cat <<EOF
+--- a/makefile.in	2023-06-24 09:02:14.000000000 -0600
++++ b/makefile.in	2023-07-18 16:14:04.812013683 -0600
+@@ -2,6 +2,9 @@ CC=@CC@
+ LD=@LD@
+ AR=@AR@
+ 
++SOVER=@SOVER@
++MAJVER=@MAJVER@
++
+ VPATH=../src:../test
+ 
+ %.o: %.c ../[st]*/*.h makefile
+@@ -23,7 +26,7 @@ TSTOBJ=$(APPOBJ) $(TSTSRC:.c=.o)
+ 
+ INCLUDES=-I../$(shell pwd|sed -e 's,.*/,,')
+ 
+-LIBS=libkissat.a
++LIBS=libkissat.so
+ 
+ all: @GOALS@
+ 
+@@ -45,10 +48,10 @@ coverage:
+ format:
+ 	clang-format -i ../*/*.[ch]
+ 
+-kissat: main.o $(APPOBJ) libkissat.a makefile
++kissat: main.o $(APPOBJ) $(LIBS) makefile
+ 	$(LD) -o $@ main.o $(APPOBJ) $(LIBS) -lm
+ 
+-tissat: test.o $(TSTOBJ) libkissat.a makefile
++tissat: test.o $(TSTOBJ) $(LIBS) makefile
+ 	$(LD) -o $@ test.o $(TSTOBJ) $(LIBS) -lm
+ 
+ kitten: kitten.c random.h stack.h makefile
+@@ -78,6 +81,8 @@ libkissat.a: $(LIBOBJ) makefile
+ 	$(AR) rc $@ $(LIBOBJ)
+ 
+ libkissat.so: $(LIBOBJ) makefile
+-	$(LD) -shared -o $@ $(LIBOBJ)
++	$(LD) -shared -Wl,-h,libkissat.so.$(MAJVER) -o libkissat.so.$(SOVER) $(LIBOBJ) -lm
++	ln -s libkissat.so.$(SOVER) libkissat.so.$(MAJVER)
++	ln -s libkissat.so.$(MAJVER) $@
+ 
+ .PHONY: all clean coverage indent test build.h

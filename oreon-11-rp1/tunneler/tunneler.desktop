@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Tunneler
+Exec=tunneler
+Icon=tunneler
+Categories=Game;ActionGame;
+Terminal=false

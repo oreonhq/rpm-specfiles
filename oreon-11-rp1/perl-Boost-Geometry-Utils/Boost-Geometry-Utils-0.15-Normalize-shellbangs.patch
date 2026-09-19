@@ -1,0 +1,51 @@
+From 72254b11e54c2892f4fda07bea9f2355b2bf3062 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 17 Oct 2024 12:31:46 +0200
+Subject: [PATCH] Normalize shellbangs
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Most test files had #!/usr/bin/perl in shebang except of few.
+This patch unifies them.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/00-compile.t           | 2 +-
+ t/release-pod-coverage.t | 2 +-
+ t/release-pod-syntax.t   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/t/00-compile.t b/t/00-compile.t
+index 6771e12..808d2c2 100644
+--- a/t/00-compile.t
++++ b/t/00-compile.t
+@@ -1,4 +1,4 @@
+-#!perl
++#!/usr/bin/perl
+ 
+ use strict;
+ use warnings;
+diff --git a/t/release-pod-coverage.t b/t/release-pod-coverage.t
+index 3a81849..d99cef7 100644
+--- a/t/release-pod-coverage.t
++++ b/t/release-pod-coverage.t
+@@ -1,4 +1,4 @@
+-#!perl
++#!/usr/bin/perl
+ 
+ BEGIN {
+   unless ($ENV{RELEASE_TESTING}) {
+diff --git a/t/release-pod-syntax.t b/t/release-pod-syntax.t
+index d46a955..8cb3377 100644
+--- a/t/release-pod-syntax.t
++++ b/t/release-pod-syntax.t
+@@ -1,4 +1,4 @@
+-#!perl
++#!/usr/bin/perl
+ 
+ BEGIN {
+   unless ($ENV{RELEASE_TESTING}) {
+-- 
+2.47.0
+

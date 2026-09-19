@@ -1,0 +1,12 @@
+Index: flrig-1.4.7/src/include/WSclient.h
+===================================================================
+--- flrig-1.4.7.orig/src/include/WSclient.h
++++ flrig-1.4.7/src/include/WSclient.h
+@@ -30,6 +30,7 @@
+ #ifndef WSCLIENT_HP
+ #define WSCLIENT_HP
+ 
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ 

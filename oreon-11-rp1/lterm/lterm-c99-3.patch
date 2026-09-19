@@ -1,0 +1,19 @@
+Missing return value in add_update_connection
+
+This fixes a compilation failure with current compilers.
+
+Submitted upstream: <https://github.com/FabLeo451/lterm/pull/2>
+
+diff --git a/src/connection.c b/src/connection.c
+index 910990029dd1c4df..f3f26d6c30d4c985 100755
+--- a/src/connection.c
++++ b/src/connection.c
+@@ -1528,7 +1528,7 @@ add_update_connection (struct GroupNode *p_node, struct Connection *p_conn_model
+   if (gtk_builder_add_from_file (builder, ui, &error) == 0)
+     {
+       msgbox_error ("Can't load user interface file:\n%s", error->message);
+-      return;
++      return NULL;
+     }
+     
+   log_debug ("Loaded %s\n", ui);

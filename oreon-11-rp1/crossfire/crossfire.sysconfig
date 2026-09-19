@@ -1,0 +1,7 @@
+#
+# crossfire(6) options. Pick a custom port here if needed, for example.
+#
+
+# The default options for crossfire are usually just fine.  Read
+# the crossfire(6) manpage to see what you can set here.
+CROSSFIRE_OPTIONS=""

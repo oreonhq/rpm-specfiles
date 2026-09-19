@@ -1,0 +1,196 @@
+diff -up koules1.4/koules.sndsrv.linux.c.unusedresult koules1.4/koules.sndsrv.linux.c
+--- koules1.4/koules.sndsrv.linux.c.unusedresult	2024-04-21 13:09:14.755634599 -0400
++++ koules1.4/koules.sndsrv.linux.c	2024-04-21 15:40:22.862390493 -0400
+@@ -166,7 +166,10 @@ read_sound (int k)
+       return (0);
+     };
+   lseek (fd, 0, SEEK_SET);
+-  read (fd, sound_buffer[k], size);
++  if (read (fd, sound_buffer[k], size) == -1) {
++    perror("read");
++    exit(EXIT_FAILURE);
++  }
+   close (fd);
+   for (i = 0; i < size; i++)
+     sound_buffer[k][i] ^= 0x80;
+@@ -262,7 +265,12 @@ do_everything (int dsp, int is_pcsp)
+ 	   */
+ 	  memset (final, 128, sizeof (final));
+ 	};
+-      write (dsp, final, fragsize);
++
++      if (write (dsp, final, fragsize) == -1) {
++	perror("write");
++	exit(EXIT_FAILURE);
++      }
++      
+       if(!ioctl(dsp,SNDCTL_DSP_GETOSPACE,&info)) { /*this is code 
+ 			drivers that does not allow to set number of
+ 			fragments to 2. (ultrasound project?)*/
+diff -up koules1.4/rcfiles.c.unusedresult koules1.4/rcfiles.c
+--- koules1.4/rcfiles.c.unusedresult	2024-04-21 13:09:15.146768702 -0400
++++ koules1.4/rcfiles.c	2024-04-21 15:55:14.350674303 -0400
+@@ -61,6 +61,7 @@ save_rc ()
+   {0, 0, 0, 0, 0, 0, 0, 0};
+ #endif /* !defined(MOUSE) || !defined(JOYSTICK) */
+   char            fullname[256];
++  int             ret;
+ #ifdef NETSUPPORT
+   if (client || server)
+     return;
+@@ -83,20 +84,20 @@ save_rc ()
+       perror ("error");
+       return;
+     }
+-  fwrite (keys, 1, sizeof (keys), controls);	/*save user defined keys */
++  ret = fwrite (keys, 1, sizeof (keys), controls);	/*save user defined keys */
+ #ifdef MOUSE
+-  fwrite (&mouseplayer, 1, sizeof (int), controls);	/*save mouseplayer */
++  ret = fwrite (&mouseplayer, 1, sizeof (int), controls);	/*save mouseplayer */
+ #else
+-  fwrite (zeros, 1, sizeof (int), controls);
++  ret = fwrite (zeros, 1, sizeof (int), controls);
+ #endif
+ #ifdef JOYSTICK
+-  fwrite (joystickplayer, 1, sizeof (joystickplayer), controls);
++  ret = fwrite (joystickplayer, 1, sizeof (joystickplayer), controls);
+ #else
+-  fwrite (zeros, 2, sizeof (int), controls);
++  ret = fwrite (zeros, 2, sizeof (int), controls);
+ #endif
+-  fwrite (rotation, 1, sizeof (rotation), controls);
++  ret = fwrite (rotation, 1, sizeof (rotation), controls);
+ #ifdef JOYSTICK
+-  fwrite (joystickmul, 1, sizeof (joystickmul), controls);
++  ret = fwrite (joystickmul, 1, sizeof (joystickmul), controls);
+ #else
+   fwrite (zeros, 2, sizeof (float), controls);
+ #endif
+@@ -119,11 +120,11 @@ save_rc ()
+       perror ("error");
+       return;
+     }
+-  fwrite (&maxlevel, 1, sizeof (int), levels);
+-  fwrite (&lastlevel, 1, sizeof (int), levels);
+-  fwrite (&nrockets, 1, sizeof (int), levels);
+-  fwrite (&gameplan, 1, sizeof (int), levels);
+-  fwrite (&difficulty, 1, sizeof (int), levels);
++  ret = fwrite (&maxlevel, 1, sizeof (int), levels);
++  ret = fwrite (&lastlevel, 1, sizeof (int), levels);
++  ret = fwrite (&nrockets, 1, sizeof (int), levels);
++  ret = fwrite (&gameplan, 1, sizeof (int), levels);
++  ret = fwrite (&difficulty, 1, sizeof (int), levels);
+   fclose (levels);
+ }
+ 
+@@ -136,6 +137,7 @@ load_rc ()
+   int             dummy[8];
+ #endif /* !defined(MOUSE) || !defined(JOYSTICK) */
+   char            fullname[256];
++  int             ret;
+ #ifdef NETSUPPORT
+   if (client || server)
+     return;
+@@ -158,22 +160,22 @@ load_rc ()
+       perror ("error");
+       goto skip;
+     }
+-  fread (keys, 1, sizeof (keys), controls);	/*save user defined keys */
++  ret = fread (keys, 1, sizeof (keys), controls);	/*save user defined keys */
+ #ifdef MOUSE
+   if(!fread (&mouseplayer, 1, sizeof (int), controls)) mouseplayer=-1;	/*save mouseplayer */
+ #else
+-  fread (dummy, 1, sizeof (int), controls);
++  ret = fread (dummy, 1, sizeof (int), controls);
+ #endif
+ #ifdef JOYSTICK
+   if(!fread (joystickplayer, 1, sizeof (joystickplayer), controls)) joystickplayer[0]=joystickplayer[1]=-1;
+ #else
+-  fread (dummy, 2, sizeof (int), controls);
++  ret = fread (dummy, 2, sizeof (int), controls);
+ #endif
+-  fread (rotation, 1, sizeof (rotation), controls);
++  ret = fread (rotation, 1, sizeof (rotation), controls);
+ #ifdef JOYSTICK
+-  fread (joystickmul, 1, sizeof (joystickmul), controls);
++  ret = fread (joystickmul, 1, sizeof (joystickmul), controls);
+ #else
+-  fread (dummy, 2, sizeof (float), controls);
++  ret = fread (dummy, 2, sizeof (float), controls);
+ #endif
+   fclose (controls);
+ skip:;
+@@ -196,11 +198,11 @@ skip:;
+       return;
+     }
+ 
+-  fread (&maxlevel, 1, sizeof (int), levels);
+-  fread (&lastlevel, 1, sizeof (int), levels);
++  ret = fread (&maxlevel, 1, sizeof (int), levels);
++  ret = fread (&lastlevel, 1, sizeof (int), levels);
+   if(maxlevel>=100||maxlevel<0) maxlevel=0;
+   if(lastlevel>maxlevel||lastlevel<0) lastlevel=0;
+-  fread (&nrockets, 1, sizeof (int), levels);
++  ret = fread (&nrockets, 1, sizeof (int), levels);
+   if(nrockets<1) nrockets=1;
+   if(nrockets>4) nrockets=1;
+   if (fread (&gameplan, 1, sizeof (int), levels) != sizeof (int))
+diff -up koules1.4/sound.c.unusedresult koules1.4/sound.c
+--- koules1.4/sound.c.unusedresult	1998-03-04 13:59:19.000000000 -0500
++++ koules1.4/sound.c	2024-04-21 15:52:24.783990764 -0400
+@@ -54,7 +54,10 @@ init_sound ()
+ 
+   /*  Create a pipe, set the write end to close when we exec the sound server,
+      and set both (is the write end necessary?) ends to non-blocking   */
+-  pipe (fd);
++  if (pipe(fd) == -1) {
++    perror("pipe");
++    exit(EXIT_FAILURE);
++  }
+   soundfd = fd[1];
+ 
+   if (!(child = fork ()))
+@@ -84,8 +87,12 @@ play_sound (k)
+   char            c;
+   test_sound ();
+   c = k;
+-  if ((playSounds) && (audioOK))
+-    write (soundfd, &c, sizeof (c));
++  if ((playSounds) && (audioOK)) {
++    if (write (soundfd, &c, sizeof (c)) == -1) {
++      perror("write");
++      exit(EXIT_FAILURE);
++    }
++  }
+   return 0;
+ }
+ 
+@@ -103,8 +110,12 @@ maybe_play_sound (k)
+   sound_flags[k] |= 1;
+   test_sound ();
+   c = (unsigned char) (k);
+-  if ((playSounds) && (audioOK))
+-    write (soundfd, &c, sizeof (c));
++  if ((playSounds) && (audioOK)) {
++    if ( write (soundfd, &c, sizeof (c)) == -1) {
++      perror("write");
++      exit(EXIT_FAILURE);
++    }
++  }
+ }
+ 
+ 
+@@ -125,7 +136,11 @@ kill_sound ()
+ 
+   c = -1;
+   test_sound ();
+-  if ((playSounds) && (audioOK))
+-    write (soundfd, &c, sizeof (c));
++  if ((playSounds) && (audioOK)) {
++    if (write (soundfd, &c, sizeof (c)) == -1) {
++      perror("write");
++      exit(EXIT_FAILURE);
++    }
++  }
+ }
+ #endif

@@ -1,0 +1,25 @@
+am-utils-6.2 - convert AM_CONFIG_HEADER to AC_CONFIG_HEADERS
+
+From: Ian Kent <raven@themaw.net>
+
+autoconf 2.71 autoreconf tells us AM_CONFIG_HEADER macro is obsolete.
+Use AC_CONFIG_HEADERS instead.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ configure.ac |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 98b444d3..e1bc3290 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -18,7 +18,7 @@ AC_INIT([am-utils],
+ AC_MSG_NOTICE(*** INITIALIZATION ***)
+ AC_CONFIG_SRCDIR([amd/amd.c])
+ AC_CONFIG_MACRO_DIR([m4])
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADERS(config.h)
+ AH_TOP([
+ /*
+  * Start of am-utils-6.x config.h file.

@@ -1,0 +1,43 @@
+From 75f7308a111dc704d1eeea013d2a9c993c0a89ac Mon Sep 17 00:00:00 2001
+From: Tom Rix <Tom.Rix@amd.com>
+Date: Fri, 14 Nov 2025 12:44:23 -0800
+Subject: [PATCH] lld workaround .gnu.version change
+
+---
+ lld/ELF/InputFiles.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/lld/ELF/InputFiles.cpp b/lld/ELF/InputFiles.cpp
+index 42d0e4c202ec..b306fde7e14c 100644
+--- a/lld/ELF/InputFiles.cpp
++++ b/lld/ELF/InputFiles.cpp
+@@ -1581,6 +1581,7 @@ template <class ELFT> void SharedFile::parse() {
+       continue;
+     }
+ 
++    /*
+     if (ver == VER_NDX_LOCAL ||
+         (ver != VER_NDX_GLOBAL && idx >= verdefs.size())) {
+       // In GNU ld < 2.31 (before 3be08ea4728b56d35e136af4e6fd3086ade17764), the
+@@ -1592,7 +1593,7 @@ template <class ELFT> void SharedFile::parse() {
+                      << " for symbol " << name
+                      << " is out of bounds\n>>> defined in " << this;
+       continue;
+-    }
++      }*/
+ 
+     uint32_t alignment = getAlignment<ELFT>(sections, sym);
+     if (ver == idx) {
+@@ -1606,7 +1607,8 @@ template <class ELFT> void SharedFile::parse() {
+ 
+     // Also add the symbol with the versioned name to handle undefined symbols
+     // with explicit versions.
+-    if (ver == VER_NDX_GLOBAL)
++    if (sym.isExternal() &&
++	(ver == VER_NDX_LOCAL || ver == VER_NDX_GLOBAL))
+       continue;
+ 
+     StringRef verName =
+-- 
+2.51.1
+

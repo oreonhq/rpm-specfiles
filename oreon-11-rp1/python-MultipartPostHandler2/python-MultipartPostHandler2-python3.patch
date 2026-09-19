@@ -1,0 +1,80 @@
+--- MultipartPostHandler2-0.1.5/MultipartPostHandler.py.bak	2014-09-24 20:53:19.000000000 -0500
++++ MultipartPostHandler2-0.1.5/MultipartPostHandler.py	2023-10-18 10:57:41.204221017 -0500
+@@ -51,11 +51,11 @@
+   opener.open("http://wwww.bobsite.com/upload/", params)
+ """
+ 
+-import urllib
+-import urllib2
++import urllib.request, urllib.parse, urllib.error
++import urllib.request, urllib.error, urllib.parse
+ import mimetools, mimetypes
+ import os, stat
+-from cStringIO import StringIO
++from io import StringIO
+ 
+ class Callable:
+     def __init__(self, anycallable):
+@@ -65,8 +65,8 @@
+ #  assigning a sequence.
+ doseq = 1
+ 
+-class MultipartPostHandler(urllib2.BaseHandler):
+-    handler_order = urllib2.HTTPHandler.handler_order - 10 # needs to run first
++class MultipartPostHandler(urllib.request.BaseHandler):
++    handler_order = urllib.request.HTTPHandler.handler_order - 10 # needs to run first
+ 
+     def http_request(self, request):
+         data = request.get_data()
+@@ -74,23 +74,23 @@
+             v_files = []
+             v_vars = []
+             try:
+-                 for(key, value) in data.items():
++                 for(key, value) in list(data.items()):
+                      if type(value) == file:
+                          v_files.append((key, value))
+                      else:
+                          v_vars.append((key, value))
+             except TypeError:
+                 systype, value, traceback = sys.exc_info()
+-                raise TypeError, "not a valid non-string sequence or mapping object", traceback
++                raise TypeError("not a valid non-string sequence or mapping object").with_traceback(traceback)
+ 
+             if len(v_files) == 0:
+-                data = urllib.urlencode(v_vars, doseq)
++                data = urllib.parse.urlencode(v_vars, doseq)
+             else:
+                 boundary, data = self.multipart_encode(v_vars, v_files)
+                 contenttype = 'multipart/form-data; boundary=%s' % boundary
+                 if(request.has_header('Content-Type')
+                    and request.get_header('Content-Type').find('multipart/form-data') != 0):
+-                    print "Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data')
++                    print("Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data'))
+                 request.add_unredirected_header('Content-Type', contenttype)
+ 
+             request.add_data(data)
+--- MultipartPostHandler2-0.1.5/examples/MultipartPostHandler-example.py.bak	2023-10-18 10:55:52.601625534 -0500
++++ MultipartPostHandler2-0.1.5/examples/MultipartPostHandler-example.py	2023-10-18 10:57:53.299175967 -0500
+@@ -5,10 +5,10 @@
+ """
+ 
+ def main():
+-    import tempfile, sys, os, urllib2, MultipartPostHandler
++    import tempfile, sys, os, urllib.request, urllib.error, urllib.parse, MultipartPostHandler
+ 
+     validatorURL = "http://validator.w3.org/check"
+-    opener = urllib2.build_opener(MultipartPostHandler.MultipartPostHandler)
++    opener = urllib.request.build_opener(MultipartPostHandler.MultipartPostHandler)
+ 
+     def validateFile(url):
+         temp = tempfile.mkstemp(suffix=".html")
+@@ -16,7 +16,7 @@
+         params = { "ss" : "0",            # show source
+             "doctype" : "Inline", 
+             "uploaded_file" : open(temp[1], "rb") }
+-        print(opener.open(validatorURL, params).read())
++        print((opener.open(validatorURL, params).read()))
+         os.remove(temp[1])
+ 
+     if len(sys.argv[1:]) > 0:

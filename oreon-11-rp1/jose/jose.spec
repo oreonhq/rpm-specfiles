@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           jose
-Version:        14
+Version:        15
 Release:        %autorelease
 Summary:        Tools for JSON Object Signing and Encryption (JOSE)
 

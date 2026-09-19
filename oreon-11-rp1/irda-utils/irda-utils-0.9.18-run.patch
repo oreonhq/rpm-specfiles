@@ -1,0 +1,11 @@
+--- irda-utils-0.9.18/irattach/irattach.c.orig	2021-05-17 01:58:48.781587723 +0300
++++ irda-utils-0.9.18/irattach/irattach.c	2021-05-17 02:01:21.738344238 +0300
+@@ -68,7 +68,7 @@
+ static int termvalid = -1;	/* If termsave is valid */
+ 
+ /* Default path for pid file */
+-char *pidfile = "/var/run/irattach.pid";
++char *pidfile = "/run/irattach.pid";
+ 
+ /* Used by ioctl to the tty to obtain the network device name */
+ struct irtty_info {

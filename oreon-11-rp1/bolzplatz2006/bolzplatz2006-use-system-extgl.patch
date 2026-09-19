@@ -1,0 +1,110 @@
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLDriver.h~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLDriver.h
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLDriver.h~	2006-03-21 15:26:50.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLDriver.h	2014-10-24 13:00:37.365379552 +0200
+@@ -18,13 +18,11 @@
+ #include "IrrCompileConfig.h"
+ 
+ #ifdef LINUX
+-#define GL_GLEXT_LEGACY 1
+ #include <X11/Xlib.h>
+ #endif // LINUX
+ 
+ #ifdef _IRR_COMPILE_WITH_OPENGL_
+ #include <GL/gl.h>
+-#include "glext.h"
+ 
+ namespace irr
+ {
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLMaterialRenderer.h~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLMaterialRenderer.h
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLMaterialRenderer.h~	2006-03-21 15:26:50.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLMaterialRenderer.h	2014-10-24 12:59:12.040804418 +0200
+@@ -16,10 +16,8 @@
+ #endif
+ 
+ #ifdef LINUX
+-#define GL_GLEXT_LEGACY 1
+ #include <GL/glx.h>
+ #include <GL/gl.h>
+-#include "glext.h"
+ #endif
+ 
+ #include "COpenGLDriver.h"
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLNormalMapRenderer.cpp~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLNormalMapRenderer.cpp
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLNormalMapRenderer.cpp~	2006-03-21 15:26:52.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLNormalMapRenderer.cpp	2014-10-24 13:01:10.847481590 +0200
+@@ -10,8 +10,7 @@
+ #include "IShaderConstantSetCallBack.h"
+ #include "IVideoDriver.h"
+ #include "os.h"
+-#define GL_GLEXT_LEGACY 1
+-#include "glext.h"
++#include <GL/gl.h>
+ #include "COpenGLDriver.h"
+ #include <stdio.h>
+ #include <string.h>
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLParallaxMapRenderer.cpp~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLParallaxMapRenderer.cpp
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLParallaxMapRenderer.cpp~	2006-03-21 15:26:50.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLParallaxMapRenderer.cpp	2014-10-24 13:01:11.167473008 +0200
+@@ -10,8 +10,7 @@
+ #include "IShaderConstantSetCallBack.h"
+ #include "IVideoDriver.h"
+ #include "os.h"
+-#define GL_GLEXT_LEGACY 1
+-#include "glext.h"
++#include <GL/gl.h>
+ #include "COpenGLDriver.h"
+ #include <stdio.h>
+ #include <string.h>
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLSLMaterialRenderer.h~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLSLMaterialRenderer.h
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLSLMaterialRenderer.h~	2006-03-21 15:26:52.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLSLMaterialRenderer.h	2014-10-24 12:59:19.750571335 +0200
+@@ -17,10 +17,8 @@
+ #endif
+ 
+ #ifdef LINUX
+-#define GL_GLEXT_LEGACY 1
+ #include <GL/glx.h>
+ #include <GL/gl.h>
+-#include "glext.h"
+ #endif
+ 
+ #include "IMaterialRenderer.h"
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLShaderMaterialRenderer.cpp~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLShaderMaterialRenderer.cpp
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLShaderMaterialRenderer.cpp~	2006-03-21 15:26:50.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLShaderMaterialRenderer.cpp	2014-10-24 13:01:11.503463997 +0200
+@@ -10,8 +10,7 @@
+ #include "IShaderConstantSetCallBack.h"
+ #include "IVideoDriver.h"
+ #include "os.h"
+-#define GL_GLEXT_LEGACY 1
+-#include "glext.h"
++#include <GL/gl.h>
+ #include "COpenGLDriver.h"
+ #include <stdio.h>
+ #include <string.h>
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLShaderMaterialRenderer.h~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLShaderMaterialRenderer.h
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLShaderMaterialRenderer.h~	2006-03-21 15:26:50.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLShaderMaterialRenderer.h	2014-10-24 12:59:07.289948046 +0200
+@@ -16,10 +16,8 @@
+ #endif
+ 
+ #ifdef LINUX
+-#define GL_GLEXT_LEGACY 1
+ #include <GL/glx.h>
+ #include <GL/gl.h>
+-#include "glext.h"
+ #endif
+ 
+ #include "IMaterialRenderer.h"
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLTexture.cpp~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLTexture.cpp
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLTexture.cpp~	2006-05-22 15:13:44.000000000 +0200
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COpenGLTexture.cpp	2014-10-24 13:05:04.109402026 +0200
+@@ -10,7 +10,7 @@
+ #include "IrrCompileConfig.h"
+ #ifdef _IRR_COMPILE_WITH_OPENGL_
+ 
+-#include "glext.h"
++#include <GL/gl.h>
+ 
+ namespace irr
+ {

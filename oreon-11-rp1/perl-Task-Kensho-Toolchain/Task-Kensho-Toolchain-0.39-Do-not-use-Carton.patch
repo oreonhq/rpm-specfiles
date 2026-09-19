@@ -1,0 +1,33 @@
+From e219319bdc4856a6c1863279f70a842f22c04f96 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 16 May 2016 11:53:37 +0200
+Subject: [PATCH] Do not use Carton
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Task/Kensho/Toolchain.pm | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/lib/Task/Kensho/Toolchain.pm b/lib/Task/Kensho/Toolchain.pm
+index cd9ef72..7f9fe5a 100644
+--- a/lib/Task/Kensho/Toolchain.pm
++++ b/lib/Task/Kensho/Toolchain.pm
+@@ -88,7 +88,11 @@ Create a minimal mirror of CPAN
+ 
+ =head3 L<Carton>
+ 
+-Perl module dependency manager (aka Bundler for Perl)
++Perl module dependency manager (aka Bundler for Perl) - Not supported
++
++Note: L<Carton> is not provided by Fedora. Carton does not work correctly, if
++the system uses perl installed by a vendor package with modules stripped from
++core as Fedora does.
+ 
+ =head3 L<Pinto>
+ 
+-- 
+2.5.5
+

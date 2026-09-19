@@ -1,8 +1,8 @@
 %global source0_hash 684ea53c1f5b71d6d1ac6086bbc96906b1f709ecc7ab536615b0f0c9e1baa3cc
 
 Name:           asciidoc
-Version:        10.2.0
-Release:        19%{?dist}
+Version:        10.2.1
+Release:        1%{?dist}
 Summary:        Text based document generation
 
 License:        GPL-2.0-or-later

@@ -1,12 +1,12 @@
-%global source0_hash 4cba86999331960b3fddac8ed02cccb31fc49406422360217135f6bf3fbca8d9
+%global source0_hash 76285d03cdc06f0647afbbc89f31ab5aa766cbc3c6eb177e3f8a0441444e3068
 
 %global		framework kwidgetsaddons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.30.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with various classes on top of QtWidgets
 License:	BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later
@@ -32,6 +32,7 @@ BuildRequires:  python3-wheel
 BuildRequires:  clang-devel
 BuildRequires:  cmake(Shiboken6)
 BuildRequires:  cmake(PySide6)
+BuildRequires:  python3-pyside6-devel >= 6.11.1-25
 
 Requires:	kf6-filesystem
 
@@ -86,6 +87,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 
@@ -100,4 +104,3 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

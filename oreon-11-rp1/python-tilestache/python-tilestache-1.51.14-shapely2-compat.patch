@@ -1,0 +1,151 @@
+From 3e73bcfed83353caa2afc1ac7fe5d744e2de566f Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Mon, 5 Dec 2022 09:06:26 -0500
+Subject: [PATCH] Use shape instead of asShape from shapely.geometry
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The “adapters to create geometry-like proxy objects with coordinates
+stored outside Shapely geometries,” including
+shapely.geometry.asShape(), are deprecated in Shapely 1.8 and removed in
+Shapely 2.0.
+---
+ TileStache/Goodies/VecTiles/geojson.py |  4 ++--
+ tests/vectiles_tests.py                | 12 ++++++------
+ tests/vector_tests.py                  | 12 ++++++------
+ 3 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/TileStache/Goodies/VecTiles/geojson.py b/TileStache/Goodies/VecTiles/geojson.py
+index 6bbde69..5e11cd2 100644
+--- a/TileStache/Goodies/VecTiles/geojson.py
++++ b/TileStache/Goodies/VecTiles/geojson.py
+@@ -4,7 +4,7 @@ from math import pi, log, tan, ceil
+ import json
+ 
+ from shapely.wkb import loads
+-from shapely.geometry import asShape
++from shapely.geometry import shape
+ 
+ from ... import getTile
+ from ...Core import KnownUnknown
+@@ -66,7 +66,7 @@ def decode(file):
+             continue
+         
+         prop = feature['properties']
+-        geom = transform(asShape(feature['geometry']), mercator)
++        geom = transform(shape(feature['geometry']), mercator)
+         features.append((geom.wkb, prop))
+     
+     return features
+diff --git a/tests/vectiles_tests.py b/tests/vectiles_tests.py
+index d80d4e5..314d0a8 100644
+--- a/tests/vectiles_tests.py
++++ b/tests/vectiles_tests.py
+@@ -7,7 +7,7 @@ from math import hypot
+ import json
+ 
+ from osgeo import ogr, osr
+-from shapely.geometry import Point, LineString, Polygon, MultiPolygon, asShape
++from shapely.geometry import Point, LineString, Polygon, MultiPolygon, shape
+ import mapbox_vector_tile
+ 
+ from TileStache.Goodies.VecTiles import pbf
+@@ -106,7 +106,7 @@ def decoded_pbf_asshape(feature, extent, srid=4326):
+         'coordinates': coords,
+     }
+ 
+-    return asShape(geoint)
++    return shape(geoint)
+ 
+ 
+ class PostGISVectorTestBase(object):
+@@ -252,11 +252,11 @@ class VectorProviderTest(PostGISVectorTestBase, TestCase):
+         for feature in geojson_result['features']:
+             if feature['properties']['name'] == 'San Francisco':
+                 cities.append(feature['properties']['name'])
+-                self.assertTrue(point_sf.almost_equals(asShape(feature['geometry'])))
++                self.assertTrue(point_sf.almost_equals(shape(feature['geometry'])))
+ 
+             elif feature['properties']['name'] == 'Lima':
+                 cities.append(feature['properties']['name'])
+-                self.assertTrue(point_lima.almost_equals(asShape(feature['geometry'])))
++                self.assertTrue(point_lima.almost_equals(shape(feature['geometry'])))
+ 
+         self.assertTrue('San Francisco' in cities)
+         self.assertTrue('Lima' in cities)
+@@ -287,7 +287,7 @@ class VectorProviderTest(PostGISVectorTestBase, TestCase):
+         tile_mimetype, tile_content = utils.request(self.config_file_content, "vectile_test", "json", 0, 0, 0)
+         self.assertTrue(tile_mimetype.endswith('/json'))
+         geojson_result = json.loads(tile_content.decode('utf8'))
+-        west_hemisphere_geometry = asShape(geojson_result['features'][0]['geometry'])
++        west_hemisphere_geometry = shape(geojson_result['features'][0]['geometry'])
+         expected_geometry = LineString([(-180, 32), (180, 32)])
+         self.assertTrue(expected_geometry.almost_equals(west_hemisphere_geometry))
+ 
+@@ -311,7 +311,7 @@ class VectorProviderTest(PostGISVectorTestBase, TestCase):
+         self.assertTrue(tile_mimetype.endswith('/json'))
+         geojson_result = json.loads(tile_content.decode('utf8'))
+         
+-        result_geom = asShape(geojson_result['features'][0]['geometry'])
++        result_geom = shape(geojson_result['features'][0]['geometry'])
+         expected_geom = Polygon( [(-180, -85.05), (180, -85.05), (180, 85.05), (-180, 85.05), (-180, -85.05)])
+ 
+         # What is going on here is a bit unorthodox, but let me explain. The clipping
+diff --git a/tests/vector_tests.py b/tests/vector_tests.py
+index 24e271c..66da1a5 100644
+--- a/tests/vector_tests.py
++++ b/tests/vector_tests.py
+@@ -3,7 +3,7 @@ import json
+ import os
+ 
+ from osgeo import ogr
+-from shapely.geometry import Point, LineString, Polygon, MultiPolygon, asShape
++from shapely.geometry import Point, LineString, Polygon, MultiPolygon, shape
+ 
+ from . import utils
+ 
+@@ -118,11 +118,11 @@ class VectorProviderTest(PostGISVectorTestBase, TestCase):
+         for feature in geojson_result['features']:
+             if feature['properties']['name'] == 'San Francisco':
+                 cities.append(feature['properties']['name'])
+-                self.assertTrue(point_sf.almost_equals(asShape(feature['geometry'])))
++                self.assertTrue(point_sf.almost_equals(shape(feature['geometry'])))
+ 
+             elif feature['properties']['name'] == 'Lima':
+                 cities.append(feature['properties']['name'])
+-                self.assertTrue(point_lima.almost_equals(asShape(feature['geometry'])))
++                self.assertTrue(point_lima.almost_equals(shape(feature['geometry'])))
+ 
+         self.assertTrue('San Francisco' in cities)
+         self.assertTrue('Lima' in cities)
+@@ -154,7 +154,7 @@ class VectorProviderTest(PostGISVectorTestBase, TestCase):
+         tile_mimetype, tile_content = utils.request(self.config_file_content, "vector_test", "geojson", 0, 0, 0)
+         self.assertTrue(tile_mimetype.endswith('/json'))
+         geojson_result = json.loads(tile_content.decode('utf8'))
+-        west_hemisphere_geometry = asShape(geojson_result['features'][0]['geometry'])
++        west_hemisphere_geometry = shape(geojson_result['features'][0]['geometry'])
+         expected_geometry = LineString([(-180, 32), (0, 32)])
+         self.assertTrue(expected_geometry.almost_equals(west_hemisphere_geometry))
+ 
+@@ -162,7 +162,7 @@ class VectorProviderTest(PostGISVectorTestBase, TestCase):
+         tile_mimetype, tile_content = utils.request(self.config_file_content, "vector_test", "geojson", 0, 1, 0)
+         self.assertTrue(tile_mimetype.endswith('/json'))
+         geojson_result = json.loads(tile_content.decode('utf8'))
+-        east_hemisphere_geometry = asShape(geojson_result['features'][0]['geometry'])
++        east_hemisphere_geometry = shape(geojson_result['features'][0]['geometry'])
+         expected_geometry = LineString([(0, 32), (180, 32)])
+         self.assertTrue(expected_geometry.almost_equals(east_hemisphere_geometry))
+ 
+@@ -186,7 +186,7 @@ class VectorProviderTest(PostGISVectorTestBase, TestCase):
+         self.assertTrue(tile_mimetype.endswith('/json'))
+         geojson_result = json.loads(tile_content.decode('utf8'))
+         
+-        result_geom = asShape(geojson_result['features'][0]['geometry'])
++        result_geom = shape(geojson_result['features'][0]['geometry'])
+         expected_geom = Polygon( [(-180, -90), (0, -90), (0, 90), (-180, 90), (-180, -90)])
+ 
+         # What is going on here is a bit unorthodox, but let me explain. The clipping
+-- 
+2.38.1
+

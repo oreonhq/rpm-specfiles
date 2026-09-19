@@ -1,0 +1,19 @@
+From: dronord <dronord@gmail.com>
+Date: Fri, 3 Nov 2017 17:05:35 +0300
+Subject: [PATCH] db_ora: null-terminating string is more safely, most modules
+ use VAL_STRING, not VAL_STR.
+
+
+diff --git a/modules/db_oracle/res.c b/modules/db_oracle/res.c
+index 97099b4a0..2ced0b3b5 100644
+--- a/modules/db_oracle/res.c
++++ b/modules/db_oracle/res.c
+@@ -216,7 +216,7 @@ set_flt:
+ 			LM_DBG("use DB_STRING result type\n");
+ 			RES_TYPES(_r)[i] = DB_STRING;
+ dyn_str:
+-			dtype = SQLT_CHR;
++			dtype = SQLT_STR;
+ 			len = 0; /* DATA_SIZE is ub2 */
+ 			status = OCIAttrGet(param, OCI_DTYPE_PARAM,
+ 				(dvoid**)(dvoid*)&len, NULL, OCI_ATTR_DATA_SIZE,

@@ -1,0 +1,34 @@
+.\" Man page for bearing
+.\" Created by copying text from utils/README  
+.TH man 1 "30 July 2008" "1.0" "bearing"
+.SH NAME
+bearing \- returns the azimuth bearing and great circle path distance between two specified points
+.SH SYNOPSIS
+.B bearing
+file
+.SH DESCRIPTION
+.B bearing
+reads a pair of .qth files specified on the command
+line, and returns the azimuth bearing and great circle path distance between
+the two points specified.  A -metric switch is available so that distances
+can be provided in kilometers rather than statute miles.  SPLAT! provides
+similar distance and bearing information between two specific site locations.
+The bearing utility, however, provides the information quickly and easily
+over great distances without having to run SPLAT!
+ 
+.SH EXAMPLES
+bearing ai4qr.qth 940-repeater.qth
+
+.SH FILES
+.P 
+.I /usr/bin/bearing
+.SH SEE ALSO
+.BR splat (1), 
+.SH BUGS
+No known bugs at this time. 
+.SH AUTHOR
+.nf
+Steve Conklin (fedora@conklinhouse.com)
+.fi
+.SH HISTORY
+2008 \- Text copied from README

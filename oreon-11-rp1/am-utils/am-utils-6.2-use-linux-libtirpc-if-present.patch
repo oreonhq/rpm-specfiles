@@ -1,0 +1,95 @@
+am-utils-6.2 - use Linux libtirpc if present
+
+From: Ian Kent <raven@themaw.net>
+
+For Linux systems, if the header files and shared libraries of libtirpc
+are present use them instead of the glibc RPC implementation.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ Makefile.am                       |    3 ++-
+ configure.ac                      |    4 ++++
+ include/am_compat.h               |    8 ++++++--
+ m4/macros/check_linux_libtirpc.m4 |   15 +++++++++++++++
+ 4 files changed, 27 insertions(+), 3 deletions(-)
+ create mode 100644 m4/macros/check_linux_libtirpc.m4
+
+diff --git a/Makefile.am b/Makefile.am
+index bae4615e..e094e950 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -146,7 +146,8 @@ EXTRA_DIST_M4 =				\
+ 	m4/macros/type_xdrproc_t.m4			\
+ 	m4/macros/type_xfs_args.m4			\
+ 	m4/macros/type_yp_order_outorder.m4		\
+-	m4/macros/with_addon.m4
++	m4/macros/with_addon.m4				\
++	m4/macros/check_linux_libtirpc.m4
+ 
+ EXTRA_DIST_CONF =			\
+ 	conf/autofs/autofs_default.h		\
+diff --git a/configure.ac b/configure.ac
+index ce619257..98b444d3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -222,6 +222,9 @@ dnl lots of code.  So I am forced to use a special purpose macro that sets
+ dnl the libraries based on the OS.  Sigh.  -Erez.
+ AMU_CHECK_OS_LIBS
+ 
++dnl use Linux libtirpc if possible
++AMU_CHECK_LIBTIRPC
++
+ dnl librpc and librpcsvc are needed on Solaris
+ AC_CHECK_LIB(rpc, clnt_sperrno)
+ AC_CHECK_LIB(rpcsvc, xdr_fhandle)
+@@ -433,6 +436,7 @@ AC_CHECK_HEADERS(			\
+ 	arpa/nameser.h			\
+ 	arpa/inet.h			\
+ 	bsd/rpc/rpc.h			\
++	tirpc/netconfig.h		\
+ 	cdfs/cdfsmount.h		\
+  	cdfs/cdfs_mount.h		\
+ 	fs/udf/udf_mount.h		\
+diff --git a/include/am_compat.h b/include/am_compat.h
+index 3463f3fa..d6826fc7 100644
+--- a/include/am_compat.h
++++ b/include/am_compat.h
+@@ -454,11 +454,15 @@ struct hsfs_args {
+ /*
+  * Define a dummy struct netconfig for non-TLI systems
+  */
+-#if !defined(HAVE_NETCONFIG_H) && !defined(HAVE_SYS_NETCONFIG_H)
++#if !defined(HAVE_NETCONFIG_H)
++# if !defined(HAVE_SYS_NETCONFIG_H)
++#  if !defined(HAVE_TIRPC_NETCONFIG_H)
+ struct netconfig {
+   int dummy;
+ };
+-#endif /* not HAVE_NETCONFIG_H and not HAVE_SYS_NETCONFIG_H */
++#  endif /* not HAVE_TIRPC_NETCONFIG_H */
++# endif /* not HAVE_SYS_NETCONFIG_H */
++#endif /* not HAVE_NETCONFIG_H */
+ 
+ /* some OSs don't define INADDR_NONE and assume it's unsigned -1 */
+ #ifndef INADDR_NONE
+diff --git a/m4/macros/check_linux_libtirpc.m4 b/m4/macros/check_linux_libtirpc.m4
+new file mode 100644
+index 00000000..7b40e45c
+--- /dev/null
++++ b/m4/macros/check_linux_libtirpc.m4
+@@ -0,0 +1,15 @@
++dnl ######################################################################
++dnl Check for Linux libtirpc library
++AC_DEFUN([AMU_CHECK_LIBTIRPC],[
++AC_CHECK_HEADER(tirpc/netconfig.h,[
++  amu_check_libtirpc_save_CPPFLAGS=$CPPFLAGS
++  CPPFLAGS="$CPPFLAGS -I/usr/include/tirpc"
++  AC_CHECK_LIB(tirpc,clnt_tli_create,,amu_check_libtirpc=notfound)])
++  if test "$amu_check_libtirpc" = "notfound"
++  then
++    CPPFLAGS="$amu_check_libtirpc_save_CPPFLAGS"
++  else
++    AC_DEFINE(HAVE_LIBTIRPC, 1, [Define to 1 if you have libtirpc headers installed])
++  fi
++])
++dnl ======================================================================

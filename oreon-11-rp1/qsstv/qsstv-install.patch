@@ -1,0 +1,13 @@
+Index: qsstv_9.5.3/qsstv.pro
+===================================================================
+--- qsstv_9.5.3.orig/qsstv.pro
++++ qsstv_9.5.3/qsstv.pro
+@@ -582,7 +582,7 @@ DISTFILES += \
+     documentation/manual/images/spectrum1.png \
+     documentation/manual/images/cat_flrig.png
+ 
+-INSTALLS += target
++INSTALLS += target shortcutfiles dox
+ 
+ LIBS +=  -lasound \
+          -lpulse \

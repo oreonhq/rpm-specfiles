@@ -1,0 +1,388 @@
+From d8bd23ccfd34a60eb8d58593ceb190e4f68b1e24 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Sun, 28 Feb 2016 15:03:03 +0100
+Subject: [PATCH 09/12] Misc. doc fixes.
+
+---
+ alliance/src/boog/doc/boog.1                                           | 2 +-
+ .../documentation/tutorials/place_and_route/tex/place_and_route.tex    | 1 -
+ .../src/documentation/tutorials/simulation/src/addaccu_beh/addaccu.vbe | 0
+ .../documentation/tutorials/simulation/src/addaccu_beh/addaccu4.vhdl   | 0
+ .../documentation/tutorials/simulation/src/addaccu_beh/addaccu_dly.vbe | 0
+ .../documentation/tutorials/simulation/src/addaccu_beh/patterns.pat    | 0
+ .../tutorials/simulation/src/addaccu_beh/patterns_dly.pat              | 0
+ .../src/documentation/tutorials/simulation/src/addaccu_struct/accu.vbe | 0
+ .../src/documentation/tutorials/simulation/src/addaccu_struct/accu.vst | 0
+ .../documentation/tutorials/simulation/src/addaccu_struct/addaccu.vbe  | 0
+ .../documentation/tutorials/simulation/src/addaccu_struct/addaccu.vst  | 0
+ .../src/documentation/tutorials/simulation/src/addaccu_struct/alu.vbe  | 0
+ .../src/documentation/tutorials/simulation/src/addaccu_struct/alu.vst  | 0
+ .../src/documentation/tutorials/simulation/src/addaccu_struct/mux.vbe  | 0
+ .../src/documentation/tutorials/simulation/src/addaccu_struct/mux.vst  | 0
+ .../documentation/tutorials/simulation/src/addaccu_struct/pat_new.c    | 0
+ alliance/src/documentation/tutorials/simulation/tex/simulation.tex     | 1 -
+ alliance/src/documentation/tutorials/start/Makefile                    | 2 +-
+ alliance/src/documentation/tutorials/start/start.tex                   | 2 +-
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_0.vbe    | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_1.vbe    | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_10.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_11.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_12.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_13.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_14.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_15.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_16.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_17.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_18.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_19.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_2.vbe    | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_20.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_21.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_22.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_23.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_24.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_3.vbe    | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_4.vbe    | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_5.vbe    | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_6.vbe    | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_7.vbe    | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_8.vbe    | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_9.vbe    | 0
+ alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_ok.vbe   | 0
+ alliance/src/documentation/tutorials/synthesis/tex/synthesis.tex       | 1 -
+ alliance/src/fsm/man1/fsm.1                                            | 2 +-
+ alliance/src/mbk/man3/viewlofigcon.3                                   | 3 ++-
+ alliance/src/mbk/man3/viewphfig.3                                      | 3 ++-
+ alliance/src/mbk/man3/viewphvia.3                                      | 3 ++-
+ alliance/src/nero/doc/man1/nero.1                                      | 1 -
+ alliance/src/ring/doc/ring.1                                           | 2 +-
+ 52 files changed, 11 insertions(+), 12 deletions(-)
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_beh/addaccu.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_beh/addaccu4.vhdl
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_beh/addaccu_dly.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_beh/patterns.pat
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_beh/patterns_dly.pat
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_struct/accu.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_struct/accu.vst
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_struct/addaccu.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_struct/addaccu.vst
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_struct/alu.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_struct/alu.vst
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_struct/mux.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_struct/mux.vst
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/simulation/src/addaccu_struct/pat_new.c
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/start/Makefile
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/start/start.tex
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_0.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_1.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_10.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_11.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_12.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_13.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_14.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_15.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_16.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_17.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_18.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_19.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_2.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_20.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_21.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_22.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_23.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_24.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_3.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_4.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_5.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_6.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_7.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_8.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_9.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_ok.vbe
+ mode change 100755 => 100644 alliance/src/documentation/tutorials/synthesis/tex/synthesis.tex
+
+diff --git a/alliance/src/boog/doc/boog.1 b/alliance/src/boog/doc/boog.1
+index c9dcb73..6e87374 100644
+--- a/alliance/src/boog/doc/boog.1
++++ b/alliance/src/boog/doc/boog.1
+@@ -136,7 +136,7 @@ Just another way to show explicitly the \f4VST\fP output file name.
+ Just another way to show explicitly the \f4LAX\fP parameter file name.
+ .TP 10
+ \f4\-d debug_file\fP
+-Generates a \f4VBE\f debug file. It comes from internal result algorithm. Users aren't concerned.
++Generates a \f4VBE\fP debug file. It comes from internal result algorithm. Users aren't concerned.
+ .br
+ 
+ .SH ENVIRONMENT VARIABLES
+diff --git a/alliance/src/documentation/tutorials/place_and_route/tex/place_and_route.tex b/alliance/src/documentation/tutorials/place_and_route/tex/place_and_route.tex
+index 8d51631..0115a94 100644
+--- a/alliance/src/documentation/tutorials/place_and_route/tex/place_and_route.tex
++++ b/alliance/src/documentation/tutorials/place_and_route/tex/place_and_route.tex
+@@ -85,7 +85,6 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+ %\end{figure}
+ %---------------------------------- document ---------------------------------
+ \begin{document}
+-\setlength{\footrulewidth}{0.6pt}
+ 
+ \title{
+                {\Huge ALLIANCE TUTORIAL \\}
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_beh/addaccu.vbe b/alliance/src/documentation/tutorials/simulation/src/addaccu_beh/addaccu.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_beh/addaccu4.vhdl b/alliance/src/documentation/tutorials/simulation/src/addaccu_beh/addaccu4.vhdl
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_beh/addaccu_dly.vbe b/alliance/src/documentation/tutorials/simulation/src/addaccu_beh/addaccu_dly.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_beh/patterns.pat b/alliance/src/documentation/tutorials/simulation/src/addaccu_beh/patterns.pat
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_beh/patterns_dly.pat b/alliance/src/documentation/tutorials/simulation/src/addaccu_beh/patterns_dly.pat
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/accu.vbe b/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/accu.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/accu.vst b/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/accu.vst
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/addaccu.vbe b/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/addaccu.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/addaccu.vst b/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/addaccu.vst
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/alu.vbe b/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/alu.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/alu.vst b/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/alu.vst
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/mux.vbe b/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/mux.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/mux.vst b/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/mux.vst
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/pat_new.c b/alliance/src/documentation/tutorials/simulation/src/addaccu_struct/pat_new.c
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/simulation/tex/simulation.tex b/alliance/src/documentation/tutorials/simulation/tex/simulation.tex
+index 2b99a40..0b0d105 100644
+--- a/alliance/src/documentation/tutorials/simulation/tex/simulation.tex
++++ b/alliance/src/documentation/tutorials/simulation/tex/simulation.tex
+@@ -91,7 +91,6 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+ %---------------------------------- document ---------------------------------
+ 
+ \begin{document}
+-\setlength{\footrulewidth}{0.6pt}
+ 
+ \title{
+                     {\Huge ALLIANCE TUTORIAL\\}
+diff --git a/alliance/src/documentation/tutorials/start/Makefile b/alliance/src/documentation/tutorials/start/Makefile
+old mode 100755
+new mode 100644
+index 2a99685..4649755
+--- a/alliance/src/documentation/tutorials/start/Makefile
++++ b/alliance/src/documentation/tutorials/start/Makefile
+@@ -14,4 +14,4 @@ start.dvi : start.tex
+ 	latex start.tex
+ 
+ clean :
+-	rm -f $(MYFILE).ps $(MYFILE).pdf *.log *.dvi *.aux
++	rm -f start.ps start.pdf *.log *.dvi *.aux
+diff --git a/alliance/src/documentation/tutorials/start/start.tex b/alliance/src/documentation/tutorials/start/start.tex
+old mode 100755
+new mode 100644
+index c88481b..7ee4a90
+--- a/alliance/src/documentation/tutorials/start/start.tex
++++ b/alliance/src/documentation/tutorials/start/start.tex
+@@ -144,7 +144,7 @@ To see it, please enter the following command :
+ ~alp/addaccu %-) env | grep MBK
+ \end{phraseverbatim}
+ 
+-\begin{figure}[H]\center\leavevmode
++\begin{figure}[p]\center\leavevmode
+ \begin{framedverbatim}
+ ~alp/addaccu %-) env | grep MBK
+ MBK_OUT_PH=ap
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_0.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_0.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_1.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_1.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_10.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_10.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_11.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_11.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_12.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_12.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_13.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_13.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_14.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_14.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_15.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_15.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_16.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_16.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_17.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_17.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_18.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_18.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_19.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_19.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_2.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_2.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_20.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_20.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_21.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_21.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_22.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_22.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_23.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_23.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_24.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_24.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_3.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_3.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_4.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_4.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_5.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_5.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_6.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_6.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_7.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_7.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_8.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_8.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_9.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_9.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_ok.vbe b/alliance/src/documentation/tutorials/synthesis/src/amdbug/amd_ok.vbe
+old mode 100755
+new mode 100644
+diff --git a/alliance/src/documentation/tutorials/synthesis/tex/synthesis.tex b/alliance/src/documentation/tutorials/synthesis/tex/synthesis.tex
+old mode 100755
+new mode 100644
+index 099caee..d8bd15c
+--- a/alliance/src/documentation/tutorials/synthesis/tex/synthesis.tex
++++ b/alliance/src/documentation/tutorials/synthesis/tex/synthesis.tex
+@@ -85,7 +85,6 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+ 
+ %---------------------------------- document ---------------------------------
+ \begin{document}
+-\setlength{\footrulewidth}{0.6pt}
+ 
+ \title{
+                {\Huge ALLIANCE TUTORIAL\\}
+diff --git a/alliance/src/fsm/man1/fsm.1 b/alliance/src/fsm/man1/fsm.1
+index a0f6142..ca58505 100644
+--- a/alliance/src/fsm/man1/fsm.1
++++ b/alliance/src/fsm/man1/fsm.1
+@@ -40,7 +40,7 @@ Functions :
+ .TP 20
+ .br
+ 
+-...
++\&...
+ 
+ .TP 0
+ libFsm101.a :
+diff --git a/alliance/src/mbk/man3/viewlofigcon.3 b/alliance/src/mbk/man3/viewlofigcon.3
+index cabb1c0..8bc798b 100644
+--- a/alliance/src/mbk/man3/viewlofigcon.3
++++ b/alliance/src/mbk/man3/viewlofigcon.3
+@@ -10,10 +10,11 @@ viewlofigcon
+ .ti 0.2i
+ viewlofigcon
+ .XE2 \}
+-.so man1/alc_origin.1
++.TH VIEWLOFIGCON 3 "October 1, 1997" "ASIM/LIP6" "MBK LOGICAL FUNCTIONS"
+ .SH NAME
+ viewlofigcon \- display elements of a \fBlocon_list\fP attached to a
+ figure
++.so man1/alc_origin.1
+ .SH SYNOPSIS
+ .nf
+ .if n \{\
+diff --git a/alliance/src/mbk/man3/viewphfig.3 b/alliance/src/mbk/man3/viewphfig.3
+index cade2bf..1aaec24 100644
+--- a/alliance/src/mbk/man3/viewphfig.3
++++ b/alliance/src/mbk/man3/viewphfig.3
+@@ -10,9 +10,10 @@ viewphfig
+ .ti 0.2i
+ viewphfig
+ .XE0 \}
+-.so man1/alc_origin.1
++.TH VIEWPHSEG 3 "October 1, 1997" "ASIM/LIP6" "MBK PHYSICAL FUNCTIONS"
+ .SH NAME
+ viewphfig \- display elements of a \fBphfig_list\fP
++.so man1/alc_origin.1
+ .SH SYNOPSIS
+ .nf
+ .if n \{\
+diff --git a/alliance/src/mbk/man3/viewphvia.3 b/alliance/src/mbk/man3/viewphvia.3
+index fb7050c..b82f05c 100644
+--- a/alliance/src/mbk/man3/viewphvia.3
++++ b/alliance/src/mbk/man3/viewphvia.3
+@@ -10,9 +10,10 @@ viewphvia
+ .ti 0.2i
+ viewphvia
+ .XE0 \}
+-.so man1/alc_origin.1
++.TH VIEWPHVIA 3 "October 1, 1997" "ASIM/LIP6" "MBK PHYSICAL FUNCTIONS"
+ .SH NAME
+ viewphvia \- display elements of a \fBphvia_list\fP
++.so man1/alc_origin.1
+ .SH SYNOPSIS
+ .nf
+ .if n \{\
+diff --git a/alliance/src/nero/doc/man1/nero.1 b/alliance/src/nero/doc/man1/nero.1
+index e3c76c9..46e396d 100644
+--- a/alliance/src/nero/doc/man1/nero.1
++++ b/alliance/src/nero/doc/man1/nero.1
+@@ -1,4 +1,3 @@
+-.\\" auto-generated by docbook2man-spec $Revision: 1.4 $
+ .TH "NERO" "1" "13 October 2002" "ASIM/LIP6" "Alliance - nero User's Manual"
+ .SH NAME
+ nero \- Negotiating Router
+diff --git a/alliance/src/ring/doc/ring.1 b/alliance/src/ring/doc/ring.1
+index 054aa47..43a6be3 100644
+--- a/alliance/src/ring/doc/ring.1
++++ b/alliance/src/ring/doc/ring.1
+@@ -110,7 +110,7 @@ piot_sp  C
+ .br
+ pvssick_sp  C
+ .br
+-\.\.\.\.
++\&...
+ .br
+ pvdde_sp C
+ .br
+-- 
+2.5.5
+

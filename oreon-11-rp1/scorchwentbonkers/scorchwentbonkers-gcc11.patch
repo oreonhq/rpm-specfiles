@@ -1,0 +1,13 @@
+diff --git a/src/misc/TextHandler.h b/src/misc/TextHandler.h
+index b2fc8f6..66772eb 100644
+--- a/src/misc/TextHandler.h
++++ b/src/misc/TextHandler.h
+@@ -14,7 +14,7 @@ using namespace std;
+ 
+ struct stringLessThan
+ {
+-	bool operator()(const char *s1, const char *s2)
++	bool operator()(const char *s1, const char *s2) const
+ 	{
+ 		return strcmp(s1, s2) < 0;
+ 	}

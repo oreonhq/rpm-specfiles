@@ -1,65 +1,44 @@
-%global source0_hash 1c674ab4665686a0887d7e24c03ab25f24201c213e82ea689d2f3e169ef7ef57
+%global source0_hash none
 
-%bcond tests 1
-
-Name:           python-setuptools_scm
-Version:        9.2.2
+Name:           python-setuptools-scm
+Version:        10.2.3
 Release:        %autorelease
-Summary:        Blessed package to manage your versions by SCM tags
+# Fill in the actual package summary to submit package to Fedora
+Summary:        the blessed package to manage your versions by scm tags
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/pypa/setuptools_scm/
-Source:        https://files.pythonhosted.org/packages/source/s/setuptools-scm/setuptools-scm-9.2.2.tar.gz
+URL:            https://github.com/pypa/setuptools-scm/
+Source:         %{pypi_source setuptools_scm}
+
 BuildArch:      noarch
-
-BuildRequires:  python%{python3_pkgversion}-devel
-%if %{with tests}
-BuildRequires:  git-core
-# Don't pull mercurial into RHEL just to test this work with it
-%if %{undefined rhel}
-BuildRequires:  mercurial
-%endif
-%endif
-
-%description
-Setuptools_scm handles managing your Python package versions in SCM metadata.
-It also handles file finders for the supported SCMs.
+BuildRequires:  python3-devel
 
 
-%package -n python%{python3_pkgversion}-setuptools_scm
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'setuptools-scm' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-setuptools-scm
 Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-setuptools_scm
-Setuptools_scm handles managing your Python package versions in SCM metadata.
-It also handles file finders for the supported SCMs.
+%description -n python3-setuptools-scm %_description
 
-
-# We don't package the [rich] extra on RHELs, to avoid pulling rich into the buildroot
-%pyproject_extras_subpkg -n python%{python3_pkgversion}-setuptools_scm simple,toml%{!?rhel:,rich}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-setuptools-scm rich,simple,toml
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n setuptools_scm-%{version}
-# Remove flake8, mypy, ruff, … from the test dependencies
-sed -Ei '/^test = \[/,/^\]/ { /"(griffe|mypy|ruff|flake8).*"/d }' pyproject.toml
-
-%if %{defined rhel}
-# Remove unnecessary test dependencies:
-# rich is listed in both [rich] and [test] extras, so we need to be more careful
-sed -Ei '/^test = \[/,/^\]/ { /"(rich|build|wheel|pytest-timeout)",/d }' pyproject.toml
-sed -Ei '/^\[tool.pytest.ini_options\]/,/^\[/ { /^timeout/d }' pyproject.toml
-# Don't blow up all of the tests by failing to report the installed version of build
-sed -Ei '0,/VERSION_PKGS/{s/, "(build|wheel)"//g}' testing/conftest.py
-%endif
 
 
 %generate_buildrequires
-# Note: We only pull in the [rich] extra when running tests.
-# This is to make the new Python version bootstrapping simpler
-# as setuptools_scm is an early package and rich is a late one.
-%pyproject_buildrequires %{?with_tests:-g test %{!?rhel:-x rich}} -x simple,toml
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x rich,simple,toml
 
 
 %build
@@ -68,30 +47,17 @@ sed -Ei '0,/VERSION_PKGS/{s/, "(build|wheel)"//g}' testing/conftest.py
 
 %install
 %pyproject_install
-%pyproject_save_files setuptools_scm
-
-# Allow parallel-installable executable for alternate Python stacks (e.g. in RHEL)
-mv %{buildroot}%{_bindir}/setuptools-scm %{buildroot}%{_bindir}/setuptools-scm-%{python3_version}
-%if "%{python3_pkgversion}" == "3"
-ln -s ./setuptools-scm-%{python3_version} %{buildroot}%{_bindir}/setuptools-scm
-%endif
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
-%if %{with tests}
 %check
-# test_pip_download, test_xmlsec_download_regression try to download from the internet
-# test_pyproject_missing_setup_hook_works requires build
-%pytest -v -k 'not test_pip_download and not test_xmlsec_download_regression %{?rhel: and not test_pyproject_missing_setup_hook_works}'
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python%{python3_pkgversion}-setuptools_scm -f %{pyproject_files}
-%doc README.md
-%{_bindir}/setuptools-scm-%{python3_version}
-%if "%{python3_pkgversion}" == "3"
+%files -n python3-setuptools-scm -f %{pyproject_files}
 %{_bindir}/setuptools-scm
-%endif
-
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.2.2-1

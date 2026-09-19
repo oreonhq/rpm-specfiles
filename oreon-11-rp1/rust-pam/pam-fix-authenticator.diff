@@ -1,0 +1,24 @@
+diff -Naur pam-0.7.0.orig/examples/spawn_bash.rs pam-0.7.0/examples/spawn_bash.rs
+--- pam-0.7.0.orig/examples/spawn_bash.rs	2020-11-21 12:48:35.542633857 +0000
++++ pam-0.7.0/examples/spawn_bash.rs	2020-11-21 12:50:00.275446490 +0000
+@@ -2,7 +2,7 @@
+ use std::os::unix::process::CommandExt;
+ use std::process::Command;
+ 
+-use pam_auth::Authenticator;
++use pam::Authenticator;
+ use users::get_user_by_name;
+ use rpassword::read_password_from_tty;
+ 
+diff -Naur pam-0.7.0.orig/src/authenticator.rs pam-0.7.0/src/authenticator.rs
+--- pam-0.7.0.orig/src/authenticator.rs	2020-11-21 12:48:35.542633857 +0000
++++ pam-0.7.0/src/authenticator.rs	2020-11-21 12:51:22.980239668 +0000
+@@ -15,7 +15,7 @@
+ /// and to the following flow:
+ ///
+ /// ```no_run
+-/// use pam_auth::Authenticator;
++/// use pam::Authenticator;
+ ///
+ /// let mut authenticator = Authenticator::with_password("system-auth")
+ ///         .expect("Failed to init PAM client.");

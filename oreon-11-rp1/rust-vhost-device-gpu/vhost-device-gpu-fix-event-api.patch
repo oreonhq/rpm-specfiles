@@ -1,0 +1,69 @@
+diff --git a/src/device.rs b/src/device.rs
+index 1234567..abcdefg 100644
+--- a/src/device.rs
++++ b/src/device.rs
+@@ -46,7 +46,7 @@ use std::{
+     sync::{self, Arc, Mutex},
+ };
+
+-use log::{debug, error, info, trace, warn};
++use log::{debug, info, trace, warn};
+ use rutabaga_gfx::RutabagaFence;
+ use thiserror::Error as ThisError;
+ use vhost::vhost_user::{
+@@ -71,7 +71,6 @@ use virtio_queue::{QueueOwnedT, Reader, Writer};
+ use vm_memory::{ByteValued, GuestAddressSpace, GuestMemoryAtomic, GuestMemoryMmap, Le32};
+ use vmm_sys_util::{
+     epoll::EventSet,
+-    event::{new_event_consumer_and_notifier, EventConsumer, EventFlag, EventNotifier},
+     eventfd::EventFd,
+ };
+
+@@ -143,8 +142,8 @@ struct VhostUserGpuBackendInner {
+     virtio_cfg: VirtioGpuConfig,
+     event_idx_enabled: bool,
+     gpu_backend: Option<GpuBackend>,
+-    exit_consumer: EventConsumer,
+-    exit_notifier: EventNotifier,
++    exit_event_read: EventFd,
++    exit_event_write: EventFd,
+     mem: Option<GuestMemoryAtomic<GuestMemoryMmap>>,
+     gpu_config: GpuConfig,
+ }
+@@ -164,8 +163,9 @@ impl VhostUserGpuBackend {
+             gpu_config.capsets(),
+             gpu_config.flags()
+         );
+-        let (exit_consumer, exit_notifier) = new_event_consumer_and_notifier(EventFlag::NONBLOCK)
+-            .map_err(|_| Error::EventFdFailed)?;
++        let exit_event_read = EventFd::new(libc::EFD_NONBLOCK)
++            .map_err(|_| Error::EventFdFailed)?;
++        let exit_event_write = exit_event_read.try_clone().map_err(|_| Error::EventFdFailed)?;
+
+         let inner = VhostUserGpuBackendInner {
+             virtio_cfg: VirtioGpuConfig {
+@@ -176,8 +176,8 @@ impl VhostUserGpuBackend {
+             },
+             event_idx_enabled: false,
+             gpu_backend: None,
+-            exit_consumer,
+-            exit_notifier,
++            exit_event_read,
++            exit_event_write,
+             mem: None,
+             gpu_config,
+         };
+@@ -720,11 +720,9 @@ impl VhostUserBackendMut for VhostUserGpuBackend {
+         self.inner.lock().unwrap().get_config(offset, size)
+     }
+
+-    fn exit_event(&self, _thread_index: usize) -> Option<(EventConsumer, EventNotifier)> {
++    fn exit_event(&self, _thread_index: usize) -> Option<EventFd> {
+         let inner = self.inner.lock().unwrap();
+-        let consumer = inner.exit_consumer.try_clone().ok()?;
+-        let notifier = inner.exit_notifier.try_clone().ok()?;
+-        Some((consumer, notifier))
++        inner.exit_event_read.try_clone().ok()
+     }
+
+     fn handle_event(

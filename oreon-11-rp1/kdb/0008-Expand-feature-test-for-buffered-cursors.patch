@@ -1,0 +1,67 @@
+From 3e7b595ee9080b71930243d6e56268a2a8d08185 Mon Sep 17 00:00:00 2001
+From: jordi fita i mas <jfita@infoblitz.com>
+Date: Sat, 25 Apr 2020 23:00:43 +0200
+Subject: [PATCH 08/22] Expand feature test for buffered cursors
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Summary:
+When testing a driver’s cached cursors it is interesting to see whether
+the cursor actually can go back to the first record and then return the
+values for all of them again.
+
+Checking only the return value of KDbCursor::moveFirst and
+KDbCursor::moveLast is not enough to see if it works, because they just
+return true even though the driver does not change anything.
+
+Reviewers: staniek, piggz
+
+Subscribers: Kexi-Devel-list
+
+Tags: #kdb
+
+FIXED-IN:3.2.1
+
+Differential Revision: https://phabricator.kde.org/D29185
+---
+ tests/features/cursors_test.h | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
+
+diff --git a/tests/features/cursors_test.h b/tests/features/cursors_test.h
+index 9ea968e1..5691158e 100644
+--- a/tests/features/cursors_test.h
++++ b/tests/features/cursors_test.h
+@@ -46,11 +46,24 @@ int cursorsTest()
+     qDebug() << "KDbCursor::moveFirst() ---------------------";
+     qDebug() << "-- KDbCursor::moveFirst() == " << cursor->moveFirst();
+ 
+-    /*  qDebug()<<"KDbCursor::moveNext() == "<<cursor->moveNext();
+-      qDebug()<<"KDbCursor::moveNext() == "<<cursor->moveNext();
+-      qDebug()<<"KDbCursor::moveNext() == "<<cursor->moveNext();
+-      qDebug()<<"KDbCursor::moveNext() == "<<cursor->moveNext();
+-      qDebug()<<"KDbCursor::eof() == "<<cursor->eof();*/
++    if (cursor_options & KDbCursor::Option::Buffered) {
++      qDebug() << "KDbCursor Buffered -------------------------";
++      qDebug() << "-- KDbCursor::value(0) == " << cursor->value(0);
++      qDebug() << "-- KDbCursor::moveNext() == " << cursor->moveNext();
++      qDebug() << "-- KDbCursor::value(0) == " << cursor->value(0);
++      qDebug() << "-- KDbCursor::moveNext() == "<< cursor->moveNext();
++      qDebug() << "-- KDbCursor::value(0) == " << cursor->value(0);
++      qDebug() << "-- KDbCursor::moveNext() == "<< cursor->moveNext();
++      qDebug() << "-- KDbCursor::value(0) == " << cursor->value(0);
++      qDebug() << "-- KDbCursor::moveNext() == "<< cursor->moveNext();
++      qDebug() << "-- KDbCursor::value(0) == " << cursor->value(0);
++      qDebug() << "-- KDbCursor::movePrev() == "<< cursor->movePrev();
++      qDebug() << "-- KDbCursor::value(0) == " << cursor->value(0);
++      qDebug() << "-- KDbCursor::moveNext() == "<< cursor->moveNext();
++      qDebug() << "-- KDbCursor::value(0) == " << cursor->value(0);
++      qDebug() << "-- KDbCursor::eof() == " << cursor->eof();
++    }
++
+     conn->deleteCursor(cursor);
+ 
+     return 0;
+-- 
+2.31.1
+

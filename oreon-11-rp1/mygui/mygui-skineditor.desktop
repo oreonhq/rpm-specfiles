@@ -1,0 +1,11 @@
+# Created with jdDesktopEntryEdit 1.6
+[Desktop Entry]
+Type=Application
+Name=MyGUI Skin Editor
+GenericName=MyGUI Skin Editor
+Comment=Design Skins using MyGUI library
+Icon=mygui_se
+Exec=MyGUI-Tools SkinEditor
+Categories=Development;
+StartupNotify=true
+StartupWMClass=SkinEditor

@@ -1,0 +1,15 @@
+--- wallpapoz-0.4.1-svn92_trunk/src/wallpapoz.noselect	2010-02-08 02:51:56.000000000 +0900
++++ wallpapoz-0.4.1-svn92_trunk/src/wallpapoz	2010-02-08 03:57:03.000000000 +0900
+@@ -213,6 +213,12 @@
+     # how many of selection do we have
+     length_of_path_list = len(pathlist)
+ 
++    # Well, it seems that in some cases no item is selected...
++    # (RedHat bug 555181)
++    if (not pathlist) or (not length_of_path_list) :
++      # simply ignore
++      return None
++
+     # add wallpapers, paste operation
+     # multiple selection are okay as long as in one workspace, parent and child node togeter are okay, these multiple selection
+     if type_selection == "wallpaper" or type_selection == "paste":

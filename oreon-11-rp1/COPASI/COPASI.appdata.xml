@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>COPASI.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <summary>The COPASI graphical user interface</summary>
+  <name>COPASI</name>
+  <project_license>Artistic-2.0 and GPL-3.0+ and BSD</project_license>
+  <categories>
+   <category>Science</category>
+  </categories>
+  <description>
+    <p>
+      COPASI is a software application for simulation and analysis of biochemical
+      networks and their dynamics.
+    </p>
+    <p>
+      COPASI is a stand-alone program that supports models in the SBML standard
+      and can simulate their behavior using ODEs or Gillespie's stochastic
+      simulation algorithm; arbitrary discrete events can be included in such
+      simulations.
+    </p>
+    <p>
+      COPASI carries out several analyses of the network and its dynamics and 
+      has extensive support for parameter estimation and optimization. 
+      COPASI provides means to visualize data in customizable plots, histograms and 
+      animations of network diagrams.
+    </p>
+    <p>
+       MODELS
+
+       Models in COPASI are based on reactions that convert a set of species into another set of species. Each species is located in a compartment,
+       which is a physical location with a size (volume, area, etc). This maps directly to biochemical reaction networks,
+       but can also represent other types of processes (for example,  the species could be cell types).
+       COPASI automatically converts the reaction network to a set of differential equations or to a system of stochastic reaction events
+       — the user does not have to write down the math explicitly, the software does that.
+    </p>
+    <p>Models can also have:</p>
+      <ul> 
+       <li>* Unlimited number of species, reactions, and compartments.</li>
+       <li>* Arbitrary discrete events; these can be used to change the model, or just to monitor the progress of simulations.</li>
+       <li>* Arbitrary differential equations; these have to be added explicitly by the user and can be mapped to species, compartments, or generic variables.</li>
+       <li>* Compartments can have variable sizes (ie they can be variables of the model).</li>
+       <li>* The rates of reaction can be picked from a set of predefined kinetic functions (the most common in biochemistry), or arbitrary functions defined by the user.</li>
+      </ul>
+
+     <p>Models can be visualized through</p>
+
+      <ul>
+       <li>* the GUI interface, with tables for reactions, species, compartments, etc.;</li>
+       <li>* an arbitrary number of network diagrams (including an SBGN-compliant option);</li>
+       <li>* the full set of differential equations; these can be exported in Latex or MathML formats.</li>
+      </ul>
+     <p>
+       COPASI can import and export models in the SBML format (levels 1 to 3). Models can also be exported in XPP format,
+       Berkeley Madonna format, and as C code (in addition to MathML and Latex).
+
+       SIMULATION
+
+       Simulation can be performed either with stochastic kinetics or with differential equations, and the software easily allows
+       switching between them. The software provides an interface to create parameter scans (sweeps),
+       parameter sampling and repeated simulations — including complex simulation scenarios mixing parameter samples
+       with scans and repeats of simulations (or other analyses).
+     </p>
+     <p>Algorithms available for simulation:</p>
+
+      <ul>
+       <li>* LSODAR for ordinary differential equation modeling.</li>
+       <li>* Gillespie's direct method for exact stochastic kinetics.</li>
+       <li>* Gibson-Brooke's version of Gillespie's algorithm for exact stochastic kinetics.</li>
+       <li>* τ-leap algorithm for faster (approximate) stochastic kinetics.</li>
+       <li>* Adaptive SSA/τ-leap algorithm for faster (approximate) stochastic kinetics.</li>
+       <li>* Hybrid Runge-Kutta/SSA for hybrid simulations with stochastic kinetics and differential equations.</li>
+       <li>* Hybrid LSODA/SSA for hybrid simulations with stochastic kinetics and differential equations.</li>
+      </ul>
+     <p>
+       Simulations can be of time courses or steady states.
+
+       ANALISYS
+
+       Models can be analyzed and modified with a large set of methods:
+     </p>
+      <ul>
+       <li>* Stoichiometric analysis of the reaction network, including mass conservation analysis and elementary flux modes.</li>
+       <li>* Optimization of arbitrary components of the model using a range of diverse algorithms.</li>
+       <li>* Parameter estimation using a range of diverse optimization algorithms. This can be done over several different experiments simultaneously,
+         including mixtures of steady-state and time course experiments.</li>
+       <li>* Local sensitivity analysis.</li>
+       <li>* Metabolic control analysis (a special form of sensitivity analysis).</li>
+       <li>* Time scale separation analysis; this allows definition of fast and slow components of the model, in a time-dependent way.</li>
+       <li>* Analysis of stochasticity using the linear noise approximation (allows estimating variances and co-variances even in the presence
+         of large numbers of particles).</li>
+       <li>* Cross sections, which allow to characterize non-linear dynamics properties, such as oscillations and chaos.</li>
+       <li>* Lyapunov exponents, which allows to establish if the system dynamics are chaotic.</li>
+      </ul>
+     <p>
+      DATA VISUALIZATION
+
+      COPASI allows users to visualize data in various ways:
+     </p>
+     <ul>
+      <li>* Network diagrams can be used to visualize time course simulations as movies;</li>
+      <li>* Network diagrams can also be used to visualize mass conservation moieties, and elementary flux modes;</li>
+      <li>* Arbitrary 2D plots of any model variables and parameters (including trajectories in phase space);</li>
+      <li>* A series of plots that are most commonly used are already pre-defined;</li>
+      <li>* Color-coded matrices, for easily identifying large and small values;</li>
+      <li>* 3D bar chart representation of matrices</li>
+     </ul>
+     <p>
+      DATA OUTPUT
+
+      COPASI allows users to define report files where data is written to during simulations and analyses.
+      These report files are useful for importing data onto other applications for further analysis and visualization.
+     </p>
+  </description>
+  <url type="homepage">http://copasi.org/</url>
+  <screenshots>
+    <screenshot type="default">
+     <image>https://sagitter.fedorapeople.org/copasi/COPASI-TSSATask_03.png</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/copasi/COPASI-maxresdefault.jpg</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/copasi/COPASI-Diagrams_02.png</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/copasi/COPASI-Diagrams_03.png</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/copasi/COPASI-MCATask_02.png</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/copasi/COPASI-MCATask_03.png</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/copasi/COPASI-ParameterScan_08.png</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/copasi/COPASIF5.large.jpg</image>
+    </screenshot>
+  </screenshots>
+  <updatecontact>sagitter_at_fedoraproject.org</updatecontact>
+</component>

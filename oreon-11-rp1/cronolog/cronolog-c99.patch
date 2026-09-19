@@ -1,0 +1,18 @@
+Without this change, <time.h> does not declare strptime, leading to an
+implicit function declaration and a build failure with future
+compilers.
+
+diff -up cronolog-1.6.2/src/cronoutils.c.c99 cronolog-1.6.2/src/cronoutils.c
+--- cronolog-1.6.2/src/cronoutils.c.c99	2001-05-03 18:43:21.000000000 +0200
++++ cronolog-1.6.2/src/cronoutils.c	2023-02-02 08:01:48.533575521 +0100
+@@ -69,6 +69,10 @@
+  *
+  */
+ 
++/* Declare strptime in <time.h>. */
++#define _XOPEN_SOURCE
++#define _DEFAULT_SOURCE
++
+ #include "cronoutils.h"
+ extern char *tzname[2];
+ 

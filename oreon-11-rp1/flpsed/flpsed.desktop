@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=flpsed
+GenericName=flpsed
+Comment=WYSIWYG pseudo PostScript editor
+Exec=flpsed
+Terminal=false
+Type=Application
+Categories=Graphics;

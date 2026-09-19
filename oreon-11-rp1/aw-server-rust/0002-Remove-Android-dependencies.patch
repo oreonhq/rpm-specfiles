@@ -1,0 +1,43 @@
+From 4b79bd870f5b4c6c85a247d273d26b7a83b78387 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Wojni=C5=82owicz?=
+ <lukasz.wojnilowicz@gmail.com>
+Date: Mon, 9 Dec 2024 17:21:41 +0100
+Subject: [PATCH 2/8] Remove Android dependencies
+
+---
+ aw-server/Cargo.toml | 7 -------
+ aw-sync/Cargo.toml   | 3 ---
+ 2 files changed, 10 deletions(-)
+
+diff --git a/aw-server/Cargo.toml b/aw-server/Cargo.toml
+index da6c908..a12eded 100644
+--- a/aw-server/Cargo.toml
++++ b/aw-server/Cargo.toml
+@@ -40,10 +40,3 @@ sd-notify = "0.4.2"
+ 
+ [target.'cfg(all(target_os="linux", target_arch="x86"))'.dependencies]
+ jemallocator = "0.5.0"
+-
+-[target.'cfg(target_os="android")'.dependencies]
+-jni = { version = "0.20", default-features = false }
+-libc = "0.2"
+-android_logger = "0.13"
+-openssl-sys = { version = "0.9.82", features = ["vendored"]}
+-aw-client-rust = { path = "../aw-client-rust" }
+diff --git a/aw-sync/Cargo.toml b/aw-sync/Cargo.toml
+index fc2deeb..37d6976 100644
+--- a/aw-sync/Cargo.toml
++++ b/aw-sync/Cargo.toml
+@@ -32,9 +32,6 @@ aw-models = { path = "../aw-models" }
+ aw-datastore = { path = "../aw-datastore" }
+ aw-client-rust = { path = "../aw-client-rust" }
+ 
+-[target.'cfg(target_os="android")'.dependencies]
+-jni = { version = "0.21", default-features = false }
+-
+ [features]
+ default = ["cli"]
+ cli = ["clap", "ctrlc"]
+-- 
+2.51.1
+

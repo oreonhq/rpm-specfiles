@@ -1,0 +1,59 @@
+From 90c4468ba5d334ffaa627f6f63fba444119bac47 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Sat, 10 Jul 2021 13:48:11 +0200
+Subject: [PATCH 2/3] mdb-provider: Store filename used to open the DB in our
+ private data
+
+With mdbtools >= 0.9.0, the MdbFile struct no longer has a filename member,
+instead store the filename passed to mdb_open() in our private data.
+
+Note this also fixes the dynamically allocated string returned by
+g_build_filename() being leaked.
+---
+ providers/mdb/gda-mdb-provider.c | 4 +++-
+ providers/mdb/gda-mdb.h          | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/providers/mdb/gda-mdb-provider.c b/providers/mdb/gda-mdb-provider.c
+index 82b085ca7..c82a37aee 100644
+--- a/providers/mdb/gda-mdb-provider.c
++++ b/providers/mdb/gda-mdb-provider.c
+@@ -288,6 +288,7 @@ gda_mdb_provider_open_connection (GdaServerProvider *provider, GdaConnection *cn
+ 
+ 	cdata = g_new0 (MdbConnectionData, 1);
+ 	cdata->cnc = cnc;
++	cdata->filename = filename;
+ 	cdata->server_version = NULL;
+ #ifdef MDB_WITH_WRITE_SUPPORT
+ 	cdata->mdb = mdb_open (filename, MDB_WRITABLE);
+@@ -562,7 +563,7 @@ gda_mdb_provider_get_database (GdaServerProvider *provider, GdaConnection *cnc)
+ 	if (!cdata)
+ 		return NULL;
+ 
+-	return (const gchar *) cdata->mdb->f->filename;
++	return cdata->filename;
+ }
+ 
+ /*
+@@ -572,5 +573,6 @@ static void
+ gda_mdb_free_cnc_data (MdbConnectionData *cdata)
+ {
+ 	g_free (cdata->server_version);
++	g_free (cdata->filename);
+ 	g_free (cdata);
+ }
+diff --git a/providers/mdb/gda-mdb.h b/providers/mdb/gda-mdb.h
+index 4744fe593..14eaf5d22 100644
+--- a/providers/mdb/gda-mdb.h
++++ b/providers/mdb/gda-mdb.h
+@@ -38,6 +38,7 @@
+ typedef struct {
+ 	GdaConnection  *cnc;
+ 	MdbHandle      *mdb;
++	gchar          *filename;
+ 	gchar          *server_version;
+ } MdbConnectionData;
+ 
+-- 
+2.31.1
+

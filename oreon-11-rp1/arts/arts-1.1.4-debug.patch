@@ -1,0 +1,13 @@
+diff -up arts-1.5.10/mcop/dispatcher.cc.debug arts-1.5.10/mcop/dispatcher.cc
+--- arts-1.5.10/mcop/dispatcher.cc.debug	2008-02-13 10:35:23.000000000 +0100
++++ arts-1.5.10/mcop/dispatcher.cc	2022-11-24 09:29:26.445273664 +0100
+@@ -216,8 +216,7 @@ Dispatcher::Dispatcher(IOManager *ioMana
+ 	orig_sigpipe = signal(SIGPIPE,SIG_IGN);
+ 	if((orig_sigpipe != SIG_DFL) && (orig_sigpipe != SIG_IGN))
+ 	{
+-		cerr << "mcop warning: user defined signal handler found for"
+-		        " SIG_PIPE, overriding" << endl;
++		arts_debug("mcop warning: user defined signal handler found for SIG_PIPE, overriding");
+ 	}
+ 	
+ 	StartupManager::startup();

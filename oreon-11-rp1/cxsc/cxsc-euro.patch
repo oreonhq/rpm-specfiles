@@ -1,0 +1,11 @@
+--- src/real.hpp.orig	2014-01-30 10:23:48.000000000 -0700
++++ src/real.hpp	2018-10-06 11:12:03.686497352 -0600
+@@ -496,7 +496,7 @@ extern const real Ep2_real;       // e^2
+ extern const real Ep2r_real;      // 1/e^2
+ //! Constant for \f$ \mbox{e}^\pi \f$ rounded to the nearest machine number
+ extern const real EpPi_real;      // e^(Pi)
+-//! Constant for \f$ \mbox{€}^{2 \pi} \f$ rounded to the nearest machine number
++//! Constant for \f$ \mbox{e}^{2 \pi} \f$ rounded to the nearest machine number
+ extern const real Ep2Pi_real;     // e^(2Pi)
+ //! Constant for \f$ \mbox{e}^{\frac{\pi}{2}} \f$ rounded to the nearest machine number
+ extern const real EpPid2_real;    // e^(Pi/2)

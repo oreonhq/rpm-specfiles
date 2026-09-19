@@ -1,0 +1,12 @@
+diff -up Cairo-1.109/CairoSurface.xs.strlen-fix Cairo-1.109/CairoSurface.xs
+--- Cairo-1.109/CairoSurface.xs.strlen-fix	2024-02-10 12:50:52.402209783 -0500
++++ Cairo-1.109/CairoSurface.xs	2024-02-10 12:51:24.924694430 -0500
+@@ -389,7 +389,7 @@ cairo_status_t
+ cairo_surface_set_mime_data (cairo_surface_t *surface, const char *mime_type, SV *data);
+     PREINIT:
+ 	const unsigned char *mime_data;
+-	unsigned long length;
++	STRLEN length;
+     CODE:
+ 	SvREFCNT_inc (data);
+ 	mime_data = (const unsigned char *) SvPV(data, length);

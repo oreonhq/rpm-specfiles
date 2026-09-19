@@ -1,0 +1,20 @@
+diff --git a/setup.py b/setup.py
+index 3220f82..54362e5 100644
+--- a/setup.py
++++ b/setup.py
+@@ -59,12 +59,12 @@ setup(
+     ],
+     python_requires=">=3.6",
+     install_requires=[
+-        'Click==7.1.2',
+-        'arrow==0.17.0',
++        'Click>=7.1.2',
++        'arrow>=0.15.6',
+     ],
+     extras_require={
+         ':sys_platform != "win32"': [
+-            'sh==1.14.1',
++            'sh>=1.13.1',
+         ],
+     },
+     keywords='gitlint git lint',

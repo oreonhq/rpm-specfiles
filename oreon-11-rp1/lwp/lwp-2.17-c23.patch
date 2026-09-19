@@ -1,0 +1,12 @@
+diff -up lwp-2.17/src/timer.c.c23 lwp-2.17/src/timer.c
+--- lwp-2.17/src/timer.c.c23	2025-03-12 17:22:13.093660069 -0400
++++ lwp-2.17/src/timer.c	2025-03-12 17:22:22.941613832 -0400
+@@ -55,7 +55,7 @@ Pittsburgh, PA.
+ #define DEBUG(...)
+ #endif
+ 
+-typedef unsigned char bool;
++/* typedef unsigned char bool; */
+ 
+ #define expiration TotalTime
+ 

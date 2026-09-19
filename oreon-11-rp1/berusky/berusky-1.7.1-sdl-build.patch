@@ -1,0 +1,12 @@
+diff -up berusky-1.7.1/configure.in.old berusky-1.7.1/configure.in
+--- berusky-1.7.1/configure.in.old	2019-04-25 14:50:03.000806129 +0200
++++ berusky-1.7.1/configure.in	2019-04-25 14:49:35.607915012 +0200
+@@ -26,7 +26,7 @@ AM_GLIB_GNU_GETTEXT
+ 
+ AM_PROG_LIBTOOL
+ 
+-PKG_CHECK_MODULES(PACKAGE, [gtk+-2.0 gdk-2.0])
++PKG_CHECK_MODULES(PACKAGE, [gtk+-2.0 gdk-2.0 SDL_image])
+ AC_SUBST(PACKAGE_CFLAGS)
+ AC_SUBST(PACKAGE_LIBS)
+ 

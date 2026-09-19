@@ -1,0 +1,13 @@
+diff --git a/src/tools/setuptools_wrapper.py b/src/tools/setuptools_wrapper.py
+index 4ffeb5e..4b3fc96 100644
+--- a/src/tools/setuptools_wrapper.py
++++ b/src/tools/setuptools_wrapper.py
+@@ -5,7 +5,7 @@ from setuptools.build_meta import *  # Do not remove this line, it's nedded!  #
+ 
+ 
+ def compile_ui() -> None:
+-    protoc_call = ["python", "-m", "src.tools.ui_compile"]
++    protoc_call = ["python3", "-m", "src.tools.ui_compile"]
+     subprocess.call(protoc_call)
+ 
+ 

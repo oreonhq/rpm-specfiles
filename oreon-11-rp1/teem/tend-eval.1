@@ -1,0 +1,47 @@
+.TH TEND\-EVAL "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-eval \- calculate one or more eigenvalues in a DT volume
+.SH SYNOPSIS
+.B tend\ eval
+.B \-c
+.RI < c0 \ ...>
+.RB [ \-t
+.RI < thresh >]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH OPTIONS
+.TP
+.B \-c\fR <\fIc0\fR\ ...>
+which eigenvalues should be saved out.
+.RB \(lq 0 \(rq
+for the largest,
+.RB \(lq 1 \(rq
+for the middle,
+.RB \(lq 2 \(rq
+for the smallest,
+.RB \(lq 0\ 1 \(rq,
+.RB \(lq 1\ 2 \(rq,
+.RB \(lq 0\ 1\ 2 \(rq
+or similar for more than one (1..3
+.IR int s)
+.TP
+.B \-t\fR <\fIthresh\fR>
+confidence threshold
+.RI ( float );
+default:
+.RB \(lq 0.5 \(rq
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1),
+.BR tend\-evec (1)

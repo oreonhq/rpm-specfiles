@@ -1,0 +1,10 @@
+[Unit]
+Description=Soundcard Packet Radio Modem
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/soundmodem --daemonize
+
+[Install]
+WantedBy=multi-user.target
+

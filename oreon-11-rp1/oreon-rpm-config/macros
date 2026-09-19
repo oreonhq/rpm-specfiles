@@ -117,10 +117,12 @@
 # Use "%undefine _auto_set_build_flags" to disable"
 %_auto_set_build_flags 1
 %__spec_build_pre %{___build_pre} \
+  unset VERSION; \
   %{?_auto_set_build_flags:%{set_build_flags}} \
   %{?_generate_package_note_file}
 
 %__spec_check_pre %{___build_pre} \
+  unset VERSION; \
   %{?_auto_set_build_flags:%{set_build_flags}} \
   %{?_generate_package_note_file}
 
@@ -253,7 +255,6 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 	--infodir=%{_infodir} %{?*}
 
 %make_build \
-  %{?__oreon_hwcaps_make_pre:%{__oreon_hwcaps_make_pre} &&} \
   %{__make} %{_make_output_sync} %{?_smp_mflags} %{_make_verbose}
 
 #==============================================================================
@@ -268,6 +269,7 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
     [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf "${RPM_BUILD_ROOT}"\
     mkdir -p "`dirname "$RPM_BUILD_ROOT"`"\
     mkdir "$RPM_BUILD_ROOT"\
+    unset VERSION; \
     %{?_auto_set_build_flags:%{set_build_flags}}\
 %{nil}
 
@@ -319,7 +321,6 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 
 %__spec_install_post\
     %{?__debug_package:%{__debug_install_post}}\
-    %{__oreon_hwcaps_post_install}\
     %{__arch_install_post}\
     %{__os_install_post}\
 %{nil}

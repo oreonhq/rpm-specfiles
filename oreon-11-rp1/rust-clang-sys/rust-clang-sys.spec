@@ -7,7 +7,7 @@
 %global crate clang-sys
 
 Name:           rust-clang-sys
-Version:        1.8.1
+Version:        1.9.1
 Release:        %autorelease
 Summary:        Rust bindings for libclang
 

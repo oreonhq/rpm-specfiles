@@ -1,0 +1,39 @@
+From c4a020ab4674d2936514ab1c54e5285c4aec231c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 21 Jul 2017 11:16:23 +0200
+Subject: [PATCH] Install into architecture specific path
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Inline/CPP/Config.pm stores C++ flags that are specific to
+architecture.
+
+CPAN RT#122557
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index e0151ed..0eea0f3 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -40,6 +40,13 @@ WriteMakefile(
+     'ExtUtils::CppGuess'  => '0.15',
+     'ExtUtils::MakeMaker' => '7.04',    # Core.
+   },
++  PM => {
++    'lib/Inline/CPP.pod'        => '$(INST_LIB)/Inline/CPP.pod',
++    'lib/Inline/CPP.pm'         => '$(INST_LIB)/Inline/CPP.pm',
++    'lib/Inline/CPP/Config.pm'  => '$(INST_ARCHLIB)/Inline/CPP/Config.pm',
++    'lib/Inline/CPP/Parser/RecDescent.pm' =>
++        '$(INST_LIB)/Inline/CPP/Parser/RecDescent.pm',
++  },
+   META_MERGE => {
+     'meta-spec' => {
+       version => 2,
+-- 
+2.20.1
+

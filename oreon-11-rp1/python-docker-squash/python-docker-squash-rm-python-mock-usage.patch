@@ -1,0 +1,44 @@
+--- a/tests/test_integ_squash.py
++++ b/tests/test_integ_squash.py
+@@ -8,7 +8,7 @@ import unittest
+ import uuid
+ from io import BytesIO
+ 
+-import mock
++from unittest import mock
+ 
+ from docker_squash.errors import SquashError, SquashUnnecessaryError
+ from docker_squash.lib import common
+--- a/tests/test_unit_squash.py
++++ b/tests/test_unit_squash.py
+@@ -1,7 +1,7 @@
+ import unittest
+ 
+ import docker
+-import mock
++from unittest import mock
+ 
+ from docker_squash.errors import SquashError
+ from docker_squash.squash import Squash
+--- a/tests/test_unit_v1_image.py
++++ b/tests/test_unit_v1_image.py
+@@ -3,7 +3,7 @@ import pathlib
+ import tarfile
+ import unittest
+ 
+-import mock
++from unittest import mock
+ 
+ from docker_squash.errors import SquashError
+ from docker_squash.image import Image
+--- a/tests/test_unit_v2_image.py
++++ b/tests/test_unit_v2_image.py
+@@ -2,7 +2,7 @@ import builtins
+ import unittest
+ from collections import OrderedDict
+ 
+-import mock
++from unittest import mock
+ 
+ from docker_squash.v2_image import V2Image
+ 

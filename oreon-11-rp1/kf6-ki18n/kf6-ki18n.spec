@@ -1,12 +1,12 @@
-%global source0_hash cd812ae95b0e95b40e46a50b9dea6d188eec001be96b1e1a5d962730e5f9bc58
+%global source0_hash 9037f3caa67768869f00ee257dbb35b81febe6ad600ed0bd3ffdf293c36252ba
 
 %global		framework ki18n
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.30.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon for localization
 License:	BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND ODbl-1.0
@@ -92,6 +92,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

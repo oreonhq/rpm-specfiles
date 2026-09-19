@@ -5,8 +5,8 @@
 
 Summary:        A screen manager that supports multiple logins on one terminal
 Name:           screen
-Version:        5.0.1
-Release:        6%{?dist}
+Version:        5.0.2
+Release:        1%{?dist}
 License:        GPL-3.0-or-later
 URL:            http://www.gnu.org/software/screen
 BuildRequires: make

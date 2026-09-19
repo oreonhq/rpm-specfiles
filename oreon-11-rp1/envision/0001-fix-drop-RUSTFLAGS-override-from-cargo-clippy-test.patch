@@ -1,0 +1,28 @@
+From de76f72b6dacd6a9338de0236d18af4c12f9b88a Mon Sep 17 00:00:00 2001
+From: Nicolas Chauvet <kwizart@gmail.com>
+Date: Thu, 29 Jan 2026 14:19:28 +0100
+Subject: [PATCH] fix: drop RUSTFLAGS override from cargo-clippy test
+
+This will avoid to trigger a rebuild of the envision application if the
+RUSTFLAGS differs from the build.
+
+fixes #256
+---
+ src/meson.build | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/meson.build b/src/meson.build
+index 9d4cce9156de..43f7ffa3edc6 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -53,7 +53,6 @@ test(
+ test(
+   'cargo-clippy',
+   cargo,
+-  env: ['RUSTFLAGS=-Dwarnings'],
+   args: ['clippy', '--all-targets', '--all-features'],
+   timeout: 0,
+ )
+-- 
+2.52.0
+

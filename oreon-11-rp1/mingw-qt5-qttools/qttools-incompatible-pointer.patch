@@ -1,0 +1,12 @@
+diff -rupN --no-dereference qttools-everywhere-src-5.15.18/src/assistant/qcollectiongenerator/main.c qttools-everywhere-src-5.15.18-new/src/assistant/qcollectiongenerator/main.c
+--- qttools-everywhere-src-5.15.18/src/assistant/qcollectiongenerator/main.c	2025-03-30 13:49:56.000000000 +0200
++++ qttools-everywhere-src-5.15.18-new/src/assistant/qcollectiongenerator/main.c	2025-11-09 21:36:15.866065555 +0100
+@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
+ 
+     argv[0] = newPath;
+ #ifdef _WIN32
+-    const intptr_t ret = _spawnvp(_P_WAIT, newPath, argv);
++    const intptr_t ret = _spawnvp(_P_WAIT, newPath, (const char * const*)argv);
+     if (ret == -1) {
+         fprintf(stderr, "Error while executing \"%s\" tool.\n", newPath);
+         return 3;

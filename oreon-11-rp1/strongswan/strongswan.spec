@@ -3,8 +3,8 @@
 
 Summary:        Open source IPsec-based VPN solution
 Name:           strongswan
-Version:        6.0.7
-Release:        2%{?dist}
+Version:        6.1.0
+Release:        1%{?dist}
 License:        GPL-2.0-only
 URL:            https://www.strongswan.org/
 Source0:        https://download.strongswan.org/strongswan-%{version}.tar.bz2

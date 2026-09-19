@@ -1,0 +1,121 @@
+From: Miroslav Stampar <miroslav.stampar@gmail.com>
+Date: Wed, 19 May 2021 19:46:21 +0200
+Subject: Use Py_ssize_t for lengths
+
+Origin: pcapy-ng, https://github.com/stamparm/pcapy-ng/commit/1f671809b685b13f55d8a51a42acef27b3ae97fc
+Origin: pcapy-ng, https://github.com/stamparm/pcapy-ng/commit/01243484a2da987cc35224c0bd26775f6198613e
+Origin: pcapy-ng, https://github.com/stamparm/pcapy-ng/commit/b3b54d35bef4e87cd45fcbc524aee5cfa7794f25
+Origin: pcapy-ng, https://github.com/stamparm/pcapy-ng/commit/9d62fd8b86c0daf3749e89deb543bbf73f21fcad
+Origin: pcapy-ng, https://github.com/stamparm/pcapy-ng/pull/2/commits/2a95795c87738600a9dd1bf12db674614263f93e
+---
+ bpfobj.cc      | 4 +++-
+ pcap_pkthdr.cc | 2 ++
+ pcapdumper.cc  | 4 +++-
+ pcapobj.cc     | 8 +++++---
+ pcapy.cc       | 2 ++
+ 5 files changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/bpfobj.cc b/bpfobj.cc
+index 5e70e0b..7392130 100644
+--- a/bpfobj.cc
++++ b/bpfobj.cc
+@@ -7,6 +7,8 @@
+  *
+  */
+ 
++#define PY_SSIZE_T_CLEAN
++
+ #include <pcap.h>
+ #include <Python.h>
+ 
+@@ -191,7 +193,7 @@ p_filter(register bpfobject* bpf, PyObject* args)
+ {
+   int status;
+   u_char* packet;
+-  unsigned int len;
++  Py_ssize_t len;
+ 
+   if (Py_TYPE(bpf) != &BPFProgramType)
+     {
+diff --git a/pcap_pkthdr.cc b/pcap_pkthdr.cc
+index 140eef0..75dd1f9 100644
+--- a/pcap_pkthdr.cc
++++ b/pcap_pkthdr.cc
+@@ -7,6 +7,8 @@
+  *
+  */
+ 
++#define PY_SSIZE_T_CLEAN
++
+ #include <Python.h>
+ #include <pcap.h>
+ 
+diff --git a/pcapdumper.cc b/pcapdumper.cc
+index 3baee81..04e006b 100644
+--- a/pcapdumper.cc
++++ b/pcapdumper.cc
+@@ -7,6 +7,8 @@
+  *
+  */
+ 
++#define PY_SSIZE_T_CLEAN
++
+ #include <Python.h>
+ #include <pcap.h>
+ 
+@@ -142,7 +144,7 @@ p_dump(register pcapdumper* pp, PyObject* args)
+ {
+ 	PyObject *pyhdr;
+ 	u_char *data;
+-	int       len;
++	Py_ssize_t len;
+ 
+ 	if(validate_pcapdumper(pp) == false){
+         return NULL;  
+diff --git a/pcapobj.cc b/pcapobj.cc
+index cedc9e9..00253fd 100644
+--- a/pcapobj.cc
++++ b/pcapobj.cc
+@@ -7,6 +7,8 @@
+  *
+  */
+ 
++#define PY_SSIZE_T_CLEAN
++
+ #include <Python.h>
+ #include <pcap.h>
+ 
+@@ -393,9 +395,9 @@ PythonCallBack(u_char *user,
+ 	       const u_char *packetdata)
+ {
+   PyObject *arglist, *result;
+-  unsigned int *len;
++  Py_ssize_t *len;
+   PcapCallbackContext *pctx;
+-  len    = (unsigned int *)&header->caplen;
++  len    = (Py_ssize_t *)&header->caplen;
+   pctx = (PcapCallbackContext *)user;
+ 
+   PyEval_RestoreThread(pctx->thread_state);
+@@ -769,7 +771,7 @@ p_sendpacket(register pcapobject* pp, PyObject* args)
+ {
+   int status;
+   unsigned char* str;
+-  unsigned int length;
++  Py_ssize_t length;
+ 
+   if (Py_TYPE(pp) != &Pcaptype)
+     {
+diff --git a/pcapy.cc b/pcapy.cc
+index 54de2a4..6725695 100644
+--- a/pcapy.cc
++++ b/pcapy.cc
+@@ -7,6 +7,8 @@
+  *
+  */
+ 
++#define PY_SSIZE_T_CLEAN
++
+ #include <pcap.h>
+ #include <Python.h>
+ #ifdef WIN32

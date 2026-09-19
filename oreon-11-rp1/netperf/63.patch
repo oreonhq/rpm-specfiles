@@ -1,0 +1,37 @@
+From fd9e2948486a452a9c936451f613b05d8ca8c19e Mon Sep 17 00:00:00 2001
+From: Shuo Chen <chenshuo@chenshuo.com>
+Date: Thu, 17 Jun 2021 15:26:05 -0700
+Subject: [PATCH] netserver: do not chmod("/dev/null", 0644) when
+ suppress_debug==1 (default).
+
+When running as root, chmod("/dev/null", 0644) will break most Unix-like
+systems as "/dev/null" can't be open for write by non-root users anymore.
+
+Before the fix:
+root@linux# strace -f -e chmod ./netserver
+Starting netserver with host 'IN(6)ADDR_ANY' port '12865' and family AF_UNSPEC
+strace: Process 976220 attached
+[pid 976219] +++ exited with 0 +++
+chmod("/dev/null", 0644)                = 0
+
+Fixes: 5380b1f5 ("netserver: use mkstemp to create/open debug file")
+---
+ src/netserver.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/netserver.c b/src/netserver.c
+index 2e6b567..bf911db 100644
+--- a/src/netserver.c
++++ b/src/netserver.c
+@@ -260,7 +260,10 @@ open_debug_file()
+ 
+ #if !defined(WIN32)
+ 
+-  chmod(FileName,0644);
++  /* Only chmod() if FileName != "/dev/null" */
++  if (strcmp(FileName, NETPERF_NULL)) {
++    chmod(FileName, 0644);
++  }
+ 
+   /* redirect stdin to "/dev/null" */
+   rd_null_fp = fopen(NETPERF_NULL,"r");

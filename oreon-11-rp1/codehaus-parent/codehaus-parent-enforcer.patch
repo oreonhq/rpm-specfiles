@@ -1,0 +1,19 @@
+diff -up ./codehaus-parent-4.pom.enforcer ./codehaus-parent-4.pom
+--- ./codehaus-parent-4.pom.enforcer	2012-07-03 08:52:12.845362577 -0600
++++ ./pom.xml	2012-07-03 08:53:40.415245681 -0600
+@@ -58,6 +58,7 @@
+ 	</distributionManagement>
+ 
+ 	<build>
++		<!--
+ 		<plugins>
+ 			<plugin>
+ 				<groupId>org.apache.maven.plugins</groupId>
+@@ -81,6 +82,7 @@
+ 				</executions>
+ 			</plugin>
+ 		</plugins>
++		-->
+ 		<pluginManagement>
+ 			<plugins>
+ 				<plugin>

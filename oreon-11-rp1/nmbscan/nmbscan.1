@@ -1,0 +1,54 @@
+.TH NMBSCAN 1 "Aug 02, 2010"
+.SH NAME
+nmbscan \- NMB/SMB network scanner
+.SH SYNOPSIS
+.B nmbscan
+.RI -L
+.br
+.B nmbscan
+.RI {-d|-m|-a}
+.br
+.B nmbscan
+.RI {-h|-n}
+host1 [host2 [...]]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B nmbscan
+command.
+.PP
+\fBnmbscan\fP scans the shares of a SMB/NetBIOS network, using the 
+NMB/SMB/NetBIOS protocols. It is useful for acquiring information on a local
+area network for such purposes as security auditing.
+.PP
+It can obtain such information as NMB/SMB/NetBIOS/Windows host name, IP address,
+IP host name, Ethernet MAC address, Windows user name, NMB/SMB/NetBIOS/Windows 
+domain name, and master browser.
+.PP
+It can discover all the NMB/SMB/NetBIOS/Windows hosts on a local area network
+by using the hosts lists maintained by master browsers.
+.SH OPTIONS
+.TP
+.B \-\-help
+.br
+Show summary of options.
+.TP
+.B \-L
+Show license agreement (GPL).
+.TP
+.B \-d
+Show all domains.
+.TP
+.B \-m
+Show all domains with master browsers.
+.TP
+.B \-a
+Show all domains, master browsers, and servers.
+.TP
+.B \-h
+Show information on hosts, known by ip name/address.
+.TP
+.B \-n
+Show information on hosts, known by nmb name.
+.SH AUTHOR
+nmbscan was written by Grégoire Barbier.
+

@@ -1,0 +1,24 @@
+diff --git a/qoibench.c b/qoibench.c
+index e447c5a..ff4e347 100644
+--- a/qoibench.c
++++ b/qoibench.c
+@@ -18,7 +18,6 @@ Compile with:
+ 
+ #define STB_IMAGE_IMPLEMENTATION
+ #define STBI_ONLY_PNG
+-#define STBI_NO_LINEAR
+ #include "stb_image.h"
+ 
+ #define STB_IMAGE_WRITE_IMPLEMENTATION
+diff --git a/qoiconv.c b/qoiconv.c
+index caef2ee..a114884 100644
+--- a/qoiconv.c
++++ b/qoiconv.c
+@@ -19,7 +19,6 @@ Compile with:
+ 
+ #define STB_IMAGE_IMPLEMENTATION
+ #define STBI_ONLY_PNG
+-#define STBI_NO_LINEAR
+ #include "stb_image.h"
+ 
+ #define STB_IMAGE_WRITE_IMPLEMENTATION

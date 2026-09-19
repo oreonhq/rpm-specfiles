@@ -1,0 +1,12 @@
+[Unit]
+Description=Bitcoin daemon
+Documentation=man:bitcoind(1)
+
+[Service]
+ExecStart=/usr/bin/bitcoind
+
+Restart=on-failure
+TimeoutStopSec=120
+TimeoutStartSec=60
+StartLimitInterval=240
+StartLimitBurst=5

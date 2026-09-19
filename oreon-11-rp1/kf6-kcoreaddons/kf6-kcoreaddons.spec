@@ -1,13 +1,13 @@
-%global source0_hash ad0d0147968dabdcf011425cf7764e71a0d0cfdc30e9e34b561ea5ba9a768001
+%global source0_hash 771f7fee754a356fa284d0ad7b8b159b890cbbfac082e49ce441b43d4943027e
 
 %global		framework kcoreaddons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.30.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with various classes on top of QtCore
 License:	BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND MPL-1.1 AND LGPL-2.0-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-2.1-only WITH Qt-LGPL-exception-1.1
@@ -36,6 +36,7 @@ BuildRequires:  python3-wheel
 BuildRequires:  clang-devel
 BuildRequires:  cmake(Shiboken6)
 BuildRequires:  cmake(PySide6)
+BuildRequires:  python3-pyside6-devel >= 6.11.1-25
 
 Requires:       kf6-filesystem
 
@@ -99,6 +100,9 @@ cat *.lang > all.lang
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 
@@ -113,4 +117,3 @@ cat *.lang > all.lang
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

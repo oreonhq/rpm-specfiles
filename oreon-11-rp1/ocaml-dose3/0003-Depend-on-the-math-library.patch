@@ -1,0 +1,24 @@
+From 360558ce2b40e04bd0f184e70aacd43eac50ed3b Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Mon, 26 Jun 2023 12:41:57 -0600
+Subject: [PATCH 3/4] Depend on the math library
+
+---
+ src/common/dune | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/common/dune b/src/common/dune
+index 1467fd7..4ef508a 100644
+--- a/src/common/dune
++++ b/src/common/dune
+@@ -2,6 +2,7 @@
+  (name dose_common)
+  (public_name dose3.common)
+  (libraries extlib cudf re.pcre unix)
++ (c_library_flags -lm)
+  (flags (:standard)))
+ 
+ (ocamllex shell_lexer)
+-- 
+2.41.0
+

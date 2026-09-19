@@ -1,0 +1,10 @@
+diff -up xmlm-1.4.0/_tags~ xmlm-1.4.0/_tags
+--- xmlm-1.4.0/_tags~	2022-02-08 15:06:38.000000000 -0700
++++ xmlm-1.4.0/_tags	2022-02-09 10:55:12.152753099 -0700
+@@ -1,4 +1,4 @@
+-true : bin_annot, safe_string
++true : bin_annot, safe_string, debug
+ <_b0> : -traverse
+ <src> : include
+ <test> : include
+\ No newline at end of file

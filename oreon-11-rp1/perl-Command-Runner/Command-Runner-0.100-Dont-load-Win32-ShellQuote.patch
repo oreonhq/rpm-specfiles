@@ -1,0 +1,24 @@
+diff -up Command-Runner-0.100/lib/Command/Runner/Quote.pm.orig Command-Runner-0.100/lib/Command/Runner/Quote.pm
+--- Command-Runner-0.100/lib/Command/Runner/Quote.pm.orig	2018-05-02 09:49:44.535395473 +0200
++++ Command-Runner-0.100/lib/Command/Runner/Quote.pm	2018-05-02 09:51:05.873903588 +0200
+@@ -2,18 +2,17 @@ package Command::Runner::Quote;
+ use strict;
+ use warnings;
+ 
+-use Win32::ShellQuote ();
+-use String::ShellQuote ();
+-
+ use Exporter 'import';
+ our @EXPORT_OK = qw(quote quote_win32 quote_unix);
+ 
+ sub quote_win32 {
++    require Win32::ShellQuote;
+     my $str = shift;
+     Win32::ShellQuote::quote_literal($str, 1);
+ }
+ 
+ sub quote_unix {
++    require String::ShellQuote;
+     my $str = shift;
+     String::ShellQuote::shell_quote_best_effort($str);
+ }

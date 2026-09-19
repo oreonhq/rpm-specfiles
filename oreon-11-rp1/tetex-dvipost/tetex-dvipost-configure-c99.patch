@@ -1,0 +1,19 @@
+Fix historic C99 incompatibility in autoconf-generated C fragment.
+This is an acient bug in autoconf itself, fixed in later versions.  No
+need to upstream this patch because we assume that upstream would use
+a relatively current autoconf version to generate the configure script
+for a new release.
+
+diff --git a/configure b/configure
+index f625702fdb0cbfbb..2fab8a6f0f1d3942 100755
+--- a/configure
++++ b/configure
+@@ -652,7 +652,7 @@ cat > conftest.$ac_ext << EOF
+ #line 653 "configure"
+ #include "confdefs.h"
+ 
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:658: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes

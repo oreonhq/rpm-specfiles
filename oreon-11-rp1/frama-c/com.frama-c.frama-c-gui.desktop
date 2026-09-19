@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Frama-C
+GenericName=Frama C
+Comment=Framework for analysis of C source code
+Exec=frama-c-gui
+Icon=frama-c
+Terminal=false
+Type=Application
+Categories=Development;
+

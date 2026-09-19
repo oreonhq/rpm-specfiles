@@ -1,0 +1,9 @@
+diff --git a/tests/_exts/stream/test_library.py b/tests/_exts/stream/test_library.py
+index 41dcfdb..6beca1d 100644
+--- a/tests/_exts/stream/test_library.py
++++ b/tests/_exts/stream/test_library.py
+@@ -59,4 +59,3 @@ def test_lookup_converts_uri_metadata_to_track(audio, config, track_uri):
+     assert len(result) == 1
+     track = result[0]
+     assert track.uri == track_uri
+-    assert track.length == 4406

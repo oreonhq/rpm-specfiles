@@ -1,0 +1,21 @@
+From 8bb19933477ea69334ee694d4eea62d90e5a273d Mon Sep 17 00:00:00 2001
+From: topazus <77263945+topazus@users.noreply.github.com>
+Date: Mon, 12 Jan 2026 00:39:41 +0800
+Subject: [PATCH] Fix: add <cstdint> header to fix build
+
+---
+ src/crispy/TrieMap.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/crispy/TrieMap.h b/src/crispy/TrieMap.h
+index 879ad2a793..d8ad5f87ba 100644
+--- a/src/crispy/TrieMap.h
++++ b/src/crispy/TrieMap.h
+@@ -3,6 +3,7 @@
+ 
+ #include <array>
+ #include <cassert>
++#include <cstdint>
+ #include <memory>
+ #include <optional>
+ #include <variant>

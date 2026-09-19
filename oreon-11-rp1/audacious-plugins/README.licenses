@@ -1,0 +1,82 @@
+aac
+adplug                        LGPL-2.0-or-later
+alarm                         GPL-2.0-or-later
+albumart                      BSD
+alsa                          BSD
+amidi-plug                    GPL-2.0-or-later
+ampache                       GPL-3.0-only
+aosd                          GPL-2.0-or-later
+asx                           BSD
+asx3                          BSD
+audpl                         BSD
+background_music              BSD
+bitcrusher                    MIT
+blur_scope                    GPL-2.0-or-later
+bs2b                          GPL-2.0-or-later
+cairo-spectrum                MIT
+cdaudio-ng                    GPL-3.0-only
+cd-menu-items                 BSD
+compressor                    BSD
+console                       LGPL-2.0-or-later
+crossfade                     BSD
+crystalizer                   MIT
+cue                           BSD
+delete-files                  BSD
+echo_plugin
+ffaudio                       BSD
+filewriter                    GPL-2.0-or-later
+flac                          GPL-2.0-or-later
+gio                           BSD
+gl-spectrum                   GPL-2.0-or-later
+gnomeshortcuts                GPL-2.0-or-later
+gtkui                         BSD
+hotkey                        GPL-2.0-or-later
+jack-ng                       BSD
+ladspa                        BSD
+lirc                          GPL-2.0-or-later
+lyricwiki                     MIT
+m3u                           GPL-2.0-or-later
+metronom                      GPL-2.0-or-later
+mixer                         BSD
+mms                           BSD
+modplug                       LicenseRef-Fedora-Public-Domain
+mpg123                        MIT
+mpris2                        BSD
+neon                          GPL-2.0-or-later
+notify                        GPL-3.0-or-later
+openmpt                       MIT
+opus                          BSD
+oss4                          BSD
+pipewire                      BSD
+playback-history              GPL-3.0-or-later
+playlist-manager              BSD
+pls                           GPL-2.0-or-later
+psf                           BSD-3-Clause AND GPL-2.0-or-later
+pulse_audio                   GPL-2.0-or-later
+qtaudio                       BSD
+qt-spectrum                   MIT
+qtui                          BSD
+resample                      BSD
+scrobbler2                    GPL-3.0-only
+sdlout                        BSD
+search-tool                   BSD
+sid                           GPL-2.0-or-later
+silence-removal               BSD
+skins                         GPL-2.0-only AND GPL-3.0-only
+sndfile                       GPL-2.0-or-later
+sndio                         BSD
+song_change                   GPL-3.0-only
+song-info-qt                  BSD
+sox-resampler                 BSD
+speed-pitch                   BSD
+statusicon                    GPL-2.0-or-later
+stereo_plugin
+streamtuner                   MIT No Attribution
+tonegen                       GPL-2.0-or-later
+voice_removal                 MIT
+vorbis                        GPL-2.0-or-later
+vtx                           GPL-2.0-or-later
+vumeter                       MIT
+wavpack
+xsf                           BSD AND GPL-2.0-or-later
+xspf                          GPL-2.0-or-later

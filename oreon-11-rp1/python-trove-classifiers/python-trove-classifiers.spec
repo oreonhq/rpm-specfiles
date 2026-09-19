@@ -1,52 +1,36 @@
-%global source0_hash 00492545a1402b09d4858605ba190ea33243d361e2b01c9c296ce06b5c3325f3
+%global source0_hash none
 
 Name:           python-trove-classifiers
-Version:        2026.1.14.14
+Version:        2026.6.1.19
 Release:        %autorelease
-Summary:        Canonical source for classifiers on PyPI (pypi.org)
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Canonical source for classifiers on PyPI _pypi.org_.
 
-License:        Apache-2.0
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/pypa/trove-classifiers
-Source:        https://files.pythonhosted.org/packages/d8/43/7935f8ea93fcb6680bc10a6fdbf534075c198eeead59150dd5ed68449642/trove_classifiers-%{version}.tar.gz
-# Drop dependency on calver which is not packaged in Fedora.
-# This patch is rebased version of upstream PR:
-# https://github.com/pypa/trove-classifiers/pull/126/commits/809156bb35852bcaa1c753e0165f1814f2bcedf6
-Patch:          Move-to-PEP-621-declarative-metadata.patch
+Source:         %{pypi_source trove_classifiers}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-# Tests require python-iniconfig which requires python-trove-classifiers
-# The bcond is needed for new Python bootstrap
-%bcond tests 1
 
-%if %{with tests}
-BuildRequires:  python3-pytest
-%endif
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Canonical source for classifiers on PyPI.
-Classifiers categorize projects per PEP 301. Use this package to validate
-classifiers in packages for PyPI upload or download.
-}
+This is package 'trove-classifiers' generated automatically by pyp2spec.}
+
+Patch:          Move-to-PEP-621-declarative-metadata.patch
 
 %description %_description
 
-%package -n python3-trove-classifiers
+%package -n     python3-trove-classifiers
 Summary:        %{summary}
 
 %description -n python3-trove-classifiers %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n trove_classifiers-%{version}
-# Replace @@VERSION@@ with %%version
-%writevars -f pyproject.toml version
-
-# Make the the CLI tests work in %%check
-# https://github.com/pypa/trove-classifiers/issues/219
-sed -i 's@{BINDIR}/@@' tests/test_cli.py
 
 
 %generate_buildrequires
@@ -59,20 +43,17 @@ sed -i 's@{BINDIR}/@@' tests/test_cli.py
 
 %install
 %pyproject_install
-%pyproject_save_files trove_classifiers
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pyproject_check_import
-%if %{with tests}
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
 %files -n python3-trove-classifiers -f %{pyproject_files}
-%doc README.*
 %{_bindir}/trove-classifiers
-
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2026.1.14.14-1

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bd44c4c13e22dc69366e76d05b3d65629d07507a38e5ba42d60267756d73edcf
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kdegraphics-thumbnailers
 Summary: Thumbnailers for various graphic types
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # most sources GPLv2+, dscparse.* GPL, gscreator.* LGPLv2+,

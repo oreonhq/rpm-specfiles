@@ -1,0 +1,12 @@
+diff -Nrup a/netgen/base/netfile.c b/netgen/base/netfile.c
+--- a/netgen/base/netfile.c	2006-04-10 16:04:49.000000000 -0600
++++ b/netgen/base/netfile.c	2019-10-15 14:32:36.523096473 -0600
+@@ -548,7 +548,7 @@ char *readbuf;
+ int bytes_in_buffer;
+ char *bufptr;
+ 
+-INLINE
++static INLINE
+ int READ(void *buf, int bytes)
+ {
+   if (bytes_in_buffer >= bytes) {

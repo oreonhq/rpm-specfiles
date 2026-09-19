@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.fract4d</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LGPL-2.1-or-later</project_license>
+  <name>gnofract4d</name>
+  <summary>Gnome-based program to draw fractals</summary>
+  <description>
+    <p>
+      Gnofract 4D is a free, open source program which allows anyone to create
+      beautiful images called fractals.
+    </p>
+    <p>The fractals are automatically created by the computer based on
+    mathematical principles.  These include the Mandelbrot and Julia sets and
+    many more.  You don't need to do any math: you can explore a universe of
+    images just using a mouse.
+    </p>
+  </description>
+  <replaces>
+    <id>com.github.fract4d.gnofract4d</id>
+  </replaces>
+  <launchable type="desktop-id">io.github.fract4d.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://gnofract4d.sourceforge.net/images/screenshot.png</image>
+      <caption>Curlybrot fractals</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://gnofract4d.sourceforge.net/images/screenshot2.png</image>
+      <caption>Mandelbrot fractals</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://gnofract4d.sourceforge.net/images/screenshot3.png</image>
+      <caption>Formula browser and color maps</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://gnofract4d.sourceforge.net/images/screenshot4.png</image>
+      <caption>Fractal settings</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://gnofract4d.sourceforge.net/images/screenshot5.png</image>
+      <caption>Gradient editor</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://gnofract4d.sourceforge.net/images/screenshot6.png</image>
+      <caption>Explorer</caption>
+    </screenshot>
+  </screenshots>
+  <update_contact>gnofract4d-maintainers@fedoraproject.org</update_contact>
+  <url type="homepage">http://gnofract4d.sourceforge.net/</url>
+  <url type="bugtracker">https://github.com/edyoung/gnofract4d/issues</url>
+  <content_rating type="oars-1.1"></content_rating>
+  <provides>
+    <binary>gnofract4d</binary>
+  </provides>
+</component>

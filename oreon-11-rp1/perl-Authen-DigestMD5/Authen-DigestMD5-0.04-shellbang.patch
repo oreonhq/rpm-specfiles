@@ -1,0 +1,8 @@
+--- digest-md5-auth.pl
++++ digest-md5-auth.pl
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ 
+ use warnings;
+ use strict;

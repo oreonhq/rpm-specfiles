@@ -1,0 +1,45 @@
+diff -up Sigil-1.9.20/src/Exporters/ExportEPUB.cpp.mz Sigil-1.9.20/src/Exporters/ExportEPUB.cpp
+--- Sigil-1.9.20/src/Exporters/ExportEPUB.cpp.mz	2022-10-03 22:36:32.076924844 +0200
++++ Sigil-1.9.20/src/Exporters/ExportEPUB.cpp	2022-10-03 22:39:26.415909428 +0200
+@@ -26,8 +26,10 @@
+ 
+ #include <string>
+ #include <string.h>
++#include <stdint.h>
+ 
+ #include <zip.h>
++#include <zlib.h>
+ #ifdef _WIN32
+ #include <iowin32.h>
+ #endif
+@@ -145,7 +147,7 @@ void ExportEPUB::SaveFolderAsEpubToLocat
+     fileInfo.tmz_date.tm_year = timeNow.date().year();
+ 
+      // Write the mimetype. This must be uncompressed and the first entry in the archive.
+-    if (zipOpenNewFileInZip64(zfile, "mimetype", &fileInfo, NULL, 0, NULL, 0, NULL, Z_NO_COMPRESSION, 0, 0) != ZIP_OK) {
++    if (zipOpenNewFileInZip4_64(zfile, "mimetype", &fileInfo, NULL, 0, NULL, 0, NULL, Z_NO_COMPRESSION, 8, 0, 15, 8, Z_DEFAULT_STRATEGY, NULL, 0, 0x0b00, 1<<11, 0) != ZIP_OK) {
+         zipClose(zfile, NULL);
+         QFile::remove(tempFile);
+         throw(CannotStoreFile("mimetype"));
+diff -up Sigil-1.9.20/src/Importers/ImportEPUB.cpp.mz Sigil-1.9.20/src/Importers/ImportEPUB.cpp
+--- Sigil-1.9.20/src/Importers/ImportEPUB.cpp.mz	2022-08-31 17:13:03.000000000 +0200
++++ Sigil-1.9.20/src/Importers/ImportEPUB.cpp	2022-10-03 22:36:32.076924844 +0200
+@@ -25,6 +25,7 @@
+ #define NOMINMAX
+ #endif
+ 
++#include <stdint.h>
+ #include "unzip.h"
+ #ifdef _WIN32
+ #include "iowin32.h"
+diff -up Sigil-1.9.20/src/Misc/Utility.cpp.mz Sigil-1.9.20/src/Misc/Utility.cpp
+--- Sigil-1.9.20/src/Misc/Utility.cpp.mz	2022-10-03 22:36:32.076924844 +0200
++++ Sigil-1.9.20/src/Misc/Utility.cpp	2022-10-03 22:40:38.757189168 +0200
+@@ -25,6 +25,7 @@
+ #define NOMINMAX
+ #endif
+ 
++#include <stdint.h>
+ #include "unzip.h"
+ 
+ #ifdef _WIN32

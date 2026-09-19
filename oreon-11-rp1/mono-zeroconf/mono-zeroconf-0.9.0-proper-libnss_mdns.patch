@@ -1,0 +1,12 @@
+diff -up mono-zeroconf-0.9.0/configure.2017 mono-zeroconf-0.9.0/configure
+--- mono-zeroconf-0.9.0/configure.2017	2017-07-12 11:07:50.804528258 -0400
++++ mono-zeroconf-0.9.0/configure	2017-07-12 11:08:07.891109083 -0400
+@@ -3265,7 +3265,7 @@ case ${host} in
+ 		mdns_target_library="libc"
+ 		;;
+ 	*)
+-		mdns_target_library="libnss_mdns-0.2.so"
++		mdns_target_library="libnss_mdns.so.2"
+ 		;;
+ esac
+ 

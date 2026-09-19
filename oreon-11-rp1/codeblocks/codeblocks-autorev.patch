@@ -1,0 +1,43 @@
+From 691468b112193bd6577059a08511a529e233c386 Mon Sep 17 00:00:00 2001
+From: Dan Horak <dan@danny.cz>
+Date: Mon, 19 Jan 2009 11:40:00 +0100
+Subject: [PATCH] use pregenerated revision.m4
+
+---
+ bootstrap       |    9 ---------
+ src/Makefile.am |    2 +-
+ 2 files changed, 1 insertions(+), 10 deletions(-)
+
+diff --git a/bootstrap b/bootstrap
+index 8c08bec..e8d3312 100755
+--- a/bootstrap
++++ b/bootstrap
+@@ -6,15 +6,6 @@
+ #  - automake 1.7+, 1.9+ for make dist
+ #  - libtool 1.4+
+ 
+-# Touch revision.m4
+-if [ -f ./update_revision.sh ]; then
+-	./update_revision.sh;
+-elif [ ! -f ./revision.m4 ]; then
+-	echo "m4_define([SVN_REV], 0)" > ./revision.m4;
+-	echo "m4_define([SVN_REVISION], trunk-r0)" >> ./revision.m4;
+-	echo "m4_define([SVN_DATE], )" >> ./revision.m4;
+-fi
+-
+ # create m4 directory or we break older systems like RedHat/CentOS 5
+ mkdir -p m4
+ 
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 776b136..9a661f4 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -1,4 +1,4 @@
+-SUBDIRS = include base build_tools mime sdk src plugins tools templates scripts wxsmith
++SUBDIRS = include base mime sdk src plugins tools templates scripts wxsmith
+ 
+ dist_pkgdata_DATA = tips.txt
+ 
+-- 
+1.7.4.4
+

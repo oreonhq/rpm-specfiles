@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           maven-enforcer
-Version:        3.5.0
+Version:        3.6.3
 Release:        %autorelease
 Summary:        Maven Enforcer
 License:        Apache-2.0
@@ -42,7 +42,7 @@ BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.5.0-9
+Obsoletes:      %{name}-javadoc < 3.6.3-9
 
 %description
 Enforcer is a build rule execution framework.

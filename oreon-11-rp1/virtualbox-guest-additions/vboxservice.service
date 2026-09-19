@@ -1,0 +1,12 @@
+[Unit]
+Description=VirtualBox guest services
+ConditionVirtualization=|oracle
+
+[Service]
+Type=simple
+ExecStartPre=-/usr/sbin/modprobe vboxguest
+ExecStart=/usr/sbin/VBoxService -f
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

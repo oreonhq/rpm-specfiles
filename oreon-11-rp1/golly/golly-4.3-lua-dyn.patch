@@ -1,0 +1,68 @@
+diff -uNr golly-4.3-src.old/gui-wx/makefile-gtk golly-4.3-src/gui-wx/makefile-gtk
+--- golly-4.3-src.old/gui-wx/makefile-gtk	2024-05-21 11:03:43.000000000 +0200
++++ golly-4.3-src/gui-wx/makefile-gtk	2024-06-18 22:47:23.838999065 +0200
+@@ -20,7 +20,7 @@
+ DOCSDIR = ../docs
+ BASEDIR = ../gollybase
+ CMDDIR = ../cmdline
+-LUADIR = ../lua
++#LUADIR = ../lua
+ SOUNDDIR = ../sound
+ OTHERGUIS = ../gui-android ../gui-common ../gui-ios ../gui-web
+ 
+@@ -40,10 +40,10 @@
+ SRCFILES = $(DOCSDIR) $(BASEDIR) $(CMDDIR) $(OTHERGUIS)
+ GUIFILES = makefile-gtk makefile-mac makefile-win local-win-template.mk local-gtk-template.mk \
+     golly.rc Info.plist.in wx*.h wx*.cpp bitmaps icons
+-LUAFILES = $(LUADIR)/*.h $(LUADIR)/*.c $(LUADIR)/*.hpp $(LUADIR)/Makefile $(LUADIR)/ReadMe.html
++#LUAFILES = $(LUADIR)/*.h $(LUADIR)/*.c $(LUADIR)/*.hpp $(LUADIR)/Makefile $(LUADIR)/ReadMe.html
+ SOUNDFILES = $(SOUNDDIR)/*.h $(SOUNDDIR)/*.c
+ 
+-LUALIB = $(LUADIR)/liblua.a -ldl
++#LUALIB = $(LUADIR)/liblua.a -ldl
+ 
+ CXXC = g++
+ CXXFLAGS := -DVERSION=$(APP_VERSION) -DGOLLYDIR="$(GOLLYDIR)" \
+@@ -70,6 +70,9 @@
+ PYTHON_SHLIB = `$(PYTHON) -c "import distutils.sysconfig as s; print(s.get_config_var('LDLIBRARY'))"`
+ PYTHON_PREFS = -DPYTHON_SHLIB="$(PYTHON_SHLIB)"
+ 
++LUA_INCLUDE = `pkg-config --cflags lua`
++LUA_LINK = `pkg-config --libs lua`
++
+ # default settings for zlib support, so clear these to build without zlib
+ ZLIB_CXXFLAGS = -DZLIB
+ ZLIB_LDFLAGS = -lz
+@@ -79,7 +82,7 @@
+ EXTRALIBS_OPENGL = `$(WX_CONFIG) --libs gl` -lGL -lGLU
+ 
+ # for wxGTK support (required for GUI)
+-WX_CXXFLAGS = `$(WX_CONFIG) --cxxflags` -I$(LUADIR) $(SOUND_INCLUDE)
++WX_CXXFLAGS = `$(WX_CONFIG) --cxxflags` $(LUA_INCLUDE) $(SOUND_INCLUDE)
+ WX_LDFLAGS = `$(WX_CONFIG) --libs`
+ 
+ OBJDIR = ObjGTK
+@@ -118,9 +121,9 @@
+ 	-rm -rf $(LOCALDIR)
+ 	-(cd $(LUADIR) && $(MAKE) clean)
+ 
+-golly: $(OBJDIR) $(BASEOBJ) $(WXOBJ) $(LUALIB)
+-	$(CXXC) $(CXXFLAGS) -o $(EXEDIR)/golly $(BASEOBJ) $(WXOBJ) $(LUALIB) \
+-	$(LDFLAGS) $(ZLIB_LDFLAGS) $(EXTRALIBS_OPENGL) $(WX_LDFLAGS) $(PYTHON_LINK) $(SOUND_LINK)
++golly: $(OBJDIR) $(BASEOBJ) $(WXOBJ) # $(LUALIB)
++	$(CXXC) $(CXXFLAGS) -o $(EXEDIR)/golly $(BASEOBJ) $(WXOBJ) \
++	$(LDFLAGS) $(ZLIB_LDFLAGS) $(EXTRALIBS_OPENGL) $(WX_LDFLAGS) $(PYTHON_LINK) $(SOUND_LINK) $(LUA_LINK)
+ 
+ bgolly: $(OBJDIR) $(BASEOBJ) $(OBJDIR)/bgolly.o
+ 	$(CXXC) $(CXXFLAGS) -o $(EXEDIR)/bgolly $(BASEOBJ) $(OBJDIR)/bgolly.o $(LDFLAGS) $(ZLIB_LDFLAGS)
+@@ -128,8 +131,8 @@
+ RuleTableToTree: $(OBJDIR) $(BASEOBJ) $(OBJDIR)/RuleTableToTree.o
+ 	$(CXXC) $(CXXFLAGS) -o $(EXEDIR)/RuleTableToTree $(BASEOBJ) $(OBJDIR)/RuleTableToTree.o $(LDFLAGS) $(ZLIB_LDFLAGS)
+ 
+-$(LUALIB):
+-	(cd $(LUADIR) && $(MAKE) all)
++#$(LUALIB):
++#	(cd $(LUADIR) && $(MAKE) all)
+ 
+ $(OBJDIR)/bgolly.o: $(CMDDIR)/bgolly.cpp
+ 	$(CXXC) $(CXXFLAGS) $(ZLIB_CXXFLAGS) -c -o $@ $(CMDDIR)/bgolly.cpp

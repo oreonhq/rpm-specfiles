@@ -1,0 +1,12 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 92f931c..ef36cb9 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -23,3 +23,7 @@ test = ["pytest", "mypy", "black", "ruff"]
+ 
+ [project.entry-points.sqlite_utils]
+ migrate = "sqlite_migrate.sqlite_utils_plugin"
++
++[build-system]
++requires = ["setuptools"]
++build-backend = "setuptools.build_meta"

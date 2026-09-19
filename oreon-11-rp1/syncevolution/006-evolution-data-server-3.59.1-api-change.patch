@@ -1,0 +1,51 @@
+From f4620c2083b7b5fcf1d2f943ddfd9c1f211b4f5a Mon Sep 17 00:00:00 2001
+Date: Fri, 17 Oct 2025 09:25:38 +0200
+Subject: [PATCH] evolution: Adapt to EVCard API changes in 3.59.1
+
+The (currently) upcoming evolution-data-server 3.59.1 contains API
+changes in the libebook-contacts' EVCard and EContact. This change
+handles it in a way that allows to compile with the old and with
+the new evolution-data-server.
+---
+ src/backends/evolution/EvolutionContactSource.cpp | 5 +++++
+ src/backends/evolution/EvolutionContactSource.h   | 6 ++++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/src/backends/evolution/EvolutionContactSource.cpp b/src/backends/evolution/EvolutionContactSource.cpp
+index dc5038015..c33e8d825 100644
+--- a/src/backends/evolution/EvolutionContactSource.cpp
++++ b/src/backends/evolution/EvolutionContactSource.cpp
+@@ -867,8 +867,13 @@ void EvolutionContactSource::readItem(const string &luid, std::string &item, boo
+ #endif
+     }
+ 
++#if EDS_CHECK_VERSION(3,59,1)
++    eptr<char> vcardstr(e_vcard_convert_to_string(&contactptr->parent,
++                                                  E_VCARD_VERSION_30));
++#else
+     eptr<char> vcardstr(e_vcard_to_string(&contactptr->parent,
+                                           EVC_FORMAT_VCARD_30));
++#endif
+     if (!vcardstr) {
+         throwError(SE_HERE, string("failure extracting contact from Evolution " ) + luid);
+     }
+diff --git a/src/backends/evolution/EvolutionContactSource.h b/src/backends/evolution/EvolutionContactSource.h
+index 46ee71999..968395c3a 100644
+--- a/src/backends/evolution/EvolutionContactSource.h
++++ b/src/backends/evolution/EvolutionContactSource.h
+@@ -40,6 +40,12 @@ SE_GOBJECT_TYPE(EBookClientView)
+ #endif
+ SE_GOBJECT_TYPE(EContact)
+ 
++#if EDS_CHECK_VERSION(3,59,1)
++#define EVCardFormat EVCardVersion
++#define EVC_FORMAT_VCARD_21 E_VCARD_VERSION_21
++#define EVC_FORMAT_VCARD_30 E_VCARD_VERSION_30
++#endif
++
+ SE_BEGIN_CXX
+ 
+ class ContactCache;
+-- 
+GitLab
+

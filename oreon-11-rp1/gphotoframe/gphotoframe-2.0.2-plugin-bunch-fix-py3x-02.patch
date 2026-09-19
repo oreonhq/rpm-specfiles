@@ -1,0 +1,67 @@
+diff -urp '--exclude=*~' '--exclude=*pycache*' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/base/ui.py gphotoframe-2.0.2-hg2084299dffb6.new/lib/plugins/base/ui.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/base/ui.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.new/lib/plugins/base/ui.py	2021-03-30 01:20:21.591142744 +0900
+@@ -70,7 +70,10 @@ class PhotoSourceUI(object):
+     def _set_target_default(self):
+         if self.data:
+             try:
+-                fr_num = self._label().index(self.data[2].decode('utf-8')) # liststore target # FIXME
++                data_target = self.data[2]
++                if type(data_target) is bytes: # FIXME
++                    data_target = data_target.decode('utf-8')
++                fr_num = self._label().index(data_target) # liststore targetE
+             except ValueError:
+                 fr_num = 0
+ 
+diff -urp '--exclude=*~' '--exclude=*pycache*' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/facebook/__init__.py gphotoframe-2.0.2-hg2084299dffb6.new/lib/plugins/facebook/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/facebook/__init__.py	2019-08-21 02:18:52.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.new/lib/plugins/facebook/__init__.py	2021-03-30 01:16:09.177937970 +0900
+@@ -123,7 +123,9 @@ class PhotoSourceFacebookUI(PhotoSourceP
+     def _widget_cb(self, widget):
+         super(PhotoSourceFacebookUI, self)._widget_cb(widget)
+ 
+-        target = widget.get_active_text().decode('utf-8') # FIXME
++        target = widget.get_active_text()
++        if type(target) is bytes: # FIXME
++            target = target.decode('utf-8')
+         is_albums = bool(target == _('Albums'))
+ 
+         self.gui.get_object('checkbutton_all_album').set_sensitive(not is_albums)
+diff -urp '--exclude=*~' '--exclude=*pycache*' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/flickr/ui.py gphotoframe-2.0.2-hg2084299dffb6.new/lib/plugins/flickr/ui.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/flickr/ui.py	2019-08-21 00:59:26.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.new/lib/plugins/flickr/ui.py	2021-03-30 01:10:05.063648497 +0900
+@@ -43,7 +43,7 @@ class PhotoSourceFlickrUI(PhotoSourceUI)
+ 
+     def _label(self):
+         keys = FlickrFactoryAPI().api.keys()
+-        keys.sort()
++        sorted(keys)
+         label = [api for api in keys]
+ 
+         if not SETTINGS_FLICKR.get_string('nsid'):
+diff -urp '--exclude=*~' '--exclude=*pycache*' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/folder.py gphotoframe-2.0.2-hg2084299dffb6.new/lib/plugins/folder.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/folder.py	2019-08-23 13:06:17.784721448 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.new/lib/plugins/folder.py	2021-03-30 12:42:44.872148706 +0900
+@@ -47,7 +47,7 @@ class DirPhotoList(base.LocalPhotoList):
+ 
+     def _prepare_cb(self):
+         walk = os.walk(self.target) # target = path
+-        paths = walk if self.options.get('subfolders') else [walk.next()]
++        paths = walk if self.options.get('subfolders') else [walk.__next__()]
+ 
+         for root, dirs, files in paths:
+             self._set_photo_from_dirs(root, files)
+diff -urp '--exclude=*~' '--exclude=*pycache*' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/picasa.py gphotoframe-2.0.2-hg2084299dffb6.new/lib/plugins/picasa.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/picasa.py	2019-08-21 00:38:42.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.new/lib/plugins/picasa.py	2021-03-30 01:13:41.476818171 +0900
+@@ -174,7 +174,9 @@ class PhotoSourcePicasaUI(ui.PhotoSource
+         self.target_widget.connect('changed', self._widget_cb)
+ 
+     def _widget_cb(self, widget):
+-        target = widget.get_active_text().decode('utf-8') # FIXME
++        target = widget.get_active_text()
++        if type(target) is bytes: # FIXME
++            target = target.decode('utf-8') # FIXME
+         label, state = self._check_argument_sensitive_for(target)
+         self._set_argument_sensitive(label=label, state=state)
+ 

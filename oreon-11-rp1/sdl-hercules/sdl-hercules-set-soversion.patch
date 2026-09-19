@@ -1,0 +1,12 @@
+diff -Naur a/Makefile.am b/Makefile.am
+--- a/Makefile.am	2024-03-10 05:25:45.000000000 +0100
++++ b/Makefile.am	2024-12-26 15:24:59.169005628 +0100
+@@ -167,7 +167,7 @@
+   -export-dynamic   \
+    $(XSTATIC)       \
+    -no-undefined    \
+-   -avoid-version
++   -version-number $(VERS_MAJ):$(VERS_INT):$(VERS_MIN)
+ 
+ #------------------------------------------------------------------------------
+ 

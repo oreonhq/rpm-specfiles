@@ -1,0 +1,14 @@
+--- script/engine/code.lua
++++ script/engine/code.lua
+@@ -62,7 +62,9 @@
+                     pom1 = roompole[0]
+                     local left = radius * math.sin(pom1 / 20 * math.pi)
+                     local top = radius * math.cos(pom1 / 20 * math.pi)
+-                    game_setScreenShift(left, top)
++                    -- Lua has no function for rounding to the nearest integer,
++                    -- so do it by adding 0.5 and rounding towards negative infinity.
++                    game_setScreenShift(math.floor(left + 0.5), math.floor(top + 0.5))
+                 end
+             else
+                 room.zapnula = 0
+

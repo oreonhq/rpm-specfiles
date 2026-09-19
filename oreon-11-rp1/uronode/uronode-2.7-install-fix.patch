@@ -1,0 +1,138 @@
+diff --git a/Makefile.in b/Makefile.in
+index a549299..cacc4d2 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -27,35 +27,35 @@ CALIBRATE_OBJS =	$(CALIBRATE_SRC:.c=.o)
+ 	$(CC) $(CFLAGS) -c $<
+ 
+ install: installbin installman installhelp installconf
+-	install -b -m 755    -D -d	$(VAR_DIR)
+-	install -b -m 755    -D -d	$(VAR_DIR)/node
+-	install -b -m 644    -p etc/loggedin	$(VAR_DIR)/node
+-	install -b -m 644    -p etc/lastlog	$(VAR_DIR)/node
+-	install -b -m 755    -D -d	$(VAR_DIR)/flex
+-	install -b -m 644    -p etc/gateways	 $(VAR_DIR)/flex
++	install -m 755    -D -d	$(VAR_DIR)/lib/uronode
++	install -m 755    -D -d	$(VAR_DIR)/lib/flexd
++	install -m 755    -D -d	$(VAR_DIR)/log/uronode
++	install -m 644    -p etc/loggedin	$(VAR_DIR)/lib/uronode
++	install -m 644    -p etc/lastlog	$(VAR_DIR)/log/uronode
++	install -m 644    -p etc/gateways	$(VAR_DIR)/lib/flexd
+ 	
+ installbin: all
+-	install -m 755 	-s -p	uronode		$(SBIN_DIR)
+-	install -m 755  -s -p	nodeusers	$(SBIN_DIR)
+-	install -m 755  -s -p	axdigi		$(SBIN_DIR)
+-	install -m 755	-s -p	calibrate	$(SBIN_DIR)
+-@IN@	install -m 755  -s -p	flexd		$(SBIN_DIR)
++	install -m 755 -D -d	$(SBIN_DIR)
++	install -m 755 	-p	uronode		$(SBIN_DIR)
++	install -m 755  -p	nodeusers	$(SBIN_DIR)
++	install -m 755  -p	axdigi		$(SBIN_DIR)
++	install -m 755	-p	calibrate	$(SBIN_DIR)
++@IN@	install -m 755  -p	flexd		$(SBIN_DIR)
+ 
+ installhelp:
+-	install -b -m 755    -D -d		 $(VAR_DIR)
+-	install -b -m 755    -D -d		 $(VAR_DIR)/node/help
+-	install -b -m 644    -p etc/help/*.hlp $(VAR_DIR)/node/help
++	install -m 755    -D -d		 $(DATA_DIR)/uronode/help
++	install -m 644    -p etc/help/*.hlp $(DATA_DIR)/uronode/help
+ 
+ installconf: installhelp
+-	install -b -m 755    -D -d		 $(ETC_DIR)
+-	install -b -m 600    -p etc/uronode.announce  $(ETC_DIR)
+-	install -b -m 600    -p etc/uronode.conf  $(ETC_DIR)
+-	install -b -m 600    -p etc/uronode.perms $(ETC_DIR)
+-	install -b -m 600    -p etc/uronode.info  $(ETC_DIR)
+-	install -b -m 600    -p etc/uronode.motd  $(ETC_DIR)
+-	install -b -m 600    -p etc/uronode.users $(ETC_DIR)
+-	install -b -m 600    -p etc/uronode.routes   $(ETC_DIR)
+-	install -b -m 600    -p etc/flexd.conf  $(ETC_DIR)
++	install -m 755    -D -d		 $(ETC_DIR)
++	install -m 644    -p etc/uronode.announce  $(ETC_DIR)
++	install -m 644    -p etc/uronode.conf  $(ETC_DIR)
++	install -m 600    -p etc/uronode.perms $(ETC_DIR)
++	install -m 644    -p etc/uronode.info  $(ETC_DIR)
++	install -m 644    -p etc/uronode.motd  $(ETC_DIR)
++	install -m 600    -p etc/uronode.users $(ETC_DIR)
++	install -m 644    -p etc/uronode.routes   $(ETC_DIR)
++	install -m 644    -p etc/flexd.conf  $(ETC_DIR)
+ 
+ installman:
+ 	install -m 755	  -D -d $(MAN_DIR)/man1 $(MAN_DIR)/man5 $(MAN_DIR)/man8
+diff --git a/Makefile.include.in b/Makefile.include.in
+index aca87b5..774d11f 100644
+--- a/Makefile.include.in
++++ b/Makefile.include.in
+@@ -2,12 +2,13 @@
+ ARCH		= @ARCH@
+ 
+ # Paths
+-ETC_DIR		= @ETC_DIR@
+-SBIN_DIR	= @SBIN_DIR@
+-BIN_DIR		= @BIN_DIR@
+-LIB_DIR		= @LIB_DIR@
+-MAN_DIR		= @MAN_DIR@
+-VAR_DIR		= @VAR_DIR@
++ETC_DIR		= $(DESTDIR)@ETC_DIR@
++SBIN_DIR	= $(DESTDIR)@SBIN_DIR@
++BIN_DIR		= $(DESTDIR)@BIN_DIR@
++LIB_DIR		= $(DESTDIR)@LIB_DIR@
++MAN_DIR		= $(DESTDIR)@MAN_DIR@
++VAR_DIR		= $(DESTDIR)@VAR_DIR@
++DATA_DIR	= $(DESTDIR)@DATA_DIR@
+ 
+ # Is Zlib available?
+ ZLIB		= @ZLIB@
+\ No newline at end of file
+diff --git a/config.h.in b/config.h.in
+index 5d488af..51dc57c 100644
+--- a/config.h.in
++++ b/config.h.in
+@@ -25,14 +25,14 @@
+ #define AX_ROUTES_FILE          "@ETC_DIR@/uronode.routes"
+ #define CONF_USERS_FILE         "@ETC_DIR@/uronode.users"
+ #define FLEXD_CONF_FILE         "@ETC_DIR@/flexd.conf"
+-#define FLEXD_TEMP_PATH         "@VAR_DIR@/flex/"
+-#define FLEXD_PID_FILE		"/var/run/flexd.pid"
+-#define FLEX_GT_FILE            "@VAR_DIR@/flex/gateways"
+-#define FLEX_DST_FILE           "@VAR_DIR@/flex/destinations"
+-#define DATA_MHEARD_FILE        "@VAR_DIR@/mheard/mheard.dat"
+-#define	DATA_NODE_LOGIN_FILE	"@VAR_DIR@/node/loggedin"
+-#define	DATA_NODE_HELP_DIR	"@VAR_DIR@/node/help/"
+-#define DATA_NODE_LAST_FILE     "@VAR_DIR@/node/lastlog"
+-#define DATA_NODE_IP_FILE       "@VAR_DIR@/node/iplog"
++#define FLEXD_TEMP_PATH         "/tmp"
++#define FLEXD_PID_FILE          "@VAR_DIR@/run/flexd.pid"
++#define FLEX_GT_FILE            "@VAR_DIR@/lib/flexd/gateways"
++#define FLEX_DST_FILE           "@VAR_DIR@/lib/flexd/destinations"
++#define DATA_MHEARD_FILE        "@VAR_DIR@/ax25/mheard/mheard.dat"
++#define DATA_NODE_LOGIN_FILE    "@VAR_DIR@/lib/uronode/loggedin"
++#define DATA_NODE_HELP_DIR      "@DATA_DIR@/uronode/help/"
++#define DATA_NODE_LAST_FILE     "@VAR_DIR@/lib/uronode/lastlog"
++#define DATA_NODE_IP_FILE       "@VAR_DIR@/lib/uronode/iplog"
+ 
+ #endif
+diff --git a/procinfo.h b/procinfo.h
+index 366a7bd..f8d8369 100644
+--- a/procinfo.h
++++ b/procinfo.h
+@@ -34,7 +34,7 @@ struct proc_dev {
+ 
+ 
+ /*
+- * /var/ax25/flex/gateways: (example)
++ * /var/lib/flexd/gateways: (example)
+  * addr  callsign  dev  dest  digipeaters
+  * 00001 PI4TUE    ax1   935
+  */
+@@ -49,7 +49,7 @@ struct flex_gt {
+ };
+ 
+ /*
+- * /usr/local/var/ax25/flex/destinations: (example)
++ * /var/lib/flexd/destinations: (example)
+  * callsign  ssid    rtt  gateway
+  * 9A0XZG    0-15   2575    00001
+  * DB0AAA    0-0      63    00001

@@ -1,0 +1,20 @@
+--- configure.orig	2006-11-02 14:42:53.000000000 -0800
++++ configure	2006-11-02 14:43:11.000000000 -0800
+@@ -6155,6 +6155,7 @@
+ 
+     if test x"${gincdir}" = x -o x"${glibdir}" = x; then
+         for i in \
++                `ls -d ${libdir} 2>/dev/null`\
+                 `ls -d ${exec_prefix}/lib 2>/dev/null`\
+                 `ls -d ${prefix}/lib 2>/dev/null`\
+                 `ls -d /usr/local/lib 2>/dev/null`\
+--- aclocal.m4.orig	2006-11-02 14:42:57.000000000 -0800
++++ aclocal.m4	2006-11-02 14:43:04.000000000 -0800
+@@ -40,6 +40,7 @@
+     ])
+     if test x"${gincdir}" = x -o x"${glibdir}" = x; then
+         for i in \
++                `ls -d ${libdir} 2>/dev/null`\
+                 `ls -d ${exec_prefix}/lib 2>/dev/null`\
+                 `ls -d ${prefix}/lib 2>/dev/null`\
+                 `ls -d /usr/local/lib 2>/dev/null`\

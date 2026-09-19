@@ -1,0 +1,36 @@
+.TH UNU\-SWAP "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-swap \- interchange ordering of two axes
+.SH SYNOPSIS
+.B unu\ swap
+.BR \-a , \-\-axis
+.RI < axisA \  axisB >
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Interchange ordering of two axes. Special case of
+.BR unu\-permute (1).
+.IP \(bu +2n
+Uses
+.B nrrdAxesSwap
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIaxisA\fR\ \fIaxisB\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxisA\fR\ \fIaxisB\fR>
+the two axes to switch (0-based numbering) (2
+.IR unsigned\ int s)
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-permute (1)

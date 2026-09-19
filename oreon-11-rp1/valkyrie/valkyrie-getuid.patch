@@ -1,0 +1,10 @@
+--- valkyrie-2.0.0-orig/src/utils/vk_config.cpp	2010-10-20 23:23:29.000000000 +1100
++++ valkyrie-2.0.0/src/utils/vk_config.cpp	2012-10-05 09:21:22.362312949 +1000
+@@ -24,6 +24,7 @@
+ #include "utils/vk_defines.h"  // build-generated file.
+ #include "utils/vk_utils.h"
+ 
++#include <unistd.h>  // getuid
+ #include <pwd.h>     // getpwuid
+ 
+ #include <QColor>

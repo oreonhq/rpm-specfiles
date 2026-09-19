@@ -1,0 +1,1177 @@
+From a0c312dd03f2774b573c9a7bb1a8bfe95024598d Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Fri, 15 Aug 2025 16:24:28 -0600
+Subject: [PATCH] Update autoconf and automake input files
+
+---
+ configure.ac                               | 40 ++++++++--------------
+ m4/check-package.m4                        | 34 +++++++++---------
+ m4/geom_local.m4                           | 12 +++----
+ m4/geomview.m4                             | 19 ++++------
+ m4/iso-c99.m4                              | 34 ------------------
+ m4/withtool.m4                             |  4 +--
+ src/bin/animate/Makefile.am                |  2 +-
+ src/bin/clipboard/Makefile.am              |  2 +-
+ src/bin/geomutil/bdy/Makefile.am           |  2 +-
+ src/bin/geomutil/clip/Makefile.am          |  2 +-
+ src/bin/geomutil/math2oogl/Makefile.am     |  2 +-
+ src/bin/geomutil/oogl2rib/Makefile.am      |  2 +-
+ src/bin/geomutil/oogl2vrml/Makefile.am     |  2 +-
+ src/bin/geomutil/plutil/Makefile.am        |  2 +-
+ src/bin/geomutil/ucd/Makefile.am           |  2 +-
+ src/bin/geomutil/vrml2oogl/Makefile.am     |  2 +-
+ src/bin/geomutil/vrml2oogl/lib/Makefile.am |  2 +-
+ src/bin/geomview/common/Makefile.am        |  2 +-
+ src/bin/geomview/common/comm.c             |  7 ----
+ src/bin/geomview/x11/Makefile.am           |  2 +-
+ src/bin/nose/Makefile.am                   |  2 +-
+ src/bin/togeomview/Makefile.am             |  2 +-
+ src/lib/camera/Makefile.am                 |  2 +-
+ src/lib/color/Makefile.am                  |  2 +-
+ src/lib/fexpr/Makefile.am                  |  2 +-
+ src/lib/forms/Makefile.am                  |  2 +-
+ src/lib/geometry/cmodel/Makefile.am        |  2 +-
+ src/lib/geometry/hpoint3/Makefile.am       |  2 +-
+ src/lib/geometry/hpointn/Makefile.am       |  2 +-
+ src/lib/geometry/ntransobj/Makefile.am     |  2 +-
+ src/lib/geometry/point3/Makefile.am        |  2 +-
+ src/lib/geometry/transform3/Makefile.am    |  2 +-
+ src/lib/geometry/transformn/Makefile.am    |  2 +-
+ src/lib/geometry/transobj/Makefile.am      |  2 +-
+ src/lib/geomutil/bdy/Makefile.am           |  2 +-
+ src/lib/geomutil/crayplutil/Makefile.am    |  2 +-
+ src/lib/geomutil/dim/Makefile.am           |  2 +-
+ src/lib/geomutil/plutil/Makefile.am        |  2 +-
+ src/lib/gprim/bbox/Makefile.am             |  2 +-
+ src/lib/gprim/bezier/Makefile.am           |  2 +-
+ src/lib/gprim/comment/Makefile.am          |  2 +-
+ src/lib/gprim/discgrp/Makefile.am          |  2 +-
+ src/lib/gprim/geom/Makefile.am             |  2 +-
+ src/lib/gprim/inst/Makefile.am             |  2 +-
+ src/lib/gprim/lincoln/Makefile.am          |  2 +-
+ src/lib/gprim/list/Makefile.am             |  2 +-
+ src/lib/gprim/mesh/Makefile.am             |  2 +-
+ src/lib/gprim/ndmesh/Makefile.am           |  2 +-
+ src/lib/gprim/npolylist/Makefile.am        |  2 +-
+ src/lib/gprim/polylist/Makefile.am         |  2 +-
+ src/lib/gprim/quad/Makefile.am             |  2 +-
+ src/lib/gprim/skel/Makefile.am             |  2 +-
+ src/lib/gprim/sphere/Makefile.am           |  2 +-
+ src/lib/gprim/stub/Makefile.am             |  2 +-
+ src/lib/gprim/tlist/Makefile.am            |  2 +-
+ src/lib/gprim/vect/Makefile.am             |  2 +-
+ src/lib/mg/buf/Makefile.am                 |  2 +-
+ src/lib/mg/common/Makefile.am              |  2 +-
+ src/lib/mg/opengl/Makefile.am              |  2 +-
+ src/lib/mg/ps/Makefile.am                  |  2 +-
+ src/lib/mg/rib/Makefile.am                 |  2 +-
+ src/lib/mg/x11/Makefile.am                 |  2 +-
+ src/lib/mib/Makefile.am                    |  2 +-
+ src/lib/oogl/lisp/Makefile.am              |  2 +-
+ src/lib/oogl/refcomm/Makefile.am           |  2 +-
+ src/lib/oogl/util/Makefile.am              |  2 +-
+ src/lib/oogl/util/iobuffer.c               |  4 ---
+ src/lib/oogl/wa/Makefile.am                |  2 +-
+ src/lib/pointlist/Makefile.am              |  2 +-
+ src/lib/shade/Makefile.am                  |  2 +-
+ src/lib/window/Makefile.am                 |  2 +-
+ 71 files changed, 109 insertions(+), 171 deletions(-)
+ delete mode 100644 m4/iso-c99.m4
+
+diff --git a/configure.ac b/configure.ac
+index 9df4e0b..b1ab1bc 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,11 +1,11 @@
+-AC_PREREQ(2.59)
+-AC_INIT(geomview, [1.9.5], Claus-Justus Heine <Claus.Heine@Mathematik.Uni-Freiburg.DE>)
++AC_PREREQ([2.72])
++AC_INIT([geomview],[1.9.5],[Claus-Justus Heine <Claus.Heine@Mathematik.Uni-Freiburg.DE>])
+ AC_MSG_RESULT([configuring $PACKAGE_NAME $PACKAGE_VERSION])
+ AC_CANONICAL_TARGET([])
+ AM_INIT_AUTOMAKE([dist-bzip2 1.10])
+ AM_MAINTAINER_MODE
+ AC_CONFIG_SRCDIR([src/bin/geomview/x11/gvmain.c])
+-AC_CONFIG_HEADER([config.h])
++AC_CONFIG_HEADERS([config.h])
+ AC_CONFIG_MACRO_DIR([m4])
+ AC_SUBST(abs_top_builddir)
+ AC_SUBST(abs_top_srcdir)
+@@ -99,14 +99,8 @@ typedef bool _Bool;
+ # endif
+ #endif
+ 
+-#if HAVE_ISO_C99
+ # define VARARRAY(name, type, len) type name[len]
+ # define VARARRAY2(name, type, len1, len2) type name[len1][len2]
+-#else
+-# define VARARRAY(name, type, len) type *name = alloca((len)*sizeof(type))
+-# define VARARRAY2(name, type, len1, len2) \
+-  type (*name)[len2] = alloca((len1)*(len2)*sizeof(type))
+-#endif
+ 
+ #if 0
+ #ifdef HAVE_SYS_TYPES_H
+@@ -172,14 +166,13 @@ else
+   HAVE_CXX=true
+ fi
+ AC_PROG_CC
+-GEOMVIEW_ISO_C99_CHECK
+ AC_PROG_AWK
+ AC_PROG_INSTALL
+ AC_PROG_CPP
+-AC_PROG_LEX
++AC_PROG_LEX([noyywrap])
+ AC_PROG_YACC
+ AM_CONDITIONAL([INSTALL_LIBGEOMVIEW],[true || test  "z${enable_shared}" = "zyes"])
+-AC_PROG_LIBTOOL
++LT_INIT
+ # Search path for "find" executable.  Use "find" unless
+ # the bogus MS Windows version is first on the path, in 
+ # which case we use the full pathname.  This AC_CHECK_PROG
+@@ -229,7 +222,6 @@ AC_CHECK_LIB([m], [cos])
+ # Checks for header files.
+ AC_FUNC_ALLOCA
+ AC_HEADER_DIRENT
+-AC_HEADER_STDC
+ AC_HEADER_SYS_WAIT
+ 
+ AC_CHECK_HEADERS([errno.h fcntl.h getopt.h inttypes.h libgen.h libintl.h \
+@@ -243,7 +235,6 @@ AC_C_CONST
+ AC_HEADER_STDBOOL
+ AC_C_INLINE
+ AC_TYPE_SIZE_T
+-AC_HEADER_TIME
+ AC_STRUCT_TM
+ AC_LANG_PUSH([C])
+ AC_MSG_CHECKING([for M_PI])
+@@ -274,24 +265,22 @@ AC_FUNC_OBSTACK
+ #AC_FUNC_MALLOC  It is ok when malloc(0) returns NULL. Why not?
+ #AC_FUNC_REALLOC It is ok when realloc(0, 0) returns NULL. Why not?
+ AC_FUNC_SETPGRP
+-AC_FUNC_SETVBUF_REVERSED
+-AC_TYPE_SIGNAL
+ AC_FUNC_STAT
+ AC_FUNC_LSTAT
+ #AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
+ AC_FUNC_STRTOD
+ AC_FUNC_VPRINTF
+-AC_FUNC_WAIT3
+ AC_CHECK_FUNCS([fmemopen],
+   [AC_CHECK_DECLS([fmemopen])],
+   [AC_LIBOBJ([fmemopen])])
+ AC_REPLACE_FUNCS([acosh popen putenv strcasecmp strdup strncasecmp lstat stat])
+-AC_CHECK_DECLS([putenv, strdup, acosh, strcasecmp, strncasecmp])
++AC_CHECK_DECLS([putenv, strdup, strcasecmp, strncasecmp])
++AC_DEFINE(HAVE_DECL_ACOSH, 1, [Define to 1 if you have the 'acosh' function.])
+ AC_CHECK_FUNCS([fstat])
+ AC_CHECK_FUNCS([vfscanf])
+ AC_FUNC_SELECT_ARGTYPES
+ AC_CHECK_FUNC([select],
+-  [AC_DEFINE(HAVE_SELECT, 1, [Define to 1 if you have the `select' function.])
++  [AC_DEFINE(HAVE_SELECT, 1, [Define to 1 if you have the 'select' function.])
+ AC_CHECK_DECLS([select],[],[],[
+ #if HAVE_SYS_SELECT_H
+ # include <sys/select.h>
+@@ -510,7 +499,7 @@ Default to int])
+ # Search for necessary programs.
+ 
+ AC_ARG_WITH(htmlbrowser,
+-  AC_HELP_STRING([--with-htmlbrowser=BROWSER],
++  AS_HELP_STRING([--with-htmlbrowser=BROWSER],
+ [Use BROWSER for viewing the HTML version of the manual when the
+ `Manual (HTML)' menu item is selected. This setting can be changed at
+ runtime through the '(ui-html-browser BROWSER)' GCL-command.
+@@ -525,7 +514,7 @@ if ! test "${HTMLBROWSER}" = "${DFLTHTMLBROWSER}"; then
+ fi
+ 
+ AC_ARG_WITH(pdfviewer,
+-  AC_HELP_STRING([--with-pdfviewer=VIEWER],
++  AS_HELP_STRING([--with-pdfviewer=VIEWER],
+ [Use BROWSER for viewing the PDF version of the manual when the
+ `Manual (PDF)' menu item is selected. This setting can be changed at
+ runtime through the '(ui-pdf-viewer VIEWER)' GCL-command.
+@@ -545,13 +534,13 @@ fi
+ 
+ # If --with-motif=DIR was specified, set MOTIF_DIR to DIR
+ AC_ARG_WITH(motif,
+-  AC_HELP_STRING([--with-motif=DIR],
++  AS_HELP_STRING([--with-motif=DIR],
+ [Set DIR to motif installation prefix. It is not possible to compile Geomview
+ without Motif.]),
+   [MOTIF_DIR=$withval])
+ 
+ AC_ARG_WITH(opengl,
+-  AC_HELP_STRING([--with-opengl=DIR],
++  AS_HELP_STRING([--with-opengl=DIR],
+ [Set DIR to opengl installation prefix. OpenGL is optional. The default is to
+ auto-detect OpenGL and use it if available. Use `--without-opengl' to disable
+ OpenGL.]),
+@@ -833,7 +822,7 @@ AC_ARG_ENABLE(d1debug,
+               )
+ 
+ AC_ARG_ENABLE([motion-averaging],
+-  AC_HELP_STRING([--enable-motion-averaging],
++  AS_HELP_STRING([--enable-motion-averaging],
+                  [turn on experimental motion averaging (default is off)]),
+   [if test "$enableval" = "no" ; then
+      AC_DEFINE(EXPERIMENTAL_MOTION_AVERAGING, 0,
+@@ -844,7 +833,7 @@ AC_ARG_ENABLE([motion-averaging],
+   [AC_DEFINE(EXPERIMENTAL_MOTION_AVERAGING, 0)])
+ 
+ dnl AC_ARG_ENABLE([bezier-spheres],
+-dnl   AC_HELP_STRING([--disable-bezier-spheres],[Use a mesh based on a polar
++dnl   AS_HELP_STRING([--disable-bezier-spheres],[Use a mesh based on a polar
+ dnl co-ordinate system instead of using Bezier-splines to approximate a sphere.
+ dnl This simplifies drawing textured spheres if the texture co-ordinates live
+ dnl in a polar co-ordinate system, e.g. when trying to paste a world-map onto
+@@ -878,6 +867,7 @@ else
+   return 0;])],[AC_MSG_RESULT([yes])
+ AC_DEFINE(POPEN_ACCEPTS_RB, 1,
+ [Define to 1 if popen(CMD, MODE) accepts "rb" for MODE])],
++[AC_MSG_RESULT([no])],
+ [AC_MSG_RESULT([no])])
+ AC_LANG_POP([C])
+ 
+diff --git a/m4/check-package.m4 b/m4/check-package.m4
+index ae45afb..a90912c 100644
+--- a/m4/check-package.m4
++++ b/m4/check-package.m4
+@@ -65,7 +65,7 @@ m4_if($2,enabled,
+        m4_define([NEGVERB],[enable])
+        m4_define([DEFAULT],[disabled])])
+ AC_ARG_WITH($1,
+-AC_HELP_STRING(--[]NEGDEFAULT[]-$1,
++AS_HELP_STRING([--NEGDEFAULT-$1],
+ [NEGVERB use of package $1 (default: DEFAULT)]),
+ 	[if test -z "$[]UPNAME[_DISABLE]"; then
+ 	    case "$withval" in
+@@ -94,14 +94,14 @@ AC_DEFUN([GEOMVIEW_CHECK_PKG_HDR_OPT],
+ [m4_define([UPNAME], [m4_bpatsubst(m4_toupper([$1]),-,_)])
+ AC_ARG_WITH($1-headers,
+ m4_if($2,[],
+-[AC_HELP_STRING([--with-$1-headers=DIR],
++[AS_HELP_STRING([--with-$1-headers=DIR],
+ 	       [use $1 include files below directory DIR (default: PREFIX/include/)])],
+-[AC_HELP_STRING([--with-$1-headers=DIR],
++[AS_HELP_STRING([--with-$1-headers=DIR],
+ 	       [use $1 include files below directory DIR (default: $2)])]),
+ [case "$withval" in
+-    yes) AC_MSG_ERROR("option \"--with-$1-headers\" requires an argument")
++    yes) AC_MSG_ERROR([option "--with-$1-headers" requires an argument])
+ 	;;
+-    no) AC_MSG_ERROR("option \"--with-$1-headers\" requires an argument")
++    no) AC_MSG_ERROR([option "--with-$1-headers" requires an argument])
+ 	;;
+     *) UPNAME[_INCLUDE_PATH]="$withval"
+ 	;;
+@@ -114,12 +114,12 @@ dnl
+ AC_DEFUN([GEOMVIEW_CHECK_PKG_DIR_OPT],
+ [m4_define([UPNAME], [m4_bpatsubst(m4_toupper([$1]),-,_)])
+ AC_ARG_WITH($1-dir,
+-AC_HELP_STRING([--with-$1-dir=DIR],
++AS_HELP_STRING([--with-$1-dir=DIR],
+               [use $1 library (and headers) below directory DIR (no default)]),
+ [case "$withval" in
+-    yes) AC_MSG_ERROR("option \"--with-$1-dir\" requires an argument")
++    yes) AC_MSG_ERROR([option "--with-$1-dir" requires an argument])
+ 	;;
+-    no) AC_MSG_ERROR("option \"--with-$1-dir\" requires an argument")
++    no) AC_MSG_ERROR([option "--with-$1-dir" requires an argument])
+ 	;;
+     *) UPNAME[_LIB_PATH]="$withval"
+        UPNAME[_INCLUDE_PATH]="$withval"
+@@ -175,11 +175,11 @@ dnl
+ dnl Optionally use an alternate name (e.g. MesaGL instead of GL etc.)
+ dnl
+ AC_ARG_WITH($1-name,
+-AC_HELP_STRING([--with-$1-name=NAME], [use NAME as the name of the $1 library (without leading "lib" prefix and trailing suffix). Default: "$2"]),
++AS_HELP_STRING([--with-$1-name=NAME], [use NAME as the name of the $1 library (without leading "lib" prefix and trailing suffix). Default: "$2"]),
+ [case "$withval" in
+-    yes) AC_MSG_ERROR("option \"--with-$1-name\" requires an argument")
++    yes) AC_MSG_ERROR([option "--with-$1-name" requires an argument])
+ 	;;
+-    no) AC_MSG_ERROR("option \"--with-$1-name\" requires an argument")
++    no) AC_MSG_ERROR([option "--with-$1-name" requires an argument])
+ 	;;
+     *) UPNAME[_NAME]="$withval"
+ 	;;
+@@ -196,14 +196,14 @@ dnl location of library
+ dnl
+ AC_ARG_WITH($1-lib,
+ m4_if($3,[],
+-[AC_HELP_STRING([--with-$1-lib=DIR],
++[AS_HELP_STRING([--with-$1-lib=DIR],
+                [use $1 library below directory DIR (default: EPREFIX/lib/)])],
+-[AC_HELP_STRING([--with-$1-lib=DIR],
++[AS_HELP_STRING([--with-$1-lib=DIR],
+                [use $1 library below directory DIR (default: $3)])]),
+ [case "$withval" in
+-    yes) AC_MSG_ERROR("option \"--with-$1-lib\" requires an argument")
++    yes) AC_MSG_ERROR([option "--with-$1-lib" requires an argument])
+ 	;;
+-    no) AC_MSG_ERROR("option \"--with-$1-lib\" requires an argument")
++    no) AC_MSG_ERROR([option "--with-$1-lib" requires an argument])
+ 	;;
+     *) UPNAME[_LIB_PATH]="$withval"
+ 	;;
+@@ -277,7 +277,7 @@ else
+     dnl  check for the header file
+     dnl
+     [gv_ac_]UPNAME[_save_CPPFLAGS]="$CPPFLAGS"
+-    m4_define([gv_ac_inctemp],[m4_bpatsubst([gv_ac_$5],[[].-[]],_)])
++    m4_define([gv_ac_inctemp],[m4_bpatsubst([m4_bpatsubst([gv_ac_$5],-,_)],.,_)])
+     unset gv_ac_inctemp
+     for incdir in "${UPNAME[_INCLUDE_PATH]}"; do
+       if test -n "`eval eval eval echo ${incdir}`"; then
+@@ -285,7 +285,7 @@ else
+       fi
+       AC_CHECK_HEADERS($5,[gv_ac_inctemp="$5"])
+       if ! test "${gv_ac_inctemp}" = "$5"; then
+-	eval "[unset ac_cv_header_]m4_bpatsubst([$5],[[].-[]],_)"
++	eval "[unset ac_cv_header_]m4_bpatsubst([m4_bpatsubst([$5],-,_)],.,_)"
+       else
+      	break
+       fi
+diff --git a/m4/geom_local.m4 b/m4/geom_local.m4
+index 0351952..410ba05 100644
+--- a/m4/geom_local.m4
++++ b/m4/geom_local.m4
+@@ -2,7 +2,7 @@ dnl
+ dnl
+ dnl GEOM_LOG_MSG(MESSAGE)
+ define(GEOM_LOG_MSG,
+-[echo "configure:__oline__: $1" >&AC_FD_CC])
++[echo "configure:__oline__: $1" >&AS_MESSAGE_LOG_FD])
+ dnl 
+ dnl GEOM_FIND_L_OPTION(LIB, FUNC, DIRS, OTHERLIBS)
+ dnl 
+@@ -75,10 +75,10 @@ for geom_z in $geom_dirs ; do
+   test -n "$geom_z" && geom_i_option="-I$geom_z"
+   CPPFLAGS="$geom_i_option $geom_saved_CPPFLAGS"
+   GEOM_LOG_MSG([checking for $geom_header with $geom_i_option])
+-  AC_TRY_CPP([ #include <$geom_header> ],
++  AC_PREPROC_IFELSE([AC_LANG_SOURCE([[ #include <$geom_header> ]])],
+ 	     [ GEOM_I_OPTION="$geom_i_option"
+-               break ]
+-	     )
++               break ],
++	     [])
+ done
+ CPPFLAGS=$geom_saved_CPPFLAGS
+ #if test "$GEOM_I_OPTION" = "0" ; then
+@@ -130,7 +130,7 @@ dnl
+ AC_DEFUN([GEOM_AC_PROG_CXX_WORKS],
+ [AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $LDFLAGS) works])
+ AC_LANG_SAVE
+-AC_LANG_CPLUSPLUS
++AC_LANG([C++])
+ AC_TRY_COMPILER([int main(){return(0);}], ac_cv_prog_cxx_works, ac_cv_prog_cxx_cross)
+ AC_LANG_RESTORE
+ AC_MSG_RESULT($ac_cv_prog_cxx_works)
+@@ -151,7 +151,7 @@ else
+ 
+   AC_PROG_CXX_GNU
+ 
+-  if test $ac_cv_prog_gxx = yes; then
++  if test $ac_cv_cxx_compiler_gnu = yes; then
+     GXX=yes
+   else
+     GXX=
+diff --git a/m4/geomview.m4 b/m4/geomview.m4
+index f3621fd..2571606 100644
+--- a/m4/geomview.m4
++++ b/m4/geomview.m4
+@@ -27,17 +27,17 @@ dnl distribution terms that you use for the rest of that program.
+ AC_DEFUN([GV_INIT_GEOMVIEW],
+ [
+   AC_MSG_RESULT([configuring $PACKAGE_NAME $PACKAGE_VERSION])
+-  AC_PREREQ(2.59)
++  AC_PREREQ([2.72])
+   AC_CANONICAL_TARGET([])
+   AM_MAINTAINER_MODE
+   AM_INIT_AUTOMAKE([dist-bzip2 1.9])
+-  AC_CONFIG_HEADER([config.h])
++  AC_CONFIG_HEADERS([config.h])
+   AC_CONFIG_MACRO_DIR([m4])
+ 
+   AC_REQUIRE([GEOMVIEW_SET_PREFIX])
+ 
+   AC_ARG_WITH(geomview,
+-    AC_HELP_STRING([--with-geomview=PROGRAM],
++    AS_HELP_STRING([--with-geomview=PROGRAM],
+ [Set PROGRAM to the name of the Geomview executable, possibly
+ including the full path to the executable. If not disabled by the
+ `--disable-geomview-query' switch then the installed
+@@ -60,8 +60,7 @@ directories to use. (default: autodetected)]),
+ 	exit 1
+   fi
+   AC_ARG_ENABLE([local-emodule],
+-    AC_HELP_STRING([--enable-local-emodule],
+-
++    AS_HELP_STRING([--enable-local-emodule],
+ [Install the emodule definition into `${HOME}/.geomview-EMODULENAME';
+ that file will contain the full path to the emodule binary. Otherwise
+ the emodule definition will be installed under either the location
+@@ -81,7 +80,7 @@ returned by `geomview --print-emodule-dir' (if
+   AC_SUBST(LOCAL_EMODULE)
+   
+   AC_ARG_ENABLE([geomview-query],
+-    AC_HELP_STRING([--disable-geomview-query],
++    AS_HELP_STRING([--disable-geomview-query],
+ [Normally the installed version of the Geomview executable is queried
+ about the location of the system-wide emodule definition files
+ (usually `PREFIX/libexec/geomview/') by runnding the Geomview
+@@ -183,7 +182,6 @@ Your version of Geomview seems to be $gv_major.$gv_minor.$gv_rev.
+   AC_C_INLINE
+   AC_C_BIGENDIAN
+   AC_C_CONST
+-  AC_HEADER_STDC
+   AC_HEADER_STDBOOL
+   AC_CHECK_HEADERS([limits.h stdlib.h sys/param.h sys/types.h stdio.h math.h])
+   AC_CHECK_LIB([m],[sqrt])
+@@ -238,14 +236,9 @@ typedef bool _Bool;
+ # endif
+ #endif
+ 
+-#if HAVE_ISO_C99
+ # define VARARRAY(name, type, len) type name[len]
+ # define VARARRAY2(name, type, len1, len2) type name[len1][len2]
+-#else
+-# define VARARRAY(name, type, len) type *name = alloca((len)*sizeof(type))
+-# define VARARRAY2(name, type, len1, len2) \
+-  type (*name)[len2] = alloca((len1)*(len2)*sizeof(type))
+-#endif])
++])
+ ])
+ 
+ AC_DEFUN([_GV_PRINT_EXPAND],
+diff --git a/m4/iso-c99.m4 b/m4/iso-c99.m4
+deleted file mode 100644
+index d1daab3..0000000
+--- a/m4/iso-c99.m4
++++ /dev/null
+@@ -1,34 +0,0 @@
+-#
+-# We need (at least) two features from the C99 standard: variadic
+-# macros and variable length arrays. We check here whether or those
+-# are available.
+-#
+-# Note that we do not further modify the compiler flags, we just check
+-# whether variadic macros and variable length arrays are available.
+-#
+-# The macro takes 2 arguments:
+-#
+-# $1: optional: a set of compiler flags in addition to CFLAGS
+-#
+-AC_DEFUN([GEOMVIEW_ISO_C99_CHECK],
+-[AC_REQUIRE([AC_PROG_CC])
+-_alberta_save_cflags="${CFLAGS}"
+-m4_if($#,1,[CFLAGS="$1"])
+-AC_LANG_PUSH([C])
+-AC_MSG_CHECKING([for ISO C99 features with "${CC} ${CFLAGS}"])
+-AC_COMPILE_IFELSE(
+-	[AC_LANG_PROGRAM(
+-[[extern void exit(int status);
+-#define FOO(a, ...)  (a, __VA_ARGS__)
+-extern int foo(int a, int b, int c);]],
+-[[int bar[foo FOO(3, 4, 5)];
+-exit(bar[0]);]])],
+-[HAVE_ISO_C99=1
+-AC_MSG_RESULT([variadic macros and variable length arrays are available])],
+-[HAVE_ISO_C99=0
+-AC_MSG_RESULT([variadic macros and/or vairable length arrays are NOT available])])
+-AC_LANG_POP([C])
+-CFLAGS="${_alberta_save_cflags}"
+-AC_DEFINE_UNQUOTED([HAVE_ISO_C99],[${HAVE_ISO_C99}],
+-[Define to 1 if ISO C99 features are available (e.g. variadic macros and variable length arrays)])
+-])
+diff --git a/m4/withtool.m4 b/m4/withtool.m4
+index 02b0b7b..46a34d5 100644
+--- a/m4/withtool.m4
++++ b/m4/withtool.m4
+@@ -37,7 +37,7 @@ AC_DEFUN([GV_PATH_PROG],
+ m4_if($#,1,
+      [m4_define([PROG],[$1])],[m4_define([PROG],[$2])])
+ AC_ARG_WITH($1,
+-  AC_HELP_STRING([--with-$1=PROGRAM],
++  AS_HELP_STRING([--with-$1=PROGRAM],
+ [Set PROGRAM to the name of the `$1' program (usually `PROG').
+ (default: autodetected)]),
+   [case "${withval}" in
+@@ -79,7 +79,7 @@ AC_DEFUN([GV_CHECK_PROG],
+ m4_if($2,[],
+      [m4_define([PROG],[$1])],[m4_define([PROG],[$2])])
+ AC_ARG_WITH($1,
+-  AC_HELP_STRING([--with-$1=PROGRAM],
++  AS_HELP_STRING([--with-$1=PROGRAM],
+ [Set PROGRAM to the name of the `$1' program (usually `PROG').
+ (default: autodetected)]),
+   [case "${withval}" in
+diff --git a/src/bin/animate/Makefile.am b/src/bin/animate/Makefile.am
+index b188927..459b6fb 100644
+--- a/src/bin/animate/Makefile.am
++++ b/src/bin/animate/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes) $(MOTIFINCLUDE)
++AM_CPPFLAGS = $(default_includes) $(MOTIFINCLUDE)
+ SUBDIRS = interface
+ 
+ EXTRA_DIST = animate.1gv
+diff --git a/src/bin/clipboard/Makefile.am b/src/bin/clipboard/Makefile.am
+index e29f5c6..5aecab5 100644
+--- a/src/bin/clipboard/Makefile.am
++++ b/src/bin/clipboard/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes) $(MOTIFINCLUDE)
++AM_CPPFLAGS = $(default_includes) $(MOTIFINCLUDE)
+ 
+ LDADD =  $(OOGLLIB) $(MOTIFUILIB) $(MOTIFLIBS) $(XMULIBS) $(XLIBS)
+ 
+diff --git a/src/bin/geomutil/bdy/Makefile.am b/src/bin/geomutil/bdy/Makefile.am
+index 2c5a186..825b81d 100644
+--- a/src/bin/geomutil/bdy/Makefile.am
++++ b/src/bin/geomutil/bdy/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ 
+ LDADD = $(OOGLLIB)
+ 
+diff --git a/src/bin/geomutil/clip/Makefile.am b/src/bin/geomutil/clip/Makefile.am
+index d31f9f5..a30b9fd 100644
+--- a/src/bin/geomutil/clip/Makefile.am
++++ b/src/bin/geomutil/clip/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ 
+ man_MANS = clip.1gv
+ 
+diff --git a/src/bin/geomutil/math2oogl/Makefile.am b/src/bin/geomutil/math2oogl/Makefile.am
+index c8407d0..1fce57f 100644
+--- a/src/bin/geomutil/math2oogl/Makefile.am
++++ b/src/bin/geomutil/math2oogl/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = @default_includes@
++AM_CPPFLAGS = @default_includes@
+ 
+ bin_PROGRAMS = math2oogl
+ man_MANS = math2oogl.1gv
+diff --git a/src/bin/geomutil/oogl2rib/Makefile.am b/src/bin/geomutil/oogl2rib/Makefile.am
+index 2d3743b..2715b34 100644
+--- a/src/bin/geomutil/oogl2rib/Makefile.am
++++ b/src/bin/geomutil/oogl2rib/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = @default_includes@
++AM_CPPFLAGS = @default_includes@
+ 
+ bin_PROGRAMS = oogl2rib
+ man_MANS = oogl2rib.1gv
+diff --git a/src/bin/geomutil/oogl2vrml/Makefile.am b/src/bin/geomutil/oogl2vrml/Makefile.am
+index 1ab9552..b9bd615 100644
+--- a/src/bin/geomutil/oogl2vrml/Makefile.am
++++ b/src/bin/geomutil/oogl2vrml/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = @default_includes@
++AM_CPPFLAGS = @default_includes@
+ 
+ bin_PROGRAMS = oogl2vrml oogl2vrml2
+ man_MANS = oogl2vrml.1gv
+diff --git a/src/bin/geomutil/plutil/Makefile.am b/src/bin/geomutil/plutil/Makefile.am
+index 564d2de..271f2b9 100644
+--- a/src/bin/geomutil/plutil/Makefile.am
++++ b/src/bin/geomutil/plutil/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = @default_includes@
++AM_CPPFLAGS = @default_includes@
+ 
+ LDADD= ${OOGLLIB}
+ DEPENDENCIES = $(OOGLLIB)
+diff --git a/src/bin/geomutil/ucd/Makefile.am b/src/bin/geomutil/ucd/Makefile.am
+index 134ca70..035fb9b 100644
+--- a/src/bin/geomutil/ucd/Makefile.am
++++ b/src/bin/geomutil/ucd/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = @default_includes@
++AM_CPPFLAGS = @default_includes@
+ 
+ LDADD = ${OOGLLIB}
+ DEPENDENCIES = ${OOGLLIB}
+diff --git a/src/bin/geomutil/vrml2oogl/Makefile.am b/src/bin/geomutil/vrml2oogl/Makefile.am
+index 97bef3f..27e850a 100644
+--- a/src/bin/geomutil/vrml2oogl/Makefile.am
++++ b/src/bin/geomutil/vrml2oogl/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = @default_includes@ -I$(srcdir)/lib
++AM_CPPFLAGS = @default_includes@ -I$(srcdir)/lib
+ 
+ SUBDIRS = lib
+ 
+diff --git a/src/bin/geomutil/vrml2oogl/lib/Makefile.am b/src/bin/geomutil/vrml2oogl/lib/Makefile.am
+index 6916ba4..cb7b02d 100644
+--- a/src/bin/geomutil/vrml2oogl/lib/Makefile.am
++++ b/src/bin/geomutil/vrml2oogl/lib/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = @default_includes@
++AM_CPPFLAGS = @default_includes@
+ 
+ noinst_LIBRARIES = libQv.a
+ 
+diff --git a/src/bin/geomview/common/Makefile.am b/src/bin/geomview/common/Makefile.am
+index 0560d87..a7d0386 100644
+--- a/src/bin/geomview/common/Makefile.am
++++ b/src/bin/geomview/common/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes) -I..
++AM_CPPFLAGS = $(default_includes) -I..
+ 
+ EXTRA_DIST = Headers
+ 
+diff --git a/src/bin/geomview/common/comm.c b/src/bin/geomview/common/comm.c
+index 49c7b8b..3aa10ec 100644
+--- a/src/bin/geomview/common/comm.c
++++ b/src/bin/geomview/common/comm.c
+@@ -354,15 +354,8 @@ LDEFINE(input_translator, LVOID,
+ static void
+ comm_sigchld(int sig)
+ {
+-#if HAVE_WAITPID
+   int status;
+   int pid = waitpid(-1, &status, WNOHANG);
+-#elif HAVE_WAIT3
+-  union wait status;
+-  int pid = wait3(&status, WNOHANG|WUNTRACED, NULL);
+-#else
+-# error FIXME
+-#endif
+ 
+   if (WIFEXITED(status) || WIFSIGNALED(status)) {
+     emodule *em = VVEC(uistate.emod, emodule);
+diff --git a/src/bin/geomview/x11/Makefile.am b/src/bin/geomview/x11/Makefile.am
+index 5456a3a..b7b2d16 100644
+--- a/src/bin/geomview/x11/Makefile.am
++++ b/src/bin/geomview/x11/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes) $(MOTIFINCLUDE) $(OPENGLINCLUDE) $(X_CFLAGS) -I..
++AM_CPPFLAGS = $(default_includes) $(MOTIFINCLUDE) $(OPENGLINCLUDE) $(X_CFLAGS) -I..
+ SUBDIRS = bitmaps interface
+ 
+ gvx_LDADD = ../common/libgvcommon.a buildinfo.o \
+diff --git a/src/bin/nose/Makefile.am b/src/bin/nose/Makefile.am
+index aa6ac25..f2a8b4d 100644
+--- a/src/bin/nose/Makefile.am
++++ b/src/bin/nose/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ 
+ LDADD =  $(OOGLLIB)
+ 
+diff --git a/src/bin/togeomview/Makefile.am b/src/bin/togeomview/Makefile.am
+index 47c6a8c..961dbf1 100644
+--- a/src/bin/togeomview/Makefile.am
++++ b/src/bin/togeomview/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ 
+ LDADD = ${SOCKETLIBS}
+ 
+diff --git a/src/lib/camera/Makefile.am b/src/lib/camera/Makefile.am
+index 7bc9a2b..d28693c 100644
+--- a/src/lib/camera/Makefile.am
++++ b/src/lib/camera/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libcamera.la
+diff --git a/src/lib/color/Makefile.am b/src/lib/color/Makefile.am
+index 8344809..a51b5f8 100644
+--- a/src/lib/color/Makefile.am
++++ b/src/lib/color/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libcolor.la
+diff --git a/src/lib/fexpr/Makefile.am b/src/lib/fexpr/Makefile.am
+index 7864a6a..b34c29f 100644
+--- a/src/lib/fexpr/Makefile.am
++++ b/src/lib/fexpr/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers parse.tab.c-saved
+ 
+ noinst_LTLIBRARIES = libfexpr.la
+diff --git a/src/lib/forms/Makefile.am b/src/lib/forms/Makefile.am
+index 1a83343..05a882b 100644
+--- a/src/lib/forms/Makefile.am
++++ b/src/lib/forms/Makefile.am
+@@ -1,2 +1,2 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers xforms-compat.h
+diff --git a/src/lib/geometry/cmodel/Makefile.am b/src/lib/geometry/cmodel/Makefile.am
+index a4702f5..39713c2 100644
+--- a/src/lib/geometry/cmodel/Makefile.am
++++ b/src/lib/geometry/cmodel/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libcmodel.la
+diff --git a/src/lib/geometry/hpoint3/Makefile.am b/src/lib/geometry/hpoint3/Makefile.am
+index 0d00e03..160a1f2 100644
+--- a/src/lib/geometry/hpoint3/Makefile.am
++++ b/src/lib/geometry/hpoint3/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers\
+  hg4.h hline3.h hplane3.h hpoint3.h line.h plane.h point.h tolerance.h
+ 
+diff --git a/src/lib/geometry/hpointn/Makefile.am b/src/lib/geometry/hpointn/Makefile.am
+index 0a7e546..4c6efe1 100644
+--- a/src/lib/geometry/hpointn/Makefile.am
++++ b/src/lib/geometry/hpointn/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers hpointn.h
+ 
+ #noinst_LTLIBRARIES = libhpointn.la
+diff --git a/src/lib/geometry/ntransobj/Makefile.am b/src/lib/geometry/ntransobj/Makefile.am
+index c941c4b..7b136ca 100644
+--- a/src/lib/geometry/ntransobj/Makefile.am
++++ b/src/lib/geometry/ntransobj/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libntransobj.la
+diff --git a/src/lib/geometry/point3/Makefile.am b/src/lib/geometry/point3/Makefile.am
+index f9e9590..d41c42e 100644
+--- a/src/lib/geometry/point3/Makefile.am
++++ b/src/lib/geometry/point3/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES	= libpoint3.la
+diff --git a/src/lib/geometry/transform3/Makefile.am b/src/lib/geometry/transform3/Makefile.am
+index fafee4f..c1637eb 100644
+--- a/src/lib/geometry/transform3/Makefile.am
++++ b/src/lib/geometry/transform3/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libtransform3.la
+diff --git a/src/lib/geometry/transformn/Makefile.am b/src/lib/geometry/transformn/Makefile.am
+index 46995d9..b688a61 100644
+--- a/src/lib/geometry/transformn/Makefile.am
++++ b/src/lib/geometry/transformn/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libtransformn.la
+diff --git a/src/lib/geometry/transobj/Makefile.am b/src/lib/geometry/transobj/Makefile.am
+index a1d85f7..b6757a1 100644
+--- a/src/lib/geometry/transobj/Makefile.am
++++ b/src/lib/geometry/transobj/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libtransobj.la
+diff --git a/src/lib/geomutil/bdy/Makefile.am b/src/lib/geomutil/bdy/Makefile.am
+index a58e32c..8e62ef2 100644
+--- a/src/lib/geomutil/bdy/Makefile.am
++++ b/src/lib/geomutil/bdy/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ 
+ man_MANS = bdy.3gv
+ 
+diff --git a/src/lib/geomutil/crayplutil/Makefile.am b/src/lib/geomutil/crayplutil/Makefile.am
+index 547f1d4..2ed3bf8 100644
+--- a/src/lib/geomutil/crayplutil/Makefile.am
++++ b/src/lib/geomutil/crayplutil/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libcrayplutil.la
+diff --git a/src/lib/geomutil/dim/Makefile.am b/src/lib/geomutil/dim/Makefile.am
+index 46ad3ee..80cbeec 100644
+--- a/src/lib/geomutil/dim/Makefile.am
++++ b/src/lib/geomutil/dim/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libdim.la
+diff --git a/src/lib/geomutil/plutil/Makefile.am b/src/lib/geomutil/plutil/Makefile.am
+index 8c37aff..46ee21a 100644
+--- a/src/lib/geomutil/plutil/Makefile.am
++++ b/src/lib/geomutil/plutil/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ 
+ man_MANS = anytopl.3gv plcombine.3gv plconsol.3gv
+ 
+diff --git a/src/lib/gprim/bbox/Makefile.am b/src/lib/gprim/bbox/Makefile.am
+index c56ec83..0a177d5 100644
+--- a/src/lib/gprim/bbox/Makefile.am
++++ b/src/lib/gprim/bbox/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libbbox.la
+diff --git a/src/lib/gprim/bezier/Makefile.am b/src/lib/gprim/bezier/Makefile.am
+index 7c7eb76..92dd839 100644
+--- a/src/lib/gprim/bezier/Makefile.am
++++ b/src/lib/gprim/bezier/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libbezier.la
+diff --git a/src/lib/gprim/comment/Makefile.am b/src/lib/gprim/comment/Makefile.am
+index e37ddc0..c5ad60b 100644
+--- a/src/lib/gprim/comment/Makefile.am
++++ b/src/lib/gprim/comment/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libcomment.la
+diff --git a/src/lib/gprim/discgrp/Makefile.am b/src/lib/gprim/discgrp/Makefile.am
+index 902bbb7..0f6c608 100644
+--- a/src/lib/gprim/discgrp/Makefile.am
++++ b/src/lib/gprim/discgrp/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ 
+ man_MANS = discgrp.5gv
+ 
+diff --git a/src/lib/gprim/geom/Makefile.am b/src/lib/gprim/geom/Makefile.am
+index 61e0338..5323b57 100644
+--- a/src/lib/gprim/geom/Makefile.am
++++ b/src/lib/gprim/geom/Makefile.am
+@@ -2,7 +2,7 @@
+ # $(OPENGLINCLUDE) is needed for bsptree.c to get the correct
+ # location of the glu.h header file.
+ #
+-INCLUDES = $(default_includes) $(OPENGLINCLUDE)
++AM_CPPFLAGS = $(default_includes) $(OPENGLINCLUDE)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libgeom.la
+diff --git a/src/lib/gprim/inst/Makefile.am b/src/lib/gprim/inst/Makefile.am
+index 72bdf1e..1538ad7 100644
+--- a/src/lib/gprim/inst/Makefile.am
++++ b/src/lib/gprim/inst/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libinst.la
+diff --git a/src/lib/gprim/lincoln/Makefile.am b/src/lib/gprim/lincoln/Makefile.am
+index 82f50d0..6169d8d 100644
+--- a/src/lib/gprim/lincoln/Makefile.am
++++ b/src/lib/gprim/lincoln/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = liblincoln.la
+diff --git a/src/lib/gprim/list/Makefile.am b/src/lib/gprim/list/Makefile.am
+index 77b963a..4765351 100644
+--- a/src/lib/gprim/list/Makefile.am
++++ b/src/lib/gprim/list/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = liblist.la
+diff --git a/src/lib/gprim/mesh/Makefile.am b/src/lib/gprim/mesh/Makefile.am
+index 9bfb41d..c4777c9 100644
+--- a/src/lib/gprim/mesh/Makefile.am
++++ b/src/lib/gprim/mesh/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libmesh.la
+diff --git a/src/lib/gprim/ndmesh/Makefile.am b/src/lib/gprim/ndmesh/Makefile.am
+index 1efccd8..47789c4 100644
+--- a/src/lib/gprim/ndmesh/Makefile.am
++++ b/src/lib/gprim/ndmesh/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libndmesh.la
+diff --git a/src/lib/gprim/npolylist/Makefile.am b/src/lib/gprim/npolylist/Makefile.am
+index fc1bb06..11e481d 100644
+--- a/src/lib/gprim/npolylist/Makefile.am
++++ b/src/lib/gprim/npolylist/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libnpolylist.la
+diff --git a/src/lib/gprim/polylist/Makefile.am b/src/lib/gprim/polylist/Makefile.am
+index 471c419..43d8a89 100644
+--- a/src/lib/gprim/polylist/Makefile.am
++++ b/src/lib/gprim/polylist/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libpolylist.la
+diff --git a/src/lib/gprim/quad/Makefile.am b/src/lib/gprim/quad/Makefile.am
+index 8ebfe17..c0b431a 100644
+--- a/src/lib/gprim/quad/Makefile.am
++++ b/src/lib/gprim/quad/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libquad.la
+diff --git a/src/lib/gprim/skel/Makefile.am b/src/lib/gprim/skel/Makefile.am
+index 6e1c596..b86a81e 100644
+--- a/src/lib/gprim/skel/Makefile.am
++++ b/src/lib/gprim/skel/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libskel.la
+diff --git a/src/lib/gprim/sphere/Makefile.am b/src/lib/gprim/sphere/Makefile.am
+index 15c8f3e..cdd0b65 100644
+--- a/src/lib/gprim/sphere/Makefile.am
++++ b/src/lib/gprim/sphere/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libsphere.la
+diff --git a/src/lib/gprim/stub/Makefile.am b/src/lib/gprim/stub/Makefile.am
+index 961bebb..84dc42f 100644
+--- a/src/lib/gprim/stub/Makefile.am
++++ b/src/lib/gprim/stub/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libstub.la
+diff --git a/src/lib/gprim/tlist/Makefile.am b/src/lib/gprim/tlist/Makefile.am
+index d9c0f40..7c36fb4 100644
+--- a/src/lib/gprim/tlist/Makefile.am
++++ b/src/lib/gprim/tlist/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libtlist.la
+diff --git a/src/lib/gprim/vect/Makefile.am b/src/lib/gprim/vect/Makefile.am
+index ffe31ad..fd6b824 100644
+--- a/src/lib/gprim/vect/Makefile.am
++++ b/src/lib/gprim/vect/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libvect.la
+diff --git a/src/lib/mg/buf/Makefile.am b/src/lib/mg/buf/Makefile.am
+index 9f72e85..1752677 100644
+--- a/src/lib/mg/buf/Makefile.am
++++ b/src/lib/mg/buf/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = liblibmgbuf.la
+diff --git a/src/lib/mg/common/Makefile.am b/src/lib/mg/common/Makefile.am
+index 732cc1a..8374240 100644
+--- a/src/lib/mg/common/Makefile.am
++++ b/src/lib/mg/common/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libmgcommon.la
+diff --git a/src/lib/mg/opengl/Makefile.am b/src/lib/mg/opengl/Makefile.am
+index 7f2363e..f2897b9 100644
+--- a/src/lib/mg/opengl/Makefile.am
++++ b/src/lib/mg/opengl/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes) $(OPENGLINCLUDE)
++AM_CPPFLAGS = $(default_includes) $(OPENGLINCLUDE)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libmgopengl.la
+diff --git a/src/lib/mg/ps/Makefile.am b/src/lib/mg/ps/Makefile.am
+index 4113473..3504845 100644
+--- a/src/lib/mg/ps/Makefile.am
++++ b/src/lib/mg/ps/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libmgps.la
+diff --git a/src/lib/mg/rib/Makefile.am b/src/lib/mg/rib/Makefile.am
+index c6ec56f..2dcaec4 100644
+--- a/src/lib/mg/rib/Makefile.am
++++ b/src/lib/mg/rib/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libmgrib.la
+diff --git a/src/lib/mg/x11/Makefile.am b/src/lib/mg/x11/Makefile.am
+index 5a89d61..6765aef 100644
+--- a/src/lib/mg/x11/Makefile.am
++++ b/src/lib/mg/x11/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes) $(X_CFLAGS)
++AM_CPPFLAGS = $(default_includes) $(X_CFLAGS)
+ 
+ EXTRA_DIST = Headers
+ 
+diff --git a/src/lib/mib/Makefile.am b/src/lib/mib/Makefile.am
+index 885ca0f..b324bff 100644
+--- a/src/lib/mib/Makefile.am
++++ b/src/lib/mib/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes) $(MOTIFINCLUDE) $(X_CFLAGS)
++AM_CPPFLAGS = $(default_includes) $(MOTIFINCLUDE) $(X_CFLAGS)
+ EXTRA_DIST = Headers
+ 
+ noinst_LIBRARIES = libmib.a
+diff --git a/src/lib/oogl/lisp/Makefile.am b/src/lib/oogl/lisp/Makefile.am
+index 3c0ba2f..6f57002 100644
+--- a/src/lib/oogl/lisp/Makefile.am
++++ b/src/lib/oogl/lisp/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ BUILT_SOURCES = clisp.c clisp.h
+ EXTRA_DIST = Headers lisp2c $(BUILT_SOURCES)
+ 
+diff --git a/src/lib/oogl/refcomm/Makefile.am b/src/lib/oogl/refcomm/Makefile.am
+index db9e396..fe80def 100644
+--- a/src/lib/oogl/refcomm/Makefile.am
++++ b/src/lib/oogl/refcomm/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = librefcomm.la
+diff --git a/src/lib/oogl/util/Makefile.am b/src/lib/oogl/util/Makefile.am
+index 300657a..9e4fe37 100644
+--- a/src/lib/oogl/util/Makefile.am
++++ b/src/lib/oogl/util/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libooglutil.la
+diff --git a/src/lib/oogl/util/iobuffer.c b/src/lib/oogl/util/iobuffer.c
+index fb8e665..a23fcb3 100644
+--- a/src/lib/oogl/util/iobuffer.c
++++ b/src/lib/oogl/util/iobuffer.c
+@@ -260,11 +260,7 @@ IOBFILE *iobfileopen(FILE *istream)
+     /* If we have read(2) and write(2), then we disable stdio
+      * completely and use the system calls directly.
+      */
+-#if SETVBUF_REVERSED
+-    setvbuf(istream, _IONBF, NULL, 0);
+-#else
+     setvbuf(istream, NULL, _IONBF, 0);
+-#endif
+ #if HAVE_FCNTL
+     iobf->fflags = fcntl(iobf->fd, F_GETFL);
+     if (iobf->fflags != -1 && (iobf->fflags & o_nonblock)) {
+diff --git a/src/lib/oogl/wa/Makefile.am b/src/lib/oogl/wa/Makefile.am
+index b383380..c555349 100644
+--- a/src/lib/oogl/wa/Makefile.am
++++ b/src/lib/oogl/wa/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ 
+ man_MANS = fsaparse.3gv
+ 
+diff --git a/src/lib/pointlist/Makefile.am b/src/lib/pointlist/Makefile.am
+index 3bfa035..4f13d7d 100644
+--- a/src/lib/pointlist/Makefile.am
++++ b/src/lib/pointlist/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libpointlist.la
+diff --git a/src/lib/shade/Makefile.am b/src/lib/shade/Makefile.am
+index 34fedf7..bdb4b71 100644
+--- a/src/lib/shade/Makefile.am
++++ b/src/lib/shade/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libshade.la
+diff --git a/src/lib/window/Makefile.am b/src/lib/window/Makefile.am
+index 408812a..f313e7e 100644
+--- a/src/lib/window/Makefile.am
++++ b/src/lib/window/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES = $(default_includes)
++AM_CPPFLAGS = $(default_includes)
+ EXTRA_DIST = Headers
+ 
+ noinst_LTLIBRARIES = libwindow.la

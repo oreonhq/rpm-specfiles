@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5d3c143e2b157a7b11b214fa95d67c4e2d3d366580a62f965c7f10b9f1523fc9
 
 %global stable_kf6 stable
 
@@ -11,7 +11,7 @@
 ExcludeArch: %{ix86}
 
 Name:    ktorrent
-Version: 26.04.1
+Version: 26.08.1
 Release: 1%{?dist}
 Summary: A BitTorrent program
 
@@ -67,7 +67,7 @@ BuildRequires: cmake(KF6Completion)
 BuildRequires: cmake(KF6Archive)
 
 BuildRequires: boost-devel
-%global majmin %(echo %{version} | cut -d. -f1,2)
+%global majmin 26.08
 BuildRequires: cmake(KTorrent6) >= %{majmin}
 BuildRequires: cmake(Phonon4Qt6)
 BuildRequires: pkgconfig(libmaxminddb)

@@ -1,0 +1,31 @@
+--- src/t4k_menu.c~	2011-04-07 21:46:07.000000000 -0500
++++ src/t4k_menu.c	2024-01-31 11:37:37.336605658 -0600
+@@ -251,7 +251,7 @@
+         /* Now add child nodes. */
+         if(xmlStrcasecmp(node->name, "menu") == 0) {
+             i = 0;
+-            for(child = node->children; child; child = child->next) {
++            for(child = (xmlAttr *)(node->children); child; child = child->next) {
+                 if(child->type == XML_ELEMENT_NODE) {
+                     tnode->submenu[i++] = menu_TranslateNode(child);
+                 }
+--- src/t4k_menu.c~	2024-01-31 11:47:51.247975123 -0600
++++ src/t4k_menu.c	2024-01-31 11:50:54.831499873 -0600
+@@ -253,7 +253,7 @@
+             i = 0;
+             for(child = (xmlAttr *)(node->children); child; child = child->next) {
+                 if(child->type == XML_ELEMENT_NODE) {
+-                    tnode->submenu[i++] = menu_TranslateNode(child);
++                    tnode->submenu[i++] = menu_TranslateNode((xmlNode *)child);
+                 }
+             }
+         }
+@@ -443,7 +443,7 @@
+   int click_flag = 1;
+   int using_scroll = 0;
+ 
+-  internal_res_switch_handler(&T4K_PrerenderAll);
++  internal_res_switch_handler((ResSwitchCallback)&T4K_PrerenderAll);
+   
+   for(;;) /* one loop body execution for one menu page */
+   {

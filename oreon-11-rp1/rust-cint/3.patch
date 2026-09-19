@@ -1,0 +1,22 @@
+From ae9069ef3ba65f4212d222b5cbd79f7c573b54c9 Mon Sep 17 00:00:00 2001
+From: Davide Cavalca <dcavalca@fedoraproject.org>
+Date: Sun, 10 Jul 2022 17:51:31 -0700
+Subject: [PATCH] Ignore example in doc test
+
+---
+ src/lib.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index f663e2a..d9a727a 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -37,7 +37,7 @@
+ //! or `into` calls from the [From]/[Into] trait. [`ColorInterop`] solves this by providing a strongly
+ //! typed "reference" conversion to/from `cint` types. This way, you can do things like:
+ //!
+-//! ```rust
++//! ```rust,ignore
+ //! let color_crate1 = color_crate2.into_cint().into();
+ //! // or
+ //! let color_crate2 = ColorCrate2::from_cint(color_crate1.into());

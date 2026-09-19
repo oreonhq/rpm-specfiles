@@ -1,0 +1,58 @@
+diff -Naur soundmodem-0.20/newqpsk/filter.c soundmodem-0.20-mod/newqpsk/filter.c
+--- soundmodem-0.20/newqpsk/filter.c	2002-08-09 22:14:35.000000000 +0200
++++ soundmodem-0.20-mod/newqpsk/filter.c	2016-02-17 18:48:32.131907738 +0100
+@@ -6,6 +6,24 @@
+ #include "modemconfig.h"
+ #include "filter.h"
+ 
++#ifdef __i386__
++#define __HAVE_ARCH_MAC
++#include "filter-i386.h"
++#endif                /* __i386__ */
++
++#ifndef __HAVE_ARCH_MAC
++#define __HAVE_ARCH_MAC
++only_inline float mac(const float *a, const float *b, unsigned int size)
++{
++	float sum = 0;
++	unsigned int i;
++
++	for (i = 0; i < size; i++)
++		sum += (*a++) * (*b++);
++	return sum;
++}
++#endif                                /* __HAVE_ARCH_MAC */
++
+ #include <stdio.h>
+ #include <string.h>
+ 
+diff -Naur soundmodem-0.20/newqpsk/filter.h soundmodem-0.20-mod/newqpsk/filter.h
+--- soundmodem-0.20/newqpsk/filter.h	2015-05-04 19:50:06.000000000 +0200
++++ soundmodem-0.20-mod/newqpsk/filter.h	2016-02-17 18:48:54.477749461 +0100
+@@ -5,26 +5,6 @@
+ 
+ /* ---------------------------------------------------------------------- */
+ 
+-#ifdef __i386__
+-#include "filter-i386.h"
+-#endif				/* __i386__ */
+-
+-/* ---------------------------------------------------------------------- */
+-
+-#ifndef __HAVE_ARCH_MAC
+-only_inline float mac(const float *a, const float *b, unsigned int size)
+-{
+-	float sum = 0;
+-	unsigned int i;
+-
+-	for (i = 0; i < size; i++)
+-		sum += (*a++) * (*b++);
+-	return sum;
+-}
+-#endif				/* __HAVE_ARCH_MAC */
+-
+-/* ---------------------------------------------------------------------- */
+-
+ struct filter {
+ 	float filtI[NumFilters][AliasFilterLen];
+ 	float filtQ[NumFilters][AliasFilterLen];

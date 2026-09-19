@@ -1,0 +1,26 @@
+diff -Naur old/t/linux_helpers.t new/t/linux_helpers.t
+--- old/t/linux_helpers.t	2012-12-19 04:04:14.000000000 +1100
++++ new/t/linux_helpers.t	2013-07-03 22:13:29.638284551 +1000
+@@ -80,11 +80,17 @@
+ 			"detect_dmesg() against $virt test data") or diag explain $got;
+ 
+ 		$got = eval { $d->detect_dmidecode() } || [];
+-		cmp_deeply(
+-			$got,
+-			$expected_dmidecode{$virt},
+-			"detect_dmidecode() against $virt test data") or diag explain $got;
+-
++		SKIP: {
++			if (($@) && ($@ =~ /^Cannot run dmidecode detection without Parse::DMIDecode/)) {
++				my $exception = $@;
++				eval { require Parse::DMIDecode; };
++				skip("Parse::DMIDecode has not been installed:$exception", 1);
++			}
++			cmp_deeply(
++				$got,
++				$expected_dmidecode{$virt},
++				"detect_dmidecode() against $virt test data") or diag explain $got;
++		}
+ 		$got = eval { $d->detect_modules() } || [];
+ 		cmp_deeply(
+ 			$got,

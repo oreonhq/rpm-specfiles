@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6b695382b8bf27deea190c48b29c63ffeae416f84da014de105cc8f86b7a7ae6
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kamera
 Summary: Digital camera support for KDE 
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.

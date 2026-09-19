@@ -1,0 +1,17 @@
+--- a/galaxy.yml
++++ b/galaxy.yml
+@@ -18,3 +19,14 @@
+   - .gitignore
+   - changelogs/.plugin-cache.yaml
+   - '*.tar.gz'
++  - .azure-pipelines
++  - .github
++  - changelogs/fragments/.keep
++  - shippable.yml
++  - tests
++  # These files are installed with %doc and %license
++  - README.md
++  - CHANGELOG.rst
++  - simplified_bsd.txt
++  - COPYING
++  - PSF-license.txt

@@ -1,0 +1,11 @@
+--- a/src/array_t.cpp	2017-09-17 00:51:49.983706157 -0400
++++ b/src/array_t.cpp	2017-09-17 00:51:57.155899534 -0400
+@@ -185,7 +185,7 @@
+     : actual(rhs), m_begin((T*)(rhs->begin())), m_end((T*)(rhs->end())) {
+     if (actual != 0)
+         actual->beginUse();
+-    difference_type diff = m_end - m_begin;
++    //difference_type diff = m_end - m_begin;
+ 
+     LOGGER(ibis::gVerbose > 9)
+         << "array_t<" << typeid(T).name() << "> constructed at "

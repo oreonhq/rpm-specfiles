@@ -1,0 +1,191 @@
+diff -rupN meterbridge-0.9.2.org/src/jf_meters.c meterbridge-0.9.2/src/jf_meters.c
+--- meterbridge-0.9.2.org/src/jf_meters.c	2003-06-05 07:23:07.000000000 -0400
++++ meterbridge-0.9.2/src/jf_meters.c	2020-02-08 21:45:13.725292084 -0500
+@@ -12,7 +12,7 @@
+ 
+ static float lp[MAX_METERS];
+ static float tau_lp[MAX_METERS/2];
+-static SDL_Rect buf_rect[MAX_METERS];
++static SDL_Rect buf_rect_jf[MAX_METERS];
+ 
+ float tau(float *x, float *y, unsigned int n);
+ 
+@@ -58,10 +58,10 @@ int gfx_thread_jf(void *foo)
+ 	}
+ 
+ 	for (i=0; i<num_scopes; i++) {
+-		buf_rect[i].x = dest[i].x + 10;
+-		buf_rect[i].y = dest[i].y + 10;
+-		buf_rect[i].w = 200;
+-		buf_rect[i].h = 227;
++		buf_rect_jf[i].x = dest[i].x + 10;
++		buf_rect_jf[i].y = dest[i].y + 10;
++		buf_rect_jf[i].w = 200;
++		buf_rect_jf[i].h = 227;
+ 	}
+ 
+ 	while (1) {
+@@ -69,8 +69,8 @@ int gfx_thread_jf(void *foo)
+ 			int x=0, y=0, xm1, ym1;
+ 			SDL_Rect cor_rect;
+ 
+-			SDL_FillRect(meter, buf_rect, trace);
+-                        SDL_BlitSurface(meter_buf, buf_rect, screen, buf_rect+i);
++			SDL_FillRect(meter, buf_rect_jf, trace);
++                        SDL_BlitSurface(meter_buf, buf_rect_jf, screen, buf_rect_jf+i);
+                         for (j=0; j<RING_BUF_SIZE; j++) {
+ 				xm1 = x;
+ 				ym1 = y;
+@@ -102,24 +102,24 @@ int gfx_thread_jf(void *foo)
+ 					continue;
+ 				}
+ 
+-				set_rgba(screen, buf_rect[i].x+100+x, buf_rect[i].y+100+y, trace);
++				set_rgba(screen, buf_rect_jf[i].x+100+x, buf_rect_jf[i].y+100+y, trace);
+ #if 0
+ 				if (j > 0) {
+-					draw_line(screen, buf_rect[i].x+100+x,  buf_rect[i].y+100+y, buf_rect[i].x+100+xm1, buf_rect[i].y+100+ym1, trace);
++					draw_line(screen, buf_rect_jf[i].x+100+x,  buf_rect_jf[i].y+100+y, buf_rect_jf[i].x+100+xm1, buf_rect_jf[i].y+100+ym1, trace);
+ 				}
+ #endif
+                         }
+ 
+ 			/* Draw correlation meter */
+ 			tau_lp[i] = tau_lp[i] * 0.8f + tau((float *)ring_buf[i*2], (float *)ring_buf[i*2+1], RING_BUF_SIZE) * 0.2f;
+-			cor_rect.y = buf_rect[i].y + 210;
++			cor_rect.y = buf_rect_jf[i].y + 210;
+ 			cor_rect.h = 6;
+ 			if (tau_lp[i] > 0.0f) {
+-				cor_rect.x = buf_rect[i].x+100;
++				cor_rect.x = buf_rect_jf[i].x+100;
+ 				cor_rect.w = tau_lp[i] * 92.0f;
+ 				SDL_FillRect(screen, &cor_rect, met_green);
+ 			} else {
+-				cor_rect.x = buf_rect[i].x+100 + tau_lp[i] * 92.0f;
++				cor_rect.x = buf_rect_jf[i].x+100 + tau_lp[i] * 92.0f;
+ 				cor_rect.w = (int)(tau_lp[i] * -92.0f) + 1;
+ 				SDL_FillRect(screen, &cor_rect, met_red);
+ 			}
+diff -rupN meterbridge-0.9.2.org/src/ppm_meters.c meterbridge-0.9.2/src/ppm_meters.c
+--- meterbridge-0.9.2.org/src/ppm_meters.c	2003-06-05 05:40:06.000000000 -0400
++++ meterbridge-0.9.2/src/ppm_meters.c	2020-02-08 21:44:40.182414313 -0500
+@@ -9,7 +9,7 @@
+ #include "envelopes.h"
+ 
+ static float lp[MAX_METERS];
+-static SDL_Rect buf_rect[MAX_METERS];
++static SDL_Rect buf_rect_ppm[MAX_METERS];
+ 
+ void load_graphics_ppm()
+ {
+@@ -29,10 +29,10 @@ int gfx_thread_ppm(void *foo)
+ 
+ 	for (i=0; i<MAX_METERS; i++) {
+ 		lp[i] = 0.0f;
+-		buf_rect[i].x = dest[i].x + 23;
+-		buf_rect[i].y = dest[i].y + 55;
+-		buf_rect[i].w = 127;
+-		buf_rect[i].h = 84;
++		buf_rect_ppm[i].x = dest[i].x + 23;
++		buf_rect_ppm[i].y = dest[i].y + 55;
++		buf_rect_ppm[i].w = 127;
++		buf_rect_ppm[i].h = 84;
+ 	}
+ 
+ 	while (1) {
+@@ -48,9 +48,9 @@ int gfx_thread_ppm(void *foo)
+ 			x2 = 89 + (int)(sinf(theta) * needle_len);
+ 			y2 = 138 - (int)(cosf(theta) * needle_len);
+ 
+-			SDL_BlitSurface(meter, buf_rect, meter_buf, buf_rect);
++			SDL_BlitSurface(meter, buf_rect_ppm, meter_buf, buf_rect_ppm);
+ 			draw_ptr(meter_buf, x1, y1, x2, y2, needle, aa);
+-			SDL_BlitSurface(meter_buf, buf_rect, screen, buf_rect+i);
++			SDL_BlitSurface(meter_buf, buf_rect_ppm, screen, buf_rect_ppm+i);
+ 		}
+ 		SDL_UpdateRects(screen, 1, &win);
+ 		SDL_Delay(100);
+diff -rupN meterbridge-0.9.2.org/src/scope.c meterbridge-0.9.2/src/scope.c
+--- meterbridge-0.9.2.org/src/scope.c	2003-06-05 05:21:38.000000000 -0400
++++ meterbridge-0.9.2/src/scope.c	2020-02-08 21:45:36.309209780 -0500
+@@ -8,7 +8,7 @@
+ #include "find_image.h"
+ #include "envelopes.h"
+ 
+-static SDL_Rect buf_rect[MAX_METERS];
++static SDL_Rect buf_rect_sc[MAX_METERS];
+ 
+ void load_graphics_scope()
+ {
+@@ -22,17 +22,17 @@ int gfx_thread_scope(void *foo)
+ 	const Uint32 trace = SDL_MapRGB(meter->format, 0x70, 0xFF, 0x70);
+ 
+ 	for (i=0; i<num_scopes; i++) {
+-		buf_rect[i].x = dest[i].x + 24;
+-		buf_rect[i].y = dest[i].y + 22;
+-		buf_rect[i].w = 236;
+-		buf_rect[i].h = 236;
++		buf_rect_sc[i].x = dest[i].x + 24;
++		buf_rect_sc[i].y = dest[i].y + 22;
++		buf_rect_sc[i].w = 236;
++		buf_rect_sc[i].h = 236;
+ 	}
+ 
+ 	while (1) {
+ 		for (i=0; i<num_scopes; i++) {
+ 			int x=0, y=128, ym1, base;
+ 
+-                        SDL_BlitSurface(meter_buf, buf_rect, screen, buf_rect+i);
++                        SDL_BlitSurface(meter_buf, buf_rect_sc, screen, buf_rect_sc+i);
+ 			for (base = 0; base < RING_BUF_SIZE - 257; base++) {
+ 				if (ring_buf[i][base] <= 0.0f &&
+ 						ring_buf[i][base+1] > 0.0f) {
+@@ -53,7 +53,7 @@ int gfx_thread_scope(void *foo)
+ 				}
+ 
+ 				if (x > 0) {
+-					draw_line(screen, buf_rect[i].x+x,  buf_rect[i].y+y, buf_rect[i].x+x-1, buf_rect[i].y+ym1, trace);
++					draw_line(screen, buf_rect_sc[i].x+x,  buf_rect_sc[i].y+y, buf_rect_sc[i].x+x-1, buf_rect_sc[i].y+ym1, trace);
+ 				}
+                         }
+ 		}
+diff -rupN meterbridge-0.9.2.org/src/vu_meters.c meterbridge-0.9.2/src/vu_meters.c
+--- meterbridge-0.9.2.org/src/vu_meters.c	2003-06-05 07:08:52.000000000 -0400
++++ meterbridge-0.9.2/src/vu_meters.c	2020-02-08 21:44:17.934495377 -0500
+@@ -8,7 +8,7 @@
+ #include "find_image.h"
+ 
+ static float lp[MAX_METERS];
+-static SDL_Rect buf_rect[MAX_METERS];
++static SDL_Rect buf_rect_vu[MAX_METERS];
+ 
+ void load_graphics_vu()
+ {
+@@ -29,10 +29,10 @@ int gfx_thread_vu(void *foo)
+ 
+ 	for (i=0; i<MAX_METERS; i++) {
+                 lp[i] = 0.0f;
+-		buf_rect[i].x = dest[i].x + 30;
+-		buf_rect[i].y = dest[i].y + 70;
+-		buf_rect[i].w = 168;
+-		buf_rect[i].h = 86;
++		buf_rect_vu[i].x = dest[i].x + 30;
++		buf_rect_vu[i].y = dest[i].y + 70;
++		buf_rect_vu[i].w = 168;
++		buf_rect_vu[i].h = 86;
+ 	}
+ 
+ 	while (1) {
+@@ -48,10 +48,10 @@ int gfx_thread_vu(void *foo)
+ 			x2 = 108 + (int)(sinf(theta) * needle_len);
+ 			y2 = 169 - (int)(cosf(theta) * needle_len);
+ 
+-			SDL_BlitSurface(meter, buf_rect, meter_buf, buf_rect);
++			SDL_BlitSurface(meter, buf_rect_vu, meter_buf, buf_rect_vu);
+ 			draw_ptr(meter_buf, x1, y1, x2, y2, needle, aa);
+ 			draw_ptr(meter_buf, x1, y1, x2, y2, needle, aa);
+-			SDL_BlitSurface(meter_buf, buf_rect, screen, buf_rect+i);
++			SDL_BlitSurface(meter_buf, buf_rect_vu, screen, buf_rect_vu+i);
+ 		}
+ 		SDL_UpdateRects(screen, 1, &win);
+ 		SDL_Delay(100);

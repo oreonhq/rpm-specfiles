@@ -1,0 +1,59 @@
+From 5200ccc45953051278f400f3463347c379dc2a99 Mon Sep 17 00:00:00 2001
+From: Paul Millar <paul.millar@desy.de>
+Date: Tue, 10 Jan 2017 17:55:21 +0100
+Subject: [PATCH] Relax proxy validation to be RFC-3820 compliant
+
+Motivation:
+
+Nothing in RFC-3820 states that an X.509 proxy certificate cannot assert
+KeyUsage; however, such certificates are currently rejected by JGlobus.
+This discrepency is likely due to code developed against a draft version
+of the RFC and not subsequently updated, but it is certainly preventing
+the adoption of RFC proxies as some CAs assert NON_REPUDIATION as a
+KeyUsage.
+
+Modification:
+
+Update proxy certificate validation so that certificates that assert
+NON_REPUDIATION or KEY_CERTSIGN are accepted.
+
+Result:
+
+RFC-3820 compliant proxies that assert KeyUsage should now be accepted.
+
+Closes jglobus/JGlobus#160
+---
+ .../gsi/trustmanager/X509ProxyCertPathValidator.java   | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java
+index ce132c9..40d90c5 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java
+@@ -515,8 +515,6 @@ public class X509ProxyCertPathValidator extends CertPathValidatorSpi {
+                     }
+                 } else if (oid.equals(X509Extension.keyUsage)) {
+                     proxyKeyUsage = proxyExtension;
+-
+-                    checkKeyUsage(issuer, proxyExtension);
+                 }
+             }
+         }
+@@ -534,14 +532,6 @@ public class X509ProxyCertPathValidator extends CertPathValidatorSpi {
+ 
+     }
+ 
+-    private void checkKeyUsage(TBSCertificateStructure issuer, X509Extension proxyExtension) throws IOException, CertPathValidatorException {
+-        EnumSet<KeyUsage> keyUsage = CertificateUtil.getKeyUsage(proxyExtension);
+-        // these must not be asserted
+-        if (keyUsage.contains(KeyUsage.NON_REPUDIATION) || keyUsage.contains(KeyUsage.KEY_CERTSIGN)) {
+-            throw new CertPathValidatorException("Proxy violation: Key usage is asserted.");
+-        }
+-    }
+-
+     private void checkExtension(ASN1ObjectIdentifier oid, X509Extension proxyExtension, X509Extension proxyKeyUsage) throws CertPathValidatorException {
+         if (oid.equals(X509Extension.keyUsage)) {
+             // If issuer has it then proxy must have it also
+-- 
+2.17.2
+

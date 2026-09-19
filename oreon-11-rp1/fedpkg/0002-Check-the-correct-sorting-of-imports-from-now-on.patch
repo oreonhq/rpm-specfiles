@@ -1,0 +1,339 @@
+From d922f4fc1fe8c19c84147e19bd918feccc815d52 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Nosek?= <onosek@redhat.com>
+Date: Mon, 1 Dec 2025 15:13:11 +0100
+Subject: [PATCH] Check the correct sorting of imports from now on
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Enabled ruff plugin for checking import order and fixed wrong lines.
+
+Signed-off-by: Ondřej Nosek <onosek@redhat.com>
+---
+ doc/fedpkg_man_page.py |  1 -
+ doc/source/conf.py     |  1 +
+ fedpkg/__init__.py     | 12 ++++++------
+ fedpkg/__main__.py     |  7 +++----
+ fedpkg/bodhi_6.py      |  2 +-
+ fedpkg/bugzilla.py     |  1 -
+ fedpkg/cli.py          | 36 ++++++++++++++++++++++++------------
+ fedpkg/utils.py        |  6 +++---
+ pyproject.toml         |  2 +-
+ setup.py               |  1 -
+ test/test_bugzilla.py  |  3 ++-
+ test/test_cli.py       |  7 ++++---
+ test/test_retire.py    |  2 +-
+ test/test_utils.py     |  8 ++++----
+ test/utils.py          |  4 +++-
+ 15 files changed, 53 insertions(+), 40 deletions(-)
+
+diff --git a/doc/fedpkg_man_page.py b/doc/fedpkg_man_page.py
+index 58e4d40..be4fd8a 100755
+--- a/doc/fedpkg_man_page.py
++++ b/doc/fedpkg_man_page.py
+@@ -3,7 +3,6 @@
+ 
+ import os
+ import sys
+-
+ from configparser import ConfigParser
+ 
+ if __name__ == '__main__':
+diff --git a/doc/source/conf.py b/doc/source/conf.py
+index 597fc83..d85d741 100644
+--- a/doc/source/conf.py
++++ b/doc/source/conf.py
+@@ -13,6 +13,7 @@
+ # documentation root, use os.path.abspath to make it absolute, like shown here.
+ #
+ import datetime
++
+ # import os
+ # import sys
+ # sys.path.insert(0, os.path.abspath('.'))
+diff --git a/fedpkg/__init__.py b/fedpkg/__init__.py
+index ce21c90..70da587 100644
+--- a/fedpkg/__init__.py
++++ b/fedpkg/__init__.py
+@@ -9,25 +9,25 @@
+ # option) any later version.  See http://www.gnu.org/copyleft/gpl.html for
+ # the full text of the license.
+ 
+-import pyrpkg
+ import os
+-import git
+ import re
+-
+ from datetime import datetime, timedelta, timezone
+ 
++import git
++import pyrpkg
++
+ # doc/fedpkg_man_page.py uses the 'cli' import
+ from . import cli  # noqa
+ 
+ try:
+-    from .bodhi_6 import BodhiClient, UPDATE_TYPES, REQUEST_TYPES, SUGGEST_TYPES
++    from .bodhi_6 import REQUEST_TYPES, SUGGEST_TYPES, UPDATE_TYPES, BodhiClient
+ except ImportError:
+     # working bodhi-client is not available for el8 (Python3.6)
+     BodhiClient = None
+-from .lookaside import FedoraLookasideCache
++import distro
+ from pyrpkg.utils import cached_property
+ 
+-import distro
++from .lookaside import FedoraLookasideCache
+ 
+ 
+ class Commands(pyrpkg.Commands):
+diff --git a/fedpkg/__main__.py b/fedpkg/__main__.py
+index fdc9c01..c100f2b 100644
+--- a/fedpkg/__main__.py
++++ b/fedpkg/__main__.py
+@@ -14,14 +14,13 @@
+ import logging
+ import os
+ import sys
++from configparser import ConfigParser
+ 
+-import fedpkg
+-import fedpkg.utils
+ import pyrpkg
+ import pyrpkg.utils
+ 
+-from configparser import ConfigParser
+-
++import fedpkg
++import fedpkg.utils
+ 
+ cli_name = os.path.basename(sys.argv[0])
+ 
+diff --git a/fedpkg/bodhi_6.py b/fedpkg/bodhi_6.py
+index 415e3d2..ffa6268 100644
+--- a/fedpkg/bodhi_6.py
++++ b/fedpkg/bodhi_6.py
+@@ -10,7 +10,7 @@
+ # the full text of the license.
+ 
+ from bodhi.client.bindings import BodhiClient as BodhiClient_
+-from bodhi.client.constants import UPDATE_TYPES, REQUEST_TYPES, SUGGEST_TYPES  # noqa
++from bodhi.client.constants import REQUEST_TYPES, SUGGEST_TYPES, UPDATE_TYPES  # noqa
+ 
+ 
+ class BodhiClient(BodhiClient_):
+diff --git a/fedpkg/bugzilla.py b/fedpkg/bugzilla.py
+index 9305572..38207b3 100644
+--- a/fedpkg/bugzilla.py
++++ b/fedpkg/bugzilla.py
+@@ -16,7 +16,6 @@ from __future__ import absolute_import
+ from datetime import datetime, timezone
+ 
+ import bugzilla
+-
+ from pyrpkg import rpkgError
+ 
+ 
+diff --git a/fedpkg/cli.py b/fedpkg/cli.py
+index e612155..3536d2e 100644
+--- a/fedpkg/cli.py
++++ b/fedpkg/cli.py
+@@ -22,7 +22,6 @@ import shutil
+ import textwrap
+ from datetime import datetime
+ 
+-
+ # Use deprecated pkg_resources if importlib isn't available (python 3.6)
+ try:
+     from importlib.metadata import distribution
+@@ -33,21 +32,34 @@ try:
+     from packaging.version import parse as parse_version
+ except ImportError:
+     from pkg_resources import parse_version
+-from pyrpkg import rpkgError
+-from pyrpkg.cli import cliClient
+ import configparser
+ from urllib.parse import urlparse
+ 
++from pyrpkg import rpkgError
++from pyrpkg.cli import cliClient
++
+ from fedpkg.bugzilla import BugzillaClient
+-from fedpkg.completers import (build_arches, distgit_branches, fedpkg_packages,
+-                               list_targets)
+-from fedpkg.utils import (assert_new_tests_repo, assert_valid_epel_package,
+-                          config_get_safely, disable_monitoring, do_add_remote,
+-                          do_fork, expand_release, get_dist_git_url,
+-                          get_fedora_release_state, get_pagure_branches,
+-                          get_release_branches, get_stream_branches, is_epel,
+-                          new_pagure_issue, sl_list_to_dict, verify_sls,
+-                          does_package_exist_in_anitya, get_last_commit_date)
++from fedpkg.completers import build_arches, distgit_branches, fedpkg_packages, list_targets
++from fedpkg.utils import (
++    assert_new_tests_repo,
++    assert_valid_epel_package,
++    config_get_safely,
++    disable_monitoring,
++    do_add_remote,
++    do_fork,
++    does_package_exist_in_anitya,
++    expand_release,
++    get_dist_git_url,
++    get_fedora_release_state,
++    get_last_commit_date,
++    get_pagure_branches,
++    get_release_branches,
++    get_stream_branches,
++    is_epel,
++    new_pagure_issue,
++    sl_list_to_dict,
++    verify_sls,
++)
+ 
+ RELEASE_BRANCH_REGEX = r'^(f\d+|el\d+|eln|epel\d+|epel\d+\.\d+)$'
+ BUGZILLA_URL_REGEX = r"https:\/\/bugzilla\.redhat\.com\/show_bug\.cgi\?id=(\d{7})"
+diff --git a/fedpkg/utils.py b/fedpkg/utils.py
+index 232ebea..9ca4985 100644
+--- a/fedpkg/utils.py
++++ b/fedpkg/utils.py
+@@ -12,15 +12,15 @@
+ 
+ import json
+ import re
+-from datetime import datetime, timezone
+ import tempfile
++from configparser import NoOptionError, NoSectionError
++from datetime import datetime, timezone
++from urllib.parse import urlparse
+ 
+ import git
+ import requests
+ from pyrpkg import rpkgError
+ from requests.exceptions import ConnectionError
+-from configparser import NoOptionError, NoSectionError
+-from urllib.parse import urlparse
+ 
+ 
+ def query_bodhi(server_url, timeout=60):
+diff --git a/pyproject.toml b/pyproject.toml
+index ff12656..8f2c7c0 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -103,7 +103,7 @@ select = [
+     # flake8-simplify
+     #"SIM",
+     # isort
+-    #"I",
++    "I",
+     # flake8-bandit
+     "S",
+     # flake8-type-checking
+diff --git a/setup.py b/setup.py
+index bd3de2b..8048774 100755
+--- a/setup.py
++++ b/setup.py
+@@ -4,7 +4,6 @@ import os
+ 
+ from setuptools import find_packages, setup
+ 
+-
+ project_dir = os.path.dirname(os.path.realpath(__file__))
+ requirements = os.path.join(project_dir, 'requirements.txt')
+ tests_requirements = os.path.join(project_dir, 'tests-requirements.txt')
+diff --git a/test/test_bugzilla.py b/test/test_bugzilla.py
+index c0a8b02..dfbe943 100644
+--- a/test/test_bugzilla.py
++++ b/test/test_bugzilla.py
+@@ -13,9 +13,10 @@
+ import unittest
+ from unittest.mock import Mock, patch
+ 
+-from fedpkg.bugzilla import BugzillaClient
+ from pyrpkg import rpkgError
+ 
++from fedpkg.bugzilla import BugzillaClient
++
+ 
+ class BugzillaSideEffect(object):
+     def __init__(self):
+diff --git a/test/test_cli.py b/test/test_cli.py
+index 155151b..a1aae35 100644
+--- a/test/test_cli.py
++++ b/test/test_cli.py
+@@ -36,13 +36,14 @@ try:
+ except ImportError:
+     from pkg_resources import get_distribution as distribution
+ 
+-import fedpkg.cli
+-from fedpkg.bugzilla import BugzillaClient
+-from fedpkg.cli import check_bodhi_version
+ from freezegun import freeze_time
+ from pyrpkg.errors import rpkgError
+ from utils import CliTestCase
+ 
++import fedpkg.cli
++from fedpkg.bugzilla import BugzillaClient
++from fedpkg.cli import check_bodhi_version
++
+ try:
+     import bodhi
+     bodhi_version = distribution('bodhi-client').version
+diff --git a/test/test_retire.py b/test/test_retire.py
+index e6f371e..aa6db69 100644
+--- a/test/test_retire.py
++++ b/test/test_retire.py
+@@ -5,7 +5,7 @@ import os
+ import shutil
+ import subprocess
+ import tempfile
+-from unittest import mock, TestCase
++from unittest import TestCase, mock
+ 
+ from pyrpkg.errors import rpkgError
+ 
+diff --git a/test/test_utils.py b/test/test_utils.py
+index ddb0e3d..498a572 100644
+--- a/test/test_utils.py
++++ b/test/test_utils.py
+@@ -10,18 +10,18 @@
+ # option) any later version.  See http://www.gnu.org/copyleft/gpl.html for
+ # the full text of the license.
+ 
+-from configparser import NoOptionError, NoSectionError
+ import json
+ import unittest
++from configparser import NoOptionError, NoSectionError
+ from unittest.mock import Mock, patch
+ 
+ import git
++import requests
++from freezegun import freeze_time
++from pyrpkg.errors import rpkgError
+ from requests.exceptions import ConnectionError
+ 
+ from fedpkg import utils
+-from freezegun import freeze_time
+-from pyrpkg.errors import rpkgError
+-import requests
+ 
+ 
+ class TestUtils(unittest.TestCase):
+diff --git a/test/utils.py b/test/utils.py
+index f4e71f3..36d4f3a 100644
+--- a/test/utils.py
++++ b/test/utils.py
+@@ -17,8 +17,10 @@ import shutil
+ import subprocess
+ import tempfile
+ import unittest
+-import fedpkg.cli
++
+ import pyrpkg
++
++import fedpkg.cli
+ from fedpkg import Commands
+ 
+ 
+-- 
+2.53.0
+

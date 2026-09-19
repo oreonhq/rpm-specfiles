@@ -1,0 +1,28 @@
+From 07093dab5110229117e23690ebd005a2f6f729b0 Mon Sep 17 00:00:00 2001
+From: Y <julia.roznova@intel.com>
+Date: Thu, 11 Jul 2024 04:57:19 -0500
+Subject: [PATCH 2/3] remove -Werror flag
+
+(cherry picked from commit 2eaae5c45d441b4a36c1dc3a76cb028063d8e414)
+---
+ src_cpp/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src_cpp/Makefile b/src_cpp/Makefile
+index 15fbe2ae1178..0007e237c398 100644
+--- a/src_cpp/Makefile
++++ b/src_cpp/Makefile
+@@ -60,8 +60,8 @@ ifeq ($(origin CXX),default)
+ CXX=mpiicpx
+ endif
+ override CPPFLAGS += -I.
+-override CFLAGS += -g -O0 -Wall -Werror
+-override CXXFLAGS += -g -O0 -Wall -Wextra -Werror
++override CFLAGS += -g -O0 -Wall
++override CXXFLAGS += -g -O0 -Wall -Wextra
+ ifdef WITH_OPENMP
+ ifeq ("$(CXX)",$(filter "$(CXX)", "mpiicpx" "icpx"))
+ override CXXFLAGS += -qopenmp
+-- 
+2.45.2
+

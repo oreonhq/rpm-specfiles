@@ -1,0 +1,14 @@
+diff -up iaxclient-2.1beta3/lib/ringbuffer.c.arm iaxclient-2.1beta3/lib/ringbuffer.c
+--- iaxclient-2.1beta3/lib/ringbuffer.c.arm	2013-07-15 22:07:08.478680792 -0400
++++ iaxclient-2.1beta3/lib/ringbuffer.c	2013-07-15 22:07:36.449681212 -0400
+@@ -104,6 +104,10 @@
+ #      define rb_FullMemoryBarrier()  asm volatile("sync":::"memory")
+ #      define rb_ReadMemoryBarrier()  asm volatile("sync":::"memory")
+ #      define rb_WriteMemoryBarrier() asm volatile("sync":::"memory")
++#   elif defined( __arm__ )
++#	define rb_FullMemoryBarrier()  asm volatile("dmb":::"memory")
++#	define rb_ReadMemoryBarrier()  asm volatile("dmb":::"memory")
++#	define rb_WriteMemoryBarrier() asm volatile("dmb":::"memory")
+ #   elif defined( __SSE2__ )
+ #      define rb_FullMemoryBarrier()  asm volatile("mfence":::"memory")
+ #      define rb_ReadMemoryBarrier()  asm volatile("lfence":::"memory")

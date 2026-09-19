@@ -1,140 +1,60 @@
-%global source0_hash 643d3914d73d3eeb0c552cbb12d7e82adf0e504dbf86a3182f8771a153a1971c
-
-%bcond bootstrap 0
-%bcond tests %{without bootstrap}
+%global source0_hash none
 
 Name:           python-virtualenv
-Version:        20.35.4
+Version:        21.7.11
 Release:        %autorelease
-Summary:        Tool to create isolated Python environments
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Virtual Python Environment builder
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://pypi.python.org/pypi/virtualenv
-Source:        https://files.pythonhosted.org/packages/source/v/virtualenv/virtualenv-20.35.4.tar.gz
-# Add /usr/share/python-wheels to extra_search_dir
-Patch:          rpm-wheels.patch
-
-# Restore support for Python 3.6 virtual environments
-Patch:          python3.6.patch
+URL:            https://github.com/pypa/virtualenv
+Source:         %{pypi_source virtualenv}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  fish
-BuildRequires:  tcsh
-BuildRequires:  gcc
-# from the [test] extra, but manually filtered, version bounds removed
-BuildRequires:  python3-flaky
-BuildRequires:  python3-packaging
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-env
-#BuildRequires: python3-pytest-freezer -- not available, tests skipped
-BuildRequires:  python3-pytest-mock
-BuildRequires:  python3-pytest-randomly
-BuildRequires:  python3-pytest-timeout
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-time-machine
-%endif
 
-# RPM installed wheels
-BuildRequires:  %{python_wheel_pkg_prefix}-pip-wheel >= 25.1
-BuildRequires:  %{python_wheel_pkg_prefix}-setuptools-wheel >= 70.1
-# python-wheel-wheel is only used on Python 3.8 which is retired from Fedora 42+
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-virtualenv is a tool to create isolated Python environments.
-A subset of it has been integrated into the Python standard library under
-the venv module. The venv module does not offer all features of this library,
-to name just a few more prominent:
+This is package 'virtualenv' generated automatically by pyp2spec.}
 
-- is slower (by not having the app-data seed method),
-- is not as extendable,
-- cannot create virtual environments for arbitrarily installed Python versions
-  (and automatically discover these),
-- does not have as rich programmatic API (describe virtual environments
-  without creating them).}
+Patch:          rpm-wheels.patch
+Patch:          python3.6.patch
 
 %description %_description
 
-
 %package -n     python3-virtualenv
-Summary:        Tool to create isolated Python environments
-
-# Provide "virtualenv" for convenience
-Provides:       virtualenv = %{version}-%{release}
-
-# RPM installed wheels
-Requires:       %{python_wheel_pkg_prefix}-pip-wheel >= 25.1
-# Python 3.12 virtualenvs are created without setuptools,
-# but the users can still do --setuptools=bundle to force them:
-Requires:       %{python_wheel_pkg_prefix}-setuptools-wheel >= 70.1
-# This is only needed for Python 3.6 virtual environments
-Requires:       (%{python_wheel_pkg_prefix}-wheel0.37-wheel if python3.6)
+Summary:        %{summary}
 
 %description -n python3-virtualenv %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n virtualenv-%{version}
 
-# Remove the wheels provided by RPM packages
-rm src/virtualenv/seed/wheels/embed/pip-*
-rm src/virtualenv/seed/wheels/embed/setuptools-*
-rm src/virtualenv/seed/wheels/embed/wheel-*
-
-test ! -f src/virtualenv/seed/embed/wheels/*.whl
-
-# Replace hardcoded path from rpm-wheels.patch by %%{python_wheel_dir}
-# On Fedora, this should change nothing, but when building for RHEL9+, it will
-sed -i "s|/usr/share/python-wheels|%{python_wheel_dir}|" src/virtualenv/util/path/_system_wheels.py
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l virtualenv
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import -e '*activate_this' -e '*windows*'
-%if %{with tests}
-# Skip tests which requires internet or some extra dependencies
-# Requires internet:
-# - test_download_*
-# - test_can_build_c_extensions
-# - test_create_distutils_cfg
-# Uses disabled functionalities around bundled wheels:
-# - test_wheel_*
-# - test_seed_link_via_app_data
-# - test_base_bootstrap_via_pip_invoke
-# - test_acquire.py (whole file)
-# - test_bundle.py (whole file)
-# Uses disabled functionalities around automatic updates:
-# - test_periodic_update.py (whole file)
-# We don't run the tests in an active virtual environment
-# https://github.com/pypa/virtualenv/issues/2939#issuecomment-3384554583
-# - test_py_info_cache_clear
-PIP_CERT=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem \
-%pytest -vv -k "not test_bundle and \
-                not test_acquire and \
-                not test_periodic_update and \
-                not test_wheel_ and \
-                not test_download_ and \
-                not test_can_build_c_extensions and \
-                not test_base_bootstrap_via_pip_invoke and \
-                not test_seed_link_via_app_data and \
-                not test_py_info_cache_clear and \
-                not test_create_distutils_cfg"
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-virtualenv -f %{pyproject_files}
-%doc README.md
 %{_bindir}/virtualenv
 
 %changelog

@@ -1,0 +1,34 @@
+From 9f38c6300712a23ccdc75e140143a1c461e15705 Mon Sep 17 00:00:00 2001
+From: Andrew Bauer <zonexpertconsulting@outlook.com>
+Date: Mon, 24 Jun 2024 10:11:23 -0500
+Subject: [PATCH] silence integrity check for excluded files
+
+---
+ lib/private/IntegrityCheck/Checker.php | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/lib/private/IntegrityCheck/Checker.php b/lib/private/IntegrityCheck/Checker.php
+index a6de3cf6030d7..3974483601b08 100644
+--- a/lib/private/IntegrityCheck/Checker.php
++++ b/lib/private/IntegrityCheck/Checker.php
+@@ -337,7 +337,20 @@ private function verify(string $signaturePath, string $basePath, string $certifi
+ 		$differencesB = array_diff_assoc($currentInstanceHashes, $expectedHashes);
+ 		$differences = array_unique(array_merge($differencesA, $differencesB));
+ 		$differenceArray = [];
++
++		# Nasty hack to silence the integrity checker for files patched during the build process or files we simply don't care about
++		$excludedFilenames = [
++//sedplaceholder			];
++
+ 		foreach ($differences as $filename => $hash) {
++
++			# Skip if the file in question matches our exclusion list
++			foreach ($excludedFilenames as $excludedFilename) {
++			  if (strpos($filename, $excludedFilename)!==false) {
++			    break 2;
++			  }
++			}
++
+ 			// Check if file should not exist in the new signature table
+ 			if (!array_key_exists($filename, $expectedHashes)) {
+ 				$differenceArray['EXTRA_FILE'][$filename]['expected'] = '';

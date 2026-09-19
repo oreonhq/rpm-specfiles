@@ -1,0 +1,8 @@
+--- superluminal-perf-0.4.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ superluminal-perf-0.4.0/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -50,5 +50,3 @@
+ default = ["enable"]
+ enable = []
+ 
+-[target."cfg(windows)".dependencies.superluminal-perf-sys]
+-version = "0.4.0"

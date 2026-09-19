@@ -1,0 +1,31 @@
+Thanks to Jakub Jelinek for the stacksize patch.  The old code was valid C17,
+but the semantics changed in C23, where int (*fun)(); doesn't mean function
+pointer with unspecified parameters, but it means the same thing as
+int (*fun)(void); (like in C++).
+
+--- autoconf/dlopen.orig	2023-12-22 09:18:46.000000000 -0700
++++ autoconf/dlopen	2025-01-13 11:24:33.571721278 -0700
+@@ -54,9 +54,9 @@ fi
+ #*    Test                                                             */
+ #*---------------------------------------------------------------------*/
+ cat > $file.c <<EOF
+-extern void *dlopen();
+-extern int dlclose();
+-extern void *dlsym();
++extern void *dlopen(const char *filename, int flags);
++extern int dlclose(void *handle);
++extern void *dlsym(void *restrict handle, const char *restrict symbol);
+ 
+ int main( int argc, char *argv[] ) {
+    void *handle = dlopen( "/dev/null", 0 );
+--- autoconf/stacksize.orig	2023-12-22 09:18:46.000000000 -0700
++++ autoconf/stacksize	2025-01-13 10:30:41.403388476 -0700
+@@ -58,7 +58,7 @@ rm -f $aout.exe 2> /dev/null
+ #*    Test                                                             */
+ #*---------------------------------------------------------------------*/
+ cat > $file.c <<EOF
+-int (*fun)();
++int (*fun)( int, int );
+ int glob;
+ 
+ int foo( int x, int y ) {

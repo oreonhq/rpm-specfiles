@@ -1,0 +1,12 @@
+diff -rup a/src/hf/gl_preview.c b/src/hf/gl_preview.c
+--- a/src/hf/gl_preview.c	2016-05-13 14:19:11.723938797 +0200
++++ b/src/hf/gl_preview.c	2016-05-13 14:23:12.798321985 +0200
+@@ -1164,7 +1164,7 @@ void gl_save_water_inc (gl_preview_struc
+ 		if (gl_preview->use_water && *gl_preview->use_water)
+ 			fprintf(fin,"#declare preview_water_level = %5.2f;\n",*gl_preview->water_level);
+ 		else
+-			fprintf(fin," ",0);
++			fprintf(fin,"\n");
+ 		setlocale(LC_NUMERIC,loc);
+ 		free(loc);
+ 		fclose(fin);

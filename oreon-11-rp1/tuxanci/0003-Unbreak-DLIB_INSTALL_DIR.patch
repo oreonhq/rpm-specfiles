@@ -1,0 +1,25 @@
+From d76834d7832d984fdf2ff53babd8a6f7e88ace24 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Mon, 10 Nov 2014 00:30:14 +0100
+Subject: [PATCH] Unbreak -DLIB_INSTALL_DIR
+
+---
+ CMakeLists.txt | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9c128c0..b7abee8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -28,8 +28,6 @@ SET ( CMAKE_INSTALL_PREFIX "/usr/local/" CACHE PATH "Install path prefix" )
+ SET ( CMAKE_DOC_PATH "${CMAKE_INSTALL_PREFIX}/share/doc" CACHE PATH "Data path prefix" )
+ SET ( CMAKE_LOCALE_PATH "${CMAKE_INSTALL_PREFIX}/share/locale" CACHE PATH "Locale path prefix" )
+ SET ( CMAKE_DATA_PATH "${CMAKE_INSTALL_PREFIX}/share/" CACHE PATH "Data path prefix" )
+-SET ( CMAKE_LIB_PATH "${CMAKE_INSTALL_PREFIX}/lib/" CACHE PATH "Library path prefix" )
+-SET ( LIB_INSTALL_DIR "${CMAKE_LIB_PATH}" )
+ ###############################################################################
+ # BASIC PROJECT VALUES
+ ###############################################################################
+-- 
+2.1.0
+

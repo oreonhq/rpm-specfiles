@@ -1,0 +1,18 @@
+--- build.gradle	2021-05-31 12:00:45.000000000 +0200
++++ build.gradle.rej	2021-06-02 14:27:41.778875605 +0200
+@@ -11,15 +11,6 @@
+   test.java.srcDirs 'test'
+ }
+ 
+-repositories { jcenter() }
+-dependencies {
+-  testCompile 'junit:junit:4.12'
+-  testCompile 'org.assertj:assertj-core:3.12.2'
+-}
+-
+ jar {
+   archiveName 'fernflower.jar'
+-  manifest {
+-    attributes 'Main-Class': 'org.jetbrains.java.decompiler.main.decompiler.ConsoleDecompiler'
+-  }
+ }

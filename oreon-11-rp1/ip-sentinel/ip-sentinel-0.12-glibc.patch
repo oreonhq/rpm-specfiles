@@ -1,0 +1,18 @@
+--- src/compat.h~	2005-03-08 04:58:48.000000000 -0600
++++ src/compat.h	2013-03-01 09:04:54.995744990 -0600
+@@ -45,11 +45,11 @@
+ #endif
+ 
+ 
+-#ifndef __dietlibc__
+-#  include <stropts.h>
+-#else
++//#ifndef __dietlibc__
++//#  include <stropts.h>
++//#else
+ #  include <sys/ioctl.h>
+-#endif
++//#endif
+ 
+ #ifdef __dietlibc__
+ #  define sin	XsinX

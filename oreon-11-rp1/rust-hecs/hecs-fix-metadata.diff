@@ -1,0 +1,12 @@
+--- hecs-0.10.5/Cargo.toml	1970-01-01T00:00:01+00:00
++++ hecs-0.10.5/Cargo.toml	2026-02-24T15:35:36.508239+00:00
+@@ -70,9 +70,6 @@
+ ]
+ default-features = false
+ 
+-[dev-dependencies.bencher]
+-version = "0.1.5"
+-
+ [dev-dependencies.rand]
+ version = "0.8.3"
+ 

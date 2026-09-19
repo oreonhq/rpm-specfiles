@@ -1,0 +1,29 @@
+Include <string.h> for the strerror function.
+
+Fixed upstream via:
+
+commit 3a5fe9ec80f9cec382d37f002877f98a64a64ac1
+Author: Rin Okuyama <rokuyama@rk.phys.keio.ac.jp>
+Date:   Fri Nov 10 19:05:23 2017 +0900
+
+    Forget to commit other files than suspend.?
+    - Allow coprocess to suspend
+    - Appease some compiler warnings
+    Check compile & run on NetBSD, macOS, Linux, and Solaris.
+
+<https://github.com/vmi/cocot/commit/3a5fe9ec80f9cec382d37f002877f98a64a64ac1>
+
+diff --git a/loop.c b/loop.c
+index 4911eaf918953b25..77576d41d5b09945 100644
+--- a/loop.c
++++ b/loop.c
+@@ -8,6 +8,9 @@
+ #if HAVE_CONFIG_H
+ #  include <config.h>
+ #endif
++#if HAVE_STRING_H
++#  include <string.h>
++#endif
+ #if HAVE_UNISTD_H
+ #  include <unistd.h>
+ #endif

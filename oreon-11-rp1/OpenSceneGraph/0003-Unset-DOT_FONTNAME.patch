@@ -1,0 +1,36 @@
+diff -rupN --no-dereference OpenSceneGraph-OpenSceneGraph-3.6.5/doc/Doxyfiles/all_Doxyfile OpenSceneGraph-OpenSceneGraph-3.6.5-new/doc/Doxyfiles/all_Doxyfile
+--- OpenSceneGraph-OpenSceneGraph-3.6.5/doc/Doxyfiles/all_Doxyfile	2020-01-31 12:03:07.000000000 +0100
++++ OpenSceneGraph-OpenSceneGraph-3.6.5-new/doc/Doxyfiles/all_Doxyfile	2025-07-20 16:14:39.313250545 +0200
+@@ -230,7 +230,7 @@ CLASS_DIAGRAMS         = YES
+ MSCGEN_PATH            = 
+ HIDE_UNDOC_RELATIONS   = YES
+ HAVE_DOT               = YES
+-DOT_FONTNAME           = FreeSans
++DOT_FONTNAME           = 
+ DOT_FONTPATH           = 
+ CLASS_GRAPH            = YES
+ COLLABORATION_GRAPH    = NO
+diff -rupN --no-dereference OpenSceneGraph-OpenSceneGraph-3.6.5/doc/Doxyfiles/auto_Doxyfile OpenSceneGraph-OpenSceneGraph-3.6.5-new/doc/Doxyfiles/auto_Doxyfile
+--- OpenSceneGraph-OpenSceneGraph-3.6.5/doc/Doxyfiles/auto_Doxyfile	2020-01-31 12:03:07.000000000 +0100
++++ OpenSceneGraph-OpenSceneGraph-3.6.5-new/doc/Doxyfiles/auto_Doxyfile	2025-07-20 16:14:39.313729769 +0200
+@@ -244,7 +244,7 @@ CLASS_DIAGRAMS         = YES
+ MSCGEN_PATH            = 
+ HIDE_UNDOC_RELATIONS   = YES
+ HAVE_DOT               = YES
+-DOT_FONTNAME           = FreeSans
++DOT_FONTNAME           = 
+ DOT_FONTPATH           = 
+ CLASS_GRAPH            = YES
+ COLLABORATION_GRAPH    = NO
+diff -rupN --no-dereference OpenSceneGraph-OpenSceneGraph-3.6.5/doc/Doxyfiles/core_Doxyfile OpenSceneGraph-OpenSceneGraph-3.6.5-new/doc/Doxyfiles/core_Doxyfile
+--- OpenSceneGraph-OpenSceneGraph-3.6.5/doc/Doxyfiles/core_Doxyfile	2020-01-31 12:03:07.000000000 +0100
++++ OpenSceneGraph-OpenSceneGraph-3.6.5-new/doc/Doxyfiles/core_Doxyfile	2025-07-20 16:14:39.313907929 +0200
+@@ -234,7 +234,7 @@ CLASS_DIAGRAMS         = YES
+ MSCGEN_PATH            = 
+ HIDE_UNDOC_RELATIONS   = YES
+ HAVE_DOT               = YES
+-DOT_FONTNAME           = FreeSans
++DOT_FONTNAME           = 
+ DOT_FONTPATH           = 
+ CLASS_GRAPH            = YES
+ COLLABORATION_GRAPH    = NO

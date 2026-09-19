@@ -1,0 +1,55 @@
+diff -up ansible-pylibssh-1.3.0/pytest.ini.nocov ansible-pylibssh-1.3.0/pytest.ini
+--- ansible-pylibssh-1.3.0/pytest.ini.nocov	2025-10-11 18:18:25.000000000 -0600
++++ ansible-pylibssh-1.3.0/pytest.ini	2025-11-29 14:44:23.640938468 -0700
+@@ -19,16 +19,6 @@ addopts =
+   # dump the test results in junit format:
+   --junitxml=.test-results/pytest/results.xml
+ 
+-  # Pre-load the `pytest-cov` plugin early:
+-  -p pytest_cov
+-
+-  # `pytest-cov`:
+-  --cov
+-  --cov-config=.coveragerc
+-  --cov-context=test
+-  --cov-report=xml:.test-results/pytest/cov.xml
+-  --no-cov-on-fail
+-
+   # Fail on config parsing warnings:
+   # --strict-config
+ 
+diff -up ansible-pylibssh-1.3.0/tox.ini.nocov ansible-pylibssh-1.3.0/tox.ini
+--- ansible-pylibssh-1.3.0/tox.ini.nocov	2025-10-11 18:18:25.000000000 -0600
++++ ansible-pylibssh-1.3.0/tox.ini	2025-11-29 14:45:29.276169014 -0700
+@@ -9,11 +9,7 @@ allowlist_externals =
+ isolated_build = true
+ usedevelop = false
+ deps =
+-  # NOTE: `coverage` is a transitive dep but we need a minimum version boundary
+-  # NOTE: to get a version supporting `source_pkgs`.
+-  coverage >= 5.3
+   pytest
+-  pytest-cov
+   pytest-xdist
+ passenv =
+   PYTHONPATH
+@@ -22,7 +18,6 @@ commands =
+   {envpython} -m \
+     pytest \
+     {tty:--color=yes} \
+-    --no-cov \
+     {posargs:}
+ 
+ 
+@@ -34,11 +29,9 @@ allowlist_externals =
+ isolated_build = true
+ usedevelop = false
+ deps =
+-  coverage >= 5.3
+   Cython
+   expandvars
+   pytest
+-  pytest-cov
+   pytest-xdist
+ setenv =
+   ANSIBLE_PYLIBSSH_CYTHON_TRACING = {env:ANSIBLE_PYLIBSSH_CYTHON_TRACING:1}

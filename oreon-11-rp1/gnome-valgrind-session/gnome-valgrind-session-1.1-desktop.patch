@@ -1,0 +1,22 @@
+diff -urNp gnome-valgrind-session-1.1.orig/gnome-valgrind-errors.desktop gnome-valgrind-session-1.1/gnome-valgrind-errors.desktop
+--- gnome-valgrind-session-1.1.orig/gnome-valgrind-errors.desktop	2008-09-12 04:11:13.516914580 +0530
++++ gnome-valgrind-session-1.1/gnome-valgrind-errors.desktop	2008-09-12 04:11:46.508156064 +0530
+@@ -1,6 +1,5 @@
+ [Desktop Entry]
+-Encoding=UTF-8
+-Type=XSession
++Type=Application
+ Exec=gnome-valgrind-errors
+ TryExec=gnome-valgrind-errors
+ Name=GNOME Valgrind (Errors)
+diff -urNp gnome-valgrind-session-1.1.orig/gnome-valgrind-leaks.desktop gnome-valgrind-session-1.1/gnome-valgrind-leaks.desktop
+--- gnome-valgrind-session-1.1.orig/gnome-valgrind-leaks.desktop	2008-09-12 04:11:13.516914580 +0530
++++ gnome-valgrind-session-1.1/gnome-valgrind-leaks.desktop	2008-09-12 04:11:37.596154819 +0530
+@@ -1,6 +1,5 @@
+ [Desktop Entry]
+-Encoding=UTF-8
+-Type=XSession
++Type=Application
+ Exec=gnome-valgrind-leaks
+ TryExec=gnome-valgrind-leaks
+ Name=GNOME Valgrind (Leaks)

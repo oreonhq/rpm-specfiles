@@ -1,0 +1,41 @@
+From 0354081ae7367ed9c85ae450623a308c80d54175 Mon Sep 17 00:00:00 2001
+From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+Date: Fri, 5 Apr 2013 15:32:26 +0200
+Subject: [PATCH] fix use-after-free in sasl code
+
+==20127== Invalid read of size 4
+==20127==    at 0x412AC4: finish_sasl_redirection (sasl.c:67)
+==20127==    by 0x406901: rebind (ldapvi.c:611)
+==20127==    by 0x407843: do_connect (ldapvi.c:732)
+==20127==    by 0x4042F3: main (ldapvi.c:1739)
+==20127==  Address 0x4c6498c is 28 bytes inside a block of size 40 free'd
+==20127==    at 0x4A077E6: free (vg_replace_malloc.c:446)
+==20127==    by 0x4068EE: rebind (ldapvi.c:609)
+==20127==    by 0x407843: do_connect (ldapvi.c:732)
+==20127==    by 0x4042F3: main (ldapvi.c:1739)
+
+Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+---
+ ldapvi/ldapvi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ldapvi/ldapvi.c b/ldapvi/ldapvi.c
+index b594327..ebf3c9f 100644
+--- a/ldapvi/ldapvi.c
++++ b/ldapvi/ldapvi.c
+@@ -606,11 +606,11 @@ rebind_sasl(LDAP *ld, bind_options *bind_options, char *dir, int verbose)
+ 		ld, bind_options->user, bind_options->sasl_mech, NULL,
+ 		NULL, sasl_mode, ldapvi_sasl_interact, defaults);
+ 
+-	sasl_defaults_free(defaults);
+ 	if (defaults->fd != -1) {
+ 		finish_sasl_redirection(defaults);
+ 		free(defaults->pathname);
+ 	}
++	sasl_defaults_free(defaults);
+ 
+ 	if (rc != LDAP_SUCCESS) {
+ 		ldap_perror(ld, "ldap_sasl_interactive_bind_s");
+-- 
+1.8.1.4
+

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>seadrive.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>Apache-2.0</project_license>
+  <name>SeaDrive</name>
+  <summary>Seafile cloud storage Drive Client</summary>
+  <description>
+    <p>
+    Seafile is a next-generation open source cloud storage system, with
+    advanced support for file syncing, privacy protection and teamwork.
+    </p>
+    <p>
+    Seafile allows users to create groups with file syncing, wiki, and discussion
+    to enable easy collaboration around documents within a team.
+    </p>
+    <p>
+    The Seafile Drive client enables you to access files on the server without
+    syncing to local disk.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://alebastr.fedorapeople.org/appstream/seadrive/seadrive-folder.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://alebastr.fedorapeople.org/appstream/seadrive/add-an-account.png</image>
+    </screenshot>
+  </screenshots>
+  <launchable type="desktop-id">seadrive.desktop</launchable>
+  <url type="homepage">https://www.seafile.com</url>
+  <url type="bugtracker">https://forum.seafile.com/</url>
+  <url type="help">https://help.seafile.com/drive_client/using_drive_client/</url>
+  <url type="translate">https://www.transifex.com/projects/p/seadrive-gui</url>
+  <developer_name>Seafile Ltd</developer_name>
+</component>

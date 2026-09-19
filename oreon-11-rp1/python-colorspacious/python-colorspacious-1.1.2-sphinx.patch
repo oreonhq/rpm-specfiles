@@ -1,0 +1,18 @@
+diff -up colorspacious-1.1.2/doc/conf.py.orig colorspacious-1.1.2/doc/conf.py
+--- colorspacious-1.1.2/doc/conf.py.orig	2017-01-17 11:30:22.000000000 +0100
++++ colorspacious-1.1.2/doc/conf.py	2021-01-25 23:50:37.538672639 +0100
+@@ -69,9 +69,11 @@ extensions = [
+ # Undocumented trick: if we def setup here in conf.py, it gets called just
+ # like an extension's setup function.
+ def setup(app):
+-    app.add_javascript("show-code.js")
+-    app.add_javascript("facebox.js")
+-    app.add_stylesheet("facebox.css")
++    app.add_js_file("show-code.js")
++    app.add_js_file("facebox.js")
++    app.add_css_file("facebox.css")
++
++bibtex_bibfiles = ['bibliography.bib']
+ 
+ # Add any paths that contain templates here, relative to this directory.
+ templates_path = ['_templates']

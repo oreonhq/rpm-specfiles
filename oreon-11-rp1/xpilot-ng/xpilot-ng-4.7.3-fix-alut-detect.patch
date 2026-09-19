@@ -1,0 +1,12 @@
+--- xpilot-ng-4.7.3/configure.ac~	2010-03-06 02:20:30.000000000 +0100
++++ xpilot-ng-4.7.3/configure.ac	2016-02-01 14:29:21.981049477 +0100
+@@ -325,7 +325,8 @@ if test x$enable_sound = xyes; then
+ 		alut, 
+ 		main, 
+ 		[have_alut=yes],
+-		[])
++		[],
++		-lopenal)
+ 	if test x$have_openal = xyes; then
+ 		if test x$have_alut = xyes; then
+ 			have_sound=yes

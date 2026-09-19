@@ -1,0 +1,27 @@
+From fbd2b983cb2f86b9d633570bbe4fb39c997b4c43 Mon Sep 17 00:00:00 2001
+From: Allen Winter <winter@kde.org>
+Date: Fri, 11 Sep 2015 16:43:08 -0400
+Subject: [PATCH 23/31] addtransportdialog.cpp - make default size a little
+ larger 300x200 is pretty small => increase to 400x300
+
+MERGE: safe for newer versions
+---
+ mailtransport/addtransportdialog.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mailtransport/addtransportdialog.cpp b/mailtransport/addtransportdialog.cpp
+index b6a3bd8..732a34c 100644
+--- a/mailtransport/addtransportdialog.cpp
++++ b/mailtransport/addtransportdialog.cpp
+@@ -71,7 +71,7 @@ void AddTransportDialog::Private::writeConfig()
+ void AddTransportDialog::Private::readConfig()
+ {
+   KConfigGroup group( KGlobal::config(), "AddTransportDialog" );
+-  const QSize sizeDialog = group.readEntry( "Size", QSize(300,200) );
++  const QSize sizeDialog = group.readEntry( "Size", QSize(400,300) );
+   if ( sizeDialog.isValid() ) {
+     q->resize( sizeDialog );
+   }
+-- 
+2.5.0
+

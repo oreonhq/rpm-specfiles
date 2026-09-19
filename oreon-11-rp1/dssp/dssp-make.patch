@@ -1,0 +1,63 @@
+--- dssp-2.2.1/makefile.make	2013-09-11 07:33:28.000000000 +0100
++++ dssp-2.2.1/makefile	2015-12-13 13:08:01.069936929 +0000
+@@ -19,7 +19,7 @@
+ LIB_DIR				= $(BOOST_LIB_DIR)
+ INC_DIR				= $(BOOST_INC_DIR)
+ BIN_DIR				= $(DEST_DIR)/bin
+-MAN_DIR				= $(DEST_DIR)/man/man1
++MAN_DIR				= $(DEST_DIR)/share/man/man1
+ 
+ BOOST_LIBS			= thread filesystem program_options iostreams system
+ LIBS				= $(BOOST_LIBS:%=boost_%$(BOOST_LIB_SUFFIX)) z bz2
+@@ -29,6 +29,7 @@
+ 
+ CFLAGS				+= $(INC_DIR:%=-I%) -iquote src -g -Wall -Wno-multichar -pthread
+ LDOPTS				+= $(LIB_DIR:%=-L%) $(LIBS:%=-l%) -g -pthread
++COPT				= -O3
+ 
+ OBJ_DIR				= obj
+ 
+@@ -37,7 +38,7 @@
+ CFLAGS				+= -g3
+ else
+ DEFINES				+= NDEBUG
+-CFLAGS				+= -O3
++CFLAGS				+= $(COPT)
+ endif
+ 
+ CFLAGS				+= $(DEFINES:%=-D%)
+@@ -49,28 +50,26 @@
+ OBJECTS = $(OBJ_DIR)/mkdssp.o $(OBJ_DIR)/dssp.o $(OBJ_DIR)/primitives-3d.o $(OBJ_DIR)/structure.o $(OBJ_DIR)/utils.o $(OBJ_DIR)/mas.o $(OBJ_DIR)/iocif.o
+ 
+ mkdssp: $(OBJECTS)
+-	@ echo linking $@
+-	@ $(CXX) -static -o $@ $^ $(LDOPTS)
++	$(CXX) -o $@ $^ $(LDOPTS)
+ 
+ include $(OBJECTS:%.o=%.d)
+ 
+ $(OBJECTS:.o=.d):
+ 
+ $(OBJ_DIR):
+-	@ mkdir -p $(OBJ_DIR)
++	mkdir -p $(OBJ_DIR)
+ 
+ $(OBJ_DIR)/%.o: %.cpp | $(OBJ_DIR)
+-	@ echo compiling $@
+-	@ $(CXX) -MD -c -o $@ $< $(CFLAGS)
++	$(CXX) -MD -c -o $@ $< $(CFLAGS)
+ 
+ clean:
+ 	install -d $(BIN_DIR) $(MAN_DIR)
+ 	rm -rf $(OBJ_DIR)/* mkdssp
+ 
+ install: mkdssp
+-	install -d $(BIN_DIR) $(MAN_DIR)
+-	install -m 755 mkdssp $(BIN_DIR)/mkdssp
+-	install doc/mkdssp.1 $(MAN_DIR)/mkdssp.1
++	install -d $(DESTDIR)$(BIN_DIR) $(DESTDIR)$(MAN_DIR)
++	install -m 755 mkdssp $(DESTDIR)$(BIN_DIR)/mkdssp
++	install doc/mkdssp.1 $(DESTDIR)$(MAN_DIR)/mkdssp.1
+ 
+ dist:
+ 	@ rm -rf $(DIST_NAME)

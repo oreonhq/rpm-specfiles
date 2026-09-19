@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+ <id type="desktop">clipit.desktop</id>
+ <metadata_licence>CC0</metadata_licence>
+ <project_license>GPL-3.0+</project_license>
+ <name>ClipIt</name>
+ <summary>A lightweight, fully featured clipboard manager</summary>
+ <description>
+  <p>
+  ClipIt is a lightweight, fully featured GTK+ clipboard manager.
+  It was forked from Parcellite, adding additional features and bugfixes to the project.
+  </p>
+  <p>ClipIt's main features are:</p>
+  <ul>
+   <li>Save a history of your last copied items</li>
+   <li>Search through the history</li>
+   <li>Global hot-keys for most used functions</li>
+   <li>Execute actions with clipboard items</li>
+   <li>Exclude specific items from history</li>
+  </ul>
+ </description>
+ <screenshots>
+  <screenshot type="default" width="626" height="647">https://fedoraproject.org/w/uploads/3/3a/ClipIt.jpg</screenshot>
+ </screenshots>
+ <url type="homepage">https://github.com/CristianHenzel/ClipIt</url>
+</application>

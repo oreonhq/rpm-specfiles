@@ -1,0 +1,28 @@
+From 833c14d5bd7a2033bfe1ba8afd8c9cbfa7ee6c92 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com>
+Date: Mon, 20 Jul 2009 13:57:09 +0200
+Subject: [PATCH] Ensure output is 7-bit ASCII data
+
+XML needs to be UTF-8, but Encode seems to have trouble ensuring
+it is. Let's ensure it's ASCII, a subset of UTF-8 for now.
+---
+ lib/TAP/Harness/JUnit.pm |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/lib/TAP/Harness/JUnit.pm b/lib/TAP/Harness/JUnit.pm
+index 8202553..4343028 100644
+--- a/lib/TAP/Harness/JUnit.pm
++++ b/lib/TAP/Harness/JUnit.pm
+@@ -347,6 +347,9 @@ sub runtests {
+ 	# Ensure it is valid XML. Not very smart though.
+ 	$xml = encode ('UTF-8', decode ('UTF-8', $xml));
+ 
++	# https://rt.cpan.org/Ticket/Display.html?id=48018
++	$xml =~ s/([^\x00-\x7f]+)/?/g;
++
+ 	# Dump output
+ 	open my $xml_fh, '>', $self->{__xmlfile}
+ 		or die $self->{__xmlfile}.': '.$!;
+-- 
+1.6.2.5
+

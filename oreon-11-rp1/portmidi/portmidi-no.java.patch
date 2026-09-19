@@ -1,0 +1,85 @@
+--- portmidi-old/CMakeLists.txt	2022-07-26 13:58:56.502175056 +0200
++++ portmidi/CMakeLists.txt	2022-07-26 14:01:36.635235371 +0200
+@@ -72,6 +72,4 @@
+ 
+ add_subdirectory(pm_dylib)
+ 
+-# Cannot figure out how to make an xcode Java application with CMake
+-add_subdirectory(pm_java)
+ 
+--- portmidi-old/pm_common/CMakeLists.txt	2022-07-26 13:58:56.494175153 +0200
++++ portmidi/pm_common/CMakeLists.txt	2022-07-26 14:04:07.113412636 +0200
+@@ -67,15 +67,6 @@
+     message(STATUS "SYSROOT: " ${CMAKE_OSX_SYSROOT})
+   else(APPLE)
+     # LINUX settings...
+-    include(FindJNI)
+-    message(STATUS "JAVA_JVM_LIB_PATH is " ${JAVA_JVM_LIB_PATH})
+-    message(STATUS "JAVA_INCLUDE_PATH is " ${JAVA_INCLUDE_PATH})
+-    message(STATUS "JAVA_INCLUDE_PATH2 is " ${JAVA_INCLUDE_PATH2})
+-    message(STATUS "JAVA_JVM_LIBRARY is " ${JAVA_JVM_LIBRARY})
+-    set(JAVA_INCLUDE_PATHS ${JAVA_INCLUDE_PATH} ${JAVA_INCLUDE_PATH2})
+-    # libjvm.so is found relative to JAVA_INCLUDE_PATH:
+-    set(JAVAVM_LIB ${JAVA_JVM_LIBRARY}/libjvm.so)
+-
+     set(LINUXSRC pmlinuxalsa pmlinux finddefault)
+     prepend_path(LIBSRC ../pm_linux/ ${LINUXSRC})
+     list(APPEND LIBSRC ../porttime/ptlinux)
+@@ -99,7 +90,6 @@
+     set(PM_NEEDED_LIBS winmm.lib)
+   endif(WIN32)
+ endif(UNIX)
+-set(JNI_EXTRA_LIBS ${PM_NEEDED_LIBS} ${JAVA_JVM_LIBRARY})
+ 
+ # this completes the list of library sources by adding shared code
+ list(APPEND LIBSRC pmutil portmidi)
+@@ -109,17 +99,9 @@
+ set_target_properties(portmidi-static PROPERTIES OUTPUT_NAME "portmidi_s")
+ target_link_libraries(portmidi-static ${PM_NEEDED_LIBS})
+ 
+-# define the jni library
+-include_directories(${JAVA_INCLUDE_PATHS})
+-
+-set(JNISRC ${LIBSRC} ../pm_java/pmjni/pmjni.c)
+-add_library(pmjni SHARED ${JNISRC})
+-target_link_libraries(pmjni ${JNI_EXTRA_LIBS})
+-set_target_properties(pmjni PROPERTIES EXECUTABLE_EXTENSION "jnilib")
+-
+ # install the libraries (Linux and Mac OS X command line)
+ if(UNIX)
+-  INSTALL(TARGETS portmidi-static pmjni
++  INSTALL(TARGETS portmidi-static
+     LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+     ARCHIVE DESTINATION ${LIB_INSTALL_DIR})
+ # .h files installed by pm_dylib/CMakeLists.txt, so don't need them here
+--- portmidi-old/pm_dylib/CMakeLists.txt	2022-07-26 13:58:56.494175153 +0200
++++ portmidi/pm_dylib/CMakeLists.txt	2022-07-26 14:05:24.435476039 +0200
+@@ -63,20 +63,6 @@
+     message(STATUS "SYSROOT: " ${CMAKE_OSX_SYSROOT})
+   else(APPLE)
+     # LINUX settings...
+-    include(FindJNI)
+-    # message(STATUS "JAVA_JVM_LIB_PATH is " ${JAVA_JVM_LIB_PATH})
+-    # message(STATUS "JAVA_INCLUDE_PATH is " ${JAVA_INCLUDE_PATH})
+-    # note: should use JAVA_JVM_LIB_PATH, but it is not set properly
+-    # note: user might need to set JAVA_INCLUDE_PATH manually
+-    #
+-    # this will probably break on BSD and other Unix systems; the fix
+-    # depends on whether FindJNI can find Java or not. If yes, then
+-    # we should try to rely on automatically set JAVA_INCLUDE_PATH and
+-    # JAVA_INCLUDE_PATH2; if no, then we need to make both JAVA_INCLUDE_PATH
+-    # and JAVA_INCLUDE_PATH2 set by user (will need clear documentation
+-    # because JAVA_INCLUDE_PATH2 is pretty obscure)
+-    set(JAVAVM_LIB ${JAVA_JVM_LIBRARY})
+-
+     set(LINUXSRC pmlinuxalsa pmlinux finddefault)
+     prepend_path(LIBSRC ../pm_linux/ ${LINUXSRC})
+     list(APPEND LIBSRC ../porttime/ptlinux)
+@@ -102,7 +88,6 @@
+     # message(STATUS "JAVAVM_LIB: " ${JAVAVM_LIB})
+   endif(WIN32)
+ endif(UNIX)
+-set(JNI_EXTRA_LIBS ${PM_NEEDED_LIBS} ${JAVAVM_LIB})
+ 
+ # this completes the list of library sources by adding shared code
+ set(SHARED_FILES pmutil portmidi)

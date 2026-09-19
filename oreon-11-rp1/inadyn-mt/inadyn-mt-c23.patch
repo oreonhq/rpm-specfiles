@@ -1,0 +1,15 @@
+--- a/src/base64.h	2016-05-06 18:22:47.000000000 -0500
++++ b/src/base64.h	2025-01-22 16:12:39.719208551 -0600
+@@ -35,10 +35,12 @@
+ #endif
+ 
+ #ifndef __cplusplus
++#if __STDC_VERSION__ < 202311L
+ typedef int bool;
+ 	#define false (1 == 0)
+ 	#define true  !false
+ #endif
++#endif
+ 
+ 
+ bool	b64help(void);                      /*Displays brief help messages.*/

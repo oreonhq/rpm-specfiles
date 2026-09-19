@@ -1,0 +1,12 @@
+--- noisy_float-0.2.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ noisy_float-0.2.1/Cargo.toml	2026-02-01T20:01:49.418168+00:00
+@@ -54,9 +54,6 @@
+ version = "1.0"
+ optional = true
+ 
+-[dev-dependencies.criterion]
+-version = "0.3"
+-
+ [dev-dependencies.serde_derive]
+ version = "1.0"
+ 

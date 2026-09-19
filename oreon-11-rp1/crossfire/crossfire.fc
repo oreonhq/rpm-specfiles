@@ -1,0 +1,9 @@
+# crossfire executable will have:
+# label: system_u:object_r:crossfire_exec_t
+# MLS sensitivity: s0
+# MCS categories: <none>
+
+/usr/bin/crossfire		--	gen_context(system_u:object_r:crossfire_exec_t,s0)
+/var/run/crossfire.pid			gen_context(system_u:object_r:crossfire_var_run_t,s0)
+/var/log/crossfire(/.*)?		gen_context(system_u:object_r:crossfire_var_log_t,s0)
+/var/games/crossfire(/.*)?		gen_context(system_u:object_r:crossfire_variable_data_t,s0)

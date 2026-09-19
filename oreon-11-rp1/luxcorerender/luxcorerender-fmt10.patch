@@ -1,0 +1,11 @@
+--- LuxCore-luxcorerender_v2.6/src/luxcore/luxcoreimpl.cpp.fmt10	2021-12-25 20:07:24.000000000 +0900
++++ LuxCore-luxcorerender_v2.6/src/luxcore/luxcoreimpl.cpp	2023-06-29 22:41:35.193767178 +0900
+@@ -518,7 +518,7 @@ const CameraImpl::CameraType CameraImpl:
+ 
+ 	const CameraImpl::CameraType type = (Camera::CameraType)scene.scene->camera->GetType();
+ 	
+-	API_RETURN("{}", type);
++	API_RETURN("{}", static_cast<int>(type));
+ 
+ 	return type;
+ }

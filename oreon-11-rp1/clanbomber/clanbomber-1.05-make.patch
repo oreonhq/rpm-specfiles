@@ -1,0 +1,60 @@
+diff -up clanbomber-1.05/clanbomber/Makefile.in~ clanbomber-1.05/clanbomber/Makefile.in
+--- clanbomber-1.05/clanbomber/Makefile.in~	2010-09-10 09:33:27.000000000 +0200
++++ clanbomber-1.05/clanbomber/Makefile.in	2010-09-10 09:34:54.085574002 +0200
+@@ -614,7 +614,7 @@ distclean-local:
+ .PHONY: files
+ 
+ files:
+-        @for subdir in $(SUBDIRS); do \
++	@for subdir in $(SUBDIRS); do \
+ 	  files=d $$subdir; $(MAKE) files | grep -v "make\[[1-9]\]"; \
+           for file in $$files; do \
+             echo $$subdir/$$file; \
+diff -up clanbomber-1.05/clanbomber/maps/Makefile.in~ clanbomber-1.05/clanbomber/maps/Makefile.in
+--- clanbomber-1.05/clanbomber/maps/Makefile.in~	2010-09-10 09:36:15.000000000 +0200
++++ clanbomber-1.05/clanbomber/maps/Makefile.in	2010-09-10 09:38:15.861573996 +0200
+@@ -355,7 +355,7 @@ uninstall-local:
+ .PHONY: files
+ 
+ files:
+-        @for subdir in $(SUBDIRS); do \
++	@for subdir in $(SUBDIRS); do \
+ 	  files=d $$subdir; $(MAKE) files | grep -v "make\[[1-9]\]"; \
+           for file in $$files; do \
+             echo $$subdir/$$file; \
+diff -up clanbomber-1.05/clanbomber/music/Makefile.in~ clanbomber-1.05/clanbomber/music/Makefile.in
+--- clanbomber-1.05/clanbomber/music/Makefile.in~	2010-09-10 09:36:15.000000000 +0200
++++ clanbomber-1.05/clanbomber/music/Makefile.in	2010-09-10 09:37:19.786573998 +0200
+@@ -259,7 +259,7 @@ uninstall-local:
+ .PHONY: files
+ 
+ files:
+-        @for subdir in $(SUBDIRS); do \
++	@for subdir in $(SUBDIRS); do \
+ 	  files=d $$subdir; $(MAKE) files | grep -v "make\[[1-9]\]"; \
+           for file in $$files; do \
+             echo $$subdir/$$file; \
+diff -up clanbomber-1.05/clanbomber/pics/Makefile.in~ clanbomber-1.05/clanbomber/pics/Makefile.in
+--- clanbomber-1.05/clanbomber/pics/Makefile.in~	2004-02-16 20:07:41.000000000 +0100
++++ clanbomber-1.05/clanbomber/pics/Makefile.in	2010-09-10 09:38:03.205573995 +0200
+@@ -252,7 +252,7 @@ uninstall-am: uninstall-info-am
+ .PHONY: files
+ 
+ files:
+-        @for subdir in $(SUBDIRS); do \
++	@for subdir in $(SUBDIRS); do \
+ 	  files=d $$subdir; $(MAKE) files | grep -v "make\[[1-9]\]"; \
+           for file in $$files; do \
+             echo $$subdir/$$file; \
+diff -up clanbomber-1.05/clanbomber/wavs/Makefile.in~ clanbomber-1.05/clanbomber/wavs/Makefile.in
+--- clanbomber-1.05/clanbomber/wavs/Makefile.in~	2004-02-16 20:07:42.000000000 +0100
++++ clanbomber-1.05/clanbomber/wavs/Makefile.in	2010-09-10 09:38:21.604574010 +0200
+@@ -252,7 +252,7 @@ uninstall-am: uninstall-info-am
+ .PHONY: files
+ 
+ files:
+-        @for subdir in $(SUBDIRS); do \
++	@for subdir in $(SUBDIRS); do \
+ 	  files=d $$subdir; $(MAKE) files | grep -v "make\[[1-9]\]"; \
+           for file in $$files; do \
+             echo $$subdir/$$file; \

@@ -1,0 +1,25 @@
+From f1959443d4a9c2fbaf9166334b41f821ce9abfb1 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Wed, 11 Mar 2026 20:05:10 +0100
+Subject: [PATCH 2/2] Prevent including README as Rust documentation
+
+---
+ src/lib.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index 86a4e8c..b08ca9d 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -5,7 +5,7 @@
+     html_logo_url = "https://raw.githubusercontent.com/bilelmoussaoui/ashpd/main/ashpd-demo/data/icons/com.belmoussaoui.ashpd.demo.svg",
+     html_favicon_url = "https://raw.githubusercontent.com/bilelmoussaoui/ashpd/main/ashpd-demo/data/icons/com.belmoussaoui.ashpd.demo-symbolic.svg"
+ )]
+-#![doc = include_str!("../README.md")]
++//#![doc = include_str!("../README.md")]
+ #[cfg(all(all(feature = "tokio", feature = "async-io"), not(doc)))]
+ compile_error!("You can't enable both async-io & tokio features at once");
+ #[cfg(all(not(feature = "tokio"), not(feature = "async-io"), not(doc)))]
+-- 
+2.53.0
+

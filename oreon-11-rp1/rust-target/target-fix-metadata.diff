@@ -1,0 +1,10 @@
+--- target-2.1.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ target-2.1.0/Cargo.toml	2024-10-22T20:27:57.827256+00:00
+@@ -17,6 +17,7 @@
+ description = "Get information on compilation target"
+ homepage = "https://github.com/casey/target"
+ license = "CC0-1.0"
++autobins = false
+ [dev-dependencies.executable-path]
+ version = "1.0.0"
+ 

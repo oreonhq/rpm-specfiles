@@ -1,0 +1,125 @@
+This patch introduces a new header file, lexparse.h, to provide
+function prototypes used for lexer/parser integration, and includes
+the new header in the lexers and parsers. This helps to avoid implicit
+function declarations and build issues with future compilers.
+
+Submitted upstream: <https://sourceforge.net/p/sblim/bugs/2768/>
+
+diff --git a/lexer.c b/lexer.c
+index ddbceec0ac2ff8c9..ff816ed0d40c7016 100644
+--- a/lexer.c
++++ b/lexer.c
+@@ -796,6 +796,7 @@ char *NFSv3yytext_ptr;
+ #line 7 "util/parser/lexer.l"
+ #include <string.h>
+ #include "cmpidt.h"
++#include "lexparse.h"
+ #include "parser.h"
+ /* #ifndef YY_FLEX_LEX_COMPAT
+ int NFSv3yylineno = 1;
+diff --git a/lexparse.h b/lexparse.h
+new file mode 100644
+index 0000000000000000..37d24e43f9ad1c4d
+--- /dev/null
++++ b/lexparse.h
+@@ -0,0 +1,9 @@
++#include <stdio.h>
++
++int NFSv3yylex (void);
++void NFSv3yyrestart (FILE *);
++void NFSv3yyerror(char *);
++
++int NFSv3xmlyylex (void);
++void NFSv3xmlyyerror(char *);
++int NFSv3xmlyyparse (void);
+diff --git a/parser.c b/parser.c
+index a4869608e0eab3f9..597aad4623ae6cff 100644
+--- a/parser.c
++++ b/parser.c
+@@ -1,3 +1,4 @@
++
+ /* A Bison parser, made by GNU Bison 2.3.  */
+ 
+ /* Skeleton implementation for Bison's Yacc-like parsers in C
+@@ -122,6 +123,8 @@
+ 
+ #include "GLOBALS.h"			/* Contains the custom Linux_SystemSetting classname _SETTINGCLASSNAME */
+ 
++#include "lexparse.h"
++
+ #include "cmpidt.h"     		/* Contains CIM type definitions */
+ static CMPIType propertytype;			/* CIM type of the current property */
+ 
+diff --git a/util/parser/lexer.l b/util/parser/lexer.l
+index 3258182becf87c47..8a904cab67c141b4 100644
+--- a/util/parser/lexer.l
++++ b/util/parser/lexer.l
+@@ -6,6 +6,7 @@
+ %{
+ #include <string.h>
+ #include "cmpidt.h"
++#include "lexparse.h"
+ #include "parser.h"
+ /* #ifndef YY_FLEX_LEX_COMPAT
+ int yylineno = 1;
+diff --git a/util/xmlparser/setProperty.c b/util/xmlparser/setProperty.c
+index 8a143ee06a30b53d..6192205956ca9978 100644
+--- a/util/xmlparser/setProperty.c
++++ b/util/xmlparser/setProperty.c
+@@ -1,5 +1,6 @@
+ #include <stdio.h>
+ #include <stdlib.h>
++#include "lexparse.h"
+ 
+ /* Stand-in for the real setProperty() to test the XML parser in isolation */ 
+ int NFSv3setProperty( char * name, char * typename, char * valuebuffer)
+diff --git a/util/xmlparser/xmllexer.l b/util/xmlparser/xmllexer.l
+index adecfad01470675e..39fce6d605140ea2 100644
+--- a/util/xmlparser/xmllexer.l
++++ b/util/xmlparser/xmllexer.l
+@@ -5,6 +5,7 @@
+ 
+ %{
+ #include <string.h>
++#include "lexparse.h"
+ #include "xmlparser.h"
+ /* #ifndef YY_FLEX_LEX_COMPAT
+ int yylineno = 1;
+diff --git a/util/xmlparser/xmlparser.y b/util/xmlparser/xmlparser.y
+index 82017c538bd0137c..19e63bef06216622 100644
+--- a/util/xmlparser/xmlparser.y
++++ b/util/xmlparser/xmlparser.y
+@@ -8,6 +8,8 @@
+ 
+ #include "GLOBALS.h"		/* Contains _SETTINGCLASSNAME */
+ 
++#include "lexparse.h"
++
+ #define RC_OK 0
+ #define RC_SYNTAX_ERROR 1
+ #define RC_BAD_CLASSNAME 2
+diff --git a/xmllexer.c b/xmllexer.c
+index 8431f742db84ac1e..5cb748f43a6e0a5a 100644
+--- a/xmllexer.c
++++ b/xmllexer.c
+@@ -572,6 +572,7 @@ char *NFSv3xmlyytext_ptr;
+ /* Everything between %{ ... %} is copied verbatim to the start of the lex generated C code. */
+ #line 7 "util/xmlparser/xmllexer.l"
+ #include <string.h>
++#include "lexparse.h"
+ #include "xmlparser.h"
+ /* #ifndef YY_FLEX_LEX_COMPAT
+ int NFSv3xmlyylineno = 1;
+diff --git a/xmlparser.c b/xmlparser.c
+index c496077b6c2019e1..7dedb9952d6f4337 100644
+--- a/xmlparser.c
++++ b/xmlparser.c
+@@ -118,6 +118,8 @@
+ 
+ #include "GLOBALS.h"		/* Contains _SETTINGCLASSNAME */
+ 
++#include "lexparse.h"
++
+ #define RC_OK 0
+ #define RC_SYNTAX_ERROR 1
+ #define RC_BAD_CLASSNAME 2

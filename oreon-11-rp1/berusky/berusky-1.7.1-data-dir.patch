@@ -1,0 +1,21 @@
+diff -up berusky-1.7.1/src/defines.h.old berusky-1.7.1/src/defines.h
+--- berusky-1.7.1/src/defines.h.old	2019-05-06 09:31:44.970662030 +0200
++++ berusky-1.7.1/src/defines.h	2019-05-06 09:31:15.389779078 +0200
+@@ -28,6 +28,8 @@
+ #ifndef __DEFINES_H__
+ #define __DEFINES_H__
+ 
++#include "config.h"
++
+ /* Basic constants
+ */
+ #define GAME_FPS                  (berusky_config::game_fps)  // game refresh
+@@ -447,7 +449,7 @@ typedef int anim_handle;
+ #define INI_USER_DIRECTORY "~/.berusky"
+ #define INI_USER_LEVELS    "~/.berusky/User"
+ #define INI_USER_PROFILES  "~/.berusky/Profiles"
+-#define INI_FILE_GLOBAL    "/var/games/berusky/"INI_FILE_NAME
++#define INI_FILE_GLOBAL    PACKAGE_DATA_DIR"/berusky/"INI_FILE_NAME
+ #define INI_FILE_USER      "~/.berusky/"INI_FILE_NAME
+ #define INI_FILE_LOCAL     "./"INI_FILE_NAME
+ #elif WINDOWS

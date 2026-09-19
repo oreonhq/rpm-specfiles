@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ba8a6f27311ca14f8d1e1c2135fa925e1075c43c6463ea2f641b1af3de670430
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    audiocd-kio
 Summary: KF6 Audiocd kio slave
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-3.0-or-later

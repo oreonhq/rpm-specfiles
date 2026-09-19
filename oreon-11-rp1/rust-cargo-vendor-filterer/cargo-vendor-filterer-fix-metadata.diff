@@ -1,0 +1,19 @@
+--- cargo-vendor-filterer-0.5.18/Cargo.toml	1970-01-01T00:00:01+00:00
++++ cargo-vendor-filterer-0.5.18/Cargo.toml	2025-12-12T12:54:38.128105+00:00
+@@ -33,7 +33,6 @@
+ default = ["sha-rs"]
+ openssl = ["dep:openssl"]
+ sha-rs = ["dep:sha2"]
+-vendored-openssl = ["openssl/vendored"]
+ 
+ [lib]
+ name = "cargo_vendor_filterer"
+@@ -54,7 +53,7 @@
+ version = "1.0"
+ 
+ [dependencies.cargo-lock]
+-version = "10"
++version = ">=10, <12"
+ 
+ [dependencies.cargo_metadata]
+ version = "0.18"

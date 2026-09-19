@@ -1,0 +1,11 @@
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -24,7 +24,7 @@ itertools = "0.14.0"
+ getopts = "0.2"
+ diesel = { version = "2.2.11", features = ["postgres"] }
+ dotenv = "0.15.0"
+-dns-lookup = "2.0.4"
++dns-lookup = ">=2.0.4,<4"
+ ipnetwork = ">=0.20,<0.22"
+ indicatif = "0.18.0"
+ console = "0.16.0"

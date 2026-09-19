@@ -1,5 +1,5 @@
-%global source0_hash ad13e4c43a061214b64da767edcba51ba709729d6d9adf832c7fc961420791fd
-%global source1_hash 21e39b86719287b67c483d6e5d09a3c513d264576828801617db35b7daebe9ea
+%global source0_hash 4252436af26489464f4865a91902518a6af47e4d176b12e04cfbe4573ad8303df2f613920dd9bfbd0842bb13cbf847bc7ce6c274218a38cf719ba82573d6b7a6
+%global source1_hash 4bc8c11c2f1240590d5576d69acc7fab41df8b75dd71448351d079d318f3e28ec9ec8f11165fad5d60d548274de7c7aaeb132a5f4e87966d5bb005fb968980ea
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Extension of CJK package for Korean typesetting
 License:        GPL-2.0-or-later
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cjk-ko.tar.xz#/cjk-ko.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cjk-ko.doc.tar.xz#/cjk-ko.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-cjk-ko-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-cjk-ko-doc <= 11:%{version}
@@ -28,8 +28,8 @@ Provides:       tex(kotex.sty)
 Extension of CJK package for Korean typesetting.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

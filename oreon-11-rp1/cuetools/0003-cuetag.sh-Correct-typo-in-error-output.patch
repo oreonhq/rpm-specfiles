@@ -1,0 +1,25 @@
+From c0623cb1fcc8a2c92ea9af364b780de265f3c8f2 Mon Sep 17 00:00:00 2001
+From: Todd Zullinger <tmz@pobox.com>
+Date: Fri, 8 May 2009 16:20:09 -0400
+Subject: [PATCH 3/3] cuetag.sh: Correct typo in error output
+
+---
+ src/tools/cuetag.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/tools/cuetag.sh b/src/tools/cuetag.sh
+index 4d8be69..9b725b0 100755
+--- a/src/tools/cuetag.sh
++++ b/src/tools/cuetag.sh
+@@ -180,7 +180,7 @@ main()
+ 			vorbis $trackno "$file"
+ 			;;
+ 		*.*)
+-			echo "$file: uknown file type"
++			echo "$file: unknown file type"
+ 			;;
+ 		esac
+ 		trackno=$(($trackno + 1))
+-- 
+1.6.3
+

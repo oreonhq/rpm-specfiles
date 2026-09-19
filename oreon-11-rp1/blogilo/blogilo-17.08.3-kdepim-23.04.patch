@@ -1,0 +1,83 @@
+diff -ur blogilo-17.08.3/CMakeLists.txt blogilo-17.08.3-kdepim-23.04/CMakeLists.txt
+--- blogilo-17.08.3/CMakeLists.txt	2023-05-07 19:03:09.307693426 +0200
++++ blogilo-17.08.3-kdepim-23.04/CMakeLists.txt	2023-05-08 14:47:05.981674233 +0200
+@@ -60,13 +60,14 @@
+ find_package(KF5XmlGui ${KF5_VERSION} CONFIG REQUIRED)
+ find_package(KF5KIO ${KF5_VERSION} CONFIG REQUIRED)
+ find_package(KF5Notifications ${KF5_VERSION} CONFIG REQUIRED)
++find_package(KF5TextEditTextToSpeech CONFIG REQUIRED)
+ 
+ # Find KdepimLibs Package
+ find_package(KF5Blog ${KBLOG_LIB_VERSION} CONFIG REQUIRED)
+ find_package(KF5Libkdepim ${LIBKDEPIM_LIB_VERSION_LIB} CONFIG REQUIRED)
+ find_package(KF5PimCommon ${PIMCOMMON_LIB_VERSION_LIB} CONFIG REQUIRED)
+ find_package(KF5PimTextEdit ${KPIMTEXTEDIT_LIB_VERSION} CONFIG REQUIRED)
+-find_package(KF5WebEngineViewer ${MESSAGELIB_LIB_VERSION_LIB} CONFIG REQUIRED)
++find_package(KPim5WebEngineViewer ${MESSAGELIB_LIB_VERSION_LIB} CONFIG REQUIRED)
+ find_package(KF5IMAP ${KIMAP_LIB_VERSION} CONFIG REQUIRED)
+ 
+ 
+diff -ur blogilo-17.08.3/composereditorwebengine/src/CMakeLists.txt blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/CMakeLists.txt
+--- blogilo-17.08.3/composereditorwebengine/src/CMakeLists.txt	2017-10-29 08:12:51.000000000 +0100
++++ blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/CMakeLists.txt	2023-05-08 15:03:05.359086581 +0200
+@@ -28,6 +28,7 @@
+ target_link_libraries(composereditorwebengineprivate
+     PRIVATE
+     KF5::PimTextEdit
++    KF5::TextEditTextToSpeech
+     KF5::SonnetCore
+     KF5::PimCommon
+     KF5::KIOWidgets
+@@ -35,7 +36,7 @@
+     KF5::Completion
+     Qt5::WebEngine
+     Qt5::WebEngineWidgets
+-    KF5::WebEngineViewer
++    KPim5::WebEngineViewer
+     KF5::I18n
+     KF5::SonnetUi
+     )
+diff -ur blogilo-17.08.3/composereditorwebengine/src/composerwebengine.cpp blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/composerwebengine.cpp
+--- blogilo-17.08.3/composereditorwebengine/src/composerwebengine.cpp	2017-10-29 08:12:51.000000000 +0100
++++ blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/composerwebengine.cpp	2023-05-08 14:49:17.824640489 +0200
+@@ -21,7 +21,6 @@
+ #include "private/composerwebengine_p.h"
+ #include "composereditorwebengine_debug.h"
+ #include <kpimtextedit/emoticontexteditaction.h>
+-#include "kpimtextedit/texttospeech.h"
+ #include <QStandardPaths>
+ #include <QFile>
+ #include <QFileInfo>
+diff -ur blogilo-17.08.3/composereditorwebengine/src/private/composerwebengine_p.cpp blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/private/composerwebengine_p.cpp
+--- blogilo-17.08.3/composereditorwebengine/src/private/composerwebengine_p.cpp	2017-10-29 08:12:51.000000000 +0100
++++ blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/private/composerwebengine_p.cpp	2023-05-08 14:52:26.819736628 +0200
+@@ -32,7 +32,7 @@
+ #include <kpimtextedit/emoticontexteditaction.h>
+ #include <kpimtextedit/inserthtmldialog.h>
+ #include <kpimtextedit/selectspecialchardialog.h>
+-#include "kpimtextedit/texttospeech.h"
++#include <TextEditTextToSpeech/TextToSpeech>
+ 
+ #include <Sonnet/Dialog>
+ #include <sonnet/backgroundchecker.h>
+@@ -1046,7 +1046,7 @@
+     QString text = q->selectedText();
+     if (text.isEmpty()) {
+         q->page()->toHtml([](const QString & html) {
+-            KPIMTextEdit::TextToSpeech::self()->say(html);
++            TextEditTextToSpeech::TextToSpeech::self()->say(html);
+         });
+     }
+ }
+diff -ur blogilo-17.08.3/src/CMakeLists.txt blogilo-17.08.3-kdepim-23.04/src/CMakeLists.txt
+--- blogilo-17.08.3/src/CMakeLists.txt	2023-05-07 19:03:09.471691147 +0200
++++ blogilo-17.08.3-kdepim-23.04/src/CMakeLists.txt	2023-05-07 19:03:34.414344538 +0200
+@@ -82,7 +82,7 @@
+     Qt5::WebEngine
+     Qt5::WebEngineWidgets
+     composereditorwebengineprivate
+-    KF5::WebEngineViewer
++    KPim5::WebEngineViewer
+     KF5::Crash
+     KF5::SyntaxHighlighting
+     KF5::KIOFileWidgets

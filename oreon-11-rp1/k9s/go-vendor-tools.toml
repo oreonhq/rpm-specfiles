@@ -1,0 +1,110 @@
+[archive]
+
+pre_commands = [
+    # We use the go workspace feature below to override dependencies.
+    ["go", "work", "init"],
+    ["go", "work", "use", "."],
+]
+post_commands = [
+    [
+        # See https://bugzilla.redhat.com/show_bug.cgi?id=2368453#c5.
+        # github.com/therootcompany/xz is a fork of github.com/xi2/xz with a
+        # different license that isn't allowed in Fedora.
+        # Instead of usikng the fork, we can use a local copy of the original
+        # version instead.
+        "sh", "-xeuc",
+        # XXX: Keep this script in sync with the specfile until go-vendor-tools allows
+        # including extra files (i.e., the replacements directory) in the vendor archive.
+        '''
+        # Copy github.com/xi2/xz (which is already included as a dependency)
+        # and create a local override.
+        mkdir -p replacements
+        # Copy original library
+        cp -rp vendor/github.com/xi2/xz replacements/xz
+        cp go.mod replacements/xz
+        cd replacements/xz
+        sed -i '/github.com\/therootcompany\/xz/d' go.mod
+        # Rename to use import path of the fork.
+        sed -i 's|github.com/xi2/xz|github.com/therootcompany/xz|' $(find -name '*.go')
+        go mod edit -module=github.com/therootcompany/xz
+
+        # These lines SHOULD NOT be copied to the specfile.
+        # They edit the root go work and regen the vendor directory.
+        go mod tidy
+        cd -
+        rm -r vendor/github.com/therootcompany/xz
+        go work use replacements/xz
+        go work sync
+        go work vendor
+        test ! -f vendor/github.com/therootcompany/xz
+        '''
+    ],
+]
+
+[licensing]
+detector = "askalono"
+
+[[licensing.licenses]]
+path = "vendor/github.com/apparentlymart/go-textseg/v15/LICENSE"
+sha256sum = "59e80949c14925f65181757d837ed93dea3783f62b031f642281d9e5b1936917"
+expression = "Apache-2.0 AND MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/cloudflare/circl/LICENSE"
+sha256sum = "b0da1764fe4d13d610b695536fc3f2ebc362482d053a1cd258e36975bc6b97a7"
+expression = "BSD-3-Clause"
+
+[[licensing.licenses]]
+path = "vendor/github.com/emirpasic/gods/LICENSE"
+sha256sum = "871b440e9b348d6b2485c72e15f1d18f4cf8ee7bb424cbcd854b6a4a772b61d8"
+expression = "BSD-2-Clause AND ISC"
+
+[[licensing.licenses]]
+path = "vendor/github.com/glebarez/go-sqlite/SQLITE-LICENSE"
+sha256sum = "8438c9c89b849131ead81d5435cb97fcf052df5b0b286dda8a2d4c29e6cb3fd0"
+expression = "LicenseRef-Fedora-Public-Domain"
+
+[[licensing.licenses]]
+path = "vendor/github.com/kevinburke/ssh_config/LICENSE"
+sha256sum = "a15a6f732df3a033a71853ce1d255bd671f00fbc537fa629b78d71baecda0ace"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/shopspring/decimal/LICENSE"
+sha256sum = "b92ba0f6ee02f2309628bfdadb123668a17c016e475ba477b857d33470d9d625"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/spdx/tools-golang/LICENSE.code"
+sha256sum = "e914fb1f3927226e04b0438e0b541b3c6e3c65de4d64aa8f5cdaa803f05448fd"
+expression = "Apache-2.0 OR GPL-2.0-or-later"
+
+[[licensing.licenses]]
+path = "vendor/github.com/xi2/xz/LICENSE"
+sha256sum = "5c640056d513f276d56635af7a0bed81cb7eac02a31b6e56d40c416557a8d8ce"
+expression = "LicenseRef-Fedora-Public-Domain"
+
+[[licensing.licenses]]
+path = "vendor/go.yaml.in/yaml/v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "Apache-2.0 AND MIT"
+
+[[licensing.licenses]]
+path = "vendor/gopkg.in/yaml.v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "Apache-2.0 AND MIT"
+
+[[licensing.licenses]]
+path = "vendor/modernc.org/libc/COPYRIGHT-MUSL"
+sha256sum = "f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/modernc.org/memory/LICENSE-LOGO"
+sha256sum = "5ae5bee3072a841376451b48d8cfcec7188e10543926d5870828d36c8a750dc5"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "replacements/xz/LICENSE"
+sha256sum = "5c640056d513f276d56635af7a0bed81cb7eac02a31b6e56d40c416557a8d8ce"
+expression = "LicenseRef-Fedora-Public-Domain"

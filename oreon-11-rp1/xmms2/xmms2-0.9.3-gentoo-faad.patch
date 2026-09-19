@@ -1,0 +1,14 @@
+diff -up xmms2-0.9.3/src/plugins/faad/faad.c.gentoo xmms2-0.9.3/src/plugins/faad/faad.c
+--- xmms2-0.9.3/src/plugins/faad/faad.c.gentoo	2023-09-15 09:56:23.452817978 -0400
++++ xmms2-0.9.3/src/plugins/faad/faad.c	2023-09-15 09:56:55.255273805 -0400
+@@ -242,7 +242,9 @@ xmms_faad_init (xmms_xform_t *xform)
+ 	 * and durations calculations... So we cheat and tell libfaad2 we're feeding
+ 	 * it frame 1.
+ 	 */
+-	NeAACDecPostSeekReset (data->decoder, 1);
++	// This line has stopped working since security fixes in the faad 2.9.0
++	// release.
++	// NeAACDecPostSeekReset (data->decoder, 1);
+ 
+ 	/* FIXME: Because for HE AAC files some versions of libfaad return the wrong
+ 	 * samplerate in init, we have to do one read and let it decide the real

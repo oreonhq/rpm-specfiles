@@ -1,0 +1,8 @@
+Regarding demo's
+=================
+
+All demo's pertaining to this package as well as any package in Mayavi
+stack don't run as expected. They have dependency issues with other
+packages in stack. This has been confirmed by upstream and will be
+hopfeully fixed in coming releases.
+

@@ -1,0 +1,58 @@
+Only in nazghul.orig: haxima.desktop.orig
+diff -u -r nazghul.orig/src/kern.c nazghul/src/kern.c
+--- nazghul.orig/src/kern.c	2012-02-28 13:12:29.000000000 -0600
++++ nazghul/src/kern.c	2015-02-21 13:35:23.308415763 -0600
+@@ -9762,7 +9762,7 @@
+                 int n = 0;
+ 
+                 if (scm_is_str(sc, val)) {
+-                        n = snprintf(ptr, room, scm_str_val(sc, val));
++                        n = snprintf(ptr, room, "%s", scm_str_val(sc, val));
+                 } else if (scm_is_int(sc, val)) {
+                         n = snprintf(ptr, room, "%ld", scm_int_val(sc, val));
+                 } else if (scm_is_real(sc, val)) {
+diff -u -r nazghul.orig/src/menus.c nazghul/src/menus.c
+--- nazghul.orig/src/menus.c	2012-02-28 13:12:29.000000000 -0600
++++ nazghul/src/menus.c	2015-02-21 13:31:45.760808596 -0600
+@@ -1004,7 +1004,7 @@
+         menubufptr = menubuf;
+ 
+         /* The first entry is always the New Save Game option. */
+-        sprintf(menubufptr, MENU_NEW_GAME_STR);
++        sprintf(menubufptr, "%s", MENU_NEW_GAME_STR);
+         data.hotkeys[i] = 'n';
+         menu[i++] = menubufptr;
+         menubufptr += linew+1;
+diff -u -r nazghul.orig/src/Party.cpp nazghul/src/Party.cpp
+--- nazghul.orig/src/Party.cpp	2012-02-28 13:12:29.000000000 -0600
++++ nazghul/src/Party.cpp	2015-02-21 13:10:11.942886876 -0600
+@@ -1093,7 +1093,7 @@
+ 
+                 statlist[list_sz].sprite = member->getSprite();
+                 snprintf(statlist[list_sz].line1, STAT_LIST_CHARS_PER_LINE,
+-                         member->getName());
++                         "%s", member->getName());
+                 statlist[list_sz].data = member;
+                 list_sz++;
+         }
+diff -u -r nazghul.orig/src/scheme.c nazghul/src/scheme.c
+--- nazghul.orig/src/scheme.c	2012-02-28 13:12:29.000000000 -0600
++++ nazghul/src/scheme.c	2015-02-21 13:43:00.340087397 -0600
+@@ -4738,7 +4738,7 @@
+                 /* type */
+                 for (i = 0; i < T_LAST_SYSTEM_TYPE && i != type(pp); i++)
+                         ;
+-                bptr += sprintf(bptr, typestr[i]);
++                bptr += sprintf(bptr, "%s", typestr[i]);
+                 *bptr++ = ' ';
+                 
+                 /* flags */
+@@ -4781,7 +4781,7 @@
+         strbuf[sizeof(strbuf)-1] = 0;
+ 
+         /*putstr(sc, strbuf);*/
+-        fprintf(stderr,strbuf);
++        fprintf(stderr, "%s", strbuf);
+         fflush(NULL);
+ }
+ 

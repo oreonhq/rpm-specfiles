@@ -1,0 +1,123 @@
+am-utils-6.2 - fix umount to mount race
+
+From: Ian Kent <raven@themaw.net>
+
+If a mount request arrives while its mount fs is being umounted the
+the reference count of the mount fs never reaches 1 so the location
+MF_MOUNTED is not cleared and the mount fs instance is not freed.
+
+This leads to amd thinking the mount fs is still mounted and the
+mount request succeeds without its corresponding target being
+mounted.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/amd.h          |    1 +
+ amd/amfs_generic.c |   10 +++++++---
+ amd/autil.c        |    9 +++++++++
+ amd/map.c          |   13 ++++++++++++-
+ 4 files changed, 29 insertions(+), 4 deletions(-)
+
+diff --git a/amd/amd.h b/amd/amd.h
+index f66f5b7..504bcf7 100644
+--- a/amd/amd.h
++++ b/amd/amd.h
+@@ -112,6 +112,7 @@
+ #define AMF_AUTOFS	0x0004	/* This node is part of an autofs filesystem */
+ #define AMF_REMOUNT	0x0008	/* This node needs to be remounted */
+ #define AMF_SOFTLOOKUP	0x0010	/* This node returns EIO if server is down */
++#define AMF_SOFTUNMOUNT	0x0020	/* unmount_node() returned EAGAIN, mount still referenced */
+ 
+ /*
+  * macros for struct mntfs (list of mounted filesystems)
+diff --git a/amd/amfs_generic.c b/amd/amfs_generic.c
+index 86d0ab7..7ab2829 100644
+--- a/amd/amfs_generic.c
++++ b/amd/amfs_generic.c
+@@ -178,7 +178,7 @@ amfs_lookup_node(am_node *mp, char *fname, int *error_return)
+ 	error = mf->mf_error;
+ 	continue;
+       }
+-      if (!(mf->mf_flags & MFF_MOUNTED) || (mf->mf_flags & MFF_UNMOUNTING)) {
++      if (mf->mf_flags & (MFF_MOUNTING | MFF_UNMOUNTING)) {
+       in_progrss:
+ 	/*
+ 	 * If the fs is not mounted or it is unmounting then there
+@@ -743,9 +743,13 @@ amfs_bgmount(struct continuation *cp)
+ 
+     if (mf->mf_flags & (MFF_MOUNTING | MFF_UNMOUNTING)) {
+       /*
+-       * Still mounting - retry later
++       * Still mounting or umounting - retry later
+        */
+-      dlog("mount of \"%s\" already pending", mf->mf_info);
++      if (mf->mf_flags & MFF_MOUNTING) {
++        dlog("mount of \"%s\" already pending", mf->mf_info);
++      } else {
++        dlog("unmount of \"%s\" already pending", mf->mf_info);
++      }
+       goto retry;
+     }
+ 
+diff --git a/amd/autil.c b/amd/autil.c
+index f44a0e2..1962c71 100644
+--- a/amd/autil.c
++++ b/amd/autil.c
+@@ -703,6 +703,15 @@ am_unmounted(am_node *mp)
+   }
+ 
+   /*
++   * Clear the mounted flag in case there is a pending mount with
++   * the same target fs and this is the last reference to it.
++   */
++   if (mp->am_flags & AMF_SOFTUNMOUNT)
++     mp->am_flags &= ~AMF_SOFTUNMOUNT;
++   else
++     mf->mf_flags &= ~MFF_MOUNTED;
++
++  /*
+    * If this is a pseudo-directory then adjust the link count
+    * in the parent
+    */
+diff --git a/amd/map.c b/amd/map.c
+index a6df44b..cf5263e 100644
+--- a/amd/map.c
++++ b/amd/map.c
+@@ -819,11 +819,17 @@ unmount_node(opaque_t arg)
+ #endif /* HAVE_FS_AUTOFS */
+       if (mf->mf_refc == 1)
+ 	error = mf->mf_ops->umount_fs(mp, mf);
++
++    /* Mount was not actually unmounted, soft umount.
++     * Tell the caller about it.
++     */
++    if (!error && mf->mf_refc > 1)
++        error = EAGAIN;
+   }
+ 
+   /* do this again, it might have changed */
+   mf = mp->am_al->al_mnt;
+-  if (error) {
++  if (error && error != EAGAIN) {
+     errno = error;		/* XXX */
+     dlog("%s: unmount: %m", mf->mf_mount);
+   }
+@@ -870,6 +876,10 @@ free_map_if_success(int rc, int term, opaque_t arg)
+ #endif /* HAVE_FS_AUTOFS */
+     amd_stats.d_uerr++;
+   } else if (rc) {
++    if (rc == EAGAIN) {
++      mp->am_flags |= AMF_SOFTUNMOUNT;
++      goto done;
++    }
+     notify_child(mp, AMQ_UMNT_FAILED, rc, 0);
+     if (mf->mf_ops == &amfs_program_ops || rc == EBUSY)
+       plog(XLOG_STATS, "\"%s\" on %s still active", mp->am_path, mf->mf_mount);
+@@ -885,6 +895,7 @@ free_map_if_success(int rc, int term, opaque_t arg)
+ #endif /* HAVE_FS_AUTOFS */
+     amd_stats.d_uerr++;
+   } else {
++done:
+     /*
+      * am_unmounted() will call notify_child() appropriately.
+      */

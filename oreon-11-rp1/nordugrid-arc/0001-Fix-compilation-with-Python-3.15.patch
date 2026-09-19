@@ -1,0 +1,39 @@
+From ccde2563178106d230b32585c35618cbe927551a Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Wed, 12 Nov 2025 08:42:51 +0100
+Subject: [PATCH] Fix compilation with Python 3.15
+
+https://bugzilla.redhat.com/show_bug.cgi?id=2412512
+https://docs.python.org/dev/whatsnew/3.15.html#removed-c-apis
+---
+ python/arc_init.cpp | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/python/arc_init.cpp b/python/arc_init.cpp
+index 8459c84f2..02a631524 100644
+--- a/python/arc_init.cpp
++++ b/python/arc_init.cpp
+@@ -46,7 +46,19 @@ Note: it seems like Python is hiding site-packages part of path. Maybe it
+ is hardcoded inside Python somewhere. But at least part till site-packages
+ seems to be present.
+ */
+-#if PY_MAJOR_VERSION >= 3
++#if PY_VERSION_HEX >= 0x030E0000
++  std::string pythonpath;
++  PyObject *paths = PyConfig_Get("module_search_paths");
++  Py_ssize_t sz = PySequence_Size(paths);
++  for (Py_ssize_t i = 0; i < sz; ++i) {
++    PyObject *item = PySequence_GetItem(paths, i);
++    std::string path = PyUnicode_AsUTF8(item);
++    Py_DECREF(item);
++    if (i > 0) pythonpath += ':';
++    pythonpath += path;
++  }
++  Py_DECREF(paths);
++#elif PY_MAJOR_VERSION >= 3
+   std::wstring pythonwpath = Py_GetPath();
+   std::string pythonpath(pythonwpath.begin(), pythonwpath.end());
+ #else
+-- 
+2.51.1
+

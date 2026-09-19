@@ -1,0 +1,67 @@
+Basic steps:
+------------
+
+1. To create a base tarball with the chroot environment, type
+
+  - for Debian:
+
+    sudo dnf install debian-keyring
+    sudo pbuilder create --mirror ftp://ftp.us.debian.org/debian/ --debootstrapopts "--keyring=/usr/share/keyrings/debian-archive-keyring.gpg" --distribution <distro> --architecture <arch>
+
+  - for Ubuntu:
+
+    sudo dnf install ubu-keyring
+    sudo pbuilder create --mirror http://archive.ubuntu.com/ubuntu/ \
+    --debootstrapopts "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg" \
+    --distribution <distro> \
+    --architecture <arch>
+
+  - distro: a distro name, such as squeeze, wheezy, sid, lucid, quantal, etc
+  - architecture: i386, amd64, etc
+
+2. To build a package:
+  - From within an extracted source tarball with a "debian" folder, in that folder just type
+
+      pdebuild
+
+  - Or by using a <package>.dsc file, type
+
+      sudo pbuilder build <package>.dsc
+
+3. To update the chroot tarball, type
+
+      sudo pbuilder update <distro>
+
+
+Helpful tips:
+-------------
+
+1. Enable components other tham main (for instance, universe) by adding them to the COMPONENTS variable in pbuilderrc:
+
+    COMPONENTS="main universe"
+    
+2. To include local packages in the buildroot, see
+
+    https://wiki.debian.org/PbuilderTricks#How_to_include_local_packages_in_the_build
+
+    
+Performance enhancements:
+-------------------------
+
+1. To build on tmpfs
+  - Add to /etc/fstab
+
+      tmpfs           /var/cache/pbuilder/build   tmpfs   mode=0755,auto           0   0
+
+  - Ensure the partition is mounted:
+
+      sudo mount /var/cache/pbuilder/build
+
+  - Set in /etc/pbuilderrc:
+
+      APTCACHEHARDLINK=no
+
+2. To use ccache
+  - Install ccache
+
+  - Uncomment the lines under #ccache in /etc/pbuilderrc

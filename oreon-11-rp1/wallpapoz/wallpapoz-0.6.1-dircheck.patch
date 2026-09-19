@@ -1,0 +1,84 @@
+--- wallpapoz-0.6.1/src/wallpapoz.dircheck	2011-07-24 00:54:43.000000000 +0900
++++ wallpapoz-0.6.1/src/wallpapoz	2011-12-30 14:28:16.000000000 +0900
+@@ -536,6 +536,9 @@
+         # if recursive, we use walktree
+         if recursive_widget.get_active():
+           # looping with walktree method
++          if not os.path.isdir(cur_dir):
++            return
++
+           for (basepath, children) in self.walktree(cur_dir,False):
+             for child in children:
+               # get the filename
+@@ -551,7 +554,11 @@
+         # if not just looping the directory with ordinary fashion
+         else:
+           # looping all files in this directory
+-          for file in os.listdir(cur_dir):
++          try:
++            dlist = os.listdir(cur_dir)
++          except OSError:
++            return
++          for file in dlist:
+             # get the filename
+             filename = os.path.join(cur_dir, file)
+             # we interested in file, not directory
+@@ -573,6 +580,9 @@
+         # if recursive, we use walktree
+         if recursive_widget.get_active():
+           # looping with walktree method
++          if not os.path.isdir(cur_dir):
++            return
++
+           for (basepath, children) in self.walktree(cur_dir,False):
+             for child in children:
+               # get the filename
+@@ -588,7 +598,11 @@
+         # if not, just looping with ordinary fashion
+         else:
+           # looping all files in this directory
+-          for file in os.listdir(cur_dir):
++          try:
++            ddir = os.listdir(cur_dir)
++          except OSError:
++            return
++          for file in ddir:
+             # get the filename
+             filename = os.path.join(cur_dir, file)
+             # we interested in file, not directory
+@@ -618,6 +632,9 @@
+       cur_dir = filechooser_widget.get_filename()
+       # if recursive, we use walktree
+       if recursive_widget.get_active():
++        if not os.path.isdir(cur_dir):
++          return
++
+         # looping with walktree method
+         for (basepath, children) in self.walktree(cur_dir,False):
+           for child in children:
+@@ -634,7 +651,11 @@
+       # if not recursive, just looping the directory with ordinary fashion
+       else:
+         # looping all files in this directory
+-        for file in os.listdir(cur_dir):
++        try:
++          dlist = os.listdir(cur_dir)
++        except OSError:
++          return
++        for file in dlist:
+           # get the filename
+           filename = os.path.join(cur_dir, file)
+           # we interested in file, not directory
+@@ -1210,7 +1231,11 @@
+ 
+   # helping method
+   def walktree (self, top = ".", depthfirst = True):
+-    names = os.listdir(top)
++    try:
++      names = os.listdir(top)
++    except OSError:
++      names = []
++      yield top, names
+     if not depthfirst:
+       yield top, names
+     for name in names:

@@ -1,0 +1,32 @@
+diff -Naur a/x11docker b/x11docker
+--- a/x11docker	2023-01-18 08:46:57.000000000 -0800
++++ b/x11docker	2023-05-25 21:54:39.850870442 -0700
+@@ -12,7 +12,7 @@
+ # More documentation at:  https://github.com/mviereck/x11docker
+ 
+ Version="7.6.0"
+-Packagedversion="no" # Set to "yes" if you want to package x11docker. This disables installation options.
++Packagedversion="yes" # Set to "yes" if you want to package x11docker. This disables installation options.
+ 
+ # --enforce-i: Enforce running in interactive mode to allow commands tty and weston-launch in special setups. (deprecated)
+ grep -q -- "--enforce-i" <<< "$*" && case $- in
+@@ -95,8 +95,8 @@
+  -i, --interactive     Run with an interactive tty to allow shell commands.
+                        Useful with commands like bash.
+      --backend=BACKEND  Container backend to use. BACKEND can be:
+-                         docker  (recommended for rootful) (default)
+-                         podman  (recommended for rootless and rootful)
++                         docker  (recommended for rootful)
++                         podman  (recommended for rootless and rootful) (default)
+                          nerdctl (experimental)
+                          host    Run a host application, no container.
+      --rootless [=yes|no]  Use (or disallow) rootless backend.
+@@ -9584,7 +9584,7 @@
+       ;;
+     esac
+   }
+-  Backend="${Backend:-docker}"
++  Backend="${Backend:-podman}"
+   case "$Backend" in
+     docker|podman|nerdctl|proot|host) ;;
+     *) 

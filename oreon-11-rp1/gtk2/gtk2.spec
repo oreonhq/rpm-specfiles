@@ -21,8 +21,8 @@
 
 Summary: GTK+ graphical user interface library
 Name: gtk2
-Version: 2.24.33
-Release: 25%{?dist}
+Version: 3.94.0
+Release: 1%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
 URL: http://www.gtk.org
@@ -117,7 +117,7 @@ as part of GTK+.
 
 %package -n gtk-immodules-imsettings
 Summary: IMSettings config files for GTK+ input methods
-Conflicts: gtk2 < 2.24.33-12
+Conflicts: gtk2 < 3.94.0-12
 BuildArch: noarch
 
 %description -n gtk-immodules-imsettings

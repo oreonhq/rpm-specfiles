@@ -1,0 +1,13 @@
+--- a/Makefile	2019-08-20 14:22:17.158034121 -0500
++++ b/Makefile	2019-08-20 14:26:50.731987080 -0500
+@@ -26,8 +26,8 @@ ifdef HAS_VBE
+ TARGETS += monitor-get-edid-using-vbe
+ endif
+ 
+-CPPFLAGS = -I.
+-CFLAGS = -O -Wall -g
++CPPFLAGS := -I. $(CPPFLAGS)
++CFLAGS := -O -Wall -g $(CFLAGS)
+ OBJS = monitor-get-edid-using-vbe.c vbe.o
+ 
+ monitor-get-edid-using-vbe: LDFLAGS += -lx86

@@ -1,58 +1,57 @@
-%global source0_hash 437f55a4e0c1b01a4f3077cc470e6991d47430970e36fbcb77e2be0df4fc1cd6
+%global source0_hash none
 
 Name:           python-cachetools
-Version:        7.1.4
+Version:        7.2.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Extensible memoizing collections and decorators
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.python.org/pypi/cachetools
+URL:            https://github.com/tkem/cachetools/
 Source:         %{pypi_source cachetools}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-# cachetools is a direct runtime dependency of tox,
-# so we don't use tox to generate test dependencies or run tests
-BuildRequires:  python3-pytest
 
-%global _description\
-This module provides various memoizing collections and decorators,\
-including a variant of the Python 3 Standard Library @lru_cache\
-function decorator.\
-\
-This module provides multiple cache implementations based on different\
-cache algorithms, as well as decorators for easily memoizing function\
-and method calls.\
-
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cachetools' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-cachetools
+%package -n     python3-cachetools
 Summary:        %{summary}
 
 %description -n python3-cachetools %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n cachetools-%{version}
+%autosetup -p1 -n cachetools-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l cachetools
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-cachetools -f %{pyproject_files}
-%doc CHANGELOG.rst README.rst
 
 %changelog
 %autochangelog

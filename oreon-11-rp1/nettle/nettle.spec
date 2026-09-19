@@ -27,7 +27,7 @@
 %endif
 
 Name:           nettle
-Version:        3.10.1
+Version:        4.0
 Release:        %{?autorelease}%{!?autorelease:1%{?dist}}
 Summary:        A low-level cryptographic library
 

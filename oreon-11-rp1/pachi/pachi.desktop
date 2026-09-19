@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Pachi El Marciano
+Comment=2D platform game
+Exec=pachi -f
+Icon=pachi
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;ActionGame;
+Keywords=Game;Arcade;Retro;Platform;

@@ -1,0 +1,14 @@
+diff -uNr a/core/utils.c b/core/utils.c
+--- a/core/utils.c	2021-10-06 07:22:45.000000000 +0200
++++ b/core/utils.c	2022-01-23 12:19:10.715602147 +0100
+@@ -593,6 +593,10 @@
+ 			uwsgi_error("chroot()");
+ 			exit(1);
+ 		}
++		if (chdir("/")) {
++			uwsgi_error("chdir()");
++			exit(1);
++		}
+ 		uwsgi.is_chrooted = 1;
+ #ifdef __linux__
+ 		if (uwsgi.logging_options.memory_report) {

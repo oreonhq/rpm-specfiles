@@ -1,0 +1,11 @@
+[Unit]
+Description=gsissh Server Socket
+Documentation=man:gsisshd(8) man:gsisshd_config(5)
+Conflicts=gsisshd.service
+
+[Socket]
+ListenStream=22
+Accept=yes
+
+[Install]
+WantedBy=sockets.target

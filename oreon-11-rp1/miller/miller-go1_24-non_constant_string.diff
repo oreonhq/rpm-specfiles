@@ -1,0 +1,77 @@
+--- a/pkg/dsl/cst/lvalues.go
++++ b/pkg/dsl/cst/lvalues.go
+@@ -6,6 +6,7 @@
+ package cst
+ 
+ import (
++	"errors"
+ 	"fmt"
+ 	"os"
+ 
+@@ -62,7 +63,7 @@ func (root *RootNode) BuildAssignableNod
+ 		return root.BuildEnvironmentVariableLvalueNode(astNode)
+ 	}
+ 
+-	return nil, fmt.Errorf(
++	return nil, errors.New(
+ 		"at CST BuildAssignableNode: unhandled AST node " + string(astNode.Type),
+ 	)
+ }
+--- a/pkg/dsl/cst/root.go
++++ b/pkg/dsl/cst/root.go
+@@ -7,6 +7,7 @@ package cst
+ 
+ import (
+ 	"container/list"
++	"errors"
+ 	"fmt"
+ 	"os"
+ 	"strings"
+@@ -163,7 +164,7 @@ func (root *RootNode) IngestAST(
+ 	err = nil
+ 
+ 	if ast.RootNode == nil {
+-		return hadWarnings, fmt.Errorf("cannot build CST from nil AST root")
++		return hadWarnings, errors.New("cannot build CST from nil AST root")
+ 	}
+ 
+ 	// Check for things that are syntax errors but not done in the AST for
+@@ -417,7 +418,7 @@ func (root *RootNode) resolveSubroutineC
+ 			return err
+ 		}
+ 		if uds == nil {
+-			return fmt.Errorf("mlr: subroutine name not found: " + subroutineName)
++			return errors.New("mlr: subroutine name not found: " + subroutineName)
+ 		}
+ 
+ 		unresolvedSubroutineCallsite.uds = uds
+--- a/pkg/dsl/cst/builtin_functions.go
++++ b/pkg/dsl/cst/builtin_functions.go
+@@ -5,6 +5,7 @@
+ package cst
+ 
+ import (
++	"errors"
+ 	"fmt"
+ 
+ 	"github.com/johnkerl/miller/v6/pkg/bifs"
+@@ -78,7 +79,7 @@ func (root *RootNode) BuildMultipleArity
+ 		return root.BuildTernaryFunctionCallsiteNode(astNode, builtinFunctionInfo)
+ 	}
+ 
+-	return nil, fmt.Errorf(
++	return nil, errors.New(
+ 		"at CST BuildMultipleArityFunctionCallsiteNode: function name not found: " +
+ 			builtinFunctionInfo.name,
+ 	)
+--- a/pkg/dsl/cst/dump.go
++++ b/pkg/dsl/cst/dump.go
+@@ -199,7 +199,7 @@ func (node *DumpStatementNode) dumpToStd
+ 	outputString string,
+ 	state *runtime.State,
+ ) error {
+-	fmt.Fprintf(os.Stderr, outputString)
++	fmt.Fprint(os.Stderr, outputString)
+ 	return nil
+ }
+ 

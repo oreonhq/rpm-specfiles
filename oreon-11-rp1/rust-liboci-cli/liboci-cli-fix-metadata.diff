@@ -1,0 +1,11 @@
+--- liboci-cli-0.3.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ liboci-cli-0.3.3/Cargo.toml	2024-06-24T18:27:53.820371+00:00
+@@ -22,7 +22,7 @@
+     "container",
+     "oci",
+ ]
+-license-file = "LICENSE"
++license = "Apache-2.0"
+ repository = "https://github.com/containers/youki"
+ 
+ [dependencies.clap]

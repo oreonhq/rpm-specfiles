@@ -1,0 +1,154 @@
+diff -r -u opencity-0.0.6.5stable.orig/configure opencity-0.0.6.5stable/configure
+--- configure	2015-03-15 22:38:20.000000000 +0100
++++ configure	2015-07-15 10:55:57.072490359 +0200
+@@ -16141,8 +16141,6 @@
+ 
+ ac_config_files="$ac_config_files src/Makefile"
+ 
+-ac_config_files="$ac_config_files src/binreloc/Makefile"
+-
+ ac_config_files="$ac_config_files src/enum/Makefile"
+ 
+ ac_config_files="$ac_config_files src/framework/Makefile"
+@@ -16169,10 +16167,6 @@
+ 
+ ac_config_files="$ac_config_files src/structure/Makefile"
+ 
+-ac_config_files="$ac_config_files src/tinyxml/Makefile"
+-
+-ac_config_files="$ac_config_files src/tinyxpath/Makefile"
+-
+ ac_config_files="$ac_config_files src/triangulation/Makefile"
+ 
+ ac_config_files="$ac_config_files viewer/Makefile"
+@@ -17298,7 +17292,6 @@
+     "map/heightmap/Makefile") CONFIG_FILES="$CONFIG_FILES map/heightmap/Makefile" ;;
+     "sound/Makefile") CONFIG_FILES="$CONFIG_FILES sound/Makefile" ;;
+     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
+-    "src/binreloc/Makefile") CONFIG_FILES="$CONFIG_FILES src/binreloc/Makefile" ;;
+     "src/enum/Makefile") CONFIG_FILES="$CONFIG_FILES src/enum/Makefile" ;;
+     "src/framework/Makefile") CONFIG_FILES="$CONFIG_FILES src/framework/Makefile" ;;
+     "src/framework/System/Makefile") CONFIG_FILES="$CONFIG_FILES src/framework/System/Makefile" ;;
+@@ -17312,8 +17305,6 @@
+     "src/pngfuncs/Makefile") CONFIG_FILES="$CONFIG_FILES src/pngfuncs/Makefile" ;;
+     "src/simulator/Makefile") CONFIG_FILES="$CONFIG_FILES src/simulator/Makefile" ;;
+     "src/structure/Makefile") CONFIG_FILES="$CONFIG_FILES src/structure/Makefile" ;;
+-    "src/tinyxml/Makefile") CONFIG_FILES="$CONFIG_FILES src/tinyxml/Makefile" ;;
+-    "src/tinyxpath/Makefile") CONFIG_FILES="$CONFIG_FILES src/tinyxpath/Makefile" ;;
+     "src/triangulation/Makefile") CONFIG_FILES="$CONFIG_FILES src/triangulation/Makefile" ;;
+     "viewer/Makefile") CONFIG_FILES="$CONFIG_FILES viewer/Makefile" ;;
+     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+diff -r -u opencity-0.0.6.5stable.orig/configure.ac opencity-0.0.6.5stable/configure.ac
+--- configure.ac	2015-03-15 22:38:13.000000000 +0100
++++ configure.ac	2015-07-15 10:56:42.367834499 +0200
+@@ -13,7 +13,6 @@
+ 
+ 
+ AM_INIT_AUTOMAKE([1.7 dist-bzip2 subdir-objects])
+-AM_BINRELOC
+ 
+ 
+ dnl ===========================================================================
+@@ -245,7 +244,6 @@
+ AC_CONFIG_FILES([map/heightmap/Makefile])
+ AC_CONFIG_FILES([sound/Makefile])
+ AC_CONFIG_FILES([src/Makefile])
+-AC_CONFIG_FILES([src/binreloc/Makefile])
+ AC_CONFIG_FILES([src/enum/Makefile])
+ AC_CONFIG_FILES([src/framework/Makefile])
+ AC_CONFIG_FILES([src/framework/System/Makefile])
+@@ -259,8 +257,6 @@
+ AC_CONFIG_FILES([src/pngfuncs/Makefile])
+ AC_CONFIG_FILES([src/simulator/Makefile])
+ AC_CONFIG_FILES([src/structure/Makefile])
+-AC_CONFIG_FILES([src/tinyxml/Makefile])
+-AC_CONFIG_FILES([src/tinyxpath/Makefile])
+ AC_CONFIG_FILES([src/triangulation/Makefile])
+ AC_CONFIG_FILES([viewer/Makefile])
+ AC_CONFIG_FILES([Makefile])
+diff -r -u opencity-0.0.6.5stable.orig/src/Makefile.am opencity-0.0.6.5stable/src/Makefile.am
+--- src/Makefile.am	2015-03-15 22:37:48.000000000 +0100
++++ src/Makefile.am	2015-07-15 10:57:35.254897316 +0200
+@@ -2,12 +2,11 @@
+ # Makefile.am for the source root.
+ # $Id: Makefile.am 427 2009-11-23 22:48:26Z neoneurone $
+ #==============================================================================
+-SUBDIRS = binreloc enum framework mapgen mas model networking pngfuncs \
+-	simulator structure tinyxml tinyxpath triangulation
++SUBDIRS = enum framework mapgen mas model networking pngfuncs \
++	simulator structure triangulation
+ 
+ AM_CPPFLAGS = \
+ 	-I@top_srcdir@/src \
+-	-I@top_srcdir@/src/binreloc \
+ 	-I@top_srcdir@/src/enum \
+ 	-I@top_srcdir@/src/framework \
+ 	-I@top_srcdir@/src/mas \
+@@ -17,8 +16,6 @@
+ 	-I@top_srcdir@/src/pngfuncs \
+ 	-I@top_srcdir@/src/simulator \
+ 	-I@top_srcdir@/src/structure \
+-	-I@top_srcdir@/src/tinyxml \
+-	-I@top_srcdir@/src/tinyxpath \
+ 	-I@top_srcdir@/src/triangulation \
+ 	-DDATADIR=\"@datadir@\" \
+ 	-DSYSCONFDIR=\"@sysconfdir@\"
+@@ -42,7 +39,6 @@
+ # Main OpenCity executable
+ #==============================================================================
+ opencity_LDADD = \
+-	binreloc/libbinreloc.a \
+ 	framework/libsharpplus.la \
+ 	mapgen/libmapgen.a \
+ 	mas/libmas.a \
+@@ -51,8 +47,6 @@
+ 	pngfuncs/libpngfuncs.a \
+ 	simulator/libsim.a \
+ 	structure/libstruct.a \
+-	tinyxml/libtinyxml.a \
+-	tinyxpath/libtinyxpath.a \
+ 	triangulation/libtriangulation.a
+ 
+ 
+@@ -135,7 +129,6 @@
+ # Zen server executable
+ #==============================================================================
+ oczen_LDADD = \
+-	binreloc/libbinreloc.a \
+ 	mapgen/libmapgen.a \
+ 	mas/libmas.a \
+ 	model/libmodel.a \
+@@ -143,8 +136,6 @@
+ 	pngfuncs/libpngfuncs.a \
+ 	simulator/libsim.a \
+ 	structure/libstruct.a \
+-	tinyxml/libtinyxml.a \
+-	tinyxpath/libtinyxpath.a \
+ 	triangulation/libtriangulation.a
+ 
+ 
+diff -r -u opencity-0.0.6.5stable.orig/viewer/Makefile.am opencity-0.0.6.5stable/viewer/Makefile.am
+--- viewer/Makefile.am	2015-03-15 22:37:48.000000000 +0100
++++ viewer/Makefile.am	2015-07-14 23:43:03.195492788 +0200
+@@ -9,9 +9,7 @@
+ 	-I@top_srcdir@/src/model \
+ 	-I@top_srcdir@/src/networking \
+ 	-I@top_srcdir@/src/pngfuncs \
+-	-I@top_srcdir@/src/structure \
+-	-I@top_srcdir@/src/tinyxml \
+-	-I@top_srcdir@/src/tinyxpath
++	-I@top_srcdir@/src/structure 
+ 
+ noinst_PROGRAMS = viewer
+ 
+@@ -19,9 +17,7 @@
+ 	../src/model/libmodel.a \
+ 	../src/pngfuncs/libpngfuncs.a \
+ 	../src/structure/libstruct.a \
+-	../src/triangulation/libtriangulation.a \
+-	../src/tinyxml/libtinyxml.a \
+-	../src/tinyxpath/libtinyxpath.a
++	../src/triangulation/libtriangulation.a
+ 
+ 
+ viewer_SOURCES = \

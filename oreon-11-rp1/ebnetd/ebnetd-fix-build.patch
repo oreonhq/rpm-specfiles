@@ -1,0 +1,12 @@
+diff -pruN ebnetd-1.0.orig/ebhttpd/generator.c ebnetd-1.0/ebhttpd/generator.c
+--- ebnetd-1.0.orig/ebhttpd/generator.c	2003-12-27 09:43:07.000000000 +0900
++++ ebnetd-1.0/ebhttpd/generator.c	2024-05-08 16:05:48.188431230 +0900
+@@ -1702,7 +1702,7 @@ output_mpeg(property)
+     EB_Error_Code error_code;
+     ssize_t read_length;
+ 
+-    if (eb_decompose_movie_file_name(argv, &property->file_name)
++    if (eb_decompose_movie_file_name(argv, property->file_name)
+ 	!= EB_SUCCESS)
+ 	return;
+ 

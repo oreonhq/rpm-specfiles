@@ -1,0 +1,193 @@
+diff -up frysk-0.4/frysk-common/antlr-warnings.awk.awk-gensub frysk-0.4/frysk-common/antlr-warnings.awk
+--- frysk-0.4/frysk-common/antlr-warnings.awk.awk-gensub	2015-08-17 11:28:51.763304833 -0400
++++ frysk-0.4/frysk-common/antlr-warnings.awk	2015-08-17 11:31:02.856574123 -0400
+@@ -46,7 +46,7 @@
+ 
+ function get_prob_field(field) {
+     return gensub(/^(.*\.java):([0-9]+): (error|warning): (.*)$/, \
+-		  "\\" field, "")
++		  "\\" field, 1)
+ }
+ 
+ {
+@@ -59,7 +59,7 @@ function get_prob_field(field) {
+ 	line = get_prob_field(2)
+ 	prob = get_prob_field(4)
+ 	getline
+-	code = gensub(/^[[:space:]]*(.*)[[:space:]]*$/, "\\1", "")
++	code = gensub(/^[[:space:]]*(.*)[[:space:]]*$/, "\\1", 1)
+     } else if ($0 ~ /^[[:digit:]]+\. (WARNING|ERROR) in .*\.java$/) {
+ # An ECJ  warning looks like:
+ # <num>. (WARNING|ERROR) in <file>
+@@ -69,9 +69,9 @@ function get_prob_field(field) {
+ # <prob>
+ 	file = $4
+ 	getline
+-	line = gensub(/)/, "", "", $3)
++	line = gensub(/)/, "", 1, $3)
+ 	getline
+-	code = gensub(/^[[:space:]]*(.*)[[:space:]]*$/, "\\1", "")
++	code = gensub(/^[[:space:]]*(.*)[[:space:]]*$/, "\\1", 1)
+ 	getline
+ 	getline
+ 	prob = $0
+@@ -83,16 +83,16 @@ function get_prob_field(field) {
+ # <prob>
+         java = ECJ
+ 	file = $4
+-	line = gensub(/)/, "", "", $7)
++	line = gensub(/)/, "", 1, $7)
+ 	getline
+-	code = gensub(/^[[:space:]]*(.*)[[:space:]]*$/, "\\1", "")
++	code = gensub(/^[[:space:]]*(.*)[[:space:]]*$/, "\\1", 1)
+ 	getline
+ 	getline
+ 	prob = $0
+     } else {
+ 	next
+     }
+-    base = gensub(/^(|.*\/)([[:alnum:]]*)\.java/, "\\2", "", file)
++    base = gensub(/^(|.*\/)([[:alnum:]]*)\.java/, "\\2", 1, file)
+     sed = ""
+     if (DEBUG) {
+         print "file=" file >> "/dev/stderr"
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwAccess.shenum.awk-gensub frysk-0.4/frysk-sys/lib/dwfl/DwAccess.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwAccess.shenum.awk-gensub	2015-08-17 12:51:26.234215677 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwAccess.shenum	2015-08-17 12:54:55.770427076 -0400
+@@ -45,8 +45,8 @@ CC=${CC:-gcc}
+ $CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_ACCESS_.* = / {
+ 	p = $1
+-	v = gensub(",","","",$3)
+-	n = toupper(gensub("DW_ACCESS_","","",p))
++	v = gensub(",","",1,$3)
++	n = toupper(gensub("DW_ACCESS_","",1,p))
+ 	print n, v, p
+     }
+ '
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwAte.shenum.awk-gensub frysk-0.4/frysk-sys/lib/dwfl/DwAte.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwAte.shenum.awk-gensub	2015-08-17 12:51:10.498579529 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwAte.shenum	2015-08-17 12:55:14.737997869 -0400
+@@ -45,8 +45,8 @@ CC=${CC:-gcc}
+ $CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_ATE_.* = / {
+ 	p = $1
+-	v = gensub(",","","",$3)
+-	n = toupper(gensub("DW_ATE_","","",p))
++	v = gensub(",","",1,$3)
++	n = toupper(gensub("DW_ATE_","",1,p))
+ 	print n, v, p
+     }
+ '
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwAt.shenum.awk-gensub frysk-0.4/frysk-sys/lib/dwfl/DwAt.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwAt.shenum.awk-gensub	2015-08-17 12:50:05.037093181 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwAt.shenum	2015-08-17 12:55:34.063560561 -0400
+@@ -45,8 +45,8 @@ CC=${CC:-gcc}
+ $CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_AT_.* = / {
+ 	p = $1
+-	v = gensub(",","","",$3)
+-	n = toupper(gensub("DW_AT_","","",p))
++	v = gensub(",","",1,$3)
++	n = toupper(gensub("DW_AT_","",1,p))
+ 	print n, v, p
+     }
+ '
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwDsc.shenum.awk-gensub frysk-0.4/frysk-sys/lib/dwfl/DwDsc.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwDsc.shenum.awk-gensub	2015-08-17 12:50:21.258718092 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwDsc.shenum	2015-08-17 12:55:54.736092772 -0400
+@@ -45,8 +45,8 @@ CC=${CC:-gcc}
+ $CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_DSC_.* = / {
+ 	p = $1
+-	v = gensub(",","","",$3)
+-	n = toupper(gensub("DW_DSC_","","",p))
++	v = gensub(",","",1,$3)
++	n = toupper(gensub("DW_DSC_","",1,p))
+ 	print n, v, p
+     }
+ '
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwDs.shenum.awk-gensub frysk-0.4/frysk-sys/lib/dwfl/DwDs.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwDs.shenum.awk-gensub	2015-08-17 12:50:32.963447446 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwDs.shenum	2015-08-17 12:56:13.462669019 -0400
+@@ -45,8 +45,8 @@ CC=${CC:-gcc}
+ $CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_DS_.* = / {
+ 	p = $1
+-	v = gensub(",","","",$3)
+-	n = toupper(gensub("DW_DS_","","",p))
++	v = gensub(",","",1,$3)
++	n = toupper(gensub("DW_DS_","",1,p))
+ 	print n, v, p
+     }
+ '
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwEnd.shenum.awk-gensub frysk-0.4/frysk-sys/lib/dwfl/DwEnd.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwEnd.shenum.awk-gensub	2015-08-17 12:51:54.258567676 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwEnd.shenum	2015-08-17 12:56:34.959182585 -0400
+@@ -45,8 +45,8 @@ CC=${CC:-gcc}
+ $CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_END_.* = / {
+ 	p = $1
+-	v = gensub(",","","",$3)
+-	n = toupper(gensub("DW_END_","","",p))
++	v = gensub(",","",1,$3)
++	n = toupper(gensub("DW_END_","",1,p))
+ 	print n, v, p
+     }
+ '
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwInl.shenum.awk-gensub frysk-0.4/frysk-sys/lib/dwfl/DwInl.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwInl.shenum.awk-gensub	2015-08-17 12:50:44.749174927 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwInl.shenum	2015-08-17 12:56:53.437764443 -0400
+@@ -45,8 +45,8 @@ CC=${CC:-gcc}
+ $CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_INL_.* = / {
+ 	p = $1
+-	v = gensub(",","","",$3)
+-	n = toupper(gensub("DW_INL_","","",p))
++	v = gensub(",","",1,$3)
++	n = toupper(gensub("DW_INL_","",1,p))
+ 	print n, v, p
+     }
+ '
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwOp.shenum.awk-gensub frysk-0.4/frysk-sys/lib/dwfl/DwOp.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwOp.shenum.awk-gensub	2015-08-17 12:51:41.343866300 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwOp.shenum	2015-08-17 12:57:16.653239112 -0400
+@@ -46,8 +46,8 @@ $CC -dD -E /usr/include/dwarf.h | awk '
+     /lo_user/ || /hi_user/ { next }
+     /DW_OP_.* = / {
+ 	p = $1
+-	v = gensub(",","","",$3)
+-	n = toupper(gensub("DW_OP_","","",p))
++	v = gensub(",","",1,$3)
++	n = toupper(gensub("DW_OP_","",1,p))
+ 	print n, v, p
+     }
+ '
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwOrd.shenum.awk-gensub frysk-0.4/frysk-sys/lib/dwfl/DwOrd.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwOrd.shenum.awk-gensub	2015-08-17 12:50:56.155911172 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwOrd.shenum	2015-08-17 12:57:33.172865298 -0400
+@@ -45,8 +45,8 @@ CC=${CC:-gcc}
+ $CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_ORD_.* = / {
+ 	p = $1
+-	v = gensub(",","","",$3)
+-	n = toupper(gensub("DW_ORD_","","",p))
++	v = gensub(",","",1,$3)
++	n = toupper(gensub("DW_ORD_","",1,p))
+ 	print n, v, p
+     }
+ '
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwTag.shenum.awk-gensub frysk-0.4/frysk-sys/lib/dwfl/DwTag.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwTag.shenum.awk-gensub	2015-08-17 12:52:06.320288776 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwTag.shenum	2015-08-17 12:57:54.620379973 -0400
+@@ -45,8 +45,8 @@ CC=${CC:-gcc}
+ $CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_TAG_/ {
+ 	p = $1
+-	v = gensub(",","","",$3)
+-	n = toupper(gensub("DW_TAG_","","",p))
++	v = gensub(",","",1,$3)
++	n = toupper(gensub("DW_TAG_","",1,p))
+ 	print n, v, p
+     }
+ ' 2>&1

@@ -1,8 +1,8 @@
 %global source0_hash e2ad56d132d0cd63f08f3122391a0472adcc8c5d046d7cd81bcadf48a55deea4
 
 Name:           liblouis
-Version:        3.33.0
-Release:        7%{?dist}
+Version:        3.39.0
+Release:        1%{?dist}
 Summary:        Braille translation and back-translation library
 
 # LGPL-2.1-or-later: the project as a whole

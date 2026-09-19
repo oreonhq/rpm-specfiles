@@ -1,0 +1,29 @@
+From 01ebc717995f632b7ff28c5a72562ef304ef966d Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+Date: Thu, 2 Nov 2017 23:24:18 +0100
+Subject: [PATCH] don't install docs
+
+Signed-off-by: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+---
+ CMakeLists.txt | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 205cf7b..bd29b31 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -63,11 +63,6 @@ if (EXISTS ${CMAKE_SOURCE_DIR}/test)
+   add_subdirectory (test EXCLUDE_FROM_ALL)
+ endif (EXISTS ${CMAKE_SOURCE_DIR}/test)
+ 
+-set (doc_FILES NEWS ChangeLog INSTALL AUTHORS COPYING)
+-foreach (doc_FILE ${doc_FILES})
+-  install (FILES ${doc_FILE}  DESTINATION ${TASKSH_DOCDIR})
+-endforeach (doc_FILE)
+-
+ # ---
+ 
+ set (CPACK_SOURCE_GENERATOR "TGZ")
+-- 
+2.14.3
+

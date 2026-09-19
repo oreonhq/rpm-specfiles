@@ -1,0 +1,36 @@
+From dddd2dd9473466e2e4aa6a9fd417ab1600d89c9a Mon Sep 17 00:00:00 2001
+From: Davide Cavalca <dcavalca@fedoraproject.org>
+Date: Sat, 28 Sep 2024 16:06:18 -0700
+Subject: [PATCH] Use telnetlib3 instead of telnetlib
+
+---
+ setup.py         | 2 +-
+ tn3270/telnet.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 3e7317f..c034e9f 100644
+--- a/setup.py
++++ b/setup.py
+@@ -21,7 +21,7 @@
+     author='Andrew Kay',
+     author_email='projects@ajk.me',
+     packages=['tn3270'],
+-    install_requires=[],
++    install_requires=['telnetlib3'],
+     long_description=LONG_DESCRIPTION,
+     long_description_content_type='text/markdown',
+     classifiers=[
+diff --git a/tn3270/telnet.py b/tn3270/telnet.py
+index 8998126..a7ab206 100644
+--- a/tn3270/telnet.py
++++ b/tn3270/telnet.py
+@@ -10,7 +10,7 @@
+ import logging
+ import socket
+ import selectors
+-from telnetlib import IAC, WILL, WONT, DO, DONT, SB, SE, BINARY, EOR, TTYPE, TN3270E
++from telnetlib3 import IAC, WILL, WONT, DO, DONT, SB, SE, BINARY, EOR, TTYPE, TN3270E
+ 
+ # https://tools.ietf.org/html/rfc855
+ RFC855_EOR = b'\xef'

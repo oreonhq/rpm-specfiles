@@ -1,4 +1,4 @@
-%global source0_hash a0ab17dddd4c029ecd7a423c30badd5a3c7599ea42707016d1d57545f5723ccf
+%global source0_hash 4213f43ddb875bb141e5040e97735579d74665bec3d17b51052aade395b83f00
 
 %global         majorminor 1.0
 %global         _gobject_introspection  1.31.1
@@ -9,6 +9,11 @@
 %bcond_with aom
 %else
 %bcond_without aom
+%endif
+%ifarch x86_64
+%bcond_without vmaf
+%else
+%bcond_with vmaf
 %endif
 %bcond extras %{defined fedora}
 %bcond opencv %{defined fedora}
@@ -32,8 +37,8 @@
 %endif
 
 Name:           gstreamer1-plugins-bad-free
-Version:        1.26.7
-Release:        10%{?dist}
+Version:        1.28.7
+Release:        1%{?dist}
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later
@@ -96,6 +101,9 @@ BuildRequires:  pkgconfig(libusb-1.0)
 BuildRequires:  pkgconfig(libva)
 BuildRequires:  pkgconfig(libva-drm)
 BuildRequires:  pkgconfig(libva-x11)
+%if %{with vmaf}
+BuildRequires:  pkgconfig(libvmaf)
+%endif
 BuildRequires:  pkgconfig(libwebp)
 BuildRequires:  pkgconfig(libwebpmux)
 BuildRequires:  pkgconfig(openssl)
@@ -175,7 +183,7 @@ BuildRequires:  pkgconfig(zxing)
 
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Provides:       gstreamer1-vaapi = %{version}-%{release}
-Obsoletes:      gstreamer1-vaapi < 1.26.10-3
+Obsoletes:      gstreamer1-vaapi < 1.28.7-1
 
 # mpeg2enc, mplex used to be shipped in -freeworld
 Conflicts: gstreamer1-plugins-bad-freeworld < 1:1.26.3-3
@@ -426,6 +434,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -D zbar=disabled \
     -D zxing=disabled \
 %endif
+%if %{without vmaf}
+    -D vmaf=disabled \
+%endif
     -D aja=disabled \
     -D androidmedia=disabled \
     -D amfcodec=disabled \
@@ -439,6 +450,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -D lcevcencoder=disabled \
     -D libde265=disabled \
     -D magicleap=disabled \
+    -D mpeghdec=disabled \
     -D neon=disabled \
     -D nvcomp=disabled \
     -D nvdswrapper=disabled \
@@ -450,9 +462,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -D svthevcenc=disabled \
     -D svtjpegxs=disabled \
     -D tinyalsa=disabled \
+    -D tflite=disabled \
     -D voaacenc=disabled \
     -D wasapi=disabled -D wasapi2=disabled \
     -D wpe=disabled \
+    -D wpe2=disabled \
     -D x11=disabled \
     -D x265=disabled \
     %{nil}
@@ -655,7 +669,6 @@ EOF
 %{_libdir}/gstreamer-%{majorminor}/libgstinsertbin.so
 %{_libdir}/gstreamer-%{majorminor}/libgstmse.so
 %{_libdir}/gstreamer-%{majorminor}/libgstunixfd.so
-%{_libdir}/gstreamer-%{majorminor}/libgsty4mdec.so
 
 # System (Linux) specific plugins
 %{_libdir}/gstreamer-%{majorminor}/libgstbluez.so
@@ -697,7 +710,11 @@ EOF
 %{_libdir}/gstreamer-%{majorminor}/libgstsndfile.so
 %{_libdir}/gstreamer-%{majorminor}/libgstsoundtouch.so
 %{_libdir}/gstreamer-%{majorminor}/libgstsrtp.so
+%{_libdir}/gstreamer-%{majorminor}/libgsthip.so
 %{_libdir}/gstreamer-%{majorminor}/libgstva.so
+%if %{with vmaf}
+%{_libdir}/gstreamer-%{majorminor}/libgstvmaf.so
+%endif
 %{_libdir}/gstreamer-%{majorminor}/libgstvulkan.so
 %{_libdir}/gstreamer-%{majorminor}/libgstwaylandsink.so
 %{_libdir}/gstreamer-%{majorminor}/libgstwebp.so
@@ -804,6 +821,7 @@ EOF
 %{_libdir}/libgstcodecparsers-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstcodecs-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstcuda-%{majorminor}.so.0{,.*}
+%{_libdir}/libgsthip.so.0{,.*}
 %{_libdir}/libgstdxva-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstinsertbin-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstisoff-%{majorminor}.so.0{,.*}
@@ -823,12 +841,14 @@ EOF
 %endif
 %{_libdir}/libgstwayland-%{majorminor}.so.0{,.*}
 
-# libgstcodecparsers remains; GstCodecParsers-*.typelib/.gir not built since upstream dropped GI there (1.26+)
 %{_libdir}/girepository-1.0/CudaGst-1.0.typelib
 %{_libdir}/girepository-1.0/GstAnalytics-1.0.typelib
 %{_libdir}/girepository-1.0/GstBadAudio-1.0.typelib
 %{_libdir}/girepository-1.0/GstCodecs-1.0.typelib
+%{_libdir}/girepository-1.0/GstCodecParsers-1.0.typelib
 %{_libdir}/girepository-1.0/GstCuda-1.0.typelib
+%{_libdir}/girepository-1.0/GstHip-1.0.typelib
+%{_libdir}/girepository-1.0/GstHipGL-1.0.typelib
 %{_libdir}/girepository-1.0/GstDxva-1.0.typelib
 %{_libdir}/girepository-1.0/GstInsertBin-1.0.typelib
 %{_libdir}/girepository-1.0/GstMpegts-1.0.typelib
@@ -851,7 +871,10 @@ EOF
 %{_datadir}/gir-1.0/GstAnalytics-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstBadAudio-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstCodecs-%{majorminor}.gir
+%{_datadir}/gir-1.0/GstCodecParsers-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstCuda-%{majorminor}.gir
+%{_datadir}/gir-1.0/GstHip-%{majorminor}.gir
+%{_datadir}/gir-1.0/GstHipGL-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstDxva-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstInsertBin-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstMpegts-%{majorminor}.gir
@@ -869,6 +892,7 @@ EOF
 %{_libdir}/libgstbasecamerabinsrc-%{majorminor}.so
 %{_libdir}/libgstbadaudio-%{majorminor}.so
 %{_libdir}/libgstcuda-%{majorminor}.so
+%{_libdir}/libgsthip.so
 %{_libdir}/libgstcodecparsers-%{majorminor}.so
 %{_libdir}/libgstcodecs-%{majorminor}.so
 %{_libdir}/libgstdxva-%{majorminor}.so
@@ -895,6 +919,7 @@ EOF
 %{_includedir}/gstreamer-%{majorminor}/gst/basecamerabinsrc
 %{_includedir}/gstreamer-%{majorminor}/gst/codecparsers
 %{_includedir}/gstreamer-%{majorminor}/gst/cuda/
+%{_includedir}/gstreamer-%{majorminor}/gst/hip/
 %{_includedir}/gstreamer-%{majorminor}/gst/insertbin
 %{_includedir}/gstreamer-%{majorminor}/gst/interfaces/photography*
 %{_includedir}/gstreamer-%{majorminor}/gst/isoff/
@@ -914,6 +939,8 @@ EOF
 %{_libdir}/pkgconfig/gstreamer-analytics-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-bad-audio-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-cuda-%{majorminor}.pc
+%{_libdir}/pkgconfig/gstreamer-hip-%{majorminor}.pc
+%{_libdir}/pkgconfig/gstreamer-hip-gl-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-codecparsers-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-insertbin-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-mpegts-%{majorminor}.pc
@@ -935,6 +962,9 @@ EOF
 
 
 %changelog
+* Tue Sep 8 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
+- Update to 1.28.3
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-2
 - Remove commented git snapshot lines that expanded macros in comments
 

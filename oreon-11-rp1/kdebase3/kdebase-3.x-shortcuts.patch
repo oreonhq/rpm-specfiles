@@ -1,0 +1,38 @@
+--- /dev/null	2006-02-15 14:04:20.595741250 +0100
++++ kdebase-3.5.1/kcontrol/ebrowsing/plugins/ikws/searchproviders/bugzilla.desktop	2006-02-01 15:04:12.000000000 +0100
+@@ -0,0 +1,6 @@
++[Desktop Entry]
++Type=Service
++Name=Red Hat bug tracking system
++ServiceTypes=SearchProvider
++Keys=rhbug,bz
++Query=http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=\\1
+--- kdebase-3.5.1/kcontrol/ebrowsing/plugins/ikws/searchproviders/fedora.desktop.shortcuts	2006-02-15 19:44:30.000000000 +0100
++++ kdebase-3.5.1/kcontrol/ebrowsing/plugins/ikws/searchproviders/fedora.desktop	2006-02-15 19:44:16.000000000 +0100
+@@ -0,0 +1,8 @@
++[Desktop Entry]
++Hidden=false
++Keys=fp,fedora
++Name=fedoraproject
++Query=http://fedoraproject.org/wiki/?action=fullsearch&context=180&value=\\{@}&titlesearch=Titles
++ServiceTypes=SearchProvider
++Type=Service
++
+--- kdebase-3.5.1/kcontrol/ebrowsing/plugins/ikws/searchproviders/Makefile.am.shortcuts	2005-10-10 17:03:45.000000000 +0200
++++ kdebase-3.5.1/kcontrol/ebrowsing/plugins/ikws/searchproviders/Makefile.am	2006-02-15 19:41:59.000000000 +0100
+@@ -11,6 +11,7 @@
+ 		backports.desktop \
+ 		bugft.desktop \
+ 		bugno.desktop \
++		bugzilla.desktop \
+ 		call.desktop \
+ 		cia.desktop \
+ 		citeseer.desktop \
+@@ -32,6 +33,7 @@
+ 		excite.desktop \
+ 		feedster.desktop \
+ 		foldoc.desktop \
++		fedora.desktop \
+ 		fr2de.desktop \
+ 		fr2en.desktop \
+ 		freedb.desktop \

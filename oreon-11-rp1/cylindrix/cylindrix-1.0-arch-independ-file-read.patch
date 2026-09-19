@@ -1,0 +1,732 @@
+--- ai.c	2008-06-15 22:52:49.000000000 +0200
++++ ai.c	2008-06-15 22:53:07.000000000 +0200
+@@ -19,7 +19,7 @@
+ #include "ai.h"
+ #include "keys.h" /* For get_keypress */
+ #include "jonsb.h"
+-
++#include <allegro/file.h>
+ 
+ extern char g_DataPath[255];
+ 
+@@ -210,29 +210,55 @@ void Init_AI( WorldStuff *world_stuff )
+  
+ } /* End of Init_AI */
+ 
++#define i386_character_type_size 660
++
++/* Read a character, which is a binary dump of struct character_type on i386
++   from disk, do this in an arch independent way.
++   
++   Note we use the same brillaint error handling as the original fread
++   call: none :) */
++void read_character(character_type *character, PACKFILE *fp)
++{
++   /* read all the strings at the beginning of the struct */
++   pack_fread(character, 40 + 15 + 7 * 80, fp);
++
++   /* skip 1 byte of padding + 7 * 4 byte pointers (yes pointers on disk,
++      yeah! */
++   pack_fseek(fp, 1 + 7 * 4);
++
++   /* read the state (enum == lsb int */
++   character->state = pack_igetl(fp);
++
++   /* and read the 9 unsigned chars at the end of the struct */
++   pack_fread(&character->passive_aggressive, 9, fp);
++
++   /* last skip 3 bytes of padding */
++   pack_fseek(fp, 3);
++}
++
+ 
+ /* Load the ai file filename, and load in the ai_number'th character
+    and store it in character */
+ void Load_AI( character_type *character, char *filename, int ai_number )
+     {
+-     FILE *fp;
++     PACKFILE *fp;
+ 	char newfilename[512];
+ 
+ 	sprintf(newfilename,"%s%s",g_DataPath,filename);
+ 
+-     if( (fp = fopen( newfilename, "rb" )) == NULL ) /* Open input file */
++     if( (fp = pack_fopen( newfilename, "r" )) == NULL ) /* Open input file */
+          {
+           printf("Error loading AI \n");
+           exit_gracefully();
+          }
+ 
+      /* Move to the ai_number'th character in the file */
+-     fseek( fp, sizeof( character_type ) * ai_number, SEEK_SET );
++     pack_fseek( fp, i386_character_type_size * ai_number);
+       
+      /* Read the data into character */
+-     fread( character, sizeof( character_type ), 1, fp );
++     read_character(character, fp);
+ 
+-     fclose( fp );
++     pack_fclose( fp );
+ 
+           /* Load the samples for this ai */
+           
+--- fli.c	2008-06-15 22:52:49.000000000 +0200
++++ fli.c	2008-06-15 22:53:07.000000000 +0200
+@@ -21,6 +21,7 @@
+ #include "util.h" /* For exit_gracefully() */
+ #include "timer.h"
+ #include "keys.h"
++#include <allegro/file.h>
+ 
+ extern char g_DataPath[255];
+ 
+@@ -34,6 +35,8 @@ int current_frame;
+ unsigned long first_frame = 0;
+ unsigned long file_length = 0;
+ 
++#if 0
++
+ /* Delta chunk is the most common type of chunk...
+    it contains the changes in the image from the last
+    frame */
+@@ -375,11 +378,33 @@ void Play_Fli( char *filename )
+      fclose( fp ); /* Close the file */
+     }
+ 
+-
++#endif
+ 
+ /* Beginning of Ram based fli reading */
+ 
++static int read_intel_int32(unsigned char *file_buffer,
++  unsigned long *file_pos)
++{
++   int res;
++   
++   res  = file_buffer[(*file_pos)++];
++   res |= file_buffer[(*file_pos)++] << 8;
++   res |= file_buffer[(*file_pos)++] << 16;
++   res |= file_buffer[(*file_pos)++] << 24;
++
++   return res;
++}
++
++static short read_intel_int16(unsigned char *file_buffer,
++  unsigned long *file_pos)
++{
++   short res;
++
++   res  = file_buffer[(*file_pos)++];
++   res |= file_buffer[(*file_pos)++] << 8;
+ 
++   return res;
++}
+ 
+ void Delta_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
+     {
+@@ -397,19 +422,13 @@ void Delta_Chunk_Ram( unsigned char *fil
+      
+      unsigned char pixel_data;      /* One pixel to put on screen */
+      unsigned long byte_count;       /* Index for loop             */
+-     long x, y, i;
+-     unsigned char *temp_buffer;
++     long x, y;
+ 
+ 
+      /* Get the y position we start on */ 
+-     temp_buffer = (unsigned char *)&lines_to_skip;
+-     for( i = 0; i < sizeof( short ); i++ )
+-         temp_buffer[i] = file_buffer[ (*file_pos)++ ];
++     lines_to_skip = read_intel_int16(file_buffer, file_pos);
+      /* Get the number of lines encoded */
+-     temp_buffer = (unsigned char *)&number_lines;
+-     for( i = 0; i < sizeof( short ); i++ )
+-         temp_buffer[i] = file_buffer[ (*file_pos)++ ];
+-     
++     number_lines = read_intel_int16(file_buffer, file_pos);
+ 
+      x = y = 0;
+ 
+@@ -474,7 +493,6 @@ void Color_Chunk_Ram( unsigned char *fil
+      unsigned short num_packets; 
+      RGB_color color;
+      
+-     unsigned char *temp_buffer;
+ 
+      /* Packet */
+      unsigned char skip_count;
+@@ -484,11 +502,7 @@ void Color_Chunk_Ram( unsigned char *fil
+      long i, j;
+      
+ 
+-     temp_buffer = (unsigned char *)&num_packets;
+-     for( i = 0; i < sizeof( unsigned short ); i++ )
+-         {
+-          temp_buffer[i] = file_buffer[ (*file_pos)++ ];
+-         }
++     num_packets = read_intel_int16(file_buffer, file_pos);
+ 
+      for( i = 0; i < num_packets; i++ )
+          {
+@@ -619,16 +633,9 @@ void Byte_Run_Chunk_Ram( unsigned char *
+ int Read_Sub_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
+     {
+      sub_chunk_header header;
+-     long i;
+-     unsigned char *temp_buffer;
+ 
+-
+-     temp_buffer = (unsigned char *)&header;
+-
+-     for( i = 0; i < sizeof(sub_chunk_header); i++ )
+-         {
+-          temp_buffer[i] = file_buffer[ (*file_pos)++ ];
+-         }
++     header.chunk_size = read_intel_int32(file_buffer, file_pos);
++     header.chunk_type = read_intel_int16(file_buffer, file_pos);;
+ 
+      if( header.chunk_type == 0xC )
+          {
+@@ -668,22 +675,17 @@ long Read_Chunk_Ram( unsigned char *file
+      chunk_header header;
+      long i;
+      unsigned long pos;
+-     unsigned char *temp_buffer;
+-
+-
+-     /* Alias pointer to chunk header */
+-     temp_buffer = (unsigned char *)&header;
+ 
+      if( *file_pos >= file_length )
+          return 0;
+ 
+      pos = *file_pos;
+ 
+-     /* Get chunk header from array */
+-     for( i = 0; i < sizeof( chunk_header ); i++ )
+-         {
+-          temp_buffer[i] = file_buffer[ (*file_pos)++ ]; 
+-         }
++     header.chunk_size = read_intel_int32(file_buffer, file_pos);
++     header.chunk_type = read_intel_int16(file_buffer, file_pos);
++     header.number_of_chunks = read_intel_int16(file_buffer, file_pos);
++     /* skip 8 reserved bytes */
++     (*file_pos) += 8;
+ 
+      /* If there are subchunks */
+      if( header.number_of_chunks > 0 )
+@@ -709,6 +711,7 @@ long Read_Chunk_Ram( unsigned char *file
+ 
+     } /* End of Read_Chunk_Ram */
+ 
++#if 0
+ 
+ void Play_Fli_Ram( char *filename )
+     {
+@@ -912,8 +915,7 @@ void One_Frame( fli_file_type *fli_file 
+ 
+     } /* End of One_Frame */
+ 
+-
+-
++#endif
+ 
+ /* Size of buffer we load chunks of fli file into */
+ #define FLI_BUFFER_SIZE 66000
+@@ -927,6 +929,8 @@ typedef struct
+     } fli_file_type;
+ */
+ 
++#define i386_flic_header_size 128
++
+ void Play_Fli_Buffered( char *filename )
+     {
+      unsigned char done = 0; /* Flag for the loop           */
+@@ -940,6 +944,7 @@ void Play_Fli_Buffered( char *filename )
+      int done_reading = 0; /* Flag to say we're done reading file */
+      long i, temp;
+    	char newfilename[512];
++   	unsigned char header_buf[i386_flic_header_size];
+ 
+ 	sprintf(newfilename,"%s%s",g_DataPath,filename);
+ 
+@@ -956,7 +961,31 @@ void Play_Fli_Buffered( char *filename )
+ 		 return;
+ 
+      /* Read the damm header */
+-     fread( &header, sizeof( header ), 1, fp);
++     fread( header_buf, i386_flic_header_size, 1, fp);
++     
++     header.file_size        = read_intel_int32(header_buf, &file_pos);
++     header.file_id          = read_intel_int16(header_buf, &file_pos);
++     header.number_of_frames = read_intel_int16(header_buf, &file_pos);
++     header.width            = read_intel_int16(header_buf, &file_pos);
++     header.height           = read_intel_int16(header_buf, &file_pos);
++     header.pixel_depth      = read_intel_int16(header_buf, &file_pos);
++     header.flags            = read_intel_int16(header_buf, &file_pos);
++     header.frame_delay      = read_intel_int32(header_buf, &file_pos);
++     header.reserved1        = read_intel_int16(header_buf, &file_pos);
++     /* The following fields are set to zero in a .fli file */       
++     header.date_created = read_intel_int32(header_buf, &file_pos);
++     header.creator_sn   = read_intel_int32(header_buf, &file_pos);
++     header.last_updated = read_intel_int32(header_buf, &file_pos);
++     header.updater_sn   = read_intel_int32(header_buf, &file_pos);
++     header.x_aspect     = read_intel_int16(header_buf, &file_pos);
++     header.y_aspect     = read_intel_int16(header_buf, &file_pos);
++     /* skip 38 reserved bytes */
++     file_pos += 38;
++     header.frame1_offset = read_intel_int32(header_buf, &file_pos);
++     header.frame2_offset = read_intel_int32(header_buf, &file_pos);
++     /* skip 40 reserved bytes */
++     file_pos += 40;
++
+ 
+      current_frame = 0;
+ 
+@@ -982,6 +1011,7 @@ void Play_Fli_Buffered( char *filename )
+      current_buffer = buffer_one;
+      old_buffer     = buffer_two;
+      
++     file_pos = 0;
+      file_length = FLI_BUFFER_SIZE; /* Update global */
+ 
+      Set_Timer(0);
+
+--- level.c	2008-06-15 22:52:49.000000000 +0200
++++ level.c	2008-06-15 22:53:07.000000000 +0200
+@@ -17,24 +17,96 @@
+ */
+ 
+ #include <stdio.h>
++#include <allegro/file.h>
+ #include "level.h"
+ 
+ extern char g_DataPath[255];
+ 
++/* Read a level, which is a binary dump of struct level_type on i386
++   from disk, do this in an arch independent way.
++   
++   Note we use the same brillaint error handling as the original fread
++   call: none :) */
++void read_level(level_type *level, PACKFILE *fp)
++{
++   union {
++      int i;
++      float f;
++   } u;
++   int i, j;
++
++   /* read all the strings at the beginning of the struct */
++   pack_fread(level, 9 * 40, fp);
++
++   /* read boolean wire_tube */
++   pack_fread(&level->wire_tube, 1, fp);
++   
++   /* skip 3 bytes of padding */
++   pack_fseek(fp, 3);
++
++   /* read the other members of the struct */
++   u.i = pack_igetl(fp);
++   level->angular_friction = u.f;
++
++   u.i = pack_igetl(fp);
++   level->surface_friction = u.f;
++
++   u.i = pack_igetl(fp);
++   level->air_friction = u.f;
++
++   level->yon_clipping_plane = pack_igetl(fp);
++
++   /* Orientation contains 9 floats, treat it as an array */
++   for (i = 0; i < 2; i++) {
++      float *f = (float *)(&level->base_orientations[i]);
++      for (j = 0; j < 9; j++) {
++         u.i = pack_igetl(fp);
++         f[j] = u.f;
++      }
++   }
++   
++   for (i = 0; i < 2; i++) {
++      float *f = (float *)(&level->turret_orientations[i]);
++      for (j = 0; j < 9; j++) {
++         u.i = pack_igetl(fp);
++         f[j] = u.f;
++      }
++   }
++
++   for (i = 0; i < 6; i++) {
++      float *f = (float *)(&level->vehicle_orientations[i]);
++      for (j = 0; j < 9; j++) {
++         u.i = pack_igetl(fp);
++         f[j] = u.f;
++      }
++   }
++
++   for (i = 0; i < NUM_GRADIENTS; i++) {
++      level->color_info.gradient[i].active = pack_getc(fp);
++      level->color_info.gradient[i].first = pack_getc(fp);
++      level->color_info.gradient[i].last = pack_getc(fp);
++      /* skip 1 byte of padding */ 
++      pack_fseek(fp, 1);
++      level->color_info.gradient[i].num_colors = pack_igetl(fp);
++   }
++   level->color_info.size = pack_igetl(fp);
++}
++
++
+ int Load_Level( char *filename, level_type *level )
+     {
+-     FILE *fp;
++     PACKFILE *fp;
+ 	char newfilename[512];
+ 
+ 	sprintf(newfilename,"%s%s",g_DataPath,filename);
+ 
+ 
+-     if( (fp = fopen( newfilename, "rb" )) == NULL )
++     if( (fp = pack_fopen( newfilename, "r" )) == NULL )
+          return 0;
+ 
+-     fread( level, sizeof(level_type), 1, fp );
++     read_level(level, fp);
+ 
+-     fclose( fp );
++     pack_fclose( fp );
+     
+      return(1); /* Function was successful */
+     }
+
+--- pcx.c	2008-06-15 22:52:49.000000000 +0200
++++ pcx.c	2008-06-15 22:53:07.000000000 +0200
+@@ -22,6 +22,7 @@
+ 
+ #include "prim.h"
+ 
++#include <endian.h>
+ #include <allegro.h>
+ 
+ /* Allocate about 64k for image->buffer */
+@@ -45,7 +46,7 @@ void PCX_Allocate( pcx_picture_ptr image
+ 
+     } /* End of PCX_Allocate */
+ 
+-
++#define swap_short(a) a = (((unsigned)(a)) >> 8) | (((unsigned)(a)) << 8)
+ 
+ /* Function PCX load loads and uncompresses a PCX image into image->buffer
+    And loads the palette into image->palette
+@@ -79,6 +80,17 @@ void PCX_Load( char *filename, pcx_pictu
+      fseek( fp, 0, SEEK_SET ); /* Move to beginning of file */
+      fread( &image->header, sizeof( pcx_header ), 1, fp );
+ 
++#if __BYTE_ORDER == __BIG_ENDIAN
++     swap_short(image->header.xstart);
++     swap_short(image->header.ystart);
++     swap_short(image->header.xend);
++     swap_short(image->header.yend);
++     swap_short(image->header.horz_res);
++     swap_short(image->header.vert_res);
++     swap_short(image->header.bytes_per_line);
++     swap_short(image->header.palette_type);
++#endif
++
+      /* Compute the width of the image in pixels  */
+      image->xpixels = image->header.xend - image->header.xstart;
+ 
+
+--- stats.c	2008-06-15 22:52:49.000000000 +0200
++++ stats.c	2008-06-15 22:53:07.000000000 +0200
+@@ -21,6 +21,7 @@
+ #include "keys.h"
+ 
+ #include <stdio.h>
++#include <allegro/file.h>
+ 
+ extern char g_DataPath[255];
+ 
+@@ -274,24 +275,58 @@ int Save_Overall_Stats_Binary( overall_s
+      return(1);
+     } /* End of Save_Overall_Stats_Binary() */
+ 
++/* Read overal stats, which is a binary dump of overall_stats_type on i386
++   from disk, do this in an arch independent way.
++   
++   Note we use the same brillaint error handling as the original fread
++   call: none :) */
++void read_overall_stats(overall_stats_type *overall_stats, PACKFILE *fp)
++{
++   union {
++      int i;
++      float f;
++   } u;
++
++   pack_fread(overall_stats->name, 80, fp);
++   overall_stats->number_of_games = pack_igetl(fp);
++   overall_stats->victories = pack_igetl(fp);
++   overall_stats->defeats = pack_igetl(fp);
++
++   u.i = pack_igetl(fp);
++   overall_stats->win_percentage = u.f;
++
++   overall_stats->kills = pack_igetl(fp);
++   overall_stats->times_killed = pack_igetl(fp);
++   overall_stats->shots_fired = pack_igetl(fp);
++   overall_stats->enemy_hits = pack_igetl(fp);
++   overall_stats->friendly_hits = pack_igetl(fp);
++   overall_stats->misses = pack_igetl(fp);
++   overall_stats->times_hit = pack_igetl(fp);
++
++   u.i = pack_igetl(fp);
++   overall_stats->hit_percentage = u.f;
++
++   overall_stats->pylons_grabbed = pack_igetl(fp);
++}
++
+ 
+ int Load_Overall_Stats_Binary( overall_stats_type *overall_stats, char *filename )
+     {
+-     FILE *fp;
++     PACKFILE *fp;
+ 	char newfilename[512];
+ 
+ 	sprintf(newfilename,"%s%s",g_DataPath,filename);
+ 
+ 
+ 
+-     fp = fopen( newfilename, "rb" );
++     fp = pack_fopen( newfilename, "r" );
+ 
+      if( fp == NULL )
+          return(0);
+ 
+-     fread( overall_stats, sizeof(overall_stats_type), 1, fp );
++     read_overall_stats(overall_stats, fp);
+ 
+-     fclose(fp);
++     pack_fclose(fp);
+ 
+      return(1);
+     } /* End of Load_Overall_Stats_Binary() */
+
+--- tanks.c	2008-06-15 22:52:49.000000000 +0200
++++ tanks.c	2008-06-15 22:53:07.000000000 +0200
+@@ -22,12 +22,197 @@
+ #include "tanks.h"
+ #include "object.h"
+ #include "collide.h"
++#include <allegro/file.h>
+ 
+ extern char g_DataPath[255];
+ 
++/* Read a tank, which is a binary dump of struct Vehicle on i386
++   from disk, do this in an arch independent way.
++   
++   Note we use the same brillaint error handling as the original fread
++   call: none :) */
++void read_tank(Vehicle *tank, PACKFILE *fp)
++{
++    union {
++      int i;
++      float f;
++    } u;
++    float *f;
++    int i, *ip;
++
++    /* General information about this vehicle */
++
++    tank->vtype = pack_igetl(fp);
++    tank->team = pack_igetl(fp);
++    tank->vehicle_mode = pack_igetl(fp);
++    tank->alive = pack_igetw(fp);
++
++    /* skip 2 bytes of padding */
++    pack_fseek(fp, 2);
++
++    u.i = pack_igetl(fp);
++    tank->surface_rad = u.f;
++
++    /* Information about this vehicles 3d object */
++
++    /* skip 4 PointFace pointers */
++    pack_fseek(fp, 4 * 4);
++
++    /* BoundingBox contains 6 floats, treat it as an array of floats */
++    f = (float *)(&tank->box);
++    for (i = 0; i < 6; i++) {
++        u.i = pack_igetl(fp);
++        f[i] = u.f;
++    }
++
++    /* MagicBoundingBox contains 6 32 bit ints, treat it as an array of ints */
++    ip = (int *)(&tank->mbox);
++    for (i = 0; i < 6; i++) {
++        ip[i] = pack_igetl(fp);
++    }
++
++    /* skip EdgeTable edge pointer */
++    pack_fseek(fp, 4);
++
++    tank->collision_edges.edges = pack_igetl(fp);
++
++    /* Orientation contains 9 floats, treat it as an array */
++    f = (float *)(&tank->orient);
++    for (i = 0; i < 9; i++) {
++        u.i = pack_igetl(fp);
++        f[i] = u.f;
++    }
++
++    /* Information about this vehicles movement and rotation */
++
++    /* Float_Vector contains 3 floats, treat it as an array */
++    f = (float *)(&tank->vel);
++    for (i = 0; i < 3; i++) {
++        u.i = pack_igetl(fp);
++        f[i] = u.f;
++    }
++
++    u.i = pack_igetl(fp);
++    tank->air_forward_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->air_max_forward_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->air_inc_forward_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->air_max_sidestep_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->air_inc_sidestep_speed = u.f;
++
++    u.i = pack_igetl(fp);
++    tank->air_rise_rot_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->air_spin_rot_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->air_inc_rot_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->air_max_rot_speed = u.f;
++
++    u.i = pack_igetl(fp);
++    tank->surface_max_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->surface_inc_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->surface_inc_sidestep_speed = u.f;
++
++    u.i = pack_igetl(fp);
++    tank->surface_rot_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->surface_inc_rot_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->surface_max_rot_speed = u.f;
++
++    /* Information about this vehicles weapons */
++
++    /* skip 1 float pointer */
++    pack_fseek(fp, 4);
++
++    u.i = pack_igetl(fp);
++    tank->laser_speed = u.f;
++
++    tank->laser_life = pack_igetw(fp);
++    tank->laser_damage = pack_igetw(fp);
++    tank->laser_reload_time = pack_igetw(fp);
++    tank->frames_till_fire_laser = pack_igetw(fp);
++
++    u.i = pack_igetl(fp);
++    tank->missile_speed = u.f;
++    u.i = pack_igetl(fp);
++    tank->turning_angle = u.f;
++
++    tank->missile_life = pack_igetw(fp);
++    tank->missile_damage = pack_igetw(fp);
++    tank->missile_reload_time = pack_igetw(fp);
++    tank->frames_till_fire_missile = pack_igetw(fp);
++    tank->missile_generation_time = pack_igetw(fp);
++    tank->frames_till_new_missile = pack_igetw(fp);
++    tank->max_missile_storage = pack_igetw(fp);
++    tank->missiles_stored = pack_igetw(fp);
++
++    tank->max_projectiles = pack_igetw(fp);
++
++    /* skip 2 bytes pad + 1 Projectile pointer */
++    pack_fseek(fp, 6);
++
++    /* Information about this vehicles hitpoints */
++
++    tank->max_hitpoints = pack_igetl(fp);
++    tank->current_hitpoints = pack_igetl(fp);
++
++    tank->ramming_active = pack_igetw(fp);
++    tank->ramming_damage = pack_igetw(fp);
++
++    tank->double_lasers_active = pack_igetw(fp);
++
++    tank->mine_reload_time = pack_igetw(fp);
++    tank->mine_damage = pack_igetw(fp);
++    tank->mine_life = pack_igetw(fp);
++
++    tank->cs_missile_reload_time = pack_igetw(fp);
++    tank->cs_missile_life = pack_igetw(fp);
++
++    u.i = pack_igetl(fp);
++    tank->cs_missile_speed = u.f;
++
++    tank->controls_scrambled = pack_igetw(fp);
++    tank->frames_till_unscramble = pack_igetw(fp);
++    tank->scramble_life = pack_igetw(fp);
++
++    tank->traitor_missile_reload_time = pack_igetw(fp);
++    tank->traitor_missile_life = pack_igetw(fp);
++    /* skip 2 bytes pad */
++    pack_fseek(fp, 2);
++
++    u.i = pack_igetl(fp);
++    tank->traitor_missile_speed = u.f;
++
++    tank->traitor_life = pack_igetw(fp);
++    tank->traitor_active = pack_igetw(fp);
++    tank->frames_till_traitor_deactivate = pack_igetw(fp);
++
++    tank->anti_missile_active = pack_igetw(fp);
++
++    tank->cloaking_active = pack_igetw(fp);
++    tank->cloak_reload_time = pack_igetw(fp);
++    tank->frames_till_cloak = pack_igetw(fp);
++    tank->cloak_time = pack_igetw(fp);
++    tank->frames_till_cloak_suck = pack_igetw(fp);
++
++    tank->decoy_life = pack_igetw(fp);
++    tank->decoy_reload_time = pack_igetw(fp);
++    /* skip 2 bytes pad */
++    pack_fseek(fp, 2);
++}
++
++#define i386_Vehicle_size 316
++
+ void Load_Tank( Vehicle *tank, enum VehicleType tank_type )
+     {
+-     FILE *fp;
++     PACKFILE *fp;
+ 
+ 	char newfilename[512];
+ 
+@@ -35,16 +220,16 @@ void Load_Tank( Vehicle *tank, enum Vehi
+ 
+ 
+ 
+-     if( (fp = fopen( newfilename, "rb" )) == NULL ) {
++     if( (fp = pack_fopen( newfilename, "r" )) == NULL ) {
+          printf( "Load_Tank() : fopen failed\n" );
+          Get_Keypress();
+          exit_gracefully();
+      }
+ 
+-     fseek( fp, sizeof( Vehicle ) * tank_type, SEEK_SET );
+-     fread( tank, sizeof( Vehicle ), 1, fp );
++     pack_fseek( fp, i386_Vehicle_size * tank_type );
++     read_tank( tank, fp );
+ 
+-     fclose( fp );
++     pack_fclose( fp );
+ 
+     } /* End of Load_Tank */
+ 

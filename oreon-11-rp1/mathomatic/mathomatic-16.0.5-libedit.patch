@@ -1,0 +1,26 @@
+diff --git a/includes.h b/includes.h
+index 2e5667a..f9223fc 100644
+--- a/includes.h
++++ b/includes.h
+@@ -106,7 +106,7 @@ George Gesslein II, P.O. Box 224, Lansing, NY  14882-0224  USA.
+ #include <readline/history.h>
+ #endif
+ #if	EDITLINE	/* Editline is a stripped down version of readline. */
+-#include <editline.h>
++#include <editline/readline.h>
+ #endif
+ 
+ /* Include files from the current directory: */
+diff --git a/makefile b/makefile
+index 9e82c15..0d74d10 100644
+--- a/makefile
++++ b/makefile
+@@ -77,7 +77,7 @@ CFLAGS		+= $(READLINE:1=-DREADLINE)
+ LDLIBS		+= $(READLINE:1=-lreadline) # Add -lncurses if needed for readline, might be called "curses" on some systems.
+ # Run "make EDITLINE=1" to include the optional editline editing and history support (smaller than readline):
+ CFLAGS		+= $(EDITLINE:1=-DEDITLINE)
+-LDLIBS		+= $(EDITLINE:1=-leditline)
++LDLIBS		+= $(EDITLINE:1=-ledit)
+ 
+ # Uncomment the following line to force generation of x86-64-bit code:
+ #CFLAGS		+= -m64

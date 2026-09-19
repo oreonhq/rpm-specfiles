@@ -1,0 +1,58 @@
+diff --git a/src/qtcwin.c b/src/qtcwin.c
+index 0c91e3e..64fb53b 100644
+--- a/src/qtcwin.c
++++ b/src/qtcwin.c
+@@ -53,11 +53,11 @@
+ 
+ 
+ void init_qtc_panel();
+-void draw_qtc_panel();
++void draw_qtc_panel(int direction);
+ void start_qtc_recording();
+ void stop_qtc_recording();
+ void clear_help_block();
+-void show_help_msg();
++void show_help_msg(int msgidx);
+ void showfield(int fidx);
+ void modify_field(int pressed);
+ void delete_from_field(int dir);
+diff --git a/test/test_searchlog.c b/test/test_searchlog.c
+index b4f2a46..f463e40 100644
+--- a/test/test_searchlog.c
++++ b/test/test_searchlog.c
+@@ -233,7 +233,7 @@ void test_init_search_panel_dxped(void **state) {
+ /* testing searchlog for refactoring */
+ void test_searchlog_pickup_call(void **state) {
+     strcpy (hiscall, "UA");
+-    filterLog("");
++    filterLog();
+     assert_int_equal (strncmp(searchresult[0], QSO3, 80), 0);
+     assert_int_equal (strncmp(searchresult[1], QSO5, 80), 0);
+ }
+@@ -241,7 +241,7 @@ void test_searchlog_pickup_call(void **state) {
+ void test_searchlog_pickup_call_mixedmode(void **state) {
+     mixedmode = 1;
+     strcpy (hiscall, "UA");
+-    filterLog("");
++    filterLog();
+     assert_int_equal (strncmp(searchresult[0], QSO3, 80), 0);
+     assert_int_equal (strncmp(searchresult[1], QSO4, 80), 0);
+     assert_int_equal (strncmp(searchresult[2], QSO5, 80), 0);
+@@ -249,7 +249,7 @@ void test_searchlog_pickup_call_mixedmode(void **state) {
+ 
+ void test_searchlog_extract_data(void **state) {
+     strcpy (hiscall, "UA");
+-    filterLog("");
++    filterLog();
+     assert_string_equal (result[0], " 40CW  0007 OE3UAI       15            ");
+     assert_string_equal (result[1], " 80CW  0009 UA9LM        17            ");
+ }
+@@ -257,7 +257,7 @@ void test_searchlog_extract_data(void **state) {
+ void test_searchlog_extract_data_mixedmode(void **state) {
+     mixedmode = 1;
+     strcpy (hiscall, "UA");
+-    filterLog("");
++    filterLog();
+     assert_string_equal (result[0], " 40CW  0007 OE3UAI       15            ");
+     assert_string_equal (result[1], " 80SSB 0008 UA3JK        16            ");
+ }

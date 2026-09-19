@@ -1,0 +1,111 @@
+--- CMakeLists.orig.txt	2019-01-28 17:47:49.000000000 +0100
++++ CMakeLists.txt	2019-03-16 15:21:04.874449745 +0100
+@@ -14,42 +14,42 @@
+     set(CMAKE_BUILD_TYPE "Release")
+ endif()
+ 
+-add_library(crossguid ${CMAKE_CURRENT_SOURCE_DIR}/src/guid.cpp)
+-set_property(TARGET crossguid PROPERTY POSITION_INDEPENDENT_CODE ON)
+-target_include_directories(crossguid PUBLIC
++add_library(crossguid2 ${CMAKE_CURRENT_SOURCE_DIR}/src/guid.cpp)
++set_property(TARGET crossguid2 PROPERTY POSITION_INDEPENDENT_CODE ON)
++target_include_directories(crossguid2 PUBLIC
+     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+     $<INSTALL_INTERFACE:include>)
+ 
+ if(WIN32)
+-    target_compile_definitions(crossguid PRIVATE GUID_WINDOWS)
++    target_compile_definitions(crossguid2 PRIVATE GUID_WINDOWS)
+ elseif(APPLE)
+     find_library(CFLIB CoreFoundation)
+-    target_link_libraries(crossguid ${CFLIB})
+-    target_compile_definitions(crossguid PRIVATE GUID_CFUUID)
++    target_link_libraries(crossguid2 ${CFLIB})
++    target_compile_definitions(crossguid2 PRIVATE GUID_CFUUID)
+ elseif(ANDROID)
+     # GUID_ANDROID is used in the headers, so make PUBLIC
+-    target_compile_definitions(crossguid PUBLIC GUID_ANDROID)
++    target_compile_definitions(crossguid2 PUBLIC GUID_ANDROID)
+ else()
+     find_package(Libuuid REQUIRED)
+     if (NOT LIBUUID_FOUND)
+         message(FATAL_ERROR
+-            "You might need to run 'sudo apt-get install uuid-dev' or similar")
++            "You might need to run 'sudo dnf install libuuid-devel' or similar")
+     endif()
+-    target_include_directories(crossguid PRIVATE ${LIBUUID_INCLUDE_DIR})
+-    target_link_libraries(crossguid ${LIBUUID_LIBRARY})
+-    target_compile_definitions(crossguid PRIVATE GUID_LIBUUID)
++    target_include_directories(crossguid2 PRIVATE ${LIBUUID_INCLUDE_DIR})
++    target_link_libraries(crossguid2 ${LIBUUID_LIBRARY})
++    target_compile_definitions(crossguid2 PRIVATE GUID_LIBUUID)
+ endif()
+ 
+ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+-    set(WARNINGS "-Werror" "-Wall")
++    set(WARNINGS "-Wall")
+ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+     set(WARNINGS "-Werror" "-Wall")
+ elseif(MSVC)
+     set(WARNINGS "/WX" "/W4")
+ endif()
+-target_compile_options(crossguid PRIVATE ${WARNINGS})
++target_compile_options(crossguid2 PRIVATE ${WARNINGS})
+ 
+-set_target_properties(crossguid
++set_target_properties(crossguid2
+ 					  PROPERTIES
+ 					  VERSION ${PROJECT_VERSION}
+ 					  SOVERSION ${PROJECT_VERSION_MAJOR}
+@@ -64,11 +64,11 @@
+ 	set(CROSSGUID_ARCHIVE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}")
+ 	set(CROSSGUID_FRAMEWORK_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}")
+ 
+-	set(CROSSGUID_CMAKE_CONFIG_INSTALL_DIR "${CMAKE_INSTALL_DATADIR}/crossguid/cmake")
+-	set(CROSSGUID_ADDITIONAL_FILES_INSTALL_DIR "${CMAKE_INSTALL_DATADIR}/crossguid")
++	set(CROSSGUID_CMAKE_CONFIG_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/crossguid2")
++	set(CROSSGUID_ADDITIONAL_FILES_INSTALL_DIR "${CMAKE_INSTALL_DATADIR}/crossguid2")
+ 
+ 	# Install target
+-	install(TARGETS crossguid EXPORT crossguidTargets
++	install(TARGETS crossguid2 EXPORT crossguidTargets
+ 		RUNTIME       DESTINATION ${CROSSGUID_RUNTIME_INSTALL_DIR}
+ 		LIBRARY       DESTINATION ${CROSSGUID_LIBRARY_INSTALL_DIR}
+ 		ARCHIVE       DESTINATION ${CROSSGUID_ARCHIVE_INSTALL_DIR}
+@@ -81,17 +81,12 @@
+ 	# Make cmake config files for all targets
+ 	install(EXPORT  crossguidTargets
+ 		DESTINATION ${CROSSGUID_CMAKE_CONFIG_INSTALL_DIR}
+-		FILE crossguid-config.cmake)
+-
+-	# Install readme and license
+-	install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE" "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+-		DESTINATION ${CROSSGUID_ADDITIONAL_FILES_INSTALL_DIR})
+-
+-	configure_file(crossguid.pc.in ${PROJECT_BINARY_DIR}/crossguid.pc @ONLY)
+-	install(FILES ${PROJECT_BINARY_DIR}/crossguid.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)
++		FILE crossguid2-config.cmake)
++	configure_file(crossguid.pc.in ${PROJECT_BINARY_DIR}/crossguid2.pc @ONLY)
++	install(FILES ${PROJECT_BINARY_DIR}/crossguid2.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)
+ endif()
+ 
+ if (CROSSGUID_TESTS)
+-    add_executable(crossguid-test test/TestMain.cpp test/Test.cpp)
+-    target_link_libraries(crossguid-test crossguid)
++    add_executable(crossguid2-test test/TestMain.cpp test/Test.cpp)
++    target_link_libraries(crossguid2-test crossguid2)
+ endif()
+--- crossguid.pc.orig.in	2019-05-29 17:36:34.000000000 +0200
++++ crossguid.pc.in	2019-06-18 11:22:02.767524564 +0200
+@@ -3,9 +3,9 @@
+ includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+-Name: crossguid
++Name: crossguid2
+ Description: Lightweight cross platform C++ GUID/UUID library 
+ URL: https://github.com/graeme-hill/crossguid
+ Version: @PROJECT_VERSION@
+ Cflags: -I${includedir}
+-Libs: -L${libdir} -lcrossguid
++Libs: -L${libdir} -lcrossguid2

@@ -1,0 +1,12 @@
+diff -Nrup a/pskmodem/pskmodem.c b/pskmodem/pskmodem.c
+--- a/pskmodem/pskmodem.c	2015-05-04 11:58:30.000000000 -0600
++++ b/pskmodem/pskmodem.c	2019-10-15 14:17:33.531220004 -0600
+@@ -262,7 +262,7 @@ static void rxrotate(cplxshort_t *ptr, u
+ 	}
+ }
+ 
+-only_inline int calcsync(int *toten, int *corren, cplxshort_t *samples)
++static only_inline int calcsync(int *toten, int *corren, cplxshort_t *samples)
+ {
+ 	const cplxshort_t *tr = traincorrrotated;
+ 	unsigned int i;

@@ -1,0 +1,57 @@
+From 1fbee954127c942001975071da0d3229c118b25c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 4 Mar 2019 15:42:43 +0100
+Subject: [PATCH] Add LWP_AUTHEN_NEGOTIATE_MUTUAL environment variable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Some HTTP servers (e.g. Red Hat SSO) require GSS_C_MUTUAL_FLAG GSSAPI
+flag on the client side although they do not send any ticket back
+in an HTTP Negotiate header.
+
+A work around is enablging LWP_AUTHEN_NEGOTIATE_DELEGATE, but this
+potentially hazardous as it allows the server to impersonate the
+client.
+
+Therofre this patch adds LWP_AUTHEN_NEGOTIATE_MUTUAL environment
+variable to allow users to to enable the GSS_C_MUTUAL_FLAG flag
+without delegatation.
+
+One could be tempted to enable the flag by default because all the
+entities are usually equiped with a Kerberos ticket, but for the sake
+of a compatibility let not do it.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/LWP/Authen/Negotiate.pm | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/lib/LWP/Authen/Negotiate.pm b/lib/LWP/Authen/Negotiate.pm
+index 3dce7b1..ac24f02 100644
+--- a/lib/LWP/Authen/Negotiate.pm
++++ b/lib/LWP/Authen/Negotiate.pm
+@@ -83,6 +83,9 @@ sub authenticate
+ 	              | GSS_C_MUTUAL_FLAG
+ 		      | GSS_C_DELEG_FLAG;
+ 	}
++	if ( $ENV{LWP_AUTHEN_NEGOTIATE_MUTUAL} ) {
++	   $iflags =    $iflags | GSS_C_MUTUAL_FLAG;
++	}
+         my $bindings = GSS_C_NO_CHANNEL_BINDINGS;
+         my $creds    = GSS_C_NO_CREDENTIAL;
+         my $itime    = 0;
+@@ -197,6 +200,10 @@ Run kinit first ;-)
+ 
+ Define to enable ticket forwarding to webserver.
+ 
++=item LWP_AUTHEN_NEGOTIATE_MUTUAL
++
++Define to enable a mutual authentication with the webserver.
++
+ =back
+ 
+ =head1 SEE ALSO
+-- 
+2.20.1
+

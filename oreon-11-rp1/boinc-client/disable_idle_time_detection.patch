@@ -1,0 +1,344 @@
+diff -urNr boinc-client_release-8.2-8.2.4-orig/client/client_state.cpp boinc-client_release-8.2-8.2.4/client/client_state.cpp
+--- boinc-client_release-8.2-8.2.4-orig/client/client_state.cpp	2025-06-08 23:44:04.000000000 +0200
++++ boinc-client_release-8.2-8.2.4/client/client_state.cpp	2025-10-02 11:55:18.836055731 +0200
+@@ -1075,7 +1075,8 @@
+         user_active = device_status.user_active;
+ #else
+         idle_time = host_info.user_idle_time(check_all_logins);
+-        user_active = idle_time < global_prefs.idle_time_to_run * 60;
++        //user_active = idle_time < global_prefs.idle_time_to_run * 60;
++        user_active = false;
+ #endif
+         if (user_active != old_user_active) {
+             set_n_usable_cpus();
+diff -urNr boinc-client_release-8.2-8.2.4-orig/client/hostinfo_unix.cpp boinc-client_release-8.2-8.2.4/client/hostinfo_unix.cpp
+--- boinc-client_release-8.2-8.2.4-orig/client/hostinfo_unix.cpp	2025-06-08 23:44:04.000000000 +0200
++++ boinc-client_release-8.2-8.2.4/client/hostinfo_unix.cpp	2025-10-02 12:19:11.819964897 +0200
+@@ -44,16 +44,6 @@
+ #include <gnu/libc-version.h>
+ #endif
+ 
+-#if HAVE_XSS
+-#include <X11/extensions/scrnsaver.h> //X-based idle detection
+-// prevents naming collision between X.h define of Always and boinc's
+-// lib/prefs.h definition in an enum.
+-#undef Always
+-#include <dirent.h> //for opening /tmp/.X11-unix/
+-  // (There is a DirScanner class in BOINC, but it doesn't do what we want)
+-#include "log_flags.h" // idle_detection_debug flag for verbose output
+-#endif
+-
+ #include <cstdio>
+ #include <cstdlib>
+ #include <cstring>
+@@ -1858,11 +1848,7 @@
+ }
+ 
+ inline long device_idle_time(const char *device) {
+-    struct stat sbuf;
+-    if (stat(device, &sbuf)) {
+-        return USER_IDLE_TIME_INF;
+-    }
+-    return gstate.now - sbuf.st_atime;
++    return 0;
+ }
+ 
+ // list of directories and prefixes of TTY devices
+@@ -1935,22 +1921,7 @@
+ }
+ 
+ inline long all_tty_idle_time() {
+-    static vector<string> tty_list;
+-    static bool first = true;
+-    struct stat sbuf;
+-    long idle_time = USER_IDLE_TIME_INF;
+-
+-    if (first) {
+-        first = false;
+-        tty_list = get_tty_list();
+-    }
+-    for (unsigned int i=0; i<tty_list.size(); i++) {
+-        // ignore errors
+-        if (!stat(tty_list[i].c_str(), &sbuf)) {
+-            // printf("tty: %s %d %d\n",tty_list[i].c_str(), sbuf.st_atime, t);
+-            idle_time = min(idle_time, (long)(gstate.now-sbuf.st_atime));
+-        }
+-    }
++    long idle_time = 0;
+     return idle_time;
+ }
+ 
+@@ -2009,44 +1980,7 @@
+ // faster than the previous method, which called IOHIDGetParameter().
+ //
+ long HOST_INFO::user_idle_time(bool /*check_all_logins*/) {
+-    static bool     error_posted = false;
+-    int64_t         idleNanoSeconds;
+     double          idleTime = 0;
+-    double          idleTimeFromCG = 0;
+-
+-    CFTypeRef idleTimeProperty;
+-    io_registry_entry_t IOHIDSystemEntry;
+-
+-    if (error_posted) return USER_IDLE_TIME_INF;
+-
+-    IOHIDSystemEntry = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IOHIDSystem");
+-    if (IOHIDSystemEntry != MACH_PORT_NULL) {
+-        idleTimeProperty = IORegistryEntryCreateCFProperty(IOHIDSystemEntry, CFSTR(EVSIOIDLE), kCFAllocatorDefault, kNilOptions);
+-        CFNumberGetValue((CFNumberRef)idleTimeProperty, kCFNumberSInt64Type, &idleNanoSeconds);
+-        idleTime = ((double)idleNanoSeconds) / 1000.0 / 1000.0 / 1000.0;
+-        IOObjectRelease(IOHIDSystemEntry);  // Prevent a memory leak (see comment above)
+-        CFRelease(idleTimeProperty);
+-    } else {
+-        // When the system first starts up, allow time for HIDSystem to be available if needed
+-        if (get_system_uptime() > (120)) {   // If system has been up for more than 2 minutes
+-            msg_printf(NULL, MSG_INFO,
+-                "Could not connect to HIDSystem: user idle detection is disabled."
+-            );
+-            error_posted = true;
+-            return USER_IDLE_TIME_INF;
+-        }
+-    }
+-
+-    if (!gstate.executing_as_daemon) {
+-        idleTimeFromCG =  CGEventSourceSecondsSinceLastEventType (
+-            kCGEventSourceStateCombinedSessionState, kCGAnyInputEventType
+-        );
+-
+-        if (idleTimeFromCG < idleTime) {
+-            idleTime = idleTimeFromCG;
+-        }
+-    }
+-
+     return (long)idleTime;
+ }
+ 
+@@ -2054,18 +1988,8 @@
+ 
+ #if HAVE_UTMP_H
+ inline long user_idle_time(struct utmp* u) {
+-    char tty[5 + sizeof u->ut_line + 1] = "/dev/";
+-    unsigned int i;
+-
+-    for (i=0; i < sizeof(u->ut_line); i++) {
+-        // clean up tty if garbled
+-        if (isalnum((int) u->ut_line[i]) || (u->ut_line[i]=='/')) {
+-            tty[i+5] = u->ut_line[i];
+-        } else {
+-            tty[i+5] = '\0';
+-        }
+-    }
+-    return device_idle_time(tty);
++    long idle_time = 0;
++    return idle_time;
+ }
+ 
+ #if !HAVE_SETUTENT || !HAVE_GETUTENT
+@@ -2109,202 +2033,26 @@
+   inline long all_logins_idle() {
+       struct utmp* u;
+       setutent();
+-      long idle_time = USER_IDLE_TIME_INF;
++      long idle_time = 0;
+ 
+       while ((u = getutent()) != NULL) {
+-          idle_time = min(idle_time, user_idle_time(u));
++          idle_time = 0;
+       }
+       return idle_time;
+   }
+ #endif  // HAVE_UTMP_H
+ 
+-#if LINUX_LIKE_SYSTEM
+-
+-#if HAVE_XSS
+-
+-// Initializer for const vector<string> in xss_idle
+-//
+-const vector<string> X_display_values_initialize() {
+-    // According to "man Xserver", each local Xserver will have a socket file
+-    // at /tmp/.X11-unix/Xn, where "n" is the display number (0, 1, 2, etc).
+-    // We will parse this directory for currently open Xservers and attempt
+-    // to ultimately query them for their idle time. If we can't open this
+-    // directory, or the display_values vector is otherwise empty, then a
+-    // static list of guesses for open display servers is utilized instead
+-    // (DISPLAY values ":{0..6}") that will attempt connections to the first
+-    // seven open Xservers.
+-    //
+-    // If we were unable to open _any_ Xserver, then we will log this and
+-    // xss_idle returns true, effectively leaving idle detection up to other
+-    // methods.
+-    //
+-    static const string dir = "/tmp/.X11-unix/";
+-    vector<string> display_values;
+-    vector<string>::iterator it;
+-
+-    DIR *dp;
+-    struct dirent *dirp;
+-    if ((dp = opendir(dir.c_str())) == NULL) {
+-        if (log_flags.idle_detection_debug ) {
+-            msg_printf(NULL, MSG_INFO,
+-                "[idle_detection] Error (%d) opening %s.", errno, dir.c_str()
+-            );
+-        }
+-    } else {
+-        while ((dirp = readdir(dp)) != NULL) {
+-            display_values.push_back(string(dirp->d_name));
+-        }
+-        closedir(dp);
+-    }
+-
+-    // Get rid of non-matching elements and format the matching ones.
+-    //
+-    for (it = display_values.begin(); it != display_values.end(); ) {
+-        if (it->c_str()[0] != 'X') {
+-            it = display_values.erase(it);
+-        } else {
+-            replace(it->begin(), it->end(), 'X', ':');
+-            it++;
+-        }
+-    }
+-
+-    return display_values;
+-}
+-
+-// Ask the X server for user idle time (using XScreenSaver API)
+-// Return min of idle times.
+-// This function assumes that the boinc user has been
+-// granted access to the Xservers a la "xhost +SI:localuser:boinc". If
+-// access isn't available for an Xserver, then that Xserver is skipped.
+-// One may drop a file in /etc/X11/Xsession.d/ that runs the xhost command
+-// for all Xservers on a machine when the Xservers start up.
+-//
+-long xss_idle() {
+-    long idle_time = USER_IDLE_TIME_INF;
+-    const vector<string> display_values = X_display_values_initialize();
+-    vector<string>::const_iterator it;
+-
+-    // If we can connect to at least one DISPLAY, this is set to false.
+-    //
+-    bool no_available_x_display = true;
+-
+-    static XScreenSaverInfo* xssInfo = XScreenSaverAllocInfo();
+-    // This shouldn't fail. XScreenSaverAllocInfo just returns a small
+-    // struct (see "man 3 xss"). If we can't allocate this, then we've
+-    // got bigger problems to worry about.
+-    //
+-    if (xssInfo == NULL) {
+-        if (log_flags.idle_detection_debug) {
+-            msg_printf(NULL, MSG_INFO,
+-                "[idle_detection] XScreenSaverAllocInfo failed. Out of memory? Skipping XScreenSaver idle detection."
+-            );
+-        }
+-        return true;
+-    }
+-
+-    for (it = display_values.begin(); it != display_values.end() ; it++) {
+-
+-        Display* disp = NULL;
+-        long display_idle_time = 0;
+-
+-        disp = XOpenDisplay(it->c_str());
+-        // XOpenDisplay may return NULL if there is no running X
+-        // or DISPLAY points to wrong/invalid display
+-        //
+-        if (disp == NULL) {
+-            if (log_flags.idle_detection_debug) {
+-	            msg_printf(NULL, MSG_INFO,
+-	                "[idle_detection] DISPLAY '%s' not found or insufficient access.",
+-	                it->c_str()
+-                );
+-            }
+-            continue;
+-        }
+-
+-        // Determine if the DISPLAY we have accessed has the XScreenSaver
+-        // extension or not.
+-        //
+-        int event_base_return, error_base_return;
+-        if (!XScreenSaverQueryExtension(
+-            disp, &event_base_return, &error_base_return
+-        )){
+-            if (log_flags.idle_detection_debug) {
+-	            msg_printf(NULL, MSG_INFO,
+-	                "[idle_detection] XScreenSaver extension not available for DISPLAY '%s'.",
+-	                it->c_str()
+-                );
+-            }
+-            XCloseDisplay(disp);
+-            continue;
+-        }
+-
+-        // All checks passed. Get the idle information.
+-        //
+-        no_available_x_display = false;
+-        XScreenSaverQueryInfo(disp, DefaultRootWindow(disp), xssInfo);
+-        display_idle_time = xssInfo->idle;
+-
+-        // Close the connection to the XServer
+-        //
+-        XCloseDisplay(disp);
+-
+-        // convert from milliseconds to seconds
+-        //
+-        display_idle_time /= 1000;
+-
+-        if (log_flags.idle_detection_debug) {
+-            msg_printf(NULL, MSG_INFO,
+-                "[idle_detection] XSS idle detection succeeded on display '%s'.",
+-                it->c_str()
+-            );
+-            msg_printf(NULL, MSG_INFO,
+-                "[idle_detection] display idle time: %ld sec", display_idle_time
+-            );
+-        }
+-
+-        idle_time = min(idle_time, display_idle_time);
+-    }
+-
+-    // If none of the Xservers were queryable, report it
+-    //
+-    if (log_flags.idle_detection_debug && no_available_x_display) {
+-        msg_printf(NULL, MSG_INFO,
+-            "[idle_detection] Could not connect to any DISPLAYs. XSS idle determination impossible."
+-        );
+-    }
+-    return idle_time;
+-
+-}
+-#endif // HAVE_XSS
+-
+-#endif // LINUX_LIKE_SYSTEM
+-
+ long HOST_INFO::user_idle_time(bool check_all_logins) {
+-    long idle_time = USER_IDLE_TIME_INF;
++    long idle_time = 0;
+ 
+ #if HAVE_UTMP_H
+     if (check_all_logins) {
+-        idle_time = min(idle_time, all_logins_idle());
++        long idle_time = 0;
+     }
+ #endif
+ 
+-    idle_time = min(idle_time, all_tty_idle_time());
+-
+ #if LINUX_LIKE_SYSTEM
+-
+-#if HAVE_XSS
+-    idle_time = min(idle_time, xss_idle());
+-#endif // HAVE_XSS
+-
+-#else
+-    // We should find out which of the following are actually relevant
+-    // on which systems (if any)
+-    //
+-    idle_time = min(idle_time, (long)device_idle_time("/dev/mouse"));
+-        // solaris, linux
+-    idle_time = min(idle_time, (long)device_idle_time("/dev/input/mice"));
+-    idle_time = min(idle_time, (long)device_idle_time("/dev/kbd"));
+-        // solaris
++    idle_time = 0;
+ #endif // LINUX_LIKE_SYSTEM
+     return idle_time;
+ }

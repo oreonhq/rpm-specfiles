@@ -1,0 +1,13 @@
+[archive]
+
+[licensing]
+detector = "askalono"
+[[licensing.licenses]]
+path = "LICENSE-THIRD-PARTY"
+sha256sum = "0487c25cba70f2c55c68dc66dc4669b86a396621a96505b1970371cc741c4ac0"
+expression = "BSD-3-Clause AND (BSD-3-Clause AND MIT) AND (Apache-2.0 AND MIT) AND MIT AND (Apache-2.0 AND BSD-3-Clause) AND (BSD-3-Clause AND MPL-1.1 AND MPL-2.0) AND JSON AND BSD-2-Clause AND Apache-2.0"
+
+[[licensing.licenses]]
+path = "vendor/github.com/micro-editor/json5/LICENSE"
+sha256sum = "598015380703f97d5729581fde8f78e4c75af5ab0fd0aa18b6e6b75813302a4f"
+expression = "BSD-3-Clause AND MIT"

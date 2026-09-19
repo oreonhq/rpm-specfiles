@@ -1,0 +1,11 @@
+diff -up CriticalMass-1.5/utilsgl/GLee.h~ CriticalMass-1.5/utilsgl/GLee.h
+--- CriticalMass-1.5/utilsgl/GLee.h~	2010-10-17 03:09:51.000000000 +0200
++++ CriticalMass-1.5/utilsgl/GLee.h	2019-02-16 23:38:55.538912671 +0100
+@@ -68,6 +68,7 @@
+ #else // GLX
+ 	#define __glext_h_  /* prevent glext.h from being included  */
+ 	#define __glxext_h_ /* prevent glxext.h from being included */
++	#define GL_GLEXT_PROTOTYPES
+ 	#define GLX_GLXEXT_PROTOTYPES
+ 	#include <GL/gl.h>
+ 	#include <GL/glx.h>

@@ -1,0 +1,16 @@
+diff -up udis86-56ff6c8/tests/symresolve.c.orig udis86-56ff6c8/tests/symresolve.c
+--- udis86-56ff6c8/tests/symresolve.c.orig	2014-12-25 07:00:50.000000000 -0500
++++ udis86-56ff6c8/tests/symresolve.c	2019-05-01 12:20:20.597531514 -0400
+@@ -26,9 +26,9 @@ static void
+ dis_loop(struct ud *ud_obj)
+ {
+   while (ud_disassemble(ud_obj) != 0) {
+-    printf("%016llx %-16s %s\n", ud_insn_off(ud_obj),
+-                                 ud_insn_hex(ud_obj),
+-                                 ud_insn_asm(ud_obj));
++    printf("%016lx %-16s %s\n", ud_insn_off(ud_obj),
++                                ud_insn_hex(ud_obj),
++                                ud_insn_asm(ud_obj));
+   }
+ }
+ 

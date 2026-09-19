@@ -1,0 +1,33 @@
+From 602f3b45095fc63728850ba1d636ac52e4a6f156 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Mon, 4 Mar 2024 21:45:51 +0100
+Subject: [PATCH 2/3] Catch AttributeError in set_manager()
+
+Return empty list if AttributeError is raised.
+---
+ bottles/frontend/windows/window.py | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/bottles/frontend/windows/window.py b/bottles/frontend/windows/window.py
+index 26d90728..ce76ab42 100644
+--- a/bottles/frontend/windows/window.py
++++ b/bottles/frontend/windows/window.py
+@@ -262,9 +262,12 @@ class BottlesWindow(Adw.ApplicationWindow):
+         def set_manager(result: Manager, error=None):
+             self.manager = result
+ 
+-            tmp_runners = [
+-                x for x in self.manager.runners_available if not x.startswith("sys-")
+-            ]
++            try:
++                tmp_runners = [
++                    x for x in self.manager.runners_available if not x.startswith("sys-")
++                ]
++            except AttributeError:
++                tmp_runners = []
+             if len(tmp_runners) == 0:
+                 self.show_onboard_view()
+ 
+-- 
+2.51.0
+

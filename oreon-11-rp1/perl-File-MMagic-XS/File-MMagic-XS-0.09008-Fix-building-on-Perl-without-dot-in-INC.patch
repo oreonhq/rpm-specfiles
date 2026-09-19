@@ -1,0 +1,9 @@
+diff -up File-MMagic-XS-0.09008/Makefile.PL.orig File-MMagic-XS-0.09008/Makefile.PL
+--- File-MMagic-XS-0.09008/Makefile.PL.orig	2017-05-17 10:27:42.339729720 +0200
++++ File-MMagic-XS-0.09008/Makefile.PL	2017-05-17 10:28:32.474544346 +0200
+@@ -1,4 +1,5 @@
+ BEGIN {
++    push @INC, '.';
+     if (-e ".git") {
+         my $errors = 0;
+         foreach my $module (qw(Module::Install Module::Install::AuthorTests Module::Install::Repository Module::Install::XSUtil)) {

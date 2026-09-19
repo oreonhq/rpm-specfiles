@@ -1,0 +1,24 @@
+diff -ruN jed-0.99-19.orig/src/misc.c jed-0.99-19/src/misc.c
+--- jed-0.99-19.orig/src/misc.c	2009-12-14 02:12:55.000000000 +0000
++++ jed-0.99-19/src/misc.c	2025-01-19 06:14:13.834695382 +0000
+@@ -648,7 +648,7 @@
+    else message (buf);
+ }
+ 
+-void jed_verror (char *fmt, ...)
++void jed_verror (const char *fmt, ...)
+ {
+    va_list ap;
+    char buf[2048];
+diff -ruN jed-0.99-19.orig/src/misc.h jed-0.99-19/src/misc.h
+--- jed-0.99-19.orig/src/misc.h	2009-12-14 02:12:55.000000000 +0000
++++ jed-0.99-19/src/misc.h	2025-01-19 06:14:17.702663186 +0000
+@@ -11,7 +11,7 @@
+ extern void exit_error(char *, int);
+ extern void jed_error_hook (SLFUTURE_CONST char *);
+ extern void msg_error(char *);
+-extern void jed_verror (char *, ...);
++extern void jed_verror (const char *, ...);
+ extern void jed_vmessage (int, char *, ...);
+ extern void read_string(char *, int *);
+ extern void clear_error(void);

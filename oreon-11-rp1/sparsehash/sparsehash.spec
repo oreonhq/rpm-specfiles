@@ -5,8 +5,8 @@
 %global debug_package %{nil}
 
 Name:           sparsehash
-Version:        2.0.3
-Release:        17%{?dist}
+Version:        2.0.4
+Release:        1%{?dist}
 Summary:        Extremely memory-efficient C++ hash_map implementation
 
 # Automatically converted from old format: BSD - review is highly recommended.

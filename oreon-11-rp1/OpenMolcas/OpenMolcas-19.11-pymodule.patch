@@ -1,0 +1,11 @@
+diff -up OpenMolcas-v19.11-0d9635ae238b52b977b259aa5f5cddc26e8a2a91/Tools/pymolcas/pymolcas.py.pymodule OpenMolcas-v19.11-0d9635ae238b52b977b259aa5f5cddc26e8a2a91/Tools/pymolcas/pymolcas.py
+--- OpenMolcas-v19.11-0d9635ae238b52b977b259aa5f5cddc26e8a2a91/Tools/pymolcas/pymolcas.py.pymodule	2020-01-14 14:09:16.139366789 +0100
++++ OpenMolcas-v19.11-0d9635ae238b52b977b259aa5f5cddc26e8a2a91/Tools/pymolcas/pymolcas.py	2020-01-14 14:09:50.338878476 +0100
+@@ -22,6 +22,7 @@ except ImportError:
+ import sys
+ sys.dont_write_bytecode = True
+ 
++sys.path.append('@MOLCAS_PYTHON@')
+ warning = ''
+ stamp = 'd41d8cd98f00b204e9800998ecf8427e'
+ 

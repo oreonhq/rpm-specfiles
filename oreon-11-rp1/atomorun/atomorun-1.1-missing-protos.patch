@@ -1,0 +1,39 @@
+diff -up atomorun-1.1_pre2/src/events.c~ atomorun-1.1_pre2/src/events.c
+--- atomorun-1.1_pre2/src/events.c~	2008-04-02 19:35:48.000000000 +0200
++++ atomorun-1.1_pre2/src/events.c	2008-04-02 19:35:48.000000000 +0200
+@@ -1,4 +1,5 @@
+ #include "main.h"
++#include "scenes.h"
+ 
+ static void handle_key_down( SDL_keysym* keysym ) /* Werden Tasten gedrückt? */
+ {
+diff -up atomorun-1.1_pre2/src/objects.h~ atomorun-1.1_pre2/src/objects.h
+--- atomorun-1.1_pre2/src/objects.h~	2008-04-02 19:36:26.000000000 +0200
++++ atomorun-1.1_pre2/src/objects.h	2008-04-02 19:36:26.000000000 +0200
+@@ -8,4 +8,6 @@ void draw_skybox(void);
+ /* Charakter: */
+ void DrawGlasses(void);
+ void DrawBody(void);
++void DrawFoot(void);
++
+ #endif
+diff -up atomorun-1.1_pre2/src/engine_setup.c~ atomorun-1.1_pre2/src/engine_setup.c
+--- atomorun-1.1_pre2/src/engine_setup.c~	2008-04-02 19:34:45.000000000 +0200
++++ atomorun-1.1_pre2/src/engine_setup.c	2008-04-02 19:34:45.000000000 +0200
+@@ -1,5 +1,6 @@
+ #include "main.h"
+ #include "objects.h"
++#include <time.h>
+ 
+ void play_sound(GLint sound_id)
+ {
+diff -up atomorun-1.1_pre2/src/scenes.h~ atomorun-1.1_pre2/src/scenes.h
+--- atomorun-1.1_pre2/src/scenes.h~	2008-04-02 19:35:32.000000000 +0200
++++ atomorun-1.1_pre2/src/scenes.h	2008-04-02 19:35:32.000000000 +0200
+@@ -4,5 +4,6 @@
+ void set_default(void);
+ void menu(void);
+ void level(void);
++void skip_intro(void);
+ 
+ #endif

@@ -1,8 +1,8 @@
 %global source0_hash e58ab3fd7b8ff5f4dd0d17f11848817e7d83c0a6918145ac81de03b5dccf8f49
 
 Name:             powertop
-Version:          2.15
-Release:          12%{?dist}
+Version:          2.16
+Release:          1%{?dist}
 Summary:          Power consumption monitor
 
 License:          gpl-2.0-only AND lgpl-2.1-only AND isc

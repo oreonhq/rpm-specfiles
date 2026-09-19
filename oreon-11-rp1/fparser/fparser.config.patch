@@ -1,0 +1,10 @@
+diff -urN fparser.orig/fpconfig.hh fparser.config/fpconfig.hh
+--- fparser.orig/fpconfig.hh	2012-11-11 09:25:15.000000000 +0100
++++ fparser.config/fpconfig.hh	2014-06-07 16:53:15.512151116 +0200
+@@ -84,5 +84,5 @@
+  The second version requires that the compiler supports the alloca() function,
+  which is not standard, but is faster.
+  */
+-//#define FP_USE_THREAD_SAFE_EVAL
++#define FP_USE_THREAD_SAFE_EVAL
+ //#define FP_USE_THREAD_SAFE_EVAL_WITH_ALLOCA

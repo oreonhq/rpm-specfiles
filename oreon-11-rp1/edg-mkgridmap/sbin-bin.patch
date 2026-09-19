@@ -1,0 +1,12 @@
+diff -uNr edg-mkgridmap-v4.0.6.ORIG/Makefile edg-mkgridmap-v4.0.6/Makefile
+--- edg-mkgridmap-v4.0.6.ORIG/Makefile	2025-02-04 19:21:51.825377519 +0100
++++ edg-mkgridmap-v4.0.6/Makefile	2025-02-04 19:22:39.208208065 +0100
+@@ -7,7 +7,7 @@
+ # Distribution Makefile
+ ####################################################################
+ 
+-bin_dir  = $(prefix)/usr/sbin
++bin_dir  = $(prefix)/usr/bin
+ lxc_dir  = $(prefix)/usr/libexec/edg-mkgridmap
+ doc_dir  = $(prefix)/usr/share/doc/edg-mkgridmap
+ man5_dir = $(prefix)/usr/share/man/man5

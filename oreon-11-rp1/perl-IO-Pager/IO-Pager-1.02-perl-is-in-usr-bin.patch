@@ -1,0 +1,37 @@
+From ce8bd78dd95dd04f875de98508e791547f6885ee Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 8 Jun 2020 11:57:50 +0200
+Subject: [PATCH] perl is in /usr/bin
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ eg/fib          | 2 +-
+ lib/IO/Pager/tp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/eg/fib b/eg/fib
+index f699244..2413924 100755
+--- a/eg/fib
++++ b/eg/fib
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ use strict;
+ use IO::Pager::Perl;
+ use Term::ReadKey;
+diff --git a/lib/IO/Pager/tp b/lib/IO/Pager/tp
+index ea8fb4b..31c0045 100755
+--- a/lib/IO/Pager/tp
++++ b/lib/IO/Pager/tp
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ use strict;
+ use warnings;
+ use IO::Pager::Perl;
+-- 
+2.25.4
+

@@ -1,0 +1,47 @@
+diff -ur pads-1.2.orig/src/configuration.c pads-1.2/src/configuration.c
+--- pads-1.2.orig/src/configuration.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/configuration.c	2008-07-01 21:11:22.000000000 -0400
+@@ -191,8 +191,10 @@
+                 log_message("warning:  'ptrFunc' in function 'conf_module_processor' failed.");
+         } else {
+             /* Input processor does not contain an argument. */
+-            if (((*ptrFunc)(list->entry[0], bfromcstr(""))) == -1)
++            bstring empty = bfromcstr("");
++            if (((*ptrFunc)(list->entry[0], empty)) == -1)
+                 log_message("warning:  'ptrFunc' in function 'conf_module_processor' failed.");
++            bdestroy(empty);
+         }
+         if (list != NULL)
+             bstrListDestroy(list);
+diff -ur pads-1.2.orig/src/monnet.c pads-1.2/src/monnet.c
+--- pads-1.2.orig/src/monnet.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/monnet.c	2008-07-01 20:37:50.000000000 -0400
+@@ -32,7 +32,7 @@
+ #include "monnet.h"
+ #include "util.h"
+ 
+-struct mon_net *mn;
++static struct mon_net *mn = NULL;
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION	: parse_networks
+diff -ur pads-1.2.orig/src/pads.c pads-1.2/src/pads.c
+--- pads-1.2.orig/src/pads.c	2008-06-30 17:54:33.000000000 -0400
++++ pads-1.2/src/pads.c	2008-07-01 21:35:45.000000000 -0400
+@@ -343,11 +343,11 @@
+ 
+     /* Display PCAP Statistics */
+     if (!pcap_stats(gc.handle, &pstat)) {
+-        log_message("\n");
+-        log_message("%d Packets Received\n", pstat.ps_recv);
+-        log_message("%d Packets Dropped by Software\n", pstat.ps_drop);
+-        log_message("%d Packets Dropped by Interface\n", pstat.ps_ifdrop);
+-        log_message("\n");
++        verbose_message("\n");
++        verbose_message("%d Packets Received\n", pstat.ps_recv);
++        verbose_message("%d Packets Dropped by Software\n", pstat.ps_drop);
++        verbose_message("%d Packets Dropped by Interface\n", pstat.ps_ifdrop);
++        verbose_message("\n");
+     }
+ 
+     /* Close banner dump file if specifed (-d). */

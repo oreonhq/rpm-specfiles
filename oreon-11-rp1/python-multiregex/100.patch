@@ -1,0 +1,68 @@
+From 6fde62928aeebc381ea70e3ef3779af381d3a175 Mon Sep 17 00:00:00 2001
+From: Maxwell G <maxwell@gtmx.me>
+Date: Wed, 25 Feb 2026 17:06:43 -0600
+Subject: [PATCH 1/2] Explicitly set build-system in pyproject.toml
+
+setuptools is an implicit default, but projects are supposed to
+explicitly set the build-backend. pip does not seem affected by this
+omission, but at least [pyproject-rpm-macros] used in Fedora Linux is more
+strict in this regard and requires both options to be specified when the
+`[build-system]` table exists.
+
+[pyproject-rpm-macros]: https://src.fedoraproject.org/rpms/pyproject-rpm-macros/
+---
+ CHANGELOG.rst  | 4 ++++
+ pyproject.toml | 1 +
+ 2 files changed, 5 insertions(+)
+
+diff --git a/CHANGELOG.rst b/CHANGELOG.rst
+index 3ac3662..ba6c580 100644
+--- a/CHANGELOG.rst
++++ b/CHANGELOG.rst
+@@ -7,6 +7,10 @@
+ Changelog
+ =========
+ 
++X.Y.Z (unreleased)
++------------------
++- Make ``pyproject.toml`` ``[build-system]`` configuration fully compliant with PEP 517.
++
+ 2.0.2 (2024-05-23)
+ ------------------
+ - Included a py.typed file to indicate that the package is fully typed.
+diff --git a/pyproject.toml b/pyproject.toml
+index 4e957fc..0a59b94 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,5 +1,6 @@
+ [build-system]
+ requires = ["setuptools", "setuptools-scm", "wheel"]
++build-backend = "setuptools.build_meta"
+ 
+ [tool.setuptools_scm]
+ version_scheme = "post-release"
+
+From fb2b576208eb22dd9a751d9d60fb0bb3fb23ba49 Mon Sep 17 00:00:00 2001
+From: Maxwell G <maxwell@gtmx.me>
+Date: Wed, 25 Feb 2026 23:39:06 -0600
+Subject: [PATCH 2/2] Remove unnecessary build-system requires on wheel
+
+Newer setuptools versions don't use the wheel package anymore. Older
+setuptools versions don't need this either, as PEP 517
+`get_requires_for_build_wheel()` would always include `wheel` when it was
+necessary.
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 0a59b94..b4282b3 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ["setuptools", "setuptools-scm", "wheel"]
++requires = ["setuptools", "setuptools-scm"]
+ build-backend = "setuptools.build_meta"
+ 
+ [tool.setuptools_scm]

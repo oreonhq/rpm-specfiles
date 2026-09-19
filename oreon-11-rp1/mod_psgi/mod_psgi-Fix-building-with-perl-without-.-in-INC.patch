@@ -1,0 +1,88 @@
+From 414b9cf2bdc7e2bdc5e9dcd88e009808ab7c4cd7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 8 Nov 2018 16:06:37 +0100
+Subject: [PATCH] Fix building with perl without "." in @INC
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/00_output.t | 1 +
+ t/01_lint.t   | 1 +
+ t/02_input.t  | 1 +
+ t/03_errors.t | 1 +
+ t/04_die.t    | 1 +
+ t/suite.t     | 1 +
+ 6 files changed, 6 insertions(+)
+
+diff --git a/t/00_output.t b/t/00_output.t
+index 731fc53..4bbca89 100644
+--- a/t/00_output.t
++++ b/t/00_output.t
+@@ -1,5 +1,6 @@
+ use strict;
+ use warnings;
++use lib '.';
+ use t::TestModPSGI;
+ 
+ BEGIN {
+diff --git a/t/01_lint.t b/t/01_lint.t
+index 1da8a44..f816a18 100644
+--- a/t/01_lint.t
++++ b/t/01_lint.t
+@@ -1,5 +1,6 @@
+ use strict;
+ use warnings;
++use lib '.';
+ use t::TestModPSGI;
+ 
+ return eval_body_app if running_in_mod_psgi;
+diff --git a/t/02_input.t b/t/02_input.t
+index a3060f4..9d37deb 100644
+--- a/t/02_input.t
++++ b/t/02_input.t
+@@ -1,5 +1,6 @@
+ use strict;
+ use warnings;
++use lib '.';
+ use t::TestModPSGI;
+ 
+ return eval_body_app if running_in_mod_psgi;
+diff --git a/t/03_errors.t b/t/03_errors.t
+index 512d871..99bdc76 100644
+--- a/t/03_errors.t
++++ b/t/03_errors.t
+@@ -1,5 +1,6 @@
+ use strict;
+ use warnings;
++use lib '.';
+ use t::TestModPSGI;
+ 
+ return eval_body_app if running_in_mod_psgi;
+diff --git a/t/04_die.t b/t/04_die.t
+index 77ecbc0..6a27c9c 100644
+--- a/t/04_die.t
++++ b/t/04_die.t
+@@ -1,5 +1,6 @@
+ use strict;
+ use warnings;
++use lib '.';
+ use t::TestModPSGI;
+ 
+ return eval_body_app if running_in_mod_psgi;
+diff --git a/t/suite.t b/t/suite.t
+index 7ae2514..e2db034 100644
+--- a/t/suite.t
++++ b/t/suite.t
+@@ -2,6 +2,7 @@ use strict;
+ use warnings;
+ use Test::More;
+ use Plack::Test::Suite;
++use lib '.';
+ require t::TestModPSGI;
+ 
+ BEGIN {
+-- 
+2.17.2
+

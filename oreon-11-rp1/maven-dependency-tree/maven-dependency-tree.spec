@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-dependency-tree
-Version:        3.2.1
+Version:        3.3.0
 Release:        %autorelease
 Summary:        Maven dependency tree artifact
 License:        Apache-2.0
@@ -26,7 +26,7 @@ BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.2.1-20
+Obsoletes:      %{name}-javadoc < 3.3.0-20
 
 %description
 Apache Maven dependency tree artifact. Originally part of maven-shared.

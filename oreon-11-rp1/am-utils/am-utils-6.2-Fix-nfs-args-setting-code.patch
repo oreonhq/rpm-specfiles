@@ -1,0 +1,71 @@
+commit 1c4c00a489d7aef115020b903dcd10201eb56ac0
+Author: zoulasc <christos@zoulas.com>
+Date:   Thu Apr 30 14:24:39 2015 -0400
+
+    Fix nfs args setting code (raven at the maw dot net)
+
+diff --git a/ChangeLog b/ChangeLog
+index fd05087..64be682 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,8 @@
++2015-04-30  Christos Zoulas <christos@zoulas.com>
++
++	* fix compilation error in nfs args set code.
++	  (raven at themaw.net)
++
+ 2015-01-17  Christos Zoulas <christos@zoulas.com>
+ 
+ 	* Move libtool macro functions from m4/macros to m4 and delete
+diff --git a/libamu/mount_fs.c b/libamu/mount_fs.c
+index b577bab..87f64c3 100644
+--- a/libamu/mount_fs.c
++++ b/libamu/mount_fs.c
+@@ -1001,12 +1001,12 @@ compute_nfs23_args(nfs_args_t *nap,
+ 
+ #ifdef MNTTAB_OPT_SYMTTL	/* symlink cache time-to-live */
+   if ((nap->symttl = hasmntval(mntp, MNTTAB_OPT_SYMTTL)))
+-    nap->args.flags |= MNT2_NFS_OPT_SYMTTL;
++    nap->flags |= MNT2_NFS_OPT_SYMTTL;
+ #endif /* MNTTAB_OPT_SYMTTL */
+ 
+ #ifdef MNT2_NFS_OPT_PGTHRESH	/* paging threshold */
+   if ((nap->pg_thresh = hasmntval(mntp, MNTTAB_OPT_PGTHRESH)))
+-    nap->args.flags |= MNT2_NFS_OPT_PGTHRESH;
++    nap->flags |= MNT2_NFS_OPT_PGTHRESH;
+ #endif /* MNT2_NFS_OPT_PGTHRESH */
+ 
+ #if defined(MNT2_NFS_OPT_POSIX) && defined(MNTTAB_OPT_POSIX)
+@@ -1029,12 +1029,12 @@ compute_nfs23_args(nfs_args_t *nap,
+     return;
+   }
+   /* update the flags field for knconf */
+-  nap->args.flags |= MNT2_NFS_OPT_KNCONF;
++  nap->flags |= MNT2_NFS_OPT_KNCONF;
+ #endif /* HAVE_TRANSPORT_TYPE_TLI */
+ 
+ #ifdef MNT2_NFS_OPT_FSNAME
+   nap->fsname = fs_name;
+-  nap->args.flags |= MNT2_NFS_OPT_FSNAME;
++  nap->flags |= MNT2_NFS_OPT_FSNAME;
+ #endif /* MNT2_NFS_OPT_FSNAME */
+ 
+ 
+@@ -1323,7 +1323,7 @@ compute_nfs4_args(nfs4_args_t *nap,
+ 
+ #if defined(MNT2_NFS_OPT_POSIX) && defined(MNTTAB_OPT_POSIX)
+   if (amu_hasmntopt(mntp, MNTTAB_OPT_POSIX) != NULL) {
+-    nap->args.flags |= MNT2_NFS_OPT_POSIX;
++    nap->flags |= MNT2_NFS_OPT_POSIX;
+ # ifdef HAVE_NFS_ARGS_T_PATHCONF
+     nap->pathconf = NULL;
+ # endif /* HAVE_NFS_ARGS_T_PATHCONF */
+@@ -1333,7 +1333,7 @@ compute_nfs4_args(nfs4_args_t *nap,
+ #if defined(MNT2_NFS_OPT_MAXGRPS) && defined(MNTTAB_OPT_MAXGROUPS)
+   nap->maxgrouplist = hasmntval(mntp, MNTTAB_OPT_MAXGROUPS);
+   if (nap->maxgrouplist != 0)
+-    nap->args.flags |= MNT2_NFS_OPT_MAXGRPS;
++    nap->flags |= MNT2_NFS_OPT_MAXGRPS;
+ #endif /* defined(MNT2_NFS_OPT_MAXGRPS) && defined(MNTTAB_OPT_MAXGROUPS) */
+ 
+ #ifdef HAVE_NFS_ARGS_T_OPTSTR

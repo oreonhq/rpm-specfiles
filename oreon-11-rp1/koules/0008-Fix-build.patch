@@ -1,0 +1,56 @@
+From f03159724e7eecb52be2eba008d6b6e7dcf460d7 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:47 +0200
+Subject: [PATCH 08/41] Fix build
+
+This fixes compilation issues with newer GCC. Taken from PLD.
+---
+ font.c           | 7 +++----
+ xlib/shmbitmap.c | 7 +++----
+ 2 files changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/font.c b/font.c
+index ea11d2a..ba4c508 100644
+--- a/font.c
++++ b/font.c
+@@ -52,13 +52,12 @@ static INLINE int
+ muldiv64 (int CONST m1, int CONST m2, int CONST d)
+ {
+ /* int32 * int32 -> int64 / int32 -> int32 */
+-  int             result;
++  int             result,dummy;
+   __asm__ (
+ 	    "imull %%edx\n\t"
+-	    "idivl %3\n\t"
+-:	    "=a" (result)	/* out */
++	    "idivl %4\n\t"
++:	    "=a" (result), "=d" (dummy)	/* out */
+ :	    "a" (m1), "d" (m2), "g" (d)		/* in */
+-:	    "ax", "dx"		/* mod */
+     );
+   return result;
+ }
+diff --git a/xlib/shmbitmap.c b/xlib/shmbitmap.c
+index 673ebc8..d0b5574 100644
+--- a/xlib/shmbitmap.c
++++ b/xlib/shmbitmap.c
+@@ -242,13 +242,12 @@ static INLINE int
+ muldiv64 (int CONST m1, int CONST m2, int CONST d)
+ {
+ /* int32 * int32 -> int64 / int32 -> int32 */
+-  int             result;
++  int             result,dummy;
+   __asm__ (
+ 	    "imull %%edx\n\t"
+-	    "idivl %3\n\t"
+-:	    "=a" (result)	/* out */
++	    "idivl %4\n\t"
++:	    "=a" (result), "=d" (dummy)	/* out */
+ :	    "a" (m1), "d" (m2), "g" (d)		/* in */
+-:	    "ax", "dx"		/* mod */
+     );
+   return result;
+ }
+-- 
+2.5.0
+

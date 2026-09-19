@@ -1,0 +1,20 @@
+--- libapreq2-2.17/glue/perl/xsbuilder/apreq_xs_tables.h.orig	2024-01-30 10:30:04.572469290 +1100
++++ libapreq2-2.17/glue/perl/xsbuilder/apreq_xs_tables.h	2024-01-30 11:38:17.450335964 +1100
+@@ -42,7 +42,7 @@
+  */
+ 
+ static int apreq_xs_cookie_table_magic_copy(pTHX_ SV *sv, MAGIC *mg, SV *nsv,
+-                                            const char *name, int namelen)
++                                            const char *name, I32 namelen)
+ {
+     /* Prefetch the value whenever the table iterator is > 0 */
+     MAGIC *tie_magic = mg_find(nsv, PERL_MAGIC_tiedelem);
+@@ -151,7 +151,7 @@ static int apreq_xs_cookie_table_values(
+  */
+ 
+ static int apreq_xs_param_table_magic_copy(pTHX_ SV *sv, MAGIC *mg, SV *nsv,
+-                                  const char *name, int namelen)
++                                  const char *name, I32 namelen)
+ {
+     /* Prefetch the value whenever the table iterator is > 0 */
+     MAGIC *tie_magic = mg_find(nsv, PERL_MAGIC_tiedelem);

@@ -1,0 +1,164 @@
+diff -up snack2.2.10/doc/python-man.html.mpg123 snack2.2.10/doc/python-man.html
+--- snack2.2.10/doc/python-man.html.mpg123	2005-12-14 06:29:39.000000000 -0500
++++ snack2.2.10/doc/python-man.html	2019-07-30 16:14:55.453593911 -0400
+@@ -158,7 +158,6 @@ than or equal to 1, or <tt>"Mono"</tt> o
+ be read -- not all of them can be&nbsp;<emph>written</emph>.)</dd>
+   <ul type="">
+  <li> "WAV"</li>
+-  <li> "MP3"</li>
+   <li> "AU"</li>
+   <li> "SND"</li>
+   <li> "AIFF"</li>
+@@ -381,7 +380,7 @@ operation</td>
+   
+ <h4> read (<i>filename</i>)</h4>
+  Reads new sound data from a file. Current supported file formats are WAV, 
+-MP3, AU, SND, AIFF, SD, SMP, CSL, and RAW binary. The command returns the 
++AU, SND, AIFF, SD, SMP, CSL, and RAW binary. The command returns the 
+ file format detected. It is possible to force a file to be read as RAW using
+ by setting the option <b>fileformat=RAW</b>. In this case, properties of
+ the sound data can be specified by hand, using the <b>rate, channels, encoding,
+diff -up snack2.2.10/doc/tcl-man.html.mpg123 snack2.2.10/doc/tcl-man.html
+--- snack2.2.10/doc/tcl-man.html.mpg123	2005-12-14 06:29:39.000000000 -0500
++++ snack2.2.10/doc/tcl-man.html	2019-07-30 16:14:55.453593911 -0400
+@@ -46,7 +46,7 @@
+ &nbsp;</dt>
+ 
+ <dt>
+-<a href="#defpack">Standard extension packages</a> (sound, snackogg, snacksphere)</dt>
++<a href="#defpack">Standard extension packages</a> (sound, snackogg, snackmpg, snacksphere)</dt>
+ 
+ <dt>
+ &nbsp;</dt>
+@@ -650,7 +650,7 @@ fmt?</b> <b>?-rate f? ?-channels n? ?-en
+ endianess? ?-start start? ?-end end?</b> <b>?-guessproperties boolean?
+ ?-progress callback?</b>
+ <ul>Reads new sound data from a file. Current supported file formats are
+-WAV, MP3, AU, SND, AIFF, SD, SMP, CSL, and RAW binary. The command returns
++WAV, AU, SND, AIFF, SD, SMP, CSL, and RAW binary. The command returns
+ the file format detected. It is possible to force a file to be read as
+ RAW using "<b>-fileformat
+ </b>RAW". In this case the properties of the
+@@ -1064,6 +1064,8 @@ description on how to use the <b>-progre
+ <ul>The <b>sound</b> package gives you the <b>snack::audio, snack::filter, snack::mixer, </b>and <b>snack::sound </b>commands. Basicly the same functions as the <b>snack</b> package except for graphics. This is useful on some systems if you want to use the tclsh interpreter.</ul>
+ <p><b>snackogg</b>
+ <ul>The <b>snackogg</b> package adds support for the Ogg/Vorbis compressed sound file format. Ogg format files and streams are detected automatically. Encoding is supported. Simply use the extension .ogg when writing files or use the option <b>-fileformat ogg</b>. When creating Ogg files the additional options <b>-nominalbitrate</b>, <b>-maxbitrate</b>, <b>-minbitrate</b>, and <b>-comment</b> apply.</ul>
++<p><b>snackmpg</b>
++<ul>The <b>snackmpg</b> package adds support for the MP3 compressed sound file format. MP3 format files and streams are detected automatically. Encoding is not currently supported. MP3 supports the following new readonly options: <b>-author</b>, <b>-album</b>, <b>-title</b>, <b>-year</b>, <b>-tag</b>, <b>-genre</b>, <b>-played</b>, <b>-remain</b>.</ul>
+ <p><b>snacksphere</b>
+ <ul>The <b>snacksphere</b> package adds support for reading the NIST/Sphere sound file formats. Sphere files are detected automatically.</ul>
+ <p>
+diff -up snack2.2.10/generic/jkSoundFile.c.mpg123 snack2.2.10/generic/jkSoundFile.c
+--- snack2.2.10/generic/jkSoundFile.c.mpg123	2019-07-30 16:16:32.624468486 -0400
++++ snack2.2.10/generic/jkSoundFile.c	2019-07-30 16:16:48.089130226 -0400
+@@ -1785,7 +1785,7 @@ PutAuHeader(Sound *s, Tcl_Interp *interp
+ }
+ 
+ #define WAVE_FORMAT_PCM	1
+-#ifndef WIN
++#ifndef WAVE_FORMAT_ALAW
+ #  define WAVE_FORMAT_IEEE_FLOAT 3
+ #  define WAVE_FORMAT_ALAW  6
+ #  define WAVE_FORMAT_MULAW 7
+@@ -3305,6 +3305,7 @@ Snack_FileFormat snackRawFormat = {
+   (Snack_FileFormat *) NULL
+ };
+ 
++#ifdef USE_OLD_MP3
+ Snack_FileFormat snackMp3Format = {
+   MP3_STRING,
+   GuessMP3File,
+@@ -3320,6 +3321,7 @@ Snack_FileFormat snackMp3Format = {
+   ConfigMP3Header,
+   (Snack_FileFormat *) NULL
+ };
++#endif
+ 
+ Snack_FileFormat snackSmpFormat = {
+   SMP_STRING,
+@@ -3434,8 +3436,12 @@ SnackDefineFileFormats(Tcl_Interp *inter
+ */
+ {
+   snackFileFormats        = &snackWavFormat;
++#ifdef BUILTIN_MP3
+   snackWavFormat.nextPtr  = &snackMp3Format;
+   snackMp3Format.nextPtr  = &snackAiffFormat;
++#else
++  snackWavFormat.nextPtr  = &snackAiffFormat;
++#endif
+   snackAiffFormat.nextPtr = &snackAuFormat;
+   snackAuFormat.nextPtr   = &snackSmpFormat;
+   snackSmpFormat.nextPtr  = &snackCslFormat;
+@@ -3570,8 +3576,13 @@ GetSample(SnackLinkedFileInfo *infoPtr,
+ 	    Snack_WriteLogInt("  Read Tries", maxt-tries);
+ 	    Snack_WriteLogInt("  Read Samples", nRead);
+ 	  }
++	  if (tries<=0) {
++             Snack_ProgressCallback(s->cmdPtr, s->interp, "Tries exceeded", -1.0);
++	  }
+ 	  infoPtr->validSamples = nRead;
+-	  memcpy(infoPtr->buffer, junkBuffer, nRead * sizeof(float));
++	  if (nRead>0) {
++	      memcpy(infoPtr->buffer, junkBuffer, nRead * sizeof(float));
++	  }
+ 	}
+ 
+ 	if (ff->readProc == NULL) { /* unpack block */
+diff -up snack2.2.10/unix/Makefile.in.mpg123 snack2.2.10/unix/Makefile.in
+--- snack2.2.10/unix/Makefile.in.mpg123	2005-12-14 06:29:39.000000000 -0500
++++ snack2.2.10/unix/Makefile.in	2019-07-30 16:14:55.453593911 -0400
+@@ -43,13 +43,13 @@ SHLIB_SUFFIX = @SHLIB_SUFFIX@
+ all: libsound${SHLIB_SUFFIX} libsnack${SHLIB_SUFFIX} @DOSTUBLIB@ @LIBNIST@ @LIBOGG@ editversion
+ 
+ OBJSO = sound.o jkSound.o jkSoundEngine.o jkSoundEdit.o jkSoundFile.o \
+-	g711.o @AOBJ@ jkFormatMP3.o jkSoundProc.o ffa.o jkPitchCmd.o \
++	g711.o @AOBJ@ jkSoundProc.o ffa.o jkPitchCmd.o \
+ 	@STUBINITOBJ@ jkAudio.o jkMixer.o shape.o jkFilter.o jkSynthesis.o \
+ 	jkFilterIIR.o jkGetF0.o sigproc.o jkFormant.o sigproc2.o
+ 
+ OBJSN = snack.o jkSound.o jkSoundEngine.o jkSoundEdit.o jkSoundFile.o \
+ 	jkCanvSpeg.o jkCanvWave.o jkCanvSect.o ffa.o g711.o @AOBJ@ \
+-	jkFormatMP3.o jkSoundProc.o jkPitchCmd.o @STUBINITOBJ@ \
++	jkSoundProc.o jkPitchCmd.o @STUBINITOBJ@ \
+ 	jkAudio.o jkMixer.o shape.o jkFilter.o jkSynthesis.o jkFilterIIR.o \
+ 	jkGetF0.o sigproc.o jkFormant.o sigproc2.o
+ 
+@@ -296,12 +296,21 @@ libsnacksphere${SHLIB_SUFFIX}: ${OBJNIST
+ LIBOGG = @OGGLIBS@ -lc @TCL_LIB_SPEC@ -L. @SNACK_STUB_LIB_FLAG@
+ OBJOGG = SnackOgg.o
+ 
++LIBMPG = -lmpg123 -lc @TCL_LIB_SPEC@ -L. @SNACK_STUB_LIB_FLAG@
++OBJMPG = SnackMpg.o
++
+ SnackOgg.o: $(GENERIC_DIR)/SnackOgg.c
+ 	$(CC) @OGGINC@ -c $(CFLAGS) -DUSE_SNACK_STUBS $(GENERIC_DIR)/SnackOgg.c
+ 
+ libsnackogg${SHLIB_SUFFIX}: ${OBJOGG}
+ 	${SHLIB_LD} ${OBJOGG} ${LIBOGG} -o libsnackogg${SHLIB_SUFFIX}
+ 
++SnackMpg.o: $(GENERIC_DIR)/SnackMpg.c
++	$(CC) -c $(CFLAGS) -DUSE_SNACK_STUBS $(GENERIC_DIR)/SnackMpg.c
++
++libsnackmpg${SHLIB_SUFFIX}: ${OBJMPG}
++	${SHLIB_LD} ${OBJMPG} ${LIBMPG} -o libsnackmpg${SHLIB_SUFFIX}
++
+ install:
+ 	@if [ ! -d ${DESTDIR}${SNACK_INSTALL_PATH}/snack${VERSION} ] ; then \
+ 	    echo "Making directory ${DESTDIR}${SNACK_INSTALL_PATH}/snack${VERSION}"; \
+@@ -314,6 +323,7 @@ install:
+ 	if test -f libsnackstub${VERSION}.a; then cp -f libsnackstub${VERSION}.a ${DESTDIR}${SNACK_INSTALL_PATH}/; fi
+ 	if test -f libsnacksphere${SHLIB_SUFFIX}; then cp -f libsnacksphere${SHLIB_SUFFIX} ${DESTDIR}${SNACK_INSTALL_PATH}/snack${VERSION}/; fi
+ 	if test -f libsnackogg${SHLIB_SUFFIX}; then cp -f libsnackogg${SHLIB_SUFFIX} ${DESTDIR}${SNACK_INSTALL_PATH}/snack${VERSION}/; fi
++	if test -f libsnackmpg${SHLIB_SUFFIX}; then cp -f libsnackmpg${SHLIB_SUFFIX} ${DESTDIR}${SNACK_INSTALL_PATH}/snack${VERSION}/; fi
+ 	cp -f $(UNIX_DIR)/snack.tcl ${DESTDIR}${SNACK_INSTALL_PATH}/snack${VERSION}/
+ 	cp -f pkgIndex.tcl ${DESTDIR}${SNACK_INSTALL_PATH}/snack${VERSION}/
+ 
+diff -up snack2.2.10/unix/pkgIndex.tcl.dll.mpg123 snack2.2.10/unix/pkgIndex.tcl.dll
+--- snack2.2.10/unix/pkgIndex.tcl.dll.mpg123	2005-12-14 06:29:39.000000000 -0500
++++ snack2.2.10/unix/pkgIndex.tcl.dll	2019-07-30 16:14:55.454593890 -0400
+@@ -11,3 +11,5 @@ package ifneeded sound 2.2 [list load [f
+ package ifneeded snacksphere 1.2 [list load [file join $dir libsnacksphere.dll]]
+ 
+ package ifneeded snackogg 1.3 [list load [file join $dir libsnackogg.dll]]
++
++package ifneeded snackmpg 1.3 [list load [file join $dir libsnackmpg.dll]]

@@ -1,0 +1,41 @@
+From aa62e1be219a129efe09464981bd3ae1f7b31282 Mon Sep 17 00:00:00 2001
+From: Jarek Prokop <jprokop@redhat.com>
+Date: Tue, 9 May 2023 19:41:28 +0200
+Subject: [PATCH] Disable loading of direct_conversions file.
+
+plugins/commands/serve/util/direct_conversions.rb file contains
+logic for Protobuf related code. It needs related google/protobuf
+dependencies, therefore it is better to remove the file and
+prevent loading it until we have google/protobuf components available
+in Fedora.
+---
+ plugins/commands/serve/command.rb | 2 +-
+ plugins/commands/serve/util.rb    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/commands/serve/command.rb b/plugins/commands/serve/command.rb
+index 9948f28bd..65d74f5d2 100644
+--- a/plugins/commands/serve/command.rb
++++ b/plugins/commands/serve/command.rb
+@@ -138,4 +138,4 @@ module VagrantPlugins
+ end
+ 
+ # Load in our conversions down here so all the autoload stuff is in place
+-require Vagrant.source_root.join("plugins/commands/serve/util/direct_conversions.rb").to_s
++#require Vagrant.source_root.join("plugins/commands/serve/util/direct_conversions.rb").to_s
+diff --git a/plugins/commands/serve/util.rb b/plugins/commands/serve/util.rb
+index a8f963df7..930d023a6 100644
+--- a/plugins/commands/serve/util.rb
++++ b/plugins/commands/serve/util.rb
+@@ -4,7 +4,7 @@ module VagrantPlugins
+       autoload :Cacher, Vagrant.source_root.join("plugins/commands/serve/util/cacher").to_s
+       autoload :ClientSetup, Vagrant.source_root.join("plugins/commands/serve/util/client_setup").to_s
+       autoload :Connector, Vagrant.source_root.join("plugins/commands/serve/util/connector").to_s
+-      autoload :DirectConversion, Vagrant.source_root.join("plugins/commands/serve/util/direct_conversions").to_s
++      # autoload :DirectConversion, Vagrant.source_root.join("plugins/commands/serve/util/direct_conversions").to_s
+       autoload :ExceptionTransformer, Vagrant.source_root.join("plugins/commands/serve/util/exception_transformer").to_s
+       autoload :FuncSpec, Vagrant.source_root.join("plugins/commands/serve/util/func_spec").to_s
+       autoload :HasBroker, Vagrant.source_root.join("plugins/commands/serve/util/has_broker").to_s
+-- 
+2.40.1
+

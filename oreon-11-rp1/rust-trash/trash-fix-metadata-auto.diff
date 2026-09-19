@@ -1,0 +1,24 @@
+--- trash-3.3.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ trash-3.3.1/Cargo.toml	2024-02-14T16:03:46.978482+00:00
+@@ -95,21 +95,3 @@
+ [target."cfg(all(unix, not(target_os = \"macos\"), not(target_os = \"ios\"), not(target_os = \"android\")))".dependencies.url]
+ version = "2.4.1"
+ 
+-[target."cfg(any(target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"netbsd\", target_os = \"openbsd\"))".dependencies.once_cell]
+-version = "1.7.2"
+-
+-[target."cfg(target_os = \"macos\")".dependencies.objc]
+-version = "0.2.7"
+-
+-[target."cfg(windows)".dependencies.scopeguard]
+-version = "1.2.0"
+-
+-[target."cfg(windows)".dependencies.windows]
+-version = "0.44.0"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_Storage_EnhancedStorage",
+-    "Win32_System_Com_StructuredStorage",
+-    "Win32_System_SystemServices",
+-    "Win32_UI_Shell_PropertiesSystem",
+-]

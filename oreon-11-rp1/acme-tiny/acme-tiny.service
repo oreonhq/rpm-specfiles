@@ -1,0 +1,17 @@
+[Unit]
+Description=Check for acme certs about to expire
+Wants=acme-tiny-notify.service
+Before=acme-tiny-notify.service
+
+[Service]
+Type=oneshot
+Nice=19
+ProtectHome=true
+ProtectSystem=true
+User=acme
+Group=acme
+SyslogIdentifier=acme-tiny
+ExecStart=/usr/libexec/acme-tiny/sign
+
+[Install]
+Also=acme-tiny.timer

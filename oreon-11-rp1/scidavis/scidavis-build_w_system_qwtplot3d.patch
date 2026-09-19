@@ -1,0 +1,12 @@
+diff -Naur a/3rdparty/CMakeLists.txt b/3rdparty/CMakeLists.txt
+--- a/3rdparty/CMakeLists.txt	2022-04-16 11:37:37.000000000 +0200
++++ b/3rdparty/CMakeLists.txt	2022-04-16 14:14:11.667153679 +0200
+@@ -47,7 +47,7 @@
+ 
+ if( NOT BUILD_QWTPLOT3D )
+ find_library ( QWTPLOT3D_LIBRARY
+-    NAMES qwtplot3d
++    NAMES qwtplot3d-qt5
+     HINTS ${QT_LIBRARY_DIR}
+   )
+   if( NOT QWTPLOT3D_LIBRARY )

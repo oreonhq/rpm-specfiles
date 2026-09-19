@@ -1,0 +1,22 @@
+diff --git a/msort.c b/msort.c
+index 7187ed4..e21f5dd 100644
+--- a/msort.c
++++ b/msort.c
+@@ -2133,7 +2133,7 @@ DescribeKeys(FILE *fp)
+ 	else if(first %  10 == 2) sprintf(tmp,"%dnd field from end",first);
+ 	else sprintf(tmp,"%dth field from end",first);
+       }
+-      fprintf(fp,tmp);
++      fprintf(fp,"%s", tmp);
+       if (KeyInfo[i]->FirstOffset > 0) {
+ 	fprintf(fp," character %d",(KeyInfo[i]->FirstOffset)+1);
+       }
+@@ -2165,7 +2165,7 @@ DescribeKeys(FILE *fp)
+ 	  else if(last %  10 == 2) sprintf(tmp,"%dnd field from end",last);
+ 	  else sprintf(tmp,"%dth field from end",last);
+ 	}
+-	fprintf(fp,tmp);
++	fprintf(fp,"%s", tmp);
+ 	if (KeyInfo[i]->LastOffset > 0) {
+ 	  fprintf(fp," character %d",(KeyInfo[i]->LastOffset)+1);
+ 	}

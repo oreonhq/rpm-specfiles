@@ -1,0 +1,22 @@
+--- wallpapoz-0.6.1/src/wallpapoz.workspace_num_incr	2012-01-18 10:05:16.361577377 +0900
++++ wallpapoz-0.6.1/src/wallpapoz	2012-01-18 10:09:45.651470988 +0900
+@@ -722,12 +722,17 @@
+       # make the wallpaper list
+       wallpapoz_system = WallpapozSystem()
+       workspace_num = wallpapoz_system.get_total_workspaces()
++      ii = 0
+       for i in range(workspace_num):
+-        parent = self.store.append(None, [i+1, worklist[i].pop(0), True])
++        if (ii >= len(worklist)):
++          ii = 0 
++        tmplist = list(worklist[ii])
++        parent = self.store.append(None, [i+1, tmplist.pop(0), True])
+         j = 1
+-        for wallpaper in worklist[i]:
++        for wallpaper in tmplist:
+           self.store.append(parent, [j, wallpaper, False])
+           j = j + 1
++        ii = ii + 1
+ 
+       # enable rename workspace menu
+       self.main_window.get_widget("rename_workspace").set_sensitive(True)

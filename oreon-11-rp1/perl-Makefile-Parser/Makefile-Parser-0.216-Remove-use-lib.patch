@@ -1,0 +1,32 @@
+From 686607e6722b9a03e30d3d89c2bbec8d70c1c1e7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 22 Sep 2015 12:39:30 +0200
+Subject: [PATCH] Remove "use lib"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This could have security implications.
+
+CPAN RT#107235
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ script/pgmake-db | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/script/pgmake-db b/script/pgmake-db
+index 215c8de..9025e3a 100755
+--- a/script/pgmake-db
++++ b/script/pgmake-db
+@@ -2,7 +2,6 @@
+ 
+ use strict;
+ use warnings;
+-use lib qw(/home/agentz/gmake-db/lib /home/agentz/mdom-gmake/lib);
+ 
+ #use Smart::Comments;
+ use Getopt::Long;
+-- 
+2.4.3
+

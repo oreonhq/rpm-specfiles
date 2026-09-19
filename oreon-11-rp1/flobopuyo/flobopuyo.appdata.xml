@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2019 Andrea Musuruane <musuruan@gmail.com> -->
+<application>
+  <id type="desktop">flobopuyo.desktop</id>
+  <metadata_license>CC-BY-SA-3.0</metadata_license>
+  <project_license>GPLv2+</project_license>
+  <name>flobopuyo</name>
+  <summary>2-player falling bubbles game</summary>
+  <description>
+    <p>
+       The goal of flobopuyo is to make groups of four or more Puyos 
+       (colored bubbles) to make them explode and send bad ghost Puyos to 
+       your opponent. You win the game if your opponent reaches the top 
+       of the board. You can play against computer or another human.
+    </p>
+  </description>
+  <url type="homepage">http://www.fovea.cc/flobopuyo-en/</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://screenshots.debian.net/screenshots/000/001/990/large.png</image>
+    </screenshot>
+  </screenshots>
+</application>
+

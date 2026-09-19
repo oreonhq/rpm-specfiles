@@ -1,0 +1,24 @@
+From fe3f1abd649700b53ce4dfc5ee213f4e3ef08615 Mon Sep 17 00:00:00 2001
+From: Daniel Milnes <daniel@daniel-milnes.uk>
+Date: Tue, 26 Sep 2023 20:02:38 +0100
+Subject: [PATCH] Migrate to Setuptools
+
+Python 3.12 has removed `distutils`.
+
+Fedora is using this patch in the deployed version of this package.
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 8fd556b..e2452aa 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+ 
+-from distutils.core import setup
++from setuptools import setup
+ 
+ LONG_DESCRIPTION = '''A pure-Python implementation of the AES (FIPS-197)
+ block-cipher algorithm and common modes of operation (CBC, CFB, CTR, ECB,

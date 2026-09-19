@@ -1,0 +1,131 @@
+From 22301de7ea5c313eb5ec283ef615e36928ce584b Mon Sep 17 00:00:00 2001
+From: Arun S A G <sagarun@gmail.com>
+Date: Mon, 10 Sep 2018 08:37:41 -0700
+Subject: [PATCH] ArpON gcc 8 fixes
+
+---
+ src/arpca.c |  3 ++-
+ src/darpi.c | 12 ++++++++----
+ src/harpi.c | 12 ++++++++----
+ src/sarpi.c |  8 ++++++--
+ src/sig.c   |  2 +-
+ 5 files changed, 25 insertions(+), 12 deletions(-)
+
+diff --git a/src/arpca.c b/src/arpca.c
+index 0160c7e..fe1afab 100644
+--- a/src/arpca.c
++++ b/src/arpca.c
+@@ -436,7 +436,8 @@ arpca_add(const struct arp_entry *entry)
+         interface = opt_getinterface();
+ 
+         /* Copy the interface in the ARP request structure. */
+-        strncpy(ar.arp_dev, interface, IF_NAMESIZE);
++        strncpy(ar.arp_dev, interface, IF_NAMESIZE -1);
++        ar.arp_dev[IF_NAMESIZE -1] = '\0';
+ 
+         /*
+          * Overwrite the IP entry in the ARP cache
+diff --git a/src/darpi.c b/src/darpi.c
+index f4ad134..b3a901c 100644
+--- a/src/darpi.c
++++ b/src/darpi.c
+@@ -66,17 +66,21 @@ darpi_handler(int op, struct ether_addr *macsrc, struct in_addr *ipsrc,
+         interface = opt_getinterface();
+ 
+         /* MAC src addr network byte order to string. */
+-        strncpy(smacsrc, ether_ntoa(macsrc), INTF_ETHERSTRLEN);
++        strncpy(smacsrc, ether_ntoa(macsrc), INTF_ETHERSTRLEN-1);
++        smacsrc[INTF_ETHERSTRLEN-1] = '\0';
+ 
+         /* IP src addr network byte order to string. */
+-        strncpy(sipsrc, inet_ntoa(*ipsrc), INET_ADDRSTRLEN);
++        strncpy(sipsrc, inet_ntoa(*ipsrc), INET_ADDRSTRLEN-1);
++        sipsrc[INET_ADDRSTRLEN-1] = '\0';
+ 
+ #ifndef NDEBUG
+         /* MAC dst addr network byte order to string. */
+-        strncpy(smacdst, ether_ntoa(macdst), INTF_ETHERSTRLEN);
++        strncpy(smacdst, ether_ntoa(macdst), INTF_ETHERSTRLEN-1);
++        smacdst[INTF_ETHERSTRLEN-1] = '\0';
+ 
+         /* IP dst addr network byte order to string. */
+-        strncpy(sipdst, inet_ntoa(*ipdst), INET_ADDRSTRLEN);
++        strncpy(sipdst, inet_ntoa(*ipdst), INET_ADDRSTRLEN-1);
++        sipdst[INET_ADDRSTRLEN-1] = '\0';
+ #endif  /* !NDEBUG */
+ 
+         /* Check the type of the ARP packet read. */
+diff --git a/src/harpi.c b/src/harpi.c
+index d981715..66b1139 100644
+--- a/src/harpi.c
++++ b/src/harpi.c
+@@ -68,17 +68,21 @@ harpi_handler(int op, struct ether_addr *macsrc, struct in_addr *ipsrc,
+         interface = opt_getinterface();
+ 
+         /* MAC src addr network byte order to string. */
+-        strncpy(smacsrc, ether_ntoa(macsrc), INTF_ETHERSTRLEN);
++        strncpy(smacsrc, ether_ntoa(macsrc), INTF_ETHERSTRLEN-1);
++        smacsrc[INTF_ETHERSTRLEN-1] = '\0';
+ 
+         /* IP src addr network byte order to string. */
+-        strncpy(sipsrc, inet_ntoa(*ipsrc), INET_ADDRSTRLEN);
++        strncpy(sipsrc, inet_ntoa(*ipsrc), INET_ADDRSTRLEN-1);
++        sipsrc[INET_ADDRSTRLEN-1] = '\0';
+ 
+ #ifndef NDEBUG
+         /* MAC dst addr network byte order to string. */
+-        strncpy(smacdst, ether_ntoa(macdst), INTF_ETHERSTRLEN);
++        strncpy(smacdst, ether_ntoa(macdst), INTF_ETHERSTRLEN-1);
++        smacdst[INTF_ETHERSTRLEN-1] = '\0';
+ 
+         /* IP dst addr network byte order to string. */
+-        strncpy(sipdst, inet_ntoa(*ipdst), INET_ADDRSTRLEN);
++        strncpy(sipdst, inet_ntoa(*ipdst), INET_ADDRSTRLEN-1);
++        sipdst[INET_ADDRSTRLEN-1] = '\0';
+ #endif  /* !NDEBUG */
+ 
+         /* Check the type of the ARP packet read. */
+diff --git a/src/sarpi.c b/src/sarpi.c
+index b90104b..8961255 100644
+--- a/src/sarpi.c
++++ b/src/sarpi.c
+@@ -67,17 +67,21 @@ sarpi_handler(int op, struct ether_addr *macsrc, struct in_addr *ipsrc,
+         interface = opt_getinterface();
+ 
+         /* MAC src addr network byte order to string. */
+-        strncpy(smacsrc, ether_ntoa(macsrc), INTF_ETHERSTRLEN);
++        strncpy(smacsrc, ether_ntoa(macsrc), INTF_ETHERSTRLEN-1);
++        smacsrc[INTF_ETHERSTRLEN-1] = '\0';
+ 
+         /* IP src addr network byte order to string. */
+-        strncpy(sipsrc, inet_ntoa(*ipsrc), INET_ADDRSTRLEN);
++        strncpy(sipsrc, inet_ntoa(*ipsrc), INET_ADDRSTRLEN-1);
++        sipsrc[INET_ADDRSTRLEN-1] = '\0';
+ 
+ #ifndef NDEBUG
+         /* MAC dst addr network byte order to string. */
+         strncpy(smacdst, ether_ntoa(macdst), INTF_ETHERSTRLEN);
++        smacdst[INTF_ETHERSTRLEN-1] = '\0';
+ 
+         /* IP dst addr network byte order to string. */
+         strncpy(sipdst, inet_ntoa(*ipdst), INET_ADDRSTRLEN);
++        sipdst[INET_ADDRSTRLEN-1] = '\0';
+ #endif  /* !NDEBUG */
+ 
+         /* Check the type of the ARP packet read. */
+diff --git a/src/sig.c b/src/sig.c
+index d2a34cd..a07539e 100644
+--- a/src/sig.c
++++ b/src/sig.c
+@@ -204,7 +204,7 @@ sig_loop(char **argv, char **envp)
+             case SIGINT:
+                 /* Remove ^C symbol from the output terminal. */
+                 printf("\r");
+-		/* FALLTHRU */
++                /* Fallthrough. */
+ 
+             case SIGTERM:
+                 MSG_DEBUG("Caught %s (%d)..", SIG_ITOA(sig), sig);
+-- 
+2.17.1
+

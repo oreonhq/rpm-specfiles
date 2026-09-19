@@ -1,0 +1,51 @@
+%global source0_hash a6652a0060a0bea3c3318d9d03b6dddac34f6aeca01b883eef9e58281f5202a1
+
+Name:       swaybg
+Version:    1.2.2
+Release:    %{autorelease}
+Summary:    Wallpaper tool for Wayland compositors
+
+License:    MIT
+URL:        https://github.com/swaywm/swaybg
+Source0:    %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source1:    %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz.sig
+Source2:    https://keys.openpgp.org/vks/v1/by-fingerprint/34FF9526CFEF0E97A340E2E40FDE7BE0E88F5E48
+
+# Swaybg was part of sway before sway 1.1
+Conflicts:  sway < 1.1
+
+BuildRequires:  gnupg2
+BuildRequires:  gcc
+BuildRequires:  meson >= 0.59.0
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
+BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  pkgconfig(wayland-protocols) >= 1.14
+BuildRequires:  pkgconfig(wayland-scanner)
+# Man page compilation
+BuildRequires:  scdoc
+
+%description
+%{summary}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%autosetup -p1
+
+%build
+%meson
+%meson_build
+
+%install
+%meson_install
+
+%files
+%doc README.md
+%license LICENSE
+%{_bindir}/swaybg
+%{_mandir}/man1/swaybg.1*
+
+%changelog
+%autochangelog

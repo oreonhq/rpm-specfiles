@@ -1,0 +1,112 @@
+From e67f30327e2e10e507add6594a43503f661ffff2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Mon, 10 Dec 2018 07:38:30 +0100
+Subject: [PATCH 06/18] Remove src/medit/eigenv.h
+
+---
+ src/medit/Makefile.am          |  2 +-
+ src/medit/eigenv.h             | 37 ----------------------------------
+ src/medit/inout.c              |  2 +-
+ src/medit/inout_morice.c       |  2 +-
+ src/medit/inout_popenbinaire.c |  2 +-
+ 5 files changed, 4 insertions(+), 41 deletions(-)
+ delete mode 100644 src/medit/eigenv.h
+
+diff --git a/src/medit/Makefile.am b/src/medit/Makefile.am
+index 2b914c591..e76d3a758 100644
+--- a/src/medit/Makefile.am
++++ b/src/medit/Makefile.am
+@@ -9,7 +9,7 @@ ffmedit_SOURCES=animat.c cube.c image.c listnum.c mouse.c persp.c stream.c zaldy
+ 	material.c normal.c tiles.c camera.c ellipse.c inout.c medit.c param.c psfile.c transform.c cenrad.c geometry.c \
+ 	inout_morice.c menus.c parsar.c scene.c util.c clip.c gisfil.c inout_popenbinaire.c mesh.c parsop.c scissor.c vector.c \
+ 	clipvol.c hash.c items.c mlists.c particle.c sftcpy.c view.c critip.c ilists.c keyboard.c morphing.c path.c status.c \
+-	zaldy1.c chrono.h extern.h image.h mesh.h eigenv.h grafic.h medit.h sproto.h picking.c
++	zaldy1.c chrono.h extern.h image.h mesh.h grafic.h medit.h sproto.h picking.c
+ 
+ 
+ LDADD=../libMesh/libMesh.a $(LIBSGLUT) -lm
+diff --git a/src/medit/eigenv.h b/src/medit/eigenv.h
+deleted file mode 100644
+index 6a3ddd52f..000000000
+--- a/src/medit/eigenv.h
++++ /dev/null
+@@ -1,37 +0,0 @@
+-/****************************************************************************/
+-/* This file is part of FreeFEM.                                            */
+-/*                                                                          */
+-/* FreeFEM is free software: you can redistribute it and/or modify          */
+-/* it under the terms of the GNU Lesser General Public License as           */
+-/* published by the Free Software Foundation, either version 3 of           */
+-/* the License, or (at your option) any later version.                      */
+-/*                                                                          */
+-/* FreeFEM is distributed in the hope that it will be useful,               */
+-/* but WITHOUT ANY WARRANTY; without even the implied warranty of           */
+-/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            */
+-/* GNU Lesser General Public License for more details.                      */
+-/*                                                                          */
+-/* You should have received a copy of the GNU Lesser General Public License */
+-/* along with FreeFEM. If not, see <http://www.gnu.org/licenses/>.          */
+-/****************************************************************************/
+-/* SUMMARY : ...                                                            */
+-/* LICENSE : LGPLv3                                                         */
+-/* ORG     : LJLL Universite Pierre et Marie Curie, Paris, FRANCE           */
+-/* AUTHORS : Pascal Frey                                                    */
+-/* E-MAIL  : pascal.frey@sorbonne-universite.fr                             */
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+-#ifndef _EIGENV_H_
+-#define _EIGENV_H_
+-
+-int eigenv(int symmat, double *mat, double lambda[3], double v[3][3]);
+-int eigen2(double *mm, double *lambda, double vp[2][2]);
+-
+-#endif /* _EIGENV_H_ */
+-
+-#ifdef __cplusplus
+-}
+-#endif
+diff --git a/src/medit/inout.c b/src/medit/inout.c
+index 60d5b3fa2..a1604f9e1 100644
+--- a/src/medit/inout.c
++++ b/src/medit/inout.c
+@@ -27,7 +27,7 @@ extern "C" {
+ #include "medit.h"
+ #include "libmeshb7.h"
+ #include "extern.h"
+-#include "eigenv.h"
++#include <eigenv.h>
+ 
+ int loadMesh(pMesh mesh) {
+   pPoint ppt;
+diff --git a/src/medit/inout_morice.c b/src/medit/inout_morice.c
+index 3fe8625a9..133b940c1 100644
+--- a/src/medit/inout_morice.c
++++ b/src/medit/inout_morice.c
+@@ -28,7 +28,7 @@ extern "C" {
+ #include "libmeshb7.h"
+ #include "extern.h"
+ #include "string.h"
+-#include "eigenv.h"
++#include <eigenv.h>
+ 
+ static int debug = 0;
+ void getline_number(char *nature, int *nb) {
+diff --git a/src/medit/inout_popenbinaire.c b/src/medit/inout_popenbinaire.c
+index 5d7e4d1ad..8391292bc 100644
+--- a/src/medit/inout_popenbinaire.c
++++ b/src/medit/inout_popenbinaire.c
+@@ -28,7 +28,7 @@ extern "C" {
+ #include "libmeshb7.h"
+ #include "extern.h"
+ #include "string.h"
+-#include "eigenv.h"
++#include <eigenv.h>
+ #ifdef WIN32
+ #include <fcntl.h>
+ #endif
+-- 
+2.47.1
+

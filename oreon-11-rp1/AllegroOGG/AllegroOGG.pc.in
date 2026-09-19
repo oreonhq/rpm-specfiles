@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: @name@
+Description: Ogg library for use with the Allegro game library
+Version: @version@
+Libs:   -l@name@
+Cflags: -I${includedir}/@name@

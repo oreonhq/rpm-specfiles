@@ -1,0 +1,103 @@
+.TH NIAAML\-OPTIMIZE "1" "September 2024" "" "User Commands"
+.SH NAME
+.B niaaml\-optimize
+\(en \[u1F52E] optimizes a NiaAML pipeline on a given dataset
+.SH SYNOPSIS
+.B niaaml optimize
+.RI [ OPTIONS ]
+.I DATA_CSV_FILE
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I data_csv_file
+.I PATH
+.RB [default:\  None ]
+[required]
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-\-has\-header\fR, \fB\-\-no\-has\-header
+.RB [default:\  has-header ]
+.TP
+.B \-\-ignore\-columns
+.I INTEGER
+.TP
+.B \-\-classifiers
+.I TEXT
+[default:
+.BR AdaBoost ,
+.BR Bagging ,
+.BR MultiLayerPerceptron ,
+.BR RandomForest ,
+.BR ExtremelyRandomizedTrees ,
+.BR LinearSVC ]
+.TP
+.B \-\-feature\-selection\-algorithms
+.I TEXT
+[default:
+.BR SelectKBest ,
+.BR SelectPercentile ,
+.BR ParticleSwarmOptimization ,
+.BR VarianceThreshold ]
+.TP
+.B \-\-feature\-transform\-algorithms
+.I TEXT
+[default:
+.BR Normalizer ,
+.BR StandardScaler ]
+.TP
+.B \-\-categorical\-features\-encoder
+.I TEXT
+[default:
+.BR OneHotEncoder ]
+.TP
+.B \-\-imputer
+.I TEXT
+[default:
+.BR None ]
+.TP
+.B \-\-fitness\-name
+.I TEXT
+[default:
+.BR Accuracy ]
+.TP
+.B \-\-pipeline\-population\-size
+.I INTEGER
+[default:
+.BR 15 ]
+.TP
+.B \-\-inner\-population\-size
+.I INTEGER
+[default:
+.BR 15 ]
+.TP
+.B \-\-number\-of\-pipeline\-evaluations
+.I INTEGER
+[default:
+.BR 100 ]
+.TP
+.B \-\-number\-of\-inner\-evaluations
+.I INTEGER
+[default:
+.BR 100 ]
+.TP
+.B \-\-optimization\-algorithm
+.I TEXT
+[default:
+.BR ParticleSwarmAlgorithm ]
+.TP
+.B \-\-inner\-optimization\-algorithm
+.I TEXT
+[default:
+.BR None ]
+.TP
+.B \-\-result\-file
+.I TEXT
+[default:
+.BR pipeline.ppln ]
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH "SEE\ ALSO"
+.BR niaaml (1)
+.P
+.BR niaaml\-infer (1)

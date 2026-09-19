@@ -1,0 +1,306 @@
+From 13106b3f065f4e4f093a53f9c92f0d535db81e6f Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 10 Feb 2026 12:34:53 +0000
+Subject: [PATCH] update-cmake-for-build
+
+---
+ CMakeLists.txt                | 179 +++++++++++++++++-----------------
+ v1/libtpcimgio/CMakeLists.txt |  34 +++++--
+ 2 files changed, 116 insertions(+), 97 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 441a6db8..d45fe7b5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,6 +11,7 @@ message(STATUS "${PROJECT_NAME} ${tpcclib_COPYRIGHT}")
+ set(CMAKE_C_STANDARD 11)
+ 
+ # Includes, except CPack which must always be after settings
++include(GNUInstallDirs)
+ include(CheckCCompilerFlag)
+ include(InstallRequiredSystemLibraries)
+ include(CheckIncludeFiles)
+@@ -34,7 +35,7 @@ endif()
+ # We do not (yet) want to automatically install to systems default binary path
+ # but instead into current working path.
+ # This MAY only work if set before or after project() !
+-set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}" CACHE PATH "Default install path" FORCE)
++#set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}" CACHE PATH "Default install path" FORCE)
+ 
+ # Check that we are running on 64 bit system.
+ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+@@ -54,7 +55,7 @@ add_definitions(-D_POSIX_C_SOURCE=200809L)
+ # For binaries intended to run on your system only you should choose -march=native, 
+ # which will select what is available on your processor.
+ if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" )
+-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -mfpmath=sse -Wall -Wno-unknown-pragmas -Wno-format-truncation -s -D_POSIX_C_SOURCE=200809L -std=gnu11")
++  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_POSIX_C_SOURCE=200809L -std=gnu11")
+ else()
+   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -mfpmath=sse -Wall -Wno-unknown-pragmas -D_POSIX_C_SOURCE=200809L -std=c11")
+ endif()
+@@ -212,105 +213,105 @@ enable_testing()
+ #
+ 
+ # recurse into the library version 1 subdirectories
+-add_subdirectory (v1/libtpcmisc)
+-add_subdirectory (v1/libtpcsvg)
+-add_subdirectory (v1/libtpcmodel)
+-add_subdirectory (v1/libtpccurveio)
++#add_subdirectory (v1/libtpcmisc)
++#add_subdirectory (v1/libtpcsvg)
++#add_subdirectory (v1/libtpcmodel)
++#add_subdirectory (v1/libtpccurveio)
+ add_subdirectory (v1/libtpcimgio)
+-add_subdirectory (v1/libtpcimgp)
+-add_subdirectory (v1/libtpcmodext)
+-add_subdirectory (v1/libtpcrec)
+-add_subdirectory (v1/libtpcroi)
+-add_subdirectory (v1/libtpcidi)
+-
++#add_subdirectory (v1/libtpcimgp)
++#add_subdirectory (v1/libtpcmodext)
++#add_subdirectory (v1/libtpcrec)
++#add_subdirectory (v1/libtpcroi)
++#add_subdirectory (v1/libtpcidi)
++#
+ # recurse into the executable subdirectories
+-add_subdirectory (v1/analyze)
+-add_subdirectory (v1/cmfits)
+-add_subdirectory (v1/ecat)
+-add_subdirectory (v1/hrrt)
+-add_subdirectory (v1/imgcmfits)
+-add_subdirectory (v1/imginform)
+-add_subdirectory (v1/imgtools)
+-add_subdirectory (v1/input)
+-add_subdirectory (v1/mask)
+-add_subdirectory (v1/mtga)
+-add_subdirectory (v1/nifti)
+-add_subdirectory (v1/restools)
+-add_subdirectory (v1/simulations)
+-add_subdirectory (v1/suv)
+-add_subdirectory (v1/tactools)
+-add_subdirectory (v1/tacfits)
+-add_subdirectory (v1/tools)
+-add_subdirectory (v1/upet)
++#add_subdirectory (v1/analyze)
++#add_subdirectory (v1/cmfits)
++#add_subdirectory (v1/ecat)
++#add_subdirectory (v1/hrrt)
++#add_subdirectory (v1/imgcmfits)
++#add_subdirectory (v1/imginform)
++#add_subdirectory (v1/imgtools)
++#add_subdirectory (v1/input)
++#add_subdirectory (v1/mask)
++#add_subdirectory (v1/mtga)
++#add_subdirectory (v1/nifti)
++#add_subdirectory (v1/restools)
++#add_subdirectory (v1/simulations)
++#add_subdirectory (v1/suv)
++#add_subdirectory (v1/tactools)
++#add_subdirectory (v1/tacfits)
++#add_subdirectory (v1/tools)
++#add_subdirectory (v1/upet)
+ 
+ #add_subdirectory (v1/devel)
+ 
+ 
+ # recurse into the library version 2 subdirectories
+-add_subdirectory (v2/libtpcextensions)
+-add_subdirectory (v2/libtpcisotope)
+-add_subdirectory (v2/libtpcift)
+-add_subdirectory (v2/libtpccsv)
+-add_subdirectory (v2/libtpctac)
+-add_subdirectory (v2/libtpcabss)
+-add_subdirectory (v2/libtpcmodels)
+-add_subdirectory (v2/libtpcfileutil)
+-add_subdirectory (v2/libtpcfcmc)
+-add_subdirectory (v2/libtpcfunc)
+-add_subdirectory (v2/libtpcpar)
+-add_subdirectory (v2/libtpcli)
+-add_subdirectory (v2/libtpcstatist)
+-add_subdirectory (v2/libtpcrand)
+-add_subdirectory (v2/libtpclinopt)
+-add_subdirectory (v2/libtpcnlopt)
+-add_subdirectory (v2/libtpcbootstrap)
+-add_subdirectory (v2/libtpctacmod)
+-add_subdirectory (v2/libtpccm)
+-add_subdirectory (v2/libtpcbfm)
+-add_subdirectory (v2/libtpcdcm)
+-add_subdirectory (v2/libtpcecat)
+-add_subdirectory (v2/libtpcnifti)
+-add_subdirectory (v2/libtpcmicropet)
+-add_subdirectory (v2/libtpcimage)
+-
+-# recurse into the executable subdirectories
+-add_subdirectory (v2/abss)
+-add_subdirectory (v2/arg)
+-add_subdirectory (v2/bfm)
+-add_subdirectory (v2/csvutils)
+-add_subdirectory (v2/dcmutils)
+-add_subdirectory (v2/halflife)
+-add_subdirectory (v2/iftutils)
+-add_subdirectory (v2/imgutils)
+-add_subdirectory (v2/input)
+-add_subdirectory (v2/llsq)
+-add_subdirectory (v2/misc)
+-add_subdirectory (v2/mtga)
+-add_subdirectory (v2/parutils)
+-add_subdirectory (v2/pk)
+-add_subdirectory (v2/sifutils)
+-add_subdirectory (v2/simimg)
+-add_subdirectory (v2/simulation)
+-add_subdirectory (v2/suv)
+-add_subdirectory (v2/taccm)
+-add_subdirectory (v2/tacfits)
+-add_subdirectory (v2/tacutils)
++#add_subdirectory (v2/libtpcextensions)
++#add_subdirectory (v2/libtpcisotope)
++#add_subdirectory (v2/libtpcift)
++#add_subdirectory (v2/libtpccsv)
++#add_subdirectory (v2/libtpctac)
++#add_subdirectory (v2/libtpcabss)
++#add_subdirectory (v2/libtpcmodels)
++#add_subdirectory (v2/libtpcfileutil)
++#add_subdirectory (v2/libtpcfcmc)
++#add_subdirectory (v2/libtpcfunc)
++#add_subdirectory (v2/libtpcpar)
++#add_subdirectory (v2/libtpcli)
++#add_subdirectory (v2/libtpcstatist)
++#add_subdirectory (v2/libtpcrand)
++#add_subdirectory (v2/libtpclinopt)
++#add_subdirectory (v2/libtpcnlopt)
++#add_subdirectory (v2/libtpcbootstrap)
++#add_subdirectory (v2/libtpctacmod)
++#add_subdirectory (v2/libtpccm)
++#add_subdirectory (v2/libtpcbfm)
++#add_subdirectory (v2/libtpcdcm)
++#add_subdirectory (v2/libtpcecat)
++#add_subdirectory (v2/libtpcnifti)
++#add_subdirectory (v2/libtpcmicropet)
++#add_subdirectory (v2/libtpcimage)
++#
++## recurse into the executable subdirectories
++#add_subdirectory (v2/abss)
++#add_subdirectory (v2/arg)
++#add_subdirectory (v2/bfm)
++#add_subdirectory (v2/csvutils)
++#add_subdirectory (v2/dcmutils)
++#add_subdirectory (v2/halflife)
++#add_subdirectory (v2/iftutils)
++#add_subdirectory (v2/imgutils)
++#add_subdirectory (v2/input)
++#add_subdirectory (v2/llsq)
++#add_subdirectory (v2/misc)
++#add_subdirectory (v2/mtga)
++#add_subdirectory (v2/parutils)
++#add_subdirectory (v2/pk)
++#add_subdirectory (v2/sifutils)
++#add_subdirectory (v2/simimg)
++#add_subdirectory (v2/simulation)
++#add_subdirectory (v2/suv)
++#add_subdirectory (v2/taccm)
++#add_subdirectory (v2/tacfits)
++#add_subdirectory (v2/tacutils)
+ 
+ #add_subdirectory (v1/devel)
+ 
+ 
+ # "install" README and COPYING files to be included in the binary package
+-install(
+-  FILES 
+-  ${CMAKE_CURRENT_SOURCE_DIR}/readme.md 
+-  ${CMAKE_CURRENT_SOURCE_DIR}/copying.md
+-  ${CMAKE_CURRENT_SOURCE_DIR}/license.md
+-  ${CMAKE_CURRENT_SOURCE_DIR}/changelog.md
+-  DESTINATION ${LIBPATH}
+-  # go wherever libraries go
+-  COMPONENT libraries 
+-)
+-
++#install(
++#  FILES
++#  ${CMAKE_CURRENT_SOURCE_DIR}/readme.md
++#  ${CMAKE_CURRENT_SOURCE_DIR}/copying.md
++#  ${CMAKE_CURRENT_SOURCE_DIR}/license.md
++#  ${CMAKE_CURRENT_SOURCE_DIR}/changelog.md
++#  DESTINATION ${LIBPATH}
++#  # go wherever libraries go
++#  COMPONENT libraries
++#)
++#
+ 
+ # Add binary path to the CTest environment
+ set(PATH_STRING "$ENV{PATH};${CMAKE_BINARY_DIR}/bin")
+diff --git a/v1/libtpcimgio/CMakeLists.txt b/v1/libtpcimgio/CMakeLists.txt
+index 6bbee27f..0c269438 100644
+--- a/v1/libtpcimgio/CMakeLists.txt
++++ b/v1/libtpcimgio/CMakeLists.txt
+@@ -2,7 +2,7 @@
+ set(libtpcimgio_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}" PARENT_SCOPE)
+ 
+ # This needs to be edited each time a new .c is added
+-add_library (tpcimgio STATIC 
++set (libtpcimgio_src
+   analyze.c dcm.c ecat63h.c ecat63ml.c ecat63p.c ecat63r.c ecat63w.c
+   ecat7h.c ecat7ml.c ecat7p.c ecat7r.c ecat7w.c ecat7ift.c
+   img.c imgdecayc.c imgfile.c imgcomp.c imgminmax.c
+@@ -11,6 +11,22 @@ add_library (tpcimgio STATIC
+   nifti.c pixel.c sif.c sifio.c ird.c vol.c weight.c
+ )
+ 
++# object library, compiles source once
++add_library (tpcimgio_obj OBJECT ${libtpcimgio_src})
++add_library (tpcimgio SHARED $<TARGET_OBJECTS:tpcimgio_obj>)
++add_library (tpcimgio_static STATIC $<TARGET_OBJECTS:tpcimgio_obj>)
++
++set_target_properties(tpcimgio PROPERTIES
++    VERSION 0.0.0
++    SOVERSION 0
++    PUBLIC_HEADER libtpcimgio.h
++)
++
++set_target_properties(tpcimgio_static PROPERTIES
++    OUTPUT_NAME tpcimgio
++)
++
++
+ # Dependencies on other libraries
+ include_directories( 
+   ${libtpcmisc_HEADER_FILES} 
+@@ -20,17 +36,16 @@ target_link_libraries (tpcimgio tpcmisc m)
+ # Install the library and headers
+ install (
+   TARGETS tpcimgio
+-  ARCHIVE 
+-  DESTINATION ${LIBPATH}
+-  COMPONENT libraries
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+ )
+-
+ install (
+-  FILES libtpcimgio.h 
+-  DESTINATION ${LIBPATH}/include
+-  COMPONENT headers
++  TARGETS tpcimgio_static
++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+ )
+ 
++
+ # Compile executable(s) for testing
+ add_executable (libtpcimgio test_libtpcimgio.c) 
+ add_executable (libtpcimgiobig test_libtpcimgiobig.c) 
+@@ -39,6 +54,9 @@ add_executable (libtpcimgiobig test_libtpcimgiobig.c)
+ target_link_libraries (libtpcimgio tpcimgio tpcmisc m)
+ target_link_libraries (libtpcimgiobig tpcimgio tpcmisc m)
+ 
++install (TARGETS libtpcimgio libtpcimgiobig
++    DESTINATION ${CMAKE_INSTALL_BINDIR})
++
+ # Copy test data folder
+ file(COPY test DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+ 
+-- 
+GitLab
+

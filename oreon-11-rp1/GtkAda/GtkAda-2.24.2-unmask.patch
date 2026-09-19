@@ -1,0 +1,11 @@
+--- src/Makefile.common.in
++++ src/Makefile.common.in
+@@ -120,7 +120,7 @@
+ 
+ ${OBJ_DIR}/${SONAME}: ${wildcard ${SRC_FILES:%=${OBJ_DIR}/%}}
+ 	@echo Building ${SONAME}
+-	@cd ${OBJ_DIR}; $(CC) -shared $(FPIC) $(OS_SPECIFIC_LINK_OPTIONS) \
++	cd ${OBJ_DIR}; $(CC) -shared $(FPIC) $(OS_SPECIFIC_LINK_OPTIONS) \
+ 	  -o $(SONAME) $(SO_OPTS)$(SONAME) ${LDFLAGS} ${SRC_FILES} \
+           $(GTKADA_LIBS) $(GTK_LIBS) $(EXTERNAL_LIBS)
+ 	@cd ${OBJ_DIR}; $(RM) $(LIBNAME)

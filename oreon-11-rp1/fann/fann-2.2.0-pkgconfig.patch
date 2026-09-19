@@ -1,0 +1,12 @@
+diff -up FANN-2.2.0-Source/CMakeLists.txt.pkgconfig FANN-2.2.0-Source/CMakeLists.txt
+--- FANN-2.2.0-Source/CMakeLists.txt.pkgconfig	2012-04-24 14:33:08.201999985 +0200
++++ FANN-2.2.0-Source/CMakeLists.txt	2012-04-24 14:33:52.907999769 +0200
+@@ -16,7 +16,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINA
+ 
+ configure_file( ${CMAKE_SOURCE_DIR}/cmake/fann.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/fann.pc @ONLY )
+ 
+-SET(PKGCONFIG_INSTALL_DIR /lib/pkgconfig)
++#SET(PKGCONFIG_INSTALL_DIR /lib/pkgconfig)
+ 
+ ########### install files ###############
+ 

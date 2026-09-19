@@ -1,0 +1,19 @@
+commit 721e6da9d6af998087ff43b8590e0d347237e18a
+Author: Jiri Vanek <jvanek@redhat.com>
+Date:   Tue Feb 8 16:43:33 2022 +0100
+
+    Moved to source/target 1.8 and preffixed new jdk17 keyword yield
+
+diff --git a/src/main/java/sunlabs/brazil/server/Server.java b/src/main/java/sunlabs/brazil/server/Server.java
+index c5d21cf..4248adb 100644
+--- a/srcs/sunlabs/brazil/server/Server.java
++++ b/srcs/sunlabs/brazil/server/Server.java
+@@ -593,7 +593,7 @@ public class Server
+ 			sub[i].interrupt();
+ 			sub[i].join();
+ 		    }
+-		    yield();
++		    this.yield();
+ 		}
+ 	    } catch (Exception e) {}
+ 

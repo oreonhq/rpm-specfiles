@@ -1,0 +1,25 @@
+From f4ad029ce995a4d21099a8316165f95659a7fb97 Mon Sep 17 00:00:00 2001
+From: Mikel Olasagasti Uranga <mikel@olasagasti.info>
+Date: Wed, 15 Jan 2025 23:17:38 +0100
+Subject: [PATCH] Use full path for Fedora
+
+---
+ discovery/azure/azure_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/discovery/azure/azure_test.go b/discovery/azure/azure_test.go
+index b905e9fce..080dd570c 100644
+--- a/discovery/azure/azure_test.go
++++ b/discovery/azure/azure_test.go
+@@ -45,7 +45,7 @@ const defaultMockNetworkID string = "/subscriptions/{subscriptionId}/resourceGro
+ 
+ func TestMain(m *testing.M) {
+ 	goleak.VerifyTestMain(m,
+-		goleak.IgnoreTopFunction("github.com/Code-Hex/go-generics-cache.(*janitor).run.func1"),
++		goleak.IgnoreTopFunction("github.com/prometheus/prometheus/vendor/github.com/Code-Hex/go-generics-cache.(*janitor).run.func1"),
+ 	)
+ }
+ 
+-- 
+2.47.1
+

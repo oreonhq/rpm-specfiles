@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2019 Artem Polishchuk <ego.cordatus@gmail.com> -->
+<component type="addon">
+  <id>vim-gv</id>
+  <extends>gvim.desktop</extends>
+  <name>vim-gv</name>
+  <summary>Git commit browser in Vim</summary>
+  <url type="homepage">https://github.com/junegunn/gv.vim</url>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <updatecontact>ego.cordatus@gmail.com</updatecontact>
+</component>

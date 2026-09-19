@@ -1,0 +1,17 @@
+diff -up x2goclient-4.1.1.0/src/onmainwindow.cpp.krb5 x2goclient-4.1.1.0/src/onmainwindow.cpp
+--- x2goclient-4.1.1.0/src/onmainwindow.cpp.krb5	2017-10-31 07:38:19.164945462 -0600
++++ x2goclient-4.1.1.0/src/onmainwindow.cpp	2017-10-31 17:33:50.078537406 -0600
+@@ -7056,13 +7056,6 @@ void ONMainWindow::SlotRunCommand(bool,
+     command.replace ( " ","X2GO_SPACE_CHAR" );
+     QString krbFwString;
+ 
+-    if(sshConnection->useKerberos() && sshConnection->get_kerberosDelegation())
+-    {
+-        krbFwString="KRB5CCNAME=`echo $KRB5CCNAME |sed 's/FILE://g'` \
+-        KRBFL=$HOME/.x2go/C-"+resumingSession.sessionId+"/krb5cc ;\
+-        cp -a $KRB5CCNAME $KRBFL;KRB5CCNAME=$KRBFL ";
+-    }
+-
+     if ( !startSessSound  || startSessSndSystem==PULSE )
+     {
+         cmd=krbFwString+"setsid " + output + "/bin/x2goruncommand "+

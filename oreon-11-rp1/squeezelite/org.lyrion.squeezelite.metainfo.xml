@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="service">
+  <id>org.lyrion.squeezelite</id>
+
+  <name>Squeezelite</name>
+  <summary>Headless music player for streaming from Lyrion Music Server</summary>
+  <url type="homepage">https://lyrion.org/players-and-controllers/squeezelite/</url>
+  <url type="bugtracker">https://github.com/ralph-irving/squeezelite/issues</url>
+  <url type="help">https://ralph-irving.github.io/squeezelite.html</url>
+  <url type="vcs-browser">https://github.com/ralph-irving/squeezelite</url>
+
+  <metadata_license>MIT</metadata_license>
+  <project_license>GPL-3.0-only AND BSD-2-Clause-Views</project_license>
+
+  <description>
+    <p>
+      Squeezelite is a headless client for Lyrion Music Server, and can be used in place of dedicated Squeezebox network music playing hardware.
+    </p>
+  </description>
+
+  <launchable type="service">squeezelite</launchable>
+
+  <icon type="remote">https://raw.githubusercontent.com/CDrummond/squeezelite/refs/heads/android/fastlane/metadata/android/en-US/images/icon.png</icon>
+
+  <provides>
+    <mediatype>audio/L16</mediatype>
+    <mediatype>audio/L24</mediatype>
+    <mediatype>audio/L8</mediatype>
+    <mediatype>audio/flac</mediatype>
+    <mediatype>audio/mp4</mediatype>
+    <mediatype>audio/mpeg</mediatype>
+    <mediatype>audio/ogg</mediatype>
+    <mediatype>audio/x-dff</mediatype>
+    <mediatype>audio/x-dsf/</mediatype>
+    <mediatype>audio/x-ms-wma</mediatype>
+  </provides>
+
+  <categories>
+    <category>AudioVideo</category>
+    <category>Player</category>
+  </categories>
+
+  <developer id="io.github.ralph-irving">
+    <name>Ralph Irving</name>
+  </developer>
+
+  <branding>
+    <color type="primary">#009485</color>
+  </branding>
+</component>

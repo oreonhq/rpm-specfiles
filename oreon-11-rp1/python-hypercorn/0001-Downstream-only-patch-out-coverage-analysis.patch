@@ -1,0 +1,26 @@
+From 2f5fa6aebfeeaa776dac1392db9f714711f9d298 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 31 Jan 2024 16:46:20 -0500
+Subject: [PATCH] Downstream-only: patch out coverage analysis
+
+https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index b72f468..611fef9 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -102,7 +102,7 @@ strict_optional = true
+ warn_return_any = true
+ 
+ [tool.pytest.ini_options]
+-addopts = "--no-cov-on-fail --showlocals --strict-markers"
++addopts = "--showlocals --strict-markers"
+ asyncio_mode = "strict"
+ testpaths = ["tests"]
+ 
+-- 
+2.51.1
+

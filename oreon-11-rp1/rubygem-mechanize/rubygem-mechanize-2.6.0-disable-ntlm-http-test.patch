@@ -1,0 +1,18 @@
+--- ./test/test_mechanize_http_agent.rb.nontlmtest	1970-01-01 09:00:00.000000000 +0900
++++ ./test/test_mechanize_http_agent.rb	2013-10-17 14:10:56.481951136 +0900
+@@ -790,6 +790,7 @@
+                  e.message
+   end
+ 
++=begin
+   def test_response_authenticate_ntlm
+     @uri += '/ntlm'
+     @agent.add_auth @uri, 'user', 'password'
+@@ -801,6 +802,7 @@
+ 
+     assert_equal 'ok', page.body # lame test
+   end
++=end
+ 
+   def test_response_authenticate_unknown
+     @agent.add_auth @uri, 'user', 'password'

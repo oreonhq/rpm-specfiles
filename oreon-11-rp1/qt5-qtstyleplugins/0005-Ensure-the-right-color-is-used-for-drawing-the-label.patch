@@ -1,0 +1,33 @@
+From 0daddff57d17715e17b96a02eb7dab9489801e64 Mon Sep 17 00:00:00 2001
+From: Andy Shaw <andy.shaw@theqtcompany.com>
+Date: Wed, 23 Sep 2015 14:01:15 +0000
+Subject: [PATCH 05/12] Ensure the right color is used for drawing the label
+ text in a combobox
+
+After QWindowsStyle was changed to use a different color from the palette
+for the CE_ComboBoxLabel case it caused it to override the color used by
+the plastique style. By going right to QCommonStyle we bypass the changes
+done by the Windows style and thus ensure it is drawn correctly.
+
+Change-Id: Ic1398afc16e2498f25287f55526301fb7f17731c
+Reviewed-by: J-P Nurmi <jpnurmi@theqtcompany.com>
+---
+ src/plugins/styles/plastique/qplastiquestyle.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/plugins/styles/plastique/qplastiquestyle.cpp b/src/plugins/styles/plastique/qplastiquestyle.cpp
+index a418ffa..f8525aa 100644
+--- a/src/plugins/styles/plastique/qplastiquestyle.cpp
++++ b/src/plugins/styles/plastique/qplastiquestyle.cpp
+@@ -3615,7 +3615,7 @@ void QPlastiqueStyle::drawControl(ControlElement element, const QStyleOption *op
+                 // we need the label to be drawn using ButtonText where it
+                 // would usually use Text.
+                 painter->setPen(QPen(comboBox->palette.buttonText(), 0));
+-                QProxyStyle::drawControl(element, option, painter, widget);
++                QCommonStyle::drawControl(element, option, painter, widget);
+             } else if (!comboBox->currentIcon.isNull()) {
+                 {
+                     QRect editRect = proxy()->subControlRect(CC_ComboBox, comboBox, SC_ComboBoxEditField, widget);
+-- 
+2.7.4
+

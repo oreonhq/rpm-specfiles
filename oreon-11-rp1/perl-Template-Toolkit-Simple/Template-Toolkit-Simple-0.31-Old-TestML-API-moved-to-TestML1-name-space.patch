@@ -1,0 +1,124 @@
+From cc179c23e92e315db4ffcd46d822a62fda3ca46a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 19 Nov 2018 09:21:46 +0100
+Subject: [PATCH] Old TestML API moved to TestML1 name space
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<https://github.com/testml-lang/testml/wiki/TestML-and-CPAN>
+<https://bugzilla.redhat.com/show_bug.cgi?id=1650156>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/cli.t         | 8 ++++----
+ t/render_json.t | 8 ++++----
+ t/render_xml.t  | 8 ++++----
+ t/render_yaml.t | 8 ++++----
+ 4 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/t/cli.t b/t/cli.t
+index b8f1ba2..3365acf 100644
+--- a/t/cli.t
++++ b/t/cli.t
+@@ -1,16 +1,16 @@
+ use lib 'inc';
+ 
+-use TestML;
++use TestML1;
+ 
+-TestML->new(
++TestML1->new(
+     testml => do { local $/; <DATA> },
+     bridge => 'main',
+ )->run;
+ 
+ {
+     package main;
+-    use base 'TestML::Bridge';
+-    use TestML::Util;
++    use base 'TestML1::Bridge';
++    use TestML1::Util;
+ 
+     sub run_command {
+         my ($self, $command) = @_;
+diff --git a/t/render_json.t b/t/render_json.t
+index 6d7d2c3..47a0ee3 100644
+--- a/t/render_json.t
++++ b/t/render_json.t
+@@ -6,17 +6,17 @@ use lib 'inc';
+         plan skip_all => 'JSON::XS required';
+ }
+ 
+-use TestML;
++use TestML1;
+ 
+-TestML->new(
++TestML1->new(
+     testml => do { local $/; <DATA> },
+     bridge => 'main',
+ )->run;
+ 
+ {
+     package main;
+-    use base 'TestML::Bridge';
+-    use TestML::Util;
++    use base 'TestML1::Bridge';
++    use TestML1::Util;
+     use Template::Toolkit::Simple;
+ 
+     sub render_template {
+diff --git a/t/render_xml.t b/t/render_xml.t
+index e656a29..5c7d0bc 100644
+--- a/t/render_xml.t
++++ b/t/render_xml.t
+@@ -6,17 +6,17 @@ use lib 'inc';
+         plan skip_all => 'XML::Simple required';
+ }
+ 
+-use TestML;
++use TestML1;
+ 
+-TestML->new(
++TestML1->new(
+     testml => do { local $/; <DATA> },
+     bridge => 'main',
+ )->run;
+ 
+ {
+     package main;
+-    use base 'TestML::Bridge';
+-    use TestML::Util;
++    use base 'TestML1::Bridge';
++    use TestML1::Util;
+     use Template::Toolkit::Simple;
+ 
+     sub render_template {
+diff --git a/t/render_yaml.t b/t/render_yaml.t
+index eb4effe..bd2af71 100644
+--- a/t/render_yaml.t
++++ b/t/render_yaml.t
+@@ -1,16 +1,16 @@
+ use lib 'inc';
+ 
+-use TestML;
++use TestML1;
+ 
+-TestML->new(
++TestML1->new(
+     testml => do { local $/; <DATA> },
+     bridge => 'main',
+ )->run;
+ 
+ {
+     package main;
+-    use base 'TestML::Bridge';
+-    use TestML::Util;
++    use base 'TestML1::Bridge';
++    use TestML1::Util;
+     use Template::Toolkit::Simple;
+ 
+     sub render_template {
+-- 
+2.17.2
+

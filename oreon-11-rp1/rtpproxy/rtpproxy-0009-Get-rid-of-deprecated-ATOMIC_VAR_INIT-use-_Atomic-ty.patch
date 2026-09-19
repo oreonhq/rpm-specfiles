@@ -1,0 +1,165 @@
+From: Maksym Sobolyev <sobomax@sippysoft.com>
+Date: Sat, 27 Jul 2024 15:43:16 -0700
+Subject: [PATCH] Get rid of deprecated ATOMIC_VAR_INIT(), use _Atomic(type)
+ consistently.
+
+
+diff --git a/modules/catch_dtmf/rtpp_catch_dtmf.c b/modules/catch_dtmf/rtpp_catch_dtmf.c
+index 8918fcce..6fefa36a 100644
+--- a/modules/catch_dtmf/rtpp_catch_dtmf.c
++++ b/modules/catch_dtmf/rtpp_catch_dtmf.c
+@@ -88,7 +88,7 @@ struct catch_dtmf_edata {
+ 
+ struct catch_dtmf_stream_cfg {
+     struct rtpp_refcnt *rcnt;
+-    atomic_int pt;
++    _Atomic(int) pt;
+     _Atomic(enum pproc_action) act;
+     struct catch_dtmf_edata *edata;
+     const struct rtpp_timeout_data *rtdp;
+diff --git a/pertools/udp_storm/udp_storm.c b/pertools/udp_storm/udp_storm.c
+index ad0c4f2b..a7ed3f2c 100644
+--- a/pertools/udp_storm/udp_storm.c
++++ b/pertools/udp_storm/udp_storm.c
+@@ -140,10 +140,13 @@ int main(int argc, char **argv)
+     char ch, *datafile;
+     char sendbuf[88], databuf[1024 * 8];
+     FILE *f;
+-    _Atomic(uint64_t) totalout = ATOMIC_VAR_INIT(0);
+-    _Atomic(uint64_t) totalin = ATOMIC_VAR_INIT(0);
++    _Atomic(uint64_t) totalout;
++    atomic_init(&totalout, 0);
++    _Atomic(uint64_t) totalin;
++    atomic_init(&totalin, 0);
+     void *elp;
+-    _Atomic(double) prate = ATOMIC_VAR_INIT(100.0);
++    _Atomic(double) prate;
++    atomic_init(&prate, 100.0);
+     double pr;
+ 
+     min_port = 6000;
+diff --git a/src/rtpp_glitch.h b/src/rtpp_glitch.h
+index 74d5eed1..647f14d5 100644
+--- a/src/rtpp_glitch.h
++++ b/src/rtpp_glitch.h
+@@ -28,14 +28,14 @@
+ struct rtpp_codeptr;
+ 
+ struct _glav_trig {
+-    atomic_intmax_t step;
+-    atomic_intmax_t hits;
++    _Atomic(intmax_t) step;
++    _Atomic(intmax_t) hits;
+     uintptr_t stack;
+     int wild;
+     char act[16];
+     union {
+       const struct rtpp_codeptr *ptr;
+-      atomic_uintptr_t aptr;
++      _Atomic(uintptr_t) aptr;
+     } lasthit;
+ };
+ 
+diff --git a/src/rtpp_log_stand.c b/src/rtpp_log_stand.c
+index f781b630..f2da51c7 100644
+--- a/src/rtpp_log_stand.c
++++ b/src/rtpp_log_stand.c
+@@ -49,16 +49,16 @@
+ #include "rtpp_mallocs.h"
+ 
+ #ifdef RTPP_LOG_ADVANCED
+-static atomic_int syslog_async_opened = ATOMIC_VAR_INIT(0);
++static _Atomic(int) syslog_async_opened = (0);
+ #endif
+ static double iitime = 0.0;
+ 
+ #define CALL_ID_NONE "GLOBAL"
+ 
+ static struct {
+-    atomic_uint next_ticket;
+-    atomic_uint now_serving;
+-} _log_lock = {ATOMIC_VAR_INIT(0), ATOMIC_VAR_INIT(0)};
++    _Atomic(unsigned int) next_ticket;
++    _Atomic(unsigned int) now_serving;
++} _log_lock = {0};
+ 
+ struct rtpp_log_inst {
+     char *call_id;
+diff --git a/src/rtpp_nofile.h b/src/rtpp_nofile.h
+index 7455d9bc..2f36821c 100644
+--- a/src/rtpp_nofile.h
++++ b/src/rtpp_nofile.h
+@@ -32,7 +32,7 @@ DEFINE_METHOD(rtpp_nofile, rtpp_nofile_dtor, void);
+ 
+ struct rtpp_nofile {
+     struct rlimit *limit;
+-    atomic_int warned;
++    _Atomic(int) warned;
+     rtpp_nofile_dtor_t dtor;
+ };
+ 
+diff --git a/src/rtpp_proc_async.c b/src/rtpp_proc_async.c
+index 13344e83..a1d2bf2e 100644
+--- a/src/rtpp_proc_async.c
++++ b/src/rtpp_proc_async.c
+@@ -78,7 +78,7 @@ struct rtpp_proc_async_cf;
+ 
+ struct rtpp_proc_thread_cf {
+     pthread_t thread_id;
+-    atomic_int tstate;
++    _Atomic(int) tstate;
+     int pipe_type;
+     struct rtpp_polltbl ptbl;
+     const struct rtpp_proc_async_cf *proc_cf;
+diff --git a/src/rtpp_proc_ttl.c b/src/rtpp_proc_ttl.c
+index 1a36350d..a58b37f7 100644
+--- a/src/rtpp_proc_ttl.c
++++ b/src/rtpp_proc_ttl.c
+@@ -68,7 +68,7 @@ struct rtpp_proc_ttl_pvt {
+     struct rtpp_proc_ttl pub;
+     pthread_t thread_id;
+     struct rtpp_anetio_cf *op;
+-    atomic_int tstate;
++    _Atomic(int) tstate;
+     void *elp;
+     struct rtpp_hash_table *sessions_ht;
+     struct foreach_args fa;
+diff --git a/src/rtpp_proc_wakeup.c b/src/rtpp_proc_wakeup.c
+index 7353b7e9..5884ce9a 100644
+--- a/src/rtpp_proc_wakeup.c
++++ b/src/rtpp_proc_wakeup.c
+@@ -47,7 +47,7 @@
+ struct rtpp_proc_wakeup_priv {
+     struct rtpp_proc_wakeup pub;
+     pthread_t thread_id;
+-    atomic_int tstate;
++    _Atomic(int) tstate;
+     int requested_i_wake;
+     int delivered_i_wake;
+     pthread_mutex_t mutex;
+diff --git a/src/rtpp_refcnt.c b/src/rtpp_refcnt.c
+index 871290aa..d35542dc 100644
+--- a/src/rtpp_refcnt.c
++++ b/src/rtpp_refcnt.c
+@@ -68,7 +68,7 @@ static void rtpp_refcnt_decref(struct rtpp_refcnt *);
+ struct rtpp_refcnt_priv
+ {
+     struct rtpp_refcnt pub;
+-    atomic_int cnt;
++    _Atomic(int) cnt;
+     rtpp_refcnt_dtor_t dtor_f;
+     void *data;
+     rtpp_refcnt_dtor_t pre_dtor_f;
+diff --git a/src/rtpp_sessinfo.h b/src/rtpp_sessinfo.h
+index c4108b5c..30b6d73b 100644
+--- a/src/rtpp_sessinfo.h
++++ b/src/rtpp_sessinfo.h
+@@ -63,7 +63,7 @@ struct rtpp_polltbl {
+     uint64_t revision;
+     struct rtpp_weakref *streams_wrt;
+     int wakefd[2];
+-    atomic_int served_i_wake;
++    _Atomic(int) served_i_wake;
+ };
+ 
+ DECLARE_SMETHODS(rtpp_sessinfo)

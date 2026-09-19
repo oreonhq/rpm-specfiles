@@ -1,13 +1,13 @@
-%global source0_hash 75a43775ef03cb0c577c70d9605203789b3c75b786efa17a2e8c286d0c55fb93
+%global source0_hash 9e9ec69110c2427a262c9afb0fc46a8bea7387a8386d7b51b80a9805b8327aa4
 
 %global framework kbookmarks
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon for bookmarks manipulation
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-3.0-only AND LicenseRef-KDE-Accepted-LGPL
@@ -19,16 +19,16 @@ BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6Codecs)
+BuildRequires:  cmake(KF6Codecs) >= %{version}
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qttools-devel
 
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6ConfigWidgets)
-BuildRequires:  cmake(KF6ColorScheme)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6ConfigWidgets) >= %{version}
+BuildRequires:  cmake(KF6ColorScheme) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
+BuildRequires:  cmake(KF6XmlGui) >= %{version}
 
 Requires:  kf6-filesystem
 
@@ -77,6 +77,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

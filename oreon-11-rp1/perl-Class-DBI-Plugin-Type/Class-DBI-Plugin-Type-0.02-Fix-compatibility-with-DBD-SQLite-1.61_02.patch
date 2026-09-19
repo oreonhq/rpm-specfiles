@@ -1,0 +1,31 @@
+From b8cd9d0d853fdca08488f261d5856801e2ce2771 Mon Sep 17 00:00:00 2001
+From: Niko Tyni <ntyni@debian.org>
+Date: Mon, 21 Jan 2019 21:07:59 +0200
+Subject: [PATCH] Fix compatibility with DBD-SQLite >=  1.61_02
+
+type_info() now returns an array of mostly undefined values, breaking
+the t/1.t tests. Add a guard for definedness so we still take the other
+branch in this case.
+
+Bug: https://rt.cpan.org/Public/Bug/Display.html?id=128135
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=919006
+---
+ Type.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Type.pm b/Type.pm
+index 688ca35..986fecd 100644
+--- a/Type.pm
++++ b/Type.pm
+@@ -29,7 +29,7 @@ sub import {
+             @hash{@{$sth->{NAME}}} = 
+             map { 
+                     my $info = scalar $self->db_Main->type_info($_);
+-                    if ($info) { $info->{TYPE_NAME} } 
++                    if ($info and defined $info->{TYPE_NAME}) { $info->{TYPE_NAME} }
+                     else { $_ } # Typeless databases (SQLite)
+                 }
+                 @{$sth->{TYPE}};
+-- 
+2.20.1
+

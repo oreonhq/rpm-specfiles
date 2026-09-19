@@ -1,0 +1,19 @@
+diff -urp '--exclude=*~' rb-readline-0.5.5.orig/test/test_readline.rb rb-readline-0.5.5/test/test_readline.rb
+--- rb-readline-0.5.5.orig/test/test_readline.rb	2025-12-27 11:40:05.078110246 +0900
++++ rb-readline-0.5.5/test/test_readline.rb	2025-12-27 11:59:56.040604616 +0900
+@@ -99,6 +99,15 @@ class TestReadline < Minitest::Test
+     assert_equal " ", Readline.completion_append_character
+   end
+ 
++  alias_method :assert_equal_nonil, :assert_equal
++  def assert_equal expected, actual, msg = nil
++    if nil == expected
++      assert_nil actual, msg
++    else
++      assert_equal_nonil expected, actual, msg
++    end
++  end
++
+   def test_completion_append_character
+     orig_char = Readline.completion_append_character
+     begin

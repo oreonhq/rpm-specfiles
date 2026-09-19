@@ -1,5 +1,5 @@
-%global source0_hash fa4b5cede6e3e195e0aa4a3c86b1e65f6d6302e38a879dbe0fab9494814f9679
-%global source1_hash ecbddf6c739b1ac34a9c063b38860047ba1805620ac33d6ee2cca36c5bee1a8d
+%global source0_hash d90f2f2a1ab889078332eabdb23aa9c88f3fb079b73a21efb80ccb9f8e7b5a09d08b21b8a9c8473007d7dfd2cea1c4af9acdd5bc3f41ae7a7f2a3aebc1f1a917
+%global source1_hash 61b5245f97b0d3441062b17bd94221124608d6eee2100447b05648cbcf879adeaaa2c77e859b6ad8221c950eb420c0df0cbbd0be982dec1dfc277b0324069725
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        A new reference scheme for LaTeX
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zref.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zref.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zref.tar.xz#/zref.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zref.doc.tar.xz#/zref.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-zref-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-zref-doc <= 11:%{version}
@@ -43,8 +43,8 @@ Provides:       tex(zref.sty)
 A new reference scheme for LaTeX.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

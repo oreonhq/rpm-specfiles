@@ -1,0 +1,49 @@
+From ea89aee27489e44c2366f086f524a1564f2a3f63 Mon Sep 17 00:00:00 2001
+From: Jonathan Underwood <jonathan.underwood@gmail.com>
+Date: Sat, 26 May 2018 21:15:14 +0100
+Subject: [PATCH] Use MathJax TeX fonts rather than STIXWeb
+
+---
+ nbclassic/static/base/js/mathjaxutils.js | 6 +++---
+ nbclassic/static/notebook/js/main.min.js | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/notebook/static/base/js/mathjaxutils.js b/notebook/static/base/js/mathjaxutils.js
+index 296f15e..4430bdf 100644
+--- a/nbclassic/static/base/js/mathjaxutils.js
++++ b/nbclassic/static/base/js/mathjaxutils.js
+@@ -29,10 +29,10 @@ define([
+                 // we use CSS to left justify single line equations in code cells.
+                 displayAlign: 'center',
+                 "HTML-CSS": {
+-                    availableFonts: [],
++                    availableFonts: ["TeX"],
+                     imageFont: null,
+-                    preferredFont: null,
+-                    webFont: "STIX-Web",
++                    preferredFont: "TeX",
++                    webFont: "TeX",
+                     styles: {'.MathJax_Display': {"margin": 0}},
+                     linebreaks: { automatic: true }
+                 },
+diff --git a/notebook/static/notebook/js/main.min.js b/notebook/static/notebook/js/main.min.js
+index d782d36..4363c16 100644
+--- a/nbclassic/static/notebook/js/main.min.js
++++ b/nbclassic/static/notebook/js/main.min.js
+@@ -26895,10 +26895,10 @@ define('base/js/mathjaxutils',[
+                 // we use CSS to left justify single line equations in code cells.
+                 displayAlign: 'center',
+                 "HTML-CSS": {
+-                    availableFonts: [],
++                    availableFonts: ["TeX"],
+                     imageFont: null,
+-                    preferredFont: null,
+-                    webFont: "STIX-Web",
++                    preferredFont: "TeX",
++                    webFont: "TeX",
+                     styles: {'.MathJax_Display': {"margin": 0}},
+                     linebreaks: { automatic: true }
+                 },
+-- 
+2.30.0
+

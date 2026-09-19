@@ -1,0 +1,27 @@
+From a63f47dd1d16f94b21e4d4a1f8da6db976a6d80f Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Thu, 18 Oct 2012 16:31:36 +0200
+Subject: [PATCH 07/15] Fix subdir command
+
+Signed-off-by: Mario Ceresa <mrceresa@gmail.com>
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8db8529..88e5f5e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,5 +2,5 @@ project(expatpp)
+ 
+ find_package(EXPAT REQUIRED)
+ 
+-add_dir(lib)
+-add_dir(test)
+\ No newline at end of file
++add_subdirectory(lib)
++add_subdirectory(test)
+\ No newline at end of file
+-- 
+1.7.11.7
+

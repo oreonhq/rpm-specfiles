@@ -1,0 +1,42 @@
+diff -rup a/src/app/document.c b/src/app/document.c
+--- a/src/app/document.c	2016-05-18 18:36:11.063707458 +0200
++++ b/src/app/document.c	2016-05-18 18:38:47.140736604 +0200
+@@ -307,7 +307,7 @@ doc_wrapper *doc_prepare_to_load(gchar *
+ 	}
+ //	printf("IDX: %d\n", doc_type_index);
+ 	if (doc_type_index < 0) {
+-		buf = (gchar *) x_malloc(strlen(_("File extension <<%s>> unknown or non-existent"))+1, "gchar (buf)");
++		buf = (gchar *) x_malloc(strlen("File extension <<%s>> unknown or non-existent")+1, "gchar (buf)");
+ 		if ( buf ) {
+ 			sprintf(buf,_("File extension <<%s>> unknown or non-existent"),fname);
+ 			my_msg(buf,WARNING);
+diff -rup a/src/app/main.c b/src/app/main.c
+--- a/src/app/main.c	2016-05-18 18:36:11.063707458 +0200
++++ b/src/app/main.c	2016-05-18 18:38:28.740851057 +0200
+@@ -60,7 +60,7 @@ gchar *get_data_dir() {
+ void create_config_file(gchar *rc_file) {
+ 	gchar *buf, *command;
+ 	buf = (gchar *) x_malloc(strlen(rc_file)+1+strlen(_("Creation of the option file %s")), "const gchar (buf - Creation of the option file MSG)");
+-	sprintf(buf,_("Creation of the option file %s"),rc_file);
++	sprintf(buf,"Creation of the option file %s",rc_file);
+ 	my_msg(buf,INFO);
+ 	command = concat_dname_fname(get_data_dir(),"install-step2-rcfile");
+ 	if (system(command))
+@@ -114,7 +114,7 @@ gchar *find_config_file() {
+ 					// Geomorph directory ("default_dir") doesn't exist
+ 					// Create one with default scenes and rc file
+ 					buf = (gchar *) x_malloc(strlen(_("Creation of the default working directory?"))+1+strlen(default_dir), "const gchar (buf - Creation of the default working directory MSG)");
+-					sprintf(buf,_("Creation of the default working directory?"),default_dir);
++					sprintf(buf,"Creation of the default working directory?",default_dir);
+ 					if (!yes_no(buf,TRUE))
+ 						exit(0);
+ //					if (buf) x_free(buf);
+@@ -201,7 +201,7 @@ int main( int   argc,
+ 	if (chdir(default_dir)) { // Working if return code is 0
+ 	//	Not supposed to get here!!
+ 		buf = x_malloc(strlen(default_dir)+strlen(_("Unable to change directory to %s"))+1, "const gchar (buf - change directory in main.c)");
+-		sprintf(buf,_("Unable to change directory to %s"),default_dir);
++		sprintf(buf,"Unable to change directory to %s",default_dir);
+ 		my_msg(buf, ABORT);
+ 	}
+ 

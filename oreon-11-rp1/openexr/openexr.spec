@@ -2,8 +2,8 @@
 %global sover 31
 
 Name:           openexr
-Version:        3.2.4
-Release:        7%{?dist}
+Version:        3.4.15
+Release:        1%{?dist}
 Summary:        Tools and libraries for ILM's OpenEXR high dynamic-range image format
 License:        BSD-3-Clause
 URL:            https://www.openexr.com/

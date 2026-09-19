@@ -1,0 +1,28 @@
+From 46b7bfecad147c4015fda41c24532bb79850d64c Mon Sep 17 00:00:00 2001
+From: Aaron Conole <aconole@redhat.com>
+Date: Sat, 18 Feb 2017 10:17:16 -0500
+Subject: [PATCH] array_fuzz: Fix a sizeof issue
+
+The array fuzz function has a bad sizeof.  Fix it.
+
+Signed-off-by: Aaron Conole <aconole@redhat.com>
+---
+ sfuzz.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sfuzz.c b/sfuzz.c
+index 4e8b1ad..a5f4f7a 100644
+--- a/sfuzz.c
++++ b/sfuzz.c
+@@ -854,7 +854,7 @@ int in_array_execute_fuzz(option_block *opts)
+ 
+             snprintf(sizerepl, sizeof(sizerepl), "%%%%%s",
+                      current_array->array_name);
+-            snprintf(ssizerepl, sizeof(sizerepl), "%%%s",
++            snprintf(ssizerepl, sizeof(ssizerepl), "%%%s",
+                      current_array->array_name);
+ 
+             if(!current_array->value_array[current_array->value_ctr].bin)
+-- 
+2.9.3
+

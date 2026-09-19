@@ -1,0 +1,12 @@
+diff -urp '--exclude=*~' '--exclude=*cache*' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/rss.py gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/rss.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/rss.py	2021-03-13 02:38:09.580386979 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/rss.py	2021-03-13 02:41:53.618569277 +0900
+@@ -151,7 +151,7 @@ class RSSIcon(LocalIconImage):
+     def __init__(self):
+         self.icon_name = 'rss-16.png'
+ 
+-class FeedParserPlus(feedparser._StrictFeedParser):
++class FeedParserPlus(feedparser.parsers.strict._StrictFeedParser):
+ 
+     def _start_media_content(self, data):
+         self.entries[-1]['media_content_attrs'] = copy.deepcopy(data)

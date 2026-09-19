@@ -1,0 +1,10 @@
+Index: 2048-cli-0.9.1/src/gfx_sdl.c
+===================================================================
+--- 2048-cli-0.9.1.orig/src/gfx_sdl.c
++++ 2048-cli-0.9.1/src/gfx_sdl.c
+@@ -1,4 +1,5 @@
+ #include <stdlib.h>
++#include <string.h>
+ #include <SDL.h>
+ #include <SDL_ttf.h>
+ #include "merge.h"

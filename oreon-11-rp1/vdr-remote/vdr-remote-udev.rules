@@ -1,0 +1,23 @@
+# vdr-remote friendly udev rules
+
+# Set group for things that look like event devices of remote controls, and
+# point the /dev/input/ir symlink to (some) one of them.  This may be enough
+# if a remote control matches, and there is only one of them.
+
+SUBSYSTEM=="input", ATTRS{name}=="*DVB*|*dvb*|*saa7146*|X10 Wireless Technology Inc USB Receiver", KERNEL!="mouse*", SYMLINK+="input/ir"
+
+
+# On the other hand, if there are multiple matching devices, /dev/input/ir may
+# not always end up pointing to the desired one, so here are some examples that
+# add an additional /dev/input/event-remote symlink for a specific device.
+# Combine with "-i /dev/input/event-remote" in PLUGIN_OPTIONS in
+# /etc/sysconfig/vdr-plugins.d/remote.conf.
+
+# On-card receivers on various Hauppauge/Technotrend DVB cards:
+#SUBSYSTEM=="input", ATTRS{name}=="DVB on-card IR receiver", SYMLINK+="input/event-remote"
+
+# On-card receivers on some Hauppauge Nova-T DVB cards:
+#SUBSYSTEM=="input", ATTRS{name}=="cx88 IR (Hauppauge Nova-T DVB-T", SYMLINK+="input/event-remote"
+
+# ATI remote wonder and friends:
+#SUBSYSTEM=="input", ATTRS{name}=="X10 Wireless Technology Inc USB Receiver", KERNEL!="mouse*", SYMLINK+="input/event-remote"

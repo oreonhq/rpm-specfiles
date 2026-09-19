@@ -1,0 +1,14 @@
+In `image` 0.23 and above, `raw_pixels` is now `to_bytes`:
+
+https://github.com/image-rs/image/commit/67a327b3aa83be00580cd8a4e8d2538c730f6cb2#diff-c5963e01c09615b1b65648d16468d47a95c8eaee3daf8e830665f48a0c17ad90
+--- a/tests/lib.rs
++++ b/tests/lib.rs
+@@ -37,7 +37,7 @@ mod tests {
+ 
+     fn create_encoded_rows(image: &DynamicImage) -> Vec<String> {
+         image
+-            .raw_pixels()
++            .as_bytes().to_vec()
+             .chunks(image.dimensions().0 as usize * 4)
+             .map(|chunk| encode(chunk))
+             .collect()

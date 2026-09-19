@@ -1,0 +1,12 @@
+--- cozy-1.3.0--orig/data/com.github.geigi.cozy.appdata.xml	2024-03-01 15:44:03.000000000 +0100
++++ cozy-1.3.0--patched/data/com.github.geigi.cozy.appdata.xml	2024-03-03 11:55:41.260289799 +0100
+@@ -67,8 +67,9 @@
+       </description>
+     </release>
+     <release version="1.2.1" date="2022-08-21">
+       <description translatable="no">
++		<p>This minor release includes various assorted fixes.</p>
+         <ul>
+           <li>Support for GTK style manager (thanks A6GibKm)</li>
+           <li>Use natural sorting for chapter titles</li>
+           <li>As always, updated translations thanks to all the translators!</li>

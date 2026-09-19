@@ -1,0 +1,43 @@
+--- CMakeLists.txt~	2019-09-26 14:18:04.000000000 -0500
++++ CMakeLists.txt	2019-09-26 14:18:34.476407791 -0500
+@@ -581,9 +581,9 @@
+ 		message(SEND_ERROR "You have to enable OpenGL if you plan to use GLUT.")
+ 	endif(NOT MGL_HAVE_OPENGL)
+ 	include(FindGLUT)
+-	if(NOT GLUT_FOUND)
+-		message(SEND_ERROR "Couldn't find GLUT library.")
+-	endif(NOT GLUT_FOUND)
++#	if(NOT GLUT_FOUND)
++#		message(SEND_ERROR "Couldn't find GLUT library.")
++#	endif(NOT GLUT_FOUND)
+ else(enable-glut)
+ 	set(MGL_HAVE_GLUT 0)
+ endif(enable-glut)
+--- widgets/glut.cpp~	2019-07-08 13:56:57.000000000 -0500
++++ widgets/glut.cpp	2019-09-26 14:24:21.070662407 -0500
+@@ -30,7 +30,7 @@
+ 		#include "glut.h"
+ 	#else
+ 		#include <GL/gl.h>
+-		#include <GL/glut.h>
++		#include <GL/freeglut.h>
+ 	#endif
+ #endif
+ 
+--- widgets/CMakeLists.txt~	2019-07-08 13:56:57.000000000 -0500
++++ widgets/CMakeLists.txt	2019-09-26 14:28:13.770162047 -0500
+@@ -14,10 +14,10 @@
+ 
+ if(MGL_HAVE_GLUT)
+ 	mgl_add_lib(glut glut.cpp ../include/mgl2/glut.h)
+-	target_include_directories(mgl-glut SYSTEM PUBLIC ${GLUT_INCLUDE_DIR})
+-	target_include_directories(mgl-glut-static SYSTEM PUBLIC ${GLUT_INCLUDE_DIR})
+-	target_link_libraries(mgl-glut mgl ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES})
+-	target_link_libraries(mgl-glut-static mgl-static ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES})
++	target_include_directories(mgl-glut SYSTEM PUBLIC ${FreeGLUT_INCLUDE_DIR})
++	target_include_directories(mgl-glut-static SYSTEM PUBLIC ${FreeGLUT_INCLUDE_DIR})
++	target_link_libraries(mgl-glut mgl ${FreeGLUT_LIBRARIES} ${OPENGL_LIBRARIES} -lglut)
++	target_link_libraries(mgl-glut-static mgl-static ${FreeGLUT_LIBRARIES} ${OPENGL_LIBRARIES} -lglut)
+ endif(MGL_HAVE_GLUT)
+ 
+ if(MGL_HAVE_WX)

@@ -1,0 +1,275 @@
+diff -up crm114-20100106-BlameMichelson.src/crm114.h.gcc10 crm114-20100106-BlameMichelson.src/crm114.h
+--- crm114-20100106-BlameMichelson.src/crm114.h.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm114.h	2020-02-21 10:37:46.025513168 +0100
+@@ -10,25 +10,25 @@
+ //    Global variables
+ 
+ //   The VHT (Variable Hash Table)
+-VHT_CELL **vht;
++extern VHT_CELL **vht;
+ 
+ //   The pointer to the global Current Stack Level (CSL) frame
+-CSL_CELL *csl;
++extern CSL_CELL *csl;
+ 
+ //    the data window
+-CSL_CELL *cdw;
++extern CSL_CELL *cdw;
+ 
+ //    the temporarys data window (where argv, environ, newline etc. live)
+-CSL_CELL *tdw;
++extern CSL_CELL *tdw;
+ 
+ //    the pointer to a CSL that we use during matching.  This is flipped
+ //    to point to the right data window during matching.  It doesn't have
+ //    it's own data, unlike cdw and tdw.
+-CSL_CELL *mdw;
++extern CSL_CELL *mdw;
+ 
+ //    a pointer to the current statement argparse block.  This gets whacked
+ //    on every new statement.
+-ARGPARSE_BLOCK *apb;
++extern ARGPARSE_BLOCK *apb;
+ 
+ //    the microcompiler
+ int crm_microcompiler (CSL_CELL *csl,
+diff -up crm114-20100106-BlameMichelson.src/crm114_structs.h.gcc10 crm114-20100106-BlameMichelson.src/crm114_structs.h
+--- crm114-20100106-BlameMichelson.src/crm114_structs.h.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm114_structs.h	2020-02-21 10:37:46.025513168 +0100
+@@ -9,35 +9,34 @@
+ //    These are systemwide globals.  Sure, they should go into a global
+ //     struct, but that realization only occured to me in 2008.  Sorry.
+ 
+-long vht_size;
+-long cstk_limit;
+-long max_pgmlines;
+-long max_pgmsize;
+-long max_pgmsize;
+-long user_trace;
+-long internal_trace;
+-long debug_countdown;
+-long cmdline_break;
+-long cycle_counter;
+-long ignore_environment_vars;
+-long data_window_size;
++extern long vht_size;
++extern long cstk_limit;
++extern long max_pgmlines;
++extern long max_pgmsize;
++extern long user_trace;
++extern long internal_trace;
++extern long debug_countdown;
++extern long cmdline_break;
++extern long cycle_counter;
++extern long ignore_environment_vars;
++extern long data_window_size;
+ 
+ // Number of hash table buckets.  Set from command line, read (only)
+ // by classifier learns.
+-long sparse_spectrum_file_length;
++extern long sparse_spectrum_file_length;
+ 
+-long microgroom_chain_length ;
+-long microgroom_stop_after;
++extern long microgroom_chain_length;
++extern long microgroom_stop_after;
+ 
+-float min_pmax_pmin_ratio;
+-long profile_execution;
++extern float min_pmax_pmin_ratio;
++extern long profile_execution;
+ 
+-int dontcare;
+-void *dontcareptr;
++extern int dontcare;
++extern void *dontcareptr;
+ 
+-long prettyprint_listing;  //  0= none, 1 = basic, 2 = expanded, 3 = parsecode
++extern long prettyprint_listing;  //  0= none, 1 = basic, 2 = expanded, 3 = parsecode
+ 
+-long engine_exit_base;  //  All internal errors will use this number or higher;
++extern long engine_exit_base;  //  All internal errors will use this number or higher;
+                        //  the user programs can use lower numbers freely.
+ 
+ 
+@@ -46,7 +45,7 @@ long engine_exit_base;  //  All internal
+ //        = 1 no extended (non-EVAL) math, use RPN
+ //        = 2 extended (everywhere) math, use algebraic notation
+ //        = 3 extended (everywhere) math, use RPN
+-long q_expansion_mode;
++extern long q_expansion_mode;
+ 
+ 
+ //   structure of a vht cell
+diff -up crm114-20100106-BlameMichelson.src/crm_main.c.gcc10 crm114-20100106-BlameMichelson.src/crm_main.c
+--- crm114-20100106-BlameMichelson.src/crm_main.c.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_main.c	2020-02-21 10:37:46.026513178 +0100
+@@ -29,6 +29,34 @@ char *inbuf;
+ char *outbuf;
+ char *tempbuf;
+ 
++CSL_CELL *cdw;
++CSL_CELL *csl;
++CSL_CELL *tdw;
++CSL_CELL *mdw;
++ARGPARSE_BLOCK *apb;
++
++long cstk_limit;
++long max_pgmlines;
++long max_pgmsize;
++long debug_countdown;
++long cmdline_break;
++long cycle_counter;
++long ignore_environment_vars;
++long data_window_size;
++
++long sparse_spectrum_file_length;
++
++float min_pmax_pmin_ratio;
++long profile_execution;
++
++void *dontcareptr;
++
++long prettyprint_listing;
++
++long engine_exit_base;
++
++long q_expansion_mode;
++
+ int main (int argc, char **argv)
+ {
+   int i;    //  some random counters, when we need a loop
+diff -up crm114-20100106-BlameMichelson.src/crm_osbf_maintenance.c.gcc10 crm114-20100106-BlameMichelson.src/crm_osbf_maintenance.c
+--- crm114-20100106-BlameMichelson.src/crm_osbf_maintenance.c.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_osbf_maintenance.c	2020-02-21 10:38:22.905846597 +0100
+@@ -22,6 +22,9 @@
+ 
+ #include "crm114_osbf.h"
+ 
++long microgroom_chain_length;
++long microgroom_stop_after;
++
+ /* Version names */
+ char *CSS_version_name[] = {
+   "SBPH-Markovian",
+diff -up crm114-20100106-BlameMichelson.src/crm_pca_lib_fncts.c.gcc10 crm114-20100106-BlameMichelson.src/crm_pca_lib_fncts.c
+--- crm114-20100106-BlameMichelson.src/crm_pca_lib_fncts.c.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_pca_lib_fncts.c	2020-02-21 10:37:46.026513178 +0100
+@@ -14,6 +14,8 @@
+ #include "crm_svm_matrix.h"
+ #include "crm_pca_lib_fncts.h"
+ 
++int PCA_DEBUG_MODE;
++
+ /*******************************************************************************************
+  *This is a variation of the VonMises power algorithm for sparse matrices.  Let us have
+  *x_1, x_2,.., x_n examples with column means xbar.  Then the VonMises update is:
+diff -up crm114-20100106-BlameMichelson.src/crm_pca_lib_fncts.h.gcc10 crm114-20100106-BlameMichelson.src/crm_pca_lib_fncts.h
+--- crm114-20100106-BlameMichelson.src/crm_pca_lib_fncts.h.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_pca_lib_fncts.h	2020-02-21 10:37:46.026513178 +0100
+@@ -25,7 +25,7 @@
+                             //The intermediate DEBUG modes may enable debug printing for the
+                             //matrix operations.  See crm_svm_matrix_util.h for details.
+ 
+-int PCA_DEBUG_MODE;         //The debug mode for the PCA
++extern int PCA_DEBUG_MODE;         //The debug mode for the PCA
+ extern int MATR_DEBUG_MODE; //Debug mode for matrices.  MATR_DEBUG_MODE = PCA_DEBUG_MODE
+                             //Defined in crm_svm_matrix_util.h
+ 
+diff -up crm114-20100106-BlameMichelson.src/crm_str_funcs.c.gcc10 crm114-20100106-BlameMichelson.src/crm_str_funcs.c
+--- crm114-20100106-BlameMichelson.src/crm_str_funcs.c.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_str_funcs.c	2020-02-21 10:37:46.026513178 +0100
+@@ -16,6 +16,10 @@
+ //  and include the routine declarations file
+ #include "crm114.h"
+ 
++int dontcare;
++long internal_trace;
++long user_trace;
++
+ //     strnhash - generate the hash of a string of length N
+ //     goals - fast, works well with short vars includng
+ //     letter pairs and palindromes, not crypto strong, generates
+diff -up crm114-20100106-BlameMichelson.src/crm_svm_lib_fncts.c.gcc10 crm114-20100106-BlameMichelson.src/crm_svm_lib_fncts.c
+--- crm114-20100106-BlameMichelson.src/crm_svm_lib_fncts.c.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_svm_lib_fncts.c	2020-02-21 10:37:46.026513178 +0100
+@@ -13,6 +13,8 @@
+ // Copyright 2009 William S. Yerazunis.
+ // This file is under GPLv3, as described in COPYING.
+ 
++int SVM_DEBUG_MODE;
++
+ //static function declarations
+ static SVM_Solution *svm_solve_init_sol(Matrix *Xy, Vector *st_theta, 
+ 					double weight, int max_train_val);
+diff -up crm114-20100106-BlameMichelson.src/crm_svm_lib_fncts.h.gcc10 crm114-20100106-BlameMichelson.src/crm_svm_lib_fncts.h
+--- crm114-20100106-BlameMichelson.src/crm_svm_lib_fncts.h.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_svm_lib_fncts.h	2020-02-21 10:37:46.027513187 +0100
+@@ -47,7 +47,7 @@
+                                 //a feasible setting since the print operations
+                                 //put all the zeros in!
+ 
+-int SVM_DEBUG_MODE;         //There are a number of modes.
++extern int SVM_DEBUG_MODE;         //There are a number of modes.
+                                    //See crm_svm_matrix_util.h for them.
+ //the SVM solution struct
+ typedef struct {
+diff -up crm114-20100106-BlameMichelson.src/crm_svm_matrix_util.c.gcc10 crm114-20100106-BlameMichelson.src/crm_svm_matrix_util.c
+--- crm114-20100106-BlameMichelson.src/crm_svm_matrix_util.c.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_svm_matrix_util.c	2020-02-21 10:37:46.027513187 +0100
+@@ -19,6 +19,8 @@
+  *matrix library, but possibly more general.
+  ************************************************************************/
+ 
++int MATR_DEBUG_MODE;
++
+ /***********************Expanding Array Functions***************************/
+ 
+ //Static expanding array function declarations
+diff -up crm114-20100106-BlameMichelson.src/crm_svm_matrix_util.h.gcc10 crm114-20100106-BlameMichelson.src/crm_svm_matrix_util.h
+--- crm114-20100106-BlameMichelson.src/crm_svm_matrix_util.h.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_svm_matrix_util.h	2020-02-21 10:37:46.027513187 +0100
+@@ -58,7 +58,7 @@
+ #define MY_INLINE static inline
+ #endif
+ 
+-int MATR_DEBUG_MODE;            //the debug value
++extern int MATR_DEBUG_MODE;            //the debug value
+                                //for SVM, if internal trace is on 
+                                //MATR_DEBUG_MODE = SVM_INTERNAL_TRACE_LEVEL
+                                //for PCA, if internal trace is on
+diff -up crm114-20100106-BlameMichelson.src/crm_svm_quad_prog.c.gcc10 crm114-20100106-BlameMichelson.src/crm_svm_quad_prog.c
+--- crm114-20100106-BlameMichelson.src/crm_svm_quad_prog.c.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_svm_quad_prog.c	2020-02-21 10:37:46.028513196 +0100
+@@ -13,6 +13,7 @@
+ // Copyright 2009 William S. Yerazunis.
+ // This file is under GPLv3, as described in COPYING.
+ 
++int QP_DEBUG_MODE;
+ 
+ /******************************************************************
+  *We use the active set method outlined in Gill and Murray 1977
+diff -up crm114-20100106-BlameMichelson.src/crm_svm_quad_prog.h.gcc10 crm114-20100106-BlameMichelson.src/crm_svm_quad_prog.h
+--- crm114-20100106-BlameMichelson.src/crm_svm_quad_prog.h.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_svm_quad_prog.h	2020-02-21 10:37:46.028513196 +0100
+@@ -20,7 +20,7 @@
+ extern int MATR_DEBUG_MODE;     //debugging mode. see crm_svm_matrix_util.h for
+                                //possible values.
+ 
+-int QP_DEBUG_MODE;
++extern int QP_DEBUG_MODE;
+ 
+ #define QP_DEBUG 2              //basic information about the qp solver
+ 
+diff -up crm114-20100106-BlameMichelson.src/crm_var_hash_table.c.gcc10 crm114-20100106-BlameMichelson.src/crm_var_hash_table.c
+--- crm114-20100106-BlameMichelson.src/crm_var_hash_table.c.gcc10	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_var_hash_table.c	2020-02-21 10:37:46.028513196 +0100
+@@ -19,6 +19,8 @@
+ //    wherever needed.  These are sized to the same size as the data window.
+ extern char *tempbuf;
+ 
++long vht_size;
++VHT_CELL **vht;
+ 
+ //      initialize the variable hash table (the vht)
+ //      and stuff in the "standards" (:_vars:, environment vars)

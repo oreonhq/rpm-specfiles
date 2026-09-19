@@ -1,0 +1,56 @@
+--- a/handlers/dup.helper.in	2021-01-25 21:50:45.000000000 +0600
++++ b/handlers/dup.helper.in	2022-05-27 18:19:28.948488094 +0600
+@@ -540,7 +540,7 @@
+ 
+    # Global variables whose '*' shall not be expanded
+    set -o noglob
+-   dup_default_includes="/var/spool/cron/crontabs /var/backups /etc /root /home /usr/local/*bin /var/lib/dpkg/status*"
++   dup_default_includes="/var/spool/cron /var/backups /etc /root /home /usr/local/*bin"
+    dup_default_excludes="/home/*/.gnupg /home/*/.local/share/Trash /home/*/.Trash /home/*/.thumbnails /home/*/.beagle /home/*/.aMule /home/*/gtk-gnutella-downloads /var/cache/backupninja/duplicity"
+    set +o noglob
+ 
+--- a/handlers/rdiff.helper.in	2021-01-25 21:50:45.000000000 +0600
++++ b/handlers/rdiff.helper.in	2022-05-27 18:19:28.948488094 +0600
+@@ -190,7 +190,7 @@
+          if [ "$rdiff_user" = "root" ]; then
+             booleanBox "install rdiff-backup?" "It seems like the remote machine does not have rdiff-backup installed, I can attempt to install rdiff-backup on the remote machine.\n\n\nDo you want me to attempt this now?"
+             if [ $? = 0 ]; then
+-               ssh $rdiff_user@$rdiff_host 'apt-get install rdiff-backup'
++               ssh $rdiff_user@$rdiff_host 'yum install rdiff-backup'
+                result=$?
+                echo "Hit return to continue."
+                read
+@@ -355,7 +355,7 @@
+ 
+    # Global variables whose '*' shall not be expanded
+    set -o noglob
+-   rdiff_includes=(/var/spool/cron/crontabs /var/backups /etc /root /home /usr/local/*bin /var/lib/dpkg/status*)
++   rdiff_includes=(/var/spool/cron /var/backups /etc /root /home /usr/local/*bin)
+    rdiff_excludes=(/home/*/.gnupg /home/*/.local/share/Trash /home/*/.Trash /home/*/.thumbnails /home/*/.beagle /home/*/.aMule /home/*/gtk-gnutella-downloads /var/cache/backupninja/duplicity)
+    set +o noglob
+ 
+--- a/src/ninjahelper.in	2021-01-25 21:50:45.000000000 +0600
++++ b/src/ninjahelper.in	2022-05-27 18:19:28.948488094 +0600
+@@ -27,11 +27,11 @@
+ ##
+ require_packages() {
+    for pkg in "$@"; do
+-      installed=`dpkg -s $pkg | grep 'ok installed'`
++      installed=`yum list installed $pkg 2>/dev/null | grep -i 'installed'`
+       if [ -z "$installed" ]; then
+          booleanBox "install $pkg?" "This backup action requires package $pkg. Do you want to install it now?"
+          if [ $? = 0 ]; then
+-            apt-get install $pkg
++            yum install $pkg
+             echo "hit return to continue...."
+             read
+          fi
+@@ -164,7 +164,7 @@
+       echo -n "(yes/no): "
+       read install
+       if [ "$install" == "yes" ]; then
+-         apt-get install dialog
++         yum install dialog
+             break
+          elif [ "$install" == "no" ]; then
+             exit

@@ -1,0 +1,12 @@
+diff -ruN zipios++-0.1.5.9+cvs.2007.04.28.orig/src/directory.h zipios++-0.1.5.9+cvs.2007.04.28/src/directory.h
+--- zipios++-0.1.5.9+cvs.2007.04.28.orig/src/directory.h	2003-01-04 06:45:34.000000000 +0800
++++ zipios++-0.1.5.9+cvs.2007.04.28/src/directory.h	2012-01-24 22:30:20.362767134 +0800
+@@ -56,6 +56,8 @@
+ 
+ namespace boost
+ {
++        using std::ptrdiff_t;
++
+ 	namespace filesystem
+ 	{
+ 		class dir_it;

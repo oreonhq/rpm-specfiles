@@ -1,0 +1,45 @@
+.TH "CSDP-THETA" "1" "6.1.1" "Brian Borchers" "User Commands"
+.SH "NAME"
+csdp-theta \- Compute the Lovasz Theta number of a graph
+.SH "SYNOPSIS"
+.B csdp-theta
+GRAPH_FILE
+.SH "DESCRIPTION"
+.PP 
+The csdp-theta program uses the CSDP library to compute the Lovasz Theta number
+of an input graph.
+
+.SH "FILE FORMAT"
+.PP
+The input file should be in the following format:
+.RS
+.br
+n
+.br
+m
+.br
+i1 j1
+.br
+\[u2026]
+.br
+im jm
+.RE
+where n is the number of nodes, m is the number of edges, and each i/j pair
+describes one edge.
+
+.SH "EXIT STATUS"
+.PP 
+The output is the Lovasz Theta number of the input graph.  The exit status is
+zero if the number is computed successfully.  Otherwise, the exit status is
+one, and an error message indicating the problem is produced on standard out.
+
+.SH "AUTHORS"
+Csdp was written by Dr. Brian Borchers <borchers@nmt.edu>, with contributions
+by Joseph Young <josyoun@nmt.edu> and Aaron Wilson <wilson@nmt.edu>.
+.PP 
+This man page was written by Jerry James <loganjerry@gmail.com>.
+It is distributed under the same terms as Csdp.
+
+.SH "SEE ALSO"
+.PP
+\fIcsdp-graphtoprob\fP(1), \fIcsdp-complement\fP(1), \fIcsdp-rand_graph\fP(1)

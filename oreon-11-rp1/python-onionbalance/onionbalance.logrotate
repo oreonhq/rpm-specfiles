@@ -1,0 +1,10 @@
+/var/log/onionbalance/*log {
+	compress
+	create 0640 onionbalance toranon
+	daily
+	missingok
+	notifempty
+	rotate 14
+	copytruncate
+	sharedscripts
+}

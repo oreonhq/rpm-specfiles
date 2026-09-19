@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>mutante</id>
+  <metadata_license>CC-BY-2.5</metadata_license>
+  <name>MutantE</name>
+  <summary>Mutante font used by the HUD in cave9 game</summary>
+  <description>
+    <p>
+      Fantasy/display font used by the cave9 game, this font has only the basic
+      characters used in the Portuguese language was made as an experiment by the
+      designer Jonas Kühner (http://www.criatipos.com/) the font was altered by
+      the game developer to also include numbers.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://code.google.com/p/cave9</url>
+</component>
+

@@ -1,0 +1,22 @@
+--- sqlx-sqlite-0.8.6/Cargo.toml	1970-01-01T00:00:01+00:00
++++ sqlx-sqlite-0.8.6/Cargo.toml	2025-05-20T08:24:26.334055+00:00
+@@ -79,10 +79,8 @@
+ default-features = false
+ 
+ [dependencies.libsqlite3-sys]
+-version = "0.30.1"
++version = ">=0.28,<0.31"
+ features = [
+-    "pkg-config",
+-    "vcpkg",
+     "unlock_notify",
+ ]
+ default-features = false
+@@ -143,7 +141,6 @@
+ 
+ [features]
+ any = ["sqlx-core/any"]
+-bundled = ["libsqlite3-sys/bundled"]
+ chrono = [
+     "dep:chrono",
+     "sqlx-core/chrono",

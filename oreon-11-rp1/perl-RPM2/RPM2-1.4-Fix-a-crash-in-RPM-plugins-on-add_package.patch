@@ -1,0 +1,115 @@
+From cbcad2f75d51ace89c3c4597df373e9ae0014c4b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 22 Apr 2025 10:27:34 +0200
+Subject: [PATCH] Fix a crash in RPM plugins on add_package()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If fapolicyd RPM plugin was installed the tests crashed like this:
+
+    #0  fapolicyd_init (plugin=<optimized out>, ts=0x555555813e10)
+        at /usr/src/debug/rpm-5.99.90-3.fc43.x86_64/plugins/fapolicyd.c:154
+    #1  fapolicyd_init (plugin=plugin@entry=0x5555556e10c0, ts=ts@entry=0x555555813e10)
+        at /usr/src/debug/rpm-5.99.90-3.fc43.x86_64/plugins/fapolicyd.c:149
+    #2  0x00007ffff75b3a2c in rpmpluginsCallInit (plugin=0x5555556e10c0, ts=<optimized out>)
+        at /usr/src/debug/rpm-5.99.90-3.fc43.x86_64/lib/rpmplugins.cc:226
+    #3  rpmpluginsAdd (plugins=<optimized out>, name=<optimized out>,
+        path=0x55555558b060 "/usr/lib64/rpm-plugins/fapolicyd.so", opts=<optimized out>)
+        at /usr/src/debug/rpm-5.99.90-3.fc43.x86_64/lib/rpmplugins.cc:145
+    #4  rpmpluginsAddPlugin (type=0x7ffff75e2847 "transaction", plugins=<optimized out>,
+        name=<optimized out>) at /usr/src/debug/rpm-5.99.90-3.fc43.x86_64/lib/rpmplugins.cc:184
+    #5  rpmtsSetupTransactionPlugins (ts=<optimized out>)
+        at /usr/src/debug/rpm-5.99.90-3.fc43.x86_64/lib/transaction.cc:1616
+    #6  0x00007ffff7585688 in rpmtsAddInstallElement (ts=0x555555813e10, h=0x555557d873e0,
+        key=0x5555589bce50, upgrade=0, relocs=0x0)
+        at /usr/src/debug/rpm-5.99.90-3.fc43.x86_64/lib/depends.cc:456
+    #7  0x00007ffff78893b8 in XS_RPM2__C__Transaction__add_install (my_perl=<optimized out>,
+        cv=<optimized out>) at lib/RPM2.xs:523
+    #8  0x00007ffff7ce2622 in Perl_pp_entersub () from /lib64/libperl.so.5.40
+    #9  0x00007ffff7d62650 in Perl_runops_standard () from /lib64/libperl.so.5.40
+    #10 0x00007ffff7c2dfb6 in perl_run () from /lib64/libperl.so.5.40
+    #11 0x000055555555468e in main ()
+
+The crash was in rstreq(rpmtsRootDir(ts), "/") of the plugin where
+ts->rootDir was NULL.  According to rpmtsRun() documenation:
+
+    Before calling rpmtsRun be sure to have:
+
+        - setup the rpm root dir via rpmtsSetRoot().
+        - setup the rpm notify callback via rpmtsSetNotifyCallback().
+        - setup the rpm transaction flags via rpmtsSetFlags().
+
+The same probably applies to rpmtsAddInstallElement() and similar
+functions.
+
+This patch adds RPM2::Transaction::set_root() method which exposes
+rpmtsSetRootDir() function and calls it in create_transaction() to obey
+the RPM's assumption about always set transaction root directory.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/RPM2.pm | 12 ++++++++++++
+ lib/RPM2.xs | 11 +++++++++++
+ 2 files changed, 23 insertions(+)
+
+diff --git a/lib/RPM2.pm b/lib/RPM2.pm
+index d689b6d..ab99633 100644
+--- a/lib/RPM2.pm
++++ b/lib/RPM2.pm
+@@ -91,6 +91,7 @@ sub create_transaction
+ 
+   $t = RPM2::_create_transaction($flags);
+   $t = RPM2::Transaction->_new_raw($t);
++  $t->set_root;
+ 
+   return $t;	
+ }
+@@ -472,6 +473,12 @@ sub run {
+ 	$ignore_probs);
+ }
+ 
++sub set_root {
++	my $self = shift;
++	my $root = shift || '/';
++	return $self->{'c_transaction'}->_set_root($root);
++}
++
+ # Preloaded methods go here.
+ 
+ 1;
+@@ -770,6 +777,11 @@ returns the NEVR's not the package headers.
+ Run the transaction.  This will automatically check for dependency
+ satisfaction, and order the transaction.
+ 
++=item set_root($root)
++
++Set a root directory for the transaction. Defaults to C</>. Returns 0 on
++failure, 1 on success.
++
+ =back
+ 
+ =head1 TODO
+diff --git a/lib/RPM2.xs b/lib/RPM2.xs
+index b5575b3..1223c79 100644
+--- a/lib/RPM2.xs
++++ b/lib/RPM2.xs
+@@ -633,4 +633,15 @@ _run(t, ok_probs, prob_filter)
+     OUTPUT:
+ 	RETVAL
+ 
++int
++_set_root(t, root)
++	rpmts t
++	const char *root
++    PREINIT:
++	int ret;
++    CODE:
++	ret = rpmtsSetRootDir(t, root);
++	RETVAL = (ret == 0) ? 1 : 0;
++    OUTPUT:
++	RETVAL
+ 
+-- 
+2.49.0
+

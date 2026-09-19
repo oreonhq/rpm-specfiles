@@ -1,0 +1,21 @@
+C type error in the Python module definition
+
+The m_size field at this position has type Py_ssize_t, so you use 0 to
+initialize it, and not a pointer constant. Fixes a build error with
+current compilers.
+
+Submitted upstream: <https://github.com/tgalal/python-axolotl-curve25519/pull/28>
+
+diff --git a/curve25519module.c b/curve25519module.c
+index f4bd3d7adc504cf5..cf8bb45969f486c6 100644
+--- a/curve25519module.c
++++ b/curve25519module.c
+@@ -158,7 +158,7 @@ curve25519_functions[] = {
+         PyModuleDef_HEAD_INIT,
+         "axolotl_curve25519",
+         NULL,
+-        NULL,
++        0,
+         curve25519_functions,
+     };
+ 

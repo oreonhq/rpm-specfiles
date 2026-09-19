@@ -1,0 +1,14 @@
+diff -up bolzplatz2006/libsrc/jirr-dev/src/java/net/sf/jirr/SMaterial.java~ bolzplatz2006/libsrc/jirr-dev/src/java/net/sf/jirr/SMaterial.java
+--- jirr/src/java/net/sf/jirr/SMaterial.java~	2007-09-08 11:57:38.000000000 +0200
++++ jirr/src/java/net/sf/jirr/SMaterial.java	2007-09-08 11:57:38.000000000 +0200
+@@ -98,7 +98,9 @@ public class SMaterial {
+   }
+ 
+   public void setTexture(int index, ITexture texture) {
+-    JirrJNI.SMaterial_setTexture(swigCPtr, this, index, ITexture.getCPtr(texture), texture);
++    // Work around for missing materials better to have no texture then to crash
++    if (swigCPtr != 0)
++      JirrJNI.SMaterial_setTexture(swigCPtr, this, index, ITexture.getCPtr(texture), texture);
+   }
+ 
+   public boolean notEqualsOperator(SMaterial b) {

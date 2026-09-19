@@ -1,0 +1,30 @@
+From 66ca27de4f8fc7bd3bdbc739c18e72f7daff59d7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tom=C3=A1=C5=A1=20Hrn=C4=8Diar?= <thrnciar@redhat.com>
+Date: Fri, 19 Apr 2024 11:29:47 +0200
+Subject: [PATCH] Replace setup() method with setup_method() to add
+ compatibility with pytest 8
+
+---
+ tests/test_lexer.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_lexer.py b/tests/test_lexer.py
+index 986aae1..7bdf833 100644
+--- a/tests/test_lexer.py
++++ b/tests/test_lexer.py
+@@ -11,7 +11,7 @@
+ 
+ 
+ class TestMathematicaLexer:
+-    def setup(self):
++    def setup_method(self):
+         self.lexer = MathematicaLexer()
+ 
+     def verify(self, code, expected):
+@@ -414,5 +414,5 @@ def test_lexical_scope_nasty(self):
+ 
+ if __name__ == "__main__":
+     t = TestMathematicaLexer()
+-    t.setup()
++    t.setup_method()
+     t.test_get()

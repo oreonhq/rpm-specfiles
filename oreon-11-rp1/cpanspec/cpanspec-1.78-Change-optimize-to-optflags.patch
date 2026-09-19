@@ -1,0 +1,29 @@
+From b0bdaf235941165e74d5db24a9f87fdb4bcf57ce Mon Sep 17 00:00:00 2001
+From: Gavin Carr <gavin@openfusion.com.au>
+Date: Tue, 8 Feb 2011 16:40:02 +0000
+Subject: [PATCH] Change %{optimize} to %{optflags}.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Šabata <contyk@redhat.com>
+---
+ cpanspec | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cpanspec b/cpanspec
+index 5eaa63d..7b697ff 100755
+--- a/cpanspec
++++ b/cpanspec
+@@ -265,7 +265,7 @@ my @MACROS = (
+ 
+     # 1 is for the macros.
+     {
+-        'optimize'  => '%{optimize}',
++        'optimize'  => '%{optflags}',
+         'buildroot' => '%{buildroot}',
+     },
+ );
+-- 
+1.9.3
+

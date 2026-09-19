@@ -1,0 +1,29 @@
+From 63aa8513a5b5ace0c101a7e320a1d9d1ab2d60e7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 7 Apr 2014 13:47:10 +0200
+Subject: [PATCH] Supress undefined warning
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Frontier/RPC2.pm | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/lib/Frontier/RPC2.pm b/lib/Frontier/RPC2.pm
+index f721ef1..ed17a8e 100644
+--- a/lib/Frontier/RPC2.pm
++++ b/lib/Frontier/RPC2.pm
+@@ -230,6 +230,8 @@ sub _array {
+ sub _scalar {
+     my $self = shift; my $value = shift;
+ 
++    $value = '' unless defined $value;
++
+     # these are from `perldata(1)'
+     if ($value =~ /^[+-]?\d+$/) {
+ 	return ("<value><i4>$value</i4></value>");
+-- 
+1.9.0
+

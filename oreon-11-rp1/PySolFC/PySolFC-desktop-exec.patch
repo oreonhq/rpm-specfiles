@@ -1,0 +1,11 @@
+--- PySolFC-2.8.0/data/pysol.desktop.orig	2020-03-20 10:25:30.037977009 +0200
++++ PySolFC-2.8.0/data/pysol.desktop	2020-03-20 10:25:37.655003734 +0200
+@@ -1,7 +1,7 @@
+ [Desktop Entry]
+ Name=PySol Fan Club Edition
+ Comment=More than 1000 solitaire card games
+-Exec=pysol.py
++Exec=pysol
+ StartupWMClass=Pysol
+ Terminal=false
+ Type=Application

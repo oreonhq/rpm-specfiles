@@ -1,0 +1,14 @@
+[Unit]
+Description="wmbusmeters service"
+Documentation=https://github.com/weetmuts/wmbusmeters
+Documentation=man:wmbusmeters(1)
+After=network.target
+
+[Service]
+Type=forking
+ExecStartPre=/bin/mkdir -p /run/wmbusmeters
+ExecStart=/usr/bin/wmbusmetersd /run/wmbusmeters/wmbusmeters.pid
+PIDFile=/run/wmbusmeters/wmbusmeters.pid
+
+[Install]
+WantedBy=multi-user.target

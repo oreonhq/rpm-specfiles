@@ -1,12 +1,12 @@
-%global source0_hash 6fe86f0c0ff41044f44d1f37f9ae001b8d2c1a5a8bc06c41c43ed574138af5be
+%global source0_hash 233de4cd2fef5b7b4ce1e317196407d25300b767614a93e160b45ac34710223d
 
 %global framework kiconthemes
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 integration module with icon themes
 
@@ -26,14 +26,14 @@ BuildRequires:  qt6-qtbase-devel
 BuildRequires:  cmake(Qt6Svg)
 BuildRequires:  cmake(Qt6Qml)
 BuildRequires:  cmake(Qt6UiPlugin)
-BuildRequires:  cmake(KF6Archive)
-BuildRequires:  cmake(KF6BreezeIcons)
-BuildRequires:  cmake(KF6ColorScheme)
-BuildRequires:  cmake(KF6ConfigWidgets)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6ItemViews)
-BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6Archive) >= %{version}
+BuildRequires:  cmake(KF6BreezeIcons) >= %{version}
+BuildRequires:  cmake(KF6ColorScheme) >= %{version}
+BuildRequires:  cmake(KF6ConfigWidgets) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6ItemViews) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
 
 BuildRequires:  pkgconfig(xkbcommon)
 
@@ -82,6 +82,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

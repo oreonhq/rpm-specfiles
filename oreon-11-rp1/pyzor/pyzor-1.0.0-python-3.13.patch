@@ -1,0 +1,169 @@
+From e34e7527f884edbcc5729f22a891d4e56e368d52 Mon Sep 17 00:00:00 2001
+From: Robert Scheck <robert@fedoraproject.org>
+Date: Sun, 9 Jun 2024 14:32:33 +0200
+Subject: [PATCH] Python 3.13 compatibility: Rename deprecated .warn() to
+ .warning()
+
+Without this patch, building latest Pyzor using Python 3.13.0b2 fails
+like this: AttributeError: 'Logger' object has no attribute 'warn'
+
+See also: https://docs.python.org/3.13/whatsnew/3.13.html#logging
+---
+ pyzor/client.py        |  6 +++---
+ pyzor/config.py        | 22 +++++++++++-----------
+ pyzor/engines/mysql.py |  2 +-
+ pyzor/forwarder.py     |  4 ++--
+ pyzor/server.py        |  2 +-
+ web/application.py     |  7 ++++---
+ 6 files changed, 22 insertions(+), 21 deletions(-)
+
+diff --git a/pyzor/client.py b/pyzor/client.py
+index ac4299b..8db9200 100644
+--- a/pyzor/client.py
++++ b/pyzor/client.py
+@@ -184,10 +184,10 @@ def read_response(self, sock, expected_id):
+                     raise pyzor.ProtocolError(
+                         "received unexpected thread id %d (expected %d)" %
+                         (thread_id, expected_id))
+-                self.log.warn("received error thread id %d (expected %d)",
+-                              thread_id, expected_id)
++                self.log.warning("received error thread id %d (expected %d)",
++                                 thread_id, expected_id)
+         except KeyError:
+-            self.log.warn("no thread id received")
++            self.log.warning("no thread id received")
+         return msg
+ 
+ 
+diff --git a/pyzor/config.py b/pyzor/config.py
+index 9474a3e..eb8e555 100644
+--- a/pyzor/config.py
++++ b/pyzor/config.py
+@@ -63,12 +63,12 @@ def load_access_file(access_fn, accounts):
+             operations, users, allowed = [part.lower().strip()
+                                           for part in line.split(":")]
+         except ValueError:
+-            log.warn("Invalid ACL line: %r", line)
++            log.warning("Invalid ACL line: %r", line)
+             continue
+         try:
+             allowed = {"allow": True, "deny": False}[allowed]
+         except KeyError:
+-            log.warn("Invalid ACL line: %r", line)
++            log.warning("Invalid ACL line: %r", line)
+             continue
+         if operations == "all":
+             operations = ("check", "report", "ping", "pong", "info",
+@@ -118,7 +118,7 @@ def load_passwd_file(passwd_fn):
+         try:
+             user, key = line.split(":")
+         except ValueError:
+-            log.warn("Invalid accounts line: %r", line)
++            log.warning("Invalid accounts line: %r", line)
+             continue
+         user = user.strip()
+         key = key.strip()
+@@ -145,30 +145,30 @@ def load_accounts(filepath):
+                 host, port, username, key = [x.strip()
+                                              for x in line.split(":")]
+             except ValueError:
+-                log.warn("account file: invalid line %d: wrong number of "
+-                         "parts", lineno)
++                log.warning("account file: invalid line %d: wrong number of "
++                            "parts", lineno)
+                 continue
+             try:
+                 port = int(port)
+             except ValueError as ex:
+-                log.warn("account file: invalid line %d: %s", lineno, ex)
++                log.warning("account file: invalid line %d: %s", lineno, ex)
+                 continue
+             address = (host, port)
+             try:
+                 salt, key = pyzor.account.key_from_hexstr(key)
+             except ValueError as ex:
+-                log.warn("account file: invalid line %d: %s", lineno, ex)
++                log.warning("account file: invalid line %d: %s", lineno, ex)
+                 continue
+             if not salt and not key:
+-                log.warn("account file: invalid line %d: keystuff can't be "
+-                         "all None's", lineno)
++                log.warning("account file: invalid line %d: keystuff can't "
++                            "be all None's", lineno)
+                 continue
+             accounts[address] = pyzor.account.Account(username, salt, key)
+         accountsf.close()
+ 
+     else:
+-        log.warn("No accounts are setup.  All commands will be executed by "
+-                 "the anonymous user.")
++        log.warning("No accounts are setup.  All commands will be executed "
++                    "by the anonymous user.")
+     return accounts
+ 
+ 
+diff --git a/pyzor/engines/mysql.py b/pyzor/engines/mysql.py
+index f723cd2..e79f91c 100644
+--- a/pyzor/engines/mysql.py
++++ b/pyzor/engines/mysql.py
+@@ -233,7 +233,7 @@ def start_reorganizing(self):
+             c.execute("DELETE FROM %s WHERE r_updated<%%s" %
+                       self.table_name, (breakpoint,))
+         except (MySQLdb.Error, AttributeError) as e:
+-            self.log.warn("Unable to reorganise: %s", e)
++            self.log.warning("Unable to reorganise: %s", e)
+         finally:
+             c.close()
+             db.close()
+diff --git a/pyzor/forwarder.py b/pyzor/forwarder.py
+index b6686e1..470ac2d 100644
+--- a/pyzor/forwarder.py
++++ b/pyzor/forwarder.py
+@@ -47,8 +47,8 @@ def _forward_loop(self):
+                     else:
+                         self.forwarding_client.report(digest, server)
+                 except Exception as ex:
+-                    self.log.warn('Forwarding digest %s to %s failed: %s',
+-                                  digest, server, ex)
++                    self.log.warning('Forwarding digest %s to %s failed: %s',
++                                     digest, server, ex)
+ 
+     def queue_forward_request(self, digest, whitelist=False):
+         """If forwarding is enabled, insert a digest into the forwarding queue
+diff --git a/pyzor/server.py b/pyzor/server.py
+index d73692f..d881c4b 100644
+--- a/pyzor/server.py
++++ b/pyzor/server.py
+@@ -272,7 +272,7 @@ def _really_handle(self):
+             if int(float(request["PV"])) != int(pyzor.proto_version):
+                 raise pyzor.UnsupportedVersionError()
+         except ValueError:
+-            self.server.log.warn("Invalid PV: %s", request["PV"])
++            self.server.log.warning("Invalid PV: %s", request["PV"])
+             raise pyzor.ProtocolError("Invalid Protocol Version")
+ 
+         # Check that the user has permission to execute the requested
+diff --git a/web/application.py b/web/application.py
+index d6fa006..9d760da 100755
+--- a/web/application.py
++++ b/web/application.py
+@@ -145,15 +145,16 @@ def validate(self):
+                 response = client.check(digest)
+             except pyzor.TimeoutError as e:
+                 self.add_error("message", "Temporary error please try again.")
+-                self.logger.warn("Timeout: %s", e)
++                self.logger.warning("Timeout: %s", e)
+                 return False
+             except pyzor.CommError as e:
+                 self.add_error("message", "Temporary error please try again.")
+-                self.logger.warn("Error: %s", e)
++                self.logger.warning("Error: %s", e)
+                 return False
+             if not response.is_ok():
+                 self.add_error("message", "Temporary error please try again.")
+-                self.logger.warn("Invalid response from server: %s", response)
++                self.logger.warning("Invalid response from server: %s",
++                                    response)
+                 return False
+             if int(response["Count"]) == 0:
+                 self.add_error("message", "Message not reported as spam.")

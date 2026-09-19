@@ -1,0 +1,68 @@
+--- Makefile.PL
++++ Makefile.PL
+@@ -1,13 +1,14 @@
+ # Only EU::MM 6.52+ understands CONFIGURE_REQUIRES
+ use ExtUtils::MakeMaker 6.52;
+-use Alien::Hunspell 0.04;
++use ExtUtils::PkgConfig;
+ use Config;
+ 
+ my $CC = $ENV{'CXX'} || 'c++';
+ 
+-my $shlib_location = Alien::Hunspell->libs;
+-my $header_location = Alien::Hunspell->cflags;
++my $shlib_location = ExtUtils::PkgConfig->libs_only_l('hunspell');
++my $header_location = ExtUtils::PkgConfig->cflags_only_I('hunspell');
+ 
++if ($shlib_location ne '' && $header_location ne '') {
+     WriteMakefile(
+         NAME          => 'Text::Hunspell',
+         VERSION_FROM  => 'Hunspell.pm',
+@@ -17,7 +18,7 @@ my $header_location = Alien::Hunspell->c
+         LD            => '$(CC)',
+         CONFIGURE_REQUIRES => {
+             'ExtUtils::MakeMaker' => '6.52',
+-            'Alien::Hunspell'     => '0.04',
++            'ExtUtils::PkgConfig' => 0,
+         },
+         XSOPT         => '-C++',
+         TYPEMAPS      => ['perlobject.map', 'typemap'],
+@@ -28,3 +29,13 @@ my $header_location = Alien::Hunspell->c
+             keywords  => [ qw(hunspell spelling spell-checker text-processing) ],
+         },
+     );
++}
++else {
++    # By default, ExtUtils::PkgConfig provides a verbose warning about
++    # being unable to locate the pkgconfig file and such. This adds an
++    # additional comment after that output.
++    warn "\n=========================================================\n";
++    warn "NOTE: You may need to install the libhunspell-dev package\n";
++    warn "(or the equivalent on your OS).\n";
++    warn "=========================================================\n";
++}
+--- META.json
++++ META.json
+@@ -33,8 +33,8 @@
+       },
+       "configure" : {
+          "requires" : {
+-            "Alien::Hunspell" : "0.04",
+-            "ExtUtils::MakeMaker" : "6.52"
++            "ExtUtils::MakeMaker" : "6.52",
++            "ExtUtils::PkgConfig" : "0"
+          }
+       }
+    },
+--- META.yml
++++ META.yml
+@@ -5,8 +5,8 @@ author:
+ build_requires:
+   ExtUtils::MakeMaker: '0'
+ configure_requires:
+-  Alien::Hunspell: '0.04'
+   ExtUtils::MakeMaker: '6.52'
++  ExtUtils::PkgConfig: '0'
+ dynamic_config: 1
+ generated_by: 'ExtUtils::MakeMaker version 7.24, CPAN::Meta::Converter version 2.150010'
+ keywords:

@@ -3,7 +3,7 @@
 %global apiversion 0.1
 
 Name: libmspub
-Version: 0.1.4
+Version: 0.1.5
 Release: %autorelease
 Summary: A library for import of Microsoft Publisher documents
 

@@ -3,7 +3,7 @@
 %bcond_without tests
 
 Name:           jimtcl
-Version:        0.83
+Version:        0.84
 Release:        %autorelease
 Summary:        A small embeddable Tcl interpreter
 

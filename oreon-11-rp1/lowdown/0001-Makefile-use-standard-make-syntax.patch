@@ -1,0 +1,33 @@
+From 6be5d5c8362825c38a5d26133f251534a857b17a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Sun, 23 Feb 2025 09:47:46 -0500
+Subject: [PATCH] Makefile: use standard make syntax
+
+The bmake syntax is not suppored by GNU make. Use that for wider compatibility.
+---
+ Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 988d9f5263..b55c408028 100644
+--- a/Makefile
++++ b/Makefile
+@@ -128,13 +128,13 @@ CFLAGS		+= -DVERSION=\"$(VERSION)\"
+ # also set SANDBOX_INIT_ERROR_IGNORE in their environment to ignore
+ # failure.
+ # Has no effect unless HAVE_SANDBOX_INIT is defined.
+-.ifdef SANDBOX_INIT_ERROR_IGNORE
+-.if $(SANDBOX_INIT_ERROR_IGNORE) == "always"
++ifdef SANDBOX_INIT_ERROR_IGNORE
++ifeq ($(SANDBOX_INIT_ERROR_IGNORE),"always")
+ CFLAGS		+= -DSANDBOX_INIT_ERROR_IGNORE=2
+-.else
++else
+ CFLAGS		+= -DSANDBOX_INIT_ERROR_IGNORE=1
+-.endif
+-.endif
++endif
++endif
+ # Because the objects will be compiled into a shared library:
+ CFLAGS		+= -fPIC
+ # To avoid exporting internal functions (lowdown.h has default visibility).

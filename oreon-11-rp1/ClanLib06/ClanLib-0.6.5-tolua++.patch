@@ -1,0 +1,69 @@
+diff -up ClanLib-0.6.5/Sources/API/Lua/lua.h.bar ClanLib-0.6.5/Sources/API/Lua/lua.h
+--- ClanLib-0.6.5/Sources/API/Lua/lua.h.bar	2001-09-22 17:52:16.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Lua/lua.h	2008-09-07 13:42:06.000000000 +0200
+@@ -47,9 +47,9 @@ public:
+ 	//: Init
+ 	static void init()
+ 	{
+-		state=lua_open(0);
++		state=lua_open();
+ 		tolua_clanbindings_open(state);
+-		lua_baselibopen(state);
++		luaopen_base(state);
+ 		initialized=true;
+ 	}
+ 
+@@ -65,32 +65,32 @@ public:
+ 	static int dofile (char *filename)
+ 	{ 
+ 		cl_assert(initialized);
+-		return lua_dofile(state,filename);
++		return luaL_dofile(state,filename);
+ 	}
+ 
+ 
+ 	//: Open the IO library
+-	static void iolibopen(void) { lua_iolibopen(state); }
++	static void iolibopen(void) { luaopen_io(state); }
+ 
+ 	//: Open the string library
+ 	static void strlibopen(void)
+ 	{ 
+ 		cl_assert(initialized);
+-		lua_strlibopen(state);
++		luaopen_string(state);
+ 	}
+ 
+ 	//: Open the math library
+ 	static void mathlibopen(void)
+ 	{ 
+ 		cl_assert(initialized);
+-		lua_mathlibopen(state);
++		luaopen_math(state);
+ 	}
+ 
+ 	//: Open the db library
+ 	static void dblibopen(void)
+ 	{ 
+ 		cl_assert(initialized);
+-		lua_dblibopen(state);
++		luaopen_debug(state);
+ 	}
+ };
+ #endif
+diff -up ClanLib-0.6.5/configure.in.bar ClanLib-0.6.5/configure.in
+--- ClanLib-0.6.5/configure.in.bar	2008-09-07 13:39:37.000000000 +0200
++++ ClanLib-0.6.5/configure.in	2008-09-07 13:42:06.000000000 +0200
+@@ -219,10 +219,8 @@ CHECK_LIB(GL,Setup/Tests/opengl.cpp, OPE
+ CHECK_LIB(mikmod,Setup/Tests/mikmod.cpp, mikmod=enabled, mikmod=disabled, [$x_libraries -lmikmod])
+ CHECK_LIB(png,Setup/Tests/png.cpp, png=enabled, png=disabled, [$x_libraries -lpng -lz])
+ CHECK_LIB(jpeg,Setup/Tests/jpeg.cpp, jpeg=enabled, jpeg=disabled, [$x_libraries -ljpeg])
+-for lib in lua40 lua; do
+-	dnl setting back OLDLIBS is needed because of the break
+-	CHECK_LIB($lib, Setup/Tests/lua.cpp, [ lua=enabled; LIBS="$OLDLIBS"; break ], lua=disabled, [ $x_libraries ])
+-done
++dnl hack force lua
++lua=enabled
+ CHECK_LIB(vorbis,Setup/Tests/vorbis.cpp, VORBIS=enabled, VORBIS=disabled, [$x_libraries -lvorbis])
+ for lib in Xxf86vm_pic Xxf86vm; do
+ 	dnl setting back OLDLIBS is needed because of the break

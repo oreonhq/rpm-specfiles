@@ -1,0 +1,82 @@
+diff --git a/Makefile b/Makefile
+index e42c791..cc0b9cc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -9,7 +9,7 @@ HDRS = $(SRCDIR)/config.h $(SRCDIR)/endianness.h $(SRCDIR)/version.h
+ HDRS += $(SRCDIR)/pixiewps.h $(SRCDIR)/utils.h $(SRCDIR)/wps.h
+ 
+ # Internal flags so one can safely override CFLAGS, CPPFLAGS and LDFLAGS
+-INTFLAGS = -std=c99 -I $(SRCDIR)/crypto/tc
++INTFLAGS = -std=c99
+ LIBS = -lpthread
+ 
+ ifeq ($(OPENSSL),1)
+@@ -17,12 +17,14 @@ LIBS += -lcrypto
+ INTFLAGS += -DUSE_OPENSSL
+ endif
+ 
++LIBS += -ltomcrypt
++
+ TARGET = pixiewps
+ 
+ include $(SRCDIR)/crypto/tfm/sources.mak
+ TFMSRC = $(patsubst ./%,$(SRCDIR)/crypto/tfm/%,$(TFM_SRCS))
+ TFMOBJS = $(TFMSRC:.c=.o)
+-TC_SRCS = ./aes_cbc.c ./aes.c
++TC_SRCS = ./aes_cbc.c
+ TCSRC = $(patsubst ./%,$(SRCDIR)/crypto/tc/%,$(TC_SRCS))
+ TCOBJS = $(TCSRC:.c=.o)
+ 
+diff --git a/src/crypto/hmac_sha256.c b/src/crypto/hmac_sha256.c
+index defda43..435d801 100644
+--- a/src/crypto/hmac_sha256.c
++++ b/src/crypto/hmac_sha256.c
+@@ -5,7 +5,7 @@
+ #ifdef USE_OPENSSL
+ # include <openssl/sha.h>
+ #else
+-# include "tc/sha256.c"
++# include <tomcrypt.h>
+ # define SHA256_CTX hash_state
+ # define SHA256_Init(x) do { sha256_init(x); } while(0)
+ # define SHA256_Update(x, y, z) sha256_process(x, y, z)
+diff --git a/src/crypto/tc/aes_cbc.c b/src/crypto/tc/aes_cbc.c
+index 5d023f0..63d9b49 100644
+--- a/src/crypto/tc/aes_cbc.c
++++ b/src/crypto/tc/aes_cbc.c
+@@ -6,7 +6,7 @@
+  * The library is free for all purposes without any express
+  * guarantee it works.
+  */
+-#include "tomcrypt.h"
++#include <tomcrypt.h>
+ 
+ /**
+    @file cbc_start.c
+diff --git a/src/pixiewps.c b/src/pixiewps.c
+index f733f36..cf0858d 100644
+--- a/src/pixiewps.c
++++ b/src/pixiewps.c
+@@ -44,7 +44,6 @@
+ #include "pixiewps.h"
+ #include "crypto/crypto_internal-modexp.c"
+ #include "crypto/hmac_sha256.c"
+-#include "crypto/tc/aes_cbc.h"
+ #include "random/glibc_random_yura.c"
+ #include "utils.h"
+ #include "wps.h"
+diff --git a/src/pixiewps.h b/src/pixiewps.h
+index 2ff110b..2e2bc0f 100644
+--- a/src/pixiewps.h
++++ b/src/pixiewps.h
+@@ -293,4 +293,10 @@ static inline uint_fast8_t is_mode_selected(const uint_fast8_t mode)
+ 	return 0;
+ }
+ 
++int aes_128_cbc_decrypt(
++        const unsigned char *key,
++        const unsigned char *iv,
++        unsigned char *data,
++        size_t data_len);
++
+ #endif /* PIXIEWPS_H */

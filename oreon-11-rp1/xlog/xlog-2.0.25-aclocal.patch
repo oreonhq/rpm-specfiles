@@ -1,0 +1,12 @@
+diff -up a/Makefile.am b/Makefile.am
+--- a/Makefile.am	2021-02-15 20:37:54.000000000 -0500
++++ b/Makefile.am	2025-10-19 01:05:33.816651640 -0400
+@@ -6,7 +6,7 @@ EXTRA_DIST = config.rpath mkinstalldirs
+ 
+ CLEANFILES = *~
+ 
+-ACLOCAL_AMFLAGS = -I /usr/share/aclocal
++ACLOCAL_AMFLAGS = -I m4
+ 
+ dist-hook:
+ 	rm -f AUTHORS ChangeLog

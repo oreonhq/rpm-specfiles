@@ -1,0 +1,17 @@
+--- wmidi-4.0.10/Cargo.toml	1970-01-01T00:00:01+00:00
++++ wmidi-4.0.10/Cargo.toml	2024-06-18T13:02:36.236028+00:00
+@@ -29,14 +29,7 @@
+ [lib]
+ bench = false
+ 
+-[[bench]]
+-name = "bench"
+-harness = false
+-
+ [dependencies]
+-
+-[dev-dependencies.criterion]
+-version = "0.3"
+ 
+ [features]
+ default = ["std"]

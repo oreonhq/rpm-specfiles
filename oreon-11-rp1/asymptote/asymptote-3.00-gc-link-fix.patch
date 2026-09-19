@@ -1,0 +1,12 @@
+diff -up asymptote-3.00/configure.ac.gcfix asymptote-3.00/configure.ac
+--- asymptote-3.00/configure.ac.gcfix	2025-02-20 16:40:40.060177301 -0500
++++ asymptote-3.00/configure.ac	2025-02-20 16:40:47.533014041 -0500
+@@ -477,7 +477,7 @@ AC_ARG_ENABLE(gc,
+ if test "x$enable_gc" != "xno" ; then
+   if test "x$with_vcpkg" == "xno"; then
+     AC_DEFINE(USEGC,1,[GC Enabled])
+-    GCLIB="\$(GC)/.libs/libgc.a"
++    GCLIB="-lgc "
+     INCL=$INCL" -I\$(GC)/include"
+     AC_MSG_NOTICE([$GCNAME is enabled])
+   fi

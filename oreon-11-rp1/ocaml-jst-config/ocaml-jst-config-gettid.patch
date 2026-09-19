@@ -1,0 +1,17 @@
+--- jst-config-0.17.0/src/thread_id.h.orig	2024-05-07 12:46:09.000000000 -0600
++++ jst-config-0.17.0/src/thread_id.h	2024-06-28 10:28:26.375066525 -0600
+@@ -6,10 +6,12 @@
+ 
+ #if JSC_THREAD_ID_METHOD == 1
+ 
+-#include <sys/syscall.h>
++#ifndef _GNU_SOURCE
++#define _GNU_SOURCE
++#endif
+ #include <unistd.h>
+ 
+-#define GET_THREAD_ID syscall(SYS_gettid)
++#define GET_THREAD_ID gettid
+ 
+ #elif JSC_THREAD_ID_METHOD == 2
+ 

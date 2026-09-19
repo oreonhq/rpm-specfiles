@@ -1,0 +1,25 @@
+From 8c997fc9f9c98c9878259b1bd178145add58fe0b Mon Sep 17 00:00:00 2001
+From: Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+Date: Fri, 11 Jul 2025 12:57:07 +0200
+Subject: [PATCH] Mark compatible with termcolor 3
+
+The breaking changes do not affect git-up.
+
+Link: https://github.com/termcolor/termcolor/releases/tag/3.0.0
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 6271e6b..3b9b0e8 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -33,7 +33,7 @@ classifiers = [
+ python = "^3.8"
+ GitPython = "^3.0.0"
+ colorama = "^0.4.0"
+-termcolor = "^2.0.0"
++termcolor = ">= 2.0.0, < 4.0.0"
+ 
+ [tool.poetry.dev-dependencies]
+ coveralls = "^3.0.0"

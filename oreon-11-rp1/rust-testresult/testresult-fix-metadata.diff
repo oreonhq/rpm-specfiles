@@ -1,0 +1,8 @@
+--- testresult-0.4.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ testresult-0.4.1/Cargo.toml	2025-08-07T12:35:44.638387+00:00
+@@ -44,4 +44,4 @@
+ version = "1.0.86"
+ 
+ [dev-dependencies.rstest]
+-version = "0.21.0"
++version = "0.26.0"

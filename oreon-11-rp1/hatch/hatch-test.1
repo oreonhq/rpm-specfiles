@@ -1,0 +1,118 @@
+.TH HATCH\-TEST "1" "August 2024" "" "User Commands"
+.SH NAME
+.B hatch\ test
+\(en Run tests using the \fBhatch\-test\fR environment matrix
+.SH SYNOPSIS
+.B hatch\ test
+.RI [ OPTIONS ]
+.RI [ ARGS ]...
+.SH DESCRIPTION
+Run tests using the
+.B hatch\-test
+environment matrix.
+.P
+If no filtering options are selected,
+then tests will be run
+in the first compatible environment
+found in the matrix
+with priority given
+to those matching the current interpreter.
+.P
+The
+.BR \-i / \-\-include
+and
+.BR \-x / \-\-exclude
+options may be used to include or exclude certain variables,
+optionally followed by specific comma-separated values,
+and may be selected multiple times.
+For example, if you have the following configuration:
+.TP
+.in +4n
+.EX
+.B [[tool.hatch.envs.hatch-test.matrix]]
+.B python\ =\ ["3.9",\ "3.10"]
+.B version\ =\ ["42",\ "3.14",\ "9000"]
+.EE
+.in
+.P
+then running:
+.P
+.in +4n
+.EX
+.B hatch\ test\ \-i\ py=3.10\ \-x\ version=9000
+.EE
+.in
+.P
+would run tests in the environments
+.B test.py3.10\-42
+and
+.BR test.py3.10\-3.14 .
+.P
+The
+.BR \-py / \-\-python
+option is a shortcut for specifying the inclusion
+.BR \-i\ py=... .
+.SH OPTIONS
+.TP
+.B \-r\fR, \fB\-\-randomize
+Randomize the order of test execution
+.TP
+.B \-p\fR, \fB\-\-parallel
+Parallelize test execution
+.TP
+.B \-\-retries\ INTEGER
+Number of times to retry failed tests
+.TP
+.B \-\-retry\-delay\ FLOAT
+Seconds to wait between retries
+.TP
+.B \-c\fR, \fB\-\-cover
+Measure code coverage
+.TP
+.B \-\-cover\-quiet
+Disable coverage reporting after tests, implicitly enabling
+.B \-\-cover
+.TP
+.B \-a\fR, \fB\-\-all
+Test all environments in the matrix
+.TP
+.B \-py\fR, \fB\-\-python\ \fITEXT
+The Python versions to test, equivalent to:
+.B \-i\ \py=...
+.TP
+.B \-i\fR, \fB\-\-include\ \fITEXT
+The matrix variables to include
+.TP
+.B \-x\fR, \fB\-\-exclude\ \fITEXT
+The matrix variables to exclude
+.TP
+.B \-s\fR, \fB\-\-show
+Show information about environments in the matrix
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH NOTES
+The inclusion option is treated as an intersection
+while the exclusion option is treated as a union
+i.e. an environment must match all of the included variables
+to be selected
+while matching any of the excluded variables
+will prevent selection.
+.SH "SEE ALSO"
+.BR hatch\-build (1),
+.BR hatch\-clean (1),
+.BR hatch\-config (1),
+.BR hatch\-dep (1),
+.BR hatch\-env (1),
+.BR hatch\-fmt (1),
+.BR hatch\-new (1),
+.BR hatch\-project (1),
+.BR hatch\-publish (1),
+.BR hatch\-python (1),
+.BR hatch\-run (1),
+.BR hatch\-self (1),
+.BR hatch\-shell (1),
+.BR hatch\-status (1),
+.BR hatch\-version (1)
+.P
+.BR hatch (1)

@@ -1,0 +1,32 @@
+diff -ur krazy-krazy/cppchecks/cplusplus/cppmodel/CMakeLists.txt krazy-krazy-install-shlibs/cppchecks/cplusplus/cppmodel/CMakeLists.txt
+--- krazy-krazy/cppchecks/cplusplus/cppmodel/CMakeLists.txt	2013-08-17 17:03:13.000000000 +0200
++++ krazy-krazy-install-shlibs/cppchecks/cplusplus/cppmodel/CMakeLists.txt	2013-11-17 03:07:55.000000000 +0100
+@@ -20,7 +20,5 @@
+ target_link_libraries(cppmodel preprocessor cpp_parser ${QT_QTCORE_LIBRARY})
+ set_target_properties(cppmodel PROPERTIES DEFINE_SYMBOL CPLUSPLUSMODEL_BUILD_LIB)
+ 
+-if(WIN32)
+ install(TARGETS cppmodel ${INSTALL_TARGETS_DEFAULT_ARGS})
+-endif(WIN32)
+ 
+diff -ur krazy-krazy/cppchecks/cplusplus/parser/CMakeLists.txt krazy-krazy-install-shlibs/cppchecks/cplusplus/parser/CMakeLists.txt
+--- krazy-krazy/cppchecks/cplusplus/parser/CMakeLists.txt	2013-08-17 17:03:13.000000000 +0200
++++ krazy-krazy-install-shlibs/cppchecks/cplusplus/parser/CMakeLists.txt	2013-11-17 03:07:55.000000000 +0100
+@@ -45,6 +45,4 @@
+ add_library(cpp_parser SHARED ${cplusplus_SRCS})
+ set_target_properties(cpp_parser PROPERTIES DEFINE_SYMBOL CPLUSPLUS_BUILD_LIB)
+ 
+-if(WIN32)
+ install(TARGETS cpp_parser ${INSTALL_TARGETS_DEFAULT_ARGS})
+-endif(WIN32)
+diff -ur krazy-krazy/cppchecks/cplusplus/preprocessor/CMakeLists.txt krazy-krazy-install-shlibs/cppchecks/cplusplus/preprocessor/CMakeLists.txt
+--- krazy-krazy/cppchecks/cplusplus/preprocessor/CMakeLists.txt	2013-08-17 17:03:13.000000000 +0200
++++ krazy-krazy-install-shlibs/cppchecks/cplusplus/preprocessor/CMakeLists.txt	2013-11-17 03:07:55.000000000 +0100
+@@ -17,7 +17,5 @@
+ target_link_libraries(preprocessor cpp_parser ${QT_QTCORE_LIBRARY})
+ set_target_properties(preprocessor PROPERTIES DEFINE_SYMBOL CPLUSPLUSPREPROCESSOR_BUILD_LIB)
+ 
+-if(WIN32)
+ install(TARGETS preprocessor ${INSTALL_TARGETS_DEFAULT_ARGS})
+-endif(WIN32)
+ 

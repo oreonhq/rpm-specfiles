@@ -1,0 +1,41 @@
+--- a/aws.gpr
++++ b/aws.gpr
+@@ -17,25 +17,17 @@
+ ------------------------------------------------------------------------------
+ 
+ with "shared";
+-with "include/zlib/zlib.gpr";
++with "zlib_ada";
+ with "templates_parser";
+ 
+ aggregate library project AWS is
+ 
+    for Project_Files use ("include/include.gpr", "src/src.gpr", "ssl/ssl.gpr");
+ 
+-   case ZLib.Zlib_Activated is
+-      when "Yes" =>
+-         for Project_Files
+-           use Project'Project_Files & ("include/zlib/zlib.gpr");
+-      when "No" =>
+-         null;
+-   end case;
+-
+    for Library_Name use "aws";
+    for Library_Kind use Shared.Library_Type;
+    for Library_Dir use Shared'Library_Dir & "/aws";
+-   for Library_Options use ("-L", "-ltemplates_parser");
++   for Library_Options use ("-L", "-ltemplates_parser", "-lzlib_ada");
+ 
+    case Shared.Library_Type is
+       when "static" | "static-pic" =>
+--- a/include/include.gpr
++++ b/include/include.gpr
+@@ -18,7 +18,7 @@
+ 
+ with "../shared";
+ 
+-with "zlib/zlib";
++with "zlib_ada";
+ 
+ library project Include is
+ 

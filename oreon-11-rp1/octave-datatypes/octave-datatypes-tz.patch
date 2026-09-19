@@ -1,0 +1,21 @@
+diff -up datatypes-release-1.2.0/src/Makefile.tz datatypes-release-1.2.0/src/Makefile
+--- datatypes-release-1.2.0/src/Makefile.tz	2026-03-05 10:59:42.000000000 -0700
++++ datatypes-release-1.2.0/src/Makefile	2026-03-09 18:03:15.812990994 -0600
+@@ -4,7 +4,7 @@ TARGET_OS ?= $(OS)
+ ifeq ($(TARGET_OS),Windows_NT)
+ 	LIBS = -lole32
+ else
+-	LIBS =
++	LIBS = -ldate-tz
+ endif
+ 
+ LDFLAGS += $(LIBS)
+@@ -12,7 +12,7 @@ LDFLAGS += $(LIBS)
+ TZFLAGS = -DHAS_REMOTE_API=0
+ 
+ all:
+-	$(MKOCTFILE)       '-I ./date'  __datetime__.cc tz.cpp $(TZFLAGS) $(LDFLAGS)
++	$(MKOCTFILE)       '-I ./date'  __datetime__.cc $(TZFLAGS) $(LDFLAGS)
+ 	$(MKOCTFILE)       __table2csv__.cc $(LDFLAGS)
+ 	$(MKOCTFILE)       __csv2table__.cc $(LDFLAGS)
+ 	$(MKOCTFILE)       __ckeyHash__.cc $(LDFLAGS)

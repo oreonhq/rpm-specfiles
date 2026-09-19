@@ -1,0 +1,12 @@
+diff -up sjinn/rs232opts.c.orig sjinn/rs232opts.c
+--- sjinn/rs232opts.c.orig	2011-06-21 15:56:40.172943276 -0400
++++ sjinn/rs232opts.c	2011-06-21 15:56:59.996695444 -0400
+@@ -167,7 +167,7 @@ main (int argc, char **argv)
+ 	     { NULL,	   no_argument,       NULL,  0  }
+ 	};
+ 
+-	c = getopt_long (argc, argv, "hVd:b:p:mns:r::w:",
++	c = getopt_long (argc, argv, "hVd:b:p:mns:r:w:",
+ 			 long_options, &option_index);
+ 	
+ 	if (c == -1)

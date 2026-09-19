@@ -1,0 +1,27 @@
+diff -up magicpoint-1.13a/mng.c~ magicpoint-1.13a/mng.c
+--- magicpoint-1.13a/mng.c~	2004-09-01 05:50:32.000000000 +0200
++++ magicpoint-1.13a/mng.c	2013-08-27 17:37:16.338296945 +0200
+@@ -24,6 +24,7 @@
+ 
+ #ifdef MNG
+ 
++#include <stdio.h>
+ #include <sys/time.h>
+ #include <libmng.h>
+ #include "mgp.h"
+@@ -49,13 +49,13 @@ void mng_window_setup __P((mngstuff *mym
+ /* callbacks for the mng decoder */
+ 
+ /* memory allocation; data must be zeroed */
+-mng_ptr mymngalloc(mng_uint32 size)
++mng_ptr mymngalloc(mng_size_t size)
+ {
+ 	return (mng_ptr)calloc(1, size);
+ }
+ 
+ /* memory deallocation */
+-void mymngfree(mng_ptr p, mng_uint32 size)
++void mymngfree(mng_ptr p, mng_size_t size)
+ {
+ 	free(p);
+ 	return;

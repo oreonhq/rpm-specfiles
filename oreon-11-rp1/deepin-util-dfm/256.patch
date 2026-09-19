@@ -1,0 +1,62 @@
+From 04e6a14943d9446afb4fa746a56012ff62bfc024 Mon Sep 17 00:00:00 2001
+From: Hillwood Yang <hillwood@opensuse.org>
+Date: Mon, 2 Feb 2026 21:58:48 +0800
+Subject: [PATCH] fix: Don't link boost_system for Boost 1.89+
+
+Since version 1.89, the Boost.System library has become header-only
+and no longer requires linking.
+---
+ misc/dfm-search/dfm-searchConfig.cmake.in      |  7 ++++++-
+ src/dfm-search/dfm-search-lib/dfm-search.cmake | 12 ++++++++++--
+ 2 files changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/misc/dfm-search/dfm-searchConfig.cmake.in b/misc/dfm-search/dfm-searchConfig.cmake.in
+index 227d96c..19c933e 100644
+--- a/misc/dfm-search/dfm-searchConfig.cmake.in
++++ b/misc/dfm-search/dfm-searchConfig.cmake.in
+@@ -4,7 +4,12 @@ include(CMakeFindDependencyMacro)
+ find_dependency(Qt@QT_VERSION_MAJOR@ COMPONENTS Core)
+ find_dependency(Dtk@DFM_VERSION_MAJOR@ COMPONENTS Core)
+ find_dependency(Threads)
+-find_dependency(Boost COMPONENTS system)
++find_package(Boost REQUIRED)
++
++if (Boost_VERSION_STRING VERSION_LESS "1.89.0")
++    message(STATUS "Boost < 1.89 → using Boost::system")
++    find_package(Boost REQUIRED COMPONENTS system)
++endif()
+ 
+ # 查找 PkgConfig 和 liblucene++ 依赖
+ find_dependency(PkgConfig)
+diff --git a/src/dfm-search/dfm-search-lib/dfm-search.cmake b/src/dfm-search/dfm-search-lib/dfm-search.cmake
+index 7b1cb82..6696236 100644
+--- a/src/dfm-search/dfm-search-lib/dfm-search.cmake
++++ b/src/dfm-search/dfm-search-lib/dfm-search.cmake
+@@ -2,7 +2,12 @@
+ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
+ find_package(Dtk${DFM_VERSION_MAJOR} COMPONENTS Core REQUIRED)
+ find_package(Threads REQUIRED)
+-find_package(Boost REQUIRED COMPONENTS system)
++find_package(Boost REQUIRED)
++
++if (Boost_VERSION_STRING VERSION_LESS "1.89.0")
++    message(STATUS "Boost < 1.89 → using Boost::system")
++    find_package(Boost REQUIRED COMPONENTS system)
++endif()
+ 
+ find_package(PkgConfig REQUIRED)
+ pkg_check_modules(Lucene REQUIRED IMPORTED_TARGET liblucene++ liblucene++-contrib)
+@@ -18,9 +23,12 @@ target_link_libraries(${BIN_NAME} PUBLIC
+     Dtk${DFM_VERSION_MAJOR}::Core
+     PkgConfig::Lucene
+     Threads::Threads
+-    Boost::system
+ )
+ 
++if (Boost_VERSION_STRING VERSION_LESS "1.89.0")
++    target_link_libraries(${BIN_NAME} PUBLIC Boost::system)
++endif()
++
+ target_include_directories(
+     ${BIN_NAME}
+ PUBLIC

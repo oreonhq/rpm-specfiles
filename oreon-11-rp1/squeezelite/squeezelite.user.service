@@ -1,0 +1,13 @@
+[Unit]
+Description=Squeezelite headless streaming music client
+Documentation=man:squeezelite.service(7)
+Wants=sound.target
+
+[Service]
+Type=exec
+ExecStartPre=/usr/bin/mkdir -p .local/share/squeezelite
+ExecStart=/usr/bin/squeezelite -M SqueezeLiteFedora -N .local/share/squeezelite/player-name
+ProtectSystem=full
+
+[Install]
+WantedBy=default.target

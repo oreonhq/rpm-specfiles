@@ -1,0 +1,23 @@
+From 073c92ae7222b7f51a43993358e7c0aece9dade1 Mon Sep 17 00:00:00 2001
+From: Antonio Terceiro <terceiro@debian.org>
+Date: Mon, 10 Mar 2025 15:49:47 -0300
+Subject: [PATCH] Rack::Accept::Response: drop usage of deprecated method
+
+Rack 3.1 has removed `header` in favor of `headers`.
+---
+ lib/rack/accept/response.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/rack/accept/response.rb b/lib/rack/accept/response.rb
+index 88eddf0..c4cc006 100644
+--- a/lib/rack/accept/response.rb
++++ b/lib/rack/accept/response.rb
+@@ -12,7 +12,7 @@ class Response < Rack::Response
+     def not_acceptable!
+       self.status = 406
+       self.body = []
+-      header['Content-Length'] = '0'
++      headers['Content-Length'] = '0'
+     end
+   end
+ end

@@ -1,0 +1,83 @@
+From df3c40025d8af665d826033aa2baa72c03116dc3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Mon, 23 Jun 2025 16:56:56 +0200
+Subject: [PATCH] Compatibility with Rack 3
+
+* Rack has removed Mongrel support ages ago [[1]]. Replace it with
+  WEBrick.
+* Rack split the webserver handlers into Rackup [[2]]
+* Use Rack::Handler.default which easily allows to choose even different
+  servers then WEBrick [[3]]
+
+[1]: https://github.com/rack/rack/pull/870/commits/2577f0bb09ff85fe6b07d290f708028aebf640ee
+[2]: https://github.com/rack/rack/pull/1937/commits/91c9c7f287f9f314e1523337b83d1b9c2c289f66
+[3]: https://github.com/igrigorik/em-http-request/pull/370#discussion_r2162951448
+---
+ benchmarks/server.rb    | 2 +-
+ em-http-request.gemspec | 5 +++--
+ spec/stallion.rb        | 7 ++++---
+ 3 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/benchmarks/server.rb b/benchmarks/server.rb
+index 8392f14..eea74b9 100644
+--- a/benchmarks/server.rb
++++ b/benchmarks/server.rb
+@@ -15,7 +15,7 @@ module Benchmark
+   class Server < Sinatra::Base
+ 
+     def self.run
+-      Rack::Handler::WEBrick.run(
++      Rackup::Handler.get('webrick').run(
+         Benchmark::Server.new,
+         :Port => 9292,
+         :AccessLog => [],
+diff --git a/em-http-request.gemspec b/em-http-request.gemspec
+index e6e2671..9c734ef 100644
+--- a/em-http-request.gemspec
++++ b/em-http-request.gemspec
+@@ -21,9 +21,10 @@ Gem::Specification.new do |s|
+   s.add_dependency 'eventmachine', '>= 1.0.3'
+   s.add_dependency 'http_parser.rb', '>= 0.6.0'
+ 
+-  s.add_development_dependency 'mongrel', '~> 1.2.0.pre2'
++  s.add_development_dependency 'webrick'
+   s.add_development_dependency 'multi_json'
+-  s.add_development_dependency 'rack', '< 2.0'
++  s.add_development_dependency 'rack'
++  s.add_development_dependency 'rackup'
+   s.add_development_dependency 'rake'
+   s.add_development_dependency 'rspec'
+ 
+diff --git a/spec/stallion.rb b/spec/stallion.rb
+index 54d6c80..dd262a9 100644
+--- a/spec/stallion.rb
++++ b/spec/stallion.rb
+@@ -4,6 +4,7 @@
+ # #--
+ 
+ require 'rack'
++require 'rackup/handler'
+ 
+ module Stallion
+   class Mount
+@@ -16,7 +17,7 @@ module Stallion
+     end
+ 
+     def match?(request)
+-      method = request['REQUEST_METHOD']
++      method = request.env['REQUEST_METHOD']
+       @methods.empty? or @methods.include?(method)
+     end
+   end
+@@ -56,9 +57,9 @@ module Stallion
+ 
+     ruby_version = RUBY_VERSION.split('.').map(&:to_i)
+     if ruby_version[0] >= 3
+-      Rack::Handler::Mongrel.run(Rack::Lint.new(self), **options)
++      Rackup::Handler.default.run(Rack::Lint.new(self), **options)
+     else
+-      Rack::Handler::Mongrel.run(Rack::Lint.new(self), options)
++      Rackup::Handler.default.run(Rack::Lint.new(self), options)
+     end
+   end
+ 

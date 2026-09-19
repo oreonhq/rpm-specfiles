@@ -1,0 +1,10 @@
+--- a/src/src/main.cpp~	2021-07-13 00:53:54.000000000 -0500
++++ b/src/src/main.cpp	2026-02-17 08:44:14.377231137 -0600
+@@ -29,6 +29,7 @@
+ #include <DLog>
+ #include <QTranslator>
+ #include <DApplicationSettings>
++#include <QDir>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <fcntl.h>

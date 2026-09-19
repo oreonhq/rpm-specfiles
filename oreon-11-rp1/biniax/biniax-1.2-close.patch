@@ -1,0 +1,13 @@
+--- desktop/inp.orig	2005-08-24 17:20:28.000000000 -0500
++++ desktop/inp.c	2012-08-08 16:35:35.970181592 -0500
+@@ -35,6 +35,10 @@
+     while( SDL_PollEvent( &event ) ) 
+ 	{
+ 
++	if( event.type == SDL_QUIT ){
++		exit(0);
++	}
++
+         switch( event.type ) 
+ 		{
+ 			case SDL_KEYDOWN:

@@ -1,0 +1,28 @@
+diff -ur jsroot-7.5.3.orig/build/jsroot.js jsroot-7.5.3/build/jsroot.js
+--- jsroot-7.5.3.orig/build/jsroot.js	2023-11-24 09:37:14.000000000 +0100
++++ jsroot-7.5.3/build/jsroot.js	2023-11-24 21:58:23.697321652 +0100
+@@ -9705,9 +9705,7 @@
+          }
+       };
+ 
+-      let mj_dir = '../mathjax/3.2.0';
+-      if (browser.webwindow && exports.source_dir.indexOf('https://root.cern/js') < 0 && exports.source_dir.indexOf('https://jsroot.gsi.de') < 0)
+-         mj_dir = 'mathjax';
++      let mj_dir = 'mathjax';
+ 
+       return loadScript(exports.source_dir + mj_dir + '/es5/tex-svg.js')
+                .catch(() => loadScript('https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-svg.js'))
+diff -ur jsroot-7.5.3.orig/modules/base/latex.mjs jsroot-7.5.3/modules/base/latex.mjs
+--- jsroot-7.5.3.orig/modules/base/latex.mjs	2023-11-24 09:37:14.000000000 +0100
++++ jsroot-7.5.3/modules/base/latex.mjs	2023-11-24 21:59:54.451531293 +0100
+@@ -928,9 +928,7 @@
+          }
+       };
+ 
+-      let mj_dir = '../mathjax/3.2.0';
+-      if (browser.webwindow && source_dir.indexOf('https://root.cern/js') < 0 && source_dir.indexOf('https://jsroot.gsi.de') < 0)
+-         mj_dir = 'mathjax';
++      let mj_dir = 'mathjax';
+ 
+       return loadScript(source_dir + mj_dir + '/es5/tex-svg.js')
+                .catch(() => loadScript('https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-svg.js'))

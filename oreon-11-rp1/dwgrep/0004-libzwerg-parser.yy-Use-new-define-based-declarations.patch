@@ -1,0 +1,33 @@
+From f5da56b9543fac11480adef44a47501a71e439e9 Mon Sep 17 00:00:00 2001
+From: Petr Machata <me@pmachata.org>
+Date: Mon, 17 Feb 2020 00:49:39 +0100
+Subject: [PATCH 04/10] libzwerg/parser.yy: Use new %define-based declarations
+ for Bison
+
+Bison newly declares pure api and error verbosity through a specially-named
+%define symbols. The old declarations are now warned about. Update the code
+correspondingly.
+
+Signed-off-by: Petr Machata <me@pmachata.org>
+---
+ libzwerg/parser.yy | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libzwerg/parser.yy b/libzwerg/parser.yy
+index cd8de1d..650ec01 100644
+--- a/libzwerg/parser.yy
++++ b/libzwerg/parser.yy
+@@ -308,8 +308,8 @@
+   }
+ %}
+ 
+-%pure-parser
+-%error-verbose
++%define api.pure
++%define parse.error verbose
+ %parse-param { std::unique_ptr <tree> &ret }
+ %parse-param { void *yyscanner }
+ %lex-param { yyscanner }
+-- 
+2.51.0
+

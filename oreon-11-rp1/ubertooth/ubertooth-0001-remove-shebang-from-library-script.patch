@@ -1,0 +1,22 @@
+From 500d9b2024e55c1bd269e80ede3980a60f6abbef Mon Sep 17 00:00:00 2001
+From: Sergey Avseyev <sergey.avseyev@gmail.com>
+Date: Sat, 2 Jan 2021 13:24:37 +0300
+Subject: [PATCH] remove shebang from library script
+
+---
+ host/python/specan_ui/specan/Ubertooth.py | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/host/python/specan_ui/specan/Ubertooth.py b/host/python/specan_ui/specan/Ubertooth.py
+index 9887c17..8c427ca 100644
+--- a/host/python/specan_ui/specan/Ubertooth.py
++++ b/host/python/specan_ui/specan/Ubertooth.py
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env python3
+-#
+ # Copyright 2011 Jared Boone
+ #
+ # This file is part of Project Ubertooth.
+-- 
+2.29.2
+

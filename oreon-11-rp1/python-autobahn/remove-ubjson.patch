@@ -1,0 +1,10 @@
+--- a/pyproject.toml"	2020-02-02 01:00:00.000000000 +0100
++++ b/pyproject.toml	2025-12-14 11:13:49.923117086 +0100
+@@ -52,7 +52,6 @@
+     "u-msgpack-python>=2.1; platform_python_implementation != 'CPython'",
+     "ujson>=4.0.2",  # Binary wheels for both CPython and PyPy
+     "cbor2>=5.2.0",  # Binary wheels + pure Python fallback
+-    "py-ubjson>=0.16.1",  # Pure Python implementation (set PYUBJSON_NO_EXTENSION=1 to skip C extension build)
+     # flatbuffers is vendored - no external dependency needed
+ ]
+ 

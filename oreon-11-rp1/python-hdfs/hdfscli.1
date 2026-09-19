@@ -1,0 +1,115 @@
+.TH HDFSCLI "1" "October 2021" "" "User Commands"
+.SH NAME
+.B hdfscli
+\(en a command line interface for HDFS
+.SH SYNOPSIS
+.B hdfscli
+.RB [ interactive ]
+.RB [ \-a\fR\ \fIALIAS ]
+.RB [ \-v ...]
+.P
+.B hdfscli download
+.RB [ \-fsa\fR\ \fIALIAS ]
+.RB [ \-v ...]
+.RB [ \-t\fR\ \fITHREADS ]
+.I HDFS_PATH
+.I LOCAL_PATH
+.P
+.B hdfscli upload
+.RB [ \-sa\fR\ \fIALIAS ]
+.RB [ \-v ...]
+.RB [ \-A \ |\  \-f ]
+.RB [ \-t\fR\ \fITHREADS ]
+.I LOCAL_PATH
+.I HDFS_PATH
+.P
+.B hdfscli
+.BR \-L \ |\  \-v \ |\  \-h
+.SH OPTIONS
+.SS COMMANDS
+.TP
+.B download
+Download a file or folder from HDFS.
+If a single file is downloaded,
+.B \-
+can be specified as
+.I LOCAL_PATH
+to stream it to standard out.
+.TP
+.B interactive
+Upload a file or folder to HDFS.
+.B \-
+can be specified as
+.I LOCAL_PATH
+to read from standard in.
+Start the client and expose it via the python interpreter (using
+.BR ipython (1)
+if available).
+.TP
+.B upload
+Upload a file or folder to HDFS.
+.B \-
+can be specified as
+.I LOCAL_PATH
+to read from standard in.
+.SS ARGUMENTS
+.TP
+.I HDFS_PATH
+Remote HDFS path.
+.TP
+.I LOCAL_PATH
+Path to local file or directory.
+.SS OPTIONS
+.TP
+.BR \-A \  \-\-append
+Append data to an existing file.
+Only supported if uploading a single file or from standard in.
+.TP
+.BR \-L \  \-\-log
+Show path to current log file and exit.
+.TP
+.BR \-V \  \-\-version
+Show version and exit.
+.TP
+.BR \-a \ \fIALIAS \-\-alias=\fIALIAS
+Alias of namenode to connect to.
+.TP
+.BR \-f \  \-\-force
+Allow overwriting any existing files.
+.TP
+.BR \-s \  \-\-silent
+Don\(cqt display progress status.
+.TP
+.BR \-t \ \fITHREADS \-\-threads=\fITHREADS
+Number of threads to use for parallelization.
+.B 0
+allocates a thread per file.
+[default:
+.BR 0 ]
+.TP
+.BR \-v \  \-\-verbose
+Enable log output.
+Can be specified up to three times (increasing verbosity each time).
+.SH "EXIT\ STATUS"
+HdfsCLI exits with return status
+.B 1
+if an error occurred and
+.B 0
+otherwise.
+.SH EXAMPLES
+.EX
+.B hdfscli\ \-a\ prod\ /user/foo
+.EE
+.EX
+.B hdfscli\ download\ features.avro\ dat/
+.EE
+.EX
+.B hdfscli\ download\ logs/1987\-03\-23\ \-\ >>logs
+.EE
+.EX
+.B hdfscli\ upload\ \-f\ \-\ data/weights.tsv\ <weights.tsv
+.EE
+.SH "SEE\ ALSO"
+.BR hdfscli\-avro (1)
+.P
+.BR ipython (1)

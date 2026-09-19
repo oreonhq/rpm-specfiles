@@ -1,0 +1,8 @@
+--- drm-sys-0.8.1/Cargo.toml	2006-07-24T01:21:28+00:00
++++ drm-sys-0.8.1/Cargo.toml	2026-03-05T14:43:51.050491+00:00
+@@ -54,5 +54,3 @@
+ ]
+ default-features = false
+ 
+-[target.'cfg(not(any(target_os = "android", target_os = "linux")))'.dependencies.libc]
+-version = "0.2"

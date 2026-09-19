@@ -1,0 +1,26 @@
+--- rpld-1.8/Makefile.orig	2001-11-01 09:30:36.000000000 -0600
++++ rpld-1.8/Makefile	2006-09-16 09:45:12.627495010 -0500
+@@ -109,7 +109,7 @@
+ # Stuff
+ CC	 = gcc
+ INCLUDES = 
+-OPT	 = -O
++#OPT	 = -O
+ CFLAGS   = ${OPT} ${INCLUDES} ${DEFINES}
+ LIBS     = 
+ LDFLAGS  =
+@@ -212,11 +212,11 @@
+ 	cp $< $@
+ 
+ install-prog:${PROG}
+-	${INSTALL} -c -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${BINDIR}
++	${INSTALL} -c -m ${BINMODE} ${PROG} ${BINDIR}
+ 
+ install-docs: doc
+-	${INSTALL} -c -o ${MANOWN} -g ${MANGRP} -m ${MANMODE} rpld.${MAN8EXT} ${MAN8}/rpld.${MAN8EXT}
+-	${INSTALL} -c -o ${MANOWN} -g ${MANGRP} -m ${MANMODE} rpld.conf.${MAN5EXT} ${MAN5}/rpld.conf.${MAN5EXT}
++	${INSTALL} -c -m ${MANMODE} rpld.${MAN8EXT} ${MAN8}/rpld.${MAN8EXT}
++	${INSTALL} -c -m ${MANMODE} rpld.conf.${MAN5EXT} ${MAN5}/rpld.conf.${MAN5EXT}
+ 
+ ana:ana.c ${NIT}
+ #linux-old-nit.c

@@ -1,0 +1,347 @@
+From 613e4532d93b728bef7b2c8e529a431bbe6ecc19 Mon Sep 17 00:00:00 2001
+From: Philippe F <phil.fremy@free.fr>
+Date: Wed, 18 Nov 2020 09:45:24 +0100
+Subject: [PATCH] Fix small typos
+
+---
+ rpdb/breakinfo.py       |  1 +
+ rpdb/const.py           |  2 --
+ rpdb/crypto.py          |  5 +++++
+ rpdb/debugee.py         |  2 +-
+ rpdb/events.py          |  4 ++--
+ rpdb/firewall_test.py   |  6 ++---
+ rpdb/rpc.py             |  4 +++-
+ rpdb/session_manager.py | 50 ++++++++++++++++++++++++++++-------------
+ rpdb/utils.py           |  2 +-
+ rpdb2.py                | 25 ---------------------
+ 10 files changed, 50 insertions(+), 51 deletions(-)
+
+diff --git a/rpdb/breakinfo.py b/rpdb/breakinfo.py
+index 7eddb90..58a0fa1 100644
+--- a/rpdb/breakinfo.py
++++ b/rpdb/breakinfo.py
+@@ -24,6 +24,7 @@ def CalcScopeLine(self, lineno):
+         rvl = copy.copy(self.m_valid_lines)
+         rvl.reverse()
+ 
++        l = ''
+         for l in rvl:
+             if lineno >= l:
+                 break
+diff --git a/rpdb/const.py b/rpdb/const.py
+index 9c01d86..3407af8 100644
+--- a/rpdb/const.py
++++ b/rpdb/const.py
+@@ -22,8 +22,6 @@
+ """
+ 
+ 
+-import os
+-
+ COPYRIGHT_NOTICE = """Copyright (C) 2013-2017 Philippe Fremy, 2005-2009 Nir Aides"""
+ CREDITS_NOTICE = """Work on version 1.4.8 was sponsored by Investortools, Inc."""
+ LICENSE_NOTICE = """
+diff --git a/rpdb/crypto.py b/rpdb/crypto.py
+index 65c36ec..8482ae5 100644
+--- a/rpdb/crypto.py
++++ b/rpdb/crypto.py
+@@ -5,6 +5,11 @@
+ import time
+ import zlib
+ 
++try:
++    from Crypto.Cipher import DES
++except ImportError:
++    pass
++
+ from rpdb.compat import _md5, base64_encodestring, base64_decodestring
+ from rpdb.exceptions import EncryptionExpected, EncryptionNotSupported, DecryptionFailure, AuthenticationFailure, \
+     AuthenticationBadData, AuthenticationBadIndex
+diff --git a/rpdb/debugee.py b/rpdb/debugee.py
+index 1105257..683e810 100644
+--- a/rpdb/debugee.py
++++ b/rpdb/debugee.py
+@@ -193,7 +193,7 @@ def __StartXMLRPCServer(self):
+ 
+         while True:
+             try:
+-                server = CXMLRPCServer((host, port), logRequests = 0)
++                server = CXMLRPCServer((host, port), logRequests = False)
+                 return (port, server)
+ 
+             except socket.error:
+diff --git a/rpdb/events.py b/rpdb/events.py
+index dcef346..6adeb7d 100644
+--- a/rpdb/events.py
++++ b/rpdb/events.py
+@@ -305,10 +305,10 @@ class CEventBreakpoint(CEvent):
+     REMOVE = as_unicode('remove')
+     SET = as_unicode('set')
+ 
+-    def __init__(self, bp, action = SET, id_list = [], fAll = False):
++    def __init__(self, bp, action = SET, id_list = None, fAll = False):
+         self.m_bp = breakpoint_copy(bp)
+         self.m_action = action
+-        self.m_id_list = id_list
++        self.m_id_list = id_list or []
+         self.m_fAll = fAll
+ 
+ 
+diff --git a/rpdb/firewall_test.py b/rpdb/firewall_test.py
+index 49ff48b..96c5476 100644
+--- a/rpdb/firewall_test.py
++++ b/rpdb/firewall_test.py
+@@ -97,7 +97,7 @@ def __client(self):
+                 s.connect((LOOPBACK, CFirewallTest.m_port))
+ 
+                 s.send(as_bytes('Hello, world'))
+-                data = self.__recv(s, 1024)
++                _data = self.__recv(s, 1024)
+                 self.m_result = True
+ 
+             except socket.error:
+@@ -140,9 +140,9 @@ def __server(self):
+ 
+         CFirewallTest.m_port = port
+ 
++        conn = None
+         try:
+             try:
+-                conn = None
+                 s.listen(1)
+                 conn, addr = s.accept()
+ 
+@@ -163,7 +163,7 @@ def __server(self):
+             s.close()
+ 
+ 
+-    def __recv(self, s, len):
++    def __recv(self, s, _len):
+         t0 = time.time()
+ 
+         while True:
+diff --git a/rpdb/rpc.py b/rpdb/rpc.py
+index 2576e13..eed5406 100644
+--- a/rpdb/rpc.py
++++ b/rpdb/rpc.py
+@@ -196,7 +196,7 @@ def __marshaled_dispatch(self, data, dispatch_method = None):
+                 response = self._dispatch(method, params)
+             # wrap response in a singleton tuple
+             response = (response,)
+-            response = xmlrpclib.dumps(response, methodresponse=1)
++            response = xmlrpclib.dumps(response, methodresponse=True)
+         except xmlrpclib.Fault:
+             fault = sys.exc_info()[1]
+             response = xmlrpclib.dumps(fault)
+@@ -279,11 +279,13 @@ def __request(self, name, params):
+ 
+             except AuthenticationBadIndex:
+                 e = sys.exc_info()[1]
++                print_debug("Caught AuthenticationBadIndex: %s" % str(e))
+                 self.m_crypto.set_index(e.m_max_index, e.m_anchor)
+                 continue
+ 
+             except xmlrpclib.Fault:
+                 fault = sys.exc_info()[1]
++                print_debug("Caught xmlrpclib.Fault: %s" % fault.faultString)
+                 if class_name(BadVersion) in fault.faultString:
+                     s = fault.faultString.split("'")
+                     version = ['', s[1]][len(s) > 0]
+diff --git a/rpdb/session_manager.py b/rpdb/session_manager.py
+index f9ef51c..cfba37f 100644
+--- a/rpdb/session_manager.py
++++ b/rpdb/session_manager.py
+@@ -8,19 +8,17 @@
+ import tempfile
+ import threading
+ import time
+-import sys
++import stat
+ 
+ from rpdb.breakpoint import CBreakPointsManagerProxy
+ from rpdb.const import *
+-from rpdb.const import POSIX, RPDB_BPL_FOLDER, BREAKPOINTS_FILE_EXT, RPDB_BPL_FOLDER_NT, LOCALHOST, LOOPBACK
+ from rpdb.compat import base64_encodestring, _md5
+ from rpdb.events import *
+ from rpdb.exceptions import *
+-from rpdb.exceptions import CException, CConnectionException, NotAttached
+ from rpdb.globals import g_fDefaultStd, g_fScreen, g_fDebug, g_found_unicode_files
+ from rpdb.utils import as_unicode, _print, print_debug, is_unicode, as_bytes, ENCODING_AUTO, detect_locale, as_string, \
+     get_python_executable, print_debug_exception, print_exception, generate_rid, split_command_line_path_filename_args, \
+-    my_os_path_join, FindFile, g_safe_base64_to, getcwdu, calcURL, generate_random_char
++    my_os_path_join, FindFile, g_safe_base64_to, getcwdu, calcURL, generate_random_char, myisfile
+ from rpdb.state_manager import CStateManager
+ from rpdb.firewall_test import CFirewallTest
+ from rpdb.crypto import CCrypto
+@@ -154,12 +152,12 @@ def set_printer(self, printer):
+         return self.__smi.set_printer(printer)
+ 
+ 
+-    def report_exception(self, type, value, tb):
++    def report_exception(self, etype, value, tb):
+         """
+         Sends exception information to the printer.
+         """
+ 
+-        return self.__smi.report_exception(type, value, tb)
++        return self.__smi.report_exception(etype, value, tb)
+ 
+ 
+     def register_callback(self, callback, event_type_dict, fSingleUse):
+@@ -920,11 +918,11 @@ def script_terminated_callback(self):
+     # Private Methods
+     #
+ 
+-    def __unhandled_exception(self, event):
++    def __unhandled_exception(self, _event):
+         self.unhandled_exception_callback()
+ 
+ 
+-    def __termination_callback(self, event):
++    def __termination_callback(self, _event):
+         self.script_terminated_callback()
+ 
+ 
+@@ -961,7 +959,7 @@ def __state_calback(self, event):
+ 
+         e = s[-1]
+ 
+-        function_name = e[2]
++        _function_name = e[2]
+         filename = os.path.basename(e[0])
+ 
+         if filename != DEBUGGER_FILENAME:
+@@ -1099,10 +1097,9 @@ def __wait_for_debuggee(self, rid):
+             time.sleep(STARTUP_TIMEOUT / 2)
+ 
+             for i in range(STARTUP_RETRIES):
++                print_debug('Scanning for debuggee...')
++                t0 = time.time()
+                 try:
+-                    print_debug('Scanning for debuggee...')
+-
+-                    t0 = time.time()
+                     return self.m_server_list_object.calcList(self.m_rpdb2_pwd, self.m_rid, rid)
+ 
+                 except UnknownServer:
+@@ -1226,7 +1223,7 @@ def _spawn_server(self, fchdir, ExpandedFilename, args, rid, interpreter):
+             try:
+                 import terminalcommand
+                 name = MAC
+-            except:
++            except ImportError:
+                 name = os.name
+ 
+         if name == 'nt' and g_fDebug:
+@@ -1523,7 +1520,7 @@ def on_event_signal_exception(self, event):
+         self.m_printer(STR_SIGNAL_EXCEPTION % (event.m_description, event.m_signame, event.m_signum))
+ 
+ 
+-    def on_event_embedded_sync(self, event):
++    def on_event_embedded_sync(self, _event):
+         #
+         # time.sleep() allows pending break requests to go through...
+         #
+@@ -1531,7 +1528,7 @@ def on_event_embedded_sync(self, event):
+         self.getSession().getProxy().embedded_sync()
+ 
+ 
+-    def on_event_exit(self, event):
++    def on_event_exit(self, _event):
+         self.m_printer(STR_DEBUGGEE_TERMINATED)
+         threading.Thread(target = self.detach_job).start()
+ 
+@@ -2402,7 +2399,7 @@ def CalcTerminalCommand():
+             return term
+ 
+     if IsPrefixInEnviron(KDE_PREFIX):
+-        (s, term) = commands.getstatusoutput(KDE_DEFAULT_TERM_QUERY)
++        (s, term) = subprocess.getstatusoutput(KDE_DEFAULT_TERM_QUERY)
+         if (s == 0) and IsFileInPath(term):
+             return term
+ 
+@@ -2531,6 +2528,27 @@ def cleanup_bpl_folder(path):
+             pass
+ 
+ 
++def IsFileInPath(filename):
++    if filename == '':
++        return False
++
++    try:
++        FindFile(filename)
++        return True
++
++    except IOError:
++        return False
++
++
++def IsPrefixInEnviron(_str):
++    for e in os.environ.keys():
++        if e.startswith(_str):
++            return True
++
++    return False
++
++
++
+ def ControlRate(t_last_call, max_rate):
+     """
+     Limits rate at which this function is called by sleeping.
+diff --git a/rpdb/utils.py b/rpdb/utils.py
+index ca83607..e20e344 100644
+--- a/rpdb/utils.py
++++ b/rpdb/utils.py
+@@ -286,8 +286,8 @@ def safe_wait(lock, timeout = None):
+     #
+ 
+     while True:
++        t0 = time.time()
+         try:
+-            t0 = time.time()
+             return lock.wait(timeout)
+ 
+         except:
+diff --git a/rpdb2.py b/rpdb2.py
+index d970fed..4bed551 100644
+--- a/rpdb2.py
++++ b/rpdb2.py
+@@ -79,11 +79,6 @@
+     print(STR_BAD_PYTHON_VERSION)
+     sys.exit(-1)
+ 
+-try:
+-    from Crypto.Cipher import DES
+-except ImportError:
+-    pass
+-
+ import xmlrpc.client as xmlrpclib
+ import _thread as thread
+ import numbers
+@@ -602,26 +597,6 @@ def IsPythonSourceFile(path):
+     # this is too complicated in Python 3
+ 
+ 
+-def IsFileInPath(filename):
+-    if filename == '':
+-        return False
+-
+-    try:
+-        FindFile(filename)
+-        return True
+-
+-    except IOError:
+-        return False
+-
+-
+-
+-def IsPrefixInEnviron(_str):
+-    for e in os.environ.keys():
+-        if e.startswith(_str):
+-            return True
+-
+-    return False
+-
+ 
+ 
+ def get_file_encoding(filename):

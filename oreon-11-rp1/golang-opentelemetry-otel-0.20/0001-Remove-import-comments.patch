@@ -1,0 +1,1591 @@
+diff -up opentelemetry-go-0.20.0/attribute/doc.go.orig opentelemetry-go-0.20.0/attribute/doc.go
+--- opentelemetry-go-0.20.0/attribute/doc.go.orig	2021-08-06 15:29:35.268174451 +0200
++++ opentelemetry-go-0.20.0/attribute/doc.go	2021-08-06 15:31:24.218426357 +0200
+@@ -17,4 +17,4 @@
+ // This package is currently in a pre-GA phase. Backwards incompatible changes
+ // may be introduced in subsequent minor version releases as we work to track
+ // the evolving OpenTelemetry specification and user feedback.
+-package attribute // import "go.opentelemetry.io/otel/attribute"
++package attribute
+diff -up opentelemetry-go-0.20.0/attribute/encoder.go.orig opentelemetry-go-0.20.0/attribute/encoder.go
+--- opentelemetry-go-0.20.0/attribute/encoder.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/attribute/encoder.go	2021-08-06 15:29:35.269174444 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package attribute // import "go.opentelemetry.io/otel/attribute"
++package attribute
+ 
+ import (
+ 	"bytes"
+diff -up opentelemetry-go-0.20.0/attribute/iterator.go.orig opentelemetry-go-0.20.0/attribute/iterator.go
+--- opentelemetry-go-0.20.0/attribute/iterator.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/attribute/iterator.go	2021-08-06 15:29:35.270174437 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package attribute // import "go.opentelemetry.io/otel/attribute"
++package attribute
+ 
+ // Iterator allows iterating over the set of labels in order,
+ // sorted by key.
+diff -up opentelemetry-go-0.20.0/attribute/key.go.orig opentelemetry-go-0.20.0/attribute/key.go
+--- opentelemetry-go-0.20.0/attribute/key.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/attribute/key.go	2021-08-06 15:29:35.270174437 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package attribute // import "go.opentelemetry.io/otel/attribute"
++package attribute
+ 
+ // Key represents the key part in key-value pairs. It's a string. The
+ // allowed character set in the key depends on the use of the key.
+diff -up opentelemetry-go-0.20.0/attribute/kv.go.orig opentelemetry-go-0.20.0/attribute/kv.go
+--- opentelemetry-go-0.20.0/attribute/kv.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/attribute/kv.go	2021-08-06 15:29:35.271174430 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package attribute // import "go.opentelemetry.io/otel/attribute"
++package attribute
+ 
+ import (
+ 	"encoding/json"
+diff -up opentelemetry-go-0.20.0/attribute/set.go.orig opentelemetry-go-0.20.0/attribute/set.go
+--- opentelemetry-go-0.20.0/attribute/set.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/attribute/set.go	2021-08-06 15:29:35.272174424 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package attribute // import "go.opentelemetry.io/otel/attribute"
++package attribute
+ 
+ import (
+ 	"encoding/json"
+diff -up opentelemetry-go-0.20.0/attribute/value.go.orig opentelemetry-go-0.20.0/attribute/value.go
+--- opentelemetry-go-0.20.0/attribute/value.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/attribute/value.go	2021-08-06 15:29:35.272174424 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package attribute // import "go.opentelemetry.io/otel/attribute"
++package attribute
+ 
+ import (
+ 	"encoding/json"
+diff -up opentelemetry-go-0.20.0/baggage/baggage.go.orig opentelemetry-go-0.20.0/baggage/baggage.go
+--- opentelemetry-go-0.20.0/baggage/baggage.go.orig	2021-08-06 15:35:47.540618299 +0200
++++ opentelemetry-go-0.20.0/baggage/baggage.go	2021-08-06 15:36:27.420344464 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package baggage // import "go.opentelemetry.io/otel/baggage"
++package baggage
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/baggage/doc.go.orig opentelemetry-go-0.20.0/baggage/doc.go
+--- opentelemetry-go-0.20.0/baggage/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/baggage/doc.go	2021-08-06 15:29:38.285153736 +0200
+@@ -21,4 +21,4 @@ This package is currently in a pre-GA ph
+ may be introduced in subsequent minor version releases as we work to track the
+ evolving OpenTelemetry specification and user feedback.
+ */
+-package baggage // import "go.opentelemetry.io/otel/baggage"
++package baggage
+diff -up opentelemetry-go-0.20.0/bridge/opencensus/doc.go.orig opentelemetry-go-0.20.0/bridge/opencensus/doc.go
+--- opentelemetry-go-0.20.0/bridge/opencensus/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/bridge/opencensus/doc.go	2021-08-06 15:29:38.285153736 +0200
+@@ -13,4 +13,4 @@
+ // limitations under the License.
+ 
+ // Package opencensus provides a migration bridge forwarding the OpenCensus API to the OpenTelemetry SDK.
+-package opencensus // import "go.opentelemetry.io/otel/bridge/opencensus"
++package opencensus
+diff -up opentelemetry-go-0.20.0/bridge/opencensus/utils/utils.go.orig opentelemetry-go-0.20.0/bridge/opencensus/utils/utils.go
+--- opentelemetry-go-0.20.0/bridge/opencensus/utils/utils.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/bridge/opencensus/utils/utils.go	2021-08-06 15:29:38.286153729 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package utils // import "go.opentelemetry.io/otel/bridge/opencensus/utils"
++package utils
+ 
+ import (
+ 	octrace "go.opencensus.io/trace"
+diff -up opentelemetry-go-0.20.0/bridge/opentracing/bridge.go.orig opentelemetry-go-0.20.0/bridge/opentracing/bridge.go
+--- opentelemetry-go-0.20.0/bridge/opentracing/bridge.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/bridge/opentracing/bridge.go	2021-08-06 15:29:38.287153722 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package opentracing // import "go.opentelemetry.io/otel/bridge/opentracing"
++package opentracing
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/bridge/opentracing/doc.go.orig opentelemetry-go-0.20.0/bridge/opentracing/doc.go
+--- opentelemetry-go-0.20.0/bridge/opentracing/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/bridge/opentracing/doc.go	2021-08-06 15:29:38.287153722 +0200
+@@ -97,4 +97,4 @@
+ // LogFields() function, so when the call to the function gets
+ // translated to OpenTelemetry AddEvent() function, an empty context
+ // is passed.
+-package opentracing // import "go.opentelemetry.io/otel/bridge/opentracing"
++package opentracing
+diff -up opentelemetry-go-0.20.0/bridge/opentracing/internal/doc.go.orig opentelemetry-go-0.20.0/bridge/opentracing/internal/doc.go
+--- opentelemetry-go-0.20.0/bridge/opentracing/internal/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/bridge/opentracing/internal/doc.go	2021-08-06 15:29:38.287153722 +0200
+@@ -12,4 +12,4 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package internal // import "go.opentelemetry.io/otel/bridge/opentracing/internal"
++package internal
+diff -up opentelemetry-go-0.20.0/bridge/opentracing/migration/api.go.orig opentelemetry-go-0.20.0/bridge/opentracing/migration/api.go
+--- opentelemetry-go-0.20.0/bridge/opentracing/migration/api.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/bridge/opentracing/migration/api.go	2021-08-06 15:29:38.288153715 +0200
+@@ -15,7 +15,7 @@
+ // Package migration provides interfaces and functions that are useful for
+ // providing a cooperation of the OpenTelemetry tracers with the
+ // OpenTracing API.
+-package migration // import "go.opentelemetry.io/otel/bridge/opentracing/migration"
++package migration
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/bridge/opentracing/migration/defer.go.orig opentelemetry-go-0.20.0/bridge/opentracing/migration/defer.go
+--- opentelemetry-go-0.20.0/bridge/opentracing/migration/defer.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/bridge/opentracing/migration/defer.go	2021-08-06 15:29:38.288153715 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package migration // import "go.opentelemetry.io/otel/bridge/opentracing/migration"
++package migration
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/bridge/opentracing/util.go.orig opentelemetry-go-0.20.0/bridge/opentracing/util.go
+--- opentelemetry-go-0.20.0/bridge/opentracing/util.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/bridge/opentracing/util.go	2021-08-06 15:29:38.289153708 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package opentracing // import "go.opentelemetry.io/otel/bridge/opentracing"
++package opentracing
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/bridge/opentracing/wrapper.go.orig opentelemetry-go-0.20.0/bridge/opentracing/wrapper.go
+--- opentelemetry-go-0.20.0/bridge/opentracing/wrapper.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/bridge/opentracing/wrapper.go	2021-08-06 15:29:38.289153708 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package opentracing // import "go.opentelemetry.io/otel/bridge/opentracing"
++package opentracing
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/codes/codes.go.orig opentelemetry-go-0.20.0/codes/codes.go
+--- opentelemetry-go-0.20.0/codes/codes.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/codes/codes.go	2021-08-06 15:29:38.289153708 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package codes // import "go.opentelemetry.io/otel/codes"
++package codes
+ 
+ import (
+ 	"encoding/json"
+diff -up opentelemetry-go-0.20.0/codes/doc.go.orig opentelemetry-go-0.20.0/codes/doc.go
+--- opentelemetry-go-0.20.0/codes/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/codes/doc.go	2021-08-06 15:29:38.290153701 +0200
+@@ -22,4 +22,4 @@ the evolving OpenTelemetry specification
+ It conforms to [the OpenTelemetry
+ specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#statuscanonicalcode).
+ */
+-package codes // import "go.opentelemetry.io/otel/codes"
++package codes
+diff -up opentelemetry-go-0.20.0/doc.go.orig opentelemetry-go-0.20.0/doc.go
+--- opentelemetry-go-0.20.0/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/doc.go	2021-08-06 15:29:38.290153701 +0200
+@@ -35,4 +35,4 @@ To read more about metrics, see go.opent
+ To read more about propagation, see go.opentelemetry.io/otel/propagation and
+ go.opentelemetry.io/otel/baggage.
+ */
+-package otel // import "go.opentelemetry.io/otel"
++package otel
+diff -up opentelemetry-go-0.20.0/error_handler.go.orig opentelemetry-go-0.20.0/error_handler.go
+--- opentelemetry-go-0.20.0/error_handler.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/error_handler.go	2021-08-06 15:29:38.291153695 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package otel // import "go.opentelemetry.io/otel"
++package otel
+ 
+ // ErrorHandler handles irremediable events.
+ type ErrorHandler interface {
+diff -up opentelemetry-go-0.20.0/example/namedtracer/foo/foo.go.orig opentelemetry-go-0.20.0/example/namedtracer/foo/foo.go
+--- opentelemetry-go-0.20.0/example/namedtracer/foo/foo.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/example/namedtracer/foo/foo.go	2021-08-06 15:29:38.291153695 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package foo // import "go.opentelemetry.io/otel/example/namedtracer/foo"
++package foo
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/exporters/metric/prometheus/prometheus.go.orig opentelemetry-go-0.20.0/exporters/metric/prometheus/prometheus.go
+--- opentelemetry-go-0.20.0/exporters/metric/prometheus/prometheus.go.orig	2021-08-06 15:35:47.495618608 +0200
++++ opentelemetry-go-0.20.0/exporters/metric/prometheus/prometheus.go	2021-08-06 15:39:26.451102971 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package prometheus // import "go.opentelemetry.io/otel/exporters/metric/prometheus"
++package prometheus
+ 
+ // Note that this package does not support a way to export Prometheus
+ // Summary data points, removed in PR#1412.
+diff -up opentelemetry-go-0.20.0/exporters/metric/prometheus/sanitize.go.orig opentelemetry-go-0.20.0/exporters/metric/prometheus/sanitize.go
+--- opentelemetry-go-0.20.0/exporters/metric/prometheus/sanitize.go.orig	2021-08-06 15:35:47.500618573 +0200
++++ opentelemetry-go-0.20.0/exporters/metric/prometheus/sanitize.go	2021-08-06 15:38:15.360600067 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package prometheus // import "go.opentelemetry.io/otel/exporters/metric/prometheus"
++package prometheus
+ 
+ import (
+ 	"strings"
+diff -up opentelemetry-go-0.20.0/exporters/otlp/doc.go.orig opentelemetry-go-0.20.0/exporters/otlp/doc.go
+--- opentelemetry-go-0.20.0/exporters/otlp/doc.go.orig	2021-08-06 15:35:47.451618910 +0200
++++ opentelemetry-go-0.20.0/exporters/otlp/doc.go	2021-08-06 15:37:59.641709983 +0200
+@@ -17,4 +17,4 @@
+ // This package is currently in a pre-GA phase. Backwards incompatible changes
+ // may be introduced in subsequent minor version releases as we work to track
+ // the evolving OpenTelemetry specification and user feedback.
+-package otlp // import "go.opentelemetry.io/otel/exporters/otlp"
++package otlp
+diff -up opentelemetry-go-0.20.0/exporters/otlp/internal/otlpconfig/options.go.orig opentelemetry-go-0.20.0/exporters/otlp/internal/otlpconfig/options.go
+--- opentelemetry-go-0.20.0/exporters/otlp/internal/otlpconfig/options.go.orig	2021-08-06 15:35:47.436619013 +0200
++++ opentelemetry-go-0.20.0/exporters/otlp/internal/otlpconfig/options.go	2021-08-06 15:37:34.671882698 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package otlpconfig // import "go.opentelemetry.io/otel/exporters/otlp/internal/otlpconfig"
++package otlpconfig
+ 
+ import (
+ 	"crypto/tls"
+diff -up opentelemetry-go-0.20.0/exporters/otlp/options.go.orig opentelemetry-go-0.20.0/exporters/otlp/options.go
+--- opentelemetry-go-0.20.0/exporters/otlp/options.go.orig	2021-08-06 15:35:47.425619088 +0200
++++ opentelemetry-go-0.20.0/exporters/otlp/options.go	2021-08-06 15:37:20.736978377 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package otlp // import "go.opentelemetry.io/otel/exporters/otlp"
++package otlp
+ 
+ import (
+ 	metricsdk "go.opentelemetry.io/otel/sdk/export/metric"
+diff -up opentelemetry-go-0.20.0/exporters/otlp/optiontypes.go.orig opentelemetry-go-0.20.0/exporters/otlp/optiontypes.go
+--- opentelemetry-go-0.20.0/exporters/otlp/optiontypes.go.orig	2021-08-06 15:35:47.456618875 +0200
++++ opentelemetry-go-0.20.0/exporters/otlp/optiontypes.go	2021-08-06 15:37:11.837039486 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package otlp // import "go.opentelemetry.io/otel/exporters/otlp"
++package otlp
+ 
+ // Compression describes the compression used for payloads sent to the
+ // collector.
+diff -up opentelemetry-go-0.20.0/exporters/otlp/otlp.go.orig opentelemetry-go-0.20.0/exporters/otlp/otlp.go
+--- opentelemetry-go-0.20.0/exporters/otlp/otlp.go.orig	2021-08-06 15:35:47.422619109 +0200
++++ opentelemetry-go-0.20.0/exporters/otlp/otlp.go	2021-08-06 15:37:25.393946401 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package otlp // import "go.opentelemetry.io/otel/exporters/otlp"
++package otlp
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/exporters/otlp/otlpgrpc/doc.go.orig opentelemetry-go-0.20.0/exporters/otlp/otlpgrpc/doc.go
+--- opentelemetry-go-0.20.0/exporters/otlp/otlpgrpc/doc.go.orig	2021-08-06 15:35:47.446618944 +0200
++++ opentelemetry-go-0.20.0/exporters/otlp/otlpgrpc/doc.go	2021-08-06 15:36:49.652191812 +0200
+@@ -22,4 +22,4 @@ changes may be introduced in subsequent
+ work to track the evolving OpenTelemetry specification and user
+ feedback.
+ */
+-package otlpgrpc // import "go.opentelemetry.io/otel/exporters/otlp/otlpgrpc"
++package otlpgrpc
+diff -up opentelemetry-go-0.20.0/exporters/otlp/otlpgrpc/driver.go.orig opentelemetry-go-0.20.0/exporters/otlp/otlpgrpc/driver.go
+--- opentelemetry-go-0.20.0/exporters/otlp/otlpgrpc/driver.go.orig	2021-08-06 15:35:47.441618978 +0200
++++ opentelemetry-go-0.20.0/exporters/otlp/otlpgrpc/driver.go	2021-08-06 15:36:38.071271331 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package otlpgrpc // import "go.opentelemetry.io/otel/exporters/otlp/otlpgrpc"
++package otlpgrpc
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/exporters/otlp/otlphttp/doc.go.orig opentelemetry-go-0.20.0/exporters/otlp/otlphttp/doc.go
+--- opentelemetry-go-0.20.0/exporters/otlp/otlphttp/doc.go.orig	2021-08-06 15:35:47.431619047 +0200
++++ opentelemetry-go-0.20.0/exporters/otlp/otlphttp/doc.go	2021-08-06 15:36:58.396131774 +0200
+@@ -21,4 +21,4 @@ changes may be introduced in subsequent
+ work to track the evolving OpenTelemetry specification and user
+ feedback.
+ */
+-package otlphttp // import "go.opentelemetry.io/otel/exporters/otlp/otlphttp"
++package otlphttp
+diff -up opentelemetry-go-0.20.0/exporters/otlp/protocoldriver.go.orig opentelemetry-go-0.20.0/exporters/otlp/protocoldriver.go
+--- opentelemetry-go-0.20.0/exporters/otlp/protocoldriver.go.orig	2021-08-06 15:35:47.427619075 +0200
++++ opentelemetry-go-0.20.0/exporters/otlp/protocoldriver.go	2021-08-06 15:37:29.651917166 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package otlp // import "go.opentelemetry.io/otel/exporters/otlp"
++package otlp 
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/exporters/stdout/config.go.orig opentelemetry-go-0.20.0/exporters/stdout/config.go
+--- opentelemetry-go-0.20.0/exporters/stdout/config.go.orig	2021-08-06 15:35:47.530618367 +0200
++++ opentelemetry-go-0.20.0/exporters/stdout/config.go	2021-08-06 15:38:04.692674663 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package stdout // import "go.opentelemetry.io/otel/exporters/stdout"
++package stdout
+ 
+ import (
+ 	"io"
+diff -up opentelemetry-go-0.20.0/exporters/stdout/doc.go.orig opentelemetry-go-0.20.0/exporters/stdout/doc.go
+--- opentelemetry-go-0.20.0/exporters/stdout/doc.go.orig	2021-08-06 15:35:47.525618402 +0200
++++ opentelemetry-go-0.20.0/exporters/stdout/doc.go	2021-08-06 15:38:10.471634254 +0200
+@@ -18,4 +18,4 @@
+ // This package is currently in a pre-GA phase. Backwards incompatible changes
+ // may be introduced in subsequent minor version releases as we work to track
+ // the evolving OpenTelemetry specification and user feedback.
+-package stdout // import "go.opentelemetry.io/otel/exporters/stdout"
++package stdout
+diff -up opentelemetry-go-0.20.0/exporters/stdout/exporter.go.orig opentelemetry-go-0.20.0/exporters/stdout/exporter.go
+--- opentelemetry-go-0.20.0/exporters/stdout/exporter.go.orig	2021-08-06 15:35:47.460618848 +0200
++++ opentelemetry-go-0.20.0/exporters/stdout/exporter.go	2021-08-06 15:37:48.089790569 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package stdout // import "go.opentelemetry.io/otel/exporters/stdout"
++package stdout
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/exporters/stdout/metric.go.orig opentelemetry-go-0.20.0/exporters/stdout/metric.go
+--- opentelemetry-go-0.20.0/exporters/stdout/metric.go.orig	2021-08-06 15:35:47.470618779 +0200
++++ opentelemetry-go-0.20.0/exporters/stdout/metric.go	2021-08-06 15:37:43.679820848 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package stdout // import "go.opentelemetry.io/otel/exporters/stdout"
++package stdout
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/exporters/stdout/trace.go.orig opentelemetry-go-0.20.0/exporters/stdout/trace.go
+--- opentelemetry-go-0.20.0/exporters/stdout/trace.go.orig	2021-08-06 15:35:47.465618814 +0200
++++ opentelemetry-go-0.20.0/exporters/stdout/trace.go	2021-08-06 15:37:52.675758691 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package stdout // import "go.opentelemetry.io/otel/exporters/stdout"
++package stdout
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/exporters/trace/jaeger/agent.go.orig opentelemetry-go-0.20.0/exporters/trace/jaeger/agent.go
+--- opentelemetry-go-0.20.0/exporters/trace/jaeger/agent.go.orig	2021-08-06 15:35:47.519618443 +0200
++++ opentelemetry-go-0.20.0/exporters/trace/jaeger/agent.go	2021-08-06 15:39:19.786149575 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package jaeger // import "go.opentelemetry.io/otel/exporters/trace/jaeger"
++package jaeger
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/exporters/trace/jaeger/doc.go.orig opentelemetry-go-0.20.0/exporters/trace/jaeger/doc.go
+--- opentelemetry-go-0.20.0/exporters/trace/jaeger/doc.go.orig	2021-08-06 15:35:47.485618676 +0200
++++ opentelemetry-go-0.20.0/exporters/trace/jaeger/doc.go	2021-08-06 15:38:58.082301338 +0200
+@@ -17,4 +17,4 @@
+ // This package is currently in a pre-GA phase. Backwards incompatible changes
+ // may be introduced in subsequent minor version releases as we work to track
+ // the evolving OpenTelemetry specification and user feedback.
+-package jaeger // import "go.opentelemetry.io/otel/exporters/trace/jaeger"
++package jaeger
+diff -up opentelemetry-go-0.20.0/exporters/trace/jaeger/env.go.orig opentelemetry-go-0.20.0/exporters/trace/jaeger/env.go
+--- opentelemetry-go-0.20.0/exporters/trace/jaeger/env.go.orig	2021-08-06 15:35:47.480618711 +0200
++++ opentelemetry-go-0.20.0/exporters/trace/jaeger/env.go	2021-08-06 15:39:08.996225023 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package jaeger // import "go.opentelemetry.io/otel/exporters/trace/jaeger"
++package jaeger
+ 
+ import (
+ 	"os"
+diff -up opentelemetry-go-0.20.0/exporters/trace/jaeger/jaeger.go.orig opentelemetry-go-0.20.0/exporters/trace/jaeger/jaeger.go
+--- opentelemetry-go-0.20.0/exporters/trace/jaeger/jaeger.go.orig	2021-08-06 15:35:47.513618484 +0200
++++ opentelemetry-go-0.20.0/exporters/trace/jaeger/jaeger.go	2021-08-06 15:39:04.183258677 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package jaeger // import "go.opentelemetry.io/otel/exporters/trace/jaeger"
++package jaeger
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/exporters/trace/jaeger/reconnecting_udp_client.go.orig opentelemetry-go-0.20.0/exporters/trace/jaeger/reconnecting_udp_client.go
+--- opentelemetry-go-0.20.0/exporters/trace/jaeger/reconnecting_udp_client.go.orig	2021-08-06 15:35:47.490618642 +0200
++++ opentelemetry-go-0.20.0/exporters/trace/jaeger/reconnecting_udp_client.go	2021-08-06 15:38:51.570346873 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package jaeger // import "go.opentelemetry.io/otel/exporters/trace/jaeger"
++package jaeger
+ 
+ import (
+ 	"fmt"
+diff -up opentelemetry-go-0.20.0/exporters/trace/jaeger/uploader.go.orig opentelemetry-go-0.20.0/exporters/trace/jaeger/uploader.go
+--- opentelemetry-go-0.20.0/exporters/trace/jaeger/uploader.go.orig	2021-08-06 15:35:47.504618546 +0200
++++ opentelemetry-go-0.20.0/exporters/trace/jaeger/uploader.go	2021-08-06 15:38:39.598430587 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package jaeger // import "go.opentelemetry.io/otel/exporters/trace/jaeger"
++package jaeger
+ 
+ import (
+ 	"bytes"
+diff -up opentelemetry-go-0.20.0/exporters/trace/zipkin/doc.go.orig opentelemetry-go-0.20.0/exporters/trace/zipkin/doc.go
+--- opentelemetry-go-0.20.0/exporters/trace/zipkin/doc.go.orig	2021-08-06 15:35:47.475618745 +0200
++++ opentelemetry-go-0.20.0/exporters/trace/zipkin/doc.go	2021-08-06 15:38:45.484389430 +0200
+@@ -17,4 +17,4 @@
+ // This package is currently in a pre-GA phase. Backwards incompatible changes
+ // may be introduced in subsequent minor version releases as we work to track
+ // the evolving OpenTelemetry specification and user feedback.
+-package zipkin // import "go.opentelemetry.io/otel/exporters/trace/zipkin"
++package zipkin
+diff -up opentelemetry-go-0.20.0/exporters/trace/zipkin/model.go.orig opentelemetry-go-0.20.0/exporters/trace/zipkin/model.go
+--- opentelemetry-go-0.20.0/exporters/trace/zipkin/model.go.orig	2021-08-06 15:35:47.535618333 +0200
++++ opentelemetry-go-0.20.0/exporters/trace/zipkin/model.go	2021-08-06 15:38:22.279551686 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package zipkin // import "go.opentelemetry.io/otel/exporters/trace/zipkin"
++package zipkin
+ 
+ import (
+ 	"encoding/binary"
+diff -up opentelemetry-go-0.20.0/exporters/trace/zipkin/zipkin.go.orig opentelemetry-go-0.20.0/exporters/trace/zipkin/zipkin.go
+--- opentelemetry-go-0.20.0/exporters/trace/zipkin/zipkin.go.orig	2021-08-06 15:35:47.509618511 +0200
++++ opentelemetry-go-0.20.0/exporters/trace/zipkin/zipkin.go	2021-08-06 15:38:28.835505846 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package zipkin // import "go.opentelemetry.io/otel/exporters/trace/zipkin"
++package zipkin 
+ 
+ import (
+ 	"bytes"
+diff -up opentelemetry-go-0.20.0/handler.go.orig opentelemetry-go-0.20.0/handler.go
+--- opentelemetry-go-0.20.0/handler.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/handler.go	2021-08-06 15:30:09.559938999 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package otel // import "go.opentelemetry.io/otel"
++package otel
+ 
+ import (
+ 	"log"
+diff -up opentelemetry-go-0.20.0/internal/matchers/package.go.orig opentelemetry-go-0.20.0/internal/matchers/package.go
+--- opentelemetry-go-0.20.0/internal/matchers/package.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/internal/matchers/package.go	2021-08-06 15:30:09.560938992 +0200
+@@ -12,4 +12,4 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package matchers // import "go.opentelemetry.io/otel/internal/matchers"
++package matchers
+diff -up opentelemetry-go-0.20.0/metric/config.go.orig opentelemetry-go-0.20.0/metric/config.go
+--- opentelemetry-go-0.20.0/metric/config.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/metric/config.go	2021-08-06 15:30:09.560938992 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package metric // import "go.opentelemetry.io/otel/metric"
++package metric
+ 
+ import (
+ 	"go.opentelemetry.io/otel/unit"
+diff -up opentelemetry-go-0.20.0/metric/doc.go.orig opentelemetry-go-0.20.0/metric/doc.go
+--- opentelemetry-go-0.20.0/metric/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/metric/doc.go	2021-08-06 15:30:09.560938992 +0200
+@@ -64,4 +64,4 @@ create its own unique Meter. Alternative
+ MeterProvider from the go.opentelemetry.io/otel package can be used as a
+ default.
+ */
+-package metric // import "go.opentelemetry.io/otel/metric"
++package metric
+diff -up opentelemetry-go-0.20.0/metric/global/metric.go.orig opentelemetry-go-0.20.0/metric/global/metric.go
+--- opentelemetry-go-0.20.0/metric/global/metric.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/metric/global/metric.go	2021-08-06 15:30:09.561938985 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package global // import "go.opentelemetry.io/otel/metric/global"
++package global
+ 
+ import (
+ 	"go.opentelemetry.io/otel/internal/global"
+diff -up opentelemetry-go-0.20.0/metric/metric.go.orig opentelemetry-go-0.20.0/metric/metric.go
+--- opentelemetry-go-0.20.0/metric/metric.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/metric/metric.go	2021-08-06 15:30:09.561938985 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package metric // import "go.opentelemetry.io/otel/metric"
++package metric
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/metric/metric_instrument.go.orig opentelemetry-go-0.20.0/metric/metric_instrument.go
+--- opentelemetry-go-0.20.0/metric/metric_instrument.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/metric/metric_instrument.go	2021-08-06 15:30:09.562938978 +0200
+@@ -14,7 +14,7 @@
+ 
+ //go:generate stringer -type=InstrumentKind
+ 
+-package metric // import "go.opentelemetry.io/otel/metric"
++package metric
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/metric/metric_noop.go.orig opentelemetry-go-0.20.0/metric/metric_noop.go
+--- opentelemetry-go-0.20.0/metric/metric_noop.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/metric/metric_noop.go	2021-08-06 15:30:09.562938978 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package metric // import "go.opentelemetry.io/otel/metric"
++package metric
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/metric/metric_sdkapi.go.orig opentelemetry-go-0.20.0/metric/metric_sdkapi.go
+--- opentelemetry-go-0.20.0/metric/metric_sdkapi.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/metric/metric_sdkapi.go	2021-08-06 15:30:09.563938971 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package metric // import "go.opentelemetry.io/otel/metric"
++package metric
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/metric/number/doc.go.orig opentelemetry-go-0.20.0/metric/number/doc.go
+--- opentelemetry-go-0.20.0/metric/number/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/metric/number/doc.go	2021-08-06 15:30:10.587931941 +0200
+@@ -20,4 +20,4 @@ This package is currently in a pre-GA ph
+ may be introduced in subsequent minor version releases as we work to track the
+ evolving OpenTelemetry specification and user feedback.
+ */
+-package number // import "go.opentelemetry.io/otel/metric/number"
++package number
+diff -up opentelemetry-go-0.20.0/metric/number/number.go.orig opentelemetry-go-0.20.0/metric/number/number.go
+--- opentelemetry-go-0.20.0/metric/number/number.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/metric/number/number.go	2021-08-06 15:30:10.588931934 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package number // import "go.opentelemetry.io/otel/metric/number"
++package number
+ 
+ //go:generate stringer -type=Kind
+ 
+diff -up opentelemetry-go-0.20.0/metric/registry/doc.go.orig opentelemetry-go-0.20.0/metric/registry/doc.go
+--- opentelemetry-go-0.20.0/metric/registry/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/metric/registry/doc.go	2021-08-06 15:30:10.588931934 +0200
+@@ -21,4 +21,4 @@ This package is currently in a pre-GA ph
+ may be introduced in subsequent minor version releases as we work to track the
+ evolving OpenTelemetry specification and user feedback.
+ */
+-package registry // import "go.opentelemetry.io/otel/metric/registry"
++package registry
+diff -up opentelemetry-go-0.20.0/metric/registry/registry.go.orig opentelemetry-go-0.20.0/metric/registry/registry.go
+--- opentelemetry-go-0.20.0/metric/registry/registry.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/metric/registry/registry.go	2021-08-06 15:30:10.588931934 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package registry // import "go.opentelemetry.io/otel/metric/registry"
++package registry
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/oteltest/config.go.orig opentelemetry-go-0.20.0/oteltest/config.go
+--- opentelemetry-go-0.20.0/oteltest/config.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/oteltest/config.go	2021-08-06 15:30:13.505911906 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package oteltest // import "go.opentelemetry.io/otel/oteltest"
++package oteltest
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/oteltest/doc.go.orig opentelemetry-go-0.20.0/oteltest/doc.go
+--- opentelemetry-go-0.20.0/oteltest/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/oteltest/doc.go	2021-08-06 15:30:13.505911906 +0200
+@@ -48,4 +48,4 @@ testing structures.
+ 	sr := new(oteltest.SpanRecorder)
+ 	tp := oteltest.NewTracerProvider(oteltest.WithSpanRecorder(sr))
+ */
+-package oteltest // import "go.opentelemetry.io/otel/oteltest"
++package oteltest
+diff -up opentelemetry-go-0.20.0/oteltest/event.go.orig opentelemetry-go-0.20.0/oteltest/event.go
+--- opentelemetry-go-0.20.0/oteltest/event.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/oteltest/event.go	2021-08-06 15:30:13.506911899 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package oteltest // import "go.opentelemetry.io/otel/oteltest"
++package oteltest
+ 
+ import (
+ 	"time"
+diff -up opentelemetry-go-0.20.0/oteltest/harness.go.orig opentelemetry-go-0.20.0/oteltest/harness.go
+--- opentelemetry-go-0.20.0/oteltest/harness.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/oteltest/harness.go	2021-08-06 15:30:13.506911899 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package oteltest // import "go.opentelemetry.io/otel/oteltest"
++package oteltest
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/oteltest/meter.go.orig opentelemetry-go-0.20.0/oteltest/meter.go
+--- opentelemetry-go-0.20.0/oteltest/meter.go.orig	2021-08-06 15:35:47.413619171 +0200
++++ opentelemetry-go-0.20.0/oteltest/meter.go	2021-08-06 15:36:32.180311781 +0200
+@@ -12,8 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package oteltest // import "go.opentelemetry.io/otel/oteltest"
+-
++package oteltest
+ import (
+ 	"context"
+ 	"sync"
+diff -up opentelemetry-go-0.20.0/oteltest/provider.go.orig opentelemetry-go-0.20.0/oteltest/provider.go
+--- opentelemetry-go-0.20.0/oteltest/provider.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/oteltest/provider.go	2021-08-06 15:30:13.507911892 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package oteltest // import "go.opentelemetry.io/otel/oteltest"
++package oteltest
+ 
+ import (
+ 	"sync"
+diff -up opentelemetry-go-0.20.0/oteltest/span.go.orig opentelemetry-go-0.20.0/oteltest/span.go
+--- opentelemetry-go-0.20.0/oteltest/span.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/oteltest/span.go	2021-08-06 15:30:13.508911885 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package oteltest // import "go.opentelemetry.io/otel/oteltest"
++package oteltest
+ 
+ import (
+ 	"fmt"
+diff -up opentelemetry-go-0.20.0/oteltest/text_map_propagator.go.orig opentelemetry-go-0.20.0/oteltest/text_map_propagator.go
+--- opentelemetry-go-0.20.0/oteltest/text_map_propagator.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/oteltest/text_map_propagator.go	2021-08-06 15:30:13.508911885 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package oteltest // import "go.opentelemetry.io/otel/oteltest"
++package oteltest
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/oteltest/tracer.go.orig opentelemetry-go-0.20.0/oteltest/tracer.go
+--- opentelemetry-go-0.20.0/oteltest/tracer.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/oteltest/tracer.go	2021-08-06 15:30:13.509911878 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package oteltest // import "go.opentelemetry.io/otel/oteltest"
++package oteltest
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/propagation/baggage.go.orig opentelemetry-go-0.20.0/propagation/baggage.go
+--- opentelemetry-go-0.20.0/propagation/baggage.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/propagation/baggage.go	2021-08-06 15:30:13.509911878 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package propagation // import "go.opentelemetry.io/otel/propagation"
++package propagation
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/propagation/doc.go.orig opentelemetry-go-0.20.0/propagation/doc.go
+--- opentelemetry-go-0.20.0/propagation/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/propagation/doc.go	2021-08-06 15:30:13.510911871 +0200
+@@ -25,4 +25,4 @@ package is the W3C Trace Context encodin
+ (https://www.w3.org/TR/trace-context/), and W3C Baggage
+ (https://w3c.github.io/baggage/).
+ */
+-package propagation // import "go.opentelemetry.io/otel/propagation"
++package propagation
+diff -up opentelemetry-go-0.20.0/propagation.go.orig opentelemetry-go-0.20.0/propagation.go
+--- opentelemetry-go-0.20.0/propagation.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/propagation.go	2021-08-06 15:30:13.510911871 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package otel // import "go.opentelemetry.io/otel"
++package otel
+ 
+ import (
+ 	"go.opentelemetry.io/otel/internal/global"
+diff -up opentelemetry-go-0.20.0/propagation/propagation.go.orig opentelemetry-go-0.20.0/propagation/propagation.go
+--- opentelemetry-go-0.20.0/propagation/propagation.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/propagation/propagation.go	2021-08-06 15:30:13.511911865 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package propagation // import "go.opentelemetry.io/otel/propagation"
++package propagation
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/propagation/trace_context.go.orig opentelemetry-go-0.20.0/propagation/trace_context.go
+--- opentelemetry-go-0.20.0/propagation/trace_context.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/propagation/trace_context.go	2021-08-06 15:30:13.511911865 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package propagation // import "go.opentelemetry.io/otel/propagation"
++package propagation
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/export/metric/aggregation/aggregation.go.orig opentelemetry-go-0.20.0/sdk/export/metric/aggregation/aggregation.go
+--- opentelemetry-go-0.20.0/sdk/export/metric/aggregation/aggregation.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/export/metric/aggregation/aggregation.go	2021-08-06 15:30:13.511911865 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package aggregation // import "go.opentelemetry.io/otel/sdk/export/metric/aggregation"
++package aggregation
+ 
+ import (
+ 	"fmt"
+diff -up opentelemetry-go-0.20.0/sdk/export/metric/metric.go.orig opentelemetry-go-0.20.0/sdk/export/metric/metric.go
+--- opentelemetry-go-0.20.0/sdk/export/metric/metric.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/export/metric/metric.go	2021-08-06 15:30:13.512911858 +0200
+@@ -14,7 +14,7 @@
+ 
+ //go:generate stringer -type=ExportKind
+ 
+-package metric // import "go.opentelemetry.io/otel/sdk/export/metric"
++package metric
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/export/metric/metrictest/test.go.orig opentelemetry-go-0.20.0/sdk/export/metric/metrictest/test.go
+--- opentelemetry-go-0.20.0/sdk/export/metric/metrictest/test.go.orig	2021-08-06 15:35:47.416619150 +0200
++++ opentelemetry-go-0.20.0/sdk/export/metric/metrictest/test.go	2021-08-06 15:39:55.231901728 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package metrictest // import "go.opentelemetry.io/otel/sdk/export/metric/metrictest"
++package metrictest
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/instrumentation/library.go.orig opentelemetry-go-0.20.0/sdk/instrumentation/library.go
+--- opentelemetry-go-0.20.0/sdk/instrumentation/library.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/instrumentation/library.go	2021-08-06 15:30:13.512911858 +0200
+@@ -23,7 +23,7 @@ evolving OpenTelemetry specification and
+ For more information see
+ [this](https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md).
+ */
+-package instrumentation // import "go.opentelemetry.io/otel/sdk/instrumentation"
++package instrumentation
+ 
+ // Library represents the instrumentation library.
+ type Library struct {
+diff -up opentelemetry-go-0.20.0/sdk/internal/internal.go.orig opentelemetry-go-0.20.0/sdk/internal/internal.go
+--- opentelemetry-go-0.20.0/sdk/internal/internal.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/internal/internal.go	2021-08-06 15:30:13.513911851 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package internal // import "go.opentelemetry.io/otel/sdk/internal"
++package internal
+ 
+ import (
+ 	"fmt"
+diff -up opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregator.go.orig opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregator.go
+--- opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregator.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregator.go	2021-08-06 15:30:13.513911851 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package aggregator // import "go.opentelemetry.io/otel/sdk/metric/aggregator"
++package aggregator
+ 
+ import (
+ 	"fmt"
+diff -up opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregator_test.go.orig opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregator_test.go
+--- opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregator_test.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregator_test.go	2021-08-06 15:30:13.513911851 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package aggregator_test // import "go.opentelemetry.io/otel/sdk/metric/aggregator"
++package aggregator_test
+ 
+ import (
+ 	"errors"
+diff -up opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregatortest/test.go.orig opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregatortest/test.go
+--- opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregatortest/test.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/aggregator/aggregatortest/test.go	2021-08-06 15:30:13.514911844 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package aggregatortest // import "go.opentelemetry.io/otel/sdk/metric/aggregator/aggregatortest"
++package aggregatortest
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/metric/aggregator/exact/exact.go.orig opentelemetry-go-0.20.0/sdk/metric/aggregator/exact/exact.go
+--- opentelemetry-go-0.20.0/sdk/metric/aggregator/exact/exact.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/aggregator/exact/exact.go	2021-08-06 15:30:13.514911844 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package exact // import "go.opentelemetry.io/otel/sdk/metric/aggregator/exact"
++package exact
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/metric/aggregator/histogram/histogram.go.orig opentelemetry-go-0.20.0/sdk/metric/aggregator/histogram/histogram.go
+--- opentelemetry-go-0.20.0/sdk/metric/aggregator/histogram/histogram.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/aggregator/histogram/histogram.go	2021-08-06 15:30:13.515911837 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package histogram // import "go.opentelemetry.io/otel/sdk/metric/aggregator/histogram"
++package histogram
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/metric/aggregator/lastvalue/lastvalue.go.orig opentelemetry-go-0.20.0/sdk/metric/aggregator/lastvalue/lastvalue.go
+--- opentelemetry-go-0.20.0/sdk/metric/aggregator/lastvalue/lastvalue.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/aggregator/lastvalue/lastvalue.go	2021-08-06 15:30:13.515911837 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package lastvalue // import "go.opentelemetry.io/otel/sdk/metric/aggregator/lastvalue"
++package lastvalue
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/metric/aggregator/minmaxsumcount/mmsc.go.orig opentelemetry-go-0.20.0/sdk/metric/aggregator/minmaxsumcount/mmsc.go
+--- opentelemetry-go-0.20.0/sdk/metric/aggregator/minmaxsumcount/mmsc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/aggregator/minmaxsumcount/mmsc.go	2021-08-06 15:30:13.516911830 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package minmaxsumcount // import "go.opentelemetry.io/otel/sdk/metric/aggregator/minmaxsumcount"
++package minmaxsumcount
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/metric/aggregator/sum/sum.go.orig opentelemetry-go-0.20.0/sdk/metric/aggregator/sum/sum.go
+--- opentelemetry-go-0.20.0/sdk/metric/aggregator/sum/sum.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/aggregator/sum/sum.go	2021-08-06 15:30:13.516911830 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package sum // import "go.opentelemetry.io/otel/sdk/metric/aggregator/sum"
++package sum
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/metric/atomicfields.go.orig opentelemetry-go-0.20.0/sdk/metric/atomicfields.go
+--- opentelemetry-go-0.20.0/sdk/metric/atomicfields.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/atomicfields.go	2021-08-06 15:30:13.517911823 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package metric // import "go.opentelemetry.io/otel/sdk/metric"
++package metric
+ 
+ import "unsafe"
+ 
+diff -up opentelemetry-go-0.20.0/sdk/metric/controller/basic/config.go.orig opentelemetry-go-0.20.0/sdk/metric/controller/basic/config.go
+--- opentelemetry-go-0.20.0/sdk/metric/controller/basic/config.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/controller/basic/config.go	2021-08-06 15:30:13.517911823 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package basic // import "go.opentelemetry.io/otel/sdk/metric/controller/basic"
++package basic
+ 
+ import (
+ 	"time"
+diff -up opentelemetry-go-0.20.0/sdk/metric/controller/basic/controller.go.orig opentelemetry-go-0.20.0/sdk/metric/controller/basic/controller.go
+--- opentelemetry-go-0.20.0/sdk/metric/controller/basic/controller.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/controller/basic/controller.go	2021-08-06 15:30:13.517911823 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package basic // import "go.opentelemetry.io/otel/sdk/metric/controller/basic"
++package basic
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/metric/controller/controllertest/test.go.orig opentelemetry-go-0.20.0/sdk/metric/controller/controllertest/test.go
+--- opentelemetry-go-0.20.0/sdk/metric/controller/controllertest/test.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/controller/controllertest/test.go	2021-08-06 15:30:13.518911816 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package controllertest // import "go.opentelemetry.io/otel/sdk/metric/controller/controllertest"
++package controllertest
+ 
+ import (
+ 	"time"
+diff -up opentelemetry-go-0.20.0/sdk/metric/controller/time/time.go.orig opentelemetry-go-0.20.0/sdk/metric/controller/time/time.go
+--- opentelemetry-go-0.20.0/sdk/metric/controller/time/time.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/controller/time/time.go	2021-08-06 15:30:13.518911816 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package time // import "go.opentelemetry.io/otel/sdk/metric/controller/time"
++package time
+ 
+ import (
+ 	"time"
+diff -up opentelemetry-go-0.20.0/sdk/metric/doc.go.orig opentelemetry-go-0.20.0/sdk/metric/doc.go
+--- opentelemetry-go-0.20.0/sdk/metric/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/doc.go	2021-08-06 15:30:13.519911810 +0200
+@@ -138,4 +138,4 @@ Controllers are expected to implement th
+ API, meaning they can be installed as the global Meter provider.
+ 
+ */
+-package metric // import "go.opentelemetry.io/otel/sdk/metric"
++package metric
+diff -up opentelemetry-go-0.20.0/sdk/metric/processor/basic/basic.go.orig opentelemetry-go-0.20.0/sdk/metric/processor/basic/basic.go
+--- opentelemetry-go-0.20.0/sdk/metric/processor/basic/basic.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/processor/basic/basic.go	2021-08-06 15:30:13.519911810 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package basic // import "go.opentelemetry.io/otel/sdk/metric/processor/basic"
++package basic
+ 
+ import (
+ 	"errors"
+diff -up opentelemetry-go-0.20.0/sdk/metric/processor/basic/config.go.orig opentelemetry-go-0.20.0/sdk/metric/processor/basic/config.go
+--- opentelemetry-go-0.20.0/sdk/metric/processor/basic/config.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/processor/basic/config.go	2021-08-06 15:30:13.520911803 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package basic // import "go.opentelemetry.io/otel/sdk/metric/processor/basic"
++package basic
+ 
+ // Config contains the options for configuring a basic metric processor.
+ type Config struct {
+diff -up opentelemetry-go-0.20.0/sdk/metric/processor/processortest/test.go.orig opentelemetry-go-0.20.0/sdk/metric/processor/processortest/test.go
+--- opentelemetry-go-0.20.0/sdk/metric/processor/processortest/test.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/processor/processortest/test.go	2021-08-06 15:30:13.520911803 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package processortest // import "go.opentelemetry.io/otel/sdk/metric/processor/processortest"
++package processortest
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/metric/processor/reducer/doc.go.orig opentelemetry-go-0.20.0/sdk/metric/processor/reducer/doc.go
+--- opentelemetry-go-0.20.0/sdk/metric/processor/reducer/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/processor/reducer/doc.go	2021-08-06 15:30:13.520911803 +0200
+@@ -57,4 +57,4 @@ func setupMetrics(exporter export.Export
+         global.SetMeterProvider(pusher.Provider())
+         return pusher.Stop
+ */
+-package reducer // import "go.opentelemetry.io/otel/sdk/metric/processor/reducer"
++package reducer
+diff -up opentelemetry-go-0.20.0/sdk/metric/processor/reducer/reducer.go.orig opentelemetry-go-0.20.0/sdk/metric/processor/reducer/reducer.go
+--- opentelemetry-go-0.20.0/sdk/metric/processor/reducer/reducer.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/processor/reducer/reducer.go	2021-08-06 15:30:13.521911796 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package reducer // import "go.opentelemetry.io/otel/sdk/metric/processor/reducer"
++package reducer
+ 
+ import (
+ 	"go.opentelemetry.io/otel/attribute"
+diff -up opentelemetry-go-0.20.0/sdk/metric/refcount_mapped.go.orig opentelemetry-go-0.20.0/sdk/metric/refcount_mapped.go
+--- opentelemetry-go-0.20.0/sdk/metric/refcount_mapped.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/refcount_mapped.go	2021-08-06 15:30:13.521911796 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package metric // import "go.opentelemetry.io/otel/sdk/metric"
++package metric
+ 
+ import (
+ 	"sync/atomic"
+diff -up opentelemetry-go-0.20.0/sdk/metric/sdk.go.orig opentelemetry-go-0.20.0/sdk/metric/sdk.go
+--- opentelemetry-go-0.20.0/sdk/metric/sdk.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/sdk.go	2021-08-06 15:30:13.522911789 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package metric // import "go.opentelemetry.io/otel/sdk/metric"
++package metric
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/metric/selector/simple/simple.go.orig opentelemetry-go-0.20.0/sdk/metric/selector/simple/simple.go
+--- opentelemetry-go-0.20.0/sdk/metric/selector/simple/simple.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/metric/selector/simple/simple.go	2021-08-06 15:30:13.522911789 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package simple // import "go.opentelemetry.io/otel/sdk/metric/selector/simple"
++package simple
+ 
+ import (
+ 	"go.opentelemetry.io/otel/metric"
+diff -up opentelemetry-go-0.20.0/sdk/resource/auto.go.orig opentelemetry-go-0.20.0/sdk/resource/auto.go
+--- opentelemetry-go-0.20.0/sdk/resource/auto.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/resource/auto.go	2021-08-06 15:30:13.522911789 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package resource // import "go.opentelemetry.io/otel/sdk/resource"
++package resource
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/resource/builtin.go.orig opentelemetry-go-0.20.0/sdk/resource/builtin.go
+--- opentelemetry-go-0.20.0/sdk/resource/builtin.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/resource/builtin.go	2021-08-06 15:30:13.523911782 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package resource // import "go.opentelemetry.io/otel/sdk/resource"
++package resource
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/resource/config.go.orig opentelemetry-go-0.20.0/sdk/resource/config.go
+--- opentelemetry-go-0.20.0/sdk/resource/config.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/resource/config.go	2021-08-06 15:30:13.523911782 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package resource // import "go.opentelemetry.io/otel/sdk/resource"
++package resource
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/resource/doc.go.orig opentelemetry-go-0.20.0/sdk/resource/doc.go
+--- opentelemetry-go-0.20.0/sdk/resource/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/resource/doc.go	2021-08-06 15:30:13.523911782 +0200
+@@ -29,4 +29,4 @@
+ // OTEL_RESOURCE_ATTRIBUTES the FromEnv Detector can be used. It will interpret
+ // the value as a list of comma delimited key/value pairs
+ // (e.g. `<key1>=<value1>,<key2>=<value2>,...`).
+-package resource // import "go.opentelemetry.io/otel/sdk/resource"
++package resource
+diff -up opentelemetry-go-0.20.0/sdk/resource/env.go.orig opentelemetry-go-0.20.0/sdk/resource/env.go
+--- opentelemetry-go-0.20.0/sdk/resource/env.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/resource/env.go	2021-08-06 15:30:13.524911775 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package resource // import "go.opentelemetry.io/otel/sdk/resource"
++package resource
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/resource/export_test.go.orig opentelemetry-go-0.20.0/sdk/resource/export_test.go
+--- opentelemetry-go-0.20.0/sdk/resource/export_test.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/resource/export_test.go	2021-08-06 15:30:15.075901125 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package resource // import "go.opentelemetry.io/otel/sdk/resource"
++package resource
+ 
+ var (
+ 	SetDefaultOSProviders      = setDefaultOSProviders
+diff -up opentelemetry-go-0.20.0/sdk/resource/os.go.orig opentelemetry-go-0.20.0/sdk/resource/os.go
+--- opentelemetry-go-0.20.0/sdk/resource/os.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/resource/os.go	2021-08-06 15:30:17.028887715 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package resource // import "go.opentelemetry.io/otel/sdk/resource"
++package resource
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/resource/process.go.orig opentelemetry-go-0.20.0/sdk/resource/process.go
+--- opentelemetry-go-0.20.0/sdk/resource/process.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/resource/process.go	2021-08-06 15:30:20.956860746 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package resource // import "go.opentelemetry.io/otel/sdk/resource"
++package resource
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/resource/resource.go.orig opentelemetry-go-0.20.0/sdk/resource/resource.go
+--- opentelemetry-go-0.20.0/sdk/resource/resource.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/resource/resource.go	2021-08-06 15:30:20.957860739 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package resource // import "go.opentelemetry.io/otel/sdk/resource"
++package resource
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/trace/attributesmap.go.orig opentelemetry-go-0.20.0/sdk/trace/attributesmap.go
+--- opentelemetry-go-0.20.0/sdk/trace/attributesmap.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/attributesmap.go	2021-08-06 15:30:20.957860739 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ import (
+ 	"container/list"
+diff -up opentelemetry-go-0.20.0/sdk/trace/batch_span_processor.go.orig opentelemetry-go-0.20.0/sdk/trace/batch_span_processor.go
+--- opentelemetry-go-0.20.0/sdk/trace/batch_span_processor.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/batch_span_processor.go	2021-08-06 15:30:20.957860739 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/trace/config.go.orig opentelemetry-go-0.20.0/sdk/trace/config.go
+--- opentelemetry-go-0.20.0/sdk/trace/config.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/config.go	2021-08-06 15:30:20.957860739 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ // SpanLimits represents the limits of a span.
+ type SpanLimits struct {
+diff -up opentelemetry-go-0.20.0/sdk/trace/doc.go.orig opentelemetry-go-0.20.0/sdk/trace/doc.go
+--- opentelemetry-go-0.20.0/sdk/trace/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/doc.go	2021-08-06 15:30:20.958860732 +0200
+@@ -22,4 +22,4 @@ evolving OpenTelemetry specification and
+ The following assumes a basic familiarity with OpenTelemetry concepts.
+ See https://opentelemetry.io.
+ */
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+diff -up opentelemetry-go-0.20.0/sdk/trace/evictedqueue.go.orig opentelemetry-go-0.20.0/sdk/trace/evictedqueue.go
+--- opentelemetry-go-0.20.0/sdk/trace/evictedqueue.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/evictedqueue.go	2021-08-06 15:30:20.958860732 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ type evictedQueue struct {
+ 	queue        []interface{}
+diff -up opentelemetry-go-0.20.0/sdk/trace/id_generator.go.orig opentelemetry-go-0.20.0/sdk/trace/id_generator.go
+--- opentelemetry-go-0.20.0/sdk/trace/id_generator.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/id_generator.go	2021-08-06 15:30:20.958860732 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/trace/provider.go.orig opentelemetry-go-0.20.0/sdk/trace/provider.go
+--- opentelemetry-go-0.20.0/sdk/trace/provider.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/provider.go	2021-08-06 15:30:20.958860732 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/trace/sampling.go.orig opentelemetry-go-0.20.0/sdk/trace/sampling.go
+--- opentelemetry-go-0.20.0/sdk/trace/sampling.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/sampling.go	2021-08-06 15:30:20.958860732 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/trace/simple_span_processor.go.orig opentelemetry-go-0.20.0/sdk/trace/simple_span_processor.go
+--- opentelemetry-go-0.20.0/sdk/trace/simple_span_processor.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/simple_span_processor.go	2021-08-06 15:30:20.958860732 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/trace/span_exporter.go.orig opentelemetry-go-0.20.0/sdk/trace/span_exporter.go
+--- opentelemetry-go-0.20.0/sdk/trace/span_exporter.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/span_exporter.go	2021-08-06 15:30:20.958860732 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ import "context"
+ 
+diff -up opentelemetry-go-0.20.0/sdk/trace/span.go.orig opentelemetry-go-0.20.0/sdk/trace/span.go
+--- opentelemetry-go-0.20.0/sdk/trace/span.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/span.go	2021-08-06 15:30:20.958860732 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/trace/span_processor.go.orig opentelemetry-go-0.20.0/sdk/trace/span_processor.go
+--- opentelemetry-go-0.20.0/sdk/trace/span_processor.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/span_processor.go	2021-08-06 15:30:20.958860732 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/trace/tracer.go.orig opentelemetry-go-0.20.0/sdk/trace/tracer.go
+--- opentelemetry-go-0.20.0/sdk/trace/tracer.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/tracer.go	2021-08-06 15:30:20.958860732 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/sdk/trace"
++package trace
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/sdk/trace/tracetest/test.go.orig opentelemetry-go-0.20.0/sdk/trace/tracetest/test.go
+--- opentelemetry-go-0.20.0/sdk/trace/tracetest/test.go.orig	2021-08-06 15:35:47.419619129 +0200
++++ opentelemetry-go-0.20.0/sdk/trace/tracetest/test.go	2021-08-06 15:40:01.530857682 +0200
+@@ -15,7 +15,7 @@
+ // Package tracetest is a testing helper package for the SDK. User can
+ // configure no-op or in-memory exporters to verify different SDK behaviors or
+ // custom instrumentation.
+-package tracetest // import "go.opentelemetry.io/otel/sdk/trace/tracetest"
++package tracetest
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/semconv/doc.go.orig opentelemetry-go-0.20.0/semconv/doc.go
+--- opentelemetry-go-0.20.0/semconv/doc.go.orig	2021-08-06 15:35:47.402619246 +0200
++++ opentelemetry-go-0.20.0/semconv/doc.go	2021-08-06 15:39:32.174062955 +0200
+@@ -21,4 +21,4 @@
+ // OpenTelemetry semantic conventions are agreed standardized naming
+ // patterns for OpenTelemetry things. This package aims to be the
+ // centralized place to interact with these conventions.
+-package semconv // import "go.opentelemetry.io/otel/semconv"
++package semconv
+diff -up opentelemetry-go-0.20.0/semconv/http.go.orig opentelemetry-go-0.20.0/semconv/http.go
+--- opentelemetry-go-0.20.0/semconv/http.go.orig	2021-08-06 15:35:47.409619198 +0200
++++ opentelemetry-go-0.20.0/semconv/http.go	2021-08-06 15:39:39.401012423 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package semconv // import "go.opentelemetry.io/otel/semconv"
++package semconv
+ 
+ import (
+ 	"fmt"
+diff -up opentelemetry-go-0.20.0/semconv/resource.go.orig opentelemetry-go-0.20.0/semconv/resource.go
+--- opentelemetry-go-0.20.0/semconv/resource.go.orig	2021-08-06 15:35:47.386619356 +0200
++++ opentelemetry-go-0.20.0/semconv/resource.go	2021-08-06 15:39:49.166944136 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package semconv // import "go.opentelemetry.io/otel/semconv"
++package semconv
+ 
+ import "go.opentelemetry.io/otel/attribute"
+ 
+diff -up opentelemetry-go-0.20.0/semconv/trace.go.orig opentelemetry-go-0.20.0/semconv/trace.go
+--- opentelemetry-go-0.20.0/semconv/trace.go.orig	2021-08-06 15:35:47.381619390 +0200
++++ opentelemetry-go-0.20.0/semconv/trace.go	2021-08-06 15:40:08.180811186 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package semconv // import "go.opentelemetry.io/otel/semconv"
++package semconv
+ 
+ import "go.opentelemetry.io/otel/attribute"
+ 
+diff -up opentelemetry-go-0.20.0/trace/context.go.orig opentelemetry-go-0.20.0/trace/context.go
+--- opentelemetry-go-0.20.0/trace/context.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/trace/context.go	2021-08-06 15:30:25.742827882 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/trace"
++package trace
+ 
+ import "context"
+ 
+diff -up opentelemetry-go-0.20.0/trace/context_test.go.orig opentelemetry-go-0.20.0/trace/context_test.go
+--- opentelemetry-go-0.20.0/trace/context_test.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/trace/context_test.go	2021-08-06 15:30:25.743827875 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/trace"
++package trace
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/trace/doc.go.orig opentelemetry-go-0.20.0/trace/doc.go
+--- opentelemetry-go-0.20.0/trace/doc.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/trace/doc.go	2021-08-06 15:30:25.743827875 +0200
+@@ -67,4 +67,4 @@ a default.
+ 		// ...
+ 	}
+ */
+-package trace // import "go.opentelemetry.io/otel/trace"
++package trace
+diff -up opentelemetry-go-0.20.0/trace.go.orig opentelemetry-go-0.20.0/trace.go
+--- opentelemetry-go-0.20.0/trace.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/trace.go	2021-08-06 15:30:25.743827875 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package otel // import "go.opentelemetry.io/otel"
++package otel
+ 
+ import (
+ 	"go.opentelemetry.io/otel/internal/global"
+diff -up opentelemetry-go-0.20.0/trace/nonrecording.go.orig opentelemetry-go-0.20.0/trace/nonrecording.go
+--- opentelemetry-go-0.20.0/trace/nonrecording.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/trace/nonrecording.go	2021-08-06 15:30:25.743827875 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/trace"
++package trace
+ 
+ // nonRecordingSpan is a minimal implementation of a Span that wraps a
+ // SpanContext. It performs no operations other than to return the wrapped
+diff -up opentelemetry-go-0.20.0/trace/noop.go.orig opentelemetry-go-0.20.0/trace/noop.go
+--- opentelemetry-go-0.20.0/trace/noop.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/trace/noop.go	2021-08-06 15:30:25.743827875 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/trace"
++package trace
+ 
+ import (
+ 	"context"
+diff -up opentelemetry-go-0.20.0/trace/trace.go.orig opentelemetry-go-0.20.0/trace/trace.go
+--- opentelemetry-go-0.20.0/trace/trace.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/trace/trace.go	2021-08-06 15:30:25.744827868 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package trace // import "go.opentelemetry.io/otel/trace"
++package trace
+ 
+ import (
+ 	"bytes"
+diff -up opentelemetry-go-0.20.0/unit/doc.go.orig opentelemetry-go-0.20.0/unit/doc.go
+--- opentelemetry-go-0.20.0/unit/doc.go.orig	2021-08-06 15:35:47.398619274 +0200
++++ opentelemetry-go-0.20.0/unit/doc.go	2021-08-06 15:40:14.465767239 +0200
+@@ -17,4 +17,4 @@
+ // This package is currently in a pre-GA phase. Backwards incompatible changes
+ // may be introduced in subsequent minor version releases as we work to track
+ // the evolving OpenTelemetry specification and user feedback.
+-package unit // import "go.opentelemetry.io/otel/unit"
++package unit
+diff -up opentelemetry-go-0.20.0/unit/unit.go.orig opentelemetry-go-0.20.0/unit/unit.go
+--- opentelemetry-go-0.20.0/unit/unit.go.orig	2021-08-06 15:35:47.391619322 +0200
++++ opentelemetry-go-0.20.0/unit/unit.go	2021-08-06 15:40:20.743723338 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package unit // import "go.opentelemetry.io/otel/unit"
++package unit
+ 
+ type Unit string
+ 
+diff -up opentelemetry-go-0.20.0/version.go.orig opentelemetry-go-0.20.0/version.go
+--- opentelemetry-go-0.20.0/version.go.orig	2021-04-23 20:19:07.000000000 +0200
++++ opentelemetry-go-0.20.0/version.go	2021-08-06 15:30:25.744827868 +0200
+@@ -12,7 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-package otel // import "go.opentelemetry.io/otel"
++package otel
+ 
+ // Version is the current release version of OpenTelemetry in use.
+ func Version() string {

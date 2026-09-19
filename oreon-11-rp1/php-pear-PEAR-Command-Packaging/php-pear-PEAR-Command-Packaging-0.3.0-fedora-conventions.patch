@@ -1,0 +1,127 @@
+diff -up PEAR_Command_Packaging-0.3.0/PEAR/Command/Packaging.php.fedora PEAR_Command_Packaging-0.3.0/PEAR/Command/Packaging.php
+--- PEAR_Command_Packaging-0.3.0/PEAR/Command/Packaging.php.fedora	2012-04-07 22:47:13.000000000 +0200
++++ PEAR_Command_Packaging-0.3.0/PEAR/Command/Packaging.php	2012-04-16 17:41:19.000000000 +0200
+@@ -72,15 +72,14 @@ are as follows:
+ %n = Channel name (full) e.g. pear.example.com
+ %N = Non standard channel name followed by a "/" (e.g. "pear.example.com/")
+ 
+-Defaults to "%C::%s" for library/application packages and "php-channel-%c" for 
++Defaults to "php-%c-%S" for library/application packages and "php-channel-%c" for 
+ channel packages.',
+                     ),
+                 'rpm-depname' => array(
+                     'shortopt' => 'd',
+                     'arg' => 'FORMAT',
+                     'doc' => 'Use FORMAT as format string for naming RPM dependencies. Substitutions
+-are as for the --rpm-pkgname option. Defaults to be the same as
+-the format defined by the --rpm-pkgname option.',
++are as for the --rpm-pkgname option. Defaults to "php-%c(%s)".',
+                    ),
+                 ),
+             'doc' => '<package-file>
+@@ -91,10 +90,10 @@ PEAR package tarball in the SOURCES dire
+ 
+ $ cd /path/to/rpm-build-tree/SPECS
+ $ pear make-rpm-spec ../SOURCES/Net_Socket-1.0.tgz
+-Wrote RPM spec file PEAR::Net_Socket-1.0.spec
+-$ rpm -bb PEAR::Net_Socket-1.0.spec
++Wrote RPM spec file php-pear-Net-Socket.spec
++$ rpm -bb php-pear-Net-Socket.spec
+ ...
+-Wrote: /path/to/rpm-build-tree/RPMS/noarch/PEAR::Net_Socket-1.0-1.noarch.rpm
++Wrote: /path/to/rpm-build-tree/RPMS/noarch/php-pear-Net-Socket-1.0-1.noarch.rpm
+ ',
+             ),
+         );
+@@ -121,7 +120,7 @@ Wrote: /path/to/rpm-build-tree/RPMS/noar
+      * $commands array above and in Packaging.xml so that it is consistent.
+      */
+     var $_rpm_pkgname_format = array(
+-        'pkg'  => '%C::%s',
++        'pkg'  => 'php-%c-%S',
+         'chan' => 'php-channel-%c',
+     );
+     
+@@ -140,9 +139,9 @@ Wrote: /path/to/rpm-build-tree/RPMS/noar
+      * %P   = use the same as whatever rpm_pkgname_format is set to be
+      */
+     var $_rpm_depname_format = array(
+-        'pkg'  => '%P',
++        'pkg'  => 'php-pear(%N%s)',
+         'ext'  => 'php-%l',
+-        'php'  => 'php',
++        'php'  => 'php-common',
+         'chan' => 'php-channel(%n)',
+     );
+     
+@@ -159,7 +158,7 @@ Wrote: /path/to/rpm-build-tree/RPMS/noar
+      * chan - used when generating a spec file for a channel
+      */
+     var $_rpm_specname_format = array(
+-        'pkg'  => '%P-%v.spec',
++        'pkg'  => '%P.spec',
+         'chan' => 'php-channel-%c.spec'
+     );
+     
+@@ -182,14 +181,14 @@ Wrote: /path/to/rpm-build-tree/RPMS/noar
+      * need to be listed here
+      */
+     var $_file_prefixes = array(
+-        'php' => '%{_libdir}/php/pear',
++        'php' => '%{pear_phpdir}',
+         'doc' => '',
+-        'ext' => '%{_libdir}/php',
+-        'test' => '%{_libdir}/php/tests/%s',
+-        'data' => '%{_libdir}/php/data/%s',
++        'ext' => '%{_libdir}/php/modules',
++        'test' => '%{pear_testdir}/%s',
++        'data' => '%{pear_datadir}/%s',
+         'script' => '%{_bindir}',
+         'cfg' => '%{_sysconfdir}/pear',
+-        'www' => '%{_datadir}/pear/www'
++        'www' => '%{pear_wwwdir}/%s'
+     );
+     
+     /**
+@@ -197,7 +196,7 @@ Wrote: /path/to/rpm-build-tree/RPMS/noar
+      * printf format. The first '%s' is the RPM header name followed by a colon,
+      * the second is the header value.
+      */
+-    var $_spec_line_format = '%s %s';
++    var $_spec_line_format = '%-16s%s';
+     
+     // ------------------------------------------------------------------------
+     // --- END DISTRIBUTION CONFIG
+@@ -597,7 +596,7 @@ Wrote: /path/to/rpm-build-tree/RPMS/noar
+         if ($pf->getDeps()) {
+             $this->_generatePackageDeps($pf);
+         }
+-    
++        
+         // Hook to support virtual Provides, where the dependency name differs
+         // from the package name
+         $rpmdep = $this->_getRPMName($pf->getPackage(), $pf->getChannel(), null, 'pkgdep');
+@@ -661,9 +660,9 @@ Wrote: /path/to/rpm-build-tree/RPMS/noar
+         
+         // Handle doc files
+         if (isset($file_list['doc'])) {
+-            $this->_output['doc_files'] = 'docs/' . $pf->getPackage() . '/*';
++            $this->_output['doc_files'] = '%{pear_docdir}/%{pear_name}';
+             $this->_output['doc_files_statement'] = '%doc ' . $this->_output['doc_files'];
+-            $this->_output['doc_files_relocation_script'] = "mv %{buildroot}/docs .\n";
++            $this->_output['doc_files_relocation_script'] = "# Move documentation\nmkdir -p docdir\nmv \$RPM_BUILD_ROOT%{pear_docdir}/* docdir\n";
+         }
+         
+         // Work out architecture
+diff -up PEAR_Command_Packaging-0.3.0/php-pear-PEAR-Command-Packaging.xml.fedora PEAR_Command_Packaging-0.3.0/php-pear-PEAR-Command-Packaging.xml
+--- PEAR_Command_Packaging-0.3.0/php-pear-PEAR-Command-Packaging.xml.fedora	2012-04-07 22:47:13.000000000 +0200
++++ PEAR_Command_Packaging-0.3.0/php-pear-PEAR-Command-Packaging.xml	2012-04-16 17:42:43.000000000 +0200
+@@ -51,7 +51,7 @@ Request #19299	Handle max + exclude vers
+  </notes>
+  <contents>
+   <dir baseinstalldir="/" name="/">
+-   <file baseinstalldir="/" md5sum="c766a6a8d994f1b90f0e232144db2cfb" name="PEAR/Command/Packaging.php" role="php">
++   <file baseinstalldir="/" name="PEAR/Command/Packaging.php" role="php">
+     <tasks:replace from="@DATA-DIR@" to="data_dir" type="pear-config" />
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>

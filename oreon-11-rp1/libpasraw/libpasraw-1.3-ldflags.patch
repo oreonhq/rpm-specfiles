@@ -1,0 +1,12 @@
+diff -U 3 -dHrN -- b/raw/Makefile c/raw/Makefile
+--- b/raw/Makefile	2020-03-02 09:39:22.000000000 +0100
++++ c/raw/Makefile	2020-03-15 09:25:21.063472620 +0100
+@@ -18,7 +18,7 @@
+ else
+ SOName        = libpasraw.so.1
+ SO_Name       = libpasraw.so.1.1
+-LIBFLAGS      = -shared -Wl,-soname,$(SOName) 
++LIBFLAGS      = ${LDFLAGS} -shared -Wl,-soname,$(SOName) 
+ #LIBFLAGS      = -L/usr/local/lib -I/usr/local/include -shared -Wl,-soname,$(SOName) 
+ # on Linux, use the standard shared library
+ LIBS          = -lraw

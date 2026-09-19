@@ -1,0 +1,380 @@
+.TH LUMINANCE\-HDR\-CLI "1" "April 2021" "" "User Commands"
+.SH NAME
+luminance\-hdr\-cli \- command-line high dynamic range image processing
+.SH SYNOPSIS
+.B luminance\-hdr\-cli
+.RI [ OPTIONS ]...
+.RI [ INPUTFILES ]...
+.SH OPTIONS
+.TP
+.B \-h\fR\ [\ \fB\-\-help\fR\ ]
+Display detailed help text.
+.TP
+.B \-V\fR\ [\ \fB\-\-version\fR\ ]
+Display program version.
+.TP
+.B \-v\fR\ [\ \fB\-\-verbose\fR\ ]
+Print more messages during execution.
+.TP
+.B \-c\fR\ [\ \fB\-\-cameras\fR\ ]
+Print a list of all supported cameras.
+.TP
+.B \-a\fR\ [\ \fB\-\-align\fR\ ]\ [\fBAIS\fR|\fBMTB\fR]
+Align Engine to use during HDR creation (default: no alignment).
+.TP
+.B \-e\fR\ [\ \fB\-\-ev\fR\ ]\ \fIEV1\fR,\fIEV2\fR,...
+Specify numerical EV values (as many as
+.IR INPUTFILES ).
+.TP
+.B \-d\fR\ [\ \fB\-\-savealigned\fR\ ]\ \fIprefix
+Save aligned images to files which
+names start with
+.I prefix
+.TP
+.B \-l\fR\ [\ \fB\-\-load\fR\ ]\ \fIHDR_FILE
+Load an HDR instead of creating a new one.
+.TP
+.B \-s\fR\ [\ \fB\-\-save\fR\ ]\ \fIHDR_FILE
+Save to a HDR file format.
+(default: don't save)
+.TP
+.B \-g\fR\ [\ \fB\-\-gamma\fR\ ]\ \fIVALUE
+Gamma value to use during tone mapping.
+(default: 1)
+.TP
+.B \-S\fR\ [\ \fB\-\-saturation\fR\ ]\ \fIVALUE
+Saturation value to use during tone mapping.
+(default: 1)
+.TP
+.B \-G\fR\ [\ \fB\-\-postgamma\fR\ ]\ \fIVALUE
+Gamma value to use after tone mapping.
+(default: 1)
+.TP
+.B \-r\fR\ [\ \fB\-\-resize\fR\ ]\ \fIVALUE
+Width you want to resize your HDR to (resized before gamma and tone mapping)
+.TP
+.B \-o\fR\ [\ \fB\-\-output\fR\ ]\ \fILDR_FILE
+File name you want to save your tone mapped LDR to.
+.TP
+.B \-t\fR\ [\ \fB\-\-autoag\fR\ ]\ \fITHRESHOLD
+Enable auto anti-ghosting with given threshold.
+.RB ( 0.0 \- 1.0 )
+.TP
+.B \-b\fR\ [\ \fB\-\-autolevels\fR\ ]
+Apply autolevels correction after tonemapping.
+.TP
+.B \-w\fR\ [\ \fB\-\-createwebpage\fR\ ]
+Enable generation of a webpage with embedded HDR viewer.
+.TP
+.B \-p\fR\ [\ \fB\-\-proposedldrname\fR\ ]\ \fIFILE_EXTENSION
+Save LDR file with a name of the form
+.IR first \- last _ tmparameters . extension .
+.TP
+.B \-z\fR\ [\ \fB\-\-proposedhdrname\fR\ ]\ \fIFILE_EXTENSION
+Save HDR file with a name of the form
+.IR first \- last _ HdrCreationModel . extension .
+.SS "HDR\ CREATION\ PARAMETERS"
+.P
+You must either load an existing HDR file (via the
+.B \-l
+option) or specify
+.I INPUTFILES
+to create a new HDR.
+.TP
+.BR \-\-hdrWeight\  [ triangular | gaussian | plateau | flat ]
+(Default is
+.BR triangular )
+.TP
+.BR \-\-hdrResponseCurve\  [ from_file | linear | gamma | log | srgb ]
+(Default is
+.BR linear )
+.TP
+.BR \-\-hdrModel\  [ robertson | robertsonauto | debevec ]
+(Default is
+.BR debevec )
+.TP
+.B \-\-hdrCurveFilename\ \fIyour_file_here\fB.m
+.SS "LDR\ OUTPUT\ PARAMETERS"
+.TP
+.B \-q\fR\ [\ \fB\-\-ldrQuality\fR\ ]\ \fIVALUE
+Quality of the saved tone mapped file
+.RB ( 1 \- 100 ).
+.TP
+.BR \-\-ldrTiff\  [ 8b | 16b | 32b | logluv ]
+Tiff format.
+(Default is
+.BR 8b )
+.TP
+.BR \-\-ldrTiffDeflate\  [ true | false ]
+Tiff deflate compression.
+(Default is
+.BR true )
+.SS "HTML\ OUTPUT\ PARAMETERS"
+.TP
+.B \-k\fR\ [\ \fB\-\-htmlQuality\fR\ ]\ \fIVALUE
+Quality of the interpolated exposures, from the worst
+.RB ( 1 )
+to the best
+.RB ( 4 ).
+Higher quality will introduce less distortions in the brightest and the darkest
+tones, but will also generate more images.
+More images means that there is more data that needs to be transferred to the
+web-browser, making HDR viewer less responsive.
+(Default is
+.BR 2 ,
+which is sufficient for most applications)
+.TP
+.B \-\-pageName\ \fIpage_name
+Specifies the file name of the web page to be generated.
+If
+.I page_name
+is missing, the file name of the first image with
+.B .html
+extension will be used.
+(Default is first image name)
+.TP
+.B \-\-imagesDir\ \fIdirectory
+Specify where to store the resulting image files.
+Links to images in HTML will be updated accordingly.
+This must be a relative path and the directory must exist.
+Useful to avoid clutter in the current directory.
+(Default is current working directory)
+.SS "TONE\ MAPPING\ PARAMETERS"
+.P
+No tonemapping is performed unless
+.B \-o
+is specified.
+.TP
+.BR \-\-tmo\  [ ashikhmin | drago | durand | fattal | ferradans | ferwerda | kimkautz | pattanaik | reinhard02 | reinhard05 | mai | mantiuk06 | mantiuk08 | vanhateren | lischinski ]
+Tone mapping operator.
+(Default is
+.BR mantiuk06 )
+.TP
+.B \-\-tmofile\fR\ \fISETTING_FILE
+Load an existing setting file containing pre-gamma and all TMO settings
+.TP
+.B Fattal
+.RS +7n
+.TP
+.B \-\-tmoFatAlpha\ \fIFLOAT
+alpha
+.TP
+.B \-\-tmoFatBeta\ \fIFLOAT
+beta
+.TP
+.B \-\-tmoFatColor\ \fIFLOAT
+color
+.TP
+.B \-\-tmoFatNoise\ \fIFLOAT
+noise
+.TP
+.B \-\-tmoFatNew\ \fR[\fBtrue\fR|\fBfalse\fR]
+new
+.RE
+.TP
+.B Ferradans
+.RS +7n
+.TP
+.B \-\-tmoFerRho\ \fIFLOAT
+rho
+.TP
+.B \-\-tmoFerInvAlpha\ \fIFLOAT
+inv_alpha
+.RE
+.TP
+.B KimKautz
+.RS +7n
+.TP
+.B \-\-tmoKimKautzC1\ \fIFLOAT
+c1
+.TP
+.B \-\-tmoKimKautzC2\ \fIFLOAT
+c2
+.RE
+.TP
+.B Mantiuk\ 06
+.RS +7n
+.TP
+.B \-\-tmoM06Contrast\ \fIFLOAT
+contrast
+.TP
+.B \-\-tmoM06Saturation\ \fIFLOAT
+saturation
+.TP
+.B \-\-tmoM06Detail\ \fIFLOAT
+detail
+.TP
+.B \-\-tmoM06ContrastEqual\ \fR[\fBtrue\fR|\fBfalse\fR]
+equalization
+.RE
+.TP
+.B Mantiuk\ 08
+.RS +7n
+.TP
+.B \-\-tmoM08ColorSaturation\ \fIFLOAT
+color saturation
+.TP
+.B \-\-tmoM08ConstrastEnh\ \fIFLOAT
+contrast enhancement
+.TP
+.B \-\-tmoM08LuminanceLvl\ \fIFLOAT
+luminance level
+.TP
+.B \-\-tmoM08SetLuminance\ \fR[\fBtrue\fR|\fBfalse\fR]
+enable luminance level
+.RE
+.TP
+.B Durand
+.RS +7n
+.TP
+.B \-\-tmoDurSigmaS\ \fIFLOAT
+spatial kernel sigma
+.TP
+.B \-\-tmoDurSigmaR\ \fIFLOAT
+range kernel sigma
+.TP
+.B \-\-tmoDurBase\ \fIFLOAT
+base contrast
+.RE
+.TP
+.B Drago
+.RS +7n
+.TP
+.B \-\-tmoDrgBias\ \fIFLOAT
+bias
+.RE
+.TP
+.B Reinhard\ 02
+.RS +7n
+.TP
+.B \-\-tmoR02Key\ \fIFLOAT
+key value
+.TP
+.B \-\-tmoR02Phi\ \fIFLOAT
+phi
+.TP
+.B \-\-tmoR02Scales\ \fR[\fBtrue\fR|\fBfalse\fR]
+use scales
+.TP
+.B \-\-tmoR02Num\ \fIFLOAT
+range
+.TP
+.B \-\-tmoR02Low\ \fIFLOAT
+lower scale
+.TP
+.B \-\-tmoR02High\ \fIFLOAT
+upper scale
+.RE
+.TP
+.B Reinhard\ 05
+.RS +7n
+.TP
+.B \-\-tmoR05Brightness\ \fIFLOAT
+Brightness
+.TP
+.B \-\-tmoR05Chroma\ \fIFLOAT
+Chroma adaption
+.TP
+.B \-\-tmoR05Lightness\ \fIFLOAT
+Light adaption
+.RE
+.TP
+.B Ashikmin
+.RS +7n
+.TP
+.B \-\-tmoAshEq2\ \fR[\fBtrue\fR|\fBfalse\fR]
+Equation number 2
+.TP
+.B \-\-tmoAshSimple\ \fR[\fBtrue\fR|\fBfalse\fR]
+Simple
+.TP
+.B \-\-tmoAshLocal\ \fIFLOAT
+Local threshold
+.RE
+.TP
+.B Pattanaik
+.RS +7n
+.TP
+.B \-\-tmoPatMultiplier\ \fIFLOAT
+multiplier
+.TP
+.B \-\-tmoPatLocal\ \fR[\fBtrue\fR|\fBfalse\fR]
+Local tone mapping
+.TP
+.B \-\-tmoPatAutoLum\ \fR[\fBtrue\fR|\fBfalse\fR]
+Auto luminance
+.TP
+.B \-\-tmoPatCone\ \fIFLOAT
+cone level
+.TP
+.B \-\-tmoPatRod\ \fIFLOAT
+rod level
+.RE
+.TP
+.B VanHateren
+.RS +7n
+.TP
+.B \-\-tmoVanHaterenPupilArea\ \fIFLOAT
+pupil_area
+.RE
+.TP
+.B Lischinski
+.RS +7n
+.TP
+.B \-\-tmoLischinskiAlpha\ \fIFLOAT
+alpha
+.RE
+.SH "SEE\ ALSO"
+.P
+.BR luminance\-hdr (1)
+.TP
+.I pfstools
+.BR pfsabsolute (1),
+.BR pfscat (1),
+.BR pfsclamp (1),
+.BR pfscolortransform (1),
+.BR pfscut (1),
+.BR pfsdisplayfunction (1),
+.BR pfsextractchannels (1),
+.BR pfsflip (1),
+.BR pfsgamma (1),
+.BR pfsin (1),
+.BR pfsindcraw (1),
+.BR pfsinpfm (1),
+.BR pfsinppm (1),
+.BR pfsinrgbe (1),
+.BR pfsintiff (1),
+.BR pfsinyuv (1),
+.BR pfsout (1),
+.BR pfsouthdrhtml (1),
+.BR pfsoutpfm (1),
+.BR pfsoutppm (1),
+.BR pfsoutrgbe (1),
+.BR pfsouttiff (1),
+.BR pfsoutyuv (1),
+.BR pfspad (1),
+.BR pfspanoramic (1),
+.BR pfsretime (1),
+.BR pfsrotate (1),
+.BR pfssize (1),
+.BR pfstag (1)
+.TP
+.I pfstmo
+.BR pfstmo_drago03 (1),
+.BR pfstmo_durand02 (1),
+.BR pfstmo_fattal02 (1),
+.BR pfstmo_ferradans11 (1),
+.BR pfstmo_mai11 (1),
+.BR pfstmo_mantiuk06 (1),
+.BR pfstmo_mantiuk08 (1),
+.BR pfstmo_pattanaik00 (1),
+.BR pfstmo_reinhard02 (1),
+.BR pfstmo_reinhard05 (1)
+.TP
+.I pfscalibration
+.BR dcraw2hdrgen (1),
+.BR jpeg2hdrgen (1),
+.BR pfshdrcalibrate (1),
+.BR pfsinhdrgen (1),
+.BR pfsinme (1),
+.BR pfsplotresponse (1)

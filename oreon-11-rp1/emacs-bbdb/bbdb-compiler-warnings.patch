@@ -1,0 +1,226 @@
+From bbdb-user-bounces+goeran=uddeborg.se@nongnu.org  Thu Mar 16 11:37:42 2023
+X-VM-v5-Data: ([nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil]
+	["5299" "Thursday" "16" "March" "2023" "11:35:27" "+0100" "Arash Esbati" "arash@gnu.org" nil "158" nil "^From:" nil nil "3" nil nil nil nil nil nil nil nil nil nil nil nil "[PATCH] Silencing the compiler for `backward-delete-char'" nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil]
+	("todo"))
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <bbdb-user-bounces+goeran=uddeborg.se@nongnu.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on mimmi
+X-Spam-Level: 
+Received: from lists.gnu.org (lists.gnu.org [209.51.188.17])
+	by mimmi.uddeborg.se (8.17.1/8.17.1) with ESMTPS id 32GAbfng1268580
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
+	for <goeran@uddeborg.se>; Thu, 16 Mar 2023 11:37:42 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 mimmi.uddeborg.se 32GAbfng1268580
+Authentication-Results: mimmi.uddeborg.se;
+	dkim=pass (2048-bit key, unprotected) header.d=gnu.org header.i=@gnu.org header.a=rsa-sha256 header.s=fencepost-gnu-org header.b=cSvS0SE2
+Received: from localhost ([::1] helo=lists1p.gnu.org)
+	by lists.gnu.org with esmtp (Exim 4.90_1)
+	(envelope-from <bbdb-user-bounces@nongnu.org>)
+	id 1pckyv-0005KA-9G; Thu, 16 Mar 2023 06:37:13 -0400
+Received: from eggs.gnu.org ([2001:470:142:3::10])
+ by lists.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+ (Exim 4.90_1) (envelope-from <arash@gnu.org>) id 1pckyt-0005Jv-B3
+ for bbdb-user@nongnu.org; Thu, 16 Mar 2023 06:37:11 -0400
+Received: from fencepost.gnu.org ([2001:470:142:3::e])
+ by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+ (Exim 4.90_1) (envelope-from <arash@gnu.org>) id 1pckyt-0003oc-27
+ for bbdb-user@nongnu.org; Thu, 16 Mar 2023 06:37:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
+ s=fencepost-gnu-org; h=MIME-Version:Date:Subject:To:From:in-reply-to:
+ references; bh=abvh372VkeGuexS17dWOtt/aQ4u9XfoJOql5R7BBsMk=; b=cSvS0SE2Jeh5/2
+ qWCERUXB8FXLhCt8r8Qxf8b3JvcpfKh7VY33r+pMIsbB4sTRhUR/k/w8CdbLa2xwJIrbYUxQYUd/l
+ xpbpJjV4cK9lAo8qSq+jC4QyLWd+x7rrAhrxzo3ZFZxeo/j4vrJJyQX6yKS4upDkmCGGGeMXSAs7u
+ 2Op5vhQqqRsq0qxsI5aC1KiFsUzEjgMawCY0TEDu3c9MNSCYABNsMXvkdxsvLX6qNvtp6ZTV1jkBu
+ AAy7iFETHxa7gEtLYZ4Vgmaz9mFEyxIl4MVhulXUNfICzJBUlZEENiOezzxs9esqhLp6nLg5dKPrN
+ EuUEo4ZXl/izuIC64h2A==;
+Received: from p5b326a86.dip0.t-ipconnect.de ([91.50.106.134] helo=MUTANT)
+ by fencepost.gnu.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+ (Exim 4.90_1) (envelope-from <arash@gnu.org>) id 1pckys-0007Px-KO
+ for bbdb-user@nongnu.org; Thu, 16 Mar 2023 06:37:10 -0400
+Message-ID: <867cvhnfv4.fsf@gnu.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="=-=-="
+X-BeenThere: bbdb-user@nongnu.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: List for discussion and development of BBDB for GNU Emacs
+ <bbdb-user.nongnu.org>
+List-Unsubscribe: <https://lists.nongnu.org/mailman/options/bbdb-user>,
+ <mailto:bbdb-user-request@nongnu.org?subject=unsubscribe>
+List-Archive: <https://lists.nongnu.org/archive/html/bbdb-user>
+List-Post: <mailto:bbdb-user@nongnu.org>
+List-Help: <mailto:bbdb-user-request@nongnu.org?subject=help>
+List-Subscribe: <https://lists.nongnu.org/mailman/listinfo/bbdb-user>,
+ <mailto:bbdb-user-request@nongnu.org?subject=subscribe>
+Errors-To: bbdb-user-bounces+goeran=uddeborg.se@nongnu.org
+From: Arash Esbati <arash@gnu.org>
+Sender: bbdb-user-bounces+goeran=uddeborg.se@nongnu.org
+To: bbdb-user@nongnu.org
+Subject: [PATCH] Silencing the compiler for `backward-delete-char'
+Date: Thu, 16 Mar 2023 11:35:27 +0100
+X-Spam-Status: No, score=-5.1 required=2.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+please find attached a small change silencing the compiler warning:
+
+In bbdb-display-record-one-line:
+bbdb.el:4046:10: Warning: =E2=80=98backward-delete-char=E2=80=99 is for int=
+eractive use only;
+    use =E2=80=98delete-char=E2=80=99 instead.
+
+--=-=-=
+Content-Type: text/x-patch
+Content-Disposition: attachment;
+ filename=0001-Silence-the-compiler-for-backward-delete-char.patch
+
+>From 412def20fe8a6c7f733f37eeabaf8d861267cdfc Mon Sep 17 00:00:00 2001
+From: Arash Esbati <arash@gnu.org>
+Date: Thu, 16 Mar 2023 11:21:50 +0100
+Subject: [PATCH] Silence the compiler for `backward-delete-char'
+
+* lisp/bbdb.el (bbdb-display-record-one-line): Use `delete-char'
+instead of `backward-delete-char' which is intended for
+interactive use only.
+---
+ lisp/bbdb.el | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lisp/bbdb.el b/lisp/bbdb.el
+index e18c54b..0f0744d 100644
+--- a/lisp/bbdb.el
++++ b/lisp/bbdb.el
+@@ -4043,7 +4043,7 @@ FIELD-LIST is the list of actually displayed FIELDS."
+                     `(xfields ,xfield)))))))
+     ;; delete the trailing "; "
+     (if (looking-back "; " nil)
+-        (backward-delete-char 2))
++        (delete-char -2))
+     (insert "\n")))
+ 
+ (defun bbdb-display-record-multi-line (record layout field-list)
+-- 
+2.40.0
+
+
+--=-=-=
+Content-Type: text/plain
+
+
+I'm also attaching a follow up to my suggestion in this message[1]
+reg. bbdb-anniv.el.  The new change also changes the given example and
+removes the entry for `nnimap-split-rule' which was declared obsolete in
+2010.  Please decide yourself which change is more appropriate.
+
+--=-=-=
+Content-Type: text/x-patch
+Content-Disposition: attachment; filename=0001-Silence-the-compiler.patch
+
+>From cf4a05ad93deb84fa7c17b1edbc51b00c24d0a90 Mon Sep 17 00:00:00 2001
+From: Arash Esbati <arash@gnu.org>
+Date: Thu, 16 Mar 2023 11:04:54 +0100
+Subject: [PATCH] Silence the compiler
+
+* lisp/bbdb-anniv.el (bbdb-anniv-diary-entries): Remove
+unnecessary quoting of opening paren.
+Fix unescaped single quotes.
+
+* lisp/bbdb-gnus-aux.el (bbdb/gnus-nnimap-folder-list-from-bbdb):
+Remove unnecessary quoting of opening paren.
+Fix unescaped single quotes.
+Replace example code using a select method and server variables
+instead of hard-coding with `setq'.
+Delete entry for `nnimap-split-rule' which was declared obsolete
+in 2010 and is finally removed in Emacs 29.
+---
+ lisp/bbdb-anniv.el    |  2 +-
+ lisp/bbdb-gnus-aux.el | 26 +++++++++++++-------------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/lisp/bbdb-anniv.el b/lisp/bbdb-anniv.el
+index 99f8521..22022a4 100644
+--- a/lisp/bbdb-anniv.el
++++ b/lisp/bbdb-anniv.el
+@@ -77,7 +77,7 @@ as format string."
+ This obeys `calendar-date-style' via `diary-date-forms'.
+ To enable this feature, put the following into your .emacs:
+ 
+- \(add-hook 'diary-list-entries-hook 'bbdb-anniv-diary-entries)"
++  (add-hook \\='diary-list-entries-hook \\='bbdb-anniv-diary-entries)"
+   ;; Loop over NUMBER dates starting from ORGINAL-DATE.
+   (let* ((num-date (1- (calendar-absolute-from-gregorian original-date)))
+          (end-date (+ num-date number)))
+diff --git a/lisp/bbdb-gnus-aux.el b/lisp/bbdb-gnus-aux.el
+index f2050d8..d8397c9 100644
+--- a/lisp/bbdb-gnus-aux.el
++++ b/lisp/bbdb-gnus-aux.el
+@@ -318,31 +318,31 @@ determine the group and spooling priority for a single address."
+ ;;
+ ;;;###autoload
+ (defun bbdb/gnus-nnimap-folder-list-from-bbdb ()
+-  "Return a list of \( \"From\" mail-regexp imap-folder-name\) tuples
++  "Return a list of (\"From\" mail-regexp imap-folder-name) tuples
+ based on the contents of the bbdb.
+ 
+-The folder-name is the value of the 'imap attribute of the BBDB record;
++The folder-name is the value of the \\='imap attribute of the BBDB record;
+ the mail-regexp consists of all the mail addresses for the BBDB record
+-concatenated with OR.  Records without an 'imap attribute are ignored.
++concatenated with OR.  Records without an \\='imap attribute are ignored.
+ 
+-Here  is an example of a relevant BBDB record:
++Here is an example of a relevant BBDB record:
+ 
+-Uwe Brauer
+-           mail: oub@mat.ucm.es
+-           imap: testimap
++  Uwe Brauer
++             mail: oub@mat.ucm.es
++             imap: testimap
+ 
+ This function uses `regexp-opt' to generate the mail-regexp which automatically
+ `regexp-quote's its arguments.  Please note: in order that this will work with
+ the `nnimap-split-fancy' method you have to use macros, that is your setting
+ will look like:
+ 
+-\(setq nnimap-split-rule  'nnimap-split-fancy
+-       nnimap-split-inbox \"INBOX\"
+-       nnimap-split-fancy
+-       `\(| ,@\(bbdb/gnus-nnimap-folder-list-from-bbdb\)
+-            ... \)\)
++  (setq gnus-secondary-select-methods
++        \\=`((nnimap \"imap.example.com\")
++          (nnimap-split-inbox \"INBOX\")
++          (| ,@(bbdb/gnus-nnimap-folder-list-from-bbdb)
++             ... )))
+ 
+-Note that `\( is the backquote, NOT the quote '\(."
++Note that \\=`( is the backquote, NOT the quote \\='(."
+ 
+   (let (;; the value of the 'imap attribute of a bbdb record
+         folder-attr
+-- 
+2.40.0
+
+
+--=-=-=
+Content-Type: text/plain
+
+
+Best, Arash
+
+Footnotes:
+[1]  https://lists.nongnu.org/archive/html/bbdb-user/2022-07/msg00009.html
+
+
+--=-=-=--
+

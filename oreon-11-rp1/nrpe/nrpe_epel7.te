@@ -1,0 +1,29 @@
+# this file was contributed by David Galloway. Thank you.
+module nrpe_epel 1.0;
+
+require {
+        type fsadm_exec_t;
+        type hostname_exec_t;
+        type hwdata_t;
+        type nrpe_t;
+        type scsi_generic_device_t;
+        type tmp_t;
+        class capability { sys_admin sys_rawio };
+        class chr_file { ioctl open read write };
+        class dir { add_name remove_name search write };
+        class file { create execute getattr open read unlink write };
+        class unix_dgram_socket sendto;
+}
+
+#============= nrpe_t ==============
+
+allow nrpe_t fsadm_exec_t:file { execute getattr open read };
+allow nrpe_t hostname_exec_t:file execute;
+allow nrpe_t hwdata_t:dir search;
+allow nrpe_t hwdata_t:file { getattr open read };
+allow nrpe_t scsi_generic_device_t:chr_file { ioctl open read write };
+allow nrpe_t self:capability { sys_admin sys_rawio };
+allow nrpe_t self:unix_dgram_socket sendto;
+allow nrpe_t tmp_t:dir { add_name remove_name write };
+allow nrpe_t tmp_t:file unlink;
+allow nrpe_t tmp_t:file { create open write };

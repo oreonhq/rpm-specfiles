@@ -1,0 +1,583 @@
+diff -ru pioneers-15.6.orig/ChangeLog pioneers-15.6/ChangeLog
+--- pioneers-15.6.orig/ChangeLog	2020-08-02 08:55:59.000000000 -0400
++++ pioneers-15.6/ChangeLog	2020-09-14 08:26:32.856165062 -0400
+@@ -5585,7 +5585,7 @@
+ 
+ 2001-03-09  Matt Waggoner  <matt@waggoner.com>
+ 
+-	* One of the official rule variants for Settlers of Catan is
++	* One of the official rule variants is
+ 	to disallow rolling a 7 on the first two rounds.  This has been
+ 	added as a feature of gnocatan, as well as an additional variant:
+ 	always reroll 7s.  These are accessed from the console server
+Only in pioneers-15.6: ChangeLog.orig
+diff -ru pioneers-15.6.orig/client/gtk/gui.c pioneers-15.6/client/gtk/gui.c
+--- pioneers-15.6.orig/client/gtk/gui.c	2020-06-21 07:32:32.000000000 -0400
++++ pioneers-15.6/client/gtk/gui.c	2020-09-14 18:13:27.515938839 -0400
+@@ -74,14 +74,12 @@
+ 	TRADE_PAGE,		/* trading interface */
+ 	QUOTE_PAGE,		/* submit quotes page */
+ 	LEGEND_PAGE,		/* legend */
+-	SPLASH_PAGE		/* splash screen */
+ };
+ 
+ static GtkWidget *map_notebook;	/* map area panel */
+ static GtkWidget *trade_page;	/* trade page in map area */
+ static GtkWidget *quote_page;	/* quote page in map area */
+ static GtkWidget *legend_page;	/* legend page in map area */
+-static GtkWidget *splash_page;	/* splash page in map area */
+ 
+ static GtkWidget *develop_notebook;	/* development card area panel */
+ 
+@@ -349,41 +347,6 @@
+ 		gtk_widget_hide(legend_page);
+ }
+ 
+-void gui_show_splash_page(gboolean show, GtkWidget * chat_widget)
+-{
+-	static GtkWidget *widget = NULL;
+-	if (chat_widget != NULL)
+-		widget = chat_widget;
+-	g_assert(widget != NULL);
+-
+-	chat_set_grab_focus_on_update(TRUE);
+-	if (show) {
+-		gtk_widget_show(splash_page);
+-		gtk_notebook_set_current_page(GTK_NOTEBOOK(map_notebook),
+-					      SPLASH_PAGE);
+-		gtk_widget_hide(widget);
+-	} else {
+-		gtk_widget_hide(splash_page);
+-		gtk_notebook_set_current_page(GTK_NOTEBOOK(map_notebook),
+-					      MAP_PAGE);
+-		gtk_widget_show(widget);
+-	}
+-}
+-
+-static GtkWidget *splash_build_page(void)
+-{
+-	GtkWidget *image;
+-	gchar *filename;
+-
+-	filename = g_build_filename(DATADIR, "pixmaps", "pioneers",
+-				    "splash.png", NULL);
+-	image = gtk_image_new_from_file(filename);
+-	gtk_widget_show(image);
+-	g_free(filename);
+-
+-	return image;
+-}
+-
+ static GtkWidget *build_map_panel(void)
+ {
+ 	GtkWidget *lbl;
+@@ -435,13 +398,6 @@
+ 		gui_show_legend_page(FALSE);
+ 	theme_register_callback(G_CALLBACK(gui_theme_changed));
+ 
+-	/* Tab page name, shown for the splash screen */
+-	lbl = gtk_label_new(_("Welcome to Pioneers"));
+-	gtk_widget_show(lbl);
+-	splash_page = splash_build_page();
+-	gtk_notebook_insert_page(GTK_NOTEBOOK(map_notebook),
+-				 splash_page, lbl, SPLASH_PAGE);
+-
+ 	return map_notebook;
+ }
+ 
+@@ -584,7 +540,6 @@
+ 	gtk_paned_pack1(GTK_PANED(vpaned), build_map_panel(), TRUE, TRUE);
+ 
+ 	chat_panel = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+-	gui_show_splash_page(TRUE, chat_panel);
+ 
+ 	panel = chat_build_panel();
+ 	frontend_gui_register(panel, GUI_DISCONNECT, NULL);
+Only in pioneers-15.6/client/gtk: gui.c.orig
+Only in pioneers-15.6/client/gtk: gui.c.rej
+diff -ru pioneers-15.6.orig/client/gtk/offline.c pioneers-15.6/client/gtk/offline.c
+--- pioneers-15.6.orig/client/gtk/offline.c	2020-06-21 05:18:27.000000000 -0400
++++ pioneers-15.6/client/gtk/offline.c	2020-09-14 08:26:32.859165095 -0400
+@@ -89,7 +89,6 @@
+ 				   && !connectable);
+ 		break;
+ 	case GUI_CONNECT_TRY:
+-		gui_show_splash_page(FALSE, NULL);
+ 		gui_set_net_status(_("Connecting"));
+ 
+ 		connectable = FALSE;
+Only in pioneers-15.6/client/gtk: offline.c.orig
+diff -ru pioneers-15.6.orig/client/help/C/index.docbook pioneers-15.6/client/help/C/index.docbook
+--- pioneers-15.6.orig/client/help/C/index.docbook	2018-03-07 10:59:54.000000000 -0500
++++ pioneers-15.6/client/help/C/index.docbook	2020-09-14 08:26:32.860165106 -0400
+@@ -31,9 +31,10 @@
+       <simplesect id="Authors">
+         <title>Authors and History</title>
+         <para>
+-        Pioneers is a GNOME game based upon the board game Settlers of Catan
+-        created by Mayfair Games. Pioneers was originally authored by Dave
+-        Cole in the spring and summer of 1999, under the name Gnocatan.
++        Pioneers is a computerized version of a well known strategy
++	    board game. The goal of the game is to colonize an
++	    island. The players play the first colonists hence the name
++	    pioneers.
+ 	Dave wanted to be able to
+         play the game without having to travel, so he developed a computer
+         implementation of the game. The Pioneers project stalled in the late
+@@ -52,9 +53,6 @@
+ 	on the user interface.
+       </para>
+         <para>
+-        In June 2005 the project was renamed from Gnocatan to Pioneers.
+-      </para>
+-        <para>
+         To be continued...
+       </para>
+       </simplesect>
+diff -ru pioneers-15.6.orig/common/gtk/aboutbox.c pioneers-15.6/common/gtk/aboutbox.c
+--- pioneers-15.6.orig/common/gtk/aboutbox.c	2018-03-14 09:44:46.000000000 -0400
++++ pioneers-15.6/common/gtk/aboutbox.c	2020-09-14 08:26:32.861165117 -0400
+@@ -34,24 +34,18 @@
+ 
+ void aboutbox_display(GtkWindow * parent, const gchar * title)
+ {
+-	GdkPixbuf *logo;
+-	gchar *filename;
++	GdkPixbuf *logo = NULL;
+ 	const gchar *authors[] = {
+ 		AUTHORLIST
+ 	};
+ 
+-	filename = g_build_filename(DATADIR, "pixmaps", "pioneers",
+-				    "splash.png", NULL);
+-	logo = gdk_pixbuf_new_from_file(filename, NULL);
+-	g_free(filename);
+-
+ 	/* *INDENT-OFF* */
+ 	gtk_show_about_dialog(
+ 		parent,
+ 		"authors", authors,
+ 		"comments",
+-		      _("Pioneers is based upon the excellent\n"
+-			"Settlers of Catan board game.\n"),
++              _("Pioneers is a computerized version of\n"
++            "a well known strategy board game.\n"),
+ 		//  "copyright", _("Copyright \xc2\xa9 2002 the Free Software Foundation"),
+ 		"license-type", GTK_LICENSE_GPL_2_0,
+ 		"logo", logo,
+diff -ru pioneers-15.6.orig/docs/pioneers.6 pioneers-15.6/docs/pioneers.6
+--- pioneers-15.6.orig/docs/pioneers.6	2013-02-24 17:35:29.000000000 -0500
++++ pioneers-15.6/docs/pioneers.6	2020-09-14 08:26:32.861165117 -0400
+@@ -1,6 +1,6 @@
+ .TH pioneers 6 "Februari 24, 2013" "pioneers"
+ .SH NAME
+-pioneers \- network implementation of Settlers of Catan
++pioneers \- Turnbased board strategy game (colonize an island)
+ 
+ .SH SYNOPSIS
+ .B pioneers
+@@ -18,8 +18,9 @@
+ command.
+ .PP
+ .B Pioneers
+-is an implementation of the popular, award-winning "Settlers of Catan"
+-board game for the GNOME desktop environment.  It uses a client/server
++is a computerized version of a well known strategy board game. The
++goal of the game is to colonize an island. The players play the first
++colonists hence the name pioneers. It uses a client/server
+ model for networked play of between two and eight players.  You will
+ need to connect to a machine running either \fBpioneers-server-gtk\fP
+ or \fBpioneers-server-console\fP to play.  An AI client, \fBpioneersai\fP,
+diff -ru pioneers-15.6.orig/docs/pioneersai.6 pioneers-15.6/docs/pioneersai.6
+--- pioneers-15.6.orig/docs/pioneersai.6	2014-05-20 16:57:22.000000000 -0400
++++ pioneers-15.6/docs/pioneersai.6	2020-09-14 08:26:32.862165128 -0400
+@@ -25,8 +25,9 @@
+ command.
+ .PP
+ .B Pioneers
+-is an emulation of the Settlers of Catan board game which can
+-be played over the internet. This is a computer player
++is a computerized version of a well known strategy board game. The
++goal of the game is to colonize an island. The players play the first
++colonists hence the name pioneers. This is an AI player
+ implementation that can take part in Pioneers games.
+ 
+ .SH OPTIONS
+diff -ru pioneers-15.6.orig/docs/pioneers-metaserver.6 pioneers-15.6/docs/pioneers-metaserver.6
+--- pioneers-15.6.orig/docs/pioneers-metaserver.6	2013-09-03 02:30:23.000000000 -0400
++++ pioneers-15.6/docs/pioneers-metaserver.6	2020-09-14 08:26:32.862165128 -0400
+@@ -8,8 +8,10 @@
+ 
+ .SH DESCRIPTION
+ .B Pioneers
+-is an implementation of the popular, award-winning "Settlers of Catan"
+-board game.  It uses a client/server model for networked play. This program
++is a computerized version of a well known strategy board game. The
++goal of the game is to colonize an island. The players play the first
++colonists hence the name pioneers. It uses a client/server model for
++networked play. This program
+ provides a piece of network infrastructure that helps match pioneers clients to
+ pioneers servers. Casual players of pioneers probably do not need to run this
+ program.
+diff -ru pioneers-15.6.orig/docs/pioneers-server-console.6 pioneers-15.6/docs/pioneers-server-console.6
+--- pioneers-15.6.orig/docs/pioneers-server-console.6	2013-02-24 17:35:29.000000000 -0500
++++ pioneers-15.6/docs/pioneers-server-console.6	2020-09-14 08:26:32.862165128 -0400
+@@ -12,8 +12,9 @@
+ command.
+ .PP
+ .B Pioneers
+-is an implementation of the popular, award-winning "Settlers of Catan"
+-board game for the GNOME desktop environment.  It uses a client/server
++is a computerized version of a well known strategy board game. The
++goal of the game is to colonize an island. The players play the first
++colonists hence the name pioneers. It uses a client/server
+ model for networked play of between two and eight players.  This program
+ provides a console-only server that \fBpioneers\fP clients can connect
+ to.
+diff -ru pioneers-15.6.orig/docs/pioneers-server-gtk.6 pioneers-15.6/docs/pioneers-server-gtk.6
+--- pioneers-15.6.orig/docs/pioneers-server-gtk.6	2013-02-24 17:35:29.000000000 -0500
++++ pioneers-15.6/docs/pioneers-server-gtk.6	2020-09-14 08:26:32.863165139 -0400
+@@ -12,8 +12,9 @@
+ command.
+ .PP
+ .B Pioneers
+-is an implementation of the popular, award-winning "Settlers of Catan"
+-board game for the GNOME desktop environment.  It uses a client/server
++is a computerized version of a well known strategy board game. The
++goal of the game is to colonize an island. The players play the first
++colonists hence the name pioneers. It uses a client/server
+ model for networked play of between two and eight players.  This program
+ provides a GUI-configurable stand-alone server which you connect to
+ from 
+diff -ru pioneers-15.6.orig/po/af.po pioneers-15.6/po/af.po
+--- pioneers-15.6.orig/po/af.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/af.po	2020-09-14 08:26:32.864165150 -0400
+@@ -1,4 +1,4 @@
+-# Pioneers - Settlers of Catan for GNOME.
++# Pioneers - Turnbased board strategy game (colonize an island)
+ # This file is distributed under the same license as the pioneers package.
+ # Petri Jooste <petri.jooste@gmail.com>, 2006, 2013.
+ # Petri Jooste <Petri.Jooste@nwu.ac.za>, 2006.
+@@ -2568,14 +2568,6 @@
+ msgid "No games available\n"
+ msgstr "Geen spel beskikbaar\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioniers is gebaseer op die uitstekende\n"
+-"bordspel Settlers of Catan.\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/ca.po pioneers-15.6/po/ca.po
+--- pioneers-15.6.orig/po/ca.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/ca.po	2020-09-14 08:26:32.865165161 -0400
+@@ -1,4 +1,4 @@
+-# Pioneers - Settlers of Catan for GNOME.
++# Pioneers - Turnbased board strategy game (colonize an island)
+ # This file is distributed under the same license as the pioneers package.
+ #
+ # Copyright (C) Jaume Badiella <myotis@drac.com>, 2013
+@@ -2562,14 +2562,6 @@
+ msgid "No games available\n"
+ msgstr "No hi ha partides disponibles.\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers està basat en l'excel·lent\n"
+-"joc de taulell 'Els Colons de Catan'.\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/cs.po pioneers-15.6/po/cs.po
+--- pioneers-15.6.orig/po/cs.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/cs.po	2020-09-14 08:26:32.867165184 -0400
+@@ -2566,14 +2566,6 @@
+ msgid "No games available\n"
+ msgstr "Promiňte, dostupno je pouze %s.\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers je založeno na skvělé\n"
+-"deskové hře Osadníci z Katanu.\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/da.po pioneers-15.6/po/da.po
+--- pioneers-15.6.orig/po/da.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/da.po	2020-09-14 08:26:32.868165195 -0400
+@@ -2573,14 +2573,6 @@
+ msgid "No games available\n"
+ msgstr "Beklager, %s tilgængelig.\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers er baseret på det fantastiske\n"
+-"Settlers og Catan brædtspil.\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/de.po pioneers-15.6/po/de.po
+--- pioneers-15.6.orig/po/de.po	2020-08-02 08:37:31.000000000 -0400
++++ pioneers-15.6/po/de.po	2020-09-14 08:26:32.869165206 -0400
+@@ -2570,14 +2570,6 @@
+ msgid "No games available\n"
+ msgstr "Keine Spiele verfügbar\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers basiert auf dem exzellenten\n"
+-"Brettspiel 'Die Siedler von Catan'.\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/en_GB.po pioneers-15.6/po/en_GB.po
+--- pioneers-15.6.orig/po/en_GB.po	2020-08-02 08:37:44.000000000 -0400
++++ pioneers-15.6/po/en_GB.po	2020-09-14 08:26:32.870165217 -0400
+@@ -2562,14 +2562,6 @@
+ msgid "No games available\n"
+ msgstr "No games available\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+ #. * \n after your name (except the last name).
+diff -ru pioneers-15.6.orig/po/es.po pioneers-15.6/po/es.po
+--- pioneers-15.6.orig/po/es.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/es.po	2020-09-14 08:26:32.871165228 -0400
+@@ -2574,14 +2574,6 @@
+ msgid "No games available\n"
+ msgstr "Lo siento, %s disponible.\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers está basado en el excelente\n"
+-"juego de mesa 'Los fundadores de Catán'.\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/fr.po pioneers-15.6/po/fr.po
+--- pioneers-15.6.orig/po/fr.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/fr.po	2020-09-14 08:26:32.872165239 -0400
+@@ -2574,14 +2574,6 @@
+ msgid "No games available\n"
+ msgstr "Aucune partie disponible\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers est basé sur l'excellent\n"
+-"jeu de plateau 'Les colons de Catane'.\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/gl.po pioneers-15.6/po/gl.po
+--- pioneers-15.6.orig/po/gl.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/gl.po	2020-09-14 08:26:32.873165250 -0400
+@@ -2574,14 +2574,6 @@
+ msgid "No games available\n"
+ msgstr "Sintoo, %s dispoñíbel.\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneiros está baseado no excelente\n"
+-"xogo de mesa «Os fundadores de Catan».\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/hu.po pioneers-15.6/po/hu.po
+--- pioneers-15.6.orig/po/hu.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/hu.po	2020-09-14 08:26:32.875165272 -0400
+@@ -2579,14 +2579,6 @@
+ msgid "No games available\n"
+ msgstr "Bocs, %s használható.\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"A Pioneers a kíváló táblajáték a\n"
+-"Catan telepesei alapján készült.\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/it.po pioneers-15.6/po/it.po
+--- pioneers-15.6.orig/po/it.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/it.po	2020-09-14 08:26:32.877165294 -0400
+@@ -2565,14 +2565,6 @@
+ msgid "No games available\n"
+ msgstr "Nessuna partita disponibile\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers è basato sull'eccellente gioco\n"
+-"I Coloni di Catan.\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/ja.po pioneers-15.6/po/ja.po
+--- pioneers-15.6.orig/po/ja.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/ja.po	2020-09-14 08:26:32.879165316 -0400
+@@ -2563,14 +2563,6 @@
+ msgid "No games available\n"
+ msgstr "利用可能なゲームがない\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers は「カタンの開拓者たち」という\n"
+-"すばらしいボードゲームが元になっています。\n"
+-
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+ #. * \n after your name (except the last name).
+diff -ru pioneers-15.6.orig/po/nl.po pioneers-15.6/po/nl.po
+--- pioneers-15.6.orig/po/nl.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/nl.po	2020-09-14 08:26:32.880165327 -0400
+@@ -2569,14 +2569,6 @@
+ msgid "No games available\n"
+ msgstr "Geen spellen beschikbaar\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioniers is gebaseerd op\n"
+-"het bordspel \"De kolonisten van Catan\".\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/pioneers.pot pioneers-15.6/po/pioneers.pot
+--- pioneers-15.6.orig/po/pioneers.pot	2020-08-02 08:59:37.000000000 -0400
++++ pioneers-15.6/po/pioneers.pot	2020-09-14 08:26:32.881165338 -0400
+@@ -2538,12 +2538,6 @@
+ msgid "No games available\n"
+ msgstr ""
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+ #. * \n after your name (except the last name).
+Only in pioneers-15.6/po: pioneers.pot.orig
+diff -ru pioneers-15.6.orig/po/pt.po pioneers-15.6/po/pt.po
+--- pioneers-15.6.orig/po/pt.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/pt.po	2020-09-14 08:26:32.883165360 -0400
+@@ -2570,14 +2570,6 @@
+ msgid "No games available\n"
+ msgstr "Desculpa, %s disponível.\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers é baseado no excelente\n"
+-"jogo de tabuleiro 'Os Descobridores de Catan'.\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/sv.po pioneers-15.6/po/sv.po
+--- pioneers-15.6.orig/po/sv.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/sv.po	2020-09-14 08:26:32.884165372 -0400
+@@ -2571,14 +2571,6 @@
+ msgid "No games available\n"
+ msgstr "Tyvärr, %s tillgänglig.\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers är baserad på det utmärkta\n"
+-"brädspelet Settlers of Catan.\n"
+-
+ #
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+diff -ru pioneers-15.6.orig/po/zh_CN.po pioneers-15.6/po/zh_CN.po
+--- pioneers-15.6.orig/po/zh_CN.po	2020-08-02 08:37:55.000000000 -0400
++++ pioneers-15.6/po/zh_CN.po	2020-09-14 08:26:32.885165383 -0400
+@@ -2551,14 +2551,6 @@
+ msgid "No games available\n"
+ msgstr "没有可以选择的游戏\n"
+ 
+-#: ../common/gtk/aboutbox.c:53
+-msgid ""
+-"Pioneers is based upon the excellent\n"
+-"Settlers of Catan board game.\n"
+-msgstr ""
+-"Pioneers 是在优秀的桌游卡坦岛(Settlers of Catan)\n"
+-"的基础上建立起来的。\n"
+-
+ #. Translators: add your name here. Keep the list
+ #. * alphabetically, do not remove any names, and add
+ #. * \n after your name (except the last name).
+diff -ru pioneers-15.6.orig/README pioneers-15.6/README
+--- pioneers-15.6.orig/README	2007-08-05 09:14:39.000000000 -0400
++++ pioneers-15.6/README	2020-09-14 08:26:32.885165383 -0400
+@@ -1,8 +1,8 @@
+ Pioneers
+ 
+-Pioneers is an Internet playable implementation of the Settlers of
+-Catan board game.  The aim is to remain as faithful to the board game
+-as is possible.
++Pioneers is a computerized version of a well known strategy board
++game. The goal of the game is to colonize an island. The players play
++the first colonists hence the name pioneers.
+ 
+ Playing the Game
+ ================

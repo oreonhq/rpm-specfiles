@@ -1,0 +1,105 @@
+Fix "called object is not a function" when using gcc
+
+Author: Rajesh <rmandalemula [...] yahoo.com>
+<https://rt.cpan.org/Public/Bug/Display.html?id=43016>
+
+--- Utmp.xs	2006-03-26 19:20:05.000000000 -0500
++++ Utmp-new.xs	2009-02-04 04:08:42.895383000 -0500
+@@ -269,7 +269,7 @@
+    char  *key;
+    SV    *val;
+    I32    len;
+-   STRLEN strlen;
++   STRLEN val_len;
+ 
+    hv_iterinit(entry);
+    
+@@ -282,14 +282,14 @@
+       {
+ 	 char* c_val;
+ 	    
+-	 c_val = SvPV(val, strlen);
++	 c_val = SvPV(val, val_len);
+ 	 strncpy(utent->ut_user, c_val, sizeof(utent->ut_user));
+       }
+       else if (strEQ(key, "ut_line"))
+       {
+ 	 char* c_val;
+ 
+-	 c_val = SvPV(val, strlen);
++	 c_val = SvPV(val, val_len);
+ 	 strncpy(utent->ut_line, c_val, sizeof(utent->ut_line));
+       }
+       else if (strEQ(key, "ut_time"))
+@@ -302,7 +302,7 @@
+       {
+ 	 char* c_val;
+ 
+-	 c_val = SvPV(val, strlen);
++	 c_val = SvPV(val, val_len);
+ 	 strncpy(utent->ut_id, c_val, sizeof(utent->ut_id));
+       }
+       else if (strEQ(key, "ut_pid"))
+@@ -342,7 +342,7 @@
+       {
+ 	 char *c_val;
+ 	    
+-	 c_val = SvPV(val, strlen);
++	 c_val = SvPV(val, val_len);
+ 	 strncpy(utent->ut_host, c_val, sizeof(utent->ut_host));
+       }
+ #endif
+@@ -350,8 +350,8 @@
+ #ifdef HAS_UT_ADDR
+       else if (strEQ(key, "ut_addr"))
+       {
+-	 memcpy(&utent->ut_addr, SvPV(val, strlen),
+-		MIN(sizeof(utent->ut_addr), strlen));
++	 memcpy(&utent->ut_addr, SvPV(val, val_len),
++		MIN(sizeof(utent->ut_addr), val_len));
+       }
+ #endif
+    }
+@@ -364,7 +364,7 @@
+    char  *key;
+    SV    *val;
+    I32    len;
+-   STRLEN strlen;
++   STRLEN val_len;
+ 
+    /* Initialize the entry */
+ 
+@@ -408,21 +408,21 @@
+       {
+ 	 char* c_val;
+ 	    
+-	 c_val = SvPV(val, strlen);
++	 c_val = SvPV(val, val_len);
+ 	 strncpy(utent->ut_name, c_val, sizeof(utent->ut_name));
+       }
+       else if (strEQ(key, "ut_id"))
+       {
+ 	 char* c_val;
+ 
+-	 c_val = SvPV(val, strlen);
++	 c_val = SvPV(val, val_len);
+ 	 strncpy(utent->ut_id, c_val, sizeof(utent->ut_id));
+       }
+       else if (strEQ(key, "ut_line"))
+       {
+ 	 char* c_val;
+ 
+-	 c_val = SvPV(val, strlen);
++	 c_val = SvPV(val, val_len);
+ 	 strncpy(utent->ut_line, c_val, sizeof(utent->ut_line));
+       }
+       else if (strEQ(key, "ut_pid"))
+@@ -518,7 +518,7 @@
+       {
+ 	 char* c_val;
+ 
+-	 c_val = SvPV(val, strlen);
++	 c_val = SvPV(val, val_len);
+ 	 strncpy(utent->ut_host, c_val, sizeof(utent->ut_host));
+       }
+ #endif

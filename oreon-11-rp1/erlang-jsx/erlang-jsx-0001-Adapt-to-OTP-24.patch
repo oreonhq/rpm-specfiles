@@ -1,0 +1,19 @@
+From: "Paulo F. Oliveira" <paulo.ferraz.oliveira@gmail.com>
+Date: Fri, 14 May 2021 10:42:35 +0100
+Subject: [PATCH] Adapt to OTP 24
+
+
+diff --git a/src/jsx_to_json.erl b/src/jsx_to_json.erl
+index d20add6..5b877e2 100644
+--- a/src/jsx_to_json.erl
++++ b/src/jsx_to_json.erl
+@@ -325,7 +325,8 @@ encode_test_() ->
+         },
+         {"1.0e23", ?_assert(encode(float, 1.0e23, #config{}) =:= ["1.0e23"])},
+         {"0.3", ?_assert(encode(float, 3.0/10.0, #config{}) =:= ["0.3"])},
+-        {"0.0001", ?_assert(encode(float, 0.0001, #config{}) =:= ["0.0001"])},
++        {"0.0001", ?_assert(encode(float, 0.0001, #config{}) =:= ["0.0001"]
++                                orelse encode(float, 0.0001, #config{}) =:= ["1.0e-4"])}, % OTP-24
+         {"0.00001", ?_assert(encode(float, 0.00001, #config{}) =:= ["1.0e-5"])},
+         {"0.00000001", ?_assert(encode(float, 0.00000001, #config{}) =:= ["1.0e-8"])},
+         {"1.0e-323", ?_assert(encode(float, 1.0e-323, #config{}) =:= ["1.0e-323"])},

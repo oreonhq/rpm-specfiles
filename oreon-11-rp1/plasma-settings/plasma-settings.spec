@@ -1,12 +1,12 @@
-%global source0_hash 45a8a8d5eb22fa76263c06acea026a21c222ac853ca666c1a34a982d5c7bb47d
+%global source0_hash ee2e913bbb2117bb24aebcf60c0542d1f9df3f2f48c13e5463d92ce4b8f45ed1
 
 Name:           plasma-settings
-Version: 26.03.80
+Version: 26.08.0
 Release: 1%{?dist}
 License:        BSD-2-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only
 Summary:        Convergent Plasma Mobile settings application
 Url:            https://invent.kde.org/plasma-mobile/plasma-settings
-Source0:        https://invent.kde.org/plasma-mobile/plasma-settings/-/archive/v%{version}/plasma-settings-v%{version}.tar.gz#/plasma-settings-%{version}.tar.gz
+Source0:        https://download.kde.org/stable/release-service/%{version}/src/plasma-settings-%{version}.tar.xz
 
 BuildRequires:  appstream
 BuildRequires:  cmake
@@ -47,7 +47,7 @@ modules are provided separately, by plasma-nm.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n plasma-settings-v26.03.80
+%autosetup -p1 -n %{name}-%{version}
 
 %build
 %cmake_kf6
@@ -71,77 +71,4 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.mo
 %{_kf6_datadir}/plasma-settings/
 
 %changelog
-* Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
-- 26.03.80
-
-* Fri Feb 27 2026 Steve Cossette <farchord@gmail.com> - 26.02.0-1
-- 26.02.0
-
-* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 25.12.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
-
-* Mon Dec 08 2025 Steve Cossette <farchord@gmail.com> - 25.12.0-1
-- 25.12.0
-
-* Fri Nov 07 2025 Steve Cossette <farchord@gmail.com> - 25.11.0-1
-- 25.11.0
-
-* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 25.07.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
-
-* Tue Jul 08 2025 Steve Cossette <farchord@gmail.com> - 25.07.0-1
-- 25.07.0
-
-* Mon Feb 24 2025 Steve Cossette <farchord@gmail.com> - 25.02.0-1
-- 25.02.0
-
-* Sat Jan 18 2025 Fedora Release Engineering <releng@fedoraproject.org> - 24.02.0-4
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
-
-* Wed Sep 04 2024 Miroslav Suchý <msuchy@redhat.com> - 24.02.0-3
-- convert license to SPDX
-
-* Fri Jul 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 24.02.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
-
-* Sat Mar 02 2024 Steve Cossette <farchord@gmail.com> - 24.02.0-1
-- 24.02.0
-
-* Mon Jan 29 2024 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-5
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-4
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Fri Jul 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
-
-* Mon Jan 30 2023 Justin Zobel <justin@1707.io> - 23.01.0-1
-- Update to 23.01.0
-
-* Fri Jan 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 22.11-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
-
-* Thu Dec 01 2022 Justin Zobel <justin@1707.io> - 22.11-1
-- Update to 22.11
-
-* Wed Sep 28 2022 Justin Zobel <justin@1707.io> - 22.09-1
-- Update to 22.09
-
-* Thu Aug 25 2022 Justin Zobel <justin@1707.io> - 22.06-1
-- Update to 22.06
-
-* Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 22.04-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
-
-* Wed Apr 27 2022 Justin Zobel <justin@1707.io> - 22.04-1
-- Update to 22.04
-
-* Sat Feb 26 2022 Justin Zobel <justin@1707.io> - 22.02
-- Verison bump to 22.02
-
-* Sun Feb 6 2022 Justin <justin@1707.io> - 21.12-1
-- Initial Inclusion
+%autochangelog

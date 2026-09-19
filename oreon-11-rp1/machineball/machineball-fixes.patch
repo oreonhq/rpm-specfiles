@@ -1,0 +1,111 @@
+--- machineball-src/Makefile~	2007-04-30 17:24:11.000000000 +0200
++++ machineball-src/Makefile	2007-04-30 17:24:11.000000000 +0200
+@@ -1,7 +1,7 @@
+ all : machineball
+ 
+ machineball : main.o window.o intro.o menu.o game.o text.o timer.o controls.o ball.o glode.o camera.o render.o court.o machine.o powerup.o explosion.o models.o mbdata.o options.o mbdata.o
+-	gcc main.o window.o intro.o menu.o game.o text.o timer.o controls.o ball.o glode.o camera.o render.o court.o machine.o powerup.o explosion.o models.o mbdata.o options.o -o machineball -laldmb -ldumb -lagl `allegro-config --libs` -lGL -lGLU -lode
++	g++ main.o window.o intro.o menu.o game.o text.o timer.o controls.o ball.o glode.o camera.o render.o court.o machine.o powerup.o explosion.o models.o mbdata.o options.o -o machineball -laldmb -ldumb -lalleggl `allegro-config --libs` -lGL -lGLU -lode -lm
+ 
+ main.o : main.cpp
+ 
+@@ -39,10 +39,10 @@
+ 
+ options.o : options.cpp
+ 
+-mbdata.o : mbdata.s
++mbdata.o : mbdata.c
+ 
+-mbdata.s : mbdata.dat
+-	dat2s mbdata.dat -o mbdata.s -h mbdata.h -p mb
++mbdata.c : mbdata.dat
++	dat2c mbdata.dat -o mbdata.c -h mbdata.h -p mb -g
+ 
+ clean :
+ 	rm machineball main.o window.o intro.o menu.o game.o text.o timer.o controls.o ball.o glode.o camera.o render.o court.o machine.o powerup.o explosion.o models.o options.o mbdata.o
+--- machineball-src/main.cpp	2002-12-21 14:31:40.000000000 +0100
++++ machineball-src.new/main.cpp	2007-04-30 20:05:07.000000000 +0200
+@@ -198,6 +198,7 @@ int main(int argc, char **argv)
+ 	}
+ 
+ 	srand(time(0));
++	dInitODE();
+	createWindow(forc); // The argument tells us if we want sound or not
+ 	
+ 	loadProgramData();
+@@ -290,13 +290,11 @@
+ 	text.init();
+ 
+ 
+-	allegro_gl_set_texture_format(GL_ALPHA4);
+-	shadowtex = allegro_gl_make_texture(&mb_shadow);
++	shadowtex = allegro_gl_make_texture_ex(AGL_TEXTURE_RESCALE|AGL_TEXTURE_FLIP, &mb_shadow, GL_ALPHA4);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+ 
+-	allegro_gl_set_texture_format(GL_ALPHA4);
+-	poweruptex = allegro_gl_make_texture(&mb_powerup);
++	poweruptex = allegro_gl_make_texture_ex(AGL_TEXTURE_RESCALE|AGL_TEXTURE_FLIP, &mb_powerup, GL_ALPHA4);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+ 
+@@ -332,8 +330,7 @@
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+ 
+-	allegro_gl_set_texture_format(GL_ALPHA4);
+-	bennykramekwebtex = allegro_gl_make_texture(&mb_bennykramekweb);
++	bennykramekwebtex = allegro_gl_make_texture_ex(AGL_TEXTURE_RESCALE|AGL_TEXTURE_FLIP, &mb_bennykramekweb, GL_ALPHA4);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+ 
+--- machineball-src/text.cpp	2002-12-21 14:31:40.000000000 +0100
++++ machineball-src.new/text.cpp	2007-04-30 20:02:43.000000000 +0200
+@@ -65,8 +67,7 @@
+ 
+ 
+ 	// Create the OpenGL texture from the BITMAP
+-	allegro_gl_set_texture_format(GL_INTENSITY4);
+-	texture = allegro_gl_make_texture(bmp);
++	texture = allegro_gl_make_texture_ex(AGL_TEXTURE_RESCALE|AGL_TEXTURE_FLIP, bmp, GL_INTENSITY4);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+ 
+--- machineball-src/game.cpp~	2007-05-01 16:04:31.000000000 +0200
++++ machineball-src/game.cpp	2007-05-01 16:04:31.000000000 +0200
+@@ -178,9 +178,12 @@
+ 	int esckeydown=0;
+ 	while(!((gameover && key[KEY_ESC]) || (gamepaused && key[KEY_F11])))
+ 	{
+-		rest(1);
+-		m=timer.seconds();
+-		timer.reset();
++		/* m may never be 0, otherwise an assert in ODE will get
++		   triggered */
++		do {
++			rest(1);
++			m=timer.getsecondsandreset();
++		} while (m <= 0);
+ 
+ 		poll_joystick();
+ 		al_poll_duh(dp);
+--- machineball-src/timer.h~	2007-05-01 16:02:19.000000000 +0200
++++ machineball-src/timer.h	2007-05-01 16:02:19.000000000 +0200
+@@ -23,6 +23,17 @@
+   void install(double tps=596590.5) { install_int_ex(tickf, (long int)((double)1193181.0/tps)); ticks_per_sec=tps; ticks=0; }
+   double seconds(void) { return (double)ticks/ticks_per_sec; }
+   void reset(void) { ticks=0; }
++  /* race proof code to get the seconds and then reset the ticks, without
++     missing any ticks */
++  double getsecondsandreset(void) {
++    unsigned long ticks_counter = 0;
++    while (ticks) {
++      ticks--;
++      ticks_counter++;
++    }
++    return (double)ticks_counter/ticks_per_sec;
++  }
++  
+ };
+ 
+ extern Timer timer;

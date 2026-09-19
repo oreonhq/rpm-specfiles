@@ -1,0 +1,20 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Mon, 2 Sep 2024 16:34:24 +0200
+Subject: [PATCH] Don't strip binary
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/pyproject.toml b/pyproject.toml
+index fce47ba..aaf0588 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -71,6 +71,9 @@ wheel.py-api = ""
+ wheel.packages = []
+ 
+ # --- scikit-build-core ---
++[tool.scikit-build]
++install.strip = false
++
+ [tool.scikit-build.cmake.define]
+ CMAKE_BUILD_TYPE = "Release"
+ # Coincurve build options - This may be better extracted from the ENV by the CMake directly?

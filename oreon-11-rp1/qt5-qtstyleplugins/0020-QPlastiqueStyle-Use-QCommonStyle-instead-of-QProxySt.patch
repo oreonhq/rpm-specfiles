@@ -1,0 +1,31 @@
+From 84b443109729664c7a0bd124b42c493f28069efc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?B=C5=82a=C5=BCej=20Szczygie=C5=82?= <spaz16@wp.pl>
+Date: Wed, 11 Jan 2017 20:20:57 +0100
+Subject: [PATCH 20/23] QPlastiqueStyle: Use QCommonStyle instead of
+ QProxyStyle
+
+This change allows to draw the QProgresBar properly as in Qt4. Now the
+percent text is inside the progress bar.
+
+Change-Id: I1dac6b958e863d6d450602ab2990c3c2e8ca67c1
+Reviewed-by: J-P Nurmi <jpnurmi@qt.io>
+---
+ src/plugins/styles/plastique/qplastiquestyle.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/plugins/styles/plastique/qplastiquestyle.cpp b/src/plugins/styles/plastique/qplastiquestyle.cpp
+index 0cd342d..88fbca9 100644
+--- a/src/plugins/styles/plastique/qplastiquestyle.cpp
++++ b/src/plugins/styles/plastique/qplastiquestyle.cpp
+@@ -3634,7 +3634,7 @@ void QPlastiqueStyle::drawControl(ControlElement element, const QStyleOption *op
+         break;
+ #endif
+     default:
+-        QProxyStyle::drawControl(element, option, painter, widget);
++        QCommonStyle::drawControl(element, option, painter, widget);
+         break;
+     }
+ }
+-- 
+2.9.3
+

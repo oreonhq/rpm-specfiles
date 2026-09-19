@@ -1,0 +1,29 @@
+--- minreq-2.14.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ minreq-2.14.1/Cargo.toml	2025-09-08T17:19:34.258767+00:00
+@@ -51,11 +51,6 @@
+ 
+ [features]
+ https = ["https-rustls"]
+-https-bundled = ["openssl/vendored"]
+-https-bundled-probe = [
+-    "https-bundled",
+-    "openssl-probe",
+-]
+ https-native = ["native-tls"]
+ https-rustls = [
+     "rustls",
+@@ -109,14 +104,6 @@
+ version = "0.2"
+ optional = true
+ 
+-[dependencies.openssl]
+-version = "0.10.29"
+-optional = true
+-
+-[dependencies.openssl-probe]
+-version = "0.1"
+-optional = true
+-
+ [dependencies.punycode]
+ version = "0.4.1"
+ optional = true

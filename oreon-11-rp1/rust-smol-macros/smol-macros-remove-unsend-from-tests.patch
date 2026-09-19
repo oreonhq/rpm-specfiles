@@ -1,0 +1,48 @@
+From 2f3b11b5d233c3535bb083b382a7ee61997983a9 Mon Sep 17 00:00:00 2001
+From: Andreas Schneider <asn@cryptomilk.org>
+Date: Mon, 2 Mar 2026 09:27:13 +0100
+Subject: [PATCH] tests: Replace unsend with async-lock for LocalExecutor
+ barrier tests
+
+The unsend crate uses the Patron license which is not a free-software
+license. This is an issue when packaging for Fedora. However looking at
+the usage, it is only used for a barrier.
+
+So lets replace unsend::lock::Barrier with async_lock::Barrier (already
+a dev-dependency).
+---
+ Cargo.toml            | 1 -
+ tests/macro_usages.rs | 6 +++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/tests/macro_usages.rs b/tests/macro_usages.rs
+index c69f4c2..f98149e 100644
+--- a/tests/macro_usages.rs
++++ b/tests/macro_usages.rs
+@@ -79,7 +79,7 @@ async fn with_executor_arcref(ex: &Arc<Executor<'static>>) {
+ 
+ #[apply(test!)]
+ async fn with_local(ex: &LocalExecutor<'_>) {
+-    let barrier = Rc::new(unsend::lock::Barrier::new(2));
++    let barrier = Rc::new(async_lock::Barrier::new(2));
+     ex.spawn({
+         let barrier = barrier.clone();
+         async move {
+@@ -98,7 +98,7 @@ async fn with_local(ex: &LocalExecutor<'_>) {
+ 
+ #[apply(test!)]
+ async fn with_local_rc(ex: Rc<LocalExecutor<'_>>) {
+-    let barrier = Rc::new(unsend::lock::Barrier::new(2));
++    let barrier = Rc::new(async_lock::Barrier::new(2));
+     ex.spawn({
+         let barrier = barrier.clone();
+         async move {
+@@ -117,7 +117,7 @@ async fn with_local_rc(ex: Rc<LocalExecutor<'_>>) {
+ 
+ #[apply(test!)]
+ async fn with_local_rcref(ex: &Rc<LocalExecutor<'_>>) {
+-    let barrier = Rc::new(unsend::lock::Barrier::new(2));
++    let barrier = Rc::new(async_lock::Barrier::new(2));
+     ex.spawn({
+         let barrier = barrier.clone();
+         async move {

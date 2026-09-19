@@ -1,0 +1,45 @@
+Index: polybar-3.7.2/include/ipc/encoder.hpp
+===================================================================
+--- polybar-3.7.2.orig/include/ipc/encoder.hpp
++++ polybar-3.7.2/include/ipc/encoder.hpp
+@@ -1,5 +1,6 @@
+ #pragma once
+ 
++#include <cstdint>
+ #include "common.hpp"
+ #include "errors.hpp"
+ #include "ipc/msg.hpp"
+Index: polybar-3.7.2/include/ipc/msg.hpp
+===================================================================
+--- polybar-3.7.2.orig/include/ipc/msg.hpp
++++ polybar-3.7.2/include/ipc/msg.hpp
+@@ -3,6 +3,7 @@
+ #include "common.hpp"
+ 
+ #include <array>
++#include <cstdint>
+ 
+ POLYBAR_NS
+ 
+Index: polybar-3.7.2/include/utils/string.hpp
+===================================================================
+--- polybar-3.7.2.orig/include/utils/string.hpp
++++ polybar-3.7.2/include/utils/string.hpp
+@@ -1,5 +1,6 @@
+ #pragma once
+ 
++#include <cstdint>
+ #include <sstream>
+ 
+ #include "common.hpp"
+Index: polybar-3.7.2/include/utils/color.hpp
+===================================================================
+--- polybar-3.7.2.orig/include/utils/color.hpp
++++ polybar-3.7.2/include/utils/color.hpp
+@@ -1,5 +1,6 @@
+ #pragma once
+ 
++#include <cstdint>
+ #include <cstdlib>
+ 
+ #include "common.hpp"

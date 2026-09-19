@@ -1,0 +1,43 @@
+Automatically increase meteor number.
+https://bugzilla.redhat.com/show_bug.cgi?id=494526
+
+Lubomir Rintel <lkundrak@v3.sk>
+
+diff -urp corrida-0.96-11/corrida/gui_callbacks.c corrida-0.96-11.count/corrida/gui_callbacks.c
+--- corrida-0.96-11/corrida/gui_callbacks.c	2007-06-04 21:27:21.000000000 +0200
++++ corrida-0.96-11.count/corrida/gui_callbacks.c	2009-04-10 12:02:32.000000000 +0200
+@@ -834,6 +834,12 @@ gint charts_accept_button_pressed_cb( Gt
+       corrida_error_box (GTK_WINDOW (charts_window), "Please check the meteor number you entered. More info on statusbar");
+     } else {
+       current_meteor.met_no = atoi (entry_text);
++
++      /* increment the meteor number */
++      snprintf (entry_text, sizeof(entry_text), "%i", current_meteor.met_no + 1);
++      entry_text[10] = '\0';
++      gtk_entry_set_text (GTK_ENTRY (num_pad_entry), entry_text);
++
+       add_charts_meteor_record (current_meteor);
+       refresh_chart ();
+       
+diff -urp corrida-0.96-11/corrida/gui_charts.c corrida-0.96-11.count/corrida/gui_charts.c
+--- corrida-0.96-11/corrida/gui_charts.c	2007-06-04 21:27:21.000000000 +0200
++++ corrida-0.96-11.count/corrida/gui_charts.c	2009-04-10 12:03:52.000000000 +0200
+@@ -397,6 +397,7 @@ GtkWidget *create_charts_tools_num_pad( 
+ 							     */
+   gtk_table_attach_defaults (GTK_TABLE (num_pad), num_pad_entry,
+ 			     1, 3, 0, 1);
++  gtk_entry_set_text (GTK_ENTRY (num_pad_entry), "1");
+   gtk_widget_show (num_pad_entry); 
+   
+   /* '0' button */
+@@ -1084,10 +1085,6 @@ void charts_clear_entries( void )
+     }
+   }
+ 
+-  /* clear meteor number entry */
+-  if (num_pad_entry != NULL)
+-    gtk_entry_set_text (GTK_ENTRY (num_pad_entry), "\0");
+-
+   /* clear current meteor data */
+   current_meteor.met_no = -1;
+   current_meteor.map_no = -1;

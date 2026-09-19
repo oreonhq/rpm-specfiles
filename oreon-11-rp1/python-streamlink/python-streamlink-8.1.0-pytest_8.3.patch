@@ -1,0 +1,22 @@
+diff -up ./pyproject.toml.orig ./pyproject.toml
+--- ./pyproject.toml.orig	2025-12-14 19:07:27.966754200 +0100
++++ ./pyproject.toml	2026-01-03 21:39:28.689796694 +0100
+@@ -97,7 +97,7 @@ dev = [
+ test = [
+   { include-group = "dev" },
+   # pytest and plugins
+-  "pytest >=8.4.0",
++  "pytest",
+   "pytest-cov",
+   "pytest-trio",
+   "requests-mock",
+@@ -192,9 +192,7 @@ method = { module = "build_backend.onbui
+ # https://docs.pytest.org/en/latest/reference/customize.html#configuration
+ # https://docs.pytest.org/en/latest/reference/reference.html#ini-options-ref
+ [tool.pytest.ini_options]
+-minversion = "8.4.0"
+ addopts = """
+---disable-plugin-autoload
+ -p trio
+ -p requests_mock
+ """

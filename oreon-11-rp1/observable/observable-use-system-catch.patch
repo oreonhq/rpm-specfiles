@@ -1,0 +1,255 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index aaa39bb..c3bf575 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,4 +12,3 @@ add_subdirectory(tests)
+ add_subdirectory(benchmark)
+ add_subdirectory(docs)
+ add_subdirectory(examples)
+-add_subdirectory(vendor)
+diff --git a/docs/example_tests/CMakeLists.txt b/docs/example_tests/CMakeLists.txt
+index aa436bc..e4bb040 100644
+--- a/docs/example_tests/CMakeLists.txt
++++ b/docs/example_tests/CMakeLists.txt
+@@ -13,7 +13,11 @@ add_executable(docs_example_tests
+ set_target_properties(docs_example_tests PROPERTIES FOLDER docs)
+ configure_compiler(docs_example_tests)
+ target_include_directories(docs_example_tests PRIVATE src)
+-target_link_libraries(docs_example_tests observable catch)
++target_link_libraries(docs_example_tests observable)
++find_package(Catch2)
++if(CATCH2_FOUND)
++    target_link_libraries(docs_example_tests ${CATCH2_LIBRARIES})
++endif()
+ 
+ add_test(NAME docs_example_tests
+          COMMAND docs_example_tests
+diff --git a/docs/example_tests/src/getting_started.cpp b/docs/example_tests/src/getting_started.cpp
+index 5906deb..a76128a 100644
+--- a/docs/example_tests/src/getting_started.cpp
++++ b/docs/example_tests/src/getting_started.cpp
+@@ -1,6 +1,6 @@
+ #include <iostream>
+ #include <string>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/observable.hpp>
+ #include "utility.h"
+ 
+diff --git a/docs/example_tests/src/index.cpp b/docs/example_tests/src/index.cpp
+index 6ee60a0..5d4d50b 100644
+--- a/docs/example_tests/src/index.cpp
++++ b/docs/example_tests/src/index.cpp
+@@ -1,6 +1,6 @@
+ #include <iostream>
+ #include <string>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/observable.hpp>
+ #include "utility.h"
+ 
+diff --git a/docs/example_tests/src/main.cpp b/docs/example_tests/src/main.cpp
+index 4c506ba..4ed06df 100644
+--- a/docs/example_tests/src/main.cpp
++++ b/docs/example_tests/src/main.cpp
+@@ -1,2 +1,2 @@
+ #define CATCH_CONFIG_MAIN
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+diff --git a/docs/example_tests/src/readme.cpp b/docs/example_tests/src/readme.cpp
+index 81fdfbe..2465361 100644
+--- a/docs/example_tests/src/readme.cpp
++++ b/docs/example_tests/src/readme.cpp
+@@ -1,5 +1,5 @@
+ #include <iostream>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/observable.hpp>
+ #include "utility.h"
+ 
+diff --git a/docs/example_tests/src/using_expressions.cpp b/docs/example_tests/src/using_expressions.cpp
+index a998cd3..ada1939 100644
+--- a/docs/example_tests/src/using_expressions.cpp
++++ b/docs/example_tests/src/using_expressions.cpp
+@@ -1,7 +1,7 @@
+ #define _USE_MATH_DEFINES
+ #include <cassert>
+ #include <cmath>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/observable.hpp>
+ 
+ using namespace std::string_literals;
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index da9fd44..18bfd35 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -24,7 +24,12 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+ endif()
+ 
+ configure_compiler(tests)
+-target_link_libraries(tests observable catch)
++target_link_libraries(tests observable)
++find_package(Catch2)
++if(CATCH2_FOUND)
++    target_link_libraries(tests ${CATCH2_LIBRARIES})
++endif()
++
+ target_include_directories(tests PRIVATE src)
+ 
+ find_package(Threads)
+diff --git a/tests/src/detail/collection.cpp b/tests/src/detail/collection.cpp
+index 59c0e34..f4494ed 100644
+--- a/tests/src/detail/collection.cpp
++++ b/tests/src/detail/collection.cpp
+@@ -4,7 +4,7 @@
+ #include <thread>
+ #include <vector>
+ #include <unordered_set>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/detail/collection.hpp>
+ 
+ namespace observable { namespace detail { namespace test {
+diff --git a/tests/src/detail/type_traits.cpp b/tests/src/detail/type_traits.cpp
+index b297ce8..32b7e07 100644
+--- a/tests/src/detail/type_traits.cpp
++++ b/tests/src/detail/type_traits.cpp
+@@ -1,5 +1,5 @@
+ #include <type_traits>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/subject.hpp>
+ #include <observable/detail/type_traits.hpp>
+ 
+diff --git a/tests/src/expressions/expression.cpp b/tests/src/expressions/expression.cpp
+index 0638988..3d32ac9 100644
+--- a/tests/src/expressions/expression.cpp
++++ b/tests/src/expressions/expression.cpp
+@@ -1,5 +1,5 @@
+ #include <memory>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/expressions/expression.hpp>
+ 
+ namespace observable { inline namespace expr { namespace test {
+diff --git a/tests/src/expressions/filters.cpp b/tests/src/expressions/filters.cpp
+index 95f2c98..667ef09 100644
+--- a/tests/src/expressions/filters.cpp
++++ b/tests/src/expressions/filters.cpp
+@@ -1,4 +1,4 @@
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/observe.hpp>
+ #include <observable/value.hpp>
+ #include <observable/expressions/operators.hpp>
+diff --git a/tests/src/expressions/math.cpp b/tests/src/expressions/math.cpp
+index ad6926b..ceca486 100644
+--- a/tests/src/expressions/math.cpp
++++ b/tests/src/expressions/math.cpp
+@@ -1,5 +1,5 @@
+ #include <cmath>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/observe.hpp>
+ #include <observable/value.hpp>
+ #include <observable/expressions/math.hpp>
+diff --git a/tests/src/expressions/operators.cpp b/tests/src/expressions/operators.cpp
+index 2dd9413..799f7dd 100644
+--- a/tests/src/expressions/operators.cpp
++++ b/tests/src/expressions/operators.cpp
+@@ -1,5 +1,5 @@
+ #include <functional>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/value.hpp>
+ #include <observable/expressions/operators.hpp>
+ #include <observable/expressions/tree.hpp>
+diff --git a/tests/src/expressions/tree.cpp b/tests/src/expressions/tree.cpp
+index ae4bbe1..54fa62a 100644
+--- a/tests/src/expressions/tree.cpp
++++ b/tests/src/expressions/tree.cpp
+@@ -1,4 +1,4 @@
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/value.hpp>
+ #include <observable/expressions/tree.hpp>
+ 
+diff --git a/tests/src/infinite_subscription.cpp b/tests/src/infinite_subscription.cpp
+index ba7231c..434529b 100644
+--- a/tests/src/infinite_subscription.cpp
++++ b/tests/src/infinite_subscription.cpp
+@@ -1,6 +1,6 @@
+ #include <type_traits>
+ #include <utility>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/subscription.hpp>
+ 
+ namespace observable { namespace test {
+diff --git a/tests/src/main.cpp b/tests/src/main.cpp
+index 1c77b13..4ed06df 100644
+--- a/tests/src/main.cpp
++++ b/tests/src/main.cpp
+@@ -1,2 +1,2 @@
+ #define CATCH_CONFIG_MAIN
+-#include "catch/catch.hpp"
++#include <catch2/catch.hpp>
+diff --git a/tests/src/observe.cpp b/tests/src/observe.cpp
+index db5e724..43c289e 100644
+--- a/tests/src/observe.cpp
++++ b/tests/src/observe.cpp
+@@ -1,4 +1,4 @@
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/observe.hpp>
+ #include <observable/value.hpp>
+ 
+diff --git a/tests/src/shared_subscription.cpp b/tests/src/shared_subscription.cpp
+index 8f43813..88ec21d 100644
+--- a/tests/src/shared_subscription.cpp
++++ b/tests/src/shared_subscription.cpp
+@@ -1,6 +1,6 @@
+ #include <memory>
+ #include <type_traits>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/subscription.hpp>
+ 
+ namespace observable { namespace test {
+diff --git a/tests/src/subject.cpp b/tests/src/subject.cpp
+index aee3ad3..23dc480 100644
+--- a/tests/src/subject.cpp
++++ b/tests/src/subject.cpp
+@@ -5,7 +5,7 @@
+ #include <type_traits>
+ #include <chrono>
+ #include <vector>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/subject.hpp>
+ 
+ namespace observable { namespace test {
+diff --git a/tests/src/unique_subscription.cpp b/tests/src/unique_subscription.cpp
+index 8b3c8d3..cca9b0f 100644
+--- a/tests/src/unique_subscription.cpp
++++ b/tests/src/unique_subscription.cpp
+@@ -1,6 +1,6 @@
+ #include <type_traits>
+ #include <utility>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/subscription.hpp>
+ 
+ namespace observable { namespace test {
+diff --git a/tests/src/value.cpp b/tests/src/value.cpp
+index 9f29649..160f5d7 100644
+--- a/tests/src/value.cpp
++++ b/tests/src/value.cpp
+@@ -1,5 +1,5 @@
+ #include <type_traits>
+-#include <catch/catch.hpp>
++#include <catch2/catch.hpp>
+ #include <observable/value.hpp>
+ 
+ namespace observable { namespace test {

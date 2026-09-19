@@ -5,10 +5,10 @@
 %global multilib_arches %{ix86} x86_64
 
 Name:		libffi
-Version:	3.5.2
-Release:	2%{?dist}
+Version:	3.8.0
+Release:	1%{?dist}
 Summary:	A portable foreign function interface library
-# No license change for 3.5.2
+# No license change for 3.8.0
 # No license change for 3.5.1
 # No license change for 3.4.8
 # No license change for 3.4.7

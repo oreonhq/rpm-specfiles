@@ -1,0 +1,11 @@
+diff -rupN --no-dereference OpenSceneGraph-OpenSceneGraph-3.6.5/examples/CMakeLists.txt OpenSceneGraph-OpenSceneGraph-3.6.5-new/examples/CMakeLists.txt
+--- OpenSceneGraph-OpenSceneGraph-3.6.5/examples/CMakeLists.txt	2025-07-20 16:14:39.309746312 +0200
++++ OpenSceneGraph-OpenSceneGraph-3.6.5-new/examples/CMakeLists.txt	2025-07-20 16:14:39.473249947 +0200
+@@ -48,6 +48,7 @@ IF(DYNAMIC_OPENSCENEGRAPH)
+     ADD_SUBDIRECTORY(osgfont)
+     ADD_SUBDIRECTORY(osgforest)
+     ADD_SUBDIRECTORY(osgfxbrowser)
++    ADD_SUBDIRECTORY(osgframerenderer)
+     ADD_SUBDIRECTORY(osgoutline)
+     ADD_SUBDIRECTORY(osggameoflife)
+     ADD_SUBDIRECTORY(osggeometry)

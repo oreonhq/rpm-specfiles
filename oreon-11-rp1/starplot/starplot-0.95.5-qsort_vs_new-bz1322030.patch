@@ -1,0 +1,50 @@
+--- starplot-0.95.5/src/classes/stararray.cc.debug	2008-03-20 04:01:33.000000000 +0900
++++ starplot-0.95.5/src/classes/stararray.cc	2016-05-07 23:57:13.973854324 +0900
+@@ -21,6 +21,7 @@
+ //  for stars, with the ability to read and filter a text data file on the fly.
+ //
+ 
++#include <algorithm>
+ #include "stararray.h"
+ #include "greek.h"
+ 
+@@ -174,6 +175,13 @@
+   return (x1 - x2 >= 0.0) ? 1 : -1;
+ }
+ 
++bool compare_function_bool(const sortable &smaller, const sortable &larger)
++{
++  double x1 = smaller.xposition;
++  double x2 = larger.xposition;
++  return !(x1 - x2 >= 0.0);
++}
++
+ // Finally, the main function which calls qsort()
+ 
+ void StarArray::Sort()
+@@ -181,7 +189,7 @@
+   size_t size = Array.size();
+   Vector3 relativeLocation;
+   SolidAngle orientation = ArrayRules.ChartOrientation;
+-  sortable *temparray = new sortable[size];
++  std::vector<sortable> temparray(size);
+ 
+   // Make a temporary array for qsort(), consisting of "sortable" structs
+   //  which each contain a Star and a position in local coordinates.
+@@ -193,7 +201,7 @@
+     temparray[i].star = Array[i];
+   }
+ 
+-  qsort(temparray, size, sizeof(sortable), compare_function);
++  std::sort(temparray.begin(), temparray.end(), compare_function_bool);
+ 
+   // Put the sorted temporary array back into the vector
+   Array.clear();
+@@ -202,7 +210,6 @@
+     Array.push_back(temparray[i].star);
+   }
+ 
+-  delete [] temparray;
+   return;
+ }
+ 

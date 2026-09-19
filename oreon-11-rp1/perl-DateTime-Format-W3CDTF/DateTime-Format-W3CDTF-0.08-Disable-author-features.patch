@@ -1,0 +1,11 @@
+diff -up DateTime-Format-W3CDTF-0.08/Makefile.PL.orig DateTime-Format-W3CDTF-0.08/Makefile.PL
+--- DateTime-Format-W3CDTF-0.08/Makefile.PL.orig	2020-12-21 09:18:08.389214913 +0100
++++ DateTime-Format-W3CDTF-0.08/Makefile.PL	2020-12-21 09:18:20.036350637 +0100
+@@ -21,7 +21,4 @@ resources(
+ 	'bugtracker' => "https://github.com/kasei/datetime-format-w3cdtf/issues",
+ );
+ 
+-write_doap_changes "meta/changes.ttl", "Changes", "turtle";
+-
+-sign;
+ WriteAll;

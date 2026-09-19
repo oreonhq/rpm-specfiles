@@ -1,0 +1,13 @@
+diff --git a/src/qdjviewplugin.cpp b/src/qdjviewplugin.cpp
+index bdd4a49..441cc2d 100644
+--- a/src/qdjviewplugin.cpp
++++ b/src/qdjviewplugin.cpp
+@@ -181,7 +181,7 @@ struct QDjViewPlugin::Instance
+ 
+ 
+ #if QT_VERSION >= 0x50500 /* && QT_VERSION < 0x50XXX */
+-# define WORKAROUND_QT55_XEMBED_BUG 1
++//# define WORKAROUND_QT55_XEMBED_BUG 1
+ #endif
+ 
+ #if WORKAROUND_QT55_XEMBED_BUG

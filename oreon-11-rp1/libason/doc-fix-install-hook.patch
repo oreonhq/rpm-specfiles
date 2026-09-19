@@ -1,0 +1,63 @@
+--- libason-0.1.2/doc/Makefile.in	2014-10-02 16:18:29.000000000 -0400
++++ libason-0.1.2.new/doc/Makefile.in	2014-10-02 18:55:03.918811962 -0400
+@@ -527,14 +527,14 @@ info: info-am
+ info-am:
+ 
+ install-data-am: install-dist_docDATA install-man
+-
++	@$(NORMAL_INSTALL)
++	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
+ install-dvi: install-dvi-am
+ 
+ install-dvi-am:
+ 
+ install-exec-am:
+-	@$(NORMAL_INSTALL)
+-	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
++
+ install-html: install-html-am
+ 
+ install-html-am:
+@@ -579,22 +579,22 @@ valgrind: valgrind-am
+ 
+ valgrind-am: valgrind-local
+ 
+-.MAKE: install-am install-exec-am install-strip
++.MAKE: install-am install-data-am install-strip
+ 
+ .PHONY: all all-am check check-am clean clean-generic clean-libtool \
+ 	cscopelist-am ctags-am distclean distclean-generic \
+ 	distclean-libtool distdir dvi dvi-am html html-am info info-am \
+ 	install install-am install-data install-data-am \
+-	install-dist_docDATA install-dvi install-dvi-am install-exec \
+-	install-exec-am install-exec-hook install-html install-html-am \
+-	install-info install-info-am install-man install-man1 \
+-	install-man3 install-pdf install-pdf-am install-ps \
+-	install-ps-am install-strip installcheck installcheck-am \
+-	installdirs maintainer-clean maintainer-clean-generic \
+-	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+-	ps ps-am tags-am uninstall uninstall-am uninstall-dist_docDATA \
+-	uninstall-man uninstall-man1 uninstall-man3 valgrind-am \
+-	valgrind-local
++	install-data-hook install-dist_docDATA install-dvi \
++	install-dvi-am install-exec install-exec-am install-html \
++	install-html-am install-info install-info-am install-man \
++	install-man1 install-man3 install-pdf install-pdf-am \
++	install-ps install-ps-am install-strip installcheck \
++	installcheck-am installdirs maintainer-clean \
++	maintainer-clean-generic mostlyclean mostlyclean-generic \
++	mostlyclean-libtool pdf pdf-am ps ps-am tags-am uninstall \
++	uninstall-am uninstall-dist_docDATA uninstall-man \
++	uninstall-man1 uninstall-man3 valgrind-am valgrind-local
+ 
+ 
+ ason_spec.aux: ason_spec.tex
+@@ -603,7 +603,7 @@ ason_spec.aux: ason_spec.tex
+ ason_spec.pdf: ason_spec.tex ason_spec.aux
+ 	$(pdflatex) -halt-on-error $< | grep '^!' && exit 1 || exit 0
+ 
+-install-exec-hook:
++install-data-hook:
+ 	$(LN_S) $(DESTDIR)$(mandir)/man3/ason_inspect.3 $(DESTDIR)$(mandir)/man3/ason_check_represented_in.3
+ 	$(LN_S) $(DESTDIR)$(mandir)/man3/ason_inspect.3 $(DESTDIR)$(mandir)/man3/ason_check_equal.3
+ 	$(LN_S) $(DESTDIR)$(mandir)/man3/ason_inspect.3 $(DESTDIR)$(mandir)/man3/ason_type.3

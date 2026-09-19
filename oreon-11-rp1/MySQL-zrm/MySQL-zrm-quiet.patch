@@ -1,0 +1,107 @@
+diff -up MySQL-zrm-3.0/usr/bin/mysql-zrm-scheduler.quiet MySQL-zrm-3.0/usr/bin/mysql-zrm-scheduler
+--- MySQL-zrm-3.0/usr/bin/mysql-zrm-scheduler.quiet	2013-08-26 14:45:37.000000000 -0600
++++ MySQL-zrm-3.0/usr/bin/mysql-zrm-scheduler	2014-07-22 22:59:27.895493535 -0600
+@@ -195,7 +195,12 @@ unless ( -d $logdir ) {
+ }
+ 
+ open (LOG, ">>$logfile") || &log_and_die ("ERROR: Cannot create/open logfile: $!\n");
+-print STDOUT "Logging to $logfile\n";
++my $quiet="";
++if( !defined $inputs{"quiet"} || $inputs{"quiet"} == 0 ){
++    print STDOUT "Logging to $logfile\n";
++} else {
++    $quiet="--quiet";
++}
+ 
+ 
+ unless ( defined $delete || defined $add || defined $query || defined $now) {
+@@ -238,14 +243,16 @@ if ( defined $interval && $interval eq "
+ #now is specified, just start mysql-zrm
+ #Not doing anything with crontab.
+ if ( $now ) {
+-    system ("$zrm_backup $verbose $level_str --backup-set $backupset");
++    system ("$zrm_backup $verbose $level_str --backup-set $backupset $quiet");
+     $exit_value  = $? >> 8;
+     if ( $exit_value !=0 ) {
+ 	&mprint ("ERROR: $zrm did not finish successfully\n");
+ 	&call_reporter($backupset);
+ 	exit 1;
+     } else {
+-	&mprint ("$zrm started successfully\n");
++	if( !defined $inputs{"quiet"} || $inputs{"quiet"} == 0 ){
++	    &mprint ("$zrm started successfully\n");
++	}
+ 	&call_reporter($backupset);
+ 	exit;
+     }
+diff -up MySQL-zrm-3.0/usr/bin/zrm-pre-scheduler.quiet MySQL-zrm-3.0/usr/bin/zrm-pre-scheduler
+--- MySQL-zrm-3.0/usr/bin/zrm-pre-scheduler.quiet	2013-08-26 14:45:37.000000000 -0600
++++ MySQL-zrm-3.0/usr/bin/zrm-pre-scheduler	2014-07-22 22:59:27.896493558 -0600
+@@ -229,10 +229,6 @@ unless ( -d $logdir ) {
+     die ("ERROR: mkdir $logdir failed: $!\n");
+ }
+ 
+-open (LOG, ">>$logfile") || &log_and_die ("ERROR: Cannot create/open logfile: $!\n");
+-print STDOUT "Logging to $logfile\n";
+-
+-
+ my $ret;
+ my $now="--now";
+ my $no_plugin=0;
+@@ -240,6 +236,15 @@ my $exit_value=0;
+ my $skip=0;
+ my $level=0;
+ my $delay=0;
++my $quiet="";
++
++
++open (LOG, ">>$logfile") || &log_and_die ("ERROR: Cannot create/open logfile: $!\n");
++if( !defined $inputs{"quiet"} || $inputs{"quiet"} == 0 ){
++    print STDOUT "Logging to $logfile\n";
++} else {
++    $quiet = "--quiet";
++}
+ 
+ 
+ my $interval    = $inputs{"interval"};
+@@ -290,7 +295,11 @@ if ( $skip ||
+ if ( $no_plugin == 1 || $exit_value == 0 ||
+      (($interval ne "daily") &&  ($delay + $exit_value) > 23 )) {
+     # call mysql-zrm-scheduler --now
+-    system($zrm_scheduler, $now, "--backup-set", $backupset, "--interval", $interval, "--backup-level", $level);
++    if ($quiet ne "") {
++	system($zrm_scheduler, $now, "--backup-set", $backupset, "--interval", $interval, "--backup-level", $level, $quiet);
++    } else {
++	system($zrm_scheduler, $now, "--backup-set", $backupset, "--interval", $interval, "--backup-level", $level);
++    }
+     &mprint("ERROR: $zrm_scheduler failed\n") if ( $? == 1 );
+     &call_reporter($backupset);
+ 
+diff -up MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm.quiet MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm
+--- MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm.quiet	2013-08-26 14:45:36.000000000 -0600
++++ MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm	2014-07-22 22:59:27.897493580 -0600
+@@ -1459,6 +1459,9 @@ sub verifySnapshotParams()
+ 	}
+ 	my $cmd = $inputs{"snapshot-plugin"};
+         $cmd .= " --action verify-config";
++	if( defined $inputs{"quiet"} && $inputs{"quiet"} == 1 ){
++		$cmd .= " --quiet";
++	}
+ 	$cmd .= " 2>$LOGGER";
+         if( $verbose ){
+                 &printLog( "Running snapshot verification using command $cmd\n" );
+@@ -1476,13 +1479,13 @@ sub verifySnapshotParams()
+ # @_ list of acceptable command line paramneters
+ sub initCommon()
+ {
+-        &getZrmVersion();
+         &openLogFile();
+ 	&notifyMonitor($action."_ZRM_STARTED");
+         if( $verbose ){
+                 &printLog( "action being performed is ".$action."\n" );
+         }
+         &processCommandLineParams(@_);
++        &getZrmVersion();
+         &processOptionFiles();
+ 	&processTmpDir();
+ 	&processDirPaths();

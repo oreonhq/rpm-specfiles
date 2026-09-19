@@ -1,0 +1,9 @@
+[Unit]
+Description=EB Library Server Activation Socket
+
+[Socket]
+ListenStream=22010
+Accept=yes
+
+[Install]
+WantedBy=sockets.target

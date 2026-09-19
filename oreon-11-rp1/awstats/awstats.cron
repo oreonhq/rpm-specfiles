@@ -1,0 +1,3 @@
+#!/bin/bash
+exec /usr/share/awstats/tools/awstats_updateall.pl now -configdir="/etc/awstats" -awstatsprog="/usr/share/awstats/wwwroot/cgi-bin/awstats.pl" >/dev/null
+exit 0

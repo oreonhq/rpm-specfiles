@@ -1,0 +1,8 @@
+{
+    "routing" : "routingmanagerd",
+    "logging":  {
+        "level" : "warning",
+        "console" : "true",
+        "dlt" : "false"
+    }
+}

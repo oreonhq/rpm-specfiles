@@ -1,0 +1,51 @@
+From 696d0aa770c6f2fe3745f087e81490e9d4dafeda Mon Sep 17 00:00:00 2001
+From: Ghanshyam Mann <gmann@ghanshyammann.com>
+Date: Sat, 30 Apr 2022 19:15:03 -0500
+Subject: [PATCH 3/3] Drop lower-constraints.txt and its testing
+
+As discussed in TC PTG[1] and TC resolution[2], we are
+dropping the lower-constraints.txt file and its testing.
+We will keep lower bounds in the requirements.txt file but
+with a note that these are not tested lower bounds and we
+try our best to keep them updated.
+
+[1] https://etherpad.opendev.org/p/tc-zed-ptg#L326
+[2] https://governance.openstack.org/tc/resolutions/20220414-drop-lower-constraints.html#proposal
+
+Co-authored-by: zhurong <aaronzhu1121@gmail.com>
+
+Change-Id: Ieb54d8c5381d1409986df8fd9db2a5d223e10537
+(cherry picked from commit bf91491fcc55b93ddfe0c1812bf690ca4b836234)
+---
+ muranopkgcheck/tests/functional/test_cases.py | 2 +-
+ requirements.txt                              | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/muranopkgcheck/tests/functional/test_cases.py b/muranopkgcheck/tests/functional/test_cases.py
+index 46ce753..ea11ec3 100644
+--- a/muranopkgcheck/tests/functional/test_cases.py
++++ b/muranopkgcheck/tests/functional/test_cases.py
+@@ -76,7 +76,7 @@ def load_cases():
+     cases = []
+     for cases_file in cases_files:
+         with open(cases_file) as f:
+-            cases.extend(list(yaml.load_all(f)))
++            cases.extend(list(yaml.load_all(f, yaml.SafeLoader)))
+     return cases
+ 
+ cases = load_cases()
+diff --git a/requirements.txt b/requirements.txt
+index 81022de..d19e529 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,3 +1,7 @@
++# Requirements lower bounds listed here are our best effort to keep them up to
++# date but we do not test them so no guarantee of having them all correct. If
++# you find any incorrect lower bounds, let us know or propose a fix.
++
+ # The order of packages is significant, because pip processes them in the order
+ # of appearance. Changing the order has an impact on the overall integration
+ # process, which may cause wedges in the gate later.
+-- 
+2.35.3
+

@@ -1,0 +1,34 @@
+Index: LuxCore-luxcorerender_v2.5/CMakeLists.txt
+===================================================================
+--- LuxCore-luxcorerender_v2.5.orig/CMakeLists.txt
++++ LuxCore-luxcorerender_v2.5/CMakeLists.txt
+@@ -92,7 +92,6 @@ INCLUDE(KernelPreprocess)
+ SET(LuxRays_INCLUDE_DIR "${LuxRays_SOURCE_DIR}/include")
+ include_directories("${LuxRays_INCLUDE_DIR}")
+ 
+-include_directories("${LuxRays_SOURCE_DIR}/deps/json-3.7.3/include")
+ include_directories("${LuxRays_SOURCE_DIR}/deps/cuew/include")
+ include_directories("${LuxRays_SOURCE_DIR}/deps/clew/include")
+ include_directories("${LuxRays_SOURCE_DIR}/deps/optix-7.1.0/include")
+@@ -216,7 +215,7 @@ endif(OPENGL_FOUND)
+ #
+ ################################################################################
+ 
+-add_subdirectory(pyunittests)
++
+ 
+ ################################################################################
+ #
+Index: LuxCore-luxcorerender_v2.5/samples/luxcoreui/CMakeLists.txt
+===================================================================
+--- LuxCore-luxcorerender_v2.5.orig/samples/luxcoreui/CMakeLists.txt
++++ LuxCore-luxcorerender_v2.5/samples/luxcoreui/CMakeLists.txt
+@@ -22,8 +22,6 @@
+ #
+ #############################################################################
+ 
+-add_subdirectory(deps/glfw-3.1.1)
+-include_directories(deps/glfw-3.1.1/include)
+ include_directories(deps/nfd/include)
+ 
+ #############################################################################

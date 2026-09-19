@@ -1,0 +1,20 @@
+--- spm_precompiled-0.1.4/Cargo.toml	1970-01-01T00:00:01+00:00
++++ spm_precompiled-0.1.4/Cargo.toml	2025-05-31T16:51:48.317970+00:00
+@@ -16,7 +16,7 @@
+ authors = ["Nicolas Patry <patry.nicolas@protonmail.com>"]
+ description = """
+ This crate aims to emulate https://github.com/google/sentencepiece Dart::DoubleArray
+-struct and it's Normalizer. 
++struct and its Normalizer. 
+ 
+ This crate is highly specialized and not intended for general use.
+ """
+@@ -33,7 +33,7 @@
+ repository = "https://github.com/huggingface/spm_precompiled"
+ 
+ [dependencies.base64]
+-version = "0.13"
++version = "0.22"
+ 
+ [dependencies.nom]
+ version = "7.1.1"

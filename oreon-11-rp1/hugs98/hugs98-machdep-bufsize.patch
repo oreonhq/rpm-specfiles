@@ -1,0 +1,17 @@
+Increase the buffer size to avoid a build failure with:
+
+ERROR "libraries/bootlib/Foreign/Marshal/Alloc.hs" - Unable to build compilation command
+
+diff --git a/src/machdep.c b/src/machdep.c
+index 3cb32c6fd84400d8..b842f16e38cebe62 100644
+--- a/src/machdep.c
++++ b/src/machdep.c
+@@ -2292,7 +2292,7 @@ void*  dll; {
+  * the above mechanisms.
+  * ------------------------------------------------------------------------*/
+ 
+-#define BUFSIZE 1000
++#define BUFSIZE 10000
+ static char buffer[BUFSIZE];
+ static Int used = 0;
+ static Void local insert     Args((String));

@@ -1,0 +1,31 @@
+--- src/AlgebraicCore/TmpFactorDir/linalg/Qsolve.c.orig	2008-12-16 14:05:53.000000000 -0700
++++ src/AlgebraicCore/TmpFactorDir/linalg/Qsolve.c	2018-06-14 14:56:08.127685643 -0600
+@@ -321,9 +321,8 @@ int Qsolve(Qmat soln, Qmat M, Qmat rhs)
+   for (i=0; i < M->ncols; i++) shape[i] = 0;
+   step_size = 3;
+   count_down = 3;
+-  while(1)
++  for (p = NextPrime(PS); p != 0; p = NextPrime(PS))
+   {
+-    p = NextPrime(PS);
+     FFp = FFctor(p);
+     FFselect(FFp);
+     /* Skip unsuitable primes */
+@@ -374,8 +373,15 @@ int Qsolve(Qmat soln, Qmat M, Qmat rhs)
+   FFmat_dtor(solnp);
+ 
+   /* Compute the rank */
+-  r = 0;
+-  for (i=0; i < M->ncols; i++) r += shape[i];
++  if (p == 0)
++  {
++    r = -1;
++  }
++  else
++  {
++    r = 0;
++    for (i=0; i < M->ncols; i++) r += shape[i];
++  }
+   FREE(shape);
+ 
+   return r;

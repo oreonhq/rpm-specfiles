@@ -1,0 +1,25 @@
+From 9243a252c1d8bf64bc71afdf5de378eca4236ea5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Mon, 17 Oct 2022 17:22:08 +0200
+Subject: [PATCH] Don't use the deprecated Python distutils module in CMake
+
+The Python standard library distutils module will be removed from Python 3.12+
+
+https://peps.python.org/pep-0632/
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a41a72f..42714c9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,7 +14,7 @@ ELSE ()
+     MESSAGE (FATAL_ERROR "Invalid PYTHON_DESIRED value: " ${PYTHON_DESIRED})
+ ENDIF()
+ 
+-EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "from sys import stdout; from distutils import sysconfig; stdout.write(sysconfig.get_python_lib())" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
++EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "from sys import stdout; import sysconfig; stdout.write(sysconfig.get_path('purelib'))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
+ MESSAGE(STATUS "Python install dir is ${PYTHON_INSTALL_DIR}")
+ 
+ SET (SYSCONFDIR /etc)

@@ -1,0 +1,1 @@
+OPTIONS="--logfile /var/log/keydb/sentinel.log --unixsocket /var/run/keydb/sentinel.sock --pidfile /var/run/keydb/sentinel.pid"

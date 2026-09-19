@@ -1,0 +1,40 @@
+--- vdr-plugin-epgsearch-2.4.0/epgsearch.c.orig	2018-04-18 09:52:20.771857071 +0200
++++ vdr-plugin-epgsearch-2.4.0/epgsearch.c	2018-04-18 09:54:13.613374320 +0200
+@@ -455,16 +455,16 @@
+     LoadConfD();
+     LoadUserVars();
+ 
+-    ChannelGroups.Load(AddDirectory(CONFIGDIR, "epgsearchchangrps.conf"), true);
+-    Blacklists.Load(AddDirectory(CONFIGDIR, "epgsearchblacklists.conf"));
+-    SearchExts.Load(AddDirectory(CONFIGDIR, "epgsearch.conf"));
+-    SearchTemplates.Load(AddDirectory(CONFIGDIR, "epgsearchtemplates.conf"));
+-    RecsDone.Load(AddDirectory(CONFIGDIR, "epgsearchdone.data"));
+-    SwitchTimers.Load(AddDirectory(CONFIGDIR, "epgsearchswitchtimers.conf"));
+-    NoAnnounces.Load(AddDirectory(CONFIGDIR, "noannounce.conf"));
+-    DefTimerCheckModes.Load(AddDirectory(CONFIGDIR, "deftimerchkmodes.conf"));
+-    TimersDone.Load(AddDirectory(CONFIGDIR, "timersdone.conf"));
+-    PendingNotifications.Load(AddDirectory(CONFIGDIR, "pendingnotifications.conf"));
++   ChannelGroups.Load("__VARDIR__/epgsearch/epgsearchchangrps.conf", true);
++   Blacklists.Load("__VARDIR__/epgsearch/epgsearchblacklists.conf");
++   SearchExts.Load("__VARDIR__/epgsearch/epgsearch.conf");
++   SearchTemplates.Load("__VARDIR__/epgsearch/epgsearchtemplates.conf");
++   RecsDone.Load("__VARDIR__/epgsearch/epgsearchdone.data");
++   SwitchTimers.Load("__VARDIR__/epgsearch/epgsearchswitchtimers.conf");
++   NoAnnounces.Load("__VARDIR__/epgsearch/noannounce.conf");
++   DefTimerCheckModes.Load("__VARDIR__/epgsearch/deftimerchkmodes.conf");
++   TimersDone.Load("__VARDIR__/epgsearch/timersdone.conf");
++   PendingNotifications.Load("__VARDIR__/epgsearch/pendingnotifications.conf");
+ 
+     cSearchTimerThread::Init(this);
+     cSwitchTimerThread::Init();
+--- vdr-plugin-epgsearch-2.4.0/epgsearchcfg.c.orig	2018-04-18 09:50:49.099003046 +0200
++++ vdr-plugin-epgsearch-2.4.0/epgsearchcfg.c	2018-04-18 09:56:39.880934757 +0200
+@@ -76,7 +76,7 @@
+     strcpy(MailAuthUser, "");
+     strcpy(MailAuthPass, "");
+     strcpy(LastMailConflicts, "");
+-    mailViaScript = 1;
++    mailViaScript = 0;
+     manualTimerCheckDefault = 0;
+     noAnnounceWhileReplay = 0;
+     TimerProgRepeat = 0;

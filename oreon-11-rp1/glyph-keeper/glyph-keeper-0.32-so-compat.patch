@@ -1,0 +1,48 @@
+--- glyph-keeper-0.32/src/glyph_rend.c.compat	2007-02-06 00:14:18.000000000 +0100
++++ glyph-keeper-0.32/src/glyph_rend.c	2007-02-19 13:32:35.000000000 +0100
+@@ -789,5 +789,25 @@
+ #endif
+ }
+ 
++/* for binary compatiblity with glyph-keeper-0.29, these won't be used by
++   newly compiled apps as those will be made into using the new functions
++   through defines in glyph.h, which is also why we need the undef's */
++#undef gk_rend_set_angle
++void gk_rend_set_angle(GLYPH_REND* const rend,const double new_text_angle)
++{
++    gk_rend_set_angle_in_radians(rend, new_text_angle);
++}
++
++#undef gk_rend_set_italic
++void gk_rend_set_italic(GLYPH_REND* const rend,const double new_italic_angle)
++{
++    gk_rend_set_italic_angle_in_degrees(rend, new_italic_angle);
++}
++
++#undef gk_rend_set_bold
++void gk_rend_set_bold(GLYPH_REND* const rend,const int new_bold_strength)
++{
++    gk_rend_set_bold_strength(rend, new_bold_strength);
++}
+ 
+ #endif  /* included_from_glyph_c */
+--- glyph-keeper-0.32/src/glyph_face.c.compat	2007-02-05 17:51:50.000000000 +0100
++++ glyph-keeper-0.32/src/glyph_face.c	2007-02-19 13:34:06.000000000 +0100
+@@ -225,7 +225,7 @@
+     char buf[1000] = "";
+     funcname = "gk_load_face_from_file()";
+ 
+-    if (gk_header_version != GK_MAKE_VERSION(_gk_version_major,_gk_version_minor,_gk_version_patch))
++    if (gk_header_version < GK_MAKE_VERSION(0, 29, 1) || gk_header_version > GK_MAKE_VERSION(_gk_version_major,_gk_version_minor,_gk_version_patch))
+     {
+         _gk_msg("Error: Glyph Keeper library and header versions don't match\n");
+         return 0;
+@@ -340,7 +340,7 @@
+     GLYPH_FACE* f;
+     funcname = "gk_load_face_from_memory()";
+ 
+-    if (gk_header_version != GK_MAKE_VERSION(_gk_version_major,_gk_version_minor,_gk_version_patch))
++    if (gk_header_version < GK_MAKE_VERSION(0, 29, 1) || gk_header_version > GK_MAKE_VERSION(_gk_version_major,_gk_version_minor,_gk_version_patch))
+     {
+         _gk_msg("Error: Glyph Keeper library and header versions don't match\n");
+         return 0;

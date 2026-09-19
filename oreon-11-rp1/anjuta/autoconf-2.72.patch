@@ -1,0 +1,64 @@
+diff -r -U5 anjuta-3.34.0.old/configure.ac anjuta-3.34.0/configure.ac
+--- anjuta-3.34.0.old/configure.ac	2022-11-17 14:53:51.042100150 +0100
++++ anjuta-3.34.0/configure.ac	2022-11-17 17:07:23.233317448 +0100
+@@ -468,21 +468,21 @@
+ dnl -------------------------
+ dnl CHECK_HEADER_DEFINE(LABEL, HEADER [,ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND ] ])
+ AC_DEFUN([CHECK_HEADER_DEFINE],
+ [
+ 	AC_MSG_CHECKING("if $1 is defined in $2")
+-	AC_EGREP_CPP(yes,
+-[#include <$2>
+-#ifdef $1
+-  yes
++	AC_PREPROC_IFELSE(
++[[#include <$2>
++#ifndef $1
++#error not defined
+ #endif
+-], [
++]], [
+ 	AC_MSG_RESULT(yes)
+-	$3
++	[$3]
+ ], [
+ 	AC_MSG_RESULT(no)
+-	$4
++	[$4]
+ ]) ])
+ 
+ dnl Checks for header files.
+ AC_CHECK_HEADERS(dirent.h fcntl.h fnmatch.h stat.h stdlib.h string.h stdint.h)
+ AC_CHECK_HEADERS(time.h types.h unistd.h)
+diff -r -U5 anjuta-3.34.0.old/configure.ac.webkit anjuta-3.34.0/configure.ac.webkit
+--- anjuta-3.34.0.old/configure.ac.webkit	2022-11-17 14:53:50.954100638 +0100
++++ anjuta-3.34.0/configure.ac.webkit	2022-11-17 17:07:46.886183426 +0100
+@@ -468,21 +468,21 @@
+ dnl -------------------------
+ dnl CHECK_HEADER_DEFINE(LABEL, HEADER [,ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND ] ])
+ AC_DEFUN([CHECK_HEADER_DEFINE],
+ [
+ 	AC_MSG_CHECKING("if $1 is defined in $2")
+-	AC_EGREP_CPP(yes,
+-[#include <$2>
+-#ifdef $1
+-  yes
++	AC_PREPROC_IFELSE(
++[[#include <$2>
++#ifndef $1
++#error not defined
+ #endif
+-], [
++]], [
+ 	AC_MSG_RESULT(yes)
+-	$3
++	[$3]
+ ], [
+ 	AC_MSG_RESULT(no)
+-	$4
++	[$4]
+ ]) ])
+ 
+ dnl Checks for header files.
+ AC_CHECK_HEADERS(dirent.h fcntl.h fnmatch.h stat.h stdlib.h string.h stdint.h)
+ AC_CHECK_HEADERS(time.h types.h unistd.h)

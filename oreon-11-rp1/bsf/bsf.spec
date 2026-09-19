@@ -1,7 +1,7 @@
 %global source0_hash 5ab58cf5738c144f4d85a4a442c2f33be2c4c502dca6e29e0c570c2a51ae6ae9
 
 Name:           bsf
-Version:        2.4.0
+Version:        3.1
 Release:        %autorelease
 Summary:        Bean Scripting Framework
 License:        Apache-2.0
@@ -21,7 +21,7 @@ BuildRequires:  apache-commons-logging
 BuildRequires:  apache-parent
 BuildRequires:  xalan-j2
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.4.0-63
+Obsoletes:      %{name}-javadoc < 3.1-63
 
 %description
 Bean Scripting Framework (BSF) is a set of Java classes which provides

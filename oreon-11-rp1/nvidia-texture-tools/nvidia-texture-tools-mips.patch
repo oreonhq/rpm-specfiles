@@ -1,0 +1,14 @@
+diff -up src/nvcore/nvcore.h.orig src/nvcore/nvcore.h
+--- src/nvcore/nvcore.h.orig	2020-08-24 03:27:21.000000000 -0300
++++ src/nvcore/nvcore.h	2021-02-22 17:41:56.397423994 -0300
+@@ -115,6 +115,10 @@
+ #   define NV_CPU_ARM_64 1
+ #elif defined POSH_CPU_E2K
+ #   define NV_CPU_E2K 1
++#elif defined POSH_CPU_MIPS
++#	define NV_CPU_MIPS 1
++#elif defined POSH_CPU_MIPS64
++#	define NV_CPU_MIPS64 1
+ #else
+ #   error "Unsupported CPU"
+ #endif

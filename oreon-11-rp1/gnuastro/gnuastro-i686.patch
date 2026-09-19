@@ -1,0 +1,73 @@
+From c5dafb87d8c3342aaeb57c00e88e023335525b11 Mon Sep 17 00:00:00 2001
+From: Giacomo Lorenzetti <glorenzetti@cefca.es>
+Date: Mon, 23 Jun 2025 11:48:03 +0200
+Subject: Library (arithmetic.h and python.h): support for i686 (32bit)
+
+Until now, the arithmetic library's 'arithmetic_to_1d' was explicitly using
+64 bit unsigned integers for 'size_t' blank values, not our custom
+'GAL_BLANK_SIZE_T'. Furthermore, the 'python.c' functions to convert types
+assumed 'NPY_LONG' is separate from 'NPY_INT32' (which is not the case for
+32-bit systems). Both these issues caused crashes during the build on i686
+systems.
+
+With this commit, both issues have been corrected by using the correct
+Gnuastro and Numpy macros instead of the problematic ones.
+
+This bug was reported by Benson Muite.
+
+This fixes bug #67232.
+---
+ THANKS                       | 1 +
+ lib/arithmetic.c             | 2 +-
+ lib/python.c                 | 4 ++--
+ 5 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/THANKS b/THANKS
+index dcd3a494..e7abfdbf 100644
+--- a/THANKS
++++ b/THANKS
+@@ -36,6 +36,7 @@ support in Gnuastro. The list is ordered alphabetically (by first name).
+     Antonio Diaz Diaz                    antonio@gnu.org
+     Aurélien Jarno                       aurelien.jarno@univ-lyon1.fr
+     Benjamin Clement                     benjamin.clement@univ-lyon1.fr
++    Benson Muite                         sbgkmo@savannah
+     Bertrand Pain                        bertrand.pain@inserm.fr
+     Bob Proulx                           bob@proulx.com
+     Boudewijn F. Roukema                 boud@cosmo.torun.pl
+diff --git a/lib/arithmetic.c b/lib/arithmetic.c
+index ad5dd279..3b246520 100644
+--- a/lib/arithmetic.c
++++ b/lib/arithmetic.c
+@@ -1359,7 +1359,7 @@ arithmetic_to_1d(int flags, gal_data_t *input)
+ 
+   /* Set absurd value to cause a crash if values that shouldn't be used
+      are used! */
+-  for(i=1;i<input->ndim;++i) input->dsize[i]=GAL_BLANK_UINT64;
++  for(i=1;i<input->ndim;++i) input->dsize[i]=GAL_BLANK_SIZE_T;
+ 
+   /* Reset the metadata and return.*/
+   input->ndim=1;
+diff --git a/lib/python.c b/lib/python.c
+index 8a867494..cd79077a 100644
+--- a/lib/python.c
++++ b/lib/python.c
+@@ -61,7 +61,7 @@ gal_python_type_to_numpy(uint8_t type)
+     case GAL_TYPE_INT8:      return NPY_INT8;
+     case GAL_TYPE_INT16:     return NPY_INT16;
+     case GAL_TYPE_INT32:     return NPY_INT32;
+-    case GAL_TYPE_INT64:     return NPY_LONG;
++    case GAL_TYPE_INT64:     return NPY_INT64;
+     case GAL_TYPE_UINT8:     return NPY_UINT8;
+     case GAL_TYPE_UINT16:    return NPY_UINT16;
+     case GAL_TYPE_UINT32:    return NPY_UINT32;
+@@ -91,7 +91,7 @@ gal_python_type_from_numpy(int type)
+     case NPY_INT8:           return GAL_TYPE_INT8;
+     case NPY_INT16:          return GAL_TYPE_INT16;
+     case NPY_INT32:          return GAL_TYPE_INT32;
+-    case NPY_LONG:           return GAL_TYPE_INT64;
++    case NPY_INT64:          return GAL_TYPE_INT64;
+     case NPY_UINT8:          return GAL_TYPE_UINT8;
+     case NPY_UINT16:         return GAL_TYPE_UINT16;
+     case NPY_UINT32:         return GAL_TYPE_UINT32;
+-- 
+cgit v1.2.3

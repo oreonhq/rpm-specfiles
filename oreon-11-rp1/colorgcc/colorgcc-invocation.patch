@@ -1,0 +1,23 @@
+diff --git a/colorgcc.pl b/colorgcc.pl
+index 92bb58c..ceb31de 100755
+--- a/colorgcc.pl
++++ b/colorgcc.pl
+@@ -149,6 +149,18 @@ my($unfinishedQuote, $previousColor);
+ 
+ sub initDefaults
+ {
++  $compilerPaths{"color-gcc"} = "gcc";
++  $compilerPaths{"color-g++"} = "g++";
++  $compilerPaths{"color-cc"}  = "cc";
++  $compilerPaths{"color-c++"} = "c++";
++  $compilerPaths{"color-ccache"} = "ccache";
++
++  $compilerPaths{"colorgcc"} = "gcc";
++  $compilerPaths{"colorg++"} = "g++";
++  $compilerPaths{"colorcc"}  = "cc";
++  $compilerPaths{"colorc++"} = "c++";
++  $compilerPaths{"colorccache"} = "ccache";
++
+   $options{"chainedPath"} = "0";
+   $nocolor{"dumb"} = "true";
+ 

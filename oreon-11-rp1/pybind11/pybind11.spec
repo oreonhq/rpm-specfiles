@@ -11,7 +11,7 @@
 
 
 Name:    pybind11
-Version: 3.0.4
+Version: 3.1.0
 Release: %autorelease
 Summary: Seamless operability between C++11 and Python
 License: BSD-3-Clause

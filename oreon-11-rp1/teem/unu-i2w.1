@@ -1,0 +1,58 @@
+.TH UNU\-I2W "1" "April 2021" "" "User Commands"
+.SH NAME
+unu\-i2w \- converts from 1-D index to world position
+.SH SYNOPSIS
+.B unu\ i2w
+.RI < center >
+.RI < minPos >
+.RI < maxPos >
+.RI < num >
+.RI < index >
+.SH DESCRIPTION
+Converts from 1-D index to world position, given the centering of the data
+.RB ( cell
+vs.
+.BR node ),
+the range of positions, and the number of intervals into which position has
+been quantized.
+This is a demo/utility, which does not actually operate on any
+.IR nrrd s.
+Previously available as the stand-alone
+.B idx2pos
+binary.
+.P
+Uses
+.B NRRD_POS
+macro
+.SH OPTIONS
+.TP
+.RI < center >
+which centering applies to the quantized position.
+Possibilities are:
+.RS +7n
+.IP \(bu 2
+.RB \(lq cell \(rq
+for histogram bins, quantized values, and pixels-as-squares
+.IP \(bu 2
+.RB \(lq node \(rq
+for non-trivially interpolated sample points
+.RE
+.TP
+.RI < minPos >
+smallest position associated with index
+.B 0
+.RI ( double )
+.TP
+.RI < maxPos >
+highest position associated with highest index
+.RI ( double )
+.TP
+.RI < num >
+number of intervals into which position has been quantized
+.RI ( double )
+.TP
+.RI < index >
+the input index position, to be converted to world
+.RI ( double )
+.SH "SEE\ ALSO"
+.BR unu (1)

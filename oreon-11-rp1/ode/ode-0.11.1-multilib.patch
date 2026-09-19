@@ -1,0 +1,16 @@
+diff -up ode-0.13.1/ode-config.in.orig ode-0.13.1/ode-config.in
+--- ode-0.13.1/ode-config.in.orig	2014-02-04 07:00:58.000000000 +0100
++++ ode-0.13.1/ode-config.in	2014-10-29 12:53:06.347970838 +0100
+@@ -39,10 +39,10 @@ while test $# -gt 0; do
+       echo @ODE_VERSION@
+       ;;
+     --cflags)
+-      echo  -I@includedir@
++      echo
+       ;;
+     --libs)
+-      echo  -L@libdir@ -lode
++      echo -lode
+       ;;
+     *)
+       echo "${usage}" 1>&2

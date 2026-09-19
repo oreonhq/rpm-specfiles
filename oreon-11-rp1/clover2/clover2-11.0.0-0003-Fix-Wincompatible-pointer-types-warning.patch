@@ -1,0 +1,27 @@
+From 73f9fe3d40d3881223f3a9776732e31bdc8a459f Mon Sep 17 00:00:00 2001
+From: Tom Stellard <tstellar@redhat.com>
+Date: Sat, 8 Nov 2025 15:45:20 +0000
+Subject: [PATCH] Fix [-Wincompatible-pointer-types] warning
+
+This fixes the build with clang >= 22 which has this warning as an
+error by default.
+---
+ src/interpreter.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/interpreter.c b/src/interpreter.c
+index 44dfaa6..4708e7c 100644
+--- a/src/interpreter.c
++++ b/src/interpreter.c
+@@ -945,7 +945,7 @@ void command_completion()
+                                 struct stat stat_;
+                                 if(stat(path2, &stat_) == 0) {
+                                     if(stat_.st_mode & S_IXUSR) {
+-                                        char* entry_d_name[PATH_MAX];
++                                        char entry_d_name[PATH_MAX];
+ 
+                                         char* p = entry->d_name;
+                                         char* p2 = entry_d_name;
+-- 
+2.50.1
+

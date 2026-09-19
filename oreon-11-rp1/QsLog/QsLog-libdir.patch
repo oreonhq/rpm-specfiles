@@ -1,0 +1,16 @@
+diff -up QsLog/QsLogSharedLibrary.pro.libdir QsLog/QsLogSharedLibrary.pro
+--- QsLog/QsLogSharedLibrary.pro.libdir	2014-01-03 00:21:06.931837093 +0200
++++ QsLog/QsLogSharedLibrary.pro	2014-01-03 00:21:51.041653578 +0200
+@@ -24,11 +24,7 @@ unix:!macx {
+     other_files.files = *.txt
+     other_files.path = /usr/local/share/$(QMAKE_TARGET)
+ 
+-    contains(QT_ARCH, x86_64) {
+-        target.path = /usr/lib64
+-    } else {
+-        target.path = /usr/lib
+-    }
++    target.path = $$[QT_INSTALL_LIBS]
+ 
+     INSTALLS += headers target
+ }

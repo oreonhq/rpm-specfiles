@@ -1,0 +1,543 @@
+diff --git a/Makefile b/Makefile
+index cdb51b7..3a1b965 100644
+--- a/Makefile
++++ b/Makefile
+@@ -27,13 +27,13 @@ clean:
+ 
+ distclean : clean
+ 	rm -f .*.m
+-	rm -r images/gdigi_icon.h
++	rm -f images/gdigi_icon.h
+ 	rm -f gdigi
+ 
+ install: gdigi
+ 	install gdigi $(DESTDIR)/usr/bin
+-	install gdigi.desktop $(DESTDIR)/usr/share/applications/
+-	install images/gdigi.png $(DESTDIR)/usr/share/icons/
++	install -m 0644 gdigi.desktop $(DESTDIR)/usr/share/applications/
++	install -m 0644 images/gdigi.png $(DESTDIR)/usr/share/icons/
+ 
+ NODEP_TARGETS := clean distclean
+ depinc := 1
+diff --git a/effects.c b/effects.c
+index 134920c..1eee658 100644
+--- a/effects.c
++++ b/effects.c
+@@ -291,6 +291,15 @@ static gchar *rhold_labels[] = {
+     NULL,
+ };
+ 
++static gchar *delay_mult_labels[] = {
++    "Half",
++    "Quarter",
++    "Dot Eighth",
++    "Eighth",
++    "3 Quarter",
++    NULL,
++};
++
+ static EffectValues values_1_2_warp = {
+     .min = 0.0, .max = 2.0,
+     .type = VALUE_TYPE_LABEL,
+@@ -326,6 +335,10 @@ static EffectValues values_warp_0_to_98 = {
+     .offset = 1,
+ };
+ 
++static EffectValues values_0_to_1 = {
++    .min = 0.0, .max = 1.0, .type = VALUE_TYPE_PLAIN,
++};
++
+ static EffectValues values_0_to_9 = {
+     .min = 0.0, .max = 9.0, .type = VALUE_TYPE_PLAIN,
+ };
+@@ -557,6 +570,12 @@ static EffectValues values_delay_spread_0_49 = {
+     0.0, 49.0, .type = VALUE_TYPE_PLAIN,
+ };
+ 
++static EffectValues values_delay_mult = {
++    .min = 2176.0, .max = 2180.0,
++    .type = VALUE_TYPE_LABEL,
++    .labels = delay_mult_labels,
++};
++
+ EffectValues values_on_off = {
+     .min = 0.0, .max = 1.0,
+     .type = VALUE_TYPE_LABEL,
+@@ -1070,7 +1089,7 @@ static EffectSettings rp500_eq_settings[] = {
+     {"Mid Level", EQ_MID, EQ_A_POSITION, &values_eq_db},
+     {"High Level", EQ_TREB, EQ_A_POSITION, &values_eq_db},
+     {"Low Freq", EQ_LOW_FREQ, EQ_A_POSITION, &values_eq_low_freq},
+-    {"Mid Freq", EQ_MID_FREQ, EQ_A_POSITION, &values_eq_mid_freq},
++    {"Mid Freq", EQ_MID_FREQ_RP500, EQ_A_POSITION, &values_eq_mid_freq},
+     {"High Freq", EQ_HIGH_FREQ, EQ_A_POSITION, &values_eq_high_freq},
+     {"Low Bandwidth", EQ_LOW_BANDWIDTH, EQ_A_POSITION, &values_eq_bandwidth},
+     {"Mid Bandwidth", EQ_MID_BANDWIDTH, EQ_A_POSITION, &values_eq_bandwidth},
+@@ -2948,7 +2967,8 @@ static Effect rp355_amp_effect_B[] = {
+ };
+ 
+ static Effect rp500_amp_effect[] = {
+-    {NULL, AMP_ON_OFF, AMP_TYPE, AMP_A_POSITION, rp500_amp_group, G_N_ELEMENTS(rp500_amp_group)},
++    {"Amp/Cab Bypass", AMP_BYPASS_ON_OFF, -1, AMP_BYPASS_POSITION, NULL, -1},
++    {NULL, -1, AMP_TYPE, AMP_A_POSITION, rp500_amp_group, G_N_ELEMENTS(rp500_amp_group)},
+     {"Cabinet", -1, AMP_CAB_TYPE, AMP_CAB_POSITION, rp500_amp_cab_group, G_N_ELEMENTS(rp500_amp_cab_group)},
+ };
+ 
+@@ -3342,10 +3362,33 @@ static Modifier modifiers[] = {
+     {"Dist Overdrive", DIST_808_OVERDRIVE, DIST_POSITION, &values_0_to_99},
+     {"Dist Tone", DIST_808_TONE, DIST_POSITION, &values_0_to_99},
+     {"Dist Level", DIST_808_LVL, DIST_POSITION, &values_0_to_99},
++    {"Dist Drive", DIST_TS_MOD_DRIVE, DIST_POSITION, &values_0_to_99},
++    {"Dist Tone", DIST_TS_MOD_TONE, DIST_POSITION, &values_0_to_99},
++    {"Dist Level", DIST_TS_MOD_LVL, DIST_POSITION, &values_0_to_99},
++    {"Dist Drive", DIST_SD_ODRV_DRIVE, DIST_POSITION, &values_0_to_99},
++    {"Dist Tone", DIST_SD_ODRV_TONE, DIST_POSITION, &values_0_to_99},
++    {"Dist Level", DIST_SD_ODRV_LVL, DIST_POSITION, &values_0_to_99},
++    {"Dist Overdrive", DIST_OD_ODRV_OVERDRIVE, DIST_POSITION, &values_0_to_99},
++    {"Dist Level", DIST_OD_ODRV_LVL, DIST_POSITION, &values_0_to_99}, 
++    {"Dist Gain", DIST_SPARKDRIVE_GAIN, DIST_POSITION, &values_0_to_99},
++    {"Dist Tone", DIST_SPARKDRIVE_TONE, DIST_POSITION, &values_0_to_99},
++    {"Dist Clean", DIST_SPARKDRIVE_CLEAN, DIST_POSITION, &values_0_to_99},
++    {"Dist Volume", DIST_SPARKDRIVE_VOLUME, DIST_POSITION, &values_0_to_99},
+     {"Dist Drive", DIST_GUYOD_DRIVE, DIST_POSITION, &values_0_to_99},
+     {"Dist Level", DIST_GUYOD_LVL, DIST_POSITION, &values_0_to_99},
+     {"Dist Gain", DIST_DOD250_GAIN, DIST_POSITION, &values_0_to_99},
+     {"Dist Level", DIST_DOD250_LVL, DIST_POSITION, &values_0_to_99},
++    {"Dist Gain", DIST_REDLINE_GAIN, DIST_POSITION, &values_0_to_99},
++    {"Dist Low", DIST_REDLINE_LOW, DIST_POSITION, &values_0_to_99},
++    {"Dist High", DIST_REDLINE_HIGH, DIST_POSITION, &values_0_to_99},
++    {"Dist Level", DIST_REDLINE_LEVEL, DIST_POSITION, &values_0_to_99},
++    {"Dist Gain", DIST_AMPDRIVR_GAIN, DIST_POSITION, &values_0_to_99},
++    {"Dist Mid Boost", DIST_AMPDRIVR_MIDBOOST, DIST_POSITION, &values_0_to_99},
++    {"Dist Level", DIST_AMPDRIVR_LVL, DIST_POSITION, &values_0_to_99},    
++    {"Dist Drive", DIST_OC_DRIVE_DRIVE, DIST_POSITION, &values_0_to_99},
++    {"Dist Tone", DIST_OC_DRIVE_TONE, DIST_POSITION, &values_0_to_99},
++    {"Dist HP/LP", DIST_OC_DRIVE_HP_LP, DIST_POSITION, &values_0_to_99},
++    {"Dist Level", DIST_OC_DRIVE_LVL, DIST_POSITION, &values_0_to_99},
+     {"Dist Distortion", DIST_RODENT_DIST, DIST_POSITION, &values_0_to_99},
+     {"Dist Filter", DIST_RODENT_FILTER, DIST_POSITION, &values_0_to_99},
+     {"Dist Volume", DIST_RODENT_LVL, DIST_POSITION, &values_0_to_99},
+@@ -3372,6 +3415,15 @@ static Modifier modifiers[] = {
+     {"Dist Smear", DIST_GONK_SMEAR, DIST_POSITION, &values_0_to_99},
+     {"Dist Suck", DIST_GONK_SUCK, DIST_POSITION, &values_0_to_99},
+     {"Dist Heave", DIST_GONK_HEAVE, DIST_POSITION, &values_0_to_99},
++    {"Dist Drive", DIST_8TAVIA_DRIVE, DIST_POSITION, &values_0_to_99},
++    {"Dist Volume", DIST_8TAVIA_VOLUME, DIST_POSITION, &values_0_to_99},
++    {"Dist Fuzz", DIST_FUZZLATOR_FUZZ, DIST_POSITION, &values_0_to_99},
++    {"Dist Tone", DIST_FUZZLATOR_TONE, DIST_POSITION, &values_0_to_99},
++    {"Dist Loose/Tight", DIST_FUZZLATOR_LOOSETIGHT, DIST_POSITION, &values_0_to_99},
++    {"Dist Volume", DIST_FUZZLATOR_VOLUME, DIST_POSITION, &values_0_to_99},
++    {"Dist Fuzz", DIST_CLASSIC_FUZZ_FUZZ, DIST_POSITION, &values_0_to_99},
++    {"Dist Tone", DIST_CLASSIC_FUZZ_TONE, DIST_POSITION, &values_0_to_99},
++    {"Dist Volume", DIST_CLASSIC_FUZZ_VOLUME, DIST_POSITION, &values_0_to_99},
+     {"Dist Fuzz", DIST_FUZZY_FUZZ, DIST_POSITION, &values_0_to_99},
+     {"Dist Volume", DIST_FUZZY_VOLUME, DIST_POSITION, &values_0_to_99},
+     {"Dist Sustain", DIST_MP_SUSTAIN, DIST_POSITION, &values_0_to_99},
+@@ -3380,6 +3432,11 @@ static Modifier modifiers[] = {
+     {"Amp Enable", AMP_ON_OFF, AMP_A_POSITION, &values_on_off},
+     {"Amp Gain", AMP_GAIN, AMP_A_POSITION, &values_0_to_99},
+     {"Amp Level", AMP_LEVEL, AMP_A_POSITION, &values_0_to_99},
++
++    {"Bass", AMP_BASS, AMP_A_POSITION, &values_1_to_10_step_0p1},
++    {"Mid", AMP_MID, AMP_A_POSITION, &values_1_to_10_step_0p1},
++    {"Treble", AMP_TREBLE, AMP_A_POSITION, &values_1_to_10_step_0p1},
++ 
+     {"Amp B Enable", AMP_ON_OFF, AMP_B_POSITION, &values_on_off},
+     {"Amp B Gain", AMP_GAIN, AMP_B_POSITION, &values_0_to_99},
+     {"Amp B Level", AMP_LEVEL, AMP_B_POSITION, &values_0_to_99},
+@@ -3388,6 +3445,11 @@ static Modifier modifiers[] = {
+     {"EQ Mid", EQ_MID, EQ_A_POSITION, &values_eq_db},
+     {"EQ Treb", EQ_TREB, EQ_A_POSITION, &values_eq_db},
+     {"EQ Presence", EQ_PRESENCE, EQ_A_POSITION, &values_eq_db},
++
++    {"Low Freq", EQ_LOW_FREQ, EQ_A_POSITION, &values_eq_low_freq},
++    {"Mid Freq", EQ_MID_FREQ_RP500, EQ_A_POSITION, &values_eq_mid_freq},
++    {"High Freq", EQ_HIGH_FREQ, EQ_A_POSITION, &values_eq_high_freq},
++
+     {"EQ B Enable", EQ_ENABLE, EQ_B_POSITION, &values_on_off},
+     {"EQ B Bass", EQ_BASS, EQ_B_POSITION, &values_eq_db},
+     {"EQ B Mid", EQ_MID, EQ_B_POSITION, &values_eq_db},
+@@ -3418,6 +3480,7 @@ static Modifier modifiers[] = {
+     {"Chorus Waveform", CHORUS_WAVE, CHORUSFX_POSITION, &values_waveform},
+     {"Chorus Width", CHORUS_WIDTH, CHORUSFX_POSITION, &values_0_to_99},
+     {"Chorus Intensity", CHORUS_INTENSITY, CHORUSFX_POSITION, &values_0_to_99},
++    {"Chorus Rate", CHORUS_RATE, CHORUSFX_POSITION, &values_0_to_99},
+     {"Flanger Speed", FLANGER_SPEED, CHORUSFX_POSITION, &values_0_to_99},
+     {"Flanger Depth", FLANGER_DEPTH, CHORUSFX_POSITION, &values_0_to_99},
+     {"Flanger Regen", FLANGER_REGEN, CHORUSFX_POSITION, &values_0_to_99},
+@@ -3432,6 +3495,9 @@ static Modifier modifiers[] = {
+     {"Flanger Range", EH_FLANGER_RANGE, CHORUSFX_POSITION, &values_0_to_99},
+     {"Flanger Rate", EH_FLANGER_RATE, CHORUSFX_POSITION, &values_0_to_99},
+     {"Flanger Color", EH_FLANGER_COLOR, CHORUSFX_POSITION, &values_0_to_99},
++    {"Flanger Enhance", AD_FLANGER_ENHANCE, CHORUSFX_POSITION, &values_0_to_99},
++    {"Flanger Harmonics", AD_FLANGER_HARMONICS, CHORUSFX_POSITION, &values_0_to_99},
++    {"Flanger Frequency", FLTFLANGER_FREQ, CHORUSFX_POSITION, &values_0_to_99},
+     {"Vibrato Speed", VIBRATO_SPEED, CHORUSFX_POSITION, &values_0_to_99},
+     {"Vibrato Depth", VIBRATO_DEPTH, CHORUSFX_POSITION, &values_0_to_99},
+     {"Rotary Speed", ROTARY_SPEED, CHORUSFX_POSITION, &values_0_to_99},
+@@ -3463,6 +3529,8 @@ static Modifier modifiers[] = {
+     {"YaYa Range", YAYA_RANGE, CHORUSFX_POSITION, &values_0_to_49},
+     {"Step Filter Speed", STEP_FILTER_SPEED, CHORUSFX_POSITION, &values_0_to_99},
+     {"Step Filter Intensity", STEP_FILTER_INTENSITY, CHORUSFX_POSITION, &values_0_to_99},
++    {"Sample Hold Speed", SAMPLE_HOLD_SPEED, CHORUSFX_POSITION, &values_0_to_99},
++    {"Sample Hold Intensity", SAMPLE_HOLD_INTENSITY, CHORUSFX_POSITION, &values_0_to_99},
+     {"Synth Talk Attack", SYNTH_TALK_ATTACK, CHORUSFX_POSITION, &values_0_to_99},
+     {"Synth Talk Release", SYNTH_TALK_RELEASE, CHORUSFX_POSITION, &values_0_to_99},
+     {"Synth Talk Sens", SYNTH_TALK_SENS, CHORUSFX_POSITION, &values_0_to_99},
+@@ -3486,7 +3554,11 @@ static Modifier modifiers[] = {
+     {"Delay Enable", DELAY_ON_OFF, DELAY_POSITION, &values_on_off},
+     {"Delay Time", DELAY_TIME, DELAY_POSITION, &values_delay_time},
+     {"Delay Repeats", DELAY_REPEATS, DELAY_POSITION, &values_delay_repeats},
++    {"Delay Repeats", DELAY_REPEATS_0_99, DELAY_POSITION, &values_delay_repeats},
+     {"Delay Level", DELAY_LEVEL, DELAY_POSITION, &values_0_to_99},
++    {"Delay Volume", DELAY_VOLUME, DELAY_POSITION, &values_0_to_99},
++    {"Delay Mix", DELAY_MIX, DELAY_POSITION, &values_0_to_99},
++    {"Delay Tap Ratio", DELAY_TAP_RATIO, DELAY_POSITION, &values_0_to_99},
+     {"Delay Duck Thresh", DELAY_DUCK_THRESH, DELAY_POSITION, &values_0_to_99},
+     {"Delay Duck Level", DELAY_DUCK_LEVEL, DELAY_POSITION, &values_0_to_99},
+     {"Delay Mod Depth", DELAY_DEPTH, DELAY_POSITION, &values_0_to_99},
+@@ -3499,6 +3571,13 @@ static Modifier modifiers[] = {
+     {"Reverb Predelay", REVERB_PREDELAY, REVERB_POSITION, &values_0_to_15},
+     {"Volume Pre FX", PRESET_LEVEL, VOLUME_PRE_FX_POSITION, &values_0_to_99},
+     {"Volume Post FX", PRESET_LEVEL, VOLUME_POST_FX_POSITION, &values_0_to_99},
++    
++    {"Delay Intensity", DELAY_INTENSITY, DELAY_POSITION, &values_0_to_99},
++    {"Delay Tempo Division", DELAY_MULTIPLIER, DELAY_POSITION, &values_delay_mult},
++    {"Delay Echo", DELAY_ECHO, DELAY_POSITION, &values_0_to_99},
++    
++    {"Amp Loop Enable", AMP_LOOP_ON_OFF, AMP_LOOP_POSITION, &values_on_off},
++    {"Stomp Loop Enable", STOMP_LOOP_ON_OFF, STOMP_LOOP_POSITION, &values_0_to_1},
+ };
+ 
+ int n_modifiers = G_N_ELEMENTS(modifiers);
+@@ -3682,7 +3761,7 @@ static XmlLabel xml_noisegate_labels[] = {
+     {NOISEGATE_SWELL, "Swell"},
+ };
+ 
+-static XmlLabel xml_chorus_pre_post_labels[] = {
++static XmlLabel xml_pre_post_labels[] = {
+     {CHORUSFX_PRE, "Pre"},
+     {CHORUSFX_POST, "Post"},
+ };
+@@ -3956,6 +4035,138 @@ static XmlLabel xml_fx_lib_labels[] = {
+ static XmlLabel xml_rhold_labels[] = {
+     {100, "RHold"},
+ };
++static XmlLabel xml_eq_low_freq_labels[] = {
++    {0, "60Hz"},
++    {1, "63Hz"},
++    {2, "67Hz"},
++    {3, "71Hz"},
++    {4, "75Hz"},
++    {5, "80Hz"},
++    {6, "85Hz"},
++    {7, "90Hz"},
++    {8, "95Hz"},
++    {9, "100Hz"},
++    {11, "106Hz"},
++    {12, "112Hz"},
++    {13, "118Hz"},
++    {14, "125Hz"},
++    {15, "132Hz"},
++    {16, "140Hz"},
++    {17, "150Hz"},
++    {18, "160Hz"},
++    {19, "170Hz"},
++    {20, "180Hz"},
++    {21, "190Hz"},
++    {22, "200Hz"},
++    {23, "212Hz"},
++    {24, "224Hz"},
++    {25, "236Hz"},
++    {26, "250Hz"},
++    {27, "265Hz"},
++    {28, "280Hz"},
++    {29, "300Hz"},
++    {30, "315Hz"},
++    {31, "335Hz"},
++    {32, "355Hz"},
++    {33, "375Hz"},
++    {34, "400Hz"},
++    {35, "425Hz"},
++    {36, "450Hz"},
++    {37, "475Hz"},
++    {38, "500Hz"},
++};
++
++static XmlLabel xml_eq_mid_freq_labels[] = {
++    {0, "300Hz"},
++    {1, "315Hz"},
++    {2, "335Hz"},
++    {3, "355Hz"},
++    {4, "375Hz"},
++    {5, "400Hz"},
++    {6, "425Hz"},
++    {7, "450Hz"},
++    {8, "475Hz"},
++    {9, "500Hz"},
++    {0, "530Hz"},
++    {11, "560Hz"},
++    {12, "600Hz"},
++    {13, "630Hz"},
++    {15, "670Hz"},
++    {16, "710Hz"},
++    {17, "750Hz"},
++    {18, "800Hz"},
++    {19, "850Hz"},
++    {20, "900Hz"},
++    {21, "950Hz"},
++    {22, "1kHz"},
++    {23, "1.06kHz"},
++    {24, "1.12kHz"},
++    {25, "1.18kHz"},
++    {26, "1.25kHz"},
++    {27, "1.32kHz"},
++    {28, "1.4kHz"},
++    {29, "1.5kHz"},
++    {30, "1.6kHz"},
++    {31, "1.7kHz"},
++    {32, "1.8kHz"},
++    {33, "1.9kHz"},
++    {34, "2kHz"},
++    {35, "2.12kHz"},
++    {36, "2.24kHz"},
++    {37, "2.36kHz"},
++    {38, "2.5kHz"},
++    {39, "2.65kHz"},
++    {40, "2.8kHz"},
++    {41, "3kHz"},
++    {42, "3.15kHz"},
++    {43, "3.35kHz"},
++    {44, "3.55kHz"},
++    {45, "3.75kHz"},
++    {46, "4kHz"},
++};
++
++static XmlLabel xml_eq_high_freq_labels[] = {
++    {0, "2kHz"},
++    {1, "2.12kHz"},
++    {2,"2.24kHz"},
++    {3, "2.36kHz"},
++    {4, "2.5kHz"},
++    {5, "2.65kHz"},
++    {6, "2.8kHz"},
++    {7, "3kHz"},
++    {8, "3.15kHz"},
++    {9, "3.35kHz"},
++    {10, "3.55kHz"},
++    {11, "3.75kHz"},
++    {12, "4kHz"},
++    {13, "4.25kHz"},
++    {14, "4.5kHz"},
++    {15, "4.75kHz"},
++    {16, "5kHz"},
++    {17, "5.3kHz"},
++    {18, "5.6kHz"},
++    {19, "6kHz"},
++    {20, "6.3kHz"},
++    {21, "6.7kHz"},
++    {22, "7.1kHz"},
++    {23, "7.5kHz"},
++    {24, "8kHz"},
++};
++
++static XmlLabel xml_eq_bandwidth_labels[] = {
++    {0, "Wide"},
++    {1, "Medium"},
++    {2, "Narrow"},
++};
++
++static XmlLabel xml_delay_mult_labels[] = {
++    {DELAY_HALF, "Half"},
++    {DELAY_QUARTER, "Quarter"},
++    {DELAY_DOTEIGHT, "Dot Eighth"},
++    {DELAY_EIGHT, "Eighth"},
++    {DELAY_3_QUARTR, "3 Quarter"},
++};
++
+ /* Array to map id/position pairs to labels and settings. */
+ XmlSettings xml_settings[] = {
+     {0, 0, "None", NULL,},
+@@ -4023,11 +4234,17 @@ XmlSettings xml_settings[] = {
+     {AMP_GAIN, AMP_A_POSITION, "Amp A Gain", &values_0_to_99,},
+     {AMP_LEVEL, AMP_A_POSITION, "Amp A Level", &values_0_to_99,},
+ 
++    {AMP_BYPASS_ON_OFF, AMP_BYPASS_POSITION, "Amp Bypass", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++
+     {AMP_TYPE, AMP_B_POSITION, "Amp B Type", &values_amp_type, xml_amp_labels, G_N_ELEMENTS(xml_amp_labels)},
+     {AMP_ON_OFF, AMP_B_POSITION, "Amp B Enable", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
+     {AMP_GAIN, AMP_B_POSITION, "Amp B Gain", &values_0_to_99,},
+     {AMP_LEVEL, AMP_B_POSITION, "Amp B Level", &values_0_to_99,},
+ 
++    {AMP_BASS, AMP_A_POSITION, "Amp B Level", &values_1_to_10_step_0p1,},
++    {AMP_MID, AMP_A_POSITION, "Amp B Level", &values_1_to_10_step_0p1,},
++    {AMP_TREBLE, AMP_A_POSITION, "Amp B Level", &values_1_to_10_step_0p1,},
++
+     {AMP_CAB_TYPE, AMP_CAB_POSITION, "Cab A Type", &values_cab_type, xml_amp_cab_labels, G_N_ELEMENTS(xml_amp_cab_labels)},
+     {AMP_CAB_TYPE, AMP_CAB_B_POSITION, "Cab B Type", &values_cab_type, xml_amp_cab_labels, G_N_ELEMENTS(xml_amp_cab_labels)},
+ 
+@@ -4039,10 +4256,10 @@ XmlSettings xml_settings[] = {
+     {NOISEGATE_RELEASE, NOISEGATE_POSITION, "Gate Release", &values_0_to_99,},
+     {NOISEGATE_ATTN, NOISEGATE_POSITION, "Gate Attenuation", &values_0_to_99,},
+ 
+-    {MOD_PRE_POST, CHORUSFX_POSITION, "Mod Pre/Post", &values_pre_post, xml_chorus_pre_post_labels, G_N_ELEMENTS(xml_chorus_pre_post_labels)},
++    {MOD_PRE_POST, CHORUSFX_POSITION, "Mod Pre/Post", &values_pre_post, xml_pre_post_labels, G_N_ELEMENTS(xml_pre_post_labels)},
+ 
+     {CHORUSFX_ON_OFF, CHORUSFX_POSITION, "Chorus/FX Enable", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
+-    {CHORUSFX_PRE_POST, CHORUSFX_POSITION, "Mod Pre/Post", &values_pre_post, xml_chorus_pre_post_labels, G_N_ELEMENTS(xml_chorus_pre_post_labels)},
++    {CHORUSFX_PRE_POST, CHORUSFX_POSITION, "Mod Pre/Post", &values_pre_post, xml_pre_post_labels, G_N_ELEMENTS(xml_pre_post_labels)},
+     {CHORUSFX_TYPE, CHORUSFX_POSITION, "Mod Type", &values_mod_type, xml_chorusfx_labels, G_N_ELEMENTS(xml_chorusfx_labels)},
+ 
+     {PHASER_SPEED, CHORUSFX_POSITION, "Phaser Speed", &values_0_to_99,},
+@@ -4165,6 +4382,7 @@ XmlSettings xml_settings[] = {
+     {DELAY_DEPTH, DELAY_POSITION, "Delay Mod Depth", &values_0_to_99,},
+     {DELAY_TAPE_WOW, DELAY_POSITION, "Delay Tape Wow", &values_0_to_99,},
+     {DELAY_TAPE_FLUTTER, DELAY_POSITION, "Delay Tape Flut", &values_0_to_99,},
++    {DELAY_TAP_TIME_0_4990, DELAY_POSITION, "Tap Time", &values_delay_time_0_4990,},
+ 
+     {REVERB_TYPE, REVERB_POSITION, "Reverb Type", &values_reverb_type, xml_reverb_labels, G_N_ELEMENTS(xml_reverb_labels)},
+     {REVERB_ON_OFF, REVERB_POSITION, "Reverb Enable", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
+@@ -4211,13 +4429,24 @@ XmlSettings xml_settings[] = {
+ 
+     {EQ_ENABLE, EQ_A_POSITION, "EQ A Enable", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
+     {EQ_TYPE, EQ_A_POSITION, "EQ A Type", &values_eq_type, xml_eq_labels, G_N_ELEMENTS(xml_eq_labels)},
++
+     {EQ_BASS, EQ_A_POSITION, "EQ A Bass", &values_eq_db,},
+     {EQ_MID, EQ_A_POSITION, "EQ A Mid", &values_eq_db,},
+     {EQ_TREB, EQ_A_POSITION, "EQ A Treb", &values_eq_db,},
++
+     {EQ_PRESENCE, EQ_A_POSITION, "EQ A Presence", &values_eq_db,},
+     {EQ_MID_FREQ, EQ_A_POSITION, "EQ A Mid Freq", &values_eq_mid_hz,},
+     {EQ_TREB_FREQ, EQ_A_POSITION, "EQ A Treb Freq", &values_eq_treb_hz,},
+ 
++    // RP500 values
++    {EQ_LOW_FREQ, EQ_A_POSITION, "EQ A Low Freq", &values_eq_low_freq, xml_eq_low_freq_labels, G_N_ELEMENTS(xml_eq_low_freq_labels)},
++    {EQ_MID_FREQ_RP500, EQ_A_POSITION, "EQ A Mid Freq", &values_eq_mid_freq, xml_eq_mid_freq_labels, G_N_ELEMENTS(xml_eq_mid_freq_labels)},
++    {EQ_HIGH_FREQ, EQ_A_POSITION, "EQ A High Freq", &values_eq_high_freq, xml_eq_high_freq_labels, G_N_ELEMENTS(xml_eq_high_freq_labels)},
++
++    {EQ_LOW_BANDWIDTH, EQ_A_POSITION, "Low Bandwidth", &values_eq_bandwidth, xml_eq_bandwidth_labels, G_N_ELEMENTS(xml_eq_bandwidth_labels)},
++    {EQ_MID_BANDWIDTH, EQ_A_POSITION, "Mid Bandwidth", &values_eq_bandwidth, xml_eq_bandwidth_labels, G_N_ELEMENTS(xml_eq_bandwidth_labels)},
++    {EQ_HIGH_BANDWIDTH, EQ_A_POSITION, "High Bandwidth", &values_eq_bandwidth, xml_eq_bandwidth_labels, G_N_ELEMENTS(xml_eq_bandwidth_labels)},
++
+     {EQ_ENABLE, EQ_B_POSITION, "EQ B Enable", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
+     {EQ_TYPE, EQ_B_POSITION, "EQ B Type", &values_eq_type, xml_eq_labels, G_N_ELEMENTS(xml_eq_labels)},
+     {EQ_BASS, EQ_B_POSITION, "EQ B Bass", &values_eq_db,},
+@@ -4240,6 +4469,30 @@ XmlSettings xml_settings[] = {
+     {FX_LIB_LEVEL_MAX1, LIB_POSITION_B, "FxLib B LvlMax1", &values_0_to_99,},
+     {FX_LIB_LEVEL_MAX2, LIB_POSITION_B, "FxLib B LvlMax2", &values_0_to_99,},
+     {FX_LIB_LEVEL_MAX3, LIB_POSITION_B, "FxLib B LvlMax3", &values_0_to_99,},
++    
++    // RP1000 values
++    {DELAY_TAP_TIME, DELAY_POSITION, "Delay Tap Time", &values_delay_time,},
++    {DELAY_MULTIPLIER, DELAY_POSITION, "Delay Tempo Division", &values_delay_mult, xml_delay_mult_labels, G_N_ELEMENTS(xml_delay_mult_labels)},
++    {MOD_PRE_POST, STOMP_LOOP_POSITION, "Stomp Pre/Post", &values_pre_post, xml_pre_post_labels, G_N_ELEMENTS(xml_pre_post_labels)},
++    {STOMP_LOOP_ON_OFF, STOMP_LOOP_POSITION, "Stomp Loop Enable", &values_0_to_1,},
++    {AMP_LOOP_ON_OFF, AMP_LOOP_POSITION, "Amp Loop Enable", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++    
++    {VSWITCH_ASSIGN, FOOTSWITCH_6_POSITION, "Footswitch 6 Param", &values_vswitch_assign, xml_vswitch_assign_labels, G_N_ELEMENTS(xml_vswitch_assign_labels)},
++    {VSWITCH_MIN, FOOTSWITCH_6_POSITION, "Footswitch 6 Min", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++    {VSWITCH_MAX, FOOTSWITCH_6_POSITION, "Footswitch 6 Max", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++    {VSWITCH_ASSIGN, FOOTSWITCH_7_POSITION, "Footswitch 7 Param", &values_vswitch_assign, xml_vswitch_assign_labels, G_N_ELEMENTS(xml_vswitch_assign_labels)},
++    {VSWITCH_MIN, FOOTSWITCH_7_POSITION, "Footswitch 7 Min", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++    {VSWITCH_MAX, FOOTSWITCH_7_POSITION, "Footswitch 7 Max", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++    {VSWITCH_ASSIGN, FOOTSWITCH_8_POSITION, "Footswitch 8 Param", &values_vswitch_assign, xml_vswitch_assign_labels, G_N_ELEMENTS(xml_vswitch_assign_labels)},
++    {VSWITCH_MIN, FOOTSWITCH_8_POSITION, "Footswitch 8 Min", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++    {VSWITCH_MAX, FOOTSWITCH_8_POSITION, "Footswitch 8 Max", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++    {VSWITCH_ASSIGN, FOOTSWITCH_9_POSITION, "Footswitch 9 Param", &values_vswitch_assign, xml_vswitch_assign_labels, G_N_ELEMENTS(xml_vswitch_assign_labels)},
++    {VSWITCH_MIN, FOOTSWITCH_9_POSITION, "Footswitch 9 Min", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++    {VSWITCH_MAX, FOOTSWITCH_9_POSITION, "Footswitch 9 Max", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++    {VSWITCH_ASSIGN, FOOTSWITCH_10_POSITION, "Footswitch 10 Param", &values_vswitch_assign, xml_vswitch_assign_labels, G_N_ELEMENTS(xml_vswitch_assign_labels)},
++    {VSWITCH_MIN, FOOTSWITCH_10_POSITION, "Footswitch 10 Min", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++    {VSWITCH_MAX, FOOTSWITCH_10_POSITION, "Footswitch 10 Max", &values_on_off, xml_on_off_labels, G_N_ELEMENTS(xml_on_off_labels)},
++
+ 
+     // Global settings, not part of presets or standard XML.
+     {TUNING_REFERENCE, GLOBAL_POSITION, "Tuning Reference", &values_0_to_99,},
+@@ -4282,6 +4535,7 @@ gchar *Positions[] = {
+     [ LIB_POSITION_A ] = "Library A",
+     [ LIB_POSITION_B ] = "Library B",
+     [ AMP_LOOP_POSITION ] = "Amp Loop",
++    [ STOMP_LOOP_POSITION ] = "Stomp Loop",
+ };
+ 
+ guint max_position = G_N_ELEMENTS(Positions);
+@@ -4314,6 +4568,8 @@ static Modifier *get_modifier(guint id, guint position)
+         if ((modifiers[x].id == id) && (modifiers[x].position == position))
+             return &(modifiers[x]);
+ 
++    g_warning("Failed to find modifier for id %d position %d", id, position);
++
+     return NULL;
+ }
+ 
+@@ -4441,7 +4697,8 @@ void update_modifier_linkable_list(GString *msg)
+             group[i].settings = get_modifier_settings(modifier->values);
+             group[i].settings_amt = 2;
+         } else {
+-            group[i].label = NULL;
++            // The string is leaked when the modifier list is updated. 
++            group[i].label = g_strdup_printf("Unknown pos %d id %d", position, id);
+             group[i].settings = NULL;
+         }
+ 
+diff --git a/gdigi.c b/gdigi.c
+index 1ca93ae..dad5ca1 100644
+--- a/gdigi.c
++++ b/gdigi.c
+@@ -188,7 +188,7 @@ format_ipv (guint id, guint pos, guint val)
+ 
+     if (!xml) {
+         g_warning("Failed to find xml settings for position %d id %d.",
+-                   id, pos);
++                   pos, id);
+         g_string_printf(buf, "%s", "error");
+         return buf;
+     }
+diff --git a/gdigi.desktop b/gdigi.desktop
+index c8a257d..df0dbd3 100644
+--- a/gdigi.desktop
++++ b/gdigi.desktop
+@@ -3,6 +3,7 @@ Version=1.0
+ Type=Application
+ Name=gdigi
+ Exec=gdigi
+-Categories=GNOME;Audio;AudioVideo;
++Categories=GTK;Audio;AudioVideo;
+ Icon=gdigi
++X-Desktop-File-Install-Version=0.20
+ 
+diff --git a/gdigi.h b/gdigi.h
+index 92e81d9..0fb906d 100644
+--- a/gdigi.h
++++ b/gdigi.h
+@@ -251,6 +251,9 @@ enum {
+ #define PRESET_POSITION 18
+ #define PRESET_LEVEL 2626
+ 
++#define STOMP_LOOP_ON_OFF 3329
++#define STOMP_LOOP_POSITION 34
++
+ enum {
+   AMP_TYPE_TWEED_CHAMP = 307,
+   AMP_TYPE_TWEED_DELUXE = 308,
+@@ -441,7 +444,7 @@ enum {
+ #define EQ_ENABLE 3212
+ 
+ #define EQ_LOW_FREQ 3213
+-#define EQ_MID_FREQ_XXX 3214
++#define EQ_MID_FREQ_RP500 3214
+ #define EQ_HIGH_FREQ 3215
+ 
+ #define EQ_TREBLE_FREQ 3215
+@@ -888,6 +891,12 @@ enum {
+ #define VSWITCH_PEDAL_ASSIGN_WAH 196740
+ #define VSWITCH_ASSIGN_WAH_ENABLE 196737
+ 
++#define FOOTSWITCH_6_POSITION 28
++#define FOOTSWITCH_7_POSITION 29
++#define FOOTSWITCH_8_POSITION 30
++#define FOOTSWITCH_9_POSITION 31
++#define FOOTSWITCH_10_POSITION 32
++
+ #define LIBRARY_TONE 8704
+ #define LIBRARY_EFFECTS 8705
+ #define EFFECTS_LEVEL 8706

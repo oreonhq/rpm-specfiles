@@ -5,8 +5,8 @@
 Name:           targetcli
 License:        Apache-2.0
 Summary:        An administration shell for storage targets
-Version:        3.0.1
-Release:        5%{?dist}
+Version:        3.0.2
+Release:        1%{?dist}
 URL:            https://github.com/open-iscsi/%{oname}
 Source:        https://github.com/open-iscsi/targetcli-fb/archive/refs/tags/v3.0.1.tar.gz#/targetcli-fb-3.0.1.tar.gz
 # Proposed upstream

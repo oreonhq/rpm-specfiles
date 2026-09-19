@@ -27,7 +27,7 @@ BuildRequires:	perl(YAML::Tiny) >= 1.40
 BuildRequires:	perl(version) >= 0.70
 BuildRequires:	perl(warnings)
 
-Provides:       perl(Test::MinimumVersion)
+Provides:       perl(Test::MinimumVersion) = %{version}
 %description
 Check whether your code requires a newer perl than you think.
 

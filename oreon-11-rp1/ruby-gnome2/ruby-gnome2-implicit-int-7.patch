@@ -1,0 +1,29 @@
+This code has been removed upstream.  These type changes from int
+look like actual bug fixes.
+
+diff --git a/gconf/src/rbgconf-changeset.c b/gconf/src/rbgconf-changeset.c
+index 234ac8ac429fbcb6..72516a16c42b2667 100644
+--- a/gconf/src/rbgconf-changeset.c
++++ b/gconf/src/rbgconf-changeset.c
+@@ -102,7 +102,7 @@ change_set_foreach_func(GConfChangeSet *cs, const gchar *key,
+ }
+ 
+ static VALUE
+-change_set_foreach(self)
++change_set_foreach(VALUE self)
+ {
+ 	VALUE func;
+ 
+diff --git a/gnome/src/rbgnome-app-helper.c b/gnome/src/rbgnome-app-helper.c
+index bf6f0a1677a34f66..700d9b8091c9ad2a 100644
+--- a/gnome/src/rbgnome-app-helper.c
++++ b/gnome/src/rbgnome-app-helper.c
+@@ -766,7 +766,7 @@ ui_info_to_ary(uiinfo)
+ 
+ static VALUE
+ app_fill_menus(self, menuinfo, accel_group, uline_accels, pos)
+-    VALUE self, menuinfo, accel_group;
++    VALUE self, menuinfo, accel_group, uline_accels, pos;
+ {
+     VALUE uiinfo = rbgno_ary_to_ui_info(menuinfo, RBUI_MENUS);
+ 

@@ -1,0 +1,10 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 16 Mar 2016 15:38:05 +0300
+Subject: [PATCH] Move test handled to test directory
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/riak_sysmon_testhandler.erl b/test/riak_sysmon_testhandler.erl
+similarity index 100%
+rename from src/riak_sysmon_testhandler.erl
+rename to test/riak_sysmon_testhandler.erl

@@ -1,0 +1,11 @@
+diff -up mygui-MyGUI3.4.3/Platforms/OpenGL/OpenGLPlatform/CMakeLists.txt.orig mygui-MyGUI3.4.3/Platforms/OpenGL/OpenGLPlatform/CMakeLists.txt
+--- mygui-MyGUI3.4.3/Platforms/OpenGL/OpenGLPlatform/CMakeLists.txt.orig	2023-08-06 23:45:08.000000000 +0200
++++ mygui-MyGUI3.4.3/Platforms/OpenGL/OpenGLPlatform/CMakeLists.txt	2025-07-29 20:49:36.561869888 +0200
+@@ -41,6 +41,7 @@ link_directories(${OPENGL_LIB_DIR})
+ install(FILES ${HEADER_FILES}
+ 	DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/MYGUI"
+ )
++set_target_properties(${PROJECTNAME} PROPERTIES VERSION ${MYGUI_VERSION} SOVERSION "${MYGUI_VERSION_MAJOR}.${MYGUI_VERSION_MINOR}.${MYGUI_VERSION_PATCH}")
+ mygui_install_target(${PROJECTNAME} "")
+ 
+ if (MYGUI_HIGH_LEVEL_WARNINGS)

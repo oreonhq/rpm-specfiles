@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Task-warrior server</short>
+  <description>This option allows you to connect to the task warrior server.</description>
+  <port protocol="tcp" port="6544"/>
+</service>
+

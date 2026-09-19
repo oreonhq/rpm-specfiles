@@ -1,0 +1,46 @@
+From ed275658a6f56912cd1608fe3f4d5023afa54e19 Mon Sep 17 00:00:00 2001
+From: C <chunkeey@web.de>
+Date: Tue, 26 Jun 2018 22:31:17 +0200
+Subject: use exponentional backup select in interface/alsaseq_c.c
+
+Bug-Debian: https://bugs.debian.org/433643
+---
+ interface/alsaseq_c.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/interface/alsaseq_c.c b/interface/alsaseq_c.c
+index 876a62c..cf012db 100644
+--- a/interface/alsaseq_c.c
++++ b/interface/alsaseq_c.c
+@@ -484,6 +484,7 @@ static void stop_playing(void)
+ 
+ static void doit(struct seq_context *ctxp)
+ {
++	int err, timeout_val = 10;
+ 	for (;;) {
+ 		while (snd_seq_event_input_pending(ctxp->handle, 1)) {
+ 			if (do_sequencer(ctxp))
+@@ -517,10 +518,20 @@ static void doit(struct seq_context *ctxp)
+ 			FD_SET(ctxp->fd, &rfds);
+ 			if (! IS_STREAM_TRACE) {
+ 				struct timeval timeout;
+-				timeout.tv_sec = 0;
+-				timeout.tv_usec = 10000; /* 10ms */
+-				if (select(ctxp->fd + 1, &rfds, NULL, NULL, &timeout) < 0)
++				timeout.tv_sec = (timeout_val / 1000);
++				timeout.tv_usec = (timeout_val % 1000) * 1000;
++				err = select(ctxp->fd + 1, &rfds, NULL, NULL, timeout_val < 0 ? NULL : &timeout);
++				if (err < 0) {
+ 					goto __done;
++				} else if (err == 0) {
++					if (timeout_val < 1024) {
++						timeout_val+=timeout_val;
++					} else {
++						timeout_val = -1;
++					}
++				} else {
++					timeout_val = 10;
++				}
+ 			} else {
+ 				if (select(ctxp->fd + 1, &rfds, NULL, NULL, NULL) < 0)
+ 					goto __done;

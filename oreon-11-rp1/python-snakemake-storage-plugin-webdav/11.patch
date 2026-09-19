@@ -1,0 +1,22 @@
+From 674fbbf817a3001ca472ef42de6029ca704b0160 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 19 Feb 2026 08:26:27 +0000
+Subject: [PATCH] Allow webdav4 0.11
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index d5b79bb..5b32d65 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -15,7 +15,7 @@ documentation = "https://snakemake.github.io/snakemake-plugin-catalog/plugins/st
+ python = "^3.11"
+ snakemake-interface-common = "^1.15.0"
+ snakemake-interface-storage-plugins = "^4.0.0"
+-webdav4 = "^0.10.0"
++webdav4 = ">0.10.0, <0.12.0"
+ fsspec = ">=2023.12.2"
+ 
+ [tool.poetry.group.dev.dependencies]

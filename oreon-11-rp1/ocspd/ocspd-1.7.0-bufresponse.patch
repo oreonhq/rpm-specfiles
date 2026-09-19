@@ -1,0 +1,79 @@
+diff -Naur openca-ocspd-1.7.0.orig/src/ocspd_engine.c openca-ocspd-1.7.0.new/src/ocspd_engine.c
+--- openca-ocspd-1.7.0.orig/src/ocspd_engine.c	2008-11-21 20:37:13.000000000 +0100
++++ openca-ocspd-1.7.0.new/src/ocspd_engine.c	2013-02-20 11:43:48.853874579 +0100
+@@ -228,7 +228,7 @@
+ 			    syslog( LOG_INFO, "Added '%s' to POST COMMANDS",
+ 				val->value );
+ 		} else {
+-			syslog( LOG_INFO, "Not Reckognised '%s' option",
++			syslog( LOG_INFO, "Not recognised '%s' option",
+ 				val->name );
+ 		}
+ 	}
+diff -Naur openca-ocspd-1.7.0.orig/src/ocsp_response.c openca-ocspd-1.7.0.new/src/ocsp_response.c
+--- openca-ocspd-1.7.0.orig/src/ocsp_response.c	2008-11-19 22:23:16.000000000 +0100
++++ openca-ocspd-1.7.0.new/src/ocsp_response.c	2013-02-20 11:54:37.702711720 +0100
+@@ -74,7 +74,7 @@
+ 		if ((ca = ocspd_CA_ENTRY_find( conf, cid )) == NULL) {
+ 			if (conf->verbose) {
+ 				syslog( LOG_INFO, 
+-				  "request for non reckognized CA [serial %ld]",
++				  "request for non recognized CA [serial %ld]",
+ 					ASN1_INTEGER_get(serial) );
+ 			}
+ 			OCSP_basic_add1_status(bs, cid,
+@@ -227,6 +227,9 @@
+ int ocspd_resp_send_socket(int connfd, OCSP_RESPONSE *resp, 
+ 							OCSPD_CONFIG *conf) {
+ 	BIO *out = NULL;
++	BIO *mem = NULL;
++	char * cp;
++	int len;
+ 	int  bio_ret = 0;
+ 	ASN1_GENERALIZEDTIME *date = NULL;
+         ASN1_GENERALIZEDTIME *expire = NULL;
+@@ -258,6 +261,12 @@
+ 		return(0);
+ 	}
+ 
++	if((mem = BIO_new(BIO_s_mem())) == NULL ) {
++		syslog(LOG_ERR, "ERROR::memory BIO creation");
++		BIO_free(out);
++		return(0);
++	}
++
+ 	// thisupd = thisupd = M_ASN1_TIME_dup(ca->lastUpdate);
+ 	date = ASN1_GENERALIZEDTIME_new();
+ 	expire = ASN1_GENERALIZEDTIME_new();
+@@ -269,16 +278,23 @@
+ 		X509_gmtime_adj(expire, 0);
+ 	}
+ 
+-	BIO_printf(out, http_resp, i2d_OCSP_RESPONSE(resp, NULL));
+-	BIO_printf(out, "Date: ");
+-	ASN1_GENERALIZEDTIME_print(out, date);
+-	BIO_printf(out, "\r\nExpires: ");
+-	ASN1_GENERALIZEDTIME_print(out, expire);
+-	BIO_printf(out, "\r\n\r\n");
++	BIO_printf(mem, http_resp, i2d_OCSP_RESPONSE(resp, NULL));
++	BIO_printf(mem, "Date: ");
++	ASN1_GENERALIZEDTIME_print(mem, date);
++	BIO_printf(mem, "\r\nExpires: ");
++	ASN1_GENERALIZEDTIME_print(mem, expire);
++	BIO_printf(mem, "\r\n\r\n");
++
++	i2d_OCSP_RESPONSE_bio(mem, resp);
++	len = BIO_get_mem_data(mem, &cp);
++
++	if (len < 0)
++		syslog(LOG_ERR, "ERROR::response length %d <= 0", len);
++	else
++		BIO_write(out, cp, len);
+ 
+-	i2d_OCSP_RESPONSE_bio(out, resp);
+ 	bio_ret = BIO_flush(out);
+-
++	BIO_free(mem);
+ 	BIO_free(out);
+ 
+ 	if( date ) ASN1_GENERALIZEDTIME_free( date );

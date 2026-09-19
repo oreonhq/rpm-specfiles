@@ -1,0 +1,60 @@
+From 4ca52a1be8ef9b2ce1c62fdb4e5ba4db44132ad0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Tue, 15 Oct 2024 20:24:40 +0200
+Subject: [PATCH] Fix return value from mod_python init
+
+---
+ gmond/modules/python/mod_python.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/gmond/modules/python/mod_python.c b/gmond/modules/python/mod_python.c
+index 484429e..cdfeb7e 100644
+--- a/gmond/modules/python/mod_python.c
++++ b/gmond/modules/python/mod_python.c
+@@ -601,11 +601,14 @@ static struct PyModuleDef moduledef = {
+ #define INITERROR return NULL
+ 
+ PyMODINIT_FUNC PyInit_metric_init(apr_pool_t *p)
++
+ #else
++
+ #define INITERROR return
+ 
+ static int pyth_metric_init (apr_pool_t *p)
+ #endif
++
+ {
+     DIR *dp;
+     struct dirent *entry;
+@@ -796,6 +799,16 @@ static int pyth_metric_init (apr_pool_t *p)
+ #endif
+ }
+ 
++#if PY_MAJOR_VERSION >= 3
++static int pyth_metric_init (apr_pool_t *p) {
++  if (PyInit_metric_init(p) == NULL) {
++    return 1;
++  } else {
++    return 0;
++  }
++}
++#endif
++
+ static apr_status_t pyth_metric_cleanup ( void *data)
+ {
+     PyObject *pcleanup, *pobj;
+@@ -913,11 +926,7 @@ static g_val_t pyth_metric_handler( int metric_index )
+ mmodule python_module =
+ {
+     STD_MMODULE_STUFF,
+-#if PY_MAJOR_VERSION >= 3
+-    (int (*)(apr_pool_t *))PyInit_metric_init,
+-#else
+     pyth_metric_init,
+-#endif
+     NULL,
+     NULL, /* defined dynamically */
+     pyth_metric_handler,
+-- 
+2.47.0
+

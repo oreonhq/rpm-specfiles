@@ -1,0 +1,22 @@
+From 7f9f21b54831e1b3d8f9a41580e03364391672a0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 12 May 2011 17:51:45 +0200
+Subject: [PATCH] Install parsers headers into subdirectory
+
+---
+ src/parsers/Makefile.am |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/src/parsers/Makefile.am b/src/parsers/Makefile.am
+index 426b81b..0b11734 100644
+--- a/src/parsers/Makefile.am
++++ b/src/parsers/Makefile.am
+@@ -1,4 +1,5 @@
+ EXTRA_DIST=mkallmodules
++pkgincludedir=$(includedir)/$(PACKAGE)/parsers
+ 
+ pkginclude_HEADERS = file.h ifupdown.h \
+ 			pair.h ppp.h shell.h properties.h table.h ini.h tz.h pslave.h route.h iproute.h ipsec.h \
+-- 
+1.7.4.4
+

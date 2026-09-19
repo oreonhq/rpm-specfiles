@@ -1,0 +1,52 @@
+Fixes these GCC warnings:
+
+cos.c: In function 'mpfi_cos':
+cos.c:200:8: warning: 'inexact_right' may be used uninitialized [-Wmaybe-uninitialized]
+  200 |     if (inexact_right) inexact += 2;
+      |        ^
+cos.c:31:21: note: 'inexact_right' was declared here
+   31 |   int inexact_left, inexact_right, inexact=0;
+      |                     ^~~~~~~~~~~~~
+cos.c:199:8: warning: 'inexact_left' may be used uninitialized [-Wmaybe-uninitialized]
+  199 |     if (inexact_left) inexact = 1;
+      |        ^
+cos.c:31:7: note: 'inexact_left' was declared here
+   31 |   int inexact_left, inexact_right, inexact=0;
+      |       ^~~~~~~~~~~~
+
+sin.c: In function 'mpfi_sin':
+sin.c:199:8: warning: 'inexact_right' may be used uninitialized [-Wmaybe-uninitialized]
+  199 |     if (inexact_right) inexact += 2;
+      |        ^
+sin.c:31:21: note: 'inexact_right' was declared here
+   31 |   int inexact_left, inexact_right, inexact = 0;
+      |                     ^~~~~~~~~~~~~
+sin.c:198:8: warning: 'inexact_left' may be used uninitialized [-Wmaybe-uninitialized]
+  198 |     if (inexact_left) inexact = 1;
+      |        ^
+sin.c:31:7: note: 'inexact_left' was declared here
+   31 |   int inexact_left, inexact_right, inexact = 0;
+      |       ^~~~~~~~~~~~
+
+--- a/src/cos.c	2022-03-11 08:33:43.000000000 -0700
++++ b/src/cos.c	2022-03-28 16:14:58.691392501 -0600
+@@ -28,7 +28,7 @@ MA 02110-1301, USA. */
+ int
+ mpfi_cos (mpfi_ptr a, mpfi_srcptr b)
+ {
+-  int inexact_left, inexact_right, inexact=0;
++  int inexact_left=0, inexact_right=0, inexact=0;
+   mpfr_prec_t prec, prec_left, prec_right;
+   mpfr_t tmp;
+   mpz_t z, zmod4;
+--- a/src/sin.c	2022-03-11 08:33:43.000000000 -0700
++++ b/src/sin.c	2022-03-28 16:25:22.397105860 -0600
+@@ -28,7 +28,7 @@ MA 02110-1301, USA. */
+ int
+ mpfi_sin (mpfi_ptr a, mpfi_srcptr b)
+ {
+-  int inexact_left, inexact_right, inexact = 0;
++  int inexact_left = 0, inexact_right = 0, inexact = 0;
+   mpfr_prec_t prec, prec_left, prec_right;
+   mpfr_t tmp;
+   mpz_t z, zmod4;

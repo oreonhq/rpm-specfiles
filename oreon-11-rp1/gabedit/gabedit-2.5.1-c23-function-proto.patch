@@ -1,0 +1,290 @@
+commit 334e1ecbbd027e34822b56b4f8c1ffc41c93f06e
+Author: gabedit maint <gabedit-maintainer@fedoraproject.org>
+Date:   Fri Jan 17 23:57:47 2025 +0900
+
+    save
+
+diff --git a/src/Common/Run.c b/src/Common/Run.c
+index 60c4788..7f2e131 100644
+--- a/src/Common/Run.c
++++ b/src/Common/Run.c
+@@ -504,7 +504,7 @@ void get_file_frome_remote_host(GtkWidget* wid,gpointer data)
+   	gabedit_text_insert (GABEDIT_TEXT(Text[1]), NULL, NULL, NULL,temp,-1);   
+ 	g_free(temp);
+   	put_text_in_texts_widget(Text,fout,ferr);
+-  	view_result(NULL,NULL);
++  	view_result();
+ 	if(type==LOGFILE || iprogram == PROG_IS_GAUSS) break;
+ 	if(type==LOGFILE || iprogram == PROG_IS_GAMESS) break;
+   case OUTFILE :
+@@ -518,7 +518,7 @@ void get_file_frome_remote_host(GtkWidget* wid,gpointer data)
+   	gabedit_text_insert (GABEDIT_TEXT(Text[1]), NULL, NULL, NULL,temp,-1);   
+ 	g_free(temp);
+   	put_text_in_texts_widget(Text,fout,ferr);
+-  	view_result(NULL,NULL);
++  	view_result();
+ 	if(type==OUTFILE) break;
+   case MOLDENFILE :
+   	/* get file.molden */
+diff --git a/src/Display/AnimationGeomConv.c b/src/Display/AnimationGeomConv.c
+index 153e266..dc7e515 100644
+--- a/src/Display/AnimationGeomConv.c
++++ b/src/Display/AnimationGeomConv.c
+@@ -5696,7 +5696,7 @@ static void activate_action (GtkAction *action)
+ 	else if(!strcmp(name, "HelpAnimation")) help_animated_file();
+ 	else if(!strcmp(name, "CreateGaussInput")) create_gaussian_file_dlg(FALSE);
+ 	else if(!strcmp(name, "CreateGaussInputLink")) create_gaussian_file_dlg(TRUE);
+-	else if(!strcmp(name, "CreateGr")) create_gr_dlg(TRUE);
++	else if(!strcmp(name, "CreateGr")) create_gr_dlg();
+ 	else if(!strcmp(name, "ComputeConformerTpes")) computeConformerTypes();
+ }
+ /*--------------------------------------------------------------------*/
+diff --git a/src/Display/GridPlans.h b/src/Display/GridPlans.h
+index bc1b907..7fb1726 100644
+--- a/src/Display/GridPlans.h
++++ b/src/Display/GridPlans.h
+@@ -30,7 +30,7 @@ typedef struct _Plane
+ 	gdouble limits[3][2]; /* xmin,xmax,ymin,ymax,zmin and zmax */
+ }Plane;
+ Grid* define_plane_grid(Point5 C, Point5 V, gdouble *len, gint *N);
+-void create_planeGrid_center_vector();
++void create_planeGrid_center_vector(gchar* type);
+ 
+ #endif /* __GABEDIT_GRIDPLANS_H__ */
+ 
+diff --git a/src/Geometry/BuildLinear.c b/src/Geometry/BuildLinear.c
+index 1c07359..cea6f6a 100644
+--- a/src/Geometry/BuildLinear.c
++++ b/src/Geometry/BuildLinear.c
+@@ -66,7 +66,7 @@ static void build_linear_molecule(GtkWidget *w,gpointer data)
+ 
+ 	init_dipole();
+  	if(GeomXYZ) freeGeomXYZ();
+- 	if(VariablesXYZ) freeVariablesXYZ(VariablesXYZ);
++ 	if(VariablesXYZ) freeVariablesXYZ();
+ 
+ 
+ 	NcentersXYZ = Nc;
+diff --git a/src/Geometry/BuildNanoTube.c b/src/Geometry/BuildNanoTube.c
+index 7ddcb8c..bbd5397 100644
+--- a/src/Geometry/BuildNanoTube.c
++++ b/src/Geometry/BuildNanoTube.c
+@@ -150,7 +150,7 @@ static void build_nanotube(GtkWidget *w,gpointer data)
+ 
+ 	init_dipole();
+  	if(GeomXYZ) freeGeomXYZ();
+- 	if(VariablesXYZ) freeVariablesXYZ(VariablesXYZ);
++ 	if(VariablesXYZ) freeVariablesXYZ();
+ 
+ 	NcentersXYZ = 2*Nc*ncells;
+ 	GeomXYZ=g_malloc(NcentersXYZ*sizeof(GeomXYZAtomDef));
+diff --git a/src/Geometry/BuildRing.c b/src/Geometry/BuildRing.c
+index d0f716d..67758b8 100644
+--- a/src/Geometry/BuildRing.c
++++ b/src/Geometry/BuildRing.c
+@@ -75,7 +75,7 @@ static void build_ring_molecule(GtkWidget *w,gpointer data)
+  	if(GeomXYZ)
+    		freeGeomXYZ();
+  	if(VariablesXYZ)
+-		freeVariablesXYZ(VariablesXYZ);
++		freeVariablesXYZ();
+ 
+ 
+ 	NcentersXYZ = Nc;
+diff --git a/src/Geometry/BuildRoZPhi.c b/src/Geometry/BuildRoZPhi.c
+index 56aba81..6c4e7ba 100644
+--- a/src/Geometry/BuildRoZPhi.c
++++ b/src/Geometry/BuildRoZPhi.c
+@@ -65,7 +65,7 @@ static void build_rozphi_molecule(GtkWidget *w,gpointer data)
+ 		if(GeomXYZ)
+    			freeGeomXYZ();
+ 		if(VariablesXYZ)
+-			freeVariablesXYZ(VariablesXYZ);
++			freeVariablesXYZ();
+ 		NcentersXYZ = 0;
+ 
+ 	}
+diff --git a/src/Geometry/DrawGeomCairo.c b/src/Geometry/DrawGeomCairo.c
+index 2d5f3aa..9317794 100644
+--- a/src/Geometry/DrawGeomCairo.c
++++ b/src/Geometry/DrawGeomCairo.c
+@@ -188,7 +188,7 @@ void define_geometry();
+ void buildRotation();
+ void deleteHydrogensConnectedTo(gint n, gint nH);
+ void delete_one_atom(gint NumDel);
+-static gint replace_atom();
++static gint replace_atom(gint);
+ /********************************************************************************/
+ static  GdkGC* gc=NULL;
+ static	GdkColor* BackColor=NULL;
+@@ -3009,7 +3009,7 @@ void draw_selection_circle(gdouble x,gdouble y)
+ 	gdk_draw_arc(GeomDrawingArea->window,gc,FALSE,xi,yi,xf,yf,0,380*64);
+ }
+ /********************************************************************************/
+-static void delete_molecule()
++static void delete_molecule(GtkWidget* wid, gpointer data)
+ {
+ 	if(Natoms<1) return;
+ 
+@@ -8803,7 +8803,7 @@ void moveCenterOfSelectedAtomsToOrigin()
+ 	activate_edit_objects();
+ }
+ /*****************************************************************************/
+-void delete_hydrogen_atoms()
++void delete_hydrogen_atoms(GtkWidget* wid, gpointer data)
+ {
+ 
+ 	gint i;
+diff --git a/src/Geometry/DrawGeomGL.c b/src/Geometry/DrawGeomGL.c
+index 92b6ebe..ee21f91 100644
+--- a/src/Geometry/DrawGeomGL.c
++++ b/src/Geometry/DrawGeomGL.c
+@@ -213,7 +213,7 @@ void define_geometry();
+ void buildRotation();
+ void deleteHydrogensConnectedTo(gint n, gint nH);
+ void delete_one_atom(gint NumDel);
+-static gint replace_atom();
++static gint replace_atom(gint);
+ static void draw_rectangle_selection();
+ /********************************************************************************/
+ static	GdkColor* BackColor=NULL;
+@@ -3592,7 +3592,7 @@ void draw_selection_circle(gdouble x,gdouble y)
+ {
+ }
+ /********************************************************************************/
+-static void delete_molecule()
++static void delete_molecule(GtkWidget* wid, gpointer data)
+ {
+ 	if(Natoms<1) return;
+ 
+@@ -9106,7 +9106,7 @@ static gint insert_fragment(GtkWidget *widget,GdkEvent *event)
+ 		FreeFragment(&Frag);
+ 		return 0;
+ 	}
+-	if(isItACrystalFragment(&Frag)) delete_molecule();
++	if(isItACrystalFragment(&Frag)) delete_molecule(NULL, NULL);
+ 	if(atomToDelete>=0)  
+ 	{
+ 		return insert_fragment_connected_to_an_atom(
+@@ -9473,7 +9473,7 @@ void moveCenterOfSelectedAtomsToOrigin()
+ 	activate_edit_objects();
+ }
+ /*****************************************************************************/
+-void delete_hydrogen_atoms()
++void delete_hydrogen_atoms(GtkWidget* wid, gpointer data)
+ {
+ 
+ 	gint i;
+diff --git a/src/Geometry/GeomXYZ.c b/src/Geometry/GeomXYZ.c
+index b6195dd..759893b 100644
+--- a/src/Geometry/GeomXYZ.c
++++ b/src/Geometry/GeomXYZ.c
+@@ -3243,7 +3243,7 @@ static void freelistvariablesXYZ(gchar **tlist)
+ 
+ 
+ /********************************************************************************/
+-static void DialogueAdd(GtkWidget *w,gpointer data)
++static void DialogueAdd()
+ {
+   GtkWidget *Dialogue;
+   GtkWidget *Bouton;
+diff --git a/src/Molcas/MolcasBasis.c b/src/Molcas/MolcasBasis.c
+index 030fd48..286245b 100644
+--- a/src/Molcas/MolcasBasis.c
++++ b/src/Molcas/MolcasBasis.c
+@@ -72,7 +72,7 @@ static void selectRow(GtkWidget* list, gint row)
+ 	gtk_tree_path_free(path);
+ }
+ /************************************************************************************************************/
+-static void detroyBasisWindow()
++static void detroyBasisWindow(GtkWidget *win)
+ {
+ 	destroy(Wins,NULL);
+ 	Wins = NULL;
+diff --git a/src/Molcas/MolcasGateWay.c b/src/Molcas/MolcasGateWay.c
+index 16e9875..52a7322 100644
+--- a/src/Molcas/MolcasGateWay.c
++++ b/src/Molcas/MolcasGateWay.c
+@@ -593,7 +593,7 @@ static gboolean setGeomXYZFromSXYZ(gint numberOfAtoms, gchar** symbols, gdouble*
+ 	if(numberOfAtoms<1) return FALSE;
+ 
+  	if(GeomXYZ) freeGeomXYZ();
+- 	if(VariablesXYZ) freeVariablesXYZ(VariablesXYZ);
++ 	if(VariablesXYZ) freeVariablesXYZ();
+ 
+ 	init_dipole();
+ 	GeomXYZ=g_malloc(numberOfAtoms*sizeof(GeomXYZAtomDef));
+@@ -644,7 +644,7 @@ static gboolean setGeomXYZFromMolcasMolecule()
+ 	if(molcasMolecule.numberOfMolcasGenerators != 0) return FALSE;
+ 
+  	if(GeomXYZ) freeGeomXYZ();
+- 	if(VariablesXYZ) freeVariablesXYZ(VariablesXYZ);
++ 	if(VariablesXYZ) freeVariablesXYZ();
+ 	init_dipole();
+ 	GeomXYZ=g_malloc(molcasMolecule.numberOfAtoms*sizeof(GeomXYZAtomDef));
+ 	for(i=0;i<molcasMolecule.numberOfAtoms;i++)
+diff --git a/src/Symmetry/PointGroupGabedit.c b/src/Symmetry/PointGroupGabedit.c
+index 48a2891..fda8341 100644
+--- a/src/Symmetry/PointGroupGabedit.c
++++ b/src/Symmetry/PointGroupGabedit.c
+@@ -286,7 +286,7 @@ static SMolecule createSymmetrizedMolecule(PointGroup* pointGroup, gdouble toler
+ {
+ 	gint i;
+ 	SMolecule* mol = &pointGroup->molecule;
+-	SMolecule newMolecule = newSMolecule(mol->size(mol));
++	SMolecule newMolecule = newSMoleculeSize(mol->size(mol));
+ 	SMolecule* umol = &pointGroup->uniqueMolecule;
+ 	Elements* els = &pointGroup->elements;
+ 	GList* listOfElements = els->getElements(els);
+diff --git a/src/Symmetry/SymmetryGabedit.c b/src/Symmetry/SymmetryGabedit.c
+index ba87c59..82083c6 100644
+--- a/src/Symmetry/SymmetryGabedit.c
++++ b/src/Symmetry/SymmetryGabedit.c
+@@ -1087,7 +1087,7 @@ static gchar* findSinglePointGroup(Symmetry* symmetry)
+ 		if(symmetry->principalMoments[1] == minMoment) index = 1;
+ 		else if(symmetry->principalMoments[2] == minMoment) index = 2;
+ 
+-		refAxis = newPoint3D(tempPrincipalAxes[index].x, tempPrincipalAxes[index].y, tempPrincipalAxes[index].z);
++		refAxis = newPoint3Dxyz(tempPrincipalAxes[index].x, tempPrincipalAxes[index].y, tempPrincipalAxes[index].z);
+ 		ref = newElementReflection(&symmetry->centerOfMass, &refAxis);
+ 		testSymmetryElement(symmetry, &ref);
+ 		sprintf(pointGroupGuess,"Cinfv");
+diff --git a/src/Utils/UtilsInterface.c b/src/Utils/UtilsInterface.c
+index b33c616..bd8c032 100644
+--- a/src/Utils/UtilsInterface.c
++++ b/src/Utils/UtilsInterface.c
+@@ -2044,7 +2044,7 @@ void show_version()
+  g_free(temp);
+ }
+ /********************************************************************************/
+-void show_homepage(GtkWidget *w,gpointer data)
++void show_homepage(GtkAboutDialog *w, const gchar *link, gpointer data)
+ {
+ 
+ #ifdef G_OS_WIN32
+diff --git a/src/Utils/UtilsInterface.h b/src/Utils/UtilsInterface.h
+index b9781db..77d9b8a 100644
+--- a/src/Utils/UtilsInterface.h
++++ b/src/Utils/UtilsInterface.h
+@@ -51,16 +51,16 @@ void save_doc(void);
+ void enreg_selec_doc(GabeditFileChooser *, gint response_id);
+ void desole();
+ void change_insert();
+-void new_doc_molpro();
+-void new_doc_gauss();
+-void new_doc_orca();
+-void new_doc_qchem();
++void new_doc_molpro(GtkWidget* wid, gpointer data);
++void new_doc_gauss(GtkWidget* wid, gpointer data);
++void new_doc_orca(GtkWidget* wid, gpointer data);
++void new_doc_qchem(GtkWidget* wid, gpointer data);
+ void insert_doc_gauss();
+ gchar* get_license();
+ void new_psicode(GtkWidget *widget, gchar *data);
+ void show_about();
+ void show_version();
+-void show_homepage();
++void show_homepage(GtkAboutDialog *w, const gchar *link, gpointer data);
+ void  create_label_hbox(GtkWidget *,gchar *,gint );
+ GtkWidget *create_hbox(GtkWidget *);
+ GtkWidget *create_vbox(GtkWidget *);

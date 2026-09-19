@@ -1,0 +1,42 @@
+From 5c1365f33464b32de89a3e41f848118ca724f307 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Tue, 19 Aug 2025 13:06:13 +0200
+Subject: [PATCH] Revert changes for cssparser 0.35+
+
+---
+ src/style.rs | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/src/style.rs b/src/style.rs
+index c9be2d8..b738b32 100644
+--- a/src/style.rs
++++ b/src/style.rs
+@@ -32,7 +32,7 @@
+ //! [CSSATTR]: https://w3c.github.io/csswg-drafts/css-style-attr/
+ use std::collections::HashSet;
+ 
+-use cssparser::{BasicParseErrorKind, DeclarationParser, ParseError, ParseErrorKind, Parser, ParserInput, ParserState, ToCss, Token};
++use cssparser::{BasicParseErrorKind, DeclarationParser, ParseError, ParseErrorKind, Parser, ParserInput, ToCss, Token};
+ 
+ 
+ 
+@@ -98,7 +98,7 @@ pub fn parse_one_declaration<'i, 't>(
+         return Ok(("".into(), String::new()));
+     }
+     input.expect_colon()?;
+-    Declarations.parse_value(name, input, &input.state())
++    Declarations.parse_value(name, input)
+ }
+ 
+ 
+@@ -111,7 +111,6 @@ impl <'i> DeclarationParser<'i> for Declarations {
+         &mut self,
+         name: cssparser::CowRcStr<'i>,
+         input: &mut Parser<'i, 't>,
+-        _declaration_start: &ParserState,
+     ) -> Result<Self::Declaration, cssparser::ParseError<'i, Self::Error>> {
+         let mut value = String::new();
+         loop {
+-- 
+2.50.1
+

@@ -1,0 +1,12 @@
+diff -up crystal-stacker-1.5/cs/source/Makefile.unix~ crystal-stacker-1.5/cs/source/Makefile.unix
+--- crystal-stacker-1.5/cs/source/Makefile.unix~	2006-04-07 10:32:26.000000000 +0200
++++ crystal-stacker-1.5/cs/source/Makefile.unix	2010-02-15 09:27:12.971926372 +0100
+@@ -1,7 +1,7 @@
+ PREFIX  = /usr/local
+ DATADIR = $(PREFIX)/share/$(TARGET)
+ CFLAGS  = -g -Wall -O2 -fsigned-char
+-LDFLAGS = `allegro-config --libs` -laldmb -ldumb
++LDFLAGS = `allegro-config --libs` -laldmb -ldumb -lpthread
+ DEFINES = -DDATADIR=\"$(DATADIR)/\"
+ OBJS    =    animate.o  misc.o   cs2bd.o     cs2ns.o    game.o      keys.o   \
+   battle.o   cs.o       cs2bl.o  draw.o      gef.o      logo.o      mywav.o  \

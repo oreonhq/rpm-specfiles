@@ -1,0 +1,78 @@
+From d0d567c76c1acafb841d6569d6a3cd3eaaf9614f Mon Sep 17 00:00:00 2001
+From: "FeRD (Frank Dana)" <ferdnyc@gmail.com>
+Date: Fri, 5 Jun 2020 04:45:31 -0400
+Subject: [PATCH] Rename dumb-frotz to dfrotz
+
+---
+ contrib/rec2scr.pl | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/contrib/rec2scr.pl b/contrib/rec2scr.pl
+index 9faf9a8..398e462 100644
+--- a/contrib/rec2scr.pl
++++ b/contrib/rec2scr.pl
+@@ -13,7 +13,7 @@ rec2scr [options] zcode-file
+ B<rec2scr> takes a Z-code IF game file and a list of recorded game commands
+ on stdin and creates a game transcript from them on stdout, by feeding the
+ commands to the game.  It does this non-interactively, using the
+-B<dumb-frotz> interpreter (available from C<ftp.gmd.de>).
++B<dfrotz> interpreter (available from C<ftp.gmd.de>).
+ 
+ The Z-code file specified on the command line can exist in the current
+ directory or in a directory where Z-code files are kept (as specified by
+@@ -36,11 +36,11 @@ factors when tailoring your recording file to solve the game.
+ 
+ =item B<-t>
+ 
+-Make a transcript file, instead of capturing B<dumb-frotz> standard output.
++Make a transcript file, instead of capturing B<dfrotz> standard output.
+ 
+ =item B<-c> F<file>
+ 
+-Specify a command file.  The commands in this file are fed to B<dumb-frotz>
++Specify a command file.  The commands in this file are fed to B<dfrotz>
+ before playing back the recorded commands.  This is useful for entering
+ various game-specific commands before starting the game proper.  See
+ L<"COMMANDS">, below.
+@@ -86,15 +86,15 @@ elements of a game to see if anything has changed.
+ =head1 RESTRICTIONS
+ 
+ Things are very dependent on the nuances of the current version of
+-B<dumb-frotz>.
++B<dfrotz>.
+ 
+-B<rec2scr> tries to clean up the transcript after B<dumb-frotz> has printed
++B<rec2scr> tries to clean up the transcript after B<dfrotz> has printed
+ it, but does it very simplistically.
+ 
+ =head1 ENVIRONMENT
+ 
+     REC_ZCODE_DIR                       Directory of Z-code files.
+-    REC_DF_OPTIONS                      Extra dumb-frotz options.
++    REC_DF_OPTIONS                      Extra dfrotz options.
+ 
+ =head1 AUTHOR
+ 
+@@ -206,8 +206,8 @@ print IN "Y\n";			# Yes, really.
+ 
+ close IN;
+ 
+-# Invoke dumb-frotz.
+-$cmd = "dumb-frotz $options $zpath < $in > ";
++# Invoke dfrotz.
++$cmd = "dfrotz $options $zpath < $in > ";
+ $cmd .= ($opt_t ? "/dev/null" : $out);
+ system $cmd;
+ 
+@@ -224,7 +224,7 @@ unless (open(OUT, $out)) {
+ }
+ 
+ while (<OUT>) {
+-    # Dumb-frotz status messages.
++    # dfrotz status messages.
+     next if /^More prompts/;
+     next if /^Compression mode/;
+     next if /^Line-type display/;
+-- 
+2.26.2
+

@@ -1,0 +1,180 @@
+--- machineball-src/window.h~	2007-04-30 20:18:54.000000000 +0200
++++ machineball-src/window.h	2007-04-30 20:18:54.000000000 +0200
+@@ -10,6 +10,6 @@
+ #ifndef _WINDOW_H_
+ #define _WINDOW_H_
+ 
+-void createWindow(int force);
++void createWindow(int force, int do_configure);
+ 
+ #endif
+--- machineball-src/window.cpp~	2007-04-30 20:29:41.000000000 +0200
++++ machineball-src/window.cpp	2007-04-30 20:29:41.000000000 +0200
+@@ -92,7 +92,7 @@
+ }
+ 
+ 
+-static int setup (void)
++static int setup (int do_configure)
+ {
+ #define RESOLUTION_LIST   4
+ #define COLOUR_LIST       6
+@@ -117,71 +117,35 @@
+ 
+ 	int x;
+ 
+-	set_dialog_color (dlg, makecol(255, 255, 255), makecol(32, 32, 64));
++	if (do_configure)
++	{
++		set_dialog_color (dlg, makecol(255, 255, 255), makecol(32, 32, 64));
++			
++		x = do_dialog (dlg, 9);
+ 		
+-	x = do_dialog (dlg, 9);
++		options.resolution = dlg[RESOLUTION_LIST].d1;
++		options.colordepth = dlg[COLOUR_LIST].d1;
++		options.zdepth = dlg[ZBUFFER_LIST].d1;
++	}
++	else
++		x = BUTTON_OK;
+ 	
+ 	allegro_gl_clear_settings();
+-	allegro_gl_set (AGL_COLOR_DEPTH, colour_depths[dlg[COLOUR_LIST].d1].depth);
+-	allegro_gl_set (AGL_Z_DEPTH, zbuffer_depths[dlg[ZBUFFER_LIST].d1].depth);
++	allegro_gl_set (AGL_COLOR_DEPTH, colour_depths[options.colordepth].depth);
++	allegro_gl_set (AGL_Z_DEPTH, zbuffer_depths[options.zdepth].depth);
+ 	allegro_gl_set (AGL_DOUBLEBUFFER, TRUE);
+ 	allegro_gl_set (AGL_RENDERMETHOD, 1);
+ 	allegro_gl_set(AGL_FULLSCREEN, TRUE);
+ 	allegro_gl_set(AGL_REQUIRE, AGL_RENDERMETHOD);
+ 	allegro_gl_set (AGL_SUGGEST, AGL_COLOR_DEPTH | AGL_Z_DEPTH | AGL_DOUBLEBUFFER | AGL_RENDERMETHOD | AGL_FULLSCREEN);
+-	width  = resolutions[dlg[RESOLUTION_LIST].d1].w;
+-	height = resolutions[dlg[RESOLUTION_LIST].d1].h;
+-
+-	if(width==320 && height==200)
+-		options.resolution=0;
+-	if(width==320 && height==240)
+-		options.resolution=1;
+-	if(width==400 && height==300)
+-		options.resolution=2;
+-	if(width==512 && height==384)
+-		options.resolution=3;
+-	if(width==640 && height==400)
+-		options.resolution=4;
+-	if(width==640 && height==480)
+-		options.resolution=5;
+-	if(width==800 && height==600)
+-		options.resolution=6;
+-	if(width==1024 && height==768)
+-		options.resolution=7;
+-	if(width==1152 && height==864)
+-		options.resolution=8;
+-	if(width==1280 && height==960)
+-		options.resolution=9;
+-	if(width==1280 && height==1024)
+-		options.resolution=10;
+-	if(width==1600 && height==1200)
+-		options.resolution=11;
+-	if(width==1920 && height==1440)
+-		options.resolution=12;
+-
+-	if(colour_depths[dlg[COLOUR_LIST].d1].depth==15)
+-		options.colordepth=0;
+-	if(colour_depths[dlg[COLOUR_LIST].d1].depth==16)
+-		options.colordepth=1;
+-	if(colour_depths[dlg[COLOUR_LIST].d1].depth==24)
+-		options.colordepth=2;
+-	if(colour_depths[dlg[COLOUR_LIST].d1].depth==32)
+-		options.colordepth=3;
+-
+-	if(zbuffer_depths[dlg[ZBUFFER_LIST].d1].depth==8)
+-		options.zdepth=0;
+-	if(zbuffer_depths[dlg[ZBUFFER_LIST].d1].depth==16)
+-		options.zdepth=1;
+-	if(zbuffer_depths[dlg[ZBUFFER_LIST].d1].depth==24)
+-		options.zdepth=2;
+-	if(zbuffer_depths[dlg[ZBUFFER_LIST].d1].depth==32)
+-		options.zdepth=3;
++	width  = resolutions[options.resolution].w;
++	height = resolutions[options.resolution].h;
+ 	
+ 	return (x == BUTTON_OK);
+ }
+ 
+ 
+-void createWindow(int force)
++void createWindow(int force, int do_configure)
+ {
+ 	// Load configuration from disk
+ 	// ...
+@@ -158,7 +158,8 @@
+ 	atexit(&dumb_exit);
+ 
+ 	dumb_register_stdfiles();
+-	
++
++if (do_configure) {	
+ 	set_color_depth(16);
+ 	if(set_gfx_mode(GFX_AUTODETECT_WINDOWED, 600, 400, 0, 0) < 0)
+ 	{
+@@ -181,7 +182,7 @@
+ 
+ 	MoveWindow(wnd, (dw-w)/2, (dh-h)/2, w, h, TRUE); 
+ #endif
+-
++}
+ 
+ 	install_keyboard();
+ 	install_mouse();
+@@ -198,6 +199,7 @@
+ 	}
+ 	set_volume(options.soundvol, -1);
+ 
++if (do_configure) {
+ 	acquire_screen();
+ 	
+ 	rectfill(screen, 0, 0, 599, 399, makecol(64, 64, 128));
+@@ -215,10 +217,11 @@
+ 				putpixel(screen, x, y, makecol(0, 0, y*192/400));
+ 
+ 	release_screen();
++}
+ 	
+ 	install_allegro_gl();
+ 
+-	int ok = setup();
++	int ok = setup(do_configure);
+ 	if(!ok)
+ 		exit(0);
+ 	
+--- machineball-src/main.cpp~	2007-04-30 20:21:05.000000000 +0200
++++ machineball-src/main.cpp	2007-04-30 20:21:05.000000000 +0200
+@@ -35,6 +35,7 @@
+ 	// Parse command line args:
+ 	int i;
+ 	int forc=1;
++	int do_configure=0;
+ 
+ 	char rcfile[1024];
+ #ifndef ALLEGRO_WINDOWS
+@@ -105,9 +106,9 @@
+ 
+ 	FILE *fp = fopen(rcfile, "r");
+ 	if(fp==NULL)
+-		printf("=== Cannot Open %s for reading. Using default Configuration ===\n", rcfile);
+-	if(fp==NULL)
+ 	{
++		printf("=== Cannot Open %s for reading. Using default Configuration ===\n", rcfile);
++		do_configure=1;
+ 		// Default values:
+ 		options.resolution=6;
+ 		options.colordepth=1;
+@@ -198,7 +199,7 @@
+ 
+ 	srand(time(0));
+	dInitODE();
+-	createWindow(forc); // The argument tells us if we want sound or not
++	createWindow(forc, do_configure); // The 1st argument tells us if we want sound or not
+ 	
+ 	loadProgramData();
+ 	dumb_resampling_quality=2;

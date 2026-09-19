@@ -1,0 +1,47 @@
+Index: trunk/Config.kmk
+===================================================================
+--- trunk/Config.kmk	(revision 3571)
++++ trunk/Config.kmk	(revision 3572)
+@@ -124,4 +124,11 @@
+  TOOL_FLEX_LEX = gflex
+ endif
++# Not all compiler tools currently do the same quoting of DEFS, so here's a
++# temporary workaround.
++ifn1of ($(KBUILD_TARGET), win)
++ TMP_QUOTE_SLASH :=
++else
++ TMP_QUOTE_SLASH := \$(NO_SUCH_VARIABLE)
++endif
+ 
+ #
+@@ -183,6 +190,6 @@
+ 
+ DEFS += \
+-	KBUILD_PATH=\"/$(patsubst %/,%,$(MY_INST_DATA))\" \
+-	KBUILD_BIN_PATH=\"/$(patsubst %/,%,$(MY_INST_BIN))\"
++	KBUILD_PATH=$(TMP_QUOTE_SLASH)"/$(patsubst %/,%,$(MY_INST_DATA))$(TMP_QUOTE_SLASH)" \
++	KBUILD_BIN_PATH=$(TMP_QUOTE_SLASH)"/$(patsubst %/,%,$(MY_INST_BIN))$(TMP_QUOTE_SLASH)"
+ endif
+ 
+Index: trunk/src/kmk/Makefile.kmk
+===================================================================
+--- trunk/src/kmk/Makefile.kmk	(revision 3571)
++++ trunk/src/kmk/Makefile.kmk	(revision 3572)
+@@ -39,5 +39,5 @@
+ 	$(TEMPLATE_BIN_DEFS) \
+ 	KBUILD_SVN_REV=$(KBUILD_SVN_REV) \
+-	KBUILD_TYPE=\"$(KBUILD_TYPE)\"
++	KBUILD_TYPE=$(TMP_QUOTE_SLASH)"$(KBUILD_TYPE)$(TMP_QUOTE_SLASH)"
+ TEMPLATE_BIN-KMK_DEPS = \
+ 	$(kmk_0_OUTDIR)/config.h \
+@@ -235,7 +235,7 @@
+ 	CONFIG_WITH_MEMORY_OPTIMIZATIONS \
+ 	\
+-	KBUILD_HOST=\"$(KBUILD_TARGET)\" \
+-	KBUILD_HOST_ARCH=\"$(KBUILD_TARGET_ARCH)\" \
+-	KBUILD_HOST_CPU=\"$(KBUILD_TARGET_CPU)\"
++	KBUILD_HOST=$(TMP_QUOTE_SLASH)"$(KBUILD_TARGET)$(TMP_QUOTE_SLASH)" \
++	KBUILD_HOST_ARCH=$(TMP_QUOTE_SLASH)"$(KBUILD_TARGET_ARCH)$(TMP_QUOTE_SLASH)" \
++	KBUILD_HOST_CPU=$(TMP_QUOTE_SLASH)"$(KBUILD_TARGET_CPU)$(TMP_QUOTE_SLASH)"
+ # kmk_DEFS += CONFIG_WITH_COMPILER  # experimental, doesn't work 101% right it seems.
+ kmk_DEFS.x86 = CONFIG_WITH_OPTIMIZATION_HACKS

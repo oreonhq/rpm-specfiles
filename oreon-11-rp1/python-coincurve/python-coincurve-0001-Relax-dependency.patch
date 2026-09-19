@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 26 Jul 2024 00:33:47 +0200
+Subject: [PATCH] Relax dependency
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 7fcd63b..cf00c91 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,7 @@
+ [build-system]
+ build-backend = "hatchling.build"
+ requires = [
+-    "hatchling>=1.24.2",
++    "hatchling",
+     "cffi",
+     "setuptools",
+     "scikit-build-core>=0.9.0",

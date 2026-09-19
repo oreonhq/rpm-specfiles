@@ -1,0 +1,97 @@
+.TH GENGO "1" "January 2025" "" "User Commands"
+.SH NAME
+.B gengo
+\(en
+Fetch language statistics for your source code
+.SH SYNOPSIS
+.B gengo
+.RI [ OPTIONS ]
+.I COMMAND
+.SH OPTIONS
+.SS COMMANDS
+.TP
+.B git
+Analyze a git repository
+.IP
+See
+.BR gengo\-git (1).
+.TP
+.B directory
+.B BETA
+Analyze a directory
+.IP
+See
+.BR gengo\-directory (1).
+.TP
+.B help
+Print a general help message, or the help of the given subcommand(s)
+.SS OPTIONAL ARGUMENTS
+.TP
+.B \-l\fR, \fB\-\-read\-limit\ \fIREAD_LIMIT
+The maximum number of bytes to read from each file.
+.IP
+This is useful for large files that can impact performance.
+.IP
+The format is in bytes.
+The default is 1 MiB.
+.IP
+[default:
+.BR 1048576 ]
+.TP
+.B \-a\fR, \fB\-\-all
+Report on all files, even if they are not detectable.
+.IP
+This only applies to the pretty format,
+as machine-readable formats always include all files.
+.TP
+.B \-b\fR, \fB\-\-breakdown
+Include detailed statistics for each language.
+.IP
+This only applies to the pretty format,
+as machine-readable formats always include detailed statistics.
+.TP
+.B \-\-color\ \fICOLOR
+Control when colors are displayed
+.IP
+[default:
+.BR always ]
+.IP
+Possible values:
+.RS +7n
+.IP \(bu +2n
+.BR always :
+Always use colors
+.IP \(bu +2n
+.BR ansi :
+Use only the 8 ANSI colors
+.IP \(bu +2n
+.BR never :
+Disable colors
+.RE
+.TP
+.B \-F\fR, \fB\-\-format\ \fIFORMAT
+The format to use for output
+.IP
+[default:
+.BR pretty ]
+.IP
+Possible values:
+.RS +7n
+.IP \(bu +2n
+.BR pretty :
+Output for humans
+.IP \(bu +2n
+.BR json :
+JSON output
+.RE
+.TP
+.B \-h\fR, \fB\-\-help
+Print help
+(see a summary with
+.BR \-h )
+.TP
+.B \-V\fR, \fB\-\-version
+Print version
+.SH "SEE ALSO"
+.BR gengo-git (1),
+.BR gengo-directory (1)

@@ -1,0 +1,59 @@
+From ea0558fbfdc7bd99671f0534e593cc5cdb7a8e65 Mon Sep 17 00:00:00 2001
+From: Adrian Sampson <adrian@radbox.org>
+Date: Fri, 8 Sep 2023 16:17:46 -0400
+Subject: [PATCH 2/5] Version bump; changelog for #71
+
+---
+ docs/conf.py   | 4 ++--
+ docs/index.rst | 6 ++++++
+ mediafile.py   | 2 +-
+ 3 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/docs/conf.py b/docs/conf.py
+index cf3e3f2..da5e23d 100644
+--- a/docs/conf.py
++++ b/docs/conf.py
+@@ -17,8 +17,8 @@ project = 'MediaFile'
+ copyright = '2016, the beets project'
+ author = 'the beets project'
+ 
+-version = '0.12'
+-release = '0.12.0'
++version = '0.13'
++release = '0.13.0'
+ 
+ pygments_style = 'sphinx'
+ htmlhelp_basename = 'mediafiledoc'
+diff --git a/docs/index.rst b/docs/index.rst
+index f1b9b6e..8d484dd 100644
+--- a/docs/index.rst
++++ b/docs/index.rst
+@@ -135,6 +135,12 @@ To copy tags from one MediaFile to another:
+ Changelog
+ ---------
+ 
++v0.13.0
++'''''''
++
++- Add a mapping compatible with Plex and ffmpeg for the "original date"
++  fields.
++
+ v0.12.0
+ '''''''
+ 
+diff --git a/mediafile.py b/mediafile.py
+index 6dbbecb..b0c80a0 100644
+--- a/mediafile.py
++++ b/mediafile.py
+@@ -59,7 +59,7 @@ import struct
+ import traceback
+ 
+ 
+-__version__ = '0.12.0'
++__version__ = '0.13.0'
+ __all__ = ['UnreadableFileError', 'FileTypeError', 'MediaFile']
+ 
+ log = logging.getLogger(__name__)
+-- 
+2.47.0
+

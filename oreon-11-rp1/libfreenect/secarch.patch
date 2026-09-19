@@ -1,0 +1,160 @@
+Index: libfreenect-0.7.5/OpenNI2-FreenectDriver/extern/OpenNI-Linux-x64-2.2.0.33/Include/Linux-ppc/OniPlatformLinux-PPC.h
+===================================================================
+--- /dev/null
++++ libfreenect-0.7.5/OpenNI2-FreenectDriver/extern/OpenNI-Linux-x64-2.2.0.33/Include/Linux-ppc/OniPlatformLinux-PPC.h
+@@ -0,0 +1,41 @@
++/*****************************************************************************
++*                                                                            *
++*  OpenNI 2.x Alpha                                                          *
++*  Copyright (C) 2012 PrimeSense Ltd.                                        *
++*                                                                            *
++*  This file is part of OpenNI.                                              *
++*                                                                            *
++*  Licensed under the Apache License, Version 2.0 (the "License");           *
++*  you may not use this file except in compliance with the License.          *
++*  You may obtain a copy of the License at                                   *
++*                                                                            *
++*      http://www.apache.org/licenses/LICENSE-2.0                            *
++*                                                                            *
++*  Unless required by applicable law or agreed to in writing, software       *
++*  distributed under the License is distributed on an "AS IS" BASIS,         *
++*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
++*  See the License for the specific language governing permissions and       *
++*  limitations under the License.                                            *
++*                                                                            *
++*****************************************************************************/
++#ifndef _ONI_PLATFORM_LINUX_PPC_H_
++#define _ONI_PLATFORM_LINUX_PPC_H_
++
++// Start with Linux-x86, and override what's different
++#include "../Linux-x86/OniPlatformLinux-x86.h"
++
++//---------------------------------------------------------------------------
++// Platform Basic Definition
++//---------------------------------------------------------------------------
++#undef ONI_PLATFORM
++#undef ONI_PLATFORM_STRING
++#define ONI_PLATFORM ONI_PLATFORM_LINUX_PPC
++#define ONI_PLATFORM_STRING "Linux-PowerPC"
++
++#if !(defined(__powerpc64__) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__))
++#undef ONI_PLATFORM_ENDIAN_TYPE
++#define ONI_PLATFORM_ENDIAN_TYPE ONI_PLATFORM_IS_BIG_ENDIAN
++#endif
++
++#endif //_ONI_PLATFORM_LINUX_PPC_H_
++
+Index: libfreenect-0.7.5/OpenNI2-FreenectDriver/extern/OpenNI-Linux-x64-2.2.0.33/Include/Linux-s390/OniPlatformLinux-s390.h
+===================================================================
+--- /dev/null
++++ libfreenect-0.7.5/OpenNI2-FreenectDriver/extern/OpenNI-Linux-x64-2.2.0.33/Include/Linux-s390/OniPlatformLinux-s390.h
+@@ -0,0 +1,42 @@
++/*****************************************************************************
++*                                                                            *
++*  OpenNI 2.x Alpha                                                          *
++*  Copyright (C) 2012 PrimeSense Ltd.                                        *
++*                                                                            *
++*  This file is part of OpenNI.                                              *
++*                                                                            *
++*  Licensed under the Apache License, Version 2.0 (the "License");           *
++*  you may not use this file except in compliance with the License.          *
++*  You may obtain a copy of the License at                                   *
++*                                                                            *
++*      http://www.apache.org/licenses/LICENSE-2.0                            *
++*                                                                            *
++*  Unless required by applicable law or agreed to in writing, software       *
++*  distributed under the License is distributed on an "AS IS" BASIS,         *
++*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
++*  See the License for the specific language governing permissions and       *
++*  limitations under the License.                                            *
++*                                                                            *
++*****************************************************************************/
++#ifndef _ONI_PLATFORM_LINUX_s390_H_
++#define _ONI_PLATFORM_LINUX_s390_H_
++
++// Start with Linux-x86, and override what's different
++#include "../Linux-x86/OniPlatformLinux-x86.h"
++
++//---------------------------------------------------------------------------
++// Platform Basic Definition
++//---------------------------------------------------------------------------
++#undef ONI_PLATFORM
++#undef ONI_PLATFORM_STRING
++#define ONI_PLATFORM ONI_PLATFORM_LINUX_S390
++#define ONI_PLATFORM_STRING "Linux-s390"
++
++#undef ONI_PLATFORM_ENDIAN_TYPE
++#define ONI_PLATFORM_ENDIAN_TYPE ONI_PLATFORM_IS_BIG_ENDIAN
++
++#undef ONI_DEFAULT_MEM_ALIGN
++#define ONI_DEFAULT_MEM_ALIGN 8
++
++#endif //_ONI_PLATFORM_LINUX_s390_H_
++
+Index: libfreenect-0.7.5/OpenNI2-FreenectDriver/extern/OpenNI-Linux-x64-2.2.0.33/Include/OniPlatform.h
+===================================================================
+--- libfreenect-0.7.5.orig/OpenNI2-FreenectDriver/extern/OpenNI-Linux-x64-2.2.0.33/Include/OniPlatform.h
++++ libfreenect-0.7.5/OpenNI2-FreenectDriver/extern/OpenNI-Linux-x64-2.2.0.33/Include/OniPlatform.h
+@@ -27,6 +27,8 @@
+ #define ONI_PLATFORM_LINUX_ARM 3
+ #define ONI_PLATFORM_MACOSX 4
+ #define ONI_PLATFORM_ANDROID_ARM 5
++#define ONI_PLATFORM_LINUX_PPC 6
++#define ONI_PLATFORM_LINUX_S390 7
+ 
+ #if (defined _WIN32)
+ #	ifndef RC_INVOKED
+@@ -41,6 +43,12 @@
+ #	include "Linux-x86/OniPlatformLinux-x86.h"
+ #elif (__linux__ && (__arm__ || __aarch64__))
+ #	include "Linux-Arm/OniPlatformLinux-Arm.h"
++#elif (__linux__ && (__powerpc__ || __powerpc64__))
++#   include "Linux-ppc/OniPlatformLinux-PPC.h"
++#elif (__linux__ && (__riscv))
++#   include "Linux-riscv/OniPlatformLinux-RISCV.h"
++#elif (__linux__ && (__s390__ || __s390x__ ))
++#   include "Linux-s390/OniPlatformLinux-s390.h"
+ #elif _ARC
+ #	include "ARC/OniPlaformARC.h"
+ #elif (__APPLE__)
+Index: libfreenect-0.7.5/OpenNI2-FreenectDriver/extern/OpenNI-Linux-x64-2.2.0.33/Include/Linux-riscv/OniPlatformLinux-RISCV.h
+===================================================================
+--- /dev/null
++++ libfreenect-0.7.5/OpenNI2-FreenectDriver/extern/OpenNI-Linux-x64-2.2.0.33/Include/Linux-riscv/OniPlatformLinux-RISCV.h
+@@ -0,0 +1,36 @@
++/*****************************************************************************
++*                                                                            *
++*  OpenNI 2.x Alpha                                                          *
++*  Copyright (C) 2012 PrimeSense Ltd.                                        *
++*                                                                            *
++*  This file is part of OpenNI.                                              *
++*                                                                            *
++*  Licensed under the Apache License, Version 2.0 (the "License");           *
++*  you may not use this file except in compliance with the License.          *
++*  You may obtain a copy of the License at                                   *
++*                                                                            *
++*      http://www.apache.org/licenses/LICENSE-2.0                            *
++*                                                                            *
++*  Unless required by applicable law or agreed to in writing, software       *
++*  distributed under the License is distributed on an "AS IS" BASIS,         *
++*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
++*  See the License for the specific language governing permissions and       *
++*  limitations under the License.                                            *
++*                                                                            *
++*****************************************************************************/
++#ifndef _ONI_PLATFORM_LINUX_RISCV_H_
++#define _ONI_PLATFORM_LINUX_RISCV_H_
++
++// Start with Linux-x86, and override what's different
++#include "../Linux-x86/OniPlatformLinux-x86.h"
++
++//---------------------------------------------------------------------------
++// Platform Basic Definition
++//---------------------------------------------------------------------------
++#undef ONI_PLATFORM
++#undef ONI_PLATFORM_STRING
++#define ONI_PLATFORM ONI_PLATFORM_LINUX_RISCV
++#define ONI_PLATFORM_STRING "Linux-RISCV"
++
++#endif //_ONI_PLATFORM_LINUX_RISCV_H_
++

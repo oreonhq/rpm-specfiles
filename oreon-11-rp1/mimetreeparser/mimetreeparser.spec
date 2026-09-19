@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 88750429310e9dc60e1f962dc9d7e58e1936e878db54aa41cb7f5c4b4fc524dc
 
 Name:    mimetreeparser
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: Parser for MIME trees
 

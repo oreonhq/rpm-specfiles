@@ -1,0 +1,8 @@
+--- getch-0.3.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ getch-0.3.1/Cargo.toml	1970-01-01T00:00:01+00:00
+@@ -21,5 +21,3 @@
+ repository = "https://nest.pijul.com/pmeunier/getch"
+ [target."cfg(unix)".dependencies.termios]
+ version = "0.3.3"
+-[target."cfg(windows)".dependencies.libc]
+-version = "0.2"

@@ -1,0 +1,35 @@
+From 12bb1fb6f2dcac2ac2c336737a52ef0243a1b5ac Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?B=C5=82a=C5=BCej=20Szczygie=C5=82?= <spaz16@wp.pl>
+Date: Wed, 11 Jan 2017 21:07:25 +0100
+Subject: [PATCH 19/23] QCleanlooksStyle: Use QCommonStyle instead of
+ QProxyStyle
+
+This allows to use correct color (non-white) for label text in a
+QComboBox. Same as 0daddff57d17715e17b96a02eb7dab9489801e64, but
+for Cleanlooks.
+
+Also improves progress bar drawing - now looks like in Qt4, the progress
+bar content now fills the entire groove vertically.
+
+Change-Id: Ib652bb9a8dfe6806299c0f11211cfa83898f6eef
+Reviewed-by: J-P Nurmi <jpnurmi@qt.io>
+---
+ src/plugins/styles/cleanlooks/qcleanlooksstyle.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/plugins/styles/cleanlooks/qcleanlooksstyle.cpp b/src/plugins/styles/cleanlooks/qcleanlooksstyle.cpp
+index ca90820..2ebe10f 100644
+--- a/src/plugins/styles/cleanlooks/qcleanlooksstyle.cpp
++++ b/src/plugins/styles/cleanlooks/qcleanlooksstyle.cpp
+@@ -2325,7 +2325,7 @@ void QCleanlooksStyle::drawControl(ControlElement element, const QStyleOption *o
+ 
+ #endif // QT_NO_TABBAR
+     default:
+-        QProxyStyle::drawControl(element,option,painter,widget);
++        QCommonStyle::drawControl(element,option,painter,widget);
+         break;
+     }
+ }
+-- 
+2.9.3
+

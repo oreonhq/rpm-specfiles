@@ -1,0 +1,27 @@
+Add include of <time.h> for definition of time(...) to these files.
+https://github.com/larsbrinkhoff/httptunnel/issues/25
+
+diff --git a/htc.c b/htc.c
+index 62a0d6c..8551730 100644
+--- a/htc.c
++++ b/htc.c
+@@ -11,6 +11,7 @@ two-way data path tunneled in HTTP requests.
+ #include <stdlib.h>
+ #include <unistd_.h>
+ #include <signal.h>
++#include <time.h>
+ #include <sys/poll_.h>
+ #include <sys/time.h>
+ #include <sys/stat.h>
+diff --git a/hts.c b/hts.c
+index c318fba..531dfe0 100644
+--- a/hts.c
++++ b/hts.c
+@@ -11,6 +11,7 @@ two-way data path tunneled in HTTP requests.
+ #include <stdlib.h>
+ #include <unistd_.h>
+ #include <signal.h>
++#include <time.h>
+ #include <sys/poll_.h>
+ #include <sys/time.h>
+ 

@@ -1,0 +1,33 @@
+diff -ur klamav-0.46/src/klammail/clamdmail.c klamav-0.46-clamav-0.101/src/klammail/clamdmail.c
+--- klamav-0.46/src/klammail/clamdmail.c	2009-02-28 11:27:28.000000000 +0100
++++ klamav-0.46-clamav-0.101/src/klammail/clamdmail.c	2019-01-04 04:18:02.811982952 +0100
+@@ -97,7 +97,11 @@
+   long double mb;
+   const char *virname;
+   struct cl_engine *engine = NULL;
+-#ifndef SUPPORT_CLAMAV_V095
++#ifdef SUPPORT_CLAMAV_V095
++#ifndef CL_SCAN_ARCHIVE /* clamav >= 0.101 */
++  struct cl_scan_options options;
++#endif
++#else
+   struct cl_limits limits;
+ #endif
+   struct stat sb;
+@@ -242,8 +246,16 @@
+       limits.archivememlim = 1;
+ #endif
+ #ifdef SUPPORT_CLAMAV_V095
++#ifndef CL_SCAN_ARCHIVE /* clamav >= 0.101 */
++      memset(&options, 0, sizeof(struct cl_scan_options));
++      options.parse |= ~0; /* enable all parsers */
++      options.general |= CL_SCAN_GENERAL_HEURISTICS; /* enable heuristic alert options */
++      ret = cl_scandesc(fd, /* filename = */ NULL, &virname, &size, engine,
++             &options);
++#else
+       ret = cl_scandesc(fd, &virname, &size, engine,
+              CL_SCAN_STDOPT | CL_SCAN_ARCHIVE | CL_SCAN_MAIL | CL_SCAN_OLE2 | CL_SCAN_HTML);
++#endif
+       printf("scandesc returned: %i\n", cl_strerror(ret));;
+ #else
+       ret = cl_scandesc(fd, &virname, &size, engine, &limits,

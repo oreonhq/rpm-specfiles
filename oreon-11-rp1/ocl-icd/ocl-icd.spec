@@ -1,7 +1,7 @@
 %global source0_hash 1a302b71b7304cca5a36f69d017b1af2b762cc4c2dd1c0c0e2fc1933db25c9cc
 
 Name:           ocl-icd
-Version:        2.3.4
+Version:        2.3.5
 Release:        %autorelease
 Summary:        OpenCL Library (Installable Client Library) Bindings
 License:        BSD-2-Clause

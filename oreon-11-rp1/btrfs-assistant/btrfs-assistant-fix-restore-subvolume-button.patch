@@ -1,0 +1,48 @@
+From 95e413ddadce43b9d3cd87300190b35026a597c6 Mon Sep 17 00:00:00 2001
+From: dalto <dalto@fastmail.com>
+Date: Sun, 24 Aug 2025 12:01:43 -0500
+Subject: [PATCH] Fix restore subvolume button
+
+---
+ src/ui/MainWindow.cpp | 4 +++-
+ src/util/Btrfs.cpp    | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/ui/MainWindow.cpp b/src/ui/MainWindow.cpp
+index 2e01870..eff0bfd 100644
+--- a/src/ui/MainWindow.cpp
++++ b/src/ui/MainWindow.cpp
+@@ -521,6 +521,8 @@ void MainWindow::refreshSubvolListUi()
+     if (m_ui->comboBox_btrfsDevice->count() == 1) {
+         m_ui->tableView_subvols->hideColumn(SubvolumeModel::Column::FilesystemUuid);
+     }
++
++    m_ui->toolButton_subvolRestoreBackup->setEnabled(false);
+ }
+ 
+ void MainWindow::restoreSnapshot(const QString &uuid, const QString &subvolume)
+@@ -1494,7 +1496,7 @@ void MainWindow::on_toolButton_subvolRestoreBackup_clicked()
+     const QString name = nameIndexes.at(0).data().toString();
+ 
+     // Ensure it is a backup we created
+-    static QRegularExpression re("_backup_[0-9]{17}");
++    static QRegularExpression re("_backup_[0-9]{4}");
+     const QStringList nameParts = name.split(re);
+ 
+     if (nameParts.count() != 2) {
+diff --git a/src/util/Btrfs.cpp b/src/util/Btrfs.cpp
+index d02b976..7d3d632 100644
+--- a/src/util/Btrfs.cpp
++++ b/src/util/Btrfs.cpp
+@@ -157,7 +157,7 @@ bool Btrfs::isSnapper(const QString &subvolume)
+ 
+ bool Btrfs::isSubvolumeBackup(QString subvolPath)
+ {
+-    static QRegularExpression re("_backup_[0-9]{17}");
++    static QRegularExpression re("_backup_[0-9]{4}");
+     const QStringList nameParts = subvolPath.split(re);
+ 
+     return nameParts.count() == 2;
+-- 
+GitLab
+

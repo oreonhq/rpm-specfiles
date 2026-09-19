@@ -1,0 +1,23 @@
+From 66bdba7819f1372df1237768c1d96b48b558579d Mon Sep 17 00:00:00 2001
+From: Andrew Bauer <zonexpertconsulting@outlook.com>
+Date: Mon, 4 May 2020 12:24:52 -0500
+Subject: [PATCH] Update build.xml
+
+set source & target to newer values
+---
+ build.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build.xml b/build.xml
+index fcc1618..b41abf4 100644
+--- a/build.xml
++++ b/build.xml
+@@ -37,7 +37,7 @@
+     <target name="compile" depends="init">
+         <echo message="Compiling with JVM Version ${java.version}"/>
+         <!-- Compile the java code from ${src} into ${build} -->
+-        <javac srcdir="${src}" target="1.1" source="1.2" destdir="${build}" optimize="false" debug="on" includeantruntime="false"/>
++        <javac srcdir="${src}" target="1.8" source="1.8" destdir="${build}" optimize="false" debug="on" includeantruntime="false"/>
+         <copy file="application.properties" todir="${build}" overwrite="true"/>
+         <!--
+             == Add on the build specific info...

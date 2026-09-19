@@ -1,4 +1,4 @@
-%global source0_hash 5d5d293cbaefc1d3074f3d3860cea0e55fc0d776b471e0f65744dcaa04b793b7
+%global source0_hash 5a88985dc522ca3287f13ed989609a93871996d4e8c5b0a41594e2d3a2fe8f2a
 
 Name:           plasma-pass
 Version: 1.3.1
@@ -50,7 +50,7 @@ password manager.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-v%{version}
+%autosetup -n %{name}-%{version}
 sed -i 's/set(KF6_MIN_VERSION "6.18.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeLists.txt
 
 

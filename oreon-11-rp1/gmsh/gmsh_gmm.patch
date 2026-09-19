@@ -1,0 +1,22 @@
+diff -rupN gmsh-4.15.0-source/CMakeLists.txt gmsh-4.15.0-source-new/CMakeLists.txt
+--- gmsh-4.15.0-source/CMakeLists.txt	2025-11-16 12:12:00.997452631 +0100
++++ gmsh-4.15.0-source-new/CMakeLists.txt	2025-11-16 13:18:32.590269286 +0100
+@@ -1271,6 +1271,18 @@ if(HAVE_SOLVER)
+       if(ENABLE_GMM) # use GMM/MUMPS interface
+         add_definitions(-DGMM_USES_MUMPS)
+       endif()
++    else()
++      if(ENABLE_GMM) # use GMM/MUMPS interface
++        add_definitions(-DGMM_USES_SUPERLU -DGMM_NO_SUPERLU_INCLUDE_SUBDIR)
++        find_path(SUPERLU_INC "slu_util.h" PATH_SUFFIXES SuperLU)
++        include_directories(${SUPERLU_INC})
++      endif()
++    endif()
++  else()
++    if(ENABLE_GMM) # use GMM/MUMPS interface
++      add_definitions(-DGMM_USES_SUPERLU -DGMM_NO_SUPERLU_INCLUDE_SUBDIR)
++      find_path(SUPERLU_INC "slu_util.h" PATH_SUFFIXES SuperLU)
++      include_directories(${SUPERLU_INC})
+     endif()
+   endif()
+ 

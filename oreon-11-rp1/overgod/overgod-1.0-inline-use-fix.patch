@@ -1,0 +1,42 @@
+diff -up overgod-1.0/stuff.c~ overgod-1.0/stuff.c
+--- overgod-1.0/stuff.c~	2015-06-23 10:47:52.000000000 +0200
++++ overgod-1.0/stuff.c	2015-06-23 10:48:36.681343233 +0200
+@@ -51,7 +51,7 @@ float decoy_table [ANGLE_FULL]; // not u
+ float cos_table [ANGLE_FULL];
+ float sin_table [ANGLE_FULL];
+ 
+-inline int xpart(int angle, int length);
++int xpart(int angle, int length);
+ 
+ void init_trig(void)
+ {
+@@ -66,13 +66,13 @@ void init_trig(void)
+  
+ }
+ 
+-inline int xpart(int angle, int length)
++int xpart(int angle, int length)
+ {
+ // return (lcos(angle) * length);// / ANGLE_FULL;
+  return (cos_table [angle & 1023] * length);// / ANGLE_FULL;
+ }
+ 
+-inline int ypart(int angle, int length)
++int ypart(int angle, int length)
+ {
+  return (sin_table [angle & 1023] * length);// / ANGLE_FULL;
+ }
+diff -up overgod-1.0/stuff.h~ overgod-1.0/stuff.h
+--- overgod-1.0/stuff.h~	2005-01-01 13:43:12.000000000 +0100
++++ overgod-1.0/stuff.h	2015-06-23 10:48:24.986629624 +0200
+@@ -7,8 +7,8 @@ int grand(int number);
+ int crandom(int number);
+ int turn_towards_angle(int angle, int tangle, int turning);
+ int turn_towards_xy(int x1, int y1, int x2, int y2, int angle, int turning);
+-inline int xpart(int angle, int length);
+-inline int ypart(int angle, int length);
++int xpart(int angle, int length);
++int ypart(int angle, int length);
+ int pulsate(int speed, int amount, int county);
+ int angle_difference(int a1, int a2);
+ 

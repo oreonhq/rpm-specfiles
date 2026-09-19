@@ -1,0 +1,27 @@
+string_chomp is used by mfiler3, so move it to the public header file.
+
+diff --git a/headers/saphire/saphire_inner.h b/headers/saphire/saphire_inner.h
+index 5a5b6245aa72c5a1..2ba552ebc18f57ac 100644
+--- a/headers/saphire/saphire_inner.h
++++ b/headers/saphire/saphire_inner.h
+@@ -394,9 +394,6 @@ BOOL is_line_field(char* p);
+ BOOL is_line_field2(enum eLineField lf, char* p);
+     // °ú¿ô¤¬¥é¥¤¥ó¥Õ¥£¡¼¥ë¥É¤ò¥İ¥¤¥ó¥È¤·¤Æ¤¤¤ë¤«2
+ 
+-BOOL string_chomp(string_obj* str);
+-    // ²ş¹Ô¥³¡¼¥É¤ò¼è¤ê½ü¤¯
+-
+ BOOL string_chomp2(string_obj* str, enum eLineField lf);
+     // ²ş¹Ô¥³¡¼¥É¤ò¼è¤ê½ü¤¯
+ 
+diff --git a/headers/saphire/saphire_string.h b/headers/saphire/saphire_string.h
+index 79871885230ab3f9..ddae52e0fe40b218 100644
+--- a/headers/saphire/saphire_string.h
++++ b/headers/saphire/saphire_string.h
+@@ -54,4 +54,6 @@ void string_erase(string_obj* obj, int pos, int len);       // æ–‡å­—åˆ—ã‚’pos
+ void string_toupper(string_obj* self, enum eKanjiCode code); // å¤§æ–‡å­—ã«ã™ã‚‹
+ void string_tolower(string_obj* self, enum eKanjiCode code); // å°æ–‡å­—ã«ã™ã‚‹
+ 
++BOOL string_chomp(string_obj* str);
++
+ #endif

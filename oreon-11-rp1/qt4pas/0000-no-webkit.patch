@@ -1,0 +1,634 @@
+diff -r -U4 qt4pas-V2.5_Qt4.5.3--orig/qt4.pas qt4pas-V2.5_Qt4.5.3--patched/qt4.pas
+--- qt4pas-V2.5_Qt4.5.3--orig/qt4.pas	2011-12-25 00:53:12.000000000 +0100
++++ qt4pas-V2.5_Qt4.5.3--patched/qt4.pas	2025-11-09 12:12:04.188981217 +0100
+@@ -324,13 +324,8 @@
+   QValidatorH = class(QObjectH) end;
+     QDoubleValidatorH = class(QValidatorH) end;
+     QIntValidatorH = class(QValidatorH) end;
+     QRegExpValidatorH = class(QValidatorH) end;
+-  QWebFrameH = class(QObjectH) end;
+-  QWebHistoryInterfaceH = class(QObjectH) end;
+-  QWebPageH = class(QObjectH) end;
+-    QLCLWebPageH = class(QWebPageH) end;
+-  QWebPluginFactoryH = class(QObjectH) end;
+   QWidgetH = class(QObjectH) end;
+     QAbstractButtonH = class(QWidgetH) end;
+       QCheckBoxH = class(QAbstractButtonH) end;
+       QPushButtonH = class(QAbstractButtonH) end;
+@@ -395,10 +390,8 @@
+     QTabBarH = class(QWidgetH) end;
+     QTabWidgetH = class(QWidgetH) end;
+       QLCLTabWidgetH = class(QTabWidgetH) end;
+     QToolBarH = class(QWidgetH) end;
+-    QWebViewH = class(QWidgetH) end;
+-      QLCLWebViewH = class(QWebViewH) end;
+ QPaintDeviceH = class(TObject) end;
+   QImageH = class(QPaintDeviceH) end;
+   QPictureH = class(QPaintDeviceH) end;
+   QPixmapH = class(QPaintDeviceH) end;
+@@ -499,14 +492,8 @@
+ QVectorH = class(TObject) end;
+   QPolygonH = class(QVectorH) end;
+   QPolygonFH = class(QVectorH) end;
+ QWSEventH = class(TObject) end;
+-QWebDatabaseH = class(TObject) end;
+-QWebHistoryH = class(TObject) end;
+-QWebHistoryItemH = class(TObject) end;
+-QWebHitTestResultH = class(TObject) end;
+-QWebSecurityOriginH = class(TObject) end;
+-QWebSettingsH = class(TObject) end;
+ QWhatsThisH = class(TObject) end;
+ QX11InfoH = class(TObject) end;
+ QMatrixH = class(TObject) end;
+ 
+@@ -605,18 +592,8 @@
+ QTcpSocket_hookH = class(QAbstractSocket_hookH) end;
+ QTcpServer_hookH = class(QObject_hookH) end;
+ QNetworkAccessManager_hookH = class(QObject_hookH) end;
+ QNetworkReply_hookH = class(QIODevice_hookH) end;
+-QWebHitTestResult_hookH = class(QObject_hookH) end;
+-QWebFrame_hookH = class(QObject_hookH) end;
+-QWebSecurityOrigin_hookH = class(QObject_hookH) end;
+-QWebDatabase_hookH = class(QObject_hookH) end;
+-QWebHistoryItem_hookH = class(QObject_hookH) end;
+-QWebHistory_hookH = class(QObject_hookH) end;
+-QWebHistoryInterface_hookH = class(QObject_hookH) end;
+-QWebPage_hookH = class(QObject_hookH) end;
+-QWebSettings_hookH = class(QObject_hookH) end;
+-QWebView_hookH = class(QWidget_hookH) end;
+ 
+   QCoreApplicationEventFilter = function(Msg:PChar;Res:PLong):boolean cdecl;
+ QAbstractEventDispatcherEventFilter = function(Msg:PChar):boolean cdecl;
+ QLCLItemDelegate_sizeHint_Override = procedure (option: QStyleOptionViewItemH; index: QModelIndexH; Size: PSize) of object cdecl;
+@@ -626,10 +603,8 @@
+ QLCLItemDelegate_setModelData_Override = procedure (editor : QWidgetH; model: QAbstractItemModelH; index: QModelIndexH) of object cdecl;
+ QLCLItemDelegate_updateEditorGeometry_Override = procedure (editor : QWidgetH; option: QStyleOptionViewItemH; index: QModelIndexH) of object cdecl;
+ QLCLItemDelegate_editorEvent_Override = procedure (event : QEventH; model: QAbstractItemModelH; option: QStyleOptionViewItemH; index: QModelIndexH; retval: PBoolean) of object cdecl;
+ QLCLAbstractScrollArea_viewportEvent_Override = procedure (event: QEventH; retval: PBoolean) of object cdecl;
+-QLCLWebPage_userAgentForUrl_Override = procedure(url : QUrlH;userAgent:PWideString) of object; cdecl;
+-QLCLWebView_createWindow_Override = function (WebWindowType : integer):QWebViewH of object cdecl;
+ QLCLThread_run_Override = procedure of object cdecl;
+ 
+ type
+   QObjectEventFilter = function (Sender:QObjectH; Event: QEventH):boolean of object cdecl;
+@@ -12903,370 +12878,8 @@
+ procedure QAuthenticator_realm(handle: QAuthenticatorH; retval: PWideString); cdecl; external Qt4PasLib name 'QAuthenticator_realm';
+ function QAuthenticator_isNull(handle: QAuthenticatorH): Boolean; cdecl; external Qt4PasLib name 'QAuthenticator_isNull';
+ procedure QAuthenticator_detach(handle: QAuthenticatorH); cdecl; external Qt4PasLib name 'QAuthenticator_detach';
+ 
+-function QWebHitTestResult_create(): QWebHitTestResultH; cdecl; external Qt4PasLib name 'QWebHitTestResult_create';
+-procedure QWebHitTestResult_destroy(handle: QWebHitTestResultH); cdecl; external Qt4PasLib name 'QWebHitTestResult_destroy'; 
+-function QWebHitTestResult_create(other: QWebHitTestResultH): QWebHitTestResultH; cdecl; external Qt4PasLib name 'QWebHitTestResult_create2';
+-function QWebHitTestResult_isNull(handle: QWebHitTestResultH): Boolean; cdecl; external Qt4PasLib name 'QWebHitTestResult_isNull';
+-procedure QWebHitTestResult_pos(handle: QWebHitTestResultH; retval: PQtPoint); cdecl; external Qt4PasLib name 'QWebHitTestResult_pos';
+-procedure QWebHitTestResult_boundingRect(handle: QWebHitTestResultH; retval: PRect); cdecl; external Qt4PasLib name 'QWebHitTestResult_boundingRect';
+-procedure QWebHitTestResult_title(handle: QWebHitTestResultH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebHitTestResult_title';
+-procedure QWebHitTestResult_linkText(handle: QWebHitTestResultH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebHitTestResult_linkText';
+-procedure QWebHitTestResult_linkUrl(handle: QWebHitTestResultH; retval: QUrlH); cdecl; external Qt4PasLib name 'QWebHitTestResult_linkUrl';
+-procedure QWebHitTestResult_linkTitle(handle: QWebHitTestResultH; retval: QUrlH); cdecl; external Qt4PasLib name 'QWebHitTestResult_linkTitle';
+-function QWebHitTestResult_linkTargetFrame(handle: QWebHitTestResultH): QWebFrameH; cdecl; external Qt4PasLib name 'QWebHitTestResult_linkTargetFrame';
+-procedure QWebHitTestResult_alternateText(handle: QWebHitTestResultH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebHitTestResult_alternateText';
+-procedure QWebHitTestResult_imageUrl(handle: QWebHitTestResultH; retval: QUrlH); cdecl; external Qt4PasLib name 'QWebHitTestResult_imageUrl';
+-procedure QWebHitTestResult_pixmap(handle: QWebHitTestResultH; retval: QPixmapH); cdecl; external Qt4PasLib name 'QWebHitTestResult_pixmap';
+-function QWebHitTestResult_isContentEditable(handle: QWebHitTestResultH): Boolean; cdecl; external Qt4PasLib name 'QWebHitTestResult_isContentEditable';
+-function QWebHitTestResult_isContentSelected(handle: QWebHitTestResultH): Boolean; cdecl; external Qt4PasLib name 'QWebHitTestResult_isContentSelected';
+-function QWebHitTestResult_frame(handle: QWebHitTestResultH): QWebFrameH; cdecl; external Qt4PasLib name 'QWebHitTestResult_frame';
+-
+-function QWebFrame_page(handle: QWebFrameH): QWebPageH; cdecl; external Qt4PasLib name 'QWebFrame_page';
+-procedure QWebFrame_load(handle: QWebFrameH; url: QUrlH); cdecl; external Qt4PasLib name 'QWebFrame_load';
+-procedure QWebFrame_load(handle: QWebFrameH; request: QNetworkRequestH; operation: QNetworkAccessManagerOperation = QNetworkAccessManagerGetOperation; body: QByteArrayH = nil); cdecl; external Qt4PasLib name 'QWebFrame_load2';
+-procedure QWebFrame_setHtml(handle: QWebFrameH; html: PWideString; baseUrl: QUrlH = nil); cdecl; external Qt4PasLib name 'QWebFrame_setHtml';
+-procedure QWebFrame_setContent(handle: QWebFrameH; data: QByteArrayH; mimeType: PWideString = nil; baseUrl: QUrlH = nil); cdecl; external Qt4PasLib name 'QWebFrame_setContent';
+-procedure QWebFrame_addToJavaScriptWindowObject(handle: QWebFrameH; name: PWideString; _object: QObjectH); cdecl; external Qt4PasLib name 'QWebFrame_addToJavaScriptWindowObject';
+-procedure QWebFrame_toHtml(handle: QWebFrameH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebFrame_toHtml';
+-procedure QWebFrame_toPlainText(handle: QWebFrameH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebFrame_toPlainText';
+-procedure QWebFrame_renderTreeDump(handle: QWebFrameH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebFrame_renderTreeDump';
+-procedure QWebFrame_title(handle: QWebFrameH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebFrame_title';
+-procedure QWebFrame_setUrl(handle: QWebFrameH; url: QUrlH); cdecl; external Qt4PasLib name 'QWebFrame_setUrl';
+-procedure QWebFrame_url(handle: QWebFrameH; retval: QUrlH); cdecl; external Qt4PasLib name 'QWebFrame_url';
+-procedure QWebFrame_icon(handle: QWebFrameH; retval: QIconH); cdecl; external Qt4PasLib name 'QWebFrame_icon';
+-procedure QWebFrame_frameName(handle: QWebFrameH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebFrame_frameName';
+-function QWebFrame_parentFrame(handle: QWebFrameH): QWebFrameH; cdecl; external Qt4PasLib name 'QWebFrame_parentFrame';
+-procedure QWebFrame_childFrames(handle: QWebFrameH; retval: PPtrIntArray); cdecl; external Qt4PasLib name 'QWebFrame_childFrames';
+-function QWebFrame_scrollBarPolicy(handle: QWebFrameH; orientation: QtOrientation): QtScrollBarPolicy; cdecl; external Qt4PasLib name 'QWebFrame_scrollBarPolicy';
+-procedure QWebFrame_setScrollBarPolicy(handle: QWebFrameH; orientation: QtOrientation; policy: QtScrollBarPolicy); cdecl; external Qt4PasLib name 'QWebFrame_setScrollBarPolicy';
+-procedure QWebFrame_setScrollBarValue(handle: QWebFrameH; orientation: QtOrientation; value: Integer); cdecl; external Qt4PasLib name 'QWebFrame_setScrollBarValue';
+-function QWebFrame_scrollBarValue(handle: QWebFrameH; orientation: QtOrientation): Integer; cdecl; external Qt4PasLib name 'QWebFrame_scrollBarValue';
+-function QWebFrame_scrollBarMinimum(handle: QWebFrameH; orientation: QtOrientation): Integer; cdecl; external Qt4PasLib name 'QWebFrame_scrollBarMinimum';
+-function QWebFrame_scrollBarMaximum(handle: QWebFrameH; orientation: QtOrientation): Integer; cdecl; external Qt4PasLib name 'QWebFrame_scrollBarMaximum';
+-procedure QWebFrame_scroll(handle: QWebFrameH; AnonParam1: Integer; AnonParam2: Integer); cdecl; external Qt4PasLib name 'QWebFrame_scroll';
+-procedure QWebFrame_scrollPosition(handle: QWebFrameH; retval: PQtPoint); cdecl; external Qt4PasLib name 'QWebFrame_scrollPosition';
+-procedure QWebFrame_setScrollPosition(handle: QWebFrameH; pos: PQtPoint); cdecl; external Qt4PasLib name 'QWebFrame_setScrollPosition';
+-procedure QWebFrame_render(handle: QWebFrameH; painter: QPainterH; clip: QRegionH); cdecl; external Qt4PasLib name 'QWebFrame_render';
+-procedure QWebFrame_render(handle: QWebFrameH; painter: QPainterH); cdecl; external Qt4PasLib name 'QWebFrame_render2';
+-procedure QWebFrame_setTextSizeMultiplier(handle: QWebFrameH; factor: qreal); cdecl; external Qt4PasLib name 'QWebFrame_setTextSizeMultiplier';
+-function QWebFrame_textSizeMultiplier(handle: QWebFrameH): qreal; cdecl; external Qt4PasLib name 'QWebFrame_textSizeMultiplier';
+-function QWebFrame_zoomFactor(handle: QWebFrameH): qreal; cdecl; external Qt4PasLib name 'QWebFrame_zoomFactor';
+-procedure QWebFrame_setZoomFactor(handle: QWebFrameH; factor: qreal); cdecl; external Qt4PasLib name 'QWebFrame_setZoomFactor';
+-procedure QWebFrame_pos(handle: QWebFrameH; retval: PQtPoint); cdecl; external Qt4PasLib name 'QWebFrame_pos';
+-procedure QWebFrame_geometry(handle: QWebFrameH; retval: PRect); cdecl; external Qt4PasLib name 'QWebFrame_geometry';
+-procedure QWebFrame_contentsSize(handle: QWebFrameH; retval: PSize); cdecl; external Qt4PasLib name 'QWebFrame_contentsSize';
+-procedure QWebFrame_hitTestContent(handle: QWebFrameH; retval: QWebHitTestResultH; pos: PQtPoint); cdecl; external Qt4PasLib name 'QWebFrame_hitTestContent';
+-function QWebFrame_event(handle: QWebFrameH; AnonParam1: QEventH): Boolean; cdecl; external Qt4PasLib name 'QWebFrame_event';
+-procedure QWebFrame_evaluateJavaScript(handle: QWebFrameH; retval: QVariantH; scriptSource: PWideString); cdecl; external Qt4PasLib name 'QWebFrame_evaluateJavaScript';
+-procedure QWebFrame_print(handle: QWebFrameH; printer: QPrinterH); cdecl; external Qt4PasLib name 'QWebFrame_print';
+-
+-
+-type
+-  QWebFrame_javaScriptWindowObjectCleared_Event = procedure () of object cdecl;
+-  QWebFrame_provisionalLoad_Event = procedure () of object cdecl;
+-  QWebFrame_titleChanged_Event = procedure (title: PWideString) of object cdecl;
+-  QWebFrame_urlChanged_Event = procedure (url: QUrlH) of object cdecl;
+-  QWebFrame_initialLayoutCompleted_Event = procedure () of object cdecl;
+-  QWebFrame_iconChanged_Event = procedure () of object cdecl;
+-
+-
+-procedure QWebSecurityOrigin_allOrigins(retval: PPtrIntArray); cdecl; external Qt4PasLib name 'QWebSecurityOrigin_allOrigins';
+-procedure QWebSecurityOrigin_scheme(handle: QWebSecurityOriginH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebSecurityOrigin_scheme';
+-procedure QWebSecurityOrigin_host(handle: QWebSecurityOriginH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebSecurityOrigin_host';
+-function QWebSecurityOrigin_port(handle: QWebSecurityOriginH): Integer; cdecl; external Qt4PasLib name 'QWebSecurityOrigin_port';
+-function QWebSecurityOrigin_databaseUsage(handle: QWebSecurityOriginH): int64; cdecl; external Qt4PasLib name 'QWebSecurityOrigin_databaseUsage';
+-function QWebSecurityOrigin_databaseQuota(handle: QWebSecurityOriginH): int64; cdecl; external Qt4PasLib name 'QWebSecurityOrigin_databaseQuota';
+-procedure QWebSecurityOrigin_setDatabaseQuota(handle: QWebSecurityOriginH; quota: int64); cdecl; external Qt4PasLib name 'QWebSecurityOrigin_setDatabaseQuota';
+-procedure QWebSecurityOrigin_databases(handle: QWebSecurityOriginH; retval: PPtrIntArray); cdecl; external Qt4PasLib name 'QWebSecurityOrigin_databases';
+-function QWebSecurityOrigin_create(other: QWebSecurityOriginH): QWebSecurityOriginH; cdecl; external Qt4PasLib name 'QWebSecurityOrigin_create';
+-procedure QWebSecurityOrigin_destroy(handle: QWebSecurityOriginH); cdecl; external Qt4PasLib name 'QWebSecurityOrigin_destroy'; 
+-
+-function QWebDatabase_create(other: QWebDatabaseH): QWebDatabaseH; cdecl; external Qt4PasLib name 'QWebDatabase_create';
+-procedure QWebDatabase_destroy(handle: QWebDatabaseH); cdecl; external Qt4PasLib name 'QWebDatabase_destroy'; 
+-procedure QWebDatabase_name(handle: QWebDatabaseH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebDatabase_name';
+-procedure QWebDatabase_displayName(handle: QWebDatabaseH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebDatabase_displayName';
+-function QWebDatabase_expectedSize(handle: QWebDatabaseH): int64; cdecl; external Qt4PasLib name 'QWebDatabase_expectedSize';
+-function QWebDatabase_size(handle: QWebDatabaseH): int64; cdecl; external Qt4PasLib name 'QWebDatabase_size';
+-procedure QWebDatabase_fileName(handle: QWebDatabaseH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebDatabase_fileName';
+-procedure QWebDatabase_origin(handle: QWebDatabaseH; retval: QWebSecurityOriginH); cdecl; external Qt4PasLib name 'QWebDatabase_origin';
+-procedure QWebDatabase_removeDatabase(db: QWebDatabaseH); cdecl; external Qt4PasLib name 'QWebDatabase_removeDatabase';
+-
+-function QWebHistoryItem_create(other: QWebHistoryItemH): QWebHistoryItemH; cdecl; external Qt4PasLib name 'QWebHistoryItem_create';
+-procedure QWebHistoryItem_destroy(handle: QWebHistoryItemH); cdecl; external Qt4PasLib name 'QWebHistoryItem_destroy'; 
+-procedure QWebHistoryItem_originalUrl(handle: QWebHistoryItemH; retval: QUrlH); cdecl; external Qt4PasLib name 'QWebHistoryItem_originalUrl';
+-procedure QWebHistoryItem_url(handle: QWebHistoryItemH; retval: QUrlH); cdecl; external Qt4PasLib name 'QWebHistoryItem_url';
+-procedure QWebHistoryItem_title(handle: QWebHistoryItemH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebHistoryItem_title';
+-procedure QWebHistoryItem_lastVisited(handle: QWebHistoryItemH; retval: QDateTimeH); cdecl; external Qt4PasLib name 'QWebHistoryItem_lastVisited';
+-procedure QWebHistoryItem_icon(handle: QWebHistoryItemH; retval: QIconH); cdecl; external Qt4PasLib name 'QWebHistoryItem_icon';
+-procedure QWebHistoryItem_userData(handle: QWebHistoryItemH; retval: QVariantH); cdecl; external Qt4PasLib name 'QWebHistoryItem_userData';
+-procedure QWebHistoryItem_setUserData(handle: QWebHistoryItemH; userData: QVariantH); cdecl; external Qt4PasLib name 'QWebHistoryItem_setUserData';
+-function QWebHistoryItem_isValid(handle: QWebHistoryItemH): Boolean; cdecl; external Qt4PasLib name 'QWebHistoryItem_isValid';
+-
+-procedure QWebHistory_clear(handle: QWebHistoryH); cdecl; external Qt4PasLib name 'QWebHistory_clear';
+-procedure QWebHistory_items(handle: QWebHistoryH; retval: PPtrIntArray); cdecl; external Qt4PasLib name 'QWebHistory_items';
+-procedure QWebHistory_backItems(handle: QWebHistoryH; retval: PPtrIntArray; maxItems: Integer); cdecl; external Qt4PasLib name 'QWebHistory_backItems';
+-procedure QWebHistory_forwardItems(handle: QWebHistoryH; retval: PPtrIntArray; maxItems: Integer); cdecl; external Qt4PasLib name 'QWebHistory_forwardItems';
+-function QWebHistory_canGoBack(handle: QWebHistoryH): Boolean; cdecl; external Qt4PasLib name 'QWebHistory_canGoBack';
+-function QWebHistory_canGoForward(handle: QWebHistoryH): Boolean; cdecl; external Qt4PasLib name 'QWebHistory_canGoForward';
+-procedure QWebHistory_back(handle: QWebHistoryH); cdecl; external Qt4PasLib name 'QWebHistory_back';
+-procedure QWebHistory_forward(handle: QWebHistoryH); cdecl; external Qt4PasLib name 'QWebHistory_forward';
+-procedure QWebHistory_goToItem(handle: QWebHistoryH; item: QWebHistoryItemH); cdecl; external Qt4PasLib name 'QWebHistory_goToItem';
+-procedure QWebHistory_backItem(handle: QWebHistoryH; retval: QWebHistoryItemH); cdecl; external Qt4PasLib name 'QWebHistory_backItem';
+-procedure QWebHistory_currentItem(handle: QWebHistoryH; retval: QWebHistoryItemH); cdecl; external Qt4PasLib name 'QWebHistory_currentItem';
+-procedure QWebHistory_forwardItem(handle: QWebHistoryH; retval: QWebHistoryItemH); cdecl; external Qt4PasLib name 'QWebHistory_forwardItem';
+-procedure QWebHistory_itemAt(handle: QWebHistoryH; retval: QWebHistoryItemH; i: Integer); cdecl; external Qt4PasLib name 'QWebHistory_itemAt';
+-function QWebHistory_currentItemIndex(handle: QWebHistoryH): Integer; cdecl; external Qt4PasLib name 'QWebHistory_currentItemIndex';
+-function QWebHistory_count(handle: QWebHistoryH): Integer; cdecl; external Qt4PasLib name 'QWebHistory_count';
+-function QWebHistory_maximumItemCount(handle: QWebHistoryH): Integer; cdecl; external Qt4PasLib name 'QWebHistory_maximumItemCount';
+-procedure QWebHistory_setMaximumItemCount(handle: QWebHistoryH; count: Integer); cdecl; external Qt4PasLib name 'QWebHistory_setMaximumItemCount';
+-
+-procedure QWebHistoryInterface_setDefaultInterface(defaultInterface: QWebHistoryInterfaceH); cdecl; external Qt4PasLib name 'QWebHistoryInterface_setDefaultInterface';
+-function QWebHistoryInterface_defaultInterface(): QWebHistoryInterfaceH; cdecl; external Qt4PasLib name 'QWebHistoryInterface_defaultInterface';
+-function QWebHistoryInterface_historyContains(handle: QWebHistoryInterfaceH; url: PWideString): Boolean; cdecl; external Qt4PasLib name 'QWebHistoryInterface_historyContains';
+-procedure QWebHistoryInterface_addHistoryEntry(handle: QWebHistoryInterfaceH; url: PWideString); cdecl; external Qt4PasLib name 'QWebHistoryInterface_addHistoryEntry';
+-
+-
+-type
+-  QWebPageNavigationType = ( // QWebPage::NavigationType (1)
+-    QWebPageNavigationTypeLinkClicked, QWebPageNavigationTypeFormSubmitted, QWebPageNavigationTypeBackOrForward, QWebPageNavigationTypeReload, QWebPageNavigationTypeFormResubmitted, QWebPageNavigationTypeOther );
+-
+-  QWebPageLinkDelegationPolicy = ( // QWebPage::LinkDelegationPolicy (1)
+-    QWebPageDontDelegateLinks, QWebPageDelegateExternalLinks, QWebPageDelegateAllLinks );
+-
+-  QWebPageWebWindowType = ( // QWebPage::WebWindowType (1)
+-    QWebPageWebBrowserWindow, QWebPageWebModalDialog );
+-
+-  QWebPageExtension = ( // QWebPage::Extension (1)
+-    QWebPageChooseMultipleFilesExtension );
+-
+-  QWebPageWebAction = (  //QWebPage::WebAction (2)
+-    QWebPageNoWebAction = -1,
+-    QWebPageOpenLink,
+-    QWebPageOpenLinkInNewWindow,
+-    QWebPageOpenFrameInNewWindow,
+-    QWebPageDownloadLinkToDisk,
+-    QWebPageCopyLinkToClipboard,
+-    QWebPageOpenImageInNewWindow,
+-    QWebPageDownloadImageToDisk,
+-    QWebPageCopyImageToClipboard,
+-    QWebPageBack,
+-    QWebPageForward,
+-    QWebPageStop,
+-    QWebPageReload,
+-    QWebPageCut,
+-    QWebPageCopy,
+-    QWebPagePaste,
+-    QWebPageUndo,
+-    QWebPageRedo,
+-    QWebPageMoveToNextChar,
+-    QWebPageMoveToPreviousChar,
+-    QWebPageMoveToNextWord,
+-    QWebPageMoveToPreviousWord,
+-    QWebPageMoveToNextLine,
+-    QWebPageMoveToPreviousLine,
+-    QWebPageMoveToStartOfLine,
+-    QWebPageMoveToEndOfLine,
+-    QWebPageMoveToStartOfBlock,
+-    QWebPageMoveToEndOfBlock,
+-    QWebPageMoveToStartOfDocument,
+-    QWebPageMoveToEndOfDocument,
+-    QWebPageSelectNextChar,
+-    QWebPageSelectPreviousChar,
+-    QWebPageSelectNextWord,
+-    QWebPageSelectPreviousWord,
+-    QWebPageSelectNextLine,
+-    QWebPageSelectPreviousLine,
+-    QWebPageSelectStartOfLine,
+-    QWebPageSelectEndOfLine,
+-    QWebPageSelectStartOfBlock,
+-    QWebPageSelectEndOfBlock,
+-    QWebPageSelectStartOfDocument,
+-    QWebPageSelectEndOfDocument,
+-    QWebPageDeleteStartOfWord,
+-    QWebPageDeleteEndOfWord,
+-    QWebPageSetTextDirectionDefault,
+-    QWebPageSetTextDirectionLeftToRight,
+-    QWebPageSetTextDirectionRightToLeft,
+-    QWebPageToggleBold,
+-    QWebPageToggleItalic,
+-    QWebPageToggleUnderline,
+-    QWebPageInspectElement,
+-    QWebPageInsertParagraphSeparator,
+-    QWebPageInsertLineSeparator,
+-    QWebPageSelectAll,
+-    QWebPageWebActionCount );
+-
+-type
+-  QWebPageFindFlag = cardinal; // QWebPage::FindFlag
+-  QWebPageFindFlags = QWebPageFindFlag; //QFlags<> (3)
+-const
+-  QWebPageFindBackward =   1;
+-  QWebPageFindCaseSensitively =   2;
+-  QWebPageFindWrapsAroundDocument =   4;
+-
+-function QWebPage_create(parent: QObjectH = nil): QWebPageH; cdecl; external Qt4PasLib name 'QWebPage_create';
+-procedure QWebPage_destroy(handle: QWebPageH); cdecl; external Qt4PasLib name 'QWebPage_destroy'; 
+-function QWebPage_mainFrame(handle: QWebPageH): QWebFrameH; cdecl; external Qt4PasLib name 'QWebPage_mainFrame';
+-function QWebPage_currentFrame(handle: QWebPageH): QWebFrameH; cdecl; external Qt4PasLib name 'QWebPage_currentFrame';
+-function QWebPage_history(handle: QWebPageH): QWebHistoryH; cdecl; external Qt4PasLib name 'QWebPage_history';
+-function QWebPage_settings(handle: QWebPageH): QWebSettingsH; cdecl; external Qt4PasLib name 'QWebPage_settings';
+-procedure QWebPage_setView(handle: QWebPageH; view: QWidgetH); cdecl; external Qt4PasLib name 'QWebPage_setView';
+-function QWebPage_view(handle: QWebPageH): QWidgetH; cdecl; external Qt4PasLib name 'QWebPage_view';
+-function QWebPage_isModified(handle: QWebPageH): Boolean; cdecl; external Qt4PasLib name 'QWebPage_isModified';
+-function QWebPage_undoStack(handle: QWebPageH): QUndoStackH; cdecl; external Qt4PasLib name 'QWebPage_undoStack';
+-procedure QWebPage_setNetworkAccessManager(handle: QWebPageH; manager: QNetworkAccessManagerH); cdecl; external Qt4PasLib name 'QWebPage_setNetworkAccessManager';
+-function QWebPage_networkAccessManager(handle: QWebPageH): QNetworkAccessManagerH; cdecl; external Qt4PasLib name 'QWebPage_networkAccessManager';
+-procedure QWebPage_setPluginFactory(handle: QWebPageH; factory: QWebPluginFactoryH); cdecl; external Qt4PasLib name 'QWebPage_setPluginFactory';
+-function QWebPage_pluginFactory(handle: QWebPageH): QWebPluginFactoryH; cdecl; external Qt4PasLib name 'QWebPage_pluginFactory';
+-function QWebPage_totalBytes(handle: QWebPageH): qword; cdecl; external Qt4PasLib name 'QWebPage_totalBytes';
+-function QWebPage_bytesReceived(handle: QWebPageH): qword; cdecl; external Qt4PasLib name 'QWebPage_bytesReceived';
+-procedure QWebPage_selectedText(handle: QWebPageH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebPage_selectedText';
+-function QWebPage_action(handle: QWebPageH; action: QWebPageWebAction): QActionH; cdecl; external Qt4PasLib name 'QWebPage_action';
+-procedure QWebPage_triggerAction(handle: QWebPageH; action: QWebPageWebAction; checked: Boolean = False); cdecl; external Qt4PasLib name 'QWebPage_triggerAction';
+-procedure QWebPage_viewportSize(handle: QWebPageH; retval: PSize); cdecl; external Qt4PasLib name 'QWebPage_viewportSize';
+-procedure QWebPage_setViewportSize(handle: QWebPageH; size: PSize); cdecl; external Qt4PasLib name 'QWebPage_setViewportSize';
+-function QWebPage_event(handle: QWebPageH; AnonParam1: QEventH): Boolean; cdecl; external Qt4PasLib name 'QWebPage_event';
+-function QWebPage_focusNextPrevChild(handle: QWebPageH; next: Boolean): Boolean; cdecl; external Qt4PasLib name 'QWebPage_focusNextPrevChild';
+-procedure QWebPage_inputMethodQuery(handle: QWebPageH; retval: QVariantH; _property: QtInputMethodQuery); cdecl; external Qt4PasLib name 'QWebPage_inputMethodQuery';
+-function QWebPage_findText(handle: QWebPageH; subString: PWideString; options: QWebPageFindFlags = 0): Boolean; cdecl; external Qt4PasLib name 'QWebPage_findText';
+-procedure QWebPage_setForwardUnsupportedContent(handle: QWebPageH; forward: Boolean); cdecl; external Qt4PasLib name 'QWebPage_setForwardUnsupportedContent';
+-function QWebPage_forwardUnsupportedContent(handle: QWebPageH): Boolean; cdecl; external Qt4PasLib name 'QWebPage_forwardUnsupportedContent';
+-procedure QWebPage_setLinkDelegationPolicy(handle: QWebPageH; policy: QWebPageLinkDelegationPolicy); cdecl; external Qt4PasLib name 'QWebPage_setLinkDelegationPolicy';
+-function QWebPage_linkDelegationPolicy(handle: QWebPageH): QWebPageLinkDelegationPolicy; cdecl; external Qt4PasLib name 'QWebPage_linkDelegationPolicy';
+-procedure QWebPage_setPalette(handle: QWebPageH; palette: QPaletteH); cdecl; external Qt4PasLib name 'QWebPage_setPalette';
+-procedure QWebPage_palette(handle: QWebPageH; retval: QPaletteH); cdecl; external Qt4PasLib name 'QWebPage_palette';
+-procedure QWebPage_setContentEditable(handle: QWebPageH; editable: Boolean); cdecl; external Qt4PasLib name 'QWebPage_setContentEditable';
+-function QWebPage_isContentEditable(handle: QWebPageH): Boolean; cdecl; external Qt4PasLib name 'QWebPage_isContentEditable';
+-function QWebPage_swallowContextMenuEvent(handle: QWebPageH; event: QContextMenuEventH): Boolean; cdecl; external Qt4PasLib name 'QWebPage_swallowContextMenuEvent';
+-procedure QWebPage_updatePositionDependentActions(handle: QWebPageH; pos: PQtPoint); cdecl; external Qt4PasLib name 'QWebPage_updatePositionDependentActions';
+-function QWebPage_createStandardContextMenu(handle: QWebPageH): QMenuH; cdecl; external Qt4PasLib name 'QWebPage_createStandardContextMenu';
+-function QWebPage_supportsExtension(handle: QWebPageH; extension: QWebPageExtension): Boolean; cdecl; external Qt4PasLib name 'QWebPage_supportsExtension';
+-
+-
+-type
+-  QWebPage_loadStarted_Event = procedure () of object cdecl;
+-  QWebPage_loadProgress_Event = procedure (progress: Integer) of object cdecl;
+-  QWebPage_loadFinished_Event = procedure (ok: Boolean) of object cdecl;
+-  QWebPage_linkHovered_Event = procedure (link: PWideString; title: PWideString; textContent: PWideString) of object cdecl;
+-  QWebPage_statusBarMessage_Event = procedure (text: PWideString) of object cdecl;
+-  QWebPage_selectionChanged_Event = procedure () of object cdecl;
+-  QWebPage_frameCreated_Event = procedure (frame: QWebFrameH) of object cdecl;
+-  QWebPage_geometryChangeRequested_Event = procedure (geom: PRect) of object cdecl;
+-  QWebPage_repaintRequested_Event = procedure (dirtyRect: PRect) of object cdecl;
+-  QWebPage_scrollRequested_Event = procedure (dx: Integer; dy: Integer; scrollViewRect: PRect) of object cdecl;
+-  QWebPage_windowCloseRequested_Event = procedure () of object cdecl;
+-  QWebPage_printRequested_Event = procedure (frame: QWebFrameH) of object cdecl;
+-  QWebPage_linkClicked_Event = procedure (url: QUrlH) of object cdecl;
+-  QWebPage_toolBarVisibilityChangeRequested_Event = procedure (visible: Boolean) of object cdecl;
+-  QWebPage_statusBarVisibilityChangeRequested_Event = procedure (visible: Boolean) of object cdecl;
+-  QWebPage_menuBarVisibilityChangeRequested_Event = procedure (visible: Boolean) of object cdecl;
+-  QWebPage_unsupportedContent_Event = procedure (reply: QNetworkReplyH) of object cdecl;
+-  QWebPage_downloadRequested_Event = procedure (request: QNetworkRequestH) of object cdecl;
+-  QWebPage_microFocusChanged_Event = procedure () of object cdecl;
+-  QWebPage_contentsChanged_Event = procedure () of object cdecl;
+-  QWebPage_databaseQuotaExceeded_Event = procedure (frame: QWebFrameH; databaseName: PWideString) of object cdecl;
+-  QWebPage_saveFrameStateRequested_Event = procedure (frame: QWebFrameH; item: QWebHistoryItemH) of object cdecl;
+-  QWebPage_restoreFrameStateRequested_Event = procedure (frame: QWebFrameH) of object cdecl;
+-
+-
+-function QLCLWebPage_create(parent: QObjectH = nil): QLCLWebPageH; cdecl; external Qt4PasLib name 'QLCLWebPage_create';
+-procedure QLCLWebPage_destroy(handle: QLCLWebPageH); cdecl; external Qt4PasLib name 'QLCLWebPage_destroy'; 
+-procedure QLCLWebPage_override_userAgentForUrl(handle: QLCLWebPageH; hook: QLCLWebPage_userAgentForUrl_Override); cdecl; external Qt4PasLib name 'QLCLWebPage_override_userAgentForUrl';
+-procedure QLCLWebPage_DefaultUserAgentForUrl(handle: QLCLWebPageH; retval: PWideString; url: QUrlH); cdecl; external Qt4PasLib name 'QLCLWebPage_DefaultUserAgentForUrl';
+-
+-
+-type
+-  QWebSettingsFontFamily = ( // QWebSettings::FontFamily (1)
+-    QWebSettingsStandardFont, QWebSettingsFixedFont, QWebSettingsSerifFont, QWebSettingsSansSerifFont, QWebSettingsCursiveFont, QWebSettingsFantasyFont );
+-
+-  QWebSettingsWebAttribute = ( // QWebSettings::WebAttribute (1)
+-    QWebSettingsAutoLoadImages, QWebSettingsJavascriptEnabled, QWebSettingsJavaEnabled, QWebSettingsPluginsEnabled, QWebSettingsPrivateBrowsingEnabled, QWebSettingsJavascriptCanOpenWindows, 
+-    QWebSettingsJavascriptCanAccessClipboard, QWebSettingsDeveloperExtrasEnabled, QWebSettingsLinksIncludedInFocusChain, QWebSettingsZoomTextOnly, QWebSettingsPrintElementBackgrounds, QWebSettingsOfflineStorageDatabaseEnabled, 
+-    QWebSettingsOfflineWebApplicationCacheEnabled, QWebSettingsLocalStorageDatabaseEnabled );
+-
+-  QWebSettingsWebGraphic = ( // QWebSettings::WebGraphic (1)
+-    QWebSettingsMissingImageGraphic, QWebSettingsMissingPluginGraphic, QWebSettingsDefaultFrameIconGraphic, QWebSettingsTextAreaSizeGripCornerGraphic );
+-
+-  QWebSettingsFontSize = ( // QWebSettings::FontSize (1)
+-    QWebSettingsMinimumFontSize, QWebSettingsMinimumLogicalFontSize, QWebSettingsDefaultFontSize, QWebSettingsDefaultFixedFontSize );
+-
+-function QWebSettings_globalSettings(): QWebSettingsH; cdecl; external Qt4PasLib name 'QWebSettings_globalSettings';
+-procedure QWebSettings_setFontFamily(handle: QWebSettingsH; which: QWebSettingsFontFamily; family: PWideString); cdecl; external Qt4PasLib name 'QWebSettings_setFontFamily';
+-procedure QWebSettings_fontFamily(handle: QWebSettingsH; retval: PWideString; which: QWebSettingsFontFamily); cdecl; external Qt4PasLib name 'QWebSettings_fontFamily';
+-procedure QWebSettings_resetFontFamily(handle: QWebSettingsH; which: QWebSettingsFontFamily); cdecl; external Qt4PasLib name 'QWebSettings_resetFontFamily';
+-procedure QWebSettings_setFontSize(handle: QWebSettingsH; _type: QWebSettingsFontSize; size: Integer); cdecl; external Qt4PasLib name 'QWebSettings_setFontSize';
+-function QWebSettings_fontSize(handle: QWebSettingsH; _type: QWebSettingsFontSize): Integer; cdecl; external Qt4PasLib name 'QWebSettings_fontSize';
+-procedure QWebSettings_resetFontSize(handle: QWebSettingsH; _type: QWebSettingsFontSize); cdecl; external Qt4PasLib name 'QWebSettings_resetFontSize';
+-procedure QWebSettings_setAttribute(handle: QWebSettingsH; attr: QWebSettingsWebAttribute; _on: Boolean); cdecl; external Qt4PasLib name 'QWebSettings_setAttribute';
+-function QWebSettings_testAttribute(handle: QWebSettingsH; attr: QWebSettingsWebAttribute): Boolean; cdecl; external Qt4PasLib name 'QWebSettings_testAttribute';
+-procedure QWebSettings_resetAttribute(handle: QWebSettingsH; attr: QWebSettingsWebAttribute); cdecl; external Qt4PasLib name 'QWebSettings_resetAttribute';
+-procedure QWebSettings_setUserStyleSheetUrl(handle: QWebSettingsH; location: QUrlH); cdecl; external Qt4PasLib name 'QWebSettings_setUserStyleSheetUrl';
+-procedure QWebSettings_userStyleSheetUrl(handle: QWebSettingsH; retval: QUrlH); cdecl; external Qt4PasLib name 'QWebSettings_userStyleSheetUrl';
+-procedure QWebSettings_setIconDatabasePath(location: PWideString); cdecl; external Qt4PasLib name 'QWebSettings_setIconDatabasePath';
+-procedure QWebSettings_iconDatabasePath(retval: PWideString); cdecl; external Qt4PasLib name 'QWebSettings_iconDatabasePath';
+-procedure QWebSettings_clearIconDatabase(); cdecl; external Qt4PasLib name 'QWebSettings_clearIconDatabase';
+-procedure QWebSettings_iconForUrl(retval: QIconH; url: QUrlH); cdecl; external Qt4PasLib name 'QWebSettings_iconForUrl';
+-procedure QWebSettings_setWebGraphic(_type: QWebSettingsWebGraphic; graphic: QPixmapH); cdecl; external Qt4PasLib name 'QWebSettings_setWebGraphic';
+-procedure QWebSettings_webGraphic(retval: QPixmapH; _type: QWebSettingsWebGraphic); cdecl; external Qt4PasLib name 'QWebSettings_webGraphic';
+-procedure QWebSettings_setMaximumPagesInCache(pages: Integer); cdecl; external Qt4PasLib name 'QWebSettings_setMaximumPagesInCache';
+-function QWebSettings_maximumPagesInCache(): Integer; cdecl; external Qt4PasLib name 'QWebSettings_maximumPagesInCache';
+-procedure QWebSettings_setObjectCacheCapacities(cacheMinDeadCapacity: Integer; cacheMaxDead: Integer; totalCapacity: Integer); cdecl; external Qt4PasLib name 'QWebSettings_setObjectCacheCapacities';
+-procedure QWebSettings_setOfflineStoragePath(path: PWideString); cdecl; external Qt4PasLib name 'QWebSettings_setOfflineStoragePath';
+-procedure QWebSettings_offlineStoragePath(retval: PWideString); cdecl; external Qt4PasLib name 'QWebSettings_offlineStoragePath';
+-procedure QWebSettings_setOfflineStorageDefaultQuota(maximumSize: int64); cdecl; external Qt4PasLib name 'QWebSettings_setOfflineStorageDefaultQuota';
+-function QWebSettings_offlineStorageDefaultQuota(): int64; cdecl; external Qt4PasLib name 'QWebSettings_offlineStorageDefaultQuota';
+-
+-function QWebView_create(parent: QWidgetH = nil): QWebViewH; cdecl; external Qt4PasLib name 'QWebView_create';
+-procedure QWebView_destroy(handle: QWebViewH); cdecl; external Qt4PasLib name 'QWebView_destroy'; 
+-function QWebView_page(handle: QWebViewH): QWebPageH; cdecl; external Qt4PasLib name 'QWebView_page';
+-procedure QWebView_setPage(handle: QWebViewH; page: QWebPageH); cdecl; external Qt4PasLib name 'QWebView_setPage';
+-procedure QWebView_load(handle: QWebViewH; url: QUrlH); cdecl; external Qt4PasLib name 'QWebView_load';
+-procedure QWebView_load(handle: QWebViewH; request: QNetworkRequestH; operation: QNetworkAccessManagerOperation = QNetworkAccessManagerGetOperation; body: QByteArrayH = nil); cdecl; external Qt4PasLib name 'QWebView_load2';
+-procedure QWebView_setHtml(handle: QWebViewH; html: PWideString; baseUrl: QUrlH = nil); cdecl; external Qt4PasLib name 'QWebView_setHtml';
+-procedure QWebView_setContent(handle: QWebViewH; data: QByteArrayH; mimeType: PWideString = nil; baseUrl: QUrlH = nil); cdecl; external Qt4PasLib name 'QWebView_setContent';
+-function QWebView_history(handle: QWebViewH): QWebHistoryH; cdecl; external Qt4PasLib name 'QWebView_history';
+-function QWebView_settings(handle: QWebViewH): QWebSettingsH; cdecl; external Qt4PasLib name 'QWebView_settings';
+-procedure QWebView_title(handle: QWebViewH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebView_title';
+-procedure QWebView_setUrl(handle: QWebViewH; url: QUrlH); cdecl; external Qt4PasLib name 'QWebView_setUrl';
+-procedure QWebView_url(handle: QWebViewH; retval: QUrlH); cdecl; external Qt4PasLib name 'QWebView_url';
+-procedure QWebView_icon(handle: QWebViewH; retval: QIconH); cdecl; external Qt4PasLib name 'QWebView_icon';
+-procedure QWebView_selectedText(handle: QWebViewH; retval: PWideString); cdecl; external Qt4PasLib name 'QWebView_selectedText';
+-function QWebView_pageAction(handle: QWebViewH; action: QWebPageWebAction): QActionH; cdecl; external Qt4PasLib name 'QWebView_pageAction';
+-procedure QWebView_triggerPageAction(handle: QWebViewH; action: QWebPageWebAction; checked: Boolean = False); cdecl; external Qt4PasLib name 'QWebView_triggerPageAction';
+-function QWebView_isModified(handle: QWebViewH): Boolean; cdecl; external Qt4PasLib name 'QWebView_isModified';
+-procedure QWebView_inputMethodQuery(handle: QWebViewH; retval: QVariantH; _property: QtInputMethodQuery); cdecl; external Qt4PasLib name 'QWebView_inputMethodQuery';
+-procedure QWebView_sizeHint(handle: QWebViewH; retval: PSize); cdecl; external Qt4PasLib name 'QWebView_sizeHint';
+-function QWebView_zoomFactor(handle: QWebViewH): qreal; cdecl; external Qt4PasLib name 'QWebView_zoomFactor';
+-procedure QWebView_setZoomFactor(handle: QWebViewH; factor: qreal); cdecl; external Qt4PasLib name 'QWebView_setZoomFactor';
+-procedure QWebView_setTextSizeMultiplier(handle: QWebViewH; factor: qreal); cdecl; external Qt4PasLib name 'QWebView_setTextSizeMultiplier';
+-function QWebView_textSizeMultiplier(handle: QWebViewH): qreal; cdecl; external Qt4PasLib name 'QWebView_textSizeMultiplier';
+-function QWebView_findText(handle: QWebViewH; subString: PWideString; options: QWebPageFindFlags = 0): Boolean; cdecl; external Qt4PasLib name 'QWebView_findText';
+-function QWebView_event(handle: QWebViewH; AnonParam1: QEventH): Boolean; cdecl; external Qt4PasLib name 'QWebView_event';
+-procedure QWebView_stop(handle: QWebViewH); cdecl; external Qt4PasLib name 'QWebView_stop';
+-procedure QWebView_back(handle: QWebViewH); cdecl; external Qt4PasLib name 'QWebView_back';
+-procedure QWebView_forward(handle: QWebViewH); cdecl; external Qt4PasLib name 'QWebView_forward';
+-procedure QWebView_reload(handle: QWebViewH); cdecl; external Qt4PasLib name 'QWebView_reload';
+-procedure QWebView_print(handle: QWebViewH; printer: QPrinterH); cdecl; external Qt4PasLib name 'QWebView_print';
+-
+-
+-type
+-  QWebView_loadStarted_Event = procedure () of object cdecl;
+-  QWebView_loadProgress_Event = procedure (progress: Integer) of object cdecl;
+-  QWebView_loadFinished_Event = procedure (AnonParam1: Boolean) of object cdecl;
+-  QWebView_titleChanged_Event = procedure (title: PWideString) of object cdecl;
+-  QWebView_statusBarMessage_Event = procedure (text: PWideString) of object cdecl;
+-  QWebView_linkClicked_Event = procedure (url: QUrlH) of object cdecl;
+-  QWebView_selectionChanged_Event = procedure () of object cdecl;
+-  QWebView_iconChanged_Event = procedure () of object cdecl;
+-  QWebView_urlChanged_Event = procedure (url: QUrlH) of object cdecl;
+-
+-
+-function QLCLWebView_create(parent: QWidgetH = nil): QLCLWebViewH; cdecl; external Qt4PasLib name 'QLCLWebView_create';
+-procedure QLCLWebView_destroy(handle: QLCLWebViewH); cdecl; external Qt4PasLib name 'QLCLWebView_destroy'; 
+-procedure QLCLWebView_override_createWindow(handle: QLCLWebViewH; hook: QLCLWebView_createWindow_Override); cdecl; external Qt4PasLib name 'QLCLWebView_override_createWindow';
+-
+ function QCoreApplication_hook_create(handle: QObjectH): QCoreApplication_hookH; cdecl; external Qt4PasLib name 'QCoreApplication_hook_create';
+ procedure QCoreApplication_hook_destroy(handle: QCoreApplication_hookH); cdecl; external Qt4PasLib name 'QCoreApplication_hook_destroy'; 
+ procedure QCoreApplication_hook_hook_aboutToQuit(handle: QCoreApplication_hookH; hook: QCoreApplication_aboutToQuit_Event); cdecl; external Qt4PasLib name 'QCoreApplication_hook_hook_aboutToQuit';
+ procedure QCoreApplication_hook_hook_unixSignal(handle: QCoreApplication_hookH; hook: QCoreApplication_unixSignal_Event); cdecl; external Qt4PasLib name 'QCoreApplication_hook_hook_unixSignal';
+@@ -13811,77 +13424,8 @@
+ procedure QNetworkReply_hook_hook_error(handle: QNetworkReply_hookH; hook: QNetworkReply_error_Event); cdecl; external Qt4PasLib name 'QNetworkReply_hook_hook_error';
+ procedure QNetworkReply_hook_hook_uploadProgress(handle: QNetworkReply_hookH; hook: QNetworkReply_uploadProgress_Event); cdecl; external Qt4PasLib name 'QNetworkReply_hook_hook_uploadProgress';
+ procedure QNetworkReply_hook_hook_downloadProgress(handle: QNetworkReply_hookH; hook: QNetworkReply_downloadProgress_Event); cdecl; external Qt4PasLib name 'QNetworkReply_hook_hook_downloadProgress';
+ 
+-function QWebHitTestResult_hook_create(handle: QObjectH): QWebHitTestResult_hookH; cdecl; external Qt4PasLib name 'QWebHitTestResult_hook_create';
+-procedure QWebHitTestResult_hook_destroy(handle: QWebHitTestResult_hookH); cdecl; external Qt4PasLib name 'QWebHitTestResult_hook_destroy'; 
+-
+-function QWebFrame_hook_create(handle: QObjectH): QWebFrame_hookH; cdecl; external Qt4PasLib name 'QWebFrame_hook_create';
+-procedure QWebFrame_hook_destroy(handle: QWebFrame_hookH); cdecl; external Qt4PasLib name 'QWebFrame_hook_destroy'; 
+-procedure QWebFrame_hook_hook_javaScriptWindowObjectCleared(handle: QWebFrame_hookH; hook: QWebFrame_javaScriptWindowObjectCleared_Event); cdecl; external Qt4PasLib name 'QWebFrame_hook_hook_javaScriptWindowObjectCleared';
+-procedure QWebFrame_hook_hook_provisionalLoad(handle: QWebFrame_hookH; hook: QWebFrame_provisionalLoad_Event); cdecl; external Qt4PasLib name 'QWebFrame_hook_hook_provisionalLoad';
+-procedure QWebFrame_hook_hook_titleChanged(handle: QWebFrame_hookH; hook: QWebFrame_titleChanged_Event); cdecl; external Qt4PasLib name 'QWebFrame_hook_hook_titleChanged';
+-procedure QWebFrame_hook_hook_urlChanged(handle: QWebFrame_hookH; hook: QWebFrame_urlChanged_Event); cdecl; external Qt4PasLib name 'QWebFrame_hook_hook_urlChanged';
+-procedure QWebFrame_hook_hook_initialLayoutCompleted(handle: QWebFrame_hookH; hook: QWebFrame_initialLayoutCompleted_Event); cdecl; external Qt4PasLib name 'QWebFrame_hook_hook_initialLayoutCompleted';
+-procedure QWebFrame_hook_hook_iconChanged(handle: QWebFrame_hookH; hook: QWebFrame_iconChanged_Event); cdecl; external Qt4PasLib name 'QWebFrame_hook_hook_iconChanged';
+-
+-function QWebSecurityOrigin_hook_create(handle: QObjectH): QWebSecurityOrigin_hookH; cdecl; external Qt4PasLib name 'QWebSecurityOrigin_hook_create';
+-procedure QWebSecurityOrigin_hook_destroy(handle: QWebSecurityOrigin_hookH); cdecl; external Qt4PasLib name 'QWebSecurityOrigin_hook_destroy'; 
+-
+-function QWebDatabase_hook_create(handle: QObjectH): QWebDatabase_hookH; cdecl; external Qt4PasLib name 'QWebDatabase_hook_create';
+-procedure QWebDatabase_hook_destroy(handle: QWebDatabase_hookH); cdecl; external Qt4PasLib name 'QWebDatabase_hook_destroy'; 
+-
+-function QWebHistoryItem_hook_create(handle: QObjectH): QWebHistoryItem_hookH; cdecl; external Qt4PasLib name 'QWebHistoryItem_hook_create';
+-procedure QWebHistoryItem_hook_destroy(handle: QWebHistoryItem_hookH); cdecl; external Qt4PasLib name 'QWebHistoryItem_hook_destroy'; 
+-
+-function QWebHistory_hook_create(handle: QObjectH): QWebHistory_hookH; cdecl; external Qt4PasLib name 'QWebHistory_hook_create';
+-procedure QWebHistory_hook_destroy(handle: QWebHistory_hookH); cdecl; external Qt4PasLib name 'QWebHistory_hook_destroy'; 
+-
+-function QWebHistoryInterface_hook_create(handle: QObjectH): QWebHistoryInterface_hookH; cdecl; external Qt4PasLib name 'QWebHistoryInterface_hook_create';
+-procedure QWebHistoryInterface_hook_destroy(handle: QWebHistoryInterface_hookH); cdecl; external Qt4PasLib name 'QWebHistoryInterface_hook_destroy'; 
+-
+-function QWebPage_hook_create(handle: QObjectH): QWebPage_hookH; cdecl; external Qt4PasLib name 'QWebPage_hook_create';
+-procedure QWebPage_hook_destroy(handle: QWebPage_hookH); cdecl; external Qt4PasLib name 'QWebPage_hook_destroy'; 
+-procedure QWebPage_hook_hook_loadStarted(handle: QWebPage_hookH; hook: QWebPage_loadStarted_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_loadStarted';
+-procedure QWebPage_hook_hook_loadProgress(handle: QWebPage_hookH; hook: QWebPage_loadProgress_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_loadProgress';
+-procedure QWebPage_hook_hook_loadFinished(handle: QWebPage_hookH; hook: QWebPage_loadFinished_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_loadFinished';
+-procedure QWebPage_hook_hook_linkHovered(handle: QWebPage_hookH; hook: QWebPage_linkHovered_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_linkHovered';
+-procedure QWebPage_hook_hook_statusBarMessage(handle: QWebPage_hookH; hook: QWebPage_statusBarMessage_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_statusBarMessage';
+-procedure QWebPage_hook_hook_selectionChanged(handle: QWebPage_hookH; hook: QWebPage_selectionChanged_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_selectionChanged';
+-procedure QWebPage_hook_hook_frameCreated(handle: QWebPage_hookH; hook: QWebPage_frameCreated_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_frameCreated';
+-procedure QWebPage_hook_hook_geometryChangeRequested(handle: QWebPage_hookH; hook: QWebPage_geometryChangeRequested_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_geometryChangeRequested';
+-procedure QWebPage_hook_hook_repaintRequested(handle: QWebPage_hookH; hook: QWebPage_repaintRequested_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_repaintRequested';
+-procedure QWebPage_hook_hook_scrollRequested(handle: QWebPage_hookH; hook: QWebPage_scrollRequested_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_scrollRequested';
+-procedure QWebPage_hook_hook_windowCloseRequested(handle: QWebPage_hookH; hook: QWebPage_windowCloseRequested_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_windowCloseRequested';
+-procedure QWebPage_hook_hook_printRequested(handle: QWebPage_hookH; hook: QWebPage_printRequested_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_printRequested';
+-procedure QWebPage_hook_hook_linkClicked(handle: QWebPage_hookH; hook: QWebPage_linkClicked_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_linkClicked';
+-procedure QWebPage_hook_hook_toolBarVisibilityChangeRequested(handle: QWebPage_hookH; hook: QWebPage_toolBarVisibilityChangeRequested_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_toolBarVisibilityChangeRequested';
+-procedure QWebPage_hook_hook_statusBarVisibilityChangeRequested(handle: QWebPage_hookH; hook: QWebPage_statusBarVisibilityChangeRequested_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_statusBarVisibilityChangeRequested';
+-procedure QWebPage_hook_hook_menuBarVisibilityChangeRequested(handle: QWebPage_hookH; hook: QWebPage_menuBarVisibilityChangeRequested_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_menuBarVisibilityChangeRequested';
+-procedure QWebPage_hook_hook_unsupportedContent(handle: QWebPage_hookH; hook: QWebPage_unsupportedContent_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_unsupportedContent';
+-procedure QWebPage_hook_hook_downloadRequested(handle: QWebPage_hookH; hook: QWebPage_downloadRequested_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_downloadRequested';
+-procedure QWebPage_hook_hook_microFocusChanged(handle: QWebPage_hookH; hook: QWebPage_microFocusChanged_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_microFocusChanged';
+-procedure QWebPage_hook_hook_contentsChanged(handle: QWebPage_hookH; hook: QWebPage_contentsChanged_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_contentsChanged';
+-procedure QWebPage_hook_hook_databaseQuotaExceeded(handle: QWebPage_hookH; hook: QWebPage_databaseQuotaExceeded_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_databaseQuotaExceeded';
+-procedure QWebPage_hook_hook_saveFrameStateRequested(handle: QWebPage_hookH; hook: QWebPage_saveFrameStateRequested_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_saveFrameStateRequested';
+-procedure QWebPage_hook_hook_restoreFrameStateRequested(handle: QWebPage_hookH; hook: QWebPage_restoreFrameStateRequested_Event); cdecl; external Qt4PasLib name 'QWebPage_hook_hook_restoreFrameStateRequested';
+-
+-function QWebSettings_hook_create(handle: QObjectH): QWebSettings_hookH; cdecl; external Qt4PasLib name 'QWebSettings_hook_create';
+-procedure QWebSettings_hook_destroy(handle: QWebSettings_hookH); cdecl; external Qt4PasLib name 'QWebSettings_hook_destroy'; 
+-
+-function QWebView_hook_create(handle: QObjectH): QWebView_hookH; cdecl; external Qt4PasLib name 'QWebView_hook_create';
+-procedure QWebView_hook_destroy(handle: QWebView_hookH); cdecl; external Qt4PasLib name 'QWebView_hook_destroy'; 
+-procedure QWebView_hook_hook_loadStarted(handle: QWebView_hookH; hook: QWebView_loadStarted_Event); cdecl; external Qt4PasLib name 'QWebView_hook_hook_loadStarted';
+-procedure QWebView_hook_hook_loadProgress(handle: QWebView_hookH; hook: QWebView_loadProgress_Event); cdecl; external Qt4PasLib name 'QWebView_hook_hook_loadProgress';
+-procedure QWebView_hook_hook_loadFinished(handle: QWebView_hookH; hook: QWebView_loadFinished_Event); cdecl; external Qt4PasLib name 'QWebView_hook_hook_loadFinished';
+-procedure QWebView_hook_hook_titleChanged(handle: QWebView_hookH; hook: QWebView_titleChanged_Event); cdecl; external Qt4PasLib name 'QWebView_hook_hook_titleChanged';
+-procedure QWebView_hook_hook_statusBarMessage(handle: QWebView_hookH; hook: QWebView_statusBarMessage_Event); cdecl; external Qt4PasLib name 'QWebView_hook_hook_statusBarMessage';
+-procedure QWebView_hook_hook_linkClicked(handle: QWebView_hookH; hook: QWebView_linkClicked_Event); cdecl; external Qt4PasLib name 'QWebView_hook_hook_linkClicked';
+-procedure QWebView_hook_hook_selectionChanged(handle: QWebView_hookH; hook: QWebView_selectionChanged_Event); cdecl; external Qt4PasLib name 'QWebView_hook_hook_selectionChanged';
+-procedure QWebView_hook_hook_iconChanged(handle: QWebView_hookH; hook: QWebView_iconChanged_Event); cdecl; external Qt4PasLib name 'QWebView_hook_hook_iconChanged';
+-procedure QWebView_hook_hook_urlChanged(handle: QWebView_hookH; hook: QWebView_urlChanged_Event); cdecl; external Qt4PasLib name 'QWebView_hook_hook_urlChanged';
+-
+-
+ 
+ //=======================================================
+ // Dynamic Qt Version 
+ //=======================================================
+diff -r -U4 qt4pas-V2.5_Qt4.5.3--orig/Qt4Pas.pro qt4pas-V2.5_Qt4.5.3--patched/Qt4Pas.pro
+--- qt4pas-V2.5_Qt4.5.3--orig/Qt4Pas.pro	2011-12-25 00:53:12.000000000 +0100
++++ qt4pas-V2.5_Qt4.5.3--patched/Qt4Pas.pro	2025-11-06 22:56:42.310288227 +0100
+@@ -11,9 +11,9 @@
+ 
+ 
+ VERSION = 5.2.5
+ 
+-QT += network webkit
++QT += network
+ TARGET = Qt4Pas
+ TEMPLATE = lib
+ DEPENDPATH += src
+ MOC_DIR = tmp
+@@ -161,16 +161,8 @@
+            qtcpsocket_hook.h \
+            qtcpserver_hook.h \
+            qnetworkaccessmanager_hook.h \
+            qnetworkreply_hook.h \
+-           qwebframe_hook.h \
+-           qwebsecurityorigin_hook.h \
+-           qwebdatabase_hook.h \
+-           qwebhistory_hook.h \
+-           qwebhistoryinterface_hook.h \
+-           qwebpage_hook.h \
+-           qwebsettings_hook.h \
+-           qwebview_hook.h
+ 
+ SOURCES += qt4pas.cpp \
+            qobject_hook_c.cpp \
+            pascalbind.cpp \
+@@ -350,18 +342,8 @@
+            qnetworkcookie_c.cpp \
+            qlclnetworkcookie_c.cpp \
+            qnetworkproxy_c.cpp \
+            qauthenticator_c.cpp \
+-           qwebframe_c.cpp \
+-           qwebsecurityorigin_c.cpp \
+-           qwebdatabase_c.cpp \
+-           qwebhistory_c.cpp \
+-           qwebhistoryinterface_c.cpp \
+-           qwebpage_c.cpp \
+-           qlclwebpage_c.cpp \
+-           qwebsettings_c.cpp \
+-           qwebview_c.cpp \
+-           qlclwebview_c.cpp \
+            qcoreapplication_hook_c.cpp \
+            qtimer_hook_c.cpp \
+            qabstractitemmodel_hook_c.cpp \
+            qsocketnotifier_hook_c.cpp \
+@@ -440,14 +422,6 @@
+            qtcpsocket_hook_c.cpp \
+            qtcpserver_hook_c.cpp \
+            qnetworkaccessmanager_hook_c.cpp \
+            qnetworkreply_hook_c.cpp \
+-           qwebframe_hook_c.cpp \
+-           qwebsecurityorigin_hook_c.cpp \
+-           qwebdatabase_hook_c.cpp \
+-           qwebhistory_hook_c.cpp \
+-           qwebhistoryinterface_hook_c.cpp \
+-           qwebpage_hook_c.cpp \
+-           qwebsettings_hook_c.cpp \
+-           qwebview_hook_c.cpp
+ 
+-# end of file
+\ No newline at end of file
++# end of file
+diff -r -U4 qt4pas-V2.5_Qt4.5.3--orig/src/qt4pas.cpp qt4pas-V2.5_Qt4.5.3--patched/src/qt4pas.cpp
+--- qt4pas-V2.5_Qt4.5.3--orig/src/qt4pas.cpp	2011-12-25 00:53:12.000000000 +0100
++++ qt4pas-V2.5_Qt4.5.3--patched/src/qt4pas.cpp	2025-11-06 23:03:16.243986972 +0100
+@@ -15,9 +15,8 @@
+ 
+ #include <QtCore>
+ #include <QtGui>
+ #include <QtNetwork>
+-#include <QtWebKit>
+ 
+ 
+ #include "qobject_hook_c.cpp"
+ #include "pascalbind.cpp"
+@@ -197,18 +196,8 @@
+ #include "qnetworkcookie_c.cpp"
+ #include "qlclnetworkcookie_c.cpp"
+ #include "qnetworkproxy_c.cpp"
+ #include "qauthenticator_c.cpp"
+-#include "qwebframe_c.cpp"
+-#include "qwebsecurityorigin_c.cpp"
+-#include "qwebdatabase_c.cpp"
+-#include "qwebhistory_c.cpp"
+-#include "qwebhistoryinterface_c.cpp"
+-#include "qwebpage_c.cpp"
+-#include "qlclwebpage_c.cpp"
+-#include "qwebsettings_c.cpp"
+-#include "qwebview_c.cpp"
+-#include "qlclwebview_c.cpp"
+ #include "qcoreapplication_hook_c.cpp"
+ #include "qtimer_hook_c.cpp"
+ #include "qabstractitemmodel_hook_c.cpp"
+ #include "qsocketnotifier_hook_c.cpp"
+@@ -287,12 +276,4 @@
+ #include "qtcpsocket_hook_c.cpp"
+ #include "qtcpserver_hook_c.cpp"
+ #include "qnetworkaccessmanager_hook_c.cpp"
+ #include "qnetworkreply_hook_c.cpp"
+-#include "qwebframe_hook_c.cpp"
+-#include "qwebsecurityorigin_hook_c.cpp"
+-#include "qwebdatabase_hook_c.cpp"
+-#include "qwebhistory_hook_c.cpp"
+-#include "qwebhistoryinterface_hook_c.cpp"
+-#include "qwebpage_hook_c.cpp"
+-#include "qwebsettings_hook_c.cpp"
+-#include "qwebview_hook_c.cpp"

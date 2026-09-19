@@ -1,0 +1,49 @@
+From bfada8596fb8636843bef07dfa496f0b0b815cc6 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa13@gmail.com>
+Date: Sun, 14 Mar 2021 10:27:34 -0400
+Subject: [PATCH] Fix iterating on log entries with Python 3.9+
+
+xml.etree.ElementTree.Element.getiterator() has been deprecated since
+Python 2.7, and has been removed in Python 3.9.
+
+Replace all instances of Element.getiterator(tag) with Element.iter(tag)
+to make iterating on log entries work on Python 3.9+.
+---
+ MgaRepo/VCS.py | 4 ++--
+ MgaRepo/git.py | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/MgaRepo/VCS.py b/MgaRepo/VCS.py
+index 4edbd7f..c78eb63 100644
+--- a/MgaRepo/VCS.py
++++ b/MgaRepo/VCS.py
+@@ -365,11 +365,11 @@ class VCS(object):
+ 
+         xmllog = ElementTree.fromstring(output)
+         log = []
+-        logentries = xmllog.getiterator("logentry")
++        logentries = xmllog.iter("logentry")
+         for entry in logentries:
+             changed = []
+             lines = []
+-            for pathelem in entry.getiterator("paths"):
++            for pathelem in entry.iter("paths"):
+                 path = pathelem.find("path")
+                 from_rev = path.get("copyfrom-rev")
+                 if from_rev:
+diff --git a/MgaRepo/git.py b/MgaRepo/git.py
+index 670bfa7..89fde8e 100644
+--- a/MgaRepo/git.py
++++ b/MgaRepo/git.py
+@@ -146,7 +146,7 @@ class GIT(VCS):
+             return retval
+ 
+         xmllog = ElementTree.fromstring(result)
+-        logentries = xmllog.getiterator("logentry")
++        logentries = xmllog.iter("logentry")
+         revisions = []
+         for entry in logentries:
+             revisions.append(int(entry.attrib["revision"]))
+-- 
+2.29.2
+

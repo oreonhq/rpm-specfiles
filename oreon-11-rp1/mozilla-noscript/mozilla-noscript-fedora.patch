@@ -1,0 +1,73 @@
+diff -up noscript-13.5.2/build.sh.f noscript-13.5.2/build.sh
+--- noscript-13.5.2/build.sh.f	2025-12-02 17:29:09.000000000 +0100
++++ noscript-13.5.2/build.sh	2025-12-11 14:34:01.728193977 +0100
+@@ -129,8 +129,8 @@ rm -rf "$BUILD" "$XPI"
+ cp -pR "$SRC" "$BUILD"
+ cp -p LICENSE "$BUILD"/
+ 
+-BUILD_CMD="web-ext"
+-BUILD_OPTS="build --overwrite-dest"
++BUILD_CMD="zip"
++BUILD_OPTS="-r"
+ 
+ # save Chromium build settings from Mozilla signing overwrite
+ CHROMIUM_BUILD_CMD="$BUILD_CMD"
+@@ -163,7 +163,34 @@ if ! [ "$UNPACKED_ONLY" ]; then
+ fi
+ 
+ CYGPATH=$(which cypath)
+-COMMON_BUILD_OPTS="--ignore-files='test/**' 'embargoed/**' content/experiments.js"
++grep -E -h -v '^(#|$)' .gitignore src/nscl/.gitignore > exclude.lst
++cat >> exclude.lst << __EOF__
++.gitignore
++content/experiments.js
++nscl/boot.js
++nscl/common/Entities.js
++nscl/content/ftp.js
++nscl/content.js
++nscl/COPYING
++nscl/lib/browser-polyfill.js.license
++nscl/lib/punycode.js.license
++nscl/LICENSE.md
++nscl/LICENSES/*
++nscl/main.js
++nscl/.reuse/*
++nscl/.gitignore
++nscl/include.sh
++nscl/manifest.json
++nscl/nscl-logo.png
++nscl/reuse.sh
++nscl/ReadMe.md
++nscl/service/PolicyEnforcer.js
++nscl/service/WebRequestCSP.js
++nscl/test/run.js
++nscl/TLD/*
++test/*
++__EOF__
++COMMON_BUILD_OPTS="--exclude @$BASE/exclude.lst"
+ 
+ fix_manifest() {
+   node manifest.js "$1" "$MANIFEST_IN" "$MANIFEST_OUT" || exit 9
+@@ -196,10 +223,12 @@ build() {
+     WEBEXT_OUT="$XPI_DIR"
+   fi
+ 
++  pushd "$WEBEXT_IN"
+   "$BUILD_CMD" $BUILD_OPTS \
+-    --source-dir="$WEBEXT_IN" \
+-    --artifacts-dir="$WEBEXT_OUT" \
++    "$WEBEXT_OUT/noscript-$VER.zip" \
++    . \
+     $COMMON_BUILD_OPTS
++  popd
+ }
+ 
+ fix_manifest "$FIREFOX_TARGET"
+@@ -228,6 +257,7 @@ elif ! [ "$UNPACKED_ONLY" ]; then
+   echo >&2 "ERROR: Could not create $XPI$DBG.xpi!"
+   exit 3
+ fi
++exit 0
+ 
+ 
+ 

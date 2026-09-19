@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 615b7c244a5baee0be5214c53b8ce37d0a54e69a6fd6b8438c30d7fda45b0746
 
 
 # uncomment to enable bootstrap mode
@@ -10,7 +10,7 @@
 
 Name:    analitza
 Summary: Library of mathematical features
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

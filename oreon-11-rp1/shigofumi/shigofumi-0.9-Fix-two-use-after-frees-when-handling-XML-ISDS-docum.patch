@@ -1,0 +1,63 @@
+From dec9330d14c6e7f1c6cdad599bd8abcaf541c9df Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <petr.pisar@atlas.cz>
+Date: Wed, 26 Jan 2022 12:48:16 +0100
+Subject: [PATCH] Fix two use-after-frees when handling XML ISDS documents
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+GCC 12.0.1 started to identify these mistakes.
+
+Signed-off-by: Petr Písař <petr.pisar@atlas.cz>
+---
+ src/io.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/src/io.c b/src/io.c
+index d2d7988..3135138 100644
+--- a/src/io.c
++++ b/src/io.c
+@@ -373,7 +373,7 @@ int save_data_to_file(const char *file, int fd, const void *data,
+ static int xpath2nodelist(xmlNodePtr *node_list, xmlXPathContextPtr xpath_ctx,
+         const xmlChar *xpath_expr) {
+     xmlXPathObjectPtr result = NULL;
+-    xmlNodePtr node = NULL, prev_node = NULL;
++    xmlNodePtr node = NULL, prev_node = NULL, next_node;
+ 
+     if (!node_list || !xpath_ctx || !xpath_expr) return -1;
+ 
+@@ -397,8 +397,10 @@ static int xpath2nodelist(xmlNodePtr *node_list, xmlXPathContextPtr xpath_ctx,
+             if (!node) {
+                 fprintf(stderr, _("Not enough memory\n"));
+                 xmlXPathFreeObject(result);
+-                for (node = *node_list; node; node = node->next)
++                for (node = *node_list; node; node = next_node) {
++                    next_node = node->next;
+                     free(node);
++                }
+                 *node_list = NULL;
+                 return -1;
+             }
+@@ -479,14 +481,16 @@ leave:
+ /* Deallocate struct isds_document with embedded XML recursively and NULL it */
+ void free_document_with_xml_node_list(struct isds_document **document) {
+     /* Free document xml_node_lists and associated XML document because
+-     * they are weak copies and isds_document_free() does not free it. */
++     * they are weak copies and isds_document_free() does not free them. */
+     if (!document || !*document) return;
+ 
+     if ((*document)->is_xml && (*document)->xml_node_list) {
+         xmlFreeDoc((*document)->xml_node_list->doc);
+-        for (xmlNodePtr node = (*document)->xml_node_list; node;
+-                node = node->next)
++        for (xmlNodePtr next_node, node = (*document)->xml_node_list; node;
++                node = next_node) {
++            next_node = node->next;
+             free(node);
++        }
+     }
+ 
+     isds_document_free(document);
+-- 
+2.34.1
+

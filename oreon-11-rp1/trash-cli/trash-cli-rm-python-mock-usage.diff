@@ -1,0 +1,236 @@
+--- a/tests/test_dev_tools/test_make_scripts/test_list_of_created_scripts.py
++++ b/tests/test_dev_tools/test_make_scripts/test_list_of_created_scripts.py
+@@ -1,4 +1,4 @@
+-from mock import Mock
++from unittest.mock import Mock
+ 
+ from tests.support.make_scripts import Scripts
+ from tests.support.make_scripts import script_path_without_base_dir_for
+--- a/tests/test_dev_tools/test_make_scripts/test_make_script.py
++++ b/tests/test_dev_tools/test_make_scripts/test_make_script.py
+@@ -1,7 +1,7 @@
+ from textwrap import dedent
+ 
+-import mock
+-from mock import Mock
++from unittest import mock
++from unittest.mock import Mock
+ 
+ from tests.support.make_scripts import Scripts
+ from tests.support.make_scripts import script_path_for
+--- a/tests/test_empty/cmd/test_empty_cmd.py
++++ b/tests/test_empty/cmd/test_empty_cmd.py
+@@ -2,7 +2,7 @@
+ import unittest
+ from typing import cast
+ 
+-from mock import call
++from unittest.mock import call
+ from six import StringIO
+ 
+ from tests.support.fakes.stub_volume_of import StubVolumeOf
+@@ -14,7 +14,7 @@ from trashcli.fstab.volume_listing impor
+ from trashcli.fstab.volume_listing import VolumesListing
+ from trashcli.lib.dir_reader import DirReader
+ from trashcli.trash_dirs_scanner import TopTrashDirRules
+-from mock import Mock
++from unittest.mock import Mock
+ 
+ class TestTrashEmptyCmdFs(unittest.TestCase):
+     def setUp(self):
+--- a/tests/test_empty/cmd/test_empty_cmd_fs.py
++++ b/tests/test_empty/cmd/test_empty_cmd_fs.py
+@@ -2,7 +2,7 @@
+ import unittest
+ 
+ import pytest
+-from mock import Mock
++from unittest.mock import Mock
+ from six import StringIO
+ 
+ from tests.support.fakes.stub_volume_of import StubVolumeOf
+--- a/tests/test_empty/cmd/test_empty_cmd_with_multiple_volumes_fs.py
++++ b/tests/test_empty/cmd/test_empty_cmd_with_multiple_volumes_fs.py
+@@ -2,7 +2,7 @@
+ import os
+ import unittest
+ 
+-from mock import Mock
++from unittest.mock import Mock
+ from six import StringIO
+ 
+ from tests.support.fakes.stub_volume_of import StubVolumeOf
+--- a/tests/test_empty/components/test_clock.py
++++ b/tests/test_empty/components/test_clock.py
+@@ -1,7 +1,7 @@
+ import datetime
+ import unittest
+ 
+-from mock import Mock, call
++from unittest.mock import Mock, call
+ from trashcli.empty.clock import Clock
+ 
+ 
+--- a/tests/test_empty/components/test_guard.py
++++ b/tests/test_empty/components/test_guard.py
+@@ -1,6 +1,6 @@
+ import unittest
+ 
+-from mock import Mock, call
++from unittest.mock import Mock, call
+ from trashcli.empty.guard import Guard, UserIntention
+ 
+ 
+--- a/tests/test_empty/components/test_user.py
++++ b/tests/test_empty/components/test_user.py
+@@ -1,6 +1,6 @@
+ import unittest
+ 
+-from mock import Mock, call
++from unittest.mock import Mock, call
+ 
+ from trashcli.empty.user import User
+ from trashcli.lib.my_input import HardCodedInput
+--- a/tests/test_put/components/test_trash_directories_finder.py
++++ b/tests/test_put/components/test_trash_directories_finder.py
+@@ -1,6 +1,6 @@
+ import unittest
+ 
+-from mock import Mock
++from unittest.mock import Mock
+ 
+ from trashcli.put.core.candidate import Candidate
+ from trashcli.put.core.check_type import NoCheck, TopTrashDirCheck
+--- a/tests/test_put/components/test_trash_put_reporter.py
++++ b/tests/test_put/components/test_trash_put_reporter.py
+@@ -1,4 +1,4 @@
+-from mock import Mock
++from unittest.mock import Mock
+ from six import StringIO
+ from trashcli.put.describer import Describer
+ 
+--- a/tests/test_restore/cmd/test_listing_in_restore_cmd.py
++++ b/tests/test_restore/cmd/test_listing_in_restore_cmd.py
+@@ -1,6 +1,6 @@
+ import unittest
+ 
+-from mock import Mock
++from unittest.mock import Mock
+ from six import StringIO
+ 
+ from trashcli.restore.file_system import FakeReadCwd
+--- a/tests/test_restore/cmd/test_restore2.py
++++ b/tests/test_restore/cmd/test_restore2.py
+@@ -1,7 +1,7 @@
+ import datetime
+ import unittest
+ 
+-from mock import Mock, call
++from unittest.mock import Mock, call
+ 
+ from tests.support.restore.fake_restore_fs import FakeRestoreFs
+ from tests.support.restore.restore_user import RestoreUser
+--- a/tests/test_restore/cmd/test_trashed_file_restore_integration.py
++++ b/tests/test_restore/cmd/test_trashed_file_restore_integration.py
+@@ -1,7 +1,7 @@
+ import os
+ import unittest
+ 
+-from mock import Mock
++from unittest.mock import Mock
+ from six import StringIO
+ 
+ from tests.support.files import make_empty_file
+--- a/tests/test_restore/components/collaborators/test_restore_asking_the_user.py
++++ b/tests/test_restore/components/collaborators/test_restore_asking_the_user.py
+@@ -1,6 +1,6 @@
+ import unittest
+ 
+-from mock import Mock, call
++from unittest.mock import Mock, call
+ 
+ from trashcli.lib.my_input import HardCodedInput
+ from trashcli.restore.output_event import Quit
+--- a/tests/test_restore/components/collaborators/test_trash_directories2.py
++++ b/tests/test_restore/components/collaborators/test_trash_directories2.py
+@@ -1,7 +1,7 @@
+ import unittest
+ 
+ import pytest
+-from mock import Mock, call
++from unittest.mock import Mock, call
+ 
+ from tests.support.fakes.stub_volume_of import StubVolumeOf
+ from trashcli.restore.trash_directories import TrashDirectories2
+--- a/tests/test_restore/components/trashed_files/test_trashed_files_integration.py
++++ b/tests/test_restore/components/trashed_files/test_trashed_files_integration.py
+@@ -1,7 +1,7 @@
+ import datetime
+ import unittest
+ 
+-from mock import Mock
++from unittest.mock import Mock
+ 
+ from tests.support.files import make_file, require_empty_dir
+ from tests.support.dirs.remove_dir_if_exists import remove_dir_if_exists
+--- a/tests/test_rm/cmd/test_trash_rm.py
++++ b/tests/test_rm/cmd/test_trash_rm.py
+@@ -2,7 +2,7 @@ import unittest
+ 
+ from six import StringIO
+ 
+-from mock import Mock
++from unittest.mock import Mock
+ 
+ from tests.support.asserts import assert_starts_with
+ from trashcli.rm.rm_cmd import RmCmd
+--- a/tests/test_trashcli_lib/test_parsing_trashinfo_contents.py
++++ b/tests/test_trashcli_lib/test_parsing_trashinfo_contents.py
+@@ -2,7 +2,7 @@
+ import unittest
+ from datetime import datetime
+ 
+-from mock import MagicMock
++from unittest.mock import MagicMock
+ 
+ from trashcli.parse_trashinfo.parse_path import parse_path
+ from trashcli.parse_trashinfo.parse_trashinfo import ParseTrashInfo
+--- a/tests/test_trashcli_lib/trash_dir_scanner/test_top_trash_dir_rules.py
++++ b/tests/test_trashcli_lib/trash_dir_scanner/test_top_trash_dir_rules.py
+@@ -1,6 +1,6 @@
+ import unittest
+ 
+-from mock import Mock, call
++from unittest.mock import Mock, call
+ from trashcli.trash_dirs_scanner import (
+     TopTrashDirRules,
+     top_trash_dir_does_not_exist,
+--- a/tests/test_trashcli_lib/trash_dir_scanner/test_trash_dir_scanner.py
++++ b/tests/test_trashcli_lib/trash_dir_scanner/test_trash_dir_scanner.py
+@@ -1,6 +1,6 @@
+ import unittest
+ 
+-from mock import Mock
++from unittest.mock import Mock
+ 
+ from trashcli.fstab.volume_listing import VolumesListing
+ from trashcli.lib.dir_checker import DirChecker
+--- a/requirements-dev.txt
++++ b/requirements-dev.txt
+@@ -1,6 +1,5 @@
+ # testing
+ pytest
+-mock
+ flexmock
+ tox
+ PyYAML <= 5.4.1; python_version ~= '2.7'
+--- a/tox.ini
++++ b/tox.ini
+@@ -11,7 +11,6 @@ deps =
+     enum34; python_version < '3.4'
+     # testing
+     pytest
+-    mock
+     flexmock
+     # build testing
+     setuptools

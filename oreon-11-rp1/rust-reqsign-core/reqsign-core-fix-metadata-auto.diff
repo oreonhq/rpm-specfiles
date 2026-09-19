@@ -1,0 +1,13 @@
+--- reqsign-core-3.0.0/Cargo.toml	2006-07-24T01:21:28+00:00
++++ reqsign-core-3.0.0/Cargo.toml	2026-03-24T12:10:28.206771+00:00
+@@ -74,10 +74,3 @@
+ version = "0.10"
+ features = ["oid"]
+ 
+-[target.'cfg(target_os = "windows")'.dependencies.windows-sys]
+-version = "0.61.0"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_UI_Shell",
+-    "Win32_System_Com",
+-]

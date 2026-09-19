@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Pipepanic 
+Comment=A pipe connecting game
+Exec=pipepanic
+Icon=pipepanic
+Terminal=false
+Type=Application
+Categories=Game;LogicGame;
+

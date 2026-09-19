@@ -1,0 +1,12 @@
+diff -Naur orig/ext/xmlparser.c new/ext/xmlparser.c
+--- orig/ext/xmlparser.c	1970-01-01 01:00:00.000000001 +0100
++++ new/ext/xmlparser.c	2023-10-04 14:53:34.000000001 +0200
+@@ -1803,7 +1803,7 @@
+       volatile VALUE encobj;
+       volatile VALUE ustr;
+       enc = rb_enc_find(parser->detectedEncoding);
+-      if ((int)ENC_TO_ENCINDEX(enc) != rb_ascii8bit_encindex()) {
++      if ((int)rb_enc_to_index(enc) != rb_ascii8bit_encindex()) {
+         rb_enc_associate(str, enc);
+         encobj = rb_enc_from_encoding(enc_xml);
+         /* rb_str_encode may raises an exception */

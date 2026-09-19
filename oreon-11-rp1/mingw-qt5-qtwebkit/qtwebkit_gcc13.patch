@@ -1,0 +1,11 @@
+diff -rupN --no-dereference qtwebkit-5.212.0-alpha4/Source/ThirdParty/ANGLE/src/common/mathutil.h qtwebkit-5.212.0-alpha4-new/Source/ThirdParty/ANGLE/src/common/mathutil.h
+--- qtwebkit-5.212.0-alpha4/Source/ThirdParty/ANGLE/src/common/mathutil.h	2020-03-04 18:16:37.000000000 +0100
++++ qtwebkit-5.212.0-alpha4-new/Source/ThirdParty/ANGLE/src/common/mathutil.h	2025-07-18 10:44:50.140879728 +0200
+@@ -14,6 +14,7 @@
+ 
+ #include <limits>
+ #include <algorithm>
++#include <cstdint>
+ #include <string.h>
+ #include <stdlib.h>
+ 

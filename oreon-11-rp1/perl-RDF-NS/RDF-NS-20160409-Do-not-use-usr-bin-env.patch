@@ -1,0 +1,26 @@
+From 6c147bce4ed5370a5ee171b31a6b2a3093971ced Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 27 May 2016 14:07:13 +0200
+Subject: [PATCH] Do not use /usr/bin/env
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ script/rdfns | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/script/rdfns b/script/rdfns
+index c9af67a..34dacb1 100755
+--- a/script/rdfns
++++ b/script/rdfns
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!perl
+ #ABSTRACT: look up common URI namespaces and prefixes
+ #PODNAME: rdfns
+ 
+-- 
+2.5.5
+

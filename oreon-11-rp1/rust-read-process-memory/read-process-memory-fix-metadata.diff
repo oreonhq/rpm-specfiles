@@ -1,0 +1,10 @@
+--- read-process-memory-0.1.6/Cargo.toml	1970-01-01T00:00:01+00:00
++++ read-process-memory-0.1.6/Cargo.toml	2023-03-15T14:22:26.853882+00:00
+@@ -20,6 +20,7 @@
+ readme = "README.md"
+ license = "MIT"
+ repository = "https://github.com/rbspy/read-process-memory"
++autobins = false
+ 
+ [dependencies.libc]
+ version = "0.2"

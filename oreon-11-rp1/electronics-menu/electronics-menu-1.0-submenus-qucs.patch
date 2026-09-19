@@ -1,0 +1,47 @@
+--- electronics.menu.orig-patched	2013-04-05 15:41:38.000000000 +0200
++++ electronics.menu	2013-04-05 15:44:38.631153181 +0200
+@@ -23,6 +23,7 @@
+       <Filename>toped.desktop</Filename>
+       <Filename>tkgate.desktop</Filename>
+       <Filename>ktechlab.desktop</Filename>
++      <Filename>pikdev.desktop</Filename>
+       <Filename>piklab.desktop</Filename>
+       <Filename>pikloops.desktop</Filename>
+       <Filename>geda-gattrib.desktop</Filename>
+@@ -30,8 +31,11 @@
+       <Filename>geda-gschem.desktop</Filename>
+       <Filename>pcb.desktop</Filename>
+       <Filename>kicad.desktop</Filename>
++      <Filename>eeschema.desktop</Filename>
++      <Filename>pcbnew.desktop</Filename>
+       <Filename>gspiceui.desktop</Filename>
+       <Filename>gwave.desktop</Filename>
++      <Filename>qucs.desktop</Filename>
+       <Filename>dinotrace.desktop</Filename>
+       <Filename>GNUSim8085.desktop</Filename>
+       <Filename>gsim85.desktop</Filename>
+@@ -78,6 +82,7 @@
+       <Include>
+         <Category>Embedded</Category>
+         <Filename>ktechlab.desktop</Filename>
++        <Filename>pikdev.desktop</Filename>
+         <Filename>piklab.desktop</Filename>
+         <Filename>pikloops.desktop</Filename>
+         <Filename>GNUSim8085.desktop</Filename>
+@@ -95,6 +100,8 @@
+         <Filename>geda-gschem.desktop</Filename>
+         <Filename>pcb.desktop</Filename>
+         <Filename>kicad.desktop</Filename>
++        <Filename>eeschema.desktop</Filename>
++        <Filename>pcbnew.desktop</Filename>
+       </Include>
+     </Menu>
+     <Menu>
+@@ -104,6 +111,7 @@
+         <Category>Spice</Category>
+         <Filename>gspiceui.desktop</Filename>
+         <Filename>gwave.desktop</Filename>
++        <Filename>qucs.desktop</Filename>
+       </Include>
+     </Menu>
+   </Menu>

@@ -1,13 +1,13 @@
-%global source0_hash 5fa4b07f729c3ff6b7f362d318374810fa55b13a922d2b240462eb8efc1045e8
+%global source0_hash aee3405475bfed6187abc483df6baf48e89b2b2505ee0acc1c8d37728fb9c786
 
 %global framework kpackage
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.30.0
 Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 library to load and install packages as plugins
 
@@ -22,9 +22,9 @@ BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  kf6-karchive-devel
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6DocTools) >= %{version}
 BuildRequires:  qt6-qtbase-devel
 Requires:  kf6-filesystem
 
@@ -72,6 +72,9 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kpackage/
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

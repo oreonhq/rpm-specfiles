@@ -1,0 +1,11 @@
+--- ./server/vglrun.in.orig	2024-06-10 02:08:28.012311363 +0100
++++ ./server/vglrun.in	2024-06-10 02:09:10.763245113 +0100
+@@ -183,7 +183,7 @@ if [ -z "$DISPLAY" ]; then
+ 	fi
+ else
+ 	DISPLAYHOST=`echo $DISPLAY | cut -d: -f1`
+-	if [ "$DISPLAYHOST" = "localhost" -o "$DISPLAYHOST" = "`hostname`" ]; then
++	if [ "$DISPLAYHOST" = "localhost" -o "$DISPLAYHOST" = "${HOSTNAME}" ]; then
+ 		if [ ! -z "$SSH_IP" -a -z "$VGL_CLIENT" -a -z "$RRCLIENT" ]; then
+ 			VGL_CLIENT=$SSH_IP
+ 			export VGL_CLIENT

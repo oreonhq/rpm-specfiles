@@ -1,0 +1,22 @@
+From 76429a4c78fd4771c550e977e9649fd79ef1ef82 Mon Sep 17 00:00:00 2001
+From: Thomas Klausner <wiz@gatalith.at>
+Date: Mon, 12 Aug 2024 11:32:44 +0200
+Subject: [PATCH] Remove reference to unused and deprecated pytest-runner
+
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 8271fe0..acaeb8c 100755
+--- a/setup.py
++++ b/setup.py
+@@ -37,7 +37,7 @@
+       version="0.8.2",
+       packages=["pyte"],
+       install_requires=["wcwidth"],
+-      setup_requires=["pytest-runner"],
++      setup_requires=[],
+       tests_require=["pytest"],
+       python_requires=">=3.8",
+       platforms=["any"],

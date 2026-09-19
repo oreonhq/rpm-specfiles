@@ -1,0 +1,70 @@
+From 4de937340de902ccc81603544cc7c56456fc6a0e Mon Sep 17 00:00:00 2001
+From: "Kai A. Hiller" <V02460@gmail.com>
+Date: Thu, 19 Jun 2025 16:04:13 +0200
+Subject: [PATCH] Disable tests fetching online resources
+
+---
+ variationselector/variationselector_test.go | 36 ---------------------
+ 1 file changed, 36 deletions(-)
+
+diff --git a/variationselector/variationselector_test.go b/variationselector/variationselector_test.go
+index 912497f..10b05bf 100644
+--- a/variationselector/variationselector_test.go
++++ b/variationselector/variationselector_test.go
+@@ -7,53 +7,17 @@
+ package variationselector_test
+ 
+ import (
+-	"encoding/json"
+ 	"fmt"
+-	"net/http"
+ 	"strconv"
+ 	"strings"
+ 	"testing"
+ 
+ 	"github.com/stretchr/testify/assert"
+-	"github.com/stretchr/testify/require"
+ 
+ 	"go.mau.fi/util/exerrors"
+ 	"go.mau.fi/util/variationselector"
+ )
+ 
+-func TestAdd_Full(t *testing.T) {
+-	resp := get(t, "https://raw.githubusercontent.com/milesj/emojibase/master/packages/data/en/data.raw.json")
+-	var emojis []emojibaseEmoji
+-	exerrors.PanicIfNotNil(json.NewDecoder(resp.Body).Decode(&emojis))
+-	for _, e := range emojis {
+-		compareEmoji(t, e.Emoji, variationselector.Add)
+-		for _, s := range e.Skins {
+-			compareEmoji(t, s.Emoji, variationselector.Add)
+-		}
+-	}
+-}
+-
+-func TestFullyQualify_Full(t *testing.T) {
+-	resp := get(t, "https://raw.githubusercontent.com/iamcal/emoji-data/master/emoji.json")
+-	var emojis []iamcalEmoji
+-	exerrors.PanicIfNotNil(json.NewDecoder(resp.Body).Decode(&emojis))
+-	for _, e := range emojis {
+-		compareEmoji(t, unifiedToUnicode(e.Unified), variationselector.FullyQualify)
+-		for _, s := range e.SkinVariations {
+-			compareEmoji(t, unifiedToUnicode(s.Unified), variationselector.FullyQualify)
+-		}
+-	}
+-}
+-
+-func get(t *testing.T, url string) *http.Response {
+-	req, err := http.NewRequest(http.MethodGet, url, nil)
+-	require.NoError(t, err)
+-	req.Header.Set("User-Agent", "GitHub actions @ https://github.com/mautrix/go-util/blob/main/variationselector/variationselector_test.go")
+-	resp, err := http.DefaultClient.Do(req)
+-	require.NoError(t, err)
+-	return resp
+-}
+-
+ type emojibaseEmoji struct {
+ 	Emoji   string           `json:"emoji"`
+ 	Hexcode string           `json:"hexcode"`
+-- 
+2.49.0
+

@@ -2,7 +2,7 @@
 
 Summary: Tracks and displays system calls associated with a running process
 Name: strace
-Version: 6.19
+Version: 7.2
 Release: 1%{?dist}
 # The test suite is GPLv2+, the bundled headers are GPLv2 with Linux syscall
 # exception, all the rest is LGPLv2.1+.

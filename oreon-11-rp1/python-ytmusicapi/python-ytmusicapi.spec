@@ -1,60 +1,58 @@
 %global source0_hash none
 
-%global srcname ytmusicapi
-
-Name:           python-%{srcname}
-Version:        1.12.1
+Name:           python-ytmusicapi
+Version:        1.12.3
 Release:        %autorelease
-License:        MIT
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Unofficial API for YouTube Music
-Url:            https://github.com/sigma67/%{srcname}
-Source0:        %{pypi_source}
-Source1:        ytmusicapi.1
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/sigma67/ytmusicapi
+Source:         %{pypi_source ytmusicapi}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-ytmusicapi is a Python 3 library to send requests to the YouTube Music API. 
-It emulates YouTube Music web client requests using the user's 
-cookie data for authentication.}
+This is package 'ytmusicapi' generated automatically by pyp2spec.}
 
 %description %_description
 
-
-%package -n     python3-%{srcname}
+%package -n     python3-ytmusicapi
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-ytmusicapi %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ytmusicapi-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires -r
- 
+%pyproject_buildrequires
+
+
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
 
+
 %install
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_install
-%pyproject_save_files %{srcname}
-install -D -p -m 0644 %{SOURCE1} %{buildroot}%{_mandir}/man1/ytmusicapi.1
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst CONTRIBUTING.rst
+
+%files -n python3-ytmusicapi -f %{pyproject_files}
 %{_bindir}/ytmusicapi
-%{_mandir}/man1/ytmusicapi.1*
-
 
 %changelog
 %autochangelog

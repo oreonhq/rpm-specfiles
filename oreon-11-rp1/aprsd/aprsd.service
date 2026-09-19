@@ -1,0 +1,11 @@
+[Unit]
+Description=Amateur Radio And Internet Services Daemon
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/run/aprsd.pid
+ExecStart=/usr/bin/aprsd -d
+
+[Install]
+WantedBy=multi-user.target

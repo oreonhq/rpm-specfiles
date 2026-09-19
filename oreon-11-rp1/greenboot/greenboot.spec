@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:               greenboot
-Version:            0.15.8
-Release:            4%{?dist}
+Version:            0.15.9
+Release:            1%{?dist}
 Summary:            Generic Health Check Framework for systemd
 License:            LGPL-2.1-or-later
 

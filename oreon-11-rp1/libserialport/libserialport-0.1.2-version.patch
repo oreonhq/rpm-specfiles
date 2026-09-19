@@ -1,0 +1,45 @@
+From 8beca91f569db4b1ec98c1ffe8005f20162f0fd6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Thu, 16 Oct 2025 18:07:47 +0200
+Subject: [PATCH] update version info in libserialport.h
+
+---
+ libserialport.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/libserialport.h b/libserialport.h
+index 7467f74..6613a74 100644
+--- a/libserialport.h
++++ b/libserialport.h
+@@ -1714,10 +1714,10 @@ SP_API void sp_default_debug_handler(const char *format, ...);
+ #define SP_PACKAGE_VERSION_MINOR 1
+ 
+ /** The libserialport package 'micro' version number. */
+-#define SP_PACKAGE_VERSION_MICRO 1
++#define SP_PACKAGE_VERSION_MICRO 2
+ 
+ /** The libserialport package version ("major.minor.micro") as string. */
+-#define SP_PACKAGE_VERSION_STRING "0.1.1"
++#define SP_PACKAGE_VERSION_STRING "0.1.2"
+ 
+ /*
+  * Library/libtool version macros (can be used for conditional compilation).
+@@ -1727,13 +1727,13 @@ SP_API void sp_default_debug_handler(const char *format, ...);
+ #define SP_LIB_VERSION_CURRENT 1
+ 
+ /** The libserialport libtool 'revision' version number. */
+-#define SP_LIB_VERSION_REVISION 0
++#define SP_LIB_VERSION_REVISION 1
+ 
+ /** The libserialport libtool 'age' version number. */
+ #define SP_LIB_VERSION_AGE 1
+ 
+ /** The libserialport libtool version ("current:revision:age") as string. */
+-#define SP_LIB_VERSION_STRING "1:0:1"
++#define SP_LIB_VERSION_STRING "1:1:1"
+ 
+ /**
+  * Get the major libserialport package version number.
+-- 
+2.51.0
+

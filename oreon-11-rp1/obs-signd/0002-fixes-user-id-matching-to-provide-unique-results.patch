@@ -1,0 +1,99 @@
+From 242015e49c2050d8d3ab276140d3551dbfb7a025 Mon Sep 17 00:00:00 2001
+From: clime <clime@redhat.com>
+Date: Mon, 2 May 2016 21:05:43 +0200
+Subject: [PATCH 2/2] fixes user-id matching to provide unique results
+
+Supposing you have got these two keys (generated in this order) in the gpg homedir:
+pub   rsa2048/DB5F2C7E 2016-05-02 [SCEA]
+uid         [ultimate] abc (abc) <foobar@foobar.com>
+
+pub   rsa2048/9F129E90 2016-05-02 [SCEA]
+uid         [ultimate] abc (abc) <bar@foobar.com>
+
+and content of the phrases directory is the following:
+bar@foobar.com  foobar@foobar.com
+
+Then if you call /bin/sign -u bar@foobar.com -p, both keys are returned (| gpg2 --list-packets | grep 'user ID'):
+:user ID packet: "abc (abc) <foobar@foobar.com>"
+:user ID packet: "abc (abc) <bar@foobar.com>"
+
+If you try to sign a rpm like this: /bin/sign -u bar@foobar.com -r unsigned35.rpm, you will get it signed by foobar's key:
+$ rpm -Kv unsigned35.rpm
+unsigned35.rpm:
+    Header V3 RSA/SHA1 Signature, key ID db5f2c7e: NOKEY
+    Header SHA1 digest: OK (6289e7d8d0a73be107945df48cefb762a5036eb1)
+    V3 RSA/SHA1 Signature, key ID db5f2c7e: NOKEY
+    MD5 digest: OK (3c8cafddad94a1e75adf52c59203cd3a)
+
+If you generate a new key-pair with: /bin/sign -u bar@foobar.com -P test.priv -g rsa@2048 800 test test@test.cz > test.pub,
+then test.pub is again signed by foobar's key:
+
+(Here I generated new keys in a different gpg homedir to test this with gpg-1.4.20)
+pub   2048R/12390294 2016-05-02
+uid                  abc (abc) <foobar@foobar.com>
+
+pub   2048R/2CD4F3AA 2016-05-02
+uid                  abc (abc) <bar@foobar.com>
+
+$ cat test.pub | gpg --list-packets | grep 'signature packet'
+:signature packet: algo 1, keyid 8CCC8E826051E7F0
+:signature packet: algo 1, keyid 2F34AD5812390294
+(the second signature has foobar's short key id: 12390294)
+
+The problem is that without angle brackets (<>) around email, gpg performs substring match on user ids. With angle brackets, it performs exact matching,
+which produces the (I suppose) expected behaviour of signd.
+
+An alternative to this patch is to keep all phrases' file names in form <email> (so that you can then call sign client with -u '<email>')
+but I don't think this was intended.
+---
+ signd | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff -Naur obs-sign-2.8.4.orig/signd obs-sign-2.8.4/signd
+--- obs-sign-2.8.4.orig/signd	2024-12-28 19:59:44.659077236 +0100
++++ obs-sign-2.8.4/signd	2024-12-28 20:15:47.761092444 +0100
+@@ -883,7 +883,7 @@
+   my ($user, $purpose) = @_;
+   $purpose ||= 's';
+   $purpose = qr/$purpose/;
+-  my $lines = rungpg_fatal('/dev/null', undef, $gpg, '--locate-key', '--with-fingerprint', '--with-keygrip', '--with-colons', '--', $user);
++  my $lines = rungpg_fatal('/dev/null', undef, $gpg, '--locate-key', '--with-fingerprint', '--with-keygrip', '--with-colons', '--', "<$user>");
+   my $fpr;
+   my $grp;
+   my $keyid;
+@@ -1071,7 +1071,7 @@
+   my ($user, $data, $tdir) = @_;
+   my $file = $tdir ? "$tdir/privkey" : "$tmpdir/privkey.$$";
+   spew($file, $data);
+-  my $encodeddata = rungpg_fatal('/dev/null', $tdir || [ $file ], $gpg, '--batch', '--encrypt', '--no-verbose', '--no-secmem-warning', '--trust-model', 'always', '-o-', '-r', $user, $file);
++  my $encodeddata = rungpg_fatal('/dev/null', $tdir || [ $file ], $gpg, '--batch', '--encrypt', '--no-verbose', '--no-secmem-warning', '--trust-model', 'always', '-o-', '-r', "<$user>", $file);
+   unlink($file);
+   return $encodeddata;
+ }
+@@ -1225,7 +1225,7 @@
+   if ($isprivsign) {
+     push @args, '--allow-non-selfsigned-uid';
+   } else {
+-    push @args, '-u', $user;
++    push @args, '-u', "<$user>";
+   }
+   my $classtime;
+   if ($patchclasstime && !$replyv4 && ($hash =~ /\@([0-9a-fA-F]{10})$/s)) {
+@@ -1832,7 +1832,7 @@
+   rungpg_fatal("$phrases/$user", $tdir, $gpg, '--batch', '--no-secmem-warning',
+         @pinentrymode,
+         "--passphrase-fd=0", "--yes",
+-        "-u", $user,
++        "-u", "<$user>",
+         '--default-cert-level', '3',
+         "--keyring", $pubring,
+         '--edit-key', $keyid,
+@@ -1877,7 +1877,7 @@
+ sub cmd_pubkey {
+   my ($cmd, $user, $hashalgo, @args) = @_;
+   die("pubkey: no argument expected\n") if @args;
+-  my $pubkey = rungpg_fatal('/dev/null', undef, $gpg, '--export', '-a', $user);
++  my $pubkey = rungpg_fatal('/dev/null', undef, $gpg, '--export', '-a', "<$user>");
+   return (0, '', $pubkey);
+ }
+ 

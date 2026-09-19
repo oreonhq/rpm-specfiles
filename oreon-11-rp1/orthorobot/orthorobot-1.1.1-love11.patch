@@ -1,0 +1,656 @@
+From 540f355b5589baa85952d1cc3bc7d27edf49aa91 Mon Sep 17 00:00:00 2001
+From: Mystro256 <alexjnewt@hotmail.com>
+Date: Mon, 11 Jun 2018 13:58:31 -0400
+Subject: [PATCH] Support Love 11
+
+---
+ game.lua        | 54 ++++++++++++++++++++++-----------------------
+ intro.lua       |  6 ++---
+ levelbutton.lua | 58 ++++++++++++++++++++++++------------------------
+ main.lua        | 68 +++++++++++++++++++++++++++++++++++++++++----------------
+ menu.lua        | 24 ++++++++++----------
+ menubutton.lua  |  6 ++---
+ pausebutton.lua |  6 ++---
+ 7 files changed, 126 insertions(+), 96 deletions(-)
+
+diff --git a/game.lua b/game.lua
+index 9d1ff60..18648fa 100644
+--- a/game.lua
++++ b/game.lua
+@@ -341,7 +341,7 @@ end
+ function game_draw()
+ 	local lmap = map
+ 	
+-	love.graphics.setColor(fillcolor[1], fillcolor[2], fillcolor[3], 255)
++	lg_setColor(fillcolor[1], fillcolor[2], fillcolor[3], 255)
+ 	love.graphics.draw(scanlineimg, 0, math.mod(creditss*3, 5)-5)
+ 	
+ 	if fadetimert == 1 then
+@@ -396,14 +396,14 @@ function game_draw()
+ 	--always draw player in topdown
+ 	if perspective == "up" then
+ 		local x, y = convertGRDtoSCR(pl.drawx, pl.drawy, pl.drawz)
+-		love.graphics.setColor(255, 255, 255, 255*fadecolor)
++		lg_setColor(255, 255, 255, 255*fadecolor)
+ 		if won == false then
+ 			love.graphics.drawq(playerimg, playerquad[1], round(x), round(y+halfboxwidth*pitch*0.6), 0, playerscale, playerscale, 10, 20)
+-			love.graphics.setColor(255, 255, 255, 255*coinglowa)
++			lg_setColor(255, 255, 255, 255*coinglowa)
+ 			love.graphics.draw(coinglowimg, round(x), round(y+halfboxwidth*pitch*0.6), 0, playerscale/4, playerscale/4, 29, 89)
+ 		else
+ 			love.graphics.drawq(playerimg, playerquad[2], round(x), round(y+halfboxwidth*pitch*0.6), 0, playerscale, playerscale, 10, 20)
+-			love.graphics.setColor(0, 255, 0, 255*fadecolor)
++			lg_setColor(0, 255, 0, 255*fadecolor)
+ 			love.graphics.rectangle("fill", round(x)-2*playerscale, round(y+halfboxwidth*pitch*0.6)-16*playerscale-winwindowtimer/1*3*playerscale, 4*playerscale, winwindowtimer/1*3*playerscale)
+ 		end
+ 	end
+@@ -413,17 +413,17 @@ function game_draw()
+ 		alpha = fadecolor
+ 		width = 99 + (625-(1-((fadetimer3)/1.5))^2 * 625)
+ 		mygraphicssetScissor(149, 0, width+1, 101)
+-		love.graphics.setColor(0, 0, 0, 200*alpha)
++		lg_setColor(0, 0, 0, 200*alpha)
+ 		love.graphics.rectangle("fill", 150, 1, width, 100)
+-		love.graphics.setColor(255, 255, 255, 100*alpha)
++		lg_setColor(255, 255, 255, 100*alpha)
+ 		love.graphics.rectangle("fill", 159, 10, 80, 81)
+ 		local r, g, b = unpack(getrainbowcolor(math.mod(rainbowi+0.5, 1)))
+-		love.graphics.setColor(r, g, b, 200*alpha)
++		lg_setColor(r, g, b, 200*alpha)
+ 		love.graphics.rectangle("line", 150, 1, width, 100)
+ 		love.graphics.draw(textavatarimg, 159, 11)
+ 		
+ 		love.graphics.setFont(winwindowfont)
+-		love.graphics.setColor(190, 206, 248, alpha*255)
++		lg_setColor(190, 206, 248, alpha*255)
+ 		local s = string.sub(filetable[currentmap].text, 1, math.max(0, string.len(filetable[currentmap].text)*(texttimer/texttime)-1))
+ 		if math.mod(rainbowi, 0.1) > 0.033 then
+ 			s = s .. "_"
+@@ -431,13 +431,13 @@ function game_draw()
+ 		
+ 		love.graphics.printf( s, 260, 10, 604, "left" )
+ 		
+-		love.graphics.setColor(fillcolor[1], fillcolor[2], fillcolor[3], 255*alpha)
++		lg_setColor(fillcolor[1], fillcolor[2], fillcolor[3], 255*alpha)
+ 		love.graphics.draw(scanlineimg, 0, math.mod(creditss*3, 5)-5)
+ 		mygraphicssetScissor()
+ 	end
+ 	
+ 	local r, g, b = unpack(getrainbowcolor(math.mod(rainbowi+0.5, 1)))
+-	love.graphics.setColor(r, g, b, 200*fadecolor)
++	lg_setColor(r, g, b, 200*fadecolor)
+ 	
+ 	if fadetimer >= 0.5 and fadetimer2 < 0.5 then
+ 		love.graphics.draw(number3img, 436.5, 296-(fadetimer+fadetimer2-1)*2*(screenheight/2+175))
+@@ -446,14 +446,14 @@ function game_draw()
+ 	elseif fadetimer3 >= 0.5 and fadetimer3 < 1.5 then
+ 		love.graphics.draw(number1img, 474, 296-(fadetimer3-1)*2*(screenheight/2+175))
+ 	elseif fadetimer3 == 1.5 and fadetimer4 < 0.1 then
+-		love.graphics.setColor(r, g, b, 200*fadecolor)
++		lg_setColor(r, g, b, 200*fadecolor)
+ 		love.graphics.draw(gosmallimg, 311.5, 296)
+ 	elseif fadetimer4 >= 0.1 and fadetimer4 < 0.2 then
+-		love.graphics.setColor(r, g, b, 200*fadecolor)
++		lg_setColor(r, g, b, 200*fadecolor)
+ 		love.graphics.draw(gobigimg, 111.5, 208.5)
+ 	end
+ 	
+-	love.graphics.setColor(255, 255, 255, 200*fadecolor)
++	lg_setColor(255, 255, 255, 200*fadecolor)
+ 	love.graphics.setFont(winwindowfont)
+ 	love.graphics.draw(clockimg, 7, 7, 0, 2, 2)
+ 	love.graphics.draw(stepsimg, 7, 32, 0, 2, 2)
+@@ -467,9 +467,9 @@ function game_draw()
+ 	if pausemenutimer > 0 then
+ 		local height = (100-(1-((pausemenutimer)/1))^2 * 100)
+ 		mygraphicssetScissor(screenwidth/2-130-1, screenheight/2-height-1, 260+1, height*2+1)
+-		love.graphics.setColor(0, 0, 0, 200*fadecolor)
++		lg_setColor(0, 0, 0, 200*fadecolor)
+ 		love.graphics.rectangle("fill", screenwidth/2-130, screenheight/2-height, 259, height*2)
+-		love.graphics.setColor(255, 255, 255, 255*fadecolor)
++		lg_setColor(255, 255, 255, 255*fadecolor)
+ 		
+ 		love.graphics.setFont(winwindowtitlefont, 20)
+ 		love.graphics.print("Game Paused", screenwidth/2-111, screenheight/2-80)
+@@ -480,7 +480,7 @@ function game_draw()
+ 		pausebuttons["tomenu"]:draw()
+ 		
+ 		local r, g, b = unpack(getrainbowcolor(math.mod(rainbowi+0.5, 1)))
+-		love.graphics.setColor(r, g, b, 255*fadecolor)
++		lg_setColor(r, g, b, 255*fadecolor)
+ 		love.graphics.rectangle("line", screenwidth/2-130, screenheight/2-height, 260, height*2)
+ 		
+ 		mygraphicssetScissor()
+@@ -492,13 +492,13 @@ function game_draw()
+ 		mygraphicssetScissor(0, screenheight/2-height-1, screenwidth, height*2+1)
+ 		
+ 		if newstar then
+-			love.graphics.setColor(255, 255, 255, 150*fadecolor)
++			lg_setColor(255, 255, 255, 150*fadecolor)
+ 			love.graphics.draw(yaywonimg, screenwidth/2-210, screenheight/2-200)
+ 		end
+ 		
+-		love.graphics.setColor(0, 0, 0, 200*fadecolor)
++		lg_setColor(0, 0, 0, 200*fadecolor)
+ 		love.graphics.rectangle("fill", screenwidth/2-110, screenheight/2-height, 219, height*2)
+-		love.graphics.setColor(255, 255, 255, 255*fadecolor)
++		lg_setColor(255, 255, 255, 255*fadecolor)
+ 		
+ 		love.graphics.setFont(winwindowtitlefont, 20)
+ 		love.graphics.print("Level Done!", screenwidth/2-91, screenheight/2-200)
+@@ -524,27 +524,27 @@ function game_draw()
+ 		love.graphics.print(bestwarps or "-", screenwidth/2+30, screenheight/2+72)
+ 		
+ 		if timebeaten then
+-			love.graphics.setColor(0, 255, 0, 255*fadecolor)
++			lg_setColor(0, 255, 0, 255*fadecolor)
+ 		else
+-			love.graphics.setColor(255, 0, 0, 255*fadecolor)
++			lg_setColor(255, 0, 0, 255*fadecolor)
+ 		end
+ 		love.graphics.print(scoretime, screenwidth/2+30, screenheight/2-145)
+ 		
+ 		if stepsbeaten then
+-			love.graphics.setColor(0, 255, 0, 255*fadecolor)
++			lg_setColor(0, 255, 0, 255*fadecolor)
+ 		else
+-			love.graphics.setColor(255, 0, 0, 255*fadecolor)
++			lg_setColor(255, 0, 0, 255*fadecolor)
+ 		end
+ 		love.graphics.print(scoresteps, screenwidth/2+30, screenheight/2-45)
+ 		
+ 		if warpsbeaten then
+-			love.graphics.setColor(0, 255, 0, 255*fadecolor)
++			lg_setColor(0, 255, 0, 255*fadecolor)
+ 		else
+-			love.graphics.setColor(255, 0, 0, 255*fadecolor)
++			lg_setColor(255, 0, 0, 255*fadecolor)
+ 		end
+ 		love.graphics.print(scorewarps, screenwidth/2+30, screenheight/2+55)
+ 		
+-		love.graphics.setColor(255, 255, 255, 255*fadecolor)
++		lg_setColor(255, 255, 255, 255*fadecolor)
+ 		love.graphics.print("Goal:", screenwidth/2-70, screenheight/2-111)
+ 		love.graphics.print(goaltime, screenwidth/2+30, screenheight/2-111)
+ 		love.graphics.print("Goal:", screenwidth/2-70, screenheight/2-11)
+@@ -559,7 +559,7 @@ function game_draw()
+ 		pausebuttons["return"]:draw()
+ 		
+ 		local r, g, b = unpack(getrainbowcolor(math.mod(rainbowi+0.5, 1)))
+-		love.graphics.setColor(r, g, b, 255*fadecolor)
++		lg_setColor(r, g, b, 255*fadecolor)
+ 		love.graphics.rectangle("line", screenwidth/2-110, screenheight/2-height, 220, height*2)
+ 		
+ 		mygraphicssetScissor()
+diff --git a/intro.lua b/intro.lua
+index e5636b7..b2a9c70 100644
+--- a/intro.lua
++++ b/intro.lua
+@@ -34,7 +34,7 @@ function intro_draw()
+ 			a = (1-(introprogress-(introduration-introfadetime))/introfadetime) * 255
+ 		end
+ 		
+-		love.graphics.setColor(255, 255, 255, a)
++		lg_setColor(255, 255, 255, a)
+ 		
+ 		if introprogress > introfadetime+0.3 and introprogress < introduration - introfadetime then
+ 			local y = (introprogress-0.2-introfadetime) / (introduration-2*introfadetime) * 206 * 5
+@@ -48,7 +48,7 @@ function intro_draw()
+ 			love.graphics.draw(logo, screenwidth/2-142, screenheight/2-150)
+ 		end
+ 	end
+-	love.graphics.setColor(fillcolor[1], fillcolor[2], fillcolor[3], 255)
++	lg_setColor(fillcolor[1], fillcolor[2], fillcolor[3], 255)
+ 	love.graphics.draw(scanlineimg, 0, math.mod(creditss*3, 5)-5)
+ end
+ 
+@@ -61,4 +61,4 @@ function intro_keypressed()
+ 	stabsound:stop()
+ 	menu_load()
+ end
+-	
+\ No newline at end of file
++
+diff --git a/levelbutton.lua b/levelbutton.lua
+index 67ec5a4..438523a 100644
+--- a/levelbutton.lua
++++ b/levelbutton.lua
+@@ -60,7 +60,7 @@ function levelbutton:draw()
+ 		(not filetable[self.i].goalsteps or (filetable[self.i].highsteps and filetable[self.i].highsteps <= filetable[self.i].goalsteps)) and
+ 		(not filetable[self.i].goalwarps or (filetable[self.i].highwarps and filetable[self.i].highwarps <= filetable[self.i].goalwarps)) and
+ 		(#filetable[self.i].collectedcoins >= filetable[self.i].coins) then
+-			love.graphics.setColor(255, 255, 255, 150*fadecolor)
++			lg_setColor(255, 255, 255, 150*fadecolor)
+ 			love.graphics.draw(yayimg, self.x-self.width/2+.5, self.y+1)
+ 		end
+ 		
+@@ -71,20 +71,20 @@ function levelbutton:draw()
+ 		g = g + (tg-g)*(self.value*.7+.3)
+ 		b = b + (tb-b)*(self.value*.7+.3)
+ 		
+-		love.graphics.setColor(r, g, b, 200*fadecolor)
++		lg_setColor(r, g, b, 200*fadecolor)
+ 		love.graphics.rectangle("fill", self.x-self.width/2, self.y+self.height-(self.height-30)*self.value, self.width, (self.height-30)*self.value)
+ 		
+ 		love.graphics.setFont(levelselectfont)
+ 		mygraphicssetScissor(self.x-self.width/2+menuoffsetx+self.width/2*self.value, self.y+menuoffset, round(self.width-self.width*self.value), self.height*0.6)
+-		love.graphics.setColor(r, g, b, 100*fadecolor)
++		lg_setColor(r, g, b, 100*fadecolor)
+ 		love.graphics.rectangle("fill", self.x-self.width/2, self.y, self.width, 30)
+-		love.graphics.setColor(0, 0, 0, 255*fadecolor)
++		lg_setColor(0, 0, 0, 255*fadecolor)
+ 		if self.text then
+ 			love.graphics.print(self.text, self.x - self.textwidth/2+6, self.y-2)
+ 		end
+ 		mygraphicssetScissor()
+ 		
+-		love.graphics.setColor(r, g, b, 255*fadecolor)
++		lg_setColor(r, g, b, 255*fadecolor)
+ 		
+ 		mygraphicssetScissor(round(self.x-self.width/2+menuoffsetx), self.y+menuoffset, round(self.width/2*self.value), self.height*0.6)
+ 		if self.text then
+@@ -101,84 +101,84 @@ function levelbutton:draw()
+ 		
+ 		love.graphics.setFont(winwindowfont)
+ 		
+-		love.graphics.setColor(255, 255, 255, 255*fadecolor)
++		lg_setColor(255, 255, 255, 255*fadecolor)
+ 		love.graphics.draw(clockimg, self.x-self.width/2+6, self.y+34, 0, 2, 2)
+ 		love.graphics.draw(stepsimg, self.x-self.width/2+70, self.y+34, 0, 2, 2)
+ 		love.graphics.draw(warpsimg, self.x-self.width/2+134, self.y+34, 0, 2, 2)
+ 		
+ 		if not filetable[self.i].hightime then
+-			love.graphics.setColor(255, 255, 255, 255*fadecolor)
++			lg_setColor(255, 255, 255, 255*fadecolor)
+ 		elseif (not filetable[self.i].goaltime and filetable[self.i].hightime) or  filetable[self.i].hightime <= filetable[self.i].goaltime then
+-			love.graphics.setColor(0, 255, 0, 255*fadecolor)
++			lg_setColor(0, 255, 0, 255*fadecolor)
+ 		else
+-			love.graphics.setColor(255, 0, 0, 255*fadecolor)
++			lg_setColor(255, 0, 0, 255*fadecolor)
+ 		end
+ 		love.graphics.print(filetable[self.i].hightime or "-", self.x-self.width/2+30, self.y+50)
+ 		
+ 		if not filetable[self.i].highsteps then
+-			love.graphics.setColor(255, 255, 255, 255*fadecolor)
++			lg_setColor(255, 255, 255, 255*fadecolor)
+ 		elseif (not filetable[self.i].goalsteps and filetable[self.i].highsteps) or filetable[self.i].highsteps <= filetable[self.i].goalsteps then
+-			love.graphics.setColor(0, 255, 0, 255*fadecolor)
++			lg_setColor(0, 255, 0, 255*fadecolor)
+ 		else
+-			love.graphics.setColor(255, 0, 0, 255*fadecolor)
++			lg_setColor(255, 0, 0, 255*fadecolor)
+ 		end
+ 		love.graphics.print(filetable[self.i].highsteps or "-", self.x-self.width/2+94, self.y+50)
+ 		
+ 		if not filetable[self.i].highwarps then
+-			love.graphics.setColor(255, 255, 255, 255*fadecolor)
++			lg_setColor(255, 255, 255, 255*fadecolor)
+ 		elseif (not filetable[self.i].goalwarps and filetable[self.i].highwarps) or filetable[self.i].highwarps <= filetable[self.i].goalwarps then
+-			love.graphics.setColor(0, 255, 0, 255*fadecolor)
++			lg_setColor(0, 255, 0, 255*fadecolor)
+ 		else
+-			love.graphics.setColor(255, 0, 0, 255*fadecolor)
++			lg_setColor(255, 0, 0, 255*fadecolor)
+ 		end
+ 		love.graphics.print(filetable[self.i].highwarps or "-", self.x-self.width/2+158, self.y+50)
+ 		
+-		love.graphics.setColor(255, 255, 255, 255*fadecolor)
++		lg_setColor(255, 255, 255, 255*fadecolor)
+ 		love.graphics.print(filetable[self.i].goaltime or "-", self.x-self.width/2+30, self.y+30)
+-		love.graphics.setColor(255, 255, 255, 255*fadecolor)
++		lg_setColor(255, 255, 255, 255*fadecolor)
+ 		love.graphics.print(filetable[self.i].goalsteps or "-", self.x-self.width/2+94, self.y+30)
+-		love.graphics.setColor(255, 255, 255, 255*fadecolor)
++		lg_setColor(255, 255, 255, 255*fadecolor)
+ 		love.graphics.print(filetable[self.i].goalwarps or "-", self.x-self.width/2+158, self.y+30)
+ 		
+-		love.graphics.setColor(100+self.value*150, 100+self.value*150, 100+self.value*150, 200*fadecolor)
++		lg_setColor(100+self.value*150, 100+self.value*150, 100+self.value*150, 200*fadecolor)
+ 		love.graphics.draw(coinsbackimg, self.x+self.width/2, self.y)
+-		love.graphics.setColor(255, 255, 255, 255*fadecolor)
++		lg_setColor(255, 255, 255, 255*fadecolor)
+ 		
+ 		if #filetable[self.i].collectedcoins >= filetable[self.i].coins then
+-			love.graphics.setColor(255, 255, 255, 255*fadecolor)
++			lg_setColor(255, 255, 255, 255*fadecolor)
+ 		else
+-			love.graphics.setColor(50, 50, 50, 255*fadecolor)
++			lg_setColor(50, 50, 50, 255*fadecolor)
+ 		end
+ 		
+ 		love.graphics.draw(coinimg, self.x+self.width/2-14, self.y-2+creditsr*30, 0, 3, 3)
+ 		
+ 		if #filetable[self.i].collectedcoins >= filetable[self.i].coins then
+-			love.graphics.setColor(0, 255, 0, 255*fadecolor)
++			lg_setColor(0, 255, 0, 255*fadecolor)
+ 		else
+-			love.graphics.setColor(255, 0, 0, 255*fadecolor)
++			lg_setColor(255, 0, 0, 255*fadecolor)
+ 		end
+ 		
+ 		love.graphics.setFont(coinsfont)
+ 		love.graphics.print(#filetable[self.i].collectedcoins .. "/" .. filetable[self.i].coins, self.x+self.width/2+17-self.coinwidth/2, self.y+50)
+ 		
+ 		local r, g, b = unpack(getrainbowcolor(math.mod(rainbowi+0.5+self.value*0.5, 1)))
+-		love.graphics.setColor(r, g, b, 255*fadecolor)
++		lg_setColor(r, g, b, 255*fadecolor)
+ 		love.graphics.rectangle("line", round(self.x-self.width/2)-1, round(self.y)-1, self.width+2, self.height+2)
+ 	else		
+ 		local r, g, b = 200, 200, 200
+ 		
+ 		love.graphics.setFont(levelselectfont)
+-		love.graphics.setColor(r, g, b, 100*fadecolor)
++		lg_setColor(r, g, b, 100*fadecolor)
+ 		love.graphics.rectangle("fill", self.x-self.width/2, self.y, self.width, 30)
+-		love.graphics.setColor(0, 0, 0, 255*fadecolor)
++		lg_setColor(0, 0, 0, 255*fadecolor)
+ 		if self.text then
+ 			love.graphics.print(self.text, self.x - self.textwidth/2+6, self.y-2)
+ 		end
+ 		
+-		love.graphics.setColor(100, 100, 100, 100*fadecolor)
++		lg_setColor(100, 100, 100, 100*fadecolor)
+ 		love.graphics.draw(coinsbackimg, self.x+self.width/2, self.y)
+ 		
+-		love.graphics.setColor(r, g, b, 100*fadecolor)
++		lg_setColor(r, g, b, 100*fadecolor)
+ 		love.graphics.rectangle("line", round(self.x-self.width/2)-1, round(self.y)-1, self.width+2, self.height+2)
+ 	end
+ end
+diff --git a/main.lua b/main.lua
+index 9818da8..4cbb102 100644
+--- a/main.lua
++++ b/main.lua
+@@ -24,8 +24,26 @@ if not love.graphics.drawq then
+ 	love.graphics.drawq = love.graphics.draw
+ end
+ 
++function filesexists(file)
++	if major >= 11 then
++		return love.filesystem.getInfo(file) ~= nil
++	else
++		return love.filesystem.exists(file)
++	end
++end
++
++function lg_setColor(r, g, b, a)
++	if major >= 11 then
++		if a == nil then
++			a = 255
++		end
++		love.graphics.setColor(r/255, g/255, b/255, a/255)
++	else
++		love.graphics.setColor(r, g, b, a)
++	end
++end
++
+ local lg_polygon = love.graphics.polygon
+-local lg_setColor = love.graphics.setColor
+ 
+ function love.load()
+ 	require "intro"
+@@ -138,17 +156,17 @@ function love.load()
+ 	ssssimg = love.graphics.newImage("ssss.png");ssssimg:setFilter("nearest", "nearest")
+ 	accentimg = love.graphics.newImage("accent.png");accentimg:setFilter("nearest", "nearest")
+ 	
+-	menumusic = love.audio.newSource("sounds/menu_back.ogg")
++	menumusic = love.audio.newSource("sounds/menu_back.ogg", "stream")
+ 	menumusic:setLooping(true)
+ 	menumusic:setVolume(0.01)
+-	gamemusic = love.audio.newSource("sounds/game_back.ogg")
++	gamemusic = love.audio.newSource("sounds/game_back.ogg", "stream")
+ 	gamemusic:setLooping(true)
+-	stabsound = love.audio.newSource("sounds/stab.ogg")
++	stabsound = love.audio.newSource("sounds/stab.ogg", "static")
+ 	
+-	backsound = love.audio.newSource("sounds/back.ogg")
+-	proceedsound = love.audio.newSource("sounds/proceed.ogg")
+-	winningsound = love.audio.newSource("sounds/winning.ogg")
+-	coinsound = love.audio.newSource("sounds/coin.ogg")
++	backsound = love.audio.newSource("sounds/back.ogg", "static")
++	proceedsound = love.audio.newSource("sounds/proceed.ogg", "static")
++	winningsound = love.audio.newSource("sounds/winning.ogg", "static")
++	coinsound = love.audio.newSource("sounds/coin.ogg", "static")
+ 	
+ 	loadlevels()
+ 	scale = 1
+@@ -345,7 +363,7 @@ function loadmap(name)
+ 		name = string.sub(name, 1, -5)
+ 	end
+ 	
+-	if love.filesystem.exists("maps/" .. name .. ".txt") == false or love.filesystem.exists("maps/" .. name .. ".png") == false then
++	if filesexists("maps/" .. name .. ".txt") == false or filesexists("maps/" .. name .. ".png") == false then
+ 		return false
+ 	end
+ 	
+@@ -405,6 +423,12 @@ function loadmap(name)
+ 		for z = 1, mapdepth do
+ 			for x = 1, mapwidth do
+ 				local r, g, b, a = imgdata:getPixel( x-1, z+(y-1)*mapdepth-1 )
++				if major >= 11 then
++					r = r * 255;
++					g = g * 255;
++					b = b * 255;
++					a = a * 255;
++				end
+ 				
+ 				for i = 1, #tilecolors do
+ 					if r == tilecolors[i][1] and g == tilecolors[i][2] and b == tilecolors[i][3] then
+@@ -452,7 +476,7 @@ function loadmenumap(name)
+ 		name = string.sub(name, 1, -5)
+ 	end
+ 	
+-	if love.filesystem.exists("maps/" .. name .. ".txt") == false or love.filesystem.exists("maps/" .. name .. ".png") == false then
++	if filesexists("maps/" .. name .. ".txt") == false or filesexists("maps/" .. name .. ".png") == false then
+ 		return false
+ 	end
+ 	
+@@ -497,6 +521,12 @@ function loadmenumap(name)
+ 		for z = 1, menumapdepth do
+ 			for x = 1, menumapwidth do
+ 				local r, g, b, a = imgdata:getPixel( x-1, z+(y-1)*menumapdepth-1 )
++				if major >= 11 then
++					r = r * 255;
++					g = g * 255;
++					b = b * 255;
++					a = a * 255;
++				end
+ 				
+ 				for i = 1, #tilecolors do
+ 					if r == tilecolors[i][1] and g == tilecolors[i][2] and b == tilecolors[i][3] then
+@@ -559,14 +589,14 @@ function drawtile(cox, coy, coz, tile, xd, yd, zd)
+ 		if perspective ~= "up" then
+ 			if playerx == cox and playery == coy and playerz == coz then
+ 				local x, y = convertGRDtoSCR(pl.drawx, pl.drawy, pl.drawz)
+-				love.graphics.setColor(255, 255, 255, 255*fadecolor)
++				lg_setColor(255, 255, 255, 255*fadecolor)
+ 				if won == false then
+ 					love.graphics.drawq(playerimg, playerquad[1], round(x), round(y+halfboxwidth*pitch*0.6), 0, playerscale, playerscale, 10, 20)
+-					love.graphics.setColor(255, 255, 255, 255*coinglowa)
++					lg_setColor(255, 255, 255, 255*coinglowa)
+ 					love.graphics.draw(coinglowimg, round(x), round(y+halfboxwidth*pitch*0.6), 0, playerscale/4, playerscale/4, 29, 89)
+ 				else
+ 					love.graphics.drawq(playerimg, playerquad[2], round(x), round(y+halfboxwidth*pitch*0.6), 0, playerscale, playerscale, 10, 20)
+-					love.graphics.setColor(0, 255, 0, 255*fadecolor)
++					lg_setColor(0, 255, 0, 255*fadecolor)
+ 					love.graphics.rectangle("fill", round(x)-2*playerscale, round(y+halfboxwidth*pitch*0.6)-16*playerscale-winwindowtimer/1*3*playerscale, 4*playerscale, winwindowtimer/1*3*playerscale)
+ 				end
+ 			end
+@@ -576,7 +606,7 @@ function drawtile(cox, coy, coz, tile, xd, yd, zd)
+ 	for i, v in pairs(coins) do
+ 		if v[1] == cox and v[2] == coy and v[3] == coz then
+ 			local x, y = convertGRDtoSCR(cox, coy, coz)
+-			love.graphics.setColor(255, 255, 255, 255*fadecolor)
++			lg_setColor(255, 255, 255, 255*fadecolor)
+ 			love.graphics.draw(coinimg, round(x), round(y+halfboxwidth*pitch*0.6-(math.sin(rainbowi*pi2)+1)*halfboxwidth/6+3*playerscale), 0, playerscale, playerscale, 10, 20)
+ 		end
+ 	end
+@@ -737,7 +767,7 @@ function round(num, idp)
+ end
+ 
+ function loadsave()
+-	if not love.filesystem.exists("save.txt") then
++	if not filesexists("save.txt") then
+ 		return
+ 	end
+ 	
+@@ -830,14 +860,14 @@ end
+ 
+ function drawblock(x, y, width, height, fillcolor, outlinecolor, r)
+ 	if math.mod((r or 0), math.pi/2) ~= 0 then --Rotated
+-		love.graphics.setColor(unpack(fillcolor))
++		lg_setColor(unpack(fillcolor))
+ 		rotatedsquare("fill", x+width/2+.5, y+height/2+.5, r or 0, width-1)
+-		love.graphics.setColor(unpack(outlinecolor))
++		lg_setColor(unpack(outlinecolor))
+ 		rotatedsquare("line", x+width/2+.5, y+height/2+.5, r or 0, width)
+ 	else --not rotated
+-		love.graphics.setColor(unpack(fillcolor))
++		lg_setColor(unpack(fillcolor))
+ 		love.graphics.rectangle("fill", x+1, y+1, width-1, height-1)
+-		love.graphics.setColor(unpack(outlinecolor))
++		lg_setColor(unpack(outlinecolor))
+ 		love.graphics.rectangle("line", x+.5, y+.5, width, height)
+ 	end
+ end
+diff --git a/menu.lua b/menu.lua
+index 219943b..c24bc1e 100644
+--- a/menu.lua
++++ b/menu.lua
+@@ -273,7 +273,7 @@ end
+ function menu_draw()
+ 	love.graphics.translate(menuoffsetx, menuoffset)
+ 	
+-	love.graphics.setColor(100, 100, 100, 100*fadecolor)
++	lg_setColor(100, 100, 100, 100*fadecolor)
+ 	love.graphics.rectangle("fill", 30, 30, 964, 230)
+ 	
+ 	gridfadecolor = fadecolor
+@@ -348,7 +348,7 @@ function menu_draw()
+ 	end
+ 	
+ 	if menuoffset > 0 and menuoffsetx < 0 and menuoffsett == 500 then --win screen
+-		love.graphics.setColor(255, 255, 255, 255*fadecolor)
++		lg_setColor(255, 255, 255, 255*fadecolor)
+ 		for x = 2, 6 do --0-4
+ 			love.graphics.draw(winplayerimg, screenwidth+screenwidth/7*x, screenheight/5-500, math.sin(creditss+(x-2)/16*math.pi*2)*0.2, 1, 1, 42, 66)
+ 		end
+@@ -364,7 +364,7 @@ function menu_draw()
+ 		love.graphics.setFont(helpfont)
+ 		
+ 		local r, g, b = unpack(getrainbowcolor(math.mod(rainbowi, 1)))
+-		love.graphics.setColor(r, g, b, 255*fadecolor)
++		lg_setColor(r, g, b, 255*fadecolor)
+ 		for i = 1, #wintext do
+ 			love.graphics.print(wintext[i], screenwidth+screenwidth*0.5 - helpfont:getWidth(wintext[i])/2, i*45+150-500)
+ 		end
+@@ -382,14 +382,14 @@ function menu_draw()
+ 		love.graphics.translate(screenwidth+screenwidth/2, (#creditstext-1)*100-70)
+ 		love.graphics.rotate(creditsr)
+ 		love.graphics.translate(-screenwidth-screenwidth/2, -(#creditstext-1)*100+70)
+-		love.graphics.setColor(100, 100, 100, 100*fadecolor)
++		lg_setColor(100, 100, 100, 100*fadecolor)
+ 		love.graphics.rectangle("fill", screenwidth*1.5-480, 50, 960, 510)
+ 		
+ 		for i = 1, #creditstext do
+-			love.graphics.setColor(255, 255, 255, 255*fadecolor)
++			lg_setColor(255, 255, 255, 255*fadecolor)
+ 			if i == 3 then
+ 				local r, g, b = unpack(getrainbowcolor(math.mod(rainbowi+.66, 1)))
+-				love.graphics.setColor(r, g, b, 255*fadecolor)
++				lg_setColor(r, g, b, 255*fadecolor)
+ 				love.graphics.draw(accentimg, screenwidth*1.5+100, 266)
+ 			end
+ 			love.graphics.print(creditstext[i], screenwidth*1.5 - menufont:getWidth(creditstext[i])/2, i*100-50)
+@@ -400,7 +400,7 @@ function menu_draw()
+ 		love.graphics.setFont(menufont)
+ 		
+ 		local r, g, b = unpack(getrainbowcolor(math.mod(rainbowi+.33, 1)))
+-		love.graphics.setColor(r, g, b, 255*fadecolor)
++		lg_setColor(r, g, b, 255*fadecolor)
+ 		love.graphics.print("Saso", screenwidth*1.5 + 230, 350)
+ 		love.graphics.draw(ssssimg, screenwidth*1.5+307, 366)
+ 		
+@@ -413,12 +413,12 @@ function menu_draw()
+ 	if menuoffsetx > 0 then --HELP
+ 		--[[love.graphics.setFont(helpfont)
+ 		for i = 1, #helptext do
+-			love.graphics.setColor(255, 255, 255, 255*fadecolor)
++			lg_setColor(255, 255, 255, 255*fadecolor)
+ 			love.graphics.print(helptext[i], -screenwidth*0.5 - helpfont:getWidth(helptext[i])/2, (i-1)*65+20)
+ 		end
+ 		love.graphics.setFont(menufont)--]]
+ 		
+-		love.graphics.setColor(255, 255, 255, 255*fadecolor)
++		lg_setColor(255, 255, 255, 255*fadecolor)
+ 		love.graphics.draw(helptextimg, -screenwidth, 0)
+ 		love.graphics.draw(helpplayerimg, -350, 60, creditsr, 1, 1, 28, 64)
+ 		love.graphics.draw(helpgoalimg, -200, 80)
+@@ -434,10 +434,10 @@ function menu_draw()
+ 	sizebutton:draw()
+ 	
+ 	love.graphics.setFont(winwindowfont)
+-	love.graphics.setColor(255, 255, 255, 100*fadecolor)
++	lg_setColor(255, 255, 255, 100*fadecolor)
+ 	love.graphics.print("2011 Stabyourself.net (v1.1.1)", screenwidth/2-140, 730)
+ 	
+-	love.graphics.setColor(fillcolor[1], fillcolor[2], fillcolor[3], 255)
++	lg_setColor(fillcolor[1], fillcolor[2], fillcolor[3], 255)
+ 	love.graphics.draw(scanlineimg, 0, math.mod(creditss*3, 5)-5)
+ end
+ 
+@@ -655,4 +655,4 @@ function menu_togglesound()
+ 		pausebuttons["menutogglesound"].text = "Sound ON"
+ 		pausebuttons["menutogglesound"].textwidth = levelselectfont:getWidth(pausebuttons["menutogglesound"].text)
+ 	end
+-end
+\ No newline at end of file
++end
+diff --git a/menubutton.lua b/menubutton.lua
+index 93a73d3..8c107da 100644
+--- a/menubutton.lua
++++ b/menubutton.lua
+@@ -45,13 +45,13 @@ function menubutton:draw()
+ 	love.graphics.setFont(menufont)
+ 	
+ 	mygraphicssetScissor(self.x-self.width/2-self.xmargin+menuoffsetx, self.y-self.height/2+menuoffset, (self.width+self.xmargin*2)*self.value, self.height)
+-	love.graphics.setColor(r, g, b, fadecolor*255)
++	lg_setColor(r, g, b, fadecolor*255)
+ 	love.graphics.rectangle("fill", self.x-self.width/2-self.xmargin, self.y-self.height/2, (self.width+self.xmargin*2)*self.value, self.height)
+-	love.graphics.setColor(0, 0, 0, fadecolor*255)
++	lg_setColor(0, 0, 0, fadecolor*255)
+ 	love.graphics.print(self.text, self.x-self.width/2, self.y-self.height/2+self.textyplus)
+ 	
+ 	mygraphicssetScissor(self.x-self.width/2-self.xmargin+(self.width+self.xmargin*2)*self.value+menuoffsetx, self.y-self.height/2+menuoffset, self.width+self.xmargin*2, self.height)
+-	love.graphics.setColor(r, g, b, fadecolor*255)
++	lg_setColor(r, g, b, fadecolor*255)
+ 	love.graphics.print(self.text, self.x-self.width/2, self.y-self.height/2+self.textyplus)
+ 	
+ 	mygraphicssetScissor()
+diff --git a/pausebutton.lua b/pausebutton.lua
+index 6d98584..a1b6f94 100644
+--- a/pausebutton.lua
++++ b/pausebutton.lua
+@@ -47,15 +47,15 @@ function pausebutton:draw()
+ 	
+ 	love.graphics.setFont(levelselectfont)
+ 	mygraphicssetScissor(self.x-self.width/2+self.width/2*self.value, scissory or self.y, round(self.width-self.width*self.value), scissorheight or self.height)
+-	love.graphics.setColor(r, g, b, 100*fadecolor)
++	lg_setColor(r, g, b, 100*fadecolor)
+ 	love.graphics.rectangle("fill", self.x-self.width/2, self.y, self.width, self.height)
+-	love.graphics.setColor(0, 0, 0, 255*fadecolor)
++	lg_setColor(0, 0, 0, 255*fadecolor)
+ 	if self.text then
+ 		love.graphics.print(self.text, self.x - self.textwidth/2+1, self.y-7)
+ 	end
+ 	mygraphicssetScissor()
+ 	
+-	love.graphics.setColor(r, g, b, 255*fadecolor)
++	lg_setColor(r, g, b, 255*fadecolor)
+ 	
+ 	mygraphicssetScissor(round(self.x-self.width/2), scissory or self.y, round(self.width/2*self.value), scissorheight or self.height)
+ 	if self.text then
+-- 
+2.14.4
+

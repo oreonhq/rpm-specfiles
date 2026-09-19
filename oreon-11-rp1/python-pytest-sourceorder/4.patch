@@ -1,0 +1,25 @@
+From e8f62113b16bf19f35121cd88b06cfdf88ca7d4d Mon Sep 17 00:00:00 2001
+From: Tomáš Hrnčiar <thrnciar@redhat.com>
+Date: Nov 13 2025 10:13:53 +0000
+Subject: Remove nose-style generator test for compatibility with pytest 8.4+
+
+
+Fixes: #3
+
+---
+
+diff --git a/test_sourceorder.py b/test_sourceorder.py
+index 6d7b955..cbabe31 100644
+--- a/test_sourceorder.py
++++ b/test_sourceorder.py
+@@ -69,9 +69,5 @@ class TestUnrelated(object):
+     def test_b(self):
+         pass
+ 
+-    def test_nose_generator(self):
+-        for i in range(2):
+-            yield (lambda x: i, i)
+-
+ def test_unrelated():
+     pass
+

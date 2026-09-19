@@ -1,0 +1,101 @@
+--- code/latte/ExponentialSubst.cpp.orig	2018-09-02 16:59:01.000000000 -0600
++++ code/latte/ExponentialSubst.cpp	2021-03-18 14:56:02.570800510 -0600
+@@ -57,7 +57,6 @@ mpq_vector
+ computeExponentialResidueWeights(const vec_ZZ &generic_vector,
+ 				 mpz_class &prod_ray_scalar_products,
+ 				 const listCone *cone, int numOfVars)
+-  throw(NotGenericException)
+ {
+   // Compute dimension; can be smaller than numOfVars
+   int dimension = 0;
+@@ -95,7 +94,6 @@ computeExponentialResidueWeights(const v
+ mpq_vector
+ computeExponentialResidueWeights(const vec_ZZ &generic_vector,
+ 				 const listCone *cone, int numOfVars)
+-  throw(NotGenericException)
+ {
+   mpz_class prod_ray_scalar_products;
+   return computeExponentialResidueWeights(generic_vector,
+--- code/latte/ExponentialSubst.h.orig	2018-09-02 16:59:01.000000000 -0600
++++ code/latte/ExponentialSubst.h	2021-03-18 14:57:13.226675411 -0600
+@@ -58,13 +58,11 @@ public:
+ mpq_vector /* FIXME: This version can probably go away */
+ computeExponentialResidueWeights(const vec_ZZ &generic_vector,
+ 				 mpz_class &prod_ray_scalar_products,
+-				 const listCone *cone, int numOfVars)
+-  throw(NotGenericException);
++				 const listCone *cone, int numOfVars);
+ 
+ mpq_vector
+ computeExponentialResidueWeights(const vec_ZZ &generic_vector,
+-				 const listCone *cone, int numOfVars)
+-  throw(NotGenericException);
++				 const listCone *cone, int numOfVars);
+ 
+ ZZ
+ scalar_power(const vec_ZZ &generic_vector,
+--- code/latte/LattException.cpp.orig	2018-09-02 16:59:01.000000000 -0600
++++ code/latte/LattException.cpp	2021-03-18 14:56:44.818725701 -0600
+@@ -8,7 +8,7 @@
+ #include "LattException.h"
+ 
+ 
+-LattException::~LattException() throw() {}
++LattException::~LattException() noexcept {}
+ 
+ LattException::LattException(UserError ue, const char * file, const int line, const bool b, const char * message)
+ {
+@@ -56,7 +56,7 @@ string  LattException::printErrorMessage
+ 	return out.str();
+ }
+ 
+-const char* LattException::what() const throw()
++const char* LattException::what() const noexcept 
+ {
+ 	string s = "";
+ 	if ( LATTEXCEPTION_PRINTSTATUS || printStatus == 1 )
+--- code/latte/LattException.h.orig	2018-09-02 16:59:01.000000000 -0600
++++ code/latte/LattException.h	2021-03-18 14:56:24.218762178 -0600
+@@ -79,10 +79,10 @@ public:
+ 
+ 
+ 
+-	virtual ~LattException() throw();
++	virtual ~LattException() noexcept;
+ 	LattException(UserError ue, const char * file, const int line, const bool printException, const char * message = "");
+ 
+-	virtual const char* what() const throw();
++	virtual const char* what() const noexcept;
+ 
+ private:
+ 	string printErrorMessages() const;
+--- code/latte/sqlite/IntegrationDB.cpp.orig	2018-09-01 20:47:50.000000000 -0600
++++ code/latte/sqlite/IntegrationDB.cpp	2021-03-18 14:58:01.795589436 -0600
+@@ -1277,7 +1277,7 @@ void  IntegrationDB::insertSpecficPolyto
+  * @parm filePath: to the latte-style polynomial.
+  * @return rowid of the inserted row.
+  */
+-int IntegrationDB::insertPolynomial(int dim, int degree, const char*filePath) throw(SqliteDBexception)
++int IntegrationDB::insertPolynomial(int dim, int degree, const char*filePath)
+ {
+ 	if ( doesPolynomialExist(filePath))
+ 		throw SqliteDBexception(string("insertPolynomial::Polynomial ")+filePath+" already exist");
+--- code/latte/sqlite/SqliteDB.cpp.orig	2018-09-01 20:47:50.000000000 -0600
++++ code/latte/sqlite/SqliteDB.cpp	2021-03-18 14:57:45.362618525 -0600
+@@ -8,11 +8,11 @@
+ 
+ 
+ //A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+-SqliteDBexception::SqliteDBexception() throw() {}
+-SqliteDBexception::SqliteDBexception(const char* s) throw() {msg = s;}
+-SqliteDBexception::SqliteDBexception (const string s) throw() {msg = s;}
+-SqliteDBexception::~SqliteDBexception() throw() {}
+-const char* SqliteDBexception::what() const  throw() {return msg.c_str();}
++SqliteDBexception::SqliteDBexception() noexcept {}
++SqliteDBexception::SqliteDBexception(const char* s) noexcept {msg = s;}
++SqliteDBexception::SqliteDBexception (const string s) noexcept {msg = s;}
++SqliteDBexception::~SqliteDBexception() noexcept {}
++const char* SqliteDBexception::what() const  noexcept {return msg.c_str();}
+ 
+ 
+ 

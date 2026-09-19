@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e27779db83170b280381934eb276d2d1caed452284289e9371cd2b9c1fd1f29a
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@
 Name:           kdevelop
 Summary:        Integrated Development Environment for C++/C
 Epoch:          9
-Version:        26.03.80
+Version:        26.08.1
 Release:        1%{?dist}
 License:        GPL-2.0-only
 URL:            https://www.kdevelop.org/
@@ -74,6 +74,7 @@ BuildRequires:  pkgconfig(shared-mime-info)
 BuildRequires:  boost-devel
 # kdevplatform/documentation
 BuildRequires:  cmake(Qt6WebEngineWidgets)
+BuildRequires:  qt6-qtwebengine-devel
 
 # app/plasma
 BuildRequires:  cmake(Plasma)
@@ -163,7 +164,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 %cmake_kf6
-%cmake_build
+cmake --build "%{_vpath_builddir}" -j${RPM_BUILD_NCPUS}
 
 
 %install
@@ -239,6 +240,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/org.kde.kdevel
 %{rpm_macros_dir}/macros.kdevelop
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 9:26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 9:26.03.80-1
 - 26.03.80
 

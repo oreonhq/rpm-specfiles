@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Naturette
+Comment=AGI adventure game
+Exec=naturette-wrapper.sh
+Icon=naturette.xpm
+Terminal=false
+Categories=Game;AdventureGame;

@@ -1,7 +1,7 @@
 %global source0_hash 4c5c6136540384e5455b250f768e7ca11b03fdba1a8efc2341ee0f1111e57612
 
 Name:     scdoc
-Version:  1.11.3
+Version:  1.11.5
 Release:  %autorelease
 Summary:  Tool for generating roff manual pages
 

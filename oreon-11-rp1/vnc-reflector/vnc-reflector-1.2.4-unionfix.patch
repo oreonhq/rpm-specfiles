@@ -1,0 +1,20 @@
+Remove _LITTLE_ENDIAN identifier
+
+The _LITTLE_ENDIAN union identifier clashes on little-endian 64-bit PowerPC
+platform:
+
+main.c:467:9: error: expected '{' before numeric constant
+   union _LITTLE_ENDIAN {
+         ^
+
+--- main.c.ori
++++ main.c
+@@ -464,7 +464,7 @@
+ 
+ static int init_screen_info(void)
+ {
+-  union _LITTLE_ENDIAN {
++  union {
+     CARD32 value32;
+     CARD8 test;
+   } little_endian;

@@ -1,0 +1,13 @@
+diff --git a/io.github.torrent_file_editor.Torrent-file-editor.metainfo.xml b/io.github.torrent_file_editor.Torrent-file-editor.metainfo.xml
+index d323551..a0afc87 100644
+--- a/io.github.torrent_file_editor.Torrent-file-editor.metainfo.xml
++++ b/io.github.torrent_file_editor.Torrent-file-editor.metainfo.xml
+@@ -64,8 +64,6 @@
+   <url type="bugtracker">https://github.com/torrent-file-editor/torrent-file-editor/issues</url>
+   <url type="homepage">https://torrent-file-editor.github.io</url>
+   <url type="translate">https://crowdin.com/project/torrent-file-editor</url>
+-  <url type="contribute">https://github.com/torrent-file-editor/torrent-file-editor/pulls</url>
+-  <url type="vcs-browser">https://github.com/torrent-file-editor/torrent-file-editor</url>
+ 
+   <content_rating type="oars-1.0" />
+ 

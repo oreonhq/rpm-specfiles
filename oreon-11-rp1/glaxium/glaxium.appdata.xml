@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>glaxium.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Glaxium</name>
+  <summary>Scrolling 2D spaceship shooter</summary>
+  <description>
+    <p>
+      Glaxium is an OpenGL-based space-ship "shoot-em-up" styled game.
+      It is designed to provide the same feel as the old 2D games 
+      of that type, but with 3D for the special effects.
+    </p>
+    <p>
+      Destroy every-thing and especially the dark boxes that may
+      contain interesting things like POWER-UP.
+    </p>
+  </description>
+  <url type="homepage">http://xhosxe.free.fr/glaxium/</url>
+  <screenshots>
+    <screenshot type="default">http://xhosxe.free.fr/glaxium/shot05_2.jpg</screenshot>
+    <screenshot>http://xhosxe.free.fr/glaxium/shot05_7.jpg</screenshot>
+    <screenshot>http://xhosxe.free.fr/glaxium/shot05_4.jpg</screenshot>
+    <screenshot>http://xhosxe.free.fr/glaxium/shot05_5.jpg</screenshot>
+    <screenshot>http://xhosxe.free.fr/glaxium/shot05_6.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

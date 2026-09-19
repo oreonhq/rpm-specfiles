@@ -1,0 +1,113 @@
+.TH DAV "1" "February 2024" "" "User Commands"
+.SH NAME
+.B dav
+\(en CLI for working with webdav servers
+.SH SYNOPSIS
+.B dav
+.RB [ \-h ]
+.RB [ \-\-verbose ]
+.RB [ \-\-endpoint\-url\ \fIURL ]
+.RB [ \-\-user\ \fIUSER ]
+.RB [ \-\-password\ \fIPASSWORD ]
+.RB { ls , cp , mv , rm , mkdir , run , cat , sync , du } \fR...
+.SH OPTIONS
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit
+.TP
+.B \-\-verbose\fR,\ \fB\-v
+Show more information
+.TP
+.B \-\-endpoint\-url\ \fIURL
+Endpoint url to connect to.
+Will be considered as a root path.
+Can also be specified through
+.B WEBDAV_ENDPOINT_URL
+environment variable.
+.TP
+.B \-\-user\ \fIUSER\fR, \fB\-u\ \fIUSER
+Account Username
+.TP
+.B \-\-password\ \fIPASSWORD\fR, \fB\-p\ \fIPASSWORD
+Account Password
+.SS ACTIONS
+.RB { ls , cp , mv , rm , mkdir , run , cat , sync , du }
+.P
+Available subcommands
+.TP
+.B ls
+List files
+.IP
+See
+.BR dav\-ls (1).
+.TP
+.B cp
+Copies a local file or remote file to another location
+locally or in remote.
+.IP
+See
+.BR dav\-cp (1).
+.TP
+.B mv
+Moves a local file or remote file to another location
+locally or in remote.
+.IP
+See
+.BR dav\-mv (1).
+.TP
+.B rm
+Removes a file from the remote server.
+.IP
+See
+.BR dav\-rm (1).
+.TP
+.B mkdir
+Creates a directory/collection in the remote server.
+.IP
+See
+.BR dav\-mkdir (1).
+.TP
+.B run
+Run multiple commands.
+.IP
+See
+.BR dav\-run (1).
+.TP
+.B cat
+Print remote file content.
+.IP
+See
+.BR dav\-cat (1).
+.TP
+.B sync
+Sync local file/folder to/from the remote
+file/directories.
+.IP
+See
+.BR dav\-sync (1).
+.TP
+.B du
+Print sizes of directories/files
+.IP
+See
+.BR dav\-du (1).
+.SH ENVIRONMENT
+.TP
+.B WEBDAV_ENDPOINT_URL
+Endpoint url to connect to.
+Will be considered as a root path.
+Can also be specified through
+.B \-\-endpoint\-url\ \fIURL
+command-line option.
+.B
+.SH "SEE\ ALSO"
+.BR dav\-ls (1),
+.BR dav\-cp (1),
+.BR dav\-mv (1),
+.BR dav\-rm (1),
+.BR dav\-mkdir (1),
+.BR dav\-run (1),
+.BR dav\-cat (1),
+.BR dav\-sync (1),
+.BR dav\-du (1)

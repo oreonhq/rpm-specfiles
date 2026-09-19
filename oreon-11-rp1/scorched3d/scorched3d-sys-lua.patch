@@ -1,0 +1,295 @@
+diff -up scorched/src/client/scorchedc/Makefile.am~ scorched/src/client/scorchedc/Makefile.am
+--- scorched/src/client/scorchedc/Makefile.am~	2014-08-29 14:20:29.000000000 +0200
++++ scorched/src/client/scorchedc/Makefile.am	2014-08-30 08:52:17.803527748 +0200
+@@ -178,42 +178,12 @@ scorched3dc_SOURCES = \
+ 	../../common/landscapemap/MovementMap.cpp \
+ 	../../common/landscapemap/NapalmMap.cpp \
+ 	../../common/landscapemap/RoofMaps.cpp \
+-	../../common/lua/lapi.cpp \
+-	../../common/lua/lauxlib.cpp \
+-	../../common/lua/lbaselib.cpp \
+-	../../common/lua/lcode.cpp \
+-	../../common/lua/ldblib.cpp \
+-	../../common/lua/ldebug.cpp \
+-	../../common/lua/ldo.cpp \
+-	../../common/lua/ldump.cpp \
+-	../../common/lua/lfixed.cpp \
+-	../../common/lua/lfunc.cpp \
+-	../../common/lua/lgc.cpp \
+-	../../common/lua/linit.cpp \
+-	../../common/lua/liolib.cpp \
+-	../../common/lua/llex.cpp \
+-	../../common/lua/lmathlib.cpp \
+-	../../common/lua/lmem.cpp \
+-	../../common/lua/loadlib.cpp \
+-	../../common/lua/lobject.cpp \
+-	../../common/lua/lopcodes.cpp \
+-	../../common/lua/loslib.cpp \
+-	../../common/lua/lparser.cpp \
+-	../../common/lua/lstate.cpp \
+-	../../common/lua/lstring.cpp \
+-	../../common/lua/lstrlib.cpp \
+-	../../common/lua/ltable.cpp \
+-	../../common/lua/ltablib.cpp \
+-	../../common/lua/ltm.cpp \
+ 	../../common/lua/LUAS3DLib.cpp \
+ 	../../common/lua/LUAS3DWeaponLib.cpp \
+ 	../../common/lua/LUAScript.cpp \
+ 	../../common/lua/LUAScriptFactory.cpp \
+ 	../../common/lua/LUAScriptHook.cpp \
+ 	../../common/lua/LUAUtil.cpp \
+-	../../common/lua/lundump.cpp \
+-	../../common/lua/lvm.cpp \
+-	../../common/lua/lzio.cpp \
+ 	../../common/movement/Boid2.cpp \
+ 	../../common/movement/TargetMovement.cpp \
+ 	../../common/movement/TargetMovementEntry.cpp \
+@@ -933,35 +903,12 @@ scorched3dc_SOURCES = \
+ 	../../common/landscapemap/MovementMap.h \
+ 	../../common/landscapemap/NapalmMap.h \
+ 	../../common/landscapemap/RoofMaps.h \
+-	../../common/lua/lapi.h \
+-	../../common/lua/lauxlib.h \
+-	../../common/lua/lcode.h \
+-	../../common/lua/ldebug.h \
+-	../../common/lua/ldo.h \
+-	../../common/lua/lfixed.h \
+-	../../common/lua/lfunc.h \
+-	../../common/lua/lgc.h \
+-	../../common/lua/llex.h \
+-	../../common/lua/llimits.h \
+-	../../common/lua/lmem.h \
+-	../../common/lua/lobject.h \
+-	../../common/lua/lopcodes.h \
+-	../../common/lua/lparser.h \
+-	../../common/lua/lstate.h \
+-	../../common/lua/lstring.h \
+-	../../common/lua/ltable.h \
+-	../../common/lua/ltm.h \
+-	../../common/lua/luaconf.h \
+-	../../common/lua/lualib.h \
+ 	../../common/lua/LUAS3DLib.h \
+ 	../../common/lua/LUAS3DWeaponLib.h \
+ 	../../common/lua/LUAScript.h \
+ 	../../common/lua/LUAScriptFactory.h \
+ 	../../common/lua/LUAScriptHook.h \
+ 	../../common/lua/LUAUtil.h \
+-	../../common/lua/lundump.h \
+-	../../common/lua/lvm.h \
+-	../../common/lua/lzio.h \
+ 	../../common/movement/Boid2.h \
+ 	../../common/movement/TargetMovement.h \
+ 	../../common/movement/TargetMovementEntry.h \
+@@ -1450,5 +1450,5 @@ scorched3dc_SOURCES = \
+ 	../../common/simactions/TankTeamBallanceSimAction.h
+ 
+ AM_CPPFLAGS = -I../../common/porting -I../../common -I../../client -I../../server  @FFTW_CFLAGS@ @AL_CFLAGS@ @FT2_CFLAGS@ @OGG_CFLAGS@ @SDL_CFLAGS@
+-LDADD = @FFTW_LIBS@ @AL_LIBS@ @FT2_LIBS@ @GL_LIBS@ @OGG_LIBS@ @SDL_LIBS@
++LDADD = @FFTW_LIBS@ @AL_LIBS@ @FT2_LIBS@ @GL_LIBS@ @OGG_LIBS@ @SDL_LIBS@ -llua
+ 
+diff -up scorched/src/server/scorcheds/Makefile.am~ scorched/src/server/scorcheds/Makefile.am
+--- scorched/src/server/scorcheds/Makefile.am~	2014-08-29 14:20:29.000000000 +0200
++++ scorched/src/server/scorcheds/Makefile.am	2014-08-30 08:51:55.790113979 +0200
+@@ -361,42 +361,12 @@ scorched3ds_SOURCES = \
+ 	../../common/landscapemap/MovementMap.cpp \
+ 	../../common/landscapemap/NapalmMap.cpp \
+ 	../../common/landscapemap/RoofMaps.cpp \
+-	../../common/lua/lapi.cpp \
+-	../../common/lua/lauxlib.cpp \
+-	../../common/lua/lbaselib.cpp \
+-	../../common/lua/lcode.cpp \
+-	../../common/lua/ldblib.cpp \
+-	../../common/lua/ldebug.cpp \
+-	../../common/lua/ldo.cpp \
+-	../../common/lua/ldump.cpp \
+-	../../common/lua/lfixed.cpp \
+-	../../common/lua/lfunc.cpp \
+-	../../common/lua/lgc.cpp \
+-	../../common/lua/linit.cpp \
+-	../../common/lua/liolib.cpp \
+-	../../common/lua/llex.cpp \
+-	../../common/lua/lmathlib.cpp \
+-	../../common/lua/lmem.cpp \
+-	../../common/lua/loadlib.cpp \
+-	../../common/lua/lobject.cpp \
+-	../../common/lua/lopcodes.cpp \
+-	../../common/lua/loslib.cpp \
+-	../../common/lua/lparser.cpp \
+-	../../common/lua/lstate.cpp \
+-	../../common/lua/lstring.cpp \
+-	../../common/lua/lstrlib.cpp \
+-	../../common/lua/ltable.cpp \
+-	../../common/lua/ltablib.cpp \
+-	../../common/lua/ltm.cpp \
+ 	../../common/lua/LUAS3DLib.cpp \
+ 	../../common/lua/LUAS3DWeaponLib.cpp \
+ 	../../common/lua/LUAScript.cpp \
+ 	../../common/lua/LUAScriptFactory.cpp \
+ 	../../common/lua/LUAScriptHook.cpp \
+ 	../../common/lua/LUAUtil.cpp \
+-	../../common/lua/lundump.cpp \
+-	../../common/lua/lvm.cpp \
+-	../../common/lua/lzio.cpp \
+ 	../../common/movement/Boid2.cpp \
+ 	../../common/movement/TargetMovement.cpp \
+ 	../../common/movement/TargetMovementEntry.cpp \
+@@ -840,35 +810,12 @@ scorched3ds_SOURCES = \
+ 	../../common/landscapemap/MovementMap.h \
+ 	../../common/landscapemap/NapalmMap.h \
+ 	../../common/landscapemap/RoofMaps.h \
+-	../../common/lua/lapi.h \
+-	../../common/lua/lauxlib.h \
+-	../../common/lua/lcode.h \
+-	../../common/lua/ldebug.h \
+-	../../common/lua/ldo.h \
+-	../../common/lua/lfixed.h \
+-	../../common/lua/lfunc.h \
+-	../../common/lua/lgc.h \
+-	../../common/lua/llex.h \
+-	../../common/lua/llimits.h \
+-	../../common/lua/lmem.h \
+-	../../common/lua/lobject.h \
+-	../../common/lua/lopcodes.h \
+-	../../common/lua/lparser.h \
+-	../../common/lua/lstate.h \
+-	../../common/lua/lstring.h \
+-	../../common/lua/ltable.h \
+-	../../common/lua/ltm.h \
+-	../../common/lua/luaconf.h \
+-	../../common/lua/lualib.h \
+ 	../../common/lua/LUAS3DLib.h \
+ 	../../common/lua/LUAS3DWeaponLib.h \
+ 	../../common/lua/LUAScript.h \
+ 	../../common/lua/LUAScriptFactory.h \
+ 	../../common/lua/LUAScriptHook.h \
+ 	../../common/lua/LUAUtil.h \
+-	../../common/lua/lundump.h \
+-	../../common/lua/lvm.h \
+-	../../common/lua/lzio.h \
+ 	../../common/movement/Boid2.h \
+ 	../../common/movement/TargetMovement.h \
+ 	../../common/movement/TargetMovementEntry.h \
+@@ -896,5 +896,5 @@ scorched3ds_SOURCES = \
+ 	../../common/simactions/TankTeamBallanceSimAction.h
+ 
+ AM_CPPFLAGS = -I../../common/porting -I../../common -I../../server -DS3D_SERVER=1 @SDL_CFLAGS@ @MYSQL_CFLAGS@
+-LDADD = @SDL_LIBS@ @MYSQL_LIBS@
++LDADD = @SDL_LIBS@ @MYSQL_LIBS@ -llua
+ 
+diff -up scorched/src/common/lua/LUAS3DLib.cpp~ scorched/src/common/lua/LUAS3DLib.cpp
+--- scorched/src/common/lua/LUAS3DLib.cpp~	2014-08-01 18:47:31.000000000 +0200
++++ scorched/src/common/lua/LUAS3DLib.cpp	2014-08-30 09:33:00.096184004 +0200
+@@ -34,6 +34,8 @@
+ #include <target/TargetLife.h>
+ #include <landscapemap/LandscapeMaps.h>
+ 
++extern "C" {
++
+ #define LUA_LIB
+ 
+ #include "lua.h"
+@@ -350,3 +352,5 @@ LUALIB_API int luaopen_s3d (lua_State *L
+ 	luaL_register(L, LUA_S3DLIBNAME, s3dlib);
+ 	return 1;
+ }
++
++} /* end of extern "C" */
+diff -up scorched/src/common/lua/LUAS3DLib.h~ scorched/src/common/lua/LUAS3DLib.h
+--- scorched/src/common/lua/LUAS3DLib.h~	2014-08-01 18:47:31.000000000 +0200
++++ scorched/src/common/lua/LUAS3DLib.h	2014-08-30 09:34:59.244191281 +0200
+@@ -21,9 +21,13 @@
+ #if !defined(__INCLUDE_LUAS3DLib_INCLUDE__)
+ #define __INCLUDE_LUAS3DLib_INCLUDE__
+ 
++extern "C" {
++
+ #include "lua.h"
+ 
+ #define LUA_S3DLIBNAME	"s3d"
+ LUALIB_API int (luaopen_s3d) (lua_State *L);
+ 
++}
++
+ #endif // __INCLUDE_LUAS3DLib_INCLUDE__
+diff -up scorched/src/common/lua/LUAS3DWeaponLib.cpp~ scorched/src/common/lua/LUAS3DWeaponLib.cpp
+--- scorched/src/common/lua/LUAS3DWeaponLib.cpp~	2014-08-01 18:47:31.000000000 +0200
++++ scorched/src/common/lua/LUAS3DWeaponLib.cpp	2014-08-30 09:32:55.503299589 +0200
+@@ -30,6 +30,8 @@
+ #include <engine/Simulator.h>
+ #include <common/Logger.h>
+ 
++extern "C" {
++
+ #define LUA_LIB
+ 
+ #include "lua.h"
+@@ -157,3 +159,5 @@ LUALIB_API int luaopen_s3dweapon (lua_St
+ 	luaL_register(L, LUA_S3DWEAPONLIBNAME, s3dweaponlib);
+ 	return 1;
+ }
++
++} /* end of extern "C" */
+diff -up scorched/src/common/lua/LUAS3DWeaponLib.h~ scorched/src/common/lua/LUAS3DWeaponLib.h
+--- scorched/src/common/lua/LUAS3DWeaponLib.h~	2014-08-01 18:47:31.000000000 +0200
++++ scorched/src/common/lua/LUAS3DWeaponLib.h	2014-08-30 09:35:00.875150821 +0200
+@@ -21,9 +21,13 @@
+ #if !defined(__INCLUDE_LUAWeaponFns_INCLUDE__)
+ #define __INCLUDE_LUAWeaponFns_INCLUDE__
+ 
++extern "C" {
++
+ #include "lua.h"
+ 
+ #define LUA_S3DWEAPONLIBNAME "s3dweapon"
+ LUALIB_API int (luaopen_s3dweapon) (lua_State *L);
+ 
++}
++
+ #endif // __INCLUDE_LUAWeaponFns_INCLUDE__
+diff -up scorched/src/common/lua/LUAScript.cpp~ scorched/src/common/lua/LUAScript.cpp
+--- scorched/src/common/lua/LUAScript.cpp~	2014-08-30 09:28:33.000000000 +0200
++++ scorched/src/common/lua/LUAScript.cpp	2014-08-30 09:30:41.267677817 +0200
+@@ -24,15 +24,14 @@
+ #include <lua/LUAS3DWeaponLib.h>
+ #include <common/Logger.h>
+ 
+-#include "lauxlib.h"
+-#include "lualib.h"
++#include "lua.hpp"
+ 
+ LUAScript::LUAScript(ScorchedContext *context) :
+ 	context_(context),
+ 	L_(0),
+ 	weapon_(0)
+ {
+-	L_ = lua_open();
++	L_ = luaL_newstate();
+ 	
+ 	// Load the available libraries
+ 	luaopen_base(L_); 
+diff -up scorched/src/common/lua/LUAScript.h~ scorched/src/common/lua/LUAScript.h
+--- scorched/src/common/lua/LUAScript.h~	2014-08-01 18:47:31.000000000 +0200
++++ scorched/src/common/lua/LUAScript.h	2014-08-30 09:33:56.397767096 +0200
+@@ -24,7 +24,7 @@
+ #include <string>
+ #include <common/FixedVector.h>
+ 
+-#include "lua.h"
++#include "lua.hpp"
+ 
+ class Weapon;
+ class ScorchedContext;
+diff -up scorched/src/common/lua/LUAUtil.h~ scorched/src/common/lua/LUAUtil.h
+--- scorched/src/common/lua/LUAUtil.h~	2014-08-01 18:47:31.000000000 +0200
++++ scorched/src/common/lua/LUAUtil.h	2014-08-30 09:34:14.652307697 +0200
+@@ -24,9 +24,7 @@
+ #include <string>
+ #include <common/FixedVector.h>
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
+-#include "lualib.h"
++#include "lua.hpp"
+ 
+ class LUAUtil
+ {

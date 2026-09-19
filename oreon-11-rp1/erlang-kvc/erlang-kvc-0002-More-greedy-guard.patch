@@ -1,0 +1,24 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Mon, 22 Aug 2022 23:16:29 +0200
+Subject: [PATCH] More greedy guard
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/test/kvc_prop_tests.erl b/test/kvc_prop_tests.erl
+index 6961f68..af0292f 100644
+--- a/test/kvc_prop_tests.erl
++++ b/test/kvc_prop_tests.erl
+@@ -4,11 +4,12 @@
+ %% @doc Property based tests for KVC.
+ -module(kvc_prop_tests).
+ 
++-ifdef(USE_PROPER).
++
+ -type strict_key() :: kvc:kvc_key().
+ -type strict_proplist() :: [{strict_key(), strict_value()}].
+ -type strict_value() :: strict_key() | strict_proplist() | [strict_value()].
+ 
+--ifdef(USE_PROPER).
+ -type container_type() :: gb_trees | dict | struct | proplist | eep0018.
+ -include_lib("proper/include/proper.hrl").
+ -include_lib("eunit/include/eunit.hrl").

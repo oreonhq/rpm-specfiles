@@ -1,0 +1,53 @@
+From b794aa1ad3cd9e74d6534010ccc5766aef4562ca Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Rapha=C3=ABl=20Droz?= <raphael.droz@gmail.com>
+Date: Tue, 21 Jan 2025 00:39:00 -0300
+Subject: [PATCH 1/8] follow symlinks, fix bug #4
+
+---
+ database.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/database.c b/database.c
+index 095ba17..217f836 100644
+--- a/database.c
++++ b/database.c
+@@ -402,8 +402,11 @@ save_database(int force_save)
+ 	FILE *out;
+ 	int ret = 0;
+ 	struct db_enumerator e = init_db_enumerator(ENUM_ALL);
+-	char *datafile_new = strconcat(datafile, ".new", NULL);
+-	char *datafile_old = strconcat(datafile, "~", NULL);
++
++	// resolving possibly symlinked datafile: symlink itself isn't replaced anymore
++	char *res = realpath(datafile, NULL);
++	char *datafile_new = strconcat(res, ".new", NULL);
++	char *datafile_old = strconcat(res, "~", NULL);
+ 
+ 	if( (out = abook_fopen(datafile_new, "w")) == NULL ) {
+ 		ret = -1;
+@@ -419,11 +422,11 @@ save_database(int force_save)
+ 
+ 	fclose(out);
+ 
+-	if(access(datafile, F_OK) == 0 &&
+-			(rename(datafile, datafile_old)) == -1)
++	if(access(res, F_OK) == 0 &&
++			(rename(res, datafile_old)) == -1)
+ 		ret = -1;
+ 	
+-	if((rename(datafile_new, datafile)) == -1)
++	if((rename(datafile_new, res)) == -1)
+ 		ret = -1;
+ 
+ 	if(ret == 0) {
+@@ -434,6 +437,7 @@ save_database(int force_save)
+ out:
+ 	free(datafile_new);
+ 	free(datafile_old);
++	free(res);
+ 	return ret;
+ }
+ 
+-- 
+2.53.0
+

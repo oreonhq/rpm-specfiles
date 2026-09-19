@@ -1,0 +1,12 @@
+diff -up evolution-rspam-0.6.0/po/en_AU.po.1 evolution-rspam-0.6.0/po/en_AU.po
+--- evolution-rspam-0.6.0/po/en_AU.po.1	2023-07-20 10:28:08.384804915 +0200
++++ evolution-rspam-0.6.0/po/en_AU.po	2023-07-20 10:28:10.558832280 +0200
+@@ -13,7 +13,7 @@ msgstr ""
+ "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+ "Language-Team: LANGUAGE <LL@li.org>\n"
+ "MIME-Version: 1.0\n"
+-"Content-Type: text/plain; charset=utf8\n"
++"Content-Type: text/plain; charset=utf-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+ 
+ #: src/rspam.c:664

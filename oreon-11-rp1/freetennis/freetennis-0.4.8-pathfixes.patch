@@ -1,0 +1,19 @@
+diff -u freetennis-0.4.8.old/freetennis.ml freetennis-0.4.8/freetennis.ml
+--- freetennis-0.4.8.old/freetennis.ml	2005-11-22 10:20:33.000000000 +1300
++++ freetennis-0.4.8/freetennis.ml	2007-04-10 17:27:06.000000000 +1200
+@@ -27,10 +27,10 @@
+    places. If you choose to customize them, use absolute paths without
+    the trailing slash. *)
+ 
+-let sfxDir = "sfx" (* where the wav files are located.
++let sfxDir = "/usr/share/freetennis/sfx" (* where the wav files are located.
+ 		      example of customization: /usr/share/freetennis/sounds *)
+ 
+-let gfxDir = "graphics" (* where the pngs and subdirs are located. 
++let gfxDir = "/usr/share/freetennis/graphics" (* where the pngs and subdirs are located. 
+ 			   example of customization: /usr/share/freetennis/gfx *)
+     
+ 
+Common subdirectories: freetennis-0.4.8.old/graphics and freetennis-0.4.8/graphics
+Common subdirectories: freetennis-0.4.8.old/sfx and freetennis-0.4.8/sfx
+Common subdirectories: freetennis-0.4.8.old/web-site and freetennis-0.4.8/web-site

@@ -1,0 +1,342 @@
+From eec3de6f74fdba0c3e9b6b16f4462249badfa7d2 Mon Sep 17 00:00:00 2001
+From: Craig Macdonald <craig.macdonald@glasgow.ac.uk>
+Date: Sun, 18 May 2025 20:35:50 +0100
+Subject: [PATCH 1/2] fixes for Cython 3.1 support (#753)
+
+#752 identified that a problem existed building from Cython 3.1.0, but it was not clear from the posted errors what the problem was.
+
+The problem appears to be that under 3.1.0 long is note defined - several error messages were observed like:
+```
+Error compiling Cython file:
+     ------------------------------------------------------------
+     ...
+                 score += 10
+                 continue
+
+             if r == 'S' or r == 'I':
+                 if isinstance(arg, int) or (
+                         (isinstance(arg, long) and arg < 2147483648)):
+                                          ^
+     ------------------------------------------------------------
+
+ jnius/jnius_utils.pxi:323:37: undeclared name not builtin: long
+```
+
+The solution is to add `from ctypes import c_long as long` where appropriate, following https://github.com/jswhit/pygrib/issues/265#issuecomment-2874812782
+
+Also closes #752
+---
+ jnius/jnius_conversion.pxi | 3 +++
+ jnius/jnius_utils.pxi      | 1 +
+ 2 files changed, 4 insertions(+)
+
+diff --git a/jnius/jnius_conversion.pxi b/jnius/jnius_conversion.pxi
+index 2e0b48d..464c75d 100644
+--- a/jnius/jnius_conversion.pxi
++++ b/jnius/jnius_conversion.pxi
+@@ -38,6 +38,7 @@ cdef void populate_args(JNIEnv *j_env, tuple definition_args, jvalue *j_args, ar
+     cdef JavaClass jc
+     cdef PythonJavaClass pc
+     cdef int index
++    from ctypes import c_long as long
+ 
+     for index, argtype in enumerate(definition_args):
+         py_arg = args[index]
+@@ -467,6 +468,7 @@ cdef jobject convert_python_to_jobject(JNIEnv *j_env, definition, obj) except *:
+     cdef JavaClassStorage jcs
+     cdef PythonJavaClass pc
+     cdef int index
++    from ctypes import c_long as long
+ 
+     if definition[0] == 'V':
+         return NULL
+@@ -632,6 +634,7 @@ cdef jobject convert_pyarray_to_java(JNIEnv *j_env, definition, pyarray) except
+     cdef jclass j_class
+     cdef JavaObject jo
+     cdef JavaClass jc
++    from ctypes import c_long as long
+ 
+     cdef ByteArray a_bytes
+ 
+diff --git a/jnius/jnius_utils.pxi b/jnius/jnius_utils.pxi
+index ef5d6ab..5c8904c 100644
+--- a/jnius/jnius_utils.pxi
++++ b/jnius/jnius_utils.pxi
+@@ -278,6 +278,7 @@ cdef int calculate_score(sign_args, args, is_varargs=False) except *:
+     cdef JavaClass jc
+     cdef int args_len = len(args)
+     cdef int sign_args_len = len(sign_args)
++    from ctypes import c_long as long
+ 
+     if args_len != sign_args_len and not is_varargs:
+         # if the number of arguments expected is not the same
+-- 
+2.50.1
+
+
+From dad068ec5907fe6f5cbf68677d4e4b09cfb443f7 Mon Sep 17 00:00:00 2001
+From: Craig Macdonald <craig.macdonald@glasgow.ac.uk>
+Date: Sun, 27 Jul 2025 12:35:28 +0100
+Subject: [PATCH 2/2] Remove python long to support Cython >= 3.1.x (#756)
+
+* remove long mentions
+
+* change debug=True output
+---
+ jnius/jnius_conversion.pxi                  |  9 ++-----
+ jnius/jnius_export_class.pxi                |  8 ++++++
+ jnius/jnius_utils.pxi                       | 30 +++++++++++++--------
+ tests/java-src/org/jnius/SignatureTest.java | 22 +++++++++++++++
+ tests/test_signature.py                     | 23 ++++++++++++++++
+ 5 files changed, 74 insertions(+), 18 deletions(-)
+ create mode 100644 tests/java-src/org/jnius/SignatureTest.java
+
+diff --git a/jnius/jnius_conversion.pxi b/jnius/jnius_conversion.pxi
+index 464c75d..c045df8 100644
+--- a/jnius/jnius_conversion.pxi
++++ b/jnius/jnius_conversion.pxi
+@@ -38,7 +38,6 @@ cdef void populate_args(JNIEnv *j_env, tuple definition_args, jvalue *j_args, ar
+     cdef JavaClass jc
+     cdef PythonJavaClass pc
+     cdef int index
+-    from ctypes import c_long as long
+ 
+     for index, argtype in enumerate(definition_args):
+         py_arg = args[index]
+@@ -63,7 +62,7 @@ cdef void populate_args(JNIEnv *j_env, tuple definition_args, jvalue *j_args, ar
+                 j_args[index].l = NULL
+ 
+             # numeric types
+-            elif isinstance(py_arg, (int, long)):
++            elif isinstance(py_arg, int):
+                 j_args[index].l = convert_python_to_jobject(
+                     j_env, 'Ljava/lang/Integer;', py_arg
+                 )
+@@ -468,7 +467,6 @@ cdef jobject convert_python_to_jobject(JNIEnv *j_env, definition, obj) except *:
+     cdef JavaClassStorage jcs
+     cdef PythonJavaClass pc
+     cdef int index
+-    from ctypes import c_long as long
+ 
+     if definition[0] == 'V':
+         return NULL
+@@ -481,7 +479,7 @@ cdef jobject convert_python_to_jobject(JNIEnv *j_env, definition, obj) except *:
+             return convert_pystr_to_java(j_env, to_unicode(obj))
+ 
+         # numeric types
+-        elif isinstance(obj, (int, long)) and \
++        elif isinstance(obj, int) and \
+                 definition in (
+                     'Ljava/lang/Integer;',
+                     'Ljava/lang/Number;',
+@@ -543,7 +541,6 @@ cdef jobject convert_python_to_jobject(JNIEnv *j_env, definition, obj) except *:
+         conversions = {
+             int: 'I',
+             bool: 'Z',
+-            long: 'J',
+             float: 'F',
+             unicode: 'Ljava/lang/String;',
+             bytes: 'B'
+@@ -634,7 +631,6 @@ cdef jobject convert_pyarray_to_java(JNIEnv *j_env, definition, pyarray) except
+     cdef jclass j_class
+     cdef JavaObject jo
+     cdef JavaClass jc
+-    from ctypes import c_long as long
+ 
+     cdef ByteArray a_bytes
+ 
+@@ -644,7 +640,6 @@ cdef jobject convert_pyarray_to_java(JNIEnv *j_env, definition, pyarray) except
+         conversions = {
+             int: 'I',
+             bool: 'Z',
+-            long: 'J',
+             float: 'F',
+             bytes: 'B',
+             str: 'Ljava/lang/String;',
+diff --git a/jnius/jnius_export_class.pxi b/jnius/jnius_export_class.pxi
+index a688e2b..dfa6c45 100644
+--- a/jnius/jnius_export_class.pxi
++++ b/jnius/jnius_export_class.pxi
+@@ -283,6 +283,7 @@ cdef class JavaClass(object):
+         cdef jmethodID constructor = NULL
+         cdef JNIEnv *j_env = get_jnienv()
+         cdef list found_definitions = []
++        debug = kwargs.get("debug", False)
+ 
+         # get the constructor definition if exist
+         definitions = [('()V', False)]
+@@ -348,6 +349,9 @@ cdef class JavaClass(object):
+                 )
+             scores.sort()
+             score, definition, d_ret, d_args, args_ = scores[-1]
++            if debug:
++                print(scores)
++                print("Selected %s for invocation" % definition)
+ 
+         try:
+             # convert python arguments to java arguments
+@@ -1122,6 +1126,7 @@ cdef class JavaMultipleMethod(object):
+         cdef dict methods
+         cdef int max_sign_args
+         cdef list found_signatures = []
++        debug = kwargs.get("debug", False)
+ 
+         if self.j_self:
+             methods = self.instance_methods
+@@ -1157,6 +1162,9 @@ cdef class JavaMultipleMethod(object):
+             )
+         scores.sort()
+         score, signature = scores[-1]
++        if debug:
++            print(scores)
++            print("Selected %s for invocation" % signature)
+ 
+         jm = methods[signature]
+         jm.j_self = self.j_self
+diff --git a/jnius/jnius_utils.pxi b/jnius/jnius_utils.pxi
+index 5c8904c..cec16ab 100644
+--- a/jnius/jnius_utils.pxi
++++ b/jnius/jnius_utils.pxi
+@@ -278,7 +278,6 @@ cdef int calculate_score(sign_args, args, is_varargs=False) except *:
+     cdef JavaClass jc
+     cdef int args_len = len(args)
+     cdef int sign_args_len = len(sign_args)
+-    from ctypes import c_long as long
+ 
+     if args_len != sign_args_len and not is_varargs:
+         # if the number of arguments expected is not the same
+@@ -301,27 +300,26 @@ cdef int calculate_score(sign_args, args, is_varargs=False) except *:
+         r = sign_args[index]
+         arg = args[index]
+ 
+-        if r == 'Z':
++        if r == 'Z': # boolean
+             if not isinstance(arg, bool):
+                 return -1
+             score += 10
+             continue
+ 
+-        if r == 'B':
++        if r == 'B': # byte
+             if not isinstance(arg, int):
+                 return -1
+             score += 10
+             continue
+ 
+-        if r == 'C':
++        if r == 'C': # char
+             if not isinstance(arg, str) or len(arg) != 1:
+                 return -1
+             score += 10
+             continue
+ 
+-        if r == 'S' or r == 'I':
+-            if isinstance(arg, int) or (
+-                    (isinstance(arg, long) and arg < 2147483648)):
++        if r == 'S': # short
++            if isinstance(arg, int) and arg <= 32767 and arg >= -32768:
+                 score += 10
+                 continue
+             elif isinstance(arg, float):
+@@ -330,8 +328,8 @@ cdef int calculate_score(sign_args, args, is_varargs=False) except *:
+             else:
+                 return -1
+ 
+-        if r == 'J':
+-            if isinstance(arg, int) or isinstance(arg, long):
++        if r == 'I': # int
++            if isinstance(arg, int) and arg <= 2147483647 and arg >= -2147483648:
+                 score += 10
+                 continue
+             elif isinstance(arg, float):
+@@ -340,7 +338,17 @@ cdef int calculate_score(sign_args, args, is_varargs=False) except *:
+             else:
+                 return -1
+ 
+-        if r == 'F' or r == 'D':
++        if r == 'J': # long
++            if isinstance(arg, int):
++                score += 10
++                continue
++            elif isinstance(arg, float):
++                score += 5
++                continue
++            else:
++                return -1
++
++        if r == 'F' or r == 'D': # float or double
+             if isinstance(arg, int):
+                 score += 5
+                 continue
+@@ -350,7 +358,7 @@ cdef int calculate_score(sign_args, args, is_varargs=False) except *:
+             else:
+                 return -1
+ 
+-        if r[0] == 'L':
++        if r[0] == 'L': # classname
+ 
+             r = r[1:-1]
+ 
+diff --git a/tests/java-src/org/jnius/SignatureTest.java b/tests/java-src/org/jnius/SignatureTest.java
+new file mode 100644
+index 0000000..8514df6
+--- /dev/null
++++ b/tests/java-src/org/jnius/SignatureTest.java
+@@ -0,0 +1,22 @@
++package org.jnius;
++
++public class SignatureTest {
++
++    public static class IntOrLong {
++        boolean was_long;
++        public IntOrLong(int i) { was_long = false; }
++        public IntOrLong(long l) { was_long = true; }
++    }
++
++    public static class ShortOrLong {
++        boolean was_short;
++        public ShortOrLong(short i) { was_short = true; }
++        public ShortOrLong(long i) { was_short = false; }
++    }
++    
++    public static class ShortOnly {
++        public ShortOnly(short i) { }
++        public ShortOnly(boolean o) { } // we need alternative constructor to force calculate_score
++    }
++
++}
+diff --git a/tests/test_signature.py b/tests/test_signature.py
+index 19a709e..637c5b9 100644
+--- a/tests/test_signature.py
++++ b/tests/test_signature.py
+@@ -172,3 +172,26 @@ class SignaturesTest(unittest.TestCase):
+         sig = signature(jvoid, [JArray(jint), JArray(jboolean)])
+         self.assertEqual(sig, "([I[Z)V")
+ 
++    def test_calc_signature(self):
++        import sys
++        clz = autoclass("org.jnius.SignatureTest$IntOrLong")
++        obj = clz(0, debug=True) # could be int or long
++        # this isnt truly deterministic, the two possible methods are tied for score
++        self.assertTrue(obj.was_long)
++        
++        obj = clz(sys.maxsize)
++        self.assertTrue(obj.was_long)
++
++        obj = clz(-1 * sys.maxsize)
++        self.assertTrue(obj.was_long)
++    
++        clz = autoclass("org.jnius.SignatureTest$ShortOrLong")
++        obj = clz(0) # could be short or long
++        # this isnt truly deterministic, the two possible methods are tied for score
++        self.assertTrue(obj.was_short)
++
++        obj = clz(sys.maxsize)
++        self.assertFalse(obj.was_short)
++
++        autoclass("org.jnius.SignatureTest$ShortOnly")(0) # this should work as short
++        autoclass("org.jnius.SignatureTest$ShortOnly")(0.) # this float should be cast to short
+\ No newline at end of file
+-- 
+2.50.1
+

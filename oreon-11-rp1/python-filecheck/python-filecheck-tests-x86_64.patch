@@ -1,0 +1,15 @@
+diff -up FileCheck.py-0.0.22/tasks.py.orig FileCheck.py-0.0.22/tasks.py
+--- FileCheck.py-0.0.22/tasks.py.orig	2022-07-29 01:41:19.665881088 +0200
++++ FileCheck.py-0.0.22/tasks.py	2022-07-29 01:44:36.925953001 +0200
+@@ -189,8 +189,9 @@ def test_filecheck_py_using_filecheck_py
+ 
+ @task
+ def test_integration(context, focus=None):
+-    test_filecheck_llvm(context, focus)
+-    test_filecheck_py_using_file_check_llvm_tester(context, focus)
++    if platform.machine() == 'x86_64':
++        test_filecheck_llvm(context, focus)
++        test_filecheck_py_using_file_check_llvm_tester(context, focus)
+ 
+ 
+ @task(test_unit, test_integration)

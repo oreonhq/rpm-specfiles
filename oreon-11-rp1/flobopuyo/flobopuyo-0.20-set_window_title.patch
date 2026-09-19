@@ -1,0 +1,10 @@
+--- flobopuyo-0.20.orig/PuyoCommander.cpp	2004-10-09 05:41:12.000000000 +0700
++++ flobopuyo-0.20/PuyoCommander.cpp	2009-11-30 18:53:59.000000000 +0700
+@@ -666,6 +666,7 @@
+     
+     start_time = SDL_GetTicks ();
+     
++    SDL_WM_SetCaption("FloboPuyo", "FloboPuyo");
+     audio_music_start (0);
+     
+     /*  PuyoStory *introStory = new PuyoStory(this, 0);

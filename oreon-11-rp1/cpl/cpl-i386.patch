@@ -1,0 +1,67 @@
+diff -ur cpl-7.2.2/cplcore/cpl_image_basic.c cpl-7.2.2.i386/cplcore/cpl_image_basic.c
+--- cpl-7.2.2/cplcore/cpl_image_basic.c	2022-04-29 16:56:02.000000000 +0200
++++ cpl-7.2.2.i386/cplcore/cpl_image_basic.c	2022-06-16 12:36:43.388945408 +0200
+@@ -226,10 +226,10 @@
+ 
+ #undef CPL_OPERATION
+ 
+-#ifdef __SSE3__
++#if (defined __SSE3__) && (defined __x86_64)
+ #include <pmmintrin.h>
+ #endif
+-#ifdef __SSE2__
++#if (defined __SSE2__) && (defined __x86_64)
+ #include <xmmintrin.h>
+ 
+ #ifdef __clang__
+@@ -239,9 +239,9 @@
+ #endif
+ #endif
+ 
+-#if defined __SSE2__ || defined __SSE3__
++#if (defined __SSE2__ || defined __SSE3__) && (defined __x86_64)
+ 
+-#if defined __SSE3__
++#if (defined __SSE3__) && (defined __x86_64)
+ #define CPL_MM_ADDSUB_PS(a, b) _mm_addsub_ps(a, b)
+ #define CPL_MM_ADDSUB_PD(a, b) _mm_addsub_pd(a, b)
+ #else
+@@ -709,7 +709,7 @@
+ {
+     /* Faster version of code generated with gcc -ffast-math */
+     /* (NaNs and other float specials are no longer IEEE compliant) */
+-#if (defined __SSE3__ || defined __SSE2__)
++#if (defined __SSE3__ || defined __SSE2__) && (defined __x86_64)
+     cpl_ensure_code(im1 != NULL, CPL_ERROR_NULL_INPUT);
+     cpl_ensure_code(im2 != NULL, CPL_ERROR_NULL_INPUT);
+ 
+@@ -3832,7 +3832,7 @@
+ }
+ 
+ 
+-#if (defined __SSE3__ || defined __SSE2__)
++#if (defined __SSE3__ || defined __SSE2__) && (defined __x86_64)
+ 
+ 
+ /*----------------------------------------------------------------------------*/
+diff -ur cpl-7.2.2/cplcore/cpl_mask.c cpl-7.2.2.i386/cplcore/cpl_mask.c
+--- cpl-7.2.2/cplcore/cpl_mask.c	2022-04-29 16:56:02.000000000 +0200
++++ cpl-7.2.2.i386/cplcore/cpl_mask.c	2022-06-16 12:39:50.519772315 +0200
+@@ -46,7 +46,7 @@
+ 
+ #include <assert.h>
+ 
+-#ifdef __SSE2__
++#if (defined __SSE2__) && (defined __x86_64)
+ #include <emmintrin.h>
+ 
+ #ifdef __clang__
+@@ -116,7 +116,7 @@
+       << 8) |                                                                  \
+      (cpl_bitmask)CPL_BINARY_1)
+ 
+-#ifdef __SSE2__
++#if (defined __SSE2__) && (defined __x86_64)
+ #define CPL_MASK_REGISTER_SIZE 16
+ #define CPL_MASK_REGISTER_TYPE __m128i
+ #else

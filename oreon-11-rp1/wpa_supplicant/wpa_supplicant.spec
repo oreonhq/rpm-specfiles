@@ -10,8 +10,8 @@
 Summary: WPA/WPA2/IEEE 802.1X Supplicant
 Name: wpa_supplicant
 Epoch: 1
-Version: 2.11
-Release: 10%{?dist}
+Version: 2.12
+Release: 1%{?dist}
 License: BSD-3-Clause
 Source0:        http://w1.fi/releases/%{name}-%{version}.tar.gz
 Source1: wpa_supplicant.conf

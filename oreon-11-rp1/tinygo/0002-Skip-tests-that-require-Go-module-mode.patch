@@ -1,0 +1,58 @@
+From f650ab16b5a3badf48922f77683ceaf791c82d64 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Wed, 28 Feb 2024 04:26:40 -0500
+Subject: [PATCH 2/5] Skip tests that require Go module mode
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ errors_test.go                       | 2 +-
+ main_test.go                         | 2 +-
+ testdata/errors/loader-invaliddep.go | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/errors_test.go b/errors_test.go
+index 871dc4c0..3d0bb162 100644
+--- a/errors_test.go
++++ b/errors_test.go
+@@ -37,7 +37,7 @@ func TestErrors(t *testing.T) {
+ 		{name: "loader-importcycle"},
+ 		{name: "loader-invaliddep"},
+ 		{name: "loader-invalidpackage"},
+-		{name: "loader-nopackage"},
++		// {name: "loader-nopackage"},
+ 		{name: "optimizer"},
+ 		{name: "syntax"},
+ 		{name: "types"},
+diff --git a/main_test.go b/main_test.go
+index ae0a4482..ca052821 100644
+--- a/main_test.go
++++ b/main_test.go
+@@ -78,7 +78,6 @@ func TestBuild(t *testing.T) {
+ 		"json.go",
+ 		"map.go",
+ 		"math.go",
+-		"oldgo/",
+ 		"print.go",
+ 		"reflect.go",
+ 		"signal.go",
+@@ -1031,6 +1030,7 @@ func ioLogger(t *testing.T, wg *sync.WaitGroup) io.WriteCloser {
+ }
+ 
+ func TestGetListOfPackages(t *testing.T) {
++	t.Skip("Not available in non-module mode")
+ 	opts := optionsFromTarget("", sema)
+ 	tests := []struct {
+ 		pkgs          []string
+diff --git a/testdata/errors/loader-invaliddep.go b/testdata/errors/loader-invaliddep.go
+index 05c2f2d5..719a617b 100644
+--- a/testdata/errors/loader-invaliddep.go
++++ b/testdata/errors/loader-invaliddep.go
+@@ -5,4 +5,4 @@ import _ "github.com/tinygo-org/tinygo/testdata/errors/invaliddep"
+ func main() {
+ }
+ 
+-// ERROR: invaliddep{{[\\/]}}invaliddep.go:1:1: expected 'package', found ppackage
++// ERROR: {{.*}}invaliddep{{[\\/]}}invaliddep.go:1:1: expected 'package', found ppackage
+-- 
+2.50.0
+

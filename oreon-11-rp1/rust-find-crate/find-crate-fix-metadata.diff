@@ -1,0 +1,8 @@
+--- find-crate-0.6.3/Cargo.toml	2021-01-05T16:06:59+00:00
++++ find-crate-0.6.3/Cargo.toml	2025-06-13T08:57:35.571000+00:00
+@@ -34,4 +34,4 @@
+ version = "1"
+ 
+ [dev-dependencies.semver]
+-version = "0.11"
++version = "1.0"

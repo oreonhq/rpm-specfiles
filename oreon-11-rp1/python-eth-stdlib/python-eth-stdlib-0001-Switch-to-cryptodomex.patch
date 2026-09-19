@@ -1,0 +1,32 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 8 Jan 2025 10:13:14 +0100
+Subject: [PATCH] Switch to cryptodomex
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 83ec359..bbe1e61 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -20,7 +20,7 @@ packages = [
+ 
+ [tool.poetry.dependencies]
+ python = "^3.8"
+-pycryptodome = {version = "^3.18.0"}
++pycryptodomex = {version = "^3.18.0"}
+ hypothesis = {version = "^6.58.0", optional = true}
+ 
+ [tool.poetry.extras]
+diff --git a/src/eth/hash.py b/src/eth/hash.py
+index 1319aa5..ba8af3c 100644
+--- a/src/eth/hash.py
++++ b/src/eth/hash.py
+@@ -14,7 +14,7 @@
+ # You should have received a copy of the GNU Lesser General Public License
+ # along with this program. If not, see <https://www.gnu.org/licenses/>.
+ 
+-from Crypto.Hash import keccak
++from Cryptodome.Hash import keccak
+ 
+ 
+ def keccak256(data: bytes) -> bytes:

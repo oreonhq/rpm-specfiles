@@ -1,0 +1,23 @@
+diff -uNr a/setup.cfg b/setup.cfg
+--- a/setup.cfg	2024-06-24 16:27:55.000000000 -0500
++++ b/setup.cfg	2024-06-25 15:24:36.942455997 -0500
+@@ -57,6 +57,7 @@
+     ignore:pkg_resources is deprecated as an API::flake8_import_order
+     ignore:SelectableGroups dict interface is deprecated::flake8
+     ignore:Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated::pyreadline
++    ignore:@pytest.yield_fixture is deprecated
+ junit_suite_name = colcon-alias
+ markers =
+     flake8
+diff -uNr a/test/conftest.py b/test/conftest.py
+--- a/test/conftest.py	2024-06-24 16:27:55.000000000 -0500
++++ b/test/conftest.py	2024-06-25 15:21:42.425592159 -0500
+@@ -8,7 +8,7 @@
+ import pytest
+ 
+ 
+-@pytest.fixture
++@pytest.yield_fixture
+ def fresh_alias_config(tmpdir):
+     tmpdir = Path(tmpdir)
+     with patch('colcon_alias.config.get_config_path', return_value=tmpdir):

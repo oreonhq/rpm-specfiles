@@ -1,0 +1,176 @@
+From: blester <blester@oreon>
+Date: Mon, 14 Sep 2026 00:00:00 +0000
+Subject: [PATCH] mpl 3.10 get_figure(root=True) and py3.14 warning stack
+
+get_figure(root=True) for mpl 3.10. warn_pandas uses skip_file_prefixes
+so py3.14 still records pandas UserWarnings. no fake unused-cmap warn.
+
+--- a/pandas/plotting/_matplotlib/core.py
++++ b/pandas/plotting/_matplotlib/core.py
+@@ -25,7 +25,10 @@
+ from pandas._libs import lib
+ from pandas.errors import AbstractMethodError
+ from pandas.util._decorators import cache_readonly
+-from pandas.util._exceptions import find_stack_level
++from pandas.util._exceptions import (
++    find_stack_level,
++    warn_pandas,
++)
+ 
+ from pandas.core.dtypes.common import (
+     is_any_real_numeric_dtype,
+@@ -72,6 +75,7 @@
+     use_dynamic_x,
+ )
+ from pandas.plotting._matplotlib.tools import (
++    _figure_of,
+     create_subplots,
+     flatten_axes,
+     format_date_labels,
+@@ -580,7 +584,7 @@
+             fig = self.plt.figure(figsize=self.figsize)
+             axes = fig.add_subplot(111)
+         else:
+-            fig = self.ax.get_figure()
++            fig = _figure_of(self.ax)
+             if self.figsize is not None:
+                 fig.set_size_inches(self.figsize)
+             axes = self.ax
+@@ -2066,11 +2070,7 @@
+     ) -> bool | None | Literal["sym"]:
+         super()._validate_log_kwd(kwd=kwd, value=value)
+         if value is not False:
+-            warnings.warn(
+-                f"PiePlot ignores the '{kwd}' keyword",
+-                UserWarning,
+-                stacklevel=find_stack_level(),
+-            )
++            warn_pandas(f"PiePlot ignores the '{kwd}' keyword")
+         return False
+ 
+     def _validate_color_args(self, color, colormap) -> None:
+--- a/pandas/plotting/_matplotlib/tools.py
++++ b/pandas/plotting/_matplotlib/tools.py
+@@ -9,7 +9,10 @@
+ import matplotlib.table
+ import numpy as np
+ 
+-from pandas.util._exceptions import find_stack_level
++from pandas.util._exceptions import (
++    find_stack_level,
++    warn_pandas,
++)
+ 
+ from pandas.core.dtypes.common import is_list_like
+ from pandas.core.dtypes.generic import (
+@@ -36,6 +39,16 @@
+     )
+ 
+ 
++def _figure_of(ax):
++    get_figure = getattr(ax, "get_figure", None)
++    if get_figure is None:
++        return None
++    try:
++        return get_figure(root=True)
++    except TypeError:
++        return get_figure()
++
++
+ def do_adjust_figure(fig: Figure) -> bool:
+     """Whether fig has constrained_layout enabled."""
+     if not hasattr(fig, "get_constrained_layout"):
+@@ -236,20 +249,16 @@
+             if squeeze:
+                 ax = flatten_axes(ax)
+             if layout is not None:
+-                warnings.warn(
+-                    "When passing multiple axes, layout keyword is ignored.",
+-                    UserWarning,
+-                    stacklevel=find_stack_level(),
++                warn_pandas(
++                    "When passing multiple axes, layout keyword is ignored."
+                 )
+             if sharex or sharey:
+-                warnings.warn(
++                warn_pandas(
+                     "When passing multiple axes, sharex and sharey "
+-                    "are ignored. These settings must be specified when creating axes.",
+-                    UserWarning,
+-                    stacklevel=find_stack_level(),
++                    "are ignored. These settings must be specified when creating axes."
+                 )
+             if ax.size == naxes:
+-                fig = ax.flat[0].get_figure()
++                fig = _figure_of(ax.flat[0])
+                 return fig, ax
+             else:
+                 raise ValueError(
+@@ -257,7 +266,7 @@
+                     "same as the output plot"
+                 )
+ 
+-        fig = ax.get_figure()
++        fig = _figure_of(ax)
+         # if ax is passed and a number of subplots is 1, return ax as it is
+         if naxes == 1:
+             if squeeze:
+@@ -265,13 +274,12 @@
+             else:
+                 return fig, flatten_axes(ax)
+         else:
+-            warnings.warn(
++            warn_pandas(
+                 "To output multiple subplots, the figure containing "
+-                "the passed axes is being cleared.",
+-                UserWarning,
+-                stacklevel=find_stack_level(),
++                "the passed axes is being cleared."
+             )
+-            fig.clear()
++            if fig is not None:
++                fig.clear()
+ 
+     nrows, ncols = _get_layout(naxes, layout=layout, layout_type=layout_type)
+     nplots = nrows * ncols
+--- a/pandas/util/_exceptions.py
++++ b/pandas/util/_exceptions.py
+@@ -47,7 +47,10 @@
+     try:
+         n = 0
+         while frame:
+-            filename = inspect.getfile(frame)
++            try:
++                filename = inspect.getfile(frame)
++            except (TypeError, OSError):
++                filename = frame.f_code.co_filename
+             if filename.startswith(pkg_dir) and not filename.startswith(test_dir):
+                 frame = frame.f_back
+                 n += 1
+@@ -60,6 +63,26 @@
+     return n
+ 
+ 
++def warn_pandas(message, category=UserWarning):
++    import pandas as pd
++
++    pkg_dir = os.path.dirname(pd.__file__)
++    prefixes = []
++    try:
++        names = os.listdir(pkg_dir)
++    except OSError:
++        names = []
++    for name in names:
++        if name == "tests":
++            continue
++        path = os.path.join(pkg_dir, name)
++        if os.path.isdir(path):
++            prefixes.append(path + os.sep)
++        elif name.endswith(".py"):
++            prefixes.append(path)
++    warnings.warn(message, category, skip_file_prefixes=tuple(prefixes))
++
++
+ @contextlib.contextmanager
+ def rewrite_warning(
+     target_message: str,

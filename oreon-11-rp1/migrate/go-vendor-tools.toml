@@ -1,0 +1,33 @@
+[archive]
+
+[licensing]
+detector = "askalono"
+[[licensing.licenses]]
+path = "vendor/github.com/mutecomm/go-sqlcipher/v4/LICENSE"
+sha256sum = "e9bb8e7cc0245db9c0269023c3d3484d8277219d4235bd5137a80ad6b9d726ee"
+expression = "MIT AND BSD-3-Clause AND blessing AND LicenseRef-scancode-public-domain"
+
+[[licensing.licenses]]
+path = "vendor/github.com/shopspring/decimal/LICENSE"
+sha256sum = "b92ba0f6ee02f2309628bfdadb123668a17c016e475ba477b857d33470d9d625"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/gopkg.in/yaml.v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "MIT AND (MIT AND Apache-2.0)"
+
+[[licensing.licenses]]
+path = "vendor/github.com/jackc/pgerrcode/LICENSE"
+sha256sum = "ba651777b8362b30d778d60f7a0fcd1f01cdac79aa713d1a6f0a53bf5372fa2f"
+expression = "(MIT AND PostgreSQL) AND PostgreSQL"
+
+[[licensing.licenses]]
+path = "vendor/github.com/apache/arrow/go/v10/LICENSE.txt"
+sha256sum = "b9bb118a7b522be9463470835c0a50451255b4e8dd350465c366a1656128f622"
+expression = "(Apache-2.0 AND BSD-3-Clause) AND BSD-3-Clause AND CC0-1.0 AND (LicenseRef-scancode-public-domain AND MIT) AND Apache-2.0 AND BSL-1.0 AND (BSD-2-Clause AND BSD-3-Clause) AND MIT AND (BSL-1.0 AND BSD-2-Clause) AND BSD-2-Clause AND ZPL-2.1 AND LicenseRef-scancode-protobuf AND NCSA AND (CC-BY-3.0 AND MIT) AND (CC-BY-4.0 AND LicenseRef-scancode-public-domain) AND NTP AND Zlib AND OpenSSL AND (BSD-3-Clause AND BSD-2-Clause) AND (BSD-2-Clause AND Zlib)"
+
+[[licensing.licenses]]
+path = "vendor/modernc.org/sqlite/SQLITE-LICENSE"
+sha256sum = "8438c9c89b849131ead81d5435cb97fcf052df5b0b286dda8a2d4c29e6cb3fd0"
+expression = "LicenseRef-scancode-public-domain"

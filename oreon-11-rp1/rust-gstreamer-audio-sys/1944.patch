@@ -1,0 +1,85 @@
+From 35be5d75338904b9d68b4d2227d1dade9ece96f9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <sebastian@centricular.com>
+Date: Wed, 11 Mar 2026 19:15:23 +0200
+Subject: [PATCH] audio: Ignore GST_DSD_FORMAT_U16 / U32 in the -sys bindings
+
+Their actual value depends on the platform's endianness so handle it the
+same way as other such cases.
+
+Fixes https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/issues/574
+
+Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/merge_requests/1944>
+---
+ gstreamer-audio/sys/Gir.toml         | 10 ++++++++++
+ gstreamer-audio/sys/src/lib.rs       |  2 --
+ gstreamer-audio/sys/tests/abi.rs     |  2 --
+ gstreamer-audio/sys/tests/constant.c |  2 --
+ 4 files changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/gstreamer-audio/sys/Gir.toml b/gstreamer-audio/sys/Gir.toml
+index ca35324ad..e56fe5766 100644
+--- a/gstreamer-audio/sys/Gir.toml
++++ b/gstreamer-audio/sys/Gir.toml
+@@ -92,6 +92,16 @@ status = "generate"
+     name = "s20_32"
+     ignore = true
+ 
++[[object]]
++name = "GstAudio.DsdFormat"
++status = "generate"
++    [[object.member]]
++    name = "dsd_format_u16"
++    ignore = true
++    [[object.member]]
++    name = "dsd_format_u32"
++    ignore = true
++
+ [[object]]
+ name = "GstAudio.*"
+ status = "generate"
+diff --git a/gstreamer-audio/sys/src/lib.rs b/gstreamer-audio/sys/src/lib.rs
+index 86c4eb225..2d4744359 100644
+--- a/gstreamer-audio/sys/src/lib.rs
++++ b/gstreamer-audio/sys/src/lib.rs
+@@ -206,8 +206,6 @@ pub const GST_DSD_FORMAT_U16BE: GstDsdFormat = 3;
+ pub const GST_DSD_FORMAT_U32LE: GstDsdFormat = 4;
+ pub const GST_DSD_FORMAT_U32BE: GstDsdFormat = 5;
+ pub const GST_NUM_DSD_FORMATS: GstDsdFormat = 6;
+-pub const GST_DSD_FORMAT_U16: GstDsdFormat = 2;
+-pub const GST_DSD_FORMAT_U32: GstDsdFormat = 4;
+ 
+ pub type GstStreamVolumeFormat = c_int;
+ pub const GST_STREAM_VOLUME_FORMAT_LINEAR: GstStreamVolumeFormat = 0;
+diff --git a/gstreamer-audio/sys/tests/abi.rs b/gstreamer-audio/sys/tests/abi.rs
+index 1e58f1fe2..7717a8df1 100644
+--- a/gstreamer-audio/sys/tests/abi.rs
++++ b/gstreamer-audio/sys/tests/abi.rs
+@@ -902,10 +902,8 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
+         "GST_DSD_FORMATS_ALL",
+         "{ DSDU32BE, DSDU16BE, DSDU8, DSDU32LE, DSDU16LE }",
+     ),
+-    ("(gint) GST_DSD_FORMAT_U16", "2"),
+     ("(gint) GST_DSD_FORMAT_U16BE", "3"),
+     ("(gint) GST_DSD_FORMAT_U16LE", "2"),
+-    ("(gint) GST_DSD_FORMAT_U32", "4"),
+     ("(gint) GST_DSD_FORMAT_U32BE", "5"),
+     ("(gint) GST_DSD_FORMAT_U32LE", "4"),
+     ("(gint) GST_DSD_FORMAT_U8", "1"),
+diff --git a/gstreamer-audio/sys/tests/constant.c b/gstreamer-audio/sys/tests/constant.c
+index 15520511a..8bc00dab7 100644
+--- a/gstreamer-audio/sys/tests/constant.c
++++ b/gstreamer-audio/sys/tests/constant.c
+@@ -211,10 +211,8 @@ int main() {
+     PRINT_CONSTANT((gint) GST_AUDIO_RING_BUFFER_STATE_STARTED);
+     PRINT_CONSTANT((gint) GST_AUDIO_RING_BUFFER_STATE_STOPPED);
+     PRINT_CONSTANT(GST_DSD_FORMATS_ALL);
+-    PRINT_CONSTANT((gint) GST_DSD_FORMAT_U16);
+     PRINT_CONSTANT((gint) GST_DSD_FORMAT_U16BE);
+     PRINT_CONSTANT((gint) GST_DSD_FORMAT_U16LE);
+-    PRINT_CONSTANT((gint) GST_DSD_FORMAT_U32);
+     PRINT_CONSTANT((gint) GST_DSD_FORMAT_U32BE);
+     PRINT_CONSTANT((gint) GST_DSD_FORMAT_U32LE);
+     PRINT_CONSTANT((gint) GST_DSD_FORMAT_U8);
+-- 
+GitLab
+

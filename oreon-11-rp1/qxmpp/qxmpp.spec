@@ -6,7 +6,7 @@
 %bcond_with all_tests
 
 Name:           qxmpp
-Version:        1.14.7
+Version:        1.16.3
 Release:        %autorelease
 Summary:        Cross-platform C++ XMPP client and server library
 

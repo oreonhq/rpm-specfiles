@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=xscorch
+Comment=Scorched Earth clone
+Exec=xscorch
+Icon=xscorch
+Categories=Game;StrategyGame;
+Keywords=game;tankwars;bomb;scorch;scorched;earth;

@@ -1,0 +1,12 @@
+diff -up alienarena-7.71.6/source/client/menu.c.fix-bad-sprintf-use alienarena-7.71.6/source/client/menu.c
+--- alienarena-7.71.6/source/client/menu.c.fix-bad-sprintf-use	2024-01-25 10:53:56.969381084 -0500
++++ alienarena-7.71.6/source/client/menu.c	2024-01-25 10:54:05.714512495 -0500
+@@ -5705,7 +5705,7 @@ static void StartServerActionFunc (UNUSE
+ 		Cvar_ForceSet("dedicated", "0");
+ #endif
+ 		Cvar_Set("sv_maplist", startmap);
+-		Cbuf_AddText (sprintf("setmaster %s %s\n", DEFAULT_MASTER_1, DEFAULT_MASTER_2));
++		Cbuf_AddText (va("setmaster %s %s\n", DEFAULT_MASTER_1, DEFAULT_MASTER_2));
+ 	}
+ 	Cvar_SetValue( "skill", s_skill_box.curvalue );
+ 	Cvar_SetValue( "g_antilagprojectiles", s_antilagprojectiles_box.curvalue);

@@ -1,0 +1,10 @@
+--- /external/partio_zip/zip_manager.hpp	2021-12-22 18:01:58.000000000 -0500
++++ /external/partio_zip/zip_manager.hpp	2022-02-22 04:16:37.934781613 -0500
+@@ -41,6 +41,7 @@
+ #ifndef __ZIP__
+ #define __ZIP__
+ 
++#include <memory>
+ #include <fstream>
+ #include <iostream>
+ #include <map>

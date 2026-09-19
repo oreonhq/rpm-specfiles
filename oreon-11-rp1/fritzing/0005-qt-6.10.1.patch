@@ -1,0 +1,53 @@
+diff -r -U4 fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--orig/src/commands.cpp fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--patched/src/commands.cpp
+--- fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--orig/src/commands.cpp	2025-10-07 15:46:45.000000000 +0200
++++ fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--patched/src/commands.cpp	2026-01-06 13:52:47.929616127 +0100
+@@ -508,9 +508,9 @@
+ 	return QString("FlipItemCommand ")
+ 	       + BaseCommand::getParamString() +
+ 	       QString(" id:%1 by:%2")
+ 	       .arg(m_itemID)
+-	       .arg(m_orientation);
++	       .arg(static_cast<int>(m_orientation));
+ }
+ 
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+@@ -1829,9 +1829,9 @@
+ 		result += QString(" [%1]").arg(commandText);
+ 	}
+ 	
+ 	result += QString(" id:%1 degrees:%2 orientation:%3")
+-	          .arg(m_itemID).arg(m_degrees).arg(m_orientation);
++	          .arg(m_itemID).arg(m_degrees).arg(static_cast<int>(m_orientation));
+ 	
+ 	return result;
+ }
+ 
+diff -r -U4 fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--orig/src/items/itembase.cpp fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--patched/src/items/itembase.cpp
+--- fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--orig/src/items/itembase.cpp	2025-10-07 15:46:45.000000000 +0200
++++ fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--patched/src/items/itembase.cpp	2026-01-06 13:57:29.341134445 +0100
+@@ -2005,9 +2005,9 @@
+ 	                   .arg(this->id())
+ 	                   .arg(this->instanceTitle())
+ 	                   .arg(this->viewLayerID())
+ 	                   .arg(this->viewLayerPlacement())
+-	                   .arg(this->wireFlags())
++	                   .arg(static_cast<int>(this->wireFlags()))
+ 			   .arg((long) dynamic_cast<const QGraphicsItem *>(this), 0, 16)
+ 	                   .arg(m_viewID)
+ 	                   .arg(this->zValue())
+ 	                   .arg(this->pos().x())
+diff -r -U4 fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--orig/src/sketch/sketchwidget.cpp fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--patched/src/sketch/sketchwidget.cpp
+--- fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--orig/src/sketch/sketchwidget.cpp	2025-10-07 15:46:45.000000000 +0200
++++ fritzing-app-04e5bb0241e8f1de24d0fce9be070041c6d5b68e--patched/src/sketch/sketchwidget.cpp	2026-01-06 14:04:12.136316627 +0100
+@@ -1383,9 +1383,9 @@
+ 	DebugDialog::debug(QString("creating wire %11: %1, flags: %6, from %7 %8, to %9 %10, frompos: %2 %3, topos: %4 %5")
+ 	                   .arg(newID)
+ 	                   .arg(fromPos.x()).arg(fromPos.y())
+ 	                   .arg(toPos.x()).arg(toPos.y())
+-	                   .arg(wireFlags)
++	                   .arg(static_cast<int>(wireFlags))
+ 	                   .arg(from->attachedToTitle()).arg(from->connectorSharedID())
+ 	                   .arg(to->attachedToTitle()).arg(to->connectorSharedID())
+ 	                   .arg(m_viewID)
+ 	                  );

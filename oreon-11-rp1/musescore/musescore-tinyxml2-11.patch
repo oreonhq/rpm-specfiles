@@ -1,0 +1,501 @@
+--- MuseScore-4.6.0-beta/src/framework/global/thirdparty/tinyxml/tinyxml2.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/global/thirdparty/tinyxml/tinyxml2.cpp	2025-09-19 11:43:56.406890818 -0600
+@@ -26,7 +26,7 @@ distribution.
+ #include "mu_patch.h"
+ 
+ #include <new>		// yes, this one new style header, is in the Android SDK.
+-#if defined(ANDROID_NDK) || defined(__BORLANDC__) || defined(__QNXNTO__)
++#if defined(ANDROID_NDK) || defined(__BORLANDC__) || defined(__QNXNTO__) || defined(__CC_ARM)
+ #   include <stddef.h>
+ #   include <stdarg.h>
+ #else
+@@ -108,14 +108,9 @@ distribution.
+ #elif defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__) || defined(__CYGWIN__)
+ 	#define TIXML_FSEEK fseeko
+ 	#define TIXML_FTELL ftello
+-#elif defined(__ANDROID__) 
+-    #if __ANDROID_API__ > 24
+-        #define TIXML_FSEEK fseeko64
+-        #define TIXML_FTELL ftello64
+-    #else
+-        #define TIXML_FSEEK fseeko
+-        #define TIXML_FTELL ftello
+-    #endif
++#elif defined(__ANDROID__) && __ANDROID_API__ > 24
++	#define TIXML_FSEEK fseeko64
++	#define TIXML_FTELL ftello64
+ #else
+ 	#define TIXML_FSEEK fseek
+ 	#define TIXML_FTELL ftell
+@@ -241,13 +236,13 @@ char* StrPair::ParseName( char* p )
+     if ( !p || !(*p) ) {
+         return 0;
+     }
+-    if ( !XMLUtil::IsNameStartChar( (unsigned char) *p ) ) {
++    if ( !XMLUtil::IsNameStartChar( static_cast<unsigned char>(*p) ) ) {
+         return 0;
+     }
+ 
+     char* const start = p;
+     ++p;
+-    while ( *p && XMLUtil::IsNameChar( (unsigned char) *p ) ) {
++    while ( *p && XMLUtil::IsNameChar( static_cast<unsigned char>(*p) ) ) {
+         ++p;
+     }
+ 
+@@ -474,102 +469,94 @@ void XMLUtil::ConvertUTF32ToUTF8( unsign
+ }
+ 
+ 
+-const char* XMLUtil::GetCharacterRef( const char* p, char* value, int* length )
++const char* XMLUtil::GetCharacterRef(const char* p, char* value, int* length)
+ {
+-    // Presume an entity, and pull it out.
++    // Assume an entity, and pull it out.
+     *length = 0;
+ 
+-    if ( *(p+1) == '#' && *(p+2) ) {
+-        unsigned long ucs = 0;
+-        TIXMLASSERT( sizeof( ucs ) >= 4 );
++    static const uint32_t MAX_CODE_POINT = 0x10FFFF;
++
++    if (*(p + 1) == '#' && *(p + 2)) {
++        uint32_t ucs = 0;
+         ptrdiff_t delta = 0;
+-        unsigned mult = 1;
++        uint32_t mult = 1;
+         static const char SEMICOLON = ';';
+ 
+-        if ( *(p+2) == 'x' ) {
++        bool hex = false;
++        uint32_t radix = 10;
++        const char* q = 0;
++        char terminator = '#';
++
++        if (*(p + 2) == 'x') {
+             // Hexadecimal.
+-            const char* q = p+3;
+-            if ( !(*q) ) {
+-                return 0;
+-            }
++            hex = true;
++            radix = 16;
++            terminator = 'x';
+ 
+-            q = strchr( q, SEMICOLON );
++            q = p + 3;
++        }
++        else {
++            // Decimal.
++            q = p + 2;
++        }
++        if (!(*q)) {
++            return 0;
++        }
+ 
+-            if ( !q ) {
+-                return 0;
+-            }
+-            TIXMLASSERT( *q == SEMICOLON );
++        q = strchr(q, SEMICOLON);
++        if (!q) {
++            return 0;
++        }
++        TIXMLASSERT(*q == SEMICOLON);
+ 
+-            delta = q-p;
+-            --q;
++        delta = q - p;
++        --q;
+ 
+-            while ( *q != 'x' ) {
+-                unsigned int digit = 0;
++        while (*q != terminator) {
++            uint32_t digit = 0;
+ 
+-                if ( *q >= '0' && *q <= '9' ) {
+-                    digit = *q - '0';
+-                }
+-                else if ( *q >= 'a' && *q <= 'f' ) {
+-                    digit = *q - 'a' + 10;
+-                }
+-                else if ( *q >= 'A' && *q <= 'F' ) {
+-                    digit = *q - 'A' + 10;
+-                }
+-                else {
+-                    return 0;
+-                }
+-                TIXMLASSERT( digit < 16 );
+-                TIXMLASSERT( digit == 0 || mult <= UINT_MAX / digit );
+-                const unsigned int digitScaled = mult * digit;
+-                TIXMLASSERT( ucs <= ULONG_MAX - digitScaled );
+-                ucs += digitScaled;
+-                TIXMLASSERT( mult <= UINT_MAX / 16 );
+-                mult *= 16;
+-                --q;
++            if (*q >= '0' && *q <= '9') {
++                digit = *q - '0';
+             }
+-        }
+-        else {
+-            // Decimal.
+-            const char* q = p+2;
+-            if ( !(*q) ) {
+-                return 0;
++            else if (hex && (*q >= 'a' && *q <= 'f')) {
++                digit = *q - 'a' + 10;
+             }
+-
+-            q = strchr( q, SEMICOLON );
+-
+-            if ( !q ) {
++            else if (hex && (*q >= 'A' && *q <= 'F')) {
++                digit = *q - 'A' + 10;
++            }
++            else {
+                 return 0;
+             }
+-            TIXMLASSERT( *q == SEMICOLON );
+-
+-            delta = q-p;
+-            --q;
++            TIXMLASSERT(digit < radix);
+ 
+-            while ( *q != '#' ) {
+-                if ( *q >= '0' && *q <= '9' ) {
+-                    const unsigned int digit = *q - '0';
+-                    TIXMLASSERT( digit < 10 );
+-                    TIXMLASSERT( digit == 0 || mult <= UINT_MAX / digit );
+-                    const unsigned int digitScaled = mult * digit;
+-                    TIXMLASSERT( ucs <= ULONG_MAX - digitScaled );
+-                    ucs += digitScaled;
+-                }
+-                else {
+-                    return 0;
+-                }
+-                TIXMLASSERT( mult <= UINT_MAX / 10 );
+-                mult *= 10;
+-                --q;
++            const unsigned int digitScaled = mult * digit;
++            ucs += digitScaled;
++            mult *= radix;       
++            
++            // Security check: could a value exist that is out of range?
++            // Easily; limit to the MAX_CODE_POINT, which also allows for a
++            // bunch of leading zeroes.
++            if (mult > MAX_CODE_POINT) {
++                mult = MAX_CODE_POINT;
+             }
++            --q;
++        }
++        // Out of range:
++        if (ucs > MAX_CODE_POINT) {
++            return 0;
+         }
+         // convert the UCS to UTF-8
+-        ConvertUTF32ToUTF8( ucs, value, length );
++        ConvertUTF32ToUTF8(ucs, value, length);
++		if (length == 0) {
++            // If length is 0, there was an error. (Security? Bad input?)
++            // Fail safely.
++			return 0;
++		}
+         return p + delta + 1;
+     }
+-    return p+1;
++    return p + 1;
+ }
+ 
+-
+ void XMLUtil::ToStr( int v, char* buffer, int bufferSize )
+ {
+     TIXML_SNPRINTF( buffer, bufferSize, "%d", v );
+@@ -612,7 +599,7 @@ void XMLUtil::ToStr( int64_t v, char* bu
+ void XMLUtil::ToStr( uint64_t v, char* buffer, int bufferSize )
+ {
+     // horrible syntax trick to make the compiler happy about %llu
+-    TIXML_SNPRINTF(buffer, bufferSize, "%llu", (long long)v);
++    TIXML_SNPRINTF(buffer, bufferSize, "%llu", static_cast<unsigned long long>(v));
+ }
+ 
+ bool XMLUtil::ToInt(const char* str, int* value)
+@@ -707,7 +694,7 @@ bool XMLUtil::ToInt64(const char* str, i
+ bool XMLUtil::ToUnsigned64(const char* str, uint64_t* value) {
+     unsigned long long v = 0;	// horrible syntax trick to make the compiler happy about %llu
+     if(TIXML_SSCANF(str, IsPrefixHex(str) ? "%llx" : "%llu", &v) == 1) {
+-        *value = (uint64_t)v;
++        *value = static_cast<uint64_t>(v);
+         return true;
+     }
+     return false;
+@@ -1163,7 +1150,7 @@ char* XMLNode::ParseDeep( char* p, StrPa
+                 _document->DeleteNode( node );
+                 break;
+ #endif
+-             }
++            }
+         }
+ 
+         XMLElement* ele = node->ToElement();
+@@ -1989,7 +1976,7 @@ char* XMLElement::ParseAttributes( char*
+         }
+ 
+         // attribute.
+-        if (XMLUtil::IsNameStartChar( (unsigned char) *p ) ) {
++        if (XMLUtil::IsNameStartChar( static_cast<unsigned char>(*p) ) ) {
+             XMLAttribute* attrib = CreateAttribute();
+             TIXMLASSERT( attrib );
+             attrib->_parseLineNum = _document->_parseCurLineNum;
+@@ -2233,7 +2220,7 @@ void XMLDocument::MarkInUse(const XMLNod
+ 	TIXMLASSERT(node);
+ 	TIXMLASSERT(node->_parent == 0);
+ 
+-	for (int i = 0; i < _unlinked.Size(); ++i) {
++	for (size_t i = 0; i < _unlinked.Size(); ++i) {
+ 		if (node == _unlinked[i]) {
+ 			_unlinked.SwapRemove(i);
+ 			break;
+@@ -2516,7 +2503,7 @@ void XMLDocument::ClearError() {
+ 
+ void XMLDocument::SetError( XMLError error, int lineNum, const char* format, ... )
+ {
+-    TIXMLASSERT( error >= 0 && error < XML_ERROR_COUNT );
++    TIXMLASSERT(error >= 0 && error < XML_ERROR_COUNT);
+     _errorID = error;
+     _errorLineNum = lineNum;
+ 	_errorStr.Reset();
+@@ -2525,7 +2512,8 @@ void XMLDocument::SetError( XMLError err
+     char* buffer = new char[BUFFER_SIZE];
+ 
+     TIXMLASSERT(sizeof(error) <= sizeof(int));
+-    TIXML_SNPRINTF(buffer, BUFFER_SIZE, "Error=%s ErrorID=%d (0x%x) Line number=%d", ErrorIDToName(error), int(error), int(error), lineNum);
++    TIXML_SNPRINTF(buffer, BUFFER_SIZE, "Error=%s ErrorID=%d (0x%x) Line number=%d",
++        ErrorIDToName(error), static_cast<int>(error), static_cast<unsigned int>(error), lineNum);
+ 
+ 	if (format) {
+ 		size_t len = strlen(buffer);
+--- MuseScore-4.6.0-beta/src/framework/global/thirdparty/tinyxml/tinyxml2.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/global/thirdparty/tinyxml/tinyxml2.h	2025-09-19 11:43:56.407548743 -0600
+@@ -96,11 +96,11 @@ distribution.
+ /* Versioning, past 1.0.14:
+ 	http://semver.org/
+ */
+-static const int TIXML2_MAJOR_VERSION = 10;
++static const int TIXML2_MAJOR_VERSION = 11;
+ static const int TIXML2_MINOR_VERSION = 0;
+ static const int TIXML2_PATCH_VERSION = 0;
+ 
+-#define TINYXML2_MAJOR_VERSION 10
++#define TINYXML2_MAJOR_VERSION 11
+ #define TINYXML2_MINOR_VERSION 0
+ #define TINYXML2_PATCH_VERSION 0
+ 
+@@ -199,7 +199,7 @@ private:
+ 	Has a small initial memory pool, so that low or no usage will not
+ 	cause a call to new/delete
+ */
+-template <class T, int INITIAL_SIZE>
++template <class T, size_t INITIAL_SIZE>
+ class DynArray
+ {
+ public:
+@@ -227,9 +227,8 @@ public:
+         ++_size;
+     }
+ 
+-    T* PushArr( int count ) {
+-        TIXMLASSERT( count >= 0 );
+-        TIXMLASSERT( _size <= INT_MAX - count );
++    T* PushArr( size_t count ) {
++        TIXMLASSERT( _size <= SIZE_MAX - count );
+         EnsureCapacity( _size+count );
+         T* ret = &_mem[_size];
+         _size += count;
+@@ -242,7 +241,7 @@ public:
+         return _mem[_size];
+     }
+ 
+-    void PopArr( int count ) {
++    void PopArr( size_t count ) {
+         TIXMLASSERT( _size >= count );
+         _size -= count;
+     }
+@@ -251,13 +250,13 @@ public:
+         return _size == 0;
+     }
+ 
+-    T& operator[](int i)				{
+-        TIXMLASSERT( i>= 0 && i < _size );
++    T& operator[](size_t i) {
++        TIXMLASSERT( i < _size );
+         return _mem[i];
+     }
+ 
+-    const T& operator[](int i) const	{
+-        TIXMLASSERT( i>= 0 && i < _size );
++    const T& operator[](size_t i) const {
++        TIXMLASSERT( i < _size );
+         return _mem[i];
+     }
+ 
+@@ -266,18 +265,18 @@ public:
+         return _mem[ _size - 1];
+     }
+ 
+-    int Size() const					{
++    size_t Size() const {
+         TIXMLASSERT( _size >= 0 );
+         return _size;
+     }
+ 
+-    int Capacity() const				{
++    size_t Capacity() const {
+         TIXMLASSERT( _allocated >= INITIAL_SIZE );
+         return _allocated;
+     }
+ 
+-	void SwapRemove(int i) {
+-		TIXMLASSERT(i >= 0 && i < _size);
++	void SwapRemove(size_t i) {
++		TIXMLASSERT(i < _size);
+ 		TIXMLASSERT(_size > 0);
+ 		_mem[i] = _mem[_size - 1];
+ 		--_size;
+@@ -297,14 +296,14 @@ private:
+     DynArray( const DynArray& ); // not supported
+     void operator=( const DynArray& ); // not supported
+ 
+-    void EnsureCapacity( int cap ) {
++    void EnsureCapacity( size_t cap ) {
+         TIXMLASSERT( cap > 0 );
+         if ( cap > _allocated ) {
+-            TIXMLASSERT( cap <= INT_MAX / 2 );
+-            const int newAllocated = cap * 2;
+-            T* newMem = new T[static_cast<unsigned int>(newAllocated)];
++            TIXMLASSERT( cap <= SIZE_MAX / 2 / sizeof(T));
++            const size_t newAllocated = cap * 2;
++            T* newMem = new T[newAllocated];
+             TIXMLASSERT( newAllocated >= _size );
+-            memcpy( newMem, _mem, sizeof(T)*static_cast<size_t>(_size) );	// warning: not using constructors, only works for PODs
++            memcpy( newMem, _mem, sizeof(T) * _size );	// warning: not using constructors, only works for PODs
+             if ( _mem != _pool ) {
+                 delete [] _mem;
+             }
+@@ -314,9 +313,9 @@ private:
+     }
+ 
+     T*  _mem;
+-    T   _pool[static_cast<size_t>(INITIAL_SIZE)];
+-    int _allocated;		// objects allocated
+-    int _size;			// number objects in use
++    T   _pool[INITIAL_SIZE];
++    size_t _allocated;		// objects allocated
++    size_t _size;			// number objects in use
+ };
+ 
+ 
+@@ -330,7 +329,7 @@ public:
+     MemPool() {}
+     virtual ~MemPool() {}
+ 
+-    virtual int ItemSize() const = 0;
++    virtual size_t ItemSize() const = 0;
+     virtual void* Alloc() = 0;
+     virtual void Free( void* ) = 0;
+     virtual void SetTracked() = 0;
+@@ -340,7 +339,7 @@ public:
+ /*
+ 	Template child class to create pools of the correct type.
+ */
+-template< int ITEM_SIZE >
++template< size_t ITEM_SIZE >
+ class MemPoolT : public MemPool
+ {
+ public:
+@@ -362,10 +361,10 @@ public:
+         _nUntracked = 0;
+     }
+ 
+-    virtual int ItemSize() const override{
++    virtual size_t ItemSize() const override {
+         return ITEM_SIZE;
+     }
+-    int CurrentAllocs() const		{
++    size_t CurrentAllocs() const {
+         return _currentAllocs;
+     }
+ 
+@@ -376,7 +375,7 @@ public:
+             _blockPtrs.Push( block );
+ 
+             Item* blockItems = block->items;
+-            for( int i = 0; i < ITEMS_PER_BLOCK - 1; ++i ) {
++            for( size_t i = 0; i < ITEMS_PER_BLOCK - 1; ++i ) {
+                 blockItems[i].next = &(blockItems[i + 1]);
+             }
+             blockItems[ITEMS_PER_BLOCK - 1].next = 0;
+@@ -417,7 +416,7 @@ public:
+         --_nUntracked;
+     }
+ 
+-    int Untracked() const {
++    size_t Untracked() const {
+         return _nUntracked;
+     }
+ 
+@@ -448,10 +447,10 @@ private:
+     DynArray< Block*, 10 > _blockPtrs;
+     Item* _root;
+ 
+-    int _currentAllocs;
+-    int _nAllocs;
+-    int _maxAllocs;
+-    int _nUntracked;
++    size_t _currentAllocs;
++    size_t _nAllocs;
++    size_t _maxAllocs;
++    size_t _nUntracked;
+ };
+ 
+ 
+@@ -892,7 +891,7 @@ public:
+ 
+ 		If the 'target' is null, then the nodes will
+ 		be allocated in the current document. If 'target'
+-        is specified, the memory will be allocated is the
++        is specified, the memory will be allocated in the
+         specified XMLDocument.
+ 
+ 		NOTE: This is probably not the correct tool to
+@@ -1981,11 +1980,11 @@ private:
+ 	void PushDepth();
+ 	void PopDepth();
+ 
+-    template<class NodeType, int PoolElementSize>
++    template<class NodeType, size_t PoolElementSize>
+     NodeType* CreateUnlinkedNode( MemPoolT<PoolElementSize>& pool );
+ };
+ 
+-template<class NodeType, int PoolElementSize>
++template<class NodeType, size_t PoolElementSize>
+ inline NodeType* XMLDocument::CreateUnlinkedNode( MemPoolT<PoolElementSize>& pool )
+ {
+     TIXMLASSERT( sizeof( NodeType ) == PoolElementSize );
+@@ -2315,7 +2314,7 @@ public:
+     	of the XML file in memory. (Note the size returned
+     	includes the terminating null.)
+     */
+-    int CStrSize() const {
++    size_t CStrSize() const {
+         return _buffer.Size();
+     }
+     /**
+@@ -2375,7 +2374,7 @@ private:
+ };
+ 
+ 
+-}	// tinyxml2
++} // namespace tinyxml2
+ 
+ #if defined(_MSC_VER)
+ #   pragma warning(pop)

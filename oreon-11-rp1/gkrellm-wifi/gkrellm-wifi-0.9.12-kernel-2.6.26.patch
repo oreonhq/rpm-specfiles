@@ -1,0 +1,12 @@
+diff -up gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c~ gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c
+--- gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c~	2008-05-31 16:05:33.000000000 +0200
++++ gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c	2008-05-31 16:05:33.000000000 +0200
+@@ -29,7 +29,7 @@
+ #include <sys/socket.h>
+ #include <sys/types.h>
+ 
+-#include <net/if.h>
++/* #include <net/if.h> */
+ #include <asm/types.h>
+ #include <linux/wireless.h>
+ 

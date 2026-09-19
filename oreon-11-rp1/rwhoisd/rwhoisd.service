@@ -1,0 +1,12 @@
+[Unit]
+Description=Referral WHOIS daemon
+After=syslog.target
+
+[Service]
+Type=simple
+ExecStartPre=/usr/bin/rwhois_indexer -c /etc/rwhoisd.conf -i -s txt
+ExecStart=/usr/sbin/rwhoisd -c /etc/rwhoisd.conf -n
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

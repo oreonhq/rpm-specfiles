@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Typespeed
+Comment=Test your typing speed
+Exec=typespeed
+Type=Application
+Terminal=true
+Icon=system-config-keyboard
+Categories=Game;ArcadeGame;Education
+Encoding=UTF-8

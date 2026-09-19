@@ -1,0 +1,9 @@
+diff -Naur crudini-0.9.3/crudini.py crudini-0.9.3.new/crudini.py
+--- crudini-0.9.3/crudini.py	2016-12-13 20:14:56.000000000 +0000
++++ crudini-0.9.3.new/crudini.py	2019-02-20 08:16:34.470569740 +0000
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ # vim:fileencoding=utf8
+ #

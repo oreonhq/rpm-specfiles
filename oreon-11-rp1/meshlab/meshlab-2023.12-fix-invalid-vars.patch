@@ -1,0 +1,13 @@
+diff -up meshlab-MeshLab-2023.12/src/meshlabplugins/filter_screened_poisson/Src/SparseMatrix.inl.fix-invalid-vars meshlab-MeshLab-2023.12/src/meshlabplugins/filter_screened_poisson/Src/SparseMatrix.inl
+--- meshlab-MeshLab-2023.12/src/meshlabplugins/filter_screened_poisson/Src/SparseMatrix.inl.fix-invalid-vars	2025-03-24 09:42:13.730188185 -0400
++++ meshlab-MeshLab-2023.12/src/meshlabplugins/filter_screened_poisson/Src/SparseMatrix.inl	2025-03-24 09:44:30.374921811 -0400
+@@ -196,7 +196,8 @@ void SparseMatrix< T >::SetRowSize( int
+ template<class T>
+ void SparseMatrix<T>::SetZero()
+ {
+-	Resize(this->m_N, this->m_M);
++	// I have no idea what this was trying to do, but m_N and m_M are non-existent variables
++	// Resize(this->m_N, this->m_M);
+ }
+ 
+ template<class T>

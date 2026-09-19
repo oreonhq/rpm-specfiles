@@ -1,0 +1,383 @@
+.TH UNU\-MAKE "1" "May 2021" "" "User Commands"
+.SH NAME
+unu\-make \- create a \fInrrd\fR (or \fInrrd\fR header) from scratch
+.SH SYNOPSIS
+.B unu\ make
+.RI [ @file \ ...]
+.RB [ \-h ]
+.RB [ \-i , \-\-input
+.RI < file \ ...>]
+.BR \-t , \-\-type
+.RI < type >
+.BR \-s , \-\-size
+.RI < sz0 \  sz1 \ ...>
+.RB [ \-fd , \-\-filedim
+.RI < dim >]
+.RB [ \-sp , \-\-spacing
+.RI < sp0 \  sp1 \ ...>]
+.RB [ \-th , \-\-thickness
+.RI < th0 \  th1 \ ...>]
+.RB [ \-k , \-\-kind
+.RI < k0 \  k1 \ ...>]
+.RB [ \-cn , \-\-centering
+.RI < c0 \  c1 \ ...>]
+.RB [ \-l , \-\-label
+.RI < lb0 \  lb1 \ ...>]
+.RB [ \-u , \-\-unit
+.RI < un0 \  un1 \ ...>]
+.RB [ \-c , \-\-content
+.RI < content >]
+.RB [ \-ls , \-\-lineskip
+.RI < num >]
+.RB [ \-bs , \-\-byteskip
+.RI < num >]
+.RB [ \-e , \-\-encoding
+.RI < enc >]
+.RB [ \-en , \-\-endian
+.RI < end >]
+.RB [ \-kv , \-\-keyvalue
+.RI < key/val \ ...>]
+.RB [ \-spc , \-\-space
+.RI < space >]
+.RB [ \-orig , \-\-origin
+.RI < origin >]
+.RB [ \-dirs , \-\-directions
+.RI < v0 \  v1 \ ...>]
+.RB [ \-mf , \-\-measurementframe
+.RI < v0 \  v1 \ ...>]
+.RB [ \-spu , \-\-spaceunit
+.RI < su0 \  su1 \ ...>]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.RB [ \-od , \-\-outputdata
+.RI < name >]
+.SH DESCRIPTION
+Create a
+.I nrrd
+(or
+.I nrrd
+header) from scratch.
+The data can be in one or more files, or coming from
+.BR stdin (3).
+This provides an easy way of specifying the information about some data as to
+wrap it in a NRRD file, either to pass on for further
+.BR unu (1)
+processing, or to save to disk.
+Note that with
+.RB \(lq \-h \(rq,
+this creates a detached
+.I nrrd
+header file, without ever reading or writing data files. 
+.P
+When using multiple datafiles, the data from each is simply concatenated in
+memory (as opposed to interleaving along a faster axis).
+Keep in mind that all the options below refer to the finished data segment
+resulting from joining all the data pieces together, except for
+.RB \(lq \-ls \(rq,
+.RB \(lq \-bs \(rq,
+and
+.RB \(lq \-e \(rq,
+which apply (uniformly) to the individual data files.
+Use the
+.RB \(lq \-fd \(rq,
+option when the things being joined together are not slices of the final
+result, but slabs or scanlines.
+It may be easier to put multiple filenames in a response file; there can be one
+or more filenames per line of the response file. You can also use a
+.BR sprintf (3)-style
+format to identify a numbered range of files, so for example
+.RB \(lq \-i\ I.%03d\ 1\ 90\ 1 \(rq
+refers to
+.BR I.001 ,\  I.002 ,\ ...\  I.090 ,
+using the inclusive range from the first to the second integer (following the
+.BR sprintf (3)-style
+format), in steps of the third.
+Can optionally give a fourth integer to serve same role as
+.RB \(lq \-fd \(rq.
+.TP
+.B NOTE:
+For the
+.RB \(lq \-l \(rq
+(labels),
+.RB \(lq \-u \(rq
+(units), and
+.RB \(lq \-spu \(rq
+(space units) options below, you can use a single unquoted period
+.RB ( . )
+to signify an empty string.
+This creates a convenient way to convey something that the shell doesn\(cqt
+make it easy to convey.
+Shell expansion weirdness also requires the use of
+quotes
+around the arguments to
+.RB \(lq \-orig \(rq
+(space origin),
+.RB \(lq \-dirs \(rq
+(space directions), and
+.RB \(lq \-mf \(rq
+(measurement frame).
+.P
+Uses various components of file and data IO, but currently there is no library
+function that encapsulates the functionality here.
+.SH OPTIONS
+.TP
+.IR @file \ ...\:
+response file(s) containing command-line arguments
+.TP
+.B \-h
+Generate header
+.BR ONLY :
+don\(cqt write out the whole
+.IR nrrd ,
+don\(cqt even bother reading the input data, just output the detached
+.I nrrd
+header file (usually with a
+.RB \(lq .nhdr \(rq
+extension) determined by the options below.
+The single constraint is that detached headers are incompatible with using
+.BR stdin (3)
+as the data source.
+.TP
+.B \-i\fR\ <\fIfile\fR\ ...>\ ,\ \fB\-\-input\fR\ <\fIfile\fR\ ...>
+Filename(s) of data file(s); use
+.RB \(lq \- \(rq
+for
+.BR stdin (3).
+.BR OR ,
+can use
+.BR sprintf (3)-style
+format for identifying a range of numbered files, see above for details.
+(1 or more
+.IR string s);
+default:
+.RB \(lq \- \(rq
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+type of data (e.g.\:
+.RB \(lq uchar \(rq,
+.RB \(lq int \(rq,
+.RB \(lq float \(rq,
+.RB \(lq double \(rq,
+etc.)
+.TP
+.B \-s\fR\ <\fIsz0\fR\ \fIsz1\fR\ ...>\ ,\ \fB\-\-size\fR\ <\fIsz0\fR\ \fIsz1\fR\ ...>
+number of samples along each axis (and implicit indicator of dimension of
+.IR nrrd )
+(1 or more
+.IR size_t s)
+.TP
+.B \-fd\fR\ <\fIdim\fR>\ ,\ \fB\-\-filedim\fR\ <\fIdim\fR>
+When using
+.B multiple
+input data files (to
+.RB \(lq \-i \(rq),
+what is the dimension of the array data in each individual file.
+By default (not using this option), this dimension is assumed to be one less
+than the whole data dimension.
+.RI ( unsigned\ int );
+default:
+.RB \(lq 0 \(rq)
+.TP
+.B \-sp\fR\ <\fIsp0\fR\ \fIsp1\fR\ ...>\ ,\ \fB\-\-spacing\fR\ <\fIsp0\fR\ \fIsp1\fR\ ...>
+spacing between samples on each axis.
+Use
+.RB \(lq nan \(rq
+for any non-spatial axes (e.g.  spacing between red, green, and blue along axis
+0 of interleaved RGB image data) (1 or more
+.IR double s)
+.TP
+.B \-th\fR\ <\fIth0\fR\ \fIth1\fR\ ...>\ ,\ \fB\-\-thickness\fR\ <\fIth0\fR\ \fIth1\fR\ ...>
+thickness of region represented by one sample along each axis.
+As with spacing, use
+.RB \(lq nan \(rq
+for any non-spatial axes.
+(1 or more
+.IR double s)
+.TP
+.B \-k\fR\ <\fIk0\fR\ \fIk1\fR\ ...>\ ,\ \fB\-\-kind\fR\ <\fIk0\fR\ \fIk1\fR\ ...>
+what \(lqkind\(rq is each axis, from the
+.I nrrdKind
+.I airEnum
+(e.g.
+.BR space ,
+.BR time ,
+.BR 3-vector ,
+.BR 3D-masked-symmetric-matrix ,
+or
+.RB \(lq none \(rq
+to signify no kind) (1 or more
+.IR string s)
+.TP
+.B \-cn\fR\ <\fIc0\fR\ \fIc1\fR\ ...>\ ,\ \fB\-\-centering\fR\ <\fIc0\fR\ \fIc1\fR\ ...>
+kind of centering
+.RB ( node
+or
+.RB cell )
+for each axis, or
+.RB \(lq none \(rq
+to signify no centering) (1 or more
+.IR string s)
+.TP
+.B \-l\fR\ <\fIlb0\fR\ \fIlb1\fR\ ...>\ ,\ \fB\-\-label\fR\ <\fIlb0\fR\ \fIlb1\fR\ ...>
+short string labels for each of the axes (1 or more
+.IR string s)
+.TP
+.B \-u\fR\ <\fIun0\fR\ \fIun1\fR\ ...>\ ,\ \fB\-\-unit\fR\ <\fIun0\fR\ \fIun1\fR\ ...>
+short strings giving units for each of the axes (1 or more
+.TP
+.B \-c\fR\ <\fIcontent\fR>\ ,\ \fB\-\-content\fR\ <\fIcontent\fR>
+Specifies the content string of the
+.IR nrrd ,
+which is built upon by many
+.I nrrd
+functions to record a history of operations
+.RI ( string )
+.TP
+.B \-ls\fR\ <\fInum\fR>\ ,\ \fB\-\-lineskip\fR\ <\fInum\fR>
+number of ascii lines to skip before reading data
+.RI ( int )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-bs\fR\ <\fInum\fR>\ ,\ \fB\-\-byteskip\fR\ <\fInum\fR>
+number of bytes to skip (after skipping ascii lines, if any) before reading
+data.
+Can use
+.RB \(lq \-bs\ \-1 \(rq
+to skip a binary header of unknown length in raw-encoded data
+.RI ( long int )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-e\fR\ <\fIenc\fR>\ ,\ \fB\-\-encoding\fR\ <\fIenc\fR>
+encoding of input data.
+Possibilities include:
+.RS +7n
+.IP \(bu 2
+.RB \(lq raw \(rq
+raw encoding
+.IP \(bu 2
+.RB \(lq ascii \(rq
+ascii values, one scanline per line of text, values within line are delimited
+by space, tab, or comma
+.IP \(bu 2
+.RB \(lq hex \(rq
+two hex digits per byte
+.IP \(bu 2
+.RB \(lq gzip \(rq,\ \(lq gz \(rq
+gzip compressed raw data
+.IP \(bu 2
+.RB \(lq bzip2 \(rq,\ \(lq bz2 \(rq
+bzip2 compressed raw data
+.P
+default:
+.RB \(lq raw \(rq
+.RE
+.TP
+.B \-kv\fR\ <\fIkey/val\fR\ ...>\ ,\ \fB\-\-keyvalue\fR\ <\fIkey/val\fR\ ...>
+key/value string pairs to be stored in
+.IR nrrd .
+Each key/value pair must be a single string (put it in
+.BR \(dq\(dq s
+if the key or the value contain spaces).
+The format of each pair is
+.RI \(lq key\fB:=\fIvalue \(rq,
+with no spaces before or after
+.RB \(lq := \(rq.
+(1 or more
+.IR string s)
+.TP
+.B \-spc\fR\ <\fIspace\fR>\ ,\ \fB\-\-space\fR\ <\fIspace\fR>
+identify the space (e.g.\:
+.RB \(lq RAS \(rq,
+.RB \(lq LPS \(rq)
+in which the array conceptually lives, from the
+.I nrrdSpace
+.IR airEnum ,
+which in turn determines the dimension of the space.
+Or, use an
+.RB integer> 0
+to give the dimension of a space that
+.I nrrdSpace
+doesn\(cqt know about.
+By default (not using this option), the enclosing space is set as unknown.
+.RI ( string )
+.TP
+.B \-orig\fR\ <\fIorigin\fR>\ ,\ \fB\-\-origin\fR\ <\fIorigin\fR>
+.RB ( NOTE:
+must quote vector)
+the origin in space of the array: the location of the center of the first
+sample, of the form
+.RB \(lq (x,y,z) \(rq
+(or however many coefficients are needed for the chosen space).
+Quoting the vector is needed to stop interpretation from the shell
+.RI ( string )
+.TP
+.B \-dirs\fR\ <\fIv0\fR\ \fIv1\fR\ ...>\ ,\ \fB\-\-directions\fR\ <\fI\fIv0\fR\ \fIv1\fR\ ...>
+.RB ( NOTE:
+must quote whole vector list)
+The \(lqspace directions\(rq: the vectors in space spanned by incrementing (by
+one) each axis index (the column vectors of the index-to-world matrix
+transform),
+.BR OR ,
+.RB \(lq none \(rq
+for non-spatial axes.
+Give one vector per axis.
+(Quoting around whole vector list, not individually, is needed because of
+limitations in the parser)
+.RI ( string )
+.TP
+.B \-mf\fR\ <\fIv0\fR\ \fIv1\fR\ ...>\ ,\ \fB\-\-measurementframe\fR\ <\fI\fIv0\fR\ \fIv1\fR\ ...>
+.RB ( NOTE:
+must quote whole vector list)
+Each vector is a
+.I column
+vector of the matrix which transforms from coordinates in measurement frame (in
+which the coefficients of vectors and tensors are given) to coordinates of
+world space (given with
+.RB \(lq \-spc \(rq).
+This is not a per-axis field: the column vectors comprise a
+.IR D -by- D
+square matrix, where
+.I D
+is the dimension of world space.
+.RI ( string )
+.TP
+.B \-spu\fR\ <\fIsu0\fR\ \fIsu1\fR\ ...>\ ,\ \fB\-\-spaceunit\fR\ <\fI\fIsu0\fR\ \fIsu1\fR\ ...>
+short
+.IR string s
+giving units with which the coefficients of the space origin and direction
+vectors are measured.
+(1 or more
+.IR string s)
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output filename.
+If
+.RB \(lq \-h \(rq
+has been used, the output file is always a detached header.
+Otherwise, use extension
+.RB \(lq .nrrd \(rq
+to signal creation of self-contained
+.IR nrrd ,
+and
+.RB \(lq .nhdr \(rq
+to signal creating of a detached header with (single) data file.
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.TP
+.B \-od\fR\ <\fIname\fR>\ ,\ \fB\-\-outputdata\fR\ <\fIname\fR>
+when
+.I not
+using
+.RB \(lq \-h \(rq
+and saving to a
+.RB \(lq .nhdr \(rq
+file, using this option allows you to explicitly name the data file, instead of
+(by default, not using this option) having it be the same filename base as the
+header file.
+.RI ( string )
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR sprintf (3)

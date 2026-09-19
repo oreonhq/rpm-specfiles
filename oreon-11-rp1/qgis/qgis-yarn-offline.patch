@@ -1,0 +1,12 @@
+diff -rupN --no-dereference qgis-3.44.8/resources/CMakeLists.txt qgis-3.44.8-new/resources/CMakeLists.txt
+--- qgis-3.44.8/resources/CMakeLists.txt	2026-03-06 13:02:13.000000000 +0100
++++ qgis-3.44.8-new/resources/CMakeLists.txt	2026-03-06 23:20:53.943455052 +0100
+@@ -47,7 +47,7 @@ if (WITH_SERVER_LANDINGPAGE_WEBAPP)
+   # add_custom_command does not support OUTPUT_QUIET, so we need to make a cmake subcommand first:
+   file(WRITE ${CMAKE_BINARY_DIR}/yarn_commands.cmake
+   "execute_process(
+-      COMMAND ${YARN} install --frozen-lockfile
++      COMMAND ${YARN} install --frozen-lockfile --offline
+       WORKING_DIRECTORY ${LANDINGPAGE_OUTPUT_PATH}
+       OUTPUT_QUIET
+       ERROR_FILE ${CMAKE_BINARY_DIR}/yarn_error.log

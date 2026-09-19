@@ -1,0 +1,33 @@
+From c4145224a89cfba2bf4b9f0ecfd54873265f1e4c Mon Sep 17 00:00:00 2001
+From: Jonathan Wakely <jwakely@fedoraproject.org>
+Date: Mon, 15 Dec 2025 22:07:56 +0000
+Subject: [PATCH] Add missing Boost.Filesystem header to mainscreen.C
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This file uses `fs::directory_iterator` so it needs the relevant header.  This causes a build failure with Boost 1.90.0:
+
+```
+src/mainscreen.C: In member function ‘void BTMainScreen::run()’:
+src/mainscreen.C:43:6: error: ‘directory_iterator’ is not a member of ‘fs’; did you mean ‘directory_entry’?
+   43 |  fs::directory_iterator end_iter;
+      |      ^~~~~~~~~~~~~~~~~~
+      |      directory_entry
+```
+---
+ src/mainscreen.C | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/mainscreen.C b/src/mainscreen.C
+index 7d83c3f..6c9955b 100644
+--- a/src/mainscreen.C
++++ b/src/mainscreen.C
+@@ -16,6 +16,7 @@
+ #include "editor.h"
+ #include "boost/filesystem/operations.hpp"
+ #include "boost/filesystem/path.hpp"
++#include "boost/filesystem/directory.hpp"
+ #include <physfs.h>
+ 
+ namespace fs = boost::filesystem;

@@ -1,0 +1,25 @@
+From e71ffeb59da946b95f97bfc3976fb86b7ab4f91d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Fri, 9 Dec 2016 11:08:02 -0500
+Subject: [PATCH] Skip tests if we cannot download images
+
+---
+ src/test/java/nom/tam/fits/util/BlackBoxImages.java | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/test/java/nom/tam/fits/util/BlackBoxImages.java b/src/test/java/nom/tam/fits/util/BlackBoxImages.java
+index 0508d5c32c..b5de99a5e8 100644
+--- a/src/test/java/nom/tam/fits/util/BlackBoxImages.java
++++ b/src/test/java/nom/tam/fits/util/BlackBoxImages.java
+@@ -86,6 +86,8 @@ public class BlackBoxImages {
+             }
+ 
+         }
++
++        org.junit.Assume.assumeTrue(false);
+         throw new UnsupportedOperationException("could not get blackbox image from anywhere");
+     }
+ 
+-- 
+2.9.0
+

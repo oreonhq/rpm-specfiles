@@ -1,0 +1,17 @@
+diff -ur klamav-0.46/src/dbviewer.cpp klamav-0.46-gzip-api/src/dbviewer.cpp
+--- klamav-0.46/src/dbviewer.cpp	2009-02-28 11:27:28.000000000 +0100
++++ klamav-0.46-gzip-api/src/dbviewer.cpp	2012-08-05 00:25:27.000000000 +0200
+@@ -430,11 +430,11 @@
+     int nbytes, nread, nwritten, in_block = 0;
+     unsigned int size;
+     FILE *outfile = NULL;
+-    gzFile *infile;
++    gzFile infile;
+ 
+     printf("in cli_untgz()\n");
+ 
+-    if((infile = (gzFile*) gzdopen(fd, "rb")) == NULL) {
++    if((infile = gzdopen(fd, "rb")) == NULL) {
+     printf("Can't gzdopen() descriptor %d\n", fd);
+     return -1;
+     }

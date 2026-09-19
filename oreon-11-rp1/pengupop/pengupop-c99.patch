@@ -1,0 +1,25 @@
+Avoid implicit function declarations of swprintf and remove_bubble,
+for compatibility with future compilers.
+
+diff --git a/common.h b/common.h
+index aca02552d4b92031..eaddb171661eee7b 100644
+--- a/common.h
++++ b/common.h
+@@ -80,3 +80,5 @@ void load_font();
+ int has_char(int font, int ch);
+ void print_string(int font, int x, int y, const wchar_t* string, int align);
+ int string_width(int font, const wchar_t* string, size_t length);
++
++void remove_bubble(struct player_state* p, int x, int y, int evil);
+diff --git a/singleplayer.c b/singleplayer.c
+index 5c738f881dab55aa..c8d1168e0a5ee6be 100644
+--- a/singleplayer.c
++++ b/singleplayer.c
+@@ -4,6 +4,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <limits.h>
++#include <wchar.h>
+ 
+ #include "common.h"
+ #include "sound.h"

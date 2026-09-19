@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=INIFileEditor
+Categories=Science;Biology;Chemistry;
+Comment=An editor for OpenMS configuration files.
+Exec=env OPENMS_DATA_PATH=/usr/share/OpenMS INIFileEditor %U
+Icon=/usr/share/icons/TOPP/INIFileEditor.png
+Terminal=false
+Type=Application
+StartupNotify=true

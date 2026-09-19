@@ -1,0 +1,12 @@
+--- matugen-3.1.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ matugen-3.1.0/Cargo.toml	2026-02-12T15:20:47.713602+00:00
+@@ -154,9 +154,3 @@
+ version = "0.5"
+ features = ["html_reports"]
+ 
+-[target.'cfg(target_os = "macos")'.dependencies.enquote]
+-version = "1.1.0"
+-
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3"
+-features = ["winuser"]

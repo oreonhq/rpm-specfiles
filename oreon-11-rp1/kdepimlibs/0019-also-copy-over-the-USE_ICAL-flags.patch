@@ -1,0 +1,29 @@
+From 1bfa83213d675a85eba58ead36d7212bc9ba2f05 Mon Sep 17 00:00:00 2001
+From: Patrick Spendrin <ps_ml@gmx.de>
+Date: Fri, 28 Aug 2015 15:51:12 +0200
+Subject: [PATCH 19/31] also copy over the USE_ICAL flags
+
+---
+ cmake/modules/FindLibical.cmake | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/cmake/modules/FindLibical.cmake b/cmake/modules/FindLibical.cmake
+index 6c92482..05dbb1f 100644
+--- a/cmake/modules/FindLibical.cmake
++++ b/cmake/modules/FindLibical.cmake
+@@ -24,6 +24,12 @@ if(LibIcal_FOUND)
+   set(LIBICAL_VERSION ${LibIcal_VERSION})
+   set(LIBICAL_MAJOR_VERSION ${LibIcal_VERSION_MAJOR})
+   set(LIBICAL_MINOR_VERSION ${LibIcal_VERSION_MINOR})
++  if(NOT LIBICAL_VERSION VERSION_LESS 0.46)
++    set(USE_ICAL_0_46 TRUE)
++  endif()
++  if(NOT LIBICAL_VERSION VERSION_LESS 1.00)
++    set(USE_ICAL_1_0 TRUE)
++  endif()
+ 
+ else()
+ 
+-- 
+2.5.0
+

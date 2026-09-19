@@ -1,0 +1,47 @@
+--- diskonaut-0.11.0/Cargo.toml	2020-09-23T14:13:43+00:00
++++ diskonaut-0.11.0/Cargo.toml	2024-11-04T15:59:18.457350+00:00
+@@ -20,8 +20,13 @@
+ readme = "README.md"
+ license = "MIT"
+ repository = "https://github.com/imsnif/diskonaut"
++
++[dependencies.clap]
++version = "4"
++features = ["derive"]
++
+ [dependencies.crossterm]
+-version = "0.17"
++version = "0.27"
+ 
+ [dependencies.failure]
+ version = "0.1"
+@@ -30,21 +35,21 @@
+ version = "0.2.0"
+ 
+ [dependencies.jwalk]
+-version = "0.5"
++version = "0.8"
+ 
+ [dependencies.nix]
+-version = "0.17.0"
+-
+-[dependencies.structopt]
+-version = "0.3"
++version = "0.29.0"
++features = ["user"]
+ 
+ [dependencies.tui]
+-version = "0.11"
++package = "ratatui"
++version = "0.26"
+ features = ["crossterm"]
+ default-features = false
+ 
+ [dependencies.unicode-width]
+-version = "0.1.7"
++version = "0.2"
++
+ [dev-dependencies.insta]
+-version = "0.16.0"
++version = "1"
+ 

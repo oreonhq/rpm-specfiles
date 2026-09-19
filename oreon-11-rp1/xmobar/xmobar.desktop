@@ -1,0 +1,9 @@
+[Desktop Entry]
+Categories=Utility;
+Exec=xmobar
+Type=Application
+Terminal=false
+Name=XMobar status bar
+GenericName=Status bar
+Comment=Text-based status bar inspired by Ion3
+NoDisplay=true

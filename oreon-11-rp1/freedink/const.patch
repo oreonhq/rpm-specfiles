@@ -1,0 +1,15 @@
+--- src/gfx_fonts.cpp.orig	2019-02-16 17:20:32.000000000 -0600
++++ src/gfx_fonts.cpp	2022-08-05 13:51:17.743368149 -0500
+@@ -293,10 +293,10 @@
+  */
+ void setup_font(TTF_Font *font)
+ {
+-  char *familyname = TTF_FontFaceFamilyName(font);
++  const char *familyname = TTF_FontFaceFamilyName(font);
+   if(familyname)
+     log_info("The family name of the face in the font is: %s", familyname);
+-  char *stylename = TTF_FontFaceStyleName(font);
++  const char *stylename = TTF_FontFaceStyleName(font);
+   if(stylename)
+     log_info("The name of the face in the font is: %s", stylename);
+   log_info("The font max height is: %d", TTF_FontHeight(font));

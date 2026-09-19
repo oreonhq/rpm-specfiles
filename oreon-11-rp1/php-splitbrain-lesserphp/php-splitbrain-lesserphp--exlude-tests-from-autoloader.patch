@@ -1,0 +1,17 @@
+--- lesserphp-0.10.2/composer.json	2024-11-25 12:59:34.000000000 +0100
++++ lesserphp-0.10.2/composer.json.patched	2025-01-30 15:47:21.333941665 +0100
+@@ -24,9 +24,13 @@
+         }
+     ],
+     "autoload": {
+         "psr-4": {
+-            "LesserPHP\\": "src",
++            "LesserPHP\\": "src"
++        }
++    },
++    "autoload-dev": {
++        "psr-4": {
+             "LesserPHP\\tests\\": "tests"
+         }
+     },
+     "require": {

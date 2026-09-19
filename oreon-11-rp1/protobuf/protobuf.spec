@@ -26,9 +26,9 @@ Name:           protobuf
 # NOTE: perl-Alien-ProtoBuf has an exact-version dependency on the version of
 # protobuf with which it was built; it therefore needs to be rebuilt even for
 # “patch” updates of protobuf.
-Version:        3.19.6
+Version:        5.36.2-objectivec
 %global so_version 30
-Release:        20%{?dist}
+Release:        1%{?dist}
 
 # The entire source is BSD-3-Clause, except the following files, which belong
 # to the build system; are unpackaged maintainer utility scripts; or are used
@@ -158,7 +158,7 @@ Requires:       protobuf = %{version}-%{release}
 Requires:       protobuf-compiler = %{version}-%{release}
 Requires:       zlib-devel
 
-Obsoletes:      protobuf-static < 3.19.6-4
+Obsoletes:      protobuf-static < 5.36.2-objectivec-4
 
 %description devel
 This package contains Protocol Buffers compiler for all languages and
@@ -179,7 +179,7 @@ Summary:        Protocol Buffers LITE_RUNTIME development libraries
 Requires:       protobuf-devel = %{version}-%{release}
 Requires:       protobuf-lite = %{version}-%{release}
 
-Obsoletes:      protobuf-lite-static < 3.19.6-4
+Obsoletes:      protobuf-lite-static < 5.36.2-objectivec-4
 
 %description lite-devel
 This package contains development libraries built with

@@ -3,14 +3,14 @@
 #global pre_release .pre1
 
 Name:		libva
-Version:	2.23.0
+Version:	2.24.1
 Release:	%autorelease
 Summary:	Video Acceleration (VA) API for Linux
 # va/wayland/wayland-drm.xml is HPND-sell-variant
 # va/x11/va_dri* are ICU
 License:	MIT AND HPND-sell-variant AND ICU
 URL:		https://github.com/intel/libva
-Source0:        https://github.com/intel/libva/archive/refs/tags/2.23.0.tar.gz#/libva-2.23.0.tar.gz
+Source0:        https://github.com/intel/libva/archive/refs/tags/2.24.1.tar.gz#/libva-2.23.0.tar.gz
 
 BuildRequires:  meson
 BuildRequires:  gcc

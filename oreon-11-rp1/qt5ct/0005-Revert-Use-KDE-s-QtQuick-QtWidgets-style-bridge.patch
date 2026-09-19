@@ -1,0 +1,73 @@
+From 383df028b19cab56b85edbb8b14204a1bdd32bcc Mon Sep 17 00:00:00 2001
+From: Zephyr Lykos <git@mochaa.ws>
+Date: Tue, 9 Sep 2025 06:15:41 +0800
+Subject: [PATCH 5/6] Revert "Use KDE's QtQuick-QtWidgets style bridge"
+
+This breaks some application's styling, like nheko, which relies on
+Fusion's default component size & padding.
+
+The style bridge was only applied to applications initializing
+QtWidgets. Since there is QT_QUICK_CONTROLS_CONF, leave configuration
+logic to there.
+---
+ qt5ct/CMakeLists.txt                            | 2 +-
+ qt5ct/src/qt5ct-qtplugin/CMakeLists.txt         | 2 +-
+ qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.cpp | 9 ---------
+ 3 files changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/qt5ct/CMakeLists.txt b/qt5ct/CMakeLists.txt
+index 18a4dc7..27ad453 100644
+--- a/qt5ct/CMakeLists.txt
++++ b/qt5ct/CMakeLists.txt
+@@ -31,7 +31,7 @@ set(QT_MINIMUM_VERSION "5.15.0")
+ 
+ add_compile_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050C00 -DUSE_WIDGETS)
+ 
+-find_package(Qt5 ${QT_MINIMUM_VERSION} COMPONENTS Widgets Concurrent LinguistTools OPTIONAL_COMPONENTS QuickControls2 REQUIRED)
++find_package(Qt5 ${QT_MINIMUM_VERSION} COMPONENTS Widgets Concurrent LinguistTools REQUIRED)
+ find_package(Qt5Gui ${QT_MINIMUM_VERSION} CONFIG REQUIRED Private)
+ find_package(KF5 COMPONENTS Config ConfigWidgets IconThemes)
+ 
+diff --git a/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt b/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt
+index 0e39277..d2e84c4 100644
+--- a/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt
++++ b/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt
+@@ -5,7 +5,7 @@ set(lib_SRCS
+ 
+ add_library(qt5ct-qtplugin MODULE ${lib_SRCS})
+ set_target_properties(qt5ct-qtplugin PROPERTIES OUTPUT_NAME qt5ct)
+-target_link_libraries(qt5ct-qtplugin PRIVATE Qt5::Widgets Qt5::GuiPrivate $<TARGET_NAME_IF_EXISTS:Qt5::QuickControls2> $<TARGET_NAME_IF_EXISTS:KF5::IconThemes> qt5ct-common)
++target_link_libraries(qt5ct-qtplugin PRIVATE Qt5::Widgets Qt5::GuiPrivate $<TARGET_NAME_IF_EXISTS:KF5::IconThemes> qt5ct-common)
+ target_compile_definitions(qt5ct-qtplugin PRIVATE $<$<TARGET_EXISTS:KF5::IconThemes>:KF_ICONTHEMES_LIB>)
+ if(NOT DISABLE_DBUS)
+     target_link_libraries(qt5ct-qtplugin PRIVATE Qt5::DBus Qt5::ThemeSupportPrivate)
+diff --git a/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.cpp b/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.cpp
+index 505decd..31f5db1 100644
+--- a/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.cpp
++++ b/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.cpp
+@@ -45,9 +45,6 @@
+ #endif
+ #include <QFile>
+ #include <QFileSystemWatcher>
+-#ifdef QT_QUICKCONTROLS2_LIB
+-#include <QQuickStyle>
+-#endif
+ 
+ #include "qt5ct.h"
+ #include "qt5ctplatformtheme.h"
+@@ -84,12 +81,6 @@ Qt5CTPlatformTheme::Qt5CTPlatformTheme()
+         //must be applied before Q_COREAPP_STARTUP_FUNCTION execution
+         if(Qt5CT::isKColorScheme(m_schemePath))
+             qApp->setProperty("KDE_COLOR_SCHEME_PATH", m_schemePath);
+-#if defined QT_WIDGETS_LIB && defined QT_QUICKCONTROLS2_LIB
+-        if(hasWidgets())
+-            //don't override the value explicitly set by the user
+-            if(QQuickStyle::name().isEmpty() || QQuickStyle::name() == QLatin1String("Fusion"))
+-                QQuickStyle::setStyle(QLatin1String("org.kde.desktop"));
+-#endif
+     }
+     qCDebug(lqt5ct) << "using qt5ct plugin";
+ #ifdef QT_WIDGETS_LIB
+-- 
+2.51.0
+

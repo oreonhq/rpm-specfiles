@@ -1,0 +1,11 @@
+diff -up psi4-1.9.1/psi4/src/psi4/libqt/qt.h.uint64 psi4-1.9.1/psi4/src/psi4/libqt/qt.h
+--- psi4-1.9.1/psi4/src/psi4/libqt/qt.h.uint64	2024-02-08 21:08:35.000000000 +0000
++++ psi4-1.9.1/psi4/src/psi4/libqt/qt.h	2025-01-31 12:08:01.214159193 +0000
+@@ -38,6 +38,7 @@
+ 
+ #pragma once
+ 
++#include <cstdint>
+ #include <string>
+ 
+ #include "psi4/pragma.h"

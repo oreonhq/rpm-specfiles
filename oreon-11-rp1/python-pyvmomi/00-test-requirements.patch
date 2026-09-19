@@ -1,0 +1,14 @@
+diff -up pyvmomi-9.0.0.0/pyproject.toml_fix pyvmomi-9.0.0.0/pyproject.toml
+--- pyvmomi-9.0.0.0/pyproject.toml_fix	2025-10-12 12:50:46.755002978 -0500
++++ pyvmomi-9.0.0.0/pyproject.toml	2025-10-13 13:15:56.972903816 -0500
+@@ -63,8 +63,6 @@ env_list = ["3.9", "3.10", "3.11", "3.12
+ [tool.tox.env_run_base]
+ description = "Run test under {base_python}"
+ deps = [
+-    "mock",
+-    "discover",
+-    "vcrpy==3.0.0",
++    "vcrpy",
+ ]
+-commands = [["python", "-m", "unittest", "discover", "tests"]]
++commands = [["pytest", "-vvv"]]

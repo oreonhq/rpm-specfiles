@@ -1,0 +1,15 @@
+diff -up mrchem-1.1.4/src/mrchem.cpp.ompnamespace mrchem-1.1.4/src/mrchem.cpp
+--- mrchem-1.1.4/src/mrchem.cpp.ompnamespace	2024-01-17 13:01:08.000000000 +0000
++++ mrchem-1.1.4/src/mrchem.cpp	2025-06-12 07:43:50.537403601 +0000
+@@ -78,9 +78,9 @@ int main(int argc, char **argv) {
+     // Provenance
+     json_out["provenance"] = {{"creator", "MRChem"},
+                               {"version", program_version()},
+-                              {"nthreads", omp::n_threads},
++                              {"nthreads", mrcpp::omp::n_threads},
+                               {"mpi_processes", mpi::world_size},
+-                              {"total_cores", mpi::world_size * omp::n_threads},
++                              {"total_cores", mpi::world_size * mrcpp::omp::n_threads},
+                               {"routine", "mrchem.x"}};
+     // Computed values
+     json_out["scf_calculation"] = scf_out;

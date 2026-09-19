@@ -1,0 +1,17 @@
+Index: gtkextra/gtkcharsel.c
+===================================================================
+RCS file: /cvsroot/gtkextra/gtkextra-2/gtkextra/gtkcharsel.c,v
+retrieving revision 1.4
+diff -c -r1.4 gtkcharsel.c
+*** gtkextra/gtkcharsel.c	27 Aug 2004 21:46:14 -0000	1.4
+--- gtkextra/gtkcharsel.c	7 Dec 2011 03:30:41 -0000
+***************
+*** 18,24 ****
+   */
+  
+  #include <gtk/gtk.h>
+- #include <glib/gunicode.h>
+  
+  #include <string.h>
+  #include "gtkcharsel.h"
+--- 18,23 ----

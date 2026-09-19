@@ -1,0 +1,35 @@
+diff -Naupr fillets-ng-0.8.1.orig/src/gengine/OptionAgent.cpp fillets-ng-0.8.1/src/gengine/OptionAgent.cpp
+--- fillets-ng-0.8.1.orig/src/gengine/OptionAgent.cpp	2008-12-29 11:43:40.000000000 +0100
++++ fillets-ng-0.8.1/src/gengine/OptionAgent.cpp	2009-02-13 21:49:08.168396060 +0100
+@@ -26,6 +26,8 @@
+ #include <stdlib.h> //getenv
+ #include <string.h> //strlen
+ #include <locale.h> //setlocale
++#include <cstdlib> //getenv
++#include <climits>
+ 
+ #ifndef LC_MESSAGES
+ #define LC_MESSAGES LC_CTYPE
+diff -Naupr fillets-ng-0.8.1.orig/src/gengine/StringTool.cpp fillets-ng-0.8.1/src/gengine/StringTool.cpp
+--- fillets-ng-0.8.1.orig/src/gengine/StringTool.cpp	2008-08-10 12:00:15.000000000 +0200
++++ fillets-ng-0.8.1/src/gengine/StringTool.cpp	2009-02-13 21:49:08.168396060 +0100
+@@ -10,6 +10,7 @@
+ 
+ #include <stdlib.h>
+ #include <sstream>
++#include <cstdlib>
+ 
+ //-----------------------------------------------------------------
+ /**
+diff -Naupr fillets-ng-0.8.1.orig/src/level/Landslip.cpp fillets-ng-0.8.1/src/level/Landslip.cpp
+--- fillets-ng-0.8.1.orig/src/level/Landslip.cpp	2008-08-10 12:00:29.000000000 +0200
++++ fillets-ng-0.8.1/src/level/Landslip.cpp	2009-02-13 21:49:08.169395749 +0100
+@@ -13,6 +13,8 @@
+ 
+ #include <string.h>
+ 
++#include <cstring>
++
+ //-----------------------------------------------------------------
+     Landslip::Landslip(const ModelList &models)
+ : m_models(models)

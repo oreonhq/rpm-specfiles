@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+ <id>utox.desktop</id>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>MIT</project_license>
+ <name>uTox</name>
+ <summary>The lightweight Tox client.</summary>
+ <description>
+  <p>
+    Features:
+  </p>
+  <ul>
+    <li>Avatars</li>
+    <li>Secure person to person conversations</li>
+    <li>Video (Webcam or Desktop sharing)</li>
+    <li>Audio</li>
+    <li>Chat History</li>
+    <li>Screenshots</li>
+    <li>Group chats</li>
+    <li>File transfers, with inline images support</li>
+    <li>Tox URI support (clickable Tox links)</li>
+    <li>Emoticons</li>
+  </ul>
+  <ul>
+    <li>
+      Easy to Use: The Tox project was started with the goal of making secure 
+      encrypted communication, in any form, easy. The uTox client is no 
+      exception, built to be easy for your computer, and easier for you.
+    </li>
+    <li>
+      Security &amp; Privacy: Utilizing a completely serverless design and industry 
+      grade high-strength encryption, uTox keeps your conversations secure and 
+      private from prying eyes. (If perfect security is important to you, or 
+      your work, make sure you understand the guarantees that uTox offers. For 
+      a detailed explanation of what uTox will protect you from, read through  
+      uTox's security model.
+    </li>
+    <li>
+      Transparency &amp; Freedom: There is a steady and growing trend in software 
+      development that shows; software can only serve it's users when it's not 
+      hidding secrets, or backdoors. This is what's known as open-source 
+      software, its code is never hidden from it's users, and always available 
+      for anyone read. While this important to all software, there is no 
+      cryptographer or security expert who will agree that anything closed 
+      source can be called safe and secure. uTox was created with this in 
+      mind, and will always be free, and open source.
+    </li>
+  </ul>
+ </description>
+ <screenshots>
+  <screenshot type="default">
+   <image>https://utox.io/images/utox_image.png</image>
+  </screenshot>
+ </screenshots>
+ <url type="homepage">https://utox.io/</url>
+ <update_contact>eclipseo@fedoraproject.org</update_contact>
+</component>
+

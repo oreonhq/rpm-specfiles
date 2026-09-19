@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>xscorch.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+  <name>Xscorch</name>
+  <summary>Scorched Earth clone</summary>
+  <description>
+    <p>
+     Xscorch is a clone of the classic DOS game, "Scorched Earth".
+     The basic goal is to annihilate enemy tanks using overpowered guns.
+    </p>
+    <p>
+     Basically, you buy weapons, you target the enemy by adjusting the
+     angle of your turret and firing power, and you hope to destroy their
+     tank before they destroy yours. 
+    </p>
+  </description>
+  <url type="homepage">http://xscorch.org/</url>
+  <screenshots>
+    <screenshot type="default">http://xscorch.org/screenshots/xscorch.1.png</screenshot>
+    <screenshot>http://www.xscorch.org/screenshots/napalm1.png</screenshot>
+    <screenshot>http://xscorch.org/screenshots/annihilator.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

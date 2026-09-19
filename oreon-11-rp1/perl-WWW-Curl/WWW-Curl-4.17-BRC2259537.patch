@@ -1,0 +1,12 @@
+diff -up ./Makefile.PL.orig ./Makefile.PL
+--- ./Makefile.PL.orig	2024-02-04 12:33:33.041145642 +0100
++++ ./Makefile.PL	2024-02-04 12:41:10.105758451 +0100
+@@ -127,7 +127,7 @@ if (!defined($curl_h)) {
+     close H;
+ 
+     for my $e (sort @syms) {
+-       if($e =~ /(OBSOLETE|^CURL_DEPRECATED\z|^CURL_EXTERN|^CURL_IGNORE_DEPRECATION\z|^CURL_STRICTER\z|^CURL_WIN32\z|^CURLOPT\z|^CURLOPTDEPRECATED\z|_LAST\z|_LASTENTRY\z)/) {
++       if($e =~ /(OBSOLETE|^CURL_DEPRECATED\z|^CURL_EXTERN|^CURL_IGNORE_DEPRECATION\z|^CURL_STRICTER\z|^CURL_WIN32\z|^CURLOPT\z|^CURLOPTDEPRECATED\z|^CURL_DID_MEMORY_FUNC_TYPEDEFS\z|CURLINC_CURL_H\z|_LAST\z|_LASTENTRY\z)/) {
+           next;
+        }
+        my ($group) = $e =~ m/^([^_]+_)/;

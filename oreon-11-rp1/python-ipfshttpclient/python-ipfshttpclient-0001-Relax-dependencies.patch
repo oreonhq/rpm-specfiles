@@ -1,0 +1,21 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sun, 1 Sep 2024 20:12:45 +0200
+Subject: [PATCH] Relax dependencies
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/tox.ini b/tox.ini
+index d8b653a..10ede0a 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -13,8 +13,8 @@ isolated_build = true
+ 
+ [testenv]
+ deps =
+-	pytest     ~= 6.2
+-	pytest-cov ~= 2.11
++	pytest     >= 6.2
++	pytest-cov >= 2.11
+ 	pytest-dependency  ~= 0.5
+ 	pytest-localserver ~= 0.5
+ 	pytest-mock        ~= 3.5

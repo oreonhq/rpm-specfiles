@@ -1,0 +1,13 @@
+Index: hamlib-4.1/bindings/Makefile.am
+===================================================================
+--- hamlib-4.1.orig/bindings/Makefile.am
++++ hamlib-4.1/bindings/Makefile.am
+@@ -107,7 +107,7 @@ nodist_pyexec_PYTHON = Hamlib.py
+ nodist__Hamlib_la_SOURCES = hamlibpy_wrap.c
+ 
+ _Hamlib_la_LDFLAGS = -no-undefined -module -avoid-version
+-_Hamlib_la_LIBADD = $(top_builddir)/src/libhamlib.la $(PYTHON_LIBS)
++_Hamlib_la_LIBADD = $(top_builddir)/src/libhamlib.la
+ _Hamlib_ladir = $(pyexecdir)
+ _Hamlib_la_LTLIBRARIES = $(pyexec_ltlib)
+ 

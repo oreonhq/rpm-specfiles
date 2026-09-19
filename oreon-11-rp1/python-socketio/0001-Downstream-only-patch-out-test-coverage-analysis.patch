@@ -1,0 +1,33 @@
+From a8840586f86040c87b4c65914e87f1bdc950b0ae Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 19 Mar 2023 20:49:14 -0400
+Subject: [PATCH] Downstream-only: patch out test coverage analysis
+
+---
+ tox.ini | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/tox.ini b/tox.ini
+index 471510e..66b789b 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -1,7 +1,7 @@
+ [testenv]
+ commands=
+     pip install -e .
+-    pytest -p no:logging --timeout=60 --cov=socketio --cov-branch --cov-report=term-missing --cov-report=xml {posargs}
++    pytest -p no:logging --timeout=60 {posargs}
+ deps=
+     simple-websocket
+     uvicorn
+@@ -14,7 +14,6 @@ deps=
+     pytest
+     pytest-asyncio
+     pytest-timeout
+-    pytest-cov
+ 
+ [testenv:flake8]
+ deps=
+-- 
+2.53.0
+

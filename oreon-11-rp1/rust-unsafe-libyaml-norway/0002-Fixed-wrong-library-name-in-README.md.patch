@@ -1,0 +1,25 @@
+From 8042fbd57f6f9e10b1c60b194790fb400d7ba9bf Mon Sep 17 00:00:00 2001
+From: Bourumir Wyngs <bourumir.wyngs@gmail.com>
+Date: Tue, 16 Sep 2025 12:05:09 +0200
+Subject: [PATCH 2/2] Fixed wrong library name in README.md
+
+---
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/README.md b/README.md
+index e87b827..e256d5b 100644
+--- a/README.md
++++ b/README.md
+@@ -9,7 +9,7 @@ of [c2rust].
+ 
+ ```toml
+ [dependencies]
+-unsafe-libyaml = "0.2"
++unsafe-libyaml-norway = "0.2"
+ ```
+ 
+ *Compiler support: requires rustc 1.60+*
+-- 
+2.51.1
+

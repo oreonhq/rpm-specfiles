@@ -1,0 +1,27 @@
+From d6e969d3c78e57356ac1c92bfac76c67db9954ce Mon Sep 17 00:00:00 2001
+From: Integral <integral@member.fsf.org>
+Date: Sat, 11 Oct 2025 00:37:33 +0800
+Subject: [PATCH] Only treat warnings as errors when building the Debug config
+
+Closes: #134
+---
+ src/CMakeLists.txt | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 269c01d..8677a39 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -34,4 +34,8 @@ install(TARGETS btrfs-assistant-bin RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ find_library(BTRFSUTIL_LIB btrfsutil)
+ target_link_libraries(btrfs-assistant-bin PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${BTRFSUTIL_LIB})
+-target_compile_options(btrfs-assistant-bin PRIVATE -Werror -Wall -Wextra -Wconversion)
++target_compile_options(btrfs-assistant-bin PRIVATE -Wall -Wextra -Wconversion)
++
++if(CMAKE_BUILD_TYPE STREQUAL "Debug")
++    target_compile_options(btrfs-assistant-bin PRIVATE -Werror)
++endif()
+-- 
+GitLab
+

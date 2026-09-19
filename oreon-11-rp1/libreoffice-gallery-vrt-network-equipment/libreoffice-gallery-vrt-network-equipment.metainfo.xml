@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>au.vrt.vrt-network-equipment.addon</id>
+  <extends>libreoffice-calc.desktop</extends>
+  <extends>libreoffice-draw.desktop</extends>
+  <extends>libreoffice-impress.desktop</extends>
+  <extends>libreoffice-writer.desktop</extends>
+  <name>VRT Network Equipment Gallery</name>
+  <summary>Adds a gallery of network equipment shapes into LibreOffice</summary>
+  <url type="homepage">http://www.vrt.com.au/downloads/vrt-network-equipment</url>
+  <url type="bugtracker">https://bitbucket.org/vrtsystems/odf-extension-vrt-network-equipment/issues</url>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>CC-BY-SA</project_license>
+</component>

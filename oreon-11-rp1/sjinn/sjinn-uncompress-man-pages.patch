@@ -1,0 +1,24 @@
+diff -up sjinn/Makefile.orig sjinn/Makefile
+--- sjinn/Makefile.orig	2011-04-29 11:13:38.658751152 -0400
++++ sjinn/Makefile	2011-04-29 11:14:07.853386165 -0400
+@@ -30,15 +30,15 @@ install:
+ 	$(INSTALL) $(TARGET) $(DESTDIR)/${bindir}/$(TARGET)
+ 	rm -f $(DESTDIR)/${bindir}/$(S_LINK)
+ 	ln -s ${bindir}/$(TARGET) $(DESTDIR)/${bindir}/$(S_LINK)
+-	$(INSTALL) -m 0644 $(TARGET).1.gz $(DESTDIR)/${mandir}/$(TARGET).1.gz
+-	rm -f $(DESTDIR)/${mandir}/$(S_LINK).1.gz
+-	ln -s ${mandir}/$(TARGET).1.gz $(DESTDIR)/${mandir}/$(S_LINK).1.gz
++	$(INSTALL) -m 0644 $(TARGET).1 $(DESTDIR)/${mandir}/$(TARGET).1
++	rm -f $(DESTDIR)/${mandir}/$(S_LINK).1
++	ln -s ${mandir}/$(TARGET).1 $(DESTDIR)/${mandir}/$(S_LINK).1
+ 
+ uninstall:
+ 	rm -f $(DESTDIR)/${bindir}/$(S_LINK)
+ 	rm -f $(DESTDIR)/${bindir}/$(TARGET)
+-	rm -f $(DESTDIR)/${mandir}/$(S_LINK).1.gz
+-	rm -f $(DESTDIR)/${mandir}/$(TARGET).1.gz
++	rm -f $(DESTDIR)/${mandir}/$(S_LINK).1
++	rm -f $(DESTDIR)/${mandir}/$(TARGET).1
+ 
+ clean:
+ 	rm -f $(TARGET) *.o 

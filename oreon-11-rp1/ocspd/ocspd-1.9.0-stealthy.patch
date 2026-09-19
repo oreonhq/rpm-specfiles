@@ -1,0 +1,400 @@
+diff -Naurp openca-ocspd-1.9.0.orig/src/ocsp_request.c openca-ocspd-1.9.0.new/src/ocsp_request.c
+--- openca-ocspd-1.9.0.orig/src/ocsp_request.c	2013-12-04 13:21:08.967589458 +0100
++++ openca-ocspd-1.9.0.new/src/ocsp_request.c	2013-12-04 14:45:53.431264484 +0100
+@@ -28,10 +28,8 @@ OCSP_REQUEST * ocspd_req_get_socket ( in
+ 
+ 	char*   buf      = NULL;
+ 
+-	int	post	 = 0;
+ 	int	headers  = 0;
+ 	int	sel_ret	 = 0;
+-	int	cont	 = 0;
+ 
+ 	char    *pnt	 = NULL;
+ 	char 	*pnt_end = NULL;
+@@ -44,225 +42,198 @@ OCSP_REQUEST * ocspd_req_get_socket ( in
+ 	fd_set  readset;
+ 	long ltemp;
+ 
+-	if( !ocspd_conf ) {
+-		return (NULL);
+-	}
++	if (!ocspd_conf)
++		return NULL;
+ 
+-	if( ocspd_conf->max_req_size > 2 * OCSPD_DEF_MAX_READ ) {
+-		buf = (char *) malloc ( ocspd_conf->max_req_size );
+-		maxsize = ocspd_conf->max_req_size - OCSPD_DEF_MAX_READ;
+-	} else {
+-		buf = (char *) malloc ( OCSPD_DEF_MAX_SIZE );
+-		maxsize = OCSPD_DEF_MAX_SIZE - OCSPD_DEF_MAX_READ;
++	maxsize = ocspd_conf->max_req_size < OCSPD_DEF_MAX_READ?
++	    OCSPD_DEF_MAX_SIZE: ocspd_conf->max_req_size;
++	buf = (char *) malloc(maxsize + OCSPD_DEF_MAX_READ + 1);
++
++	if (!buf) {
++		syslog(LOG_ERR,
++		    "ERROR: Cannot allocate request buffer (size=%ld)",
++		    (long) maxsize + OCSPD_DEF_MAX_READ + 1);
++		return NULL;
+ 	}
+ 
+-	/* Add the socket to the read set */
+-	FD_ZERO( &readset );
+-	FD_SET (connfd, &readset);
+-
+-	time_out.tv_sec = ocspd_conf->max_timeout_secs;
+-	time_out.tv_usec = 0;
+-
+ 	if (fcntl(connfd, F_SETFL, O_NONBLOCK) < 0) {
+ 		syslog(LOG_ERR, "[Tread] ERROR, cannot set no non-waiting\n");
+ 		free(buf);
+-		return(NULL);
++		return NULL;
+ 	}
+ 
+-	cont = 0;
+-	/*
+-	while((sel_ret = Select(connfd+1, &readset, 
+-				NULL, NULL, &time_out)) >= 0) {
+-	*/
++	FD_ZERO(&readset);
+ 	full_req_size = 0;
+-	for(;;) {
+-
+-		FD_ZERO( &readset );
+-		FD_SET (connfd, &readset);
+ 
++	for (;;) {
++		FD_SET(connfd, &readset);
+ 		time_out.tv_sec = ocspd_conf->max_timeout_secs;
+ 		time_out.tv_usec = 0;
++		sel_ret = select(connfd + 1, &readset, NULL, NULL, &time_out);
+ 
+-		sel_ret = select(connfd+1, &readset, NULL, NULL, &time_out);
+-
+-		if (sel_ret == -1 && errno == EINTR) {
+-			if(ocspd_conf->debug)
+-				syslog(LOG_ERR, "ERROR::NET::Select Recoverable %s",
+-					strerror(errno));
+-			continue;
+-		}
++		if (sel_ret < 0) {
++			if (errno == EINTR) {
++				if (ocspd_conf->debug)
++					syslog(LOG_ERR,
++					    "ERROR::NET::Select Recoverable %s",
++					    strerror(errno));
++				continue;
++			}
+ 
+-		if( sel_ret < 0 ) {
+-			if(ocspd_conf->debug )
++			if (ocspd_conf->debug)
+ 				syslog(LOG_ERR, "ERROR::NET::Select %s",
+-					strerror(errno));
++				    strerror(errno));
+ 
+ 			free(buf);
+-			return(NULL);
++			return NULL;
+ 		}
+ 
+-		if( sel_ret == 0 ) {
+-			if( ocspd_conf->debug )
+-				syslog(LOG_ERR, "ERROR::NET::Socket connection timeout");
++		if (sel_ret == 0) {
++			if (ocspd_conf->debug)
++				syslog(LOG_ERR,
++				    "ERROR::NET::Socket connection timeout");
+ 			free(buf);
+-			return(NULL);
++			return NULL;
+ 		}
+ 
+-		/*
+-		if( ocspd_conf->debug ) {
+-			syslog(LOG_ERR, "DEBUG::NETWORK::Select "
+-				"%d (cont = %d)!", sel_ret, cont);
+-		}
+-	
+-		if( ocspd_conf->debug ) {
+-			syslog(LOG_ERR, "DEBUG::NETWORK::FD_ISSET "
+-				"%d", FD_ISSET(connfd, &readset) );
+-		}
+-		*/
+-	
+-		// cont += WAIT_USEC;
+-
+-		if (FD_ISSET (connfd, &readset)) {
+-			if((newsize = recv(connfd, &(buf[fullsize]), 
+-				OCSPD_DEF_MAX_READ, 0 )) == 0 ) {
+-				break;
+-			}
++		if (!FD_ISSET(connfd, &readset))
++			continue;		/* Should not happen. */
++
++		newsize = recv(connfd, buf + fullsize, OCSPD_DEF_MAX_READ, 0);
++
++		if (newsize == 0)
++			break;			/* Connection closed. */
++
++		if (newsize < 0) {
++			if (ocspd_conf->debug) {
++				syslog(LOG_ERR,
++				    "DEBUG::NETWORK::ERROR in RECV::%s [%d]",
++				    strerror(errno), errno);
+ 
+-			if (newsize < 0) {
+-				if( ocspd_conf->debug ) {
+-					syslog(LOG_ERR, "DEBUG::NETWORK::ERROR in RECV::"
+-						"%s [%d]", strerror(errno), errno );
+-					if( errno == EWOULDBLOCK ) {
+-						syslog(LOG_ERR, "DEBUG::NETWORK::ERROR::"
+-							"EWOULDBLOCK");
+-						continue;
+-					}
++				if (errno == EWOULDBLOCK) {
++					syslog(LOG_ERR,
++					    "DEBUG::NETWORK::ERROR::"
++					    "EWOULDBLOCK");
++					continue;
+ 				}
+-				break;
+ 			}
+ 
+-			if( ocspd_conf->debug ) {
+-				syslog(LOG_ERR, "DEBUG::NETWORK::recv "
+-					"received %ld (conn = %d)!", (long) newsize, connfd);
+-			}
+-	
+-		/*
+-		if( sel_ret == 0 ) {
+-			if( (cont/1000) >= ocspd_conf->max_timeout_secs ) {
+-				if( ocspd_conf->verbose ) {
+-					syslog(LOG_ERR, "ERROR::NETWORK::Timeout "
+-					"reached while reading REQUEST (%d >= %d)!",
+-					cont/1000, ocspd_conf->max_timeout_secs);
+-				}
++			break;			/* I/O error. */
++		}
+ 
+-				break;
+-			} else {
+-				continue;
+-			}
++		if (ocspd_conf->debug)
++			syslog(LOG_ERR, "DEBUG::NETWORK::recv received %ld "
++			    "(conn = %d)!", (long) newsize, connfd);
++
++		/* Check for headers */
++
++		fullsize += newsize;
++		buf[fullsize] = '\0';
++
++		if (!cont_len &&
++		    (pnt = strstr_nocase(buf, "Content-Length: "))) {
++			ltemp = 0;
++
++			if ((pnt_end = strstr(pnt, "\r\n")))
++				sscanf(pnt + 16, "%ld", &ltemp);
++
++			cont_len = ltemp;
++
++			if (ocspd_conf->debug)
++				syslog(LOG_ERR, "DEBUG::Got Content Len [%ld]",
++					ltemp);
+ 		}
+-		*/
+ 
+-			/* Check for headers */
+-			if( (!cont_len) && 
+-				((pnt = strstr_nocase(buf, "Content-Length: " )) != NULL) ) {
+-				ltemp = 0;
++		if (!headers && 
++		    ((pnt = strstr(buf, "\r\n\r\n")) ||
++		    (pnt = strstr(buf, "\n\n")))) {
+ 
+-				if((pnt_end = strstr(pnt, "\r\n")) != NULL )
+-					sscanf((char *) (pnt+16), "%ld", &ltemp);
++			while (*pnt == '\n' || *pnt == '\r')
++				*pnt++ = '\0';
+ 
+-				cont_len = ltemp;
++			req_st = pnt;
++			headers = (int) (req_st - buf);
++			full_req_size = headers + cont_len;
++		}
+ 
+-				if(ocspd_conf->debug) {
+-					syslog(LOG_ERR, "DEBUG::Got Content Len [%ld]",
+-						ltemp);
+-				}
+-			}
++		if (fullsize >= maxsize) {
++			/* Max Reading size exceeded */
++			syslog(LOG_ERR,
++			    "ERROR::Max REQUEST size exceeded [%ld]",
++			    (long) maxsize);
++			free(buf);
++			return NULL;
++		}
+ 
+-			fullsize += newsize;
+-			if( (!headers) && 
+-				(((pnt = strstr(buf, "\r\n\r\n")) != NULL) ||
+-					((pnt = strstr(buf, "\n\n")) != NULL)) ) {
+-
+-				while( (*pnt == '\n') || (*pnt == '\r')) {
+-					*pnt = '\x0';
+-					pnt++;
+-				}
++		if (full_req_size > 0 && full_req_size - fullsize < 1)
++			break;
++	}
+ 
+-				if( !cont_len ) {
+-					if(ocspd_conf->verbose) 
+-						syslog(LOG_ERR, "ERROR::No "
+-							"Content-Length"
+-							" in REQ Headers");
+-					if(ocspd_conf->debug) {
+-						fprintf( stderr,"---BEGIN HEADERS---\n"
+-							"%s\n"
+-							"---END HEADERS---\n\n",
+-							buf );
+-					}
+-					free(buf);
+-					return(NULL);
+-				}
+-				req_st = pnt;
+-				headers = (int) (req_st - buf);
+-				full_req_size = headers+cont_len;
+-			}
++	if (!fullsize) {
++		free(buf);
++		return NULL;			/* Null request. */
++	}
+ 
+-			if( (!post) && (fullsize >= 5 ) &&
+-				( strncmp_nocase( buf, "POST ", 5) != 0 )) {
++	buf[fullsize] = '\0';
+ 
+-				/* Got an error - probably not found (?) */
+-				if( ocspd_conf->verbose) {
+-					syslog( LOG_ERR, "ERROR::Request::HTTP method "
+-								"is not POST");
+-				}
++	if (!cont_len) {
++		if (ocspd_conf->verbose) 
++			syslog(LOG_ERR,
++			    "ERROR::No Content-Length in REQ Headers");
+ 
+-				free(buf);
+-				return(NULL);
+-			}
++		if (ocspd_conf->debug)
++			fprintf(stderr, "---BEGIN HEADERS---\n%s\n"
++			    "---END HEADERS---\n\n", buf);
+ 
+-			if( fullsize >= maxsize ) {
+-				/* Max Reading size exceeded */
+-				syslog( LOG_ERR, 
+-					"ERROR::Max REQUEST size exceeded [ %ld ]",
+-						(long) maxsize );
+-				free( buf );
+-				return(NULL);
+-			}
++		free(buf);
++		return NULL;
++	}
+ 
+-			if( (full_req_size > 0) && 
+-					(full_req_size - fullsize < 1 )) {
++	if (!headers) {
++		headers = fullsize;
++		req_st = buf + fullsize;
++	}
+ 
+-				break;
+-			}
++	if (fullsize - headers != cont_len) {
++		if (ocspd_conf->verbose)
++			syslog(LOG_ERR, "Error::Request not terminated");
+ 
+-		}
++		free(buf);
++		return NULL;
+ 	}
+ 
+-	if(ocspd_conf->debug) {
+-		fprintf( stderr,"---BEGIN HEADERS---\n"
+-			"%s\n"
+-			"---END HEADERS---\n\n",
+-			buf );
++	if (fullsize >= 5 && strncmp_nocase(buf, "POST ", 5)) {
++		if (ocspd_conf->verbose)
++			syslog(LOG_ERR,
++			    "ERROR::Request::HTTP method is not POST");
++
++		free(buf);
++		return NULL;
+ 	}
+ 
+-        if(!(mem = BIO_new_mem_buf(req_st, cont_len) )) {
++	if (ocspd_conf->debug)
++		fprintf(stderr,
++		    "---BEGIN HEADERS---\n%s\n---END HEADERS---\n\n", buf);
++
++        if (!(mem = BIO_new_mem_buf(req_st, cont_len))) {
+ 		BIO *err = NULL;
+ 
+-		if((err = BIO_new(BIO_s_file())) != NULL) {
++		if ((err = BIO_new(BIO_s_file())) != NULL) {
+ 			BIO_set_fp(err,stderr,BIO_NOCLOSE);
+ 			ERR_print_errors(err);
+ 			BIO_free(err);
+ 		}
+ 
+-                syslog( LOG_ERR, "ERROR: Internal memory allocation error!");
+-		if(ocspd_conf->debug) {
++                syslog(LOG_ERR, "ERROR: Internal memory allocation error!");
++
++		if (ocspd_conf->debug)
+ 			fprintf(stderr, "ERROR::req_st=%p [len %ld]\n",
+-				req_st, (long) cont_len);
+-		}
++			    req_st, (long) cont_len);
+         } else {
+-		if((req = d2i_OCSP_REQUEST_bio(mem, NULL)) == NULL ) {
+-			if(ocspd_conf->debug) {
+-				syslog(LOG_ERR, "ERROR::Parsing in d2i_ function\n");
++		if ((req = d2i_OCSP_REQUEST_bio(mem, NULL)) == NULL) {
++			if (ocspd_conf->debug) {
++				syslog(LOG_ERR,
++				    "ERROR::Parsing in d2i_ function\n");
+ 
+ 				fprintf(stderr, "[len %ld] buf=%p -- req_st=%p "
+ 						"(fullsize %ld - "
+@@ -270,15 +241,14 @@ OCSP_REQUEST * ocspd_req_get_socket ( in
+ 						"rq_size = %ld)\n", 
+ 						(long) cont_len, buf, 
+ 						req_st, (long) fullsize,
+-						(long) (req_st - buf),
+-						(long) (fullsize - (req_st - buf)));
++						(long) (req_st - buf), (long)
++						(fullsize - (req_st - buf)));
+ 			}
+ 		}
+-		if(mem) BIO_free (mem);
+-	}
+ 
+-	if( buf ) free (buf);
++		BIO_free(mem);
++	}
+ 
+-	return (req);
++	free(buf);
++	return req;
+ }
+-

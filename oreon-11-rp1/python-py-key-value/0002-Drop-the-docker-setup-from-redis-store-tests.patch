@@ -1,0 +1,68 @@
+From fe3537057438ddef1c66a14c4d4676a7bc59f82c Mon Sep 17 00:00:00 2001
+From: Rodolfo Olivieri <rodolfo.olivieri3@gmail.com>
+Date: Mon, 23 Feb 2026 09:45:57 -0300
+Subject: [PATCH 2/2] Drop the docker setup from redis store tests
+
+Valkey is packaged and present in Fedora 43/44 and 45, so we can set it
+up in order to run the tests for both stores without the need to pull
+docker and run it inside a container.
+---
+ .../tests/stores/redis/test_redis.py           | 18 ++++--------------
+ 1 file changed, 4 insertions(+), 14 deletions(-)
+
+diff --git a/key-value/key-value-aio/tests/stores/redis/test_redis.py b/key-value/key-value-aio/tests/stores/redis/test_redis.py
+index 742e584..87b564b 100644
+--- a/key-value/key-value-aio/tests/stores/redis/test_redis.py
++++ b/key-value/key-value-aio/tests/stores/redis/test_redis.py
+@@ -5,25 +5,23 @@ from typing import Any
+ import pytest
+ from dirty_equals import IsDatetime
+ from inline_snapshot import snapshot
+-from key_value.shared.stores.wait import async_wait_for_true
+ from redis.asyncio.client import Redis
+ from typing_extensions import override
+ 
+ from key_value.aio.stores.base import BaseStore
+ from key_value.aio.stores.redis import RedisStore
+-from tests.conftest import docker_container, should_skip_docker_tests
+ from tests.stores.base import BaseStoreTests, ContextManagerStoreTestMixin
+ 
+ # Redis test configuration
+ REDIS_HOST = "localhost"
+-REDIS_PORT = 6379
++REDIS_PORT = 6380
+ REDIS_DB = 15  # Use a separate database for tests
+ 
+ WAIT_FOR_REDIS_TIMEOUT = 30
+ 
+ REDIS_VERSIONS_TO_TEST = [
+-    "4.0.0",
+-    "7.0.0",
++    "8.1.5",  # Version available in Fedora 43
++    "9.0.2",  # Version available in Fedora 44 and 45
+ ]
+ 
+ 
+@@ -43,18 +41,10 @@ def get_client_from_store(store: RedisStore) -> Redis:
+     return store._client  # pyright: ignore[reportPrivateUsage]
+ 
+ 
+-@pytest.mark.skipif(should_skip_docker_tests(), reason="Docker is not running")
+ class TestRedisStore(ContextManagerStoreTestMixin, BaseStoreTests):
+     @pytest.fixture(autouse=True, scope="session", params=REDIS_VERSIONS_TO_TEST)
+     async def setup_redis(self, request: pytest.FixtureRequest) -> AsyncGenerator[None, None]:
+-        version = request.param
+-
+-        with docker_container("redis-test", f"redis:{version}", {"6379": REDIS_PORT}):
+-            if not await async_wait_for_true(bool_fn=ping_redis, tries=30, wait_time=1):
+-                msg = "Redis failed to start"
+-                raise RedisFailedToStartError(msg)
+-
+-            yield
++        yield
+ 
+     @override
+     @pytest.fixture
+-- 
+2.52.0
+

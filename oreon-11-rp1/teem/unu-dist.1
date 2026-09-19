@@ -1,0 +1,71 @@
+.TH UNU\-DIST "1" "May 2021" "" "User Commands"
+.SH NAME
+unu\-dist \- Euclidean distance transform
+.SH SYNOPSIS
+.B unu\ dist
+.BR \-th , \-\-thresh
+.RI < val >
+.RB [ \-b , \-\-bias
+.RI < val >]
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-sgn ]
+.RB [ \-inv ]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Euclidean distance transform.
+Based on \(lqDistance Transforms of Sampled Functions\(rq
+by Pedro F. Felzenszwalb and Daniel P. Huttenlocher,
+\fICornell Computing and Information Science\fR TR2004\-1963.
+This function first thresholds at the specified value and then does the
+distance transform of the resulting binary image.
+The signed distance (negative values inside object) is also available.
+Distances between non-isotropic samples are handled correctly.
+.IP \(bu +2n
+Uses
+.B nrrdDistanceL2
+or
+.B nrrdDistanceL2Signed
+.SH OPTIONS
+.TP
+.B \-th\fR\ <\fIval\fR>\ ,\ \fB\-\-thresh\fR\ <\fIval\fR>
+threshold value to separate inside from outside
+.RI ( double )
+.TP
+.B \-b\fR\ <\fIval\fR>\ ,\ \fB\-\-bias\fR\ <\fIval\fR>
+if non-zero, bias the distance transform by this amount times the difference in
+value from the threshold
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+type to save output in; default:
+.RB \(lq float \(rq
+.TP
+.B \-sgn
+also compute signed (negative) distances inside objects, instead of leaving
+them as zero
+.TP
+.B \-inv
+values
+.B below
+threshold are considered interior to object.
+By default (not using this option), values above threshold are considered
+interior.
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

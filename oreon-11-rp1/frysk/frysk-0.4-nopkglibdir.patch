@@ -1,0 +1,233 @@
+diff -up frysk-0.4/frysk-common/Makefile.gen.sh.nopkglibdir frysk-0.4/frysk-common/Makefile.gen.sh
+--- frysk-0.4/frysk-common/Makefile.gen.sh.nopkglibdir	2012-02-11 23:00:39.095000078 -0500
++++ frysk-0.4/frysk-common/Makefile.gen.sh	2012-02-11 23:00:39.544000078 -0500
+@@ -225,7 +225,10 @@ echo_PROGRAMS ()
+ 	*dir/* )
+             # extract the directory prefix
+             local dir=`echo /"$1" | sed -e 's,.*/\([a-z]*\)dir/.*,\1,'`
+-            echo "${dir}_PROGRAMS += $1"
++	    case $dir in
++	      pkglib ) echo "noinst_PROGRAMS += $1" ;;
++              * ) echo "${dir}_PROGRAMS += $1" ;;
++	    esac
+ 	    ;;
+         * )
+ 	    echo "noinst_PROGRAMS += $1"
+@@ -726,8 +729,16 @@ do
+   do
+     d=`dirname $file`
+     b=`basename $file ${suffix}`
+-    echo `expr $d : '.*/\([a-z]*\)dir'`_SCRIPTS += $d/$b
+-    check_MANS $d/$b
++    dir=`expr $d : '.*/\([a-z]*\)dir'`
++    case $dir in
++      pkglib )
++	echo noinst_SCRIPTS += $d/$b
++	;;
++      * )
++	echo "${dir}_SCRIPTS += $d/$b"
++    	check_MANS $d/$b
++	;;
++    esac
+     cat <<EOF
+ ${d}/${b}: ${file}
+ 	\$(SUBST)
+diff -up frysk-0.4/frysk-common/Makefile.rules.nopkglibdir frysk-0.4/frysk-common/Makefile.rules
+--- frysk-0.4/frysk-common/Makefile.rules.nopkglibdir	2012-02-11 23:00:39.493000079 -0500
++++ frysk-0.4/frysk-common/Makefile.rules	2012-02-11 23:01:33.129016031 -0500
+@@ -53,7 +53,6 @@ FRYSK_ASCOMPILE = $(CCAS) $(DEFS) $(DEFA
+ 
+ # Initialize everything to empty and then use += to add things in.
+ 
+-noinst_SCRIPTS =
+ SUFFIXES =
+ BUILT_SOURCES = 
+ CLEANFILES = $(BUILT_SOURCES)
+@@ -61,14 +60,11 @@ CLEANDIRS =
+ MOSTLYCLEANFILES = core.[1-9]*
+ noinst_PROGRAMS =
+ noinst_DATA =
++noinst_SCRIPTS =
+ bin_PROGRAMS =
+ bin_SCRIPTS =
+ sbin_PROGRAMS =
+ sbin_SCRIPTS =
+-pkgdata_PROGRAMS =
+-pkglib_PROGRAMS =
+-pkglib_SCRIPTS =
+-pkglibdir = $(libdir)/@PACKAGE@
+ pkglib32_PROGRAMS =
+ pkglib32dir = $(lib32dir)/@PACKAGE@
+ pkglib64dir = $(lib64dir)/@PACKAGE@
+diff -up frysk-0.4/frysk-core/Makefile.am.nopkglibdir frysk-0.4/frysk-core/Makefile.am
+--- frysk-0.4/frysk-core/Makefile.am.nopkglibdir	2012-02-11 23:00:39.226000079 -0500
++++ frysk-0.4/frysk-core/Makefile.am	2012-02-11 23:01:40.329995991 -0500
+@@ -70,7 +70,7 @@ GEN_GCJ_LDADD_LIST += -lstdc++
+ GEN_GCJ_LDADD_LIST += -laudit
+ 
+ # For TestExec.java
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-exec-alias
++noinst_PROGRAMS += frysk/pkglibdir/funit-exec-alias
+ frysk_pkglibdir_funit_exec_alias_SOURCES =
+ frysk/pkglibdir/funit-exec-alias: frysk/pkglibdir/funit-exec
+ 	cp -p frysk/pkglibdir/funit-exec $@
+@@ -79,7 +79,7 @@ frysk/pkglibdir/funit-exec-alias: frysk/
+ frysk_pkglibdir_test1_LDADD = -lm
+ 
+ if DO_ARCH32_TEST
+-pkglib32_PROGRAMS += frysk/pkglibdir/arch32/funit-exec-alias
++noinst_PROGRAMS += frysk/pkglibdir/arch32/funit-exec-alias
+ frysk_pkglibdir_arch32_funit_exec_alias_SOURCES =
+ frysk/pkglibdir/arch32/funit-exec-alias: frysk/pkglibdir/arch32/funit-exec
+ 	cp -p frysk/pkglibdir/arch32/funit-exec $@
+@@ -103,8 +103,8 @@ frysk/debuginfo/TestTypeFactory.java: fr
+ # of the test program (in particular c++ exceptions).
+ 
+ # funit-stacks
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-stacks-nodebug
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-stacks-noeh
++noinst_PROGRAMS += frysk/pkglibdir/funit-stacks-nodebug
++noinst_PROGRAMS += frysk/pkglibdir/funit-stacks-noeh
+ frysk_pkglibdir_funit_stacks_nodebug_SOURCES =
+ frysk_pkglibdir_funit_stacks_noeh_SOURCES =
+ frysk/pkglibdir/funit-stacks-nodebug: frysk/pkglibdir/funit-stacks
+@@ -115,8 +115,8 @@ frysk/pkglibdir/funit-stacks-noeh: frysk
+ 		frysk/pkglibdir/funit-stacks $@
+ 
+ # funit-empty-functions
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-empty-functions-nodebug
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-empty-functions-noeh
++noinst_PROGRAMS += frysk/pkglibdir/funit-empty-functions-nodebug
++noinst_PROGRAMS += frysk/pkglibdir/funit-empty-functions-noeh
+ frysk_pkglibdir_funit_empty_functions_nodebug_SOURCES =
+ frysk_pkglibdir_funit_empty_functions_noeh_SOURCES =
+ frysk/pkglibdir/funit-empty-functions-nodebug: frysk/pkglibdir/funit-empty-functions
+@@ -127,8 +127,8 @@ frysk/pkglibdir/funit-empty-functions-no
+ 		frysk/pkglibdir/funit-empty-functions $@
+ 
+ # funit-stacks-exit
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-stacks-exit-nodebug
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-stacks-exit-noeh
++noinst_PROGRAMS += frysk/pkglibdir/funit-stacks-exit-nodebug
++noinst_PROGRAMS += frysk/pkglibdir/funit-stacks-exit-noeh
+ frysk_pkglibdir_funit_stacks_exit_nodebug_SOURCES =
+ frysk_pkglibdir_funit_stacks_exit_noeh_SOURCES =
+ frysk/pkglibdir/funit-stacks-exit-nodebug: frysk/pkglibdir/funit-stacks-exit
+@@ -139,8 +139,8 @@ frysk/pkglibdir/funit-stacks-exit-noeh:
+ 		frysk/pkglibdir/funit-stacks-exit $@
+ 
+ # funit-scopes
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-scopes-nodebug
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-scopes-noeh
++noinst_PROGRAMS += frysk/pkglibdir/funit-scopes-nodebug
++noinst_PROGRAMS += frysk/pkglibdir/funit-scopes-noeh
+ frysk_pkglibdir_funit_scopes_nodebug_SOURCES =
+ frysk_pkglibdir_funit_scopes_noeh_SOURCES =
+ frysk/pkglibdir/funit-scopes-nodebug: frysk/pkglibdir/funit-scopes
+@@ -151,8 +151,8 @@ frysk/pkglibdir/funit-scopes-noeh: frysk
+ 		frysk/pkglibdir/funit-scopes $@
+ 
+ # funit-scopes-workaround
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-scopes-workaround-nodebug
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-scopes-workaround-noeh
++noinst_PROGRAMS += frysk/pkglibdir/funit-scopes-workaround-nodebug
++noinst_PROGRAMS += frysk/pkglibdir/funit-scopes-workaround-noeh
+ frysk_pkglibdir_funit_scopes_workaround_nodebug_SOURCES =
+ frysk_pkglibdir_funit_scopes_workaround_noeh_SOURCES =
+ frysk/pkglibdir/funit-scopes-workaround-nodebug: frysk/pkglibdir/funit-scopes-workaround
+@@ -163,8 +163,8 @@ frysk/pkglibdir/funit-scopes-workaround-
+ 		frysk/pkglibdir/funit-scopes-workaround $@
+ 
+ # funit-stack-inlined
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-stack-inlined-nodebug
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-stack-inlined-noeh
++noinst_PROGRAMS += frysk/pkglibdir/funit-stack-inlined-nodebug
++noinst_PROGRAMS += frysk/pkglibdir/funit-stack-inlined-noeh
+ frysk_pkglibdir_funit_stack_inlined_nodebug_SOURCES =
+ frysk_pkglibdir_funit_stack_inlined_noeh_SOURCES =
+ frysk/pkglibdir/funit-stack-inlined-nodebug: frysk/pkglibdir/funit-stack-inlined
+@@ -175,8 +175,8 @@ frysk/pkglibdir/funit-stack-inlined-noeh
+ 		frysk/pkglibdir/funit-stack-inlined $@
+ 
+ # funit-stacks-values
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-stacks-values-nodebug
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-stacks-values-noeh
++noinst_PROGRAMS += frysk/pkglibdir/funit-stacks-values-nodebug
++noinst_PROGRAMS += frysk/pkglibdir/funit-stacks-values-noeh
+ frysk_pkglibdir_funit_stacks_values_nodebug_SOURCES =
+ frysk_pkglibdir_funit_stacks_values_noeh_SOURCES =
+ frysk/pkglibdir/funit-stacks-values-nodebug: frysk/pkglibdir/funit-stacks-values
+@@ -187,8 +187,8 @@ frysk/pkglibdir/funit-stacks-values-noeh
+ 		frysk/pkglibdir/funit-stacks-values $@
+ 
+ # funit-stacks-linenum
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-stacks-linenum-nodebug
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-stacks-linenum-noeh
++noinst_PROGRAMS += frysk/pkglibdir/funit-stacks-linenum-nodebug
++noinst_PROGRAMS += frysk/pkglibdir/funit-stacks-linenum-noeh
+ frysk_pkglibdir_funit_stacks_linenum_nodebug_SOURCES =
+ frysk_pkglibdir_funit_stacks_linenum_noeh_SOURCES =
+ frysk/pkglibdir/funit-stacks-linenum-nodebug: frysk/pkglibdir/funit-stacks-linenum
+@@ -199,8 +199,8 @@ frysk/pkglibdir/funit-stacks-linenum-noe
+ 		frysk/pkglibdir/funit-stacks-linenum $@
+ 
+ # funit-cpp-scopes-class
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-cpp-scopes-class-nodebug
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-cpp-scopes-class-noeh
++noinst_PROGRAMS += frysk/pkglibdir/funit-cpp-scopes-class-nodebug
++noinst_PROGRAMS += frysk/pkglibdir/funit-cpp-scopes-class-noeh
+ frysk_pkglibdir_funit_cpp_scopes_class_nodebug_SOURCES =
+ frysk_pkglibdir_funit_cpp_scopes_class_noeh_SOURCES =
+ frysk/pkglibdir/funit-cpp-scopes-class-nodebug: frysk/pkglibdir/funit-cpp-scopes-class
+@@ -213,13 +213,13 @@ frysk/pkglibdir/funit-cpp-scopes-class-n
+ 
+ # Create executables for symbol tests for TestSymbol.java.
+ 
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-symbols-nodebug
++noinst_PROGRAMS += frysk/pkglibdir/funit-symbols-nodebug
+ frysk_pkglibdir_funit_symbols_nodebug_SOURCES =
+ frysk/pkglibdir/funit-symbols-nodebug: frysk/pkglibdir/funit-symbols
+ 	strip --strip-debug -o $@ frysk/pkglibdir/funit-symbols
+ 
+ 
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-symbols-stripped
++noinst_PROGRAMS += frysk/pkglibdir/funit-symbols-stripped
+ frysk_pkglibdir_funit_symbols_stripped_SOURCES =
+ frysk/pkglibdir/funit-symbols-stripped: frysk/pkglibdir/funit-symbols
+ 	strip -o $@ frysk/pkglibdir/funit-symbols
+@@ -268,13 +268,13 @@ uninstall-sysroot-local:
+ 	rm -rf $(pkglib32dir)/test-sysroot
+ 
+ if DO_ARCH32_TEST
+-pkglib32_PROGRAMS += frysk/pkglibdir/arch32/funit-symbols-nodebug
++noinst_PROGRAMS += frysk/pkglibdir/arch32/funit-symbols-nodebug
+ frysk_pkglibdir_arch32_funit_symbols_nodebug_SOURCES =
+ frysk/pkglibdir/arch32/funit-symbols-nodebug: frysk/pkglibdir/arch32/funit-symbols
+ 	strip --strip-debug -o $@ frysk/pkglibdir/arch32/funit-symbols
+ 
+ 
+-pkglib32_PROGRAMS += frysk/pkglibdir/arch32/funit-symbols-stripped
++noinst_PROGRAMS += frysk/pkglibdir/arch32/funit-symbols-stripped
+ frysk_pkglibdir_arch32_funit_symbols_stripped_SOURCES =
+ frysk/pkglibdir/arch32/funit-symbols-stripped: frysk/pkglibdir/arch32/funit-symbols
+ 	strip -o $@ frysk/pkglibdir/arch32/funit-symbols
+@@ -318,7 +318,7 @@ frysk/pkgdatadir/test-core-x86:
+ 	ln -s -f @abs_top_builddir@/../frysk-sys/$@ $@
+ 
+ # The following links two files into one executable
+-pkglib_PROGRAMS += frysk/pkglibdir/funit-scopes-multi-file
++noinst_PROGRAMS += frysk/pkglibdir/funit-scopes-multi-file
+ frysk_pkglibdir_funit_scopes_multi_file_SOURCES =
+ frysk/pkglibdir/funit-scopes-multi-file:
+ 	gcc -g $(srcdir)/frysk/pkglibdir/funit-scopes-multi-file-a.c  $(srcdir)/frysk/pkglibdir/funit-scopes-multi-file-b.c  -o   frysk/pkglibdir/funit-scopes-multi-file
+diff -up frysk-0.4/frysk-imports/tests/Makefile.am.nopkglibdir frysk-0.4/frysk-imports/tests/Makefile.am
+--- frysk-0.4/frysk-imports/tests/Makefile.am.nopkglibdir	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-imports/tests/Makefile.am	2012-02-11 23:01:46.275993979 -0500
+@@ -42,7 +42,6 @@ AM_CFLAGS = -Werror -Wall -I$(top_srcdir
+ # Gag all the output from the failing tests
+ noinst_PROGRAMS =
+ noinst_SCRIPTS =
+-pkglib_SCRIPTS =
+ TESTS_ENVIRONMENT = eval > /dev/null 2>&1
+ XFAIL_TESTS =
+ PASS_TESTS =

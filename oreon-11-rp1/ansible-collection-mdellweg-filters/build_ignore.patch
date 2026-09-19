@@ -1,0 +1,31 @@
+From 630854b04763636e050e2b13c77dd102e202b5c4 Mon Sep 17 00:00:00 2001
+From: Maxwell G <maxwell@gtmx.me>
+Date: Tue, 11 Jul 2023 22:09:15 +0000
+Subject: [PATCH] build_ignore development files, tests, and docs
+
+---
+ galaxy.yml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/galaxy.yml b/galaxy.yml
+index 52e456d..8a600cd 100644
+--- a/galaxy.yml
++++ b/galaxy.yml
+@@ -13,4 +13,14 @@ tags:
+   - "jq"
+   - "json"
+   - "repr"
++build_ignore:
++  - .github
++  - .gitignore
++  - .yamllint
++  - tests
++  - ansible.cfg
++  - Makefile
++  # These files are installed with %license and %doc
++  - LICENSE
++  - README.md
+ ...
+-- 
+2.41.0
+

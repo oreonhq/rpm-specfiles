@@ -1,0 +1,53 @@
+From b4e57c8ccd59d69fe61fa5f6470b3a99ba52aeeb Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Thu, 4 Dec 2025 23:13:28 +0100
+Subject: [PATCH] Dont export Python modules
+
+---
+ bindings/pyroot/cppyy/CPyCppyy/CMakeLists.txt | 3 +--
+ bindings/pyroot/pythonizations/CMakeLists.txt | 8 +-------
+ 2 files changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/bindings/pyroot/cppyy/CPyCppyy/CMakeLists.txt b/bindings/pyroot/cppyy/CPyCppyy/CMakeLists.txt
+index bb48c032974..c34069855b2 100644
+--- a/bindings/pyroot/cppyy/CPyCppyy/CMakeLists.txt
++++ b/bindings/pyroot/cppyy/CPyCppyy/CMakeLists.txt
+@@ -119,8 +119,7 @@ install(TARGETS CPyCppyy EXPORT ${CMAKE_PROJECT_NAME}Exports
+                             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libraries
+                             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libraries)
+ 
+-install(TARGETS cppyy EXPORT ${CMAKE_PROJECT_NAME}Exports
+-                            RUNTIME DESTINATION ${CMAKE_INSTALL_PYTHONDIR}/cppyy COMPONENT libraries # Windows
++install(TARGETS cppyy       RUNTIME DESTINATION ${CMAKE_INSTALL_PYTHONDIR}/cppyy COMPONENT libraries # Windows
+                             LIBRARY DESTINATION ${CMAKE_INSTALL_PYTHONDIR}/cppyy COMPONENT libraries
+                             ARCHIVE DESTINATION ${CMAKE_INSTALL_PYTHONDIR}/cppyy COMPONENT libraries)
+ 
+diff --git a/bindings/pyroot/pythonizations/CMakeLists.txt b/bindings/pyroot/pythonizations/CMakeLists.txt
+index 1230f18ca47..2df4b733320 100644
+--- a/bindings/pyroot/pythonizations/CMakeLists.txt
++++ b/bindings/pyroot/pythonizations/CMakeLists.txt
+@@ -202,11 +202,6 @@ foreach(py_source ${py_sources})
+                       COMMENT "Compiling PyROOT source ${py_source} for Python ${Python3_VERSION}")
+ endforeach()
+ 
+-# Create meta-target PyROOT3 (INTERFACE library)
+-# Export of targets are not supported for custom targets(add_custom_targets())
+-add_library(PyROOT INTERFACE)
+-target_link_libraries(PyROOT INTERFACE cppyy_backend cppyy ROOTPythonizations)
+-
+ # Define library output directories for build and install trees
+ set(pymoduledir_build "${localruntimedir}/ROOT")
+ set(pymoduledir_install "${CMAKE_INSTALL_PYTHONDIR}/ROOT")
+@@ -231,8 +226,7 @@ if(NOT MSVC)
+ endif()
+ 
+ # Install library
+-install(TARGETS ${libname} EXPORT ${CMAKE_PROJECT_NAME}Exports
+-                            RUNTIME DESTINATION ${pymoduledir_install} COMPONENT libraries
++install(TARGETS ${libname}  RUNTIME DESTINATION ${pymoduledir_install} COMPONENT libraries
+                             LIBRARY DESTINATION ${pymoduledir_install}  COMPONENT libraries
+                             ARCHIVE DESTINATION ${pymoduledir_install} COMPONENT libraries)
+ 
+-- 
+2.52.0
+

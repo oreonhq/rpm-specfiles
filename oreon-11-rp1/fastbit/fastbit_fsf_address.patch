@@ -1,0 +1,11 @@
+--- a/contrib/fbmerge/fbmerge.cpp	2017-09-29 17:44:28.260259698 -0400
++++ b/contrib/fbmerge/fbmerge.cpp	2017-09-29 17:45:06.188254373 -0400
+@@ -17,7 +17,7 @@
+  *
+  *  You should have received a copy of the GNU General Public License
+  *  along with this program; if not, write to the Free Software
+- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  *
+  */
+ 

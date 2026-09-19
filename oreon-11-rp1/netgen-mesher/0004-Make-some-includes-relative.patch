@@ -1,0 +1,18 @@
+diff -rupN --no-dereference netgen-6.2.2601/libsrc/include/meshing.hpp netgen-6.2.2601-new/libsrc/include/meshing.hpp
+--- netgen-6.2.2601/libsrc/include/meshing.hpp	2026-01-14 10:54:29.000000000 +0100
++++ netgen-6.2.2601-new/libsrc/include/meshing.hpp	2026-01-18 10:30:32.175535128 +0100
+@@ -1 +1 @@
+-#include <../meshing/meshing.hpp>
++#include "../meshing/meshing.hpp"
+diff -rupN --no-dereference netgen-6.2.2601/libsrc/include/myadt.hpp netgen-6.2.2601-new/libsrc/include/myadt.hpp
+--- netgen-6.2.2601/libsrc/include/myadt.hpp	2026-01-14 10:54:29.000000000 +0100
++++ netgen-6.2.2601-new/libsrc/include/myadt.hpp	2026-01-18 10:30:32.175798969 +0100
+@@ -1 +1 @@
+-#include <../general/myadt.hpp>
++#include "../general/myadt.hpp"
+diff -rupN --no-dereference netgen-6.2.2601/libsrc/include/stlgeom.hpp netgen-6.2.2601-new/libsrc/include/stlgeom.hpp
+--- netgen-6.2.2601/libsrc/include/stlgeom.hpp	2026-01-14 10:54:29.000000000 +0100
++++ netgen-6.2.2601-new/libsrc/include/stlgeom.hpp	2026-01-18 10:30:32.175966989 +0100
+@@ -1 +1 @@
+-#include <../stlgeom/stlgeom.hpp>
++#include "../stlgeom/stlgeom.hpp"

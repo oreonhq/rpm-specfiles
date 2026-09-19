@@ -1,0 +1,25 @@
+xmobar-0.35.1/xmobar.cabal.orig	2001-09-09 09:46:40.000000000 +0800
++++ xmobar-0.35.1/xmobar.cabal	2020-08-18 20:29:58.797400927 +0800
+@@ -37,7 +37,7 @@
+ 
+ flag with_inotify
+   description: inotify support (modern Linux only). Required for the Mail and MBox plugins.
+-  default: False
++  default: True
+ 
+ flag with_iwlib
+   description: Wireless info support via Wext ioctls (deprecated). Required for the Wireless plugin, needs iwlib installed.
+@@ -45,11 +45,11 @@
+ 
+ flag with_nl80211
+   description: Wireless info support via nl80211. Required for the Wireless plugin on systems running Linux, the kernel.
+-  default: False
++  default: True
+ 
+ flag with_mpd
+   description: MPD support. Needs libmpd installed.
+-  default: False
++  default: True
+ 
+ flag all_extensions
+   description: Includes all optional extensions.

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=JWM
+Comment=Joe's Window Manager
+Exec=/usr/bin/jwm
+TryExec=jwm
+Icon=/usr/share/jwm/jwm-red.svg
+Type=XSession

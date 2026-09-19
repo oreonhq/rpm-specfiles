@@ -1,0 +1,67 @@
+Index: riemann-c-client-riemann-c-client-1.10.5/lib/riemann/client.c
+===================================================================
+--- riemann-c-client-riemann-c-client-1.10.5.orig/lib/riemann/client.c
++++ riemann-c-client-riemann-c-client-1.10.5/lib/riemann/client.c
+@@ -67,10 +67,9 @@ SYMVER(riemann_client_new) (void)
+ }
+ 
+ #if HAVE_VERSIONING
+-riemann_client_t riemann_client_new_1_0 (void) __attribute__((alias("riemann_client_new_default")));
+-
+-__asm__(".symver riemann_client_new_1_0,riemann_client_new@RIEMANN_C_1.0");
+-__asm__(".symver riemann_client_new_default,riemann_client_new@@RIEMANN_C_1.10");
++extern __typeof (riemann_client_new_default) riemann_client_new_default
++  __attribute__((symver("riemann_client_new@@RIEMANN_C_1.10")))
++  __attribute__((symver("riemann_client_new@RIEMANN_C_1.0")));
+ #endif
+ 
+ #ifndef __clang__
+@@ -264,15 +263,15 @@ SYMVER(riemann_client_connect) (riemann_
+ }
+ 
+ #if HAVE_VERSIONING
+-__asm__(".symver riemann_client_connect_default,riemann_client_connect@@RIEMANN_C_1.5");
++extern __typeof (riemann_client_connect_default) riemann_client_connect_default
++  __attribute__((symver("riemann_client_connect@@RIEMANN_C_1.5")));
+ 
+ int
+ riemann_client_connect_1_0 (riemann_client_t *client,
+                             riemann_client_type_t type,
+                             const char *hostname, int port)
+-  __attribute__((alias ("riemann_client_connect_default")));
+-
+-__asm__(".symver riemann_client_connect_1_0,riemann_client_connect@RIEMANN_C_1.0");
++  __attribute__((alias ("riemann_client_connect_default")))
++  __attribute__((symver("riemann_client_connect@RIEMANN_C_1.0")));
+ #endif
+ 
+ riemann_client_t *
+@@ -300,19 +299,20 @@ SYMVER(riemann_client_create) (riemann_c
+ }
+ 
+ #if HAVE_VERSIONING
+-riemann_client_t *
+-riemann_client_create_1_0 (riemann_client_type_t type,
+-                           const char *hostname, int port)
+-  __attribute__((alias ("riemann_client_create_default")));
++extern __typeof (riemann_client_create_default) riemann_client_create_default
++  __attribute__((symver("riemann_client_create@@RIEMANN_C_1.10")));
+ 
+ riemann_client_t *
+ riemann_client_create_1_5 (riemann_client_type_t type,
+                            const char *hostname, int port, ...)
+-  __attribute__((alias ("riemann_client_create_default")));
++  __attribute__((alias ("riemann_client_create_default")))
++  __attribute__((symver("riemann_client_create@RIEMANN_C_1.5")));
+ 
+-__asm__(".symver riemann_client_create_1_0,riemann_client_create@RIEMANN_C_1.0");
+-__asm__(".symver riemann_client_create_1_5,riemann_client_create@RIEMANN_C_1.5");
+-__asm__(".symver riemann_client_create_default,riemann_client_create@@RIEMANN_C_1.10");
++riemann_client_t *
++riemann_client_create_1_0 (riemann_client_type_t type,
++                           const char *hostname, int port)
++  __attribute__((alias ("riemann_client_create_default")))
++  __attribute__((symver("riemann_client_create@RIEMANN_C_1.0")));
+ #endif
+ 
+ #ifndef __clang__

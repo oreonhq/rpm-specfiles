@@ -1,0 +1,64 @@
+From 7031255413eba696630582a4b82f53a086e6e515 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 8 Jun 2017 09:21:50 +0200
+Subject: [PATCH] Do not loose $Config{ccflags} when setting CCFLAGS
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CCFLAGS must respect $Config{ccflags} to preserve ABI between XS
+modules and libperl.so. Otherwise the resulting Cflow.so can be
+incomaptible and tests fail like:
+
+Cflow.c: loadable library and perl binaries are mismatched (got handshake key 0x7e00080, needed 0x7f00080)
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1459766
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=628522
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 9bb312a..4863c5b 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -3,13 +3,16 @@
+ 
+ require 5.003; # for INSTALLSCRIPT
+ 
+-# use Config;
++use Config;
+ use ExtUtils::MakeMaker;
+ # See lib/ExtUtils/MakeMaker.pm for details of how to influence
+ # the contents of the Makefile that is written.
+ WriteMakefile(
+     # ABSTRACT_FROM  => 'Cflow.pm',
+     # AUTHOR         => 'Dave Plonka <plonka@doit.wisc.edu>',
++    CONFIGURE_REQUIRES => {
++             'Config'   => '0',
++              },
+     CONFIGURE      => \&find_argus_or_flow_tools,
+     EXE_FILES      => [ 'flowdumper' ],
+     NAME           => 'Cflow',
+@@ -49,7 +52,7 @@ sub find_flow_tools {
+    }
+    if ("$libdir") {
+       print "Found flow-tools... using \"-DOSU $incdir $libdir -lft -lz\".\n";
+-      return { CCFLAGS => '-DOSU',
++      return { CCFLAGS => $Config{ccflags} . ' -DOSU',
+ 	       INC     => join(' ', $incdir),
+ 	       LIBS    => [ join(' ', $libdir, '-lnsl -lft -lz') ] }
+    }
+@@ -66,7 +69,7 @@ sub find_argus {
+    }
+    if ("$libdir") {
+       print "Found argus... using \"-DARGUS $incdir $dir/argus_common.a $dir/argus_parse.a\".\n";
+-      return { CCFLAGS => '-DARGUS',
++      return { CCFLAGS => $Config{ccflags} . ' -DARGUS',
+ 	       INC     => join(' ', $incdir),
+ 	       LIBS    => [ join(' ', $libdir, '-lnsl', '-lm') ],
+ 	       LDFROM  => "\$(OBJECT) $dir/argus_common.a $dir/argus_parse.a" }
+-- 
+2.9.4
+

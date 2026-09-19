@@ -1,0 +1,73 @@
+From 5ef7b26b9792b5aae4d289413a3a0691766b072e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?B=C5=82a=C5=BCej=20Szczygie=C5=82?= <spaz16@wp.pl>
+Date: Mon, 16 Jan 2017 23:04:13 +0100
+Subject: [PATCH 22/23] Motif/CDE: Fix QSpinBox height in layout
+
+Calculate correct height for QSpinBox for Motif and CDE styles.
+
+Change-Id: I4cb3acd37a1e9129c5b3faef7dbf980a32744329
+Reviewed-by: J-P Nurmi <jpnurmi@qt.io>
+---
+ src/plugins/styles/motif/qcdestyle.cpp   |  1 +
+ src/plugins/styles/motif/qmotifstyle.cpp | 11 ++++++++++-
+ src/plugins/styles/motif/qmotifstyle.h   |  3 +++
+ 3 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/src/plugins/styles/motif/qcdestyle.cpp b/src/plugins/styles/motif/qcdestyle.cpp
+index 2c34510..756f9f8 100644
+--- a/src/plugins/styles/motif/qcdestyle.cpp
++++ b/src/plugins/styles/motif/qcdestyle.cpp
+@@ -100,6 +100,7 @@ QT_BEGIN_NAMESPACE
+ QCDEStyle::QCDEStyle(bool useHighlightCols)
+     : QMotifStyle(useHighlightCols)
+ {
++    spinboxHCoeff = 10;
+ }
+ 
+ /*!
+diff --git a/src/plugins/styles/motif/qmotifstyle.cpp b/src/plugins/styles/motif/qmotifstyle.cpp
+index 00bbbc7..7bc340d 100644
+--- a/src/plugins/styles/motif/qmotifstyle.cpp
++++ b/src/plugins/styles/motif/qmotifstyle.cpp
+@@ -111,7 +111,8 @@ static const int motifCheckMarkSpace    = 16;
+   text color.
+ */
+ QMotifStyle::QMotifStyle(bool useHighlightCols) : QCommonStyle(), focus(0),
+-    highlightCols(useHighlightCols), animationFps(25), animateTimer(0), animateStep(0)
++    highlightCols(useHighlightCols), animationFps(25), animateTimer(0), animateStep(0),
++    spinboxHCoeff(6)
+ {
+     startTime.start();
+ }
+@@ -1902,6 +1903,14 @@ QMotifStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
+         }
+         break;
+ 
++#ifndef QT_NO_SPINBOX
++    case CT_SpinBox:
++        if (const QStyleOptionSpinBox *vopt = qstyleoption_cast<const QStyleOptionSpinBox *>(opt)) {
++            if (vopt->frame)
++                sz.rheight() += spinboxHCoeff * proxy()->pixelMetric(PM_SpinBoxFrameWidth, vopt, widget);
++        }
++        break;
++#endif
+ 
+     default:
+         sz = QCommonStyle::sizeFromContents(ct, opt, contentsSize, widget);
+diff --git a/src/plugins/styles/motif/qmotifstyle.h b/src/plugins/styles/motif/qmotifstyle.h
+index a19d015..4efabe0 100644
+--- a/src/plugins/styles/motif/qmotifstyle.h
++++ b/src/plugins/styles/motif/qmotifstyle.h
+@@ -114,6 +114,9 @@ private:
+     int animateTimer;
+     QTime startTime;
+     int animateStep;
++
++protected:
++    int spinboxHCoeff;
+ };
+ 
+ QT_END_NAMESPACE
+-- 
+2.9.3
+

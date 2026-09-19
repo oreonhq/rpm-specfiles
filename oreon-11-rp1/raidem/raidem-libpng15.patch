@@ -1,0 +1,43 @@
+Index: lib/loadpng/loadpng.c
+===================================================================
+--- lib/loadpng/loadpng.c.orig
++++ lib/loadpng/loadpng.c
+@@ -14,6 +14,7 @@
+  */
+ 
+ 
++#include <zlib.h>
+ #include <png.h>
+ #include <allegro.h>
+ #include <allegro/internal/aintern.h>
+@@ -314,7 +315,7 @@ BITMAP *load_png_pf(PACKFILE *fp, RGB *p
+      * the normal method of doing things with libpng).  REQUIRED unless you
+      * set up your own error handlers in the png_create_read_struct() earlier.
+      */
+-    if (setjmp(png_ptr->jmpbuf)) {
++    if (setjmp(png_jmpbuf(png_ptr))) {
+ 	/* Free all of the memory associated with the png_ptr and info_ptr */
+ 	png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+ 	/* If we get here, we had a problem reading the file */
+@@ -417,7 +418,7 @@ BITMAP *load_memory_png_ex(AL_CONST void
+      * the normal method of doing things with libpng).  REQUIRED unless you
+      * set up your own error handlers in the png_create_read_struct() earlier.
+      */
+-    if (setjmp(png_ptr->jmpbuf)) {
++    if (setjmp(png_jmpbuf(png_ptr))) {
+ 	/* Free all of the memory associated with the png_ptr and info_ptr */
+ 	png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+ 	/* If we get here, we had a problem reading the file */
+Index: lib/loadpng/savepng.c
+===================================================================
+--- lib/loadpng/savepng.c.orig
++++ lib/loadpng/savepng.c
+@@ -188,7 +188,7 @@ static int really_save_png(PACKFILE *fp,
+ 	goto Error;
+ 
+     /* Set error handling. */
+-    if (setjmp(png_ptr->jmpbuf)) {
++    if (setjmp(png_jmpbuf(png_ptr))) {
+ 	/* If we get here, we had a problem reading the file. */
+ 	goto Error;
+     }

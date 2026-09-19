@@ -1,0 +1,43 @@
+From dc159c3ab2e32ef5cc8a2f844948da40d0b0b4d2 Mon Sep 17 00:00:00 2001
+From: Steve Traylen <steve.traylen@cern.ch>
+Date: Sun, 12 Oct 2025 11:29:35 +0200
+Subject: [PATCH] =?UTF-8?q?Fix:=20don=E2=80=99t=20forward=20empty=20JSON?=
+ =?UTF-8?q?=20bodies=20on=20GET=20(prevents=20Jira=20403)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Non-empty dict → keep existing behavior and send json.dumps(data).
+Empty dict → remove data from prepared_kwargs so no body is sent.
+
+While I understand this is needed I do not understand why the tests
+ever passed.
+
+* Fixes #2362
+---
+ jira/resilientsession.py | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/jira/resilientsession.py b/jira/resilientsession.py
+index 39ce7643d..bf89b0813 100644
+--- a/jira/resilientsession.py
++++ b/jira/resilientsession.py
+@@ -180,10 +180,14 @@ def _jira_prepare(self, **original_kwargs) -> dict:
+         prepared_kwargs["headers"] = request_headers
+ 
+         data = original_kwargs.get("data", None)
+-        if isinstance(data, dict) and data:
+-            # mypy ensures we don't do this,
+-            # but for people subclassing we should preserve old behaviour
+-            prepared_kwargs["data"] = json.dumps(data)
++        if isinstance(data, dict):
++            if data:
++                # mypy ensures we don't do this,
++                # but for people subclassing we should preserve old behaviour
++                prepared_kwargs["data"] = json.dumps(data)
++            else:
++                # Don't forward an empty JSON body
++                prepared_kwargs.pop("data", None)
+ 
+         if "verify" not in prepared_kwargs:
+             prepared_kwargs["verify"] = self.verify

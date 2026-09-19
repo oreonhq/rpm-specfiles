@@ -1,0 +1,24 @@
+=== modified file 'usr/lib/byobu/updates_available'
+--- usr/lib/byobu/updates_available	2019-05-26 19:15:34 +0000
++++ usr/lib/byobu/updates_available	2022-03-14 10:11:43 +0000
+@@ -54,6 +54,9 @@
+ 	elif eval $BYOBU_TEST apt-get >/dev/null; then
+ 		# If apt-get exists, use it
+ 		flock -xn "$flock" apt-get -s -o Debug::NoLocking=true upgrade | grep -c ^Inst >$mycache 2>/dev/null &
++	elif eval $BYOBU_TEST dnf >/dev/null; then
++		# If dnf exists, use it
++		flock -xn "$flock" dnf list --upgrades -q -y | grep -vc "Available Upgrades" >$mycache 2>/dev/null &
+ 	elif eval $BYOBU_TEST pkcon >/dev/null; then
+ 		# use packagekit to show list of packages
+ 		LC_ALL=C flock -xn "$flock" pkcon get-updates -p | awk '/^Results:$/ { start=NR }; /^Security/ { security++ }; END { if (!/There are no updates available at this time./) { print NR-start, security }}' > "$mycache" 2>/dev/null &
+@@ -103,6 +106,9 @@
+ 		else
+ 			return 1
+ 		fi
++	elif [ -e "/var/cache/dnf/packages.db" ]; then
++		[ "/var/cache/dnf/packages.db" -nt "$mycache" ]
++		return $?
+ 	elif [ -e "/var/lib/PackageKit/transactions.db" ]; then
+ 		[ "/var/lib/PackageKit/transactions.db" -nt "$mycache" ]
+ 		return $?
+

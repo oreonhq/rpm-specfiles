@@ -3,7 +3,7 @@
 %{?mingw_package_header}
 
 Name:           mingw-expat
-Version:        2.8.1
+Version:        2.8.4
 Release:        1%{?dist}
 Summary:        MinGW Windows port of expat XML parser library
 

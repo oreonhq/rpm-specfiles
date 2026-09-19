@@ -1,0 +1,87 @@
+From c56743ac36efb9e12f29e31fd36aeba12ff111f7 Mon Sep 17 00:00:00 2001
+From: "Neal H. Walfield" <neal@walfield.org>
+Date: Sun, 22 Feb 2026 12:18:29 +0100
+Subject: [PATCH] Upgrade pty-process.
+
+---
+ tests/gpg.rs | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/tests/gpg.rs b/tests/gpg.rs
+index 4469edc..00b5fbb 100644
+--- a/tests/gpg.rs
++++ b/tests/gpg.rs
+@@ -193,29 +193,29 @@ impl Context {
+         // We're going to change directories before execve(2)ing in
+         // the child, so make sure the path is absolute.
+         let exe = fs::canonicalize(&executable[0])?;
+-        let pty = pty_process::blocking::Pty::new()?;
+-        let mut c = pty_process::blocking::Command::new(&exe);
+-        c.env("LC_ALL", "C");
+-        c.env("TZ", "Africa/Nairobi"); // EAT, no DST.
+-        c.env("SEQUOIA_CRYPTO_POLICY", // Use a null policy.
+-              format!("{}/tests/null-policy.toml",
+-                      env!("CARGO_MANIFEST_DIR")));
+-        c.current_dir(workdir.path());
++        let (_pty, pts) = pty_process::blocking::open()?;
++        let mut c = pty_process::blocking::Command::new(&exe)
++            .env("LC_ALL", "C")
++            .env("TZ", "Africa/Nairobi") // EAT, no DST.
++            .env("SEQUOIA_CRYPTO_POLICY", // Use a null policy.
++                 format!("{}/tests/null-policy.toml",
++                         env!("CARGO_MANIFEST_DIR")))
++            .current_dir(workdir.path());
+         for arg in &executable[1..] {
+-            c.arg(arg);
++            c = c.arg(arg);
+         }
+-        c.arg("--homedir").arg(self.home.path());
++        c = c.arg("--homedir").arg(self.home.path());
+ 
+         // IPC.  Stdin, stdout, and stderr we handle using the std
+         // library.
+-        c.stdin(Stdio::piped());
+-        c.stdout(Stdio::piped());
+-        c.stderr(Stdio::piped());
++        c = c.stdin(Stdio::piped())
++            .stdout(Stdio::piped())
++            .stderr(Stdio::piped());
+ 
+         use interprocess::unnamed_pipe::pipe;
+         use std::os::unix::io::AsRawFd;
+         let (writer, mut reader) = pipe()?;
+-        c.arg(format!("--status-fd={}", writer.as_raw_fd()));
++        c = c.arg(format!("--status-fd={}", writer.as_raw_fd()));
+ 
+         // Be nice and close one end of the pipe in the child process.
+         #[cfg(target_family = "unix")]
+@@ -223,7 +223,7 @@ impl Context {
+             use std::os::unix::io::FromRawFd;
+             let reader_fd = reader.as_raw_fd();
+             unsafe {
+-                c.pre_exec(move || {
++                c = c.pre_exec(move || {
+                     drop(fs::File::from_raw_fd(reader_fd));
+                     Ok(())
+                 });
+@@ -232,7 +232,7 @@ impl Context {
+ 
+         // Finish the arguments and start the process.
+         for arg in args {
+-            c.arg(arg);
++            c = c.arg(arg);
+         }
+ 
+         // XXX: Sadly, there is no pty_process::blocking::Command::get_args...
+@@ -240,7 +240,7 @@ impl Context {
+         //eprintln!("    {:?} {}",
+         //          exe.file_name().unwrap(),
+         //          c.get_args().map(|s| format!("{:?}", s)).collect::<Vec<_>>().join(" "));
+-        let mut child = c.spawn(&pty.pts()?)?;
++        let mut child = c.spawn(pts)?;
+ 
+         // Now handle the status-fd pipe.
+         drop(writer);
+-- 
+2.53.0
+

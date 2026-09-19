@@ -1,0 +1,29 @@
+From 7a7487f3d913c9c0e902e1f22a93e63e15753968 Mon Sep 17 00:00:00 2001
+From: Igor Raits <igor.raits@gmail.com>
+Date: Sat, 18 May 2024 17:46:37 +0200
+Subject: [PATCH 4/6] Apply -fPIC properly in re2 build
+
+Otherwise %configure overrides CXXFLAGS that does NOT include -fPIC and
+the compilation fails.
+---
+ deps/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/deps/Makefile b/deps/Makefile
+index 23c4f894..05144023 100644
+--- a/deps/Makefile
++++ b/deps/Makefile
+@@ -211,8 +211,9 @@ ifeq ($(SYS_KERN),Darwin)
+ 	cd re2/re2 && sed -i '' -e 's/-O3 -g/-O3 -g -${STDCPP} -fPIC -DMEMORY_SANITIZER -DRE2_ON_VALGRIND /' Makefile
+ #	cd re2/re2 && sed -i '' -e 's/RE2_CXXFLAGS?=-std=c++11 /RE2_CXXFLAGS?=-std=c++11 -fPIC /' Makefile
+ else
+-	cd re2/re2 && sed -i -e 's/-O3 -g/-O3 -g ${STDCPP} -fPIC -DMEMORY_SANITIZER -DRE2_ON_VALGRIND /' Makefile
++#	cd re2/re2 && sed -i -e 's/-O3 -g/-O3 -g ${STDCPP} -fPIC -DMEMORY_SANITIZER -DRE2_ON_VALGRIND /' Makefile
+ #	cd re2/re2 && sed -i -e 's/RE2_CXXFLAGS?=-std=c++11 /RE2_CXXFLAGS?=-std=c++11 -fPIC /' Makefile
++	sed -i -e '/^RE2_CXXFLAGS?=/ s/$$/ -fPIC -DMEMORY_SANITIZER -DRE2_ON_VALGRIND /' re2/re2/Makefile
+ endif
+ 	cd re2/re2 && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+-- 
+2.45.0
+

@@ -1,0 +1,43 @@
+From 1bd34f2ff81129b532c705801122280fa911b779 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 3 Sep 2019 12:31:34 +0200
+Subject: [PATCH] Fix installation
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Do not change ownership of the destination files. That failed if the
+installation was not performed by root.
+
+Create installation directories properly.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index db3984b..f2e88b0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -28,10 +28,13 @@ clean:
+ 	rm -f root-tail root-tail.o root-tail.1 root-tail.1.gz
+ 
+ install: all
+-	install -D -o root -g root root-tail $(BINDIR)
+-	install -D -m 0644 -o root -g root root-tail.1 $(MANDIR)
+-	install -D -m 0644 -o root -g root README $(DOCDIR)
+-	install -m 0644 -o root -g root Changes $(DOCDIR)
++	install -d $(BINDIR)
++	install root-tail $(BINDIR)
++	install -d $(MANDIR)
++	install -m 0644 root-tail.1 $(MANDIR)
++	install -d $(DOCDIR)
++	install -m 0644 README $(DOCDIR)
++	install -m 0644 Changes $(DOCDIR)
+ 
+ uninstall:
+ 	rm -f $(BINDIR)/root-tail $(MANDIR)/root-tail.1
+-- 
+2.21.0
+

@@ -1,0 +1,33 @@
+diff -up alex4src/src/main.c~ alex4src/src/main.c
+--- alex4src/src/main.c~	2017-09-08 12:11:48.000000000 +0200
++++ alex4src/src/main.c	2017-09-08 12:15:45.784592931 +0200
+@@ -452,7 +452,7 @@ void load_level_files(const char *filena
+ 			mode = 2;
+ 		}
+ 		else {
+-			char full_path_to_map[1024];
++			char full_path_to_map[2048];
+ 
+ 			clear_trailing_whitespace(buf);
+ 			sprintf(full_path_to_map, "%s%s", path, buf);
+@@ -2579,7 +2579,7 @@ int get_string(BITMAP *bmp, char *string
+     if (block == NULL)
+         return 1;
+ 
+-	blit(bmp, block, pos_x - 1, pos_y - 1, 0, 0, block->w, block->h);
++    blit(bmp, block, pos_x - 1, pos_y - 1, 0, 0, block->w, block->h);
+ 
+     clear_keybuf();
+     while(1) {
+diff -up alex4src/src/shooter.c~ alex4src/src/shooter.c
+--- alex4src/src/shooter.c~	2017-09-08 12:11:48.000000000 +0200
++++ alex4src/src/shooter.c	2017-09-08 12:14:27.389952486 +0200
+@@ -903,7 +903,7 @@ void s_check_collision(Tspace_object *ar
+ 									s_var.score += 1000000;
+ 								}
+ 								else {  // increase power
+-									s_var.power_level = MIN(s_var.power_level ++, 7);
++									s_var.power_level++;
+ 								}
+ 								play_sound_id(SMPL_HEART);	
+ 

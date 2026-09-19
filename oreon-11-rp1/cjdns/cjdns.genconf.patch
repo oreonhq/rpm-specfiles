@@ -1,0 +1,21 @@
+diff -up ./client/cjdroute2.c.genconf ./client/cjdroute2.c
+--- ./client/cjdroute2.c.genconf	2020-06-23 08:37:44.000000000 -0400
++++ ./client/cjdroute2.c	2020-07-01 13:48:09.041257042 -0400
+@@ -359,7 +359,7 @@ static int genconf(struct Allocator* all
+            if (Defined(android) || Defined(darwin)) {
+     printf("        { \"setuser\": 0 },\n");
+            } else {
+-    printf("        { \"setuser\": \"nobody\", \"keepNetAdmin\": 1 },\n");
++    printf("        { \"setuser\": \"cjdns\", \"keepNetAdmin\": 1 },\n");
+            }
+     printf("\n"
+            "        // Chroot changes the filesystem root directory which cjdns sees, blocking it\n"
+@@ -372,7 +372,7 @@ static int genconf(struct Allocator* all
+           }
+           else {
+     printf("        // Default: enabled (using \"/var/run\")\n"
+-           "        { \"chroot\": \"/var/run/\" },\n");
++           "        { \"chroot\": \"/var/empty/cjdns\" },\n");
+           }
+     printf("\n"
+            "        // Nofiles is a deprecated security feature which prevents cjdns from opening\n"

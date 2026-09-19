@@ -1,0 +1,1357 @@
+--- /dev/null	2006-12-01 08:45:08.001995750 +0100
++++ alphabet-soup-1.1/Makefile.unix	2006-12-01 11:20:56.000000000 +0100
+@@ -0,0 +1,24 @@
++CC = gcc
++PREFIX  = /usr
++DATADIR = $(PREFIX)/share/$(TARGET)
++CFLAGS  = -g -Wall -O2 -Wno-deprecated-declarations
++LDFLAGS = -lalfont `allegro-config --libs` -ldumb -laldmb
++DEFINES = -DDATADIR=\"$(DATADIR)/\"
++OBJS    = ncds.o hs.o animate.o 3dsprite.o main.o data.o game.o menu.o map.o \
++          snake.o input.o dictionary.o effects.o text.o credits.o unix.o
++TARGET  = alphabet-soup
++
++$(TARGET): $(OBJS)
++	$(CC) -o $@ $^ $(LDFLAGS) 
++
++%.o: %.c
++	$(CC) $(CFLAGS) $(DEFINES) -o $@ -c $<
++
++install: $(TARGET)
++	mkdir -p $(PREFIX)/bin
++	mkdir -p $(DATADIR)
++	install -p -m 755 $(TARGET) $(PREFIX)/bin
++	install -p -m 644 soup.dat $(DATADIR)
++	
++clean:
++	rm -f $(OBJS) $(TARGET) *~
+--- alphabet-soup-1.1/animate.c.unix	2003-12-22 19:41:18.000000000 +0100
++++ alphabet-soup-1.1/animate.c	2006-12-01 11:20:56.000000000 +0100
+@@ -358,7 +358,7 @@
+ 
+ BITMAP * get_ani(ANIMATION * ap, int f)
+ {
+-    int i, d;
++    int i = 0, d;
+     
+     switch(ap->type)
+     {
+@@ -432,8 +432,6 @@
+ /* like draw_sprite but for animations (pick frame based on f) */
+ int draw_ani(BITMAP * bp, ANIMATION * ap, int x, int y, unsigned long f)
+ {
+-    int i;
+-
+     if(ap != NULL)
+     {
+         /* make sure there are frames to draw */
+--- alphabet-soup-1.1/config.c.unix	2004-01-21 21:56:48.000000000 +0100
++++ alphabet-soup-1.1/config.c	2006-12-01 11:20:56.000000000 +0100
+@@ -12,7 +12,7 @@
+ 	install_mouse();
+ 	ncds_install();
+ 	set_gfx_mode(GFX_AUTODETECT, 640, 480, 0, 0);
+-	bg = load_pcx("soup.dat#images/background.pcx", palette);
++	bg = load_pcx(DATADIR "soup.dat#images/background.pcx", palette);
+ 	set_palette(palette);
+ 	while(!key[KEY_ESC])
+ 	{
+--- alphabet-soup-1.1/credits.c.unix	2004-01-29 08:47:10.000000000 +0100
++++ alphabet-soup-1.1/credits.c	2006-12-01 11:20:56.000000000 +0100
+@@ -1,5 +1,6 @@
+ #include <allegro.h>
+ #include <alfont.h>
++#include <string.h>
+ #include "credits.h"
+ 
+ void credits_add_item(CREDITS * cp, char * text, ALFONT_FONT * fp, int oy, int color)
+--- alphabet-soup-1.1/data.c.unix	2004-09-21 16:54:02.000000000 +0200
++++ alphabet-soup-1.1/data.c	2006-12-01 11:20:56.000000000 +0100
+@@ -1,5 +1,6 @@
+ #include <allegro.h>
+ #include <alfont.h>
++#include <string.h>
+ #include "hs.h"
+ #include "animate.h"
+ #include "data.h"
+@@ -10,10 +11,11 @@
+ #include "menu.h"
+ #include "text.h"
+ #include "credits.h"
++#include "ncds.h"
+ 
+ /* main data */
+ int state = STATE_MENU;
+-int logic_ticks = 0;
++volatile int logic_ticks = 0;
+ int frame = 0;
+ char * mem_buffer = NULL;
+ int mem_buffer_size = 0;
+@@ -29,7 +31,7 @@
+ int score_view;
+ char * score_title[MAX_GAME_MODES] = {"Scatter Word", "Blind Worm", "Elimination", "Poison Letter", "Fat Worm", "Skinny Worm", "Cold Soup", "Nibbles"};
+ int game_modes = 8;
+-char word_file[MAX_WORD_FILES][1024] = {0};
++char word_file[MAX_WORD_FILES][1024] = { {0} };
+ char word_files = 0;
+ char word_selected = 0;
+ int gtime = 0;
+@@ -68,18 +70,18 @@
+ 
+ void word_file_add(const char * fn, int attrib, int param)
+ {
+-	strcpy(word_file[word_files], fn);
++	strcpy(word_file[(int)word_files], fn);
+ 	word_files++;
+ }
+ 
+ void build_dictionary_list(void)
+ {
+ 	word_files = 0;
+-	word_file_add("soup.dat#dictionaries/default.asd", 0, 0);
+-	word_file_add("soup.dat#dictionaries/kids.asd", 0, 0);
+-	word_file_add("soup.dat#dictionaries/strange.asd", 0, 0);
++	word_file_add(DATADIR "soup.dat#dictionaries/default.asd", 0, 0);
++	word_file_add(DATADIR "soup.dat#dictionaries/kids.asd", 0, 0);
++	word_file_add(DATADIR "soup.dat#dictionaries/strange.asd", 0, 0);
+ 	for_each_file("*.asd", FA_ARCH | FA_RDONLY, word_file_add, 0);
+-	dictionary_load(&dictionary[DICTIONARY_MAIN], word_file[word_selected]);
++	dictionary_load(&dictionary[DICTIONARY_MAIN], word_file[(int)word_selected]);
+ }
+ 
+ void load_mem_file(char * fn)
+@@ -183,36 +185,36 @@
+ 	int i;
+ 	
+ 	/* load sounds */
+-	sound[SOUND_BITE] = load_wav("soup.dat#sounds/eat.wav");
+-	sound[SOUND_MENU_MOVE] = load_wav("soup.dat#sounds/navigate.wav");
+-	sound[SOUND_MENU_ENTER] = load_wav("soup.dat#sounds/select.wav");
+-	sound[SOUND_MENU_OPTION] = load_wav("soup.dat#sounds/option.wav");
+-	sound[SOUND_WORD] = load_wav("soup.dat#sounds/word.wav");
+-	sound[SOUND_LEVEL] = load_wav("soup.dat#sounds/level.wav");
+-	sound[SOUND_PAPER] = load_wav("soup.dat#sounds/paper.wav");
+-	sound[SOUND_CLAP] = load_wav("soup.dat#sounds/clap.wav");
++	sound[SOUND_BITE] = load_wav(DATADIR "soup.dat#sounds/eat.wav");
++	sound[SOUND_MENU_MOVE] = load_wav(DATADIR "soup.dat#sounds/navigate.wav");
++	sound[SOUND_MENU_ENTER] = load_wav(DATADIR "soup.dat#sounds/select.wav");
++	sound[SOUND_MENU_OPTION] = load_wav(DATADIR "soup.dat#sounds/option.wav");
++	sound[SOUND_WORD] = load_wav(DATADIR "soup.dat#sounds/word.wav");
++	sound[SOUND_LEVEL] = load_wav(DATADIR "soup.dat#sounds/level.wav");
++	sound[SOUND_PAPER] = load_wav(DATADIR "soup.dat#sounds/paper.wav");
++	sound[SOUND_CLAP] = load_wav(DATADIR "soup.dat#sounds/clap.wav");
+ 	
+ 	/* load images */
+-	image[IMAGE_GAME_BACKGROUND] = load_pcx("soup.dat#images/bowl.pcx", palette);
+-	image[IMAGE_MENU_BG] = load_pcx("soup.dat#images/background.pcx", NULL);
+-	image[IMAGE_SOUP_CAN] = load_pcx("soup.dat#images/can_texture.pcx", NULL);
+-	image[IMAGE_SOUP_SHADOW] = load_pcx("soup.dat#images/can_shadow.pcx", NULL);
++	image[IMAGE_GAME_BACKGROUND] = load_pcx(DATADIR "soup.dat#images/bowl.pcx", palette);
++	image[IMAGE_MENU_BG] = load_pcx(DATADIR "soup.dat#images/background.pcx", NULL);
++	image[IMAGE_SOUP_CAN] = load_pcx(DATADIR "soup.dat#images/can_texture.pcx", NULL);
++	image[IMAGE_SOUP_SHADOW] = load_pcx(DATADIR "soup.dat#images/can_shadow.pcx", NULL);
+ 	image[IMAGE_MENU_SURFACE] = create_sub_bitmap(image[IMAGE_SOUP_CAN], 0, 90, image[IMAGE_SOUP_CAN]->w / 2, image[IMAGE_SOUP_CAN]->h - 90 - 4);
+-	image[IMAGE_PAPER] = load_pcx("soup.dat#images/score_sheet.pcx", NULL);
+-	image[IMAGE_BODY_H] = load_pcx("soup.dat#snake/body_horizontal.pcx", NULL);
+-	image[IMAGE_BODY_V] = load_pcx("soup.dat#snake/body_vertical.pcx", NULL);
+-	image[IMAGE_BODY_DUL] = load_pcx("soup.dat#snake/body_up_left.pcx", NULL);
+-	image[IMAGE_BODY_DUR] = load_pcx("soup.dat#snake/body_up_right.pcx", NULL);
+-	image[IMAGE_BODY_DDL] = load_pcx("soup.dat#snake/body_down_left.pcx", NULL);
+-	image[IMAGE_BODY_DDR] = load_pcx("soup.dat#snake/body_down_right.pcx", NULL);
+-	image[IMAGE_HEAD_UP] = load_pcx("soup.dat#snake/head_up.pcx", NULL);
+-	image[IMAGE_HEAD_DOWN] = load_pcx("soup.dat#snake/head_down.pcx", NULL);
+-	image[IMAGE_HEAD_LEFT] = load_pcx("soup.dat#snake/head_left.pcx", NULL);
+-	image[IMAGE_HEAD_RIGHT] = load_pcx("soup.dat#snake/head_right.pcx", NULL);
+-	image[IMAGE_TAIL_UP] = load_pcx("soup.dat#snake/tail_up.pcx", NULL);
+-	image[IMAGE_TAIL_DOWN] = load_pcx("soup.dat#snake/tail_down.pcx", NULL);
+-	image[IMAGE_TAIL_LEFT] = load_pcx("soup.dat#snake/tail_left.pcx", NULL);
+-	image[IMAGE_TAIL_RIGHT] = load_pcx("soup.dat#snake/tail_right.pcx", NULL);
++	image[IMAGE_PAPER] = load_pcx(DATADIR "soup.dat#images/score_sheet.pcx", NULL);
++	image[IMAGE_BODY_H] = load_pcx(DATADIR "soup.dat#snake/body_horizontal.pcx", NULL);
++	image[IMAGE_BODY_V] = load_pcx(DATADIR "soup.dat#snake/body_vertical.pcx", NULL);
++	image[IMAGE_BODY_DUL] = load_pcx(DATADIR "soup.dat#snake/body_up_left.pcx", NULL);
++	image[IMAGE_BODY_DUR] = load_pcx(DATADIR "soup.dat#snake/body_up_right.pcx", NULL);
++	image[IMAGE_BODY_DDL] = load_pcx(DATADIR "soup.dat#snake/body_down_left.pcx", NULL);
++	image[IMAGE_BODY_DDR] = load_pcx(DATADIR "soup.dat#snake/body_down_right.pcx", NULL);
++	image[IMAGE_HEAD_UP] = load_pcx(DATADIR "soup.dat#snake/head_up.pcx", NULL);
++	image[IMAGE_HEAD_DOWN] = load_pcx(DATADIR "soup.dat#snake/head_down.pcx", NULL);
++	image[IMAGE_HEAD_LEFT] = load_pcx(DATADIR "soup.dat#snake/head_left.pcx", NULL);
++	image[IMAGE_HEAD_RIGHT] = load_pcx(DATADIR "soup.dat#snake/head_right.pcx", NULL);
++	image[IMAGE_TAIL_UP] = load_pcx(DATADIR "soup.dat#snake/tail_up.pcx", NULL);
++	image[IMAGE_TAIL_DOWN] = load_pcx(DATADIR "soup.dat#snake/tail_down.pcx", NULL);
++	image[IMAGE_TAIL_LEFT] = load_pcx(DATADIR "soup.dat#snake/tail_left.pcx", NULL);
++	image[IMAGE_TAIL_RIGHT] = load_pcx(DATADIR "soup.dat#snake/tail_right.pcx", NULL);
+ 	
+ 	set_palette(black_palette);
+ 	gui_fg_color = 224;
+@@ -230,13 +232,14 @@
+ 	build_dictionary_list();
+ 	
+ 	/* load fonts */
+-	load_mem_file("soup.dat#fonts/game.ttf");
++	memset(gfont, 0, MAX_FONTS * sizeof(void *));
++	load_mem_file(DATADIR "soup.dat#fonts/game.ttf");
+ 	gfont[FONT_GAME] = alfont_load_font_from_mem(mem_buffer, mem_buffer_size);
+ 	alfont_set_font_size(gfont[FONT_GAME], 32);
+ 	gfont[FONT_GAME_BIG] = alfont_load_font_from_mem(mem_buffer, mem_buffer_size);
+ 	alfont_set_font_size(gfont[FONT_GAME_BIG], 48);
+ 	free_mem_file();
+-	load_mem_file("soup.dat#fonts/menu.ttf");
++	load_mem_file(DATADIR "soup.dat#fonts/menu.ttf");
+ 	gfont[FONT_MENU_HEADER] = alfont_load_font_from_mem(mem_buffer, mem_buffer_size);
+ 	alfont_set_font_size(gfont[FONT_MENU_HEADER], 24);
+ 	gfont[FONT_MENU] = alfont_load_font_from_mem(mem_buffer, mem_buffer_size);
+@@ -244,7 +247,7 @@
+ 	free_mem_file();
+ 	
+ 	/* load animations */
+-	animation[ANIMATION_APPEAR_FG] = load_ani("soup.dat#animations/letter_appear.ani", NULL);
++	animation[ANIMATION_APPEAR_FG] = load_ani(DATADIR "soup.dat#animations/letter_appear.ani", NULL);
+ 	
+ 	buffer = create_bitmap(640, 480);
+ //	buffer_map = create_sub_bitmap(buffer, (SCREEN_W - image[IMAGE_GAME_BACKGROUND]->w) / 2 + 16, (SCREEN_H - image[IMAGE_GAME_BACKGROUND]->h) / 2 + 16, MAP_W * 32, MAP_H * 32);
+--- alphabet-soup-1.1/data.h.unix	2004-09-21 16:42:22.000000000 +0200
++++ alphabet-soup-1.1/data.h	2006-12-01 11:20:56.000000000 +0100
+@@ -58,7 +58,7 @@
+ #define STATE_SCORES 4
+ 
+ extern int state;
+-extern int logic_ticks;
++extern volatile int logic_ticks;
+ extern int frame;
+ 
+ extern BITMAP * buffer;
+--- alphabet-soup-1.1/dictionary.c.unix	2004-01-21 09:56:20.000000000 +0100
++++ alphabet-soup-1.1/dictionary.c	2006-12-01 11:20:56.000000000 +0100
+@@ -128,7 +128,7 @@
+ void dictionary_save(DICTIONARY * dp, char * fn)
+ {
+ 	PACKFILE * fp;
+-	int i, j, k;
++	int i, j;
+ 	
+ 	fp = pack_fopen(fn, "w");
+ 	for(i = 15; i >= 3; i--)
+@@ -145,7 +145,7 @@
+ 
+ int  dictionary_find(DICTIONARY * dp, SNAKE * sp)
+ {
+-	int i, j, k, l;
++	int i, j, l;
+ 	int r = 0;
+ 	
+ 	for(i = 0; i < dp->words; i++)
+@@ -171,8 +171,7 @@
+ 
+ int  dictionary_find_all(DICTIONARY * dp, SNAKE * sp)
+ {
+-	int i, j, k, l;
+-	int r = 0;
++	int i, j, l;
+ 	int marked[SNAKE_MAX_SEGMENTS] = {0};
+ 	int found[DICTIONARY_MAX_WORDS] = {0};
+ 	
+@@ -217,7 +216,7 @@
+ {
+ 	int list[DICTIONARY_MAX_WORDS];
+ 	int list_length = 0;
+-	int i, j, pick;
++	int i;
+ 	
+ 	for(i = 0; i < dp->words; i++)
+ 	{
+@@ -234,7 +233,7 @@
+ {
+ 	int list[DICTIONARY_MAX_WORDS];
+ 	int list_length = 0;
+-	int i, j, pick;
++	int i, pick;
+ 	
+ 	for(i = 0; i < dp->words; i++)
+ 	{
+--- alphabet-soup-1.1/effects.c.unix	2004-07-19 13:18:00.000000000 +0200
++++ alphabet-soup-1.1/effects.c	2006-12-01 11:20:56.000000000 +0100
+@@ -10,7 +10,7 @@
+ 	drawing_mode(DRAW_MODE_SOLID, NULL, 0, 0);
+ }
+ 
+-void myblend(PALETTE pal, int x, int y, RGB *rgb)
++void myblend(const PALETTE pal, int x, int y, RGB *rgb)
+ {
+ 	int light;
+ 	
+@@ -36,7 +36,7 @@
+ {     
+ 	int x, y; // coordinates on the target bitmap 
+ //	int p, q; // coordinates on the source bitmap
+-	fixed p, q; // coordinates on the source bitmap
++	fixed p; // coordinates on the source bitmap
+ 	fixed cy, oy;
+ 	int iy;
+      
+--- alphabet-soup-1.1/effects.h.unix	2004-01-14 11:11:38.000000000 +0100
++++ alphabet-soup-1.1/effects.h	2006-12-01 11:20:56.000000000 +0100
+@@ -4,7 +4,7 @@
+ #include <allegro.h>
+ 
+ void draw_shadow(BITMAP * bp, int x, int y, int w, int h, int ox, int oy);
+-void myblend(PALETTE pal, int x, int y, RGB *rgb);
++void myblend(const PALETTE pal, int x, int y, RGB *rgb);
+ int get_pixel_wrap(BITMAP * bp, int x, int y);
+ void draw_cylinder(BITMAP * bp, BITMAP * texture, int x, int y, int w, int h, fixed angle); 
+ void mapped_cylinder(BITMAP * target, int cx, int top, int r, int h, BITMAP * map, int ofs);
+--- alphabet-soup-1.1/game.c.unix	2004-09-22 09:56:00.000000000 +0200
++++ alphabet-soup-1.1/game.c	2006-12-01 11:55:12.000000000 +0100
+@@ -167,7 +167,7 @@
+ void game_start(GAME * gp)
+ {
+ 	/* reload the dictionary */
+-	dictionary_load(&dictionary[DICTIONARY_MAIN], word_file[word_selected]);
++	dictionary_load(&dictionary[DICTIONARY_MAIN], word_file[(int)word_selected]);
+ 	
+ 	game_set_options(gp);
+ 	
+@@ -200,8 +200,7 @@
+ 
+ int game_advance(GAME * gp)
+ {
+-	int i, ol;
+-	int ret = 0;
++	int ol, ret = 0;
+ 	
+ 	ol = gp->level;
+ 	gp->level = gp->snake.words / 10;
+@@ -262,8 +261,7 @@
+ 				main_render();
+ 				main_draw();
+ 				game_state = GAME_STATE_PLAY;
+-				ncds_play_music("soup.dat#music/bgm.xm", 1);
+-				logic_ticks = 0;
++				ncds_play_music(DATADIR "soup.dat#music/bgm.xm", 1);
+ 			}
+ 			break;
+ 		}
+@@ -362,7 +360,6 @@
+ 					score_state = SCORE_STATE_IN;
+ 				}
+ 				score_view = game.mode;
+-				logic_ticks = 0;
+ 			}
+ 			break;
+ 		}
+@@ -391,7 +388,6 @@
+ void game_draw_word(GAME * gp, ALFONT_FONT * fp, int x, int y)
+ {
+ 	char text[256] = {0};
+-	int i;
+ 	int ofs, ofs2;
+ 	
+ 	strcpy(text, gp->snake.word);
+--- alphabet-soup-1.1/game.h.unix	2004-09-22 08:23:54.000000000 +0200
++++ alphabet-soup-1.1/game.h	2006-12-01 11:20:56.000000000 +0100
+@@ -45,5 +45,6 @@
+ void game_logic(GAME * gp);
+ void game_render(GAME * gp);
+ void game_draw(GAME * gp);
++int game_advance(GAME * gp);
+ 
+ #endif
+--- alphabet-soup-1.1/hs.c.unix	2004-09-22 10:12:40.000000000 +0200
++++ alphabet-soup-1.1/hs.c	2006-12-01 11:20:56.000000000 +0100
+@@ -1,6 +1,7 @@
+ #include <allegro.h>
+ #include <alfont.h>
+ #include <string.h>
++#include <stdio.h>
+ #include "hs.h"
+ 
+ int hs_save_fp(HIGH_SCORES * hp, PACKFILE * fp)
+--- alphabet-soup-1.1/includes.h.unix	2004-09-21 16:19:06.000000000 +0200
++++ alphabet-soup-1.1/includes.h	2006-12-01 11:20:56.000000000 +0100
+@@ -3,6 +3,8 @@
+ 
+ #include <allegro.h>
+ #include <alfont.h>
++#include <stdio.h>
++#include <string.h>
+ 
+ #include "ncds.h"
+ #include "hs.h"
+@@ -19,4 +21,7 @@
+ #include "text.h"
+ #include "credits.h"
+ 
++void main_render(void);
++void main_draw(void);
++
+ #endif
+--- /dev/null	2006-12-01 08:45:08.001995750 +0100
++++ alphabet-soup-1.1/license-change.txt	2006-12-01 11:20:56.000000000 +0100
+@@ -0,0 +1,199 @@
++The original license statement in readme.txt was:
++"Alphabet Soup is freeware and may be distributed freely (without charge). If
++you would like to include Alphabet Soup on a compilation CD you must contact us
++for permission. Please see the "Contacting Us" section at the bottom of this
++document."
++
++This was changed to the current text by Hans de Goede
++<j.w.r.degoede@hhs.nl>, with permission from the original author Todd Cope,
++below is are literal copies of the email exchange in which he gave his
++permission:
++
++---
++
++Message-ID: <456DE5CA.7020300@hhs.nl>
++Date: Wed, 29 Nov 2006 20:55:54 +0100
++From: Hans de Goede <j.w.r.degoede@hhs.nl>
++User-Agent: Thunderbird 1.5.0.5 (X11/20060803)
++MIME-Version: 1.0
++To:  todd@t3-i.com
++Subject: alphabet soup, laserwars en others license
++X-Enigmail-Version: 0.94.0.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 7bit
++
++Hi Todd,
++
++Remember me I mailed you patches for a Linux version for crystalstacker
++quite some time ago. and I've created Fedora Linux packages of
++crystalstacker so that Fedora users can easily install it.
++
++Besides a Linux enthousiast / Fedora developer I'm also a Computer
++Science teacher at a Dutch University. This period I'm teaching my
++students howto write portable code, so I thought it would be fun to give
++them some games written with allegro, but not with another OS like Linux
++in mind, to "port" to Linux. Today there was a practical lesson where
++they did just that and it was a great success.
++
++The managed to get smashteroid and alphabet soup running under Linux
++quite easily. Their work still needs some cleaning up and then I'll send
++it to you. Know that I've seen your other games in action I would like
++to package them for Fedora Linux too.
++
++I'm interested in creating packages for all your (non java) games, but
++lets start with those for which you currently already make source
++available: alphabet soup, smashteroid and laserwars.
++
++All 3 of these come with a Freeware-ish license currently in the text. I
++don't know if you remember, but we had some discussions about some rough
++(and thus for Fedora troublesome) edges with the crystalstacker license.
++
++In the end you put the following license on crystalstacker (for which
++I'm still very grateful):
++
++"Crystal Stacker is freeware. This means you can pass copies around
++freely provided you include this document in it's original form in your
++distribution. Please see the "Contacting Us" section of this document if
++you need to contact us for any reason.
++
++The source code is provided as-is and you may do with it whatsoever you
++please provided that you include this file in its unmodified form with
++any new distribution. NewCreature Design makes no gaurantees regarding
++the usability of the source but are willing to help with any problems
++you might run into. Please see the "Contacting Us" section of this
++document if you need to get in touch with us about any issues you have
++regarding the source."
++
++Are you willing to release: alphabet soup, smashteroid and laserwars
++under this license too? And in that case is it ok for me to distribute
++the current available versions under this license?
++
++Thanks & Regards,
++
++Hans
++
++
++p.s.
++
++While I'm asking any chance you could release source of any of your
++other games like vgolf and secret of the hose? I know you already make
++linux binaries available, but source under an unrestrictive license
++would be really awsome!
++
++
++
++---
++
++Return-Path: <todd@t3-i.com>
++Received: from koko.hhs.nl ([145.52.2.16] verified)
++  by hhs.nl (CommuniGate Pro SMTP 4.3.6)
++  with ESMTP id 55013466 for j.w.r.degoede@hhs.nl; Thu, 30 Nov 2006 01:50:54 +0100
++Received: from exim by koko.hhs.nl with spam-scanned (Exim 4.62)
++	(envelope-from <todd@t3-i.com>)
++	id 1Gpa8Z-0007DU-2j
++	for j.w.r.degoede@hhs.nl; Thu, 30 Nov 2006 01:50:54 +0100
++X-Spam-Checker-Version: SpamAssassin 3.1.0 (2005-09-13) on koko.hhs.nl
++X-Spam-Level: 
++X-Spam-Status: No, score=0.6 required=5.0 tests=AWL,BAYES_05,NO_REAL_NAME,
++	UNWANTED_LANGUAGE_BODY autolearn=no version=3.1.0
++Received: from exim (helo=koko)
++	by koko.hhs.nl with local-smtp (Exim 4.62)
++	(envelope-from <todd@t3-i.com>)
++	id 1Gpa8Y-0007DR-VX
++	for j.w.r.degoede@hhs.nl; Thu, 30 Nov 2006 01:50:51 +0100
++Received: from [68.178.232.10] (port=55956 helo=smtpout15-02.prod.mesa1.secureserver.net)
++	by koko.hhs.nl with smtp (Exim 4.62)
++	(envelope-from <todd@t3-i.com>)
++	id 1Gpa8Y-0007DM-Bx
++	for j.w.r.degoede@hhs.nl; Thu, 30 Nov 2006 01:50:50 +0100
++Received: (qmail 23995 invoked from network); 30 Nov 2006 00:50:48 -0000
++Received: from unknown (HELO gem-wbe25.prod.mesa1.secureserver.net) (64.202.189.228)
++  by smtpout15-02.prod.mesa1.secureserver.net with SMTP; 30 Nov 2006 00:50:48 -0000
++Received: (qmail 20967 invoked by uid 99); 30 Nov 2006 00:50:48 -0000
++Date: Wed, 29 Nov 2006 17:50:48 -0700
++From: todd@t3-i.com
++Subject: RE: alphabet soup, laserwars en others license
++To: Hans de Goede <j.w.r.degoede@hhs.nl>
++Message-ID: <20061129175048.c1bf2b7c2c1de069cff39b794cd5d62e.b7005c9902.wbe@email.secureserver.net>
++MIME-Version: 1.0
++Content-Type: TEXT/plain; CHARSET=US-ASCII
++User-Agent: Web-Based Email 4.9.0
++X-Originating-IP: 70.157.254.177
++X-Anti-Virus: Kaspersky Anti-Virus for MailServers 5.5.2/RELEASE, bases: 30112006 #232888, status: clean
++
++Hello Hans,
++
++To your first request to release the other games (Alphabet Soup, Smashteroid, Laser War) under the Crystal Stacker license, I give you my permission to do so.
++
++As for vGolf, it is unfinished but the source code is available under the "Linux" packages on the web site. No Linux binaries exist as I have no idea how to make them so they work with all Linux versions :) I am fine with you releasing the current vGolf under the Crystal Stacker license as well.
++
++However, Secret of the Hose is closed-source at the request of the game designer. He wanted to keep it closed-sourced so that people wouldn't be able to cheat as easily in online play. I would love to release the source otherwise. I see no benefit personally in keeping my sources under wraps Your case of using them for educational purposes makes me quite happy.
++
++Sincerely,
++
++Todd
++
++> -------- Original Message --------
++> Subject: alphabet soup, laserwars en others license
++> From: Hans de Goede <j.w.r.degoede@hhs.nl>
++> Date: Wed, November 29, 2006 12:55 pm
++> To: todd@t3-i.com
++> 
++> Hi Todd,
++> 
++> Remember me I mailed you patches for a Linux version for crystalstacker
++> quite some time ago. and I've created Fedora Linux packages of
++> crystalstacker so that Fedora users can easily install it.
++> 
++> Besides a Linux enthousiast / Fedora developer I'm also a Computer
++> Science teacher at a Dutch University. This period I'm teaching my
++> students howto write portable code, so I thought it would be fun to give
++> them some games written with allegro, but not with another OS like Linux
++> in mind, to "port" to Linux. Today there was a practical lesson where
++> they did just that and it was a great success.
++> 
++> The managed to get smashteroid and alphabet soup running under Linux
++> quite easily. Their work still needs some cleaning up and then I'll send
++> it to you. Know that I've seen your other games in action I would like
++> to package them for Fedora Linux too.
++> 
++> I'm interested in creating packages for all your (non java) games, but
++> lets start with those for which you currently already make source
++> available: alphabet soup, smashteroid and laserwars.
++> 
++> All 3 of these come with a Freeware-ish license currently in the text. I
++> don't know if you remember, but we had some discussions about some rough
++> (and thus for Fedora troublesome) edges with the crystalstacker license.
++> 
++> In the end you put the following license on crystalstacker (for which
++> I'm still very grateful):
++> 
++> "Crystal Stacker is freeware. This means you can pass copies around
++> freely provided you include this document in it's original form in your
++> distribution. Please see the "Contacting Us" section of this document if
++> you need to contact us for any reason.
++> 
++> The source code is provided as-is and you may do with it whatsoever you
++> please provided that you include this file in its unmodified form with
++> any new distribution. NewCreature Design makes no gaurantees regarding
++> the usability of the source but are willing to help with any problems
++> you might run into. Please see the "Contacting Us" section of this
++> document if you need to get in touch with us about any issues you have
++> regarding the source."
++> 
++> Are you willing to release: alphabet soup, smashteroid and laserwars
++> under this license too? And in that case is it ok for me to distribute
++> the current available versions under this license?
++> 
++> Thanks & Regards,
++> 
++> Hans
++> 
++> 
++> p.s.
++> 
++> While I'm asking any chance you could release source of any of your
++> other games like vgolf and secret of the hose? I know you already make
++> linux binaries available, but source under an unrestrictive license
++> would be really awsome!
++
+--- alphabet-soup-1.1/main.c.unix	2004-09-22 10:19:34.000000000 +0200
++++ alphabet-soup-1.1/main.c	2006-12-01 11:20:56.000000000 +0100
+@@ -145,9 +145,26 @@
+ void main_loop(void)
+ {
+ 	int i;
++#ifdef __unix__
++	char buf[512];
++	char *home = getenv("HOME");
++	int check_and_create_dir(const char *name);
+ 
++	snprintf(buf, sizeof(buf), "%s/.alphabet-soup", home? home:".");
++	if (check_and_create_dir(buf))
++		return;
++
++	snprintf(buf, sizeof(buf), "%s/.alphabet-soup/soup.cfg",
++		home? home:".");
++	config_load(buf);
++
++	snprintf(buf, sizeof(buf), "%s/.alphabet-soup/soup.hs",
++		home? home:".");
++	load_scores(buf);
++#else
+ 	config_load("soup.cfg");
+ 	load_scores("soup.hs");
++#endif
+ 	can_x = SCREEN_W / 2 - CAN_R;
+ 	can_y = -CAN_H;
+ 	can_ofs = CAN_START_OFS;
+@@ -155,22 +172,37 @@
+ 	menu_init();
+ 	blit(image[IMAGE_MENU_BG], screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
+ 	fade_in(palette, 4);
+-	ncds_play_music("soup.dat#music/title.xm", 1);
++	ncds_play_music(DATADIR "soup.dat#music/title.xm", 1);
+ 	logic_ticks = 0;
+ 	while(state != STATE_FIN)
+ 	{
+-		for(i = 0; i < ((logic_ticks < 30) ? logic_ticks : 30); i++)
++		if (logic_ticks > 30)
++			logic_ticks = 30;
++		
++		while (logic_ticks)
+ 		{
+ 			main_logic();
++			logic_ticks--;
+ 		}
+ 		ncds_update_music();
+-		logic_ticks = 0;
+ 		main_render();
+ 		main_draw();
++		while (logic_ticks == 0)
++			rest(1);
+ 	}
+ 	ncds_stop_music();
++#ifdef __unix__
++	snprintf(buf, sizeof(buf), "%s/.alphabet-soup/soup.cfg",
++		home? home:".");
++	config_save(buf);
++
++	snprintf(buf, sizeof(buf), "%s/.alphabet-soup/soup.hs",
++		home? home:".");
++	save_scores(buf);
++#else
+ 	config_save("soup.cfg");
+ 	save_scores("soup.hs");
++#endif
+ 	fade_out(4);
+ }
+ 
+--- alphabet-soup-1.1/map.c.unix	2004-01-26 08:28:38.000000000 +0100
++++ alphabet-soup-1.1/map.c	2006-12-01 11:20:56.000000000 +0100
+@@ -139,9 +139,8 @@
+ void map_add_letter(MAP * mp, char letter)
+ {
+ 	int loc;
+-	int val = rand() % 26;
+ 	int i, j;
+-	int smap[MAP_H][MAP_W] = {0};
++	int smap[MAP_H][MAP_W] = { {0} };
+ 	
+ 	/* find a place to put the letter */
+ 	map_update_blocked(mp, &game.snake);
+@@ -183,7 +182,7 @@
+ 
+ void map_clear(MAP * mp)
+ {
+-	int i, j;
++	int i;
+ 	
+ 	for(i = 0; i < MAX_LETTERS; i++)
+ 	{
+@@ -279,7 +278,7 @@
+ 
+ void map_draw(BITMAP * bp, MAP * mp, int ox, int oy)
+ {
+-	int i, j;
++	int i;
+ 	char str[2] = {'\0', '\0'};
+ 	
+ 	for(i = 0; i < MAX_LETTERS; i++)
+--- alphabet-soup-1.1/map.h.unix	2004-01-26 08:29:06.000000000 +0100
++++ alphabet-soup-1.1/map.h	2006-12-01 11:20:56.000000000 +0100
+@@ -1,8 +1,6 @@
+ #ifndef _MAP_H
+ #define _MAP_H
+ 
+-#include "dictionary.h"
+-
+ #define MAP_W (12)
+ #define MAP_H (12)
+ 
+@@ -31,10 +29,16 @@
+ 	
+ } MAP;
+ 
+-//void map_auto_shuffle(MAP * mp, SNAKE * sp);
++#include "snake.h"
++#include "dictionary.h"
++
++void map_auto_shuffle(MAP * mp, SNAKE * sp);
+ void map_new_letter(MAP * mp, int val, int x, int y);
+ void map_add_letter(MAP * mp, char letter);
+ void map_logic(MAP * mp);
+ void map_draw(BITMAP * bp, MAP * mp, int ox, int oy);
++void map_clear(MAP * mp);
++void map_re_letter(MAP * mp, char * wp);
++
+ 
+ #endif
+--- alphabet-soup-1.1/menu.c.unix	2004-09-21 16:15:36.000000000 +0200
++++ alphabet-soup-1.1/menu.c	2006-12-01 11:56:20.000000000 +0100
+@@ -1,5 +1,7 @@
+ #include <allegro.h>
+ #include <alfont.h>
++#include <stdio.h>
++#include <string.h>
+ #include "ncds.h"
+ #include "data.h"
+ #include "menu.h"
+@@ -95,8 +97,7 @@
+ 		if(music_vol <= 0)
+ 		{
+ 			ncds_enable_music();
+-			ncds_play_music("soup.dat#music/title.xm", 1);
+-			logic_ticks = 0;
++			ncds_play_music(DATADIR "soup.dat#music/title.xm", 1);
+ 		}
+ 		music_vol += 5;
+ 		ncds_set_music_volume(music_vol);
+@@ -199,7 +200,7 @@
+ 
+ void menu_dictionary_text(void)
+ {
+-	strcpy(gmenu_wtext, get_filename(word_file[word_selected]));
++	strcpy(gmenu_wtext, get_filename(word_file[(int)word_selected]));
+ }
+ 
+ void menu_proc_dictionary_left(void)
+@@ -208,7 +209,7 @@
+ 	{
+ 		ncds_play_sample(sound[SOUND_MENU_OPTION], 128, -1, -1);
+ 		word_selected--;
+-		dictionary_load(&dictionary[DICTIONARY_MAIN], word_file[word_selected]);
++		dictionary_load(&dictionary[DICTIONARY_MAIN], word_file[(int)word_selected]);
+ 		menu_dictionary_text();
+ 	}
+ }
+@@ -219,7 +220,7 @@
+ 	{
+ 		ncds_play_sample(sound[SOUND_MENU_OPTION], 128, -1, -1);
+ 		word_selected++;
+-		dictionary_load(&dictionary[DICTIONARY_MAIN], word_file[word_selected]);
++		dictionary_load(&dictionary[DICTIONARY_MAIN], word_file[(int)word_selected]);
+ 		menu_dictionary_text();
+ 	}
+ }
+@@ -241,15 +242,12 @@
+ 		build_dictionary_list();
+ 	}
+ 	ncds_resume_music();
+-	logic_ticks = 0;
+ }
+ 
+ void config_init(void)
+ {
+-	memset(&menu, sizeof(GMENU), 0);
+-	
+ 	/* set up menu */
+-	memset(&menu, sizeof(GMENU), 0);
++	memset(&menu, 0, sizeof(GMENU));
+ 	menu.item[0].type = MENU_ITEM_TYPE_TEXT;
+ 	menu.item[0].data = "Configure";
+ 	menu.item[0].ox = 0;
+@@ -330,7 +328,7 @@ void config_init(void)
+ void menu_init(void)
+ {
+ 	/* set up menu */
+-	memset(&menu, sizeof(GMENU), 0);
++	memset(&menu, 0, sizeof(GMENU));
+ 	menu.item[0].type = MENU_ITEM_TYPE_TEXT;
+ 	menu.item[0].data = "Options";
+ 	menu.item[0].ox = 0;
+@@ -482,8 +482,6 @@
+ 
+ void menu_logic(void)
+ {
+-	int i;
+-	int f = frame;
+ 	char k;
+ 	
+ 	if(keypressed())
+@@ -522,7 +520,7 @@
+ 				menu_state = MENU_STATE_TO_OS;
+ 				ncds_play_sample(sound[SOUND_MENU_ENTER], 128, -1, -1);
+ 			}
+-			if(k == KEY_ENTER)
++			if(k == KEY_ENTER || k == KEY_SPACE)
+ 			{
+ 				menu_state = MENU_STATE_TO_OPTIONS;
+ 				ncds_play_sample(sound[SOUND_MENU_ENTER], 128, -1, -1);
+@@ -565,7 +563,7 @@
+ 			{
+ 				menu.item[menu.selected].right_proc();
+ 			}
+-			if(k == KEY_ENTER && menu.item[menu.selected].enter_proc)
++			if((k == KEY_ENTER || k == KEY_SPACE) && menu.item[menu.selected].enter_proc)
+ 			{
+ 				menu.item[menu.selected].enter_proc();
+ 			}
+@@ -701,8 +699,6 @@
+ 
+ void menu_render(void)
+ {
+-	int i, j;
+-	
+ //	clear_to_color(buffer, makecol(0, 0, 128));
+ /*	for(i = 0; i < SCREEN_H / image[IMAGE_MENU_SHAPE_1]->h + 2; i++)
+ 	{
+@@ -746,7 +742,7 @@
+ 			{
+ 				k = 0;
+ 			}
+-			if(k == KEY_ESC)
++			if(k == KEY_ESC || k == KEY_ENTER || k == KEY_SPACE)
+ 			{
+ 				score_state = SCORE_STATE_OUT;
+ 			}
+@@ -847,8 +843,7 @@
+ //				can_ofs = CAN_START_OFS;
+ 				state = STATE_MENU;
+ 				menu_state = MENU_STATE_FROM_SCORES;
+-				ncds_play_music("soup.dat#music/title.xm", 1);
+-				logic_ticks = 0;
++				ncds_play_music(DATADIR "soup.dat#music/title.xm", 1);
+ 			}
+ 			break;
+ 		}
+--- alphabet-soup-1.1/menu.h.unix	2004-01-29 08:53:22.000000000 +0100
++++ alphabet-soup-1.1/menu.h	2006-12-01 11:20:56.000000000 +0100
+@@ -58,5 +58,9 @@
+ void menu_logic(void);
+ void menu_render(void);
+ void menu_draw(void);
++void scores_logic(void);
++void scores_render(void);
++void scores_draw(void);
++
+ 
+ #endif
+--- alphabet-soup-1.1/ncds.c.unix	2004-09-14 06:54:42.000000000 +0200
++++ alphabet-soup-1.1/ncds.c	2006-12-01 11:20:56.000000000 +0100
+@@ -60,7 +60,7 @@
+ SAMPLE * ncds_sample_queue[NCDS_MAX_QUEUE] = {NULL};
+ int ncds_queue_channel = -1;
+ 
+-char ncds_music_type[NCDS_MAX_MUSIC_TYPES][8] = {0};
++char ncds_music_type[NCDS_MAX_MUSIC_TYPES][8] = { {0} };
+ int ncds_music_types = 0;
+ 
+ void ncds_add_music_type(char * ext)
+@@ -410,7 +410,6 @@
+ {
+ 	char str[1024] = {0};
+ 	int i;
+-	int mode = 0;
+ 	
+ 	if(fn[0] != '\0')
+ 	{
+@@ -456,7 +455,7 @@
+ 
+ void ncds_update_queue(void)
+ {
+-	int i, j;
++	int j;
+ 	
+ 	if(ncds_initialized)
+ 	{
+@@ -515,7 +514,7 @@
+ 
+ void ncds_update_music(void)
+ {
+-	int i, ret;
++	int ret;
+ 	
+ 	if(ncds_initialized && !ncds_done)
+ 	{
+@@ -812,8 +811,6 @@
+ /* saves a wave file to file pointer */
+ int ncds_save_wav_fp(SAMPLE * SamplePointer, PACKFILE * f)
+ {
+-    int i;
+-
+     /* create the header */
+     char RiffHeader[4] = {'R', 'I', 'F', 'F'};
+     unsigned long FileLength = 36 + SamplePointer->len;
+@@ -961,7 +958,6 @@
+ /* figure out sound panning based on X coordinate and width */
+ int ncds_place_sound(int x, int width)
+ {
+-    float fw = width;
+     float wr = width / 256;
+     float fx = x * wr;
+ 
+--- alphabet-soup-1.1/ncds.h.unix	2004-09-13 08:53:52.000000000 +0200
++++ alphabet-soup-1.1/ncds.h	2006-12-01 11:20:56.000000000 +0100
+@@ -9,8 +9,8 @@
+ 
+ /* undefine these to disable portions of NCDS */
+ #define NCDS_DUMB
+-#define NCDS_ALMP3
+-#define NCDS_ALOGG
++// #define NCDS_ALMP3
++// #define NCDS_ALOGG
+ 
+ /* sound system channel modes */
+ #define NCDS_MAX_CHANNELS     32
+@@ -73,4 +73,8 @@
+ }
+ #endif
+ 
++#ifndef DATADIR
++#define DATADIR
++#endif
++
+ #endif
+--- alphabet-soup-1.1/readme.txt.unix	2004-01-29 21:50:44.000000000 +0100
++++ alphabet-soup-1.1/readme.txt	2006-12-01 11:20:56.000000000 +0100
+@@ -1,147 +1,155 @@
+-Alphabet Soup 1.0 (c)2004 NewCreature Design
+---------------------------------------------
+-
+-Alphabet Soup is freeware and may be distributed freely (without charge). If
+-you would like to include Alphabet Soup on a compilation CD you must contact us
+-for permission. Please see the "Contacting Us" section at the bottom of this
+-document.
+-
+-
+-Disclaimer
+-----------
+-
+-NewCreature Design makes no gaurantees regarding the Alphabet Soup software. We
+-take no responsibility for any damages the software may cause to you or your
+-equipment, though it has not been known to cause any problems. Please contact
+-us if you have any trouble with the software and we'll see if we can resolve
+-the problem.
+-
+-
+-Description
+------------
+-
+-Guide your worm through the soup to spell words and earn points. Play the way
+-you like with several game mode selections. Words are chosen from one of three
+-included dictionaries, or import your own.
+-
+-
+-System Requirements
+--------------------
+-
+-Pentium or better PC
+-VGA or better graphics card
+-
+-
+-Navigating the Menu
+--------------------
+-
+-Use the UP and DOWN arrow keys to move through the menu, LEFT and RIGHT to
+-modify options, ENTER to select.
+-
+-
+-Playing the Game
+-----------------
+-
+-Alphabet soup contains several game modes, all with a similar goal. You are
+-given a word and you must maneuver your worm through the soup to spell out that
+-word. Larger words, naturally, earn you more points.
+-
+-
+-Game Modes
+-----------
+-
+-All game modes share the same basic rules as spelled out above, however, some
+-details about how the game plays depend on what game mode you've chosen.
+-
+-
+-  Scatter Word
+-  ------------
+-  
+-  The basic game mode, spell the given word to earn points.
+-  
+-
+-  Blind Worm
+-  ----------
+-  
+-  Just like Scatter Word, except you must figure out what word you are supposed
+-  to find based on what letters are floating in the soup.
+-  
+-  
+-  Elimination
+-  -----------
+-  
+-  Like Scatter Word but each word you find is eliminated from the dictionary
+-  until no words remain.
+-  
+-  
+-  Poison Letter
+-  -------------
+-  
+-  Eat the wrong letter and you lose.
+-  
+-  
+-  Fat Worm
+-  --------
+-  
+-  Your worm does not get smaller as you find words.
+-  
+-  
+-  Skinny Worm
+-  -----------
+-  
+-  Your worm does not get bigger with each word.
+-  
+-  
+-  Cold Soup
+-  ---------
+-  
+-  Letters do not float around in the soup.
+-  
+-
+-  Nibbles
+-  -------
+-  
+-  The simplest mode, only the letter you need appears.
+-  
+-  
+-Dictionaries
+-------------
+-
+-When playing Alphabet Soup, words are selected from a dictionary. You can use
+-any of the provided dictionaries or import your own. To import a dictionary
+-press ENTER on the Dictionary option in the menu and select the text file which
+-contains your list of words. The file must be formatted one word per line with
+-a line break at the end of the file to be imported properly.
+-
+-
+-Credits
+--------
+-
+-Programming, Concept, Design, Graphics, Music, and Sound by Todd Cope.
+-
+-Additional Design by Brandy Cope.
+-
+-
+-Conclusion
+-----------
+-
+-Alphabet Soup has been a blast to work on. We hope the you all will enjoy the
+-game. If you would like to comment or report problems with the game please
+-contact us using the information below.
+-
+-
+-Contacting Us
+--------------
+-
+-If you have general questions about our programs or anything else you can
+-contact us via e-mail. Please report any bugs you find in our software as well.
+-Comments are also appreciated. Visit our web site for the latest updates and
+-releases.
+-
+-E-mail     - todd@ncdgames.com
+-
+-Snail Mail - 1409 Diuguid Drive Apt. A5
+-             Murray, KY 42071
+-             Apt. A5
+-
+-Web Site   - http://www.ncdgames.com
++Alphabet Soup 1.0 (c)2004 NewCreature Design
++--------------------------------------------
++
++Alphabet Soup is freeware. This means you can pass copies around
++freely provided you include this document in it's original form in your
++distribution. Please see the "Contacting Us" section of this document if
++you need to contact us for any reason.
++
++The source code is provided as-is and you may do with it whatsoever you
++please provided that you include this file in its unmodified form with
++any new distribution. NewCreature Design makes no gaurantees regarding
++the usability of the source but are willing to help with any problems
++you might run into. Please see the "Contacting Us" section of this
++document if you need to get in touch with us about any issues you have
++regarding the source.
++
++
++Disclaimer
++----------
++
++NewCreature Design makes no gaurantees regarding the Alphabet Soup software. We
++take no responsibility for any damages the software may cause to you or your
++equipment, though it has not been known to cause any problems. Please contact
++us if you have any trouble with the software and we'll see if we can resolve
++the problem.
++
++
++Description
++-----------
++
++Guide your worm through the soup to spell words and earn points. Play the way
++you like with several game mode selections. Words are chosen from one of three
++included dictionaries, or import your own.
++
++
++System Requirements
++-------------------
++
++Pentium or better PC
++VGA or better graphics card
++
++
++Navigating the Menu
++-------------------
++
++Use the UP and DOWN arrow keys to move through the menu, LEFT and RIGHT to
++modify options, ENTER to select.
++
++
++Playing the Game
++----------------
++
++Alphabet soup contains several game modes, all with a similar goal. You are
++given a word and you must maneuver your worm through the soup to spell out that
++word. Larger words, naturally, earn you more points.
++
++
++Game Modes
++----------
++
++All game modes share the same basic rules as spelled out above, however, some
++details about how the game plays depend on what game mode you've chosen.
++
++
++  Scatter Word
++  ------------
++  
++  The basic game mode, spell the given word to earn points.
++  
++
++  Blind Worm
++  ----------
++  
++  Just like Scatter Word, except you must figure out what word you are supposed
++  to find based on what letters are floating in the soup.
++  
++  
++  Elimination
++  -----------
++  
++  Like Scatter Word but each word you find is eliminated from the dictionary
++  until no words remain.
++  
++  
++  Poison Letter
++  -------------
++  
++  Eat the wrong letter and you lose.
++  
++  
++  Fat Worm
++  --------
++  
++  Your worm does not get smaller as you find words.
++  
++  
++  Skinny Worm
++  -----------
++  
++  Your worm does not get bigger with each word.
++  
++  
++  Cold Soup
++  ---------
++  
++  Letters do not float around in the soup.
++  
++
++  Nibbles
++  -------
++  
++  The simplest mode, only the letter you need appears.
++  
++  
++Dictionaries
++------------
++
++When playing Alphabet Soup, words are selected from a dictionary. You can use
++any of the provided dictionaries or import your own. To import a dictionary
++press ENTER on the Dictionary option in the menu and select the text file which
++contains your list of words. The file must be formatted one word per line with
++a line break at the end of the file to be imported properly.
++
++
++Credits
++-------
++
++Programming, Concept, Design, Graphics, Music, and Sound by Todd Cope.
++
++Additional Design by Brandy Cope.
++
++
++Conclusion
++----------
++
++Alphabet Soup has been a blast to work on. We hope the you all will enjoy the
++game. If you would like to comment or report problems with the game please
++contact us using the information below.
++
++
++Contacting Us
++-------------
++
++If you have general questions about our programs or anything else you can
++contact us via e-mail. Please report any bugs you find in our software as well.
++Comments are also appreciated. Visit our web site for the latest updates and
++releases.
++
++E-mail     - todd@t3-i.com
++
++Snail Mail - 1409 Diuguid Drive Apt. A5
++             Murray, KY 42071
++             Apt. A5
++
++Web Site   - http://www.t3-i.com/
+--- alphabet-soup-1.1/snake.c.unix	2004-09-22 10:06:48.000000000 +0200
++++ alphabet-soup-1.1/snake.c	2006-12-01 11:20:56.000000000 +0100
+@@ -28,8 +28,6 @@
+ 
+ void snake_add(SNAKE * sp, char val)
+ {
+-	int i;
+-	
+ 	sp->segment[sp->length].letter = val;
+ 	if(sp->length < SNAKE_MAX_SEGMENTS - 1)
+ 	{
+@@ -39,8 +37,6 @@
+ 
+ void snake_control(SNAKE * sp)
+ {
+-	int i, j;
+-	
+ 	read_controller(&sp->controller);
+ 	if(sp->segment[0].nx != sp->segment[0].x)
+ 	{
+@@ -108,11 +104,8 @@
+ 
+ void snake_move(SNAKE * sp, MAP * mp)
+ {
+-	int i, j, r;
+-	char tester[17] = {0};
+-	char snake_string[256] = {0};
++	int i, j;
+ 	int points = 5;
+-	int count = 0;
+ 	char c[2] = {0};
+ 	int cx;
+ 	
+@@ -285,7 +278,7 @@
+ void snake_draw(BITMAP * bp, SNAKE * sp, int ox, int oy)
+ {
+ 	int i;
+-	BITMAP * sbp;
++	BITMAP * sbp = NULL;
+ 	
+ 	if(sp->segment[1].x > sp->segment[0].x)
+ 	{
+--- alphabet-soup-1.1/snake.h.unix	2004-01-26 08:29:18.000000000 +0100
++++ alphabet-soup-1.1/snake.h	2006-12-01 11:20:56.000000000 +0100
+@@ -1,7 +1,6 @@
+ #ifndef SNAKE_H
+ #define SNAKE_H
+ 
+-#include "map.h"
+ #include "input.h"
+ 
+ #define SNAKE_MAX_SEGMENTS 256
+@@ -32,8 +31,10 @@
+ 	
+ } SNAKE;
+ 
++#include "map.h"
++
+ void snake_compile(SNAKE * sp);
+-//void snake_move(SNAKE * sp, MAP * mp);
++void snake_move(SNAKE * sp, MAP * mp);
+ void snake_draw(BITMAP * bp, SNAKE * sp, int ox, int oy);
+ 
+ #endif
+--- /dev/null	2006-12-01 08:45:08.001995750 +0100
++++ alphabet-soup-1.1/unix.c	2006-12-01 11:20:56.000000000 +0100
+@@ -0,0 +1,50 @@
++#include <stdio.h>
++#include <unistd.h>
++#include <errno.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++
++int check_and_create_dir(const char *name)
++{
++	struct stat stat_buffer;
++
++	if (stat(name, &stat_buffer))
++	{
++		/* error check if it doesn't exist or something else is wrong */
++		if (errno == ENOENT)
++		{
++			/* doesn't exist letts create it ;) */
++#ifdef BSD43
++			if (mkdir(name, 0775))
++#else
++				if (mkdir(name, S_IRWXU|S_IRWXG|S_IROTH|S_IXOTH))
++#endif
++				{
++					fprintf(stderr, "Error creating dir %s", name);
++					perror(" ");
++					return -1;
++				}
++		}
++		else
++		{
++			/* something else went wrong yell about it */
++			fprintf(stderr, "Error opening %s", name);
++			perror(" ");
++			return -1;
++		}
++	}
++	else
++	{
++		/* file exists check it's a dir otherwise yell about it */
++#ifdef BSD43
++		if (!(S_IFDIR & stat_buffer.st_mode))
++#else
++			if (!S_ISDIR(stat_buffer.st_mode))
++#endif
++			{
++				fprintf(stderr,"Error %s exists but isn't a dir\n", name);
++				return -1;
++			}
++	}
++	return 0;
++}

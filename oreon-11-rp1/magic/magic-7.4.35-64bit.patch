@@ -1,0 +1,19 @@
+--- tcltk/tkcon.tcl	2006-04-11 00:02:12.000000000 +0200
++++ tkcon.tcl	2007-07-08 02:49:34.000000000 +0200
+@@ -2,6 +2,16 @@
+ # \
+ exec ${MAGIC_WISH:=wish} "$0" ${1+"$@"}
+ 
++set i [ lsearch $auto_path /usr/lib ]
++set j [ lsearch $auto_path /usr/lib64 ]
++puts stderr "old auto_path: $auto_path"
++puts stderr "i: $i j: $j"
++if {$i >= 0 && $j >= 0 && $i < $j} {
++   set auto_path [lreplace $auto_path $i $i /usr/lib64 ]
++   set auto_path [lreplace $auto_path $j $j /usr/lib ]
++}
++puts stderr "new auto_path: $auto_path"
++
+ #
+ ## tkcon.tcl
+ ## Enhanced Tk Console, part of the VerTcl system

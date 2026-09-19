@@ -1,0 +1,70 @@
+From d901f4ff06c21238c28207619b55bdd401108f7b Mon Sep 17 00:00:00 2001
+Message-ID: <d901f4ff06c21238c28207619b55bdd401108f7b.1766566720.git.github@sicherha.de>
+From: Christoph Erhardt <github@sicherha.de>
+Date: Wed, 24 Dec 2025 09:57:50 +0100
+Subject: [PATCH] Fix compatibility with Python 3.15
+
+The undocumented function `glob.glob1()` was deprecated in Python 3.13
+and removed in Python 3.15.
+
+Replace it with a call to `glob.glob()` with the `root_dir` argument
+set. Note that this requires at least Python 3.10, which was released in
+October 2021. This is deemed acceptable as Python 3.9 was declared
+end-of-life in October 2025.
+
+Remove two unused imports of `glob1`.
+---
+ tests/test_in_vterm/test_shells.py | 1 -
+ tests/test_in_vterm/test_tmux.py   | 4 ++--
+ tests/test_in_vterm/test_vim.py    | 1 -
+ 3 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/tests/test_in_vterm/test_shells.py b/tests/test_in_vterm/test_shells.py
+index faf79767..0faa8272 100755
+--- a/tests/test_in_vterm/test_shells.py
++++ b/tests/test_in_vterm/test_shells.py
+@@ -7,7 +7,6 @@ import sys
+ 
+ from time import sleep
+ from subprocess import check_call
+-from glob import glob1
+ from traceback import print_exc
+ 
+ from argparse import ArgumentParser
+diff --git a/tests/test_in_vterm/test_tmux.py b/tests/test_in_vterm/test_tmux.py
+index c1e126bf..a7764a6e 100755
+--- a/tests/test_in_vterm/test_tmux.py
++++ b/tests/test_in_vterm/test_tmux.py
+@@ -8,7 +8,7 @@ import json
+ 
+ from time import sleep
+ from subprocess import check_call
+-from glob import glob1
++from glob import glob
+ from traceback import print_exc
+ 
+ from powerline.lib.dict import updated
+@@ -24,7 +24,7 @@ TEST_ROOT = os.path.abspath(os.environ['TEST_ROOT'])
+ 
+ 
+ def tmux_logs_iter(test_dir):
+-	for tail in glob1(test_dir, '*.log'):
++	for tail in glob('*.log', root_dir=test_dir):
+ 		yield os.path.join(test_dir, tail)
+ 
+ 
+diff --git a/tests/test_in_vterm/test_vim.py b/tests/test_in_vterm/test_vim.py
+index 0fbc3190..c8be1f64 100755
+--- a/tests/test_in_vterm/test_vim.py
++++ b/tests/test_in_vterm/test_vim.py
+@@ -7,7 +7,6 @@ import sys
+ 
+ from time import sleep
+ from subprocess import check_call
+-from glob import glob1
+ from traceback import print_exc
+ 
+ from powerline.lib.dict import updated
+-- 
+2.52.0
+

@@ -1,0 +1,241 @@
+diff -up xgalaga-2.0.34/README.foo xgalaga-2.0.34/README
+--- xgalaga-2.0.34/README.foo	2008-09-08 08:50:19.000000000 +0200
++++ xgalaga-2.0.34/README	2008-09-08 08:50:32.000000000 +0200
+@@ -44,9 +44,9 @@ Command line options:
+   <anything else>      print usage and version.
+ 
+ Basic instructions:
+-  It's Galaga, you know how to play Galaga, stop bothering me.
+-  (Ship follows the mouse, button fires.  Auto-fire by holding it
+-   down, so no-one accuses me of breaking their mouse!)
++  It's just like Galaxian / Galaga, you know how to play Galaxian/ Galaga,
++  stop bothering me. (Ship follows the mouse, button fires.  Auto-fire by
++  holding it down, so no-one accuses me of breaking their mouse!)
+ 
+ Keyboard commands:
+ 
+@@ -73,7 +73,7 @@ it takes care of every aspect of the X i
+ games written quickly and painlessly.
+ 
+ Credits:
+-   Galaga code: 
++   XGalaxy code: 
+             Joe Rumsey (mrogre@mediaone.net)
+    X interface:
+             Bill Dyess(dyessww@eng.auburn.edu), 
+diff -up xgalaga-2.0.34/images.c.foo xgalaga-2.0.34/images.c
+--- xgalaga-2.0.34/images.c.foo	2008-09-08 08:50:19.000000000 +0200
++++ xgalaga-2.0.34/images.c	2008-09-08 08:50:32.000000000 +0200
+@@ -6786,54 +6786,108 @@ static char * shield_xpm[] = {
+ /* XPM */
+ static char * title_xpm[] = {
+ /* width height ncolors chars_per_pixel */
+-"126 37 7 1",
++"136 37 62 1",
+ /* colors */
+-"` c None",
+-"a c #606000",
+-"b c #909000",
+-"c c #C0B000",
+-"d c #F0E000",
+-"e c #404040",
+-"f c #303030",
++" 	c None",
++".	c #303030",
++"+	c #606000",
++"@	c #909000",
++"#	c #C0B000",
++"$	c #F0E000",
++"%	c #404040",
++"&	c #6E6C00",
++"*	c #9A9300",
++"=	c #DECE00",
++"-	c #AFA600",
++";	c #A29A00",
++">	c #C2B200",
++",	c #B7B000",
++"'	c #C8BD00",
++")	c #DDCD01",
++"!	c #DBCD05",
++"~	c #A5A100",
++"{	c #C8B800",
++"]	c #E3D300",
++"^	c #C2BA00",
++"/	c #9C9400",
++"(	c #C4B400",
++"_	c #C3B300",
++":	c #B8B100",
++"<	c #D3C600",
++"[	c #B4AA04",
++"}	c #9F940E",
++"|	c #32322F",
++"1	c #A09D00",
++"2	c #34342E",
++"3	c #A69D03",
++"4	c #C7B700",
++"5	c #949300",
++"6	c #C1B100",
++"7	c #CCC200",
++"8	c #9B9314",
++"9	c #C5B500",
++"0	c #ACA600",
++"a	c #EADB00",
++"b	c #BFB307",
++"c	c #35352E",
++"d	c #6A6900",
++"e	c #979100",
++"f	c #EADA00",
++"g	c #989100",
++"h	c #B6AE00",
++"i	c #A19D00",
++"j	c #E9D900",
++"k	c #D9CB00",
++"l	c #B1AB00",
++"m	c #ADA10E",
++"n	c #656121",
++"o	c #BCB500",
++"p	c #7A7800",
++"q	c #C0B800",
++"r	c #42412B",
++"s	c #676600",
++"t	c #38372D",
++"u	c #8D8700",
++"v	c #AAA300",
++"w	c #666500",
+ /* pixels */
+-"`````````````````faf`````````````````````````````````````````````````faf``````````````````````````````````````````````````````",
+-"````fabf````````fccbf`````````fabbbf````````````````````````````````fccbf`````````````````````````````````````````````````````",
+-"```fccdbf``````acddda```````fbccdddbbf`````````````````````````````acddda`````````````````````````````````````````````````````",
+-"``abcddda`````aabddda``````fccdbaaccdbf```````````````````````````acdddda`````````````````````````````````````````````````````",
+-"`accdddbf````aaacddbf`````acdbaaababddbf`````````````````````````abcdbcda`````````````````````````````````````````````````````",
+-"`cccddda`````fabcdda`````acddaffbaaabddbf```````````````````````accdbbcda`````````````````````````````````````````````````````",
+-"`ccabdda`````abcddbf````abcdbf``fbaaabdda```````````````````````cbcdabcbf`````````````````````````````````````````````````````",
+-"`caacddcf````bbcdbf````abcdbf````fbaacddcf``````````````````````bbcdaaca``````````````````````````````````````````````````````",
+-"`fbcabdda```abcdda`````acdbf``````fbccddda`````````````````````accddabca``````````````````````````````````````````````````````",
+-"``caacddcf``bbcdbf````abcda````````ccabdbf`````````````````````cccdbacbf``````````````````````````````````````````````````````",
+-"``fbcabdda`abcdbf````accdda````````caaaae``````````````````````cccdaaca``````````````````````````````fabbf````````````````````",
+-"```caacddcfacdda`````cbcdbf````````fbaaf```````````````````````cccdccbf`````````````````````````````fccdda````````````````````",
+-"```fbcabddbcddbf`````bbcda``````````ff```````````````fabbf`````cbcddda````````````````fabbf````````acdddbf```````````fabbf````",
+-"````caaabddddbf`````accdda`````````````````````````fbccdbf`````bbcddbf``````````````fbccdbf```````acdddbf``````````fbccdbf````",
+-"````fbaaabddbf``````cccdda```````````````````````fbccbaae`````accddda`````````````fbccbaae```````abcdbae`````````fbccbaae`````",
+-"`````fbaacdda```````cbcdda``````````````````````fccbaaafaf````cccddbf````````````fccbaaafaf`````abcdbaf`````````fccbaaafaf````",
+-"``````facdddcf``````bbcdda````````````````````fbcdbafffcca````cccdda```````````fbcdbafffcca`````bbcbf`````````fbcdbafffcca````",
+-"``````acdbcdda`````accddda```````````fabf````fccdbf``acdda````cbcddcf`````````fccdbf``acdda````abcda`````````fccdbf``acdda````",
+-"`````abcbbabdcf````cccddda``````````fbcda```acddbf``acddda````acdddda````````acddbf``acddda````acdbf````````acddbf``acddda````",
+-"````abcdaaaabcbf```ccabddcf````````aacdda``acddbf``abcddbf```acbcddda```````acddbf``abcddbf```acdda```````fbcddbf``abcddbf````",
+-"````acdbebaacdda```caacddda````````acddda`abcdbf``abcbcda```acbbcddda`````fbcddbf``abcbcda```aaacdcf`````fccddbf``abcbcda```ff",
+-"```abcbf`fbcabdcf``fbccdddcf``````acdddbfacabda``fbcbbcda``acbbcabddcf```fcbacda``fbcbbcda``acaacdda````acbacda``fbcbbcda``fba",
+-"``abcbf```caaabcbf``ccabdddbf````acdddda`caacdcbbccdabcdcbbcbfcaacdddbbbbcbaacdcbbccdabcdcbbcbaccddcf``acbaacdcbbccdabcdcbbcbf",
+-"``acbf````fbaaabcbf`caaabdddbbbbbcbcddda`fabcdddddbaacabcddbf`fbcabddddddbfabcdddddbaacabcddbfccabddbbbcbfabcdddddbaacabcddbf`",
+-"`abca``````fbaaaaba`fbaaaacdddddbabcddda`acabddddbafcaaaaaae```caaabdddbaeacabddddbafcaaaaaae`caaabddddbfacabddddbafcaaaaaae``",
+-"acaaf```````fbaaaa```fbaabaaaaaaaaccddda`caaaaaaae``fbaaaaf````fbaaaaaaaf`caaaaaaae``fbaaaaf``fbaaabddda`caaaaaaae``fbaaaaf```",
+-"caaf`````````ffbe`````ffbaaaaaaf`cccddbf`fbaaaaaf````ffff```````fbaaaaf```fbaaaaaf````ffff`````fbaacdddcffbaaaaaf````ffff`````",
+-"ff`````````````f````````ffffff```cccdda```fffff``````````````````ffff``````fffff````````````````facbaaccbffffff```````````````",
+-"`````````````````````````````````cccdda`````````````````````````````````````````````````````````acbaabcdda````````````````````",
+-"`````````````````````````````````cccdda````````````````````````````````````````````````````````acbffbcabda````````````````````",
+-"`````````````````````````````````cccdda```````````````````````````````````````````````````````abbf``caacda````````````````````",
+-"`````````````````````````````````cccdda``````````````````````````````````````````````````````accbf``fabcda````````````````````",
+-"`````````````````````````````````cccdda``````````````````````````````````````````````````````cbabbbbbccdbf````````````````````",
+-"`````````````````````````````````cccdbf``````````````````````````````````````````````````````caaabcdddbae`````````````````````",
+-"`````````````````````````````````ccaae```````````````````````````````````````````````````````fbaaaaaaaaf``````````````````````",
+-"`````````````````````````````````caaf`````````````````````````````````````````````````````````fbaaaaaf````````````````````````",
+-"`````````````````````````````````ff````````````````````````````````````````````````````````````fffff``````````````````````````"
+-};
++"                 .+.                                                 .+.                                                                ",
++"    .+@.        .##@.         .+@@@.                                .##@.                                                               ",
++"   .##$@.      +#$$$+       .@##$$$@@.                             +#$$$+                                                               ",
++"  +@#$$$+     ++@$$$+      .##$@++##$@.                           +#$$$$+                                                               ",
++" +##$$$@.    +++#$$@.     +#$@+++@+@$$@.                         +@#$@#$+                                                               ",
++" ###$$$+     .+@#$$+     +#$$+..@+++@$$@.                       +##$@@#$+                                                               ",
++" ##+@$$+     +@#$$@.    +@#$@.  .@+++@$$+                       #@#$+@#@.                                                               ",
++" #++#$$#.    @@#$@.    +@#$@.    .@++#$$#.                      @@#$++#+                                                                ",
++" .@#+@$$+   +@#$$+     +#$@.      .@##$$$+                     +##$$+@#+                                                                ",
++"  #++#$$#.  @@#$@.    +@#$+        ##+@$@.                     ###$@+#@.                                                                ",
++"  .@#+@$$+ +@#$@.    +##$$+        #++++%                      ###$++#+                                 .+         .+@@.                ",
++"   #++#$$#.+#$$+     #@#$@.        .@++.                       ###$##@.                        .#$.    +$$+       .##$$+                ",
++"   .@#+@$$@#$$@.     @@#$+          ..               .+@@.     #@#$$$+                .+@@.   +@$$+   ++$$+      +#$$$@.           .+@@.",
++"    #+++@$$$$@.     +##$$+                         .@##$@.     @@#$$@.              .@##$@.   ##$$    +@$$      +#$$$@.          .@##$@.",
++"    .@+++@$$@.      ###$$+                       .@##@++%     +##$$$+             .@##@++%    ++$$.   @#@.     +@#$@+%         .@##@++% ",
++"     .@++#$$+       #@#$$+                      .##@+++.+.    ###$$@.            .##@+++.+.   @#@$+  +#$+     +@#$@+.         .##@+++.  ",
++"      .+#$$$#.      @@#$$+                    .@#$@+...##+    ###$$+           .@#$@+...##+   .@+@$++@$@      @@#@.         .@#$@+...   ",
++"      +#$@#$$+     +##$$$+           .+@.    .##$@.  +#$$+    #@#$$#.         .##$@.  +#$$+    #+#$#+#$+     +@#$+         .##$@.       ",
++"     +@#@@+@$#.    ###$$$+          .@#$+   +#$$@.  +#$$$+    +#$$$$+        +#$$@.  +#$$$+     ++@$$$.      +#$@.        +#$$@.        ",
++"    +@#$++++@#@.   ##+@$$#.        ++#$$+  +#$$@.  +@#$$@.   +#@#$$$+       +#$$@.  +@#$$@.     @++@$@      +#$$+       .@#$$@.         ",
++"    +#$@%@++#$$+   #++#$$$+        +#$$$+ +@#$@.  +@#@#$+   +#@@#$$$+     .@#$$@.  +@#@#$+       .#$$#     +&*#$#.     .##$$@.          ",
++"   +@#@. .@#+@$#.  .@##$$$#.      +#$$$@.+#+@$+  .@#@@#$+  +#@@#+@$$#.   .#@+#$+  .@#@@#$+       +$@$$    +=-;#$$+    +>,')!+           ",
++"  +@#@.   #+++@#@.  ##+@$$$@.    +#$$$$+ #++#$#@@##$+@#$#@@#@.#++#$$$@@@@#@++#$#@@##$+@#$#@     ~{+++@@. @]^/(#$$#.  +_:<[}|            ",
++"  +#@.    .@+++@#@. #+++@$$$@@@@@#@#$$$+ .+@#$$$$$@++#+@#$$@. .@#+@$$$$$$@.+@#$$$$$@++#+@#$$12 345 .#+$6$$78##+@$$@@@90abc              ",
++" +@#+      .@++++@+ .@++++#$$$$$@+@#$$$+ +#+@$$$$@+.#++++++%   #+++@$$$@+%+#+@$$$$@+.#++++def$ghi.  ++@]jk% #+++@$$$$lmn                ",
++"+#++.       .@++++   .@++@++++++++##$$$+ #+++++++%  .@++++.    .@+++++++. #+++++++%  .@++++.$$o_    .@+pqr  .@+++@$$$s t                ",
++"#++.         ..@%     ..@++++++. ###$$@. .@+++++.    ....       .@++++.   .@+++++.    ....   uvw     .+++    .@++#$$$#..                ",
++"..             .        ......   ###$$+   .....                  ....      .....             .         .      .+#@++##@.                ",
++"                                 ###$$+                                                                       +#@++@#$$+                ",
++"                                 ###$$+                                                                      +#@..@#+@$+                ",
++"                                 ###$$+                                                                     +@@.  #++#$+                ",
++"                                 ###$$+                                                                    +##@.  .+@#$+                ",
++"                                 ###$$+                                                                    #@+@@@@@##$@.                ",
++"                                 ###$@.                                                                    #+++@#$$$@+%                 ",
++"                                 ##++%                                                                     .@++++++++.                  ",
++"                                 #++.                                                                       .@+++++.                    ",
++"                                 ..                                                                          .....                      "};
+ 
+ /* keep sorted (for bsearch) [BDyess] */
+ static W_Image imagearray[] = {
+diff -up xgalaga-2.0.34/main.c.foo xgalaga-2.0.34/main.c
+--- xgalaga-2.0.34/main.c.foo	2008-09-08 08:50:19.000000000 +0200
++++ xgalaga-2.0.34/main.c	2008-09-08 08:50:32.000000000 +0200
+@@ -97,15 +97,15 @@ Command line options:\n\
+ -window              Start in windowed mode instead of fullscreen\n\
+ -winsize <WxH>       Window size (default 468 x 596)\n\
+ -b                   turn buffered mode off, use this if it runs\n\
+-too slowly.  Will cause flicker, maybe lots,\n\
+-maybe only a little.\n\
++                     too slowly.  Will cause flicker, maybe lots,\n\
++                     maybe only a little.\n\
+ \n\
+ This game is now free software, under the GPL\n\
+ \n\
+ Basic instructions:\n\
+-It's Galaga, you know how to play Galaga, stop bothering me.\n\
+-(Ship follows the mouse, button fires.  Auto-fire by holding it\n\
+-down, so no-one accuses me of breaking their mouse!)\n\
++It's just like Galaxian / Galaga, you know how to play Galaxian / Galaga,\n\
++stop bothering me. (Ship follows the mouse, button fires.  Auto-fire by\n\
++holding it down, so no-one accuses me of breaking their mouse!)\n\
+ \n\
+ Keyboard commands:\n\
+ \n\
+diff -up xgalaga-2.0.34/xgal.6x.foo xgalaga-2.0.34/xgal.6x
+--- xgalaga-2.0.34/xgal.6x.foo	2008-09-08 08:50:19.000000000 +0200
++++ xgalaga-2.0.34/xgal.6x	2008-09-08 08:50:32.000000000 +0200
+@@ -1,6 +1,6 @@
+-.TH XGALAGA 6x "23 April 2003" "2.0.34"
++.TH XGALAXY 6 "23 April 2003" "2.0.34"
+ .SH NAME
+-xgalaga \- X11 version of the famous Galaga game
++xgalaga \- X11 Galaga like game
+ .SH SYNOPSIS
+ .B xgalaga
+ [-scores] [-display display] [-mouse] [-keyboard] [-nosound] [-b]
+@@ -11,9 +11,9 @@ xgalaga \- X11 version of the famous Gal
+ [-window] [-winsize widthxheight] [-b] [-noclipmask] [-nouseor] [-nostars]
+ .SH INSTRUCTIONS
+ .LP
+-It's Galaga, you know how to play Galaga, stop bothering me.
+-(Ship follows the mouse, button fires.  Auto-fire by holding it
+-down, so no-one accuses me of breaking their mouse!)
++It's just like Galaxian / Galaga, you know how to play Galaxian/ Galaga,
++stop bothering me. (Ship follows the mouse, button fires.  Auto-fire by
++holding it down, so no-one accuses me of breaking their mouse!)
+ .P
+ The xgalaga-hyperspace version features some new weapons and different
+ gameplay.
+@@ -80,7 +80,7 @@ x - use your shields (xgalaga-hyperspace
+ .TP 8
+ alt-enter - Toggle full screen node.
+ .SH "SEE ALSO"
+-Xgalaga home page
++XGalaxy home page
+ .RI < http://rumsey.org/xgal.html >
+ .SH AUTHORS
+ Joe Rumsey, <\fIjoe@rumsey.org\fP> (Original author)

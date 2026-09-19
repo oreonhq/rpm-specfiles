@@ -1,12 +1,12 @@
-%global source0_hash 69026ef8607cb6257e4d1f0e46e451130ef7ba67994a83e4f9a6c46eefd5a3f3
+%global source0_hash 1e1cb8bbf53e4f0482a916e1db9e202c8a8e8f4f2264dbcf98e837876ef83fae
 
 %global framework kdoctools
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 2 addon for generating documentation
 
@@ -22,8 +22,8 @@ BuildRequires:  cmake
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
-BuildRequires:  cmake(KF6Archive)
-BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6Archive) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
 BuildRequires:  libxml2-devel
 BuildRequires:  libxslt-devel
 BuildRequires:  perl-generators
@@ -75,6 +75,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

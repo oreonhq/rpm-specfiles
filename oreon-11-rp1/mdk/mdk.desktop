@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MDK
+GenericName=MDK
+Comment=GNU MIX Development Kit
+Exec=gmixvm
+Type=Application
+Categories=Education;ComputerScience;Emulator;GTK;

@@ -1,8 +1,8 @@
 %global source0_hash 056033cd4fa551b947eebd697bbf78fa9e6baf8f7f12cb5395656aa619de4946
 
 Name:       wireplumber
-Version:    0.5.13
-Release:    2%{?dist}
+Version:    0.5.17
+Release:    1%{?dist}
 Summary:    A modular session/policy manager for PipeWire
 
 License:    MIT

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Accanthis ADF Std No3</target>
+    <like>
+      <family>Accanthis ADF Pro No3</family>
+      <family>Accanthis ADF No3</family>
+      <family>Accanthis ADF Std No2</family>
+      <family>Accanthis ADF Pro No2</family>
+      <family>Accanthis ADF No2</family>
+      <family>Horley old style</family>
+      <family>Accanthis ADF Std</family>
+      <family>Accanthis ADF Pro</family>
+      <family>Accanthis ADF</family>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

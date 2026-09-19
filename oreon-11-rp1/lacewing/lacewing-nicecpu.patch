@@ -1,0 +1,82 @@
+diff -ur lacewing.orig/display.c lacewing/display.c
+--- lacewing.orig/display.c	2006-01-21 13:31:40.000000000 +0100
++++ lacewing/display.c	2006-01-21 13:21:34.000000000 +0100
+@@ -3140,7 +3140,7 @@
+  do
+  {
+   while(ticked == 0)
+-   rest(0);
++   rest(1);
+     
+   waiting--;
+   ticked--;
+diff -ur lacewing.orig/game.c lacewing/game.c
+--- lacewing.orig/game.c	2006-01-21 13:31:40.000000000 +0100
++++ lacewing/game.c	2006-01-21 13:21:37.000000000 +0100
+@@ -180,7 +180,7 @@
+    frames_skipped++;
+ 
+   while(ticked == 0)
+-   rest(0);
++   rest(1);
+ 
+   ticked --;
+ 
+diff -ur lacewing.orig/menu.c lacewing/menu.c
+--- lacewing.orig/menu.c	2006-01-21 13:32:08.000000000 +0100
++++ lacewing/menu.c	2006-01-21 13:29:55.000000000 +0100
+@@ -361,7 +361,7 @@
+   menu_input();
+ 
+   while(ticked == 0)
+-   rest(0);
++   rest(1);
+   ticked --;
+ 
+  } while(TRUE);
+@@ -403,7 +403,8 @@
+ 
+   text_mode(-1);
+ 
+-  vsync();
++  if (options.run_vsync > 0)
++   vsync();
+ 
+   RGB title_colour [1];
+ 
+@@ -1375,7 +1376,9 @@
+ 
+  game.type = game_type;
+ 
+- vsync();
++ if (options.run_vsync > 0)
++  vsync();
++ 
+  clear_bitmap(screen);
+ 
+  begin_game();
+@@ -1599,7 +1602,7 @@
+   }
+ 
+   while (ticked == 0)
+-   rest(0);
++   rest(1);
+ 
+   ticked --;
+ 
+@@ -3203,12 +3206,13 @@
+ //   textprintf_centre(menu_bmp, small_font, 320, 305, COLOUR_YELLOW8, "your time, like ");
+    if (county2 > 99)
+     textprintf_centre(menu_bmp, small_font, 320, 380, COLOUR_YELLOW5, "Press Space to continue.");
+-   vsync();
++   if (options.run_vsync > 0)
++    vsync();
+    blit(menu_bmp, screen, 0, 0, 0, 0, 640, 480);
+   }
+ 
+   while (ticked == 0)
+-   rest(0);
++   rest(1);
+   ticked --;
+ 
+   county2 ++;

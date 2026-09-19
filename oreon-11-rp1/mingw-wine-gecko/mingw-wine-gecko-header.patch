@@ -1,0 +1,168 @@
+--- a/accessible/windows/uia/uiaRawElmProvider.h	2022-07-12 08:33:06.000000000 -0500
++++ b/accessible/windows/uia/uiaRawElmProvider.h	2022-10-10 21:00:37.312691681 -0500
+@@ -10,7 +10,12 @@
+ #include "objbase.h"
+ #include "AccessibleWrap.h"
+ #include "IUnknownImpl.h"
+-#include "uiautomation.h"
++//#include "uiautomation.h"
++#include <uiautomationcore.h>
++#include <uiautomationclient.h>
++
++// from mingw/include/uiautomationcoreapi.h
++#define UiaAppendRuntimeId  3
+ 
+ namespace mozilla {
+ namespace a11y {
+--- a/accessible/interfaces/msaa/ISimpleDOMDocument.idl	2022-07-12 08:33:06.000000000 -0500
++++ b/accessible/interfaces/msaa/ISimpleDOMDocument.idl	2022-10-10 21:50:49.789611875 -0500
+@@ -54,6 +54,9 @@
+ cpp_quote("///////////////////////////////////////////////////////////////////////////////////////////////////////")
+ cpp_quote("")
+ cpp_quote("")
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
+ 
+ import "objidl.idl";
+ import "oaidl.idl";
+--- a/accessible/interfaces/msaa/ISimpleDOMText.idl	2022-10-10 21:50:58.653700783 -0500
++++ b/accessible/interfaces/msaa/ISimpleDOMText.idl	2022-10-10 21:48:31.824229684 -0500
+@@ -50,6 +50,9 @@
+ cpp_quote("///////////////////////////////////////////////////////////////////////////////////////////////////////")
+ cpp_quote("")
+ cpp_quote("")
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
+ 
+ [object, uuid(4e747be5-2052-4265-8af0-8ecad7aad1c0)]
+ interface ISimpleDOMText: IUnknown
+--- a/other-licenses/ia2/Accessible2.idl	2022-07-12 08:33:06.000000000 -0500
++++ b/other-licenses/ia2/Accessible2.idl	2022-10-10 21:53:19.401141868 -0500
+@@ -349,6 +349,10 @@
+ 
+ **/
+ 
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
++
+ import "objidl.idl";
+ import "oaidl.idl";
+ import "oleacc.idl";
+--- other-licenses/ia2/AccessibleAction.idl	2022-07-12 08:33:06.000000000 -0500
++++ b/other-licenses/ia2/AccessibleAction.idl	2022-10-10 21:56:07.888866970 -0500
+@@ -51,6 +51,10 @@
+  * 
+  ************************************************************************/ 
+ 
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
++
+ import "objidl.idl";
+ import "oaidl.idl";
+ import "oleacc.idl";
+--- a/other-licenses/ia2/AccessibleApplication.idl	2022-07-12 08:33:06.000000000 -0500
++++ b/other-licenses/ia2/AccessibleApplication.idl	2022-10-10 21:58:51.334540452 -0500
+@@ -51,6 +51,9 @@
+  * 
+  ************************************************************************/ 
+ 
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
+ 
+ import "objidl.idl";
+ import "oaidl.idl";
+--- a/other-licenses/ia2/AccessibleComponent.idl	2022-07-12 08:33:06.000000000 -0500
++++ b/other-licenses/ia2/AccessibleComponent.idl	2022-10-10 22:00:46.459714290 -0500
+@@ -51,6 +51,10 @@
+  * 
+  ************************************************************************/ 
+ 
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
++
+ import "objidl.idl";
+ import "oaidl.idl";
+ import "oleacc.idl";
+--- a/other-licenses/ia2/AccessibleDocument.idl	2022-07-12 08:33:06.000000000 -0500
++++ b/other-licenses/ia2/AccessibleDocument.idl	2022-10-10 22:03:37.926434136 -0500
+@@ -49,6 +49,10 @@
+  * 
+  ************************************************************************/ 
+ 
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
++
+ import "objidl.idl";
+ import "oaidl.idl";
+ import "oleacc.idl";
+--- a/other-licenses/ia2/AccessibleEditableText.idl	2022-07-12 08:33:06.000000000 -0500
++++ b/other-licenses/ia2/AccessibleEditableText.idl	2022-10-10 22:05:03.473292177 -0500
+@@ -51,6 +51,10 @@
+  * 
+  ************************************************************************/ 
+ 
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
++
+ import "objidl.idl";
+ import "oaidl.idl";
+ import "oleacc.idl";
+--- a/other-licenses/ia2/AccessibleImage.idl	2022-07-12 08:33:06.000000000 -0500
++++ b/other-licenses/ia2/AccessibleImage.idl	2022-10-10 22:09:56.002205574 -0500
+@@ -50,6 +50,9 @@
+  *  Policy to indicate compliance with the IAccessible2 specification. 
+  * 
+  ************************************************************************/ 
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
+ 
+ import "objidl.idl";
+ import "oaidl.idl";
+--- a/other-licenses/ia2/AccessibleRelation.idl	2022-07-12 08:33:06.000000000 -0500
++++ b/other-licenses/ia2/AccessibleRelation.idl	2022-10-10 22:12:04.181447409 -0500
+@@ -51,6 +51,10 @@
+  * 
+  ************************************************************************/ 
+ 
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
++
+ import "objidl.idl";
+ import "oaidl.idl";
+ import "oleacc.idl";
+--- a/other-licenses/ia2/AccessibleText.idl	2022-07-12 08:33:06.000000000 -0500
++++ b/other-licenses/ia2/AccessibleText.idl	2022-10-10 22:15:18.708332033 -0500
+@@ -51,6 +51,10 @@
+  * 
+  ************************************************************************/ 
+ 
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
++
+ import "objidl.idl";
+ import "oaidl.idl";
+ import "oleacc.idl";
+--- a/other-licenses/ia2/AccessibleValue.idl	2022-07-12 08:33:06.000000000 -0500
++++ b/other-licenses/ia2/AccessibleValue.idl	2022-10-10 22:18:05.236944031 -0500
+@@ -51,6 +51,10 @@
+  * 
+  ************************************************************************/ 
+ 
++cpp_quote("HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(IUnknown *This, REFIID riid, void **ppvObject);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy(IUnknown *This);")
++cpp_quote("ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy(IUnknown *This);")
++
+ import "objidl.idl";
+ import "oaidl.idl";
+ import "oleacc.idl";

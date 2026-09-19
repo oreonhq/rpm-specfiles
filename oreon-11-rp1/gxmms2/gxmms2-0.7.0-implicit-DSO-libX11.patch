@@ -1,0 +1,18 @@
+diff -up gxmms2/Makefile.DSO gxmms2/Makefile
+--- gxmms2/Makefile.DSO	2010-02-10 14:28:09.715658532 -0500
++++ gxmms2/Makefile	2010-02-10 14:29:29.821776218 -0500
+@@ -10,10 +10,12 @@ GTK_CFLAGS=$(shell pkg-config gtk+-2.0 -
+ GTK_LIB=$(shell pkg-config gtk+-2.0 --libs)
+ XMMS2_CFLAGS=$(shell pkg-config xmms2-client xmms2-client-glib --cflags)
+ XMMS2_LIB=$(shell pkg-config xmms2-client xmms2-client-glib --libs)
++X11_CFLAGS=$(shell pkg-config x11 --cflags)
++X11_LIB=$(shell pkg-config x11 --libs)
+ 
+ CFLAGS ?= -O2
+-CFLAGS := -Wall -fPIC $(GTK_CFLAGS) $(XMMS2_CFLAGS) -I. $(CFLAGS)
+-LIBS = $(GTK_LIB) $(XMMS2_LIB)
++CFLAGS := -Wall -fPIC $(GTK_CFLAGS) $(XMMS2_CFLAGS) $(X11_CFLAGS) -I. $(CFLAGS)
++LIBS = $(GTK_LIB) $(XMMS2_LIB) $(X11_LIB)
+ 
+ KRELLLFLAGS=-shared
+ 

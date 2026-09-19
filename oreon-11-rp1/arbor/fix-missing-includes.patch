@@ -1,0 +1,43 @@
+From fa15938c196bf317e0292d41ec7d341978e9ed08 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Mon, 29 Apr 2024 14:35:01 +0200
+Subject: [PATCH] Fix missing includes
+
+Tests are failing to compile without those.
+
+diff --git a/test/unit/common.hpp b/test/unit/common.hpp
+index db75e4d1..e02b9df2 100644
+--- a/test/unit/common.hpp
++++ b/test/unit/common.hpp
+@@ -11,6 +11,7 @@
+ #include <unordered_map>
+ #include <utility>
+ #include <vector>
++#include <algorithm>
+ 
+ #include <gtest/gtest.h>
+ 
+diff --git a/test/unit/test_event_queue.cpp b/test/unit/test_event_queue.cpp
+index daa0ccb9..17c10378 100644
+--- a/test/unit/test_event_queue.cpp
++++ b/test/unit/test_event_queue.cpp
+@@ -6,6 +6,7 @@
+ #include <arbor/spike_event.hpp>
+ 
+ #include "event_queue.hpp"
++#include "common.hpp"
+ 
+ using namespace arb;
+ 
+diff --git a/test/unit/test_ordered_forest.cpp b/test/unit/test_ordered_forest.cpp
+index c58c76a4..12f7bd31 100644
+--- a/test/unit/test_ordered_forest.cpp
++++ b/test/unit/test_ordered_forest.cpp
+@@ -5,6 +5,7 @@
+ 
+ #include <gtest/gtest.h>
+ #include "util/ordered_forest.hpp"
++#include "common.hpp"
+ 
+ using arb::util::ordered_forest;
+ 

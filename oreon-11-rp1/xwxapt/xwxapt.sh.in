@@ -1,0 +1,15 @@
+#!/bin/sh
+#Wrapper script for xwxapt to ensure that user configuration is present
+xwxaptbin="/usr/bin/xwxapt.bin"
+#check if user configuration is present
+if [ ! -e ~/xwxapt/xwxaptrc ]
+then
+echo "Creating user configuration file"
+mkdir ~/xwxapt
+mkdir ~/xwxapt/images
+mkdir ~/xwxapt/record
+cp /usr/share/xwxapt/xwxaptrc ~/xwxapt/xwxaptrc
+fi
+#launch xwxapt
+echo "Configuration can be found in the xwxapt/xwxaptrc file in your users home directory"
+$xwxaptbin

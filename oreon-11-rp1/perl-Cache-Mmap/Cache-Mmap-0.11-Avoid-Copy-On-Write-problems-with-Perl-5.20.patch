@@ -1,0 +1,39 @@
+>From 610a7fd5092921cc317d77eedf626b2c62ca4a38 Mon Sep 17 00:00:00 2001
+From: Niko Tyni <ntyni@debian.org>
+Date: Mon, 28 Jul 2014 00:15:11 +0300
+Subject: [PATCH] Avoid Copy-On-Write problems with Perl 5.20
+
+Quoting Dave Mitchell in https://rt.cpan.org/Public/Bug/Display.html?id=95940
+
+  After FC's commit, $buf gets marked as COW, since its a copy of a
+  COWable constant (the constant string "") and mmap() never unsets this
+  flag before stealing its buffer. So later on when it applies substr()
+  to $buf, the var is assumed to be COW and bad things happen to it.
+
+  The correct usage is still up for debate (see Leon's use case in
+  rt.perl.org tickets #116407 and #116925), but calling SvPV_force()
+  first would be a good first step (although that will cause the previous
+  contents of PVX() to leak). It might be better for Mmap.pm to call mmap()
+  with an undef value rather than assigning "" to it first.
+
+Bug: https://rt.cpan.org/Public/Bug/Display.html?id=95940
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=750226
+---
+ Mmap.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Mmap.pm b/Mmap.pm
+index c3501b1..21925e9 100644
+--- a/Mmap.pm
++++ b/Mmap.pm
+@@ -823,7 +823,7 @@ sub _set_options{
+     # mmap() isn't supposed to work on locked files, so unlock
+     $self->_unlock;
+ 
+-    mmap($self->{_mmap}='',$size,$self->{_fh})
++    mmap($self->{_mmap}=undef,$size,$self->{_fh})
+       or do{
+ 	delete $self->{_mmap};
+ 	croak "Can't mmap $self->{_filename}: $!";
+-- 
+2.0.1

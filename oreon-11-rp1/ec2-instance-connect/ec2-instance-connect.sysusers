@@ -1,0 +1,2 @@
+#Type Name   ID  GECOS                        Home directory  Shell
+u     ec2-instance-connect  -   "EC2 Instance Connect service user"  -      /sbin/nologin

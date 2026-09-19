@@ -1,0 +1,8 @@
+--- onig-6.5.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ onig-6.5.3/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -96,5 +96,3 @@
+ version = "69.9.3"
+ default-features = false
+ 
+-[target."cfg(windows)".dependencies.libc]
+-version = "0.2"

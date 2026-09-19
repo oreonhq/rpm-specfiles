@@ -1,0 +1,8 @@
+--- tracy-client-sys-0.28.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ tracy-client-sys-0.28.0/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -80,5 +80,3 @@
+ version = "1.0.83"
+ default-features = false
+ 
+-[target."cfg(windows)".dependencies.windows-targets]
+-version = ">=0.48, <0.53"

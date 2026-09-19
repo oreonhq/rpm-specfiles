@@ -1,0 +1,32 @@
+diff --git a/wfserver.pro b/wfserver.pro
+index 7465553..dae8778 100644
+--- a/wfserver.pro
++++ b/wfserver.pro
+@@ -110,9 +110,9 @@ MY_ENTITLEMENTS.value = ../wfview/resources/wfview.entitlements
+ QMAKE_MAC_XCODE_SETTINGS += MY_ENTITLEMENTS
+ QMAKE_INFO_PLIST = ../wfview/resources/Info.plist
+ 
+-!win32:DEFINES += HOST=\\\"`hostname`\\\" UNAME=\\\"`whoami`\\\"
++!win32:DEFINES += HOST=\\\"wfview.org\\\" UNAME=\\\"build\\\"
+ 
+-!win32:DEFINES += GITSHORT="\\\"$(shell git -C $$PWD rev-parse --short HEAD)\\\""
++!win32:DEFINES += GITSHORT=\\\"release\\\"
+ win32:DEFINES += GITSHORT=\\\"$$system(git -C $$PWD rev-parse --short HEAD)\\\"
+ 
+ win32:DEFINES += HOST=\\\"wfview.org\\\"
+diff --git a/wfview.pro b/wfview.pro
+index 208ed60..ed4ba09 100644
+--- a/wfview.pro
++++ b/wfview.pro
+@@ -100,9 +100,9 @@ macx:QMAKE_INFO_PLIST = ../wfview/resources/Info.plist
+ 
+ QMAKE_TARGET_BUNDLE_PREFIX = org.wfview
+ 
+-!win32:DEFINES += HOST=\\\"`hostname`\\\" UNAME=\\\"`whoami`\\\"
++!win32:DEFINES += HOST=\\\"wfview.org\\\" UNAME=\\\"build\\\"
+ 
+-!win32:DEFINES += GITSHORT="\\\"$(shell git -C \"$$PWD\" rev-parse --short HEAD)\\\""
++!win32:DEFINES += GITSHORT=\\\"release\\\"
+ win32:DEFINES += GITSHORT=\\\"$$system(git -C $$PWD rev-parse --short HEAD)\\\"
+ 
+ win32:DEFINES += HOST=\\\"wfview.org\\\"

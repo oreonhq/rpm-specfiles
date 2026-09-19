@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 130afd8..d4b647d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -43,7 +43,7 @@ clean:
+ 	rm -f $(OBJS) $(TARGET)
+ 
+ install: $(TARGET)
+-	install -D -g root -o root $(TARGET) $(TARGET_DIR)/sbin/$(TARGET)
++	install -D -g root -o root $(TARGET) $(TARGET_DIR)/bin/$(TARGET)
+ 	install -D -g root -o root $(TARGET).1 $(TARGET_DIR)/share/man/man1/$(TARGET).1
+ 
+ hd-idle.o:     hd-idle.c

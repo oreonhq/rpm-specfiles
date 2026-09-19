@@ -1,0 +1,23 @@
+Avoid implicit declaration of exit.  This requires a C language
+feature that was removed in 1999.  Future compilers are likely to
+reject implicit function declarations by default.
+
+No need to upstream this because it is part of autoconf, not this
+package.  Re-running autoconf makes the issue go away (after
+porting configure.in).
+
+diff --git a/configure b/configure
+index 92ca9868de299603..cbbf15cc749a8057 100755
+--- a/configure
++++ b/configure
+@@ -2525,8 +2525,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

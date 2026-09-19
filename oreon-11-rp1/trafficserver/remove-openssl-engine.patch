@@ -1,0 +1,28 @@
+--- src/iocore/net/SSLUtils.cc	2025-01-09 22:39:31.823534630 +0000
++++ src/iocore/net/SSLUtils.cc	2025-01-09 22:40:21.834084401 +0000
+@@ -65,7 +65,6 @@
+ #include <openssl/conf.h>
+ #include <openssl/dh.h>
+ #include <openssl/ec.h>
+-#include <openssl/engine.h>
+ #include <openssl/err.h>
+ #include <openssl/evp.h>
+ #include <openssl/pem.h>
+@@ -866,16 +865,7 @@
+ SSLPostConfigInitialize()
+ {
+   if (SSLConfigParams::engine_conf_file) {
+-#if HAVE_ENGINE_LOAD_DYNAMIC
+-    ENGINE_load_dynamic();
+-#endif
+-
+-    OPENSSL_load_builtin_modules();
+-    if (CONF_modules_load_file(SSLConfigParams::engine_conf_file, nullptr, 0) <= 0) {
+-      char err_buf[256] = {0};
+-      ERR_error_string_n(ERR_get_error(), err_buf, sizeof(err_buf));
+-      Error("Could not load SSL engine configuration file %s: %s", SSLConfigParams::engine_conf_file, err_buf);
+-    }
++    Error("OpenSSL engines no longer supported; please remove engine_conf_file.");
+   }
+ }
+ 

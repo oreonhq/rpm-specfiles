@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Parcellite
+Comment=Clipboard Manager
+Icon=parcellite
+Exec=parcellite
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true

@@ -1,0 +1,9 @@
+diff -up mac-12.35/CMakeLists.txt.cmake4 mac-12.35/CMakeLists.txt
+--- mac-12.35/CMakeLists.txt.cmake4	2026-01-29 08:21:46.000000000 +0100
++++ mac-12.35/CMakeLists.txt	2026-02-23 11:49:19.012716022 +0100
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0...4.2)
++cmake_minimum_required(VERSION 3.5...4.2)
+ project("Monkey's Audio")
+ 
+ set(CMAKE_CXX_STANDARD 11)

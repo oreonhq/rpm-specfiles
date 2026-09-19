@@ -1,0 +1,18 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for UnrealIRCd >= 6.0.6 to apply the
+Fedora system-wide crypto policy by default to the UnrealIRCd configuration file to follow
+https://docs.fedoraproject.org/en-US/packaging-guidelines/CryptoPolicies/ properly.
+
+--- unrealircd-6.0.6/doc/conf/examples/example.conf	2023-02-03 07:02:03.000000000 +0100
++++ unrealircd-6.0.6/doc/conf/examples/example.conf	2023-02-04 03:16:25.787798783 +0100
+@@ -528,6 +528,11 @@
+ 		//	except { connect-time 10; }
+ 		//}
+ 	}
++
++	/* TLS protocols and ciphers */
++	tls {
++		ciphers "PROFILE=SYSTEM"; /* Fedora system-wide crypto policy */
++	}
+ }
+ 
+ /*

@@ -1,0 +1,27 @@
+From 53f9440955d3a0dd5f077cadd5af56f6efa5b163 Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Tue, 30 Jan 2024 12:42:21 +0000
+Subject: [PATCH 2/2] Makefile.config: Avoid annoying coreutils warning
+
+$ make -j1
+egrep: warning: egrep is obsolescent; using grep -E
+---
+ Makefile.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.config b/Makefile.config
+index 7e4e3d7..d233cb7 100644
+--- a/Makefile.config
++++ b/Makefile.config
+@@ -53,7 +53,7 @@ EXTRA_CFLAGS := -DPERL4CAML_REFCOUNTING_EXPERIMENTAL=1
+ # To work out what this should be, try:
+ # `perl -MExtUtils::Embed -e ldopts'
+ 
+-DYNALOADER_HACK := $(shell perl -MExtUtils::Embed -e ldopts | egrep -o '/[^[:space:]]*DynaLoader.a')
++DYNALOADER_HACK := $(shell perl -MExtUtils::Embed -e ldopts | grep -Eo '/[^[:space:]]*DynaLoader.a')
+ #DYNALOADER_HACK := /usr/lib/perl/5.8/auto/DynaLoader/DynaLoader.a
+ #DYNALOADER_HACK := /System/Library/Perl/5.8.1/darwin-thread-multi-2level/auto/DynaLoader/DynaLoader.a
+ 
+-- 
+2.43.0
+

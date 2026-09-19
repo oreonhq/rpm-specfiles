@@ -1,0 +1,12 @@
+diff -up sblim-cmpi-rpm-1.0.1/cimrpmv4.c.orig sblim-cmpi-rpm-1.0.1/cimrpmv4.c
+--- sblim-cmpi-rpm-1.0.1/cimrpmv4.c.orig	2005-01-05 18:08:57.000000000 +0100
++++ sblim-cmpi-rpm-1.0.1/cimrpmv4.c	2014-06-10 12:44:50.427351852 +0200
+@@ -29,6 +29,8 @@
+ 
+ #define EH_MAGIC 0x17711881
+ 
++#define	PAGE_SIZE (sysconf(_SC_PAGESIZE))
++
+ typedef struct {
+   long     ehMagic;
+   char   **ehListResult;

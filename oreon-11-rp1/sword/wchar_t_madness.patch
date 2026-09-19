@@ -1,0 +1,52 @@
+From Aaron Rainbolt:
+
+This test was breaking the build because it's trying to write a UTF-32 string
+to 'cout', which isn't possible. I don't know what the right way to do
+whatever this code is trying to do, so I'm just disabling the test entirely
+for now. I've emailed the SWORD developers about this and let them know I'm
+patching the test out.
+
+---
+diff -ru a/tests/swbuftest.cpp b/tests/swbuftest.cpp
+--- a/tests/swbuftest.cpp	2020-11-04 18:00:51.000000000 -0600
++++ b/tests/swbuftest.cpp	2026-01-31 17:43:49.464397667 -0600
+@@ -163,10 +163,10 @@
+ 	cout << "Prefix should be (prefix): " << prefixTest.stripPrefix(':') << "\n";
+ 	cout << "Value should be (value): " << prefixTest << "\n";
+ 
+-	x = utf8ToWChar("ⲉⲛⲧⲁⲡⲛⲟⲩⲧⲉ");
+-	cout << (wchar_t *)x.getRawData() << "\n";
+-	x = wcharToUTF8((wchar_t *)x.getRawData());
+-	cout << x << "\n";
++//	x = utf8ToWChar("ⲉⲛⲧⲁⲡⲛⲟⲩⲧⲉ");
++//	cout << (wchar_t *)x.getRawData() << "\n";
++//	x = wcharToUTF8((wchar_t *)x.getRawData());
++//	cout << x << "\n";
+ 
+ //	y.appendFormatted(" from %d %s running %02.05f miles", 4, "dogs", 1.9f);
+ //	cout << "should be (hello wurld hello wurld from 4 dogs running 1.90000 miles): (" << y << ")\n";
+diff -ru a/tests/tlitmgrtest.cpp b/tests/tlitmgrtest.cpp
+--- a/tests/tlitmgrtest.cpp	2020-11-04 18:00:51.000000000 -0600
++++ b/tests/tlitmgrtest.cpp	2026-01-31 17:56:20.494390453 -0600
+@@ -392,8 +392,8 @@
+ 			std::cout << "status " << u_errorName(status) << std::endl;
+ 			std::cout << "Parse error: line " << parseError.line << std::endl;
+ 			std::cout << "Parse error: offset " << parseError.offset << std::endl;
+-			std::cout << "Parse error: preContext " << *parseError.preContext << std::endl;
+-			std::cout << "Parse error: postContext " << *parseError.postContext << std::endl;
++//			std::cout << "Parse error: preContext " << *parseError.preContext << std::endl;
++//			std::cout << "Parse error: postContext " << *parseError.postContext << std::endl;
+ 			std::cout << "rules were" << std::endl;
+ 			std::cout << rules << std::endl;
+ 			return false;
+@@ -464,8 +464,8 @@
+ 		std::cout << "status " << u_errorName(status) << std::endl;
+ 		std::cout << "Parse error: line " << parseError.line << std::endl;
+ 		std::cout << "Parse error: offset " << parseError.offset << std::endl;
+-		std::cout << "Parse error: preContext " << *parseError.preContext << std::endl;
+-		std::cout << "Parse error: postContext " << *parseError.postContext << std::endl;
++//		std::cout << "Parse error: preContext " << *parseError.preContext << std::endl;
++//		std::cout << "Parse error: postContext " << *parseError.postContext << std::endl;
+ 		std::cout << "rules were" << std::endl;
+ 		std::cout << rules << std::endl;
+ 		return NULL;

@@ -1,7 +1,7 @@
 %global source0_hash 83b6b37e21b315f069d69faa4686dcec3306225b48fdfe64588dec33e6063e72
 
 Name:           prrte
-Version:        3.0.6
+Version:        4.1.0
 Release:        %autorelease
 Summary:        PMIx Reference RunTime Environment (PRRTE)
 # src/mca/prtereachable/netlink/reachable_netlink_utils_common.c is BSD-2-Clause

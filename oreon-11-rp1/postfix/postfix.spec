@@ -59,7 +59,7 @@
 
 Name: postfix
 Summary: Postfix Mail Transport Agent
-Version: 3.11.0
+Version: 3.11.7
 Release: 1%{?dist}
 Epoch: 2
 URL: http://www.postfix.org

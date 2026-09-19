@@ -1,0 +1,4 @@
+--- src/helpers/Log.cpp.orig	2009-02-23 12:42:15.000000000 -0600
++++ src/helpers/Log.cpp	2009-02-23 12:42:15.000000000 -0600
+@@ -25,0 +26 @@
++#include <cstdio>

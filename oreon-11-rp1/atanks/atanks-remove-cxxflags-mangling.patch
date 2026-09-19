@@ -1,0 +1,24 @@
+Index: atanks-6.3/Makefile
+===================================================================
+--- atanks-6.3.orig/Makefile
++++ atanks-6.3/Makefile
+@@ -232,7 +232,7 @@ ifeq (YES,$(DEBUG))
+   endif
+ 
+ else
+-  CXXFLAGS := -march=native ${CXXFLAGS} -O2
++  CXXFLAGS := ${CXXFLAGS}
+ endif
+ 
+ 
+--- atanks-6.6/Makefile~	2021-08-12 09:57:21.403451957 -0500
++++ atanks-6.6/Makefile	2021-08-12 12:15:12.000041013 -0500
+@@ -141,7 +141,7 @@
+ # ------------------------------------
+ # Flags for compiler and linker
+ # ------------------------------------
+-CPPFLAGS += -DDATA_DIR=\"${INSTALLDIR}\" -D$(PLATFORM) -DVERSION=\"${VERSION}\"
++CPPFLAGS += -DDATA_DIR=\"${INSTALLDIR}\" -DLINUX -DVERSION=\"${VERSION}\"
+ CXXFLAGS += -Wall -Wextra $(PEDANDIC_FLAG) -std=c++$(GCC_CXXSTD)
+ LDFLAGS  +=
+ 

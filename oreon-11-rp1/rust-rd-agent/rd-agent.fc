@@ -1,0 +1,4 @@
+/usr/bin/rd-agent                       -- gen_context(system_u:object_r:resctl_demo_exec_t,s0)
+
+/var/lib/resctl-demo/misc-bin(/.*)?        gen_context(system_u:object_r:var_lib_resctl_demo_bin_t,s0)
+/var/lib/resctl-demo/sideload-bin(/.*)?    gen_context(system_u:object_r:var_lib_resctl_demo_bin_t,s0)

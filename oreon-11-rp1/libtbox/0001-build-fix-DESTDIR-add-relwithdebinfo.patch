@@ -1,0 +1,117 @@
+From 1563e56a69165f7b00d683675ee34af2a16016c1 Mon Sep 17 00:00:00 2001
+From: Zephyr Lykos <git@mochaa.ws>
+Date: Sat, 7 Oct 2023 16:12:57 +0800
+Subject: [PATCH v1] build: fix DESTDIR, add relwithdebinfo
+
+---
+ configure    | 43 +++++++++++++++++--------------------------
+ src/xmake.sh |  5 ++++-
+ 2 files changed, 21 insertions(+), 27 deletions(-)
+
+diff --git a/configure b/configure
+index 532e7a27..ef433cbd 100755
+--- a/configure
++++ b/configure
+@@ -701,9 +701,9 @@ if test -d "/usr/local"; then
+ elif test -d "/usr"; then
+     _install_prefix_default="/usr"
+ fi
+-_install_bindir_default="\${prefix}/bin"
+-_install_libdir_default="\${prefix}/lib"
+-_install_includedir_default="\${prefix}/include"
++_install_bindir_default="\$(PREFIX)/bin"
++_install_libdir_default="\$(PREFIX)/lib"
++_install_includedir_default="\$(PREFIX)/include"
+ 
+ # determining target platform
+ # e.g.
+@@ -3894,16 +3894,6 @@ _gmake_add_switches() {
+     echo "PREFIX=${_install_prefix_default}" >> "${xmake_sh_makefile}"
+     echo "endif" >> "${xmake_sh_makefile}"
+     echo "" >> "${xmake_sh_makefile}"
+-    echo "INSTALLDIR:=\$(DESTDIR)" >> "${xmake_sh_makefile}"
+-    echo "ifneq (\$(PREFIX),)" >> "${xmake_sh_makefile}"
+-    echo "ifneq (\$(INSTALLDIR),)" >> "${xmake_sh_makefile}"
+-    echo "PREFIX_:=\$(patsubst /%,%,\$(PREFIX))" >> "${xmake_sh_makefile}"
+-    echo "INSTALLDIR:=\$(INSTALLDIR)/\$(PREFIX_)" >> "${xmake_sh_makefile}"
+-    echo "else" >> "${xmake_sh_makefile}"
+-    echo "INSTALLDIR:=\$(PREFIX)" >> "${xmake_sh_makefile}"
+-    echo "endif" >> "${xmake_sh_makefile}"
+-    echo "endif" >> "${xmake_sh_makefile}"
+-    echo "" >> "${xmake_sh_makefile}"
+ }
+ 
+ _gmake_add_flags() {
+@@ -4209,29 +4199,25 @@ _gmake_add_install_target() {
+ 
+     # install target file
+     if test_eq "${targetkind}" "binary"; then
+-        string_replace "${_install_bindir_default}" "\${prefix}" "${installdir}"; _install_bindir_default="${_ret}"
+         print "\t@echo installing ${targetfile} to ${_install_bindir_default}" >> "${xmake_sh_makefile}"
+-        print "\t@mkdir -p ${_install_bindir_default}" >> "${xmake_sh_makefile}"
+-        print "\t@cp -p ${targetfile} ${_install_bindir_default}/${filename}" >> "${xmake_sh_makefile}"
++        print "\t@mkdir -p \$(DESTDIR)${_install_bindir_default}" >> "${xmake_sh_makefile}"
++        print "\t@cp -p ${targetfile} \$(DESTDIR)${_install_bindir_default}/${filename}" >> "${xmake_sh_makefile}"
+     elif ${install_for_soname}; then
+-        string_replace "${_install_libdir_default}" "\${prefix}" "${installdir}"; _install_libdir_default="${_ret}"
+         print "\t@echo installing ${targetfile} to ${_install_libdir_default}" >> "${xmake_sh_makefile}"
+-        print "\t@mkdir -p ${_install_libdir_default}" >> "${xmake_sh_makefile}"
+-        print "\t@cp -p ${targetfile} ${targetfile_with_version}" >> "${xmake_sh_makefile}"
+-        print "\t@cd ${_install_libdir_default} && ln -sf ${targetfilename_with_version} ${soname} && ln -sf ${soname} ${filename}" >> "${xmake_sh_makefile}"
++        print "\t@mkdir -p \$(DESTDIR)${_install_libdir_default}" >> "${xmake_sh_makefile}"
++        print "\t@cp -p ${targetfile} \$(DESTDIR)${targetfile_with_version}" >> "${xmake_sh_makefile}"
++        print "\t@cd \$(DESTDIR)${_install_libdir_default} && ln -sf ${targetfilename_with_version} ${soname} && ln -sf ${soname} ${filename}" >> "${xmake_sh_makefile}"
+     elif test_eq "${targetkind}" "static" || test_eq "${targetkind}" "shared"; then
+-        string_replace "${_install_libdir_default}" "\${prefix}" "${installdir}"; _install_libdir_default="${_ret}"
+         print "\t@echo installing ${targetfile} to ${_install_libdir_default}" >> "${xmake_sh_makefile}"
+-        print "\t@mkdir -p ${_install_libdir_default}" >> "${xmake_sh_makefile}"
+-        print "\t@cp -p ${targetfile} ${_install_libdir_default}/${filename}" >> "${xmake_sh_makefile}"
++        print "\t@mkdir -p \$(DESTDIR)${_install_libdir_default}" >> "${xmake_sh_makefile}"
++        print "\t@cp -p ${targetfile} \$(DESTDIR)${_install_libdir_default}/${filename}" >> "${xmake_sh_makefile}"
+     fi
+ 
+     # install header files
+     _get_target_item "${target}" "headerfiles"; local headerfiles="${_ret}"
+     if test_nz "${headerfiles}"; then
+-        string_replace "${_install_includedir_default}" "\${prefix}" "${installdir}"; _install_includedir_default="${_ret}"
+         local srcheaderfile=""
+-        local includedir="${_install_includedir_default}"
++        local includedir="\$(DESTDIR)${_install_includedir_default}"
+         for srcheaderfile in ${headerfiles}; do
+             string_split "${srcheaderfile}" ":"
+             local srcheaderfile="${_ret}"
+@@ -4269,7 +4260,7 @@ _gmake_add_install_target() {
+             if test_z "${filename}"; then
+                 path_filename "${srcinstallfile}"; filename="${_ret}"
+             fi
+-            local dstinstalldir="${installdir}"
++            local dstinstalldir="\$(DESTDIR)"
+             if test_nz "${prefixdir}"; then
+                 dstinstalldir="${dstinstalldir}/${prefixdir}"
+             fi
+diff --git a/src/xmake.sh b/src/xmake.sh
+index 10078fdd..7ce23ccd 100755
+--- a/src/xmake.sh
++++ b/src/xmake.sh
+@@ -18,6 +18,9 @@ if is_mode "debug"; then
+     add_defines "__tb_debug__"
+     set_symbols "debug"
+     set_optimizes "none"
++elif is_mode "relwithdebinfo"; then
++    set_symbols "debug"
++    set_optimizes "smallest"
+ else
+     set_strip "all"
+     if ! is_kind "shared"; then
+@@ -42,7 +45,7 @@ else
+ fi
+ 
+ # enable backtrace symbols for linux
+-if is_plat "linux" && is_mode "debug"; then
++if is_plat "linux" && (is_mode "debug" || is_mode "relwithdebinfo"); then
+     add_ldflags "-rdynamic"
+ fi
+ 
+-- 
+2.42.0
+

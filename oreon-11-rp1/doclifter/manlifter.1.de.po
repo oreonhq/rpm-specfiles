@@ -1,0 +1,533 @@
+# German translation of the manlifter man page.
+# Copyright (C) 2014 Free Software Foundation, Inc.
+# This file is distributed under the same license as the doclifter package.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: doclifter\n"
+"POT-Creation-Date: 2014-10-23 21:18+0100\n"
+"PO-Revision-Date: 2014-10-31 21:39+0100\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"Language-Team: German <debian-l10n-german@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: de\n"
+
+#. type: TH
+#: manlifter.1:10
+#, no-wrap
+msgid "MANLIFTER"
+msgstr "MANLIFTER"
+
+#. type: TH
+#: manlifter.1:10
+#, no-wrap
+msgid "06/03/2014"
+msgstr "3. Juni 2014"
+
+#. type: TH
+#: manlifter.1:10
+#, no-wrap
+msgid "manlifter"
+msgstr "manlifter"
+
+#. type: TH
+#: manlifter.1:10
+#, no-wrap
+msgid "Documentation Tools"
+msgstr "Dokumentationswerkzeuge"
+
+#. -----------------------------------------------------------------
+#. * MAIN CONTENT STARTS HERE *
+#. -----------------------------------------------------------------
+#. type: SH
+#: manlifter.1:30
+#, no-wrap
+msgid "NAME"
+msgstr "BEZEICHNUNG"
+
+#. type: Plain text
+#: manlifter.1:32
+msgid "manlifter - mass-conversion script and test harness for doclifter"
+msgstr "manlifter - Skript zur Massenumwandlung und Testumgebung für Doclifter"
+
+#. type: SH
+#: manlifter.1:32
+#, no-wrap
+msgid "SYNOPSIS"
+msgstr "ÜBERSICHT"
+
+#. type: Plain text
+#: manlifter.1:35
+msgid ""
+"B<manlifter> [-d\\ I<option>] [-e] [-f\\ I<listfile>] [-h] [-I\\ I<mandir>] "
+"[-m] [-M] [-o\\ I<outdir>] [-p\\ I<patch-directory>] [-P] [-q] [-v] [-s\\ "
+"I<section>] [-X\\ I<exclude>] I<name>..."
+msgstr ""
+"B<manlifter> [-d\\ I<Option>] [-e] [-f\\ I<Listendatei>] [-h] [-I\\ I<man-"
+"Verzeichnis>] [-m] [-M] [-o\\ I<Ausgabeverzeichnis>] [-p\\ I<Patch-"
+"Verzeichnis>] [-P] [-q] [-v] [-s\\ I<Abschnitt>] [-X\\ I<Ausschluss>] "
+"I<Name> …"
+
+#. type: Plain text
+#: manlifter.1:37
+msgid "B<manlifter> [-S]"
+msgstr "B<manlifter> [-S]"
+
+#. type: SH
+#: manlifter.1:37
+#, no-wrap
+msgid "DESCRIPTION"
+msgstr "BESCHREIBUNG"
+
+#. type: Plain text
+#: manlifter.1:43
+msgid ""
+"B<manlifter> is a script that sequences B<doclifter>(1)  to convert an "
+"entire manual-page tree to XML-Docbook, optionally also generating HTML from "
+"the XML\\&. Another use is as a torture-test tool for doclifter; it logs "
+"errors to standard output and collects timings\\&."
+msgstr ""
+"B<manlifter> ist ein Skript, das B<doclifter>(1) mehrfach ausführt, um einen "
+"ganzen Handbuchseiten-Dateibaum in XML-DocBook umzuwandeln. Wahlweise kann "
+"auch HTML-Code aus XML erzeugt werden\\&. Ein weiterer Anwendungsfall ist "
+"ein Belastbarkeitstest für Doclifter; dessen Fehlerprotokolle werden in die "
+"Standardausgabe geleitet und Zeitstatistiken gesammelt\\&."
+
+#. type: Plain text
+#: manlifter.1:47
+msgid ""
+"Called without any file arguments, manlifter tries to convert all eligible "
+"man pages installed on the system, placing the resulting xml files under "
+"xmlman in the current directory\\&. Each successfully translated page foo\\&."
+"N is copied to manN/foo\\&.xml beneath the output directory, regardless of "
+"what source directory it came from\\&."
+msgstr ""
+"Wenn Manlifter ohne Argumente aufgerufen wird, wird versucht, alle auf dem "
+"System auffindbaren Handbuchseiten umzuwandeln\\&. Die sich ergebenden XML-"
+"Dateien werden im aktuellen Verzeichnis gespeichert. Jede erfolgreich "
+"umgewandelte Seite bla\\&.N wird nach manN/bla\\&.xml unterhalb des "
+"Ausgabeverzeichnisses kopiert, ungeachtet dessen, aus welchem Verzeichnis "
+"die Datei ursprünglich stammt\\&."
+
+#. type: Plain text
+#: manlifter.1:49
+msgid ""
+"A manual page is considered ineligible for batch conversion if it contains "
+"text indicating it has been generated from DocBook masters of from Doxygen"
+"\\&."
+msgstr ""
+"Eine Handbuchseite wird als untauglich für die Stapelverarbeitung "
+"eingestuft, wenn sie Text enthält, der auf ihre Herkunft aus DocBook-Quellen "
+"oder aus Doxygen verweist\\&."
+
+#. type: Plain text
+#: manlifter.1:53
+msgid ""
+"For each source file examined, if the destination file exists and is newer "
+"than the source, the conversion is skipped; thus, incremental runs of "
+"B<manlifter> do the least work needed to keep the target XML tree up to date"
+"\\&. Likewise, in -h mode derived HTML files are only made when necessary\\&."
+msgstr ""
+"Für jede der untersuchten Quelldateien gilt: Wenn die Zieldatei existiert "
+"und neuer als die Quelldatei ist, wird deren Umwandlung übersprungen. Das "
+"bedeutet, dass inkrementelle Durchläufe von B<manlifter> nur die wirklich "
+"notwendigen Aufgaben erledigen, um den Ziel-XML-Baum aktuell zu halten\\&. "
+"Gleichermaßen werden mit der Option -h die HTML-Dateien nur dann erstellt, "
+"wenn es nötig ist."
+
+#. type: Plain text
+#: manlifter.1:57
+msgid ""
+"Stub pages that are just B<\\&.so> redirections are translated to "
+"corresponding symlinks of XML files (and, with -h, HTML files)\\&."
+msgstr ""
+"Seiten, die lediglich B<\\&.so>-Weiterleitungen zu anderen Dateien sind, "
+"werden in entsprechende symbolische Verknüpfungen mit XML-Dateien übersetzt "
+"(mit -h werden HTML-Dateien erstellt)\\&."
+
+#. type: Plain text
+#: manlifter.1:64
+msgid ""
+"B<manlifter> may also be called with a single file argument, which is "
+"interpreted as the stem name of a potential manual page\\&.  B<manlifter> "
+"then searches all selected manual sections for a matching page and attempts "
+"to convert it\\&. In this case, a copy of the man page and the converted "
+"version are dropped immediately beheath the output directory, with the names "
+"foobar\\&.man and foobar\\&.man\\&.xml, respectively\\&. This mode is "
+"normally only of interest only to B<doclifter> developers for debugging that "
+"program\\&."
+msgstr ""
+"B<manlifter> kann auch mit einer einzelnen Datei als Argument aufgerufen "
+"werden, die als Namensrumpf einer potenziellen Handbuchseite angesehen wird"
+"\\&. B<manlifter> durchsucht dann alle ausgewählten Handbuchseiten-"
+"Abschnitte nach passenden Dateien und versucht diese umzuwandeln\\&. In "
+"diesem Fall wird eine Kopie der Handbuchseite und der zugehörigen "
+"umgewandelten Version direkt im Ausgabeordner unter den Namen bla\\&.man "
+"beziehungsweise bla\\&.man\\&.xml gespeichert. Dieser Modus ist "
+"normalerweise nur für B<doclifter>-Entwickler für Debugging-Zwecke "
+"interessant."
+
+#. type: Plain text
+#: manlifter.1:73
+msgid ""
+"In either of the above cases, B<manlifter> will uncompress the file if it "
+"has a \\&.gz, \\&.bz2 or \\&.Z suffix on the name\\&."
+msgstr ""
+"In jedem der oben genannten Fälle entpackt B<manlifter> die Datei, sofern "
+"sie eine der Erweiterungen \\&.gz, \\&.bz2 oder \\&.Z im Namen enthält\\&."
+
+#. type: Plain text
+#: manlifter.1:75
+msgid "Options are as follows:"
+msgstr "Folgende Optionen stehen zur Verfügung:"
+
+#. type: Plain text
+#: manlifter.1:77
+msgid "-d"
+msgstr "-d"
+
+#. type: Plain text
+#: manlifter.1:79
+msgid ""
+"Pass the string argument to each doclifter call as options\\&. Each space-"
+"separated token in the string becomes a separate argument in the call\\&."
+msgstr ""
+"übergibt das Zeichenketten-Argument an jeden Doclifter-Aufruf als Option\\&. "
+"Jeder der Teile der Zeichenkette, die durch Leerzeichen voneinander getrennt "
+"sind, wird als separates Argument im Aufruf verwendet\\&."
+
+#. type: Plain text
+#: manlifter.1:82
+msgid "-e"
+msgstr "-e"
+
+#. type: Plain text
+#: manlifter.1:88
+msgid ""
+"Run in log-filter mode (mainly of interest to B<doclifter> developers)\\&. "
+"In this mode, B<manlifter> reads a test log from standard input and filters "
+"it in a a way dependent on the -f and -q options\\&. If neither of these is "
+"given, messages from successful runs are stripped out and only errors passed "
+"through to standard output\\&."
+msgstr ""
+"arbeitet im Protokollfilter-Modus (hauptsächlich für B<doclifter>-Entwickler "
+"von Bedeutung)\\&. In diesem Modus liest B<manlifter> ein Testprotokoll aus "
+"der Standardausgabe und filtert dieses unter Verwendung der angegebenen "
+"Optionen -f und -q\\&. Falls keine davon angegeben ist, werden die Meldungen "
+"über erfolgreiche Durchläufe herausgenommen und nur Fehler an die "
+"Standardausgabe weitergeleitet\\&."
+
+#. type: Plain text
+#: manlifter.1:91
+msgid "-f"
+msgstr "-f"
+
+#. type: Plain text
+#: manlifter.1:93
+msgid ""
+"Normally, run doclifter on the files named by each line in the argument file"
+"\\&. In error-filter mode the argument is instead interpreted as a filtering "
+"regular expression\\&."
+msgstr ""
+"Normalerweise wird Doclifter auf die in jeder Zeile der Argumentdatei "
+"bezeichneten Dateien angewendet\\&. Im Fehlerfilter-Modus wird das Argument "
+"stattdessen als ein filternder regulärer Ausdruck interpretiert\\&."
+
+#. type: Plain text
+#: manlifter.1:96
+msgid "-h"
+msgstr "-h"
+
+#. type: Plain text
+#: manlifter.1:99
+msgid ""
+"Also generate HTML translations into the output directory\\&. DocBook "
+"citerefentry markup is transformed to hyperlinks in the directory, and a "
+"contents listing is generated to index\\&.html\\&."
+msgstr ""
+"erzeugt ebenfalls HTML-Übersetzungen im Ausgabeverzeichnis\\&. Die Markup-"
+"Tags »citerefentry« in DocBook werden in Hyperlinks übersetzt und ein "
+"Inhaltsverzeichnis in index\\&.html gespeichert\\&."
+
+#. type: Plain text
+#: manlifter.1:102
+msgid "-I"
+msgstr "-I"
+
+#. type: Plain text
+#: manlifter.1:105
+msgid ""
+"Specify the root of the manual-page tree\\&. By default this is /usr/share/"
+"man\\&."
+msgstr ""
+"gibt das Wurzelverzeichnis des Handbuchseiten-Dateibaums an\\&. In der "
+"Voreinstellung ist das /usr/share/man\\&."
+
+#. type: Plain text
+#: manlifter.1:108
+msgid "-m"
+msgstr "-m"
+
+#. type: Plain text
+#: manlifter.1:113
+msgid ""
+"Make a patch to correct the last page fetched\\&. It is copied, an editor is "
+"called on the copy (using the environment variable B<$EDITOR>), and then "
+"B<diff>(1)  is called to drop the patch in the prepatch directory\\&. Fails "
+"with an error if such a patch is already present\\&."
+msgstr ""
+"erstellt einen Patch, um die letzte geholte Datei zu korrigieren\\&. Dieser "
+"Patch wird kopiert und in einen Texteditor geladen (über die "
+"Umgebungsvariable B<$EDITOR>)\\&. Anschließend wird B<diff>(1) aufgerufen, "
+"um den Patch in das Prepatch-Verzeichnis zu kopieren\\&. Der Vorgang schlägt "
+"mit einer Fehlermeldung fehl, wenn ein entsprechender Patch bereits "
+"vorhanden ist\\&."
+
+#. type: Plain text
+#: manlifter.1:116
+msgid "-M"
+msgstr "-M"
+
+#. type: Plain text
+#: manlifter.1:118
+msgid "Lift the specified files, then do the equivalent of the -m option\\&."
+msgstr ""
+"listet die angegebenen Dateien auf und tut dann das Gleiche wie die Option -m"
+"\\&."
+
+#. type: Plain text
+#: manlifter.1:121
+msgid "-o"
+msgstr "-o"
+
+#. type: Plain text
+#: manlifter.1:125
+msgid ""
+"Set the output directory into which XML-DocBook translations will be dropped"
+"\\&. By default this is xmlman under the current directory in batch mode, or "
+"the current directory otherwise\\&."
+msgstr ""
+"legt das Ausgabeverzeichnis fest, in welchem XML-DocBook-Dateien gespeichert "
+"werden\\&. In der Voreinstellung ist dies »xmlman« unterhalb des aktuellen "
+"Verzeichnisses im Stapelverarbeitungsmodus, oder anderenfalls das aktuelle "
+"Verzeichnis\\&."
+
+#. type: Plain text
+#: manlifter.1:128
+msgid "-p"
+msgstr "-p"
+
+#. type: Plain text
+#: manlifter.1:134
+msgid ""
+"Interpret the argument as the name of a patch directory (the default name is "
+"prepatch under the current directory)\\&. Each file named foo\\&.N\\&.patch "
+"is interpreted as a patch to be applied to the manual page foo(N) before "
+"doclifter translates it\\&."
+msgstr ""
+"interpretiert das Argument als den Namen des Patch-Verzeichnisses (die "
+"Voreinstellung ist »prepatch« unterhalb des aktuellen Verzeichnisses)\\&. "
+"Jede Datei, die nach dem Schema bla\\&.N\\&.patch benannt ist, wird als "
+"Patch interpretiert, der auf die Handbuchseite bla(N) angewendet werden "
+"soll, bevor Doclifter sie übersetzt\\&."
+
+#. type: Plain text
+#: manlifter.1:137
+msgid "-P"
+msgstr "-P"
+
+#. type: Plain text
+#: manlifter.1:142
+msgid ""
+"Enable profiling using the Python hotshot module; this is only useful for "
+"tuning doclifter so it runs faster\\&. Raw data is written to manlifter\\&."
+"prof, and a digested report is appended to the log on standard output\\&. "
+"Warning: the raw data files can become huge, and the postprocessing for "
+"report generation can take as long as the actual processing (or longer!)\\&."
+msgstr ""
+"aktiviert die Profilierung mittels des Python-Hotshot-Moduls. Dies ist nur "
+"für das Tuning von Doclifter nötig, um die Verarbeitungsgeschwindigkeit zu "
+"erhöhen. Die Rohdaten werden in manlifter\\&.prof geschrieben und ein "
+"zusammenfassender Bericht an das Protokoll in der Standardausgabe angehängt"
+"\\&. Achtung: Die Rohdaten-Dateien können sehr groß werden, und die "
+"Nachbearbeitung für die Erstellung des Berichts kann genauso viel (oder "
+"sogar mehr!) Zeit in Anspruch nehmen als die eigentliche Verarbeitung\\&."
+
+#. type: Plain text
+#: manlifter.1:145
+msgid "-q"
+msgstr "-q"
+
+#. type: Plain text
+#: manlifter.1:147
+msgid ""
+"Normally, pass the -q (quiet) option to each doclifter call\\&. In error-"
+"filter mode, return a list of files on which translation failed\\&."
+msgstr ""
+"Normalerweise wird die Option -q (still) an den Doclifter-Aufruf übergeben"
+"\\&. Im Fehlerfiltermodus wird eine Liste der Dateien zurückgegeben, deren "
+"Übersetzung fehlgeschlagen ist\\&."
+
+#. type: Plain text
+#: manlifter.1:150
+msgid "-v"
+msgstr "-v"
+
+#. type: Plain text
+#: manlifter.1:152
+msgid ""
+"Pass the -v (verbose) option to each doclifter call\\&. This option can be "
+"repeated to increase the verbosity level\\&."
+msgstr ""
+"übergibt die Option -v (ausführliche Ausgabe) mit jedem Aufruf von Doclifter"
+"\\&. Diese Option kann mehrfach angegeben werden, um die "
+"Ausführlichkeitsstufe zu erhöhen\\&."
+
+#. type: Plain text
+#: manlifter.1:155
+msgid "-s"
+msgstr "-s"
+
+#. type: Plain text
+#: manlifter.1:157
+msgid ""
+"Specify a section to scan\\&. Use this with an argument; it should not be "
+"necessary when doing a conversion of the entire tree\\&."
+msgstr ""
+"gibt einen einzulesenden Abschnitt an\\&. Verwenden Sie dies zusammen mit "
+"einem Argument; es sollte nicht notwendig sein, wenn Sie einen kompletten "
+"Baum umwandeln wollen\\&."
+
+#. type: Plain text
+#: manlifter.1:160
+msgid "-S"
+msgstr "-S"
+
+#. type: Plain text
+#: manlifter.1:166
+msgid ""
+"Compile error statistics from a B<manlifter> logfile presented on standard "
+"input\\&. This option will be of interest mainly to B<doclifter> developers"
+"\\&."
+msgstr ""
+"generiert Fehlerstatistiken aus einer in der Standardausgabe erzeugten "
+"B<manlifter>-Protokolldatei\\&. Diese Option wird hauptsächlich für "
+"B<doclifter>-Entwickler interessant sein\\&."
+
+#. type: Plain text
+#: manlifter.1:169
+msgid "-X"
+msgstr "-X"
+
+#. type: Plain text
+#: manlifter.1:171
+msgid ""
+"In batch mode exclude pages listed in the argument file\\&. Meant to be used "
+"for pages that are known good and take an extremely long time to lift, in "
+"order to cut down the time for a test run\\&. (Most pages lift in less than "
+"a half second, but a few can take 15 minutes or longer\\&.)"
+msgstr ""
+"schließt im Stapelverarbeitungsmodus die in der Argumentdatei aufgelisteten "
+"Seiten aus. Dies ist sinnvoll bei Dateien, die als korrekt angesehen werden, "
+"aber eine lange Zeit für die Umwandlung benötigen, damit die für den "
+"Testlauf erforderliche Zeit reduziert werden kann\\&. Für die meisten Seiten "
+"dauert die Umwandlung nur eine halbe Sekunde, aber gelegentlich kann die "
+"Umwandlung auch fünfzehn Minuten oder länger dauern\\&."
+
+#. type: Plain text
+#: manlifter.1:177
+msgid ""
+"B<manlifter> emits a logfile to standard output\\&. The file begins with a "
+"timestamp line and a blank line, and ends with a line giving run time and "
+"various interesting statistics\\&. Between these are stanzas, separated by "
+"blank lines, one for each file on which B<doclifter> was run\\&."
+msgstr ""
+"B<manlifter> gibt eine Protokolldatei in die Standardausgabe aus\\&. In "
+"deren erster Zeile steht der Zeitstempel, darauf folgt eine Leerzeile. Die "
+"Datei endet mit einer Zeile, welche die für die Ausführung benötigte Zeit "
+"angibt und einige interessante Statistiken enthält\\&. Die Statistiken sind "
+"in Abschnitte gegliedert, von denen jeder für eine von B<doclifter> "
+"verarbeitete Datei steht\\&."
+
+#. type: Plain text
+#: manlifter.1:180
+msgid ""
+"The first line of each stanza beguns with \"! \", followed by the pathname "
+"of the source manual pager, followed by \"=\" and the return status of "
+"doclifter run on that file\\&. Following that is a space and B<doclifter>"
+"\\*(Aqs runtime in seconds\\&."
+msgstr ""
+"Die erste Zeile jedes Abschnitts beginnt mit »!«, gefolgt vom Pfadnamen des "
+"Anzeigeprogramms der ursprünglichen Handbuchseite, einem »=« und dem "
+"Rückgabestatus des Doclifter-Aufrufs für diese Datei\\&. Abschließend steht "
+"ein Leerzeichen und die Ausführungszeit von B<doclifter> in Sekunden\\&."
+
+#. type: Plain text
+#: manlifter.1:182
+msgid ""
+"This initial line may be followed by information messages and the error "
+"output of the doclifter run\\&."
+msgstr ""
+"Dieser Anfangszeile können informative Meldungen und die Fehlerausgabe des "
+"Doclifter-Aufrufs folgen\\&."
+
+#. type: Plain text
+#: manlifter.1:189
+msgid ""
+"B<manlifter> must find a copy of B<doclifter> in either the current "
+"directory or one of the command directories in your B<PATH> in order to run"
+"\\&."
+msgstr ""
+"Damit B<manlifter> funktioniert, muss eine ausführbare B<doclifter>-Datei "
+"entweder im aktuellen Verzeichnis oder in den in der Variable B<PATH> "
+"aufgelisteten Verzeichnissen auffindbar sein\\&."
+
+#. type: SH
+#: manlifter.1:189
+#, no-wrap
+msgid "BUGS"
+msgstr "BUGS"
+
+#. type: Plain text
+#: manlifter.1:192
+msgid ""
+"HTML generation is painfully slow\\&. Unfortunately, there is little we can "
+"do to remedy this, because XSLT engines are painfully slow\\&."
+msgstr ""
+"Die HTML-Erzeugung ist recht langsam\\&. Unglücklicherweise kann kaum "
+"Abhilfe geschaffen werden, da XSLT-Engines furchtbar langsam sind\\&."
+
+#. type: SH
+#: manlifter.1:192
+#, no-wrap
+msgid "SEE ALSO"
+msgstr "SIEHE AUCH"
+
+#. type: Plain text
+#: manlifter.1:196
+msgid "B<doclifter>(1), B<xmlto>(1)"
+msgstr "B<doclifter>(1), B<xmlto>(1)"
+
+#. type: SH
+#: manlifter.1:196
+#, no-wrap
+msgid "AUTHOR"
+msgstr "AUTOR"
+
+#. type: Plain text
+#: manlifter.1:200
+msgid "Eric S\\&. Raymond E<lt>esr@thyrsus\\&.comE<gt>"
+msgstr "Eric S\\&. Raymond E<lt>esr@thyrsus\\&.comE<gt>"
+
+#. type: Plain text
+#: manlifter.1:202
+msgid ""
+"There is a project web page at \\m[blue]B<http://www\\&.catb\\&.org/~esr/"
+"doclifter/>\\m[]\\&."
+msgstr ""
+"Die Projektwebseite befindet sich auf \\m[blue]B<http://www\\&.catb\\&.org/"
+"~esr/doclifter/>\\m[]\\&."

@@ -1,0 +1,52 @@
+diff -ur dvipost-1.1/Makefile.in dvipost-new/Makefile.in
+--- dvipost-1.1/Makefile.in	2006-03-23 04:47:44.000000000 +0000
++++ dvipost-new/Makefile.in	2006-04-26 17:07:42.000000000 +0100
+@@ -27,14 +27,14 @@
+ INSTALL_PROGRAM= @INSTALL_PROGRAM@
+ INSTALL_DATA= @INSTALL_DATA@
+ 
+-BIN=	@bindir@
++BIN=	$(DESTDIR)@bindir@
+ 
+ # Directory to install LaTeX styles
+ 
+-LATEX=	@texpath@
++LATEX=	$(DESTDIR)@texpath@
+ 
+ MANEXT=	1
+-MANDIR=	@mandir@/man$(MANEXT)
++MANDIR=	$(DESTDIR)@mandir@/man$(MANEXT)
+ 
+ # Install names
+ 
+@@ -92,6 +92,7 @@
+ 	for p in $(NAME) $(ALIAS); do rm -f $(BIN)/$$p; done
+ 
+ install-exec: uninstall-exec
++	mkdir -p $(BIN)
+ 	$(INSTALL_PROGRAM) $(NAME) $(BIN)/$(NAME)
+ 	(cd $(BIN); for p in $(ALIAS); do rm -f $$p; $(LN) $(NAME) $$p; done)
+ 
+@@ -99,6 +100,7 @@
+ 	for p in $(NAME) $(ALIAS); do rm -f $(MANDIR)/$$p.$(MANEXT); done
+ 
+ install-man: uninstall-man
++	mkdir -p $(MANDIR)
+ 	$(INSTALL_DATA) dvipost.man $(MANDIR)/$(NAME).$(MANEXT)
+ 	(cd $(MANDIR); for p in $(ALIAS); \
+ 		do rm -f $$p.$(MANEXT); \
+@@ -107,11 +109,12 @@
+ 
+ uninstall-data:
+ 	for p in $(FILES); do rm -f $(LATEX)/$$p; done
+-	texhash
++	#texhash
+ 
+ install-data: uninstall-data
++	mkdir -p $(LATEX)
+ 	for p in $(FILES); do $(INSTALL_DATA) $$p $(LATEX)/$$p; done
+-	texhash
++	#texhash
+ 
+ distclean:: clean
+ 	rm -f config.cache config.log config.status Makefile

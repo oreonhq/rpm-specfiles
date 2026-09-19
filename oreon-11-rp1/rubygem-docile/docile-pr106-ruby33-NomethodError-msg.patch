@@ -1,0 +1,29 @@
+From 43e851bbb29fda61179543f0e217b5c3ab8f607e Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Fri, 6 Oct 2023 12:15:21 +0900
+Subject: [PATCH] TEST: support ruby 3.3 NoMethodError message
+
+ruby 3.3 changes error messages especially for NoMethodError:
+https://github.com/ruby/ruby/pull/6950
+https://bugs.ruby-lang.org/issues/18285
+
+Modify spec to support this new ruby 3.3 error messages.
+
+Closes #105 .
+---
+ spec/docile_spec.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/spec/docile_spec.rb b/spec/docile_spec.rb
+index e912f9b..b9e3ea8 100644
+--- a/spec/docile_spec.rb
++++ b/spec/docile_spec.rb
+@@ -128,7 +128,7 @@ describe Docile do
+     context 'when DSL have NoMethod error inside' do
+       it 'raise error from nil' do
+         Docile.dsl_eval(DSLWithNoMethod.new(nil)) do
+-          expect { push_element }.to raise_error(NoMethodError, /undefined method `push' (for|on) nil:NilClass/)
++          expect { push_element }.to raise_error(NoMethodError, /undefined method `push' (for|on) nil/)
+         end
+       end
+     end

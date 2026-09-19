@@ -1,0 +1,197 @@
+From e7371ed4f34fe911b8b46f0b1eeb5e24f0ac638c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 17 Jul 2025 16:07:57 +0200
+Subject: [PATCH] Adapt to CMake 4.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CMake 4.0 removed support for CMake script < 3.5:
+
+    -- Configuring incomplete, errors occurred!
+    CMake Error at CMakeLists.txt:44 (CMAKE_MINIMUM_REQUIRED):
+      Compatibility with CMake < 3.5 has been removed from CMake.
+
+This patch raises the minimal CMake version of the script to 3.5 and
+adjusts it accordingly. Unfortuntelly, there is no way to have one
+script working with CMake 3 and CMake 4. The upper limit 4.0.2 sets
+maximal tested CMake version and instructs CMake to enable the most
+modern policies rather then being stuck on 3.5 which produces many
+deprecation warning.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ CMakeLists.txt                | 11 +++--
+ src/CMakeLists.txt            | 82 +++++++++++++++++------------------
+ src/downserver/CMakeLists.txt |  6 +--
+ src/modules/CMakeLists.txt    |  4 +-
+ 4 files changed, 51 insertions(+), 52 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c261239..4d3253f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -31,6 +31,11 @@ SET ( CMAKE_DATA_PATH "${CMAKE_INSTALL_PREFIX}/share/" CACHE PATH "Data path pre
+ ###############################################################################
+ # BASIC PROJECT VALUES
+ ###############################################################################
++CMAKE_MINIMUM_REQUIRED ( VERSION 3.5.0...4.0.2 FATAL_ERROR )
++IF ( COMMAND cmake_policy )
++	cmake_policy( SET CMP0003 NEW )
++ENDIF ( COMMAND cmake_policy )
++
+ PROJECT ( tuxanci C )
+ IF ( NOT Server )
+ 	SET ( APPNAME "tuxanci-${TUXANCI_VERSION}")
+@@ -41,12 +46,6 @@ MESSAGE ( "<******************************>" )
+ MESSAGE ( "Configure for ${APPNAME} Started" )
+ MESSAGE ( "<******************************>" )
+ 
+-CMAKE_MINIMUM_REQUIRED ( VERSION 2.6.0 )
+-CMAKE_MINIMUM_REQUIRED ( VERSION 2.6.0 FATAL_ERROR )
+-IF ( COMMAND cmake_policy )
+-	cmake_policy( SET CMP0003 NEW )
+-ENDIF ( COMMAND cmake_policy )
+-
+ SET ( CMAKE_COLOR_MAKEFILE ON )
+ SET ( CMAKE_BUILD_TYPE_SHARED_LIBS ON )
+ SET ( CMAKE_C_FLAGS $ENV{CFLAGS} )
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 292333a..89f680d 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -20,58 +20,58 @@ ENDIF ( Server )
+ # directory name you want eg: base
+ # find ./ -maxdepth 1 -type f -name \*.c |grep "$" |sed -e 's/^\.\//\$\{WORKDIR\}\/DIR\//' -e 's/\.c//' |tr '\n' ' '
+ SET ( SRC_base
+-	${WORKDIR}/net/udp ${WORKDIR}/net/tcp
+-	${WORKDIR}/base/udp_server
+-	${WORKDIR}/base/main	${WORKDIR}/base/shot
+-	${WORKDIR}/base/space	${WORKDIR}/base/checkFront
+-	${WORKDIR}/base/storage	${WORKDIR}/base/myTimer
+-	${WORKDIR}/base/protect	${WORKDIR}/base/list
+-	${WORKDIR}/base/arena	${WORKDIR}/base/server
+-	${WORKDIR}/base/serverSelect	${WORKDIR}/base/serverSendMsg
+-	${WORKDIR}/base/textFile ${WORKDIR}/base/gun
+-	${WORKDIR}/base/arenaFile	${WORKDIR}/base/modules
+-	${WORKDIR}/base/net_multiplayer ${WORKDIR}/base/index
+-	${WORKDIR}/base/item	${WORKDIR}/base/tux
+-	${WORKDIR}/base/director	${WORKDIR}/base/idManager
+-	${WORKDIR}/base/homeDirector	${WORKDIR}/base/proto
+-	${WORKDIR}/base/shareFunction	${WORKDIR}/base/buffer
+-	${WORKDIR}/base/archive
+-	${WORKDIR}/net/dns
++	${WORKDIR}/net/udp.c ${WORKDIR}/net/tcp.c
++	${WORKDIR}/base/udp_server.c
++	${WORKDIR}/base/main.c	${WORKDIR}/base/shot.c
++	${WORKDIR}/base/space.c	${WORKDIR}/base/checkFront.c
++	${WORKDIR}/base/storage.c	${WORKDIR}/base/myTimer.c
++	${WORKDIR}/base/protect.c	${WORKDIR}/base/list.c
++	${WORKDIR}/base/arena.c	${WORKDIR}/base/server.c
++	${WORKDIR}/base/serverSelect.c	${WORKDIR}/base/serverSendMsg.c
++	${WORKDIR}/base/textFile.c ${WORKDIR}/base/gun.c
++	${WORKDIR}/base/arenaFile.c	${WORKDIR}/base/modules.c
++	${WORKDIR}/base/net_multiplayer.c ${WORKDIR}/base/index.c
++	${WORKDIR}/base/item.c	${WORKDIR}/base/tux.c
++	${WORKDIR}/base/director.c	${WORKDIR}/base/idManager.c
++	${WORKDIR}/base/homeDirector.c	${WORKDIR}/base/proto.c
++	${WORKDIR}/base/shareFunction.c	${WORKDIR}/base/buffer.c
++	${WORKDIR}/base/archive.c
++	${WORKDIR}/net/dns.c
+ )
+ 
+ SET ( SRC_client
+-	${WORKDIR}/client/layer	${WORKDIR}/client/term
+-	${WORKDIR}/client/screen	${WORKDIR}/client/interface
+-	${WORKDIR}/client/client	${WORKDIR}/client/chat
+-	${WORKDIR}/client/configFile	${WORKDIR}/client/saveLoad
+-	${WORKDIR}/client/font	${WORKDIR}/client/game
+-	${WORKDIR}/client/radar	${WORKDIR}/client/panel
+-	${WORKDIR}/client/image	${WORKDIR}/client/keyboardBuffer
+-	${WORKDIR}/client/pauza	${WORKDIR}/client/saveDialog
+-	${WORKDIR}/client/hotKey
++	${WORKDIR}/client/layer.c	${WORKDIR}/client/term.c
++	${WORKDIR}/client/screen.c	${WORKDIR}/client/interface.c
++	${WORKDIR}/client/client.c	${WORKDIR}/client/chat.c
++	${WORKDIR}/client/configFile.c	${WORKDIR}/client/saveLoad.c
++	${WORKDIR}/client/font.c	${WORKDIR}/client/game.c
++	${WORKDIR}/client/radar.c	${WORKDIR}/client/panel.c
++	${WORKDIR}/client/image.c	${WORKDIR}/client/keyboardBuffer.c
++	${WORKDIR}/client/pauza.c	${WORKDIR}/client/saveDialog.c
++	${WORKDIR}/client/hotKey.c
+ 
+-	${WORKDIR}/screen/screen_choiceArena
+-	${WORKDIR}/screen/screen_settingKeys	${WORKDIR}/screen/screen_table
+-	${WORKDIR}/screen/screen_setting	${WORKDIR}/screen/screen_credits
+-	${WORKDIR}/screen/screen_world	${WORKDIR}/screen/screen_analyze
+-	${WORKDIR}/screen/screen_mainMenu	${WORKDIR}/screen/screen_browser
+-	${WORKDIR}/screen/screen_gameType	${WORKDIR}/screen/screen_downArena
++	${WORKDIR}/screen/screen_choiceArena.c
++	${WORKDIR}/screen/screen_settingKeys.c	${WORKDIR}/screen/screen_table.c
++	${WORKDIR}/screen/screen_setting.c	${WORKDIR}/screen/screen_credits.c
++	${WORKDIR}/screen/screen_world.c	${WORKDIR}/screen/screen_analyze.c
++	${WORKDIR}/screen/screen_mainMenu.c	${WORKDIR}/screen/screen_browser.c
++	${WORKDIR}/screen/screen_gameType.c	${WORKDIR}/screen/screen_downArena.c
+ 
+-	${WORKDIR}/widget/widget_check	${WORKDIR}/widget/widget_button
+-	${WORKDIR}/widget/widget_textfield	${WORKDIR}/widget/widget_label
+-	${WORKDIR}/widget/widget_buttonimage	${WORKDIR}/widget/widget_image
+-	${WORKDIR}/widget/widget_select	${WORKDIR}/widget/widget_catchkey
+-	${WORKDIR}/widget/widget_choicegroup	${WORKDIR}/widget/widget
++	${WORKDIR}/widget/widget_check.c	${WORKDIR}/widget/widget_button.c
++	${WORKDIR}/widget/widget_textfield.c	${WORKDIR}/widget/widget_label.c
++	${WORKDIR}/widget/widget_buttonimage.c	${WORKDIR}/widget/widget_image.c
++	${WORKDIR}/widget/widget_select.c	${WORKDIR}/widget/widget_catchkey.c
++	${WORKDIR}/widget/widget_choicegroup.c	${WORKDIR}/widget/widget.c
+ )
+ 
+ SET ( SRC_audio
+-	${WORKDIR}/audio/audio	${WORKDIR}/audio/music
+-	${WORKDIR}/audio/sound
++	${WORKDIR}/audio/audio.c	${WORKDIR}/audio/music.c
++	${WORKDIR}/audio/sound.c
+ )
+ 
+ SET ( SRC_server
+-	${WORKDIR}/server/log	${WORKDIR}/server/serverConfigFile
+-	${WORKDIR}/server/highScore	${WORKDIR}/server/publicServer
++	${WORKDIR}/server/log.c	${WORKDIR}/server/serverConfigFile.c
++	${WORKDIR}/server/highScore.c	${WORKDIR}/server/publicServer.c
+ )
+ ###############################################################################
+ # AUDIO CHECK
+diff --git a/src/downserver/CMakeLists.txt b/src/downserver/CMakeLists.txt
+index 2a3b863..60857e3 100644
+--- a/src/downserver/CMakeLists.txt
++++ b/src/downserver/CMakeLists.txt
+@@ -12,9 +12,9 @@ ENDIF ( Win )
+ ###############################################################################
+ IF ( Server )
+ 	SET ( SRC
+-		${WORKDIR}/base/list	${WORKDIR}/base/textFile
+-		${WORKDIR}/base/buffer	${WORKDIR}/net/tcp
+-		${WORKDIR}/downserver/downServer
++		${WORKDIR}/base/list.c	${WORKDIR}/base/textFile.c
++		${WORKDIR}/base/buffer.c	${WORKDIR}/net/tcp.c
++		${WORKDIR}/downserver/downServer.c
+ 	)
+ ###############################################################################
+ # COMPILATION AND INSTALLATION ITSELF
+diff --git a/src/modules/CMakeLists.txt b/src/modules/CMakeLists.txt
+index d1bc4b0..455f19b 100644
+--- a/src/modules/CMakeLists.txt
++++ b/src/modules/CMakeLists.txt
+@@ -20,8 +20,8 @@ SET ( SRC_base_modules
+ 	${SRC_base_modules}
+ 	${WORKDIR}/base/main.h	${WORKDIR}/base/modules.h
+ 	${WORKDIR}/base/shot.h	${WORKDIR}/base/tux.h
+-	${WORKDIR}/base/list	${WORKDIR}/base/gun.h
+-	${WORKDIR}/base/space	${WORKDIR}/base/index
++	${WORKDIR}/base/list.c	${WORKDIR}/base/gun.h
++	${WORKDIR}/base/space.c	${WORKDIR}/base/index.c
+ )
+ SET ( SRC_modBasic
+ 	${SRC_base_modules}
+-- 
+2.50.1
+

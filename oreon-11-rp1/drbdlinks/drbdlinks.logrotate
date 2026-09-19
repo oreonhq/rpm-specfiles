@@ -1,0 +1,2 @@
+# Ignore possible logrotate copies caused by drbdlinks
+tabooext + .drbdlinks

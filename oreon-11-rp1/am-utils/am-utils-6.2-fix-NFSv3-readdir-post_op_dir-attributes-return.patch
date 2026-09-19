@@ -1,0 +1,53 @@
+am-utils-6.2 - fix NFSv3 readdir post_op_dir attributes return
+
+From: Ian Kent <raven@themaw.net>
+
+The NFS v3 readdir method is expected to return the attributes of
+the directory being read for both success and fail cases.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/nfs_subr.c |   15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/amd/nfs_subr.c b/amd/nfs_subr.c
+index 6a1b717..00a1dc0 100644
+--- a/amd/nfs_subr.c
++++ b/amd/nfs_subr.c
+@@ -1627,28 +1627,29 @@ am_nfs3_readdir_3_svc(am_READDIR3args *argp, struct svc_req *rqstp)
+     result.status = nfs_error(retry);
+   } else {
+     am_dirlist3 *list = &result.res_u.ok.reply;
++    nfsfattr *fattr;
++    am_fattr3 *fattr3;
+     am_nfsstat3 status;
+ 
+     if (amuDebug(D_TRACE))
+       plog(XLOG_DEBUG, "\treaddir_3(%s)", mp->am_path);
+ 
++    fattr = &mp->am_fattr;
++
+     status = mp->am_al->al_mnt->mf_ops->readdir(mp,
+ 					(voidp)&cookie, list, entries, count);
+     if (status == 0) {
+       post_op_dir = &result.res_u.ok.dir_attributes;
+-      nfsfattr *fattr;
+-      am_fattr3 *fattr3;
+-
+-      fattr = &mp->am_fattr;
+-      fattr3 = &post_op_dir->am_post_op_attr_u.attributes;
+       post_op_dir->attributes_follow = 1;
+-      fattr_to_fattr3(fattr, fattr3);
++      fattr3 = &post_op_dir->am_post_op_attr_u.attributes;
+       result.status = AM_NFS3_OK;
+     } else {
+       post_op_dir = &result.res_u.fail.dir_attributes;
+-      post_op_dir->attributes_follow = 0;
++      post_op_dir->attributes_follow = 1;
++      fattr3 = &post_op_dir->am_post_op_attr_u.attributes;
+       result.status = nfs_error(status);
+     }
++    fattr_to_fattr3(fattr, fattr3);
+ 
+     mp->am_stats.s_readdir++;
+   }

@@ -1,0 +1,35 @@
+From 9f843c41a185b8972470e8ce828cadffea936b59 Mon Sep 17 00:00:00 2001
+From: Timofey Titovets <nefelim4ag@gmail.com>
+Date: Tue, 9 May 2017 15:06:27 +0300
+Subject: [PATCH] Not schred swapfc file on ext4
+
+Signed-off-by: Timofey Titovets <nefelim4ag@gmail.com>
+---
+ systemd-swap | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/systemd-swap b/systemd-swap
+index 428b185..5bfa2ea 100644
+--- a/systemd-swap
++++ b/systemd-swap
+@@ -25,6 +25,8 @@ help(){
+     echo "$0 start|stop"
+ }
+ 
++get_fs_type(){ stat -f "$1" | grep Type: | tr -s ' ' | cut -d' ' -f7; }
++
+ ################################################################################
+ # Initialization
+ check_root_rights(){ [ "$UID" == "0" ] || ERRO "Script must be run as root!"; }
+@@ -187,7 +189,10 @@ case "$1" in
+                 chunk_size="$1" file="$2"
+                 fallocate -l "$chunk_size" "$file"
+                 # File must not contain holes for XFS/f2fs & etc
+-                shred -n1 -z "$file"
++                case "$(get_fs_type $file)" in
++                    ext4);;
++                    *) shred -n1 -z "$file" ;;
++                esac
+                 chmod 0600 "$file"
+                 mkswap "$file" &> /dev/null
+             }

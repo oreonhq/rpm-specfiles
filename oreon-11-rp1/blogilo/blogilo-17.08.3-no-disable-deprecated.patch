@@ -1,0 +1,11 @@
+diff -ur blogilo-17.08.3/CMakeLists.txt blogilo-17.08.3-no-disable-deprecated/CMakeLists.txt
+--- blogilo-17.08.3/CMakeLists.txt	2017-11-07 02:26:44.000000000 +0100
++++ blogilo-17.08.3-no-disable-deprecated/CMakeLists.txt	2020-08-03 18:00:39.450303502 +0200
+@@ -79,7 +79,6 @@
+ add_definitions(-DQT_NO_CAST_FROM_ASCII)
+ add_definitions(-DQT_NO_CAST_TO_ASCII)
+ add_definitions(-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT)
+-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000)
+ 
+ add_subdirectory(composereditorwebengine)
+ 

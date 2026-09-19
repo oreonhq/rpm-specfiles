@@ -9,7 +9,7 @@
 %global giturl  https://github.com/mojohaus/javacc-maven-plugin
 
 Name:           javacc-maven-plugin
-Version:        3.2.0
+Version:        3.2.1
 Release:        %autorelease
 Summary:        JavaCC Maven Plugin
 

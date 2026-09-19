@@ -1,0 +1,11 @@
+diff -urNp starplot-0.95.5.orig/starplot.desktop starplot-0.95.5/starplot.desktop
+--- starplot-0.95.5.orig/starplot.desktop	2008-03-05 04:35:42.000000000 +0530
++++ starplot-0.95.5/starplot.desktop	2008-06-28 00:53:00.000000000 +0530
+@@ -2,6 +2,7 @@
+ Version=1.0
+ Name=StarPlot Star Chart Viewer
+ GenericName=Star Chart Viewer
++Comment=View detailed star charts in 3D
+ Comment[en]=View detailed star charts in 3D
+ Comment[es]=Vista detallada de gráficos de estrellas en 3D
+ Type=Application

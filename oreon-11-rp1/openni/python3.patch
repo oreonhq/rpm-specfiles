@@ -1,0 +1,202 @@
+diff -rU3 OpenNI-1e9524ffd759841789dadb4ca19fb5d4ac5820e7.orig/Platform/Linux/CreateRedist/Redist_OpenNi.py OpenNI-1e9524ffd759841789dadb4ca19fb5d4ac5820e7/Platform/Linux/CreateRedist/Redist_OpenNi.py
+--- OpenNI-1e9524ffd759841789dadb4ca19fb5d4ac5820e7.orig/Platform/Linux/CreateRedist/Redist_OpenNi.py	2021-01-14 19:39:30.193759462 +0100
++++ OpenNI-1e9524ffd759841789dadb4ca19fb5d4ac5820e7/Platform/Linux/CreateRedist/Redist_OpenNi.py	2021-01-14 21:11:55.909525074 +0100
+@@ -31,7 +31,8 @@
+ import sys
+ import shutil
+ import stat
+-from commands import getoutput as gop
++from subprocess import check_output as gop
++from pathlib import Path
+ 
+ #-------------Functions--------------------------------------------------------#
+ 
+@@ -102,19 +103,17 @@
+     redistFile.close()
+     return rc
+ 
+-def fix_file(arg,dirname,fname):
++def fix_file(filePath):
+     "Fixes paths for all the files in fname"
+-    for filename in fname:
+-        filePath = dirname + "/" + filename
+-        if os.path.isdir(filePath):
+-            continue
++    if not os.path.isdir(filePath):
++        filename = filePath.name
+ 
+         ext = ['c','cpp','h','ini','cs','java']
+         if filename == "Makefile" or filename.partition(".")[2] in ext:
+-            #print "Fixing: " + filePath
+-            tempName=filePath+'~~~'
+-            input = open(filePath)
+-            output = open(tempName,'w')
++            print("Fixing: ", filePath)
++            tempName = str(filePath) + '~~~'
++            input = open(filePath, encoding='latin-1')
++            output = open(tempName, 'w', encoding='latin-1')
+             for s in input:
+                 olds = s
+                 s = re.sub(r"../../../Bin",r"../Bin",s)
+@@ -158,8 +157,8 @@
+     "Executes command and checks the return code. If it's not 0, stops redist."
+     ret = os.system(cmd)
+     if ret != 0:
+-        print "failed to execute: " + cmd
+-        print name + " Failed!"
++        print("failed to execute: " + cmd)
++        print(name + " Failed!")
+         logger.critical(name + " Failed!")
+         finish_script(1)
+         
+@@ -186,7 +185,7 @@
+     elif machinetype[:3] == "arm":
+         PLATFORM = "Arm"
+     else:
+-        print "Unknown platform:", machinetype
++        print("Unknown platform:", machinetype)
+         finish_script(1)
+ 
+     MAKE_ARGS = ''
+@@ -214,15 +213,15 @@
+ logger.setLevel(logging.INFO)
+ 
+ #------------Welcome Messege--------=------------------------------------------#
+-print "\n";
+-print "*********************************"
+-print "*   PrimeSense OpenNI Redist    *"
+-print "*     " + DateTimeSTR + "       *"
+-print "*********************************"
+-print
++print("\n");
++print("*********************************")
++print("*   PrimeSense OpenNI Redist    *")
++print("*     " + DateTimeSTR + "       *")
++print("*********************************")
++print()
+ logger.info("PrimeSense OpenNI Redist Started")
+ 
+-print "Target:", TARGET
++print("Target:", TARGET)
+ 
+ #--------------Take Version----------------------------------------------------#
+ version_file = open("../../../Include/XnVersion.h").read()
+@@ -232,14 +231,14 @@
+ build = re.search(r"define XN_BUILD_VERSION (\d+)", version_file).groups()[0]
+ 
+ version = major + "." + minor + "." + maintenance + "." + build
+-print "Version:", version
++print("Version:", version)
+ 
+-print "Num of compile jobs:", calc_jobs_number()
++print("Num of compile jobs:", calc_jobs_number())
+ 
+-print
++print()
+ 
+ #--------------Build Project---------------------------------------------------#
+-print "* Building OpenNI..."
++print("* Building OpenNI...")
+ logger.info("Building OpenNI...")
+ 
+ # Build
+@@ -248,7 +247,7 @@
+ execute_check('make ' + MAKE_ARGS + ' -C ' + SCRIPT_DIR + '/../Build > ' + SCRIPT_DIR + '/Output/Build' + PROJECT_NAME + '.txt', 'Building')
+ 
+ #--------------Doxygen---------------------------------------------------------#
+-print "* Creating Doxygen..."
++print("* Creating Doxygen...")
+ logger.info("Creating DoxyGen...")
+ os.chdir("../../../Source/DoxyGen");
+ if os.path.exists("html"):
+@@ -261,7 +260,7 @@
+ os.system("rm -rf html/*.map html/*.md5 html/*.hhc html/*.hhk html/*.hhp")
+ 
+ #-------------Create Redist Dir------------------------------------------------#
+-print "* Creating Redist Dir..."
++print("* Creating Redist Dir...")
+ logger.info("Creating Redist Dir...")
+ os.chdir(SCRIPT_DIR + "/..")
+ 
+@@ -289,7 +288,7 @@
+ os.makedirs(REDIST_DIR + "/Samples/Res")
+ 
+ #-------------Copy files to redist---------------------------------------------#
+-print "* Copying files to redist dir..."
++print("* Copying files to redist dir...")
+ logger.info("Copying files to redist dir...")
+ 
+ #license
+@@ -358,7 +357,7 @@
+     samples_list.remove("SimpleViewer.net")
+     samples_list.remove("UserTracker.net")
+ 
+-print "Samples:", samples_list
++print("Samples:", samples_list)
+ 
+ for sample in samples_list:
+     shutil.copytree("../../Samples/" + sample, REDIST_DIR + "/Samples/" + sample)
+@@ -381,17 +380,18 @@
+ os.system("find " + REDIST_DIR + "/Samples/. | grep .svn | xargs rm -rf")
+ 
+ #-----Remove Read Only Attrib--------------------------------------------------#
+-print "* Removing Read Only Attributes..."
++print("* Removing Read Only Attributes...")
+ logger.info("Removing Read Only Attributes...")
+ os.system ("chmod -R +r " + REDIST_DIR + "/*")
+ 
+ #--------Fixing Files----------------------------------------------------------#
+-print "* Fixing Files..."
++print("* Fixing Files...")
+ logger.info("Fixing Files...")
+-os.path.walk(REDIST_DIR + "/Samples",fix_file,'')
++for path in Path(REDIST_DIR + "/Samples").rglob('*'):
++    fix_file(path)
+ 
+ #-------Creating project and solutions-----------------------------------------#
+-print "* Creating Makefile..."
++print("* Creating Makefile...")
+ logger.info("Creating Makefile...")
+ 
+ MAKEFILE = open(REDIST_DIR + "/Samples/Build/Makefile", 'w')
+@@ -421,19 +421,19 @@
+ MAKEFILE.close()
+ 
+ #-------Copy install script---------------------------------------------------#
+-print "* Copying install script..."
++print("* Copying install script...")
+ logger.info("Copying install script...")
+ 
+ copy_install_script(PLATFORM, "CreateRedist/install.sh", REDIST_DIR)
+ 
+ #-------------Build Samples---------------------------------------------------#
+-print "* Building Samples in release configuration......"
++print("* Building Samples in release configuration......")
+ logger.info("Building Samples in release configuration...")
+ 
+ # Build project solution
+ execute_check("make " + MAKE_ARGS + " -C " + REDIST_DIR + "/Samples/Build " + " > "+SCRIPT_DIR+"/Output/BuildSmpRelease.txt", "Build samples in release")
+ 
+-print "* Building Samples in debug configuration......"
++print("* Building Samples in debug configuration......")
+ logger.info("Building Samples in debug configuration...")
+ 
+ # Build project solution
+@@ -445,7 +445,7 @@
+    os.system("rm -rf " + REDIST_DIR + "/Samples/"+sample+"/" + PLATFORM + "/Release")
+ 
+ #-------------Create TAR-------------------------------------------------------#
+-print "* Creating tar......"
++print("* Creating tar......")
+ logger.info("Creating tar...")
+ 
+ os.makedirs(SCRIPT_DIR+"/Final")
+@@ -456,7 +456,7 @@
+ os.chdir(SCRIPT_DIR)
+ 
+ #-------------CleanUP----------------------------------------------------------#
+-print "* Redist OpenNi Ended.   !!"
++print("* Redist OpenNi Ended.   !!")
+ logger.info("Redist OpenNi Ended.")
+ finish_script(0)
+ 

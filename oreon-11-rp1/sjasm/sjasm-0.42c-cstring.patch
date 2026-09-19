@@ -1,0 +1,43 @@
+From 0292303e47a75dd9459632c5f7875b01a0c96c7b Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 22 Nov 2022 04:16:03 +0100
+Subject: [PATCH 3/3] Include cstring
+
+  datastructures.h: In constructor ‘Data::Data(byte*, int)’:
+  datastructures.h:50:96: error: ‘memcpy’ was not declared in this scope
+     50 |   Data(byte *n_data,int n_size) : _data(0), _size(n_size), _maxsize(n_size) { _resize(n_size); memcpy(_data,n_data,n_size); }
+        |                                                                                                ^~~~~~
+  datastructures.h:1:1: note: ‘memcpy’ is defined in header ‘<cstring>’; did you forget to ‘#include <cstring>’?
+    +++ |+#include <cstring>
+      1 | /*
+  datastructures.h: In member function ‘void Data::setdata(byte*, int)’:
+  datastructures.h:52:64: error: ‘memcpy’ was not declared in this scope
+     52 |   void setdata(byte *buffer, int size) { _data=new byte[size]; memcpy(_data,buffer,size); _size=_maxsize=size; }
+        |                                                                ^~~~~~
+  datastructures.h:52:64: note: ‘memcpy’ is defined in header ‘<cstring>’; did you forget to ‘#include <cstring>’?
+  datastructures.h: In member function ‘void Data::push(const Data&)’:
+  datastructures.h:56:5: error: ‘memcpy’ was not declared in this scope
+     56 |     memcpy(_data+_size,n_data._data,n_data._size);
+        |     ^~~~~~
+  datastructures.h:56:5: note: ‘memcpy’ is defined in header ‘<cstring>’; did you forget to ‘#include <cstring>’?
+  datadir.cpp: In function ‘void piASCMAP(std::string, Data&)’:
+---
+ .sjasm.h.swo | Bin 20480 -> 20480 bytes
+ sjasm.h      |   1 +
+ 2 files changed, 1 insertion(+)
+
+diff --git a/sjasmsrc42c/sjasm.h b/sjasmsrc42c/sjasm.h
+index 9b7bb55..7fee884 100644
+--- a/sjasmsrc42c/sjasm.h
++++ b/sjasmsrc42c/sjasm.h
+@@ -66,6 +66,7 @@
+ #include <vector>
+ #include <sstream>
+ #include <iostream>
++#include <cstring>
+ 
+ using namespace std;
+ 
+-- 
+2.38.1
+

@@ -1,0 +1,15 @@
+--- wayland-protocols-wlr-0.3.10/Cargo.toml	1970-01-01T00:00:01+00:00
++++ wayland-protocols-wlr-0.3.10/Cargo.toml	2026-02-27T11:07:48.173586+00:00
+@@ -37,6 +37,12 @@
+ ]
+ license = "MIT"
+ repository = "https://github.com/smithay/wayland-rs"
++exclude = [
++    "wlr-protocols/.*",
++    "wlr-protocols/*.in",
++    "wlr-protocols/*.sh",
++    "wlr-protocols/Makefile",
++]
+ 
+ [package.metadata.docs.rs]
+ all-features = true

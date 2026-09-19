@@ -1,0 +1,30 @@
+From 1f8065f3ec5963bc7450a415c316c90c74f0f82c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 30 Sep 2015 13:11:10 +0200
+Subject: [PATCH] Disable installing dependencies from CPAN
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+File::Slurp is not needed at tests, yet auto_install will install it
+from CPAN because it's a run-time dependency.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 89401ed..d54fc37 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -28,6 +28,5 @@ build_requires  ('IPC::Run3' => '0.036');
+ 
+ use_test_base;
+ 
+-auto_install;
+ WriteAll;
+ 
+-- 
+2.4.3
+

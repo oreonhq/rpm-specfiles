@@ -1,0 +1,50 @@
+From 0fc6046148318c620012284ed9d0cdbbc88ca911 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 20 Apr 2018 13:06:09 +0200
+Subject: [PATCH] Fix SVN::Core version check
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The subversion version used numerical comparison that failed after
+upgrading subversion to 1.10.0 (1.1 >= 1.3). This patch fixes it.
+
+The patch also uses $Foo::VERSION instead of method Foo->VERSION
+because the method returns stringified value of a version object.
+
+CPAN RT #125150
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index d25f880..f1ecfd5 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -98,6 +98,9 @@ requires(
+ requires(
+     'Date::Format'             => '',
+ ) if ($^O eq 'MSWin32');
++configure_requires(
++    'version'                  => '0.77',
++);
+ build_requires(
+     'Test::More'               => '0.42',
+ );
+@@ -152,8 +155,9 @@ auto_install();
+ auto_provides();
+ WriteAll( sign => 0 );
+ 
+-$::VERSION = $required_svn;
+-die << "." unless eval {require SVN::Core; SVN::Core->VERSION >= main->VERSION };
++use version 0.77;
++$::VERSION = version->parse($required_svn);
++die << "." unless eval {require SVN::Core; $SVN::Core::VERSION >= $::VERSION };
+ ===> Warning: SVN::Core missing or outdated.
+ Please manually install SVN::Core by compiling Subversion
+ (version $required_svn or above) with SWIG/Perl bindings,
+-- 
+2.14.3
+

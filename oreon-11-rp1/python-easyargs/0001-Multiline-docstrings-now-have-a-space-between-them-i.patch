@@ -1,0 +1,52 @@
+From 11c658225c602e3d669607428fc701f2784117e0 Mon Sep 17 00:00:00 2001
+From: Sveder <m@sveder.com>
+Date: Fri, 21 Sep 2018 22:49:17 +0300
+Subject: [PATCH 1/3] Multiline docstrings now have a space between them
+ instead of merging words in the -h auto generated usage.
+
+(cherry picked from commit ec1d617f6cac6056094081fd6ce185f134d070c3)
+---
+ easyargs/parsers.py  | 3 ++-
+ test/test_parsers.py | 4 +++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/easyargs/parsers.py b/easyargs/parsers.py
+index 72e276a..8c9adea 100644
+--- a/easyargs/parsers.py
++++ b/easyargs/parsers.py
+@@ -31,8 +31,9 @@ def parser_help_text(help_text):
+         if match:
+             params_help[match.group('param')] = match.group('help').strip()
+         else:
+-            main_text += line
++            main_text += line + ' '
+ 
++    main_text = main_text.strip()
+     return main_text, params_help
+ 
+ 
+diff --git a/test/test_parsers.py b/test/test_parsers.py
+index 6183fe4..86d4c83 100644
+--- a/test/test_parsers.py
++++ b/test/test_parsers.py
+@@ -286,7 +286,8 @@ class TestParsersWithPoorFormattedArgParsers(unittest.TestCase):
+         @easyargs
+         def poor_formatting(src, _dest):
+             """
+-            Clone a repository
++            Clone a repository, but
++            with a new line
+             :    param src: the repository to clone
+             :param    _dest     : the destination for cloning
+             """
+@@ -301,6 +302,7 @@ class TestParsersWithPoorFormattedArgParsers(unittest.TestCase):
+                                             None,
+                                             True)
+ 
++        self.assertTrue('but with' in stdout)
+         self.assertTrue('usage: test_parsers [-h] src [dest]' in stdout)
+         self.assertTrue('src         the repository to clone' in stdout)
+         self.assertTrue('dest        the destination for cloning' in stdout)
+-- 
+2.35.1
+

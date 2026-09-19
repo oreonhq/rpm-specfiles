@@ -1,0 +1,26 @@
+diff -up evolutionrspam-0.6.0/src/rspam.c.gcc evolutionrspam-0.6.0/src/rspam.c
+--- evolutionrspam-0.6.0/src/rspam.c.gcc	2025-01-22 08:02:38.189231626 +0100
++++ evolutionrspam-0.6.0/src/rspam.c	2025-01-22 08:13:37.256279723 +0100
+@@ -220,8 +220,8 @@ readrazorconfig(gpointer data);
+ 
+ //spam functions wrapper
+ //for calling internal functions
+-void
+-intern_call(void (*p)(), CamelMimeMessage *msg, gchar *msgfile)
++static void
++intern_call(void (*p)(CamelMimeMessage *msg, gchar *msgfile), CamelMimeMessage *msg, gchar *msgfile)
+ {
+ 	p(msg, msgfile);
+ }
+diff -up evolutionrspam-0.6.0/src/rspam.h.gcc evolutionrspam-0.6.0/src/rspam.h
+--- evolutionrspam-0.6.0/src/rspam.h.gcc	2025-01-22 08:13:27.899186386 +0100
++++ evolutionrspam-0.6.0/src/rspam.h	2025-01-22 08:13:33.208239344 +0100
+@@ -55,8 +55,6 @@ gboolean check_discovery(void);
+ 
+ CamelStore *rspam_component_peek_local_store(void);
+ 
+-void intern_call(void (*p)(), CamelMimeMessage *msg, gchar *msgfile);
+-
+ gchar *save_message(CamelMimeMessage *msg);
+ 
+ void update_stats(gboolean command);

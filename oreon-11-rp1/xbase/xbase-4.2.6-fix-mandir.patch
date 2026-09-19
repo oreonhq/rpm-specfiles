@@ -1,0 +1,12 @@
+diff -up xbase64-4.2.6/build/linux64/CMakeLists.txt.fix-mandir xbase64-4.2.6/build/linux64/CMakeLists.txt
+--- xbase64-4.2.6/build/linux64/CMakeLists.txt.fix-mandir	2025-11-06 12:03:41.583830105 -0500
++++ xbase64-4.2.6/build/linux64/CMakeLists.txt	2025-11-06 12:03:51.233202792 -0500
+@@ -932,7 +932,7 @@ install (FILES ${PROJECT_PARENT_DIR}/doc
+                ${PROJECT_PARENT_DIR}/docs/man/xb_tblinfo.1.gz
+                ${PROJECT_PARENT_DIR}/docs/man/xb_undelall.1.gz
+ 
+-         DESTINATION man/man1)
++         DESTINATION share/man/man1)
+ 
+ ENDIF( NOT WIN32 )
+ 

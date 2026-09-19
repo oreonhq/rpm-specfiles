@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>oflb-prociono</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Prociono</name>
+  <summary>A text roman with standard and discretionary ligatures, class-based kerning</summary>
+  <description>
+    <p>
+      A serif font created by Barry Schwartz
+
+      The name is pronounced "pro-tsee-O-no" and is Esperanto for
+      either "raccoon" or the star Procyon. The author prefers to
+      think of this font as a raccoon.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://www.google.com/fonts/specimen/Prociono</url>
+</component>

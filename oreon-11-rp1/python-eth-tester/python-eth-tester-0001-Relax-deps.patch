@@ -1,0 +1,21 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 10 Jan 2025 14:56:35 +0100
+Subject: [PATCH] Relax deps
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/setup.py b/setup.py
+index 0266ae5..1d109b3 100644
+--- a/setup.py
++++ b/setup.py
+@@ -19,8 +19,8 @@ extras_require = {
+     ],
+     "test": [
+         "pytest>=7.0.0",
+-        "pytest-xdist>=2.0.0,<3",
+-        "eth-hash[pycryptodome]>=0.1.4,<1.0.0",
++        "pytest-xdist>=2.0.0",
++        "eth-hash>=0.1.4,<1.0.0",
+     ],
+     "py-evm": [
+         # Pin py-evm to a minor version range to ensure compatibility with the current

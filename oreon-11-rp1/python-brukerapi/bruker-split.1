@@ -1,0 +1,33 @@
+.TH BRUKER\-SPLIT "1" "August 2023" "" "User Commands"
+.SH NAME
+.B bruker\-split
+\(en split dataset into several sub-datasets
+.SH SYNOPSIS
+.B bruker\-split
+.RB [ \-h ]
+.BI \-i\  PATH_IN
+.RB [ \-o\ \fIPATH_OUT ]
+.RB [ \-s ]
+.RB [ \-f\ \fIFRAME_GROUP ]
+.SH OPTIONS
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.TP
+.B \-i\ \fIPATH_IN\fR, \fB\-\-input\ \fIPATH_IN
+Bruker 2dseq data set
+.TP
+.B \-o\ \fIPATH_OUT\fR, \fB\-\-output\ \fIPATH_OUT
+Folder to save split data sets
+.TP
+.B \-s\fR, \fB\-\-slice_package
+Split by slice package
+.TP
+.B \-f\ \fIFRAME_GROUP\fR, \fB\-\-frame_group\ \fIFRAME_GROUP
+Split by frame group
+.SH "SEE\ ALSO"
+.BR bruker (1)
+.P
+.BR bruker\-filter (1),
+.BR bruker\-report (1)

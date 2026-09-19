@@ -1,0 +1,40 @@
+.TH NIAAML "1" "August 2024" "" "User Commands"
+.SH NAME
+.B niaaml
+\(en \[u1F333] a command line interface for NiaAML
+.SH SYNOPSIS
+.B niaaml
+.RB [ \-h ]
+.RI [ OPTIONS ]
+.I COMMAND
+.RI [ ARGS ]...
+.SH OPTIONS
+.SS "COMMANDS"
+.TP
+.B infer
+\[u1F9BE]
+use an optimized NiaAML pipeline to make predictions.
+.IP
+See
+.BR niaaml\-infer (1).
+.TP
+.B optimize
+\[u1F52E]
+optimizes a NiaAML pipeline on a given dataset.
+.IP
+See
+.BR niaaml\-optimize (1).
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-\-install\-completion
+Install completion for the current shell.
+.TP
+.B \-\-show\-completions
+Show completion for the current shell,
+to copy it or customize the installation.
+.TP
+.B \-\-help
+Show a help message and exit.
+.SH "SEE\ ALSO"
+.BR niaaml\-infer (1),
+.BR niaaml\-optimize (1)

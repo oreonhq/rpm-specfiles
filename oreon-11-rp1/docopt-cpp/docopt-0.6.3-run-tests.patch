@@ -1,0 +1,53 @@
+From b3d909dc952ab102a4ad5a1541a41736f35b92ba Mon Sep 17 00:00:00 2001
+From: Petr Mensik <pemensik@redhat.com>
+Date: Fri, 12 Nov 2021 14:05:32 +0100
+Subject: [PATCH] Support python3 for running tests
+
+Simple change done by 2to3 python tool. Make prints compatible with both
+python3 and python2.
+
+Change default version to python3. Still can be run by python2
+run_tests.py.
+
+Signed-off-by: Petr Mensik <pemensik@redhat.com>
+---
+ run_tests.py | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/run_tests.py b/run_tests.py
+index ef723b4..b75e176 100755
+--- a/run_tests.py
++++ b/run_tests.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/env python3
+ 
+ import re
+ import sys
+@@ -56,17 +56,17 @@ def parse_test(raw):
+ 
+ 		failures += 1
+ 
+-		print "="*40
+-		print doc
+-		print ':'*20
+-		print prog, argv
+-		print '-'*20
++		print("="*40)
++		print(doc)
++		print(':'*20)
++		print(prog, argv)
++		print('-'*20)
+ 		if out:
+-			print out
+-		print error
++			print(out)
++		print(error)
+ 
+ if failures:
+-	print "%d failures" % failures
++	print("%d failures" % failures)
+ 	sys.exit(1)
+ else:
+-	print "PASS (%d)" % passes
++	print("PASS (%d)" % passes)

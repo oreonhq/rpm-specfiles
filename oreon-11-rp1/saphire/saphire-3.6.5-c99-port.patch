@@ -1,0 +1,137 @@
+diff --git a/headers/saphire/saphire_inner.h b/headers/saphire/saphire_inner.h
+index 2143e25..95f9040 100644
+--- a/headers/saphire/saphire_inner.h
++++ b/headers/saphire/saphire_inner.h
+@@ -149,6 +149,7 @@ typedef struct {
+     sClass* running_class;
+ } sRunInfo;
+ 
++BOOL statment_tree_internal_commands(sRunInfo* runinfo, sCommand* command, int* rcode, vector_obj* argv, vector_obj* blocks, sWFd* nextout, sRFd* nextin, int nexterr, int j, char* title, BOOL input, char* sname, int sline);
+ BOOL statment_tree_internal_commands_fselector(sRunInfo* runinfo, sCommand* command, int* rcode, vector_obj* argv, vector_obj* blocks, sWFd* nextout, sRFd* nextin, int nexterr, char* title, char* sname, int sline, BOOL input, int j);
+ BOOL statment_tree_internal_commands_object(sRunInfo* runinfo, sCommand* command, int* rcode, vector_obj* argv, vector_obj* blocks, sWFd* nextout, sRFd* nextin, int nexterr, char* title, char* sname, int sline, BOOL input, int j);
+ BOOL statment_tree_internal_commands_ref(sRunInfo* runinfo, sCommand* command, int* rcode, vector_obj* argv, vector_obj* blocks, sWFd* nextout, sRFd* nextin, int nexterr, char* title, char* sname, int sline, BOOL input, int j);
+@@ -297,6 +298,7 @@ BOOL statment_tree_internal_commands_condition_ge(sRunInfo* runinfo, sCommand* c
+ BOOL statment_tree_internal_commands_condition_nt(sRunInfo* runinfo, sCommand* command, int* rcode, vector_obj* argv, vector_obj* blocks, sWFd* nextout, sRFd* nextin, int nexterr, char* title, char* sname, int sline, BOOL input, int j);
+ BOOL statment_tree_internal_commands_condition_ot(sRunInfo* runinfo, sCommand* command, int* rcode, vector_obj* argv, vector_obj* blocks, sWFd* nextout, sRFd* nextin, int nexterr, char* title, char* sname, int sline, BOOL input, int j);
+ BOOL statment_tree_internal_commands_condition_ef(sRunInfo* runinfo, sCommand* command, int* rcode, vector_obj* argv, vector_obj* blocks, sWFd* nextout, sRFd* nextin, int nexterr, char* title, char* sname, int sline, BOOL input, int j);
++int statment_tree_internal_commands_write_lf(sWFd* nextout, enum eLineField lf);
+ 
+ typedef BOOL (*fInternalCommand)(sRunInfo* runinfo, sCommand* command, int* rcode, vector_obj* argv, vector_obj* blocks, sWFd* nextout, sRFd* nextin, int nexterr, char* title, char* sname, int sline, BOOL input, int j);
+ 
+@@ -663,6 +665,8 @@ void sHash_delete(sHash* self);
+ string_obj* saphire_get_hash_item(sHash* hash, char* key);
+ void saphire_put_hash_item(sHash* hash, char* key, string_obj* item);
+ void saphire_erase_hash_element(sHash* hash, char* key);
++void saphire_clear_array_element(sAry* v);
++void saphire_erase_array_element(sAry* v, int index);
+ 
+ typedef struct {
+     sStatments* mStatments;
+@@ -682,6 +686,7 @@ void burry_stack_frame(sAry* fun_argv_before, string_obj** sname_strace, int* li
+ ////////////////////////////////////////////////////////////
+ 
+ BOOL vcat_expand_env(string_obj* pipeout, char* env, vector_obj* numbers,char* sname, int line);
++int str_lflen(enum eLineField lf, char* str);
+ 
+ ////////////////////////////////////////////////////////////
+ /// from saphire_parser.c
+diff --git a/src/saphire_commands.c b/src/saphire_commands.c
+index 51fec4b..a0450da 100644
+--- a/src/saphire_commands.c
++++ b/src/saphire_commands.c
+@@ -1,3 +1,5 @@
++#define _GNU_SOURCE /* wcswidth */
++
+ #include "config.h"
+ #include <errno.h>
+ #include <time.h>
+@@ -15,6 +17,7 @@
+ #include <signal.h>
+ #include <limits.h>
+ #include <dirent.h>
++#include <wchar.h>
+ 
+ #if defined(HAVE_CURSES_H)
+ #include <curses.h>
+diff --git a/src/saphire_commands_string.c b/src/saphire_commands_string.c
+index c52fe65..ebb3e53 100644
+--- a/src/saphire_commands_string.c
++++ b/src/saphire_commands_string.c
+@@ -1,3 +1,5 @@
++#define _GNU_SOURCE /* strcasestr, asprintf */
++
+ #include "config.h"
+ #include <errno.h>
+ #include <time.h>
+@@ -15,6 +17,7 @@
+ #include <signal.h>
+ #include <limits.h>
+ #include <dirent.h>
++#include <ctype.h>
+ 
+ #if defined(HAVE_CURSES_H)
+ #include <curses.h>
+diff --git a/src/saphire_curses.c b/src/saphire_curses.c
+index 3d79fb6..6bfa095 100644
+--- a/src/saphire_curses.c
++++ b/src/saphire_curses.c
+@@ -1,3 +1,5 @@
++#define _GNU_SOURCE /* wcswidth */
++
+ #include <termios.h>
+ #include <sys/ioctl.h>
+ #include <sys/types.h>
+@@ -19,6 +21,7 @@
+ #include <curses.h>
+ #elif defined(HAVE_NCURSES_H)
+ #include <ncurses.h>
++#include <term.h>
+ #elif defined(HAVE_NCURSES_NCURSES_H)
+ #include <ncurses/ncurses.h>
+ #endif
+diff --git a/src/saphire_kanji.c b/src/saphire_kanji.c
+index 03bb46e..8cf6d6d 100644
+--- a/src/saphire_kanji.c
++++ b/src/saphire_kanji.c
+@@ -1,3 +1,5 @@
++#define _GNU_SOURCE /* wcswidth */
++
+ #include "config.h"
+ #include "saphire/saphire_debug.h"
+ #include "saphire/saphire_kanji.h"
+@@ -6,6 +8,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdio.h>
++#include <wchar.h>
+ 
+ char* gKanjiCodeString[6] = {
+     "eucjp", "sjis", "utf8", "utf8-mac", "byte", "unknown"
+diff --git a/src/saphire_main.c b/src/saphire_main.c
+index 522c480..8dcc07d 100644
+--- a/src/saphire_main.c
++++ b/src/saphire_main.c
+@@ -9,6 +9,8 @@
+ #include <sys/msg.h>
+ #include <signal.h>
+ #include <limits.h>
++#include <ctype.h>
++#include <oniguruma.h>
+ 
+ #include "saphire/saphire.h"
+ #include "saphire/saphire_inner.h"
+diff --git a/src/saphire_vm.c b/src/saphire_vm.c
+index e12772c..6a0b5f1 100644
+--- a/src/saphire_vm.c
++++ b/src/saphire_vm.c
+@@ -11,8 +11,10 @@
+ #include <sys/types.h>
+ #include <sys/ipc.h>
+ #include <sys/msg.h>
++#include <sys/stat.h>
+ #include <signal.h>
+ #include <dirent.h>
++#include <time.h>
+ 
+ #include <limits.h>
+ 

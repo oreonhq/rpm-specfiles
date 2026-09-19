@@ -1,0 +1,14 @@
+diff -Naur credcheck-4.4/Makefile credcheck-4.4_patched/Makefile
+--- credcheck-4.4/Makefile	2026-01-12 17:55:30.000000000 +0100
++++ credcheck-4.4_patched/Makefile	2026-01-19 15:02:01.191228041 +0100
+@@ -4,8 +4,8 @@
+ 
+ # Uncomment the following two lines to enable cracklib support, adapt the path
+ # to the cracklib dictionary following your distribution
+-#PG_CPPFLAGS = -DUSE_CRACKLIB '-DCRACKLIB_DICTPATH="/usr/lib/cracklib_dict"'
+-#SHLIB_LINK = -lcrack
++PG_CPPFLAGS = -DUSE_CRACKLIB '-DCRACKLIB_DICTPATH="/usr/share/cracklib/pw_dict"'
++SHLIB_LINK = -lcrack
+ 
+ PG_CPPFLAGS += -Wno-ignored-attributes -flto
+ 

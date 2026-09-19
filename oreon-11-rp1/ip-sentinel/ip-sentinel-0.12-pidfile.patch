@@ -1,0 +1,13 @@
+Index: src/arguments.c
+===================================================================
+--- src/arguments.c	(revision 487)
++++ src/arguments.c	(working copy)
+@@ -34,7 +34,7 @@
+ #endif
+ 
+ #ifndef DEFAULT_PIDFILE
+-#  define DEFAULT_PIDFILE		"/var/run/ip-sentinel.run"
++#  define DEFAULT_PIDFILE		"/var/run/ip-sentinel.pid"
+ #endif
+ 
+ #ifndef DEFAULT_LOGFILE

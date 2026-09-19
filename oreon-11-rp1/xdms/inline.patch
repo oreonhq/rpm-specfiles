@@ -1,0 +1,75 @@
+diff -Nrup a/src/u_deep.c b/src/u_deep.c
+--- a/src/u_deep.c	2006-06-25 09:30:30.000000000 -0600
++++ b/src/u_deep.c	2019-10-15 13:54:07.360163470 -0600
+@@ -17,9 +17,9 @@
+ #include "getbits.h"
+ 
+ 
+-INLINE USHORT DecodeChar(void);
+-INLINE USHORT DecodePosition(void);
+-INLINE void update(USHORT c);
++static INLINE USHORT DecodeChar(void);
++static INLINE USHORT DecodePosition(void);
++static INLINE void update(USHORT c);
+ static void reconst(void);
+ 
+ 
+@@ -98,7 +98,7 @@ USHORT Unpack_DEEP(UCHAR *in, UCHAR *out
+ 
+ 
+ 
+-INLINE USHORT DecodeChar(void){
++static INLINE USHORT DecodeChar(void){
+ 	USHORT c;
+ 
+ 	c = son[R];
+@@ -117,7 +117,7 @@ INLINE USHORT DecodeChar(void){
+ 
+ 
+ 
+-INLINE USHORT DecodePosition(void){
++static INLINE USHORT DecodePosition(void){
+ 	USHORT i, j, c;
+ 
+ 	i = GETBITS(8);  DROPBITS(8);
+@@ -171,7 +171,7 @@ static void reconst(void){
+ 
+ /* increment frequency of given code by one, and update tree */
+ 
+-INLINE void update(USHORT c){
++static INLINE void update(USHORT c){
+ 	USHORT i, j, k, l;
+ 
+ 	if (freq[R] == MAX_FREQ) {
+diff -Nrup a/src/u_heavy.c b/src/u_heavy.c
+--- a/src/u_heavy.c	2006-06-25 09:30:30.000000000 -0600
++++ b/src/u_heavy.c	2019-10-15 13:53:03.543524151 -0600
+@@ -30,8 +30,8 @@ USHORT heavy_text_loc;
+ 
+ static USHORT read_tree_c(void);
+ static USHORT read_tree_p(void);
+-INLINE USHORT decode_c(void);
+-INLINE USHORT decode_p(void);
++static INLINE USHORT decode_c(void);
++static INLINE USHORT decode_p(void);
+ 
+ 
+ 
+@@ -74,7 +74,7 @@ USHORT Unpack_HEAVY(UCHAR *in, UCHAR *ou
+ 
+ 
+ 
+-INLINE USHORT decode_c(void){
++static INLINE USHORT decode_c(void){
+ 	USHORT i, j, m;
+ 
+ 	j = c_table[GETBITS(12)];
+@@ -96,7 +96,7 @@ INLINE USHORT decode_c(void){
+ 
+ 
+ 
+-INLINE USHORT decode_p(void){
++static INLINE USHORT decode_p(void){
+ 	USHORT i, j, m;
+ 
+ 	j = pt_table[GETBITS(8)];

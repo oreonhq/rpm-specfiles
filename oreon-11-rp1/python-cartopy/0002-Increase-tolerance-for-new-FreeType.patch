@@ -1,0 +1,170 @@
+From d3d4e7a80ded257b3094d837e5133b199989b460 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Mon, 26 Feb 2018 02:42:50 -0500
+Subject: [PATCH 2/2] Increase tolerance for new FreeType
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ lib/cartopy/tests/mpl/test_examples.py        |  2 +-
+ lib/cartopy/tests/mpl/test_gridliner.py       | 19 +++++++------------
+ lib/cartopy/tests/mpl/test_mpl_integration.py |  2 +-
+ lib/cartopy/tests/mpl/test_ticks.py           | 14 +++++++++-----
+ 4 files changed, 18 insertions(+), 19 deletions(-)
+
+diff --git a/lib/cartopy/tests/mpl/test_examples.py b/lib/cartopy/tests/mpl/test_examples.py
+index a7f64ac9..404d3d83 100644
+--- a/lib/cartopy/tests/mpl/test_examples.py
++++ b/lib/cartopy/tests/mpl/test_examples.py
+@@ -37,7 +37,7 @@ def test_global_map():
+ 
+ @pytest.mark.natural_earth
+ @pytest.mark.mpl_image_compare(
+-    filename='contour_label.png', tolerance=3.9 if _MPL_38 else 0.5)
++    filename='contour_label.png', tolerance=11.2 if _MPL_38 else 0.5)
+ def test_contour_label():
+     from cartopy.tests.mpl.test_caching import sample_data
+     fig = plt.figure()
+diff --git a/lib/cartopy/tests/mpl/test_gridliner.py b/lib/cartopy/tests/mpl/test_gridliner.py
+index 66144070..3ff88139 100644
+--- a/lib/cartopy/tests/mpl/test_gridliner.py
++++ b/lib/cartopy/tests/mpl/test_gridliner.py
+@@ -130,15 +130,10 @@ def test_gridliner_specified_lines():
+     assert gl.ylocator.tick_values(None, None).tolist() == parallels
+ 
+ 
+-# The tolerance on these tests are particularly high because of the high number
+-# of text objects. A new testing strategy is needed for this kind of test.
+-grid_label_tol = 3.9
+-
+-
+ @pytest.mark.skipif(geos_version == (3, 9, 0), reason="GEOS intersection bug")
+ @pytest.mark.natural_earth
+ @pytest.mark.mpl_image_compare(filename='gridliner_labels.png',
+-                               tolerance=grid_label_tol)
++                               tolerance=15.2)
+ def test_grid_labels():
+     fig = plt.figure(figsize=(10, 10))
+ 
+@@ -211,7 +206,7 @@ def test_grid_labels():
+ @pytest.mark.skipif(geos_version == (3, 9, 0), reason="GEOS intersection bug")
+ @pytest.mark.natural_earth
+ @pytest.mark.mpl_image_compare(filename='gridliner_labels_tight.png',
+-                               tolerance=2.9)
++                               tolerance=47.1)
+ def test_grid_labels_tight():
+     # Ensure tight layout accounts for gridlines
+     fig = plt.figure(figsize=(7, 5))
+@@ -259,7 +254,7 @@ def test_grid_labels_tight():
+ 
+ @pytest.mark.mpl_image_compare(
+     filename='gridliner_constrained_adjust_datalim.png',
+-    tolerance=grid_label_tol)
++    tolerance=46.5)
+ def test_gridliner_constrained_adjust_datalim():
+     fig = plt.figure(figsize=(8, 4), layout="constrained")
+ 
+@@ -293,7 +288,7 @@ def test_gridliner_constrained_adjust_datalim():
+ @pytest.mark.skipif(geos_version == (3, 9, 0), reason="GEOS intersection bug")
+ @pytest.mark.natural_earth
+ @pytest.mark.parametrize('proj', TEST_PROJS)
+-@pytest.mark.mpl_image_compare(style='mpl20')
++@pytest.mark.mpl_image_compare(style='mpl20', tolerance=8.36)
+ def test_grid_labels_inline(proj):
+     fig = plt.figure()
+     if isinstance(proj, tuple):
+@@ -309,7 +304,7 @@ def test_grid_labels_inline(proj):
+ @pytest.mark.skipif(geos_version == (3, 9, 0), reason="GEOS intersection bug")
+ @pytest.mark.natural_earth
+ @pytest.mark.parametrize('proj', TEST_PROJS)
+-@pytest.mark.mpl_image_compare(style='mpl20', tolerance=0.79)
++@pytest.mark.mpl_image_compare(style='mpl20', tolerance=7.76)
+ def test_grid_labels_inline_usa(proj):
+     top = 49.3457868  # north lat
+     left = -124.7844079  # west long
+@@ -334,7 +329,7 @@ def test_grid_labels_inline_usa(proj):
+ @pytest.mark.natural_earth
+ @pytest.mark.skipif(geos_version == (3, 9, 0), reason="GEOS intersection bug")
+ @pytest.mark.mpl_image_compare(filename='gridliner_labels_bbox_style.png',
+-                               tolerance=grid_label_tol)
++                               tolerance=41.5)
+ def test_gridliner_labels_bbox_style():
+     top = 49.3457868  # north lat
+     left = -124.7844079  # west long
+@@ -521,7 +516,7 @@ def test_gridliner_save_tight_bbox():
+ 
+ @pytest.mark.natural_earth
+ @pytest.mark.mpl_image_compare(filename='gridliner_labels_title_adjust.png',
+-                               tolerance=grid_label_tol)
++                               tolerance=61.3)
+ def test_gridliner_title_adjust():
+     # Test that title do not overlap labels
+     projs = [ccrs.Mercator(), ccrs.AlbersEqualArea(), ccrs.LambertConformal(),
+diff --git a/lib/cartopy/tests/mpl/test_mpl_integration.py b/lib/cartopy/tests/mpl/test_mpl_integration.py
+index f1aeccdf..78866085 100644
+--- a/lib/cartopy/tests/mpl/test_mpl_integration.py
++++ b/lib/cartopy/tests/mpl/test_mpl_integration.py
+@@ -1016,7 +1016,7 @@ def test_streamplot():
+ 
+ 
+ @pytest.mark.natural_earth
+-@pytest.mark.mpl_image_compare()
++@pytest.mark.mpl_image_compare(tolerance=3.97)
+ def test_annotate():
+     """ test a variety of annotate options on multiple projections
+ 
+diff --git a/lib/cartopy/tests/mpl/test_ticks.py b/lib/cartopy/tests/mpl/test_ticks.py
+index f75ad2d2..bc0ba0b7 100644
+--- a/lib/cartopy/tests/mpl/test_ticks.py
++++ b/lib/cartopy/tests/mpl/test_ticks.py
+@@ -10,7 +10,8 @@ from cartopy.mpl.ticker import LatitudeFormatter, LongitudeFormatter
+ 
+ 
+ @pytest.mark.natural_earth
+-@pytest.mark.mpl_image_compare(filename='xticks_no_transform.png')
++@pytest.mark.mpl_image_compare(filename='xticks_no_transform.png',
++                               tolerance=6.71)
+ def test_set_xticks_no_transform():
+     ax = plt.axes(projection=ccrs.PlateCarree())
+     ax.coastlines('110m')
+@@ -21,7 +22,8 @@ def test_set_xticks_no_transform():
+ 
+ 
+ @pytest.mark.natural_earth
+-@pytest.mark.mpl_image_compare(filename='xticks_cylindrical.png')
++@pytest.mark.mpl_image_compare(filename='xticks_cylindrical.png',
++                               tolerance=7.13)
+ def test_set_xticks_cylindrical():
+     ax = plt.axes(projection=ccrs.Mercator(min_latitude=-85, max_latitude=85))
+     ax.coastlines('110m')
+@@ -40,7 +42,8 @@ def test_set_xticks_non_cylindrical():
+ 
+ 
+ @pytest.mark.natural_earth
+-@pytest.mark.mpl_image_compare(filename='yticks_no_transform.png')
++@pytest.mark.mpl_image_compare(filename='yticks_no_transform.png',
++                               tolerance=3.75)
+ def test_set_yticks_no_transform():
+     ax = plt.axes(projection=ccrs.PlateCarree())
+     ax.coastlines('110m')
+@@ -51,7 +54,8 @@ def test_set_yticks_no_transform():
+ 
+ 
+ @pytest.mark.natural_earth
+-@pytest.mark.mpl_image_compare(filename='yticks_cylindrical.png')
++@pytest.mark.mpl_image_compare(filename='yticks_cylindrical.png',
++                               tolerance=4.37)
+ def test_set_yticks_cylindrical():
+     ax = plt.axes(projection=ccrs.Mercator(min_latitude=-85, max_latitude=85))
+     ax.coastlines('110m')
+@@ -72,7 +76,7 @@ def test_set_yticks_non_cylindrical():
+ 
+ 
+ @pytest.mark.natural_earth
+-@pytest.mark.mpl_image_compare(filename='xyticks.png')
++@pytest.mark.mpl_image_compare(filename='xyticks.png', tolerance=7.19)
+ def test_set_xyticks():
+     fig = plt.figure(figsize=(10, 10))
+     projections = (ccrs.PlateCarree(),
+-- 
+2.50.0
+

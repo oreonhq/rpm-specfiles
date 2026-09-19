@@ -1,0 +1,30 @@
+From e984a5974463a3a0780bbddd445a9394dfd4dd8a Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 28 Feb 2025 08:33:34 -0500
+Subject: [PATCH 2/2] Replace tests_require with a "test" extra
+
+---
+ setup.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 90f43a8..957be1c 100755
+--- a/setup.py
++++ b/setup.py
+@@ -184,10 +184,10 @@ setup(
+         "cffi>=1.0.0",
+         "six>=1.4.1",
+     ],
+-    tests_require=[
+-        "pytest",
+-    ],
+     extras_require={
++        "test": [
++            "pytest",
++        ],
+         "docstest": [
+             "doc8",
+             "readme_renderer >= 16.0",
+-- 
+2.48.1
+

@@ -1,0 +1,20 @@
+Incorrect pointer argument in sftp_panel_change_time
+
+The sftp_utimes function expects a struct const timeval *, not a
+pointer to an array of two elements.
+
+Submitted upstream: <https://github.com/FabLeo451/lterm/pull/2>
+
+diff --git a/src/sftp-panel.c b/src/sftp-panel.c
+index 36845823e984a027..f03f7e69616b9f55 100755
+--- a/src/sftp-panel.c
++++ b/src/sftp-panel.c
+@@ -1486,7 +1486,7 @@ run_dialog:
+             ////////////////////////////////
+             lockSSH (__func__, TRUE);
+ 
+-            rc = sftp_utimes (p_ssh_current->ssh_node->sftp, file_abs_path, &newFileTime);
++            rc = sftp_utimes (p_ssh_current->ssh_node->sftp, file_abs_path, newFileTime);
+ 
+             lockSSH (__func__, FALSE);
+             ////////////////////////////////

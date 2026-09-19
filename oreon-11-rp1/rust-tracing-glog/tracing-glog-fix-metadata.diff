@@ -1,0 +1,23 @@
+--- tracing-glog-0.4.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ tracing-glog-0.4.1/Cargo.toml	2025-07-19T16:59:18.711115+00:00
+@@ -63,10 +63,6 @@
+ name = "tokio_compact"
+ path = "examples/tokio_compact.rs"
+ 
+-[[example]]
+-name = "yak-shave"
+-path = "examples/yak-shave.rs"
+-
+ [dependencies.chrono]
+ version = "0.4.20"
+ 
+@@ -102,9 +98,6 @@
+ [dev-dependencies.anyhow]
+ version = "1"
+ 
+-[dev-dependencies.structopt]
+-version = "0.3"
+-
+ [dev-dependencies.thiserror]
+ version = "1"
+ 

@@ -1,0 +1,30 @@
+--- a/libgda/sql-parser/lemon.c~	2020-11-08 14:23:20.000000000 -0600
++++ b/libgda/sql-parser/lemon.c	2025-01-27 14:49:51.198611608 -0600
+@@ -70,7 +70,7 @@
+ static struct action *Action_sort(struct action *);
+ 
+ /********** From the file "build.h" ************************************/
+-void FindRulePrecedences();
++void FindRulePrecedences(struct lemon *);
+ void FindFirstSets();
+ void FindStates();
+ void FindLinks();
+--- a/libgda/sql-parser/lemon.c~	2025-01-27 15:12:58.292567611 -0600
++++ b/libgda/sql-parser/lemon.c	2025-01-27 15:14:33.853011549 -0600
+@@ -71,11 +71,11 @@
+ 
+ /********** From the file "build.h" ************************************/
+ void FindRulePrecedences(struct lemon *);
+-void FindFirstSets();
+-void FindStates();
+-void FindLinks();
+-void FindFollowSets();
+-void FindActions();
++void FindFirstSets(struct lemon *);
++void FindStates(struct lemon *);
++void FindLinks(struct lemon *);
++void FindFollowSets(struct lemon *);
++void FindActions(struct lemon *);
+ 
+ /********* From the file "configlist.h" *********************************/
+ void Configlist_init(void);

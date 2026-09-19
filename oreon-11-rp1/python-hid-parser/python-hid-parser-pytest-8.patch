@@ -1,0 +1,68 @@
+From d36074df265df981268ecdbe526d68d5f1f41b57 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dirk=20M=C3=BCller?= <dirk@dmllr.de>
+Date: Wed, 20 Nov 2024 11:27:21 +0100
+Subject: [PATCH] Avoid typeerror exception on tests
+
+when running with pytest 8.3.3 on python 3.13 tests fail with
+
+  TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
+
+turns out the way to check that no warnings are emitted is not
+warns(None).
+---
+ tests/test_items.py | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/tests/test_items.py b/tests/test_items.py
+index 47e5c4a..f0ae13f 100644
+--- a/tests/test_items.py
++++ b/tests/test_items.py
+@@ -5,7 +5,7 @@
+ import pytest
+ 
+ import hid_parser
+-
++import warnings
+ 
+ def test_baseitem():
+     item = hid_parser.BaseItem(1, 2)
+@@ -129,14 +129,18 @@ def test_variableitem_compliance():
+     with pytest.warns(hid_parser.HIDComplianceWarning):
+         hid_parser.VariableItem(1, 2, 0, hid_parser.Usage(0x0001, 0x0001), -1, 1)
+ 
+-    with pytest.warns(None):
++    with warnings.catch_warnings():
+         hid_parser.VariableItem(1, 2, 0, hid_parser.Usage(0x0001, 0x0030), -1, 1)
++        warnings.simplefilter("error")
+ 
+-    with pytest.warns(None):
++    with warnings.catch_warnings():
+         hid_parser.VariableItem(1, 2, 0, hid_parser.Usage(0x0001, 0x0000), -1, 1)
++        warnings.simplefilter("error")
+ 
+-    with pytest.warns(None):
++    with warnings.catch_warnings():
+         hid_parser.VariableItem(1, 2, 0, hid_parser.Usage(0x0000, 0x0000), -1, 1)
++        warnings.simplefilter("error")
++
+ 
+ 
+ def test_arrayitem():
+@@ -178,11 +182,14 @@ def test_arrayitem_compliance():
+     with pytest.warns(hid_parser.HIDComplianceWarning):
+         hid_parser.ArrayItem(1, 2, 1, 0, usages, -1, 1)
+ 
+-    with pytest.warns(None):
++    with warnings.catch_warnings():
+         hid_parser.ArrayItem(1, 2, 1, 0, usages, -1, 1)
++        warnings.simplefilter("error")
+ 
+-    with pytest.warns(None):
++    with warnings.catch_warnings():
+         hid_parser.ArrayItem(1, 2, 1, 0, usages, -1, 1)
++        warnings.simplefilter("error")
+ 
+-    with pytest.warns(None):
++    with warnings.catch_warnings():
+         hid_parser.ArrayItem(1, 2, 1, 0, usages, -1, 1)
++        warnings.simplefilter("error")

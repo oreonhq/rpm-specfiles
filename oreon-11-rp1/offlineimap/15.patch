@@ -1,0 +1,109 @@
+From 656ac288b0a800009ceb15a4afe16d70f173fb09 Mon Sep 17 00:00:00 2001
+From: Pi-Yueh Chuang <pychuang@pm.me>
+Date: Fri, 26 Feb 2021 00:02:11 -0500
+Subject: [PATCH 1/2] add __version__ to __all__ for python 3 version
+
+---
+ imaplib2/imaplib2.py3 | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/imaplib2/imaplib2.py3 b/imaplib2/imaplib2.py3
+index 9de6702..b543fc8 100755
+--- a/imaplib2/imaplib2.py3
++++ b/imaplib2/imaplib2.py3
+@@ -16,7 +16,7 @@ Public functions: Internaldate2Time
+ 
+ __all__ = ("IMAP4", "IMAP4_SSL", "IMAP4_stream",
+            "Internaldate2Time", "ParseFlags", "Time2Internaldate",
+-           "Mon2num", "MonthNames", "InternalDate")
++           "Mon2num", "MonthNames", "InternalDate", "__version__")
+ 
+ __version__ = "3.06"
+ __release__ = "3"
+@@ -1370,7 +1370,7 @@ class IMAP4(object):
+             self.ouq.put(rqb)
+             return rqb
+ 
+-        # Must setup continuation expectancy *before* ouq.put 
++        # Must setup continuation expectancy *before* ouq.put
+         crqb = self._request_push(name=name, tag='continuation')
+ 
+         self.ouq.put(rqb)
+@@ -2554,7 +2554,7 @@ if __name__ == '__main__':
+             run('id', ())
+             run('id', ("(name imaplib2)",))
+             run('id', ("version", __version__, "os", os.uname()[0]))
+- 
++
+         for cmd,args in test_seq2:
+             if (cmd,args) != ('uid', ('SEARCH', 'SUBJECT', 'IMAP4 test')):
+                 run(cmd, args)
+
+From b9eaaf6aed4f314ea06b849556ad8aa23a9f698b Mon Sep 17 00:00:00 2001
+From: Pi-Yueh Chuang <pychuang@pm.me>
+Date: Fri, 26 Feb 2021 10:04:18 -0500
+Subject: [PATCH 2/2] remove direct access to the module's __version__; add
+ version()
+
+---
+ imaplib2/imaplib2.py3 | 26 +++++++++++++++++++++++---
+ 1 file changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/imaplib2/imaplib2.py3 b/imaplib2/imaplib2.py3
+index b543fc8..babc614 100755
+--- a/imaplib2/imaplib2.py3
++++ b/imaplib2/imaplib2.py3
+@@ -16,7 +16,7 @@ Public functions: Internaldate2Time
+ 
+ __all__ = ("IMAP4", "IMAP4_SSL", "IMAP4_stream",
+            "Internaldate2Time", "ParseFlags", "Time2Internaldate",
+-           "Mon2num", "MonthNames", "InternalDate", "__version__")
++           "Mon2num", "MonthNames", "InternalDate", "version")
+ 
+ __version__ = "3.06"
+ __release__ = "3"
+@@ -138,6 +138,26 @@ Commands = {
+ UID_direct = ('SEARCH', 'SORT', 'THREAD')
+ 
+ 
++def version(use_tuple=False):
++    """Return the version of this module.
++
++    Arguments
++    ---------
++    use_tuple : bool
++        Whether to return a string or a tuple of (major, minor). When True, the major and minor in the tuple will be
++        integers rather than strings.
++
++    Returns
++    -------
++    The version.
++    """
++
++    if use_tuple:
++        return (int(__release__), int(__revision__))
++
++    return __version__
++
++
+ def Int2AP(num):
+ 
+     """string = Int2AP(num)
+@@ -1370,7 +1390,7 @@ class IMAP4(object):
+             self.ouq.put(rqb)
+             return rqb
+ 
+-        # Must setup continuation expectancy *before* ouq.put
++        # Must setup continuation expectancy *before* ouq.put 
+         crqb = self._request_push(name=name, tag='continuation')
+ 
+         self.ouq.put(rqb)
+@@ -2554,7 +2574,7 @@ if __name__ == '__main__':
+             run('id', ())
+             run('id', ("(name imaplib2)",))
+             run('id', ("version", __version__, "os", os.uname()[0]))
+-
++ 
+         for cmd,args in test_seq2:
+             if (cmd,args) != ('uid', ('SEARCH', 'SUBJECT', 'IMAP4 test')):
+                 run(cmd, args)

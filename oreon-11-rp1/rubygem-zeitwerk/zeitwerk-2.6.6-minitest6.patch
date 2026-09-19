@@ -1,0 +1,11 @@
+diff -urp '--exclude=*~' zeitwerk-2.6.6.orig/test/test_helper.rb zeitwerk-2.6.6/test/test_helper.rb
+--- zeitwerk-2.6.6.orig/test/test_helper.rb	2025-12-27 14:18:48.928964310 +0900
++++ zeitwerk-2.6.6/test/test_helper.rb	2025-12-27 14:43:58.366232652 +0900
+@@ -1,6 +1,7 @@
+ # frozen_string_literal: true
+ 
+ require "minitest/autorun"
++require "minitest/mock"
+ require "minitest/focus"
+ 
+ require "minitest/reporters"

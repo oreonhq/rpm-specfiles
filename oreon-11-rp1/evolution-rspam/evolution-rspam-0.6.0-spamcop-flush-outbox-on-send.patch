@@ -1,0 +1,24 @@
+diff -up evolution-rspam-0.6.0/src/rspam.c.12 evolution-rspam-0.6.0/src/rspam.c
+--- evolution-rspam-0.6.0/src/rspam.c.12	2025-01-07 10:52:04.033075926 +0100
++++ evolution-rspam-0.6.0/src/rspam.c	2025-01-07 10:55:08.390703982 +0100
+@@ -54,6 +54,9 @@
+ #include <libemail-engine/mail-tools.h>
+ #include <shell/es-event.h>
+ #endif
++#if EVOLUTION_VERSION >= 30303
++#include <mail/mail-send-recv.h>
++#endif
+ 
+ #include <shell/e-shell-view.h>
+ #include <mail/e-mail-reader.h>
+@@ -767,7 +770,9 @@ spamcop_report(CamelMimeMessage *msg, gc
+ 			G_PRIORITY_DEFAULT, NULL,
+ 			NULL, NULL);
+ #endif
+-		/*composer_send_queued_cb*/
++#if EVOLUTION_VERSION >= 30303
++		mail_send (session);
++#endif
+ 
+ 		update_stats(1);
+ 	}

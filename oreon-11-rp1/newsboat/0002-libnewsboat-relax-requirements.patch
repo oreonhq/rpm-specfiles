@@ -1,0 +1,67 @@
+From 41330ab27a61890a9c81c4fe3309a8ade8c4bf86 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jan=20Stan=C4=9Bk?= <jstanek@redhat.com>
+Date: Tue, 14 Jan 2025 15:31:26 +0100
+Subject: [PATCH] libnewsboat: relax requirements
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jan Staněk <jstanek@redhat.com>
+Signed-off-by: rpm-build <rpm-build>
+---
+ rust/libnewsboat/Cargo.toml | 12 ++++++------
+ rust/regex-rs/Cargo.toml    |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/rust/libnewsboat/Cargo.toml b/rust/libnewsboat/Cargo.toml
+index d8f1318..ea8633f 100644
+--- a/rust/libnewsboat/Cargo.toml
++++ b/rust/libnewsboat/Cargo.toml
+@@ -9,7 +9,7 @@ strprintf = { path="../strprintf" }
+ regex-rs = { path="../regex-rs" }
+ 
+ fastrand = "2.3.0"
+-url = "2.5.8"
++url = "2.5.7"
+ percent-encoding = "2.3.2"
+ xdg = "3.0.0"
+ backtrace = "= 0.3"
+@@ -17,20 +17,20 @@ unicode-width = "0.2.2"
+ nom = "8"
+ libc = "0.2"
+ natord = "1.0.9"
+-md5 = "0.8.0"
+-lexopt = "0.3.2"
++md5 = "0.7.0"
++lexopt = "0.3.1"
+ chrono = "0.4.44"
+ unicode-segmentation = "1.12.0"
+-regex = "1.12.3"
++regex = "1.12.2"
+ 
+ [dependencies.gettext-rs]
+-version = "0.7.7"
++version = "0.7.2"
+ # Don't let the crate build its own copy of gettext; force it to use the one
+ # built into glibc.
+ features = [ "gettext-system" ]
+ 
+ [dependencies.curl-sys]
+-version = "0.4.85"
++version = "0.4.84"
+ # This disables the only default feature, "ssl". It doesn't affect the
+ # functionality, since it can't affect the libcurl.so available on the host.
+ #
+diff --git a/rust/regex-rs/Cargo.toml b/rust/regex-rs/Cargo.toml
+index d510e9d..acbe359 100644
+--- a/rust/regex-rs/Cargo.toml
++++ b/rust/regex-rs/Cargo.toml
+@@ -12,4 +12,4 @@ strprintf = { path="../strprintf" }
+ 
+ bitflags = "2.11"
+ libc = ">=0.2.69"
+-gettext-rs = "0.7.7"
++gettext-rs = "0.7.2"
+-- 
+2.53.0
+

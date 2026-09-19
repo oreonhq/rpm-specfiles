@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8e4575a50d37a6259b7c4381c4243d0a05d64847c620c5af58c34a83ae6ce38b
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kmahjongg
 Summary: A tile matching game
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ and GFDL - review is highly recommended.

@@ -1,0 +1,96 @@
+From 941a0027855ae2d55b6672a692a750a33a0d3260 Mon Sep 17 00:00:00 2001
+From: Carlos Rodriguez-Fernandez <carlosrodrifernandez@gmail.com>
+Date: Mon, 11 Mar 2024 20:20:39 -0700
+Subject: [PATCH] remove use of deprecated inet_aton and inet_ntoa
+
+---
+ daemon.c | 43 +++++++++++++++++++++++++++++++------------
+ 1 file changed, 31 insertions(+), 12 deletions(-)
+
+diff --git a/daemon.c b/daemon.c
+index 449caca..4d9f078 100644
+--- a/daemon.c
++++ b/daemon.c
+@@ -90,6 +90,8 @@ static struct {
+ };
+ #define COMMANDS (sizeof(commandInfo)/sizeof(commandInfo[0]))
+ 
++#define ADDR_LEN 64
++
+ static command_t lookup_command( int argc, const char **argv )
+ {
+    size_t i;
+@@ -199,7 +201,7 @@ static int daemon_check_mask(const char *spec, const char *ip)
+ {
+    char           *tmp = alloca(strlen(spec) + 1);
+    char           *pt;
+-   char           tstring[64], mstring[64];
++   char           tstring[ADDR_LEN], mstring[ADDR_LEN];
+    struct in_addr target, mask;
+    int            bits;
+    unsigned long  bitmask;
+@@ -216,11 +218,18 @@ static int daemon_check_mask(const char *spec, const char *ip)
+       return DICT_DENY;
+    }
+    
+-   inet_aton(ip, &target);
+-   inet_aton(tmp, &mask);
++
++   if (inet_pton(AF_INET, ip, &target) < 1) {
++      log_info( ":E: Unable to parse '%s' as an IPv4 address\n", ip);
++      return DICT_DENY;
++   }
++   if (inet_pton(AF_INET, tmp, &mask) < 1) {
++      log_info( ":E: Unable to parse '%s' as an IPv4 address\n", tmp);
++      return DICT_DENY;
++   }
+    bits = strtol(pt, NULL, 10);
+-   strcpy(tstring, inet_ntoa(target));
+-   strcpy(mstring, inet_ntoa(mask));
++   inet_ntop(AF_INET, &target, tstring, ADDR_LEN);
++   inet_ntop(AF_INET, &mask, mstring, ADDR_LEN);
+    if (bits < 0 || bits > 32) {
+       log_info( ":E: Bit count (%d) out of range, denying access to %s\n",
+                 bits, ip);
+@@ -240,7 +249,7 @@ static int daemon_check_range(const char *spec, const char *ip)
+ {
+    char           *tmp = alloca(strlen(spec) + 1);
+    char           *pt;
+-   char           tstring[64], minstring[64], maxstring[64];
++   char           tstring[ADDR_LEN], minstring[ADDR_LEN], maxstring[ADDR_LEN];
+    struct in_addr target, min, max;
+    
+    strcpy(tmp, spec);
+@@ -258,13 +267,23 @@ static int daemon_check_range(const char *spec, const char *ip)
+       log_info( ":E: Misformed range %s, denying access to %s\n", spec, ip);
+       return DICT_DENY;
+    }
++
++   if (inet_pton(AF_INET, ip, &target) < 1) {
++      log_info( ":E: Unable to parse '%s' as an IPv4 address\n", ip);
++      return DICT_DENY;
++   }
++   if (inet_pton(AF_INET, tmp, &min) < 1) {
++      log_info( ":E: Unable to parse '%s' as an IPv4 address\n", tmp);
++      return DICT_DENY;
++   }
++   if (inet_pton(AF_INET, pt, &max) < 1) {
++      log_info( ":E: Unable to parse '%s' as an IPv4 address\n", pt);
++      return DICT_DENY;
++   }
+    
+-   inet_aton(ip, &target);
+-   inet_aton(tmp, &min);
+-   inet_aton(pt, &max);
+-   strcpy(tstring, inet_ntoa(target));
+-   strcpy(minstring, inet_ntoa(min));
+-   strcpy(maxstring, inet_ntoa(max));
++   inet_ntop(AF_INET, &target, tstring, ADDR_LEN);
++   inet_ntop(AF_INET, &min, minstring, ADDR_LEN);
++   inet_ntop(AF_INET, &max, maxstring, ADDR_LEN);
+    if (ntohl(target.s_addr) >= ntohl(min.s_addr)
+        && ntohl(target.s_addr) <= ntohl(max.s_addr)) {
+       PRINTF(DBG_AUTH,("%s in range from %s to %s\n",
+-- 
+2.44.0
+

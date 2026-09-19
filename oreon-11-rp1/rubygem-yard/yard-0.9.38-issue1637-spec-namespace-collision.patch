@@ -1,0 +1,16 @@
+diff --git a/spec/tags/types_explainer_spec.rb b/spec/tags/types_explainer_spec.rb
+index de7454d3..5eb72d47 100644
+--- a/spec/tags/types_explainer_spec.rb
++++ b/spec/tags/types_explainer_spec.rb
+@@ -5,10 +5,9 @@ RSpec.describe YARD::Tags::TypesExplainer do
+   CollectionType = YARD::Tags::TypesExplainer::CollectionType
+   FixedCollectionType = YARD::Tags::TypesExplainer::FixedCollectionType
+   HashCollectionType = YARD::Tags::TypesExplainer::HashCollectionType
+-  Parser = YARD::Tags::TypesExplainer::Parser
+ 
+   def parse(types)
+-    Parser.new(types).parse
++    YARD::Tags::TypesExplainer::Parser.new(types).parse
+   end
+ 
+   def parse_fail(types)

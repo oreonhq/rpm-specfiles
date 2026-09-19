@@ -1,0 +1,12 @@
+diff -up Module-Install-Authority-0.03/Makefile.PL.orig Module-Install-Authority-0.03/Makefile.PL
+--- Module-Install-Authority-0.03/Makefile.PL.orig	2017-05-16 16:44:57.030023108 +0200
++++ Module-Install-Authority-0.03/Makefile.PL	2017-05-16 16:45:51.519796326 +0200
+@@ -22,7 +22,7 @@ resources repository => 'git://github.co
+ # Load ourself in author mode so that the dist META.yml always
+ # gets generated with the latest version of the code.
+ if ($Module::Install::AUTHOR) {
+-    require 'lib/Module/Install/Authority.pm';
++    require './lib/Module/Install/Authority.pm';
+ }
+ 
+ authority 'cpan:BOBTFISH';

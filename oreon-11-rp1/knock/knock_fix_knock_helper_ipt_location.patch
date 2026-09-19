@@ -1,0 +1,11 @@
+--- Makefile.am.old	2015-12-14 20:30:12.971111620 +0000
++++ Makefile.am	2015-12-14 20:30:23.504304924 +0000
+@@ -7,7 +7,7 @@
+ 
+ if BUILD_KNOCKD
+ sbin_PROGRAMS = knockd
+-dist_sbin_SCRIPTS = src/knock_helper_ipt.sh
++libexec_SCRIPTS = src/knock_helper_ipt.sh
+ man_MANS += doc/knockd.1
+ sysconf_DATA = knockd.conf
+ endif

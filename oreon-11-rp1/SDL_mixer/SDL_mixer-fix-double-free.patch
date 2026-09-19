@@ -1,0 +1,33 @@
+From 23b6289224edb24fcb8266fce9647822b69c4298 Mon Sep 17 00:00:00 2001
+From: Sam Lantinga <slouken@libsdl.org>
+Date: Sun, 12 Feb 2012 17:58:22 -0500
+Subject: [PATCH] Fixed 1418 - crash on double free if loading WAV file failed
+
+---
+ mixer.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/mixer.c b/mixer.c
+index 2f283844..ecb5da91 100644
+--- a/mixer.c
++++ b/mixer.c
+@@ -610,13 +610,15 @@ Mix_Chunk *Mix_LoadWAV_RW(SDL_RWops *src, int freesrc)
+ 			break;
+ 		default:
+ 			SDL_SetError("Unrecognized sound file type");
+-			return(0);			
++			if ( freesrc ) {
++				SDL_RWclose(src);
++			}
++			loaded = NULL;
++			break;
+ 	}
+ 	if ( !loaded ) {
++		/* The individual loaders have closed src if needed */
+ 		SDL_free(chunk);
+-		if ( freesrc ) {
+-			SDL_RWclose(src);
+-		}
+ 		return(NULL);
+ 	}
+ 

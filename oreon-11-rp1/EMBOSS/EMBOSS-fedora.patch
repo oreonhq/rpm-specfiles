@@ -1,0 +1,15 @@
+diff -up jemboss/resources/jemboss.properties.fedora jemboss/resources/jemboss.properties
+--- jemboss/resources/jemboss.properties.fedora	2010-07-02 07:19:55.000000000 -0400
++++ jemboss/resources/jemboss.properties	2010-08-02 17:18:45.298144756 -0400
+@@ -4,8 +4,8 @@ server.public=https://jemboss.hgmp.mrc.a
+ server.private=https://jemboss.hgmp.mrc.ac.uk:8443/axis/services
+ service.public=JembossAuthServer
+ service.private=JembossAuthServer
+-embossData=/packages/emboss/STABLE/share/EMBOSS/data/
+-embossBin=/packages/emboss/STABLE/bin/
++embossData=/usr/share/EMBOSS/data/
++embossBin=/usr/bin/
+ embossPath=/usr/bin:/bin:/packages/clustal/:/packages/primer3/bin:/data/jobqueue/bin/:/usr/ucb/
+-acdDirToParse=/packages/emboss/STABLE/share/EMBOSS/acd/
++acdDirToParse=/usr/share/EMBOSS/acd/
+ embossURL=http://emboss.sourceforge.net/

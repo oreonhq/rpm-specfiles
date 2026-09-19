@@ -1,0 +1,92 @@
+.TH HATCH\-ENV\-RUN "1" "August 2024" "" "User Commands"
+.SH NAME
+.B hatch\ env\ run
+\(en Run commands within project environments
+.SH SYNOPSIS
+.B hatch\ env\ run
+.RI [ OPTIONS ]
+.RI ARGS...
+.SH DESCRIPTION
+The
+.BR \-e\ / \-\-env
+option overrides the equivalent root option and the
+.B HATCH_ENV
+environment variable.
+.P
+The
+.BR \-i \ /\  \-\-include
+and
+.BR \-x \ /\  \-\-exclude
+options may be used to include or exclude certain variables,
+optionally followed by specific comma-separated values,
+and may be selected multiple times.
+.SH OPTIONS
+.TP
+.B \-e\fR, \fB\-\-env\ \fITEXT
+The environments to target
+.TP
+.B \-i\fR, \fB\-\-include\ \fITEXT
+The matrix variables to include
+.TP
+.B \-x\fR, \fB\-\-exclude\ \fITEXT
+The matrix variables to exclude
+.TP
+.B \-f\fR, \fB\-\-filter\ \fITEXT
+The JSON data used to select environments
+.TP
+.B \-\-force\-continue
+Run every command and if there were any errors exit
+with the first code
+.TP
+.B \-\-ignore\-compat
+Ignore incompatibility when selecting specific environments
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH NOTES
+The inclusion option is treated as an intersection
+while the exclusion option is treated as a union
+i.e. an environment must match all of the included variables
+to be selected
+while matching any of the excluded variables
+will prevent selection.
+.SH EXAMPLES
+If you have the following configuration:
+.TP
+.in +4n
+.EX
+.B [[tool.hatch.envs.test.matrix]]
+.B python\ =\ ["3.9",\ "3.10"]
+.B version\ =\ ["42",\ "3.14",\ "9000"]
+.EE
+.in
+.P
+then running:
+.P
+.in +4n
+.EX
+.B hatch\ env run\ \-i\ py=3.10\ \-x\ \-version=9000\ test:pytest
+.EE
+.in
+.P
+would execute
+.B pytest
+in the environments
+.B test.py3.10\-42
+and
+.BR test.py3.10\-3.14 .
+Note that
+.B py
+may be used as an alias for
+.BR python .
+.SH "SEE ALSO"
+.BR hatch\-run (1)
+.P
+.BR hatch\-env\-create (1),
+.BR hatch\-env\-find (1),
+.BR hatch\-env\-prune (1),
+.BR hatch\-env\-remove (1),
+.BR hatch\-env\-show (1)
+.P
+.BR hatch\-env (1),
+.BR hatch (1)

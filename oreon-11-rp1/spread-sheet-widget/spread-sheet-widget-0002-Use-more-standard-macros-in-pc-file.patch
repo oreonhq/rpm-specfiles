@@ -1,0 +1,21 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 12 Feb 2019 18:24:34 +0300
+Subject: [PATCH] Use more standard macros in pc-file
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/spread-sheet-widget.pc.in b/spread-sheet-widget.pc.in
+index 2b68fce..a40579b 100644
+--- a/spread-sheet-widget.pc.in
++++ b/spread-sheet-widget.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@prefix@
+-exec_prefix=${prefix}
+-libdir=${exec_prefix}/lib
+-includedir=${prefix}/include
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
+ 
+ Name: spread-sheet-widget
+ Description: A spreadsheet widget for Gtk+

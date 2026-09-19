@@ -1,0 +1,10 @@
+--- minicomputer-1.4.1/editor/Memory.cpp	2009-11-19 04:46:01.000000000 +0000
++++ minicomputer-1.4.1.new/editor/Memory.cpp	2012-01-09 00:15:47.627802482 +0000
+@@ -16,6 +16,7 @@
+  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ #include "Memory.h"
++#include <unistd.h>
+ /**
+  * constructor
+  */

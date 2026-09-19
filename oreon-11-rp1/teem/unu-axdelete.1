@@ -1,0 +1,42 @@
+.TH UNU\-AXDELETE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-axdelete \- remove one or more singleton axes from a
+.I nrrd
+.SH SYNOPSIS
+.B unu\ axdelete
+.BR \-a , \-\-axis
+.RI < axis >
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Remove one or more singleton axes from a
+.IR nrrd .
+Singleton axes have only a single sample along them.
+The underlying linear ordering of the samples is unchanged, and the information
+about the other axes is shifted downwards as needed.
+As a total hack, if you give \-1 as the axis, this will do a matlab-style
+\(lqsqueeze\(rq, in which any and all singleton axes are removed.
+.IP \(bu +2n
+Uses
+.B nrrdAxesDelete
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIaxis\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxis\fR>
+dimension (axis index) of the axis to remove
+.RI ( unsigned\ int )
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-axmerge (1)

@@ -1,0 +1,39 @@
+From 42442db78751ce8d7cb8113b925205b076a0695b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 10 Jun 2021 12:43:49 +0200
+Subject: [PATCH] Place temporary files into a writable location
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+check_header() failed if called from a read-only location:
+
+$ cd /
+$ perl -e 'use Alien::SDL; Alien::SDL::check_header(q{SDL.h})'
+[SDL.h] Testing header(s): Error in tempfile() using template aaXXXX.c: Could not create temp file aam5Xl.c: Permission denied at /usr/share/perl5/vendor_perl/Alien/SDL.pm line 243.
+
+Using a temporary directory attempts to place the files into
+a temporary location designated by a system. That location (e.g. /tmp)
+is usually writable.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Alien/SDL.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/Alien/SDL.pm b/lib/Alien/SDL.pm
+index 582ef27..b06976e 100644
+--- a/lib/Alien/SDL.pm
++++ b/lib/Alien/SDL.pm
+@@ -240,7 +240,7 @@ sub check_header {
+   }
+ 
+   my $cb = ExtUtils::CBuilder->new( quiet => 1, config => $config );
+-  my ($fs, $src) = File::Temp::tempfile('aaXXXX', SUFFIX => '.c', UNLINK => 1);
++  my ($fs, $src) = File::Temp::tempfile('aaXXXX', SUFFIX => '.c', TMPDIR => 1, UNLINK => 1);
+   my $inc = '';
+   my $i = 0;
+   foreach (@header) {
+-- 
+2.31.1
+

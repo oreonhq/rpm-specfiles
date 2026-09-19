@@ -1,0 +1,836 @@
+simcoupe contains a few rom patches to modify the original samcoupe rom to
+support booting from harddisks, these patches were taken from B-DOS, and are
+used under the following license:
+
+"The B-DOS code and B-DOS information are FREEWARE. This is a
+fully functional DOS and there are no silly restrictions whatso
+ever. Please pas it on to other SAM users."
+
+This license is taken from the B-DOS Version 1.5a readme, which
+at the time this note was written (25-04-2008) can be found here:
+http://home.wanadoo.nl/edwin.blink/samcoupe/software/bdos/bdosinfo.htm
+
+And which is reproduced in full below:
+
+===============================================================
+B-DOS Version 1.5a Information         1997/1998 by Edwin Blink.
+
+Last updated : 11/11/1998
+
+The contents of this file is ment for the above B-DOS version.
+Contents may be different from previous B-DOS info versions.
+
+The B-DOS code and B-DOS information are FREEWARE. This is a
+fully functional DOS and there are no silly restrictions whatso
+ever. Please pas it on to other SAM users.
+
+              Enjoy B-DOS.
+
+                        Edwin Blink.
+
+=B-DOS History ================================================
+
+Version 1.5a
+============
+
+B-DOS info screen can be deactivated.
+
+When B-DOS is booted.All system vectors are resetted to their
+default values,ESC key enabled NMI enabled,ROM font restored
+and mode 4 screen selected.
+
+Implementation of decimal point command.
+
+On DIRs the device from which the directory is made from is
+printed at the top left.(Floppy,Master or Slave Dir.)
+
+Copy command ignores also protected or hidden MDOS DIR
+filetypes
+
+Version 1.4e
+============
+
+Directory head prints 'Record x,recordname' instead of
+'Drive x,record x,recordname'. So it all fits in 32 characters.
+
+RESTORE DEVICE now uses a soft harddisk reset instead of a hard-
+ware reset.
+
+Version 1.4d
+============
+
+hookcodes HSVBK,HVEBK,HLDBK,SBYT,LBYTE and HCFSM work correctly
+
+Version 1.4C
+============
+
+Rewrote SAMBUS Read clock routine using a SAMBUS (thanx Malcolm)
+and data sheets. Uses double read technique without holding the
+clock.
+
+Version 1.4B
+============
+
+RECORD 0 is possible without a harddisk connected.
+
+The "READ RECORD LIST" example in this info text will read the
+record list correct if current RECORD is > 1.
+
+
+Version 1.4A
+============
+Faster end of dir detection for COPY/HIDE/PROTECT/ERASE commands
+
+RENAME bug removed. Caused the Invalid record or file not found
+error in some cases (directly after BOOT) when renaming a file
+on hard disk.
+
+Wildcard bug removed. A wildcard like "*.?" only 'saw' a file
+matching that wildcard if the file length is less than 256
+sectors. (ie DIR 1,"*.?" would not print a file like
+"BUG.S" if its length is longer than 255 sectors).
+This bug was imported from SAMDOS (also resident in masterdos)
+
+Version 1.4
+===========
+
+Reports 'No such drive' error if a hard disk speciffic command
+is executed and no hard disk is available.
+
+Allowes the use of RECORD 0 to use floppy disk
+New hookcode HRECORD to select a record from Machine code.
+
+Command LOAD n selects the current device to prevent incorrect
+loading. Previously it LOADed from the last drive used and if
+it was used directly after BOOT the SAM migth crash. This was
+A imported SAMDOS bug.
+
+Check disk timeout after 1.2 Seconds.
+
+Hookcodes HRSAD and HWSAD work correctly.(didn't work version
+1.3)
+
+BOOT bug fixed.(Version 1.3: Loaded a different sector if a
+sector error occured during BOOTing).
+
+Version 1.3 (Date 16/03/98)
+===========================
+
+Floppy disk format improved verify and error reporting if a
+bad sector is detected.
+
+SNAPSHOT save options work correctly.
+
+MasterDos directory type ignored by copy command.
+
+Version 1.3
+=============
+
+New auto hard disk detection. (the 5TH one !!!)
+
+Auto SAMBUS / DALLAS clock detection
+
+Auto date stamping.
+
+Current date and time printed at the start of a directory.
+
+** Introduction ***********************************************
+
+B-DOS Is an improved SAMDOS. B-DOS was mainly written to use
+with a hard disk (using the internal hard disk interface).
+However B-DOS can also be used without a hard disk but it only
+works with one diskdrive.
+
+a few B-DOS features:
+
+- Faster verify (as fast as loading).
+- VERIFY AT sector command
+- Faster FORMAT (Formating a disk takes about 66 seconds).
+- Disks can be named with a 16 character name (file names not).
+- Date stamping.
+
+HARD DISK
+=========
+
+To make using a hard disk as user friendly as possible. The
+hard disk works like a virtual second disk drive. The storage
+capacity of a hard disk is deviced into 800K blocks. Such a 800K
+block is called a record and has the same format as a floppy
+disk. (10 sectors per track, 80 tracks and 2 sides).
+A record can be selected by number or by name.
+
+= BOOTING =====================================================
+
+When B-DOS is booted, the B-DOS logo is displayed and B-DOS
+Checks if a SAMBUS clock or a DALLAS clock is connected to the
+SAM. If so B-DOS will be set to use the clock for date stamping
+and date and time will be displayed at the top of each
+directory.
+
+After the clock test B-DOS will do a hard disk test. If a hard
+disk is detected. The hard disk specifications and the total
+number of available records is displayed.
+
+The DOS variables are automatically set to use the hard disk.
+So no manual settings are required.
+If a harddisk is connected but is not reconized. Try press 'R'
+when the B-DOS logo is still on the screen otherwise enter:
+BOOT 1 or CALL DVAR 35.
+
+DATE STAMPING
+=============
+
+B-DOS supports date stamping files. If a SAMBUS clock or a
+DALLAS clock is connected. If no clock is connected the date
+and time can be poked manually in DVARS 39 to 43 to to date
+stamp a file.
+The day,month year,hour and minute are saved with a file.
+Date and time are displayed in a directory if the screen mode
+3 is active and bit 0 of DVAR 38 is set to 1.
+
+Using date and time can be done by peeking at DVARS 39 to
+DVARS 44. The clock is read and the DVARS are updated whenever
+DVAR 39 is addressed.
+
+EXAMPLE:
+
+10 PRINT AT 0,0; PEEK DVAR 39;"/";PEEK DVAR 40;"/";1900+PEEK
+DVAR 41;" ";PEEK DVAR 42;":";PEEK DVAR 43;":";PEEK DVAR 44;"  "
+20 IF INKEY$="" THEN GOTO 10
+
+This small program will print the date and time at the top left
+of the screen and is printed again until a key is pressed.
+
+= BDOS BASIC COMMANDS =========================================
+
+Note. All between brackets is optional and should be entered
+      Without the brackets.
+
+Example: DIR 1 (!) Enter: DIR 1 or: DIR 1!
+
+Decimal point      loads and runs a special code file from the
+.filename          command record (DVAR 32) without changing
+                   current device and record. The file is
+                   loaded to the current activated screen and
+                   executed. During loading the screen is
+                   disabled. The file name should be entered
+                   without quotes. Because of this spaces
+                   within the filename are ignored.
+                   (t e s t file=testfile)
+
+- Hard disk power management (motor control) ------------------
+
+DEVICE ON          Puts the hard disk in idle mode (Motor on).
+
+DEVICE ON,n        As above and sets the APD counter (Auto
+                   Power Down). The hard disk enters stand-by
+                   mode when the time set by the APD counter
+                   has elapsed.
+                   n=0 disable APD counter
+                   n=12/240 APD active after n * 5 seconds.
+                   Note. The APD commands may work different
+                   or not work at all with some hard disks.
+
+DEVICE OFF         Puts the hard disk in stand-by mode
+                   (Motor off) Idle mode is entered as
+                   soon as a new command is issued.
+
+DEVICE OFF,n       As above and sets the APD counter.
+
+DEVICE STOP        Puts hard disk in sleep mode (motor
+                   off and hard disk is no longer access-
+                   able. Also DEVICE D2 is set to 'not
+                   available' and the DEVICE is set to D1
+                   Use DEVICE ON to re-activate.
+
+RESTORE DEVICE     Resets hard disk logic and selects DEVICE D2
+
+- RECORDs -----------------------------------------------------
+
+A record must be selected before it can be used. A record can
+be selected by:
+
+RECORD n      Selects record number 'n' as permanent record
+RECORD "name" Selects record named "name" as permanet record
+RECORD 0      Selects Floppy. (Same as DEVICE D1)
+
+Before a record is selected and DEVICE D2 is set a test is
+made if that record is available to B-DOS. (Records can be
+reserved for other uses). The 'Invalid record' report will
+be given if a record is not available to B-DOS.(See FORMAT
+for more info)
+
+RECORD can be used in combination with other commands. In such
+a case a record is only selected to be used by that command and
+can be in three forms: RECORD, RECORD n or RECORD "name".
+If RECORD 0 is used the floppy disk is used instead of the hard
+disk (Same as "D1:*").
+
+To make things easier The RECORD keyword can be entered at once
+by pressing SYMBOL Z.
+
+Records and disks can also be named with a name up to 16
+characters (See RENAME).
+The following command. Can be used to list all records with a
+name:
+
+RECORD           Will list all named records with their record
+                 number. Record names which start with a CHR$ 0
+                 (no name) will not be displayed.
+RECORD (#s)      Same as above but output to stream s
+RECORD (3s),"*"  Same as above but using wildcarts
+
+- Directory ---------------------------------------------------
+
+DIR                      DIR only or DIR added with '!' at the
+DIR drive (!)            end will perform a short directory
+DIR RECORD (!)           (filenames printed only). In all other
+DIR drive,"*" (!)        cases a detailed directory will be
+DIR RECORD ,"*" (!)      displayed.
+DIR #stream,drive (!)
+DIR #stream,RECORD (!)
+DIR #stream,drive,"*" (!)
+DIR #stream,RECORD,"*" (!)
+
+RECORD may be:  'RECORD'only, 'RECORD n' or 'RECORD "name"'
+
+The file number of a file is printed in inverse if that file
+is protected.
+In screen mode 3 the execute address of a CODE file is also
+printerd (third number)
+If BIT 0 of DVAR 38 and screen mode 3 Date and time will be
+printed if the file has a valid date.
+
+- Erasing files -----------------------------------------------
+
+ERASE "filename" (?)      Erases normal file
+ERASE OVER "filename" (?) Erases a protected file
+
+(?) will activate 'Erase "" (Y/N/C/E) ?' request for each file
+to copy press Y to copy the file, N to skip the file,C to cont-
+inue copying without the request, E to end the command. Any
+other key will be seen as 'N'
+
+- Protecting files/records ------------------------------------
+
+PROTECT "filename"            Protects a file
+PROTECT OFF "filename"        Unprotects a file
+
+PROTECT RECORD \n\"name"      Software write protect to protect
+                              a complete record against any
+                              write operation (FORMAT too)
+PROTECT OFF RECORD \n\"name"  Removes record write protect
+
+- Hiding files ------------------------------------------------
+
+HIDE "filename"      "filename" will not be displayed in a DIR.
+HIDE OFF "filename"  To undo a HIDE
+
+LOAD n             LOAD a file by number. As given in a detail-
+                   ed DIR.
+
+- Sector commands ---------------------------------------------
+
+READ AT d,t,s,a,n    Reads 'n' sectors from drive 'd' starting
+                     at track 't',sector 's' to ram at 'a'
+
+Note 'n' must be in the range of 16384 to 540671. All sector
+formats (128/256/512 or 1024) can be read. However multiple
+sectors will only work correctly with standard disk format.
+(10 sectors per track numbered 1 to 10).
+
+WRITE AT d,t,s,a,n   Writes sectors to disk. See READ AT also.
+
+VERIFY AT d,t,s,a,n  Checks if contents of sectors is the same
+                     as in ram. See READ AT also.
+
+- Renaming files/records --------------------------------------
+
+RENAME "oldname" to "newname" Renames "oldname" to "newname"
+                              Note. The new name can be the
+                              same as the old name to allow
+                              Case changes.
+
+RENAME TO "Label"             Renames a disk/record to
+                              "Label"
+RENAME RECORD TO "label"      Renames record to "Label"
+
+(RECORD can be: RECORD, RECORD n or RECORD "name")
+
+ Use CHR$ 0 as "label" to remove a disk/record name
+
+Note. There is no check if records have the same name.
+
+- FORMATTING DISKS/RECORDS ------------------------------------
+
+FORMAT (OVER) (RECORD) ("name")
+
+OVER            Formats immediately without request message
+RECORD  may be: RECORD Formats last selected record
+                RECORD n Formats record number n
+                RECORD "name" Formats record named "name"
+"name" names disk/record with name "name". If 1st chr of name
+       is a CHR$ 0 or no name is given, the disk/record will
+       not be named.
+
+Important !!!!
+--------------
+
+A device specifier ("D1:*") is not allowed inside the name.
+the name. Use RECORD 0 for "D1:" and RECORD for "D2:"
+
+Before a disk is formatted a check is made if the disk has
+been formatted before and if so 'FORMAT "" (Y/N)' is displayed
+B-DOS formats both sides at the same track at once (SAMDOS/
+MASTERDOS formats all tracks on side first and then side two).
+Which makes a format faster. According to my real time clock
+it took 65 seconds to format/verify a floppy disk.
+
+Note.1 Hard disks are hard sectored and can not be formatted.
+       B-DOS will fill all 1600 sectors in a record with zeros
+       instead.
+
+Note.2 B-DOS sets an BDOS ID in the first directory entry.
+       Before a record is selected a check is made for this ID.
+       If the ID is not there. The record is not selected.
+       This allows records to be reserved for non B-DOS use.
+
+To select a record without a ID you can DPOKE the record number
+directly in DVAR 25. and do a POKE DVAR 27,0: to disable a
+posible software write protect from the last selected record.
+To set the ID in that record you can enter FORMAT OVER or
+RENAME TO CHR$ 0 (or any other name you like).
+
+- COPYING FILES -----------------------------------------------
+
+COPY (OVER) source TO target (?)
+
+(OVER) Will inhibit the 'OVERWRITE "" (Y/N)' request if a file
+on the target disk/record has the same name as the file to copy
+
+(?) will activate 'COPY "" (Y/N/C/E) ?' request for each file
+to copy press Y to copy the file, N to skip the file,C to cont-
+inue copying without the request, E to end the command. Any
+other key will be seen as 'N'
+
+source and target may be any of the following:
+
+"*"               ;All files using the current device.
+"d1:*"            ;All files using drive 1
+"d2:*"            ;All files using current hard disk record
+RECORD            ;As above
+RECORD,"*"        ;As above
+RECORD 1          ;As above but using record 1
+RECORD 1,"*"      ;As above
+RECORD "name"     ;As above but using record named "name"
+RECORD "name","*" ;As above
+
+"*" May be replaced with a string to copy selected files.
+
+- ZX FILES and SNAPSHOTS --------------------------------------
+
+B-DOS prevents ZX files to be in the first directory entry
+(the one starting with number one in a detailed directory).
+The first directory entry holds part of the disk/record name
+at the same place as ZX file info.(As with masterdos. However
+masterdos allowes ZX files to be in the first directory entry).
+a ZX file with corrupted file info will be corrected by B-DOS
+when copied.
+
+SNAPSHOTS
+
+loading 48K SNAPSHOTS works as with SAMDOS/MASTERDOS. Before
+loading them the emulator files 'skelt.bin' and 'snapt.bin'must
+be loaded in memory before loading a snapshot. Use LOAD n to
+load a SNAPSHOT.
+When the break button is pressed while A SNAPSHOT is running.
+The border will change and waits for one of the following keys
+to be pressed:
+
+'2' return to SNAPSHOT
+'3' Save screen  to Floppy (or to hard disk if'SHIFT' pressed)
+'4' Save SNAPSHOT to Floppy(or to hard disk if 'SHIFT' pressed)
+'X' Return to SAM basic
+
+CALL MODE 1 in basic to return to the SNAPSHOT again.
+
+= ERROR CODES =================================================
+
+Some BDOS error reports are sligthly different from those used
+by SAMDOS and MasterDOS. The number between brackets is the
+report number used by SAMDOS and MasterDOS.
+
+1       Out of memory.            There are no pages available
+                                  for the COPY command to use
+                                  as a copy buffer.
+
+18 (89) Invalid file name         The file name or record name
+                                  was a null string or too long
+
+20 (91) Invalid device.           A unknown device is selected.
+
+21 (90) Invalid stream number     the stream number was not in
+                                  the range of 0 to 15.
+
+29     Not understood.            General syntax error.
+
+30     Integer out of range.      The RAM address of a READ /
+                                  WRITE or VERIFY AT command.
+                                  was smaller than 16384.
+
+55 (87) Missing Disk.             There is no disk inserted in
+                                  the floppy disk drive.
+
+81      Invalid record.           The record selected does not
+                                  Exist or is no BDOS format.
+
+82      Record not found          Record could not be selected
+                                  by name. Because the name is
+                                  not in use.
+
+83      Trk .. Sct .. not found   The sector .. at track ..
+                                  does not exist (any longer).
+
+84      ESC requested             ESC key was pressed during a
+                                  disk operation.
+
+85      Trk .. Sct .. error       Sector .. at track .. could
+                                  not be read.
+
+86      Trk .. Sct .. lost        Sector .. at track .. is
+                                  damaged.
+
+93      Verify failed             File contents is not the same
+                                  as in memory.
+
+94      Wrong file type           The file could not be handled
+                                  by the command.
+
+101     No AUTO file              There is no AUTO file on the
+                                  disk.
+
+103     No such drive.            The drive selected does not
+                                  exist.
+
+104     Disk is proteced.         Floppy disk or record is
+                                  write protected.
+
+105     Not enoug space on disk   There is not enough disk
+                                  space left to store the file.
+
+106     Directory full            The 80 directory slots are all
+                                  being used.
+
+107     File not found.           The file doesn't exist.
+
+108     End of file               File is corrupted or track
+                                  0 sector 0 was selected.
+
+109     File name used            File name already exists.
+
+= DVARS (DOS VARIABLES) =======================================
+
+DVARS 0,1,2,5 and 7 are compatible with SAMDOS and masterdos.
+All other DVARS are B-DOS speciffic.
+
+0   1 Border mask 0=no border change,1-7 border changed
+1   1 Drive 1 data (normaly 208 for 2*80 tracks)
+2   1 Drive 2 data (208 if hard disk connected may be less
+      if last record is selected)
+3   1 Default device chr. Set when BDOS has been booted
+4   1 Default device no. Set when BDOS has been booted
+5   1 Space replacement character (DIR).
+6   1 Drive data last record available.
+7   1 Version number devided by 10 minus 10 (version 1.1 = 1)
+8   1 Hard disk base sector of current record
+9   1 Hard disk number of sectors per track + 1
+10  1 Hard disk base head of current record
+11  1 Hard disk number of heads
+12  2 Hard disk base cylinder of current record
+14  2 Hard disk number of cylinders
+16  2 Hard disk heads * sectors
+18  2 Total number of sectors on hard disk MOD 65536
+20  1 Total number of sectors on hard disk / 65536
+21  2 Number of reserved sectors on hard disk for BOOT sector
+      and RECORD list. Equal to INT ((records+63)/32))
+      May be altered to access the Record names list. This DVAR
+      must be restored to its old value before the hard disk is
+      used again.
+23  2 Total number of records available
+25  2 current record selected. May be DPOKEd manually to select
+      a record. The write protect status of a record is not
+      updated if this DVAR is DPOKEd.
+27  1 Write protect status of current record. Note only updated
+      If a record is selected using the RECORD command.
+28  2 Temporarely record number
+30  2 Alternative record number
+32  2 Record number used by decimal point command
+34  1 Hard disk select (&A0 Master/&B0 slave)
+35  3 Call this dvar to re initialize Master/slave hard disk.
+      RECORD 1:POKE DVAR 34,&B0: CALL DVAR 35 to use slave
+      hard disk.
+38  1 Date flag bit 0 = 1 Prints dates on a detailed directory
+      in screen mode 3
+      bit 7 when set disables B-DOS info screen.
+39  1 Day     DVARS 39/43 are used to date stamp a file if day
+40  1 Month               <> 0. All values are decimal.
+41  1 Year    (2000=100)
+42  1 Hour
+43  1 Minutes
+44  1 Seconds
+
+Note: When DVAR 39 (Day) is addressed from basic or hook code
+HVAR the clock is read and DVARS 39 to 44 are updated.
+
+To make access the DVARS from machine code a bit easier, the
+address of DVAR 0 is stored at the first 2 bytes in the DOS
+page. This address points to location C in memory (&8000-&BFFF)
+
+example:      LD  a,(&5BC2)
+              OUT  (&FB),A
+              LD   HL,(&8000)
+              LD   BC,7           ;DVAR 7
+              ADD  HL,BC
+              LD   A,(HL)         ;A=B-DOS version number
+
+
+= HOOK CODES ==================================================
+
+B-DOS offers several hook codes including the SAMDOS hookcodes
+
+
+All other codes which are not included in this list. Are
+ignored by B-DOS (Just a RETurn from DOS).
+The hook codes followed with a 'B' are B-DOS speciffic. A 'M'
+indicates compatibility with Masterdos. All other hookcodes are
+compatible with both SAMDOS and Masterdos.
+
+128 &80       INIT   Same as HAUTO
+
+129 &81       HGTHD  Get file header.IX points to a tape like
+                     header (file name at IX+1 to IX+14).
+                     file name may include "D1:" or "D2:"
+                     The loaded header can be found at &4B50 in
+                     the system page.
+
+
+130 &82       HLOAD  Load data from from file which is selected
+                     with HGTHD.
+                     Destination page paged at location C
+                     Destination offset (32768 - 49151)
+                     C  =length in 16K pages (0 - 31)
+                     DE =Modulo length (0 - 16383)
+
+131 &83       HVERY  Verify data from from file which is
+                     selected with HGTHD.
+                     Destination page paged at location C
+                     Destination offset (32768 - 49151)
+                     C  =length in 16K pages (0 - 31)
+                     DE =Modulo length (0 - 16383)
+
+132 &84       HSAVE  Save file. IX should point to a 48 bytes
+                     header containing type, name and file
+                     specific information.
+
+134 &86   B   HVMSAD Verify multiple sectors
+                     A = drive number
+                     D = track, E=sector
+                     C = memory page
+                     HL = memory offset (32768 to 49151)
+                     IX = number of sectors
+                     Multiple sectors only works with 512 bytes
+                     sectors.
+
+135 &87   B   HDINIT Re-initialize B-DOS,prints BDOS logo
+                     re-inits clock,hard disk and DVARS.
+
+136 &88       HAUTO  Loads "AUTO*" file. The "AUTO*" file
+                     can be BASIC or CODE type
+
+139 &8B       HVAR   Expects the DVAR number on the calculator
+                     stack. Restacks the basic address of the
+                     required DVAR.
+                     If dvar 39 is addressed the clock DVARS
+                     are updated.
+                     B-DOS also puts the DVAR offset in the
+                     1st two bytes of the DOS page.(See DVARS)
+
+147 &43       HOFLE  Open a new file. IX points to a 48 byte
+                     header and 9 header bytes are saved to the
+                     file. Before using this hook poke &5BB9
+                     with 0 to overite existing file.
+
+148 &44       HSBYT  Save Byte in the A register to the file
+                     opened with HOFLE.
+
+149 &45       HWSAD  Write a single sector.
+                     A=drive number
+                     D = track, E=sector
+                     HL =memory address (16384 to 65024)
+
+150 &46       HSVBK  Save a Block to file opened with HOFLE.
+                     saves A pages and DE bytes from page
+                     selected in location C starting at HL.
+                     Hl points also to location C in memory.
+                     Note that this hookcode must be used only
+                     in location B (&4000 to &7FFF).
+
+152 &48       HCFSM  Close file sector map. Closes the file
+                     opened with HOFLE and the file is made
+                     in the directory.
+
+154 &9A               Reserved ...
+155 &9B               Reserved ...
+
+156 &9C   B   HRECORD Select a record. If A = 0 then select
+                      record number HL. Else select record by.
+                      name. HL points to the 16 char. name.
+
+157 &9D   B   HVEBK  Verifies a block. See HSVBK for more
+                     details.
+
+158 &9E       HGFLE  Get file ...
+
+159 &9F   B   HLBYT  Load byte in D register from file.
+
+160 &A0       HRSAD  Read sector
+                     A=drive number
+                     D = track, E=sector
+                     HL =memory address (16384 to 65024)
+
+161 &A1       HLDBK  Load a block from file. See HSVBK for
+                     more details.
+
+162 &A2   M   HMRSAD Read Multiple sectors
+                     A = drive number
+                     D = track, E=sector
+                     C = memory page
+                     HL = memory offset (32768 to 49151)
+                     IX = number of sectors
+                     Multiple sectors only works with 512 bytes
+                     sectors.
+
+163 &A3   M   HMWSAD Write multiple sectors
+                     A = drive number
+                     D = track, E=sector
+                     C = memory page
+                     HL = memory offset (32768 to 49151)
+                     IX = number of sectors
+                     Multiple sectors only works with 512 bytes
+                     sectors.
+
+164 &A4       HREST  Restores last used drive head to track 0
+                     ignored by hard disk
+
+165 &A5       HDIR   Clears the screen and outputs a directory
+                     to screen.
+                     A register: =2 short dir,= 4 detailed dir
+
+166 &A6       HERAZ  Erase file which name is at IX+1 to IX+10
+
+= COMPATIBILITY NOTES =========================================
+
+Programms which POKE or CALL  directly into SAMDOS will not
+work correctly with B-DOS and B-DOS can not be joined with
+Masterbasic.
+
+= Some Tips ===================================================
+
+To detect if B-DOS is in memory:
+--------------------------------
+
+IF PEEK DVAR 7<20 THEN PRINT "B-DOS BOOTed"
+
+Test if a hard disk present
+===========================
+
+IF DPEEK DVAR 23 THEN PRINT "Hard disk present"
+
+Test if a hard disk is in sleep mode
+------------------------------------
+
+IF NOT PEEK DVAR 2 AND DPEEK DVAR 23 THEN PRINT "Zzz Zzz"
+
+
+To format a non B-DOS record to B-DOS format.
+---------------------------------------------
+
+10 DPOKE DVAR 25,record number
+20 FORMAT OVER
+
+record number =min. 1, max. DPEEK DVAR 23
+
+To Quick format a (non format) record (Clears directory only)
+------------------------------------------------------------
+
+10 MODE 4: CLS # : LET SCR=((IN 252 BAND 31)+1)*16384
+20 DPOKE DVAR 25,record number
+30 WRITE AT 2,0,1,scr,40
+40 RENAME TO name$
+
+record number = min. 1, max. DPEEK DVAR 23
+name$=CHR$ 0 for no name or anything else for a name
+
+To quick copy a full disk or RECORD
+-----------------------------------
+
+10  CLEAR 81919
+20  RECORD source
+30  READ AT PEEK SVAR 7,0,1,81920,800
+40  RECORD target
+50  WRITE AT PEEK SVAR 7,0,1,81920,800
+60  VERIFY AT PEEK SVAR 7,0,1,81920,800
+70  RENAME TO name$
+80  RECORD source
+90  READ AT PEEK SVAR 7,128,1,81920,800
+100 RECORD target
+110 WRITE AT PEEK SVAR 7,128,1,81920,800
+120 VERIFY AT PEEK SVAR 7,128,1,81920,800
+
+source,target= 0 for floppy any other for a hard disk record
+name$ = CHR$ 0 for no name,anything else for a name
+
+Get record number from record name
+----------------------------------
+
+10 RECORD name$
+20 LET number = DPEEK DVAR 25
+
+To read the Record LIST
+-----------------------
+
+10 LET BASE=DPEEK DVAR 21
+20 LET OLD_RCD=DPEEK DVAR 25
+30 ON ERROR GOTO 70
+40 DPOKE DVAR 21,0
+50 DPOKE DVAR 25,1
+60 READ AT 2,0,2,81920,BASE-1
+70 DPOKE DVAR 25,OLD_RCD
+80 DPOKE DVAR 21,BASE
+90 ON ERROR STOP
+
+The first 16 bytes at 81920 is the name of record 1,the next 16
+bytes of record 2, Etc. Etc.
+A CHR$ 0 as a first character indicates the record has no name.
+
+To read the BOOT SECTOR
+-----------------------
+
+10 LET BASE=DPEEK DVAR 21
+20 LET OLD_RCD=DPEEK DVAR 25
+30 ON ERROR GOTO 70
+40 DPOKE DVAR 21,0
+50 DPOKE DVAR 25,1
+60 READ AT 2,0,1,81920
+70 DPOKE DVAR 25,OLD_RCD
+80 DPOKE DVAR 21,BASE
+90 ON ERROR STOP
+
+Note !!!
+
+Make sure that DVAR 21 is restored to its old value before
+using the hard disk again. Otherwise reading or writing to the
+hard disk will be incorrect.
+
+===============================================================
+ 

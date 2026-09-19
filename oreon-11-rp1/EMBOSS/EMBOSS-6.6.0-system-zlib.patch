@@ -1,0 +1,19 @@
+diff -up EMBOSS-6.6.0/configure.in.system-zlib EMBOSS-6.6.0/configure.in
+--- EMBOSS-6.6.0/configure.in.system-zlib	2015-10-30 09:32:02.595043840 -0400
++++ EMBOSS-6.6.0/configure.in	2015-10-30 09:32:48.225796757 -0400
+@@ -811,6 +811,7 @@ AC_ARG_ENABLE([systemlibs],
+ if test "x${enable_systemlibs}" = "xyes" ; then
+    AC_CHECK_LIB(pcre, pcre_compile)
+    AC_CHECK_LIB(expat, XML_ParserCreate)
++   AC_CHECK_LIB(z, compress)
+ fi
+ AM_CONDITIONAL([ESYSTEMLIBS], [test "x${enable_systemlibs}" = "xyes"])
+ 
+@@ -964,7 +965,6 @@ AC_CONFIG_FILES([Makefile
+                  ajax/core/Makefile
+                  ajax/ensembl/Makefile
+                  ajax/graphics/Makefile
+-                 ajax/zlib/Makefile
+                  doc/Makefile
+                  doc/manuals/Makefile
+                  doc/programs/Makefile

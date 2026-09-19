@@ -1,0 +1,15 @@
+diff -up python-asyncmy-0.2.11/pyproject.toml.text-files-in-sdist python-asyncmy-0.2.11/pyproject.toml
+--- python-asyncmy-0.2.11/pyproject.toml.text-files-in-sdist	2026-01-15 12:06:03.000000000 +0100
++++ python-asyncmy-0.2.11/pyproject.toml	2026-02-26 10:28:59.128144037 +0100
+@@ -15,7 +15,10 @@ homepage = "https://github.com/long2ice/
+ repository = "https://github.com/long2ice/asyncmy.git"
+ 
+ [tool.poetry]
+-include = ["CHANGELOG.md", "LICENSE", "README.md"]
++include = [
++    { path = "CHANGELOG.md", format = "sdist" },
++    { path = "README.md", format = "sdist" },
++]
+ packages = [
+     { include = "asyncmy" },
+ ]

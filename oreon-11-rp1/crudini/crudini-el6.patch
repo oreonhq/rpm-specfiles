@@ -1,0 +1,32 @@
+diff --git a/crudini.py b/crudini.py
+index e931143..1699adc 100755
+--- a/crudini.py
++++ b/crudini.py
+@@ -197,9 +197,6 @@ class LockedFile(FileLock):
+ class CrudiniConfigParser(iniparse.RawConfigParser):
+     def __init__(self, preserve_case=False):
+         iniparse.RawConfigParser.__init__(self)
+-        # Without the following we can't have params starting with "rem"!
+-        # We ignore lines starting with '%' which mercurial uses to include
+-        iniparse.change_comment_syntax('%;#', allow_rem=False)
+         if preserve_case:
+             self.optionxform = str
+ 
+diff --git a/tests/test.sh b/tests/test.sh
+index 90cc9a8..d629141 100755
+--- a/tests/test.sh
++++ b/tests/test.sh
+@@ -217,13 +217,6 @@ printf '%s\n' '#comment' '[section1]' > test.ini
+ test "$(crudini --get test.ini)" = 'section1' || fail
+ ok
+ 
+-# Ensure we handle comments correctly
+-printf '%s\n' '[DEFAULT]' '#c1' ';c2' '%inc1' > test.ini
+-test "$(crudini --get test.ini)" = '' || fail
+-printf '%s\n' '[section1]' 'remote=1' > test.ini
+-test "$(crudini --get test.ini 'section1')" = 'remote' || fail
+-ok
+-
+ # missing bits
+ :> test.ini
+ crudini --get missing.ini 2>/dev/null && fail

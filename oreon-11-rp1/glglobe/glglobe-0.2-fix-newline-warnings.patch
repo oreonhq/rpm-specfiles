@@ -1,0 +1,30 @@
+diff -u glglobe/jpg_loader.h glglobe-patched/jpg_loader.h
+--- glglobe/jpg_loader.h	2001-09-02 17:52:16.000000000 +1000
++++ glglobe-patched/jpg_loader.h	2006-05-30 00:19:33.000000000 +1000
+@@ -8,4 +8,4 @@
+ write_jpeg(FILE *outfile, int width, int height, unsigned char *rgb,
+            int quality);
+ 
+-#endif
+\ No newline at end of file
++#endif
+diff -u glglobe/markers_parser.c glglobe-patched/markers_parser.c
+--- glglobe/markers_parser.c	2001-09-06 02:22:08.000000000 +1000
++++ glglobe-patched/markers_parser.c	2006-05-30 00:36:13.000000000 +1000
+@@ -136,4 +136,4 @@
+ 
+     return 0;
+ }
+-*/
+\ No newline at end of file
++*/
+diff -u glglobe/options.h glglobe-patched/options.h
+--- glglobe/options.h	2001-09-21 01:09:10.000000000 +1000
++++ glglobe-patched/options.h	2006-05-30 00:14:32.000000000 +1000
+@@ -14,4 +14,4 @@
+ #define options_ball_shadows 1
+ #define options_queue_shadows 1
+ 
+-#undef DEBUG
+\ No newline at end of file
++#undef DEBUG

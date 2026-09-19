@@ -1,0 +1,186 @@
+diff -up worminator-3.0R2.1/Worminator.c~ worminator-3.0R2.1/Worminator.c
+--- worminator-3.0R2.1/Worminator.c~	2026-01-24 11:37:54.000000000 +0100
++++ worminator-3.0R2.1/Worminator.c	2026-01-24 12:50:28.996630952 +0100
+@@ -77,7 +77,7 @@ release_screen();
+ void greenify()
+ {
+ RGB newcol, oldcol;
+-int i, avg = 0;;
++int i, avg = 0;
+ 
+ newcol.r = 0;
+ newcol.b = 0;
+@@ -108,7 +108,7 @@ pal_time = 64;
+ void little_tinge()
+ {
+ RGB newcol, oldcol;
+-int i, avg = 0;;
++int i;
+ 
+ if (pal_time < 0) {pal_time = -32; return;}
+ if (pal_time > 0) return;
+@@ -121,7 +121,6 @@ newcol.b = 0;
+ newcol.filler = 0; // silence warnings.
+ 
+ for (i = 0; i < 256; i++) {
+-	avg = 0;
+ 	get_color(i, &oldcol);
+ 	/*avg += oldcol.r;
+ 	avg += oldcol.g;
+@@ -141,7 +140,7 @@ game_is_running = TRUE;
+ void redify()
+ {
+ RGB newcol, oldcol;
+-int i, avg = 0;;
++int i, avg = 0;
+ 
+ newcol.g = 0;
+ newcol.b = 0;
+@@ -161,7 +160,7 @@ for (i = 0; i < 256; i++) {
+ void darken(char always)
+ {
+ RGB newcol, oldcol;
+-int i, avg = 0;;
++int i;
+ 
+ newcol.r = 0;
+ newcol.b = 0;
+@@ -184,7 +183,6 @@ if (!always) {
+ select_palette(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
+ 
+ for (i = 0; i < 256; i++) {
+-	avg = 0;
+ 	get_color(i, &oldcol);
+ 	newcol.r = oldcol.r / 2;
+ 	newcol.g = oldcol.g / 2;
+diff -up worminator-3.0R2.1/animation.h~ worminator-3.0R2.1/animation.h
+--- worminator-3.0R2.1/animation.h~	2006-03-01 13:47:26.000000000 +0100
++++ worminator-3.0R2.1/animation.h	2026-01-24 12:47:51.189632867 +0100
+@@ -141,14 +141,11 @@ void build_animation_table()
+ {
+ short unsigned int x_tile_loop, y_tile_loop;
+ int number_of_animations = 0;
+-int bg_tile, fg_tile;
+ 
+ 
+ // Add all animated tiles to the list
+ for (x_tile_loop = 0; x_tile_loop < worminator_map.map_width; x_tile_loop++) {
+ 	for (y_tile_loop = 0; y_tile_loop < worminator_map.map_height; y_tile_loop++) {
+-	bg_tile = worminator_map.background_tile_grid[x_tile_loop][y_tile_loop];
+-	fg_tile = worminator_map.foreground_tile_grid[x_tile_loop][y_tile_loop];
+ 
+ ////////////// A red strobe light and its glare ///////////////////////////////////////////////
+ 		if (check_tile_for_animation(x_tile_loop, y_tile_loop, RED_STROBE_LIGHT_ANIMATION_START, RED_STROBE_LIGHT_ANIMATION_LENGTH, RED_STROBE_LIGHT_ANIMATION_SPEED, number_of_animations) == TRUE) number_of_animations++;
+diff -up worminator-3.0R2.1/globals.h~ worminator-3.0R2.1/globals.h
+--- worminator-3.0R2.1/globals.h~	2026-01-24 12:53:20.000000000 +0100
++++ worminator-3.0R2.1/globals.h	2026-01-24 12:58:14.609674800 +0100
+@@ -293,7 +293,7 @@ int look_shift = 0;
+ char player_just_died = FALSE;
+ 
+ // This is the path of the current level
+-char current_level_mapfile_path[256] = "";
++char current_level_mapfile_path[512] = "";
+ 
+ // Map and stats toggles and togglers
+ char display_map = FALSE;
+diff -up worminator-3.0R2.1/menus.h~ worminator-3.0R2.1/menus.h
+--- worminator-3.0R2.1/menus.h~	2006-02-26 20:44:09.000000000 +0100
++++ worminator-3.0R2.1/menus.h	2026-01-24 12:48:48.149271239 +0100
+@@ -84,7 +84,8 @@ if (theta >= 64) masked_blit(img, bmp, w
+ else {
+ 	for (i = 0; i < w/2; i++) {
+ 		j = i*tan(theta*360/256*RADIAN_CONVERTER);
+-		if (j > h/2) j = h/2; if (j < 0) j = 0;
++		if (j > h/2) j = h/2;
++		if (j < 0) j = 0;
+ 		masked_blit(img, bmp, w/2 + i, h/2 - j, x + w/2 + i, y + h/2 - j, 1, j);
+ 		}
+ 	return;
+@@ -95,7 +96,8 @@ if (theta >= 128) masked_blit(img, bmp,
+ else {
+ 	for (i = w/2; i >= 0; i--) {
+ 		j = (h/2)-abs((i - w/2)*tan(theta*360/256*RADIAN_CONVERTER));
+-		if (j > h/2) j = h/2; if (j < 0) j = 0;
++		if (j > h/2) j = h/2;
++		if (j < 0) j = 0;
+ 		masked_blit(img, bmp, i, 0, x + i, y, 1, j);
+ 		}
+ 	return;
+@@ -106,7 +108,8 @@ if (theta >= 192) masked_blit(img, bmp,
+ else {
+ 	for (i = w/2; i >= 0; i--) {
+ 		j = abs((i - w/2)*tan(theta*360/256*RADIAN_CONVERTER));
+-		if (j > h/2) j = h/2; if (j < 0) j = 0;
++		if (j > h/2) j = h/2;
++		if (j < 0) j = 0;
+ 		masked_blit(img, bmp, i, h/2, x + i, y + h/2, 1, j);
+ 		}
+ 	return;
+@@ -117,7 +120,8 @@ if (theta == 255) masked_blit(img, bmp,
+ else {
+ 	for (i = 0; i < w/2; i++) {
+ 		j = (h/2)-abs(i*tan(theta*360/256*RADIAN_CONVERTER));
+-		if (j > h/2) j = h/2; if (j < 0) j = 0;
++		if (j > h/2) j = h/2;
++		if (j < 0) j = 0;
+ 		masked_blit(img, bmp, w/2 + i, h - j, x + w/2 + i, y + h - j, 1, j);
+ 		}
+ 	return;
+@@ -2610,7 +2610,7 @@ void save_screenshot()
+ {
+ BITMAP *backup;
+ int shotnum = -1;
+-char *fname = "fuck this shit";
++char fname[32];
+ do {
+ 	shotnum++;
+ 	sprintf(fname, "shot%d.bmp", shotnum);
+diff -up worminator-3.0R2.1/misc_ai.h~ worminator-3.0R2.1/misc_ai.h
+--- worminator-3.0R2.1/misc_ai.h~	2006-02-02 21:33:38.000000000 +0100
++++ worminator-3.0R2.1/misc_ai.h	2026-01-24 12:51:31.180236159 +0100
+@@ -4,7 +4,6 @@
+ void floating_platform_ai(int sprite_number)
+ {
+ char done_looping = FALSE;
+-char blocked = FALSE;
+ char exponent_loop;
+ int tile_hit;
+ int blocked_test;
+@@ -51,7 +50,7 @@ if (sprite_is_touching_player(sprite_num
+ 		if (player.y_position_in_pixels + 32 > sprites[sprite_number].y_position_in_pixels - 1 && player.y_position_in_pixels + 32 < sprites[sprite_number].y_position_in_pixels + 4) {
+ 			blocked_test = (int)player.y_position_in_pixels;
+ 			push_player(0, -1);
+-			if (blocked_test == (int)player.y_position_in_pixels) done_looping = TRUE, blocked = TRUE;
++			if (blocked_test == (int)player.y_position_in_pixels) done_looping = TRUE;
+ 			}
+ 		else done_looping = TRUE;
+ 		};
+@@ -241,7 +240,6 @@ if (sprites[sprite_number].timer == 0) {
+ void pushable_crate_ai(int sprite_number)
+ {
+ char done_looping = FALSE;
+-char blocked = FALSE;
+ int blocked_test;
+ // These are true or false for the three points nessecary for collision detection
+ char p1, p2, p3;
+@@ -305,7 +303,7 @@ if (sprite_is_touching_player(sprite_num
+ 		if (player.y_position_in_pixels + 32 > sprites[sprite_number].y_position_in_pixels - 1 && player.y_position_in_pixels + 32 < sprites[sprite_number].y_position_in_pixels + 4) {
+ 			blocked_test = (int)player.y_position_in_pixels;
+ 			push_player(0, -1);
+-			if (blocked_test == (int)player.y_position_in_pixels) done_looping = TRUE, blocked = TRUE;
++			if (blocked_test == (int)player.y_position_in_pixels) done_looping = TRUE;
+ 			}
+ 		else done_looping = TRUE;
+ 		};
+diff -up worminator-3.0R2.1/text.h~ worminator-3.0R2.1/text.h
+--- worminator-3.0R2.1/text.h~	2006-02-24 14:18:31.000000000 +0100
++++ worminator-3.0R2.1/text.h	2026-01-24 12:56:19.034408585 +0100
+@@ -137,7 +137,7 @@ void stringPop(char *string)
+ {
+ 	int length = strlen(string);
+ 	
+-	strncpy(string, string + 1, length - 1);
++	memmove(string, string + 1, length - 1);
+ 	string[length - 1] = 0;
+ }
+ 

@@ -1,0 +1,154 @@
+commit 1b43afaf5f93e3fd2c7198054c038268bb671149
+Author: Andrew Cagney <cagney@gnu.org>
+Date:   Tue Apr 19 10:38:01 2016 -0400
+
+    When cloning a unw_cursor_t also clone the jobject ref.
+
+diff --git a/frysk-sys/lib/unwind/jni/UnwindH.hxx b/frysk-sys/lib/unwind/jni/UnwindH.hxx
+index 4d72423..6c16f39 100644
+--- a/frysk-sys/lib/unwind/jni/UnwindH.hxx
++++ b/frysk-sys/lib/unwind/jni/UnwindH.hxx
+@@ -64,9 +64,12 @@
+ using namespace java::lang;
+ using namespace lib::unwind;
+ 
++#define CURSOR_MAGIC 0xfab
++
+ struct jni_cursor {
+   unw_cursor_t cursor;
+   jobject addressSpace;
++  int magic;
+ };
+ 
+ #define UNW_PROC_INFO ((unw_proc_info_t*)unwProcInfo)
+@@ -248,27 +251,56 @@ jlong
+ TARGET::createCursor(jnixx::env env,
+ 		     AddressSpace addressSpace,
+ 		     jlong unwAddressSpace) {
+-  logf(FINE, "createCursor from address-space %lx", (long) UNW_ADDRESS_SPACE);
+   jni_cursor *cursor = new(jni_cursor);
++  logf(FINE, "createCursor %p using address-space %p arg %llx",
++       cursor, UNW_ADDRESS_SPACE, (long long) addressSpace._object);
+   // XXX: Need to zero out the cursor, as unw_init_remote doesn't seem
+   // to do it.
+   memset(cursor, 0, sizeof(jni_cursor));
+   // Make global as object is used across JNI calls
++  cursor->magic = CURSOR_MAGIC;
+   cursor->addressSpace = env.NewGlobalRef(addressSpace._object);
+   unw_init_remote(&cursor->cursor, UNW_ADDRESS_SPACE, cursor->addressSpace);
+-  logf(FINE, "createCursor at %p", cursor);
++  logf(FINE, "createCursor %p global address-space ref %llx",
++       cursor, (long long) cursor->addressSpace);
+   return (jlong)cursor;
+ }
+ 
+ void
+ TARGET::destroyCursor(jnixx::env env, jlong unwCursor) {
+   jni_cursor *cursor = (jni_cursor*)unwCursor;
+-  logf(FINE, "destroyCursor at %p", cursor);
++  logf(FINE, "destroyCursor %p", cursor);
++  if (cursor->magic != CURSOR_MAGIC) {
++    fprintf(stderr, "\n%s: cursor %p has bad CURSOR_MAGIC number\n",
++	    __func__, cursor);
++    abort();
++  }
++  logf(FINE, "destroyCursor %p deleting global address-space ref %llx",
++       cursor, (long long) cursor->addressSpace);
+   env.DeleteGlobalRef(cursor->addressSpace);
+   ::free(cursor);
+ }
+ 
+ jlong
++TARGET::copyCursor(jnixx::env env, jlong unwCursor) {
++  jni_cursor *original = (jni_cursor*) unwCursor;
++  logf(FINE, "copyCursor %p", original);
++  if (original->magic != CURSOR_MAGIC) {
++    fprintf(stderr, "\n%s: cursor %p has bad CURSOR_MAGIC number\n",
++	    __func__, original);
++    abort();
++  }
++  jni_cursor *copy = new(jni_cursor);
++  // Create a local copy of the unwind cursor
++  ::memcpy(&copy->cursor, &original->cursor, sizeof(original->cursor));
++  copy->magic = CURSOR_MAGIC;
++  copy->addressSpace = env.NewGlobalRef(original->addressSpace);
++  logf(FINE, "copyCursor %p to %p global address-space ref %llx",
++       original, copy, (long long) copy->addressSpace);
++  return (jlong) copy;
++}
++
++jlong
+ TARGET::createAddressSpace(jnixx::env env, ByteOrder byteOrder) {
+   logf(FINE, "createAddressSpace, byteOrder %d",
+        (int) byteOrder.hashCode(env));
+@@ -304,13 +336,13 @@ TARGET::setCachingPolicy(jnixx::env env, jlong unwAddressSpace,
+ 
+ jint
+ TARGET::isSignalFrame(jnixx::env env, jlong unwCursor) {
+-  logf(FINE, "isSignalFrame");
++  logf(FINE, "isSignalFrame: %p", UNW_CURSOR);
+   return unw_is_signal_frame(UNW_CURSOR);
+ }
+ 
+ jint
+ TARGET::step(jnixx::env env, jlong unwCursor) {
+-  logf(FINE, "step cursor: %lx", (long) UNW_CURSOR);
++  logf(FINE, "step cursor: %p", UNW_CURSOR);
+   return unw_step(UNW_CURSOR);
+ }
+ 
+@@ -329,8 +361,8 @@ TARGET::getRegister(jnixx::env env, jlong unwCursor,
+ 		    Number num, jlong offset, jint length,
+ 		    jnixx::jbyteArray jbytes, jint start) {
+   int regNum = num.intValue(env);
+-  logf(FINE, "getRegister %d from %lx, offset %ld length %d start %d",
+-       regNum, (long)UNW_CURSOR, (long) offset, (int)length, (int)start);
++  logf(FINE, "getRegister: %d from cursor: %p offset: %ld length: %d start: %d",
++       regNum, UNW_CURSOR, (long) offset, (int)length, (int)start);
+   int status;
+   union {
+     unw_word_t w;
+@@ -423,9 +455,11 @@ TARGET::getCFA(jnixx::env env, jlong unwCursor) {
+   // This is wasteful, but there is no generic UNW_REG_CFA.
+   // So just unwind and return the stack pointer.
+ #define FRYSK_UNW_REG_CFA UNW_REG_SP
+-  unw_cursor_t copy;
++  // Need to copy everything including magic and the addressSpace
++  // handle.
++  jni_cursor copy;
+   memcpy(&copy, UNW_CURSOR, sizeof (copy));
+-  if (unw_step(&copy) < 0)
++  if (unw_step(&copy.cursor) < 0)
+     return 0;
+   unwCursor = (jlong) &copy;
+ #endif
+@@ -446,17 +480,6 @@ TARGET::getContext(jnixx::env env, jlong context) {
+ }
+ 
+ jlong
+-TARGET::copyCursor(jnixx::env env, jlong unwCursor) {
+-  ::unw_cursor_t *nativeCursor
+-    = (::unw_cursor_t*) ::malloc(sizeof(::unw_cursor_t));
+-  // Create a local copy of the unwind cursor
+-  ::memcpy(nativeCursor, UNW_CURSOR, sizeof(*UNW_CURSOR));
+-  logf(FINE, "copyCursor %lx to %lx", (long) UNW_CURSOR,
+-       (long) nativeCursor);
+-  return (jlong) nativeCursor;
+-}
+-
+-jlong
+ TARGET::getProcInfo(jnixx::env env, jlong unwCursor) {
+   logf(FINE, "getProcInfo cursor: %lx", (long) UNW_CURSOR);
+   unw_proc_info_t *procInfo
+@@ -510,8 +533,9 @@ image_access_mem(unw_addr_space_t as, unw_word_t addr,
+ 		 unw_word_t *val, int write, void *arg) {
+   struct image *image = (struct image*) arg;
+   if (image->magic != IMAGE_MAGIC) {
+-    fprintf(stderr, "%s: bad magic number\n", __func__);
+-    return -UNW_EINVAL;
++    fprintf(stderr, "%s: image %p has bad IMAGE_MAGIC number\n",
++	    __func__, image);
++    abort();
+   }
+   // Writing is not supported
+   if (write)

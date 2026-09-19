@@ -1,0 +1,33 @@
+# HG changeset patch
+# User Benjamin A. Beasley <code@musicinmybrain.net>
+# Date 1716246655 14400
+#      Mon May 20 19:10:55 2024 -0400
+# Branch fedora-no-fatal-warnings
+# Node ID 4307a96c7cfb608fe39666c2ee0990fa7c28176b
+# Parent  ed6abba2122503760517c238c019a5db9dfa2172
+Downstream-only: do not pass --fatal-warnings to gi-docgen
+
+This is too strict for downstream packaging.
+
+diff --git a/gplugin-gtk4/reference/meson.build b/gplugin-gtk4/reference/meson.build
+--- a/gplugin-gtk4/reference/meson.build
++++ b/gplugin-gtk4/reference/meson.build
+@@ -17,7 +17,6 @@ gplugin_gtk4_doc = custom_target('gplugi
+ 		gidocgen,
+ 		'generate',
+ 		'--quiet',
+-		'--fatal-warnings',
+ 		'--add-include-path=@0@'.format(meson.project_build_root() / 'gplugin'),
+ 		'--config=@INPUT0@',
+ 		'--output-dir=@OUTPUT@',
+diff --git a/gplugin/reference/meson.build b/gplugin/reference/meson.build
+--- a/gplugin/reference/meson.build
++++ b/gplugin/reference/meson.build
+@@ -27,7 +27,6 @@ gplugin_doc = custom_target('gplugin-doc
+ 		gidocgen,
+ 		'generate',
+ 		'--quiet',
+-		'--fatal-warnings',
+ 		'--config=@INPUT0@',
+ 		'--output-dir=@OUTPUT@',
+ 		'--no-namespace-dir',

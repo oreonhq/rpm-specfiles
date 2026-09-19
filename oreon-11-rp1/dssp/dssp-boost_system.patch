@@ -1,0 +1,22 @@
+--- dssp-3.0.0/makefile~	2025-12-16 11:37:08.708959301 +0000
++++ dssp-3.0.0/makefile	2025-12-16 11:37:11.279951995 +0000
+@@ -21,7 +21,7 @@
+ BIN_DIR				= $(DEST_DIR)/bin
+ MAN_DIR				= $(DEST_DIR)/share/man/man1
+ 
+-BOOST_LIBS			= thread filesystem program_options iostreams system
++BOOST_LIBS			= thread filesystem program_options iostreams
+ LIBS				= $(BOOST_LIBS:%=boost_%$(BOOST_LIB_SUFFIX)) z bz2
+ 
+ DEFINES				= USE_COMPRESSION LINUX VERSION='"$(VERSION)"'
+--- dssp-3.0.0/makefile.make~	2025-12-16 11:37:05.494968436 +0000
++++ dssp-3.0.0/makefile.make	2025-12-16 11:37:13.578018185 +0000
+@@ -21,7 +21,7 @@
+ BIN_DIR				= $(DEST_DIR)/bin
+ MAN_DIR				= $(DEST_DIR)/man/man1
+ 
+-BOOST_LIBS			= thread filesystem program_options iostreams system
++BOOST_LIBS			= thread filesystem program_options iostreams
+ LIBS				= $(BOOST_LIBS:%=boost_%$(BOOST_LIB_SUFFIX)) z bz2
+ 
+ DEFINES				= USE_COMPRESSION LINUX VERSION='"$(VERSION)"'

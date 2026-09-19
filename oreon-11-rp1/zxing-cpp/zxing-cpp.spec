@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           zxing-cpp
-Version:        2.2.1
+Version:        3.1.1
 Release:        %autorelease
 Summary:        C++ port of the ZXing ("Zebra Crossing") barcode scanning library
 

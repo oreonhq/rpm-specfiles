@@ -1,0 +1,10 @@
+--- diskonaut-0.11.0/Cargo.toml	2020-09-23T14:13:43+00:00
++++ diskonaut-0.11.0/Cargo.toml	2024-11-04T15:56:56.469634+00:00
+@@ -47,6 +47,4 @@
+ version = "0.1.7"
+ [dev-dependencies.insta]
+ version = "0.16.0"
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3"
+-features = ["securitybaseapi", "debugapi"]
++

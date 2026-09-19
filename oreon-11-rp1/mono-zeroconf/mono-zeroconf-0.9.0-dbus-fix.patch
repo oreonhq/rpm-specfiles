@@ -1,0 +1,132 @@
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/BrowseService.cs.dbusfix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/BrowseService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/BrowseService.cs.dbusfix	2017-07-12 10:53:43.569444368 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/BrowseService.cs	2017-07-12 11:01:50.194394328 -0400
+@@ -28,7 +28,7 @@
+ 
+ using System;
+ using System.Net;
+-using NDesk.DBus;
++using DBus;
+ using Mono.Zeroconf;
+ 
+ namespace Mono.Zeroconf.Providers.AvahiDBus
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/DBusManager.cs.dbusfix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/DBusManager.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/DBusManager.cs.dbusfix	2008-06-26 15:51:10.000000000 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/DBusManager.cs	2017-07-12 10:53:43.575444217 -0400
+@@ -31,7 +31,7 @@ using System.IO;
+ using System.Reflection;
+ using System.Threading;
+ 
+-using NDesk.DBus;
++using DBus;
+ 
+ namespace Mono.Zeroconf.Providers.AvahiDBus
+ {
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiEntryGroup.cs.dbusfix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiEntryGroup.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiEntryGroup.cs.dbusfix	2009-03-30 17:26:24.000000000 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiEntryGroup.cs	2017-07-12 10:53:43.575444217 -0400
+@@ -27,7 +27,7 @@
+ //
+ 
+ using System;
+-using NDesk.DBus;
++using DBus;
+ 
+ namespace Mono.Zeroconf.Providers.AvahiDBus
+ {
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServer.cs.dbusfix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServer.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServer.cs.dbusfix	2009-03-30 17:04:17.000000000 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServer.cs	2017-07-12 10:53:43.575444217 -0400
+@@ -27,7 +27,7 @@
+ //
+ 
+ using System;
+-using NDesk.DBus;
++using DBus;
+ 
+ namespace Mono.Zeroconf.Providers.AvahiDBus
+ {
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServiceBrowser.cs.dbusfix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServiceBrowser.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServiceBrowser.cs.dbusfix	2008-06-25 14:42:16.000000000 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServiceBrowser.cs	2017-07-12 10:53:43.575444217 -0400
+@@ -27,7 +27,7 @@
+ //
+ 
+ using System;
+-using NDesk.DBus;
++using DBus;
+ 
+ namespace Mono.Zeroconf.Providers.AvahiDBus
+ {
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServiceResolver.cs.dbusfix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServiceResolver.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServiceResolver.cs.dbusfix	2008-06-25 17:03:34.000000000 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/IAvahiServiceResolver.cs	2017-07-12 10:53:43.576444192 -0400
+@@ -27,7 +27,7 @@
+ //
+ 
+ using System;
+-using NDesk.DBus;
++using DBus;
+ 
+ namespace Mono.Zeroconf.Providers.AvahiDBus
+ {   
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/RegisterService.cs.dbusfix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/RegisterService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/RegisterService.cs.dbusfix	2017-07-12 10:53:43.571444318 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/RegisterService.cs	2017-07-12 11:02:09.945907504 -0400
+@@ -28,7 +28,7 @@
+ 
+ using System;
+ using System.Threading;
+-using NDesk.DBus;
++using DBus;
+ 
+ namespace Mono.Zeroconf.Providers.AvahiDBus
+ {
+@@ -70,7 +70,7 @@ namespace Mono.Zeroconf.Providers.AvahiD
+         {
+             try {
+                 Monitor.Enter (this);
+-                DBusManager.Bus.TrapSignals ();
++                // DBusManager.Bus.TrapSignals ();
+                 
+                 if (entry_group != null) {
+                     entry_group.Reset ();
+@@ -89,7 +89,7 @@ namespace Mono.Zeroconf.Providers.AvahiD
+                 entry_group.StateChanged += OnEntryGroupStateChanged;
+             } finally {
+                 Monitor.Exit (this);
+-                DBusManager.Bus.UntrapSignals ();
++                // DBusManager.Bus.UntrapSignals ();
+             }
+         }
+         
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/ServiceBrowser.cs.dbusfix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/ServiceBrowser.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/ServiceBrowser.cs.dbusfix	2017-07-12 10:53:43.569444368 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/ServiceBrowser.cs	2017-07-12 11:02:58.071721329 -0400
+@@ -30,7 +30,7 @@ using System;
+ using System.Collections.Generic;
+ using Mono.Zeroconf;
+ 
+-using NDesk.DBus;
++using DBus;
+ 
+ namespace Mono.Zeroconf.Providers.AvahiDBus
+ {
+@@ -66,7 +66,7 @@ namespace Mono.Zeroconf.Providers.AvahiD
+     
+         public void Browse (uint interfaceIndex, AddressProtocol addressProtocol, string regtype, string domain)
+         {
+-            DBusManager.Bus.TrapSignals ();
++            // DBusManager.Bus.TrapSignals ();
+             
+             lock (this) {
+                 Dispose ();
+@@ -83,7 +83,7 @@ namespace Mono.Zeroconf.Providers.AvahiD
+             service_browser.ItemNew += OnItemNew;
+             service_browser.ItemRemove += OnItemRemove;
+             
+-            DBusManager.Bus.UntrapSignals ();
++            // DBusManager.Bus.UntrapSignals ();
+         }
+         
+         protected virtual void OnServiceAdded (BrowseService service)

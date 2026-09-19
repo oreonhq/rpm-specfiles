@@ -1,0 +1,256 @@
+From ab7170f78fce5200d2d771d4fd5c6299b423a906 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 20 Sep 2024 23:21:49 +0200
+Subject: [PATCH 4/7] generator: migrate away from deprecated clap APIs
+
+---
+ generator/src/main.rs                         | 27 ++++++------
+ generator/src/subcommands/gen_cmake.rs        | 42 +++++++++----------
+ generator/src/subcommands/gen_cmake/target.rs |  4 +-
+ 3 files changed, 38 insertions(+), 35 deletions(-)
+
+diff --git a/generator/src/main.rs b/generator/src/main.rs
+index 553582e..cbcf101 100644
+--- a/generator/src/main.rs
++++ b/generator/src/main.rs
+@@ -1,7 +1,7 @@
+ use std::path::PathBuf;
+ 
+ use cargo_metadata::Metadata;
+-use clap::{App, Arg};
++use clap::{Arg, ArgAction, Command};
+ 
+ mod subcommands {
+     pub mod gen_cmake;
+@@ -24,12 +24,12 @@ pub struct GeneratorSharedArgs {
+ }
+ 
+ fn main() -> Result<(), Box<dyn std::error::Error>> {
+-    let matches = App::new("CMake Generator for Cargo")
++    let matches = Command::new("CMake Generator for Cargo")
+         .version("0.1")
+         .author("Andrew Gaspar <andrew.gaspar@outlook.com>")
+         .about("Generates CMake files for Cargo projects")
+         .arg(
+-            Arg::with_name(MANIFEST_PATH)
++            Arg::new(MANIFEST_PATH)
+                 .long("manifest-path")
+                 .value_name("Cargo.toml")
+                 .help("Specifies the target Cargo project")
+@@ -37,25 +37,28 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+                 .takes_value(true),
+         )
+         .arg(
+-            Arg::with_name(CARGO_EXECUTABLE)
++            Arg::new(CARGO_EXECUTABLE)
+                 .long("cargo")
+                 .value_name("EXECUTABLE")
+                 .required(true)
+                 .help("Path to the cargo executable to use"),
+         )
+         .arg(
+-            Arg::with_name(VERBOSE)
++            Arg::new(VERBOSE)
+                 .long("verbose")
++                .action(ArgAction::SetTrue)
+                 .help("Request verbose output"),
+         )
+         .arg(
+-            Arg::with_name(LOCKED)
++            Arg::new(LOCKED)
+                 .long("locked")
++                .action(ArgAction::SetTrue)
+                 .help("Pass --locked to cargo invocations"),
+         )
+         .arg(
+-            Arg::with_name(FROZEN)
++            Arg::new(FROZEN)
+                 .long("frozen")
++                .action(ArgAction::SetTrue)
+                 .help("Pass --frozen to cargo invocations"),
+         )
+         .subcommand(gen_cmake::subcommand())
+@@ -63,15 +66,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+ 
+     let mut cmd = cargo_metadata::MetadataCommand::new();
+     cmd.no_deps();
+-    if matches.is_present(LOCKED) {
++    if matches.get_flag(LOCKED) {
+         cmd.other_options(["--locked".into()]);
+     }
+-    if matches.is_present(FROZEN) {
++    if matches.get_flag(FROZEN) {
+         cmd.other_options(["--frozen".into()]);
+     }
+ 
+-    let manifest_path = matches.value_of(MANIFEST_PATH).unwrap();
+-    let cargo_executable = matches.value_of(CARGO_EXECUTABLE).unwrap();
++    let manifest_path: &String = matches.get_one(MANIFEST_PATH).unwrap();
++    let cargo_executable: &String = matches.get_one(CARGO_EXECUTABLE).unwrap();
+ 
+     cmd.manifest_path(manifest_path);
+     cmd.cargo_path(cargo_executable);
+@@ -82,7 +85,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+         manifest_path: manifest_path.into(),
+         cargo_executable: cargo_executable.into(),
+         metadata,
+-        verbose: matches.is_present(VERBOSE),
++        verbose: matches.get_flag(VERBOSE),
+     };
+ 
+     match matches.subcommand() {
+diff --git a/generator/src/subcommands/gen_cmake.rs b/generator/src/subcommands/gen_cmake.rs
+index d975786..ab01c08 100644
+--- a/generator/src/subcommands/gen_cmake.rs
++++ b/generator/src/subcommands/gen_cmake.rs
+@@ -5,7 +5,7 @@ use std::{
+     rc::Rc,
+ };
+ 
+-use clap::{App, Arg, ArgMatches, SubCommand};
++use clap::{Arg, ArgAction, ArgMatches, Command};
+ 
+ mod target;
+ 
+@@ -20,10 +20,10 @@ const IMPORTED_CRATES: &str = "imported-crates";
+ const CRATE_TYPE: &str = "crate-type";
+ const PASSTHROUGH_ADD_CARGO_BUILD: &str = "passthrough-acb";
+ 
+-pub fn subcommand() -> App<'static> {
+-    SubCommand::with_name(GEN_CMAKE)
++pub fn subcommand() -> Command<'static> {
++    Command::new(GEN_CMAKE)
+         .arg(
+-            Arg::with_name(CONFIGURATION_ROOT)
++            Arg::new(CONFIGURATION_ROOT)
+                 .long("configuration-root")
+                 .value_name("DIRECTORY")
+                 .takes_value(true)
+@@ -33,42 +33,42 @@ pub fn subcommand() -> App<'static> {
+                 ),
+         )
+         .arg(
+-            Arg::with_name(CRATES)
++            Arg::new(CRATES)
+                 .long("crates")
+                 .value_name("crates")
+                 .takes_value(true)
+-                .multiple(true)
+-                .require_delimiter(true)
++                .action(ArgAction::Append)
++                .require_value_delimiter(true)
+                 .help("Specifies which crates of the workspace to import"),
+         )
+         .arg(
+-            Arg::with_name(CRATE_TYPE)
++            Arg::new(CRATE_TYPE)
+                 .long(CRATE_TYPE)
+                 .value_name("kind")
+-                .possible_values(&["staticlib", "cdylib", "bin"])
+-                .multiple(true)
++                .value_parser(["staticlib", "cdylib", "bin"])
++                .action(ArgAction::Append)
+                 .value_delimiter(';')
+                 .help("Only import the specified crate types")
+         )
+         .arg(
+-            Arg::with_name(OUT_FILE)
++            Arg::new(OUT_FILE)
+                 .short('o')
+                 .long("out-file")
+                 .value_name("FILE")
+                 .help("Output CMake file name. Defaults to stdout."),
+         )
+         .arg(
+-            Arg::with_name(IMPORTED_CRATES)
++            Arg::new(IMPORTED_CRATES)
+                 .long(IMPORTED_CRATES)
+                 .value_name("variable_name")
+                 .takes_value(true)
+                 .help("Save a list of the imported target names into c CMake variable with the given name"),
+         )
+         .arg(
+-            Arg::with_name(PASSTHROUGH_ADD_CARGO_BUILD)
++            Arg::new(PASSTHROUGH_ADD_CARGO_BUILD)
+                 .long(PASSTHROUGH_ADD_CARGO_BUILD)
+                 .takes_value(true)
+-                .multiple(true)
++                .action(ArgAction::Append)
+                 .value_delimiter(std::char::from_u32(0x1f).unwrap())
+                 .help("Passthrough arguments to the _add_cargo_build invocation(s) in CMake")
+         )
+@@ -78,7 +78,7 @@ pub fn invoke(
+     args: &crate::GeneratorSharedArgs,
+     matches: &ArgMatches,
+ ) -> Result<(), Box<dyn std::error::Error>> {
+-    let mut out_file: Box<dyn Write> = if let Some(path) = matches.value_of(OUT_FILE) {
++    let mut out_file: Box<dyn Write> = if let Some(path) = matches.get_one::<&String>(OUT_FILE) {
+         let path = Path::new(path);
+         if let Some(parent) = path.parent() {
+             create_dir_all(parent).expect("Failed to create directory!");
+@@ -96,10 +96,10 @@ cmake_minimum_required(VERSION 3.15)
+ "
+     )?;
+ 
+-    let crates = matches
+-        .values_of(CRATES)
++    let crates: Vec<&String> = matches
++        .get_many(CRATES)
+         .map_or(Vec::new(), |c| c.collect());
+-    let crate_kinds: Option<Vec<&str>> = matches.values_of(CRATE_TYPE).map(|c| c.collect());
++    let crate_kinds: Option<Vec<&String>> = matches.get_many(CRATE_TYPE).map(|c| c.collect());
+     let workspace_manifest_path = Rc::new(args.manifest_path.clone());
+     let targets: Vec<_> = args
+         .metadata
+@@ -107,7 +107,7 @@ cmake_minimum_required(VERSION 3.15)
+         .iter()
+         .filter(|p| {
+             args.metadata.workspace_members.contains(&p.id)
+-                && (crates.is_empty() || crates.contains(&p.name.as_str()))
++                && (crates.is_empty() || crates.contains(&&p.name))
+         })
+         .cloned()
+         .map(Rc::new)
+@@ -128,7 +128,7 @@ cmake_minimum_required(VERSION 3.15)
+         .collect();
+ 
+     let passthrough_args: Vec<String> = matches
+-        .values_of(PASSTHROUGH_ADD_CARGO_BUILD)
++        .get_many::<&String>(PASSTHROUGH_ADD_CARGO_BUILD)
+         .map(|values| {
+             // Add quotes around each argument for CMake to preserve which arguments belong together.
+             values
+@@ -144,7 +144,7 @@ cmake_minimum_required(VERSION 3.15)
+             .emit_cmake_target(&mut out_file, &passthrough_str)
+             .unwrap();
+     }
+-    if let Some(imported_crate_list_name) = matches.value_of(IMPORTED_CRATES) {
++    if let Some(imported_crate_list_name) = matches.get_one::<&String>(IMPORTED_CRATES) {
+         let imported_targets: Vec<_> = targets.iter().map(|target| target.target_name()).collect();
+         let imported_targets_list = imported_targets.join(";");
+         writeln!(
+diff --git a/generator/src/subcommands/gen_cmake/target.rs b/generator/src/subcommands/gen_cmake/target.rs
+index 1f59109..e9fcdae 100644
+--- a/generator/src/subcommands/gen_cmake/target.rs
++++ b/generator/src/subcommands/gen_cmake/target.rs
+@@ -48,7 +48,7 @@ impl CargoTarget {
+         cargo_target: cargo_metadata::Target,
+         workspace_manifest_path: Rc<PathBuf>,
+         // If Some, only import crates if the kind variant is given in crate_kinds.
+-        crate_kinds: &Option<Vec<&str>>,
++        crate_kinds: &Option<Vec<&String>>,
+     ) -> Option<Self> {
+         let filtered_kinds: Vec<String> = cargo_target
+             .kind
+@@ -56,7 +56,7 @@ impl CargoTarget {
+             .into_iter()
+             .filter(|kind| match crate_kinds {
+                 None => true,
+-                Some(allowed_kinds_subset) => allowed_kinds_subset.contains(&&**kind),
++                Some(allowed_kinds_subset) => allowed_kinds_subset.contains(&kind),
+             })
+             .collect();
+ 
+-- 
+2.46.0
+

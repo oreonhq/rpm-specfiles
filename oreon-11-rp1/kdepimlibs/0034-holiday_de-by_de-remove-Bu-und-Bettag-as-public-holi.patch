@@ -1,0 +1,31 @@
+From 6b85f859091f9d0b46fba9a4f04ded35509d80d7 Mon Sep 17 00:00:00 2001
+From: Allen Winter <winter@kde.org>
+Date: Sat, 27 Feb 2016 09:24:17 -0500
+Subject: [PATCH 34/35] =?UTF-8?q?holiday=5Fde-by=5Fde=20-=20remove=20Bu?=
+ =?UTF-8?q?=C3=9F-=20und=20Bettag=20as=20public=20holiday=20BUG:=20355073?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CHERRY-PICK: everywhere
+---
+ kholidays/holidays/plan2/holiday_de-by_de | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kholidays/holidays/plan2/holiday_de-by_de b/kholidays/holidays/plan2/holiday_de-by_de
+index 5dc68f1..d6dc5e1 100644
+--- a/kholidays/holidays/plan2/holiday_de-by_de
++++ b/kholidays/holidays/plan2/holiday_de-by_de
+@@ -42,7 +42,8 @@ language    "de"
+ "Mariä Himmelfahrt"           public cultural on august 15
+ "Einheitstag"                 public on october 3
+ "Allerheiligen"               public on november 1
+-"Buß- und Bettag"             public on sunday before december 24 minus 32 days
++::No longer a public holiday (except in Saxony), per Bug 355073
++::"Buß- und Bettag"             public on sunday before december 24 minus 32 days
+ "Weihnachten"                 public cultural on december 25 length 2 days
+ 
+ :: Religious
+-- 
+1.9.3
+

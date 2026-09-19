@@ -1,0 +1,9 @@
+diff -up mrchem-1.0.2/external/upstream/fetch_eigen3.cmake.eigen3 mrchem-1.0.2/external/upstream/fetch_eigen3.cmake
+--- mrchem-1.0.2/external/upstream/fetch_eigen3.cmake.eigen3	2021-10-14 03:36:42.000000000 -0400
++++ mrchem-1.0.2/external/upstream/fetch_eigen3.cmake	2021-12-25 13:19:01.151175940 -0500
+@@ -1,4 +1,4 @@
+-find_package(Eigen3 3.4 CONFIG QUIET
++find_package(Eigen3 CONFIG QUIET
+   NO_CMAKE_PATH
+   NO_CMAKE_PACKAGE_REGISTRY
+   )

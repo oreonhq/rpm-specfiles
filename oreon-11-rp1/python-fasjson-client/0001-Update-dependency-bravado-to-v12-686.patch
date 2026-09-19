@@ -1,0 +1,28 @@
+From cc8fe354e244062c6ba35885c8c4b3ee614c99b3 Mon Sep 17 00:00:00 2001
+From: "renovate[bot]" <29139614+renovate[bot]@users.noreply.github.com>
+Date: Mon, 12 May 2025 09:02:37 +0530
+Subject: [PATCH] Update dependency bravado to v12 (#686)
+
+Signed-off-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+(cherry picked from commit 9806fa5022502fae3f5e8d58599791b9f3d4e07e)
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index f21e99f..65e58cb 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -34,7 +34,7 @@ classifiers = [
+ [tool.poetry.dependencies]
+ python = "^3.8.0"
+ gssapi = "^1.5.1"
+-bravado = "^10.6.0 || ^11"
++bravado = "^10.6.0 || ^11 || ^12.0.0"
+ requests = "^2.20.0"
+ requests-gssapi = "^1.2.1"
+ cryptography = {version = ">=2.3", optional = true}
+-- 
+2.49.0
+

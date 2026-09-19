@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0808766fda2d11274cca943bfed2347d89e7a85225e0606bb724eb6d50f0a434
 
 %global stable_kf6 stable
 
@@ -10,7 +10,7 @@
 ExcludeArch: %{ix86}
 
 Name:       elisa-player
-Version:    26.03.80
+Version:    26.08.1
 Release:    1%{?dist}
 Summary:    Elisa music player
 
@@ -101,6 +101,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.el
 %{_kf6_libdir}/elisa/
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

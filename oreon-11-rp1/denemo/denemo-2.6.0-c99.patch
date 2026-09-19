@@ -1,0 +1,20 @@
+diff -up denemo-2.6.0/libs/libsffile/sffile.c.c99 denemo-2.6.0/libs/libsffile/sffile.c
+--- denemo-2.6.0/libs/libsffile/sffile.c.c99	2023-01-27 11:40:05.030418369 +0100
++++ denemo-2.6.0/libs/libsffile/sffile.c	2023-01-27 11:40:34.280667274 +0100
+@@ -20,6 +20,7 @@
+  *================================================================*/
+ //Interface to Denemo License:  FSF GPL version 3 or later
+ 
++#include <ctype.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdlib.h>
+@@ -51,7 +52,7 @@ static void ConvertIllegalChar(char *nam
+ int  ParseSoundfont(char *soundfont, int index, char **name, int *preset, int *bank) {
+   FILE *fp;
+   static SFInfo sf;
+-  static initialized = FALSE;
++  static int initialized = FALSE;
+   int i;
+   int number = 0;
+   if(soundfont) {

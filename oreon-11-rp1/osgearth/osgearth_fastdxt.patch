@@ -1,0 +1,13 @@
+diff -rupN --no-dereference osgearth-osgearth-3.7.2/src/osgEarthDrivers/CMakeLists.txt osgearth-osgearth-3.7.2-new/src/osgEarthDrivers/CMakeLists.txt
+--- osgearth-osgearth-3.7.2/src/osgEarthDrivers/CMakeLists.txt	2025-04-03 22:14:59.000000000 +0200
++++ osgearth-osgearth-3.7.2-new/src/osgEarthDrivers/CMakeLists.txt	2025-11-27 05:52:43.919883675 +0100
+@@ -30,7 +30,8 @@ endif()
+ 
+ add_subdirectory(cache_rocksdb)
+ 
+-if(NOT APPLE AND NOT ANDROID)
++OPTION(DISABLE_FASTDXT "Disale fastdxt build" OFF)
++if(NOT APPLE AND NOT ANDROID AND NOT DISABLE_FASTDXT)
+     add_subdirectory(fastdxt)
+     if(NOT BUILDING_VCPKG_PORT)
+         add_subdirectory(lerc)

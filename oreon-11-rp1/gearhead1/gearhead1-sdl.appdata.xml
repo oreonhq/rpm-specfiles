@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AppData file for GearHead1, copyleft 2020 suve (veg@svgames.pl) -->
+<component type="desktop">
+	<id>gearhead1-sdl.desktop</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>LGPL-2.1+</project_license>
+	<name>GearHead: Arena</name>
+	<summary>Roguelike mecha role-playing game</summary>
+	<description>
+		<p>
+				Set a century and a half after nuclear war, in this game you explore a world
+				where various factions compete to determine the future of the human race.
+		</p>
+		<p>
+				Features include random plot generation and over two hundred mecha designs.
+				Pilot a giant robot, a city smashing tank, a living jet fighter, or
+				anything else that can be built using the game's sophisticated design system.
+		</p>
+	</description>
+	<launchable type="desktop-id">gearhead1-sdl.desktop</launchable>
+	<screenshots>
+		<screenshot type="default">
+			<image>https://img.itch.zone/aW1hZ2UvNzM0MDcvMzM4NzYzLnBuZw==/original/wY8FoO.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://img.itch.zone/aW1hZ2UvNzM0MDcvMzM4NzY0LnBuZw==/original/Snh3fG.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://img.itch.zone/aW1hZ2UvNzM0MDcvMzM4NzYyLnBuZw==/original/2YXTSi.png</image>
+		</screenshot>
+	</screenshots>
+	<developer_name>Joseph Hewitt</developer_name>
+	<update_contact>veg@svgames.pl</update_contact>
+	<url type="homepage">http://gearheadrpg.com</url>
+	<url type="bugtracker">https://github.com/jwvhewitt/gearhead-1/issues</url>
+	<content_rating type="oars-1.1">
+		<content_attribute id="violence-cartoon">moderate</content_attribute>
+		<content_attribute id="violence-fantasy">moderate</content_attribute>
+		<content_attribute id="violence-bloodshed">mild</content_attribute>
+		<content_attribute id="sex-homosexuality">mild</content_attribute>
+	</content_rating>
+</component>

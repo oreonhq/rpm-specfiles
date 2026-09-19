@@ -1,0 +1,1400 @@
+From 4601b862cd4c446d757930ce9d65f982e4531df7 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 14 Nov 2021 07:46:33 -0500
+Subject: [PATCH 1/3] Update help tree files from Scribus SVN#24770
+
+These files are based on a newer version of the Qt4 examples, so their
+license changes from GPLv2 (only) to BSD, fixing the license
+incompatibility with GPLv3+ code in LuminanceHDR (#247).
+---
+ src/HelpBrowser/schelptreemodel.cpp | 383 ++++++++++++++-------------
+ src/HelpBrowser/schelptreemodel.h   |  80 +++---
+ src/HelpBrowser/treeitem.cpp        | 179 ++++++++-----
+ src/HelpBrowser/treeitem.h          | 125 +++++----
+ src/HelpBrowser/treemodel.cpp       | 392 ++++++++++++++++------------
+ src/HelpBrowser/treemodel.h         | 142 +++++-----
+ 6 files changed, 733 insertions(+), 568 deletions(-)
+
+diff --git a/src/HelpBrowser/schelptreemodel.cpp b/src/HelpBrowser/schelptreemodel.cpp
+index 1596a17c..0aebb3b3 100644
+--- a/src/HelpBrowser/schelptreemodel.cpp
++++ b/src/HelpBrowser/schelptreemodel.cpp
+@@ -1,31 +1,46 @@
+-/**
+-** This file is a part of Luminance HDR package.
+-** ----------------------------------------------------------------------
+-** Copyright (C) 2009-2016 Davide Anastasia, Franco Comida, Daniel Kaneider
+-**
+-****************************************************************************
++
++/****************************************************************************
+ **
+-** Copyright (C) 2005-2007 Trolltech ASA. All rights reserved.
++** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
++** All rights reserved.
++** Contact: Nokia Corporation (qt-info@nokia.com)
+ **
+-** This file is part of the example classes of the Qt Toolkit.
++** This file is part of the examples of the Qt Toolkit.
+ **
+-** This file may be used under the terms of the GNU General Public
+-** License version 2.0 as published by the Free Software Foundation
+-** and appearing in the file LICENSE.GPL included in the packaging of
+-** this file.  Please review the following information to ensure GNU
+-** General Public Licensing requirements will be met:
+-** http://www.trolltech.com/products/qt/opensource.html
++** $QT_BEGIN_LICENSE:BSD$
++** You may use this file under the terms of the BSD license as follows:
+ **
+-** If you are unsure which license is appropriate for your use, please
+-** review the following information:
+-** http://www.trolltech.com/products/qt/licensing.html or contact the
+-** sales department at sales@trolltech.com.
++** "Redistribution and use in source and binary forms, with or without
++** modification, are permitted provided that the following conditions are
++** met:
++**   * Redistributions of source code must retain the above copyright
++**     notice, this list of conditions and the following disclaimer.
++**   * Redistributions in binary form must reproduce the above copyright
++**     notice, this list of conditions and the following disclaimer in
++**     the documentation and/or other materials provided with the
++**     distribution.
++**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
++**     the names of its contributors may be used to endorse or promote
++**     products derived from this software without specific prior written
++**     permission.
+ **
+-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
++** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
++** $QT_END_LICENSE$
+ **
+ ****************************************************************************/
+ 
++//File initially based on treemodel.h from Qt 4.x, hardly anything like it now
++
+ /*
+     treemodel.cpp
+ 
+@@ -33,180 +48,178 @@
+     models.
+ */
+ 
++#include <QtGui>
+ #include <QDomDocument>
+ #include <QFile>
+-#include <QtWidgets>
+ 
+ #include "schelptreemodel.h"
+ 
+-ScHelpTreeModel::ScHelpTreeModel(const QString &dataFile,
+-                                 const QString &col1name,
+-                                 const QString &col2name,
+-                                 QMap<QString, QString> *indexToBuild,
+-                                 QObject *parent)
+-    : TreeModel(parent) {
+-    QList<QVariant> rootData;
+-    rootData << col1name << col2name;
+-    rootItem = new TreeItem(rootData);
+-    if (!dataFile.isEmpty()) setupModelData(dataFile, rootItem, indexToBuild);
++ScHelpTreeModel::ScHelpTreeModel(const QString &dataFile, const QString &col1name, const QString &col2name, QMap<QString, QString>* indexToBuild, QObject *parent)
++    : TreeModel(parent)
++{
++	QList<QVariant> rootData;
++	rootData << col1name << col2name;
++	m_rootItem = new TreeItem(rootData);
++	if (!dataFile.isEmpty())
++		setupModelData(dataFile, m_rootItem, indexToBuild);
+ }
+ 
+-void ScHelpTreeModel::setupModelData(const QString &dataFile, TreeItem *parent,
+-                                     QMap<QString, QString> *indexToBuild) {
+-    QFile file(dataFile);
+-    if (!file.open(QIODevice::ReadOnly)) return;
+-    QDomDocument doc(QStringLiteral("menuentries"));
+-    if (!doc.setContent(&file)) {
+-        file.close();
+-        return;
+-    }
+-    file.close();
+-
+-    QList<TreeItem *> parents;
+-    QList<int> indentations;
+-    parents << parent;
+-    indentations << 0;
+-    QDomElement docElem = doc.documentElement();
+-    QDomNode n = docElem.firstChild();
+-    //    bool haveTutorials=false;
+-    QList<QVariant> columnData;
+-    int position = 0;
+-    while (!n.isNull()) {
+-        QDomElement e =
+-            n.toElement();  // try to convert the node to an element.
+-        if (!e.isNull()) {
+-            if (e.hasAttribute(QStringLiteral("text")) &&
+-                e.hasAttribute(QStringLiteral("file"))) {
+-                QDomAttr textAttr = e.attributeNode(QStringLiteral("text"));
+-                QDomAttr fileAttr = e.attributeNode(QStringLiteral("file"));
+-                columnData.clear();
+-                columnData << textAttr.value() << fileAttr.value();
+-                if (position > indentations.last()) {
+-                    // The last child of the current parent is now the new
+-                    // parent
+-                    // unless the current parent has no children.
+-
+-                    if (parents.last()->childCount() > 0) {
+-                        parents << parents.last()->child(
+-                            parents.last()->childCount() - 1);
+-                        indentations << position;
+-                    }
+-                } else {
+-                    while (position < indentations.last() &&
+-                           parents.count() > 0) {
+-                        parents.pop_back();
+-                        indentations.pop_back();
+-                    }
+-                }
+-                // Append a new item to the current parent's list of children.
+-                parents.last()->appendChild(
+-                    new TreeItem(columnData, parents.last()));
+-                if (indexToBuild)
+-                    indexToBuild->insert(textAttr.value(), fileAttr.value());
+-            }
+-
+-            QDomNodeList nl = n.childNodes();
+-            if (nl.count() > 0) position = 1;
+-            for (int i = 0; i <= nl.count(); i++) {
+-                QDomNode child = nl.item(i);
+-                if (child.isElement()) {
+-                    QDomElement ec = child.toElement();
+-                    if (!ec.isNull()) {
+-                        if (ec.hasAttribute(QStringLiteral("text")) &&
+-                            ec.hasAttribute(QStringLiteral("file"))) {
+-                            QDomAttr textAttr =
+-                                ec.attributeNode(QStringLiteral("text"));
+-                            QDomAttr fileAttr =
+-                                ec.attributeNode(QStringLiteral("file"));
+-                            columnData.clear();
+-                            columnData << textAttr.value() << fileAttr.value();
+-                            if (position > indentations.last()) {
+-                                // The last child of the current parent is now
+-                                // the new parent
+-                                // unless the current parent has no children.
++void ScHelpTreeModel::setupModelData(const QString &dataFile, TreeItem *parent, QMap<QString, QString>* indexToBuild)
++{
++	QFile file( dataFile );
++	if ( !file.open( QIODevice::ReadOnly ) )
++		return;
++	QDomDocument doc( "menuentries" );
++	if ( !doc.setContent( &file ) )
++	{
++		file.close();
++		return;
++	}
++	file.close();
+ 
+-                                if (parents.last()->childCount() > 0) {
+-                                    parents << parents.last()->child(
+-                                        parents.last()->childCount() - 1);
+-                                    indentations << position;
+-                                }
+-                            } else {
+-                                while (position < indentations.last() &&
+-                                       parents.count() > 0) {
+-                                    parents.pop_back();
+-                                    indentations.pop_back();
+-                                }
+-                            }
+-                            // Append a new item to the current parent's list of
+-                            // children.
+-                            parents.last()->appendChild(
+-                                new TreeItem(columnData, parents.last()));
+-                            if (indexToBuild)
+-                                indexToBuild->insert(textAttr.value(),
+-                                                     fileAttr.value());
+-                        }
+-                        // 3rd level
+-                        QDomNodeList nl2 = child.childNodes();
+-                        if (nl2.count() > 0) position = 2;
+-                        for (int i2 = 0; i2 <= nl2.count(); i2++) {
+-                            QDomNode childchild = nl2.item(i2);
+-                            if (childchild.isElement()) {
+-                                QDomElement ecc = childchild.toElement();
+-                                if (!ecc.isNull()) {
+-                                    QDomAttr textAttr = ecc.attributeNode(
+-                                        QStringLiteral("text"));
+-                                    QDomAttr fileAttr = ecc.attributeNode(
+-                                        QStringLiteral("file"));
+-                                    columnData.clear();
+-                                    columnData << textAttr.value()
+-                                               << fileAttr.value();
+-                                    if (position > indentations.last()) {
+-                                        // The last child of the current parent
+-                                        // is now the new
+-                                        // parent
+-                                        // unless the current parent has no
+-                                        // children.
++	QList<TreeItem*> parents;
++	QList<int> indentations;
++	parents << parent;
++	indentations << 0;
++	QDomElement docElem = doc.documentElement();
++	QDomNode n = docElem.firstChild();
++//	bool haveTutorials=false;
++	QList<QVariant> columnData;
++	int position=0;
++	while (!n.isNull())
++	{
++		QDomElement e = n.toElement(); // try to convert the node to an element.
++		if (!e.isNull())
++		{
++			if (e.hasAttribute( "text" ) && e.hasAttribute( "file" ))
++			{
++				QDomAttr textAttr = e.attributeNode( "text" );
++				QDomAttr fileAttr = e.attributeNode( "file" );
++				columnData.clear();
++				columnData << textAttr.value() <<  fileAttr.value();
++				if (position > indentations.last()) 
++				{
++					// The last child of the current parent is now the new parent
++					// unless the current parent has no children.
++		
++					if (parents.last()->childCount() > 0) 
++					{
++						parents << parents.last()->child(parents.last()->childCount()-1);
++						indentations << position;
++					}
++				}
++				else 
++				{
++					while (position < indentations.last() && parents.count() > 0) {
++						parents.pop_back();
++						indentations.pop_back();
++					}
++				}
++				// Append a new item to the current parent's list of children.
++				parents.last()->appendChild(new TreeItem(columnData, parents.last()));
++				if (indexToBuild)
++					indexToBuild->insert(textAttr.value(), fileAttr.value());
++			}
+ 
+-                                        if (parents.last()->childCount() > 0) {
+-                                            parents << parents.last()->child(
+-                                                parents.last()->childCount() -
+-                                                1);
+-                                            indentations << position;
+-                                        }
+-                                    } else {
+-                                        while (position < indentations.last() &&
+-                                               parents.count() > 0) {
+-                                            parents.pop_back();
+-                                            indentations.pop_back();
+-                                        }
+-                                    }
+-                                    // Append a new item to the current parent's
+-                                    // list of children.
+-                                    parents.last()->appendChild(new TreeItem(
+-                                        columnData, parents.last()));
+-                                    if (indexToBuild)
+-                                        indexToBuild->insert(textAttr.value(),
+-                                                             fileAttr.value());
+-                                }
+-                            }
+-                        }
+-                        position = 1;
+-                    }
+-                }
+-            }
+-            position = 0;
+-        }
+-        n = n.nextSibling();
+-    }
++			QDomNodeList nl=n.childNodes();
++			if (nl.count()>0)
++				position=1;
++			for (int i=0 ; i<= nl.count() ; i++)
++			{
++				QDomNode child=nl.item(i);
++				if (child.isElement())
++				{
++					QDomElement ec = child.toElement();
++					if (!ec.isNull())
++					{
++						if (ec.hasAttribute( "text" ) && ec.hasAttribute( "file" ))
++						{
++							QDomAttr textAttr = ec.attributeNode( "text" );
++							QDomAttr fileAttr = ec.attributeNode( "file" );
++							columnData.clear();
++							columnData << textAttr.value() <<  fileAttr.value();
++							if (position > indentations.last()) 
++							{
++								// The last child of the current parent is now the new parent
++								// unless the current parent has no children.
++					
++								if (parents.last()->childCount() > 0) 
++								{
++									parents << parents.last()->child(parents.last()->childCount()-1);
++									indentations << position;
++								}
++							}
++							else 
++							{
++								while (position < indentations.last() && parents.count() > 0) {
++									parents.pop_back();
++									indentations.pop_back();
++								}
++							}
++							// Append a new item to the current parent's list of children.
++							parents.last()->appendChild(new TreeItem(columnData, parents.last()));
++							if (indexToBuild)
++								indexToBuild->insert(textAttr.value(), fileAttr.value());
++						}
++						//3rd level
++						QDomNodeList nl2=child.childNodes();
++						if (nl2.count() > 0)
++							position = 2;
++						for (int i2 = 0 ; i2 <= nl2.count(); i2++)
++						{
++							QDomNode childchild = nl2.item(i2);
++							if (childchild.isElement())
++							{
++								QDomElement ecc = childchild.toElement();
++								if (!ecc.isNull())
++								{
++									QDomAttr textAttr = ecc.attributeNode( "text" );
++									QDomAttr fileAttr = ecc.attributeNode( "file" );
++									columnData.clear();
++									columnData << textAttr.value() <<  fileAttr.value();
++									if (position > indentations.last()) 
++									{
++										// The last child of the current parent is now the new parent
++										// unless the current parent has no children.
++							
++										if (parents.last()->childCount() > 0) 
++										{
++											parents << parents.last()->child(parents.last()->childCount()-1);
++											indentations << position;
++										}
++									}
++									else 
++									{
++										while (position < indentations.last() && parents.count() > 0) {
++											parents.pop_back();
++											indentations.pop_back();
++										}
++									}
++									// Append a new item to the current parent's list of children.
++									parents.last()->appendChild(new TreeItem(columnData, parents.last()));
++									if (indexToBuild)
++										indexToBuild->insert(textAttr.value(), fileAttr.value());
++								}
++							}
++						}
++						position=1;
++					}
++				}
++			}
++			position=0;
++		}
++		n = n.nextSibling();
++	}
+ }
+ 
+-void ScHelpTreeModel::addRow(const QString &s1, const QString &s2, int /*i*/) {
+-    QList<TreeItem *> parents;
+-    QList<int> indentations;
+-    parents << rootItem;
+-    if (parents.last()->childCount() > 0)
+-        parents << parents.last()->child(parents.last()->childCount() - 1);
+-    QList<QVariant> columnData;
+-    columnData << s1 << s2;  // << i;
+-    parents.last()->appendChild(new TreeItem(columnData, parents.last()));
++void ScHelpTreeModel::addRow(const QString& s1, const QString& s2, int i)
++{
++	QList<TreeItem*> parents;
++//	QList<int> indentations;
++	parents << m_rootItem;
++	if (parents.last()->childCount() > 0) 
++		parents << parents.last()->child(parents.last()->childCount()-1);
++	QList<QVariant> columnData;
++	columnData << s1 << s2;// << i;
++	parents.last()->appendChild(new TreeItem(columnData, parents.last()));
+ }
+diff --git a/src/HelpBrowser/schelptreemodel.h b/src/HelpBrowser/schelptreemodel.h
+index 0ed9c7b6..d023191a 100644
+--- a/src/HelpBrowser/schelptreemodel.h
++++ b/src/HelpBrowser/schelptreemodel.h
+@@ -1,55 +1,69 @@
+-/**
+-** This file is a part of Luminance HDR package.
+-** ----------------------------------------------------------------------
+-** Copyright (C) 2009-2016 Davide Anastasia, Franco Comida, Daniel Kaneider
+-**
+-*****************************************************************************
++
++/****************************************************************************
+ **
+-** Copyright (C) 2005-2007 Trolltech ASA. All rights reserved.
++** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
++** All rights reserved.
++** Contact: Nokia Corporation (qt-info@nokia.com)
+ **
+-** This file is part of the example classes of the Qt Toolkit.
++** This file is part of the examples of the Qt Toolkit.
+ **
+-** This file may be used under the terms of the GNU General Public
+-** License version 2.0 as published by the Free Software Foundation
+-** and appearing in the file LICENSE.GPL included in the packaging of
+-** this file.  Please review the following information to ensure GNU
+-** General Public Licensing requirements will be met:
+-** http://www.trolltech.com/products/qt/opensource.html
++** $QT_BEGIN_LICENSE:BSD$
++** You may use this file under the terms of the BSD license as follows:
+ **
+-** If you are unsure which license is appropriate for your use, please
+-** review the following information:
+-** http://www.trolltech.com/products/qt/licensing.html or contact the
+-** sales department at sales@trolltech.com.
++** "Redistribution and use in source and binary forms, with or without
++** modification, are permitted provided that the following conditions are
++** met:
++**   * Redistributions of source code must retain the above copyright
++**     notice, this list of conditions and the following disclaimer.
++**   * Redistributions in binary form must reproduce the above copyright
++**     notice, this list of conditions and the following disclaimer in
++**     the documentation and/or other materials provided with the
++**     distribution.
++**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
++**     the names of its contributors may be used to endorse or promote
++**     products derived from this software without specific prior written
++**     permission.
+ **
+-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
++** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
++** $QT_END_LICENSE$
+ **
+ ****************************************************************************/
+ 
++//File initially based on treemodel.h from Qt 4.x  
++
+ #ifndef SCHELP_TREEMODEL_H
+ #define SCHELP_TREEMODEL_H
+ 
+ #include <QAbstractItemModel>
+-#include <QDomDocument>
+ #include <QModelIndex>
+ #include <QVariant>
+ 
+-#include "treemodel.h"
++#include "./tt/simpletreemodel/treemodel.h"
++
++
++class ScHelpTreeModel : public TreeModel
++{
++	Q_OBJECT
+ 
+-class ScHelpTreeModel : public TreeModel {
+-    // Q_OBJECT
++public:
++	ScHelpTreeModel(const QString &dataFile, const QString &col1name, const QString &col2name, QMap<QString, QString>* indexToBuild, QObject* parent = nullptr);
++	~ScHelpTreeModel() {};
+ 
+-   public:
+-    ScHelpTreeModel(const QString &dataFile, const QString &col1name,
+-                    const QString &col2name,
+-                    QMap<QString, QString> *indexToBuild, QObject *parent = 0);
+-    ~ScHelpTreeModel(){};
++	void addRow(const QString&, const QString&, int i);
+ 
+-    void addRow(const QString &, const QString &, int i);
++private:
++	void setupModelData(const QString &dataFile, TreeItem *parent, QMap<QString, QString>* indexToBuild);
+ 
+-   private:
+-    void setupModelData(const QString &dataFile, TreeItem *parent,
+-                        QMap<QString, QString> *indexToBuild);
+ };
+ 
+ #endif
+diff --git a/src/HelpBrowser/treeitem.cpp b/src/HelpBrowser/treeitem.cpp
+index cfda0c67..936ca18b 100644
+--- a/src/HelpBrowser/treeitem.cpp
++++ b/src/HelpBrowser/treeitem.cpp
+@@ -1,63 +1,116 @@
+-/**
+-** This file is a part of Luminance HDR package.
+-** ----------------------------------------------------------------------
+-** Copyright (C) 2009-2016 Davide Anastasia, Franco Comida, Daniel Kaneider
+-**
+-*****************************************************************************
+-**
+-** Copyright (C) 2005-2007 Trolltech ASA. All rights reserved.
+-**
+-** This file is part of the example classes of the Qt Toolkit.
+-**
+-** This file may be used under the terms of the GNU General Public
+-** License version 2.0 as published by the Free Software Foundation
+-** and appearing in the file LICENSE.GPL included in the packaging of
+-** this file.  Please review the following information to ensure GNU
+-** General Public Licensing requirements will be met:
+-** http://www.trolltech.com/products/qt/opensource.html
+-**
+-** If you are unsure which license is appropriate for your use, please
+-** review the following information:
+-** http://www.trolltech.com/products/qt/licensing.html or contact the
+-** sales department at sales@trolltech.com.
+-**
+-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+-**
+-****************************************************************************/
+-
+-/*
+-    treeitem.cpp
+-
+-    A container for items of data supplied by the simple tree model.
+-*/
+-
+-#include <QStringList>
+-
+-#include "treeitem.h"
+-
+-TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent) {
+-    parentItem = parent;
+-    itemData = data;
+-}
+-
+-TreeItem::~TreeItem() { qDeleteAll(childItems); }
+-
+-void TreeItem::appendChild(TreeItem *item) { childItems.append(item); }
+-
+-TreeItem *TreeItem::child(int row) { return childItems.value(row); }
+-
+-int TreeItem::childCount() const { return childItems.count(); }
+-
+-int TreeItem::columnCount() const { return itemData.count(); }
+-
+-QVariant TreeItem::data(int column) const { return itemData.value(column); }
+-
+-TreeItem *TreeItem::parent() { return parentItem; }
+-
+-int TreeItem::row() const {
+-    if (parentItem)
+-        return parentItem->childItems.indexOf(const_cast<TreeItem *>(this));
+-
+-    return 0;
+-}
++/****************************************************************************
++**
++** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
++** All rights reserved.
++** Contact: Nokia Corporation (qt-info@nokia.com)
++**
++** This file is part of the examples of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:BSD$
++** You may use this file under the terms of the BSD license as follows:
++**
++** "Redistribution and use in source and binary forms, with or without
++** modification, are permitted provided that the following conditions are
++** met:
++**   * Redistributions of source code must retain the above copyright
++**     notice, this list of conditions and the following disclaimer.
++**   * Redistributions in binary form must reproduce the above copyright
++**     notice, this list of conditions and the following disclaimer in
++**     the documentation and/or other materials provided with the
++**     distribution.
++**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
++**     the names of its contributors may be used to endorse or promote
++**     products derived from this software without specific prior written
++**     permission.
++**
++** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++/*
++    treeitem.cpp
++
++    A container for items of data supplied by the simple tree model.
++*/
++
++#include <QStringList>
++
++#include "treeitem.h"
++
++//! [0]
++TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent)
++{
++    m_parentItem = parent;
++    m_itemData = data;
++}
++//! [0]
++
++//! [1]
++TreeItem::~TreeItem()
++{
++    qDeleteAll(m_childItems);
++}
++//! [1]
++
++//! [2]
++void TreeItem::appendChild(TreeItem *item)
++{
++    m_childItems.append(item);
++}
++//! [2]
++
++//! [3]
++TreeItem *TreeItem::child(int row)
++{
++    return m_childItems.value(row);
++}
++//! [3]
++
++//! [4]
++int TreeItem::childCount() const
++{
++    return m_childItems.count();
++}
++//! [4]
++
++//! [5]
++int TreeItem::columnCount() const
++{
++    return m_itemData.count();
++}
++//! [5]
++
++//! [6]
++QVariant TreeItem::data(int column) const
++{
++    return m_itemData.value(column);
++}
++//! [6]
++
++//! [7]
++TreeItem *TreeItem::parent()
++{
++    return m_parentItem;
++}
++//! [7]
++
++//! [8]
++int TreeItem::row() const
++{
++    if (m_parentItem)
++        return m_parentItem->m_childItems.indexOf(const_cast<TreeItem*>(this));
++
++    return 0;
++}
++//! [8]
+diff --git a/src/HelpBrowser/treeitem.h b/src/HelpBrowser/treeitem.h
+index 3c61bc50..9e60e09a 100644
+--- a/src/HelpBrowser/treeitem.h
++++ b/src/HelpBrowser/treeitem.h
+@@ -1,55 +1,70 @@
+-/**
+-** This file is a part of Luminance HDR package.
+-** ----------------------------------------------------------------------
+-** Copyright (C) 2009-2016 Davide Anastasia, Franco Comida, Daniel Kaneider
+-**
+-*****************************************************************************
+-**
+-** Copyright (C) 2005-2007 Trolltech ASA. All rights reserved.
+-**
+-** This file is part of the example classes of the Qt Toolkit.
+-**
+-** This file may be used under the terms of the GNU General Public
+-** License version 2.0 as published by the Free Software Foundation
+-** and appearing in the file LICENSE.GPL included in the packaging of
+-** this file.  Please review the following information to ensure GNU
+-** General Public Licensing requirements will be met:
+-** http://www.trolltech.com/products/qt/opensource.html
+-**
+-** If you are unsure which license is appropriate for your use, please
+-** review the following information:
+-** http://www.trolltech.com/products/qt/licensing.html or contact the
+-** sales department at sales@trolltech.com.
+-**
+-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+-**
+-****************************************************************************/
+-
+-#ifndef TREEITEM_H
+-#define TREEITEM_H
+-
+-#include <QList>
+-#include <QVariant>
+-
+-class TreeItem {
+-   public:
+-    TreeItem(const QList<QVariant> &data, TreeItem *parent = 0);
+-    ~TreeItem();
+-
+-    void appendChild(TreeItem *child);
+-
+-    TreeItem *child(int row);
+-    int childCount() const;
+-    int columnCount() const;
+-    QVariant data(int column) const;
+-    int row() const;
+-    TreeItem *parent();
+-
+-   private:
+-    QList<TreeItem *> childItems;
+-    QList<QVariant> itemData;
+-    TreeItem *parentItem;
+-};
+-
+-#endif
++/****************************************************************************
++**
++** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
++** All rights reserved.
++** Contact: Nokia Corporation (qt-info@nokia.com)
++**
++** This file is part of the examples of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:BSD$
++** You may use this file under the terms of the BSD license as follows:
++**
++** "Redistribution and use in source and binary forms, with or without
++** modification, are permitted provided that the following conditions are
++** met:
++**   * Redistributions of source code must retain the above copyright
++**     notice, this list of conditions and the following disclaimer.
++**   * Redistributions in binary form must reproduce the above copyright
++**     notice, this list of conditions and the following disclaimer in
++**     the documentation and/or other materials provided with the
++**     distribution.
++**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
++**     the names of its contributors may be used to endorse or promote
++**     products derived from this software without specific prior written
++**     permission.
++**
++** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef TREEITEM_H
++#define TREEITEM_H
++
++#include <QList>
++#include <QVariant>
++
++//! [0]
++class TreeItem
++{
++public:
++    TreeItem(const QList<QVariant> &data, TreeItem* parent = nullptr);
++    ~TreeItem();
++
++	void appendChild(TreeItem *item);
++
++    TreeItem *child(int row);
++    int childCount() const;
++    int columnCount() const;
++    QVariant data(int column) const;
++    int row() const;
++    TreeItem *parent();
++
++private:
++	QList<TreeItem*> m_childItems;
++	QList<QVariant> m_itemData;
++	TreeItem *m_parentItem;
++};
++//! [0]
++
++#endif
+diff --git a/src/HelpBrowser/treemodel.cpp b/src/HelpBrowser/treemodel.cpp
+index 45d2a32f..5006ad5e 100644
+--- a/src/HelpBrowser/treemodel.cpp
++++ b/src/HelpBrowser/treemodel.cpp
+@@ -1,169 +1,223 @@
+-/**
+-** This file is a part of Luminance HDR package.
+-** ----------------------------------------------------------------------
+-** Copyright (C) 2009-2016 Davide Anastasia, Franco Comida, Daniel Kaneider
+-**
+-*****************************************************************************
+-**
+-** Copyright (C) 2005-2007 Trolltech ASA. All rights reserved.
+-**
+-** This file is part of the example classes of the Qt Toolkit.
+-**
+-** This file may be used under the terms of the GNU General Public
+-** License version 2.0 as published by the Free Software Foundation
+-** and appearing in the file LICENSE.GPL included in the packaging of
+-** this file.  Please review the following information to ensure GNU
+-** General Public Licensing requirements will be met:
+-** http://www.trolltech.com/products/qt/opensource.html
+-**
+-** If you are unsure which license is appropriate for your use, please
+-** review the following information:
+-** http://www.trolltech.com/products/qt/licensing.html or contact the
+-** sales department at sales@trolltech.com.
+-**
+-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+-**
+-****************************************************************************/
+-
+-/*
+-    treemodel.cpp
+-
+-    Provides a simple tree model to show how to create and use hierarchical
+-    models.
+-*/
+-
+-#include <QtWidgets>
+-
+-#include "treeitem.h"
+-#include "treemodel.h"
+-
+-TreeModel::TreeModel(const QString &data, QObject *parent)
+-    : QAbstractItemModel(parent) {
+-    QList<QVariant> rootData;
+-    rootData << "Title"
+-             << "Summary";
+-    rootItem = new TreeItem(rootData);
+-    setupModelData(data.split(QStringLiteral("\n")), rootItem);
+-}
+-
+-TreeModel::~TreeModel() { delete rootItem; }
+-
+-int TreeModel::columnCount(const QModelIndex &parent) const {
+-    if (parent.isValid())
+-        return static_cast<TreeItem *>(parent.internalPointer())->columnCount();
+-    else
+-        return rootItem->columnCount();
+-}
+-
+-QVariant TreeModel::data(const QModelIndex &index, int role) const {
+-    if (!index.isValid()) return QVariant();
+-
+-    if (role != Qt::DisplayRole) return QVariant();
+-
+-    TreeItem *item = static_cast<TreeItem *>(index.internalPointer());
+-
+-    return item->data(index.column());
+-}
+-
+-Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const {
+-    if (!index.isValid()) return Qt::ItemIsEnabled;
+-
+-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+-}
+-
+-QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
+-                               int role) const {
+-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+-        return rootItem->data(section);
+-
+-    return QVariant();
+-}
+-
+-QModelIndex TreeModel::index(int row, int column,
+-                             const QModelIndex &parent) const {
+-    TreeItem *parentItem;
+-
+-    if (!parent.isValid())
+-        parentItem = rootItem;
+-    else
+-        parentItem = static_cast<TreeItem *>(parent.internalPointer());
+-
+-    TreeItem *childItem = parentItem->child(row);
+-    if (childItem)
+-        return createIndex(row, column, childItem);
+-    else
+-        return QModelIndex();
+-}
+-
+-QModelIndex TreeModel::parent(const QModelIndex &index) const {
+-    if (!index.isValid()) return QModelIndex();
+-
+-    TreeItem *childItem = static_cast<TreeItem *>(index.internalPointer());
+-    TreeItem *parentItem = childItem->parent();
+-
+-    if (parentItem == rootItem) return QModelIndex();
+-
+-    return createIndex(parentItem->row(), 0, parentItem);
+-}
+-
+-int TreeModel::rowCount(const QModelIndex &parent) const {
+-    TreeItem *parentItem;
+-
+-    if (!parent.isValid())
+-        parentItem = rootItem;
+-    else
+-        parentItem = static_cast<TreeItem *>(parent.internalPointer());
+-
+-    return parentItem->childCount();
+-}
+-
+-void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent) {
+-    QList<TreeItem *> parents;
+-    QList<int> indentations;
+-    parents << parent;
+-    indentations << 0;
+-
+-    int number = 0;
+-
+-    while (number < lines.count()) {
+-        int position = 0;
+-        while (position < lines[number].length()) {
+-            if (lines[number].mid(position, 1) != QLatin1String(" ")) break;
+-            position++;
+-        }
+-
+-        QString lineData = lines[number].mid(position).trimmed();
+-
+-        if (!lineData.isEmpty()) {
+-            // Read the column data from the rest of the line.
+-            QStringList columnStrings =
+-                lineData.split(QStringLiteral("\t"), QString::SkipEmptyParts);
+-            QList<QVariant> columnData;
+-            for (int column = 0; column < columnStrings.count(); ++column)
+-                columnData << columnStrings[column];
+-
+-            if (position > indentations.last()) {
+-                // The last child of the current parent is now the new parent
+-                // unless the current parent has no children.
+-
+-                if (parents.last()->childCount() > 0) {
+-                    parents << parents.last()->child(
+-                        parents.last()->childCount() - 1);
+-                    indentations << position;
+-                }
+-            } else {
+-                while (position < indentations.last() && parents.count() > 0) {
+-                    parents.pop_back();
+-                    indentations.pop_back();
+-                }
+-            }
+-
+-            // Append a new item to the current parent's list of children.
+-            parents.last()->appendChild(
+-                new TreeItem(columnData, parents.last()));
+-        }
+-
+-        number++;
+-    }
+-}
++/****************************************************************************
++**
++** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
++** All rights reserved.
++** Contact: Nokia Corporation (qt-info@nokia.com)
++**
++** This file is part of the examples of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:BSD$
++** You may use this file under the terms of the BSD license as follows:
++**
++** "Redistribution and use in source and binary forms, with or without
++** modification, are permitted provided that the following conditions are
++** met:
++**   * Redistributions of source code must retain the above copyright
++**     notice, this list of conditions and the following disclaimer.
++**   * Redistributions in binary form must reproduce the above copyright
++**     notice, this list of conditions and the following disclaimer in
++**     the documentation and/or other materials provided with the
++**     distribution.
++**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
++**     the names of its contributors may be used to endorse or promote
++**     products derived from this software without specific prior written
++**     permission.
++**
++** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++/*
++    treemodel.cpp
++
++    Provides a simple tree model to show how to create and use hierarchical
++    models.
++*/
++
++#include <QtGui>
++
++#include "treeitem.h"
++#include "treemodel.h"
++
++TreeModel::TreeModel(QObject *parent )
++{
++	m_rootItem = nullptr;
++}
++
++//! [0]
++TreeModel::TreeModel(const QString &data, QObject *parent)
++    : QAbstractItemModel(parent)
++{
++    QList<QVariant> rootData;
++    rootData << "Title" << "Summary";
++    m_rootItem = new TreeItem(rootData);
++    setupModelData(data.split(QString("\n")), m_rootItem);
++}
++//! [0]
++
++//! [1]
++TreeModel::~TreeModel()
++{
++    delete m_rootItem;
++}
++//! [1]
++
++//! [2]
++int TreeModel::columnCount(const QModelIndex &parent) const
++{
++    if (parent.isValid())
++        return static_cast<TreeItem*>(parent.internalPointer())->columnCount();
++    else
++        return m_rootItem->columnCount();
++}
++//! [2]
++
++//! [3]
++QVariant TreeModel::data(const QModelIndex &index, int role) const
++{
++    if (!index.isValid())
++        return QVariant();
++
++    if (role != Qt::DisplayRole)
++        return QVariant();
++
++    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
++
++    return item->data(index.column());
++}
++//! [3]
++
++//! [4]
++Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
++{
++    if (!index.isValid())
++		return Qt::ItemFlags();
++
++    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
++}
++//! [4]
++
++//! [5]
++QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
++                               int role) const
++{
++    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
++        return m_rootItem->data(section);
++
++    return QVariant();
++}
++//! [5]
++
++//! [6]
++QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent)
++            const
++{
++    if (!hasIndex(row, column, parent))
++        return QModelIndex();
++
++    TreeItem *parentItem;
++
++    if (!parent.isValid())
++        parentItem = m_rootItem;
++    else
++        parentItem = static_cast<TreeItem*>(parent.internalPointer());
++
++    TreeItem *childItem = parentItem->child(row);
++    if (childItem)
++        return createIndex(row, column, childItem);
++    else
++        return QModelIndex();
++}
++//! [6]
++
++//! [7]
++QModelIndex TreeModel::parent(const QModelIndex &index) const
++{
++    if (!index.isValid())
++        return QModelIndex();
++
++    TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
++    TreeItem *parentItem = childItem->parent();
++
++    if (parentItem == m_rootItem)
++        return QModelIndex();
++
++    return createIndex(parentItem->row(), 0, parentItem);
++}
++//! [7]
++
++//! [8]
++int TreeModel::rowCount(const QModelIndex &parent) const
++{
++    TreeItem *parentItem;
++    if (parent.column() > 0)
++        return 0;
++
++    if (!parent.isValid())
++        parentItem = m_rootItem;
++    else
++        parentItem = static_cast<TreeItem*>(parent.internalPointer());
++
++    return parentItem->childCount();
++}
++//! [8]
++
++void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
++{
++    QList<TreeItem*> parents;
++    QList<int> indentations;
++    parents << parent;
++    indentations << 0;
++
++    int number = 0;
++
++    while (number < lines.count()) {
++        int position = 0;
++        while (position < lines[number].length()) {
++            if (lines[number].mid(position, 1) != " ")
++                break;
++            position++;
++        }
++
++        QString lineData = lines[number].mid(position).trimmed();
++
++        if (!lineData.isEmpty()) {
++            // Read the column data from the rest of the line.
++            QStringList columnStrings = lineData.split("\t", Qt::SkipEmptyParts);
++            QList<QVariant> columnData;
++            for (int column = 0; column < columnStrings.count(); ++column)
++                columnData << columnStrings[column];
++
++            if (position > indentations.last()) {
++                // The last child of the current parent is now the new parent
++                // unless the current parent has no children.
++
++                if (parents.last()->childCount() > 0) {
++                    parents << parents.last()->child(parents.last()->childCount()-1);
++                    indentations << position;
++                }
++            } else {
++                while (position < indentations.last() && parents.count() > 0) {
++                    parents.pop_back();
++                    indentations.pop_back();
++                }
++            }
++
++            // Append a new item to the current parent's list of children.
++            parents.last()->appendChild(new TreeItem(columnData, parents.last()));
++        }
++
++        number++;
++    }
++}
+diff --git a/src/HelpBrowser/treemodel.h b/src/HelpBrowser/treemodel.h
+index f0614a35..2b03765e 100644
+--- a/src/HelpBrowser/treemodel.h
++++ b/src/HelpBrowser/treemodel.h
+@@ -1,63 +1,79 @@
+-/**
+-** This file is a part of Luminance HDR package.
+-** ----------------------------------------------------------------------
+-** Copyright (C) 2009-2016 Davide Anastasia, Franco Comida, Daniel Kaneider
+-**
+-*****************************************************************************
+-**
+-** Copyright (C) 2005-2007 Trolltech ASA. All rights reserved.
+-**
+-** This file is part of the example classes of the Qt Toolkit.
+-**
+-** This file may be used under the terms of the GNU General Public
+-** License version 2.0 as published by the Free Software Foundation
+-** and appearing in the file LICENSE.GPL included in the packaging of
+-** this file.  Please review the following information to ensure GNU
+-** General Public Licensing requirements will be met:
+-** http://www.trolltech.com/products/qt/opensource.html
+-**
+-** If you are unsure which license is appropriate for your use, please
+-** review the following information:
+-** http://www.trolltech.com/products/qt/licensing.html or contact the
+-** sales department at sales@trolltech.com.
+-**
+-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+-**
+-****************************************************************************/
+-
+-#ifndef TREEMODEL_H
+-#define TREEMODEL_H
+-
+-#include <QAbstractItemModel>
+-#include <QModelIndex>
+-#include <QVariant>
+-
+-#include "treeitem.h"  //CB include this here to make subclasses easier
+-
+-class TreeModel : public QAbstractItemModel {
+-    // Q_OBJECT
+-
+-   public:
+-    TreeModel(const QString &data, QObject *parent = 0);
+-    explicit TreeModel(QObject * /*parent = 0*/)
+-        : rootItem(NULL){};  // CB Added for ScHelpTreeModel
+-    ~TreeModel();
+-
+-    QVariant data(const QModelIndex &index, int role) const;
+-    Qt::ItemFlags flags(const QModelIndex &index) const;
+-    QVariant headerData(int section, Qt::Orientation orientation,
+-                        int role = Qt::DisplayRole) const;
+-    QModelIndex index(int row, int column,
+-                      const QModelIndex &parent = QModelIndex()) const;
+-    QModelIndex parent(const QModelIndex &index) const;
+-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+-
+-   protected:
+-    void setupModelData(const QStringList &lines, TreeItem *parent);
+-
+-    TreeItem *rootItem;
+-};
+-
+-#endif
++/****************************************************************************
++**
++** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
++** All rights reserved.
++** Contact: Nokia Corporation (qt-info@nokia.com)
++**
++** This file is part of the examples of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:BSD$
++** You may use this file under the terms of the BSD license as follows:
++**
++** "Redistribution and use in source and binary forms, with or without
++** modification, are permitted provided that the following conditions are
++** met:
++**   * Redistributions of source code must retain the above copyright
++**     notice, this list of conditions and the following disclaimer.
++**   * Redistributions in binary form must reproduce the above copyright
++**     notice, this list of conditions and the following disclaimer in
++**     the documentation and/or other materials provided with the
++**     distribution.
++**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
++**     the names of its contributors may be used to endorse or promote
++**     products derived from this software without specific prior written
++**     permission.
++**
++** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef TREEMODEL_H
++#define TREEMODEL_H
++
++#include <QAbstractItemModel>
++#include <QModelIndex>
++#include <QVariant>
++
++//Scribus class TreeItem;
++#include "treeitem.h" //Scribus include this here to make subclasses easier
++
++//! [0]
++class TreeModel : public QAbstractItemModel
++{
++    Q_OBJECT
++
++public:
++    TreeModel(const QString &data, QObject* parent = nullptr);
++    TreeModel(QObject* parent = nullptr); //Scribus Added for ScHelpTreeModel
++    ~TreeModel();
++
++    QVariant data(const QModelIndex &index, int role) const;
++    Qt::ItemFlags flags(const QModelIndex &index) const;
++    QVariant headerData(int section, Qt::Orientation orientation,
++                        int role = Qt::DisplayRole) const;
++    QModelIndex index(int row, int column,
++                      const QModelIndex &parent = QModelIndex()) const;
++    QModelIndex parent(const QModelIndex &index) const;
++    int rowCount(const QModelIndex &parent = QModelIndex()) const;
++    int columnCount(const QModelIndex &parent = QModelIndex()) const;
++
++//Scribus private:
++protected:
++    void setupModelData(const QStringList &lines, TreeItem *parent);
++
++	TreeItem *m_rootItem;
++};
++//! [0]
++
++#endif
+-- 
+2.33.1
+

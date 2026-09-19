@@ -1,0 +1,79 @@
+From ebba39064088b83cca8c560ff1b88a6b2f26af92 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Sun, 30 Jun 2024 17:56:26 +0200
+Subject: [PATCH] Make compatible with Exiv2 >= 0.28.0
+
+---
+ align.cpp |  4 ++--
+ align.h   | 12 ++++++++++--
+ immix.cpp |  4 ++--
+ 3 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/align.cpp b/align.cpp
+index 4e78294..a889278 100755
+--- a/align.cpp
++++ b/align.cpp
+@@ -172,9 +172,9 @@ void AlignmentManager::finalProcessing (void)
+ 	finale.save (newPremsFileName, "jpg", ImmixWin::jpgQuality) ;
+ 
+ 	// Copy EXIF metadata.
+-    Exiv2::Image::AutoPtr imageExifRead = Exiv2::ImageFactory::open(imw->displayList[0]->filePath[0].toStdString());
++    ImagePtr imageExifRead = Exiv2::ImageFactory::open(imw->displayList[0]->filePath[0].toStdString());
+     imageExifRead->readMetadata();
+-    Exiv2::Image::AutoPtr imageExifWrite = Exiv2::ImageFactory::open(newPremsFileName.toStdString());
++    ImagePtr imageExifWrite = Exiv2::ImageFactory::open(newPremsFileName.toStdString());
+     imageExifWrite->setExifData(imageExifRead->exifData());
+     imageExifWrite->writeMetadata();
+ 
+diff --git a/align.h b/align.h
+index dadf7e9..72a0c62 100644
+--- a/align.h
++++ b/align.h
+@@ -24,9 +24,17 @@
+ #ifdef Q_OS_WIN32
+   #include <exiv2\exif.hpp>
+   #include <exiv2\image.hpp>
++  #include <exiv2\version.hpp>
+ #else
+   #include <exiv2/exif.hpp>
+   #include <exiv2/image.hpp>
++  #include <exiv2/version.hpp>
++#endif
++
++#if EXIV2_TEST_VERSION(0,28,0)
++    typedef Exiv2::Image::UniquePtr ImagePtr;
++#else
++    typedef Exiv2::Image::AutoPtr ImagePtr;
+ #endif
+ 
+ #include "correlator.h"
+@@ -134,8 +142,8 @@ Q_OBJECT
+     QRect refRect1, refRect2 ;
+     QImage finale ;
+ 	QImage currentImage ;
+-    Exiv2::Image::AutoPtr imageExifRead ;
+-    Exiv2::Image::AutoPtr imageExifWrite ;
++    ImagePtr imageExifRead ;
++    ImagePtr imageExifWrite ;
+ 
+     int MkrSz, FineFactor ;
+ 
+diff --git a/immix.cpp b/immix.cpp
+index bb0456c..566a725 100755
+--- a/immix.cpp
++++ b/immix.cpp
+@@ -366,9 +366,9 @@ void ImmixWin::StartAverage (void)
+ 			// Copy EXIF metadata.
+             if ( file.endsWith("jpg",Qt::CaseInsensitive) )
+             {
+-			    Exiv2::Image::AutoPtr imageExifRead = Exiv2::ImageFactory::open(displayList[0]->filePath[0].toStdString());
++			    ImagePtr imageExifRead = Exiv2::ImageFactory::open(displayList[0]->filePath[0].toStdString());
+ 			    imageExifRead->readMetadata();
+-			    Exiv2::Image::AutoPtr imageExifWrite = Exiv2::ImageFactory::open(file.toStdString());
++			    ImagePtr imageExifWrite = Exiv2::ImageFactory::open(file.toStdString());
+ 			    imageExifWrite->setExifData(imageExifRead->exifData());
+ 		    	imageExifWrite->writeMetadata();
+ 			}
+-- 
+2.45.2
+

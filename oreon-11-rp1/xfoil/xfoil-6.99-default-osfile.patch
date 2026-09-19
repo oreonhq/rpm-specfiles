@@ -1,0 +1,18 @@
+Index: xfoil/osrc/getosfile.c
+===================================================================
+--- xfoil.orig/osrc/getosfile.c	2009-12-31 01:55:41.176705284 +0100
+@@ -28,11 +28,12 @@
+       printf("osfile: %s\n",osfile); */
+ 
+    if(bufp){ 
+-      strcpy(osfile,bufp);
++      strncpy(osfile,bufp, 128);
+       l = strlen(bufp);
+       }
+     else {
+-      l = 0;
++      strncpy(osfile,DEFAULT_OSFILE, 128);
++      l = strlen(DEFAULT_OSFILE);
+       }
+ 
+    *len = l;

@@ -1,0 +1,15 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Thu, 8 Aug 2024 12:56:13 +0200
+Subject: [PATCH] Remove unnecessary shebang
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/vyper/__main__.py b/vyper/__main__.py
+index c5bda47b..a29d50bf 100644
+--- a/vyper/__main__.py
++++ b/vyper/__main__.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python3
+ # -*- coding: UTF-8 -*-
+ import sys
+ 

@@ -1,0 +1,8 @@
+If you want to use systemd wfserver service, generate configuration for it,
+then copy it to the /etc and change its owner to root:root (if owned by
+different user) by e.g.:
+# cp ${HOME}/.config/wfview/wfserver.conf /etc/wfserver.conf
+# chown root:root /etc/wfserver.conf
+
+You can enable wfserver to run on machine startup and start it by:
+# systemctl enable --now wfserver.service

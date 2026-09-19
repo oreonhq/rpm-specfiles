@@ -1,0 +1,59 @@
+--- CMakeModules/FindLIBSEDML.orig.cmake	2020-06-04 14:54:13.000000000 +0200
++++ CMakeModules/FindLIBSEDML.cmake	2020-06-14 14:21:59.208254269 +0200
+@@ -64,6 +64,7 @@
+ 
+ find_path(LIBSEDML_INCLUDE_DIR sedml/SedBase.h
+     PATHS $ENV{LIBSEDML_DIR}/include
++          ${INCLUDE_INSTALL_DIR}
+           $ENV{LIBSEDML_DIR}
+            ${${_PROJECT_DEPENDENCY_DIR}}/include
+           ${${_PROJECT_DEPENDENCY_DIR}}
+@@ -86,6 +87,7 @@
+           libsedml-static 
+           libsedml
+     PATHS $ENV{LIBSEDML_DIR}/lib
++          ${CMAKE_INSTALL_PREFI}/lib${LIB_SUFFIX}
+           $ENV{LIBSEDML_DIR}
+           ${${_PROJECT_DEPENDENCY_DIR}}/${CMAKE_INSTALL_LIBDIR}
+           ${${_PROJECT_DEPENDENCY_DIR}}/lib
+@@ -111,33 +113,15 @@
+ endif (NOT LIBSEDML_LIBRARY)
+ 
+ 
+-find_library(LIBNUML_LIBRARY 
+-    NAMES numl-static 
+-          numl
+-          libnuml-static 
+-          libnuml
+-    PATHS $ENV{LIBSEDML_DIR}/lib
+-          $ENV{LIBSEDML_DIR}
+-          ${${_PROJECT_DEPENDENCY_DIR}}/${CMAKE_INSTALL_LIBDIR}
+-          ${${_PROJECT_DEPENDENCY_DIR}}/lib
+-          ${${_PROJECT_DEPENDENCY_DIR}}
+-          ${CONAN_LIB_DIRS_LIBNUML}
+-          ~/Library/Frameworks
+-          /Library/Frameworks
+-          /sw/lib        # Fink
+-          /opt/local/lib # MacPorts
+-          /opt/csw/lib   # Blastwave
+-          /opt/lib
+-          /usr/freeware/lib64
+-          CMAKE_FIND_ROOT_PATH_BOTH
+-    NO_DEFAULT_PATH)
++# numl
++find_package(numl CONFIG QUIET)
++if (NOT LIBNUML_LIBRARY)
++    find_library(LIBNUML_LIBRARY 
++        NAMES numl)
++endif (NOT LIBNUML_LIBRARY)
+ 
+ endif()
+-
+-  add_library(${LIBSEDML_LIBRARY_NAME} UNKNOWN IMPORTED)
+-  set_target_properties(${LIBSEDML_LIBRARY_NAME} PROPERTIES IMPORTED_LOCATION ${LIBSEDML_LIBRARY})
+-  set_target_properties(${LIBSEDML_LIBRARY_NAME} PROPERTIES INTERFACE_LINK_LIBRARIES ${LIBNUML_LIBRARY})
+-  
++ 
+ 
+ 
+ if (NOT LIBSEDML_INCLUDE_DIR)

@@ -1,0 +1,11 @@
+diff -urp '--exclude=*~' sprockets-rails-3.5.2.orig/test/test_quiet_assets.rb sprockets-rails-3.5.2/test/test_quiet_assets.rb
+--- sprockets-rails-3.5.2.orig/test/test_quiet_assets.rb	2024-08-01 05:25:25.000000000 +0900
++++ sprockets-rails-3.5.2/test/test_quiet_assets.rb	2025-12-29 21:16:23.520039826 +0900
+@@ -2,6 +2,7 @@ require 'active_support'
+ require 'active_support/testing/isolation'
+ require 'active_support/log_subscriber/test_helper'
+ require 'minitest/autorun'
++require 'minitest/mock'
+ 
+ require 'sprockets/railtie'
+ require 'rails'

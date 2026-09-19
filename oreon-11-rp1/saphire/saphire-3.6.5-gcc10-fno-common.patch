@@ -1,0 +1,11 @@
+--- saphire-3.6.5/headers/saphire/saphire_inner.h.gcc10	2012-01-08 14:33:04.000000000 +0900
++++ saphire-3.6.5/headers/saphire/saphire_inner.h	2020-01-23 22:34:48.514785360 +0900
+@@ -300,7 +300,7 @@ BOOL statment_tree_internal_commands_con
+ 
+ typedef BOOL (*fInternalCommand)(sRunInfo* runinfo, sCommand* command, int* rcode, vector_obj* argv, vector_obj* blocks, sWFd* nextout, sRFd* nextin, int nexterr, char* title, char* sname, int sline, BOOL input, int j);
+ 
+-fInternalCommand kInternalCommands[kCommand];
++extern fInternalCommand kInternalCommands[kCommand];
+ 
+ //extern char* kCommandOptions[kCommand][32];
+ 

@@ -1,0 +1,38 @@
+From 482ce55cdd132893feb30d00d277493bbaa51098 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sat, 27 Oct 2018 22:44:43 +0200
+Subject: [PATCH 2/2] Makefile: allow changing CPPFLAGS
+
+The distribution packagers will typically want to use their own compiler
+warnings and optimization flags:
+
+   make CPPFLAGS="..."
+
+However, this also overwrites the preprocessor defines, library/include
+paths and the like. Let's mark the options the packager has no business
+changing with the "override" keyword.
+---
+ Makefile | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f4b2e9b..a35488d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -119,9 +119,10 @@ LINKER=$(CC) -o
+ #
+ # Compilation flags and setup for packages we use.
+ #
+-CPPFLAGS+=-std=c++0x -Wall -Werror
+-CPPFLAGS+=-DLUMAIL_VERSION="\"${VERSION}\"" -DLUMAIL_LUAPATH="\"${LUMAIL_LIBS}\""
+-CPPFLAGS+=${LUA_FLAGS} $(shell pcre-config --cflags) $(shell pkg-config --cflags ncursesw) $(shell pkg-config --cflags gmime-2.6)
++CPPFLAGS+=-Wall -Werror
++override CPPFLAGS+=-std=c++0x
++override CPPFLAGS+=-DLUMAIL_VERSION="\"${VERSION}\"" -DLUMAIL_LUAPATH="\"${LUMAIL_LIBS}\""
++override CPPFLAGS+=${LUA_FLAGS} $(shell pcre-config --cflags) $(shell pkg-config --cflags ncursesw) $(shell pkg-config --cflags gmime-2.6)
+ 
+ #
+ # Linker flags for the packages we use.
+-- 
+2.19.1
+

@@ -1,0 +1,13 @@
+diff -up nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt.sover nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt
+--- nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt.sover	2022-12-21 18:42:08.000000000 -0500
++++ nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt	2023-08-03 09:26:24.956242209 -0400
+@@ -22,6 +22,9 @@ target_link_libraries(nanosvgrast PUBLIC
+ target_include_directories(nanosvgrast PRIVATE src)
+ target_compile_definitions(nanosvgrast PRIVATE NANOSVGRAST_IMPLEMENTATION)
+ 
++# Add soversion
++set_target_properties(nanosvg nanosvgrast PROPERTIES SOVERSION 0)
++
+ # Installation and export:
+ 
+ include(CMakePackageConfigHelpers)

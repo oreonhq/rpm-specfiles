@@ -1,0 +1,13 @@
+diff --git a/wfmain.ui b/wfmain.ui
+index 070dc23..f295891 100644
+--- a/wfmain.ui
++++ b/wfmain.ui
+@@ -3260,7 +3260,7 @@
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+-                   <number>250</number>
++                   <number>2000</number>
+                   </property>
+                  </widget>
+                 </item>

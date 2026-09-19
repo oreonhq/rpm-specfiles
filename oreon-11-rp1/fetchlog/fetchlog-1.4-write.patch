@@ -1,0 +1,43 @@
+--- fetchlog.c-old	2012-04-05 14:48:22.999438037 -0400
++++ fetchlog.c	2012-04-05 14:52:56.469292696 -0400
+@@ -55,7 +55,7 @@
+ #define MIN_FETCHLEN    50	/* Min length of fetched data */
+ #define MAX_FETCHLEN    20000	/* Max length of fetched data */
+ 
+-#define OK_MESSAGE	"OK: no messages"
++#define OK_MESSAGE	"OK: no messages\n"
+ #define ERR_MESSAGE	"ERROR: fetchlog: "
+ 
+ /* suffix for temp bookmarkfile:  mkstemp() template */
+@@ -155,7 +155,7 @@
+ 	msg[fetchlen_G-2] = '~';
+ 	len = fetchlen_G + 1;
+     }
+-    (void)write( STDOUT_FILENO, msg, len-1 );
++    fprintf(stdout, msg);
+     free( msg );
+ }
+ 
+@@ -295,7 +295,7 @@
+     /* something changed meanwhile ? */
+     if( obm.mtime==nbm.mtime && obm.inode==nbm.inode && obm.last==nbm.last ) {
+ 	if( conv_G & CONV_OKMSG ) 
+-	    (void)write( STDOUT_FILENO, OK_MESSAGE "\n", sizeof( OK_MESSAGE ));
++	    fprintf(stdout, OK_MESSAGE "\n");
+ 	close( fd );
+ 	return RET_OK;
+     }
+@@ -484,11 +484,11 @@
+ 	      ((conv_G & CONV_NAGIOS3)!= 0 && fetchlen_G-opos==4 )    )  ) ) {
+ 
+ 	if( conv_G & CONV_OKMSG ) {
+-	    (void)write( STDOUT_FILENO, OK_MESSAGE "\n", sizeof( OK_MESSAGE ) );
++	    fprintf(stdout,OK_MESSAGE);
+ 	}
+ 	i = RET_OK;
+     }else{
+-	(void)write( STDOUT_FILENO, obuf+opos,fetchlen_G-opos);
++	fprintf(stdout, "%s",obuf+opos);
+ 	i = RET_NEWMSG;
+     }
+ 

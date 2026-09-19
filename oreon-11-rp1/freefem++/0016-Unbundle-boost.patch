@@ -1,0 +1,91 @@
+From 6856fdb758e830ab7cc1b98aa75ac50e55e8e1d8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Sun, 10 Apr 2022 08:40:53 +0200
+Subject: [PATCH 16/18] Unbundle boost
+
+---
+ 3rdparty/Makefile.am | 29 +++--------------------------
+ configure.ac         |  4 ----
+ 2 files changed, 3 insertions(+), 30 deletions(-)
+
+diff --git a/3rdparty/Makefile.am b/3rdparty/Makefile.am
+index 6765a5511..c1de0d826 100755
+--- a/3rdparty/Makefile.am
++++ b/3rdparty/Makefile.am
+@@ -117,10 +117,10 @@ install-other: tag-install-other
+ tag-install-other:
+ 	if test -n "$(TOOL_COMPILE_hpddm)"; then $(MAKE) install-hpddm; else true; fi
+ 	if test -n "$(TOOL_COMPILE_htool)"; then $(MAKE) install-htool; else true; fi
+-	if test -n "$(TOOL_COMPILE_bemtool)"; then $(MAKE) install-boost install-bemtool; else true; fi
++	if test -n "$(TOOL_COMPILE_bemtool)"; then $(MAKE) install-bemtool; else true; fi
+ 	touch tag-install-other
+ 
+-WHERE-OTHER: lib/WHERE.hpddm lib/WHERE.htool lib/WHERE.bemtool lib/WHERE.boost
++WHERE-OTHER: lib/WHERE.hpddm lib/WHERE.htool lib/WHERE.bemtool
+ WHERE-LD: tag-compile-pkg WHERE-OTHER
+ 	touch ../plugin/seq/WHERE_LIBRARY-config ../plugin/seq/WHERE_LIBRARY
+ 	-grep LD ../plugin/seq/WHERE_LIBRARY ../plugin/seq/WHERE_LIBRARY-config >WHERE-LD
+@@ -185,25 +185,6 @@ lib/WHERE.bemtool: ./getall
+ 	else true; fi
+ # end BEMTOOL
+ 
+-# begin BOOST
+-install-boost: ./getall
+-	 if test -n "$(TOOL_COMPILE_bemtool)"; then ./getall -o Boost -a; $(MAKE) boost/done.tag lib/WHERE.boost; else true; fi
+-reinstall-boost: ./getall
+-	-rm lib/WHERE.boost
+-	-rm ./pkg/boost_for_bemtool.tar.gz
+-	-rm -rf boost
+-	-test -n "$(TOOL_COMPILE_bemtool)" && $(MAKE) install-boost || true
+-boost/done.tag: ./pkg/boost_for_bemtool.tar.gz
+-	if test -f ./pkg/boost_for_bemtool.tar.gz; then \
+-	rm -rf boost boost_*; tar xzf pkg/boost_for_bemtool.tar.gz; mv boost_for_bemtool boost; \
+-	else true; fi	
+-	touch boost/done.tag
+-lib/WHERE.boost: ./getall
+-	if test -d boost/include; then \
+-	echo boost INCLUDE -I@DIR@/boost/include >> $@ ; \
+-	else true; fi
+-# end BOOST
+-
+ # to reinstall mpi under window afer clean
+ reinstall-msmpi:
+ 	-if test -f "$$MSMPI_INC"/mpif.h; then \
+@@ -235,7 +216,7 @@ tag-compile-pkg: bin lib include pkg FORCE
+ 			for d in $(MPI_SOFT); do $(MAKE) compile-dir COMPILEDIR=$$d || exit 1; done; \
+ 		fi; \
+ 	fi
+-	$(MAKE) install-hpddm install-htool install-bemtool install-boost
++	$(MAKE) install-hpddm install-htool install-bemtool
+ 	touch tag-compile-pkg
+ FORCE:
+ 
+@@ -250,10 +231,6 @@ install-exec-local:
+ 	cp -rp lib "$(DESTDIR)$(ff_prefix_dir)"
+ 	cp -rp include "$(DESTDIR)$(ff_prefix_dir)"
+ 	cp -rp bin "$(DESTDIR)$(ff_prefix_dir)"
+-	-if test -f boost/done.tag; then \
+-		$(mkinstalldirs) -m 755 "$(DESTDIR)$(ff_prefix_dir)/boost"; \
+-		cp -rp boost "$(DESTDIR)$(ff_prefix_dir)"; \
+-	fi
+ clean-local:
+ 	-rm -rf	 tag-* include lib bin WHERE-LD
+ 	-mkdir include lib bin
+diff --git a/configure.ac b/configure.ac
+index cda2be84b..213763969 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2638,10 +2638,6 @@ if test "$enable_download" = yes; then
+     AC_MSG_NOTICE([      try to download: $ff_download_lib])
+   fi
+ 
+-  if test "$enable_boost" = yes; then
+-    AC_MSG_NOTICE([      use of download boost        see 3rdparty/boost/LICENSE_1_0.txt  ])
+-  fi
+-
+   if test "$ff_download_blas" = "generic"; then
+     AC_MSG_NOTICE([      use of download generic blas and cblas freefem may be slow  ])
+     AC_MSG_NOTICE([      you can try to use the  Kazushige Goto s BLAS at http://www.cs.utexas.edu/users/flame/goto/  ])
+-- 
+2.47.1
+

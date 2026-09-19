@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /usr/bin/fossil ui "$@" /usr/share/doc/fossil-doc/fossil-doc.fossil

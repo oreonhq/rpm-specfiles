@@ -1,0 +1,11 @@
+--- src/Makefile.in.orig	2010-03-26 21:59:40.000000000 -0500
++++ src/Makefile.in	2010-03-26 18:02:53.000000000 -0500
+@@ -110,7 +110,7 @@
+ 	load_save.c load_save.h non_gui_defs.h
+ 
+ 
+-greyhounds_LDADD = @PACKAGE_LIBS@ $(INTLLIBS)
++greyhounds_LDADD = @PACKAGE_LIBS@ $(INTLLIBS) -lm
+ subdir = src
+ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+ CONFIG_HEADER = $(top_builddir)/config.h

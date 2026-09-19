@@ -1,0 +1,16 @@
+[Unit]
+Description=Registry Server for OCI Images
+Documentation=https://github.com/docker/distribution
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/registry serve /etc/docker-distribution/registry/config.yml
+User=registry
+Group=registry
+Restart=on-failure
+User=registry
+Group=registry
+
+[Install]
+WantedBy=multi-user.target

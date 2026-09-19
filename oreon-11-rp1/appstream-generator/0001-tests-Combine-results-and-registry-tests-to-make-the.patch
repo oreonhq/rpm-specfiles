@@ -1,0 +1,87 @@
+From 43bba5d450f91f59e7408c7ddf25c9557ca9cef2 Mon Sep 17 00:00:00 2001
+From: Matthias Klumpp <matthias@tenstral.net>
+Date: Mon, 3 Nov 2025 22:53:44 +0100
+Subject: [PATCH] tests: Combine results and registry tests to make them
+ order-independent
+
+The tests had an implicit pseudo-dependency on each other, and somehow
+the order randomly changed on recent Fedora releases (apparently the
+compiler changed declaration order within the file? Even though that
+shouldn't be possible...)
+
+This patch removes the dependency, which hopefully addresses the test
+failure.
+
+(cherry picked from commit 20010e3c85bc150cfa7c97dbb8802e758f656dcf)
+---
+ tests/tests-misc.cpp | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
+
+diff --git a/tests/tests-misc.cpp b/tests/tests-misc.cpp
+index 438cd95..af05289 100644
+--- a/tests/tests-misc.cpp
++++ b/tests/tests-misc.cpp
+@@ -324,9 +324,11 @@ TEST_CASE("Image size operations", "[utils][imagesize]")
+     }
+ }
+ 
+-TEST_CASE("HintRegistry functionality", "[hintregistry]")
++TEST_CASE("GeneratorResult functionality", "[result]")
+ {
+-    using namespace ASGenerator;
++    /**
++     * HINTS REGISTRY
++     */
+ 
+     SECTION("Load hints registry")
+     {
+@@ -407,14 +409,16 @@ TEST_CASE("HintRegistry functionality", "[hintregistry]")
+         // Clean up
+         fs::remove(tempFile);
+     }
+-}
+ 
+-TEST_CASE("GeneratorResult functionality", "[result]")
+-{
+-    using namespace ASGenerator;
++    /**
++     * GENERATOR RESULT
++     */
+ 
+     auto pkg = std::make_shared<DummyPackage>("foobar", "1.0.0", "amd64");
+ 
++    // Ensure hints registry is loaded
++    REQUIRE_NOTHROW(loadHintsRegistry());
++
+     SECTION("Basic GeneratorResult operations")
+     {
+         GeneratorResult result(pkg);
+@@ -431,9 +435,6 @@ TEST_CASE("GeneratorResult functionality", "[result]")
+     {
+         GeneratorResult result(pkg);
+ 
+-        // Ensure hints registry is loaded
+-        loadHintsRegistry();
+-
+         // Add a hint with component ID
+         std::unordered_map<std::string, std::string> vars = {
+             {"icon_fname",      "test.png" },
+@@ -456,7 +457,6 @@ TEST_CASE("GeneratorResult functionality", "[result]")
+     SECTION("Generate hints JSON")
+     {
+         GeneratorResult result(pkg);
+-        loadHintsRegistry();
+ 
+         // Add some hints
+         const std::unordered_map<std::string, std::string> &vars = {
+@@ -489,7 +489,6 @@ TEST_CASE("GeneratorResult functionality", "[result]")
+     SECTION("Move semantics")
+     {
+         GeneratorResult result1(pkg);
+-        loadHintsRegistry();
+         result1.addHint("test.component", "icon-not-found");
+ 
+         // Test move constructor
+-- 
+2.51.1
+

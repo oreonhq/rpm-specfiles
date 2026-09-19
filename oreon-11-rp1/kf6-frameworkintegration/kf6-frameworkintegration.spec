@@ -1,13 +1,13 @@
-%global source0_hash 55eefe8ebc67a040e64c75482276c29a69d0c5877b7b3674f4c7a40238c6d44c
+%global source0_hash be01225efe9063e4c4a23dae47ebafed437f1cd06d73ab2de77dfb99e35785b8
 
 %global framework frameworkintegration
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 4 workspace and cross-framework integration plugins
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -19,22 +19,22 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6NewStuff)
-BuildRequires:  cmake(KF6Package)
+BuildRequires:  cmake(KF6NewStuff) >= %{version}
+BuildRequires:  cmake(KF6Package) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  libXcursor-devel
 BuildRequires:  qt6-qtbase-devel
 
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6ConfigWidgets)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6ConfigWidgets) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6IconThemes) >= %{version}
+BuildRequires:  cmake(KF6KIO) >= %{version}
+BuildRequires:  cmake(KF6Notifications) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
 BuildRequires:  cmake(AppStreamQt) >= 1.0
 BuildRequires:  cmake(packagekitqt6)
-BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6ColorScheme) >= %{version}
 Requires:  kf6-filesystem
 
 %description
@@ -88,6 +88,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 
@@ -102,4 +105,3 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

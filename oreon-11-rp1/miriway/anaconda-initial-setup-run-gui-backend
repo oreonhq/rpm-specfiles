@@ -1,0 +1,20 @@
+#!/bin/sh
+
+## Runs the GUI program from $@ in Miriway
+
+RUN_SCRIPT=$(mktemp --suffix="-wl-miriway-firstboot-run")
+EXIT_CODE_SAVE=$(mktemp --suffix="-wl-miriway-firstboot-exit")
+
+cat > ${RUN_SCRIPT} << EOF
+#!/bin/sh
+$@
+echo $? > ${EXIT_CODE_SAVE}
+EOF
+
+chmod +x ${RUN_SCRIPT}
+
+miriway-run ${RUN_SCRIPT}
+exit_code=$(< ${EXIT_CODE_SAVE})
+
+rm ${RUN_SCRIPT} ${EXIT_CODE_SAVE}
+exit $exit_code

@@ -1,0 +1,84 @@
+From e0eca8041a75dd4fe0580c2f74f7c6fc52db7d9b Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <ignatenko@redhat.com>
+Date: Sat, 9 Apr 2016 19:19:32 +0200
+Subject: [PATCH 4/5] make all internal libs STATIC
+
+Signed-off-by: Igor Gnatenko <ignatenko@redhat.com>
+---
+ src/base/CMakeLists.txt       | 2 +-
+ src/effect/CMakeLists.txt     | 2 +-
+ src/main/CMakeLists.txt       | 2 +-
+ src/misc/CMakeLists.txt       | 2 +-
+ src/ovt_kate/CMakeLists.txt   | 2 +-
+ src/ovt_theora/CMakeLists.txt | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/base/CMakeLists.txt b/src/base/CMakeLists.txt
+index f1427ef..59a4315 100644
+--- a/src/base/CMakeLists.txt
++++ b/src/base/CMakeLists.txt
+@@ -22,6 +22,6 @@
+       rawMediaPacket.cpp
+ )
+ 
+-ADD_LIBRARY ( ovtbase ${LIBRARY_BASE_SRC} )
++ADD_LIBRARY ( ovtbase STATIC ${LIBRARY_BASE_SRC} )
+ 
+ add_subdirectory(test)
+\ No newline at end of file
+diff --git a/src/effect/CMakeLists.txt b/src/effect/CMakeLists.txt
+index 15b86cc..8b738e1 100644
+--- a/src/effect/CMakeLists.txt
++++ b/src/effect/CMakeLists.txt
+@@ -15,4 +15,4 @@ SET ( LIBRARY_VIDEOEFFECT_SRC
+       rgbPlane.cpp
+       blendElement.cpp )
+ 
+-ADD_LIBRARY ( ovteffect ${LIBRARY_VIDEOEFFECT_SRC} )
++ADD_LIBRARY ( ovteffect STATIC ${LIBRARY_VIDEOEFFECT_SRC} )
+diff --git a/src/main/CMakeLists.txt b/src/main/CMakeLists.txt
+index 303b7c4..d12ad72 100644
+--- a/src/main/CMakeLists.txt
++++ b/src/main/CMakeLists.txt
+@@ -9,5 +9,5 @@ SET ( LIBRARY_MAIN_SRC
+       cmdlineextractor.cpp
+     )
+ 
+-ADD_LIBRARY ( ovtmain ${LIBRARY_MAIN_SRC} )
++ADD_LIBRARY ( ovtmain STATIC ${LIBRARY_MAIN_SRC} )
+ 
+diff --git a/src/misc/CMakeLists.txt b/src/misc/CMakeLists.txt
+index 24c14f3..e85c6ad 100644
+--- a/src/misc/CMakeLists.txt
++++ b/src/misc/CMakeLists.txt
+@@ -5,4 +5,4 @@ SET ( LIBRARY_MISC_SRC
+       crc.cpp
+ )
+ 
+-ADD_LIBRARY ( ovtmisc ${LIBRARY_MISC_SRC} )
++ADD_LIBRARY ( ovtmisc STATIC ${LIBRARY_MISC_SRC} )
+diff --git a/src/ovt_kate/CMakeLists.txt b/src/ovt_kate/CMakeLists.txt
+index 3209560..41f1ab9 100644
+--- a/src/ovt_kate/CMakeLists.txt
++++ b/src/ovt_kate/CMakeLists.txt
+@@ -4,5 +4,5 @@ SET ( LIBRARY_KATE_SRC
+       kateExtractor.cpp 
+     )
+ 
+-ADD_LIBRARY ( ovtkate ${LIBRARY_KATE_SRC} )
++ADD_LIBRARY ( ovtkate STATIC ${LIBRARY_KATE_SRC} )
+ 
+diff --git a/src/ovt_theora/CMakeLists.txt b/src/ovt_theora/CMakeLists.txt
+index 6d7c43a..3f0343f 100644
+--- a/src/ovt_theora/CMakeLists.txt
++++ b/src/ovt_theora/CMakeLists.txt
+@@ -7,5 +7,5 @@ SET ( LIBRARY_THEORA_SRC
+     )
+ #      theoraConfig.cpp
+ 
+-ADD_LIBRARY ( ovttheora ${LIBRARY_THEORA_SRC} )
++ADD_LIBRARY ( ovttheora STATIC ${LIBRARY_THEORA_SRC} )
+ 
+-- 
+2.7.3
+

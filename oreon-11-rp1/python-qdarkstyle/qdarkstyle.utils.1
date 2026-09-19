@@ -1,0 +1,91 @@
+.TH QDARKSTYLE.UTILS "1" "June 2024" "" "User Commands"
+.SH NAME
+.B qdarkstyle.utils
+\(en Script to process QRC files
+.SH SYNOPSIS
+.B python3\ \-m\ qdarkstyle.utils
+.RB [ \-h ]
+.RB [ \-\-qrc_dir\ \fIQRC_DIR ]
+.RB [ \-\-create\  { pyqt5 , pyqt6 , pyside2 , pyside6 , qtpy , pyqtgraph , qt , qt5 , all }]
+.RB [ \-\-watch ]
+.SH DESCRIPTION
+Script to process QRC files
+(convert
+.B .qrc
+to
+.B _rc.py
+and
+.BT .rcc ).
+.P
+The script will attempt to compile the qrc file using the following tools:
+.RS +7n
+.IP \(bu +2n
+.B pyside6-rcc
+for PySide6 and QtPy
+(Python)
+(Official)
+.IP \(bu +2n
+There is no specific rcc compiler for PyQt6, use
+.B pyside6-rcc
+(Python)
+.IP \(bu +2n
+.B pyrcc5
+for PyQt5
+(Python)
+.IP \(bu +2n
+.B pyside2-rcc
+for PySide2
+(Python)
+.IP \(bu +2n
+.B rcc
+for Qt5/Qt6
+(C++)
+.RE
+.P
+Delete the compiled files that you don\(cqt want to use manually
+after running this script.
+.P
+Links to understand those tools:
+.RS +7n
+.IP \(bu +2n
+.UR https://doc.qt.io/qtforpython/tutorials/basictutorial/qrcfiles.html
+.B pyside6-rcc
+.UE
+(Official)
+.IP \(bu +2n
+.UR https://pyqt.sourceforge.net/Docs/PyQt5/resources.html#pyrcc5
+.B pyrcc5
+.UE
+.IP \(bu +2n
+.UR https://doc.qt.io/qtforpython/overviews/resources.html
+>B pyside2-rcc
+.UE
+(Documentation Incomplete)
+.IP \(bu +2n
+.UR https://doc.qt.io/qt-6/resources.html
+.B rcc
+on Qt6
+.UE
+.IP \(bu +2n
+.UR https://doc.qt.io/qt-5/rcc.html
+.B rcc
+on Qt5
+.UE
+.RE
+.SH OPTIONS
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit.
+.TP
+.B \-\-qrc_dir\ \fIQRC_DIR
+QRC file directory, relative to current directory.
+.TP
+.B \-\-create\ \fR{\fBpyqt5\fR,\fBpyqt6\fR,\fBpyside2\fR,\fBpyside6\fR,\fBqtpy\fR,\fBpyqtgraph\fR,\fBqt\fR,\fBqt5\fR,\fBall\fR}
+Choose which one would be generated.
+.TP
+.B \-\-watch\fR, \fB\-w
+Watch for file changes.
+.SH "SEE\ ALSO"
+.BR qdarkstyle (1)
+.P
+.BR qdarkstyle.example (1)

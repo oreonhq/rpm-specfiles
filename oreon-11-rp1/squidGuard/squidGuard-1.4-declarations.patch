@@ -1,0 +1,20 @@
+--- squidGuard-1.4/src/sg.h.in.org	2025-01-22 11:56:40.746747203 +1100
++++ squidGuard-1.4/src/sg.h.in	2025-01-22 12:06:34.209800524 +1100
+@@ -327,7 +327,7 @@ char   *sgStripUrl __P((char *));
+ void   sgEmergency __P(());
+ void   sgReloadConfig __P(());
+ void   sgHandlerSigHUP __P((int));
+-void   sgAlarm __P(());
++void   sgAlarm __P((int));
+ int    sgStrRcmp __P((char *, char *));
+ int    sgStrRncmp __P((char *, char *, int));
+ int    sgDomStrRncmp __P((char *, char *, int));
+@@ -394,7 +394,7 @@ void   sgFreePatternBuffer __P((struct s
+ int    sgRegExpMatch __P((struct sgRegExp *, char *));
+ char   *sgRegExpSubst __P((struct sgRegExp *, char *));
+ 
+-void   sgDbInit __P(());
++void   sgDbInit __P((struct sgDb *, char *));
+ void   sgDbLoadTextFile __P((struct sgDb *, char *, int));
+ void   sgDbUpdate __P((struct sgDb *, char *, char *, size_t));
+ 

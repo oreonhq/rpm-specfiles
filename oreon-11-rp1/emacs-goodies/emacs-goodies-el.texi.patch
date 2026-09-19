@@ -1,0 +1,94 @@
+diff -up ./elisp/emacs-goodies-el/emacs-goodies-el.texi.fix ./elisp/emacs-goodies-el/emacs-goodies-el.texi
+--- ./elisp/emacs-goodies-el/emacs-goodies-el.texi.fix	2018-09-13 09:16:47.259134108 -0700
++++ ./elisp/emacs-goodies-el/emacs-goodies-el.texi	2018-09-13 09:17:22.700131622 -0700
+@@ -1,16 +1,16 @@
+ @c -*- mode: texinfo -*-
+ \input texinfo
+ 
+-@c $Id: emacs-goodies-el.texi,v 1.104 2016/11/06 20:08:20 psg Exp $
++@c $Id: emacs-goodies.texi,v 1.104 2016/11/06 20:08:20 psg Exp $
+ @c %**start of header
+-@setfilename info/emacs-goodies-el
+-@settitle Emacs-Goodies-el
++@setfilename info/emacs-goodies
++@settitle emacs-goodies
+ @documentencoding ISO-8859-1
+ @c %**end of header
+ 
+ @dircategory Emacs
+ @direntry
+-* Emacs-Goodies-el: (emacs-goodies-el). Miscellaneous add-ons for Emacs
++* emacs-goodies: (emacs-goodies). Miscellaneous add-ons for Emacs
+ @end direntry
+ 
+ @c Version variables.
+@@ -19,27 +19,27 @@
+ 
+ @ifinfo
+ This is Edition @value{EDITION}, last updated @value{UPDATED}, of
+-@cite{Emacs-Goodies-el}.
++@cite{emacs-goodies}.
+ @end ifinfo
+ 
+ @titlepage
+-@title Emacs-Goodies-el: Miscellaneous add-ons for Emacs
++@title emacs-goodies: Miscellaneous add-ons for Emacs
+ @subtitle A manual for what's in this package.
+ @author Peter S. Galbraith
+ @end titlepage
+ 
+ @node Top, ff-paths, (dir), (dir)
+-@top The Emacs-Goodies-el Package Setup
++@top The emacs-goodies Package Setup
+ 
+-This manual describes the Emacs-Goodies-el package and its setup.  A
++This manual describes the emacs-goodies package and its setup.  A
+ quick descriptions of elisp files contained in this package can be found
+-in the file @file{/usr/share/doc/emacs-goodies-el/README.Debian.gz}.
++in the file @file{/usr/share/doc/emacs-goodies/README.Debian.gz}.
+ 
+ All packaged files are installed, setup and ready to use if they don't
+ override standard Emacs commands, modes, or settings.
+ 
+ Some extra package installation and setup is done if you customize the
+-variable @code{emacs-goodies-el-defaults} to t (its aggressive state).
++variable @code{emacs-goodies-defaults} to t (its aggressive state).
+ These will override standard Emacs defaults, but in a good
+ (uncontroversial) way.  The only affected package is currently
+ @ref{ff-paths}.
+@@ -47,7 +47,7 @@ These will override standard Emacs defau
+ To customize setup of all customizable packages on a finer-grain
+ basis, do:
+ @example
+-@kbd{M-x} customize-group @key{RET} emacs-goodies-el @key{RET}
++@kbd{M-x} customize-group @key{RET} emacs-goodies @key{RET}
+ @end example
+ 
+ In the following document, when we speak of customizing a variable, we
+@@ -56,7 +56,7 @@ mean to use the Emacs custom interface,
+ @kbd{M-x} customize-variable @key{RET} some-variable @key{RET}
+ @end example
+ When we speak of customizing a group, it's as the example above for the
+-group @code{emacs-goodies-el}.
++group @code{emacs-goodies}.
+ 
+ The following files are documented so far.  Eventually, all files will
+ be documented.
+@@ -67,7 +67,7 @@ be documented.
+ @end menu
+ 
+ This work compiles GPL'ed documentation from the various elisp files
+-in /usr/share/emacs/site-lisp/emacs-goodies-el/.  As a derived work
++in /usr/share/emacs/site-lisp/emacs-goodies/.  As a derived work
+ from GPL'ed works, this text is also licensed under the GPL V2 (See
+ /usr/share/common-licenses/GPL-2) and is edited by Peter S. Galbraith
+ @email{psg@@debian.org}.
+@@ -134,7 +134,7 @@ To use it, customize the variable @code{
+ To also enable ffap, customize the variable @code{ff-paths-use-ffap}.
+ 
+ Both of the above are enabled if you customize the variable
+-@code{emacs-goodies-el-defaults} to t (its aggressive state).
++@code{emacs-goodies-defaults} to t (its aggressive state).
+ 
+ You may alter various settings of @code{ff-paths} using the
+ customization group @code{ff-paths}.

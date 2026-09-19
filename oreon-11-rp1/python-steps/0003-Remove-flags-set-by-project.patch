@@ -1,0 +1,59 @@
+From 202650f21a683d8adf40e4919330546bf9fc8c7d Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Sun, 5 Apr 2020 10:34:29 +0100
+Subject: [PATCH 3/5] Remove flags set by project
+
+---
+ CMakeLists.txt | 33 ---------------------------------
+ 1 file changed, 33 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 69622f3..4c4c055 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -99,45 +99,12 @@
+ # for debug symbol
+ include(CMake/UseDebugSymbols.cmake)
+ 
+-add_options(ALL_LANGUAGES
+-            ALL_BUILDS
+-            "-Wall"
+-            "-Wextra"
+-            "-Wshadow"
+-            "-Wnon-virtual-dtor"
+-            "-Wunused"
+-            "-Woverloaded-virtual"
+-            "-Wformat=2")
+-
+-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+-  add_options(ALL_LANGUAGES
+-              ALL_BUILDS
+-              "-Wcast-align"
+-              "-Wdouble-promotion"
+-              "-Wold-style-cast"
+-              "-Wnull-dereference"
+-              "-Wpedantic")
+-endif()
+-
+ if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
+   add_options(ALL_LANGUAGES ALL_BUILDS -Wloop-analysis)
+ endif()
+ 
+ # FIXME TCL: compile with 2 flags below "-Wconversion" "-Wsign-conversion"
+ 
+-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+-  add_options(ALL_LANGUAGES
+-              ALL_BUILDS
+-              "-Wmisleading-indentation"
+-              "-Wduplicated-cond"
+-              "-Wlogical-op"
+-              "-Wuseless-cast")
+-  if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "7.0")
+-    add_options(ALL_LANGUAGES ALL_BUILDS "-Wno-implicit-fallthrough")
+-  endif()
+-
+-endif()
+-
+ set(CMAKE_CXX_FLAGS "${CXX_DIALECT_OPT_CXX11} ${CMAKE_CXX_FLAGS}")
+ 
+ if(TARGET_NATIVE_ARCH)

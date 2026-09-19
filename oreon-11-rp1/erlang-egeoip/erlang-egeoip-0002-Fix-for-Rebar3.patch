@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 12 Jun 2024 09:39:38 +0200
+Subject: [PATCH] Fix for Rebar3
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/egeoip.erl b/src/egeoip.erl
+index f0ad249..7236623 100644
+--- a/src/egeoip.erl
++++ b/src/egeoip.erl
+@@ -495,7 +495,7 @@ read_segments(Type, Data, Seek) when Type == ?GEOIP_CITY_EDITION_REV0;
+ 
+ priv_path(Components) ->
+     AppDir = case code:which(?MODULE) of
+-                 cover_compiled -> "..";
++                 cover_compiled -> ".";
+                  F -> filename:dirname(filename:dirname(F))
+              end,
+     filename:join([AppDir, "priv" | Components]).

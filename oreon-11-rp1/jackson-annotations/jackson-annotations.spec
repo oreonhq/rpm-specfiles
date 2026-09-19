@@ -1,8 +1,8 @@
 %global source0_hash dcfe3d203c5ebfec618300c23ebe317450e579a3659012ce57c577ff9045432b
 
 Name:           jackson-annotations
-Version:        2.18.2
-Release:        6%{?dist}
+Version:        2.19.4
+Release:        1%{?dist}
 Summary:        Core annotations for Jackson data processor
 License:        Apache-2.0
 

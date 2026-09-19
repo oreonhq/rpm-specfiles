@@ -1,0 +1,125 @@
+diff --git a/src/services/gpodder/GpodderPodcastMeta.h b/src/services/gpodder/GpodderPodcastMeta.h
+index abe2c9f2b6..8bd28f82c1 100644
+--- a/src/services/gpodder/GpodderPodcastMeta.h
++++ b/src/services/gpodder/GpodderPodcastMeta.h
+@@ -22,7 +22,7 @@
+ 
+ #include "core/playlists/PlaylistProvider.h"
+ #include "core/podcasts/PodcastMeta.h"
+-#include <mygpo-qt6/ApiRequest.h>
++#include <mygpo-qt/ApiRequest.h>
+ 
+ namespace Podcasts {
+ 
+diff --git a/src/services/gpodder/GpodderPodcastRequestHandler.h b/src/services/gpodder/GpodderPodcastRequestHandler.h
+index c56ec1942f..2b65e5d5df 100644
+--- a/src/services/gpodder/GpodderPodcastRequestHandler.h
++++ b/src/services/gpodder/GpodderPodcastRequestHandler.h
+@@ -20,7 +20,7 @@
+ #define GPODDERPODCASTREQUESTHANDLER_H_
+ 
+ #include "GpodderServiceModel.h"
+-#include <mygpo-qt6/PodcastList.h>
++#include <mygpo-qt/PodcastList.h>
+ 
+ #include <QModelIndex>
+ 
+diff --git a/src/services/gpodder/GpodderPodcastTreeItem.h b/src/services/gpodder/GpodderPodcastTreeItem.h
+index 91323fb770..1c5fd45c0c 100644
+--- a/src/services/gpodder/GpodderPodcastTreeItem.h
++++ b/src/services/gpodder/GpodderPodcastTreeItem.h
+@@ -20,7 +20,7 @@
+ #define GPODDERPODCASTTREEITEM_H_
+ 
+ #include "GpodderTreeItem.h"
+-#include <mygpo-qt6/Podcast.h>
++#include <mygpo-qt/Podcast.h>
+ 
+ class GpodderPodcastTreeItem: public GpodderTreeItem
+ {
+diff --git a/src/services/gpodder/GpodderProvider.h b/src/services/gpodder/GpodderProvider.h
+index 9551a97a69..bfddcb1ff7 100644
+--- a/src/services/gpodder/GpodderProvider.h
++++ b/src/services/gpodder/GpodderProvider.h
+@@ -23,8 +23,8 @@
+ #include "core/podcasts/PodcastProvider.h"
+ #include "core/podcasts/PodcastReader.h"
+ #include "GpodderPodcastMeta.h"
+-#include <mygpo-qt6/ApiRequest.h>
+-#include <mygpo-qt6/EpisodeActionList.h>
++#include <mygpo-qt/ApiRequest.h>
++#include <mygpo-qt/EpisodeActionList.h>
+ #include "playlistmanager/file/KConfigSyncRelStore.h"
+ #include "playlistmanager/PlaylistManager.h"
+ 
+diff --git a/src/services/gpodder/GpodderService.cpp b/src/services/gpodder/GpodderService.cpp
+index b2d51ea807..841942e9d7 100644
+--- a/src/services/gpodder/GpodderService.cpp
++++ b/src/services/gpodder/GpodderService.cpp
+@@ -27,8 +27,8 @@
+ #include "GpodderServiceModel.h"
+ #include "GpodderServiceView.h"
+ #include "GpodderSortFilterProxyModel.h"
+-#include <mygpo-qt6/ApiRequest.h>
+-#include <mygpo-qt6/Podcast.h>
++#include <mygpo-qt/ApiRequest.h>
++#include <mygpo-qt/Podcast.h>
+ #include "playlistmanager/PlaylistManager.h"
+ #include "widgets/SearchWidget.h"
+ 
+diff --git a/src/services/gpodder/GpodderServiceModel.h b/src/services/gpodder/GpodderServiceModel.h
+index 6eb979ca07..76bc61da7b 100644
+--- a/src/services/gpodder/GpodderServiceModel.h
++++ b/src/services/gpodder/GpodderServiceModel.h
+@@ -20,8 +20,8 @@
+ #define GPODDERSERVICEMODEL_H_
+ 
+ #include "GpodderTreeItem.h"
+-#include <mygpo-qt6/ApiRequest.h>
+-#include <mygpo-qt6/TagList.h>
++#include <mygpo-qt/ApiRequest.h>
++#include <mygpo-qt/TagList.h>
+ #include "NetworkAccessManagerProxy.h"
+ 
+ #include <QAbstractItemModel>
+diff --git a/src/services/gpodder/GpodderServiceSettings.h b/src/services/gpodder/GpodderServiceSettings.h
+index 5d75f07e52..e7f773ae02 100644
+--- a/src/services/gpodder/GpodderServiceSettings.h
++++ b/src/services/gpodder/GpodderServiceSettings.h
+@@ -22,7 +22,7 @@
+ 
+ #include "GpodderServiceConfig.h"
+ 
+-#include <mygpo-qt6/ApiRequest.h>
++#include <mygpo-qt/ApiRequest.h>
+
+ #include <KCModule>
+ 
+diff --git a/src/services/gpodder/GpodderTagTreeItem.h b/src/services/gpodder/GpodderTagTreeItem.h
+index 63cc965d89..8941cb8fc3 100644
+--- a/src/services/gpodder/GpodderTagTreeItem.h
++++ b/src/services/gpodder/GpodderTagTreeItem.h
+@@ -20,7 +20,7 @@
+ #define GPODDERTAGTREEITEM_H_
+ 
+ #include "GpodderTreeItem.h"
+-#include <mygpo-qt6/Tag.h>
++#include <mygpo-qt/Tag.h>
+ 
+ #include <QObject>
+ 
+diff --git a/src/services/gpodder/GpodderTreeItem.h b/src/services/gpodder/GpodderTreeItem.h
+index 642e1cb371..ce1d4d070a 100644
+--- a/src/services/gpodder/GpodderTreeItem.h
++++ b/src/services/gpodder/GpodderTreeItem.h
+@@ -19,8 +19,8 @@
+ #ifndef GPODDERTREEITEM_H_
+ #define GPODDERTREEITEM_H_
+ 
+-#include <mygpo-qt6/ApiRequest.h>
+-#include <mygpo-qt6/TagList.h>
++#include <mygpo-qt/ApiRequest.h>
++#include <mygpo-qt/TagList.h>
+ 
+ #include <QList>
+ #include <QModelIndex>

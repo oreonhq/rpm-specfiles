@@ -1,0 +1,325 @@
+--- a/apbs/CMakeLists.txt_orig	2018-05-20 13:00:17.451341064 -0400
++++ b/apbs/CMakeLists.txt	2018-05-20 13:00:47.917440250 -0400
+@@ -1,4 +1,5 @@
+-cmake_minimum_required (VERSION 3.12)
++cmake_minimum_required(VERSION 3.13...4.0)
++set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ 
+ ################################################################################
+ # TODO:  Add licensing and authorship information
+@@ -7,7 +8,6 @@
+ #        (configure.ac:1306)
+ ################################################################################
+ set(CMAKE_VERBOSE_MAKEFILE true)
+-cmake_policy(SET CMP0054 OLD)
+ cmake_policy(SET CMP0042 NEW)
+ set(CMAKE_MACOSX_RPATH 1)
+ 
+@@ -70,10 +71,10 @@
+ set(TOOLS_PATH ${APBS_BUILD}/tools)
+ set(APBS_BINARY ${EXECUTABLE_OUTPUT_PATH}/apbs)
+ 
+-set(LIBRARY_INSTALL_PATH lib)
+-set(HEADER_INSTALL_PATH include/apbs)
++set(LIBRARY_INSTALL_PATH ${LIB_INSTALL_DIR})
++set(HEADER_INSTALL_PATH ${INCLUDE_INSTALL_DIR}/apbs)
+ set(EXECUTABLE_INSTALL_PATH bin)
+-set(SHARE_INSTALL_PATH share/apbs)
++set(SHARE_INSTALL_PATH ${SHARE_INSTALL_PREFIX}/apbs)
+ 
+ set(APBS_LIBS)
+ set(APBS_LIB_DIRS)
+@@ -85,7 +86,7 @@
+           PATHS "${APBS_ROOT}"
+           DOC "The path to the external git submodules")
+ 
+-set(SYS_LIBPATHS /usr/lib64)
++#set(SYS_LIBPATHS /usr/lib64)
+ #list(APPEND SYS_LIBPATHS /usr/lib64)
+ 
+ 
+@@ -139,11 +140,6 @@
+ ################################################################################
+ message(STATUS "Setting lookup paths for headers and libraries")
+ 
+-set(CMAKE_INCLUDE_PATH "${CMAKE_INCLUDE_PATH}")
+-list(APPEND CMAKE_INCLUDE_PATH /usr/include)
+-list(APPEND CMAKE_INCLUDE_PATH /usr/local/include)
+-
+-
+ ################################################################################
+ # Enable ansi pedantic compiling                                               #
+ ################################################################################
+@@ -307,12 +303,12 @@
+ ################################################################################
+ if(NOT ENABLE_FETK)
+     # We'll use autotools to build MALOC if FETK is enabled.
+-    add_subdirectory(${EXTERNALS_PATH}/fetk/maloc)
+-    include_directories(${EXTERNALS_PATH}/fetk/maloc/src/base
+-                        ${EXTERNALS_PATH}/fetk/maloc/src/vsys
+-                        ${EXTERNALS_PATH}/fetk/maloc/src/vsh
+-                        ${EXTERNALS_PATH}/fetk/maloc/src/psh)
+-    list(APPEND APBS_LIB_DIRS ${EXTERNALS_PATH}/fetk/maloc/lib)
++    #add_subdirectory(${EXTERNALS_PATH}/fetk/maloc)
++    #include_directories(${EXTERNALS_PATH}/fetk/maloc/src/base
++    #                    ${EXTERNALS_PATH}/fetk/maloc/src/vsys
++    #                    ${EXTERNALS_PATH}/fetk/maloc/src/vsh
++    #                    ${EXTERNALS_PATH}/fetk/maloc/src/psh)
++    #list(APPEND APBS_LIB_DIRS ${EXTERNALS_PATH}/fetk/maloc/lib)
+     list(APPEND APBS_LIBS maloc)
+ endif()
+ 
+@@ -778,10 +774,10 @@
+ ################################################################################
+ # Set up additional directories to install                                     #
+ ################################################################################
+-install(DIRECTORY ${APBS_ROOT}/doc
+-        DESTINATION ${SHARE_INSTALL_PATH}
+-        PATTERN "programmer" EXCLUDE
+-        PATTERN "CMakeLists.txt" EXCLUDE)
++#install(DIRECTORY ${APBS_ROOT}/doc
++#        DESTINATION ${SHARE_INSTALL_PATH}
++#        PATTERN "programmer" EXCLUDE
++#        PATTERN "CMakeLists.txt" EXCLUDE)
+ 
+ if(BUILD_DOC)
+     install(DIRECTORY ${APBS_BUILD}/doc/programmer
+@@ -791,27 +787,11 @@
+             PATTERN "mainpage.h" EXCLUDE)
+ endif()
+ 
+-install(DIRECTORY ${APBS_ROOT}/examples
+-        DESTINATION ${SHARE_INSTALL_PATH})
+-
+-install(DIRECTORY ${APBS_ROOT}/tests
+-        DESTINATION ${SHARE_INSTALL_PATH}
+-        FILES_MATCHING
+-        PATTERN "*.py"
+-        PATTERN "README")
+-
+-if(BUILD_TOOLS)
+-    install(DIRECTORY ${APBS_ROOT}/tools
+-            DESTINATION ${SHARE_INSTALL_PATH}
+-            USE_SOURCE_PERMISSIONS
+-            PATTERN "CMakeLists.txt"
+-            PATTERN "matlab" EXCLUDE)
+-
+-    if(NOT "${APBS_ROOT}" STREQUAL "${APBS_BUILD}")
+-    install(DIRECTORY ${APBS_BUILD}/tools/bin
++if(NOT "${APBS_ROOT}" STREQUAL "${APBS_BUILD}")
++    install(
++            DIRECTORY ${APBS_BUILD}/tools/bin
+             DESTINATION ${SHARE_INSTALL_PATH}/tools
+             USE_SOURCE_PERMISSIONS)
+-    endif()
+ endif()
+ 
+ ################################################################################
+@@ -880,7 +860,7 @@
+ set(CPACK_PACKAGE_NAME                 "${PACKAGE_NAME}")
+ set(CPACK_PACKAGE_DESCRIPTION          "APBS - Adaptive Poisson Boltzmann Solver")
+ 
+-set(CPACK_RESOURCE_FILE_LICENSE        "${PROJECT_SOURCE_DIR}/../LICENSE.md")
++set(CPACK_RESOURCE_FILE_LICENSE        "${PROJECT_SOURCE_DIR}/LICENSE.md")
+ set(CPACK_PACKAGE_DESCRIPTION_FILE     "${PROJECT_SOURCE_DIR}/README.md")
+ 
+ set(CPACK_SOURCE_IGNORE_FILES          "${PROJECT_BINARY_DIR};/.git/;.gitignore;/tools/matlab/")
+--- a/apbs/src/CMakeLists.txt_orig	2018-05-20 13:00:20.518351049 -0400
++++ b/apbs/src/CMakeLists.txt	2018-05-20 13:00:47.917440250 -0400
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.13...4.0)
+ 
+ macro(add_items TYPE)
+ 
+@@ -32,11 +32,11 @@
+     message(STATUS "With external header files ${EXTERNAL_HEADERS}")
+     message(STATUS "With internal header files ${INTERNAL_HEADERS}")
+     message(STATUS "With library dependencies ${LIBRARY_DEPENDENCIES}")
+-    add_library(${LIBRARY_NAME} ${SOURCES} ${EXTERNAL_HEADERS} ${INTERNAL_HEADERS})
+-    target_link_libraries(${LIBRARY_NAME} ${LIBRARY_DEPENDENCIES})
++    add_library(${LIBRARY_NAME} OBJECT ${SOURCES} ${EXTERNAL_HEADERS} ${INTERNAL_HEADERS})
++    # target_link_libraries(${LIBRARY_NAME} ${LIBRARY_DEPENDENCIES})
+     #add_dependencies(${LIBRARY_NAME} ${LIBRARY_DEPENDENCIES})
+     INSTALL(FILES ${EXTERNAL_HEADERS} DESTINATION ${HEADER_INSTALL_PATH}/${LIBRARY})
+-    INSTALL(TARGETS ${LIBRARY_NAME} DESTINATION ${LIBRARY_INSTALL_PATH})
++    # INSTALL(TARGETS ${LIBRARY_NAME} DESTINATION ${LIBRARY_INSTALL_PATH})
+     list(APPEND APBS_INTERNAL_LIBS ${LIBRARY_NAME})
+     set(APBS_INTERNAL_LIBS ${APBS_INTERNAL_LIBS} PARENT_SCOPE)
+     message(STATUS "Added ${LIBRARY_NAME}")
+@@ -45,6 +45,11 @@
+ add_subdirectory(generic)
+ add_subdirectory(pmgc)
+ add_subdirectory(mg)
++add_library(apbs SHARED $<TARGET_OBJECTS:apbs_generic> $<TARGET_OBJECTS:apbs_pmgc> $<TARGET_OBJECTS:apbs_mg>)
++# set a SOVERSION to keep packager happy
++SET_TARGET_PROPERTIES(apbs PROPERTIES SOVERSION "1")
++target_link_libraries(apbs ${LIBRARY_DEPENDENCIES})
++INSTALL(TARGETS apbs LIBRARY DESTINATION ${LIBRARY_INSTALL_PATH})
+ 
+ if(ENABLE_FETK)
+    add_subdirectory(fem)
+@@ -56,7 +61,7 @@
+ message(STATUS "External Headers: ${EXTERNAL_HEADERS}")
+ 
+ #add_executable(apbs main.c routines.c)
+-add_executable(apbs main.c apbs.h routines.c routines.h)
++add_executable(apbs-bin main.c apbs.h routines.c routines.h)
+ message(STATUS " ")
+ message(STATUS "APBS Libraries: ${APBS_LIBS}")
+ message(STATUS "Internal Libraries: ${APBS_INTERNAL_LIBS}")
+@@ -64,7 +69,8 @@
+ 
+ #add_dependencies(apbs ${BEM_LIB})
+ #target_include_directories(apbs PRIVATE apbs.h routines.h)
+-target_link_libraries(apbs ${APBS_LIBS} ${APBS_INTERNAL_LIBS} ${APBS_LIBS})
++target_link_libraries(apbs-bin ${APBS_LIBS} apbs)
++SET_TARGET_PROPERTIES(apbs-bin PROPERTIES OUTPUT_NAME apbs)
+ #add_dependencies(apbs ${APBS_LIBS} ${APBS_INTERNAL_LIBS} ${APBS_LIBS})
+ 
+ configure_file(
+@@ -79,6 +85,6 @@
+ endif()
+ 
+ INSTALL(FILES apbs.h routines.h DESTINATION ${HEADER_INSTALL_PATH})
+-INSTALL(TARGETS apbs DESTINATION ${EXECUTABLE_INSTALL_PATH})
++INSTALL(TARGETS apbs-bin DESTINATION ${EXECUTABLE_INSTALL_PATH})
+ 
+ message(STATUS ${CMAKE_C_FLAGS})
+--- a/apbs/tools/manip/CMakeLists.txt_orig	2018-05-20 13:00:31.831387880 -0400
++++ b/apbs/tools/manip/CMakeLists.txt	2018-05-20 13:07:07.742714938 -0400
+@@ -1,9 +1,10 @@
+ message(STATUS "Building manip")
+ 
+ set(LIBS "")
+-list(APPEND LIBS "apbs_generic")
+-list(APPEND LIBS "apbs_mg")
+-list(APPEND LIBS "apbs_pmgc")
++#list(APPEND LIBS "apbs_generic")
++#list(APPEND LIBS "apbs_mg")
++#list(APPEND LIBS "apbs_pmgc")
++list(APPEND LIBS "apbs")
+ if(FETK_ENABLED)
+     list(APPEND LIBS "apbs_fem")
+ endif(FETK_ENABLED)
+@@ -11,7 +12,9 @@
+ message(STATUS "libraries: ${LIBS}")
+ 
+ add_executable(coulomb coulomb.c)
+-target_link_libraries(coulomb ${LIBS})
++target_link_libraries(coulomb ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(born born.c)
+-target_link_libraries(born ${LIBS})
++target_link_libraries(born ${LIBS} ${APBS_LIBS})
++
++INSTALL(TARGETS coulomb born DESTINATION ${EXECUTABLE_INSTALL_PATH})
+--- a/apbs/tools/mesh/CMakeLists.txt_orig	2018-05-20 13:00:26.966372042 -0400
++++ b/apbs/tools/mesh/CMakeLists.txt	2018-05-20 13:00:47.917440250 -0400
+@@ -1,9 +1,10 @@
+ message(STATUS "Building mesh")
+ 
+ set(LIBS "")
+-list(APPEND LIBS "apbs_generic")
+-list(APPEND LIBS "apbs_mg")
+-list(APPEND LIBS "apbs_pmgc")
++#list(APPEND LIBS "apbs_generic")
++#list(APPEND LIBS "apbs_mg")
++#list(APPEND LIBS "apbs_pmgc")
++list(APPEND LIBS "apbs")
+ if(FETK_ENABLED)
+     list(APPEND LIBS "apbs_fem")
+ endif(FETK_ENABLED)
+@@ -11,46 +12,48 @@
+ message(STATUS "libraries: ${LIBS}")
+ 
+ add_executable(mgmesh mgmesh.c)
+-target_link_libraries(mgmesh ${LIBS})
++target_link_libraries(mgmesh ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(smooth smooth.c)
+-target_link_libraries(smooth ${LIBS})
++target_link_libraries(smooth ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(dxmath dxmath.c)
+-target_link_libraries(dxmath ${LIBS})
++target_link_libraries(dxmath ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(mergedx mergedx.c)
+-target_link_libraries(mergedx ${LIBS})
++target_link_libraries(mergedx ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(mergedx2 mergedx2.c)
+-target_link_libraries(mergedx2 ${LIBS})
++target_link_libraries(mergedx2 ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(value value.c)
+-target_link_libraries(value ${LIBS})
++target_link_libraries(value ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(multivalue multivalue.c)
+-target_link_libraries(multivalue ${LIBS})
++target_link_libraries(multivalue ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(benchmark benchmark.c)
+-target_link_libraries(benchmark ${LIBS})
++target_link_libraries(benchmark ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(similarity similarity.c)
+-target_link_libraries(similarity ${LIBS})
++target_link_libraries(similarity ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(analysis analysis.c)
+-target_link_libraries(analysis ${LIBS})
++target_link_libraries(analysis ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(dx2mol dx2mol.c)
+-target_link_libraries(dx2mol ${LIBS})
++target_link_libraries(dx2mol ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(dx2uhbd dx2uhbd.c)
+-target_link_libraries(dx2uhbd ${LIBS})
++target_link_libraries(dx2uhbd ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(del2dx del2dx.c)
+-target_link_libraries(del2dx ${LIBS})
++target_link_libraries(del2dx ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(tensor2dx tensor2dx.c)
+-target_link_libraries(tensor2dx ${LIBS})
++target_link_libraries(tensor2dx ${LIBS} ${APBS_LIBS})
+ 
+ add_executable(uhbd_asc2bin uhbd_asc2bin.c)
+-target_link_libraries(uhbd_asc2bin ${LIBS})
++target_link_libraries(uhbd_asc2bin ${LIBS} ${APBS_LIBS})
++
++INSTALL(TARGETS mgmesh smooth dxmath mergedx mergedx2 value multivalue benchmark similarity analysis dx2mol dx2uhbd del2dx tensor2dx uhbd_asc2bin DESTINATION ${EXECUTABLE_INSTALL_PATH})
+--- a/a/tools/python/CMakeLists.orig.txt	2020-05-30 03:47:30.000000000 +0200
++++ b/b/tools/python/CMakeLists.txt	2025-07-24 20:56:31.152039088 +0200
+@@ -1,3 +1,4 @@
++cmake_minimum_required(VERSION 3.13...4.0)
+ if (${CMAKE_VERSION} VERSION_GREATER "3.13")
+ 	CMAKE_POLICY(SET CMP0078 OLD)
+ 	CMAKE_POLICY(SET CMP0086 OLD)
+@@ -23,18 +24,16 @@
+ SET(CMAKE_SWIG_FLAGS "")
+ 
+ SWIG_ADD_LIBRARY(apbslib
+-		#TYPE USE_BUILD_SHARED_LIBS
++		TYPE USE_BUILD_SHARED_LIBS
+ 		TYPE SHARED
+ 		LANGUAGE python
+ 		SOURCES apbslib.i)
+ 
+ # Hack to get the correct shared library extensions.  Why does Python suck so hard wrt to this?
+-if(APPLE)
+-    set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
+-endif(APPLE)
++set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
+ 
+ # Another hack to get SWIG to use the the correct library extension!
+-#SET_TARGET_PROPERTIES(${SWIG_MODULE_apbslib_REAL_NAME} PROPERTIES SUFFIX ${CMAKE_SHARED_LIBRARY_SUFFIX})
++SET_TARGET_PROPERTIES(${SWIG_MODULE_apbslib_REAL_NAME} PROPERTIES SUFFIX ${CMAKE_SHARED_LIBRARY_SUFFIX})
+ 
+ SWIG_LINK_LIBRARIES(apbslib ${APBS_LIBS} ${APBS_INTERNAL_LIBS} ${Python3_LIBRARIES})
+ 

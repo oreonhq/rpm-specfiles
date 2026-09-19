@@ -1,0 +1,21 @@
+--- rustix-openpty-0.2.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ rustix-openpty-0.2.0/Cargo.toml	2025-07-19T22:44:18.734461+00:00
+@@ -59,18 +59,3 @@
+ ]
+ default-features = false
+ 
+-[target.'cfg(not(any(target_os = "android", target_os = "linux")))'.dependencies.errno]
+-version = "0.3.1"
+-default-features = false
+-
+-[target.'cfg(not(any(target_os = "android", target_os = "linux")))'.dependencies.libc]
+-version = "0.2.114"
+-default-features = false
+-
+-[target.'cfg(not(any(target_os = "android", target_os = "linux")))'.dependencies.rustix]
+-version = "1.0.0"
+-features = [
+-    "fs",
+-    "termios",
+-]
+-default-features = false

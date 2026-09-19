@@ -15,7 +15,7 @@ IFS=$'\n'
 # mainline kernel.
 #
 is_kernel_package=""
-case "${1:-}" in
+case "${RPM_PACKAGE_NAME:-${1:-}}" in
 kernel-module-*)    ;; # Fedora kernel module package names start with
 		       # kernel-module.
 kernel*)	   is_kernel_package=1 ;;

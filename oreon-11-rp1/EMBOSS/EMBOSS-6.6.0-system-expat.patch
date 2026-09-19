@@ -1,0 +1,19 @@
+diff -up EMBOSS-6.6.0/configure.in.system-expat EMBOSS-6.6.0/configure.in
+--- EMBOSS-6.6.0/configure.in.system-expat	2015-10-30 09:30:20.978720930 -0400
++++ EMBOSS-6.6.0/configure.in	2015-10-30 09:31:33.117227536 -0400
+@@ -810,6 +810,7 @@ AC_ARG_ENABLE([systemlibs],
+ [AS_HELP_STRING([--enable-systemlibs], [utility for RPM/dpkg bundles])])
+ if test "x${enable_systemlibs}" = "xyes" ; then
+    AC_CHECK_LIB(pcre, pcre_compile)
++   AC_CHECK_LIB(expat, XML_ParserCreate)
+ fi
+ AM_CONDITIONAL([ESYSTEMLIBS], [test "x${enable_systemlibs}" = "xyes"])
+ 
+@@ -962,7 +963,6 @@ AC_CONFIG_FILES([Makefile
+                  ajax/ajaxdb/Makefile
+                  ajax/core/Makefile
+                  ajax/ensembl/Makefile
+-                 ajax/expat/Makefile
+                  ajax/graphics/Makefile
+                  ajax/zlib/Makefile
+                  doc/Makefile

@@ -1,0 +1,85 @@
+diff -up evolution-rspam-0.6.0/configure.ac.evo38 evolution-rspam-0.6.0/configure.ac
+--- evolution-rspam-0.6.0/configure.ac.evo38	2012-08-12 11:47:39.000000000 +0200
++++ evolution-rspam-0.6.0/configure.ac	2013-02-22 13:26:09.092461180 +0100
+@@ -70,9 +70,13 @@ if test "$EVOLUTION_BASE_VERSION_S" = "-
+ 	LIBGTK_REQUIRED=2.99.3
+ 	EVOLUTION_REQUIRED=2.91.6
+ if test "$EVOLUTION_VERSION" -gt "3003005"; then
++if test "$EVOLUTION_VERSION" -gt "3007006"; then
++	EVOLUTION_ADDITIONAL="libemail-engine"
++else
+ 	EVOLUTION_ADDITIONAL="libemail-utils libemail-engine"
+ fi
+ fi
++fi
+ 
+ PKG_CHECK_MODULES(RSPAM_EPLUGIN,
+ [
+diff -up evolution-rspam-0.6.0/configure.evo38 evolution-rspam-0.6.0/configure
+--- evolution-rspam-0.6.0/configure.evo38	2012-08-12 22:10:13.000000000 +0200
++++ evolution-rspam-0.6.0/configure	2013-02-22 13:26:09.098461260 +0100
+@@ -13554,9 +13554,13 @@ if test "$EVOLUTION_BASE_VERSION_S" = "-
+ 	LIBGTK_REQUIRED=2.99.3
+ 	EVOLUTION_REQUIRED=2.91.6
+ if test "$EVOLUTION_VERSION" -gt "3003005"; then
++if test "$EVOLUTION_VERSION" -gt "3007006"; then
++	EVOLUTION_ADDITIONAL="libemail-engine"
++else
+ 	EVOLUTION_ADDITIONAL="libemail-utils libemail-engine"
+ fi
+ fi
++fi
+ 
+ 
+ pkg_failed=no
+diff -up evolution-rspam-0.6.0/src/rspam.c.evo38 evolution-rspam-0.6.0/src/rspam.c
+--- evolution-rspam-0.6.0/src/rspam.c.evo38	2012-07-28 22:06:58.000000000 +0200
++++ evolution-rspam-0.6.0/src/rspam.c	2013-02-22 13:34:54.039014061 +0100
+@@ -42,6 +42,22 @@
+ #include <camel/camel-stream-fs.h>
+ #endif
+ 
++#if EVOLUTION_VERSION >= 30706
++#include <libedataserver/libedataserver.h>
++#include <e-util/e-util.h>
++
++#include <libemail-engine/e-mail-folder-utils.h>
++#include <libemail-engine/mail-ops.h>
++#include <libemail-engine/mail-tools.h>
++#include <shell/e-shell-view.h>
++#include <shell/es-event.h>
++#include <mail/e-mail-reader.h>
++#include <mail/em-utils.h>
++#include <mail/message-list.h>
++#include <mail/em-folder-selector.h>
++
++#else
++
+ #if EVOLUTION_VERSION < 22900
+ #include <mail/mail-component.h>
+ #include <mail/em-popup.h>
+@@ -98,6 +114,7 @@
+ #else
+ #include <mail/mail-ops.h>
+ #endif
++#endif /* EVOLUTION_VERSION >= 30706 */
+ 
+ #include "rspam.h"
+ 
+@@ -459,6 +476,7 @@ spamcop_report(CamelMimeMessage *msg, gc
+ 	extension = e_source_get_extension (source, extension_name);
+ 	name = e_source_mail_identity_get_name (extension);
+ 	address = e_source_mail_identity_get_address (extension);
++	uid = e_source_get_uid (source);
+ 
+ 	if (name == NULL && address == NULL)
+ 		goto fail;
+@@ -486,7 +504,7 @@ spamcop_report(CamelMimeMessage *msg, gc
+ 	text = em_utils_message_to_html (msg, NULL, 0, &len, NULL, NULL, NULL);
+ #else
+ #if EVOLUTION_VERSION > 30400
+-	text = em_utils_message_to_html (session, msg, NULL, 0, NULL, NULL, NULL);
++	text = em_utils_message_to_html (CAMEL_SESSION (session), msg, NULL, 0, NULL, NULL, NULL);
+ #else
+ 	text = em_utils_message_to_html (msg, NULL, 0, NULL, NULL, NULL);
+ #endif

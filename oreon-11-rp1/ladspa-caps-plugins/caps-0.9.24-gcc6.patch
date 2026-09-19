@@ -1,0 +1,12 @@
+diff -up caps-0.9.24/AutoFilter.cc~ caps-0.9.24/AutoFilter.cc
+--- caps-0.9.24/AutoFilter.cc~	2016-02-20 17:22:07.000000000 +0100
++++ caps-0.9.24/AutoFilter.cc	2016-02-20 17:22:30.081209456 +0100
+@@ -69,7 +69,7 @@ AutoFilter::activate()
+ void
+ AutoFilter::cycle (uint frames)
+ {
+-	div_t qr = div (frames, blocksize);
++	div_t qr = div ((int)frames, (int)blocksize);
+ 	int blocks = qr.quot;
+ 	if (qr.rem) ++blocks;
+ 	double over_blocks = 1./blocks;

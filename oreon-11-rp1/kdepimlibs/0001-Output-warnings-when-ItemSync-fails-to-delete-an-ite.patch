@@ -1,0 +1,42 @@
+From 3c9431857b4bc483ca526f0af35f25a51862706c Mon Sep 17 00:00:00 2001
+From: David Faure <faure@kde.org>
+Date: Fri, 26 Jun 2015 16:02:51 +0200
+Subject: [PATCH 01/31] Output warnings when ItemSync fails to delete an item.
+
+In my case, because the resource was specifying items with only a remote id
+and no id (not supported by the server due to different collection selected before)
+---
+ akonadi/itemsync.cpp | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/akonadi/itemsync.cpp b/akonadi/itemsync.cpp
+index 9f833e6..1b15897 100644
+--- a/akonadi/itemsync.cpp
++++ b/akonadi/itemsync.cpp
+@@ -428,8 +428,11 @@ void ItemSyncPrivate::deleteItems(const Item::List &itemsToDelete)
+     }
+ }
+ 
+-void ItemSyncPrivate::slotLocalDeleteDone(KJob *)
++void ItemSyncPrivate::slotLocalDeleteDone(KJob *job)
+ {
++    if (job->error()) {
++        kWarning() << "Deleting items from the akonadi database failed:" << job->errorString();
++    }
+     mPendingJobs--;
+     mProgress++;
+ 
+@@ -438,7 +441,9 @@ void ItemSyncPrivate::slotLocalDeleteDone(KJob *)
+ 
+ void ItemSyncPrivate::slotLocalChangeDone(KJob *job)
+ {
+-    Q_UNUSED(job);
++    if (job->error()) {
++        kWarning() << "Creating/updating items from the akonadi database failed:" << job->errorString();
++    }
+     mPendingJobs--;
+     mProgress++;
+ 
+-- 
+2.5.0
+

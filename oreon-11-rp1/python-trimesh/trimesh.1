@@ -1,0 +1,41 @@
+.TH TRIMESH "1" "October 2024" "" "User Commands"
+.SH NAME
+.B trimesh
+\(en A simple command line utility for accessing trimesh functions
+.SH SYNOPSIS
+.B trimesh
+.RB [ \-h ]
+.RB [ \-i ]
+.RB [ \-e\ \fIEXPORT ]
+.RI [ file_name ]
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I file_name
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.TP
+.B \-i\fR, \fB\-\-interact
+Get an interactive terminal with trimesh and loaded geometry
+.TP
+.B \-e\ \fIEXPORT\fR, \fB\-\-export\ \fIEXPORT
+Export a loaded geometry to a new file.
+.SH EXAMPLES
+.P
+To display a mesh:
+.EX
+.B >\ trimesh\ hi.stl
+.EE
+.P
+To convert a mesh:
+.EX
+.B >\ trimesh\ hi.stl\ \-e\ hey.glb
+.EE
+.\" NOTE: The following is documented but not yet implemented:
+.\" .P
+.\" To print some information about a mesh:
+.\" .EX
+.\" .B >\ trimesh\ hi.stl\ \-\-statistics
+.\" .EE

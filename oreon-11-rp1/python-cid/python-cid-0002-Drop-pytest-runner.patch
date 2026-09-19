@@ -1,0 +1,41 @@
+From 44d6386f5e4cbb73e7625a12a4fc29f981a92599 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 13 Feb 2025 15:16:03 -0500
+Subject: [PATCH 2/2] Drop pytest-runner / "setup.py test" support from
+ setup.py
+
+---
+ setup.py | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index bd2c2b3..767a079 100644
+--- a/setup.py
++++ b/setup.py
+@@ -19,15 +19,6 @@ requirements = [
+     'py-multihash>=0.2.0',
+ ]
+ 
+-setup_requirements = [
+-    'pytest-runner',
+-]
+-
+-test_requirements = [
+-    'pytest',
+-    'pytest-cov',
+-]
+-
+ setup(
+     name='py-cid',
+     version='0.3.0',
+@@ -53,7 +44,4 @@ setup(
+         'Programming Language :: Python :: 3.5',
+         'Programming Language :: Python :: 3.6',
+     ],
+-    test_suite='tests',
+-    tests_require=test_requirements,
+-    setup_requires=setup_requirements,
+ )
+-- 
+2.48.1
+

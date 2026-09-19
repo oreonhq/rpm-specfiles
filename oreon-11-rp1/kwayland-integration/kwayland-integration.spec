@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 81f0e65271648c612c6899a7d2d3a0d17b77896de096934e0e793b1337546282
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    kwayland-integration
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: Provides integration plugins for various KDE Frameworks for Wayland
 

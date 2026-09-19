@@ -1,12 +1,12 @@
-%global source0_hash a2eec2a981ed9da6cffc955cc21a50dcbc77141cbb840d915f92d1897442d239
+%global source0_hash b2c9375edc219425b2ffc90b443e686fc48699a0ee0408b6a4e55a5f345dde2e
 
 %global framework kstatusnotifieritem
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.29.0
 Release:        1%{?dist}
 Summary:        Implementation of Status Notifier Items
 
@@ -21,7 +21,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6DBus)
-BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xkbcommon)
 
@@ -79,6 +79,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

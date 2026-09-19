@@ -1,0 +1,2 @@
+#Type  Name     ID  GECOS                     Home directory    Shell
+u      bitlbee  -   "BitlBee IRC/IM gateway"  /var/lib/bitlbee  /sbin/nologin

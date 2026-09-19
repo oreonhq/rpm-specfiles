@@ -1,0 +1,1309 @@
+From 92d2f2710d5ca3190d99236be3d424106a9ebbb9 Mon Sep 17 00:00:00 2001
+From: Andrew Bauer <zonexpertconsulting@outlook.com>
+Date: Mon, 26 May 2025 16:12:31 -0500
+Subject: [PATCH] update fsf address
+
+---
+ LW5xx_Linux/COPYING                                           | 2 +-
+ LW5xx_Linux/LICENSE                                           | 2 +-
+ LW5xx_Linux/Makefile.am                                       | 2 +-
+ LW5xx_Linux/Makefile.in                                       | 2 +-
+ LW5xx_Linux/configure.ac                                      | 2 +-
+ LW5xx_Linux/docs/Makefile.am                                  | 2 +-
+ LW5xx_Linux/docs/Makefile.in                                  | 2 +-
+ LW5xx_Linux/dymo-cups-drivers.spec                            | 2 +-
+ LW5xx_Linux/ppd/Makefile.am                                   | 2 +-
+ LW5xx_Linux/ppd/Makefile.in                                   | 2 +-
+ LW5xx_Linux/ppd/lmmls.ppd                                     | 2 +-
+ LW5xx_Linux/ppd/lw550.ppd                                     | 2 +-
+ LW5xx_Linux/ppd/lw550p.ppd                                    | 2 +-
+ LW5xx_Linux/ppd/lw550t.ppd                                    | 2 +-
+ LW5xx_Linux/ppd/lw550tp.ppd                                   | 2 +-
+ LW5xx_Linux/ppd/lw5xl.ppd                                     | 2 +-
+ LW5xx_Linux/ppd/lw5xlp.ppd                                    | 2 +-
+ LW5xx_Linux/ppd/lww.ppd                                       | 2 +-
+ LW5xx_Linux/samples/Makefile.am                               | 2 +-
+ LW5xx_Linux/samples/Makefile.in                               | 2 +-
+ LW5xx_Linux/samples/custom_paper/Makefile.am                  | 2 +-
+ LW5xx_Linux/samples/custom_paper/Makefile.in                  | 2 +-
+ LW5xx_Linux/samples/custom_paper_tape/Makefile.am             | 2 +-
+ LW5xx_Linux/samples/custom_paper_tape/Makefile.in             | 2 +-
+ LW5xx_Linux/samples/paper_bounds/Makefile.am                  | 2 +-
+ LW5xx_Linux/samples/paper_bounds/Makefile.in                  | 2 +-
+ LW5xx_Linux/samples/paper_list/Makefile.am                    | 2 +-
+ LW5xx_Linux/samples/paper_list/Makefile.in                    | 2 +-
+ LW5xx_Linux/samples/test_label/Makefile.am                    | 2 +-
+ LW5xx_Linux/samples/test_label/Makefile.in                    | 2 +-
+ LW5xx_Linux/src/Makefile.am                                   | 2 +-
+ LW5xx_Linux/src/Makefile.in                                   | 2 +-
+ LW5xx_Linux/src/common/CommonTypedefs.h                       | 2 +-
+ LW5xx_Linux/src/common/CupsFilter.h                           | 2 +-
+ LW5xx_Linux/src/common/CupsPrintEnvironment.cpp               | 2 +-
+ LW5xx_Linux/src/common/CupsPrintEnvironment.h                 | 2 +-
+ LW5xx_Linux/src/common/CupsUtils.cpp                          | 2 +-
+ LW5xx_Linux/src/common/CupsUtils.h                            | 2 +-
+ LW5xx_Linux/src/common/DummyLanguageMonitor.h                 | 2 +-
+ LW5xx_Linux/src/common/ErrorDiffusionHalftoning.h             | 2 +-
+ LW5xx_Linux/src/common/Halftoning.h                           | 2 +-
+ LW5xx_Linux/src/common/NonLinearLaplacianHalftoning.cpp       | 2 +-
+ LW5xx_Linux/src/common/NonLinearLaplacianHalftoning.h         | 2 +-
+ LW5xx_Linux/src/common/PrinterDriver.h                        | 2 +-
+ LW5xx_Linux/src/common/tests/MOCK_PrintEnvironment.cpp        | 2 +-
+ LW5xx_Linux/src/common/tests/MOCK_PrintEnvironment.h          | 2 +-
+ LW5xx_Linux/src/common/tests/Makefile.am                      | 2 +-
+ LW5xx_Linux/src/common/tests/Makefile.in                      | 2 +-
+ LW5xx_Linux/src/common/tests/TestCommon.cpp                   | 2 +-
+ LW5xx_Linux/src/common/tests/TestCommon.h                     | 2 +-
+ LW5xx_Linux/src/common/tests/TestErrorDiffusionHalftoning.cpp | 2 +-
+ LW5xx_Linux/src/common/tests/TestErrorDiffusionHalftoning.h   | 2 +-
+ LW5xx_Linux/src/common/tests/TestNLLHalftoning.cpp            | 2 +-
+ LW5xx_Linux/src/common/tests/TestNLLHalftoning.h              | 2 +-
+ LW5xx_Linux/src/common/tests/testsMain.cpp                    | 2 +-
+ LW5xx_Linux/src/lm/LabelManagerDriver.h                       | 2 +-
+ LW5xx_Linux/src/lm/LabelManagerDriverInitializer.cpp          | 2 +-
+ LW5xx_Linux/src/lm/LabelManagerDriverInitializer.h            | 2 +-
+ LW5xx_Linux/src/lm/LabelManagerDriverV2.cpp                   | 2 +-
+ LW5xx_Linux/src/lm/LabelManagerDriverV2.h                     | 2 +-
+ LW5xx_Linux/src/lm/LabelManagerLanguageMonitor.h              | 2 +-
+ LW5xx_Linux/src/lm/LabelManagerLanguageMonitorV2.cpp          | 2 +-
+ LW5xx_Linux/src/lm/LabelManagerLanguageMonitorV2.h            | 2 +-
+ LW5xx_Linux/src/lm/Makefile.am                                | 2 +-
+ LW5xx_Linux/src/lm/Makefile.in                                | 2 +-
+ LW5xx_Linux/src/lm/raster2dymolm.cpp                          | 2 +-
+ LW5xx_Linux/src/lm/tests/Makefile.am                          | 2 +-
+ LW5xx_Linux/src/lm/tests/Makefile.in                          | 2 +-
+ LW5xx_Linux/src/lm/tests/TestLabelManagerDriver.cpp           | 2 +-
+ LW5xx_Linux/src/lm/tests/TestLabelManagerDriver.h             | 2 +-
+ LW5xx_Linux/src/lm/tests/TestLabelManagerFilter.cpp           | 2 +-
+ LW5xx_Linux/src/lm/tests/TestLabelManagerFilter.h             | 2 +-
+ LW5xx_Linux/src/lw/LabelWriterDriver.h                        | 2 +-
+ LW5xx_Linux/src/lw/LabelWriterDriverInitializer.cpp           | 2 +-
+ LW5xx_Linux/src/lw/LabelWriterDriverInitializer.h             | 2 +-
+ LW5xx_Linux/src/lw/LabelWriterDriverV2.cpp                    | 2 +-
+ LW5xx_Linux/src/lw/LabelWriterDriverV2.h                      | 2 +-
+ LW5xx_Linux/src/lw/LabelWriterLanguageMonitor.h               | 2 +-
+ LW5xx_Linux/src/lw/LabelWriterLanguageMonitorV2.cpp           | 2 +-
+ LW5xx_Linux/src/lw/LabelWriterLanguageMonitorV2.h             | 2 +-
+ LW5xx_Linux/src/lw/Makefile.am                                | 2 +-
+ LW5xx_Linux/src/lw/Makefile.in                                | 2 +-
+ LW5xx_Linux/src/lw/raster2dymolw.cpp                          | 2 +-
+ LW5xx_Linux/src/lw/tests/MOCK_LWLMPrintEnvironment.cpp        | 2 +-
+ LW5xx_Linux/src/lw/tests/MOCK_LWLMPrintEnvironment.h          | 2 +-
+ LW5xx_Linux/src/lw/tests/Makefile.am                          | 2 +-
+ LW5xx_Linux/src/lw/tests/Makefile.in                          | 2 +-
+ LW5xx_Linux/src/lw/tests/TestLabelWriterDriver.cpp            | 2 +-
+ LW5xx_Linux/src/lw/tests/TestLabelWriterDriver.h              | 2 +-
+ LW5xx_Linux/src/lw/tests/TestLabelWriterFilter.cpp            | 2 +-
+ LW5xx_Linux/src/lw/tests/TestLabelWriterFilter.h              | 2 +-
+ LW5xx_Linux/src/lw/tests/TestLabelWriterLanguageMonitor.cpp   | 2 +-
+ LW5xx_Linux/src/lw/tests/TestLabelWriterLanguageMonitor.h     | 2 +-
+ 93 files changed, 93 insertions(+), 93 deletions(-)
+
+diff --git a/LW5xx_Linux/COPYING b/LW5xx_Linux/COPYING
+index fd94e166..1f18ed7f 100644
+--- a/LW5xx_Linux/COPYING
++++ b/LW5xx_Linux/COPYING
+@@ -2,7 +2,7 @@
+                Version 2, June 1991
+ 
+  Copyright (C) 1989, 1991 Free Software Foundation, Inc.,
+- 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ 31 Milk Street, # 960789, Boston, MA 02196 USA
+  Everyone is permitted to copy and distribute verbatim copies
+  of this license document, but changing it is not allowed.
+ 
+diff --git a/LW5xx_Linux/LICENSE b/LW5xx_Linux/LICENSE
+index d511905c..88d13229 100644
+--- a/LW5xx_Linux/LICENSE
++++ b/LW5xx_Linux/LICENSE
+@@ -2,7 +2,7 @@
+ 		       Version 2, June 1991
+ 
+  Copyright (C) 1989, 1991 Free Software Foundation, Inc.,
+- 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ 31 Milk Street, # 960789, Boston, MA 02196 USA
+  Everyone is permitted to copy and distribute verbatim copies
+  of this license document, but changing it is not allowed.
+ 
+diff --git a/LW5xx_Linux/Makefile.am b/LW5xx_Linux/Makefile.am
+index b5e30cfe..1ab5043e 100644
+--- a/LW5xx_Linux/Makefile.am
++++ b/LW5xx_Linux/Makefile.am
+@@ -13,7 +13,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ SUBDIRS = src ppd docs samples
+ EXTRA_DIST = dymo-cups-drivers.spec LICENSE
+diff --git a/LW5xx_Linux/Makefile.in b/LW5xx_Linux/Makefile.in
+index ea53b8ee..5a26e49e 100644
+--- a/LW5xx_Linux/Makefile.in
++++ b/LW5xx_Linux/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+   if test -z '$(MAKELEVEL)'; then \
+diff --git a/LW5xx_Linux/configure.ac b/LW5xx_Linux/configure.ac
+index 9e4a9638..78b0cf32 100644
+--- a/LW5xx_Linux/configure.ac
++++ b/LW5xx_Linux/configure.ac
+@@ -13,7 +13,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ AC_PREREQ(2.59)
+ AC_INIT(dymo-cups-drivers, 2.0.0.0, philipp.ineichen@dymo.com)
+diff --git a/LW5xx_Linux/docs/Makefile.am b/LW5xx_Linux/docs/Makefile.am
+index eab35ba1..80dcfec2 100644
+--- a/LW5xx_Linux/docs/Makefile.am
++++ b/LW5xx_Linux/docs/Makefile.am
+@@ -15,7 +15,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ EXTRA_DIST = SAMPLES TestImage.png longtest.txt test.ps test.txt testprint.ps DYMO_SDK_for_Linux.rtf
+ 
+diff --git a/LW5xx_Linux/docs/Makefile.in b/LW5xx_Linux/docs/Makefile.in
+index cf218c1b..e262fb42 100644
+--- a/LW5xx_Linux/docs/Makefile.in
++++ b/LW5xx_Linux/docs/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+   if test -z '$(MAKELEVEL)'; then \
+diff --git a/LW5xx_Linux/dymo-cups-drivers.spec b/LW5xx_Linux/dymo-cups-drivers.spec
+index cc722490..74427981 100644
+--- a/LW5xx_Linux/dymo-cups-drivers.spec
++++ b/LW5xx_Linux/dymo-cups-drivers.spec
+@@ -13,7 +13,7 @@
+ 
+ #    You should have received a copy of the GNU General Public License
+ #    along with this program; if not, write to the Free Software
+-#    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++#    Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ Summary: DYMO LabelWriter Drivers for CUPS
+ Name: dymo-cups-drivers
+diff --git a/LW5xx_Linux/ppd/Makefile.am b/LW5xx_Linux/ppd/Makefile.am
+index ed687745..76d8327c 100644
+--- a/LW5xx_Linux/ppd/Makefile.am
++++ b/LW5xx_Linux/ppd/Makefile.am
+@@ -13,7 +13,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ dist_cupsmodel_DATA = \
+     lmmls.ppd \
+diff --git a/LW5xx_Linux/ppd/Makefile.in b/LW5xx_Linux/ppd/Makefile.in
+index 949955c3..79dee22a 100644
+--- a/LW5xx_Linux/ppd/Makefile.in
++++ b/LW5xx_Linux/ppd/Makefile.in
+@@ -29,7 +29,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+diff --git a/LW5xx_Linux/ppd/lmmls.ppd b/LW5xx_Linux/ppd/lmmls.ppd
+index a4a98861..8bffbd62 100644
+--- a/LW5xx_Linux/ppd/lmmls.ppd
++++ b/LW5xx_Linux/ppd/lmmls.ppd
+@@ -15,7 +15,7 @@
+ 
+ *% You should have received a copy of the GNU General Public License
+ *% along with this program; if not, write to the Free Software
+-*% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++*% Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ *FormatVersion: "4.3"
+ *FileVersion:   "3.1"
+diff --git a/LW5xx_Linux/ppd/lw550.ppd b/LW5xx_Linux/ppd/lw550.ppd
+index 40950858..4a173238 100644
+--- a/LW5xx_Linux/ppd/lw550.ppd
++++ b/LW5xx_Linux/ppd/lw550.ppd
+@@ -15,7 +15,7 @@
+ 
+ *% You should have received a copy of the GNU General Public License
+ *% along with this program; if not, write to the Free Software
+-*% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++*% Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ *FormatVersion: "4.3"
+ *FileVersion:   "3.1"
+diff --git a/LW5xx_Linux/ppd/lw550p.ppd b/LW5xx_Linux/ppd/lw550p.ppd
+index fd5e5b00..1e0d7caf 100644
+--- a/LW5xx_Linux/ppd/lw550p.ppd
++++ b/LW5xx_Linux/ppd/lw550p.ppd
+@@ -15,7 +15,7 @@
+ 
+ *% You should have received a copy of the GNU General Public License
+ *% along with this program; if not, write to the Free Software
+-*% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++*% Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ *FormatVersion: "4.3"
+ *FileVersion:   "3.1"
+diff --git a/LW5xx_Linux/ppd/lw550t.ppd b/LW5xx_Linux/ppd/lw550t.ppd
+index 1b76ada6..32c1fc04 100644
+--- a/LW5xx_Linux/ppd/lw550t.ppd
++++ b/LW5xx_Linux/ppd/lw550t.ppd
+@@ -15,7 +15,7 @@
+ 
+ *% You should have received a copy of the GNU General Public License
+ *% along with this program; if not, write to the Free Software
+-*% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++*% Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ *FormatVersion: "4.3"
+ *FileVersion:   "3.1"
+diff --git a/LW5xx_Linux/ppd/lw550tp.ppd b/LW5xx_Linux/ppd/lw550tp.ppd
+index 948662a8..a232a058 100644
+--- a/LW5xx_Linux/ppd/lw550tp.ppd
++++ b/LW5xx_Linux/ppd/lw550tp.ppd
+@@ -15,7 +15,7 @@
+ 
+ *% You should have received a copy of the GNU General Public License
+ *% along with this program; if not, write to the Free Software
+-*% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++*% Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ *FormatVersion: "4.3"
+ *FileVersion:   "3.1"
+diff --git a/LW5xx_Linux/ppd/lw5xl.ppd b/LW5xx_Linux/ppd/lw5xl.ppd
+index 70be98c9..4364d3e3 100644
+--- a/LW5xx_Linux/ppd/lw5xl.ppd
++++ b/LW5xx_Linux/ppd/lw5xl.ppd
+@@ -15,7 +15,7 @@
+ 
+ *% You should have received a copy of the GNU General Public License
+ *% along with this program; if not, write to the Free Software
+-*% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++*% Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ *FormatVersion: "4.3"
+ *FileVersion:   "3.1"
+diff --git a/LW5xx_Linux/ppd/lw5xlp.ppd b/LW5xx_Linux/ppd/lw5xlp.ppd
+index fc10ef1b..3f2abce5 100644
+--- a/LW5xx_Linux/ppd/lw5xlp.ppd
++++ b/LW5xx_Linux/ppd/lw5xlp.ppd
+@@ -15,7 +15,7 @@
+ 
+ *% You should have received a copy of the GNU General Public License
+ *% along with this program; if not, write to the Free Software
+-*% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++*% Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ *FormatVersion: "4.3"
+ *FileVersion:   "3.1"
+diff --git a/LW5xx_Linux/ppd/lww.ppd b/LW5xx_Linux/ppd/lww.ppd
+index b95c5da1..a2403ae6 100644
+--- a/LW5xx_Linux/ppd/lww.ppd
++++ b/LW5xx_Linux/ppd/lww.ppd
+@@ -15,7 +15,7 @@
+ 
+ *% You should have received a copy of the GNU General Public License
+ *% along with this program; if not, write to the Free Software
+-*% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++*% Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ *FormatVersion: "4.3"
+ *FileVersion:   "3.1"
+diff --git a/LW5xx_Linux/samples/Makefile.am b/LW5xx_Linux/samples/Makefile.am
+index c0856e8a..1d77b980 100644
+--- a/LW5xx_Linux/samples/Makefile.am
++++ b/LW5xx_Linux/samples/Makefile.am
+@@ -15,7 +15,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ SUBDIRS = paper_bounds paper_list test_label custom_paper custom_paper_tape
+ 
+diff --git a/LW5xx_Linux/samples/Makefile.in b/LW5xx_Linux/samples/Makefile.in
+index c83108f0..bc8fb9ca 100644
+--- a/LW5xx_Linux/samples/Makefile.in
++++ b/LW5xx_Linux/samples/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+   if test -z '$(MAKELEVEL)'; then \
+diff --git a/LW5xx_Linux/samples/custom_paper/Makefile.am b/LW5xx_Linux/samples/custom_paper/Makefile.am
+index 9cc54a09..0887d9c7 100644
+--- a/LW5xx_Linux/samples/custom_paper/Makefile.am
++++ b/LW5xx_Linux/samples/custom_paper/Makefile.am
+@@ -15,7 +15,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ EXTRA_PROGRAMS = CustomPaper
+ 
+diff --git a/LW5xx_Linux/samples/custom_paper/Makefile.in b/LW5xx_Linux/samples/custom_paper/Makefile.in
+index dc057301..0ae8c555 100644
+--- a/LW5xx_Linux/samples/custom_paper/Makefile.in
++++ b/LW5xx_Linux/samples/custom_paper/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+diff --git a/LW5xx_Linux/samples/custom_paper_tape/Makefile.am b/LW5xx_Linux/samples/custom_paper_tape/Makefile.am
+index 12ebba90..71773cfb 100644
+--- a/LW5xx_Linux/samples/custom_paper_tape/Makefile.am
++++ b/LW5xx_Linux/samples/custom_paper_tape/Makefile.am
+@@ -15,7 +15,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ EXTRA_PROGRAMS = CustomPaperTape
+ 
+diff --git a/LW5xx_Linux/samples/custom_paper_tape/Makefile.in b/LW5xx_Linux/samples/custom_paper_tape/Makefile.in
+index 87e4c11f..5ee2f96c 100644
+--- a/LW5xx_Linux/samples/custom_paper_tape/Makefile.in
++++ b/LW5xx_Linux/samples/custom_paper_tape/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+diff --git a/LW5xx_Linux/samples/paper_bounds/Makefile.am b/LW5xx_Linux/samples/paper_bounds/Makefile.am
+index 88d29b04..86f7c2f7 100644
+--- a/LW5xx_Linux/samples/paper_bounds/Makefile.am
++++ b/LW5xx_Linux/samples/paper_bounds/Makefile.am
+@@ -15,7 +15,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ EXTRA_PROGRAMS = PaperBounds
+ 
+diff --git a/LW5xx_Linux/samples/paper_bounds/Makefile.in b/LW5xx_Linux/samples/paper_bounds/Makefile.in
+index 2141f5cd..11902431 100644
+--- a/LW5xx_Linux/samples/paper_bounds/Makefile.in
++++ b/LW5xx_Linux/samples/paper_bounds/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+diff --git a/LW5xx_Linux/samples/paper_list/Makefile.am b/LW5xx_Linux/samples/paper_list/Makefile.am
+index 83596022..3a98fbf0 100644
+--- a/LW5xx_Linux/samples/paper_list/Makefile.am
++++ b/LW5xx_Linux/samples/paper_list/Makefile.am
+@@ -15,7 +15,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #samples_PROGRAMS = paperlist
+ #PROGRAMS = paperlist
+diff --git a/LW5xx_Linux/samples/paper_list/Makefile.in b/LW5xx_Linux/samples/paper_list/Makefile.in
+index 007649b4..7d7326e3 100644
+--- a/LW5xx_Linux/samples/paper_list/Makefile.in
++++ b/LW5xx_Linux/samples/paper_list/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #samples_PROGRAMS = paperlist
+ #PROGRAMS = paperlist
+diff --git a/LW5xx_Linux/samples/test_label/Makefile.am b/LW5xx_Linux/samples/test_label/Makefile.am
+index a426db55..7b8b6dc9 100644
+--- a/LW5xx_Linux/samples/test_label/Makefile.am
++++ b/LW5xx_Linux/samples/test_label/Makefile.am
+@@ -15,7 +15,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ EXTRA_PROGRAMS = TestLabel
+ 
+diff --git a/LW5xx_Linux/samples/test_label/Makefile.in b/LW5xx_Linux/samples/test_label/Makefile.in
+index d3f39297..37553793 100644
+--- a/LW5xx_Linux/samples/test_label/Makefile.in
++++ b/LW5xx_Linux/samples/test_label/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+diff --git a/LW5xx_Linux/src/Makefile.am b/LW5xx_Linux/src/Makefile.am
+index 40b46810..b76c7550 100644
+--- a/LW5xx_Linux/src/Makefile.am
++++ b/LW5xx_Linux/src/Makefile.am
+@@ -13,6 +13,6 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ SUBDIRS = lw lm common/tests
+diff --git a/LW5xx_Linux/src/Makefile.in b/LW5xx_Linux/src/Makefile.in
+index 8ec71bf5..879743e1 100644
+--- a/LW5xx_Linux/src/Makefile.in
++++ b/LW5xx_Linux/src/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+   if test -z '$(MAKELEVEL)'; then \
+diff --git a/LW5xx_Linux/src/common/CommonTypedefs.h b/LW5xx_Linux/src/common/CommonTypedefs.h
+index 290a3f93..da7306f6 100644
+--- a/LW5xx_Linux/src/common/CommonTypedefs.h
++++ b/LW5xx_Linux/src/common/CommonTypedefs.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef COMMON_TYPE_DEF_H
+ #define COMMON_TYPE_DEF_H
+diff --git a/LW5xx_Linux/src/common/CupsFilter.h b/LW5xx_Linux/src/common/CupsFilter.h
+index 6b2dffc1..2dac1eae 100644
+--- a/LW5xx_Linux/src/common/CupsFilter.h
++++ b/LW5xx_Linux/src/common/CupsFilter.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include <cups/cups.h>
+ #include <cups/raster.h>
+diff --git a/LW5xx_Linux/src/common/CupsPrintEnvironment.cpp b/LW5xx_Linux/src/common/CupsPrintEnvironment.cpp
+index 923983c3..947ba9c7 100644
+--- a/LW5xx_Linux/src/common/CupsPrintEnvironment.cpp
++++ b/LW5xx_Linux/src/common/CupsPrintEnvironment.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include <cups/cups.h>
+ #include <cups/sidechannel.h>
+diff --git a/LW5xx_Linux/src/common/CupsPrintEnvironment.h b/LW5xx_Linux/src/common/CupsPrintEnvironment.h
+index 2c9c1902..1a14ae81 100644
+--- a/LW5xx_Linux/src/common/CupsPrintEnvironment.h
++++ b/LW5xx_Linux/src/common/CupsPrintEnvironment.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "PrinterDriver.h"
+ 
+diff --git a/LW5xx_Linux/src/common/CupsUtils.cpp b/LW5xx_Linux/src/common/CupsUtils.cpp
+index 5c22b6b8..274ccc15 100644
+--- a/LW5xx_Linux/src/common/CupsUtils.cpp
++++ b/LW5xx_Linux/src/common/CupsUtils.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "CupsUtils.h"
+ 
+diff --git a/LW5xx_Linux/src/common/CupsUtils.h b/LW5xx_Linux/src/common/CupsUtils.h
+index 78ad74b8..0d235f10 100644
+--- a/LW5xx_Linux/src/common/CupsUtils.h
++++ b/LW5xx_Linux/src/common/CupsUtils.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include <cups/cups.h>
+ 
+diff --git a/LW5xx_Linux/src/common/DummyLanguageMonitor.h b/LW5xx_Linux/src/common/DummyLanguageMonitor.h
+index 98e16041..a500daeb 100644
+--- a/LW5xx_Linux/src/common/DummyLanguageMonitor.h
++++ b/LW5xx_Linux/src/common/DummyLanguageMonitor.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef DUMMY_LANGUAGE_MONITOR_H
+ #define DUMMY_LANGUAGE_MONITOR_H
+diff --git a/LW5xx_Linux/src/common/ErrorDiffusionHalftoning.h b/LW5xx_Linux/src/common/ErrorDiffusionHalftoning.h
+index 1ca9d897..7e2d6781 100644
+--- a/LW5xx_Linux/src/common/ErrorDiffusionHalftoning.h
++++ b/LW5xx_Linux/src/common/ErrorDiffusionHalftoning.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ 
+ #ifndef ERRORDIFFUSIONHALFTONING_H
+diff --git a/LW5xx_Linux/src/common/Halftoning.h b/LW5xx_Linux/src/common/Halftoning.h
+index 75ac42f5..ca8840dd 100644
+--- a/LW5xx_Linux/src/common/Halftoning.h
++++ b/LW5xx_Linux/src/common/Halftoning.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ 
+ #ifndef HALFTONING_H
+diff --git a/LW5xx_Linux/src/common/NonLinearLaplacianHalftoning.cpp b/LW5xx_Linux/src/common/NonLinearLaplacianHalftoning.cpp
+index dbaca0d5..757974aa 100644
+--- a/LW5xx_Linux/src/common/NonLinearLaplacianHalftoning.cpp
++++ b/LW5xx_Linux/src/common/NonLinearLaplacianHalftoning.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "NonLinearLaplacianHalftoning.h"
+ #include <algorithm>
+diff --git a/LW5xx_Linux/src/common/NonLinearLaplacianHalftoning.h b/LW5xx_Linux/src/common/NonLinearLaplacianHalftoning.h
+index 3941c1ec..4251ae13 100644
+--- a/LW5xx_Linux/src/common/NonLinearLaplacianHalftoning.h
++++ b/LW5xx_Linux/src/common/NonLinearLaplacianHalftoning.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef NONLINEARLAPLACIANHALFTONING_H
+ #define NONLINEARLAPLACIANHALFTONING_H
+diff --git a/LW5xx_Linux/src/common/PrinterDriver.h b/LW5xx_Linux/src/common/PrinterDriver.h
+index dfd71a35..3598d5c5 100644
+--- a/LW5xx_Linux/src/common/PrinterDriver.h
++++ b/LW5xx_Linux/src/common/PrinterDriver.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef PRINTER_DRIVER_H
+ #define PRINTER_DRIVER_H
+diff --git a/LW5xx_Linux/src/common/tests/MOCK_PrintEnvironment.cpp b/LW5xx_Linux/src/common/tests/MOCK_PrintEnvironment.cpp
+index 1b66c5ad..4fc42703 100644
+--- a/LW5xx_Linux/src/common/tests/MOCK_PrintEnvironment.cpp
++++ b/LW5xx_Linux/src/common/tests/MOCK_PrintEnvironment.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "MOCK_PrintEnvironment.h"
+ 
+diff --git a/LW5xx_Linux/src/common/tests/MOCK_PrintEnvironment.h b/LW5xx_Linux/src/common/tests/MOCK_PrintEnvironment.h
+index 44b3ea81..21134db2 100644
+--- a/LW5xx_Linux/src/common/tests/MOCK_PrintEnvironment.h
++++ b/LW5xx_Linux/src/common/tests/MOCK_PrintEnvironment.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef c002c15c_0f9e_4cc5_b38a_b5928c2348b1
+ #define c002c15c_0f9e_4cc5_b38a_b5928c2348b1
+diff --git a/LW5xx_Linux/src/common/tests/Makefile.am b/LW5xx_Linux/src/common/tests/Makefile.am
+index b285a2cd..7c60ca7f 100644
+--- a/LW5xx_Linux/src/common/tests/Makefile.am
++++ b/LW5xx_Linux/src/common/tests/Makefile.am
+@@ -15,7 +15,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ TESTS = tests
+ 
+diff --git a/LW5xx_Linux/src/common/tests/Makefile.in b/LW5xx_Linux/src/common/tests/Makefile.in
+index dd730d3f..917a7030 100644
+--- a/LW5xx_Linux/src/common/tests/Makefile.in
++++ b/LW5xx_Linux/src/common/tests/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+   if test -z '$(MAKELEVEL)'; then \
+diff --git a/LW5xx_Linux/src/common/tests/TestCommon.cpp b/LW5xx_Linux/src/common/tests/TestCommon.cpp
+index fa55cfc0..24824619 100644
+--- a/LW5xx_Linux/src/common/tests/TestCommon.cpp
++++ b/LW5xx_Linux/src/common/tests/TestCommon.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include <ostream>
+ #include "TestCommon.h"
+diff --git a/LW5xx_Linux/src/common/tests/TestCommon.h b/LW5xx_Linux/src/common/tests/TestCommon.h
+index 5be1fd48..1173795b 100644
+--- a/LW5xx_Linux/src/common/tests/TestCommon.h
++++ b/LW5xx_Linux/src/common/tests/TestCommon.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef h0ec9edba_c55d_43ab_ba47_ad936cbb8d74
+ #define h0ec9edba_c55d_43ab_ba47_ad936cbb8d74
+diff --git a/LW5xx_Linux/src/common/tests/TestErrorDiffusionHalftoning.cpp b/LW5xx_Linux/src/common/tests/TestErrorDiffusionHalftoning.cpp
+index 3ed100bc..37906879 100644
+--- a/LW5xx_Linux/src/common/tests/TestErrorDiffusionHalftoning.cpp
++++ b/LW5xx_Linux/src/common/tests/TestErrorDiffusionHalftoning.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "TestErrorDiffusionHalftoning.h"
+ #include "TestCommon.h"
+diff --git a/LW5xx_Linux/src/common/tests/TestErrorDiffusionHalftoning.h b/LW5xx_Linux/src/common/tests/TestErrorDiffusionHalftoning.h
+index 773f5ac8..82386990 100644
+--- a/LW5xx_Linux/src/common/tests/TestErrorDiffusionHalftoning.h
++++ b/LW5xx_Linux/src/common/tests/TestErrorDiffusionHalftoning.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef hd5e4ea9d_d3c3_4d2e_8235_830809f13fbf
+ #define hd5e4ea9d_d3c3_4d2e_8235_830809f13fbf
+diff --git a/LW5xx_Linux/src/common/tests/TestNLLHalftoning.cpp b/LW5xx_Linux/src/common/tests/TestNLLHalftoning.cpp
+index cfa61994..ec831846 100644
+--- a/LW5xx_Linux/src/common/tests/TestNLLHalftoning.cpp
++++ b/LW5xx_Linux/src/common/tests/TestNLLHalftoning.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "TestNLLHalftoning.h"
+ #include "TestCommon.h"
+diff --git a/LW5xx_Linux/src/common/tests/TestNLLHalftoning.h b/LW5xx_Linux/src/common/tests/TestNLLHalftoning.h
+index 379cea42..abea46c5 100644
+--- a/LW5xx_Linux/src/common/tests/TestNLLHalftoning.h
++++ b/LW5xx_Linux/src/common/tests/TestNLLHalftoning.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef h93317978_9c29_4c43_9de5_263975cb8c69
+ #define h93317978_9c29_4c43_9de5_263975cb8c69
+diff --git a/LW5xx_Linux/src/common/tests/testsMain.cpp b/LW5xx_Linux/src/common/tests/testsMain.cpp
+index b47dc87a..8f406dc8 100644
+--- a/LW5xx_Linux/src/common/tests/testsMain.cpp
++++ b/LW5xx_Linux/src/common/tests/testsMain.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include <cppunit/CompilerOutputter.h>
+ #include <cppunit/extensions/TestFactoryRegistry.h>
+diff --git a/LW5xx_Linux/src/lm/LabelManagerDriver.h b/LW5xx_Linux/src/lm/LabelManagerDriver.h
+index 9c22a3f9..3fa5bb6a 100644
+--- a/LW5xx_Linux/src/lm/LabelManagerDriver.h
++++ b/LW5xx_Linux/src/lm/LabelManagerDriver.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef LABEL_MANAGER_DRIVER_H
+ #define LABEL_MANAGER_DRIVER_H
+diff --git a/LW5xx_Linux/src/lm/LabelManagerDriverInitializer.cpp b/LW5xx_Linux/src/lm/LabelManagerDriverInitializer.cpp
+index 1849f7c8..db6f91d3 100644
+--- a/LW5xx_Linux/src/lm/LabelManagerDriverInitializer.cpp
++++ b/LW5xx_Linux/src/lm/LabelManagerDriverInitializer.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "LabelManagerDriverInitializer.h"
+ #include "CupsUtils.h"
+diff --git a/LW5xx_Linux/src/lm/LabelManagerDriverInitializer.h b/LW5xx_Linux/src/lm/LabelManagerDriverInitializer.h
+index 236ff4f6..8c10661f 100644
+--- a/LW5xx_Linux/src/lm/LabelManagerDriverInitializer.h
++++ b/LW5xx_Linux/src/lm/LabelManagerDriverInitializer.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include <cups/cups.h>
+ #include <cups/raster.h>
+diff --git a/LW5xx_Linux/src/lm/LabelManagerDriverV2.cpp b/LW5xx_Linux/src/lm/LabelManagerDriverV2.cpp
+index c43129cc..703c8f44 100644
+--- a/LW5xx_Linux/src/lm/LabelManagerDriverV2.cpp
++++ b/LW5xx_Linux/src/lm/LabelManagerDriverV2.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "LabelManagerDriverV2.h"
+ 
+diff --git a/LW5xx_Linux/src/lm/LabelManagerDriverV2.h b/LW5xx_Linux/src/lm/LabelManagerDriverV2.h
+index 793210a5..6aacef72 100644
+--- a/LW5xx_Linux/src/lm/LabelManagerDriverV2.h
++++ b/LW5xx_Linux/src/lm/LabelManagerDriverV2.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef LABEL_MANAGER_DRIVER_V2_H
+ #define LABEL_MANAGER_DRIVER_V2_H
+diff --git a/LW5xx_Linux/src/lm/LabelManagerLanguageMonitor.h b/LW5xx_Linux/src/lm/LabelManagerLanguageMonitor.h
+index 65687fd3..c16a8cfe 100644
+--- a/LW5xx_Linux/src/lm/LabelManagerLanguageMonitor.h
++++ b/LW5xx_Linux/src/lm/LabelManagerLanguageMonitor.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef LABEL_MANAGER_LANGUAGE_MONITOR_H
+ #define LABEL_MANAGER_LANGUAGE_MONITOR_H
+diff --git a/LW5xx_Linux/src/lm/LabelManagerLanguageMonitorV2.cpp b/LW5xx_Linux/src/lm/LabelManagerLanguageMonitorV2.cpp
+index 4ad5b991..7fe8406d 100644
+--- a/LW5xx_Linux/src/lm/LabelManagerLanguageMonitorV2.cpp
++++ b/LW5xx_Linux/src/lm/LabelManagerLanguageMonitorV2.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "LabelManagerLanguageMonitorV2.h"
+ 
+diff --git a/LW5xx_Linux/src/lm/LabelManagerLanguageMonitorV2.h b/LW5xx_Linux/src/lm/LabelManagerLanguageMonitorV2.h
+index d160f48e..92111138 100644
+--- a/LW5xx_Linux/src/lm/LabelManagerLanguageMonitorV2.h
++++ b/LW5xx_Linux/src/lm/LabelManagerLanguageMonitorV2.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef LABEL_MANAGER_LANGUAGE_MONITOR_V2_H
+ #define LABEL_MANAGER_LANGUAGE_MONITOR_V2_H
+diff --git a/LW5xx_Linux/src/lm/Makefile.am b/LW5xx_Linux/src/lm/Makefile.am
+index 71bf4074..13988187 100644
+--- a/LW5xx_Linux/src/lm/Makefile.am
++++ b/LW5xx_Linux/src/lm/Makefile.am
+@@ -13,7 +13,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ SUBDIRS = tests
+ 
+diff --git a/LW5xx_Linux/src/lm/Makefile.in b/LW5xx_Linux/src/lm/Makefile.in
+index d8c2032c..cfd4a2ff 100644
+--- a/LW5xx_Linux/src/lm/Makefile.in
++++ b/LW5xx_Linux/src/lm/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+diff --git a/LW5xx_Linux/src/lm/raster2dymolm.cpp b/LW5xx_Linux/src/lm/raster2dymolm.cpp
+index d4ab9f37..004ee9a9 100644
+--- a/LW5xx_Linux/src/lm/raster2dymolm.cpp
++++ b/LW5xx_Linux/src/lm/raster2dymolm.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "LabelManagerDriverV2.h"
+ #include "LabelManagerDriverInitializer.h"
+diff --git a/LW5xx_Linux/src/lm/tests/Makefile.am b/LW5xx_Linux/src/lm/tests/Makefile.am
+index 647da0b0..bdb37606 100644
+--- a/LW5xx_Linux/src/lm/tests/Makefile.am
++++ b/LW5xx_Linux/src/lm/tests/Makefile.am
+@@ -15,7 +15,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ TESTS = tests
+ 
+diff --git a/LW5xx_Linux/src/lm/tests/Makefile.in b/LW5xx_Linux/src/lm/tests/Makefile.in
+index 900881b1..a5aedc58 100644
+--- a/LW5xx_Linux/src/lm/tests/Makefile.in
++++ b/LW5xx_Linux/src/lm/tests/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+   if test -z '$(MAKELEVEL)'; then \
+diff --git a/LW5xx_Linux/src/lm/tests/TestLabelManagerDriver.cpp b/LW5xx_Linux/src/lm/tests/TestLabelManagerDriver.cpp
+index d976367c..719ea98d 100644
+--- a/LW5xx_Linux/src/lm/tests/TestLabelManagerDriver.cpp
++++ b/LW5xx_Linux/src/lm/tests/TestLabelManagerDriver.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "TestCommon.h"
+ #include "TestLabelManagerDriver.h"
+diff --git a/LW5xx_Linux/src/lm/tests/TestLabelManagerDriver.h b/LW5xx_Linux/src/lm/tests/TestLabelManagerDriver.h
+index 32688246..2d534c23 100644
+--- a/LW5xx_Linux/src/lm/tests/TestLabelManagerDriver.h
++++ b/LW5xx_Linux/src/lm/tests/TestLabelManagerDriver.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef h89cd8614_1576_42a1_a747_8ce1ccab21c3
+ #define h89cd8614_1576_42a1_a747_8ce1ccab21c3
+diff --git a/LW5xx_Linux/src/lm/tests/TestLabelManagerFilter.cpp b/LW5xx_Linux/src/lm/tests/TestLabelManagerFilter.cpp
+index ba56d58e..7ce21162 100644
+--- a/LW5xx_Linux/src/lm/tests/TestLabelManagerFilter.cpp
++++ b/LW5xx_Linux/src/lm/tests/TestLabelManagerFilter.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "TestCommon.h"
+ #include "TestLabelManagerFilter.h"
+diff --git a/LW5xx_Linux/src/lm/tests/TestLabelManagerFilter.h b/LW5xx_Linux/src/lm/tests/TestLabelManagerFilter.h
+index c6342a4c..275147be 100644
+--- a/LW5xx_Linux/src/lm/tests/TestLabelManagerFilter.h
++++ b/LW5xx_Linux/src/lm/tests/TestLabelManagerFilter.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef h51475713_0568_480f_b711_ddf8f09a3e15
+ #define h51475713_0568_480f_b711_ddf8f09a3e15
+diff --git a/LW5xx_Linux/src/lw/LabelWriterDriver.h b/LW5xx_Linux/src/lw/LabelWriterDriver.h
+index 3c75c53c..65724fc5 100644
+--- a/LW5xx_Linux/src/lw/LabelWriterDriver.h
++++ b/LW5xx_Linux/src/lw/LabelWriterDriver.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef LABEL_WRITER_DRIVER_H
+ #define LABEL_WRITER_DRIVER_H
+diff --git a/LW5xx_Linux/src/lw/LabelWriterDriverInitializer.cpp b/LW5xx_Linux/src/lw/LabelWriterDriverInitializer.cpp
+index 43ed8399..7aaf7b06 100644
+--- a/LW5xx_Linux/src/lw/LabelWriterDriverInitializer.cpp
++++ b/LW5xx_Linux/src/lw/LabelWriterDriverInitializer.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "LabelWriterDriverInitializer.h"
+ #include "CupsUtils.h"
+diff --git a/LW5xx_Linux/src/lw/LabelWriterDriverInitializer.h b/LW5xx_Linux/src/lw/LabelWriterDriverInitializer.h
+index 3d29ba91..b4e9910b 100644
+--- a/LW5xx_Linux/src/lw/LabelWriterDriverInitializer.h
++++ b/LW5xx_Linux/src/lw/LabelWriterDriverInitializer.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include <cups/cups.h>
+ #include <cups/raster.h>
+diff --git a/LW5xx_Linux/src/lw/LabelWriterDriverV2.cpp b/LW5xx_Linux/src/lw/LabelWriterDriverV2.cpp
+index 7efd8e97..205b87fb 100644
+--- a/LW5xx_Linux/src/lw/LabelWriterDriverV2.cpp
++++ b/LW5xx_Linux/src/lw/LabelWriterDriverV2.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "LabelWriterDriverV2.h"
+ 
+diff --git a/LW5xx_Linux/src/lw/LabelWriterDriverV2.h b/LW5xx_Linux/src/lw/LabelWriterDriverV2.h
+index e5d5f15b..c23dfe9d 100644
+--- a/LW5xx_Linux/src/lw/LabelWriterDriverV2.h
++++ b/LW5xx_Linux/src/lw/LabelWriterDriverV2.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef LABEL_WRITER_DRIVER_V2_H
+ #define LABEL_WRITER_DRIVER_V2_H
+diff --git a/LW5xx_Linux/src/lw/LabelWriterLanguageMonitor.h b/LW5xx_Linux/src/lw/LabelWriterLanguageMonitor.h
+index 1f696aa0..76f04975 100644
+--- a/LW5xx_Linux/src/lw/LabelWriterLanguageMonitor.h
++++ b/LW5xx_Linux/src/lw/LabelWriterLanguageMonitor.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef LABEL_WRITER_LANGUAGE_MONITOR_H
+ #define LABEL_WRITER_LANGUAGE_MONITOR_H
+diff --git a/LW5xx_Linux/src/lw/LabelWriterLanguageMonitorV2.cpp b/LW5xx_Linux/src/lw/LabelWriterLanguageMonitorV2.cpp
+index 7424cb48..e559371d 100644
+--- a/LW5xx_Linux/src/lw/LabelWriterLanguageMonitorV2.cpp
++++ b/LW5xx_Linux/src/lw/LabelWriterLanguageMonitorV2.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "LabelWriterDriverInitializer.h"
+ #include "LabelWriterLanguageMonitorV2.h"
+diff --git a/LW5xx_Linux/src/lw/LabelWriterLanguageMonitorV2.h b/LW5xx_Linux/src/lw/LabelWriterLanguageMonitorV2.h
+index 5511c231..e3656fc0 100644
+--- a/LW5xx_Linux/src/lw/LabelWriterLanguageMonitorV2.h
++++ b/LW5xx_Linux/src/lw/LabelWriterLanguageMonitorV2.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef LABEL_WRITER_LANGUAGE_MONITOR_V2_H
+ #define LABEL_WRITER_LANGUAGE_MONITOR_V2_H
+diff --git a/LW5xx_Linux/src/lw/Makefile.am b/LW5xx_Linux/src/lw/Makefile.am
+index 93fb6e87..05547acd 100644
+--- a/LW5xx_Linux/src/lw/Makefile.am
++++ b/LW5xx_Linux/src/lw/Makefile.am
+@@ -13,7 +13,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ SUBDIRS = tests
+ 
+diff --git a/LW5xx_Linux/src/lw/Makefile.in b/LW5xx_Linux/src/lw/Makefile.in
+index 805ea351..ece59d96 100644
+--- a/LW5xx_Linux/src/lw/Makefile.in
++++ b/LW5xx_Linux/src/lw/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+diff --git a/LW5xx_Linux/src/lw/raster2dymolw.cpp b/LW5xx_Linux/src/lw/raster2dymolw.cpp
+index d0bdd033..2319b76a 100644
+--- a/LW5xx_Linux/src/lw/raster2dymolw.cpp
++++ b/LW5xx_Linux/src/lw/raster2dymolw.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include <csignal>
+ 
+diff --git a/LW5xx_Linux/src/lw/tests/MOCK_LWLMPrintEnvironment.cpp b/LW5xx_Linux/src/lw/tests/MOCK_LWLMPrintEnvironment.cpp
+index 2d58bc95..914e09c6 100644
+--- a/LW5xx_Linux/src/lw/tests/MOCK_LWLMPrintEnvironment.cpp
++++ b/LW5xx_Linux/src/lw/tests/MOCK_LWLMPrintEnvironment.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "MOCK_LWLMPrintEnvironment.h"
+ #include "../LabelWriterDriver.h"
+diff --git a/LW5xx_Linux/src/lw/tests/MOCK_LWLMPrintEnvironment.h b/LW5xx_Linux/src/lw/tests/MOCK_LWLMPrintEnvironment.h
+index 01de4db0..15c3f942 100644
+--- a/LW5xx_Linux/src/lw/tests/MOCK_LWLMPrintEnvironment.h
++++ b/LW5xx_Linux/src/lw/tests/MOCK_LWLMPrintEnvironment.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef hc8e31bb3_01a5_4422_84b8_64c017e18521
+ #define hc8e31bb3_01a5_4422_84b8_64c017e18521
+diff --git a/LW5xx_Linux/src/lw/tests/Makefile.am b/LW5xx_Linux/src/lw/tests/Makefile.am
+index 303fc741..4a070412 100644
+--- a/LW5xx_Linux/src/lw/tests/Makefile.am
++++ b/LW5xx_Linux/src/lw/tests/Makefile.am
+@@ -15,7 +15,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ TESTS = tests
+ 
+diff --git a/LW5xx_Linux/src/lw/tests/Makefile.in b/LW5xx_Linux/src/lw/tests/Makefile.in
+index 521a339b..c8ab668d 100644
+--- a/LW5xx_Linux/src/lw/tests/Makefile.in
++++ b/LW5xx_Linux/src/lw/tests/Makefile.in
+@@ -31,7 +31,7 @@
+ 
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++# Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+   if test -z '$(MAKELEVEL)'; then \
+diff --git a/LW5xx_Linux/src/lw/tests/TestLabelWriterDriver.cpp b/LW5xx_Linux/src/lw/tests/TestLabelWriterDriver.cpp
+index d4d9d491..7690c90f 100644
+--- a/LW5xx_Linux/src/lw/tests/TestLabelWriterDriver.cpp
++++ b/LW5xx_Linux/src/lw/tests/TestLabelWriterDriver.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "TestLabelWriterDriver.h"
+ #include "MOCK_PrintEnvironment.h"
+diff --git a/LW5xx_Linux/src/lw/tests/TestLabelWriterDriver.h b/LW5xx_Linux/src/lw/tests/TestLabelWriterDriver.h
+index 4865d9ce..894b4e81 100644
+--- a/LW5xx_Linux/src/lw/tests/TestLabelWriterDriver.h
++++ b/LW5xx_Linux/src/lw/tests/TestLabelWriterDriver.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef h32c7cec0_3fa1_46d1_af3b_834205cd3ce8
+ #define h32c7cec0_3fa1_46d1_af3b_834205cd3ce8
+diff --git a/LW5xx_Linux/src/lw/tests/TestLabelWriterFilter.cpp b/LW5xx_Linux/src/lw/tests/TestLabelWriterFilter.cpp
+index a624ec84..ece5d999 100644
+--- a/LW5xx_Linux/src/lw/tests/TestLabelWriterFilter.cpp
++++ b/LW5xx_Linux/src/lw/tests/TestLabelWriterFilter.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "TestCommon.h"
+ #include "TestLabelWriterFilter.h"
+diff --git a/LW5xx_Linux/src/lw/tests/TestLabelWriterFilter.h b/LW5xx_Linux/src/lw/tests/TestLabelWriterFilter.h
+index 0ec8a575..3e8466d3 100644
+--- a/LW5xx_Linux/src/lw/tests/TestLabelWriterFilter.h
++++ b/LW5xx_Linux/src/lw/tests/TestLabelWriterFilter.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef hdc29f4ef_802f_478b_97c1_e61ddf654005
+ #define hdc29f4ef_802f_478b_97c1_e61ddf654005
+diff --git a/LW5xx_Linux/src/lw/tests/TestLabelWriterLanguageMonitor.cpp b/LW5xx_Linux/src/lw/tests/TestLabelWriterLanguageMonitor.cpp
+index 0d3f6ed7..e4008720 100644
+--- a/LW5xx_Linux/src/lw/tests/TestLabelWriterLanguageMonitor.cpp
++++ b/LW5xx_Linux/src/lw/tests/TestLabelWriterLanguageMonitor.cpp
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #include "TestLabelWriterLanguageMonitor.h"
+ #include "MOCK_PrintEnvironment.h"
+diff --git a/LW5xx_Linux/src/lw/tests/TestLabelWriterLanguageMonitor.h b/LW5xx_Linux/src/lw/tests/TestLabelWriterLanguageMonitor.h
+index d972ade5..471b3935 100644
+--- a/LW5xx_Linux/src/lw/tests/TestLabelWriterLanguageMonitor.h
++++ b/LW5xx_Linux/src/lw/tests/TestLabelWriterLanguageMonitor.h
+@@ -16,7 +16,7 @@
+ 
+ // You should have received a copy of the GNU General Public License
+ // along with this program; if not, write to the Free Software
+-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++// Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196 USA.
+ 
+ #ifndef h017d33d9_70fc_470f_a55d_19c2eb5f0263
+ #define h017d33d9_70fc_470f_a55d_19c2eb5f0263

@@ -3,7 +3,7 @@
 %define catalogue %{_sysconfdir}/X11/fontpath.d
 
 Name:           zvbi
-Version:        0.2.44
+Version:        0.2.45
 Release:        %autorelease
 Summary:        Raw VBI, Teletext and Closed Caption decoding library
 

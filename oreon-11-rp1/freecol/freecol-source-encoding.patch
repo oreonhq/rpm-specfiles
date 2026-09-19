@@ -1,0 +1,11 @@
+diff -up freecol/build.xml~ freecol/build.xml
+--- freecol/build.xml~	2014-10-22 20:19:45.000000000 +0200
++++ freecol/build.xml	2014-10-22 20:19:55.891317238 +0200
+@@ -98,6 +98,7 @@
+         <mkdir dir="${freecol.build.dir}"/>
+         <javac srcdir="${freecol.src.dir}"
+                destdir="${freecol.build.dir}"
++               encoding="utf8"
+                classpathref="freecol.build.classpath"
+                debug="on"
+                optimize="on"

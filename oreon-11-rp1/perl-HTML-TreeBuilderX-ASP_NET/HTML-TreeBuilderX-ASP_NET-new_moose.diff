@@ -1,0 +1,13 @@
+Index: lib/HTML/TreeBuilderX/ASP_NET/Roles/htmlElement.pm
+===================================================================
+--- lib/HTML/TreeBuilderX/ASP_NET/Roles/htmlElement.pm
++++ lib/HTML/TreeBuilderX/ASP_NET/Roles/htmlElement.pm	2013-04-23 20:55:27.422260615 +0200
+@@ -4,7 +4,7 @@
+ 
+ use Moose::Role;
+ 
+-Moose::init_meta( 'HTML::Element' );
++Moose::init_meta( 'HTML::Element', for_class => 'HTML::Element' );
+ 
+ sub BUILD {
+ 	my $self = shift;

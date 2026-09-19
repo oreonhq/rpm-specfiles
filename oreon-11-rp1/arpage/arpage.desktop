@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=arpage
+GenericName=JACK MIDI Arpeggiator
+Comment=A 4-channel JACK MIDI Arpeggiator
+Exec=arpage
+Icon=arpage
+Terminal=false
+Type=Application
+Categories=AudioVideo;Audio;Midi;X-Jack;

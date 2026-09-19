@@ -1,0 +1,36 @@
+diff -up openscad-openscad-2019.01-RC2/openscad.pro.polyclipping openscad-openscad-2019.01-RC2/openscad.pro
+--- openscad-openscad-2019.01-RC2/openscad.pro.polyclipping	2019-02-15 14:14:00.356626672 -0500
++++ openscad-openscad-2019.01-RC2/openscad.pro	2019-02-15 14:14:19.488249681 -0500
+@@ -559,8 +559,7 @@ SOURCES += src/ext/lodepng/lodepng.cpp
+ HEADERS += src/ext/lodepng/lodepng.h
+            
+ # ClipperLib
+-SOURCES += src/ext/polyclipping/clipper.cpp
+-HEADERS += src/ext/polyclipping/clipper.hpp
++LIBS += -lpolyclipping
+ 
+ # libtess2
+ INCLUDEPATH += src/ext/libtess2/Include
+diff -up openscad-openscad-2019.01-RC2/src/clipper-utils.h.polyclipping openscad-openscad-2019.01-RC2/src/clipper-utils.h
+--- openscad-openscad-2019.01-RC2/src/clipper-utils.h.polyclipping	2019-02-15 14:14:31.068021503 -0500
++++ openscad-openscad-2019.01-RC2/src/clipper-utils.h	2019-02-15 14:14:49.640655527 -0500
+@@ -1,6 +1,6 @@
+ #pragma once
+ 
+-#include "ext/polyclipping/clipper.hpp"
++#include <polyclipping/clipper.hpp>
+ #include "Polygon2d.h"
+ 
+ namespace ClipperUtils {
+diff -up openscad-openscad-2019.01-RC2/src/libsvg/shape.h.polyclipping openscad-openscad-2019.01-RC2/src/libsvg/shape.h
+--- openscad-openscad-2019.01-RC2/src/libsvg/shape.h.polyclipping	2019-02-15 15:03:16.651372730 -0500
++++ openscad-openscad-2019.01-RC2/src/libsvg/shape.h	2019-02-15 15:03:26.240183783 -0500
+@@ -34,7 +34,7 @@
+ #include <Eigen/Geometry>
+ 
+ #include "util.h"
+-#include "ext/polyclipping/clipper.hpp"
++#include <polyclipping/clipper.hpp>
+ 
+ namespace libsvg {
+ 

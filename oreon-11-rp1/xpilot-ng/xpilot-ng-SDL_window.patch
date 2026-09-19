@@ -1,0 +1,13 @@
+diff --git a/src/client/sdl/scrap.c b/src/client/sdl/scrap.c
+index e86beaff931d66e9..557e33f206f84d12 100644
+--- a/src/client/sdl/scrap.c
++++ b/src/client/sdl/scrap.c
+@@ -57,6 +57,8 @@ typedef uint32_t scrap_type;
+ #if defined(X11_SCRAP)
+ /* * */
+ static Display *SDL_Display;
++/* Avoid conflict with SDL_Window defined in <SDL/SDL_syswm.h>. */
++#define SDL_Window SDL_Window_variable
+ static Window SDL_Window;
+ static void (*Lock_Display)(void);
+ static void (*Unlock_Display)(void);

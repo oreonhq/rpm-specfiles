@@ -1,0 +1,14 @@
+diff --git a/src/Kernel/src/Clipboard/MimeHelper.cpp b/src/Kernel/src/Clipboard/MimeHelper.cpp
+index 37a006b..6a75a9f 100644
+--- a/src/Kernel/src/Clipboard/MimeHelper.cpp
++++ b/src/Kernel/src/Clipboard/MimeHelper.cpp
+@@ -32,7 +32,7 @@
+ 
+ // public
+ 
+-const QString MimeHelper::ScreenieMimeType = QString("application/x-") + Version::getApplicationName().toLower();
++const QString MimeHelper::ScreenieMimeType = QString("application/x-screenie"); // + Version::getApplicationName().toLower();
+ const QString MimeHelper::XmlMimeType = QString("text/xml");
+ const QString MimeHelper::TextMimeType = QString("text/plain");
+ 
+

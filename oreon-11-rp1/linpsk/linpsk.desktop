@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=linpsk
+GenericName=linpsk
+Comment=Psk31 and RTTY program for Linux
+Exec=linpsk
+Icon=linpsk
+Terminal=false
+Type=Application
+Categories=Network;HamRadio;
+Version=1.0

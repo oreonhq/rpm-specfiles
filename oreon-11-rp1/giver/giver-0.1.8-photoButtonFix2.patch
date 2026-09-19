@@ -1,0 +1,78 @@
+diff -up giver-0.1.8/src/PreferencesDialog.cs.photoButtonFix giver-0.1.8/src/PreferencesDialog.cs
+--- giver-0.1.8/src/PreferencesDialog.cs.photoButtonFix	2008-12-03 12:55:05.000000000 -0500
++++ giver-0.1.8/src/PreferencesDialog.cs	2008-12-03 12:57:33.000000000 -0500
+@@ -46,6 +46,7 @@ namespace Giver
+ 		private Button 				photoButton;
+ 		private Entry				webEntry;
+ 		private Entry				gravatarEntry;
++		string					localImagePath;
+ 
+ 		public PreferencesDialog() : base ()
+ 		{
+@@ -166,7 +167,13 @@ namespace Giver
+ 			table.Attach(localButton, 0, 1, 2, 3, AttachOptions.Shrink, AttachOptions.Shrink, 0, 0);
+ 			vbox = new VBox();
+ 			vbox.Show();
+-			localImage = new Image(Utilities.GetIcon("stock_person", 48));
++			if (File.Exists(Giver.Application.Preferences.PhotoLocation)) {
++				Logger.Debug("setting image to what we chose");
++				localImage = new Image(Giver.Application.Preferences.PhotoLocation);
++			} else {
++				Logger.Debug("setting image to stock_person");
++				localImage = new Image(Utilities.GetIcon("stock_person", 48));
++			}
+ 			localImage.Show();
+ 			vbox.PackStart(localImage, false, false, 0);
+ 			label = new Label("File");
+@@ -174,6 +181,7 @@ namespace Giver
+ 			vbox.PackStart(label, false, false, 0);
+ 			table.Attach(vbox, 1, 2, 2 ,3, AttachOptions.Shrink, AttachOptions.Shrink, 0, 0);
+ 			photoButton = new Button("Change Photo");
++			photoButton.Clicked += PhotoButtonClick;
+ 			photoButton.Show();
+ 			table.Attach(photoButton, 2,3,2,3, AttachOptions.Expand | AttachOptions.Fill, AttachOptions.Shrink, 0, 0);
+ 
+@@ -233,6 +241,24 @@ namespace Giver
+ 			DeleteEvent += WindowDeleted;
+ 		}
+ 
++		private void PhotoButtonClick (object o, EventArgs args)
++		{
++			FileChooserDialog fc = new FileChooserDialog(Catalog.GetString("Image File"), this, FileChooserAction.Open);
++			fc.AddButton(Stock.Cancel, ResponseType.Cancel);
++			fc.AddButton(Stock.Open, ResponseType.Ok);
++			fc.Filter = new FileFilter();
++			fc.Filter.AddPattern ("*.gif");
++			fc.Filter.AddPattern ("*.jpg");
++			fc.Filter.AddPattern ("*.png");
++			fc.SelectMultiple = false;
++			fc.DefaultResponse = ResponseType.Ok;
++			if (fc.Run() == (int)ResponseType.Ok) {
++				localImagePath = fc.Filename;
++				Giver.Application.Preferences.PhotoLocation = localImagePath;
++			}
++			fc.Destroy();
++		}
++
+ 		///<summary>
+ 		///	WindowDeleted
+ 		/// Cleans up the conversation object with the ConversationManager
+@@ -255,8 +281,8 @@ namespace Giver
+ 			if(Giver.Application.Preferences.PhotoType.CompareTo(Giver.Preferences.Local) == 0) {
+ 				localButton.Active = true;
+ 				photoButton.Sensitive = true;
++				localImagePath = Giver.Application.Preferences.PhotoLocation;
+ /*
+-				Logger.Debug("photo type is local");
+ 			   (Glade["local_radiobutton"] as RadioButton).Active = true;
+ 				Image photo = new Image(photoLocation);
+ 			   (Glade["local_radiobutton"] as RadioButton).Image = photo;
+@@ -320,6 +346,8 @@ namespace Giver
+ 			localButton.Toggled += delegate {
+ 				if(localButton.Active)
+ 				{
++					Application.Preferences.PhotoType = Preferences.Local;
++					Application.Preferences.PhotoLocation = localImagePath;
+ 					photoButton.Sensitive = true;
+ 					webEntry.Sensitive = false;
+ 					gravatarEntry.Sensitive = false;

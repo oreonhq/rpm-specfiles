@@ -3,7 +3,7 @@
 Name:		fontawesome-fonts
 Summary:	Support files for the FontAwesome fonts
 Epoch:		1
-Version:	6.7.2
+Version:	7.3.1
 Release:	%autorelease
 
 License:	MIT

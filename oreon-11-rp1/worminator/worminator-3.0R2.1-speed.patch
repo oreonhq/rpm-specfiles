@@ -1,0 +1,105 @@
+--- worminator-3.0R2.1/demo.h.speed	2006-02-24 20:05:02.000000000 +0100
++++ worminator-3.0R2.1/demo.h	2006-04-24 23:10:05.000000000 +0200
+@@ -74,8 +74,15 @@
+ 		speed_counter--;
+ 		if (keypressed()) time_to_quit = TRUE;
+ 		}
+-	render_map();
+-	if (keypressed()) time_to_quit = TRUE;
++	game_is_running = TRUE;
++	if (frames_to_draw) {
++		render_map();
++		frames_to_draw--;
++		}
++	while (speed_counter == 0) {
++		rest(1);
++		if (keypressed()) time_to_quit = TRUE;
++		}
+ 	} while(!time_to_quit);  // End core demo loop
+ 
+ fclose(demofile);
+--- worminator-3.0R2.1/Worminator.c.speed	2006-03-03 10:29:44.000000000 +0100
++++ worminator-3.0R2.1/Worminator.c	2006-04-24 23:25:29.000000000 +0200
+@@ -269,6 +269,16 @@
+ }
+ END_OF_FUNCTION(increment_speed_counter);
+ 
++/***********************************\
++|** FRAMERATE THROTTLING FUNCTION **|
++\***********************************/
++void increment_frames_to_draw()
++{
++	if (frames_to_draw < 2)
++		frames_to_draw++;
++}
++END_OF_FUNCTION(increment_frames_to_draw);
++
+ /*******************\
+ |** MAIN FUNCTION **|
+ \*******************/
+@@ -333,7 +343,12 @@
+ 		if (player.timer > 0) player.timer--;
+ 		speed_counter--;
+ 		}
+-	render_map();
++	game_is_running = TRUE;
++	if (frames_to_draw) {
++		render_map();
++		frames_to_draw--;
++		}
++	while (speed_counter == 0) rest(1);
+ } while(time_to_quit == FALSE);  // End core game loop
+ add_console_line("Core loop complete, beginning shutdown.");
+ 
+@@ -1540,10 +1555,6 @@
+ frame_counter++;
+ if (frame_counter > 32768) frame_counter = 32768;
+ 
+-// game_is_running can be changed from under us by update_animations, this
+-// should be fixed but just to be sure put the check for it in the while.
+-while (game_is_running && speed_counter == 0) rest(1);
+-
+ //set_palette_range(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 0, 255, FALSE);
+ }
+ 
+@@ -3253,6 +3264,11 @@
+ install_int_ex(increment_speed_counter, BPS_TO_TIMER(GAME_SPEED_NORMAL));
+ change_game_speed(wormy_config.game_speed);
+ 
++// Set up the framerate throtteling timer
++LOCK_VARIABLE(frames_to_draw);
++LOCK_FUNCTION(increment_frames_to_draw);
++install_int_ex(increment_frames_to_draw, BPS_TO_TIMER(30));
++
+ // Set up the soundz
+ add_console_line("Initilizing sound");
+ reset_sound();
+--- worminator-3.0R2.1/globals.h.speed	2006-02-26 22:30:18.000000000 +0100
++++ worminator-3.0R2.1/globals.h	2006-04-24 23:10:05.000000000 +0200
+@@ -255,9 +255,10 @@
+ volatile int speed_counter = 0;
+ volatile int idle_counter = 0;
+ volatile int idle_speed_counter = 0;
++volatile int frames_to_draw = 0;
+ 
+ // This is used to tell the game timer when to update and when not to
+-char game_is_running = FALSE;
++volatile char game_is_running = FALSE;
+ 
+ // This is used to indicate what level we are on
+ char current_level = 1;
+--- worminator-3.0R2.1/player.h.speed	2006-02-25 10:33:10.000000000 +0100
++++ worminator-3.0R2.1/player.h	2006-04-24 23:10:05.000000000 +0200
+@@ -2188,7 +2188,11 @@
+ 		if (frame_loop >= 256) done = TRUE;
+ 		speed_counter--;
+ 		}
+-	render_map();
++	if (frames_to_draw) {
++		render_map();
++		frames_to_draw--;
++		}
++	while (speed_counter == 0) rest(1);
+ 	} while (done != TRUE);
+ 
+ // Fade out the display and clear out some junk

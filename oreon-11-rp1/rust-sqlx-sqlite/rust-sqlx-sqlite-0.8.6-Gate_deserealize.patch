@@ -1,0 +1,75 @@
+Only in sqlx-sqlite-0.8.6-new: rust-sqlx-sqlite-0.8.6-Gate_deserealize.patch
+diff -ru sqlx-sqlite-0.8.6/src/connection/mod.rs sqlx-sqlite-0.8.6-new/src/connection/mod.rs
+--- sqlx-sqlite-0.8.6/src/connection/mod.rs	2006-07-24 03:21:28.000000000 +0200
++++ sqlx-sqlite-0.8.6-new/src/connection/mod.rs	2025-11-30 12:57:36.064085474 +0100
+@@ -41,6 +41,7 @@
+ pub(crate) mod intmap;
+ #[cfg(feature = "preupdate-hook")]
+ mod preupdate_hook;
++#[cfg(any())]
+ pub(crate) mod serialize;
+ 
+ mod worker;
+diff -ru sqlx-sqlite-0.8.6/src/connection/worker.rs sqlx-sqlite-0.8.6-new/src/connection/worker.rs
+--- sqlx-sqlite-0.8.6/src/connection/worker.rs	2006-07-24 03:21:28.000000000 +0200
++++ sqlx-sqlite-0.8.6-new/src/connection/worker.rs	2025-11-30 12:59:11.262870697 +0100
+@@ -21,6 +21,7 @@
+ use crate::connection::ConnectionState;
+ use crate::{Sqlite, SqliteArguments, SqliteQueryResult, SqliteRow, SqliteStatement};
+ 
++#[cfg(any())]
+ use super::serialize::{deserialize, serialize, SchemaName, SqliteOwnedBuf};
+ 
+ // Each SQLite connection has a dedicated thread.
+@@ -67,10 +68,12 @@
+         tx: flume::Sender<Result<Either<SqliteQueryResult, SqliteRow>, Error>>,
+         limit: Option<usize>,
+     },
++    #[cfg(any())]
+     Serialize {
+         schema: Option<SchemaName>,
+         tx: oneshot::Sender<Result<SqliteOwnedBuf, Error>>,
+     },
++    #[cfg(any())]
+     Deserialize {
+         schema: Option<SchemaName>,
+         data: SqliteOwnedBuf,
+@@ -302,9 +305,11 @@
+                                 }
+                             }
+                         }
++                        #[cfg(any())]
+                         Command::Serialize { schema, tx } => {
+                             tx.send(serialize(&mut conn, schema)).ok();
+                         }
++                        #[cfg(any())]
+                         Command::Deserialize { schema, data, read_only, tx } => {
+                             tx.send(deserialize(&mut conn, schema, data, read_only)).ok();
+                         }
+@@ -406,6 +411,7 @@
+         self.oneshot_cmd(|tx| Command::Ping { tx }).await
+     }
+ 
++    #[cfg(any())]
+     pub(crate) async fn deserialize(
+         &mut self,
+         schema: Option<SchemaName>,
+@@ -421,6 +427,7 @@
+         .await?
+     }
+ 
++    #[cfg(any())]
+     pub(crate) async fn serialize(
+         &mut self,
+         schema: Option<SchemaName>,
+diff -ru sqlx-sqlite-0.8.6/src/lib.rs sqlx-sqlite-0.8.6-new/src/lib.rs
+--- sqlx-sqlite-0.8.6/src/lib.rs	2006-07-24 03:21:28.000000000 +0200
++++ sqlx-sqlite-0.8.6-new/src/lib.rs	2025-11-30 13:00:40.517786577 +0100
+@@ -46,6 +46,7 @@
+ 
+ pub use arguments::{SqliteArgumentValue, SqliteArguments};
+ pub use column::SqliteColumn;
++#[cfg(any())]
+ pub use connection::serialize::SqliteOwnedBuf;
+ #[cfg(feature = "preupdate-hook")]
+ pub use connection::PreupdateHookResult;

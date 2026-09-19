@@ -1,0 +1,105 @@
+diff --git a/screenshot.c b/screenshot.c
+index cae9a61..641cc49 100755
+--- a/screenshot.c
++++ b/screenshot.c
+@@ -58,15 +58,19 @@ void cThreadScreenshot::Action(void) {
+         Skins.Flush();
+     }
+ */
++    int	iResX = screenshotConfig.iResX;
+     int	iResY = screenshotConfig.iResY;
+-    if( iResY == 0 )
++    if( iResX <= 0 &&  iResY <= 0 ) {
++      iResX = -1;
++      iResY = -1;
++    }
++    else if( iResY == 0 )
+     {
+ 	iResY = screenshotConfig.iResX / (1.25 * Setup.OSDAspect);
+     }
+     isOk = cDevice::PrimaryDevice()->GrabImageFile(fileName, screenshotConfig.iFileformat, 
+                                                              screenshotConfig.iQuality, 
+-							     screenshotConfig.iResX, 
+-							     iResY);
++                                                             iResX, iResY);
+     i++;
+   }
+ 
+@@ -78,7 +82,9 @@ void cThreadScreenshot::Action(void) {
+   // show result
+   if (isOk) {
+     isyslog("screenshot: %d image%s saved", screenshotConfig.iNoOfPics, (screenshotConfig.iNoOfPics > 1) ? "s" : "");
+-    const char *tmp = tr(screenshotConfig.iNoOfPics > 1 ? "OK - Images saved." : "OK - Image saved.");
++    const char *tmp = screenshotConfig.iNoOfPics > 1 ? 
++              tr("Images successfully saved.") : 
++              tr("Image successfully saved.");
+     Skins.QueueMessage(mtInfo, tmp);
+     Skins.Flush();      
+   } else {
+@@ -120,14 +126,13 @@ void cMenuScreenshot::Show(void) {
+ -------------------------------------------------------------------------------------------------*/
+ 
+ cScreenshotConfig::cScreenshotConfig(void) {
+-  strcpy(sPath, "/tmp");
++
+   iFileformat    = 1;
+-  iQuality       = 95;
+-  iResX          = 768;
+-  iResY          = 576;
++  iQuality       = 85;
++  iResX          = 0;
++  iResY          = 0;
+   iNoOfPics      = 1;
+   iHideMenuEntry = false;
+-  iUserKey       = 0;
+   iHideOsd       = true;
+   iShowDate      = false;
+   iDelayed       = false;
+@@ -155,7 +160,6 @@ void cMenuSetupScreenshot::Store(void) {
+   SetupStore("ResY",          screenshotConfig.iResY);
+   SetupStore("NoOfPics",      screenshotConfig.iNoOfPics);
+   SetupStore("HideMenuEntry", screenshotConfig.iHideMenuEntry);
+-  SetupStore("UserKey",       screenshotConfig.iUserKey);
+   SetupStore("HideOsd",       screenshotConfig.iHideOsd);
+   SetupStore("ShowDate",      screenshotConfig.iShowDate);
+   SetupStore("Delayed",       screenshotConfig.iDelayed);
+@@ -169,17 +173,17 @@ cMenuSetupScreenshot::cMenuSetupScreenshot(void) {
+   iNewResY          = screenshotConfig.iResY;
+   iNewNoOfPics      = screenshotConfig.iNoOfPics;
+   iNewHideMenuEntry = screenshotConfig.iHideMenuEntry;
+-  iNewUserKey       = screenshotConfig.iUserKey;
+   iNewHideOsd       = screenshotConfig.iHideOsd;
+   iNewShowDate      = screenshotConfig.iShowDate;
+   iNewDelayed       = screenshotConfig.iDelayed;
+-  char allowedChars[100];
+-  sprintf(allowedChars, "%s/", tr(FileNameChars));
++
++  cString allowedChars = cString::sprintf("%s/", tr(FileNameChars));
++
+   Add(new cMenuEditStrItem  (tr("Image directory"),         sNewPath, sizeof(sNewPath), allowedChars));
+   Add(new cMenuEditStraItem (tr("Fileformat"),              &iNewFileformat, 2, FILEFORMATS));
+   Add(new cMenuEditIntItem  (tr("Image quality (1-100)"),   &iNewQuality, 1, 100));
+-  Add(new cMenuEditIntItem  (tr("Image width (Pixel)"),     &iNewResX, 1, 768));
+-  Add(new cMenuEditIntItem  (tr("Image height (Pixel)"),    &iNewResY, 0, 576));
++  Add(new cMenuEditIntItem  (tr("Image width (Pixel)"),     &iNewResX, 0, MAXOSDWIDTH));
++  Add(new cMenuEditIntItem  (tr("Image height (Pixel)"),    &iNewResY, 0, MAXOSDHEIGHT));
+   Add(new cMenuEditIntItem  (tr("No. of pictures to take"), &iNewNoOfPics, 1, 100));
+   Add(new cMenuEditBoolItem (tr("Hide mainmenu entry"),     &iNewHideMenuEntry));
+ //  Add(new cMenuEditBoolItem (tr("Hide OSD"),                &iNewHideOsd));
+@@ -223,6 +227,8 @@ bool cPluginScreenshot::Initialize(void) {
+ }
+ 
+ bool cPluginScreenshot::Start(void) {
++
++  strcpy(screenshotConfig.sPath, cString::sprintf("%s/", cPlugin::CacheDirectory(PLUGIN_NAME_I18N)));
+   // Start any background activities the plugin shall perform.
+   // Make dummy picture at startup, because the first screenshot using
+   // GrabImage(...) only takes a gray image.
+@@ -268,7 +274,6 @@ bool cPluginScreenshot::SetupParse(const char *Name, const char *Value) {
+   else if  (!strcasecmp(Name, "Fileformat"))    screenshotConfig.iFileformat    = atoi(Value);
+   else if  (!strcasecmp(Name, "NoOfPics"))      screenshotConfig.iNoOfPics      = atoi(Value);
+   else if  (!strcasecmp(Name, "HideMenuEntry")) screenshotConfig.iHideMenuEntry = atoi(Value);
+-  else if  (!strcasecmp(Name, "UserKey"))       screenshotConfig.iUserKey       = atoi(Value);
+   else if  (!strcasecmp(Name, "HideOsd"))       screenshotConfig.iHideOsd       = atoi(Value);
+   else if  (!strcasecmp(Name, "ShowDate"))      screenshotConfig.iShowDate      = atoi(Value);
+   else if  (!strcasecmp(Name, "Delayed"))       screenshotConfig.iDelayed       = atoi(Value);

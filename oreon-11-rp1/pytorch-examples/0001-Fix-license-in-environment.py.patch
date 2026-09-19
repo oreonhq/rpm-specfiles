@@ -1,0 +1,25 @@
+From a630ec6965af237be71f6956dff4f62a43a9e7ab Mon Sep 17 00:00:00 2001
+From: Mark Saroufim <marksaroufim@fb.com>
+Date: Wed, 13 Aug 2025 11:32:39 -0700
+Subject: [PATCH] Fix license in environment.py
+
+---
+ distributed/FSDP/utils/environment.py | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/distributed/FSDP/utils/environment.py b/distributed/FSDP/utils/environment.py
+index 1e00da3acdbc..0b6c494fb2b5 100644
+--- a/distributed/FSDP/utils/environment.py
++++ b/distributed/FSDP/utils/environment.py
+@@ -1,8 +1,6 @@
+ # Copyright (c) 2022 Meta Platforms, Inc. and its affiliates.
+ # All rights reserved.
+ #
+-# This source code is licensed under the Apache-style license found in the
+-# LICENSE file in the root directory of this source tree.
+ 
+ # This is a simple check to confirm that your current server has full bfloat support -
+ #  both GPU native support, and Network communication support.
+-- 
+2.51.0
+

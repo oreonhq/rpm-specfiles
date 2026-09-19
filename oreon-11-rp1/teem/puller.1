@@ -1,0 +1,591 @@
+.TH PULLER "1" "April 2021" "" "User Commands"
+.SH NAME
+puller \- command-line interface to the \(lqpull\(rq library
+.SH SYNOPSIS
+.B puller
+.RI [ @file \ ...]
+.RB [ \-int
+.RI < int >]
+.RB [ \-enr
+.RI < spec >]
+.RB [ \-ens
+.RI < spec >]
+.RB [ \-enw
+.RI < spec >]
+.RB [ \-efs
+.RI < bool >]
+.RB [ \-nave
+.RI < bool >]
+.RB [ \-cbst
+.RI < bool >]
+.RB [ \-noadd ]
+.RB [ \-usa
+.RI < bool >]
+.RB [ \-pcet
+.RI < bool >]
+.RB [ \-nobin ]
+.RB [ \-lti
+.RI < bool >]
+.RB [ \-por
+.RI < bool >]
+.RB [ \-npcwza
+.RI < bool >]
+.RB [ \-ubfgl
+.RI < bool >]
+.RB [ \-ratb
+.RI < bool >]
+.RB [ \-svec
+.RI < vec >]
+.RB [ \-gssr
+.RI < rad >]
+.RB [ \-v
+.RI < verbosity >]
+.B \-vol
+.RI < vol0\ vol1 \ ...>
+.B \-info
+.RI < info0\ info1 \ ...>
+.RB [ \-k00
+.RI < kern00 >]
+.RB [ \-k11
+.RI < kern11 >]
+.RB [ \-k22
+.RI < kern22 >]
+.RB [ \-sscp
+.RI < path >]
+.RB [ \-kssb
+.RI < kernel >]
+.RB [ \-kssr
+.RI < kernel >]
+.RB [ \-nss
+.RI < #\ scl\ smpls >]
+.RB [ \-np
+.RI < #\ points >]
+.RB [ \-halton ]
+.RB [ \-ppv
+.RI < #\ pnts/vox >]
+.RB [ \-ppvzr
+.RI < z\ range >]
+.RB [ \-jit
+.RI < jitter >]
+.RB [ \-pi
+.RI < npos >]
+.RB [ \-step
+.RI < step >]
+.RB [ \-csm
+.RI < step >]
+.RB [ \-snap
+.RI < #\ iters >]
+.RB [ \-maxi
+.RI < #\ iters >]
+.RB [ \-stim
+.RI < #\ iters >]
+.RB [ \-maxci
+.RI < #\ iters >]
+.RB [ \-irad
+.RI < scale >]
+.RB [ \-srad
+.RI < scale >]
+.RB [ \-bws
+.RI < bin\ width >]
+.RB [ \-alpha
+.RI < alpha >]
+.RB [ \-beta
+.RI < beta >]
+.RB [ \-gamma
+.RI < gamma >]
+.RB [ \-theta
+.RI < theta >]
+.RB [ \-wall
+.RI < k >]
+.RB [ \-eip
+.RI < k >]
+.RB [ \-ess
+.RI < scl >]
+.RB [ \-oss
+.RI < scl >]
+.RB [ \-edmin
+.RI < frac >]
+.RB [ \-edpcmin
+.RI < frac >]
+.RB [ \-fnnm
+.RI < frac >]
+.RB [ \-pcp
+.RI < period >]
+.RB [ \-iad
+.RI < #\ iters >]
+.RB [ \-icb
+.RI < #\ iters >]
+.RB [ \-ac3c
+.RI < ac3c >]
+.RB [ \-sit
+.RI < sit >]
+.RB [ \-rng
+.RI < seed >]
+.RB [ \-pbm
+.RI < mod >]
+.RB [ \-eiphl
+.RI < hl >]
+.RB [ \-nt
+.RI < #\ threads >]
+.RB [ \-nprob
+.RI < prob >]
+.RB [ \-pprob
+.RI < prob >]
+.RB [ \-addlog
+.RI < fname >]
+.RB [ \-o
+.RI < nout >]
+.RB [ \-eob
+.RI < base >]
+.SH OPTIONS
+.TP
+.IR @file \ ...\:
+response file(s) containing command-line arguments
+.TP
+.B \-int\fR <\fIint\fR>
+inter-particle energy type
+.RI ( interaction\ type );
+default:
+.RB \(lq justr \(rq
+.TP
+.B \-enr\fR <\fIspec\fR>
+inter-particle energy, radial component
+.RI ( energy\ specification );
+default:
+.RB \(lq cotan \(rq
+.TP
+.B \-ens\fR <\fIspec\fR>
+inter-particle energy, scale component
+.RI ( energy\ specification );
+default:
+.RB \(lq zero \(rq
+.TP
+.B \-enw\fR <\fIspec\fR>
+windowing to create locality with additive scale-space interaction
+.RB (\(lq \-int\ add \(rq)
+.RI ( energy\ specification );
+default:
+.RB \(lq butter:16,0.8 \(rq
+.TP
+.B \-efs\fR <\fIbool\fR>
+whether or not strength contributes to particle-image energy
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-nave\fR <\fIbool\fR>
+whether or not to nix points at edge of volume, where gage had to invent values
+for kernel support
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-cbst\fR <\fIbool\fR>
+during initialization, try constraint satisfaction before testing
+.B seedThresh
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-noadd
+turn off adding during population control
+.TP
+.B \-usa\fR <\fIbool\fR>
+allow volumes to have different shapes
+.RB ( false
+is safe as different volume sizes are often accidental)
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-pcet\fR <\fIbool\fR>
+use neighbor-counting \(lqenough\(rq heuristic to bail out of population
+control
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-nobin
+turn off spatial binning (which prevents multi-threading from being useful),
+for debugging or speed-up measurement
+.TP
+.B \-lti\fR <\fIbool\fR>
+impose
+.B liveThresh
+on initialization
+.RI ( bool );
+default:
+.RB \(lq true \(rq
+.TP
+.B \-por\fR <\fIbool\fR>
+permute points during rebinning
+.RI ( bool );
+default:
+.RB \(lq true \(rq
+.TP
+.B \-npcwza\fR <\fIbool\fR>
+no population control with zero alpha
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-ubfgl\fR <\fIbool\fR>
+use beta for gamma learning
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-ratb\fR <\fIbool\fR>
+be choosy when adding points to bins to avoid overlap
+.RI ( bool );
+default:
+.RB \(lq true \(rq
+.TP
+.B \-svec\fR <\fIvec\fR>
+if non-zero (length), vector to use for displaying scale in 3-space (3
+\fIdouble\fRs); default:
+.RB \(lq 0\ 0\ 0 \(rq
+.TP
+.B \-gssr\fR <\fIrad\fR>
+if non-zero (length), scaling of scale to cylindrical tensors
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-v\fR <\fIverbosity\fR>
+verbosity level
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-vol\fR <\fIvol0\fR\ \fIvol1\fR\ ...>
+input volumes, in format
+<\fIfilename\fR>\fB:\fR<\fIkind\fR>\fB:\fR<\fIvolname\fR>
+(1 or more \fImeetPullVol\fRs)
+.TP
+.B \-info\fR <\fIinfo0\fR\ \fIinfo1\fR\ ...>
+info definitions, in format
+.RI < info >[\fB\-c\fR]\fB:\fR< volname >\fB:\fR< item >[\fB:\fR< zero >\fB:\fR< scale >]
+(1 or more \fImeetPullInfo\fRs)
+.TP
+.B \-k00\fR <\fIkern00\fR>
+kernel for
+.B gageKernel00
+.RI ( kernel\ specification );
+default:
+.RB \(lq cubic:1,0 \(rq
+.TP
+.B \-k11\fR <\fIkern11\fR>
+kernel for
+.B gageKernel11
+.RI ( kernel\ specification );
+default:
+.RB \(lq cubicd:1,0 \(rq
+.TP
+.B \-k22\fR <\fIkern22\fR>
+kernel for
+.B gageKernel22
+.RI ( kernel\ specification );
+default:
+.RB \(lq cubicdd:1,0 \(rq
+.TP
+.B \-sscp\fR <\fIpath\fR>
+path (without trailing
+.BR / )
+for where to read/write pre-blurred volumes for scale-space
+.RI ( string );
+default:
+.RB \(lq ./ \(rq
+.TP
+.B \-kssb\fR <\fIkernel\fR>
+blurring kernel, to sample scale space
+.RI ( kernel\ specification );
+default:
+.RB \(lq ds:1,5 \(rq
+.TP
+.B \-kssr\fR <\fIkernel\fR>
+kernel for reconstructing from scale space samples
+.RI ( kernel\ specification );
+default:
+.RB \(lq hermite \(rq
+.TP
+.B \-nssr\fR <\fI#\ scl\ smpls\fR>
+if using
+.RB \(lq \-ppv \(rq;
+number of samples along scale axis for each spatial position
+.RI ( unsigned\ int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-np\fR <\fI#\ points\fR>
+number of points to start in system
+.RI ( unsigned\ int );
+default:
+.RB \(lq 1000 \(rq
+.TP
+.B \-halton
+use Halton sequence initialization instead of uniform random
+.TP
+.B \-ppv\fR <\fI#\ p[nts/vox\fR>
+number of points per voxel to start in simulation (need to have a seed
+threshold volume, overrides
+.RB \(lq \-np \(rq)
+.RI ( int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-ppvzr\fR <\fIz\ range\fR>
+range of Z slices (1st num < 2nd num) to do
+.B ppv
+in, or,
+.RB \(lq 1\ 0 \(rq)
+for whole volume (2 \fIunsigned\ int\fRs); default:
+.RB \(lq 1\ 0 \(rq
+.TP
+.B \-jit\fR <\fIjitter\fR>
+amount of jittering to do with
+.B ppv
+.RI ( double );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-pi\fR <\fInpos\fR>
+4-by-N array of positions to start at (overrides
+.RB \(lq \-np \(rq
+.RI ( nrrd );
+default: \(lq\(rq
+.TP
+.B \-step\fR <\fIstep\fR>
+initial step size for gradient descent
+.RI ( double );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-csm\fR <\fIstep\fR>
+convergence criterion for constraint satisfaction
+.RI ( double );
+default:
+.RB \(lq 0.0001 \(rq
+.TP
+.B \-snap\fR <\fI#\ iters\fR>
+if non-zero, # iters between saved snapshots
+.RI ( unsigned\ int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-maxi\fR <\fI#\ iters\fR>
+if non-zero, max # iterations to run whole system
+.RI ( unsigned\ int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-stim\fR <\fI#\ iters\fR>
+if non-zero, max # iterations to allow a particle to be stuck before nixing
+.RI ( unsigned\ int );
+default:
+.RB \(lq 5 \(rq
+.TP
+.B \-maxci\fR <\fI#\ iters\fR>
+if non-zero, max # iterations for contraint enforcement
+.RI ( unsigned\ int );
+default:
+.RB \(lq 15 \(rq
+.TP
+.B \-irad\fR <\fIscale\fR>
+particle radius in spatial domain
+.RI ( double );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-srad\fR <\fIscale\fR>
+particle radius in scale domain
+.RI ( double );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-bws\fR <\fIbin\ width\fR>
+spatial bin width as multiple of spatial radius
+.RI ( double );
+default:
+.RB \(lq 1.001 \(rq
+.TP
+.B \-alpha\fR <\fIalpha\fR>
+blend between particle-image (\fIalpha\fR=\fB0\fR) and inter-particle
+(\fIalpha\fR=\fB1\fR) energies
+.RI ( double );
+default:
+.RB \(lq 0.5 \(rq
+.TP
+.B \-beta\fR <\fIbeta\fR>
+when using
+.B Phi2
+energy, blend between pure space repulsion (\fIbeta\fR=\fB0\fR) and scale
+attraction (\fIbeta\fR=\fB1\fR)
+.RI ( double );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-gamma\fR <\fIgamma\fR>
+scaling factor on energy from strength
+.RI ( double );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-theta\fR <\fItheta\fR>
+slope of increasing
+.B livethresh
+with respect to scale
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-wall\fR <\fIk\fR>
+spring constant on walls
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-eip\fR <\fIk\fR>
+amount by which it\(cqs okay for
+.B per-particle
+energy to increase during gradient descent process
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-ess\fR <\fIscl\fR>
+when energy goes up instead of down, scale step size by this
+.RI ( double );
+default:
+.RB \(lq 0.5 \(rq
+.TP
+.B \-oss\fR <\fIscl\fR>
+opportunistic scaling (hopefully up, >1) of step size on every iteration
+.RI ( double );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-edmin\fR <\fIfrac\fR>
+convergence threshold: stop when fractional improvement (decrease) in energy
+dips below this
+.RI ( double );
+default:
+.RB \(lq 0.0001 \(rq
+.TP
+.B \-edpcmin\fR <\fIfrac\fR>
+population control is triggered when energy improvement goes below this
+threshold
+.RI ( double );
+default:
+.RB \(lq 0.01 \(rq
+.TP
+.B \-fnnm\fR <\fIfrac\fR>
+don\(cqt nix if this fraction (or more) of neighbors have been nixed
+.RI ( double );
+default:
+.RB \(lq 0.25 \(rq
+.TP
+.B \-pcp\fR <\fIperiod\fR>
+# iters to wait between attempts at population control
+.RI ( unsigned\ int );
+default:
+.RB \(lq 20 \(rq
+.TP
+.B \-iad\fR <\fI#\ iters\fR>
+# iters to run descent on tentative new points during PC
+.RI ( unsigned\ int );
+default:
+.RB \(lq 10 \(rq
+.TP
+.B \-icb\fR <\fI#\ iters\fR>
+periodicity of calling rendering callback
+.RI ( unsigned\ int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-ac3c\fR <\fIac3c\fR>
+allow codimensions 3 constraints
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-sit\fR <\fIsit\fR>
+scale is tau
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-rng\fR <\fIseed\fR>
+base seed value for RNGs
+.RI ( unsigned\ int );
+default:
+.RB \(lq 42 \(rq
+.TP
+.B \-pbm\fR <\fImod\fR>
+progress bin mod
+.RI ( unsigned\ int );
+default:
+.RB \(lq 50 \(rq
+.TP
+.B \-eiphl\fR <\fIhl\fR>
+half-life of
+.BR energyIncreasePermute (\(lq \-eip \(rq)
+.RI ( unsigned\ int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-nt\fR <\fI#\ threads\fR>
+number of threads hoover should use
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-nprob\fR <\fIprob\fR>
+do full neighbor discovery with this probability
+.RI ( double );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-pprob\fR <\fIprob\fR>
+probe local image values with this probability
+.RI ( double );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-addlog\fR <\fIfname\fR>
+name of file in which to log all particle additions
+.RI ( string );
+default: \(lq\(rq
+.TP
+.B \-o\fR <\fInout\fR>
+filename for saving computed positions
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.TP
+.B \-eob\fR <\fIbase\fR>
+save extra info (besides position), and use this string as the base of the
+filenames.
+Not using this eans the extra info is not saved.
+.RI ( string );
+default: \(lq\(rq
+.SH NOTES
+.P
+Published research using this tool or the \(lqpull\(rq library should cite the
+paper:
+.in +4n
+\fBGordon L. Kindlmann, Ra{\(rs\(aqu}l San Jos{\(rs\(aqe} Est{\(rs\(aqe}par,
+Stephen M. Smith, Carl-Fredrik Westin.
+Sampling and Visualizing Creases with Scale-Space Particles.
+IEEE Trans. on Visualization and Computer Graphics, 15(6):1415-1424 (2009).\fR
+.in
+.SH "SEE\ ALSO"
+.BR gprobe (1),
+.BR ilk (1),
+.BR mrender (1),
+.BR miter (1),
+.BR nrrdSanity (1),
+.BR overrgb (1),
+.BR tend (1),
+.BR unu (1),
+.BR vprobe (1)

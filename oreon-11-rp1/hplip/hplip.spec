@@ -8,8 +8,8 @@
 
 Summary: HP Linux Imaging and Printing Project
 Name: hplip
-Version: 3.25.8
-Release: 2%{?dist}
+Version: 3.26.4
+Release: 1%{?dist}
 # most files (base/*, *, ui*/...) - GPL2+
 # prnt/hpijs/ jpeg related files - IJG
 # prnt/* - BSD-3-Clause-HP - it is modified a little, asked here https://gitlab.com/fedora/legal/fedora-license-data/-/issues/267
@@ -255,7 +255,7 @@ Patch72:        hplip-no-urlopener.patch
 # hp-scan command failed to run and gives an error (fedora#2395809)
 # https://bugs.launchpad.net/hplip/+bug/2124268
 Patch73:        hplip-scan-size.patch
-# 3.25.8 brings new implementation for calling commands in subprocess,
+# 3.26.4 brings new implementation for calling commands in subprocess,
 # but again directs I/O into pipes, which does not work for TUI plugin
 # installation. Additionally it tracebacks if stdout/stderr is None
 # https://bugs.launchpad.net/hplip/+bug/2110101

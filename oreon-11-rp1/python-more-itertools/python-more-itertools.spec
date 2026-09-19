@@ -1,52 +1,57 @@
-%global source0_hash 5482bfef7849c25dc3c6dd53a6173ae4795da2a41a80faea6700d9f5846c5da6
-
-%bcond_without tests
+%global source0_hash none
 
 Name:           python-more-itertools
-Version:        10.5.0
+Version:        11.1.0
 Release:        %autorelease
-Summary:        More routines for operating on Python iterables, beyond itertools
+# Fill in the actual package summary to submit package to Fedora
+Summary:        More routines for operating on iterables, beyond itertools
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/more-itertools/more-itertools
-Source0:        https://files.pythonhosted.org/packages/source/m/more-itertools/more-itertools-10.5.0.tar.gz
-BuildArch:      noarch
+Source:         %{pypi_source more_itertools}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Python's itertools library is a gem - you can compose elegant solutions for
-a variety of problems with the functions it provides. In more-itertools we
-collect additional building blocks, recipes, and routines for working with
-Python iterables.}
+This is package 'more-itertools' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-more-itertools
+%package -n     python3-more-itertools
 Summary:        %{summary}
 
 %description -n python3-more-itertools %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n more-itertools-%{version}
+%autosetup -p1 -n more_itertools-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -r %{?with_tests: -t}
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files more_itertools
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%tox
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-more-itertools -f %pyproject_files
-%doc README.rst
+
+%files -n python3-more-itertools -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.5.0-1

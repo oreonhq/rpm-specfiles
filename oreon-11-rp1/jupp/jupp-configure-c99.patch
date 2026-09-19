@@ -1,0 +1,54 @@
+Avoid implicit function declarations in the configure script.
+This avoid issues with feature detection once future compilers
+disable implicit function declarations by default.
+
+Reported upstream: <https://bugs.launchpad.net/jupp/+bug/2006768>
+
+Second hunk already part of:
+
+  <https://bazaar.launchpad.net/~mirabilos/jupp/trunk/revision/735>
+
+diff --git a/acinclude.m4 b/acinclude.m4
+index f7f034f30673af13..a034285c6f6d24b4 100644
+--- a/acinclude.m4
++++ b/acinclude.m4
+@@ -13,7 +13,7 @@ AC_DEFUN([joe_SETPGRP],
+ #endif
+ int main() {
+ 	/* exit succesfully if setpgrp() takes two args (*BSD systems) */
+-	exit(setpgrp(0, 0) != 0);
++	return setpgrp(0, 0) != 0;
+ }],
+ 			[joe_cv_setpgrp_void=no],
+ 			[joe_cv_setpgrp_void=yes],
+@@ -74,7 +74,7 @@ int main() {
+ 	kill((int)getpid(), SIGINT);
+ 	kill((int)getpid(), SIGINT);
+ 	/* exit succesfully if don't have to reinstall sighandler when invoked */
+-	exit(nsigint != 2);
++	return nsigint != 2;
+ }],
+ 			[joe_cv_reinstall_sighandlers=no],
+ 			[joe_cv_reinstall_sighandlers=yes],
+diff --git a/configure b/configure
+index 284380258e08eeb3..124b291bc2046258 100644
+--- a/configure
++++ b/configure
+@@ -9158,7 +9158,7 @@ cat >>conftest.$ac_ext <<_ACEOF
+ #endif
+ int main() {
+ 	/* exit succesfully if setpgrp() takes two args (*BSD systems) */
+-	exit(setpgrp(0, 0) != 0);
++	return setpgrp(0, 0) != 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext
+@@ -10589,7 +10589,7 @@ int main() {
+ 	kill((int)getpid(), SIGINT);
+ 	kill((int)getpid(), SIGINT);
+ 	/* exit succesfully if don't have to reinstall sighandler when invoked */
+-	exit(nsigint != 2);
++	return nsigint != 2;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

@@ -1,0 +1,12 @@
+diff -up berusky-1.7.1/src/animation.h.old berusky-1.7.1/src/animation.h
+--- berusky-1.7.1/src/animation.h.old	2020-06-29 15:45:10.260247849 +0200
++++ berusky-1.7.1/src/animation.h	2020-06-29 15:45:21.277191840 +0200
+@@ -159,7 +159,7 @@ public:
+ // Run-time animation
+ // -------------------------------------------------------
+ 
+-#define MAX_POST_EVENTS  10
++#define MAX_POST_EVENTS  20
+ 
+ typedef class animation {
+ 

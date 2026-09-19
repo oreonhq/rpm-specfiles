@@ -1,13 +1,13 @@
-%global source0_hash 27f68558259394ad84d357aa316821672ee66481fa851ddf2a6109f668a6c6a3
+%global source0_hash c8a4bbbb3e6876caa9357a151afbd66e06336f7a4a27b54a94497cf4cafa96ac
 
 %global framework kfilemetadata
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:           kf6-%{framework}
 Summary:        A Tier 2 KDE Framework for extracting file metadata
-Version:        6.27.0
+Version:        6.30.0
 Release:        1%{?dist}
 
 License:        BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -20,11 +20,11 @@ BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6Archive)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6Codecs)
-BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6Archive) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6Codecs) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
 BuildRequires:  cmake(QMobipocket6)
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  libattr-devel
@@ -81,6 +81,9 @@ mkdir -p %{buildroot}%{_kf6_plugindir}/kfilemetadata/writers/
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

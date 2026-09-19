@@ -1,0 +1,19 @@
+Add missing include directives for declarations of close, create,
+unlink.  This avoids implicit function declarations and prevents build
+issues with future compilers.
+
+diff --git a/src/luks.c b/src/luks.c
+index e764c33c1675df23..dc3632534879bda6 100644
+--- a/src/luks.c
++++ b/src/luks.c
+@@ -14,7 +14,10 @@
+ #include "policy.h"
+ #include <stdio.h>
+ #include <limits.h>
++#include <fcntl.h>
++#include <sys/mount.h>
+ #include <sys/stat.h>
++#include <unistd.h>
+ #include <libintl.h>
+ 
+ 

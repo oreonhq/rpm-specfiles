@@ -1,0 +1,182 @@
+From 1dfd3c12adc4e53d36faf925e6a6d04647559544 Mon Sep 17 00:00:00 2001
+From: Jan Chaloupka <jchaloup@redhat.com>
+Date: Mon, 23 Mar 2015 13:52:08 +0100
+Subject: [PATCH] aarch64
+
+---
+ config.sub | 72 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+
+diff --git a/config.sub b/config.sub
+index 9633db7..c0c2d7e 100755
+--- a/config.sub
++++ b/config.sub
+@@ -201,6 +201,10 @@ case $os in
+ 		# Don't forget version if it is 3.2v4 or newer.
+ 		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
+ 		;;
++	-sco5v6*)
++		# Don't forget version if it is 3.2v4 or newer.
++		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
++		;;
+ 	-sco*)
+ 		os=-sco3.2v2
+ 		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
+@@ -224,6 +228,12 @@ case $os in
+ 	-lynx*5)
+ 		os=-lynxos5
+ 		;;
++	-lynx*178)
++		os=-lynxos178
++		;;
++	-lynx*5)
++		os=-lynxos5
++		;;
+ 	-lynx*)
+ 		os=-lynxos
+ 		;;
+@@ -614,6 +628,10 @@ case $basic_machine in
+ 		basic_machine=i686-pc
+ 		os=-dicos
+ 		;;
++	dicos)
++		basic_machine=i686-pc
++		os=-dicos
++		;;
+ 	djgpp)
+ 		basic_machine=i586-pc
+ 		os=-msdosdjgpp
+@@ -775,6 +793,14 @@ case $basic_machine in
+ 		basic_machine=m68k-`echo $basic_machine | sed 's/^[^-]*-//'`
+ 		os=-linux
+ 		;;
++	m68knommu)
++		basic_machine=m68k-unknown
++		os=-linux
++		;;
++	m68knommu-*)
++		basic_machine=m68k-`echo $basic_machine | sed 's/^[^-]*-//'`
++		os=-linux
++		;;
+ 	m88k-omron*)
+ 		basic_machine=m88k-omron
+ 		;;
+@@ -911,6 +937,12 @@ case $basic_machine in
+ 	nse-tandem)
+ 		basic_machine=nse-tandem
+ 		;;
++	neo-tandem)
++		basic_machine=neo-tandem
++		;;
++	nse-tandem)
++		basic_machine=nse-tandem
++		;;
+ 	nsr-tandem)
+ 		basic_machine=nsr-tandem
+ 		;;
+@@ -949,6 +981,14 @@ case $basic_machine in
+ 		basic_machine=hppa-`echo $basic_machine | sed 's/^[^-]*-//'`
+ 		os=-linux
+ 		;;
++	parisc)
++		basic_machine=hppa-unknown
++		os=-linux
++		;;
++	parisc-*)
++		basic_machine=hppa-`echo $basic_machine | sed 's/^[^-]*-//'`
++		os=-linux
++		;;
+ 	pbd)
+ 		basic_machine=sparc-tti
+ 		;;
+@@ -964,6 +1004,12 @@ case $basic_machine in
+ 	pc98-*)
+ 		basic_machine=i386-`echo $basic_machine | sed 's/^[^-]*-//'`
+ 		;;
++	pc98)
++		basic_machine=i386-pc
++		;;
++	pc98-*)
++		basic_machine=i386-`echo $basic_machine | sed 's/^[^-]*-//'`
++		;;
+ 	pentium | p5 | k5 | k6 | nexgen | viac3)
+ 		basic_machine=i586-pc
+ 		;;
+@@ -1029,6 +1075,10 @@ case $basic_machine in
+ 		basic_machine=i386-pc
+ 		os=-rdos
+ 		;;
++	rdos)
++		basic_machine=i386-pc
++		os=-rdos
++		;;
+ 	rom68k)
+ 		basic_machine=m68k-rom68k
+ 		os=-coff
+@@ -1059,6 +1109,10 @@ case $basic_machine in
+ 		basic_machine=mipsisa32-sde
+ 		os=-elf
+ 		;;
++	sde)
++		basic_machine=mipsisa32-sde
++		os=-elf
++		;;
+ 	sei)
+ 		basic_machine=mips-sei
+ 		os=-seiux
+@@ -1073,6 +1127,9 @@ case $basic_machine in
+ 	sh5el)
+ 		basic_machine=sh5le-unknown
+ 		;;
++	sh5el)
++		basic_machine=sh5le-unknown
++		;;
+ 	sh64)
+ 		basic_machine=sh64-unknown
+ 		;;
+@@ -1097,6 +1154,9 @@ case $basic_machine in
+ 	strongarm-* | thumb-*)
+ 		basic_machine=arm-`echo $basic_machine | sed 's/^[^-]*-//'`
+ 		;;
++	strongarm-* | thumb-*)
++		basic_machine=arm-`echo $basic_machine | sed 's/^[^-]*-//'`
++		;;
+ 	sun2)
+ 		basic_machine=m68000-sun
+ 		;;
+@@ -1227,6 +1287,9 @@ case $basic_machine in
+ 	xscale-* | xscalee[bl]-*)
+ 		basic_machine=`echo $basic_machine | sed 's/^xscale/arm/'`
+ 		;;
++	xscale-* | xscalee[bl]-*)
++		basic_machine=`echo $basic_machine | sed 's/^xscale/arm/'`
++		;;
+ 	ymp)
+ 		basic_machine=ymp-cray
+ 		os=-unicos
+@@ -1239,6 +1302,10 @@ case $basic_machine in
+ 		basic_machine=z80-unknown
+ 		os=-sim
+ 		;;
++	z80-*-coff)
++		basic_machine=z80-unknown
++		os=-sim
++		;;
+ 	none)
+ 		basic_machine=none-none
+ 		os=-none
+@@ -1506,6 +1573,11 @@ case $os in
+ 		;;
+ 	-nacl*)
+ 		;;
++	-dicos*)
++		os=-dicos
++		;;
++	-nacl*)
++		;;
+ 	-none)
+ 		;;
+ 	*)
+-- 
+1.9.3
+

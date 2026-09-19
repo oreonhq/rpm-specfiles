@@ -1,0 +1,43 @@
+From 1c00c05e63cc4a47832d51b0e9b2c82d67079009 Mon Sep 17 00:00:00 2001
+From: Aaron Conole <aconole@redhat.com>
+Date: Mon, 9 May 2016 09:57:11 -0400
+Subject: [PATCH] configure: disable snoop on OS X
+
+Additionally, change from extended regular expressions to posix-only
+regular expressions for sed lines.
+
+Signed-off-by: Aaron Conole <aconole@redhat.com>
+---
+ configure | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/configure b/configure
+index 1c8bb23..9f23823 100755
+--- a/configure
++++ b/configure
+@@ -354,6 +354,7 @@ LIBS=""
+ if [ "Darwin" = "$OS_SYSTEM" ]; then
+     XCFLAGS="$XCFLAGS "
+     SFO_PLATFORM=" sfuzz_oracle_null.o"
++    SNOOP_SUPPORT="disable"
+ elif [ "Linux" = "$OS_SYSTEM" ]; then
+     SFO_PLATFORM=" sfuzz_oracle_ptrace.o"
+     XCFLAGS="$XCFLAGS -D_GNU_SOURCE"
+@@ -471,12 +472,12 @@ $CAT ./Makefile.in >> Makefile
+ 
+ echo "Writing spec file"
+ 
+-SFUZZ_MAINVERSION=`echo $SFUZZ_VERSION | $SED -re 's/"//g' | $SED -re 's/^([0-9]+)\.([0-9]+)\.[0-9]+$/\1.\2/g'`
++SFUZZ_MAINVERSION=`echo $SFUZZ_VERSION | $SED -e 's/"//g' | $SED -e 's/^([0-9]+)\.([0-9]+)\.[0-9]+$/\1.\2/g'`
+ SFUZZ_RELEASE=`echo $SFUZZ_VERSION | $CUT -d"." -f3`
+ 
+ echo "Wrote $SFUZZ_MAINVERSION : $SFUZZ_RELEASE"
+ 
+-$SED -re "s@VERSION@$SFUZZ_MAINVERSION\.$SFUZZ_RELEASE@g" < ./simple-fuzzer.spec.in | $SED -re "s@MAINVER@$SFUZZ_MAINVERSION@g" | $SED -re "s@RELEASE@$SFUZZ_RELEASE@g" > ./simple-fuzzer.spec
++$SED -e "s@VERSION@$SFUZZ_MAINVERSION\.$SFUZZ_RELEASE@g" < ./simple-fuzzer.spec.in | $SED -e "s@MAINVER@$SFUZZ_MAINVERSION@g" | $SED -e "s@RELEASE@$SFUZZ_RELEASE@g" > ./simple-fuzzer.spec
+ 
+ echo "Finished. Now run 'make'"
+ exit 0
+-- 
+2.9.3
+

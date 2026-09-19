@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -153,6 +153,8 @@
+ 
+   set_target_properties(${target} PROPERTIES DEFINE_SYMBOL "")
+   target_link_libraries(${target} PRIVATE ${X_LIBRARIES})
++  # YYYY.M.D of last upstream commit to main
++  set_target_properties(${target} PROPERTIES SOVERSION "0.0.20231007")
+ 
+   # target_link_options was added in cmake v3.13, don't use it for now...
+   foreach(link_flag ${ASMJIT_SANITIZE_LFLAGS})

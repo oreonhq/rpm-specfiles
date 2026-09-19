@@ -1,0 +1,23 @@
+diff -up vavoom-1.33/utils/vlaunch/CMakeLists.txt.wx3 vavoom-1.33/utils/vlaunch/CMakeLists.txt
+--- vavoom-1.33/utils/vlaunch/CMakeLists.txt.wx3	2010-12-13 16:01:21.000000000 -0500
++++ vavoom-1.33/utils/vlaunch/CMakeLists.txt	2018-10-28 20:53:27.545594859 -0400
+@@ -1,5 +1,7 @@
+ if(ENABLE_LAUNCHER)
+ 
++	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
++
+ 	find_package(wxWidgets REQUIRED)
+ 	include(${wxWidgets_USE_FILE})
+ 
+diff -up vavoom-1.33/utils/vlaunch/vlaunch.cpp.wx3 vavoom-1.33/utils/vlaunch/vlaunch.cpp
+--- vavoom-1.33/utils/vlaunch/vlaunch.cpp.wx3	2011-01-01 06:51:56.000000000 -0500
++++ vavoom-1.33/utils/vlaunch/vlaunch.cpp	2018-10-28 20:32:37.076595864 -0400
+@@ -133,7 +133,7 @@ IMPLEMENT_APP(VLaunchApp)
+ 
+ VMain::VMain()
+ : wxFrame(NULL, wxID_ANY, wxT("Vavoom launcher"), wxDefaultPosition, wxDefaultSize,
+-	wxDEFAULT_FRAME_STYLE & ~ (wxRESIZE_BORDER | wxRESIZE_BOX | wxMAXIMIZE_BOX))
++	wxDEFAULT_FRAME_STYLE & ~ (wxRESIZE_BORDER | wxMAXIMIZE_BOX))
+ {
+ 	SetIcon(wxICON(vlaunch));
+ 

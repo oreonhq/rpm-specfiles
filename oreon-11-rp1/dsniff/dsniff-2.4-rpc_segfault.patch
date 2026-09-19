@@ -1,0 +1,17 @@
+Patch based on suggestion by Matthew Boyle <mlb@decisionsoft.co.uk> for dsniff >=
+2.4b1 which avoids xdrs being used without being initialised first. Without this
+patch dsniff segfaults when decoding RPC packets on x86_64. For further information
+please also have a look to Red Hat Bugzilla ID #715042 and #850494.
+
+--- dsniff-2.4/rpc.c				2001-03-15 09:33:04.000000000 +0100
++++ dsniff-2.4/rpc.c.rpc_segfault		2013-12-20 22:49:34.000000000 +0100
+@@ -125,6 +125,9 @@
+ 			return (0);
+ 		}
+ 	}
++	else
++		return (0);
++	
+ 	stat = xdr_getpos(&xdrs);
+ 	xdr_destroy(&xdrs);
+ 	

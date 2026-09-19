@@ -1,0 +1,29 @@
+--- afm.py.bak	2019-09-16 03:05:39.000000000 -0500
++++ afm.py	2023-10-20 10:24:50.964650381 -0500
+@@ -48,5 +48,5 @@
+ 
+ if __name__ == '__main__':
+     i = read_afm_file  (sys.argv[1])
+-    print(i, i.FullName, i.FontName)
++    print((i, i.FullName, i.FontName))
+ 
+--- tfm.py.bak	2019-09-16 03:05:39.000000000 -0500
++++ tfm.py	2023-10-20 10:24:51.028650067 -0500
+@@ -179,5 +179,5 @@
+ 
+ if __name__=='__main__':
+     t = read_tfm_file  (sys.argv[1])
+-    print(t, t.design_size,  t.coding)
++    print((t, t.design_size,  t.coding))
+ 
+--- mftrace.py.bak	2023-10-20 10:12:26.152299849 -0500
++++ mftrace.py	2023-10-20 10:24:51.501647749 -0500
+@@ -859,7 +859,7 @@
+ 
+         open ('to-ttf.pe', 'w').write (pe_script)
+         if options.verbose:
+-            print ('Fontforge script', pe_script)
++            print(('Fontforge script', pe_script))
+         system ("%s -quiet -script to-ttf.pe %s %s" % (ff_command,
+               shell_escape_filename (raw_name), shell_escape_filename (options.tfm_file)))
+     elif ff_needed and (options.simplify or options.round_to_int or 'ttf' in formats or 'svg' in formats):

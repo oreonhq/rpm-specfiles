@@ -1,0 +1,25 @@
+From e9ecd46773f74da71242a550fc2037cd2601b801 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Florian=20Mei=C3=9Fner?=
+ <936176+t-nil@users.noreply.github.com>
+Date: Sun, 14 May 2023 12:18:48 +0200
+Subject: [PATCH] make: numerically compare the major version of pandoc to be
+ greater then or equal to 2
+
+See https://github.com/yt-dlp/yt-dlp/issues/7046
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 3e17365b83d..e2e0136dbf5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -15,7 +15,7 @@ PYTHON ?= /usr/bin/env python
+ SYSCONFDIR = $(shell if [ $(PREFIX) = /usr -o $(PREFIX) = /usr/local ]; then echo /etc; else echo $(PREFIX)/etc; fi)
+ 
+ # set markdown input format to "markdown-smart" for pandoc version 2 and to "markdown" for pandoc prior to version 2
+-MARKDOWN = $(shell if [ `pandoc -v | head -n1 | cut -d" " -f2 | head -c1` = "2" ]; then echo markdown-smart; else echo markdown; fi)
++MARKDOWN = $(shell if [ `pandoc -v | head -n1 | cut -d" " -f2 | head -c1` -ge "2" ]; then echo markdown-smart; else echo markdown; fi)
+ 
+ install: youtube-dl youtube-dl.1 youtube-dl.bash-completion youtube-dl.zsh youtube-dl.fish
+ 	install -d $(DESTDIR)$(BINDIR)

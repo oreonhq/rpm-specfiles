@@ -1,0 +1,12 @@
+--- reqsign-azure-storage-3.0.0/Cargo.toml	2006-07-24T01:21:28+00:00
++++ reqsign-azure-storage-3.0.0/Cargo.toml	2026-03-24T13:58:08.280149+00:00
+@@ -95,8 +95,7 @@
+ default-features = false
+ 
+ [target.'cfg(not(target_arch = "wasm32"))'.dependencies.jsonwebtoken]
+-version = "10"
+-features = ["aws_lc_rs"]
++version = "9"
+ 
+ [target.'cfg(not(target_arch = "wasm32"))'.dependencies.pem]
+ version = "3.0"

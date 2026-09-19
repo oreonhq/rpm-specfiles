@@ -1,0 +1,8 @@
+diff -ur kile-2.9.94/src/org.kde.kile.desktop kile-2.9.94-fix-missing-icon/src/org.kde.kile.desktop
+--- kile-2.9.94/src/org.kde.kile.desktop	2024-03-17 09:23:41.000000000 +0100
++++ kile-2.9.94-fix-missing-icon/src/org.kde.kile.desktop	2024-04-18 16:32:22.207143857 +0200
+@@ -187,3 +187,4 @@
+ Categories=Qt;KDE;Office;Publishing;
+ SingleMainWindow=true
+ X-DBUS-ServiceName=org.kde.kile
++StartupWMClass=kile

@@ -1,0 +1,14 @@
+diff -rU4 inject-5.2.1--orig/test/__init__.py inject-5.2.1--patched/test/__init__.py
+--- inject-5.2.1--orig/test/__init__.py	2020-02-02 01:00:00.000000000 +0100
++++ inject-5.2.1--patched/test/__init__.py	2025-06-17 11:27:51.367532010 +0200
+@@ -7,6 +7,7 @@
+     def tearDown(self):
+         inject.clear()
+     
+     def run_async(self, awaitable):
+-        loop = asyncio.get_event_loop()
+-        return loop.run_until_complete(awaitable)
+\ No newline at end of file
++        loop = asyncio.new_event_loop()
++        asyncio.set_event_loop(loop)
++        return loop.run_until_complete(awaitable)

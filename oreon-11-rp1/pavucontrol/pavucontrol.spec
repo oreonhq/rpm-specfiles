@@ -1,7 +1,7 @@
 %global source0_hash 0dce61c1088eafa04c270e1fb79eb7aff47e98567f7d28c65a7bee6cd24e415d
 
 Name:           pavucontrol
-Version:        6.1
+Version:        6.2
 Release:        %autorelease
 Summary:        Volume control for PulseAudio
 

@@ -1,0 +1,12 @@
+[Unit]
+Description=Enable the cron job for Moodle
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Environment=LOCKFILE=/var/lock/subsys/moodle
+ExecStart=/usr/bin/touch $LOCKFILE
+ExecStop=/usr/bin/rm -f $LOCKFILE
+
+[Install]
+WantedBy=multi-user.target

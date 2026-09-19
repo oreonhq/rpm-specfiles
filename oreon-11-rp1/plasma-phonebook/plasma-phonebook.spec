@@ -1,10 +1,10 @@
-%global source0_hash cef8d4129225c95b3a4f35909723ee67e677f55e5d8812bcf3ccf165d0901b57
+%global source0_hash 920115bc4c3aed6d3a13bbed8a1d5cb29fa8ea23609fe9076502e5e0e3b16d07
 
 %global stable_kf6 stable
 
 
 Name:           plasma-phonebook
-Version: 26.04.1
+Version: 26.08.0
 Release: 1%{?dist}
 License:        CC0 and GPLv2 and GPLv3 and GPLv3+ and LGPLv2+
 Summary:        Convergent Plasma Mobile phonebook application
@@ -48,7 +48,7 @@ Contacts application which allows adding, modifying and removing contacts.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n plasma-phonebook-v26.04.1
+%autosetup -p1 -n %{name}-%{version}
 
 %build
 %cmake_kf6
@@ -68,6 +68,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_qt6_plugindir}/kpeople/actions/phonebook_kpeople_plugin.so
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

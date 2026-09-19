@@ -1,0 +1,53 @@
+From a7d02b009f79021b5c5add0a1767ffcace3e7904 Mon Sep 17 00:00:00 2001
+From: Nika Layzell <nika@thelayzells.com>
+Date: Tue, 21 Jan 2025 17:49:02 -0500
+Subject: [PATCH] Workaround reflog corruption bug in git 2.48
+
+In git 2.48, there is an issue where using `git update-ref` add a new
+entry to the reflog for a branch will cause corrupted reflog entries to
+be created for any symbolic refs referencing the updated reference. This
+impacts most usage of `git-revise`, as we update the default `HEAD`
+reference indirectly due to using `git rev-parse --symbolic-full-name`
+to resolve the identity of a branch.
+
+This patch works around this issue in the common case by checking if the
+given name directly names a valid ref or symbolic ref, skipping the
+`--symbolic-full-name` resolution if it does. This means that HEAD will
+be directly updated by `git update-ref`, and receive valid reflog
+entries.
+
+This workaround shouldn't negatively impact other git versions, and is
+largely an internal change to how symbolic refs are handled by the
+odb.Reference type.
+
+See #138 for details.
+---
+ gitrevise/odb.py | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/gitrevise/odb.py b/gitrevise/odb.py
+index 641ad70..9ca13e8 100644
+--- a/gitrevise/odb.py
++++ b/gitrevise/odb.py
+@@ -884,7 +884,20 @@ class Reference(Generic[GitObjT]):  # pylint: disable=unsubscriptable-object
+ 
+     def __init__(self, obj_type: Type[GitObjT], repo: Repository, name: str) -> None:
+         self._type = obj_type
+-        self.name = repo.git("rev-parse", "--symbolic-full-name", name).decode()
++
++        self.name = name
++        try:
++            # Silently verify that a ref with the name exists and recover if it
++            # doesn't.
++            repo.git("show-ref", "--quiet", "--verify", self.name)
++        except CalledProcessError:
++            # `name` could be a branch name which can be resolved to a ref. Try
++            # to do so with `rev-parse`, and verify that the new name exists.
++            self.name = repo.git(
++                "rev-parse", "--symbolic-full-name", self.name
++            ).decode()
++            repo.git("show-ref", "--verify", self.name)
++
+         self.repo = repo
+         self.refresh()
+ 

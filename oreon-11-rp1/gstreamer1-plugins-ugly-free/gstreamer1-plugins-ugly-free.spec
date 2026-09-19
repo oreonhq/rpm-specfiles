@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0c04763200467b9b61a916b33646a6916a97cc9869d8b6dca57427b1f2734dee
 
 %global         majorminor 1.0
 
@@ -7,7 +7,7 @@
 #global shortcommit %%(c=%%{gitcommit}; echo ${c:0:5})
 
 Name:           gstreamer1-plugins-ugly-free
-Version:        1.28.3
+Version:        1.29.2
 Release:        1%{?dist}
 Summary:        GStreamer streaming media framework "ugly" plugins
 

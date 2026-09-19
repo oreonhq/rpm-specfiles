@@ -1,0 +1,172 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 553192e..5543557 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -74,59 +74,40 @@ endif()
+ find_package(Poco COMPONENTS Foundation JSON)
+ find_package(Qt5Core)
+ 
+-# jsoncpp library
+-add_library(jsoncpp
+-    thirdparty/jsoncpp/src/lib_json/json_reader.cpp
+-    thirdparty/jsoncpp/src/lib_json/json_value.cpp
+-    thirdparty/jsoncpp/src/lib_json/json_writer.cpp
+-)
+-
+-target_include_directories(jsoncpp SYSTEM PRIVATE thirdparty/jsoncpp/include)
+-set_target_properties(jsoncpp PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/thirdparty/jsoncpp)
+-
+-add_library(json11
+-    thirdparty/json11/json11.cpp
+-)
+-
+-target_include_directories(json11 SYSTEM PRIVATE thirdparty/json11)
+-set_target_properties(json11 PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/thirdparty/json11)
+-
+-# yaml-cpp library
+-file(GLOB yamlcpp_SOURCES "thirdparty/yaml-cpp/src/*.cpp")
+-add_library(yamlcpp ${yamlcpp_SOURCES})
+-
+-target_include_directories(yamlcpp SYSTEM PRIVATE thirdparty/yamlcpp/include)
+-set_target_properties(yamlcpp PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/thirdparty/yamlcpp)
+-
+ # Not all of these are required for examples build it doesn't hurt to include them
+-include_directories(include SYSTEM
+-    thirdparty/googletest/include
+-    thirdparty/json11
+-    thirdparty/jsoncpp/include
+-    thirdparty/rapidjson/include
+-    thirdparty/picojson
+-    thirdparty/nlohmann-json/include
+-    thirdparty/yaml-cpp/include
+-)
++#include_directories(include SYSTEM
++#    thirdparty/googletest/include
++#    thirdparty/json11
++#    thirdparty/jsoncpp/include
++#    thirdparty/rapidjson/include
++#    thirdparty/picojson
++#    thirdparty/nlohmann-json/include
++#    thirdparty/yaml-cpp/include
++#)
++
++# Use system libraries for above dependencies where availale
++# GTest is included conditionally below
++# json11 is deprecated
++find_package(jsoncpp)
++find_package(RapidJSON)
++# picojson does not provide a CMake configuration
++find_package(nlohmann_json)
++find_package(yaml-cpp)
++
++include_directories(include SYSTEM)
+ 
+ if(valijson_BUILD_TESTS)
+     if(NOT valijson_EXCLUDE_BOOST)
+         find_package(Boost)
+     endif()
+ 
+-    # Build local gtest
+-    set(gtest_force_shared_crt ON)
+-    option(BUILD_GMOCK FALSE)
+-    option(INSTALL_GTEST FALSE)
+-    add_subdirectory(thirdparty/googletest)
++    find_package(GTest REQUIRED)
+ 
+     set(TEST_SOURCES
+-        tests/test_adapter_comparison.cpp
+         tests/test_date_time_format.cpp
+         tests/test_fetch_absolute_uri_document_callback.cpp
+         tests/test_fetch_urn_document_callback.cpp
+         tests/test_json_pointer.cpp
+-        tests/test_json11_adapter.cpp
+         tests/test_jsoncpp_adapter.cpp
+         tests/test_nlohmann_json_adapter.cpp
+         tests/test_rapidjson_adapter.cpp
+@@ -139,7 +120,7 @@ if(valijson_BUILD_TESTS)
+         tests/test_utf8_utils.cpp
+     )
+ 
+-    set(TEST_LIBS gtest gtest_main jsoncpp json11 yamlcpp)
++    set(TEST_LIBS gtest gtest_main jsoncpp yaml-cpp)
+ 
+     if(Boost_FOUND)
+         include_directories(${Boost_INCLUDE_DIRS})
+@@ -162,6 +143,10 @@ if(valijson_BUILD_TESTS)
+         endif()
+     endif()
+ 
++    if(GTest_FOUND)
++        include_directories(${GTEST_INCLUDE_DIRS})
++    endif()
++
+     if(Poco_FOUND)
+         if(COMPILER_SUPPORTS_CXX17)
+             list(APPEND TEST_SOURCES tests/test_poco_json_adapter.cpp)
+@@ -195,7 +180,7 @@ if(valijson_BUILD_TESTS)
+ 
+     if(NOT MSVC)
+         set_target_properties(test_suite PROPERTIES
+-            COMPILE_FLAGS " -pedantic -Werror -Wshadow -Wunused"
++            COMPILE_FLAGS " -pedantic -Wshadow -Wunused"
+             CXX_STANDARD 17
+         )
+     endif()
+@@ -226,7 +211,7 @@ if(valijson_BUILD_TESTS)
+         target_compile_definitions(test_suite PRIVATE "VALIJSON_BUILD_QT_ADAPTER")
+     endif()
+ 
+-    target_link_libraries(test_suite ${TEST_LIBS} ${Boost_LIBRARIES})
++    target_link_libraries(test_suite ${TEST_LIBS} ${Boost_LIBRARIES} ${GTEST_BOTH_LIBRARIES})
+ endif()
+ 
+ if(valijson_BUILD_EXAMPLES)
+diff --git a/tests/test_validator.cpp b/tests/test_validator.cpp
+index e2bf78e..34b1ecf 100644
+--- a/tests/test_validator.cpp
++++ b/tests/test_validator.cpp
+@@ -11,12 +11,10 @@
+ 
+ #include <gtest/gtest.h>
+ 
+-#include <valijson/adapters/json11_adapter.hpp>
+ #include <valijson/adapters/jsoncpp_adapter.hpp>
+ #include <valijson/adapters/rapidjson_adapter.hpp>
+ #include <valijson/adapters/picojson_adapter.hpp>
+ #include <valijson/adapters/nlohmann_json_adapter.hpp>
+-#include <valijson/utils/json11_utils.hpp>
+ #include <valijson/utils/jsoncpp_utils.hpp>
+ #include <valijson/utils/picojson_utils.hpp>
+ #include <valijson/utils/rapidjson_utils.hpp>
+@@ -174,7 +172,6 @@ protected:
+     void processTestFile(const std::string &testFile,
+                          const SchemaParser::Version version)
+     {
+-        processTestFile<valijson::adapters::Json11Adapter>(testFile, version);
+         processTestFile<valijson::adapters::JsonCppAdapter>(testFile, version);
+         processTestFile<valijson::adapters::RapidJsonAdapter>(testFile, version);
+         processTestFile<valijson::adapters::PicoJsonAdapter>(testFile, version);
+@@ -622,4 +619,4 @@ TEST_F(TestValidator, Draft7_OptionalFormatTime)
+ TEST_F(TestValidator, Draft7_OptionalFormatDateTime)
+ {
+     processDraft7TestFile(TEST_SUITE_DIR "draft7/optional/format/date-time.json");
+-}
+\ No newline at end of file
++}
+diff --git a/tests/test_validator_with_custom_regular_expression_engine.cpp b/tests/test_validator_with_custom_regular_expression_engine.cpp
+index 42423c4..44c38a3 100644
+--- a/tests/test_validator_with_custom_regular_expression_engine.cpp
++++ b/tests/test_validator_with_custom_regular_expression_engine.cpp
+@@ -10,12 +10,10 @@
+ 
+ #include <gtest/gtest.h>
+ 
+-#include <valijson/adapters/json11_adapter.hpp>
+ #include <valijson/adapters/jsoncpp_adapter.hpp>
+ #include <valijson/adapters/rapidjson_adapter.hpp>
+ #include <valijson/adapters/picojson_adapter.hpp>
+ #include <valijson/adapters/nlohmann_json_adapter.hpp>
+-#include <valijson/utils/json11_utils.hpp>
+ #include <valijson/utils/jsoncpp_utils.hpp>
+ #include <valijson/utils/picojson_utils.hpp>
+ #include <valijson/utils/rapidjson_utils.hpp>

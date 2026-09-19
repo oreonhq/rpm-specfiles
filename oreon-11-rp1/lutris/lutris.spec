@@ -1,0 +1,130 @@
+%global source0_hash 1001b215d68c7e450b74bcf11510adb3ac60074ed46d5a160eb851bafcc14c3c
+
+%define debug_package %{nil}
+Name:           lutris
+Version:        0.5.22
+Release:        %autorelease
+Summary:        Install and play any video game easily
+
+# Automatically converted from old format: GPLv3 - review is highly recommended.
+License:        GPL-3.0-only
+URL:            http://%{name}.net
+Source0:        https://github.com/%{name}/%{name}/archive/refs/tags/v%{version}.tar.gz
+
+BuildRequires:  desktop-file-utils
+BuildRequires:  python3-devel
+Requires:       cabextract
+Requires:       gtk3, psmisc
+Requires:       hicolor-icon-theme
+# According to the INSTALL.rst upstream docs, lutris requires either (xorg-x11-server-Xephyr, xrandr)
+# or gnome-desktop3. Considering we are mainly using Wayland now, gnome-desktop3 should be sufficient.
+Requires:       gnome-desktop3
+Requires:       python3-distro
+Requires:       python3-cairo
+
+# Tests
+BuildRequires:  python3dist(pytest)
+BuildRequires:  pkgconfig(gdk-3.0)
+BuildRequires:  pkgconfig(webkit2gtk-4.1)
+BuildRequires:  pkgconfig(py3cairo)
+BuildRequires:  libX11-devel
+
+%if 0%{?fedora} || 0%{?rhel} < 10
+%ifarch x86_64
+Recommends:     mesa-dri-drivers(x86-32)
+Recommends:     mesa-vulkan-drivers(x86-32)
+Recommends:     vulkan-loader(x86-32)
+Recommends:     mesa-libGL(x86-32)
+Recommends:     libXScrnSaver(x86-32)
+Recommends:     pipewire(x86-32)
+Recommends:     libFAudio(x86-32)
+Recommends:     wine-pulseaudio(x86-32)
+Recommends:     wine-core(x86-32)
+%endif
+%endif
+
+Requires:       libXScrnSaver
+Requires:       mesa-vulkan-drivers
+Requires:       mesa-dri-drivers
+Requires:       vulkan-loader
+Requires:       mesa-libGL
+Requires:       glx-utils
+Requires:       gvfs
+Requires:       webkit2gtk4.1
+Requires:       protobuf
+Recommends: 	p7zip, curl
+Recommends:	fluid-soundfont-gs
+Recommends:     wine-core
+Recommends:	p7zip-plugins
+Recommends:	gamemode
+Recommends:     libFAudio
+Recommends:     gamescope
+BuildRequires:  fdupes
+BuildRequires:  libappstream-glib
+BuildRequires:  meson, gettext
+
+%description
+Lutris is a gaming platform for GNU/Linux. Its goal is to make
+gaming on Linux as easy as possible by taking care of installing
+and setting up the game for the user. The only thing you have to
+do is play the game. It aims to support every game that is playable
+on Linux.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{name}-%{version} -p1
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+%meson
+%meson_build
+
+%install
+%pyproject_install
+%pyproject_save_files lutris
+%meson_install
+appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/net.%{name}.Lutris.metainfo.xml
+%fdupes %{buildroot}%{python3_sitelib}
+desktop-file-install --dir=%{buildroot}%{_datadir}/applications share/applications/net.%{name}.Lutris.desktop
+desktop-file-install --dir=%{buildroot}%{_datadir}/applications share/applications/net.%{name}.Lutris1.desktop
+%find_lang %{name} --with-man
+
+%check
+# Tests disabled for now. Let's retry next patch.
+
+# Python tests: Disabled because either they are querying hardware (Don't work in mock) or they're
+# trying to spawn processes, which is also blocked.
+#%%pytest --ignore=tests/test_dialogs.py --ignore=tests/test_installer.py --ignore=tests/test_api.py -k "not GetNvidiaDriverInfo and not GetNvidiaGpuInfo and not import_module and not options"
+
+%files -f %{pyproject_files} -f %{name}.lang
+%{_bindir}/%{name}
+%{_datadir}/%{name}/
+%{_datadir}/applications/net.%{name}.Lutris.desktop
+%{_datadir}/applications/net.%{name}.Lutris1.desktop
+%{_datadir}/icons/hicolor/scalable/apps/net.lutris.Lutris.svg
+%{_datadir}/icons/hicolor/16x16/apps/net.lutris.Lutris.png
+%{_datadir}/icons/hicolor/22x22/apps/net.lutris.Lutris.png
+%{_datadir}/icons/hicolor/24x24/apps/net.lutris.Lutris.png
+%{_datadir}/icons/hicolor/32x32/apps/net.lutris.Lutris.png
+%{_datadir}/icons/hicolor/48x48/apps/net.lutris.Lutris.png
+%{_datadir}/icons/hicolor/64x64/apps/net.lutris.Lutris.png
+%{_datadir}/icons/hicolor/128x128/apps/net.lutris.Lutris.png
+%{_datadir}/icons/hicolor/128x128/mimetypes/application-x-lutris.png
+%{_datadir}/icons/hicolor/16x16/mimetypes/application-x-lutris.png
+%{_datadir}/icons/hicolor/22x22/mimetypes/application-x-lutris.png
+%{_datadir}/icons/hicolor/24x24/mimetypes/application-x-lutris.png
+%{_datadir}/icons/hicolor/32x32/mimetypes/application-x-lutris.png
+%{_datadir}/icons/hicolor/48x48/mimetypes/application-x-lutris.png
+%{_datadir}/icons/hicolor/64x64/mimetypes/application-x-lutris.png
+%{_datadir}/icons/hicolor/scalable/mimetypes/application-x-lutris.svg
+%{_datadir}/mime/packages/application-x-lutris.xml
+%{_datadir}/man/man1/%{name}.1.gz
+%{_metainfodir}/net.lutris.Lutris.metainfo.xml
+%pycached %{python3_sitelib}/%{name}/optional_settings.py
+
+%changelog
+%autochangelog

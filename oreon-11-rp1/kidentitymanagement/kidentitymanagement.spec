@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 4399db39573e59218ca8bc03b0adf7d1ebdddb7cf87f6e6f55390ab4fa0edaad
 
 Name:    kidentitymanagement
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: The KIdentityManagement Library
 

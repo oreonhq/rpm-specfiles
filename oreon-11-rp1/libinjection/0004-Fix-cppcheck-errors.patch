@@ -1,0 +1,60 @@
+From 20b1a703d8d1bf0d4c3f6f1355da8b92a7777970 Mon Sep 17 00:00:00 2001
+From: Miguel de Moura <me@migueldemoura.com>
+Date: Tue, 29 Sep 2020 12:54:46 +0100
+Subject: [PATCH 4/8] Fix cppcheck errors
+
+Fixes `parse_slash()` overflow.
+This is also easily found with `-fsanitize=undefined` and input `/*foo`.
+
+Fixes `Variable 'slen' is assigned a value that is never used`.
+---
+ src/libinjection_sqli.c | 12 +++++-------
+ src/testdriver.c        |  2 +-
+ 2 files changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/src/libinjection_sqli.c b/src/libinjection_sqli.c
+index a3e0822..94cbed2 100644
+--- a/src/libinjection_sqli.c
++++ b/src/libinjection_sqli.c
+@@ -503,12 +503,7 @@ static size_t parse_slash(struct libinjection_sqli_state * sf)
+      * skip over initial '/x'
+      */
+     ptr = memchr2(cur + 2, slen - (pos + 2), '*', '/');
+-
+-    /*
+-     * (ptr == NULL) causes false positive in cppcheck 1.61
+-     * casting to type seems to fix it
+-     */
+-    if (ptr == (const char*) NULL) {
++    if (ptr == NULL) {
+         /* till end of line */
+         clen = slen - pos;
+     } else {
+@@ -525,7 +520,10 @@ static size_t parse_slash(struct libinjection_sqli_state * sf)
+      *  are an automatic black ban!
+      */
+ 
+-    if (memchr2(cur + 2, (size_t)(ptr - (cur + 1)), '/', '*') !=  NULL) {
++    if (
++        ptr != NULL &&
++        memchr2(cur + 2, (size_t)(ptr - (cur + 1)), '/', '*') !=  NULL
++    ) {
+         ctype = TYPE_EVIL;
+     } else if (is_mysql_comment(cs, slen, pos)) {
+         ctype = TYPE_EVIL;
+diff --git a/src/testdriver.c b/src/testdriver.c
+index a63b664..0230b0d 100644
+--- a/src/testdriver.c
++++ b/src/testdriver.c
+@@ -62,7 +62,7 @@ size_t print_string(char* buf, size_t len, stoken_t* t)
+ 
+ size_t print_var(char* buf, size_t len, stoken_t* t)
+ {
+-    int slen = 0;
++    int slen;
+     if (t->count >= 1) {
+         slen = sprintf(buf + len, "%c", '@');
+         assert(slen >= 0);
+-- 
+2.27.0
+

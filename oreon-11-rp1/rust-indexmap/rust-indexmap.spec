@@ -13,6 +13,7 @@ Summary:        Hash table with consistent order and fast iteration
 License:        Apache-2.0 OR MIT
 URL:            https://crates.io/crates/indexmap
 Source:         %{crates_source}
+Patch:          indexmap-fix-metadata-auto.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 

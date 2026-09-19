@@ -1,0 +1,66 @@
+%__build2 %{_bindir}/b
+# Define compilation and linker options:
+#  - Build only shared libraries by default
+#  - Disable automatic prerequisite library rpaths
+#  - cc.* configuration is for C-common, applying to both C and C++
+%__build2_build_config                                      \\\
+  config.bin.lib=shared                                     \\\
+  config.bin.rpath.auto=false                               \\\
+  config.bin.rpath_link.auto=true                           \\\
+  config.c.coptions="%{build_cflags}"                       \\\
+  config.cxx.coptions="%{build_cxxflags}"                   \\\
+  config.cc.loptions="%{build_ldflags}"
+# Define basic installation configuration. Note that this does not include:
+#  %%{_libexecdir}           %%{_exec_prefix}/libexec
+#  %%{_sharedstatedir}       /var/lib
+#  %%{_datadir}              %%{_prefix}/share
+#  %%{_infodir}              /usr/share/info
+#  %%{_localstatedir}        /var
+# config.install.data and config.install.libexec seems to default to a value
+# like %%{_datadir}/${project} and %%{_libexecdir}/${project} so that data files
+# are not installed directly in %%{_datadir} or %%{_libexecdir}
+# By specifying the installation location, the default file install mode will be
+# 644, so we should set mode 755 for executable target install directories
+# explicitly
+%__build2_install_config                                    \\\
+  config.install.root=%{_prefix}                            \\\
+  config.install.exec_root=%{_exec_prefix}                  \\\
+  config.install.bin=%{_bindir}                             \\\
+  config.install.sbin=%{_sbindir}                           \\\
+  config.install.include=%{_includedir}                     \\\
+  config.install.lib=%{_libdir}                             \\\
+  config.install.etc=%{_sysconfdir}                         \\\
+  config.install.man=%{_mandir}                             \\\
+  config.install.legal=%{_defaultlicensedir}/"<project>"    \\\
+  config.install.pkgconfig=%{_libdir}/pkgconfig             \\\
+  config.install.bin.mode=755                               \\\
+  config.install.sbin.mode=755                              \\\
+  config.install.lib.mode=755                               \\\
+  config.install.chroot=%{?buildroot}
+%__build2_config                                            \\\
+  %{__build2_build_config}                                  \\\
+  %{__build2_install_config}
+
+# Performs the default operation, update, on a target
+%build2                                                     \
+  %{__build2}                                               \\\
+    %{__build2_build_config}                                \\\
+    %{nil}
+
+# Configures all operations on a target
+%build2_configure                                           \
+  %{__build2} configure:                                    \\\
+    %{__build2_config}                                      \\\
+    %{nil}
+
+# Performs the update and install operations on a target
+%build2_install                                             \
+  %{__build2} install:                                      \\\
+    %{__build2_config}                                      \\\
+    %{nil}
+
+# Performs the update and test operations on a target
+%build2_test                                                \
+  %{__build2} test:                                         \\\
+    %{__build2_build_config}                                \\\
+    %{nil}

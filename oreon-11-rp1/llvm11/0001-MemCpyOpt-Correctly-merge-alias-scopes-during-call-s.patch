@@ -1,0 +1,373 @@
+From e804574cad8efa1b7a660848ef7adc871a7f850e Mon Sep 17 00:00:00 2001
+From: modimo <modimo@fb.com>
+Date: Thu, 3 Dec 2020 09:23:37 -0800
+Subject: [PATCH] [MemCpyOpt] Correctly merge alias scopes during call slot
+ optimization
+
+When MemCpyOpt performs call slot optimization it will concatenate the `alias.scope` metadata between the function call and the memcpy. However, scoped AA relies on the domains in metadata to be maintained in a caller-callee relationship. Naive concatenation breaks this assumption leading to bad AA results.
+
+The fix is to take the intersection of domains then union the scopes within those domains.
+
+The original bug came from a case of rust bad codegen which uses this bad aliasing to perform additional memcpy optimizations. As show in the added test case `%src` got forwarded past its lifetime leading to a dereference of garbage data.
+
+Testing
+ninja check-llvm
+
+Reviewed By: jeroen.dobbelaere
+
+Differential Revision: https://reviews.llvm.org/D91576
+
+(cherry picked from commit 18603319321a6c1b158800bcc60035ee01549516)
+---
+ llvm/include/llvm/Analysis/ScopedNoAliasAA.h  | 21 ++++++++++
+ llvm/lib/Analysis/ScopedNoAliasAA.cpp         | 25 ------------
+ llvm/lib/IR/Metadata.cpp                      | 28 ++++++++++++-
+ .../ScopedNoAliasAA/alias-scope-merging.ll    | 37 ++++++++++++++++++
+ llvm/test/Transforms/GVN/noalias.ll           | 29 +++++++-------
+ .../InstCombine/fold-phi-load-metadata.ll     |  4 +-
+ .../Transforms/MemCpyOpt/callslot_badaa.ll    | 39 +++++++++++++++++++
+ llvm/test/Transforms/NewGVN/noalias.ll        | 29 +++++++-------
+ 8 files changed, 156 insertions(+), 56 deletions(-)
+ create mode 100644 llvm/test/Analysis/ScopedNoAliasAA/alias-scope-merging.ll
+ create mode 100644 llvm/test/Transforms/MemCpyOpt/callslot_badaa.ll
+
+diff --git a/llvm/include/llvm/Analysis/ScopedNoAliasAA.h b/llvm/include/llvm/Analysis/ScopedNoAliasAA.h
+index c55228eace4b..562640647918 100644
+--- a/llvm/include/llvm/Analysis/ScopedNoAliasAA.h
++++ b/llvm/include/llvm/Analysis/ScopedNoAliasAA.h
+@@ -25,6 +25,27 @@ class Function;
+ class MDNode;
+ class MemoryLocation;
+ 
++/// This is a simple wrapper around an MDNode which provides a higher-level
++/// interface by hiding the details of how alias analysis information is encoded
++/// in its operands.
++class AliasScopeNode {
++  const MDNode *Node = nullptr;
++
++public:
++  AliasScopeNode() = default;
++  explicit AliasScopeNode(const MDNode *N) : Node(N) {}
++
++  /// Get the MDNode for this AliasScopeNode.
++  const MDNode *getNode() const { return Node; }
++
++  /// Get the MDNode for this AliasScopeNode's domain.
++  const MDNode *getDomain() const {
++    if (Node->getNumOperands() < 2)
++      return nullptr;
++    return dyn_cast_or_null<MDNode>(Node->getOperand(1));
++  }
++};
++
+ /// A simple AA result which uses scoped-noalias metadata to answer queries.
+ class ScopedNoAliasAAResult : public AAResultBase<ScopedNoAliasAAResult> {
+   friend AAResultBase<ScopedNoAliasAAResult>;
+diff --git a/llvm/lib/Analysis/ScopedNoAliasAA.cpp b/llvm/lib/Analysis/ScopedNoAliasAA.cpp
+index 8928678d6ab2..22e0501b28f4 100644
+--- a/llvm/lib/Analysis/ScopedNoAliasAA.cpp
++++ b/llvm/lib/Analysis/ScopedNoAliasAA.cpp
+@@ -50,31 +50,6 @@ using namespace llvm;
+ static cl::opt<bool> EnableScopedNoAlias("enable-scoped-noalias",
+                                          cl::init(true), cl::Hidden);
+ 
+-namespace {
+-
+-/// This is a simple wrapper around an MDNode which provides a higher-level
+-/// interface by hiding the details of how alias analysis information is encoded
+-/// in its operands.
+-class AliasScopeNode {
+-  const MDNode *Node = nullptr;
+-
+-public:
+-  AliasScopeNode() = default;
+-  explicit AliasScopeNode(const MDNode *N) : Node(N) {}
+-
+-  /// Get the MDNode for this AliasScopeNode.
+-  const MDNode *getNode() const { return Node; }
+-
+-  /// Get the MDNode for this AliasScopeNode's domain.
+-  const MDNode *getDomain() const {
+-    if (Node->getNumOperands() < 2)
+-      return nullptr;
+-    return dyn_cast_or_null<MDNode>(Node->getOperand(1));
+-  }
+-};
+-
+-} // end anonymous namespace
+-
+ AliasResult ScopedNoAliasAAResult::alias(const MemoryLocation &LocA,
+                                          const MemoryLocation &LocB,
+                                          AAQueryInfo &AAQI) {
+diff --git a/llvm/lib/IR/Metadata.cpp b/llvm/lib/IR/Metadata.cpp
+index ce89009e86eb..5826464206d6 100644
+--- a/llvm/lib/IR/Metadata.cpp
++++ b/llvm/lib/IR/Metadata.cpp
+@@ -26,6 +26,7 @@
+ #include "llvm/ADT/StringMap.h"
+ #include "llvm/ADT/StringRef.h"
+ #include "llvm/ADT/Twine.h"
++#include "llvm/Analysis/ScopedNoAliasAA.h"
+ #include "llvm/IR/Argument.h"
+ #include "llvm/IR/BasicBlock.h"
+ #include "llvm/IR/Constant.h"
+@@ -925,7 +926,32 @@ MDNode *MDNode::getMostGenericAliasScope(MDNode *A, MDNode *B) {
+   if (!A || !B)
+     return nullptr;
+ 
+-  return concatenate(A, B);
++  // Take the intersection of domains then union the scopes
++  // within those domains
++  SmallPtrSet<const MDNode *, 16> ADomains;
++  SmallPtrSet<const MDNode *, 16> IntersectDomains;
++  SmallSetVector<Metadata *, 4> MDs;
++  for (const MDOperand &MDOp : A->operands())
++    if (const MDNode *NAMD = dyn_cast<MDNode>(MDOp))
++      if (const MDNode *Domain = AliasScopeNode(NAMD).getDomain())
++        ADomains.insert(Domain);
++
++  for (const MDOperand &MDOp : B->operands())
++    if (const MDNode *NAMD = dyn_cast<MDNode>(MDOp))
++      if (const MDNode *Domain = AliasScopeNode(NAMD).getDomain())
++        if (ADomains.contains(Domain)) {
++          IntersectDomains.insert(Domain);
++          MDs.insert(MDOp);
++        }
++
++  for (const MDOperand &MDOp : A->operands())
++    if (const MDNode *NAMD = dyn_cast<MDNode>(MDOp))
++      if (const MDNode *Domain = AliasScopeNode(NAMD).getDomain())
++        if (IntersectDomains.contains(Domain))
++          MDs.insert(MDOp);
++
++  return MDs.empty() ? nullptr
++                     : getOrSelfReference(A->getContext(), MDs.getArrayRef());
+ }
+ 
+ MDNode *MDNode::getMostGenericFPMath(MDNode *A, MDNode *B) {
+diff --git a/llvm/test/Analysis/ScopedNoAliasAA/alias-scope-merging.ll b/llvm/test/Analysis/ScopedNoAliasAA/alias-scope-merging.ll
+new file mode 100644
+index 000000000000..4c8369d30adb
+--- /dev/null
++++ b/llvm/test/Analysis/ScopedNoAliasAA/alias-scope-merging.ll
+@@ -0,0 +1,37 @@
++; RUN: opt < %s -S -memcpyopt | FileCheck --match-full-lines %s
++
++; Alias scopes are merged by taking the intersection of domains, then the union of the scopes within those domains
++define i8 @test(i8 %input) {
++  %tmp = alloca i8
++  %dst = alloca i8
++  %src = alloca i8
++; CHECK:   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %dst, i8* align 8 %src, i64 1, i1 false), !alias.scope ![[SCOPE:[0-9]+]]
++  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %src), !noalias !4
++  store i8 %input, i8* %src
++  call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %tmp, i8* align 8 %src, i64 1, i1 false), !alias.scope !0
++  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %src), !noalias !4
++  call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %dst, i8* align 8 %tmp, i64 1, i1 false), !alias.scope !4
++  %ret_value = load i8, i8* %dst
++  ret i8 %ret_value
++}
++
++; Merged scope contains "callee0: %a" and "callee0 : %b"
++; CHECK-DAG: ![[CALLEE0_A:[0-9]+]] = distinct !{!{{[0-9]+}}, !{{[0-9]+}}, !"callee0: %a"}
++; CHECK-DAG: ![[CALLEE0_B:[0-9]+]] = distinct !{!{{[0-9]+}}, !{{[0-9]+}}, !"callee0: %b"}
++; CHECK-DAG: ![[SCOPE]] = !{![[CALLEE0_A]], ![[CALLEE0_B]]}
++
++declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture)
++declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture)
++declare void @llvm.memcpy.p0i8.p0i8.i64(i8*, i8*, i64, i1)
++
++!0 = !{!1, !7}
++!1 = distinct !{!1, !3, !"callee0: %a"}
++!2 = distinct !{!2, !3, !"callee0: %b"}
++!3 = distinct !{!3, !"callee0"}
++
++!4 = !{!2, !5}
++!5 = distinct !{!5, !6, !"callee1: %a"}
++!6 = distinct !{!6, !"callee1"}
++
++!7 = distinct !{!7, !8, !"callee2: %a"}
++!8 = distinct !{!8, !"callee2"}
+diff --git a/llvm/test/Transforms/GVN/noalias.ll b/llvm/test/Transforms/GVN/noalias.ll
+index 69c21f110b5e..67d48d768a91 100644
+--- a/llvm/test/Transforms/GVN/noalias.ll
++++ b/llvm/test/Transforms/GVN/noalias.ll
+@@ -5,7 +5,7 @@ define i32 @test1(i32* %p, i32* %q) {
+ ; CHECK: load i32, i32* %p
+ ; CHECK-NOT: noalias
+ ; CHECK: %c = add i32 %a, %a
+-  %a = load i32, i32* %p, !noalias !0
++  %a = load i32, i32* %p, !noalias !3
+   %b = load i32, i32* %p
+   %c = add i32 %a, %b
+   ret i32 %c
+@@ -13,31 +13,32 @@ define i32 @test1(i32* %p, i32* %q) {
+ 
+ define i32 @test2(i32* %p, i32* %q) {
+ ; CHECK-LABEL: @test2(i32* %p, i32* %q)
+-; CHECK: load i32, i32* %p, align 4, !alias.scope !0
++; CHECK: load i32, i32* %p, align 4, !alias.scope ![[SCOPE1:[0-9]+]]
+ ; CHECK: %c = add i32 %a, %a
+-  %a = load i32, i32* %p, !alias.scope !0
+-  %b = load i32, i32* %p, !alias.scope !0
++  %a = load i32, i32* %p, !alias.scope !3
++  %b = load i32, i32* %p, !alias.scope !3
+   %c = add i32 %a, %b
+   ret i32 %c
+ }
+ 
+-; FIXME: In this case we can do better than intersecting the scopes, and can
+-; concatenate them instead. Both loads are in the same basic block, the first
+-; makes the second safe to speculatively execute, and there are no calls that may
+-; throw in between.
+ define i32 @test3(i32* %p, i32* %q) {
+ ; CHECK-LABEL: @test3(i32* %p, i32* %q)
+-; CHECK: load i32, i32* %p, align 4, !alias.scope !1
++; CHECK: load i32, i32* %p, align 4, !alias.scope ![[SCOPE2:[0-9]+]]
+ ; CHECK: %c = add i32 %a, %a
+-  %a = load i32, i32* %p, !alias.scope !1
+-  %b = load i32, i32* %p, !alias.scope !2
++  %a = load i32, i32* %p, !alias.scope !4
++  %b = load i32, i32* %p, !alias.scope !5
+   %c = add i32 %a, %b
+   ret i32 %c
+ }
+ 
++; CHECK:   ![[SCOPE1]] = !{!{{[0-9]+}}}
++; CHECK:   ![[SCOPE2]] = !{!{{[0-9]+}}, !{{[0-9]+}}}
+ declare i32 @foo(i32*) readonly
+ 
+-!0 = !{!0}
+-!1 = !{!1}
+-!2 = !{!0, !1}
++!0 = distinct !{!0, !2, !"callee0: %a"}
++!1 = distinct !{!1, !2, !"callee0: %b"}
++!2 = distinct !{!2, !"callee0"}
+ 
++!3 = !{!0}
++!4 = !{!1}
++!5 = !{!0, !1}
+diff --git a/llvm/test/Transforms/InstCombine/fold-phi-load-metadata.ll b/llvm/test/Transforms/InstCombine/fold-phi-load-metadata.ll
+index e5a1aa7362a5..7fa26b46e25d 100644
+--- a/llvm/test/Transforms/InstCombine/fold-phi-load-metadata.ll
++++ b/llvm/test/Transforms/InstCombine/fold-phi-load-metadata.ll
+@@ -40,10 +40,10 @@ return:                                           ; preds = %if.end, %if.then
+ ; CHECK: ![[TBAA]] = !{![[TAG1:[0-9]+]], ![[TAG1]], i64 0}
+ ; CHECK: ![[TAG1]] = !{!"int", !{{[0-9]+}}, i64 0}
+ ; CHECK: ![[RANGE]] = !{i32 10, i32 25}
+-; CHECK: ![[ALIAS_SCOPE]] = !{![[SCOPE0:[0-9]+]], ![[SCOPE2:[0-9]+]], ![[SCOPE1:[0-9]+]]}
++; CHECK: ![[ALIAS_SCOPE]] = !{![[SCOPE0:[0-9]+]], ![[SCOPE1:[0-9]+]], ![[SCOPE2:[0-9]+]]}
+ ; CHECK: ![[SCOPE0]] = distinct !{![[SCOPE0]], !{{[0-9]+}}, !"scope0"}
+-; CHECK: ![[SCOPE2]] = distinct !{![[SCOPE2]], !{{[0-9]+}}, !"scope2"}
+ ; CHECK: ![[SCOPE1]] = distinct !{![[SCOPE1]], !{{[0-9]+}}, !"scope1"}
++; CHECK: ![[SCOPE2]] = distinct !{![[SCOPE2]], !{{[0-9]+}}, !"scope2"}
+ ; CHECK: ![[NOALIAS]] = !{![[SCOPE3:[0-9]+]]}
+ ; CHECK: ![[SCOPE3]] = distinct !{![[SCOPE3]], !{{[0-9]+}}, !"scope3"}
+ 
+diff --git a/llvm/test/Transforms/MemCpyOpt/callslot_badaa.ll b/llvm/test/Transforms/MemCpyOpt/callslot_badaa.ll
+new file mode 100644
+index 000000000000..346546f72c4c
+--- /dev/null
++++ b/llvm/test/Transforms/MemCpyOpt/callslot_badaa.ll
+@@ -0,0 +1,39 @@
++; RUN: opt < %s -S -memcpyopt | FileCheck --match-full-lines %s
++
++; Make sure callslot optimization merges alias.scope metadata correctly when it merges instructions.
++; Merging here naively generates:
++;  call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %dst, i8* align 8 %src, i64 1, i1 false), !alias.scope !3
++;  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %src), !noalias !0
++;   ...
++;  !0 = !{!1}
++;  !1 = distinct !{!1, !2, !"callee1: %a"}
++;  !2 = distinct !{!2, !"callee1"}
++;  !3 = !{!1, !4}
++;  !4 = distinct !{!4, !5, !"callee0: %a"}
++;  !5 = distinct !{!5, !"callee0"}
++; Which is incorrect because the lifetime.end of %src will now "noalias" the above memcpy.
++define i8 @test(i8 %input) {
++  %tmp = alloca i8
++  %dst = alloca i8
++  %src = alloca i8
++; NOTE: we're matching the full line and looking for the lack of !alias.scope here
++; CHECK:   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %dst, i8* align 8 %src, i64 1, i1 false)
++  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %src), !noalias !3
++  store i8 %input, i8* %src
++  call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %tmp, i8* align 8 %src, i64 1, i1 false), !alias.scope !0
++  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %src), !noalias !3
++  call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %dst, i8* align 8 %tmp, i64 1, i1 false), !alias.scope !3
++  %ret_value = load i8, i8* %dst
++  ret i8 %ret_value
++}
++
++declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture)
++declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture)
++declare void @llvm.memcpy.p0i8.p0i8.i64(i8*, i8*, i64, i1)
++
++!0 = !{!1}
++!1 = distinct !{!1, !2, !"callee0: %a"}
++!2 = distinct !{!2, !"callee0"}
++!3 = !{!4}
++!4 = distinct !{!4, !5, !"callee1: %a"}
++!5 = distinct !{!5, !"callee1"}
+diff --git a/llvm/test/Transforms/NewGVN/noalias.ll b/llvm/test/Transforms/NewGVN/noalias.ll
+index c5f23bfad89a..2d90dc84d90b 100644
+--- a/llvm/test/Transforms/NewGVN/noalias.ll
++++ b/llvm/test/Transforms/NewGVN/noalias.ll
+@@ -5,7 +5,7 @@ define i32 @test1(i32* %p, i32* %q) {
+ ; CHECK: load i32, i32* %p
+ ; CHECK-NOT: noalias
+ ; CHECK: %c = add i32 %a, %a
+-  %a = load i32, i32* %p, !noalias !0
++  %a = load i32, i32* %p, !noalias !3
+   %b = load i32, i32* %p
+   %c = add i32 %a, %b
+   ret i32 %c
+@@ -13,31 +13,32 @@ define i32 @test1(i32* %p, i32* %q) {
+ 
+ define i32 @test2(i32* %p, i32* %q) {
+ ; CHECK-LABEL: @test2(i32* %p, i32* %q)
+-; CHECK: load i32, i32* %p, align 4, !alias.scope !0
++; CHECK: load i32, i32* %p, align 4, !alias.scope ![[SCOPE1:[0-9]+]]
+ ; CHECK: %c = add i32 %a, %a
+-  %a = load i32, i32* %p, !alias.scope !0
+-  %b = load i32, i32* %p, !alias.scope !0
++  %a = load i32, i32* %p, !alias.scope !3
++  %b = load i32, i32* %p, !alias.scope !3
+   %c = add i32 %a, %b
+   ret i32 %c
+ }
+ 
+-; FIXME: In this case we can do better than intersecting the scopes, and can
+-; concatenate them instead. Both loads are in the same basic block, the first
+-; makes the second safe to speculatively execute, and there are no calls that may
+-; throw in between.
+ define i32 @test3(i32* %p, i32* %q) {
+ ; CHECK-LABEL: @test3(i32* %p, i32* %q)
+-; CHECK: load i32, i32* %p, align 4, !alias.scope !1
++; CHECK: load i32, i32* %p, align 4, !alias.scope ![[SCOPE2:[0-9]+]]
+ ; CHECK: %c = add i32 %a, %a
+-  %a = load i32, i32* %p, !alias.scope !1
+-  %b = load i32, i32* %p, !alias.scope !2
++  %a = load i32, i32* %p, !alias.scope !4
++  %b = load i32, i32* %p, !alias.scope !5
+   %c = add i32 %a, %b
+   ret i32 %c
+ }
+ 
++; CHECK:   ![[SCOPE1]] = !{!{{[0-9]+}}}
++; CHECK:   ![[SCOPE2]] = !{!{{[0-9]+}}, !{{[0-9]+}}}
+ declare i32 @foo(i32*) readonly
+ 
+-!0 = !{!0}
+-!1 = !{!1}
+-!2 = !{!0, !1}
++!0 = distinct !{!0, !2, !"callee0: %a"}
++!1 = distinct !{!1, !2, !"callee0: %b"}
++!2 = distinct !{!2, !"callee0"}
+ 
++!3 = !{!0}
++!4 = !{!1}
++!5 = !{!0, !1}
+-- 
+2.30.2
+

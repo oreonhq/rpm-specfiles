@@ -1,0 +1,55 @@
+diff -up kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/options_unix.cpp.me kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/options_unix.cpp
+--- kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/options_unix.cpp.me	2024-01-30 11:03:14.396391957 +0100
++++ kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/options_unix.cpp	2024-01-30 11:03:33.475767884 +0100
+@@ -19,6 +19,7 @@
+ #include <libxml/parser.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <cstdlib>
+ #include "xsldbg.h"
+ #include "options.h"
+ 
+diff -up kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/files.cpp.me kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/files.cpp
+--- kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/files.cpp.me	2024-01-30 11:21:59.190247017 +0100
++++ kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/files.cpp	2024-01-30 11:22:13.364523600 +0100
+@@ -21,6 +21,7 @@
+ 
+ #include "xsldbg.h"
+ #include <stdio.h>
++#include <cstdlib>
+ #include <libxml/entities.h>
+ #include <libxml/tree.h>
+ #include <libxml/catalog.h>
+diff -up kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/files_unix.cpp.me kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/files_unix.cpp
+--- kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/files_unix.cpp.me	2024-01-30 11:21:19.098465862 +0100
++++ kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/files_unix.cpp	2024-01-30 11:21:46.572000790 +0100
+@@ -17,6 +17,7 @@
+  *                                                                         *
+  ***************************************************************************/
+ 
++#include <cstdlib>
+ #include "xsldbg.h"
+ #include "files.h"
+ #include "utils.h"
+diff -up kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/options.cpp.me kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/options.cpp
+--- kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/options.cpp.me	2024-01-30 11:19:37.925501528 +0100
++++ kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/options.cpp	2024-01-30 11:20:28.423481969 +0100
+@@ -17,6 +17,7 @@
+  *                                                                         *
+  ***************************************************************************/
+ 
++#include <cstdlib>
+ #include "xsldbg.h"
+ #include "xsldbgthread.h"
+ #include "options.h"
+diff -up kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/os_cmds.cpp.me kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/os_cmds.cpp
+--- kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/os_cmds.cpp.me	2024-01-30 11:20:38.721681900 +0100
++++ kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/os_cmds.cpp	2024-01-30 11:20:55.457006835 +0100
+@@ -16,6 +16,7 @@
+  *                                                                         *
+  ***************************************************************************/
+ 
++#include <cstdlib>
+ #include "xsldbg.h"
+ #include "debugXSL.h"
+ #include "files.h"

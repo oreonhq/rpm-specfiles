@@ -1,0 +1,94 @@
+CFLAGS=-O2 -Wall -Werror -I. -fPIC
+CC = gcc
+bindir = /usr/bin
+libdir = /usr/lib
+includedir = /usr/include
+mandir = /usr/share/man
+DESTDIR = 
+
+AR = ar
+RANLIB = ranlib
+LIBTOOL = libtool
+INSTALL = install -c
+LDFLAGS = 
+LIBS = 
+
+LT_CURRENT=0
+LT_REVISION=0
+LT_AGE=0
+
+OBJS=libinjection_sqli.o libinjection_html5.o libinjection_xss.o
+
+LTOBJS:= $(OBJS:.o=.lo)
+
+all: libinjection_sqli_data.h libinjection.la html5 sqli fptool reader testdriver testspeedxss testspeedsqli
+
+fingerprints.txt: make_parens.py
+	./make_parens.py < fingerprints.txt > fingerprints2.txt
+	mv fingerprints2.txt fingerprints.txt
+
+fingerprints:
+	./make_parens.py < fingerprints.txt > fingerprints2.txt
+	mv fingerprints2.txt fingerprints.txt
+.PHONY: fingerprints
+
+sqlparse_data.json: sqlparse_map.py fingerprints
+	./sqlparse_map.py > sqlparse_data.json
+
+libinjection_sqli_data.h: sqlparse2c.py sqlparse_data.json
+	./sqlparse2c.py < sqlparse_data.json > libinjection_sqli_data.h
+
+libinjection.la: $(LTOBJS) libinjection_sqli_data.h
+	$(LIBTOOL) --tag=CC --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -rpath $(libdir) \
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -o \
+	libinjection.la $(LTOBJS) $(LIBS)
+
+html5: html5_cli.o libinjection.la
+	$(LIBTOOL) --tag=CC --mode=link $(CC) $(CFLAGS) -o $@ $(LDFLAGS) $(LIBS)  $^
+
+sqli: sqli_cli.o libinjection.la
+	$(LIBTOOL) --tag=CC --mode=link $(CC) $(CFLAGS) -o $@ $(LDFLAGS) $(LIBS)  $^
+
+fptool: fptool.o libinjection.la
+	$(LIBTOOL) --tag=CC --mode=link $(CC) $(CFLAGS) -o $@ $(LDFLAGS) $(LIBS)  $^
+
+reader: reader.o libinjection.la
+	$(LIBTOOL) --tag=CC --mode=link $(CC) $(CFLAGS) -o $@ $(LDFLAGS) $(LIBS)  $^
+
+testdriver: testdriver.o libinjection.la
+	$(LIBTOOL) --tag=CC --mode=link $(CC) $(CFLAGS) -o $@ $(LDFLAGS) $(LIBS)  $^
+
+testspeedxss: test_speed_xss.o libinjection.la
+	$(LIBTOOL) --tag=CC --mode=link $(CC) $(CFLAGS) -o $@ $(LDFLAGS) $(LIBS)  $^
+
+testspeedsqli: test_speed_sqli.o libinjection.la
+	$(LIBTOOL) --tag=CC --mode=link $(CC) $(CFLAGS) -o $@ $(LDFLAGS) $(LIBS)  $^
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
+
+%.lo: %.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -c $(CFLAGS) $< -o $@
+
+install:
+	$(INSTALL) -d $(DESTDIR)$(bindir)
+	$(INSTALL) -d $(DESTDIR)$(libdir)
+	$(INSTALL) -d $(DESTDIR)$(includedir)
+	$(LIBTOOL) --mode=install $(INSTALL) libinjection.la $(DESTDIR)$(libdir)
+	$(LIBTOOL) --mode=install $(INSTALL) -m 755 html5 $(DESTDIR)$(bindir)
+	$(LIBTOOL) --mode=install $(INSTALL) -m 755 sqli $(DESTDIR)$(bindir)
+	$(LIBTOOL) --mode=install $(INSTALL) -m 755 fptool $(DESTDIR)$(bindir)
+	$(LIBTOOL) --mode=install $(INSTALL) -m 755 reader $(DESTDIR)$(bindir)
+	$(LIBTOOL) --mode=install $(INSTALL) -m 755 testdriver $(DESTDIR)$(bindir)
+	$(LIBTOOL) --mode=install $(INSTALL) -m 755 testspeedxss $(DESTDIR)$(bindir)
+	$(LIBTOOL) --mode=install $(INSTALL) -m 755 testspeedsqli $(DESTDIR)$(bindir)
+	$(INSTALL) -m 644 libinjection.h $(DESTDIR)$(includedir)/
+	$(INSTALL) -m 644 libinjection_html5.h $(DESTDIR)$(includedir)/
+	$(INSTALL) -m 644 libinjection_sqli.h $(DESTDIR)$(includedir)/
+	$(INSTALL) -m 644 libinjection_sqli_data.h $(DESTDIR)$(includedir)/
+	$(INSTALL) -m 644 libinjection_xss.h $(DESTDIR)$(includedir)/
+
+clean:
+	rm -f *.o *core *.lo *.a *.la
+	rm -f html5 sqli fptool reader testdriver testspeedxss testspeedsqli
+	rm -rf .libs

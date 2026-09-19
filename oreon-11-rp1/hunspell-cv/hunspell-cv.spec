@@ -8,8 +8,8 @@
 
 Name: hunspell-cv
 Summary: Chuvash hunspell dictionaries
-Version: 1.06
-Release: 20%{?dist}
+Version: 1.11
+Release: 1%{?dist}
 URL: http://hunspell.chv.su/download.shtml
 License: GPL-3.0-or-later OR LGPL-3.0-or-later OR MPL-1.1
 BuildArch: noarch

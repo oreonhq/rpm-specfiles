@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=River Classic
+Comment=A dynamic tiling Wayland compositor
+DesktopNames=river;wlroots
+Exec=river
+Type=Application

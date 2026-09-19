@@ -50,7 +50,7 @@
 
 Summary:        JDBC driver for PostgreSQL
 Name:           postgresql-jdbc
-Version:        42.7.8
+Version:        42.7.13
 Release:        %autorelease
 License:        BSD-2-Clause
 URL:            https://jdbc.postgresql.org/

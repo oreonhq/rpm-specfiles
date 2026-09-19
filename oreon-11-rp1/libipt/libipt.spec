@@ -3,8 +3,8 @@
 %global __cmake_in_source_build 1
 
 Name: libipt
-Version: 2.1.2
-Release: 4%{?dist}
+Version: 2.2
+Release: 1%{?dist}
 Summary: Intel Processor Trace Decoder Library
 License: BSD-3-Clause
 URL: https://github.com/intel/libipt

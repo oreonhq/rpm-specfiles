@@ -1,0 +1,47 @@
+From ea3498f9c9cadeaed7e6a155bc3c4585a17133c9 Mon Sep 17 00:00:00 2001
+From: "Alan D. Salewski" <salewski@att.net>
+Date: Thu, 9 Apr 2020 07:11:00 -0400
+Subject: [PATCH] fixes #46 (unit tests): missing $HOME relevant only w/o
+ passwd->pw_dir
+
+When Ruby's `Dir` class obtains the user's home directory from the password
+database via `getpwname(3)`, the `${HOME}` environment variable is not
+consulted. In such a case, `Dir.home` will return the value from the `passwd`
+struct's `pw_dir` member, and the last resort fallback use of `Dir.pwd` (by
+`Netrc.home_path`) is not triggered.
+
+The `test_missing_environment()` unit test was failing on my machine (Debian
+GNU/Linux, amd64, libc6 2.28, Ruby 2.5) because it expected that by removing
+the `${HOME}` environment variable the `Netrc` class would have constructed
+its `default_path` from the `Dir.pwd` fallback. That was not the behavior,
+though, when Ruby's `Dir.home` was able to return a valid, readable directory
+from the password database (and the build process was not in that directory
+when running the unit tests).
+
+This change tweaks the unit test to conditionally expect the use of `Dir.home`
+rather than `Dir.pwd`.
+---
+ test/test_netrc.rb | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/test/test_netrc.rb b/test/test_netrc.rb
+index 73c5c25..dab0a38 100644
+--- a/test/test_netrc.rb
++++ b/test/test_netrc.rb
+@@ -200,7 +200,15 @@ def test_encrypted_roundtrip
+   def test_missing_environment
+     nil_home = nil
+     ENV["HOME"], nil_home = nil_home, ENV["HOME"]
+-    assert_equal File.join(Dir.pwd, '.netrc'), Netrc.default_path
++
++    # If user's home directory can be obtained via getpwnam(3) AND is
++    # readable, then the $HOME environment variable is not considered for
++    # building the Netrc default_path, and no fallback directory is
++    # referenced.
++    dflt_dir = Dir.respond_to?(:home) && File.readable?(Dir.home) \
++             ? Dir.home : Dir.pwd
++
++    assert_equal File.join(dflt_dir, '.netrc'), Netrc.default_path
+   ensure
+     ENV["HOME"], nil_home = nil_home, ENV["HOME"]
+   end

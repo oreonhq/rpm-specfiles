@@ -1,0 +1,3 @@
+# Running FEX on non-4k page-size systems
+
+FEX only supports 4k page-size systems natively. Attempting to run it directly on systems using a different page-size (e.g. Apple Silicon Macs running a 16k page-size kernel) will result in a segmentation fault. FEX can be used in these environments via krun, which uses a microVM with a 4k page-size kernel to run it.

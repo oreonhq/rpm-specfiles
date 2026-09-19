@@ -1,0 +1,17 @@
+diff -up procinfo-18/routines.c.version procinfo-18/routines.c
+--- procinfo-18/routines.c.version	2010-10-12 13:37:18.000000000 +0200
++++ procinfo-18/routines.c	2010-10-12 13:40:29.166001055 +0200
+@@ -273,6 +273,13 @@ make_version (FILE * versionfp)
+ 	ret = sscanf (line, "Linux version %s (%[^)]) (gcc %[^(] (%*[^)])) #%s %[^\n]",
+ 		      ver, host, gcc, compno, date);
+ 
++    if (ret != 5) {	/* Red Hat has different format of gcc version... */
++	ret = sscanf (line, "Linux version %s (%[^)]) (gcc %[^)]) (%*[^)]) ) #%s %[^\n]",
++		      ver, host, gcc, compno, date);
++	if(ret == 5)
++		strcat(gcc, ")");
++    }
++
+     if (ret == 3) {	/* At least we've got ver & host right... */
+ 	strcpy (gcc, "[can't parse]");
+ 	strcpy (compno, "???");

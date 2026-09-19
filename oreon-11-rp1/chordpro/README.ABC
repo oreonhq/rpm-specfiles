@@ -1,0 +1,7 @@
+To render ABC, ChordPro makes use of QuickJS embedding. You can
+install this easily with
+
+    cpan JavaScript::QuickJS
+
+The Windows and MacOS installers for ChordPro include all tools to
+provide ABC embedding.

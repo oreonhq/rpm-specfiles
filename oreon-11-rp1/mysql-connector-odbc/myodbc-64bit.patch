@@ -1,0 +1,20 @@
+Fix some 64-bitness issues arising from unixODBC 2.2.14 changes.
+
+The other part was fixed upstream in:
+https://github.com/mysql/mysql-connector-odbc/commit/dc565dbceb24852d9c97e63855ab0c5ee622bc3b
+
+
+
+diff --git a/test/my_catalog1.c b/test/my_catalog1.c
+index cee16ab..bf9aace 100644
+--- a/test/my_catalog1.c
++++ b/test/my_catalog1.c
+@@ -631,7 +631,7 @@ DECLARE_TEST(t_tables_bug)
+     printMessage(" Column Name   : %s", szColName);
+     printMessage(" NameLengh     : %d", pcbColName);
+     printMessage(" DataType      : %d", pfSqlType);
+-    printMessage(" ColumnSize    : %d", pcbColDef);
++    printMessage(" ColumnSize    : %ld", pcbColDef);
+     printMessage(" DecimalDigits : %d", pibScale);
+     printMessage(" Nullable      : %d", pfNullable);
+ 

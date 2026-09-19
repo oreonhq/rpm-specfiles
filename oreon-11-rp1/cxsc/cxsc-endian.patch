@@ -1,0 +1,22 @@
+--- src/rts/o_syst.h.orig	2014-01-30 10:24:11.000000000 -0700
++++ src/rts/o_syst.h	2016-12-30 12:12:02.080955562 -0700
+@@ -30,6 +30,7 @@
+ /****************************************************************/
+ 
+ #include "cxscconf.h"
++#include <endian.h>
+ 
+ #ifdef SUN4_FORTE
+ #undef SUN4_GNU_C
+@@ -42,10 +43,7 @@
+ /* cells.                                                       */
+ /* 0 - most significant byte at high address                    */
+ /* 1 - most significant byte at low address (Intel)             */
+-#define DUMMY_INTEL IBM_AT_MS_C+IBM_AT_TURBO_C+IBM_PS2_C+T800_HELIOS_C\
+-                    +IBM_AT_BOR_C+IBM_OS2_ICC_C+IBM_EMX_C+IBM_LINUX_C
+-#if DUMMY_INTEL+GNU_C+ZORTECH_C+VAX_VMS_C+VAX_UNIX_C+DEC_ULTRIX_C+DEC_ALPHA_C+\
+-    CHAM_32_C+CHAM_64_C+IBM_WATCOM_C
++#if __FLOAT_WORD_ORDER == __LITTLE_ENDIAN
+ #define INTEL           1
+ #else
+ #define INTEL           0

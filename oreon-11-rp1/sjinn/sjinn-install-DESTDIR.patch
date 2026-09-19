@@ -1,0 +1,40 @@
+diff -up sjinn/Makefile.orig sjinn/Makefile
+--- sjinn/Makefile.orig	2011-04-18 16:59:35.023065359 -0400
++++ sjinn/Makefile	2011-04-18 17:01:10.385873158 -0400
+@@ -7,6 +7,7 @@ INSTALL=/usr/bin/install -c
+ DEPEND=/usr/X11R6/bin/makedepend
+ TARGET=rs232
+ S_LINK=sjinn
++DESTDIR=
+ 
+ prefix=/usr/local
+ exec_prefix=${prefix}
+@@ -26,18 +27,18 @@ rs232ctl.o: rs232ctl.c rs232.h
+ 	$(CC) -c rs232ctl.c  $(CFLAGS) $(INC)
+ 
+ install:
+-	$(INSTALL) $(TARGET) ${bindir}
+-	rm -f ${bindir}/$(S_LINK)
+-	ln -s ${bindir}/$(TARGET) ${bindir}/$(S_LINK)
+-	$(INSTALL) -m 0644 $(TARGET).1.gz ${mandir}/$(TARGET).1.gz
+-	rm -f ${mandir}/$(S_LINK).1.gz
+-	ln -s ${mandir}/$(TARGET).1.gz ${mandir}/$(S_LINK).1.gz
++	$(INSTALL) $(TARGET) $(DESTDIR)/${bindir}/$(TARGET)
++	rm -f $(DESTDIR)/${bindir}/$(S_LINK)
++	ln -s ${bindir}/$(TARGET) $(DESTDIR)/${bindir}/$(S_LINK)
++	$(INSTALL) -m 0644 $(TARGET).1.gz $(DESTDIR)/${mandir}/$(TARGET).1.gz
++	rm -f $(DESTDIR)/${mandir}/$(S_LINK).1.gz
++	ln -s ${mandir}/$(TARGET).1.gz $(DESTDIR)/${mandir}/$(S_LINK).1.gz
+ 
+ uninstall:
+-	rm -f ${bindir}/$(S_LINK)
+-	rm -f ${bindir}/$(TARGET)
+-	rm -f ${mandir}/$(S_LINK).1.gz
+-	rm -f ${mandir}/$(TARGET).1.gz
++	rm -f $(DESTDIR)/${bindir}/$(S_LINK)
++	rm -f $(DESTDIR)/${bindir}/$(TARGET)
++	rm -f $(DESTDIR)/${mandir}/$(S_LINK).1.gz
++	rm -f $(DESTDIR)/${mandir}/$(TARGET).1.gz
+ 
+ clean:
+ 	rm -f $(TARGET) *.o 

@@ -1,0 +1,28 @@
+From f87d4330953effdea41355d2daedb6b9659f39d3 Mon Sep 17 00:00:00 2001
+From: Jarek Prokop <jprokop@redhat.com>
+Date: Fri, 10 Feb 2023 16:24:07 +0100
+Subject: [PATCH] Allow a mock object to receive synced_folders when using qemu
+ session.
+
+When using qemu session, there is another code path
+regarding 9p and virtiofs that wasn't considered.
+---
+ spec/unit/config_spec.rb | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/spec/unit/config_spec.rb b/spec/unit/config_spec.rb
+index d205214..e606b89 100644
+--- a/spec/unit/config_spec.rb
++++ b/spec/unit/config_spec.rb
+@@ -770,6 +770,8 @@ describe VagrantPlugins::ProviderLibvirt::Config do
+       let (:vm) { double('vm') }
+       before do
+         machine.config.instance_variable_get("@keys")[:vm] = vm
++
++        allow(vm).to receive(:synced_folders).and_return({})
+       end
+ 
+       it 'is valid with valid mac' do
+-- 
+2.39.1
+

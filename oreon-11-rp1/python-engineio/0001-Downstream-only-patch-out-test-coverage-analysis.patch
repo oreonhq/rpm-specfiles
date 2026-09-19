@@ -1,0 +1,28 @@
+From b1e45596529045e31de51219f4ebd779ce1ddebb Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 19 Mar 2023 16:02:15 -0400
+Subject: [PATCH] Downstream-only: patch out test coverage analysis
+
+---
+ tox.ini | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/tox.ini b/tox.ini
+index 4325354..b81d558 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -15,10 +15,9 @@ python =
+ [testenv]
+ commands=
+     pip install -e .
+-    pytest -p no:logging --cov=engineio --cov-branch --cov-report=term-missing --cov-report=xml
++    pytest -p no:logging
+ deps=
+     pytest
+-    pytest-cov
+     pytest-asyncio
+     aiohttp
+     tornado
+-- 
+2.47.1
+

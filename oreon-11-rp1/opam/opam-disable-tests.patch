@@ -1,0 +1,397 @@
+--- opam-full-2.4.1/tests/reftests/dune.orig	2025-07-22 18:42:14.000000000 -0600
++++ opam-full-2.4.1/tests/reftests/dune	2025-07-23 09:55:12.436424590 -0600
+@@ -36,7 +36,7 @@
+ (rule
+  (alias reftest-gen)
+  (action
+-  (diff dune.inc dune.inc.gen)))
++  (run true)))
+ 
+ (rule
+   (with-stdout-to opam-root-version
+--- opam-full-2.4.1/tests/reftests/dune.inc.orig	2025-07-22 18:42:14.000000000 -0600
++++ opam-full-2.4.1/tests/reftests/dune.inc	2025-07-23 10:10:06.785958712 -0600
+@@ -526,19 +526,19 @@
+ 
+ (rule
+  (alias reftest-download)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) (= %{env:TESTN0REP0=0} 1))))
++ (enabled_if false)
+  (action
+   (diff download.test download.out)))
+ 
+ (alias
+  (name reftest)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) (= %{env:TESTN0REP0=0} 1))))
++ (enabled_if false)
+  (deps (alias reftest-download)))
+ 
+ (rule
+  (targets download.out)
+  (deps root-N0REP0)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) (= %{env:TESTN0REP0=0} 1))))
++ (enabled_if false)
+  (package opam)
+  (action
+   (with-stdout-to
+@@ -883,19 +883,19 @@
+ 
+ (rule
+  (alias reftest-git)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) (= %{env:TESTN0REP0=0} 1))))
++ (enabled_if false)
+  (action
+   (diff git.test git.out)))
+ 
+ (alias
+  (name reftest)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) (= %{env:TESTN0REP0=0} 1))))
++ (enabled_if false)
+  (deps (alias reftest-git)))
+ 
+ (rule
+  (targets git.out)
+  (deps root-N0REP0)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) (= %{env:TESTN0REP0=0} 1))))
++ (enabled_if false)
+  (package opam)
+  (action
+   (with-stdout-to
+@@ -1366,19 +1366,19 @@
+ 
+ (rule
+  (alias reftest-opamrt-big-upgrade)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) )))
++ (enabled_if false)
+  (action
+   (diff opamrt-big-upgrade.test opamrt-big-upgrade.out)))
+ 
+ (alias
+  (name reftest)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) )))
++ (enabled_if false)
+  (deps (alias reftest-opamrt-big-upgrade)))
+ 
+ (rule
+  (targets opamrt-big-upgrade.out)
+  (deps root-7090735c)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) )))
++ (enabled_if false)
+  (package opam)
+  (action
+   (with-stdout-to
+@@ -1828,19 +1828,19 @@
+ 
+ (rule
+  (alias reftest-swhid.unix)
+- (enabled_if (and (= %{os_type} "Unix") (or (<> %{env:TESTALL=1} 0) (= %{env:TESTN0REP0=0} 1))))
++ (enabled_if false)
+  (action
+   (diff swhid.unix.test swhid.unix.out)))
+ 
+ (alias
+  (name reftest)
+- (enabled_if (and (= %{os_type} "Unix") (or (<> %{env:TESTALL=1} 0) (= %{env:TESTN0REP0=0} 1))))
++ (enabled_if false)
+  (deps (alias reftest-swhid.unix)))
+ 
+ (rule
+  (targets swhid.unix.out)
+  (deps root-N0REP0)
+- (enabled_if (and (= %{os_type} "Unix") (or (<> %{env:TESTALL=1} 0) (= %{env:TESTN0REP0=0} 1))))
++ (enabled_if false)
+  (package opam)
+  (action
+   (with-stdout-to
+@@ -2101,19 +2101,19 @@
+ 
+ (rule
+  (alias reftest-upgrade-format)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) )))
++ (enabled_if false)
+  (action
+   (diff upgrade-format.test upgrade-format.out)))
+ 
+ (alias
+  (name reftest)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) )))
++ (enabled_if false)
+  (deps (alias reftest-upgrade-format)))
+ 
+ (rule
+  (targets upgrade-format.out)
+  (deps root-009e00fa)
+- (enabled_if (and  (or (<> %{env:TESTALL=1} 0) )))
++ (enabled_if false)
+  (package opam)
+  (action
+   (with-stdout-to
+@@ -2287,7 +2287,7 @@
+ 
+ (rule
+  (targets opam-archive-0070613707.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/0070613707.tar.gz)))
++ (action (run cp -p %SOURCE3% %{targets})))
+ 
+ (rule
+   (targets opam-repo-0070613707)
+@@ -2308,7 +2308,7 @@
+ 
+ (rule
+  (targets opam-archive-009e00fa.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/009e00fa.tar.gz)))
++ (action (run cp -p %SOURCE4% %{targets})))
+ 
+ (rule
+   (targets opam-repo-009e00fa)
+@@ -2329,7 +2329,7 @@
+ 
+ (rule
+  (targets opam-archive-11ea1cb.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/11ea1cb.tar.gz)))
++ (action (run cp -p %SOURCE5% %{targets})))
+ 
+ (rule
+   (targets opam-repo-11ea1cb)
+@@ -2350,7 +2350,7 @@
+ 
+ (rule
+  (targets opam-archive-143dd2a2f59f5befbf3cb90bb2667f911737fbf8.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/143dd2a2f59f5befbf3cb90bb2667f911737fbf8.tar.gz)))
++ (action (run cp -p %SOURCE6% %{targets})))
+ 
+ (rule
+   (targets opam-repo-143dd2a2f59f5befbf3cb90bb2667f911737fbf8)
+@@ -2371,7 +2371,7 @@
+ 
+ (rule
+  (targets opam-archive-297366c.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/297366c.tar.gz)))
++ (action (run cp -p %SOURCE7% %{targets})))
+ 
+ (rule
+   (targets opam-repo-297366c)
+@@ -2392,7 +2392,7 @@
+ 
+ (rule
+  (targets opam-archive-3235916.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/3235916.tar.gz)))
++ (action (run cp -p %SOURCE8% %{targets})))
+ 
+ (rule
+   (targets opam-repo-3235916)
+@@ -2413,7 +2413,7 @@
+ 
+ (rule
+  (targets opam-archive-7090735c.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/7090735c.tar.gz)))
++ (action (run cp -p %SOURCE9% %{targets})))
+ 
+ (rule
+   (targets opam-repo-7090735c)
+@@ -2434,7 +2434,7 @@
+ 
+ (rule
+  (targets opam-archive-7371c1d9.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/7371c1d9.tar.gz)))
++ (action (run cp -p %SOURCE10% %{targets})))
+ 
+ (rule
+   (targets opam-repo-7371c1d9)
+@@ -2455,7 +2455,7 @@
+ 
+ (rule
+  (targets opam-archive-a5d7cdc0.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/a5d7cdc0.tar.gz)))
++ (action (run cp -p %SOURCE11% %{targets})))
+ 
+ (rule
+   (targets opam-repo-a5d7cdc0)
+@@ -2476,7 +2476,7 @@
+ 
+ (rule
+  (targets opam-archive-ad4dd344.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/ad4dd344.tar.gz)))
++ (action (run cp -p %SOURCE12% %{targets})))
+ 
+ (rule
+   (targets opam-repo-ad4dd344)
+@@ -2497,7 +2497,7 @@
+ 
+ (rule
+  (targets opam-archive-c1842d168d.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/c1842d168d.tar.gz)))
++ (action (run cp -p %SOURCE13% %{targets})))
+ 
+ (rule
+   (targets opam-repo-c1842d168d)
+@@ -2518,7 +2518,7 @@
+ 
+ (rule
+  (targets opam-archive-c1ba97dafe95c865d37ad4d88f6e57c9ffbe7f0a.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/c1ba97dafe95c865d37ad4d88f6e57c9ffbe7f0a.tar.gz)))
++ (action (run cp -p %SOURCE14% %{targets})))
+ 
+ (rule
+   (targets opam-repo-c1ba97dafe95c865d37ad4d88f6e57c9ffbe7f0a)
+@@ -2539,7 +2539,7 @@
+ 
+ (rule
+  (targets opam-archive-de897adf36c4230dfea812f40c98223b31c4521a.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/de897adf36c4230dfea812f40c98223b31c4521a.tar.gz)))
++ (action (run cp -p %SOURCE15% %{targets})))
+ 
+ (rule
+   (targets opam-repo-de897adf36c4230dfea812f40c98223b31c4521a)
+@@ -2560,7 +2560,7 @@
+ 
+ (rule
+  (targets opam-archive-f372039d.tar.gz)
+- (action (run curl --silent -Lo %{targets} https://github.com/ocaml/opam-repository/archive/f372039d.tar.gz)))
++ (action (run cp -p %SOURCE16% %{targets})))
+ 
+ (rule
+   (targets opam-repo-f372039d)
+--- opam-full-2.4.1/tests/reftests/lock.test.orig	2025-07-22 18:42:14.000000000 -0600
++++ opam-full-2.4.1/tests/reftests/lock.test	2025-07-23 09:05:18.788999500 -0600
+@@ -1092,140 +1092,6 @@ pin-depends: [
+   "git+https://github.com/ocaml-ppx/ppx_deriving.git#0a89b619f94cbbfc3b0fb3255ab4fe5bc77d32d6"
+ ]
+ ]
+-### opam switch create gob --empty
+-### OPAMYES=1
+-### OPAMLOCKED=locked
+-### opam pin add -n goblint.dev ./goblint
+-[NOTE] Package goblint does not exist in opam repositories registered in the current switch.
+-[goblint.dev] synchronised (file://${BASEDIR}/goblint)
+-The following additional pinnings are required by goblint.dev:
+-  - apron.v0.9.13 at git+https://github.com/antoinemine/apron.git#c852ebcc89e5cf4a5a3318e7c13c73e1756abb11
+-  - goblint-cil.1.8.2 at git+https://github.com/goblint/cil.git#a3c91aa6e8f946fec9a9a13361b051a73b12a65c
+-  - ppx_deriving.5.2.1 at git+https://github.com/ocaml-ppx/ppx_deriving.git#0a89b619f94cbbfc3b0fb3255ab4fe5bc77d32d6
+-Pin and install them? [Y/n] y
+-[NOTE] Package apron does not exist in opam repositories registered in the current switch.
+-[apron.v0.9.13] synchronised (no changes)
+-[WARNING] Failed checks on apron package definition from source at git+https://github.com/antoinemine/apron.git#c852ebcc89e5cf4a5a3318e7c13c73e1756abb11:
+-           warning 62: License doesn't adhere to the SPDX standard, see https://spdx.org/licenses/ : "LGPL-2.1 with linking exception"
+-apron is now pinned to git+https://github.com/antoinemine/apron.git#c852ebcc89e5cf4a5a3318e7c13c73e1756abb11 (version v0.9.13)
+-[NOTE] Package goblint-cil does not exist in opam repositories registered in the current switch.
+-[goblint-cil.1.8.2] synchronised (no changes)
+-goblint-cil is now pinned to git+https://github.com/goblint/cil.git#a3c91aa6e8f946fec9a9a13361b051a73b12a65c (version 1.8.2)
+-[NOTE] Package ppx_deriving does not exist in opam repositories registered in the current switch.
+-[ppx_deriving.5.2.1] synchronised (no changes)
+-ppx_deriving is now pinned to git+https://github.com/ocaml-ppx/ppx_deriving.git#0a89b619f94cbbfc3b0fb3255ab4fe5bc77d32d6 (version 5.2.1)
+-goblint is now pinned to file://${BASEDIR}/goblint (version dev)
+-### # removing src field is needed because of formatting, in macos/windows it is printed on 2 lines
+-### cat OPAM/gob/.opam-switch/overlay/goblint/opam | grep -v 'src:' | grep -v '/goblint"'
+-opam-version: "2.0"
+-synopsis: "Static analysis framework for C"
+-maintainer: [
+-  "Michael Schwarz <michael.schwarz93@gmail.com>"
+-  "Simmo Saan <simmo.saan@gmail.com>"
+-  "Ralf Vogler <ralf.vogler@gmail.com>"
+-]
+-authors: [
+-  "Vesal Vojdani"
+-  "Kalmer Apinis"
+-  "Ralf Vogler"
+-  "Michael Schwarz"
+-  "Julian Erhard"
+-  "Simmo Saan"
+-]
+-license: "MIT"
+-homepage: "https://goblint.in.tum.de"
+-doc: "https://goblint.readthedocs.io/en/latest/"
+-bug-reports: "https://github.com/goblint/analyzer/issues"
+-depends: [
+-  "apron" {= "v0.9.13"}
+-  "astring" {= "0.8.5" & with-doc}
+-  "base-bigarray" {= "base"}
+-  "base-bytes" {= "base"}
+-  "base-threads" {= "base"}
+-  "base-unix" {= "base"}
+-  "batteries" {= "3.3.0"}
+-  "benchmark" {= "1.6" & with-test}
+-  "biniou" {= "1.2.1"}
+-  "camlidl" {= "1.09"}
+-  "cmdliner" {= "1.0.4" & with-doc}
+-  "conf-gmp" {= "3"}
+-  "conf-mpfr" {= "2"}
+-  "conf-perl" {= "1"}
+-  "conf-ruby" {= "1.0.0" & with-test}
+-  "cppo" {= "1.6.7"}
+-  "dune" {= "2.9.1"}
+-  "dune-private-libs" {= "2.9.1"}
+-  "dune-site" {= "2.9.1"}
+-  "easy-format" {= "1.3.2"}
+-  "fpath" {= "0.7.3" & with-doc}
+-  "goblint-cil" {= "1.8.2"}
+-  "mlgmpidl" {= "1.2.13"}
+-  "num" {= "1.4"}
+-  "ocaml" {= "4.12.0"}
+-  "ocaml-base-compiler" {= "4.12.0"}
+-  "ocaml-compiler-libs" {= "v0.12.4"}
+-  "ocaml-config" {= "2"}
+-  "ocaml-monadic" {= "0.5"}
+-  "ocaml-options-vanilla" {= "1"}
+-  "ocamlbuild" {= "0.14.0"}
+-  "ocamlfind" {= "1.9.1"}
+-  "odoc" {= "1.5.2" & with-doc}
+-  "ounit2" {= "2.2.4" & with-test}
+-  "ppx_derivers" {= "1.2.1"}
+-  "ppx_deriving" {= "5.2.1"}
+-  "ppx_deriving_yojson" {= "3.6.1"}
+-  "ppx_distr_guards" {= "0.3"}
+-  "ppxlib" {= "0.23.0"}
+-  "qcheck-core" {= "0.17"}
+-  "re" {= "1.9.0" & with-doc}
+-  "result" {= "1.5"}
+-  "seq" {= "base" & with-doc}
+-  "sexplib0" {= "v0.14.0"}
+-  "sha" {= "1.15.1"}
+-  "stdlib-shims" {= "0.3.0"}
+-  "topkg" {= "1.0.3" & with-doc}
+-  "tyxml" {= "4.4.0" & with-doc}
+-  "uchar" {= "0.0.2" & with-doc}
+-  "uutf" {= "1.0.2" & with-doc}
+-  "yojson" {= "1.7.0"}
+-  "zarith" {= "1.12"}
+-]
+-build: [
+-  ["dune" "subst"] {dev}
+-  [
+-  "dune"
+-  "build"
+-  "-p"
+-  name
+-  "-j"
+-  jobs
+-  "--promote-install-files=false"
+-  "@install"
+-  "@runtest" {with-test}
+-  "@doc" {with-doc}
+-]
+-  ["dune" "install" "-p" name "--create-install-files" name]
+-]
+-dev-repo: "git+https://github.com/goblint/analyzer.git"
+-name: "goblint"
+-version: "dev"
+-pin-depends: [
+-  [
+-  "apron.v0.9.13"
+-  "git+https://github.com/antoinemine/apron.git#c852ebcc89e5cf4a5a3318e7c13c73e1756abb11"
+-]
+-  [
+-  "goblint-cil.1.8.2"
+-  "git+https://github.com/goblint/cil.git#a3c91aa6e8f946fec9a9a13361b051a73b12a65c"
+-]
+-  [
+-  "ppx_deriving.5.2.1"
+-  "git+https://github.com/ocaml-ppx/ppx_deriving.git#0a89b619f94cbbfc3b0fb3255ab4fe5bc77d32d6"
+-]
+-]
+-url {
+-}
+-x-locked: "locked"
+ ### : Pin depends :
+ ### rm -r tolock
+ ### opam switch create pin-depends --empty

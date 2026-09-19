@@ -1,0 +1,38 @@
+From 748a62985f2faabccca2270872e376dbb8e75947 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 2 Mar 2020 15:54:00 +0100
+Subject: [PATCH] Do not require Module::Install::Base
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It's a collection of mostly unsed modules. Not helpful.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 7e2f8a1..9dc563f 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -9,11 +9,13 @@ requires(
+ );
+ 
+ test_requires(
++    'FindBin'                   => 0,
++    'lib'                       => 0,
++    'strict'                    => 0,
+     'Test::More'                   => 0,
++    'warnings'                  => 0,
+     'File::Spec'                => 0,
+-    'Module::Install::AuthorTests' => 0,
+ );
+ 
+-use_test_base;
+ auto_include;
+ WriteAll;
+-- 
+2.21.1
+

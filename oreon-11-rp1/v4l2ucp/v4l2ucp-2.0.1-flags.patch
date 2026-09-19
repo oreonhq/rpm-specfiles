@@ -1,0 +1,217 @@
+--- v4l2ucp-2.0.1/src/mainWindow.cpp	2011-03-12 22:20:37.781578096 +0100
++++ v4l2ucp-2.0.1.new/src/mainWindow.cpp	2011-03-12 22:18:09.217435401 +0100
+@@ -249,16 +249,16 @@
+     
+     switch(ctrl.type) {
+         case V4L2_CTRL_TYPE_INTEGER:
+-            w = new V4L2IntegerControl(fd, ctrl, parent);
++            w = new V4L2IntegerControl(fd, ctrl, parent, this);
+             break;
+         case V4L2_CTRL_TYPE_BOOLEAN:
+-            w = new V4L2BooleanControl(fd, ctrl, parent);
++            w = new V4L2BooleanControl(fd, ctrl, parent, this);
+             break;
+         case V4L2_CTRL_TYPE_MENU:
+-            w = new V4L2MenuControl(fd, ctrl, parent);
++            w = new V4L2MenuControl(fd, ctrl, parent, this);
+             break;
+         case V4L2_CTRL_TYPE_BUTTON:
+-            w = new V4L2ButtonControl(fd, ctrl, parent);
++            w = new V4L2ButtonControl(fd, ctrl, parent, this);
+             break;
+         case V4L2_CTRL_TYPE_INTEGER64:
+         case V4L2_CTRL_TYPE_CTRL_CLASS:
+@@ -274,7 +274,8 @@
+     }
+     
+     layout->addWidget(w);
+-    if(ctrl.flags & V4L2_CTRL_FLAG_GRABBED) {
++    if(ctrl.flags & (V4L2_CTRL_FLAG_GRABBED|V4L2_CTRL_FLAG_INACTIVE|
++                     V4L2_CTRL_FLAG_READ_ONLY)) {
+         w->setEnabled(false);
+     }
+ 
+@@ -397,6 +398,11 @@
+     emit(updateNow());
+ }
+ 
++void MainWindow::updateAll()
++{
++    emit(updateNow());
++}
++
+ void MainWindow::startPreview()
+ {
+     if (previewProcess && previewProcess->state() != QProcess::NotRunning)
+--- v4l2ucp-2.0.1/src/mainWindow.h	2009-09-10 22:02:50.000000000 +0200
++++ v4l2ucp-2.0.1.new/src/mainWindow.h	2011-03-12 22:15:48.887189771 +0100
+@@ -49,6 +49,7 @@
+ public:
+     static MainWindow *openFile(const char *fileName);
+     ~MainWindow();
++    void updateAll();
+ 
+ private:
+     QMenu *updateMenu, *resetMenu;
+--- v4l2ucp-2.0.1/src/v4l2controls.cpp	2011-03-12 22:20:37.786578033 +0100
++++ v4l2ucp-2.0.1.new/src/v4l2controls.cpp	2011-03-12 22:20:25.456732180 +0100
+@@ -28,10 +28,11 @@
+ #include <QMessageBox>
+ 
+ #include "v4l2controls.h"
++#include "mainWindow.h"
+ 
+ V4L2Control::V4L2Control(int fd, const struct v4l2_queryctrl &ctrl,
+-                         QWidget *parent) :
+-    QWidget(parent), cid(ctrl.id), default_value(ctrl.default_value)
++                         QWidget *parent, MainWindow *mw) :
++    QWidget(parent), cid(ctrl.id), default_value(ctrl.default_value), mw(mw)
+ {
+     this->fd = fd;
+     strncpy(name, (const char *)ctrl.name, sizeof(name));
+@@ -49,7 +50,10 @@
+ 	msg.sprintf("Unable to set %s\n%s", name, strerror(errno));
+ 	QMessageBox::warning(this, "Unable to set control", msg, "OK");
+     }
+-    updateStatus();
++    if(flags & V4L2_CTRL_FLAG_UPDATE)
++        mw->updateAll();
++    else
++        updateStatus();
+ }
+ 
+ void V4L2Control::updateStatus()
+@@ -73,7 +78,12 @@
+ 	            strerror(errno));
+ 	QMessageBox::warning(this, "Unable to get control status", msg, "OK");
+     } else {
+-        setEnabled(ctrl.flags == 0);
++        flags = ctrl.flags;
++        if(ctrl.flags & (V4L2_CTRL_FLAG_GRABBED|V4L2_CTRL_FLAG_INACTIVE|
++                         V4L2_CTRL_FLAG_READ_ONLY))
++            setEnabled(false);
++        else
++            setEnabled(true);
+     }
+ }
+ 
+@@ -89,8 +99,8 @@
+  * V4L2IntegerControl
+  */
+ V4L2IntegerControl::V4L2IntegerControl
+-    (int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent) :
+-    V4L2Control(fd, ctrl, parent),
++    (int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent, MainWindow *mw) :
++    V4L2Control(fd, ctrl, parent, mw),
+     minimum(ctrl.minimum), maximum(ctrl.maximum), step(ctrl.step)
+ {
+     int pageStep = (maximum-minimum)/10;
+@@ -170,8 +180,8 @@
+  * V4L2BooleanControl
+  */
+ V4L2BooleanControl::V4L2BooleanControl
+-    (int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent) :
+-    V4L2Control(fd, ctrl, parent),
++    (int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent, MainWindow *mw) :
++    V4L2Control(fd, ctrl, parent, mw),
+     cb(new QCheckBox(this))
+ {
+     this->layout.addWidget(cb);
+@@ -193,8 +203,8 @@
+  * V4L2MenuControl
+  */
+ V4L2MenuControl::V4L2MenuControl
+-    (int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent) :
+-    V4L2Control(fd, ctrl, parent)
++    (int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent, MainWindow *mw) :
++    V4L2Control(fd, ctrl, parent, mw)
+ {
+     cb = new QComboBox(this);
+     this->layout.addWidget(cb);
+@@ -239,8 +249,8 @@
+  * V4L2ButtonControl
+  */
+ V4L2ButtonControl::V4L2ButtonControl
+-    (int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent) :
+-    V4L2Control(fd, ctrl, parent)
++    (int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent, MainWindow *mw) :
++    V4L2Control(fd, ctrl, parent, mw)
+ {
+     QPushButton *pb = new QPushButton((const char *)ctrl.name, this);
+     this->layout.addWidget(pb);
+@@ -257,7 +267,12 @@
+ 	            strerror(errno));
+ 	QMessageBox::warning(this, "Unable to get control status", msg, "OK");
+     } else {
+-        setEnabled(ctrl.flags == 0);
++        flags = ctrl.flags;
++        if(ctrl.flags & (V4L2_CTRL_FLAG_GRABBED|V4L2_CTRL_FLAG_INACTIVE|
++                         V4L2_CTRL_FLAG_READ_ONLY))
++            setEnabled(false);
++        else
++            setEnabled(true);
+     }
+ }
+ 
+--- v4l2ucp-2.0.1/src/v4l2controls.h	2009-06-20 14:28:12.000000000 +0200
++++ v4l2ucp-2.0.1.new/src/v4l2controls.h	2011-03-12 22:19:02.438770043 +0100
+@@ -27,6 +27,8 @@
+ #include <QComboBox>
+ #include <QLineEdit>
+ 
++class MainWindow;
++
+ class V4L2Control : public QWidget
+ {
+     Q_OBJECT
+@@ -40,19 +42,21 @@
+     virtual int getValue() = 0;
+ 
+ protected:
+-    V4L2Control(int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent);
++    V4L2Control(int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent, MainWindow *mw);
+     int fd;
+     int cid;
+     int default_value;
++    int flags;
+     char name[32];
+     QHBoxLayout layout;
++    MainWindow *mw;
+ };
+ 
+ class V4L2IntegerControl : public V4L2Control
+ {
+     Q_OBJECT
+ public:
+-    V4L2IntegerControl(int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent);
++    V4L2IntegerControl(int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent, MainWindow *mw);
+ 
+ public slots:
+     void setValue(int val);
+@@ -76,7 +80,7 @@
+ {
+     Q_OBJECT
+ public:
+-    V4L2BooleanControl(int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent);
++    V4L2BooleanControl(int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent, MainWindow *mw);
+ 
+ public slots:
+     void setValue(int val);
+@@ -92,7 +96,7 @@
+ {
+     Q_OBJECT
+ public:
+-    V4L2MenuControl(int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent);
++    V4L2MenuControl(int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent, MainWindow *mw);
+ 
+ public slots:
+     void setValue(int val);
+@@ -115,7 +119,7 @@
+     void resetToDefault();
+ 
+ public:
+-    V4L2ButtonControl(int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent);
++    V4L2ButtonControl(int fd, const struct v4l2_queryctrl &ctrl, QWidget *parent, MainWindow *mw);
+ 
+ public slots:
+     void setValue(int) {};

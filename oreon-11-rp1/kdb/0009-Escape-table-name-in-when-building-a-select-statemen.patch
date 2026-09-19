@@ -1,0 +1,59 @@
+From 14280f03d408b47a682312840ca296fe238655c6 Mon Sep 17 00:00:00 2001
+From: jordi fita i mas <jfita@infoblitz.com>
+Date: Sun, 3 May 2020 22:17:40 +0200
+Subject: [PATCH 09/22] Escape table name in when building a select statement
+ with row id
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Summary:
+When a KDbQuerySchema has a table name or alias that is a reserved SQL
+keyword, and the alsoRetrieveRecordId statement option is set to true,
+KDbNativeStatementBuilder constructed an incorrect statement.
+
+For instance, if trying to create a SELECT statement in SQLite of a
+table named “table” with a single “id column, the generated query was:
+
+    SELECT [id], table.OID FROM [table] ORDER BY [id]
+
+The execution if that query generated an error due to the unescaped
+table keyword.  With this commit, the generated query is:
+
+    SELECT [id], [table].OID FROM [table] ORDER BY [id]
+
+FIXED-IN:3.2.1
+
+Reviewers: staniek, piggz
+
+Reviewed By: staniek
+
+Subscribers: Kexi-Devel-list
+
+Tags: #kdb
+
+Differential Revision: https://phabricator.kde.org/D29277
+---
+ src/KDbNativeStatementBuilder.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/KDbNativeStatementBuilder.cpp b/src/KDbNativeStatementBuilder.cpp
+index e1d82961..1b03f01c 100644
+--- a/src/KDbNativeStatementBuilder.cpp
++++ b/src/KDbNativeStatementBuilder.cpp
+@@ -299,8 +299,10 @@ static bool selectStatementInternal(KDbEscapedString *target,
+         KDbEscapedString s;
+         if (!sql.isEmpty())
+             s = ", ";
+-        if (querySchema->masterTable())
+-            s += KDbEscapedString(querySchema->tableAliasOrName(querySchema->masterTable()->name())) + '.';
++        if (querySchema->masterTable()) {
++            s += KDb::escapeIdentifier(driver, querySchema->tableAliasOrName(querySchema->masterTable()->name()));
++            s += '.';
++        }
+         s += KDbDriverPrivate::behavior(driver)->ROW_ID_FIELD_NAME;
+         sql += s;
+     }
+-- 
+2.31.1
+

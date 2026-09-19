@@ -1,0 +1,66 @@
+diff --git a/src/game_over_screen.cpp b/src/game_over_screen.cpp
+index 4d34b5d..891781d 100644
+--- a/src/game_over_screen.cpp
++++ b/src/game_over_screen.cpp
+@@ -4,6 +4,10 @@
+ #include <fstream>
+ #include <algorithm>
+ 
++#include <unistd.h>
++#include <sys/types.h>
++#include <pwd.h>
++
+ #include "game.h"
+ 
+ extern sf::Texture planetTexture;
+@@ -32,7 +36,8 @@ GameOverScreen::GameOverScreen(Game& game,
+     asteroidSprite.setRotation(42.0f);
+     asteroidSprite.setPosition(-300.0f, 200.0f);
+ 
+-    std::ifstream hiscoreFile("scores");
++    generateScoresPath();
++    std::ifstream hiscoreFile(hiscore_path);
+     if (!hiscoreFile.is_open()) {
+         return;
+     }
+@@ -46,9 +51,22 @@ GameOverScreen::GameOverScreen(Game& game,
+     }
+ }
+ 
++void GameOverScreen::generateScoresPath() {
++    auto xdg_data = getenv("XDG_DATA_HOME");
++    if (xdg_data != nullptr) {
++        hiscore_path = xdg_data;
++    } else {
++        struct passwd *pw = getpwuid(getuid());
++        hiscore_path = pw->pw_dir;
++        hiscore_path += "/.local/share";
++    }
++
++    hiscore_path += "/gravity-beams-and-evaporating-stars.hiscore";
++}
++
+ void GameOverScreen::saveScores()
+ {
+-    std::ofstream file("scores");
++    std::ofstream file(hiscore_path);
+ 
+     if (currName.empty()) {
+         currName = "anonymous";
+diff --git a/src/game_over_screen.h b/src/game_over_screen.h
+index cd0b3fa..a4c4a46 100644
+--- a/src/game_over_screen.h
++++ b/src/game_over_screen.h
+@@ -35,10 +35,12 @@ private:
+     const ssize_t points;
+     std::vector<HiscoreEntry> hiscore;
+     std::string currName;
++    std::string hiscore_path;
+ 
+     sf::Sprite planetSprite;
+     sf::Sprite sunSprite;
+     sf::Sprite asteroidSprite;
+ 
++    void generateScoresPath();
+     void saveScores();
+ };

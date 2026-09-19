@@ -1,0 +1,23 @@
+diff --git a/tests/test_attrdict.py b/tests/test_attrdict.py
+index 2d1450b..faf6328 100644
+--- a/tests/test_attrdict.py
++++ b/tests/test_attrdict.py
+@@ -16,7 +16,8 @@ def test_manipulation():
+     ad.foo.baz = "yaarrrr"
+ 
+     assert +ad.foo == {"bar": "hello, world", "baz": "yaarrrr"}
+-    py.test.raises(KeyError, "str(ad.c.x.y.z)")
++    with py.test.raises(KeyError):
++        str(ad.c.x.y.z)
+ 
+     ad.c.x.y.z = 3
+     assert ad.c.x.y.z == 3
+@@ -28,6 +29,7 @@ def test_manipulation():
+     del ad.c.x
+     assert +ad == {"a": 1, "b": "blat", "c": {"d": "e"}}
+ 
+-    py.test.raises(KeyError, "del ad.bar.baz")
++    with py.test.raises(KeyError):
++        del ad.bar.baz
+ 
+     assert +ad is j

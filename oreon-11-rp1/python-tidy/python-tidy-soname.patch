@@ -1,0 +1,13 @@
+diff --git a/tidy/lib.py b/tidy/lib.py
+index 44daca2..c511d8f 100644
+--- a/tidy/lib.py
++++ b/tidy/lib.py
+@@ -21,7 +21,7 @@ LIBNAMES = (
+     # Linux, full soname
+     "libtidy-0.99.so.0.0.0",
+     # HTML tidy
+-    "libtidy.so.5",
++    "libtidy.so.58",
+     # Debian changed soname
+     "libtidy.so.5deb1",
+     # Windows?

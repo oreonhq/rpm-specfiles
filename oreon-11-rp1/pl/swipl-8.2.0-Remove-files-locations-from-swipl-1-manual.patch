@@ -1,0 +1,68 @@
+From 58724c908d580aa53ef6a4a43530182d8e18971b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 22 Aug 2011 17:03:22 +0200
+Subject: [PATCH] Remove files locations from swipl(1) manual
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+We install the files somewhere else.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/swipl.1.in | 35 -----------------------------------
+ 1 file changed, 35 deletions(-)
+
+diff --git a/src/swipl.1.in b/src/swipl.1.in
+index e6eeda5..81c5abb 100644
+--- a/src/swipl.1.in
++++ b/src/swipl.1.in
+@@ -449,38 +449,6 @@ to find the local installation directory
+ .I ~/.config/swi-prolog/init.pl
+ Personal initialisation files consulted by SWI-Prolog on startup.
+ The exact location depends on the OS.
+-.TP
+-.I @prefix@/lib/@PL@-@PLVERSION@/bin/@PLARCH@/
+-Location for the executables.
+-.TP
+-.I @prefix@/lib/@PL@-@PLVERSION@/include/
+-Location for the include files.  If writable, SWI-Prolog.h is also
+-copied to @prefix@/include/SWI-Prolog.h.
+-.TP
+-.I @prefix@/lib/@PL@-@PLVERSION@/library/
+-SWI-Prolog user libraries.
+-.TP
+-.I @prefix@/lib/@PL@-@PLVERSION@/boot/
+-SWI-Prolog kernel parts written in Prolog.  The startup file
+-@prefix@/lib/@PL@-@PLVERSION@/@BOOTFILE@ may be recreated using
+-the command from the directory @prefix@/lib/@PL@-@PLVERSION@:
+-.RS
+-.TP
+-bin/@PLARCH@/@PL@ \-O \-o @BOOTFILE@ \-b boot/init.pl
+-.RE
+-.TP
+-.I @prefix@/lib/@PL@-@PLVERSION@/doc/packages
+-HTML and/or PDF documentation on the installed add-ons.
+-.TP
+-.I @prefix@/lib/@PL@-@PLVERSION@/@BOOTFILE@
+-Default startup file.  This is a `intermediate code' file containing
+-precompiled code from the boot directory.  The
+-.BI \-x bootfile
+-option may be used to select a different file.
+-.TP
+-.I @prefix@/lib/@PL@-@PLVERSION@/runtime/@PLARCH@/libpl.a
+-SWI-Prolog library for embedding.  See also
+-.I plld(1).
+ .SH SEE ALSO
+ .PP
+ The SWI-Prolog web-home at
+@@ -490,9 +458,6 @@ Jan\ Wielemaker
+ .IR "SWI-Prolog Reference Manual" " at"
+ .I http://www.swi-prolog.org/pldoc/index.html
+ .PP
+-Documentation on the add-on packages in
+-.I @prefix@/lib/@PL@-@PLVERSION@/boot/doc
+-.PP
+ William\ F.\ Clocksin & Christopher\ S.\ Mellish,
+ .IR "Programming in Prolog" ,
+ fourth edition, Springer Verlag, Berlin 1994.

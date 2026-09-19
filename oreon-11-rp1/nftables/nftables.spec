@@ -3,8 +3,8 @@
 %global source2_key_fpr 8C5F7146A1757A65E2422A94D70D1A666ACF2B21
 
 Name:           nftables
-Version:        1.1.6
-Release:        2%{?dist}
+Version:        1.1.7
+Release:        1%{?dist}
 # Upstream released a 0.100 version, then 0.4. Need Epoch to get back on track.
 Epoch:          1
 Summary:        Netfilter Tables userspace utilities

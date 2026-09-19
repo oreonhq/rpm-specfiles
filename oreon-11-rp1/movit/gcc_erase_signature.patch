@@ -1,0 +1,11 @@
+--- movit-1.6.2/effect_chain.cpp.orig	2018-11-04 16:20:18.808403966 +0000
++++ movit-1.6.2/effect_chain.cpp	2018-11-04 16:26:37.459686314 +0000
+@@ -2133,7 +2133,7 @@ void EffectChain::render(GLuint dest_fbo
+ 		// Get back the timer queries.
+ 		for (unsigned phase_num = 0; phase_num < phases.size(); ++phase_num) {
+ 			Phase *phase = phases[phase_num];
+-			for (auto timer_it = phase->timer_query_objects_running.cbegin();
++			for (auto timer_it = phase->timer_query_objects_running.begin();
+ 			     timer_it != phase->timer_query_objects_running.cend(); ) {
+ 				GLint timer_query_object = *timer_it;
+ 				GLint available;

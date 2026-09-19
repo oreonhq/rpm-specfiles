@@ -1,0 +1,12 @@
+--- configure.ac.orig	2014-06-05 13:30:50.859363408 -0500
++++ configure.ac	2014-06-05 13:31:36.838557047 -0500
+@@ -101,6 +101,9 @@
+ # see m4/ax_cxx_have_isfinite.m4
+ AX_CXX_HAVE_ISFINITE
+ 
++AC_CHECK_HEADER([mpfit.h], [], [AC_MSG_ERROR(
++ [cmpfit headers were not found. You may need to install cmpfit-devel first.])])
++
+ AC_CHECK_HEADER([xylib/xylib.h], [], [AC_MSG_ERROR(
+  [xylib headers were not found. You may need to install xylib first.])])
+ 

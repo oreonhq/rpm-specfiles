@@ -1,10 +1,10 @@
 %global source0_hash c5592d14a955856aba22a0cf3ca9392bc8c2e89358b6b5ad28507dca978388e4
 
-%define project_version 1.0-alpha-15
+%define project_version 1.0-alpha-33-alpha-15
 
 Name:           plexus-component-api
-Version:        1.0
-Release:        0.38.alpha15%{?dist}
+Version:        1.0-alpha-33-alpha-33
+Release:        1.38.alpha15%{?dist}
 Summary:        Plexus Component API
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

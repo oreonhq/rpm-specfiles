@@ -1,0 +1,31 @@
+From 55ccde74d44edf2e972c5bc534bd070dadd4d3da Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 20 Apr 2021 18:30:26 +0100
+Subject: [PATCH 5/8] Install python shared object
+
+---
+ binds/python/CMakeLists.txt | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/binds/python/CMakeLists.txt b/binds/python/CMakeLists.txt
+index 35f82eb..9b20ed6 100644
+--- a/binds/python/CMakeLists.txt
++++ b/binds/python/CMakeLists.txt
+@@ -12,6 +12,12 @@ pybind11_add_module(_morphio SYSTEM
+ )
+ 
+ target_link_libraries(_morphio
+-    PRIVATE morphio_static
+-    PRIVATE pybind11::module
++    PRIVATE
++    morphio_static)
++
++find_package (Python3)
++
++install(
++  TARGETS _morphio
++  LIBRARY DESTINATION ${Python3_SITEARCH}/morphio/
+ )
+-- 
+2.35.1
+

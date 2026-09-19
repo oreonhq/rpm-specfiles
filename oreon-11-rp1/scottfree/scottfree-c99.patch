@@ -1,0 +1,13 @@
+diff --git a/ScottCurses.c b/ScottCurses.c
+index 77d141919afb0a54..3db1056dc8acdb84 100755
+--- a/ScottCurses.c
++++ b/ScottCurses.c
+@@ -1165,7 +1165,7 @@ int PerformActions(int vb,int no)
+ 					if(f2==2)
+ 						doagain=1;
+ 					if(vb!=0 && doagain==0)
+-						return;
++						return 0;
+ 				}
+ 			}
+ 		}

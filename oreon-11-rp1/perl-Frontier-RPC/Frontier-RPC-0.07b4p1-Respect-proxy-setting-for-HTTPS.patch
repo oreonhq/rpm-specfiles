@@ -1,0 +1,36 @@
+From c5ffabf72c254ba3c185b0234ca77e0525eed57f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 13 Sep 2016 13:00:14 +0200
+Subject: [PATCH] Respect proxy setting for HTTPS
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+URLs different from http schema ignored specified proxy. This patch
+passes the proxy setting for http and https schemata.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Frontier/Client.pm | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/lib/Frontier/Client.pm b/lib/Frontier/Client.pm
+index 6ea7b60..a7bdce2 100644
+--- a/lib/Frontier/Client.pm
++++ b/lib/Frontier/Client.pm
+@@ -28,8 +28,10 @@ sub new {
+ 	if !defined $self->{'url'};
+ 
+     $self->{'ua'} = LWP::UserAgent->new;
+-    $self->{'ua'}->proxy('http', $self->{'proxy'})
+-	if(defined $self->{'proxy'});
++    my @schemes = grep { $self->{'ua'}->is_protocol_supported($_) }
++	qw/http https/;
++    $self->{'ua'}->proxy([@schemes], $self->{'proxy'})
++	if(defined $self->{'proxy'} && @schemes);
+     $self->{'rq'} = HTTP::Request->new (POST => $self->{'url'});
+     $self->{'rq'}->header('Content-Type' => 'text/xml');
+     # Patch to enable basic authentication:
+-- 
+2.7.4
+

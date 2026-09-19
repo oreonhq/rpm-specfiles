@@ -1,0 +1,14 @@
+Description: Switch to local mathjax for documentation
+Author: Stuart Prescott <stuart@debian.org>
+--- a/manual/conf.py
++++ b/manual/conf.py
+@@ -230,7 +230,8 @@
+ 
+ # -- Other options  ------------------------------------------------------------
+ 
+-mathjax_path = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'
++# Use the packaged copy of MathJax
++mathjax_path = 'mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+ todo_include_todos = True
+ autoclass_content = 'both'
+ autodoc_member_order = 'bysource'

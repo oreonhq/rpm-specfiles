@@ -1,7 +1,7 @@
 %global source0_hash 3d35db0ac03f9e6b0d5a53577591b714238985f4cfc31a0aa17f26cd74675e83
 
-Version: 0.301
-Release: 17%{?dist}
+Version: 0.311
+Release: 1%{?dist}
 URL: https://gitlab.gnome.org/GNOME/cantarell-fonts/
 
 %global	common_description	%{expand:
@@ -34,7 +34,7 @@ This package contains the non-variable font version of the Cantarell font.}
 
 This package contains the variable font version of the Cantarell font.}
 
-Source0:        http://download.gnome.org/sources/cantarell-fonts/0.301/cantarell-fonts-%{version}.tar.xz
+Source0:        http://download.gnome.org/sources/cantarell-fonts/0.311/cantarell-fonts-%{version}.tar.xz
 Source1: 31-cantarell.conf
 Source2: 31-cantarell-vf.conf
 

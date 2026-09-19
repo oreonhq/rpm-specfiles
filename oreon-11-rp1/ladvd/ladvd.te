@@ -1,0 +1,68 @@
+policy_module(ladvd,1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type ladvd_t;
+type ladvd_exec_t;
+init_daemon_domain(ladvd_t, ladvd_exec_t)
+
+type ladvd_script_exec_t;
+init_script_file(ladvd_script_exec_t)
+
+type ladvd_run_t;
+files_pid_file(ladvd_run_t)
+
+type ladvd_unit_file_t;
+systemd_unit_file(ladvd_unit_file_t)
+
+########################################
+#
+# ladvd local policy
+#
+allow ladvd_t self:fifo_file rw_file_perms;
+allow ladvd_t self:unix_stream_socket create_stream_socket_perms;
+allow ladvd_t self:capability { setuid net_admin net_raw setgid setpcap sys_chroot chown };
+allow ladvd_t self:netlink_generic_socket create_socket_perms;
+allow ladvd_t self:process { signal_perms setcap setrlimit };
+allow ladvd_t self:packet_socket create_socket_perms;
+allow ladvd_t self:unix_dgram_socket sendto;
+# allow writing 'ifalias' file in sysfs
+allow ladvd_t sysfs_t:file write;
+
+# fixes for https://bugzilla.redhat.com/show_bug.cgi?id=1834325
+allow init_t ladvd_t:process2 nnp_transition;
+allow ladvd_t ladvd_t:packet_socket map;
+allow ladvd_t ladvd_t:capability kill;
+
+# libpcap changes (https://bugzilla.redhat.com/show_bug.cgi?id=1855163)
+allow ladvd_t self:netlink_rdma_socket { bind create getattr setopt };
+
+manage_files_pattern(ladvd_t, ladvd_run_t, ladvd_run_t)
+manage_dirs_pattern(ladvd_t, ladvd_run_t, ladvd_run_t)
+manage_sock_files_pattern(ladvd_t, ladvd_run_t, ladvd_run_t)
+manage_lnk_files_pattern(ladvd_t, ladvd_run_t, ladvd_run_t)
+files_pid_filetrans(ladvd_t, ladvd_run_t, { file dir sock_file })
+
+kernel_read_net_sysctls(ladvd_t)
+kernel_read_system_state(ladvd_t)
+kernel_read_network_state(ladvd_t)
+kernel_request_load_module(ladvd_t)
+
+corecmd_exec_bin(ladvd_t)
+
+dev_read_sysfs(ladvd_t)
+
+domain_use_interactive_fds(ladvd_t)
+
+files_read_etc_files(ladvd_t)
+
+miscfiles_read_localization(ladvd_t)
+miscfiles_read_hwdata(ladvd_t)
+
+logging_send_syslog_msg(ladvd_t)
+
+auth_use_nsswitch(ladvd_t)
+

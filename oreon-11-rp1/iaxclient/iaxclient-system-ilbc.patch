@@ -1,0 +1,117 @@
+diff -rupN iaxclient-2.1beta3/configure.ac iaxclient-2.1beta3-new/configure.ac
+--- iaxclient-2.1beta3/configure.ac	2015-01-08 19:09:38.191814917 +0100
++++ iaxclient-2.1beta3-new/configure.ac	2015-01-08 19:09:59.137149341 +0100
+@@ -89,7 +89,7 @@ AC_ARG_ENABLE(clients,
+ 
+ AC_ARG_WITH(ilbc,
+       [AS_HELP_STRING([--with-ilbc],
+-         [Enable iLBC support (You need to place the iLBC reference sources in lib/iLBC) [default=auto]])],,
++         [Enable iLBC support [default=auto]])],,
+       with_ilbc="auto")
+ 
+ AC_ARG_WITH(wish,
+@@ -121,17 +121,17 @@ AC_ARG_WITH(ffmpeg,
+ 
+ case "$with_ilbc" in
+    yes)
+-      enable_local_ilbc=yes ;;
++      enable_ilbc=yes ;;
+    no)
+-      enable_local_ilbc=no ;;
++      enable_ilbc=no ;;
+    auto)
+       AC_MSG_CHECKING([for iLBC reference sources in lib/iLBC])
+-      if test -r lib/iLBC/iLBC_encode.c; then
+-         enable_local_ilbc=yes
++      if test -r /usr/include/iLBC_encode.h; then
++         enable_ilbc=yes
+       else
+-         enable_local_ilbc=no
++         enable_ilbc=no
+       fi
+-      AC_MSG_RESULT([$enable_local_ilbc]) ;;
++      AC_MSG_RESULT([$enable_ilbc]) ;;
+ 
+    *)
+       AC_MSG_ERROR([bad value ${with_ilbc} for --with-ilbc]) ;;
+@@ -317,7 +317,7 @@ if test x$use_echo_can = xspeex; then
+    AC_DEFINE(SPEEX_EC, 1, [Define to 1 to enable speex echo cancellation])
+ fi
+ 
+-if test x$enable_local_ilbc = xyes; then
++if test x$enable_ilbc = xyes; then
+    AC_DEFINE(CODEC_ILBC,,[Define to 1 to enable ILBC support])
+ fi
+ 
+@@ -333,7 +333,7 @@ AM_CONDITIONAL(FFMPEG, test x$has_ffmpeg
+ AM_CONDITIONAL(SPAN_EC, test x$use_echo_can = xspan)
+ AM_CONDITIONAL(USE_CODEC_GSM, test x$has_gsm = xyes && test x$with_gsm != xno)
+ AM_CONDITIONAL(USE_LOCAL_GSM, test x$enable_local_gsm = xyes)
+-AM_CONDITIONAL(USE_LOCAL_ILBC, test x$enable_local_ilbc = xyes)
++AM_CONDITIONAL(USE_ILBC, test x$enable_ilbc = xyes)
+ AM_CONDITIONAL(LINUX, test x$OSTYPE = xLINUX)
+ AM_CONDITIONAL(WIN32, test x$OSTYPE = xWIN32)
+ AM_CONDITIONAL(MACOSX, test x$OSTYPE = xMACOSX)
+diff -rupN iaxclient-2.1beta3/lib/codec_ilbc.c iaxclient-2.1beta3-new/lib/codec_ilbc.c
+--- iaxclient-2.1beta3/lib/codec_ilbc.c	2008-04-07 18:05:42.000000000 +0200
++++ iaxclient-2.1beta3-new/lib/codec_ilbc.c	2015-01-08 19:09:59.138149357 +0100
+@@ -14,8 +14,8 @@
+ 
+ #include "codec_ilbc.h"
+ #include "iaxclient_lib.h"
+-#include "iLBC/iLBC_encode.h"
+-#include "iLBC/iLBC_decode.h"
++#include <iLBC_encode.h>
++#include <iLBC_decode.h>
+ 
+ 
+ static void destroy ( struct iaxc_audio_codec *c) {
+diff -rupN iaxclient-2.1beta3/lib/Makefile.am iaxclient-2.1beta3-new/lib/Makefile.am
+--- iaxclient-2.1beta3/lib/Makefile.am	2015-01-08 19:09:38.192814933 +0100
++++ iaxclient-2.1beta3-new/lib/Makefile.am	2015-01-08 19:09:59.138149357 +0100
+@@ -68,10 +68,10 @@ if USE_LOCAL_GSM
+ SRCS += $(SRCS_LIBGSM)
+ endif
+ 
+-if USE_LOCAL_ILBC
++if USE_ILBC
+ SRCS += codec_ilbc.c
+-NODIST_SRCS += $(SRCS_ILBC)
+-endif USE_LOCAL_ILBC
++libiaxclient_la_LIBADD += -lilbc
++endif USE_ILBC
+ 
+ if USE_CODEC_GSM
+ SRCS += codec_gsm.c codec_gsm.h
+@@ -147,31 +147,6 @@ SRCS_VIDEO=					\
+ 	video.c					\
+ 	video.h
+ 
+-SRCS_ILBC=					\
+-	iLBC/anaFilter.c			\
+-	iLBC/iCBSearch.c			\
+-	iLBC/packing.c				\
+-	iLBC/constants.c			\
+-	iLBC/gainquant.c			\
+-	iLBC/iLBC_decode.c			\
+-	iLBC/StateConstructW.c			\
+-	iLBC/createCB.c				\
+-	iLBC/getCBvec.c				\
+-	iLBC/iLBC_encode.c			\
+-	iLBC/StateSearchW.c			\
+-	iLBC/doCPLC.c				\
+-	iLBC/helpfun.c				\
+-	iLBC/syntFilter.c			\
+-	iLBC/enhancer.c				\
+-	iLBC/hpInput.c				\
+-	iLBC/LPCdecode.c			\
+-	iLBC/filter.c				\
+-	iLBC/hpOutput.c				\
+-	iLBC/LPCencode.c			\
+-	iLBC/FrameClassify.c			\
+-	iLBC/iCBConstruct.c			\
+-	iLBC/lsf.c
+-
+ SRCS_WIN32=					\
+ 	winfuncs.c				\
+ 	portmixer/px_win_wmme/px_win_wmme.c

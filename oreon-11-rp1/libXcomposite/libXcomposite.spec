@@ -2,8 +2,8 @@
 
 Summary: X Composite Extension library
 Name: libXcomposite
-Version: 0.4.6
-Release: 7%{?dist}
+Version: 0.4.7
+Release: 1%{?dist}
 License: MIT AND HPND-sell-variant
 URL: http://www.x.org
 

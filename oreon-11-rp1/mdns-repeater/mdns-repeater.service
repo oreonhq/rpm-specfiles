@@ -1,0 +1,12 @@
+[Unit]
+Description=Multicast DNS repeater
+After=syslog.target network.target
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/sysconfig/mdns-repeater
+ExecStart=/usr/sbin/mdns-repeater $OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

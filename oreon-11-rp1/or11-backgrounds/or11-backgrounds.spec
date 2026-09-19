@@ -9,7 +9,7 @@
 
 Name:           %{bgname}-backgrounds
 Version:        11.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Oreon %{relnum} default desktop background
 
 License:        CC-BY-SA-4.0
@@ -68,6 +68,7 @@ default theme.
 Summary:        Oreon %{relnum} default wallpaper for KDE
 Requires:       %{name}-base = %{version}-%{release}
 Requires:       kde-filesystem
+Requires:       oreon-wallpapers
 Provides:       f44-backgrounds-kde = %{version}-%{release}
 Provides:       system-backgrounds-kde = %{version}-%{release}
 
@@ -203,5 +204,4 @@ rm -fr %{buildroot}%{_datadir}/xfce4
 %endif
 
 %changelog
-* Mon Apr 27 2026 Oreon Packaging Team <packaging@oreonhq.com> - 11.0.0-1
-- Import from Fedora f44-backgrounds, rebrand to Oreon 11 and single PNG wallpaper
+%autochangelog

@@ -1,0 +1,13 @@
+--- txt2rss.org	2008-09-02 19:58:34.000000000 +0530
++++ txt2rss	2008-09-02 20:08:50.000000000 +0530
+@@ -82,8 +82,8 @@
+ ### MAIN ###
+ # if configfile exist, export variables, else exit!
+ # Reading configuration file
+-if [ -e "txt2rss.conf" ]; then
+-	. txt2rss.conf
++if [ -e "/etc/txt2rss/txt2rss.conf" ]; then
++	. /etc/txt2rss/txt2rss.conf
+ 	export TITLE=$TITLE
+ 	export LINK=$LINK
+ 	export DESCRIPTION=$DESCRIPTION

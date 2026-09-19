@@ -1,0 +1,42 @@
+From 593e18caf15cf3d0c73a96f4e5e7105c0e378233 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Mon, 8 Apr 2024 14:56:02 +0100
+Subject: [PATCH 7/7] remove hard coded O0
+
+---
+ nestkernel/CMakeLists.txt | 4 ----
+ sli/CMakeLists.txt        | 3 ---
+ 2 files changed, 7 deletions(-)
+
+diff --git a/nestkernel/CMakeLists.txt b/nestkernel/CMakeLists.txt
+index 50f99859f..553a440a1 100644
+--- a/nestkernel/CMakeLists.txt
++++ b/nestkernel/CMakeLists.txt
+@@ -136,10 +136,6 @@ if ( HAVE_MPI )
+ endif ()
+ 
+ 
+-# Prevent problems with Conda path substitution (see #2348)
+-set_source_files_properties( dynamicloader.cpp PROPERTIES COMPILE_OPTIONS "-O0" )
+-
+-
+ add_library( nestkernel STATIC ${nestkernel_sources} )
+ set_target_properties( nestkernel
+     PROPERTIES
+diff --git a/sli/CMakeLists.txt b/sli/CMakeLists.txt
+index 4ee036195..906258017 100644
+--- a/sli/CMakeLists.txt
++++ b/sli/CMakeLists.txt
+@@ -83,9 +83,6 @@ set( sli_sources
+     )
+ 
+ 
+-# Prevent problems with Conda path substitution (see #2348) 
+-set_source_files_properties( slistartup.cc PROPERTIES COMPILE_OPTIONS "-O0" )
+-
+ add_library( sli_lib ${sli_sources} )
+ 
+ set_target_properties( sli_lib
+-- 
+2.44.0
+

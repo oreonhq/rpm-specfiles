@@ -8,7 +8,7 @@
 # until that's done, disable LTO.  This has to happen before setting the flags below.
 %define _lto_cflags %{nil}
 
-%global dotnetver 10.0
+%global dotnetver 11.0
 
 # Only the package for the latest dotnet version should provide RPMs like
 # dotnet-host
@@ -22,7 +22,7 @@
 %global hostfxr_version %{runtime_version}
 %global runtime_version 10.0.4
 %global aspnetcore_runtime_version 10.0.4
-%global sdk_version 10.0.104
+%global sdk_version 11.0.0-preview.7.26381.103
 %global sdk_feature_band_version %(echo %{sdk_version} | cut -d '-' -f 1 | sed -e 's|[[:digit:]][[:digit:]]$|00|')
 %global templates_version %{aspnetcore_runtime_version}
 #%%global templates_version %%(echo %%{runtime_version} | awk 'BEGIN { FS="."; OFS="." } {print $1, $2, $3+1 }')

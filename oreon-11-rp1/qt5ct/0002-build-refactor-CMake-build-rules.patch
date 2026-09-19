@@ -1,0 +1,375 @@
+From 288f4f038008a42ebba6dfa51a15b42099084b37 Mon Sep 17 00:00:00 2001
+From: Zephyr Lykos <git@mochaa.ws>
+Date: Fri, 23 Aug 2024 12:44:28 +0800
+Subject: [PATCH 2/6] build: refactor CMake build rules
+
+---
+ qt5ct/CMakeLists.txt                        | 41 ++++++------------
+ qt5ct/src/qt5ct-common/CMakeLists.txt       | 35 +++++----------
+ qt5ct/src/qt5ct-common/config.h.in          | 37 ++++++++++++++++
+ qt5ct/src/qt5ct-common/qt5ct.cpp            |  6 ++-
+ qt5ct/src/qt5ct-common/qt5ct.h              |  4 ++
+ qt5ct/src/qt5ct-qtplugin/CMakeLists.txt     | 10 ++---
+ qt5ct/src/qt5ct-style/CMakeLists.txt        | 13 ++----
+ qt5ct/src/qt5ct/CMakeLists.txt              |  9 +++-
+ qt5ct/src/qt5ct/main.cpp                    |  5 +++
+ qt5ct/src/qt5ct/translations/CMakeLists.txt | 48 +++++++++++++++++++++
+ 10 files changed, 136 insertions(+), 72 deletions(-)
+ create mode 100644 qt5ct/src/qt5ct-common/config.h.in
+ create mode 100644 qt5ct/src/qt5ct/translations/CMakeLists.txt
+
+diff --git a/qt5ct/CMakeLists.txt b/qt5ct/CMakeLists.txt
+index 59256fd..cb53e8f 100644
+--- a/qt5ct/CMakeLists.txt
++++ b/qt5ct/CMakeLists.txt
+@@ -1,9 +1,15 @@
+-cmake_minimum_required(VERSION 3.11.0)
++cmake_minimum_required(VERSION 3.16.0)
+ 
+-project(qt5ct LANGUAGES CXX)
++project(qt5ct LANGUAGES CXX VERSION 1.9)
+ 
+ include(GNUInstallDirs)
+ 
++find_package(ECM REQUIRED NO_MODULE)
++set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
++
++option(DISABLE_DBUS "disable D-Bus support (global menu and D-Bus tray icon implementation)" OFF)
++option(QT5CT_IN_TREE "act as an in-tree Qt module, use standard Qt paths, unbundle language files, etc." OFF)
++
+ CONFIGURE_FILE(
+   "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+@@ -23,9 +29,7 @@ set(CMAKE_AUTOUIC ON)
+ set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
+ set(QT_MINIMUM_VERSION "5.15.0")
+ 
+-option(DISABLE_DBUS "disable D-Bus support (global menu and D-Bus tray icon implementation)" OFF)
+-
+-ADD_DEFINITIONS(-DQT_DISABLE_DEPRECATED_BEFORE=0x050C00 -DUSE_WIDGETS)
++add_compile_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050C00 -DUSE_WIDGETS)
+ 
+ find_package(Qt5 ${QT_MINIMUM_VERSION} COMPONENTS Widgets Concurrent LinguistTools REQUIRED)
+ find_package(Qt5Gui ${QT_MINIMUM_VERSION} CONFIG REQUIRED Private)
+@@ -37,30 +41,9 @@ else()
+     message(STATUS "D-Bus support: Disabled")
+ endif()
+ 
+-get_target_property(QT_LRELEASE_EXECUTABLE Qt5::lrelease IMPORTED_LOCATION)
+-
+-if(QT_LRELEASE_EXECUTABLE)
+-    message(STATUS "Found lrelease executable: " ${QT_LRELEASE_EXECUTABLE})
+-else()
+-    message(FATAL_ERROR "Could NOT find lrelease executable")
+-endif()
+-
+-get_filename_component(QT_QTPATHS_EXECUTABLE ${QT_LRELEASE_EXECUTABLE} DIRECTORY)
+-set(QT_QTPATHS_EXECUTABLE ${QT_QTPATHS_EXECUTABLE}/qtpaths)
+-
+-if(EXISTS ${QT_QTPATHS_EXECUTABLE})
+-    message(STATUS "Found qtpaths executable: " ${QT_QTPATHS_EXECUTABLE})
+-else()
+-    message(FATAL_ERROR "Could NOT find qtpaths executable")
+-endif()
+-
+-execute_process(COMMAND ${QT_QTPATHS_EXECUTABLE} --plugin-dir OUTPUT_VARIABLE PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+-message(STATUS "Plugin path: " ${PLUGINDIR})
+-
+-message(STATUS "Generating translations ...")
+-execute_process(COMMAND find ${CMAKE_CURRENT_SOURCE_DIR} -name *.ts COMMAND xargs ${QT_LRELEASE_EXECUTABLE} -silent)
+-
+-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/qt5ct-common)
++include(ECMQueryQt)
++ecm_query_qt(QT_INSTALL_PLUGINS QT_INSTALL_PLUGINS)
++ecm_query_qt(QT_INSTALL_TRANSLATIONS QT_INSTALL_TRANSLATIONS)
+ 
+ add_link_options(-Wl,--no-undefined)
+ add_subdirectory(src/qt5ct-common)
+diff --git a/qt5ct/src/qt5ct-common/CMakeLists.txt b/qt5ct/src/qt5ct-common/CMakeLists.txt
+index f15112b..30c29ca 100644
+--- a/qt5ct/src/qt5ct-common/CMakeLists.txt
++++ b/qt5ct/src/qt5ct-common/CMakeLists.txt
+@@ -1,30 +1,17 @@
+-project(qt5ct-common)
++block()
++  set(QT5CT_VERSION_MAJOR "${CMAKE_PROJECT_VERSION_MAJOR}")
++  set(QT5CT_VERSION_MINOR "${CMAKE_PROJECT_VERSION_MINOR}")
++  configure_file(config.h.in config.h @ONLY)
++endblock()
+ 
+-#extract version from qt5ct.h
+-file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/qt5ct.h"
+-     QT5CT_VERSION_DATA REGEX "^#define[ \t]+QT5CT_VERSION_[A-Z]+[ \t]+[0-9]+.*$")
+-
+-if(QT5CT_VERSION_DATA)
+-  foreach(item IN ITEMS MAJOR MINOR)
+-    string(REGEX REPLACE ".*#define[ \t]+QT5CT_VERSION_${item}[ \t]+([0-9]+).*"
+-       "\\1" QT5CT_VERSION_${item} ${QT5CT_VERSION_DATA})
+-  endforeach()
+-  set(QT5CT_VERSION "${QT5CT_VERSION_MAJOR}.${QT5CT_VERSION_MINOR}")
+-  set(QT5CT_SOVERSION "${QT5CT_VERSION_MAJOR}")
+-  message(STATUS "qt5ct version: ${QT5CT_VERSION}")
+-else()
+-  message(FATAL_ERROR "invalid header")
+-endif()
+-
+-add_definitions(-DQT5CT_LIBRARY)
+-
+-set(app_SRCS
++set(lib_SRCS
+   qt5ct.cpp
+ )
+ 
+-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
+-
+-add_library(qt5ct-common SHARED ${app_SRCS})
+-set_target_properties(qt5ct-common PROPERTIES VERSION ${QT5CT_VERSION})
++add_library(qt5ct-common SHARED ${lib_SRCS})
++set_target_properties(qt5ct-common PROPERTIES VERSION ${CMAKE_PROJECT_VERSION})
++target_compile_definitions(qt5ct-common PRIVATE -DQT5CT_LIBRARY -DQT5CT_HAVE_CONFIG_H)
++target_include_directories(qt5ct-common PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
++target_include_directories(qt5ct-common INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+ target_link_libraries(qt5ct-common PRIVATE Qt5::Core Qt5::Gui)
+ install(TARGETS qt5ct-common DESTINATION ${CMAKE_INSTALL_LIBDIR})
+diff --git a/qt5ct/src/qt5ct-common/config.h.in b/qt5ct/src/qt5ct-common/config.h.in
+new file mode 100644
+index 0000000..a9b654c
+--- /dev/null
++++ b/qt5ct/src/qt5ct-common/config.h.in
+@@ -0,0 +1,37 @@
++/*
++ * Copyright (c) 2014-2024, Ilya Kotov <forkotov02@ya.ru>
++ * Copyright (c) 2023-2024, Zephyr Lykos <self@mochaa.ws>
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++ * HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#ifndef QT5CT_CONFIG_H
++#define QT5CT_CONFIG_H
++
++#cmakedefine QT5CT_VERSION_MAJOR @QT5CT_VERSION_MAJOR@
++#cmakedefine QT5CT_VERSION_MINOR @QT5CT_VERSION_MINOR@
++#cmakedefine01 QT5CT_IN_TREE
++
++#endif
+diff --git a/qt5ct/src/qt5ct-common/qt5ct.cpp b/qt5ct/src/qt5ct-common/qt5ct.cpp
+index 3ec88d7..6ab1c51 100644
+--- a/qt5ct/src/qt5ct-common/qt5ct.cpp
++++ b/qt5ct/src/qt5ct-common/qt5ct.cpp
+@@ -36,7 +36,7 @@
+ #include <QtDebug>
+ #include "qt5ct.h"
+ 
+-#ifndef QT5CT_DATADIR
++#if !defined(QT5CT_IN_TREE) && !defined(QT5CT_DATADIR)
+ #define QT5CT_DATADIR "/usr/share"
+ #endif
+ 
+@@ -97,7 +97,9 @@ QStringList Qt5CT::sharedStyleSheetPaths()
+     {
+         paths << (p + QLatin1String("/qt5ct/qss"));
+     }
++#ifndef QT5CT_IN_TREE
+     paths << QLatin1String(QT5CT_DATADIR"/qt5ct/qss");
++#endif
+     paths.removeDuplicates();
+     return paths;
+ }
+@@ -119,7 +121,9 @@ QStringList Qt5CT::sharedColorSchemePaths()
+     {
+         paths << (p + QLatin1String("/qt5ct/colors"));
+     }
++#ifndef QT5CT_IN_TREE
+     paths << QLatin1String(QT5CT_DATADIR"/qt5ct/colors");
++#endif
+     paths.removeDuplicates();
+     return paths;
+ }
+diff --git a/qt5ct/src/qt5ct-common/qt5ct.h b/qt5ct/src/qt5ct-common/qt5ct.h
+index 7a1a426..cd06bbc 100644
+--- a/qt5ct/src/qt5ct-common/qt5ct.h
++++ b/qt5ct/src/qt5ct-common/qt5ct.h
+@@ -29,8 +29,12 @@
+ #ifndef QT5CT_H
+ #define QT5CT_H
+ 
++#ifndef QT5CT_HAVE_CONFIG_H
+ #define QT5CT_VERSION_MAJOR 1
+ #define QT5CT_VERSION_MINOR 9
++#else
++#include "config.h"
++#endif
+ 
+ #define QT5CT_TOSTRING(s) #s
+ #define QT5CT_STRINGIFY(s)         QT5CT_TOSTRING(s)
+diff --git a/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt b/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt
+index 7ac6c82..aedb4a6 100644
+--- a/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt
++++ b/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt
+@@ -1,16 +1,12 @@
+-project(qt5ct-qtplugin)
+-
+-set(app_SRCS
++set(lib_SRCS
+   main.cpp
+   qt5ctplatformtheme.cpp
+ )
+ 
+-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
+-
+-add_library(qt5ct-qtplugin MODULE ${app_SRCS})
++add_library(qt5ct-qtplugin MODULE ${lib_SRCS})
+ set_target_properties(qt5ct-qtplugin PROPERTIES OUTPUT_NAME qt5ct)
+ target_link_libraries(qt5ct-qtplugin PRIVATE Qt5::Widgets Qt5::GuiPrivate qt5ct-common)
+ if(NOT DISABLE_DBUS)
+     target_link_libraries(qt5ct-qtplugin PRIVATE Qt5::DBus Qt5::ThemeSupportPrivate)
+ endif()
+-install(TARGETS qt5ct-qtplugin DESTINATION ${PLUGINDIR}/platformthemes)
++install(TARGETS qt5ct-qtplugin DESTINATION ${QT_INSTALL_PLUGINS}/platformthemes)
+diff --git a/qt5ct/src/qt5ct-style/CMakeLists.txt b/qt5ct/src/qt5ct-style/CMakeLists.txt
+index 5a00f7b..0508adc 100644
+--- a/qt5ct/src/qt5ct-style/CMakeLists.txt
++++ b/qt5ct/src/qt5ct-style/CMakeLists.txt
+@@ -1,14 +1,9 @@
+-project(qt5ct-style)
+-
+-add_definitions(-DUSE_WIDGETS)
+-
+-set(app_SRCS
++set(lib_SRCS
+   plugin.cpp
+   qt5ctproxystyle.cpp
+ )
+ 
+-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
+-
+-add_library(qt5ct-style MODULE ${app_SRCS})
++add_library(qt5ct-style MODULE ${lib_SRCS})
++target_compile_definitions(qt5ct-style PRIVATE -DUSE_WIDGETS)
+ target_link_libraries(qt5ct-style PRIVATE Qt5::Widgets qt5ct-common)
+-install(TARGETS qt5ct-style DESTINATION ${PLUGINDIR}/styles)
++install(TARGETS qt5ct-style DESTINATION ${QT_INSTALL_PLUGINS}/styles)
+diff --git a/qt5ct/src/qt5ct/CMakeLists.txt b/qt5ct/src/qt5ct/CMakeLists.txt
+index 78535e3..9271e30 100644
+--- a/qt5ct/src/qt5ct/CMakeLists.txt
++++ b/qt5ct/src/qt5ct/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-project(app)
++add_subdirectory(translations)
+ 
+ set(app_SRCS
+   appearancepage.cpp
+@@ -24,10 +24,15 @@ set(app_SRCS
+   qsseditordialog.ui
+   qsspage.ui
+   troubleshootingpage.ui
+-  translations/translations.qrc
+ )
+ 
+ add_executable(qt5ct ${app_SRCS})
++add_dependencies(qt5ct app_translations)
+ target_link_libraries(qt5ct PRIVATE Qt5::Widgets Qt5::Concurrent Qt5::WidgetsPrivate qt5ct-common)
++
++if(NOT QT5CT_IN_TREE)
++  target_link_libraries(qt5ct PRIVATE app_resources)
++endif()
++
+ install(TARGETS qt5ct DESTINATION ${CMAKE_INSTALL_BINDIR})
+ install(FILES qt5ct.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+diff --git a/qt5ct/src/qt5ct/main.cpp b/qt5ct/src/qt5ct/main.cpp
+index a912b9c..5417fcc 100644
+--- a/qt5ct/src/qt5ct/main.cpp
++++ b/qt5ct/src/qt5ct/main.cpp
+@@ -42,8 +42,13 @@ int main(int argc, char **argv)
+ 
+     QTranslator translator;
+ 
++#ifndef QT5CT_IN_TREE
+     if(translator.load(QLocale(), QStringLiteral("qt5ct"), QStringLiteral("_"), QStringLiteral(":/")))
+         QCoreApplication::installTranslator(&translator);
++#else
++    if(translator.load(QLocale(), QStringLiteral("qt5ct"), QStringLiteral("_"), QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
++        QCoreApplication::installTranslator(&translator);
++#endif
+ 
+     QTranslator qt_translator;
+     if(qt_translator.load(QLocale(), QStringLiteral("qtbase"), QStringLiteral("_"), QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
+diff --git a/qt5ct/src/qt5ct/translations/CMakeLists.txt b/qt5ct/src/qt5ct/translations/CMakeLists.txt
+new file mode 100644
+index 0000000..6f3b337
+--- /dev/null
++++ b/qt5ct/src/qt5ct/translations/CMakeLists.txt
+@@ -0,0 +1,48 @@
++set(translation_SRCS
++    qt5ct_ar.ts
++    qt5ct_bg.ts
++    qt5ct_ca.ts
++    qt5ct_cs.ts
++    qt5ct_da.ts
++    qt5ct_de.ts
++    qt5ct_el.ts
++    qt5ct_en.ts
++    qt5ct_es_ES.ts
++    qt5ct_es.ts
++    qt5ct_fi.ts
++    qt5ct_fr.ts
++    qt5ct_gl_ES.ts
++    qt5ct_he.ts
++    qt5ct_hu.ts
++    qt5ct_it_IT.ts
++    qt5ct_it.ts
++    qt5ct_ja.ts
++    qt5ct_kk.ts
++    qt5ct_lt.ts
++    qt5ct_nl_NL.ts
++    qt5ct_nl.ts
++    qt5ct_pl.ts
++    qt5ct_pt_BR.ts
++    qt5ct_pt.ts
++    qt5ct_ru.ts
++    qt5ct_sk.ts
++    qt5ct_sr_BA.ts
++    qt5ct_sr_RS.ts
++    qt5ct_sr.ts
++    qt5ct_tr.ts
++    qt5ct_uk.ts
++    qt5ct_zh_CN.ts
++    qt5ct_zh_TW.ts
++)
++
++qt5_add_translation(app_LANGS ${translation_SRCS} OPTIONS -silent)
++set_source_files_properties(${app_LANGS} PROPERTIES GENERATED TRUE)
++add_custom_target(app_translations DEPENDS ${app_LANGS})
++
++if(QT5CT_IN_TREE)
++  install(FILES ${app_LANGS} DESTINATION ${QT_INSTALL_TRANSLATIONS})
++else()
++  configure_file(translations.qrc translations.qrc COPYONLY)
++  qt5_add_resources(lang_RC ${CMAKE_CURRENT_BINARY_DIR}/translations.qrc)
++  add_library(app_resources INTERFACE ${lang_RC})
++endif()
+-- 
+2.51.0
+

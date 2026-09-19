@@ -1,0 +1,41 @@
+From 26cebbaef4bdc9c41ba9867fa2d1121bb3609ce3 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Thu, 13 Jun 2024 14:08:09 -0700
+Subject: [PATCH] Handle changed ntpath.isabs behaviour in Python 3.13
+
+ntpath.isabs no longer considers paths that start with "/" to
+be absolute. This is correct behaviour on Windows but causes us
+problems, because our `PathConstants` use paths that start with
+/ and expect these to always be considered absolute. To deal
+with this, let's just filter out paths that are absolute by
+ntpath *or* posixpath rules.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ src/catkin_lint/checks/build.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/catkin_lint/checks/build.py b/src/catkin_lint/checks/build.py
+index 69b243e..125b908 100644
+--- a/src/catkin_lint/checks/build.py
++++ b/src/catkin_lint/checks/build.py
+@@ -30,6 +30,7 @@
+ # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
++import ntpath
+ import os
+ import posixpath
+ import stat
+@@ -394,7 +395,7 @@ def exports(linter):
+         if ext_includes:
+             info.report(ERROR, "EXTERNAL_INCLUDE_PATH")
+         info.export_libs |= set(opts["LIBRARIES"])
+-        info.export_includes |= set([d for d in includes if not os.path.isabs(d)])
++        info.export_includes |= set([d for d in includes if not posixpath.isabs(d) and not ntpath.isabs(d)])
+         info.export_packages |= set(opts["CATKIN_DEPENDS"])
+         info.export_targets |= set(opts["EXPORTED_TARGETS"])
+ 
+-- 
+2.45.2
+

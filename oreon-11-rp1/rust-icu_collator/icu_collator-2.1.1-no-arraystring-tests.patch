@@ -1,0 +1,45 @@
+diff -Naur icu_collator-2.1.1-original/tests/tests.rs icu_collator-2.1.1/tests/tests.rs
+--- icu_collator-2.1.1-original/tests/tests.rs	2006-07-24 02:21:28.000000000 +0100
++++ icu_collator-2.1.1/tests/tests.rs	2025-10-30 21:08:22.952339012 +0000
+@@ -39,8 +39,12 @@
+     icu_normalizer_data::impl_normalizer_uts46_data_v1!(TestingProvider);
+ };
+ 
++// Downstream: patch out tests requiring arraystring
++#[cfg(any())]
+ type StackString = arraystring::ArrayString<arraystring::typenum::U32>;
+ 
++// Downstream: patch out tests requiring arraystring
++#[cfg(any())]
+ /// Parse a string of space-separated hexadecimal code points (ending in end of input or semicolon)
+ fn parse_hex(mut hexes: &[u8]) -> Option<StackString> {
+     let mut buf = StackString::new();
+@@ -70,6 +74,8 @@
+     }
+ }
+ 
++// Downstream: patch out tests requiring arraystring
++#[cfg(any())]
+ #[test]
+ fn test_parse_hex() {
+     assert_eq!(
+@@ -1700,6 +1706,9 @@
+     }
+ }
+ 
++// Downstream: patch out tests requiring arraystring
++#[cfg(any())]
++#[test]
+ #[test]
+ fn test_conformance_shifted() {
+     // Adapted from `UCAConformanceTest::TestTableShifted` of ucaconf.cpp in ICU4C.
+@@ -1743,6 +1752,9 @@
+     }
+ }
+ 
++// Downstream: patch out tests requiring arraystring
++#[cfg(any())]
++#[test]
+ #[test]
+ fn test_conformance_non_ignorable() {
+     // Adapted from `UCAConformanceTest::TestTableNonIgnorable` of ucaconf.cpp in ICU4C.

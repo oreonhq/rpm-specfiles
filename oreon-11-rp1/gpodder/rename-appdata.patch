@@ -1,0 +1,19 @@
+From 4fe05c3cb4ad4b462583e8d0416098e192f9f3f1 Mon Sep 17 00:00:00 2001
+From: Otto Urpelainen <oturpe@iki.fi>
+Date: Mon, 18 Jan 2021 20:03:37 +0200
+Subject: [PATCH] Rename appdata.xml to comply with Fedora Packaging Guidelines
+
+According to guidelines, appdata.xml file must have the same basename as
+desktop entry.
+---
+ .../{org.gpodder.gpodder.appdata.xml => gpodder.appdata.xml}      | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename share/metainfo/{org.gpodder.gpodder.appdata.xml => gpodder.appdata.xml} (100%)
+
+diff --git a/share/metainfo/org.gpodder.gpodder.appdata.xml b/share/metainfo/gpodder.appdata.xml
+similarity index 100%
+rename from share/metainfo/org.gpodder.gpodder.appdata.xml
+rename to share/metainfo/gpodder.appdata.xml
+-- 
+2.29.2
+

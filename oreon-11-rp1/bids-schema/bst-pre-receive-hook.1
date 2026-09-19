@@ -1,0 +1,57 @@
+.TH BST\-PRE\-RECEIVE\-HOOK "1" "February 2026" "" "User Commands"
+.SH NAME
+.B bst\ pre\-receive\-hook
+\(en Validate filenames from a list of files against the BIDS schema
+.SH SYNOPSIS
+.B bst\ pre\-receive\-hook
+.RI [ OPTIONS ]
+.SH DESCRIPTION
+The expected input takes the following form:
+.P
+.EX
+.B bids\-hook\-v2\ {"Name":\ "My\ dataset",\ "BIDSVersion":\ "1.9.0",
+.B "DatasetType":\ "raw"}\ ignore\-pattern1\ ...\ ignore-patternN\ 0001
+.B .datalad/config\ .gitattributes\ CHANGES\ README\ dataset_description.json
+.B participants.tsv\ sub-01/anat/sub-01_T1w.nii.gz\ ...
+.EE
+.P
+The header identifies the protocol version.
+For protocol
+.BR bids\-hook\-v2 ,
+the second line
+.I MUST
+be the
+.B dataset_description.json
+file, with any newlines removed.
+The following lines, up to the line containing
+.RB \(lq 0001 \(rq,
+are ignore patterns from the
+.B .bidsignore
+file.
+The lines following
+.RB \(lq 0001 \(rq
+are the filenames to be validated.
+.P
+This is intended to be used in a git pre-receive hook.
+.SH OPTIONS
+.TP
+.B \-s\fR, \fB\-\-schema\ \fIPATH
+Path to the BIDS schema
+.TP
+.B \-i\fR, \fB\-\-input\ \fIPATH
+Input file
+(default:
+.IR stdin )
+.TP
+.B \-o\fR, \fB\-\-output\ \fIPATH
+Output file
+(default:
+.IR stdout )
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH "SEE ALSO"
+.BR bst\-export (1),
+.BR bst\-export\-metaschema (1)
+.P
+.BR bst (1)

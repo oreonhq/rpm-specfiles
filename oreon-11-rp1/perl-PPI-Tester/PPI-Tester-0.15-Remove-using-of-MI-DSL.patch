@@ -1,0 +1,25 @@
+diff -up PPI-Tester-0.15/Makefile.PL.dsl PPI-Tester-0.15/Makefile.PL
+--- PPI-Tester-0.15/Makefile.PL.dsl	2023-05-10 10:31:19.390752602 +0200
++++ PPI-Tester-0.15/Makefile.PL	2023-05-11 08:45:14.567627740 +0200
+@@ -1,10 +1,12 @@
+-use inc::Module::Install::DSL 0.86;
++use inc::Module::Install;
+ 
+-all_from       lib/PPI/Tester.pm
+-requires       Devel::Dumpvar 0.04
+-requires       PPI            1.201
+-requires       Wx             0.54
+-test_requires  File::Spec     0.80
+-test_requires  Test::More     0.47
+-test_requires  Test::Script   1.02
+-install_script ppitester
++all_from       'lib/PPI/Tester.pm';
++requires       'Devel::Dumpvar' => '0.04';
++requires       'PPI'            => '1.201';
++requires       'Wx'             => '0.54';
++test_requires  'File::Spec'     => '0.80';
++test_requires  'Test::More'     => '0.47';
++test_requires  'Test::Script'   => '1.02';
++install_script 'ppitester';
++
++WriteAll;

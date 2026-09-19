@@ -1,0 +1,30 @@
+From 30d8ca791d96f5cfa59be8c8d001f4a2a484cb3f Mon Sep 17 00:00:00 2001
+From: Julio Faracco <jcfaracco@gmail.com>
+Date: Tue, 14 Oct 2025 12:02:47 -0300
+Subject: [PATCH 2/4] Initialize TerminalState structure properly
+
+The structure TerminalState is not a pointer. So, it should be properly
+initialized with a double brackets. This commit just fixes this warning
+to avoid compilation failures.
+
+Signed-off-by: Julio Faracco <jcfaracco@gmail.com>
+---
+ src/Monitor.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Monitor.cpp b/src/Monitor.cpp
+index 6268edf..1a1c63d 100644
+--- a/src/Monitor.cpp
++++ b/src/Monitor.cpp
+@@ -1605,7 +1605,7 @@ void* RestrackManualTriggerThread(void *thread_args /* struct ProcDumpConfigurat
+ #ifdef __linux__
+     struct ProcDumpConfiguration *config = (struct ProcDumpConfiguration *)thread_args;
+ 
+-    struct TerminalState originalTerminalState = {0};
++    struct TerminalState originalTerminalState = {{}};
+     auto_free struct CoreDumpWriter *writer = NULL;
+     std::vector<pthread_t> leakReportThreads;
+     int rc = 0;
+-- 
+2.50.1
+

@@ -1,0 +1,225 @@
+diff -ur bristol-0.60.11/brighton/brightonMixerMenu.c bristol-0.60.11m/brighton/brightonMixerMenu.c
+--- bristol-0.60.11/brighton/brightonMixerMenu.c	2012-04-27 05:04:29.000000000 -0600
++++ bristol-0.60.11m/brighton/brightonMixerMenu.c	2022-12-26 11:12:17.342692017 -0700
+@@ -1179,7 +1179,7 @@
+ 	return(NULL);
+ }
+ 
+-brightonEvent event;
++extern brightonEvent event;
+ 
+ int
+ doAlarm()
+diff -ur bristol-0.60.11/bristol/arpdco.c bristol-0.60.11m/bristol/arpdco.c
+--- bristol-0.60.11/bristol/arpdco.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/arpdco.c	2022-12-26 11:23:15.960030704 -0700
+@@ -39,7 +39,8 @@
+ #include "bristolblo.h"
+ #include "arpdco.h"
+ 
+-float note_diff, *zbuf;
++extern float note_diff;
++float *zbuf;
+ 
+ #define BRISTOL_SQR 4
+ 
+diff -ur bristol-0.60.11/bristol/bit1osc.c bristol-0.60.11m/bristol/bit1osc.c
+--- bristol-0.60.11/bristol/bit1osc.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/bit1osc.c	2022-12-26 11:16:48.124157499 -0700
+@@ -47,7 +47,7 @@
+ #include "bit1osc.h"
+ 
+ static float note_diff;
+-int samplecount;
++extern int samplecount;
+ 
+ static void fillWave(float *, int, int);
+ static void buildBitoneSound(bristolOP *, bristolOPParams *);
+diff -ur bristol-0.60.11/bristol/blo.c bristol-0.60.11m/bristol/blo.c
+--- bristol-0.60.11/bristol/blo.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/blo.c	2022-12-26 11:22:32.538261188 -0700
+@@ -31,6 +31,8 @@
+ 
+ #include "bristolblo.h"
+ 
++struct bloStruct blo;
++
+ static int init = 1;
+ 
+ float blosine[BRISTOL_BLO_SIZE];
+diff -ur bristol-0.60.11/bristol/cs80osc.c bristol-0.60.11m/bristol/cs80osc.c
+--- bristol-0.60.11/bristol/cs80osc.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/cs80osc.c	2022-12-26 11:25:15.828155003 -0700
+@@ -41,8 +41,8 @@
+ #include "cs80osc.h"
+ #include "bristolcs80.h"
+ 
+-float note_diff;
+-int samplecount;
++extern float note_diff;
++extern int samplecount;
+ 
+ static void fillWave(float *, int, int);
+ static void buildCs80Sound(bristolOP *, bristolOPParams *);
+diff -ur bristol-0.60.11/bristol/dco.c bristol-0.60.11m/bristol/dco.c
+--- bristol-0.60.11/bristol/dco.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/dco.c	2022-12-26 11:23:31.656308874 -0700
+@@ -39,7 +39,7 @@
+ #include "bristolblo.h"
+ #include "dco.h"
+ 
+-float note_diff;
++extern float note_diff;
+ 
+ /*
+  * The name of this operator, IO count, and IO names.
+diff -ur bristol-0.60.11/bristol/expdco.c bristol-0.60.11m/bristol/expdco.c
+--- bristol-0.60.11/bristol/expdco.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/expdco.c	2022-12-26 11:25:37.582540535 -0700
+@@ -40,7 +40,7 @@
+ #include "bristolblo.h"
+ #include "expdco.h"
+ 
+-float note_diff;
++extern float note_diff;
+ 
+ /*
+  * The name of this operator, IO count, and IO names.
+diff -ur bristol-0.60.11/bristol/filter2.c bristol-0.60.11m/bristol/filter2.c
+--- bristol-0.60.11/bristol/filter2.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/filter2.c	2022-12-26 11:40:25.684192963 -0700
+@@ -147,7 +147,7 @@
+ }
+ 
+ #define ROOT2 1.4142135623730950488
+-double pidsr;
++extern double pidsr;
+ 
+ /*
+  * Reset any local memory information.
+diff -ur bristol-0.60.11/bristol/granulardco.c bristol-0.60.11m/bristol/granulardco.c
+--- bristol-0.60.11/bristol/granulardco.c	2012-04-27 05:04:29.000000000 -0600
++++ bristol-0.60.11m/bristol/granulardco.c	2022-12-26 11:44:13.954207180 -0700
+@@ -38,8 +38,8 @@
+ #include "bristol.h"
+ #include "granulardco.h"
+ 
+-float note_diff;
+-float samplerate;
++extern float note_diff;
++extern float samplerate;
+ 
+ #define BRISTOL_SQR 4
+ 
+diff -ur bristol-0.60.11/bristol/hammond.c bristol-0.60.11m/bristol/hammond.c
+--- bristol-0.60.11/bristol/hammond.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/hammond.c	2022-12-26 11:39:47.707525133 -0700
+@@ -45,8 +45,8 @@
+ #include "bristol.h"
+ #include "hammond.h"
+ 
+-float note_diff;
+-int samplecount;
++extern float note_diff;
++extern int samplecount;
+ 
+ static void fillWave(float *, int, int);
+ static void buildHammondSound(bristolOP *, unsigned char);
+@@ -70,8 +70,8 @@
+ static int *waveindex;
+ static int *percussion;
+ 
+-float *wave1;
+-float *wave2;
++extern float *wave1;
++extern float *wave2;
+ 
+ /*
+  * This can be a single list, it is used to generate the different pipes.
+diff -ur bristol-0.60.11/bristol/junodco.c bristol-0.60.11m/bristol/junodco.c
+--- bristol-0.60.11/bristol/junodco.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/junodco.c	2022-12-26 11:25:09.529043371 -0700
+@@ -39,7 +39,7 @@
+ #include "bristolblo.h"
+ #include "junodco.h"
+ 
+-float note_diff;
++extern float note_diff;
+ 
+ #define BRISTOL_SQR 8
+ 
+diff -ur bristol-0.60.11/bristol/prophetdco.c bristol-0.60.11m/bristol/prophetdco.c
+--- bristol-0.60.11/bristol/prophetdco.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/prophetdco.c	2022-12-26 11:24:29.232329234 -0700
+@@ -47,7 +47,7 @@
+ #include "bristolblo.h"
+ #include "prophetdco.h"
+ 
+-float note_diff;
++extern float note_diff;
+ 
+ #define BRISTOL_SQR 4
+ 
+diff -ur bristol-0.60.11/bristol/sdco.c bristol-0.60.11m/bristol/sdco.c
+--- bristol-0.60.11/bristol/sdco.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/sdco.c	2022-12-26 11:25:31.758437322 -0700
+@@ -41,7 +41,7 @@
+ #include "bristol.h"
+ #include "sdco.h"
+ 
+-float note_diff;
++extern float note_diff;
+ 
+ /*
+  * The name of this operator, IO count, and IO names.
+diff -ur bristol-0.60.11/bristol/trilogyosc.c bristol-0.60.11m/bristol/trilogyosc.c
+--- bristol-0.60.11/bristol/trilogyosc.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/trilogyosc.c	2022-12-26 11:24:06.366924017 -0700
+@@ -40,8 +40,8 @@
+ #include "bristolblo.h"
+ #include "trilogyosc.h"
+ 
+-float note_diff;
+-int samplecount;
++extern float note_diff;
++extern int samplecount;
+ 
+ static void fillWave(float *, int, int);
+ static void buildTrilogySound(bristolOP *, bristolOPParams *);
+diff -ur bristol-0.60.11/bristol/vox.c bristol-0.60.11m/bristol/vox.c
+--- bristol-0.60.11/bristol/vox.c	2012-04-27 05:04:28.000000000 -0600
++++ bristol-0.60.11m/bristol/vox.c	2022-12-26 11:24:12.790037844 -0700
+@@ -40,8 +40,8 @@
+ #include "bristolblo.h"
+ #include "vox.h"
+ 
+-float note_diff;
+-int samplecount;
++extern float note_diff;
++extern int samplecount;
+ 
+ static void fillWave(float *, int, int);
+ static void buildVoxSound(bristolOP *, bristolOPParams *, unsigned char);
+diff -ur bristol-0.60.11/include/bristol/bristolblo.h bristol-0.60.11m/include/bristol/bristolblo.h
+--- bristol-0.60.11/include/bristol/bristolblo.h	2012-04-27 05:04:29.000000000 -0600
++++ bristol-0.60.11m/include/bristol/bristolblo.h	2022-12-26 11:22:08.940842994 -0700
+@@ -39,7 +39,7 @@
+ #define BLO_COSINE	6
+ #define BLO_PULSE	7
+ 
+-struct {
++struct bloStruct {
+ 	int flags;
+ 	int harmonics;
+ 	int cutin;
+@@ -47,7 +47,9 @@
+ 	int min;
+ 	float fraction;
+ 	float samplerate;
+-} blo;
++};
++
++extern struct bloStruct blo;
+ 
+ extern float blosine[BRISTOL_BLO_SIZE];
+ extern float blosquare[BRISTOL_BLO_SIZE];

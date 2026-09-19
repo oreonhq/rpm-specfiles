@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2016-2021 Michael Kuhn <suraia@fedoraproject.org> -->
+<component type="font">
+  <id>source-serif</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>OFL-1.1</project_license>
+  <name>Source Serif 4</name>
+  <summary>Typeface for setting text in many sizes, weights, and languages</summary>
+  <url type="homepage">https://github.com/adobe-fonts/source-serif</url>
+  <update_contact>suraia@fedoraproject.org</update_contact>
+</component>

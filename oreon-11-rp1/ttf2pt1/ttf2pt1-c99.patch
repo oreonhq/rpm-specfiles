@@ -1,0 +1,69 @@
+Avoid implicit ints and implicit function declarations, and build
+failures with future compilers which do not support this pre-C99
+features by default.
+
+Submitted upstream:
+
+  <https://sourceforge.net/p/ttf2pt1/mailman/message/37804025/>
+
+diff --git other/bmpfont.h other/bmpfont.h
+index 59c27372a4de6f1e..57fbccb2e8a66954 100644
+--- other/bmpfont.h
++++ other/bmpfont.h
+@@ -2,7 +2,9 @@
+  * see COPYRIGHT
+  */
+ 
++#include <stdlib.h>
+ 
++void
+ fchkneg(file, line, rc, cmd)
+ 	char *file;
+ 	int line;
+@@ -17,6 +19,7 @@ fchkneg(file, line, rc, cmd)
+ 	}
+ }
+ 
++void
+ fchknull(file, line, rc, cmd)
+ 	char *file;
+ 	int line;
+diff --git other/cmpf.c other/cmpf.c
+index 37e6e98f0c05bf9c..f750cdc11b1011dc 100644
+--- other/cmpf.c
++++ other/cmpf.c
+@@ -14,7 +14,7 @@
+ 
+ #include "bmpfont.h"
+ 
+-
++int
+ main(ac, av)
+ 	int ac;
+ 	char **av;
+diff --git other/dmpf.c other/dmpf.c
+index 1052a44872164200..7a1dfe9138dd4f0e 100644
+--- other/dmpf.c
++++ other/dmpf.c
+@@ -14,7 +14,7 @@
+ 
+ #include "bmpfont.h"
+ 
+-
++int
+ main(ac, av)
+ 	int ac;
+ 	char **av;
+diff --git t1asm.c t1asm.c
+index d9c3061cc8fd9caf..9872647c8a405b34 100644
+--- t1asm.c
++++ t1asm.c
+@@ -59,6 +59,8 @@ static char portnotice[] =
+ #		define WINDOWS_FUNCTIONS
+ #		include "windows.h"
+ #	endif
++#else
++#  include <unistd.h>
+ #endif
+ 
+ /* int32 must be at least 32-bit and uint16 must be at least 16-bit */

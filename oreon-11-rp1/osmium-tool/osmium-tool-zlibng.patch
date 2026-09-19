@@ -1,0 +1,73 @@
+From 56bcc0a9fded208ac7661e9306cdcfce06b3ba94 Mon Sep 17 00:00:00 2001
+From: Tom Hughes <tom@compton.nu>
+Date: Fri, 19 Jan 2024 11:14:35 +0000
+Subject: [PATCH 2/2] Use zlib-ng compatible results for PBF tests
+
+---
+ test/formats/f1-nodensenodes-nometadata.osm.pbf | Bin 289 -> 293 bytes
+ test/formats/f1-nodensenodes.osm.pbf            | Bin 402 -> 408 bytes
+ test/formats/f1-nometadata.osm.pbf              | Bin 299 -> 304 bytes
+ test/formats/f1.osm.pbf                         | Bin 404 -> 412 bytes
+ 4 files changed, 0 insertions(+), 0 deletions(-)
+
+diff --git a/test/formats/f1-nodensenodes-nometadata.osm.pbf b/test/formats/f1-nodensenodes-nometadata.osm.pbf
+index 6b34b2b6583b4fd8169d5a4351fda710026e0c4d..23ce29c1db3cb81c4f5157858c6d6d04e51dda82 100644
+GIT binary patch
+delta 133
+zcmV;00DAwS0;K|wLOVYYJ{miCoa18RVi2<6;^7c+Xt;HR(*s0s@o<Pa%sIAM*yF>r
+zC)`{-91;!<edlCga#9WrFD9vhd69c*KRysL8ajBK<C5TF;9{<*tm0x$OiJcr;NmFG
+n&rMY*PplLYQxf5j6JlhPVq|h+VrKDTk`M@DVqgRS=|l(OWSBYx
+
+delta 129
+zcmV-{0Dk|a0-*wsLODGUJ{mcAoa18RVi2<6;^7c+Xt;HR(*r~Rd14N8j%^n9_%Q7W
+zH;^ac(9m~I1|}!v(C}iC8kh%>eQ7;B5HcD#c%0*s;9}rnuBfcyVopp-2C_Md^K(-b
+j$`dPv#FRuh<b)U*r5Kr<n3!3-m?Q*(m>3uV=|l(OU^h6L
+
+diff --git a/test/formats/f1-nodensenodes.osm.pbf b/test/formats/f1-nodensenodes.osm.pbf
+index cb18b36729f08cd0de625a5b8940e2b37d0a6309..4beed0c4d565f675a167e2219d5dfc7607ab0cc3 100644
+GIT binary patch
+delta 233
+zcmbQlJcD_Hc|8voyMM5+OJYf)L<6HhH=|T_#hk~Fo+mv>()85Tdzkbf$?x=e@l_8d
+zJroFh^f*Bz<HxtBYTYc0nHIAxc0RmTd5)YylXsglkIwIe*w6eEbeh>FAD)vuyVcgt
+zr~1%Y)x(O6(`@&@JS!5$sm7Ydo7Ud8uh__7Z&1QbPHQ#Y)Tx{aZ8QEPO_GWbo4Bhb
+zG(^BdDxhM{<4KQ`9we<>vF1^dpO4owm`fgMoICFus^PyzBq%uO;RNBNlqpFmK_ExX
+h*pPfFD2&sM)r~hzT}>=ZUyZX-L5<CgL4==|3jq3FUf=)#
+
+delta 227
+zcmV<90383A1Cj%fH-8HX2TxN?L}7Gc7<>?m0UCFBoa5r>V&GyaNi8k`(#&c3`9c+3
+zG8`gGd>o7d4d1@pWRYN0VANoAXt;HR(*r~RWyQd<57ssR0Le0FFgeUQwprNY!?Y*d
+zKv@Z}?D<V^rm#vdDKKj=J2dp2lY!}#0?SU=F=;8Q1T)0s7X*{kz_O9Qgj7=yNE%Og
+zoa2(?V&Gz~sI1~*PE1PXVkt>2E&+;g6zAurDwHQy3aKfnaL5TUGD<NrDe-YI3QX8B
+dX(_7&qXMG_vl9~ws~3}mKoAoHBLEZ+4GKEWU335d
+
+diff --git a/test/formats/f1-nometadata.osm.pbf b/test/formats/f1-nometadata.osm.pbf
+index 4d30d935c6c457ec3033b9b066d951ddb274f49b..83cdf8889cd3fc2d3eba4ec5945b955d233121ce 100644
+GIT binary patch
+delta 93
+zcmV-j0HXh^0<Z#*P6a*?H5xjRQz{DYna{)!#KOS9z>$P%KRysL8ajBK<C5TF;9{<*
+ztm0x$OiJcr;NmFG&rMY*PplLYQxf5j6JlhPVq|h+VrKDTk`M@DVqgRS=|l(Od&ek-
+
+delta 88
+zcmV-e0H^=30;>X$P6ay<H5xaOQz{1oF+&gw0}zpiYCSv<G8#B|oa2(<V&Gz~sI1~*
+uPE1M$vN?+Lb5j+{6Dx(plteh>gcup67@3@ym|47-Bm{z(7#IQRL<izQ_aQF;
+
+diff --git a/test/formats/f1.osm.pbf b/test/formats/f1.osm.pbf
+index ae021020f2fc854e7a5f684d1a5ca8af496619cf..d6ff0414268033bb02bafffce176bd4f8e0b44fd 100644
+GIT binary patch
+delta 223
+zcmV<503iRA1DpepPJek2ZyI%Yoa5r>V&GyaNi8nnV&Gy<%g+~z5sKns5n*Ct($eN)
+zVPs@v6cTKB^Kvuifsb=+?zLaCZ0bIvAjQJOz{I4)!o<kNti{5_#Ki0*&~WPr=bSh1
+zIG-G!#R+12@q)+?d*(B}-!q?yA&7;6fq?-45IrD60000B3X#ToRa6j28c=wg<C5cI
+z;9{<*tm0x$OiJcrDM>9Z;bP$8D9+DKRVYua6jD=C;gAzzWRzlLQsU!a6qvAM(o$9l
+ZMg>L<W+x^VRxc(AfgmOZMgSBK4GPqQWRw5^
+
+delta 222
+zcmV<403rXJ1C#@hPJeO`ZyIiRoa5r>V&GyaNi8k`(#&c3`9d*5QCut{OiWB#+FUG*
+zKp-U8@aE-a&I2Fk*xYNsWZBexMnQ^&iGhhpiG_)gjaiEYsFvADpyAdL&N*-1aXvXd
+zixb55;suc(_RME`55x>XEDS&Z01!POLjV8(3knBMQ%yu+bdl6^R8tU08c%qf<C5cI
+z;9{<*tm0x$OiJcrDM>9Z0g7-G=jWy>lqXgSsVS*&$O$nrN-;7i@o_K;OxQ7LDXRpd
+Y0;2}A6B7%o7n6iQ5EBC<02B`m3S$ddZ~y=R
+
+-- 
+2.52.0
+

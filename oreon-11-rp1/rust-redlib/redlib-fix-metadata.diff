@@ -1,0 +1,40 @@
+--- redlib-0.35.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ redlib-0.35.1/Cargo.toml	2025-09-03T23:25:51.896679+00:00
+@@ -19,7 +19,7 @@
+ ]
+ description = " Alternative private front-end to Reddit"
+ readme = "README.md"
+-license = "AGPL-3.0"
++license = "AGPL-3.0-only"
+ repository = "https://github.com/redlib-org/redlib"
+ 
+ [profile.release]
+@@ -31,21 +31,25 @@
+ version = "1.7.1"
+ 
+ [dependencies.askama]
+-version = "0.12.1"
++version = "0.14.0"
+ default-features = false
++features = [
++    "std",
++    "derive",
++]
+ 
+ [dependencies.base64]
+ version = "0.22.1"
+ 
+ [dependencies.brotli]
+-version = "6.0.0"
++version = ">=7.0.0, <9.0.0"
+ features = ["std"]
+ 
+ [dependencies.build_html]
+ version = "2.4.0"
+ 
+ [dependencies.cached]
+-version = "0.51.3"
++version = "0.53"
+ features = ["async"]
+ 
+ [dependencies.clap]

@@ -1,0 +1,14 @@
+
+#[~]# udevadm info /sys/bus/fsl-mc/devices/dpmac.7
+#P: /devices/platform/NXP0008:00/dprc.1/dpmac.7
+#L: 0
+#E: DEVPATH=/devices/platform/NXP0008:00/dprc.1/dpmac.7
+#E: DEVTYPE=fsl_mc_bus_dpmac
+#E: MODALIAS=fsl-mc:v00001957ddpmac
+#E: SUBSYSTEM=fsl-mc
+
+ACTION=="add", SUBSYSTEM=="fsl-mc", ENV{DEVTYPE}=="fsl_mc_bus_dpmac", RUN+="/usr/bin/flock /usr/bin/ls-addni -c '(PATH=/usr/bin /usr/bin/ls-addni %k)'"
+
+
+
+

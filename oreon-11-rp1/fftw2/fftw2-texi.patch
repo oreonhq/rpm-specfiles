@@ -1,0 +1,19 @@
+From Vladimir Eltsov: https://bugzilla.redhat.com/show_bug.cgi?id=2169765
+
+--- fftw-2.1.5/doc/fftw.texi~	2003-03-17 01:43:18.000000000 +0200
++++ fftw-2.1.5/doc/fftw.texi	2023-10-28 21:03:11.079545569 +0300
+@@ -46,10 +46,10 @@
+ @titlepage
+ @sp 10
+ @comment The title is printed in a large font.
+-@title{FFTW User's Manual}
++@title FFTW User's Manual
+ @subtitle For version @value{VERSION}, @value{UPDATED}
+-@author{Matteo Frigo}
+-@author{Steven G. Johnson}
++@author Matteo Frigo
++@author Steven G. Johnson
+ 
+ @c The following two commands start the copyright page.
+ @page
+ 

@@ -1,0 +1,29 @@
+From 722965223a263c2b9b8744a85528689b80198353 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:49 +0200
+Subject: [PATCH 17/41] Fix undefined reference if building with net and
+ without mouse
+
+---
+ menu.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/menu.c b/menu.c
+index d74c5c3..e871385 100644
+--- a/menu.c
++++ b/menu.c
+@@ -159,9 +159,11 @@ control_change ()
+     return;
+ #endif
+ #endif
++#ifdef MOUSE
+ #ifdef NETSUPPORT
+   if(client && !control[mouseplayer]) mouseplayer=-1;
+ #endif
++#endif
+ 
+    if (rotation[player]==1)
+       {
+-- 
+2.5.0
+

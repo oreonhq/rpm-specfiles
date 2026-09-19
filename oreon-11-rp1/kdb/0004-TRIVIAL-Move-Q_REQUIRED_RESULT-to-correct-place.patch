@@ -1,0 +1,547 @@
+From 3df6c74a4e44498d21820a5e84b93b549360157f Mon Sep 17 00:00:00 2001
+From: Jaroslaw Staniek <staniek@kde.org>
+Date: Sat, 1 Feb 2020 19:31:34 +0100
+Subject: [PATCH 04/22] TRIVIAL Move Q_REQUIRED_RESULT to correct place
+
+This can fix builds for newer MSVC
+---
+ autotests/KDbTestUtils.h                      |  2 +-
+ src/KDbConnection.h                           | 38 ++++++++++---------
+ src/KDbConnectionProxy.h                      |  4 +-
+ src/KDbConnection_p.h                         |  4 +-
+ src/KDbFieldList.h                            | 10 ++---
+ src/KDbOrderByColumn.h                        |  4 +-
+ src/drivers/mysql/MysqlConnection.h           | 14 ++++---
+ src/drivers/mysql/MysqlConnection_p.h         |  7 ++--
+ src/drivers/mysql/MysqlPreparedStatement.h    |  4 +-
+ src/drivers/postgresql/PostgresqlConnection.h | 14 ++++---
+ .../postgresql/PostgresqlConnection_p.h       |  7 ++--
+ .../postgresql/PostgresqlPreparedStatement.h  |  5 ++-
+ src/drivers/sqlite/SqliteConnection.h         | 14 ++++---
+ src/drivers/sqlite/SqliteConnection_p.h       |  8 ++--
+ src/drivers/sqlite/SqlitePreparedStatement.h  |  5 ++-
+ src/drivers/sybase/SybaseConnection.h         |  8 ++--
+ src/drivers/xbase/XbaseConnection.h           | 10 ++---
+ src/parser/KDbParser.h                        |  4 +-
+ src/parser/KDbParser_p.h                      |  2 +-
+ src/sql/KDbSqlResult.h                        |  2 +-
+ 20 files changed, 90 insertions(+), 76 deletions(-)
+
+diff --git a/autotests/KDbTestUtils.h b/autotests/KDbTestUtils.h
+index 9094f177..4c3bf2fc 100644
+--- a/autotests/KDbTestUtils.h
++++ b/autotests/KDbTestUtils.h
+@@ -125,7 +125,7 @@ KDBTESTUTILS_EXPORT bool qCompare(const QString &val1, const char *val2, const c
+ //! This way users of this method can call QVERIFY(utils.<name>());
+ #define KDBTEST_METHOD_DECL(name, argsDecl, args) \
+ public: \
+-    bool name argsDecl Q_REQUIRED_RESULT { name ## Internal args ; return !QTest::currentTestFailed(); } \
++    Q_REQUIRED_RESULT bool name argsDecl { name ## Internal args ; return !QTest::currentTestFailed(); } \
+ private Q_SLOTS: \
+     void name ## Internal argsDecl
+ 
+diff --git a/src/KDbConnection.h b/src/KDbConnection.h
+index 48008fae..a6968cf8 100644
+--- a/src/KDbConnection.h
++++ b/src/KDbConnection.h
+@@ -394,8 +394,8 @@ public:
+      (passing @a query and @a options to it's constructor).
+      Kexi SQL and driver-specific escaping is performed on table names.
+     */
+-    KDbCursor* prepareQuery(KDbQuerySchema* query, const QList<QVariant>& params,
+-                            KDbCursor::Options options = KDbCursor::Option::None) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(KDbQuerySchema *query, const QList<QVariant> &params,
++                                              KDbCursor::Options options = KDbCursor::Option::None);
+ 
+     /*! @overload
+      Prepares query described by @a query schema without parameters.
+@@ -404,9 +404,10 @@ public:
+                                     KDbCursor::Options options = KDbCursor::Option::None) /*Q_REQUIRED_RESULT*/ = 0;
+ 
+     /*! @overload
+-     Statement is build from data provided by @a table schema, it is like "select * from table_name".*/
+-    KDbCursor* prepareQuery(KDbTableSchema* table,
+-                            KDbCursor::Options options = KDbCursor::Option::None) Q_REQUIRED_RESULT;
++     Statement is build from data provided by @a table schema, it is like "select * from
++     table_name".*/
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(KDbTableSchema *table,
++                                              KDbCursor::Options options = KDbCursor::Option::None);
+ 
+     /*! Executes SELECT query described by a raw SQL statement @a sql.
+      @return opened cursor created for results of this query
+@@ -416,8 +417,8 @@ public:
+      Identifiers in @a sql that are the same as keywords
+      in KDbSQL dialect or the backend's SQL have to be escaped.
+      */
+-    KDbCursor* executeQuery(const KDbEscapedString& sql,
+-                            KDbCursor::Options options = KDbCursor::Option::None) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *executeQuery(const KDbEscapedString &sql,
++                                              KDbCursor::Options options = KDbCursor::Option::None);
+ 
+     /*! @overload executeQuery(const KDbEscapedString&, int)
+      @a params are values of parameters that
+@@ -425,19 +426,19 @@ public:
+ 
+      Statement is build from data provided by @a query schema.
+      Kexi SQL and driver-specific escaping is performed on table names. */
+-    KDbCursor* executeQuery(KDbQuerySchema* query, const QList<QVariant>& params,
+-                            KDbCursor::Options options = KDbCursor::Option::None) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *executeQuery(KDbQuerySchema *query, const QList<QVariant> &params,
++                                              KDbCursor::Options options = KDbCursor::Option::None);
+ 
+     /*! @overload */
+-    KDbCursor* executeQuery(KDbQuerySchema* query,
+-                            KDbCursor::Options options = KDbCursor::Option::None) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *executeQuery(KDbQuerySchema *query,
++                                              KDbCursor::Options options = KDbCursor::Option::None);
+ 
+     /*! @overload
+      Executes query described by @a query schema without parameters.
+      Statement is build from data provided by @a table schema,
+      it is like "select * from table_name".*/
+-    KDbCursor* executeQuery(KDbTableSchema* table,
+-                            KDbCursor::Options options = KDbCursor::Option::None) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *executeQuery(KDbTableSchema *table,
++                                              KDbCursor::Options options = KDbCursor::Option::None);
+ 
+     /*! Deletes cursor @a cursor previously created by functions like executeQuery()
+      for this connection.
+@@ -819,7 +820,7 @@ public:
+      * @note Only use this method if a non-portable raw query is required.
+      *       In other cases use prepareQuery() or executeQuery() and the KDbCursor object.
+      */
+-    QSharedPointer<KDbSqlResult> prepareSql(const KDbEscapedString& sql) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT QSharedPointer<KDbSqlResult> prepareSql(const KDbEscapedString& sql);
+ 
+     /**
+      * Executes a new native (raw, backend-specific) SQL query
+@@ -1080,7 +1081,7 @@ protected:
+     /*! @return a new field table schema for a table retrieved from @a data.
+      Ownership of the returned object is passed to the caller.
+      Used internally by tableSchema(). */
+-    KDbField* setupField(const KDbRecordData& data) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbField *setupField(const KDbRecordData &data);
+ 
+     /**
+      * Prepares query for a raw SQL statement @a sql with possibility of returning records.
+@@ -1190,7 +1191,7 @@ protected:
+      @todo Add support for nested transactions,
+            e.g. KDbTransactionData* beginTransaction(KDbTransactionData *parent)
+     */
+-    virtual KDbTransactionData* drv_beginTransaction() Q_REQUIRED_RESULT;
++    virtual Q_REQUIRED_RESULT KDbTransactionData *drv_beginTransaction();
+ 
+     /*! Note for driver developers: begins new transaction
+      and returns handle to it. Default implementation just
+@@ -1372,8 +1373,9 @@ protected:
+     /*! @internal used by *Internal() methods.
+      Executes query based on a raw SQL statement @a sql or @a query with optional @a params.
+      Ownership of the returned object is passed to the caller.*/
+-    KDbCursor* executeQueryInternal(const KDbEscapedString& sql, KDbQuerySchema* query,
+-                                    const QList<QVariant>* params) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *executeQueryInternal(const KDbEscapedString &sql,
++                                                      KDbQuerySchema *query,
++                                                      const QList<QVariant> *params);
+ 
+     /*! Loads extended schema information for table @a tableSchema,
+      if present (see ExtendedTableSchemaInformation in Kexi Wiki).
+diff --git a/src/KDbConnectionProxy.h b/src/KDbConnectionProxy.h
+index ec0d3541..b50aad7d 100644
+--- a/src/KDbConnectionProxy.h
++++ b/src/KDbConnectionProxy.h
+@@ -259,7 +259,7 @@ public:
+ 
+     bool useTemporaryDatabaseIfNeeded(QString* name);
+ 
+-    QSharedPointer<KDbSqlResult> prepareSql(const KDbEscapedString& sql) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT QSharedPointer<KDbSqlResult> prepareSql(const KDbEscapedString& sql);
+ 
+     bool executeSql(const KDbEscapedString& sql);
+ 
+@@ -316,7 +316,7 @@ public:
+ 
+     KDbField* setupField(const KDbRecordData& data);
+ 
+-    KDbSqlResult* drv_prepareSql(const KDbEscapedString& sql) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbSqlResult *drv_prepareSql(const KDbEscapedString &sql) override;
+ 
+     bool drv_executeSql(const KDbEscapedString& sql) override;
+ 
+diff --git a/src/KDbConnection_p.h b/src/KDbConnection_p.h
+index df52d3d1..ec1e7df1 100644
+--- a/src/KDbConnection_p.h
++++ b/src/KDbConnection_p.h
+@@ -115,13 +115,13 @@ public:
+      Connection keeps ownership of the returned object.
+      Used internally by tableSchema() methods.
+      On failure deletes @a table and returns @c nullptr. */
+-    KDbTableSchema* setupTableSchema(KDbTableSchema *table) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbTableSchema *setupTableSchema(KDbTableSchema *table);
+ 
+     /*! @return a full query schema for a query using 'kexi__*' system tables.
+      Connection keeps ownership of the returned object.
+      Used internally by querySchema() methods.
+      On failure deletes @a query and returns @c nullptr. */
+-    KDbQuerySchema* setupQuerySchema(KDbQuerySchema *query) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbQuerySchema *setupQuerySchema(KDbQuerySchema *query);
+ 
+     //! @return cached fields expanded information for @a query
+     KDbQuerySchemaFieldsExpanded *fieldsExpanded(const KDbQuerySchema *query);
+diff --git a/src/KDbFieldList.h b/src/KDbFieldList.h
+index bea6445c..a7c18ea3 100644
+--- a/src/KDbFieldList.h
++++ b/src/KDbFieldList.h
+@@ -130,7 +130,7 @@ public:
+      Returned list can be usable e.g. as argument for KDbConnection::insertRecord().
+      0 is returned if at least one name cannot be found.
+     */
+-    KDbFieldList* subList(const QString& n1, const QString& n2 = QString(),
++    Q_REQUIRED_RESULT KDbFieldList *subList(const QString& n1, const QString& n2 = QString(),
+                        const QString& n3 = QString(), const QString& n4 = QString(),
+                        const QString& n5 = QString(), const QString& n6 = QString(),
+                        const QString& n7 = QString(), const QString& n8 = QString(),
+@@ -139,16 +139,16 @@ public:
+                        const QString& n13 = QString(), const QString& n14 = QString(),
+                        const QString& n15 = QString(), const QString& n16 = QString(),
+                        const QString& n17 = QString(), const QString& n18 = QString()
+-                      ) Q_REQUIRED_RESULT;
++                      );
+ 
+     /*! Like above, but for QStringList. */
+-    KDbFieldList* subList(const QStringList& list) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbFieldList *subList(const QStringList &list);
+ 
+     /*! @overload subList(const QStringList&) */
+-    KDbFieldList* subList(const QList<QByteArray>& list) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbFieldList *subList(const QList<QByteArray> &list);
+ 
+     /*! Like above, but with a list of field indices */
+-    KDbFieldList* subList(const QList<int>& list) Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbFieldList *subList(const QList<int> &list);
+ 
+     /*! @return a string that is a result of all field names concatenated
+      and with @a separator. This is usable e.g. as argument like "field1,field2"
+diff --git a/src/KDbOrderByColumn.h b/src/KDbOrderByColumn.h
+index 96c6cdb6..7c9a218a 100644
+--- a/src/KDbOrderByColumn.h
++++ b/src/KDbOrderByColumn.h
+@@ -61,8 +61,8 @@ public:
+      @a fromQuery and @a toQuery is needed if column() is assigned to this info.
+      Then, column info within @a toQuery will be assigned to the new KDbOrderByColumn object,
+      corresponding to column() from "this" KDbOrderByColumn object. */
+-    KDbOrderByColumn *copy(KDbConnection *conn, KDbQuerySchema *fromQuery,
+-                           KDbQuerySchema *toQuery) const Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbOrderByColumn *copy(KDbConnection *conn, KDbQuerySchema *fromQuery,
++                                             KDbQuerySchema *toQuery) const;
+ 
+     //! A column to sort.
+     KDbQueryColumnInfo* column() const;
+diff --git a/src/drivers/mysql/MysqlConnection.h b/src/drivers/mysql/MysqlConnection.h
+index 5583cc89..cfe17fcf 100644
+--- a/src/drivers/mysql/MysqlConnection.h
++++ b/src/drivers/mysql/MysqlConnection.h
+@@ -36,12 +36,14 @@ class MysqlConnection : public KDbConnection
+ public:
+     ~MysqlConnection() override;
+ 
+-    KDbCursor *prepareQuery(const KDbEscapedString &sql, KDbCursor::Options options
+-                            = KDbCursor::Option::None) override Q_REQUIRED_RESULT;
+-    KDbCursor *prepareQuery(KDbQuerySchema *query, KDbCursor::Options options
+-                            = KDbCursor::Option::None) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(const KDbEscapedString &sql,
++                                              KDbCursor::Options options
++                                              = KDbCursor::Option::None) override;
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(KDbQuerySchema *query,
++                                              KDbCursor::Options options
++                                              = KDbCursor::Option::None) override;
+ 
+-    KDbPreparedStatementInterface *prepareStatementInternal() override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbPreparedStatementInterface *prepareStatementInternal() override;
+ 
+ protected:
+     /*! Used by driver */
+@@ -59,7 +61,7 @@ protected:
+                                  KDbMessageHandler* msgHandler = nullptr) override;
+     bool drv_closeDatabase() override;
+     bool drv_dropDatabase(const QString &dbName = QString()) override;
+-    KDbSqlResult* drv_prepareSql(const KDbEscapedString& sql) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbSqlResult *drv_prepareSql(const KDbEscapedString &sql) override;
+     bool drv_executeSql(const KDbEscapedString& sql) override;
+ 
+     //! Implemented for KDbResultable
+diff --git a/src/drivers/mysql/MysqlConnection_p.h b/src/drivers/mysql/MysqlConnection_p.h
+index 23154525..05d3da00 100644
+--- a/src/drivers/mysql/MysqlConnection_p.h
++++ b/src/drivers/mysql/MysqlConnection_p.h
+@@ -166,7 +166,7 @@ public:
+         return data ? mysql_num_fields(data) : 0;
+     }
+ 
+-    inline KDbSqlField *field(int index) override Q_REQUIRED_RESULT {
++    inline Q_REQUIRED_RESULT KDbSqlField *field(int index) override {
+         if (!fields) {
+             if (!data) {
+                 return nullptr;
+@@ -176,9 +176,10 @@ public:
+         return new MysqlSqlField(fields + index);
+     }
+ 
+-    KDbField *createField(const QString &tableName, int index) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbField *createField(const QString &tableName, int index) override;
+ 
+-    inline QSharedPointer<KDbSqlRecord> fetchRecord() override Q_REQUIRED_RESULT {
++    inline Q_REQUIRED_RESULT QSharedPointer<KDbSqlRecord> fetchRecord() override
++    {
+         QSharedPointer<KDbSqlRecord> record;
+         MYSQL_ROW row = data ? mysql_fetch_row(data) : nullptr;
+         if (!row) {
+diff --git a/src/drivers/mysql/MysqlPreparedStatement.h b/src/drivers/mysql/MysqlPreparedStatement.h
+index a7702f3b..26f11181 100644
+--- a/src/drivers/mysql/MysqlPreparedStatement.h
++++ b/src/drivers/mysql/MysqlPreparedStatement.h
+@@ -36,10 +36,10 @@ public:
+ private:
+     bool prepare(const KDbEscapedString& sql) override;
+ 
+-    QSharedPointer<KDbSqlResult> execute(KDbPreparedStatement::Type type,
++    Q_REQUIRED_RESULT QSharedPointer<KDbSqlResult> execute(KDbPreparedStatement::Type type,
+                                          const KDbField::List &selectFieldList,
+                                          KDbFieldList *insertFieldList,
+-                                         const KDbPreparedStatementParameters &parameters) override Q_REQUIRED_RESULT;
++                                         const KDbPreparedStatementParameters &parameters) override;
+ 
+     bool init();
+     void done();
+diff --git a/src/drivers/postgresql/PostgresqlConnection.h b/src/drivers/postgresql/PostgresqlConnection.h
+index 8e308941..f6aed510 100644
+--- a/src/drivers/postgresql/PostgresqlConnection.h
++++ b/src/drivers/postgresql/PostgresqlConnection.h
+@@ -45,14 +45,16 @@ public:
+     ~PostgresqlConnection() override;
+ 
+     //! @return a new query based on a query statement
+-    KDbCursor *prepareQuery(const KDbEscapedString &sql, KDbCursor::Options options
+-                            = KDbCursor::Option::None) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(const KDbEscapedString &sql,
++                                              KDbCursor::Options options
++                                              = KDbCursor::Option::None) override;
+ 
+     //! @return a new query based on a query object
+-    KDbCursor *prepareQuery(KDbQuerySchema *query, KDbCursor::Options options
+-                            = KDbCursor::Option::None) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(KDbQuerySchema *query,
++                                              KDbCursor::Options options
++                                              = KDbCursor::Option::None) override;
+ 
+-    KDbPreparedStatementInterface *prepareStatementInternal() override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbPreparedStatementInterface *prepareStatementInternal() override;
+ 
+     /*! Connection-specific string escaping.  */
+     KDbEscapedString escapeString(const QString& str) const override;
+@@ -83,7 +85,7 @@ private:
+     //! Drops the given database
+     bool drv_dropDatabase(const QString &dbName = QString()) override;
+     //! Executes an SQL statement
+-    KDbSqlResult* drv_prepareSql(const KDbEscapedString& sql) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbSqlResult *drv_prepareSql(const KDbEscapedString &sql) override;
+     bool drv_executeSql(const KDbEscapedString& sql) override;
+ 
+     //! Implemented for KDbResultable
+diff --git a/src/drivers/postgresql/PostgresqlConnection_p.h b/src/drivers/postgresql/PostgresqlConnection_p.h
+index 3d221128..c0485786 100644
+--- a/src/drivers/postgresql/PostgresqlConnection_p.h
++++ b/src/drivers/postgresql/PostgresqlConnection_p.h
+@@ -155,13 +155,14 @@ public:
+         return PQnfields(result);
+     }
+ 
+-    inline KDbSqlField *field(int index) override Q_REQUIRED_RESULT {
++    inline Q_REQUIRED_RESULT KDbSqlField *field(int index) override
++    {
+         return new PostgresqlSqlField(result, index);
+     }
+ 
+-    KDbField *createField(const QString &tableName, int index) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbField *createField(const QString &tableName, int index) override;
+ 
+-    inline QSharedPointer<KDbSqlRecord> fetchRecord() override Q_REQUIRED_RESULT
++    inline Q_REQUIRED_RESULT QSharedPointer<KDbSqlRecord> fetchRecord() override
+     {
+         return QSharedPointer<KDbSqlRecord>(recordToFetch < recordsCount
+                                                 ? new PostgresqlSqlRecord(result, recordToFetch++)
+diff --git a/src/drivers/postgresql/PostgresqlPreparedStatement.h b/src/drivers/postgresql/PostgresqlPreparedStatement.h
+index eae7fcef..8be56375 100644
+--- a/src/drivers/postgresql/PostgresqlPreparedStatement.h
++++ b/src/drivers/postgresql/PostgresqlPreparedStatement.h
+@@ -33,10 +33,11 @@ public:
+ 
+     bool prepare(const KDbEscapedString& sql) override;
+ 
+-    QSharedPointer<KDbSqlResult> execute(KDbPreparedStatement::Type type,
++    Q_REQUIRED_RESULT QSharedPointer<KDbSqlResult> execute(
++            KDbPreparedStatement::Type type,
+             const KDbField::List &selectFieldList,
+             KDbFieldList *insertFieldList,
+-            const KDbPreparedStatementParameters &parameters) override Q_REQUIRED_RESULT;
++            const KDbPreparedStatementParameters &parameters) override;
+ 
+ private:
+     Q_DISABLE_COPY(PostgresqlPreparedStatement)
+diff --git a/src/drivers/sqlite/SqliteConnection.h b/src/drivers/sqlite/SqliteConnection.h
+index 72282291..a9eb087f 100644
+--- a/src/drivers/sqlite/SqliteConnection.h
++++ b/src/drivers/sqlite/SqliteConnection.h
+@@ -39,12 +39,14 @@ class SqliteConnection : public KDbConnection
+ public:
+     ~SqliteConnection() override;
+ 
+-    KDbCursor *prepareQuery(const KDbEscapedString &sql, KDbCursor::Options options
+-                            = KDbCursor::Option::None) override Q_REQUIRED_RESULT;
+-    KDbCursor *prepareQuery(KDbQuerySchema *query, KDbCursor::Options options
+-                            = KDbCursor::Option::None) override Q_REQUIRED_RESULT;
+-
+-    KDbPreparedStatementInterface* prepareStatementInternal() override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(const KDbEscapedString &sql,
++                                              KDbCursor::Options options
++                                              = KDbCursor::Option::None) override;
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(KDbQuerySchema *query,
++                                              KDbCursor::Options options
++                                              = KDbCursor::Option::None) override;
++
++    Q_REQUIRED_RESULT KDbPreparedStatementInterface *prepareStatementInternal() override;
+ 
+ protected:
+     /*! Used by driver */
+diff --git a/src/drivers/sqlite/SqliteConnection_p.h b/src/drivers/sqlite/SqliteConnection_p.h
+index b30d08ba..841abbd3 100644
+--- a/src/drivers/sqlite/SqliteConnection_p.h
++++ b/src/drivers/sqlite/SqliteConnection_p.h
+@@ -140,13 +140,15 @@ public:
+         return sqlite3_column_count(prepared_st);
+     }
+ 
+-    inline KDbSqlField *field(int index) override Q_REQUIRED_RESULT {
++    inline Q_REQUIRED_RESULT KDbSqlField *field(int index) override
++    {
+         return prepared_st ? new SqliteSqlField(prepared_st, index) : nullptr;
+     }
+ 
+-    KDbField *createField(const QString &tableName, int index) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbField *createField(const QString &tableName, int index) override;
+ 
+-    inline QSharedPointer<KDbSqlRecord> fetchRecord() override Q_REQUIRED_RESULT {
++    inline Q_REQUIRED_RESULT QSharedPointer<KDbSqlRecord> fetchRecord() override
++    {
+         SqliteSqlRecord *record;
+         const int res = sqlite3_step(prepared_st);
+         if (res == SQLITE_ROW) {
+diff --git a/src/drivers/sqlite/SqlitePreparedStatement.h b/src/drivers/sqlite/SqlitePreparedStatement.h
+index 5923c206..daa3502d 100644
+--- a/src/drivers/sqlite/SqlitePreparedStatement.h
++++ b/src/drivers/sqlite/SqlitePreparedStatement.h
+@@ -36,9 +36,10 @@ public:
+ protected:
+     bool prepare(const KDbEscapedString& sql) override;
+ 
+-    QSharedPointer<KDbSqlResult> execute(KDbPreparedStatement::Type type,
++    Q_REQUIRED_RESULT QSharedPointer<KDbSqlResult> execute(
++            KDbPreparedStatement::Type type,
+             const KDbField::List &selectFieldList, KDbFieldList *insertFieldList,
+-            const KDbPreparedStatementParameters &parameters) override Q_REQUIRED_RESULT;
++            const KDbPreparedStatementParameters &parameters) override;
+ 
+     bool bindValue(KDbField *field, const QVariant& value, int arg);
+ 
+diff --git a/src/drivers/sybase/SybaseConnection.h b/src/drivers/sybase/SybaseConnection.h
+index ecfa6c2a..793de01a 100644
+--- a/src/drivers/sybase/SybaseConnection.h
++++ b/src/drivers/sybase/SybaseConnection.h
+@@ -34,10 +34,10 @@ class SybaseConnection : public KDbConnection
+ public:
+     virtual ~SybaseConnection();
+ 
+-    KDbCursor *prepareQuery(const KDbEscapedString &sql,
+-                            int cursor_options = 0) override Q_REQUIRED_RESULT;
+-    KDbCursor *prepareQuery(KDbQuerySchema *query,
+-                            int cursor_options = 0) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(const KDbEscapedString &sql,
++                                              int cursor_options = 0) override;
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(KDbQuerySchema *query,
++                                              int cursor_options = 0) override;
+ 
+     KDbPreparedStatement prepareStatement(KDbPreparedStatement::StatementType type,
+                                           KDbFieldList *fields) override;
+diff --git a/src/drivers/xbase/XbaseConnection.h b/src/drivers/xbase/XbaseConnection.h
+index c5caaf9b..169d0fcf 100644
+--- a/src/drivers/xbase/XbaseConnection.h
++++ b/src/drivers/xbase/XbaseConnection.h
+@@ -34,13 +34,13 @@ class xBaseConnection : public KDbConnection
+ public:
+     virtual ~xBaseConnection();
+ 
+-    KDbCursor *prepareQuery(const KDbEscapedString &sql,
+-                            int cursor_options = 0) override Q_REQUIRED_RESULT;
+-    KDbCursor *prepareQuery(KDbQuerySchema *query,
+-                            int cursor_options = 0) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(const KDbEscapedString &sql,
++                                              int cursor_options = 0) override;
++    Q_REQUIRED_RESULT KDbCursor *prepareQuery(KDbQuerySchema *query,
++                                              int cursor_options = 0) override;
+ 
+     //! @todo returns @c nullptr for now
+-    KDbPreparedStatementInterface *prepareStatementInternal() override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbPreparedStatementInterface *prepareStatementInternal() override;
+ 
+ protected:
+ 
+diff --git a/src/parser/KDbParser.h b/src/parser/KDbParser.h
+index 0d5110a3..48122cca 100644
+--- a/src/parser/KDbParser.h
++++ b/src/parser/KDbParser.h
+@@ -160,7 +160,7 @@ public:
+      *
+      * @todo Implement this
+      */
+-    KDbTableSchema *table() Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbTableSchema *table();
+ 
+     /**
+      * @return a pointer to a new query schema created by parsing 'SELECT ...' statement
+@@ -169,7 +169,7 @@ public:
+      * @note A proper query schema is returned only once for each successful parse() call,
+      * and the object is owned by the caller. In all other cases nullptr is returned.
+      */
+-    KDbQuerySchema *query() Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbQuerySchema *query();
+ 
+     /**
+      * @return a pointer to the used database connection or @c nullptr if it was not set.
+diff --git a/src/parser/KDbParser_p.h b/src/parser/KDbParser_p.h
+index 8a5669a7..94bb9acc 100644
+--- a/src/parser/KDbParser_p.h
++++ b/src/parser/KDbParser_p.h
+@@ -71,7 +71,7 @@ public:
+     /**
+      * Creates a new query or provides the one provided by KDbParser::parse().
+      */
+-    KDbQuerySchema* createQuery() Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbQuerySchema *createQuery();
+ 
+     friend class KDbParser;
+ 
+diff --git a/src/sql/KDbSqlResult.h b/src/sql/KDbSqlResult.h
+index fe67d5ee..0e353f43 100644
+--- a/src/sql/KDbSqlResult.h
++++ b/src/sql/KDbSqlResult.h
+@@ -76,7 +76,7 @@ public:
+     //! @return record data object and passes its ownership
+     //! @c nullptr is returned on error or when there is no record to fetch.
+     //! Check lastResult() for errors.
+-    KDbRecordData* fetchRecordData() Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KDbRecordData *fetchRecordData();
+ 
+     //! @return result of last operation on this SQL result
+     virtual KDbResult lastResult() = 0;
+-- 
+2.31.1
+

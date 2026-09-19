@@ -1,0 +1,45 @@
+diff --git a/test-requirements.txt b/test-requirements.txt
+index 446a41f..0bf6dc3 100644
+--- a/test-requirements.txt
++++ b/test-requirements.txt
+@@ -1,5 +1,5 @@
+ # The order of packages is significant, because pip processes them in the order
+ # of appearance. Changing the order has an impact on the overall integration
+ # process, which may cause wedges in the gate later.
+-nose
++pytest
+ sphinx!=1.2.0,!=1.3b1,<1.3,>=1.1.2
+diff --git a/test/compliancetest.py b/test/compliancetest.py
+index bf4e59c..a7285de 100644
+--- a/test/compliancetest.py
++++ b/test/compliancetest.py
+@@ -6,15 +6,13 @@ import lockfile
+ 
+ 
+ class ComplianceTest(object):
+-    def __init__(self):
+-        self.saved_class = lockfile.LockFile
+-
+     def _testfile(self):
+         """Return platform-appropriate file.  Helper for tests."""
+         import tempfile
+         return os.path.join(tempfile.gettempdir(), 'trash-%s' % os.getpid())
+ 
+     def setup(self):
++        self.saved_class = lockfile.LockFile
+         lockfile.LockFile = self.class_to_test
+ 
+     def teardown(self):
+diff --git a/tox.ini b/tox.ini
+index 750ad5f..7bfd923 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -4,7 +4,7 @@ envlist = py27,py32,py33,py34
+ 
+ [testenv]
+ deps = -r{toxinidir}/test-requirements.txt
+-commands=nosetests
++commands=pytest
+ 
+ [testenv:venv]
+ commands = {posargs}

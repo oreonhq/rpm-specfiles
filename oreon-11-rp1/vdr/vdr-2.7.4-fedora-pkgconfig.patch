@@ -1,0 +1,15 @@
+--- vdr-2.7.4/Makefile.orig	2025-02-26 14:07:24.323718942 +0100
++++ vdr-2.7.4/Makefile	2025-02-26 14:08:33.583687374 +0100
+@@ -186,6 +186,12 @@
+ 	@echo "cflags=$(CFLAGS) $(CDEFINES) $(CINCLUDES) $(HDRDIR)" >> $@
+ 	@echo "cxxflags=$(CXXFLAGS) $(CDEFINES) $(CINCLUDES) $(HDRDIR)" >> $@
+ 	@echo "" >> $@
++	@echo "datadir=\$${resdir}" >> $@
++	@echo "rundir=$(RUNDIR)" >> $@
++	@echo "vardir=$(VARDIR)" >> $@
++	@echo "user=$(VDR_USER)" >> $@
++	@echo "group=$(VDR_GROUP)" >> $@
++	@echo "" >> $@
+ 	@echo "Name: VDR" >> $@
+ 	@echo "Description: Video Disk Recorder" >> $@
+ 	@echo "URL: https://www.tvdr.de/" >> $@

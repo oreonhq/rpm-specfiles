@@ -1,0 +1,32 @@
+diff -up qzxing-3.3.0/src/QZXing-components.pri.orig qzxing-3.3.0/src/QZXing-components.pri
+--- qzxing-3.3.0/src/QZXing-components.pri.orig	2024-07-25 16:37:25.273297305 +0200
++++ qzxing-3.3.0/src/QZXing-components.pri	2024-07-25 16:37:34.051256916 +0200
+@@ -456,7 +456,7 @@ unix {
+         # Installation
+         headers.files = $$PWD/QZXing.h $$PWD/QZXing_global.h
+         headers.path = $$PREFIX/include
+-        target.path = $$PREFIX/lib
++        target.path = $${INSTALL_LIBDIR}
+         INSTALLS += headers target
+     }
+ 
+@@ -464,7 +464,7 @@ unix {
+     # pkg-config support
+     CONFIG += create_pc create_prl no_install_prl
+     QMAKE_PKGCONFIG_DESTDIR = pkgconfig
+-    QMAKE_PKGCONFIG_LIBDIR = ${prefix}/lib
++    QMAKE_PKGCONFIG_LIBDIR = $${INSTALL_LIBDIR}
+     QMAKE_PKGCONFIG_INCDIR = ${prefix}/include
+ 
+     unix:QMAKE_CLEAN += -r pkgconfig lib$${TARGET}.prl
+diff -up qzxing-3.3.0/src/QZXing.pro.orig qzxing-3.3.0/src/QZXing.pro
+--- qzxing-3.3.0/src/QZXing.pro.orig	2024-07-25 16:37:50.025183418 +0200
++++ qzxing-3.3.0/src/QZXing.pro	2024-07-25 16:37:58.413144815 +0200
+@@ -27,7 +27,6 @@ CONFIG += \
+ 
+ VERSION = 3.3
+ 
+-TARGET = QZXing
+ TEMPLATE = lib
+ 
+ include(QZXing-components.pri)

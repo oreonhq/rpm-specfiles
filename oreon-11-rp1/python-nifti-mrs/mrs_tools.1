@@ -1,0 +1,64 @@
+.TH MRS_TOOLS "1" "November 2023" "" "User Commands"
+.SH NAME
+.B mrs_tools
+\(en NIfTI-MRS (Magnetic Resonance Spectroscopy) tools
+.SH SYNOPSIS
+.B mrs_tools
+.RB [ \-h ]
+.RB [ \-v ]
+.RB { info , vis , merge , split , reorder , reshape , conjugate }\ ...\:
+.RI [ OPTIONS ]
+.I COMMAND
+.RI [ ARGS ]...
+.SH OPTIONS
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit.
+.TP
+.B \-v\fR,\ \fB\-\-version
+Show the program\(cqs version number and exit.
+.SS "SUBCOMMANDS"
+Available tools
+.TP
+.B info
+Information about the NIfTI-MRS file.
+See
+.BR mrs_tools\-info (1).
+.TP
+.B vis
+Quick visualisation of a NIfTI-MRS file or FSL-MRS basis set.
+See
+.BR mrs_tools\-vis (1).
+.TP
+.B merge
+Merge NIfTI-MRS along higher dimensions.
+See
+.BR mrs_tools\-merge (1).
+.TP
+.B split
+Split NIfTI-MRS along higher dimensions.
+See
+.BR mrs_tools\-split (1).
+.TP
+.B reorder
+Reorder higher dimensions of NIfTI-MRS.
+See
+.BR mrs_tools\-reorder (1).
+.TP
+.B reshape
+Reorder higher dimensions of NIfTI-MRS.
+See
+.BR mrs_tools\-reshape (1).
+.TP
+.B conjugage
+Conjugate data to correct phase/frequency convention in a NIfTI-MRS file.
+See
+.BR mrs_tools\-conjugate (1).
+.SH "SEE ALSO"
+.BR mrs_tools\-info (1),
+.BR mrs_tools\-vis (1),
+.BR mrs_tools\-merge (1),
+.BR mrs_tools\-split (1),
+.BR mrs_tools\-reorder (1),
+.BR mrs_tools\-reshape (1),
+.BR mrs_tools\-conjugate (1)

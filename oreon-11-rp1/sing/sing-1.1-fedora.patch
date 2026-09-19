@@ -1,0 +1,188 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for sing >= 1.1, which removes
+all references to internal libpcap and libnet to get the system libraries used. It
+also removes internal CFLAGS definitation in favour of the system-wide one.
+
+--- SING-1.1/configure.in			2001-04-18 13:11:08.000000000 +0200
++++ SING-1.1/configure.in.fedora		2009-04-18 04:33:04.000000000 +0200
+@@ -7,20 +7,11 @@
+ 
+ AM_CONFIG_HEADER(config.h)
+ 
+-libpcapdir=libpcap-0.4
+-libnetdir=Libnet-1.0.1b
+-
+-AC_SUBST(libpcapdir)
+-AC_SUBST(libnetdir)
+-
+ AC_CANONICAL_SYSTEM
+ 
+ AM_INIT_AUTOMAKE(SING, 1.1)
+ 
+ AC_PROG_CC
+-if test -n "$GCC"; then
+-      CFLAGS="-O3 -Wall"
+-fi
+ 
+ AC_STDC_HEADERS
+ 
+@@ -44,45 +35,6 @@
+ AC_CHECK_LIB(net, libnet_open_raw_sock, have_libnet=yes, have_libnet=no)
+ 
+ dnl
+-dnl libpcap...
+-dnl
+-PCAP_CLEAN="pcap_clean"
+-PCAP_DISTCLEAN="pcap_distclean"
+-CFLAGS="$CFLAGS -I$libpcapdir"
+-
+-if test $have_libpcap = yes; then
+-  PCAP_COMPILE=""
+-  LIBS="-L/usr/local/lib $LIBS"
+-else
+-  PCAP_COMPILE="pcap_compile"
+-  LIBS="-L/usr/local/lib -L$libpcapdir $LIBS"
+-fi
+-
+-AC_SUBST(PCAP_CLEAN)
+-AC_SUBST(PCAP_DISTCLEAN)
+-AC_SUBST(PCAP_COMPILE)
+-
+-dnl
+-dnl libnet...
+-dnl
+-LIBNET_CLEAN="libnet_clean"
+-LIBNET_DISTCLEAN="libnet_distclean"
+-CFLAGS="$CFLAGS -I$libnetdir"
+-
+-if test $have_libnet = yes; then
+-  LIBNET_COMPILE=""
+-  LIBS="-L/usr/local/lib $LIBS"
+-else
+-  LIBNET_COMPILE="libnet_compile"
+-  LIBS="-L/usr/local/lib -L$libnetdir/lib $LIBS"
+-fi
+-
+-AC_SUBST(LIBNET_CLEAN)
+-AC_SUBST(LIBNET_DISTCLEAN)
+-AC_SUBST(LIBNET_COMPILE)
+-
+-
+-dnl
+ dnl Check headers
+ dnl
+ AC_CHECK_HEADERS(sys/sockio.h string.h strings.h bstring.h sys/ioctl.h)
+@@ -144,7 +96,7 @@
+            case "`uname -r`" in
+                 2.4*)
+                    AC_DEFINE(LINUX_24)
+-                ;
++                ;;
+                 2.2*)
+                    AC_DEFINE(LINUX_22)
+                 ;;
+--- SING-1.1/Makefile.in			2001-04-18 13:11:06.000000000 +0200
++++ SING-1.1/Makefile.in.fedora			2009-04-18 04:18:04.000000000 +0200
+@@ -67,18 +67,13 @@
+ LIBNET_DISTCLEAN = @LIBNET_DISTCLEAN@
+ MAKEDEPEND = @MAKEDEPEND@
+ PACKAGE = @PACKAGE@
+-PCAP_CLEAN = @PCAP_CLEAN@
+-PCAP_COMPILE = @PCAP_COMPILE@
+-PCAP_DISTCLEAN = @PCAP_DISTCLEAN@
+ VERSION = @VERSION@
+ getopt_OBJECTS = @getopt_OBJECTS@
+ getopt_SOURCES = @getopt_SOURCES@
+-libnetdir = @libnetdir@
+-libpcapdir = @libpcapdir@
+ 
+-INCLUDES = -I$(includedir) -I$(libpcapdir) -I$(libnetdir)/include
++INCLUDES = -I$(includedir)
+ 
+-LIBS = @LIBS@ -lpcap -lnet
++LIBS = @LIBS@ -lpcap `/usr/bin/libnet10-config --libs`
+ 
+ bin_PROGRAMS = sing
+ 
+@@ -94,7 +89,7 @@
+ PROGRAMS =  $(bin_PROGRAMS)
+ 
+ 
+-DEFS = @DEFS@ `$(libnetdir)/libnet-config --defines` -I. -I$(srcdir) -I.
++DEFS = @DEFS@ `/usr/bin/libnet10-config --cflags --defines` -I.
+ sing_OBJECTS =  sing.o device.o ip_options.o parser.o vers_date.o help.o @getopt_OBJECTS@
+ sing_LDADD = $(LDADD)
+ sing_DEPENDENCIES = 
+@@ -111,7 +106,7 @@
+ SOURCES = $(sing_SOURCES)
+ OBJECTS = $(sing_OBJECTS)
+ 
+-all: libpcap libnet all-redirect
++all: all-redirect
+ .SUFFIXES:
+ .SUFFIXES: .S .c .o .s
+ 
+@@ -226,7 +221,7 @@
+ 
+ 
+ help.o: help.c config.h
+-sing.o: sing.c config.h libpcap-0.4/pcap.h libpcap-0.4/net/bpf.h \
++sing.o: sing.c config.h \
+ 	sing.h ipcompat.h misc.h packet.h dev_struct.h
+ ip_options.o: ip_options.c config.h ip_options.h ipcompat.h packet.h \
+ 	misc.h
+@@ -269,12 +264,12 @@
+ 
+ clean-am:  clean-binPROGRAMS mostlyclean-am
+ 
+-clean: clean-am pcap_clean libnet_clean
++clean: clean-am
+ 
+ distclean-am:  distclean-hdr distclean-compile \
+ 		 distclean-generic clean-am
+ 
+-distclean: distclean-am pcap_distclean libnet_distclean
++distclean: distclean-am
+ 	-rm -f config.status
+ 
+ 
+@@ -290,38 +285,9 @@
+ distclean-generic clean mostlyclean distclean
+ 
+ 
+-clean-local:	@PCAP_CLEAN@ @LIBNET_CLEAN@
++clean-local:
+ 
+-distclean-local:	@PCAP_DISTCLEAN@ @LIBNET_DISTCLEAN@
+-
+-libpcap:	pcap_conf @PCAP_COMPILE@
+-
+-pcap_conf:
+-	@echo Configuring libpcap; cd $(libpcapdir); ./configure
+-
+-pcap_compile:
+-	@echo Compiling libpcap; cd $(libpcapdir); $(MAKE)
+-
+-pcap_clean:
+-	cd $(libpcapdir); $(MAKE) clean
+-
+-pcap_distclean:
+-	cd $(libpcapdir); $(MAKE) distclean
+-
+-
+-libnet: libnet_conf @LIBNET_COMPILE@
+-
+-libnet_conf:
+-	@echo Configuring libnet; cd $(libnetdir); ./configure
+-
+-libnet_compile:
+-	@echo Compiling libnet; cd $(libnetdir); $(MAKE)
+-
+-libnet_clean:
+-	cd $(libnetdir); $(MAKE) clean
+-
+-libnet_distclean:
+-	cd $(libnetdir); $(MAKE) distclean
++distclean-local:
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.

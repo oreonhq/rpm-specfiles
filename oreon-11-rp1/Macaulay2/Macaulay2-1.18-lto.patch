@@ -1,0 +1,35 @@
+--- M2/Macaulay2/c/compat.h.orig	2021-06-13 14:30:17.341325747 -0600
++++ M2/Macaulay2/c/compat.h	2021-06-14 06:52:52.648631798 -0600
+@@ -2,7 +2,7 @@
+ 
+ #ifndef __cplusplus
+ #undef bool
+-typedef char bool;
++typedef _Bool bool;
+ #endif
+ 
+ extern char posfmt[];
+--- M2/Macaulay2/d/types.h.orig	2021-06-04 17:33:04.000000000 -0600
++++ M2/Macaulay2/d/types.h	2021-06-13 14:30:27.804335244 -0600
+@@ -37,6 +37,10 @@
+ # define LONGJUMP(env) longjmp(env, 1)
+ #endif
+ 
++#ifdef  __cplusplus
++extern "C" {
++#endif
++
+ struct ArgCell
+ {
+   int argc, envc;
+@@ -50,6 +54,10 @@ struct JumpCell
+   bool is_set;
+ };
+ 
++#ifdef  __cplusplus
++}
++#endif
++
+ #ifdef HAVE_UNISTD_H
+ #include <unistd.h>
+ #endif

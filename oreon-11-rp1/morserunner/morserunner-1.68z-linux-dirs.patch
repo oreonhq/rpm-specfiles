@@ -1,0 +1,61 @@
+diff --git a/CallLst.pas b/CallLst.pas
+index 14851cc..38678f2 100644
+--- a/CallLst.pas
++++ b/CallLst.pas
+@@ -48,16 +48,16 @@ var
+ begin
+   Calls.Clear;
+ 
+-  FileName := ExtractFilePath(ParamStr(0)) + 'Master.dta';
++  GetDir(0, FileName);
++  FileName := Filename + '/Master.dta';
+   if not FileExists(FileName) then
+      begin
+-	GetDir(0, FileName);
+-	FileName := Filename + '/Master.dta';
+-	if not FileExists(FileName) then
+-	   begin
+-	      Writeln('Unable to load call file, default single call used');
+-	      Exit;
+-	   end;
++       FileName := '/usr/share/morserunner/Master.dta';
++       if not FileExists(FileName) then
++         begin
++           Writeln('Unable to load call file, default single call used');
++           Exit;
++         end;
+      end;
+ 
+   Writeln('Using calls from file: ', Filename);
+diff --git a/Ini.pas b/Ini.pas
+index c0b155d..14e7a3c 100644
+--- a/Ini.pas
++++ b/Ini.pas
+@@ -65,8 +65,12 @@ uses
+ procedure FromIni;
+ var
+   V: integer;
++  IniFile: string;
+ begin
+-  with TIniFile.Create(ChangeFileExt(ParamStr(0), '.ini')) do
++  IniFile := GetEnvironmentVariable('HOME') + '/.config';
++  ForceDirectories(IniFile);
++  IniFile := IniFile + '/morserunner.ini';
++  with TIniFile.Create(IniFile) do
+     try
+       MainForm.SetMyCall(ReadString(SEC_STN, 'Call', Call));
+       MainForm.SetPitch(ReadInteger(SEC_STN, 'Pitch', 3));
+@@ -121,8 +125,12 @@ end;
+ procedure ToIni;
+ var
+   V: integer;
++  IniFile: string;
+ begin
+-  with TIniFile.Create(ChangeFileExt(ParamStr(0), '.ini')) do
++  IniFile := GetEnvironmentVariable('HOME') + '/.config';
++  ForceDirectories(IniFile);
++  IniFile := IniFile + '/morserunner.ini';
++  with TIniFile.Create(IniFile) do
+     try
+       WriteString(SEC_STN, 'Call', Call);
+       WriteInteger(SEC_STN, 'Pitch', MainForm.ComboBox1.ItemIndex);

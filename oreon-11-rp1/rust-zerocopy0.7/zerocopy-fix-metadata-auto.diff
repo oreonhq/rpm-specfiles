@@ -1,0 +1,9 @@
+--- zerocopy-0.7.35/Cargo.toml	1970-01-01T00:00:01+00:00
++++ zerocopy-0.7.35/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -97,5 +97,5 @@
+ simd = []
+ simd-nightly = ["simd"]
+ 
+-[target."cfg(any())".dependencies.zerocopy-derive]
++[dependencies.zerocopy-derive]
+ version = "=0.7.35"

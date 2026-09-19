@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d0f0cac5d70716ba626c222de7cf43b6d80bdf369e6ce8bafac433c1b3ec9ca2
 
 Name:           chemical-mime-data
 Version:        0.1.94
@@ -10,7 +10,7 @@ URL:            https://github.com/dleidert/chemical-mime
 # The SF page has been removed
 # Source0:        http://downloads.sourceforge.net/chemical-mime/%%{name}-%%{version}.tar.bz2
 # The latest release is in the lookaside cache
-Source0:        %{name}-%{version}.tar.bz2
+Source0:        http://deb.debian.org/debian/pool/main/c/chemical-mime-data/chemical-mime-data_%{version}.orig.tar.gz
 Patch0:         chemical-mime-data-0.1.94-turbomole.patch
 
 BuildArch:      noarch

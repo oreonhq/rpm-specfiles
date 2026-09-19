@@ -1,0 +1,11 @@
+--- src/input.cpp~	2020-02-18 09:08:04.000000000 -0600
++++ src/input.cpp	2020-02-18 09:08:23.241349543 -0600
+@@ -91,7 +91,7 @@
+ 
+   // TODO: don't attempt to simulate mouse events from touch events -
+   // fake mouse events often are de-centered
+-  SDL_SetHint(SDL_HINT_ANDROID_SEPARATE_MOUSE_AND_TOUCH, "0");
++  //SDL_SetHint(SDL_HINT_ANDROID_SEPARATE_MOUSE_AND_TOUCH, "0");
+ 
+   /* Touch devices */
+   {

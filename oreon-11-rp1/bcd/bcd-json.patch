@@ -1,0 +1,12 @@
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/io/ParametersIO.cpp bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/io/ParametersIO.cpp
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/io/ParametersIO.cpp	2025-10-19 18:01:23.763040853 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/io/ParametersIO.cpp	2025-10-19 18:01:24.241031769 +0200
+@@ -10,7 +10,7 @@
+ 
+ #include "Utils.h"
+ 
+-#include "json.hpp"
++#include <json.hpp>
+ 
+ #include <iostream>
+ #include <iomanip>

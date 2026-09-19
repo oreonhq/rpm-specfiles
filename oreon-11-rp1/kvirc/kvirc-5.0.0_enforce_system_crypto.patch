@@ -1,0 +1,13 @@
+diff --git a/src/kvilib/net/KviSSL.cpp b/src/kvilib/net/KviSSL.cpp
+index 70a58aeb2..d8bb209b4 100644
+--- a/src/kvilib/net/KviSSL.cpp
++++ b/src/kvilib/net/KviSSL.cpp
+@@ -394,7 +394,7 @@ bool KviSSL::initContext(Method m)
+ #endif
+ 	);
+ 	// we want all ciphers to be available here, except insecure ones, orderer by strength;
+-	SSL_CTX_set_cipher_list(m_pSSLCtx, "ALL:!eNULL:!LOW:!EXP:!SSLv2:!SSLv3:!TLSv1:@STRENGTH");
++	SSL_CTX_set_cipher_list(m_pSSLCtx, "PROFILE=SYSTEM");
+ #if OPENSSL_VERSION_NUMBER >= 0x30000000L
+ 	SSL_CTX_set_dh_auto(m_pSSLCtx, 1);
+ #else

@@ -1,0 +1,11 @@
+--- frysk-0.4/frysk-sys/jnixx/Printer.java.dist	2017-02-10 17:14:52.993596017 -0500
++++ frysk-0.4/frysk-sys/jnixx/Printer.java	2017-02-10 17:15:20.770189841 -0500
+@@ -318,6 +318,8 @@
+ 	    || name.equals("xor")
+ 	    || name.equals("not")
+ 	    || name.equals("register")
++	    || name.equals("signed")
++	    || name.equals("unsigned")
+ 	    ) {
+ 	    return name + "$";
+ 	} else {

@@ -1,0 +1,230 @@
+Index: include/config.h
+===================================================================
+--- include/config.h.orig
++++ include/config.h
+@@ -2,6 +2,8 @@
+ #ifndef __included_configa_h
+ #define __included_configa_h
+ 
++#include <stdio.h>
++
+ extern FILE *fopen_cfg(const char *cfg, char *mode);
+ extern void read_config_file(int *w, int *h, int *bpp);
+ extern void write_config_file(const int w, const int h, const int bpp);
+Index: include/input-controller.h
+===================================================================
+--- include/input-controller.h.orig
++++ include/input-controller.h
+@@ -2,6 +2,8 @@
+ #ifndef __included_input_controller_h
+ #define __included_input_controller_h
+ 
++#include <stdio.h>
++
+ #include <objc/Object.h>
+ 
+ enum RAID_KEY {
+Index: src/gui/widget-packingbox.m
+===================================================================
+--- src/gui/widget-packingbox.m.orig
++++ src/gui/widget-packingbox.m
+@@ -6,6 +6,7 @@
+  *  2) child_spacing is the space between adjacent widgets.
+  */
+ 
++#include <stdio.h>
+ #include <allegro.h>
+ #include <assert.h>
+ #include "gui/widget-packingbox.h"
+Index: src/gui/widget-pane.m
+===================================================================
+--- src/gui/widget-pane.m.orig
++++ src/gui/widget-pane.m
+@@ -1,6 +1,7 @@
+ /* widget-pane.m,
+  */
+ 
++#include <stdio.h>
+ #include <allegro.h>
+ #include <assert.h>
+ #include "gui/widget-pane.h"
+Index: src/seborrhea/container-animation.m
+===================================================================
+--- src/seborrhea/container-animation.m.orig
++++ src/seborrhea/container-animation.m
+@@ -4,6 +4,7 @@
+  * animation.  All of the frames must have the same dimensions.
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include "seborrhea/container-animation.h"
+ #include "seborrhea/seborrhea-common.h"
+Index: src/seborrhea/container-file.m
+===================================================================
+--- src/seborrhea/container-file.m.orig
++++ src/seborrhea/container-file.m
+@@ -3,6 +3,7 @@
+  * A basic container that allows us to find an item by its name.
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include "seborrhea/container-file.h"
+ #include "seborrhea/seborrhea-command.h"
+Index: src/seborrhea/container-lump.m
+===================================================================
+--- src/seborrhea/container-lump.m.orig
++++ src/seborrhea/container-lump.m
+@@ -4,6 +4,7 @@
+  * This allows us to safely grab a random thing from it.
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include <stdlib.h>
+ #include "maybe-alrand.h"
+Index: src/seborrhea/container-metafile.m
+===================================================================
+--- src/seborrhea/container-metafile.m.orig
++++ src/seborrhea/container-metafile.m
+@@ -4,6 +4,7 @@
+  * processing metafiles.
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include <ctype.h>
+ #include <zzip/zzip.h>
+Index: src/seborrhea/container.m
+===================================================================
+--- src/seborrhea/container.m.orig
++++ src/seborrhea/container.m
+@@ -3,6 +3,7 @@
+  * Abstract container class, from which we get Files, Animations, etc.
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include <stdlib.h>
+ #include "seborrhea/container.h"
+Index: src/seborrhea/container-queue.m
+===================================================================
+--- src/seborrhea/container-queue.m.orig
++++ src/seborrhea/container-queue.m
+@@ -5,6 +5,7 @@
+  * in order, instead of randomly.
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include "seborrhea/container-queue.h"
+ #include "seborrhea/seborrhea-common.h"
+Index: src/seborrhea/container-shuffle.m
+===================================================================
+--- src/seborrhea/container-shuffle.m.orig
++++ src/seborrhea/container-shuffle.m
+@@ -4,6 +4,7 @@
+  * has been used up, the queue will be randomised.
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include "maybe-alrand.h"
+ #include "seborrhea/container-shuffle.h"
+Index: src/seborrhea/dirlist.m
+===================================================================
+--- src/seborrhea/dirlist.m.orig
++++ src/seborrhea/dirlist.m
+@@ -1,6 +1,7 @@
+ /* seborrhea-dirlist.m,
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include <dirent.h>
+ #include <stdlib.h>
+Index: src/seborrhea/font-glyphkeeper.m
+===================================================================
+--- src/seborrhea/font-glyphkeeper.m.orig
++++ src/seborrhea/font-glyphkeeper.m
+@@ -3,6 +3,7 @@
+  * TTF support using Glyph Keeper.
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include <glyph.h>
+ #include "seborrhea/font-glyphkeeper.h"
+Index: src/seborrhea/font.m
+===================================================================
+--- src/seborrhea/font.m.orig
++++ src/seborrhea/font.m
+@@ -8,6 +8,7 @@
+  *  load-font-with-sizes ("base name" px px ...)
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include <stdarg.h>
+ #include <stdlib.h>
+Index: src/seborrhea/seborrhea-allegro.m
+===================================================================
+--- src/seborrhea/seborrhea-allegro.m.orig
++++ src/seborrhea/seborrhea-allegro.m
+@@ -3,6 +3,7 @@
+  * Seborrhea image and sample classes using Allegro to load and stuff.
+  */
+ 
++#include <stdio.h>
+ #include <allegro.h>
+ #include <assert.h>
+ #ifndef NO_FBLEND
+Index: src/seborrhea/spline.m
+===================================================================
+--- src/seborrhea/spline.m.orig
++++ src/seborrhea/spline.m
+@@ -3,6 +3,7 @@
+  * Splines for Seborrhea.
+  */
+ 
++#include <stdio.h>
+ #include <allegro.h>
+ #include <assert.h>
+ #include <math.h>
+Index: src/seborrhea/token.m
+===================================================================
+--- src/seborrhea/token.m.orig
++++ src/seborrhea/token.m
+@@ -1,6 +1,7 @@
+ /* token.m,
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include <ctype.h>
+ #include <stdlib.h>
+Index: src/video.m
+===================================================================
+--- src/video.m.orig
++++ src/video.m
+@@ -10,6 +10,7 @@
+ 
+ #ifndef NO_VIDEO_BITMAPS
+ 
++#include <stdio.h>
+ #include <allegro.h>
+ #include <assert.h>
+ #include "common.h"
+Index: src/waypoint.m
+===================================================================
+--- src/waypoint.m.orig
++++ src/waypoint.m
+@@ -3,6 +3,7 @@
+  * This file calculates the points along a spline for waypoints.
+  */
+ 
++#include <stdio.h>
+ #include <assert.h>
+ #include <math.h>
+ #include <stdlib.h>

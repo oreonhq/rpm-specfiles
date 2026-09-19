@@ -1,0 +1,13 @@
+diff --color -Nur rkhunter-1.4.6/files/rkhunter rkhunter-1.4.6-build/rkhunter-1.4.6/files/rkhunter
+--- rkhunter-1.4.6/files/rkhunter	2026-01-03 10:15:00.159046977 -0800
++++ rkhunter-1.4.6/files/rkhunter	2026-01-03 10:22:54.440297219 -0800
+@@ -8680,8 +8680,7 @@
+ 
+ 
+ 	# Lion Worm
+-	LION_FILES="/bin/in.telnetd
+-		    /bin/mjy
++	LION_FILES="/bin/mjy
+ 		    /usr/man/man1/man1/lib/.lib/mjy
+ 		    /usr/man/man1/man1/lib/.lib/in.telnetd
+ 		    /usr/man/man1/man1/lib/.lib/.x

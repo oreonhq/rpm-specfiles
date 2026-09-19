@@ -1,0 +1,16 @@
+diff -uNr a/setup.cfg b/setup.cfg
+--- a/setup.cfg	2020-04-09 15:37:41.000000000 -0700
++++ b/setup.cfg	2020-04-13 15:21:50.600563787 -0700
+@@ -32,12 +32,6 @@
+   EmPy
+   importlib-metadata; python_version < "3.8"
+   packaging
+-  # the pytest dependency and its extensions are provided for convenience
+-  # even though they are only conditional
+-  pytest
+-  pytest-cov
+-  pytest-repeat
+-  pytest-rerunfailures
+   setuptools>=30.3.0,<80
+   # toml is also supported but deprecated
+   tomli>=1.0.0; python_version < "3.11"

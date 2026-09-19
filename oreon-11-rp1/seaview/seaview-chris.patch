@@ -1,0 +1,21 @@
+diff -drup seaview.0/Makefile seaview.1/Makefile
+--- seaview.0/Makefile	2019-12-28 18:12:13.000000000 +0100
++++ seaview.1/Makefile	2020-02-21 23:42:03.294287605 +0100
+@@ -1,6 +1,6 @@
+ #For Debian compilation, uncomment the 2 lines below 
+-#HELPFILE= -DDEFAULT_HELPFILE=\"/usr/share/doc/seaview/seaview.html\"
+-#PHYMLNAME= -DPHYMLNAME=\"phyml\"
++HELPFILE= -DDEFAULT_HELPFILE=\"/usr/share/doc/seaview/seaview.html\"
++PHYMLNAME= -DPHYMLNAME=\"phyml\"
+ 
+ 
+ #to use your own, uninstalled FLTK library,
+@@ -21,7 +21,7 @@ CSRC = csrc
+ #DEBUG = -g
+ #OPT = -O0
+ 
+-OPT ?= -O3
++OPT ?= $(RPM_OPT_FLAGS)
+ 
+ SVFLAGS = $(CPPFLAGS) $(CFLAGS) -Dunix $(OPT) -I. $(IFLTK) -I$(CSRC) $(DEBUG) $(HELPFILE) $(PHYMLNAME)
+ 

@@ -1,0 +1,27 @@
+From c8ad7c59603c97c1b60009ff7ff1489258259b37 Mon Sep 17 00:00:00 2001
+From: YiyangWu <xgreenlandforwyy@gmail.com>
+Date: Wed, 2 Nov 2022 15:15:16 +0800
+Subject: [PATCH 4/8] Search nickname/alias as well
+
+Signed-off-by: Yiyang Wu <xgreenlandforwyy@gmail.com>
+---
+ database.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/database.c b/database.c
+index 7f87cb7..384223e 100644
+--- a/database.c
++++ b/database.c
+@@ -276,6 +276,9 @@ prepare_database_internals()
+ 	/* the only two mandatory fields */
+ 	declare_standard_field(NAME);
+ 	declare_standard_field(EMAIL);
++
++	/* search NICK as well */
++	declare_standard_field(NICK);
+ }
+ 
+ int
+-- 
+2.53.0
+

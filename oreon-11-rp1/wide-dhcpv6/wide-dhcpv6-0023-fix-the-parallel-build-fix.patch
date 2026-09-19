@@ -1,0 +1,19 @@
+diff --git a/Makefile.in b/Makefile.in
+index 2f7e528..88c99ff 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -77,12 +77,11 @@ dhcp6relay: $(RELAYOBJS) $(LIBOBJS)
+ dhcp6ctl: $(CTLOBJS)
+ 	$(CC) $(LDFLAGS) -o $@ $(CTLOBJS) $(LIBOBJS) $(LIBS)
+ 
+-cfparse.c: y.tab.h
+-y.tab.h: cfparse.y
++cfparse.c: cfparse.y
+ 	@YACC@ -d cfparse.y
+ 	mv y.tab.c cfparse.c
+ 
+-cftoken.c: cftoken.l y.tab.h
++cftoken.c: cftoken.l cfparse.c
+ 	@LEX@ cftoken.l
+ 	mv lex.yy.c $@	
+ 

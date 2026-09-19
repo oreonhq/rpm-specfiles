@@ -1,0 +1,11 @@
+--- lib/Apache/Session/LDAP.pm
++++ lib/Apache/Session/LDAP.pm
+@@ -45,7 +45,7 @@ Apache::Session::LDAP - An implementatio
+     ldapAttributeId      => 'cn',
+     ldapAttributeContent => 'description',
+     ldapVerify           => 'require',
+-    ldapCAFile           => '/etc/ssl/certs/ca-certificates.crt',
++    ldapCAFile           => '/etc/pki/tls/certs/ca-bundle.crt',
+   };
+ 
+ =head1 DESCRIPTION

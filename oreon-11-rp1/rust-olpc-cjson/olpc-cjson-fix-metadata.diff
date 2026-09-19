@@ -1,0 +1,13 @@
+--- olpc-cjson-0.1.4/Cargo.toml	1970-01-01T00:00:01+00:00
++++ olpc-cjson-0.1.4/Cargo.toml	2024-10-23T15:02:45.945031+00:00
+@@ -30,10 +30,6 @@
+ name = "olpc_cjson"
+ path = "src/lib.rs"
+ 
+-[[bin]]
+-name = "olpc-cjson"
+-path = "src/main.rs"
+-
+ [dependencies.serde]
+ version = "1"
+ 

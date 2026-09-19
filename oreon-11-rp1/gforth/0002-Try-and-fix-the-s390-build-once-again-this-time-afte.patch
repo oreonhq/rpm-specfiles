@@ -1,0 +1,38 @@
+From: Peter Pentchev <roam@ringlet.net>
+Date: Sat, 5 Sep 2009 18:46:33 +0300
+Subject: [PATCH] Try and fix the s390 build once again, this time after
+ testing the sdiv_qrnnd() usage code on x86; hopefully Closes: #544827
+
+
+diff --git a/engine/support.c b/engine/support.c
+index 021fa227..deba6df7 100644
+--- a/engine/support.c
++++ b/engine/support.c
+@@ -724,16 +724,21 @@ DCell smdiv (DCell num, Cell denom)
+   DCell res;
+ #if defined(sdiv_qrnnd)
+   /* #warning "using sdiv_qrnnd" */
+-  Cell u1,q,r
++  Cell u1,q,r;
+   UCell u0;
+   UCell MAYBE_UNUSED lz;
+   
+-  vm_d2twoCell(u,u0,u1);
+-  if (v==0)
++  vm_d2twoCell(num,u0,u1);
++  if (denom==0)
+     throw(BALL_DIVZERO);
+-  if (u1>=v)
+-    throw(BALL_RESULTRANGE);
+-  sdiv_qrnnd(q,r,u1,u0,v);
++  sdiv_qrnnd(q,r,u1,u0,denom);
++  if ((u1^denom)<0) {
++    if (q>0)
++      throw(BALL_RESULTRANGE);
++  } else {
++    if (q<0)
++      throw(BALL_RESULTRANGE);
++  }
+   vm_twoCell2d(q,r,res);
+ #else
+   UDCell ures;

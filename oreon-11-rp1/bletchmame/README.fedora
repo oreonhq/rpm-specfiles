@@ -1,0 +1,3 @@
+If you have trouble getting machines to receive input correctly, try switching
+to full screen and back (e.g. by pressing F11). This issue is tracked upstream
+in https://github.com/npwoods/bletchmame/issues/295.

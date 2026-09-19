@@ -1,0 +1,16 @@
+Declare fhstat to avoid an implicit function declaration in fileops.c.
+
+Submitted upstream: <https://sourceforge.net/p/ffsb/bugs/3/>
+
+diff --git a/fh.h b/fh.h
+index d047b39178962602..7e026734f1418fa7 100644
+--- a/fh.h
++++ b/fh.h
+@@ -33,6 +33,7 @@ void fhread(int, void *, uint64_t, struct ffsb_thread *, struct ffsb_fs *);
+ /* can only write up to size_t bytes at a time, so size is a uint32_t */
+ void fhwrite(int, void *, uint32_t, struct ffsb_thread *, struct ffsb_fs *);
+ void fhseek(int, uint64_t, int, struct ffsb_thread *, struct ffsb_fs *);
++void fhstat(char *, struct ffsb_thread *, struct ffsb_fs *);
+ void fhclose(int, struct ffsb_thread *, struct ffsb_fs *);
+ 
+ int writefile_helper(int, uint64_t, uint32_t, char *, struct ffsb_thread *,

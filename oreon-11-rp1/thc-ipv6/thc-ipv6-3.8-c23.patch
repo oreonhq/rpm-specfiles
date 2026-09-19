@@ -1,0 +1,80 @@
+From c9617d5638196bd88336225a6abdfd45c3df0bcf Mon Sep 17 00:00:00 2001
+From: Robert Scheck <robert@fedoraproject.org>
+Date: Mon, 10 Feb 2025 02:50:12 +0100
+Subject: [PATCH] Remove K&R function declarations for C23 compatibility
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+thc-ipv6-lib.c:2555:5: error: conflicting types for ‘thc_open_ipv6’; have ‘int(char *)’
+ 2555 | int thc_open_ipv6(char *interface) {
+      |     ^~~~~~~~~~~~~
+thc-ipv6.h:211:23: note: previous declaration of ‘thc_open_ipv6’ with type ‘int(void)’
+  211 | extern int            thc_open_ipv6();
+      |                       ^~~~~~~~~~~~~
+
+detect_sniffer6.c:140:19: error: passing argument 2 of ‘signal’ from incompatible pointer type [-Wincompatible-pointer-types]
+  140 |   signal(SIGALRM, alarming);
+      |                   ^~~~~~~~
+      |                   |
+      |                   void (*)(void)
+
+thcping6.c:648:21: error: passing argument 2 of ‘signal’ from incompatible pointer type [-Wincompatible-pointer-types]
+  648 |     signal(SIGALRM, alarming);
+      |                     ^~~~~~~~
+      |                     |
+      |                     void (*)(void)
+---
+ detect_sniffer6.c | 4 ++--
+ thc-ipv6.h        | 2 +-
+ thcping6.c        | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/detect_sniffer6.c b/detect_sniffer6.c
+index 4fb1699..96d4718 100644
+--- a/detect_sniffer6.c
++++ b/detect_sniffer6.c
+@@ -27,7 +27,7 @@ void help(char *prg) {
+   exit(-1);
+ }
+ 
+-void alarming() {
++void alarming(int signal) {
+   if (found == 0)
+     printf("No packets received, no vulnerable system seems to be sniffing.\n");
+   else
+@@ -63,7 +63,7 @@ void check_packets(u_char *pingdata, const struct pcap_pkthdr *header,
+       printf(" Sniffing host detected: %s\n", thc_ipv62notation(ptr + 8));
+       memcpy(doubles[found], thc_ipv62notation(ptr + 8), 16);
+       found++;
+-      if (oneonly) alarming();
++      if (oneonly) alarming(0);
+     }
+   }
+ }
+diff --git a/thc-ipv6.h b/thc-ipv6.h
+index df18abb..8e08472 100644
+--- a/thc-ipv6.h
++++ b/thc-ipv6.h
+@@ -208,7 +208,7 @@ extern int thc_generate_pkt(char *interface, unsigned char *srcmac,
+                             int *pkt_len);
+ extern int thc_send_pkt(char *interface, unsigned char *pkt, int *pkt_len);
+ extern unsigned char *thc_destroy_packet(unsigned char *pkt);
+-extern int            thc_open_ipv6();
++extern int            thc_open_ipv6(char *interface);
+ extern int            thc_is_dst_local(char *interface, unsigned char *dst);
+ extern int  checksum_pseudo_header(unsigned char *src, unsigned char *dst,
+                                    unsigned char type, unsigned char *data,
+diff --git a/thcping6.c b/thcping6.c
+index 257547b..6f4cb14 100644
+--- a/thcping6.c
++++ b/thcping6.c
+@@ -89,7 +89,7 @@ void help(char *prg, int help) {
+   exit(-1);
+ }
+ 
+-void alarming() {
++void alarming(int signal) {
+   if (done == 0) printf("No packet received, terminating.\n");
+   exit(resp_type);
+ }

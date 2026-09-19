@@ -1,62 +1,57 @@
-%global source0_hash 6a02470b1716ec7a32abe89a873a4795c41c938468225f8a53d860980ec9e3c6
+%global source0_hash none
 
-%global pypi_name jmespath
-
-Name:           python-%{pypi_name}
-Version:        1.0.1
-Release:        14%{?dist}
+Name:           python-jmespath
+Version:        1.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        JSON Matching Expressions
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jmespath/jmespath.py
-Source0:        https://github.com/jmespath/jmespath.py/archive/refs/tags/1.0.1.tar.gz#/jmespath.py-1.0.1.tar.gz
+Source:         %{pypi_source jmespath}
+
 BuildArch:      noarch
-
-%description
-JMESPath allows you to declaratively specify how to extract elements from
-a JSON document.
-
-%package -n     python3-%{pypi_name}
-Summary:        JSON Matching Expressions
-%{?python_provide:%python_provide python3-%{pypi_name}}
-%{?python_provide:%python_provide python-%{pypi_name}}
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
 
-BuildRequires:  python3-pytest
-%if %{undefined rhel}
-BuildRequires:  python3-hypothesis
-%endif
 
-Obsoletes: python2-jmespath < 0.9.4-2
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'jmespath' generated automatically by pyp2spec.}
 
-%description -n python3-%{pypi_name}
-JMESPath allows you to declaratively specify how to extract elements from
-a JSON document.
+%description %_description
+
+%package -n     python3-jmespath
+Summary:        %{summary}
+
+%description -n python3-jmespath %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n jmespath.py-%{version}
-rm -rf %{pypi_name}.egg-info
+%autosetup -p1 -n jmespath-%{version}
+
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# RHEL does not have python3-hypothesis. Only one file in the upstream repo
-# depends on hypothesis, so we can omit this dependency for RHEL.
-%pytest %{?rhel:--ignore=extra/test_hypothesis.py}
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%doc README.rst
-%license LICENSE.txt
-%{_bindir}/jp.py
-%{python3_sitelib}/%{pypi_name}
-%{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info
+
+%files -n python3-jmespath -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.1-14

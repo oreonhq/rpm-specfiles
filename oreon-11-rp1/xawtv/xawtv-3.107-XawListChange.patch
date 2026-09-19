@@ -1,0 +1,28 @@
+#
+#  Since https://gitlab.freedesktop.org/xorg/lib/libxaw/-/commit/197e9d055f3cd351
+#  XawListChange() want the second argument to be (const char **) instead of (char **).
+#
+#  To avoid compiler issues when -Wcompatible-pointer-types just cast it to (void *) .
+#
+
+diff -Nrup xawtv-3.107/x11/propwatch.c xawtv-3.107-OK/x11/propwatch.c
+--- xawtv-3.107/x11/propwatch.c	2020-05-16 02:32:25.000000000 +0300
++++ xawtv-3.107-OK/x11/propwatch.c	2024-01-30 04:16:55.411559253 +0300
+@@ -316,7 +316,7 @@ RebuildList(void)
+     for (i=0, this=watchlist; this!=NULL; i++, this=this->next)
+ 	str_list[i] = this->text;
+     qsort(str_list,str_count,sizeof(char*),cmp);
+-    XawListChange(bl,str_count ? str_list : &empty,
++    XawListChange(bl,(void *)(str_count ? str_list : &empty),
+ 		  str_count ? str_count : 1,1000,1);
+ }
+ 
+@@ -495,7 +495,7 @@ ProcessPropertyChange(Display *dpy, XEve
+ 		AddWatch(dpy,event->xproperty.window, i);
+ 	    else {
+ 		Update(dpy,event->xproperty.window,event->xproperty.atom);
+-		XawListChange(bl,str_list,str_count,1000,1);
++		XawListChange(bl,(void *)str_list,str_count,1000,1);
+ 	    }
+ 	}
+     }

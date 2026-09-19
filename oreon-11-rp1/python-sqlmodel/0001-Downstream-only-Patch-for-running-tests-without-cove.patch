@@ -1,0 +1,52 @@
+From 679296585eff456faaec70e17874f7e52ea8311a Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 13 Oct 2024 09:33:29 -0400
+Subject: [PATCH] Downstream-only: Patch for running tests without coverage
+
+https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
+---
+ tests/conftest.py                                            | 5 +----
+ .../test_app_testing/test_tutorial001_tests_main.py          | 5 ++---
+ 2 files changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/tests/conftest.py b/tests/conftest.py
+index a95eb32..b1d0b5a 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -36,10 +36,7 @@ def cov_tmp_path(tmp_path: Path):
+ def coverage_run(*, module: str, cwd: Union[str, Path]) -> subprocess.CompletedProcess:
+     result = subprocess.run(
+         [
+-            "coverage",
+-            "run",
+-            "--parallel-mode",
+-            "--source=docs_src,tests,sqlmodel",
++            sys.executable,
+             "-m",
+             module,
+         ],
+diff --git a/tests/test_tutorial/test_fastapi/test_app_testing/test_tutorial001_tests_main.py b/tests/test_tutorial/test_fastapi/test_app_testing/test_tutorial001_tests_main.py
+index d7c1329..1101677 100644
+--- a/tests/test_tutorial/test_fastapi/test_app_testing/test_tutorial001_tests_main.py
++++ b/tests/test_tutorial/test_fastapi/test_app_testing/test_tutorial001_tests_main.py
+@@ -1,5 +1,6 @@
+ import subprocess
+ from pathlib import Path
++import sys
+ 
+ 
+ def test_run_tests(clear_sqlmodel):
+@@ -9,9 +10,7 @@ def test_run_tests(clear_sqlmodel):
+     top_level_path = Path(__file__).resolve().parent.parent.parent.parent.parent
+     result = subprocess.run(
+         [
+-            "coverage",
+-            "run",
+-            "--parallel-mode",
++            sys.executable,
+             "-m",
+             "pytest",
+             test_path,
+-- 
+2.47.0
+

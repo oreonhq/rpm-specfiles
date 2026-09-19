@@ -1,0 +1,12 @@
+diff -Naur mapbox_earcut_python-2.0.0-original/pyproject.toml mapbox_earcut_python-2.0.0/pyproject.toml
+--- mapbox_earcut_python-2.0.0-original/pyproject.toml	2025-11-16 18:17:47.000000000 +0000
++++ mapbox_earcut_python-2.0.0/pyproject.toml	2025-11-16 21:12:37.027665270 +0000
+@@ -42,7 +42,7 @@
+ result = "{major}.{minor}.{patch}"
+ 
+ [build-system]
+-requires = ["nanobind>=2.9.2", "scikit-build-core>=0.11.6"]
++requires = ["nanobind>=2.9.2", "scikit-build-core>=0.11.5"]
+ build-backend = "scikit_build_core.build"
+ 
+ [tool.cibuildwheel]

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Charis SIL</target>
+    <like>
+      <family>Charis SIL AmArea</family>
+      <family>Charis SIL Mali</family>
+      <family>Charis SIL Tat</family>
+      <family>Charis SIL Literacy</family>
+      <family>Charis SIL Literacy AmArea</family>
+      <family>Charis SIL Compact</family>
+      <family>Charis SIL Literacy Compact</family>
+      <family>Charter BT Pro</family>
+      <family>Charter BT Std</family>
+      <family>Charter BT</family>
+      <family>ITC Charter Pro</family>
+      <family>ITC Charter Std</family>
+      <family>ITC Charter</family>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

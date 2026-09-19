@@ -1,0 +1,31 @@
+From c84508d59dacf91a89582fed6115714f42f706aa Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 3 Dec 2013 12:54:53 +0100
+Subject: [PATCH] Pass compilation with -Werror=format-security
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<https://bugzilla.redhat.com/show_bug.cgi?id=1037376>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ vconfig.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/vconfig.c b/vconfig.c
+index 5057cfd..77cf4b3 100644
+--- a/vconfig.c
++++ b/vconfig.c
+@@ -36,7 +36,7 @@
+ #define MAX_HOSTNAME 256
+ 
+ 
+-static char* usage = 
++static const char usage[] =
+       "\n"
+ "Usage: add             [interface-name] [vlan_id]\n"
+ "       rem             [vlan-name]\n"
+-- 
+1.8.3.1
+

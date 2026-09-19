@@ -1,0 +1,58 @@
+commit 3369871a5e68484e231705bb0a893b4c6da85d17
+Author: zoulasc <christos@zoulas.com>
+Date:   Mon Mar 7 18:05:07 2016 -0500
+
+    Default to "string" mount options for NFSv4 because the kernel does not
+    properly handle the auth_flavours[] field. Tested with nfs-utils-1.3.3 and
+    it always defaults to krb5i if string options are not used. Please note
+    that the "rw" option is not recognized by the linux kernel.
+
+diff --git a/conf/mount/mount_linux.c b/conf/mount/mount_linux.c
+index d3841ce..de7708d 100644
+--- a/conf/mount/mount_linux.c
++++ b/conf/mount/mount_linux.c
+@@ -450,7 +450,7 @@ do_mount_linux(MTYPE_TYPE type, mntent_t *mnt, int flags, caddr_t data)
+   return mount(mnt->mnt_fsname,
+ 	       mnt->mnt_dir,
+ 	       type,
+-	       MS_MGC_VAL | flags,
++	       flags,
+ 	       data);
+ }
+ 
+@@ -566,9 +566,9 @@ mount_linux_nfs(MTYPE_TYPE type, mntent_t *mnt, int flags, caddr_t data)
+     plog(XLOG_DEBUG, "%s: port %d\n", __func__,
+ 	 htons(mnt_data->addr.sin_port));
+   }
++  flags |= MS_MGC_VAL;
+   if (amuDebug(D_TRACE)) {
+-    plog(XLOG_DEBUG, "%s: Generic mount flags 0x%x", __func__,
+-	 MS_MGC_VAL | flags);
++    plog(XLOG_DEBUG, "%s: Generic mount flags 0x%x", __func__, flags);
+     plog(XLOG_DEBUG, "%s: updated nfs_args...", __func__);
+     print_nfs_args(mnt_data, 0);
+   }
+@@ -610,14 +610,21 @@ mount_linux_nfs4(MTYPE_TYPE type, mntent_t *mnt, int flags, caddr_t data)
+     plog(XLOG_DEBUG, "%s: type %s\n", __func__, type);
+     plog(XLOG_DEBUG, "%s: version %d\n", __func__, mnt_data->version);
+   }
++#if 0
++  flags |= MS_MGC_VAL;
++#endif
+   if (amuDebug(D_TRACE)) {
+-    plog(XLOG_DEBUG, "%s: Generic mount flags 0x%x", __func__,
+-	 MS_MGC_VAL | flags);
++    plog(XLOG_DEBUG, "%s: Generic mount flags 0x%x", __func__, flags);
+     plog(XLOG_DEBUG, "%s: updated nfs_args...", __func__);
+     print_nfs_args(mnt_data, NFS_VERSION4);
+   }
+ 
++#if 0
+   errorcode = do_mount_linux(type, mnt, flags, data);
++#else
++  errorcode = do_mount_linux(type, mnt, flags, mnt->mnt_opts);
++#endif
++
+ 
+   return errorcode;
+ }

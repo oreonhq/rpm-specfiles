@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index db83ef6..3d20531 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -108,6 +108,7 @@ set(QT_LIBRARIES
+   Core
+   Gui
+   Widgets
++  WidgetsPrivate
+   OpenGL
+   LinguistTools
+   Concurrent
+@@ -142,6 +143,7 @@ list(APPEND OLIVE_LIBRARIES
+   Qt${QT_VERSION_MAJOR}::Core
+   Qt${QT_VERSION_MAJOR}::Gui
+   Qt${QT_VERSION_MAJOR}::Widgets
++  Qt${QT_VERSION_MAJOR}::WidgetsPrivate
+   Qt${QT_VERSION_MAJOR}::OpenGL
+   Qt${QT_VERSION_MAJOR}::Concurrent
+ )

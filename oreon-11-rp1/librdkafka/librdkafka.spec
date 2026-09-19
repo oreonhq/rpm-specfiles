@@ -3,8 +3,8 @@
 %bcond optional_tests %{undefined rhel}
 
 Name:		librdkafka
-Version:	2.12.1
-Release:	2%{?dist}
+Version:	2.15.1
+Release:	1%{?dist}
 Summary:	The Apache Kafka C library
 
 License:	Apache-2.0

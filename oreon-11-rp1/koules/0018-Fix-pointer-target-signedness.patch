@@ -1,0 +1,25 @@
+From 533c2e9de07d2bc5f73811f4c9f4588b2ed2442a Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:50 +0200
+Subject: [PATCH 18/41] Fix pointer target signedness
+
+---
+ koules.sndsrv.linux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/koules.sndsrv.linux.c b/koules.sndsrv.linux.c
+index 66e1dd7..9b1e875 100644
+--- a/koules.sndsrv.linux.c
++++ b/koules.sndsrv.linux.c
+@@ -188,7 +188,7 @@ do_everything (int dsp, int is_pcsp)
+   int             playnum = 0;	/* Number of sounds currently being played               */
+   unsigned char   final[512];	/* Final Mixing Buffer                                   */
+   int             premix[512];
+-  char           *sample;
++  signed char     *sample;
+   audio_buf_info  info;
+ 
+   for (;;)
+-- 
+2.5.0
+

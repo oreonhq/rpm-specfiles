@@ -1,0 +1,11 @@
+--- CToolbox/Modules/expreval.cpp.orig	2014-01-30 10:49:26.000000000 -0700
++++ CToolbox/Modules/expreval.cpp	2020-12-12 10:59:20.723883041 -0700
+@@ -168,7 +168,7 @@ StaggArray::StaggArray ( int n )
+ 
+ StaggArray::StaggArray ( const StaggArray& x )                   // Copy constructor
+ {                                                          //-----------------
+-  if ( (Dim < 1) || (x.SA == NULL) ) {
++  if ( (x.Dim < 1) || (x.SA == NULL) ) {
+     cerr << "Illegal input parameter in 'StaggArray(StaggArray&)'!" << endl;
+     exit(-1);
+   }

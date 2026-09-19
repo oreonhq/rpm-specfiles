@@ -1,0 +1,135 @@
+diff -durN flobopuyo-0.20.orig/Makefile flobopuyo-0.20/Makefile
+--- flobopuyo-0.20.orig/Makefile	2004-10-09 00:41:12.000000000 +0200
++++ flobopuyo-0.20/Makefile	2008-02-10 14:41:48.000000000 +0100
+@@ -13,8 +13,8 @@
+ 
+ # Unix/Linux settings
+ PREFIX=/usr/local
+-DATADIR=$(PREFIX)/share/games/flobopuyo
+-INSTALL_BINDIR=$(DESTDIR)/$(PREFIX)/games
++DATADIR=$(PREFIX)/share/flobopuyo
++INSTALL_BINDIR=$(DESTDIR)/$(PREFIX)/bin
+ INSTALL_DATADIR=$(DESTDIR)/$(DATADIR)
+ 
+ # Mac settings
+@@ -44,12 +44,12 @@
+ CC=g++
+ CXX=g++
+ 
+-CFLAGS= -DDATADIR=\"${DATADIR}\"
+-LDFLAGS=
++CFLAGS+= -DDATADIR=\"${DATADIR}\"
+ 
+ ifneq ($(PLATFORM), $(CYGWIN_VERSION))
+ CFLAGS:=$(CFLAGS) `$(SDL_CONFIG) --cflags` -I/sw/include
+-LDFLAGS:=$(LDFLAGS) `$(SDL_CONFIG) --cflags --libs`
++LDFLAGS:=$(LDFLAGS)
++LIBS:=$(LIBS) `$(SDL_CONFIG) --cflags --libs`
+ endif
+ 
+ HFILES= HiScores.h IosException.h IosImgProcess.h IosVector.h PuyoCommander.h\
+@@ -78,7 +78,8 @@
+ # Win32
+ ifeq ($(PLATFORM), $(CYGWIN_VERSION))
+ CFLAGS:=$(CFLAGS) -mno-cygwin -mwindows -DWIN32 -DYY_NEVER_INTERACTIVE=1 -I$(WINSDLINCLUDE) 
+-LDFLAGS:=$(LDFLAGS) -L$(WINSDLDEVLIBS) -lmingw32 -ljpeg -lzlib -lpng1 -lSDL_image -lSDL_mixer -lSDL -lSDLmain 
++LDFLAGS:=$(LDFLAGS) -L$(WINSDLDEVLIBS)
++LIBS:=$(LIBS) -lmingw32 -ljpeg -lzlib -lpng1 -lSDL_image -lSDL_mixer -lSDL -lSDLmain 
+ endif
+ 
+ ifeq ($(ENABLE_AUDIO), true)
+@@ -90,7 +91,8 @@
+ CFLAGS:=$(CFLAGS) -DHAVE_OPENGL=1
+ OBJFILES:=$(OBJFILES) glSDL.o
+ ifeq ($(PLATFORM), Linux)
+-LDFLAGS:=$(LDFLAGS) -lGL
++LDFLAGS:=$(LDFLAGS)
++LIBS:=$(LIBS) -lGL
+ endif
+ endif
+ 
+@@ -110,25 +112,17 @@
+ all: prelude flobopuyo
+ 
+ flobopuyo: ${OBJFILES}
+-	@echo "[flobopuyo]" && g++ $(CFLAGS) $(LDFLAGS) -o flobopuyo -lSDL_mixer -lSDL_image ${OBJFILES}
+-	@echo "--------------------------------------"
+-	@echo " Compilation finished"
+-	@[ "x`cat WARNINGS | wc -l`" != "x0" ] && echo -e "--------------------------------------\n There have been some warnings:\n" && cat WARNINGS && rm -f WARNINGS && echo "--------------------------------------" || true
+-	@echo
+-	@echo " Type ./flobopuyo to play."
+-	@echo "--------------------------------------"
++	$(CXX) $(CFLAGS) $(LDFLAGS) $(OBJFILES) -o flobopuyo $(LIBS) -lSDL_mixer -lSDL_image
+ 
+ prelude:
+-	@rm -f WARNINGS
+-	@touch WARNINGS
+ 	@echo "Compiling with CFLAGS=$(CFLAGS)"
+ 	@echo "Compiling with LDFLAGS=$(LDFLAGS)"
+ 
+ %.o:%.c
+-	@echo "[$@]" && $(CC) $(CFLAGS) -c $< 2>> WARNINGS || (cat WARNINGS && false)
++	$(CC) $(CFLAGS) -c $< 
+ 
+ %.o:%.cpp
+-	@echo "[$@]" && $(CXX) $(CFLAGS) -c $< 2>> WARNINGS || (cat WARNINGS && false)
++	$(CXX) $(CFLAGS) -c $<
+ 
+ PuyoDoomMelt.o:PuyoDoomMelt.c ${HFILES}
+ HiScores.o:HiScores.cpp HiScores.h preferences.h
+@@ -155,22 +149,20 @@
+ IosException.o:IosException.cpp
+ IosVector.o:IosVector.cpp
+ glSDL.o:glSDL.c
+-	@echo "[$@]" && $(CC) $(CFLAGS) -c $< 2>> EXT_WARNINGS
+-	@rm -f EXT_WARNINGS
++	$(CC) $(CFLAGS) -c $<
+ SDL_prim.o:SDL_prim.c
+-	@echo "[$@]" && $(CC) $(CFLAGS) -c $< 2>> EXT_WARNINGS
+-	@rm -f EXT_WARNINGS
++	$(CC) $(CFLAGS) -c $<
+ corona.o:corona.cpp
+ corona32.o:corona32.cpp
+ corona_palette.o:corona_palette.cpp	
+ 
+ scenar.l.c:scenar.l ${HFILES}
+-	@echo "[$@]" && flex -oscenar.l.c scenar.l
++	flex -oscenar.l.c scenar.l
+ scenar.y.c:scenar.y ${HFILES}
+-	@echo "[$@]" && bison -y -d -o scenar.y.c scenar.y
++	bison -y -d -o scenar.y.c scenar.y
+ 
+ clean:
+-	rm -f *~ scenar.y.c scenar.y.h scenar.l.c *.o flobopuyo* WARNINGS
++	rm -f *~ scenar.y.c scenar.y.h scenar.l.c *.o flobopuyo*
+ 	rm -rf .xvpics data/.xvpics    data/*/.xvpics
+ 	rm -rf $(bundle_name)
+ 	rm -rf $(macimage_name)
+@@ -178,7 +170,6 @@
+ 	rm -f  .DS_Store */.DS_Store */*/.DS_Store .gdb_history
+ 
+ install: flobopuyo
+-	strip flobopuyo
+ 	mkdir -p ${INSTALL_BINDIR}
+ 	mkdir -p ${INSTALL_DATADIR}
+ 	cp -r data/* ${INSTALL_DATADIR}
+@@ -191,10 +182,8 @@
+ 	chmod a+rx ${INSTALL_BINDIR}/flobopuyo
+ 
+ flobopuyo-static: prelude  ${OBJFILES}
+-	@echo "[flobopuyo-static]" && g++ $(CFLAGS) -o flobopuyo-static ${OBJFILES}\
++	$(CXX) $(CFLAGS) -o flobopuyo-static ${OBJFILES}\
+         /sw/lib/libSDL_mixer.a /sw/lib/libvorbisfile.a /sw/lib/libvorbis.a /sw/lib/libogg.a /sw/lib/libsmpeg.a /sw/lib/libSDL_image.a /sw/lib/libjpeg.a /sw/lib/libpng.a -lz `$(SDL_CONFIG) --static-libs`
+-	@echo "--------------------------------------"
+-	@echo " Compilation finished"
+ 
+ bundle: flobopuyo-static
+ 	mkdir -p $(bundle_name)/Contents/MacOS
+@@ -207,7 +196,6 @@
+ 	rm -rf $(bundle_name)/Contents/Resources/data/CVS $(bundle_name)/Contents/Resources/data/*/CVS
+ 	rm -rf $(bundle_name)/Contents/Resources/data/.xvpics $(bundle_name)/Contents/Resources/data/*/.xvpics
+ 	rm -f $(bundle_name)/Contents/Resources/data/.DS_Store $(bundle_name)/Contents/Resources/data/*/.DS_Store
+-	strip $(bundle_name)/Contents/MacOS/flobopuyo
+ 
+ mac-package: bundle
+ 	mkdir -p $(macimage_name)

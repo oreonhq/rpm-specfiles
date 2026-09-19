@@ -1,5 +1,5 @@
-%global source0_hash d3cc16bff3c44d548e0b73eadcd3a9719659013ba110cf6a18b3eaafc25e1f27
-%global source1_hash 8e086db6d42cf0f047b1d0d68ee7bcde00ceb441a9212a290497c3e3328b4a54
+%global source0_hash 0d5ed318e8c77bbea56b2033df902d86f2a585c8ec1870fb184167a23ba9d5f871af32bdd0e6576ad1de2efa745b340cb55312e13cd9bf75778d167d96821620
+%global source1_hash 8364779804341cd337b651097db3b4ecbc6eef5f8d7c9ea39a001f98b7e576161d3b8100010f167f21eff539c66f57eab80c51bba7eab382c8778f798e1fc977
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
 Name:           texlive-lettrine
@@ -10,8 +10,8 @@ Summary:        Typeset dropped capitals
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lettrine.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lettrine.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lettrine.tar.xz#/lettrine.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lettrine.doc.tar.xz#/lettrine.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-lettrine-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-lettrine-doc <= 11:%{version}
@@ -25,8 +25,8 @@ Provides:       tex(lettrine.sty)
 %description
 Typeset dropped capitals.
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %build
 %install
 mkdir -p %{buildroot}%{_texmf_main}

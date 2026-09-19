@@ -1,0 +1,199 @@
+diff -rupN Xrotor/bin/Makefile Xrotor-new/bin/Makefile
+--- Xrotor/bin/Makefile	2010-06-17 00:04:18.000000000 +0200
++++ Xrotor-new/bin/Makefile	2013-09-12 19:01:10.237574159 +0200
+@@ -4,104 +4,10 @@
+ # H.Youngren 11/28/98
+ #*********************************************************
+ 
+-SHELL = sh
+-BINDIR = /home/codes/bin/
+-
+-###================================================
+-###  Default compilers and flags
+-
+-### Default system
+-FC = f77
+-FFLAGS = -O
+-FFLOPT = -O
+-#FFLAGS = -g -C -O0
+-#FFLOPT = -g -C -O0
+-INSTALLCMD = install -s
+-
+-###  Plot libraries and link libs
+-
+-PLTOBJ = -lPlt
+-#PLTOBJ = ../plotlib/libPlt.a 
+-#PLTOBJ = $(HOME)/lib/libPlt.a
+-#PLTOBJ = /usr/local/lib/libPlt.a
+-
++FC = gfortran
++PLTOBJ = ../plotlib/libPltDP.a
+ LIBS = -lX11
+-#LIBS = -L/usr/X11R6/lib -lX11
+-###================================================
+-
+-
+-
+-###================================================
+-### Select any special compile options from this if 
+-### they apply to your system or add your own to 
+-### override the defaults
+-
+-
+-##--------------------------
+-## Linux Intel ifort Fortran
+-FC = ifort
+-FFLAGS = -O -static
+-FFLOPT = -O -static
+-LIBS = -L/usr/X11R6/lib -lX11
+-FTNLIB =
+-#FTNLIB = -Vaxlib
+-#PLTOBJ = $(HOME)/lib/libPltDP_ifort.a
+-PLTOBJ = ../plotlib/libPlt.a
+-
+-##--------------------------
+-## DEC Alpha with OSF and DEC f77/f90 compiler
+-#FC = f77
+-#FFLAGS = -O4 
+-#FFLOPT = -O4 
+-#FFLAGS = -O4 -tune host -fast
+-#FFLOPT = -O5 -fast -tune host -unroll 3
+-#FFLAGS =  -O0 -g
+-#FFLOPT =  -O0 -g
+-
+-##--------------------------
+-## SGI setup
+-#FC = f77
+-#FFLAGS = -O -static 
+-#FFLOPT = -O -static 
+-#PLTOBJ = $(HOME)/lib/libPlt.a
+-#LIBS = -lX11
+-
+-##--------------------------
+-## Absoft Linux f77 (you need to compile the plotlib correctly too!)
+-#FC = f77
+-#FFLAGS = -O -f -s -W -B108 -N34
+-#FFLOPT = -O -f -s -W -B108 -N34
+-#PLTOBJ = -L$(HOME)/lib -lPlt_absoft
+-#LIBS = -L/usr/X11R6/lib -lX11
+-
+-##--------------------------
+-## Linux GNU g77
+-#FC = g77
+-#FFLAGS =  -O3 -fomit-frame-pointer
+-#FFLOPT =  -O3 -fomit-frame-pointer
+-#FFLAGS =  -g -O0 -C
+-#FFLOPT =  -g -O0 -C
+-#LIBS = -L/usr/X11R6/lib -lX11
+-
+-##--------------------------
+-## Linux pgf77
+-#FC = pgf77
+-#FFLAGS =  -O -fast -Msave
+-#FFLOPT =  -O2 -fast -Msave
+-#LIBS = -g77libs -L/usr/X11R6/lib -lX11
+-
+-##--------------------------
+-##  Uncomment for RS/6000
+-#FC = f77
+-#FFLAGS = -O -qextname
+-#FFLOPT = -O -qextname
+-
+-##--------------------------
+-##  Uncomment for HP-9000
+-#FC = f77
+-#FFLAGS = -O +ppu
+-#FFLOPT = -O +ppu
+-###================================================
++# override FFLAGS += -fdefault-real-8
+ 
+ 
+ SRC = ../src
+@@ -123,12 +29,13 @@ JPLOTEOBJS = jplote.o xutils.o jputil.o
+ all:	 $(PROGS)
+ 
+ install: 
+-	$(INSTALLCMD) $(PROGS) $(BINDIR)
++	install -d $(DESTDIR)$(BINDIR)
++	install -m 0755 $(PROGS) $(DESTDIR)$(BINDIR)
+ 
+ clean:
+-	-/bin/rm *.o
+-	-/bin/rm $(PROGS)
+-	-/bin/rm plot.ps
++	rm -f *.o
++	rm -f $(PROGS)
++	rm -f plot.ps
+ 
+ 
+ ### Make targets
+@@ -190,11 +97,3 @@ jplote.o: $(SRC)/jplote.f
+ 	$(FC) -c -I$(SRC) $(FFLAGS) $(SRC)/jplote.f
+ jputil.o: $(SRC)/jputil.f
+ 	$(FC) -c -I$(SRC) $(FFLAGS) $(SRC)/jputil.f
+-
+-
+-
+-
+-
+-
+-
+-
+diff -rupN Xrotor/plotlib/Makefile Xrotor-new/plotlib/Makefile
+--- Xrotor/plotlib/Makefile	2010-06-07 16:29:26.000000000 +0200
++++ Xrotor-new/plotlib/Makefile	2013-09-12 18:56:18.685087250 +0200
+@@ -22,21 +22,13 @@
+ #***********************************************************************
+ 
+ 
+-#================================#
+-# Makefile for Xplot11 library   #
+-#  edit the config.make file to  #
+-#  set specific options for your #
+-#  system                        #
+-#================================#
+-
+-# Point to your install directory
+-#INSTALLDIR = /home/codes/bin
+-#INSTALLDIR = /usr/local/lib
+ INSTALLDIR = .
+ 
+-# Use these to set default library name (overridden in config.make file) 
+-PLTLIB = libPlt.a
+-#PLTLIB = libPltDP.a
++FC = gfortran
++PLTLIB = libPltDP.a
++# override FFLAGS += -fdefault-real-8
++# Some fortrans need trailing underscores in C interface symbols (see Xwin.c)
++override CFLAGS += -DUNDERSCORE
+ 
+ 
+ ###========================================================
+@@ -67,16 +59,11 @@ OBJ3D  = plt_3D.o
+ 
+ 
+ ###-------------------------------------------------------------------------
+-### Set compiler, compiler flags, name of output object library
+-include ./config.make
+-
+-
+-###-------------------------------------------------------------------------
+ ### Basic make targets - build library, test programs
+ 
+ $(PLTLIB):  $(OBJ) $(OBJOLD) $(OBJ3D) $(OBJMISC)
+-	$(AR)     $(PLTLIB) $(OBJ) $(OBJOLD) $(OBJ3D) $(OBJMISC)
+-	$(RANLIB) $(PLTLIB)
++	ar -r  $(PLTLIB) $(OBJ) $(OBJOLD) $(OBJ3D) $(OBJMISC)
++	ranlib $(PLTLIB)
+ 
+ test:  $(PLTLIB)
+ 	(cd examples; make test)
+@@ -87,7 +74,7 @@ test:  $(PLTLIB)
+ 
+ install:  $(PLTLIB)
+ 	mv $(PLTLIB) $(INSTALLDIR)
+-	$(RANLIB)   $(INSTALLDIR)/$(PLTLIB)
++	ranlib   $(INSTALLDIR)/$(PLTLIB)
+ 
+ clean:
+ 	-/bin/rm $(OBJ) $(OBJOLD) $(OBJ3D) $(OBJMISC)

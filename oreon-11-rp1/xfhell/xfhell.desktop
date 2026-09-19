@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=xfhell
+GenericName=xfhell
+Comment=Ham Radio application for the Hellschreiber digital communications mode
+Exec=xfhell
+Icon=xfhell.png
+Terminal=false
+Type=Application
+Categories=Network;HamRadio;
+Version=1.0

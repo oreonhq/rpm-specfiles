@@ -1,0 +1,53 @@
+diff -up uucp-1.07/unix/pipe.c.fix-types uucp-1.07/unix/pipe.c
+--- uucp-1.07/unix/pipe.c.fix-types	2024-07-21 15:06:55.183353617 +0200
++++ uucp-1.07/unix/pipe.c	2024-07-21 15:06:55.190353570 +0200
+@@ -198,14 +198,14 @@ fspipe_dial (qconn, puuconf, qsys, zphon
+ {
+   struct ssysdep_conn *q;
+   int aidescs[3];
+-  const char **pzprog;
++  char **pzprog;
+   char **p;
+ 
+   q = (struct ssysdep_conn *) qconn->psysdep;
+ 
+   *ptdialer = DIALERFOUND_FALSE;
+ 
+-  pzprog = (const char **) qconn->qport->uuconf_u.uuconf_spipe.uuconf_pzcmd;
++  pzprog = qconn->qport->uuconf_u.uuconf_spipe.uuconf_pzcmd;
+ 
+   if (pzprog == NULL)
+     {
+@@ -224,7 +224,7 @@ fspipe_dial (qconn, puuconf, qsys, zphon
+ 
+   /* Pass fkeepuid, fkeepenv and fshell as TRUE.  This puts the
+      responsibility of security on the connection program.  */
+-  q->ipid = ixsspawn (pzprog, aidescs, TRUE, TRUE, (const char *) NULL,
++  q->ipid = ixsspawn ((const char **) pzprog, aidescs, TRUE, TRUE, (const char *) NULL,
+ 		      FALSE, TRUE, (const char *) NULL,
+ 		      (const char *) NULL, (const char *) NULL);
+   if (q->ipid < 0)
+diff -up uucp-1.07/unix/portnm.c.fix-types uucp-1.07/unix/portnm.c
+--- uucp-1.07/unix/portnm.c.fix-types	2003-05-29 08:08:49.000000000 +0200
++++ uucp-1.07/unix/portnm.c	2024-07-21 15:06:55.190353570 +0200
+@@ -32,7 +32,7 @@ zsysdep_port_name (ftcp_port)
+ 
+ #if HAVE_TCP
+   {
+-    size_t clen;
++    socklen_t clen;
+     struct sockaddr s;
+ 
+     clen = sizeof (struct sockaddr);
+diff -up uucp-1.07/unix/tcp.c.fix-types uucp-1.07/unix/tcp.c
+--- uucp-1.07/unix/tcp.c.fix-types	2003-05-29 08:08:49.000000000 +0200
++++ uucp-1.07/unix/tcp.c	2024-07-21 15:09:08.799443660 +0200
+@@ -395,7 +395,7 @@ ftcp_open (qconn, ibaud, fwait, fuser)
+   while (! FGOT_SIGNAL ())
+     {
+       sockaddr_storage speer;
+-      size_t clen;
++      socklen_t clen;
+       int onew;
+       pid_t ipid;
+ 

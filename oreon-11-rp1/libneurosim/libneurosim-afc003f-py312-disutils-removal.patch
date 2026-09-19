@@ -1,0 +1,13 @@
+--- libneurosim-afc003f/configure.ac.py312	2020-11-12 01:11:31.000000000 +0900
++++ libneurosim-afc003f/configure.ac	2023-07-30 22:27:22.462609661 +0900
+@@ -190,8 +190,8 @@ else
+ fi
+ AM_CONDITIONAL([HAVE_PYTHON], [test "$PYTHON" != [:]])
+ if test $PYTHON != [:]; then
+-    PYTHON_INCLUDE=`$PYTHON -c 'from distutils import sysconfig;\
+-        print (sysconfig.get_python_inc ())'`
++    PYTHON_INCLUDE=`$PYTHON -c 'import sysconfig;\
++        print (sysconfig.get_path("include"))'`
+ fi
+ dnl set this to use in the makefile
+ AM_CONDITIONAL([PY3], [test "x$with_python" = x3 ])

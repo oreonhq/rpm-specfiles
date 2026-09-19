@@ -4,7 +4,7 @@
 %define version_underscore %(echo %{version} | tr '.' '_')
 
 Name:     squid
-Version:  7.4
+Version:  7.7
 Release:  1%{?dist}
 Summary:  The Squid proxy caching server
 Epoch:    7

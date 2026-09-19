@@ -1,0 +1,23 @@
+-- Projects that use GTKada should import this file.
+-- Copyright 2016 – 2020 B. Persson, Bjorn@Rombobeorn.se
+--
+-- This project file is free software: you can redistribute it and/or modify it
+-- under the terms of the GNU General Public License as published by the Free
+-- Software Foundation, either version 3 of the License, or (at your option)
+-- any later version.
+
+
+with "directories";
+
+library project GTKada is
+   for Library_Name     use "gtkada";
+   for Library_Kind     use "dynamic";
+   for Source_Dirs      use (Directories.Includedir & "/gtkada");
+   for Library_Dir      use Directories.Libdir;
+   for Library_ALI_Dir  use Directories.Libdir & "/gtkada";
+   for Externally_Built use "true";
+
+   -- A horrible kludge in GPS's configuration script wants to see this line in
+   -- this file:
+   version := "@VERSION@";
+end GTKada;

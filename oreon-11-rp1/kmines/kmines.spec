@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a1ba7b35da8b8a9bf51f227838485b8d9d2424b3c048d4539256f4fd0b2fc825
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kmines
 Summary: A classic Minesweeper game
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

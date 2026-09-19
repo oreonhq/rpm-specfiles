@@ -15,7 +15,7 @@ BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(gio-unix-2.0)
 BuildRequires:  pkgconfig(json-glib-1.0)
-BuildRequires:  pkgconfig(libsoup-3.0)
+BuildRequires:  pkgconfig(libsoup-2.4)
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtdeclarative-devel
 
@@ -25,6 +25,8 @@ the daemon that controls snap packages.
 
 %package -n libsnapd-qt
 Summary:        Qt library to access snapd
+Provides:       snapd-qt = %{version}-%{release}
+Provides:       snapd-qt%{?_isa} = %{version}-%{release}
 
 %description -n libsnapd-qt
 snapd-qt wraps snapd-glib for Qt and QML applications, used by KDE Discover
@@ -32,6 +34,8 @@ to browse and install snaps.
 
 %package -n libsnapd-qt-devel
 Summary:        Development files for libsnapd-qt
+Provides:       cmake(Snapd) = %{version}
+Provides:       cmake(Snapd) = %{version}-%{release}
 Requires:       libsnapd-qt%{?_isa} = %{version}-%{release}
 Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
 
@@ -57,6 +61,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
         -Dqt5=false \
         -Dqt6=true \
         -Dqml-bindings=true \
+        -Dsoup2=true \
         -Dexamples=false \
         -Dtests=false
 %meson_build
@@ -81,7 +86,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files -n libsnapd-qt-devel
 %{_includedir}/snapd-qt/
 %{_libdir}/libsnapd-qt.so
-%{_libdir}/cmake/SnapdQt/
+%{_libdir}/cmake/Snapd/
 %{_libdir}/pkgconfig/snapd-qt.pc
 
 %changelog

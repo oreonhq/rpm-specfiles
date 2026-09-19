@@ -3,8 +3,8 @@
 %global source_name	usb-modeswitch-data
 
 Name:		usb_modeswitch-data
-Version:	20191128
-Release:	15%{?dist}
+Version:	20251207
+Release:	1%{?dist}
 Summary:	USB Modeswitch gets mobile broadband cards in operational mode
 Summary(de):	USB Modeswitch aktiviert UMTS-Karten
 License:	GPL-2.0-or-later

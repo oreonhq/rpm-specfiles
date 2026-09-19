@@ -1,0 +1,13 @@
+[Unit]
+Description=Anyterm Web Based Terminal Emulator
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/anytermd.pid
+ExecStart=/usr/sbin/anytermd -c /usr/libexec/anyterm/anyterm-cmd -s UTF8 --user anyterm --port 81 --local-only
+RemainAfterExit=yes
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

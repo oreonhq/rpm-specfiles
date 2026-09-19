@@ -1,0 +1,66 @@
+From 77e5e5d05f5b4df313b89ed96d5cc2e7d335dac5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 24 Apr 2014 11:20:51 +0200
+Subject: [PATCH] Restore working directory after loading CPAN configuration
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Uninitialized CPAN can install local::lib and change working directory
+into last build directory (CPAN RT#52520).
+
+This is a work-around to restore the directory back.
+
+<https://rt.cpan.org/Public/Bug/Display.html?id=94963>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL        |  1 +
+ lib/CPAN/Inject.pm | 12 ++++++++++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 9c49730..e1e8ee8 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -2,6 +2,7 @@ use inc::Module::Install 1.00;
+ 
+ name          'CPAN-Inject';
+ all_from      'lib/CPAN/Inject.pm';
++requires      'Cwd'             => '0';
+ requires      'File::Spec'      => '0.80';
+ requires      'File::stat'      => '1.00';
+ requires      'File::chmod'     => '0.30';
+diff --git a/lib/CPAN/Inject.pm b/lib/CPAN/Inject.pm
+index faec14c..86cf9ea 100644
+--- a/lib/CPAN/Inject.pm
++++ b/lib/CPAN/Inject.pm
+@@ -205,6 +205,10 @@ sub from_cpan_config {
+ 	# Load the CPAN module
+ 	require CPAN;
+ 
++	# Remember working directory in case CPAN will change it, RT#94963
++	require Cwd;
++	my $origin_working_directory = Cwd::getcwd;
++
+ 	# Support for different mechanisms depending on the version
+ 	# of CPAN that is in use.
+ 	if ( defined $CPAN::HandleConfig::VERSION ) {
+@@ -213,6 +217,14 @@ sub from_cpan_config {
+ 		CPAN::Config->load;
+ 	}
+ 
++	# Restore working directory in case CPAN has changed it, RT#94963
++	if ($origin_working_directory ne Cwd::getcwd) {
++		chdir $origin_working_directory or
++			warn "CPAN changed working directory " .
++				"and later restoration to " .
++				"$origin_working_directory failed: $!";
++	}
++
+ 	# Get the sources directory
+ 	my $sources = undef;
+ 	if ( defined $CPAN::Config->{keep_source_where} ) {
+-- 
+1.9.0
+

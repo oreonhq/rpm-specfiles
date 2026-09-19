@@ -1,0 +1,499 @@
+diff -up sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFile.c.orig sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFile.c
+--- sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFile.c.orig	2024-02-26 14:18:06.798713226 +0100
++++ sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFile.c	2024-02-26 14:18:45.422785727 +0100
+@@ -48,8 +48,8 @@
+ /* ---------- method to create a CMPIObjectPath of Linux_RpmAssociatedFile ---*/
+ 
+ CMPIObjectPath * _makePath_RpmAssociatedFile( CMPIBroker * _broker, 
+-					   CMPIObjectPath * filecheck,
+-					   CMPIObjectPath * package,
++					   const CMPIObjectPath * filecheck,
++					   const CMPIObjectPath * package,
+ 					   CMPIStatus * rc) {
+   CMPIObjectPath * op = NULL;
+   CMPIInstance   * ci = NULL;
+@@ -69,8 +69,8 @@ CMPIObjectPath * _makePath_RpmAssociated
+ /* ----------- method to create a CMPIInstance of Linux_RpmAssociatedFile ----*/
+ 
+ CMPIInstance * _makeInst_RpmAssociatedFile( CMPIBroker * _broker,
+-					 CMPIObjectPath * filecheck,
+-					 CMPIObjectPath * package,
++					 const CMPIObjectPath * filecheck,
++					 const CMPIObjectPath * package,
+ 					 CMPIStatus * rc) {
+   CMPIObjectPath * op = NULL;
+   CMPIInstance   * ci = NULL;
+@@ -105,9 +105,9 @@ CMPIInstance * _makeInst_RpmAssociatedFi
+ /* ----- method to handle the association logic for Linux_RpmAssociatedFile --*/
+ 
+ int assoc_RpmAssociatedFile( CMPIBroker * _broker,
+-			  CMPIContext * ctx,
+-			  CMPIResult * rslt,
+-			  CMPIObjectPath * ref,
++			  const CMPIContext * ctx,
++			  const CMPIResult * rslt,
++			  const CMPIObjectPath * ref,
+ 			  int assocType,
+ 			  CMPIStatus * rc )
+ {
+diff -up sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFile.h.orig sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFile.h
+--- sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFile.h.orig	2024-02-26 14:16:07.606489500 +0100
++++ sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFile.h	2024-02-26 14:17:17.797621250 +0100
+@@ -47,16 +47,16 @@ static char * _RefRightClass = "Linux_Rp
+ /* method to create a CMPIObjectPath of Linux_RpmAssociatedFile               */
+ 
+ CMPIObjectPath * _makePath_RpmAssociatedFile( CMPIBroker * _broker, 
+-					      CMPIObjectPath * filecheck,
+-					      CMPIObjectPath * package,
++					      const CMPIObjectPath * filecheck,
++					      const CMPIObjectPath * package,
+ 					      CMPIStatus * rc);
+ 
+ 
+ /* method to create a CMPIInstance of Linux_RpmAssociatedFile                 */
+ 
+ CMPIInstance * _makeInst_RpmAssociatedFile( CMPIBroker * _broker,
+-					    CMPIObjectPath * filecheck,
+-					    CMPIObjectPath * package,
++					    const CMPIObjectPath * filecheck,
++					    const CMPIObjectPath * package,
+ 					    CMPIStatus * rc);
+ 
+ 
+@@ -65,9 +65,9 @@ CMPIInstance * _makeInst_RpmAssociatedFi
+ /* method to handle the association logic for Linux_RpmAssociatedFile         */
+ 
+ int assoc_RpmAssociatedFile( CMPIBroker * _broker,
+-			     CMPIContext * ctx,
+-			     CMPIResult * rslt,
+-			     CMPIObjectPath * ref,
++			     const CMPIContext * ctx,
++			     const CMPIResult * rslt,
++			     const CMPIObjectPath * ref,
+ 			     int assocType,
+ 			     CMPIStatus * rc );
+ 
+diff -up sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFileProvider.c.orig sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFileProvider.c
+--- sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFileProvider.c.orig	2024-02-26 14:09:45.004769549 +0100
++++ sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmAssociatedFileProvider.c	2024-02-26 14:15:47.975452651 +0100
+@@ -46,7 +46,7 @@ static CMPIBroker * _broker;
+ 
+ 
+ CMPIStatus OSBase_RpmAssociatedFileProviderAssociationCleanup( CMPIAssociationMI * mi,
+-           CMPIContext * ctx) {
++           const CMPIContext * ctx, CMPIBoolean terminate) {
+   _OSBASE_TRACE(1,("--- %s CMPI AssociationCleanup() called",_AssocName));
+   _OSBASE_TRACE(1,("--- %s CMPI AssociationCleanup() exited",_AssocName));
+   CMReturn(CMPI_RC_OK);
+@@ -107,14 +107,14 @@ CMPIStatus OSBase_RpmAssociatedFileProvi
+  */
+ 
+ CMPIStatus OSBase_RpmAssociatedFileProviderAssociators( CMPIAssociationMI * mi,
+-           CMPIContext * ctx,
+-           CMPIResult * rslt,
+-           CMPIObjectPath * cop,
+-           char * assocClass,
+-           char * resultClass,
+-           char * role,
+-           char * resultRole,
+-           char ** propertyList ) {
++           const CMPIContext * ctx,
++           const CMPIResult * rslt,
++           const CMPIObjectPath * cop,
++           const char * assocClass,
++           const char * resultClass,
++           const char * role,
++           const char * resultRole,
++           const char ** propertyList ) {
+   CMPIStatus       rc    = {CMPI_RC_OK, NULL};
+   CMPIObjectPath * op    = NULL;
+   int              refrc = 0;
+@@ -160,13 +160,13 @@ CMPIStatus OSBase_RpmAssociatedFileProvi
+ }
+ 
+ CMPIStatus OSBase_RpmAssociatedFileProviderAssociatorNames( CMPIAssociationMI * mi,
+-           CMPIContext * ctx,
+-           CMPIResult * rslt,
+-           CMPIObjectPath * cop,
+-           char * assocClass,
+-           char * resultClass,
+-           char * role,
+-           char * resultRole) {
++           const CMPIContext * ctx,
++           const CMPIResult * rslt,
++           const CMPIObjectPath * cop,
++           const char * assocClass,
++           const char * resultClass,
++           const char * role,
++           const char * resultRole) {
+   CMPIStatus       rc    = {CMPI_RC_OK, NULL};
+   CMPIObjectPath * op    = NULL;
+   int              refrc = 0;
+@@ -221,12 +221,12 @@ CMPIStatus OSBase_RpmAssociatedFileProvi
+  */
+ 
+ CMPIStatus OSBase_RpmAssociatedFileProviderReferences( CMPIAssociationMI * mi,
+-           CMPIContext * ctx,
+-           CMPIResult * rslt,
+-           CMPIObjectPath * cop,
+-           char * assocClass,
+-           char * role,
+-           char ** propertyList ) {
++           const CMPIContext * ctx,
++           const CMPIResult * rslt,
++           const CMPIObjectPath * cop,
++           const char * assocClass,
++           const char * role,
++           const char ** propertyList ) {
+   CMPIStatus       rc    = {CMPI_RC_OK, NULL};
+   CMPIObjectPath * op    = NULL;
+   int              refrc = 0;
+@@ -272,11 +272,11 @@ CMPIStatus OSBase_RpmAssociatedFileProvi
+ }
+ 
+ CMPIStatus OSBase_RpmAssociatedFileProviderReferenceNames( CMPIAssociationMI * mi,
+-           CMPIContext * ctx,
+-           CMPIResult * rslt,
+-           CMPIObjectPath * cop,
+-           char * assocClass,
+-           char * role) {
++           const CMPIContext * ctx,
++           const CMPIResult * rslt,
++           const CMPIObjectPath * cop,
++           const char * assocClass,
++           const char * role) {
+   CMPIStatus       rc    = {CMPI_RC_OK, NULL};
+   CMPIObjectPath * op    = NULL;
+   int              refrc = 0;
+diff -up sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheck.c.orig sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheck.c
+--- sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheck.c.orig	2024-02-26 14:06:06.364356787 +0100
++++ sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheck.c	2024-02-26 14:06:57.666453637 +0100
+@@ -46,8 +46,8 @@
+ /* ---------- method to create a CMPIObjectPath of Linux_RpmFileCheck --------*/
+ 
+ CMPIObjectPath * _makePath_RpmFileCheck( CMPIBroker * _broker,
+-		 CMPIContext * ctx, 
+-	         CMPIObjectPath * ref,
++		 const CMPIContext * ctx, 
++	         const CMPIObjectPath * ref,
+ 	         CRPM_SE * crpmse,
+ 		 char * filename,
+ 	         CMPIStatus * rc) {
+@@ -79,8 +79,8 @@ CMPIObjectPath * _makePath_RpmFileCheck(
+ /* ----------- method to create a CMPIInstance of Linux_RpmFileCheck ---------*/
+ 
+ CMPIInstance * _makeInst_RpmFileCheck( CMPIBroker * _broker,
+-	       CMPIContext * ctx, 
+-	       CMPIObjectPath * ref,
++	       const CMPIContext * ctx, 
++	       const CMPIObjectPath * ref,
+ 	       const char ** properties,
+ 	       CRPM_SE * crpmse,
+ 	       char * filename,
+diff -up sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheck.h.orig sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheck.h
+--- sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheck.h.orig	2024-02-26 14:05:17.109263799 +0100
++++ sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheck.h	2024-02-26 14:05:53.701332880 +0100
+@@ -39,8 +39,8 @@ static char * _ClassName = "Linux_RpmFil
+ /* method to create a CMPIObjectPath of Linux_RpmFileCheck                    */
+ 
+ CMPIObjectPath * _makePath_RpmFileCheck( CMPIBroker * _broker,
+-                 CMPIContext * ctx, 
+-                 CMPIObjectPath * cop,
++                 const CMPIContext * ctx, 
++                 const CMPIObjectPath * cop,
+ 	         CRPM_SE * crpmse,
+ 	         char * filename,
+                  CMPIStatus * rc);
+@@ -49,8 +49,8 @@ CMPIObjectPath * _makePath_RpmFileCheck(
+ /* method to create a CMPIInstance of Linux_RpmFileCheck                      */
+ 
+ CMPIInstance * _makeInst_RpmFileCheck( CMPIBroker * _broker,
+-               CMPIContext * ctx, 
+-               CMPIObjectPath * cop,
++               const CMPIContext * ctx, 
++               const CMPIObjectPath * cop,
+ 	       const char ** properties,
+ 	       CRPM_SE * crpmse,
+ 	       char * filename,
+diff -up sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheckProvider.c.orig sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheckProvider.c
+--- sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheckProvider.c.orig	2024-02-26 14:02:07.373905608 +0100
++++ sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmFileCheckProvider.c	2024-02-26 14:08:33.415634398 +0100
+@@ -46,16 +46,16 @@ static CMPIBroker * _broker;
+ 
+ 
+ CMPIStatus OSBase_RpmFileCheckProviderCleanup( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx) { 
++           const CMPIContext * ctx, CMPIBoolean terminate) { 
+   _OSBASE_TRACE(1,("--- %s CMPI Cleanup() called",_ClassName));
+   _OSBASE_TRACE(1,("--- %s CMPI Cleanup() exited",_ClassName));
+   CMReturn(CMPI_RC_OK);
+ }
+ 
+ CMPIStatus OSBase_RpmFileCheckProviderEnumInstanceNames( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * ref) { 
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * ref) { 
+   CMPIStatus rc = {CMPI_RC_OK, NULL};
+   
+   _OSBASE_TRACE(1,("--- %s CMPI EnumInstanceNames() called",_ClassName));
+@@ -68,10 +68,10 @@ CMPIStatus OSBase_RpmFileCheckProviderEn
+ }
+ 
+ CMPIStatus OSBase_RpmFileCheckProviderEnumInstances( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * ref, 
+-           char ** properties) { 
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * ref, 
++           const char ** properties) { 
+   CMPIStatus rc = {CMPI_RC_OK, NULL}; 
+ 
+   _OSBASE_TRACE(1,("--- %s CMPI EnumInstances() called",_ClassName));
+@@ -84,10 +84,10 @@ CMPIStatus OSBase_RpmFileCheckProviderEn
+ }
+ 
+ CMPIStatus OSBase_RpmFileCheckProviderGetInstance( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * cop, 
+-           char ** properties) {
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * cop, 
++           const char ** properties) {
+   CMPIInstance * ci     = NULL;
+   CMPIString   * spec   = NULL;  
+   CMPIString   * id     = NULL;
+@@ -167,10 +167,10 @@ CMPIStatus OSBase_RpmFileCheckProviderGe
+ }
+ 
+ CMPIStatus OSBase_RpmFileCheckProviderCreateInstance( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * cop, 
+-           CMPIInstance * ci) {
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * cop, 
++           const CMPIInstance * ci) {
+   CMPIStatus rc = {CMPI_RC_OK, NULL};
+   
+   _OSBASE_TRACE(1,("--- %s CMPI CreateInstance() called",_ClassName));
+@@ -183,11 +183,11 @@ CMPIStatus OSBase_RpmFileCheckProviderCr
+ }
+ 
+ CMPIStatus OSBase_RpmFileCheckProviderSetInstance( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * cop,
+-           CMPIInstance * ci, 
+-           char **properties) {
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * cop,
++           const CMPIInstance * ci, 
++           const char **properties) {
+   CMPIStatus rc = {CMPI_RC_OK, NULL};
+ 
+   _OSBASE_TRACE(1,("--- %s CMPI SetInstance() called",_ClassName));
+@@ -200,9 +200,9 @@ CMPIStatus OSBase_RpmFileCheckProviderSe
+ }
+ 
+ CMPIStatus OSBase_RpmFileCheckProviderDeleteInstance( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * cop) {
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * cop) {
+   CMPIStatus rc = {CMPI_RC_OK, NULL}; 
+ 
+   _OSBASE_TRACE(1,("--- %s CMPI DeleteInstance() called",_ClassName));
+@@ -215,11 +215,11 @@ CMPIStatus OSBase_RpmFileCheckProviderDe
+ }
+ 
+ CMPIStatus OSBase_RpmFileCheckProviderExecQuery( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * ref, 
+-           char * lang, 
+-           char * query) {
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * ref, 
++           const char * lang, 
++           const char * query) {
+   CMPIStatus rc = {CMPI_RC_OK, NULL};
+ 
+   _OSBASE_TRACE(1,("--- %s CMPI ExecQuery() called",_ClassName));
+diff -up sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackage.c.orig sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackage.c
+--- sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackage.c.orig	2024-02-26 13:58:15.348467577 +0100
++++ sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackage.c	2024-02-26 14:00:43.826747881 +0100
+@@ -46,8 +46,8 @@
+ /* ---------- method to create a CMPIObjectPath of Linux_RpmPackage ----------*/
+ 
+ CMPIObjectPath * _makePath_RpmPackage( CMPIBroker * _broker,
+-		 CMPIContext * ctx, 
+-	         CMPIObjectPath * ref,
++		 const CMPIContext * ctx, 
++	         const CMPIObjectPath * ref,
+ 	         CRPM_SE * crpmse,
+ 	         CMPIStatus * rc) {
+   CMPIObjectPath * op = NULL;
+@@ -77,8 +77,8 @@ CMPIObjectPath * _makePath_RpmPackage( C
+ /* ----------- method to create a CMPIInstance of Linux_RpmPackage -----------*/
+ 
+ CMPIInstance * _makeInst_RpmPackage( CMPIBroker * _broker,
+-	       CMPIContext * ctx, 
+-	       CMPIObjectPath * ref,
++	       const CMPIContext * ctx, 
++	       const CMPIObjectPath * ref,
+ 	       const char ** properties,
+ 	       CRPM_SE * crpmse,
+ 	       CMPIStatus * rc) {
+diff -up sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackage.h.orig sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackage.h
+--- sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackage.h.orig	2024-02-26 13:13:59.479538957 +0100
++++ sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackage.h	2024-02-26 13:14:36.737607631 +0100
+@@ -39,8 +39,8 @@ static char * _ClassName = "Linux_RpmPac
+ /* method to create a CMPIObjectPath of Linux_RpmPackage                      */
+ 
+ CMPIObjectPath * _makePath_RpmPackage( CMPIBroker * _broker,
+-                 CMPIContext * ctx, 
+-                 CMPIObjectPath * cop,
++                 const CMPIContext * ctx, 
++                 const CMPIObjectPath * cop,
+ 	         CRPM_SE * crpmse,
+                  CMPIStatus * rc);
+ 
+@@ -48,8 +48,8 @@ CMPIObjectPath * _makePath_RpmPackage( C
+ /* method to create a CMPIInstance of Linux_RpmPackage                        */
+ 
+ CMPIInstance * _makeInst_RpmPackage( CMPIBroker * _broker,
+-               CMPIContext * ctx, 
+-               CMPIObjectPath * cop,
++               const CMPIContext * ctx, 
++               const CMPIObjectPath * cop,
+ 	       const char ** properties,
+ 	       CRPM_SE * crpmse,
+                CMPIStatus * rc);
+diff -up sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackageProvider.c.orig sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackageProvider.c
+--- sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackageProvider.c.orig	2024-02-26 13:06:48.702745022 +0100
++++ sblim-cmpi-rpm-1.0.1/cmpiOSBase_RpmPackageProvider.c	2024-02-26 13:22:34.798486055 +0100
+@@ -46,16 +46,16 @@ static CMPIBroker * _broker;
+ 
+ 
+ CMPIStatus OSBase_RpmPackageProviderCleanup( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx) { 
++           const CMPIContext * ctx, CMPIBoolean terminate) { 
+   _OSBASE_TRACE(1,("--- %s CMPI Cleanup() called",_ClassName));
+   _OSBASE_TRACE(1,("--- %s CMPI Cleanup() exited",_ClassName));
+   CMReturn(CMPI_RC_OK);
+ }
+ 
+ CMPIStatus OSBase_RpmPackageProviderEnumInstanceNames( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * ref) { 
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * ref) { 
+   CMPIObjectPath * op      = NULL;
+   CMPIString     * clsname = NULL;
+   HCRPM            hcrpm;
+@@ -110,10 +110,10 @@ CMPIStatus OSBase_RpmPackageProviderEnum
+ }
+ 
+ CMPIStatus OSBase_RpmPackageProviderEnumInstances( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * ref, 
+-           char ** properties) { 
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * ref, 
++           const char ** properties) { 
+   CMPIInstance * ci      = NULL; 
+   CMPIString   * clsname = NULL;
+   HCRPM          hcrpm;
+@@ -168,10 +168,10 @@ CMPIStatus OSBase_RpmPackageProviderEnum
+ }
+ 
+ CMPIStatus OSBase_RpmPackageProviderGetInstance( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * cop, 
+-           char ** properties) {
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * cop, 
++           const char ** properties) {
+   CMPIInstance * ci     = NULL;
+   CMPIString   * spec   = NULL;  
+   HCRPM          hcrpm;
+@@ -229,10 +229,10 @@ CMPIStatus OSBase_RpmPackageProviderGetI
+ }
+ 
+ CMPIStatus OSBase_RpmPackageProviderCreateInstance( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * cop, 
+-           CMPIInstance * ci) {
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * cop, 
++           const CMPIInstance * ci) {
+   CMPIStatus rc = {CMPI_RC_OK, NULL};
+ 
+   _OSBASE_TRACE(1,("--- %s CMPI CreateInstance() called",_ClassName));
+@@ -245,11 +245,11 @@ CMPIStatus OSBase_RpmPackageProviderCrea
+ }
+ 
+ CMPIStatus OSBase_RpmPackageProviderSetInstance( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * cop,
+-           CMPIInstance * ci, 
+-           char **properties) {
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * cop,
++           const CMPIInstance * ci, 
++           const char **properties) {
+   CMPIStatus rc = {CMPI_RC_OK, NULL};
+ 
+   _OSBASE_TRACE(1,("--- %s CMPI SetInstance() called",_ClassName));
+@@ -262,9 +262,9 @@ CMPIStatus OSBase_RpmPackageProviderSetI
+ }
+ 
+ CMPIStatus OSBase_RpmPackageProviderDeleteInstance( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * cop) {
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * cop) {
+   CMPIStatus rc = {CMPI_RC_OK, NULL}; 
+ 
+   _OSBASE_TRACE(1,("--- %s CMPI DeleteInstance() called",_ClassName));
+@@ -277,11 +277,11 @@ CMPIStatus OSBase_RpmPackageProviderDele
+ }
+ 
+ CMPIStatus OSBase_RpmPackageProviderExecQuery( CMPIInstanceMI * mi, 
+-           CMPIContext * ctx, 
+-           CMPIResult * rslt, 
+-           CMPIObjectPath * ref, 
+-           char * lang, 
+-           char * query) {
++           const CMPIContext * ctx, 
++           const CMPIResult * rslt, 
++           const CMPIObjectPath * ref, 
++           const char * lang, 
++           const char * query) {
+   CMPIStatus rc = {CMPI_RC_OK, NULL};
+ 
+   _OSBASE_TRACE(1,("--- %s CMPI ExecQuery() called",_ClassName));

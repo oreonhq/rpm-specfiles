@@ -1,0 +1,84 @@
+From 488239a1a626f752cc7fdba84361af61a6c72976 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 18 Jan 2018 14:31:01 +0100
+Subject: [PATCH] Revert PERL-715 Force localhost to connect via IPv4
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts:
+
+    From 3bf06890a2675e323e09a0ff123f572ad23b2627 Mon Sep 17 00:00:00 2001
+    From: David Golden <xdg@xdg.me>
+    Date: Mon, 6 Mar 2017 23:36:35 -0500
+    Subject: [PATCH] PERL-715 Force localhost to connect via IPv4
+    MIME-Version: 1.0
+    Content-Type: text/plain; charset=UTF-8
+    Content-Transfer-Encoding: 8bit
+
+    Some operating systems return IPv6 localhost addresses first, which fail
+    to connect if MongoDB isn't running on IPv6.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/MongoDB/_Link.pm |  9 +--------
+ t/connection.t       | 15 ---------------
+ 2 files changed, 1 insertion(+), 23 deletions(-)
+
+diff --git a/lib/MongoDB/_Link.pm b/lib/MongoDB/_Link.pm
+index 25a77e0..8992824 100644
+--- a/lib/MongoDB/_Link.pm
++++ b/lib/MongoDB/_Link.pm
+@@ -29,7 +29,7 @@ use Moo;
+ use Errno qw[EINTR EPIPE];
+ use IO::Socket qw[SOCK_STREAM];
+ use Scalar::Util qw/refaddr/;
+-use Socket qw/SOL_SOCKET SO_KEEPALIVE SO_RCVBUF IPPROTO_TCP TCP_NODELAY AF_INET/;
++use Socket qw/SOL_SOCKET SO_KEEPALIVE SO_RCVBUF IPPROTO_TCP TCP_NODELAY/;
+ use Time::HiRes qw/time/;
+ use MongoDB::Error;
+ use MongoDB::_Constants;
+@@ -277,16 +277,9 @@ sub connect {
+ 
+     my ($host, $port) = split /:/, $self->address;
+ 
+-    # PERL-715: For 'localhost' where MongoDB is only listening on IPv4 and
+-    # getaddrinfo returns an IPv6 address before an IPv4 address, some
+-    # operating systems tickle a bug in IO::Socket::IP that causes
+-    # connection attempts to fail before trying the IPv4 address.  As a
+-    # workaround, we always force 'localhost' to use IPv4.
+-
+     my $fh = $SOCKET_CLASS->new(
+         PeerHost => $ENV{TEST_MONGO_SOCKET_HOST} || $host,
+         PeerPort => $port,
+-        ( lc($host) eq 'localhost' ? ( Family => AF_INET ) : () ),
+         Proto    => 'tcp',
+         Type     => SOCK_STREAM,
+         Timeout  => $self->connect_timeout >= 0 ? $self->connect_timeout : undef,
+diff --git a/t/connection.t b/t/connection.t
+index 84e5c2d..019343f 100644
+--- a/t/connection.t
++++ b/t/connection.t
+@@ -133,19 +133,4 @@ subtest "app name" => sub {
+         or diag explain $ret->{output};
+ };
+ 
+-subtest "localhost translated to 127.0.0.1" => sub {
+-    my $topo = $conn->_topology;
+-    $topo->scan_all_servers;
+-    my $link = $topo->get_readable_link;
+-    my $fh = $link->fh;
+-
+-    plan skip_all => "Test needs IO::Socket::IP and localhost mongod"
+-        unless $fh->isa("IO::Socket::IP") && $conn->host =~ /localhost/;
+-
+-    # IO::Socket::IP::as_inet is fatal unless socket is PF_INET
+-    eval { $fh->as_inet };
+-    is( $@, '', "Socket can convert to plain INET (IPv4)" );
+-};
+-
+-
+ done_testing;
+-- 
+2.21.0
+

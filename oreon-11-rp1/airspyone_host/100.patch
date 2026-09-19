@@ -1,0 +1,141 @@
+Subject: [PATCH] Use GNUInstallDirs
+Bump CMake policies
+---
+Index: CMakeLists.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	(revision d0c4ff510bb40e134adfe655b7fe818ac2d2f66d)
++++ b/CMakeLists.txt	(revision 387f6f797513e6dc119bda633712c05f07b9c13d)
+@@ -1,8 +1,10 @@
+ #top dir cmake project for libairspy + airspy-tools
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...4.0)
+ project (airspy_all)
+ 
++include(GNUInstallDirs)
++
+ #provide missing strtoull() for VC11
+ if(MSVC11)
+     add_definitions(-Dstrtoull=_strtoui64)
+Index: airspy-tools/CMakeLists.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/airspy-tools/CMakeLists.txt b/airspy-tools/CMakeLists.txt
+--- a/airspy-tools/CMakeLists.txt	(revision d0c4ff510bb40e134adfe655b7fe818ac2d2f66d)
++++ b/airspy-tools/CMakeLists.txt	(revision 0708cf50b6821fe0fb37fc9a7534c635c4d9c235)
+@@ -21,7 +21,7 @@
+ 
+ # Based heavily upon the libftdi cmake setup.
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...4.0)
+ project(airspy-tools C)
+ set(MAJOR_VERSION 0)
+ set(MINOR_VERSION 2)
+Index: libairspy/CMakeLists.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/libairspy/CMakeLists.txt b/libairspy/CMakeLists.txt
+--- a/libairspy/CMakeLists.txt	(revision d0c4ff510bb40e134adfe655b7fe818ac2d2f66d)
++++ b/libairspy/CMakeLists.txt	(revision 387f6f797513e6dc119bda633712c05f07b9c13d)
+@@ -21,7 +21,7 @@
+ 
+ # Based heavily upon the libftdi cmake setup.
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...4.0)
+ project(libairspy C)
+ file(READ ${CMAKE_CURRENT_SOURCE_DIR}/src/airspy.h AIRSPY_H_CONTENTS)
+ 
+@@ -99,8 +99,8 @@
+ 
+ set(prefix ${CMAKE_INSTALL_PREFIX})
+ set(exec_prefix \${prefix})
+-set(libdir \${exec_prefix}/lib${LIB_SUFFIX})
+-set(includedir \${prefix}/include)
++set(libdir \${exec_prefix}/${CMAKE_INSTALL_LIBDIR})
++set(includedir \${prefix}/${CMAKE_INSTALL_INCLUDEDIR})
+ 
+ CONFIGURE_FILE(
+     ${CMAKE_CURRENT_SOURCE_DIR}/libairspy.pc.in
+@@ -109,7 +109,7 @@
+ 
+ INSTALL(
+     FILES ${CMAKE_CURRENT_BINARY_DIR}/libairspy.pc
+-    DESTINATION lib${LIB_SUFFIX}/pkgconfig
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+ )
+ 
+ ########################################################################
+Index: airspy-tools/src/CMakeLists.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/airspy-tools/src/CMakeLists.txt b/airspy-tools/src/CMakeLists.txt
+--- a/airspy-tools/src/CMakeLists.txt	(revision 0708cf50b6821fe0fb37fc9a7534c635c4d9c235)
++++ b/airspy-tools/src/CMakeLists.txt	(revision 387f6f797513e6dc119bda633712c05f07b9c13d)
+@@ -21,7 +21,13 @@
+ 
+ # Based heavily upon the libftdi cmake setup.
+ 
+-set(INSTALL_DEFAULT_BINDIR "bin" CACHE STRING "Appended to CMAKE_INSTALL_PREFIX")
++if(DEFINED INSTALL_DEFAULT_BINDIR)
++    message(WARNING
++        "INSTALL_DEFAULT_BINDIR is deprecated, use the standard CMAKE_INSTALL_BINDIR instead."
++    )
++else()
++    set(INSTALL_DEFAULT_BINDIR "${CMAKE_INSTALL_BINDIR}")
++endif()
+ 
+ if(MSVC)
+ add_library(libgetopt_static STATIC
+Index: libairspy/src/CMakeLists.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/libairspy/src/CMakeLists.txt b/libairspy/src/CMakeLists.txt
+--- a/libairspy/src/CMakeLists.txt	(revision 0708cf50b6821fe0fb37fc9a7534c635c4d9c235)
++++ b/libairspy/src/CMakeLists.txt	(revision 387f6f797513e6dc119bda633712c05f07b9c13d)
+@@ -79,30 +79,26 @@
+ 
+ if( ${UNIX} )
+    install(TARGETS airspy
+-           LIBRARY DESTINATION lib${LIB_SUFFIX}
+            COMPONENT sharedlibs
+            )
+    install(TARGETS airspy-static
+-           ARCHIVE DESTINATION lib${LIB_SUFFIX}
+            COMPONENT staticlibs
+            )
+    install(FILES ${c_headers}
+-           DESTINATION include/${PROJECT_NAME}
++           DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+            COMPONENT headers
+            )
+ endif( ${UNIX} )
+ 
+ if( ${WIN32} )
+    install(TARGETS airspy
+-           DESTINATION bin
+            COMPONENT sharedlibs
+            )
+    install(TARGETS airspy-static
+-           DESTINATION bin
+            COMPONENT staticlibs
+            )
+    install(FILES ${c_headers}
+-           DESTINATION include/${PROJECT_NAME}
++           DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+            COMPONENT headers
+            )
+ endif( ${WIN32} )

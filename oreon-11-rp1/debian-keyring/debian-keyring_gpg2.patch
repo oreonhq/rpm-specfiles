@@ -1,0 +1,28 @@
+diff -rupN --no-dereference debian-archive-keyring/Makefile debian-archive-keyring-new/Makefile
+--- debian-archive-keyring/Makefile	2025-04-09 23:04:45.000000000 +0200
++++ debian-archive-keyring-new/Makefile	2025-04-15 17:09:16.737574152 +0200
+@@ -7,13 +7,13 @@ build: keyrings/debian-archive-keyring.p
+ 
+ keyrings/debian-archive-keyring.pgp: active-keys/index
+ 	jetring-build -I $@ active-keys
+-	gpg ${GPG_OPTIONS} --no-keyring --import-options import-export --import < $@ > $@.tmp
++	gpg2 ${GPG_OPTIONS} --no-keyring --import-options import-export --import < $@ > $@.tmp
+ 	mv -f $@.tmp $@
+ 	ln -s $(notdir $@) $(patsubst %.pgp,%.gpg,$@)
+ 
+ keyrings/debian-archive-removed-keys.pgp: removed-keys/index
+ 	jetring-build -I $@ removed-keys
+-	gpg ${GPG_OPTIONS} --no-keyring --import-options import-export --import < $@ > $@.tmp
++	gpg2 ${GPG_OPTIONS} --no-keyring --import-options import-export --import < $@ > $@.tmp
+ 	mv -f $@.tmp $@
+ 	ln -s $(notdir $@) $(patsubst %.pgp,%.gpg,$@)
+ 
+@@ -23,7 +23,7 @@ $(TRUSTED-LIST) :: trusted.pgp/debian-ar
+ 	cp $< $(TMPRING)
+ 	jetring-build -I $@ $(TMPRING)
+ 	rm -rf $(TMPRING)
+-	gpg ${GPG_OPTIONS} --no-keyring --import-options import-export --import < $@ > $@.tmp
++	gpg2 ${GPG_OPTIONS} --no-keyring --import-options import-export --import < $@ > $@.tmp
+ 	mv -f $@.tmp $@
+ 	ln -s $(notdir $@) $(patsubst %.pgp,%.gpg,$@)
+ 

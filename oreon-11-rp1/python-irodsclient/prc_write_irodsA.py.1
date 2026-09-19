@@ -1,0 +1,51 @@
+.TH PRC_WRITE_IRODSA.PY "1" "March 2026" "" "User Commands"
+.SH NAME
+prc_write_irodsA.py
+\(en
+Produce a \(lqsecrets\(rq (i.e. encoded password) file
+.SH SYNOPSIS
+.B prc_write_irodsA.py
+.RB [ \-i\ \fI STREAM \ |\  \-h \ |\  \-\-help \ |\  \-\-ttl\ \fIHOURS ]
+.I AUTH_SCHEME
+.SH DESCRIPTION
+This script produces a \(lqsecrets\(rq (i.e. encoded password) file.
+Similar to
+.B iinit
+in this capacity, if the environment \(en
+and where applicable, the PAM configuration for both system and user \(en
+is already set up in every other regard,
+this program will generate the secrets file
+with appropriate permissions and in the normal location, usually:
+.in +7n
+.EX
+.B ~/.irods/.irodsA
+.EE
+.in
+The user will be interactively prompted to enter their cleartext password.
+.SH OPTIONS
+.SS "POSITIONAL ARGUMENTS"
+.TP
+.I AUTH_SCHEME
+Choices are:
+.RS +7n
+.PD 0
+.IP \(bu 2
+.B pam_password
+.IP \(bu 2
+.B native
+.PD
+.RE
+.SS "OPTIONAL ARGUMENTS"
+.TP
+.B \-i\ \fISTREAM
+.I STREAM
+is the name of a file containing a password.
+Alternatively, a hyphen
+.RB (\(oq \- \(cq)
+is used to indicate that the password may be read from
+.IR stdin .
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit.
+.TP
+.B \-\-ttl\ \fIHOURS

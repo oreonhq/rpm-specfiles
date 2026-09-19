@@ -1,0 +1,255 @@
+diff -Nwbu xmakemol-5.16/canvas.c xmakemol-5.16h/canvas.c
+--- xmakemol-5.16/canvas.c	2014-09-16 17:34:38.980403580 +0200
++++ xmakemol-5.16h/canvas.c	2014-09-17 08:17:36.290309946 +0200
+@@ -338,7 +338,7 @@
+ 
+       /* Draw the H-bonds ... */
+         
+-      if((any_hydrogen == 1) && (hbond_flag == 1))
++      if((any_hydrogen == 1) && (any_hbondpartner == 1) && (hbond_flag == 1))
+         {
+           /* ... if there are any */
+ 
+diff -Nwbu xmakemol-5.16/configure xmakemol-5.16h/configure
+--- xmakemol-5.16/configure	2014-09-16 17:49:53.310411064 +0200
++++ xmakemol-5.16h/configure	2014-09-16 17:47:18.705367045 +0200
+@@ -2068,7 +2068,7 @@
+ 
+ PACKAGE=xmakemol
+ 
+-VERSION=5.16
++VERSION=5.16h
+ 
+ if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
+   { { echo "$as_me:$LINENO: error: source directory already configured; run \"make distclean\" there first" >&5
+diff -Nwbu xmakemol-5.16/fig.c xmakemol-5.16h/fig.c
+--- xmakemol-5.16/fig.c	2014-09-16 17:34:40.073311262 +0200
++++ xmakemol-5.16h/fig.c	2014-09-17 08:17:36.693395682 +0200
+@@ -118,7 +118,7 @@
+ 
+       /* Loop over H-bonds */
+ 
+-      if (any_hydrogen && hbond_flag)
++      if (any_hydrogen && any_hbondpartner && hbond_flag)
+         {
+           ptr = hbond_adjacency_list[si];
+         
+diff -Nwbu xmakemol-5.16/file.c xmakemol-5.16h/file.c
+--- xmakemol-5.16/file.c	2014-09-16 17:34:40.181366939 +0200
++++ xmakemol-5.16h/file.c	2014-09-17 08:17:36.808395132 +0200
+@@ -1509,9 +1509,10 @@
+ 
+   current_frame->next = NULL;
+   
+-  /* Are any of the atoms hydrogen? */
++  /* Are any of the atoms hydrogen or H-bond partners? */
+ 
+   any_hydrogen = False;
++  any_hbondpartner = False;
+   
+   for (i = 0; i < 4; i++)
+     {
+@@ -2875,6 +2876,11 @@
+ 
+ #define MIN_HBOND_LENGTH2 (1.2 * 1.2)
+ 
++/* Minimum H-bond angle allowed (in radians): should make this customizable, too */
++/* Would also be good to have different angle criteria for different elements... */
++#define GOOD_HB_ANGLE 90.0 * PI/180.0
++
++
+ void
+ update_bond_matrix(Boolean force_update)
+ {
+@@ -2988,26 +2994,39 @@
+ 
+   /* Assign the H-bonds */
+ 
+-/* There is no point doing this if there are no H atoms */
++/* There is no point doing this if there are no H atoms and H-bond partners*/
+ 
+-  if(any_hydrogen == 1)
++  if((any_hydrogen == 1) && (any_hbondpartner == 1))
+     {
+       
+       for(i = 0; i < no_atoms - 1 ; i++)
+         {
+           for(j = i + 1; j < no_atoms; j++)
+             {
+-              /* Test if _one_ of the atoms is hydrogen */
++              /* Test if _one_ of the atoms is hydrogen and the other N/O/F */
+               
+-              if((( atoms[i].is_hydrogen) && (!atoms[j].is_hydrogen)) ||
+-                 ((!atoms[i].is_hydrogen) && ( atoms[j].is_hydrogen)))
++              if((( atoms[i].is_hydrogen)     && ( atoms[j].is_hbondpartner)) ||
++                 (( atoms[i].is_hbondpartner) && ( atoms[j].is_hydrogen)))
+                 {
++
+                   double bond_test, hbond_test;
+                   double x, y, z;
+-
+-                  x = atoms[i].x - atoms[j].x;
+-                  y = atoms[i].y - atoms[j].y;
+-                  z = atoms[i].z - atoms[j].z;
++                  double x1, x2, x3, y1, y2, y3, z1, z2, z3;
++                  Boolean good_hbond_angle;
++                  int hatom_ind, hbond_ind, covbondp;
++                  double ax, bx, ay, by, az, bz, la, lb, sp, theta;
++                  double angletol;
++
++                  x1 = atoms[i].x; 
++                  y1 = atoms[i].y; 
++                  z1 = atoms[i].z; 
++                  x2 = atoms[j].x; 
++                  y2 = atoms[j].y; 
++                  z2 = atoms[j].z; 
++
++                  x = x1-x2;
++                  y = y1-y2;
++                  z = z1-z2;
+ 
+                   atom_sep2 = (x * x) + (y * y) + (z * z);
+ 
+@@ -3043,7 +3062,62 @@
+                      
+                      (atom_sep2 > bond_test))
+                     {
+-                      /* There is an H-bond */
++                        /* There might be an H-bond, check angle */
++
++                        good_hbond_angle = 1;
++                        if (atoms[i].is_hydrogen) {
++                            hatom_ind = i;
++                            hbond_ind = j;
++                            /* if atoms[i] is the hydrogen, we need to exchange x1<->x2, etc */
++                            x1=x1+x2; x2=x1-x2; x1=x1-x2;
++                            y1=y1+y2; y2=y1-y2; y1=y1-y2;
++                            z1=z1+z2; z2=z1-z2; z1=z1-z2;
++		                  }
++                        else {
++                            hatom_ind = j;
++                            hbond_ind = i;
++                        }
++
++                        if (bond_adjacency_list[hatom_ind] != NULL) {
++                            struct node *covptr = bond_adjacency_list[hatom_ind];
++
++                            /* Let's only check the first (possible) bonded partner */
++                            /* Should be more than enough for a hydrogen...         */
++
++                            covbondp = (covptr->v);
++                            
++                            /* Check that the hydrogen is covalently bound to F/O/N as well */ 
++
++                            if (!atoms[covbondp].is_hbondpartner) {good_hbond_angle = 0;}
++
++                            else {
++                            /* Now let's test the angle */
++
++                                x3=atoms[covbondp].x;
++                                y3=atoms[covbondp].y;
++                                z3=atoms[covbondp].z;
++
++                                /* Compute angle between X...H--Y  */
++                                /*                       x1  x2 x3 */
++                                ax = x1-x2;
++                                ay = y1-y2;
++                                az = z1-z2;
++                                bx = x3-x2;
++                                by = y3-y2;
++                                bz = z3-z2;
++                                la = sqrt(ax*ax + ay*ay + az*az);
++                                lb = sqrt(bx*bx + by*by + bz*bz);
++                                sp = ax*bx + ay*by + az*bz;
++                                theta = acos(sp / (la*lb)) - GOOD_HB_ANGLE;
++                                
++                                angletol = (PI - GOOD_HB_ANGLE)*2;
++
++                                if ((theta < 0.0) || (theta > angletol)) {good_hbond_angle = 0;}
++                            }
++                        }
++
++                        if (good_hbond_angle == 1) {
++                            /* This should at least resemble an H-bond */
+                       no_hbonds++;
+                       
+                       /* So j is joined to i */
+@@ -3064,6 +3138,7 @@
+             }
+         }
+     }
++    }
+   
+   update_lengths_dialog(True);
+   
+@@ -3879,6 +3954,19 @@
+           atoms[io].is_hydrogen = 0;
+         }
+ 
++      /* Test for H-bond partners, nitrogen, oxygen, fluorine */
++      if ((strcmp (atoms[io].uppercase_label, "N") == 0) ||
++          (strcmp (atoms[io].uppercase_label, "O") == 0) ||
++          (strcmp (atoms[io].uppercase_label, "F") == 0))
++        {
++          atoms[io].is_hbondpartner = 1;
++          any_hbondpartner = 1;
++        }
++      else
++        {
++          atoms[io].is_hbondpartner = 0;
++        }
++
+       /* Render type */
+       atoms[io].gl_render_type = this_frame->atom[i].gl_render_type;
+ 
+diff -Nwbu xmakemol-5.16/globals.h xmakemol-5.16h/globals.h
+--- xmakemol-5.16/globals.h	2014-09-16 17:34:59.332478502 +0200
++++ xmakemol-5.16h/globals.h	2014-09-17 08:17:38.665393899 +0200
+@@ -55,6 +55,7 @@
+   Boolean visi;      /* is visible ? */
+   unsigned short red,green,blue;
+   Boolean is_hydrogen; /* is the atom Hydrogen? */
++  Boolean is_hbondpartner; /* is the atom of a H-bond forming type (N/O/F)? */
+   int type;          /* atom type index */
+   int has_vector;
+   int is_ellipse;
+@@ -182,6 +183,7 @@
+ Boolean never_use_vdw = 0;
+ Boolean atoms_sorted=0;
+ Boolean any_hydrogen;
++Boolean any_hbondpartner;
+ Boolean view_ghost_atoms = False;
+ 
+ Widget main_w,toplevel,label,canvas,message_area;
+@@ -268,6 +270,7 @@
+ extern Boolean never_use_vdw;
+ extern Boolean atoms_sorted;
+ extern Boolean any_hydrogen;
++extern Boolean any_hbondpartner;
+ extern Boolean view_ghost_atoms;
+ 
+ extern Widget main_w,toplevel,label,canvas,message_area;
+diff -Nwbu xmakemol-5.16/help.c xmakemol-5.16h/help.c
+--- xmakemol-5.16/help.c	2014-09-16 17:34:40.570300721 +0200
++++ xmakemol-5.16h/help.c	2014-09-17 08:17:37.127424462 +0200
+@@ -62,7 +62,7 @@
+ }
+ 
+ 
+-#define ABOUT_MSG "XMakemol version %s\nCopyright (C) 2007 Matthew P. Hodges\n\nXMakemol is free software; you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation; either version 2, or (at your option)\nany later version.\n\nXMakemol is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with XMakemol; see the file COPYING.  If not, write to the Free Software\nFoundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
++#define ABOUT_MSG "XMakemol version %s\nCopyright (C) 2007 Matthew P. Hodges\n\nXMakemol is free software; you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation; either version 2, or (at your option)\nany later version.\n\nXMakemol is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with XMakemol; see the file COPYING.  If not, write to the Free Software\nFoundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\nThis version includes a slight tuning of H-bond detection (mpjohans 2014)"
+ 
+ 
+ void
+diff -Nwbu xmakemol-5.16/xmakemol.c xmakemol-5.16h/xmakemol.c
+--- xmakemol-5.16/xmakemol.c	2014-09-16 17:34:41.497338834 +0200
++++ xmakemol-5.16h/xmakemol.c	2014-09-17 08:17:37.912423795 +0200
+@@ -54,7 +54,7 @@
+ int file_specified = 0;
+ 
+ char go_file[1024];
+-char xmakemol_version[5];
++char xmakemol_version[6];
+ 
+ /* aro - made app global so we can have warning dialog
+    in edit.c that does not allow user to continue

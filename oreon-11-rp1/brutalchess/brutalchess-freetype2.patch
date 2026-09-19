@@ -1,0 +1,18 @@
+diff --git src/fontloader.h.orig src/fontloader.h
+index 745b9eb..414283c 100644
+--- src/fontloader.h.orig
++++ src/fontloader.h
+@@ -13,10 +13,9 @@
+ #include <ft2build.h>
+ #include FT_FREETYPE_H
+ 
+-#include <freetype/freetype.h>
+-#include <freetype/ftglyph.h>
+-#include <freetype/ftoutln.h>
+-#include <freetype/fttrigon.h>
++#include FT_GLYPH_H
++#include FT_OUTLINE_H
++#include FT_TRIGONOMETRY_H
+ 
+ // Other Headers we'll need.
+ #include <vector>

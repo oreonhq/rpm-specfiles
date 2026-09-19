@@ -1,0 +1,42 @@
+diff -up iso2mesh-1.9.8/tools/meshfix/contrib/OpenNL3.2.1/src/NL/nl_blas.c.superlu7 iso2mesh-1.9.8/tools/meshfix/contrib/OpenNL3.2.1/src/NL/nl_blas.c
+--- iso2mesh-1.9.8/tools/meshfix/contrib/OpenNL3.2.1/src/NL/nl_blas.c.superlu7	2020-06-20 10:44:57.000000000 -0600
++++ iso2mesh-1.9.8/tools/meshfix/contrib/OpenNL3.2.1/src/NL/nl_blas.c	2025-08-02 21:50:11.848276795 -0600
+@@ -555,7 +555,7 @@ doublereal NL_FORTRAN_WRAP(dnrm2)(intege
+ } /* dnrm2_ */
+ #undef X
+ 
+-/* Subroutine */ int NL_FORTRAN_WRAP(dcopy)(integer *n, doublereal *dx, integer *incx, 
++/* Subroutine */ void NL_FORTRAN_WRAP(dcopy)(integer *n, doublereal *dx, integer *incx, 
+ 	doublereal *dy, integer *incy)
+ {
+ 
+@@ -956,7 +956,7 @@ extern double NL_FORTRAN_WRAP(ddot)(
+ 
+ extern double NL_FORTRAN_WRAP(dnrm2)( int *n, double *x, int *incx ) ;
+ 
+-extern int NL_FORTRAN_WRAP(dcopy)(int* n, double* dx, int* incx, double* dy, int* incy) ;
++extern void NL_FORTRAN_WRAP(dcopy)(int* n, double* dx, int* incx, double* dy, int* incy) ;
+ 
+ extern void NL_FORTRAN_WRAP(dscal)(int* n, double* alpha, double *x, int* incx) ;
+ 
+diff -up iso2mesh-1.9.8/tools/meshfix/contrib/OpenNL3.2.1/src/nl_single_file.c.suplerlu7 iso2mesh-1.9.8/tools/meshfix/contrib/OpenNL3.2.1/src/nl_single_file.c
+--- iso2mesh-1.9.8/tools/meshfix/contrib/OpenNL3.2.1/src/nl_single_file.c.suplerlu7	2025-08-02 22:42:08.229788744 -0600
++++ iso2mesh-1.9.8/tools/meshfix/contrib/OpenNL3.2.1/src/nl_single_file.c	2025-08-02 22:43:04.139687970 -0600
+@@ -1942,7 +1942,7 @@ doublereal NL_FORTRAN_WRAP(dnrm2)(intege
+ } /* dnrm2_ */
+ #undef X
+ 
+-/* Subroutine */ int NL_FORTRAN_WRAP(dcopy)(integer *n, doublereal *dx, integer *incx, 
++/* Subroutine */ void NL_FORTRAN_WRAP(dcopy)(integer *n, doublereal *dx, integer *incx, 
+ 	doublereal *dy, integer *incy)
+ {
+ 
+@@ -2343,7 +2343,7 @@ extern double NL_FORTRAN_WRAP(ddot)(
+ 
+ extern double NL_FORTRAN_WRAP(dnrm2)( int *n, double *x, int *incx ) ;
+ 
+-extern int NL_FORTRAN_WRAP(dcopy)(int* n, double* dx, int* incx, double* dy, int* incy) ;
++extern void NL_FORTRAN_WRAP(dcopy)(int* n, double* dx, int* incx, double* dy, int* incy) ;
+ 
+ extern void NL_FORTRAN_WRAP(dscal)(int* n, double* alpha, double *x, int* incx) ;
+ 

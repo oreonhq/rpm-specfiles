@@ -1,0 +1,345 @@
+--- pcapdiff.py.bak	2007-11-27 04:21:09.000000000 -0600
++++ pcapdiff.py	2019-08-06 14:05:25.910214377 -0500
+@@ -42,14 +42,14 @@
+ skew_amount = 0
+ 
+ def print_usage():
+-    print '''
++    print('''
+     Usage:
+     %s [-v | -h]
+     %s [-V[V]] [-c] [-t] [-s]
+        <local.pcap> <local ip> <remote.pcap> <remote ip>
+-    ''' % (sys.argv[0], sys.argv[0])
++    ''' % (sys.argv[0], sys.argv[0]))
+ 
+-    print '''
++    print('''
+     pcapdiff takes two pcap files (usually produced by running tcpdump on two
+     different computers) and compares them to find dropped and forged packets
+     between the two machines.  Required arguments are the filenames of the two
+@@ -95,14 +95,14 @@
+           skew and apply this difference to all other timestamps.  The purpose of
+           this option is to reduce the amount of memory used by pcapdiff; it will
+           never affect the output (except for printing the clock skew).
+-    '''
++    ''')
+ 
+ (opts, args) = \
+     getopt.gnu_getopt(sys.argv[1:], 'vhVcts', ['version', 'help', 'verbose=', 'use-checksum', 'ignore-timestamps', 'skew-clocks'])
+ 
+ for opt in opts:
+     if opt[0] == '-v' or opt[0] == '--version':
+-        print "pcapdiff version:", version
++        print("pcapdiff version:", version)
+         sys.exit(0)
+     if opt[0] == '-h' or opt[0] == '--help':
+         print_usage()
+@@ -125,7 +125,7 @@
+     pcap_remote = pcapy.open_offline(args[2])
+     ip_remote = args[3]
+ except:
+-    print "Error opening file or identifying IP address"
++    print("Error opening file or identifying IP address")
+     print_usage()
+     sys.exit(1)
+ 
+@@ -147,7 +147,7 @@
+     '''
+     while 1:
+         try:
+-            packet = a.next()
++            packet = a.__next__()
+         except pcapy.PcapError:
+             return 0
+         spacket = parse_and_save(packet)
+@@ -218,7 +218,7 @@
+ next['remote'] = get_packet(pcap_remote, 1)
+ 
+ if ['local'] == 0 or next['remote'] == 0:
+-    print "ERROR: No packets in one or more files!"
++    print("ERROR: No packets in one or more files!")
+     sys.exit(2)
+ 
+ last_ts_local  = tsp(next['local'])
+@@ -226,7 +226,7 @@
+ first_ts = max(last_ts_local, last_ts_remote)
+ if skew_clocks:
+     skew_amount = last_ts_local - last_ts_remote
+-    if v>=1: print "Clock skew:", skew_amount
++    if v>=1: print("Clock skew:", skew_amount)
+ 
+ # now, find first real packet we care about:
+ if not is_our_traffic(next['local']):
+@@ -306,9 +306,9 @@
+ 
+ # XXX put code here
+ 
+-if v >= 2: print "Parsed.  Local num of unique packets: %d, num of duplicate packets: %d" % (len(manifest.keys()), total['duplicates'])
++if v >= 2: print("Parsed.  Local num of unique packets: %d, num of duplicate packets: %d" % (len(list(manifest.keys())), total['duplicates']))
+ 
+-if v >= 2: print "Remote num of unmatching packets: %d" % len(manifest.keys())
++if v >= 2: print("Remote num of unmatching packets: %d" % len(list(manifest.keys())))
+ 
+ dropped_in = []
+ dropped_out = []
+@@ -316,70 +316,70 @@
+ forged_out = []
+ errors = []
+ 
+-for p in manifest.keys():
++for p in list(manifest.keys()):
+     mp = manifest[p]
+-    if v >= 2: print '--------------'
++    if v >= 2: print('--------------')
+     ip_from = re_ipfrom.search(p).group(1)
+     ip_to = re_ipto.search(p).group(1)
+     if ip_from == ip_local and ip_to == ip_remote:
+         if mp > 0:
+-            if v >=2 : print "DROPPED: %d" % mp
++            if v >=2 : print("DROPPED: %d" % mp)
+             dropped_out += [getid(p)] * abs(mp)
+         elif mp < 0:
+-            if v >= 2: print "!!! FORGED: %d" % mp
++            if v >= 2: print("!!! FORGED: %d" % mp)
+             forged_out += [getid(p)] * abs(mp)
+         else:
+-            if v >= 2: print "ERROR"
++            if v >= 2: print("ERROR")
+             errors += [getid(p)]
+     elif ip_from == ip_remote and ip_to == ip_local:
+         if mp > 0:
+-            if v >= 2: print "!!! FORGED: %d" % mp
++            if v >= 2: print("!!! FORGED: %d" % mp)
+             forged_in += [getid(p)] * abs(mp)
+         elif mp < 0:
+-            if v >= 2: print "DROPPED: %d" % mp
++            if v >= 2: print("DROPPED: %d" % mp)
+             dropped_in += [getid(p)] * abs(mp)
+         else:
+-            if v >= 2: print "ERROR"
++            if v >= 2: print("ERROR")
+             errors += [getid(p)]
+     else:
+         if v >= 2:
+-            print "ERROR: ip addrs should have been dropped %d -> %d" % (ip_from, ip_to)
++            print("ERROR: ip addrs should have been dropped %d -> %d" % (ip_from, ip_to))
+         errors += [1]
+-    if v >= 2: print p
++    if v >= 2: print(p)
+ 
+ if v >= 1:
+-    print "Here are the IP identification fields for forged and dropped packets:"
+-    print
+-    print "list of  inbound forged  packets: ", ' '.join(forged_in)
+-    print
+-    print "list of outbound forged  packets: ", ' '.join(forged_out)
+-    print
+-    print "list of  inbound dropped packets: ", ' '.join(dropped_in)
+-    print
+-    print "list of outbound dropped packets: ", ' '.join(dropped_out)
+-    print
++    print("Here are the IP identification fields for forged and dropped packets:")
++    print()
++    print("list of  inbound forged  packets: ", ' '.join(forged_in))
++    print()
++    print("list of outbound forged  packets: ", ' '.join(forged_out))
++    print()
++    print("list of  inbound dropped packets: ", ' '.join(dropped_in))
++    print()
++    print("list of outbound dropped packets: ", ' '.join(dropped_out))
++    print()
+ 
+ mystery = {}
+ mystery['in'] = total['local'] - total['remote_received'] + len(forged_out) - len(dropped_out)
+ mystery['out'] = total['remote'] - total['local_received'] + len(forged_in) - len(dropped_in)
+ 
+-print "-------------"
+-print "Packet counts"
+-print "-------------"
+-
+-print "               inbound",\
+-      "   outbound"
+-print "sent:        %9d" % total['remote'],\
+-                 "  %9d" % total['local']
+-print "received:    %9d" % total['local_received'],\
+-                 "  %9d" % total['remote_received']
+-print "forged:      %9d" % len(forged_in),\
+-                 "  %9d" % len(forged_out)
+-print "dropped:     %9d" % len(dropped_in),\
+-                 "  %9d" % len(dropped_out)
++print("-------------")
++print("Packet counts")
++print("-------------")
++
++print("               inbound",\
++      "   outbound")
++print("sent:        %9d" % total['remote'],\
++                 "  %9d" % total['local'])
++print("received:    %9d" % total['local_received'],\
++                 "  %9d" % total['remote_received'])
++print("forged:      %9d" % len(forged_in),\
++                 "  %9d" % len(forged_out))
++print("dropped:     %9d" % len(dropped_in),\
++                 "  %9d" % len(dropped_out))
+ if mystery['in'] != 0 or mystery['out'] != 0:
+-    print "mystery:     %9d" % mystery['in'],\
+-          "             %9d" % mystery['out']
++    print("mystery:     %9d" % mystery['in'],\
++          "             %9d" % mystery['out'])
+ 
+-if len(errors): print "\nERRORS: %d" % len(errors)
++if len(errors): print("\nERRORS: %d" % len(errors))
+ 
+--- printpackets.py.bak	2007-11-16 22:09:07.000000000 -0600
++++ printpackets.py	2019-08-06 14:05:45.300107950 -0500
+@@ -31,13 +31,13 @@
+ try:
+     pcap_local = pcapy.open_offline(sys.argv[1])
+ except IndexError:
+-    print "Usage: %s <pcap file>" % sys.argv[0]
++    print("Usage: %s <pcap file>" % sys.argv[0])
+     sys.exit(1)
+ 
+ while 1:
+     try:
+-	packet = pcap_local.next()
++	packet = next(pcap_local)
+     except pcapy.PcapError:
+ 	break
+     
+-    print "------------------\n%s" % packet_to_string(parse_and_save(packet))
++    print("------------------\n%s" % packet_to_string(parse_and_save(packet)))
+--- pcapdiff_helper.py.bak	2007-11-16 22:03:16.000000000 -0600
++++ pcapdiff_helper.py	2019-08-06 14:10:12.034643912 -0500
+@@ -30,8 +30,8 @@
+ 
+     s = packet_to_string(spacket)
+     if s:
+-	print '------------'
+-	print s
++	print('------------')
++	print(s)
+ 
+ def packet_to_string(spacket, hidefields=0):
+     '''
+@@ -51,7 +51,7 @@
+ 
+     for field in fields:
+ 	try:
+-	    if spacket.has_key(field) and not (hidefields and field in hiddenfields):
++	    if field in spacket and not (hidefields and field in hiddenfields):
+ 		if field == 'ip_payload_data':
+ 		    s += field + ": " + str(spacket[field]).encode("string_escape") + "\n"
+ 		else:
+--- pcapdiff_helper.py~	2019-08-06 14:10:39.000000000 -0500
++++ pcapdiff_helper.py	2019-08-06 14:21:15.141999262 -0500
+@@ -30,8 +30,8 @@
+ 
+     s = packet_to_string(spacket)
+     if s:
+-	print('------------')
+-	print(s)
++        print('------------')
++        print(s)
+ 
+ def packet_to_string(spacket, hidefields=0):
+     '''
+--- pcapdiff_helper.py~	2019-08-06 14:21:31.000000000 -0500
++++ pcapdiff_helper.py	2019-08-06 14:22:39.880533430 -0500
+@@ -47,17 +47,17 @@
+     hiddenfields = 'timestamp eth_type eth_dest eth_src ip_tos ip_ttl ip_header_checksum'.split(' ')
+ 
+     if hidefields and spacket['eth_type'] == '(not IPv4)':
+-	return
++        return
+ 
+     for field in fields:
+-	try:
++        try:
+ 	    if field in spacket and not (hidefields and field in hiddenfields):
+-		if field == 'ip_payload_data':
++                if field == 'ip_payload_data':
+ 		    s += field + ": " + str(spacket[field]).encode("string_escape") + "\n"
+-		else:
+-		    s += field + ": " + str(spacket[field]) + "\n"
+-	except KeyError:
+-	    pass
++                else:
++                    s += field + ": " + str(spacket[field]) + "\n"
++        except KeyError:
++            pass
+ 
+     return s
+ 
+--- pcapdiff_helper.py~	2019-08-06 14:22:49.000000000 -0500
++++ pcapdiff_helper.py	2019-08-06 14:23:12.813352392 -0500
+@@ -51,7 +51,7 @@
+ 
+     for field in fields:
+         try:
+-	    if field in spacket and not (hidefields and field in hiddenfields):
++            if field in spacket and not (hidefields and field in hiddenfields):
+                 if field == 'ip_payload_data':
+ 		    s += field + ": " + str(spacket[field]).encode("string_escape") + "\n"
+                 else:
+--- pcapdiff_helper.py~	2019-08-06 14:23:18.000000000 -0500
++++ pcapdiff_helper.py	2019-08-06 14:23:41.238196138 -0500
+@@ -53,7 +53,7 @@
+         try:
+             if field in spacket and not (hidefields and field in hiddenfields):
+                 if field == 'ip_payload_data':
+-		    s += field + ": " + str(spacket[field]).encode("string_escape") + "\n"
++                    s += field + ": " + str(spacket[field]).encode("string_escape") + "\n"
+                 else:
+                     s += field + ": " + str(spacket[field]) + "\n"
+         except KeyError:
+--- pcapdiff_helper.py~	2019-08-06 14:23:47.000000000 -0500
++++ pcapdiff_helper.py	2019-08-06 14:24:12.667023367 -0500
+@@ -71,8 +71,8 @@
+ 
+     packet = dump_packet[1]
+     if ord(packet[12]) != 8 or ord(packet[13]) != 0:
+-	spacket['eth_type'] = '(not IPv4)'
+-	return spacket
++        spacket['eth_type'] = '(not IPv4)'
++        return spacket
+ 
+     spacket['eth_type'] = "%02x%02x" % (ord(packet[12]), ord(packet[13]))
+ 
+--- pcapdiff_helper.py~	2019-08-06 14:24:19.000000000 -0500
++++ pcapdiff_helper.py	2019-08-06 14:25:06.375728108 -0500
+@@ -82,8 +82,8 @@
+     ip_packet = packet[14:]
+     spacket['ip_version'] = binascii.hexlify(ip_packet[0])[0]
+     if spacket['ip_version'] != '4':
+-	spacket['eth_type'] = '(not IPv4)'
+-	return spacket
++        spacket['eth_type'] = '(not IPv4)'
++        return spacket
+ 
+     spacket['ip_header_length'] = binascii.hexlify(ip_packet[0])[1]
+     spacket['ip_tos'] = binascii.hexlify(ip_packet[1])
+--- pcapdiff_helper.py~	2019-08-06 14:25:15.000000000 -0500
++++ pcapdiff_helper.py	2019-08-06 14:27:11.309041330 -0500
+@@ -100,14 +100,14 @@
+     #payload = ip_packet[header_len:] # also in bytes
+     if ignore_tcp_checksum and spacket['ip_protocol'] == 0x06:
+ 	#ignore TCP checksums because of offloading
+-	payload = ip_packet[header_len:header_len+16] +\
+-	    '\0\0' + ip_packet[header_len+18:spacket['ip_total_length']] # also in bytes
++        payload = ip_packet[header_len:header_len+16] +\
++            '\0\0' + ip_packet[header_len+18:spacket['ip_total_length']] # also in bytes
+     elif ignore_tcp_checksum and spacket['ip_protocol'] == 0x11:
+-	#ignore UDP checksums because of offloading
+-	payload = ip_packet[header_len:header_len+4] +\
+-	    '\0\0' + ip_packet[header_len+6:spacket['ip_total_length']] # also in bytes
++        #ignore UDP checksums because of offloading
++        payload = ip_packet[header_len:header_len+4] +\
++            '\0\0' + ip_packet[header_len+6:spacket['ip_total_length']] # also in bytes
+     else:
+-	payload = ip_packet[header_len:spacket['ip_total_length']] # also in bytes
++        payload = ip_packet[header_len:spacket['ip_total_length']] # also in bytes
+ 
+     spacket['ip_payload_length'] = len(payload)
+     spacket['ip_payload_data'] = payload

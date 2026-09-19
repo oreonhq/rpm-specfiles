@@ -1,0 +1,31 @@
+diff -rupN --no-dereference gtk+-2.24.33/gtk/gtkstatusicon.c gtk+-2.24.33-new/gtk/gtkstatusicon.c
+--- gtk+-2.24.33/gtk/gtkstatusicon.c	2021-01-05 15:57:58.164719400 +0100
++++ gtk+-2.24.33-new/gtk/gtkstatusicon.c	2021-01-05 15:57:58.675715090 +0100
+@@ -764,11 +764,13 @@ wndproc (HWND   hwnd,
+ 	  button = 3;
+ 	  goto buttondown0;
+ 
++#ifdef WM_XBUTTONDOWN
+ 	case WM_XBUTTONDOWN:
+ 	  if (HIWORD (wparam) == XBUTTON1)
+ 	    button = 4;
+ 	  else
+ 	    button = 5;
++#endif
+ 
+ 	buttondown0:
+ 	  bc = g_new (ButtonCallbackData, 1);
+@@ -790,11 +792,13 @@ wndproc (HWND   hwnd,
+ 	  button = 3;
+ 	  goto buttonup0;
+ 
++#ifdef WM_XBUTTONUP
+ 	case WM_XBUTTONUP:
+ 	  if (HIWORD (wparam) == XBUTTON1)
+ 	    button = 4;
+ 	  else
+ 	    button = 5;
++#endif
+ 
+ 	buttonup0:
+ 	  bc = g_new (ButtonCallbackData, 1);

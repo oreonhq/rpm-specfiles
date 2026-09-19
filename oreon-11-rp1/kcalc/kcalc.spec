@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 45bd63e3791eaef421a7e0172ce26f5df8da5be5f5d1052cb23be72e25685208
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kcalc 
 Summary: Scientific Calculator 
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

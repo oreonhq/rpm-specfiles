@@ -1,0 +1,12 @@
+[Unit]
+Description=Crossfire Multi-Player Network Game Server
+After=network.target
+
+[Service]
+User=crossfire
+Type=simple
+PIDFile=/run/crossfire.pid
+ExecStart=/usr/bin/crossfire -log /var/log/crossfire/crossfire.log
+
+[Install]
+WantedBy=multi-user.target

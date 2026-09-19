@@ -1,0 +1,19 @@
+diff -rupN --no-dereference sqlitebrowser-ffe7e576c1c0f4b46ce710a79c89b6d7d9506e62/cmake/FindSQLCipher.cmake sqlitebrowser-ffe7e576c1c0f4b46ce710a79c89b6d7d9506e62-new/cmake/FindSQLCipher.cmake
+--- sqlitebrowser-ffe7e576c1c0f4b46ce710a79c89b6d7d9506e62/cmake/FindSQLCipher.cmake	2025-07-19 02:27:03.000000000 +0200
++++ sqlitebrowser-ffe7e576c1c0f4b46ce710a79c89b6d7d9506e62-new/cmake/FindSQLCipher.cmake	2025-07-27 18:05:27.610424351 +0200
+@@ -56,13 +56,13 @@ if( NOT WIN32 )
+   set(SQLCIPHER_DEFINITIONS ${PC_SQLCIPHER_CFLAGS_OTHER})
+ endif( NOT WIN32 )
+ 
+-find_path(SQLCIPHER_INCLUDE_DIR NAMES sqlcipher/sqlite3.h
++find_path(SQLCIPHER_INCLUDE_DIR NAMES sqlite3.h
+   PATHS
+   ${SQLCIPHER_ROOT_DIR}
+   ${PC_SQLCIPHER_INCLUDEDIR}
+   ${PC_SQLCIPHER_INCLUDE_DIRS}
+   ${CMAKE_INCLUDE_PATH}
+-  PATH_SUFFIXES "include"
++  PATH_SUFFIXES "sqlcipher"
+ )
+ 
+ find_library(SQLCIPHER_LIBRARY NAMES sqlcipher

@@ -1,0 +1,23 @@
+diff -up normalize-0.7.7/nid3lib/write.c.gcc15 normalize-0.7.7/nid3lib/write.c
+--- normalize-0.7.7/nid3lib/write.c.gcc15	2005-09-09 23:41:39.000000000 +0200
++++ normalize-0.7.7/nid3lib/write.c	2025-02-13 21:47:42.077047853 +0100
+@@ -20,7 +20,7 @@
+  * id3_write(), and many helper functions.
+  */
+ 
+-#define _POSIX_C_SOURCE 2
++#define _POSIX_C_SOURCE 200112L
+ 
+ #include "config.h"
+ 
+@@ -65,8 +65,10 @@
+  * _POSIX_C_SOURCE, but you never know, so we use an old style
+  * declaration to lessen the chance of conflict.
+  */
++#if __STDC_VERSION__ < 202311L
+ int ftruncate();
+ #endif
++#endif
+ 
+ #include "nid3P.h"
+ 

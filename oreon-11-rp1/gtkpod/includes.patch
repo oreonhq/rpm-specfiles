@@ -1,0 +1,10 @@
+--- libgtkpod/misc.c~	2015-06-02 13:14:21.000000000 -0500
++++ libgtkpod/misc.c	2024-02-05 15:01:26.976304821 -0600
+@@ -39,6 +39,7 @@
+ #include <sys/wait.h>
+ #include <unistd.h>
+ #include <glib/gi18n-lib.h>
++#include <libxml/parser.h>
+ #include "charset.h"
+ #include "clientserver.h"
+ #include "misc.h"

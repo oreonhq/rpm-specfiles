@@ -1,0 +1,47 @@
+From 844a55ddad65bb3ce1c1b99d81bcf68028bd9061 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Tue, 23 Apr 2019 00:25:32 +0200
+Subject: [PATCH] Import github.com/franela/goblin as goblin
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Robert-André Mauchin <zebob.m@gmail.com>
+---
+ goreq_test.go | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/goreq_test.go b/goreq_test.go
+index 3b15657..2c754ce 100644
+--- a/goreq_test.go
++++ b/goreq_test.go
+@@ -16,7 +16,7 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	. "github.com/franela/goblin"
++	goblin "github.com/franela/goblin"
+ 	. "github.com/onsi/gomega"
+ )
+ 
+@@ -37,7 +37,7 @@ func TestRequest(t *testing.T) {
+ 	valuesQuery.Add("friend", "jonas")
+ 	valuesQuery.Add("friend", "peter")
+ 
+-	g := Goblin(t)
++	g := goblin.Goblin(t)
+ 
+ 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
+ 
+@@ -1147,7 +1147,7 @@ func Test_paramParse(t *testing.T) {
+ 		Corge       string `url:"corge"`
+ 	}
+ 
+-	g := Goblin(t)
++	g := goblin.Goblin(t)
+ 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
+ 	var form = Form{}
+ 	var aform = AnnotedForm{}
+-- 
+2.21.0
+

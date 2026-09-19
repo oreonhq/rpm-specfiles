@@ -1,0 +1,19 @@
+--- CMakeLists.txt.orig	2024-03-14 10:34:34.986825717 -0600
++++ CMakeLists.txt	2024-03-14 10:39:27.951732377 -0600
+@@ -14,7 +14,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMA
+ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+ 
+ # Build library for the main executable 
+-add_library(lib_drat2er STATIC 
++add_library(lib_drat2er SHARED
+ 	src/formula.cc
+ 	src/formula_parser.cc
+ 	src/clause.cc
+@@ -37,6 +37,7 @@ add_library(lib_drat2er STATIC
+ 	src/drat_trim_interface.cc
+ 	src/progress_bar.cc
+ 	)
++set_target_properties(lib_drat2er PROPERTIES OUTPUT_NAME drat2er POSITION_INDEPENDENT_CODE ON VERSION 0.0.0 SOVERSION 0)
+ target_link_libraries(lib_drat2er drat-trim)
+ 
+ # Build the executable for the main program

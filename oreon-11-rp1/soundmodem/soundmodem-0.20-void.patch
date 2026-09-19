@@ -1,0 +1,40 @@
+diff -Naur soundmodem-0.20/matlib/mat.hh soundmodem-0.20-mod/matlib/mat.hh
+--- soundmodem-0.20/matlib/mat.hh	2003-01-05 20:19:33.000000000 +0100
++++ soundmodem-0.20-mod/matlib/mat.hh	2016-02-01 23:12:06.986760830 +0100
+@@ -91,36 +91,6 @@
+                 memcpy(c, r, d1 * d3 * sizeof(c[0]));
+ }
+ 
+-template<typename T> void mdet(const T *c, unsigned int d)
+-{
+-        T *c2;
+-        unsigned int i, j, k, l;
+-        T det = 0, dr;
+-
+-        if (!d)
+-                return 0;
+-        if (d == 1)
+-                return c[0];
+-        if (d == 2)
+-                return c[0] * c[3] - c[1] * c[2];
+-        c2 = alloca(sizeof(T)*(d-1)*(d-1));
+-        for (i = 0; i < d; i++) {
+-                for (j = k = 0; j < d; j++) {
+-                        if (j == i)
+-                                continue;
+-                        for (l = 0; l < d-1; l++)
+-                                c2[l*(d-1)+k] = c[(l+1)*d+j];
+-                        k++;
+-                }
+-                dr = mdet(c2, d-1);
+-                if (i & 1)
+-                        det -= dr * c[i];
+-                else
+-                        det += dr * c[i];
+-        }
+-        return det;
+-}
+-
+ /* Transpose a matrix (a el C^{d1 x d2}, b el C^{d2 x d1}) */
+ template<typename T> void mtranspose(T *b, const T *a, unsigned int d1, unsigned int d2)
+ {

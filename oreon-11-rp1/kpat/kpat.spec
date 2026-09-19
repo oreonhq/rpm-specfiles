@@ -1,11 +1,11 @@
-%global source0_hash 35a95123cc98563970f854a73acf063c139670f592bd0076d997230c4c86b27a
+%global source0_hash 562ab74043bfb77ec57970f757f107ded9d8e3fe13748324009720077ad719cb
 
 # 
 ExcludeArch: %{ix86}
 
 Name:    kpat
 Summary: A selection of solitaire card games
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ and GFDL - review is highly recommended.

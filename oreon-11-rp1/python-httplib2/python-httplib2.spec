@@ -1,50 +1,42 @@
-%global source0_hash f0463bc04d2546325eaba1da15f8e45763ed2a52b47c0331c721f1c85470c9ca
+%global source0_hash none
 
-%global srcname httplib2
+Name:           python-httplib2
+Version:        0.32.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A comprehensive HTTP client library.
 
-Name:           python-%{srcname}
-Version:        0.22.0
-Release:        8%{?dist}
-Summary:        Comprehensive HTTP client library
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.python.org/pypi/httplib2
-Source:        https://github.com/httplib2/httplib2/archive/refs/tags/v%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
-#
-# Patch to use the Fedora ca certs instead of the bundled ones
-#
-Patch1:         python-%{srcname}.certfile.patch
+URL:            https://github.com/httplib2/httplib2
+Source:         %{pypi_source httplib2}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%global _description\
-A comprehensive HTTP client library that supports many features left out of\
-other HTTP libraries.
 
-%description %{_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'httplib2' generated automatically by pyp2spec.}
 
-%package -n python3-%{srcname}
+Patch1:         python-%{srcname}.certfile.patch
+
+%description %_description
+
+%package -n     python3-httplib2
 Summary:        %{summary}
-BuildRequires:  python3-pytest
-# This is listed as a test requirement, but doesn't seem to actually be used.
-#BuildRequires:  python3-pytest-forked
-BuildRequires:  python3-pytest-timeout
-BuildRequires:  python3-six
-BuildRequires:  python3-cryptography
-# This is a runtime dependency required to run the tests:
-BuildRequires:  python3-pyparsing
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-httplib2 %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{srcname}-%{version}
+%autosetup -p1 -n httplib2-%{version}
 
-# Drop coverage
-sed -i '/--cov/d' setup.cfg
 
 %generate_buildrequires
 %pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
@@ -52,24 +44,16 @@ sed -i '/--cov/d' setup.cfg
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l httplib2
 
 %check
-# test_get_301_no_redirect is disabled because it leads to Segfault on Python 3.11
-# the other disabled tests are broken PySocks tests
-%pytest -k "not test_unknown_server \
-	and not test_socks5_auth and not \
-	test_server_not_found_error_is_raised_for_invalid_hostname and not \
-	test_functional_noproxy_star_https and not \
-	test_sni_set_servername_callback and not test_not_trusted_ca and not \
-	test_invalid_ca_certs_path and not test_max_tls_version and not \
-	test_get_301_via_https and not test_client_cert_password_verified and not\
-	test_get_via_https and not test_min_tls_version and not\
-	test_client_cert_verified and not test_inject_space and not test_get_301_no_redirect"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-httplib2 -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.22.0-8

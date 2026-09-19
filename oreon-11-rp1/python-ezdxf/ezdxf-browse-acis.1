@@ -1,0 +1,100 @@
+.TH EZDXF\-BROWSE\-ACIS "1" "May 2024" "" "User Commands"
+.B ezdxf\ browse\-acis
+\(en PyQt ACIS entity content browser for SAT/SAB debugging
+.SH SYNOPSIS
+.B ezdxf\ browse\-acis
+.RB [ \-h ]
+.RB [ \-l\ \fILINE ]
+.RB [ \-g\ \fIHANDLE ]
+.RI [ FILE ]
+.SH DESCRIPTION
+The DXF format stores modern solid geometry as
+.B SAT
+data for DXF R2000\(enR2010 and as
+.B SAB
+data for DXF R2013 and later.
+This command shows the content of this entities
+and also let you export the raw data for further processing.
+.SS "ENTITY\ VIEW"
+The entity view is a read-only text editor,
+it is possible to select and copy parts of the text
+into the clipboard.
+All ACIS content entities get an id assigned automatically,
+this way the data is more readable,
+by default AutoCAD and BricsCAD do not use ids for ACIS entities.
+The id is shown as decimal number in parenthesis after the entity name.
+The
+.B ~
+is a shortcut for a null-pointer.
+.SS "MENUS\ AND\ SHORTCUTS"
+.TP
+.B File Menu
+.RS +7n
+.IP \(bu 2n
+.B Open DXF file...
+.I Ctrl+O
+.IP \(bu 2n
+.B Reload DXF file
+.I Ctrl+R
+.IP \(bu 2n
+.B Export Current Entity View...
+.IR Ctrl+E ,
+export the parsed content of the entity view as text file
+.IP \(bu 2n
+.B Export Raw SAT/SAB Data...
+.IR Ctrl+W ,
+export the raw SAT data as text file
+and the raw SAB data as a binary file
+for further processing
+.IP \(bu 2n
+.B Quit
+.I Ctrl+Q
+.RE
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I FILE
+DXF file to browse
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-g\ \fIHANDLE\fR,\ \fB\-\-handle\ \fIHANDLE
+go to entity by
+.IR HANDLE ,
+.I HANDLE
+has to be a hex value without any prefix like
+.RB \(oq fefe \(cq
+.SH ENVIRONMENT
+See
+.BR ezdxf (1).
+.SH FILES
+See
+.BR ezdxf (1).
+.SH EXAMPLES
+.P
+Show and export the
+.B SAT
+or
+.B SAB
+content of
+.B ACIS
+entities:
+.P
+.in +7n
+.EX
+.B $\ ezdxf\ browse\-acis\ 3dsolid.dxf
+.EE
+.in
+.SH "SEE\ ALSO"
+.BR ezdxf (1)
+.P
+.BR ezdxf\-audit (1),
+.BR ezdxf\-draw (1),
+.BR ezdxf\-view (1),
+.BR ezdxf\-browse\-acis (1),
+.BR ezdxf\-strip (1),
+.BR ezdxf\-config (1),
+.BR ezdxf\-info (1),
+.BR ezdxf\-hpgl (1)

@@ -1,0 +1,175 @@
+--- pyml-20231101/generate.ml.orig	2023-11-01 11:51:21.000000000 -0600
++++ pyml-20231101/generate.ml	2023-11-03 11:24:03.170382577 -0600
+@@ -117,7 +117,7 @@ let wrappers =
+      optional = false; };
+    { symbol = "PyDict_Size";
+      arguments = Fun [PyObject false];
+-     result = Int;
++     result = Size;
+      optional = false; };
+    { symbol = "PyDict_Values";
+      arguments = Fun [PyObject false];
+@@ -465,12 +465,12 @@ let wrappers =
+      result = PyObject false;
+      optional = false; };
+    { symbol = "PyList_SetItem";
+-     arguments = Fun [PyObject false; Int; PyObject true];
++     arguments = Fun [PyObject false; Size; PyObject true];
+      result = Int;
+      optional = false; };
+    { symbol = "PyList_Size";
+      arguments = Fun [PyObject false];
+-     result = Int;
++     result = Size;
+      optional = false; };
+    { symbol = "PyLong_AsLong";
+      arguments = Fun [PyObject false];
+@@ -498,7 +498,7 @@ let wrappers =
+      optional = false; };
+    { symbol = "PyMapping_Length";
+      arguments = Fun [PyObject false];
+-     result = Int;
++     result = Size;
+      optional = false; };
+    { symbol = "PyMapping_SetItemString";
+      arguments = Fun [PyObject false; String; PyObject false];
+@@ -506,7 +506,7 @@ let wrappers =
+      optional = false; };
+    { symbol = "PyMapping_Size";
+      arguments = Fun [PyObject false];
+-     result = Int;
++     result = Size;
+      optional = false; };
+    { symbol = "PyMarshal_ReadObjectFromFile";
+      arguments = Fun [FileIn true];
+@@ -738,7 +738,7 @@ let wrappers =
+      optional = false; };
+    { symbol = "PyObject_Hash";
+      arguments = Fun [PyObject false];
+-     result = Int64;
++     result = Size;
+      optional = false; };
+    { symbol = "PyObject_IsTrue";
+      arguments = Fun [PyObject false];
+@@ -786,7 +786,7 @@ let wrappers =
+      optional = false; };
+    { symbol = "PyObject_Size";
+      arguments = Fun [PyObject false];
+-     result = Int;
++     result = Size;
+      optional = false; };
+    { symbol = "PyObject_Str";
+      arguments = Fun [PyObject false];
+@@ -851,7 +851,7 @@ let wrappers =
+      optional = false; };
+    { symbol = "PySequence_Count";
+      arguments = Fun [PyObject false; PyObject false];
+-     result = Int;
++     result = Size;
+      optional = false; };
+    { symbol = "PySequence_DelItem";
+      arguments = Fun [PyObject false; Size];
+@@ -879,7 +879,7 @@ let wrappers =
+      optional = false; };
+    { symbol = "PySequence_Index";
+      arguments = Fun [PyObject false; PyObject false];
+-     result = Int;
++     result = Size;
+      optional = false; };
+    { symbol = "PySequence_InPlaceConcat";
+      arguments = Fun [PyObject false; PyObject false];
+@@ -891,7 +891,7 @@ let wrappers =
+      optional = false; };
+    { symbol = "PySequence_Length";
+      arguments = Fun [PyObject false];
+-     result = Int;
++     result = Size;
+      optional = false; };
+    { symbol = "PySequence_List";
+      arguments = Fun [PyObject false];
+@@ -939,7 +939,7 @@ let wrappers =
+      optional = false; };
+    { symbol = "PySet_Size";
+      arguments = Fun [PyObject false];
+-     result = Int;
++     result = Size;
+      optional = false; };
+    { symbol = "PySet_Type";
+      arguments = Value;
+@@ -967,7 +967,7 @@ let wrappers =
+      optional = false; };
+    { symbol = "PyTuple_Size";
+      arguments = Fun [PyObject false];
+-     result = Int;
++     result = Size;
+      optional = false; };
+    { symbol = "PyType_IsSubtype";
+      arguments = Fun [PyObject false; PyObject false];
+@@ -1313,7 +1313,7 @@ let wrappers_python3 =
+      optional = false; };
+    { symbol = "PyUnicode_GetSize";
+      arguments = Fun [PyObject false];
+-     result = Int;
++     result = Size;
+      optional = false; };
+    { symbol = "PyUnicode_FromKindAndData";
+      arguments = Fun [Int; UCS4; Size];
+--- pyml-20231101/pycaml.mli.orig	2023-11-01 11:51:21.000000000 -0600
++++ pyml-20231101/pycaml.mli	2023-11-03 11:24:21.641101666 -0600
+@@ -633,7 +633,7 @@ val pyobject_compare : pyobject * pyobje
+ *)
+ 
+ val pyobject_setattr : pyobject * pyobject * pyobject -> int
+-val pyobject_hash : pyobject -> int64
++val pyobject_hash : pyobject -> int
+ 
+ val pybytes_size : pyobject -> int
+ val pystring_size : pyobject -> int     (* Legacy support *)
+--- pyml-20231101/py.ml.orig	2023-11-01 11:51:21.000000000 -0600
++++ pyml-20231101/py.ml	2023-11-03 11:24:56.721568103 -0600
+@@ -1656,7 +1656,7 @@ module Object = struct
+ 
+   let hash obj =
+     assert_not_null "hash" obj;
+-    check_int64 (Pywrappers.pyobject_hash obj)
++    check_int (Pywrappers.pyobject_hash obj)
+ 
+   let is_true obj =
+     assert_not_null "is_true" obj;
+--- pyml-20231101/py.mli.orig	2023-11-01 11:51:21.000000000 -0600
++++ pyml-20231101/py.mli	2023-11-03 11:25:20.113212298 -0600
+@@ -200,7 +200,7 @@ module Object: sig
+   (** Wrapper for
+       {{:https://docs.python.org/3/c-api/object.html#c.PyObject_HasAttrString} PyObject_HasAttrString} *)
+ 
+-  val hash: t -> int64
++  val hash: t -> int
+   (** Wrapper for
+       {{:https://docs.python.org/3/c-api/object.html#c.PyObject_Hash} PyObject_Hash} *)
+ 
+--- pyml-20231101/pyml_stubs.h.orig	2023-11-01 11:51:21.000000000 -0600
++++ pyml-20231101/pyml_stubs.h	2023-11-03 12:02:05.697804949 -0600
+@@ -48,7 +48,7 @@ typedef struct _typeobject {
+     const char *tp_name;
+     Py_ssize_t tp_basicsize, tp_itemsize;
+     destructor tp_dealloc;
+-    void *tp_print;
++    Py_ssize_t tp_vectorcall_offset;
+     void *tp_getattr;
+     void *tp_setattr;
+     void *tp_as_async;
+@@ -91,13 +91,7 @@ typedef struct _typeobject {
+     void *tp_del;
+     unsigned int tp_version_tag;
+     void *tp_finalize;
+-/* #ifdef COUNT_ALLOCS */
+-    Py_ssize_t tp_allocs;
+-    Py_ssize_t tp_frees;
+-    Py_ssize_t tp_maxalloc;
+-    struct _typeobject *tp_prev;
+-    struct _typeobject *tp_next;
+-/* #endif */
++    unsigned char tp_watched;
+ } PyTypeObject;
+ 
+ void

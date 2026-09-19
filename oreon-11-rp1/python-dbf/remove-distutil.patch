@@ -1,0 +1,17 @@
+--- a/setup.py	2022-05-09 20:49:00.000000000 +0200
++++ b/setup.py	2022-12-20 12:50:55.750112172 +0100
+@@ -3,7 +3,6 @@
+     setuptools
+ except ImportError:
+     pass
+-from distutils.core import setup
+ 
+ #html_docs = glob('dbf/html/*')
+ 
+@@ -56,5 +55,5 @@
+         )
+ 
+ if __name__ == '__main__':
+-    setup(**data)
++    setuptools.setup(**data)
+ 

@@ -1,0 +1,26 @@
+--- qtest-2.11.2/qtest.opam.orig	2021-02-11 19:37:09.000000000 -0700
++++ qtest-2.11.2/qtest.opam	2023-06-24 14:59:52.659155184 -0600
+@@ -15,7 +15,6 @@ build: [
+   [ "dune" "build" "@install" "-j" jobs "-p" name ]
+ ]
+ depends: [
+-  "base-bytes"
+   "ounit2"
+   "dune" { >= "1.1" }
+   "qcheck" { >= "0.14" }
+--- qtest-2.11.2/src/dune.orig	2021-02-11 19:37:09.000000000 -0700
++++ qtest-2.11.2/src/dune	2023-06-24 15:00:07.226946098 -0600
+@@ -2,7 +2,6 @@
+ (executable
+   (name qtest_bin)
+   (public_name qtest)
+-  (libraries bytes)
+   (flags :standard -w +a-4-29-44-50@8 -warn-error -a+8 -safe-string))
+ 
+ (ocamllex (modules qtest_bin misclex))
+@@ -15,4 +14,4 @@
+   (modules)
+   (inline_tests.backend
+     (generate_runner (run qtest extract --quiet %{impl-files} %{intf-files}))
+-    (runner_libraries qcheck ounit2 bytes)))
++    (runner_libraries qcheck ounit2)))

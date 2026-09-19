@@ -1,0 +1,12 @@
+diff -up kdelibs-3.5.10/kdecore/svgicons/ksvgiconpainter.cpp.than kdelibs-3.5.10/kdecore/svgicons/ksvgiconpainter.cpp
+--- kdelibs-3.5.10/kdecore/svgicons/ksvgiconpainter.cpp.than	2016-09-28 16:58:47.881217306 +0200
++++ kdelibs-3.5.10/kdecore/svgicons/ksvgiconpainter.cpp	2016-09-28 16:59:20.518989958 +0200
+@@ -2208,7 +2208,7 @@ void KSVGIconPainter::drawPath(const QSt
+ 				break;
+ 		}
+ 
+-		if(*ptr == '+' || *ptr == '-' || (*ptr >= '0' && *ptr <= '9'))
++		if(*ptr == '+' || *ptr == '-' || (*ptr >= '0' && *ptr <= '9') || *ptr == '.')
+ 		{
+ 			// there are still coords in this command
+ 			if(command == 'M')

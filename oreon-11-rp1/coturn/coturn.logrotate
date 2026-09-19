@@ -1,0 +1,12 @@
+/var/log/coturn/turnserver.log {
+	missingok
+	compress
+	delaycompress
+	notifempty
+	postrotate
+		systemctl try-reload-or-restart coturn.service
+	endscript
+	create 0660 coturn coturn
+	sharedscripts
+	su coturn coturn
+}

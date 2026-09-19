@@ -1,0 +1,15 @@
+diff -up python-xlib-0.31/test/test_unix_connect.py.mock python-xlib-0.31/test/test_unix_connect.py
+--- python-xlib-0.31/test/test_unix_connect.py.mock	2021-07-02 04:30:09.000000000 -0600
++++ python-xlib-0.31/test/test_unix_connect.py	2022-01-11 22:06:31.771838501 -0700
+@@ -6,7 +6,10 @@ import socket
+ import sys
+ import unittest
+ 
+-from mock import patch
++try:
++    from unittest.mock import patch
++except ImportError:
++    from mock import patch
+ 
+ from Xlib.support import unix_connect
+ from Xlib.error import DisplayConnectionError, DisplayNameError

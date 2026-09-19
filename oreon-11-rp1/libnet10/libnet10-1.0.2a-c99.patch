@@ -1,0 +1,97 @@
+Downstream-only patch.  libnet-1.0 is unmaintained.
+
+diff --git a/acinclude.m4 b/acinclude.m4
+index 4f4d2b3e0ad1d705..85d6fcecf153539b 100644
+--- a/acinclude.m4
++++ b/acinclude.m4
+@@ -44,6 +44,8 @@ AC_DEFUN(AC_LIBNET_CHECK_PF_PACKET,
+ #endif  /* SOL_PACKET */
+ #include <linux/if_packet.h>
+ #endif
++#include <stdlib.h>
++#include <linux/sockios.h>
+ #include "./include/libnet.h"
+ 
+ int
+@@ -212,8 +214,10 @@ AC_DEFUN(AC_LBL_UNALIGNED_ACCESS,
+ #                   include <sys/types.h>
+ #                   include <sys/wait.h>
+ #                   include <stdio.h>
++#                   include <unistd.h>
++#                   include <stdlib.h>
+                     unsigned char a[[5]] = { 1, 2, 3, 4, 5 };
+-                    main()
++                    int main()
+                     {
+                         unsigned int i;
+                         pid_t pid;
+diff --git a/aclocal.m4 b/aclocal.m4
+index 262de531a5eec367..93f636cf6ed26571 100644
+--- a/aclocal.m4
++++ b/aclocal.m4
+@@ -58,6 +58,7 @@ AC_DEFUN(AC_LIBNET_CHECK_PF_PACKET,
+ #endif
+ #include <stdlib.h>
+ #include <linux/sockios.h>
++#include "./include/libnet.h"
+ 
+ int
+ main()
+@@ -225,8 +226,10 @@ AC_DEFUN(AC_LBL_UNALIGNED_ACCESS,
+ #                   include <sys/types.h>
+ #                   include <sys/wait.h>
+ #                   include <stdio.h>
++#                   include <unistd.h>
++#                   include <stdlib.h>
+                     unsigned char a[[5]] = { 1, 2, 3, 4, 5 };
+-                    main()
++                    int main()
+                     {
+                         unsigned int i;
+                         pid_t pid;
+diff --git a/configure b/configure
+index 153dd8659811862d..154583b7e7d14507 100755
+--- a/configure
++++ b/configure
+@@ -788,7 +788,7 @@ cat > conftest.$ac_ext << EOF
+ #line 789 "configure"
+ #include "confdefs.h"
+ 
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:794: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes
+@@ -1340,6 +1340,7 @@ else
+ #endif
+ #include <stdlib.h>
+ #include <linux/sockios.h>
++#include "./include/libnet.h"
+ 
+ int
+ main()
+@@ -1993,8 +1994,10 @@ else
+ #                   include <sys/types.h>
+ #                   include <sys/wait.h>
+ #                   include <stdio.h>
++#                   include <unistd.h>
++#                   include <stdlib.h>
+                     unsigned char a[5] = { 1, 2, 3, 4, 5 };
+-                    main()
++                    int main()
+                     {
+                         unsigned int i;
+                         pid_t pid;
+diff --git a/src/libnet_socket.c b/src/libnet_socket.c
+index a5ac951a43d4c211..9fef046cafb8d1af 100644
+--- a/src/libnet_socket.c
++++ b/src/libnet_socket.c
+@@ -36,7 +36,7 @@
+ #include "../include/libnet.h"
+ 
+ int
+-libnet_open_raw_sock(prot)
++libnet_open_raw_sock(int prot)
+ {
+     int fd;
+     int one = 1;

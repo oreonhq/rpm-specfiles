@@ -1,0 +1,8 @@
+[Unit]
+Description=Notify services of updates to acme certs
+
+[Service]
+Type=oneshot
+Nice=19
+SyslogIdentifier=acme-tiny
+ExecStart=/usr/libexec/acme-tiny/notify --scan

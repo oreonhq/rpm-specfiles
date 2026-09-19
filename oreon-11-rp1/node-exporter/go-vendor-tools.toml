@@ -1,0 +1,24 @@
+[archive]
+
+[archive.dependency_overrides]
+"github.com/dennwc/ioctl" = "0178042"
+[licensing]
+detector = "askalono"
+[[licensing.licenses]]
+path = "vendor/github.com/alecthomas/kingpin/v2/COPYING"
+sha256sum = "ed76298aa9c218e9010aa186c1107ceb6c7618db50ae0222b9a1b4196101a411"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/alecthomas/units/COPYING"
+sha256sum = "ed76298aa9c218e9010aa186c1107ceb6c7618db50ae0222b9a1b4196101a411"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/go.yaml.in/yaml/v2/LICENSE.libyaml"
+sha256sum = "a94710b55e03b5285f77d048c5ba61bb9d6ee04a06c0eb90e68821e11b0c707a"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/howett.net/plist/LICENSE"
+sha256sum = "20d9b7d9372369484ecadae229d3e3efee8029b259e11c9a1b07d2e0a3c82e39"
+expression = "BSD-2-Clause-Views AND BSD-3-Clause"

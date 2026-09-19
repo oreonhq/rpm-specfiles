@@ -1,0 +1,6 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=9wm
+Comment=This session logs you into 9wm
+Exec=/usr/bin/9wm
+Type=Application

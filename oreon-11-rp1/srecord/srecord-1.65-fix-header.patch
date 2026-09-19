@@ -1,0 +1,11 @@
+diff -up srecord-1.65.0-Source/srecord/input/file/hp64k.h.fix-header srecord-1.65.0-Source/srecord/input/file/hp64k.h
+--- srecord-1.65.0-Source/srecord/input/file/hp64k.h.fix-header	2025-03-12 12:30:06.524953796 -0400
++++ srecord-1.65.0-Source/srecord/input/file/hp64k.h	2025-03-12 12:30:22.564286204 -0400
+@@ -20,6 +20,7 @@
+ #ifndef LIB_INPUT_FILE_HP64K
+ #define LIB_INPUT_FILE_HP64K
+ 
++#include <cstdint>
+ #include <srecord/input/file.h>
+ 
+ namespace srecord {

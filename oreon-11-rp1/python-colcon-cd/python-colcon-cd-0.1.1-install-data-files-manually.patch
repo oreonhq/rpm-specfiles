@@ -1,0 +1,22 @@
+diff -uNr a/setup.cfg b/setup.cfg
+--- a/setup.cfg	2024-03-13 14:16:08.000000000 -0500
++++ b/setup.cfg	2024-03-14 16:53:37.861379651 -0500
+@@ -50,12 +50,12 @@
+   pytest-cov
+   scspell3k>=2.2
+ 
+-[options.data_files]
+-# distutils replaces dashes in keys with underscores
+-share/colcon_cd/function =
+-    function/colcon_cd.sh
+-    function/colcon_cd-argcomplete.bash
+-    function/colcon_cd-argcomplete.zsh
++# [options.data_files]
++# # distutils replaces dashes in keys with underscores
++# share/colcon_cd/function =
++#     function/colcon_cd.sh
++#     function/colcon_cd-argcomplete.bash
++#     function/colcon_cd-argcomplete.zsh
+ 
+ [tool:pytest]
+ filterwarnings =

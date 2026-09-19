@@ -1,0 +1,263 @@
+diff -up ClanLib-0.6.5/Sources/API/Signals/signal_v0.h~ ClanLib-0.6.5/Sources/API/Signals/signal_v0.h
+--- ClanLib-0.6.5/Sources/API/Signals/signal_v0.h~	2002-06-13 16:43:17.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Signals/signal_v0.h	2009-11-29 23:30:39.000000000 +0100
+@@ -62,33 +62,23 @@ public:
+ 	//: Call
+ 	void call()
+ 	{
+-		std::list<SlotIterator> remove_slots;
+-
+ 		// call slots connected to signal:
+ 		CL_SlotParent_v0 super(slots.begin(), slots.end());
+ 		super();
+ 
+ 		// find slots to be removed:
+-		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); slot_it++)
++		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); )
+ 		{
+ 			Slot slot = *slot_it;
+ 
+-			// skip slot if it has no more references left in application.
+-			// (make it pending for removal)
++			// remove slot if it has no more references left in application.
+ 			if (slot->get_slot_ref() == 0)
+ 			{
+-				remove_slots.push_back(slot_it);
+-				continue;
++				slot->release_signal_ref();
++				slot_it = slots.erase(slot_it);
+ 			}
+-		}
+-
+-		// remove all slots no longer connected to any CL_Slot.
+-		std::list<SlotIterator>::iterator remove_it;
+-		for (remove_it = remove_slots.begin(); remove_it != remove_slots.end(); remove_it++)
+-		{
+-			Slot slot = **remove_it;
+-			slot->release_signal_ref();
+-			slots.erase(*remove_it);
++			else
++				slot_it++;
+ 		}
+ 	}
+ 
+diff -up ClanLib-0.6.5/Sources/API/Signals/signal_v1.h~ ClanLib-0.6.5/Sources/API/Signals/signal_v1.h
+--- ClanLib-0.6.5/Sources/API/Signals/signal_v1.h~	2002-06-13 16:43:17.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Signals/signal_v1.h	2009-11-29 23:24:20.000000000 +0100
+@@ -63,31 +63,22 @@ public:
+ 	//: Call
+ 	void call(PARAM1 param1)
+ 	{
+-		std::list<SlotIterator> remove_slots;
+-
+ 		// call slots connected to signal:
+-		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); slot_it++)
++		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); )
+ 		{
+ 			Slot slot = *slot_it;
+ 
+-			// skip slot if it has no more references left in application.
+-			// (make it pending for removal)
++			// remove slot if it has no more references left in application.
+ 			if (slot->get_slot_ref() == 0)
+ 			{
+-				remove_slots.push_back(slot_it);
+-				continue;
++				slot->release_signal_ref();
++				slot_it = slots.erase(slot_it);
++			}
++			else
++			{
++				slot->call(param1);
++				slot_it++;
+ 			}
+-			
+-			slot->call(param1);
+-		}
+-
+-		// remove all slots no longer connected to any CL_Slot.
+-		typename std::list<SlotIterator>::iterator remove_it;
+-		for (remove_it = remove_slots.begin(); remove_it != remove_slots.end(); remove_it++)
+-		{
+-			Slot slot = **remove_it;
+-			slot->release_signal_ref();
+-			slots.erase(*remove_it);
+ 		}
+ 	}
+ 
+diff -up ClanLib-0.6.5/Sources/API/Signals/signal_v2.h~ ClanLib-0.6.5/Sources/API/Signals/signal_v2.h
+--- ClanLib-0.6.5/Sources/API/Signals/signal_v2.h~	2002-06-13 16:43:17.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Signals/signal_v2.h	2009-11-29 23:29:03.000000000 +0100
+@@ -63,31 +63,22 @@ public:
+ 	//: Call
+ 	void call(PARAM1 param1, PARAM2 param2)
+ 	{
+-		std::list<SlotIterator> remove_slots;
+-
+ 		// call slots connected to signal:
+-		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); slot_it++)
++		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); )
+ 		{
+ 			Slot slot = *slot_it;
+ 
+-			// skip slot if it has no more references left in application.
+-			// (make it pending for removal)
++			// remove slot if it has no more references left in application.
+ 			if (slot->get_slot_ref() == 0)
+ 			{
+-				remove_slots.push_back(slot_it);
+-				continue;
++				slot->release_signal_ref();
++				slot_it = slots.erase(slot_it);
++			}
++			else
++			{
++				slot->call(param1, param2);
++				slot_it++;
+ 			}
+-			
+-			slot->call(param1, param2);
+-		}
+-
+-		// remove all slots no longer connected to any CL_Slot.
+-		typename std::list<SlotIterator>::iterator remove_it;
+-		for (remove_it = remove_slots.begin(); remove_it != remove_slots.end(); remove_it++)
+-		{
+-			Slot slot = **remove_it;
+-			slot->release_signal_ref();
+-			slots.erase(*remove_it);
+ 		}
+ 	}
+ 
+diff -up ClanLib-0.6.5/Sources/API/Signals/signal_v3.h~ ClanLib-0.6.5/Sources/API/Signals/signal_v3.h
+--- ClanLib-0.6.5/Sources/API/Signals/signal_v3.h~	2002-06-13 16:43:17.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Signals/signal_v3.h	2009-11-29 23:25:00.000000000 +0100
+@@ -63,31 +63,22 @@ public:
+ 	//: Call
+ 	void call(PARAM1 param1, PARAM2 param2, PARAM3 param3)
+ 	{
+-		std::list<SlotIterator> remove_slots;
+-
+ 		// call slots connected to signal:
+-		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); slot_it++)
++		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); )
+ 		{
+ 			Slot slot = *slot_it;
+ 
+-			// skip slot if it has no more references left in application.
+-			// (make it pending for removal)
++			// remove slot if it has no more references left in application.
+ 			if (slot->get_slot_ref() == 0)
+ 			{
+-				remove_slots.push_back(slot_it);
+-				continue;
++				slot->release_signal_ref();
++				slot_it = slots.erase(slot_it);
++			}
++			else
++			{
++				slot->call(param1, param2, param3);
++				slot_it++;
+ 			}
+-			
+-			slot->call(param1, param2, param3);
+-		}
+-
+-		// remove all slots no longer connected to any CL_Slot.
+-		typename std::list<SlotIterator>::iterator remove_it;
+-		for (remove_it = remove_slots.begin(); remove_it != remove_slots.end(); remove_it++)
+-		{
+-			Slot slot = **remove_it;
+-			slot->release_signal_ref();
+-			slots.erase(*remove_it);
+ 		}
+ 	}
+ 
+diff -up ClanLib-0.6.5/Sources/API/Signals/signal_v4.h~ ClanLib-0.6.5/Sources/API/Signals/signal_v4.h
+--- ClanLib-0.6.5/Sources/API/Signals/signal_v4.h~	2002-06-13 16:43:17.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Signals/signal_v4.h	2009-11-29 23:23:14.000000000 +0100
+@@ -63,31 +63,22 @@ public:
+ 	//: Call
+ 	void call(PARAM1 param1, PARAM2 param2, PARAM3 param3, PARAM4 param4)
+ 	{
+-		std::list<SlotIterator> remove_slots;
+-
+ 		// call slots connected to signal:
+-		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); slot_it++)
++		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); )
+ 		{
+ 			Slot slot = *slot_it;
+ 
+-			// skip slot if it has no more references left in application.
+-			// (make it pending for removal)
++			// remove slot if it has no more references left in application.
+ 			if (slot->get_slot_ref() == 0)
+ 			{
+-				remove_slots.push_back(slot_it);
+-				continue;
++				slot->release_signal_ref();
++				slot_it = slots.erase(slot_it);
++			}
++			else
++			{
++				slot->call(param1, param2, param3, param4);
++				slot_it++;
+ 			}
+-			
+-			slot->call(param1, param2, param3, param4);
+-		}
+-
+-		// remove all slots no longer connected to any CL_Slot.
+-		typename std::list<SlotIterator>::iterator remove_it;
+-		for (remove_it = remove_slots.begin(); remove_it != remove_slots.end(); remove_it++)
+-		{
+-			Slot slot = **remove_it;
+-			slot->release_signal_ref();
+-			slots.erase(*remove_it);
+ 		}
+ 	}
+ 
+diff -up ClanLib-0.6.5/Sources/API/Signals/signal_v5.h~ ClanLib-0.6.5/Sources/API/Signals/signal_v5.h
+--- ClanLib-0.6.5/Sources/API/Signals/signal_v5.h~	2002-06-13 16:43:17.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Signals/signal_v5.h	2009-11-29 23:16:15.000000000 +0100
+@@ -63,31 +63,22 @@ public:
+ 	//: Call
+ 	void call(PARAM1 param1, PARAM2 param2, PARAM3 param3, PARAM4 param4, PARAM5 param5)
+ 	{
+-		std::list<SlotIterator> remove_slots;
+-
+ 		// call slots connected to signal:
+-		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); slot_it++)
++		for (SlotIterator slot_it = slots.begin(); slot_it != slots.end(); )
+ 		{
+ 			Slot slot = *slot_it;
+ 
+-			// skip slot if it has no more references left in application.
+-			// (make it pending for removal)
++			// remove slot if it has no more references left in application.
+ 			if (slot->get_slot_ref() == 0)
+ 			{
+-				remove_slots.push_back(slot_it);
+-				continue;
++				slot->release_signal_ref();
++				slot_it = slots.erase(slot_it);
++			}
++			else
++			{
++				slot->call(param1, param2, param3, param4, param5);
++				slot_it++;
+ 			}
+-			
+-			slot->call(param1, param2, param3, param4, param5);
+-		}
+-
+-		// remove all slots no longer connected to any CL_Slot.
+-		typename std::list<SlotIterator>::iterator remove_it;
+-		for (remove_it = remove_slots.begin(); remove_it != remove_slots.end(); remove_it++)
+-		{
+-			Slot slot = **remove_it;
+-			slot->release_signal_ref();
+-			slots.erase(*remove_it);
+ 		}
+ 	}
+ 

@@ -1,0 +1,12 @@
+--- a/archetype-common/src/main/java/org/apache/maven/archetype/generator/DefaultFilesetArchetypeGenerator.java
++++ b/archetype-common/src/main/java/org/apache/maven/archetype/generator/DefaultFilesetArchetypeGenerator.java
+@@ -678,8 +678,8 @@
+ 
+         String localTemplateFileName = templateFileName.replace('/', File.separatorChar);
+         if (!templateFileName.equals(localTemplateFileName)
+-                && !velocity.getEngine().templateExists(templateFileName)
+-                && velocity.getEngine().templateExists(localTemplateFileName)) {
++                && !velocity.getEngine().resourceExists(templateFileName)
++                && velocity.getEngine().resourceExists(localTemplateFileName)) {
+             templateFileName = localTemplateFileName;
+         }

@@ -10,7 +10,7 @@
 # testsuite missing deps: ChasingBottoms nothunks
 
 Name:           ghc-%{pkg_name}
-Version:        0.2.20.1
+Version:        0.2.21
 Release:        %autorelease
 Summary:        Efficient hashing-based container types
 
@@ -88,7 +88,8 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }# Begin cabal-rpm setup:
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup
 

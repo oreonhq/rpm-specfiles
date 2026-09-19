@@ -1,0 +1,137 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH MINISAT 1 "September  3, 2011"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+minisat \- fast and lightweight SAT solver
+.SH SYNOPSIS
+.B minisat
+.RI [ options ] " input-file 
+.I result-output-file
+
+.B minisat
+takes as input a plain or gzipped DIMACS formatted file. The satisfiability of
+this input problem is indicated both via standard output and the return value.
+.SH DESCRIPTION
+This manual page documents briefly the
+.B minisat
+command. MiniSat is a minimalistic, open-source SAT solver, developed to help
+researchers and developers alike to get started on SAT. Winning all the
+industrial categories of the SAT 2005 competition, MiniSat is a good starting
+point both for future research in SAT, and for applications using SAT.
+
+Despite the NP completeness of the satisfiability problem of Boolean formulas
+(SAT), SAT solvers are often able to decide this problem in a reasonable time
+frame. As all other NP complete problems are reducible to SAT, the solvers
+have become a general purpose tool for this class of problems.
+.PP
+.SH OPTIONS
+.B \-\-help, \-\-help-verb
+Show (verbose) summary of options.
+.TP
+.B \-pre, \-no-pre
+Enable (default) or disable preprocessing.
+.TP
+.B \-verb {0,1,2}
+Set the verbosity of informational output (set to 0 for silent, defaults to 1)
+.TP
+.B \-cpu-lim <unsigned>
+Set a limit on CPU time (seconds, defaults to 2147483647).
+.TP
+.B \-mem-lim <unsigned>
+Set a limit on memory usage (MB, defaults to 2147483647).
+.TP
+.B \-dimacs <output-file>
+Print (possibly preprocessed) input problem in DIMACS format and stop.
+.TP
+.B \-luby, \-no-luby
+Enable (default) or disable the Luby restart sequence.
+.TP
+.B \-rnd-init, \-no-rnd-init
+Randomize the initial activity values (defaults to off).
+.TP
+.B \-gc-frac <double>
+The fraction of wasted memory allowed before a garbage collection is triggered
+(non-negative, defaults to 0.2).
+.TP
+.B \-rinc <double>
+.TP
+.B \-var-decay <double>
+Variable activity decay factor (0 <= value <= 1, defaults to 0.95).
+.TP
+.B \-cla-decay <double>
+Clause activity decay factor (0 <= value <= 1, defaults to 0.999).
+.TP
+.B \-rnd-freq <double>
+The frequency with which the decision heuristic tries to choose a random
+variable (0 <= value <= 1, defaults to 0).
+.TP
+.B \-rnd-seed <double>
+Random seed  for random variable selection (non-negative, defaults to
+9.16483e+07).
+.TP
+.B \-phase-saving {0,1,2}
+Controls the level of phase saving (0=none, 1=limited, 2=full, defaults to 2).
+.TP
+.B \-ccmin-mode {0,1,2}
+Controls conflict clause minimization (0=none, 1=basic, 2=deep, defaults to 2)
+.TP
+.B \-rfirst <int>
+The base restart interval (positive, defaults to 100).
+.TP
+.B \-rcheck, \-no-rcheck
+Enable (costly) or disable (default) checking for redundant clauses.
+.TP
+.B \-asymm, \-no-asymm
+Shrink clauses by asymmetric branching (disabled by default).
+.TP
+.B \-elim, \-no-elim
+Perform variable elimination (enabled by default).
+.TP
+.B \-simp-gc-frac <double>
+The fraction of wasted memory allowed before a garbage collection is triggered
+during simplification (non-negative, defaults to 0.5).
+.TP
+.B \-sub-lim <int>
+Do not check if subsumption against a clause larger than this value (\-1 <=
+value, defaults to 1000). \-1 means no limit.
+.TP
+.B \-cl-lim <int>
+Variables are not eliminated if they produce a resolvent with a length above
+this limit (\-1 <= value, defaults to 20). \-1 means no limit.
+.TP
+.B \-grow <int>
+Number of additional clauses that may be introduced when eliminating a variable.
+Defaults to 0.
+.PP
+.SH EXIT CODES
+.B 0
+if parsing the command line options fails, usage information is requested, or
+output of the input problem in DIMACS format succeeds.
+.B 1
+if interrupted by SIGINT or if an input file cannot be read,
+.B 3
+if parsing the input fails,
+.B 10
+if found satisfiable, and
+.B 20
+if found unsatisfiable.
+.PP
+.SH AUTHOR
+minisat was written by Niklas Een, Niklas Sorensson 
+.PP
+This manual page was written by Michael Tautschnig <mt@debian.org>,
+for the Debian project (but may be used by others).

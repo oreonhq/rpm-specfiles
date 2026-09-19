@@ -1,0 +1,58 @@
+From 6f1a3c3902fcb03b51e2e25df63b3ef134139074 Mon Sep 17 00:00:00 2001
+From: Ales Nezbeda <anezbeda@redhat.com>
+Date: Tue, 28 May 2024 13:20:34 +0200
+Subject: [PATCH] Add missing cast when assigning uint to pointer
+
+This impacts only big endian architectures.
+---
+ regressions/ck_ec/benchmark/ck_ec.c           | 4 ++--
+ regressions/ck_ec/validate/ck_ec_smoke_test.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/regressions/ck_ec/benchmark/ck_ec.c b/regressions/ck_ec/benchmark/ck_ec.c
+index 655f9d8..cc8b4de 100644
+--- a/regressions/ck_ec/benchmark/ck_ec.c
++++ b/regressions/ck_ec/benchmark/ck_ec.c
+@@ -136,7 +136,7 @@ static void wait64(const struct ck_ec_wait_state *state,
+ #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ 	low_half = address;
+ #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+-	low_half = (uintptr_t)address + sizeof(uint32_t);
++	low_half = (void *)((uintptr_t)address + sizeof(uint32_t));
+ #else
+ # error "__BYTE_ORDER__ must be defined."
+ #endif
+@@ -165,7 +165,7 @@ static void wake64(const struct ck_ec_ops *ops, const uint64_t *address)
+ #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ 	low_half = address;
+ #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+-	low_half = (uintptr_t)address + sizeof(uint32_t);
++	low_half = (void *)((uintptr_t)address + sizeof(uint32_t));
+ #else
+ # error "__BYTE_ORDER__ must be defined."
+ #endif
+diff --git a/regressions/ck_ec/validate/ck_ec_smoke_test.c b/regressions/ck_ec/validate/ck_ec_smoke_test.c
+index 3aca162..47795bd 100644
+--- a/regressions/ck_ec/validate/ck_ec_smoke_test.c
++++ b/regressions/ck_ec/validate/ck_ec_smoke_test.c
+@@ -61,7 +61,7 @@ static void wait64(const struct ck_ec_wait_state *state,
+ #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ 	low_half = address;
+ #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+-	low_half = (uintptr_t)address + sizeof(uint32_t);
++	low_half = (void *)((uintptr_t)address + sizeof(uint32_t));
+ #else
+ # error "__BYTE_ORDER__ must be defined."
+ #endif
+@@ -90,7 +90,7 @@ static void wake64(const struct ck_ec_ops *ops, const uint64_t *address)
+ #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ 	low_half = address;
+ #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+-	low_half = (uintptr_t)address + sizeof(uint32_t);
++	low_half = (void *)((uintptr_t)address + sizeof(uint32_t));
+ #else
+ # error "__BYTE_ORDER__ must be defined."
+ #endif
+-- 
+2.45.1
+

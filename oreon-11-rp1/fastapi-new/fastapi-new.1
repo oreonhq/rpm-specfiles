@@ -1,0 +1,52 @@
+.TH FASTAPI\-NEW "1" "December 2025" "" "User Commands"
+.SH NAME
+.B fastapi\-new
+\(en Create a new FastAPI project in one command
+.SH SYNOPSIS
+.B fastapi\-new
+.RI [ OPTIONS ]
+.RI [ PROJECT_NAME ]
+.P
+If
+.BR fastapi (1)
+is installed:
+.P
+.B fastapi\ new
+.RI [ OPTIONS ]
+.RI [ PROJECT_NAME ]
+.SH OPTIONS
+.SS "POSITIONAL ARGUMENTS"
+.TP
+.B PROJECT_NAME
+The name of the new FastAPI project.
+If not provided, initializes in the current directory.
+.SS "OPTIONAL ARGUMENTS"
+.TP
+.B \-p\fR,\ \fB\-\-python\fR\ \fITEXT
+Specify the Python version for the new project (e.g.,
+.BR 3.14 ).
+Must be
+.B 3.10
+or higher.
+.TP
+.B \-\-install\-completion
+Install completion for the current shell.
+.IP
+Only for
+.BR fastapi\-new ;
+unavailable when called as
+.BR fastapi\ new .
+.TP
+.B \-\-show\-completion
+Show completion for the current shell,
+to copy it or customize the installation.
+.IP
+Only for
+.BR fastapi\-new ;
+unavailable when called as
+.BR fastapi\ new .
+.TP
+.B \-\-help
+Show a help message and exit.
+.SH "SEE ALSO"
+.BR fastapi (1)

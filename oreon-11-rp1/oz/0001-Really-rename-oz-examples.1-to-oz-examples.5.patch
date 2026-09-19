@@ -1,0 +1,24 @@
+From 8921d7fdab719fc7f352a77f4d57218344b7933c Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Wed, 16 Oct 2024 16:59:25 -0700
+Subject: [PATCH] Really rename oz-examples.1 to oz-examples.5
+
+9832cd038efdd39fa58f0b156d53c57b71a929d0 did all the work around
+this, but...didn't actually rename the source file, which causes
+install to blow up because it looks for a non-existent file:
+
+error: can't copy 'man/oz-examples.5': doesn't exist or not a regular file
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ man/{oz-examples.1 => oz-examples.5} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename man/{oz-examples.1 => oz-examples.5} (100%)
+
+diff --git a/man/oz-examples.1 b/man/oz-examples.5
+similarity index 100%
+rename from man/oz-examples.1
+rename to man/oz-examples.5
+-- 
+2.46.2
+

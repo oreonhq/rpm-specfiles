@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.gap-system.gap</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0-or-later</project_license>
+  <name>gap</name>
+  <summary>Computational discrete algebra</summary>
+  <description>
+    <p>
+      GAP is a system for computational discrete algebra, with particular
+      emphasis on Computational Group Theory.
+    </p>
+    <p>
+      GAP provides a programming language, a library of thousands of functions
+      implementing algebraic algorithms written in the GAP language as well as
+      large data libraries of algebraic objects.  GAP is used in research and
+      teaching for studying groups and their representations, rings, vector
+      spaces, algebras, combinatorial structures, and more.
+    </p>
+  </description>
+  <launchable type="desktop-id">org.gap-system.gap.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://jjames.fedorapeople.org/gap/gap-screenshot.png</image>
+      <caption>GAP introductory text and some simple computations</caption>
+    </screenshot>
+  </screenshots>
+  <update_contact>gap-maintainers@fedoraproject.org</update_contact>
+  <developer_name>GAP Centers</developer_name>
+  <url type="homepage">https://www.gap-system.org/</url>
+  <url type="bugtracker">https://github.com/gap-system/gap/issues/</url>
+  <url type="help">https://www.gap-system.org/Doc/doc.html</url>
+  <content_rating type="oars-1.1"></content_rating>
+  <provides>
+    <binary>gap</binary>
+  </provides>
+</component>

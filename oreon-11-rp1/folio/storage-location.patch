@@ -1,0 +1,18 @@
+diff -uNr a/data/app.gschema.xml b/data/app.gschema.xml
+--- a/data/app.gschema.xml	2024-07-05 05:32:43.000000000 +0300
++++ b/data/app.gschema.xml	2024-07-12 19:13:57.367399876 +0300
+@@ -37,12 +37,12 @@
+       <description>Expands the notebook list to include the notebook name</description>
+     </key>
+     <key name="notes-dir" type="s">
+-      <default>'~/.var/app/com.toolstack.Folio/data'</default>
++      <default>'~/.local/share/com.toolstack.Folio/data'</default>
+       <summary>Notes Storage Location</summary>
+       <description>Where the notebooks are stored (requires app restart)</description>
+     </key>
+     <key name="trash-dir" type="s">
+-      <default>'~/.var/app/com.toolstack.Folio/data'</default>
++      <default>'~/.local/share/com.toolstack.Folio/data'</default>
+       <summary>Trash Storage Location</summary>
+       <description>Where the trash folder is located (requires app restart)</description>
+     </key>

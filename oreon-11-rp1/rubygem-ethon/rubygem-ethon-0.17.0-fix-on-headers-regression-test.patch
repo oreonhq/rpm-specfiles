@@ -1,0 +1,25 @@
+From 96b1c3b654e3887ada4bddd892b8bd06b5a8c833 Mon Sep 17 00:00:00 2001
+From: Felipe Mesquita <felipemesquita@hey.com>
+Date: Thu, 21 Aug 2025 09:20:58 -0300
+Subject: [PATCH 2/2] might need to edit this test
+
+---
+ spec/ethon/easy/callbacks_spec.rb | 3 ++-
+ 2 file changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/spec/ethon/easy/callbacks_spec.rb b/spec/ethon/easy/callbacks_spec.rb
+index 2fa75da9..95581dd3 100644
+--- a/spec/ethon/easy/callbacks_spec.rb
++++ b/spec/ethon/easy/callbacks_spec.rb
+@@ -72,9 +72,10 @@
+         easy.on_headers { :abort }
+       end
+       let(:header_write_callback) { easy.instance_variable_get(:@header_write_callback) }
++      let(:stream) { double(:read_string => "\r\n\r\n") } # libcurl sends termination sequence
+ 
+       it "returns -1 to indicate abort to libcurl" do
+-        expect(header_write_callback.call(stream, 1, 1, nil)).to eq(-1)
++        expect(header_write_callback.call(stream, 4, 1, nil)).to eq(-1)
+       end
+     end
+   end

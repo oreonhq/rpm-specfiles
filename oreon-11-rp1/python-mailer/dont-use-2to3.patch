@@ -1,0 +1,11 @@
+--- a/setup.py
++++ b/setup.py
+@@ -2,8 +2,6 @@ from setuptools import setup
+ import sys
+ 
+ extra = {}
+-if sys.version_info >= (3, 0):
+-    extra.update(use_2to3=True)
+ 
+ setup(
+     name='mailer',

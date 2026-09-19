@@ -1,0 +1,21 @@
+--- src/gnome/Makefile.in~	2011-08-14 02:54:05.000000000 +0200
++++ src/gnome/Makefile.in	2011-08-14 02:54:05.000000000 +0200
+@@ -6,6 +6,7 @@
+ GTKADA_LIBS   = -L../../lib-obj -lgtkada  # relative to OBJ_DIR
+ EXTERNAL_LIBS = @GNOME_LIBS@
+ GPRFILE       = gnome
++INC_SUBDIR    = gnome
+ 
+ include ../Makefile.common
+ 
+--- projects/Makefile~	2011-08-14 02:50:51.000000000 +0200
++++ projects/Makefile	2011-08-14 02:50:51.000000000 +0200
+@@ -32,7 +32,7 @@
+ ifeq ($(HAVE_GNOME), True)
+ 	./generate_prj.sh GtkAda_Gnome "${bindir}" "${incdir}" "${libdir}" \
+ 	        "${libsubdir_static}" "${libsubdir_shared}" \
+-	        "${alisubdir_static}" "${alisubdir_shared}" "" \
++	        "${alisubdir_static}" "${alisubdir_shared}" gnome \
+ 	        "${DEFAULT_LIBRARY_TYPE}" "${SOVER}"
+ 	${CP} gtkada_gnome.gpr "${DESTDIR}${gprdir}"
+ endif	

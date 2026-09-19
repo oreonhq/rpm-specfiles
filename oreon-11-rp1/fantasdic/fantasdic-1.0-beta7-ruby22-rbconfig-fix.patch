@@ -1,0 +1,22 @@
+--- a/setup.rb
++++ b/setup.rb
+@@ -792,7 +792,7 @@
+     else
+       require 'rbconfig'
+     end
+-    ::Config::CONFIG
++    ::RbConfig::CONFIG
+   end
+ 
+   def initialize(ardir_root, config)
+--- a/pre-setup.rb
++++ b/pre-setup.rb
+@@ -5,7 +5,7 @@
+ # Modified by Mathieu Blondel for fantasdic
+ 
+ basename = "fantasdic"
+-config = Config::CONFIG
++config = RbConfig::CONFIG
+ podir = srcdir_root + "/po/"
+ 
+ # Create MO files.

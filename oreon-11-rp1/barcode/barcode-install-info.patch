@@ -1,0 +1,14 @@
+--- barcode-0.98/doc/doc.barcode.orig	2005-07-07 16:27:14.632811312 +0200
++++ barcode-0.98/doc/doc.barcode	2005-07-07 16:31:21.607265488 +0200
+@@ -23,6 +23,11 @@
+ 
+ @comment %**start of header
+ @setfilename barcode.info
++@dircategory Text creation and manipulation
++@dircategory GNU libraries
++@direntry
++* Barcode: (barcode).           Barcode generation from text strings.
++@end direntry
+ @settitle Barcode @value{version}
+ @iftex
+ @afourpaper

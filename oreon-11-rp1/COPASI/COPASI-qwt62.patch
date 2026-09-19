@@ -1,0 +1,161 @@
+diff -rupN COPASI-Build-268/copasi/plotUI/C2DCurveData.h COPASI-Build-268-new/copasi/plotUI/C2DCurveData.h
+--- COPASI-Build-268/copasi/plotUI/C2DCurveData.h	2022-11-25 16:48:07.000000000 +0100
++++ COPASI-Build-268-new/copasi/plotUI/C2DCurveData.h	2022-12-22 18:04:21.540571751 +0100
+@@ -30,7 +30,9 @@
+ #include <qwt_plot.h>
+ #include <qwt_painter.h>
+ 
+-#if QWT_VERSION > QT_VERSION_CHECK(6,0,0)
++#if QWT_VERSION >= QT_VERSION_CHECK(6,2,0)
++typedef QRectF QwtDoubleRect;
++#elif QWT_VERSION > QT_VERSION_CHECK(6,0,0)
+ #include <qwt_compat.h>
+ #else
+ #include <qwt_data.h>
+diff -rupN COPASI-Build-268/copasi/plotUI/C2DPlotCurve.h COPASI-Build-268-new/copasi/plotUI/C2DPlotCurve.h
+--- COPASI-Build-268/copasi/plotUI/C2DPlotCurve.h	2022-11-25 16:48:07.000000000 +0100
++++ COPASI-Build-268-new/copasi/plotUI/C2DPlotCurve.h	2022-12-22 18:04:21.541571723 +0100
+@@ -30,7 +30,9 @@
+ #include <qwt_plot.h>
+ #include <qwt_painter.h>
+ 
+-#if QWT_VERSION > QT_VERSION_CHECK(6,0,0)
++#if QWT_VERSION >= QT_VERSION_CHECK(6,2,0)
++// Pass
++#elif QWT_VERSION > QT_VERSION_CHECK(6,0,0)
+ #include <qwt_compat.h>
+ #else
+ #include <qwt_data.h>
+diff -rupN COPASI-Build-268/copasi/plotUI/CBandedGraphData.h COPASI-Build-268-new/copasi/plotUI/CBandedGraphData.h
+--- COPASI-Build-268/copasi/plotUI/CBandedGraphData.h	2022-11-25 16:48:07.000000000 +0100
++++ COPASI-Build-268-new/copasi/plotUI/CBandedGraphData.h	2022-12-22 18:04:21.542571695 +0100
+@@ -30,7 +30,9 @@
+ #include <qwt_plot.h>
+ #include <qwt_painter.h>
+ 
+-#if QWT_VERSION > QT_VERSION_CHECK(6,0,0)
++#if QWT_VERSION >= QT_VERSION_CHECK(6,2,0)
++typedef QRectF QwtDoubleRect;
++#elif QWT_VERSION > QT_VERSION_CHECK(6,0,0)
+ #include <qwt_compat.h>
+ #else
+ #include <qwt_data.h>
+diff -rupN COPASI-Build-268/copasi/plotUI/CHistoCurveData.h COPASI-Build-268-new/copasi/plotUI/CHistoCurveData.h
+--- COPASI-Build-268/copasi/plotUI/CHistoCurveData.h	2022-11-25 16:48:07.000000000 +0100
++++ COPASI-Build-268-new/copasi/plotUI/CHistoCurveData.h	2022-12-22 18:04:21.542571695 +0100
+@@ -30,7 +30,9 @@
+ #include <qwt_plot.h>
+ #include <qwt_painter.h>
+ 
+-#if QWT_VERSION > QT_VERSION_CHECK(6,0,0)
++#if QWT_VERSION >= QT_VERSION_CHECK(6,2,0)
++typedef QRectF QwtDoubleRect;
++#elif QWT_VERSION > QT_VERSION_CHECK(6,0,0)
+ #include <qwt_compat.h>
+ #else
+ #include <qwt_data.h>
+diff -rupN COPASI-Build-268/copasi/plotUI/CLinearColorMap.h COPASI-Build-268-new/copasi/plotUI/CLinearColorMap.h
+--- COPASI-Build-268/copasi/plotUI/CLinearColorMap.h	2022-11-25 16:48:07.000000000 +0100
++++ COPASI-Build-268-new/copasi/plotUI/CLinearColorMap.h	2022-12-22 18:04:21.543571667 +0100
+@@ -18,7 +18,10 @@
+ 
+ #include <qwt_color_map.h>
+ 
+-#if QWT_VERSION > QT_VERSION_CHECK(6,0,0)
++#if QWT_VERSION >= QT_VERSION_CHECK(6,2,0)
++#include <qwt_interval.h>
++typedef QwtInterval QwtDoubleInterval;
++#elif QWT_VERSION > QT_VERSION_CHECK(6,0,0)
+ #include <qwt_compat.h>
+ #endif
+ 
+diff -rupN COPASI-Build-268/copasi/plotUI/CPlotSpectogram.h COPASI-Build-268-new/copasi/plotUI/CPlotSpectogram.h
+--- COPASI-Build-268/copasi/plotUI/CPlotSpectogram.h	2022-11-25 16:48:07.000000000 +0100
++++ COPASI-Build-268-new/copasi/plotUI/CPlotSpectogram.h	2022-12-22 18:04:21.543571667 +0100
+@@ -30,7 +30,9 @@
+ #include <qwt_plot.h>
+ #include <qwt_painter.h>
+ 
+-#if QWT_VERSION > QT_VERSION_CHECK(6,0,0)
++#if QWT_VERSION >= QT_VERSION_CHECK(6,2,0)
++// Pass
++#elif QWT_VERSION > QT_VERSION_CHECK(6,0,0)
+ #include <qwt_compat.h>
+ #else
+ #include <qwt_data.h>
+diff -rupN COPASI-Build-268/copasi/plotUI/CQwtPlot.cpp COPASI-Build-268-new/copasi/plotUI/CQwtPlot.cpp
+--- COPASI-Build-268/copasi/plotUI/CQwtPlot.cpp	2022-11-25 16:48:07.000000000 +0100
++++ COPASI-Build-268-new/copasi/plotUI/CQwtPlot.cpp	2022-12-22 18:41:48.413936621 +0100
+@@ -10,7 +10,11 @@
+ 
+ #include <qwt_symbol.h>
+ #include <qwt_legend.h>
+-#if QWT_VERSION > QT_VERSION_CHECK(6,0,0)
++#if QWT_VERSION >= QT_VERSION_CHECK(6,2,0)
++#include <qwt_legend_data.h>
++#include <qwt_legend_label.h>
++#include <qwt_plot_canvas.h>
++#elif QWT_VERSION > QT_VERSION_CHECK(6,0,0)
+ #include <qwt_legend_data.h>
+ #include <qwt_legend_label.h>
+ #include <qwt_plot_canvas.h>
+diff -rupN COPASI-Build-268/copasi/plotUI/CQwtPlot.h COPASI-Build-268-new/copasi/plotUI/CQwtPlot.h
+--- COPASI-Build-268/copasi/plotUI/CQwtPlot.h	2022-11-25 16:48:07.000000000 +0100
++++ COPASI-Build-268-new/copasi/plotUI/CQwtPlot.h	2022-12-22 18:04:21.544571639 +0100
+@@ -27,7 +27,9 @@
+ #include <qwt_painter.h>
+ #include <qwt_symbol.h>
+ 
+-#if QWT_VERSION > QT_VERSION_CHECK(6,0,0)
++#if QWT_VERSION >= QT_VERSION_CHECK(6,2,0)
++typedef QList<double> QwtValueList;
++#elif QWT_VERSION > QT_VERSION_CHECK(6,0,0)
+ #include <qwt_compat.h>
+ #else
+ #include <qwt_data.h>
+diff -rupN COPASI-Build-268/copasi/plotUI/CSpectorgramData.h COPASI-Build-268-new/copasi/plotUI/CSpectorgramData.h
+--- COPASI-Build-268/copasi/plotUI/CSpectorgramData.h	2022-11-25 16:48:07.000000000 +0100
++++ COPASI-Build-268-new/copasi/plotUI/CSpectorgramData.h	2022-12-22 18:04:21.545571611 +0100
+@@ -30,7 +30,11 @@
+ #include <qwt_plot.h>
+ #include <qwt_painter.h>
+ 
+-#if QWT_VERSION > QT_VERSION_CHECK(6,0,0)
++#if QWT_VERSION >= QT_VERSION_CHECK(6,2,0)
++#include <qwt_interval.h>
++typedef QwtInterval QwtDoubleInterval;
++typedef QRectF QwtDoubleRect;
++#elif QWT_VERSION > QT_VERSION_CHECK(6,0,0)
+ #  include <qwt_compat.h>
+ #else
+ #include <qwt_data.h>
+diff -rupN COPASI-Build-268/copasi/plotUI/scrollzoomer.cpp COPASI-Build-268-new/copasi/plotUI/scrollzoomer.cpp
+--- COPASI-Build-268/copasi/plotUI/scrollzoomer.cpp	2022-11-25 16:48:07.000000000 +0100
++++ COPASI-Build-268-new/copasi/plotUI/scrollzoomer.cpp	2022-12-22 18:59:40.072860647 +0100
+@@ -44,7 +44,10 @@
+ #include <QStack>
+ #include <QVector>
+ #include <QRect>
+-
++#if QWT_VERSION >= QT_VERSION_CHECK(6,2,0)
++auto qwtMax = [](double x, double y) { return std::max(x, y); };
++auto qwtMin = [](double x, double y) { return std::min(x, y); };
++#endif
+ #if QWT_VERSION > QT_VERSION_CHECK(6,0,0)
+ LogPlotZoomer::LogPlotZoomer(QWidget *canvas) :
+   QwtPlotZoomer(canvas)
+diff -rupN COPASI-Build-268/copasi/plotUI/scrollzoomer.h COPASI-Build-268-new/copasi/plotUI/scrollzoomer.h
+--- COPASI-Build-268/copasi/plotUI/scrollzoomer.h	2022-11-25 16:48:07.000000000 +0100
++++ COPASI-Build-268-new/copasi/plotUI/scrollzoomer.h	2022-12-22 18:59:26.829431548 +0100
+@@ -39,7 +39,10 @@
+ //Added by qt3to4:
+ #include <QtCore/QEvent>
+ 
+-#if QWT_VERSION > QT_VERSION_CHECK(6,0,0)
++#if QWT_VERSION >= QT_VERSION_CHECK(6,2,0)
++typedef QPointF QwtDoublePoint;
++typedef QRectF QwtDoubleRect;
++#elif QWT_VERSION > QT_VERSION_CHECK(6,0,0)
+ #  include <qwt_compat.h>
+ #endif
+ 

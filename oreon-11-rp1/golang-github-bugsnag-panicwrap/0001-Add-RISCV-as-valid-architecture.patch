@@ -1,0 +1,50 @@
+From 49491f7e9808438787e8963f34a56589ad996b27 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Alejandro=20S=C3=A1ez?= <asm@redhat.com>
+Date: Fri, 7 Jul 2023 17:49:07 +0200
+Subject: [PATCH] Add RISCV as valid architecture
+
+---
+ dup2.go           | 3 ++-
+ dup3.go           | 3 ++-
+ panicwrap_test.go | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/dup2.go b/dup2.go
+index d9c61c7..a762391 100644
+--- a/dup2.go
++++ b/dup2.go
+@@ -1,4 +1,4 @@
+-// +build linux,!arm64 !linux,!windows
++//go:build (!arm64 && !riscv64) && linux
+
+ package panicwrap
+ 
+diff --git a/dup3.go b/dup3.go
+index 9417bc7..16cb689 100644
+--- a/dup3.go
++++ b/dup3.go
+@@ -1,4 +1,4 @@
+-//+build linux,arm64
++//go:build (linux && arm64) || (linux && riscv64)
+ 
+ package panicwrap
+ 
+diff --git a/panicwrap_test.go b/panicwrap_test.go
+index 771e1eb..bec2eff 100644
+--- a/panicwrap_test.go
++++ b/panicwrap_test.go
+@@ -221,9 +221,9 @@ func TestHelperProcess(*testing.T) {
+ 	case "panic-monitor":
+ 
+ 		config := &WrapConfig{
+-			Handler: panicHandler,
++			Handler:   panicHandler,
+ 			HidePanic: true,
+-			Monitor: true,
++			Monitor:   true,
+ 		}
+ 
+ 		exitStatus, err := Wrap(config)
+-- 
+2.40.1
+

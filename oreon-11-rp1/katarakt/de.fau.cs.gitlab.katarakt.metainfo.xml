@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>de.fau.cs.gitlab.katarakt</id>
+  <name>katarakt</name>
+  <summary>Simple PDF viewer</summary>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>BSD-2-Clause</project_license>
+  <description>
+    <p>
+      katarakt is a simple PDF viewer. It is designed to use as much available screen space as possible.
+    </p>
+  </description>
+  <launchable type="desktop-id">katarakt.desktop</launchable>
+  <url type="homepage">https://gitlab.cs.fau.de/Qui_Sum/katarakt</url>
+</component>

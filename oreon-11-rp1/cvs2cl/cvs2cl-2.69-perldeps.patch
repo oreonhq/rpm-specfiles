@@ -1,0 +1,14 @@
+Use straightforward /usr/bin/perl shebang so rpmbuild catches it
+and autogenerates better dependencies.
+
+--- cvs2cl.orig	2008-05-10 19:49:21.000000000 +0300
++++ cvs2cl	2008-05-17 15:51:19.000000000 +0300
+@@ -1,7 +1,4 @@
+-#!/bin/sh
+-exec perl -w -x "$0" ${1+"$@"} # -*- mode: perl; perl-indent-level: 2; -*-
+-#!perl -w
+-
++#!/usr/bin/perl -w
+ 
+ ##############################################################
+ ###                                                        ###

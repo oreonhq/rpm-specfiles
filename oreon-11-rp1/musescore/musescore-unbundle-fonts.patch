@@ -1,0 +1,219 @@
+--- MuseScore-4.6.3/src/engraving/CMakeLists.txt.orig	2025-10-21 02:21:23.000000000 -0600
++++ MuseScore-4.6.3/src/engraving/CMakeLists.txt	2025-10-24 16:35:36.522878352 -0600
+@@ -25,18 +25,6 @@ set(MODULE_QRC
+ )
+ 
+ set(MODULE_BIG_QRC
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Bravura.qrc
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Campania.qrc
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Edwin.qrc
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_FreeSans.qrc
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_FreeSerif.qrc
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Gootville.qrc
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Leland.qrc
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_MScore.qrc
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_MuseJazz.qrc
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Petaluma.qrc
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_FinaleMaestro.qrc
+-    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_FinaleBroadway.qrc
+     ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Tabulature.qrc
+     )
+ 
+--- MuseScore-4.6.3/src/engraving/dom/figuredbass.cpp.orig	2025-10-21 02:21:23.000000000 -0600
++++ MuseScore-4.6.3/src/engraving/dom/figuredbass.cpp	2025-10-24 16:35:36.523188460 -0600
+@@ -20,6 +20,7 @@
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  */
+ 
++#include "muse_framework_config.h"
+ #include "figuredbass.h"
+ 
+ #include "io/file.h"
+@@ -1126,7 +1127,7 @@ bool FiguredBass::readConfigFile(const S
+     String path;
+ 
+     if (fileName.isEmpty()) {         // defaults to built-in xml
+-        path = u":/fonts/fonts_figuredbass.xml";
++        path = u"/usr/share/" MUSE_APP_INSTALL_NAME "fonts/fonts_figuredbass.xml";
+         g_FBFonts.clear();
+     } else {
+         path = fileName;
+--- MuseScore-4.6.3/src/engraving/dom/stafftype.cpp.orig	2025-10-21 02:21:23.000000000 -0600
++++ MuseScore-4.6.3/src/engraving/dom/stafftype.cpp	2025-10-24 16:35:36.523544444 -0600
+@@ -20,6 +20,7 @@
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  */
+ 
++#include "muse_framework_config.h"
+ #include "stafftype.h"
+ 
+ #include "translation.h"
+@@ -987,7 +988,7 @@ bool StaffType::readTabConfigFile(const
+     muse::io::path_t path;
+ 
+     if (fileName.isEmpty()) {         // defaults to built-in xml
+-        path = ":/fonts/fonts_tablature.xml";
++        path = u"/usr/share/" MUSE_APP_INSTALL_NAME "fonts/fonts_tablature.xml";
+         m_durationFonts.clear();
+         m_fretFonts.clear();
+     } else {
+--- MuseScore-4.6.3/src/engraving/engravingmodule.cpp.orig	2025-10-21 02:21:23.000000000 -0600
++++ MuseScore-4.6.3/src/engraving/engravingmodule.cpp	2025-10-24 16:35:36.523861595 -0600
+@@ -82,19 +82,7 @@ static void engraving_init_qrc()
+ #ifndef NO_QT_SUPPORT
+     Q_INIT_RESOURCE(engraving);
+ 
+-    Q_INIT_RESOURCE(fonts_Leland);
+-    Q_INIT_RESOURCE(fonts_Bravura);
+-    Q_INIT_RESOURCE(fonts_Campania);
+-    Q_INIT_RESOURCE(fonts_Edwin);
+-    Q_INIT_RESOURCE(fonts_FreeSans);
+-    Q_INIT_RESOURCE(fonts_FreeSerif);
+-    Q_INIT_RESOURCE(fonts_Gootville);
+-    Q_INIT_RESOURCE(fonts_MScore);
+-    Q_INIT_RESOURCE(fonts_MuseJazz);
+     Q_INIT_RESOURCE(fonts_Smufl);
+-    Q_INIT_RESOURCE(fonts_Petaluma);
+-    Q_INIT_RESOURCE(fonts_FinaleMaestro);
+-    Q_INIT_RESOURCE(fonts_FinaleBroadway);
+     Q_INIT_RESOURCE(fonts_Tabulature);
+ #endif
+ }
+@@ -177,10 +165,10 @@ void EngravingModule::onInit(const IAppl
+         std::shared_ptr<IFontsDatabase> fdb = ioc()->resolve<IFontsDatabase>(moduleName());
+ 
+         // Text
+-        fdb->addFont(FontDataKey(u"Edwin", false, false), ":/fonts/edwin/Edwin-Roman.otf");
+-        fdb->addFont(FontDataKey(u"Edwin", false, true), ":/fonts/edwin/Edwin-Italic.otf");
+-        fdb->addFont(FontDataKey(u"Edwin", true, false), ":/fonts/edwin/Edwin-Bold.otf");
+-        fdb->addFont(FontDataKey(u"Edwin", true, true), ":/fonts/edwin/Edwin-BdIta.otf");
++        fdb->addFont(FontDataKey(u"Edwin", false, false), "/usr/share/fonts/edwin-fonts/Edwin-Roman.otf");
++        fdb->addFont(FontDataKey(u"Edwin", false, true), "/usr/share/fonts/edwin-fonts/Edwin-Italic.otf");
++        fdb->addFont(FontDataKey(u"Edwin", true, false), "/usr/share/fonts/edwin-fonts/Edwin-Bold.otf");
++        fdb->addFont(FontDataKey(u"Edwin", true, true), "/usr/share/fonts/edwin-fonts/Edwin-BdIta.otf");
+ 
+         // MusicSymbol[Text]
+         auto addMusicFont = [this, fdb](const std::string& name, const FontDataKey& fontDataKey, const muse::io::path_t& filePath){
+@@ -188,36 +176,36 @@ void EngravingModule::onInit(const IAppl
+             m_engravingfonts->addInternalFont(name, fontDataKey.family().id().toStdString(), filePath);
+         };
+ 
+-        addMusicFont("Bravura", FontDataKey(u"Bravura"), ":/fonts/bravura/Bravura.otf");
+-        fdb->addFont(FontDataKey(u"Bravura Text"), ":/fonts/bravura/BravuraText.otf");
+-        addMusicFont("Leland", FontDataKey(u"Leland"), ":/fonts/leland/Leland.otf");
+-        fdb->addFont(FontDataKey(u"Leland Text"), ":/fonts/leland/LelandText.otf");
+-        addMusicFont("Emmentaler", FontDataKey(u"MScore"), ":/fonts/mscore/MScore.otf");
+-        fdb->addFont(FontDataKey(u"MScore Text"), ":/fonts/mscore/MScoreText.otf");
+-        addMusicFont("Gonville", FontDataKey(u"Gootville"), ":/fonts/gootville/Gootville.otf");
+-        fdb->addFont(FontDataKey(u"Gootville Text"), ":/fonts/gootville/GootvilleText.otf");
+-        addMusicFont("MuseJazz", FontDataKey(u"MuseJazz"), ":/fonts/musejazz/MuseJazz.otf");
+-        fdb->addFont(FontDataKey(u"MuseJazz Text"), ":/fonts/musejazz/MuseJazzText.otf");
+-        addMusicFont("Petaluma", FontDataKey(u"Petaluma"),    ":/fonts/petaluma/Petaluma.otf");
+-        fdb->addFont(FontDataKey(u"Petaluma Text"), ":/fonts/petaluma/PetalumaText.otf");
+-        addMusicFont("Finale Maestro", FontDataKey(u"Finale Maestro"), ":/fonts/finalemaestro/FinaleMaestro.otf");
+-        fdb->addFont(FontDataKey(u"Finale Maestro Text"), ":/fonts/finalemaestro/FinaleMaestroText.otf");
+-        addMusicFont("Finale Broadway", FontDataKey(u"Finale Broadway"), ":/fonts/finalebroadway/FinaleBroadway.otf");
+-        fdb->addFont(FontDataKey(u"Finale Broadway Text"), ":/fonts/finalebroadway/FinaleBroadwayText.otf");
++        addMusicFont("Bravura", FontDataKey(u"Bravura"), "/usr/share/fonts/steinberg-bravura-fonts/Bravura.otf");
++        fdb->addFont(FontDataKey(u"Bravura Text"), "/usr/share/fonts/steinberg-bravuratext-fonts/BravuraText.otf");
++        addMusicFont("Leland", FontDataKey(u"Leland"), "/usr/share/fonts/leland-fonts/Leland.otf");
++        fdb->addFont(FontDataKey(u"Leland Text"), "/usr/share/fonts/leland-text-fonts/LelandText.otf");
++        addMusicFont("Emmentaler", FontDataKey(u"MScore"), "/usr/share/fonts/mscore-fonts/MScore.otf");
++        fdb->addFont(FontDataKey(u"MScore Text"), "/usr/share/fonts/mscoretext-fonts/MScoreText.ttf");
++        addMusicFont("Gonville", FontDataKey(u"Gootville"), "/usr/share/fonts/gootville-fonts/Gootville.otf");
++        fdb->addFont(FontDataKey(u"Gootville Text"), "/usr/share/fonts/gootville-text-fonts/GootvilleText.otf");
++        addMusicFont("MuseJazz", FontDataKey(u"MuseJazz"), "/usr/share/fonts/musejazz-fonts/MuseJazz.otf");
++        fdb->addFont(FontDataKey(u"MuseJazz Text"), "/usr/share/fonts/musejazz-text-fonts/MuseJazzText.otf");
++        addMusicFont("Petaluma", FontDataKey(u"Petaluma"), "/usr/share/fonts/steinberg-petaluma-fonts/Petaluma.otf");
++        fdb->addFont(FontDataKey(u"Petaluma Text"), "/usr/share/fonts/steinberg-petalumatext-fonts/PetalumaText.otf");
++        addMusicFont("Finale Maestro", FontDataKey(u"Finale Maestro"), "/usr/share/fonts/finale-maestro-fonts/FinaleMaestro.otf");
++        fdb->addFont(FontDataKey(u"Finale Maestro Text"), "/usr/share/fonts/finale-maestro-text-fonts/FinaleMaestroText-Regular.otf");
++        addMusicFont("Finale Broadway", FontDataKey(u"Finale Broadway"), "/usr/share/fonts/finale-broadway-fonts/FinaleBroadway.otf");
++        fdb->addFont(FontDataKey(u"Finale Broadway Text"), "/usr/share/fonts/finale-broadway-text-fonts/FinaleBroadwayText.otf");
+ 
+         // Tabulature
+-        fdb->addFont(FontDataKey(u"FreeSerif"), ":/fonts/FreeSerif.ttf");
+-        fdb->addFont(FontDataKey(u"FreeSerif", true, false), ":/fonts/FreeSerifBold.ttf");
+-        fdb->addFont(FontDataKey(u"FreeSerif", false, true), ":/fonts/FreeSerifItalic.ttf");
+-        fdb->addFont(FontDataKey(u"FreeSerif", true, true), ":/fonts/FreeSerifBoldItalic.ttf");
+-        fdb->addFont(FontDataKey(u"FreeSans"), ":/fonts/FreeSans.ttf");
+-        fdb->addFont(FontDataKey(u"MScoreTabulature"), ":/fonts/mscoreTab.ttf");
++        fdb->addFont(FontDataKey(u"FreeSerif"), "/usr/share/fonts/gnu-free/FreeSerif.ttf");
++        fdb->addFont(FontDataKey(u"FreeSerif", true, false), "/usr/share/fonts/gnu-free/FreeSerifBold.ttf");
++        fdb->addFont(FontDataKey(u"FreeSerif", false, true), "/usr/share/fonts/gnu-free/FreeSerifItalic.ttf");
++        fdb->addFont(FontDataKey(u"FreeSerif", true, true), "/usr/share/fonts/gnu-free/FreeSerifBoldItalic.ttf");
++        fdb->addFont(FontDataKey(u"FreeSans"), "/usr/share/fonts/gnu-free/FreeSans.ttf");
++        fdb->addFont(FontDataKey(u"MScoreTabulature"), "/usr/share/fonts/mscoretabulature-fonts/mscoreTab.ttf");
+ 
+         // Figured Bass
+-        fdb->addFont(FontDataKey(u"MscoreBC"), ":/fonts/mscore-BC.ttf");
++        fdb->addFont(FontDataKey(u"MscoreBC"), "/usr/share/fonts/mscorebc-fonts/mscore-BC.ttf");
+ 
+         // Roman Numeral Analysis
+-        fdb->addFont(FontDataKey(u"Campania"), ":/fonts/campania/Campania.otf");
++        fdb->addFont(FontDataKey(u"Campania"), "/usr/share/fonts/marcsabatella-campania-fonts/Campania.otf");
+ 
+         // Defaults
+         fdb->setDefaultFont(Font::Type::Unknown, FontDataKey(u"Edwin"));
+--- MuseScore-4.6.3/src/engraving/internal/engravingfontsprovider.cpp.orig	2025-10-21 02:21:23.000000000 -0600
++++ MuseScore-4.6.3/src/engraving/internal/engravingfontsprovider.cpp	2025-10-24 16:35:36.524075013 -0600
+@@ -36,7 +36,7 @@ EngravingFontsProvider::EngravingFontsPr
+ 
+ void EngravingFontsProvider::addInternalFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath)
+ {
+-    muse::io::path_t basePath = muse::io::dirpath(filePath.toQString());
++    muse::io::path_t basePath = "/usr/share/SMuFL/Fonts/" + name;
+     muse::io::path_t metadataPath = basePath + "/metadata.json";
+     std::shared_ptr<EngravingFont> f = std::make_shared<EngravingFont>(name, family, filePath, metadataPath, iocContext());
+     m_symbolFonts.push_back(f);
+--- MuseScore-4.6.3/src/framework/ui/uimodule.cpp.orig	2025-10-21 02:21:23.000000000 -0600
++++ MuseScore-4.6.3/src/framework/ui/uimodule.cpp	2025-10-24 16:35:36.524268053 -0600
+@@ -213,7 +213,7 @@ void UiModule::onInit(const IApplication
+         return;
+     }
+ 
+-    if (QFontDatabase::addApplicationFont(":/ui/data/MusescoreIcon.ttf") == -1) {
++    if (QFontDatabase::addApplicationFont("/usr/share/fonts/musescoreicon-fonts/MusescoreIcon.ttf") == -1) {
+         LOGE() << "Unable load icon font: `:/ui/data/MusescoreIcon.ttf`";
+     }
+ 
+--- MuseScore-4.6.3/src/framework/ui/ui.qrc.orig	2025-10-21 02:21:23.000000000 -0600
++++ MuseScore-4.6.3/src/framework/ui/ui.qrc	2025-10-24 16:35:36.524449101 -0600
+@@ -9,6 +9,5 @@
+         <file>qml/Muse/Ui/StandardDialogPanel.qml</file>
+         <file>qml/Muse/Ui/internal/FileDialog.qml</file>
+         <file>qml/Muse/Ui/internal/FolderDialog.qml</file>
+-        <file alias="ui/data/MusescoreIcon.ttf">data/MusescoreIcon.ttf</file>
+     </qresource>
+ </RCC>
+--- MuseScore-4.6.3/src/notation/internal/engravingfontscontroller.cpp.orig	2025-10-21 02:21:23.000000000 -0600
++++ MuseScore-4.6.3/src/notation/internal/engravingfontscontroller.cpp	2025-10-25 09:52:52.368729982 -0600
+@@ -66,7 +66,11 @@ void EngravingFontsController::scanAllDi
+     // The first location is the user-wide location, so we should iterate in reverse order so that
+     // user-specific fonts can override system-wide fonts
+     for (auto it = globalFontsPaths.crbegin(); it != globalFontsPaths.crend(); ++it) {
+-        scanDirectory(*it + "/SMuFL/Fonts", false);
++        auto dir = *it;
++        if (dir.back() == '/')
++            scanDirectory(dir + "SMuFL/Fonts", false);
++        else
++            scanDirectory(dir + "/SMuFL/Fonts", false);
+     }
+ 
+     // Scan MuseScore-specific "private" location last so that it can override global fonts
+@@ -186,6 +190,15 @@ muse::io::path_t EngravingFontsControlle
+     // Qt does not include the local fonts folder in the standard locations
+     fontLocations << qgetenv("LocalAppData").replace("\\", "/") + "/Microsoft/Windows/Fonts";
+ #endif
++    // Fedora addition: also search in subdirs of /usr/share/fonts
++    fontLocations.append("/usr/share/fonts/finale-broadway-fonts");
++    fontLocations.append("/usr/share/fonts/finale-maestro-fonts");
++    fontLocations.append("/usr/share/fonts/gootville-fonts");
++    fontLocations.append("/usr/share/fonts/leland-fonts");
++    fontLocations.append("/usr/share/fonts/mscore-fonts");
++    fontLocations.append("/usr/share/fonts/musejazz-fonts");
++    fontLocations.append("/usr/share/fonts/steinberg-bravura-fonts");
++    fontLocations.append("/usr/share/fonts/steinberg-petaluma-fonts");
+     for (const QString& dir : fontLocations) {
+         QDirIterator it(dir, { "*.ttf", "*.otf" }, QDir::Files);
+         while (it.hasNext()) {

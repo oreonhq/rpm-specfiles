@@ -1,0 +1,16 @@
+diff -Nrbu socket++-1.12.12/Makefile.am socket++-1.12.12-OK/Makefile.am
+--- socket++-1.12.12/Makefile.am	2002-11-25 15:31:56.000000000 +0300
++++ socket++-1.12.12-OK/Makefile.am	2013-08-07 18:58:47.987284499 +0400
+@@ -1,2 +1,2 @@
+-SUBDIRS = socket++ doc
++SUBDIRS = socket++
+ 
+diff -Nrbu socket++-1.12.12/configure.in socket++-1.12.12-OK/configure.in
+--- socket++-1.12.12/configure.in	2004-09-30 17:00:14.000000000 +0400
++++ socket++-1.12.12-OK/configure.in	2013-08-07 18:58:29.305331077 +0400
+@@ -190,4 +190,4 @@
+ dnl check for system
+ 
+ dnl generate output files
+-AC_OUTPUT(Makefile socket++/Makefile doc/Makefile test/Makefile)
++AC_OUTPUT(Makefile socket++/Makefile test/Makefile)

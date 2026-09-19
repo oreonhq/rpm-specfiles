@@ -1,0 +1,15 @@
+--- a/libgeopmd/Makefile.am	2025-05-12 19:57:52.302979971 +0300
++++ b/libgeopmd/Makefile.am	2025-05-12 19:58:22.283573424 +0300
+@@ -53,9 +53,9 @@
+ install-plugin-dir:
+ 	$(INSTALL) -d $(DESTDIR)/$(libdir)/geopm
+ 
+-dist_doc_DATA = LICENSE-BSD-3-Clause \
+-                README.md \
+-                VERSION \
++#dist_doc_DATA = LICENSE-BSD-3-Clause \
++#                README.md \
++#                VERSION \
+                 # end
+ 
+ EXTRA_DIST = .gitignore \

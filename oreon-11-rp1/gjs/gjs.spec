@@ -7,7 +7,7 @@
 %global major_minor_version %(echo %{version} | cut -d "." -f 1-2)
 
 Name:           gjs
-Version:        1.88.0
+Version:        1.90.0
 Release:        %autorelease
 Summary:        Javascript Bindings for GNOME
 

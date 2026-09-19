@@ -1,0 +1,36 @@
+.TH BRUKER "1" "August 2023" "" "User Commands"
+.SH NAME
+.B bruker
+\(en I/O interface for Bruker data sets
+.SH SYNOPSIS
+.B bruker
+.RB [ \-h ]
+.RB { report , split , filter }\ ...
+.SH OPTIONS
+.SS "COMMANDS"
+.TP
+.B report
+Export properties of data sets to json, or yaml file.
+.IP
+See
+.BR bruker\-report (1).
+.TP
+.B split
+Split dataset into several sub-datasets.
+.IP
+See
+.BR bruker\-split (1).
+.TP
+.B filter
+Get files based on query.
+.IP
+See
+.BR bruker\-filter (1).
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit
+.SH "SEE\ ALSO"
+.BR bruker\-report (1),
+.BR bruker\-split (1),
+.BR bruker\-filter (1)

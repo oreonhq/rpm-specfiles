@@ -4,8 +4,8 @@
 
 Summary:        Collection of Type 1 and 2 font manipulation utilities
 Name:           t1utils
-Version:        1.42
-Release:        12%{?dist}
+Version:        2.104
+Release:        1%{?dist}
 License:        MIT
 URL:            http://www.lcdf.org/~eddietwo/type/
 Source0:        http://www.lcdf.org/~eddietwo/type/t1utils-%{version}.tar.gz

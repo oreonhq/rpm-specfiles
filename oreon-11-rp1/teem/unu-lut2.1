@@ -1,0 +1,114 @@
+.TH UNU\-LUT2 "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-lut2 \- map
+.I nrrd
+through a bivariate lookup table
+.SH SYNOPSIS
+.B unu\ lut2
+.BR \-m , \-\-map
+.RI < lut >
+.RB [ \-r , \-\-rescale 
+.RI < bool \  bool >]
+.RB [ \-min , \-\-minimum
+.RI < value >]
+.RB [ \-max , \-\-maximum
+.RI < value >]
+.RB [ \-blind8
+.RI < bool >]
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Map
+.I nrrd
+through a bivariate lookup table (itself represented as a
+.IR nrrd ).
+The lookup table can be 2D, in which case the output has the same dimension as
+the input, or 3D, in which case the output has one more dimension than the
+input, and each value is mapped to a scanline (along axis
+.BR 0 )
+from the lookup table.
+In any case, axis
+.B 0
+of the input must have length two.
+.IP \(bu +2n
+Uses
+.B nrrdApply2DLut
+.SH OPTIONS
+.TP
+.B \-m\fR\ <\fIlut\fR>\ ,\ \fB\-\-map\fR\ <\fIlut\fR>
+lookup table to map input
+.I nrrd
+through
+.TP
+.B \-r\fR\ <\fIbool\fR\ \fIbool\fR>\ ,\ \fB\-\-rescale\fR\ <\fIbool\fR\ \fIbool\fR>
+rescale one or both of the input values from the input range to the lut domain.
+The lut domain is either explicitly defined by the axis
+.IR min , max
+along axis
+.B 0
+or
+.BR 1 ,
+or, it is implicitly defined as zero to the length of that axis minus one.
+(2
+.IR bool s);
+default:
+.RB \(lq false\ false \(rq
+.TP
+.B \-min\fR\ <\fImin0\fR\ \fImin1\fR>\ ,\ \fB\-\-minimum\fR\ <\fImin0\fR\ \fImin1\fR>
+Low end of input range.
+Defaults to lowest values found in input
+.IR nrrd .
+Explicitly setting this is useful only with rescaling
+.RB (\(lq \-r \(rq)
+(2
+.IR double s)
+.TP
+.B \-max\fR\ <\fImax0\fR\ \fImax1\fR>\ ,\ \fB\-\-maximum\fR\ <\fImax0\fR\ \fImax1\fR>
+High end of input range.
+Defaults to highest values found in input
+.IR nrrd .
+Explicitly setting this is useful only with rescaling
+.RB (\(lq \-r \(rq)
+(2
+.IR double s)
+.TP
+.B \-blind8\fR\ <\fIbool\fR>
+Whether to know the range of 8-bit data blindly
+.RI ( uchar
+is always
+.BR [0,255] ,
+.I signed\ char
+is
+.BR [-128,127] ).
+Explicitly setting this is useful only with rescaling
+.RB (\(lq \-r \(rq)
+.RI ( bool );
+default:
+.RB \(lq true \(rq
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+specify the type
+.RB (\(lq int \(rq,
+.RB \(lq float \(rq,
+etc.) of the output
+.IR nrrd .
+By default (not using this option), the output type is the lut\(cqs type.
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-lut (1),
+.BR unu\-mlut (1)

@@ -1,0 +1,187 @@
+From fc49b2eecc0526ac58c029a011b3fb90383f98c7 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Wed, 8 Jan 2025 09:44:32 +0100
+Subject: [PATCH 1004/1005] Do not require Xdp
+
+This is used for Flatpak introspection. No need to depend on Xdp in the
+RPM package. We will never run in a sandboxed environment.
+
+Upstream uses this for checking that Bottles is running inside a Flatpak
+sandbox with `running_under_sandbox`. This patch removes the check,
+allowing us to drop the dependency on Xdp.
+
+Unfortunately, we will have to review this with every release.
+---
+ bottles/frontend/main.py                     |  2 --
+ bottles/frontend/views/bottle_details.py     | 17 ++----------
+ bottles/frontend/views/bottle_preferences.py |  5 +---
+ bottles/frontend/views/list.py               |  5 +---
+ bottles/frontend/views/new_bottle_dialog.py  |  4 +--
+ bottles/frontend/windows/window.py           | 28 +-------------------
+ 6 files changed, 7 insertions(+), 54 deletions(-)
+
+diff --git a/bottles/frontend/main.py b/bottles/frontend/main.py
+index ea3d7ad1..5a8ecd20 100644
+--- a/bottles/frontend/main.py
++++ b/bottles/frontend/main.py
+@@ -34,8 +34,6 @@ from bottles.frontend.params import (
+ gi.require_version("Gtk", "4.0")
+ gi.require_version("Adw", "1")
+ gi.require_version("GtkSource", "5")
+-gi.require_version("Xdp", "1.0")
+-# gi.require_version("XdpGtk4", "1.0")
+ 
+ # ruff: noqa: E402
+ from gi.repository import Gio, GLib, GObject, Adw  # type: ignore
+diff --git a/bottles/frontend/views/bottle_details.py b/bottles/frontend/views/bottle_details.py
+index 65667ea9..b4f151ea 100644
+--- a/bottles/frontend/views/bottle_details.py
++++ b/bottles/frontend/views/bottle_details.py
+@@ -21,7 +21,7 @@ from datetime import datetime
+ from gettext import gettext as _
+ from typing import List, Optional
+ 
+-from gi.repository import Gtk, Gio, Adw, Gdk, GLib, Xdp
++from gi.repository import Gtk, Gio, Adw, Gdk, GLib
+ 
+ from bottles.backend.managers.backup import BackupManager
+ from bottles.backend.models.config import BottleConfig
+@@ -436,20 +436,7 @@ class BottleView(Adw.PreferencesPage):
+             dialog.connect("response", execute)
+             dialog.show()
+ 
+-        if Xdp.Portal.running_under_sandbox():
+-            if self.window.settings.get_boolean("show-sandbox-warning"):
+-                dialog = Adw.MessageDialog.new(
+-                    self.window,
+-                    _("Be Aware of Sandbox"),
+-                    _(
+-                        "Bottles is running in a sandbox, a restricted permission environment needed to keep you safe. If the program won't run, consider moving inside the bottle (3 dots icon on the top), then launch from there."
+-                    ),
+-                )
+-                dialog.add_response("dismiss", _("_Dismiss"))
+-                dialog.connect("response", show_chooser)
+-                dialog.present()
+-            else:
+-                show_chooser()
++        show_chooser()
+ 
+     def __backup(self, widget, backup_type):
+         """
+diff --git a/bottles/frontend/views/bottle_preferences.py b/bottles/frontend/views/bottle_preferences.py
+index 0d450f29..eb67714a 100644
+--- a/bottles/frontend/views/bottle_preferences.py
++++ b/bottles/frontend/views/bottle_preferences.py
+@@ -20,7 +20,7 @@ import os
+ import re
+ from gettext import gettext as _
+ 
+-from gi.repository import Gtk, Adw, Xdp
++from gi.repository import Gtk, Adw
+ 
+ from bottles.backend.globals import (
+     gamemode_available,
+@@ -139,9 +139,6 @@ class PreferencesView(Adw.PreferencesPage):
+         self.queue = details.queue
+         self.details = details
+ 
+-        if not gamemode_available or not Xdp.Portal.running_under_sandbox():
+-            return
+-
+         _not_available = _("This feature is unavailable on your system.")
+         _flatpak_not_available = _(
+             "{} To add this feature, please run flatpak install"
+diff --git a/bottles/frontend/views/list.py b/bottles/frontend/views/list.py
+index 43ab9c22..a8f6c587 100644
+--- a/bottles/frontend/views/list.py
++++ b/bottles/frontend/views/list.py
+@@ -18,7 +18,7 @@
+ from datetime import datetime
+ from gettext import gettext as _
+ 
+-from gi.repository import Gtk, GLib, Adw, Xdp
++from gi.repository import Gtk, GLib, Adw
+ 
+ from bottles.backend.models.config import BottleConfig
+ from bottles.backend.models.result import Result
+@@ -82,9 +82,6 @@ class BottlesBottleRow(Adw.ActionRow):
+ 
+     def run_executable(self, *_args):
+         """Display file dialog for executable"""
+-        if not Xdp.Portal.running_under_sandbox():
+-            return
+-
+         def set_path(_dialog, response):
+             if response != Gtk.ResponseType.ACCEPT:
+                 return
+diff --git a/bottles/frontend/views/new_bottle_dialog.py b/bottles/frontend/views/new_bottle_dialog.py
+index 6774b10b..a34957eb 100644
+--- a/bottles/frontend/views/new_bottle_dialog.py
++++ b/bottles/frontend/views/new_bottle_dialog.py
+@@ -21,7 +21,7 @@ from threading import Event
+ from typing import Any, Optional
+ 
+ from bottles.backend.state import Task, TaskManager
+-from gi.repository import Gtk, Adw, Pango, Gio, Xdp, GObject, GLib
++from gi.repository import Gtk, Adw, Pango, Gio, GObject, GLib
+ 
+ from bottles.backend.models.config import BottleConfig
+ from bottles.backend.utils.threading import RunAsync
+@@ -86,7 +86,7 @@ class BottlesNewBottleDialog(Adw.Dialog):
+         super().__init__(**kwargs)
+         # common variables and references
+         self.window = GtkUtils.get_parent_window()
+-        if not self.window or not Xdp.Portal.running_under_sandbox():
++        if not self.window:
+             return
+ 
+         self.app = self.window.get_application()
+diff --git a/bottles/frontend/windows/window.py b/bottles/frontend/windows/window.py
+index 05c20092..f9625016 100644
+--- a/bottles/frontend/windows/window.py
++++ b/bottles/frontend/windows/window.py
+@@ -21,7 +21,7 @@ import webbrowser
+ from gettext import gettext as _
+ from typing import Optional
+ 
+-from gi.repository import Gtk, GLib, Gio, Adw, GObject, Gdk, Xdp
++from gi.repository import Gtk, GLib, Gio, Adw, GObject, Gdk
+ 
+ from bottles.backend.globals import Paths
+ from bottles.backend.health import HealthChecker
+@@ -111,32 +111,6 @@ class BottlesWindow(Adw.ApplicationWindow):
+             manager = Adw.StyleManager.get_default()
+             manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
+ 
+-        # Be VERY explicit that non-sandboxed environments are unsupported
+-        if not Xdp.Portal.running_under_sandbox():
+-
+-            def response(dialog, response, *args):
+-                if response == "close":
+-                    return
+-
+-            body = _(
+-                "Bottles developers (upstream) only support Flatpak. Please report any issues with the RPM package in"
+-            )
+-            bug_url = "bugz.fedoraproject.org/bottles"
+-
+-            error_dialog = Adw.AlertDialog.new(
+-                _("RPM Package Note"),
+-                f"{body} <a href='https://{bug_url}' title='https://{bug_url}'>Bugzilla.</a>"
+-            )
+-
+-            error_dialog.add_response("close", _("Understood"))
+-            error_dialog.set_body_use_markup(True)
+-            error_dialog.connect("response", response)
+-            error_dialog.present(self)
+-            logging.warn(_("Bottles is only supported within a sandboxed environment. Official sources of Bottles are available at:"))
+-            logging.warn("https://usebottles.com/download/")
+-            logging.warn(_("Please report any issues using the RPM package to:"))
+-            logging.warn("https://bugz.fedoraproject.org/bottles")
+-
+         # Loading view
+         self.page_loading = LoadingView()
+ 
+-- 
+2.51.0
+

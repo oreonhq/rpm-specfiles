@@ -1,0 +1,4 @@
+--- src/helpers/Text.cpp.orig	2009-02-23 12:32:09.000000000 -0600
++++ src/helpers/Text.cpp	2009-02-23 12:32:10.000000000 -0600
+@@ -21,0 +22 @@
++#include <cstdio>

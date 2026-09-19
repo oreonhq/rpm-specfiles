@@ -1,5 +1,5 @@
-%global source0_hash 030413280971d17decff54f02ac44749010eb127fa684033e811417e391eb84d
-%global source1_hash 95c51411a1789104ae9af10578783078bda28e82216219d6e6b9d451a2b80b58
+%global source0_hash 377a23e36c9f5cdcd9de36b338defcea19bce677c80e542777aeb05529c2b3b4a0a92e2c750a20c4ba21aee484968c9b6aecfeb202729a1b7a63fbb93755632e
+%global source1_hash 823ae73016fc6b40ea5d45e033aa12963d866c5406fc421462a48137d6737b64c98f470ac0710f595812136107dfc6a7c1884d94f342cf228120e3c7db460960
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Enhanced theorem environment
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ntheorem.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ntheorem.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ntheorem.tar.xz#/ntheorem.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ntheorem.doc.tar.xz#/ntheorem.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-ntheorem-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-ntheorem-doc <= 11:%{version}
@@ -23,8 +23,8 @@ Provides:       tex(ntheorem.sty)
 Enhanced theorem environment.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

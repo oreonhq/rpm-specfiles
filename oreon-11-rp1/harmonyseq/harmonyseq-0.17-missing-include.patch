@@ -1,0 +1,496 @@
+diff --git a/src/Action.cpp b/src/Action.cpp
+index c29306c..c5df403 100644
+--- a/src/Action.cpp
++++ b/src/Action.cpp
+@@ -19,6 +19,9 @@
+ 
+ #include "Action.hpp"
+ 
++#include <functional>
++#include <memory>
++
+ #include "ControlSequencer.hpp"
+ #include "Files.hpp"
+ #include "Engine.hpp"
+diff --git a/src/Action.hpp b/src/Action.hpp
+index 0c54b2c..f715b84 100644
+--- a/src/Action.hpp
++++ b/src/Action.hpp
+@@ -20,8 +20,8 @@
+ #ifndef ACTION_H
+ #define	ACTION_H
+ 
+-#include <vector>
+ #include <memory>
++#include <vector>
+ 
+ #include "Chord.hpp"
+ 
+diff --git a/src/ActionEditor.cpp b/src/ActionEditor.cpp
+index d109064..eddea80 100644
+--- a/src/ActionEditor.cpp
++++ b/src/ActionEditor.cpp
+@@ -19,6 +19,9 @@
+ 
+ #include "ActionEditor.hpp"
+ 
++#include <functional>
++#include <memory>
++
+ #include "Action.hpp"
+ #include "Files.hpp"
+ #include "NoteSequencer.hpp"
+diff --git a/src/ActionEditor.hpp b/src/ActionEditor.hpp
+index b742803..41fdea6 100644
+--- a/src/ActionEditor.hpp
++++ b/src/ActionEditor.hpp
+@@ -21,6 +21,7 @@
+ #define	ACTIONEDITOR_H
+ 
+ #include <memory>
++
+ #include <gtkmm.h>
+ 
+ #include "Chord.hpp"
+diff --git a/src/AtomContainer.cpp b/src/AtomContainer.cpp
+index 38ed8d6..00ae4e2 100644
+--- a/src/AtomContainer.cpp
++++ b/src/AtomContainer.cpp
+@@ -20,6 +20,8 @@
+ #include "AtomContainer.hpp"
+ 
+ #include <algorithm>
++#include <set>
++#include <vector>
+ 
+ AtomContainer::AtomContainer(){
+ }
+diff --git a/src/Chord.cpp b/src/Chord.cpp
+index db7df22..e822f2f 100644
+--- a/src/Chord.cpp
++++ b/src/Chord.cpp
+@@ -21,6 +21,9 @@
+ #include "Chord.hpp"
+ 
+ #include <iostream>
++#include <map>
++#include <string>
++#include <vector>
+ 
+ #include "shared.hpp"
+ 
+diff --git a/src/Chord.hpp b/src/Chord.hpp
+index b6aba4c..686e519 100644
+--- a/src/Chord.hpp
++++ b/src/Chord.hpp
+@@ -22,6 +22,7 @@
+ #define	CHORD_H
+ 
+ #include <map>
++#include <string>
+ #include <vector>
+ 
+ #include <boost/signals2.hpp>
+diff --git a/src/ChordWidget.cpp b/src/ChordWidget.cpp
+index 98ec103..e7ba0f5 100644
+--- a/src/ChordWidget.cpp
++++ b/src/ChordWidget.cpp
+@@ -19,6 +19,10 @@
+ 
+ #include "ChordWidget.hpp"
+ 
++#include <functional>
++#include <memory>
++#include <vector>
++
+ #include "Chord.hpp"
+ #include "Sequencer.hpp"
+ #include "TreeModels.hpp"
+diff --git a/src/ChordWidget.hpp b/src/ChordWidget.hpp
+index f0766f0..ae0bb41 100644
+--- a/src/ChordWidget.hpp
++++ b/src/ChordWidget.hpp
+@@ -20,6 +20,8 @@
+ #ifndef CHORDWIDGET_H
+ #define	CHORDWIDGET_H
+ 
++#include <vector>
++
+ #include <gtkmm.h>
+ 
+ #include <boost/signals2.hpp>
+diff --git a/src/DiodeMidiEvent.cpp b/src/DiodeMidiEvent.cpp
+index f50ef8a..6c8b8ea 100644
+--- a/src/DiodeMidiEvent.cpp
++++ b/src/DiodeMidiEvent.cpp
+@@ -19,6 +19,8 @@
+ 
+ #include "DiodeMidiEvent.hpp"
+ 
++#include <memory>
++
+ 
+ DiodeMidiEvent::DiodeMidiEvent(std::weak_ptr<Sequencer> target_, DiodeType type_, double time_, int value_, int color_, int max_res_){
+     target = target_;
+diff --git a/src/Engine.cpp b/src/Engine.cpp
+index 060ab73..17190f6 100644
+--- a/src/Engine.cpp
++++ b/src/Engine.cpp
+@@ -19,7 +19,12 @@
+ 
+ #include "Engine.hpp"
+ 
++#include <algorithm>
+ #include <iostream>
++#include <map>
++#include <memory>
++#include <utility>
++#include <vector>
+ 
+ #include "AtomContainer.hpp"
+ #include "Configuration.hpp"
+diff --git a/src/Engine.hpp b/src/Engine.hpp
+index 282189e..9ef0914 100644
+--- a/src/Engine.hpp
++++ b/src/Engine.hpp
+@@ -22,6 +22,10 @@
+ #ifndef MIDIDRIVER_H
+ #define	MIDIDRIVER_H
+ 
++#include <atomic>
++#include <deque>
++#include <map>
++
+ #include <boost/signals2.hpp>
+ namespace bs2 = boost::signals2;
+ 
+diff --git a/src/Event.cpp b/src/Event.cpp
+index 0282a63..aa53923 100644
+--- a/src/Event.cpp
++++ b/src/Event.cpp
+@@ -20,6 +20,8 @@
+ #include "Event.hpp"
+ 
+ #include <iostream>
++#include <string>
++#include <vector>
+ 
+ #include <gtkmm.h>
+ 
+diff --git a/src/Event.hpp b/src/Event.hpp
+index 5e545ed..3ccb4dd 100644
+--- a/src/Event.hpp
++++ b/src/Event.hpp
+@@ -20,8 +20,8 @@
+ #ifndef EVENT_H
+ #define	EVENT_H
+ 
+-#include <vector>
+ #include <string>
++#include <vector>
+ 
+ #include <boost/signals2.hpp>
+ namespace bs2 = boost::signals2;
+diff --git a/src/EventEditor.cpp b/src/EventEditor.cpp
+index 4c03261..8360d59 100644
+--- a/src/EventEditor.cpp
++++ b/src/EventEditor.cpp
+@@ -19,6 +19,8 @@
+ 
+ #include "EventEditor.hpp"
+ 
++#include <functional>
++
+ #include "Configuration.hpp"
+ #include "Event.hpp"
+ #include "Files.hpp"
+diff --git a/src/EventsWidget.cpp b/src/EventsWidget.cpp
+index b815f03..e51c3a1 100644
+--- a/src/EventsWidget.cpp
++++ b/src/EventsWidget.cpp
+@@ -19,6 +19,9 @@
+ 
+ #include "EventsWidget.hpp"
+ 
++#include <functional>
++#include <vector>
++
+ #include "Action.hpp"
+ #include "Event.hpp"
+ #include "Files.hpp"
+diff --git a/src/EventsWidget.hpp b/src/EventsWidget.hpp
+index a971399..6ac71e8 100644
+--- a/src/EventsWidget.hpp
++++ b/src/EventsWidget.hpp
+@@ -21,6 +21,8 @@
+ #ifndef EVENTSWIDGET_H
+ #define	EVENTSWIDGET_H
+ 
++#include <vector>
++
+ #include <gtkmm.h>
+ 
+ #include <boost/signals2.hpp>
+diff --git a/src/Files.cpp b/src/Files.cpp
+index 070a476..d517a14 100644
+--- a/src/Files.cpp
++++ b/src/Files.cpp
+@@ -21,6 +21,10 @@
+ 
+ #include <fstream>
+ #include <iostream>
++#include <map>
++#include <memory>
++#include <string>
++#include <vector>
+ 
+ #include <gtkmm.h>
+ 
+diff --git a/src/MainWindow.cpp b/src/MainWindow.cpp
+index a32c2ae..394aaa1 100644
+--- a/src/MainWindow.cpp
++++ b/src/MainWindow.cpp
+@@ -19,7 +19,11 @@
+ 
+ #include "MainWindow.hpp"
+ 
++#include <algorithm>
++#include <functional>
+ #include <iostream>
++#include <memory>
++#include <vector>
+ 
+ #include "Configuration.hpp"
+ #include "ControlSequencer.hpp"
+diff --git a/src/NoteWidget.cpp b/src/NoteWidget.cpp
+index 0f0bbd2..4f62764 100644
+--- a/src/NoteWidget.cpp
++++ b/src/NoteWidget.cpp
+@@ -20,6 +20,8 @@
+ #include "NoteWidget.hpp"
+ 
+ #include <algorithm>
++#include <functional>
++#include <string>
+ 
+ #include "Chord.hpp"
+ 
+diff --git a/src/PatternWidget.cpp b/src/PatternWidget.cpp
+index 9371be1..b88d524 100644
+--- a/src/PatternWidget.cpp
++++ b/src/PatternWidget.cpp
+@@ -19,6 +19,12 @@
+ 
+ #include "PatternWidget.hpp"
+ 
++#include <algorithm>
++#include <functional>
++#include <memory>
++#include <set>
++#include <vector>
++
+ /* TODO: Replace gettimeofday with more portable GetRealTime which uses Glib. */
+ #include <sys/time.h>
+ 
+diff --git a/src/PatternWidget.hpp b/src/PatternWidget.hpp
+index 234ba8d..e642bca 100644
+--- a/src/PatternWidget.hpp
++++ b/src/PatternWidget.hpp
+@@ -21,6 +21,7 @@
+ #define	PATTERNWIDGET_H
+ 
+ #include <memory>
++#include <set>
+ 
+ #include <gtkmm.h>
+ 
+diff --git a/src/Sequencer.cpp b/src/Sequencer.cpp
+index 536a21a..35fc450 100644
+--- a/src/Sequencer.cpp
++++ b/src/Sequencer.cpp
+@@ -19,6 +19,9 @@
+ 
+ #include "Sequencer.hpp"
+ 
++#include <algorithm>
++#include <memory>
++
+ #include "AtomContainer.hpp"
+ 
+ 
+diff --git a/src/Sequencer.hpp b/src/Sequencer.hpp
+index 0a0089a..63b9d13 100644
+--- a/src/Sequencer.hpp
++++ b/src/Sequencer.hpp
+@@ -21,6 +21,8 @@
+ #ifndef SEQUENCER_H
+ #define	SEQUENCER_H
+ 
++#include <vector>
++
+ #include <boost/signals2.hpp>
+ namespace bs2 = boost::signals2;
+ 
+diff --git a/src/SequencerManager.cpp b/src/SequencerManager.cpp
+index 81436fa..7b1f9e2 100644
+--- a/src/SequencerManager.cpp
++++ b/src/SequencerManager.cpp
+@@ -21,6 +21,8 @@
+ #include "SequencerManager.hpp"
+ 
+ #include <algorithm>
++#include <mutex>
++#include <vector>
+ 
+ 
+ std::vector<std::shared_ptr<Sequencer>> SequencerManager::sequencers;
+diff --git a/src/SequencerManager.hpp b/src/SequencerManager.hpp
+index 603c893..cc74208 100644
+--- a/src/SequencerManager.hpp
++++ b/src/SequencerManager.hpp
+@@ -21,8 +21,8 @@
+ */
+ 
+ 
+-#include <vector>
+ #include <mutex>
++#include <vector>
+ 
+ #include <boost/signals2.hpp>
+ namespace bs2 = boost::signals2;
+diff --git a/src/SequencerWidget.cpp b/src/SequencerWidget.cpp
+index 0f100e5..7e7684f 100644
+--- a/src/SequencerWidget.cpp
++++ b/src/SequencerWidget.cpp
+@@ -19,6 +19,9 @@
+ 
+ #include "SequencerWidget.hpp"
+ 
++#include <functional>
++#include <memory>
++
+ #include "AtomContainer.hpp"
+ #include "ControlSequencer.hpp"
+ #include "Files.hpp"
+diff --git a/src/SequencerWidget.hpp b/src/SequencerWidget.hpp
+index 4758901..cdf0ac7 100644
+--- a/src/SequencerWidget.hpp
++++ b/src/SequencerWidget.hpp
+@@ -19,6 +19,8 @@
+ #ifndef SEQUENCERWIDGET_H
+ #define	SEQUENCERWIDGET_H
+ 
++#include <vector>
++
+ #include <boost/signals2.hpp>
+ namespace bs2 = boost::signals2;
+ 
+diff --git a/src/SettingsWindow.cpp b/src/SettingsWindow.cpp
+index f13300e..b2fdde0 100644
+--- a/src/SettingsWindow.cpp
++++ b/src/SettingsWindow.cpp
+@@ -19,6 +19,8 @@
+ 
+ #include "SettingsWindow.hpp"
+ 
++#include <functional>
++
+ #include "Configuration.hpp"
+ #include "shared.hpp"
+ 
+diff --git a/src/TreeModels.cpp b/src/TreeModels.cpp
+index e1e52a4..90eb709 100644
+--- a/src/TreeModels.cpp
++++ b/src/TreeModels.cpp
+@@ -19,6 +19,9 @@
+ 
+ #include "TreeModels.hpp"
+ 
++#include <map>
++#include <string>
++
+ #include "Action.hpp"
+ #include "Event.hpp"
+ #include "shared.hpp"
+diff --git a/src/TreeModels.hpp b/src/TreeModels.hpp
+index d63cff3..252bc7f 100644
+--- a/src/TreeModels.hpp
++++ b/src/TreeModels.hpp
+@@ -20,6 +20,8 @@
+ #ifndef TREEMODELS_H
+ #define	TREEMODELS_H
+ 
++#include <vector>
++
+ #include <boost/signals2.hpp>
+ namespace bs2 = boost::signals2;
+ 
+diff --git a/src/UIMain.cpp b/src/UIMain.cpp
+index 86a191a..8c1b47a 100644
+--- a/src/UIMain.cpp
++++ b/src/UIMain.cpp
+@@ -17,8 +17,11 @@
+     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
++#include <chrono>
+ #include <deque>
++#include <functional>
+ #include <mutex>
++#include <string>
+ #include <thread>
+ 
+ #include <gtkmm.h>
+diff --git a/src/main.cpp b/src/main.cpp
+index a32348f..e6135c0 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -17,8 +17,10 @@
+     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
++#include <map>
+ #include <string>
+ #include <thread>
++#include <vector>
+ 
+ #include <getopt.h>
+ #include <iostream>
+diff --git a/src/resources.cpp b/src/resources.cpp
+index acd5314..e550927 100644
+--- a/src/resources.cpp
++++ b/src/resources.cpp
+@@ -19,6 +19,8 @@
+ 
+ #include "resources.hpp"
+ 
++#include <string>
++
+ Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
+ Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
+ Glib::RefPtr< Gdk::Pixbuf > icon_add_note_seq;
+diff --git a/src/resources.hpp b/src/resources.hpp
+index 81b25de..36f5a8a 100644
+--- a/src/resources.hpp
++++ b/src/resources.hpp
+@@ -20,6 +20,8 @@
+ #ifndef RESOURCES_HPP
+ #define RESOURCES_HPP
+ 
++#include <string>
++
+ #include <glibmm/ustring.h>
+ #include <gdkmm/pixbuf.h>
+ 
+diff --git a/src/shared.hpp b/src/shared.hpp
+index 3fc5e00..6bb5e04 100644
+--- a/src/shared.hpp
++++ b/src/shared.hpp
+@@ -1,6 +1,7 @@
+ #ifndef SHARED_HPP
+ #define SHARED_HPP
+ 
++#include <functional>
+ #include <map>
+ #include <string>
+ #include <functional>

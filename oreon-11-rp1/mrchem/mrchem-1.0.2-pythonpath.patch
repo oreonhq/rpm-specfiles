@@ -1,0 +1,24 @@
+diff -up mrchem-1.0.2/python/mrchem.in.pythonpath mrchem-1.0.2/python/mrchem.in
+--- mrchem-1.0.2/python/mrchem.in.pythonpath	2021-10-14 03:36:42.000000000 -0400
++++ mrchem-1.0.2/python/mrchem.in	2021-12-25 15:25:46.001499205 -0500
+@@ -30,20 +30,6 @@ import sys
+ from json import dumps
+ from pathlib import Path
+ 
+-this_path = Path(__file__).parent
+-# import the MRChem Python frontend module
+-mod_install_tree = Path("@CMAKE_INSTALL_PREFIX@/lib/@PYMOD_INSTALL_LIBDIR@")
+-mod_build_tree = Path("@CMAKE_BINARY_DIR@/lib/@PYMOD_INSTALL_LIBDIR@")
+-if Path("@CMAKE_BINARY_DIR@") in this_path.parents:
+-    sys.path.append(str(mod_build_tree))
+-else:
+-    if mod_install_tree.exists():
+-        sys.path.append(str(mod_install_tree))
+-    elif mod_build_tree.exists():
+-        sys.path.append(str(mod_build_tree))
+-    else:
+-        raise RuntimeError("MRChem Python frontend module not found!")
+-
+ from mrchem import cli, parse, translate_input, validate
+ 
+ 

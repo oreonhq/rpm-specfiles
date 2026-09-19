@@ -1,0 +1,12 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 0777d9a..44d5b94 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -19,7 +19,6 @@ dependencies = [
+     'pyopenssl >= 24.0.0',
+     'pem >= 23.1.0',
+     'certifi >= 2018.10.15',
+-    'python-magic'
+ ]
+ authors = [
+   { name="Yaroslav Polyakov", email="yaroslaff@gmail.com" },

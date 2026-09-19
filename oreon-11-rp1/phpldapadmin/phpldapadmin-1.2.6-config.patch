@@ -1,0 +1,40 @@
+diff -Nrbu phpLDAPadmin-1.2.6/config/config.php phpLDAPadmin-1.2.6-OK/config/config.php
+--- phpLDAPadmin-1.2.6/config/config.php	2020-12-11 18:28:04.246637744 +0300
++++ phpLDAPadmin-1.2.6-OK/config/config.php	2020-12-11 18:27:32.178637283 +0300
+@@ -77,6 +77,11 @@
+    30 seconds or the setting of max_exection_time if this is null. */
+ // $config->custom->session['timelimit'] = 30;
+ 
++// $config->custom->appearance['show_clear_password'] = false;
++
++// $config->custom->search['size_limit'] = 50;
++#  $config->custom->search['size_limit'] = 1000;
++
+ /* Our local timezone
+    This is to make sure that when we ask the system for the current time, we
+    get the right local time. If this is not set, all time() calculations will
+@@ -287,7 +292,7 @@
+ 
+ /* A convenient name that will appear in the tree viewer and throughout
+    phpLDAPadmin to identify this LDAP server to users. */
+-$servers->setValue('server','name','My LDAP Server');
++$servers->setValue('server','name','Local LDAP Server');
+ 
+ /* Examples:
+    'ldap.example.com',
+@@ -389,6 +394,7 @@
+ /* Default password hashing algorithm. One of md5, ssha, sha, md5crpyt, smd5,
+    blowfish, crypt or leave blank for now default algorithm. */
+ // $servers->setValue('appearance','pla_password_hash','md5');
++$servers->setValue('appearance','pla_password_hash','');
+ 
+ /* If you specified 'cookie' or 'session' as the auth_type above, you can
+    optionally specify here an attribute to use when logging in. If you enter
+@@ -398,6 +404,7 @@
+    your LDAP server requires you to login to perform searches, you can enter the
+    DN to use when searching in 'bind_id' and 'bind_pass' above. */
+ // $servers->setValue('login','attr','dn');
++$servers->setValue('login','attr','uid');
+ 
+ /* Base DNs to used for logins. If this value is not set, then the LDAP server
+    Base DNs are used. */

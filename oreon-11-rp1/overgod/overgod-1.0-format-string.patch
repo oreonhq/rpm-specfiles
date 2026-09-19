@@ -1,0 +1,186 @@
+diff -up overgod-1.0/displ_in.c~ overgod-1.0/displ_in.c
+--- overgod-1.0/displ_in.c~	2014-06-15 14:22:08.000000000 +0200
++++ overgod-1.0/displ_in.c	2014-06-15 14:23:39.370556892 +0200
+@@ -1296,7 +1296,7 @@ void progress_update(const char progtxt
+  rectfill(screen, 400, 117, 450, 118, COLOUR_YELLOW8);
+  rectfill(screen, 449, 117, 450, ypos + 5, COLOUR_YELLOW8);
+  hline(screen, 449, ypos + 5, 433, COLOUR_YELLOW8);
+- textprintf_right_ex(screen, small_font, 430, ypos, COLOUR_GREEN8, -1, progtxt);
++ textprintf_right_ex(screen, small_font, 430, ypos, COLOUR_GREEN8, -1, "%s", progtxt);
+  ypos += 11; 
+ // do {rest(30);} while (!key [KEY_X]);
+ // rest(200);
+diff -up overgod-1.0/display.c~ overgod-1.0/display.c
+--- overgod-1.0/display.c~	2014-06-15 14:22:08.000000000 +0200
++++ overgod-1.0/display.c	2014-06-15 14:25:03.768428075 +0200
+@@ -1666,9 +1666,9 @@ secondary - red
+  char dstr [30];
+  secondary_name(actor[a].secondary, dstr);
+  if (game.users == 1)
+-  textprintf_ex(bmp, small_font, x + 250, y + 20, COLOUR_YELLOW6, -1, dstr);
++  textprintf_ex(bmp, small_font, x + 250, y + 20, COLOUR_YELLOW6, -1, "%s", dstr);
+    else 
+-    textprintf_ex(bmp, small_font, x + 220, y, COLOUR_YELLOW6, -1, dstr);
++    textprintf_ex(bmp, small_font, x + 220, y, COLOUR_YELLOW6, -1, "%s", dstr);
+  
+ }
+ 
+@@ -6738,7 +6738,7 @@ void draw_a_pickup(BITMAP *bmp, int dr,
+      circle(bmp, x, y, 3 + x2 / 2, x1);
+      drawing_mode(DRAW_MODE_SOLID, NULL, 0, 0);
+      secondary_name(pickup[dr].subtype, dstr);
+-     textprintf_centre_ex(bmp, small_font, x, y + 12, COLOUR_GREY3, -1, dstr);
++     textprintf_centre_ex(bmp, small_font, x, y + 12, COLOUR_GREY3, -1, "%s", dstr);
+     break;
+     case PICKUP_SECONDARY:
+      x1 = TRANS_DGREY;
+@@ -6754,7 +6754,7 @@ void draw_a_pickup(BITMAP *bmp, int dr,
+      drawing_mode(DRAW_MODE_SOLID, NULL, 0, 0);
+      circlefill(bmp, x, y, 3 + pulsate(64, 2, counter), COLOUR_YELLOW4 + pulsate(64, 3, counter));
+      secondary_name(pickup[dr].subtype, dstr);
+-     textprintf_centre_ex(bmp, small_font, x, y + 12, COLOUR_YELLOW4 + pulsate(16, 2, counter), -1, dstr);
++     textprintf_centre_ex(bmp, small_font, x, y + 12, COLOUR_YELLOW4 + pulsate(16, 2, counter), -1, "%s", dstr);
+      draw_a_light(bmp, 10 + pulsate(64, 5, counter), x, y);
+      break;    
+   case PICKUP_REPAIR:
+diff -up overgod-1.0/menu.c~ overgod-1.0/menu.c
+--- overgod-1.0/menu.c~	2014-06-15 14:27:24.000000000 +0200
++++ overgod-1.0/menu.c	2014-06-16 15:32:53.386190607 +0200
+@@ -1186,7 +1186,7 @@ void menu_display_options(void)
+ 
+    }
+ 
+-   textprintf_right_ex(menu_bmp, small_font, ox, oys + oy * i, col, -1, ostr);
++   textprintf_right_ex(menu_bmp, small_font, ox, oys + oy * i, col, -1, "%s", ostr);
+ 
+   }
+ 
+@@ -1390,7 +1390,7 @@ void menu_display_duel(void)
+ 
+    }
+ 
+-   textprintf_centre_ex(menu_bmp, small_font, ox, oys + oy * i, col, -1, ostr);
++   textprintf_centre_ex(menu_bmp, small_font, ox, oys + oy * i, col, -1, "%s", ostr);
+ 
+   }
+ 
+@@ -1517,7 +1517,7 @@ void menu_display_special(void)
+      strcpy(ostr, "Exit");
+      break;
+    }
+-   textprintf_centre_ex(menu_bmp, small_font, ox, oys + oy * i, col, -1, ostr);
++   textprintf_centre_ex(menu_bmp, small_font, ox, oys + oy * i, col, -1, "%s", ostr);
+ 
+   }
+ 
+@@ -2466,9 +2466,9 @@ void display_ship_choice2(int ship, int
+ // textprintf_ex(menu_bmp, font2, 280, y + 20, COLOUR_WHITE, "%i", ship);
+ 
+    ship_description1(ship, descr_string);
+-   textprintf_centre_ex(menu_bmp, small_font, 436, y + 70, COLOUR_YELLOW7, -1, descr_string);
++   textprintf_centre_ex(menu_bmp, small_font, 436, y + 70, COLOUR_YELLOW7, -1, "%s", descr_string);
+    ship_description2(ship, descr_string);
+-   textprintf_centre_ex(menu_bmp, small_font, 436, y + 80, COLOUR_YELLOW7, -1, descr_string);
++   textprintf_centre_ex(menu_bmp, small_font, 436, y + 80, COLOUR_YELLOW7, -1, "%s", descr_string);
+ /*
+  int line_colour = 255;
+  int box_colour = 255;
+@@ -2588,7 +2588,7 @@ void menu_display_scores(void)
+     col = COLOUR_YELLOW4 + (menu_counter / 4) % 4;
+ 
+    strcpy(sstr, hs_single[i].name);
+-   textprintf_ex(menu_bmp, small_font, ox, oys + oy * i, col, -1, sstr);
++   textprintf_ex(menu_bmp, small_font, ox, oys + oy * i, col, -1, "%s", sstr);
+ 
+    if (hs_single[i].level == 16)
+     strcpy(sstr, "<V>");
+@@ -2598,7 +2598,7 @@ void menu_display_scores(void)
+        strcpy(sstr, "");
+        anum(sstr, hs_single[i].level);
+       } 
+-   textprintf_right_ex(menu_bmp, small_font, ox + 90, oys + oy * i, col, -1, sstr);
++   textprintf_right_ex(menu_bmp, small_font, ox + 90, oys + oy * i, col, -1, "%s", sstr);
+ 
+ //   strcpy(sstr, ship_name_short(hs_single[i].ship));
+ //   textprintf_right_ex(menu_bmp, small_font, ox + 190, oys + oy * i, col, -1, sstr);
+@@ -2611,7 +2611,7 @@ void menu_display_scores(void)
+    rank_name(get_rank(hs_single[i].score, hs_single[i].level), sstr);
+    if (hs_single[i].level == 16)
+     col = COLOUR_YELLOW8;
+-   textprintf_ex(menu_bmp, small_font, ox + 220, oys + oy * i, col, -1, sstr);
++   textprintf_ex(menu_bmp, small_font, ox + 220, oys + oy * i, col, -1, "%s", sstr);
+ 
+ 
+   }
+@@ -2638,7 +2638,7 @@ void menu_display_scores(void)
+     col = COLOUR_YELLOW4 + (menu_counter / 2) % 4;
+ 
+    strcpy(sstr, hs_coop[i].name);
+-   textprintf_ex(menu_bmp, small_font, ox, oys + oy * i, col, -1, sstr);
++   textprintf_ex(menu_bmp, small_font, ox, oys + oy * i, col, -1, "%s", sstr);
+ 
+    if (hs_coop[i].level == 16)
+     strcpy(sstr, "<V>");
+@@ -2654,7 +2654,7 @@ void menu_display_scores(void)
+     textprintf_right_ex(menu_bmp, small_font, ox + 106, oys + oy * i, COLOUR_WHITE, -1, "v");
+    if (game.mode_god == 1)
+     textprintf_right_ex(menu_bmp, small_font, ox + 114, oys + oy * i, COLOUR_WHITE, -1, "g");*/
+-   textprintf_right_ex(menu_bmp, small_font, ox + 90, oys + oy * i, col, -1, sstr);
++   textprintf_right_ex(menu_bmp, small_font, ox + 90, oys + oy * i, col, -1, "%s", sstr);
+ 
+ //   strcpy(sstr, ship_name_short(hs_coop[i].ship));
+ //   textprintf_right_ex(menu_bmp, small_font, ox + 190, oys + oy * i, col, -1, sstr);
+@@ -2667,7 +2667,7 @@ void menu_display_scores(void)
+    if (hs_coop[i].level == 16)
+     col = COLOUR_YELLOW8;
+    rank_name(get_rank(hs_coop[i].score, hs_coop[i].level), sstr);
+-   textprintf_ex(menu_bmp, small_font, ox + 220, oys + oy * i, col, -1, sstr);
++   textprintf_ex(menu_bmp, small_font, ox + 220, oys + oy * i, col, -1, "%s", sstr);
+ 
+   }
+ 
+@@ -3594,7 +3594,7 @@ void jam_keys(void)
+    if (key [i] != 0)
+    {
+     scancode_to_keyname(i, sstr);
+-    textprintf_ex(menu_bmp, small_font, 200, 250 + row * 10, COLOUR_ORANGE8, -1, sstr);
++    textprintf_ex(menu_bmp, small_font, 200, 250 + row * 10, COLOUR_ORANGE8, -1, "%s", sstr);
+     row ++;
+    }
+   }
+diff -up overgod-1.0/enemy.c~ overgod-1.0/enemy.c
+--- overgod-1.0/enemy.c~	2014-06-16 15:33:55.000000000 +0200
++++ overgod-1.0/enemy.c	2014-06-16 15:35:10.006078820 +0200
+@@ -3737,7 +3737,7 @@ void standard_attack(int e, int angle)
+  int speed_rand = 0;
+  int speed_div = 5;
+  int mass;
+- int status;
++ int status = 0;
+  int displaced = 0;
+  int colours [4] = {GC_GREEN8, GC_GREEN6, GC_GREEN4, GC_GREEN2};
+  int colours_for_cloud [5] = {GC_GREEN8, GC_GREEN6, GC_GREEN4, GC_GREEN2, GC_GREEN1};
+diff -up overgod-1.0/stuff.c~ overgod-1.0/stuff.c
+--- overgod-1.0/stuff.c~	2005-09-11 09:35:48.000000000 +0200
++++ overgod-1.0/stuff.c	2014-06-16 15:35:27.811625805 +0200
+@@ -167,7 +167,7 @@ int pulsate(int speed, int amount, int c
+ void error_message_out(const char *errm)
+ {
+       set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+-      allegro_message(errm);
++      allegro_message("%s", errm);
+       exit(1);
+ }
+ 
+diff -up overgod-1.0/tile.c~ overgod-1.0/tile.c
+--- overgod-1.0/tile.c~	2014-06-16 15:33:55.000000000 +0200
++++ overgod-1.0/tile.c	2014-06-16 15:35:43.700226820 +0200
+@@ -1104,7 +1104,7 @@ BITMAP *make_bmp(int x, int y, const cha
+ void tile_progress_update(const char progtxt [])
+ {
+  static int ypos = 10, xpos = 10;
+- textprintf_centre_ex(screen, small_font, 320, ypos, COLOUR_GREEN8, -1, progtxt);
++ textprintf_centre_ex(screen, small_font, 320, ypos, COLOUR_GREEN8, -1, "%s", progtxt);
+  ypos += 10;  
+  if (ypos > 470)
+  {

@@ -1,0 +1,99 @@
+--- cryptominisat-release-5.13.0/MANIFEST.in.orig	2025-04-19 13:14:50.000000000 -0600
++++ cryptominisat-release-5.13.0/MANIFEST.in	2025-04-24 16:18:11.679181031 -0600
+@@ -3,5 +3,4 @@ global-exclude *.timeout
+ global-exclude *.in
+ global-exclude *.txt
+ recursive-include src/ *.h *.hpp
+-recursive-include src/picosat/ *.h *.hpp
+ recursive-include src/oracle/ *.h *.hpp
+--- cryptominisat-release-5.13.0/setup.py.orig	2025-04-19 13:14:50.000000000 -0600
++++ cryptominisat-release-5.13.0/setup.py	2025-04-24 16:18:11.679551772 -0600
+@@ -33,15 +33,6 @@ def _parse_toml(pyproject_path):
+     pyproject_data = toml.loads(pyproject_text)
+     return pyproject_data['project']['version']
+ 
+-picosatlib = ('picosatlib', {
+-    'sources': [
+-               "src/mpicosat/mpicosat.c",
+-               "src/mpicosat/version.c"],
+-    'language' : "c",
+-    'define_macros' : [("TRACE", "ON")],
+-    'include_dirs' : ["src/mpicosat/"]
+-    })
+-
+ 
+ def gen_modules(version):
+     define_macros_val : list[tuple[str, str | None]] | None
+@@ -106,6 +97,7 @@ def gen_modules(version):
+         extra_compile_args = extra_compile_args_val,
+         define_macros=define_macros_val,
+         language = "c++",
++        libraries = ['picosat-trace'],
+     )
+     return modules
+ 
+@@ -116,5 +108,4 @@ if __name__ == '__main__':
+     # package_data = {'pycryptosat': ['*.so', '*.dll', '*.dylib']}
+     setup(
+         ext_modules =  [modules],
+-        libraries = [picosatlib],
+     )
+--- cryptominisat-release-5.13.0/src/CMakeLists.txt.orig	2025-04-19 13:14:50.000000000 -0600
++++ cryptominisat-release-5.13.0/src/CMakeLists.txt	2025-04-25 08:41:20.197200800 -0600
+@@ -145,8 +145,6 @@ set(cryptoms_lib_files
+     gaussian.cpp
+     packedrow.cpp
+     matrixfinder.cpp
+-    mpicosat/mpicosat.c
+-    mpicosat/version.c
+     oracle/oracle.cpp
+     ${CMAKE_CURRENT_BINARY_DIR}/GitSHA1.cpp
+ )
+@@ -169,7 +167,7 @@ if (GPU)
+     )
+ endif()
+ 
+-set(cryptoms_lib_link_libs "")
++set(cryptoms_lib_link_libs picosat-trace)
+ 
+ set(cryptoms_lib_link_libs
+         ${cryptoms_lib_link_libs}
+@@ -270,7 +268,7 @@ endif()
+ 
+ # indicate that we depend on pthread, and compile in the actual library
+ target_link_libraries(cryptominisat5
+-    LINK_PUBLIC ${cryptoms_lib_link_libs}
++    LINK_PRIVATE ${cryptoms_lib_link_libs}
+     LINK_PUBLIC ${LOUVAIN_COMMUNITIES_LIBRARIES}
+     LINK_PUBLIC ${CMAKE_THREAD_LIBS_INIT}
+     LINK_PUBLIC ${GMP_LIBRARIES}
+@@ -324,7 +322,6 @@ if (IPASIR)
+ endif()
+ 
+ cmsat_add_public_header(cryptominisat5 ${CMAKE_CURRENT_SOURCE_DIR}/cryptominisat_c.h )
+-cmsat_add_public_header(cryptominisat5 ${CMAKE_CURRENT_SOURCE_DIR}/mpicosat/mpicosat.h )
+ cmsat_add_public_header(cryptominisat5 ${CMAKE_CURRENT_SOURCE_DIR}/cryptominisat.h )
+ cmsat_add_public_header(cryptominisat5 ${CMAKE_CURRENT_SOURCE_DIR}/solvertypesmini.h )
+ cmsat_add_public_header(cryptominisat5 ${CMAKE_CURRENT_SOURCE_DIR}/dimacsparser.h )
+--- cryptominisat-release-5.13.0/src/occsimplifier.cpp.orig	2025-04-19 13:14:50.000000000 -0600
++++ cryptominisat-release-5.13.0/src/occsimplifier.cpp	2025-04-24 16:18:11.680044007 -0600
+@@ -49,7 +49,7 @@ THE SOFTWARE.
+ #include "gatefinder.h"
+ #include "trim.h"
+ extern "C" {
+-#include "mpicosat/mpicosat.h"
++#include <picosat.h>
+ }
+ 
+ //#define VERBOSE_DEBUG
+--- cryptominisat-release-5.13.0/src/solver.cpp.orig	2025-04-19 13:14:50.000000000 -0600
++++ cryptominisat-release-5.13.0/src/solver.cpp	2025-04-24 16:18:11.681055082 -0600
+@@ -71,7 +71,7 @@ THE SOFTWARE.
+ #include "get_clause_query.h"
+ #include "community_finder.h"
+ extern "C" {
+-#include "mpicosat/mpicosat.h"
++#include <picosat.h>
+ }
+ #include "cryptominisat.h"
+ 

@@ -1,0 +1,13 @@
+diff -r -u ArpON-3.0-ng.orig/src/opt.c ArpON-3.0-ng/src/opt.c
+--- ArpON-3.0-ng.orig/src/opt.c	2023-02-01 14:50:24.338340689 +0200
++++ ArpON-3.0-ng/src/opt.c	2023-02-01 14:52:23.085756419 +0200
+@@ -287,8 +287,7 @@
+     }
+ 
+     /* Re-initialize the interface name command option to no interface? */
+-    if (opt->interface != NULL)
+-        memset(opt->interface, 0, (size_t)IF_NAMESIZE);
++    memset(opt->interface, 0, (size_t)IF_NAMESIZE);
+ 
+     /* Set the value of the interface name command option. */
+     memcpy(opt->interface, interface, len);

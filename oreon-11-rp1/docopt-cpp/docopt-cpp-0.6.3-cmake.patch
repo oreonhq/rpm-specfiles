@@ -1,0 +1,22 @@
+From cfaabeb731dad0899914618e0d4e71c5dfceee57 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20Men=C5=A1=C3=ADk?= <pemensik@redhat.com>
+Date: Mon, 19 Jan 2026 21:44:33 +0100
+Subject: [PATCH] Increase desired CMake policy
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index feff32e..802a778 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.12..4.0)
+ project(docopt.cpp VERSION 0.6.2)
+ 
+ include(GNUInstallDirs)
+-- 
+2.52.0
+

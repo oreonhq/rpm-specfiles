@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 31 Aug 2018 16:13:09 +0300
+Subject: [PATCH] Enable verbose output during testing
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index a8d3a9c..7cb877c 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -8,8 +8,6 @@
+ {deps, [{mochiweb, "3.2.2", {git, "https://github.com/mochi/mochiweb.git", {tag, "v3.2.2"}}}]}.
+ 
+ {eunit_opts, [
+-              no_tty,
+-              {report, {eunit_progress, [colored, profile]}}
+              ]}.
+ 
+ {profiles,

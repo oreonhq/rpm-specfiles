@@ -1,0 +1,221 @@
+diff --git a/cpanspec b/cpanspec
+index e14a7ce..451c4f8 100755
+--- a/cpanspec
++++ b/cpanspec
+@@ -688,7 +688,7 @@ for my $file (@args) {
+         next;
+     }
+ 
+-    my $url="http://search.cpan.org/dist/$name/";
++    my $url="https://metacpan.org/dist/$name";
+ 
+     $source=$source || "http://www.cpan.org/modules/by-module/"
+         . ($module=~/::/ ? (split "::", $module)[0] : (split "-", $name)[0])
+@@ -729,10 +729,13 @@ for my $file (@args) {
+             and $_ ne "INSTALL"
+             and $_ ne "SIGNATURE"
+             and $_ ne "META.yml"
++            and $_ ne "META.json"
+             and $_ ne "NINJA"
+             and $_ ne "configure"
+             and $_ ne "config.guess"
+             and $_ ne "config.sub"
++            and $_ ne "cpanfile"
++            and $_ ne "dist.ini"
+             and $_ ne "typemap"
+             and $_ ne "bin"
+             and $_ ne "lib"
+@@ -741,6 +744,42 @@ for my $file (@args) {
+             and $_ ne "autobuild.sh"
+             and $_ ne "pm_to_blib"
+             and $_ ne "install.sh"
++            # License files
++            and $_ ne "LICENSE"
++            and $_ ne "LICENCE"
++            and $_ ne "Copying"
++            and $_ ne "COPYING"
++            and $_ ne "COPYING.Artistic"
++            and $_ ne "COPYING.GNU"
++            and $_ ne "COPYRIGHT"
++            and $_ ne "ARTISTIC.txt"
++            and $_ ne "Artistic"
++            and $_ ne "Artistic.txt"
++            and $_ ne "GNU_GPL.txt"
++            and $_ ne "GNU_LGPL.txt"
++            and $_ ne "GPL"
++            and $_ ne "GPLv1"
++            and $_ ne "GPL2.txt"
++            and $_ ne "DISCLAIMER.txt"
++            } @files;
++
++    my @license=sort { $a cmp $b } grep {
++               $_ eq "LICENSE"
++            or $_ eq "LICENCE"
++            or $_ eq "Copying"
++            or $_ eq "COPYING"
++            or $_ eq "COPYING.Artistic"
++            or $_ eq "COPYING.GNU"
++            or $_ eq "COPYRIGHT"
++            or $_ eq "ARTISTIC.txt"
++            or $_ eq "Artistic"
++            or $_ eq "Artistic.txt"
++            or $_ eq "GNU_GPL.txt"
++            or $_ eq "GNU_LGPL.txt"
++            or $_ eq "GPL"
++            or $_ eq "GPLv1"
++            or $_ eq "GPL2.txt"
++            or $_ eq "DISCLAIMER.txt"
+             } @files;
+ 
+     my $date=strftime("%a %b %d %Y", localtime);
+@@ -811,7 +850,7 @@ for my $file (@args) {
+         next;
+     }
+ 
+-    print $spec qq[\%{!?perl_$vendorlib: \%define perl_$vendorlib \%(eval "\`\%{__perl} -V:install$vendorlib\`"; echo \$install$vendorlib)}\n\n]
++    print $spec qq[\%{!?perl_$vendorlib: \%define perl_$vendorlib \%(eval "\`perl -V:install$vendorlib\`"; echo \$install$vendorlib)}\n\n]
+         if ($compat);
+ 
+     my $license="";
+@@ -963,10 +1002,8 @@ END
+     print $spec <<END;
+ Summary:        $summary
+ License:        $license
+-Group:          Development/Libraries
+ URL:            $url
+ Source0:        $source
+-BuildRoot:      \%{_tmppath}/\%{name}-\%{version}-\%{release}-root-\%(\%{__id_u} -n)
+ END
+ 
+     printf $spec "%-16s%s\n", "BuildArch:", "noarch" if ($noarch);
+@@ -976,11 +1013,31 @@ END
+         delete $requires{perl};
+     }
+ 
++    if (! $usebuildpl) {
++        printf $spec "%-16s%s\n", "BuildRequires:", 'make';
++    }
++    printf $spec "%-16s%s\n", 'BuildRequires:', 'perl-generators';
++    printf $spec "%-16s%s\n", 'BuildRequires:', 'perl-interpreter';
++
+     if (defined($build_requires{perl})) {
+         $build_requires{perl} =~ s/^[<>=]+ *//;
+-        printf $spec "%-16s%s >= %s\n", "BuildRequires:", "perl",
+-            (($build_requires{perl} lt "5.6.0" ? "0:" : "1:")
+-            . $build_requires{perl}) if $build_requires{perl};
++
++        # Convert decimal version to dotted
++        if ($build_requires{perl} =~ /^v?(\d+)\.(\d{3})(\d{3})?/) {
++            $build_requires{perl} = int($1).'.'.int($2);
++            if ($3) {
++                $build_requires{perl} .= '.'.int($3);
++            } else {
++                $build_requires{perl} .= '.0';
++            }
++
++        # Remove 'v' on begin
++        } elsif ($build_requires{perl} =~ m/^v(.*)$/ms) {
++            $build_requires{perl} = $1;
++        }
++
++        printf $spec "%-16s%s >= %s\n", "BuildRequires:", "perl(:VERSION)", $build_requires{perl}
++            if $build_requires{perl};
+         delete $build_requires{perl};
+     }
+ 
+@@ -1013,21 +1070,17 @@ END
+ 
+     for my $dep (sort(keys(%requires))) {
+         next if (!$compat and exists($corelist{$dep}));
+-        printf $spec "%-16s%s", "Requires:", "perl($dep)";
+-        print $spec (" >= " . $requires{$dep}) if ($requires{$dep});
+-        print $spec "\n";
++        if ($requires{$dep}) {
++            printf $spec "%-16s%s", "Requires:", "perl($dep)";
++            print $spec (" >= " . $requires{$dep});
++            print $spec "\n";
++        }
+     }
+ 
+     for my $dep (@add_requires) {
+         printf $spec "%-16s%s\n", "Requires:", $dep;
+     }
+ 
+-    if (!$compat) {
+-        print $spec <<END;
+-Requires:       perl(:MODULE_COMPAT_\%(eval "`\%{__perl} -V:version`"; echo \$version))
+-END
+-    }
+-
+     for my $prov (@add_provides) {
+         printf $spec "%-16s%s\n", "Provides:", $prov;
+     }
+@@ -1091,28 +1144,26 @@ END
+ 
+     if ($usebuildpl) {
+         print $spec <<END;
+-\%{__perl} Build.PL --installdirs=vendor@{[$noarch ? '' : qq{ --optimize="$macro{optimize}"} ]}
++perl Build.PL --installdirs=vendor@{[$noarch ? '' : qq{ --optimize="$macro{optimize}"} ]}
+ ./Build
+ END
+     } else {
+         print $spec <<END;
+-\%{__perl} Makefile.PL INSTALLDIRS=vendor@{[$noarch ? '' : qq{ OPTIMIZE="$macro{optimize}"}]}
++perl Makefile.PL INSTALLDIRS=vendor@{[$noarch ? '' : qq{ OPTIMIZE="$macro{optimize}"}]} NO_PACKLIST=1 NO_PERLLOCAL=1
+ END
+ 
+         print $spec
+-            "\%{__perl} -pi -e 's/^\\tLD_RUN_PATH=[^\\s]+\\s*/\\t/' Makefile\n"
++            "perl -pi -e 's/^\\tLD_RUN_PATH=[^\\s]+\\s*/\\t/' Makefile\n"
+             if ($compat and !$noarch);
+ 
+         print $spec <<END;
+-make \%{?_smp_mflags}
++%{make_build}
+ END
+     }
+ 
+     print $spec <<END;
+ 
+ \%install
+-rm -rf $macro{buildroot}
+-
+ END
+ 
+     if ($usebuildpl) {
+@@ -1120,9 +1171,7 @@ END
+             "./Build install --destdir=$macro{buildroot} --create_packlist=0\n";
+     } else {
+         print $spec <<END;
+-make pure_install PERL_INSTALL_ROOT=$macro{buildroot}
+-
+-find $macro{buildroot} -type f -name .packlist -exec rm -f {} \\;
++%{make_install}
+ END
+     }
+ 
+@@ -1133,8 +1182,6 @@ END
+ }
+ 
+     print $spec <<END;
+-find $macro{buildroot} -depth -type d -exec rmdir {} 2>/dev/null \\;
+-
+ \%{_fixperms} $macro{buildroot}/*
+ 
+ END
+@@ -1160,14 +1207,9 @@ END
+ 
+     print $spec <<END;
+ 
+-\%clean
+-rm -rf $macro{buildroot}@{[
+-    (@filter_requires ? ' %{__perl_requires}' : '') .
+-    (@filter_provides ? ' %{__perl_provides}' : '')]}
+-
+ \%files
+-\%defattr(-,root,root,-)
+ \%doc @doc
++\%license @license
+ END
+ 
+     if ($scripts) {

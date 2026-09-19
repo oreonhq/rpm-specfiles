@@ -1,0 +1,71 @@
+From 112724d69e3acf27ae055de6183663e8a2fb79b8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ren=C3=A9=20Reucher?= <rene.reucher@batcom-it.net>
+Date: Thu, 9 Jun 2022 15:48:10 +0200
+Subject: [PATCH] imp: removed ancient build configs
+
+---
+ arch/Linux/Debian_6.0.1.cfg       | 1 -
+ arch/Linux/Debian_6.0.2.cfg       | 1 -
+ arch/Linux/Debian_GNU_Linux_7.cfg | 1 -
+ arch/Linux/Debian_lenny-sid.cfg   | 1 -
+ arch/Linux/Debian_squeeze-sid.cfg | 1 -
+ arch/Linux/Debian_wheezy-sid.cfg  | 1 -
+ 6 files changed, 6 deletions(-)
+ delete mode 120000 arch/Linux/Debian_6.0.1.cfg
+ delete mode 120000 arch/Linux/Debian_6.0.2.cfg
+ delete mode 120000 arch/Linux/Debian_GNU_Linux_7.cfg
+ delete mode 120000 arch/Linux/Debian_lenny-sid.cfg
+ delete mode 120000 arch/Linux/Debian_squeeze-sid.cfg
+ delete mode 120000 arch/Linux/Debian_wheezy-sid.cfg
+
+diff --git a/arch/Linux/Debian_6.0.1.cfg b/arch/Linux/Debian_6.0.1.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Debian_6.0.1.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Debian_6.0.2.cfg b/arch/Linux/Debian_6.0.2.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Debian_6.0.2.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Debian_GNU_Linux_7.cfg b/arch/Linux/Debian_GNU_Linux_7.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Debian_GNU_Linux_7.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Debian_lenny-sid.cfg b/arch/Linux/Debian_lenny-sid.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Debian_lenny-sid.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Debian_squeeze-sid.cfg b/arch/Linux/Debian_squeeze-sid.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Debian_squeeze-sid.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Debian_wheezy-sid.cfg b/arch/Linux/Debian_wheezy-sid.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Debian_wheezy-sid.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+-- 
+2.44.0
+

@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3d8d1e9..ab8e211 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -26,7 +26,7 @@ SET(STELLARIUM_RELEASE_BUILD 1 CACHE BOOL "Set 1 to build as an official release
+ ########### Detect Qt version
+ SET(ENABLE_QT6 1 CACHE BOOL "Whether to try building with Qt6. If Qt6 is not found, Qt5 will be used.")
+ IF(ENABLE_QT6)
+-    FIND_PACKAGE(Qt6 COMPONENTS Core QUIET)
++    FIND_PACKAGE(Qt6 COMPONENTS Core Gui GuiPrivate QUIET)
+ ENDIF()
+ if (NOT Qt6_FOUND)
+     FIND_PACKAGE(Qt5 REQUIRED COMPONENTS Core)
+@@ -316,7 +316,7 @@ IF(WIN32)
+           # MinGW requires enabling of exceptions
+           SET(STEL_MINGW_FLAGS "-fexceptions")
+           # -Og removes some symbols as otherwise the ordinal exceeds the maximum of the 16-bit range.
+-          SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og") 
++          SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og")
+           # MinGW clang compiler does not have these flags, but MinGW gcc requires MinGW-specific threading, version number storage
+           IF(NOT ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang"))
+                SET(STEL_MINGW_FLAGS "${STEL_MINGW_FLAGS} -fident -mthreads")

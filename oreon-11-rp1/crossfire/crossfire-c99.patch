@@ -1,0 +1,27 @@
+Declare make_perma_dead and unmake_perma_dead in a shared header file,
+so that they can be called from server/resurrection.c without an
+implicit function declaration.  This improves compatibility with
+future compilers.
+
+Fixed upstream via:
+
+commit 0980e69c30ce0b04cc33d24daa9917c2ee9be665
+Author: partmedia <partmedia@282e977c-c81d-0410-88c4-b93c2d0d6712>
+Date:   Sun Apr 13 17:27:41 2014 +0000
+
+    Add missing prototypes for permadeath functions.
+    
+    git-svn-id: svn://svn.code.sf.net/p/crossfire/code/server/trunk@19336 282e97
+7c-c81d-0410-88c4-b93c2d0d6712
+
+diff -ur crossfire-server-1.71.0.orig/include/account_char.h crossfire-server-1.71.0/include/account_char.h
+--- crossfire-server-1.71.0.orig/include/account_char.h	2014-04-06 00:30:40.000000000 +0200
++++ crossfire-server-1.71.0/include/account_char.h	2023-01-03 16:54:56.152855130 +0100
+@@ -36,4 +36,7 @@
+     struct account_char_struct  *next;
+ } Account_Char;
+ 
++int make_perma_dead(object *op);
++int unmake_perma_dead(char *account, char *player);
++
+ #endif /* OBJECT_H */

@@ -1,0 +1,11 @@
+[Unit]
+Description=Liquidwar Game Server
+After=network.target
+
+[Service]
+User=liquidwar
+PIDFile=/run/liquidwar-server.pid
+ExecStart=/usr/bin/liquidwar-server -2 -private
+
+[Install]
+WantedBy=multi-user.target

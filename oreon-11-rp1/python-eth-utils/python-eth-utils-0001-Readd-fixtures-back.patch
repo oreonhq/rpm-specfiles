@@ -1,0 +1,143 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Mon, 31 Mar 2025 19:54:25 +0200
+Subject: [PATCH] Readd fixtures back
+
+
+diff --git a/fixtures/mypy/apply_to_return_value_decorator.py b/fixtures/mypy/apply_to_return_value_decorator.py
+new file mode 100644
+index 0000000..14bb4a4
+--- /dev/null
++++ b/fixtures/mypy/apply_to_return_value_decorator.py
+@@ -0,0 +1,20 @@
++from typing import (
++    List,
++)
++
++from eth_utils import (
++    apply_to_return_value,
++)
++
++
++def wrap_as_list(value: int) -> List[int]:
++    return [value]
++
++
++@apply_to_return_value(wrap_as_list)
++def return_value() -> int:
++    return 1
++
++
++x = return_value()
++reveal_type(x)  # noqa: F821
+diff --git a/fixtures/mypy/to_dict_decorator.py b/fixtures/mypy/to_dict_decorator.py
+new file mode 100644
+index 0000000..6509e91
+--- /dev/null
++++ b/fixtures/mypy/to_dict_decorator.py
+@@ -0,0 +1,17 @@
++from typing import (
++    List,
++    Tuple,
++)
++
++from eth_utils import (
++    to_dict,
++)
++
++
++@to_dict
++def return_value() -> List[Tuple[int, int]]:
++    return [(1, 2)]
++
++
++x = return_value()
++reveal_type(x)  # noqa: F821
+diff --git a/fixtures/mypy/to_list_decorator.py b/fixtures/mypy/to_list_decorator.py
+new file mode 100644
+index 0000000..70e6427
+--- /dev/null
++++ b/fixtures/mypy/to_list_decorator.py
+@@ -0,0 +1,16 @@
++from typing import (
++    Tuple,
++)
++
++from eth_utils import (
++    to_list,
++)
++
++
++@to_list
++def return_value() -> Tuple[int, int]:
++    return (1, 2)
++
++
++x = return_value()
++reveal_type(x)  # noqa: F821
+diff --git a/fixtures/mypy/to_ordered_dict_decorator.py b/fixtures/mypy/to_ordered_dict_decorator.py
+new file mode 100644
+index 0000000..f5cfe66
+--- /dev/null
++++ b/fixtures/mypy/to_ordered_dict_decorator.py
+@@ -0,0 +1,17 @@
++from typing import (
++    List,
++    Tuple,
++)
++
++from eth_utils import (
++    to_ordered_dict,
++)
++
++
++@to_ordered_dict
++def return_value() -> List[Tuple[int, int]]:
++    return [(1, 2)]
++
++
++x = return_value()
++reveal_type(x)  # noqa: F821
+diff --git a/fixtures/mypy/to_set_decorator.py b/fixtures/mypy/to_set_decorator.py
+new file mode 100644
+index 0000000..96fc437
+--- /dev/null
++++ b/fixtures/mypy/to_set_decorator.py
+@@ -0,0 +1,16 @@
++from typing import (
++    List,
++)
++
++from eth_utils import (
++    to_set,
++)
++
++
++@to_set
++def return_value() -> List[int]:
++    return [1, 1, 2]
++
++
++x = return_value()
++reveal_type(x)  # noqa: F821
+diff --git a/fixtures/mypy/to_tuple_decorator.py b/fixtures/mypy/to_tuple_decorator.py
+new file mode 100644
+index 0000000..a918fb2
+--- /dev/null
++++ b/fixtures/mypy/to_tuple_decorator.py
+@@ -0,0 +1,16 @@
++from typing import (
++    List,
++)
++
++from eth_utils import (
++    to_tuple,
++)
++
++
++@to_tuple
++def return_value() -> List[int]:
++    return [1, 2]
++
++
++x = return_value()
++reveal_type(x)  # noqa: F821

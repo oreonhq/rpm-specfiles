@@ -1,0 +1,16 @@
+--- heatseeker-1.7.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ heatseeker-1.7.3/Cargo.toml	2025-07-19T14:37:42.064767+00:00
+@@ -68,12 +68,6 @@
+ [target."cfg(not(windows))".dependencies.signal-hook]
+ version = "0.3"
+ 
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3"
+-features = [
+-    "everything",
+-    "impl-default",
+-]
+-
+ [profile.release]
+ debug = 2
++

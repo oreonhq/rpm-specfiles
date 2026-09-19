@@ -1,0 +1,12 @@
+diff -up rasterview-1.9.1/rasterview.desktop.desktop-file rasterview-1.9.1/rasterview.desktop
+--- rasterview-1.9.1/rasterview.desktop.desktop-file	2025-09-15 00:38:34.000000000 +0100
++++ rasterview-1.9.1/rasterview.desktop	2025-12-15 14:42:32.502263792 +0000
+@@ -2,7 +2,7 @@
+ Name=RasterView
+ Comment=Apple/CUPS/PWG Raster Viewer
+ Exec=rasterview %F
+-Icon=rasterview
++Icon=/usr/share/icons/hicolor/48x48/apps/rasterview.png
+ Terminal=false
+ Type=Application
+ # image/x-cmu-raster is the shared-mime-info MIME for application/vnd.cups-raster

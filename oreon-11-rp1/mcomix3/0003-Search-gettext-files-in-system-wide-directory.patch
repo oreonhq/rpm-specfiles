@@ -1,0 +1,39 @@
+From 4d3f0e0c27ab7fd933f3654c349e7b5e00028659 Mon Sep 17 00:00:00 2001
+From: mcomix3 Fedora maintainer <mcomix3-owner@fedoraproject.org>
+Date: Mon, 4 Nov 2019 15:14:45 +0900
+Subject: [PATCH] Search gettext files in system-wide directory
+
+---
+ mcomix/mcomix/i18n.py | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/mcomix/mcomix/i18n.py b/mcomix/mcomix/i18n.py
+index 96a209c..54377d1 100644
+--- a/mcomix/mcomix/i18n.py
++++ b/mcomix/mcomix/i18n.py
+@@ -5,6 +5,7 @@ import locale
+ import os
+ import sys
+ import threading
++import sysconfig
+ 
+ try:
+     import chardet
+@@ -114,6 +115,14 @@ def install_gettext():
+             break
+         except IOError:
+             log.error('locale file: %s not found.', resource_path)
++
++        resource_path2 = os.path.join(sysconfig.get_config_var('datarootdir'), 'locale', lang, 'LC_MESSAGES', '%s.mo' % domain)
++        try:
++            with open(resource_path2, mode = 'rb') as fp:
++                translation = gettext.GNUTranslations(fp)
++            break
++        except IOError:
++            log.error('locale file: %s not found.', resource_path2)
+     else:
+         translation = gettext.NullTranslations()
+ 
+-- 
+2.23.0
+

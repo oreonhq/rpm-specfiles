@@ -1,0 +1,12 @@
+--- vsomeip-3.5.11/implementation/compat/runtime/src/application_impl.cpp~	2025-11-14 14:12:07.000000000 +0000
++++ vsomeip-3.5.11/implementation/compat/runtime/src/application_impl.cpp	2026-01-22 15:00:33.768980411 +0000
+@@ -18,6 +18,9 @@
+ #include "../../message/include/message_impl.hpp"
+ #include "../../message/include/payload_impl.hpp"
+ 
++// GCC 16 false positive in shared_ptr
++#pragma GCC diagnostic warning "-Warray-bounds"
++
+ namespace vsomeip {
+ 
+ application_impl::application_impl(const std::string& _name) {

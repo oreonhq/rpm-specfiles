@@ -1,0 +1,35 @@
+From 616718c4d858a2209c3e6a75b12c2c428589864a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 2 Aug 2013 10:47:50 +0200
+Subject: [PATCH] Do not squash @INC
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Dual-lived modules can be in vendor or site path.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ jemplate | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/jemplate b/jemplate
+index b7a828b..6c8772b 100755
+--- a/jemplate
++++ b/jemplate
+@@ -17,12 +17,6 @@
+ #     jemplate --help
+ 
+ use Config;
+-BEGIN {
+-    @INC = (
+-        $Config::Config{archlib},
+-        $Config::Config{privlib},
+-    );
+-}
+ use strict;
+ use warnings;
+ 
+-- 
+1.8.1.4
+

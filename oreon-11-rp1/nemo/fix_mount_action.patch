@@ -1,0 +1,21 @@
+diff -uNrp a/files/usr/share/nemo/actions/mount-archive.nemo_action b/files/usr/share/nemo/actions/mount-archive.nemo_action
+--- a/files/usr/share/nemo/actions/mount-archive.nemo_action	2026-01-08 13:29:19.000000000 +0000
++++ b/files/usr/share/nemo/actions/mount-archive.nemo_action	2026-01-11 09:51:38.316838796 +0000
+@@ -4,7 +4,7 @@ Name=Mount archive
+ 
+ Comment=Mount %f to browse its contents
+ 
+-Exec=gnome-disk-image-mounter %U
++Exec=/usr/libexec/gvfsd-archive file="%U"
+ 
+ Selection=s
+ 
+@@ -12,7 +12,7 @@ Mimetypes=application/x-7z-compressed;ap
+ 
+ Icon-Name=xsi-mount-archive-symbolic
+ 
+-Dependencies=gnome-disk-image-mounter;
++Dependencies=/usr/libexec/gvfsd-archive;
+ 
+ Selection=s
+ Name[am]=ማህደር መጫኛ

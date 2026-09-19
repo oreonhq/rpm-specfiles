@@ -1,0 +1,44 @@
+From d3ad5e4ad951ab9541d6f12ec8631c2f55c99a0b Mon Sep 17 00:00:00 2001
+From: Jiri Popelka <jpopelka@redhat.com>
+Date: Mon, 23 Oct 2023 10:18:39 +0200
+Subject: [PATCH] Use importlib.resources instead of importlib_resources
+
+---
+ flask_restx/schemas/__init__.py | 4 ++--
+ requirements/install.pip        | 1 -
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/flask_restx/schemas/__init__.py b/flask_restx/schemas/__init__.py
+index 27b9866..4369737 100644
+--- a/flask_restx/schemas/__init__.py
++++ b/flask_restx/schemas/__init__.py
+@@ -7,7 +7,7 @@ and allows to validate specs against them.
+ import io
+ import json
+
+-import importlib_resources
++import importlib.resources
+
+ from collections.abc import Mapping
+ from jsonschema import Draft4Validator
+@@ -57,7 +57,7 @@ class LazySchema(Mapping):
+
+     def _load(self):
+         if not self._schema:
+-            ref = importlib_resources.files(__name__) / self.filename
++            ref = importlib.resources.files(__name__) / self.filename
+
+             with io.open(ref) as infile:
+                 self._schema = json.load(infile)
+diff --git a/requirements/install.pip b/requirements/install.pip
+index 76415ed..813fb12 100644
+--- a/requirements/install.pip
++++ b/requirements/install.pip
+@@ -3,4 +3,3 @@ jsonschema
+ Flask>=0.8, !=2.0.0
+ werkzeug!=2.0.0
+ pytz
+-importlib_resources
+--
+2.41.0
+

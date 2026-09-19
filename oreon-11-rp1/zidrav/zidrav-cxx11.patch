@@ -1,0 +1,12 @@
+diff -up zidrav4unix-1.2.0/core.h.cxx11 zidrav4unix-1.2.0/core.h
+--- zidrav4unix-1.2.0/core.h.cxx11	2005-05-19 22:58:40.000000000 +0200
++++ zidrav4unix-1.2.0/core.h	2019-02-28 00:38:17.793710884 +0100
+@@ -30,7 +30,7 @@ public:
+ 	char	signature[9];
+ 	char	version[3];
+ 
+-	KSigver( char sig[], char ver[] ) {
++	KSigver( const char sig[], const char ver[] ) {
+ 		strcpy( signature, sig );
+ 		strcpy( version, ver );
+ 	};

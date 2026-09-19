@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=duc
+GenericName=Disk Usage Cache
+Comment=Collection of disk usage tools
+Exec=duc gui
+Icon=
+Terminal=false
+Type=Application
+Categories=Graphics;

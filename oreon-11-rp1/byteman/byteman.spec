@@ -16,8 +16,8 @@
 %global bindir %{homedir}/bin
 
 Name:             byteman
-Version:          4.0.26
-Release:          3%{?dist}
+Version:          4.0.27
+Release:          1%{?dist}
 Summary:          Java agent-based bytecode injection tool
 # most of the code is LGPL-2.1-or-later
 # agent/src/main/java/org/jboss/byteman/agent/adapter/RuleGeneratorAdapter.java is BSD-3-Clause

@@ -1,0 +1,22 @@
+.TH poreencode 1 "Translate Toolkit 1.10.0" "" "Translate Toolkit 1.10.0"
+.SH NAME
+poreencode \- Re\-encode all files of a PO directory to the specified encoding.
+.SH SYNOPSIS
+\fBporeencode\fR \fIencoding\fR \fIPO-directory\fR
+.P
+Where \fIencoding\fR is the encoding you would like to convert to eg.
+UTF-8, and \fIPO-directory\fR is a directory of existing PO files.
+.SH DESCRIPTION
+Takes a directory of existing PO files and converts them to a given
+encoding.
+.SH OPERATION
+\fBporeencode\fR makes use of the Gettext tool \fBmsgconv\fR(1) to perform
+its task. It traverses the PO directory and finds all PO file. It uses
+\fBmsgconv\fR(1) to convert the PO file from its existing encoding to the
+new encoding.
+.SH BUGS
+Like most Gettext tools they do a little bit more than documented,
+\fBmsgconv\fR(1) will decide which strings are in fact fuzzy and delete
+fuzzy marking - not a lot but you do need to diff (this probably related
+to #, fuzzy entries that are not placed in the place Gettext expects
+them).

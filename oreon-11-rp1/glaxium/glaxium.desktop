@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Glaxium
+Comment=OpenGL space shooter
+Exec=glaxium-wrapper -f
+Icon=glaxium
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ActionGame;
+Keywords=Game;Arcade;Shooter;Scroller;Retro;

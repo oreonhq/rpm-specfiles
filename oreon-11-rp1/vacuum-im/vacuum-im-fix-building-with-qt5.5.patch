@@ -1,0 +1,14 @@
+--- src/utils/logger.cpp.orig	2018-09-24 15:00:19.348634616 +0200
++++ src/utils/logger.cpp	2018-09-24 15:08:17.860647712 +0200
+@@ -17,6 +17,11 @@
+ 	case QtDebugMsg:
+ 		Logger::writeLog(Logger::Debug,"Qt",AMessage);
+ 		break;
++#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
++	case QtInfoMsg:
++		Logger::writeLog(Logger::Warning,"Qt",AMessage);
++		break;
++#endif
+ 	case QtWarningMsg:
+ 		Logger::writeLog(Logger::Warning,"Qt",AMessage);
+ 		break;

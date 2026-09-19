@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Ipe
+Comment=The Ipe extensible drawing editor
+Exec=ipe
+Type=Application
+Encoding=UTF-8
+Categories=Qt;Application;Graphics;

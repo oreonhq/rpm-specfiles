@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Écolier Court</target>
+    <family>Ecolier_court</family>
+    <like>
+      <family>cursive</family>
+    </like>
+  </group>
+</fontconfig>
+

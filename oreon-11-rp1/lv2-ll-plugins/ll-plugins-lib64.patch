@@ -1,0 +1,12 @@
+diff -rupN ll-plugins-0.2.8.old/programs/elven/lv2host.cpp ll-plugins-0.2.8/programs/elven/lv2host.cpp
+--- ll-plugins-0.2.8.old/programs/elven/lv2host.cpp	2010-02-11 15:39:19.000000000 -0500
++++ ll-plugins-0.2.8/programs/elven/lv2host.cpp	2010-02-20 22:54:54.000000000 -0500
+@@ -510,6 +510,8 @@ std::vector<std::string> LV2Host::get_se
+     search_dirs.push_back(string(getenv("HOME")) + "/.lv2");
+     search_dirs.push_back("/usr/lib/lv2");
+     search_dirs.push_back("/usr/local/lib/lv2");
++    search_dirs.push_back("/usr/lib64/lv2");
++    search_dirs.push_back("/usr/local/lib64/lv2");
+   }
+   else {
+     string lv2_path = lv2p_c;

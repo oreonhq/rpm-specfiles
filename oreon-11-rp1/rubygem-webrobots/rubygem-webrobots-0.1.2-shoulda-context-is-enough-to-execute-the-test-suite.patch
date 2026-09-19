@@ -1,0 +1,23 @@
+From c41c489a600d26fd04d61ab740f174e76baccfe4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Tue, 5 Sep 2023 12:23:06 +0200
+Subject: [PATCH] shoulda-context is enough to execute the test suite.
+
+This simplifies the dependency chain a bit.
+---
+ test/helper.rb |  2 +-
+ 1 files changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/helper.rb b/test/helper.rb
+index b499f52..22a23d0 100644
+--- a/test/helper.rb
++++ b/test/helper.rb
+@@ -8,7 +8,7 @@
+   exit e.status_code
+ end
+ require 'test/unit'
+-require 'shoulda'
++require 'shoulda/context'
+ require 'webmock/test_unit'
+ require 'vcr'
+ 

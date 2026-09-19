@@ -1,0 +1,51 @@
+Switch to journal via ba87937f49010b873307240e3a6f22deac511d89
+
+diff -up shorewall-5.2.8/shorewall-5.2.8/shorewall.service.orig shorewall-5.2.8/shorewall-5.2.8/shorewall.service
+--- shorewall-5.2.8/shorewall-5.2.8/shorewall.service.orig	2021-11-18 09:43:08.452912761 +0100
++++ shorewall-5.2.8/shorewall-5.2.8/shorewall.service	2021-11-18 09:43:33.332981279 +0100
+@@ -13,7 +13,7 @@ Conflicts=iptables.service firewalld.ser
+ Type=oneshot
+ RemainAfterExit=yes
+ EnvironmentFile=-/etc/sysconfig/shorewall
+-StandardOutput=syslog
++StandardOutput=journal
+ ExecStart=/sbin/shorewall $OPTIONS start $STARTOPTIONS
+ ExecStop=/sbin/shorewall $OPTIONS stop
+ ExecReload=/sbin/shorewall $OPTIONS reload $RELOADOPTIONS
+diff -up shorewall-5.2.8/shorewall6-5.2.8/shorewall6.service.orig shorewall-5.2.8/shorewall6-5.2.8/shorewall6.service
+--- shorewall-5.2.8/shorewall6-5.2.8/shorewall6.service.orig	2021-11-18 09:43:08.454912777 +0100
++++ shorewall-5.2.8/shorewall6-5.2.8/shorewall6.service	2021-11-18 09:43:45.220986024 +0100
+@@ -14,7 +14,7 @@ Conflicts=ip6tables.service firewalld.se
+ Type=oneshot
+ RemainAfterExit=yes
+ EnvironmentFile=-/etc/sysconfig/shorewall6
+-StandardOutput=syslog
++StandardOutput=journal
+ ExecStart=/sbin/shorewall -6 $OPTIONS start $STARTOPTIONS
+ ExecStop=/sbin/shorewall -6 $OPTIONS stop
+ ExecReload=/sbin/shorewall -6 $OPTIONS reload $RELOADOPTIONS
+diff -up shorewall-5.2.8/shorewall6-lite-5.2.8/shorewall6-lite.service.orig shorewall-5.2.8/shorewall6-lite-5.2.8/shorewall6-lite.service
+--- shorewall-5.2.8/shorewall6-lite-5.2.8/shorewall6-lite.service.orig	2021-11-18 09:43:08.456912793 +0100
++++ shorewall-5.2.8/shorewall6-lite-5.2.8/shorewall6-lite.service	2021-11-18 09:43:50.036987946 +0100
+@@ -15,7 +15,7 @@ Conflicts=ip6tables.service firewalld.se
+ Type=oneshot
+ RemainAfterExit=yes
+ EnvironmentFile=-/etc/sysconfig/shorewall6-lite
+-StandardOutput=syslog
++StandardOutput=journal
+ ExecStart=/sbin/shorewall -6l $OPTIONS start $STARTOPTIONS
+ ExecStop=/sbin/shorewall -6l $OPTIONS stop
+ ExecReload=/sbin/shorewall -6l $OPTIONS reload $RELOADOPTIONS
+diff -up shorewall-5.2.8/shorewall-init-5.2.8/shorewall-init.service.orig shorewall-5.2.8/shorewall-init-5.2.8/shorewall-init.service
+diff -up shorewall-5.2.8/shorewall-lite-5.2.8/shorewall-lite.service.orig shorewall-5.2.8/shorewall-lite-5.2.8/shorewall-lite.service
+--- shorewall-5.2.8/shorewall-lite-5.2.8/shorewall-lite.service.orig	2021-11-18 09:43:08.454912777 +0100
++++ shorewall-5.2.8/shorewall-lite-5.2.8/shorewall-lite.service	2021-11-18 09:43:40.908984303 +0100
+@@ -13,7 +13,7 @@ Conflicts=iptables.service firewalld.ser
+ Type=oneshot
+ RemainAfterExit=yes
+ EnvironmentFile=-/etc/sysconfig/shorewall-lite
+-StandardOutput=syslog
++StandardOutput=journal
+ ExecStart=/sbin/shorewall-lite $OPTIONS start $STARTOPTIONS
+ ExecStop=/sbin/shorewall-lite $OPTIONS stop
+ 

@@ -1,0 +1,154 @@
+--- tgif-QPL-4.1.45/chat.c.debug	2006-06-14 07:29:57.000000000 +0900
++++ tgif-QPL-4.1.45/chat.c	2008-03-11 03:59:04.000000000 +0900
+@@ -350,10 +350,11 @@
+          case TDGTNF_MULTI_BTN_CLICKED:
+             if (tdgt_notify.ctl_id == ID_CHAT_BTN_COLOR) {
+                int color_index=INVALID;
++               char c_tmp;
+ 
+                switch (tdgt_notify.nf_arg) { /* Button[1-3] */
+                case Button1:
+-                  color_index = (int)TdgtBtnGetText(
++                  color_index = (int)*TdgtBtnGetText(
+                         gstChatInfo.btn_ctl[CHAT_BTN_COLOR]);
+                   if (++color_index >= maxColors) color_index = 0;
+                   break;
+@@ -361,13 +362,14 @@
+                   color_index = tdgt_notify.nf_arg2;
+                   break;
+                case Button3:
+-                  color_index = (int)TdgtBtnGetText(
++                  color_index = (int)*TdgtBtnGetText(
+                         gstChatInfo.btn_ctl[CHAT_BTN_COLOR]);
+                   if (--color_index < 0) color_index = maxColors-1;
+                   break;
+                }
++               c_tmp = (char) color_index;
+                TdgtBtnSetText(gstChatInfo.btn_ctl[CHAT_BTN_COLOR],
+-                     (char*)color_index, NULL);
++                     &c_tmp, NULL);
+                TdgtSmplEditSetColorIndex(gstChatInfo.edit_ctl, color_index);
+                tgWriteProfileString("User", "Color",
+                      colorMenuItems[color_index], gstChatInfo.ini_fname);
+@@ -589,6 +591,8 @@
+    int new_alloc=FALSE, ival=0, font_style=STYLE_NR;
+    int is_bold=FALSE, is_italic=FALSE, color_index=colorIndex;
+ 
++   char c_tmp;
++
+    if ((buf=tgGetProfileString("User", "Color", gstChatInfo.ini_fname)) !=
+          NULL) {
+       color_index = QuickFindColorIndex(NULL, buf, &new_alloc, TRUE);
+@@ -685,6 +689,8 @@
+          0, 0, TGMUTYPE_TEXT, TDGTBTN_CLICK, TGBS_NORMAL, STYLE_NR, "Send",
+          &mosi);
+ 
++   c_tmp = (char) color_index;
++
+    mosi.one_line_status = FALSE;
+    UtilStrCpyN(mosi.btn_str[0], sizeof(mosi.btn_str[0]), colorMouseStatus[0].l);
+    UtilStrCpyN(mosi.btn_str[1], sizeof(mosi.btn_str[1]), colorMouseStatus[0].m);
+@@ -695,7 +701,7 @@
+          gstChatInfo.btn_win_info[CHAT_BTN_COLOR].w,
+          gstChatInfo.btn_win_info[CHAT_BTN_COLOR].h,
+          0, 0, TGMUTYPE_COLOR, TDGTBTN_CLICK, TGBS_NORMAL, INVALID,
+-         (char*)color_index, &mosi);
++         &c_tmp, &mosi);
+ 
+    gstChatInfo.edit_ctl = CreateTdgtSmplEdit(chatWindow, NULL, ID_CHAT_EDIT,
+          gstChatInfo.edit_win_info.x, gstChatInfo.edit_win_info.y,
+--- tgif-QPL-4.1.45/cmd.c.debug	2006-06-14 07:29:57.000000000 +0900
++++ tgif-QPL-4.1.45/cmd.c	2008-03-11 02:49:42.000000000 +0900
+@@ -794,10 +794,12 @@
+       int count=0;
+ 
+       if (CmdPtr->pos_before_has_ids) {
++         char c_tmp;
+          for (obj_ptr=topObj; obj_ptr != NULL; obj_ptr=next_obj) {
+             next_obj = obj_ptr->next;
++            c_tmp = (char) (CmdPtr->pos_before[count]);
+             if (ObjHasFullID(obj_ptr,
+-                  (char*)(int)(CmdPtr->pos_before[count]))) {
++                  &c_tmp)) {
+                count++;
+                sel_ptr->obj = obj_ptr;
+                if (!obj_ptr->locked) MoveObj(obj_ptr, dx, dy);
+--- tgif-QPL-4.1.45/font.c.debug	2008-03-11 03:54:02.000000000 +0900
++++ tgif-QPL-4.1.45/font.c	2008-03-11 03:54:02.000000000 +0900
+@@ -20,6 +20,8 @@
+ 
+ #define _INCLUDE_FROM_FONT_C_
+ 
++#include <ctype.h>
++
+ #include "tgifdefs.h"
+ #include "cmdids.h"
+ 
+@@ -372,15 +374,15 @@
+    char *font_name;
+    int dbflag;
+ {
+-   unsigned char c;
+-   unsigned char *buf, *dist, *src;
++   char c;
++   char *buf, *dist, *src;
+    char **font_list;
+    int  actual_count_return;
+ 
+    if (!font_name)
+        return False;
+ 
+-   buf = (unsigned char*)malloc (strlen(font_name) + 3);
++   buf = malloc (strlen(font_name) + 3);
+    if (!buf)
+        return False;
+ 
+--- tgif-QPL-4.1.45/stretch.c.debug	2006-06-14 07:29:59.000000000 +0900
++++ tgif-QPL-4.1.45/stretch.c	2008-03-11 03:07:59.000000000 +0900
+@@ -386,6 +386,7 @@
+    *pn_num_to_resize = 0;
+    for (sel_ptr=botSel; sel_ptr != NULL; sel_ptr=sel_ptr->prev) {
+       struct AttrRec *name_attr=NULL;
++      char c_tmp;
+ 
+       if (HasOnResize(sel_ptr->obj, &name_attr) && name_attr != NULL) {
+          num_to_resize++;
+@@ -396,7 +397,8 @@
+                   num_to_resize*sizeof(char*));
+          }
+          if (ppsz_names == NULL) FailAllocMessage();
+-         ppsz_names[num_to_resize-1] = (char*)(sel_ptr->obj->id);
++         c_tmp = (char) (sel_ptr->obj->id);
++         ppsz_names[num_to_resize-1] = &c_tmp;
+       }
+    }
+    if (num_to_resize == 0) return NULL;
+@@ -429,7 +431,7 @@
+    RemoveAllSel();
+    for (i=0; i < num_to_resize; i++) {
+       struct AttrRec *exec_attr=NULL;
+-      struct ObjRec *obj_ptr=FindObjWithOID((int)(ppsz_names[i]));
++      struct ObjRec *obj_ptr=FindObjWithOID((int)(*ppsz_names[i]));
+ 
+       if (obj_ptr != NULL && !SkipOnResize(obj_ptr)) {
+          exec_attr = FindAttrWithName(obj_ptr, "on_resize=", NULL);
+@@ -445,7 +447,7 @@
+       }
+    }
+    for (i=0; i < num_to_resize; i++) {
+-      struct ObjRec *obj_ptr=FindObjWithOID((int)(ppsz_names[i]));
++      struct ObjRec *obj_ptr=FindObjWithOID((int)(*ppsz_names[i]));
+ 
+       if (obj_ptr != NULL) {
+          if (!AlreadySelected(obj_ptr)) {
+--- tgif-QPL-4.1.45/tdgtbtn.c.debug	2006-06-14 07:29:59.000000000 +0900
++++ tgif-QPL-4.1.45/tdgtbtn.c	2008-03-11 03:14:25.000000000 +0900
+@@ -129,7 +129,7 @@
+       break;
+    case TGMUTYPE_COLOR:
+       if (colorDisplay) {
+-         pixel = (btn_down ? myFgPixel : colorPixels[(int)(pTdgtBtn->str)]);
++         pixel = (btn_down ? myFgPixel : colorPixels[(unsigned int)(*pTdgtBtn->str)]);
+       } else {
+          pixel = myFgPixel;
+       }

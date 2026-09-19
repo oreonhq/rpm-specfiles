@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>denemo-feta</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>feta26</name>
+  <summary>Denemo feta fonts</summary>
+  <description>
+    <p>
+      These are the feta.ttf fonts derived from lilypond's fonts.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://www.denemo.org/</url>
+</component>

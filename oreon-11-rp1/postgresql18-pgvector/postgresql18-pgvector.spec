@@ -13,8 +13,8 @@
 %endif
 
 Name:		postgresql%{pgversion}-%{sname}
-Version:	0.8.0
-Release:	2%{?dist}
+Version:	0.8.6
+Release:	1%{?dist}
 Summary:	Open-source vector similarity search for Postgres
 License:	PostgreSQL
 URL:		https://github.com/%{sname}/%{sname}/

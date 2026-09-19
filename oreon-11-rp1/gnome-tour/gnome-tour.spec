@@ -9,8 +9,8 @@
 %global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           gnome-tour
-Version:        48.1
-Release:        6%{?dist}
+Version:        50.0
+Release:        1%{?dist}
 Summary:        GNOME Tour and Greeter
 
 # * gnome-tour source code is GPL-3.0-or-later

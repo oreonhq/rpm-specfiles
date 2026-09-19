@@ -1,8 +1,8 @@
 %global source0_hash ea86b531462035b19a2e5e01ef3d9a35cca7d984086645e2fc844d8f0e346645
 
 Name:       xhost
-Version:    1.0.9
-Release:    11%{?dist}
+Version:    1.0.10
+Release:    1%{?dist}
 Summary:    Manage hosts or users allowed to connect to the X server
 
 License:    MIT AND ICU

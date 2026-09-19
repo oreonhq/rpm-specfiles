@@ -1,0 +1,22 @@
+--- comm/suite/components/places/PlacesUIUtils.jsm.orig	2024-12-11 18:39:13.000000000 +0300
++++ comm/suite/components/places/PlacesUIUtils.jsm	2024-12-18 23:19:04.161638823 +0300
+@@ -874,17 +874,18 @@ var PlacesUIUtils = {
+                    .createInstance(Ci.nsIMutableArray);
+       args.appendElement(uriList);
+       browserWindow = Services.ww.openWindow(aWindow,
+                                              AppConstants.BROWSER_CHROME_URL,
+                                              null, "chrome,dialog=no,all", args);
+       return;
+     }
+ 
+-    var loadInBackground = where == "tabshifted";
++    var loadInBackground = Services.prefs.getBoolPref("browser.tabs.avoidBrowserFocus") ?
++                           (where == "current" || where == "tab") : (where == "tabshifted");
+     // For consistency, we want all the bookmarks to open in new tabs, instead
+     // of having one of them replace the currently focused tab.  Hence we call
+     // loadTabs with aReplace set to false.
+     browserWindow.gBrowser.loadTabs(urls, {
+       inBackground: loadInBackground,
+       replace: false,
+       triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
+     });

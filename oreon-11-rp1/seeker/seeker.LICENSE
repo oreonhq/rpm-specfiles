@@ -1,0 +1,18 @@
+http://www.linuxinsight.com/how_fast_is_your_disk.html?page=1#comment-971
+
+ChangeLog, AUTHORS, TODO...
+Submitted by admin on Wed, 2007-01-17 20:39.
+
+Well, I don't have plans to make this a full blown package at this
+time, because of the utter lack of free time, sorry. But in time, yes,
+why not. The trigger event could be when I have time to make it
+multithreaded. Then it should become much more useful.
+
+In the meantime, put this on the top of seeker.c:
+
+# Seeker v2.0, 2007-01-15, by linportal@gmail.com
+# http://www.linuxinsight.com/how_fast_is_your_disk.html
+# Distributed under the terms of the GNU General Public License v2
+
+And then you can do whatever you like with it. If it's not against GPL
+rules, of course. ;)

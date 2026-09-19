@@ -1,4 +1,4 @@
-%global source0_hash 2b9d8a358e76eb766588609135e53fa548b902c551daae33ee32f26f25e60dbb
+%global source0_hash f3937ca282ba256242e2b6dbe523df8a80007d29ffd61f56d270190865492ea8
 
 %global debug_package %{nil}
 
@@ -6,8 +6,8 @@
 %define _binaries_in_noarch_packages_terminate_build 0
 
 Name:		linux-firmware
-Version:	20260622
-Release:	4%{?dist}
+Version:	20260916
+Release:	1%{?dist}
 Summary:	Firmware files used by the Linux kernel
 License:	GPL-1.0-or-later AND GPL-2.0-or-later AND MIT AND LicenseRef-Callaway-Redistributable-no-modification-permitted
 URL:		http://www.kernel.org/
@@ -668,6 +668,9 @@ end
 %dir %{_firmwarepath}/qcom
 %{_firmwarepath}/qcom/glymur/
 %{_firmwarepath}/qcom/kaanapali/
+%{_firmwarepath}/qcom/eliza/
+%{_firmwarepath}/qcom/hawi/
+%{_firmwarepath}/qcom/nord/
 %{_firmwarepath}/qcom/shikra/*
 %{_firmwarepath}/a300_p*
 %{_firmwarepath}/qcom/*.fw*
@@ -727,7 +730,4 @@ end
 %{_firmwarepath}/v4l-cx2*
 
 %changelog
-* Mon Jul  6 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260622-4
-- 20260622
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260309-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

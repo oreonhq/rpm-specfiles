@@ -1,0 +1,25 @@
+From d39950e9b5fb44d677fc2a570b6f1b286a837e72 Mon Sep 17 00:00:00 2001
+From: hannes <hannes@fedoraproject.org>
+Date: Wed, 15 Feb 2012 20:54:14 +0000
+Subject: [PATCH] fix build failure
+
+---
+ configure |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/configure b/configure
+index 6fd981a..842ad23 100755
+--- a/configure
++++ b/configure
+@@ -6155,7 +6155,7 @@ echo "${ECHO_T}no" >&6
+   exit 1
+ fi
+ gentoo_lt_version="1.5.18"
+-gentoo_ltmain_version=`grep '^[:space:]*VERSION=' $ltmain | sed -e 's|^[:space:]*VERSION=||'`
++gentoo_ltmain_version=`grep '^[[:space:]]*VERSION=' $ltmain | sed -e 's|^[[:space:]]*VERSION=||'`
+ if test "$gentoo_lt_version" != "$gentoo_ltmain_version"; then
+   echo "$as_me:$LINENO: result: no" >&5
+ echo "${ECHO_T}no" >&6
+-- 
+1.7.7.6
+

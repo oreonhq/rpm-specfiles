@@ -19,8 +19,8 @@
 %endif
 
 Name:       tracer
-Version:    1.4
-Release:    2%{?dist}
+Version:    1.6-1
+Release:    1%{?dist}
 Summary:    Finds outdated running applications in your system
 
 BuildArch:  noarch

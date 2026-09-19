@@ -1,0 +1,61 @@
+--- FPLSA-1.2.6/src/fplsa4.c.orig	2023-01-03 09:36:27.000000000 -0700
++++ FPLSA-1.2.6/src/fplsa4.c	2024-03-21 14:26:13.348098752 -0600
+@@ -5905,12 +5905,22 @@ void Error(int i_message)
+ }
+ /*=Initialization==========================================================
+ */
++#ifdef SPP_2000
++#define TEXTFLAG
++#else
++#define TEXTFLAG "t"
++#endif
++
+ void Initialization(void)
+ {
+-  FILE *inif;
++  FILE *inif = NULL;
+   short c;
+   uint i, j;
+   char * init_case[N_INIT_CASES];
++#ifdef GAP
++  const char *home;
++  char *path;
++#endif
+ 
+   /* Set cases strings */
+ 
+@@ -5949,21 +5959,20 @@ void Initialization(void)
+   init_case[RELATION_SIZE]              = "Re";
+ 
+ #if !defined(GAP)
+-#if defined(SPP_2000)
+-  MessageFile = OpenFile("fplsa4.msg", "r");
+-  SessionFile = OpenFile("fplsa4.ses", "w");
+-  inif = OpenFile("fplsa4.ini", "r");
+-#else
+-  MessageFile = OpenFile("fplsa4.msg", "rt");
+-  SessionFile = OpenFile("fplsa4.ses", "wt");
+-  inif = OpenFile("fplsa4.ini", "rt");
+-#endif
+-#else
+-#if defined(SPP_2000)
+-  inif = OpenFile("fplsa4.ini", "r");
++  MessageFile = OpenFile("fplsa4.msg", "r" TEXTFLAG);
++  SessionFile = OpenFile("fplsa4.ses", "w" TEXTFLAG);
++  inif = OpenFile("fplsa4.ini", "r" TEXTFLAG);
+ #else
+-  inif = OpenFile("fplsa4.ini", "rt");
+-#endif
++  home = getenv("HOME");
++  if (home != NULL && asprintf(&path, "%s/.config/gap/fplsa4.ini", home) > 0)
++  {
++    inif = fopen(path, "r" TEXTFLAG);
++    free(path);
++  }
++  if (inif == NULL)
++    inif = fopen("/etc/fplsa4.ini", "r" TEXTFLAG);
++  if (inif == NULL)
++    inif = OpenFile("fplsa4.ini", "r" TEXTFLAG);
+ #endif
+   while(YES)
+     switch(ReadCaseFromFile(inif, init_case, N_INIT_CASES))

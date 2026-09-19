@@ -1,0 +1,22 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Mon, 17 Feb 2025 08:18:47 +0100
+Subject: [PATCH] Revert "bump towncrier version pins"
+
+This reverts commit 224044874e6b39da2bb050944207b7b40ef922cb.
+
+diff --git a/setup.py b/setup.py
+index 1d109b3..be539df 100644
+--- a/setup.py
++++ b/setup.py
+@@ -15,7 +15,10 @@ extras_require = {
+         "wheel",
+     ],
+     "docs": [
+-        "towncrier>=24,<25",
++        "sphinx>=6.0.0",
++        "sphinx-autobuild>=2021.3.14",
++        "sphinx_rtd_theme>=1.0.0",
++        "towncrier>=21",
+     ],
+     "test": [
+         "pytest>=7.0.0",

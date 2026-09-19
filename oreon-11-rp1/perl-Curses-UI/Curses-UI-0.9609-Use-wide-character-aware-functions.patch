@@ -1,0 +1,478 @@
+From 32c425f58f768a4a28909488f56f7650063c80e8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 13 May 2022 09:54:06 +0200
+Subject: [PATCH] Use wide-character-aware functions
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The old code used addstr() and getch() witch do not support Unicode.
+That makes displaying and inputting proper Unicode strings impossible.
+
+Curses >= 1.29 added Unicode-aware functions which falls back to 8-bit
+cursers interface if the undelying curses C library does not support
+wide characters.
+
+This patch moves to the Unicode-aware interface of Curses Perl module
+to handle Unicode properly.
+
+CPAN RT#56695
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL                   |  2 +-
+ lib/Curses/UI.pm              |  6 +++---
+ lib/Curses/UI/Buttonbox.pm    |  2 +-
+ lib/Curses/UI/Calendar.pm     | 10 +++++-----
+ lib/Curses/UI/Checkbox.pm     |  4 ++--
+ lib/Curses/UI/Common.pm       |  6 +++---
+ lib/Curses/UI/Dialog/Error.pm |  8 ++++----
+ lib/Curses/UI/Label.pm        |  4 ++--
+ lib/Curses/UI/Listbox.pm      | 12 ++++++------
+ lib/Curses/UI/Menubar.pm      |  4 ++--
+ lib/Curses/UI/Notebook.pm     |  2 +-
+ lib/Curses/UI/Popupmenu.pm    |  4 ++--
+ lib/Curses/UI/Progressbar.pm  |  8 ++++----
+ lib/Curses/UI/TextEditor.pm   |  8 ++++----
+ lib/Curses/UI/Widget.pm       | 10 +++++-----
+ t/fakelib/Curses.pm           | 14 +++++++-------
+ 16 files changed, 52 insertions(+), 52 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 0084c7b..8c4b923 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -6,7 +6,7 @@ name            'Curses-UI';
+ all_from        'lib/Curses/UI.pm';
+ 
+ # Specific dependencies
+-requires        'Curses'        => 0;
++requires        'Curses'        => '1.29';
+ requires        'Term::ReadKey' => 0;
+ 
+ no_index        'directory'         => 'examples';
+diff --git a/lib/Curses/UI.pm b/lib/Curses/UI.pm
+index bac10c8..71fd93a 100644
+--- a/lib/Curses/UI.pm
++++ b/lib/Curses/UI.pm
+@@ -7,7 +7,7 @@ BEGIN { $ENV{TERM} = 'vt100' unless defined $ENV{TERM} }
+ use strict;
+ use warnings;
+ 
+-use Curses;
++use Curses 1.29;
+ use Curses::UI::Language;
+ use Curses::UI::Color;
+ use FileHandle;
+@@ -497,7 +497,7 @@ sub draw()
+     {
+         my $s = $self->{-canvasscr};
+         $s->clear;
+-        $s->addstr(0, 0, $self->lang->get('screen_too_small'));
++        $s->addstring(0, 0, $self->lang->get('screen_too_small'));
+         $s->move(4,0);
+         $s->noutrefresh();
+ 	doupdate();
+@@ -817,7 +817,7 @@ sub fatalerror($$;$)
+ 
+     my $s = $self->{-canvasscr};
+     $s->clear;
+-    $s->addstr(0,0,"Fatal program error:\n"
++    $s->addstring(0,0,"Fatal program error:\n"
+     	     . "-"x($ENV{COLS}-1) . "\n"
+     	     . $error 
+     	     . "-"x($ENV{COLS}-1) . "\n"
+diff --git a/lib/Curses/UI/Buttonbox.pm b/lib/Curses/UI/Buttonbox.pm
+index 53a83e8..f9c554d 100644
+--- a/lib/Curses/UI/Buttonbox.pm
++++ b/lib/Curses/UI/Buttonbox.pm
+@@ -337,7 +337,7 @@ sub draw(;$)
+         }
+  
+         # Draw the button.
+-        $this->{-canvasscr}->addstr(
++        $this->{-canvasscr}->addstring(
+             $y, $this->{-xpos} + $x, 
+             $button->{-label}
+         );    
+diff --git a/lib/Curses/UI/Calendar.pm b/lib/Curses/UI/Calendar.pm
+index 89b21cb..adebdbf 100644
+--- a/lib/Curses/UI/Calendar.pm
++++ b/lib/Curses/UI/Calendar.pm
+@@ -266,14 +266,14 @@ sub draw(;$)
+     # Draw day, month and year. If the widget has focus,
+     # show the cursor position. Else show the selected position.
+     my $c = $this->{-focus} ? 'c' : '';    
+-    $this->{-canvasscr}->addstr(0,0," "x$this->canvaswidth);
+-    $this->{-canvasscr}->addstr(0,0, $months[$this->{"-${c}month"}] 
++    $this->{-canvasscr}->addstring(0,0," "x$this->canvaswidth);
++    $this->{-canvasscr}->addstring(0,0, $months[$this->{"-${c}month"}] 
+                     . " " . $this->{"-${c}day"});
+-    $this->{-canvasscr}->addstr(0,$this->canvaswidth-4,$this->{"-${c}year"});
++    $this->{-canvasscr}->addstring(0,$this->canvaswidth-4,$this->{"-${c}year"});
+ 
+     # Draw daynames
+     $this->{-canvasscr}->attron(A_BOLD) if $this->{-focus};
+-    $this->{-canvasscr}->addstr(2,0,join " ", @days);
++    $this->{-canvasscr}->addstring(2,0,join " ", @days);
+ 
+     # Reset bold font attribute.
+     $this->{-canvasscr}->attroff(A_BOLD) if $this->{-focus};
+@@ -313,7 +313,7 @@ sub draw(;$)
+ 	       $this->{-cyear}  == $year;
+ 
+         # Draw the day.
+-        $this->{-canvasscr}->addstr($y, $weekday*3, sprintf("%2d",$day));
++        $this->{-canvasscr}->addstring($y, $weekday*3, sprintf("%2d",$day));
+ 
+         # Reset attributes.
+         $this->{-canvasscr}->attroff(A_REVERSE);
+diff --git a/lib/Curses/UI/Checkbox.pm b/lib/Curses/UI/Checkbox.pm
+index 9cd1a6f..78982fc 100644
+--- a/lib/Curses/UI/Checkbox.pm
++++ b/lib/Curses/UI/Checkbox.pm
+@@ -217,8 +217,8 @@ sub draw(;$) {
+     }
+ 
+     $this->{-canvasscr}->attron(A_BOLD) if $this->{-focus};    
+-    $this->{-canvasscr}->addstr(0, 0, '[ ]');
+-    $this->{-canvasscr}->addstr(0, 1, 'X') if $this->{-checked};
++    $this->{-canvasscr}->addstring(0, 0, '[ ]');
++    $this->{-canvasscr}->addstring(0, 1, 'X') if $this->{-checked};
+     $this->{-canvasscr}->attroff(A_BOLD) if $this->{-focus};    
+ 
+     $this->{-canvasscr}->move(0,1);
+diff --git a/lib/Curses/UI/Common.pm b/lib/Curses/UI/Common.pm
+index 83b64e6..e9b2792 100644
+--- a/lib/Curses/UI/Common.pm
++++ b/lib/Curses/UI/Common.pm
+@@ -279,13 +279,13 @@ sub text_draw($$;)
+ 		$this->{-canvasscr}->hline( $y, $x, $type, $scrlen );
+ 		$x += $scrlen;
+ 	    } else {
+-                $this->{-canvasscr}->addstr($y, $x, $token);
++                $this->{-canvasscr}->addstring($y, $x, $token);
+                 $x += length($token);
+             }
+         }
+     }
+     else {
+-        $this->{-canvasscr}->addstr($y, $x, $text);
++        $this->{-canvasscr}->addstring($y, $x, $text);
+     }
+ }
+ 
+@@ -434,7 +434,7 @@ sub char_read(;$)
+ 	print STDERR "DEBUG: get_key() -> select() -> $!\n"
+ 	    if $Curses::UI::debug; 
+     } elsif ($found) {
+-	$key = $s->getch();
++	$key = $s->getchar();
+     }
+ 
+     return $key;
+diff --git a/lib/Curses/UI/Dialog/Error.pm b/lib/Curses/UI/Dialog/Error.pm
+index 9599f4f..8a8bcd5 100644
+--- a/lib/Curses/UI/Dialog/Error.pm
++++ b/lib/Curses/UI/Dialog/Error.pm
+@@ -66,10 +66,10 @@ sub draw(;$)
+     $this->SUPER::draw(1) or return $this;
+ 
+     # Draw sign
+-    $this->{-borderscr}->addstr(2, 1, "    _"); 
+-    $this->{-borderscr}->addstr(3, 1, "   / \\"); 
+-    $this->{-borderscr}->addstr(4, 1, "  / ! \\"); 
+-    $this->{-borderscr}->addstr(5, 1, " /_____\\"); 
++    $this->{-borderscr}->addstring(2, 1, "    _"); 
++    $this->{-borderscr}->addstring(3, 1, "   / \\"); 
++    $this->{-borderscr}->addstring(4, 1, "  / ! \\"); 
++    $this->{-borderscr}->addstring(5, 1, " /_____\\"); 
+     $this->{-borderscr}->noutrefresh();
+ 
+     $this->{-canvasscr}->noutrefresh();
+diff --git a/lib/Curses/UI/Label.pm b/lib/Curses/UI/Label.pm
+index d1f2df9..2c136d0 100644
+--- a/lib/Curses/UI/Label.pm
++++ b/lib/Curses/UI/Label.pm
+@@ -209,11 +209,11 @@ sub draw(;$)
+             $line = substr($line, 0, $this->canvaswidth);
+             $line =~ s/.$/\$/;
+         } elsif ($this->{-paddingspaces}) {
+-            $this->{-canvasscr}->addstr($ypos, 0, " "x$this->canvaswidth);
++            $this->{-canvasscr}->addstring($ypos, 0, " "x$this->canvaswidth);
+         }
+ 
+         my $xpos = $this->compute_xpos($line);
+-        $this->{-canvasscr}->addstr($ypos, $xpos, $line);
++        $this->{-canvasscr}->addstring($ypos, $xpos, $line);
+ 
+         $ypos++;
+     }
+diff --git a/lib/Curses/UI/Listbox.pm b/lib/Curses/UI/Listbox.pm
+index 303e14d..fa3f633 100644
+--- a/lib/Curses/UI/Listbox.pm
++++ b/lib/Curses/UI/Listbox.pm
+@@ -340,7 +340,7 @@ sub draw(;$)
+     if (not @{$this->{-values}})
+     {
+         $this->{-canvasscr}->attron(A_DIM);    
+-        $this->{-canvasscr}->addstr(0,0,'- no values -');
++        $this->{-canvasscr}->addstring(0,0,'- no values -');
+         $this->{-canvasscr}->attroff(A_DIM);    
+ 
+     # There are values. Show them!
+@@ -388,7 +388,7 @@ sub draw(;$)
+             }
+             
+             # Make full line reverse or blank
+-            $this->{-canvasscr}->addstr(
++            $this->{-canvasscr}->addstring(
+                 $y, $prefix_len, 
+                 " "x($this->canvaswidth-$prefix_len)
+             );
+@@ -404,9 +404,9 @@ sub draw(;$)
+             if ($this->{-multi}) {
+                 if (defined $this->{-selected} and    
+                     $this->{-selected}->{$i}) {
+-		    $this->{-canvasscr}->addstr($y, 0, '[X]');
++		    $this->{-canvasscr}->addstring($y, 0, '[X]');
+                 } else {
+-                    $this->{-canvasscr}->addstr($y, 0, '[ ]');
++                    $this->{-canvasscr}->addstring($y, 0, '[ ]');
+                 }
+             }
+ 
+@@ -414,9 +414,9 @@ sub draw(;$)
+             elsif ($this->{-radio}) {
+                 if (defined $this->{-selected} 
+                     and $i == $this->{-selected}) {
+-                    $this->{-canvasscr}->addstr($y, 0, '<o>');
++                    $this->{-canvasscr}->addstring($y, 0, '<o>');
+                 } else {
+-                    $this->{-canvasscr}->addstr($y, 0, '< >');
++                    $this->{-canvasscr}->addstring($y, 0, '< >');
+                 }
+             }
+             $this->{-canvasscr}->attroff(A_BOLD) if $this->{-focus};
+diff --git a/lib/Curses/UI/Menubar.pm b/lib/Curses/UI/Menubar.pm
+index 16b62bf..7ad1540 100644
+--- a/lib/Curses/UI/Menubar.pm
++++ b/lib/Curses/UI/Menubar.pm
+@@ -420,7 +420,7 @@ sub draw()
+ 	$this->{-canvasscr}->attron(COLOR_PAIR($pair));
+     }
+  
+-    $this->{-canvasscr}->addstr(0, 0, " "x$this->canvaswidth);
++    $this->{-canvasscr}->addstring(0, 0, " "x$this->canvaswidth);
+ 
+     # Create menu-items.
+     my $x = 1;
+@@ -447,7 +447,7 @@ sub draw()
+         }
+ 
+         my $label = $item->{-label};
+-        $this->{-canvasscr}->addstr(0, $x, " " . $item->{-label} . " ");
++        $this->{-canvasscr}->addstring(0, $x, " " . $item->{-label} . " ");
+         $x += length($label) + 2;
+ 
+         $idx++;
+diff --git a/lib/Curses/UI/Notebook.pm b/lib/Curses/UI/Notebook.pm
+index 783cbd3..56714e7 100644
+--- a/lib/Curses/UI/Notebook.pm
++++ b/lib/Curses/UI/Notebook.pm
+@@ -350,7 +350,7 @@ sub draw($;$) {
+ 
+         debug_msg "    writing page name at x=$x";
+         $page_win->attron(A_REVERSE) if ($page eq $active_page);
+-        $page_win->addstr($y, $x, $page);
++        $page_win->addstring($y, $x, $page);
+         $page_win->attroff(A_REVERSE) if ($page eq $active_page);
+         if ($this->{-border} or $this->{-sbborder}) {
+             for (my $i = 0; $i < length($page); $i++) {
+diff --git a/lib/Curses/UI/Popupmenu.pm b/lib/Curses/UI/Popupmenu.pm
+index 9f7ad1c..356ac86 100644
+--- a/lib/Curses/UI/Popupmenu.pm
++++ b/lib/Curses/UI/Popupmenu.pm
+@@ -245,8 +245,8 @@ sub draw(;$)
+         $sellabel = "-"x$width;
+     }
+ 
+-    $this->{-canvasscr}->addstr(0,0, " "x$width);
+-    $this->{-canvasscr}->addstr(0,0, $sellabel);
++    $this->{-canvasscr}->addstring(0,0, " "x$width);
++    $this->{-canvasscr}->addstring(0,0, $sellabel);
+     $this->{-canvasscr}->move(0,$this->canvaswidth-1);
+     $this->{-canvasscr}->attroff(A_DIM);
+     $this->{-canvasscr}->attroff(A_REVERSE);
+diff --git a/lib/Curses/UI/Progressbar.pm b/lib/Curses/UI/Progressbar.pm
+index 8a3f826..8d60b9e 100644
+--- a/lib/Curses/UI/Progressbar.pm
++++ b/lib/Curses/UI/Progressbar.pm
+@@ -121,12 +121,12 @@ sub draw(;$)
+ 	$this->{-pos} != $this->{-max}) { $blocks-- }
+ 
+     # Draw center line
+-    $this->{-canvasscr}->addstr(0, 0, "-"x$this->canvaswidth)
++    $this->{-canvasscr}->addstring(0, 0, "-"x$this->canvaswidth)
+         unless $this->{-nocenterline};
+ 
+     # Draw blocks.
+     $this->{-canvasscr}->attron(A_REVERSE);
+-    $this->{-canvasscr}->addstr(0, 0, " "x$blocks);
++    $this->{-canvasscr}->addstring(0, 0, " "x$blocks);
+     $this->{-canvasscr}->attroff(A_REVERSE);
+ 
+     # Draw percentage
+@@ -147,9 +147,9 @@ sub draw(;$)
+         my $rev = substr($str, 0, $revlen);
+         my $norev = substr($str, $revlen, $len-$revlen);
+         $this->{-canvasscr}->attron(A_REVERSE);
+-        $this->{-canvasscr}->addstr(0, $xpos, $rev);
++        $this->{-canvasscr}->addstring(0, $xpos, $rev);
+         $this->{-canvasscr}->attroff(A_REVERSE);
+-        $this->{-canvasscr}->addstr(0, $xpos+$revlen, $norev);
++        $this->{-canvasscr}->addstring(0, $xpos+$revlen, $norev);
+     }
+ 
+     $this->{-canvasscr}->move(0,$this->canvaswidth-1);
+diff --git a/lib/Curses/UI/TextEditor.pm b/lib/Curses/UI/TextEditor.pm
+index 125f71f..1b99ee4 100644
+--- a/lib/Curses/UI/TextEditor.pm
++++ b/lib/Curses/UI/TextEditor.pm
+@@ -461,7 +461,7 @@ sub draw_text(;$)
+         $this->{-canvasscr}->attron(A_UNDERLINE) if ($this->{-showlines});;
+         $this->{-canvasscr}->attron(A_REVERSE) if ($this->{-reverse});
+         for my $y (0..$this->canvasheight-1) {
+-            $this->{-canvasscr}->addstr($y, 0, " "x($this->canvaswidth));
++            $this->{-canvasscr}->addstring($y, 0, " "x($this->canvaswidth));
+         }
+     }
+ 
+@@ -515,7 +515,7 @@ sub draw_text(;$)
+             }
+ 
+             # Clear line.
+-            $this->{-canvasscr}->addstr(
++            $this->{-canvasscr}->addstring(
+                 $id, 0, 
+ 		" "x$this->canvaswidth
+ 	    );
+@@ -525,7 +525,7 @@ sub draw_text(;$)
+             if ($inscreen =~ /\n/)
+             {
+                 $inscreen =~ s/\n//;
+-                $this->{-canvasscr}->addstr($id, 0, $inscreen);
++                $this->{-canvasscr}->addstring($id, 0, $inscreen);
+                 if ($this->{-showhardreturns})
+                 {
+                     if ($this->root->compat)
+@@ -538,7 +538,7 @@ sub draw_text(;$)
+                     }
+                 }
+             } else {
+-                $this->{-canvasscr}->addstr($id, 0, $inscreen);
++                $this->{-canvasscr}->addstring($id, 0, $inscreen);
+             }
+             
+             # Draw overflow characters.
+diff --git a/lib/Curses/UI/Widget.pm b/lib/Curses/UI/Widget.pm
+index e5ba460..074e666 100644
+--- a/lib/Curses/UI/Widget.pm
++++ b/lib/Curses/UI/Widget.pm
+@@ -567,8 +567,8 @@ sub draw(;$)
+         for my $y (0 .. $this->{-sh}-1)
+         {
+             my $rel_y = $y + $this->{-sy} - $this->{-by};
+-            $this->{-borderscr}->addstr($rel_y, 0, '[');
+-            $this->{-borderscr}->addstr($rel_y, $this->{-bw}-$offset, ']');
++            $this->{-borderscr}->addstring($rel_y, 0, '[');
++            $this->{-borderscr}->addstring($rel_y, $this->{-bw}-$offset, ']');
+         }
+         $this->{-borderscr}->attroff(A_BOLD) if $this->{-focus};
+         }
+@@ -602,7 +602,7 @@ sub draw(;$)
+             if ($this->{-titlefullwidth} 
+                 and $this->{-titlereverse}) {
+             	$this->{-borderscr}->attron(A_BOLD); 
+-                $this->{-borderscr}->addstr(0, 1, " "x($this->{-bw}-2));
++                $this->{-borderscr}->addstring(0, 1, " "x($this->{-bw}-2));
+                 $this->{-borderscr}->attroff(A_BOLD);
+             }
+             my $t = $this->{-title};
+@@ -613,7 +613,7 @@ sub draw(;$)
+                 $t =~ s/.$/\$/;
+             }
+             $this->{-borderscr}->attron(A_BOLD);   
+-            $this->{-borderscr}->addstr(0, 1, " $t ");
++            $this->{-borderscr}->addstring(0, 1, " $t ");
+             $this->{-borderscr}->attroff(A_REVERSE);
+             $this->{-borderscr}->attroff(A_BOLD);   
+         }
+@@ -1849,7 +1849,7 @@ new(), layout(), draw() and focus(), it can be used in Curses::UI.
+         $this->SUPER::draw(1);
+ 
+         ....your own draw stuff....
+-        $this->{-canvasscr}->addstr(0, 0, "Fixed string");
++        $this->{-canvasscr}->addstring(0, 0, "Fixed string");
+         ....your own draw stuff....
+ 
+         $this->{-canvasscr}->noutrefresh;
+diff --git a/t/fakelib/Curses.pm b/t/fakelib/Curses.pm
+index 2b5c196..cbb267e 100644
+--- a/t/fakelib/Curses.pm
++++ b/t/fakelib/Curses.pm
+@@ -8,7 +8,7 @@
+ 
+ package Curses;
+ 
+-$VERSION = 1.06;
++$VERSION = 1.29;
+ 
+ use Carp;
+ require Exporter;
+@@ -25,7 +25,7 @@ sub new      {
+ 
+ sub DESTROY  { }
+ 
+-sub printw   { addstr(sprintf shift, @_) }
++sub printw   { addstring(sprintf shift, @_) }
+ 
+ $LINES = 25;
+ $COLS = 80;
+@@ -40,16 +40,16 @@ $COLOR_PAIRS = "";
+     LINES $LINES COLS $COLS stdscr $stdscr curscr $curscr COLORS $COLORS
+     COLOR_PAIRS $COLOR_PAIRS
+ 
+-    addch echochar addchstr addchnstr addstr addnstr attroff attron attrset
++    addch echochar addchstr addchnstr addstring addnstr attroff attron attrset
+     standend standout attr_get attr_off attr_on attr_set chgat COLOR_PAIR
+     PAIR_NUMBER beep flash bkgd bkgdset getbkgd border box hline vline
+     erase clear clrtobot clrtoeol start_color init_pair init_color
+     has_colors can_change_color color_content pair_content delch deleteln
+-    insdelln insertln getch ungetch has_key KEY_F getstr getnstr getyx
++    insdelln insertln getchar ungetchar has_key KEY_F getstring getnstr getyx
+     getparyx getbegyx getmaxyx inch inchstr inchnstr initscr endwin
+     isendwin newterm set_term delscreen cbreak nocbreak echo noecho
+     halfdelay intrflush keypad meta nodelay notimeout raw noraw qiflush
+-    noqiflush timeout typeahead insch insstr insnstr instr innstr
++    noqiflush timeout typeahead insch insstr insnstr instring innstr
+     def_prog_mode def_shell_mode reset_prog_mode reset_shell_mode resetty
+     savetty getsyx setsyx curs_set napms move clearok idlok idcok immedok
+     leaveok setscrreg scrollok nl nonl overlay overwrite copywin newpad
+@@ -161,11 +161,11 @@ sub getbegxy{ $_[1] = 1; $_[2] = 2; }
+ sub getbegyx{ $_[1] = 1; $_[2] = 2; }
+ sub getmaxyx{ $_[1] = 24; $_[2] = 80; }
+ 
+-sub getch{
++sub getchar{
+ # ok, I got a problem here ... mess with the internals
+     my $badboy = caller();
+     no strict 'refs';
+-    #    print STDERR "getch called for $badboy\n";
++    #    print STDERR "getchar called for $badboy\n";
+     *{$badboy . "::get_key"} = sub(;$) { 
+ 	$foo = rand 2; #there is a deep dispute in curses UI
+ 	               #about if get_key returns a string or
+-- 
+2.35.3
+

@@ -1,0 +1,29 @@
+--- CMakeModules/FindSBW.orig.cmake	2020-06-14 19:46:09.656234000 +0200
++++ CMakeModules/FindSBW.cmake	2020-06-14 20:29:04.032525628 +0200
+@@ -22,7 +22,9 @@
+ 
+ find_path(SBW_INCLUDE_DIR SBW/SBW.h
+     PATHS $ENV{SBW_DIR}/include
++          ${INCLUDE_INSTALL_DIR}
+           $ENV{SBW_DIR}
++          ${INCLUDE_INSTALL_DIR}
+           ~/Library/Frameworks
+           /Library/Frameworks
+           /sw/include        # Fink
+@@ -37,13 +39,14 @@
+ endif ()
+ 
+ find_library(SBW_LIBRARY
+-    NAMES SBW-static
+-          SBW
++    NAMES SBW
++          SBW-static
+           sbw 
+           libSBW 
+           libsbw
+     PATHS $ENV{SBW_DIR}/${CMAKE_INSTALL_LIBDIR}
+           $ENV{SBW_DIR}
++          ${CMAKE_INSTALL_PREFI}/lib${LIB_SUFFIX}
+           ~/Library/Frameworks
+           /Library/Frameworks
+           /sw/lib        # Fink

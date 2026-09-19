@@ -1,0 +1,27 @@
+From 2ba2f22b91c064851a0b824402dec200771357a8 Mon Sep 17 00:00:00 2001
+From: Tomasz Torcz <tomek@pipebreaker.pl>
+Date: Wed, 13 May 2015 14:09:44 +0200
+Subject: [PATCH] systemd unit: run as 'daemon' user, not root
+
+  Debian has been running uptimed as 'daemon' for three years now.
+Root permissions are unneccessary. Packagers should ensure that
+/var/spool/uptimed is chown'ed on upgrade.
+---
+ etc/uptimed.service.in | 1 +
+ 1 file changed, 1 insertions(+)
+
+diff --git a/etc/uptimed.service.in b/etc/uptimed.service.in
+index 780420f..8ebd032 100644
+--- a/etc/uptimed.service.in
++++ b/etc/uptimed.service.in
+@@ -7,6 +7,7 @@ Documentation=man:uptimed(8) man:uprecords(1)
+ Type=notify
+ ExecStart=@prefix@/sbin/uptimed -f
+ Restart=on-failure
++User=daemon
+ 
+ [Install]
+ WantedBy=multi-user.target
+-- 
+2.1.0
+

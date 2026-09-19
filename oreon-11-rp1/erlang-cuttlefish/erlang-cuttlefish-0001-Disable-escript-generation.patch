@@ -1,0 +1,29 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sun, 6 Mar 2016 16:20:02 +0300
+Subject: [PATCH] Disable escript generation
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index 854eddf..c057570 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -9,12 +9,6 @@
+   {lager, {git, "https://github.com/erlang-lager/lager.git", {tag, "3.8.0"}}},
+   {getopt, {git, "https://github.com/jcomellas/getopt.git", {tag, "v1.0.1"}}}]}.
+ 
+-{escript_emu_args, "%%! -escript main cuttlefish_escript +S 1 +A 0\n"}.
+-{escript_incl_apps, [getopt, lager, cuttlefish]}.
+-{escript_main_app, cuttlefish}.
+-
+-{provider_hooks, [{post, [{compile, {default, escriptize}}]}]}.
+-
+ {xref_checks, [
+     undefined_function_calls,
+     undefined_functions,
+@@ -31,5 +25,3 @@
+ {profiles, [{dev, [{deps, [neotoma]},
+                    {plugins, [rebar3_neotoma_plugin]}]},
+             {test, [{deps, [bbmustache]}]}]}.
+-
+-

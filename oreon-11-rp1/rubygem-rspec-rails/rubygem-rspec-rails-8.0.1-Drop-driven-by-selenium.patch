@@ -1,0 +1,47 @@
+From 1f35f5031dae82bb1e7aa302ce1afeba94102d68 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Fri, 18 Jul 2025 17:49:40 +0200
+Subject: [PATCH] Drop `driven_by(:selenium)`
+
+In my testing, it does not have any influence.
+---
+ .../rspec/rails/example/system_example_group_spec.rb | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/spec/rspec/rails/example/system_example_group_spec.rb b/spec/rspec/rails/example/system_example_group_spec.rb
+index bba10512d..5807962d4 100644
+--- a/spec/rspec/rails/example/system_example_group_spec.rb
++++ b/spec/rspec/rails/example/system_example_group_spec.rb
+@@ -91,10 +91,6 @@ module RSpec::Rails
+         group = RSpec::Core::ExampleGroup.describe do
+           include SystemExampleGroup
+ 
+-          before do
+-            driven_by(:selenium)
+-          end
+-
+           def take_screenshot
+             puts 'line 1'
+             puts 'line 2'
+@@ -113,10 +109,6 @@ def take_screenshot
+         group = RSpec::Core::ExampleGroup.describe do
+           include SystemExampleGroup
+ 
+-          before do
+-            driven_by(:selenium)
+-          end
+-
+           def page
+             instance_double(Capybara::Session, save_screenshot: nil)
+           end
+@@ -162,10 +154,6 @@ def page
+         group = RSpec::Core::ExampleGroup.describe do
+           include SystemExampleGroup
+ 
+-          before do
+-            driven_by(:selenium)
+-          end
+-
+           after do
+             calls_in_order << :after_hook
+           end

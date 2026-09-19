@@ -1,0 +1,85 @@
+From 22d6d571a80dd954b8268cb5b4de3ba040d68822 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Mon, 9 Nov 2015 09:51:25 +0100
+Subject: [PATCH 41/41] Correct path to the sound server
+
+---
+ Makefile.sdl     | 9 ++++++---
+ Makefile.svgalib | 9 ++++++---
+ 2 files changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile.sdl b/Makefile.sdl
+index 7668f2e..c3ebdfd 100644
+--- a/Makefile.sdl
++++ b/Makefile.sdl
+@@ -14,6 +14,7 @@ INSTALLSOUND = True
+ MOUSE = -D MOUSE
+ #don`t add / and spaces at end of path!
+ #directories
++LIBEXECDIR = /usr/local/libexec/koules
+ SOUNDDIR = /usr/local/lib/koules
+ BINDIR = /usr/local/bin
+ MANDIR = /usr/local/man/man6
+@@ -31,7 +32,7 @@ CC	 = gcc
+ OPTIMIZE = -fomit-frame-pointer -O3 -ffast-math -Dlinux -Wall
+ OPTIMIZE1 = -fomit-frame-pointer -O6  -ffast-math -funroll-loops -finline-functions   -Dlinux -Wall
+ CFLAGS	 = -g3 -Wall -Wno-error=array-bounds -Wno-error=unused-but-set-variable -Wno-error=unused-function -Isdl -DHAVEUSLEEP $(DEFINES) $(SDL2_gfx_CFLAGS) $(ARCH) $(JOYSTICK) -DSOUNDDIR="\"$(SOUNDDIR)\"" $(SOUND) $(MOUSE) $(NET)\
+-	-DSOUNDSERVER=\"$(SOUNDDIR)/$(SOUNDSERVER)\" \
++	-DSOUNDSERVER=\"$(LIBEXECDIR)/$(SOUNDSERVER)\" \
+ 	-DSOUNDDIR=\"$(SOUNDDIR)\" \
+ 	-DSOUNDDEV=\"$(SOUNDDEV)\" \
+ 	-DNODIRECT -DSDLSUPPORT
+@@ -86,10 +87,12 @@ install:: $(PROG) $(SOUNDSERVER)
+ 	@:
+ 	@if [ "$(INSTALLSOUND)" = "True" ]; 				\
+ 	 then								\
++		echo "Creating directory " $(DESTDIR)$(LIBEXECDIR); 		\
++		if [ ! -d $(DESTDIR)$(LIBEXECDIR) ]; then mkdir $(DESTDIR)$(SOUNDDIR); fi;    \
++		echo "Copying sound server to directory " $(DESTDIR)$(LIBEXECDIR); \
++		$(INSTALL) -c -s $(INSTBIN1FLAGS) $(SOUNDSERVER) $(DESTDIR)$(LIBEXECDIR); \
+ 		echo "Creating directory " $(DESTDIR)$(SOUNDDIR); 		\
+ 		if [ ! -d $(DESTDIR)$(SOUNDDIR) ]; then mkdir $(DESTDIR)$(SOUNDDIR); fi;    \
+-		echo "Copying sound server to directory " $(DESTDIR)$(SOUNDDIR); \
+-		$(INSTALL) -c -s $(INSTBIN1FLAGS) $(SOUNDSERVER) $(DESTDIR)$(SOUNDDIR); \
+ 		echo "Copying sound files into directory " $(DESTDIR)$(SOUNDDIR); \
+ 		cd ./sounds; set -x;					\
+ 		for file in *.raw; do					\
+diff --git a/Makefile.svgalib b/Makefile.svgalib
+index 47809df..3456930 100644
+--- a/Makefile.svgalib
++++ b/Makefile.svgalib
+@@ -14,6 +14,7 @@ INSTALLSOUND = True
+ MOUSE = -D MOUSE
+ #don`t add / and spaces at end of path! 
+ #directories
++LIBEXECDIR = /usr/local/libexec/koules
+ SOUNDDIR = /usr/local/lib/koules
+ BINDIR = /usr/local/bin
+ MANDIR = /usr/local/man/man6
+@@ -28,7 +29,7 @@ CC	 = gcc
+ OPTIMIZE = -Isvgalib -fomit-frame-pointer -O3 -ffast-math -s -Dlinux -Wall -DHAVEUSLEEP
+ OPTIMIZE1 = -I svgalib -fomit-frame-pointer -O6  -ffast-math -funroll-loops -finline-functions   -s -Dlinux -Wall -DHAVEUSLEEP
+ CFLAGS	 = $(DEFINES) $(ARCH) $(JOYSTICK) -DSOUNDDIR="\"$(SOUNDDIR)\"" $(SOUND) $(MOUSE) $(NET)\
+-	-DSOUNDSERVER=\"$(SOUNDDIR)/$(SOUNDSERVER)\" \
++	-DSOUNDSERVER=\"$(LIBEXECDIR)/$(SOUNDSERVER)\" \
+ 	-DSOUNDDIR=\"$(SOUNDDIR)\" \
+ 	-DSOUNDDEV=\"$(SOUNDDEV)\"
+ 
+@@ -82,10 +83,12 @@ install:: $(PROG) $(SOUNDSERVER)
+ 	@:
+ 	@if [ "$(INSTALLSOUND)" = "True" ]; 				\
+ 	 then								\
++		echo "Creating directory " $(DESTDIR)$(LIBEXECDIR); 		\
++		if [ ! -d $(DESTDIR)$(LIBEXECDIR) ]; then mkdir $(DESTDIR)$(LIBEXECDIR); fi;    \
++		echo "Copying sound server to directory " $(DESTDIR)$(LIBEXECDIR); \
++		$(INSTALL) -c -s $(INSTBIN1FLAGS) $(SOUNDSERVER) $(DESTDIR)$(LIBEXECDIR); \
+ 		echo "Creating directory " $(DESTDIR)$(SOUNDDIR); 		\
+ 		if [ ! -d $(DESTDIR)$(SOUNDDIR) ]; then mkdir $(DESTDIR)$(SOUNDDIR); fi;    \
+-		echo "Copying sound server to directory " $(DESTDIR)$(SOUNDDIR); \
+-		$(INSTALL) -c -s $(INSTBIN1FLAGS) $(SOUNDSERVER) $(DESTDIR)$(SOUNDDIR); \
+ 		echo "Copying sound files into directory " $(DESTDIR)$(SOUNDDIR); \
+ 		cd ./sounds; set -x;					\
+ 		for file in *.raw; do					\
+-- 
+2.5.0
+

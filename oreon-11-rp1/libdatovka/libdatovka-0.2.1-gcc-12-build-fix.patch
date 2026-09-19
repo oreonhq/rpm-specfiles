@@ -1,0 +1,14 @@
+diff --git a/src/isds.c b/src/isds.c
+index 8bf1835..b02203b 100644
+--- a/src/isds.c
++++ b/src/isds.c
+@@ -6097,8 +6097,8 @@ static isds_error build_send_check_dbdummy_request(struct isds_ctx *context,
+     }
+ 
+ leave:
+-    free(service_name_locale);
+     xmlFreeNode(request);
++    free(service_name_locale);
+     return err;
+ }
+ #endif

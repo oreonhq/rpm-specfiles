@@ -1,0 +1,380 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sat, 31 Jan 2026 15:11:20 +0100
+Subject: [PATCH] Fix C90-style declaration warnings in snmpstats module
+
+Build fails with `-Werror=declaration-after-statement` (enforced by
+net-snmp pkg-config) due to variables declared after executable
+statements:
+
+```
+openserObjects.c:619:9: error: ISO C90 forbids mixed declarations and code [-Werror=declaration-after-statement]
+  619 |         int new_threshold = (int)(long)(int *)val;
+
+openserSIPCommonObjects.c:244:17: error: ISO C90 forbids mixed declarations and code [-Werror=declaration-after-statement]
+  244 |                 char *openBracePosition   = strchr(buffer, '(');
+
+openserSIPCommonObjects.c:475:9: error: ISO C90 forbids mixed declarations and code [-Werror=declaration-after-statement]
+  475 |         char *strEntityType = (char *)val;
+
+openserSIPContactTable.c:266:9: error: ISO C90 forbids mixed declarations and code [-Werror=declaration-after-statement]
+  266 |         static char *defaultUser = "DefaultUser";
+
+openserSIPContactTable.c:361:9: error: ISO C90 forbids mixed declarations and code [-Werror=declaration-after-statement]
+  361 |         netsnmp_variable_list *var = request->requestvb;
+```
+
+The net-snmp library's pkg-config adds
+`-Werror=declaration-after-statement` to CFLAGS, enforcing C90-style
+declaration ordering (all declarations before statements).
+
+While OpenSIPS adheres to the C99 standard (which allows mixed
+declarations and code), the net-snmp library could require C90-style
+declarations for modules that link against it. Following this style
+doesn't hurt C99 compatibility and improves code portability.`
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+Assisted-by: Claude (Anthropic) <https://claude.ai>
+
+diff --git a/modules/snmpstats/openserObjects.c b/modules/snmpstats/openserObjects.c
+index 180b62dda..909db4c80 100644
+--- a/modules/snmpstats/openserObjects.c
++++ b/modules/snmpstats/openserObjects.c
+@@ -605,6 +605,8 @@ int handle_openserDialogLimitMajorAlarm(netsnmp_mib_handler *handler,
+ static int set_if_valid_threshold(modparam_t type, void *val, char *varStr,
+ 	int *newVal)
+ {
++	int new_threshold;
++
+ 	if (val==0) {
+ 		LM_ERR("%s called with a null value!\n", varStr);
+ 		return -1;
+@@ -616,7 +618,7 @@ static int set_if_valid_threshold(modparam_t type, void *val, char *varStr,
+ 		return -1;
+ 	}
+ 
+-	int new_threshold = (int)(long)(int *)val;
++	new_threshold = (int)(long)(int *)val;
+ 
+ 	if (new_threshold < -1) {
+ 		LM_ERR("%s called with an invalid threshold=%d!\n",
+diff --git a/modules/snmpstats/openserSIPCommonObjects.c b/modules/snmpstats/openserSIPCommonObjects.c
+index e37ab6ef2..f2ddba5a7 100644
+--- a/modules/snmpstats/openserSIPCommonObjects.c
++++ b/modules/snmpstats/openserSIPCommonObjects.c
+@@ -225,6 +225,8 @@ int handle_openserSIPServiceStartTime(netsnmp_mib_handler *handler,
+ 
+ 	int elapsedTime = 0;
+ 	char buffer[SNMPGET_MAX_BUFFER];
++	char *openBracePosition = NULL;
++	char *closedBracePosition = NULL;
+ 
+ 	FILE *theFile = fopen(SNMPGET_TEMP_FILE, "r");
+ 
+@@ -241,8 +243,8 @@ int handle_openserSIPServiceStartTime(netsnmp_mib_handler *handler,
+ 
+ 		/* Find the positions of '(' and ')' so we can extract out the
+ 		 * timeticks value. */
+-		char *openBracePosition   = strchr(buffer, '(');
+-		char *closedBracePosition = strchr(buffer, ')');
++		openBracePosition   = strchr(buffer, '(');
++		closedBracePosition = strchr(buffer, ')');
+ 
+ 		/* Make sure that both the '(' and ')' exist in the file, and
+ 		 * that '(' occurs earlier than the ')'.  If all these
+@@ -464,6 +466,7 @@ int handle_openserSIPOtherwiseDiscardedMsgs(netsnmp_mib_handler *handler,
+  */
+ int handleSipEntityType( modparam_t type, void* val)
+ {
++	char *strEntityType = NULL;
+ 
+ 	/* By default we start off as "other". */
+ 	static char firstTime = 1;
+@@ -472,7 +475,7 @@ int handleSipEntityType( modparam_t type, void* val)
+ 		return -1;
+ 	}
+ 
+-	char *strEntityType = (char *)val;
++	strEntityType = (char *)val;
+ 
+ 	/* This is our first time through this function, so we need to change
+ 	 * openserEntityType from its default to 0, allowing our bitmasks below
+diff --git a/modules/snmpstats/openserSIPContactTable.c b/modules/snmpstats/openserSIPContactTable.c
+index 7edc1210c..03588029c 100644
+--- a/modules/snmpstats/openserSIPContactTable.c
++++ b/modules/snmpstats/openserSIPContactTable.c
+@@ -261,10 +261,10 @@ void deleteContactRow(int userIndex, int contactIndex)
+  */
+ void init_openserSIPContactTable(void)
+ {
+-	initialize_table_openserSIPContactTable();
+-
+ 	static char *defaultUser = "DefaultUser";
+ 
++	initialize_table_openserSIPContactTable();
++
+ 	createContactRow(1, 1, defaultUser, NULL);
+ }
+ 
+@@ -354,14 +354,16 @@ int openserSIPContactTable_get_value(
+ 	char       *retrievedExpiry;
+ 	struct tm  timeValue;
+ 
++	netsnmp_variable_list *var = NULL;
++	openserSIPContactTable_context *context = NULL;
++
+ 	/* First things first, we need to consume the interprocess buffer, in
+ 	 * case something has changed. We want to return the freshest data. */
+ 	consumeInterprocessBuffer();
+ 
+-	netsnmp_variable_list *var = request->requestvb;
++	var = request->requestvb;
+ 
+-	openserSIPContactTable_context *context =
+-		(openserSIPContactTable_context *)item;
++	context = (openserSIPContactTable_context *)item;
+ 
+ 	switch(table_info->colnum)
+ 	{
+diff --git a/modules/snmpstats/openserSIPPortTable.c b/modules/snmpstats/openserSIPPortTable.c
+index a10758273..3a03b72b2 100644
+--- a/modules/snmpstats/openserSIPPortTable.c
++++ b/modules/snmpstats/openserSIPPortTable.c
+@@ -104,19 +104,17 @@ openserSIPPortTable_context *getRow(int ipType, unsigned int *ipAddress)
+ {
+ 	int lengthOfOID;
+ 	oid *currentOIDIndex = createIndex(ipType, ipAddress, &lengthOfOID);
++	netsnmp_index theIndex;
++	openserSIPPortTable_context *rowToReturn = NULL;
+ 
+ 	if (currentOIDIndex == NULL)
+ 	{
+ 		return NULL;
+ 	}
+ 
+-	netsnmp_index theIndex;
+-
+ 	theIndex.oids = currentOIDIndex;
+ 	theIndex.len  = lengthOfOID;
+ 
+-	openserSIPPortTable_context *rowToReturn;
+-
+ 	/* Lets check to see if there is an existing row. */
+ 	rowToReturn = CONTAINER_FIND(cb.container, &theIndex);
+ 
+@@ -218,8 +216,6 @@ void init_openserSIPPortTable(void)
+ {
+ 	int curSNMPIndex = 0;
+ 
+-	initialize_table_openserSIPPortTable();
+-
+ 	unsigned int *UDPList = NULL;
+ 	unsigned int *TCPList = NULL;
+ 	unsigned int *TLSList = NULL;
+@@ -228,6 +224,8 @@ void init_openserSIPPortTable(void)
+ 	int numTCPSockets;
+ 	int numTLSSockets;
+ 
++	initialize_table_openserSIPPortTable();
++
+ 	/* Retrieve the list of the number of UDP and TCP sockets. */
+ 	numUDPSockets = get_socket_list_from_proto(&UDPList, PROTO_UDP);
+ 	numTCPSockets = get_socket_list_from_proto(&TCPList, PROTO_TCP);
+diff --git a/modules/snmpstats/openserSIPRegUserLookupTable.c b/modules/snmpstats/openserSIPRegUserLookupTable.c
+index 324df618f..a54b58375 100644
+--- a/modules/snmpstats/openserSIPRegUserLookupTable.c
++++ b/modules/snmpstats/openserSIPRegUserLookupTable.c
+@@ -514,23 +514,20 @@ void openserSIPRegUserLookupTable_set_reserve2( netsnmp_request_group *rg )
+  */
+ void openserSIPRegUserLookupTable_set_action( netsnmp_request_group *rg )
+ {
+-	/* First things first, we need to consume the interprocess buffer, in
+-	 * case something has changed. We want to return the freshest data. */
+-	consumeInterprocessBuffer();
+-
+ 	aorToIndexStruct_t *hashRecord;
+-
+ 	netsnmp_variable_list *var;
++	netsnmp_request_group_item *current;
++	int row_err = 0;
++	openserSIPRegUserLookupTable_context *row_ctx = NULL;
++	openserSIPRegUserLookupTable_context *undo_ctx = NULL;
+ 
+-	openserSIPRegUserLookupTable_context *row_ctx =
+-		(openserSIPRegUserLookupTable_context *)rg->existing_row;
+-
+-	openserSIPRegUserLookupTable_context *undo_ctx =
+-		(openserSIPRegUserLookupTable_context *)rg->undo_info;
++	/* First things first, we need to consume the interprocess buffer, in
++	 * case something has changed. We want to return the freshest data. */
++	consumeInterprocessBuffer();
+ 
+-	netsnmp_request_group_item *current;
++	row_ctx = (openserSIPRegUserLookupTable_context *)rg->existing_row;
+ 
+-	int			row_err = 0;
++	undo_ctx = (openserSIPRegUserLookupTable_context *)rg->undo_info;
+ 
+ 	/* Copy the actual data to the row. */
+ 	for( current = rg->list; current; current = current->next ) {
+diff --git a/modules/snmpstats/openserSIPRegUserTable.c b/modules/snmpstats/openserSIPRegUserTable.c
+index 43b14cdeb..9cf029df9 100644
+--- a/modules/snmpstats/openserSIPRegUserTable.c
++++ b/modules/snmpstats/openserSIPRegUserTable.c
+@@ -225,15 +225,14 @@ void updateUser(char *userName)
+  * Returns: The rows userIndex on success, and 0 otherwise. */
+ int createRegUserRow(char *stringToRegister)
+ {
+-	int static index = 0;
+-
+-	index++;
+-
+ 	openserSIPRegUserTable_context *theRow;
+-
+ 	oid  *OIDIndex;
+ 	int  stringLength;
+ 
++	int static index = 0;
++
++	index++;
++
+ 	theRow = SNMP_MALLOC_TYPEDEF(openserSIPRegUserTable_context);
+ 
+ 	if (theRow == NULL) {
+@@ -280,12 +279,12 @@ int createRegUserRow(char *stringToRegister)
+ /* Initializes the openserSIPRegUserTable module.  */
+ void init_openserSIPRegUserTable(void)
+ {
+-	/* Register this table with the master agent */
+-	initialize_table_openserSIPRegUserTable();
+-
+ 	/* We need to create a default row, so create DefaultUser */
+ 	static char *defaultUser = "DefaultUser";
+ 
++	/* Register this table with the master agent */
++	initialize_table_openserSIPRegUserTable();
++
+ 	createRegUserRow(defaultUser);
+ }
+ 
+@@ -350,14 +349,16 @@ int openserSIPRegUserTable_get_value(
+ 		netsnmp_index *item,
+ 		netsnmp_table_request_info *table_info )
+ {
++	netsnmp_variable_list *var = NULL;
++	openserSIPRegUserTable_context *context = NULL;
++
+ 	/* First things first, we need to consume the interprocess buffer, in
+ 	 * case something has changed. We want to return the freshest data. */
+ 	consumeInterprocessBuffer();
+ 
+-	netsnmp_variable_list *var = request->requestvb;
++	var = request->requestvb;
+ 
+-	openserSIPRegUserTable_context *context =
+-		(openserSIPRegUserTable_context *)item;
++	context = (openserSIPRegUserTable_context *)item;
+ 
+ 	switch(table_info->colnum)
+ 	{
+diff --git a/modules/snmpstats/openserSIPStatusCodesTable.c b/modules/snmpstats/openserSIPStatusCodesTable.c
+index 2b396c698..79f3a129a 100644
+--- a/modules/snmpstats/openserSIPStatusCodesTable.c
++++ b/modules/snmpstats/openserSIPStatusCodesTable.c
+@@ -310,6 +310,7 @@ int openserSIPStatusCodesTable_can_delete(
+ openserSIPStatusCodesTable_context *
+ openserSIPStatusCodesTable_create_row( netsnmp_index* hdr)
+ {
++	int codeIndex;
+ 	stat_var *in_status_code;
+ 	stat_var *out_status_code;
+ 
+@@ -337,7 +338,7 @@ openserSIPStatusCodesTable_create_row( netsnmp_index* hdr)
+ 	/* Retrieve the index for the status code, and then assign the starting
+ 	 * values.  The starting values will be used to calculate deltas during
+ 	 * the next snmpget/snmpwalk/snmptable/etc. */
+-	int codeIndex = ctx->openserSIPStatusCodeValue;
++	codeIndex = ctx->openserSIPStatusCodeValue;
+ 
+ 	ctx->startingInStatusCodeValue  = 0;
+ 	ctx->startingOutStatusCodeValue = 0;
+diff --git a/modules/snmpstats/snmpstats.c b/modules/snmpstats/snmpstats.c
+index 95bc1c1f3..575c0d106 100644
+--- a/modules/snmpstats/snmpstats.c
++++ b/modules/snmpstats/snmpstats.c
+@@ -346,7 +346,12 @@ static void sigchld_handler(int signal)
+  */
+ static int spawn_sysUpTime_child(void)
+ {
++	pid_t result_pid;
++	int snmpget_fd;
++	int local_path_to_snmpget_length;
++	int snmpget_binary_name_length;
+ 	struct sigaction new_sigchld_handler;
++	char *args[6];
+ 
+ 	char *local_path_to_snmpget = "/usr/bin/";
+ 	char *snmpget_binary_name   = "/snmpget";
+@@ -362,7 +367,7 @@ static int spawn_sysUpTime_child(void)
+ 	new_sigchld_handler.sa_handler = sigchld_handler;
+ 	sigaction(SIGCHLD, &new_sigchld_handler, &old_sigchld_handler);
+ 
+-	pid_t result_pid = fork();
++	result_pid = fork();
+ 
+ 	if (result_pid < 0) {
+ 		LM_ERR("failed to not spawn an agent to check sysUpTime\n");
+@@ -380,7 +385,7 @@ static int spawn_sysUpTime_child(void)
+ 
+ 	/* If we are here, then we are the child process.  Lets set up the file
+ 	 * descriptors so we can capture the output of snmpget. */
+-	int snmpget_fd =
++	snmpget_fd =
+ 		open(SNMPGET_TEMP_FILE, O_CREAT|O_TRUNC|O_RDWR,
+ 				S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+ 
+@@ -401,8 +406,12 @@ static int spawn_sysUpTime_child(void)
+ 				"  Defaulting to %s\n",	snmp_community_string);
+ 	}
+ 
+-	char *args[] = {"-Ov", "-c",  snmp_community_string, "localhost",
+-		SYSUPTIME_OID, (char *) 0};
++	args[0] = "-Ov";
++	args[1] = "-c";
++	args[2] = snmp_community_string;
++	args[3] = "localhost";
++	args[4] = SYSUPTIME_OID;
++	args[5] = (char *)0;
+ 
+ 	/* Make sure we have a path to snmpget, so we can retrieve the
+ 	 * sysUpTime. */
+@@ -416,8 +425,8 @@ static int spawn_sysUpTime_child(void)
+ 		local_path_to_snmpget = snmpget_path;
+ 	}
+ 
+-	int local_path_to_snmpget_length = strlen(local_path_to_snmpget);
+-	int snmpget_binary_name_length   = strlen(snmpget_binary_name);
++	local_path_to_snmpget_length = strlen(local_path_to_snmpget);
++	snmpget_binary_name_length   = strlen(snmpget_binary_name);
+ 
+ 	/* Allocate enough memory to hold the path, the binary name, and the
+ 	 * null character.  We don't use pkg_memory here. */
+diff --git a/modules/snmpstats/utilities.c b/modules/snmpstats/utilities.c
+index dfc0978b7..2f7ed9a30 100644
+--- a/modules/snmpstats/utilities.c
++++ b/modules/snmpstats/utilities.c
+@@ -72,13 +72,13 @@ int stringHandlerSanityCheck( modparam_t type, void *val, char *parameterName)
+ int get_statistic(char *statName)
+ {
+ 	int result = 0;
+-
++	stat_var *theVar = NULL;
+ 	str theStr;
+ 
+ 	theStr.s   = statName;
+ 	theStr.len = strlen(statName);
+ 
+-	stat_var *theVar = get_stat(&theStr);
++	theVar = get_stat(&theStr);
+ 
+ 	if (theVar==0) {
+ 		LM_INFO("failed to retrieve statistics for %s\n", statName);

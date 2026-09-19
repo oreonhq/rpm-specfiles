@@ -1,0 +1,29 @@
+--- a/configure	2023-04-06 16:07:07.000000000 +0600
++++ b/configure	2023-04-06 16:41:12.000000000 +0600
+@@ -4780,7 +4780,7 @@
+ then :
+   enableval=$enable_ddls88; with_DLL88="$enableval"
+ else $as_nop
+-  with_DDLS88=yes
++  with_DDLS88=no
+ fi
+ 
+ if test "$with_DDLS88" = "yes"; then
+@@ -5249,7 +5249,7 @@
+   printf "%s\n" "#define HAVE_SYS_IO_H 1" >>confdefs.h
+ 
+ else $as_nop
+-  as_fn_error $? "essential header file is missing" "$LINENO" 5
++  with_DDLS88=no
+ fi
+ 
+ done
+@@ -6262,7 +6262,7 @@
+ then :
+ 
+ else $as_nop
+-  as_fn_error $? "support missing" "$LINENO" 5
++  with_DDLS88=no
+ fi
+ 
+     fi

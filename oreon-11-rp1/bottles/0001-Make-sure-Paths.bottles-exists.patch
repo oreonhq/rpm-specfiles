@@ -1,0 +1,34 @@
+From 7e820512cffc4f709a2d00e341306f57d91ddda5 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Mon, 4 Mar 2024 20:28:49 +0100
+Subject: [PATCH 1/3] Make sure Paths.bottles exists
+
+When calling `bottles foo.exe` either from the command line or by
+opening the executable from the file browser with Bottles, Bottles will
+throw a FileNotFoundError if Paths.bottles does not exist.
+
+It seems check_app_dirs() is never called in that situation.
+---
+ bottles/backend/managers/manager.py | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/bottles/backend/managers/manager.py b/bottles/backend/managers/manager.py
+index 5569b663..799ce8c3 100644
+--- a/bottles/backend/managers/manager.py
++++ b/bottles/backend/managers/manager.py
+@@ -888,7 +888,11 @@ class Manager(metaclass=Singleton):
+         Check for local bottles and update the local_bottles list.
+         Will also mark the broken ones if the configuration file is missing
+         """
+-        bottles = os.listdir(Paths.bottles)
++        try:
++            bottles = os.listdir(Paths.bottles)
++        except FileNotFoundError:
++            self.check_app_dirs()
++            bottles = []
+ 
+         # Empty local bottles
+         self.local_bottles = {}
+-- 
+2.51.0
+

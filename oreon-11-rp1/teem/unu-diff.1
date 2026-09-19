@@ -1,0 +1,46 @@
+.TH UNU\-DIFF "1" "May 2021" "" "User Commands"
+.SH NAME
+unu\-diff \- sees if two
+.IR nrrd s
+are different in any way
+.SH SYNOPSIS
+.B unu\ diff
+.RI < ninA >
+.RI < ninB >
+.RB [ \-eps , \-\-epsilon
+.RI < eps >]
+.RB [ \-od , \-\-onlydata ]
+.SH DESCRIPTION
+Sees if two
+.IR nrrd s
+are different in any way.
+Looks through all fields to see if two given
+.IR nrrd s
+contain the same information.
+Or, array meta-data can be excluded, and comparison only on the data values is
+done with the
+.B \-od
+flag.
+.IP \(bu +2n
+Uses
+.B nrrdCompare
+.SH OPTIONS
+.TP
+.RI < ninA >
+First input
+.IR nrrd .
+.TP
+.RI < ninB >
+Second input
+.IR nrrd .
+.TP
+.B \-eps\fR\ <\fIeps\fR>\ ,\ \fB\-\-epsilon\fR\ <\fIeps\fR>
+threshold for allowable difference in values in data values
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-od\fR\ ,\ \fB\-\-onlydata
+Compare data values only, excluding array meta-data
+.SH "SEE\ ALSO"
+.BR unu (1)

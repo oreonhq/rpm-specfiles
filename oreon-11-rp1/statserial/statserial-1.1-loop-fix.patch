@@ -1,0 +1,27 @@
+diff --git a/statserial.c b/statserial.c
+index 98d8399..3dd29a4 100644
+--- a/statserial.c
++++ b/statserial.c
+@@ -116,6 +116,7 @@ int main(int argc, char *argv[])
+ {
+   int fd;                       /* for serial device */
+   int status;                   /* status of system calls */
++  int old_status_init = 0;      /* whether the old_status was initialized */
+   unsigned int old_status = 0;  /* value of previous call */
+   unsigned int arg;             /* value returned by ioctl */
+ 
+@@ -154,12 +155,13 @@ int main(int argc, char *argv[])
+     }
+ 
+     /* avoid unneccessary screen updates */
+-    if (arg == old_status)
++    if (old_status_init && arg == old_status)
+     {
+       sleep(1);
+       continue;
+     }
+     old_status = arg;
++    old_status_init = 1;
+ 
+     /* home cursor */
+     if (!d_option && !x_option && !n_option) {

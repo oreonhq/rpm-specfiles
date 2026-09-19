@@ -1,0 +1,10 @@
+--- src/cups-pdf.c.orig	2017-02-27 19:06:28.369835445 -0400
++++ src/cups-pdf.c	2017-02-27 19:08:14.263593153 -0400
+@@ -374,6 +374,7 @@
+   (void) umask(0077);
+ 
+   group=getgrnam(Conf_Grp);
++  if (group)
+     grpstat=setgid(group->gr_gid);
+ 
+   if (strlen(Conf_Log)) {

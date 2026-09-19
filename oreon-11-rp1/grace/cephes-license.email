@@ -1,0 +1,47 @@
+Copyright for the cephes library (details):
+
+  This email from Steve Moshier, the copyright owner of cephes, to Helen 
+  Faulkner (Debian maintainer of labplot), and other interested parties 
+  (labplot and grace authors, grace maintainer and labplot sponsor), confirms 
+  that we may release labplot with cephes licensed under the GPL.
+ 
+
+  -------- Original Message --------
+  Subject: Re: licensing of cephes
+  Date: Sun, 2 Jan 2005 21:48:02 -0500 (EST)
+  From: Steve Moshier <steve@moshier.net>
+  To: Helen Faulkner <helen_ml_faulkner@yahoo.co.uk>
+  CC: twerner@debian.org, Ben Burton <bab@debian.org>, evgeny@stambulchik.net,
+  Stefan Gerlach <gerlach@mbi-berlin.de>
+  References: <41D14354.4040506@yahoo.co.uk> 
+  <Pine.LNX.4.58.0412280836250.9987@moshier.net> 
+  <41D17BE3.3020708@yahoo.co.uk>
+  <Pine.LNX.4.58.0412281219420.10873@moshier.net> 
+  <41D1FB8D.6030002@yahoo.co.uk> 
+  <Pine.LNX.4.58.0412291032190.15474@moshier.net> 
+  <41D2D8EF.9010702@yahoo.co.uk> 
+  <Pine.LNX.4.58.0412291632540.17032@moshier.net> 
+  <41D41B2E.80508@yahoo.co.uk>
+
+
+
+  On Thu, 30 Dec 2004, Helen Faulkner wrote:
+
+  >   http://www.debian.org/social_contract#guidelines
+
+  This is fine with me.  To acknowedge your terms explicily,
+  how about augmenting the permission to read something like
+  the following --
+
+    This software is derived from the Cephes Math Library. It is
+    incorporated herein, and licensed in accordance with DFSG,
+    by permission of the author.
+
+
+  If you are trying to get me to suggest a specific form for your
+  license, then from looking at Debian programs such as dpkg it seems to
+  me that you would find the GPL to be appropriate and the permission
+  statement could reference one of the GPL documents instead of DFSG.
+  Alternatively, the packages you have been talking about distributing
+  with Debian presumably come with some sort of licenses and it would
+  make sense to propose those licenses.

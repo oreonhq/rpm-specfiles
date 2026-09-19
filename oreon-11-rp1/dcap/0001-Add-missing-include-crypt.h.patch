@@ -1,0 +1,27 @@
+From c2a685783e44eb7cd00cd16fb85120cde4f749ae Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Mon, 13 Nov 2023 21:09:07 +0100
+Subject: [PATCH] Add missing #include <crypt.h>
+
+dcapPasswd.c:35:34: error: implicit declaration of function 'crypt' [-Werror=implicit-function-declaration]
+   35 |       strncpy(savepasswd, (char*)crypt(newpasswd, user), 100);
+      |                                  ^~~~~
+---
+ plugins/telnet/dcapPasswd.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/plugins/telnet/dcapPasswd.c b/plugins/telnet/dcapPasswd.c
+index 745a487..d933384 100644
+--- a/plugins/telnet/dcapPasswd.c
++++ b/plugins/telnet/dcapPasswd.c
+@@ -6,6 +6,7 @@
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include <stdlib.h>
++#include <crypt.h>
+ 
+ int main (int argn, char **argv) {
+   int valid_change;
+-- 
+2.41.0
+

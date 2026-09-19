@@ -1,10 +1,10 @@
-%global source0_hash 77f02418b61a62727cb43c03c7ed7772c67b1c2cbc3691e4f36726a4720a1cba
+%global source0_hash f9cd525d501f08931f2c0b4d08f5384588967bc89fac62e39ed4ae2da2925a39
 
 %global stable_kf6 stable
 
 
 Name:    kscreenlocker
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: Library and components for secure lock screen architecture
 

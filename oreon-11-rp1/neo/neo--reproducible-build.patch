@@ -1,0 +1,12 @@
+--- neo-0.6.1--orig/src/neo.cpp	2022-02-22 00:45:59.000000000 +0100
++++ neo-0.6.1--patched/src/neo.cpp	2022-07-14 18:22:17.853502306 +0200
+@@ -369,9 +369,8 @@
+ }
+ 
+ void PrintVersion() {
+     printf("neo %s\n", VERSION);
+-    printf("Built on %s\n", __DATE__);
+     printf("Copyright (C) 2021 Stewart Reive\n"
+            "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.\n"
+            "This is free software: you are free to change and redistribute it.\n"
+            "There is NO WARRANTY, to the extent permitted by law.\n");

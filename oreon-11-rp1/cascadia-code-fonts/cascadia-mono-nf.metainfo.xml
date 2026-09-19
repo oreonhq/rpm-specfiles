@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot@fedoraproject.org> -->
+<component type="font">
+  <id>cascadia-mono-nf</id>
+  <metadata_license>CC-BY-4.0</metadata_license>
+  <name>Cascadia Mono NF</name>
+  <summary>A monospaced font with "nerd fonts" symbols</summary>
+  <description>
+    <p>
+       The Cascadia Mono NF font family is a variant of Cascadia Code. Cascadia Mono NF
+       includes the additional "nerd fonts" glyphs, but is still metrics compatible with
+       Cascadia Mono.
+    </p>
+  </description>
+  <updatecontact>spot_at_fedoraproject_dot_org</updatecontact>
+  <url type="homepage">https://github.com/microsoft/cascadia-code/</url>
+</component>

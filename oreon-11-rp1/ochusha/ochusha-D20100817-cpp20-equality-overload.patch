@@ -1,0 +1,23 @@
+--- ochusha-0.6.0.1-cvs20100817T0000/libochusha/ref_count.h.cpp20	2009-01-01 16:46:43.000000000 +0900
++++ ochusha-0.6.0.1-cvs20100817T0000/libochusha/ref_count.h	2026-01-16 17:08:27.987395689 +0900
+@@ -37,6 +37,7 @@
+ 
+ #include <cassert>
+ #include <cstdlib>
++#include <cstdint>
+ 
+ 
+ using namespace std;
+@@ -103,6 +104,12 @@ namespace Ochusha
+ 
+     inline bool operator==(const T *obj) const
+     { return pointer == obj; }
++
++    inline bool operator==(uintptr_t obj) const
++    { return (uintptr_t)pointer == obj; }
++
++    inline bool operator==(intptr_t obj) const
++    { return (intptr_t)pointer == obj; }
+   };
+ 
+   typedef smart_ptr<RefCount> RefCountHandle;

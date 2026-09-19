@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Alexander Ploumistos <alexpl@fedoraproject.org> -->
+<component type="font">
+	<id>gdouros-anaktoria</id>
+	<metadata_license> CC0-1.0</metadata_license>
+	<name>Anaktoria</name>
+	<summary>A font based on "Grecs du roi" and the "First Folio Edition of Shakespeare"</summary>
+	<description>
+		<p>
+			Greek letters are based on "Grecs du roi" designed by Claude Garamond (1480-
+			1561) between 1541 and 1544, commissioned by king Francis I of France, for the
+			exclusive use by the Imprimerie Nationale in Paris. Mindaugas Strockis prepared
+			a modern version of "Grecs du roi" in 2001.
+		</p>
+		<p>
+			Latin letters have been digitized directly out of the titles and front pages of
+			the 1623 "First Folio Edition of Shakespeare". Scott Mann and Peter Guither
+			prepared a modern version of the font for "The Illinois Shakespeare Festival"
+			in 1995.
+		</p>
+		<p>
+			The font covers the Windows Glyph List, IPA Extensions, Greek Extended, Ancient
+			Greek Numbers, Byzantine and Ancient Greek Musical Notation, various
+			typographic extras and several Open Type features (Case-Sensitive Forms, Small
+			Capitals, Subscript, Superscript, Numerators, Denominators, Fractions, Old
+			Style Figures, Historical Forms, Stylistic Alternates, Ligatures).
+			
+			It was created by George Douros.
+		</p>
+	</description>
+	<url type="homepage">http://users.teilar.gr/~g1951d/Textfonts.htm</url>
+	<updatecontact>alexpl@fedoraproject.org</updatecontact>
+</component>

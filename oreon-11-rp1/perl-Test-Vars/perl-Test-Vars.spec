@@ -1,3 +1,4 @@
+%global debug_package %{nil}
 %global source0_hash 56ddacbb663cf542673aa65525ef50980b53f207770e743a1d18614bd8268178
 
 Name:           perl-Test-Vars

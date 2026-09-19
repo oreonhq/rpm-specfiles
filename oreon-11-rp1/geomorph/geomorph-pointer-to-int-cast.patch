@@ -1,0 +1,15 @@
+diff -rup a/src/hf/hf_dialog_options.c b/src/hf/hf_dialog_options.c
+--- a/src/hf/hf_dialog_options.c	2016-05-17 18:40:44.143702307 +0200
++++ b/src/hf/hf_dialog_options.c	2016-05-18 17:43:46.806234496 +0200
+@@ -44,9 +44,9 @@ void set_creation_container (hf_options_
+ 		if (GTK_IS_CONTAINER(creation_container))
+ 			hfo->creation_container = creation_container;
+ 		else
+-			printf("SET_CREATION_CONTAINER: %d is not a container\n", creation_container);
++			printf("SET_CREATION_CONTAINER: %d is not a container\n", GPOINTER_TO_INT(creation_container));
+ 	else
+-		printf("SET_CREATION_CONTAINER: %d is not a widget\n", creation_container);
++		printf("SET_CREATION_CONTAINER: %d is not a widget\n", GPOINTER_TO_INT(creation_container));
+ 	if (!already_set)
+ 		gtk_box_pack_start(GTK_BOX(creation_container), hfo->fd_struct->filter_dialog, FALSE, FALSE, 0);
+ //		gtk_container_add(GTK_CONTAINER(creation_container), hfo->fd_struct->filter_dialog);

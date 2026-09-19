@@ -1,0 +1,21 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 2 Dec 2020 17:37:21 +0100
+Subject: [PATCH] We still do not use eqc for checking
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index c658738..f1dafc7 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -45,10 +45,6 @@
+     
+ ]}.
+ 
+-{plugins, [
+-    {eqc_rebar, {git, "https://github.com/Quviq/eqc-rebar", {branch, "master"}}}
+-]}.
+-
+ {xref_checks,[undefined_function_calls,undefined_functions,locals_not_used,
+     deprecated_function_calls, deprecated_functions]}.
+ 

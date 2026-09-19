@@ -1,0 +1,24 @@
+diff -ur kmix/core/settings.kcfg kmix-b/core/settings.kcfg
+--- kmix/core/settings.kcfg	2025-01-07 09:24:18.561487260 -0500
++++ kmix-b/core/settings.kcfg	2025-01-07 09:26:37.499186482 -0500
+@@ -57,7 +57,7 @@
+     <!-- Set by KMixPrefDlg, read by kmix_autostart.desktop	-->
+ 
+     <entry name="AutoStart" type="Bool">
+-      <default>true</default>
++      <default>false</default>
+     </entry>
+ 
+     <!-- Saved by KMixWindow::saveBaseConfig() and loaded	-->
+diff -ur kmix/desktop/kmix_autostart.desktop kmix-b/desktop/kmix_autostart.desktop
+--- kmix/desktop/kmix_autostart.desktop	2025-01-07 09:24:18.562487273 -0500
++++ kmix-b/desktop/kmix_autostart.desktop	2025-01-07 09:26:59.149452649 -0500
+@@ -7,7 +7,7 @@
+ X-KDE-autostart-after=pulseaudio
+ X-KDE-StartupNotify=false
+ X-DBUS-StartupType=Unique
+-X-KDE-autostart-condition=kmixrc:Global:AutoStart:true
++X-KDE-autostart-condition=kmixrc:Global:AutoStart:false
+ Icon=kmix
+ GenericName=Sound Mixer
+ GenericName[ar]=مازج الصوت

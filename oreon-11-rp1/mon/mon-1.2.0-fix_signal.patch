@@ -1,0 +1,20 @@
+diff -ru mon-1.2.0-orig/mon.d/rpc.monitor.c mon-1.2.0/mon.d/rpc.monitor.c
+--- mon-1.2.0-orig/mon.d/rpc.monitor.c	2004-06-09 07:18:04.000000000 +0200
++++ mon-1.2.0/mon.d/rpc.monitor.c	2025-01-28 10:50:58.646048623 +0100
+@@ -82,7 +82,7 @@
+ int get_inet_address(struct sockaddr_in *, char *);
+ #endif
+ void usage();
+-void alarm_nop();
++void alarm_nop(int signal);
+ 
+ /* global variables */
+ int opt_all;			/* test all registered programs */
+@@ -439,6 +439,6 @@
+     exit(0);
+ }
+ 
+-void alarm_nop() {
++void alarm_nop(int signal) {
+     return;
+ }

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fc30952c69e58c09bbc709c35d8bc5904bc5a1fcb823ff330616ba55b5fc05c7
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name: neochat
-Version: 26.03.80
+Version: 26.08.1
 Release: 1%{?dist}
 
 License: GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND BSD-3-Clause
@@ -130,8 +130,11 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 %{_libdir}/qt6/plugins/kf6/purpose/neochatshareplugin.so
 %{_mandir}/man1/neochat.1*
 %{_kf6_datadir}/dbus-1/services/org.kde.neochat.service
-
+/usr/share/config.kcfg/neochatconfig.kcfg
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

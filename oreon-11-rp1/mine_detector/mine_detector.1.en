@@ -1,0 +1,13 @@
+.TH mine_detector 1 "2013-07-03" "Mine Detector" "Mine Detector"
+.SH NAME
+\fBmine_detector\fP - a mine-finding game
+.SH DESCRIPTION
+Mine Detector is a mine-finding game with somewhat different rules from other
+mine-finding games. Mine Detector rarely requires guessing. Only at the higher
+levels may guessing sometimes be the only way to win.
+.PP
+For instructions on how to play, start the game and click the Rules button.
+.SH AUTHORS
+Mine Detector was written by Jeffrey Carter.
+.PP
+This manual page was written by Björn Persson <Bjorn@Rombobjörn.se>.

@@ -1,0 +1,19 @@
+Description: Add stdin handler to _version sub
+Origin: vendor
+Bug: https://github.com/bestpractical/gnupg-interface/issues/8
+Bug-Debian: https://bugs.debian.org/1016125
+Author: gregor herrmann <gregoa@debian.org>
+Last-Update: 2022-07-29
+
+--- a/lib/GnuPG/Interface.pm
++++ b/lib/GnuPG/Interface.pm
+@@ -821,7 +821,8 @@
+     my ( $self ) = @_;
+ 
+     my $out = IO::Handle->new;
+-    my $handles = GnuPG::Handles->new( stdout => $out );
++    my $in  = IO::Handle->new;
++    my $handles = GnuPG::Handles->new( stdout => $out, stdin => $in );
+     my $pid = $self->wrap_call( commands => [ '--no-options', '--version' ], handles => $handles );
+     my $line = $out->getline;
+     $line =~ /(\d+\.\d+\.\d+)/;

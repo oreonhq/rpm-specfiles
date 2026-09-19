@@ -1,0 +1,32 @@
+diff -udHrN -- a/cmake_modules/compiler_options.cmake b/cmake_modules/compiler_options.cmake
+--- a/cmake_modules/compiler_options.cmake	2021-06-26 21:07:31.000000000 +0200
++++ b/cmake_modules/compiler_options.cmake	2021-06-27 12:09:22.294653542 +0200
+@@ -57,28 +57,3 @@
+   # Set the possible values of build type for cmake-gui
+   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+ endif()
+-
+-# compiler capabilities
+-include(CheckCXXCompilerFlag)
+-if(WIN32)
+-  set(FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+-  #set(CMAKE_LIBRARY_ARCHITECTURE x86)
+-else()
+-  # c++11 options
+-  check_cxx_compiler_flag(-std=c++11 HAS_CXX11_FLAG)
+-  check_cxx_compiler_flag(-std=c++0x HAS_CXX0X_FLAG)
+-
+-  if(HAS_CXX11_FLAG)
+-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+-  elseif(HAS_CXX0X_FLAG)
+-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+-  endif()
+-
+-  if(APPLE)
+-    check_cxx_compiler_flag(-stdlib=libc++ HAS_LIBCXX11_FLAG)
+-
+-    if(HAS_LIBCXX11_FLAG)
+-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+-    endif()
+-  endif()
+-endif()

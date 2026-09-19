@@ -1,0 +1,21 @@
+--- ttf-parser-0.25.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ ttf-parser-0.25.1/Cargo.toml	2025-05-06T15:48:11.532129+00:00
+@@ -21,7 +21,7 @@
+     "خالد حسني (Khaled Hosny) <khaled@aliftype.com>",
+ ]
+ build = false
+-exclude = ["benches/**"]
++exclude = ["benches/**", "/examples",  "/meson.build", "/testing-tools", "/tests"]
+ autolib = false
+ autobins = false
+ autoexamples = false
+@@ -75,9 +75,6 @@
+ [dev-dependencies.base64]
+ version = "0.22.1"
+ 
+-[dev-dependencies.pico-args]
+-version = "0.5"
+-
+ [dev-dependencies.tiny-skia-path]
+ version = "0.11.4"
+ 

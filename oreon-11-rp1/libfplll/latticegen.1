@@ -1,0 +1,217 @@
+.TH LATTICEGEN "1" "November 2024" "" "User Commands"
+.SH NAME
+.B latticegen
+\(en
+utility for generating matrices
+.SH SYNOPSIS
+.B latticegen \fR[\fB\-randseed\ \fR[\fIint\fR\ |\ \fBtime\fR]] \fIoptions 
+.SH DESCRIPTION
+.BR latticegen (1)
+is a utility for generating matrices (rows form input lattice basis vectors).
+.SH OPTIONS
+Note that by default, the random bits always use the same seed,
+to ensure reproducibility.
+The seed may be changed with the option
+.BI \-randseed\  integer
+or by using the current time (in seconds)
+.BR \-randseed\ time .
+If you use this option, it must be the first one on the command line.
+.TP
+.B r\ \fId\fB\ \fIb
+.\" gen_intrel
+generates a knapsack like matrix of dimension
+.IR d \ \[mu]\ ( d +1)
+and
+.I b
+bits (see, e.g.\:
+.B D.\ Stehle.
+.B Floating-Point LLL: Theoretical and Practical Aspects.
+.B The LLL Algorithm
+.B 2009:
+.BR 179\(en213 ):
+the
+.IR i \-th
+vector starts with a random integer of bit-length
+.RI <= b
+and the rest is the
+.IR i \-th
+canonical unit vector.
+.TP
+.B s\ \fId\fB\ \fIb\fB\ \fIb2
+.\" gen_simdioph
+generates a
+.IR d \ \[mu]\  d
+matrix of a form similar to that is involved
+when trying to find rational approximations
+to reals with the same small denominator (see, e.g.,
+.B A.\ K.\ Lenstra, H.\ W.\ Lenstra,\ Jr. and L.\ Lovasz.
+.B Factoring polynomials with rational coefficients.
+.B Math.\ Ann., 261:\ 515\(en534
+.BR (1982) ):
+the first vector starts with a random integer of bit-length
+.RI <= b2
+and continues with
+.IR d \-1
+independent integers of bit-lengths
+.RI <= b ;
+the
+.IR i \-th
+vector for
+.IR i >1
+is the
+.IR i \-th
+canonical unit vector scaled by a factor
+.RI 2^ b .
+.TP
+.B u\ \fId\fB\ \fIb
+.\" gen_uniform
+generates a
+.IR d \ \[mu]\  d
+matrix whose entries are independent integers of bit-lengths
+.RI <= b .
+.TP
+.B n\ \fId\fB\ \fIb\fB\ \fIc
+generates an ntru-like matrix.
+If char is
+.RB \(oq b \(cq,
+then it first samples an integer
+.I q
+of bit-length
+.IR b ,
+whereas if char is
+.RB \(oq q \(cq,
+then it sets
+.I q
+to the provided value.
+Then it samples a uniform
+.I h
+in the ring
+.RI Z_ q [ x ]/( x ^ n -1).
+It finally returns the
+2\ \[mu]\ 2
+block matrix
+[[\fBI\fR,\ \fBRot\fR(\fIh\fR)],\ [\fB0\fR,\ \fIq\fR*\fBI\fR]],
+where each block is
+.IR d \ \[mu]\  d ,
+the first row of
+.BR Rot (\fIh\fR)
+is the coefficient vector of
+.IR h ,
+and the
+.IR i \-th
+row of
+.BR Rot (\fIh\fR)
+is the shift of the
+.RI ( i \-1)\-th
+(with last entry put back in first position), for all
+.IR i >1.
+.IR Warning :
+this does not produce a genuine ntru lattice with
+.I h
+a genuine public key (see
+.B J.\ Hoffstein, J.\ Pipher, J.\ H.\ Silverman.
+.B NTRU: A Ring-Based Public Key Cryptosystem.
+.B ANTS 1998:
+.BR 267\(en288 ).
+.\" gen_ntrulike
+.TP
+.B N\ \fId\fB\ \fIb\fB\ \fIc
+.\" gen_ntrulike2
+as the previous option, except that the constructed matrix is
+.RI [[ q *\fBI\fR,\ \fB0\fR],\ [\fBRot\fR( h ),\ \fBI\fR]].
+.TP
+.B q\ \fId\fB\ \fIk\fB\ \fIb\fB\ \fIc
+.\" gen_qary
+generates a
+.IR q \-ary
+matrix.
+If char is
+.RB \(oq b \(cq,
+then it first samples an integer
+.I q
+of bit-length
+.IR b ;
+if char is
+.RB \(oq p \(cq,
+it does the same and updates
+.I q
+to the smallest (probabilistic) prime that is greater;
+if char is
+.RB \(oq q \(cq,
+then it sets
+.I q
+to the provided value.
+It returns a
+2\ \[mu]\ 2
+block matrix
+.RI [[\fBI\fR,\ \fBH\fR],\ [\fB0\fR,\  q *\fBI\fR]],
+where
+.B H
+is
+.RI ( d \- k )\ \f[mu]\  k
+and uniformly random modulo
+.IR q .
+These bases correspond to the SIS/LWE
+.IR q \-ary
+lattices (see
+.B D.\ Micciancio and O.\ Regev.
+.B Post-Quantum Cryptography.
+.B Chapter of Lattice-based Cryptography, 147\(en191
+.BR (2009) ).
+Goldstein-Mayer lattices correspond to
+.IR k =1
+and
+.I q
+prime (see
+.B D.\ Goldstein and A.\ Mayer.
+.B On the equidistribution of Hecke points.
+.B Forum Mathematicum, 15:165\(en189
+.BR (2003) ).
+.TP
+.B t\ \fId\fB\ \fIf
+.\" gen_trg
+generates a
+.IR d \ \[mu]\  d
+lower-triangular matrix
+.B B
+with
+.RI \fBB\fR_ ii \ =\ 2^( d \- i +1)^ f
+for all
+.IR i ,
+and
+.BR B _\fIij
+is uniform between
+.RB \- B _ \fIjj /2
+and
+.BR B _ \fIjj /2
+for all
+.IR j < i .
+.TP
+.B T\ \fId
+.\" gen_trg2
+also takes as input a
+.IR d \-dimensional
+vector
+.B vec
+read from a file.
+It generates a
+.IR d \ \[mu]\  d
+lower-triangular matrix
+.B B
+with
+.BR B _\fIii\fR\ =\  vec [ \fIi ]
+for all
+.I i
+and
+.BR B _ \fIij
+is uniform between
+.RB \- B _ \fIjj /2
+and
+.BR B _ \fIjj /2
+for all
+.IR j < i .
+.SH NOTES
+The generated matrix is printed in
+.IR stdout .
+.SH "SEE ALSO"
+.BR fplll (1)

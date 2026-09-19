@@ -1,0 +1,63 @@
+--- src/initialise.c
++++ src/initialise.c
+@@ -103,7 +103,7 @@
+ 
+ 	// read nagi.ini
+ 	dir_preset_change(DIR_PRESET_NAGI);
+-	ini_nagi = ini_open("nagi.ini");
++	ini_nagi = ini_open("/etc/nagi/nagi.ini");
+ 	config_load(config_nagi, ini_nagi);
+ 	ini_close(ini_nagi);
+ 
+--- src/sys/chargen.c
++++ src/sys/chargen.c
+@@ -93,8 +93,9 @@
+ {
+ 	u8 *token, *running;
+ 	u8 *list;
++        u8 *fullpath;
+ 	SIZE size;
+ 	
+ 	FILE *pref_file = 0;
+ 	int pref_scale = 0;
+ 
+@@ -106,7 +107,11 @@
+ 	while (token != 0)
+ 	{
+ 		//check token
+-		cur_file = fopen(token, "rb");
++                fullpath = malloc( strlen(token) + strlen("/usr/share/nagi/")+1 );
++                strcpy( fullpath,  "/usr/share/nagi/" );
++                strcat( fullpath,  token );
++		cur_file = fopen(fullpath, "rb");
++                free( fullpath );
+ 		if (cur_file != 0)
+ 		{
+ 			// FIXME .. doesn't check size
+--- src/tools/savefont.c
++++ src/tools/savefont.c
+@@ -62,8 +62,8 @@
+ 	u8 *ch_ptr;
+ 	u8 ch_check;
+ 	
+-	file = fopen("font_4x8.fnt", "w");
+-	
++	file = fopen("/usr/share/nagi/font_4x8.fnt", "w");
++
+ 	this_font = &font_4x8;
+ 
+ 	
+--- src/version/standard.c
++++ src/version/standard.c
+@@ -794,9 +794,9 @@
+ 	GAMEINFO *game_selected;
+ 	
+ 	dir_preset_change(DIR_PRESET_NAGI);
+-	ini_standard = ini_open("standard.ini");
++	ini_standard = ini_open("/etc/nagi/standard.ini");
+ 	text_init();
+ 
+ 	// read in standard parameters
+ 	config_load(config_standard, ini_standard);
+ 	
+

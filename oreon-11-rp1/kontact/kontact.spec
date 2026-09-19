@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 9c10f551faba2bc3208a7f730d4a0d79bb8c6be0b3cf9536348b4c924417640c
 
 %global stable_kf6 stable
 
 
 Name:    kontact
 Summary: Personal Information Manager
-Version: 26.03.80
+Version: 26.08.1
 Release: 1%{?dist}
 
 # code (generally) GPLv2, docs GFDL
@@ -102,6 +102,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

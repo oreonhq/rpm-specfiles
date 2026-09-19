@@ -1,0 +1,33 @@
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.dnsfix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.dnsfix	2017-07-12 10:04:28.422980983 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs	2017-07-12 10:04:42.717621561 -0400
+@@ -134,7 +134,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+             
+             if (AddressProtocol == AddressProtocol.Any || AddressProtocol == AddressProtocol.IPv6) {
+                 ServiceError error = Native.DNSServiceQueryRecord(out sd_ref, ServiceFlags.None, interfaceIndex,
+-                    hosttarget, ServiceType.A6, ServiceClass.IN, query_record_reply_handler, IntPtr.Zero);
++                    hosttarget, ServiceType.AAAA, ServiceClass.IN, query_record_reply_handler, IntPtr.Zero);
+                 
+                 if(error != ServiceError.NoError) {
+                     throw new ServiceErrorException(error);
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceType.cs.dnsfix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceType.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceType.cs.dnsfix	2017-07-12 10:04:52.445376968 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceType.cs	2017-07-12 10:05:30.636411961 -0400
+@@ -56,7 +56,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         KEY       = 25,     /* Security key. */
+         PX        = 26,     /* X.400 mail mapping. */
+         GPOS      = 27,     /* Geographical position (withdrawn). */
+-        AAAA      = 28,     /* Ip6 Address. */
++        AAAA      = 28,     /* IPv6 Address. */
+         LOC       = 29,     /* Location Information. */
+         NXT       = 30,     /* Next domain (security). */
+         EID       = 31,     /* Endpoint identifier. */
+@@ -66,7 +66,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         NAPTR     = 35,     /* Naming Authority PoinTeR */
+         KX        = 36,     /* Key Exchange */
+         CERT      = 37,     /* Certification record */
+-        A6        = 38,     /* IPv6 address (deprecates AAAA) */
++        A6        = 38,     /* IPv6 address (deprecated) */
+         DNAME     = 39,     /* Non-terminal DNAME (for IPv6) */
+         SINK      = 40,     /* Kitchen sink (experimentatl) */
+         OPT       = 41,     /* EDNS0 option (meta-RR) */

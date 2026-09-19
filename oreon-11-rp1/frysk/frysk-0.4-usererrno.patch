@@ -1,0 +1,40 @@
+--- frysk-0.4/frysk-imports/include/ptrace_wait.h.usererrno	2011-02-06 12:38:38.525259999 -0500
++++ frysk-0.4/frysk-imports/include/ptrace_wait.h	2011-02-06 12:40:45.093259997 -0500
+@@ -71,7 +71,7 @@
+ 
+   // Dump the result
+   if (rpid < 0) {
+-    printf (" fails (%s)", strerror (errno));
++    printf (" fails (%s)", strerror (rerrno));
+   }
+   else {
+     printf (" returns 0x%x ", rstatus);
+@@ -87,7 +87,7 @@
+ 
+   // validate
+   if (rpid < 0) {
+-    if (wif != NULL || errno != reason) {
++    if (wif != NULL || rerrno != reason) {
+       printf ("\n");
+       abort ();
+     }
+--- frysk-0.4/frysk-imports/tests/frysk3595/detach-multi-thread.c.usererrno	2011-02-06 12:54:15.465259998 -0500
++++ frysk-0.4/frysk-imports/tests/frysk3595/detach-multi-thread.c	2011-02-06 12:54:51.845259997 -0500
+@@ -85,7 +85,7 @@
+ 
+   // Dump the result
+   if (rpid < 0) {
+-    printf (" fails (%s)", strerror (errno));
++    printf (" fails (%s)", strerror (rerrno));
+   }
+   else {
+     printf (" returns 0x%x ", rstatus);
+@@ -101,7 +101,7 @@
+ 
+   // validate
+   if (rpid < 0) {
+-    if (wif != NULL || errno != reason) {
++    if (wif != NULL || rerrno != reason) {
+       printf ("\n");
+       abort ();
+     }

@@ -1,0 +1,22 @@
+Wed Feb 24 2016
+Dominik Mierzejewski
+
+Some notes about the Fedora GROMACS package:
+
+- Per upstream change, since version 5.1, we're no longer shipping
+any g_* binaries or symlinks. All functionality is now available
+in the main gmx binary. For instance, g_anadock is replaced with
+gmx anadock.
+
+- All binaries are available in single and dual precision.
+The binaries with the _d suffix are double precision versions.
+For instance, gmx is single precision and gmx_d is double
+precision.
+
+- MPI enabled binaries are compiled for both MPICH and OpenMPI
+and available in gromacs-mpich and gromacs-openmpi subpackages,
+respectively. These, too, contain both single and double precision
+versions. Single precision versions have _mpich (_openmpi) suffix,
+while double precision versions have _mpich_d (_openmpi_d) suffix.
+For instance g_mdrun_mpich (g_mdrun_openmpi) and g_mdrun_mpich_d
+(g_mdrun_openmpi_d).

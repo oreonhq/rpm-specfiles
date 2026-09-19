@@ -1,54 +1,35 @@
-%global source0_hash 3f57055e9caa26338e353ee8c1107882ad36f60f300a3e65f33d5fbb12cf8846
-%global source1_hash 8cf7cfdf1bb976f8b60c7bd06439902d2c132412235c288af4b68a7a74378a78
-
-%global module pyasn1
-%global modules_version 0.4.1
+%global source0_hash none
 
 Name:           python-pyasn1
-Version:        0.6.2
-Release:        1%{?dist}
-Summary:        ASN.1 tools for Python
+Version:        0.6.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pure-Python implementation of ASN.1 types and DER/BER/CER codecs _X.208_
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
-Source0:        https://github.com/pyasn1/pyasn1/archive/refs/tags/v%{version}.tar.gz#/python-pyasn1-0.6.2.tar.gz
-
-Source1:        https://github.com/pyasn1/pyasn1-modules/archive/refs/tags/v0.4.1.tar.gz#/python-pyasn1-0.6.2.tar.gz
-
 URL:            https://github.com/pyasn1/pyasn1
+Source:         %{pypi_source pyasn1}
+
 BuildArch:      noarch
-
-%description
-This is an implementation of ASN.1 types and codecs in the Python programming
-language.
-
-%package -n python3-pyasn1
-Summary:    ASN.1 tools for Python 3
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
-%description -n python3-pyasn1
-This is an implementation of ASN.1 types and codecs in the Python 3 programming
-language.
 
-%package -n python3-pyasn1-modules
-Summary:    Modules for pyasn1
-Requires:   python3-pyasn1 >= 0.4.7, python3-pyasn1 < 0.7.0
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyasn1' generated automatically by pyp2spec.}
 
-%description -n python3-pyasn1-modules
-ASN.1 types modules for python3-pyasn1.
+%description %_description
 
-%package doc
-Summary:        Documentation for pyasn1
-BuildRequires:  make
-BuildRequires:  python3-sphinx
+%package -n     python3-pyasn1
+Summary:        %{summary}
 
-%description doc
-%{summary}.
+%description -n python3-pyasn1 %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%setup -n %{module}-%{version} -q -b1
+%autosetup -p1 -n pyasn1-%{version}
 
 
 %generate_buildrequires
@@ -58,36 +39,19 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %build
 %pyproject_wheel
 
-pushd ../pyasn1-modules-%{modules_version}
-%pyproject_wheel
-popd
-
-pushd docs
-PYTHONPATH=%{buildroot}%{python3_sitelib} make SPHINXBUILD=sphinx-build-3 html
-popd
-
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python3-pyasn1
-%doc README.md
-%license LICENSE.rst
-%{python3_sitelib}/%{module}
-%{python3_sitelib}/%{module}-%{version}.dist-info/
-
-%files -n python3-pyasn1-modules
-%{python3_sitelib}/%{module}_modules/
-%{python3_sitelib}/%{module}_modules-%{modules_version}.dist-info/
-
-%files doc
-%license LICENSE.rst
-%doc docs/build/html/*
+%files -n python3-pyasn1 -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.2-1

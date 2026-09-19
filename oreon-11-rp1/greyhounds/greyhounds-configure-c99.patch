@@ -1,0 +1,17 @@
+This a fix to autoconf-generated code.  No need to upstream this because
+current autoconf does not generate it anymore.
+
+diff -ur greyhounds-0.8-pre-alpha.orig/configure greyhounds-0.8-pre-alpha/configure
+--- greyhounds-0.8-pre-alpha.orig/configure	2003-12-14 18:38:58.000000000 +0100
++++ greyhounds-0.8-pre-alpha/configure	2022-11-27 17:21:47.041164505 +0100
+@@ -4061,8 +4061,8 @@
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+ 	|| toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

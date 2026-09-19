@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6acdc0b3f144f0d7f71a361c3653b5ccc1ee5760b5eb5b2470c363bc5daed210
 
 # Enable hardened build, as the udev part runs with privilege.
 %global _hardened_build 1
@@ -31,6 +31,7 @@ BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gcc
 # for translations
 BuildRequires: gettext-devel
+BuildRequires: gettext
 # for autosetup
 BuildRequires: git-core
 # for translations
@@ -130,13 +131,15 @@ printers.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -S git
-sed -i 's/AM_GNU_GETTEXT.*/AM_GNU_GETTEXT([external])/' configure.ac
 # workaround https://github.com/pypa/setuptools/issues/3143
 sed -i 's/setup.py install --prefix=$(DESTDIR)$(prefix)/setup.py install --root $(DESTDIR) --prefix=$(prefix)/' Makefile*
 
 %build
-AUTOPOINT=/bin/true autoreconf -fi
+aclocal -I /usr/share/gettext/m4
+autoconf -f
+automake --add-missing --copy --foreign
 %configure --with-udev-rules
+touch po/Makefile.in
 %make_build
 
 %install

@@ -1,0 +1,31 @@
+diff --git a/sjasmsrc42c/Makefile b/sjasmsrc42c/Makefile
+index 35fa156..db5f0bb 100644
+--- a/sjasmsrc42c/Makefile
++++ b/sjasmsrc42c/Makefile
+@@ -8,7 +8,8 @@ endif
+ TARGETS	 = sjasm$(EXTENSION)
+ OBJECTS  = datadir.o datastructures.o directives.o errors.o expressions.o fileio.o output.o pimsx.o preprocessor.o rawsource.o reader.o sjasm.o source.o
+ 
+-BINDIR   = /usr/local/bin
++BINDIR   = /usr/bin
++DESTDIR  = 
+ 
+ CXXFLAGS = -O2
+ LDFLAGS  = 
+@@ -20,14 +21,14 @@ all: $(TARGETS)
+ 
+ sjasm$(EXTENSION): $(DEPDIR) $(OBJECTS)
+ 	g++ $(LDFLAGS) -o $@ $(OBJECTS) 
+-	strip $@
+ 
+ clean:
+ 	$(RM) $(OBJECTS) $(TARGETS)
+ 	$(RM) -r $(DEPDIR)	
+ 
+ install: all
+-	cp -f $(TARGETS) $(BINDIR)
++	mkdir -p $(DESTDIR)/usr/bin
++	cp -f $(TARGETS) $(DESTDIR)/usr/bin
+ 
+ %.o : %.cpp
+ 	$(CXX) -Wp,-MD,$(DEPFILE).d $(CXXFLAGS) -c -o $@ $<

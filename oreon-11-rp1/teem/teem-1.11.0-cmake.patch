@@ -1,0 +1,110 @@
+diff -Naur teem-1.11.0-src-original/CMakeLists.txt teem-1.11.0-src/CMakeLists.txt
+--- teem-1.11.0-src-original/CMakeLists.txt	2012-12-20 09:12:22.000000000 -0500
++++ teem-1.11.0-src/CMakeLists.txt	2025-05-24 08:40:26.017110615 -0400
+@@ -22,7 +22,7 @@
+ #
+ 
+ # This is the root Teem CMakeLists file
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
+ 
+ # Cmake shouldn't define WIN32 when compiling
+ set(CMAKE_LEGACY_CYGWIN_WIN32 0) 
+@@ -368,14 +368,14 @@
+ # Create the library target
+ ADD_LIBRARY(teem ${Teem_SOURCES})
+ 
++include(GNUInstallDirs)
++
+ # Set up some library paths for installation.  Windows will ingore the
+ # RPATH stuff, and mac will ingore the INSTALL_RPATH.  Make sure for
+ # macs to set BUILD_WITH_INSTALL_RPATH OFF and set INSTALL_NAME_DIR.
+ # I belive INSTALL_NAME_DIR will be ignored on linux.
+ SET_TARGET_PROPERTIES(teem PROPERTIES
+   BUILD_WITH_INSTALL_RPATH OFF
+-  INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib
+-  INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib
+   SOVERSION 1
+   VERSION ${Teem_VERSION_STRING}
+   )
+@@ -415,8 +415,8 @@
+ 
+ INSTALL(TARGETS teem
+   RUNTIME DESTINATION bin
+-  LIBRARY DESTINATION lib${EXTRA_INSTALL_PATH}
+-  ARCHIVE DESTINATION lib${EXTRA_INSTALL_PATH}
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   ) 
+ 
+ # Stand-alone programs to process hex encoding of data
+@@ -447,9 +447,10 @@
+ 
+ #-----------------------------------------------------------------------------
+ # Help outside projects build Teem projects.
+-INCLUDE(CMakeExportBuildSettings)
+-EXPORT_LIBRARY_DEPENDENCIES(${Teem_BINARY_DIR}/TeemLibraryDepends.cmake)
+-CMAKE_EXPORT_BUILD_SETTINGS(${Teem_BINARY_DIR}/TeemBuildSettings.cmake)
++# https://cmake.org/cmake/help/latest/policy/CMP0033.html
++# INCLUDE(CMakeExportBuildSettings)
++# EXPORT_LIBRARY_DEPENDENCIES(${Teem_BINARY_DIR}/TeemLibraryDepends.cmake)
++# CMAKE_EXPORT_BUILD_SETTINGS(${Teem_BINARY_DIR}/TeemBuildSettings.cmake)
+ 
+ SET(CFLAGS "${CMAKE_C_FLAGS}")
+ SET(CC "${CMAKE_C_COMPILER}")
+@@ -468,12 +469,12 @@
+ # tree for finding include files relative to TeemConfig.cmake is "."
+ # 
+ SET(Teem_CV_CONFIG_TO_ROOT ".")
+-SET(Teem_CV_LIBRARY_DEPENDS_FILE ${Teem_BINARY_DIR}/TeemLibraryDepends.cmake)
++# SET(Teem_CV_LIBRARY_DEPENDS_FILE ${Teem_BINARY_DIR}/TeemLibraryDepends.cmake)
+ SET(Teem_CV_EXECUTABLE_DIRS ${Teem_EXECUTABLE_DIRS})
+ SET(Teem_CV_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
+ SET(Teem_CV_USE_FILE ${Teem_SOURCE_DIR}/CMake/TeemUse.cmake)
+ SET(Teem_CV_INCLUDE_DIRS "${Teem_BINARY_DIR}/include")
+-SET(Teem_CV_BUILD_SETTINGS_FILE ${Teem_BINARY_DIR}/TeemBuildSettings.cmake)
++# SET(Teem_CV_BUILD_SETTINGS_FILE ${Teem_BINARY_DIR}/TeemBuildSettings.cmake)
+ SET(Teem_CV_BUILT_LIBRARIES teem) # The libraries built by teem.  Currently we only build the mega library.
+ 
+ CONFIGURE_FILE("${Teem_SOURCE_DIR}/CMake/TeemConfig.cmake.in"
+@@ -492,12 +493,12 @@
+   SET(Teem_CV_CONFIG_TO_ROOT "..")
+ ENDIF(Teem_USE_LIB_INSTALL_SUBDIR)
+ 
+-SET(Teem_CV_LIBRARY_DEPENDS_FILE "\${Teem_ROOT_DIR}/lib${EXTRA_INSTALL_PATH}/TeemLibraryDepends.cmake")
++# SET(Teem_CV_LIBRARY_DEPENDS_FILE "\${Teem_ROOT_DIR}/cmake${EXTRA_INSTALL_PATH}/TeemLibraryDepends.cmake")
+ SET(Teem_CV_EXECUTABLE_DIRS "\${Teem_ROOT_DIR}/bin")
+-SET(Teem_CV_LIBRARY_DIRS "\${Teem_ROOT_DIR}/lib${EXTRA_INSTALL_PATH}")
+-SET(Teem_CV_USE_FILE "\${Teem_ROOT_DIR}/lib${EXTRA_INSTALL_PATH}/TeemUse.cmake")
++SET(Teem_CV_LIBRARY_DIRS "\${Teem_ROOT_DIR}/cmake${EXTRA_INSTALL_PATH}")
++SET(Teem_CV_USE_FILE "\${Teem_ROOT_DIR}/cmake${EXTRA_INSTALL_PATH}/TeemUse.cmake")
+ SET(Teem_CV_INCLUDE_DIRS "\${Teem_ROOT_DIR}/include")
+-SET(Teem_CV_BUILD_SETTINGS_FILE "\${Teem_ROOT_DIR}/lib${EXTRA_INSTALL_PATH}/TeemBuildSettings.cmake")
++# SET(Teem_CV_BUILD_SETTINGS_FILE "\${Teem_ROOT_DIR}/cmake${EXTRA_INSTALL_PATH}/TeemBuildSettings.cmake")
+ SET(Teem_CV_BUILT_LIBRARIES teem) # The libraries built by teem.  Currently we only build the mega library.
+ 
+ CONFIGURE_FILE("${Teem_SOURCE_DIR}/CMake/TeemConfig.cmake.in"
+@@ -511,7 +512,7 @@
+ INSTALL(FILES
+   "${Teem_BINARY_DIR}/CMake/TeemConfig.cmake"
+   "${Teem_SOURCE_DIR}/CMake/TeemUse.cmake"
+-  "${Teem_BINARY_DIR}/TeemBuildSettings.cmake"
+-  "${Teem_BINARY_DIR}/TeemLibraryDepends.cmake"
+-  DESTINATION lib${EXTRA_INSTALL_PATH}
++  # "${Teem_BINARY_DIR}/TeemBuildSettings.cmake"
++  # "${Teem_BINARY_DIR}/TeemLibraryDepends.cmake"
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake${EXTRA_INSTALL_PATH}
+   )
+diff -Naur teem-1.11.0-src-original/src/bin/CMakeLists.txt teem-1.11.0-src/src/bin/CMakeLists.txt
+--- teem-1.11.0-src-original/src/bin/CMakeLists.txt	2012-12-20 09:08:17.000000000 -0500
++++ teem-1.11.0-src/src/bin/CMakeLists.txt	2025-05-24 08:40:13.631849535 -0400
+@@ -27,9 +27,6 @@
+   INSTALL(TARGETS ${name}
+     RUNTIME DESTINATION bin
+     )
+-  SET_TARGET_PROPERTIES(${name} PROPERTIES
+-    INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib
+-    )
+ ENDMACRO(CREATE_EXEC)
+ 
+ # These binaries should not be depending on BUILD_EXPERIMENTAL_LIBS

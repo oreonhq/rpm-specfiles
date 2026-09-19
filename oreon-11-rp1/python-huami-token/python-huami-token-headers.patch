@@ -1,0 +1,19 @@
+diff --git a/huami_token/huami_token.py b/huami_token/huami_token.py
+--- a/huami_token/huami_token.py	(revision 20b86b66c8ec203fb65a67441b2a552784200c58)
++++ b/huami_token/huami_token.py	(date 1761596283267)
+@@ -89,8 +89,14 @@
+ 
+             data = urls.PAYLOADS['tokens_amazfit']
+             data['password'] = self.password
++            headers = {
++                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0",
++                "Origin": "https://user.zepp.com",
++                "Referer": "https://user.zepp.com/",
++                "app_name": "com.huami.webapp"
++            }
+ 
+-            response = requests.post(auth_url, data=data, allow_redirects=False, timeout=10)
++            response = requests.post(auth_url, data=data, allow_redirects=False, headers=headers, timeout=10)
+             response.raise_for_status()
+ 
+             # 'Location' parameter contains url with login status

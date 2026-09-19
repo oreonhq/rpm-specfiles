@@ -1,16 +1,12 @@
 %global source0_hash 57c1e4637039a9fd93218a78f7f6e893c7d69960c7e180c1b8c9d3ed949495ce
 %global source1_hash ebd0a660969b934ec653a78a1c843df3f327d7ea866493c0dde58e18d92c4e40
-%global source3_hash e85ce584bda515856e16116d00388d7147131e9d9a651e74e1020ca53254c97d
+%global source3_hash 453a4943a7a9a0037c6105d22548c943998f6902224294ad4d616c9eca638c34
 
 # There's no concept of debuginfo for SGX enclaves
 %global debug_package %{nil}
 
 %global linux_sgx_version 2.25
 %global dcap_version 1.22
-
-# If setting any of these to 0, modify repack.sh to strip
-# the binary from the prebuilt_dcap tarball to prevent src.rpm
-# bundling the undesirable binaries
 
 # Provisioning Certification Enclave. Required. ECDSA quote signing
 %global with_enclave_pce 1
@@ -30,10 +26,9 @@
 
 # Quote Verification Enclave. Optional. ECDSA quote verification
 #
-# XXX Disabled as it is known to link to an openssl build that has
+# Disabled as it is known to link to an openssl build that has
 # crypto algorithms that haven't been approved by legal. Thus it
-# is currently unknown if we can ship such code. See also comments
-# against Patch0202/Patch0203 later
+# is currently unknown if we can ship such code.
 %global with_enclave_qve 0
 
 
@@ -94,25 +89,21 @@ License: %{shrink:
   LicenseRef-Fedora-Public-Domain
 }
 
-URL:            https://github.com/intel/linux-sgx
+URL:            https://github.com/intel/confidential-computing.sgx
 
 # The sources are needed so we can determine the ELF so version
 # symlinks that the loader code will expect to find
 
-Source0:        https://github.com/intel/linux-sgx/archive/refs/tags/sgx_%{linux_sgx_version}_reproducible.tar.gz#/linux-sgx-%{linux_sgx_version}-reproducible.tar.gz
+Source0:        https://github.com/intel/confidential-computing.sgx/archive/refs/tags/sgx_%{linux_sgx_version}_reproducible.tar.gz#/linux-sgx-%{linux_sgx_version}-reproducible.tar.gz
 
-Source1:        https://github.com/intel/SGXDataCenterAttestationPrimitives/archive/refs/tags/dcap_%{dcap_version}_reproducible.tar.gz#/linux-sgx-enclaves-prebuilt-%{linux_sgx_version}.tar.gz
+Source1:        https://github.com/intel/confidential-computing.tee.dcap/archive/refs/tags/dcap_%{dcap_version}_reproducible.tar.gz#/linux-sgx-dcap-%{dcap_version}-reproducible.tar.gz
 
-# repack.sh purges AE's that we do not want to (& are forbidden to)
-# ship, as well as 'prebuilt/' content (openssl / OPA binaries) that
-# we must not distribute
 Source2:        repack.sh
 
-# repacked in %%prep from download.01.org prebuilt tarball
+Source3:        https://download.01.org/intel-sgx/sgx-dcap/%{dcap_version}/linux/prebuilt_dcap_%{dcap_version}.tar.gz
 
 BuildRequires: sgx-rpm-macros
 
-# SGX is a technology that only exists in Intel x86 CPUs
 ExclusiveArch: x86_64
 
 %description
@@ -146,31 +137,43 @@ prebuilt by Intel. \
 %do_package qve %{with_enclave_qve} %{dcap_version}
 
 %prep
-_dcap="%{dcap_version}"
-_repacked="prebuilt_dcap_${_dcap}-repacked.tar.gz"
-if test ! -f "$_repacked"; then
-  _raw="prebuilt_dcap_${_dcap}.tar.gz"
-  curl -sfL -o "$_raw" "https://download.01.org/intel-sgx/sgx-dcap/${_dcap}/linux/${_raw}"
-  rm -rf _repack && mkdir _repack && (
-    cd _repack
-    tar zxf "../${_raw}"
-    for _f in libcrypto.a policy.wasm libsgx_pce.signed.so libsgx_id_enclave.signed.so libsgx_qe3.signed.so libsgx_tdqe.signed.so libsgx_qve.signed.so; do
-      find . -name "$_f" -delete -print
-    done
-    tar zcf "../${_repacked}" *
-  )
-  rm -rf _repack
-fi
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-test "%{source3_hash}" = "none" || { f="$_repacked"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
-# Upstream repo renamed to confidential-computing.sgx (GitHub archive top dir matches)
+test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
+
+_repacked="$(pwd)/prebuilt_dcap_%{dcap_version}-repacked.tar.gz"
+_strip="libcrypto.a policy.wasm"
+%if ! %{with_enclave_pce}
+_strip="$_strip libsgx_pce.signed.so"
+%endif
+%if ! %{with_enclave_ide}
+_strip="$_strip libsgx_id_enclave.signed.so"
+%endif
+%if ! %{with_enclave_qe3}
+_strip="$_strip libsgx_qe3.signed.so"
+%endif
+%if ! %{with_enclave_tdqe}
+_strip="$_strip libsgx_tdqe.signed.so"
+%endif
+%if ! %{with_enclave_qve}
+_strip="$_strip libsgx_qve.signed.so"
+%endif
+rm -rf _repack && mkdir _repack
+(
+  cd _repack
+  tar zxf %{SOURCE3}
+  for _f in $_strip; do
+    find . -name "$_f" -delete -print
+  done
+  find . \( -name '*.h' -o -name '*.H' \) -delete -print
+  tar zcf "$_repacked" *
+)
+rm -rf _repack
+
 %autosetup -n confidential-computing.sgx-sgx_%{linux_sgx_version}_reproducible
 
-# dcap
 (
   cd external/dcap_source
-
   tar zxf %{SOURCE1} --strip 1
 )
 

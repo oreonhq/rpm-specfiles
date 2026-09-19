@@ -1,0 +1,13 @@
+--- jl-0.1.0/src/JL/Inferer.hs~	2022-05-17 15:34:02.000000000 +0800
++++ jl-0.1.0/src/JL/Inferer.hs	2024-08-07 18:45:36.072016076 +0800
+@@ -7,7 +7,7 @@
+ 
+ module JL.Inferer where
+ 
+-
++import Control.Monad
+ import           Control.Monad.State.Strict
+ import qualified Data.HashMap.Strict as HM
+ import           Data.Map (Map)
+
+Diff finished.  Wed Aug  7 18:46:12 2024

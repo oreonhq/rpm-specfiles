@@ -1,0 +1,29 @@
+diff --git a/tls.c b/tls.c
+index e3ab4af..86165c1 100644
+--- a/tls.c
++++ b/tls.c
+@@ -1717,6 +1717,12 @@ void Tls_Clean(State *statePtr) {
+     dprintf("Returning");
+ }
+ 
++#if TCL_MAJOR_VERSION > 8
++#define MIN_VERSION "9.0"
++#else
++#define MIN_VERSION "8.5"
++#endif
++
+ /*
+  *-------------------------------------------------------------------
+  *
+@@ -1746,9 +1752,9 @@ int Tls_Init(Tcl_Interp *interp) {
+ 	 */
+ 	if (
+ #ifdef USE_TCL_STUBS
+-	    Tcl_InitStubs(interp, "8.4", 0)
++	    Tcl_InitStubs(interp, MIN_VERSION, 0)
+ #else
+-	    Tcl_PkgRequire(interp, "Tcl", "8.4-", 0)
++	    Tcl_PkgRequire(interp, "Tcl", MIN_VERSION, 0)
+ #endif
+ 	     == NULL) {
+ 		return TCL_ERROR;

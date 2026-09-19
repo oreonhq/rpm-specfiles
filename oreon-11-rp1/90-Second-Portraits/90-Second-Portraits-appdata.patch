@@ -1,0 +1,92 @@
+--- a/appdata/90-Second-Portraits
++++ b/appdata/90-Second-Portraits
+@@ -0,0 +1,13 @@
++#!/bin/sh
++if [ $# -ne 0 ]
++then
++ if [ "$1" == "-h" ]||[ "$1" == "--help" ]
++ then
++  man 6 90-Second-Portraits
++  exit
++ fi
++ echo "Invalid option(s): $*" 1>&2
++ echo Usage: `basename $0` [-h] 1>&2
++ exit 1
++fi
++love /usr/share/90-Second-Portraits/90-Second-Portraits.love
+--- a/appdata/90-Second-Portraits.6
++++ b/appdata/90-Second-Portraits.6
+@@ -0,0 +1,18 @@
++.TH 90-Second-Portraits 6 "VERSION" "90 Second Portraits"
++.SH NAME
++90-Second-Portraits - 90 Second Portraits v VERSION
++.SH SYNOPSIS
++Frantic street painting game
++.SH DESCRIPTION
++90 Second Portraits is a silly speed painting game developed for Ludum Dare 31
++Jam competition. Time is money and you have neither! In 90 SECOND PORTRAITS
++you’re paying the bills by speed painting portraits of bypassing customers!
++You have 90 seconds to paint the customer and his/her preferred background!
++Your work day ends after 5 customers!
++This game is made with LOVE. You can find more games and
++information about the author(s) at http://tangramgames.dk/
++.SH OPTIONS
++.BR \-h ", " \-\-help
++Show manpage.
++.SH SEE ALSO
++.BR love(6)
+--- a/appdata/90-Second-Portraits.appdata.xml
++++ b/appdata/90-Second-Portraits.appdata.xml
+@@ -0,0 +1,41 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<component type="desktop">
++ <id>90-Second-Portraits.desktop</id>
++ <metadata_license>CC-BY-SA</metadata_license>
++ <project_license>zlib</project_license>
++ <name>90 Second Portraits</name>
++ <summary>Frantic street painting game</summary>
++ <description>
++  <p>
++   90 Second Portraits is a silly speed painting game developed for Ludum Dare 31
++   Jam competition. Time is money and you have neither! In 90 SECOND PORTRAITS
++   you’re paying the bills by speed painting portraits of bypassing customers!
++   You have 90 seconds to paint the customer and his/her preferred background!
++   Your work day ends after 5 customers!
++  </p>
++ </description>
++ <screenshots>
++  <screenshot type="default">
++   <image>http://tangramgames.dk/games/90secondportraits/images/header.png</image>
++   <caption>Title Screen</caption>
++  </screenshot>
++  <screenshot>
++   <image>http://tangramgames.dk/games/90secondportraits/images/1.png</image>
++   <caption>Example gameplay 1</caption>
++  </screenshot>
++  <screenshot>
++   <image>http://tangramgames.dk/games/90secondportraits/images/2.png</image>
++   <caption>Example gameplay 2</caption>
++  </screenshot>
++  <screenshot>
++   <image>http://tangramgames.dk/games/90secondportraits/images/3.png</image>
++   <caption>Example gameplay 3</caption>
++  </screenshot>
++  <screenshot>
++   <image>http://tangramgames.dk/games/90secondportraits/images/4.png</image>
++   <caption>Example gameplay 4</caption>
++  </screenshot>
++ </screenshots>
++ <url type="homepage">http://tangramgames.dk/games/90secondportraits/</url>
++ <url type="bugtracker">https://github.com/SimonLarsen/90-Second-Portraits/issues</url>
++</component>
+--- a/appdata/90-Second-Portraits.desktop
++++ b/appdata/90-Second-Portraits.desktop
+@@ -0,0 +1,8 @@
++[Desktop Entry]
++Name=90 Second Portraits
++Comment=Frantic street painting game
++Exec=90-Second-Portraits
++Type=Application
++Categories=Game;ArcadeGame;
++Terminal=false
++Icon=90-Second-Portraits

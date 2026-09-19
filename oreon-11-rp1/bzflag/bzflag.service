@@ -1,0 +1,11 @@
+[Unit]
+Description=BZFlag multi-player tank battle game server
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/sysconfig/bzflag
+ExecStart=/usr/bin/bzfs $BZFLAG_OPTIONS
+User=bzflag
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,156 @@
+From 3cb1f114bea5a948f7f559a0df15e58a42c86834 Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Tue, 24 Jun 2025 16:18:15 -0500
+Subject: [PATCH] Switch to time.monotonic
+
+time.monotonic was added to the standard library in Python 3.3.  When
+you use monotonic.monotonic from PyPI, it's an alias to the standard
+library function.  Attempting to import time.monotonic directly avoids
+an unnecessary dependency.
+---
+ Containerfile.tests.el8    |  2 +-
+ Containerfile.tests.fedora |  2 +-
+ README                     |  2 +-
+ oz.spec.in                 |  1 -
+ oz/Guest.py                |  9 ++++++---
+ oz/ozutil.py               | 11 +++++++----
+ requirements.txt           |  2 +-
+ 7 files changed, 17 insertions(+), 12 deletions(-)
+
+diff --git a/Containerfile.tests.el8 b/Containerfile.tests.el8
+index 3647d66..b433d90 100644
+--- a/Containerfile.tests.el8
++++ b/Containerfile.tests.el8
+@@ -5,7 +5,7 @@ FROM quay.io/almalinuxorg/8-base:latest
+ RUN set -exo pipefail \
+     && dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm \
+     && dnf install -y --setopt install_weak_deps=false --nodocs \
+-    python3-requests python3-cryptography python3-setuptools python3-libvirt python3-lxml python3-libguestfs python3-pytest python3-coverage python3-monotonic \
++    python3-requests python3-cryptography python3-setuptools python3-libvirt python3-lxml python3-libguestfs python3-pytest python3-coverage \
+     libvirt-daemon libvirt-daemon-kvm libvirt-daemon-driver-qemu libvirt-daemon-config-network systemd \
+     && dnf clean all \
+     && rm -rf /var/cache/* /var/log/dnf*
+diff --git a/Containerfile.tests.fedora b/Containerfile.tests.fedora
+index e842ff1..18adba4 100644
+--- a/Containerfile.tests.fedora
++++ b/Containerfile.tests.fedora
+@@ -4,7 +4,7 @@
+ FROM quay.io/fedora/fedora:latest
+ RUN set -exo pipefail \
+     && dnf install -y --setopt install_weak_deps=false --nodocs \
+-    python3-requests python3-cryptography python3-setuptools python3-libvirt python3-lxml python3-libguestfs python3-pytest python3-coverage python3-monotonic \
++    python3-requests python3-cryptography python3-setuptools python3-libvirt python3-lxml python3-libguestfs python3-pytest python3-coverage \
+     libvirt-daemon libvirt-daemon-kvm libvirt-daemon-qemu libvirt-daemon-config-network systemd \
+     && dnf clean all \
+     && rm -rf /var/cache/* /var/log/dnf*
+diff --git a/README b/README
+index 8dcfc0f..4ade33e 100644
+--- a/README
++++ b/README
+@@ -24,7 +24,7 @@ guestfs Python module, which is not available from pypi, and needs a running
+ libvirtd for most of the tests to run. To install all the test requirements on
+ Fedora:
+ 
+-dnf install python3-requests python3-cryptography python3-libvirt python3-lxml python3-libguestfs python3-pytest python3-monotonic
++dnf install python3-requests python3-cryptography python3-libvirt python3-lxml python3-libguestfs python3-pytest
+ 
+ If you wish to test on EL 7, make that:
+ 
+diff --git a/oz.spec.in b/oz.spec.in
+index e2134b4..4a450b0 100644
+--- a/oz.spec.in
++++ b/oz.spec.in
+@@ -17,7 +17,6 @@ Requires: python3-lxml
+ Requires: python3-libguestfs >= 1.18
+ Requires: python3-libvirt
+ Requires: python3-cryptography
+-Requires: python3-monotonic
+ Requires: python3-requests
+ # in theory, oz doesn't really require libvirtd to be local to operate
+ # properly.  However, because of the libguestfs manipulations, in practice
+diff --git a/oz/Guest.py b/oz/Guest.py
+index aa18582..1fe7232 100644
+--- a/oz/Guest.py
++++ b/oz/Guest.py
+@@ -23,7 +23,10 @@ import base64
+ import errno
+ import hashlib
+ import logging
+-import monotonic
++try:
++    from time import monotonic
++except ImportError:
++    from monotonic import monotonic
+ import os
+ import re
+ import shutil
+@@ -1153,7 +1156,7 @@ class Guest(object):
+             self.data = b''
+             # three minutes later or at least timeout before the global boot_timeout
+             # potential negative boot_deadline is ok in the check
+-            boot_deadline = monotonic.monotonic() + min(3 * 60 , self.boot_timeout - 2)
++            boot_deadline = monotonic() + min(3 * 60 , self.boot_timeout - 2)
+ 
+             def _boot_cb(self):
+                 '''
+@@ -1189,7 +1192,7 @@ class Guest(object):
+                         # Getting address can be slower than first report, so it is worth
+                         # to try few more times before giving up. Cron should send announce
+                         # every minute, so three minutes should be enough to confirm.
+-                        if monotonic.monotonic() < boot_deadline:
++                        if monotonic() < boot_deadline:
+                             # if the data we got didn't match, we need to continue waiting.
+                             # before going to sleep, make sure that the domain is still
+                             # around
+diff --git a/oz/ozutil.py b/oz/ozutil.py
+index be27d3f..969ad9d 100644
+--- a/oz/ozutil.py
++++ b/oz/ozutil.py
+@@ -46,7 +46,10 @@ import urllib
+ 
+ import lxml.etree
+ 
+-import monotonic
++try:
++    from time import monotonic
++except ImportError:
++    from monotonic import monotonic
+ 
+ import requests
+ 
+@@ -1138,11 +1141,11 @@ def timed_loop(max_time, cb, msg, cb_arg=None):
+     False.
+     '''
+     log = logging.getLogger('%s' % (__name__))
+-    now = monotonic.monotonic()
++    now = monotonic()
+     end = now + max_time
+     next_print = now
+     while now < end:
+-        now = monotonic.monotonic()
++        now = monotonic()
+         if now >= next_print:
+             left = int(end) - int(now)
+             if left < 0:
+@@ -1156,7 +1159,7 @@ def timed_loop(max_time, cb, msg, cb_arg=None):
+         # It's possible that the callback took longer than one second.
+         # In that case, just skip our sleep altogether in an attempt to
+         # catch up.
+-        sleep_time = 1.0 - (monotonic.monotonic() - now)
++        sleep_time = 1.0 - (monotonic() - now)
+         if sleep_time > 0:
+             # Otherwise, sleep for a time.  Note that we try to maintain
+             # on our starting boundary, so we'll sleep less than a second
+diff --git a/requirements.txt b/requirements.txt
+index 1eabb08..a54468e 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -2,4 +2,4 @@ requests
+ cryptography
+ libvirt-python
+ lxml
+-monotonic
++monotonic; python_version < '3.3'
+-- 
+2.49.0
+

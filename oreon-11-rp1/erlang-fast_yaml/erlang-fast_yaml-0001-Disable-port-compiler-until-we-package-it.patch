@@ -1,0 +1,24 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 22 Jul 2022 21:53:23 +0200
+Subject: [PATCH] Disable port compiler until we package it
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config.script b/rebar.config.script
+index 5356164..162545e 100644
+--- a/rebar.config.script
++++ b/rebar.config.script
+@@ -135,13 +135,6 @@ Rules = [
+ 	  AppendStr("--coverage"), ""},
+ 	 {[deps], IsRebar3,
+ 	  Rebar3DepsFilter, []},
+-	 {[plugins], IsRebar3,
+-	  AppendList([pc]), []},
+-	 {[provider_hooks], IsRebar3,
+-	  AppendList([{pre, [
+-			     {compile, {pc, compile}},
+-			     {clean, {pc, clean}}
+-			    ]}]), []},
+ 	 {[plugins], os:getenv("COVERALLS") == "true",
+ 	  AppendList([{coveralls, {git,
+ 	                           "https://github.com/processone/coveralls-erl.git",

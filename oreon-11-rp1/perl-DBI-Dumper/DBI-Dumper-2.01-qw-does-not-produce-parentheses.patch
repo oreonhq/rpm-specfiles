@@ -1,0 +1,31 @@
+From 760445e637138c55ec7027b0b087e72dc5ba1880 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 24 Jul 2013 12:09:22 +0200
+Subject: [PATCH] qw does not produce parentheses
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<https://rt.cpan.org/Public/Bug/Display.html?id=87243>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/DBI/Dumper.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/DBI/Dumper.pm b/lib/DBI/Dumper.pm
+index 3335028..abf7a10 100644
+--- a/lib/DBI/Dumper.pm
++++ b/lib/DBI/Dumper.pm
+@@ -322,7 +322,7 @@ sub execute {
+ 		? $start_line_num + $self->{export} : undef;
+ 
+ 	# make sure variables are set to something
+-	for my $var qw(left_delim right_delim escape terminator) {
++	for my $var (qw(left_delim right_delim escape terminator)) {
+ 		$self->{$var} = defined $self->{$var} ? $self->{$var} : '';
+ 	}
+ 
+-- 
+1.8.1.4
+

@@ -1,0 +1,29 @@
+From a6059c3486840493733f3890a51ed52558f0a6bf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 6 Apr 2020 16:33:57 +0200
+Subject: [PATCH] Convert a changelog to UTF-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ ChangeLog | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 24e33b2..3c92c52 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -497,7 +497,7 @@
+ 
+ 2007-02-12  Karl Runge <runge@karlrunge.com>
+ 	* x11vnc: add avahi (aka mDNS/Zeroconf/Bonjour...)
+-	  support thanks to Diego Petten�.  -avahi/-mdns.
++	  support thanks to Diego Pettenò.  -avahi/-mdns.
+ 	  Add -find and -create FINDISPLAY aliases.
+ 
+ 2007-02-11  Karl Runge <runge@karlrunge.com>
+-- 
+2.21.1
+

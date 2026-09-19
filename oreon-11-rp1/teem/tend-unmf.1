@@ -1,0 +1,31 @@
+.TH TEND\-UNMF "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-unmf \- applies and removes the measurement frame
+.SH SYNOPSIS
+.B tend\ unmf
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Applies and removes the measurement frame.
+When the given tensor volume has a measurement frame associated with it, this
+will apply the measurement frame transform to all tensors to convert them into
+world space, and remove the measurement frame from the
+.IR nrrd .
+.SH OPTIONS
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume (sorry, can\(cqt use usual default of
+.RB \(lq \- \(rq
+for
+.BR stdin (3)
+because of hest quirk)
+.TP
+.B \-o\fR <\fInout\fR>
+output tensor volume
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

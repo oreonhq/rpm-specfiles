@@ -1,0 +1,27 @@
+diff --git a/prody/utilities/eigtools.py b/prody/utilities/eigtools.py
+index ef8b141a..543e71c0 100644
+--- a/prody/utilities/eigtools.py
++++ b/prody/utilities/eigtools.py
+@@ -40,7 +40,13 @@ def solveEig(M, n_modes=None, zeros=False, turbo=True, expct_n_zeros=None, rever
+             if eigvals:
+                 turbo = False
+             if not issparse(M):
+-                values, vectors = linalg.eigh(M, turbo=turbo, eigvals=eigvals)
++                try:
++                    values, vectors = linalg.eigh(M, turbo=turbo, eigvals=eigvals)
++                except TypeError:
++                    if turbo:
++                        values, vectors = linalg.eigh(M, driver='evd', subset_by_index=eigvals)
++                    else:
++                        values, vectors = linalg.eigh(M, subset_by_index=eigvals)
+             else:
+                 try:
+                     from scipy.sparse import linalg as scipy_sparse_la
+diff --git a/pyproject.toml b/pyproject.toml
+index 8f38e849..d342126f 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,2 +1,2 @@
+ [build-system]
+-requires = ["setuptools", "wheel", "numpy>=1.10", "pyparsing<=3.1.1", "scipy<=1.13.1"]
++requires = ["setuptools", "wheel", "numpy>=1.10", "pyparsing", "scipy"]

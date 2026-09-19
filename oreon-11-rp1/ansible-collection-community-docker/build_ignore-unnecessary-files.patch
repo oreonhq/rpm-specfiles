@@ -1,0 +1,19 @@
+diff -Naur a/galaxy.yml b/galaxy.yml
+--- a/galaxy.yml
++++ b/galaxy.yml
+@@ -25,4 +25,15 @@
+ build_ignore:
+ # https://docs.ansible.com/ansible/devel/dev_guide/developing_collections.html#ignoring-files-and-folders
+   - .gitignore
+   - changelogs/.plugin-cache.yaml
++  - tests
++  - .github
++  - .azure-pipelines
++  - changelogs/fragments/.keep
++  - docs
++  # We install these files with %license and %doc. We don't want them duplicated.
++  - "CHANGELOG.rst*"
++  - README.md
++  - COPYING
++  - LICENSES
++  - REUSE.toml

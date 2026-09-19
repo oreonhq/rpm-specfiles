@@ -1,0 +1,65 @@
+diff --git a/toonz/sources/stdfx/CMakeLists.txt b/toonz/sources/stdfx/CMakeLists.txt
+index 4de06ec8..c7af2c19 100644
+--- a/toonz/sources/stdfx/CMakeLists.txt
++++ b/toonz/sources/stdfx/CMakeLists.txt
+@@ -270,8 +270,8 @@ set(SOURCES
+     iwa_noise1234.cpp
+     iwa_pnperspectivefx.cpp
+     iwa_soapbubblefx.cpp
+-    ${SDKROOT}/kiss_fft130/kiss_fft.c
+-    ${SDKROOT}/kiss_fft130/tools/kiss_fftnd.c
++#    ${SDKROOT}/kiss_fft130/kiss_fft.c
++#    ${SDKROOT}/kiss_fft130/tools/kiss_fftnd.c
+     iwa_bokehfx.cpp
+     iwa_timecodefx.cpp
+     iwa_bokehreffx.cpp
+@@ -303,6 +303,7 @@ add_library(tnzstdfx SHARED ${HEADERS} ${SOURCES} ${OBJCSOURCES})
+ add_definitions(
+     -D_USRDLL
+     -DTNZSTDFX_EXPORTS
++    -Dkiss_fft_scalar=double
+ )
+ 
+ if(BUILD_ENV_APPLE)
+@@ -326,12 +327,13 @@ else()
+ endif()
+ 
+ include_directories(
+-    ${SDKROOT}/kiss_fft130
++#    ${SDKROOT}/kiss_fft130
++    /usr/include/kissfft/
+ )
+ 
+ _find_toonz_library(TNZLIBS "tnzcore;tnzbase;toonzlib")
+ 
+-target_link_libraries(tnzstdfx Qt5::Core Qt5::Gui Qt5::OpenGL ${GL_LIB} ${GLEW_LIB} ${TNZLIBS} ${PTHREAD_LIBRARY})
++target_link_libraries(tnzstdfx Qt5::Core Qt5::Gui Qt5::OpenGL ${GL_LIB} ${GLEW_LIB} ${TNZLIBS} ${PTHREAD_LIBRARY} kissfft-double)
+ 
+ if(OpenCV_FOUND)
+     target_link_libraries(tnzstdfx ${OpenCV_LIBS})
+diff --git a/toonz/sources/stdfx/iwa_bokeh_util.h b/toonz/sources/stdfx/iwa_bokeh_util.h
+index 5bb593c6..3e2735ee 100644
+--- a/toonz/sources/stdfx/iwa_bokeh_util.h
++++ b/toonz/sources/stdfx/iwa_bokeh_util.h
+@@ -6,7 +6,7 @@
+ #include "tgeometry.h"
+ #include "traster.h"
+ #include "kiss_fft.h"
+-#include "tools/kiss_fftnd.h"
++#include "kiss_fftnd.h"
+ #include "ttile.h"
+ #include "stdfx.h"
+ #include "tfxparam.h"
+diff --git a/toonz/sources/stdfx/iwa_glarefx.h b/toonz/sources/stdfx/iwa_glarefx.h
+index 49873a4d..be82b7bb 100644
+--- a/toonz/sources/stdfx/iwa_glarefx.h
++++ b/toonz/sources/stdfx/iwa_glarefx.h
+@@ -15,7 +15,7 @@ Iwa_GlareFx
+ #include <QList>
+ #include <QThread>
+ 
+-#include "tools/kiss_fftnd.h"
++#include "kiss_fftnd.h"
+ 
+ const int LAYER_NUM = 5;
+ 

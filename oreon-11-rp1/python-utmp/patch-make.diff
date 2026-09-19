@@ -1,0 +1,39 @@
+diff --git python-utmp/Makefile.common python-utmp/Makefile.common.new
+index bbbedda2c5..ad0555f600 100644
+--- python-utmp/Makefile.common
++++ python-utmp/Makefile.common.new
+@@ -1,27 +1,26 @@
+ PYTHONVER?=2.7
+ PYTHONDIR=$(DESTDIR)/usr/lib/python$(PYTHONVER)/site-packages/
+-PYTHONINCLUDE=/usr/include/python$(PYTHONVER)/
+ 
+ CC = gcc 
+-CFLAGS = -g -Wall -I$(PYTHONINCLUDE) $(DEFINES)
+-LDFLAGS = 
++CFLAGS = -g -Wall $(shell pkgconf python$(PYTHONPKGVER) --cflags) $(DEFINES)
++LDFLAGS = $(shell pkgconf python$(PYTHONPKGVER) --libs)
+ 
+-all: utmpaccessmodule.so UTMPCONST.py
++all: utmpaccess.so UTMPCONST.py
+ 
+ 
+ utmpaccessmodule.o: utmpaccessmodule.c
+ 	$(CC) $(CFLAGS) -fpic -c utmpaccessmodule.c 
+ 
+-utmpaccessmodule.so: utmpaccessmodule.o
+-	$(CC) $(CFLAGS) $(LDFLAGS) -fpic -shared utmpaccessmodule.o -o utmpaccessmodule.so
++utmpaccess.so: utmpaccessmodule.o
++	$(CC) $(CFLAGS) $(LDFLAGS) -fpic -shared utmpaccessmodule.o -o utmpaccess.so
+ 
+ UTMPCONST.py: constants.h makeconst.c makeconst.sh
+ 	./makeconst.sh $(CFLAGS)
+ 
+ clean:
+-	rm -f *~ *.o utmpaccessmodule.so *.pyc UTMPCONST.py makeconst
++	rm -f *~ *.o utmpaccess.so *.pyc UTMPCONST.py makeconst
+ 
+ install:
+ 	mkdir -p $(PYTHONDIR)
+-	cp -f utmpaccessmodule.so utmp.py UTMPCONST.py $(PYTHONDIR)
++	cp -f utmpaccess.so utmp.py UTMPCONST.py $(PYTHONDIR)
+ 

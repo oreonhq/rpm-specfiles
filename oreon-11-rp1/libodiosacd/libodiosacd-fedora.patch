@@ -1,0 +1,30 @@
+diff -up libodiosacd-23.8.1/Makefile.orig libodiosacd-23.8.1/Makefile
+--- libodiosacd-23.8.1/Makefile.orig	2023-08-01 13:16:02.000000000 +0200
++++ libodiosacd-23.8.1/Makefile	2023-09-14 10:35:48.512727999 +0200
+@@ -7,7 +7,7 @@ endif
+ CFLAGS := -g -O$O -Wall -Wno-format-truncation -fpic -Idecoder -Iconverter -Ireader $(CFLAGS)
+ LDFLAGS += -lpthread -lm -Ldecoder -Lconverter -Lreader -shared -Wl,-soname,libodiosacd.so.1
+ VPATH = src
+-OBJECTS = decoder/strdata decoder/acdata decoder/codedtable decoder/framereader decoder/decoderbase decoder/decoder converter/pcmfilter converter/dsdfilter converter/filtersetup converter/converterbase converter/converter reader/media reader/disc reader/dff reader/dsf libodiosacd
++OBJECTS = decoder/strdata decoder/acdata decoder/codedtable decoder/framereader decoder/decoderbase decoder/decoder converter/pcmfilter converter/dsdfilter converter/filtersetup converter/converterbase converter/converter reader/media reader/dff reader/dsf libodiosacd reader/disc
+ SUBDIRS = $(VPATH) $(VPATH)/decoder $(VPATH)/converter $(VPATH)/reader
+ LIBDIR = lib
+ 
+@@ -42,12 +42,12 @@ clean:
+ 
+ install:
+ 
+-	$(shell install -Dt $(DESTDIR)/usr/$(LIBDIR) ./data/usr/lib/libodiosacd.so.1)
++	$(shell install -pm0755 -Dt $(DESTDIR)/usr/$(LIBDIR) ./data/usr/lib/libodiosacd.so.1)
+ 	$(shell ln -sf ./libodiosacd.so.1 $(DESTDIR)/usr/$(LIBDIR)/libodiosacd.so)
+-	$(shell install -Dt $(DESTDIR)/usr/include/libodiosacd ./src/libodiosacd.h)
+-	$(shell install -Dt $(DESTDIR)/usr/include/libodiosacd/reader ./src/reader/disc.h)
+-	$(shell install -Dt $(DESTDIR)/usr/include/libodiosacd/reader ./src/reader/media.h)
+-	$(shell install -Dt $(DESTDIR)/usr/include/libodiosacd/reader ./src/reader/sacd.h)
++	$(shell install -pm0644 -Dt $(DESTDIR)/usr/include/libodiosacd ./src/libodiosacd.h)
++	$(shell install -pm0644 -Dt $(DESTDIR)/usr/include/libodiosacd/reader ./src/reader/disc.h)
++	$(shell install -pm0644 -Dt $(DESTDIR)/usr/include/libodiosacd/reader ./src/reader/media.h)
++	$(shell install -pm0644 -Dt $(DESTDIR)/usr/include/libodiosacd/reader ./src/reader/sacd.h)
+ 
+ ifndef DESTDIR
+ 	ldconfig /usr/$(LIBDIR)

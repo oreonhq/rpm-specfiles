@@ -1,0 +1,15 @@
+diff -rupN --no-dereference OpenSceneGraph-OpenSceneGraph-3.6.5/examples/osgviewerWX/osgviewerWX.cpp OpenSceneGraph-OpenSceneGraph-3.6.5-new/examples/osgviewerWX/osgviewerWX.cpp
+--- OpenSceneGraph-OpenSceneGraph-3.6.5/examples/osgviewerWX/osgviewerWX.cpp	2020-01-31 12:03:07.000000000 +0100
++++ OpenSceneGraph-OpenSceneGraph-3.6.5-new/examples/osgviewerWX/osgviewerWX.cpp	2025-07-20 16:14:39.653198788 +0200
+@@ -91,6 +91,11 @@ bool wxOsgApp::OnInit()
+     return true;
+ }
+ 
++void __attribute__ ((constructor)) force_x11()
++{
++    setenv("GDK_BACKEND", "x11", 1);
++}
++
+ IMPLEMENT_APP(wxOsgApp)
+ 
+ BEGIN_EVENT_TABLE(MainFrame, wxFrame)

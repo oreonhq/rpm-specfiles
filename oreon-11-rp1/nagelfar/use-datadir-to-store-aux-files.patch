@@ -1,0 +1,26 @@
+--- nagelfar.tcl.orig	2022-07-09 21:24:55.339888761 +0200
++++ nagelfar.tcl	2022-07-09 21:27:34.580086391 +0200
+@@ -50,9 +50,9 @@
+ unset tmplink
+ 
+ # This makes it possible to customize where files are installed
+-set dbDir      $thisDir
+-set docDir     $thisDir/doc
+-set libDir     $thisDir/lib
++set dbDir      /usr/share/nagelfar
++set docDir     /usr/share/doc/nagelfar
++set libDir     /usr/share/nagelfar/lib
+  
+ # Search where the script is, to be able to place e.g. ctext there.
+ if {[info exists ::starkit::topdir]} {
+@@ -6476,9 +6476,7 @@
+ 
+ proc PluginSearchPath {} {
+     set dirs [list . ./plugins]
+-    lappend dirs [file join $::thisDir .. ..]
+-    lappend dirs [file join $::thisDir .. .. plugins]
+-    lappend dirs [file join $::thisDir .. plugins]
++    lappend dirs [file join /usr/share/nagelfar plugins]
+     foreach d $::Nagelfar(pluginPath) {
+         lappend dirs $d
+     }

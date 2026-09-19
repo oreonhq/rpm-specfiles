@@ -1,0 +1,23 @@
+Author: František Dvořák <valtri@civ.zcu.cz>
+Date:   Wed Nov 4 09:30:54 2015 +0100
+
+    Build flags cleanup, get flags from environment.
+
+diff --git a/Makefile b/Makefile
+index 627aa60..8150ea5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,10 +1,11 @@
++BLAS_LIBS ?= -llapack -lcblas
+ 
+-CFLAGS := -DNDEBUG -O3 -fno-exceptions -fPIC -ffast-math -msse -mfpmath=sse -ftree-vectorize -fomit-frame-pointer -DUSE_PTHREADS
++CFLAGS := -DNDEBUG -fno-exceptions -fPIC -ffast-math -ftree-vectorize -fomit-frame-pointer -DUSE_PTHREADS $(BLAS_CFLAGS) $(CFLAGS)
+ #CFLAGS	:= -g -Wall
+ 
+ CXXFLAGS := $(CFLAGS)
+ 
+-LDFLAGS	 := -shared -Lbuild/linux/i686 -Wl,-Bstatic -lqm-dsp -lvamp-sdk -llapack -lcblas -lf77blas -latlas -lgfortran -Wl,-Bdynamic -lpthread -Wl,-z,defs -Wl,--version-script=vamp-plugin.map
++LDFLAGS	 := -shared -lqm-dsp -lvamp-sdk -lpthread -Wl,--version-script=vamp-plugin.map $(BLAS_LIBS) $(LDFLAGS)
+ 
+ PLUGIN_EXT   := .so
+ 

@@ -1,0 +1,44 @@
+Add missing header files for function prototypes.
+
+An implicit declaration of sendfile in trybsdsf.c remains, but this
+is expected on GNU/Linux.
+
+The io/io_debugstring.c header change is already part of current upstream.
+
+diff --git a/io/io_debugstring.c b/io/io_debugstring.c
+index 051b4419bf7f1884..a47bc2282b0061d7 100644
+--- a/io/io_debugstring.c
++++ b/io/io_debugstring.c
+@@ -1,7 +1,7 @@
+ #include "io_internal.h"
+ #include <iarray.h>
+ #include <fmt.h>
+-#include <time.h>
++#include <sys/time.h>
+ 
+ unsigned int io_debugstring(int64 s,char* buf,unsigned int bufsize) {
+   struct timeval tv;
+diff --git a/trypoll.c b/trypoll.c
+index 30bea3d922074f15..7250b5914d94928c 100644
+--- a/trypoll.c
++++ b/trypoll.c
+@@ -1,6 +1,7 @@
+ #include <sys/types.h>
+ #include <fcntl.h>
+ #include <poll.h>
++#include <unistd.h>
+ 
+ int main()
+ {
+diff --git a/trysendfile.c b/trysendfile.c
+index 7ec8bfbe0b92c7b2..90cd63d8df1fb6d0 100644
+--- a/trysendfile.c
++++ b/trysendfile.c
+@@ -62,6 +62,7 @@ int main() {
+ #define _FILE_OFFSET_BITS 64
+ #include <sys/types.h>
+ #include <unistd.h>
++#include <fcntl.h>
+ #if defined(__GLIBC__)
+ #include <sys/sendfile.h>
+ #elif defined(__dietlibc__)

@@ -1,0 +1,12 @@
+diff -up tolua++-1.0.93/SConstruct~ tolua++-1.0.93/SConstruct
+--- tolua++-1.0.93/SConstruct~	2024-06-15 17:03:47.000000000 +0200
++++ tolua++-1.0.93/SConstruct	2024-06-15 17:09:29.709563161 +0200
+@@ -7,6 +7,8 @@ if os.name == 'nt':
+ 
+ env = Environment(tools = tools)
+ 
++env['ENV'] = os.environ
++
+ options_file = None
+ if sys.platform == 'linux2':
+ 	options_file = "linux"

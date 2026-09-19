@@ -1,0 +1,31 @@
+diff -ur kdebase-3.5.10/kcontrol/colors/colorscm.cpp kdebase-3.5.10-libkrdb_dep/kcontrol/colors/colorscm.cpp
+--- kdebase-3.5.10/kcontrol/colors/colorscm.cpp	2007-01-15 12:31:49.000000000 +0100
++++ kdebase-3.5.10-libkrdb_dep/kcontrol/colors/colorscm.cpp	2008-09-21 06:45:19.000000000 +0200
+@@ -390,6 +390,7 @@
+     cfg2.sync();
+     QApplication::syncX();
+ 
++#if 0
+     // Notify all qt-only apps of the KDE palette changes
+     uint flags = KRdbExportQtColors;
+     if ( exportColors )
+@@ -403,6 +404,7 @@
+ #endif
+     }
+     runRdb( flags );	// Save the palette to qtrc for KStyles
++#endif
+ 
+     // Notify all KDE applications
+     KIPC::sendMessageAll(KIPC::PaletteChanged);
+diff -ur kdebase-3.5.10/kcontrol/colors/Makefile.am kdebase-3.5.10-libkrdb_dep/kcontrol/colors/Makefile.am
+--- kdebase-3.5.10/kcontrol/colors/Makefile.am	2006-03-17 11:17:17.000000000 +0100
++++ kdebase-3.5.10-libkrdb_dep/kcontrol/colors/Makefile.am	2008-09-21 06:44:39.000000000 +0200
+@@ -4,7 +4,7 @@
+ 
+ kcm_colors_la_SOURCES = colorscm.cpp widgetcanvas.cpp 
+ kcm_colors_la_LDFLAGS = $(KDE_RPATH) -module -avoid-version $(all_libraries) -no-undefined
+-kcm_colors_la_LIBADD = $(LIB_KDEUI) $(LIB_KIO) $(top_builddir)/kcontrol/krdb/libkrdb.la
++kcm_colors_la_LIBADD = $(LIB_KDEUI) $(LIB_KIO)
+ METASOURCES = colorscm.moc widgetcanvas.moc
+ 
+ noinst_HEADERS = colorscm.h widgetcanvas.h

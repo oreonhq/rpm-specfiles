@@ -1,0 +1,74 @@
+--- a/refind-install	2018-09-10 10:11:58.210756087 +0100
++++ b/refind-install	2018-09-10 19:31:00.916507826 +0100
+@@ -27,6 +27,8 @@
+ #           Valid only under Linux.
+ #    "--keepname" to keep refind_x64.efi name as such even when using shim.
+ #           Valid only under Linux.
++#    "--nvramonly" to just restore the boot entry in NVRAM.
++#           Valid only under Linux.
+ #    "--yes" to assume a "yes" response to all prompts
+ #
+ # This program is copyright (c) 2012-2024 by Roderick W. Smith
+@@ -169,6 +171,8 @@
+               ;;
+          --keepname) KeepName=1
+               ;;
++         --nvramonly) NvramOnly=1
++              ;;
+          --drivers | --alldrivers) InstallDrivers="all"
+               ;;
+          --nodrivers) InstallDrivers="none"
+@@ -178,7 +182,7 @@
+          * ) echo "Usage: $0 [--notesp | --usedefault {device-file} | --root {dir} |"
+              echo "                     --ownhfs {device-file} ] [--keepname]"
+              echo "                  [--nodrivers | --alldrivers] [--shim {shimfile}]"
+-             echo "                  [--localkeys [--encryptkeys]] [--keepname] [--yes]"
++             echo "                  [--localkeys [--encryptkeys]] [--nvramonly] [--yes]"
+              exit 1
+       esac
+       shift
+@@ -208,6 +212,10 @@
+       echo "The --keepname option is incompatible with --usedefault! Aborting!"
+       exit 1
+    fi
++   if [[ "$NvramOnly" == 1 && "$OSTYPE" != "linux" && "$OSTYPE" != "linux-gnu" ]] ; then
++      echo "The --nvramonly option is valid only under Linux! Aborting!"
++      exit 1
++   fi
+    if [[ "$InstallDrivers" == "all" && "$TargetDir" != "/EFI/BOOT" ]] ; then
+       echo "The --alldrivers option is meant for creating USB flash drives with (near-)"
+       echo "universal boot support. Using it on a hard disk partition runs the risk of"
+@@ -1279,6 +1287,20 @@
+    echo "ESP was found at $InstallDir using $EspFilesystem"
+ } # FindMountedESP
+ 
++# Identifies the rEFInd EFI boot image filename.
++DetermineBootImageName() {
++   if [[ "$TargetDir" == '/EFI/BOOT' ]] ; then
++      Refind="boot$Platform.efi"
++   elif [[ "$ShimSource" != "none" ]] ; then
++      if [[ "$TargetShim" == "default" ]] ; then
++         TargetShim=`basename "$ShimSource"`
++      fi
++      Refind="$TargetShim"
++   else
++      Refind="refind_$Platform.efi"
++   fi
++} # DetermineBootImageName
++
+ # Uses efibootmgr to add an entry for rEFInd to the EFI's NVRAM, if necessary.
+ # If this fails, sets Problems=1
+ AddBootEntry() {
+@@ -1471,6 +1493,12 @@
+       DetermineTargetDir
+    fi
+ 
++   if [[ $NvramOnly == 1 ]] ; then
++      DetermineBootImageName
++      AddBootEntry
++      return
++   fi
++
+    if [[ $LocalKeys == 1 ]] ; then
+       ReSignBinaries
+    fi

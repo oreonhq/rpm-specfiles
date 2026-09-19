@@ -1,0 +1,81 @@
+From fcafe97cee012e4c3ae1996bb78f8d88a1077dcb Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Sun, 29 Dec 2024 18:41:57 +0900
+Subject: [PATCH] TEST: Support REXML 3.3.2 output change
+
+With https://github.com/ruby/rexml/pull/167
+REXML::Document.write may chomp output string compared to before.
+This change affects VagrantPlugins::ProviderLibvirt::Action::StartDomain#call
+internal behavior.
+
+Modify rspec testsuite to support this REXML behavior change.
+
+Closes #1836 .
+---
+ spec/unit/action/start_domain_spec.rb | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/spec/unit/action/start_domain_spec.rb b/spec/unit/action/start_domain_spec.rb
+index 330612beb..af9999cf9 100644
+--- a/spec/unit/action/start_domain_spec.rb
++++ b/spec/unit/action/start_domain_spec.rb
+@@ -364,7 +364,8 @@
+ 
+         it 'should add the nvram element' do
+           expect(ui).to_not receive(:warn)
+-          expect(connection).to receive(:define_domain).with(updated_domain_xml).and_return(libvirt_domain)
++          arg_domain_xml = REXML::VERSION >= "3.3.2" ?  updated_domain_xml.chomp : updated_domain_xml
++          expect(connection).to receive(:define_domain).with(arg_domain_xml).and_return(libvirt_domain)
+           expect(libvirt_domain).to receive(:xml_desc).and_return(domain_xml, updated_domain_xml)
+           expect(libvirt_domain).to receive(:autostart=)
+           expect(domain).to receive(:start)
+@@ -385,7 +385,8 @@
+ 
+         it 'should keep the XML element' do
+           expect(ui).to_not receive(:warn)
+-          expect(connection).to receive(:define_domain).with(updated_domain_xml).and_return(libvirt_domain)
++          arg_domain_xml = REXML::VERSION >= "3.3.2" ?  updated_domain_xml.chomp : updated_domain_xml
++          expect(connection).to receive(:define_domain).with(arg_domain_xml).and_return(libvirt_domain)
+           expect(libvirt_domain).to receive(:xml_desc).and_return(domain_xml, updated_domain_xml)
+           expect(libvirt_domain).to receive(:autostart=)
+           expect(domain).to receive(:start)
+@@ -399,7 +399,8 @@
+ 
+           it 'should delete the XML element' do
+             expect(ui).to_not receive(:warn)
+-            expect(connection).to receive(:define_domain).with(updated_domain_xml).and_return(libvirt_domain)
++            arg_domain_xml = REXML::VERSION >= "3.3.2" ?  updated_domain_xml.chomp : updated_domain_xml
++            expect(connection).to receive(:define_domain).with(arg_domain_xml).and_return(libvirt_domain)
+             expect(libvirt_domain).to receive(:xml_desc).and_return(domain_xml, updated_domain_xml)
+             expect(libvirt_domain).to receive(:autostart=)
+             expect(domain).to receive(:start)
+@@ -424,7 +424,8 @@
+         it 'should modify the domain tpm_path' do
+           expect(ui).to_not receive(:warn)
+           expect(logger).to receive(:debug).with('tpm config changed')
+-          expect(connection).to receive(:define_domain).with(updated_domain_xml).and_return(libvirt_domain)
++          arg_domain_xml = REXML::VERSION >= "3.3.2" ?  updated_domain_xml.chomp : updated_domain_xml
++          expect(connection).to receive(:define_domain).with(arg_domain_xml).and_return(libvirt_domain)
+           expect(libvirt_domain).to receive(:xml_desc).and_return(domain_xml, updated_domain_xml)
+           expect(libvirt_domain).to receive(:autostart=)
+           expect(domain).to receive(:start)
+@@ -446,7 +446,8 @@
+         it 'should modify the domain tpm_path' do
+           expect(ui).to_not receive(:warn)
+           expect(logger).to receive(:debug).with('tpm config changed')
+-          expect(connection).to receive(:define_domain).with(updated_domain_xml).and_return(libvirt_domain)
++          arg_domain_xml = REXML::VERSION >= "3.3.2" ?  updated_domain_xml.chomp : updated_domain_xml
++          expect(connection).to receive(:define_domain).with(arg_domain_xml).and_return(libvirt_domain)
+           expect(libvirt_domain).to receive(:xml_desc).and_return(domain_xml, updated_domain_xml)
+           expect(libvirt_domain).to receive(:autostart=)
+           expect(domain).to receive(:start)
+@@ -509,7 +509,8 @@
+         it 'should modify the domain' do
+           expect(ui).to_not receive(:warn)
+           expect(logger).to receive(:debug).with('tpm config changed')
+-          expect(connection).to receive(:define_domain).with(updated_domain_xml).and_return(libvirt_domain)
++          arg_domain_xml = REXML::VERSION >= "3.3.2" ?  updated_domain_xml.chomp : updated_domain_xml
++          expect(connection).to receive(:define_domain).with(arg_domain_xml).and_return(libvirt_domain)
+           expect(libvirt_domain).to receive(:xml_desc).and_return(domain_xml, updated_domain_xml)
+           expect(libvirt_domain).to receive(:autostart=)
+           expect(domain).to receive(:start)

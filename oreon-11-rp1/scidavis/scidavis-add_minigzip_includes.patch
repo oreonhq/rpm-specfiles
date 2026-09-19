@@ -1,0 +1,12 @@
+diff -Naur original/3rdparty/minigzip/minigzip.c patched/3rdparty/minigzip/minigzip.c
+--- original/3rdparty/minigzip/minigzip.c	2022-05-08 15:55:27.000000000 +0200
++++ patched/3rdparty/minigzip/minigzip.c	2024-02-04 13:37:27.757983673 +0100
+@@ -48,6 +48,8 @@
+ 
+ #include "zlib.h"
+ #include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
+ 
+ #ifdef STDC
+ #  include <string.h>

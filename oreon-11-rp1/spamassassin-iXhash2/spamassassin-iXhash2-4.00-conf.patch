@@ -1,0 +1,32 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for iXhash2 >= 4.00 which
+sets some useful defaults based on Mail::SpamAssassin::Plugin::iXhash2.
+
+--- iXhash2-4.00/iXhash2.cf		2019-04-30 16:49:39.000000000 +0200
++++ iXhash2-4.00/iXhash2.cf.conf	2025-02-19 16:20:06.595814903 +0100
+@@ -1,15 +1,18 @@
++# iXhash computes MD5 checksums of fragments of the body of an e-mail
++# and compares them to those of known spam using DNS queries to a RBL-
++# like name server. So it works similar to the standard plugins that
++# use the Pyzor, Razor and DCC software packages.
+ 
+ # Note: loadplugin should really go into local.pre or so
+-loadplugin Mail::SpamAssassin::Plugin::iXhash2 iXhash2.pm
++loadplugin Mail::SpamAssassin::Plugin::iXhash2
+ 
+ ifplugin Mail::SpamAssassin::Plugin::iXhash2
+ 
+-ixhashdnsbl   IXHASH_IX  ix.dnsbl.manitu.net.
+-body          IXHASH_IX  eval:check_ixhash('IXHASH_IX')
+-describe      IXHASH_IX  http://www.ixhash.net/listinfo.html
+-tflags        IXHASH_IX  net
+-score         IXHASH_IX  1.5
+-reuse         IXHASH_IX
++#ixhashdnsbl   IXHASH_EXAMPLE  ixhash.example.net.
++#body          IXHASH_EXAMPLE  eval:check_ixhash('IXHASH_EXAMPLE')
++#describe      IXHASH_EXAMPLE  https://www.example.net/
++#tflags        IXHASH_EXAMPLE  net
++#score         IXHASH_EXAMPLE  3.0
++#reuse         IXHASH_EXAMPLE
+ 
+ endif
+-

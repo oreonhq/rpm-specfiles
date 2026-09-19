@@ -1,0 +1,12 @@
+diff -ruN yices2-Yices-2.6.4/cudd-cudd-3.0.0/configure.ac yices2-Yices-2.6.4.orig/cudd-cudd-3.0.0/configure.ac
+--- a/cudd-cudd-3.0.0/configure.ac	2016-01-20 23:59:33.000000000 +0100
++++ b/cudd-cudd-3.0.0/configure.ac	2022-11-28 12:32:24.297791070 +0100
+@@ -131,7 +131,7 @@
+ AC_CACHE_VAL(ac_cv_have_ieee_754,
+ [ AC_TRY_RUN([
+ #include <math.h>
+-main(void)
++int main(void)
+ {
+     if (HUGE_VAL != HUGE_VAL * 3 || HUGE_VAL != HUGE_VAL / 3) return 1;
+     return 0;

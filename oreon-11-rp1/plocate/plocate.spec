@@ -1,7 +1,7 @@
 %global source0_hash e55a757af1d7efb15ea674993224da4f0258479f8f720bd3dae0925d27dc04a2
 
 Name:           plocate
-Version:        1.1.24
+Version:        1.1.25
 Release:        %autorelease
 Summary:        Much faster locate
 

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Shimenkan</target>
+    <match>
+      <family>Shimenkan Book</family>
+      <change>
+        <style>Bold</style>
+        <into>Black</into>
+      </change>
+      <change>
+        <style>Regular</style>
+        <into>Medium</into>
+      </change>
+    </match>
+    <match>
+      <family>Shimenkan Light</family>
+      <change>
+        <style>Bold</style>
+        <into>Medium</into>
+      </change>
+      <change>
+        <style>Regular</style>
+        <into>Light</into>
+      </change>
+    </match>
+    <match>
+      <family>Shimenkan Extra Light</family>
+      <change>
+        <style>Bold</style>
+        <into>Regular</into>
+      </change>
+      <change>
+        <style>Regular</style>
+        <into>ExtraLight</into>
+      </change>
+    </match>
+    <axis>
+      <name>weight</name>
+      <step>
+        <name>ExtraLight</name>
+        <value>40</value>
+      </step>
+      <step>
+        <name>Light</name>
+        <value>50</value>
+      </step>
+      <step>
+        <name>Regular</name>
+        <value>80</value>
+      </step>
+      <step>
+        <name>Medium</name>
+        <value>100</value>
+      </step>
+      <step>
+        <name>Bold</name>
+        <value>200</value>
+      </step>
+      <step>
+        <name>Black</name>
+        <value>210</value>
+      </step>
+    </axis>
+    <like>
+      <family>Source Sans Pro</family>
+      <family>Salaowu</family>
+      <family>Sapushan</family>
+      <family>Shimenkan Guifan</family>
+      <family>Shimenkan GSM</family>
+      <family>Shimenkan MAS</family>
+      <family>Shimenkan MGS</family>
+      <family>Shimenkan Zonghe</family>
+      <family>Taogu</family>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>
+

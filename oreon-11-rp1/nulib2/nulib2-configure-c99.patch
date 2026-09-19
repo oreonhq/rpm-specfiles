@@ -1,0 +1,32 @@
+Avoid calling the undeclared exit function.  This avoids a check
+failure with a future compiler that does not support implicit
+function declarations.
+
+Submitted upstream: <https://github.com/fadden/nulib2/pull/15>
+
+diff --git a/nufxlib/configure b/nufxlib/configure
+index f459119ac798924b..6c862bdb4f52e89a 100755
+--- a/nufxlib/configure
++++ b/nufxlib/configure
+@@ -4014,7 +4014,7 @@ else
+             int count;
+             char buf[8];
+             count = sprintf(buf, "123");    /* should return three */
+-            exit(count != 3);
++            return count != 3;
+         }
+ 
+ _ACEOF
+diff --git a/nufxlib/configure.in b/nufxlib/configure.in
+index 46df1a4daeee7302..9498ef53ea6c8155 100644
+--- a/nufxlib/configure.in
++++ b/nufxlib/configure.in
+@@ -130,7 +130,7 @@ AC_CACHE_VAL(nufxlib_cv_sprintf_returns_int, [
+             int count;
+             char buf[8];
+             count = sprintf(buf, "123");    /* should return three */
+-            exit(count != 3);
++            return count != 3;
+         }
+     ],
+     [nufxlib_cv_sprintf_returns_int=yes], [nufxlib_cv_sprintf_returns_int=no],

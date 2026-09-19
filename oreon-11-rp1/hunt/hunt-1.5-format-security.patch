@@ -1,0 +1,13 @@
+diff --git a/synchijack.c b/synchijack.c
+index dbf1070..fe94b43 100644
+--- a/synchijack.c
++++ b/synchijack.c
+@@ -242,7 +242,7 @@ static void need_write_positive(struct conn_info *ci, char *data, int data_len)
+ 	int fin_msg_len;
+ 	int len;
+ 
+-	sprintf(fin_msg, suggest_sync_msg(0));
++	sprintf(fin_msg, "%s", suggest_sync_msg(0));
+ 	fin_msg_len = strlen(fin_msg);
+ 	if (!data) {
+ #if 0 /* it doesn't work properly in ACK storm  - 

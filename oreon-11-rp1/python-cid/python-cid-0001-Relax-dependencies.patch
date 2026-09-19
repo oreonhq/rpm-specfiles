@@ -1,0 +1,31 @@
+From a5ae6389a9522534e14a6f319db5b108c1d12a31 Mon Sep 17 00:00:00 2001
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 13 Aug 2024 01:24:53 +0200
+Subject: [PATCH 1/2] Relax dependencies
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+---
+ setup.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 137b71a..bd2c2b3 100644
+--- a/setup.py
++++ b/setup.py
+@@ -12,11 +12,11 @@ with open('HISTORY.rst') as history_file:
+     history = history_file.read()
+ 
+ requirements = [
+-    'base58>=1.0.2,<2.0',
++    'base58>=1.0.2',
+     'py-multibase>=1.0.0,<2.0.0',
+     'py-multicodec<0.3.0',
+     'morphys>=1.0,<2.0',
+-    'py-multihash>=0.2.0,<1.0.0',
++    'py-multihash>=0.2.0',
+ ]
+ 
+ setup_requirements = [
+-- 
+2.48.1
+

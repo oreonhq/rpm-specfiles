@@ -1,0 +1,24 @@
+From 5649622af6f3b44e4554b51f684aa824abcd603a Mon Sep 17 00:00:00 2001
+From: Daniel Milnes <daniel.milnes@lmax.com>
+Date: Tue, 11 Mar 2025 07:43:13 +0000
+Subject: [PATCH] Add Support for Dateparser 1.2
+
+This will unblock installing on Fedora
+(https://bugzilla.redhat.com/show_bug.cgi?id=2349396)
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 4a47a75..071efc4 100644
+--- a/setup.py
++++ b/setup.py
+@@ -82,7 +82,7 @@ def get_git_commit_datetime() -> str:
+     'aiohttp>=3.9,<4',
+     'click-log>=0.4,<0.5',
+     'click>=8,<9',
+-    'dateparser>=0.7.1,<1.2',
++    'dateparser>=0.7.1,<1.3',
+     'jinja2>=2.10',
+     'jsonpath-ng>=1.5.1,<2',
+     'netdisco>=3.0.0,<4',

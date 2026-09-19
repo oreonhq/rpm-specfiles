@@ -1,0 +1,106 @@
+From c4b08c7afa91022e91979463db3cd86c34ef4502 Mon Sep 17 00:00:00 2001
+From: Adrien Schildknecht <adrs@fb.com>
+Date: Thu, 28 Jan 2021 09:11:42 -0800
+Subject: [PATCH] SSH module is not iterating on the credential list properly
+
+The logic to get the credentials for the SSH module is wrong:
+ - Pairwise: the module is using the wrong pairs of credentials: user[idx] with pass[idx+6];
+ - Default: the first 6 passwords are ignored for all the usernames except the first one;
+
+With pairwise:
+  $ ./ncrack -vvv -d10 --pairwise -U <(seq 100) -P <(seq 100) ssh://127.0.0.1 | grep Login
+  (EID 1) Login failed: '1' '1'
+  (EID 1) Login failed: '1' '2'          << should be '2' '2'
+  (EID 1) Login failed: '1' '3'          << should be '3' '3'
+  (EID 1) Login failed: '1' '4'          << ...
+  (EID 1) Login failed: '1' '5'          << ...
+  (EID 1) Login failed: '1' '6'          << ...
+  (EID 1) Login failed: '2' '7'          << should be '7' '7'
+  ...
+  (EID 24) Login failed: '32' '38'
+  ...
+  (EID 83) Login failed: '81' '87'
+  ...
+  (EID 105) Login failed: '99' '5'
+  (EID 106) Login failed: '100' '6'
+
+As we can see, ncrack is using the wrong pairs of credentials: user[idx] with pass[idx+6].
+
+With default option:
+  $ ./ncrack -vvv -d10 -U <(seq 3) -P <(seq 10) ssh://127.0.0.1 | grep Login
+  (EID 1) Connection closed by peer
+  (EID 1) Login failed: '1' '1'
+  (EID 1) Login failed: '1' '2'
+  (EID 1) Login failed: '1' '3'
+  (EID 1) Login failed: '1' '4'
+  (EID 1) Login failed: '1' '5'
+  (EID 1) Login failed: '1' '6'
+  (EID 2) Login failed: '1' '7'
+  (EID 4) Login failed: '1' '8'
+  (EID 6) Login failed: '1' '9'
+  (EID 8) Login failed: '1' '10'
+  (EID 3) Login failed: '2' '7'   << missing data here (6 creds)
+  (EID 5) Login failed: '2' '8'
+  (EID 7) Login failed: '2' '9'
+  (EID 9) Login failed: '2' '10'
+  (EID 3) Login failed: '3' '7'   << missing data here (6 creds)
+  (EID 5) Login failed: '3' '8'
+  (EID 7) Login failed: '3' '9'
+  (EID 9) Login failed: '3' '10'
+
+Ncrack is skipping the first 6 passwords for all the users except the first one.
+
+Note that if we run the same command but with the mysql module, everything looks good:
+Example:
+  $ ./ncrack -vvv -d10 --pairwise -U <(seq 100) -P <(seq 100) mysql://127.0.0.1 | grep Login
+  mysql://127.0.0.1:3306 (EID 1) Login failed: '1' '1'
+  mysql://127.0.0.1:3306 (EID 2) Login failed: '2' '2'
+  ...
+  mysql://127.0.0.1:3306 (EID 99) Login failed: '99' '99'
+  mysql://127.0.0.1:3306 (EID 100) Login failed: '100' '100'
+
+The commit f2270de0 introduced this regression and reverting it fix the issue.
+The description of the commit lacks a bit of context, but I guess the intent was that if we are using the same usernames for different attempts, then we could keep the same connection open and speed up things during the first timing probe.
+Even if reverting this commits might cause a bit of performance drop, I think it's more important to have code that behave as it should.
+
+With this commit applied:
+  $ ./ncrack -vvv -d10 --pairwise -U <(seq 20) -P <(seq 20) ssh://127.0.0.1 | grep Login
+  (EID 1) Login failed: '1' '1'
+  ...
+  (EID 21) Login failed: '20' '20'
+---
+ Service.cc | 21 ---------------------
+ 1 file changed, 21 deletions(-)
+
+diff --git a/Service.cc b/Service.cc
+index 2e57a673..3d6149be 100644
+--- a/Service.cc
++++ b/Service.cc
+@@ -404,27 +404,6 @@ getNextPair(char **user, char **pass)
+       loginlist_fini = true;
+       return -1;
+     }
+-
+-    /* special case for ssh */
+-    if (just_started == true) {
+-
+-      /* keep using same username for first timing probe */
+-      if (passvi == PassArray->end()) {                                          
+-        passvi = PassArray->begin();
+-        uservi++;
+-        if (uservi == UserArray->end()) {
+-          if (o.debugging > 8)
+-            log_write(LOG_STDOUT, "%s Username list finished!\n", HostInfo());
+-          loginlist_fini = true;
+-          return -1;
+-        } 
+-      } 
+-      *user = *uservi;
+-      *pass = *passvi;
+-      passvi++;
+-
+-      return 0;
+-    } 
+   }
+ 
+   if (o.pairwise && strcmp(name, "mongodb")) {

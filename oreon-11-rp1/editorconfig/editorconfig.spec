@@ -17,7 +17,7 @@ editors.}
 
 Name:           editorconfig
 Summary:        Parser for EditorConfig files written in C
-Version:        0.12.10
+Version:        0.12.11
 Release:        1%{?dist}
 
 # The entire source is BSD-2-Clause, except:

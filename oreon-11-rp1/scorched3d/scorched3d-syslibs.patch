@@ -1,0 +1,33 @@
+diff -up scorched/src/client/scorchedc/Makefile.am~ scorched/src/client/scorchedc/Makefile.am
+--- scorched/src/client/scorchedc/Makefile.am~	2014-08-01 18:47:59.000000000 +0200
++++ scorched/src/client/scorchedc/Makefile.am	2014-08-29 13:46:18.225526804 +0200
+@@ -41,7 +41,6 @@ scorched3dc_SOURCES = \
+ 	../../common/common/RandomGenerator.cpp \
+ 	../../common/common/RollingAverage.cpp \
+ 	../../common/common/sha2.cpp \
+-	../../common/common/snprintf.c \
+ 	../../common/common/SplineCurve.cpp \
+ 	../../common/common/SplinePath.cpp \
+ 	../../common/common/ToolTip.cpp \
+diff -up scorched/src/launcher/scorched/Makefile.am~ scorched/src/launcher/scorched/Makefile.am
+--- scorched/src/launcher/scorched/Makefile.am~	2014-08-01 18:47:59.000000000 +0200
++++ scorched/src/launcher/scorched/Makefile.am	2014-08-29 13:46:14.017634121 +0200
+@@ -36,7 +36,6 @@ scorched3d_SOURCES = \
+ 	../../common/common/OptionsGame.cpp \
+ 	../../common/common/OptionsParameters.cpp \
+ 	../../common/common/ProgressCounter.cpp \
+-	../../common/common/snprintf.c \
+ 	../../common/common/Vector.cpp \
+ 	../../common/common/Vector4.cpp \
+ 	../../common/common/VectorLib.cpp \
+diff -up scorched/src/server/scorcheds/Makefile.am~ scorched/src/server/scorcheds/Makefile.am
+--- scorched/src/server/scorcheds/Makefile.am~	2014-08-01 18:47:59.000000000 +0200
++++ scorched/src/server/scorcheds/Makefile.am	2014-08-29 13:46:36.993048162 +0200
+@@ -105,7 +105,6 @@ scorched3ds_SOURCES = \
+ 	../../common/common/RandomGenerator.cpp \
+ 	../../common/common/RollingAverage.cpp \
+ 	../../common/common/sha2.cpp \
+-	../../common/common/snprintf.c \
+ 	../../common/common/SplineCurve.cpp \
+ 	../../common/common/SplinePath.cpp \
+ 	../../common/common/ToolTip.cpp \

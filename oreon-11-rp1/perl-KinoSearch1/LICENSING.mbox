@@ -1,0 +1,75 @@
+From marvin@rectangular.com Mon Mar 23 01:37:59 2009
+Received: by norkia.v3.sk (Postfix, from userid 99) id 718E880147; Mon, 23
+ Mar 2009 01:37:59 +0100 (CET)
+X-Spam-Checker-Version: SpamAssassin 3.2.5 (2008-06-10) on norkia.v3.sk
+X-Spam-Level: 
+X-Spam-Status: No, score=0.1 required=5.0 tests=RDNS_NONE autolearn=no
+ version=3.2.5
+X-Greylist: delayed 2343 by SQLgrey-1.7.5
+Received: from rectangular.com (unknown [68.116.38.202]) (using TLSv1 with
+ cipher AES256-SHA (256/256 bits)) (No client certificate requested) by
+ norkia.v3.sk (Postfix) with ESMTP id 8320C80148 for <lkundrak@v3.sk>; Mon,
+ 23 Mar 2009 00:37:50 +0000 (UTC)
+Received: from marvin by rectangular.com with local (Exim 4.63)
+ (envelope-from <marvin@rectangular.com>) id 1LlXbT-0000Zw-2E for
+ lkundrak@v3.sk; Sun, 22 Mar 2009 17:01:19 -0700
+Date: Sun, 22 Mar 2009 17:01:19 -0700
+To: Lubomir Rintel <lkundrak@v3.sk>
+Subject: FW: [Re: KinoSearch licensing and Fedora]
+Message-ID: <20090323000118.GA2217@rectangular.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.13 (2006-08-11)
+From: Marvin Humphrey <marvin@rectangular.com>
+X-Evolution-Source: imap://lkundrak%40v3.sk@mail.v3.sk/
+Content-Transfer-Encoding: 8bit
+
+Lubomir,
+
+Here you go...
+
+Marvin Humphrey
+
+----- Forwarded message from marvin -----
+
+To: Ian Burrell <ianburrell@gmail.com>
+Subject: Re: KinoSearch licensing and Fedora
+
+On Tue, Feb 10, 2009 at 04:21:04PM -0800, Ian Burrell wrote:
+> I am trying to package KinoSearch for Fedora.  There were some
+> questions in the review[1] about the licensing.  My understanding is
+> that KinoSearch is licensed under the GPL or Aristic.  My impression
+> is that it doesn't contain any code licensed under ASL 2.0.  
+
+Correct.  It is all either original code or derived code, and all licensed
+under GPL or Artistic.  I've been quite conscientious about never copying and
+pasting anything directly from Lucene, including documentation and comments.
+That allows me to claim a separate copyright and distribute the project under
+different but compatible licensing terms.
+
+> But that since it was derived from Lucene, it has to include the Apache
+> license text.
+
+That's correct, as per ASL 2.0 section 4.1.
+
+> Is this right?  Is everything in KinoSearch licensed as "GPL+ or
+> Artistic"?  Does the Apache license need to be included in the binary
+> package to satisfy the ASL?
+
+IANAL but... 
+
+I think so.  I've always assumed that derivations/redistributions of
+derivations still need to maintain compatibility with the license terms of the
+original -- otherwise the original author would quickly lose control of their
+work.  It seems to me that you need to determine whether the GPLv3 your
+derivative work will be distributed under is compatible with both the
+KinoSearch license terms (which it obviously is) and the Lucene license terms
+-- which ought to be the case so long as you include that file and the
+existing notice embedded in the KinoSearch documentation.
+
+Best,
+
+Marvin Humphrey
+
+----- End forwarded message -----

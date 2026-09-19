@@ -1,0 +1,38 @@
+diff -rupN --no-dereference libBatch-2.4.5/CMakeLists.txt libBatch-2.4.5-new/CMakeLists.txt
+--- libBatch-2.4.5/CMakeLists.txt	2021-04-27 15:43:17.000000000 +0200
++++ libBatch-2.4.5-new/CMakeLists.txt	2025-07-17 11:26:32.758473582 +0200
+@@ -20,8 +20,12 @@
+ # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
+ #
+ 
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
+ PROJECT(LibBatch C CXX)
++include(GNUInstallDirs)
++if(CMAKE_INSTALL_LIBDIR MATCHES "lib64$")
++  set(LIB_SUFFIX 64)
++endif()
+ 
+ # Versioning
+ # ===========
+@@ -113,7 +117,7 @@ IF (LIBBATCH_PYTHON_WRAPPING)
+   FIND_PACKAGE(LibbatchSWIG REQUIRED)
+   
+   SET(PYTHON_VERSION "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+-  SET(LIBBATCH_PYTHONPATH lib/python${PYTHON_VERSION}/site-packages)
++  SET(LIBBATCH_PYTHONPATH lib${LIB_SUFFIX}/python${PYTHON_VERSION}/site-packages)
+ ENDIF()
+ 
+ # Configuration summary
+diff -rupN --no-dereference libBatch-2.4.5/src/CMakeLists.txt libBatch-2.4.5-new/src/CMakeLists.txt
+--- libBatch-2.4.5/src/CMakeLists.txt	2021-03-18 12:11:25.000000000 +0100
++++ libBatch-2.4.5-new/src/CMakeLists.txt	2025-07-17 11:26:32.758243890 +0200
+@@ -76,7 +76,7 @@ ENDIF (WIN32)
+ 
+ INSTALL(TARGETS batch 
+         EXPORT LibBatchTargets 
+-        DESTINATION lib)
++        DESTINATION lib${LIB_SUFFIX})
+ INSTALL(FILES ${HDR_FILES} DESTINATION include/libbatch)
+ 
+ IF (LIBBATCH_PYTHON_WRAPPING AND PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND AND SWIG_FOUND)

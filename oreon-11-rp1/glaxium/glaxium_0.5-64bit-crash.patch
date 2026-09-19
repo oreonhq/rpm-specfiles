@@ -1,0 +1,20 @@
+Hans de Goede:
+
+Without this patch glaxium crashes in F-15 on 64 bit machines,
+I must admit I'm not quite sure why. But the code is cleaner with this
+patch and the crash is gone, so ...
+
+diff -up glaxium_0.5/scene.cpp~ glaxium_0.5/scene.cpp
+--- glaxium_0.5/scene.cpp~	2002-10-10 14:57:58.000000000 +0200
++++ glaxium_0.5/scene.cpp	2011-06-16 16:22:15.580174520 +0200
+@@ -332,9 +332,7 @@ void Scene::drawSky()
+ 
+ 
+ float* getDirection(float x, float y, float z) {
+-  static float *fReturn = NULL;
+-
+-  if (fReturn==NULL) fReturn = new float[3];
++  static float fReturn[3];
+ 
+   float py = 2;
+   float px, pz;

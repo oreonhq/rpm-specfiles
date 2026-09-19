@@ -1,0 +1,37 @@
+From 4ff5795204303278f62c3622963efcd02b8ba8f6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jan=20Stan=C4=9Bk?= <jstanek@redhat.com>
+Date: Tue, 14 Jan 2025 15:31:21 +0100
+Subject: [PATCH] make: do not require Cargo.lock
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fedora tooling removes the lock file so that we have more wiggle room
+when providing Rust dependencies. The rule does not actually need it.
+
+Signed-off-by: Jan Staněk <jstanek@redhat.com>
+Signed-off-by: rpm-build <rpm-build>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index eb98c5e..0006969 100644
+--- a/Makefile
++++ b/Makefile
+@@ -129,10 +129,10 @@ all: doc $(NEWSBOAT) $(PODBOAT) mo-files
+ 
+ NB_DEPS=xlicense.h $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB_OUTPUT) $(NEWSBOATLIB_OUTPUT)
+ 
+-$(NEWSBOATLIB_OUTPUT): $(RUST_SRCS) Cargo.lock
++$(NEWSBOATLIB_OUTPUT): $(RUST_SRCS)
+ 	+$(CARGO) build --package libnewsboat-ffi $(CARGO_BUILD_FLAGS)
+ 
+-$(HTTPTESTSEVER_OUTPUT): $(RUST_SRCS) Cargo.lock
++$(HTTPTESTSEVER_OUTPUT): $(RUST_SRCS)
+ 	+$(CARGO) build --package http-test-server $(CARGO_BUILD_FLAGS)
+ 
+ $(NEWSBOAT): $(NB_DEPS)
+-- 
+2.51.1
+

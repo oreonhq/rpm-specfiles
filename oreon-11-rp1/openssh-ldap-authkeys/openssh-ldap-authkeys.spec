@@ -1,0 +1,154 @@
+%global source0_hash dd1fb3949c0df9c5048979f073ac8e88bbb63d28f0e0d65df3ec08077d98cfb4
+
+%global commit 62ece4b929482702f5b2e716e3ee8998a29546cd
+%global commitdate 20230224
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+
+%if %{defined commit}
+%if 0%{?rhel} && 0%{?rhel} <= 7
+%global snapshotversuffix +git%{commitdate}.%{shortcommit}
+%else
+%global snapshotversuffix ^git%{commitdate}.%{shortcommit}
+%endif
+%endif
+
+Name:		openssh-ldap-authkeys
+Version:	0.2.0%{?commit:%{snapshotversuffix}}
+Release:	13%{?dist}
+Summary:	Python script to generate SSH authorized_keys files using an LDAP directory
+
+License:	MIT
+URL:		https://github.com/fuhry/%{name}
+%if %{defined commit}
+Source0:	%{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+%else
+Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+%endif
+
+BuildArch:	noarch
+
+BuildRequires:	systemd-rpm-macros
+BuildRequires:	python%{python3_pkgversion}-devel
+BuildRequires:	python%{python3_pkgversion}-setuptools
+
+# This is only for cases that we don't have a dependency generator active...
+%if ! (%{defined python_enable_dependency_generator} || %{defined python_disable_dependency_generator})
+Requires:	python%{python3_pkgversion}-ldap
+Requires:	python%{python3_pkgversion}-dns
+Requires:	python%{python3_pkgversion}-yaml
+%endif
+
+%if 0%{?rhel} && 0%{?rhel} < 8
+Requires:	%{name}-selinux = %{version}-%{release}
+%else
+Requires:	(%{name}-selinux = %{version}-%{release} if selinux-policy)
+%endif
+
+%description
+openssh-ldap-authkeys is an implementation of AuthorizedKeysCommand for
+OpenSSH 6.9 and newer that allows SSH public keys to be retrieved from
+an LDAP source. It's provided for situations where a solution other
+than 1:1 mapping is needed for users.
+
+With SSH keys stored centrally in LDAP, revocation of a compromised
+key is a quick and painless exercise for the user or IT department.
+
+openssh-ldap-authkeys allows shared accounts to be fully auditable as
+to who used them.
+
+%if 0%{?el7}
+%post
+%sysusers_create %{name}.sysusers.conf
+%tmpfiles_create %{name}.tmpfiles.conf
+%endif
+
+%files
+%license COPYING
+%doc README.md
+%doc *.example
+%{python3_sitelib}/ldapauthkeys/
+%{python3_sitelib}/openssh_ldap_authkeys*egg-info/
+%{_bindir}/openssh-ldap-authkeys
+%dir %{_sysconfdir}/%{name}
+%ghost %config(noreplace) %{_sysconfdir}/%{name}/olak.yml
+%ghost %config(noreplace) %{_sysconfdir}/%{name}/authmap
+%{_tmpfilesdir}/openssh-ldap-authkeys.tmpfiles.conf
+%{_sysusersdir}/openssh-ldap-authkeys.sysusers.conf
+
+# -------------------------------------------------------------------
+
+%package selinux
+Summary:	SELinux module for %{name}
+BuildRequires:	selinux-policy
+BuildRequires:	selinux-policy-devel
+BuildRequires:	make
+%{?selinux_requires}
+
+%description selinux
+This package provides the SELinux policy module to ensure
+%{name} runs properly under an environment with
+SELinux enabled.
+
+%pre selinux
+%selinux_relabel_pre
+
+%post selinux
+%selinux_modules_install %{_datadir}/selinux/packages/olak.pp.bz2
+
+%posttrans selinux
+if [ $1 -eq 1 ] && /usr/sbin/selinuxenabled ; then
+	fixfiles -FR %{name} restore || :
+fi
+
+%postun selinux
+%selinux_modules_uninstall olak
+if [ $1 -eq 0 ]; then
+	%selinux_relabel_post
+fi
+
+%files selinux
+%license COPYING
+%attr(0600,-,-) %{_datadir}/selinux/packages/olak.pp.bz2
+%{_datadir}/selinux/devel/include/contrib/olak.if
+%{_mandir}/man8/olak_selinux.8*
+
+# -------------------------------------------------------------------
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%if %{defined commit}
+%autosetup -p1 -n %{name}-%{commit}
+%else
+%autosetup -p1
+%endif
+
+%build
+%py3_build
+
+# Build SELinux policy module
+pushd selinux
+make SHARE="%{_datadir}" TARGETS="olak"
+popd
+
+%install
+%py3_install
+
+# Make ghost entries for config files
+touch %{buildroot}%{_sysconfdir}/%{name}/olak.yml
+touch %{buildroot}%{_sysconfdir}/%{name}/authmap
+
+# Delete example files, we'll docify them later
+rm %{buildroot}%{_sysconfdir}/%{name}/*.example
+
+# Install SELinux policy
+install -d %{buildroot}%{_datadir}/selinux/packages
+install -d %{buildroot}%{_datadir}/selinux/devel/include/contrib
+install -d %{buildroot}%{_mandir}/man8/
+
+install -m 644 selinux/olak.pp.bz2 %{buildroot}%{_datadir}/selinux/packages
+install -m 644 selinux/olak.if  %{buildroot}%{_datadir}/selinux/devel/include/contrib/
+install -m 644 selinux/olak_selinux.8 %{buildroot}%{_mandir}/man8/
+
+%changelog
+%autochangelog

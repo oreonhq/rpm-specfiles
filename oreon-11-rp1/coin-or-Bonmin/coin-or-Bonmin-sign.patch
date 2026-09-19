@@ -1,0 +1,53 @@
+diff -up Bonmin-releases-1.8.9/Bonmin/src/CbcBonmin/Heuristics/BonHeuristicFPump.cpp.orig Bonmin-releases-1.8.9/Bonmin/src/CbcBonmin/Heuristics/BonHeuristicFPump.cpp
+--- Bonmin-releases-1.8.9/Bonmin/src/CbcBonmin/Heuristics/BonHeuristicFPump.cpp.orig	2023-01-30 07:45:31.000000000 -0700
++++ Bonmin-releases-1.8.9/Bonmin/src/CbcBonmin/Heuristics/BonHeuristicFPump.cpp	2023-02-10 16:51:05.749435658 -0700
+@@ -529,7 +529,7 @@ namespace Bonmin
+           if(indexColumnSelected < 0){//Looks like all variables have been fixed to 0
+             continue;
+           }
+-	  assert(indexColumnSelected < jac_g.size());
++	  assert(indexColumnSelected < (int)jac_g.size());
+ 	  for (size_t j=0; j<jac_g.size(); j++) {
+ 	    int iColumn = jac_g[j].first;
+ 	    if((int)j == indexColumnSelected)
+diff -up Bonmin-releases-1.8.9/Bonmin/src/Interfaces/BonTMINLP2TNLP.cpp.orig Bonmin-releases-1.8.9/Bonmin/src/Interfaces/BonTMINLP2TNLP.cpp
+--- Bonmin-releases-1.8.9/Bonmin/src/Interfaces/BonTMINLP2TNLP.cpp.orig	2023-01-30 07:45:31.000000000 -0700
++++ Bonmin-releases-1.8.9/Bonmin/src/Interfaces/BonTMINLP2TNLP.cpp	2023-02-10 16:51:05.749435658 -0700
+@@ -370,7 +370,7 @@ namespace Bonmin
+ #endif
+     if (init_x == true) {
+       if(x_init_.empty()){
+-        assert(x_init_user_.size() >= n);
++        assert((Index)x_init_user_.size() >= n);
+         IpBlasDcopy(n, x_init_user_(), 1, x, 1);
+       }
+       else
+@@ -379,7 +379,7 @@ namespace Bonmin
+     if (init_z == true) {
+       if(duals_init_ == NULL)
+         return false;
+-      assert(x_init_.size() == 3*n + m && duals_init_ == x_init_() + n); 
++      assert((Index)x_init_.size() == 3*n + m && duals_init_ == x_init_() + n); 
+       IpBlasDcopy(n, duals_init_, 1, z_L, 1);
+       IpBlasDcopy(n, duals_init_ + n, 1, z_U, 1);
+ 
+@@ -387,7 +387,7 @@ namespace Bonmin
+     if(init_lambda == true) {
+       if(duals_init_ == NULL)
+         return false;
+-      assert(x_init_.size() == 3*n + m && duals_init_ == x_init_() + n); 
++      assert((Index)x_init_.size() == 3*n + m && duals_init_ == x_init_() + n); 
+       if(m > 0)
+         IpBlasDcopy(m, duals_init_ + 2*n , 1, lambda, 1);
+     }
+@@ -667,8 +667,8 @@ namespace Bonmin
+ 
+   double
+   TMINLP2TNLP::check_solution(OsiObject ** objects, int nObjects){
+-    assert(x_sol_.size() == num_variables());
+-    assert(g_sol_.size() == num_constraints());
++    assert((Index)x_sol_.size() == num_variables());
++    assert((Index)g_sol_.size() == num_constraints());
+     if (objects) {
+       for (int i = 0 ; i < nObjects ; i++) {
+         OsiSimpleInteger * obj = dynamic_cast<OsiSimpleInteger *>(objects[i]);

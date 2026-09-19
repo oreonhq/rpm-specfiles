@@ -1,0 +1,44 @@
+.TH MRS_TOOLS-MERGE "1" "November 2023" "" "User Commands"
+.SH NAME
+.B mrs_tools\ merge
+\(en Merge NIfTI-MRS along higher dimensions
+.SH SYNOPSIS
+.B mrs_tools\ merge
+.RB [ \-h ]
+.B \-\-files\ \fIFILES\ \fR[\fIFIELS\fR\ ...]
+.B \-\-dim\ \fIDIM
+.RB [ \-\-newaxis ]
+.RB [ \-\-output\ \fIOUTPUT ]
+.RB [ \-\-filename\ \fIFILENAME ]
+.SH OPTIONS
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit.
+.TP
+.B \-\-newaxis
+Join files along a new axis (tag specified by
+.BR \-\-dim ).
+.TP
+.B \-\-output\ \fIOUTPUT
+Output folder (defaults to current directory).
+.TP
+.B \-\-filename\ \fIFILENAME
+Override output file name.
+.SS "REQUIRED\ ARGUMENTS"
+.TP
+.B \-\-files\ \fIFILES\ \fR[\fIFIELS\fR\ ...]
+List of files to merge.
+.TP
+.B \-\-dim\ \fIDIM
+NIFTI-MRS dimension tag to merge across.
+.SH "SEE ALSO"
+.BR mrs_tools (1)
+.P
+.BR mrs_tools\-info (1),
+.BR mrs_tools\-vis (1),
+.\" .BR mrs_tools\-merge (1),
+.BR mrs_tools\-split (1),
+.BR mrs_tools\-reorder (1),
+.BR mrs_tools\-reshape (1),
+.BR mrs_tools\-conjugate (1)

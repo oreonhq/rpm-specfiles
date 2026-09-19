@@ -3,12 +3,12 @@
 %global debug_package   %{nil}
 
 Name:           PEGTL
-Version:        2.8.3
-Release:        15%{?dist}
+Version:        4.0.1
+Release:        1%{?dist}
 Summary:        Parsing Expression Grammar Template Library
 License:        MIT
 URL:            https://github.com/taocpp/%{name}
-Source:        https://github.com/taocpp/PEGTL/archive/refs/tags/2.8.3.tar.gz#/PEGTL-2.8.3.tar.gz
+Source:        https://github.com/taocpp/PEGTL/archive/refs/tags/4.0.1.tar.gz#/PEGTL-2.8.3.tar.gz
 
 Patch:          PEGTL-compiler-warning.patch
 

@@ -1,0 +1,15 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index b9202bd..97f636b 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -39,6 +39,10 @@ dev = [
+     "mypy>=1.18.2",
+ ]
+ 
++[build-system]
++requires = ["setuptools"]  # PEP 508 specifications.
++build-backend = "setuptools.build_meta:__legacy__"
++
+ [tool.setuptools.packages.find]
+ include = ["gelidum*"]
+ exclude = ["resources*"]

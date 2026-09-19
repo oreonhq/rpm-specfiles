@@ -1,0 +1,11 @@
+--- MuseScore-4.6.0-beta/thirdparty/rtf2html/rtf2html.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/thirdparty/rtf2html/rtf2html.cpp	2025-09-19 11:42:14.598806030 -0600
+@@ -214,7 +214,7 @@ QString rtf2html(const QString& iString)
+                case rtf_keyword::rkw_fonttbl: 
+                {
+                     font fnt;
+-                  int font_num;
++                  int font_num = -1;
+                   bool full_name=false;
+                   bool in_font=false;
+                   while (! (*buf_in=='}' && !in_font))

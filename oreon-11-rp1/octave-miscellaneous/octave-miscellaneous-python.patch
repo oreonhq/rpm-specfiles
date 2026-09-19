@@ -1,0 +1,35 @@
+--- physical_constant.py.xx	2023-10-18 16:37:52.274479023 +0200
++++ physical_constant.py	2023-10-18 16:39:22.269545068 +0200
+@@ -23,17 +23,13 @@
+ ## save the function file (if no arguments are supplied, it saves file in the
+ ## directory as the script)
+ 
+-from __future__ import print_function
++
+ 
+ import time
+ import sys
+ import os.path
+ 
+-## For the sake of Python 2 and 3 compatibility
+-try:
+-  from urllib.request import urlopen
+-except ImportError:
+-  from urllib import urlopen
++from urllib.request import urlopen
+ 
+ def get_header ():
+   header = [
+@@ -115,10 +111,10 @@
+     ## without information on the conditions. See the old revisions
+ 
+     ## adjust value and uncertainty
+-    for old, new in {
++    for old, new in list({
+                       ' '   : '', # remove spaces
+                       '...' : '', # is decimal
+-                      }.items():
++                      }.items()):
+       value  = value.replace (old, new)
+       uncert = uncert.replace (old, new)
+ 

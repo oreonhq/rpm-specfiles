@@ -1,8 +1,8 @@
 %global source0_hash 5a9fd8d8316f90cb2e1a5a8f0d411eb9fcaf85957a8229ea3e803e81004a1ebd
 
 Name:          zenity
-Version:       4.2.1
-Release:       2%{?dist}
+Version:       4.2.2
+Release:       1%{?dist}
 Summary:       Display dialog boxes from shell scripts
 
 License:       LGPL-2.1-or-later

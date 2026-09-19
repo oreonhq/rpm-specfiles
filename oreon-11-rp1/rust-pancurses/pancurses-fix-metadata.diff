@@ -1,0 +1,10 @@
+--- pancurses-0.17.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ pancurses-0.17.0/Cargo.toml	2023-01-20T19:35:25.585039+00:00
+@@ -35,7 +35,5 @@
+ disable_resize = []
+ show_menu = []
+ wide = ["ncurses/wide"]
+-win32 = ["pdcurses-sys/win32"]
+-win32a = ["pdcurses-sys/win32a"]
+ [target."cfg(unix)".dependencies.ncurses]
+ version = "5.101.0"

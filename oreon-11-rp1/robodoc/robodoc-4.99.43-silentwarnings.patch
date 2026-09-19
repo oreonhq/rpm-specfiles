@@ -1,0 +1,131 @@
+diff -Naurp robodoc-4.99.43.orig/Source/generator.c robodoc-4.99.43.new/Source/generator.c
+--- robodoc-4.99.43.orig/Source/generator.c	2015-04-11 19:28:57.000000000 +0200
++++ robodoc-4.99.43.new/Source/generator.c	2018-03-07 15:20:58.374982012 +0100
+@@ -2048,7 +2048,7 @@ static void Generate_Item(
+             RB_Change_To_Docdir( docname );
+ 
+             /* Execute line */
+-            system( line );
++            IGNORE(system(line));
+ 
+             /* Get back to working dir */
+             RB_Change_Back_To_CWD(  );
+diff -Naurp robodoc-4.99.43.orig/Source/robodoc.h robodoc-4.99.43.new/Source/robodoc.h
+--- robodoc-4.99.43.orig/Source/robodoc.h	2015-04-11 23:09:23.000000000 +0200
++++ robodoc-4.99.43.new/Source/robodoc.h	2018-03-07 15:08:37.117748486 +0100
+@@ -33,4 +33,7 @@ along with this program.  If not, see <h
+ #endif
+ 
++/* Macro to silent unused-result warnings. */
++#define IGNORE(v)	{ if (v) ; }
++
+ #define COMMENT_ROBODOC \
+     "Generated with ROBODoc Version " VERSION " (" __DATE__ ")\n"
+diff -Naurp robodoc-4.99.43.orig/Source/robohdrs.c robodoc-4.99.43.new/Source/robohdrs.c
+--- robodoc-4.99.43.orig/Source/robohdrs.c	2015-04-11 19:28:57.000000000 +0200
++++ robodoc-4.99.43.new/Source/robohdrs.c	2018-03-07 15:22:53.591106966 +0100
+@@ -65,6 +65,8 @@ along with this program.  If not, see <h
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#include "robodoc.h"
++
+ 
+ 
+ #ifndef HAVE_FORK
+@@ -743,8 +745,8 @@ insertHeaders( ctags_t * e, char *projec
+         return;
+     }
+ 
+-    assert( ofp = fopen( dstpath, "w" ) );
+-    assert( ifp = fopen( srcpath, "r" ) );
++    assert((ofp = fopen( dstpath, "w")));
++    assert((ifp = fopen( srcpath, "r")));
+ 
+     /* include file header only if project name is defined */
+     if ( project )
+@@ -825,7 +827,7 @@ doCtagsExec( char *fname )
+     if ( ( pid = fork(  ) ) == 0 )
+     {
+         close( 1 );
+-        dup( fd[1] );
++        IGNORE(dup(fd[1]));
+         close( fd[0] );
+         if ( execlp( mybin, mybin, "-x", fname, NULL ) == -1 )
+         {
+@@ -841,7 +843,7 @@ doCtagsExec( char *fname )
+     else
+     {
+         close( 0 );
+-        dup( fd[0] );
++        IGNORE(dup(fd[0]));
+         close( fd[1] );
+ 
+         if ( ( incoming = fdopen( 0, "r" ) ) == NULL )
+@@ -869,7 +871,7 @@ doFile( char *proj, char *fname )
+ 
+     /* backup */
+     sprintf( buf, "/bin/cp -p %s %s~", fname, fname );
+-    system( buf );
++    IGNORE(system(buf));
+ 
+     if ( parseCtagsX( doCtagsExec( fname ) ) < 1 )
+     {
+diff -Naurp robodoc-4.99.43.orig/Source/troff_generator.c robodoc-4.99.43.new/Source/troff_generator.c
+--- robodoc-4.99.43.orig/Source/troff_generator.c	2015-04-11 19:28:57.000000000 +0200
++++ robodoc-4.99.43.new/Source/troff_generator.c	2018-03-07 15:08:37.117748486 +0100
+@@ -223,7 +223,7 @@ FILE               *RB_TROFF_Generate_He
+             memcpy( buf, file, len );
+             sprintf( buf + len, "%s.%s%s", base, section, compress_ext );
+             unlink( buf );
+-            symlink( basename( manpage ), buf );
++            IGNORE(symlink(basename(manpage), buf));
+             RB_Say( "+ Linked with \"%s\"\n", SAY_INFO, buf );
+         }
+ #else
+@@ -560,6 +560,6 @@ void RB_TROFF_Generate_Item_Line_Number(
+  * SOURCE
+  */
+ {
+-    fprintf( dest_doc, line_number_string );
++    fputs(line_number_string, dest_doc);
+ }
+ /******/
+diff -Naurp robodoc-4.99.43.orig/Source/util.c robodoc-4.99.43.new/Source/util.c
+--- robodoc-4.99.43.orig/Source/util.c	2015-04-11 19:28:57.000000000 +0200
++++ robodoc-4.99.43.new/Source/util.c	2018-03-07 15:08:37.118748496 +0100
+@@ -1034,7 +1034,7 @@ char               *RB_ReadWholeLine(
+     {
+         *buf = '\0';
+         /* read next chunk */
+-        fgets( buf, MAX_LINE_LEN, file );
++        IGNORE(fgets(buf, MAX_LINE_LEN, file));
+         if ( ferror( file ) )
+         {
+             /* an error occurred */
+@@ -1196,7 +1196,7 @@ void RB_Change_Back_To_CWD(
+ {
+     if ( cwd != NULL )
+     {
+-        chdir( cwd );
++        IGNORE(chdir(cwd));
+         free( cwd );
+         cwd = NULL;
+     }
+@@ -1224,14 +1224,14 @@ void RB_Change_To_Docdir(
+     RB_Change_Back_To_CWD(  );
+ 
+     /* Save CWD */
+-    getcwd( tmp, sizeof( tmp ) );
++    IGNORE(getcwd(tmp, sizeof(tmp)));
+     cwd = RB_StrDup( tmp );
+ 
+     /* Get the name of doc directory and change into it */
+     len = namestart - docname;
+     strncpy( tmp, docname, len );
+     tmp[len] = 0;
+-    chdir( tmp );
++    IGNORE(chdir(tmp));
+ }
+ 
+ /*******/

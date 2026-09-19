@@ -1,0 +1,149 @@
+diff --git a/audioconverter.cpp b/audioconverter.cpp
+index 7fee4d5..899c9f0 100644
+--- a/audioconverter.cpp
++++ b/audioconverter.cpp
+@@ -57,10 +57,10 @@ bool audioConverter::init(QAudioFormat inFormat, codecType inCodec, QAudioFormat
+ 		unsigned int ratioNum;
+ 		unsigned int ratioDen;
+ 		// Sample rate conversion required. 
+-		resampler = wf_resampler_init(outFormat.channelCount(), inFormat.sampleRate(), outFormat.sampleRate(), resampleQuality, &resampleError);
+-		wf_resampler_get_ratio(resampler, &ratioNum, &ratioDen);
++		resampler = speex_resampler_init(outFormat.channelCount(), inFormat.sampleRate(), outFormat.sampleRate(), resampleQuality, &resampleError);
++		speex_resampler_get_ratio(resampler, &ratioNum, &ratioDen);
+ 		resampleRatio = static_cast<double>(ratioDen) / ratioNum;
+-		qInfo(logAudioConverter()) << "wf_resampler_init() returned: " << resampleError << " resampleRatio: " << resampleRatio;
++		qInfo(logAudioConverter()) << "speex_resampler_init() returned: " << resampleError << " resampleRatio: " << resampleRatio;
+ 	}
+ 	return true;
+ }
+@@ -229,10 +229,10 @@ bool audioConverter::convert(audioPacket audio)
+ 
+                 int err = 0;
+                 if (outFormat.channelCount() == 1) {
+-                    err = wf_resampler_process_float(resampler, 0, in, &inFrames, out, &outFrames);
++                    err = speex_resampler_process_float(resampler, 0, in, &inFrames, out, &outFrames);
+                 }
+                 else {
+-                    err = wf_resampler_process_interleaved_float(resampler, in, &inFrames, out, &outFrames);
++                    err = speex_resampler_process_interleaved_float(resampler, in, &inFrames, out, &outFrames);
+                 }
+ 
+                 if (err) {
+diff --git a/audioconverter.h b/audioconverter.h
+index 9308cf7..9c58a0d 100644
+--- a/audioconverter.h
++++ b/audioconverter.h
+@@ -29,7 +29,7 @@
+ 
+ #include "wfviewtypes.h"
+ 
+-#include "resampler/speex_resampler.h"
++#include <speex/speex_resampler.h>
+ 
+ #include "packettypes.h"
+ 
+diff --git a/wfserver.pro b/wfserver.pro
+index dceb5f4..b7452d9 100644
+--- a/wfserver.pro
++++ b/wfserver.pro
+@@ -38,6 +38,8 @@ CONFIG(debug, release|debug) {
+   linux:QMAKE_CXXFLAGS += -fvisibility=hidden
+   linux:QMAKE_CXXFLAGS += -fvisibility-inlines-hidden
+   linux:QMAKE_CXXFLAGS += -faligned-new
++  linux:LIBS += $$system("/usr/bin/pkg-config --libs speexdsp")
++
+ 
+   win32 {
+     contains(QMAKE_TARGET.arch, x86_64) {
+@@ -81,8 +83,6 @@ DEFINES += QCUSTOMPLOT_COMPILE_LIBRARY
+ equals(QT_ARCH, i386): DEFINES += USE_SSE
+ equals(QT_ARCH, i386): DEFINES += USE_SSE2
+ equals(QT_ARCH, arm): DEFINES += USE_NEON
+-DEFINES += OUTSIDE_SPEEX
+-DEFINES += RANDOM_PREFIX=wf
+ 
+ isEmpty(PREFIX) {
+   PREFIX = /usr/local
+@@ -131,8 +131,6 @@ macx:LIBS += -framework CoreAudio -framework CoreFoundation -lpthread -lopus
+ !linux:INCLUDEPATH += ../eigen
+ !linux:INCLUDEPATH += ../r8brain-free-src
+ 
+-INCLUDEPATH += resampler
+-
+ SOURCES += main.cpp\
+     servermain.cpp \
+     commhandler.cpp \
+@@ -150,7 +148,6 @@ SOURCES += main.cpp\
+     audioconverter.cpp \
+     udpserver.cpp \
+     pttyhandler.cpp \
+-    resampler/resample.c \
+     rigctld.cpp \
+     tcpserver.cpp \
+     keyboard.cpp \
+@@ -173,9 +170,6 @@ HEADERS  += servermain.h \
+     udpserver.h \
+     packettypes.h \
+     pttyhandler.h \
+-    resampler/speex_resampler.h \
+-    resampler/arch.h \
+-    resampler/resample_sse.h \
+     repeaterattributes.h \
+     rigctld.h \
+     ulaw.h \
+diff --git a/wfview.pro b/wfview.pro
+index 0f7720e..cc3bc42 100644
+--- a/wfview.pro
++++ b/wfview.pro
+@@ -68,8 +68,6 @@ equals(QT_ARCH, i386): win32:DEFINES += USE_SSE2
+ equals(QT_ARCH, x86_64): DEFINES += USE_SSE
+ equals(QT_ARCH, x86_64): DEFINES += USE_SSE2
+ equals(QT_ARCH, arm): DEFINES += USE_NEON
+-DEFINES += OUTSIDE_SPEEX
+-DEFINES += RANDOM_PREFIX=wf
+ 
+ # These defines are used for the Eigen library
+ DEFINES += EIGEN_MPL2_ONLY
+@@ -142,6 +140,7 @@ macx:LIBS += -framework CoreAudio -framework CoreFoundation -lpthread -lopus
+ 
+ CONFIG(debug, release|debug) {
+   linux:LIBS += $$system("/usr/bin/pkg-config --libs qcustomplot-qt5")
++  linux:LIBS += $$system("/usr/bin/pkg-config --libs speexdsp")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libQCustomPlotd.so/ {print \"-lQCustomPlotd\"}'")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplotd2.so/ {print \"-lqcustomplotd2\"}'")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplotd.so/ {print \"-lqcustomplotd\"}'")
+@@ -174,6 +173,7 @@ CONFIG(debug, release|debug) {
+   }
+ } else {
+   linux:LIBS += $$system("/usr/bin/pkg-config --libs qcustomplot-qt5")
++  linux:LIBS += $$system("/usr/bin/pkg-config --libs speexdsp")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libQCustomPlot.so/ {print \"-lQCustomPlot\"}'")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplot2.so/ {print \"-lqcustomplot2\"}'")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplot.so/ {print \"-lqcustomplot\"}'")
+@@ -224,8 +224,6 @@ win32:INCLUDEPATH += ../qcustomplot
+ !linux:INCLUDEPATH += ../eigen
+ !linux:INCLUDEPATH += ../r8brain-free-src
+ 
+-INCLUDEPATH += resampler
+-
+ SOURCES += main.cpp\
+     cwsender.cpp \
+     cwsidetone.cpp \
+@@ -250,7 +248,6 @@ SOURCES += main.cpp\
+     meter.cpp \
+     qledlabel.cpp \
+     pttyhandler.cpp \
+-    resampler/resample.c \
+     repeatersetup.cpp \
+     rigctld.cpp \
+     usbcontroller.cpp \
+@@ -291,9 +288,6 @@ HEADERS  += wfmain.h \
+     meter.h \
+     qledlabel.h \
+     pttyhandler.h \
+-    resampler/speex_resampler.h \
+-    resampler/arch.h \
+-    resampler/resample_sse.h \
+     repeatersetup.h \
+     repeaterattributes.h \
+     rigctld.h \

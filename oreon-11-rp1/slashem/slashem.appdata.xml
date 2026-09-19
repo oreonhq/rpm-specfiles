@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 David King <amigadave@amigadave.com> -->
+<application>
+    <id type="desktop">slashem.desktop</id>
+    <name>Slash'EM</name>
+    <summary>Slash'EM is a single player dungeon exploration game</summary>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>NGPL</project_license>
+    <description>
+        <p>Slash'EM (Super Lotsa Added Stuff Hack - Extended Magic) is a
+        variant of the roguelike game NetHack that offers extra features,
+        monsters, levels and items.</p>
+    </description>
+    <url type="homepage">http://slashem.sourceforge.net/</url>
+    <updatecontact>amigadave@amigadave.com</updatecontact>
+</application>

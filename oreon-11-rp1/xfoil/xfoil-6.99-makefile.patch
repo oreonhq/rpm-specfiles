@@ -1,0 +1,219 @@
+diff -rupN Xfoil/bin/Makefile Xfoil-new/bin/Makefile
+--- Xfoil/bin/Makefile	2013-11-19 06:23:37.000000000 +0100
++++ Xfoil-new/bin/Makefile	2015-09-05 19:55:01.769626114 +0200
+@@ -4,10 +4,11 @@
+ # M.Drela
+ #*********************************************************
+ 
+-
+-SHELL = sh
+-BINDIR = /home/codes/bin/
+-#BINDIR = .
++FC = gfortran
++PLTOBJ = ../plotlib/libPltDP.a
++override CFLAGS += -DUNDERSCORE
++override FFLAGS += -fbounds-check -finit-real=inf -ffpe-trap=invalid,zero #-fdefault-real-8
++PLTLIB = -lX11
+ 
+ PROGS = xfoil pplot pxplot
+ 
+@@ -32,105 +33,12 @@ OSOBJ = frplot0.o
+ # Use this for individual TS-wave frequency plotting
+ OSOBJ = frplot.o ntcalc.o osmap.o getosfile.o
+ 
+-##----------------------------------------------------
+-PLTOBJ = ../plotlib/libPlt.a 
+-
+-# Use this if you have a copy of the plotlib as a system library
+-#PLTOBJ = -lPlt 
+-
+-# The extra location arg here is for Linux which places X libs in /usr/X11R6
+-PLTLIB = -L/usr/X11R6/lib -lX11
+-
+-###================================================
+-###  Default compilers and flags
+-###  FFLOPT used for xsolve.f
+-FC = f77
+-FFLAGS  = -O 
+-FFLOPT  = -O
+-INSTALLCMD = install -s
+-
+-CC = cc
+-CFLAGS = -O -DUNDERSCORE
+-
+-##--------------------------
+-
+-# Uncomment flags for desired machine...
+-
+-##--------------------------
+-### DEC Alpha with OSF and DEC f77/f90 compiler
+-#FC = f77
+-#FFLAGS = -fast -O4 -tune host
+-#FFLOPT = -fast -O4 -tune host
+-#FFLOPT = -fast -O5 -tune host -unroll 3
+-# Debug flags
+-#FFLAGS = -O0 -g
+-#FFLOPT = -fast -O4 -tune host
+-##--------------------------
+-### SGI setup
+-#FC = f77
+-#FFLAGS = -O2 -static
+-#FFLOPT = -O2 -static
+-##--------------------------
+-##  Uncomment for RS/6000
+-#FFLAGS = -O -qextname
+-#FFLOPT = -O -qextname
+-##--------------------------
+-##  Uncomment for HP-9000
+-#FFLAGS = -O +ppu
+-#FFLOPT = -O +ppu
+-#FTNLIB = -U77
+-##--------------------------
+-### Absoft Linux f77
+-#FC = f77
+-#FFLAGS = -O -f -s -W -B108 -N34
+-#FFLOPT = -O -f -s -W -B108 -N34
+-##--------------------------
+-### f2c/gcc compiler driver 
+-#FC = fort77
+-#FFLAGS = -O2 -fomit-frame-pointer
+-#FFLOPT = -O2 -fomit-frame-pointer
+-##--------------------------
+-### GNU g77
+-#FC = g77
+-#FFLAGS = -O3 -fomit-frame-pointer
+-#FFLOPT = -O3 -fomit-frame-pointer
+-# Debug flags (symbols, array bounds)
+-#FC = g77
+-#FFLAGS = -g -O0 -C
+-##--------------------------
+-### GNU gfortran
+-#FC = gfortran
+-#FFLAGS = -O3 -fomit-frame-pointer
+-#FFLOPT = -O3 -fomit-frame-pointer
+-# Debug flags (symbols, array bounds)
+-#FFLAGS = -g -O0 -fbounds-check
+-#FFLOPT = -g -O0 -fbounds-check
+-#
+-### Double precision option
+-#FFLAGS = -O3 -fdefault-real-8
+-#FFLOPT = -O3 -fdefault-real-8
+-#FFLAGS = -O3 -fdefault-real-8 -fbounds-check
+-#FFLOPT = -O3 -fdefault-real-8 -fbounds-check
+-# Debug flags (symbols, array bounds)
+-#FFLAGS = -g -O0 -C
+-##--------------------------
+-### Gfortran
+-FC = gfortran
+-CHK = 
+-CHK = -fbounds-check -finit-real=inf -ffpe-trap=invalid,zero
+-DBL = -fdefault-real-8
+-FFLAGS = -O $(CHK) $(DBL)
+-FFLOPT = -O $(CHK) $(DBL)
+-FTNLIB =
+-
+-PLTOBJ = ../plotlib/libPlt_gDP.a 
+-
+-
+ 
+ all:	 $(PROGS)
+ 
+-install: 
+-	$(INSTALLCMD) $(PROGS) $(BINDIR)
++install:
++	install -Dd $(DESTDIR)$(BINDIR)
++	install -pm 0755 $(PROGS) $(DESTDIR)$(BINDIR)
+ 
+ clean:
+ 	-/bin/rm $(PROGS)
+@@ -141,19 +49,15 @@ clean:
+ 
+ xfoil: $(XFOILOBJ) $(XUTILOBJ) $(OSOBJ)
+ 	$(FC) -o xfoil $(XFOILOBJ) $(XUTILOBJ) $(OSOBJ) $(PLTOBJ) $(PLTLIB) $(FTNLIB)
+-	$(INSTALLCMD) xfoil $(BINDIR)
+ 
+ pxplot:	$(PXPLOTOBJ) $(XUTILOBJ)
+ 	$(FC) -o pxplot $(PXPLOTOBJ) $(XUTILOBJ) $(PLTOBJ) $(PLTLIB) $(FTNLIB)
+-	$(INSTALLCMD) pxplot $(BINDIR)
+ 
+ pplot:	$(PPLOTOBJ) $(XUTILOBJ)
+ 	$(FC) -o pplot $(PPLOTOBJ) $(XUTILOBJ)  $(PLTOBJ) $(PLTLIB) $(FTNLIB)
+-	$(INSTALLCMD) pplot $(BINDIR)
+ 
+ blu: blu.o profil.o
+ 	$(FC) -o blu blu.o profil.o
+-	$(INSTALLCMD) blu $(BINDIR)
+ 
+ 
+ blu.o: $(SRC)/blu.f
+diff -rupN Xfoil/orrs/bin/Makefile Xfoil-new/orrs/bin/Makefile
+--- Xfoil/orrs/bin/Makefile	2011-04-03 18:27:46.000000000 +0200
++++ Xfoil-new/orrs/bin/Makefile	2015-09-05 19:48:08.318494742 +0200
+@@ -1,26 +1,10 @@
+ 
+ SRC = ../src
+-PLTOBJ = /home/codes/Xplot/libPlt.a
+ 
+-#========================================
+-#  Default compiler flags
+-FC = f77
+-FLG = -O
++FC = gfortran
++override FFLAGS += -fbounds-check -finit-real=inf -ffpe-trap=invalid,zero #-fdefault-real-8
+ PLTLIB = -lX11
+-FTNLIB =
+-
+-#========================================
+-#  Uncomment for Intel Fortran Compiler
+-FC = ifort
+-FLG = -O -fpe0 -CB
+-PLTLIB = -L/usr/X11R6/lib -lX11
+-FTNLIB = 
+-
+-#  Additional IFC stuff needed on MIT's Athena system
+-#FC = ifc
+-#FTNLIB = -Vaxlib /usr/lib/C-ctype.o /usr/lib/C_name.o /usr/lib/ctype-info.o
+-
+-#========================================
++PLTOBJ = libPltDP.a
+ 
+ 
+ OS: osgen osmap.o
+diff -rupN Xfoil/plotlib/Makefile Xfoil-new/plotlib/Makefile
+--- Xfoil/plotlib/Makefile	2012-12-17 05:10:15.000000000 +0100
++++ Xfoil-new/plotlib/Makefile	2015-09-05 19:51:18.841147261 +0200
+@@ -35,8 +35,16 @@
+ INSTALLDIR = .
+ 
+ # Use these to set default library name (overridden in config.make file) 
+-PLTLIB = libPlt.a
+-#PLTLIB = libPltDP.a
++#PLTLIB = libPlt.a
++PLTLIB = libPltDP.a
++
++FC = gfortran
++PLTLIB = libPltDP.a
++override FFLAGS += -fbounds-check -finit-real=inf -ffpe-trap=invalid,zero #-fdefault-real-8
++# Some fortrans need trailing underscores in C interface symbols (see Xwin.c)
++override CFLAGS += -DUNDERSCORE
++AR = ar -r
++RANLIB = ranlib
+ 
+ 
+ ###========================================================
+@@ -67,13 +75,10 @@ OBJ3D  = plt_3D.o
+ 
+ 
+ ###-------------------------------------------------------------------------
+-### Set compiler, compiler flags, name of output object library
+-include ./config.make
+-
+-
+-###-------------------------------------------------------------------------
+ ### Basic make targets - build library, test programs
+ 
++all: $(PLTLIB)
++
+ $(PLTLIB):  $(OBJ) $(OBJOLD) $(OBJ3D) $(OBJMISC)
+ 	$(AR)     $(PLTLIB) $(OBJ) $(OBJOLD) $(OBJ3D) $(OBJMISC)
+ 	$(RANLIB) $(PLTLIB)

@@ -1,0 +1,16 @@
+--- extract.c	2010-04-05 11:25:49.510402918 -0300
++++ extract.c	2010-04-05 11:26:56.657533584 -0300
+@@ -1868,7 +1868,12 @@
+ 		if (((foundat + headersize) - buf) > buflen){ return NULL; }	
+ 
+ 		foundat += headersize;
+-		
++
++		if (foundat >= (buf + buflen))
++		{
++			return buf + needle->header_len;
++		}
++
+ 		if (foundat[2] != (unsigned char)'\xff')
+ 			{
+ 			break;

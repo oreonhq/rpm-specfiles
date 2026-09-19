@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Neverputt
+Comment=Minigolf like game
+Exec=neverputt-wrapper
+Terminal=false
+Icon=neverputt
+Type=Application
+Categories=Game;SportsGame;

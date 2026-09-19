@@ -1,0 +1,44 @@
+From 27b4c5c230c0af5cafc9d33f6e82268b11ee27d8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 13 Jun 2024 16:30:23 +0200
+Subject: [PATCH] Adapt to perl 5.40.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+After upgrading perl from 5.38.2 to 5.40.0, Gnome2-1.048 fails to build like this:
+
+xs/GnomeAppHelper.xs: In function ‘gnome2perl_popup_menu_activate_func’:
+xs/GnomeAppHelper.xs:32:35: error: passing argument 1 of ‘Perl_switch_locale_context’ from incompatible pointer type [-Wincompatible-pointer-types]
+   32 |                 PERL_SET_CONTEXT (callback);
+      |                                   ^~~~~~~~
+      |                                   |
+      |                                   SV * {aka struct sv *}
+
+I don't know how this code code work befere because callback variable is
+obviously use as a code reference few lines bellow. So this patch makes it
+buildable again by retrieving current Perl contecxt with dTHX. It is probably
+not thread-safe, but if there is no argument to the interpreter down the call
+chain, there is better to do.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ xs/GnomeAppHelper.xs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xs/GnomeAppHelper.xs b/xs/GnomeAppHelper.xs
+index 1928135..dec2d78 100644
+--- a/xs/GnomeAppHelper.xs
++++ b/xs/GnomeAppHelper.xs
+@@ -29,7 +29,7 @@ gnome2perl_popup_menu_activate_func (GtkObject *object,
+ 	if (callback) {
+ 		dGPERL_CALLBACK_MARSHAL_SP;
+ #ifdef PERL_IMPLICIT_CONTEXT
+-		PERL_SET_CONTEXT (callback);
++		dTHX;
+ 		SPAGAIN;
+ #endif
+ 
+-- 
+2.45.2
+

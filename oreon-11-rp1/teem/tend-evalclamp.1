@@ -1,0 +1,47 @@
+.TH TEND\-EVALCLAMP "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-evalclamp \- modify shape by clamping eigenvalues in some range
+.SH SYNOPSIS
+.B tend\ evalclamp
+.B \-min
+.RI < min >
+.RB [ \-max
+.RI < max >]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Modify shape by clamping eigenvalues in some range.
+The orientation of the tensor is unchanged.
+Note that unlike
+.BR tend\-anscale (1),
+this operation can completely change the shape of the tensor.
+.SH OPTIONS
+.TP
+.B \-min\fR <\fImin\fR>
+Eigenvalues are clamped from below by this (the minimum output eigenvalue).
+Use
+.RB \(lq nan \(rq
+to signify that no minimum clamping should be done.
+.RI ( float )
+.TP
+.B \-max\fR <\fImax\fR>
+Eigenvalues are clamped from above by this (the maximum output eigenvalue).
+Use
+.RB \(lq nan \(rq
+to signify that no maximum clamping should be done.
+.RI ( float )
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1),
+.BR tend\-anscale (1)

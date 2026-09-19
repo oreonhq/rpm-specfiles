@@ -1,0 +1,52 @@
+From 292a1096ea89f95198bad5b1e52890c86d02a191 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Esser?= <besser82@fedoraproject.org>
+Date: Thu, 13 Feb 2025 13:30:06 +0100
+Subject: [PATCH] Drop outdated macro definitions
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ Makefile.am   |   11 +-
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 6c96b34..8ed92d3 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,7 +1,7 @@
+ ##
+ ## Makefile.am
+ ##
+-## Copyright (C) 2000-2015 by 
++## Copyright (C) 2000-2015 by
+ ## Jeffrey Fulmer - <jeff@joedog.org>, et al.
+ ## This file is distributed as part of Siege
+ ##
+@@ -15,12 +15,12 @@
+ ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ ## GNU General Public License for more details.
+ ##
+-## You should have received a copy of the GNU General Public License along 
+-## with this program; if not, write to the Free Software Foundation, Inc., 
++## You should have received a copy of the GNU General Public License along
++## with this program; if not, write to the Free Software Foundation, Inc.,
+ ## 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ ##
+ 
+-AUTOMAKE_OPTIONS  =    foreign no-dependencies  
++AUTOMAKE_OPTIONS  =    foreign no-dependencies
+ 
+ WARN_CFLAGS       =    @WARN_CFLAGS@
+ 
+@@ -30,5 +30,4 @@ SUBDIRS           =    . include src utils doc html
+ 
+ DIST_SUBDIRS      =    $(SUBDIRS)
+ 
+-EXTRA_DIST        =    README.md acspecific.m4 aclocal.m4 acinclude.m4
+-
++EXTRA_DIST        =    README.md
+-- 
+2.48.1
+

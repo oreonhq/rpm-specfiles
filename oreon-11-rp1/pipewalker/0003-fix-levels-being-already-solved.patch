@@ -1,0 +1,16 @@
+--- pipewalker-1.1--orig/meson.build	2024-05-31 06:47:31.000000000 +0200
++++ pipewalker-1.1--patched/meson.build	2024-06-02 21:18:01.888729687 +0200
+@@ -65,13 +65,9 @@
+ endif
+ 
+ # configuration file
+ conf = configuration_data()
+-if get_option('buildtype') == 'release'
+   conf.set('NDEBUG', 1)
+-else
+-  conf.set('DEBUG', 1)
+-endif
+ conf.set_quoted('APP_DATADIR', appdata_dir + '/')
+ conf.set_quoted('APP_VERSION', version)
+ if host_machine.system() == 'windows'
+   vnum = version.split('-')[0].split('.')

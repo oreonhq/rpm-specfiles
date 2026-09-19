@@ -1,0 +1,89 @@
+diff --git a/primes/matho-mult b/primes/matho-mult
+index ff9d599..1242935 100755
+--- a/primes/matho-mult
++++ b/primes/matho-mult
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#! /usr/bin/python3
+ 
+ # Python program to multiply many large integers separated by spaces or newlines.
+ # The integers to multiply may be entered on the command-line or into standard input.
+@@ -15,7 +15,7 @@ if (args == []):
+ 	# read stdin if no command line args
+ 	while True:
+ 		try:
+-			input_line = raw_input()
++			input_line = input()
+ 		except:
+ 			break;
+ 		for s in string.split(input_line):
+@@ -24,4 +24,4 @@ else:
+ 	# multiply together the command-line args
+ 	for arg in args:
+ 		prod *= int(arg)
+-print prod
++print(prod)
+diff --git a/primes/matho-sum b/primes/matho-sum
+index 34b5bbd..1f47401 100755
+--- a/primes/matho-sum
++++ b/primes/matho-sum
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#! /usr/bin/python3
+ 
+ # Python program to sum many large integers separated by spaces or newlines.
+ # The integers to sum may be entered on the command-line or into standard input.
+@@ -12,7 +12,7 @@ if (args == []):
+ 	# read stdin if no command line args
+ 	while True:
+ 		try:
+-			input_line = raw_input()
++			input_line = input()
+ 		except:
+ 			break;
+ 		for s in string.split(input_line):
+@@ -21,4 +21,4 @@ else:
+ 	# sum together the command-line args
+ 	for arg in args:
+ 		sum += int(arg)
+-print sum
++print(sum)
+diff --git a/primes/primorial b/primes/primorial
+index e5c55fe..9e9923f 100755
+--- a/primes/primorial
++++ b/primes/primorial
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#! /usr/bin/python3
+ 
+ # This is a Python program to display large primorials.
+ # A primorial is the product of all primes up to the given number.
+@@ -16,11 +16,11 @@ import os
+ import sys
+ 
+ def usage(ev):
+-	print "This program calculates large primorials."
+-	print
+-	print "Usage: %s integers" % os.path.basename(sys.argv[0])
+-	print
+-	print "A primorial is the product of all primes up to the given number."
++	print("This program calculates large primorials.")
++	print()
++	print("Usage: %s integers" % os.path.basename(sys.argv[0]))
++	print()
++	print("A primorial is the product of all primes up to the given number.")
+ 	sys.exit(ev)
+ 
+ def output_primorial(arg):
+@@ -36,9 +36,9 @@ else:
+ 	for arg in args:
+ 		try:
+ 			if (int(arg) < 1):
+-				print >>sys.stderr, "Number too small."
++				print("Number too small.", file=sys.stderr)
+ 				sys.exit(1)
+ 		except:
+-			print >>sys.stderr, "Positive integer required."
++			print("Positive integer required.", file=sys.stderr)
+ 			usage(1)
+ 		output_primorial(arg)

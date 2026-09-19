@@ -1,0 +1,23 @@
+--- fractal-12.1/.cargo/config.toml~	2025-08-26 12:07:21.000000000 -0500
++++ fractal-12.1/.cargo/config.toml	2025-09-04 15:50:41.183796591 -0500
+@@ -3,3 +3,20 @@
+ 
+ [doc.extern-map.registries]
+ crates-io = "https://docs.rs/"
++
++[source.vendored-sources]
++directory = "vendor"
++
++[source.crates-io]
++replace-with = "vendored-sources"
++
++[source."git+https://github.com/matrix-org/matrix-rust-sdk.git?rev=c1bc814ac2c306da704c5e10b7feda2e207beb19"]
++git = "https://github.com/matrix-org/matrix-rust-sdk.git"
++rev = "c1bc814ac2c306da704c5e10b7feda2e207beb19"
++replace-with = "vendored-sources"
++
++[source."git+https://github.com/ruma/ruma.git?rev=c441eccb92a36467217ff929cd71462fbeeeaf1a"]
++git = "https://github.com/ruma/ruma.git"
++rev = "c441eccb92a36467217ff929cd71462fbeeeaf1a"
++replace-with = "vendored-sources"
++

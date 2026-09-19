@@ -3,8 +3,8 @@
 %global source2_key_fpr AC5D65F10C8596D7E2DAE2633D309B604AE3942E
 
 Name:           voikko-fi
-Version:        2.5
-Release:        10%{?dist}
+Version:        2.6
+Release:        1%{?dist}
 Summary:        A description of Finnish morphology written for libvoikko
 
 License:        GPL-2.0-or-later

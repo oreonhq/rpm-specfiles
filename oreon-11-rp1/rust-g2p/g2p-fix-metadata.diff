@@ -1,0 +1,20 @@
+--- g2p-1.2.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ g2p-1.2.2/Cargo.toml	2025-05-04T13:04:57.279394+00:00
+@@ -83,17 +83,5 @@
+ [dependencies.g2poly]
+ version = "1.2"
+ 
+-[dev-dependencies.criterion]
+-version = "0.4"
+-
+-[dev-dependencies.galois_2p8]
+-version = "0.1.2"
+-
+-[dev-dependencies.rand]
+-version = "0.8"
+-
+-[dev-dependencies.reed-solomon-erasure]
+-version = "6.0"
+-
+ [dev-dependencies.static_assertions]
+ version = "1.1"

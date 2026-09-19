@@ -1,0 +1,11 @@
+--- gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c.asm_h	2007-02-19 10:58:27.000000000 +0100
++++ gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c	2007-02-19 10:59:51.000000000 +0100
+@@ -29,6 +29,8 @@
+ #include <sys/socket.h>
+ #include <sys/types.h>
+ 
++#include <net/if.h>
++#include <asm/types.h>
+ #include <linux/wireless.h>
+ 
+ #include "gkrellm-wifi-monitor.h"

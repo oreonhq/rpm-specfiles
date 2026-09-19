@@ -1,0 +1,21 @@
+diff -up nogravity-2.00/rlx32/src/syszlib.c~ nogravity-2.00/rlx32/src/syszlib.c
+--- nogravity-2.00/rlx32/src/syszlib.c~	2005-02-24 20:14:42.000000000 +0100
++++ nogravity-2.00/rlx32/src/syszlib.c	2024-08-06 13:45:38.340545799 +0200
+@@ -743,7 +743,7 @@ static int CALLING_C fzip_fclose(SYS_FIL
+     SYS_WAD *resource = filewad_getcurrent();
+ 	if ((!resource)||((resource->mode & SYS_WAD_STATUS_ENABLED)==0))
+ 	{
+-		return lib_gzclose((gzFile *)fp);
++		return lib_gzclose((gzFile)fp);
+ 	}
+ 	else
+ 	{
+@@ -751,7 +751,7 @@ static int CALLING_C fzip_fclose(SYS_FIL
+ 		SYS_ASSERT(s);
+ 		filewad_closeFP(resource, s->file);
+ 		s->file = 0;
+-		lib_gzclose((gzFile *)fp);
++		lib_gzclose((gzFile)fp);
+ 	}
+ 	return 1;
+ }

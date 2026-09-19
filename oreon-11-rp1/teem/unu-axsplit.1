@@ -1,0 +1,47 @@
+.TH UNU\-AXSPLIT "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-axsplit \- split one axis into two axes
+.SH SYNOPSIS
+.B unu\ axsplit
+.BR \-a , \-\-axis
+.RI < axis >
+.BR \-s , \-\-size
+.RI < fast ,\  slow \ sizes>
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Split one axis into two axes.
+More general version of
+.BR unu\-axinsert (1),
+since a given axis can be split into fast and slow axes of arbitrary size, as
+long as the product of the fast and slow sizes is the same as the original
+size.
+.IP \(bu +2n
+Uses
+.B nrrdAxesSplit
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIaxis\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxis\fR>
+dimension (axis index) to split at
+.RI ( unsigned\ int )
+.TP
+.B \-s\fR\ <\fIfast\fR,\ \fIslow\fR\ sizes>\ ,\ \fB\-\-size\fR\ <\fIfast\fR,\ \fIslow\fR\ sizes>
+fast and slow axis sizes to produce as result of splitting given axis.
+(2
+.IR size_t s)
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-axinsert (1)

@@ -1,0 +1,506 @@
+--- papilo-3.0.0/CMakeLists.txt.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/CMakeLists.txt	2025-11-25 12:05:25.998673315 -0700
+@@ -255,29 +255,8 @@ endif()
+ 
+ # Search for BLAS and build clusol.
+ if(LUSOL)
+-   include(CheckLanguage)
+-   check_language(Fortran)
+-   find_package(BLAS)
+-endif()
+-if(CMAKE_Fortran_COMPILER AND BLAS_FOUND)
+-   enable_language(Fortran)
+-
+-   add_library(clusol STATIC
+-      src/papilo/external/lusol/src/lusol6b.f
+-      src/papilo/external/lusol/src/lusol7b.f
+-      src/papilo/external/lusol/src/lusol8b.f
+-      src/papilo/external/lusol/src/lusol_util.f
+-      src/papilo/external/lusol/src/lusol.f90
+-      src/papilo/external/lusol/src/clusol.c
+-      src/papilo/external/lusol/src/lusol_precision.f90)
+-   set_property(TARGET clusol PROPERTY POSITION_INDEPENDENT_CODE ON)
+-   target_include_directories(clusol PRIVATE src/papilo/external/lusol)
+-   target_link_libraries(clusol ${BLAS_LIBRARIES})
+-   target_link_libraries(papilo INTERFACE clusol)
+    set(PAPILO_HAVE_LUSOL 1)
+-   set(CLUSOL_TARGET clusol)
+-   install(FILES
+-       ${PROJECT_SOURCE_DIR}/src/papilo/external/lusol/LICENSE.md DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/papilo/lusol)
++   set(CLUSOL_TARGET "")
+ else()
+    set(PAPILO_HAVE_LUSOL 0)
+    set(CLUSOL_TARGET "")
+@@ -303,17 +282,7 @@ if(NOT MSVC)
+ endif()
+ 
+ # Includes for `check_cxx_source_compiles` call.
+-set(CMAKE_REQUIRED_INCLUDES ${PROJECT_SOURCE_DIR}/src/papilo/external)
+-check_cxx_source_compiles(
+-   "#include \"ska/bytell_hash_map.hpp\"
+-   int main() { ska::bytell_hash_map<int,int> hashmap; (void)hashmap; return 0; }"
+-   PAPILO_BYTELL_HASHMAP_WORKS )
+-
+-if(PAPILO_BYTELL_HASHMAP_WORKS)
+-   set(PAPILO_USE_STANDARD_HASHMAP 0)
+-else()
+-   set(PAPILO_USE_STANDARD_HASHMAP 1)
+-endif()
++set(PAPILO_USE_STANDARD_HASHMAP 1)
+ 
+ # Create target `papilo-core` which is the static library.
+ add_library(papilo-core STATIC
+@@ -527,26 +496,8 @@ install(FILES
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/papilo/external/fmt)
+ 
+ install(FILES
+-   ${PROJECT_SOURCE_DIR}/src/papilo/external/pdqsort/pdqsort.h
+-   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/papilo/external/pdqsort)
+-
+-install(FILES
+-   ${PROJECT_SOURCE_DIR}/src/papilo/external/ska/bytell_hash_map.hpp
+-   ${PROJECT_SOURCE_DIR}/src/papilo/external/ska/flat_hash_map.hpp
+-   ${PROJECT_SOURCE_DIR}/src/papilo/external/ska/unordered_map.hpp
+-   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/papilo/external/ska)
+-
+-install(FILES
+-   ${PROJECT_SOURCE_DIR}/src/papilo/external/lusol/clusol.h
+-   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/papilo/external/lusol)
+-
+-install(FILES
+    ${PROJECT_SOURCE_DIR}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/papilo)
+ install(FILES
+-   ${PROJECT_SOURCE_DIR}/src/papilo/external/pdqsort/license.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/papilo/pdqsort)
+-install(FILES
+-   ${PROJECT_SOURCE_DIR}/src/papilo/external/ska/LICENSE.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/papilo/ska)
+-install(FILES
+    ${PROJECT_SOURCE_DIR}/src/papilo/external/fmt/LICENSE.rst DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/papilo/fmt)
+ 
+ # Configure the papilo-config.cmake for the build-tree:
+--- papilo-3.0.0/src/convMPS.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/convMPS.cpp	2025-11-25 10:39:32.199422397 -0700
+@@ -35,7 +35,7 @@
+ #include "papilo/misc/Hash.hpp"
+ #include "papilo/misc/Vec.hpp"
+ #include "papilo/misc/fmt.hpp"
+-#include "papilo/external/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ 
+ using namespace papilo;
+ 
+--- papilo-3.0.0/src/duplicates.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/duplicates.cpp	2025-11-25 10:39:32.199598966 -0700
+@@ -33,7 +33,7 @@
+ #ifdef PAPILO_TBB
+ #include "papilo/misc/tbb.hpp"
+ #endif
+-#include "papilo/external/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include <algorithm>
+ #include <sys/stat.h>
+ 
+--- papilo-3.0.0/src/papilo/core/Components.hpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/papilo/core/Components.hpp	2025-11-25 10:39:32.199789030 -0700
+@@ -26,7 +26,7 @@
+ #define _PAPILO_CORE_COMPONENTS_HPP_
+ 
+ #include "papilo/core/Problem.hpp"
+-#include "papilo/external/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "papilo/misc/Hash.hpp"
+ #include "papilo/misc/Vec.hpp"
+ #include <boost/pending/disjoint_sets.hpp>
+--- papilo-3.0.0/src/papilo/core/SparseStorage.hpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/papilo/core/SparseStorage.hpp	2025-11-25 10:39:32.199824334 -0700
+@@ -25,7 +25,7 @@
+ #ifndef _PAPILO_CORE_SPARSE_STORAGE_HPP_
+ #define _PAPILO_CORE_SPARSE_STORAGE_HPP_
+ 
+-#include "papilo/external/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "papilo/misc/MultiPrecision.hpp"
+ #include "papilo/misc/Vec.hpp"
+ #include <algorithm>
+--- papilo-3.0.0/src/papilo/io/MpsParser.hpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/papilo/io/MpsParser.hpp	2025-11-25 10:39:32.200198593 -0700
+@@ -28,7 +28,7 @@
+ #include "papilo/core/ConstraintMatrix.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/VariableDomains.hpp"
+-#include "papilo/external/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "papilo/io/BoundType.hpp"
+ #include "papilo/io/ParseKey.hpp"
+ #include "papilo/misc/Flags.hpp"
+--- papilo-3.0.0/src/papilo/io/OpbParser.hpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/papilo/io/OpbParser.hpp	2025-11-25 10:39:32.200385010 -0700
+@@ -30,7 +30,7 @@
+ #include "papilo/core/Objective.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/VariableDomains.hpp"
+-#include "papilo/external/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "papilo/io/BoundType.hpp"
+ #include "papilo/io/ParseKey.hpp"
+ #include "papilo/misc/Flags.hpp"
+--- papilo-3.0.0/src/papilo/misc/DependentRows.hpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/papilo/misc/DependentRows.hpp	2025-11-25 10:39:32.200593669 -0700
+@@ -30,7 +30,7 @@
+ #ifdef PAPILO_HAVE_LUSOL
+ extern "C"
+ {
+-#include "papilo/external/lusol/clusol.h"
++#include <clusol.h>
+ }
+ #endif
+ 
+--- papilo-3.0.0/src/papilo/presolvers/CliqueMerging.hpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/papilo/presolvers/CliqueMerging.hpp	2025-11-25 11:23:01.549065712 -0700
+@@ -30,7 +30,7 @@
+ #include "papilo/core/PresolveOptions.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemUpdate.hpp"
+-#include "papilo/external/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include <algorithm>
+ #include <unordered_map>
+ #include <set>
+--- papilo-3.0.0/src/papilo/presolvers/FreeVarSubstitution.hpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/papilo/presolvers/FreeVarSubstitution.hpp	2025-11-25 10:39:32.200773023 -0700
+@@ -29,7 +29,7 @@
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemUpdate.hpp"
+-#include "papilo/external/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "papilo/misc/Num.hpp"
+ #include "papilo/misc/fmt.hpp"
+ #include <boost/dynamic_bitset.hpp>
+--- papilo-3.0.0/src/papilo/presolvers/ParallelColDetection.hpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/papilo/presolvers/ParallelColDetection.hpp	2025-11-25 10:39:32.200824321 -0700
+@@ -29,7 +29,7 @@
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemUpdate.hpp"
+-#include "papilo/external/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "papilo/misc/Hash.hpp"
+ #ifdef PAPILO_TBB
+ #include "papilo/misc/tbb.hpp"
+--- papilo-3.0.0/src/papilo/presolvers/ParallelRowDetection.hpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/papilo/presolvers/ParallelRowDetection.hpp	2025-11-25 10:39:32.201141840 -0700
+@@ -29,7 +29,7 @@
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemUpdate.hpp"
+-#include "papilo/external/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "papilo/misc/Hash.hpp"
+ #ifdef PAPILO_TBB
+ #include "papilo/misc/tbb.hpp"
+--- papilo-3.0.0/src/papilo/presolvers/SimplifyInequalities.hpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/src/papilo/presolvers/SimplifyInequalities.hpp	2025-11-25 10:39:32.201312027 -0700
+@@ -29,7 +29,7 @@
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemUpdate.hpp"
+-#include "papilo/external/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include <boost/integer/common_factor.hpp>
+ 
+ namespace papilo
+--- papilo-3.0.0/test/CMakeLists.txt.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/CMakeLists.txt	2025-11-25 10:39:32.201533991 -0700
+@@ -60,7 +60,7 @@ add_executable(unit_test TestMain.cpp
+         ${BOOST_REQUIRED_TEST_FILES}
+         ${PAPILOLIB_TEST_FILE})
+ 
+-target_link_libraries(unit_test papilo ${PAPILOLIB_TARGET} ${Boost_LIBRARIES})
++target_link_libraries(unit_test papilo ${PAPILOLIB_TARGET} ${Boost_LIBRARIES} Catch2 Catch2Main)
+ if(${CMAKE_SYSTEM_NAME} STREQUAL "Android")
+     target_link_libraries(unit_test log)
+ endif()
+--- papilo-3.0.0/test/papilo/core/MatrixBufferTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/core/MatrixBufferTest.cpp	2025-11-25 10:39:32.201697335 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/core/MatrixBuffer.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/misc/fmt.hpp"
+ 
+ using namespace papilo;
+--- papilo-3.0.0/test/papilo/core/PostsolveTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/core/PostsolveTest.cpp	2025-11-25 10:39:32.201838508 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/core/postsolve/Postsolve.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/postsolve/PostsolveStatus.hpp"
+ #include <boost/archive/binary_iarchive.hpp>
+ 
+--- papilo-3.0.0/test/papilo/core/PresolveTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/core/PresolveTest.cpp	2025-11-25 10:39:32.201994539 -0700
+@@ -42,7 +42,7 @@ std::ostream& operator<<(std::ostream& o
+ }
+ #endif
+ 
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ 
+ using namespace papilo;
+ 
+--- papilo-3.0.0/test/papilo/core/ProblemUpdateTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/core/ProblemUpdateTest.cpp	2025-11-25 10:39:32.202146833 -0700
+@@ -22,7 +22,7 @@
+ /*                                                                           */
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+ #include "papilo/core/Reductions.hpp"
+--- papilo-3.0.0/test/papilo/core/SparseStorageTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/core/SparseStorageTest.cpp	2025-11-25 10:39:32.202301150 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/core/SparseStorage.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/misc/compress_vector.hpp"
+ 
+ papilo::SparseStorage<double>
+--- papilo-3.0.0/test/papilo/io/MpsParserTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/io/MpsParserTest.cpp	2025-11-25 10:39:32.202472329 -0700
+@@ -24,7 +24,7 @@
+ 
+ #include <memory>
+ #include "papilo/io/MpsParser.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ 
+--- papilo-3.0.0/test/PapiloLib.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/PapiloLib.cpp	2025-11-25 10:39:32.202614604 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilolib.h"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/misc/fmt.hpp"
+ 
+ TEST_CASE( "papilolib", "[C-API]" )
+--- papilo-3.0.0/test/papilo/misc/VectorUtilsTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/misc/VectorUtilsTest.cpp	2025-11-25 10:39:32.202783118 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/misc/VectorUtils.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ 
+ using namespace papilo;
+ 
+--- papilo-3.0.0/test/papilo/presolve/CliqueMergingTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/CliqueMergingTest.cpp	2025-11-25 11:26:13.746721884 -0700
+@@ -26,7 +26,7 @@
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ 
+ #include <set>
+ #include <unordered_map>
+--- papilo-3.0.0/test/papilo/presolve/CoefficientStrengtheningTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/CoefficientStrengtheningTest.cpp	2025-11-25 10:39:32.202824296 -0700
+@@ -26,7 +26,7 @@
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+ #include "papilo/presolvers/CoefficientStrengthening.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ 
+ using namespace papilo;
+ 
+--- papilo-3.0.0/test/papilo/presolve/ConstraintPropagationTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/ConstraintPropagationTest.cpp	2025-11-25 10:39:32.203155893 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/ConstraintPropagation.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/DominatedColsTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/DominatedColsTest.cpp	2025-11-25 10:39:32.203323355 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/DominatedCols.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/DualFixTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/DualFixTest.cpp	2025-11-25 10:39:32.203483704 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/DualFix.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/FixContinuousTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/FixContinuousTest.cpp	2025-11-25 10:39:32.203645054 -0700
+@@ -26,7 +26,7 @@
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+ #include "papilo/presolvers/FixContinuous.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ 
+ using namespace papilo;
+ 
+--- papilo-3.0.0/test/papilo/presolve/FreeVarSubstitutionTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/FreeVarSubstitutionTest.cpp	2025-11-25 10:39:32.203795274 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/FreeVarSubstitution.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/ImplIntDetectionTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/ImplIntDetectionTest.cpp	2025-11-25 10:39:32.203824284 -0700
+@@ -26,7 +26,7 @@
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+ #include "papilo/presolvers/ImplIntDetection.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ 
+ using namespace papilo;
+ 
+--- papilo-3.0.0/test/papilo/presolve/ParallelColDetectionTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/ParallelColDetectionTest.cpp	2025-11-25 10:39:32.204114820 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/ParallelColDetection.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/ParallelRowDetectionTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/ParallelRowDetectionTest.cpp	2025-11-25 10:39:32.204309412 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/ParallelRowDetection.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/ProbingTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/ProbingTest.cpp	2025-11-25 10:39:32.204527238 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/Probing.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/SimpleProbingTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/SimpleProbingTest.cpp	2025-11-25 10:39:32.204690182 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/SimpleProbing.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/SimpleSubstitutionTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/SimpleSubstitutionTest.cpp	2025-11-25 10:39:32.204846523 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/SimpleSubstitution.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/SimplifyInequalitiesTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/SimplifyInequalitiesTest.cpp	2025-11-25 10:39:32.205029354 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/SimplifyInequalities.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/SingletonColsTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/SingletonColsTest.cpp	2025-11-25 10:39:32.205191616 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/SingletonCols.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/SingletonStuffingTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/SingletonStuffingTest.cpp	2025-11-25 10:39:32.205377302 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/SingletonStuffing.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/papilo/presolve/SparsifyTest.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/papilo/presolve/SparsifyTest.cpp	2025-11-25 10:39:32.205526049 -0700
+@@ -23,7 +23,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include "papilo/presolvers/Sparsify.hpp"
+-#include "papilo/external/catch/catch_amalgamated.hpp"
++#include <catch2/catch_all.hpp>
+ #include "papilo/core/PresolveMethod.hpp"
+ #include "papilo/core/Problem.hpp"
+ #include "papilo/core/ProblemBuilder.hpp"
+--- papilo-3.0.0/test/TestMain.cpp.orig	2025-11-23 04:50:50.000000000 -0700
++++ papilo-3.0.0/test/TestMain.cpp	2025-11-25 10:39:32.205696777 -0700
+@@ -24,5 +24,4 @@
+ 
+ #define CATCH_CONFIG_MAIN
+ 
+-#include "papilo/external/catch/catch_amalgamated.hpp"
+-#include "papilo/external/catch/catch_amalgamated.cpp"
++#include <catch2/catch_all.hpp>

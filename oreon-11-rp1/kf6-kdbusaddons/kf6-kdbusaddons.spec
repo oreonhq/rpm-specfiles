@@ -1,12 +1,12 @@
-%global source0_hash 9ea3792b2f1c43d5551437260803fdd676c903e2768f4aac4186054e5b22d4ca
+%global source0_hash a3d2de669bfad5de3f86cc8c6448a02f7567e4ad04aa6099ccfaa2df5f07e8f8
 
 %global framework	kdbusaddons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:			kf6-%{framework}
-Version:		6.27.0
+Version:		6.30.0
 Release:        1%{?dist}
 Summary:		KDE Frameworks 6 Tier 1 addon with various classes on top of QtDBus
 License:		CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only
@@ -63,6 +63,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

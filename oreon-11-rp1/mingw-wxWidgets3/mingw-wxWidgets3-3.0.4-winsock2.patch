@@ -1,0 +1,22 @@
+--- wxWidgets-3.0.2/configure.in.x	2017-01-31 01:50:23.376982686 +0100
++++ wxWidgets-3.0.2/configure.in	2017-01-31 01:50:41.874614319 +0100
+@@ -2760,7 +2760,7 @@
+     ],
+     [ ])
+ 
+-    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32"
++    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lws2_32 -lgdi32"
+     case "${host}" in
+         x86_64-*-mingw32* )
+             dnl we need to define this to embed the manifest for correct
+--- wxWidgets-3.0.2/configure.x	2017-01-31 02:03:00.469999613 +0100
++++ wxWidgets-3.0.2/configure	2017-01-31 02:03:13.403743585 +0100
+@@ -23176,7 +23176,7 @@
+ 
+ 
+ 
+-    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32"
++    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lws2_32 -lgdi32"
+     case "${host}" in
+         x86_64-*-mingw32* )
+                                                 WINDRES_CPU_DEFINE="--define WX_CPU_AMD64"

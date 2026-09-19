@@ -1,0 +1,43 @@
+--- comm/suite/installer/Makefile.in	2020-12-22 19:18:42.000000000 +0300
++++ comm/suite/installer/Makefile.in-OK	2021-01-23 00:34:17.416407249 +0300
+@@ -140,16 +140,20 @@
+ 	defaults/profile/panels.rdf \
+ 	defaults/profile/mimeTypes.rdf \
+ 	defaults/profile/chrome/userChrome-example.css \
+ 	defaults/profile/chrome/userContent-example.css \
+ 	$(NULL)
+ 
+ include $(topsrcdir)/toolkit/mozapps/installer/packager.mk
+ 
++install::
++	$(NSINSTALL) -D $(DESTDIR)$(mandir)/man1
++	$(SYSINSTALL) $(IFLAGS1) $(DIST)/man/man1/$(MOZ_APP_NAME).1 $(DESTDIR)$(mandir)/man1
++
+ ifeq (Darwin, $(OS_ARCH))
+ BINPATH = $(_BINPATH)
+ DEFINES += -DAPPNAME='$(_APPNAME)'
+ else
+ BINPATH = bin
+ endif
+ DEFINES += -DBINPATH='$(BINPATH)'
+ 
+--- build/moz.configure/old.configure	2024-12-11 23:05:11.000000000 +0300
++++ build/moz.configure/old.configure-OK	2024-12-18 23:08:36.945260517 +0300
+@@ -107,16 +107,17 @@ def old_configure_options(*options):
+     '--enable-system-extension-dirs',
+     '--enable-system-pixman',
+     '--enable-universalchardet',
+     '--enable-updater',
+     '--enable-xul',
+     '--enable-zipwriter',
+     '--includedir',
+     '--libdir',
++    '--mandir',
+     '--prefix',
+     '--with-branding',
+     '--with-debug-label',
+     '--with-distribution-id',
+     '--with-jitreport-granularity',
+     '--with-macbundlename-prefix',
+     '--with-nss-exec-prefix',
+     '--with-nss-prefix',

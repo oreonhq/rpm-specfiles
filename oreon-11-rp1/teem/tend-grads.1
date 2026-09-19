@@ -1,0 +1,162 @@
+.TH TEND\-GRADS "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-grads \- calculate balanced gradient directions for DWI acquisition
+.SH SYNOPSIS
+.B tend\ grads
+.RB [ \-n
+.RI < #\ dir >]
+.RB [ \-i
+.RI < grads >]
+.RB [ \-seed
+.RI < value >]
+.RB [ \-step
+.RI < step >]
+.RB [ \-single ]
+.RB [ \-snap
+.RI < interval >]
+.RB [ \-jitter
+.RI < jitter >]
+.RB [ \-miniter
+.RI < #\ iters >]
+.RB [ \-maxiter
+.RI < #\ iters >]
+.RB [ \-minvelo
+.RI < vel >]
+.RB [ \-exp
+.RI < exponent >]
+.RB [ \-dp
+.RI < potential\ change >]
+.RB [ \-minimprov
+.RI < delta >]
+.RB [ \-minmean
+.RI < len >]
+.RB [ \-izv
+.RI < insert >]
+.RB [ \-o
+.RI < filename >]
+.SH DESCRIPTION
+.P
+Composites an RGBA
+.I nrrd
+over a background color (or image), after doing gamma correction, then
+quantizes to an 8-bit image.
+Actually, the input
+.I nrrd
+can have more than 4 values per pixel, but only the first four are used.
+If the RGBA
+.I nrrd
+s floating point, the values are taken at face value; if it is fixed point, the
+values interpreted as having been quantized (so that 8-bit RGBA images will act
+as you expect).
+When compositing with a background image, the given background image does not
+have to be the same size as the input image; it will be resampled (with linear
+interpolation) to fit.
+.SH OPTIONS
+.TP
+.B \-n\fR <\fI#\ dir\fR>
+desired number of diffusion gradient directions
+.RI ( int )
+default:
+.RB \(lq 6 \(rq
+.TP
+.B \-i\fR <\fIgrads\fR>
+initial gradient directions to start with, instead of default random initial
+directions (overrides
+.RB \(lq \-n \(rq);
+default: \(lq\(rq
+.TP
+.B \-seed\fR <\fIvalue\fR>
+seed value to used with
+.B airSrandMT()
+.RI ( unsigned\ int )
+default:
+.RB \(lq 42 \(rq
+.TP
+.B \-step\fR <\fIstep\fR>
+time increment in solver
+.RI ( double )
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-single
+instead of the default behavior of tracking a pair of antipodal points
+(appropriate for determining DWI gradients), use only single points
+(appropriate for who knows what).
+.TP
+.B \-snap\fR <\fIinterval\fR>
+specifies an interval between which snapshots of the point positions should be
+saved out.
+By default (not using this option), there is no such snapshot behavior
+.RI ( int )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-jitter\fR <\fIjitter\fR>
+amount by which to perturb points when given an input
+.I nrrd
+.RI ( double )
+default:
+.RB \(lq 0.1 \(rq
+.TP
+.B \-miniter\fR <\fI#\ iters\fR>
+min number of iterations for which to run the simulation
+.RI ( int )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-maxiter\fR <\fI#\ iters\fR>
+max number of iterations for which to run the simulation
+.RI ( int )
+default:
+.RB \(lq 1000000 \(rq
+.TP
+.B \-minvelo\fR <\fIvel\fR>
+low threshold on mean velocity of repelling points, at which point repulsion
+phase of algorithm terminates.
+.RI ( double )
+default:
+.RB \(lq 0.00001 \(rq
+.TP
+.B \-exp\fR <\fIexponent\fR>
+the exponent n that determines the potential energy
+.BR 1/r^n .
+.RI ( double )
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-dp\fR <\fIpotential\ change\fR>
+low threshold on fractional change of potential at which point repulsion phase
+of algorithm terminates.
+.RI ( double )
+default:
+.RB \(lq 0.000000001 \(rq
+.TP
+.B \-minimprov\fR <\fIdelta\fR>
+in the second phase of the algorithm, when stochastically balancing the sign of
+the gradients, the (small) improvement in length of mean gradient which
+triggers termination (as further improvements are unlikely.
+.RI ( double )
+default:
+.RB \(lq 0.00005 \(rq
+.TP
+.B \-minmean\fR <\fIlen\fR>
+if length of mean gradient falls below this, finish the balancing phase
+.RI ( double )
+default:
+.RB \(lq 0.0001 \(rq
+.TP
+.B \-izv\fR <\fIinsert\fR>
+adding zero vector at beginning of grads
+.RI ( bool )
+default:
+.RB \(lq false \(rq
+.TP
+.B \-o\fR <\fIfilename\fR>
+file to write output
+.I nrrd
+to
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

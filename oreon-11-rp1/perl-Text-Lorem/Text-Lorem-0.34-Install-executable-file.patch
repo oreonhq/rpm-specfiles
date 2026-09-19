@@ -1,0 +1,21 @@
+From c7b9c685491a6938c960f3550c189c01c4f165f0 Mon Sep 17 00:00:00 2001
+From: Anton Leontiev <scileont@gmail.com>
+Date: Sat, 26 Jun 2021 22:26:28 +0300
+Subject: [PATCH] Install executable file (#7)
+
+---
+ Makefile.PL | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 35b1818..1e25ffe 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -12,6 +12,7 @@ WriteMakefile(
+     TEST_REQUIRES => {
+         'Test::More' => 0,
+     },
++    EXE_FILES => [ 'bin/lorem' ],
+     META_MERGE => {
+         'meta-spec' => { version => 2 },
+         resources => {

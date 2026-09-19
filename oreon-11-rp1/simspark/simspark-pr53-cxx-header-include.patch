@@ -1,0 +1,28 @@
+From 68140237a2f8ec245204ab3f71af59c60c1bb713 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Mon, 12 Feb 2024 23:08:06 +0900
+Subject: [PATCH] spark: include additional header for compilation fix
+
+g++14 now explicitly requires <algorithm> include for
+std::find_if .
+
+Fixes #52 .
+---
+ spark/lib/oxygen/gamecontrolserver/predicate.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/spark/lib/oxygen/gamecontrolserver/predicate.cpp b/spark/lib/oxygen/gamecontrolserver/predicate.cpp
+index a367726cc..8fd7f4580 100644
+--- a/lib/oxygen/gamecontrolserver/predicate.cpp
++++ b/lib/oxygen/gamecontrolserver/predicate.cpp
+@@ -20,6 +20,7 @@
+    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+ #include "predicate.h"
++#include <algorithm>
+ 
+ using namespace zeitgeist;
+ using namespace oxygen;
+-- 
+GitLab
+

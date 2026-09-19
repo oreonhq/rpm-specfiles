@@ -1,0 +1,109 @@
+diff -Naur Ularn/data.c Ularn.new/data.c
+--- Ularn/data.c	2006-04-15 20:53:51.000000000 -0700
++++ Ularn.new/data.c	2006-04-15 20:52:46.000000000 -0700
+@@ -5,6 +5,7 @@
+ 
+ char *libdir = LIBDIR;
+ char *scoredir = SCOREBOARDDIR;
++FILE *scoreboard_filehandle = (FILE *)NULL;
+ 
+ /* the game save filename   */
+ char savefilename[MAXPATHLEN];
+diff -Naur Ularn/extern.h Ularn.new/extern.h
+--- Ularn/extern.h	2006-04-15 20:53:51.000000000 -0700
++++ Ularn.new/extern.h	2006-04-15 20:52:47.000000000 -0700
+@@ -713,6 +713,7 @@
+ 	/************** extern decls for all data items **********/
+ 
+ extern char *tempfilename, *libdir, *scoredir;
++extern FILE *scoreboard_filehandle;
+ extern char bot1f,bot2f,bot3f;	/* in display.c */
+ extern char ckpfile[], monstnamelist[];
+ extern char larnlevels[],lastmonst[];
+diff -Naur Ularn/header.h Ularn.new/header.h
+--- Ularn/header.h	2006-04-15 20:53:51.000000000 -0700
++++ Ularn.new/header.h	2006-04-15 20:52:48.000000000 -0700
+@@ -6,6 +6,9 @@
+ #include <sys/param.h>
+ #include <sys/times.h>
+ 
++#define _GNU_SOURCE /* this must be done before the first include of unistd.h */
++#include <unistd.h>
++
+ #ifdef FTIMER
+ #  include <sys/timeb.h>
+ #endif /* FTIMER */
+diff -Naur Ularn/main.c Ularn.new/main.c
+--- Ularn/main.c	2006-04-15 20:53:51.000000000 -0700
++++ Ularn.new/main.c	2006-04-15 20:52:48.000000000 -0700
+@@ -50,7 +50,22 @@
+ 	struct passwd *pwe,*getpwuid();
+ 	extern char *optarg;
+ 	extern int optind, opterr;
++        gid_t realgid;
+ 
++        /* Open the scoreboard file immediately and then drop our setgid
++         * privileges.
++         */
++	sprintf(scorefile, "%s/%s", scoredir, SCORENAME); /* the Ularn scoreboard filename */
++        /* This could be NULL!  Users of this variable must check
++         * before using and not bother writing a scoreboard if it is null.
++         */
++        scoreboard_filehandle=fopen(scorefile, "r+");
++        realgid = getgid();
++        if (setresgid(-1, realgid, realgid) != 0) {
++            perror("Could not drop setgid privileges.  Aborting.");
++            exit(1);
++        }
++        
+ 
+ /*
+  *	first task is to identify the player
+@@ -95,7 +110,6 @@
+ 	sprintf(buf, "%s/%s", ptr, ckpfile);	/* the checkpoint file */
+ 	strcpy(ckpfile, buf);
+ 
+-	sprintf(scorefile, "%s/%s", scoredir, SCORENAME); /* the Ularn scoreboard filename */
+ 
+ 	sprintf(helpfile, "%s/%s", libdir, HELPNAME); 	/* the Ularn on-line help file */
+ 
+diff -Naur Ularn/scores.c Ularn.new/scores.c
+--- Ularn/scores.c	2001-11-16 10:13:28.000000000 -0800
++++ Ularn.new/scores.c	2006-04-15 21:10:20.000000000 -0700
+@@ -145,8 +145,9 @@
+ writeboard()
+ {
+ 	FILE *fp;
++        fp = scoreboard_filehandle;
+ 
+-	if ((fp = fopen(scorefile, "w")) == (FILE *)NULL) {
++	if (fp == (FILE *)NULL) {
+ 		lprcat("Can't open scorefile for writing\n"); 
+ 		lflush();
+ 		return(-1); 
+@@ -164,7 +165,15 @@
+ 		return(-1); 
+ 	}
+ 	fflush(fp);
+-	fclose(fp);  
++	rewind(fp);
++        /* Don't close the scoreboard filehandle.  If we're running setgid
++         * then we won't be able to open it again, and we might have to
++         * write to it multiple times if the user wants to pay his taxes
++         * more than once in a game.
++         */
++	/*
++  	fclose(fp);  
++	*/
+ 	return(0);
+ }
+ 
+@@ -185,7 +194,7 @@
+ 	}
+ 	if (writeboard()) 
+ 		return(-1);
+-	chmod(scorefile, 0666);
++	//chmod(scorefile, 0666);
+ 	return(0);
+ }
+ 

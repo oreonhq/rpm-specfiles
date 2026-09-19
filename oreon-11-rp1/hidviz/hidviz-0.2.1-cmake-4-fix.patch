@@ -1,0 +1,50 @@
+diff --git a/hidviz/CMakeLists.txt b/hidviz/CMakeLists.txt
+index 903769c..438460b 100644
+--- a/hidviz/CMakeLists.txt
++++ b/hidviz/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.2)
++cmake_minimum_required(VERSION 3.10)
+ 
+ # Cmake 3.17 changed automoc behaviour for header files with .hh extension.
+ # Now these files are passed to automoc. When policy is set to <3.17, these
+diff --git a/libhidx/CMakeLists.txt b/libhidx/CMakeLists.txt
+index e7d5815..c4e5c40 100644
+--- a/libhidx/CMakeLists.txt
++++ b/libhidx/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.2)
++cmake_minimum_required(VERSION 3.10)
+ 
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/")
+ find_package(asio REQUIRED)
+diff --git a/libhidx/libhidx/CMakeLists.txt b/libhidx/libhidx/CMakeLists.txt
+index 460cbbf..916888f 100644
+--- a/libhidx/libhidx/CMakeLists.txt
++++ b/libhidx/libhidx/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.2)
++cmake_minimum_required(VERSION 3.10)
+ project(libhidx VERSION 0.0.1 LANGUAGES C CXX)
+ 
+ set(THREADS_PREFER_PTHREAD_FLAG ON)
+diff --git a/libhidx/libhidx_server/CMakeLists.txt b/libhidx/libhidx_server/CMakeLists.txt
+index 3b10e2b..1edabe0 100644
+--- a/libhidx/libhidx_server/CMakeLists.txt
++++ b/libhidx/libhidx_server/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.2)
++cmake_minimum_required(VERSION 3.10)
+ project(libhidx_server VERSION 0.0.1 LANGUAGES C CXX)
+ 
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/")
+diff --git a/libhidx/libhidx_server_daemon/CMakeLists.txt b/libhidx/libhidx_server_daemon/CMakeLists.txt
+index 451d347..f0ac3c2 100644
+--- a/libhidx/libhidx_server_daemon/CMakeLists.txt
++++ b/libhidx/libhidx_server_daemon/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.2)
++cmake_minimum_required(VERSION 3.10)
+ project(libhidx_server VERSION 0.0.1 LANGUAGES C CXX)
+ 
+ add_executable(libhidx_server_daemon

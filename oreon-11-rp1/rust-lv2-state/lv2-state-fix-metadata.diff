@@ -1,0 +1,11 @@
+--- lv2-state-2.0.0/Cargo.toml	2020-10-23T15:19:57+00:00
++++ lv2-state-2.0.0/Cargo.toml	2023-07-22T17:21:13.702257+00:00
+@@ -34,7 +34,7 @@
+ version = "2.1.0"
+ 
+ [dev-dependencies.mktemp]
+-version = "0.4.0"
++version = "0.5"
+ [badges.maintenance]
+ status = "passively-maintained"
+ 

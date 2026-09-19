@@ -1,0 +1,14 @@
+diff -rupN --no-dereference openambit-0.5/src/libambit/device_driver_ambit_navigation.h openambit-0.5-new/src/libambit/device_driver_ambit_navigation.h
+--- openambit-0.5/src/libambit/device_driver_ambit_navigation.h	2019-11-12 22:27:23.000000000 +0100
++++ openambit-0.5-new/src/libambit/device_driver_ambit_navigation.h	2025-07-17 22:52:42.758849577 +0200
+@@ -115,8 +115,8 @@ typedef struct ambit_pack_routes_s {
+ #define NUM_WAYPOINTS_MOVESCOUNT 34
+ #define NUM_WAYPOINTS_AMBIT 18
+ 
+-const uint8_t ambit_waypoint_types_from_movescount[NUM_WAYPOINTS_MOVESCOUNT];
+-const uint8_t ambit_waypoint_types_to_movescount[NUM_WAYPOINTS_AMBIT];
++extern const uint8_t ambit_waypoint_types_from_movescount[NUM_WAYPOINTS_MOVESCOUNT];
++extern const uint8_t ambit_waypoint_types_to_movescount[NUM_WAYPOINTS_AMBIT];
+ 
+ int ambit_navigation_read(ambit_object_t *object, ambit_personal_settings_t *settings);
+ int ambit_navigation_write(ambit_object_t *object, ambit_personal_settings_t *settings);

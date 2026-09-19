@@ -1,0 +1,14 @@
+--- zlink-core-0.4.0/Cargo.toml	2006-07-24T01:21:28+00:00
++++ zlink-core-0.4.0/Cargo.toml	2026-03-09T12:41:50.187922+00:00
+@@ -160,11 +160,6 @@
+ [dependencies.zlink-macros]
+ version = "=0.4.0"
+ 
+-[dev-dependencies.criterion]
+-version = "4.0.4"
+-features = ["async_tokio"]
+-package = "codspeed-criterion-compat"
+-
+ [dev-dependencies.serde]
+ version = "1.0.218"
+ features = ["alloc"]

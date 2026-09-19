@@ -1,0 +1,36 @@
+diff -up SolarModel_src/GameCore.cpp.irrlicht1.6 SolarModel_src/GameCore.cpp
+--- SolarModel_src/GameCore.cpp.irrlicht1.6	2008-05-28 22:32:54.000000000 -0400
++++ SolarModel_src/GameCore.cpp	2010-01-14 11:38:31.134244420 -0500
+@@ -125,7 +125,7 @@ void GameCreateIrrLicht(GameStruct *pGam
+ {
+ 	pGame->Device = createDevice(
+ 		pGame->DriverType,
+-		core::dimension2d<s32>( pGame->Width, pGame->Height ),
++		core::dimension2d<u32>( pGame->Width, pGame->Height ),
+ 		pGame->BitsPerPixel,
+ 		pGame->Fullscreen,
+ 		false, // Game.StencilBuffer
+diff -up SolarModel_src/GameMain.cpp.irrlicht1.6 SolarModel_src/GameMain.cpp
+--- SolarModel_src/GameMain.cpp.irrlicht1.6	2010-01-14 11:38:31.123370339 -0500
++++ SolarModel_src/GameMain.cpp	2010-01-14 11:42:11.934372782 -0500
+@@ -105,7 +105,7 @@ void GameInit()
+ 
+ 	srand(Game.Timer->getRealTime());
+ 
+-	Game.Video->setFog(video::SColor(0,8,8,8), true, 500.0f, 1200.0f);
++	Game.Video->setFog(video::SColor(0,8,8,8), video::EFT_FOG_LINEAR, 500.0f, 1200.0f);
+ 
+ 	// Maps setup
+ 
+diff -up SolarModel_src/GameMeasurer.cpp.irrlicht1.6 SolarModel_src/GameMeasurer.cpp
+--- SolarModel_src/GameMeasurer.cpp.irrlicht1.6	2010-01-14 11:38:31.123370339 -0500
++++ SolarModel_src/GameMeasurer.cpp	2010-01-14 11:38:31.134244420 -0500
+@@ -253,7 +253,7 @@ void GameMeasurer::BodyUserPosChanged()
+ gotNewT:
+ 		canGotNewT = false;
+ skipFalse:
+-		core::dimension2d<s32> dim = font->getDimension(t.c_str());
++		core::dimension2d<u32> dim = font->getDimension(t.c_str());
+ 		int tX = int(x-dim.Width/2);
+ 		if (tX < 0) { if (canGotNewT) {t=core::stringw("<-")+t; goto gotNewT;} else tX=0; }
+ 		if (tX+dim.Width > Game.Width) { if (canGotNewT) {t+="->"; goto gotNewT;} else tX=Game.Width-dim.Width; }

@@ -1,0 +1,51 @@
+#!/bin/sh
+
+VERSION=$1
+
+if [ -z "$VERSION" ]; then
+   echo "Usage: $0 X.Y.Z"
+   exit 1
+fi
+
+#set +x
+
+#FIXME lib
+LIBDIR=/usr/lib64/ghc-$VERSION
+if [ ! -d "$LIBDIR" ]; then
+   echo "$0: $LIBDIR does not exist: please install ghcX.Y first"
+   exit 1
+fi
+
+ARCH=$(arch)
+
+# stack/Cabal doesn't know ppc64le
+if [ "$ARCH" = "ppc64le" ]; then
+    ARCH=ppc64
+fi
+
+STACK_PROGRAMS=$HOME/.stack/programs/$ARCH-linux
+
+STACK_GHCDIR=${STACK_PROGRAMS}/ghc-tinfo6-$VERSION
+
+if [ -e "$STACK_GHCDIR" ]; then
+   echo "$0: $STACK_GHCDIR exists: to replace, please remove first"
+   exit 0
+fi
+
+mkdir -p $STACK_GHCDIR/bin
+
+for i in ghc ghc-pkg ghci hp2ps hpc hsc2hs runghc runhaskell; do
+    if [ -x /usr/bin/$i-$VERSION ]; then
+        ln -s /usr/bin/$i-$VERSION $STACK_GHCDIR/bin/$i
+    elif [ -x /usr/bin/$i-ghc-$VERSION ]; then
+        ln -s /usr/bin/$i-ghc-$VERSION $STACK_GHCDIR/bin/$i
+    else
+        ln -s /usr/bin/$i $STACK_GHCDIR/bin/$i
+    fi
+done
+
+ln -s /usr/bin/haddock-ghc-$VERSION $STACK_GHCDIR/bin/haddock
+
+if [ ! -f "${STACK_GHCDIR}.installed" ]; then
+    echo "installed" > $STACK_GHCDIR.installed
+fi

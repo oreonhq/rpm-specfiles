@@ -1,0 +1,13 @@
+[Unit]
+Description=Performance data collection for a number of subsystems
+After=syslog.target network.target
+
+[Service]
+PIDFile=/var/run/collectl.pid
+EnvironmentFile=/etc/sysconfig/collectl
+ExecStart=/usr/bin/collectl $OPTS /etc/collectl.conf
+ExecReload=/bin/kill -USR1 $MAINPID
+Type=forking
+
+[Install]
+WantedBy=multi-user.target

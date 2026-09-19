@@ -8,7 +8,7 @@
 %global major_minor_version %(echo %{version} | cut -d "." -f 1-2)
 
 Name:           gtksourceview5
-Version:        5.20.0
+Version:        5.21.0
 Release:        %autorelease
 Summary:        Source code editing widget
 

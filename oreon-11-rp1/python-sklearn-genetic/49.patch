@@ -1,0 +1,93 @@
+From d02ae33b7f69168f158a2fcfb8279820c2cac4a9 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 24 Jan 2025 15:41:31 -0500
+Subject: [PATCH] Adapt for fit_params renaming in scikit-learn 1.6
+
+Requires scikit-learn 1.4 or later.
+
+Fixes #48.
+---
+ genetic_selection/gscv.py | 12 ++++++------
+ requirements.txt          |  2 +-
+ setup.py                  |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/genetic_selection/gscv.py b/genetic_selection/gscv.py
+index d1c0d5c..da10735 100644
+--- a/genetic_selection/gscv.py
++++ b/genetic_selection/gscv.py
+@@ -114,7 +114,7 @@ def _createIndividual(icls, n, max_features, min_features):
+ 
+ 
+ def _evalFunction(
+-    individual, estimator, X, y, groups, cv, scorer, fit_params, max_features, min_features, caching, scores_cache={}
++    individual, estimator, X, y, groups, cv, scorer, params, max_features, min_features, caching, scores_cache={}
+ ):
+     individual_sum = np.sum(individual, axis=0)
+     if individual_sum < min_features or individual_sum > max_features:
+@@ -124,7 +124,7 @@ def _evalFunction(
+         return scores_cache[individual_tuple][0], individual_sum, scores_cache[individual_tuple][1]
+     X_selected = X[:, np.array(individual, dtype=bool)]
+     scores = cross_val_score(
+-        estimator=estimator, X=X_selected, y=y, groups=groups, scoring=scorer, cv=cv, fit_params=fit_params
++        estimator=estimator, X=X_selected, y=y, groups=groups, scoring=scorer, cv=cv, params=params
+     )
+     scores_mean = np.mean(scores)
+     scores_std = np.std(scores)
+@@ -170,7 +170,7 @@ class GeneticSelectionCV(BaseEstimator, MetaEstimatorMixin, SelectorMixin):
+         a scorer callable object / function with signature
+         ``scorer(estimator, X, y)``.
+ 
+-    fit_params : dict, optional
++    params : dict, optional
+         Parameters to pass to the fit method.
+ 
+     max_features : int or None, optional
+@@ -253,7 +253,7 @@ def __init__(
+         estimator,
+         cv=None,
+         scoring=None,
+-        fit_params=None,
++        params=None,
+         max_features=None,
+         min_features=None,
+         verbose=0,
+@@ -271,7 +271,7 @@ def __init__(
+         self.estimator = estimator
+         self.cv = cv
+         self.scoring = scoring
+-        self.fit_params = fit_params
++        self.params = params
+         self.max_features = max_features
+         self.min_features = min_features
+         self.verbose = verbose
+@@ -377,7 +377,7 @@ def _fit(self, X, y, groups=None):
+             groups=groups,
+             cv=cv,
+             scorer=scorer,
+-            fit_params=self.fit_params,
++            params=self.params,
+             max_features=max_features,
+             min_features=min_features,
+             caching=self.caching,
+diff --git a/requirements.txt b/requirements.txt
+index 64ba618..c7843ec 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,4 @@
+-scikit-learn>=1.0
++scikit-learn>=1.4
+ deap>=1.0.2
+ numpy
+ multiprocess
+diff --git a/setup.py b/setup.py
+index ea2700a..62bf9a3 100644
+--- a/setup.py
++++ b/setup.py
+@@ -39,5 +39,5 @@
+     ],
+     packages=find_packages(),
+     python_requires=">=3.7",
+-    install_requires=["scikit-learn>=1.0", "deap>=1.0.2", "numpy", "multiprocess"],
++    install_requires=["scikit-learn>=1.4", "deap>=1.0.2", "numpy", "multiprocess"],
+ )

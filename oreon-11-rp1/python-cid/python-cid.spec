@@ -1,0 +1,42 @@
+%global source0_hash 22f432cc6fb68d12a9c35dbdc92c95484fc49e31dfcb9e0efb0082233c5394e3
+
+%global pypi_name cid
+%global common_description %{expand:
+Self-describing content-addressed identifiers for distributed systems
+implementation in Python.}
+
+Name:          python-%{pypi_name}
+Version:       0.3.0
+Release:       %autorelease
+BuildArch:     noarch
+Summary:       Self-describing content-addressed identifiers
+License:       MIT
+URL:           https://github.com/ipld/py-cid
+Source0:       %{pypi_source py-%{pypi_name}}
+Patch1:        python-cid-0001-Relax-dependencies.patch
+# Drop pytest-runner / "setup.py test" support from setup.py
+# https://fedoraproject.org/wiki/Changes/DeprecatePythonPytestRunner
+# https://github.com/pypa/setuptools/blob/v75.8.0/NEWS.rst#v7200
+# Downstream-only because the upstream project is archived.
+Patch2:        python-cid-0002-Drop-pytest-runner.patch
+BuildRequires: python3-hypothesis
+BuildRequires: python3-pytest
+BuildSystem:   pyproject
+BuildOption(prep):    -n py-%{pypi_name}-%{version}
+BuildOption(install): -l %{pypi_name}
+
+%description %{common_description}
+
+%package -n python3-%{pypi_name}
+Summary: %{summary}
+
+%description -n python3-%{pypi_name} %{common_description}
+
+%check -a
+%pytest
+
+%files -n python3-%{pypi_name} -f %{pyproject_files}
+%doc AUTHORS.rst HISTORY.rst README.rst
+
+%changelog
+%autochangelog

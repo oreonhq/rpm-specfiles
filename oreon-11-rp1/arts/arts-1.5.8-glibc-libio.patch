@@ -1,0 +1,11 @@
+diff -up arts-1.5.10/artsc/stdioemu.c.me arts-1.5.10/artsc/stdioemu.c
+--- arts-1.5.10/artsc/stdioemu.c.me	2018-06-07 09:59:06.698958008 +0200
++++ arts-1.5.10/artsc/stdioemu.c	2018-06-07 10:00:22.615212014 +0200
+@@ -36,7 +36,6 @@
+ #endif
+ 
+ #include <stdio.h>
+-#include <libio.h>
+ 
+ struct fd_cookie {
+ 	int fd;

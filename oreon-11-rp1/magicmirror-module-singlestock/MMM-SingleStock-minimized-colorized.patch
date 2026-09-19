@@ -1,0 +1,111 @@
+diff --git a/MMM-SingleStock.js b/MMM-SingleStock.js
+index 6bcb39a..41a068e 100644
+--- a/MMM-SingleStock.js
++++ b/MMM-SingleStock.js
+@@ -12,6 +12,8 @@ Module.register('MMM-SingleStock', {
+     updateInterval: 3600000,
+     showChange: true,
+     changeType: '',
++    colorized: false,
++    minimal: false,
+     label: 'symbol' // 'symbol' | 'companyName' | 'none'
+   },
+ 
+@@ -41,17 +43,46 @@ Module.register('MMM-SingleStock', {
+ 
+     if (this.viewModel) {
+       const priceEl = document.createElement('div');
+-      priceEl.innerHTML = `${this.viewModel.label} ${this.viewModel.price}`;
++      if (this.config.minimal) {
++        priceEl.classList = 'small';
++      }
++
++      const labelEl = document.createElement('span');
++      labelEl.innerHTML = `${this.viewModel.label}`;
++      priceEl.appendChild(labelEl);
++
++      const valueEl = document.createElement('span');
++      valueEl.innerHTML = ` ${this.viewModel.price}`;
++      if (this.config.colorized) {
++        valueEl.classList = 'bright';
++      }
++      priceEl.appendChild(valueEl);
++
+       wrapper.appendChild(priceEl);
+ 
+       if (this.config.showChange) {
+         const changeEl = document.createElement('div');
+-        changeEl.classList = 'dimmed small';
+-        if (this.config.changeType === 'percent') {
+-          changeEl.innerHTML = ` (${this.viewModel.change}%)`;
+-        } else {
+-          changeEl.innerHTML = ` (${this.viewModel.change})`;
++
++        changeEl.innerHTML = this.config.changeType === 'percent'
++          ? `(${this.viewModel.change}%)`
++          : `(${this.viewModel.change})`;
++
++        changeEl.classList = this.config.minimal
++          ? 'dimmed xsmall'
++          : 'dimmed small';
++
++        if (this.config.colorized)
++        {
++          if (this.viewModel.change > 0)
++          {
++            changeEl.style = 'color: #a3ea80';
++          }
++          if (this.viewModel.change < 0)
++          {
++            changeEl.style = 'color: #FF8E99';
++          }
+         }
++
+         wrapper.appendChild(changeEl);
+       }
+     } else {
+@@ -92,10 +123,9 @@ Module.register('MMM-SingleStock', {
+       price: response.latestPrice
+     };
+ 
+-    // allow value or percent
+     switch (this.config.changeType) {
+       case 'percent':
+-        this.viewModel.change = response.changePercent * 100;
++        this.viewModel.change = (response.changePercent * 100).toFixed(2);
+         break;
+       default:
+         this.viewModel.change = response.change > 0 ? `+${response.change}` : `${response.change}`;
+diff --git a/README.md b/README.md
+index 28e02ca..a06d82a 100644
+--- a/README.md
++++ b/README.md
+@@ -28,6 +28,8 @@ You can also configure the module to display a percent change in the price:
+ 
+ ![Percent Change](doc/screenshot-percentchange.png)
+ 
++Finally, this module also supports a smaller view as well as colorizing the percentage change and highlight the stock value:
++
+ This module is capable to display only a single stock price. If you would like to see the price of more stocks on your mirror, add this module multiple times.
+ 
+ For updates, please check the [CHANGELOG](https://github.com/balassy/MMM-SingleStock/blob/master/CHANGELOG.md).
+@@ -56,7 +60,9 @@ var config = {
+         updateInterval: 3600000, // 1 hour in milliseconds
+         showChange: true,        // false | true
+         changeType: '',          // 'percent' | ''
+-        label: 'symbol'          // 'symbol' | 'companyName' | 'none' | any string
++        label: 'symbol',         // 'symbol' | 'companyName' | 'none' | any string
++        colorized: false,        // false | true
++        minimal: false           // false | true
+       }
+     }
+   ]
+@@ -73,6 +79,8 @@ var config = {
+ | `showChange`     | *Optional* Determines whether the price difference should be also displayed. <br><br>**Type:** `boolean` <br>**Default value:** `true` (yes, the price difference is displayed)
+ |`changeType`      | *Optional* Allows stock change to be shown as the raw value or as a percent.<br><br>**Type:** `string` <br>**Default Value**: `""` (empty string)<br>**Possible values:** <br>`percent`: Show the change as a percent rather than the raw value.
+ | `label`          | *Optional* Determines what prefix should be prepended to the price. <br><br>**Type:** `string` <br>**Possible values:** <br>`symbol`: The acronym of the stock (e.g. `GOOG`) is displayed before the price.<br>`companyName`: The full name of the company (e.g. `Alphabet Inc.`) is displayed before the price.<br>`none`: Nothing is displayed before the price, only the price is shown.<br>Any other string is displayed as is, e.g. set `$` to display a dollar sign before the price number.<br>**Default value:** `symbol` (the acronym of the stock is displayed before the price)
++| `colorized`      | *Optional* Determines whether the price difference should be displayed in red (negative) or green (positive) as well as highlight the current price. <br><br>**Type:** `boolean` <br>**Default value:** `false` (no color highlight)
++| `minimal`        | *Optional* Determines whether the module should reduce the font size for a more compact display. <br><br>**Type:** `boolean` <br>**Default value:** `false` (regular font size)
+ 
+ ## How it works
+ 

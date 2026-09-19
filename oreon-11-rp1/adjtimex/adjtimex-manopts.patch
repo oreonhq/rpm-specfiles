@@ -1,0 +1,21 @@
+diff -up adjtimex-1.29/adjtimex.8.manopts adjtimex-1.29/adjtimex.8
+--- adjtimex-1.29/adjtimex.8.manopts	2009-03-12 01:31:07.000000000 +0100
++++ adjtimex-1.29/adjtimex.8	2013-03-25 17:19:10.243085242 +0100
+@@ -106,7 +106,7 @@ follow.
+ .RI \-i " tim"
+ .RI \-\-interval " tim"
+ .RI \-l " file"
+-.RI \-\-logfile " file"
++.RI \-\-log " file"
+ .RI \-h " timeserver"
+ .RI \-\-host " timeserver"
+ \-w
+@@ -329,7 +329,7 @@ To correct the rest of the error, you co
+ in rc.local would approximately correct the system clock:
+ 
+ .nf
+-     adjtimex  --tick 9999  --freq 485452
++     adjtimex  --tick 9999  --frequency 485452
+ .fi
+ .PP
+ .\"}}}

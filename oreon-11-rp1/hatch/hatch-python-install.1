@@ -1,0 +1,48 @@
+.TH HATCH\-PYTHON\-INSTALL "1" "December 2023" "" "User Commands"
+.SH NAME
+.B hatch\ python\ install
+\(en Install Python distributions
+.SH SYNOPSIS
+.B hatch\ python\ install
+.RI [ OPTIONS ]
+.IR NAMES ...
+.P
+You may select
+.B all
+to install all compatible distributions:
+.P
+.EX
+.B hatch\ python\ install\ all
+.EE
+.SH OPTIONS
+.TP
+.B \-\-private
+Do not add distributions to the user
+.B PATH
+.TP
+.B \-u\fR, \fB\-\-update
+Update existing installations
+.TP
+.B \-d\fR, \fB\-\-dir\ \fITEXT
+The directory in which to install distributions,
+overriding configuration
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH ENVIRONMENT
+You can set custom sources for distributions by setting the
+.B HATCH_PYTHON_SOURCE_\fR<\fINAME\fR>
+environment variable where
+.RI < NAME >
+is the uppercased version
+of the distribution name
+with periods replaced by underscores
+e.g. \fBHATCH_PYTHON_SOURCE_PYPY3_10\fR.
+.SH "SEE ALSO"
+.BR hatch\-python\-find (1),
+.BR hatch\-python\-remove (1),
+.BR hatch\-python\-show (1),
+.BR hatch\-python\-update (1)
+.P
+.BR hatch\-python (1),
+.BR hatch (1)

@@ -1,0 +1,30 @@
+.TH GHERKIN "1" "February 2025" "" "User Commands"
+.SH NAME
+.B gherkin
+\(en
+parse Gherkin files
+.SH SYNOPSIS
+.B gherkin
+.RI [ options ]
+.IR FILE ...
+.SH DESCRIPTION
+Outputs the result of parsing the given files, in JSON format.
+.SH OPTIONS
+.SH POSITIONAL ARGUMENTS
+.I FILE
+A Gherkin file
+.SH OPTIONAL ARGUMENTS
+.TP
+.B \-h\fR, \fB\-\-help
+Print a help message and exit
+.TP
+.B \-\-no\-ast
+Do not emit Ast events
+.TP
+.B \-\-no\-pickles
+Do not emit Pickle events
+.TP
+.B \-\-no\-source
+Do not emit Source events
+.SH "SEE ALSO"
+.BR cucumber_gherkin-generate-tokens (1)

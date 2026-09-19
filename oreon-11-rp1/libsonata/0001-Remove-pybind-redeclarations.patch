@@ -1,0 +1,37 @@
+From c7b6d4c727012678a5cc7a967be620ea69a58c41 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Fri, 4 Mar 2022 22:21:53 +0000
+Subject: [PATCH 1/5] Remove pybind redeclarations
+
+---
+ python/bindings.cpp | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/python/bindings.cpp b/python/bindings.cpp
+index 9508d4a..80b3603 100644
+--- a/python/bindings.cpp
++++ b/python/bindings.cpp
+@@ -323,20 +323,6 @@ py::class_<Storage> bindStorageClass(py::module& m, const char* clsName, const c
+ }
+ }  // unnamed namespace
+ 
+-namespace pybind11 {
+-namespace detail {
+-template <typename T>
+-struct type_caster<nonstd::optional<T>>: optional_caster<nonstd::optional<T>> {};
+-
+-template <>
+-struct type_caster<nonstd::nullopt_t>: public void_caster<nonstd::nullopt_t> {};
+-
+-template <typename... Ts>
+-struct type_caster<nonstd::variant<Ts...>>: variant_caster<nonstd::variant<Ts...>> {};
+-}  // namespace detail
+-}  // namespace pybind11
+-
+-
+ template <typename ReportType, typename KeyType>
+ void bindReportReader(py::module& m, const std::string& prefix) {
+     py::class_<DataFrame<KeyType>>(m,
+-- 
+2.48.1
+

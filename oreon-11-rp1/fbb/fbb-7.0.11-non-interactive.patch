@@ -1,0 +1,130 @@
+diff --git a/man/xfbbd.8 b/man/xfbbd.8
+index b6db443..71d2141 100644
+--- a/man/xfbbd.8
++++ b/man/xfbbd.8
+@@ -23,6 +23,9 @@ configuration files without actually starting the daemon.
+ .TP
+ .B \-n
+ Don't start communication socket for the console.
++.TP
++.B \-N
++Non-interactive mode. Answer YES to all questions.
+ 
+ 
+ 
+diff --git a/scripts/fbb.in b/scripts/fbb.in
+index c4a45f4..b82a799 100644
+--- a/scripts/fbb.in
++++ b/scripts/fbb.in
+@@ -389,7 +389,7 @@ fbb_conf()
+ 	echo "Checking fbb configuration :"
+ 	if [ -x $FBB ] ; then
+ 		cd $FBBDIR
+-		$FBB -i
++		$FBB -i $FBB_PARAM_NI
+ 		if [ $? -ne 2 ] ; then
+ 			echo "Configuration error ! Giving up."
+ 			echo "Please read file @localstatedir@/lib/fbb/ERROR.SYS"
+@@ -452,7 +452,7 @@ fbb_loop()
+ 
+ 		cd $FBBDIR
+ 
+-		$FBB $FBB_PARAM &
++		$FBB $FBB_PARAM $FBB_PARAM_NI &
+ 		wait $!
+ 
+ 		fbb_return $?
+@@ -534,26 +534,43 @@ fbb_opt()
+ 
+ LOCALDIR=`pwd`
+ 
++[ "$NON_INTERACTIVE" = 1 ] && FBB_PARAM_NI="-N"
++
+ # Looking for fbb.conf locations
+ if [ ! -f $FBBCONF/fbb.conf ] ; then
+ 	cd $FBBCONF
+ 	cd ../
+ 	if [ -f fbb.conf ] ; then
+-	cp fbb.conf $FBBCONF
++		cp fbb.conf $FBBCONF
+ 	else
+-	get_fbb_conf
++		if [ "$NON_INTERACTIVE" = 1 ]; then
++			echo "Configuration file '$FBBCONF/fbb.conf' not found."
++			exit 1
++		else
++			get_fbb_conf
++		fi
+ 	fi
+ fi
+ 
+ # Check if exists epurmess.ini file. If not create it
+ if [ ! -f $FBBCONF/epurmess.ini ] ; then
+-	if replace $CONFDIR/epurmess.ini ; then
+-		make_epurmess_ini > $CONFDIR/epurmess.ini
++	if [ "$NON_INTERACTIVE" = 1 ]; then
++		echo "Configuration file '$FBBCONF/epurmess.ini' not found."
++		exit 1
++	else
++		if replace $CONFDIR/epurmess.ini ; then
++			make_epurmess_ini > $CONFDIR/epurmess.ini
++		fi
+ 	fi
+ fi
+ 
+ if [ ! -f $FBBCONF/port.sys ] ; then
+-	get_fbb_port
++	if [ "$NON_INTERACTIVE" = 1 ]; then
++		echo "Configuration file '$FBBCONF/port.sys' not found."
++		exit 1
++	else
++		get_fbb_port
++	fi
+ fi
+ 
+ fbb_opt $*
+diff --git a/src/xfbbd.c b/src/xfbbd.c
+index f6c4ed7..50c6d36 100644
+--- a/src/xfbbd.c
++++ b/src/xfbbd.c
+@@ -42,6 +42,7 @@
+ static int verbose = 0;
+ static int init_phase = 1;
+ static int info_canal = -1;
++static int non_interactive = 0;
+ 
+ static void sig_fct (int sig)
+ {
+@@ -200,7 +201,7 @@ int main (int ac, char **av)
+ 	{
+ 		if (strcmp (av[ng], "-h") == 0)
+ 		{
+-			fprintf (stderr, "usage : xfbbd [-v] [-p port | -s service]\n");
++			fprintf (stderr, "usage : xfbbd [-v] [-p port | -s service] [-N]\n");
+ 			return (0);
+ 		}
+ 		else if (strcmp (av[ng], "-V") == 0)
+@@ -235,6 +236,10 @@ int main (int ac, char **av)
+ 		{
+ 			orb = 0;
+ 		}
++		else if (strcmp (av[ng], "-N") == 0)
++		{
++			non_interactive = 1;
++		}
+ 	}
+ 
+ 	banner ();
+@@ -1036,6 +1041,12 @@ int sel_option (char *texte, int *val)
+ {
+ 	char str[256];
+ 
++	if (non_interactive)
++	{
++		*val = 'y';
++		return 1;
++	}
++
+ 	for (;;)
+ 	{
+ 		fprintf (stderr, "%s (Y/N) ? ", texte);

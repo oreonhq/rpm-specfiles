@@ -1,0 +1,47 @@
+diff -rupN --no-dereference commoncpp2-1.8.1/src/applog.cpp commoncpp2-1.8.1-new/src/applog.cpp
+--- commoncpp2-1.8.1/src/applog.cpp	2010-11-01 00:11:55.000000000 +0100
++++ commoncpp2-1.8.1-new/src/applog.cpp	2020-02-04 23:56:43.194896881 +0100
+@@ -45,6 +45,7 @@
+ #include <cstdlib>
+ #include <stdarg.h>
+ #include <errno.h>
++#include <sys/stat.h>
+ 
+ // TODO sc: test if has to move up now that it is into commoncpp
+ // NOTE: the order of inclusion is important do not move following include line
+@@ -297,7 +298,7 @@ logger::logger(const char* logFileName,
+     else
+     {
+       // create pipe
+-      int err = mkfifo(_nomeFile.c_str(), S_IREAD | S_IWRITE);
++      int err = mkfifo(_nomeFile.c_str(), S_IRUSR | S_IWUSR);
+       if (err == 0 || errno == EEXIST)
+       {
+         // and open it
+@@ -342,7 +343,7 @@ void logger::logFileName(const char* Fil
+     else
+     {
+       // create pipe
+-      int err = mkfifo(_nomeFile.c_str(), S_IREAD | S_IWRITE);
++      int err = mkfifo(_nomeFile.c_str(), S_IRUSR | S_IWUSR);
+       if (err == 0 || errno == EEXIST)
+       {
+         // and open it
+@@ -456,7 +457,7 @@ AppLog::AppLog(const char* logFileName,
+     else
+     {
+       // create pipe
+-      int err = mkfifo(d->_nomeFile.c_str(), S_IREAD | S_IWRITE);
++      int err = mkfifo(d->_nomeFile.c_str(), S_IRUSR | S_IWUSR);
+       if (err == 0 || errno == EEXIST)
+       {
+         // and open it
+@@ -562,7 +563,7 @@ void AppLog::logFileName(const char* Fil
+     else
+     {
+       // create pipe
+-      int err = mkfifo(d->_nomeFile.c_str(), S_IREAD | S_IWRITE);
++      int err = mkfifo(d->_nomeFile.c_str(), S_IRUSR | S_IWUSR);
+       if (err == 0 || errno == EEXIST)
+       {
+         // and open it

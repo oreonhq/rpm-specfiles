@@ -1,0 +1,17 @@
+diff -up appmenu-qt5-0.3.0+16.10.20160628.1/src/src.pro.orig appmenu-qt5-0.3.0+16.10.20160628.1/src/src.pro
+--- appmenu-qt5-0.3.0+16.10.20160628.1/src/src.pro.orig	2018-03-29 12:21:53.170623717 +0200
++++ appmenu-qt5-0.3.0+16.10.20160628.1/src/src.pro	2018-03-29 12:22:10.270648972 +0200
+@@ -4,7 +4,7 @@ PLUGIN_TYPE = platformthemes
+ PLUGIN_CLASS_NAME = AppMenuPlatformThemePlugin
+ load(qt_plugin)
+ 
+-QT += core-private gui-private platformsupport-private dbus widgets
++QT += core-private gui-private theme_support-private dbus widgets
+ DBUS_INTERFACES += com.canonical.AppMenu.Registrar.xml
+ DBUS_ADAPTORS += org.kde.StatusNotifierItem.xml
+ QDBUSXML2CPP_ADAPTOR_HEADER_FLAGS += -i dbusstructures.h
+diff -up appmenu-qt5-0.3.0+16.10.20160628.1/.qmake.conf.orig appmenu-qt5-0.3.0+16.10.20160628.1/.qmake.conf
+--- appmenu-qt5-0.3.0+16.10.20160628.1/.qmake.conf.orig	2018-03-29 13:31:23.175296349 +0200
++++ appmenu-qt5-0.3.0+16.10.20160628.1/.qmake.conf	2018-03-29 13:31:17.729292472 +0200
+@@ -0,0 +1 @@
++load(qt_build_config)

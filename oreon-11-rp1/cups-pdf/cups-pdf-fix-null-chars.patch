@@ -1,0 +1,57 @@
+diff -Naur cups-pdf-3.0.2.original/src/cups-pdf.c cups-pdf-3.0.2/src/cups-pdf.c
+--- cups-pdf-3.0.2.original/src/cups-pdf.c	2025-10-20 11:04:43.025083894 -0400
++++ cups-pdf-3.0.2/src/cups-pdf.c	2025-10-20 11:16:49.411377637 -0400
+@@ -1137,6 +1137,32 @@
+   return result;
+ }
+ 
++/* Fill the buffer with \n in order to be able to process embedded nulls on the line. */
++static char *fgets_with_null(char *fbuffer, int fbufsize, FILE *ffpsrc) {
++  memset(fbuffer, '\n', BUFSIZE);
++  return fgets2(fbuffer, fbufsize, ffpsrc);
++}
++
++/* Locate the last null character and write the full line, including embedded nulls.
++   The line must has been read with fgets_with_null. */
++static void fputs_with_null(const char *restrict s, FILE *restrict stream) {
++  char *end;
++  size_t count;
++
++  end = memrchr(s, '\0', BUFSIZE);
++  if (end == NULL) {
++    log_event(CPERROR, "failed to find end of string");
++    return;
++  }
++
++  count = end - s;
++  if (count == 0) {
++    return;
++  }
++
++  fwrite(s, sizeof(char), end - s, stream);
++}
++
+ /***************************************************************************************
+ ** preparespoolfile(fpsrc,spoolfile,title,cmdtitle,job,passwd)
+ ****************************************************************************************
+@@ -1194,16 +1220,16 @@
+     log_event(CPSTATUS, "***Experimental Option: FixNewlines");
+   else
+     log_event(CPDEBUG, "using traditional fgets");
+-  while (fgets2(buffer, BUFSIZE, fpsrc) != NULL) {
++  while (fgets_with_null(buffer, BUFSIZE, fpsrc) != NULL) {
+     if (!strncmp(buffer, "%!", 2) && strncmp(buffer, "%!PS-AdobeFont", 14)) {
+       log_event(CPDEBUG, "found beginning of postscript code: %s", buffer);
+       break;
+     }
+   }
+   log_event(CPDEBUG, "now extracting postscript code");
+-  (void) fputs(buffer, fpdest);
+-  while (fgets2(buffer, BUFSIZE, fpsrc) != NULL) {
+-    (void) fputs(buffer, fpdest);
++  (void) fputs_with_null(buffer, fpdest);
++  while (fgets_with_null(buffer, BUFSIZE, fpsrc) != NULL) {
++    (void) fputs_with_null(buffer, fpdest);
+     if (!is_title && !rec_depth) {
+       memset(title, 0, BUFSIZE);
+       if (sscanf(buffer, "%%%%Title: %"TBUFSIZE"c", title)==1) {

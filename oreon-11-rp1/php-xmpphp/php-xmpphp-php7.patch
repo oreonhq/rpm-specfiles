@@ -1,0 +1,33 @@
+diff -up xmpphp-0.1rc2-r77/XMPPHP/Roster.php.old xmpphp-0.1rc2-r77/XMPPHP/Roster.php
+--- xmpphp-0.1rc2-r77/XMPPHP/Roster.php.old	2016-07-26 13:48:40.398116647 +0200
++++ xmpphp-0.1rc2-r77/XMPPHP/Roster.php	2016-07-26 13:49:24.939348692 +0200
+@@ -118,7 +118,7 @@ class Roster {
+ 	 * @param string $status
+ 	*/
+ 	public function setPresence($presence, $priority, $show, $status) {
+-		list($jid, $resource) = split("/", $presence);
++		list($jid, $resource) = explode("/", $presence);
+ 		if ($show != 'unavailable') {
+ 			if (!$this->isContact($jid)) {
+ 				$this->addContact($jid, 'not-in-roster');
+@@ -137,7 +137,7 @@ class Roster {
+ 	 * @param string $jid
+ 	 */
+ 	public function getPresence($jid) {
+-		$split = split("/", $jid);
++		$split = explode("/", $jid);
+ 		$jid = $split[0];
+ 		if($this->isContact($jid)) {
+ 			$current = array('resource' => '', 'active' => '', 'priority' => -129, 'show' => '', 'status' => ''); //Priorities can only be -128 = 127
+diff -up xmpphp-0.1rc2-r77/XMPPHP/XMLStream.php.old xmpphp-0.1rc2-r77/XMPPHP/XMLStream.php
+--- xmpphp-0.1rc2-r77/XMPPHP/XMLStream.php.old	2016-07-26 13:48:35.867093042 +0200
++++ xmpphp-0.1rc2-r77/XMPPHP/XMLStream.php	2016-07-26 13:49:11.239277319 +0200
+@@ -263,7 +263,7 @@ class XMPPHP_XMLStream {
+ 			$ns_tags = array($xpath);
+ 		}
+ 		foreach($ns_tags as $ns_tag) {
+-			list($l, $r) = split("}", $ns_tag);
++			list($l, $r) = explode("}", $ns_tag);
+ 			if ($r != null) {
+ 				$xpart = array(substr($l, 1), $r);
+ 			} else {

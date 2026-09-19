@@ -1,9 +1,9 @@
-%global source0_hash none
+%global source0_hash 5fb76e3777ce03bd4ded119fb169efeb308a38f43dec009197158abec134441c
 
 %global stable_kf6 stable
 
 Name:          plasma-bigscreen
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later and CC-BY-SA-4.0
 Summary:       A big launcher giving you access to any installed apps and skills
@@ -55,6 +55,7 @@ BuildRequires: cmake(Qt6DBus)
 BuildRequires: cmake(Qt6Network)
 BuildRequires: cmake(Qt6Multimedia)
 BuildRequires: cmake(Qt6WebEngineCore)
+BuildRequires: qt6-qtwebengine-devel >= 6.11.1-5
 BuildRequires: cmake(KF6Config)
 BuildRequires: wayland-devel
 
@@ -125,6 +126,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 
 
 %changelog
+%autochangelog
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

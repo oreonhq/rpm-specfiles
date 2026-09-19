@@ -1,0 +1,60 @@
+diff -uNr a/plugins/jvm/uwsgiplugin.py b/plugins/jvm/uwsgiplugin.py
+--- a/plugins/jvm/uwsgiplugin.py	2024-02-08 17:35:28.000000000 +0100
++++ b/plugins/jvm/uwsgiplugin.py	2024-02-08 21:55:26.627134235 +0100
+@@ -69,11 +69,6 @@
+ 
+ GCC_LIST = ['jvm_plugin']
+ 
+-if 'LD_RUN_PATH' in os.environ:
+-    os.environ['LD_RUN_PATH'] += ':' + JVM_LIBPATH[0][2:]
+-else:
+-    os.environ['LD_RUN_PATH'] = JVM_LIBPATH[0][2:]
+-
+ def post_build(config):
+     if subprocess.call("javac %s/plugins/jvm/uwsgi.java" % os.getcwd(), shell=True) != 0:
+         os._exit(1)
+diff -uNr a/plugins/php/uwsgiplugin.py b/plugins/php/uwsgiplugin.py
+--- a/plugins/php/uwsgiplugin.py	2024-02-08 17:35:28.000000000 +0100
++++ b/plugins/php/uwsgiplugin.py	2024-02-08 21:56:28.630427541 +0100
+@@ -19,7 +19,6 @@
+ 
+ if ld_run_path:
+     LDFLAGS.append('-L%s' % ld_run_path)
+-    os.environ['LD_RUN_PATH'] = ld_run_path
+ 
+ # PHP8 and above does not add the version to the library
+ # name
+diff -uNr a/plugins/python/uwsgiplugin.py b/plugins/python/uwsgiplugin.py
+--- a/plugins/python/uwsgiplugin.py	2024-02-08 17:35:28.000000000 +0100
++++ b/plugins/python/uwsgiplugin.py	2024-02-08 21:55:26.654133927 +0100
+@@ -88,9 +88,6 @@
+             libdir = "%s/lib" % sysconfig.PREFIX
+ 
+         LDFLAGS.append("-L%s" % libdir)
+-        LDFLAGS.append("-Wl,-rpath,%s" % libdir)
+-
+-        os.environ['LD_RUN_PATH'] = "%s" % libdir
+ 
+         LIBS.append('-lpython%s' % get_python_version())
+ else:
+diff -uNr a/plugins/rack/uwsgiplugin.py b/plugins/rack/uwsgiplugin.py
+--- a/plugins/rack/uwsgiplugin.py	2024-02-08 17:35:28.000000000 +0100
++++ b/plugins/rack/uwsgiplugin.py	2024-02-08 21:55:26.655133916 +0100
+@@ -48,7 +48,6 @@
+ 
+ if has_shared == 'yes':
+     LDFLAGS.append('-L' + libpath )
+-    os.environ['LD_RUN_PATH'] = libpath
+     LIBS.append(os.popen(RUBYPATH + " -e \"require 'rbconfig';print '-l' + %s::CONFIG['RUBY_SO_NAME']\"" % rbconfig).read().rstrip())
+ else:
+     rubylibdir = os.popen(RUBYPATH + " -e \"require 'rbconfig';print RbConfig::CONFIG['rubylibdir']\"").read().rstrip()
+diff -uNr a/plugins/ruby19/uwsgiplugin.py b/plugins/ruby19/uwsgiplugin.py
+--- a/plugins/ruby19/uwsgiplugin.py	2024-02-08 17:35:28.000000000 +0100
++++ b/plugins/ruby19/uwsgiplugin.py	2024-02-08 21:55:26.655133916 +0100
+@@ -42,6 +42,5 @@
+ 
+ libpath = os.popen(RUBYPATH + " -e \"require 'rbconfig';print %s::CONFIG['libdir']\"" % rbconfig).read().rstrip()
+ LDFLAGS.append('-L' + libpath )
+-os.environ['LD_RUN_PATH'] = libpath
+ LIBS = os.popen(RUBYPATH + " -e \"require 'rbconfig';print '-l' + %s::CONFIG['RUBY_SO_NAME']\"" % rbconfig).read().rstrip().split()
+ 

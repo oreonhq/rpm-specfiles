@@ -1,0 +1,209 @@
+--- a/configure~	2016-05-18 13:30:44.000000000 -0500
++++ a/configure	2019-09-19 12:39:20.194953235 -0500
+@@ -5528,7 +5528,7 @@
+ fi
+ 
+ 
+-ac_fn_cxx_check_header_mongrel "$LINENO" "GL/glut.h" "ac_cv_header_GL_glut_h" "$ac_includes_default"
++ac_fn_cxx_check_header_mongrel "$LINENO" "GL/freeglut.h" "ac_cv_header_GL_glut_h" "$ac_includes_default"
+ if test "x$ac_cv_header_GL_glut_h" = xyes; then :
+ 
+ else
+--- a/src/libs/tgfclient/tgfclient.h~	2015-04-18 06:04:54.000000000 -0500
++++ a/src/libs/tgfclient/tgfclient.h	2019-09-19 12:51:38.575934219 -0500
+@@ -28,7 +28,7 @@
+ #define __TGFCLIENT__H__
+ 
+ #include <tgf.h>
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <plib/js.h>
+ #include <screen_properties.h>
+ 
+--- a/src/libs/tgfclient/guimenu.cpp~	2008-12-30 21:53:55.000000000 -0600
++++ a/src/libs/tgfclient/guimenu.cpp	2019-09-19 13:03:32.170960830 -0500
+@@ -29,7 +29,7 @@
+ #ifdef WIN32
+ #include <windows.h>
+ #endif
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ 
+ #include <tgfclient.h>
+ #include "gui.h"
+--- a/src/libs/tgfclient/screen.cpp~	2014-05-23 03:38:32.000000000 -0500
++++ a/src/libs/tgfclient/screen.cpp	2019-09-19 13:04:08.051912220 -0500
+@@ -26,7 +26,7 @@
+ #ifdef WIN32
+ #include <windows.h>
+ #endif
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <math.h>
+ #ifndef WIN32
+ #include <unistd.h>
+--- a/src/libs/client/splash.cpp~	2012-06-09 20:59:35.000000000 -0500
++++ a/src/libs/client/splash.cpp	2019-09-19 13:12:42.980214573 -0500
+@@ -20,7 +20,7 @@
+ #include <windows.h>
+ #define HAVE_CONFIG_H
+ #endif
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <portability.h>
+--- a/src/libs/musicplayer/musicplayer.cpp~	2011-12-29 03:23:24.000000000 -0600
++++ a/src/libs/musicplayer/musicplayer.cpp	2019-09-19 13:28:56.391915616 -0500
+@@ -19,7 +19,7 @@
+ 
+ #include "musicplayer.h"
+ 
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <string.h>
+ #include <tgf.h>
+ #include <portability.h>
+--- a/src/linux/main.cpp~	2012-05-31 20:59:42.000000000 -0500
++++ a/src/linux/main.cpp	2019-09-19 14:47:28.144404036 -0500
+@@ -19,7 +19,7 @@
+ 
+ #include <stdlib.h>
+ 
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ 
+ #include <tgfclient.h>
+ #include <client.h>
+--- a/src/modules/graphic/ssggraph/grcar.cppbak	2012-06-06 08:56:39.000000000 -0500
++++ a/src/modules/graphic/ssggraph/grcar.cpp	2019-09-19 15:04:08.907280435 -0500
+@@ -26,7 +26,7 @@
+ #ifdef WIN32
+ #include <windows.h>
+ #endif
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <plib/ssg.h>
+ 
+ #include <tgfclient.h>
+--- a/src/modules/graphic/ssggraph/grcarlight.cppbak	2012-06-06 08:56:39.000000000 -0500
++++ a/src/modules/graphic/ssggraph/grcarlight.cpp	2019-09-19 15:04:08.912280429 -0500
+@@ -25,7 +25,7 @@
+ #ifdef WIN32
+ #include <windows.h>
+ #endif
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <plib/ssg.h>
+ 
+ #include <tgfclient.h>
+--- a/src/modules/graphic/ssggraph/grmain.cppbak	2013-09-01 05:24:22.000000000 -0500
++++ a/src/modules/graphic/ssggraph/grmain.cpp	2019-09-19 15:04:08.929280409 -0500
+@@ -23,7 +23,7 @@
+ #ifdef WIN32
+ #include <windows.h>
+ #endif
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <plib/ssg.h>
+ 
+ #include <tgfclient.h>
+--- a/src/modules/graphic/ssggraph/grscene.cppbak	2012-06-10 04:32:24.000000000 -0500
++++ a/src/modules/graphic/ssggraph/grscene.cpp	2019-09-19 15:04:08.936280401 -0500
+@@ -28,7 +28,7 @@
+ #include <GL/gl.h>
+ #include <GL/glext.h>
+ #endif
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <plib/ssg.h>
+ #include <plib/ssgAux.h>
+ #include <tgfclient.h>
+--- a/src/modules/graphic/ssggraph/grskidmarks.cppbak	2014-02-10 05:09:36.000000000 -0600
++++ a/src/modules/graphic/ssggraph/grskidmarks.cpp	2019-09-19 15:04:08.946280390 -0500
+@@ -26,7 +26,7 @@
+ #ifdef WIN32
+ #include <windows.h>
+ #endif
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <plib/ssg.h>
+ 
+ #include <tgfclient.h>
+--- a/src/modules/graphic/ssggraph/grsmoke.cppbak	2014-02-10 05:06:17.000000000 -0600
++++ a/src/modules/graphic/ssggraph/grsmoke.cpp	2019-09-19 15:04:08.953280382 -0500
+@@ -24,7 +24,7 @@
+ #ifdef WIN32
+ #include <windows.h>
+ #endif
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <plib/ssg.h>
+ 
+ #include <tgfclient.h>
+--- a/src/modules/graphic/ssggraph/grutil.cppbak	2012-06-06 08:56:39.000000000 -0500
++++ a/src/modules/graphic/ssggraph/grutil.cpp	2019-09-19 15:04:08.970280362 -0500
+@@ -25,7 +25,7 @@
+ #ifdef WIN32
+ #include <windows.h>
+ #endif
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <plib/ssg.h>
+ 
+ #include <tgfclient.h>
+--- torcs-1.3.7/src/modules/graphic/ssggraph/grtrackmap.h~	2005-08-05 04:48:30.000000000 -0500
++++ torcs-1.3.7/src/modules/graphic/ssggraph/grtrackmap.h	2019-09-19 15:18:14.897293027 -0500
+@@ -30,7 +30,7 @@
+ #include <car.h>
+ #include <raceman.h>
+ #include <GL/gl.h>
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <GL/glu.h>
+ 
+ #ifndef WIN32
+--- torcs-1.3.7/src/tools/texmapper/maintexmapper.cpp~	2019-09-19 15:21:58.000000000 -0500
++++ torcs-1.3.7/src/tools/texmapper/maintexmapper.cpp	2019-09-19 15:28:43.187525674 -0500
+@@ -28,7 +28,7 @@
+ #include <getopt.h>
+ #include <math.h>
+ #include <plib/ssg.h>
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ 
+ #include <tgfclient.h>
+ 
+--- torcs-1.3.7/src/tools/trackgen/maintrackgen.cpp~	2015-01-16 15:11:34.000000000 -0600
++++ torcs-1.3.7/src/tools/trackgen/maintrackgen.cpp	2019-09-19 15:39:40.532723955 -0500
+@@ -37,7 +37,7 @@
+ #include <math.h>
+ #include <plib/ul.h>
+ #include <plib/ssg.h>
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ 
+ #include <tgfclient.h>
+ #include <track.h>
+--- torcs-1.3.7/src/tools/trackgen/relief.cpp~	2008-11-09 11:50:23.000000000 -0600
++++ torcs-1.3.7/src/tools/trackgen/relief.cpp	2019-09-19 15:40:10.373687581 -0500
+@@ -33,7 +33,7 @@
+ #endif
+ #include <math.h>
+ #include <plib/ssg.h>
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ 
+ #include <tgfclient.h>
+ #include <track.h>
+--- torcs-1.3.7/src/tools/trackgen/objects.cpp~	2019-09-19 15:31:55.000000000 -0500
++++ torcs-1.3.7/src/tools/trackgen/objects.cpp	2019-09-19 15:40:43.867646754 -0500
+@@ -32,7 +32,7 @@
+ #endif
+ #include <math.h>
+ #include <plib/ssg.h>
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ 
+ #include <tgfclient.h>
+ #include <track.h>

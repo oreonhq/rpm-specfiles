@@ -1,0 +1,25 @@
+From 11101c4fb0869919e4ce1a65cd11d55f217f463b Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Mon, 6 Oct 2025 22:26:37 +0200
+Subject: [PATCH] Add missing type annotation for prometheus 0.14 compatibility
+
+---
+ src/metrics.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/metrics.rs b/src/metrics.rs
+index bdd7c9c..eb96d59 100644
+--- a/src/metrics.rs
++++ b/src/metrics.rs
+@@ -433,7 +433,7 @@ impl MonitordPromStats {
+         monitord_stats: &monitord::MonitordStats,
+     ) {
+         debug!("Setting prometheus objects ...");
+-        let no_labels = &[];
++        let no_labels: &[&str] = &[];
+ 
+         // networkd stats
+         if config.networkd.enabled {
+-- 
+2.51.0
+

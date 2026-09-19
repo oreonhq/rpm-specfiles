@@ -1,0 +1,29 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Thu, 5 Feb 2026 13:24:26 +0100
+Subject: [PATCH] Convert to UNIX line endings
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/examples/hello/hello2-3.lua b/examples/hello/hello2-3.lua
+index e5558ac..dfba23a 100644
+--- a/examples/hello/hello2-3.lua
++++ b/examples/hello/hello2-3.lua
+@@ -1,9 +1,9 @@
+--- File    : hello2-3.lua
+--- Purpose : Demonstration of Luerl interface.
+--- See     : ./examples/hello/hello2.erl
+-
+-function no() print("(16) No!") end
+-
+-print("(15) Maybe ...")
+-
++-- File    : hello2-3.lua
++-- Purpose : Demonstration of Luerl interface.
++-- See     : ./examples/hello/hello2.erl
++
++function no() print("(16) No!") end
++
++print("(15) Maybe ...")
++
+ return "(X) Yes!"
+\ No newline at end of file

@@ -1,0 +1,101 @@
+From 2453603748f156a6cde0e810c147dc14a1bbbab8 Mon Sep 17 00:00:00 2001
+From: Linas Vepstas <linasvepstas@gmail.com>
+Date: Fri, 18 Aug 2023 17:20:34 -0500
+Subject: [PATCH] Fix compler warning for function callback cast
+
+---
+ src/ex_angle.c     | 12 ++++++------
+ src/ex_cut_round.c |  6 +++---
+ src/ex_raw.c       | 18 +++++++++---------
+ 3 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/src/ex_angle.c b/src/ex_angle.c
+index c1c7bb0..3a4f9ea 100644
+--- a/src/ex_angle.c
++++ b/src/ex_angle.c
+@@ -113,9 +113,9 @@ void draw_angle_style_front_cap (int ncp,	/* number of contour points */
+    N3F(bi);
+ 
+    tobj = gluNewTess ();
+-   gluTessCallback (tobj, GLU_BEGIN, glBegin);
+-   gluTessCallback (tobj, GLU_VERTEX, glVertex3dv);
+-   gluTessCallback (tobj, GLU_END, glEnd);
++   gluTessCallback (tobj, GLU_BEGIN, (_GLUfuncptr)glBegin);
++   gluTessCallback (tobj, GLU_VERTEX, (_GLUfuncptr)glVertex3dv);
++   gluTessCallback (tobj, GLU_END, (_GLUfuncptr)glEnd);
+ 
+ #ifdef LENIENT_TESSELATOR 
+    gluBeginPolygon (tobj);
+@@ -192,9 +192,9 @@ void draw_angle_style_back_cap (int ncp,	/* number of contour points */
+    N3F (bi);
+ 
+    tobj = gluNewTess ();
+-   gluTessCallback (tobj, GLU_BEGIN, glBegin);
+-   gluTessCallback (tobj, GLU_VERTEX, glVertex3dv);
+-   gluTessCallback (tobj, GLU_END, glEnd);
++   gluTessCallback (tobj, GLU_BEGIN, (_GLUfuncptr)glBegin);
++   gluTessCallback (tobj, GLU_VERTEX, (_GLUfuncptr)glVertex3dv);
++   gluTessCallback (tobj, GLU_END, (_GLUfuncptr)glEnd);
+ 
+ #ifdef LENIENT_TESSELATOR 
+    gluBeginPolygon (tobj);
+diff --git a/src/ex_cut_round.c b/src/ex_cut_round.c
+index 16e0135..e14438e 100644
+--- a/src/ex_cut_round.c
++++ b/src/ex_cut_round.c
+@@ -134,9 +134,9 @@ draw_cut_style_cap_callback (int iloop,
+ #ifdef OPENGL_10
+    GLUtriangulatorObj *tobj;
+    tobj = gluNewTess ();
+-   gluTessCallback (tobj, GLU_BEGIN, glBegin);
+-   gluTessCallback (tobj, GLU_VERTEX, glVertex3dv);
+-   gluTessCallback (tobj, GLU_END, glEnd);
++   gluTessCallback (tobj, GLU_BEGIN, (_GLUfuncptr) glBegin);
++   gluTessCallback (tobj, GLU_VERTEX, (_GLUfuncptr) glVertex3dv);
++   gluTessCallback (tobj, GLU_END, (_GLUfuncptr) glEnd);
+ #endif /* OPENGL_10 */
+ 
+    if (face_color != NULL) C3F (face_color);
+diff --git a/src/ex_raw.c b/src/ex_raw.c
+index bcd8726..7456273 100644
+--- a/src/ex_raw.c
++++ b/src/ex_raw.c
+@@ -151,9 +151,9 @@ void draw_raw_style_end_cap (int ncp,		/* number of contour points */
+    /* malloc the @#$%^&* array that OpenGL wants ! */
+    pts = (double *) malloc (3*ncp*sizeof(double));
+    tobj = gluNewTess ();
+-   gluTessCallback (tobj, GLU_BEGIN, glBegin);
+-   gluTessCallback (tobj, GLU_VERTEX, glVertex3dv);
+-   gluTessCallback (tobj, GLU_END, glEnd);
++   gluTessCallback (tobj, GLU_BEGIN, (_GLUfuncptr)glBegin);
++   gluTessCallback (tobj, GLU_VERTEX, (_GLUfuncptr)glVertex3dv);
++   gluTessCallback (tobj, GLU_END, (_GLUfuncptr)glEnd);
+    gluBeginPolygon (tobj);
+ 
+       /* draw the loop counter clockwise for the front cap */
+@@ -211,9 +211,9 @@ draw_front_contour_cap (int ncp,	/* number of contour points */
+ 
+ #ifdef OPENGL_10
+    tobj = gluNewTess ();
+-   gluTessCallback (tobj, GLU_BEGIN, glBegin);
+-   gluTessCallback (tobj, GLU_VERTEX, glVertex3dv);
+-   gluTessCallback (tobj, GLU_END, glEnd);
++   gluTessCallback (tobj, GLU_BEGIN, (_GLUfuncptr)glBegin);
++   gluTessCallback (tobj, GLU_VERTEX, (_GLUfuncptr)glVertex3dv);
++   gluTessCallback (tobj, GLU_END, (_GLUfuncptr)glEnd);
+    gluBeginPolygon (tobj);
+ 
+    for (j=0; j<ncp; j++) {
+@@ -257,9 +257,9 @@ draw_back_contour_cap (int ncp,	/* number of contour points */
+ 
+ #ifdef OPENGL_10
+    tobj = gluNewTess ();
+-   gluTessCallback (tobj, GLU_BEGIN, glBegin);
+-   gluTessCallback (tobj, GLU_VERTEX, glVertex3dv);
+-   gluTessCallback (tobj, GLU_END, glEnd);
++   gluTessCallback (tobj, GLU_BEGIN, (_GLUfuncptr)glBegin);
++   gluTessCallback (tobj, GLU_VERTEX, (_GLUfuncptr)glVertex3dv);
++   gluTessCallback (tobj, GLU_END, (_GLUfuncptr)glEnd);
+    gluBeginPolygon (tobj);
+ 
+    /* draw the end cap */

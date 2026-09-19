@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash aeac3ec0fa39a26cf9bacd87a30f5d8cf2968116ca99902873499b6cd45f9b17
 
 Name:           kpublictransport
-Version:        26.04.2
+Version:        26.04.3
 Release:        1%{?dist}
 License:        CC0-1.0 AND ODbL-1.0 AND LGPL-2.1-or-later AND BSD-2-Clause AND MIT AND LGPL-2.0-or-later AND BSD-3-Clause
 Summary:        Library to assist with accessing public transport timetables and other data
@@ -51,7 +51,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup
 
 %build
-%cmake_kf6 -DQT_MAJOR_VERSION=6
+%cmake_kf6 -DBUILD_QCH=OFF -DQT_MAJOR_VERSION=6
 %cmake_build
 
 %install
@@ -72,10 +72,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_includedir}/*
 %{_kf6_libdir}/cmake/*
 %{_kf6_libdir}/*.so
-%{_qt6_docdir}/*.tags
- 
+
 %files doc
-%{_qt6_docdir}/*.qch
 
 %changelog
 %autochangelog

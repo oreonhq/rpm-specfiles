@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Alexander Ploumistos <alexpl@fedoraproject.org> -->
+<component type="font">
+	<id>gdouros-aegean</id>
+	<metadata_license> CC0-1.0</metadata_license>
+	<name>Aegean</name>
+	<summary>A font for ancient scripts in the greater Aegean vicinity</summary>
+	<description>
+		<p>
+			Aegean covers the following scripts and symbols: Basic Latin, Greek and Coptic,
+			Greek Extended, some Punctuation and other Symbols, Linear B Syllabary, Linear
+			B Ideograms, Aegean Numbers, Ancient Greek Numbers, Ancient Symbols, Phaistos
+			Disc, Lycian, Carian, Old Italic, Ugaritic, Old Persian, Cypriot Syllabary,
+			Phoenician, Lydian, Archaic Greek Musical Notation, Cretan Hieroglyphs,
+			Cypro-Minoan, Linear A, the Arkalochori Axe, Ancient Greek and Old Italic variant
+			alphabets.
+		</p>
+		<p>
+			Those of the above that are not supported by the Unicode Standard 7.0,
+			they are allocated in the Supplementary Private Use Plane 15.
+			
+			It was created by George Douros.
+		</p>
+	</description>
+	<url type="homepage">http://users.teilar.gr/~g1951d/</url>
+	<updatecontact>alexpl@fedoraproject.org</updatecontact>
+</component>

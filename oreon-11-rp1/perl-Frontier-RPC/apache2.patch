@@ -1,0 +1,65 @@
+From a6259081437a560451c0b6830204e1d81288e46a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 7 Apr 2014 13:53:40 +0200
+Subject: [PATCH] Apache2 support
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Apache/XMLRPC.pm | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/lib/Apache/XMLRPC.pm b/lib/Apache/XMLRPC.pm
+index 1f2aec7..a9f16d2 100644
+--- a/lib/Apache/XMLRPC.pm
++++ b/lib/Apache/XMLRPC.pm
+@@ -10,16 +10,18 @@
+ 
+ package Apache::XMLRPC;
+ 
+-use Apache::Constants qw(:common);
++use Apache2::Const;
++use Apache2::ServerUtil;
+ use Frontier::RPC2;
+ 
+ sub handler {
+    my $r = shift;
+ 
+-   my $conf = $r->server_root_relative( $r->dir_config( "XMLRPC_Config" ) );
++   my $path = $r->dir_config( "XMLRPC_Config" );
++   my $conf = Apache2::ServerUtil::server_root_relative( $r->pool, $path );
+ 
+    if( -f $conf ) {
+-      unless( $rt = do $conf ) {
++      unless( my $rt = do $conf ) {
+          die "Couldn\'t parse conf file ($conf): $@\n"   if $@;
+          die "Couldn\'t compile conf file ($conf): $!\n" unless defined $rt;
+          die "Couldn\'t run conf file ($conf)\n"         unless $rt;
+@@ -28,15 +30,16 @@ sub handler {
+ 
+    my $decoder = Frontier::RPC2->new();
+ 
+-   my $content;
+-   $r->read( $content, $r->header_in( 'Content-length' ) );
++   if (defined $clength and $clength >= 0) {
++       my $content;
++       $r->read( $content, $r->headers_in->{'Content-length'} );
+ 
+-   my $answer = $decoder->serve( $content, $Apache::XMLRPC::map );
++        my $answer = $decoder->serve( $content, $Apache::XMLRPC::map );
+ 
+-   $r->send_http_header();
+-   $r->print($answer);
++        $r->print($answer);
++   }
+ 
+-   return OK;
++   return Apache2::Const::OK();
+ }
+ 
+ 1;
+-- 
+1.9.0
+

@@ -1,0 +1,59 @@
+--- a/applications/NXtranslate/text_xml/xml_retriever_dom.cpp
++++ b/applications/NXtranslate/text_xml/xml_retriever_dom.cpp
+@@ -163,8 +163,8 @@
+   va_start(args,msg);
+ 
+   // get the position of the error
+-  int line=getLineNumber(context);
+-  int col =getColumnNumber(context);
++  int line=xmlSAX2GetLineNumber(context);
++  int col =xmlSAX2GetColumnNumber(context);
+ 
+   // print out the result
+   char str[70];
+@@ -186,8 +186,8 @@
+   va_start(args,msg);
+ 
+   // get the position of the error
+-  int line=getLineNumber(context);
+-  int col =getColumnNumber(context);
++  int line=xmlSAX2GetLineNumber(context);
++  int col =xmlSAX2GetColumnNumber(context);
+ 
+   // print out the result
+   char str[70];
+
+--- a/applications/NXtranslate/xml_parser.cpp
++++ b/applications/NXtranslate/xml_parser.cpp
+@@ -296,7 +296,7 @@
+ 
+   // confirm that maximum node depth is not exceded
+   if(((UserData *)user_data)->mime_types.size()>MAX_NODE_DEPTH)
+-    throw runtime_error("Exceded maximum node depth");
++    throw runtime_error("Exceeded maximum node depth");
+ 
+   // create a new retriever if necessary
+   RetrieverPtr retriever(NULL);
+@@ -463,8 +463,8 @@
+   va_start(args,msg);
+ 
+   // get the position of the error
+-  int line=getLineNumber(context);
+-  int col =getColumnNumber(context);
++  int line=xmlSAX2GetLineNumber(context);
++  int col =xmlSAX2GetColumnNumber(context);
+ 
+   // print out the result
+   char str[70];
+@@ -486,8 +486,8 @@
+   va_start(args,msg);
+ 
+   // get the position of the error
+-  int line=getLineNumber(context);
+-  int col =getColumnNumber(context);
++  int line=xmlSAX2GetLineNumber(context);
++  int col =xmlSAX2GetColumnNumber(context);
+ 
+   // print out the result
+   char str[70];
+

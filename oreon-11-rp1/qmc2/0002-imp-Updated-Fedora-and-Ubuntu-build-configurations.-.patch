@@ -1,0 +1,68 @@
+From 29449822f0e0878dcfc5303d5fbd2f94a73b8ddd Mon Sep 17 00:00:00 2001
+From: Julian Sikorski <belegdol+github@gmail.com>
+Date: Sat, 17 Feb 2024 17:43:06 +0100
+Subject: [PATCH 02/10] imp: Updated Fedora and Ubuntu build configurations.
+ (#36)
+
+* Replaced Fedora 34/35/36/37 with 38/39/40/41.
+* Added Ubuntu 20.04/23.10/24.04 referencing Debian configuration.
+---
+ arch/Linux/{Fedora_release_34.cfg => Fedora_release_38.cfg} | 0
+ arch/Linux/{Fedora_release_35.cfg => Fedora_release_39.cfg} | 0
+ arch/Linux/{Fedora_release_36.cfg => Fedora_release_40.cfg} | 0
+ arch/Linux/{Fedora_release_37.cfg => Fedora_release_41.cfg} | 0
+ arch/Linux/Ubuntu_20.04.cfg                                 | 1 +
+ arch/Linux/Ubuntu_23.10.cfg                                 | 1 +
+ arch/Linux/Ubuntu_24.04.cfg                                 | 1 +
+ 7 files changed, 3 insertions(+)
+ rename arch/Linux/{Fedora_release_34.cfg => Fedora_release_38.cfg} (100%)
+ rename arch/Linux/{Fedora_release_35.cfg => Fedora_release_39.cfg} (100%)
+ rename arch/Linux/{Fedora_release_36.cfg => Fedora_release_40.cfg} (100%)
+ rename arch/Linux/{Fedora_release_37.cfg => Fedora_release_41.cfg} (100%)
+ create mode 120000 arch/Linux/Ubuntu_20.04.cfg
+ create mode 120000 arch/Linux/Ubuntu_23.10.cfg
+ create mode 120000 arch/Linux/Ubuntu_24.04.cfg
+
+diff --git a/arch/Linux/Fedora_release_34.cfg b/arch/Linux/Fedora_release_38.cfg
+similarity index 100%
+rename from arch/Linux/Fedora_release_34.cfg
+rename to arch/Linux/Fedora_release_38.cfg
+diff --git a/arch/Linux/Fedora_release_35.cfg b/arch/Linux/Fedora_release_39.cfg
+similarity index 100%
+rename from arch/Linux/Fedora_release_35.cfg
+rename to arch/Linux/Fedora_release_39.cfg
+diff --git a/arch/Linux/Fedora_release_36.cfg b/arch/Linux/Fedora_release_40.cfg
+similarity index 100%
+rename from arch/Linux/Fedora_release_36.cfg
+rename to arch/Linux/Fedora_release_40.cfg
+diff --git a/arch/Linux/Fedora_release_37.cfg b/arch/Linux/Fedora_release_41.cfg
+similarity index 100%
+rename from arch/Linux/Fedora_release_37.cfg
+rename to arch/Linux/Fedora_release_41.cfg
+diff --git a/arch/Linux/Ubuntu_20.04.cfg b/arch/Linux/Ubuntu_20.04.cfg
+new file mode 120000
+index 000000000..7ab1dcc2f
+--- /dev/null
++++ b/arch/Linux/Ubuntu_20.04.cfg
+@@ -0,0 +1 @@
++Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Ubuntu_23.10.cfg b/arch/Linux/Ubuntu_23.10.cfg
+new file mode 120000
+index 000000000..7ab1dcc2f
+--- /dev/null
++++ b/arch/Linux/Ubuntu_23.10.cfg
+@@ -0,0 +1 @@
++Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Ubuntu_24.04.cfg b/arch/Linux/Ubuntu_24.04.cfg
+new file mode 120000
+index 000000000..7ab1dcc2f
+--- /dev/null
++++ b/arch/Linux/Ubuntu_24.04.cfg
+@@ -0,0 +1 @@
++Debian.cfg
+\ No newline at end of file
+-- 
+2.44.0
+

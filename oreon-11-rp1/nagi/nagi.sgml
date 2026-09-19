@@ -1,0 +1,105 @@
+<!doctype refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+
+  <!ENTITY dhfirstname "<firstname>Jarno</firstname>">
+  <!ENTITY dhsurname   "<surname>Elonen</surname>">
+  <!ENTITY dhdate      "<date>2003-02-03</date>">
+  <!ENTITY dhsection   "<manvolnum>1</manvolnum>">
+  <!ENTITY dhemail     "<email>elonen@iki.fi</email>">
+  <!ENTITY dhusername  "elonen">
+  <!ENTITY dhucpackage "<refentrytitle>nagi</refentrytitle>">
+  <!ENTITY dhpackage   "nagi">
+
+  <!ENTITY debian      "<productname>Debian</productname>">
+  <!ENTITY gnu         "<acronym>GNU</acronym>">
+]>
+
+<refentry>
+  <refentryinfo>
+    <address>
+      &dhemail;
+    </address>
+    <author>
+      &dhfirstname;
+      &dhsurname;
+    </author>
+    <copyright>
+      <year>2003</year>
+      <holder>&dhusername;</holder>
+    </copyright>
+    &dhdate;
+  </refentryinfo>
+  <refmeta>
+    &dhucpackage;
+
+    &dhsection;
+  </refmeta>
+  <refnamediv>
+    <refname>&dhpackage;</refname>
+
+    <refpurpose>Sierra Online (tm) AGI game interpreter</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>&dhpackage;</command>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1>
+    <title>DESCRIPTION</title>
+
+   <para>AGI, or the Adventure Game Interpreter, was developed and used by Sierra
+   Online for their games, most notably the famous "Quest-series" in the late
+   1980's. Nagi is an open source interpreter for playing AGI games.</para>
+
+   <para>To start playing an AGI game, change to the directory where the
+   AGI resources are and execute <command>nagi</command> without any
+   parameters.</para>
+
+   <para>Nagi supports a wide range of old Sierra games (you need the original
+   files) as well as new AGI resources developed with tools like the
+   Linux AGI Studio.</para>
+
+   <para>This manual page was written for the &debian; distribution
+   because the original program is bundled with neither a manual page
+   nor much documentation in other formats. For more information, visit
+   <ulink url="http://www.agidev.com/projects/nagi/">Nagi website</ulink>.
+   </para>
+
+  </refsect1>
+  <refsect1>
+    <title>SEE ALSO</title>
+
+    <para>sarien (1).</para>
+
+  </refsect1>
+  <refsect1>
+    <title>AUTHOR</title>
+
+    <para>This manual page was written by &dhusername; &dhemail; for
+      the &debian; system (but may be used by others).  Permission is
+      granted to copy, distribute and/or modify this document under
+      the terms of the &gnu; Free Documentation
+      License, Version 1.1 or any later version published by the Free
+      Software Foundation; with no Invariant Sections, no Front-Cover
+      Texts and no Back-Cover Texts.</para>
+
+  </refsect1>
+</refentry>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:2
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-default-dtd-file:nil
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->
+
+

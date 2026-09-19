@@ -1,0 +1,14 @@
+diff --git a/sources/pyside6/cmake/Macros/PySideModules.cmake b/sources/pyside6/cmake/Macros/PySideModules.cmake
+index 86791f4..5e99627 100644
+--- a/sources/pyside6/cmake/Macros/PySideModules.cmake
++++ b/sources/pyside6/cmake/Macros/PySideModules.cmake
+@@ -241,6 +241,9 @@ macro(create_pyside_module)
+ 
+     add_custom_command( OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/mjb_rejected_classes.log"
+                         BYPRODUCTS ${${module_SOURCES}}
++                        COMMAND ${CMAKE_COMMAND} -E make_directory
++                                "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${module_NAME}.dir/PySide6/${module_NAME}"
++                        COMMAND_EXPAND_LISTS
+                         COMMAND ${shiboken_command}
+                         DEPENDS ${total_type_system_files}
+                                 ${module_GLUE_SOURCES}

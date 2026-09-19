@@ -1,0 +1,74 @@
+%global source0_hash 5772d4d1830664404d8f6ed96d9c35f6e7a53c60b1ac5571cd2a6183c7e633ed
+
+Name:           mmsd-tng
+Version:        2.6.4
+Release:        %autorelease
+Summary:        Multimedia Messaging Service
+
+License:        GPL-2.0-or-later
+URL:            https://gitlab.com/kop316/mmsd
+Source0:        https://gitlab.com/kop316/mmsd/-/archive/%{version}/mmsd-%{version}.tar.gz
+
+Source1:        mmsd-tng.service
+
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+%if !%{defined fc40} && !%{defined fc41}
+ExcludeArch:    %{ix86}
+%endif
+
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  meson
+BuildRequires:  pkgconfig(mobile-broadband-provider-info)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(mm-glib)
+BuildRequires:  pkgconfig(libsoup-3.0)
+BuildRequires:  pkgconfig(libcares)
+BuildRequires:  cmake(libphonenumber)
+BuildRequires:  protobuf-devel
+BuildRequires:  pkgconfig(dbus-1)
+BuildRequires:  pkgconfig(json-c)
+BuildRequires:  pkgconfig(mm-glib)
+BuildRequires:  systemd-devel
+BuildRequires:  systemd-rpm-macros
+
+Requires:       pkgconfig(mobile-broadband-provider-info)
+Requires:       systemd
+
+%description
+mmsd-tng is a lower level daemon that transmits and recieves MMSes. It works with
+both the Modem Manager stack.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n mmsd-%{version}
+
+%build
+%meson -Dbuild-mmsctl=true
+%meson_build
+
+%check
+%meson_test
+
+%install
+%meson_install
+
+mkdir -p %{buildroot}%{_userunitdir}
+install -pDm644 %{SOURCE1} %{buildroot}%{_userunitdir}
+
+%preun
+%systemd_user_preun mmsd-tng.service
+
+%post
+%systemd_user_post mmsd-tng.service
+
+%files
+%license COPYING
+%doc README
+%{_bindir}/mmsdtng
+%{_bindir}/mmsctl
+%{_userunitdir}/mmsd-tng.service
+
+%changelog
+%autochangelog

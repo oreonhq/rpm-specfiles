@@ -1,0 +1,23 @@
+hash: 52e0d0fb98aa5e255088308cd73a5d2293171e43140c02db1acc20c98ebdf4e1
+imports:
+- name: github.com/stretchr/testify
+  subpackages:
+  - assert
+  version: f6abca593680b2315d2075e0f5e2a9751e3f431a
+- name: github.com/pmezard/go-difflib
+  subpackages:
+  - difflib
+  version: 792786c7400a136282c1664665ae0a8db921c6c2
+- name: github.com/davecgh/go-spew
+  subpackages:
+  - spew
+  version: 782f4967f2dc4564575ca782fe2d04090b5faca8
+- name: github.com/gucumber/gucumber
+  subpackages:
+  - gherkin
+  - ''
+  version: 5903a8deba47bd11299556c6151b3cbe0fbec3d4
+- name: github.com/shiena/ansicolor
+  version: a422bbe96644373c5753384a59d678f7d261ff10
+updated: '2018-06-17T21:30:31.897769+00:00'
+

@@ -1,0 +1,186 @@
+From e0ab7a6a1c5f838e95e47a03e599ebe51b3b2d64 Mon Sep 17 00:00:00 2001
+From: Charalampos Stratakis <cstratak@redhat.com>
+Date: Tue, 10 Feb 2026 20:29:11 +0100
+Subject: [PATCH 1/2] Add from_python/to_python specializations for longlong
+ and ulonglong
+
+Commit 854197c67 added Python conversion specializations for all numpy
+type headers but missed longlong and ulonglong. On x86_64 this is
+harmless because int64_t is long, mapped through the int64 functor.
+
+On i686 int64_t is long long, so np.int64/np.uint64 resolve to the
+longlong/ulonglong functors which lack the conversion code, causing
+incomplete type errors during compilation.
+---
+ pythran/pythonic/include/numpy/longlong.hpp  | 19 ++++++++++++++
+ pythran/pythonic/include/numpy/ulonglong.hpp | 19 ++++++++++++++
+ pythran/pythonic/numpy/longlong.hpp          | 27 ++++++++++++++++++++
+ pythran/pythonic/numpy/ulonglong.hpp         | 27 ++++++++++++++++++++
+ 4 files changed, 92 insertions(+)
+
+diff --git a/pythran/pythonic/include/numpy/longlong.hpp b/pythran/pythonic/include/numpy/longlong.hpp
+index 393a0658f..2e3727fb8 100644
+--- a/pythran/pythonic/include/numpy/longlong.hpp
++++ b/pythran/pythonic/include/numpy/longlong.hpp
+@@ -26,4 +26,23 @@ namespace numpy
+ } // namespace numpy
+ PYTHONIC_NS_END
+ 
++#ifdef ENABLE_PYTHON_MODULE
++
++#include "pythonic/python/core.hpp"
++
++PYTHONIC_NS_BEGIN
++
++template <>
++struct to_python<numpy::functor::longlong> {
++  static PyObject *convert(numpy::functor::longlong const &c);
++};
++
++template <>
++struct from_python<numpy::functor::longlong> {
++  static bool is_convertible(PyObject *obj);
++  static numpy::functor::longlong convert(PyObject *obj);
++};
++PYTHONIC_NS_END
++#endif
++
+ #endif
+diff --git a/pythran/pythonic/include/numpy/ulonglong.hpp b/pythran/pythonic/include/numpy/ulonglong.hpp
+index b78622d95..238db2dbb 100644
+--- a/pythran/pythonic/include/numpy/ulonglong.hpp
++++ b/pythran/pythonic/include/numpy/ulonglong.hpp
+@@ -26,4 +26,23 @@ namespace numpy
+ } // namespace numpy
+ PYTHONIC_NS_END
+ 
++#ifdef ENABLE_PYTHON_MODULE
++
++#include "pythonic/python/core.hpp"
++
++PYTHONIC_NS_BEGIN
++
++template <>
++struct to_python<numpy::functor::ulonglong> {
++  static PyObject *convert(numpy::functor::ulonglong const &c);
++};
++
++template <>
++struct from_python<numpy::functor::ulonglong> {
++  static bool is_convertible(PyObject *obj);
++  static numpy::functor::ulonglong convert(PyObject *obj);
++};
++PYTHONIC_NS_END
++#endif
++
+ #endif
+diff --git a/pythran/pythonic/numpy/longlong.hpp b/pythran/pythonic/numpy/longlong.hpp
+index 1fe2865e2..10dcdddae 100644
+--- a/pythran/pythonic/numpy/longlong.hpp
++++ b/pythran/pythonic/numpy/longlong.hpp
+@@ -34,4 +34,31 @@ namespace numpy
+ } // namespace numpy
+ PYTHONIC_NS_END
+ 
++#ifdef ENABLE_PYTHON_MODULE
++
++#include "pythonic/python/core.hpp"
++#include "numpy/arrayscalars.h"
++
++PYTHONIC_NS_BEGIN
++
++inline PyObject *
++to_python<numpy::functor::longlong>::convert(numpy::functor::longlong const &c)
++{
++  return (PyObject*)&PyLongLongArrType_Type;
++}
++
++inline bool from_python<numpy::functor::longlong>::is_convertible(PyObject *obj)
++{
++  return obj == (PyObject*)&PyLongLongArrType_Type;
++}
++
++inline numpy::functor::longlong
++from_python<numpy::functor::longlong>::convert(PyObject *obj)
++{
++  return {};
++}
++
++PYTHONIC_NS_END
++#endif
++
+ #endif
+diff --git a/pythran/pythonic/numpy/ulonglong.hpp b/pythran/pythonic/numpy/ulonglong.hpp
+index 4e536d973..1ad287648 100644
+--- a/pythran/pythonic/numpy/ulonglong.hpp
++++ b/pythran/pythonic/numpy/ulonglong.hpp
+@@ -34,4 +34,31 @@ namespace numpy
+ } // namespace numpy
+ PYTHONIC_NS_END
+ 
++#ifdef ENABLE_PYTHON_MODULE
++
++#include "pythonic/python/core.hpp"
++#include "numpy/arrayscalars.h"
++
++PYTHONIC_NS_BEGIN
++
++inline PyObject *
++to_python<numpy::functor::ulonglong>::convert(numpy::functor::ulonglong const &c)
++{
++  return (PyObject*)&PyULongLongArrType_Type;
++}
++
++inline bool from_python<numpy::functor::ulonglong>::is_convertible(PyObject *obj)
++{
++  return obj == (PyObject*)&PyULongLongArrType_Type;
++}
++
++inline numpy::functor::ulonglong
++from_python<numpy::functor::ulonglong>::convert(PyObject *obj)
++{
++  return {};
++}
++
++PYTHONIC_NS_END
++#endif
++
+ #endif
+
+From 617d3bf83502d8c8ffb1f8eb46cde767603771e8 Mon Sep 17 00:00:00 2001
+From: Charalampos Stratakis <cstratak@redhat.com>
+Date: Wed, 11 Feb 2026 15:18:57 +0100
+Subject: [PATCH 2/2] Fix uint functor using wrong numpy C API type object
+
+The code was using PyUIntArrType_Type (unsigned int) instead of
+PyULongArrType_Type (unsigned long). Worked on 64-bit by accident
+through macro aliasing but fails on 32-bit with runtime TypeErrors.
+---
+ pythran/pythonic/numpy/uint.hpp | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/pythran/pythonic/numpy/uint.hpp b/pythran/pythonic/numpy/uint.hpp
+index 1fca195c6..0c504a8af 100644
+--- a/pythran/pythonic/numpy/uint.hpp
++++ b/pythran/pythonic/numpy/uint.hpp
+@@ -43,18 +43,12 @@ PYTHONIC_NS_BEGIN
+ 
+ inline PyObject *to_python<numpy::functor::uint>::convert(numpy::functor::uint const &c)
+ {
+-  return (PyObject *)&PyUIntArrType_Type;
++  return (PyObject *)&PyULongArrType_Type;
+ }
+ 
+ inline bool from_python<numpy::functor::uint>::is_convertible(PyObject *obj)
+ {
+-  return obj == (PyObject *)&PyUIntArrType_Type ||
+-#if NPY_SIZEOF_INTP == NPY_SIZEOF_LONG
+-         obj == (PyObject *)&PyUInt64ArrType_Type
+-#else
+-         obj == (PyObject *)&PyUInt32ArrType_Type
+-#endif
+-      ;
++  return obj == (PyObject *)&PyULongArrType_Type;
+ }
+ 
+ inline numpy::functor::uint from_python<numpy::functor::uint>::convert(PyObject *obj)

@@ -1,0 +1,17 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sat, 14 May 2016 11:39:24 +0300
+Subject: [PATCH] Be more greedy while loading schemas
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/riak_core_cli_registry.erl b/src/riak_core_cli_registry.erl
+index 3701a85..d7bcfcb 100644
+--- a/src/riak_core_cli_registry.erl
++++ b/src/riak_core_cli_registry.erl
+@@ -50,5 +50,5 @@ load_schema() ->
+         {ok, Directories} ->
+             ok = clique_config:load_schema(Directories);
+         _ ->
+-            ok = clique_config:load_schema([code:lib_dir()])
++            ok = clique_config:load_schema([code:lib_dir() ++ "/*/priv/"])
+     end.

@@ -10,7 +10,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        0.3.6.4
+Version:        0.4.0
 Release:        %autorelease
 Summary:        Http-client backend using the connection package and tls library
 
@@ -106,7 +106,8 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }# Begin cabal-rpm setup:
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 dos2unix -k -n %{SOURCE1} %{pkg_name}.cabal
 # End cabal-rpm setup

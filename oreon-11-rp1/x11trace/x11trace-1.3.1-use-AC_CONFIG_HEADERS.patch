@@ -1,0 +1,23 @@
+Use AC_CONFIG_HEADERS() instead of AM_CONFIG_HEADER()
+
+From: David Howells <dhowells@redhat.com>
+
+Use AC_CONFIG_HEADERS() instead of AM_CONFIG_HEADER() as the latter is
+obsolete.
+---
+ configure.ac |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 1c32aa6..5277115 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -5,7 +5,7 @@ dnl
+ AC_INIT(xtrace, 1.3.1, brlink@debian.org)
+ AC_CONFIG_SRCDIR(main.c)
+ AC_CONFIG_AUX_DIR(ac)
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADERS(config.h)
+ AM_INIT_AUTOMAKE([-Wall -Werror])
+ 
+ AM_MAINTAINER_MODE

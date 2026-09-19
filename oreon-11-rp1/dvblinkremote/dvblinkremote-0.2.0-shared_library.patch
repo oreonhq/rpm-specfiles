@@ -1,0 +1,19 @@
+diff -up ./libdvblinkremote/src/CMakeLists.txt.orig ./libdvblinkremote/src/CMakeLists.txt
+--- ./libdvblinkremote/src/CMakeLists.txt.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/CMakeLists.txt	2020-08-13 10:42:49.183943669 +0200
+@@ -81,7 +81,7 @@ INCLUDE_DIRECTORIES(
+ #############################################################
+ # dvblinkremote library
+ 
+-ADD_LIBRARY(${DVBLINKREMOTE_LIBRARY_NAME} STATIC ${LIBDVBLINKREMOTE_SOURCES} ${LIBDVBLINKREMOTE_PUBL_HEADERS} ${LIBDVBLINKREMOTE_INT_HEADERS})
++ADD_LIBRARY(${DVBLINKREMOTE_LIBRARY_NAME} SHARED ${LIBDVBLINKREMOTE_SOURCES} ${LIBDVBLINKREMOTE_PUBL_HEADERS} ${LIBDVBLINKREMOTE_INT_HEADERS})
+ 
+ IF(WITH_CURL AND CURL_FOUND)
+   SET_TARGET_PROPERTIES(${DVBLINKREMOTE_LIBRARY_NAME} PROPERTIES
+@@ -110,4 +110,4 @@ ENDIF()
+ # install
+ 
+ INSTALL(TARGETS ${DVBLINKREMOTE_LIBRARY_NAME} DESTINATION ${DVBLINKREMOTE_LIB_DIR} EXPORT libdvblinkremote-targets)
+-install(EXPORT libdvblinkremote-targets DESTINATION ${DVBLINKREMOTE_LIB_DIR})
+\ Pas de fin de ligne à la fin du fichier
++install(EXPORT libdvblinkremote-targets DESTINATION ${DVBLINKREMOTE_LIB_DIR})

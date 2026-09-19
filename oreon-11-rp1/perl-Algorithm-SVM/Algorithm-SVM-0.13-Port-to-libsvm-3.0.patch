@@ -1,0 +1,67 @@
+From c26aa307a3bfa74328e42061437c5467826f7ed3 Mon Sep 17 00:00:00 2001
+From: Mathieu Bridon <bochecha@fedoraproject.org>
+Date: Tue, 21 Aug 2012 12:14:18 +0800
+Subject: [PATCH 2/2] Port to libsvm >= 3.0
+
+The libsvm README file states the following:
+
+- Function: void svm_free_and_destroy_model(struct svm_model **model_ptr_ptr);
+
+    This function frees the memory used by a model and destroys the model
+    structure. It is equivalent to svm_destroy_model, which
+    is deprecated after version 3.0.
+---
+ bindings.cpp |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/bindings.cpp b/bindings.cpp
+index 70cb3ab..af0b29f 100644
+--- a/bindings.cpp
++++ b/bindings.cpp
+@@ -166,7 +166,7 @@ int SVM::train(int retrain) {
+ 
+   // Free any old model we have.
+   if(model != NULL) {
+-    svm_destroy_model(model);
++    svm_free_and_destroy_model(&model);
+     model = NULL;
+   }
+ 
+@@ -282,7 +282,7 @@ int SVM::loadModel(char *filename) {
+   }
+ 
+   if(model != NULL) {
+-    svm_destroy_model(model);
++    svm_free_and_destroy_model(&model);
+     model = NULL;
+   }
+ 
+@@ -357,7 +357,7 @@ double SVM::crossValidate(int nfolds) {
+ 	sumyy += y*y;
+ 	sumvy += v*y;
+       }
+-      svm_destroy_model(submodel);
++      svm_free_and_destroy_model(&submodel);
+       // cout << "Mean squared error = %g\n", error/(end-begin));
+       total_error += error;			
+     } else {
+@@ -368,7 +368,7 @@ double SVM::crossValidate(int nfolds) {
+ 	double v = svm_predict(submodel,prob->x[j]);
+ 	if(v == prob->y[j]) ++correct;
+       }
+-      svm_destroy_model(submodel);
++      svm_free_and_destroy_model(&submodel);
+       //cout << "Accuracy = " << 100.0*correct/(end-begin) << " (" <<
+       //correct << "/" << (end-begin) << endl;
+       total_correct += correct;
+@@ -423,6 +423,6 @@ int SVM::checkProbabilityModel() {
+ 
+ SVM::~SVM() {
+ 	if(x_space!=NULL) { free_x_space(); }
+-  if(model != NULL) { svm_destroy_model(model); model=NULL; }
++  if(model != NULL) { svm_free_and_destroy_model(&model); model=NULL; }
+   if(prob != NULL) { free(prob); prob=NULL; }
+ }
+-- 
+1.7.1
+

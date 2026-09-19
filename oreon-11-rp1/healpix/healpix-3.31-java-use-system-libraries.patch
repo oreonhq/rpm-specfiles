@@ -1,0 +1,11 @@
+diff -Naur Healpix_3.31/src/java/build.xml Healpix_3.31.new/src/java/build.xml
+--- Healpix_3.31/src/java/build.xml	2016-03-21 23:56:43.000000000 +0100
++++ Healpix_3.31.new/src/java/build.xml	2017-04-15 15:08:43.538053744 +0200
+@@ -1,6 +1,6 @@
+ <?xml version="1.0"?>
+ <project name="HEALPix build file" default="all" basedir=".">
+-  <property name="lib" value="${basedir}/lib"/>
++  <property name="lib" value="/usr/share/java"/>
+   <property name="classes" value="${basedir}/classes"/>
+   <property name="dist" value="${basedir}/dist"/>
+   <property name="src" value="${basedir}/src"/>

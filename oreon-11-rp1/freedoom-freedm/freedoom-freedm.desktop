@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Freedoom DeathMatch
+Comment=Doom styled first person shooter deathmatch game
+Exec=prboom -iwad /usr/share/doom/freedm.wad
+Icon=freedoom
+Terminal=false
+Type=Application
+Categories=Game;ActionGame;
+Keywords=game;freedoom;doom;first;person;shooter;deathmatch;

@@ -1,0 +1,10 @@
+diff -up ./tests/meson.build.orig ./tests/meson.build
+--- ./tests/meson.build.orig	2024-11-22 03:52:11.000000000 -0500
++++ ./tests/meson.build	2024-12-04 22:13:10.459565206 -0500
+@@ -1,5 +1,5 @@
+ python = import('python').find_installation('python3',
+-    modules : [ 'cangjie', 'coverage' ])
++    modules : [ 'cangjie' ])
+ 
+ # Run the tests folder as a module
+ # This is the equivalent of running `python -m tests` in the repo folder

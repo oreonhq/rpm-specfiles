@@ -1,0 +1,22 @@
+Subject: [PATCH] Remove `LIB_SUFFIX` reference
+---
+Index: cmake/Macros.cmake
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cmake/Macros.cmake b/cmake/Macros.cmake
+--- a/cmake/Macros.cmake	(revision e153a8a4ce524ceeead1c84a24291b29f8c43b0b)
++++ b/cmake/Macros.cmake	(revision 6f2c73d15bdbfc59fae755437f91ecb70d81d5b5)
+@@ -73,8 +73,8 @@
+ 
+     # add the install rule
+     install(TARGETS ${target}
+-            RUNTIME DESTINATION bin COMPONENT bin
+-            LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin
+-            ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel)
++            RUNTIME COMPONENT bin
++            LIBRARY COMPONENT bin
++            ARCHIVE COMPONENT devel)
+ 
+ endmacro()

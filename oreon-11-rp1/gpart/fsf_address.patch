@@ -1,0 +1,19 @@
+diff -urN gpart-0.3.orig/COPYING gpart-0.3/COPYING
+--- gpart-0.3.orig/COPYING	2022-08-02 10:29:59.222518126 -0500
++++ gpart-0.3/COPYING	2022-08-02 10:30:48.165406042 -0500
+@@ -2,10 +2,11 @@
+ 		    GNU GENERAL PUBLIC LICENSE
+ 		       Version 2, June 1991
+ 
+- Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+-                          675 Mass Ave, Cambridge, MA 02139, USA
+- Everyone is permitted to copy and distribute verbatim copies
+- of this license document, but changing it is not allowed.
++Copyright (C) 1989, 1991 Free Software Foundation, Inc.  
++51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
++
++Everyone is permitted to copy and distribute verbatim copies
++of this license document, but changing it is not allowed.
+ 
+ 			    Preamble
+ 

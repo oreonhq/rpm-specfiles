@@ -1,0 +1,12 @@
+--- gcg-4.0.0/CMakeLists.txt.orig	2025-11-20 03:01:09.000000000 -0700
++++ gcg-4.0.0/CMakeLists.txt	2025-11-25 19:38:38.133283383 -0700
+@@ -307,7 +307,8 @@ if(SYM STREQUAL "bliss" OR SYM STREQUAL
+    # if sbliss: sassy is a header-only library and is already included by SCIP
+ elseif(SYM STREQUAL "nauty" OR SYM STREQUAL "snauty")
+    if(NOT GCG_DEV_BUILD AND NOT SCIPOptSuite_SOURCE_DIR)
+-      find_package(NAUTY REQUIRED)
++      find_package(PkgConfig REQUIRED)
++      pkg_check_modules(NAUTY REQUIRED libnauty)
+       include_directories(${NAUTY_INCLUDE_DIRS})
+       set(SYM_LIBRARIES ${NAUTY_LIBRARIES})
+       set(SYM_PIC_LIBRARIES ${NAUTY_LIBRARIES})

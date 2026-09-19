@@ -1,0 +1,24 @@
+Index: soundmodem-0.20/soundcard/ptt.c
+===================================================================
+--- soundmodem-0.20.orig/soundcard/ptt.c
++++ soundmodem-0.20/soundcard/ptt.c
+@@ -71,6 +71,10 @@
+ #include <linux/hidraw.h>
+ #endif
+ 
++#ifndef HAMLIB_FILPATHLEN
++#define HAMLIB_FILPATHLEN FILEPATHLEN
++#endif
++
+ /* ---------------------------------------------------------------------- */
+ struct modemparams pttparams[] = {
+ 	{ "file", "PTT Driver", "Path name of the serial, parallel or USB HID port for outputting PTT", "none", MODEMPAR_COMBO, 
+@@ -204,7 +208,7 @@ int pttinit(struct pttio *state, const c
+ 			logprintf(MLOG_ERROR, "Hamlib: rig_init model=%d\n", rig_modl);
+ 			goto the_end;
+ 		}
+-		strncpy(state->u.rig_ptr->state.rigport.pathname, path, FILPATHLEN);
++		strncpy(state->u.rig_ptr->state.rigport.pathname, path, HAMLIB_FILPATHLEN);
+ 
+ 		logprintf(MLOG_INFO, "Hamlib: pttinit parsing %s\n", ptr_key ? ptr_key : "NULL" );
+ 

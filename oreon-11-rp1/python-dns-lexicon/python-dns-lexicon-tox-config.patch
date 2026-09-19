@@ -1,0 +1,14 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 4122ff9..936bbdc 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -126,8 +126,7 @@ extend-ignore = [ "E203", "E501" ]
+ envlist = [ "cover", "lint" , "mypy" ]
+ 
+ [tool.tox.env_run_base]
+-runner = "uv-venv-lock-runner"
+-with_dev = true
++with_dev = false
+ extras = [ "full" ]
+ setenv.PYTEST_ADDOPTS = "--numprocesses auto"
+ setenv.PYTHONHASHSEED = "0"

@@ -1,0 +1,35 @@
+From e9dbbbb276cdefbe02f94e8b12388f90ea53255d Mon Sep 17 00:00:00 2001
+From: Matthew Flatt <mflatt@racket-lang.org>
+Date: Wed, 5 Nov 2025 06:22:58 -0700
+Subject: [PATCH] pb foreign-function interface: refine `union` handling for
+ s390x
+
+With pb, foreign calls in general use libffi, which does not provide
+support for `union` arguments and results. The binding in "c/ffi.c"
+approximates `union` handling by constructing a `struct` description
+that is likely to be treated the same in the platform's ABI. The
+approximation was wrong for s390x in the case of `union`s that contain
+only floating-point fields, so add a special case for s390x. There are
+surely other platforms that would need similar treatment, but s390x is
+relevant because there's no native-code backend for that architecture.
+---
+ c/ffi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/c/ffi.c b/c/ffi.c
+index c6ee48a25..0a0e22487 100644
+--- a/c/ffi.c
++++ b/c/ffi.c
+@@ -145,6 +145,12 @@ ffi_type *decode_type(alloc_state *alloc, ptr type, ffi_abi abi, IBOOL *all_floa
+         type = Scdr(type);
+       }
+ 
++# ifdef __s390x__
++      /* s390x: unions containing only floats are not treated the
++         same as structs containing only floats */
++      union_all_float = 0;
++# endif
++
+       if (!union_all_float)
+         *all_float = 0;
+ 

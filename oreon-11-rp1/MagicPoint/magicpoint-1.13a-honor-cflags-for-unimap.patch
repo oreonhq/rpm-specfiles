@@ -1,0 +1,15 @@
+diff -up magicpoint-1.13a/Imakefile.in~ magicpoint-1.13a/Imakefile.in
+--- magicpoint-1.13a/Imakefile.in~	2007-12-03 10:08:40.000000000 +0100
++++ magicpoint-1.13a/Imakefile.in	2016-02-14 17:23:07.908738177 +0100
+@@ -102,11 +102,6 @@ grammar.c tokdefs.h: $(srcdir)/grammar.y
+ 	mv y.tab.c grammar.c
+ 	mv y.tab.h tokdefs.h
+ 
+-# -O2 will work badly...
+-unimap.o:
+-	$(CC) -c $(CCOPTIONS) $(THREADS_CFLAGS) $(ALLDEFINES) \
+-		-I$(srcdir) $(DEFS) $(OPTFLAGS) unimap.c
+-
+ # missing libraries
+ memcmp.o: missing/memcmp.c
+ 	$(CC) -c $(CFLAGS) -I$(srcdir) $(DEFS) $(OPTFLAGS) \

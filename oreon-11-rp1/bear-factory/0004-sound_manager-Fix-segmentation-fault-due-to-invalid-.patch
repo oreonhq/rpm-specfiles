@@ -1,0 +1,35 @@
+From 870f77ee9a45bd17993d36ddf2840e07ad62e73c Mon Sep 17 00:00:00 2001
+From: Quipyowert2 <38995150+Quipyowert2@users.noreply.github.com>
+Date: Thu, 11 Aug 2022 23:20:20 +0200
+Subject: [PATCH 4/5] sound_manager: Fix segmentation fault due to invalid
+ iterator
+
+Fix segmentation fault due to invalid iterator.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ bear-engine/core/src/audio/code/sound_manager.cpp | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/bear-engine/core/src/audio/code/sound_manager.cpp b/bear-engine/core/src/audio/code/sound_manager.cpp
+index 634e90d..62f59e9 100644
+--- a/bear-engine/core/src/audio/code/sound_manager.cpp
++++ b/bear-engine/core/src/audio/code/sound_manager.cpp
+@@ -239,11 +239,11 @@ void bear::audio::sound_manager::stop_all_musics( double fadeout )
+ 
+   while ( it != m_muted_musics.end() )
+     {
+-      muted_music_list::iterator tmp(it);
+-      ++it;
+-
+       // calls sample_finished()
+       it->first->stop( fadeout );
++      // Reset the iterator since stop indirectly calls
++      // remove_muted_music, invalidating the iterator.
++      it = m_muted_musics.begin();
+     }
+ 
+   if ( m_current_music != NULL )
+-- 
+2.37.1
+

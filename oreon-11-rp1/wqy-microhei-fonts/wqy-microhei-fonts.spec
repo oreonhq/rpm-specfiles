@@ -5,8 +5,8 @@
 %global fontname wqy-microhei
 %global archivename %{fontname}-%{version}-beta
 
-Version: 0.2.0
-Release: 0.39.beta%{?dist}
+Version: 0.2.0-beta-beta
+Release: 1.39.beta%{?dist}
 URL:     http://wenq.org/wqy2/index.cgi?MicroHei(en)
 
 %global foundry           WQY

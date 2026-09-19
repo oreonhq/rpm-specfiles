@@ -1,0 +1,38 @@
+From c3fbf50bd9506892c1869dddec0a643213358b73 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert=20Ch=C3=A9ramy?= <robert@cheramy.net>
+Date: Sun, 18 Aug 2024 20:40:20 +0200
+Subject: [PATCH] Fix rake test fails with mocha > 2.1.0 #72
+
+Using Mocha::Mock.new is not supported in mocha, and
+mock() does not work in a subclass.
+As we just need a stub for File:Statt an no mock, we
+just create an Object (instead of a mock) and stub it.
+This commit fixes #72
+---
+ test/common.rb | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/test/common.rb b/test/common.rb
+index a6cb77a..54c26bd 100644
+--- a/test/common.rb
++++ b/test/common.rb
+@@ -82,7 +82,8 @@ def name
+       end
+ 
+       def stub!
+-        stat = Mocha::Mock.new("file::stat")
++        # Stub for File::Stat
++        stat = Object.new
+         stat.stubs(:size => contents.length, :mode => mode, :mtime => mtime, :atime => atime, :directory? => false)
+ 
+         File.stubs(:stat).with(path).returns(stat)
+@@ -122,7 +123,8 @@ def directory(name, *args)
+       def stub!
+         Dir.stubs(:mkdir).with { |*a| a.first == path }
+ 
+-        stat = Mocha::Mock.new("file::stat")
++        # Stub for File::Stat
++        stat = Object.new
+         stat.stubs(:size => 1024, :mode => mode, :mtime => mtime, :atime => atime, :directory? => true)
+ 
+         File.stubs(:stat).with(path).returns(stat)

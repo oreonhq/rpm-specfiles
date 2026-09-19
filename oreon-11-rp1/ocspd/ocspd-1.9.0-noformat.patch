@@ -1,0 +1,27 @@
+diff -Naurp openca-ocspd-1.9.0.orig/src/ocspd.c openca-ocspd-1.9.0.new/src/ocspd.c
+--- openca-ocspd-1.9.0.orig/src/ocspd.c	2014-05-27 13:45:02.114381793 +0200
++++ openca-ocspd-1.9.0.new/src/ocspd.c	2014-05-27 13:51:50.584913720 +0200
+@@ -209,19 +209,15 @@ int main ( int argc, char *argv[] ) {
+ 
+ bad:
+ 	if (badops) {
+-		
+-		for (pp=ocspd_usage; (*pp != NULL); pp++)
+-			printf(*pp);
++		for (pp = ocspd_usage; *pp; pp++)
++			fputs(*pp, stdout);
++
+ 		goto err;
+ 	}
+ 
+-	if( daemon == 0 ) {
++	if (!daemon)
+ 		printf(ocspd_warning, VERSION);
+ 
+-		// for (pp=ocspd_warning; (*pp != NULL); pp++)
+-		// 	printf(*pp);
+-	}
+-
+ 	ERR_load_crypto_strings();
+ 	if(( ocspd_conf = (OCSPD_CONFIG *) 
+ 			OPENSSL_malloc ( sizeof(OCSPD_CONFIG))) == NULL ) {

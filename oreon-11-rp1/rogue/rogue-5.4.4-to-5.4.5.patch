@@ -1,0 +1,8074 @@
+diff -Nur --exclude .git rogue.git/armor.c rogue5.4.5/armor.c
+--- rogue.git/armor.c	2019-02-12 07:43:37.000000000 -0600
++++ rogue5.4.5/armor.c	2007-10-13 13:29:51.000000000 -0500
+@@ -17,10 +17,10 @@
+  *	The player wants to wear something, so let him/her put it on.
+  */
+ void
+-wear()
++wear(void)
+ {
+-    register THING *obj;
+-    register char *sp;
++    THING *obj;
++    char *sp;
+ 
+     if ((obj = get_item("wear", ARMOR)) == NULL)
+ 	return;
+@@ -52,9 +52,9 @@
+  *	Get the armor off of the players back
+  */
+ void
+-take_off()
++take_off(void)
+ {
+-    register THING *obj;
++    THING *obj;
+ 
+     if ((obj = cur_armor) == NULL)
+     {
+@@ -80,7 +80,7 @@
+  *	Do nothing but let other things happen
+  */
+ void
+-waste_time()
++waste_time(void)
+ {
+     do_daemons(BEFORE);
+     do_fuses(BEFORE);
+diff -Nur --exclude .git rogue.git/chase.c rogue5.4.5/chase.c
+--- rogue.git/chase.c	2019-02-12 07:43:38.000000000 -0600
++++ rogue5.4.5/chase.c	2007-10-13 13:29:51.000000000 -0500
+@@ -23,12 +23,12 @@
+  *	Make all the running monsters move.
+  */
+ void
+-runners()
++runners(void)
+ {
+-    register THING *tp;
++    THING *tp;
+     THING *next;
+-    bool wastarget;
+-    static coord orig_pos;
++    int wastarget;
++    coord orig_pos;
+ 
+     for (tp = mlist; tp != NULL; tp = next)
+     {
+@@ -79,7 +79,7 @@
+  *	all the relevant state.
+  */
+ void
+-relocate(THING *th, coord *new_loc)
++relocate(THING *th, const coord *new_loc)
+ {
+     struct room *oroom;
+ 
+@@ -114,13 +114,13 @@
+ int
+ do_chase(THING *th)
+ {
+-    register coord *cp;
+-    register struct room *rer, *ree;	/* room of chaser, room of chasee */
+-    register int mindist = 32767, curdist;
+-    register bool stoprun = FALSE;	/* TRUE means we are there */
+-    register bool door;
+-    register THING *obj;
+-    static coord this;			/* Temporary destination for chaser */
++    coord *cp;
++    struct room *rer, *ree;	/* room of chaser, room of chasee */
++    int mindist = 32767, curdist;
++    int stoprun = FALSE;	/* TRUE means we are there */
++    int door;
++    THING *obj;
++    coord this;			/* Temporary destination for chaser */
+ 
+     rer = th->t_room;		/* Find room of chaser */
+     if (on(*th, ISGREED) && rer->r_goldval == 0)
+@@ -232,9 +232,9 @@
+  *	Set the oldch character for the monster
+  */
+ void
+-set_oldch(THING *tp, coord *cp)
++set_oldch(THING *tp, const coord *cp)
+ {
+-    char sch;
++    int sch;
+ 
+     if (ce(tp->t_pos, *cp))
+         return;
+@@ -255,8 +255,8 @@
+  * see_monst:
+  *	Return TRUE if the hero can see the monster
+  */
+-bool
+-see_monst(THING *mp)
++int
++see_monst(const THING *mp)
+ {
+     int y, x;
+ 
+@@ -275,7 +275,7 @@
+     }
+     if (mp->t_room != proom)
+ 	return FALSE;
+-    return ((bool)!(mp->t_room->r_flags & ISDARK));
++    return (!(mp->t_room->r_flags & ISDARK));
+ }
+ 
+ /*
+@@ -283,20 +283,22 @@
+  *	Set a monster running after the hero.
+  */
+ void
+-runto(coord *runner)
++runto(const coord *runner)
+ {
+-    register THING *tp;
++    THING *tp;
+ 
+     /*
+      * If we couldn't find him, something is funny
+      */
+-#ifdef MASTER
+     if ((tp = moat(runner->y, runner->x)) == NULL)
+-	msg("couldn't find monster in runto at (%d,%d)", runner->y, runner->x);
+-#else
+-    tp = moat(runner->y, runner->x);
++	{
++#ifdef MASTER
++		msg("couldn't find monster in runto at (%d,%d)", runner->y, runner->x);
+ #endif
+-    /*
++		return;
++	}
++
++	/*
+      * Start the beastie running
+      */
+     tp->t_flags |= ISRUN;
+@@ -310,16 +312,16 @@
+  *	chasee(ee).  Returns TRUE if we want to keep on chasing later
+  *	FALSE if we reach the goal.
+  */
+-bool
+-chase(THING *tp, coord *ee)
++int
++chase(THING *tp, const coord *ee)
+ {
+-    register THING *obj;
+-    register int x, y;
+-    register int curdist, thisdist;
+-    register coord *er = &tp->t_pos;
+-    register char ch;
+-    register int plcnt = 1;
+-    static coord tryp;
++    THING *obj;
++    int x, y;
++    int curdist, thisdist;
++    const coord *er = &tp->t_pos;
++    int ch;
++    int plcnt = 1;
++    coord tryp;
+ 
+     /*
+      * If the thing is confused, let it move randomly. Invisible
+@@ -332,7 +334,7 @@
+ 	/*
+ 	 * get a valid random move
+ 	 */
+-	ch_ret = *rndmove(tp);
++	ch_ret = rndmove(tp);
+ 	curdist = dist_cp(&ch_ret, ee);
+ 	/*
+ 	 * Small chance that it will become un-confused 
+@@ -346,7 +348,7 @@
+      */
+     else
+     {
+-	register int ey, ex;
++	int ey, ex;
+ 	/*
+ 	 * This will eventually hold where we move to get closer
+ 	 * If we can't find an empty spot, we stay where we are.
+@@ -413,7 +415,7 @@
+ 	    }
+ 	}
+     }
+-    return (bool)(curdist != 0 && !ce(ch_ret, hero));
++    return (curdist != 0 && !ce(ch_ret, hero));
+ }
+ 
+ /*
+@@ -422,11 +424,10 @@
+  *	in any room.
+  */
+ struct room *
+-roomin(coord *cp)
++roomin(const coord *cp)
+ {
+-    register struct room *rp;
+-    register char *fp;
+-
++    struct room *rp;
++    int *fp;
+ 
+     fp = &flat(cp->y, cp->x);
+     if (*fp & F_PASS)
+@@ -450,25 +451,25 @@
+  * diag_ok:
+  *	Check to see if the move is legal if it is diagonal
+  */
+-bool
+-diag_ok(coord *sp, coord *ep)
++int
++diag_ok(const coord *sp, const coord *ep)
+ {
+     if (ep->x < 0 || ep->x >= NUMCOLS || ep->y <= 0 || ep->y >= NUMLINES - 1)
+ 	return FALSE;
+     if (ep->x == sp->x || ep->y == sp->y)
+ 	return TRUE;
+-    return (bool)(step_ok(chat(ep->y, sp->x)) && step_ok(chat(sp->y, ep->x)));
++    return (step_ok(chat(ep->y, sp->x)) && step_ok(chat(sp->y, ep->x)));
+ }
+ 
+ /*
+  * cansee:
+  *	Returns true if the hero can see a certain coordinate.
+  */
+-bool
++int
+ cansee(int y, int x)
+ {
+-    register struct room *rer;
+-    static coord tp;
++    struct room *rer;
++    coord tp;
+ 
+     if (on(player, ISBLIND))
+ 	return FALSE;
+@@ -486,18 +487,18 @@
+      */
+     tp.y = y;
+     tp.x = x;
+-    return (bool)((rer = roomin(&tp)) == proom && !(rer->r_flags & ISDARK));
++    return ((rer = roomin(&tp)) == proom && !(rer->r_flags & ISDARK));
+ }
+ 
+ /*
+  * find_dest:
+  *	find the proper destination for the monster
+  */
+-coord *
+-find_dest(THING *tp)
++const coord *
++find_dest(const THING *tp)
+ {
+-    register THING *obj;
+-    register int prob;
++    THING *obj;
++    int prob;
+ 
+     if ((prob = monsters[tp->t_type - 'A'].m_carry) <= 0 || tp->t_room == proom
+ 	|| see_monst(tp))
+@@ -535,7 +536,7 @@
+  *	Call dist() with appropriate arguments for coord pointers
+  */
+ int
+-dist_cp(coord *c1, coord *c2)
++dist_cp(const coord *c1, const coord *c2)
+ {
+     return dist(c1->y, c1->x, c2->y, c2->x);
+ }
+diff -Nur --exclude .git rogue.git/command.c rogue5.4.5/command.c
+--- rogue.git/command.c	2019-02-12 07:43:38.000000000 -0600
++++ rogue5.4.5/command.c	2007-10-13 13:29:51.000000000 -0500
+@@ -21,13 +21,13 @@
+  *	Process the user commands
+  */
+ void
+-command()
++command(void)
+ {
+-    register char ch;
+-    register int ntimes = 1;			/* Number of player moves */
+-    char *fp;
++    int ch;
++    int ntimes = 1;			/* Number of player moves */
++    int *fp;
+     THING *mp;
+-    static char countch, direction, newcount = FALSE;
++    static int countch, direction, newcount = FALSE;
+ 
+     if (on(player, ISHASTE))
+ 	ntimes++;
+@@ -79,7 +79,10 @@
+ 		ch = readchar();
+ 		move_on = FALSE;
+ 		if (mpos != 0)		/* Erase message if its there */
+-		    msg("");
++		{
++		    if (ch != '.' && ch != 's')
++			msg("");
++		}
+ 	    }
+ 	}
+ 	else
+@@ -166,7 +169,7 @@
+ 			if (levit_check())
+ 			    ;
+ 			else
+-			    pick_up((char)obj->o_type);
++			    pick_up(obj->o_type);
+ 		    }
+ 		    else {
+ 			if (!terse)
+@@ -378,9 +381,9 @@
+ 			when CTRL('F'): show_map();
+ 			when CTRL('T'): teleport();
+ 			when CTRL('E'): msg("food left: %d", food_left);
+-			when CTRL('C'): add_pass();
++			when CTRL('Q'): add_pass();
+ 			when CTRL('X'): turn_see(on(player, SEEMONST));
+-			when CTRL('~'):
++			when '~':
+ 			{
+ 			    THING *item;
+ 
+@@ -471,13 +474,13 @@
+  *	player gropes about him to find hidden things.
+  */
+ void
+-search()
++search(void)
+ {
+-    register int y, x;
+-    register char *fp;
+-    register int ey, ex;
++    int y, x;
++    int *fp;
++    int ey, ex;
+     int probinc;
+-    bool found;
++    int found;
+ 
+     ey = hero.y + 1;
+     ex = hero.x + 1;
+@@ -535,11 +538,11 @@
+  *	Give single character help, or the whole mess if he wants it
+  */
+ void
+-help()
++help(void)
+ {
+-    register struct h_list *strp;
+-    register char helpch;
+-    register int numprint, cnt;
++    const struct h_list *strp;
++    int helpch;
++    int numprint, cnt;
+     msg("character you want help for (* for all): ");
+     helpch = readchar();
+     mpos = 0;
+@@ -590,7 +593,7 @@
+     wmove(hw, LINES - 1, 0);
+     waddstr(hw, "--Press space to continue--");
+     wrefresh(hw);
+-    wait_for(' ');
++    wait_for(hw, ' ');
+     clearok(stdscr, TRUE);
+ /*
+     refresh();
+@@ -605,12 +608,12 @@
+  *	Tell the player what a certain thing is.
+  */
+ void
+-identify()
++identify(void)
+ {
+-    register int ch;
+-    register struct h_list *hp;
+-    register char *str;
+-    static struct h_list ident_list[] = {
++    int ch;
++    const struct h_list *hp;
++    const char *str;
++    const struct h_list ident_list[] = {
+ 	{'|',		"wall of a room",		FALSE},
+ 	{'-',		"wall of a room",		FALSE},
+ 	{GOLD,		"gold",				FALSE},
+@@ -660,7 +663,7 @@
+  *	He wants to go down a level
+  */
+ void
+-d_level()
++d_level(void)
+ {
+     if (levit_check())
+ 	return;
+@@ -679,7 +682,7 @@
+  *	He wants to go up a level
+  */
+ void
+-u_level()
++u_level(void)
+ {
+     if (levit_check())
+ 	return;
+@@ -703,8 +706,8 @@
+  *	Check to see if she's levitating, and if she is, print an
+  *	appropriate message.
+  */
+-bool
+-levit_check()
++int
++levit_check(void)
+ {
+     if (!on(player, ISLEVIT))
+ 	return FALSE;
+@@ -717,12 +720,13 @@
+  *	Allow a user to call a potion, scroll, or ring something
+  */
+ void
+-call()
++call(void)
+ {
+-    register THING *obj;
+-    register struct obj_info *op = NULL;
+-    register char **guess, *elsewise = NULL;
+-    register bool *know;
++    THING *obj;
++    struct obj_info *op = NULL;
++    char **guess;
++    const char *elsewise = NULL;
++    int *know;
+ 
+     obj = get_item("call", CALLABLE);
+     /*
+@@ -784,9 +788,12 @@
+     {
+ 	if (*guess != NULL)
+ 	    free(*guess);
+-	*guess = malloc((unsigned int) strlen(prbuf) + 1);
+-	strcpy(*guess, prbuf);
++	*guess = malloc(strlen(prbuf) + 1);
++	if (*guess != NULL)
++		strcpy(*guess, prbuf);
+     }
++
++    msg("");
+ }
+ 
+ /*
+@@ -794,7 +801,7 @@
+  *	Print the current weapon/armor
+  */
+ void
+-current(THING *cur, char *how, char *where)
++current(const THING *cur, const char *how, const char *where)
+ {
+     after = FALSE;
+     if (cur != NULL)
+diff -Nur --exclude .git rogue.git/configure rogue5.4.5/configure
+--- rogue.git/configure	2019-02-12 07:43:40.000000000 -0600
++++ rogue5.4.5/configure	2007-10-13 13:29:51.000000000 -0500
+@@ -1,6 +1,6 @@
+ #! /bin/sh
+ # Guess values for system-dependent variables and create Makefiles.
+-# Generated by GNU Autoconf 2.61 for Rogue 5.4.4.
++# Generated by GNU Autoconf 2.61 for Rogue 5.4.5.
+ #
+ # Report bugs to <yendor@rogueforge.net>.
+ #
+@@ -574,8 +574,8 @@
+ # Identity of this package.
+ PACKAGE_NAME='Rogue'
+ PACKAGE_TARNAME='rogue'
+-PACKAGE_VERSION='5.4.4'
+-PACKAGE_STRING='Rogue 5.4.4'
++PACKAGE_VERSION='5.4.5'
++PACKAGE_STRING='Rogue 5.4.5'
+ PACKAGE_BUGREPORT='yendor@rogueforge.net'
+ 
+ ac_unique_file="armor.c"
+@@ -1198,7 +1198,7 @@
+   # Omit some internal or obsolete options to make the list less imposing.
+   # This message is too long to be a string in the A/UX 3.1 sh.
+   cat <<_ACEOF
+-\`configure' configures Rogue 5.4.4 to adapt to many kinds of systems.
++\`configure' configures Rogue 5.4.5 to adapt to many kinds of systems.
+ 
+ Usage: $0 [OPTION]... [VAR=VALUE]...
+ 
+@@ -1264,7 +1264,7 @@
+ 
+ if test -n "$ac_init_help"; then
+   case $ac_init_help in
+-     short | recursive ) echo "Configuration of Rogue 5.4.4:";;
++     short | recursive ) echo "Configuration of Rogue 5.4.5:";;
+    esac
+   cat <<\_ACEOF
+ 
+@@ -1374,7 +1374,7 @@
+ test -n "$ac_init_help" && exit $ac_status
+ if $ac_init_version; then
+   cat <<\_ACEOF
+-Rogue configure 5.4.4
++Rogue configure 5.4.5
+ generated by GNU Autoconf 2.61
+ 
+ Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
+@@ -1388,7 +1388,7 @@
+ This file contains any messages produced by compilers while
+ running configure, to aid debugging if configure makes a mistake.
+ 
+-It was created by Rogue $as_me 5.4.4, which was
++It was created by Rogue $as_me 5.4.5, which was
+ generated by GNU Autoconf 2.61.  Invocation command line was
+ 
+   $ $0 $@
+@@ -6788,7 +6788,7 @@
+ # report actual input values of CONFIG_FILES etc. instead of their
+ # values after options handling.
+ ac_log="
+-This file was extended by Rogue $as_me 5.4.4, which was
++This file was extended by Rogue $as_me 5.4.5, which was
+ generated by GNU Autoconf 2.61.  Invocation command line was
+ 
+   CONFIG_FILES    = $CONFIG_FILES
+@@ -6837,7 +6837,7 @@
+ _ACEOF
+ cat >>$CONFIG_STATUS <<_ACEOF
+ ac_cs_version="\\
+-Rogue config.status 5.4.4
++Rogue config.status 5.4.5
+ configured by $0, generated by GNU Autoconf 2.61,
+   with options \\"`echo "$ac_configure_args" | sed 's/^ //; s/[\\""\`\$]/\\\\&/g'`\\"
+ 
+diff -Nur --exclude .git rogue.git/configure.ac rogue5.4.5/configure.ac
+--- rogue.git/configure.ac	2019-02-12 07:43:40.000000000 -0600
++++ rogue5.4.5/configure.ac	2007-10-13 13:29:51.000000000 -0500
+@@ -2,7 +2,7 @@
+ # Process this file with autoconf to produce a configure script.
+ 
+ AC_PREREQ(2.56)
+-AC_INIT([Rogue],[5.4.4], [yendor@rogueforge.net])
++AC_INIT([Rogue],[5.4.5], [yendor@rogueforge.net])
+ AC_CONFIG_SRCDIR([armor.c])
+ AC_CONFIG_HEADER([config.h])
+ AC_CONFIG_FILES([Makefile rogue.6 rogue.cat rogue.doc rogue.html rogue.me])
+diff -Nur --exclude .git rogue.git/daemon.c rogue5.4.5/daemon.c
+--- rogue.git/daemon.c	2019-02-12 07:43:41.000000000 -0600
++++ rogue5.4.5/daemon.c	2007-10-13 13:29:51.000000000 -0500
+@@ -14,25 +14,16 @@
+ #include <curses.h>
+ #include "rogue.h"
+ 
+-#define EMPTY 0
+ #define DAEMON -1
+-#define MAXDAEMONS 20
+-
+-#define _X_ { EMPTY }
+-
+-struct delayed_action d_list[MAXDAEMONS] = {
+-    _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_,
+-    _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, 
+-};
+ 
+ /*
+  * d_slot:
+  *	Find an empty slot in the daemon/fuse list
+  */
+ struct delayed_action *
+-d_slot()
++d_slot(void)
+ {
+-    register struct delayed_action *dev;
++    struct delayed_action *dev;
+ 
+     for (dev = d_list; dev <= &d_list[MAXDAEMONS-1]; dev++)
+ 	if (dev->d_type == EMPTY)
+@@ -50,7 +41,7 @@
+ struct delayed_action *
+ find_slot(void (*func)())
+ {
+-    register struct delayed_action *dev;
++    struct delayed_action *dev;
+ 
+     for (dev = d_list; dev <= &d_list[MAXDAEMONS-1]; dev++)
+ 	if (dev->d_type != EMPTY && func == dev->d_func)
+@@ -65,7 +56,7 @@
+ void
+ start_daemon(void (*func)(), int arg, int type)
+ {
+-    register struct delayed_action *dev;
++    struct delayed_action *dev;
+ 
+     dev = d_slot();
+     dev->d_type = type;
+@@ -81,7 +72,7 @@
+ void
+ kill_daemon(void (*func)())
+ {
+-    register struct delayed_action *dev;
++    struct delayed_action *dev;
+ 
+     if ((dev = find_slot(func)) == NULL)
+ 	return;
+@@ -99,7 +90,7 @@
+ void
+ do_daemons(int flag)
+ {
+-    register struct delayed_action *dev;
++    struct delayed_action *dev;
+ 
+     /*
+      * Loop through the devil list
+@@ -119,7 +110,7 @@
+ void
+ fuse(void (*func)(), int arg, int time, int type)
+ {
+-    register struct delayed_action *wire;
++    struct delayed_action *wire;
+ 
+     wire = d_slot();
+     wire->d_type = type;
+@@ -135,7 +126,7 @@
+ void
+ lengthen(void (*func)(), int xtime)
+ {
+-    register struct delayed_action *wire;
++    struct delayed_action *wire;
+ 
+     if ((wire = find_slot(func)) == NULL)
+ 	return;
+@@ -149,7 +140,7 @@
+ void
+ extinguish(void (*func)())
+ {
+-    register struct delayed_action *wire;
++    struct delayed_action *wire;
+ 
+     if ((wire = find_slot(func)) == NULL)
+ 	return;
+@@ -163,7 +154,7 @@
+ void
+ do_fuses(int flag)
+ {
+-    register struct delayed_action *wire;
++    struct delayed_action *wire;
+ 
+     /*
+      * Step though the list
+diff -Nur --exclude .git rogue.git/daemons.c rogue5.4.5/daemons.c
+--- rogue.git/daemons.c	2019-02-12 07:43:41.000000000 -0600
++++ rogue5.4.5/daemons.c	2007-10-13 13:29:51.000000000 -0500
+@@ -18,9 +18,9 @@
+  *	A healing daemon that restors hit points after rest
+  */
+ void
+-doctor()
++doctor(void)
+ {
+-    register int lv, ohp;
++    int lv, ohp;
+ 
+     lv = pstats.s_lvl;
+     ohp = pstats.s_hpt;
+@@ -50,7 +50,7 @@
+  *	Called when it is time to start rolling for wandering monsters
+  */
+ void
+-swander()
++swander(void)
+ {
+     start_daemon(rollwand, 0, BEFORE);
+ }
+@@ -59,9 +59,9 @@
+  * rollwand:
+  *	Called to roll to see if a wandering monster starts up
+  */
+-int between = 0;
++
+ void
+-rollwand()
++rollwand(void)
+ {
+ 
+     if (++between >= 4)
+@@ -81,7 +81,7 @@
+  *	Release the poor player from his confusion
+  */
+ void
+-unconfuse()
++unconfuse(void)
+ {
+     player.t_flags &= ~ISHUH;
+     msg("you feel less %s now", choose_str("trippy", "confused"));
+@@ -92,9 +92,9 @@
+  *	Turn off the ability to see invisible
+  */
+ void
+-unsee()
++unsee(void)
+ {
+-    register THING *th;
++    THING *th;
+ 
+     for (th = mlist; th != NULL; th = next(th))
+ 	if (on(*th, ISINVIS) && see_monst(th))
+@@ -107,7 +107,7 @@
+  *	He gets his sight back
+  */
+ void
+-sight()
++sight(void)
+ {
+     if (on(player, ISBLIND))
+     {
+@@ -125,7 +125,7 @@
+  *	End the hasting
+  */
+ void
+-nohaste()
++nohaste(void)
+ {
+     player.t_flags &= ~ISHASTE;
+     msg("you feel yourself slowing down");
+@@ -136,9 +136,9 @@
+  *	Digest the hero's food
+  */
+ void
+-stomach()
++stomach(void)
+ {
+-    register int oldfood;
++    int oldfood;
+     int orig_hungry = hungry_state;
+ 
+     if (food_left <= 0)
+@@ -191,10 +191,10 @@
+  *	Take the hero down off her acid trip.
+  */
+ void
+-come_down()
++come_down(void)
+ {
+-    register THING *tp;
+-    register bool seemonst;
++    THING *tp;
++    int seemonst;
+ 
+     if (!on(player, ISHALU))
+ 	return;
+@@ -239,10 +239,10 @@
+  *	change the characters for the player
+  */
+ void
+-visuals()
++visuals(void)
+ {
+-    register THING *tp;
+-    register bool seemonst;
++    THING *tp;
++    int seemonst;
+ 
+     if (!after || (running && jump))
+ 	return;
+@@ -287,7 +287,7 @@
+  *	Land from a levitation potion
+  */
+ void
+-land()
++land(void)
+ {
+     player.t_flags &= ~ISLEVIT;
+     msg(choose_str("bummer!  You've hit the ground",
+diff -Nur --exclude .git rogue.git/extern.c rogue5.4.5/extern.c
+--- rogue.git/extern.c	2019-02-12 07:43:42.000000000 -0600
++++ rogue5.4.5/extern.c	2007-10-13 13:29:51.000000000 -0500
+@@ -10,71 +10,73 @@
+  * See the file LICENSE.TXT for full copyright and licensing information.
+  */
+ 
++/* All global variables are defined here, or in vers.c or init.c */
++
+ #include <curses.h>
+ #include "rogue.h"
+ 
+-bool after;				/* True if we want after daemons */
+-bool again;				/* Repeating the last command */
++int  after;				/* True if we want after daemons */
++int  again;				/* Repeating the last command */
+ int  noscore;				/* Was a wizard sometime */
+-bool seenstairs;			/* Have seen the stairs (for lsd) */
+-bool amulet = FALSE;			/* He found the amulet */
+-bool door_stop = FALSE;			/* Stop running when we pass a door */
+-bool fight_flush = FALSE;		/* True if toilet input */
+-bool firstmove = FALSE;			/* First move after setting door_stop */
+-bool got_ltc = FALSE;			/* We have gotten the local tty chars */
+-bool has_hit = FALSE;			/* Has a "hit" message pending in msg */
+-bool in_shell = FALSE;			/* True if executing a shell */
+-bool inv_describe = TRUE;		/* Say which way items are being used */
+-bool jump = FALSE;			/* Show running as series of jumps */
+-bool kamikaze = FALSE;			/* to_death really to DEATH */
+-bool lower_msg = FALSE;			/* Messages should start w/lower case */
+-bool move_on = FALSE;			/* Next move shouldn't pick up items */
+-bool msg_esc = FALSE;			/* Check for ESC from msg's --More-- */
+-bool passgo = FALSE;			/* Follow passages */
+-bool playing = TRUE;			/* True until he quits */
+-bool q_comm = FALSE;			/* Are we executing a 'Q' command? */
+-bool running = FALSE;			/* True if player is running */
+-bool save_msg = TRUE;			/* Remember last msg */
+-bool see_floor = TRUE;			/* Show the lamp illuminated floor */
+-bool stat_msg = FALSE;			/* Should status() print as a msg() */
+-bool terse = FALSE;			/* True if we should be short */
+-bool to_death = FALSE;			/* Fighting is to the death! */
+-bool tombstone = TRUE;			/* Print out tombstone at end */
++int  seenstairs;			/* Have seen the stairs (for lsd) */
++int  amulet = FALSE;			/* He found the amulet */
++int  door_stop = FALSE;			/* Stop running when we pass a door */
++int  fight_flush = FALSE;		/* True if toilet input */
++int  firstmove = FALSE;			/* First move after setting door_stop */
++int  got_ltc = FALSE;			/* We have gotten the local tty chars */
++int  has_hit = FALSE;			/* Has a "hit" message pending in msg */
++int  in_shell = FALSE;			/* True if executing a shell */
++int  inv_describe = TRUE;		/* Say which way items are being used */
++int  jump = FALSE;			/* Show running as series of jumps */
++int  kamikaze = FALSE;			/* to_death really to DEATH */
++int  lower_msg = FALSE;			/* Messages should start w/lower case */
++int  move_on = FALSE;			/* Next move shouldn't pick up items */
++int  msg_esc = FALSE;			/* Check for ESC from msg's --More-- */
++int  passgo = FALSE;			/* Follow passages */
++int  playing = TRUE;			/* True until he quits */
++int  q_comm = FALSE;			/* Are we executing a 'Q' command? */
++int  running = FALSE;			/* True if player is running */
++int  save_msg = TRUE;			/* Remember last msg */
++int  see_floor = TRUE;			/* Show the lamp illuminated floor */
++int  stat_msg = FALSE;			/* Should status() print as a msg() */
++int  terse = FALSE;				/* True if we should be short */
++int  to_death = FALSE;			/* Fighting is to the death! */
++int  tombstone = TRUE;			/* Print out tombstone at end */
+ #ifdef MASTER
+-int wizard = FALSE;			/* True if allows wizard commands */
++int  wizard = FALSE;			/* True if allows wizard commands */
+ #endif
+-bool pack_used[26] = {			/* Is the character used in the pack? */
++int  pack_used[26] = {			/* Is the character used in the pack? */
+     FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+     FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+     FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
+ };
+ 
+-char dir_ch;				/* Direction from last get_dir() call */
++int  dir_ch;				/* Direction from last get_dir() call */
+ char file_name[MAXSTR];			/* Save file name */
+ char huh[MAXSTR];			/* The last message printed */
+-char *p_colors[MAXPOTIONS];		/* Colors of the potions */
++const char *p_colors[MAXPOTIONS];		/* Colors of the potions */
+ char prbuf[2*MAXSTR];			/* buffer for sprintfs */
+-char *r_stones[MAXRINGS];		/* Stone settings of the rings */
+-char runch;				/* Direction player is running */
++const char *r_stones[MAXRINGS];		/* Stone settings of the rings */
++int  runch;				/* Direction player is running */
+ char *s_names[MAXSCROLLS];		/* Names of the scrolls */
+-char take;				/* Thing she is taking */
++int  take;				/* Thing she is taking */
+ char whoami[MAXSTR];			/* Name of player */
+-char *ws_made[MAXSTICKS];		/* What sticks are made of */
++const char *ws_made[MAXSTICKS];		/* What sticks are made of */
+ char *ws_type[MAXSTICKS];		/* Is it a wand or a staff */
+ int  orig_dsusp;			/* Original dsusp char */
+ char fruit[MAXSTR] =			/* Favorite fruit */
+ 		{ 's', 'l', 'i', 'm', 'e', '-', 'm', 'o', 'l', 'd', '\0' };
+ char home[MAXSTR] = { '\0' };		/* User's home directory */
+-char *inv_t_name[] = {
++const char *inv_t_name[] = {
+ 	"Overwrite",
+ 	"Slow",
+ 	"Clear"
+ };
+-char l_last_comm = '\0';		/* Last last_comm */
+-char l_last_dir = '\0';			/* Last last_dir */
+-char last_comm = '\0';			/* Last command typed */
+-char last_dir = '\0';			/* Last direction given */
+-char *tr_name[] = {			/* Names of the traps */
++int  l_last_comm = '\0';		/* Last last_comm */
++int  l_last_dir = '\0';			/* Last last_dir */
++int  last_comm = '\0';			/* Last command typed */
++int  last_dir = '\0';			/* Last direction given */
++const char *tr_name[] = {			/* Names of the traps */
+ 	"a trapdoor",
+ 	"an arrow trap",
+ 	"a sleeping gas trap",
+@@ -96,7 +98,7 @@
+ int max_level;				/* Deepest player has gone */
+ int mpos = 0;				/* Where cursor is on top line */
+ int no_food = 0;			/* Number of levels without food */
+-int a_class[MAXARMORS] = {		/* Armor class for each armor type */
++const int a_class[MAXARMORS] = {		/* Armor class for each armor type */
+ 	8,	/* LEATHER */
+ 	7,	/* RING_MAIL */
+ 	7,	/* STUDDED_LEATHER */
+@@ -108,7 +110,7 @@
+ };
+ 
+ int count = 0;				/* Number of times to repeat command */
+-FILE *scoreboard = NULL;	/* File descriptor for score file */
++FILE *scoreboard = NULL;		/* File descriptor for score file */
+ int food_left;				/* Amount of food in hero's stomach */
+ int lastscore = -1;			/* Score before this turn */
+ int no_command = 0;			/* Number of turns asleep */
+@@ -117,9 +119,9 @@
+ int quiet = 0;				/* Number of quiet turns */
+ int vf_hit = 0;				/* Number of time flytrap has hit */
+ 
+-int dnum;				/* Dungeon number */
+-int seed;				/* Random number seed */
+-int e_levels[] = {
++unsigned int dnum;				/* Dungeon number */
++unsigned int seed;				/* Random number seed */
++const int e_levels[] = {
+         10L,
+ 	20L,
+ 	40L,
+@@ -321,7 +323,7 @@
+     { "cancellation",		 5, 280, NULL, FALSE },
+ };
+ 
+-struct h_list helpstr[] = {
++const struct h_list helpstr[] = {
+     {'?',	"	prints help",				TRUE},
+     {'/',	"	identify object",			TRUE},
+     {'h',	"	left",					TRUE},
+@@ -389,3 +391,16 @@
+     {'v',	"	print version number",			TRUE},
+     {0,		NULL }
+ };
++int numscores;
++char *Numname;
++int allscore;
++int between;
++
++#define _X_ { EMPTY }
++
++struct delayed_action d_list[MAXDAEMONS] = {
++    _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_,
++    _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, 
++};
++
++int group = 2;
+diff -Nur --exclude .git rogue.git/extern.h rogue5.4.5/extern.h
+--- rogue.git/extern.h	2019-02-12 07:43:42.000000000 -0600
++++ rogue5.4.5/extern.h	2007-10-13 13:29:51.000000000 -0500
+@@ -41,6 +41,12 @@
+ #define HAVE_PROCESS_H
+ #define HAVE_ERASECHAR 1
+ #define HAVE_KILLCHAR 1
++#ifndef uid_t
++typedef unsigned int uid_t;
++#endif
++#ifndef pid_t
++typedef unsigned int pid_t;
++#endif
+ #elif defined(__CYGWIN__)
+ #define HAVE_SYS_TYPES_H 1
+ #define HAVE_PWD_H 1
+@@ -116,82 +122,49 @@
+  * Now all the global variables
+  */
+ 
+-extern bool	got_ltc, in_shell;
++extern int got_ltc, in_shell;
+ extern int	wizard;
+ extern char	fruit[], prbuf[], whoami[];
+ extern int orig_dsusp;
+ extern FILE	*scoreboard;
++extern int numscores;
++extern char *Numname;
++extern int allscore;
+ 
+ /*
+  * Function types
+  */
+ 
+-void    auto_save(int);
+-void	come_down();
+-void	doctor();
+-void	end_line();
+-void    endit(int sig);
+-void	fatal();
+-void	getltchars();
+-void	land();
+-void    leave(int);
+-void	my_exit();
+-void	nohaste();
+-void	playit();
+-void    playltchars(void);
+-void	print_disc(char);
+-void    quit(int);
+-void    resetltchars(void);
+-void	rollwand();
+-void	runners();
+-void	set_order();
+-void	sight();
+-void	stomach();
+-void	swander();
+-void	tstp(int ignored);
+-void	unconfuse();
+-void	unsee();
+-void	visuals();
+-
+-char	add_line(char *fmt, char *arg);
+-
+-char	*killname(char monst, bool doart);
+-char	*nothing(char type);
+-char	*type_name(int type);
+-
+-#ifdef CHECKTIME
+-int	checkout();
+-#endif
+-
+-int	md_chmod(char *filename, int mode);
+-char	*md_crypt(char *key, char *salt);
+-int	md_dsuspchar();
+-int	md_erasechar();
+-char	*md_gethomedir();
+-char	*md_getusername();
+-int	md_getuid();
++int	md_chmod(const char *filename, int mode);
++char	*md_crypt(const char *key, const char *salt);
++int	md_dsuspchar(void);
++int	md_erasechar(void);
++char	*md_gethomedir(void);
++char	*md_getusername(void);
++uid_t	md_getuid(void);
+ char	*md_getpass(char *prompt);
+-int	md_getpid();
+-char	*md_getrealname(int uid);
+-void	md_init();
+-int	md_killchar();
+-void	md_normaluser();
+-void	md_raw_standout();
+-void	md_raw_standend();
+-int	md_readchar();
++pid_t	md_getpid(void);
++char	*md_getrealname(uid_t uid);
++void	md_init(void);
++int	md_killchar(void);
++void	md_normaluser(void);
++void	md_raw_standout(void);
++void	md_raw_standend(void);
++int	md_readchar(WINDOW *win);
+ int	md_setdsuspchar(int c);
+-int	md_shellescape();
++int	md_shellescape(void);
+ void	md_sleep(int s);
+-int	md_suspchar();
+-int	md_hasclreol();
++int	md_suspchar(void);
++int	md_hasclreol(void);
+ int	md_unlink(char *file);
+-int	md_unlink_open_file(char *file, FILE *inf);
+-void md_tstpsignal();
+-void md_tstphold();
+-void md_tstpresume();
+-void md_ignoreallsignals();
+-void md_onsignal_autosave();
+-void md_onsignal_exit();
+-void md_onsignal_default();
++int	md_unlink_open_file(const char *file, FILE *inf);
++void md_tstpsignal(void);
++void md_tstphold(void);
++void md_tstpresume(void);
++void md_ignoreallsignals(void);
++void md_onsignal_autosave(void);
++void md_onsignal_exit(void);
++void md_onsignal_default(void);
+ int md_issymlink(char *sp);
++extern char *xcrypt(const char *key, const char *setting);
+ 
+diff -Nur --exclude .git rogue.git/fight.c rogue5.4.5/fight.c
+--- rogue.git/fight.c	2019-02-12 07:43:42.000000000 -0600
++++ rogue5.4.5/fight.c	2007-10-13 13:29:51.000000000 -0500
+@@ -18,7 +18,7 @@
+ 
+ #define	EQSTR(a, b)	(strcmp(a, b) == 0)
+ 
+-char *h_names[] = {		/* strings for hitting */
++static const char *h_names[] = {		/* strings for hitting */
+ 	" scored an excellent hit on ",
+ 	" hit ",
+ 	" have injured ",
+@@ -29,7 +29,7 @@
+ 	" swings and hits "
+ };
+ 
+-char *m_names[] = {		/* strings for missing */
++static const char *m_names[] = {		/* strings for missing */
+ 	" miss",
+ 	" swing and miss",
+ 	" barely miss",
+@@ -61,21 +61,23 @@
+  *	The player attacks the monster.
+  */
+ int
+-fight(coord *mp, THING *weap, bool thrown)
++fight(const coord *mp, const THING *weap, int thrown)
+ {
+-    register THING *tp;
+-    register bool did_hit = TRUE;
+-    register char *mname, ch;
++    THING *tp;
++    int did_hit = TRUE;
++    const char *mname;
++	int ch;
+ 
+     /*
+      * Find the monster we want to fight
+      */
+-#ifdef MASTER
+     if ((tp = moat(mp->y, mp->x)) == NULL)
+-	debug("Fight what @ %d,%d", mp->y, mp->x);
+-#else
+-    tp = moat(mp->y, mp->x);
++	{
++#ifdef MASTER
++		debug("Fight what @ %d,%d", mp->y, mp->x);
+ #endif
++		return FALSE;
++	}
+     /*
+      * Since we are fighting, things are not quiet so no healing takes
+      * place.
+@@ -91,7 +93,7 @@
+     {
+ 	tp->t_disguise = 'X';
+ 	if (on(player, ISHALU)) {
+-	    ch = (char)(rnd(26) + 'A');
++	    ch = rnd(26) + 'A';
+ 	    mvaddch(tp->t_pos.y, tp->t_pos.x, ch);
+ 	}
+ 	msg(choose_str("heavy!  That's a nasty critter!",
+@@ -108,7 +110,7 @@
+ 	if (thrown)
+ 	    thunk(weap, mname, terse);
+ 	else
+-	    hit((char *) NULL, mname, terse);
++	    hit(NULL, mname, terse);
+ 	if (on(player, CANHUH))
+ 	{
+ 	    did_hit = TRUE;
+@@ -128,7 +130,7 @@
+ 	if (thrown)
+ 	    bounce(weap, mname, terse);
+ 	else
+-	    miss((char *) NULL, mname, terse);
++	    miss(NULL, mname, terse);
+     return did_hit;
+ }
+ 
+@@ -139,8 +141,8 @@
+ int
+ attack(THING *mp)
+ {
+-    register char *mname;
+-    register int oldhp;
++    const char *mname;
++    int oldhp;
+ 
+     /*
+      * Since this is an attack, stop running and any healing that was
+@@ -162,13 +164,13 @@
+     }
+     mname = set_mname(mp);
+     oldhp = pstats.s_hpt;
+-    if (roll_em(mp, &player, (THING *) NULL, FALSE))
++    if (roll_em(mp, &player, NULL, FALSE))
+     {
+ 	if (mp->t_type != 'I')
+ 	{
+ 	    if (has_hit)
+ 		addmsg(".  ");
+-	    hit(mname, (char *) NULL, FALSE);
++	    hit(mname, NULL, FALSE);
+ 	}
+ 	else
+ 	    if (has_hit)
+@@ -237,7 +239,7 @@
+ 		     */
+ 		    if (rnd(100) < (mp->t_type == 'W' ? 15 : 30))
+ 		    {
+-			register int fewer;
++			int fewer;
+ 
+ 			if (mp->t_type == 'W')
+ 			{
+@@ -275,7 +277,7 @@
+ 		    /*
+ 		     * Leperachaun steals some gold
+ 		     */
+-		    register int lastpurse;
++		    int lastpurse;
+ 
+ 		    lastpurse = purse;
+ 		    purse -= GOLDCALC;
+@@ -290,8 +292,8 @@
+ 		}
+ 		when 'N':
+ 		{
+-		    register THING *obj, *steal;
+-		    register int nobj;
++		    THING *obj, *steal;
++		    int nobj;
+ 
+ 		    /*
+ 		     * Nymph's steal a magic item, look through the pack
+@@ -307,7 +309,7 @@
+ 		    {
+ 			remove_mon(&mp->t_pos, moat(mp->t_pos.y, mp->t_pos.x), FALSE);
+                         mp=NULL;
+-			leave_pack(steal, FALSE, FALSE);
++			steal = leave_pack(steal, TRUE, FALSE);
+ 			msg("she stole %s!", inv_name(steal, TRUE));
+ 			discard(steal);
+ 		    }
+@@ -329,7 +331,7 @@
+ 	    if (pstats.s_hpt <= 0)
+ 		death(mp->t_type);	/* Bye bye life ... */
+ 	}
+-	miss(mname, (char *) NULL, FALSE);
++	miss(mname, NULL, FALSE);
+     }
+     if (fight_flush && !to_death)
+ 	flush_type();
+@@ -345,11 +347,11 @@
+  * set_mname:
+  *	return the monster name for the given monster
+  */
+-char *
+-set_mname(THING *tp)
++const char *
++set_mname(const THING *tp)
+ {
+     int ch;
+-    char *mname;
++    const char *mname;
+     static char tbuf[MAXSTR] = { 't', 'h', 'e', ' ' };
+ 
+     if (!see_monst(tp) && !on(player, SEEMONST))
+@@ -357,7 +359,7 @@
+     else if (on(player, ISHALU))
+     {
+ 	move(tp->t_pos.y, tp->t_pos.x);
+-	ch = toascii(inch());
++	ch = toascii(CCHAR(inch()));
+ 	if (!isupper(ch))
+ 	    ch = rnd(26);
+ 	else
+@@ -387,16 +389,17 @@
+  * roll_em:
+  *	Roll several attacks
+  */
+-bool
+-roll_em(THING *thatt, THING *thdef, THING *weap, bool hurl)
++int
++roll_em(const THING *thatt, THING *thdef, const THING *weap, int hurl)
+ {
+-    register struct stats *att, *def;
+-    register char *cp;
+-    register int ndice, nsides, def_arm;
+-    register bool did_hit = FALSE;
+-    register int hplus;
+-    register int dplus;
+-    register int damage;
++    const struct stats *att;
++    struct stats *def;
++    const char *cp;
++    int ndice, nsides, def_arm;
++    int did_hit = FALSE;
++    int hplus;
++    int dplus;
++    int damage;
+ 
+     att = &thatt->t_stats;
+     def = &thdef->t_stats;
+@@ -482,7 +485,7 @@
+  *	The print name of a combatant
+  */
+ char *
+-prname(char *mname, bool upper)
++prname(const char *mname, int upper)
+ {
+     static char tbuf[MAXSTR];
+ 
+@@ -501,7 +504,7 @@
+  *	A missile hits a monster
+  */
+ void
+-thunk(THING *weap, char *mname, bool noend)
++thunk(const THING *weap, const char *mname, int noend)
+ {
+     if (to_death)
+ 	return;
+@@ -520,11 +523,10 @@
+  */
+ 
+ void
+-hit(char *er, char *ee, bool noend)
++hit(const char *er, const char *ee, int noend)
+ {
+     int i;
+-    char *s;
+-    extern char *h_names[];
++    const char *s;
+ 
+     if (to_death)
+ 	return;
+@@ -550,10 +552,9 @@
+  *	Print a message to indicate a poor swing
+  */
+ void
+-miss(char *er, char *ee, bool noend)
++miss(const char *er, const char *ee, int noend)
+ {
+     int i;
+-    extern char *m_names[];
+ 
+     if (to_death)
+ 	return;
+@@ -576,7 +577,7 @@
+  *	A missile misses a monster
+  */
+ void
+-bounce(THING *weap, char *mname, bool noend)
++bounce(const THING *weap, const char *mname, int noend)
+ {
+     if (to_death)
+ 	return;
+@@ -594,9 +595,9 @@
+  *	Remove a monster from the screen
+  */
+ void
+-remove_mon(coord *mp, THING *tp, bool waskill)
++remove_mon(const coord *mp, THING *tp, int waskill)
+ {
+-    register THING *obj, *nexti;
++    THING *obj, *nexti;
+ 
+     for (obj = tp->t_pack; obj != NULL; obj = nexti)
+     {
+@@ -626,9 +627,9 @@
+  *	Called to put a monster to death
+  */
+ void
+-killed(THING *tp, bool pr)
++killed(THING *tp, int pr)
+ {
+-    char *mname;
++    const char *mname;
+ 
+     pstats.s_exp += tp->t_stats.s_exp;
+ 
+diff -Nur --exclude .git rogue.git/.gitignore rogue5.4.5/.gitignore
+--- rogue.git/.gitignore	2019-02-12 07:43:35.000000000 -0600
++++ rogue5.4.5/.gitignore	1969-12-31 18:00:00.000000000 -0600
+@@ -1,32 +0,0 @@
+-# Object files
+-*.o
+-*.ko
+-*.obj
+-*.elf
+-
+-# Precompiled Headers
+-*.gch
+-*.pch
+-
+-# Libraries
+-*.lib
+-*.a
+-*.la
+-*.lo
+-
+-# Shared objects (inc. Windows DLLs)
+-*.dll
+-*.so
+-*.so.*
+-*.dylib
+-
+-# Executables
+-*.exe
+-*.out
+-*.app
+-*.i*86
+-*.x86_64
+-*.hex
+-
+-# Debug files
+-*.dSYM/
+diff -Nur --exclude .git rogue.git/init.c rogue5.4.5/init.c
+--- rogue.git/init.c	2019-02-12 07:43:43.000000000 -0600
++++ rogue5.4.5/init.c	2007-10-13 13:29:51.000000000 -0500
+@@ -21,9 +21,9 @@
+  *	Roll her up
+  */
+ void
+-init_player()
++init_player(void)
+ {
+-    register THING *obj;
++    THING *obj;
+ 
+     pstats = max_stats;
+     food_left = HUNGERTIME;
+@@ -78,7 +78,7 @@
+  * potions and scrolls
+  */
+ 
+-char *rainbow[] = {
++const char *rainbow[] = {
+     "amber",
+     "aquamarine",
+     "black",
+@@ -109,9 +109,8 @@
+ };
+ 
+ #define NCOLORS (sizeof rainbow / sizeof (char *))
+-int cNCOLORS = NCOLORS;
+ 
+-static char *sylls[] = {
++static const char *sylls[] = {
+     "a", "ab", "ag", "aks", "ala", "an", "app", "arg", "arze", "ash",
+     "bek", "bie", "bit", "bjor", "blu", "bot", "bu", "byt", "comp",
+     "con", "cos", "cre", "dalf", "dan", "den", "do", "e", "eep", "el",
+@@ -130,7 +129,7 @@
+     "zok", "zon", "zum",
+ };
+ 
+-STONE stones[] = {
++const STONE stones[] = {
+     { "agate",		 25},
+     { "alexandrite",	 40},
+     { "amethyst",	 50},
+@@ -160,9 +159,8 @@
+ };
+ 
+ #define NSTONES (sizeof stones / sizeof (STONE))
+-int cNSTONES = NSTONES;
+ 
+-char *wood[] = {
++const char *wood[] = {
+     "avocado wood",
+     "balsa",
+     "bamboo",
+@@ -199,9 +197,8 @@
+ };
+ 
+ #define NWOOD (sizeof wood / sizeof (char *))
+-int cNWOOD = NWOOD;
+ 
+-char *metal[] = {
++const char *metal[] = {
+     "aluminum",
+     "beryllium",
+     "bone",
+@@ -227,19 +224,21 @@
+ };
+ 
+ #define NMETAL (sizeof metal / sizeof (char *))
+-int cNMETAL = NMETAL;
+-#define MAX3(a,b,c)	(a > b ? (a > c ? a : c) : (b > c ? b : c))
+ 
+-static bool used[MAX3(NCOLORS, NSTONES, NWOOD)];
++int cNWOOD = NWOOD;
++int cNMETAL = NMETAL;
++int cNSTONES = NSTONES;
++int cNCOLORS = NCOLORS;
+ 
+ /*
+  * init_colors:
+  *	Initialize the potion color scheme for this time
+  */
+ void
+-init_colors()
++init_colors(void)
+ {
+-    register int i, j;
++    int i, j;
++    int used[NCOLORS];
+ 
+     for (i = 0; i < NCOLORS; i++)
+ 	used[i] = FALSE;
+@@ -260,11 +259,12 @@
+ #define MAXNAME	40	/* Max number of characters in a name */
+ 
+ void
+-init_names()
++init_names(void)
+ {
+-    register int nsyl;
+-    register char *cp, *sp;
+-    register int i, nwords;
++    int nsyl;
++    const char *sp;
++    char *cp;
++    int i, nwords;
+ 
+     for (i = 0; i < MAXSCROLLS; i++)
+     {
+@@ -284,8 +284,9 @@
+ 	    *cp++ = ' ';
+ 	}
+ 	*--cp = '\0';
+-	s_names[i] = (char *) malloc((unsigned) strlen(prbuf)+1);
+-	strcpy(s_names[i], prbuf);
++	s_names[i] = malloc(strlen(prbuf)+1);
++	if (s_names[i] != NULL)
++		strcpy(s_names[i], prbuf);
+     }
+ }
+ 
+@@ -294,9 +295,10 @@
+  *	Initialize the ring stone setting scheme for this time
+  */
+ void
+-init_stones()
++init_stones(void)
+ {
+-    register int i, j;
++    int used[NSTONES];
++    int i, j;
+ 
+     for (i = 0; i < NSTONES; i++)
+ 	used[i] = FALSE;
+@@ -316,11 +318,12 @@
+  *	Initialize the construction materials for wands and staffs
+  */
+ void
+-init_materials()
++init_materials(void)
+ {
+-    register int i, j;
+-    register char *str;
+-    static bool metused[NMETAL];
++    int i, j;
++    const char *str;
++    int metused[NMETAL];
++    int used[NWOOD];
+ 
+     for (i = 0; i < NWOOD; i++)
+ 	used[i] = FALSE;
+@@ -402,7 +405,7 @@
+  *	Initialize the probabilities for the various items
+  */
+ void
+-init_probs()
++init_probs(void)
+ {
+     sumprobs(things, NT);
+     sumprobs(pot_info, MP);
+@@ -419,9 +422,9 @@
+  *	Check to see if a series of probabilities sums to 100
+  */
+ void
+-badcheck(char *name, struct obj_info *info, int bound)
++badcheck(const char *name, const struct obj_info *info, int bound)
+ {
+-    register struct obj_info *end;
++    const struct obj_info *end;
+ 
+     if (info[bound - 1].oi_prob == 100)
+ 	return;
+@@ -440,8 +443,8 @@
+  *	If he is halucinating, pick a random color name and return it,
+  *	otherwise return the given color.
+  */
+-char *
+-pick_color(char *col)
++const char *
++pick_color(const char *col)
+ {
+     return (on(player, ISHALU) ? rainbow[rnd(NCOLORS)] : col);
+ }
+diff -Nur --exclude .git rogue.git/io.c rogue5.4.5/io.c
+--- rogue.git/io.c	2019-02-12 07:43:44.000000000 -0600
++++ rogue5.4.5/io.c	2007-10-13 13:29:51.000000000 -0500
+@@ -21,7 +21,7 @@
+ 
+ /* VARARGS1 */
+ int
+-msg(char *fmt, ...)
++msg(const char *fmt, ...)
+ {
+     va_list args;
+ 
+@@ -50,7 +50,7 @@
+  */
+ /* VARARGS1 */
+ void
+-addmsg(char *fmt, ...)
++addmsg(const char *fmt, ...)
+ {
+     va_list args;
+ 
+@@ -65,9 +65,9 @@
+  *	if it is up there with the --More--)
+  */
+ int
+-endmsg()
++endmsg(void)
+ {
+-    char ch;
++    int ch;
+ 
+     if (save_msg)
+ 	strcpy(huh, msgbuf);
+@@ -77,7 +77,7 @@
+ 	mvaddstr(0, mpos, "--More--");
+ 	refresh();
+ 	if (!msg_esc)
+-	    wait_for(' ');
++	    wait_for(stdscr, ' ');
+ 	else
+ 	{
+ 	    while ((ch = readchar()) != ' ')
+@@ -95,7 +95,7 @@
+      * All messages should start with uppercase, except ones that
+      * start with a pack addressing character
+      */
+-    if (islower(msgbuf[0]) && !lower_msg && msgbuf[1] != ')')
++    if (islower((int)msgbuf[0]) && !lower_msg && msgbuf[1] != ')')
+ 	msgbuf[0] = (char) toupper(msgbuf[0]);
+     mvaddstr(0, 0, msgbuf);
+     clrtoeol();
+@@ -111,7 +111,7 @@
+  *	Perform an add onto the message buffer
+  */
+ void
+-doadd(char *fmt, va_list args)
++doadd(const char *fmt, va_list args)
+ {
+     static char buf[MAXSTR];
+ 
+@@ -147,37 +147,55 @@
+  * readchar:
+  *	Reads and returns a character, checking for gross input errors
+  */
+-char
+-readchar()
++
++int
++readchar(void)
+ {
+-    char ch;
++    int ch;
+ 
+-    ch = (char) md_readchar();
++    ch = md_readchar(stdscr);
+ 
+     if (ch == 3)
+     {
+-	quit(0);
++		quit(0);
+         return(27);
+     }
+ 
+     return(ch);
+ }
+ 
++int
++wreadchar(WINDOW *win)
++{
++    int ch;
++
++    ch = md_readchar(win);
++
++    if (ch == 3)
++    {
++		quit(0);
++        return(27);
++    }
++
++    return(ch);
++}
++
++
+ /*
+  * status:
+  *	Display the important stats line.  Keep the cursor where it was.
+  */
+ void
+-status()
++status(void)
+ {
+-    register int oy, ox, temp;
++    int oy, ox, temp;
+     static int hpwidth = 0;
+     static int s_hungry = 0;
+     static int s_lvl = 0;
+     static int s_pur = -1;
+     static int s_hp = 0;
+     static int s_arm = 0;
+-    static str_t s_str = 0;
++    static int s_str = 0;
+     static int s_exp = 0;
+     static char *state_name[] =
+     {
+@@ -219,11 +237,11 @@
+ 
+     if (stat_msg)
+     {
+-	move(0, 0);
+-        msg("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %d/%ld  %s",
+-	    level, purse, hpwidth, pstats.s_hpt, hpwidth, max_hp, pstats.s_str,
+-	    max_stats.s_str, 10 - s_arm, pstats.s_lvl, pstats.s_exp,
+-	    state_name[hungry_state]);
++        move(0, 0);
++        msg("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %d/%d  %s",
++        level, purse, hpwidth, pstats.s_hpt, hpwidth, max_hp, pstats.s_str,
++        max_stats.s_str, 10 - s_arm, pstats.s_lvl, pstats.s_exp,
++        state_name[hungry_state]);
+     }
+     else
+     {
+@@ -244,15 +262,15 @@
+  *	Sit around until the guy types the right key
+  */
+ void
+-wait_for(int ch)
++wait_for(WINDOW *win, int ch)
+ {
+-    register char c;
++    int c;
+ 
+     if (ch == '\n')
+-        while ((c = readchar()) != '\n' && c != '\r')
++        while ((c = wreadchar(win)) != '\n' && c != '\r')
+ 	    continue;
+     else
+-        while (readchar() != ch)
++        while (wreadchar(win) != ch)
+ 	    continue;
+ }
+ 
+@@ -261,7 +279,7 @@
+  *	Function used to display a window and wait before returning
+  */
+ void
+-show_win(char *message)
++show_win(const char *message)
+ {
+     WINDOW *win;
+ 
+@@ -269,9 +287,8 @@
+     wmove(win, 0, 0);
+     waddstr(win, message);
+     touchwin(win);
+-    wmove(win, hero.y, hero.x);
+     wrefresh(win);
+-    wait_for(' ');
++    wait_for(win, ' ');
+     clearok(curscr, TRUE);
+     touchwin(stdscr);
+ }
+diff -Nur --exclude .git rogue.git/list.c rogue5.4.5/list.c
+--- rogue.git/list.c	2019-02-12 07:43:44.000000000 -0600
++++ rogue5.4.5/list.c	2007-10-13 13:29:51.000000000 -0500
+@@ -87,7 +87,7 @@
+ #ifdef MASTER
+     total--;
+ #endif
+-    free((char *) item);
++    free(item);
+ }
+ 
+ /*
+@@ -95,19 +95,22 @@
+  *	Get a new item with a specified size
+  */
+ THING *
+-new_item()
++new_item(void)
+ {
+     THING *item;
+ 
++	if ((item = calloc(1, sizeof *item)) == NULL) {
++#ifdef MASTER
++		msg("ran out of memory after %d items", total);
++#endif
++		return NULL;
++	}
++
+ #ifdef MASTER
+-    if ((item = calloc(1, sizeof *item)) == NULL)
+-	msg("ran out of memory after %d items", total);
+-    else
+ 	total++;
+-#else
+-    item = calloc(1, sizeof *item);
+ #endif
+-    item->l_next = NULL;
++
++	item->l_next = NULL;
+     item->l_prev = NULL;
+     return item;
+ }
+diff -Nur --exclude .git rogue.git/mach_dep.c rogue5.4.5/mach_dep.c
+--- rogue.git/mach_dep.c	2019-02-12 07:43:45.000000000 -0600
++++ rogue5.4.5/mach_dep.c	2007-10-13 13:29:51.000000000 -0500
+@@ -56,17 +56,8 @@
+ #	define	NUMNAME		"Ten"
+ # endif
+ 
+-unsigned int numscores = NUMSCORES;
+-char *Numname = NUMNAME;
+-
+-# ifdef ALLSCORES
+-bool allscore = TRUE;
+-# else  /* ALLSCORES */
+-bool allscore = FALSE;
+-# endif /* ALLSCORES */
+-
+ #ifdef CHECKTIME
+-static int num_checks;		/* times we've gone over in checkout() */
++static int num_checks = 0;		/* times we've gone over in checkout() */
+ #endif /* CHECKTIME */
+ 
+ /*
+@@ -75,7 +66,7 @@
+  */
+ 
+ void
+-init_check()
++init_check(void)
+ {
+ #if defined(MAXLOAD) || defined(MAXUSERS)
+     if (too_much())
+@@ -97,10 +88,20 @@
+  */
+ 
+ void
+-open_score()
++open_score(void)
+ {
+ #ifdef SCOREFILE
+     char *scorefile = SCOREFILE;
++
++    numscores = NUMSCORES;
++    Numname = NUMNAME;
++
++#ifdef ALLSCORES
++    allscore = TRUE;
++#else  /* ALLSCORES */
++    allscore = FALSE;
++#endif /* ALLSCORES */
++
+      /* 
+       * We drop setgid privileges after opening the score file, so subsequent 
+       * open()'s will fail.  Just reuse the earlier filehandle. 
+@@ -129,17 +130,26 @@
+ }
+ 
+ /*
++ * getltchars:
++ *	Get the local tty chars for later use
++ */
++
++void
++getltchars(void)
++{
++    got_ltc = TRUE;
++    orig_dsusp = md_dsuspchar();
++    md_setdsuspchar( md_suspchar() );
++}
++
++/*
+  * setup:
+  *	Get starting setup for all games
+  */
+ 
+ void
+-setup()
++setup(void)
+ {
+-#ifdef CHECKTIME
+-    int  checkout();
+-#endif
+-
+ #ifdef DUMP
+     md_onsignal_autosave();
+ #else
+@@ -157,19 +167,6 @@
+     getltchars();			/* get the local tty chars */
+ }
+ 
+-/*
+- * getltchars:
+- *	Get the local tty chars for later use
+- */
+-
+-void
+-getltchars()
+-{
+-    got_ltc = TRUE;
+-    orig_dsusp = md_dsuspchar();
+-    md_setdsuspchar( md_suspchar() );
+-}
+-
+ /* 
+  * resetltchars: 
+  *      Reset the local tty chars to original values. 
+@@ -200,7 +197,7 @@
+  */
+ 
+ void
+-start_score()
++start_score(void)
+ {
+ #ifdef CHECKTIME
+     md_stop_checkout_timer();
+@@ -211,7 +208,7 @@
+  * is_symlink: 	 	 
+  *      See if the file has a symbolic link 	 	 
+   */ 	 	 
+-bool 	 	 
++int	 	 
+ is_symlink(char *sp) 	 	 
+ { 	 	 
+ #ifdef S_IFLNK 	 	 
+@@ -232,8 +229,8 @@
+  * too_much:
+  *	See if the system is being used too much for this game
+  */
+-bool
+-too_much()
++int
++too_much(void)
+ {
+ #ifdef MAXLOAD
+     double avec[3];
+@@ -257,8 +254,8 @@
+  * author:
+  *	See if a user is an author of the program
+  */
+-bool
+-author()
++int
++author(void)
+ {
+ #ifdef MASTER
+     if (wizard)
+@@ -282,7 +279,7 @@
+ 
+ checkout(int sig)
+ {
+-    static char *msgs[] = {
++    char *msgs[] = {
+ 	"The load is too high to be playing.  Please leave in %0.1f minutes",
+ 	"Please save your game.  You have %0.1f minutes",
+ 	"Last warning.  You have %0.1f minutes to leave",
+@@ -344,7 +341,7 @@
+ struct utmp buf;
+ 
+ int
+-ucount()
++ucount(void)
+ {
+     struct utmp *up;
+     FILE *utmp;
+@@ -370,12 +367,12 @@
+  *	they care to wait.  Return TRUE if the lock is successful.
+  */
+ static FILE *lfd = NULL;
+-bool
+-lock_sc()
++int
++lock_sc(void)
+ {
+ #if defined(SCOREFILE) && defined(LOCKFILE)
+     int cnt;
+-    static struct stat sbuf;
++    struct stat sbuf;
+     char *lockfile = LOCKFILE;
+ 
+ over:
+@@ -435,7 +432,7 @@
+  */
+ 
+ void
+-unlock_sc()
++unlock_sc(void)
+ {
+ #if defined(SCOREFILE) && defined(LOCKFILE)
+     if (lfd != NULL)
+@@ -451,7 +448,7 @@
+  */
+ 
+ void
+-flush_type()
++flush_type(void)
+ {
+     flushinp();
+ }
+diff -Nur --exclude .git rogue.git/main.c rogue5.4.5/main.c
+--- rogue.git/main.c	2019-02-12 07:43:45.000000000 -0600
++++ rogue5.4.5/main.c	2007-10-13 13:29:51.000000000 -0500
+@@ -20,10 +20,10 @@
+  *	The main program, of course
+  */
+ int
+-main(int argc, char **argv, char **envp)
++main(int argc, char **argv)
+ {
+     char *env;
+-    int lowtime;
++    time_t lowtime;
+ 
+     md_init();
+ 
+@@ -46,7 +46,10 @@
+      * get home and options from environment
+      */
+ 
+-    strncpy(home, md_gethomedir(), MAXSTR);
++    strcpy(home, md_gethomedir());
++
++	if (strlen(home) > MAXSTR - strlen("rogue.save") - 1)
++		*home = 0;
+ 
+     strcpy(file_name, home);
+     strcat(file_name, "rogue.save");
+@@ -54,14 +57,14 @@
+     if ((env = getenv("ROGUEOPTS")) != NULL)
+ 	parse_opts(env);
+     if (env == NULL || whoami[0] == '\0')
+-        strucpy(whoami, md_getusername(), (int) strlen(md_getusername()));
+-    lowtime = (int) time(NULL);
++        strucpy(whoami, md_getusername(), strlen(md_getusername()));
++    lowtime = time(NULL);
+ #ifdef MASTER
+     if (wizard && getenv("SEED") != NULL)
+ 	dnum = atoi(getenv("SEED"));
+     else
+ #endif
+-	dnum = lowtime + md_getpid();
++	dnum = (unsigned int) lowtime + md_getpid();
+     seed = dnum;
+ 
+     open_score();
+@@ -102,7 +105,7 @@
+ 
+     init_check();			/* check for legal startup */
+     if (argc == 2)
+-	if (!restore(argv[1], envp))	/* Note: restore will never return */
++	if (!restore(argv[1]))	/* Note: restore will never return */
+ 	    my_exit(1);
+ #ifdef MASTER
+     if (wizard)
+@@ -170,7 +173,7 @@
+  */
+ 
+ void
+-fatal(char *s)
++fatal(const char *s)
+ {
+     mvaddstr(LINES - 2, 0, s);
+     refresh();
+@@ -249,7 +252,7 @@
+  */
+ 
+ void
+-playit()
++playit(void)
+ {
+     char *opts;
+ 
+@@ -353,7 +356,7 @@
+  */
+ 
+ void
+-shell()
++shell(void)
+ {
+     /*
+      * Set the terminal back to original mode
+@@ -371,14 +374,11 @@
+      */
+     md_shellescape();
+ 
+-    printf("\n[Press return to continue]");
+-    fflush(stdout);
+     noecho();
+     raw();
+     keypad(stdscr,1);
+     playltchars();
+     in_shell = FALSE;
+-    wait_for('\n');
+     clearok(stdscr, TRUE);
+ }
+ 
+diff -Nur --exclude .git rogue.git/Makefile.std rogue5.4.5/Makefile.std
+--- rogue.git/Makefile.std	2019-02-12 07:43:37.000000000 -0600
++++ rogue5.4.5/Makefile.std	2007-10-13 13:29:51.000000000 -0500
+@@ -9,7 +9,7 @@
+ # See the file LICENSE.TXT for full copyright and licensing information.
+ #
+ 
+-DISTNAME = rogue5.4.4
++DISTNAME = rogue5.4.5
+ PROGRAM  = rogue54
+ O        = o
+ HDRS     = rogue.h extern.h score.h
+diff -Nur --exclude .git rogue.git/mdport.c rogue5.4.5/mdport.c
+--- rogue.git/mdport.c	2019-02-12 07:43:45.000000000 -0600
++++ rogue5.4.5/mdport.c	2007-10-13 13:29:51.000000000 -0500
+@@ -111,7 +111,7 @@
+ #define NOOP(x) (x += 0)
+ 
+ void
+-md_init()
++md_init(void)
+ {
+ #if defined(__INTERIX)
+     char *term;
+@@ -138,7 +138,7 @@
+ }
+ 
+ void
+-md_onsignal_default()
++md_onsignal_default(void)
+ {
+ #ifdef SIGHUP
+     signal(SIGHUP, SIG_DFL);
+@@ -176,7 +176,7 @@
+ }
+ 
+ void
+-md_onsignal_exit()
++md_onsignal_exit(void)
+ {
+ #ifdef SIGHUP
+     signal(SIGHUP, SIG_DFL);
+@@ -213,9 +213,14 @@
+ #endif
+ }
+ 
++extern void auto_save(int sig);
++extern void endit(int sig);
++extern void quit(int sig);
++
+ void
+-md_onsignal_autosave()
++md_onsignal_autosave(void)
+ {
++
+ #ifdef SIGHUP
+     signal(SIGHUP, auto_save);
+ #endif
+@@ -255,7 +260,7 @@
+ }
+ 
+ int
+-md_hasclreol()
++md_hasclreol(void)
+ {
+ #if defined(clr_eol)
+ #ifdef NCURSES_VERSION
+@@ -283,7 +288,7 @@
+ #endif
+ 
+ void
+-md_raw_standout()
++md_raw_standout(void)
+ {
+ #ifdef _WIN32
+     CONSOLE_SCREEN_BUFFER_INFO csbiInfo; 
+@@ -306,7 +311,7 @@
+ }
+ 
+ void
+-md_raw_standend()
++md_raw_standend(void)
+ {
+ #ifdef _WIN32
+     CONSOLE_SCREEN_BUFFER_INFO csbiInfo; 
+@@ -329,11 +334,11 @@
+ }
+ 
+ int
+-md_unlink_open_file(char *file, FILE *inf)
++md_unlink_open_file(const char *file, FILE *inf)
+ {
+ #ifdef _WIN32
+     fclose(inf);
+-    _chmod(file, 0600);
++    (void) _chmod(file, 0600);
+     return( _unlink(file) );
+ #else
+     return(unlink(file));
+@@ -344,7 +349,7 @@
+ md_unlink(char *file)
+ {
+ #ifdef _WIN32
+-    _chmod(file, 0600);
++    (void) _chmod(file, 0600);
+     return( _unlink(file) );
+ #else
+     return(unlink(file));
+@@ -352,7 +357,7 @@
+ }
+ 
+ int
+-md_chmod(char *filename, int mode)
++md_chmod(const char *filename, int mode)
+ {
+ #ifdef _WIN32
+     return( _chmod(filename, mode) );
+@@ -362,7 +367,7 @@
+ }
+ 
+ void
+-md_normaluser()
++md_normaluser(void)
+ {
+ #if defined(HAVE_GETGID) && defined(HAVE_GETUID)
+ 	gid_t realgid = getgid();
+@@ -396,8 +401,8 @@
+ #endif
+ }
+ 
+-int
+-md_getuid()
++uid_t
++md_getuid(void)
+ {
+ #ifdef HAVE_GETUID
+     return( getuid() );
+@@ -406,8 +411,8 @@
+ #endif
+ }
+ 
+-int
+-md_getpid()
++pid_t
++md_getpid(void)
+ {
+ #ifdef _WIN32
+     return( _getpid() );
+@@ -417,7 +422,7 @@
+ }
+ 
+ char *
+-md_getusername()
++md_getusername(void)
+ {
+     static char login[80];
+     char *l = NULL;
+@@ -450,7 +455,7 @@
+ }
+ 
+ char *
+-md_gethomedir()
++md_gethomedir(void)
+ {
+     static char homedir[PATH_MAX];
+     char *h = NULL;
+@@ -517,7 +522,7 @@
+ }
+ 
+ char *
+-md_getshell()
++md_getshell(void)
+ {
+     static char shell[PATH_MAX];
+     char *s = NULL;
+@@ -544,7 +549,7 @@
+ }
+ 
+ int
+-md_shellescape()
++md_shellescape(void)
+ {
+ #if defined(HAVE_WORKING_FORK)
+     int ret_status;
+@@ -604,7 +609,7 @@
+ }
+ 
+ char *
+-md_getrealname(int uid)
++md_getrealname(uid_t uid)
+ {
+     static char uidstr[20];
+ #if !defined(_WIN32) && !defined(DJGPP)
+@@ -618,15 +623,13 @@
+ 	else
+ 	    return(pp->pw_name);
+ #else
+-   sprintf(uidstr,"%d", uid);
++   sprintf(uidstr,"%ld", uid);
+    return(uidstr);
+ #endif
+ }
+ 
+-extern char *xcrypt(char *key, char *salt);
+-
+ char *
+-md_crypt(char *key, char *salt)
++md_crypt(const char *key, const char *salt)
+ {
+     return( xcrypt(key,salt) );
+ }
+@@ -687,12 +690,12 @@
+ 
+    return password_buffer;
+ #else
+-   return( (char *) getpass(prompt) );
++   return( getpass(prompt) );
+ #endif
+ }
+ 
+ int
+-md_erasechar()
++md_erasechar(void)
+ {
+ #ifdef HAVE_ERASECHAR
+     return( erasechar() ); /* process erase character */
+@@ -704,7 +707,7 @@
+ }
+ 
+ int
+-md_killchar()
++md_killchar(void)
+ {
+ #ifdef HAVE_KILLCHAR
+     return( killchar() );
+@@ -716,7 +719,7 @@
+ }
+ 
+ int
+-md_dsuspchar()
++md_dsuspchar(void)
+ {
+ #if defined(VDSUSP)			/* POSIX has priority */
+     struct termios attr;
+@@ -753,7 +756,7 @@
+ }
+ 
+ int
+-md_suspchar()
++md_suspchar(void)
+ {
+ #if defined(VSUSP)			/* POSIX has priority */
+     struct termios attr;
+@@ -1077,7 +1080,7 @@
+ #define M_TRAIL  3
+ 
+ int
+-md_readchar()
++md_readchar(WINDOW *win)
+ {
+     int ch = 0;
+     int lastch = 0;
+@@ -1086,7 +1089,7 @@
+ 
+     for(;;)
+     {
+-	ch = getch();
++	ch = wgetch(win);
+ 
+ 	if (ch == ERR)	    /* timed out waiting for valid sequence */
+ 	{		    /* flush input so far and start over    */
+@@ -1370,7 +1373,7 @@
+ #endif
+ 
+ void
+-md_ignoreallsignals()
++md_ignoreallsignals(void)
+ {
+ 	int i;
+ 
+@@ -1379,7 +1382,7 @@
+ }
+ 
+ void
+-md_tstphold()
++md_tstphold(void)
+ {
+ #ifdef SIGTSTP
+     /*
+@@ -1394,7 +1397,7 @@
+ }
+ 
+ void
+-md_tstpresume()
++md_tstpresume(void)
+ {
+ #ifdef SIGTSTP
+     signal(SIGTSTP, tstp);
+@@ -1402,7 +1405,7 @@
+ }
+ 
+ void
+-md_tstpsignal()
++md_tstpsignal(void)
+ {
+ #ifdef SIGTSTP
+     kill(0, SIGTSTP);		/* send actual signal and suspend process */
+@@ -1422,11 +1425,11 @@
+ }
+ 
+ void
+-md_stop_checkout_timer()
++md_stop_checkout_timer(void)
+ {
+ #if defined(SIGALRM)
+     signal(SIGALRM, SIG_IGN);
+ #endif
+ }
+ 
+-#endif
++#endif
+\ No newline at end of file
+diff -Nur --exclude .git rogue.git/misc.c rogue5.4.5/misc.c
+--- rogue.git/misc.c	2019-02-12 07:43:46.000000000 -0600
++++ rogue5.4.5/misc.c	2007-10-13 13:29:51.000000000 -0500
+@@ -24,19 +24,19 @@
+ 
+ 
+ void
+-look(bool wakeup)
++look(int wakeup)
+ {
+     int x, y;
+-    int ch;
++    chtype ch;
+     THING *tp;
+     PLACE *pp;
+     struct room *rp;
+     int ey, ex;
+     int passcount;
+-    char pfl, *fp, pch;
++    int pfl, *fp, pch;
+     int sy, sx, sumhero = 0, diffhero = 0;
+ # ifdef DEBUG
+-    static bool done = FALSE;
++    static int done = FALSE;
+ 
+     if (done)
+ 	return;
+@@ -214,7 +214,7 @@
+  */
+ 
+ void
+-erase_lamp(coord *pos, struct room *rp)
++erase_lamp(const coord *pos, const struct room *rp)
+ {
+     int y, x, ey, sy, ex;
+ 
+@@ -231,7 +231,7 @@
+ 	    if (y == hero.y && x == hero.x)
+ 		continue;
+ 	    move(y, x);
+-	    if (inch() == FLOOR)
++	    if (CCHAR( inch() ) == FLOOR)
+ 		addch(' ');
+ 	}
+ }
+@@ -240,8 +240,8 @@
+  * show_floor:
+  *	Should we show the floor in her room at this time?
+  */
+-bool
+-show_floor()
++int
++show_floor(void)
+ {
+     if ((proom->r_flags & (ISGONE|ISDARK)) == ISDARK && !on(player, ISBLIND))
+ 	return see_floor;
+@@ -279,7 +279,7 @@
+  */
+ 
+ void
+-eat()
++eat(void)
+ {
+     THING *obj;
+ 
+@@ -320,7 +320,7 @@
+  */
+ 
+ void
+-check_level()
++check_level(void)
+ {
+     int i, add, olevel;
+ 
+@@ -348,7 +348,7 @@
+ void
+ chg_str(int amt)
+ {
+-    auto str_t comp;
++    int comp;
+ 
+     if (amt == 0)
+ 	return;
+@@ -367,7 +367,7 @@
+  *	Perform the actual add, checking upper and lower bound limits
+  */
+ void
+-add_str(str_t *sp, int amt)
++add_str(int *sp, int amt)
+ {
+     if ((*sp += amt) < 3)
+ 	*sp = 3;
+@@ -379,8 +379,8 @@
+  * add_haste:
+  *	Add a haste to the player
+  */
+-bool
+-add_haste(bool potion)
++int
++add_haste(int potion)
+ {
+     if (on(player, ISHASTE))
+     {
+@@ -405,7 +405,7 @@
+  */
+ 
+ void
+-aggravate()
++aggravate(void)
+ {
+     THING *mp;
+ 
+@@ -419,7 +419,7 @@
+  *	"an".
+  */
+ char *
+-vowelstr(char *str)
++vowelstr(const char *str)
+ {
+     switch (*str)
+     {
+@@ -438,8 +438,8 @@
+  * is_current:
+  *	See if the object is one of the currently used items
+  */
+-bool
+-is_current(THING *obj)
++int
++is_current(const THING *obj)
+ {
+     if (obj == NULL)
+ 	return FALSE;
+@@ -459,11 +459,11 @@
+  *      Set up the direction co_ordinate for use in varios "prefix"
+  *	commands
+  */
+-bool
+-get_dir()
++int
++get_dir(void)
+ {
+     char *prompt;
+-    bool gotit;
++    int gotit;
+     static coord last_delt= {0,0};
+ 
+     if (again && last_dir != '\0')
+@@ -491,7 +491,7 @@
+ 		when 'u': case'U': delta.y = -1; delta.x =  1;
+ 		when 'b': case'B': delta.y =  1; delta.x = -1;
+ 		when 'n': case'N': delta.y =  1; delta.x =  1;
+-		when ESCAPE: last_dir = '\0'; reset_last(); return FALSE;
++		when ESCAPE: last_dir = '\0'; reset_last(); msg(""); return FALSE;
+ 		otherwise:
+ 		    mpos = 0;
+ 		    msg(prompt);
+@@ -499,7 +499,7 @@
+ 	    }
+ 	} until (gotit);
+ 	if (isupper(dir_ch))
+-	    dir_ch = (char) tolower(dir_ch);
++	    dir_ch = tolower(dir_ch);
+ 	last_dir = dir_ch;
+ 	last_delt.y = delta.y;
+ 	last_delt.x = delta.x;
+@@ -511,6 +511,7 @@
+ 	    delta.x = rnd(3) - 1;
+ 	} while (delta.y == 0 && delta.x == 0);
+     mpos = 0;
++    msg("");
+     return TRUE;
+ }
+ 
+@@ -560,9 +561,11 @@
+ 	{
+ 	    if (info->oi_guess != NULL)
+ 		free(info->oi_guess);
+-	    info->oi_guess = malloc((unsigned int) strlen(prbuf) + 1);
+-	    strcpy(info->oi_guess, prbuf);
++	    info->oi_guess = malloc(strlen(prbuf) + 1);
++		if (info->oi_guess != NULL)
++			strcpy(info->oi_guess, prbuf);
+ 	}
++	msg("");
+     }
+ }
+ 
+@@ -570,18 +573,18 @@
+  * rnd_thing:
+  *	Pick a random thing appropriate for this level
+  */
+-char
+-rnd_thing()
++int
++rnd_thing(void)
+ {
+     int i;
+-    static char thing_list[] = {
++    int thing_list[] = {
+ 	POTION, SCROLL, RING, STICK, FOOD, WEAPON, ARMOR, STAIRS, GOLD, AMULET
+     };
+ 
+     if (level >= AMULETLEVEL)
+-        i = rnd(sizeof thing_list / sizeof (char));
++        i = rnd(sizeof thing_list / sizeof (int));
+     else
+-        i = rnd(sizeof thing_list / sizeof (char) - 1);
++        i = rnd(sizeof thing_list / sizeof (int) - 1);
+     return thing_list[i];
+ }
+ 
+@@ -590,8 +593,8 @@
+  *	Choose the first or second string depending on whether it the
+  *	player is tripping
+  */
+-char *
+-choose_str(char *ts, char *ns)
++const char *
++choose_str(const char *ts, const char *ns)
+ {
+ 	return (on(player, ISHALU) ? ts : ns);
+ }
+diff -Nur --exclude .git rogue.git/monsters.c rogue5.4.5/monsters.c
+--- rogue.git/monsters.c	2019-02-12 07:43:47.000000000 -0600
++++ rogue5.4.5/monsters.c	2007-10-13 13:29:51.000000000 -0500
+@@ -18,12 +18,12 @@
+ /*
+  * List of monsters in rough order of vorpalness
+  */
+-static char lvl_mons[] =  {
++static const int lvl_mons[] =  {
+     'K', 'E', 'B', 'S', 'H', 'I', 'R', 'O', 'Z', 'L', 'C', 'Q', 'A',
+     'N', 'Y', 'F', 'T', 'W', 'P', 'X', 'U', 'M', 'V', 'G', 'J', 'D'
+ };
+ 
+-static char wand_mons[] = {
++static const int wand_mons[] = {
+     'K', 'E', 'B', 'S', 'H',   0, 'R', 'O', 'Z',   0, 'C', 'Q', 'A',
+       0, 'Y',   0, 'T', 'W', 'P',   0, 'U', 'M', 'V', 'G', 'J',   0
+ };
+@@ -33,11 +33,11 @@
+  *	Pick a monster to show up.  The lower the level,
+  *	the meaner the monster.
+  */
+-char
+-randmonster(bool wander)
++int
++randmonster(int wander)
+ {
+     int d;
+-    char *mons;
++    const int *mons;
+ 
+     mons = (wander ? wand_mons : lvl_mons);
+     do
+@@ -57,7 +57,7 @@
+  */
+ 
+ void
+-new_monster(THING *tp, char type, coord *cp)
++new_monster(THING *tp, int type, const coord *cp)
+ {
+     struct monster *mp;
+     int lev_add;
+@@ -95,7 +95,7 @@
+  *	Experience to add for this monster's level/hit points
+  */
+ int
+-exp_add(THING *tp)
++exp_add(const THING *tp)
+ {
+     int mod;
+ 
+@@ -116,15 +116,15 @@
+  */
+ 
+ void
+-wanderer()
++wanderer(void)
+ {
+     THING *tp;
+-    static coord cp;
++    coord cp;
+ 
+     tp = new_item();
+     do
+     {
+-	find_floor((struct room *) NULL, &cp, FALSE, TRUE);
++	find_floor(NULL, &cp, FALSE, TRUE);
+     } while (roomin(&cp) == proom);
+     new_monster(tp, randmonster(TRUE), &cp);
+     if (on(player, SEEMONST))
+@@ -147,21 +147,21 @@
+  * wake_monster:
+  *	What to do when the hero steps next to a monster
+  */
+-THING *
++const THING *
+ wake_monster(int y, int x)
+ {
+     THING *tp;
+     struct room *rp;
+-    char ch, *mname;
++	int ch;
++    const char *mname;
+ 
++	if ((tp = moat(y, x)) == NULL) {
+ #ifdef MASTER
+-    if ((tp = moat(y, x)) == NULL)
+-	msg("can't find monster in wake_monster");
+-#else
+-    tp = moat(y, x);
+-    if (tp == NULL) 	 	 
+-	endwin(), abort(); 
++		msg("can't find monster in wake_monster");
+ #endif
++		return NULL;
++	}
++
+     ch = tp->t_type;
+     /*
+      * Every time he sees mean monster, it might start chasing him
+@@ -226,7 +226,7 @@
+  *	See if a creature save against something
+  */
+ int
+-save_throw(int which, THING *tp)
++save_throw(int which, const THING *tp)
+ {
+     int need;
+ 
+diff -Nur --exclude .git rogue.git/move.c rogue5.4.5/move.c
+--- rogue.git/move.c	2019-02-12 07:43:47.000000000 -0600
++++ rogue5.4.5/move.c	2007-10-13 13:29:51.000000000 -0500
+@@ -18,7 +18,6 @@
+  * used to hold the new hero position
+  */
+ 
+-coord nh;
+ 
+ /*
+  * do_run:
+@@ -26,7 +25,7 @@
+  */
+ 
+ void
+-do_run(char ch)
++do_run(int ch)
+ {
+     running = TRUE;
+     after = FALSE;
+@@ -42,7 +41,8 @@
+ void
+ do_move(int dy, int dx)
+ {
+-    char ch, fl;
++    int ch, fl;
++    coord nh;
+ 
+     firstmove = FALSE;
+     if (no_move)
+@@ -56,7 +56,7 @@
+      */
+     if (on(player, ISHUH) && rnd(5) != 0)
+     {
+-	nh = *rndmove(&player);
++	nh = rndmove(&player);
+ 	if (ce(nh, hero))
+ 	{
+ 	    after = FALSE;
+@@ -110,14 +110,14 @@
+ 	    if (passgo && running && (proom->r_flags & ISGONE)
+ 		&& !on(player, ISBLIND))
+ 	    {
+-		bool	b1, b2;
++		int	b1, b2;
+ 
+ 		switch (runch)
+ 		{
+ 		    case 'h':
+ 		    case 'l':
+-			b1 = (bool)(hero.y != 1 && turn_ok(hero.y - 1, hero.x));
+-			b2 = (bool)(hero.y != NUMLINES - 2 && turn_ok(hero.y + 1, hero.x));
++			b1 = (hero.y != 1 && turn_ok(hero.y - 1, hero.x));
++			b2 = (hero.y != NUMLINES - 2 && turn_ok(hero.y + 1, hero.x));
+ 			if (!(b1 ^ b2))
+ 			    break;
+ 			if (b1)
+@@ -135,8 +135,8 @@
+ 			goto over;
+ 		    case 'j':
+ 		    case 'k':
+-			b1 = (bool)(hero.x != 0 && turn_ok(hero.y, hero.x - 1));
+-			b2 = (bool)(hero.x != NUMCOLS - 1 && turn_ok(hero.y, hero.x + 1));
++			b1 = (hero.x != 0 && turn_ok(hero.y, hero.x - 1));
++			b2 = (hero.x != NUMCOLS - 1 && turn_ok(hero.y, hero.x + 1));
+ 			if (!(b1 ^ b2))
+ 			    break;
+ 			if (b1)
+@@ -204,7 +204,7 @@
+  * turn_ok:
+  *	Decide whether it is legal to turn onto the given space
+  */
+-bool
++int
+ turn_ok(int y, int x)
+ {
+     PLACE *pp;
+@@ -220,7 +220,7 @@
+  */
+ 
+ void
+-turnref()
++turnref(void)
+ {
+     PLACE *pp;
+ 
+@@ -244,7 +244,7 @@
+  */
+ 
+ void
+-door_open(struct room *rp)
++door_open(const struct room *rp)
+ {
+     int y, x;
+ 
+@@ -259,12 +259,12 @@
+  * be_trapped:
+  *	The guy stepped on a trap.... Make him pay.
+  */
+-char
+-be_trapped(coord *tc)
++int
++be_trapped(const coord *tc)
+ {
+     PLACE *pp;
+     THING *arrow;
+-    char tr;
++    int tr;
+ 
+     if (on(player, ISLEVIT))
+ 	return T_RUST;	/* anything that's not a door or teleport */
+@@ -357,13 +357,13 @@
+  * rndmove:
+  *	Move in a random direction if the monster/person is confused
+  */
+-coord *
+-rndmove(THING *who)
++coord
++rndmove(const THING *who)
+ {
+     THING *obj;
+     int x, y;
+-    char ch;
+-    static coord ret;  /* what we will be returning */
++    int ch;
++    coord ret;  /* what we will be returning */
+ 
+     y = ret.y = who->t_pos.y + rnd(3) - 1;
+     x = ret.x = who->t_pos.x + rnd(3) - 1;
+@@ -372,7 +372,7 @@
+      * (I.e., bump into the wall or whatever)
+      */
+     if (y == who->t_pos.y && x == who->t_pos.x)
+-	return &ret;
++	return ret;
+     if (!diag_ok(&who->t_pos, &ret))
+ 	goto bad;
+     else
+@@ -389,11 +389,11 @@
+ 		goto bad;
+ 	}
+     }
+-    return &ret;
++    return ret;
+ 
+ bad:
+     ret = who->t_pos;
+-    return &ret;
++    return ret;
+ }
+ 
+ /*
+diff -Nur --exclude .git rogue.git/new_level.c rogue5.4.5/new_level.c
+--- rogue.git/new_level.c	2019-02-12 07:43:48.000000000 -0600
++++ rogue5.4.5/new_level.c	2007-10-13 13:29:51.000000000 -0500
+@@ -20,11 +20,11 @@
+ #define MINTREAS 2	/* minimum number of treasures in a treasure room */
+ 
+ void
+-new_level()
++new_level(void)
+ {
+     THING *tp;
+     PLACE *pp;
+-    char *sp;
++    int *sp;
+     int i;
+ 
+     player.t_flags &= ~ISHELD;	/* unhold when you go down just in case */
+@@ -73,7 +73,7 @@
+ 	     */
+ 	    do
+ 	    {
+-		find_floor((struct room *) NULL, &stairs, FALSE, FALSE);
++		find_floor(NULL, &stairs, FALSE, FALSE);
+ 	    } while (chat(stairs.y, stairs.x) != FLOOR);
+ 	    sp = &flat(stairs.y, stairs.x);
+ 	    *sp &= ~F_REAL;
+@@ -83,14 +83,14 @@
+     /*
+      * Place the staircase down.
+      */
+-    find_floor((struct room *) NULL, &stairs, FALSE, FALSE);
++    find_floor(NULL, &stairs, FALSE, FALSE);
+     chat(stairs.y, stairs.x) = STAIRS;
+     seenstairs = FALSE;
+ 
+     for (tp = mlist; tp != NULL; tp = next(tp))
+ 	tp->t_room = roomin(&tp->t_pos);
+ 
+-    find_floor((struct room *) NULL, &hero, FALSE, TRUE);
++    find_floor(NULL, &hero, FALSE, TRUE);
+     enter_room(&hero);
+     mvaddch(hero.y, hero.x, PLAYER);
+     if (on(player, SEEMONST))
+@@ -104,7 +104,7 @@
+  *	Pick a room that is really there
+  */
+ int
+-rnd_room()
++rnd_room(void)
+ {
+     int rm;
+ 
+@@ -121,7 +121,7 @@
+  */
+ 
+ void
+-put_things()
++put_things(void)
+ {
+     int i;
+     THING *obj;
+@@ -151,8 +151,8 @@
+ 	    /*
+ 	     * Put it somewhere
+ 	     */
+-	    find_floor((struct room *) NULL, &obj->o_pos, FALSE, FALSE);
+-	    chat(obj->o_pos.y, obj->o_pos.x) = (char) obj->o_type;
++	    find_floor(NULL, &obj->o_pos, FALSE, FALSE);
++	    chat(obj->o_pos.y, obj->o_pos.x) = obj->o_type;
+ 	}
+     /*
+      * If he is really deep in the dungeon and he hasn't found the
+@@ -171,7 +171,7 @@
+ 	/*
+ 	 * Put it somewhere
+ 	 */
+-	find_floor((struct room *) NULL, &obj->o_pos, FALSE, FALSE);
++	find_floor(NULL, &obj->o_pos, FALSE, FALSE);
+ 	chat(obj->o_pos.y, obj->o_pos.x) = AMULET;
+     }
+ }
+@@ -184,13 +184,13 @@
+ 
+ 
+ void
+-treas_room()
++treas_room(void)
+ {
+     int nm;
+     THING *tp;
+     struct room *rp;
+     int spots, num_monst;
+-    static coord mp;
++    coord mp;
+ 
+     rp = &rooms[rnd_room()];
+     spots = (rp->r_max.y - 2) * (rp->r_max.x - 2) - MINTREAS;
+@@ -203,7 +203,7 @@
+ 	tp = new_thing();
+ 	tp->o_pos = mp;
+ 	attach(lvl_obj, tp);
+-	chat(mp.y, mp.x) = (char) tp->o_type;
++	chat(mp.y, mp.x) = tp->o_type;
+     }
+ 
+     /*
+diff -Nur --exclude .git rogue.git/options.c rogue5.4.5/options.c
+--- rogue.git/options.c	2019-02-12 07:43:48.000000000 -0600
++++ rogue5.4.5/options.c	2007-10-13 13:29:51.000000000 -0500
+@@ -37,9 +37,9 @@
+ 
+ typedef struct optstruct	OPTION;
+ 
+-void	pr_optname(OPTION *op);
++void	pr_optname(const OPTION *op);
+ 
+-OPTION	optlist[] = {
++static const OPTION	optlist[] = {
+     {"terse",	 "Terse output",
+ 		 &terse,	put_bool,	get_bool	},
+     {"flush",	 "Flush typeahead during battle",
+@@ -68,9 +68,9 @@
+  */
+ 
+ void
+-option()
++option(void)
+ {
+-    OPTION	*op;
++    const OPTION *op;
+     int		retval;
+ 
+     wclear(hw);
+@@ -113,7 +113,7 @@
+     wmove(hw, LINES - 1, 0);
+     waddstr(hw, "--Press space to continue--");
+     wrefresh(hw);
+-    wait_for(' ');
++    wait_for(hw, ' ');
+     clearok(curscr, TRUE);
+     touchwin(stdscr);
+     after = FALSE;
+@@ -125,7 +125,7 @@
+  */
+ 
+ void
+-pr_optname(OPTION *op)
++pr_optname(const OPTION *op)
+ {
+     wprintw(hw, "%s (\"%s\"): ", op->o_prompt, op->o_name);
+ }
+@@ -138,7 +138,7 @@
+ void
+ put_bool(void *b)
+ {
+-    waddstr(hw, *(bool *) b ? "True" : "False");
++    waddstr(hw, *(int *) b ? "True" : "False");
+ }
+ 
+ /*
+@@ -170,9 +170,9 @@
+ int
+ get_bool(void *vp, WINDOW *win)
+ {
+-    bool *bp = (bool *) vp;
++    int *bp = (int *) vp;
+     int oy, ox;
+-    bool op_bad;
++    int op_bad;
+ 
+     op_bad = TRUE;
+     getyx(win, oy, ox);
+@@ -181,7 +181,7 @@
+     {
+ 	wmove(win, oy, ox);
+ 	wrefresh(win);
+-	switch (readchar())
++	switch (wreadchar(win))
+ 	{
+ 	    case 't':
+ 	    case 'T':
+@@ -220,8 +220,8 @@
+ int
+ get_sf(void *vp, WINDOW *win)
+ {
+-    bool	*bp = (bool *) vp;
+-    bool	was_sf;
++    int	*bp = (int *) vp;
++    int	was_sf;
+     int		retval;
+ 
+     was_sf = see_floor;
+@@ -252,8 +252,8 @@
+     char *opt = (char *) vopt;
+     char *sp;
+     int oy, ox;
+-    int i;
+-    signed char c;
++    size_t i;
++    int c;
+     static char buf[MAXSTR];
+ 
+     getyx(win, oy, ox);
+@@ -261,7 +261,7 @@
+     /*
+      * loop reading in the string, and put it in a temporary buffer
+      */
+-    for (sp = buf; (c = readchar()) != '\n' && c != '\r' && c != ESCAPE;
++    for (sp = buf; (c = wreadchar(win)) != '\n' && c != '\r' && c != ESCAPE;
+ 	wclrtoeol(win), wrefresh(win))
+     {
+ 	if (c == -1)
+@@ -271,7 +271,7 @@
+ 	    if (sp > buf)
+ 	    {
+ 		sp--;
+-		for (i = (int) strlen(unctrl(*sp)); i; i--)
++		for (i = strlen(unctrl(*sp)); i; i--)
+ 		    waddch(win, '\b');
+ 	    }
+ 	    continue;
+@@ -298,13 +298,13 @@
+ 	    putchar(CTRL('G'));
+ 	else
+ 	{
+-	    *sp++ = c;
++	    *sp++ = (char) c;
+ 	    waddstr(win, unctrl(c));
+ 	}
+     }
+     *sp = '\0';
+     if (sp > buf)	/* only change option if something has been typed */
+-	strucpy(opt, buf, (int) strlen(buf));
++	strucpy(opt, buf, strlen(buf));
+     mvwprintw(win, oy, ox, "%s\n", opt);
+     wrefresh(win);
+     if (win == stdscr)
+@@ -326,7 +326,7 @@
+ {
+     int *ip = (int *) vp;
+     int oy, ox;
+-    bool op_bad;
++    int op_bad;
+ 
+     op_bad = TRUE;
+     getyx(win, oy, ox);
+@@ -335,7 +335,7 @@
+     {
+ 	wmove(win, oy, ox);
+ 	wrefresh(win);
+-	switch (readchar())
++	switch (wreadchar(win))
+ 	{
+ 	    case 'o':
+ 	    case 'O':
+@@ -378,12 +378,12 @@
+ int
+ get_num(void *vp, WINDOW *win)
+ {
+-    short *opt = (short *) vp;
++    int *opt = (int *) vp;
+     int i;
+     static char buf[MAXSTR];
+ 
+     if ((i = get_str(buf, win)) == NORM)
+-	*opt = (short) atoi(buf);
++	*opt = atoi(buf);
+     return i;
+ }
+ #endif
+@@ -401,9 +401,9 @@
+ parse_opts(char *str)
+ {
+     char *sp;
+-    OPTION *op;
++    const OPTION *op;
+     int len;
+-    char **i;
++    const char **i;
+     char *start;
+ 
+     while (*str)
+@@ -411,7 +411,7 @@
+ 	/*
+ 	 * Get option name
+ 	 */
+-	for (sp = str; isalpha(*sp); sp++)
++	for (sp = str; isalpha((int)*sp); sp++)
+ 	    continue;
+ 	len = (int)(sp - str);
+ 	/*
+@@ -421,7 +421,7 @@
+ 	    if (EQSTR(str, op->o_name, len))
+ 	    {
+ 		if (op->o_putfunc == put_bool)	/* if option is a boolean */
+-		    *(bool *)op->o_opt = TRUE;	/* NOSTRICT */
++		    *(int *)op->o_opt = TRUE;	/* NOSTRICT */
+ 		else				/* string option */
+ 		{
+ 		    /*
+@@ -448,7 +448,7 @@
+ 		     */
+ 		    if (op->o_putfunc == put_inv_t)
+ 		    {
+-			if (islower(*str))
++			if (islower((int)*str))
+ 			    *str = (char) toupper(*str);
+ 			for (i = inv_t_name; i <= &inv_t_name[INV_CLEAR]; i++)
+ 			    if (strncmp(str, *i, sp - str) == 0)
+@@ -458,7 +458,7 @@
+ 			    }
+ 		    }
+ 		    else
+-			strucpy(start, str, (int)(sp - str));
++			strucpy(start, str, (size_t)(sp - str));
+ 		}
+ 		break;
+ 	    }
+@@ -468,14 +468,14 @@
+ 	    else if (op->o_putfunc == put_bool
+ 	      && EQSTR(str, "no", 2) && EQSTR(str + 2, op->o_name, len - 2))
+ 	    {
+-		*(bool *)op->o_opt = FALSE;	/* NOSTRICT */
++		*(int *)op->o_opt = FALSE;	/* NOSTRICT */
+ 		break;
+ 	    }
+ 
+ 	/*
+ 	 * skip to start of next option name
+ 	 */
+-	while (*sp && !isalpha(*sp))
++	while (*sp && !isalpha((int)*sp))
+ 	    sp++;
+ 	str = sp;
+     }
+@@ -487,13 +487,13 @@
+  */
+ 
+ void
+-strucpy(char *s1, char *s2, int len)
++strucpy(char *s1, const char *s2, size_t len)
+ {
+     if (len > MAXINP)
+ 	len = MAXINP;
+     while (len--)
+     {
+-	if (isprint(*s2) || *s2 == ' ')
++	if (isprint((int)*s2) || *s2 == ' ')
+ 	    *s1++ = *s2;
+ 	s2++;
+     }
+diff -Nur --exclude .git rogue.git/pack.c rogue5.4.5/pack.c
+--- rogue.git/pack.c	2019-02-12 07:43:48.000000000 -0600
++++ rogue5.4.5/pack.c	2007-10-13 13:29:51.000000000 -0500
+@@ -23,10 +23,10 @@
+  */
+ 
+ void
+-add_pack(THING *obj, bool silent)
++add_pack(THING *obj, int silent)
+ {
+     THING *op, *lp;
+-    bool from_floor;
++    int from_floor;
+ 
+     from_floor = FALSE;
+     if (obj == NULL)
+@@ -162,8 +162,8 @@
+  *	See if there's room in the pack.  If not, print out an
+  *	appropriate message
+  */
+-bool
+-pack_room(bool from_floor, THING *obj)
++int
++pack_room(int from_floor, THING *obj)
+ {
+     if (++inpack > MAXPACK)
+     {
+@@ -194,7 +194,7 @@
+  *	take an item out of the pack
+  */
+ THING *
+-leave_pack(THING *obj, bool newobj, bool all)
++leave_pack(THING *obj, int newobj, int all)
+ {
+     THING *nobj;
+ 
+@@ -228,15 +228,15 @@
+  * pack_char:
+  *	Return the next unused pack character.
+  */
+-char
+-pack_char()
++int
++pack_char(void)
+ {
+-    bool *bp;
++    int *bp;
+ 
+     for (bp = pack_used; *bp; bp++)
+ 	continue;
+     *bp = TRUE;
+-    return (char)((int)(bp - pack_used) + 'a');
++    return ((int)(bp - pack_used) + 'a');
+ }
+ 
+ /*
+@@ -244,8 +244,8 @@
+  *	List what is in the pack.  Return TRUE if there is something of
+  *	the given type.
+  */
+-bool
+-inventory(THING *list, int type)
++int
++inventory(const THING *list, int type)
+ {
+     static char inv_temp[MAXSTR];
+ 
+@@ -292,7 +292,7 @@
+  */
+ 
+ void
+-pick_up(char ch)
++pick_up(int ch)
+ {
+     THING *obj;
+ 
+@@ -325,7 +325,7 @@
+ 	    case AMULET:
+ 	    case RING:
+ 	    case STICK:
+-		add_pack((THING *) NULL, FALSE);
++		add_pack(NULL, FALSE);
+ 		break;
+ 	}
+ }
+@@ -336,7 +336,7 @@
+  */
+ 
+ void
+-move_msg(THING *obj)
++move_msg(const THING *obj)
+ {
+     if (!terse)
+ 	addmsg("you ");
+@@ -349,10 +349,10 @@
+  */
+ 
+ void
+-picky_inven()
++picky_inven(void)
+ {
+     THING *obj;
+-    char mch;
++    int mch;
+ 
+     if (pack == NULL)
+ 	msg("you aren't carrying anything");
+@@ -382,10 +382,10 @@
+  *	Pick something out of a pack for a purpose
+  */
+ THING *
+-get_item(char *purpose, int type)
++get_item(const char *purpose, int type)
+ {
+     THING *obj;
+-    char ch;
++    int ch;
+ 
+     if (pack == NULL)
+ 	msg("you aren't carrying anything");
+@@ -435,8 +435,10 @@
+ 		msg("'%s' is not a valid item",unctrl(ch));
+ 		continue;
+ 	    }
+-	    else 
++	    else {
++		msg("");
+ 		return obj;
++	    }
+ 	}
+     }
+     return NULL;
+@@ -465,8 +467,8 @@
+  * floor_ch:
+  *	Return the appropriate floor character for her room
+  */
+-char
+-floor_ch()
++int
++floor_ch(void)
+ {
+     if (proom->r_flags & ISGONE)
+ 	return PASSAGE;
+@@ -478,10 +480,10 @@
+  *	Return the character at hero's position, taking see_floor
+  *	into account
+  */
+-char
+-floor_at()
++int
++floor_at(void)
+ {
+-    char ch;
++    int ch;
+ 
+     ch = chat(hero.y, hero.x);
+     if (ch == FLOOR)
+@@ -495,7 +497,7 @@
+  */
+ 
+ void
+-reset_last()
++reset_last(void)
+ {
+     last_comm = l_last_comm;
+     last_dir = l_last_dir;
+diff -Nur --exclude .git rogue.git/passages.c rogue5.4.5/passages.c
+--- rogue.git/passages.c	2019-02-12 07:43:49.000000000 -0600
++++ rogue5.4.5/passages.c	2007-10-13 13:29:51.000000000 -0500
+@@ -20,16 +20,16 @@
+  */
+ 
+ void
+-do_passages()
++do_passages(void)
+ {
+     struct rdes *r1, *r2 = NULL;
+     int i, j;
+     int roomcount;
+-    static struct rdes
++    struct rdes
+     {
+-	bool	conn[MAXROOMS];		/* possible to connect to room i? */
+-	bool	isconn[MAXROOMS];	/* connection been made to room i? */
+-	bool	ingraph;		/* this room in graph already? */
++	int conn[MAXROOMS];		/* possible to connect to room i? */
++	int	isconn[MAXROOMS];	/* connection been made to room i? */
++	int	ingraph;		/* this room in graph already? */
+     } rdes[MAXROOMS] = {
+ 	{ { 0, 1, 0, 1, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 },
+ 	{ { 1, 0, 1, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 },
+@@ -136,8 +136,9 @@
+     int rmt;
+     int distance = 0, turn_spot, turn_distance = 0;
+     int rm;
+-    char direc;
+-    static coord del, curr, turn_delta, spos, epos;
++    int direc;
++    static coord del, turn_delta;
++    coord curr, spos, epos;
+ 
+     if (r1 < r2)
+     {
+@@ -271,7 +272,7 @@
+  */
+ 
+ void
+-putpass(coord *cp)
++putpass(const coord *cp)
+ {
+     PLACE *pp;
+ 
+@@ -290,7 +291,7 @@
+  */
+ 
+ void
+-door(struct room *rm, coord *cp)
++door(struct room *rm, const coord *cp)
+ {
+     PLACE *pp;
+ 
+@@ -319,11 +320,11 @@
+  */
+ 
+ void
+-add_pass()
++add_pass(void)
+ {
+     PLACE *pp;
+     int y, x;
+-    char ch;
++    int ch;
+ 
+     for (y = 1; y < NUMLINES - 1; y++)
+ 	for (x = 0; x < NUMCOLS; x++)
+@@ -357,11 +358,10 @@
+  *	Assign a number to each passageway
+  */
+ static int pnum;
+-static bool newpnum;
+-
++static int newpnum;
+ 
+ void
+-passnum()
++passnum(void)
+ {
+     struct room *rp;
+     int i;
+@@ -386,9 +386,9 @@
+ void
+ numpass(int y, int x)
+ {
+-    char *fp;
++    int *fp;
+     struct room *rp;
+-    char ch;
++    int ch;
+ 
+     if (x >= NUMCOLS || x < 0 || y >= NUMLINES || y <= 0)
+ 	return;
+diff -Nur --exclude .git rogue.git/potions.c rogue5.4.5/potions.c
+--- rogue.git/potions.c	2019-02-12 07:43:49.000000000 -0600
++++ rogue5.4.5/potions.c	2007-10-13 13:29:51.000000000 -0500
+@@ -14,15 +14,15 @@
+ #include <ctype.h>
+ #include "rogue.h"
+ 
+-typedef struct
++typedef struct PACT
+ {
+-    int pa_flags;
++    const int pa_flags;
+     void (*pa_daemon)();
+-    int pa_time;
+-    char *pa_high, *pa_straight;
++    const int pa_time;
++    const char *pa_high, *pa_straight;
+ } PACT;
+ 
+-static PACT p_actions[] =
++static const PACT p_actions[] =
+ {
+ 	{ ISHUH,	unconfuse,	HUHDURATION,	/* P_CONFUSE */
+ 		"what a tripy feeling!",
+@@ -56,11 +56,11 @@
+  */
+ 
+ void
+-quaff()
++quaff(void)
+ {
+     THING *obj, *tp, *mp;
+-    bool discardit = FALSE;
+-    bool show, trip;
++    int discardit = FALSE;
++    int show, trip;
+ 
+     obj = get_item("quaff", POTION);
+     /*
+@@ -83,7 +83,7 @@
+      * Calculate the effect it has on the poor guy.
+      */
+     trip = on(player, ISHALU);
+-    discardit = (bool)(obj->o_count == 1);
++    discardit = (obj->o_count == 1);
+     leave_pack(obj, FALSE, FALSE);
+     switch (obj->o_which)
+     {
+@@ -228,15 +228,15 @@
+  * is_magic:
+  *	Returns true if an object radiates magic
+  */
+-bool
+-is_magic(THING *obj)
++int
++is_magic(const THING *obj)
+ {
+     switch (obj->o_type)
+     {
+ 	case ARMOR:
+-	    return (bool)((obj->o_flags&ISPROT) || obj->o_arm != a_class[obj->o_which]);
++	    return ((obj->o_flags&ISPROT) || obj->o_arm != a_class[obj->o_which]);
+ 	case WEAPON:
+-	    return (bool)(obj->o_hplus != 0 || obj->o_dplus != 0);
++	    return (obj->o_hplus != 0 || obj->o_dplus != 0);
+ 	case POTION:
+ 	case SCROLL:
+ 	case STICK:
+@@ -253,7 +253,7 @@
+  */
+ 
+ void
+-invis_on()
++invis_on(void)
+ {
+     THING *mp;
+ 
+@@ -267,11 +267,11 @@
+  * turn_see:
+  *	Put on or off seeing monsters on this level
+  */
+-bool
+-turn_see(bool turn_off)
++int
++turn_see(int turn_off)
+ {
+     THING *mp;
+-    bool can_see, add_new;
++    int can_see, add_new;
+ 
+     add_new = FALSE;
+     for (mp = mlist; mp != NULL; mp = next(mp))
+@@ -309,13 +309,13 @@
+  * seen_stairs:
+  *	Return TRUE if the player has seen the stairs
+  */
+-bool
+-seen_stairs()
++int
++seen_stairs(void)
+ {
+     THING	*tp;
+ 
+     move(stairs.y, stairs.x);
+-    if (inch() == STAIRS)			/* it's on the map */
++    if (CCHAR( inch() ) == STAIRS)			/* it's on the map */
+ 	return TRUE;
+     if (ce(hero, stairs))			/* It's under him */
+ 	return TRUE;
+@@ -341,7 +341,7 @@
+  */
+ 
+ void
+-raise_level()
++raise_level(void)
+ {
+     pstats.s_exp = e_levels[pstats.s_lvl-1] + 1L;
+     check_level();
+@@ -354,9 +354,9 @@
+  */
+ 
+ void
+-do_pot(int type, bool knowit)
++do_pot(int type, int knowit)
+ {
+-    PACT *pp;
++    const PACT *pp;
+     int t;
+ 
+     pp = &p_actions[type];
+diff -Nur --exclude .git rogue.git/README.md rogue5.4.5/README.md
+--- rogue.git/README.md	2019-02-12 07:43:37.000000000 -0600
++++ rogue5.4.5/README.md	1969-12-31 18:00:00.000000000 -0600
+@@ -1,2 +0,0 @@
+-# rogue
+-Mirror of rogue.rogueforge.net's Rogue 5.4.4 
+diff -Nur --exclude .git rogue.git/rings.c rogue5.4.5/rings.c
+--- rogue.git/rings.c	2019-02-12 07:43:50.000000000 -0600
++++ rogue5.4.5/rings.c	2007-10-13 13:29:51.000000000 -0500
+@@ -19,7 +19,7 @@
+  */
+ 
+ void
+-ring_on()
++ring_on(void)
+ {
+     THING *obj;
+     int ring;
+@@ -91,7 +91,7 @@
+  */
+ 
+ void
+-ring_off()
++ring_off(void)
+ {
+     int ring;
+     THING *obj;
+@@ -127,7 +127,7 @@
+  *	Which hand is the hero interested in?
+  */
+ int
+-gethand()
++gethand(void)
+ {
+     int c;
+ 
+@@ -160,7 +160,7 @@
+ {
+     THING *ring;
+     int eat;
+-    static int uses[] = {
++    int uses[] = {
+ 	 1,	/* R_PROTECT */		 1,	/* R_ADDSTR */
+ 	 1,	/* R_SUSTSTR */		-3,	/* R_SEARCH */
+ 	-5,	/* R_SEEINVIS */	 0,	/* R_NOP */
+@@ -183,8 +183,8 @@
+  * ring_num:
+  *	Print ring bonuses
+  */
+-char *
+-ring_num(THING *obj)
++const char *
++ring_num(const THING *obj)
+ {
+     static char buf[10];
+ 
+diff -Nur --exclude .git rogue.git/rip.c rogue5.4.5/rip.c
+--- rogue.git/rip.c	2019-02-12 07:43:50.000000000 -0600
++++ rogue5.4.5/rip.c	2007-10-13 13:29:51.000000000 -0500
+@@ -46,7 +46,7 @@
+ /* VARARGS2 */
+ 
+ void
+-score(int amount, int flags, char monst)
++score(int amount, int flags, int monst)
+ {
+     SCORE *scp;
+     int i;
+@@ -56,8 +56,8 @@
+     int prflags = 0;
+ # endif
+     void (*fp)(int);
+-    unsigned int uid;
+-    static char *reason[] = {
++    uid_t uid;
++    char *reason[] = {
+ 	"killed",
+ 	"quit",
+ 	"A total winner",
+@@ -87,16 +87,20 @@
+ 	    delwin(hw);
+     }
+ 
+-    top_ten = (SCORE *) malloc(numscores * sizeof (SCORE));
++    top_ten = malloc(numscores * sizeof (SCORE));
++
++	if (top_ten == NULL)
++		return;
++
+     endp = &top_ten[numscores];
+     for (scp = top_ten; scp < endp; scp++)
+     {
+ 	scp->sc_score = 0;
+ 	for (i = 0; i < MAXSTR; i++)
+-	    scp->sc_name[i] = (unsigned char) rnd(255);
++	    scp->sc_name[i] = (char) rnd(255);
+ 	scp->sc_flags = RN;
+ 	scp->sc_level = RN;
+-	scp->sc_monster = (unsigned short) RN;
++	scp->sc_monster = RN;
+ 	scp->sc_uid = RN;
+     }
+ 
+@@ -170,7 +174,7 @@
+ 		scp->sc_score, scp->sc_name, reason[scp->sc_flags],
+ 		scp->sc_level);
+ 	    if (scp->sc_flags == 0 || scp->sc_flags == 3)
+-		printf(" by %s", killname((char) scp->sc_monster, TRUE));
++		printf(" by %s", killname(scp->sc_monster, TRUE));
+ #ifdef MASTER
+ 	    if (prflags == 1)
+ 	    {
+@@ -190,7 +194,7 @@
+ 			sc2->sc_name[i] = (char) rnd(255);
+ 		    sc2->sc_flags = RN;
+ 		    sc2->sc_level = RN;
+-		    sc2->sc_monster = (unsigned short) RN;
++		    sc2->sc_monster = RN;
+ 		    scp--;
+ 		}
+ 	    }
+@@ -225,12 +229,12 @@
+  */
+ 
+ void
+-death(char monst)
++death(int monst)
+ {
+-    char **dp, *killer;
++    char **dp;
++    const char *killer;
+     struct tm *lt;
+-    static time_t date;
+-    struct tm *localtime();
++    time_t date;
+ 
+     signal(SIGINT, SIG_IGN);
+     purse -= purse / 10;
+@@ -279,7 +283,7 @@
+  *	Return the index to center the given string
+  */
+ int
+-center(char *str)
++center(const char *str)
+ {
+     return 28 - (((int)strlen(str) + 1) / 2);
+ }
+@@ -290,7 +294,7 @@
+  */
+ 
+ void
+-total_winner()
++total_winner(void)
+ {
+     THING *obj;
+     struct obj_info *op;
+@@ -315,7 +319,7 @@
+     addstr("a great profit and are admitted to the Fighters' Guild.\n");
+     mvaddstr(LINES - 1, 0, "--Press space to continue--");
+     refresh();
+-    wait_for(' ');
++    wait_for(stdscr, ' ');
+     clear();
+     mvaddstr(0, 0, "   Worth  Item\n");
+     oldpurse = purse;
+@@ -389,13 +393,13 @@
+  * killname:
+  *	Convert a code to a monster name
+  */
+-char *
+-killname(char monst, bool doart)
++const char *
++killname(int monst, int doart)
+ {
+     struct h_list *hp;
+-    char *sp;
+-    bool article;
+-    static struct h_list nlist[] = {
++    const char *sp;
++    int article;
++    struct h_list nlist[] = {
+ 	{'a',	"arrow",		TRUE},
+ 	{'b',	"bolt",			TRUE},
+ 	{'d',	"dart",			TRUE},
+@@ -433,10 +437,10 @@
+  * death_monst:
+  *	Return a monster appropriate for a random death.
+  */
+-char
+-death_monst()
++int
++death_monst(void)
+ {
+-    static char poss[] =
++    int poss[] =
+     {
+ 	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+ 	'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+@@ -445,5 +449,5 @@
+ 		   message for killer */
+     };
+ 
+-    return poss[rnd(sizeof poss / sizeof (char))];
++    return poss[rnd(sizeof poss / sizeof (int))];
+ }
+diff -Nur --exclude .git rogue.git/rogue54.sln rogue5.4.5/rogue54.sln
+--- rogue.git/rogue54.sln	2019-02-12 07:43:55.000000000 -0600
++++ rogue5.4.5/rogue54.sln	2007-10-13 13:29:51.000000000 -0500
+@@ -1,7 +1,9 @@
+ Microsoft Visual Studio Solution File, Format Version 9.00
+-# Visual C++ Express 2005
++# Visual Studio 2005
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rogue54", "rogue54.vcproj", "{9EA0D326-8097-4ADA-82EA-4DB1F5CAA8F6}"
+ EndProject
++Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1C23D043-B375-4844-ACA0-32848BFCC987}"
++EndProject
+ Global
+ 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+ 		Debug|Win32 = Debug|Win32
+diff -Nur --exclude .git rogue.git/rogue54.vcproj rogue5.4.5/rogue54.vcproj
+--- rogue.git/rogue54.vcproj	2019-02-12 07:43:56.000000000 -0600
++++ rogue5.4.5/rogue54.vcproj	2007-10-13 13:29:51.000000000 -0500
+@@ -56,8 +56,9 @@
+ 				BrowseInformation="0"
+ 				WarningLevel="4"
+ 				Detect64BitPortabilityProblems="true"
+-				DebugInformationFormat="4"
++				DebugInformationFormat="3"
+ 				CompileAs="1"
++				EnablePREfast="true"
+ 			/>
+ 			<Tool
+ 				Name="VCManagedResourceCompilerTool"
+@@ -70,9 +71,9 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="Ws2_32.lib pdcurses.lib advapi32.lib shfolder.lib user32.lib"
++				AdditionalDependencies="../pdcurses/pdcurses.lib"
+ 				OutputFile="$(OutDir)/rogue54.exe"
+-				LinkIncremental="2"
++				LinkIncremental="1"
+ 				AdditionalLibraryDirectories="..\pdcurses"
+ 				IgnoreAllDefaultLibraries="false"
+ 				IgnoreDefaultLibraryNames=""
+@@ -80,6 +81,7 @@
+ 				ProgramDatabaseFile="$(OutDir)/rogue54.pdb"
+ 				SubSystem="1"
+ 				TargetMachine="1"
++				Profile="true"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -224,18 +226,6 @@
+ 				>
+ 			</File>
+ 			<File
+-				RelativePath="findpw.c"
+-				>
+-				<FileConfiguration
+-					Name="Debug|Win32"
+-					ExcludedFromBuild="true"
+-					>
+-					<Tool
+-						Name="VCCLCompilerTool"
+-					/>
+-				</FileConfiguration>
+-			</File>
+-			<File
+ 				RelativePath="init.c"
+ 				>
+ 			</File>
+@@ -308,30 +298,6 @@
+ 				>
+ 			</File>
+ 			<File
+-				RelativePath="scedit.c"
+-				>
+-				<FileConfiguration
+-					Name="Debug|Win32"
+-					ExcludedFromBuild="true"
+-					>
+-					<Tool
+-						Name="VCCLCompilerTool"
+-					/>
+-				</FileConfiguration>
+-			</File>
+-			<File
+-				RelativePath="scmisc.c"
+-				>
+-				<FileConfiguration
+-					Name="Debug|Win32"
+-					ExcludedFromBuild="true"
+-					>
+-					<Tool
+-						Name="VCCLCompilerTool"
+-					/>
+-				</FileConfiguration>
+-			</File>
+-			<File
+ 				RelativePath="scrolls.c"
+ 				>
+ 			</File>
+diff -Nur --exclude .git rogue.git/rogue.h rogue5.4.5/rogue.h
+--- rogue.git/rogue.h	2019-02-12 07:43:52.000000000 -0600
++++ rogue5.4.5/rogue.h	2007-10-13 13:29:51.000000000 -0500
+@@ -15,7 +15,11 @@
+ #undef lines 
+ 
+ #define NOOP(x) (x += 0)
+-#define CCHAR(x) ( (char) (x & A_CHARTEXT) )
++#define CCHAR(x) ( (x) & A_CHARTEXT )
++
++#define MAXDAEMONS 20
++#define EMPTY 0
++
+ /*
+  * Maximum number of different things
+  */
+@@ -66,7 +70,7 @@
+ #define free_list(a)	_free_list(&a)
+ #undef max
+ #define max(a,b)	((a) > (b) ? (a) : (b))
+-#define on(thing,flag)	((bool)(((thing).t_flags & (flag)) != 0))
++#define on(thing,flag)	((((thing).t_flags & (flag)) != 0))
+ #define GOLDCALC	(rnd(50 + 10 * level) + 2)
+ #define ISRING(h,r)	(cur_ring[h] != NULL && cur_ring[h]->o_which == r)
+ #define ISWEARING(r)	(ISRING(LEFT, r) || ISRING(RIGHT, r))
+@@ -315,30 +319,28 @@
+  * Help list
+  */
+ struct h_list {
+-    char h_ch;
+-    char *h_desc;
+-    bool h_print;
++    int h_ch;
++    const char *h_desc;
++    int h_print;
+ };
+ 
+ /*
+  * Coordinate data type
+  */
+-typedef struct {
++typedef struct coord {
+     int x;
+     int y;
+ } coord;
+ 
+-typedef unsigned int str_t;
+-
+ /*
+  * Stuff about objects
+  */
+ struct obj_info {
+-    char *oi_name;
++    const char *oi_name;
+     int oi_prob;
+     int oi_worth;
+     char *oi_guess;
+-    bool oi_know;
++    int oi_know;
+ };
+ 
+ /*
+@@ -349,7 +351,7 @@
+     coord r_max;			/* Size of room */
+     coord r_gold;			/* Where the gold is */
+     int r_goldval;			/* How much the gold is worth */
+-    short r_flags;			/* info about the room */
++    int r_flags;			/* info about the room */
+     int r_nexits;			/* Number of exits */
+     coord r_exit[12];			/* Where the exits are */
+ };
+@@ -358,7 +360,7 @@
+  * Structure describing a fighting being
+  */
+ struct stats {
+-    str_t s_str;			/* Strength */
++    int s_str;			/* Strength */
+     int s_exp;				/* Experience */
+     int s_lvl;				/* level of mastery */
+     int s_arm;				/* Armor class */
+@@ -374,12 +376,12 @@
+     struct {
+ 	union thing *_l_next, *_l_prev;	/* Next pointer in link */
+ 	coord _t_pos;			/* Position */
+-	bool _t_turn;			/* If slowed, is it a turn to move */
+-	char _t_type;			/* What it is */
+-	char _t_disguise;		/* What mimic looks like */
+-	char _t_oldch;			/* Character that was where it was */
+-	coord *_t_dest;			/* Where it is running to */
+-	short _t_flags;			/* State word */
++	int _t_turn;			/* If slowed, is it a turn to move */
++	int _t_type;			/* What it is */
++	int _t_disguise;		/* What mimic looks like */
++	int _t_oldch;			/* Character that was where it was */
++	const coord *_t_dest;		/* Where it is running to */
++	int _t_flags;			/* State word */
+ 	struct stats _t_stats;		/* Physical description */
+ 	struct room *_t_room;		/* Current room for thing */
+ 	union thing *_t_pack;		/* What the thing is carrying */
+@@ -391,7 +393,7 @@
+ 	coord _o_pos;			/* Where it lives on the screen */
+ 	char *_o_text;			/* What it says if you read it */
+ 	int  _o_launch;			/* What you need to launch it */
+-	char _o_packch;			/* What character it is in the pack */
++	int _o_packch;			/* What character it is in the pack */
+ 	char _o_damage[8];		/* Damage if used like sword */
+ 	char _o_hurldmg[8];		/* Damage if thrown */
+ 	int _o_count;			/* count for plural objects */
+@@ -441,9 +443,9 @@
+ /*
+  * describe a place on the level map
+  */
+-typedef struct {
+-    char p_ch;
+-    char p_flags;
++typedef struct PLACE {
++    int p_ch;
++    int p_flags;
+     THING *p_monst;
+ } PLACE;
+ 
+@@ -451,303 +453,326 @@
+  * Array containing information on all the various types of monsters
+  */
+ struct monster {
+-    char *m_name;			/* What to call the monster */
++    const char *m_name;			/* What to call the monster */
+     int m_carry;			/* Probability of carrying something */
+-    short m_flags;			/* things about the monster */
++    int m_flags;			/* things about the monster */
+     struct stats m_stats;		/* Initial stats */
+ };
+ 
++struct delayed_action {
++    int d_type;
++    void (*d_func)();
++    int d_arg;
++    int d_time;
++};
++
++struct STONE {
++    char	*st_name;
++    int		st_value;
++};
++
++typedef struct STONE STONE;
++
+ /*
+  * External variables
+  */
+ 
+-extern bool	after, again, allscore, amulet, door_stop, fight_flush,
+-		firstmove, has_hit, inv_describe, jump, kamikaze,
+-		lower_msg, move_on, msg_esc, pack_used[],
+-		passgo, playing, q_comm, running, save_msg, see_floor,
+-		seenstairs, stat_msg, terse, to_death, tombstone;
++extern int after, again, allscore, door_stop, fight_flush,
++	   firstmove, has_hit, inv_describe, jump, kamikaze,
++	   lower_msg, move_on, msg_esc, pack_used[],
++	   passgo, playing, q_comm, running, save_msg, see_floor,
++	   seenstairs, stat_msg, terse, to_death, tombstone,
++           amulet, count, dir_ch, food_left, hungry_state, inpack,
++	   inv_type, lastscore, level, max_hit, max_level, mpos, take,
++	   n_objs, no_command, no_food, no_move, noscore, ntraps, purse,
++	   quiet, vf_hit, runch, last_comm, l_last_comm, last_dir, l_last_dir,
++	   numscores, total, between, group, cNWOOD, cNMETAL, cNSTONES,
++	   cNCOLORS;
+ 
+-extern char	dir_ch, file_name[], home[], huh[], *inv_t_name[],
+-		l_last_comm, l_last_dir, last_comm, last_dir, *Numname,
+-		outbuf[], *p_colors[], *r_stones[], *release, runch,
+-		*s_names[], take, *tr_name[], *ws_made[], *ws_type[];
++extern char file_name[], home[], huh[], *Numname, outbuf[], 
++	    *ws_type[], *s_names[];
+ 
+-extern int	a_class[], count, food_left, hungry_state, inpack,
+-		inv_type, lastscore, level, max_hit, max_level, mpos,
+-		n_objs, no_command, no_food, no_move, noscore, ntraps, purse,
+-		quiet, vf_hit;
++extern const char *ws_made[], *inv_t_name[], *p_colors[], *r_stones[], 
++                  *release, *tr_name[], *rainbow[], *wood[], *metal[],
++		  encstr[], statlist[], version[];
+ 
+-extern unsigned int	numscores;
++extern const int a_class[], e_levels[];
+ 
+-extern int	dnum, e_levels[], seed;
++extern unsigned int dnum, seed;
+ 
+-extern WINDOW	*hw;
++extern WINDOW *hw;
+ 
+-extern coord	delta, oldpos, stairs;
++extern coord delta, oldpos, stairs;
+ 
+-extern PLACE	places[];
++extern PLACE places[];
+ 
+-extern THING	*cur_armor, *cur_ring[], *cur_weapon, *l_last_pick,
+-		*last_pick, *lvl_obj, *mlist, player;
++extern THING *cur_armor, *cur_ring[], *cur_weapon, *l_last_pick,
++	     *last_pick, *lvl_obj, *mlist, player;
+ 
+-extern struct h_list	helpstr[];
++extern const struct h_list helpstr[];
+ 
+-extern struct room	*oldrp, passages[], rooms[];
++extern struct room *oldrp, passages[], rooms[];
+ 
+-extern struct stats	max_stats;
++extern struct stats max_stats;
+ 
+-extern struct monster	monsters[];
++extern struct monster monsters[];
+ 
+-extern struct obj_info	arm_info[], pot_info[], ring_info[],
++extern struct obj_info arm_info[], pot_info[], ring_info[],
+ 			scr_info[], things[], ws_info[], weap_info[];
+ 
++extern struct delayed_action d_list[MAXDAEMONS];
++
++extern const STONE    stones[];
++
+ /*
+  * Function types
+  */
++
+ void	_attach(THING **list, THING *item);
+ void	_detach(THING **list, THING *item);
+ void	_free_list(THING **ptr);
+-void	addmsg(char *fmt, ...);
+-bool	add_haste(bool potion);
+-void	add_pack(THING *obj, bool silent);
+-void	add_pass();
+-void	add_str(str_t *sp, int amt);
++void	addmsg(const char *fmt, ...);
++int 	add_haste(int potion);
++int	add_line(const char *fmt, const char *arg);
++void	add_pack(THING *obj, int silent);
++void	add_pass(void);
++void	add_str(int *sp, int amt);
+ void	accnt_maze(int y, int x, int ny, int nx);
+-void	aggravate();
++void	aggravate(void);
+ int	attack(THING *mp);
+-void	badcheck(char *name, struct obj_info *info, int bound);
+-void	bounce(THING *weap, char *mname, bool noend);
+-void	call();
++void    auto_save(int);
++void	badcheck(const char *name, const struct obj_info *info, int bound);
++int 	be_trapped(const coord *tc);
++void	bounce(const THING *weap, const char *mname, int noend);
++void	call(void);
+ void	call_it(struct obj_info *info);
+-bool	cansee(int y, int x);
+-int	center(char *str);
++int 	cansee(int y, int x);
++int	center(const char *str);
++int	chase(THING *tp, const coord *ee);
++int	checkout(void);
++const char *charge_str(const THING *obj);
+ void	chg_str(int amt);
+-void	check_level();
++void	check_level(void);
++const char *choose_str(const char *ts, const char *ns);
+ void	conn(int r1, int r2);
+-void	command();
+-void	create_obj();
+-
+-void	current(THING *cur, char *how, char *where);
+-void	d_level();
+-void	death(char monst);
+-char	death_monst();
++void	come_down(void);
++void	command(void);
++void	create_obj(void);
++void	current(const THING *cur, const char *how, const char *where);
++void	d_level(void);
++void	death(int monst);
++int 	death_monst(void);
++int	diag_ok(const coord *sp, const coord *ep);
+ void	dig(int y, int x);
+ void	discard(THING *item);
+-void	discovered();
++void	discovered(void);
+ int	dist(int y1, int x1, int y2, int x2);
+-int	dist_cp(coord *c1, coord *c2);
++int	dist_cp(const coord *c1, const coord *c2);
+ int	do_chase(THING *th);
+ void	do_daemons(int flag);
+ void	do_fuses(int flag);
+-void	do_maze(struct room *rp);
++void	do_maze(const struct room *rp);
+ void	do_motion(THING *obj, int ydelta, int xdelta);
+ void	do_move(int dy, int dx);
+-void	do_passages();
+-void	do_pot(int type, bool knowit);
+-void	do_rooms();
+-void	do_run(char ch);
+-void	do_zap();
+-void	doadd(char *fmt, va_list args);
+-void	door(struct room *rm, coord *cp);
+-void	door_open(struct room *rp);
+-void	drain();
+-void	draw_room(struct room *rp);
+-void	drop();
+-void	eat();
++void	do_passages(void);
++void	do_pot(int type, int knowit);
++void	do_rooms(void);
++void	do_run(int ch);
++void	do_zap(void);
++void	doadd(const char *fmt, va_list args);
++void	doctor(void);
++void	door(struct room *rm, const coord *cp);
++void	door_open(const struct room *rp);
++void	drain(void);
++void	draw_room(const struct room *rp);
++void	drop(void);
++int 	dropcheck(const THING *obj);
++void	eat(void);
++int     encclearerr();
++int     encerror();
++void    encseterr();
+ size_t  encread(char *start, size_t size, FILE *inf);
+-size_t	encwrite(char *start, size_t size, FILE *outf);
+-int	endmsg();
+-void	enter_room(coord *cp);
+-void	erase_lamp(coord *pos, struct room *rp);
+-int	exp_add(THING *tp);
++size_t	encwrite(const char *start, size_t size, FILE *outf);
++void    end_line(void);
++void    endit(int sig);
++int	endmsg(void);
++void	enter_room(const coord *cp);
++void	erase_lamp(const coord *pos, const struct room *rp);
++int	exp_add(const THING *tp);
+ void	extinguish(void (*func)());
+-void	fall(THING *obj, bool pr);
+-void	fire_bolt(coord *start, coord *dir, char *name);
+-char	floor_at();
+-void	flush_type();
+-int	fight(coord *mp, THING *weap, bool thrown);
++void	fall(THING *obj, int pr);
++int	fallpos(const coord *pos, coord *newpos);
++void	fatal(const char *s);
++void	fire_bolt(const coord *start, coord *dir, const char *name);
++int 	floor_at(void);
++int	floor_ch(void);
++void	flush_type(void);
++const coord *find_dest(const THING *tp);
++int 	find_floor(const struct room *rp, coord *cp, int limit, int monst);
++THING   *find_obj(int y, int x);
++int	fight(const coord *mp, const THING *weap, int thrown);
+ void	fix_stick(THING *cur);
+ void	fuse(void (*func)(), int arg, int time, int type);
+-bool	get_dir();
+-int	gethand();
++int	get_bool(void *vp, WINDOW *win);
++int	get_dir(void);
++int	get_inv_t(void *vp, WINDOW *win);
++THING   *get_item(const char *purpose, int type);
++int	get_num(void *vp, WINDOW *win);
++int	get_sf(void *vp, WINDOW *win);
++int	get_str(void *vopt, WINDOW *win);
++int	gethand(void);
++void	getltchars(void);
+ void	give_pack(THING *tp);
+-void	help();
+-void	hit(char *er, char *ee, bool noend);
+-void	horiz(struct room *rp, int starty);
+-void	leave_room(coord *cp);
++void	help(void);
++void	hit(const char *er, const char *ee, int noend);
++void	horiz(const struct room *rp, int starty);
++void	leave_room(const coord *cp);
+ void	lengthen(void (*func)(), int xtime);
+-void	look(bool wakeup);
+-int	hit_monster(int y, int x, THING *obj);
+-void	identify();
++void	look(int wakeup);
++int	hit_monster(int y, int x, const THING *obj);
++void	identify(void);
+ void	illcom(int ch);
+-void	init_check();
+-void	init_colors();
+-void	init_materials();
+-void	init_names();
+-void	init_player();
+-void	init_probs();
+-void	init_stones();
++void	init_check(void);
++void	init_colors(void);
++void	init_materials(void);
++void	init_names(void);
++void	init_player(void);
++void	init_probs(void);
++void	init_stones(void);
+ void	init_weapon(THING *weap, int which);
+-bool	inventory(THING *list, int type);
+-void	invis_on();
+-void	killed(THING *tp, bool pr);
++char	*inv_name(const THING *obj, int drop);
++int	inventory(const THING *list, int type);
++void	invis_on(void);
++int	is_current(const THING *obj);
++int 	is_magic(const THING *obj);
++int     is_symlink(const char *sp); 
+ void	kill_daemon(void (*func)());
+-bool	lock_sc();
+-void	miss(char *er, char *ee, bool noend);
++void	killed(THING *tp, int pr);
++const char *killname(int monst, int doart);
++void	land(void);
++void    leave(int);
++THING   *leave_pack(THING *obj, int newobj, int all);
++int 	levit_check(void);
++int	lock_sc(void);
++void	miss(const char *er, const char *ee, int noend);
+ void	missile(int ydelta, int xdelta);
+ void	money(int value);
+ int	move_monst(THING *tp);
+-void	move_msg(THING *obj);
+-int	msg(char *fmt, ...);
+-void	nameit(THING *obj, char *type, char *which, struct obj_info *op, char *(*prfunc)(THING *));
+-void	new_level();
+-void	new_monster(THING *tp, char type, coord *cp);
++void	move_msg(const THING *obj);
++int	msg(const char *fmt, ...);
++void	my_exit(int sig);
++void	nameit(const THING *obj, const char *type, const char *which, const struct obj_info *op, const char *(*prfunc)(const THING *));
++THING   *new_item(void);
++void	new_level(void);
++void	new_monster(THING *tp, int type, const coord *cp);
++THING   *new_thing(void);
++void	nohaste(void);
++const char *nothing(int type);
++const char *nullstr(const THING *ignored);
++const char *num(int n1, int n2, int type);
+ void	numpass(int y, int x);
+-void	option();
+-void	open_score();
++void	option(void);
++void	open_score(void);
++int	pack_char(void);
++int	pack_room(int from_floor, THING *obj);
+ void	parse_opts(char *str);
+-void 	passnum();
+-char	*pick_color(char *col);
+-int	pick_one(struct obj_info *info, int nitems);
+-void	pick_up(char ch);
+-void	picky_inven();
+-void	pr_spec(struct obj_info *info, int nitems);
+-void	pr_list();
++void 	passnum(void);
++int	passwd(void);
++const char *pick_color(const char *col);
++int	pick_one(const struct obj_info *info, int nitems);
++void	pick_up(int ch);
++void	picky_inven(void);
++void	playit(void);
++void    playltchars(void);
++void	pr_spec(const struct obj_info *info, int nitems);
++void	pr_list(void);
++void	print_disc(int);
+ void	put_bool(void *b);
+ void	put_inv_t(void *ip);
+ void	put_str(void *str);
+-void	put_things();
+-void	putpass(coord *cp);
+-void	quaff();
+-void	raise_level();
+-char	randmonster(bool wander);
+-void	read_scroll();
+-void    relocate(THING *th, coord *new_loc);
+-void	remove_mon(coord *mp, THING *tp, bool waskill);
+-void	reset_last();
+-bool	restore(char *file, char **envp);
++void	put_things(void);
++void	putpass(const coord *cp);
++void	quaff(void);
++void    quit(int);
++void	raise_level(void);
++int 	randmonster(int wander);
++void	read_scroll(void);
++int	readchar(void);
++void    relocate(THING *th, const coord *new_loc);
++void	remove_mon(const coord *mp, THING *tp, int waskill);
++void	reset_last(void);
++void    resetltchars(void);
++int     restore(const char *file);
+ int	ring_eat(int hand);
+-void	ring_on();
+-void	ring_off();
++void	ring_on(void);
++void	ring_off(void);
++const char *ring_num(const THING *obj);
+ int	rnd(int range);
+-int	rnd_room();
++int	rnd_room(void);
++int	rnd_thing(void);
++coord	rndmove(const THING *who);
+ int	roll(int number, int sides);
++int	roll_em(const THING *thatt, THING *thdef, const THING *weap, int hurl);
++void	rollwand(void);
++struct room *roomin(const coord *cp);
+ int	rs_save_file(FILE *savef);
+ int	rs_restore_file(FILE *inf);
+-void	runto(coord *runner);
++void	runners(void);
++void	runto(const coord *runner);
+ void	rust_armor(THING *arm);
+ int	save(int which);
+ void	save_file(FILE *savef);
+-void	save_game();
+-int	save_throw(int which, THING *tp);
+-void	score(int amount, int flags, char monst);
+-void	search();
++void	save_game(void);
++int	save_throw(int which, const THING *tp);
++void	score(int amount, int flags, int monst);
++void	search(void);
++int	see_monst(const THING *mp);
++int	seen_stairs(void);
+ void	set_know(THING *obj, struct obj_info *info);
+-void	set_oldch(THING *tp, coord *cp);
+-void	setup();
+-void	shell();
+-bool	show_floor();
+-void	show_map();
+-void	show_win(char *message);
++const char *set_mname(const THING *tp);
++void	set_oldch(THING *tp, const coord *cp);
++void    set_order(int *order, int numthings);
++void	setup(void);
++void	shell(void);
++int 	show_floor(void);
++void	show_map(void);
++void	show_win(const char *message);
++void	sight(void);
+ int	sign(int nm);
+ int	spread(int nm);
+ void	start_daemon(void (*func)(), int arg, int type);
+-void	start_score();
+-void	status();
++void	start_score(void);
++void	status(void);
+ int	step_ok(int ch);
+-void	strucpy(char *s1, char *s2, int len);
++void	stomach(void);
++void	strucpy(char *s1, const char *s2, size_t len);
++void	swander(void);
+ int	swing(int at_lvl, int op_arm, int wplus);
+-void	take_off();
+-void	teleport();
+-void	total_winner();
+-void	thunk(THING *weap, char *mname, bool noend);
+-void	treas_room();
+-void	turnref();
+-void	u_level();
+-void	uncurse(THING *obj);
+-void	unlock_sc();
+-void	vert(struct room *rp, int startx);
+-void	wait_for(int ch);
+-THING  *wake_monster(int y, int x);
+-void	wanderer();
+-void	waste_time();
+-void	wear();
+-void	whatis(bool insist, int type);
+-void	wield();
+-
+-bool	chase(THING *tp, coord *ee);
+-bool	diag_ok(coord *sp, coord *ep);
+-bool	dropcheck(THING *obj);
+-bool	fallpos(coord *pos, coord *newpos);
+-bool	find_floor(struct room *rp, coord *cp, int limit, bool monst);
+-bool	is_magic(THING *obj);
+-bool    is_symlink(char *sp); 
+-bool	levit_check();
+-bool	pack_room(bool from_floor, THING *obj);
+-bool	roll_em(THING *thatt, THING *thdef, THING *weap, bool hurl);
+-bool	see_monst(THING *mp);
+-bool	seen_stairs();
+-bool	turn_ok(int y, int x);
+-bool	turn_see(bool turn_off);
+-bool	is_current(THING *obj);
+-int	passwd();
+-
+-char	be_trapped(coord *tc);
+-char	floor_ch();
+-char	pack_char();
+-char	readchar();
+-char	rnd_thing();
+-
+-char	*charge_str(THING *obj);
+-char	*choose_str(char *ts, char *ns);
+-char	*inv_name(THING *obj, bool drop);
+-char	*nullstr(THING *ignored);
+-char	*num(int n1, int n2, char type);
+-char	*ring_num(THING *obj);
+-char	*set_mname(THING *tp);
+-char	*vowelstr(char *str);
+-
+-int	get_bool(void *vp, WINDOW *win);
+-int	get_inv_t(void *vp, WINDOW *win);
+-int	get_num(void *vp, WINDOW *win);
+-int	get_sf(void *vp, WINDOW *win);
+-int	get_str(void *vopt, WINDOW *win);
++void	take_off(void);
++void	teleport(void);
++void	total_winner(void);
++void	thunk(const THING *weap, const char *mname, int noend);
++void	treas_room(void);
+ int	trip_ch(int y, int x, int ch);
++void	tstp(int ignored);
++int     turn_ok(int y, int x);
++int	turn_see(int turn_off);
++void	turnref(void);
++const char *type_name(int type);
++void	u_level(void);
++void	unconfuse(void);
++void	uncurse(THING *obj);
++void	unlock_sc(void);
++void	unsee(void);
++void	vert(const struct room *rp, int startx);
++void	visuals(void);
++char	*vowelstr(const char *str);
++void	wait_for(WINDOW *win, int ch);
++const THING *wake_monster(int y, int x);
++void	wanderer(void);
++void	waste_time(void);
++void	wear(void);
++void	whatis(int insist, int type);
++void	wield(void);
++int	wreadchar(WINDOW *win);
+ 
+-coord	*find_dest(THING *tp);
+-coord	*rndmove(THING *who);
+-
+-THING	*find_obj(int y, int x);
+-THING	*get_item(char *purpose, int type);
+-THING	*leave_pack(THING *obj, bool newobj, bool all);
+-THING	*new_item();
+-THING	*new_thing();
+-
+-struct room	*roomin(coord *cp);
+-
+-#define MAXDAEMONS 20
+-
+-extern struct delayed_action {
+-    int d_type;
+-    void (*d_func)();
+-    int d_arg;
+-    int d_time;
+-} d_list[MAXDAEMONS];
+-
+-typedef struct {
+-    char	*st_name;
+-    int		st_value;
+-} STONE;
+-
+-extern int      total;
+-extern int      between;
+-extern int      group;
+-extern coord    nh;
+-extern char     *rainbow[];
+-extern int      cNCOLORS;
+-extern STONE    stones[];
+-extern int      cNSTONES;
+-extern char     *wood[];
+-extern int      cNWOOD;
+-extern char     *metal[];
+-extern int      cNMETAL;
+diff -Nur --exclude .git rogue.git/rogue.spec rogue5.4.5/rogue.spec
+--- rogue.git/rogue.spec	2019-02-12 07:43:55.000000000 -0600
++++ rogue5.4.5/rogue.spec	2007-10-13 13:29:51.000000000 -0500
+@@ -1,12 +1,12 @@
+ Name:           rogue
+-Version:        5.4.4
++Version:        5.4.5
+ Release:        1%{?dist}
+ Summary:        The original graphical adventure game
+ 
+ Group:          Amusements/Games
+ License:        BSD
+ URL:            http://rogue.rogueforge.net/
+-Source0:        http://rogue.rogueforge.net/files/rogue5.4/rogue5.4.4-src.tar.gz
++Source0:        http://rogue.rogueforge.net/files/rogue5.4/rogue5.4.5-src.tar.gz
+ Source1:        rogue.desktop
+ Source2:        rogue.png
+ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+diff -Nur --exclude .git rogue.git/rooms.c rogue5.4.5/rooms.c
+--- rogue.git/rooms.c	2019-02-12 07:43:56.000000000 -0600
++++ rogue5.4.5/rooms.c	2007-10-13 13:29:51.000000000 -0500
+@@ -28,13 +28,13 @@
+  */
+ 
+ void
+-do_rooms()
++do_rooms(void)
+ {
+     int i;
+     struct room *rp;
+     THING *tp;
+     int left_out;
+-    static coord top;
++    coord top;
+     coord bsze;				/* maximum room size */
+     coord mp;
+ 
+@@ -150,7 +150,7 @@
+  */
+ 
+ void
+-draw_room(struct room *rp)
++draw_room(const struct room *rp)
+ {
+     int y, x;
+ 
+@@ -178,7 +178,7 @@
+  */
+ 
+ void
+-vert(struct room *rp, int startx)
++vert(const struct room *rp, int startx)
+ {
+     int y;
+ 
+@@ -192,7 +192,7 @@
+  */
+ 
+ void
+-horiz(struct room *rp, int starty)
++horiz(const struct room *rp, int starty)
+ {
+     int x;
+ 
+@@ -211,11 +211,11 @@
+ 
+ 
+ void
+-do_maze(struct room *rp)
++do_maze(const struct room *rp)
+ {
+     SPOT *sp;
+     int starty, startx;
+-    static coord pos;
++    coord pos;
+ 
+     for (sp = &maze[0][0]; sp <= &maze[NUMLINES / 3][NUMCOLS / 3]; sp++)
+     {
+@@ -245,8 +245,8 @@
+ {
+     coord *cp;
+     int cnt, newy, newx, nexty = 0, nextx = 0;
+-    static coord pos;
+-    static coord del[4] = {
++    coord pos;
++    coord del[4] = {
+ 	{2, 0}, {-2, 0}, {0, 2}, {0, -2}
+     };
+ 
+@@ -320,7 +320,7 @@
+  */
+ 
+ void
+-rnd_pos(struct room *rp, coord *cp)
++rnd_pos(const struct room *rp, coord *cp)
+ {
+     cp->x = rp->r_pos.x + rnd(rp->r_max.x - 2) + 1;
+     cp->y = rp->r_pos.y + rnd(rp->r_max.y - 2) + 1;
+@@ -331,15 +331,15 @@
+  *	Find a valid floor spot in this room.  If rp is NULL, then
+  *	pick a new room each time around the loop.
+  */
+-bool
+-find_floor(struct room *rp, coord *cp, int limit, bool monst)
++int
++find_floor(const struct room *rp, coord *cp, int limit, int monst)
+ {
+     PLACE *pp;
+     int cnt;
+-    char compchar = 0;
+-    bool pickroom;
++    int compchar = 0;
++    int pickroom;
+ 
+-    pickroom = (bool)(rp == NULL);
++    pickroom = (rp == NULL);
+ 
+     if (!pickroom)
+ 	compchar = ((rp->r_flags & ISMAZE) ? PASSAGE : FLOOR);
+@@ -371,12 +371,12 @@
+  */
+ 
+ void
+-enter_room(coord *cp)
++enter_room(const coord *cp)
+ {
+     struct room *rp;
+     THING *tp;
+     int y, x;
+-    char ch;
++    chtype ch;
+ 
+     rp = proom = roomin(cp);
+     door_open(rp);
+@@ -418,13 +418,13 @@
+  */
+ 
+ void
+-leave_room(coord *cp)
++leave_room(const coord *cp)
+ {
+     PLACE *pp;
+     struct room *rp;
+     int y, x;
+-    char floor;
+-    char ch;
++    int floor;
++    int ch;
+ 
+     rp = proom;
+ 
+diff -Nur --exclude .git rogue.git/save.c rogue5.4.5/save.c
+--- rogue.git/save.c	2019-02-12 07:43:57.000000000 -0600
++++ rogue5.4.5/save.c	2007-10-13 13:29:51.000000000 -0500
+@@ -20,24 +20,18 @@
+ #include "rogue.h"
+ #include "score.h"
+ 
+-typedef struct stat STAT;
+-
+-extern char version[], encstr[];
+-
+-static STAT sbuf;
+-
+ /*
+  * save_game:
+  *	Implement the "save game" command
+  */
+ 
+ void
+-save_game()
++save_game(void)
+ {
+     FILE *savef;
+     int c;
+-    auto char buf[MAXSTR];
+-
++    char buf[MAXSTR];
++    struct stat sbuf;
+     /*
+      * get file name
+      */
+@@ -107,7 +101,7 @@
+ 	if ((savef = fopen(file_name, "w")) == NULL)
+ 	    msg(strerror(errno));
+     } while (savef == NULL);
+-
++    msg("");
+     save_file(savef);
+     /* NOTREACHED */
+ }
+@@ -159,14 +153,13 @@
+  *	Restore a saved game from a file with elaborate checks for file
+  *	integrity from cheaters
+  */
+-bool
+-restore(char *file, char **envp)
++int
++restore(const char *file)
+ {
+     FILE *inf;
+     int syml;
+-    extern char **environ;
+-    auto char buf[MAXSTR];
+-    auto STAT sbuf2;
++    char buf[MAXSTR];
++    struct stat sbuf2;
+     int lines, cols;
+ 
+     if (strcmp(file, "-r") == 0)
+@@ -183,14 +176,14 @@
+     syml = is_symlink(file);
+ 
+     fflush(stdout);
+-    encread(buf, (unsigned) strlen(version) + 1, inf);
++    encread(buf, strlen(version) + 1, inf);
+     if (strcmp(buf, version) != 0)
+     {
+ 	printf("Sorry, saved game is out of date.\n");
+ 	return FALSE;
+     }
+     encread(buf,80,inf);
+-    sscanf(buf,"%d x %d\n", &lines, &cols);
++    (void) sscanf(buf,"%d x %d\n", &lines, &cols);
+ 
+     initscr();                          /* Start up cursor package */
+     keypad(stdscr, 1);
+@@ -256,7 +249,6 @@
+ 
+ 	md_tstpresume();
+ 
+-    environ = envp;
+     strcpy(file_name, file);
+     clearok(curscr, TRUE);
+     srand(md_getpid());
+@@ -266,26 +258,58 @@
+     return(0);
+ }
+ 
++static int encerrno = 0;
++
++int
++encerror()
++{
++    return encerrno;
++}
++
++void
++encseterr(int err)
++{
++    encerrno = err;
++}
++
++int
++encclearerr()
++{
++    int n = encerrno;
++
++    encerrno = 0;
++
++    return(n);
++}
++
+ /*
+  * encwrite:
+  *	Perform an encrypted write
+  */
+ 
+ size_t
+-encwrite(char *start, size_t size, FILE *outf)
++encwrite(const char *start, size_t size, FILE *outf)
+ {
+-    char *e1, *e2, fb;
++    const char *e1, *e2;
++    char fb;
+     int temp;
+-    extern char statlist[];
+     size_t o_size = size;
+     e1 = encstr;
+     e2 = statlist;
+     fb = 0;
+ 
++    if (encerrno) {
++	errno = encerrno;
++	return 0;
++    }
++
+     while(size)
+     {
+ 	if (putc(*start++ ^ *e1 ^ *e2 ^ fb, outf) == EOF)
++	{
++	    encerrno = errno;
+             break;
++	}
+ 
+ 	temp = *e1++;
+ 	fb = fb + ((char) (temp * *e2++));
+@@ -306,20 +330,24 @@
+ size_t
+ encread(char *start, size_t size, FILE *inf)
+ {
+-    char *e1, *e2, fb;
++    const char *e1, *e2;
++    char fb;
+     int temp;
+     size_t read_size;
+-    extern char statlist[];
+-
++    size_t items;
+     fb = 0;
+ 
+-    if ((read_size = fread(start,1,size,inf)) == 0 || read_size == -1)
+-	return(read_size);
++    if (encerrno) {
++	errno = encerrno;
++	return 0;
++    }
++
++    items = read_size = fread(start,1,size,inf);
+ 
+     e1 = encstr;
+     e2 = statlist;
+ 
+-    while (size--)
++    while (read_size--)
+     {
+ 	*start++ ^= *e1 ^ *e2 ^ fb;
+ 	temp = *e1++;
+@@ -330,10 +358,12 @@
+ 	    e2 = statlist;
+     }
+ 
+-    return(read_size);
++    if (items != size)
++	encerrno = errno;
++
++    return(items);
+ }
+ 
+-static char scoreline[100];
+ /*
+  * read_scrore
+  *	Read in the score file
+@@ -341,24 +371,25 @@
+ void
+ rd_score(SCORE *top_ten)
+ {
+-    unsigned int i;
++    char scoreline[100];
++    int i;
+ 
+-	if (scoreboard == NULL)
+-		return;
++    if (scoreboard == NULL)
++	return;
+ 
+-	rewind(scoreboard); 
++    rewind(scoreboard); 
+ 
+-	for(i = 0; i < numscores; i++)
++    for(i = 0; i < numscores; i++)
+     {
+         encread(top_ten[i].sc_name, MAXSTR, scoreboard);
+         encread(scoreline, 100, scoreboard);
+-        sscanf(scoreline, " %u %d %u %hu %d %x \n",
++        (void) sscanf(scoreline, " %u %d %u %d %d %x \n",
+             &top_ten[i].sc_uid, &top_ten[i].sc_score,
+             &top_ten[i].sc_flags, &top_ten[i].sc_monster,
+             &top_ten[i].sc_level, &top_ten[i].sc_time);
+     }
+ 
+-	rewind(scoreboard); 
++    rewind(scoreboard); 
+ }
+ 
+ /*
+@@ -368,23 +399,24 @@
+ void
+ wr_score(SCORE *top_ten)
+ {
+-    unsigned int i;
++    char scoreline[100];
++    int i;
+ 
+-	if (scoreboard == NULL)
+-		return;
++    if (scoreboard == NULL)
++	return;
+ 
+-	rewind(scoreboard);
++    rewind(scoreboard);
+ 
+     for(i = 0; i < numscores; i++)
+     {
+           memset(scoreline,0,100);
+           encwrite(top_ten[i].sc_name, MAXSTR, scoreboard);
+-          sprintf(scoreline, " %u %d %u %hu %d %x \n",
++          sprintf(scoreline, " %u %d %u %u %d %x \n",
+               top_ten[i].sc_uid, top_ten[i].sc_score,
+               top_ten[i].sc_flags, top_ten[i].sc_monster,
+               top_ten[i].sc_level, top_ten[i].sc_time);
+           encwrite(scoreline,100,scoreboard);
+     }
+ 
+-	rewind(scoreboard); 
++    rewind(scoreboard); 
+ }
+diff -Nur --exclude .git rogue.git/score.h rogue5.4.5/score.h
+--- rogue.git/score.h	2019-02-12 07:43:57.000000000 -0600
++++ rogue5.4.5/score.h	2007-10-13 13:29:51.000000000 -0500
+@@ -11,10 +11,10 @@
+  */
+ 
+ struct sc_ent {
+-    unsigned int sc_uid;
++    uid_t sc_uid;
+     int sc_score;
+     unsigned int sc_flags;
+-    unsigned short sc_monster;
++    int sc_monster;
+     char sc_name[MAXSTR];
+     int sc_level;
+     unsigned int sc_time;
+diff -Nur --exclude .git rogue.git/scrolls.c rogue5.4.5/scrolls.c
+--- rogue.git/scrolls.c	2019-02-12 07:43:57.000000000 -0600
++++ rogue5.4.5/scrolls.c	2007-10-13 13:29:51.000000000 -0500
+@@ -20,17 +20,17 @@
+  */
+ 
+ void
+-read_scroll()
++read_scroll(void)
+ {
+     THING *obj;
+     PLACE *pp;
+     int y, x;
+-    char ch;
++    int ch;
+     int i;
+-    bool discardit = FALSE;
++    int discardit = FALSE;
+     struct room *cur_room;
+     THING *orig_obj;
+-    static coord mp;
++    coord mp;
+ 
+     obj = get_item("read", SCROLL);
+     if (obj == NULL)
+@@ -51,7 +51,7 @@
+     /*
+      * Get rid of the thing
+      */
+-    discardit = (bool)(obj->o_count == 1);
++    discardit = (obj->o_count == 1);
+     leave_pack(obj, FALSE, FALSE);
+     orig_obj = obj;
+ 
+@@ -149,7 +149,7 @@
+ 	case S_ID_ARMOR:
+ 	case S_ID_R_OR_S:
+ 	{
+-	    static char id_type[S_ID_R_OR_S + 1] =
++	    int id_type[S_ID_R_OR_S + 1] =
+ 		{ 0, 0, 0, 0, 0, POTION, SCROLL, WEAPON, ARMOR, R_OR_S };
+ 	    /*
+ 	     * Identify, let him figure something out
+diff -Nur --exclude .git rogue.git/state.c rogue5.4.5/state.c
+--- rogue.git/state.c	2019-02-12 07:43:58.000000000 -0600
++++ rogue5.4.5/state.c	2007-10-13 13:29:51.000000000 -0500
+@@ -32,6 +32,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <curses.h>
++#include <errno.h>
+ #include "rogue.h"
+ 
+ /************************************************************************/
+@@ -72,38 +73,23 @@
+ static int endian = 0x01020304;
+ #define  big_endian ( *((char *)&endian) == 0x01 )
+ 
+-int
+-rs_write(FILE *savef, void *ptr, size_t size)
++void
++rs_write(FILE *savef, const void *ptr, size_t size)
+ {
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    if (encwrite(ptr, size, savef) != size)
+-        write_error = 1;
+-
+-    return(WRITESTAT);
++    encwrite(ptr, size, savef);
+ }
+ 
+-int
+-rs_read(FILE *inf, void *ptr, size_t size)
++void
++rs_read(FILE *savef, void *ptr, size_t size)
+ {
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    if (encread(ptr, size, inf) != size)
+-        read_error = 1;
+-       
+-    return(READSTAT);
++    encread(ptr, size, savef);
+ }
+ 
+-int
++void
+ rs_write_int(FILE *savef, int c)
+ {
+-    unsigned char bytes[4];
+-    unsigned char *buf = (unsigned char *) &c;
+-
+-    if (write_error)
+-        return(WRITESTAT);
++    char bytes[4];
++    char *buf = (char *) &c;
+ 
+     if (big_endian)
+     {
+@@ -115,21 +101,19 @@
+     }
+     
+     rs_write(savef, buf, 4);
+-
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_int(FILE *inf, int *i)
++void
++rs_read_int(FILE *savef, int *i)
+ {
+-    unsigned char bytes[4];
++    char bytes[4];
+     int input = 0;
+-    unsigned char *buf = (unsigned char *)&input;
++    char *buf = (char *)&input;
+     
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read(savef, &input, 4);
+ 
+-    rs_read(inf, &input, 4);
++    if (encerror())
++	return;
+ 
+     if (big_endian)
+     {
+@@ -141,414 +125,148 @@
+     }
+     
+     *i = *((int *) buf);
+-
+-    return(READSTAT);
+-}
+-
+-int
+-rs_write_char(FILE *savef, char c)
+-{
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    rs_write(savef, &c, 1);
+-
+-    return(WRITESTAT);
+-}
+-
+-int
+-rs_read_char(FILE *inf, char *c)
+-{
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read(inf, c, 1);
+-
+-    return(READSTAT);
+-}
+-
+-int
+-rs_write_chars(FILE *savef, char *c, int count)
+-{
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    rs_write_int(savef, count);
+-    rs_write(savef, c, count);
+-
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_chars(FILE *inf, char *i, int count)
+-{
+-    int value = 0;
+-    
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_int(inf, &value);
+-    
+-    if (value != count)
+-        format_error = TRUE;
+-
+-    rs_read(inf, i, count);
+-    
+-    return(READSTAT);
+-}
+-
+-int
+-rs_write_ints(FILE *savef, int *c, int count)
+-{
+-    int n = 0;
+-
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    rs_write_int(savef, count);
+-
+-    for(n = 0; n < count; n++)
+-        if( rs_write_int(savef,c[n]) != 0)
+-            break;
+-
+-    return(WRITESTAT);
+-}
+-
+-int
+-rs_read_ints(FILE *inf, int *i, int count)
+-{
+-    int n, value;
+-    
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_int(inf,&value);
+-
+-    if (value != count)
+-        format_error = TRUE;
+-
+-    for(n = 0; n < count; n++)
+-        if (rs_read_int(inf, &i[n]) != 0)
+-            break;
+-    
+-    return(READSTAT);
+-}
+-
+-int
+-rs_write_boolean(FILE *savef, int c)
+-{
+-    unsigned char buf = (c == 0) ? 0 : 1;
+-    
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    rs_write(savef, &buf, 1);
+-
+-    return(WRITESTAT);
+-}
+-
+-int
+-rs_read_boolean(FILE *inf, bool *i)
+-{
+-    unsigned char buf = 0;
+-    
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read(inf, &buf, 1);
+-
+-    *i = (buf != 0);
+-    
+-    return(READSTAT);
+-}
+-
+-int
+-rs_write_booleans(FILE *savef, bool *c, int count)
+-{
+-    int n = 0;
+-
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    rs_write_int(savef, count);
+-
+-    for(n = 0; n < count; n++)
+-        if (rs_write_boolean(savef, c[n]) != 0)
+-            break;
+-
+-    return(WRITESTAT);
+-}
+-
+-int
+-rs_read_booleans(FILE *inf, bool *i, int count)
+-{
+-    int n = 0, value = 0;
+-    
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_int(inf,&value);
+-
+-    if (value != count)
+-        format_error = TRUE;
+-
+-    for(n = 0; n < count; n++)
+-        if (rs_read_boolean(inf, &i[n]) != 0)
+-            break;
+-    
+-    return(READSTAT);
+-}
+-
+-int
+-rs_write_short(FILE *savef, short c)
++void
++rs_write_uint(FILE *savef, unsigned int c)
+ {
+-    unsigned char bytes[2];
+-    unsigned char *buf = (unsigned char *) &c;
+-
+-    if (write_error)
+-        return(WRITESTAT);
++    char bytes[4];
++    char *buf = (char *) &c;
+ 
+     if (big_endian)
+     {
+-        bytes[1] = buf[0];
+-        bytes[0] = buf[1];
++        bytes[3] = buf[0];
++        bytes[2] = buf[1];
++        bytes[1] = buf[2];
++        bytes[0] = buf[3];
+         buf = bytes;
+     }
+-
+-    rs_write(savef, buf, 2);
+-
+-    return(WRITESTAT);
++    
++    rs_write(savef, buf, 4);
+ }
+ 
+-int
+-rs_read_short(FILE *inf, short *i)
++void
++rs_read_uint(FILE *savef, unsigned int *i)
+ {
+-    unsigned char bytes[2];
+-    short  input;
+-    unsigned char *buf = (unsigned char *)&input;
++    char bytes[4];
++    int input = 0;
++    char *buf = (char *)&input;
+     
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read(savef, &input, 4);
+ 
+-    rs_read(inf, &input, 2);
++    if (encerror())
++	return;
+ 
+     if (big_endian)
+     {
+-        bytes[1] = buf[0];
+-        bytes[0] = buf[1];
++        bytes[3] = buf[0];
++        bytes[2] = buf[1];
++        bytes[1] = buf[2];
++        bytes[0] = buf[3];
+         buf = bytes;
+     }
+     
+-    *i = *((short *) buf);
+-
+-    return(READSTAT);
+-} 
+-
+-int
+-rs_write_shorts(FILE *savef, short *c, int count)
+-{
+-    int n = 0;
+-
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    rs_write_int(savef, count);
+-
+-    for(n = 0; n < count; n++)
+-        if (rs_write_short(savef, c[n]) != 0)
+-            break; 
+-
+-    return(WRITESTAT);
+-}
+-
+-int
+-rs_read_shorts(FILE *inf, short *i, int count)
+-{
+-    int n = 0, value = 0;
+-
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_int(inf,&value);
+-
+-    if (value != count)
+-        format_error = TRUE;
+-
+-    for(n = 0; n < value; n++)
+-        if (rs_read_short(inf, &i[n]) != 0)
+-            break;
+-    
+-    return(READSTAT);
++    *i = *((unsigned int *) buf);
+ }
+ 
+-int
+-rs_write_ushort(FILE *savef, unsigned short c)
++void
++rs_write_chars(FILE *savef, const char *c, int cnt)
+ {
+-    unsigned char bytes[2];
+-    unsigned char *buf = (unsigned char *) &c;
+-
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    if (big_endian)
+-    {
+-        bytes[1] = buf[0];
+-        bytes[0] = buf[1];
+-        buf = bytes;
+-    }
+-
+-    rs_write(savef, buf, 2);
+-
+-    return(WRITESTAT);
++    rs_write_int(savef, cnt);
++    rs_write(savef, c, cnt);
+ }
+ 
+-int
+-rs_read_ushort(FILE *inf, unsigned short *i)
++void
++rs_read_chars(FILE *savef, char *i, int cnt)
+ {
+-    unsigned char bytes[2];
+-    unsigned short  input;
+-    unsigned char *buf = (unsigned char *)&input;
+-    
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read(inf, &input, 2);
++    int value = 0;  
+ 
+-    if (big_endian)
+-    {
+-        bytes[1] = buf[0];
+-        bytes[0] = buf[1];
+-        buf = bytes;
+-    }
++    rs_read_int(savef, &value);
+     
+-    *i = *((unsigned short *) buf);
++    if (!encerror() && (value != cnt))
++	encseterr(EILSEQ);
+ 
+-    return(READSTAT);
+-} 
++    rs_read(savef, i, cnt);
++}
+ 
+-int
+-rs_write_uint(FILE *savef, unsigned int c)
++void
++rs_write_ints(FILE *savef, int *c, int cnt)
+ {
+-    unsigned char bytes[4];
+-    unsigned char *buf = (unsigned char *) &c;
+-
+-    if (write_error)
+-        return(WRITESTAT);
++    int n = 0;
+ 
+-    if (big_endian)
+-    {
+-        bytes[3] = buf[0];
+-        bytes[2] = buf[1];
+-        bytes[1] = buf[2];
+-        bytes[0] = buf[3];
+-        buf = bytes;
+-    }
+-    
+-    rs_write(savef, buf, 4);
++    rs_write_int(savef, cnt);
+ 
+-    return(WRITESTAT);
++    for(n = 0; n < cnt; n++)
++        rs_write_int(savef,c[n]);
+ }
+ 
+-int
+-rs_read_uint(FILE *inf, unsigned int *i)
++void
++rs_read_ints(FILE *savef, int *i, int cnt)
+ {
+-    unsigned char bytes[4];
+-    int  input;
+-    unsigned char *buf = (unsigned char *)&input;
++    int n, value;
+     
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read_int(savef,&value);
+ 
+-    rs_read(inf, &input, 4);
++    if (!encerror() && (value != cnt))
++	encseterr(EILSEQ);
+ 
+-    if (big_endian)
+-    {
+-        bytes[3] = buf[0];
+-        bytes[2] = buf[1];
+-        bytes[1] = buf[2];
+-        bytes[0] = buf[3];
+-        buf = bytes;
+-    }
+-    
+-    *i = *((unsigned int *) buf);
+-
+-    return(READSTAT);
++    for(n = 0; n < cnt; n++)
++        rs_read_int(savef, &i[n]);
+ }
+ 
+-int
++void
+ rs_write_marker(FILE *savef, int id)
+ {
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     rs_write_int(savef, id);
+-
+-    return(WRITESTAT);
+ }
+ 
+-int 
+-rs_read_marker(FILE *inf, int id)
++void
++rs_read_marker(FILE *savef, int id)
+ {
+     int nid;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read_int(savef, &nid);
+ 
+-    if (rs_read_int(inf, &nid) == 0)
+-        if (id != nid)
+-            format_error = 1;
+-    
+-    return(READSTAT);
++    if (!encerror() && (id != nid))
++	encseterr(EILSEQ);
+ }
+ 
+-
+-
+ /******************************************************************************/
+ 
+-int
+-rs_write_string(FILE *savef, char *s)
++void
++rs_write_string(FILE *savef, const char *s)
+ {
+     int len = 0;
+ 
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     len = (s == NULL) ? 0 : (int) strlen(s) + 1;
+ 
+     rs_write_int(savef, len);
+     rs_write_chars(savef, s, len);
+-            
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_string(FILE *inf, char *s, int max)
++void
++rs_read_string(FILE *savef, char *s, int max)
+ {
+     int len = 0;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_int(inf, &len);
++    rs_read_int(savef, &len);
+ 
+-    if (len > max)
+-        format_error = TRUE;
++    if (!encerror() && (len > max))
++	encseterr(EILSEQ);
+ 
+-    rs_read_chars(inf, s, len);
+-    
+-    return(READSTAT);
++    rs_read_chars(savef, s, len);
+ }
+ 
+-int
+-rs_read_new_string(FILE *inf, char **s)
++void
++rs_read_new_string(FILE *savef, char **s)
+ {
+     int len=0;
+     char *buf=0;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read_int(savef, &len);
+ 
+-    rs_read_int(inf, &len);
++    if (encerror())
++	return;
+ 
+     if (len == 0)
+         buf = NULL;
+@@ -557,172 +275,68 @@
+         buf = malloc(len);
+ 
+         if (buf == NULL)            
+-            read_error = TRUE;
++            encseterr(ENOMEM);
+     }
+ 
+-    rs_read_chars(inf, buf, len);
++    rs_read_chars(savef, buf, len);
+ 
+     *s = buf;
+-
+-    return(READSTAT);
+-}
+-
+-int
+-rs_write_strings(FILE *savef, char *s[], int count)
+-{
+-    int n = 0;
+-
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    rs_write_int(savef, count);
+-
+-    for(n = 0; n < count; n++)
+-        if (rs_write_string(savef, s[n]) != 0)
+-            break;
+-    
+-    return(WRITESTAT);
+-}
+-
+-int
+-rs_read_strings(FILE *inf, char **s, int count, int max)
+-{
+-    int n     = 0;
+-    int value = 0;
+-    
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_int(inf, &value);
+-
+-    if (value != count)
+-        format_error = TRUE;
+-
+-    for(n = 0; n < count; n++)
+-        if (rs_read_string(inf, s[n], max) != 0)
+-            break;
+-    
+-    return(READSTAT);
+ }
+ 
+-int
+-rs_read_new_strings(FILE *inf, char **s, int count)
+-{
+-    int n     = 0;
+-    int value = 0;
+-    
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_int(inf, &value);
+-
+-    if (value != count)
+-        format_error = TRUE;
+-
+-    for(n = 0; n < count; n++)
+-        if (rs_read_new_string(inf, &s[n]) != 0)
+-            break;
+-    
+-    return(READSTAT);
+-}
+-
+-int
+-rs_write_string_index(FILE *savef, char *master[], int max, const char *str)
++void
++rs_write_string_index(FILE *savef, const char *master[], int max, const char *str)
+ {
+     int i;
+ 
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     for(i = 0; i < max; i++)
+         if (str == master[i])
+-            return( rs_write_int(savef, i) );
++            rs_write_int(savef, i);
+ 
+-    return( rs_write_int(savef,-1) );
++    rs_write_int(savef,-1);
+ }
+ 
+-int
+-rs_read_string_index(FILE *inf, char *master[], int maxindex, char **str)
++void
++rs_read_string_index(FILE *savef, const char *master[], int maxindex, const char **str)
+ {
+     int i;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read_int(savef, &i);
+ 
+-    rs_read_int(inf, &i);
+-
+-    if (i > maxindex)
+-        format_error = TRUE;
++    if (!encerror() && (i > maxindex))
++        encseterr(EILSEQ);
+     else if (i >= 0)
+         *str = master[i];
+     else
+         *str = NULL;
+-
+-    return(READSTAT);
+ }
+ 
+-int
+-rs_write_str_t(FILE *savef, str_t st)
+-{
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    rs_write_uint(savef, st);
+-
+-    return( WRITESTAT );
+-}
+-
+-int
+-rs_read_str_t(FILE *inf, str_t *st)
+-{
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_uint(inf, st);
+-
+-    return(READSTAT);
+-}
+-
+-int
++void
+ rs_write_coord(FILE *savef, coord c)
+ {
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     rs_write_int(savef, c.x);
+     rs_write_int(savef, c.y);
+-    
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_coord(FILE *inf, coord *c)
++void
++rs_read_coord(FILE *savef, coord *c)
+ {
+     coord in;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_int(inf,&in.x);
+-    rs_read_int(inf,&in.y);
++    rs_read_int(savef,&in.x);
++    rs_read_int(savef,&in.y);
+ 
+-    if (READSTAT == 0) 
++    if (!encerror()) 
+     {
+         c->x = in.x;
+         c->y = in.y;
+     }
+-
+-    return(READSTAT);
+ }
+ 
+-int
++void
+ rs_write_window(FILE *savef, WINDOW *win)
+ {
+     int row,col,height,width;
+ 
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     width  = getmaxx(win);
+     height = getmaxy(win);
+ 
+@@ -732,39 +346,33 @@
+ 
+     for(row=0;row<height;row++)
+         for(col=0;col<width;col++)
+-            if (rs_write_int(savef, mvwinch(win,row,col)) != 0)
+-                return(WRITESTAT);
+-
+-    return(WRITESTAT);
++            rs_write_int(savef, mvwinch(win,row,col));
+ }
+ 
+-int
+-rs_read_window(FILE *inf, WINDOW *win)
++void
++rs_read_window(FILE *savef, WINDOW *win)
+ {
+     int row,col,maxlines,maxcols,value,width,height;
+     
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+     width  = getmaxx(win);
+     height = getmaxy(win);
+ 
+-    rs_read_marker(inf, RSID_WINDOW);
++    rs_read_marker(savef, RSID_WINDOW);
++
++    rs_read_int(savef, &maxlines);
++    rs_read_int(savef, &maxcols);
+ 
+-    rs_read_int(inf, &maxlines);
+-    rs_read_int(inf, &maxcols);
++    if (encerror())
++	return;
+ 
+     for(row = 0; row < maxlines; row++)
+         for(col = 0; col < maxcols; col++)
+         {
+-            if (rs_read_int(inf, &value) != 0)
+-                return(READSTAT);
++            rs_read_int(savef, &value);
+ 
+             if ((row < height) && (col < width))
+                 mvwaddch(win,row,col,value);
+         }
+-        
+-    return(READSTAT);
+ }
+ 
+ /******************************************************************************/
+@@ -772,10 +380,10 @@
+ void *
+ get_list_item(THING *l, int i)
+ {
+-    int count;
++    int cnt;
+ 
+-    for(count = 0; l != NULL; count++, l = l->l_next)
+-        if (count == i)
++    for(cnt = 0; l != NULL; cnt++, l = l->l_next)
++        if (cnt == i)
+             return(l);
+     
+     return(NULL);
+@@ -784,11 +392,11 @@
+ int
+ find_list_ptr(THING *l, void *ptr)
+ {
+-    int count;
++    int cnt;
+ 
+-    for(count = 0; l != NULL; count++, l = l->l_next)
++    for(cnt = 0; l != NULL; cnt++, l = l->l_next)
+         if (l == ptr)
+-            return(count);
++            return(cnt);
+     
+     return(-1);
+ }
+@@ -796,184 +404,128 @@
+ int
+ list_size(THING *l)
+ {
+-    int count;
++    int cnt;
+     
+-    for(count = 0; l != NULL; count++, l = l->l_next)
++    for(cnt = 0; l != NULL; cnt++, l = l->l_next)
+         ;
+     
+-    return(count);
++    return(cnt);
+ }
+ 
+ /******************************************************************************/
+ 
+-int
++void
+ rs_write_stats(FILE *savef, struct stats *s)
+ {
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     rs_write_marker(savef, RSID_STATS);
+-    rs_write_str_t(savef, s->s_str);
++    rs_write_int(savef, s->s_str);
+     rs_write_int(savef, s->s_exp);
+     rs_write_int(savef, s->s_lvl);
+     rs_write_int(savef, s->s_arm);
+     rs_write_int(savef, s->s_hpt);
+     rs_write_chars(savef, s->s_dmg, sizeof(s->s_dmg));
+     rs_write_int(savef,s->s_maxhp);
+-
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_stats(FILE *inf, struct stats *s)
++void
++rs_read_stats(FILE *savef, struct stats *s)
+ {
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_marker(inf, RSID_STATS);
+-    rs_read_str_t(inf,&s->s_str);
+-    rs_read_int(inf,&s->s_exp);
+-    rs_read_int(inf,&s->s_lvl);
+-    rs_read_int(inf,&s->s_arm);
+-    rs_read_int(inf,&s->s_hpt);
+-    rs_read_chars(inf,s->s_dmg,sizeof(s->s_dmg));
+-    rs_read_int(inf,&s->s_maxhp);
+-
+-    return(READSTAT);
++    rs_read_marker(savef, RSID_STATS);
++    rs_read_int(savef,&s->s_str);
++    rs_read_int(savef,&s->s_exp);
++    rs_read_int(savef,&s->s_lvl);
++    rs_read_int(savef,&s->s_arm);
++    rs_read_int(savef,&s->s_hpt);
++    rs_read_chars(savef,s->s_dmg,sizeof(s->s_dmg));
++    rs_read_int(savef,&s->s_maxhp);
+ }
+ 
+-int
+-rs_write_stone_index(FILE *savef, STONE master[], int max, const char *str)
++void
++rs_write_stone_index(FILE *savef, const STONE master[], int max, const char *str)
+ {
+     int i;
+ 
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     for(i = 0; i < max; i++)
+         if (str == master[i].st_name)
+-        {
+             rs_write_int(savef,i);
+-            return(WRITESTAT);
+-        }
+ 
+     rs_write_int(savef,-1);
+-
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_stone_index(FILE *inf, STONE master[], int maxindex, char **str)
++void
++rs_read_stone_index(FILE *savef, const STONE master[], int maxindex, const char **str)
+ {
+     int i = 0;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_int(inf,&i);
++    rs_read_int(savef,&i);
+ 
+-    if (i > maxindex)
+-        format_error = TRUE;
++    if (!encerror() && (i > maxindex))
++        encseterr(EILSEQ);
+     else if (i >= 0)
+         *str = master[i].st_name;
+     else
+         *str = NULL;
+-
+-    return(READSTAT);
+ }
+ 
+-int
++void
+ rs_write_scrolls(FILE *savef)
+ {
+     int i;
+ 
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     for(i = 0; i < MAXSCROLLS; i++)
+         rs_write_string(savef, s_names[i]);
+-
+-    return(READSTAT);
+ }
+ 
+-int
+-rs_read_scrolls(FILE *inf)
++void
++rs_read_scrolls(FILE *savef)
+ {
+     int i;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+     for(i = 0; i < MAXSCROLLS; i++)
+-        rs_read_new_string(inf, &s_names[i]);
+-
+-    return(READSTAT);
++        rs_read_new_string(savef, &s_names[i]);
+ }
+ 
+-int
++void
+ rs_write_potions(FILE *savef)
+ {
+     int i;
+ 
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     for(i = 0; i < MAXPOTIONS; i++)
+         rs_write_string_index(savef, rainbow, cNCOLORS, p_colors[i]);
+-
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_potions(FILE *inf)
++void
++rs_read_potions(FILE *savef)
+ {
+     int i;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+     for(i = 0; i < MAXPOTIONS; i++)
+-        rs_read_string_index(inf, rainbow, cNCOLORS, &p_colors[i]);
+-
+-    return(READSTAT);
++        rs_read_string_index(savef, rainbow, cNCOLORS, &p_colors[i]);
+ }
+ 
+-int
++void
+ rs_write_rings(FILE *savef)
+ {
+     int i;
+ 
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     for(i = 0; i < MAXRINGS; i++)
+         rs_write_stone_index(savef, stones, cNSTONES, r_stones[i]);
+-
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_rings(FILE *inf)
++void
++rs_read_rings(FILE *savef)
+ {
+     int i;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+     for(i = 0; i < MAXRINGS; i++)
+-        rs_read_stone_index(inf, stones, cNSTONES, &r_stones[i]);
+-
+-    return(READSTAT);
++        rs_read_stone_index(savef, stones, cNSTONES, &r_stones[i]);
+ }
+ 
+-int
++void
+ rs_write_sticks(FILE *savef)
+ {
+     int i;
+ 
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     for (i = 0; i < MAXSTICKS; i++)
+     {
+         if (strcmp(ws_type[i],"staff") == 0)
+@@ -987,204 +539,183 @@
+             rs_write_string_index(savef, metal, cNMETAL, ws_made[i]);
+         }
+     }
+- 
+-    return(WRITESTAT);
+ }
+         
+-int
+-rs_read_sticks(FILE *inf)
++void
++rs_read_sticks(FILE *savef)
+ {
+     int i = 0, list = 0;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+     for(i = 0; i < MAXSTICKS; i++)
+     { 
+-        rs_read_int(inf,&list);
++        rs_read_int(savef,&list);
+ 
+         if (list == 0)
+         {
+-            rs_read_string_index(inf, wood, cNWOOD, &ws_made[i]);
++            rs_read_string_index(savef, wood, cNWOOD, &ws_made[i]);
+             ws_type[i] = "staff";
+         }
+         else 
+         {
+-            rs_read_string_index(inf, metal, cNMETAL, &ws_made[i]);
++            rs_read_string_index(savef, metal, cNMETAL, &ws_made[i]);
+             ws_type[i] = "wand";
+         }
+     }
+-
+-    return(READSTAT);
+ }
+ 
+-int
+-rs_write_daemons(FILE *savef, struct delayed_action *d_list, int count)
++void
++rs_write_daemons(FILE *savef, struct delayed_action *dlist, int cnt)
+ {
+     int i = 0;
+     int func = 0;
+         
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     rs_write_marker(savef, RSID_DAEMONS);
+-    rs_write_int(savef, count);
++    rs_write_int(savef, cnt);
+         
+-    for(i = 0; i < count; i++)
++    for(i = 0; i < cnt; i++)
+     {
+-        if (d_list[i].d_func == rollwand)
++        if (dlist[i].d_func == rollwand)
+             func = 1;
+-        else if (d_list[i].d_func == doctor)
++        else if (dlist[i].d_func == doctor)
+             func = 2;
+-        else if (d_list[i].d_func == stomach)
++        else if (dlist[i].d_func == stomach)
+             func = 3;
+-        else if (d_list[i].d_func == runners)
++        else if (dlist[i].d_func == runners)
+             func = 4;
+-        else if (d_list[i].d_func == swander)
++        else if (dlist[i].d_func == swander)
+             func = 5;
+-        else if (d_list[i].d_func == nohaste)
++        else if (dlist[i].d_func == nohaste)
+             func = 6;
+-        else if (d_list[i].d_func == unconfuse)
++        else if (dlist[i].d_func == unconfuse)
+             func = 7;
+-        else if (d_list[i].d_func == unsee)
++        else if (dlist[i].d_func == unsee)
+             func = 8;
+-        else if (d_list[i].d_func == sight)
++        else if (dlist[i].d_func == sight)
+             func = 9;
+-        else if (d_list[i].d_func == NULL)
++        else if (dlist[i].d_func == NULL)
+             func = 0;
+         else
+             func = -1;
+ 
+-        rs_write_int(savef, d_list[i].d_type);
++        rs_write_int(savef, dlist[i].d_type);
+         rs_write_int(savef, func);
+-        rs_write_int(savef, d_list[i].d_arg);
+-        rs_write_int(savef, d_list[i].d_time);
++        rs_write_int(savef, dlist[i].d_arg);
++        rs_write_int(savef, dlist[i].d_time);
+     }
+-    
+-    return(WRITESTAT);
+ }       
+ 
+-int
+-rs_read_daemons(FILE *inf, struct delayed_action *d_list, int count)
++void
++rs_read_daemons(FILE *savef, struct delayed_action *dlist, int cnt)
+ {
+     int i = 0;
+     int func = 0;
+     int value = 0;
+     
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read_marker(savef, RSID_DAEMONS);
++    rs_read_int(savef, &value);
+ 
+-    rs_read_marker(inf, RSID_DAEMONS);
+-    rs_read_int(inf, &value);
+-
+-    if (value > count)
+-        format_error = TRUE;
++    if (!encerror() && (value > cnt))
++    {
++	encseterr(EILSEQ);
++	return;
++    }
+ 
+-    for(i=0; i < count; i++)
++    for(i=0; i < cnt; i++)
+     {
+         func = 0;
+-        rs_read_int(inf, &d_list[i].d_type);
+-        rs_read_int(inf, &func);
+-        rs_read_int(inf, &d_list[i].d_arg);
+-        rs_read_int(inf, &d_list[i].d_time);
++        rs_read_int(savef, &dlist[i].d_type);
++        rs_read_int(savef, &func);
++        rs_read_int(savef, &dlist[i].d_arg);
++        rs_read_int(savef, &dlist[i].d_time);
++
++	if (encerror())
++	    return;
+                     
+         switch(func)
+         {
+-            case 1: d_list[i].d_func = rollwand;
++            case 1: dlist[i].d_func = rollwand;
+                     break;
+-            case 2: d_list[i].d_func = doctor;
++            case 2: dlist[i].d_func = doctor;
+                     break;
+-            case 3: d_list[i].d_func = stomach;
++            case 3: dlist[i].d_func = stomach;
+                     break;
+-            case 4: d_list[i].d_func = runners;
++            case 4: dlist[i].d_func = runners;
+                     break;
+-            case 5: d_list[i].d_func = swander;
++            case 5: dlist[i].d_func = swander;
+                     break;
+-            case 6: d_list[i].d_func = nohaste;
++            case 6: dlist[i].d_func = nohaste;
+                     break;
+-            case 7: d_list[i].d_func = unconfuse;
++            case 7: dlist[i].d_func = unconfuse;
+                     break;
+-            case 8: d_list[i].d_func = unsee;
++            case 8: dlist[i].d_func = unsee;
+                     break;
+-            case 9: d_list[i].d_func = sight;
++            case 9: dlist[i].d_func = sight;
+                     break;
+-            default:d_list[i].d_func = NULL;
++            default:dlist[i].d_func = NULL;
+                     break;
+         }
+     }
+ 
+-    if (d_list[i].d_func == NULL)
++    if (dlist[i].d_func == NULL)
+     {
+-        d_list[i].d_type = 0;
+-        d_list[i].d_arg = 0;
+-        d_list[i].d_time = 0;
++        dlist[i].d_type = 0;
++        dlist[i].d_arg = 0;
++        dlist[i].d_time = 0;
+     }
+-    
+-    return(READSTAT);
+ }       
+         
+-int
+-rs_write_obj_info(FILE *savef, struct obj_info *i, int count)
++void
++rs_write_obj_info(FILE *savef, struct obj_info *i, int cnt)
+ {
+     int n;
+     
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     rs_write_marker(savef, RSID_MAGICITEMS);
+-    rs_write_int(savef, count);
++    rs_write_int(savef, cnt);
+ 
+-    for(n = 0; n < count; n++)
++    for(n = 0; n < cnt; n++)
+     {
+-        /* mi_name is constant, defined at compile time in all cases */
++        /* oi_name is constant, defined at compile time in all cases */
+         rs_write_int(savef,i[n].oi_prob);
+         rs_write_int(savef,i[n].oi_worth);
+         rs_write_string(savef,i[n].oi_guess);
+-        rs_write_boolean(savef,i[n].oi_know);
++        rs_write_int(savef,i[n].oi_know);
+     }
+-    
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_obj_info(FILE *inf, struct obj_info *mi, int count)
++void
++rs_read_obj_info(FILE *savef, struct obj_info *mi, int cnt)
+ {
+     int n;
+     int value;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read_marker(savef, RSID_MAGICITEMS);
+ 
+-    rs_read_marker(inf, RSID_MAGICITEMS);
++    rs_read_int(savef, &value);
+ 
+-    rs_read_int(inf, &value);
+-
+-    if (value > count)
+-        format_error = TRUE;
++    if (!encerror() && (value > cnt))
++    {
++	encseterr(EILSEQ);
++	return;
++    }
+ 
+     for(n = 0; n < value; n++)
+     {
+         /* mi_name is const, defined at compile time in all cases */
+-        rs_read_int(inf,&mi[n].oi_prob);
+-        rs_read_int(inf,&mi[n].oi_worth);
+-        rs_read_new_string(inf,&mi[n].oi_guess);
+-        rs_read_boolean(inf,&mi[n].oi_know);
++        rs_read_int(savef,&mi[n].oi_prob);
++        rs_read_int(savef,&mi[n].oi_worth);
++        rs_read_new_string(savef,&mi[n].oi_guess);
++        rs_read_int(savef,&mi[n].oi_know);
+     }
+-    
+-    return(READSTAT);
+ }
+ 
+-int
++void
+ rs_write_room(FILE *savef, struct room *r)
+ {
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     rs_write_coord(savef, r->r_pos);
+     rs_write_coord(savef, r->r_max);
+     rs_write_coord(savef, r->r_gold);
+     rs_write_int(savef,   r->r_goldval);
+-    rs_write_short(savef, r->r_flags);
++    rs_write_int(savef, r->r_flags);
+     rs_write_int(savef, r->r_nexits);
+     rs_write_coord(savef, r->r_exit[0]);
+     rs_write_coord(savef, r->r_exit[1]);
+@@ -1198,154 +729,115 @@
+     rs_write_coord(savef, r->r_exit[9]);
+     rs_write_coord(savef, r->r_exit[10]);
+     rs_write_coord(savef, r->r_exit[11]);
+-    
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_room(FILE *inf, struct room *r)
++void
++rs_read_room(FILE *savef, struct room *r)
+ {
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_coord(inf,&r->r_pos);
+-    rs_read_coord(inf,&r->r_max);
+-    rs_read_coord(inf,&r->r_gold);
+-    rs_read_int(inf,&r->r_goldval);
+-    rs_read_short(inf,&r->r_flags);
+-    rs_read_int(inf,&r->r_nexits);
+-    rs_read_coord(inf,&r->r_exit[0]);
+-    rs_read_coord(inf,&r->r_exit[1]);
+-    rs_read_coord(inf,&r->r_exit[2]);
+-    rs_read_coord(inf,&r->r_exit[3]);
+-    rs_read_coord(inf,&r->r_exit[4]);
+-    rs_read_coord(inf,&r->r_exit[5]);
+-    rs_read_coord(inf,&r->r_exit[6]);
+-    rs_read_coord(inf,&r->r_exit[7]);
+-    rs_read_coord(inf,&r->r_exit[8]);
+-    rs_read_coord(inf,&r->r_exit[9]);
+-    rs_read_coord(inf,&r->r_exit[10]);
+-    rs_read_coord(inf,&r->r_exit[11]);
+-
+-    return(READSTAT);
++    rs_read_coord(savef,&r->r_pos);
++    rs_read_coord(savef,&r->r_max);
++    rs_read_coord(savef,&r->r_gold);
++    rs_read_int(savef,&r->r_goldval);
++    rs_read_int(savef,&r->r_flags);
++    rs_read_int(savef,&r->r_nexits);
++    rs_read_coord(savef,&r->r_exit[0]);
++    rs_read_coord(savef,&r->r_exit[1]);
++    rs_read_coord(savef,&r->r_exit[2]);
++    rs_read_coord(savef,&r->r_exit[3]);
++    rs_read_coord(savef,&r->r_exit[4]);
++    rs_read_coord(savef,&r->r_exit[5]);
++    rs_read_coord(savef,&r->r_exit[6]);
++    rs_read_coord(savef,&r->r_exit[7]);
++    rs_read_coord(savef,&r->r_exit[8]);
++    rs_read_coord(savef,&r->r_exit[9]);
++    rs_read_coord(savef,&r->r_exit[10]);
++    rs_read_coord(savef,&r->r_exit[11]);
+ }
+ 
+-int
+-rs_write_rooms(FILE *savef, struct room r[], int count)
++void
++rs_write_rooms(FILE *savef, struct room r[], int cnt)
+ {
+     int n = 0;
+ 
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    rs_write_int(savef, count);
++    rs_write_int(savef, cnt);
+     
+-    for(n = 0; n < count; n++)
++    for(n = 0; n < cnt; n++)
+         rs_write_room(savef, &r[n]);
+-    
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_rooms(FILE *inf, struct room *r, int count)
++void
++rs_read_rooms(FILE *savef, struct room *r, int cnt)
+ {
+     int value = 0, n = 0;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read_int(savef,&value);
+ 
+-    rs_read_int(inf,&value);
+-
+-    if (value > count)
+-        format_error = TRUE;
+-
+-    for(n = 0; n < value; n++)
+-        rs_read_room(inf,&r[n]);
+-
+-    return(READSTAT);
++    if (!encerror() && (value > cnt))
++        encseterr(EILSEQ);
++    else
++	for(n = 0; n < value; n++)
++	    rs_read_room(savef,&r[n]);
+ }
+ 
+-int
++void
+ rs_write_room_reference(FILE *savef, struct room *rp)
+ {
+     int i, room = -1;
+     
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     for (i = 0; i < MAXROOMS; i++)
+         if (&rooms[i] == rp)
+             room = i;
+ 
+     rs_write_int(savef, room);
+-
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_room_reference(FILE *inf, struct room **rp)
++void
++rs_read_room_reference(FILE *savef, struct room **rp)
+ {
+     int i;
+     
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_int(inf, &i);
++    rs_read_int(savef, &i);
+ 
+-    *rp = &rooms[i];
+-            
+-    return(READSTAT);
++    if (!encerror())
++	*rp = &rooms[i];
+ }
+ 
+-int
+-rs_write_monsters(FILE *savef, struct monster *m, int count)
++void
++rs_write_monsters(FILE *savef, struct monster *m, int cnt)
+ {
+     int n;
+     
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     rs_write_marker(savef, RSID_MONSTERS);
+-    rs_write_int(savef, count);
++    rs_write_int(savef, cnt);
+ 
+-    for(n=0;n<count;n++)
++    for(n=0;n<cnt;n++)
+         rs_write_stats(savef, &m[n].m_stats);
+-    
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_monsters(FILE *inf, struct monster *m, int count)
++void
++rs_read_monsters(FILE *savef, struct monster *m, int cnt)
+ {
+     int value = 0, n = 0;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_marker(inf, RSID_MONSTERS);
++    rs_read_marker(savef, RSID_MONSTERS);
+ 
+-    rs_read_int(inf, &value);
++    rs_read_int(savef, &value);
+ 
+-    if (value != count)
+-        format_error = TRUE;
+-
+-    for(n = 0; n < count; n++)
+-        rs_read_stats(inf, &m[n].m_stats);
+-    
+-    return(READSTAT);
++    if (!encerror() && (value != cnt))
++	encseterr(EILSEQ);
++    else
++	for(n = 0; n < cnt; n++)
++	    rs_read_stats(savef, &m[n].m_stats);
+ }
+ 
+-int
++void
+ rs_write_object(FILE *savef, THING *o)
+ {
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     rs_write_marker(savef, RSID_OBJECT);
+     rs_write_int(savef, o->_o._o_type); 
+     rs_write_coord(savef, o->_o._o_pos); 
+     rs_write_int(savef, o->_o._o_launch);
+-    rs_write_char(savef, o->_o._o_packch);
++    rs_write_int(savef, o->_o._o_packch);
+     rs_write_chars(savef, o->_o._o_damage, sizeof(o->_o._o_damage));
+     rs_write_chars(savef, o->_o._o_hurldmg, sizeof(o->_o._o_hurldmg));
+     rs_write_int(savef, o->_o._o_count);
+@@ -1356,73 +848,60 @@
+     rs_write_int(savef, o->_o._o_flags);
+     rs_write_int(savef, o->_o._o_group);
+     rs_write_string(savef, o->_o._o_label);
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_object(FILE *inf, THING *o)
++void
++rs_read_object(FILE *savef, THING *o)
+ {
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_marker(inf, RSID_OBJECT);
+-    rs_read_int(inf, &o->_o._o_type);
+-    rs_read_coord(inf, &o->_o._o_pos);
+-    rs_read_int(inf, &o->_o._o_launch);
+-    rs_read_char(inf, &o->_o._o_packch);
+-    rs_read_chars(inf, o->_o._o_damage, sizeof(o->_o._o_damage));
+-    rs_read_chars(inf, o->_o._o_hurldmg, sizeof(o->_o._o_hurldmg));
+-    rs_read_int(inf, &o->_o._o_count);
+-    rs_read_int(inf, &o->_o._o_which);
+-    rs_read_int(inf, &o->_o._o_hplus);
+-    rs_read_int(inf, &o->_o._o_dplus);
+-    rs_read_int(inf, &o->_o._o_arm);
+-    rs_read_int(inf, &o->_o._o_flags);
+-    rs_read_int(inf, &o->_o._o_group);
+-    rs_read_new_string(inf, &o->_o._o_label);
+-    
+-    return(READSTAT);
++    rs_read_marker(savef, RSID_OBJECT);
++    rs_read_int(savef, &o->_o._o_type);
++    rs_read_coord(savef, &o->_o._o_pos);
++    rs_read_int(savef, &o->_o._o_launch);
++    rs_read_int(savef, &o->_o._o_packch);
++    rs_read_chars(savef, o->_o._o_damage, sizeof(o->_o._o_damage));
++    rs_read_chars(savef, o->_o._o_hurldmg, sizeof(o->_o._o_hurldmg));
++    rs_read_int(savef, &o->_o._o_count);
++    rs_read_int(savef, &o->_o._o_which);
++    rs_read_int(savef, &o->_o._o_hplus);
++    rs_read_int(savef, &o->_o._o_dplus);
++    rs_read_int(savef, &o->_o._o_arm);
++    rs_read_int(savef, &o->_o._o_flags);
++    rs_read_int(savef, &o->_o._o_group);
++    rs_read_new_string(savef, &o->_o._o_label);
+ }
+ 
+-int
++void
+ rs_write_object_list(FILE *savef, THING *l)
+ {
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     rs_write_marker(savef, RSID_OBJECTLIST);
+     rs_write_int(savef, list_size(l));
+ 
+     for( ;l != NULL; l = l->l_next)
+         rs_write_object(savef, l);
+-    
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_object_list(FILE *inf, THING **list)
++void
++rs_read_object_list(FILE *savef, THING **list)
+ {
+     int i, cnt;
+     THING *l = NULL, *previous = NULL, *head = NULL;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read_marker(savef, RSID_OBJECTLIST);
++    rs_read_int(savef, &cnt);
+ 
+-    rs_read_marker(inf, RSID_OBJECTLIST);
+-    rs_read_int(inf, &cnt);
++    if (encerror())
++	return;
+ 
+     for (i = 0; i < cnt; i++) 
+     {
+-        l = new_item(sizeof(THING));
+-
+-        memset(l,0,sizeof(THING));
++        l = new_item();
+ 
+         l->l_prev = previous;
+ 
+         if (previous != NULL)
+             previous->l_next = l;
+ 
+-        rs_read_object(inf,l);
++        rs_read_object(savef,l);
+ 
+         if (previous == NULL)
+             head = l;
+@@ -1434,42 +913,33 @@
+         l->l_next = NULL;
+     
+     *list = head;
+-
+-    return(READSTAT);
+ }
+ 
+-int
++void
+ rs_write_object_reference(FILE *savef, THING *list, THING *item)
+ {
+     int i;
+     
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     i = find_list_ptr(list, item);
+ 
+     rs_write_int(savef, i);
+-
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_object_reference(FILE *inf, THING *list, THING **item)
++void
++rs_read_object_reference(FILE *savef, THING *list, THING **item)
+ {
+     int i;
+     
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_int(inf, &i);
++    rs_read_int(savef, &i);
+ 
+-    *item = get_list_item(list,i);
+-            
+-    return(READSTAT);
++    if (!encerror())
++	*item = get_list_item(list,i);
++    else
++	*item = NULL;
+ }
+ 
+ int
+-find_room_coord(struct room *rmlist, coord *c, int n)
++find_room_coord(const struct room *rmlist,const coord *c, int n)
+ {
+     int i = 0;
+     
+@@ -1481,7 +951,7 @@
+ }
+ 
+ int
+-find_thing_coord(THING *monlist, coord *c)
++find_thing_coord(THING *monlist, const coord *c)
+ {
+     THING *mitem;
+     THING *tp;
+@@ -1501,7 +971,7 @@
+ }
+ 
+ int
+-find_object_coord(THING *objlist, coord *c)
++find_object_coord(THING *objlist, const coord *c)
+ {
+     THING *oitem;
+     THING *obj;
+@@ -1520,28 +990,25 @@
+     return(-1);
+ }
+ 
+-int
++void
+ rs_write_thing(FILE *savef, THING *t)
+ {
+     int i = -1;
+     
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     rs_write_marker(savef, RSID_THING);
+ 
+     if (t == NULL)
+     {
+         rs_write_int(savef, 0);
+-        return(WRITESTAT);
++        return;
+     }
+     
+     rs_write_int(savef, 1);
+     rs_write_coord(savef, t->_t._t_pos);
+-    rs_write_boolean(savef, t->_t._t_turn);
+-    rs_write_char(savef, t->_t._t_type);
+-    rs_write_char(savef, t->_t._t_disguise);
+-    rs_write_char(savef, t->_t._t_oldch);
++    rs_write_int(savef, t->_t._t_turn);
++    rs_write_int(savef, t->_t._t_type);
++    rs_write_int(savef, t->_t._t_disguise);
++    rs_write_int(savef, t->_t._t_oldch);
+ 
+     /* 
+         t_dest can be:
+@@ -1601,35 +1068,32 @@
+         rs_write_int(savef,0);
+     }
+     
+-    rs_write_short(savef, t->_t._t_flags);
++    rs_write_int(savef, t->_t._t_flags);
+     rs_write_stats(savef, &t->_t._t_stats);
+     rs_write_room_reference(savef, t->_t._t_room);
+     rs_write_object_list(savef, t->_t._t_pack);
+-    
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_thing(FILE *inf, THING *t)
++void
++rs_read_thing(FILE *savef, THING *t)
+ {
+     int listid = 0, index = -1;
+     THING *item;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_marker(inf, RSID_THING);
++    rs_read_marker(savef, RSID_THING);
++    rs_read_int(savef, &index);
+ 
+-    rs_read_int(inf, &index);
++    if (encerror())
++	return;
+ 
+     if (index == 0)
+-        return(READSTAT);
++        return;
+ 
+-    rs_read_coord(inf,&t->_t._t_pos);
+-    rs_read_boolean(inf,&t->_t._t_turn);
+-    rs_read_char(inf,&t->_t._t_type);
+-    rs_read_char(inf,&t->_t._t_disguise);
+-    rs_read_char(inf,&t->_t._t_oldch);
++    rs_read_coord(savef,&t->_t._t_pos);
++    rs_read_int(savef,&t->_t._t_turn);
++    rs_read_int(savef,&t->_t._t_type);
++    rs_read_int(savef,&t->_t._t_disguise);
++    rs_read_int(savef,&t->_t._t_oldch);
+             
+     /* 
+         t_dest can be (listid,index):
+@@ -1643,10 +1107,13 @@
+         the current location of what we are chasing.
+     */
+             
+-    rs_read_int(inf, &listid);
+-    rs_read_int(inf, &index);
++    rs_read_int(savef, &listid);
++    rs_read_int(savef, &index);
+     t->_t._t_reserved = -1;
+ 
++    if (encerror())
++	return;
++
+     if (listid == 0) /* hero or NULL */
+     {
+         if (index == 1)
+@@ -1678,12 +1145,10 @@
+     else
+         t->_t._t_dest = NULL;
+             
+-    rs_read_short(inf,&t->_t._t_flags);
+-    rs_read_stats(inf,&t->_t._t_stats);
+-    rs_read_room_reference(inf, &t->_t._t_room);
+-    rs_read_object_list(inf,&t->_t._t_pack);
+-    
+-    return(READSTAT);
++    rs_read_int(savef,&t->_t._t_flags);
++    rs_read_stats(savef,&t->_t._t_stats);
++    rs_read_room_reference(savef, &t->_t._t_room);
++    rs_read_object_list(savef,&t->_t._t_pack);
+ }
+ 
+ void
+@@ -1704,14 +1169,11 @@
+     }
+ }
+ 
+-int
++void
+ rs_write_thing_list(FILE *savef, THING *l)
+ {
+     int cnt = 0;
+     
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     rs_write_marker(savef, RSID_MONSTERLIST);
+ 
+     cnt = list_size(l);
+@@ -1719,28 +1181,25 @@
+     rs_write_int(savef, cnt);
+ 
+     if (cnt < 1)
+-        return(WRITESTAT);
++        return;
+ 
+     while (l != NULL) {
+         rs_write_thing(savef, l);
+         l = l->l_next;
+     }
+-    
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_thing_list(FILE *inf, THING **list)
++void
++rs_read_thing_list(FILE *savef, THING **list)
+ {
+     int i, cnt;
+     THING *l = NULL, *previous = NULL, *head = NULL;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read_marker(savef, RSID_MONSTERLIST);
++    rs_read_int(savef, &cnt);
+ 
+-    rs_read_marker(inf, RSID_MONSTERLIST);
+-
+-    rs_read_int(inf, &cnt);
++    if (encerror())
++	return;
+ 
+     for (i = 0; i < cnt; i++) 
+     {
+@@ -1751,7 +1210,7 @@
+         if (previous != NULL)
+             previous->l_next = l;
+ 
+-        rs_read_thing(inf,l);
++        rs_read_thing(savef,l);
+ 
+         if (previous == NULL)
+             head = l;
+@@ -1763,8 +1222,6 @@
+         l->l_next = NULL;
+ 
+     *list = head;
+-    
+-    return(READSTAT);
+ }
+ 
+ void
+@@ -1776,14 +1233,11 @@
+         rs_fix_thing(item);
+ }
+ 
+-int
++void
+ rs_write_thing_reference(FILE *savef, THING *list, THING *item)
+ {
+     int i;
+ 
+-    if (write_error)
+-        return(WRITESTAT);
+-
+     if (item == NULL)
+         rs_write_int(savef,-1);
+     else
+@@ -1792,152 +1246,92 @@
+ 
+         rs_write_int(savef, i);
+     }
+-
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_thing_reference(FILE *inf, THING *list, THING **item)
++void
++rs_read_thing_reference(FILE *savef, THING *list, THING **item)
+ {
+     int i;
+     
+-    if (read_error || format_error)
+-        return(READSTAT);
++    rs_read_int(savef, &i);
+ 
+-    rs_read_int(inf, &i);
++    if (encerror())
++	return;
+ 
+     if (i == -1)
+         *item = NULL;
+     else
+         *item = get_list_item(list,i);
+ 
+-    return(READSTAT);
+ }
+ 
+-int
+-rs_write_thing_references(FILE *savef, THING *list, THING *items[], int count)
++void
++rs_write_thing_references(FILE *savef, THING *list, THING *items[], int cnt)
+ {
+     int i;
+ 
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    for(i = 0; i < count; i++)
++    for(i = 0; i < cnt; i++)
+         rs_write_thing_reference(savef,list,items[i]);
+-
+-    return(WRITESTAT);
+ }
+ 
+-int
+-rs_read_thing_references(FILE *inf, THING *list, THING *items[], int count)
++void
++rs_read_thing_references(FILE *savef, THING *list, THING *items[], int cnt)
+ {
+     int i;
+ 
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    for(i = 0; i < count; i++)
+-        rs_read_thing_reference(inf,list,&items[i]);
+-
+-    return(WRITESTAT);
++    for(i = 0; i < cnt; i++)
++        rs_read_thing_reference(savef,list,&items[i]);
+ }
+ 
+-int 
+-rs_write_places(FILE *savef, PLACE *places, int count)
++void
++rs_write_places(FILE *savef, PLACE *p, int cnt)
+ {
+     int i = 0;
+     
+-    if (write_error)
+-        return(WRITESTAT);
+-
+-    for(i = 0; i < count; i++) 
++    for(i = 0; i < cnt; i++) 
+     {
+-        rs_write_char(savef, places[i].p_ch);
+-        rs_write_char(savef, places[i].p_flags);
+-        rs_write_thing_reference(savef, mlist, places[i].p_monst);
++        rs_write_int(savef, p[i].p_ch);
++        rs_write_int(savef, p[i].p_flags);
++        rs_write_thing_reference(savef, mlist, p[i].p_monst);
+     }
+-
+-    return(WRITESTAT);
+ }
+ 
+-int 
+-rs_read_places(FILE *inf, PLACE *places, int count)
++void
++rs_read_places(FILE *savef, PLACE *p, int cnt)
+ {
+     int i = 0;
+     
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    for(i = 0; i < count; i++) 
++    for(i = 0; i < cnt; i++) 
+     {
+-        rs_read_char(inf,&places[i].p_ch);
+-        rs_read_char(inf,&places[i].p_flags);
+-        rs_read_thing_reference(inf, mlist, &places[i].p_monst);
++        rs_read_int(savef,&p[i].p_ch);
++        rs_read_int(savef,&p[i].p_flags);
++        rs_read_thing_reference(savef, mlist, &p[i].p_monst);
+     }
+-
+-    return(READSTAT);
+ }
+ 
+ int
+ rs_save_file(FILE *savef)
+ {
+-    if (write_error)
+-        return(WRITESTAT);
++    encclearerr();
+ 
+-    rs_write_boolean(savef, after);                 /* 1  */    /* extern.c */
+-    rs_write_boolean(savef, again);                 /* 2  */
+-    rs_write_int(savef, noscore);	                /* 3  */
+-    rs_write_boolean(savef, seenstairs);            /* 4  */
+-    rs_write_boolean(savef, amulet);                /* 5  */
+-    rs_write_boolean(savef, door_stop);             /* 6  */
+-    rs_write_boolean(savef, fight_flush);           /* 7  */
+-    rs_write_boolean(savef, firstmove);             /* 8  */
+-    rs_write_boolean(savef, got_ltc);               /* 9  */
+-    rs_write_boolean(savef, has_hit);               /* 10 */
+-    rs_write_boolean(savef, in_shell);              /* 11 */
+-    rs_write_boolean(savef, inv_describe);          /* 12 */
+-    rs_write_boolean(savef, jump);                  /* 13 */
+-    rs_write_boolean(savef, kamikaze);              /* 14 */
+-    rs_write_boolean(savef, lower_msg);             /* 15 */
+-    rs_write_boolean(savef, move_on);               /* 16 */
+-    rs_write_boolean(savef, msg_esc);               /* 17 */
+-    rs_write_boolean(savef, passgo);                /* 18 */
+-    rs_write_boolean(savef, playing);               /* 19 */
+-    rs_write_boolean(savef, q_comm);                /* 20 */
+-    rs_write_boolean(savef, running);               /* 21 */
+-    rs_write_boolean(savef, save_msg);              /* 22 */
+-    rs_write_boolean(savef, see_floor);             /* 23 */
+-    rs_write_boolean(savef, stat_msg);              /* 24 */
+-    rs_write_boolean(savef, terse);                 /* 25 */
+-    rs_write_boolean(savef, to_death);              /* 26 */
+-    rs_write_boolean(savef, tombstone);             /* 27 */
+-#ifdef MASTER
+-    rs_write_int(savef, wizard);                    /* 28 */
+-#else
+-    rs_write_int(savef, 0);                         /* 28 */
+-#endif
+-    rs_write_booleans(savef, pack_used, 26);        /* 29 */
+-    rs_write_char(savef, dir_ch);
++    rs_write_int(savef, noscore);
++    rs_write_int(savef, seenstairs);
++    rs_write_int(savef, amulet);
++    rs_write_int(savef, fight_flush);
++    rs_write_int(savef, jump);
++    rs_write_int(savef, passgo);
++    rs_write_int(savef, see_floor);
++    rs_write_int(savef, terse);
++    rs_write_int(savef, tombstone);
++    rs_write_ints(savef, pack_used, 26);
+     rs_write_chars(savef, file_name, MAXSTR);
+     rs_write_chars(savef, huh, MAXSTR);
+     rs_write_potions(savef);
+-    rs_write_chars(savef,prbuf,2*MAXSTR);
+     rs_write_rings(savef);
+-    rs_write_string(savef,release);
+-    rs_write_char(savef, runch);
+     rs_write_scrolls(savef);
+-    rs_write_char(savef, take);
+     rs_write_chars(savef, whoami, MAXSTR);
+     rs_write_sticks(savef);
+-    rs_write_int(savef,orig_dsusp);
+     rs_write_chars(savef, fruit, MAXSTR);
+-    rs_write_chars(savef, home, MAXSTR);
+-    rs_write_strings(savef,inv_t_name,3);
+-    rs_write_char(savef,l_last_comm);
+-    rs_write_char(savef,l_last_dir);
+-    rs_write_char(savef,last_comm);
+-    rs_write_char(savef,last_dir);
+-    rs_write_strings(savef,tr_name,8);
+     rs_write_int(savef,n_objs);
+     rs_write_int(savef, ntraps);
+     rs_write_int(savef, hungry_state);
+@@ -1945,190 +1339,106 @@
+     rs_write_int(savef, inv_type);
+     rs_write_int(savef, level);
+     rs_write_int(savef, max_level);
+-    rs_write_int(savef, mpos);
+     rs_write_int(savef, no_food);
+-    rs_write_ints(savef,a_class,MAXARMORS);
+-    rs_write_int(savef, count);
+     rs_write_int(savef, food_left);
+     rs_write_int(savef, lastscore);
+-    rs_write_int(savef, no_command);
+     rs_write_int(savef, no_move);
+     rs_write_int(savef, purse);
+     rs_write_int(savef, quiet);
+     rs_write_int(savef, vf_hit);
+-    rs_write_int(savef, dnum);
+-    rs_write_int(savef, seed);
+-    rs_write_ints(savef, e_levels, 21);
+-    rs_write_coord(savef, delta);
+-    rs_write_coord(savef, oldpos);
++    rs_write_uint(savef, seed);
+     rs_write_coord(savef, stairs);
+-
+     rs_write_thing(savef, &player);                     
+     rs_write_object_reference(savef, player.t_pack, cur_armor);
+     rs_write_object_reference(savef, player.t_pack, cur_ring[0]);
+     rs_write_object_reference(savef, player.t_pack, cur_ring[1]); 
+     rs_write_object_reference(savef, player.t_pack, cur_weapon); 
+-    rs_write_object_reference(savef, player.t_pack, l_last_pick); 
+-    rs_write_object_reference(savef, player.t_pack, last_pick); 
+-    
+     rs_write_object_list(savef, lvl_obj);               
+     rs_write_thing_list(savef, mlist);                
+-
+     rs_write_places(savef,places,MAXLINES*MAXCOLS);
+-
+     rs_write_stats(savef,&max_stats); 
+     rs_write_rooms(savef, rooms, MAXROOMS);             
+-    rs_write_room_reference(savef, oldrp);              
+     rs_write_rooms(savef, passages, MAXPASS);
+-
+     rs_write_monsters(savef,monsters,26);               
+-    rs_write_obj_info(savef, things,   NUMTHINGS);   
++    rs_write_obj_info(savef, things,  NUMTHINGS);  
+     rs_write_obj_info(savef, arm_info,  MAXARMORS);  
+     rs_write_obj_info(savef, pot_info,  MAXPOTIONS);  
+     rs_write_obj_info(savef, ring_info,  MAXRINGS);    
+     rs_write_obj_info(savef, scr_info,  MAXSCROLLS);  
+     rs_write_obj_info(savef, weap_info,  MAXWEAPONS+1);  
+     rs_write_obj_info(savef, ws_info, MAXSTICKS);      
+-    
+-    
+-    rs_write_daemons(savef, &d_list[0], 20);            /* 5.4-daemon.c */
+-#ifdef MASTER
+-    rs_write_int(savef,total);                          /* 5.4-list.c   */
+-#else
+-    rs_write_int(savef, 0);
+-#endif
+-    rs_write_int(savef,between);                        /* 5.4-daemons.c*/
+-    rs_write_coord(savef, nh);                          /* 5.4-move.c    */
+-    rs_write_int(savef, group);                         /* 5.4-weapons.c */
+-
++    rs_write_daemons(savef, &d_list[0], 20);
++    rs_write_int(savef,between);
++    rs_write_int(savef, group);
+     rs_write_window(savef,stdscr);
+ 
+-    return(WRITESTAT);
++    return( encclearerr() );
+ }
+ 
+ int
+-rs_restore_file(FILE *inf)
++rs_restore_file(FILE *savef)
+ {
+-    int dummyint;
+-
+-    if (read_error || format_error)
+-        return(READSTAT);
+-
+-    rs_read_boolean(inf, &after);               /* 1  */    /* extern.c */
+-    rs_read_boolean(inf, &again);               /* 2  */
+-    rs_read_int(inf, &noscore);                 /* 3  */
+-    rs_read_boolean(inf, &seenstairs);          /* 4  */
+-    rs_read_boolean(inf, &amulet);              /* 5  */
+-    rs_read_boolean(inf, &door_stop);           /* 6  */
+-    rs_read_boolean(inf, &fight_flush);         /* 7  */
+-    rs_read_boolean(inf, &firstmove);           /* 8  */
+-    rs_read_boolean(inf, &got_ltc);             /* 9  */
+-    rs_read_boolean(inf, &has_hit);             /* 10 */
+-    rs_read_boolean(inf, &in_shell);            /* 11 */
+-    rs_read_boolean(inf, &inv_describe);        /* 12 */
+-    rs_read_boolean(inf, &jump);                /* 13 */
+-    rs_read_boolean(inf, &kamikaze);            /* 14 */
+-    rs_read_boolean(inf, &lower_msg);           /* 15 */
+-    rs_read_boolean(inf, &move_on);             /* 16 */
+-    rs_read_boolean(inf, &msg_esc);             /* 17 */
+-    rs_read_boolean(inf, &passgo);              /* 18 */
+-    rs_read_boolean(inf, &playing);             /* 19 */
+-    rs_read_boolean(inf, &q_comm);              /* 20 */
+-    rs_read_boolean(inf, &running);             /* 21 */
+-    rs_read_boolean(inf, &save_msg);            /* 22 */
+-    rs_read_boolean(inf, &see_floor);           /* 23 */
+-    rs_read_boolean(inf, &stat_msg);            /* 24 */
+-    rs_read_boolean(inf, &terse);               /* 25 */
+-    rs_read_boolean(inf, &to_death);            /* 26 */
+-    rs_read_boolean(inf, &tombstone);           /* 27 */
+-#ifdef MASTER
+-    rs_read_int(inf, &wizard);                  /* 28 */
+-#else
+-    rs_read_int(inf, &dummyint);                /* 28 */
+-#endif
+-    rs_read_booleans(inf, pack_used, 26);       /* 29 */
+-    rs_read_char(inf, &dir_ch);
+-    rs_read_chars(inf, file_name, MAXSTR);
+-    rs_read_chars(inf, huh, MAXSTR);
+-    rs_read_potions(inf);
+-    rs_read_chars(inf, prbuf, 2*MAXSTR);
+-    rs_read_rings(inf);
+-    rs_read_new_string(inf,&release);
+-    rs_read_char(inf, &runch);
+-    rs_read_scrolls(inf);
+-    rs_read_char(inf, &take);
+-    rs_read_chars(inf, whoami, MAXSTR);
+-    rs_read_sticks(inf);
+-    rs_read_int(inf,&orig_dsusp);
+-    rs_read_chars(inf, fruit, MAXSTR);
+-    rs_read_chars(inf, home, MAXSTR);
+-    rs_read_new_strings(inf,inv_t_name,3);
+-    rs_read_char(inf, &l_last_comm);
+-    rs_read_char(inf, &l_last_dir);
+-    rs_read_char(inf, &last_comm);
+-    rs_read_char(inf, &last_dir);
+-    rs_read_new_strings(inf,tr_name,8);
+-    rs_read_int(inf, &n_objs);
+-    rs_read_int(inf, &ntraps);
+-    rs_read_int(inf, &hungry_state);
+-    rs_read_int(inf, &inpack);
+-    rs_read_int(inf, &inv_type);
+-    rs_read_int(inf, &level);
+-    rs_read_int(inf, &max_level);
+-    rs_read_int(inf, &mpos);
+-    rs_read_int(inf, &no_food);
+-    rs_read_ints(inf,a_class,MAXARMORS);
+-    rs_read_int(inf, &count);
+-    rs_read_int(inf, &food_left);
+-    rs_read_int(inf, &lastscore);
+-    rs_read_int(inf, &no_command);
+-    rs_read_int(inf, &no_move);
+-    rs_read_int(inf, &purse);
+-    rs_read_int(inf, &quiet);
+-    rs_read_int(inf, &vf_hit);
+-    rs_read_int(inf, &dnum);
+-    rs_read_int(inf, &seed);
+-    rs_read_ints(inf,e_levels,21);
+-    rs_read_coord(inf, &delta);
+-    rs_read_coord(inf, &oldpos);
+-    rs_read_coord(inf, &stairs);
+-
+-    rs_read_thing(inf, &player); 
+-    rs_read_object_reference(inf, player.t_pack, &cur_armor);
+-    rs_read_object_reference(inf, player.t_pack, &cur_ring[0]);
+-    rs_read_object_reference(inf, player.t_pack, &cur_ring[1]);
+-    rs_read_object_reference(inf, player.t_pack, &cur_weapon);
+-    rs_read_object_reference(inf, player.t_pack, &l_last_pick);
+-    rs_read_object_reference(inf, player.t_pack, &last_pick);
++    encclearerr();
+ 
+-    rs_read_object_list(inf, &lvl_obj);                 
+-    rs_read_thing_list(inf, &mlist);                  
++    rs_read_int(savef, &noscore);
++    rs_read_int(savef, &seenstairs);
++    rs_read_int(savef, &amulet);
++    rs_read_int(savef, &fight_flush);
++    rs_read_int(savef, &jump);
++    rs_read_int(savef, &passgo);
++    rs_read_int(savef, &see_floor);
++    rs_read_int(savef, &terse);
++    rs_read_int(savef, &tombstone);
++    rs_read_ints(savef, pack_used, 26);
++    rs_read_chars(savef, file_name, MAXSTR);
++    rs_read_chars(savef, huh, MAXSTR);
++    rs_read_potions(savef);
++    rs_read_rings(savef);
++    rs_read_scrolls(savef);
++    rs_read_chars(savef, whoami, MAXSTR);
++    rs_read_sticks(savef);
++    rs_read_chars(savef, fruit, MAXSTR);
++    rs_read_int(savef, &n_objs);
++    rs_read_int(savef, &ntraps);
++    rs_read_int(savef, &hungry_state);
++    rs_read_int(savef, &inpack);
++    rs_read_int(savef, &inv_type);
++    rs_read_int(savef, &level);
++    rs_read_int(savef, &max_level);
++    rs_read_int(savef, &no_food);
++    rs_read_int(savef, &food_left);
++    rs_read_int(savef, &lastscore);
++    rs_read_int(savef, &no_move);
++    rs_read_int(savef, &purse);
++    rs_read_int(savef, &quiet);
++    rs_read_int(savef, &vf_hit);
++    rs_read_uint(savef, &seed);
++    rs_read_coord(savef, &stairs);
++    rs_read_thing(savef, &player); 
++    rs_read_object_reference(savef, player.t_pack, &cur_armor);
++    rs_read_object_reference(savef, player.t_pack, &cur_ring[0]);
++    rs_read_object_reference(savef, player.t_pack, &cur_ring[1]);
++    rs_read_object_reference(savef, player.t_pack, &cur_weapon);
++    rs_read_object_list(savef, &lvl_obj);                 
++    rs_read_thing_list(savef, &mlist);                  
+     rs_fix_thing(&player);
+     rs_fix_thing_list(mlist);
++    rs_read_places(savef,places,MAXLINES*MAXCOLS);
++    rs_read_stats(savef, &max_stats);
++    rs_read_rooms(savef, rooms, MAXROOMS);
++    rs_read_rooms(savef, passages, MAXPASS);
++    rs_read_monsters(savef,monsters,26);                  
++    rs_read_obj_info(savef, things,  NUMTHINGS);  
++    rs_read_obj_info(savef, arm_info,   MAXARMORS);         
++    rs_read_obj_info(savef, pot_info,  MAXPOTIONS);       
++    rs_read_obj_info(savef, ring_info,  MAXRINGS);         
++    rs_read_obj_info(savef, scr_info,  MAXSCROLLS);       
++    rs_read_obj_info(savef, weap_info, MAXWEAPONS+1);       
++    rs_read_obj_info(savef, ws_info, MAXSTICKS);       
++    rs_read_daemons(savef, d_list, 20);
++    rs_read_int(savef,&between);
++    rs_read_int(savef,&group);
++    rs_read_window(savef,stdscr);
+ 
+-    rs_read_places(inf,places,MAXLINES*MAXCOLS);
+-
+-    rs_read_stats(inf, &max_stats);
+-    rs_read_rooms(inf, rooms, MAXROOMS);
+-    rs_read_room_reference(inf, &oldrp);
+-    rs_read_rooms(inf, passages, MAXPASS);
+-
+-    rs_read_monsters(inf,monsters,26);                  
+-    rs_read_obj_info(inf, things,   NUMTHINGS);         
+-    rs_read_obj_info(inf, arm_info,   MAXARMORS);         
+-    rs_read_obj_info(inf, pot_info,  MAXPOTIONS);       
+-    rs_read_obj_info(inf, ring_info,  MAXRINGS);         
+-    rs_read_obj_info(inf, scr_info,  MAXSCROLLS);       
+-    rs_read_obj_info(inf, weap_info, MAXWEAPONS+1);       
+-    rs_read_obj_info(inf, ws_info, MAXSTICKS);       
+-
+-    rs_read_daemons(inf, d_list, 20);                   /* 5.4-daemon.c     */
+-    rs_read_int(inf,&dummyint);  /* total */            /* 5.4-list.c    */
+-    rs_read_int(inf,&between);                          /* 5.4-daemons.c    */
+-    rs_read_coord(inf, &nh);                            /* 5.4-move.c       */
+-    rs_read_int(inf,&group);                            /* 5.4-weapons.c    */
+-    
+-    rs_read_window(inf,stdscr);
+-
+-    return(READSTAT);
++    return( encclearerr() );
+ }
+diff -Nur --exclude .git rogue.git/sticks.c rogue5.4.5/sticks.c
+--- rogue.git/sticks.c	2019-02-12 07:43:59.000000000 -0600
++++ rogue5.4.5/sticks.c	2007-10-13 13:29:51.000000000 -0500
+@@ -45,13 +45,13 @@
+  */
+ 
+ void
+-do_zap()
++do_zap(void)
+ {
+     THING *obj, *tp;
+     int y, x;
+     char *name;
+-    char monster, oldch;
+-    static THING bolt;
++    int monster, oldch;
++    THING bolt;
+ 
+     if ((obj = get_item("zap with", STICK)) == NULL)
+ 	return;
+@@ -134,7 +134,7 @@
+ 			oldch = tp->t_oldch;
+ 			delta.y = y;
+ 			delta.x = x;
+-			new_monster(tp, monster = (char)(rnd(26) + 'A'), &delta);
++			new_monster(tp, monster = rnd(26) + 'A', &delta);
+ 			if (see_monst(tp))
+ 			    mvaddch(y, x, monster);
+ 			tp->t_oldch = oldch;
+@@ -246,14 +246,14 @@
+  */
+ 
+ void
+-drain()
++drain(void)
+ {
+     THING *mp;
+     struct room *corp;
+     THING **dp;
+     int cnt;
+-    bool inpass;
+-    static THING *drainee[40];
++    int inpass;
++    THING *drainee[40];
+ 
+     /*
+      * First cnt how many things we need to spread the hit points among
+@@ -263,7 +263,7 @@
+ 	corp = &passages[flat(hero.y, hero.x) & F_PNUM];
+     else
+ 	corp = NULL;
+-    inpass = (bool)(proom->r_flags & ISGONE);
++    inpass = (proom->r_flags & ISGONE);
+     dp = drainee;
+     for (mp = mlist; mp != NULL; mp = next(mp))
+ 	if (mp->t_room == proom || mp->t_room == corp ||
+@@ -297,14 +297,14 @@
+  */
+ 
+ void
+-fire_bolt(coord *start, coord *dir, char *name)
++fire_bolt(const coord *start, coord *dir, const char *name)
+ {
+     coord *c1, *c2;
+     THING *tp;
+-    char dirch = 0, ch;
+-    bool hit_hero, used, changed;
+-    static coord pos;
+-    static coord spotpos[BOLT_LENGTH];
++    int dirch = 0, ch;
++    int hit_hero, used, changed;
++    coord pos;
++    coord spotpos[BOLT_LENGTH];
+     THING bolt;
+ 
+     bolt.o_type = WEAPON;
+@@ -320,7 +320,7 @@
+ 	when 2: case -2: dirch = '\\';
+     }
+     pos = *start;
+-    hit_hero = (bool)(start != &hero);
++    hit_hero = (start != &hero);
+     used = FALSE;
+     changed = FALSE;
+     for (c1 = spotpos; c1 <= &spotpos[BOLT_LENGTH-1] && !used; c1++)
+@@ -416,8 +416,8 @@
+  * charge_str:
+  *	Return an appropriate string for a wand charge
+  */
+-char *
+-charge_str(THING *obj)
++const char *
++charge_str(const THING *obj)
+ {
+     static char buf[20];
+ 
+diff -Nur --exclude .git rogue.git/things.c rogue5.4.5/things.c
+--- rogue.git/things.c	2019-02-12 07:43:59.000000000 -0600
++++ rogue5.4.5/things.c	2007-10-13 13:29:51.000000000 -0500
+@@ -11,6 +11,7 @@
+  * See the file LICENSE.TXT for full copyright and licensing information.
+  */
+ 
++#include <stdlib.h>
+ #include <curses.h>
+ #include <string.h>
+ #include <ctype.h>
+@@ -22,11 +23,11 @@
+  *	inventory.
+  */
+ char *
+-inv_name(THING *obj, bool drop)
++inv_name(const THING *obj, int drop)
+ {
+     char *pb;
+     struct obj_info *op;
+-    char *sp;
++    const char *sp;
+     int which;
+ 
+     pb = prbuf;
+@@ -125,9 +126,9 @@
+ 	else if (obj == cur_ring[RIGHT])
+ 	    strcat(pb, " (on right hand)");
+     }
+-    if (drop && isupper(prbuf[0]))
++    if (drop && isupper((int)prbuf[0]))
+ 	prbuf[0] = (char) tolower(prbuf[0]);
+-    else if (!drop && islower(*prbuf))
++    else if (!drop && islower((int)*prbuf))
+ 	*prbuf = (char) toupper(*prbuf);
+     prbuf[MAXSTR-1] = '\0';
+     return prbuf;
+@@ -139,9 +140,9 @@
+  */
+ 
+ void
+-drop()
++drop(void)
+ {
+-    char ch;
++    int ch;
+     THING *obj;
+ 
+     ch = chat(hero.y, hero.x);
+@@ -155,12 +156,12 @@
+ 	return;
+     if (!dropcheck(obj))
+ 	return;
+-    obj = leave_pack(obj, TRUE, (bool)!ISMULT(obj->o_type));
++    obj = leave_pack(obj, TRUE, !ISMULT(obj->o_type));
+     /*
+      * Link it into the level object list
+      */
+     attach(lvl_obj, obj);
+-    chat(hero.y, hero.x) = (char) obj->o_type;
++    chat(hero.y, hero.x) = obj->o_type;
+     flat(hero.y, hero.x) |= F_DROPPED;
+     obj->o_pos = hero;
+     if (obj->o_type == AMULET)
+@@ -172,8 +173,8 @@
+  * dropcheck:
+  *	Do special checks for dropping or unweilding|unwearing|unringing
+  */
+-bool
+-dropcheck(THING *obj)
++int
++dropcheck(const THING *obj)
+ {
+     if (obj == NULL)
+ 	return TRUE;
+@@ -214,7 +215,7 @@
+  *	Return a new thing
+  */
+ THING *
+-new_thing()
++new_thing(void)
+ {
+     THING *cur;
+     int r;
+@@ -292,7 +293,7 @@
+ #ifdef MASTER
+ 	otherwise:
+ 	    debug("Picked a bad kind of object");
+-	    wait_for(' ');
++	    wait_for(stdscr, ' ');
+ #endif
+     }
+     return cur;
+@@ -303,10 +304,10 @@
+  *	Pick an item out of a list of nitems possible objects
+  */
+ int
+-pick_one(struct obj_info *info, int nitems)
++pick_one(const struct obj_info *info, int nitems)
+ {
+-    struct obj_info *end;
+-    struct obj_info *start;
++    const struct obj_info *end;
++    const struct obj_info *start;
+     int i;
+ 
+     start = info;
+@@ -334,16 +335,16 @@
+  */
+ static int line_cnt = 0;
+ 
+-static bool newpage = FALSE;
++static int newpage = FALSE;
+ 
+-static char *lastfmt, *lastarg;
++static const char *lastfmt, *lastarg;
+ 
+ 
+ void
+-discovered()
++discovered(void)
+ {
+-    char ch;
+-    bool disc_list;
++    int ch;
++    int disc_list;
+ 
+     do {
+ 	disc_list = FALSE;
+@@ -389,6 +390,7 @@
+ 	print_disc(ch);
+ 	end_line();
+     }
++    msg("");
+ }
+ 
+ /*
+@@ -400,12 +402,12 @@
+ 
+ 
+ void
+-print_disc(char type)
++print_disc(int type)
+ {
+     struct obj_info *info = NULL;
+     int i, maxnum = 0, num_found;
+-    static THING obj;
+-    static int order[MAX4(MAXSCROLLS, MAXPOTIONS, MAXRINGS, MAXSTICKS)];
++    THING obj;
++    int order[MAX4(MAXSCROLLS, MAXPOTIONS, MAXRINGS, MAXSTICKS)];
+ 
+     switch (type)
+     {
+@@ -469,8 +471,8 @@
+  *	Add a line to the list of discoveries
+  */
+ /* VARARGS1 */
+-char
+-add_line(char *fmt, char *arg)
++int
++add_line(const char *fmt, const char *arg)
+ {
+     WINDOW *tw, *sw;
+     int x, y;
+@@ -522,7 +524,7 @@
+ 		}
+ 		touchwin(tw);
+ 		wrefresh(tw);
+-		wait_for(' ');
++		wait_for(tw, ' ');
+                 if (md_hasclreol())
+ 		{
+ 		    werase(tw);
+@@ -537,7 +539,7 @@
+ 		wmove(hw, LINES - 1, 0);
+ 		waddstr(hw, prompt);
+ 		wrefresh(hw);
+-		wait_for(' ');
++		wait_for(hw, ' ');
+ 		clearok(curscr, TRUE);
+ 		wclear(hw);
+ 		touchwin(stdscr);
+@@ -565,7 +567,7 @@
+  */
+ 
+ void
+-end_line()
++end_line(void)
+ {
+     if (inv_type != INV_SLOW)
+     {
+@@ -575,7 +577,7 @@
+ 	    msg(lastfmt, lastarg);
+ 	}
+ 	else
+-	    add_line((char *) NULL, NULL);
++	    add_line(NULL, NULL);
+     }
+     line_cnt = 0;
+     newpage = FALSE;
+@@ -585,8 +587,8 @@
+  * nothing:
+  *	Set up prbuf so that message for "nothing found" is there
+  */
+-char *
+-nothing(char type)
++const char *
++nothing(int type)
+ {
+     char *sp, *tystr = NULL;
+ 
+@@ -615,8 +617,8 @@
+  */
+ 
+ void
+-nameit(THING *obj, char *type, char *which, struct obj_info *op,
+-    char *(*prfunc)(THING *))
++nameit(const THING *obj, const char *type, const char *which, const struct obj_info *op,
++    const char *(*prfunc)(const THING *))
+ {
+     char *pb;
+ 
+@@ -642,8 +644,8 @@
+  * nullstr:
+  *	Return a pointer to a null-length string
+  */
+-char *
+-nullstr(THING *ignored)
++const char *
++nullstr(const THING *ignored)
+ {
+     NOOP(ignored);
+     return "";
+@@ -656,7 +658,7 @@
+  */
+ 
+ void
+-pr_list()
++pr_list(void)
+ {
+     int ch;
+ 
+@@ -667,6 +669,7 @@
+ 	addmsg(" of object do you want a list");
+     msg("? ");
+     ch = readchar();
++	msg("");
+     switch (ch)
+     {
+ 	case POTION:
+@@ -692,9 +695,9 @@
+  */
+ 
+ void
+-pr_spec(struct obj_info *info, int nitems)
++pr_spec(const struct obj_info *info, int nitems)
+ {
+-    struct obj_info *endp;
++    const struct obj_info *endp;
+     int i, lastprob;
+ 
+     endp = &info[nitems];
+diff -Nur --exclude .git rogue.git/vers.c rogue5.4.5/vers.c
+--- rogue.git/vers.c	2019-02-12 07:43:59.000000000 -0600
++++ rogue5.4.5/vers.c	2007-10-13 13:29:51.000000000 -0500
+@@ -11,7 +11,7 @@
+  * See the file LICENSE.TXT for full copyright and licensing information.
+  */
+ 
+-char *release = "5.4.4";
+-char encstr[] = "\300k||`\251Y.'\305\321\201+\277~r\"]\240_\223=1\341)\222\212\241t;\t$\270\314/<#\201\254";
+-char statlist[] = "\355kl{+\204\255\313idJ\361\214=4:\311\271\341wK<\312\321\213,,7\271/Rk%\b\312\f\246";
+-char version[] = "rogue (rogueforge) 09/05/07";
++const char *release = "5.4.5";
++const char encstr[] = "\300k||`\251Y.'\305\321\201+\277~r\"]\240_\223=1\341)\222\212\241t;\t$\270\314/<#\201\254";
++const char statlist[] = "\355kl{+\204\255\313idJ\361\214=4:\311\271\341wK<\312\321\213,,7\271/Rk%\b\312\f\246";
++const char version[] = "rogue (rogueforge) 09/05/07";
+diff -Nur --exclude .git rogue.git/weapons.c rogue5.4.5/weapons.c
+--- rogue.git/weapons.c	2019-02-12 07:44:00.000000000 -0600
++++ rogue5.4.5/weapons.c	2007-10-13 13:29:51.000000000 -0500
+@@ -17,12 +17,10 @@
+ 
+ #define NO_WEAPON -1
+ 
+-int group = 2;
+-
+-static struct init_weaps {
++static const struct init_weaps {
+     char *iw_dam;	/* Damage when wielded */
+     char *iw_hrl;	/* Damage when thrown */
+-    char iw_launch;	/* Launching weapon */
++    int iw_launch;	/* Launching weapon */
+     int iw_flags;	/* Miscellaneous flags */
+ } init_dam[MAXWEAPONS] = {
+     { "2x4",	"1x3",	NO_WEAPON,	0,		},	/* Mace */
+@@ -119,20 +117,20 @@
+  */
+ 
+ void
+-fall(THING *obj, bool pr)
++fall(THING *obj, int pr)
+ {
+     PLACE *pp;
+-    static coord fpos;
++    coord fpos;
+ 
+     if (fallpos(&obj->o_pos, &fpos))
+     {
+ 	pp = INDEX(fpos.y, fpos.x);
+-	pp->p_ch = (char) obj->o_type;
++	pp->p_ch = obj->o_type;
+ 	obj->o_pos = fpos;
+ 	if (cansee(fpos.y, fpos.x))
+ 	{
+ 	    if (pp->p_monst != NULL)
+-		pp->p_monst->t_oldch = (char) obj->o_type;
++		pp->p_monst->t_oldch = obj->o_type;
+ 	    else
+ 		mvaddch(fpos.y, fpos.x, obj->o_type);
+ 	}
+@@ -160,7 +158,7 @@
+ void
+ init_weapon(THING *weap, int which)
+ {
+-    struct init_weaps *iwp;
++    const struct init_weaps *iwp;
+ 
+     weap->o_type = WEAPON;
+     weap->o_which = which;
+@@ -193,9 +191,9 @@
+  *	Does the missile hit the monster?
+  */
+ int
+-hit_monster(int y, int x, THING *obj)
++hit_monster(int y, int x, const THING *obj)
+ {
+-    static coord mp;
++    coord mp;
+ 
+     mp.y = y;
+     mp.x = x;
+@@ -206,8 +204,8 @@
+  * num:
+  *	Figure out the plus number for armor/weapons
+  */
+-char *
+-num(int n1, int n2, char type)
++const char *
++num(int n1, int n2, int type)
+ {
+     static char numbuf[10];
+ 
+@@ -223,7 +221,7 @@
+  */
+ 
+ void
+-wield()
++wield(void)
+ {
+     THING *obj, *oweapon;
+     char *sp;
+@@ -261,8 +259,8 @@
+  * fallpos:
+  *	Pick a random position around the give (y, x) coordinates
+  */
+-bool
+-fallpos(coord *pos, coord *newpos)
++int
++fallpos(const coord *pos, coord *newpos)
+ {
+     int y, x, cnt, ch;
+ 
+@@ -284,5 +282,5 @@
+ 		newpos->x = x;
+ 	    }
+ 	}
+-    return (bool)(cnt != 0);
++    return (cnt != 0);
+ }
+diff -Nur --exclude .git rogue.git/wizard.c rogue5.4.5/wizard.c
+--- rogue.git/wizard.c	2019-02-12 07:44:00.000000000 -0600
++++ rogue5.4.5/wizard.c	2007-10-13 13:29:51.000000000 -0500
+@@ -23,7 +23,7 @@
+  */
+ 
+ void
+-whatis(bool insist, int type)
++whatis(int insist, int type)
+ {
+     THING *obj;
+ 
+@@ -96,11 +96,11 @@
+  * type_name:
+  *	Return a pointer to the name of the type
+  */
+-char *
++const char *
+ type_name(int type)
+ {
+     struct h_list *hp;
+-    static struct h_list tlist[] = {
++    struct h_list tlist[] = {
+ 	{POTION, "potion",		FALSE},
+ 	{SCROLL, "scroll",		FALSE},
+ 	{FOOD,	 "food",		FALSE},
+@@ -125,10 +125,10 @@
+  */
+ 
+ void
+-create_obj()
++create_obj(void)
+ {
+     THING *obj;
+-    char ch, bless;
++    int ch, bless;
+ 
+     obj = new_item();
+     msg("type of item: ");
+@@ -197,12 +197,12 @@
+  */
+ 
+ void
+-teleport()
++teleport(void)
+ {
+-    static coord c;
++    coord c;
+ 
+     mvaddch(hero.y, hero.x, floor_at());
+-    find_floor((struct room *) NULL, &c, FALSE, TRUE);
++    find_floor(NULL, &c, FALSE, TRUE);
+     if (roomin(&c) != proom)
+     {
+ 	leave_room(&hero);
+@@ -236,9 +236,10 @@
+  *	See if user knows password
+  */
+ int
+-passwd()
++passwd(void)
+ {
+-    char *sp, c;
++    char *sp;
++    int c;
+     static char buf[MAXSTR];
+ 
+     msg("wizard's Password:");
+@@ -250,7 +251,7 @@
+ 	else if (c == md_erasechar() && sp > buf)
+ 	    sp--;
+ 	else
+-	    *sp++ = c;
++	    *sp++ = (char) c;
+     if (sp == buf)
+ 	return FALSE;
+     *sp = '\0';
+@@ -263,7 +264,7 @@
+  */
+ 
+ void
+-show_map()
++show_map(void)
+ {
+     int y, x, real;
+ 
+@@ -276,7 +277,7 @@
+ 		wstandout(hw);
+ 	    wmove(hw, y, x);
+ 	    waddch(hw, chat(y, x));
+-	    if (!real)
++	    if (!(real & F_REAL))
+ 		wstandend(hw);
+ 	}
+     show_win("---More (level map)---");
+diff -Nur --exclude .git rogue.git/xcrypt.c rogue5.4.5/xcrypt.c
+--- rogue.git/xcrypt.c	2019-02-12 07:44:01.000000000 -0600
++++ rogue5.4.5/xcrypt.c	2007-10-13 13:29:51.000000000 -0500
+@@ -52,7 +52,7 @@
+ #include <sys/types.h>
+ #include <string.h>
+ 
+-unsigned int md_endian = 0x01020304;
++static unsigned int md_endian = 0x01020304;
+ 
+ unsigned int
+ xntohl(unsigned int x)
+@@ -66,7 +66,7 @@
+                 ((x & 0xff000000U) >> 24) );
+ }
+ 
+-unsigned
++unsigned int
+ xhtonl(unsigned int x)
+ {
+     if ( *((char *)&md_endian) == 0x01 )
+@@ -204,7 +204,7 @@
+ /*	  0123456789012345678901234567890123456789012345678901234567890123 */
+ 
+ static __inline int
+-ascii_to_bin(char ch)
++ascii_to_bin(int ch)
+ {
+ 	if (ch > 'z')
+ 		return(0);
+@@ -222,7 +222,7 @@
+ }
+ 
+ static void
+-des_init()
++des_init(void)
+ {
+ 	int	i, j, b, k, inbit, obit;
+ 	unsigned int	*p, *il, *ir, *fl, *fr;

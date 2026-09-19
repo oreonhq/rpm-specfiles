@@ -1,0 +1,33 @@
+.TH TEND\-TRIPLE "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-triple \- compute volume of shape triples
+.SH SYNOPSIS
+.B tend\ triple
+.B \-t
+.RI < type >
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Compute volume of shape triples.
+The triple can be eigenvalues,
+invariants
+.BI ( J ,\  K ,\  R )\fR,
+and lots of other things.
+.SH OPTIONS
+.TP
+.B \-t\fR <\fItype\fR>
+desired output triple type
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output triple volume
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

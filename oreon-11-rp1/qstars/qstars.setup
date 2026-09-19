@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+# This wrapper script is needed because KDE passes additional setup options
+# which are not understood by qstars, eg the -caption option. qstars fails
+# to launch the setup if used verbatim
+qstars -setup
+

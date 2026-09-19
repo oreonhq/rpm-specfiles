@@ -1,0 +1,433 @@
+diff -r -U4 dokuwiki-2025-05-14b--orig/vendor/composer/autoload_classmap.php dokuwiki-2025-05-14b--patched/vendor/composer/autoload_classmap.php
+--- dokuwiki-2025-05-14b--orig/vendor/composer/autoload_classmap.php	2025-09-09 21:14:18.000000000 +0200
++++ dokuwiki-2025-05-14b--patched/vendor/composer/autoload_classmap.php	2025-10-14 18:39:57.736651224 +0200
+@@ -5,28 +5,28 @@
+ $vendorDir = dirname(__DIR__);
+ $baseDir = dirname($vendorDir);
+ 
+ return array(
+-    'AtomCreator03' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator03.php',
+-    'AtomCreator10' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator10.php',
++    'AtomCreator03' => '/usr/share/php/openpsa-universalfeedcreator/Creator/AtomCreator03.php',
++    'AtomCreator10' => '/usr/share/php/openpsa-universalfeedcreator/Creator/AtomCreator10.php',
+     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+-    'FeedCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/FeedCreator.php',
+-    'FeedDate' => $vendorDir . '/openpsa/universalfeedcreator/lib/Element/FeedDate.php',
+-    'FeedHtmlField' => $vendorDir . '/openpsa/universalfeedcreator/lib/Element/FeedHtmlField.php',
+-    'FeedImage' => $vendorDir . '/openpsa/universalfeedcreator/lib/Element/FeedImage.php',
+-    'FeedItem' => $vendorDir . '/openpsa/universalfeedcreator/lib/Element/FeedItem.php',
+-    'GPXCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/GPXCreator.php',
+-    'GeSHi' => $vendorDir . '/geshi/geshi/src/geshi.php',
+-    'HTMLCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/HTMLCreator.php',
+-    'HtmlDescribable' => $vendorDir . '/openpsa/universalfeedcreator/lib/Element/HtmlDescribable.php',
+-    'JSCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/JSCreator.php',
+-    'JSONCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/JSONCreator.php',
+-    'KMLCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/KMLCreator.php',
+-    'MBOXCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/MBOXCreator.php',
+-    'OPMLCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/OPMLCreator.php',
+-    'PHPCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/PHPCreator.php',
+-    'PIECreator01' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/PIECreator01.php',
+-    'RSSCreator091' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/RSSCreator091.php',
+-    'RSSCreator10' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/RSSCreator10.php',
+-    'RSSCreator20' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/RSSCreator20.php',
+-    'UniversalFeedCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/UniversalFeedCreator.php',
++    'FeedCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/FeedCreator.php',
++    'FeedDate' => '/usr/share/php/openpsa-universalfeedcreator/Element/FeedDate.php',
++    'FeedHtmlField' => '/usr/share/php/openpsa-universalfeedcreator/Element/FeedHtmlField.php',
++    'FeedImage' => '/usr/share/php/openpsa-universalfeedcreator/Element/FeedImage.php',
++    'FeedItem' => '/usr/share/php/openpsa-universalfeedcreator/Element/FeedItem.php',
++    'GPXCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/GPXCreator.php',
++    'GeSHi' => '/usr/share/php/geshi.php',
++    'HTMLCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/HTMLCreator.php',
++    'HtmlDescribable' => '/usr/share/php/openpsa-universalfeedcreator/Element/HtmlDescribable.php',
++    'JSCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/JSCreator.php',
++    'JSONCreator' => '/usr/share/php/openpsa-universalfeedcreator/lib/Creator/JSONCreator.php',
++    'KMLCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/KMLCreator.php',
++    'MBOXCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/MBOXCreator.php',
++    'OPMLCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/OPMLCreator.php',
++    'PHPCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/PHPCreator.php',
++    'PIECreator01' => '/usr/share/php/openpsa-universalfeedcreator/Creator/PIECreator01.php',
++    'RSSCreator091' => '/usr/share/php/openpsa-universalfeedcreator/Creator/RSSCreator091.php',
++    'RSSCreator10' => '/usr/share/php/openpsa-universalfeedcreator/Creator/RSSCreator10.php',
++    'RSSCreator20' => '/usr/share/php/openpsa-universalfeedcreator/Creator/RSSCreator20.php',
++    'UniversalFeedCreator' => '/usr/share/php/openpsa-universalfeedcreator/UniversalFeedCreator.php',
+ );
+diff -r -U4 dokuwiki-2025-05-14b--orig/vendor/composer/autoload_files.php dokuwiki-2025-05-14b--patched/vendor/composer/autoload_files.php
+--- dokuwiki-2025-05-14b--orig/vendor/composer/autoload_files.php	2025-09-09 21:14:18.000000000 +0200
++++ dokuwiki-2025-05-14b--patched/vendor/composer/autoload_files.php	2025-10-14 18:39:57.736965235 +0200
+@@ -5,8 +5,8 @@
+ $vendorDir = dirname(__DIR__);
+ $baseDir = dirname($vendorDir);
+ 
+ return array(
+-    'fdc0e9724ddc47859c8bf0c1ea0a623a' => $vendorDir . '/openpsa/universalfeedcreator/lib/constants.php',
+-    '9e71c1459ef1226520e4b26dac3a180d' => $vendorDir . '/php81_bc/strftime/src/php-8.1-strftime.php',
+-    'decc78cc4436b1292c6c0d151b19445c' => $vendorDir . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
++    'fdc0e9724ddc47859c8bf0c1ea0a623a' => '/usr/share/php/openpsa-universalfeedcreator/constants.php',
++    '9e71c1459ef1226520e4b26dac3a180d' => '/usr/share/php/PHP81_BC/strftime.php',
++    'decc78cc4436b1292c6c0d151b19445c' => '/usr/share/php/phpseclib3/bootstrap.php',
+ );
+diff -r -U4 dokuwiki-2025-05-14b--orig/vendor/composer/autoload_namespaces.php dokuwiki-2025-05-14b--patched/vendor/composer/autoload_namespaces.php
+--- dokuwiki-2025-05-14b--orig/vendor/composer/autoload_namespaces.php	2025-09-09 21:14:18.000000000 +0200
++++ dokuwiki-2025-05-14b--patched/vendor/composer/autoload_namespaces.php	2025-10-14 18:39:57.737188735 +0200
+@@ -5,7 +5,7 @@
+ $vendorDir = dirname(__DIR__);
+ $baseDir = dirname($vendorDir);
+ 
+ return array(
+-    'SimplePie' => array($vendorDir . '/simplepie/simplepie/library'),
+-    'EmailAddressValidator' => array($vendorDir . '/aziraphale/email-address-validator'),
++    'SimplePie' => array('/usr/share/php/php-simplepie/library'),
++    'EmailAddressValidator' => array('/usr/share/php/php-email-address-validation'),
+ );
+diff -r -U4 dokuwiki-2025-05-14b--orig/vendor/composer/autoload_psr4.php dokuwiki-2025-05-14b--patched/vendor/composer/autoload_psr4.php
+--- dokuwiki-2025-05-14b--orig/vendor/composer/autoload_psr4.php	2025-09-09 21:14:18.000000000 +0200
++++ dokuwiki-2025-05-14b--patched/vendor/composer/autoload_psr4.php	2025-10-14 18:39:57.737416654 +0200
+@@ -5,19 +5,15 @@
+ $vendorDir = dirname(__DIR__);
+ $baseDir = dirname($vendorDir);
+ 
+ return array(
+-    'splitbrain\\slika\\tests\\' => array($vendorDir . '/splitbrain/slika/tests'),
+-    'splitbrain\\slika\\' => array($vendorDir . '/splitbrain/slika/src'),
+-    'splitbrain\\phpcli\\' => array($vendorDir . '/splitbrain/php-cli/src'),
+-    'splitbrain\\PHPArchive\\' => array($vendorDir . '/splitbrain/php-archive/src'),
+-    'splitbrain\\JSStrip\\tests\\' => array($vendorDir . '/splitbrain/php-jsstrip/tests'),
+-    'splitbrain\\JSStrip\\' => array($vendorDir . '/splitbrain/php-jsstrip/src'),
+-    'phpseclib3\\' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
+-    'SimplePie\\' => array($vendorDir . '/simplepie/simplepie/src'),
+-    'ParagonIE\\ConstantTime\\' => array($vendorDir . '/paragonie/constant_time_encoding/src'),
+-    'PHP81_BC\\strftime\\' => array($vendorDir . '/php81_bc/strftime/src'),
+-    'LesserPHP\\tests\\' => array($vendorDir . '/splitbrain/lesserphp/tests'),
+-    'LesserPHP\\' => array($vendorDir . '/splitbrain/lesserphp/src'),
+-    'IXR\\tests\\' => array($vendorDir . '/kissifrot/php-ixr/tests'),
+-    'IXR\\' => array($vendorDir . '/kissifrot/php-ixr/src'),
++    'splitbrain\\slika\\' => array('/usr/share/php/splitbrain/slika'),
++    'splitbrain\\phpcli\\' => array('/usr/share/php/splitbrain/phpcli'),
++    'splitbrain\\PHPArchive\\' => array('/usr/share/php/splitbrain/PHPArchive'),
++    'splitbrain\\JSStrip\\' => array('/usr/share/php/splitbrain/JSStrip'),
++    'phpseclib3\\' => array('/usr/share/php/phpseclib3'),
++    'SimplePie\\' => array('/usr/share/php/php-simplepie/src'),
++    'ParagonIE\\ConstantTime\\' => array('/usr/share/php/ParagonIE/ConstantTime'),
++    'PHP81_BC\\strftime\\' => array('/usr/share/php/PHP81_BC'),
++    'LesserPHP\\' => array('/usr/share/php/splitbrain/lesserphp'),
++    'IXR\\' => array('/usr/share/php/kissifrot/IXR'),
+ );
+diff -r -U4 dokuwiki-2025-05-14b--orig/vendor/composer/autoload_static.php dokuwiki-2025-05-14b--patched/vendor/composer/autoload_static.php
+--- dokuwiki-2025-05-14b--orig/vendor/composer/autoload_static.php	2025-09-09 21:14:18.000000000 +0200
++++ dokuwiki-2025-05-14b--patched/vendor/composer/autoload_static.php	2025-10-14 18:39:57.737729122 +0200
+@@ -6,21 +6,19 @@
+ 
+ class ComposerStaticInita19a915ee98347a0c787119619d2ff9b
+ {
+     public static $files = array (
+-        'fdc0e9724ddc47859c8bf0c1ea0a623a' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/constants.php',
+-        '9e71c1459ef1226520e4b26dac3a180d' => __DIR__ . '/..' . '/php81_bc/strftime/src/php-8.1-strftime.php',
+-        'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
++        'fdc0e9724ddc47859c8bf0c1ea0a623a' => '/usr/share/php/openpsa-universalfeedcreator/constants.php',
++        '9e71c1459ef1226520e4b26dac3a180d' => '/usr/share/php/PHP81_BC/strftime.php',
++        'decc78cc4436b1292c6c0d151b19445c' => '/usr/share/php/phpseclib3/bootstrap.php',
+     );
+ 
+     public static $prefixLengthsPsr4 = array (
+         's' => 
+         array (
+-            'splitbrain\\slika\\tests\\' => 23,
+             'splitbrain\\slika\\' => 17,
+             'splitbrain\\phpcli\\' => 18,
+             'splitbrain\\PHPArchive\\' => 22,
+-            'splitbrain\\JSStrip\\tests\\' => 25,
+             'splitbrain\\JSStrip\\' => 19,
+         ),
+         'p' => 
+         array (
+@@ -36,118 +34,100 @@
+             'PHP81_BC\\strftime\\' => 18,
+         ),
+         'L' => 
+         array (
+-            'LesserPHP\\tests\\' => 16,
+             'LesserPHP\\' => 10,
+         ),
+         'I' => 
+         array (
+-            'IXR\\tests\\' => 10,
+             'IXR\\' => 4,
+         ),
+     );
+ 
+     public static $prefixDirsPsr4 = array (
+-        'splitbrain\\slika\\tests\\' => 
+-        array (
+-            0 => __DIR__ . '/..' . '/splitbrain/slika/tests',
+-        ),
+         'splitbrain\\slika\\' => 
+         array (
+-            0 => __DIR__ . '/..' . '/splitbrain/slika/src',
++            0 => '/usr/share/php/splitbrain/slika',
+         ),
+         'splitbrain\\phpcli\\' => 
+         array (
+-            0 => __DIR__ . '/..' . '/splitbrain/php-cli/src',
++            0 => '/usr/share/php/splitbrain/phpcli',
+         ),
+         'splitbrain\\PHPArchive\\' => 
+         array (
+-            0 => __DIR__ . '/..' . '/splitbrain/php-archive/src',
+-        ),
+-        'splitbrain\\JSStrip\\tests\\' => 
+-        array (
+-            0 => __DIR__ . '/..' . '/splitbrain/php-jsstrip/tests',
++            0 => '/usr/share/php/splitbrain/PHPArchive',
+         ),
+         'splitbrain\\JSStrip\\' => 
+         array (
+-            0 => __DIR__ . '/..' . '/splitbrain/php-jsstrip/src',
++            0 => '/usr/share/php/splitbrain/JSStrip',
+         ),
+         'phpseclib3\\' => 
+         array (
+-            0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
++            0 => '/usr/share/php/phpseclib3',
+         ),
+         'SimplePie\\' => 
+         array (
+-            0 => __DIR__ . '/..' . '/simplepie/simplepie/src',
++            0 => '/usr/share/php/php-simplepie/src',
+         ),
+         'ParagonIE\\ConstantTime\\' => 
+         array (
+-            0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
++            0 => '/usr/share/php/ParagonIE/ConstantTime',
+         ),
+         'PHP81_BC\\strftime\\' => 
+         array (
+-            0 => __DIR__ . '/..' . '/php81_bc/strftime/src',
+-        ),
+-        'LesserPHP\\tests\\' => 
+-        array (
+-            0 => __DIR__ . '/..' . '/splitbrain/lesserphp/tests',
++            0 => '/usr/share/php/PHP81_BC',
+         ),
+         'LesserPHP\\' => 
+         array (
+-            0 => __DIR__ . '/..' . '/splitbrain/lesserphp/src',
+-        ),
+-        'IXR\\tests\\' => 
+-        array (
+-            0 => __DIR__ . '/..' . '/kissifrot/php-ixr/tests',
++            0 => '/usr/share/php/splitbrain/lesserphp',
+         ),
+         'IXR\\' => 
+         array (
+-            0 => __DIR__ . '/..' . '/kissifrot/php-ixr/src',
++            0 => '/usr/share/php/kissifrot/IXR',
+         ),
+     );
+ 
+     public static $prefixesPsr0 = array (
+         'S' => 
+         array (
+             'SimplePie' => 
+             array (
+-                0 => __DIR__ . '/..' . '/simplepie/simplepie/library',
++                0 => '/usr/share/php/php-simplepie/library',
+             ),
+         ),
+         'E' => 
+         array (
+             'EmailAddressValidator' => 
+             array (
+-                0 => __DIR__ . '/..' . '/aziraphale/email-address-validator',
++                0 => '/usr/share/php/php-email-address-validation',
+             ),
+         ),
+     );
+ 
+     public static $classMap = array (
+-        'AtomCreator03' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator03.php',
+-        'AtomCreator10' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator10.php',
++        'AtomCreator03' => '/usr/share/php/openpsa-universalfeedcreator/Creator/AtomCreator03.php',
++        'AtomCreator10' => '/usr/share/php/openpsa-universalfeedcreator/Creator/AtomCreator10.php',
+         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+-        'FeedCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/FeedCreator.php',
+-        'FeedDate' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/FeedDate.php',
+-        'FeedHtmlField' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/FeedHtmlField.php',
+-        'FeedImage' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/FeedImage.php',
+-        'FeedItem' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/FeedItem.php',
+-        'GPXCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/GPXCreator.php',
+-        'GeSHi' => __DIR__ . '/..' . '/geshi/geshi/src/geshi.php',
+-        'HTMLCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/HTMLCreator.php',
+-        'HtmlDescribable' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/HtmlDescribable.php',
+-        'JSCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/JSCreator.php',
+-        'JSONCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/JSONCreator.php',
+-        'KMLCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/KMLCreator.php',
+-        'MBOXCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/MBOXCreator.php',
+-        'OPMLCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/OPMLCreator.php',
+-        'PHPCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/PHPCreator.php',
+-        'PIECreator01' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/PIECreator01.php',
+-        'RSSCreator091' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/RSSCreator091.php',
+-        'RSSCreator10' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/RSSCreator10.php',
+-        'RSSCreator20' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/RSSCreator20.php',
+-        'UniversalFeedCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/UniversalFeedCreator.php',
++        'FeedCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/FeedCreator.php',
++        'FeedDate' => '/usr/share/php/openpsa-universalfeedcreator/Element/FeedDate.php',
++        'FeedHtmlField' => '/usr/share/php/openpsa-universalfeedcreator/Element/FeedHtmlField.php',
++        'FeedImage' => '/usr/share/php/openpsa-universalfeedcreator/Element/FeedImage.php',
++        'FeedItem' => '/usr/share/php/openpsa-universalfeedcreator/Element/FeedItem.php',
++        'GPXCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/GPXCreator.php',
++        'GeSHi' => '/usr/share/php/geshi.php',
++        'HTMLCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/HTMLCreator.php',
++        'HtmlDescribable' => '/usr/share/php/openpsa-universalfeedcreator/Element/HtmlDescribable.php',
++        'JSCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/JSCreator.php',
++        'JSONCreator' => '/usr/share/php/openpsa-universalfeedcreator/lib/Creator/JSONCreator.php',
++        'KMLCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/KMLCreator.php',
++        'MBOXCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/MBOXCreator.php',
++        'OPMLCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/OPMLCreator.php',
++        'PHPCreator' => '/usr/share/php/openpsa-universalfeedcreator/Creator/PHPCreator.php',
++        'PIECreator01' => '/usr/share/php/openpsa-universalfeedcreator/Creator/PIECreator01.php',
++        'RSSCreator091' => '/usr/share/php/openpsa-universalfeedcreator/Creator/RSSCreator091.php',
++        'RSSCreator10' => '/usr/share/php/openpsa-universalfeedcreator/Creator/RSSCreator10.php',
++        'RSSCreator20' => '/usr/share/php/openpsa-universalfeedcreator/Creator/RSSCreator20.php',
++        'UniversalFeedCreator' => '/usr/share/php/openpsa-universalfeedcreator/UniversalFeedCreator.php',
+     );
+ 
+     public static function getInitializer(ClassLoader $loader)
+     {
+diff -r -U4 dokuwiki-2025-05-14b--orig/vendor/composer/installed.php dokuwiki-2025-05-14b--patched/vendor/composer/installed.php
+--- dokuwiki-2025-05-14b--orig/vendor/composer/installed.php	2025-09-09 21:14:18.000000000 +0200
++++ dokuwiki-2025-05-14b--patched/vendor/composer/installed.php	2025-10-14 18:42:38.676030924 +0200
+@@ -14,9 +14,9 @@
+             'pretty_version' => '2.0.1',
+             'version' => '2.0.1.0',
+             'reference' => 'fa25bc22c1c0b6491657c91473fae3e40719a650',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../aziraphale/email-address-validator',
++            'install_path' => '/usr/share/php/php-email-address-validation',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+         'dokuwiki/dokuwiki' => array(
+@@ -32,9 +32,9 @@
+             'pretty_version' => 'dev-master',
+             'version' => 'dev-master',
+             'reference' => '17ff9b22ac6695efa6ab6fbcf0607263f080468c',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../geshi/geshi',
++            'install_path' => '/usr/share/php',
+             'aliases' => array(
+                 0 => '1.0.x-dev',
+                 1 => '9999999-dev',
+             ),
+@@ -44,27 +44,27 @@
+             'pretty_version' => '1.8.5',
+             'version' => '1.8.5.0',
+             'reference' => '17c5bc99f42fa086620a0ad2a593366ff6798753',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../kissifrot/php-ixr',
++            'install_path' => '/usr/share/php/kissifrot/IXR',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+         'openpsa/universalfeedcreator' => array(
+             'pretty_version' => 'v1.9.0',
+             'version' => '1.9.0.0',
+             'reference' => 'c55f908e867aa6dade0905b8aefb94fd9d8c1f9e',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../openpsa/universalfeedcreator',
++            'install_path' => '/usr/share/php/openpsa-universalfeedcreator',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+         'paragonie/constant_time_encoding' => array(
+             'pretty_version' => 'v2.7.0',
+             'version' => '2.7.0.0',
+             'reference' => '52a0d99e69f56b9ec27ace92ba56897fe6993105',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../paragonie/constant_time_encoding',
++            'install_path' => '/usr/share/php/ParagonIE/ConstantTime',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+         'paragonie/random_compat' => array(
+@@ -80,72 +80,72 @@
+             'pretty_version' => 'dev-fallback-intl',
+             'version' => 'dev-fallback-intl',
+             'reference' => 'dcd30543db16c9b4ba095f6bf32ac16f15eb9448',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../php81_bc/strftime',
++            'install_path' => '/usr/share/php/PHP81_BC',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+         'phpseclib/phpseclib' => array(
+             'pretty_version' => '3.0.43',
+             'version' => '3.0.43.0',
+             'reference' => '709ec107af3cb2f385b9617be72af8cf62441d02',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../phpseclib/phpseclib',
++            'install_path' => '/usr/share/php/phpseclib3',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+         'simplepie/simplepie' => array(
+             'pretty_version' => '1.8.1',
+             'version' => '1.8.1.0',
+             'reference' => 'a567b8ab9b6145a23e6a9ec2b6b74f56d52f7ad1',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../simplepie/simplepie',
++            'install_path' => '/usr/share/php/php-simplepie',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+         'splitbrain/lesserphp' => array(
+             'pretty_version' => 'v0.10.2',
+             'version' => '0.10.2.0',
+             'reference' => '6def0a3b497b23add902b9859386642551f9c435',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../splitbrain/lesserphp',
++            'install_path' => '/usr/share/php/splitbrain/lesserphp',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+         'splitbrain/php-archive' => array(
+             'pretty_version' => '1.4.0',
+             'version' => '1.4.0.0',
+             'reference' => 'd9d4eaac12a6587727b8e539946dd06cac8b3f02',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../splitbrain/php-archive',
++            'install_path' => '/usr/share/php/splitbrain/PHPArchive',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+         'splitbrain/php-cli' => array(
+             'pretty_version' => '1.3.4',
+             'version' => '1.3.4.0',
+             'reference' => '4e669f38f660b0e9f76ed14dda7f12bff390f94f',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../splitbrain/php-cli',
++            'install_path' => '/usr/share/php/splitbrain/phpcli',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+         'splitbrain/php-jsstrip' => array(
+             'pretty_version' => '1.0.1',
+             'version' => '1.0.1.0',
+             'reference' => '21254b19b381a25d6f3dd89dbd5c8191373a4d69',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../splitbrain/php-jsstrip',
++            'install_path' => '/usr/share/php/splitbrain/JSStrip',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+         'splitbrain/slika' => array(
+             'pretty_version' => '1.0.7',
+             'version' => '1.0.7.0',
+             'reference' => '93cd2034628136b4fa322f7f1ac3d57293a6c08d',
+             'type' => 'library',
+-            'install_path' => __DIR__ . '/../splitbrain/slika',
++            'install_path' => '/usr/share/php/splitbrain/slika',
+             'aliases' => array(),
+             'dev_requirement' => false,
+         ),
+     ),

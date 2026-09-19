@@ -1,0 +1,154 @@
+The theme files available for crystal stacker do not come with any license
+of their own. Therefor I (Hans de Goede <j.w.r.degoede@hhs.nl>) have asked
+the Author and Copyright holder (Todd Cope) of crystal stacker who are the
+Authors and Copyright holders of the themes.
+
+It turns out that he (Todd Cope) is the Author and Copyright holder of all
+themes but 2 and he has given permission to distribute his themes under the
+same license as crystal stacker.
+
+For the other 2 themes Travis Cope is the Author and Copyright holder and he
+too has given permission to distribute his themes under the    
+same license as crystal stacker.
+
+The crystal stacker license can be found at the top of crystal stackers
+readme, included in this package as cs-readme.txt
+
+Below is a copy of the mail exchange between me (Hans de Goede
+<j.w.r.degoede@hhs.nl>), Todd Cope and Travis Cope including the permission
+notices:
+
+Return-Path: <todd@t3-i.com>
+Received: from koko.hhs.nl ([145.52.2.16] verified)
+  by hhs.nl (CommuniGate Pro SMTP 4.3.6)
+  with ESMTP id 45919533 for j.w.r.degoede@hhs.nl; Fri, 24 Mar 2006 23:21:49 +0100
+Received: from exim by koko.hhs.nl with spam-scanned (Exim 4.41)
+	id 1FMufF-0004Va-EH
+	for j.w.r.degoede@hhs.nl; Fri, 24 Mar 2006 23:21:49 +0100
+X-Spam-Checker-Version: SpamAssassin 3.1.0 (2005-09-13) on koko.hhs.nl
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,NO_REAL_NAME 
+	autolearn=no version=3.1.0
+Received: from exim (helo=koko)
+	by koko.hhs.nl with local-smtp (Exim 4.41)
+	id 1FMufF-0004VX-AU
+	for j.w.r.degoede@hhs.nl; Fri, 24 Mar 2006 23:21:49 +0100
+Received: from [68.178.232.4] (port=54779 helo=smtpout12-02.prod.mesa1.secureserver.net)
+	by koko.hhs.nl with smtp (Exim 4.41)
+	id 1FMufE-0004VS-Ov
+	for j.w.r.degoede@hhs.nl; Fri, 24 Mar 2006 23:21:49 +0100
+Received: (qmail 19361 invoked from network); 24 Mar 2006 22:21:47 -0000
+Received: from unknown (HELO gem-wbe03.mesa1.secureserver.net) (64.202.189.35)
+  by smtpout12-02.prod.mesa1.secureserver.net with SMTP; 24 Mar 2006 22:21:47 -0000
+Received: (qmail 24606 invoked by uid 99); 24 Mar 2006 22:21:47 -0000
+Date: Fri, 24 Mar 2006 15:21:47 -0700
+From: todd@t3-i.com
+Subject: RE: Crsytal Stacker License Clarification needed
+To: Hans de Goede <j.w.r.degoede@hhs.nl>
+Message-ID: <20060324152147.c1bf2b7c2c1de069cff39b794cd5d62e.8dd40e2b74.wbe@email.email.secureserver.net>
+MIME-Version: 1.0
+Content-Type: TEXT/plain; CHARSET=US-ASCII
+X-Originating-IP: 66.190.177.177
+X-Anti-Virus: Kaspersky Anti-Virus for MailServers 5.5.2/RELEASE, bases: 24032006 #172764, status: clean
+
+I will add a polling function to t3ssal. I need to check the code to
+make sure there are no blocking situations that would cause the music
+to stutter. I also need to fix t3ss_set_music_pattern to actually skip
+to the correct pattern in the music as this is used by some of the
+themes.
+
+About the themes, all of them are made by me with the exception of "Food
+Stacker" and "Matrix" which are made by Travis Cope. They fall under the
+same license as the game and you can even include them in the Linux
+package if you want. Speaking of license, I've been looking at those
+licenses but I can't decide on one. I'm going to rewrite my license,
+however, to clarify the issues you raised.
+
+Thanks for all the work you've put in. I will e-mail you when I have
+everything done. Also, if you haven't done so already, I'm going to add
+you to the credits for the Linux port.
+
+Thanks,
+
+Todd Cope
+
+> -------- Original Message --------
+> Subject: Re: Crsytal Stacker License Clarification needed
+> From: Hans de Goede <j.w.r.degoede@hhs.nl>
+> Date: Wed, March 22, 2006 1:13 am
+> To: todd@t3-i.com
+> 
+
+---
+
+The rest of the mail has been deleted because of non relevance
+
+---
+
+Message-ID: <4435990F.4070400@hhs.nl>
+Date: Fri, 07 Apr 2006 00:41:19 +0200
+From: Hans de Goede <j.w.r.degoede@hhs.nl>
+User-Agent: Thunderbird 1.5 (X11/20060313)
+MIME-Version: 1.0
+To:  enden@t3-i.com
+Subject: Crystal Stacker Themes
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi David,
+
+First a short intro: I've been working lately with Todd on the Linux 
+port of crystal stacker. I'm currently in the process of packaging it 
+for inclusion into Fedora a well known linux distribution.
+
+I would also like to create a package with all themes in it, including 
+yours. Todd has sais that his themes are under the same license as CS 
+itself and that that probably applied to your themes to, but that to be 
+certain I should ask you, so here I am: What is the license under which 
+your themes may be distributed?
+
+Thanks & Regards,
+
+Hans
+
+---
+
+Return-Path: <enden@t3-i.com>
+Received: from koko.hhs.nl ([145.52.2.16] verified)
+  by hhs.nl (CommuniGate Pro SMTP 4.3.6)
+  with ESMTP id 46326822 for j.w.r.degoede@hhs.nl; Fri, 07 Apr 2006 23:01:53 +0200
+Received: from exim by koko.hhs.nl with spam-scanned (Exim 4.41)
+	id 1FRy5X-0002Pz-ID
+	for j.w.r.degoede@hhs.nl; Fri, 07 Apr 2006 23:01:53 +0200
+X-Spam-Checker-Version: SpamAssassin 3.1.0 (2005-09-13) on koko.hhs.nl
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00 autolearn=ham 
+	version=3.1.0
+Received: from exim (helo=koko)
+	by koko.hhs.nl with local-smtp (Exim 4.41)
+	id 1FRy5X-0002Pq-C7
+	for j.w.r.degoede@hhs.nl; Fri, 07 Apr 2006 23:01:51 +0200
+Received: from [68.178.232.10] (port=40819 helo=smtpout15-02.prod.mesa1.secureserver.net)
+	by koko.hhs.nl with smtp (Exim 4.41)
+	id 1FRy5W-0002PY-Rx
+	for j.w.r.degoede@hhs.nl; Fri, 07 Apr 2006 23:01:51 +0200
+Received: (qmail 30428 invoked from network); 7 Apr 2006 21:01:49 -0000
+Received: from unknown (HELO webmail10.mesa1.secureserver.net) (64.202.189.47)
+  by smtpout15-02.prod.mesa1.secureserver.net with SMTP; 7 Apr 2006 21:01:49 -0000
+Received: (qmail 22348 invoked by uid 99); 7 Apr 2006 21:01:49 -0000
+Date: Fri, 07 Apr 2006 14:01:49 -0700
+From: Travis Cope <enden@t3-i.com>
+Subject: RE: Crystal Stacker Themes
+To: Hans de Goede <j.w.r.degoede@hhs.nl>
+Message-ID: <20060407140149.e23bf89adcf3efedfb931dbdea8a905d.bdfe31ab1e.wbe@email.secureserver.net>
+MIME-Version: 1.0
+Content-Type: TEXT/plain; CHARSET=US-ASCII
+User-Agent: Web-Based Email 4.0.19
+X-Originating-IP: 65.114.125.11
+X-Anti-Virus: Kaspersky Anti-Virus for MailServers 5.5.2/RELEASE, bases: 07042006 #175560, status: clean
+
+The themes I made for Crystal Stacker are under the same license as the game.  I never really sat down and thought about the licensing, etc., I just kind of assumed it would use whatever Todd was using for Crystal Stacker.
+
+Have a good day
+-Travis
+

@@ -1,0 +1,81 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for jwhois >= 4.0 which replaces
+current GNU Libidn support (IDNA 2003) by GNU Libidn2 support (IDNA 2008). This is
+e.g. allowing the 'ß' character in domain names. See also Red Hat Bugzilla #1098785
+for further information: https://bugzilla.redhat.com/show_bug.cgi?id=1098785
+
+diff -up jwhois-4.0/configure.ac.orig jwhois-4.0/configure.ac
+--- jwhois-4.0/configure.ac.orig	2014-05-21 14:10:22.354201633 +0200
++++ jwhois-4.0/configure.ac	2014-05-21 14:12:13.024607297 +0200
+@@ -154,26 +154,26 @@ int main()
+      ], AC_MSG_RESULT(no),AC_MSG_RESULT(no))
+ fi
+ 
+-AC_ARG_WITH(libidn, AC_HELP_STRING([--with-libidn=[DIR]],
+-                                     [Support IDN (needs GNU Libidn)]),
+-       libidn=$withval, libidn=yes)
+- if test "$libidn" != "no"; then
+-   if test "$libidn" != "yes"; then
+-     LDFLAGS="${LDFLAGS} -L$libidn/lib"
+-     CPPFLAGS="${CPPFLAGS} -I$libidn/include"
++AC_ARG_WITH(libidn2, AC_HELP_STRING([--with-libidn2=[DIR]],
++                                     [Support IDNA 2008 (needs GNU Libidn2)]),
++       libidn2=$withval, libidn2=yes)
++ if test "$libidn2" != "no"; then
++   if test "$libidn2" != "yes"; then
++     LDFLAGS="${LDFLAGS} -L$libidn2/lib"
++     CPPFLAGS="${CPPFLAGS} -I$libidn2/include"
+    fi
+-   AC_CHECK_HEADER(idna.h,
+-     AC_CHECK_LIB(idn, stringprep_check_version,
+-       [libidn=yes LIBS="${LIBS} -lidn"], libidn=no),
+-     libidn=no)
++   AC_CHECK_HEADER(idn2.h,
++     AC_CHECK_LIB(idn2, idn2_lookup_ul,
++       [libidn2=yes LIBS="${LIBS} -lidn2"], libidn2=no),
++     libidn2=no)
+  fi
+- if test "$libidn" != "no" ; then
+-  AC_DEFINE(LIBIDN, 1, [Define to 1 if you want IDN support.])
++ if test "$libidn2" != "no" ; then
++  AC_DEFINE(LIBIDN2, 1, [Define to 1 if you want IDNA 2008 support.])
+  else
+-  AC_MSG_WARN([Libidn not found])
++  AC_MSG_WARN([Libidn2 not found])
+ fi
+-AC_MSG_CHECKING([if Libidn should be used])
+-AC_MSG_RESULT($libidn)
++AC_MSG_CHECKING([if Libidn2 should be used])
++AC_MSG_RESULT($libidn2)
+ 
+ 
+ found=no
+diff -up jwhois-4.0/src/jwhois.c.orig jwhois-4.0/src/jwhois.c
+--- jwhois-4.0/src/jwhois.c.orig	2014-06-10 14:49:21.829925632 +0200
++++ jwhois-4.0/src/jwhois.c	2014-06-10 14:50:51.637252426 +0200
+@@ -59,8 +59,8 @@
+ # include <langinfo.h>
+ #endif
+ 
+-#ifdef LIBIDN
+-# include <idna.h>
++#ifdef LIBIDN2
++# include <idn2.h>
+ #endif
+ 
+ #ifdef ENABLE_NLS
+@@ -117,11 +117,11 @@ main(int argc, char **argv)
+       optind++;
+     }
+   qstring[strlen(qstring)-1] = '\0';
+-#ifdef LIBIDN
+-  rc = idna_to_ascii_lz(qstring, &idn, 0);
+-  if (rc != IDNA_SUCCESS)
++#ifdef LIBIDN2
++  rc = idn2_lookup_ul(qstring, &idn, 0);
++  if (rc != IDN2_OK)
+     {
+-      printf("[IDN encoding of '%s' failed with error code %d]\n", qstring, rc);
++      printf("[IDN encoding of '%s' failed: %s)]\n", qstring, idn2_strerror(rc));
+       exit(1);
+     }
+   wq.query = strdup(idn);

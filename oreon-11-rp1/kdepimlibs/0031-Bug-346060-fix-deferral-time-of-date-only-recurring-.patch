@@ -1,0 +1,48 @@
+From a791b69599c3571ff2f4b1cc9033d8fb30f1bc33 Mon Sep 17 00:00:00 2001
+From: David Jarvie <djarvie@kde.org>
+Date: Mon, 1 Feb 2016 12:06:08 +0000
+Subject: [PATCH 31/31] Bug 346060: fix deferral time of date-only recurring
+ alarms
+
+Fix a date/time deferral of a recurring date-only alarm being
+triggered at the wrong time, if a non-zero start-of-day time is
+configured.
+---
+ kalarmcal/kaevent.cpp | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/kalarmcal/kaevent.cpp b/kalarmcal/kaevent.cpp
+index 15afc67..83dcb12 100644
+--- a/kalarmcal/kaevent.cpp
++++ b/kalarmcal/kaevent.cpp
+@@ -2,7 +2,7 @@
+  *  kaevent.cpp  -  represents calendar events
+  *  This file is part of kalarmcal library, which provides access to KAlarm
+  *  calendar data.
+- *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
++ *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
+  *
+  *  This library is free software; you can redistribute it and/or modify
+  *  it under the terms of the GNU Library General Public License as published
+@@ -1071,9 +1071,16 @@ void KAEventPrivate::set(const Event* event)
+             case DEFERRED_REMINDER_ALARM:
+             case DEFERRED_ALARM:
+                 mDeferral = (data.type == DEFERRED_REMINDER_ALARM) ? REMINDER_DEFERRAL : NORMAL_DEFERRAL;
+-                mDeferralTime = dateTime;
+-                if (!data.timedDeferral)
++                if (data.timedDeferral)
++                {
++                    // Don't use start-of-day time for applying timed deferral alarm offset
++                    mDeferralTime = data.alarm->hasStartOffset() ? data.alarm->startOffset().end(mNextMainDateTime.calendarKDateTime()) : data.alarm->time();
++                }
++                else
++                {
++                    mDeferralTime = dateTime;
+                     mDeferralTime.setDateOnly(true);
++                }
+                 if (data.alarm->hasStartOffset())
+                     deferralOffset = data.alarm->startOffset();
+                 break;
+-- 
+2.5.0
+

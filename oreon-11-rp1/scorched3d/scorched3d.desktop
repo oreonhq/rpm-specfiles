@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Scorched 3D
+Comment=A game based on the classic DOS game Scorched Earth
+Exec=scorched3d-wrapper
+Icon=scorched3d
+Terminal=false
+Type=Application
+Categories=Game;ActionGame;StrategyGame;

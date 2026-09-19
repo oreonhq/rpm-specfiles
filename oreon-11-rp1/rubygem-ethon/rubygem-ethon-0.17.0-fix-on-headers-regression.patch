@@ -1,0 +1,71 @@
+From 7c4a45e8b333631ae2f4e1f23e7a9ce01dcbf694 Mon Sep 17 00:00:00 2001
+From: Felipe Mesquita <felipemesquita@hey.com>
+Date: Thu, 21 Aug 2025 09:02:19 -0300
+Subject: [PATCH 1/2] fix on_headers_regression
+
+---
+ lib/ethon/easy/callbacks.rb | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/lib/ethon/easy/callbacks.rb b/lib/ethon/easy/callbacks.rb
+index 73f2f210..2b268930 100644
+--- a/lib/ethon/easy/callbacks.rb
++++ b/lib/ethon/easy/callbacks.rb
+@@ -52,9 +52,15 @@ def body_write_callback
+       # @return [ Proc ] The callback.
+       def header_write_callback
+         @header_write_callback ||= proc {|stream, size, num, object|
+-          result = headers
+-          @response_headers << stream.read_string(size * num)
+-          result != :abort ? size * num : -1
++          header_data = stream.read_string(size * num)
++          @response_headers << header_data
++          
++          if header_data.include?("\r\n\r\n") || header_data == "\r\n"
++            result = headers
++            result != :abort ? size * num : -1
++          else
++            size * num
++          end
+         }
+       end
+ 
+@@ -146,4 +152,4 @@ def read_callback
+       end
+     end
+   end
+-end
++end
+\ No newline at end of file
+
+From 96b1c3b654e3887ada4bddd892b8bd06b5a8c833 Mon Sep 17 00:00:00 2001
+From: Felipe Mesquita <felipemesquita@hey.com>
+Date: Thu, 21 Aug 2025 09:20:58 -0300
+Subject: [PATCH 2/2] might need to edit this test
+
+---
+ lib/ethon/easy/callbacks.rb       | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/lib/ethon/easy/callbacks.rb b/lib/ethon/easy/callbacks.rb
+index 2b268930..b878ebe8 100644
+--- a/lib/ethon/easy/callbacks.rb
++++ b/lib/ethon/easy/callbacks.rb
+@@ -54,8 +54,8 @@ def header_write_callback
+         @header_write_callback ||= proc {|stream, size, num, object|
+           header_data = stream.read_string(size * num)
+           @response_headers << header_data
+-          
+-          if header_data.include?("\r\n\r\n") || header_data == "\r\n"
++
++          if @response_headers.include?("\r\n\r\n")
+             result = headers
+             result != :abort ? size * num : -1
+           else
+@@ -152,4 +152,4 @@ def read_callback
+       end
+     end
+   end
+-end
+\ No newline at end of file
++end

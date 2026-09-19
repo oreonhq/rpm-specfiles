@@ -1,0 +1,22 @@
+commit f61becdba8df1d6d515f5476d312d3cf4e933946
+Author: Christos Zoulas <christos@zoulas.com>
+Date:   Sat Jan 17 12:43:32 2015 -0500
+
+    remove unused function
+
+diff --git a/amq/amq.c b/amq/amq.c
+index e99732f..5d4ed7a 100644
+--- a/amq/amq.c
++++ b/amq/amq.c
+@@ -256,11 +256,6 @@ show_mi(amq_mount_info_list *ml, enum show_opt e, int *mwid, int *dwid, int *twi
+ }
+ 
+ static void
+-show_map(amq_map_info *mi)
+-{
+-}
+-
+-static void
+ show_mapinfo(amq_map_info_list *ml, enum show_opt e, int *nwid, int *wwid)
+ {
+   u_int i;

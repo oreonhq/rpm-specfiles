@@ -1,0 +1,58 @@
+From aec7b7161087a7783f77369c77c6807b32b5bd2f Mon Sep 17 00:00:00 2001
+From: Dongxu Li <dongxuli2011@gmail.com>
+Date: Mon, 22 May 2023 07:57:50 -0400
+Subject: [PATCH] issue #891 : treat infinity bulge as zero angle for
+ tangential polylines
+
+---
+ libraries/libdxfrw/src/drw_base.h             |  10 +-
+ libraries/libdxfrw/src/drw_entities.cpp       |   2 +-
+ libraries/libdxfrw/src/libdxfrw.cpp           |   2 +-
+
+diff --git a/libraries/libdxfrw/src/drw_base.h b/libraries/libdxfrw/src/drw_base.h
+index a6cdc1d626..c68089ae57 100644
+--- a/src/drw_base.h
++++ b/src/drw_base.h
+@@ -241,11 +241,11 @@ class DRW_Vertex2D {
+     DRW_Vertex2D(double sx, double sy, double b): x(sx), y(sy), stawidth(0), endwidth(0), bulge(b) {}
+ 
+ public:
+-    double x;                 /*!< x coordinate, code 10 */
+-    double y;                 /*!< y coordinate, code 20 */
+-    double stawidth;          /*!< Start width, code 40 */
+-    double endwidth;          /*!< End width, code 41 */
+-    double bulge;             /*!< bulge, code 42 */
++    double x=0.;                 /*!< x coordinate, code 10 */
++    double y=0.;                 /*!< y coordinate, code 20 */
++    double stawidth=0.;          /*!< Start width, code 40 */
++    double endwidth=0.;          /*!< End width, code 41 */
++    double bulge=0.;             /*!< bulge, code 42 */
+ };
+ 
+ 
+diff --git a/libraries/libdxfrw/src/drw_entities.cpp b/libraries/libdxfrw/src/drw_entities.cpp
+index 8d1fee0261..625f393eba 100644
+--- a/src/drw_entities.cpp
++++ b/src/drw_entities.cpp
+@@ -1247,7 +1247,7 @@ bool DRW_LWPolyline::parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs){
+                 vertex->y = buf->getDefaultDouble(pv->y);
+             }
+             pv = vertex;
+-            vertlist.push_back(vertex);
++            vertlist.push_back(std::move(vertex));
+         }
+         //add bulges
+         for (unsigned int i = 0; i < bulgesnum; i++){
+diff --git a/libraries/libdxfrw/src/libdxfrw.cpp b/libraries/libdxfrw/src/libdxfrw.cpp
+index b51f04eb32..7c3c6cbbb8 100644
+--- a/src/libdxfrw.cpp
++++ b/src/libdxfrw.cpp
+@@ -2607,7 +2607,7 @@ bool dxfRW::processInsert() {
+ 
+ bool dxfRW::processLWPolyline() {
+     DRW_DBG("dxfRW::processLWPolyline");
+-    int code;
++    int code=0;
+     DRW_LWPolyline pl;
+     while (reader->readRec(&code)) {
+         DRW_DBG(code); DRW_DBG("\n");

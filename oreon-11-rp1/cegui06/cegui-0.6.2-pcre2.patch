@@ -1,0 +1,92 @@
+diff -up CEGUI-0.6.2/src/elements/CEGUIEditbox.cpp~ CEGUI-0.6.2/src/elements/CEGUIEditbox.cpp
+--- CEGUI-0.6.2/src/elements/CEGUIEditbox.cpp~	2006-08-05 17:06:35.000000000 +0200
++++ CEGUI-0.6.2/src/elements/CEGUIEditbox.cpp	2022-09-30 16:45:24.821745507 +0200
+@@ -31,7 +31,8 @@
+ #include "CEGUITextUtils.h"
+ #include "CEGUIExceptions.h"
+ #include "CEGUIFont.h"
+-#include <pcre.h>
++#define PCRE2_CODE_UNIT_WIDTH 8
++#include <pcre2.h>
+ #include <string.h>
+ 
+ 
+@@ -54,13 +54,13 @@ struct RegexValidator
+ 	{
+ 		if (d_regex != 0)
+ 		{
+-			pcre_free(d_regex);
++			pcre2_code_free(d_regex);
+ 			d_regex = 0;
+ 		}
+ 
+ 	}
+ 
+-	pcre* d_regex;
++	pcre2_code* d_regex;
+ };
+ 
+ /*************************************************************************
+@@ -227,14 +227,16 @@ void Editbox::setValidationString(const
+ 		d_validator->release();
+ 
+ 		// try to compile this new regex string
+-		const char* prce_error;
+-		int pcre_erroff;
+-		d_validator->d_regex = pcre_compile(d_validationString.c_str(), PCRE_UTF8, &prce_error, &pcre_erroff, 0);
++		int pcre_error;
++		PCRE2_SIZE pcre_erroff;
++		d_validator->d_regex = pcre2_compile((PCRE2_SPTR8)d_validationString.c_str(), PCRE2_ZERO_TERMINATED, 0, &pcre_error, &pcre_erroff, NULL);
+ 
+ 		// handle failure
+ 		if (d_validator->d_regex == 0)
+ 		{
+-			throw InvalidRequestException("The Editbox named '" + getName() + "' had the following bad validation expression set: '" + validation_string + "'.  Additional Information: " + prce_error);			
++			char buffer[256];
++			pcre2_get_error_message(pcre_error, (PCRE2_UCHAR8 *)buffer, sizeof(buffer));
++			throw InvalidRequestException("The Editbox named '" + getName() + "' had the following bad validation expression set: '" + validation_string + "'.  Additional Information: " + buffer);
+ 		}
+ 
+ 		// notification
+@@ -418,27 +420,23 @@ bool Editbox::isStringValid(const String
+ 		throw InvalidRequestException("Editbox::isStringValid - An attempt was made to use the invalid RegEx '" + d_validationString + "'.");
+ 	}
+ 
+-	const char* utf8str = str.c_str();
+-	int	match[3];
+-	int len = static_cast<int>(strlen(utf8str));
+-	int result = pcre_exec(d_validator->d_regex, 0, utf8str, len, 0, 0, match, 3);
++	pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(d_validator->d_regex, NULL);
++	PCRE2_SPTR8 utf8str = (PCRE2_SPTR8)str.c_str();
++	PCRE2_SIZE len = static_cast<int>(strlen(str.c_str()));
++	int result = pcre2_match(d_validator->d_regex, utf8str, len, 0, 0, match_data, NULL);
+ 
+-	if (result >= 0)
+-	{
+-		// this ensures that any regex match is for the entire string
+-		return (match[1] - match[0] == len);
+-	}
+-	// invalid string if there's no match or if string or regex is NULL.
+-	else if ((result == PCRE_ERROR_NOMATCH) || (result == PCRE_ERROR_NULL))
+-	{
+-		return false;
+-	}
+-	// anything else is an error.
+-	else
+-	{
+-		throw InvalidRequestException("Editbox::isStringValid - An internal error occurred while attempting to match the invalid RegEx '" + d_validationString + "'.");
++	if (result < 0) {
++		pcre2_match_data_free(match_data);
++		if ((result == PCRE2_ERROR_NOMATCH) || (result == PCRE2_ERROR_NULL))
++			return false;
++		else
++			throw InvalidRequestException("Editbox::isStringValid - An internal error occurred while attempting to match the invalid RegEx '" + d_validationString + "'.");
+ 	}
+ 
++	PCRE2_SIZE *ovector = pcre2_get_ovector_pointer(match_data);
++	bool valid = ovector[1] - ovector[0] == len;
++	pcre2_match_data_free(match_data);
++	return valid;
+ }
+ 
+ 

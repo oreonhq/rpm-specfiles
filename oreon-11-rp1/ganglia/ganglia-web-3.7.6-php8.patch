@@ -1,0 +1,169 @@
+From:
+ https://bugzilla.redhat.com/show_bug.cgi?id=2180500
+
+diff --git a/api/host.php b/api/host.php
+index 5eb026c..5cee9ec 100644
+--- a/api/host.php
++++ b/api/host.php
+@@ -87,7 +87,7 @@ switch ( $_GET['action'] ) {
+     $reports["excluded_reports"] = array_unique($reports["excluded_reports"]);
+     $additional_cluster_img_html_args = array();
+     $additional_cluster_img_html_args['h'] = $hostname;
+-    $additional_cluster_img_html_args['st'] = $cluster[LOCALTIME];
++    $additional_cluster_img_html_args['st'] = $cluster['LOCALTIME'];
+     $additional_cluster_img_html_args['m'] = $metricname;
+     $additional_cluster_img_html_args['r'] = $range;
+     $additional_cluster_img_html_args['s'] = $sort;
+@@ -152,7 +152,7 @@ switch ( $_GET['action'] ) {
+       $graph_arguments['z'] = $size;
+       $graph_arguments['jr'] = $jobrange;
+       $graph_arguments['js'] = $jobstart;
+-      $graph_arguments['st'] = $cluster[LOCALTIME];
++      $graph_arguments['st'] = $cluster['LOCALTIME'];
+       # Adding units to graph 2003 by Jason Smith <smithj4@bnl.gov>.
+       if ($v['UNITS']) {
+         $graph_arguments['vl'] = $metrics[$cluster_url]['UNITS'];
+diff --git a/dwoo/Dwoo/Core.php b/dwoo/Dwoo/Core.php
+index 8ec104b..fc62cde 100644
+--- a/dwoo/Dwoo/Core.php
++++ b/dwoo/Dwoo/Core.php
+@@ -1250,7 +1250,7 @@ class Dwoo_Core
+         }
+         unset($varstr);
+ 
+-        while (list($k, $sep) = each($m[1])) {
++        foreach($m[1] as $k => $sep){
+             if ($sep === '.' || $sep === '[' || $sep === '') {
+                 // strip enclosing quotes if present
+                 $m[2][$k] = preg_replace('#^(["\']?)(.*?)\1$#', '$2', $m[2][$k]);
+@@ -1425,7 +1425,7 @@ class Dwoo_Core
+             $cur = $this->scope;
+         }
+ 
+-        while (list($k, $sep) = each($m[1])) {
++        foreach($m[1] as $k => $sep){
+             if ($sep === '.' || $sep === '[' || $sep === '') {
+                 if ((is_array($cur) || $cur instanceof ArrayAccess) && isset($cur[$m[2][$k]])) {
+                     $cur = $cur[$m[2][$k]];
+@@ -1470,7 +1470,7 @@ class Dwoo_Core
+             $cur =& $this->scope;
+             $last = array(array_pop($m[1]), array_pop($m[2]));
+ 
+-            while (list($k, $sep) = each($m[1])) {
++            foreach($m[1] as $k => $sep){
+                 if ($sep === '.' || $sep === '[' || $sep === '') {
+                     if (is_array($cur) === false) {
+                         $cur = array();
+diff --git a/dwoo/Dwoo/Data.php b/dwoo/Dwoo/Data.php
+index c5f292e..d841546 100644
+--- a/dwoo/Dwoo/Data.php
++++ b/dwoo/Dwoo/Data.php
+@@ -71,7 +71,7 @@ class Dwoo_Data implements Dwoo_IDataProvider
+ 	public function mergeData(array $data)
+ 	{
+ 		$args = func_get_args();
+-		while (list(,$v) = each($args)) {
++		foreach($args as $v){
+ 			if (is_array($v)) {
+ 				$this->data = array_merge($this->data, $v);
+ 			}
+@@ -90,7 +90,7 @@ class Dwoo_Data implements Dwoo_IDataProvider
+ 	{
+ 		if (is_array($name)) {
+ 			reset($name);
+-			while (list($k,$v) = each($name))
++			foreach($name as $k => $v)
+ 				$this->data[$k] = $v;
+ 		} else {
+ 			$this->data[$name] = $val;
+diff --git a/dwoo/plugins/builtin/blocks/textformat.php b/dwoo/plugins/builtin/blocks/textformat.php
+index fb0f422..61ec1d6 100644
+--- a/dwoo/plugins/builtin/blocks/textformat.php
++++ b/dwoo/plugins/builtin/blocks/textformat.php
+@@ -67,7 +67,7 @@ class Dwoo_Plugin_textformat extends Dwoo_Block_Plugin
+ 		// gets paragraphs
+ 		$pgs = explode("\n", str_replace(array("\r\n", "\r"), "\n", $this->buffer));
+ 
+-		while (list($i,) = each($pgs)) {
++		foreach($pgs as $i){
+ 			if (empty($pgs[$i])) {
+ 				continue;
+ 			}
+diff --git a/dwoo/plugins/builtin/functions/capitalize.php b/dwoo/plugins/builtin/functions/capitalize.php
+index d04f39b..de57c20 100644
+--- a/dwoo/plugins/builtin/functions/capitalize.php
++++ b/dwoo/plugins/builtin/functions/capitalize.php
+@@ -25,7 +25,7 @@ function Dwoo_Plugin_capitalize(Dwoo_Core $dwoo, $value, $numwords=false)
+ 	} else {
+ 		$bits = explode(' ', (string) $value);
+ 		$out = '';
+-		while (list(,$v) = each($bits)) {
++		foreach($bits as $v){
+ 			if (preg_match('#^[^0-9]+$#', $v)) {
+ 				$out .=	' '.mb_convert_case($v, MB_CASE_TITLE, $dwoo->getCharset());
+ 			} else {
+diff --git a/host_view.php b/host_view.php
+index ca05c8d..3b54b35 100644
+--- a/host_view.php
++++ b/host_view.php
+@@ -329,7 +329,7 @@ $cluster_url = rawurlencode($clustername);
+ 
+ $baseGraphArgs = "c=$cluster_url&amp;h=" . $user['hostname']
+   . "&amp;r=" . $user['range'] . "&amp;z=$size&amp;jr=$jobrange"
+-  . "&amp;js=$jobstart&amp;st=$cluster[LOCALTIME]";
++  . "&amp;js=$jobstart&amp;st=" . $cluster['LOCALTIME'];
+ if ($user['cs'])
+   $baseGraphArgs .= "&amp;cs=" . rawurlencode($user['cs']);
+ if ($user['ce'])
+diff --git a/lib/GangliaAuth.php b/lib/GangliaAuth.php
+index 01ca10d..bda8f84 100644
+--- a/lib/GangliaAuth.php
++++ b/lib/GangliaAuth.php
+@@ -94,7 +94,7 @@ class GangliaAuth {
+   }
+ 
+   protected function getMagicQuotesGpc() {
+-    return get_magic_quotes_gpc();
++    return false;
+   }
+ }
+ ?>
+diff --git a/metric_group_view.php b/metric_group_view.php
+index 13dc0a1..617a3aa 100644
+--- a/metric_group_view.php
++++ b/metric_group_view.php
+@@ -105,7 +105,7 @@ $cluster_url = rawurlencode($clustername);
+ 
+ $baseGraphArgs = "c=$cluster_url&amp;h=$hostname"
+   . "&amp;r=$range&amp;z=$size&amp;jr=$jobrange"
+-  . "&amp;js=$jobstart&amp;st=$cluster[LOCALTIME]";
++  . "&amp;js=$jobstart&amp;st={$cluster['LOCALTIME']}";
+ if ($cs)
+   $baseGraphArgs .= "&amp;cs=" . rawurlencode($cs);
+ if ($ce)
+diff --git a/mobile_helper.php b/mobile_helper.php
+index d9e20cb..2b384ad 100644
+--- a/mobile_helper.php
++++ b/mobile_helper.php
+@@ -268,7 +268,7 @@ foreach ($metrics as $metric_name => $metric_attributes) {
+   else {
+     $metric_graphargs = "c=".rawurlencode($clustername)."&amp;h=".rawurlencode($hostname)."&amp;v=".rawurlencode($metric_attributes['VAL'])
+       ."&amp;m=$metric_name&amp;r=".rawurlencode($range)."&amp;z=$size&amp;jr=$jobrange"
+-      ."&amp;js=$jobstart&amp;st=$cluster[LOCALTIME]";
++      ."&amp;js=$jobstart&amp;st=$cluster['LOCALTIME']";
+     if ($cs)
+        $metric_graphargs .= "&amp;cs=" . rawurlencode($cs);
+     if ($ce)
+diff --git a/physical_view.php b/physical_view.php
+index 8d5c3bc..a0d4111 100644
+--- a/physical_view.php
++++ b/physical_view.php
+@@ -99,7 +99,7 @@ function physical_racks() {
+    else {
+       ksort($racks);
+       reset($racks);
+-      while (list($rack,) = each($racks)) {
++      foreach($racks as $rack){
+          # In our convention, y=0 is close to the floor. (Easier to wire up)
+          krsort($racks[$rack]);
+       }

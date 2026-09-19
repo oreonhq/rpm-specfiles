@@ -2,7 +2,7 @@
 
 Summary:        Enhanced TeX modes for Emacs
 Name:           emacs-auctex
-Version:        14.1.2
+Version:        14.2.0
 Release:        %autorelease
 
 # The project as a whole is GPL-3.0-or-later.  Exceptions:

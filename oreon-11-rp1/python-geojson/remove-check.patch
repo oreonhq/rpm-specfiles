@@ -1,0 +1,14 @@
+--- setup.py	2024-12-21 20:30:30.000000000 +0100
++++ setup1.py	2025-07-29 20:27:07.964203532 +0200
+@@ -16,11 +16,6 @@
+     raise RuntimeError(f"Unable to find version string in {VERSIONFILE}.")
+ 
+ 
+-major_version, minor_version = sys.version_info[:2]
+-if not (major_version == 3 and 7 <= minor_version <= 13):
+-    sys.stderr.write("Sorry, only Python 3.7 - 3.13 are "
+-                     "supported at this time.\n")
+-    exit(1)
+ 
+ setup(
+     name="geojson",

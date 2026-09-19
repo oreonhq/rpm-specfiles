@@ -1,0 +1,89 @@
+From ac626efae045882c4a6920afcb3ddc01e6b275a6 Mon Sep 17 00:00:00 2001
+From: Jakub Jelen <jjelen@redhat.com>
+Date: Mon, 21 Jul 2025 14:23:34 +0200
+Subject: [PATCH 1/2] Allow building with CMake 4.0
+
+Signed-off-by: Jakub Jelen <jjelen@redhat.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index af8b779..885a0d2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ include(FeatureSummary)
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...4.0)
+ project(fwknop-gui CXX C)
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+ if(NOT(DEFINED IS_WIN32 OR DEFINED IS_LINUX OR DEFINED IS_APPLE))
+-- 
+2.50.1
+
+
+From fee493682a275fcbf2ca255891e30db857b408ce Mon Sep 17 00:00:00 2001
+From: Jakub Jelen <jjelen@redhat.com>
+Date: Mon, 21 Jul 2025 14:29:03 +0200
+Subject: [PATCH 2/2] cmake: Use execute_process
+
+The cmake4 complains about the usage of exec_program:
+
+```
+CMake Error at cmake/Modules/FindGpgme.cmake:196 (exec_program):
+  The exec_program command should not be called; see CMP0153.  Use
+  execute_process() instead.
+```
+
+Signed-off-by: Jakub Jelen <jjelen@redhat.com>
+---
+ cmake/Modules/FindGpgme.cmake | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/cmake/Modules/FindGpgme.cmake b/cmake/Modules/FindGpgme.cmake
+index 7a09210..69f917b 100644
+--- a/cmake/Modules/FindGpgme.cmake
++++ b/cmake/Modules/FindGpgme.cmake
+@@ -193,7 +193,7 @@ else() # not WIN32
+ 
+       message( STATUS "Found gpgme-config at ${_GPGMECONFIG_EXECUTABLE}" )
+ 
+-      exec_program( ${_GPGMECONFIG_EXECUTABLE} ARGS --version OUTPUT_VARIABLE GPGME_VERSION )
++      execute_process( COMMAND ${_GPGMECONFIG_EXECUTABLE} --version OUTPUT_VARIABLE GPGME_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE )
+ 
+       set( _GPGME_MIN_VERSION "1.1.7" )
+ 
+@@ -205,17 +205,17 @@ else() # not WIN32
+ 
+         message( STATUS "Found gpgme v${GPGME_VERSION}, checking for flavours..." )
+ 
+-        exec_program( ${_GPGMECONFIG_EXECUTABLE} ARGS                  --libs OUTPUT_VARIABLE _gpgme_config_vanilla_libs RETURN_VALUE _ret )
++        execute_process( COMMAND ${_GPGMECONFIG_EXECUTABLE} --libs OUTPUT_VARIABLE _gpgme_config_vanilla_libs RESULT_VARIABLE _ret OUTPUT_STRIP_TRAILING_WHITESPACE )
+ 	if ( _ret )
+ 	  set( _gpgme_config_vanilla_libs )
+ 	endif()
+ 
+-        exec_program( ${_GPGMECONFIG_EXECUTABLE} ARGS --thread=pthread --libs OUTPUT_VARIABLE _gpgme_config_pthread_libs RETURN_VALUE _ret )
++        execute_process( COMMAND ${_GPGMECONFIG_EXECUTABLE} --thread=pthread --libs OUTPUT_VARIABLE _gpgme_config_pthread_libs RESULT_VARIABLE _ret OUTPUT_STRIP_TRAILING_WHITESPACE )
+ 	if ( _ret )
+ 	  set( _gpgme_config_pthread_libs )
+ 	endif()
+ 
+-        exec_program( ${_GPGMECONFIG_EXECUTABLE} ARGS --thread=pth     --libs OUTPUT_VARIABLE _gpgme_config_pth_libs     RETURN_VALUE _ret )
++        execute_process( COMMAND ${_GPGMECONFIG_EXECUTABLE} --thread=pth --libs OUTPUT_VARIABLE _gpgme_config_pth_libs RESULT_VARIABLE _ret OUTPUT_STRIP_TRAILING_WHITESPACE )
+ 	if ( _ret )
+ 	  set( _gpgme_config_pth_libs )
+ 	endif()
+@@ -229,7 +229,7 @@ else() # not WIN32
+ 
+         if ( _gpgme_config_vanilla_libs OR _gpgme_config_pthread_libs OR _gpgme_config_pth_libs )
+ 
+-          exec_program( ${_GPGMECONFIG_EXECUTABLE} ARGS --cflags OUTPUT_VARIABLE _GPGME_CFLAGS )
++          execute_process( COMMAND ${_GPGMECONFIG_EXECUTABLE} --cflags OUTPUT_VARIABLE _GPGME_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE )
+ 
+           if ( _GPGME_CFLAGS )
+             string( REGEX REPLACE "(\r?\n)+$" " " _GPGME_CFLAGS  "${_GPGME_CFLAGS}" )
+-- 
+2.50.1
+

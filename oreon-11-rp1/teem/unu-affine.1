@@ -1,0 +1,84 @@
+.TH UNU\-AFFINE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-affine \- affine (lerp) mapping on 5
+.IR nrrd s
+or constants
+.SH SYNOPSIS
+.B unu\ affine
+.RI < minIn >
+.RI < in >
+.RI < maxIn >
+.RI < minOut >
+.RI < maxOut >
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-clamp
+.RI < bool >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Affine (lerp) mapping on 5
+.IR nrrd s
+or constants.
+All the 5 arguments can be either
+.IR nrrd s
+or single floating-point values.
+When all args are single values, this is subsuming the functionality of the
+previous stand-alone
+.BR affine (1)
+program.
+Use
+.RB \(lq \- \(rq
+for an operand to signify a
+.I nrrd
+to be read from
+.I stdin
+(a pipe).
+Note, however, that
+.RB \(lq \- \(rq
+can probably only be used once (reliably).
+.IP \(bu +2n
+Uses
+.B nrrdArithAffine
+or
+.B nrrdArithIterAffine
+.SH OPTIONS
+.TP
+.I minIn
+Lower end of input value range.
+.TP
+.I in
+Input value.
+.TP
+.I maxIn
+Upper end of input value range.
+.TP
+.I minOut
+Lower end of output value range.
+.TP
+.I maxOut
+Upper end of output value range.
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+type to convert all
+.IR nrrd
+inputs to, prior to doing operation.
+This also determines output type.
+By default (not using this option), the types of the input
+.IR nrrd s
+are left unchanged.
+.TP
+.B \-clamp\fR\ <\fIbool\fR>
+clamp output values to specified output range
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

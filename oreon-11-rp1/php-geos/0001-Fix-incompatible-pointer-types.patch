@@ -1,0 +1,34 @@
+From 5ad2bce06d6ecb252e427e96dde5490f34db9ba6 Mon Sep 17 00:00:00 2001
+From: Remi Collet <remi@remirepo.net>
+Date: Mon, 29 Jan 2024 10:25:42 +0100
+Subject: [PATCH] Fix incompatible pointer types
+
+---
+ geos.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/geos.c b/geos.c
+index 0437523..ad2dce2 100644
+--- a/geos.c
++++ b/geos.c
+@@ -878,7 +878,7 @@ PHP_METHOD(Geometry, buffer)
+     GEOS_PHP_ZVAL data;
+     HashTable *style;
+     zend_string *key;
+-    ulong index;
++    zend_ulong index;
+ 
+     this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+ 
+@@ -971,7 +971,7 @@ PHP_METHOD(Geometry, offsetCurve)
+     GEOS_PHP_ZVAL data;
+     HashTable *style;
+     zend_string *key;
+-    ulong index;
++    zend_ulong index;
+ 
+     this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+ 
+-- 
+2.43.0
+

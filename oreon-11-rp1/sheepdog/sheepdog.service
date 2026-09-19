@@ -1,0 +1,18 @@
+[Unit]
+Description=Sheepdog QEMU/KVM Block Storage
+After=network.target
+Requires=corosync.service
+
+[Service]
+EnvironmentFile=/etc/sysconfig/sheepdog
+ExecStart=/usr/sbin/sheep -f --log level=${SHEEPDOG_LOGLEVEL},dst=${SHEEPDOG_LOGDEST},format=${SHEEPDOG_LOGFMT} $SHEEPDOG_EXTRA_OPTS ${SHEEPDOG_PATH}
+Restart=on-failure
+RestartSec=2s
+LimitNOFILE=32768
+
+# Use sheepdog.timer instead.  Because corosync does not provide
+# notification via sd_notify, we introduce an arbitrary delay between
+# starting corosync.service and starting sheepdog.
+
+#[Install]
+#WantedBy=multi-user.target

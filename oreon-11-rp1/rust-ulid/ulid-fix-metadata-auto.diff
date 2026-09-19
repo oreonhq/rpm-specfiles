@@ -1,0 +1,15 @@
+--- ulid-1.2.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ ulid-1.2.1/Cargo.toml	2025-05-01T10:50:19.646842+00:00
+@@ -86,12 +86,3 @@
+ [dev-dependencies.serde_derive]
+ version = "1.0"
+ 
+-[target.wasm32-unknown-unknown.dependencies.web-time]
+-version = "1"
+-
+-[target.wasm32-unknown-unknown.dev-dependencies.getrandom]
+-version = "0.3.1"
+-features = ["wasm_js"]
+-
+-[target.wasm32-unknown-unknown.dev-dependencies.wasm-bindgen-test]
+-version = "0.3"

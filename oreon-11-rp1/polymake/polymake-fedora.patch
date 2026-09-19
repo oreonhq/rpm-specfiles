@@ -1,0 +1,256 @@
+--- bundled/cdd/support/configure.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/cdd/support/configure.pl	2023-11-17 10:32:30.035032672 -0700
+@@ -56,7 +56,6 @@ sub proceed {
+       my $cdd_lib=Polymake::Configure::get_libdir($cdd_path, "cddgmp");
+       if (-f "$cdd_lib/libcddgmp.$Config::Config{so}" ) {
+          $LDFLAGS = "-L$cdd_lib";
+-         $LDFLAGS .= " -Wl,-rpath,$cdd_lib" if $cdd_path ne "/usr";
+       }
+       if (!$CFLAGS or !$LDFLAGS) {
+          die "Invalid installation location of cddlib: header file cdd.h and/or library libcddgmp.$Config::Config{so} not found.\n",
+@@ -69,7 +68,6 @@ sub proceed {
+       $cdd_path .= "include: $cdd_inc ";
+    }
+    if (defined ($cdd_lib=$options->{'cdd-lib'})) {
+-      $LDFLAGS = "-L$cdd_lib -Wl,-rpath,$cdd_lib";
+       $cdd_path .= "lib: $cdd_lib";
+    }
+ 
+--- bundled/flint/support/configure.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/flint/support/configure.pl	2023-11-17 10:32:30.036032651 -0700
+@@ -23,7 +23,7 @@ sub proceed {
+       my $lib=Polymake::Configure::get_libdir($flint_path, "flint");
+       if (-f "$inc/flint/flint.h" && -f "$lib/libflint.$Config::Config{so}" ) {
+          $cxxflags .= " -I$inc";
+-         $ldflags .= " -L$lib -Wl,-rpath,$lib";
++         $ldflags .= " -L$lib";
+       } else {
+          die "Invalid installation location of flint, header files and/or library not found\n";
+       }
+--- bundled/libnormaliz/support/configure.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/libnormaliz/support/configure.pl	2023-11-17 10:32:30.036032651 -0700
+@@ -48,7 +48,7 @@ sub proceed {
+       my $nmz_lib=Polymake::Configure::get_libdir($nmz_path, "normaliz");
+       if (-f "$nmz_inc/libnormaliz/libnormaliz.h" && -f "$nmz_lib/libnormaliz.$Config::Config{so}" ) {
+          $CXXFLAGS = "-I$nmz_inc";
+-         $LDFLAGS = "-L$nmz_lib -Wl,-rpath,$nmz_lib";
++         $LDFLAGS = "-L$nmz_lib";
+       } else {
+          die "Invalid installation location of libnormaliz header file libnormaliz/libnormaliz.h and/or library libnormaliz.$Config::Config{so} not found\n";
+       }
+@@ -189,6 +189,7 @@ int main (int argc, char *argv[])
+                  Polymake::Configure::v_cmp($Polymake::Configure::CLANGversion, "5.0.0") < 0);
+ 
+    } else {
++      $CXXFLAGS='-I/usr/include/libnormaliz';
+       $LIBS="$libs";
+       $message = "$nmz_version @ ".($nmz_path//"system")
+    }
+--- bundled/lrs/support/configure.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/lrs/support/configure.pl	2023-11-17 10:32:30.036032651 -0700
+@@ -67,7 +67,7 @@ sub proceed {
+       $CFLAGS .= " -DHAVE_LRSDRIVER" if -f "$lrs_inc/lrsdriver.h";
+ 
+       if (-f "$lrs_lib/lib$lrs_libname.$Config::Config{so}" ) {
+-         $LDFLAGS = "-L$lrs_lib -Wl,-rpath,$lrs_lib";
++         $LDFLAGS = "-L$lrs_lib";
+       } elsif (-f "$lrs_lib/lib$lrs_libname.a" ) {
+          $LDFLAGS = "-L$lrs_lib";
+       } else {
+--- bundled/nauty/apps/graph/src/build_flags.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/nauty/apps/graph/src/build_flags.pl	2023-11-17 10:32:30.036032651 -0700
+@@ -1,29 +1,11 @@
+ # input for generate_ninja_targets.pl
+ 
+-my $foreign_src = $ConfigFlags{'bundled.nauty.NautySrc'} ne "bundled" && $ConfigFlags{'bundled.nauty.NautySrc'};
+-my $nauty_src = $foreign_src ? '${bundled.nauty.NautySrc}' : '${root}/bundled/nauty/external/nauty';
+-my $generated_dir = '${buildroot}/staticlib/nauty';
+-my @generated_headers = qw( nauty.h naututil.h gtools.h );
+-my @generated_in = map { /\.h$/; "$nauty_src/$`-h.in" } @generated_headers;
+-my @generated_out = map { "$generated_dir/$_" } @generated_headers;
+-my $include_generated = ($foreign_src && grep { -f "$foreign_src/$_" } @generated_headers)
+-                        ? join(" ", map { "-include $_" } @generated_out)
+-                        : "-I$generated_dir";
+-my $nauty_inc = $ConfigFlags{'bundled.nauty.NautySrc'}
+-                ? " -I$generated_dir -I$nauty_src"
+-                : "";
+-
+-( 'GraphIso.cc' => $nauty_inc,
+-
+-  $ConfigFlags{'bundled.nauty.NautySrc'}
+-  ? ( GENERATED => {
+-        out => "@generated_out", in => "@generated_in",
+-        command => "cd $generated_dir; CC=\"\${CC}\" CFLAGS=\"\${CFLAGS}\" $nauty_src/configure --quiet >/dev/null 2>/dev/null; rm -rf makefile nauty; ln -s . nauty",
+-      },
+-      staticlib => {
+-        SOURCEDIR => $nauty_src,
++(
++  $ConfigFlags{'bundled.nauty.UseBundled'}
++  ? ( staticlib => {
++        SOURCEDIR => '${root}/bundled/nauty/external/nauty',
+         SOURCES => [ qw(naugraph.c naurng.c nausparse.c nautaux.c nautil.c nautinv.c naututil.c nauty.c rng.c schreier.c) ],
+-        CFLAGS => "$include_generated -I$nauty_src",
++        CFLAGS => "-I/usr/include/nauty",
+       } )
+   : ()
+ )
+--- bundled/nauty/support/configure.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/nauty/support/configure.pl	2023-11-17 10:32:30.036032651 -0700
+@@ -30,8 +30,7 @@ sub usage {
+ }
+ 
+ sub check_nauty {
+-   my $dir = @_ > 0 ? $_[0] : "bundled/nauty/external/nauty";
+-   -e "$dir/nauty-h.in"
++   -e "bundled/nauty/external/nauty/nauty-h.in";
+ }
+ 
+ sub proceed {
+@@ -54,9 +53,16 @@ sub proceed {
+       $LDFLAGS = "-L$nauty_lib";
+       undef $NautySrc;
+    } elsif (defined ($nauty_src=$options->{"nauty-src"}) && $nauty_src ne "bundled") {
+-      check_nauty($nauty_src) or
+-         die "Specified nauty source directory invalid, could not find 'nauty-h.in' in $nauty_src.";
+-      $NautySrc = "$nauty_src";
++      my $nauty_inc="$nauty_src/include/nauty";
++      my $nauty_lib="@@LIBDIR@@";
++      if (-f "$nauty_inc/nauty.h") {
++         $CXXFLAGS="-I$nauty_inc";
++         $LDFLAGS="-L$nauty_lib";
++         $LIBS="-lnauty";
++         $NautySrc = 0;
++      } else {
++         die "Could not locate a working nauty installation\n";
++      }
+    }
+ 
+    if (!$nauty_src && $nauty_path ne "bundled" && $options->{prereq} ne ".none.") {
+--- bundled/scip/support/configure.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/scip/support/configure.pl	2023-11-17 10:32:59.874409718 -0700
+@@ -42,7 +42,7 @@ sub proceed {
+          die "invalid SCIP location $path: header file scip.h not found anywhere below\n";
+       }
+       my $libdir = Polymake::Configure::get_libdir($path, "scip","so");
+-      $LDFLAGS = "-L$libdir -Wl,-rpath,$libdir";
++      $LDFLAGS = "-L$libdir";
+    }
+ 
+    $LIBS="-lscip -lz";
+--- bundled/singular/support/configure.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/singular/support/configure.pl	2023-11-17 10:32:30.036032651 -0700
+@@ -43,7 +43,7 @@ sub singular_config_approach {
+    # yes we need it twice ...
+    chomp ($singular_prefix = `$singular_config --prefix`);
+    chomp $singular_prefix;
+-   $LDFLAGS =~ s/-L(\S+)/-L$1 -Wl,-rpath,$1/g;
++   $LDFLAGS =~ s/-L(\S+)/-L$1/g;
+    my $libdir = $1;
+ 
+    # newer versions of singular need -lsingular_resources while older ones needed -lresources
+@@ -66,9 +66,6 @@ sub pkg_config_approach {
+    chomp ($CXXFLAGS=`$pkg_config --cflags Singular`);
+    die "$pkg_config failed: $!" if ($?);
+    chomp ($LDFLAGS=`$pkg_config --libs-only-other --libs-only-L Singular`);
+-   if (defined ($options->{singular})){
+-      $LDFLAGS =~ s/-L(\S+)/-L$1 -Wl,-rpath,$1/g;
+-   }
+    chomp ($LIBS=`$pkg_config --libs-only-l Singular`);
+    return $pc_singular_prefix;
+ }
+--- bundled/soplex/support/configure.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/soplex/support/configure.pl	2023-11-17 10:33:21.465958942 -0700
+@@ -60,7 +60,7 @@ sub proceed {
+          $libdir = Polymake::Configure::get_libdir($path, "soplex")
+          # (get_libdir has a fallback to $path/lib if nothing was found)
+             unless -f "$libdir/libsoplex-pic.a";
+-         $LDFLAGS = "-L$libdir -Wl,-rpath,$libdir";
++         $LDFLAGS = "-L$libdir";
+       } else {
+          $LDFLAGS = $Polymake::Bundled::scip::LDFLAGS;
+       }
+--- bundled/sympol/apps/polytope/src/build_flags.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/sympol/apps/polytope/src/build_flags.pl	2023-11-17 10:32:30.037032630 -0700
+@@ -16,7 +16,7 @@ if ($ConfigFlags{'bundled.sympol.UseBund
+                         symmetrygroupconstruction/graphconstructiondefault.cpp symmetrygroupconstruction/matrixconstruction.cpp symmetrygroupconstruction/matrixconstructiondefault.cpp ) ],
+        'raycomputationcdd.cpp' => '-DGMPRATIONAL ${bundled.cdd.CFLAGS}',
+        'raycomputationlrs.cpp' => '-DGMP -DMA ${bundled.lrs.CFLAGS}',
+-       CXXFLAGS => $no_warnings . ($ConfigFlags{ExternalHeaders} =~ /\bpermlib\b/ ? ' -I${root}/include/external/permlib' : ''),
++       CXXFLAGS => $no_warnings . ($ConfigFlags{ExternalHeaders} =~ /\bpermlib\b/ ? ' -I/usr/include/permlib' : ''),
+     },
+   )
+ } else {
+--- bundled/sympol/support/configure.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/sympol/support/configure.pl	2023-11-17 10:32:30.037032630 -0700
+@@ -120,6 +120,7 @@ int main() {
+       undef $LIBS;
+       $CXXFLAGS = '-I${root}/bundled/sympol/external/sympol';
+    } else {
++      $CXXFLAGS="-I/usr/include/sympol";
+       $LIBS="-lsympol";
+    }
+ 
+--- perl/polymake-config.orig	2023-11-06 04:02:24.000000000 -0700
++++ perl/polymake-config	2023-11-17 10:32:30.037032630 -0700
+@@ -140,9 +140,6 @@ while (defined ($_=shift)) {
+ 
+    } elsif ($_ eq "--ldflags") {
+       my $ldflags=$ConfigFlags{LDFLAGS};
+-      if ($ldflags !~ /(?:^|\s)-L$ConfigFlags{InstallLib}(?:\s|$)/) {
+-         $ldflags="-L$ConfigFlags{InstallLib} $ldflags";
+-      }
+       my $add_rpath=1;
+ 
+       # collect standard library paths of the C++ compiler and exclude them from the result
+@@ -164,9 +161,6 @@ while (defined ($_=shift)) {
+          $ldflags = "$ConfigFlags{ARCHFLAGS} $ldflags -flat_namespace";
+       } else {
+          $ldflags .= " -Wl,-E";
+-         if ($add_rpath) {
+-            $ldflags .= " -Wl,-rpath,$ConfigFlags{InstallLib}";
+-         }
+       }
+       $ldflags =~ s/^\s+//; $ldflags =~ s/\s+$//; $ldflags =~ s/\s{2,}/ /g;
+ 
+--- support/configure.pl.orig	2023-11-06 04:02:24.000000000 -0700
++++ support/configure.pl	2023-11-17 10:32:30.037032630 -0700
+@@ -498,7 +498,7 @@ sub parse_command_line {
+       }
+    }
+ 
+-   $CXXOPT   =$vars{CXXOPT}   // "-O3";
++   $CXXOPT   =$vars{CXXOPT}   // "-O2";
+    $CXXDEBUG =$vars{CXXDEBUG} // "-g";
+    $CFLAGS   =$vars{CFLAGS}   // "";
+    $CXXFLAGS =$vars{CXXFLAGS} // $CFLAGS;
+@@ -725,7 +725,7 @@ sub determine_cxx_library {
+       }
+       $CFLAGS   .= " -I$options{toolchain}/include";
+       $CXXFLAGS .= " -I$options{toolchain}/include";
+-      $LDFLAGS  .= " -L$libdir -Wl,-rpath,$libdir";
++      $LDFLAGS  .= " -L$libdir";
+    }
+ 
+    if ($options{libcxx} eq ".true.") {
+@@ -1127,10 +1127,6 @@ sub locate_gmp_and_mpfr_libraries {
+       $CXXFLAGS .= " -I$GMP/include";
+       my $libdir=get_libdir($GMP, "gmp");
+       $LDFLAGS .= " -L$libdir";
+-      if (!$FinkBase) {
+-         # non-standard location
+-         $LDFLAGS .= " -Wl,-rpath,$libdir";
+-      }
+    }
+ 
+    my $MPFR=$options{mpfr};
+@@ -1139,10 +1135,6 @@ sub locate_gmp_and_mpfr_libraries {
+       $CXXFLAGS .= " -I$MPFR/include";
+       my $libdir=get_libdir($MPFR, "mpfr");
+       $LDFLAGS .= " -L$libdir";
+-      if (!$FinkBase) {
+-         # non-standard location
+-         $LDFLAGS .= " -Wl,-rpath,$libdir";
+-      }
+    } elsif ($FinkBase) {
+       $MPFR=$FinkBase;
+    }

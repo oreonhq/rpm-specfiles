@@ -1,0 +1,69 @@
+--- a/PARIKernel/paridecl.pxd	2023-06-08 03:41:02.000000000 -0600
++++ b/PARIKernel/paridecl.pxd	2023-06-09 08:44:56.834258928 -0600
+@@ -2,12 +2,22 @@ cdef extern from "pari/pari.h" nogil:
+     ctypedef unsigned long ulong "pari_ulong"
+     ctypedef long* GEN
+     ctypedef unsigned long pari_sp
+-    ctypedef long pari_timer
++
++    ctypedef struct pari_timer:
++        long s
++        long us
+ 
+     ctypedef struct entree:
+-        entree* next
+-        char* name
++        const char* name
++        ulong valence
++        void *value
++        long menu
++        const char *code
+         const char* help
++        void *pvalue
++        long arity
++        ulong hash
++        entree *next
+ 
+     long    paricfg_version_code
+     long    PARI_VERSION_SHIFT
+@@ -19,7 +29,7 @@ cdef extern from "pari/pari.h" nogil:
+     pari_mainstack * pari_mainstack
+     GEN     gnil
+ 
+-    int     INIT_JMPm, INIT_SIGm, INIT_DFTm, INIT_noPRIMEm, INIT_noIMTm
++    int     INIT_JMPm, INIT_SIGm, INIT_DFTm, INIT_noPRIMEm, INIT_noIMTm, INIT_noINTGMPm
+     void    pari_init_opts(size_t parisize, ulong maxprime, ulong init_opts)
+     void    pari_init(size_t parisize, ulong maxprime)
+     void    pari_sighandler(int sig)
+@@ -31,7 +41,7 @@ cdef extern from "pari/pari.h" nogil:
+     GEN     gp_read_str_multiline(const char *t, char *last)
+     char*   GENtostr(GEN x)
+     void    pari_add_hist(GEN z, long t, long r)
+-    long    pari_nb_hist()
++    ulong   pari_nb_hist()
+ 
+     long    timer_delay(pari_timer *T)
+     long    timer_get(pari_timer *T)
+@@ -55,13 +65,15 @@ cdef extern from "pari/pari.h" nogil:
+     entree* is_entry(char *s)
+ 
+     ctypedef struct PARI_plot:
++        void (*draw)(PARI_plot *T, GEN w, GEN x, GEN y)
+         long width
+         long height
+         long hunit
+         long vunit
+         long fwidth
+         long fheight
+-        void (*draw)(PARI_plot *T, GEN w, GEN x, GEN y)
++        long dwidth
++        long dheight
+ 
+     void pari_set_plot_engine(void (*T)(PARI_plot *))
+ 
+@@ -83,5 +95,3 @@ cdef extern from "pari/paripriv.h" nogil
+ 
+     void    pari_use_readline(pari_rl_interface)
+     char**  pari_completion_matches(pari_rl_interface*, char* s, long pos, long* wordpos)
+-
+-    void    init_graph()

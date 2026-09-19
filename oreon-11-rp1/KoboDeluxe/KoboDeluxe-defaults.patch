@@ -1,0 +1,12 @@
+diff -up KoboDeluxe-0.5.0/prefs.cpp.defaults KoboDeluxe-0.5.0/prefs.cpp
+--- KoboDeluxe-0.5.0/prefs.cpp.defaults	2007-12-15 08:52:14.000000000 +0100
++++ KoboDeluxe-0.5.0/prefs.cpp	2007-12-16 15:05:42.000000000 +0100
+@@ -79,7 +79,7 @@ void prefs_t::init()
+ 	key("vol_boost", vol_boost, 0); desc("Volume Boost");
+ 
+ 	comment("--- Video settings -------------------------");
+-	yesno("fullscreen", fullscreen, 0); desc("Fullscreen Display");
++	yesno("fullscreen", fullscreen, 1); desc("Fullscreen Display");
+ 	key("videodriver", videodriver, GFX_DRIVER_SDL2D);
+ 			desc("Display Driver");
+ 	key("width", width, 640); desc("Horizontal Resolution");

@@ -1,0 +1,13 @@
+diff --git a/docker.c b/docker.c
+index 17a2f0b..7696bf8 100644
+--- a/docker.c
++++ b/docker.c
+@@ -329,7 +329,7 @@ int main(int c, char **v)
+   sigaction(SIGINT, &act, NULL);
+   sigaction(SIGHUP, &act, NULL);
+ 
+-  parse_cmd_line(argc, argv);
++  parse_cmd_line();
+ 
+   display = XOpenDisplay(display_string);
+   if (!display) {

@@ -1,0 +1,22 @@
+From 2f0f46bad8ba1c942190aebd7a8223398484bd2c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 14 Sep 2012 15:24:35 +0200
+Subject: [PATCH 1/2] Do not include current directory
+
+---
+ cddb.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cddb.pl b/cddb.pl
+index f7f22b0..9ca7ea7 100755
+--- a/cddb.pl
++++ b/cddb.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -I.
++#!/usr/bin/perl
+ #
+ #  CDDB - Read the CDDB entry for an audio CD in your drive
+ #
+-- 
+1.7.11.4
+

@@ -1,0 +1,42 @@
+diff --git a/doc/tech-notes/config.html b/doc/tech-notes/config.html
+index b935483..751429c 100644
+--- a/doc/tech-notes/config.html
++++ b/doc/tech-notes/config.html
+@@ -7695,7 +7695,7 @@ If you'd like to suppress the echoing of the asterisks set this feature.
+ 
+ <DT> <A NAME="suppress-user-agent-when-sending"><EM>suppress-user-agent-when-sending</EM></A>
+ <DD> If this feature is set then <EM>Alpine</EM> will not generate a
+-<CODE>User-Agent</CODE> header in outgoing messages.
++<CODE>User-Agent</CODE> header in outgoing messages. It is set by default.
+ <P>
+ 
+ <DT> <A NAME="tab-checks-recent"><EM>tab-checks-recent</EM></A>
+diff --git a/doc/tech-notes/tech-notes.txt b/doc/tech-notes/tech-notes.txt
+index 2762c5b..b2d8cdd 100644
+--- a/doc/tech-notes/tech-notes.txt
++++ b/doc/tech-notes/tech-notes.txt
+@@ -6629,7 +6629,7 @@ John: on a job well done!
+           the echoing of the asterisks set this feature.
+    _suppress-user-agent-when-sending_
+           If this feature is set then _Alpine_ will not generate a
+-          User-Agent header in outgoing messages.
++          User-Agent header in outgoing messages.  It is set by default.
+    _tab-checks-recent_
+           In a FOLDER LIST screen, the TAB key usually just changes which
+           folder is highlighted. If this feature is set, then the TAB key
+diff --git a/pith/pine.hlp b/pith/pine.hlp
+index 1da108f..3ca4ca8 100644
+--- a/pith/pine.hlp
++++ b/pith/pine.hlp
+@@ -34823,7 +34823,7 @@ emit a beep to become silent.
+ <H1>FEATURE: <!--#echo var="FEAT_suppress-user-agent-when-sending"--></H1>
+ 
+ If this feature is set then Alpine will not generate a
+-<CODE>User-Agent</CODE> header in outgoing messages.
++<CODE>User-Agent</CODE> header in outgoing messages. It is set by default.
+ <P>
+ <UL>   
+ <LI><A HREF="h_finding_help">Finding more information and requesting help</A>
+-- 
+2.20.1
+

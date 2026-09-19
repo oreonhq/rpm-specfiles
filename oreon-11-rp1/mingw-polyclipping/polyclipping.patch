@@ -1,0 +1,220 @@
+--- ./cpp/CMakeLists.txt.mingw	2016-09-11 16:32:04.000000000 +0200
++++ ./cpp/CMakeLists.txt	2016-11-01 15:47:02.395716925 +0100
+@@ -1,6 +1,8 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
++CMAKE_MINIMUM_REQUIRED(VERSION 2.8.6)
+ PROJECT(polyclipping)
+ 
++INCLUDE (GenerateExportHeader)
++
+ SET(CMAKE_BUILD_TYPE "Release" CACHE STRING "Release type")
+ # The header name clipper.hpp is too generic, so install in a subdirectory
+ SET(CMAKE_INSTALL_INCDIR "${CMAKE_INSTALL_PREFIX}/include/polyclipping")
+@@ -11,11 +13,17 @@
+ SET(BUILD_SHARED_LIBS ON CACHE BOOL
+     "Build shared libraries (.dll/.so) instead of static ones (.lib/.a)")
+ ADD_LIBRARY(polyclipping clipper.cpp)
++GENERATE_EXPORT_HEADER(polyclipping
++             BASE_NAME polyclipping
++             EXPORT_MACRO_NAME polyclipping_EXPORT
++             EXPORT_FILE_NAME polyclipping_Export.h
++             STATIC_DEFINE polyclipping_BUILT_AS_STATIC
++)
+ 
+ CONFIGURE_FILE (polyclipping.pc.cmakein "${PCFILE}" @ONLY)
+ 
+ INSTALL (FILES clipper.hpp DESTINATION "${CMAKE_INSTALL_INCDIR}")
+-INSTALL (TARGETS polyclipping LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++INSTALL (TARGETS polyclipping LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
+ INSTALL (FILES "${PCFILE}" DESTINATION "${CMAKE_INSTALL_PKGCONFIGDIR}")
+ 
+ SET_TARGET_PROPERTIES(polyclipping PROPERTIES VERSION 22.0.0 SOVERSION 22 )
+--- ./cpp/clipper.hpp.mingw	2016-09-11 16:32:04.000000000 +0200
++++ ./cpp/clipper.hpp	2016-11-01 15:49:08.567142315 +0100
+@@ -49,6 +49,12 @@
+ //use_deprecated: Enables temporary support for the obsolete functions
+ //#define use_deprecated  
+ 
++// KB168958
++// disable warnings on 255 char debug symbols
++#pragma warning (disable : 4786)
++// disable warnings on extern before template instantiation
++#pragma warning (disable : 4231)
++
+ #include <vector>
+ #include <list>
+ #include <set>
+@@ -59,6 +65,18 @@
+ #include <functional>
+ #include <queue>
+ 
++#if defined (_WIN32) 
++  #if defined(polyclipping_EXPORTS)
++    #define  CLIPPER_EXPORT __declspec(dllexport)
++    #define  CLIPPER_IMPEXP
++  #else
++    #define  CLIPPER_EXPORT __declspec(dllimport)
++    #define  CLIPPER_IMPEXP extern
++  #endif /* polyclipping_EXPORTS */
++#else /* defined (_WIN32) */
++ #define CLIPPER_EXPORT
++#endif
++
+ namespace ClipperLib {
+ 
+ enum ClipType { ctIntersection, ctUnion, ctDifference, ctXor };
+@@ -82,7 +100,7 @@
+ 
+ #endif
+ 
+-struct IntPoint {
++struct CLIPPER_EXPORT IntPoint {
+   cInt X;
+   cInt Y;
+ #ifdef use_xyz
+@@ -109,11 +127,11 @@
+ inline Path& operator <<(Path& poly, const IntPoint& p) {poly.push_back(p); return poly;}
+ inline Paths& operator <<(Paths& polys, const Path& p) {polys.push_back(p); return polys;}
+ 
+-std::ostream& operator <<(std::ostream &s, const IntPoint &p);
+-std::ostream& operator <<(std::ostream &s, const Path &p);
+-std::ostream& operator <<(std::ostream &s, const Paths &p);
++CLIPPER_EXPORT std::ostream& operator <<(std::ostream &s, const IntPoint &p);
++CLIPPER_EXPORT std::ostream& operator <<(std::ostream &s, const Path &p);
++CLIPPER_EXPORT std::ostream& operator <<(std::ostream &s, const Paths &p);
+ 
+-struct DoublePoint
++struct CLIPPER_EXPORT DoublePoint
+ {
+   double X;
+   double Y;
+@@ -130,10 +148,10 @@
+ enum JoinType {jtSquare, jtRound, jtMiter};
+ enum EndType {etClosedPolygon, etClosedLine, etOpenButt, etOpenSquare, etOpenRound};
+ 
+-class PolyNode;
++class CLIPPER_EXPORT PolyNode;
+ typedef std::vector< PolyNode* > PolyNodes;
+ 
+-class PolyNode 
++class CLIPPER_EXPORT PolyNode 
+ { 
+ public:
+     PolyNode();
+@@ -157,7 +175,7 @@
+     friend class ClipperOffset; 
+ };
+ 
+-class PolyTree: public PolyNode
++class CLIPPER_EXPORT PolyTree: public PolyNode
+ { 
+ public:
+     ~PolyTree(){ Clear(); };
+@@ -170,42 +188,42 @@
+     friend class Clipper; //to access AllNodes
+ };
+ 
+-bool Orientation(const Path &poly);
+-double Area(const Path &poly);
+-int PointInPolygon(const IntPoint &pt, const Path &path);
+-
+-void SimplifyPolygon(const Path &in_poly, Paths &out_polys, PolyFillType fillType = pftEvenOdd);
+-void SimplifyPolygons(const Paths &in_polys, Paths &out_polys, PolyFillType fillType = pftEvenOdd);
+-void SimplifyPolygons(Paths &polys, PolyFillType fillType = pftEvenOdd);
+-
+-void CleanPolygon(const Path& in_poly, Path& out_poly, double distance = 1.415);
+-void CleanPolygon(Path& poly, double distance = 1.415);
+-void CleanPolygons(const Paths& in_polys, Paths& out_polys, double distance = 1.415);
+-void CleanPolygons(Paths& polys, double distance = 1.415);
+-
+-void MinkowskiSum(const Path& pattern, const Path& path, Paths& solution, bool pathIsClosed);
+-void MinkowskiSum(const Path& pattern, const Paths& paths, Paths& solution, bool pathIsClosed);
+-void MinkowskiDiff(const Path& poly1, const Path& poly2, Paths& solution);
+-
+-void PolyTreeToPaths(const PolyTree& polytree, Paths& paths);
+-void ClosedPathsFromPolyTree(const PolyTree& polytree, Paths& paths);
+-void OpenPathsFromPolyTree(PolyTree& polytree, Paths& paths);
++CLIPPER_EXPORT bool Orientation(const Path &poly);
++CLIPPER_EXPORT double Area(const Path &poly);
++CLIPPER_EXPORT int PointInPolygon(const IntPoint &pt, const Path &path);
++
++CLIPPER_EXPORT void SimplifyPolygon(const Path &in_poly, Paths &out_polys, PolyFillType fillType = pftEvenOdd);
++CLIPPER_EXPORT void SimplifyPolygons(const Paths &in_polys, Paths &out_polys, PolyFillType fillType = pftEvenOdd);
++CLIPPER_EXPORT void SimplifyPolygons(Paths &polys, PolyFillType fillType = pftEvenOdd);
++
++CLIPPER_EXPORT void CleanPolygon(const Path& in_poly, Path& out_poly, double distance = 1.415);
++CLIPPER_EXPORT void CleanPolygon(Path& poly, double distance = 1.415);
++CLIPPER_EXPORT void CleanPolygons(const Paths& in_polys, Paths& out_polys, double distance = 1.415);
++CLIPPER_EXPORT void CleanPolygons(Paths& polys, double distance = 1.415);
++
++CLIPPER_EXPORT void MinkowskiSum(const Path& pattern, const Path& path, Paths& solution, bool pathIsClosed);
++CLIPPER_EXPORT void MinkowskiSum(const Path& pattern, const Paths& paths, Paths& solution, bool pathIsClosed);
++CLIPPER_EXPORT void MinkowskiDiff(const Path& poly1, const Path& poly2, Paths& solution);
++
++CLIPPER_EXPORT void PolyTreeToPaths(const PolyTree& polytree, Paths& paths);
++CLIPPER_EXPORT void ClosedPathsFromPolyTree(const PolyTree& polytree, Paths& paths);
++CLIPPER_EXPORT void OpenPathsFromPolyTree(PolyTree& polytree, Paths& paths);
+ 
+-void ReversePath(Path& p);
+-void ReversePaths(Paths& p);
++CLIPPER_EXPORT void ReversePath(Path& p);
++CLIPPER_EXPORT void ReversePaths(Paths& p);
+ 
+-struct IntRect { cInt left; cInt top; cInt right; cInt bottom; };
++struct CLIPPER_EXPORT IntRect { cInt left; cInt top; cInt right; cInt bottom; };
+ 
+ //enums that are used internally ...
+ enum EdgeSide { esLeft = 1, esRight = 2};
+ 
+ //forward declarations (for stuff used internally) ...
+-struct TEdge;
+-struct IntersectNode;
+-struct LocalMinimum;
+-struct OutPt;
+-struct OutRec;
+-struct Join;
++struct CLIPPER_EXPORT TEdge;
++struct CLIPPER_EXPORT IntersectNode;
++struct CLIPPER_EXPORT LocalMinimum;
++struct CLIPPER_EXPORT OutPt;
++struct CLIPPER_EXPORT OutRec;
++struct CLIPPER_EXPORT Join;
+ 
+ typedef std::vector < OutRec* > PolyOutList;
+ typedef std::vector < TEdge* > EdgeList;
+@@ -217,7 +235,7 @@
+ //ClipperBase is the ancestor to the Clipper class. It should not be
+ //instantiated directly. This class simply abstracts the conversion of sets of
+ //polygon coordinates into edge objects that are stored in a LocalMinima list.
+-class ClipperBase
++class CLIPPER_EXPORT ClipperBase
+ {
+ public:
+   ClipperBase();
+@@ -260,7 +278,7 @@
+ };
+ //------------------------------------------------------------------------------
+ 
+-class Clipper : public virtual ClipperBase
++class CLIPPER_EXPORT Clipper : public virtual ClipperBase
+ {
+ public:
+   Clipper(int initOptions = 0);
+@@ -357,7 +375,7 @@
+ };
+ //------------------------------------------------------------------------------
+ 
+-class ClipperOffset 
++class CLIPPER_EXPORT ClipperOffset 
+ {
+ public:
+   ClipperOffset(double miterLimit = 2.0, double roundPrecision = 0.25);
+@@ -388,7 +406,7 @@
+ };
+ //------------------------------------------------------------------------------
+ 
+-class clipperException : public std::exception
++class CLIPPER_EXPORT clipperException : public std::exception
+ {
+   public:
+     clipperException(const char* description): m_descr(description) {}

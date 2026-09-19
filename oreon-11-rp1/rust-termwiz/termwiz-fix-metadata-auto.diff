@@ -1,0 +1,21 @@
+--- termwiz-0.22.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ termwiz-0.22.0/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -199,18 +199,3 @@
+ [target."cfg(unix)".dependencies.termios]
+ version = "0.3"
+ 
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3.9"
+-features = [
+-    "winbase",
+-    "winerror",
+-    "winnls",
+-    "winuser",
+-    "consoleapi",
+-    "handleapi",
+-    "fileapi",
+-    "synchapi",
+-    "memoryapi",
+-    "winnt",
+-    "impl-default",
+-]

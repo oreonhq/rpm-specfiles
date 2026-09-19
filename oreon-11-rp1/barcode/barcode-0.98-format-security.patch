@@ -1,0 +1,13 @@
+Patch to fix -Werror=format-security related build failure
+
+--- barcode-0.98/plessey.c			2000-11-07 18:43:18.000000000 +0100
++++ barcode-0.98/plessey.c.format-security	2017-08-03 23:54:16.724730732 +0200
+@@ -148,7 +148,7 @@
+                         checkptr[i+j] ^= check[j];
+     }
+     for (i = 0; i < 8; i++) {
+-        sprintf(ptr, patterns[checkptr[strlen(text) * 4 + i]]);
++        sprintf(ptr, "%s", patterns[checkptr[strlen(text) * 4 + i]]);
+ 	ptr += 2;
+     }
+     fprintf(stderr, "CRC: ");

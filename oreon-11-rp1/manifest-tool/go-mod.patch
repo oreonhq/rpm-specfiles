@@ -1,0 +1,7 @@
+diff -Nurp manifest-tool-1.0.3.orig/go.mod manifest-tool-1.0.3/go.mod
+--- manifest-tool-1.0.3.orig/go.mod	1969-12-31 19:00:00.000000000 -0500
++++ manifest-tool-1.0.3/go.mod	2021-06-11 09:10:23.837168653 -0400
+@@ -0,0 +1,3 @@
++module github.com/estesp/manifest-tool
++
++go 1.16

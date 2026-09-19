@@ -1,13 +1,13 @@
-%global source0_hash 8f3d3d61ec8a7456db8a75caa801a2e5f5e046728bd240a003e71b8813093ae4
+%global source0_hash b980fc74c3657efb840322ef35956c0caec07d9efa576cd52d86488937dcc815
 
 %global		framework attica
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.29.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks Tier 1 Addon with Open Collaboration Services API
 License:	CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -59,6 +59,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

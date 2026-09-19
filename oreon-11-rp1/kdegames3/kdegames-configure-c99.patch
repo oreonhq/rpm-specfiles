@@ -1,0 +1,24 @@
+diff --git a/admin/libtool.m4.in b/admin/libtool.m4.in
+index 7f5eed6d83a973fa..2bbbfe51b8801c9a 100644
+--- a/admin/libtool.m4.in
++++ b/admin/libtool.m4.in
+@@ -722,6 +722,8 @@ else
+ [#line __oline__ "configure"
+ #include "confdefs.h"
+ 
++#include <stdlib.h>
++
+ #if HAVE_DLFCN_H
+ #include <dlfcn.h>
+ #endif
+@@ -760,10 +762,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {

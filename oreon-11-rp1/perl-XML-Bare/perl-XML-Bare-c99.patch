@@ -1,0 +1,21 @@
+Include <stdlib.h> on all targets, for the malloc and free functions.
+This avoids implicit function declarations, which future compilers
+many no longer accept by default.
+
+Submitted upstream: <https://rt.cpan.org/Ticket/Display.html?id=145653>
+
+diff --git a/parser.c b/parser.c
+index 4d770e0efba0e336..26fbd4127fa64753 100644
+--- a/parser.c
++++ b/parser.c
+@@ -1,8 +1,6 @@
+ #include "parser.h"
+-#include<stdio.h>
+-#ifdef DARWIN
+-  #include "stdlib.h"
+-#endif
++#include <stdio.h>
++#include <stdlib.h>
+ #ifdef NOSTRING
+   void memset(char *s, int c, int n) {
+     char *se = s + n;

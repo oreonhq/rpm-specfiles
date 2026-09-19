@@ -1,0 +1,24 @@
+diff -ur z88dk/src/zcc/Makefile z88dk-makefile-flags/src/zcc/Makefile
+--- z88dk/src/zcc/Makefile	2014-03-20 04:01:24.000000000 +0100
++++ z88dk-makefile-flags/src/zcc/Makefile	2015-07-09 23:10:31.000000000 +0200
+@@ -8,7 +8,7 @@
+ all: zcc$(EXESUFFIX)
+ 
+ zcc$(EXESUFFIX):	$(OBJS)
+-	${CC} -o zcc$(EXESUFFIX) ${CFLAGS} ${CCOPT} ${OBJS}
++	${CC} -o zcc$(EXESUFFIX) ${LDFLAGS} ${OBJS}
+ 
+ install:
+ 	$(INSTALL) zcc$(EXESUFFIX) $(PREFIX)/bin/
+diff -ur z88dk/src/zx7/Makefile z88dk-makefile-flags/src/zx7/Makefile
+--- z88dk/src/zx7/Makefile	2015-01-22 22:31:32.000000000 +0100
++++ z88dk-makefile-flags/src/zx7/Makefile	2015-07-09 23:10:52.000000000 +0200
+@@ -1,7 +1,7 @@
+ 
+ INSTALL ?= install
+ 
+-OBJS = compress.c  optimize.c  zx7.c
++OBJS = compress.o  optimize.o  zx7.o
+ 
+ 
+ all: copt$(EXESUFFIX)

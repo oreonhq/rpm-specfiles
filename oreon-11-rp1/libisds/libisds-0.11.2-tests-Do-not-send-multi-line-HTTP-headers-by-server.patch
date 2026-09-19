@@ -1,0 +1,56 @@
+From 389b9c5bca3fe20c168fe5e9009a7106bb655042 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <petr.pisar@atlas.cz>
+Date: Sun, 15 May 2022 18:54:38 +0200
+Subject: [PATCH] tests: Do not send multi-line HTTP headers by server
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+cURL 7.83 started to error on multi-line HTTP headers. These headers
+were allowed by RFC 2616, but forbidden in RFC 7230. Raising an error is
+a bug in cURL. A client must process them.
+
+But it's a bug to produce these headers. A simulated server did so and
+simline tests failed on with the affected cURL:
+
+Testing unit: isds_change_password with TOTP
+        login: passed
+        First phase with invalid password: failed
+                reason: Wrong return code: expected=Not logged in, returned=Network problem (http://[::1]:39409/asws/changePassword: Weird
+server reply)
+
+This patch changes the multi-line headers into a single-line header.
+This is not accurate because the new-lines could be Base64 encoded, but
+it's a good approximation considering the server does not yet support
+RFC 2047 encoding.
+
+https://github.com/curl/curl/issues/8844
+Signed-off-by: Petr Písař <petr.pisar@atlas.cz>
+---
+ test/simline/http.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/test/simline/http.c b/test/simline/http.c
+index 93e7469..ee52115 100644
+--- a/test/simline/http.c
++++ b/test/simline/http.c
+@@ -557,10 +557,15 @@ static int http_write_header(const struct http_connection *connection,
+ 
+     if (header->name == NULL) return HTTP_ERROR_SERVER;
+ 
+-    /* TODO: Quote, split long lines */
++    /* TODO: Quote, encode non-ASCII as UTF-8 with RFC2047 into 70-character
++     * chunks. */
+     if (-1 == test_asprintf(&buffer, "%s: %s", header->name,
+                 (header->value == NULL) ? "" : header->value))
+         return HTTP_ERROR_SERVER;
++    /* RFC 7230 forbids multi-line headers specified in obsolete RFC 2616.
++     * Thus replace new-lines with a space. */
++    for (char *c = buffer; *c != '\0'; c++)
++        if ('\r' == *c || '\n' == *c) *c = '\x20';
+     error = http_write_line(connection, buffer);
+     free(buffer);
+ 
+-- 
+2.35.3
+

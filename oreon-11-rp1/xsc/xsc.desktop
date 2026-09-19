@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=xsc
+Exec=xsc
+Comment=Vector graphic shootemup
+Icon=xsc.png
+Terminal=false
+Categories=Game;ActionGame;
+StartupNotify=false

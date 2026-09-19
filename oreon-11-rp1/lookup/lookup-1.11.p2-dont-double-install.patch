@@ -1,0 +1,10 @@
+--- lookup-1.11.p2/src/src.pro.bak	2011-10-27 13:18:17.000000000 -0700
++++ lookup-1.11.p2/src/src.pro	2011-10-28 13:29:20.070232090 -0700
+@@ -30,7 +30,6 @@
+ # Default installation overwritten because qmake and debian both
+ # uses DESTDIR in different purposes
+ 
+-install.commands = -$(INSTALL_PROGRAM) $(TARGET) \"$(DESTDIR)\"$$MY_BIN_PATH$(QMAKE_TARGET)
+ install.depends = $(TARGET)
+ 
+ #

@@ -1,0 +1,68 @@
+diff -uNr basez-1.6.2.orig/Makefile.src basez-1.6.2/Makefile.src
+--- basez-1.6.2.orig/Makefile.src	2022-08-01 16:10:29.174151788 -0500
++++ basez-1.6.2/Makefile.src	2022-08-01 16:13:52.698816576 -0500
+@@ -116,14 +116,13 @@
+ 
+ BINLINKS=\
+ base16 \
+-hex \
+ base32plain \
+ base32hex \
+ base64plain \
+ base64url \
+ base64mime \
+ base64pem \
+-$(B32CMD) $(B64CMD) $(UNHEXCMD)
++$(B32CMD) $(B64CMD) $(UNHEXCMD) $(HEXCMD)
+ 
+ 
+ @IFNDEF@ INSTALL
+@@ -227,9 +226,11 @@
+              -e "s%_B32CMD_%$(B32CMD)%g" \
+              -e "s%_B64CMD_%$(B64CMD)%g" \
+              -e "s%_UNHEXCMD_%$(UNHEXCMD)%g" \
++             -e "s%_HEXCMD_%$(HEXCMD)%g" \
+              -e "s%_B32_%$(B32)%g" \
+              -e "s%_B64_%$(B64)%g" \
+              -e "s%_UNHEX_%$(UNHEX)%g" \
++             -e "s%_HEX_%$(HEX)%g" \
+              -e "s%_DEBFULLNAME_%$(DEBFULLNAME)%g" \
+              -e "s%_DEBEMAIL_%$(DEBEMAIL)%g" \
+              -e "s%_DEBDATE_%$(DEBDATE)%g" \
+diff -uNr basez-1.6.2.orig/configure basez-1.6.2/configure
+--- basez-1.6.2.orig/configure	2022-08-01 16:10:29.174151788 -0500
++++ basez-1.6.2/configure	2022-08-01 16:12:57.906830360 -0500
+@@ -70,6 +70,8 @@
+   echo "                       no base32 command"
+   echo " --disable-unhex-command"
+   echo "                       no unhex command"
++  echo " --disable-hex-command"
++  echo "                       no hex command"
+   echo
+   echo "Use full path names when providing arguments to the directory options."
+   echo
+@@ -188,6 +190,7 @@
+ CONFIG=configure.options
+ C=$CONFIG.tmp
+ 
++HEX=1
+ UNHEX=1
+ B32=1
+ B64=1
+@@ -200,6 +203,7 @@
+     --verbose)                VERBOSE="1"; shift;;
+     --debug)                  DEBUG="1"; shift;;
+     --disable-unhex-command)  UNHEX=; shift;;
++    --disable-hex-command)    HEX=; shift;;
+     --disable-base32-command) B32=; shift;;
+     --disable-base64-command) B64=; shift;;
+     --enable-*)               shift;;
+@@ -394,6 +398,8 @@
+      echo HAS_FSEEKO = ${HAS_FSEEKO:-"0"} >> $C
+      echo ${UNHEX:+"UNHEXCMD = unhex"} >> $C
+      echo UNHEX = ${UNHEX:-"0"} >> $C
++     echo ${HEX:+"HEXCMD = hex"} >> $C
++     echo HEX = ${HEX:-"0"} >> $C
+      echo ${B32:+"B32CMD = base32"} >> $C
+      echo ${B64:+"B64CMD = base64"} >> $C
+      echo B32 = ${B32:-"0"} >> $C

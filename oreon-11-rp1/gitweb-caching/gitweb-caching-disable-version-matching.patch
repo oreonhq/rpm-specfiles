@@ -1,0 +1,12 @@
+diff -uNr gitweb/gitweb/gitweb_defaults.perl gitweb.orig/gitweb/gitweb_defaults.perl
+--- gitweb/gitweb/gitweb_defaults.perl	2010-02-04 15:47:08.000000000 -0800
++++ gitweb.orig/gitweb/gitweb_defaults.perl	2010-02-04 15:41:16.000000000 -0800
+@@ -192,7 +192,7 @@
+ );
+ 
+ # This is here to allow for missmatch git & gitweb versions
+-$missmatch_git = '';
++$missmatch_git = 1;
+ 
+ #This is here to deal with an extra link on the summary pages - if it's left blank
+ # this link will not be shwon.  If it's set, this will be prepended to the repo and used

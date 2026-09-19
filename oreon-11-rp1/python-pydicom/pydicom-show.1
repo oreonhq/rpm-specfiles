@@ -1,0 +1,50 @@
+.TH PYDICOM\-SHOW "1" "September 2024" "" "User Commands"
+.SH NAME
+.B pydicom\-show
+\(en Display all or part of a DICOM file
+which can create that file
+.SH SYNOPSIS
+.B pydicom show
+.RB [ \-h ]
+.RB [ \-x ]
+.RB [ \-t ]
+.RB [ \-q ]
+.I filespec
+.RI [ outfile ]
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I filespec
+File specification, in format
+.RB [ pydicom:: ] \fIfilename [ ::element ].
+If
+.B pydicom::
+prefix is present, then use the pydicom test file with that name.
+If
+.B element
+is given, use only that data element within the file.
+.IP
+.I Examples:
+.BR path/to/your_file.dcm ,
+.BR your_file.dcm::StudyDate ,
+.BR pydicom::rtplan.dcm::BeamSequence[0] ,
+.B yourplan.dcm::BeamSequence[0].BeamNumber
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.TP
+.B \-x, \fB\-\-exclude\-private
+Don\(cqt show private data elements
+.TP
+.B \-t, \fB\-\-top
+Only show top level
+.TP
+.B \-q, \fB\-\-quiet
+Only show basic information
+.SH "SEE\ ALSO"
+.BR pydicom (1)
+.P
+.BR pydicom\-help (1),
+.BR pydicom\-codify (1)
+.\" .BR pydicom\-show (1)

@@ -1,0 +1,67 @@
+From 1a02515f5054853affe94c01a9516b310170246f Mon Sep 17 00:00:00 2001
+From: Jens Petersen <petersen@redhat.com>
+Date: Fri, 28 Jul 2023 14:27:00 +0800
+Subject: [PATCH] fix build of pas2c with ghc-9.4
+
+example error message:
+
+hedgewars-src-1.0.2/tools/pas2c/PascalBasics.hs:46:11: error:
+    Ambiguous occurrence string'
+    It could refer to
+       either Text.Parsec.Char.string',
+              imported from `Text.Parsec.Char' at /var/home/petersen/fedora/haskell/hedgewars/BUILD/hedgewars-src-1.0.2/tools/pas2c/PascalBasics.hs:5:1-23
+           or PascalBasics.string',
+              defined at /var/home/petersen/fedora/haskell/hedgewars/BUILD/hedgewars-src-1.0.2/tools/pas2c/PascalBasics.hs:17:1
+   |
+46 |     try $ string' "{$"
+   |           ^^^^^^^
+---
+ tools/pas2c/PascalBasics.hs       | 2 +-
+ tools/pas2c/PascalParser.hs       | 3 +--
+ tools/pas2c/PascalPreprocessor.hs | 2 +-
+ 3 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/tools/pas2c/PascalBasics.hs b/tools/pas2c/PascalBasics.hs
+index f4eba72f87..eaf4d596db 100644
+--- a/tools/pas2c/PascalBasics.hs
++++ b/tools/pas2c/PascalBasics.hs
+@@ -2,7 +2,7 @@
+ module PascalBasics where
+ 
+ import Text.Parsec.Combinator
+-import Text.Parsec.Char
++import Text.Parsec.Char hiding (string')
+ import Text.Parsec.Prim
+ import Text.Parsec.Token
+ import Text.Parsec.Language
+diff --git a/tools/pas2c/PascalParser.hs b/tools/pas2c/PascalParser.hs
+index 2edd7a2479..0f525c0e60 100644
+--- a/tools/pas2c/PascalParser.hs
++++ b/tools/pas2c/PascalParser.hs
+@@ -4,7 +4,7 @@ module PascalParser (
+     )
+     where
+ 
+-import Text.Parsec
++import Text.Parsec hiding (string')
+ import Text.Parsec.Token
+ import Text.Parsec.Expr
+ import Control.Monad
+@@ -720,4 +720,3 @@ redoUnit = do
+     string' "var"
+     v <- varsDecl True
+     return $ Redo (t ++ v)
+-
+diff --git a/tools/pas2c/PascalPreprocessor.hs b/tools/pas2c/PascalPreprocessor.hs
+index 4db8eaa8ae..93a176209c 100644
+--- a/tools/pas2c/PascalPreprocessor.hs
++++ b/tools/pas2c/PascalPreprocessor.hs
+@@ -1,7 +1,7 @@
+ {-# LANGUAGE ScopedTypeVariables #-}
+ module PascalPreprocessor where
+ 
+-import Text.Parsec
++import Text.Parsec hiding (string')
+ import Control.Monad.IO.Class
+ import Control.Monad
+ import System.IO

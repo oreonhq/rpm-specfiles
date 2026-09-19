@@ -43,8 +43,11 @@ Source9:        https://www-personal.umich.edu/~mejn/netdata/football.zip
 # - osmnx requires osmnx
 # - plot_lines requires momepy
 BuildArch:      noarch
+BuildSystem:    pyproject
 %if %{with doctest}
+BuildOption(generate_buildrequires): -x doc,example,extra,test
 %endif
+BuildOption(install): -l networkx
 
 BuildRequires:  make
 

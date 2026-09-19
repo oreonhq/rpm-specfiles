@@ -1,0 +1,42 @@
+[archive]
+
+[archive.dependency_overrides]
+"github.com/mholt/archives" = "v0.1.3"
+[licensing]
+detector = "askalono"
+exclude_files = ["vendor/github.com/xi2/xz/LICENSE", "vendor/github.com/sorairolake/lzip-go/README.md"]
+[[licensing.licenses]]
+path = "vendor/github.com/alecthomas/chroma/v2/COPYING"
+sha256sum = "e7bf754e7153012a3a8ff697d21acd6c12e590d6a55f2aef8ee83616aa9a795f"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/google/shlex/COPYING"
+sha256sum = "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+expression = "Apache-2.0"
+
+[[licensing.licenses]]
+path = "vendor/github.com/miekg/dns/COPYRIGHT"
+sha256sum = "66550c0ad5ca7ec1e08683e5f872cc45c741f311eee3b8ee484206ecbf9c740d"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/minio/selfupdate/LICENSE.minisig"
+sha256sum = "6c517a3e7546736b145b105ec326a0340d73e486b4b53d5740076aa568b0f921"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/github.com/mikelolasagasti/xz/LICENSE"
+sha256sum = "545b0a754bb40ce2fcf293ef90c869c85c7f75c83f0d5a1f6506c613bf7bed3d"
+expression = "0BSD"
+[[licensing.licenses]]
+path = "vendor/github.com/cloudflare/circl/LICENSE"
+sha256sum = "b0da1764fe4d13d610b695536fc3f2ebc362482d053a1cd258e36975bc6b97a7"
+expression = "BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/github.com/shirou/gopsutil/v3/LICENSE"
+sha256sum = "ad1e64b82c04fb2ee6bfe521bff01266971ffaa70500024d4ac767c6033aafb9"
+expression = "BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/gopkg.in/yaml.v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "MIT AND (MIT AND Apache-2.0)"

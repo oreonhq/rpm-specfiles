@@ -1,0 +1,133 @@
+.TH TEND\-HELIX "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-helix \- generate twisting helical tensor field
+.SH SYNOPSIS
+.B tend\ helix
+.RB [ \-s
+.RI < size >]
+.RB [ \-ip
+.RI < image\ orientation >]
+.RB [ \-mp
+.RI < measurement\ orientation >]
+.RB [ \-b
+.RI < boundary >]
+.RB [ \-r
+.RI < little\ radius >]
+.RB [ \-R
+.RI < big\ radius >]
+.RB [ \-S
+.RI < spacing >]
+.RB [ \-a
+.RI < angle >]
+.RB [ \-nit ]
+.RB [ \-ev
+.RI < eigenvalues >]
+.RB [ \-bg
+.RI < background >]
+.RB [ \-v
+.RI < verbose >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Generate twisting helical tensor field.
+The main utility of such a field is to debug handling of coordinate systems in
+tensor field visualization.
+The \(lqspace directions\(rq and \(lqspace origin\(rq fields of the NRRD header
+determines the mapping from coordinates in the index space of the image to
+coordinates in the world space in which the image is sampled.
+The \(lqmeasurement frame\(rq field determines the mapping from the coordinates
+of the tensor itself, to coordinates of the world space.
+When these are correctly handled, the region of high anisotropy is a
+right-handed helix (same as DNA).
+Using differing axes sizes (via
+.RB \(lq \-s \(rq)
+helps make sure that the raster ordering of axes is correct.
+In addition, the tensors twist relative to the helix, which exposes handling of
+the measurement frame.
+If you trace paths guided by the principal eigenvector of the tensors, along
+the surface of the helical cylinder, you get another right-handed helix, as if
+the the tensor field is modeling the result of twisting a set of fibers into
+single-stranded helical bundle.
+.SH OPTIONS
+.TP
+.B \-s\fR <\fIsize\fR>
+sizes along fast, medium, and slow axes of the sampled volume, often called
+\(lqX\(rq, \(lqY\(rq, and \(lqZ\(rq.
+It is best to use slightly different sizes here, to expose errors in
+interpreting axis ordering (e.g. \(lq\fB\-s\ 39\ 40\ 41\fR\(rq) (3 \fIint\fRs)
+.TP
+.B \-ip\fR <\fIimage\ orientation\fR>
+quaternion quotient space orientation of image (3 \fIdouble\fRs); default:
+.RB \(lq 0\ 0\ 0 \(rq
+.TP
+.B \-mp\fR <\fImeasurement\ orientation\fR>
+quaternion quotient space orientation of measurement frame (3 \fIdouble\fRs);
+default:
+.RB \(lq 0\ 0\ 0 \(rq
+.TP
+.B \-b\fR <\fIboundary\fR>
+parameter governing how fuzzy the boundary between high and low anisotropy is.
+Use
+.RB \(lq \-b\ 0 \(rq
+for no fuzziness
+.RI ( double );
+default:
+.RB \(lq 10 \(rq
+.TP
+.B \-r\fR <\fIlittle\ radius\fR>
+(minor) radius of cylinder tracing helix
+.RI ( double );
+default:
+.RB \(lq 30 \(rq
+.TP
+.B \-R\fR <\fIbig\ radius\fR>
+(major) radius of helical turns
+.RI ( double );
+default:
+.RB \(lq 50 \(rq
+.TP
+.B \-S\fR <\fIspacing\fR>
+spacing between turns of helix (along its axis)
+.RI ( double );
+default:
+.RB \(lq 100 \(rq
+.TP
+.B \-a\fR <\fIangle\fR>
+maximal angle of twist of tensors along path.
+There is no twist at helical core of path, and twist increases linearly with
+radius around this path.
+Positive twist angle with positive spacing resulting in a right-handed twist
+around a right-handed helix.
+.RI ( double );
+default:
+.RB \(lq 60 \(rq
+.TP
+.B \-nit
+changes behavior of twist angle as function of distance from center of helical
+core: instead of increasing linearly as describe above, be at a constant angle
+.TP
+.B \-ev\fR <\fIeigenvalues\fR>
+eigenvalues of tensors (in order) along direction of coil, circumferential
+around coil, and radial around coil.
+(3 \fIdouble\fRs); default:
+.RB \(lq 0.006\ 0.002\ 0.001 \(rq
+.TP
+.B \-bg\fR <\fIbackground\fR>
+eigenvalue of isotropic background
+.RI ( double );
+default:
+.RB \(lq 0.5 \(rq
+.TP
+.B \-v\fR <\fIverbose\fR>
+verbose output
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output file
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

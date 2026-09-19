@@ -1,0 +1,12 @@
+diff -up ldapdiff-1.4.1/ldaplog.c.fs ldapdiff-1.4.1/ldaplog.c
+--- ldapdiff-1.4.1/ldaplog.c.fs	2008-10-23 21:10:05.000000000 +0200
++++ ldapdiff-1.4.1/ldaplog.c	2014-03-02 23:08:50.167117726 +0100
+@@ -69,7 +69,7 @@ static void ldiflogsyslog(int aloglevel,
+   case LOG2 : level = LOG_DEBUG;
+        break;
+  }
+- syslog(level,msg);
++ syslog(level,"%s", msg);
+  closelog();
+ }
+ 

@@ -1,0 +1,44 @@
+diff --git Makefile.in Makefile.in
+--- Makefile.in.doc	2019-11-20 02:32:12.000000000 +0100
++++ Makefile.in	2020-05-03 10:25:29.060273121 +0200
+@@ -99,7 +99,7 @@
+ install: all @TCL_EXTS@ install-exec install-docs
+ 	$(INSTALL_DATA_DIR) $(DESTDIR)@libdir@/jim
+ 	$(INSTALL_DATA) $(LIBJIM) $(DESTDIR)@libdir@
+-	$(INSTALL_DATA) @srcdir@/README.extensions @C_EXT_SHOBJS@ $(DESTDIR)@libdir@/jim
++	$(INSTALL_DATA) @srcdir@/README.extensions @C_EXT_SHOBJS@ $(DESTDIR)@datadir@/doc/jimtcl
+ 	for i in tcltest.tcl @TCL_EXTS@; do $(INSTALL_DATA) @srcdir@/$$i $(DESTDIR)@libdir@/jim; done
+ 	$(INSTALL_DATA_DIR) $(DESTDIR)@includedir@
+ 	$(INSTALL_DATA) @srcdir@/jim.h @srcdir@/jim-eventloop.h @srcdir@/jim-signal.h \
+@@ -118,9 +118,9 @@
+ 	rm -f $(DESTDIR)@bindir@/$(JIMSH)
+ 	rm -f $(DESTDIR)@bindir@/build-jim-ext
+ 	rm -f $(DESTDIR)@libdir@/$(LIBJIM)
+-	for i in README.extensions @C_EXT_SHOBJS@ @TCL_EXTS@; do rm -f $(DESTDIR)@libdir@/jim/$$i; done
++	for i in README.extensions @C_EXT_SHOBJS@ @TCL_EXTS@; do rm -f $(DESTDIR)@datadir@/doc/jimtcl/$$i; done
+ 	rm -f $(DESTDIR)@includedir@/jim*.h
+-	rm -f $(DESTDIR)@datadir@/doc/jim/Tcl.html
++	rm -f $(DESTDIR)@datadir@/doc/jimtcl/Tcl.html
+ @else
+ install install-exec: all
+ uninstall:
+@@ -164,15 +164,15 @@
+ 
+ @if INSTALL_DOCS eq "docs"
+ install-docs: docs
+-	$(INSTALL_DATA_DIR) $(DESTDIR)$(docdir)
+-	$(INSTALL_DATA) Tcl.html $(DESTDIR)$(docdir)
++	$(INSTALL_DATA_DIR) $(DESTDIR)@datadir@$(docdir)
++	$(INSTALL_DATA) Tcl.html $(DESTDIR)@datadir@$(docdir)
+ @endif
+ 
+ @if INSTALL_DOCS eq "shipped"
+ install-docs:
+-	$(INSTALL_DATA_DIR) $(DESTDIR)$(docdir)
++	$(INSTALL_DATA_DIR) $(DESTDIR)@datadir@$(docdir)
+ 	@echo "Warning: asciidoc not available - installing Tcl_shipped.html"
+-	$(INSTALL_DATA) Tcl_shipped.html $(DESTDIR)$(docdir)/Tcl.html
++	$(INSTALL_DATA) Tcl_shipped.html $(DESTDIR)@datadir@$(docdir)/Tcl.html
+ @endif
+ 
+ Tcl.html: jim_tcl.txt @srcdir@/make-index

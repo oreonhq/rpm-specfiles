@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>hiran-perizia</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Perizia</name>
+  <summary>English asymmetric font</summary>
+  <description>
+    <p>
+      Perizia is an asymmetric English font.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://hiran.in/blog/thanks-perizia-is-now-a-font</url>
+</component>

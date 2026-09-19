@@ -1,0 +1,334 @@
+From f1993259bdd967e44892acfe3bd88adc56be9f77 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hansg@kernel.org>
+Date: Sat, 30 Aug 2025 16:18:38 +0200
+Subject: [PATCH 2/3] Replace all occurences of www.marsshooter.org with
+ mars-game.sourceforge.net
+
+The marsshooter.org domain has been taken over by a 3th party and is
+filled with spam now. Replace all occurences with mars-game.sourceforge.net,
+as was already done in README.md a while ago.
+---
+ CMakeLists.txt                    | 2 +-
+ data/locales/Arabic.txt           | 2 +-
+ data/locales/Chinese.txt          | 2 +-
+ data/locales/Czech.txt            | 2 +-
+ data/locales/Deutsch.txt          | 2 +-
+ data/locales/Dutch.txt            | 2 +-
+ data/locales/English.txt          | 2 +-
+ data/locales/Espanol.txt          | 2 +-
+ data/locales/Francais.txt         | 2 +-
+ data/locales/Gaelic.txt           | 2 +-
+ data/locales/Hindi.txt            | 2 +-
+ data/locales/Hungarian.txt        | 2 +-
+ data/locales/Italian.txt          | 2 +-
+ data/locales/Mongolian.txt        | 2 +-
+ data/locales/Norwegian.txt        | 2 +-
+ data/locales/Polish.txt           | 2 +-
+ data/locales/Portugues.txt        | 2 +-
+ data/locales/Russian.txt          | 2 +-
+ data/locales/Suomi.txt            | 2 +-
+ data/locales/Svenska.txt          | 2 +-
+ data/locales/Thai.txt             | 2 +-
+ license.txt                       | 2 +-
+ resources/marsshooter.appdata.xml | 2 +-
+ 23 files changed, 23 insertions(+), 23 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 625c30d..4494ad1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,7 +10,7 @@ set(mars_MINOR 7)
+ set(mars_PATCH 5)
+ set(mars_VERSION ${mars_MAJOR}.${mars_MINOR}.${mars_PATCH})
+ set(mars_DESCRIPTION "M.A.R.S. - a ridiculous Shooter")
+-set(mars_HOMEPAGE "http://www.marsshooter.org")
++set(mars_HOMEPAGE "http://mars-game.sourceforge.net")
+ set(mars_EXENAME "marsshooter")
+ set(mars_PACKAGENAME "mars")
+  
+diff --git a/data/locales/Arabic.txt b/data/locales/Arabic.txt
+index 6e10293..fdddaee 100644
+--- a/data/locales/Arabic.txt
++++ b/data/locales/Arabic.txt
+@@ -110,7 +110,7 @@
+ 
+ // about
+ 
+-057 هذه أولى محاولاتي لإنشاء لعبة في أوبن‌جي‌إل باستخدام SFML. إنها لعبة لشخصين يقودان سفنًا في مشهد فضائي ثنائي الأبعاد تحكمه قوانين الجاذبية. \n\nالموقع الإلكتروني: \nhttp://www.marsshooter.org
++057 هذه أولى محاولاتي لإنشاء لعبة في أوبن‌جي‌إل باستخدام SFML. إنها لعبة لشخصين يقودان سفنًا في مشهد فضائي ثنائي الأبعاد تحكمه قوانين الجاذبية. \n\nالموقع الإلكتروني: \nhttp://mars-game.sourceforge.net
+ 
+ // license
+ 
+diff --git a/data/locales/Chinese.txt b/data/locales/Chinese.txt
+index 2b65135..dd57d7c 100644
+--- a/data/locales/Chinese.txt
++++ b/data/locales/Chinese.txt
+@@ -134,7 +134,7 @@
+ 
+ // about
+ 
+-057 M.A.R.S.是对用OpenGL和SFML制作游戏的一次尝试。\n这是一个适合最多两人进行的在二维宇宙中飞行的游戏，当然一切都是在重力的影响下进行的(:-P)。\n\n项目主页：\nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 M.A.R.S.是对用OpenGL和SFML制作游戏的一次尝试。\n这是一个适合最多两人进行的在二维宇宙中飞行的游戏，当然一切都是在重力的影响下进行的(:-P)。\n\n项目主页：\nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Czech.txt b/data/locales/Czech.txt
+index fa00ee8..fa7ed2c 100644
+--- a/data/locales/Czech.txt
++++ b/data/locales/Czech.txt
+@@ -130,7 +130,7 @@
+ 
+ // about
+ 
+-057 Toto je první pokus o vytvoření hry v OpenGL se SFML. Jedná se o hru pro dva hráče, létání s loděmi v dvourozměrném prostoru, ovládaného zákony gravitace. \n\nDomovská stránka: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Toto je první pokus o vytvoření hry v OpenGL se SFML. Jedná se o hru pro dva hráče, létání s loděmi v dvourozměrném prostoru, ovládaného zákony gravitace. \n\nDomovská stránka: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Deutsch.txt b/data/locales/Deutsch.txt
+index ac33ad4..d33596b 100644
+--- a/data/locales/Deutsch.txt
++++ b/data/locales/Deutsch.txt
+@@ -128,7 +128,7 @@
+ 
+ // Über
+ 
+-057 M.A.R.S. ist der erste Versuch, ein Spiel in OpenGL mit SFML zu erstellen. Steuer alleine oder zu zweit dein Weltraumschiff durch eine zweidimensionale Galaxis, beherrscht von den Kräften der Schwerkraft.\n\nHomepage: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 M.A.R.S. ist der erste Versuch, ein Spiel in OpenGL mit SFML zu erstellen. Steuer alleine oder zu zweit dein Weltraumschiff durch eine zweidimensionale Galaxis, beherrscht von den Kräften der Schwerkraft.\n\nHomepage: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // Lizenz
+ 
+diff --git a/data/locales/Dutch.txt b/data/locales/Dutch.txt
+index 2eb0860..cbc1049 100644
+--- a/data/locales/Dutch.txt
++++ b/data/locales/Dutch.txt
+@@ -124,7 +124,7 @@
+ 
+ // about
+ 
+-057 Dit is de eerste poging voor een spel in OenGL met SFML. Het is een spel voor twee spelers, met schepen in een twee-dimensionale omgeving die geregeerd word door de wetten der zwaartekracht. \n\nHomepage: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Dit is de eerste poging voor een spel in OenGL met SFML. Het is een spel voor twee spelers, met schepen in een twee-dimensionale omgeving die geregeerd word door de wetten der zwaartekracht. \n\nHomepage: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/English.txt b/data/locales/English.txt
+index 5d55cfe..e38eb17 100644
+--- a/data/locales/English.txt
++++ b/data/locales/English.txt
+@@ -131,7 +131,7 @@
+ 
+ // about
+ 
+-057 This is a first attempt to create a game in OpenGL with SFML. It is a game for two players, flying with ships in a two-dimensional space setting, governed by the laws of gravity. \n\nHomepage: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 This is a first attempt to create a game in OpenGL with SFML. It is a game for two players, flying with ships in a two-dimensional space setting, governed by the laws of gravity. \n\nHomepage: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Espanol.txt b/data/locales/Espanol.txt
+index dfe1e2e..eca4ef0 100644
+--- a/data/locales/Espanol.txt
++++ b/data/locales/Espanol.txt
+@@ -129,7 +129,7 @@
+ 
+ // Sobre
+ 
+-057 Este es un primer intento de crear un juego en OpenGL con SFML. Es un juego para dos jugadores, volando con naves en un entorno espacial de dos dimensiones, que se rige por las leyes de la gravedad. \n \nHomepage: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Este es un primer intento de crear un juego en OpenGL con SFML. Es un juego para dos jugadores, volando con naves en un entorno espacial de dos dimensiones, que se rige por las leyes de la gravedad. \n \nHomepage: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // Licencia
+ 
+diff --git a/data/locales/Francais.txt b/data/locales/Francais.txt
+index 3018b4d..841b88b 100644
+--- a/data/locales/Francais.txt
++++ b/data/locales/Francais.txt
+@@ -130,7 +130,7 @@
+ 
+ // about
+ 
+-057 Ceci est une première ébauche dans la création d'un jeu en OpenGL avec SFML. C'est un jeu pour deux joueurs, pilotant des vaisseaux dans une configuration spatiale en deux dimensions, régie par les lois de la gravité. \n\nPage d'acceuil: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Ceci est une première ébauche dans la création d'un jeu en OpenGL avec SFML. C'est un jeu pour deux joueurs, pilotant des vaisseaux dans une configuration spatiale en deux dimensions, régie par les lois de la gravité. \n\nPage d'acceuil: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // licence
+ 
+diff --git a/data/locales/Gaelic.txt b/data/locales/Gaelic.txt
+index 2972abb..f1e09e2 100644
+--- a/data/locales/Gaelic.txt
++++ b/data/locales/Gaelic.txt
+@@ -131,7 +131,7 @@
+ 
+ // about
+ 
+-057 Seo a' chiad oidhirp gus geama a chruthachadh ann an OpenGL le SFML. Seo geama airson dà chluicheadair a stiùiricheas soithichean ann am fànais le dà dhimeinsean fo bhuaidh laghan an iom-tharraing. \n\nDuilleag-dhachaigh: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer agus Simon Schneegans
++057 Seo a' chiad oidhirp gus geama a chruthachadh ann an OpenGL le SFML. Seo geama airson dà chluicheadair a stiùiricheas soithichean ann am fànais le dà dhimeinsean fo bhuaidh laghan an iom-tharraing. \n\nDuilleag-dhachaigh: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer agus Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Hindi.txt b/data/locales/Hindi.txt
+index 3ec113b..d6aa07a 100644
+--- a/data/locales/Hindi.txt
++++ b/data/locales/Hindi.txt
+@@ -135,7 +135,7 @@
+ 
+ // about
+ 
+-057 यह एस.एफ.एम.एल से ओपन-जीएल में बनाए खेल का पहला प्रयास है. यह दो लोगों के दिए खेल है जिसमे वे दो आयामों में शिप उड़ते हैं, जिसमे गुरुत्वाकर्षण काम करता है. \n\nवेबसाइट: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 यह एस.एफ.एम.एल से ओपन-जीएल में बनाए खेल का पहला प्रयास है. यह दो लोगों के दिए खेल है जिसमे वे दो आयामों में शिप उड़ते हैं, जिसमे गुरुत्वाकर्षण काम करता है. \n\nवेबसाइट: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ 
+ 
+diff --git a/data/locales/Hungarian.txt b/data/locales/Hungarian.txt
+index 9f6ab01..a326264 100644
+--- a/data/locales/Hungarian.txt
++++ b/data/locales/Hungarian.txt
+@@ -136,7 +136,7 @@
+ 
+ // about
+ 
+-057 Ez az első próbálkozás egy, az SMFL segítségével OpenGL-ben megírt játék elkészítésére. Ez egy kétszemélyes játék, ahol űrhajókkal repülhetsz egy kétdimenziós űrben a gravitáció törvényeinek érvényesülése mellett. \n\nHonlap: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Ez az első próbálkozás egy, az SMFL segítségével OpenGL-ben megírt játék elkészítésére. Ez egy kétszemélyes játék, ahol űrhajókkal repülhetsz egy kétdimenziós űrben a gravitáció törvényeinek érvényesülése mellett. \n\nHonlap: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Italian.txt b/data/locales/Italian.txt
+index 6e26cbe..2a7164b 100644
+--- a/data/locales/Italian.txt
++++ b/data/locales/Italian.txt
+@@ -131,7 +131,7 @@
+ 
+ // about
+ 
+-057 Questo è il primo tentativo di creare un gioco in OpenGL con SFML. È un gioco per due persone che controllano delle navicelle in uno spazio bidimensionale governato dalle leggi della gravità. \n\nHomepage: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Questo è il primo tentativo di creare un gioco in OpenGL con SFML. È un gioco per due persone che controllano delle navicelle in uno spazio bidimensionale governato dalle leggi della gravità. \n\nHomepage: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Mongolian.txt b/data/locales/Mongolian.txt
+index d879247..28a59f6 100644
+--- a/data/locales/Mongolian.txt
++++ b/data/locales/Mongolian.txt
+@@ -124,7 +124,7 @@
+ 
+ // about
+ 
+-057 Энэ тоглоом нь анхны дэмжлэг болох OpenGL болон SFML дээр суурилсан. 2 тоглогчоос бүрдэх бөгөөд, сансар дээр явах хөлөгийг тухай ба, дэлхийн таталцлын хуулиас санаачласан болно. \n\nВебсайт: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Энэ тоглоом нь анхны дэмжлэг болох OpenGL болон SFML дээр суурилсан. 2 тоглогчоос бүрдэх бөгөөд, сансар дээр явах хөлөгийг тухай ба, дэлхийн таталцлын хуулиас санаачласан болно. \n\nВебсайт: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Norwegian.txt b/data/locales/Norwegian.txt
+index ef850d7..a9dfa57 100644
+--- a/data/locales/Norwegian.txt
++++ b/data/locales/Norwegian.txt
+@@ -130,7 +130,7 @@
+ 
+ // about
+ 
+-057 Dette er første forsøk på å lage et spill i OpenGL ved hjelp av SFML. Dette er et spill for to spillere hvor dere styrer romskipene i et todimensjonalt spillmiljø, begrenset av tyngdekraftens påvirkning. \n\nHomepage: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Dette er første forsøk på å lage et spill i OpenGL ved hjelp av SFML. Dette er et spill for to spillere hvor dere styrer romskipene i et todimensjonalt spillmiljø, begrenset av tyngdekraftens påvirkning. \n\nHomepage: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Polish.txt b/data/locales/Polish.txt
+index 2f7546c..0c60229 100644
+--- a/data/locales/Polish.txt
++++ b/data/locales/Polish.txt
+@@ -130,7 +130,7 @@
+ 
+ // about
+ 
+-057 Jest to pierwsza próba stworzenia gry w OpenGL z SFML (Simple and Fast Multimedia Library). Jest to gra dla dwóch graczy, gdzie lata się statkami kosmicznymi w dwuwymiarowej przestrzeni, w której rządzą prawa grawitacji. \n\nStrona domowa projektu: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Jest to pierwsza próba stworzenia gry w OpenGL z SFML (Simple and Fast Multimedia Library). Jest to gra dla dwóch graczy, gdzie lata się statkami kosmicznymi w dwuwymiarowej przestrzeni, w której rządzą prawa grawitacji. \n\nStrona domowa projektu: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Portugues.txt b/data/locales/Portugues.txt
+index 14534e9..1b146af 100644
+--- a/data/locales/Portugues.txt
++++ b/data/locales/Portugues.txt
+@@ -139,7 +139,7 @@
+ 
+ // about
+ 
+-057 Esta é a primeira tentativa de criar um jogo em OpenGL com SFML. É um jogo para dois jogadores, controlando naves em uma configuração de espaço bidimensional, governada pelas leis da gravidade. \n\nSite: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Esta é a primeira tentativa de criar um jogo em OpenGL com SFML. É um jogo para dois jogadores, controlando naves em uma configuração de espaço bidimensional, governada pelas leis da gravidade. \n\nSite: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Russian.txt b/data/locales/Russian.txt
+index 133a5c5..5d97566 100644
+--- a/data/locales/Russian.txt
++++ b/data/locales/Russian.txt
+@@ -130,7 +130,7 @@
+ 
+ // about
+ 
+-057 Это первая попытка сделать игру с использование OpenGL и SFML. Эта игра для двух игроков, летающих на кораблях в двухмерном космическом пространстве, управляемом законами гравитации. \n\nДомашняя страница: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Это первая попытка сделать игру с использование OpenGL и SFML. Эта игра для двух игроков, летающих на кораблях в двухмерном космическом пространстве, управляемом законами гравитации. \n\nДомашняя страница: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Suomi.txt b/data/locales/Suomi.txt
+index e4a95c7..8409c94 100644
+--- a/data/locales/Suomi.txt
++++ b/data/locales/Suomi.txt
+@@ -130,7 +130,7 @@
+ 
+ // about
+ 
+-057 This is a first attempt to create a game in OpenGL with SFML. It is a game for two players, flying with ships in a two-dimensional space setting, governed by the laws of gravity. \n\nHomepage: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 This is a first attempt to create a game in OpenGL with SFML. It is a game for two players, flying with ships in a two-dimensional space setting, governed by the laws of gravity. \n\nHomepage: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Svenska.txt b/data/locales/Svenska.txt
+index f13d1af..4503d2c 100644
+--- a/data/locales/Svenska.txt
++++ b/data/locales/Svenska.txt
+@@ -132,7 +132,7 @@
+ 
+ // about
+ 
+-057 Detta är ett första försök att skapa ett spel i OpenGL med SFML. Det är ett spel för två spelare, som flyger rymdskepp i en tvådimensionell värld som styrs av gravitationslagen. \n\nHemsida: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 Detta är ett första försök att skapa ett spel i OpenGL med SFML. Det är ett spel för två spelare, som flyger rymdskepp i en tvådimensionell värld som styrs av gravitationslagen. \n\nHemsida: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/data/locales/Thai.txt b/data/locales/Thai.txt
+index 702d3ba..0274f4a 100644
+--- a/data/locales/Thai.txt
++++ b/data/locales/Thai.txt
+@@ -130,7 +130,7 @@
+ 
+ // about
+ 
+-057 นี่คือความพยายามครั้งแรกของการสร้างเกมใน OpenGL กับ SFML มันเป็นเกมสำหรับ 2 ผู้เล่น, บินกับยานที่ตั้งค่าแบบ 2 มิติในอวกาศ, และถูกควบคุมโดยกฎของแรงโน้มถ่วง \n\nโฮมเพจ: \nhttp://www.marsshooter.org\n\n© 2010-2011 Felix Lauer & Simon Schneegans
++057 นี่คือความพยายามครั้งแรกของการสร้างเกมใน OpenGL กับ SFML มันเป็นเกมสำหรับ 2 ผู้เล่น, บินกับยานที่ตั้งค่าแบบ 2 มิติในอวกาศ, และถูกควบคุมโดยกฎของแรงโน้มถ่วง \n\nโฮมเพจ: \nhttp://mars-game.sourceforge.net\n\n© 2010-2011 Felix Lauer & Simon Schneegans
+ 
+ // license
+ 
+diff --git a/license.txt b/license.txt
+index eec1855..163a6ef 100644
+--- a/license.txt
++++ b/license.txt
+@@ -18,4 +18,4 @@ more details.
+ You should have received a copy of the GNU General Public License along with
+ this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+-The Sourcecode of M.A.R.S. can be found at http://www.marsshooter.org/
++The Sourcecode of M.A.R.S. can be found at http://mars-game.sourceforge.net/
+diff --git a/resources/marsshooter.appdata.xml b/resources/marsshooter.appdata.xml
+index 38321b1..a071e52 100644
+--- a/resources/marsshooter.appdata.xml
++++ b/resources/marsshooter.appdata.xml
+@@ -19,7 +19,7 @@
+      planet from the oncoming doom of your jealous neighbours!
+     </p>
+   </description>
+-  <url type="homepage">http://www.marsshooter.org/</url>
++  <url type="homepage">http://mars-game.sourceforge.net/</url>
+   <screenshots>
+     <screenshot type="default">http://mars-game.sourceforge.net/wordpress/wp-content/uploads/gallery/revision_175/screenshot_111211105029.jpg</screenshot>
+     <screenshot>http://mars-game.sourceforge.net/wordpress/wp-content/uploads/gallery/revision_175/screenshot_111211104719.jpg</screenshot>
+-- 
+2.51.0
+

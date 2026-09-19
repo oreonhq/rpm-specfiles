@@ -1,0 +1,83 @@
+These are quick instructions on how to get Red Hat Enterprise Linux running
+with Hercules.
+
+Red Hat Enterprise Linux 4 and 5 steps :
+======================================
+
+Prepare hercules :
+================
+- Install : yum install hercules
+- Edit /etc/hercules/hercules.cnf and change ARCHMODE if needed :
+  - ESA/390 for s390
+  - ESAME for s390x
+- Create HD image : dasdinit -z /var/lib/hercules/linux.120 3390-3 lin000
+  (substitute -lpf or -0 for -z if you wish to use a non-compressed image)
+- Mount the first installation CD
+- Run : hercules-run
+- Start installation : ipl /media/cdrom/generic.ins
+
+Note that when running Hercules, all commands sent to the OS must be prefixed
+by a dot. When not prefixed, commands are sent to Hercules itself (like "ipl").
+
+OS installation example steps :
+=============================
+Which kind of network device do you intend to use:
+.ctc
+Enter the bus ID and the device number of your CCW devices:
+.0.0.0600,0.0.0601
+Enter the FQDN of your new Linux guest:
+.s390.localdomain
+Enter the IP address of your new Linux guest:
+.192.168.200.3
+Enter the network address of the new Linux guest:
+.255.255.255.252
+Enter the IP of your CTC / ESCON / IUCV point-to-point partner:
+.192.168.200.4
+Select which protocol should be used for the CTC interface:
+.0
+Enter your DNS server(s), separated by colons (:):
+.192.168.1.1:192.168.1.2
+Enter your DNS search domain(s) (if any), separated by colons (:):
+.localdomain
+Enter DASD range (e.g. 200-203   or  200,201,202,203):
+.000-200
+
+--
+Alternatively, you can copy initrd.img and kernel.img from your installation
+media into /etc/hercules and start the installation via 'ipl 00c', which uses
+the virtual punch card defined in hercules.cnf and auto-fills in most of the
+networking options for you, based on the contents of /etc/hercules/generic.prm.
+--
+
+Use "telnet 192.168.200.3" and log in as "root" with no password (press enter).
+The installation will start automatically.
+
+
+Appendix :
+
+Red Hat Linux 7.2 steps :
+=======================
+
+- Mount the installation CD and run "ipl /mnt/cdrom/redhat.ins"
+  or
+- Copy all files from the os/images/ directory to /etc/hercules/
+- Replace in hercules.cnf the line :
+000C  3505 kernel.img generic.prm initrd.img autopad
+  with :
+000C  3505 kernel.img redhat.prm initrd.img autopad
+  And :
+0580  3420 /etc/hercules/tape.tdf
+  with :
+0580  3420 /etc/hercules/redhat.tdf
+
+- Commands :
+ipl 000C
+.s390.localdomain
+.ctc0
+.ctc0,0x600,0x601
+.192.168.200.3
+.192.168.200.4
+.192.168.1.1
+.localdomain
+.120
+

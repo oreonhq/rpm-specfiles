@@ -1,0 +1,11 @@
+diff -up Hermes-1.3.3/configure.in~ Hermes-1.3.3/configure.in
+--- Hermes-1.3.3/configure.in~	2003-06-04 10:00:12.000000000 +0200
++++ Hermes-1.3.3/configure.in	2021-02-06 16:35:20.934791433 +0100
+@@ -35,6 +35,7 @@ AC_SUBST(HERMES_AGE)
+ AM_INIT_AUTOMAKE(hermes, $HERMES_VERSION)
+ AC_LIBTOOL_WIN32_DLL
+ AM_PROG_LIBTOOL
++AM_PROG_AS
+ dnl AM_MAINTAINER_MODE
+ dnl AM_DISABLE_STATIC
+ 

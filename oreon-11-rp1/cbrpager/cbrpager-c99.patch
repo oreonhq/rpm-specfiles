@@ -1,0 +1,30 @@
+C compatibility fix for a -Wreturn-mismatch issue.
+
+Submitted upstream: <https://sourceforge.net/p/cbrpager/support-requests/5/>
+
+diff --git a/src/global.c b/src/global.c
+index 0a1faae894f43275..58122790db37deec 100644
+--- a/src/global.c
++++ b/src/global.c
+@@ -728,6 +728,7 @@ gboolean
+ main_canvas_keypressed(GdkEventKey *event)
+ {
+ printf("Key1: %04x\n", event->keyval);
++  return TRUE;
+ }
+ 
+ gboolean
+@@ -772,11 +773,12 @@ printf("Key: %04x\n", event->keyval);
+         wdg = "quit_btn";
+         break;			// End patch from Ilja Pyykkönen 2005/09/04
+     default:
+-      return;
++      return TRUE;
+   }
+   
+   w = lookup_widget(nav_window, wdg);
+   g_signal_emit_by_name(w, "clicked", NULL);
++  return TRUE;
+ }
+ 
+ 

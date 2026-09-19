@@ -1,0 +1,25 @@
+From 2e6440a9f211508e1367fb35646567b456df021d Mon Sep 17 00:00:00 2001
+From: Mikel Olasagasti Uranga <mikel@olasagasti.info>
+Date: Wed, 10 Apr 2024 17:37:50 +0200
+Subject: [PATCH 3/3] Change InaccessiblePaths from systemd service
+
+---
+ util/endlessh.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/util/endlessh.service b/util/endlessh.service
+index f997293..a1d76b8 100644
+--- a/util/endlessh.service
++++ b/util/endlessh.service
+@@ -22,7 +22,7 @@ PrivateTmp=true
+ PrivateDevices=true
+ ProtectSystem=full
+ ProtectHome=true
+-InaccessiblePaths=/run /var
++InaccessiblePaths=/var
+ 
+ ## If you want Endlessh to bind on ports < 1024
+ ## 1) run: 
+-- 
+2.44.0
+

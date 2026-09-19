@@ -1,0 +1,11 @@
+--- a/cachelib/compact_cache/CCacheFixedLruBucket.h
++++ b/cachelib/compact_cache/CCacheFixedLruBucket.h
+@@ -274,7 +274,7 @@ struct FixedLruBucket {
+   static void copyValue(T* destPtr, const T* srcPtr) {
+     XDCHECK(destPtr != nullptr);
+     XDCHECK(srcPtr != nullptr);
+-    memcpy(destPtr, srcPtr, sizeof(T));
++    memcpy(reinterpret_cast<void *>(destPtr), reinterpret_cast<const void *>(srcPtr), sizeof(T));
+   }
+ };
+ } // namespace cachelib

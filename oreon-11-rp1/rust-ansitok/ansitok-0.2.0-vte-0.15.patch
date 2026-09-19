@@ -1,0 +1,16 @@
+diff --git a/src/parse/ansi_parser.rs b/src/parse/ansi_parser.rs
+index acd1ff3..d41e6e0 100644
+--- a/src/parse/ansi_parser.rs
++++ b/src/parse/ansi_parser.rs
+@@ -58,7 +58,7 @@ impl AnsiIterator<'_> {
+ 
+     fn advance_vte(&mut self, byte: u8) {
+         let mut performer = Performer::default();
+-        self.machine.advance(&mut performer, byte);
++        self.machine.advance(&mut performer, &[byte]);
+         self.element = performer.element;
+         self.text_length += performer.text_length;
+         self.pos += 1;
+-- 
+GitLab
+

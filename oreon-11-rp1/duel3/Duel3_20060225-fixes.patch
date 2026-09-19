@@ -1,0 +1,1167 @@
+--- Duel3_20060225_src/Source/PObject.h.fixes	2006-02-18 01:17:42.000000000 +0100
++++ Duel3_20060225_src/Source/PObject.h	2007-01-31 21:07:51.000000000 +0100
+@@ -14,8 +14,8 @@
+ 
+ #include "CVector2.h"
+ #include "Object.h"
+-#include "ParticleSystem.h"
+-#include "ParticleGenerator.h"
++#include "particlesystem.h"
++#include "particlegenerator.h"
+ #include "BRect.h"
+ #include "SObject.h"
+ 
+--- Duel3_20060225_src/Source/Button.h.fixes	2006-02-15 22:41:00.000000000 +0100
++++ Duel3_20060225_src/Source/Button.h	2007-01-31 21:07:51.000000000 +0100
+@@ -9,6 +9,7 @@
+ #include <cstdlib>
+ #include <cstdio>
+ #include <cmath>
++#include <string.h>
+ #include <allegro.h>
+ #include <alleggl.h>
+ #include "Standards.h"
+--- Duel3_20060225_src/Source/CServer.h.fixes	2003-06-06 15:30:42.000000000 +0200
++++ Duel3_20060225_src/Source/CServer.h	2007-01-31 21:07:51.000000000 +0100
+@@ -7,9 +7,9 @@
+ #include <iostream>
+ #include <allegro.h>
+ #include <alleggl.h>
+-#include <gl\glu.h>	
++#include <GL/glu.h>	
+ #include <libnet.h>
+-#include "standards.h"
++#include "Standards.h"
+ 
+ #include "CNetwork.h"
+ #include "CPacket.h"
+--- Duel3_20060225_src/Source/Player.cpp.fixes	2006-02-19 01:16:26.000000000 +0100
++++ Duel3_20060225_src/Source/Player.cpp	2007-01-31 21:07:51.000000000 +0100
+@@ -19,9 +19,9 @@
+     
+ 
+     if(hudl.retExist()==false)
+-        hudl.setPict(400,70,"images/hudl_closed.bmp",false);
++        hudl.setPict(400,70,DATADIR "images/hudl_closed.bmp",false);
+     if(hudr.retExist()==false)
+-        hudr.setPict(400,70,"images/hudr_3.bmp",false);
++        hudr.setPict(400,70,DATADIR "images/hudr_3.bmp",false);
+ 
+     
+  
+@@ -104,9 +104,9 @@
+ {
+ 
+     if(hudl.retExist()==false)
+-        hudl.setPict(400,70,"images/hudl_3.bmp",false);
++        hudl.setPict(400,70,DATADIR "images/hudl_3.bmp",false);
+     if(hudr.retExist()==false)
+-        hudr.setPict(400,70,"images/hudr_3.bmp",false);
++        hudr.setPict(400,70,DATADIR "images/hudr_3.bmp",false);
+ 
+     //if(blue_bar.retExist()==false)
+     //    blue_bar.setPict(161,10,"w_hud/blue_bar.bmp");
+@@ -193,13 +193,13 @@
+ {
+     if(ScoreKeeper::instance()->getType()==INCREASING_TIME || ScoreKeeper::instance()->getType()==DECREASING_TIME)
+     {
+-        char timeLeft[5];
++        char timeLeft[16];
+         sprintf(timeLeft,"%0.1f",((float)ScoreKeeper::instance()->getTimeLeft() / 32));
+         writeText_2D(375,545,40,makecol(200,200,200),allFonts[3],timeLeft);
+     } 
+     else if(ScoreKeeper::instance()->getType()==SCORE_BASED)
+     {
+-        char score[5];
++        char score[16];
+         sprintf(score,"Score %d",ScoreKeeper::instance()->getScore(0));
+         writeText_2D(340,547,40,makecol(200,200,200),allFonts[4],score);    
+         sprintf(score,"x%0.2f",ScoreKeeper::instance()->getMultiplier(0));
+--- Duel3_20060225_src/Source/Server.h.fixes	2004-04-05 19:35:16.000000000 +0200
++++ Duel3_20060225_src/Source/Server.h	2007-01-31 21:07:51.000000000 +0100
+@@ -7,9 +7,9 @@
+ #include <iostream>
+ #include <allegro.h>
+ #include <alleggl.h>
+-#include <gl\glu.h>	
++#include <GL/glu.h>	
+ #include <libnet.h>
+-#include "standards.h"
++#include "Standards.h"
+ 
+ #include "CNetwork.h"
+ #include "CPacket.h"
+--- Duel3_20060225_src/Source/AsteroidsGameMode.h.fixes	2006-02-15 22:35:46.000000000 +0100
++++ Duel3_20060225_src/Source/AsteroidsGameMode.h	2007-01-31 21:07:51.000000000 +0100
+@@ -6,7 +6,7 @@
+ #ifndef ASTEROIDSGAMEMODE_H
+ #define ASTEROIDSGAMEMODE_H
+ 
+-#include "gamemode.h"
++#include "GameMode.h"
+ 
+ #include "CVector2.h"
+ #include "Arena.h"
+--- Duel3_20060225_src/Source/Controller.cpp.fixes	2006-02-15 22:36:48.000000000 +0100
++++ Duel3_20060225_src/Source/Controller.cpp	2007-01-31 21:07:51.000000000 +0100
+@@ -3,7 +3,7 @@
+ All rights reserved.
+ ***********************************/
+ 
+-#include "controller.h" // class's header file
++#include "Controller.h" // class's header file
+ 
+ void Controller::pollController(void)
+ {
+--- Duel3_20060225_src/Source/main.cpp.fixes	2006-02-25 12:23:32.000000000 +0100
++++ Duel3_20060225_src/Source/main.cpp	2007-01-31 21:07:51.000000000 +0100
+@@ -20,11 +20,11 @@
+ #include "CVector3.h"
+ #include "CCamera.h"
+ 
+-#include "Particle.h"
+-#include "ParticleSystem.h"
++#include "particle.h"
++#include "particlesystem.h"
+ //#include "SmokeSystem.h"
+ //#include "SparkSystem.h"
+-#include "ParticleGenerator.h"
++#include "particlegenerator.h"
+ 
+ #include "Controller.h"
+ #include "SfxSingleton.h"
+@@ -39,7 +39,7 @@
+ #include "SObject.h"
+ #include "Arena.h"
+ #include "PObject.h"
+-#include "Asteroid.h"
++#include "asteroid.h"
+ #include "Ship.h"
+ #include "ShipArray.h"
+ #include "Proj.h"
+@@ -119,7 +119,11 @@
+ int iGraphicsLoops=0;
+ int iLogicLoops=0;
+ bool bQuitGame=false;
+-
++#ifdef __unix__
++int check_and_create_dir(const char* dir);
++char *homedir;
++char LOGFILE[256];
++#endif
+ int cycles=0;
+ float fps;
+ 
+@@ -236,10 +240,16 @@
+ 
+ int main(int argc, const char **argv) 
+ {    
++#ifdef __unix__
++    homedir = getenv("HOME");
++    homedir = homedir?homedir:(char *)".";
++    snprintf(LOGFILE, sizeof(LOGFILE), "%s/.duel3-log.txt", homedir);
++#endif 
+     remove(LOGFILE);     
+     
+     initAllegroGL();    
+-    
++
++#ifndef __unix__
+     /**MAKE SURE WE ARE IN THE SAME DIR AS THE EXE**/
+     char buffer[256];
+     int len=255;
+@@ -247,7 +257,7 @@
+     (get_filename(buffer))[0] = 0;
+     outtext(LOGFILE,buffer);
+     chdir(buffer);
+-
++#endif
+ 
+ 
+ 
+@@ -270,7 +280,7 @@
+     
+ //    LARGE_INTEGER time1,time2;
+ //    QueryPerformanceCounter(&time1);
+-    play_song("music/BlackIce1.XM");
++    play_song(DATADIR "music/BlackIce1.XM");
+     
+     while(/*! key[KEY_ESC] &&*/ !bQuitGame)
+     {
+@@ -411,7 +421,7 @@
+                 //initMenus();
+                 iMenuNum=0;
+                 menu.reset();
+-                play_song("music/BlackIce1.XM");
++                play_song(DATADIR "music/BlackIce1.XM");
+                 outtext(LOGFILE,"RETURNING TO MENU\n");
+             }    
+         }
+@@ -584,18 +594,18 @@
+     dumb_register_stdfiles();
+     
+     outtext(LOGFILE,"Loading title image\n\n");
+-    title.setPict(800,600,"images/title.bmp",false);
++    title.setPict(800,600, DATADIR "images/title.bmp",false);
+     
+     load_ship_atts(ship_atts);
+     shipDefs.init();
+-    loadModels("models.d3");
++    loadModels(DATADIR "models.d3");
+ 
+     outtext(LOGFILE,"Models Loaded\n\n");
+ 
+     TShipDef def;
+     
+     outtext(LOGFILE,"Loading fonts\n");
+-    fonts = load_datafile("fonts.dat");
++    fonts = load_datafile(DATADIR "fonts.dat");
+     if(fonts)
+         outtext(LOGFILE,"Fonts Loaded\n\n");
+     else
+@@ -620,7 +630,7 @@
+ 
+     partGen = new ParticleGenerator[MAX_PG];
+ 
+-    loadShipDefs("Ships.d3");
++    loadShipDefs(DATADIR "Ships.d3");
+ 
+     game.init();
+     player1Atts.iColour=0;
+@@ -632,14 +642,14 @@
+     strcpy(player2Atts.sName,"Player2");
+     
+     outtext(LOGFILE,"Loading sounds\n\n");
+-    SfxSingleton::instance()->setData("sounds.dat");
++    SfxSingleton::instance()->setData(DATADIR "sounds.dat");
+     
+     
+     
+ 
+     game.setModels(allModels);
+ 
+-    game.setupWeapons("weapons.d3",&partGen);
++    game.setupWeapons(DATADIR "weapons.d3",&partGen);
+     game.setupPowerupTypes(&partGen);
+     
+     
+@@ -919,7 +929,7 @@
+     FILE *fp;
+     
+     outtext(LOGFILE,"\nLoading weapons set\n");
+-    fp=fopen("WeaponsSet.d3","rt");
++    fp=fopen(DATADIR "WeaponsSet.d3","rt");
+     int numWeaponsSets;
+     if(fp)
+     {
+@@ -941,7 +951,7 @@
+     
+     
+     outtext(LOGFILE,"\nLoading ship atts\n");
+-    fp=fopen("ShipAtts.d3","rt");
++    fp=fopen(DATADIR "ShipAtts.d3","rt");
+     if(fp)
+     {
+         fscanf(fp,"%d",&iNumAtts);
+@@ -1195,9 +1205,9 @@
+     outtext(LOGFILE,"entering function startGame\n");
+     
+     switch( cur_song_num ){
+-    case 0: play_song("music/BlackIce4.XM"); break;
+-    case 1: play_song("music/BlackIce3.XM"); break;
+-    case 2: play_song("music/BlackIce2.XM"); break;
++    case 0: play_song(DATADIR "music/BlackIce4.XM"); break;
++    case 1: play_song(DATADIR "music/BlackIce3.xm"); break;
++    case 2: play_song(DATADIR "music/BlackIce2.XM"); break;
+     }    
+     cur_song_num++;
+     cur_song_num%=3;
+@@ -1207,7 +1217,7 @@
+     sec=0; cycles=0;
+     
+     game.resetProjs();
+-    game.setupWeapons("weapons.d3",&partGen);
++    game.setupWeapons(DATADIR "weapons.d3",&partGen);
+     game.setupPowerupTypes(&partGen);
+     game.bHotSeat=bHotSeat;
+     
+@@ -1549,7 +1559,7 @@
+ void displaySplashScreen(void)
+ {
+         BRect splash;
+-        splash.setPict(1,1,"images/title1.bmp");
++        splash.setPict(1,1,DATADIR "images/title1.bmp");
+         splash.setPos(makeVector2(0,0,true));
+ 
+ 
+@@ -1686,19 +1696,19 @@
+     /************************SHIP EXAUST**********************************/
+     partGen[0].setParticles(&partSys);
+     partGen[0].create(smoke_atts,engine_atts);
+-    partGen[0].setTexture("images/t1.bmp");
++    partGen[0].setTexture(DATADIR "images/t1.bmp");
+     partGen[0].start();
+ 
+     /***********************DAMAGE SPARKS********************************/
+     partGen[1].setParticles(&partSys);
+     partGen[1].create(sparks_atts,damage_atts);
+-    partGen[1].setTexture("images/t3.bmp");
++    partGen[1].setTexture(DATADIR "images/t3.bmp");
+     partGen[1].start();
+ 
+     /***********************SHIP SHIELD PARTS*****************************/
+     partGen[2].setParticles(&partSys);
+     partGen[2].create(shield_atts,shieldGen_atts);
+-    partGen[2].setTexture("images/t3.bmp");
++    partGen[2].setTexture(DATADIR "images/t3.bmp");
+     partGen[2].start();
+     
+     /**********************ENERGY PROJ SPARKS******************************/
+@@ -1707,7 +1717,7 @@
+     shield_atts.colour = makeColour(.6 , .6 , 1 );
+     shield_atts.shape[0]=makeVector3(3,-1,0); shield_atts.shape[1]=makeVector3(3,1,0); shield_atts.shape[2]=makeVector3(-3,1,0); shield_atts.shape[3]=makeVector3(-3,-1,0);
+     partGen[3].create(shield_atts,shieldGen_atts);
+-    partGen[3].setTexture("images/t3.bmp");
++    partGen[3].setTexture(DATADIR "images/t3.bmp");
+     partGen[3].start();
+     
+     /**********************MISSILE EXAUST**********************************/
+@@ -1716,7 +1726,7 @@
+     smoke_atts.density=1; smoke_atts.start_density=1; smoke_atts.particle_lifespan=10;
+     smoke_atts.shape[0]=makeVector3(1,-2,0); smoke_atts.shape[1]=makeVector3(1,2,0); smoke_atts.shape[2]=makeVector3(-1,2,0); smoke_atts.shape[3]=makeVector3(-1,-2,0);
+     partGen[4].create(smoke_atts,engine_atts);
+-    partGen[4].setTexture("images/t1.bmp");
++    partGen[4].setTexture(DATADIR "images/t1.bmp");
+     partGen[4].start();
+     
+     /************************SMALL MISSLE EXPLOSIONS***************************/
+@@ -1725,14 +1735,14 @@
+     shield_atts.colour = makeColour(1 , .75 , .1 );
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[5].create(shield_atts,shieldGen_atts);
+-    partGen[5].setTexture("images/t3.bmp");
++    partGen[5].setTexture(DATADIR "images/t3.bmp");
+     partGen[5].start();
+     
+     /************************SHIP EXPLOSION*******************************/
+     sparks_atts.shape[0]=makeVector3(2,-1,0); sparks_atts.shape[1]=makeVector3(2,1,0); sparks_atts.shape[2]=makeVector3(-2,1,0); sparks_atts.shape[3]=makeVector3(-2,-1,0);
+     partGen[6].setParticles(&partSys);
+     partGen[6].create(sparks_atts,explosion_atts);
+-    partGen[6].setTexture("images/t3.bmp");
++    partGen[6].setTexture(DATADIR "images/t3.bmp");
+     partGen[6].start();
+ 
+     
+@@ -1742,7 +1752,7 @@
+     shield_atts.colour = makeColour(1 , .75 , .1 );
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[7].create(shield_atts,shieldGen_atts);
+-    partGen[7].setTexture("images/t3.bmp");
++    partGen[7].setTexture(DATADIR "images/t3.bmp");
+     partGen[7].start();
+     
+     /**********************SHIELD SHATTER SPAKRS********************************/
+@@ -1752,7 +1762,7 @@
+     shield_atts.shape[0]=makeVector3(2,-1,0); shield_atts.shape[1]=makeVector3(2,1,0); shield_atts.shape[2]=makeVector3(-2,1,0); shield_atts.shape[3]=makeVector3(-2,-1,0);
+     shield_atts.base_opacity=.45;
+     partGen[8].create(shield_atts,shieldShatter_atts);
+-    partGen[8].setTexture("images/t3.bmp");
++    partGen[8].setTexture(DATADIR "images/t3.bmp");
+     partGen[8].start();
+     
+     /**************************RESPAWN SPARKS***********************************/
+@@ -1762,7 +1772,7 @@
+     shield_atts.base_opacity=.6;
+     shield_atts.shape[0]=makeVector3(3,-1,0); shield_atts.shape[1]=makeVector3(3,1,0); shield_atts.shape[2]=makeVector3(-3,1,0); shield_atts.shape[3]=makeVector3(-3,-1,0);
+     partGen[9].create(shield_atts,respawnGen_atts);
+-    partGen[9].setTexture("images/t4.bmp");
++    partGen[9].setTexture(DATADIR "images/t4.bmp");
+     partGen[9].start();
+     //nPartGen++;
+     
+@@ -1774,7 +1784,7 @@
+     alwaysOnGen_atts.vel=.25;
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[10].create(shield_atts,alwaysOnGen_atts);
+-    partGen[10].setTexture("images/t3.bmp");
++    partGen[10].setTexture(DATADIR "images/t3.bmp");
+     partGen[10].start();
+     
+     /************************MINE EXPLOSIONS***************************/
+@@ -1783,7 +1793,7 @@
+     shield_atts.colour = makeColour(1 , .3 , 1 );
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[11].create(shield_atts,shieldGen_atts);
+-    partGen[11].setTexture("images/t3.bmp");
++    partGen[11].setTexture(DATADIR "images/t3.bmp");
+     partGen[11].start();
+     
+     /************************ASTEROID EXPLOSIONS***************************/
+@@ -1794,7 +1804,7 @@
+     asteroidGen_atts.vel=.4;
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[12].create(shield_atts,asteroidGen_atts);
+-    partGen[12].setTexture("images/t4.bmp");
++    partGen[12].setTexture(DATADIR "images/t4.bmp");
+     partGen[12].start();
+     
+     /************************SMALL SHOTGUN SPARKS***************************/
+@@ -1804,7 +1814,7 @@
+     alwaysOnGen_atts.vel=0.1;
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[13].create(shield_atts,alwaysOnGen_atts);
+-    partGen[13].setTexture("images/t3.bmp");
++    partGen[13].setTexture(DATADIR "images/t3.bmp");
+     partGen[13].start();    
+     
+     /************************COMING FROM THE CONCUSSION BALLS******************************/
+@@ -1816,7 +1826,7 @@
+     alwaysOnGen_atts.vel=.1;
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[14].create(shield_atts,alwaysOnGen_atts);
+-    partGen[14].setTexture("images/t3.bmp");
++    partGen[14].setTexture(DATADIR "images/t3.bmp");
+     partGen[14].start();
+ 
+     /**********************CONCUSSION BALLS SHATTER SPAKRS********************************/
+@@ -1826,7 +1836,7 @@
+     shield_atts.shape[0]=makeVector3(2,-1,0); shield_atts.shape[1]=makeVector3(2,1,0); shield_atts.shape[2]=makeVector3(-2,1,0); shield_atts.shape[3]=makeVector3(-2,-1,0);
+     shield_atts.base_opacity=.45;
+     partGen[15].create(shield_atts,shieldShatter_atts);
+-    partGen[15].setTexture("images/t3.bmp");
++    partGen[15].setTexture(DATADIR "images/t3.bmp");
+     partGen[15].start();
+ 
+     /**********************DEFENCE RING PARTS********************************/
+@@ -1838,7 +1848,7 @@
+     alwaysOnGen_atts.vel=.25;
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[16].create(shield_atts,alwaysOnGen_atts);
+-    partGen[16].setTexture("images/t3.bmp");
++    partGen[16].setTexture(DATADIR "images/t3.bmp");
+     partGen[16].start();
+ 
+     /**********************SHIELD BAR EFFECT********************************/
+@@ -1850,7 +1860,7 @@
+     alwaysOnGen_atts.vel=.15;
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[17].create(shield_atts,alwaysOnGen_atts);
+-    partGen[17].setTexture("images/t3.bmp");
++    partGen[17].setTexture(DATADIR "images/t3.bmp");
+     partGen[17].start();
+ 
+     /********************ARMOUR BAR EFFECT***********************************/
+@@ -1862,7 +1872,7 @@
+     alwaysOnGen_atts.vel=.1;
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[18].create(shield_atts,alwaysOnGen_atts);
+-    partGen[18].setTexture("images/t3.bmp");
++    partGen[18].setTexture(DATADIR "images/t3.bmp");
+     partGen[18].start();
+     
+     /************************COMING FROM THE EMP WAVE******************************/
+@@ -1874,7 +1884,7 @@
+     alwaysOnGen_atts.vel=.2;
+     shield_atts.shape[0]=makeVector3(2,-1,0); shield_atts.shape[1]=makeVector3(2,1,0); shield_atts.shape[2]=makeVector3(-2,1,0); shield_atts.shape[3]=makeVector3(-2,-1,0);
+     partGen[19].create(shield_atts,alwaysOnGen_atts);
+-    partGen[19].setTexture("images/t4.bmp");
++    partGen[19].setTexture(DATADIR "images/t4.bmp");
+     partGen[19].start();
+     
+     /************************EMP WAVE END******************************/
+@@ -1886,7 +1896,7 @@
+     alwaysOnGen_atts.vel=.4;
+     shield_atts.shape[0]=makeVector3(2,-1,0); shield_atts.shape[1]=makeVector3(2,1,0); shield_atts.shape[2]=makeVector3(-2,1,0); shield_atts.shape[3]=makeVector3(-2,-1,0);
+     partGen[20].create(shield_atts,alwaysOnGen_atts);
+-    partGen[20].setTexture("images/t4.bmp");
++    partGen[20].setTexture(DATADIR "images/t4.bmp");
+     partGen[20].start();
+ 
+     /************************COMING FROM THE BERSERKERS******************************/
+@@ -1897,7 +1907,7 @@
+     alwaysOnGen_atts.vel=.25;
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[21].create(shield_atts,alwaysOnGen_atts);
+-    partGen[21].setTexture("images/t3.bmp");
++    partGen[21].setTexture(DATADIR "images/t3.bmp");
+     partGen[21].start();
+     
+     /************************BERSERKERS EXPLOSIONS***************************/
+@@ -1906,7 +1916,7 @@
+     shield_atts.colour = makeColour(1 , 0 , .2 );
+     shield_atts.shape[0]=makeVector3(1,-1,0); shield_atts.shape[1]=makeVector3(1,1,0); shield_atts.shape[2]=makeVector3(-1,1,0); shield_atts.shape[3]=makeVector3(-1,-1,0);
+     partGen[22].create(shield_atts,shieldGen_atts);
+-    partGen[22].setTexture("images/t3.bmp");
++    partGen[22].setTexture(DATADIR "images/t3.bmp");
+     partGen[22].start();
+ 
+     /************************COMING FROM THE EMP WAVE******************************/
+@@ -1918,7 +1928,7 @@
+     alwaysOnGen_atts.vel=.2;
+     shield_atts.shape[0]=makeVector3(2,-1,0); shield_atts.shape[1]=makeVector3(2,1,0); shield_atts.shape[2]=makeVector3(-2,1,0); shield_atts.shape[3]=makeVector3(-2,-1,0);
+     partGen[23].create(shield_atts,alwaysOnGen_atts);
+-    partGen[23].setTexture("images/t4.bmp");
++    partGen[23].setTexture(DATADIR "images/t4.bmp");
+     partGen[23].start();
+ 
+     nPartGen=24;
+@@ -1928,21 +1938,21 @@
+ 
+         /*partGen[nPartGen].setParticles(&partSys);
+         partGen[nPartGen].create(smoke_atts,engine_atts);
+-        partGen[nPartGen].setTexture("images/t1.bmp");
++        partGen[nPartGen].setTexture(DATADIR "images/t1.bmp");
+         partGen[nPartGen].start();*/
+         g->retPlayer(n)->retShip()->addPartsGen(&partGen[0]);
+         //nPartGen++;
+         
+         /*partGen[nPartGen].setParticles(&partSys);
+         partGen[nPartGen].create(sparks_atts,damage_atts);
+-        partGen[nPartGen].setTexture("images/t3.bmp");
++        partGen[nPartGen].setTexture(DATADIR "images/t3.bmp");
+         partGen[nPartGen].start();*/
+         g->retPlayer(n)->retShip()->addPartsGen(&partGen[1]);
+         //nPartGen++;
+         
+         /*partGen[nPartGen].setParticles(&partSys);
+         partGen[nPartGen].create(shield_atts,shieldGen_atts);
+-        partGen[nPartGen].setTexture("images/t3.bmp");
++        partGen[nPartGen].setTexture(DATADIR "images/t3.bmp");
+         partGen[nPartGen].start();*/
+         g->retPlayer(n)->retShip()->addPartsGen(&partGen[2]);
+         
+@@ -1960,7 +1970,7 @@
+     /*sparks_atts.shape[0]=makeVector3(2,-1,0); sparks_atts.shape[1]=makeVector3(2,1,0); sparks_atts.shape[2]=makeVector3(-2,1,0); sparks_atts.shape[3]=makeVector3(-2,-1,0);
+     partGen[nPartGen].setParticles(&partSys);
+     partGen[nPartGen].create(sparks_atts,explosion_atts);
+-    partGen[nPartGen].setTexture("images/t3.bmp");
++    partGen[nPartGen].setTexture(DATADIR "images/t3.bmp");
+     partGen[nPartGen].start();
+     nPartGen++;*/
+ }
+@@ -2124,8 +2134,15 @@
+             
+                 char *filename_base="shot";
+                 for(int num=0 ; num<100 ; num++){
++#ifdef __unix__
++		    char *filename_final = new char[homedir?strlen(homedir):1+18+4+2+1+3+1];
++                    sprintf(filename_final,"%s/duel3-screenshots/",homedir);
++		    check_and_create_dir(filename_final);
++                    sprintf(filename_final,"%s/duel3-screenshots/%s%d.bmp",homedir, filename_base,num);
++#else
+                     char *filename_final = new char[12+4+2+1+3+1];
+                     sprintf(filename_final,"screenshots/%s%d.bmp",filename_base,num);
++#endif
+                     outtext(LOGFILE,filename_final);
+                     if(!exists(filename_final)){
+             	       save_bitmap(filename_final,bmp,NULL);
+--- Duel3_20060225_src/Source/BRect.h.fixes	2006-02-15 22:36:06.000000000 +0100
++++ Duel3_20060225_src/Source/BRect.h	2007-01-31 21:07:51.000000000 +0100
+@@ -46,7 +46,7 @@
+     float shieldDamage,armorDamage,projDamage;
+     int owner_id;                 //player's id (ie id of ship, or id of projectile's owner)
+     int owner_team;
+-    int ptrToOwner;
++    void *ptrToOwner;
+     int genType;
+ }CollisionInfo;
+ 
+--- /dev/null	2007-01-31 20:22:37.739376250 +0100
++++ Duel3_20060225_src/Source/unix.cpp	2007-01-31 21:07:51.000000000 +0100
+@@ -0,0 +1,50 @@
++#include <stdio.h>
++#include <unistd.h>
++#include <errno.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++
++int check_and_create_dir(const char *name)
++{
++	struct stat stat_buffer;
++
++	if (stat(name, &stat_buffer))
++	{
++		/* error check if it doesn't exist or something else is wrong */
++		if (errno == ENOENT)
++		{
++			/* doesn't exist letts create it ;) */
++#ifdef BSD43
++			if (mkdir(name, 0775))
++#else
++				if (mkdir(name, S_IRWXU|S_IRWXG|S_IROTH|S_IXOTH))
++#endif
++				{
++					fprintf(stderr, "Error creating dir %s", name);
++					perror(" ");
++					return -1;
++				}
++		}
++		else
++		{
++			/* something else went wrong yell about it */
++			fprintf(stderr, "Error opening %s", name);
++			perror(" ");
++			return -1;
++		}
++	}
++	else
++	{
++		/* file exists check it's a dir otherwise yell about it */
++#ifdef BSD43
++		if (!(S_IFDIR & stat_buffer.st_mode))
++#else
++			if (!S_ISDIR(stat_buffer.st_mode))
++#endif
++			{
++				fprintf(stderr,"Error %s exists but isn't a dir\n", name);
++				return -1;
++			}
++	}
++	return 0;
++}
+--- Duel3_20060225_src/Source/CPacket.h.fixes	2003-07-31 19:24:26.000000000 +0200
++++ Duel3_20060225_src/Source/CPacket.h	2007-01-31 21:07:51.000000000 +0100
+@@ -7,9 +7,9 @@
+ #include <iostream>
+ #include <allegro.h>
+ #include <alleggl.h>
+-#include <gl\glu.h>	
++#include <GL/glu.h>	
+ #include <libnet.h>
+-#include "standards.h"
++#include "Standards.h"
+ 
+ class CPacket
+ {
+--- Duel3_20060225_src/Source/CCamera.h.fixes	2006-02-15 22:36:32.000000000 +0100
++++ Duel3_20060225_src/Source/CCamera.h	2007-01-31 21:07:51.000000000 +0100
+@@ -9,8 +9,8 @@
+ #include <iostream>
+ #include <allegro.h>
+ #include <alleggl.h>
+-#include <gl\glu.h>	
+-#include "standards.h"
++#include <GL/glu.h>	
++#include "Standards.h"
+ 
+ #include "CVector3.h"
+ 
+@@ -32,8 +32,8 @@
+     void moveCamera(void);
+     bool setOrthoViewport(int w, int h);
+     
+-    CCamera::CCamera(CVector3 _pos,CVector3 _forward, CVector3 _up) {pos=_pos; forward=_forward; up=_up; init();}
+-    CCamera::CCamera(void) {pos.zero(); forward.setVector(0,0,1); up.setVector(0,1,0); init(); pos.z=-200;}
++    CCamera(CVector3 _pos,CVector3 _forward, CVector3 _up) {pos=_pos; forward=_forward; up=_up; init();}
++    CCamera(void) {pos.zero(); forward.setVector(0,0,1); up.setVector(0,1,0); init(); pos.z=-200;}
+ 
+     float retX(void) {return pos.x;}
+     float retZ(void) {return pos.z;}
+--- Duel3_20060225_src/Source/CVector3.h.fixes	2006-02-15 22:37:30.000000000 +0100
++++ Duel3_20060225_src/Source/CVector3.h	2007-01-31 21:07:51.000000000 +0100
+@@ -10,7 +10,7 @@
+ #include <cstdio>
+ #include <cmath>
+ 
+-#include "standards.h"
++#include "Standards.h"
+ 
+ 
+ using namespace std;
+@@ -47,8 +47,8 @@
+     float retYAng(void);
+     float retZAng(void);
+     
+-    CVector3::CVector3(void) {x=0;y=0;z=0; mag=0;}
+-    CVector3::CVector3(float _x, float _y, float _z) {x=_x; y=_y; z=_z; mag=findMagnitude();}
++    CVector3(void) {x=0;y=0;z=0; mag=0;}
++    CVector3(float _x, float _y, float _z) {x=_x; y=_y; z=_z; mag=findMagnitude();}
+     
+ //Overloaded operators    
+     //vector addition and subtraction
+--- Duel3_20060225_src/Source/Player.h.fixes	2006-02-15 22:41:00.000000000 +0100
++++ Duel3_20060225_src/Source/Player.h	2007-01-31 21:07:51.000000000 +0100
+@@ -17,7 +17,7 @@
+ #include "BRect.h"
+ #include "Controller.h"
+ #include "Ship.h" 
+-#include "ParticleGenerator.h"
++#include "particlegenerator.h"
+ 
+ 
+ #define RED     0
+--- Duel3_20060225_src/Source/Proj.h.fixes	2006-02-15 22:42:12.000000000 +0100
++++ Duel3_20060225_src/Source/Proj.h	2007-01-31 21:07:51.000000000 +0100
+@@ -36,7 +36,7 @@
+     int armor;      //for non-energy projectiles
+     int lifetime;   //some projectiles will cease to exist when their life runs out    
+ 
+-    int ptrToOwner;
++    void *ptrToOwner;
+ 
+ public:
+     void init(void);
+@@ -49,10 +49,10 @@
+     CollisionInfo reactToCollision(void);
+     void reactToCollisionInfo(CollisionInfo &colInfo);
+ 
+-    void setOwner(int _owner_id, int _owner_team, int ptr) {owner_id=_owner_id; owner_team = _owner_team; ptrToOwner = ptr;}
++    void setOwner(int _owner_id, int _owner_team, void *ptr) {owner_id=_owner_id; owner_team = _owner_team; ptrToOwner = ptr;}
+     int retOwnerId(void) {return owner_id;}
+     int retOwnerTeam(void) {return owner_team; }
+-    int retPtrToOwner(void) {return ptrToOwner; }
++    void *retPtrToOwner(void) {return ptrToOwner; }
+     
+     void update(BRect bounds);
+     void draw(bool wireframe=false);
+--- Duel3_20060225_src/Source/Weapon.cpp.fixes	2007-01-31 21:10:50.000000000 +0100
++++ Duel3_20060225_src/Source/Weapon.cpp	2007-01-31 21:11:07.000000000 +0100
+@@ -32,7 +32,6 @@
+ 
+ void Weapon::init(void)
+ {
+-    outtext(LOGFILE,"init weapon\n");
+     resetProjInfo();
+     iCoolDown=0;
+     strcpy(sName,"");
+--- Duel3_20060225_src/Source/particlegenerator.h.fixes	2006-02-15 22:41:00.000000000 +0100
++++ Duel3_20060225_src/Source/particlegenerator.h	2007-01-31 21:07:51.000000000 +0100
+@@ -8,8 +8,8 @@
+ 
+ #include <list>
+ 
+-#include "Particle.h"
+-#include "ParticleSystem.h"
++#include "particle.h"
++#include "particlesystem.h"
+  
+ typedef struct
+ {
+--- Duel3_20060225_src/Source/oCVector3.h.fixes	2003-05-29 19:32:36.000000000 +0200
++++ Duel3_20060225_src/Source/oCVector3.h	2007-01-31 21:07:51.000000000 +0100
+@@ -5,7 +5,7 @@
+ #include <cstdio>
+ #include <cmath>
+ 
+-#include "standards.h"
++#include "Standards.h"
+ 
+ 
+ using namespace std;
+--- /dev/null	2007-01-31 20:22:37.739376250 +0100
++++ Duel3_20060225_src/Source/Makefile	2007-01-31 21:07:51.000000000 +0100
+@@ -0,0 +1,31 @@
++PREFIX  = /usr
++TARGET = duel3
++BINDIR = $(PREFIX)/bin/
++DATADIR = $(PREFIX)/share/$(TARGET)
++CFLAGS  = -g -Wall -O2 -Wno-non-virtual-dtor
++LDFLAGS = `allegro-config --libs` -ldumb -laldmb -lalleggl -lGL -lGLU
++DEFINES = -DDATADIR=\"$(DATADIR)/\"
++OBJS  = main.o Standards.o CCamera.o CVector2.o BRect.o SObject.o Model.o Weapon.o Animation.o PObject.o Ship.o Proj.o Arena.o Player.o Game.o Widget.o ShipArray.o Starfield.o CVector3.o particle.o particlesystem.o particlegenerator.o asteroid.o Controller.o SfxSingleton.o GameMode.o AsteroidsGameMode.o NewMenu.o Button.o CheckBox.o ShipSelector.o MissileAvoid.o AIPlayer.o Turret.o MissileAvoid2p.o GameSettingsSingleton.o ScoreKeeper.o AsteroidsGameMode2p.o Powerup.o unix.o
++
++$(TARGET): $(OBJS)
++	g++ $(LDFLAGS) -o $@ $^
++
++%.o: %.cpp
++	g++ $(CFLAGS) $(DEFINES) -o $@ -c $<
++
++install: $(TARGET)
++	mkdir -p $(BINDIR)
++	mkdir -p $(DATADIR)/images
++	mkdir -p $(DATADIR)/models
++	mkdir -p $(DATADIR)/music
++	mkdir -p $(DATADIR)/w_hud
++	install -p -m 755 $(TARGET) $(BINDIR)
++	install -p -m 644 images/* $(DATADIR)/images
++	install -p -m 644 models/* $(DATADIR)/models
++	install -p -m 644 music/* $(DATADIR)/music
++	install -p -m 644 w_hud/* $(DATADIR)/w_hud
++	install -p -m 664 *.dat $(DATADIR)
++	install -p -m 664 *.d3 $(DATADIR)
++	
++clean:
++	rm -f $(OBJS) $(TARGET) *~
+--- Duel3_20060225_src/Source/Game.h.fixes	2006-02-15 22:37:40.000000000 +0100
++++ Duel3_20060225_src/Source/Game.h	2007-01-31 21:07:51.000000000 +0100
+@@ -8,13 +8,13 @@
+ #include <allegro.h>
+ #include <alleggl.h>
+ #include "Standards.h"
+-#include "ParticleGenerator.h"
++#include "particlegenerator.h"
+ #include "ScoreKeeper.h"
+ 
+ #include "SObject.h"
+ #include "Arena.h"
+ #include "PObject.h"
+-#include "Asteroid.h"
++#include "asteroid.h"
+ #include "Proj.h"
+ #include "Powerup.h"
+ #include "Player.h"
+--- Duel3_20060225_src/Source/particle.h.fixes	2006-02-15 22:41:00.000000000 +0100
++++ Duel3_20060225_src/Source/particle.h	2007-01-31 21:07:51.000000000 +0100
+@@ -7,6 +7,7 @@
+ #define PARTICLE_H
+ 
+ #include "CVector3.h"
++#include <string.h>
+ 
+ #define     PART_POINT  0
+ #define     PART_BLOB   1
+--- Duel3_20060225_src/Source/CNetwork.h.fixes	2003-05-31 17:59:16.000000000 +0200
++++ Duel3_20060225_src/Source/CNetwork.h	2007-01-31 21:07:51.000000000 +0100
+@@ -7,9 +7,9 @@
+ #include <iostream>
+ #include <allegro.h>
+ #include <alleggl.h>
+-#include <gl\glu.h>	
++#include <GL/glu.h>	
+ #include <libnet.h>
+-#include "standards.h"
++#include "Standards.h"
+ 
+ 
+ using namespace std;
+--- Duel3_20060225_src/Source/CPlayer.h.fixes	2003-06-06 19:11:00.000000000 +0200
++++ Duel3_20060225_src/Source/CPlayer.h	2007-01-31 21:07:51.000000000 +0100
+@@ -7,9 +7,9 @@
+ #include <iostream>
+ #include <allegro.h>
+ #include <alleggl.h>
+-#include <gl\glu.h>	
++#include <GL/glu.h>	
+ #include <libnet.h>
+-#include "standards.h"
++#include "Standards.h"
+ 
+ #include "CShip.h"
+ 
+--- Duel3_20060225_src/Source/Standards.h.fixes	2006-02-15 22:43:24.000000000 +0100
++++ Duel3_20060225_src/Source/Standards.h	2007-01-31 21:07:51.000000000 +0100
+@@ -21,7 +21,15 @@
+ #define Degree			0.0174532925199432957692369076848861	
+ 
+ 
++#ifdef __unix__
++extern char LOGFILE[256];
++#else
+ #define LOGFILE "log.txt"
++#endif
++
++#ifndef DATADIR
++#define DATADIR ""
++#endif
+ 
+ #define MAX_SHIP_ATTS 20
+ #define DONT_CARE   -1
+--- Duel3_20060225_src/Source/CMenuItem.h.fixes	2002-12-11 23:12:50.000000000 +0100
++++ Duel3_20060225_src/Source/CMenuItem.h	2007-01-31 21:07:51.000000000 +0100
+@@ -4,7 +4,7 @@
+ #include <allegro.h>
+ #include <string.h>
+ #include <math.h>
+-#include "standards.h"
++#include "Standards.h"
+ 
+ #define MAXSTRING   30
+ #define MAXSUBITEMS 10
+--- Duel3_20060225_src/Source/Client.h.fixes	2004-04-05 18:14:52.000000000 +0200
++++ Duel3_20060225_src/Source/Client.h	2007-01-31 21:07:51.000000000 +0100
+@@ -7,9 +7,9 @@
+ #include <iostream>
+ #include <allegro.h>
+ #include <alleggl.h>
+-#include <gl\glu.h>	
++#include <GL/glu.h>	
+ #include <libnet.h>
+-#include "standards.h"
++#include "Standards.h"
+ 
+ #include "CNetwork.h"
+ #include "CPacket.h"
+--- Duel3_20060225_src/Source/Model.cpp.fixes	2006-02-15 22:39:54.000000000 +0100
++++ Duel3_20060225_src/Source/Model.cpp	2007-01-31 21:07:51.000000000 +0100
+@@ -27,14 +27,21 @@
+ bool Model::loadModel(char *filename)
+ {
+     byte *bFile;
+-    char temp[20];
+-    
++    char temp[20];
++#ifdef __unix__
++	char filenamebuf[1024];
++#endif
+     char buf[100];
+     sprintf(buf,"  load Model: %s\n",filename);
+     outtext(LOGFILE,buf);
+     
+-    //opens the file
+-    ifstream inputFile( filename, ios::in | ios::binary );
++    //opens the file
++#if __unix__
++    snprintf(filenamebuf, 1024, "%s%s", DATADIR, filename);
++    ifstream inputFile(filenamebuf, ios::in | ios::binary );
++#else
++    ifstream inputFile(filename, ios::in | ios::binary );
++#endif
+ 	if ( inputFile.fail())
+ 		return false;	// "Couldn't Open The Model File."
+     else
+--- Duel3_20060225_src/Source/Ship.cpp.fixes	2006-02-20 19:38:42.000000000 +0100
++++ Duel3_20060225_src/Source/Ship.cpp	2007-01-31 21:07:51.000000000 +0100
+@@ -245,7 +245,7 @@
+             proj->create(pinfo,(PObject*)this,angle);
+             proj->addVel(vel);
+             proj->setTarget(target);
+-            proj->setOwner(id,team_id,(int)this);
++            proj->setOwner(id,team_id,this);
+             
+             if(n==0)    //only play the sound effect for the first proj that is fired
+                 proj->playFireSound();
+--- Duel3_20060225_src/Source/Standards.cpp.fixes	2006-02-15 22:42:12.000000000 +0100
++++ Duel3_20060225_src/Source/Standards.cpp	2007-01-31 21:07:51.000000000 +0100
+@@ -3,7 +3,8 @@
+ All rights reserved.
+ ***********************************/
+ #include <math.h>
+-#include <cstdio>
++#include <cstdio>
++#include <string.h>
+ #include "allegro.h"
+ #include "Standards.h"
+ 
+--- Duel3_20060225_src/Source/CVector2.h.fixes	2006-02-18 00:47:48.000000000 +0100
++++ Duel3_20060225_src/Source/CVector2.h	2007-01-31 21:07:51.000000000 +0100
+@@ -82,9 +82,9 @@
+     
+     /************INITIALIAZTION ROUTINES*********/
+     void init(void) {x=0; y=0; mag=0; position=true; normalized=false;}
+-    CVector2::CVector2(void) {init();}
+-    CVector2::CVector2(float _x,float _y, bool _position=true) {init(); setVector(_x,_y,_position,false); }
+-    CVector2::~CVector2(void) {}
++    CVector2(void) {init();}
++    CVector2(float _x,float _y, bool _position=true) {init(); setVector(_x,_y,_position,false); }
++    ~CVector2(void) {}
+ };
+ 
+ CVector2 makeVector2(float x,float y, bool position);
+--- Duel3_20060225_src/Source/CMenu.h.fixes	2002-12-11 23:12:40.000000000 +0100
++++ Duel3_20060225_src/Source/CMenu.h	2007-01-31 21:07:51.000000000 +0100
+@@ -4,7 +4,7 @@
+ #include <allegro.h>
+ #include <string.h>
+ #include <math.h>
+-#include "standards.h"
++#include "Standards.h"
+ 
+ #include "CMenuItem.h"
+ 
+--- Duel3_20060225_src/Source/Weapon.h.fixes	2006-02-15 22:43:24.000000000 +0100
++++ Duel3_20060225_src/Source/Weapon.h	2007-01-31 21:07:51.000000000 +0100
+@@ -17,7 +17,7 @@
+ #include "Object.h"
+ #include "BRect.h"
+ 
+-#include "ParticleGenerator.h"
++#include "particlegenerator.h"
+ 
+ using namespace std;
+ 
+--- Duel3_20060225_src/Source/models.d3.fixes	2006-02-20 19:56:22.000000000 +0100
++++ Duel3_20060225_src/Source/models.d3	2007-01-31 21:07:51.000000000 +0100
+@@ -1,16 +1,16 @@
+ 15
+-models\hellstrike.ms3d
+-models\crysblade.ms3d
+-models\hammerskull.ms3d
+-models\viper.ms3d
+-models\gaia.ms3d
+-models\bulldog.ms3d
+-models\switchblade.ms3d
+-models\redeemer.ms3d
+-models\missile2.ms3d
+-models\sphere.ms3d
+-models\mine.ms3d
+-models\asteroid.ms3d
+-models\asteroid2.ms3d
+-models\asteroid3.ms3d
+-models\missile3.ms3d
+\ No newline at end of file
++models/hellstrike.ms3d
++models/crysblade.ms3d
++models/hammerskull.ms3d
++models/viper.ms3d
++models/gaia.ms3d
++models/bulldog.ms3d
++models/switchblade.ms3d
++models/redeemer.ms3d
++models/missile2.ms3d
++models/sphere.ms3d
++models/mine.ms3d
++models/asteroid.ms3d
++models/asteroid2.ms3d
++models/asteroid3.ms3d
++models/missile3.ms3d
+\ No newline at end of file
+--- Duel3_20060225_src/Source/CClient.h.fixes	2003-07-28 19:50:40.000000000 +0200
++++ Duel3_20060225_src/Source/CClient.h	2007-01-31 21:07:51.000000000 +0100
+@@ -7,9 +7,9 @@
+ #include <iostream>
+ #include <allegro.h>
+ #include <alleggl.h>
+-#include <gl\glu.h>	
++#include <GL/glu.h>	
+ #include <libnet.h>
+-#include "standards.h"
++#include "Standards.h"
+ 
+ #include "CNetwork.h"
+ #include "CPacket.h"
+--- Duel3_20060225_src/Source/Game.cpp~	2007-01-31 21:35:08.000000000 +0100
++++ Duel3_20060225_src/Source/Game.cpp	2007-01-31 21:35:08.000000000 +0100
+@@ -110,7 +110,7 @@
+     
+     pinfo.model = &allModels[8];
+     pinfo.fRadius = .5;
+-    weapons[iNumWeapons].createWeapon("Lightning Ball",6,pinfo,"w_hud/single_shot.bmp");
++    weapons[iNumWeapons].createWeapon("Lightning Ball",6,pinfo,DATADIR "w_hud/single_shot.bmp");
+     iNumWeapons++;
+     
+     pinfo.fAccel=.03;
+@@ -138,7 +138,7 @@
+     
+     pinfo.model = &allModels[14];
+     pinfo.fRadius = .5;
+-    weapons[iNumWeapons].createWeapon("Hellstrike",14,pinfo,"w_hud/hellstrike.bmp");
++    weapons[iNumWeapons].createWeapon("Hellstrike",14,pinfo,DATADIR "w_hud/hellstrike.bmp");
+     iNumWeapons++;
+ 
+ 
+@@ -168,7 +168,7 @@
+     
+     pinfo.model = &allModels[14];
+     pinfo.fRadius = .5;
+-    weapons[iNumWeapons].createWeapon("Wrath Missile",14,pinfo,"w_hud/missile.bmp");
++    weapons[iNumWeapons].createWeapon("Wrath Missile",14,pinfo,DATADIR "w_hud/missile.bmp");
+     iNumWeapons++;
+     
+     
+@@ -197,7 +197,7 @@
+     
+     pinfo.model = 0;
+     pinfo.fRadius = .05;
+-    weapons[iNumWeapons].createWeapon("Lightning",2,pinfo,"w_hud/lightning.bmp");
++    weapons[iNumWeapons].createWeapon("Lightning",2,pinfo,DATADIR "w_hud/lightning.bmp");
+     iNumWeapons++;
+     
+     pinfo.fAccel=.014;
+@@ -225,7 +225,7 @@
+     
+     pinfo.model = 0;
+     pinfo.fRadius = .05;
+-    weapons[iNumWeapons].createWeapon("Shot Gun",14,pinfo,"w_hud/shotgun.bmp");
++    weapons[iNumWeapons].createWeapon("Shot Gun",14,pinfo,DATADIR "w_hud/shotgun.bmp");
+     iNumWeapons++;
+     
+     
+@@ -254,7 +254,7 @@
+     
+     pinfo.model = /*&allModels[10]*/0;
+     pinfo.fRadius = .65;
+-    weapons[iNumWeapons].createWeapon("Plasma Mine",25,pinfo,"w_hud/one_mine.bmp");
++    weapons[iNumWeapons].createWeapon("Plasma Mine",25,pinfo,DATADIR "w_hud/one_mine.bmp");
+     iNumWeapons++;
+     
+     
+@@ -284,7 +284,7 @@
+     
+     pinfo.model = &allModels[8];
+     pinfo.fRadius = .5;
+-    weapons[iNumWeapons].createWeapon("Tri-Shot",7,pinfo,"w_hud/tri_shot.bmp");
++    weapons[iNumWeapons].createWeapon("Tri-Shot",7,pinfo,DATADIR "w_hud/tri_shot.bmp");
+     iNumWeapons++;
+ 
+ 
+@@ -313,7 +313,7 @@
+     
+     pinfo.model = &allModels[14];
+     pinfo.fRadius = .5;
+-    weapons[iNumWeapons].createWeapon("Homing Missiles",14,pinfo,"w_hud/homing_missile.bmp");
++    weapons[iNumWeapons].createWeapon("Homing Missiles",14,pinfo,DATADIR "w_hud/homing_missile.bmp");
+     iNumWeapons++;
+     
+     
+@@ -342,7 +342,7 @@
+     
+     pinfo.model = /*&allModels[10]*/0;
+     pinfo.fRadius = .65;
+-    weapons[iNumWeapons].createWeapon("Spider Mine",25,pinfo,"w_hud/four_mines.bmp");
++    weapons[iNumWeapons].createWeapon("Spider Mine",25,pinfo,DATADIR "w_hud/four_mines.bmp");
+     iNumWeapons++;
+     
+     
+@@ -371,7 +371,7 @@
+     
+     pinfo.model = /*&allModels[8]*/NULL;
+     pinfo.fRadius = 1;
+-    weapons[iNumWeapons].createWeapon("Concussion",25,pinfo,"w_hud/concussion.bmp");
++    weapons[iNumWeapons].createWeapon("Concussion",25,pinfo,DATADIR "w_hud/concussion.bmp");
+     iNumWeapons++;
+     
+     
+@@ -400,7 +400,7 @@
+     
+     pinfo.model = 0;
+     pinfo.fRadius = .65;
+-    weapons[iNumWeapons].createWeapon("Defense Ring",50,pinfo,"w_hud/defense.bmp");
++    weapons[iNumWeapons].createWeapon("Defense Ring",50,pinfo,DATADIR "w_hud/defense.bmp");
+     iNumWeapons++;
+         
+         
+@@ -430,7 +430,7 @@
+     
+     pinfo.model = &allModels[14];
+     pinfo.fRadius = .7;
+-    weapons[iNumWeapons].createWeapon("Redeemer Missile",20,pinfo,"w_hud/redeemer.bmp");
++    weapons[iNumWeapons].createWeapon("Redeemer Missile",20,pinfo,DATADIR "w_hud/redeemer.bmp");
+     iNumWeapons++;
+     
+     
+@@ -459,7 +459,7 @@
+     
+     pinfo.model = &allModels[8];
+     pinfo.fRadius = .5;
+-    weapons[iNumWeapons].createWeapon("Gattling Gun",2,pinfo,"w_hud/gattling.bmp");
++    weapons[iNumWeapons].createWeapon("Gattling Gun",2,pinfo,DATADIR "w_hud/gattling.bmp");
+     iNumWeapons++;
+     
+     pinfo.fAccel=.014;
+@@ -487,7 +487,7 @@
+     
+     pinfo.model = &allModels[8];
+     pinfo.fRadius = .5;
+-    weapons[iNumWeapons].createWeapon("Rebound Gun",40,pinfo,"w_hud/rebound.bmp");
++    weapons[iNumWeapons].createWeapon("Rebound Gun",40,pinfo,DATADIR "w_hud/rebound.bmp");
+     iNumWeapons++;
+     
+     pinfo.fAccel=.014;
+@@ -515,7 +515,7 @@
+     
+     pinfo.model = /*&allModels[8]*/0;
+     pinfo.fRadius = 3;
+-    weapons[iNumWeapons].createWeapon("EMP Wave",30,pinfo,"w_hud/emp.bmp");
++    weapons[iNumWeapons].createWeapon("EMP Wave",30,pinfo,DATADIR "w_hud/emp.bmp");
+     iNumWeapons++;
+     
+     
+@@ -545,7 +545,7 @@
+     
+     pinfo.model = /*&allModels[10]*/0;
+     pinfo.fRadius = .65;
+-    weapons[iNumWeapons].createWeapon("Berserkers",25,pinfo,"w_hud/berserkers.bmp");
++    weapons[iNumWeapons].createWeapon("Berserkers",25,pinfo,DATADIR "w_hud/berserkers.bmp");
+     iNumWeapons++;
+     
+     /*pinfo.fAccel=.014;

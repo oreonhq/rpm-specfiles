@@ -1,0 +1,72 @@
+Fixes warnings like this:
+
+  In file included from ../src/init/initmodule.c:20:
+  ../src/init/block_helpers_numpy.ic: In function ‘PyGSL_numpy_convert’:
+  ../Include/pygsl/utils.h:48:9: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 7 has type ‘uint32_t’ {aka ‘unsigned int’} [-Wformat=]
+     48 |         "In Function %s from File %s at line %d "  mess      "\n" ,  \
+        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ../src/init/block_helpers_numpy.ic:112:6: note: in expansion of macro ‘DEBUG_MESS’
+    112 |      DEBUG_MESS(4, "Got an array @ %p with refcnt %ld", (void *)a_array,
+        |      ^~~~~~~~~~
+
+--- pygsl-2.6.4/src/init/block_helpers.c.orig	2025-11-02 03:11:24.000000000 -0700
++++ pygsl-2.6.4/src/init/block_helpers.c	2025-11-02 06:54:04.725418184 -0700
+@@ -666,7 +666,7 @@ PyGSL_vector_check(PyObject *src, PyGSL_
+ 	  }
+ 
+      }/* number of tries */
+-     DEBUG_MESS(7, "Checking refcount src obj @ %p had %ld cts and array @ %p has now %ld cts",
++     DEBUG_MESS(7, "Checking refcount src obj @ %p had %u cts and array @ %p has now %u cts",
+ 		(void *) src,  src->ob_refcnt, (void *)a_array,
+ 		PyGSL_PY_ARRAY_GET_REFCNT(a_array));
+ 
+--- pygsl-2.6.4/src/init/block_helpers_numpy.ic.orig	2025-11-02 03:11:24.000000000 -0700
++++ pygsl-2.6.4/src/init/block_helpers_numpy.ic	2025-11-02 06:53:40.773574411 -0700
+@@ -109,7 +109,7 @@ PyGSL_numpy_convert(PyObject *src, int a
+ 	  line = __LINE__ - 1;
+      }
+ 
+-     DEBUG_MESS(4, "Got an array @ %p with refcnt %ld", (void *)a_array,
++     DEBUG_MESS(4, "Got an array @ %p with refcnt %u", (void *)a_array,
+ 		PyGSL_PY_ARRAY_GET_REFCNT(a_array));
+      FUNC_MESS_END();
+ 
+@@ -186,7 +186,7 @@ PyGSL_PyArray_prepare_gsl_matrix_view(Py
+      if(PyGSL_PyArray_Check(a_array, array_type, flag,  2, dimensions, argnum, info) != GSL_SUCCESS)
+ 	  goto fail;
+ 
+-     DEBUG_MESS(3, "a_array @ %p is a matrix with refcnt %ld", (void *) a_array,
++     DEBUG_MESS(3, "a_array @ %p is a matrix with refcnt %u", (void *) a_array,
+ 		PyGSL_PY_ARRAY_GET_REFCNT(a_array));
+      FUNC_MESS_END();
+      return a_array;
+--- pygsl-2.6.4/src/rng/rng_helpers.c.orig	2025-11-02 03:11:24.000000000 -0700
++++ pygsl-2.6.4/src/rng/rng_helpers.c	2025-11-02 06:56:29.155747994 -0700
+@@ -1169,14 +1169,14 @@ PyGSL_pdf_dA_to_uint_or_dA(PyObject *sel
+ 	  goto fail;
+      }
+      k = PyArray_DIM(array_p, 0);
+-     DEBUG_MESS(4, "Building Matrix. Input Object @ %p with refcount %ld!", (void *) tmp1, tmp1->ob_refcnt);
++     DEBUG_MESS(4, "Building Matrix. Input Object @ %p with refcount %u!", (void *) tmp1, tmp1->ob_refcnt);
+      ainfo = PyGSL_BUILD_ARRAY_INFO(PyGSL_NON_CONTIGUOUS | PyGSL_INPUT_ARRAY, type_3darg, 1, 2);
+      array_n = PyGSL_matrix_check(tmp1, -1, k, ainfo,  NULL, NULL, NULL);
+      if(array_n == NULL){
+ 	  line = __LINE__ - 2;
+ 	  goto fail;
+      }
+-     DEBUG_MESS(4, "Built Matrix. Object @ %p with refcount %ld!", (void *) array_n, PyGSL_PY_ARRAY_GET_REFCNT(array_n));
++     DEBUG_MESS(4, "Built Matrix. Object @ %p with refcount %u!", (void *) array_n, PyGSL_PY_ARRAY_GET_REFCNT(array_n));
+      dimension = PyArray_DIM(array_n, 0);
+ 
+      FUNC_MESS("New Array ...");
+--- pygsl-2.6.4/src/rng/rng_multinomial.ic.orig	2025-11-02 03:11:24.000000000 -0700
++++ pygsl-2.6.4/src/rng/rng_multinomial.ic	2025-11-02 06:57:01.539241447 -0700
+@@ -37,7 +37,7 @@ PyGSL_rng_multinomial_hand(PyGSL_rng *rn
+ 	  line = __LINE__ - 2;
+ 	  goto fail;
+      }
+-     DEBUG_MESS(4, "Built Matrix object @ %p with refcount %ld dims = [%ld, %ld], dim= %ld, k = %ld",
++     DEBUG_MESS(4, "Built Matrix object @ %p with refcount %u dims = [%ld, %ld], dim= %ld, k = %ld",
+ 		(void *) array_n, PyGSL_PY_ARRAY_GET_REFCNT(array_n),
+ 		(long) PyArray_DIM(array_n, 0), (long) PyArray_DIM(array_n, 1), dim, (long) k);
+ 

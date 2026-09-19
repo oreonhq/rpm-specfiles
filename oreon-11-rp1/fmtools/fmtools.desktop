@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=tkradio
+Comment=Python/Tk wrapper for fmtools
+Exec=tkradio.py
+Icon=radio
+Terminal=false
+Type=Application
+StartupNotify=false
+StartupWMClass=tkradio
+Categories=AudioVideo;

@@ -1,0 +1,34 @@
+.TH TEND\-TCONV "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-tconv \- convert between different shape triples
+.SH SYNOPSIS
+.B tend\ tconv
+.B \-t
+.RI < inType \  outType >
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Convert between different shape triples.
+The triple can be eigenvalues,
+invariants
+.BI ( J ,\  K ,\  R )\fR,
+and lots of other things.
+.SH OPTIONS
+.TP
+.B \-t\fR <\fIinType\fR\ \fIoutType\fR>
+given input and desired output type of triples (2
+.IR tenTripleType s)
+.TP
+.B \-i\fR <\fInin\fR>
+input array of triples; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output array
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

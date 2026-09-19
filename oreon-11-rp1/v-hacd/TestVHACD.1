@@ -1,0 +1,127 @@
+.TH TESTVHACD "1" "February 2023" "" "User Commands"
+.SH NAME
+.B TestVHACD
+\(en Test and utility command-line tool for the V-HACD library
+.SH SYNOPSIS
+.B TestVHACD
+.RI < wavefront.obj >
+.RI ( options )
+.SH DESCRIPTION
+The V-HACD library decomposes a 3D surface
+into a set of \(lqnear\(rq convex parts.
+.SH OPTIONS
+.TP
+.BR \-h\  < \fIn >
+Maximum number of output convex hulls.
+Default is
+.B 32
+.TP
+.BR \-r\  < \fIvoxelresolution >
+Total number of voxels to use.
+Default is 100,000
+.TP
+.BR \-e\  < \fIvolumeErrorPercent >
+Volume error allowed as a percentage.
+Default is 1%.
+Valid range is
+.B 0.001
+to
+.B 10
+.TP
+.BR \-d\  < \fImaxRecursionDepth >
+Maximum recursion depth.
+Default value is
+.BR 10 .
+.TP
+.BR \-s\  < true / false >
+Whether or not to shrinkwrap output to source mesh.
+Default is
+.BR true .
+.TP
+.BR \-f\  < \fIfillMode >
+Fill mode.
+Default is
+.RB \(oq flood \(cq,
+also
+.RB \(oq surface \(cq
+and
+.RB \(oq raycast \(cq
+are valid.
+.TP
+.BR \-v\  < \fImaxHullVertCount >
+Maximum number of vertices in the output convex hull.
+Default value is
+.B 64
+.TP
+.BR \-a\  < true / false >
+Whether or not to run asynchronously.
+Default is
+.RB \(oq true \(cq
+.TP
+.BR \-l\  < \fIminEdgeLength >
+Minimum size of a voxel edge.
+Default value is
+.B 2
+voxels.
+.TP
+.BR \-p\  < true / false >
+If
+.BR false ,
+splits hulls in the middle.
+If
+.BR true ,
+tries to find optimal split plane location.
+False by default.
+.TP
+.BR \-o\  < obj / stl / usda >
+Export the convex hulls as a series of wavefront OBJ files,
+STL files, or a single USDA.
+.TP
+.BR \-g\  < true / false >
+If set to
+.BR false ,
+no logging will be displayed.
+.SS "TUNING PARAMETERS"
+The default values are currently designed to give a fast and basic
+approximation of a shape.
+.P
+If you want as accurate results as possible
+and don\(cqt care if it takes quite a bit longer
+you can use a small error threshold
+.RB ( \-e\ 0.01 )
+and a high voxel resolution of ten million
+.RB ( \-r\ 10000000 )
+and a relatively high number of convex hulls say
+.B 128
+.RB ( \-h\ 128 ).
+.P
+Finally you can set the maximum decomposition depth
+to much higher than the default value of
+.BR 10 .
+Setting it to say
+.B 15
+.RB ( \-d\ 15 )
+will allow the algorithm to recurse much more deeply into the shape.
+.TP
+Example:
+.EX
+.B TestVHACD beshon.obj \-e\ 0.01 \-d\ 15 \-r\ 10000000 \-r\ 128
+.EE
+.in
+.P
+Usually this may be overkill for your use case
+but if you have say machined parts with sharp angles,
+these settings have a better chance of giving a good result.
+.P
+Note that setting the maximum decomposition depth to
+.B 15
+will make the tool run a very long time
+(possibly multiple minutes)
+but it will likely give the most precise results.
+.P
+The default value for decomposition depth is currently ten
+and it goes in powers of two.
+So the default value considers a maximum of
+1,024 hulls but with a depth of
+.B 15
+it will consider 32,768 convex hull fragments.

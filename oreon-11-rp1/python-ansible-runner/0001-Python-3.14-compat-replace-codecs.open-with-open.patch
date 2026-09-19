@@ -1,0 +1,146 @@
+From 3d52b52c521e5d99f3e50c15edc34af59fb7ffee Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Fri, 25 Jul 2025 17:01:57 -0700
+Subject: [PATCH] Python 3.14 compat: replace codecs.open with open
+
+Python 3.14 deprecates codecs.open:
+https://docs.python.org/3.14/whatsnew/3.14.html#deprecated
+This makes the tests fail, because we get a bunch of warnings
+about the deprecation and I guess the tests are set to fail on
+warnings.
+
+It's never been recommended to use codecs.open on Python 3. It
+was the "right way" to open text content on Python 2 for a bit,
+but when Python 3 came around, io.open was supposed to be used
+to be agnostic between 2 and 3. Since ansible-runner only targets
+3 nowadays, let's just use open.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ src/ansible_runner/loader.py         |  2 +-
+ src/ansible_runner/runner.py         | 10 +++++-----
+ src/ansible_runner/streaming.py      |  2 +-
+ src/ansible_runner/utils/__init__.py |  2 +-
+ test/unit/test_loader.py             |  2 +-
+ test/unit/test_runner.py             |  4 ++--
+ 6 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/src/ansible_runner/loader.py b/src/ansible_runner/loader.py
+index 24d15e1..1a9d599 100644
+--- a/src/ansible_runner/loader.py
++++ b/src/ansible_runner/loader.py
+@@ -90,7 +90,7 @@ class ArtifactLoader:
+         try:
+             if not os.path.exists(path):
+                 raise ConfigurationError(f"specified path does not exist {path}")
+-            with codecs.open(path, encoding='utf-8') as f:
++            with open(path, encoding='utf-8') as f:
+                 data = f.read()
+ 
+             return data
+diff --git a/src/ansible_runner/runner.py b/src/ansible_runner/runner.py
+index 0622054..e54a8dd 100644
+--- a/src/ansible_runner/runner.py
++++ b/src/ansible_runner/runner.py
+@@ -68,7 +68,7 @@ class Runner:
+             try:
+                 event_data.update({'runner_ident': str(self.config.ident)})
+                 try:
+-                    with codecs.open(partial_filename, 'r', encoding='utf-8') as read_file:
++                    with open(partial_filename, 'r', encoding='utf-8') as read_file:
+                         partial_event_data = json.load(read_file)
+                     event_data.update(partial_event_data)
+                     if self.remove_partials:
+@@ -92,7 +92,7 @@ class Runner:
+                     ansible_runner.plugins[plugin].event_handler(self.config, event_data)
+                 if should_write:
+                     temporary_filename = full_filename + '.tmp'
+-                    with codecs.open(temporary_filename, 'w', encoding='utf-8') as write_file:
++                    with open(temporary_filename, 'w', encoding='utf-8') as write_file:
+                         os.chmod(temporary_filename, stat.S_IRUSR | stat.S_IWUSR)
+                         json.dump(event_data, write_file)
+                     os.rename(temporary_filename, full_filename)
+@@ -136,7 +136,7 @@ class Runner:
+             os.mkdir(job_events_path, 0o700)
+ 
+         command = self.config.command
+-        with codecs.open(command_filename, 'w', encoding='utf-8') as f:
++        with open(command_filename, 'w', encoding='utf-8') as f:
+             os.chmod(command_filename, stat.S_IRUSR | stat.S_IWUSR)
+             json.dump(
+                 {'command': command,
+@@ -156,8 +156,8 @@ class Runner:
+             stdout_filename = os.path.join(self.config.artifact_dir, 'stdout')
+             stderr_filename = os.path.join(self.config.artifact_dir, 'stderr')
+             os.close(os.open(stdout_filename, os.O_CREAT, stat.S_IRUSR | stat.S_IWUSR))
+-            stdout_handle = codecs.open(stdout_filename, 'w', encoding='utf-8')
+-            stderr_handle = codecs.open(stderr_filename, 'w', encoding='utf-8')
++            stdout_handle = open(stdout_filename, 'w', encoding='utf-8')
++            stderr_handle = open(stderr_filename, 'w', encoding='utf-8')
+         else:
+             stdout_handle = None
+             stderr_handle = None
+diff --git a/src/ansible_runner/streaming.py b/src/ansible_runner/streaming.py
+index bf205d2..b9ced23 100644
+--- a/src/ansible_runner/streaming.py
++++ b/src/ansible_runner/streaming.py
+@@ -326,7 +326,7 @@ class Processor:
+         for plugin in ansible_runner.plugins:
+             ansible_runner.plugins[plugin].event_handler(self.config, event_data)
+         if should_write:
+-            with codecs.open(full_filename, 'w', encoding='utf-8') as write_file:
++            with open(full_filename, 'w', encoding='utf-8') as write_file:
+                 os.chmod(full_filename, stat.S_IRUSR | stat.S_IWUSR)
+                 json.dump(event_data, write_file)
+ 
+diff --git a/src/ansible_runner/utils/__init__.py b/src/ansible_runner/utils/__init__.py
+index f4a661e..8fb44b1 100644
+--- a/src/ansible_runner/utils/__init__.py
++++ b/src/ansible_runner/utils/__init__.py
+@@ -268,7 +268,7 @@ def collect_new_events(event_path: str, old_events: dict) -> Iterator[tuple[dict
+                 dir_events_actual.append(each_file)
+     dir_events_actual.sort(key=lambda filenm: int(filenm.split("-", 1)[0]))
+     for event_file in dir_events_actual:
+-        with codecs.open(os.path.join(event_path, event_file), 'r', encoding='utf-8') as event_file_actual:
++        with open(os.path.join(event_path, event_file), 'r', encoding='utf-8') as event_file_actual:
+             try:
+                 event = json.load(event_file_actual)
+             except ValueError:
+diff --git a/test/unit/test_loader.py b/test/unit/test_loader.py
+index 5bde3e3..c037976 100644
+--- a/test/unit/test_loader.py
++++ b/test/unit/test_loader.py
+@@ -117,7 +117,7 @@ def test_load_file_type_check(loader, mocker, tmp_path):
+ 
+ 
+ def test_get_contents_ok(loader, mocker):
+-    mock_open = mocker.patch('codecs.open')
++    mock_open = mocker.patch('builtins.open')
+ 
+     handler = BytesIO()
+     handler.write(b"test string")
+diff --git a/test/unit/test_runner.py b/test/unit/test_runner.py
+index b84e39f..9d4bebd 100644
+--- a/test/unit/test_runner.py
++++ b/test/unit/test_runner.py
+@@ -93,7 +93,7 @@ def test_env_vars(rc, value):
+     status, exitcode = Runner(config=rc).run()
+     assert status == 'successful'
+     assert exitcode == 0
+-    with codecs.open(os.path.join(rc.artifact_dir, 'stdout'), 'r', encoding='utf-8') as f:
++    with open(os.path.join(rc.artifact_dir, 'stdout'), 'r', encoding='utf-8') as f:
+         assert value in f.read()
+ 
+ 
+@@ -113,7 +113,7 @@ def test_event_callback_interface_has_ident(rc, mocker):
+     rc.ident = "testident"
+     runner = Runner(config=rc, remove_partials=False)
+     runner.event_handler = mocker.Mock()
+-    mocker.patch('codecs.open', mocker.mock_open(read_data=json.dumps({"event": "test"})))
++    mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps({"event": "test"})))
+     chmod = mocker.patch('os.chmod', mocker.Mock())
+     mocker.patch('os.mkdir', mocker.Mock())
+ 
+-- 
+2.50.1
+

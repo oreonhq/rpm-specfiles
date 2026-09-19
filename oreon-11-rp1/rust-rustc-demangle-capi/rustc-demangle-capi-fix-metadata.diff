@@ -1,0 +1,15 @@
+--- rustc-demangle-capi-0.1.0/Cargo.toml	2021-02-03T15:13:59+00:00
++++ rustc-demangle-capi-0.1.0/Cargo.toml	2025-03-16T00:04:35.115373+00:00
+@@ -23,3 +23,12 @@
+ crate-type = ["staticlib", "cdylib"]
+ [dependencies.rustc-demangle]
+ version = "0.1.16"
++
++[features]
++capi = []
++
++[package.metadata.capi.header]
++generation = false
++
++[package.metadata.capi.install.include]
++asset = [{ from="include/rustc_demangle.h" }]

@@ -1,5 +1,5 @@
-%global source0_hash 7bdaf593dda367c23342fc4d3c551c736a50ceeb5d28eed99feb9779afd91038
-%global source1_hash 23d20766a3118d6c513c55432304046d5431076116191b67f6e3c5b9232725ff
+%global source0_hash ef66d4e235a4b314346c4541b0a2e702338670ebd81568234c3c5b1692d6c6132adbea2c3da9428c090ec65a2a10c312415442bb634249e6fd8a3cc58514a96a
+%global source1_hash 3cde8f9ce37a38293d589737f15a35ac4ec2afea2a821022878e92d8d32fc90f5068a672095aa72ac54352c089fcf3dc9430d6d72a6a22f524e6c9dec6171bdc
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Mathematical symbol font for Adobe MinionPro
 License:        OFL-1.1
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mnsymbol.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mnsymbol.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/mnsymbol.tar.xz#/mnsymbol.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/mnsymbol.doc.tar.xz#/mnsymbol.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-mnsymbol-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-mnsymbol-doc <= 11:%{version}
@@ -23,8 +23,8 @@ Provides:       tex(MnSymbol.sty)
 Mathematical symbol font for Adobe MinionPro.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

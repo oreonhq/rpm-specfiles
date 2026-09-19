@@ -1,0 +1,35 @@
+diff --color -Nur rkhunter-1.4.6.orig/files/rkhunter rkhunter-1.4.6/files/rkhunter
+--- rkhunter-1.4.6.orig/files/rkhunter	2023-04-29 09:32:39.288709203 -0700
++++ rkhunter-1.4.6/files/rkhunter	2023-04-29 10:00:29.396271053 -0700
+@@ -70,7 +70,7 @@
+ # we exec to log everything to the debug file.
+ #
+ 
+-if [ -n "`echo \"$*\" | grep '\-\-debug'`" ]; then
++if [ -n "`echo \"$*\" | grep '\--debug'`" ]; then
+ 	RKHDEBUGFILE=""
+ 	RKHDEBUGBASE="/tmp/rkhunter-debug"
+ 
+@@ -181,9 +181,11 @@
+ # used. If it is, then some typical grep tests will fail.
+ #
+ 
+-if [ "`echo \"rkh-grep-test\" | grep '^\+'`" = "rkh-grep-test" ]; then
++# fedora always uses POSIX grep and set an alias here for depreciated egrep too
++#if [ "`echo \"rkh-grep-test\" | grep '^\+'`" = "rkh-grep-test" ]; then
+ 	alias grep='grep -E'
+-fi
++	alias egrep='grep -E'
++#fi
+ 
+ 
+ #
+@@ -9585,7 +9587,7 @@
+ 		    rpc.nfsd:tcp.log:Sniffer installed
+ 		    sshd:/dev/ptyxx:OpenBSD Rootkit
+ 		    sshd:/.config:SHV4 Rootkit
+-		    sshd:+\\$.*\\$\!.*\!\!\\$:Backdoored SSH daemon installed
++		    sshd:+\\$.*\\$!.*!!\\$:Backdoored SSH daemon installed
+ 		    sshd:backdoor.h:Trojaned SSH daemon
+ 		    sshd:backdoor_active:Trojaned SSH daemon
+ 		    sshd:magic_pass_active:Trojaned SSH daemon

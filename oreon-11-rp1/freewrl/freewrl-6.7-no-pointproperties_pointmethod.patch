@@ -1,0 +1,22 @@
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h.no-pointproperties_pointmethod freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h.no-pointproperties_pointmethod	2025-03-27 16:06:47.263927454 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h	2025-03-27 16:13:19.927783567 -0400
+@@ -298,11 +298,18 @@ void setUserShaderNode(struct X3D_Node *
+ 		} \
+ 	}
+ 
++/*
+ enum {
+ PM_NONE = 0,  //reserve 0 for render_PointSet to thunk to opengl GL_POINTS when no PointProperties node
+ PM_SCREEN = 1,
+ PM_OBJECT = 2,
+ PM_FANCY = 3,
+ } pointproperties_pointmethod;
++*/
++
++#define PM_NONE 0
++#define PM_SCREEN 1
++#define PM_OBJECT 2
++#define PM_FANCY 3
+ 
+ #endif /* __FREEWRL_SCENEGRAPH_SHAPE_H__ */

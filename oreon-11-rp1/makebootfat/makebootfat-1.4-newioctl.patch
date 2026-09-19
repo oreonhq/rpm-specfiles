@@ -1,0 +1,12 @@
+diff -Naur makebootfat-1.4/disk.c makebootfat-1.4p/disk.c
+--- makebootfat-1.4/disk.c	2005-03-16 18:43:22.000000000 +0100
++++ makebootfat-1.4p/disk.c	2010-11-16 21:59:09.000000000 +0100
+@@ -597,7 +597,7 @@
+ 	}
+ 
+ 	/* exclude not USB mass storage device */
+-	if (strstr(hostname, "USB Mass Storage") == 0) {
++	if (strstr(hostname, "USB Mass Storage") == 0 && strstr(hostname, "usb-storage") == 0) {
+ 		goto err_close;
+ 	}
+ 

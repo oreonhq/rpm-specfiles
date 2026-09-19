@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Overgod
+Comment=Like asteroids, but the asteroids move independently and shoot back
+Exec=overgod
+Icon=overgod
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;
+Keywords=Game;Arcade;Asteroids;

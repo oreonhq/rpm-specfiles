@@ -1,0 +1,18 @@
+Use 0 for the third argument of ftpfs_mknod, as in other places.
+This avoids an int-conversion type error.
+
+Submitted upstream: <https://sourceforge.net/p/curlftpfs/patches/15/>
+
+diff --git a/ftpfs.c b/ftpfs.c
+index f63805445faa871d..4d656cabac8b8380 100644
+--- a/ftpfs.c
++++ b/ftpfs.c
+@@ -817,7 +817,7 @@ static int ftpfs_open(const char* path, struct fuse_file_info* fi) {
+ static int ftpfs_create(const char* path, mode_t mode,
+                         struct fuse_file_info* fi) {
+ //	return ftpfs_open_common(path, mode, fi);
+-	ftpfs_mknod(path, mode, NULL);
++	ftpfs_mknod(path, mode, 0);
+   return ftpfs_open_common(path, mode, fi);
+ }
+ #endif

@@ -1,0 +1,15 @@
+--- mio-0.7.14/Cargo.toml	1970-01-01T00:00:01+00:00
++++ mio-0.7.14/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -60,12 +60,5 @@
+ uds = ["net"]
+ [target."cfg(unix)".dependencies.libc]
+ version = "0.2.86"
+-[target."cfg(windows)".dependencies.miow]
+-version = "0.3.6"
+ 
+-[target."cfg(windows)".dependencies.ntapi]
+-version = "0.3"
+ 
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3"
+-features = ["winsock2", "mswsock", "mstcpip"]

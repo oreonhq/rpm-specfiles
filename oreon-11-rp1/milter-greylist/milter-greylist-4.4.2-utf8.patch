@@ -1,0 +1,11 @@
+--- ChangeLog
++++ ChangeLog
+@@ -42,7 +42,7 @@
+ 	Fix milter-greylist.m4 for newer Sendmail (Joe Pruett)
+ 	Fix autoconf warning about --datarootdir (R P Herrold)
+ 	Add spamassassin toggling to the .spec file (Adam Katz)
+-	Fix DKIM (John Wood, Jörgen Lundman)
++	Fix DKIM (John Wood, JÃ¶rgen Lundman)
+ 4.3.8
+ 	Fix spamd hang if message contains NULL (Enrico Scholz)
+ 	Format string for SpamAssassin score

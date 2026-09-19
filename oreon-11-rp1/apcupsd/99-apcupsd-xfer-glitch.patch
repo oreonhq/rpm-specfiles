@@ -1,0 +1,61 @@
+diff -aruN apcupsd-3.14.14.orig/src/drivers/usb/usb.c apcupsd-3.14.14/src/drivers/usb/usb.c
+--- apcupsd-3.14.14.orig/src/drivers/usb/usb.c	2024-02-24 20:22:42.007641242 +0100
++++ apcupsd-3.14.14/src/drivers/usb/usb.c	2024-02-24 20:23:03.824987965 +0100
+@@ -42,7 +42,9 @@
+    UpsDriver(ups),
+    _quirk_old_backups_pro(false),
+    _prev_time((struct timeval){0}),
+-   _bpcnt(0)
++   _bpcnt(0),
++   _bacnt(0),
++   _brcnt(0)
+ {
+ }
+ 
+@@ -410,8 +412,13 @@
+       break;
+ 
+    case CI_NeedReplacement:
+-      if (uval->iValue)
+-         _ups->set_replacebatt(uval->iValue);
++      if (uval->iValue) {
++         if (_brcnt++) {
++           _ups->set_replacebatt(uval->iValue);
++         }
++      } else {
++         _brcnt = 0;
++      }
+       Dmsg(200, "ReplaceBatt=%d\n", uval->iValue);
+       break;
+ 
+@@ -569,11 +576,15 @@
+        * delayed. C'est la vie.
+        */
+       if (uval->iValue) {
+-         if (_bpcnt++)
++         if (_bpcnt++) {
++            _bacnt = 0;
+             _ups->set_battpresent();
++         }
+       } else {
+-         _bpcnt = 0;
+-         _ups->clear_battpresent();
++         if (_bacnt++) {
++            _bpcnt = 0;
++            _ups->clear_battpresent();
++         }
+       }
+       Dmsg(200, "BatteryPresent=%d\n", uval->iValue);
+       break;
+diff -aruN apcupsd-3.14.14.orig/src/drivers/usb/usb.h apcupsd-3.14.14/src/drivers/usb/usb.h
+--- apcupsd-3.14.14.orig/src/drivers/usb/usb.h	2024-02-24 20:22:42.007641242 +0100
++++ apcupsd-3.14.14/src/drivers/usb/usb.h	2024-02-24 20:23:01.754956355 +0100
+@@ -86,6 +86,8 @@
+    bool _quirk_old_backups_pro;
+    struct timeval _prev_time;
+    int _bpcnt;
++   int _bacnt;
++   int _brcnt;
+ };
+ 
+ /* Max rate to update volatile data */

@@ -1,0 +1,24 @@
+diff -urp pads-1.2.orig/src/storage.c pads-1.2/src/storage.c
+--- pads-1.2.orig/src/storage.c	2015-08-17 10:18:51.304266249 -0400
++++ pads-1.2/src/storage.c	2015-08-17 10:22:40.551260540 -0400
+@@ -369,7 +369,7 @@ void end_storage ()
+  *		: 2 - Protocol
+  * RETURN	: Pointer to Asset
+  * ---------------------------------------------------------- */
+-inline Asset *
++Asset *
+ find_asset (struct in_addr ip_addr, u_int16_t port, unsigned short proto)
+ {
+     Asset *list;
+diff -urp pads-1.2.orig/src/storage.h pads-1.2/src/storage.h
+--- pads-1.2.orig/src/storage.h	2015-08-17 10:18:51.304266249 -0400
++++ pads-1.2/src/storage.h	2015-08-17 10:21:10.412262785 -0400
+@@ -56,7 +56,7 @@ void add_arp_asset (struct in_addr ip_ad
+ unsigned short get_i_attempts (struct in_addr ip_addr, u_int16_t port, unsigned short proto);
+ short update_i_attempts (unsigned short i_attempts);
+ short update_asset (struct in_addr ip_addr, u_int16_t port, unsigned short proto, bstring service, bstring application);
+-inline Asset *find_asset (struct in_addr ip_addr, u_int16_t port, unsigned short proto);
++Asset *find_asset (struct in_addr ip_addr, u_int16_t port, unsigned short proto);
+ Asset *get_asset_pointer (void);
+ ArpAsset *get_arp_pointer (void);
+ void end_storage (void);

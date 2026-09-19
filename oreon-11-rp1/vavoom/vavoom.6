@@ -1,0 +1,133 @@
+.TH vavoom 6 games
+.SS NAME 
+vavoom \- The most advanced Doom/Heretic/Hexen/Strife source port around!
+.SH SYNOPSIS
+.B vavoom
+[ \-opengl ] [ \-d3d ] [ \-particles \fIn\fR ] [ \-surfcachesize \fIn\fR ] [ \-nosound ] [ \-no3dsound ] [ \-nomusic ] [ \-cddev \fIfile\fR ] [ \-openal ] [ \-nomouse ] [ \-nojoy ] [ \-nolan ] [ \-noudp ] [ \-ip \fIip_addr\fR ] [ \-noipx ] [ \-mpath ] [ \-port \fIn\fR ] { [ \-freedoom] | [ \-doom ] | [ \-doom2 ] | [ \-tnt ] | [ \-plutonia ] | [ \-heretic ] | [ \-hexen ] | [ \-strife ] } [ \-game \fIdirectory\fR ] [ \-devgame \fIdirectory\fR ] [ \-devsnd \fIsndinfo_script\fR ] [ \-progs \fIdirectory\fP ] 
+
+.SH DESCRIPTION
+
+.B Vavoom
+is a source port based on sources of Doom, Heretic, Hexen and
+a little bit from Quake. Supported platforms are Windows and Linux.
+Vavoom has a graphical launcher (vlaunch).
+
+.SH Graphic Options
+.TP
+.BI \-opengl
+selects OpenGL driver
+.TP
+.BI \-d3d
+selects Direct3D driver
+.TP
+.BI \-particles\  <count> 
+specifies number of particles to use, default is 2048, but you can't have less than 512 (i.e. you can't disable them)
+.TP
+.BI \-surfcachesize\  <size>
+specifies size of surface cache memory, in kilobytes
+.SH Sound Options
+.TP
+.BI \-nosound
+disables all sound, music and CD-Audio
+.TP
+.BI \-nosfx
+disables sound
+.TP
+.BI \-no3dsound
+disables 3D sound, use original mode, Windows version only
+.TP
+.BI \-nomusic
+disables music
+.TP
+.BI \-nocdaudio
+disables CD music
+.TP
+.BI \-cddev\  <file>
+specifies CD device \fIfile\fP, default /dev/cdrom, LINUX version only
+.TP
+.BI \-openal
+enabled OpenAL driver.
+.SH Input Options
+.BI \-nomouse
+disables mouse
+.TP
+.BI \-nojoy
+disables joystick
+.SH Network Options
+.BI \-nolan
+disables all LAN drivers
+.TP
+.BI \-noudp
+disables TCP/IP driver
+.TP
+.BI \-ip\  <address>
+specifies IP address, Windows version only
+.TP
+.BI \-noipx
+disables IPX driver
+.TP
+.BI \-mpath
+enables MPATH TCP/IP driver, DOS version only
+.TP
+.BI \-port\  <port>
+sets default LAN port
+.SH Game selection
+.BI \-freedoom
+look only for FreeDoom IWAD files
+.TP
+.BI \-doom
+look only for Doom IWAD files
+.TP
+.BI \-doom2
+look only for Doom 2: Hell On Earth IWAD files
+.TP
+.BI \-tnt
+look only for Doom TNT: Evilution IWAD files
+.TP
+.BI \-plutonia
+look only for Doom: The Plutionia Experiment IWAD files
+.TP
+.BI \-heretic
+look only for Heretic IWAD files
+.TP
+.BI \-hexen
+look only for Hexen IWAD files
+.TP
+.BI \-strife
+look only for Strife IWAD files
+.SH Custom games and development
+.BI \-game\  <directory>
+specifies custom game.
+.TP
+.BI \-devgame\  <directory>
+like \fI-game\fR, but also sets Vavoom in development mode.
+.TP
+.BI \-devsound\  <SNDINFO_script>
+sets sound development mode, uses given SNDINFO script, sounds and music are loaded form archive \fIdirectory\fP, which is specified in script.
+.TP
+.BI \-progs\   <directory>
+specifies \fIdirectory\fP where to look for progs. Server progs are loaded from \fIfile\fP svprogs.dat, client progs - clprogs.dat. Path must include ending slash.
+    Example: \-progs progs/myprogs/
+.TP
+.BI \-file\   <file1> [<file2> \.\.\.]
+specifies additional files.
+.TP
+.BI \-iwaddir\   <dir1> [<dir2> \.\.\.]
+specifies additional directories where to look for IWAD files.
+.SH Debugging Options
+.BI \-debug
+creates a debug \fIfile\fP basev/debug.txt with all console messages.
+.TP
+.BI \-starttime\  <time>
+sets start time, not in LINUX version and dedicated servers
+.TP
+.BI \-rhide
+prints debugfile to stderr, in DOS version Sys_Error exits with call frame traceback
+.SH More Information
+http://vavoom-engine.com/wiki/index.php?title=Command_line_arguments
+
+/usr/share/doc/vavoom/vavoom.txt.gz
+.PP
+Doom is a registered trademark of id software (http://www.idsoftware.com/).
+.SH Author
+See the copyright file on \fI/usr/share/doc/vavoom/copyright\fR

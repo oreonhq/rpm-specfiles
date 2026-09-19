@@ -1,0 +1,11 @@
+--- gnome-commander-1.6.0/src/utils.cc.path	2016-10-03 05:27:02.000000000 +0900
++++ gnome-commander-1.6.0/src/utils.cc	2016-10-16 15:14:16.638827912 +0900
+@@ -112,7 +112,7 @@
+ 
+         if (gnome_cmd_data.use_gcmd_block)
+         {
+-            gchar *s = g_strdup_printf ("bash -c \"%s; %s/bin/gcmd-block\"", in_command, PREFIX);
++            gchar *s = g_strdup_printf ("bash -c \"%s; /usr/libexec/%s/gcmd-block\"", in_command, PACKAGE);
+             arg = g_shell_quote (s);
+             g_free (s);
+         }

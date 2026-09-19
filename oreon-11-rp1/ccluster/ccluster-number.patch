@@ -1,0 +1,29 @@
+--- Ccluster-1.1.8/src/fpri/fpri.c.orig	2026-03-09 16:07:17.000000000 -0600
++++ Ccluster-1.1.8/src/fpri/fpri.c	2026-03-11 15:52:59.422331524 -0600
+@@ -11,6 +11,8 @@
+ 
+ #include "fpri.h"
+ 
++typedef double number;
++
+ void fpri_swap (fpri_t x, fpri_t y) {
+     number t1 = x->low, t2 = x->upp;
+     x->low = y->low;
+--- Ccluster-1.1.8/src/fpri/fpri.h.orig	2026-03-09 16:07:17.000000000 -0600
++++ Ccluster-1.1.8/src/fpri/fpri.h	2026-03-11 15:52:40.678534369 -0600
+@@ -59,13 +59,12 @@ FPRI_INLINE void   _fpri_free(void * ptr
+                                               void *(*realloc_func) (void *, size_t),
+                                               void  (*free_func)    (void *) );
+ 
+-typedef double number;
+ typedef struct {
+     /* Assuming rounding upward; 
+      *low stores MINUS the lower 
+      * bound of the interval;*/
+-    number low;
+-    number upp;
++    double low;
++    double upp;
+ } fpri_struct;
+ 
+ typedef fpri_struct fpri_t[1];

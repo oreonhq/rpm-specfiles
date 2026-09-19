@@ -1,0 +1,44 @@
+From ec6810612c4ebfcc3221c828eb44a9a67aae361e Mon Sep 17 00:00:00 2001
+From: Scott K Logan <logans@cottsay.net>
+Date: Mon, 3 Aug 2020 15:55:29 -0700
+Subject: [PATCH] Use raw strings for each part a regex
+
+The backslashes in this regex are causing `DeprecationWarning`s to
+appear because they aren't valid escape sequences. Clearly they're meant
+as literal backslashes given the context, so using raw strings makes
+sense. I set the other parts of the regex as raw strings as well since
+escape characters are far less common in regular expressions than
+backslash characters, and it's easy to forget to make the string raw
+when modifying an existing one to contain a new backslash.
+---
+ colcon_bazel/package_identification/bazel.py | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/colcon_bazel/package_identification/bazel.py b/colcon_bazel/package_identification/bazel.py
+index cbe5ebc..990e801 100644
+--- a/colcon_bazel/package_identification/bazel.py
++++ b/colcon_bazel/package_identification/bazel.py
+@@ -135,17 +135,17 @@ def extract_project_name(content):
+     # extract project name
+     match = re.search(
+         # keyword
+-        'name'
++        r'name'
+         # optional white space
+-        '\s*'
++        r'\s*'
+         # equal assignment
+-        '\='
++        r'\='
+         # optional white space
+-        '\s*'
++        r'\s*'
+         # optional "opening" quote
+-        '("?)'
++        r'("?)'
+         # project name
+-        '([a-zA-Z0-9_-]+)'
++        r'([a-zA-Z0-9_-]+)'
+         # optional "closing" quote (only if an "opening" quote was used)
+         r'\1',
+         content)

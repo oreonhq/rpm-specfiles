@@ -1,0 +1,53 @@
+--- a/src/Makefile	2001-12-04 21:51:36.000000000 -0600
++++ b/src/Makefile	2010-07-21 15:17:35.725400474 -0500
+@@ -14,7 +14,7 @@
+ OBJECTS = qftp.o ftplib.o
+ SOURCES = qftp.c ftplib.c
+ 
+-CFLAGS = -Wall $(DEBUG) -I. $(INCLUDES) $(DEFINES) -Wno-unused-variable -D_FILE_OFFSET_BITS=64 -D__unix__
++CFLAGS = -Wall $(DEBUG) -I. $(INCLUDES) $(DEFINES) -Wno-unused-variable -D_FILE_OFFSET_BITS=64 -D_WIN32
+ LDFLAGS = -L.
+ DEPFLAGS =
+ 
+@@ -60,6 +60,18 @@
+ 	ln -sf $< libftp.so.$(SONAME)
+ 	ln -sf $< $@
+ 
++%.o: %.rc
++	$(WINDRES) -i $< -o $@
++
++libftp.dll: ftplib.o ftplib-rc.o
++	  $(CC) -shared -o $@ ftplib.o ftplib-rc.o \
++	        -Wl,--export-all-symbol \
++	        -Wl,--enable-auto-import \
++	        -Wl,--add-stdcall-alias \
++	        -Wl,--kill-at \
++	        -Wl,--output-def,$@.def \
++	        -Wl,--out-implib,$@.a -lws2_32
++
+ qftp : qftp.o libftp.so ftplib.h
+ 	$(CC) $(LDFLAGS) -o $@ $< -lftp
+ 
+--- a/src/ftplib.c	2013-06-07 03:00:00.000000000 -0500
++++ b/src/ftplib.c	2015-12-28 14:24:19.130494969 -0600
+@@ -44,7 +44,7 @@
+ #elif defined(_WIN32)
+ #include <winsock.h>
+ #endif
+-#if defined(__APPLE__)
++#if defined(__APPLE__) || defined(_WIN32)
+ #undef _REENTRANT
+ #endif
+ 
+@@ -499,7 +499,11 @@
+     	if ((phe = gethostbyname(lhost)) == NULL)
+     	{
+ 	    if (ftplib_debug)
++#ifdef _WIN32
++		fprintf(stderr, "gethostbyname: %i\n", h_errno);
++#else
+ 		fprintf(stderr, "gethostbyname: %s\n", hstrerror(h_errno));
++#endif
+ 	    free(lhost);
+ 	    return 0;
+     	}

@@ -1,0 +1,29 @@
+From b94a884ea39227b5f2fdb74fa92713840ef3f049 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 12 Jun 2025 11:44:44 -0400
+Subject: [PATCH 3/4] Expect SCIP_PY to report unbounded problems the same way
+ as SCIP_CMD
+
+This seems to have changed from scip 9.2.0 to 9.2.2; we cannot usefully
+report it upstream until PySCIPOpt releases binary PyPI wheels based on
+scip 9.2.2 or later.
+---
+ pulp/tests/test_pulp.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pulp/tests/test_pulp.py b/pulp/tests/test_pulp.py
+index 1b3e849..41be258 100644
+--- a/pulp/tests/test_pulp.py
++++ b/pulp/tests/test_pulp.py
+@@ -888,7 +888,7 @@ class BaseSolverTest:
+             elif self.solver.name in ["GLPK_CMD"]:
+                 # GLPK_CMD Does not report unbounded problems, correctly
+                 pulpTestCheck(prob, self.solver, [const.LpStatusUndefined])
+-            elif self.solver.name in ["GUROBI_CMD", "SCIP_CMD"]:
++            elif self.solver.name in ["GUROBI_CMD", "SCIP_CMD", "SCIP_PY"]:
+                 pulpTestCheck(prob, self.solver, [const.LpStatusNotSolved])
+             elif self.solver.name in ["CHOCO_CMD", "FSCIP_CMD"]:
+                 # choco bounds all variables. Would not return unbounded status
+-- 
+2.52.0
+

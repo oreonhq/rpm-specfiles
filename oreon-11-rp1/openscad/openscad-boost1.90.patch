@@ -1,0 +1,26 @@
+From 62d984a8c91a06339c359cf54ef8908ce3fdf6ed Mon Sep 17 00:00:00 2001
+From: Guenther Sohler <guenther.sohler@photeon.com>
+Date: Thu, 22 Dec 2022 08:21:41 +0100
+Subject: [PATCH] Fix build with Boost 1.90
+
+(cherry picked from commit cc51ea0a0dd14075df0f9af09ed4e20cce7fcb4c)
+---
+ src/FileModule.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/FileModule.cc b/src/FileModule.cc
+index ce57b1f..71e343c 100644
+--- a/src/FileModule.cc
++++ b/src/FileModule.cc
+@@ -65,7 +65,7 @@ void FileModule::registerUse(const std::string path, const Location &loc)
+ 	auto ext = fs::path(path).extension().generic_string();
+ 
+ 	if (boost::iequals(ext, ".otf") || boost::iequals(ext, ".ttf")) {
+-		if (fs::is_regular(path)) {
++		if (fs::is_regular_file(path)) {
+ 			FontCache::instance()->register_font_file(path);
+ 		} else {
+ 			LOG(message_group::Error,Location::NONE,"","Can't read font with path '%1$s'",path);
+-- 
+2.52.0
+

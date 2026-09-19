@@ -1,0 +1,4 @@
+news.=crit                                        /var/log/news/news.crit
+news.=err                                         /var/log/news/news.err
+news.notice                                       /var/log/news/news.notice
+news.=debug                                       /var/log/news/news.debug

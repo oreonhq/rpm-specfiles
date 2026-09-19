@@ -1,0 +1,14 @@
+diff -up magicpoint-1.13a/configure~ magicpoint-1.13a/configure
+--- magicpoint-1.13a/configure~	2021-02-15 16:26:57.000000000 +0100
++++ magicpoint-1.13a/configure	2021-02-15 17:02:17.346271096 +0100
+@@ -7434,8 +7434,8 @@ fi
+ #define USE_M17N 1
+ _ACEOF
+ 
+-		OPTFLAGS="$OPTFLAGS `m17n-config X --cflags`"
+-		LIBS="$LIBS `m17n-config X --libs` -lm17n-core"
++		OPTFLAGS="$OPTFLAGS `pkg-config --cflags m17n-gui`"
++		LIBS="$LIBS `pkg-config --libs m17n-gui` -lfontconfig"
+ 	fi
+ fi
+ 

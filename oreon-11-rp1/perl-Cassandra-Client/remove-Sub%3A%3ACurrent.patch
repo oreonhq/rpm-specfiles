@@ -1,0 +1,32 @@
+Description: replace Sub::Current by native __SUB__
+Forwarded: not-needed
+
+--- a/lib/Cassandra/Client/Util.pm
++++ b/lib/Cassandra/Client/Util.pm
+@@ -8,7 +8,7 @@
+ use Exporter 'import';
+ our @EXPORT= ('series', 'parallel', 'whilst');
+ 
+-use Sub::Current;
++use feature 'current_sub';
+ 
+ sub series {
+     my $list= shift;
+@@ -17,7 +17,7 @@
+     (shift @$list)->(sub {
+         my $next= shift @$list;
+         if ($next && !$_[0]) {
+-            splice @_, 0, 1, ROUTINE();
++            splice @_, 0, 1, __SUB__;
+             goto &$next;
+         }
+ 
+@@ -66,7 +66,7 @@
+         if (defined $_[0] || !($condition->())) {
+             goto &$callback;
+         }
+-        splice @_, 0, 1, ROUTINE();
++        splice @_, 0, 1, __SUB__;
+         goto &$iteratee;
+     })->();
+ }

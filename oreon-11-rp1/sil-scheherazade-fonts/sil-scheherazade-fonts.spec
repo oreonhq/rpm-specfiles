@@ -3,8 +3,8 @@
 %global projectname       scheherazade
 BuildArch: noarch
 
-Version:    3.300
-Release:    8%{?dist}
+Version:    4.500
+Release:    1%{?dist}
 URL:        https://software.sil.org/%{projectname}/
 
 %global foundry           SIL

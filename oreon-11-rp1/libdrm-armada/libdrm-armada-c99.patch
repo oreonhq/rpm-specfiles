@@ -1,0 +1,18 @@
+Include <unistd.h> for the lseek function, and <sys/ioctl.h>
+for the lseek function.
+
+diff --git a/armada_bufmgr.c b/armada_bufmgr.c
+index f552a317da9922b8..6aa202b332fa5e99 100644
+--- a/armada_bufmgr.c
++++ b/armada_bufmgr.c
+@@ -5,8 +5,10 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <sys/fcntl.h>
++#include <sys/ioctl.h>
+ #include <sys/mman.h>
+ #include <time.h>
++#include <unistd.h>
+ 
+ #include <xf86drm.h>
+ 

@@ -2,7 +2,7 @@
 
 Summary:        A high-performance implementation of MPI
 Name:           mpich
-Version:        4.2.2
+Version:        5.0.1
 Release:        %autorelease
 License:        mpich2
 URL:            https://www.mpich.org/

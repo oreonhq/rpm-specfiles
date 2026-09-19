@@ -1,0 +1,10 @@
+--- ClipIt-1.4.5/src/main.c.nowayland	2020-06-11 14:33:56.000000000 +0900
++++ ClipIt-1.4.5/src/main.c	2021-03-30 00:28:10.301811018 +0900
+@@ -1086,6 +1086,7 @@ int main(int argc, char **argv) {
+ 	bindtextdomain(GETTEXT_PACKAGE, CLIPITLOCALEDIR);
+ 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+ 	textdomain(GETTEXT_PACKAGE);
++	setenv("GDK_BACKEND", "x11", 1);
+ 
+ 	input_buffer[0] = '\0';
+ 	input_index = 0;

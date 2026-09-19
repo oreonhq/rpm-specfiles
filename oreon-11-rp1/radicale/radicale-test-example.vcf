@@ -1,0 +1,9 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Thunderbird.net/NONSGML Thunderbird CardBook V45.3//DE
+UID:5f523b8a-f220-4116-bdf3-12882c077aab
+EMAIL:test@example.org
+FN:Example Test
+N:Test;Example;;;
+REV:2020-09-22T06:34:04Z
+END:VCARD

@@ -1,0 +1,30 @@
+From 502a1dc846d509b7a7e695eb7b9976723bc6c096 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 7 Aug 2013 09:13:55 +0200
+Subject: [PATCH] Define POD encoding
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Catalyst/Plugin/Unicode.pm | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/lib/Catalyst/Plugin/Unicode.pm b/lib/Catalyst/Plugin/Unicode.pm
+index 0e4e4d0..9c4d6d1 100644
+--- a/lib/Catalyst/Plugin/Unicode.pm
++++ b/lib/Catalyst/Plugin/Unicode.pm
+@@ -35,6 +35,8 @@ sub prepare_parameters {
+ 
+ __END__
+ 
++=encoding utf8
++
+ =head1 NAME
+ 
+ Catalyst::Plugin::Unicode - Unicode aware Catalyst (old style)
+-- 
+1.8.1.4
+

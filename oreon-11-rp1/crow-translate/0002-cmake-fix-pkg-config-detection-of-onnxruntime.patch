@@ -1,0 +1,29 @@
+From c3a3d21b8128ed8b6350bc3fcd70cc5847bc20a5 Mon Sep 17 00:00:00 2001
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+Date: Wed, 22 Oct 2025 11:42:47 -0400
+Subject: [PATCH] cmake: fix pkg-config detection of onnxruntime
+
+The actual name of the upstream pkg-config file is libonnxruntime.pc.  This
+is needed to fix detection when it is built in another prefix, e.g. /app
+for flatpaks.
+
+https://github.com/microsoft/onnxruntime/commit/230c137460721c160c1632b6f38d99798b053321
+---
+ cmake/FindONNXRuntime.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmake/FindONNXRuntime.cmake b/cmake/FindONNXRuntime.cmake
+index d774495..0d06a0e 100644
+--- a/cmake/FindONNXRuntime.cmake
++++ b/cmake/FindONNXRuntime.cmake
+@@ -23,7 +23,7 @@ endif()
+ # First try to find ONNX Runtime via pkg-config or system paths
+ find_package(PkgConfig QUIET)
+ if(PKG_CONFIG_FOUND)
+-    pkg_check_modules(PC_ONNXRUNTIME QUIET onnxruntime)
++    pkg_check_modules(PC_ONNXRUNTIME QUIET libonnxruntime)
+ endif()
+ 
+ # Try to find onnxruntime directly if pkg-config didn't work
+-- 
+2.51.0

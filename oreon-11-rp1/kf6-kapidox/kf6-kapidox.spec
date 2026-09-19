@@ -1,13 +1,13 @@
-%global source0_hash a82f9d2e4a1faa71f633092c29a959e2dee1a172cd25465cf4a04c5388a05022
+%global source0_hash 838d31fa327b6a4ea502536b60f2b2a42f08ef5383248c0c32d481bc01a44725
 
 %global framework kapidox
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 4 scripts and data for building API documentation
 
@@ -74,6 +74,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 

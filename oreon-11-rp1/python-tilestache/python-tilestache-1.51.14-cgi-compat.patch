@@ -1,0 +1,13 @@
+--- a/TileStache/py3_compat.py	2019-03-30 09:45:13.000000000 -0700
++++ b/TileStache/py3_compat.py	2019-08-27 17:41:40.217769811 -0700
+@@ -18,9 +18,8 @@
+ try:
+     import urllib.request as urllib2
+     import http.client as httplib
+-    from urllib.parse import urlparse, urljoin, parse_qsl
++    from urllib.parse import urlparse, urljoin, parse_qs, parse_qsl
+     from urllib.request import urlopen
+-    from cgi import parse_qs
+     from _thread import allocate_lock
+     unichr = chr
+ except ImportError:

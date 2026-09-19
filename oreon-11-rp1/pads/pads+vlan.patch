@@ -1,0 +1,153 @@
+diff -r -c ./src/packet.c ../pads-1.2+vlan/src/packet.c
+*** ./src/packet.c	2005-02-15 20:47:35.000000000 -0500
+--- ../pads-1.2+vlan/src/packet.c	2007-08-24 10:11:59.000000000 -0400
+***************
+*** 35,59 ****
+   *		: 1 - Packet
+   * RETURN	: None!
+   * ---------------------------------------------------------- */
+  void process_eth (const struct pcap_pkthdr* pkthdr, const u_char* packet)
+  {
+      struct ether_header *ethh;		/* net/ethernet.h */
+  
+!     /* Extract the ethernet header from the packet. */
+!     ethh = (struct ether_header*) packet;
+  
+      /* Determine what type of ethernet packet this is. */
+      switch (ntohs(ethh->ether_type)) {
+  	/* IP */
+  	case ETHERTYPE_IP:
+! 	    process_ip (pkthdr, packet, sizeof(struct ether_header));
+! 	    break;
+  
+  	/* ARP */
+  	case ETHERTYPE_ARP:
+! 	    process_arp (pkthdr, packet, sizeof(struct ether_header));
+  	    break;
+! 
+  	/* Unknown Type */
+  	default:
+  	    return;
+--- 35,72 ----
+   *		: 1 - Packet
+   * RETURN	: None!
+   * ---------------------------------------------------------- */
++ 
++ /* Update - david@vorant.com  18 June 2007
++  * Try to detect whether the packet has an 802.1Q VLAN tag on it.  If so,
++  * try to automatically skip the tag and treat it as regular TCP/IP traffic.
++  * Otherwise the handler won't process the packet.  This is useful when,
++  * for example, you are monitoring a VLAN trunk line.
++  */
+  void process_eth (const struct pcap_pkthdr* pkthdr, const u_char* packet)
+  {
+      struct ether_header *ethh;		/* net/ethernet.h */
++     u_char * my_packet;
+  
+!     my_packet = (u_char *)packet;
+  
++     /* Extract the ethernet header from the packet. */
++     ethh = (struct ether_header*) my_packet;
++     if(ntohs(ethh->ether_type) == VLAN_ETHERTYPE) { /* strip the vlan tags */
++       ethh = (struct ether_header*) (packet + VLAN_HDRLEN);
++       my_packet += VLAN_HDRLEN;
++     }
+      /* Determine what type of ethernet packet this is. */
+      switch (ntohs(ethh->ether_type)) {
+  	/* IP */
+  	case ETHERTYPE_IP:
+! 	  process_ip (pkthdr, my_packet, sizeof(struct ether_header));
+! 	  break;
+  
+  	/* ARP */
+  	case ETHERTYPE_ARP:
+! 	    process_arp (pkthdr, my_packet, sizeof(struct ether_header));
+  	    break;
+!  
+  	/* Unknown Type */
+  	default:
+  	    return;
+***************
+*** 113,120 ****
+      struct ip *iph;			/* netinet/ip.h */
+  
+      /* Extract the IP header from this packet. */
+!     iph = (struct ip*)(packet + len);
+! 
+      /* Determine what type of IP packet this is. */
+      switch (iph->ip_p) {
+  	case IPPROTO_TCP:
+--- 126,132 ----
+      struct ip *iph;			/* netinet/ip.h */
+  
+      /* Extract the IP header from this packet. */
+!       iph = (struct ip*)(packet + len);
+      /* Determine what type of IP packet this is. */
+      switch (iph->ip_p) {
+  	case IPPROTO_TCP:
+diff -r -c ./src/packet.h ../pads-1.2+vlan/src/packet.h
+*** ./src/packet.h	2005-02-10 01:05:05.000000000 -0500
+--- ../pads-1.2+vlan/src/packet.h	2007-08-24 10:11:02.000000000 -0400
+***************
+*** 40,45 ****
+--- 40,51 ----
+  #endif /* ifdef LINUX */
+  
+  
++ /* 802.1Q VLAN tags are 4 bytes long. */
++ #define VLAN_HDRLEN 4
++ 
++ /* This is the decimal equivalent of the VLAN tag's ether frame type */
++ #define VLAN_ETHERTYPE 33024
++ 
+  /* INCLUDES ---------------------------------------- */
+  #include "global.h"
+  
+***************
+*** 47,53 ****
+  #include <netinet/tcp.h>
+  #include <netinet/ip_icmp.h>
+  
+- 
+  /* DATA STRUCTURES --------------------------------- */
+  
+  /*
+--- 53,58 ----
+diff -r -c ./src/pads.c ../pads-1.2+vlan/src/pads.c
+*** ./src/pads.c	2005-06-15 18:00:40.000000000 -0400
+--- ../pads-1.2+vlan/src/pads.c	2007-06-18 15:29:17.000000000 -0400
+***************
+*** 204,209 ****
+--- 204,210 ----
+  void
+  main_pads (void)
+  {
++     char pcap_filter[1044];
+      /* Initialize */
+      init_pads();
+  
+***************
+*** 255,262 ****
+  
+      /* Compile libpcap filter */
+      if (prog_argc > 0) {
+!         log_message("Filter:  %s\n", gc.pcap_filter);
+!         if (pcap_compile(gc.handle, &gc.filter, gc.pcap_filter, 0, gc.net) == -1) {
+              err_message("Unable to compile pcap filter!  %s", pcap_geterr(gc.handle));
+          }
+          if (pcap_setfilter(gc.handle, &gc.filter)) {
+--- 256,269 ----
+  
+      /* Compile libpcap filter */
+      if (prog_argc > 0) {
+!       if(gc.pcap_filter) {
+! 	strcpy(pcap_filter, "(ip or vlan) and ");
+! 	strncat(pcap_filter, gc.pcap_filter, 1024);
+!       } else {
+! 	strcpy(pcap_filter, "(ip or vlan)");
+!       }
+!         log_message("Filter:  %s\n", pcap_filter);
+!         if (pcap_compile(gc.handle, &gc.filter, pcap_filter, 0, gc.net) == -1) {
+              err_message("Unable to compile pcap filter!  %s", pcap_geterr(gc.handle));
+          }
+          if (pcap_setfilter(gc.handle, &gc.filter)) {

@@ -1,0 +1,36 @@
+From cae69fde545d7064433c796b7e4315aa86736a39 Mon Sep 17 00:00:00 2001
+From: Mahrud Sayrafi <mahrud@berkeley.edu>
+Date: Fri, 10 Jul 2020 00:36:17 -0500
+Subject: [PATCH] fix two typos
+
+---
+ source/polylib_mod/compress_parms.c         | 2 +-
+ source/polylib_mod/polylib/homogenization.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/source/polylib_mod/compress_parms.c b/source/polylib_mod/compress_parms.c
+index 77f481e..583dcbe 100644
+--- a/source/polylib_mod/compress_parms.c
++++ b/source/polylib_mod/compress_parms.c
+@@ -90,7 +90,7 @@ Matrix * int_ker(Matrix * M) {
+     show_matrix(H2);
+     show_matrix(U); 
+   }
+-  H->NbRows==M->NbRows;
++  H->NbRows=M->NbRows;
+   Matrix_Free(H);
+   /* the Integer Kernel is made of the last n-rk columns of U */
+   Matrix_subMatrix(U, 0, rk, U->NbRows, U->NbColumns, &K);
+diff --git a/source/polylib_mod/polylib/homogenization.h b/source/polylib_mod/polylib/homogenization.h
+index 6a24fba..4ece609 100644
+--- a/source/polylib_mod/polylib/homogenization.h
++++ b/source/polylib_mod/polylib/homogenization.h
+@@ -17,7 +17,7 @@
+ 
+ /** homogenization.h -- Bavo Nootaert **/
+ #ifndef HOMOGENIZATION_H
+-#define HOMOGENIZATTON_H
++#define HOMOGENIZATION_H
+ 
+ #include <polylib/polylib.h>
+ 

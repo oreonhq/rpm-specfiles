@@ -1,0 +1,196 @@
+diff -up ncview-2.1.11/src/interface/dataedit.c.fixes ncview-2.1.11/src/interface/dataedit.c
+--- ncview-2.1.11/src/interface/dataedit.c.fixes	2024-11-26 13:16:18.000000000 -0700
++++ ncview-2.1.11/src/interface/dataedit.c	2025-02-12 19:29:42.250865488 -0700
+@@ -209,7 +209,7 @@ XtPointer call_data;
+ 	index = (size_t)list->list_index;
+ 	in_change_dat( index, new_val );
+ 	strcpy( *(list_text+list->list_index), line );
+-	XawListChange( dataedit_list_widget, (_Xconst char **)list_text, 0, 0, True );
++	XawListChange( dataedit_list_widget, list_text, 0, 0, True );
+ 	XawListHighlight( dataedit_list_widget, list->list_index );
+ }
+ 
+diff -up ncview-2.1.11/src/interface/filesel.c.fixes ncview-2.1.11/src/interface/filesel.c
+--- ncview-2.1.11/src/interface/filesel.c.fixes	2024-11-26 13:21:24.000000000 -0700
++++ ncview-2.1.11/src/interface/filesel.c	2025-02-12 19:32:06.671483118 -0700
+@@ -241,7 +241,7 @@ fs_double_click(Widget w, XButtonEvent *
+ 			fprintf( stderr, "Error when trying to chdir to %s\n", highlited_entry->string );
+ 		fs_get_file_dir_list( &files_and_dirs );
+ 		XawListChange( fs_list_widget, 
+-			(_Xconst char **)stringlist_to_Xawlist( files_and_dirs ),
++			stringlist_to_Xawlist( files_and_dirs ),
+ 			0, 0, False );
+ 		XtVaSetValues( fs_pathname_text_widget, 
+ 			XtNstring, fs_cwd(), NULL );
+diff -up ncview-2.1.11/src/interface/set_options.c.fixes ncview-2.1.11/src/interface/set_options.c
+--- ncview-2.1.11/src/interface/set_options.c.fixes	2024-11-05 09:14:09.000000000 -0700
++++ ncview-2.1.11/src/interface/set_options.c	2025-02-12 19:34:10.855857105 -0700
+@@ -111,7 +111,7 @@ void cbsel_top_callback   	( Widget w, X
+ void cbsel_up_callback    	( Widget w, XtPointer client_data, XtPointer call_data );
+ void cbsel_down_callback  	( Widget w, XtPointer client_data, XtPointer call_data );
+ void cbsel_bottom_callback	( Widget w, XtPointer client_data, XtPointer call_data );
+-void expose_cbsel_cbar    	();
++void expose_cbsel_cbar		( Widget w, XtPointer client_data, XExposeEvent *event, Boolean *continue_to_dispatch );
+ 
+ static void cbsel_cmap_move  	( Cmaplist **pp_cmlist, int src, int dest );
+ static void cmaps_set_current	( Cmaplist *cmlist );
+diff -up ncview-2.1.11/src/interface/x_interface.c.fixes ncview-2.1.11/src/interface/x_interface.c
+--- ncview-2.1.11/src/interface/x_interface.c.fixes	2024-11-15 11:20:53.000000000 -0700
++++ ncview-2.1.11/src/interface/x_interface.c	2025-02-12 19:30:16.414987121 -0700
+@@ -436,8 +436,8 @@ void 	do_quit_app            (Widget w,
+ void 	do_set_dataedit_place  (Widget w, XButtonEvent *e, String *p, Cardinal *n );
+ void 	do_set_min_from_curdata(Widget w, XButtonEvent *e, String *p, Cardinal *n );
+ void 	do_set_max_from_curdata(Widget w, XButtonEvent *e, String *p, Cardinal *n );
+-void 	expose_ccontour();
+-void 	expose_colorbar();
++void    expose_ccontour( Widget w, XtPointer client_data, XExposeEvent *event, Boolean *continue_to_dispatch );
++void    expose_colorbar( Widget w, XtPointer client_data, XExposeEvent *event, Boolean *continue_to_dispatch );
+ 
+ void 	testf(Widget w, XButtonEvent *e, String *p, Cardinal *n );
+ 
+@@ -611,10 +611,10 @@ void x_parse_args( int *p_argc, char **a
+ /*************************************************************************************************/
+ void x_initialize()
+ {
+-	void	  check_app_res();
++	void	  check_app_res( AppDataPtr );
+ 	void 	  track_pointer();
+ 
+-	static XtActionsRec new_actions[] = {
++	static XtActionsRec new_actions[18] = {
+ 		{"cmap_mod3",    	(XtActionProc)cmap_mod3        	},
+ 		{"reverse_mod2",     	(XtActionProc)reverse_mod2     	},
+ 		{"back_mod2",     	(XtActionProc)back_mod2        	},
+diff -up ncview-2.1.11/src/SciPlot.c.fixes ncview-2.1.11/src/SciPlot.c
+--- ncview-2.1.11/src/SciPlot.c.fixes	2024-11-05 09:14:09.000000000 -0700
++++ ncview-2.1.11/src/SciPlot.c	2025-02-12 20:19:35.319431451 -0700
+@@ -107,22 +107,22 @@ static SciPlotFontDesc font_desc_table[]
+ ** Private function declarations
+ */
+ 
+-static void Redisplay();
+-static void Resize();
+-static Boolean SetValues();
+-static void Initialize();
+-static void Destroy();
+-
+-static void ComputeAll();
+-static void ComputeAllDimensions();
+-static void DrawAll();
+-static void ItemDrawAll();
+-static void ItemDraw();
+-static void EraseAll();
+-static void FontInit();
+-static int ColorStore();
+-static int FontStore();
+-static int FontnumReplace();
++static void Redisplay( Widget w, XEvent *, Region );
++static void Resize( Widget w );
++static Boolean SetValues( Widget current, Widget request, Widget n, ArgList args, Cardinal *nargs );
++static void Initialize( Widget treq, Widget tnew, ArgList args, Cardinal *num );
++static void Destroy( Widget w );
++
++static void ComputeAll( SciPlotWidget w );
++static void ComputeAllDimensions( SciPlotWidget w );
++static void DrawAll( SciPlotWidget w );
++static void ItemDrawAll( SciPlotWidget w );
++static void ItemDraw( SciPlotWidget w, SciPlotItem *item );
++static void EraseAll( SciPlotWidget w );
++static void FontInit( SciPlotWidget w, SciPlotFont *pf );
++static int ColorStore( SciPlotWidget w, Pixel color );
++static int FontStore( SciPlotWidget w, int flag );
++static int FontnumReplace( SciPlotWidget w, int fontnum, int flag );
+ 
+ 
+ 
+@@ -270,45 +270,47 @@ long	colorsave;
+ 
+ static void
+ Destroy(w)
+-SciPlotWidget w;
++Widget w;
+ {
+ int i;
+ SciPlotFont *pf;
+ SciPlotList *p;
+ 
+-	XtReleaseGC((Widget)w,w->plot.defaultGC);
+-	XtReleaseGC((Widget)w,w->plot.dashGC);
+-	XtFree((char *)w->plot.xlabel);
+-	XtFree((char *)w->plot.ylabel);
+-	XtFree((char *)w->plot.plotTitle);
+-
+-	for (i=0; i<w->plot.num_fonts; i++) {
+-		pf=&w->plot.fonts[i];
+-		XFreeFont(XtDisplay((Widget)w),pf->font);
++	XtReleaseGC(w,((SciPlotWidget)w)->plot.defaultGC);
++	XtReleaseGC(w,((SciPlotWidget)w)->plot.dashGC);
++	XtFree((char *)((SciPlotWidget)w)->plot.xlabel);
++	XtFree((char *)((SciPlotWidget)w)->plot.ylabel);
++	XtFree((char *)((SciPlotWidget)w)->plot.plotTitle);
++
++	for (i=0; i<((SciPlotWidget)w)->plot.num_fonts; i++) {
++		pf=&((SciPlotWidget)w)->plot.fonts[i];
++		XFreeFont(XtDisplay(w),pf->font);
+ 	}
+-	XtFree((char *)w->plot.fonts);
++	XtFree((char *)((SciPlotWidget)w)->plot.fonts);
+ 
+-	XtFree((char *)w->plot.colors);
++	XtFree((char *)((SciPlotWidget)w)->plot.colors);
+ 
+-	for (i=0; i<w->plot.alloc_plotlist; i++) {
+-		p=w->plot.plotlist+i;
++	for (i=0; i<((SciPlotWidget)w)->plot.alloc_plotlist; i++) {
++		p=((SciPlotWidget)w)->plot.plotlist+i;
+ 		if (p->allocated>0) XtFree((char *)p->data);
+ 		if (p->legend) XtFree(p->legend);
+ 	}
+-	if (w->plot.alloc_plotlist>0)
+-		XtFree((char *)w->plot.plotlist);
++	if (((SciPlotWidget)w)->plot.alloc_plotlist>0)
++		XtFree((char *)((SciPlotWidget)w)->plot.plotlist);
+ 		
+-	EraseAll(w);
+-	XtFree((char *)w->plot.drawlist);
++	EraseAll((SciPlotWidget)w);
++	XtFree((char *)((SciPlotWidget)w)->plot.drawlist);
+ }
+ 
+ static Boolean
+-SetValues(current, request, new, args, nargs)
+-SciPlotWidget current, request, new;
++SetValues(c, request, n, args, nargs)
++Widget c, request, n;
+ ArgList args;
+ Cardinal *nargs;
+ {
+ Boolean redisplay=FALSE;
++SciPlotWidget current = (SciPlotWidget)c;
++SciPlotWidget new = (SciPlotWidget)n;
+ 
+ 	if (current->plot.XLog!=new->plot.XLog) redisplay=TRUE;
+ 	else if (current->plot.YLog!=new->plot.YLog) redisplay=TRUE;
+@@ -361,15 +363,17 @@ Boolean redisplay=FALSE;
+ 	return redisplay;
+ }
+ 
+-static void Redisplay(w)
+-SciPlotWidget w;
++static void Redisplay(w,e,r)
++Widget w;
++XEvent *e;
++Region r;
+ {
+-	if (w->plot.update) {
++	if (((SciPlotWidget)w)->plot.update) {
+ 		Resize(w);
+-		w->plot.update=FALSE;
++		((SciPlotWidget)w)->plot.update=FALSE;
+ 	}
+ 	else {
+-		ItemDrawAll(w);
++		ItemDrawAll((SciPlotWidget)w);
+ 	}
+ }
+ 

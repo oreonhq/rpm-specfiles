@@ -1,0 +1,117 @@
+From 571e9c8ea4523dca43fa785d8b05f4a8e0925f66 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20P=2E=20Berrang=C3=A9?= <berrange@redhat.com>
+Date: Mon, 15 Jan 2024 18:58:39 +0000
+Subject: [PATCH 02/10] Use system jsoncpp library
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Daniel P. Berrangé <berrange@redhat.com>
+---
+ CMakeLists.txt                                  | 2 ++
+ compendium/tools/SCRCodeGen/CMakeLists.txt      | 5 +++--
+ compendium/tools/SCRCodeGen/test/CMakeLists.txt | 2 +-
+ framework/test/gtest/CMakeLists.txt             | 2 +-
+ tools/rc/CMakeLists.txt                         | 3 ++-
+ 5 files changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3da18bb5..6a102c04 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -388,6 +388,8 @@ if(US_USE_SYSTEM_BOOST)
+     find_package(Boost 1.74.0 REQUIRED)
+ endif()
+ 
++find_package(jsoncpp)
++
+ #-----------------------------------------------------------------------------
+ # Testing configuration
+ #-----------------------------------------------------------------------------
+diff --git a/compendium/tools/SCRCodeGen/CMakeLists.txt b/compendium/tools/SCRCodeGen/CMakeLists.txt
+index c50cbe85..b1e8ffae 100644
+--- a/compendium/tools/SCRCodeGen/CMakeLists.txt
++++ b/compendium/tools/SCRCodeGen/CMakeLists.txt
+@@ -2,8 +2,7 @@ set(_srcs
+     ComponentInfo.cpp
+     Main.cpp
+     ManifestParserImpl.cpp
+-    Util.cpp
+-    ../../../third_party/jsoncpp.cpp)
++    Util.cpp)
+ 
+ if(MINGW)
+   # Suppress warnings for specific files
+@@ -43,6 +42,8 @@ if (US_BUILD_TESTING)
+   target_compile_definitions(${US_SCRCODEGEN_EXECUTABLE_TARGET} PRIVATE USING_GTEST)
+ endif()
+ 
++target_link_libraries(${US_SCRCODEGEN_EXECUTABLE_TARGET} jsoncpp_lib)
++
+ set_property(TARGET ${US_SCRCODEGEN_EXECUTABLE_TARGET} PROPERTY OUTPUT_NAME ${US_SCRCODEGEN_EXECUTABLE_OUTPUT_NAME})
+ 
+ if(NOT US_NO_INSTALL)
+diff --git a/compendium/tools/SCRCodeGen/test/CMakeLists.txt b/compendium/tools/SCRCodeGen/test/CMakeLists.txt
+index 8e9bccbc..32d4ee90 100644
+--- a/compendium/tools/SCRCodeGen/test/CMakeLists.txt
++++ b/compendium/tools/SCRCodeGen/test/CMakeLists.txt
+@@ -22,7 +22,6 @@ endif()
+ set(_scrcodegen_tests
+   ../ComponentInfo.cpp
+   ../ManifestParserImpl.cpp
+-  ../../../../third_party/jsoncpp.cpp
+   ../Util.cpp
+   main.cpp
+   TestCodeGenerator.cpp
+@@ -60,6 +59,7 @@ target_link_libraries(${scrcodegen_test_exe_name}
+ 		${GTEST_BOTH_LIBRARIES}
+ 		${GMOCK_BOTH_LIBRARIES}
+                 CppMicroServices
++		jsoncpp_lib
+ )
+ 
+ # tests can be configured to run using add_test or GTEST_ADD_TEST (https://cmake.org/cmake/help/v3.0/module/FindGTest.html)
+diff --git a/framework/test/gtest/CMakeLists.txt b/framework/test/gtest/CMakeLists.txt
+index 4860e8d7..e76e8750 100644
+--- a/framework/test/gtest/CMakeLists.txt
++++ b/framework/test/gtest/CMakeLists.txt
+@@ -108,7 +108,6 @@ set(_additional_srcs
+ 
+ set(_third_party_srcs 
+   ../../../third_party/miniz.c
+-  ../../../third_party/jsoncpp.cpp
+ )
+ 
+ if(MINGW)
+@@ -154,6 +153,7 @@ endif()
+ target_link_libraries(${us_gtest_test_exe_name} ${GTEST_BOTH_LIBRARIES})
+ target_link_libraries(${us_gtest_test_exe_name} ${GMOCK_BOTH_LIBRARIES})
+ target_link_libraries(${us_gtest_test_exe_name} ${Framework_TARGET} usLogService)
++target_link_libraries(${us_gtest_test_exe_name} jsoncpp_lib)
+ 
+ # Needed for clock_gettime with glibc < 2.17
+ if(UNIX AND NOT APPLE)
+diff --git a/tools/rc/CMakeLists.txt b/tools/rc/CMakeLists.txt
+index a844f225..e7ada5bc 100755
+--- a/tools/rc/CMakeLists.txt
++++ b/tools/rc/CMakeLists.txt
+@@ -12,7 +12,7 @@ if(US_COMPILER_CLANG OR US_COMPILER_APPLE_CLANG)
+   add_compile_options(-Wno-error=unneeded-internal-declaration)
+ endif()
+ 
+-set(srcs ResourceCompiler.cpp ../../third_party/miniz.c ../../third_party/jsoncpp.cpp)
++set(srcs ResourceCompiler.cpp ../../third_party/miniz.c)
+ 
+ if(MINGW)
+   # Suppress warnings for specific files
+@@ -28,6 +28,7 @@ endif()
+ 
+ add_executable(${US_RCC_EXECUTABLE_TARGET} ${srcs})
+ set_property(TARGET ${US_RCC_EXECUTABLE_TARGET} PROPERTY OUTPUT_NAME ${US_RCC_EXECUTABLE_OUTPUT_NAME})
++target_link_libraries(${US_RCC_EXECUTABLE_TARGET} jsoncpp_lib)
+ if(WIN32)
+     target_link_libraries(${US_RCC_EXECUTABLE_TARGET} Shlwapi)
+ endif()
+-- 
+2.52.0
+

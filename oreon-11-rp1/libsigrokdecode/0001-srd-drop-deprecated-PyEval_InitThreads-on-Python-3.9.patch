@@ -1,0 +1,37 @@
+From 22b03810449d528e5f57a9026eaf9d3e33a23a8b Mon Sep 17 00:00:00 2001
+From: Sascha Silbe <sascha-pgp@se-silbe.de>
+Date: Mon, 23 Oct 2023 22:21:38 +0200
+Subject: [PATCH] srd: drop deprecated PyEval_InitThreads() on Python 3.9+
+
+`PyEval_InitThreads()` is called implicitly during `Py_InitializeEx()`
+since Python 3.7. It has been deprecated since 3.9 and dropped in
+3.13.
+
+[ gsi: touch up comment style ]
+---
+ srd.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/srd.c b/srd.c
+index 22f47fc..8ea1199 100644
+--- a/srd.c
++++ b/srd.c
+@@ -277,8 +277,14 @@ SRD_API int srd_init(const char *path)
+ 		}
+ 	}
+ 
+-	/* Initialize the Python GIL (this also happens to acquire it). */
++#if PY_VERSION_HEX < 0x03090000
++	/*
++	 * Initialize and acquire the Python GIL. In Python 3.7+ this
++	 * will be done implicitly as part of the Py_InitializeEx()
++	 * call above. PyEval_InitThreads() was deprecated in 3.9.
++	 */
+ 	PyEval_InitThreads();
++#endif
+ 
+ 	/* Release the GIL (ignore return value, we don't need it here). */
+ 	(void)PyEval_SaveThread();
+-- 
+2.39.1
+

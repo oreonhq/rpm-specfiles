@@ -1,0 +1,67 @@
+From 786b2a4fb0d7acbcb3a5c5be9992c32540eaac65 Mon Sep 17 00:00:00 2001
+From: Ilias Tsitsimpis <iliastsi@debian.org>
+Date: Thu, 9 Aug 2018 00:01:27 +0300
+Subject: [PATCH] Do not use TIMEOUT_MAX for Condition.wait()
+
+On some architectures, using threading.TIMEOUT_MAX for the timeout
+parameter can overflow causing Condition.wait() to return immediately.
+Instead of relying on TIMEOUT_MAX, remove it and wait forever.
+
+Signed-off-by: Ilias Tsitsimpis <iliastsi@debian.org>
+---
+ imaplib2/imaplib2.py  | 5 ++---
+ imaplib2/imaplib2.py3 | 4 ++--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/imaplib2/imaplib2.py b/imaplib2/imaplib2.py
+index 1fd47d2..3a8b6c0 100755
+--- a/imaplib2/imaplib2.py
++++ b/imaplib2/imaplib2.py
+@@ -67,7 +67,6 @@
+ else:
+     import Queue as queue
+     string_types = basestring
+-    threading.TIMEOUT_MAX = 9223372036854.0
+ 
+ select_module = select
+ 
+@@ -192,7 +191,7 @@ def abort(self, typ, val):
+     def get_response(self, exc_fmt=None):
+         self.callback = None
+         if __debug__: self.parent._log(3, '%s:%s.ready.wait' % (self.name, self.tag))
+-        self.ready.wait(threading.TIMEOUT_MAX)
++        self.ready.wait()
+ 
+         if self.aborted is not None:
+             typ, val = self.aborted
+@@ -1391,7 +1390,7 @@ def _command(self, name, *args, **kw):
+             self.commands_lock.release()
+             if need_event:
+                 if __debug__: self._log(3, 'sync command %s waiting for empty commands Q' % name)
+-                self.state_change_free.wait(threading.TIMEOUT_MAX)
++                self.state_change_free.wait()
+                 if __debug__: self._log(3, 'sync command %s proceeding' % name)
+ 
+         if self.state not in Commands[name][CMD_VAL_STATES]:
+diff --git a/imaplib2/imaplib2.py3 b/imaplib2/imaplib2.py3
+index 0aeff4d..e02f094 100755
+--- a/imaplib2/imaplib2.py3
++++ b/imaplib2/imaplib2.py3
+@@ -182,7 +182,7 @@ class Request(object):
+     def get_response(self, exc_fmt=None):
+         self.callback = None
+         if __debug__: self.parent._log(3, '%s:%s.ready.wait' % (self.name, self.tag))
+-        self.ready.wait(threading.TIMEOUT_MAX)
++        self.ready.wait()
+ 
+         if self.aborted is not None:
+             typ, val = self.aborted
+@@ -1316,7 +1316,7 @@ class IMAP4(object):
+             self.commands_lock.release()
+             if need_event:
+                 if __debug__: self._log(3, 'sync command %s waiting for empty commands Q' % name)
+-                self.state_change_free.wait(threading.TIMEOUT_MAX)
++                self.state_change_free.wait()
+                 if __debug__: self._log(3, 'sync command %s proceeding' % name)
+ 
+         if self.state not in Commands[name][CMD_VAL_STATES]:

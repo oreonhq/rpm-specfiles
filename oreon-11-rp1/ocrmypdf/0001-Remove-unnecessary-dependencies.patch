@@ -1,0 +1,56 @@
+From 45d841e58d1c5c22fdd2975fc45fd3a7f60a35cd Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Sun, 26 Sep 2021 04:04:18 -0400
+Subject: [PATCH] Remove unnecessary dependencies
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ docs/conf.py   | 2 +-
+ pyproject.toml | 7 +------
+ 2 files changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/docs/conf.py b/docs/conf.py
+index be811169..90319d19 100755
+--- a/docs/conf.py
++++ b/docs/conf.py
+@@ -100,7 +100,7 @@ if on_rtd:
+ 
+ 
+ # The full version, including alpha/beta/rc tags.
+-release = package_version('ocrmypdf')
++release = os.environ.get('OCRMYPDF_VERSION')
+ version = '.'.join(release.split('.')[:2])
+ 
+ 
+diff --git a/pyproject.toml b/pyproject.toml
+index 2caa0e75..e60c749a 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -16,7 +16,6 @@ dependencies = [
+   "img2pdf>=0.5",
+   "packaging>=20",
+   "pdfminer.six>=20220319",
+-  "pi-heif",                # Heif image format - maintainers: if this is removed, it will NOT break
+   "pikepdf>=10",
+   "Pillow>=10.0.1",
+   "pluggy>=1",
+@@ -51,15 +50,11 @@ Changelog = "https://github.com/ocrmypdf/OCRmyPDF/docs/release_notes.rst"
+ docs = ["myst-parser>=4.0.1", "sphinx", "sphinx-issues", "sphinx-rtd-theme"]
+ extended_test = ["PyMuPDF>=1.19.1"]
+ test = [
+-  "coverage[toml]>=6.2",
+   "hypothesis>=6.36.0",
+   "pytest>=6.2.5",
+-  "pytest-cov>=3.0.0",
+   "pytest-xdist>=2.5.0",
+-  "python-xmp-toolkit==2.0.1", # also requires apt-get install libexempi3
++  "python-xmp-toolkit>=2.0.1", # also requires apt-get install libexempi3
+   "reportlab>=3.6.8",
+-  "types-Pillow",
+-  "types-humanfriendly",
+ ]
+ watcher = ["watchdog>=1.0.2", "typer-slim[standard]", "python-dotenv"]
+ webservice = ["streamlit>=1.41.0"]
+-- 
+2.50.0
+

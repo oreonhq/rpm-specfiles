@@ -1,0 +1,88 @@
+--- statserial-1.1/statserial.c.-n	Fri Nov 16 10:22:30 2001
++++ statserial-1.1/statserial.c	Fri Nov 16 12:48:48 2001
+@@ -32,6 +32,7 @@
+  */
+ 
+ #include <curses.h>
++#include <stdarg.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <unistd.h>
+@@ -100,6 +101,16 @@
+   endwin(); /* required by curses */
+ }
+ 
++static int printfw (char *fmt, ...)
++{
++  int ret;
++  va_list ap;
++  va_start (ap, fmt);
++  ret = n_option ? vprintf (fmt, ap) : vwprintw (stdscr, fmt, ap);
++  va_end (ap);
++  return ret;
++}
++
+ /* main program */  
+ int main(int argc, char *argv[])
+ {
+@@ -127,7 +138,7 @@
+   }
+ 
+   /* init curses */
+-  if (!d_option && !x_option) {
++  if (!d_option && !x_option && !n_option) {
+     initscr();
+     atexit(cleanup);
+   }
+@@ -151,7 +162,7 @@
+     old_status = arg;
+ 
+     /* home cursor */
+-    if (!d_option && !x_option) {
++    if (!d_option && !x_option && !n_option) {
+       move(0,0);
+     }
+ 
+@@ -167,26 +178,27 @@
+       exit(0);
+     }
+ 
+-    printw("Device: %s\n\n", device);
+-    printw("Signal  Pin  Pin  Direction  Status  Full\n");
+-    printw("Name    (25) (9)  (computer)         Name\n");
+-    printw("-----   ---  ---  ---------  ------  -----\n");
+-    printw("FG       1    -      -           -   Frame Ground\n");
+-    printw("TxD      2    3      out         -   Transmit Data\n");
+-    printw("RxD      3    2      in          -   Receive  Data\n");
+-    printw("RTS      4    7      out         %1d   Request To Send\n", !!(arg & TIOCM_RTS));
+-    printw("CTS      5    8      in          %1d   Clear To Send\n", !!(arg & TIOCM_CTS));
+-    printw("DSR      6    6      in          %1d   Data Set Ready\n", !!(arg & TIOCM_DSR));
+-    printw("GND      7    5      -           -   Signal Ground\n");
+-    printw("DCD      8    1      in          %1d   Data Carrier Detect\n", !!(arg & TIOCM_CAR));
+-    printw("DTR     20    4      out         %1d   Data Terminal Ready\n", !!(arg & TIOCM_DTR));
+-    printw("RI      22    9      in          %1d   Ring Indicator\n", !!(arg & TIOCM_RNG));
+-    refresh();
++    printfw("Device: %s\n\n", device);
++    printfw("Signal  Pin  Pin  Direction  Status  Full\n");
++    printfw("Name    (25) (9)  (computer)         Name\n");
++    printfw("-----   ---  ---  ---------  ------  -----\n");
++    printfw("FG       1    -      -           -   Frame Ground\n");
++    printfw("TxD      2    3      out         -   Transmit Data\n");
++    printfw("RxD      3    2      in          -   Receive  Data\n");
++    printfw("RTS      4    7      out         %1d   Request To Send\n", !!(arg & TIOCM_RTS));
++    printfw("CTS      5    8      in          %1d   Clear To Send\n", !!(arg & TIOCM_CTS));
++    printfw("DSR      6    6      in          %1d   Data Set Ready\n", !!(arg & TIOCM_DSR));
++    printfw("GND      7    5      -           -   Signal Ground\n");
++    printfw("DCD      8    1      in          %1d   Data Carrier Detect\n", !!(arg & TIOCM_CAR));
++    printfw("DTR     20    4      out         %1d   Data Terminal Ready\n", !!(arg & TIOCM_DTR));
++    printfw("RI      22    9      in          %1d   Ring Indicator\n", !!(arg & TIOCM_RNG));
+ 
+     /* break out if -n option was used */
+     if (n_option)
+       exit(0);
+ 
++    refresh();
++
+     /* delay 1 second between loops */
+     sleep(1);
+   }

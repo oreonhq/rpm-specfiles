@@ -1,0 +1,12 @@
+diff -Nrbu ipxripd-0.8/ipxsap.c ipxripd-0.8-OK/ipxsap.c
+--- ipxripd-0.8/ipxsap.c	2001-07-01 01:07:34.000000000 +0400
++++ ipxripd-0.8-OK/ipxsap.c	2013-12-03 18:50:48.506149763 +0400
+@@ -230,7 +230,7 @@
+ 	name[IPX_SAP_SERVER_NAME_LEN] = 0;
+ 	len = strlen(name);
+ 	memset(name + len, ' ', IPX_SAP_SERVER_NAME_LEN - len);
+-	fprintf(file, name);
++	fprintf(file, "%s", name);
+ }
+ 
+ static void 

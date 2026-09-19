@@ -1,0 +1,36 @@
+From daf314a01d2e4fe5aa5f39158e6eaa432aa6ef37 Mon Sep 17 00:00:00 2001
+From: Daisuke Aritomo <osyoyu@osyoyu.com>
+Date: Wed, 26 Nov 2025 14:36:26 +0900
+Subject: [PATCH] Remove usage of IO#nread
+
+IO#wait, a method to obtain the number of bytes readable without
+blocking, has been removed from io/wait.
+https://github.com/ruby/io-wait/pull/49/commits/1decadc7f9485b5827b9e327b704b83dc626d971
+
+When WEBrick is combined with io.wait >= 0.4.0, the following error
+occurs on shutdown:
+
+    ERROR NoMethodError: undefined method 'nread' for an instance of IO
+        /(snip)/webrick-1.9.1/lib/webrick/server.rb:178:in 'block in WEBrick::GenericServer#start'
+
+WEBrick uses IO#nread to efficiently consume the entire input stream
+during shutdown. This patch removes the call to IO#nread, and instead
+repeatedly take a fixed size of 8 bytes each iteration.
+---
+ lib/webrick/server.rb | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/lib/webrick/server.rb b/lib/webrick/server.rb
+index 3fe268d..d268394 100644
+--- a/lib/webrick/server.rb
++++ b/lib/webrick/server.rb
+@@ -174,8 +174,7 @@ def start(&block)
+                 if svrs[0].include? sp
+                   # swallow shutdown pipe
+                   buf = String.new
+-                  nil while String ===
+-                            sp.read_nonblock([sp.nread, 8].max, buf, exception: false)
++                  nil while String === sp.read_nonblock(8, buf, exception: false)
+                   break
+                 end
+                 svrs[0].each{|svr|

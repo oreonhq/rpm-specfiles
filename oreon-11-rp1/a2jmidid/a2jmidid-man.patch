@@ -1,0 +1,49 @@
+diff --git a/man/a2jmidi_bridge.1 b/man/a2jmidi_bridge.1
+index c4c358d..e3a4af8 100644
+--- a/man/a2jmidi_bridge.1
++++ b/man/a2jmidi_bridge.1
+@@ -5,7 +5,7 @@ a2jmidi_bridge \- static bridge with one ALSA playback port and one JACK MIDI in
+ .SH SYNOPSIS
+ .B a2jmidi_bridge [NAME]
+ .SH DESCRIPTION
+-A single, static, one-way bridge from legacy ALSA MIDI to JACK MIDI.  Mostly useful for those needing a steady bridge rather than an active briding daemon such as a2jmidid.  Multiple instances of this can be run simultaneously.  
++A single, static, one-way bridge from legacy ALSA MIDI to JACK MIDI.  Mostly useful for those needing a steady bridge rather than an active bridging daemon such as a2jmidid.  Multiple instances of this can be run simultaneously.  
+ .SH OPTIONS
+ .IP NAME
+ names the given bridge with the name provided
+@@ -15,4 +15,3 @@ Eric Hedekar <after the beep at g mail dot nospam com>
+ .BR a2jmidid (1),
+ .BR a2j_control (1),
+ .BR j2amidi_bridge (1)
+-
+diff --git a/man/a2jmidid.1 b/man/a2jmidid.1
+index d4b4bf5..432e0a5 100644
+--- a/man/a2jmidid.1
++++ b/man/a2jmidid.1
+@@ -6,7 +6,7 @@ a2jmidid \- JACK MIDI daemon for ALSA MIDI
+ .B a2jmidid [-j jack-server] [e | --export-hw]
+ .SH DESCRIPTION
+ a2jmidid is a daemon that implements automatic bridging. For every ALSA
+-sequencer port you get one jack midi port. If ALSA sequencer port is
++sequencer port you get one JACK midi port. If ALSA sequencer port is
+ both input and output one, you get two JACK MIDI ports, one input and
+ output.
+ .SH OPTIONS
+diff --git a/man/j2amidi_bridge.1 b/man/j2amidi_bridge.1
+index e2f2ce0..8c4bcbd 100644
+--- a/man/j2amidi_bridge.1
++++ b/man/j2amidi_bridge.1
+@@ -5,7 +5,7 @@ j2amidi_bridge \- static bridge with one ALSA input port and one JACK MIDI outpu
+ .SH SYNOPSIS
+ .B j2amidi_bridge [NAME]
+ .SH DESCRIPTION
+-A single, static, one-way bridge from JACK MIDI to legacy ALSA MIDI.  Mostly useful for those needing a steady bridge rather than an active briding daemon such as a2jmidid.  Multiple instances of this can be run simultaneously.  
++A single, static, one-way bridge from JACK MIDI to legacy ALSA MIDI.  Mostly useful for those needing a steady bridge rather than an active bridging daemon such as a2jmidid.  Multiple instances of this can be run simultaneously.  
+ .SH OPTIONS
+ .IP NAME
+ names the given bridge with the name provided
+@@ -15,4 +15,3 @@ Eric Hedekar <after the beep at g mail dot nospam com>
+ .BR a2jmidid (1),
+ .BR a2j_control (1),
+ .BR a2jmidi_bridge (1)
+-

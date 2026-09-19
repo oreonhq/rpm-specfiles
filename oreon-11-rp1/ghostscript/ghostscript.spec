@@ -47,8 +47,8 @@
 
 Name:             ghostscript
 Summary:          Interpreter for PostScript language & PDF
-Version:          10.06.0
-Release:          2%{?dist}
+Version:          10.08.0
+Release:          1%{?dist}
 %global version_short %(echo %{version} | tr -d '.')
 
 License:          AGPL-3.0-or-later

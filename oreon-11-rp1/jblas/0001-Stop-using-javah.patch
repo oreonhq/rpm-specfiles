@@ -1,0 +1,39 @@
+From f6f6aa3693d2a922aa6ff6dac1c65dc52a8e455e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Tue, 5 Jan 2021 16:57:09 +0100
+Subject: [PATCH] Stop using javah
+
+jblas-jblas-1.2.5/build.xml:147: javah does not exist under Java 10 and higher, use the javac task with nativeHeaderDir instead
+---
+ build.xml | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
+
+diff --git a/build.xml b/build.xml
+index 9fb2fbc693..247d455200 100644
+--- a/build.xml
++++ b/build.xml
+@@ -139,23 +139,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+         </javac>
+     </target>
+     <target name="javah" depends="prepare" description="run javah">
+-        <javac destdir="${bin}" encoding="utf-8" source="1.7" debug="on" compiler="javac1.7" target="1.7" fork="yes" nowarn="yes">
++        <javac destdir="${bin}" nativeheaderdir="${include}" encoding="utf-8" source="1.7" debug="on" compiler="javac1.7" target="1.7" fork="yes" nowarn="yes">
+             <src path="${src}" />
+             <include name="**/NativeBlas.java" />
+             <include name="**/ArchFlavor.java" />
+         </javac>
+-        <javah destdir="${include}" force="yes">
+-            <class name="${pkgbase}.NativeBlas" />
+-            <classpath>
+-                <pathelement path="${bin}" />
+-            </classpath>
+-        </javah>
+-        <javah destdir="${include}" force="yes">
+-            <class name="org.jblas.util.ArchFlavor" />
+-            <classpath>
+-                <pathelement path="${bin}" />
+-            </classpath>
+-        </javah>
+     </target>
+     <target name="generate-float" depends="preprocess" description="generate float versions of classes">
+         <class-to-float class="${pkgbase}.DoubleMatrix"/>

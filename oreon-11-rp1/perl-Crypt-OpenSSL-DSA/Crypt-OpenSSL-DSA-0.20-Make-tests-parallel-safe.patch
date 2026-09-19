@@ -1,0 +1,147 @@
+From 23b7a665cb00b348b842fc2f7421f2553edb36cd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 20 May 2024 09:18:36 +0200
+Subject: [PATCH] Make tests parallel-safe
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Running the tests in parallel randomly fails:
+
+    $ prove -b -j4
+    t/00-use.t ............. ok
+    t/10-selftest.t ........ ok
+    t/90-openssl-compat.t .. Could not open file or uri for loading private key of public key from dsa.pub.pem: No such file or directory
+    t/90-openssl-compat.t .. 5/84 # Test 6 got: "0" (t/90-openssl-compat.t at line 56)
+    #   Expected: "1"
+    #  t/90-openssl-compat.t line 56 is:         ok($openssl_think, 1);
+    Could not open file or uri for loading private key of public key from dsa.pub.pem: No such file or directory
+
+That's because both t/10-selftest.t and t/90-openssl-compat.t create
+and delete files with the same name.
+
+This patch fixes it by consistenly using uniquely named temporary
+files. As a bonus, the tests now work from a read-only location.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/10-selftest.t       | 26 +++++++++++---------------
+ t/90-openssl-compat.t | 21 ++++++++++-----------
+ 2 files changed, 21 insertions(+), 26 deletions(-)
+
+diff --git a/t/10-selftest.t b/t/10-selftest.t
+index d82c8d4..3534c0d 100644
+--- a/t/10-selftest.t
++++ b/t/10-selftest.t
+@@ -4,6 +4,7 @@ use strict;
+ 
+ use Test;
+ use Crypt::OpenSSL::DSA;
++use File::Temp 0.14;
+ 
+ BEGIN { plan tests => 36 }
+ 
+@@ -44,25 +45,24 @@ ok($dsa->do_verify($message, $dsa_sig_obj1), 1);
+ ok($dsa->do_verify($message, $dsa_sig_obj2), 1);
+ ok($dsa->do_verify($message, $dsa_sig_obj_bogus), 0);
+ 
+-ok($dsa->write_params("dsa.param.pem"), 1);
+-ok($dsa->write_pub_key("dsa.pub.pem"), 1);
+-ok($dsa->write_priv_key("dsa.priv.pem"), 1);
++my $param_file = File::Temp->new();
++my $pub_file = File::Temp->new();
++my $priv_file = File::Temp->new();
++ok($dsa->write_params($param_file), 1);
++ok($dsa->write_pub_key($pub_file), 1);
++ok($dsa->write_priv_key($priv_file), 1);
+ 
+ my ($priv_key_str, $pub_key_str);
+ {
+   local($/) = undef;
+-  open PRIV, "dsa.priv.pem";
+-  $priv_key_str = <PRIV>;
+-  close PRIV;
+-  open PUB, "dsa.pub.pem";
+-  $pub_key_str = <PUB>;
+-  close PUB;
++  $priv_key_str = <$priv_file>;
++  $pub_key_str = <$pub_file>;
+ }
+ 
+-my $dsa2 = Crypt::OpenSSL::DSA->read_priv_key("dsa.priv.pem");
++my $dsa2 = Crypt::OpenSSL::DSA->read_priv_key($priv_file);
+ my $dsa_sig2 = $dsa2->sign($message);
+ 
+-my $dsa3 = Crypt::OpenSSL::DSA->read_pub_key("dsa.pub.pem");
++my $dsa3 = Crypt::OpenSSL::DSA->read_pub_key($pub_file);
+ 
+ my $dsa4 = Crypt::OpenSSL::DSA->read_priv_key_str($priv_key_str);
+ my $dsa5 = Crypt::OpenSSL::DSA->read_pub_key_str($pub_key_str);
+@@ -117,7 +117,3 @@ $dsa7->set_pub_key($pub_key);
+ ok($dsa7->get_pub_key,$pub_key);
+ ok($dsa7->verify($message, $dsa_sig4), 1);
+ 
+-unlink("dsa.param.pem");
+-unlink("dsa.priv.pem");
+-unlink("dsa.pub.pem");
+-
+diff --git a/t/90-openssl-compat.t b/t/90-openssl-compat.t
+index 1e04cb4..449a770 100644
+--- a/t/90-openssl-compat.t
++++ b/t/90-openssl-compat.t
+@@ -8,6 +8,7 @@ use strict;
+ 
+ use Test;
+ use Crypt::OpenSSL::DSA;
++use File::Temp 0.14;
+ 
+ BEGIN { plan tests => 84 }
+ 
+@@ -28,12 +29,14 @@ my $why_skip = $HAS_SHA1 ? "Need openssl binary in path" : "Need Digest::SHA to
+ my $dsa = Crypt::OpenSSL::DSA->generate_parameters( 512, "fooooooooooooooooooo" );
+ $dsa->generate_key;
+ 
+-ok($dsa->write_pub_key("dsa.pub.pem"), 1);
+-ok($dsa->write_priv_key("dsa.priv.pem"), 1);
++my $pub_file = File::Temp->new();
++my $priv_file = File::Temp->new();
++ok($dsa->write_pub_key($pub_file), 1);
++ok($dsa->write_priv_key($priv_file), 1);
+ 
+-my $dsa_pub = Crypt::OpenSSL::DSA->read_pub_key("dsa.pub.pem");
++my $dsa_pub = Crypt::OpenSSL::DSA->read_pub_key($pub_file);
+ ok($dsa_pub);
+-my $dsa_priv = Crypt::OpenSSL::DSA->read_priv_key("dsa.priv.pem");
++my $dsa_priv = Crypt::OpenSSL::DSA->read_priv_key($priv_file);
+ ok($dsa_priv);
+ 
+ my $to_do = 500;
+@@ -50,7 +53,7 @@ if ($testable) {
+         my $sig = $dsa_priv->sign($msg);
+ 
+         my $we_think       = $dsa_pub->verify($msg, $sig);
+-        my $openssl_think  = openssl_verify("dsa.pub.pem", $sig, $plain);
++        my $openssl_think  = openssl_verify($pub_file, $sig, $plain);
+ 
+         ok($we_think, 1);
+         ok($openssl_think, 1);
+@@ -61,14 +64,10 @@ if ($testable) {
+     }
+ }
+ 
+-unlink("dsa.priv.pem");
+-unlink("dsa.pub.pem");
+-
+ sub openssl_verify {
+     my ($public_pem_file, $sig, $msg_plain) = @_;
+-    require File::Temp;
+-    my $sig_temp = new File::Temp(TEMPLATE => "tmp.signatureXXXX") or die;
+-    my $msg_temp = new File::Temp(TEMPLATE => "tmp.msgXXXX") or die;
++    my $sig_temp = File::Temp->new();
++    my $msg_temp = File::Temp->new();
+     syswrite($sig_temp,$sig);
+     syswrite($msg_temp,$msg_plain);
+     # FIXME: shutup openssl from spewing to STDOUT the "Verification
+-- 
+2.45.0
+

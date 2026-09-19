@@ -1,0 +1,104 @@
+Avoid implicit declaration of exit and implicit ints.
+Also fix the return type of the va_copy probe function.
+
+The libtool change is in libtool upstream already, via:
+
+commit 4eca607f697f0c264476436913b9720d3d069e87
+Author: Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+Date:   Mon Aug 11 22:36:42 2008 +0200
+
+    Remove use of exit in configure test sources.
+
+    * libltdl/m4/libtool.m4 (_LT_TRY_DLOPEN_SELF): Return from main,
+    to avoid using undeclared exit.
+    Report against OpenMPI from Coverity via Jeff Squyres.
+
+    Signed-off-by: Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+
+
+diff --git a/admin/libtool.m4.in b/admin/libtool.m4.in
+index 7f5eed6d83a973fa..70703d6c1f1bf71e 100644
+--- a/admin/libtool.m4.in
++++ b/admin/libtool.m4.in
+@@ -777,7 +777,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }]
+ EOF
+   if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} 2>/dev/null; then
+diff --git a/configure b/configure
+index 649739b168ae8dc3..00fc221e124a2703 100755
+--- a/configure
++++ b/configure
+@@ -42024,7 +42024,7 @@ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ 
+ 	#include <stdarg.h>
+-	void f (int i, ...) {
++	int f (int i, ...) {
+ 	va_list args1, args2;
+ 	va_start (args1, i);
+ 	va_copy (args2, args1);
+diff --git a/flow/gsl/configure.in.in b/flow/gsl/configure.in.in
+index 3b147b9265085e28..b8274808a88ebfba 100644
+--- a/flow/gsl/configure.in.in
++++ b/flow/gsl/configure.in.in
+@@ -23,12 +23,12 @@ AC_CACHE_CHECK([size of $2], glib_Sizeof,
+ #include <stddef.h>
+ #endif
+ $1
+-main()
++int main()
+ {
+   FILE *f=fopen("conftestval", "w");
+-  if (!f) exit(1);
++  if (!f) return 1;
+   fprintf(f, "%d\n", sizeof($2));
+-  exit(0);
++  return 0;
+ }],
+   [glib_Sizeof=`cat conftestval`  dnl''
+ ],
+@@ -160,12 +160,12 @@ dnl all results in config.log for bug reports.
+ AC_CACHE_CHECK([for an implementation of va_copy()],glib_cv_va_copy,[
+ 	AC_TRY_RUN([
+ 	#include <stdarg.h>
+-	void f (int i, ...) {
++	int f (int i, ...) {
+ 	va_list args1, args2;
+ 	va_start (args1, i);
+ 	va_copy (args2, args1);
+ 	if (va_arg (args2, int) != 42 || va_arg (args1, int) != 42)
+-	  exit (1);
++	  return 1;
+ 	va_end (args1); va_end (args2);
+ 	}
+ 	int main() {
+@@ -179,12 +179,12 @@ AC_CACHE_CHECK([for an implementation of va_copy()],glib_cv_va_copy,[
+ AC_CACHE_CHECK([for an implementation of __va_copy()],glib_cv___va_copy,[
+ 	AC_TRY_RUN([
+ 	#include <stdarg.h>
+-	void f (int i, ...) {
++	int f (int i, ...) {
+ 	va_list args1, args2;
+ 	va_start (args1, i);
+ 	__va_copy (args2, args1);
+ 	if (va_arg (args2, int) != 42 || va_arg (args1, int) != 42)
+-	  exit (1);
++	  return 1;
+ 	va_end (args1); va_end (args2);
+ 	}
+ 	int main() {
+diff --git a/flow/gsl/gslglib.c b/flow/gsl/gslglib.c
+index f913df2101efb3c1..781ad77dfbd476dc 100644
+--- a/flow/gsl/gslglib.c
++++ b/flow/gsl/gslglib.c
+@@ -1,3 +1,5 @@
++#define _GNU_SOURCE /* for vasprintf */
++
+ #include "gsl/gslglib.h"
+ #include "gsl/gsldefs.h"
+ 

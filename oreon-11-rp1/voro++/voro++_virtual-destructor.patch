@@ -1,0 +1,89 @@
+diff -rupN voro++-0.4.6/src/cell.hh voro++-0.4.6-new/src/cell.hh
+--- voro++-0.4.6/src/cell.hh	2013-10-17 19:54:13.000000000 +0200
++++ voro++-0.4.6-new/src/cell.hh	2014-06-14 13:48:43.119907250 +0200
+@@ -84,7 +84,7 @@ class voronoicell_base {
+ 		 * the positions of the vertices. */
+ 		double *pts;
+ 		voronoicell_base();
+-		~voronoicell_base();
++		virtual ~voronoicell_base();
+ 		void init_base(double xmin,double xmax,double ymin,double ymax,double zmin,double zmax);
+ 		void init_octahedron_base(double l);
+ 		void init_tetrahedron_base(double x0,double y0,double z0,double x1,double y1,double z1,double x2,double y2,double z2,double x3,double y3,double z3);
+@@ -416,7 +416,7 @@ class voronoicell_neighbor : public voro
+ 		 * face that is clockwise from the jth edge. */
+ 		int **ne;
+ 		voronoicell_neighbor();
+-		~voronoicell_neighbor();
++		virtual ~voronoicell_neighbor();
+ 		void operator=(voronoicell &c);
+ 		void operator=(voronoicell_neighbor &c);
+ 		/** Cuts the Voronoi cell by a particle whose center is at a
+diff -rupN voro++-0.4.6/src/c_loops.hh voro++-0.4.6-new/src/c_loops.hh
+--- voro++-0.4.6/src/c_loops.hh	2013-10-17 20:18:28.000000000 +0200
++++ voro++-0.4.6-new/src/c_loops.hh	2014-06-14 13:43:40.009916206 +0200
+@@ -124,6 +124,7 @@ class c_loop_base {
+ 		c_loop_base(c_class &con) : nx(con.nx), ny(con.ny), nz(con.nz),
+ 					    nxy(con.nxy), nxyz(con.nxyz), ps(con.ps),
+ 					    p(con.p), id(con.id), co(con.co) {}
++		virtual ~c_loop_base(){}
+ 		/** Returns the position vector of the particle currently being
+ 		 * considered by the loop.
+ 		 * \param[out] (x,y,z) the position vector of the particle. */
+diff -rupN voro++-0.4.6/src/container.hh voro++-0.4.6-new/src/container.hh
+--- voro++-0.4.6/src/container.hh	2013-10-17 19:54:13.000000000 +0200
++++ voro++-0.4.6-new/src/container.hh	2014-06-14 13:48:00.484908509 +0200
+@@ -57,7 +57,7 @@ class wall_list {
+ 		 */
+ 		wall **wep;
+ 		wall_list();
+-		~wall_list();
++		virtual ~wall_list();
+ 		/** Adds a wall to the list.
+ 		 * \param[in] w the wall to add. */
+ 		inline void add_wall(wall *w) {
+@@ -161,7 +161,7 @@ class container_base : public voro_base,
+ 		container_base(double ax_,double bx_,double ay_,double by_,double az_,double bz_,
+ 				int nx_,int ny_,int nz_,bool xperiodic_,bool yperiodic_,bool zperiodic_,
+ 				int init_mem,int ps_);
+-		~container_base();
++		virtual ~container_base();
+ 		bool point_inside(double x,double y,double z);
+ 		void region_count();
+ 		/** Initializes the Voronoi cell prior to a compute_cell
+diff -rupN voro++-0.4.6/src/container_prd.hh voro++-0.4.6-new/src/container_prd.hh
+--- voro++-0.4.6/src/container_prd.hh	2013-10-17 19:54:13.000000000 +0200
++++ voro++-0.4.6-new/src/container_prd.hh	2014-06-14 13:46:47.345910670 +0200
+@@ -93,7 +93,7 @@ class container_periodic_base : public u
+ 		const int ps;
+ 		container_periodic_base(double bx_,double bxy_,double by_,double bxz_,double byz_,double bz_,
+ 				int nx_,int ny_,int nz_,int init_mem_,int ps);
+-		~container_periodic_base();
++		virtual ~container_periodic_base();
+ 		/** Prints all particles in the container, including those that
+ 		 * have been constructed in image blocks. */
+ 		inline void print_all_particles() {
+diff -rupN voro++-0.4.6/src/pre_container.hh voro++-0.4.6-new/src/pre_container.hh
+--- voro++-0.4.6/src/pre_container.hh	2013-10-17 19:54:13.000000000 +0200
++++ voro++-0.4.6-new/src/pre_container.hh	2014-06-14 13:40:25.604921950 +0200
+@@ -53,7 +53,7 @@ class pre_container_base {
+ 		const bool zperiodic;
+ 		void guess_optimal(int &nx,int &ny,int &nz);
+ 		pre_container_base(double ax_,double bx_,double ay_,double by_,double az_,double bz_,bool xperiodic_,bool yperiodic_,bool zperiodic_,int ps_);
+-		~pre_container_base();
++		virtual ~pre_container_base();
+ 		/** Calculates and returns the total number of particles stored
+ 		 * within the class.
+ 		 * \return The number of particles. */
+diff -rupN voro++-0.4.6/src/v_base.hh voro++-0.4.6-new/src/v_base.hh
+--- voro++-0.4.6/src/v_base.hh	2013-10-17 19:54:13.000000000 +0200
++++ voro++-0.4.6-new/src/v_base.hh	2014-06-14 13:40:14.507922277 +0200
+@@ -57,7 +57,7 @@ class voro_base {
+ 		static const unsigned int wl[wl_seq_length*wl_hgridcu];
+ 		bool contains_neighbor(const char* format);
+ 		voro_base(int nx_,int ny_,int nz_,double boxx_,double boxy_,double boxz_);
+-		~voro_base() {delete [] mrad;}
++		virtual ~voro_base() {delete [] mrad;}
+ 	protected:
+ 		/** A custom int function that returns consistent stepping
+ 		 * for negative numbers, so that (-1.5, -0.5, 0.5, 1.5) maps

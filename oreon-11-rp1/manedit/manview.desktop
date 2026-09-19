@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=ManView
+Comment=UNIX Manual Page Viewer
+Exec=manview
+Icon=manedit_viewer
+Terminal=false
+Type=Application
+Categories=Graphics;Viewer;

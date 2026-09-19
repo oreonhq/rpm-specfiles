@@ -1,0 +1,13 @@
+diff -up iaxclient-2.1beta3/configure.ac.DSO iaxclient-2.1beta3/configure.ac
+--- iaxclient-2.1beta3/configure.ac.DSO	2010-02-10 14:59:13.713769339 -0500
++++ iaxclient-2.1beta3/configure.ac	2010-02-10 14:59:13.720763386 -0500
+@@ -49,6 +49,9 @@ AC_CHECK_FUNCS([vsnprintf _vsnprintf])
+ AC_CHECK_FUNCS([srandomdev srandom srand48 random lrand48])
+ AC_CHECK_FUNCS(gettimeofday)
+ 
++# Implicit DSO linking fix
++AC_CHECK_LIB(m, sincos)
++
+ ACX_PTHREAD
+ 
+ AC_CHECK_PROG(have_pkg_config, pkg-config, yes, no)

@@ -1,0 +1,23 @@
+From 1b4676b3cf8bbaff2f75c8e41b005401b189b2e2 Mon Sep 17 00:00:00 2001
+From: Russ Taylor <russ@reliasolve.com>
+Date: Sun, 1 Jan 2023 11:34:16 -0500
+Subject: [PATCH] Extending range of Python version search to support two-digit
+ minor version to include 3.10 and 3.11
+
+---
+ python/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
+index 8c3870f69..c2ea7707e 100644
+--- a/python/CMakeLists.txt
++++ b/python/CMakeLists.txt
+@@ -3,7 +3,7 @@ if(PYTHONLIBS_FOUND AND (VRPN_BUILD_PYTHON_HANDCODED_2X OR VRPN_BUILD_PYTHON_HAN
+ 	include_directories(${PYTHON_INCLUDE_DIRS} "${CMAKE_CURRENT_SOURCE_DIR}")
+ 
+ 	set(PYTHONVERSIONDIR python)
+-	if(PYTHON_LIBRARY MATCHES "python([23].[0-9])")
++	if(PYTHON_LIBRARY MATCHES "python([23].[0-9]+)")
+ 		set(PYTHONVERSIONDIR "python${CMAKE_MATCH_1}/")
+ 	endif()
+ 

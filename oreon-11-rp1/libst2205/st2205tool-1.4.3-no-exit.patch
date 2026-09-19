@@ -1,0 +1,46 @@
+diff -up st2205tool/libst2205/st2205.c~ st2205tool/libst2205/st2205.c
+--- st2205tool/libst2205/st2205.c~	2009-01-28 22:34:09.000000000 +0100
++++ st2205tool/libst2205/st2205.c	2011-02-20 10:04:21.926572083 +0100
+@@ -355,11 +355,6 @@ static void pcf8833_send_partial(st2205_
+ 					p = adddata(h->buff, p, (tr)&0xff);
+ 					x++; //because we handle 2 pixels at a time
+ 				break;
+-				default:
+-					fprintf(stderr, "libst2205: Unknown bpp for this display: %i\n", h->bpp);
+-					//TODO: do not exit here, library should just send error to app
+-					exit(1);
+-				break;
+ 			}
+ 		}
+ 	}
+@@ -497,6 +492,7 @@ st2205_handle *st2205_open(const char *d
+ 			fprintf(stderr, "Unknown version %hhi\n", b->version);
+ 		close(fd);
+ 		free_aligned(buff, BUFF_SIZE);
++		free(r);
+ 		return NULL;	
+ 	}
+ 
+@@ -509,7 +505,21 @@ st2205_handle *st2205_open(const char *d
+ 	r->oldpix = NULL;
+ 	r->offx   = b->offx;
+ 	r->offy   = b->offy;
+-	
++
++	/* Verify bpp */
++	switch (r->bpp) {
++	case 24:
++	case 16:
++	case 12:
++		break;
++	default:
++		fprintf(stderr, "libst2205: Unknown bpp for this display: %i\n", r->bpp);
++		close(fd);
++		free_aligned(buff, BUFF_SIZE);
++		free(r);
++		return NULL;
++	}
++
+ 	DPRINT("libst2205: detected device, %ix%i, %i bpp.\n", r->width, r->height, r->bpp);
+ 	
+ 	return r;

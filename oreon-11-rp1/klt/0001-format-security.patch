@@ -1,0 +1,12 @@
+diff -ur ./writeFeatures.c ../klt/writeFeatures.c
+--- ./writeFeatures.c	2014-04-05 20:30:34.375967953 +1100
++++ ../klt/writeFeatures.c	2014-04-05 20:33:20.298635189 +1100
+@@ -229,7 +229,7 @@
+   if (fp != stderr)  {
+     fprintf(fp, "Feel free to place comments here.\n\n\n");
+     fprintf(fp, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+-    fprintf(fp, warning_line);
++    fprintf(fp, "%s", warning_line);
+     fprintf(fp, "\n");
+   }
+   fprintf(fp, "------------------------------\n");

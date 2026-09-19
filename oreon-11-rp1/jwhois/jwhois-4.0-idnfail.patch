@@ -1,0 +1,25 @@
+diff -up jwhois-4.0/src/jwhois.c.orig jwhois-4.0/src/jwhois.c
+--- jwhois-4.0/src/jwhois.c.orig	2014-06-10 15:27:33.944422031 +0200
++++ jwhois-4.0/src/jwhois.c	2014-06-10 15:28:47.235677030 +0200
+@@ -120,8 +120,19 @@ main(int argc, char **argv)
+   rc = idn2_lookup_ul(argv[optind], &idn, 0);
+   if (rc != IDN2_OK)
+     {
+-      printf("[IDN encoding of '%s' failed: %s)]\n", argv[optind], idn2_strerror(rc));
+-      exit(1);
++      if (rc == IDN2_TOO_BIG_LABEL)
++        {
++          if ((idn = strdup(argv[optind])) == NULL)
++            {
++              printf("[%s]\n", _("Error allocating memory"));
++              exit(1);
++            }
++        }
++      else
++        {
++          printf("[IDN encoding of '%s' failed: %s)]\n", argv[optind], idn2_strerror(rc));
++          exit(1);
++        }
+     }
+   qstring = realloc(qstring, count+strlen(idn)+1);
+   memcpy(qstring+count, idn, strlen(idn)+1);

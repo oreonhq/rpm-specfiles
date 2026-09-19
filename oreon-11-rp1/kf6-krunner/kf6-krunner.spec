@@ -1,12 +1,12 @@
-%global source0_hash 46d06321bbccadb8f3fbb948ffaac5eff18dad9552fde677761ddddb9470202f
+%global source0_hash 163129f8d3e768cd531d21277c7a643600634eb01a5ea275a9170cdef51ac125
 
 %global framework krunner
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution with parallelized query system
 
@@ -21,18 +21,18 @@ BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  kf6-rpm-macros
 
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  cmake(KF6Solid)
-BuildRequires:  cmake(KF6ThreadWeaver)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6KIO) >= %{version}
+BuildRequires:  cmake(KF6Service) >= %{version}
+BuildRequires:  cmake(KF6Solid) >= %{version}
+BuildRequires:  cmake(KF6ThreadWeaver) >= %{version}
 BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtdeclarative-devel
 
-BuildRequires:  cmake(KF6ItemModels)
+BuildRequires:  cmake(KF6ItemModels) >= %{version}
 
 Requires:  kf6-filesystem
 
@@ -75,6 +75,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

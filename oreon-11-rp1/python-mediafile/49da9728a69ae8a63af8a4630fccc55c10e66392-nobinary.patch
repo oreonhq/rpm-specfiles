@@ -1,0 +1,133 @@
+From 49da9728a69ae8a63af8a4630fccc55c10e66392 Mon Sep 17 00:00:00 2001
+From: Thomas Scholtes <geigerzaehler@axiom.fm>
+Date: Fri, 8 Mar 2024 12:17:43 +0100
+Subject: [PATCH] Replace deprecated `imghdr` package with `filetype`
+
+The `imghdr` package from the Python standard library is [deprecated and
+will be removed in Python 3.13][1]. The deprecated PEP suggests packages
+filetype, puremagic, python-magic as replacements. I chose filetype
+because it has a [larger user-base][2] than puremagic and does not have
+a C dependency, like python-magic.
+
+[1]: https://peps.python.org/pep-0594/#deprecated-modules
+[2]: https://libraries.io/pypi/filetype
+---
+ mediafile.py                   |  45 +++------------------------------
+ pyproject.toml                 |   1 +
+ test/rsrc/only-magic-bytes.jpg | Bin 622 -> 0 bytes
+ test/test_mediafile_edge.py    |  11 --------
+ 4 files changed, 4 insertions(+), 53 deletions(-)
+ delete mode 100644 test/rsrc/only-magic-bytes.jpg
+
+diff --git a/mediafile.py b/mediafile.py
+index 5f488d7..5600c49 100644
+--- a/mediafile.py
++++ b/mediafile.py
+@@ -46,8 +46,8 @@
+ import codecs
+ import datetime
+ import enum
++import filetype
+ import functools
+-import imghdr
+ import logging
+ import math
+ import os
+@@ -78,8 +78,6 @@
+     'wav':  'WAVE',
+ }
+ 
+-PREFERRED_IMAGE_EXTENSIONS = {'jpeg': 'jpg'}
+-
+ 
+ # Exceptions.
+ 
+@@ -346,52 +344,15 @@ def _sc_encode(gain, peak):
+ 
+ 
+ # Cover art and other images.
+-def _imghdr_what_wrapper(data):
+-    """A wrapper around imghdr.what to account for jpeg files that can only be
+-    identified as such using their magic bytes
+-    See #1545
+-    See https://github.com/file/file/blob/master/magic/Magdir/jpeg#L12
+-    """
+-    # imghdr.what returns none for jpegs with only the magic bytes, so
+-    # _wider_test_jpeg is run in that case. It still returns None if it didn't
+-    # match such a jpeg file.
+-    return imghdr.what(None, h=data) or _wider_test_jpeg(data)
+-
+-
+-def _wider_test_jpeg(data):
+-    """Test for a jpeg file following the UNIX file implementation which
+-    uses the magic bytes rather than just looking for the bytes that
+-    represent 'JFIF' or 'EXIF' at a fixed position.
+-    """
+-    if data[:2] == b'\xff\xd8':
+-        return 'jpeg'
+-
+ 
+ def image_mime_type(data):
+     """Return the MIME type of the image data (a bytestring).
+     """
+-    # This checks for a jpeg file with only the magic bytes (unrecognized by
+-    # imghdr.what). imghdr.what returns none for that type of file, so
+-    # _wider_test_jpeg is run in that case. It still returns None if it didn't
+-    # match such a jpeg file.
+-    kind = _imghdr_what_wrapper(data)
+-    if kind in ['gif', 'jpeg', 'png', 'tiff', 'bmp']:
+-        return 'image/{0}'.format(kind)
+-    elif kind == 'pgm':
+-        return 'image/x-portable-graymap'
+-    elif kind == 'pbm':
+-        return 'image/x-portable-bitmap'
+-    elif kind == 'ppm':
+-        return 'image/x-portable-pixmap'
+-    elif kind == 'xbm':
+-        return 'image/x-xbitmap'
+-    else:
+-        return 'image/x-{0}'.format(kind)
++    return filetype.guess_mime(data)
+ 
+ 
+ def image_extension(data):
+-    ext = _imghdr_what_wrapper(data)
+-    return PREFERRED_IMAGE_EXTENSIONS.get(ext, ext)
++    return filetype.guess_extension(data)
+ 
+ 
+ class ImageType(enum.Enum):
+diff --git a/pyproject.toml b/pyproject.toml
+index f558885..1f08159 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -10,6 +10,7 @@ home-page = "https://github.com/beetbox/mediafile"
+ description-file = "README.rst"
+ requires = [
+     "mutagen>=1.46",
++    "filetype>=1.2.0",
+ ]
+ requires-python = ">=3.7"
+ classifiers = [
+diff --git a/test/test_mediafile_edge.py b/test/test_mediafile_edge.py
+index 337c610..4796525 100644
+--- a/test/test_mediafile_edge.py
++++ b/test/test_mediafile_edge.py
+@@ -78,17 +78,6 @@ def test_old_ape_version_bitrate(self):
+         f = mediafile.MediaFile(media_file)
+         self.assertEqual(f.bitrate, 0)
+ 
+-    def test_only_magic_bytes_jpeg(self):
+-        # Some jpeg files can only be recognized by their magic bytes and as
+-        # such aren't recognized by imghdr. Ensure that this still works thanks
+-        # to our own follow up mimetype detection based on
+-        # https://github.com/file/file/blob/master/magic/Magdir/jpeg#L12
+-        magic_bytes_file = os.path.join(_common.RSRC, b'only-magic-bytes.jpg')
+-        with open(magic_bytes_file, 'rb') as f:
+-            jpg_data = f.read()
+-        self.assertEqual(
+-            mediafile._imghdr_what_wrapper(jpg_data), 'jpeg')
+-
+     def test_soundcheck_non_ascii(self):
+         # Make sure we don't crash when the iTunes SoundCheck field contains
+         # non-ASCII binary data.

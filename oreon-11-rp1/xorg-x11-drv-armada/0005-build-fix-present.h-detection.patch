@@ -1,0 +1,36 @@
+From 6c810c964b64c0d9e4970a803718bcc4b7bd7f1c Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Thu, 25 Apr 2019 18:03:18 +0200
+Subject: [PATCH 5/5] build: fix present.h detection
+
+With xserver 1.20.4 it's necessary to include xorg-server.h before
+present.h:
+
+  In file included from /usr/include/xorg/randrstr.h:46,
+                   from /usr/include/xorg/present.h:27,
+                   from conftest.c:37:
+  /usr/include/xorg/servermd.h:51:2: error: #error Drivers must include xorg-server.h before any other xserver headers
+
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+---
+ configure.ac | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index e69e447..7d4d6fa 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -295,7 +295,9 @@ PKG_CHECK_MODULES(PRESENT, [presentproto >= 1.0], , PRESENT=no)
+ if test x$PRESENT != xno; then
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$XORG_CFLAGS $PRESENT_CFLAGS"
+-   AC_CHECK_HEADERS([present.h], PRESENT=yes, PRESENT=no, [#include <dixstruct.h>])
++   AC_CHECK_HEADERS([present.h], PRESENT=yes, PRESENT=no,
++	[#include <xorg-server.h>]
++	[#include <dixstruct.h>])
+    CFLAGS=$save_CFLAGS
+ fi
+ AC_MSG_CHECKING([whether to include PRESENT support])
+-- 
+2.21.0
+

@@ -1,14 +1,14 @@
-%global source0_hash dd8d6dd045b0fd71c7ce3fc18bb15b77ec8316e57f4d83ddae67f3a62b796efb
+%global source0_hash 08f8bfe83c5d4516b5c76877ac51aba8e7001242cd56d1e2a987bc8410af53fd
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 %global framework kcontacts
 
 Name:    kf6-%{framework}
-Version: 6.27.0
-Release: 1%{?dist}
+Version:	6.29.0
+Release:        1%{?dist}
 Summary: The KContacts Library
 
 # The following licenses are present in LICENSES but go unused: BSD-3-Clause, MIT, Unicode-DFS-2016
@@ -22,9 +22,9 @@ BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
 BuildRequires:  kf6-kcodecs-devel
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  cmake(Qt6Quick)
@@ -92,5 +92,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %exclude %{_qt6_docdir}/*/*.index
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.26.0-1
-- Import
+%autochangelog

@@ -1,0 +1,39 @@
+Index: SDRPlusPlus-fe4a7b32a7656de8c8f4c4efa926cf6f21a9c1d9/core/CMakeLists.txt
+===================================================================
+--- SDRPlusPlus-fe4a7b32a7656de8c8f4c4efa926cf6f21a9c1d9.orig/core/CMakeLists.txt
++++ SDRPlusPlus-fe4a7b32a7656de8c8f4c4efa926cf6f21a9c1d9/core/CMakeLists.txt
+@@ -128,11 +128,15 @@ elseif (ANDROID)
+ else()
+     find_package(PkgConfig)
+     find_package(OpenGL REQUIRED)
++	find_package(nlohmann_json REQUIRED)
+ 
+     pkg_check_modules(FFTW3 REQUIRED fftw3f)
+     pkg_check_modules(VOLK REQUIRED volk)
+     pkg_check_modules(GLFW3 REQUIRED glfw3)
+     pkg_check_modules(LIBZSTD REQUIRED libzstd)
++	pkg_check_modules(FMT REQUIRED fmt)
++    pkg_check_modules(SPDLOG REQUIRED spdlog)
++
+ 
+     target_include_directories(sdrpp_core PUBLIC
+         ${OPENGL_INCLUDE_DIRS}
+@@ -140,6 +144,8 @@ else()
+         ${GLFW3_INCLUDE_DIRS}
+         ${VOLK_INCLUDE_DIRS}
+         ${LIBZSTD_INCLUDE_DIRS}
++		${FMT_INCLUDE_DIRS}
++        ${SPDLOG_INCLUDE_DIRS}
+     )
+     
+     target_link_directories(sdrpp_core PUBLIC
+@@ -156,6 +162,9 @@ else()
+         ${GLFW3_LIBRARIES}
+         ${VOLK_LIBRARIES}
+         ${LIBZSTD_LIBRARIES}
++		${FMT_LIBRARIES}
++        ${SPDLOG_LIBRARIES}
++
+     )
+ 
+     if (NOT USE_INTERNAL_LIBCORRECT)

@@ -1,0 +1,38 @@
+From d666cc230b430d37b2b9f209e01460dc1eb49075 Mon Sep 17 00:00:00 2001
+From: Jeff Law <law@redhat.com>
+Date: Thu, 5 Nov 2020 11:52:33 -0700
+Subject: [PATCH 14/18] Fix missing #includes for gcc-11
+
+---
+ src/fflib/AFunction2.cpp | 1 +
+ src/fflib/Operator.hpp   | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/src/fflib/AFunction2.cpp b/src/fflib/AFunction2.cpp
+index ffce6f61d..d1b0818f9 100644
+--- a/src/fflib/AFunction2.cpp
++++ b/src/fflib/AFunction2.cpp
+@@ -34,6 +34,7 @@
+ #endif
+ 
+ #include <complex>
++#include <limits>
+ #include "AFunction.hpp"
+ #include <cstdarg>
+ #include <cstring>
+diff --git a/src/fflib/Operator.hpp b/src/fflib/Operator.hpp
+index f08d9b385..bbc89db29 100644
+--- a/src/fflib/Operator.hpp
++++ b/src/fflib/Operator.hpp
+@@ -29,6 +29,8 @@
+ #ifndef Operator_hpp_
+ #define Operator_hpp_
+ 
++#include <limits>
++
+ #if defined(__GNUC__) && __GNUC__+0 >= 3
+ inline double pow(double x,long l) { return pow(x,(double)l);}
+ #endif
+-- 
+2.47.1
+

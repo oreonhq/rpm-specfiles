@@ -1,0 +1,13 @@
+--- keyvalues-serde-0.2.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ keyvalues-serde-0.2.2/Cargo.toml	2025-02-14T13:14:54.271931+00:00
+@@ -69,10 +69,6 @@
+ [dependencies.serde]
+ version = "1.0.209"
+ 
+-[dev-dependencies.divan]
+-version = "0.1.14"
+-default-features = false
+-
+ [dev-dependencies.insta]
+ version = "1.39.0"
+ 

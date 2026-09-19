@@ -1,0 +1,204 @@
+--- libanjuta/anjuta-dock.c~	2018-10-22 14:25:42.000000000 -0500
++++ libanjuta/anjuta-dock.c	2024-01-31 14:35:57.853677632 -0600
+@@ -403,7 +403,7 @@
+ 	if (self->priv->command_bar)
+ 		g_object_unref (self->priv->command_bar);
+ 
+-	self->priv->command_bar = g_object_ref (command_bar);
++	self->priv->command_bar = (GtkWidget *)(g_object_ref (command_bar));
+ }
+ 
+ /**
+--- plugins/am-project/amp-group.c~	2018-10-22 14:25:42.000000000 -0500
++++ plugins/am-project/amp-group.c	2024-01-31 14:50:30.237118169 -0600
+@@ -364,7 +364,7 @@
+ 	root = anjuta_project_node_get_file (node);
+ 
+ 	/* Set source directory variables */
+-	file = anjuta_project_node_get_file (group);
++	file = (GFile *)(anjuta_project_node_get_file ((const AnjutaProjectNode *)group));
+ 	value = anjuta_token_insert_token_list (FALSE, NULL,
+ 	                                  ANJUTA_TOKEN_LIST, NULL,
+ 	                                  ANJUTA_TOKEN_ARGUMENT, NULL,
+--- plugins/glade/plugin.c~	2018-10-22 14:25:43.000000000 -0500
++++ plugins/glade/plugin.c	2024-01-31 15:41:47.657244584 -0600
+@@ -487,7 +487,7 @@
+ 		return;
+ 
+ 	current_editor = IANJUTA_IS_EDITOR (doc) ? IANJUTA_EDITOR (doc)
+-											 : get_doc_with_associated_file (plugin, doc);
++											 : get_doc_with_associated_file ((GladePlugin *)plugin, doc);
+ 
+ 	if (!current_editor)
+ 		return;
+--- plugins/language-support-cpp-java/plugin.c~	2018-10-22 14:25:43.000000000 -0500
++++ plugins/language-support-cpp-java/plugin.c	2024-01-31 16:15:41.523962397 -0600
+@@ -430,7 +430,7 @@
+ 
+ 	g_object_unref (result_end);
+ 
+-	return ianjuta_editor_get_text (editor, prefix_end, suffix_start, NULL);
++	return ianjuta_editor_get_text (editor, (IAnjutaIterable *)prefix_end, (IAnjutaIterable *)suffix_start, NULL);
+ }
+ 
+ static gchar*
+--- plugins/language-support-cpp-java/plugin.c~	2024-01-31 16:15:41.523962397 -0600
++++ plugins/language-support-cpp-java/plugin.c	2024-01-31 16:16:37.785595579 -0600
+@@ -846,7 +846,7 @@
+ install_support (CppJavaPlugin *lang_plugin)
+ {
+ 	/* Searching for association */
+-	gchar *ui_filename = get_text_between (lang_plugin->current_editor,
++	gchar *ui_filename = get_text_between ((IAnjutaEditor *)lang_plugin->current_editor,
+ 										   WIDGETS_DECLARATION_MARKER_PREFIX,
+ 										   WIDGETS_DECLARATION_MARKER_SUFFIX);
+ 
+--- plugins/language-support-js/util.c~	2018-10-22 14:25:43.000000000 -0500
++++ plugins/language-support-js/util.c	2024-01-31 16:31:12.703891242 -0600
+@@ -109,7 +109,7 @@
+ 	JSLang* plugin = (JSLang*)getPlugin ();
+ 
+ 	if (!plugin->prefs)
+-		plugin->prefs = anjuta_shell_get_preferences (ANJUTA_PLUGIN (plugin)->shell, NULL);
++		plugin->prefs = (GSettings *)anjuta_shell_get_preferences (ANJUTA_PLUGIN (plugin)->shell, NULL);
+ 
+ 	if (!g_settings_get_boolean (plugin->prefs, HIGHLIGHT_MISSEDSEMICOLON))
+ 	{
+@@ -240,7 +240,7 @@
+ 	JSLang* plugin = (JSLang*)getPlugin ();
+ 
+ 	if (!plugin->prefs)
+-		plugin->prefs = anjuta_shell_get_preferences (ANJUTA_PLUGIN (plugin)->shell, NULL);
++		plugin->prefs = (GSettings *)anjuta_shell_get_preferences (ANJUTA_PLUGIN (plugin)->shell, NULL);
+ 
+ 	gchar *path = g_settings_get_string (plugin->prefs, GIR_DIR_KEY);
+ 	if (!path || strlen (path) < 1)
+--- plugins/project-manager/tree-data.c~	2018-10-22 14:25:43.000000000 -0500
++++ plugins/project-manager/tree-data.c	2024-02-01 09:44:25.469897292 -0600
+@@ -63,7 +63,7 @@
+ {
+ 	if (data->source != NULL)
+ 	{
+-		return g_object_ref (g_file_get_uri (data->source));
++		return (GFile *)(g_object_ref (g_file_get_uri (data->source)));
+ 	}
+ 	else if (data->target != NULL)
+ 	{
+@@ -75,7 +75,7 @@
+ 	}
+ 	else if (data->group != NULL)
+ 	{
+-		return g_object_ref (g_file_get_uri (data->group));
++		return (GFile *)(g_object_ref (g_file_get_uri (data->group)));
+ 	}
+ 
+ 	return NULL;
+--- plugins/python-loader/plugin.c~	2018-10-22 14:25:43.000000000 -0500
++++ plugins/python-loader/plugin.c	2024-02-01 16:19:19.527835521 -0600
+@@ -112,7 +112,7 @@
+ 		return FALSE;
+ 	}
+ 
+-	PySys_SetArgv (1, argv);
++	PySys_SetArgv (1, (wchar_t **)argv);
+ 
+ 	/* Retrieve the Python type for anjuta plugin */
+ 	m = PyImport_ImportModule ("gi.repository.Anjuta");
+--- plugins/starter/plugin.c~	2018-10-22 14:25:43.000000000 -0500
++++ plugins/starter/plugin.c	2024-02-05 10:58:43.132304066 -0600
+@@ -153,7 +153,7 @@
+ 
+ 	if (row != NULL)
+ 	{
+-		name = gtk_widget_get_name (row);
++		name = gtk_widget_get_name ((GtkWidget *)row);
+ 		if (name != NULL) {
+ 			if (g_strcmp0 (name, CREATE_ROW) == 0)
+ 				on_new_project_activated (row, user_data);
+@@ -189,13 +189,13 @@
+ 	}
+ 	else
+ 	{
+-		file = g_file_new_for_uri (gtk_recent_info_get_uri (recent_project));
++		file = g_file_new_for_uri (gtk_recent_info_get_uri ((GtkRecentInfo *)recent_project));
+ 		if (g_file_query_exists (file, NULL))
+ 		{
+ 			recent_row = GTK_WIDGET (gtk_builder_get_object (builder, RECENT_ROW));
+-			project_label = GTK_WIDGET (gtk_builder_get_object (builder, PROJECT_LABEL));
+-			path_label = GTK_WIDGET (gtk_builder_get_object (builder, PATH_LABEL));
+-			gtk_label_set_text (project_label, gtk_recent_info_get_display_name(recent_project));
++			project_label = (GtkLabel *)(GTK_WIDGET (gtk_builder_get_object (builder, PROJECT_LABEL)));
++			path_label = (GtkLabel *)(GTK_WIDGET (gtk_builder_get_object (builder, PATH_LABEL)));
++			gtk_label_set_text (project_label, gtk_recent_info_get_display_name((GtkRecentInfo *)recent_project));
+ 			gtk_label_set_text (path_label, g_file_get_path(file));
+ 			g_object_set_data_full (G_OBJECT (recent_row), URI_KEY, g_file_get_uri(file), g_free);
+ 			gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (recent_row)), recent_row);
+@@ -252,9 +252,9 @@
+ 	error = NULL;
+ 	if (row != NULL)
+ 	{
+-		if (gtk_recent_manager_remove_item (manager, g_object_get_data (row, URI_KEY), &error))
++		if (gtk_recent_manager_remove_item (manager, g_object_get_data ((GObject *)row, URI_KEY), &error))
+ 		{
+-			gtk_container_remove (GTK_CONTAINER (recent_list_box), row);
++			gtk_container_remove (GTK_CONTAINER (recent_list_box), (GtkWidget *)row);
+ 		}
+ 		else
+ 		{
+@@ -316,16 +316,16 @@
+ 		/* Manually assembling stack and switcher because they are not available in glade yet */
+ 		switcher = gtk_stack_switcher_new ();
+ 		stack = gtk_stack_new ();
+-		gtk_stack_switcher_set_stack (switcher, stack);
+-		gtk_stack_set_transition_type (stack, GTK_STACK_TRANSITION_TYPE_CROSSFADE);
+-		gtk_stack_set_transition_duration (stack, TRANSITION_TIME);
++		gtk_stack_switcher_set_stack ((GtkStackSwitcher *)switcher, (GtkStack *)stack);
++		gtk_stack_set_transition_type ((GtkStack *)stack, GTK_STACK_TRANSITION_TYPE_CROSSFADE);
++		gtk_stack_set_transition_duration ((GtkStack *)stack, TRANSITION_TIME);
+ 
+ 		starter_box = GTK_WIDGET (gtk_builder_get_object (builder, STARTER_BOX));
+ 		switcher_box = GTK_WIDGET (gtk_builder_get_object (builder, SWITCHER_BOX));
+ 		gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (starter_box)), starter_box);
+ 		g_object_ref (starter_box);
+-		gtk_box_pack_start (switcher_box, switcher, FALSE, FALSE, 0);
+-		gtk_box_pack_start (starter_box, stack, FALSE, FALSE, 0);
++		gtk_box_pack_start ((GtkBox *)switcher_box, switcher, FALSE, FALSE, 0);
++		gtk_box_pack_start ((GtkBox *)starter_box, stack, FALSE, FALSE, 0);
+ 		gtk_widget_show_all (starter_box);
+ 
+ 		actions_listbox = GTK_WIDGET (gtk_builder_get_object (builder, ACTIONS_LISTBOX));
+@@ -333,7 +333,7 @@
+ 		actions_frame = GTK_WIDGET (gtk_builder_get_object (builder, ACTIONS_FRAME));
+ 		gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (actions_frame)), actions_frame);
+ 		g_object_ref (actions_frame);
+-		gtk_stack_add_titled (stack, actions_frame, ACTIONS_ID, "Actions");
++		gtk_stack_add_titled ((GtkStack *)stack, actions_frame, ACTIONS_ID, "Actions");
+ 
+ 		recent_projects_box = GTK_WIDGET (gtk_builder_get_object (builder, RECENT_PROJECTS_BOX));
+ 		gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (recent_projects_box)), recent_projects_box);
+@@ -342,7 +342,7 @@
+ 		recent_listbox = GTK_WIDGET (gtk_builder_get_object (builder, RECENT_LISTBOX));
+ 		refresh_recent_project_view (GTK_LIST_BOX (recent_listbox));
+ 
+-		gtk_stack_add_titled (stack, recent_projects_box, RECENT_PROJECTS_ID, "Recent Projects");
++		gtk_stack_add_titled ((GtkStack *)stack, recent_projects_box, RECENT_PROJECTS_ID, "Recent Projects");
+ 
+ 		button = GTK_WIDGET (gtk_builder_get_object (builder, REMOVE_PROJECT_BUTTON));
+ 		g_signal_connect_object (G_OBJECT (button), "clicked",
+--- plugins/symbol-db/plugin.c~	2018-10-22 14:25:43.000000000 -0500
++++ plugins/symbol-db/plugin.c	2024-02-05 13:30:00.779663162 -0600
+@@ -584,11 +584,11 @@
+ on_code_added (IAnjutaEditor *editor, IAnjutaIterable *position, gchar *code,
+ 			   SymbolDBPlugin *sdb_plugin)
+ {
+-	IAnjutaEditor *old_editor = sdb_plugin->current_editor;
+-	sdb_plugin->current_editor = editor;
++	IAnjutaEditor *old_editor = (IAnjutaEditor *)(sdb_plugin->current_editor);
++	sdb_plugin->current_editor = (GObject *)editor;
+ 	sdb_plugin->need_symbols_update = TRUE;
+ 	editor_buffer_symbols_update (editor, sdb_plugin);
+-	sdb_plugin->current_editor = old_editor;
++	sdb_plugin->current_editor = (GObject *)old_editor;
+ }
+ 
+ static void

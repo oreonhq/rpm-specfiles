@@ -1,0 +1,67 @@
+diff -u --recursive 1/doc/aunit_cb/fixture.rst 2/doc/aunit_cb/fixture.rst
+--- 1/doc/aunit_cb/fixture.rst	2022-12-19 22:08:42.000000000 +0100
++++ 2/doc/aunit_cb/fixture.rst	2024-04-03 23:04:46.098309161 +0200
+@@ -126,8 +126,8 @@
+ .. index:: AUnit.Test_Fixtures
+ 
+ You can find a compilable example of fixture set up using
+-``AUnit.Test_Fixtures`` in your AUnit installation directory: 
+-:samp:`{<aunit-root>}/share/examples/aunit/test_fixture/` 
++``AUnit.Test_Fixtures`` in
++:samp:`/usr/share/doc/aunit/examples/test_fixture/`
+ or from the AUnit source distribution 
+ :samp:`aunit-{<version>}-src/examples/test_fixture/`.
+ 
+diff -u --recursive 1/doc/aunit_cb/introduction.rst 2/doc/aunit_cb/introduction.rst
+--- 1/doc/aunit_cb/introduction.rst	2022-12-19 22:08:42.000000000 +0100
++++ 2/doc/aunit_cb/introduction.rst	2024-04-03 23:04:46.098309161 +0200
+@@ -51,9 +51,8 @@
+ ========
+ 
+ With this version, we have provided new examples illustrating the enhanced
+-features of the framework. These examples are in the AUnit
+-installation directory:
+-:file:`<aunit-root>/share/examples/aunit`, and are also available in the source
++features of the framework. These examples are in
++:file:`/usr/share/doc/aunit/examples`, and are also available in the source
+ distribution :samp:`aunit-{<version>}-src/examples`.
+ 
+ The following examples are provided:
+diff -u --recursive 1/doc/aunit_cb/test_case.rst 2/doc/aunit_cb/test_case.rst
+--- 1/doc/aunit_cb/test_case.rst	2022-12-19 22:08:42.000000000 +0100
++++ 2/doc/aunit_cb/test_case.rst	2024-04-03 23:04:46.098309161 +0200
+@@ -74,8 +74,8 @@
+   of how to use these methods.
+ 
+ You can find a compilable example of
+-``AUnit.Simple_Test_Cases.Test_Case`` usage in your AUnit installation
+-directory: :samp:`{<aunit-root>}/share/examples/aunit/simple_test/` or from the
++``AUnit.Simple_Test_Cases.Test_Case`` usage in
++:samp:`/usr/share/doc/aunit/examples/simple_test/` or from the
+ source distribution :samp:`aunit-{<version>}-src/examples/simple_test/`.
+ 
+ .. _AUnit-Test_Cases:
+@@ -274,7 +274,6 @@
+ ``Test_Fixture`` with a controlled component.
+ 
+ You can find a compilable example of
+-``AUnit.Test_Caller`` usage in the AUnit installation
+-directory: :samp:`{<aunit-root>}/share/examples/aunit/test_caller/` or from the
++``AUnit.Test_Caller`` usage in :samp:`/usr/share/doc/aunit/examples/test_caller/` or from the
+ source distribution :samp:`aunit-{<version>}-src/examples/test_caller/`.
+ 
+diff -u --recursive 1/doc/aunit_cb/test_organization.rst 2/doc/aunit_cb/test_organization.rst
+--- 1/doc/aunit_cb/test_organization.rst	2022-12-19 22:08:42.000000000 +0100
++++ 2/doc/aunit_cb/test_organization.rst	2024-04-03 23:04:46.098309161 +0200
+@@ -42,9 +42,8 @@
+ The following sections will concentrate on applying these concepts to
+ the testing of tagged type hierarchies and to the testing of generic units.
+ 
+-A full example of this kind of test organization is available in the AUnit
+-installation directory:
+-:samp:`{<AUnit-root>}/share/examples/aunit/calculator`, or
++A full example of this kind of test organization is available in
++:samp:`/usr/share/doc/aunit/examples/calculator`, or
+ from the AUnit source distribution
+ :samp:`aunit-{<version>}-src/examples/calculator`.
+ 

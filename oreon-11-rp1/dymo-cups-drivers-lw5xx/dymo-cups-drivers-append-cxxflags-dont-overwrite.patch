@@ -1,0 +1,22 @@
+From 40376fe3f1ff173242884791662bf8620fddba0b Mon Sep 17 00:00:00 2001
+From: Andrew Bauer <zonexpertconsulting@outlook.com>
+Date: Mon, 26 May 2025 15:07:22 -0500
+Subject: [PATCH] append cxxflags, don't overwrite
+
+---
+ LW5xx_Linux/configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/LW5xx_Linux/configure.ac b/LW5xx_Linux/configure.ac
+index 9e4a9638..89ff214c 100644
+--- a/LW5xx_Linux/configure.ac
++++ b/LW5xx_Linux/configure.ac
+@@ -77,7 +77,7 @@ AC_SUBST(cups_cflags)
+ warning_flags="-Wall -Wno-unknown-pragmas"
+ debug_flags=""
+ optimization_flags="-O2"
+-CXXFLAGS="${optimization_flags} ${warning_flags} ${debug_flags} ${cups_cflags}"
++CXXFLAGS+=" ${optimization_flags} ${warning_flags} ${debug_flags} ${cups_cflags}"
+ 
+ AC_CHECK_LIB(cups, cupsMarkOptions, , AC_ERROR([Can't find cups library]))
+ AC_CHECK_LIB(cupsimage, cupsRasterReadHeader, , AC_ERROR([Can't find cupsimage library]))

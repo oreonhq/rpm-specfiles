@@ -1,0 +1,11 @@
+diff -Naur proxysql-3.0.2/include/btree.h proxysql-3.0.2_patched/include/btree.h
+--- proxysql-3.0.2/include/btree.h	2025-08-04 16:59:36.000000000 +0200
++++ proxysql-3.0.2_patched/include/btree.h	2025-08-07 12:54:45.103472248 +0200
+@@ -114,6 +114,7 @@
+ #include <ostream>
+ #include <string>
+ #include <utility>
++#include <cstdint>
+ 
+ #ifndef NDEBUG
+ #define NDEBUG 1

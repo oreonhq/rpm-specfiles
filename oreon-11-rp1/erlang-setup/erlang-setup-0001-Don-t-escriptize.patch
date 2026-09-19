@@ -1,0 +1,38 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 7 Feb 2017 18:43:28 +0300
+Subject: [PATCH] Don't escriptize
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index 2fa99bb..eff1bc2 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -13,27 +13,9 @@
+                         "http://github.com/uwiger/setup", "master"}}]}
+         ]}
+  ]}.
+-{escript_main_app, setup}.
+-{escript_name, setup_gen}.
+-{escript_shebang, "#!/usr/bin/env escript\n"}.
+-{escript_comment, "%%\n"}.
+-{provider_hooks,
+- [
+-  {post, [
+-          {compile, escriptize}
+-         ]}
+- ]}.
+ 
+ {dialyzer, [{plt_extra_apps, [sasl]}]}.
+ 
+-{post_hooks, [{"(linux|darwin|solaris|freebsd|netbsd|openbsd)",
+-               escriptize,
+-               "cp \"$REBAR_BUILD_DIR/bin/setup_gen\" ./setup_gen"},
+-              {"win32",
+-               escriptize,
+-               "robocopy \"%REBAR_BUILD_DIR%/bin/\" ./ setup_gen* "
+-               "/njs /njh /nfl /ndl & exit /b 0"} % silence things
+-             ]}.
+ %% This line is to ensure that any erl_first_files setting from
+ %% 'above' isn't accidentally inherited, since there seems to be
+ %% a strange interaction between SNMP MIB compilation and escriptize.

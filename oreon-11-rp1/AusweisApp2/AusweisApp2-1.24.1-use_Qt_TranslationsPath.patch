@@ -1,0 +1,41 @@
+From 056e560ed6432e99a297d1c1d2c89c89621bd825 Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Thu, 6 Mar 2025 01:00:00 +0100
+Subject: [PATCH] AusweisApp2-1.24.1-use_Qt_TranslationsPath.patch
+
+---
+ src/global/FileDestination.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/global/FileDestination.h b/src/global/FileDestination.h
+index 2fd5826..781e9b9 100644
+--- a/src/global/FileDestination.h
++++ b/src/global/FileDestination.h
+@@ -7,8 +7,10 @@
+ #include <QCoreApplication>
+ #include <QDebug>
+ #include <QFile>
++#include <QLibraryInfo>
+ #include <QStandardPaths>
+ #include <QStringBuilder>
++#include <QtGlobal>
+ 
+ 
+ namespace governikus
+@@ -51,6 +53,13 @@ class FileDestination
+ 			QStandardPaths::StandardLocation pStandard = QStandardPaths::AppDataLocation)
+ 		{
+ #if (defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)) || (defined(Q_OS_BSD4) && !defined(Q_OS_MACOS) && !defined(Q_OS_IOS))
++#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
++			if (pFilename.compare(QStringLiteral("translations")) == 0)
++			{
++				return QLibraryInfo::location(QLibraryInfo::TranslationsPath);
++			}
++#endif
++
+ 			if (const auto& match = QStandardPaths::locate(pStandard, pFilename, pOption); !match.isNull())
+ 			{
+ 				return match;
+-- 
+2.48.1
+

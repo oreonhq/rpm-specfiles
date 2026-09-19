@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>sooperlooper.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>SooperLooper</name>
+  <summary>Realtime software looping sampler</summary>
+  <description>
+    <p>
+      SooperLooper is a realtime software looping sampler in the spirit of
+      Gibson's Echoplex Digital Pro. If used with a low-latency kernel and
+      the proper audio buffer configuration it is capable of truly realtime
+      live looping performance.
+    </p>
+    <p>
+      SooperLooper is a standalone JACK client with an engine controllable via
+      OSC and MIDI. It also includes a GUI which communicates with the engine
+      via OSC (even over a network) for user-friendly control on a desktop.
+      However, this kind of live performance looping tool is most effectively
+      used via hardware (midi footpedals, etc) and the engine can be run
+      standalone on a computer without a monitor.
+    </p>
+  </description>
+  <url type="homepage">http://essej.net/sooperlooper/</url>
+  <url type="help">http://essej.net/sooperlooper/docs.html</url>
+  <screenshots>
+    <screenshot type="default">http://essej.net/sooperlooper/sshot6.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

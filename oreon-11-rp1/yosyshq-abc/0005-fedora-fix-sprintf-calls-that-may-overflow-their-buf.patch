@@ -1,0 +1,152 @@
+From 5274cc85270dfb5e4f881b6dcdc462017b2facc8 Mon Sep 17 00:00:00 2001
+From: Gabriel Somlo <gsomlo@gmail.com>
+Date: Fri, 4 Aug 2023 11:23:25 -0400
+Subject: [PATCH 5/7] fedora: fix sprintf calls that may overflow their buffers
+
+---
+ src/base/abci/abc.c        |  4 ++--
+ src/base/io/ioReadBlifMv.c |  2 +-
+ src/base/wlc/wlcNtk.c      | 10 +++++-----
+ src/map/mio/mioUtils.c     |  2 +-
+ src/map/scl/sclLibUtil.c   |  2 +-
+ src/opt/dau/dauMerge.c     |  2 +-
+ src/proof/fra/fraCore.c    |  2 +-
+ 7 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/src/base/abci/abc.c b/src/base/abci/abc.c
+index 23c544823..cb762c286 100644
+--- a/src/base/abci/abc.c
++++ b/src/base/abci/abc.c
+@@ -27341,7 +27341,7 @@ int Abc_CommandSymFun( Abc_Frame_t * pAbc, int argc, char ** argv )
+         printf( "%s\n", pTruth );
+     // read the truth table to be the current network in ABC
+     pCommand = ABC_CALLOC( char, strlen(pTruth) + 100 );
+-    sprintf( pCommand, "read_truth %s", pTruth );
++    snprintf( pCommand, strlen(pTruth) + 100, "read_truth %s", pTruth );
+     Cmd_CommandExecute( pAbc, pCommand );
+     ABC_FREE( pCommand );
+     ABC_FREE( pTruth );
+@@ -50761,7 +50761,7 @@ int Abc_CommandAbc9Cone( Abc_Frame_t * pAbc, int argc, char ** argv )
+         Gia_ManForEachPo( pAbc->pGia, pObj, i )
+         {
+             Gia_Man_t * pOne = Gia_ManDupDfsCone( pAbc->pGia, pObj );
+-            sprintf( Buffer, "%s_%0*d.aig", Extra_FileNameGeneric(pAbc->pGia->pSpec), nDigits, i );
++            snprintf( Buffer, 1000, "%s_%0*d.aig", Extra_FileNameGeneric(pAbc->pGia->pSpec), nDigits, i );
+             Gia_AigerWrite( pOne, Buffer, 0, 0, 0 );
+             Gia_ManStop( pOne );
+         }
+diff --git a/src/base/io/ioReadBlifMv.c b/src/base/io/ioReadBlifMv.c
+index 4141c6a59..00aee3a5e 100644
+--- a/src/base/io/ioReadBlifMv.c
++++ b/src/base/io/ioReadBlifMv.c
+@@ -1658,7 +1658,7 @@ static int Io_MvParseLineMv( Io_MvMod_t * p, char * pLine )
+ ***********************************************************************/
+ static int Io_MvWriteValues( Abc_Obj_t * pNode, Vec_Str_t * vFunc )
+ {
+-    char Buffer[10];
++    char Buffer[12];
+     Abc_Obj_t * pFanin;
+     int i;
+     // add the fanin number of values
+diff --git a/src/base/wlc/wlcNtk.c b/src/base/wlc/wlcNtk.c
+index 5d1097202..37ca447b5 100644
+--- a/src/base/wlc/wlcNtk.c
++++ b/src/base/wlc/wlcNtk.c
+@@ -1300,7 +1300,7 @@ void Wlc_NtkShortNames( Wlc_Ntk_t * p )
+     {
+         if ( Wlc_ObjIsPo(pObj) )
+             continue;
+-        sprintf( pBuffer, "%s%0*d", "fi", nDigits, i - Wlc_NtkPoNum(p) );
++        snprintf( pBuffer, 1000, "%s%0*d", "fi", nDigits, i - Wlc_NtkPoNum(p) );
+         NameId = Abc_NamStrFindOrAdd( p->pManName, pBuffer, &fFound );
+         Wlc_ObjSetNameId( p, Wlc_ObjId(p, pObj), NameId );
+     }
+@@ -1308,21 +1308,21 @@ void Wlc_NtkShortNames( Wlc_Ntk_t * p )
+     {
+         if ( Wlc_ObjIsPi(pObj) )
+             continue;
+-        sprintf( pBuffer, "%s%0*d", "fo", nDigits, i - Wlc_NtkPiNum(p) );
++        snprintf( pBuffer, 1000, "%s%0*d", "fo", nDigits, i - Wlc_NtkPiNum(p) );
+         NameId = Abc_NamStrFindOrAdd( p->pManName, pBuffer, &fFound );
+         Wlc_ObjSetNameId( p, Wlc_ObjId(p, pObj), NameId );
+     }
+     nDigits = Abc_Base10Log( Wlc_NtkPoNum(p) );
+     Wlc_NtkForEachPo( p, pObj, i )
+     {
+-        sprintf( pBuffer, "%s%0*d", "po", nDigits, i );
++        snprintf( pBuffer, 1000, "%s%0*d", "po", nDigits, i );
+         NameId = Abc_NamStrFindOrAdd( p->pManName, pBuffer, &fFound );
+         Wlc_ObjSetNameId( p, Wlc_ObjId(p, pObj), NameId );
+     }
+     nDigits = Abc_Base10Log( Wlc_NtkPiNum(p) );
+     Wlc_NtkForEachPi( p, pObj, i )
+     {
+-        sprintf( pBuffer, "%s%0*d", "pi", nDigits, i );
++        snprintf( pBuffer, 1000, "%s%0*d", "pi", nDigits, i );
+         NameId = Abc_NamStrFindOrAdd( p->pManName, pBuffer, &fFound );
+         Wlc_ObjSetNameId( p, Wlc_ObjId(p, pObj), NameId );
+     }
+@@ -1331,7 +1331,7 @@ void Wlc_NtkShortNames( Wlc_Ntk_t * p )
+     {
+         if ( Wlc_ObjIsCi(pObj) || Wlc_ObjIsCo(pObj) )
+             continue;
+-        sprintf( pBuffer, "%s%0*d", "n", nDigits, i );
++        snprintf( pBuffer, 1000, "%s%0*d", "n", nDigits, i );
+         NameId = Abc_NamStrFindOrAdd( p->pManName, pBuffer, &fFound );
+         Wlc_ObjSetNameId( p, Wlc_ObjId(p, pObj), NameId );
+     }
+diff --git a/src/map/mio/mioUtils.c b/src/map/mio/mioUtils.c
+index e75fcd90f..06e07a853 100644
+--- a/src/map/mio/mioUtils.c
++++ b/src/map/mio/mioUtils.c
+@@ -1717,7 +1717,7 @@ void Mio_LibraryShortNames( Mio_Library_t * pLib )
+     Mio_LibraryForEachGate( pLib, pGate )
+     {
+         ABC_FREE( pGate->pName );
+-        sprintf( Buffer, "g%0*d", nDigits, ++c );
++        snprintf( Buffer, 10000, "g%0*d", nDigits, ++c );
+         pGate->pName = Abc_UtilStrsav( Buffer );
+         // update formula
+         Mio_LibraryShortFormula( pGate, pGate->pForm, Buffer );
+diff --git a/src/map/scl/sclLibUtil.c b/src/map/scl/sclLibUtil.c
+index 4115143c3..308b5b41e 100644
+--- a/src/map/scl/sclLibUtil.c
++++ b/src/map/scl/sclLibUtil.c
+@@ -205,7 +205,7 @@ void Abc_SclShortNames( SC_Lib * p )
+         SC_RingForEachCell( pClass, pCell, k )
+         {
+             ABC_FREE( pCell->pName );
+-            sprintf( Buffer, "g%0*d_%0*d", nDigits, i, nDigits2, k );
++            snprintf( Buffer, 10000, "g%0*d_%0*d", nDigits, i, nDigits2, k );
+             pCell->pName = Abc_UtilStrsav( Buffer );
+             // formula
+             SC_CellForEachPinOut( pCell, pPin, n )
+diff --git a/src/opt/dau/dauMerge.c b/src/opt/dau/dauMerge.c
+index e4f7bedcc..b5989f554 100644
+--- a/src/opt/dau/dauMerge.c
++++ b/src/opt/dau/dauMerge.c
+@@ -715,7 +715,7 @@ Dau_DsdMergeStorePrintDefs( pS );
+ 
+     // create new function
+ //    assert( nVarsTotal <= 6 );
+-    sprintf( pS->pOutput, "(%s%s)", pDsd0, pDsd1 );
++    snprintf( pS->pOutput, DAU_MAX_STR, "(%s%s)", pDsd0, pDsd1 );
+     pTruth = Dau_DsdToTruth( pS->pOutput, nVarsTotal );
+     Status = Dau_DsdDecompose( pTruth, nVarsTotal, 0, 1, pS->pOutput );
+ //printf( "%d ", Status );
+diff --git a/src/proof/fra/fraCore.c b/src/proof/fra/fraCore.c
+index 1e517e7de..e3ada8fad 100644
+--- a/src/proof/fra/fraCore.c
++++ b/src/proof/fra/fraCore.c
+@@ -163,7 +163,7 @@ static inline void Fra_FraigNodeSpeculate( Fra_Man_t * p, Aig_Obj_t * pObj, Aig_
+     // create manager with the logic for these two nodes
+     pTemp = Aig_ManExtractMiter( p->pManFraig, pObjFraig, pObjReprFraig );
+     // dump the logic into a file
+-    sprintf( FileName, "aig\\%03d.blif", ++Counter );
++    snprintf( FileName, 20U, "aig\\%03d.blif", ++Counter );
+     Aig_ManDumpBlif( pTemp, FileName, NULL, NULL );
+     printf( "Speculation cone with %d nodes was written into file \"%s\".\n", Aig_ManNodeNum(pTemp), FileName );
+     // clean up
+-- 
+2.52.0
+

@@ -1,0 +1,18 @@
+diff --git a/obd_io.py b/obd_io.py
+index a20a0a5..e30f103 100755
+--- a/obd_io.py
++++ b/obd_io.py
+@@ -84,11 +84,12 @@ class OBDPort:
+          self._notify_window=_notify_window
+          wx.PostEvent(self._notify_window, DebugEvent([1,"Opening interface (serial port)"]))                
+ 
++         self.port = None
+          try:
+              self.port = serial.Serial(portnum,baud, \
+              parity = par, stopbits = sb, bytesize = databits,timeout = to)
+              
+-         except serial.SerialException:
++         except (serial.SerialException, OSError):
+              self.State = 0
+              return None
+              

@@ -1,0 +1,19 @@
+Include "http_request.h" for the ap_update_mtime function. Avoids an
+implicit function declaration, thus improving compatibility with
+future compilers which do not accept this obsolete construct by
+default.
+
+Submitted upstream(ish): <https://github.com/osantana-mirrors/mod_flvx/pull/2>
+
+diff --git a/mod_flvx.c b/mod_flvx.c
+index 173d4470df02b43c..0a0aba62b886ce27 100644
+--- a/mod_flvx.c
++++ b/mod_flvx.c
+@@ -48,6 +48,7 @@
+ #include "http_config.h"
+ #include "http_protocol.h"
+ #include "http_log.h"
++#include "http_request.h"
+ #include "apr_buckets.h"
+ #include "apr_strings.h"
+ 

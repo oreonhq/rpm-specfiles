@@ -1,0 +1,26 @@
+From 70c729e206c456d6a57909a43d7f8c0b9247b2ca Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Thu, 2 May 2019 00:43:51 +0200
+Subject: [PATCH] Replace Error with Errorf
+
+Fix #11.
+---
+ bugsnag_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bugsnag_test.go b/bugsnag_test.go
+index f0106ed..9de0c3e 100644
+--- a/bugsnag_test.go
++++ b/bugsnag_test.go
+@@ -88,7 +88,7 @@ func TestNoticeReceived(t *testing.T) {
+ 		}
+ 
+ 		if ok && len(metadata) != expectedMetadataLen {
+-			t.Error("Unexpected metadata length, got %d, expected %d", len(metadata), expectedMetadataLen)
++			t.Errorf("Unexpected metadata length, got %d, expected %d", len(metadata), expectedMetadataLen)
+ 		}
+ 
+ 		for idx, field := range expectedFields {
+-- 
+2.21.0
+

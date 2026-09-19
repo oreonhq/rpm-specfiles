@@ -1,0 +1,37 @@
+.TH PYDICOM "1" "September 2024" "" "User Commands"
+.SH NAME
+.B pydicom
+\(en pydicom command line utilities
+.SH SYNOPSIS
+.B pydicom
+.RB [ \-h ]
+.RB { help , codify , show }\ ...
+.SH OPTIONS
+.SS "COMMANDS"
+.TP
+.B help
+Display help for subcommands
+.IP
+See
+.BR pydicom\-help (1).
+.TP
+.B codify
+Read a DICOM file and produce the pydicom (Python) code
+which can create that file
+.IP
+See
+.BR pydicom\-codify (1).
+.TP
+.B show
+Display all or part of a DICOM file
+.IP
+See
+.BR pydicom\-show (1).
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-\-help
+Show a help message and exit.
+.SH "SEE\ ALSO"
+.BR pydicom\-help (1),
+.BR pydicom\-codify (1),
+.BR pydicom\-show (1)

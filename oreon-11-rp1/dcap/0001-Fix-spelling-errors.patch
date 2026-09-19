@@ -1,0 +1,57 @@
+From 6bf1fa715f0d1beb3b571a31ec896d67c25c3953 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Mon, 11 Mar 2024 15:59:09 +0100
+Subject: [PATCH] Fix spelling errors
+
+---
+ plugins/gssapi/gssIoTunnel.c | 2 +-
+ src/dcap_lseek.c             | 4 ++--
+ src/dcap_write.c             | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/plugins/gssapi/gssIoTunnel.c b/plugins/gssapi/gssIoTunnel.c
+index 449ef03..69c3855 100644
+--- a/plugins/gssapi/gssIoTunnel.c
++++ b/plugins/gssapi/gssIoTunnel.c
+@@ -492,7 +492,7 @@ gss_check(int sock)
+ 
+ 		if (output_token.length != 0) {
+ 			eWrite(sock, output_token.value, output_token.length);
+-			printf("sended token %lu\n", (unsigned long)output_token.length);
++			printf("sent token %lu\n", (unsigned long)output_token.length);
+ 			gss_release_buffer(&min_stat, &output_token);
+ 		}
+ 
+diff --git a/src/dcap_lseek.c b/src/dcap_lseek.c
+index 4fe5522..e74280b 100644
+--- a/src/dcap_lseek.c
++++ b/src/dcap_lseek.c
+@@ -138,8 +138,8 @@ dc_real_lseek(struct vsp_node *node, off64_t offset, int whence)
+ 		dc_real_fsync(node);
+ 	}
+ 
+-    /* funish unsafe write operation
+-          if node->unsafeWrite flag > 1 : transaction in progress */
++	/* finish unsafe write operation
++	   if node->unsafeWrite flag > 1 : transaction in progress */
+ 
+ 	if(node->unsafeWrite > 1) {
+ 
+diff --git a/src/dcap_write.c b/src/dcap_write.c
+index eb77346..94a85c7 100644
+--- a/src/dcap_write.c
++++ b/src/dcap_write.c
+@@ -172,8 +172,8 @@ dc_real_write( struct vsp_node *node, const void *buff, size_t buflen)
+ 
+ 	/*
+ 		node->unsafeWrite == 0 : regular write operation
+-		node->unsafeWrite == 1 : unsafeWrite, IO request not sended yet
+-		node->unsafeWrite >1   : unsafeWrite, IO request sended
++		node->unsafeWrite == 1 : unsafeWrite, IO request not sent yet
++		node->unsafeWrite > 1  : unsafeWrite, IO request sent
+ 	*/
+ 
+ 	/* do following part allways for regular write and once of unsafe write */
+-- 
+2.44.0
+

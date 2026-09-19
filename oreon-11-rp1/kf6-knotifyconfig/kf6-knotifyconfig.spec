@@ -1,13 +1,13 @@
-%global source0_hash 81861316d615e7e5ff07143c1d58d9b52cadc5e02ab38c8f2677c01f71e51f26
+%global source0_hash f0e75a0fa498fb0eccd5540257177e47da212095eb0b5ed4fc66935d42375b4e
 
 %global framework knotifyconfig
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 module for KNotify configuration
 
@@ -20,14 +20,14 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
-BuildRequires:  cmake(KF6Completion)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6ConfigWidgets)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(KF6Completion) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6ConfigWidgets) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6KIO) >= %{version}
+BuildRequires:  cmake(KF6Notifications) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
+BuildRequires:  cmake(KF6XmlGui) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  pkgconfig(libcanberra)
 BuildRequires:  qt6-qtbase-devel
@@ -70,6 +70,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

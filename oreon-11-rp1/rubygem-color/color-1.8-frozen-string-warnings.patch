@@ -1,0 +1,22 @@
+diff -urp color-1.8.orig/lib/color/palette/adobecolor.rb color-1.8/lib/color/palette/adobecolor.rb
+--- color-1.8.orig/lib/color/palette/adobecolor.rb	2025-12-28 12:34:03.309517989 +0900
++++ color-1.8/lib/color/palette/adobecolor.rb	2025-12-28 12:47:08.556845123 +0900
+@@ -210,7 +210,7 @@ class Color::Palette::AdobeColor
+   attr_reader :version
+ 
+   def to_aco(version = @version) #:nodoc:
+-    res = ""
++    res = +""
+ 
+     res << [ version, @order.size ].pack("nn")
+ 
+@@ -240,7 +240,7 @@ class Color::Palette::AdobeColor
+              end
+       cstr = cstr.pack("nnnnn")
+ 
+-      nstr = ""
++      nstr = +""
+ 
+       if version == 2
+         if (name.size / 2 * 2) == name.size # only where s[0] == byte!
+Only in color-1.8/lib/color/palette: adobecolor.rb~

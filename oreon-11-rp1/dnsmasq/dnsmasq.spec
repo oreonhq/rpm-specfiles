@@ -25,8 +25,8 @@
 %bcond_without annocheck
 
 Name:           dnsmasq
-Version:        2.92
-Release:        5%{?extraversion:.%{extraversion}}%{?dist}
+Version:        2.93
+Release:        1%{?extraversion:.%{extraversion}}%{?dist}
 Summary:        A lightweight DHCP/caching DNS server
 
 # SPDX identifiers already

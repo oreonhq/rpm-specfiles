@@ -1,0 +1,45 @@
+From d234dd7416852dd030dd299ce03d37be843c0965 Mon Sep 17 00:00:00 2001
+From: Mikel Olasagasti Uranga <mikel@olasagasti.info>
+Date: Thu, 16 Jan 2025 14:58:07 +0100
+Subject: [PATCH] parser: fix non-constant format string call
+
+Go 1.24 enhanced vet's printf analyzer to report calls of the form
+fmt.Printf(s), where s is a non-constant format string, with no other
+arguments. This change makes parser tests to fail.
+
+./generated_parser.y.go:1388:44: non-constant format string in call to
+(*github.com/prometheus/prometheus/promql/parser.parser).addParseErrf
+
+$ go version
+go version go1.24rc1 linux/amd64
+$ go vet -printf
+./generated_parser.y.go:1388:44: non-constant format string in call to
+(*github.com/prometheus/prometheus/promql/parser.parser).addParseErrf
+
+$ go version
+go version go1.23.4 linux/amd64
+$ go vet -printf
+$ echo $?
+0
+
+Signed-off-by: Mikel Olasagasti Uranga <mikel@olasagasti.info>
+---
+ promql/parser/generated_parser.y.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/promql/parser/generated_parser.y.go b/promql/parser/generated_parser.y.go
+index 04bc081f2..78d5e1524 100644
+--- a/promql/parser/generated_parser.y.go
++++ b/promql/parser/generated_parser.y.go
+@@ -1385,7 +1385,7 @@ yydefault:
+ 
+ 			if errMsg != "" {
+ 				errRange := mergeRanges(&yyDollar[2].item, &yyDollar[4].item)
+-				yylex.(*parser).addParseErrf(errRange, errMsg)
++				yylex.(*parser).addParseErrf(errRange, "%s", errMsg)
+ 			}
+ 
+ 			numLit, _ := yyDollar[3].node.(*NumberLiteral)
+-- 
+2.47.1
+

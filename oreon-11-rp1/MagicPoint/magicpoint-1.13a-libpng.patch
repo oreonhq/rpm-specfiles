@@ -1,0 +1,21 @@
+diff -rupN magicpoint-1.13a/image/png.c magicpoint-1.13a-new/image/png.c
+--- magicpoint-1.13a/image/png.c	2018-01-23 00:03:20.105053476 +0100
++++ magicpoint-1.13a-new/image/png.c	2018-02-11 23:25:03.603270718 +0100
+@@ -86,7 +86,7 @@ pngLoad(fullname, name, verbose)
+ 		return NULL;
+ 	}
+ 
+-	if (setjmp(png_ptr->jmpbuf)) {
++	if (setjmp(png_jmpbuf(png_ptr))) {
+ 		png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+ 		fclose(fp);
+ 		return NULL;
+@@ -134,7 +134,7 @@ pngLoad(fullname, name, verbose)
+ 	} 
+ 
+ 	if (colortype == PNG_COLOR_TYPE_GRAY && bitdepth < 8){
+-		png_set_gray_1_2_4_to_8(png_ptr);
++		png_set_expand_gray_1_2_4_to_8(png_ptr);
+ 	}
+ 
+ 	if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)){

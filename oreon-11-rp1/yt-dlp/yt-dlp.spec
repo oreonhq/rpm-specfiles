@@ -9,7 +9,7 @@
 %bcond_without tests
 
 Name:           yt-dlp
-Version:        2026.06.09
+Version:        2026.08.19
 Release:        %autorelease
 Summary:        A command-line program to download videos from online video platforms
 
@@ -32,7 +32,7 @@ BuildRequires:  %{py3_dist pytest}
 %endif
 
 # Needed for docs
-BuildRequires:  pandoc
+BuildRequires:  pandoc-cli
 BuildRequires:  make
 
 Requires:       yt-dlp+default = %{?epoch:%{epoch}:}%{version}-%{release}

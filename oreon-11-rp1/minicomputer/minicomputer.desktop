@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Minicomputer
+GenericName=Software Synthesizer
+Comment=Software Synthesizer
+Icon=minicomputer
+Type=Application
+Exec=minicomputer
+Terminal=false
+Categories=AudioVideo;Audio;Midi;X-Jack;X-Synthesis;

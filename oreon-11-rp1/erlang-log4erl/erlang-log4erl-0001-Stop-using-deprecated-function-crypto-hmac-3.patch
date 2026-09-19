@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 23 Apr 2024 22:48:34 +0200
+Subject: [PATCH] Stop using deprecated function crypto:hmac/3
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/smtp_fsm.erl b/src/smtp_fsm.erl
+index 3c6507b..f949c2a 100644
+--- a/src/smtp_fsm.erl
++++ b/src/smtp_fsm.erl
+@@ -108,7 +108,7 @@ hexit(Int) ->
+ %% generates MD5 mac and returns as hex string
+ md5_hmac(Challenge,Pwd) ->
+     crypto:start(),
+-    Md5_bin = crypto:hmac(md5, Pwd, Challenge),
++    Md5_bin = crypto:mac(hmac, md5, Pwd, Challenge),
+     crypto:stop(),
+     hexdigest(Md5_bin).
+ 

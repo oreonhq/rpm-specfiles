@@ -1,0 +1,13 @@
+diff --git a/src/joyaccelerometersensor.cpp b/src/joyaccelerometersensor.cpp
+index 1106c228..be2ec299 100644
+--- a/src/joyaccelerometersensor.cpp
++++ b/src/joyaccelerometersensor.cpp
+@@ -185,7 +185,7 @@ JoySensorDirection JoyAccelerometerSensor::calculateSensorDirection()
+     bool inPitch = pitch_abs < m_dead_zone;
+     bool inRoll = roll_abs < range;
+ 
+-    if (isnan(roll))
++    if (std::isnan(roll))
+     {
+         return SENSOR_CENTERED;
+     }

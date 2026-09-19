@@ -1,0 +1,165 @@
+Add missing ints in old-style function definitions, to avoid build
+failures with a strict(er) C99 compilers.
+
+The change to tiffIdent actually fixes a pointer clipping bug
+because the missing types are not ints.
+
+There's also a #include <stdlib.h>, needed for calling the exit function.
+
+diff --git a/faces.c b/faces.c
+index 3a2900e9a0030721..50c1077fa3456afd 100644
+--- a/faces.c
++++ b/faces.c
+@@ -85,6 +85,7 @@ static int nextInt(zf, len)
+ 
+ Image *facesLoad(fullname, name, verbose)
+      char *fullname, *name;
++     int verbose;
+ { ZFILE        *zf;
+   Image        *image;
+   char          fname[BUFSIZ];
+diff --git a/options.c b/options.c
+index 2fea7c5c1bd77d34..5edb2d29a086bddd 100644
+--- a/options.c
++++ b/options.c
+@@ -425,6 +425,7 @@ static int getInteger(type, s)
+ }
+ 
+ static float getFloat(type, s)
++     int type;
+      char *s;
+ {
+   float ret;
+diff --git a/rlelib.c b/rlelib.c
+index e729f6bddf08da20..0265c46c3ae888d7 100644
+--- a/rlelib.c
++++ b/rlelib.c
+@@ -424,6 +424,7 @@ register struct sv_globals * globals;
+  */
+ void
+ RunSkipBlankLines(nblank, globals)
++int nblank;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -435,6 +436,7 @@ register struct sv_globals * globals;
+  */
+ void
+ RunSetColor(c, globals)
++int c;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -447,6 +449,7 @@ register struct sv_globals * globals;
+ /* ARGSUSED */
+ void
+ RunSkipPixels(nskip, last, wasrun, globals)
++int nskip, last, wasrun;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -458,6 +461,7 @@ register struct sv_globals * globals;
+  */
+ void
+ RunNewScanLine(flag, globals)
++int flag;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -469,6 +473,7 @@ register struct sv_globals * globals;
+ void
+ Runputdata(buf, n, globals)
+ rle_pixel * buf;
++int n;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -481,6 +486,7 @@ register struct sv_globals * globals;
+ /* ARGSUSED */
+ void
+ Runputrun(color, n, last, globals)
++int color, n, last;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -1387,6 +1393,7 @@ int dith_size = 16;
+  */
+ void
+ dithermap( levels, gamma, rgbmap, divN, modN, magic )
++int levels;
+ double gamma;
+ int rgbmap[][3];
+ int divN[256];
+@@ -1447,6 +1454,7 @@ int magic[16][16];
+  */
+ void
+ bwdithermap( levels, gamma, bwmap, divN, modN, magic )
++int levels;
+ double gamma;
+ int bwmap[];
+ int divN[256];
+@@ -1670,6 +1678,7 @@ int gammamap[256];
+  * 	see "Note:" in dithermap comment.
+  */
+ int dithergb( x, y, r, g, b, levels, divN, modN, magic )
++int x, y, r, g, b, levels;
+ int divN[256];
+ int modN[256];
+ int magic[16][16];
+@@ -1700,6 +1709,7 @@ int magic[16][16];
+  * 	see "Note:" in bwdithermap comment.
+  */
+ int ditherbw( x, y, val, divN, modN, magic )
++int x, y, val;
+ int divN[256];
+ int modN[256];
+ int magic[16][16];
+diff --git a/smooth.c b/smooth.c
+index c61085b4df73a4f8..f11c682223739917 100644
+--- a/smooth.c
++++ b/smooth.c
+@@ -74,6 +74,7 @@ static Image *doSmooth(image)
+ 
+ Image *smooth(image, iterations, verbose)
+      Image *image;
++     int iterations;
+      unsigned int verbose;
+ { int a;
+   Image *old, *new;
+diff --git a/tiff.c b/tiff.c
+index 4c5649c91fb37d5c..b5e4722787440c83 100644
+--- a/tiff.c
++++ b/tiff.c
+@@ -223,6 +223,8 @@ static void babble(name, info)
+ }
+ 
+ int tiffIdent(fullname, name)
++char *fullname;
++char *name;
+ {
+   TIFF *tiff;
+   struct tiff_info info;
+diff --git a/uufilter.c b/uufilter.c
+index 72e20b200e9a06d7..e2b951602343efce 100644
+--- a/uufilter.c
++++ b/uufilter.c
+@@ -11,6 +11,7 @@
+  */
+ 
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
+ 
+ int main(argc, argv)
+diff --git a/xloadimage.c b/xloadimage.c
+index cbb44d1d1e2a179c..938137aaa4269789 100644
+--- a/xloadimage.c
++++ b/xloadimage.c
+@@ -46,6 +46,7 @@ static byte root_weave_bits[] = {
+ static Image *doProcessOnImage(image, option, verbose)
+      Image *image;
+      Option *option;
++     int verbose;
+ { Image  *retimage= image;
+   XColor  xcolor; /* color for foreground/background */
+ 

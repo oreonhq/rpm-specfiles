@@ -1,0 +1,27 @@
+From de92217b2068d8eb22afb24ac7f50ebe3214519a Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Tue, 18 Jun 2024 18:51:01 -0400
+Subject: [PATCH 4/7] Loosen up some dependencies
+
+Remove code coverage for testing.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ pyproject.toml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 9d313003..fc53753b 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -130,7 +130,6 @@ addopts = '''
+ --ignore=.github
+ --strict-markers
+ --strict-config
+---cov-config=pyproject.toml
+ -p no:asyncio
+ -p no:legacypath'''
+ filterwarnings = [
+-- 
+2.52.0
+

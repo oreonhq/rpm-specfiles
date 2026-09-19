@@ -1,0 +1,16 @@
+--- teamgit-0.0.12/teamgit-rebase/src/rebaseDialogimpl.cpp~	2013-02-28 09:25:53.000000000 +0100
++++ teamgit-0.0.12/teamgit-rebase/src/rebaseDialogimpl.cpp	2017-08-14 20:36:51.309231402 +0200
+@@ -59,11 +59,11 @@
+ {
+ 	rebaseFile = new QFile(file);
+ 	if (!rebaseFile->exists()) {
+-		qFatal ("The file " + file + " does not exist");
++	        qFatal ("The file %s does not exist", file);
+ 	}
+ 
+ 	if (!rebaseFile->open(QIODevice::ReadOnly | QIODevice::Text))
+-		qFatal ("Check the file permissions on " + file);
++	        qFatal ("Check the file permissions on %s", file);
+ 
+ 	while (!rebaseFile->atEnd()) {
+ 		QByteArray line = rebaseFile->readLine();

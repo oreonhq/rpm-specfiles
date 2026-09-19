@@ -1,0 +1,45 @@
+From 7f5f97e9d042d9b9d9acf1cdcc9738fe99c792c5 Mon Sep 17 00:00:00 2001
+From: Gustavo Rosa <gth.rosa@uol.com.br>
+Date: Thu, 22 Sep 2022 09:47:56 -0300
+Subject: [PATCH] fix(tests): Fixes rounding for Python 3.8 and 3.9.
+
+---
+ data/.gitignore                                 | 5 +++++
+ tests/opytimark/markers/test_two_dimensional.py | 4 ++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+ create mode 100644 data/.gitignore
+
+diff --git a/data/.gitignore b/data/.gitignore
+new file mode 100644
+index 0000000..5c6002a
+--- /dev/null
++++ b/data/.gitignore
+@@ -0,0 +1,5 @@
++# Extracted folders
++2005/
++2008/
++2010/
++2013/
+\ No newline at end of file
+diff --git a/tests/opytimark/markers/test_two_dimensional.py b/tests/opytimark/markers/test_two_dimensional.py
+index dfca38d..e3a568c 100644
+--- a/tests/opytimark/markers/test_two_dimensional.py
++++ b/tests/opytimark/markers/test_two_dimensional.py
+@@ -360,7 +360,7 @@ def test_hosaki():
+ 
+     y = f(x)
+ 
+-    assert y == -2.345811576101292
++    assert np.round(y, 3) == -2.346
+ 
+ 
+ def test_jennrich_sampson():
+@@ -490,7 +490,7 @@ def test_pen_holder():
+ 
+     y = f(x)
+ 
+-    assert y == -0.9635348327265058
++    assert np.round(y, 3) == -0.964
+ 
+ 
+ def test_periodic():

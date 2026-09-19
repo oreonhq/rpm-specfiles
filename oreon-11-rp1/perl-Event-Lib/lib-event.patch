@@ -1,0 +1,20 @@
+---
+ Lib.xs |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/Lib.xs b/Lib.xs
+index ac3ae5c..d014744 100644
+--- a/Lib.xs
++++ b/Lib.xs
+@@ -255,7 +255,7 @@ int  EVENT_INIT_DONE = -1;  /* we use the pid here */
+ 
+ #define event_do_init()	    \
+ {\
+-    int _pid_ = SvIV(get_sv("$", FALSE)); \
++    int _pid_ = getpid(); \
+     if (!EVENT_INIT_DONE  || EVENT_INIT_DONE != _pid_) {\
+ 	event_init();	\
+ 	DEBUG_init_pending(aTHX);   \
+-- 
+1.7.0.4
+

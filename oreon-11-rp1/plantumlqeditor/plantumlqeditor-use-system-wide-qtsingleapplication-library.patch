@@ -1,0 +1,25 @@
+From 6669b725938b3b71d832aa93cbf7d3a1dc29b394 Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Tue, 9 May 2017 19:06:31 +0200
+Subject: [PATCH] use system wide qtsingleapplication library
+
+---
+ plantumlqeditor.pro | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plantumlqeditor.pro b/plantumlqeditor.pro
+index 4e95879..ee0a225 100644
+--- a/plantumlqeditor.pro
++++ b/plantumlqeditor.pro
+@@ -8,7 +8,7 @@ TARGET = plantumlqeditor
+ 
+ TEMPLATE = app
+ 
+-include(thirdparty/qtsingleapplication/src/qtsingleapplication.pri)
++CONFIG += qtsingleapplication
+ 
+ SOURCES += \
+     textedit.cpp \
+-- 
+2.9.3
+

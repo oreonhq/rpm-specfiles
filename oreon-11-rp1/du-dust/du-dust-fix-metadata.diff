@@ -1,0 +1,13 @@
+--- a/Cargo.toml	2026-01-08 23:03:35.000000000 +0000
++++ b/Cargo.toml	2026-03-18 12:02:16.476529528 +0000
+@@ -46,10 +46,6 @@
+ [target.'cfg(not(target_has_atomic = "64"))'.dependencies]
+ portable-atomic = "1.4"
+ 
+-[target.'cfg(windows)'.dependencies]
+-winapi-util = "0.1"
+-filesize = "0.2.0"
+-
+ [dev-dependencies]
+ assert_cmd = "2"
+ tempfile = "=3"

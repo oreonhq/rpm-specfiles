@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           modello
-Version:        2.1.2
+Version:        2.8.1
 Release:        %autorelease
 Summary:        Modello Data Model toolkit
 # The majority of files are under MIT license, but some of them are ASL 2.0.
@@ -40,7 +40,7 @@ BuildRequires:  mvn(org.jsoup:jsoup)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.1.2-23
+Obsoletes:      %{name}-javadoc < 2.8.1-23
 
 %description
 Modello is a Data Model toolkit in use by the Apache Maven Project.

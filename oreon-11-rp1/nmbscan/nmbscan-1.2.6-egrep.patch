@@ -1,0 +1,30 @@
+diff -ru nmbscan-1.2.6.orig/nmbscan nmbscan-1.2.6.new/nmbscan
+--- nmbscan-1.2.6.orig/nmbscan	2024-09-21 17:35:19.640178197 +0200
++++ nmbscan-1.2.6.new/nmbscan	2024-09-21 17:36:53.266687280 +0200
+@@ -431,7 +431,7 @@
+ 
+ function get_host_by_name
+ {
+-    V=$(ping -c 1 "$1" 2>&1 | egrep '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | \
++    V=$(ping -c 1 "$1" 2>&1 | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | \
+      sed 's/.*[^0-9]\([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\)[^0-9].*/\1/' | \
+      head -1)
+     echo ${V:--}
+@@ -544,7 +544,7 @@
+ function show_ip_host
+ {
+     IP="$1"
+-    echo "$IP" | egrep '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' > /dev/null 2>&1|| IP="$(get_host_by_name $1)"
++    echo "$IP" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' > /dev/null 2>&1|| IP="$(get_host_by_name $1)"
+     if [ "$IP" != "-" ]; then
+ 	for ip in $IP; do
+ 	    echo "domain $(get_domain $ip)"
+@@ -614,7 +614,7 @@
+ 
+ function check_dependencies
+ {
+-  for C in ping ip nmblookup smbclient awk egrep grep echo head more sed; do
++  for C in ping ip nmblookup smbclient awk grep echo head more sed; do
+     which $C > /dev/null 2>&1 || echo WARNING: lacking dependency: $C
+   done
+   which nslookup > /dev/null 2>&1 || which host > /dev/null 2>&1 || \

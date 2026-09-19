@@ -1,0 +1,31 @@
+From 8e5659ec78cbe4232fc1650771ff5b82a293b1ed Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 20 Mar 2024 14:27:33 -0400
+Subject: [PATCH] Add environment variables to control bundling
+
+---
+ setup.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 15e69dd..c6428e4 100644
+--- a/setup.py
++++ b/setup.py
+@@ -67,11 +67,12 @@ setup(
+             Extension(
+                 "fcl.fcl",
+                 ["src/fcl/fcl.pyx"],
+-                include_dirs=get_include_dirs(),
++                include_dirs=get_include_dirs() + os.environ.get("PYTHON_FCL_EXTRA_INCLUDE_DIRS", "").split(),
+                 library_dirs=get_libraries_dir(),
+-                libraries=get_libraries(),
++                libraries=[lib for lib in get_libraries() if lib not in os.environ.get("PYTHON_FCL_OMIT_LIBRARIES", "").split()],
+                 language="c++",
+                 extra_compile_args=["-std=c++11"],
++                extra_objects=os.environ.get("PYTHON_FCL_EXTRA_OBJECTS", "").split(),
+             )
+         ],
+     )
+-- 
+2.44.0
+

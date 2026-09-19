@@ -1,0 +1,41 @@
+--- zbus-4.4.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ zbus-4.4.0/Cargo.toml	2024-12-31T18:42:10.174137+00:00
+@@ -114,20 +114,11 @@
+     "io-util",
+     "process",
+     "sync",
+-    "tracing",
+-]
+-optional = true
+-
+-[dependencies.tokio-vsock]
+-version = "0.4"
++]
+ optional = true
+ 
+ [dependencies.tracing]
+ version = "0.1.40"
+-
+-[dependencies.vsock]
+-version = "0.5.0"
+-optional = true
+ 
+ [dependencies.xdg-home]
+ version = "1.1.0"
+@@ -201,16 +192,8 @@
+ p2p = []
+ time = ["zvariant/time"]
+ tokio = ["dep:tokio"]
+-tokio-vsock = [
+-    "dep:tokio-vsock",
+-    "tokio",
+-]
+ url = ["zvariant/url"]
+ uuid = ["zvariant/uuid"]
+-vsock = [
+-    "dep:vsock",
+-    "dep:async-io",
+-]
+ 
+ [target."cfg(unix)".dependencies.nix]
+ version = "0.29"

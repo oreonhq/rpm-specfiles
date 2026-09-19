@@ -1,0 +1,13 @@
+diff -up tex/latex/bgteubner/bgteubner.cls.fixme tex/latex/bgteubner/bgteubner.cls
+--- tex/latex/bgteubner/bgteubner.cls.fixme	2020-05-11 11:18:45.614265736 -0400
++++ tex/latex/bgteubner/bgteubner.cls	2020-05-11 11:19:44.848269987 -0400
+@@ -280,7 +280,8 @@
+ \RequirePackage{warning}[2001/08/17]
+ \RequirePackage[all]{onlyamsmath}[2001/10/04]
+ \RequirePackage[sepfour,autolanguage]{numprint}[2003/11/09]
+-\RequirePackage{scrpage2}[2002/11/01]
++\RequirePackage{scrlfile}
++\ReplacePackage{scrpage2}{scrlayer-scrpage}
+ \RequirePackage[fixlanguage]{babelbib}[2003/07/28]
+ \RequirePackage{fnbreak}[2003/04/03]
+ \RequirePackage[countmax]{subfloat}[2002/12/16]

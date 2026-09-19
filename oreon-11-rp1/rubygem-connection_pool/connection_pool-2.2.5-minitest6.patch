@@ -1,0 +1,11 @@
+diff -urp '--exclude=*~' connection_pool-2.2.5.orig/test/helper.rb connection_pool-2.2.5/test/helper.rb
+--- connection_pool-2.2.5.orig/test/helper.rb	2025-12-27 23:56:45.589471674 +0900
++++ connection_pool-2.2.5/test/helper.rb	2025-12-28 00:03:34.503608913 +0900
+@@ -2,6 +2,7 @@ gem "minitest"
+ 
+ require "minitest/pride"
+ require "minitest/autorun"
++require "minitest/mock"
+ 
+ $VERBOSE = 1
+ 

@@ -1,0 +1,76 @@
+From f7c3b28cf4263c666169515ea0ce60fe68a141f7 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 26 Dec 2025 21:06:34 +0100
+Subject: [PATCH 4/4] port to nix 0.28
+
+---
+ src/connection/ll_conn.rs | 8 +++++---
+ src/tests/fdpassing.rs    | 5 +++--
+ 2 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/src/connection/ll_conn.rs b/src/connection/ll_conn.rs
+index 90b51e9..9a9e742 100644
+--- a/src/connection/ll_conn.rs
++++ b/src/connection/ll_conn.rs
+@@ -8,6 +8,7 @@ use crate::wire::unmarshal;
+ 
+ use std::io::IoSlice;
+ use std::io::IoSliceMut;
++use std::os::fd::AsFd;
+ use std::time;
+ 
+ use std::os::unix::io::AsRawFd;
+@@ -44,13 +45,13 @@ pub struct DuplexConn {
+ impl RecvConn {
+     pub fn can_read_from_source(&self) -> nix::Result<bool> {
+         let mut fdset = nix::sys::select::FdSet::new();
+-        fdset.insert(&self.stream);
++        fdset.insert(self.stream.as_fd());
+ 
+         use nix::sys::time::TimeValLike;
+         let mut zero_timeout = nix::sys::time::TimeVal::microseconds(0);
+ 
+         nix::sys::select::select(None, Some(&mut fdset), None, None, Some(&mut zero_timeout))?;
+-        Ok(fdset.contains(&self.stream))
++        Ok(fdset.contains(self.stream.as_fd()))
+     }
+ 
+     /// Reads from the source once but takes care that the internal buffer only reaches at maximum max_buffer_size
+@@ -78,9 +79,10 @@ impl RecvConn {
+                 self.stream.set_nonblocking(true)?;
+             }
+         }
++        let iovec_mut = &mut [iovec];
+         let msg = recvmsg::<SockaddrStorage>(
+             self.stream.as_raw_fd(),
+-            &mut [iovec],
++            iovec_mut,
+             Some(&mut cmsgspace),
+             flags,
+         )
+diff --git a/src/tests/fdpassing.rs b/src/tests/fdpassing.rs
+index 87f3934..21a312b 100644
+--- a/src/tests/fdpassing.rs
++++ b/src/tests/fdpassing.rs
+@@ -2,6 +2,7 @@ use crate::connection;
+ use crate::message_builder::MessageBuilder;
+ use std::io::Read;
+ use std::io::Write;
++use std::os::fd::IntoRawFd;
+ use std::os::unix::io::FromRawFd;
+ 
+ const TEST_STRING: &str = "This will be sent over the fd\n";
+@@ -30,8 +31,8 @@ fn test_fd_passing() {
+     std::thread::sleep(std::time::Duration::from_secs(1));
+ 
+     let rw = nix::unistd::pipe().unwrap();
+-    let mut readfile = unsafe { std::fs::File::from_raw_fd(rw.0) };
+-    send_fd(&mut con1, crate::wire::UnixFd::new(rw.1)).unwrap();
++    let mut readfile = std::fs::File::from(rw.0);
++    send_fd(&mut con1, crate::wire::UnixFd::new(rw.1.into_raw_fd())).unwrap();
+ 
+     let sig = loop {
+         let signal = con2.wait_signal(connection::Timeout::Infinite).unwrap();
+-- 
+2.52.0
+

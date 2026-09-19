@@ -1,0 +1,39 @@
+diff -urp CQRlib-1.1.2/Makefile CQRlib-1.1.2-tag/Makefile
+--- CQRlib-1.1.2/Makefile	2018-07-22 13:11:57.238425395 +0700
++++ CQRlib-1.1.2-tag/Makefile	2018-07-23 16:54:06.726303747 +0700
+@@ -46,7 +46,7 @@ RELEASE = 1.1.0
+ #
+ # Compiler and compilation flags
+ #
+-CC	= gcc
++CC = gcc
+ CXX = g++
+ CFLAGS  = -g -O2  -Wall -ansi -pedantic
+ CPPFLAGS = $(CFLAGS) -DCQR_NOCCODE=1
+@@ -87,16 +87,16 @@ else
+ INCLUDES = -I$(INC)
+ endif
+ 
+-COMPILE_COMMAND         =  $(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c
+-LIBRARY_LINK_COMMAND    =  $(LIBTOOL) --mode=link  $(CC) -version-info $(VERSION) -rpath $(INSTALLDIR)/lib
+-BUILD_COMMAND_LOCAL     =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(INCLUDES)
+-BUILD_COMMAND_DYNAMIC   =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -rdynamic -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
+-BUILD_COMMAND_STATIC    =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -static -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
+-CPPCOMPILE_COMMAND      =  $(LIBTOOL) --mode=compile $(CXX) $(CPPFLAGS) $(INCLUDES) $(WARNINGS) -c
+-CPPLIBRARY_LINK_COMMAND =  $(LIBTOOL) --mode=link $(CXX) -version-info $(VERSION) -rpath $(INSTALLDIR)/lib
+-CPPBUILD_COMMAND_LOCAL  =  $(LIBTOOL) --mode=link $(CXX) $(CPPFLAGS) $(INCLUDES)
+-CPPBUILD_COMMAND_DYNAMIC=  $(LIBTOOL) --mode=link $(CXX) $(CPPFLAGS) -rdynamic -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
+-CPPBUILD_COMMAND_STATIC =  $(LIBTOOL) --mode=link $(CXX) $(CPPFLAGS) -static -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
++COMPILE_COMMAND         =  $(LIBTOOL) --mode=compile --tag CC $(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c
++LIBRARY_LINK_COMMAND    =  $(LIBTOOL) --mode=link --tag CC  $(CC) -version-info $(VERSION) -rpath $(INSTALLDIR)/lib
++BUILD_COMMAND_LOCAL     =  $(LIBTOOL) --mode=link --tag CC $(CC) $(CFLAGS) $(INCLUDES)
++BUILD_COMMAND_DYNAMIC   =  $(LIBTOOL) --mode=link --tag CC $(CC) $(CFLAGS) -rdynamic -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
++BUILD_COMMAND_STATIC    =  $(LIBTOOL) --mode=link --tag CC $(CC) $(CFLAGS) -static -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
++CPPCOMPILE_COMMAND      =  $(LIBTOOL) --mode=compile --tag CXX $(CXX) $(CPPFLAGS) $(INCLUDES) $(WARNINGS) -c
++CPPLIBRARY_LINK_COMMAND =  $(LIBTOOL) --mode=link --tag CXX $(CXX) -version-info $(VERSION) -rpath $(INSTALLDIR)/lib
++CPPBUILD_COMMAND_LOCAL  =  $(LIBTOOL) --mode=link --tag CXX $(CXX) $(CPPFLAGS) $(INCLUDES)
++CPPBUILD_COMMAND_DYNAMIC=  $(LIBTOOL) --mode=link --tag CXX $(CXX) $(CPPFLAGS) -rdynamic -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
++CPPBUILD_COMMAND_STATIC =  $(LIBTOOL) --mode=link --tag CXX $(CXX) $(CPPFLAGS) -static -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
+ INSTALL_COMMAND         =  $(LIBTOOL) --mode=install cp
+ INSTALL_FINISH_COMMAND  =  $(LIBTOOL) --mode=finish
+ 

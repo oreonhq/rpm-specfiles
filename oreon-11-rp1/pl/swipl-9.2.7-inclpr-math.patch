@@ -1,0 +1,10 @@
+--- swipl-9.2.7/packages/inclpr/CMakeLists.txt.orig	2023-12-11 03:16:08.000000000 -0700
++++ swipl-9.2.7/packages/inclpr/CMakeLists.txt	2024-09-18 09:37:46.320423903 -0600
+@@ -15,6 +15,7 @@ swipl_plugin(inclpr_priv
+ swipl_plugin(inclpr
+ 	     NOINDEX
+ 	     C_SOURCES inclpr.c
++	     C_LIBS m
+ 	     PL_LIBS inclpr.pl)
+ 
+ swipl_examples(benchmarks.pl)

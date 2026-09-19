@@ -1,0 +1,120 @@
+diff --git a/Makefile.PL b/Makefile.PL
+index fd3d2df..d4ff4cd 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1,12 +1,12 @@
+ use ExtUtils::MakeMaker;
+ 
+ WriteMakefile(
+-	      NAME => 'rename',
++	      NAME => 'prename',
+ 	      LICENSE => 'Perl_5',
+-	      ABSTRACT_FROM => 'bin/rename.PL',
++	      ABSTRACT_FROM => 'bin/prename.PL',
+ 	      AUTHOR => 'Peder Stray <peder.stray@gmail.com>',
+-	      VERSION_FROM => 'bin/rename.PL',
+-	      PL_FILES => { 'bin/rename.PL' => 'bin/rename' },
+-	      EXE_FILES => [ 'bin/rename' ],
++	      VERSION_FROM => 'bin/prename.PL',
++	      PL_FILES => { 'bin/prename.PL' => 'bin/prename' },
++	      EXE_FILES => [ 'bin/prename' ],
+ 	      dist => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+ );
+diff --git a/bin/rename.PL b/bin/prename.PL
+similarity index 94%
+rename from bin/rename.PL
+rename to bin/prename.PL
+index 16e67ac..105f7a4 100755
+--- a/bin/rename.PL
++++ b/bin/prename.PL
+@@ -1,7 +1,7 @@
+ use Config;
+ use File::Basename qw(basename dirname);
+ 
+-($VERSION)=' $Id: rename.PL,v 1.14 Exp $ '=~/v\s*(\d+(?:\.\d+)+)/;
++($VERSION)=' $Id: prename.PL,v 1.14 Exp $ '=~/v\s*(\d+(?:\.\d+)+)/;
+ 
+ chdir(dirname($0));
+ ($file = basename($0)) =~ s/\.PL$//;
+@@ -374,11 +374,11 @@ __END__
+ 
+ =head1 NAME
+ 
+-rename - renames multiple files using perl expressions
++prename - renames multiple files using perl expressions
+ 
+ =head1 SYNOPSIS
+ 
+-B<rename>
++B<prename>
+ [B<-bcfilnv>]
+ [B<-B> I<prefix>]
+ [B<-S> I<suffix>]
+@@ -405,7 +405,7 @@ I<perlexpr>
+ 
+ =head1 DESCRIPTION
+ 
+-I<rename> renames the filenames supplied according to the rule specified as
++I<prename> renames the filenames supplied according to the rule specified as
+ the first argument.  The argument is a Perl expression which is expected to
+ modify the $_ string for at least some of the filenames specified.  If a
+ given filename is not modified by the expression, it will not be renamed.
+@@ -413,7 +413,7 @@ If no filenames are given on the command line, filenames will be read via
+ standard input (unless B<--no-stdin> is supplied on the command line).
+ 
+ If a destination file is unwritable, the standard input is a tty, and the
+-B<-f> or B<--force> option is not given, rename prompts the user for whether
++B<-f> or B<--force> option is not given, prename prompts the user for whether
+ to overwrite the file.  If the response does not begin with `y' or `Y', the
+ file is skipped.
+ 
+@@ -449,7 +449,7 @@ Print a summary of options and exit.
+ =item B<--no-stdin>
+ 
+ Disable reading of filenames from STDIN. Us it when your shell has nullglob
+-enabled to make sure rename doesn't wait for input.
++enabled to make sure prename doesn't wait for input.
+ 
+ =item B<-i>, B<--interactive>
+ 
+@@ -481,7 +481,7 @@ option.  This option does not affect whether backup files are made; it
+ affects only the name of any backup files that are made.
+ 
+ The value of I<method> is like the GNU Emacs `version-control' variable;
+-B<rename> also recognize synonyms that are more descriptive.  The valid
++B<prename> also recognize synonyms that are more descriptive.  The valid
+ values are (unique abbreviations are accepted):
+ 
+ =over
+@@ -536,22 +536,22 @@ B<zsh>.
+ To rename all files matching *.bak to strip the extension, you might
+ say
+ 
+-    rename 's/\e.bak$//' *.bak
++    prename 's/\e.bak$//' *.bak
+ 
+ To translate uppercase names to lower, you'd use
+ 
+-    rename 'y/A-Z/a-z/' *
++    prename 'y/A-Z/a-z/' *
+ 
+ More examples:
+ 
+-    rename 's/\.flip$/.flop/' *     # rename *.flip to *.flop
+-    rename s/flip/flop/ *           # rename *flip* to *flop*
+-    rename 's/^s\.(.*)/$1.X/' *     # switch sccs filenames around
+-    rename 's/$/.orig/' */*.[ch]    # add .orig to source files in */
+-    rename 'y/A-Z/a-z/' *           # lowercase all filenames in .
+-    rename 'y/A-Z/a-z/ if -B' *     # same, but just binaries!
++    prename 's/\.flip$/.flop/' *     # rename *.flip to *.flop
++    prename s/flip/flop/ *           # rename *flip* to *flop*
++    prename 's/^s\.(.*)/$1.X/' *     # switch sccs filenames around
++    prename 's/$/.orig/' */*.[ch]    # add .orig to source files in */
++    prename 'y/A-Z/a-z/' *           # lowercase all filenames in .
++    prename 'y/A-Z/a-z/ if -B' *     # same, but just binaries!
+ or even
+-    rename chop *~                  # restore all ~ backup files
++    prename chop *~                  # restore all ~ backup files
+ 
+ =head1 ENVIRONMENT
+ 

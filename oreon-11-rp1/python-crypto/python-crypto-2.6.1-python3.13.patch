@@ -1,0 +1,62 @@
+--- src/_fastmath.c
++++ src/_fastmath.c
+@@ -134,12 +134,18 @@ longObjToMPZ (mpz_t m, PyLongObject * p)
+ static PyObject *
+ mpzToLongObj (mpz_t m)
+ {
+-	/* borrowed from gmpy */
+ #ifdef IS_PY3K
+-	int size = (mpz_sizeinbase (m, 2) + PyLong_SHIFT - 1) / PyLong_SHIFT;
++	PyObject *retval;
++	int size = mpz_sizeinbase(m, 10) + 2;
++	char *str = malloc(size);
++	if (!str)
++		return NULL;
++	retval = PyLong_FromString(mpz_get_str(str, 10, m), NULL, 10);
++	free(str);
++	return retval;
+ #else
++	/* borrowed from gmpy */
+ 	int size = (mpz_sizeinbase (m, 2) + SHIFT - 1) / SHIFT;
+-#endif
+ 	int sgn;
+ 	int i;
+ 	mpz_t temp;
+@@ -151,36 +157,16 @@ mpzToLongObj (mpz_t m)
+ 	mpz_mul_si(temp, m, sgn);
+ 	for (i = 0; i < size; i++)
+ 	{
+-#ifdef IS_PY3K
+-#if PY_VERSION_HEX < 0x030C0000
+-		l->ob_digit[i] = (digit) (mpz_get_ui (temp) & PyLong_MASK);
+-#else
+-		l->long_value.ob_digit[i] = (digit) (mpz_get_ui (temp) & PyLong_MASK);
+-#endif
+-		mpz_fdiv_q_2exp (temp, temp, PyLong_SHIFT);
+-#else
+ 		l->ob_digit[i] = (digit) (mpz_get_ui (temp) & MASK);
+ 		mpz_fdiv_q_2exp (temp, temp, SHIFT);
+-#endif
+ 	}
+ 	i = size;
+-#if PY_VERSION_HEX < 0x030C0000
+ 	while ((i > 0) && (l->ob_digit[i - 1] == 0))
+-#else
+-	while ((i > 0) && (l->long_value.ob_digit[i - 1] == 0))
+-#endif
+ 		i--;
+-#ifdef IS_PY3K
+-#if PY_VERSION_HEX < 0x030C0000
+-	l->ob_base.ob_size = i * sgn;
+-#else
+-	l->long_value.lv_tag = TAG_FROM_SIGN_AND_SIZE(sgn, (size_t)i);
+-#endif
+-#else
+ 	l->ob_size = i * sgn;
+-#endif
+ 	mpz_clear (temp);
+ 	return (PyObject *) l;
++#endif
+ }
+ 
+ typedef struct

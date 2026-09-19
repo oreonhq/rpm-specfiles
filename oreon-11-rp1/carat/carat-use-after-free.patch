@@ -1,0 +1,22 @@
+--- a/functions/Autgrp/isometry.c	2021-10-18 02:30:17.000000000 -0600
++++ b/functions/Autgrp/isometry.c	2022-11-22 12:45:56.702797503 -0700
+@@ -839,6 +839,7 @@ perfect_normal_isometry (matrix_TYP *F1,
+ 		free(F.v[i]);
+ 	}
+ 	free(F.v);
++	F.v = NULL;
+ /* FF are the invariant forms of the second lattice */
+ 	FF.A = (int***)xmalloc(F.n * sizeof(int**));
+ 	FF.n = F.n;
+--- a/functions/Idem/v4_catalog.c	2021-10-18 02:30:17.000000000 -0600
++++ b/functions/Idem/v4_catalog.c	2022-11-22 12:22:14.702842239 -0700
+@@ -380,8 +380,8 @@ bravais_TYP *catalog_number_v4(bravais_T
+        zclass[0] = 1;
+        S = read_symbol_from_string(symb);
+        T = S->grp;
+-       free(S);
+        free(S->fn);
++       free(S);
+        TR[0] = init_mat(G->dim,G->dim,"1");
+        if (T->zentr_no > 0){
+           fprintf(stderr,"catalog_number: an error ocurred in the -I_n case\n");

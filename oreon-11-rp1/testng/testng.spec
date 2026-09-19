@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           testng
-Version:        7.8.0
+Version:        7.12.0
 Release:        %autorelease
 Summary:        Java-based testing framework
 License:        Apache-2.0
@@ -31,7 +31,7 @@ BuildRequires:  mvn(org.apache.ant:ant)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 7.8.0-20
+Obsoletes:      %{name}-javadoc < 7.12.0-20
 
 %description
 TestNG is a testing framework inspired from JUnit and NUnit but introducing

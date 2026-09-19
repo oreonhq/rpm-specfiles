@@ -1,0 +1,29 @@
+From 1181b555148e42a618df27eaeca91d3bec2d32de Mon Sep 17 00:00:00 2001
+From: Rodrigo Mesquita <rodrigo.m.mesquita@gmail.com>
+Date: Tue, 6 Feb 2024 11:35:02 +0000
+Subject: [PATCH] Synchronize bindist configure for #24324
+
+In cdddeb0f1280b40cc194028bbaef36e127175c4c, we set up a
+workaround for #24324 in the in-tree configure script, but forgot to
+update the bindist configure script accordingly. This updates it.
+---
+ distrib/configure.ac.in | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/distrib/configure.ac.in b/distrib/configure.ac.in
+index d3868aa591f1..942be376c8f6 100644
+--- a/distrib/configure.ac.in
++++ b/distrib/configure.ac.in
+@@ -109,6 +109,9 @@ dnl ** Which gcc to use?
+ dnl --------------------------------------------------------------
+ AC_PROG_CC([gcc clang])
+ AC_PROG_CXX([g++ clang++ c++])
++# Work around #24324
++MOVE_TO_FLAGS([CC],[CFLAGS])
++MOVE_TO_FLAGS([CXX],[CXXFLAGS])
+ 
+ dnl ** figure out how to invoke the C preprocessor (i.e. `gcc -E`)
+ AC_PROG_CPP
+-- 
+GitLab
+

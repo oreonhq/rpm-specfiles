@@ -1,8 +1,8 @@
 %global source0_hash ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
 
 Name:           lame
-Version:        3.100
-Release:        21%{?dist}
+Version:        4.0
+Release:        1%{?dist}
 Summary:        Free MP3 audio compressor
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            http://lame.sourceforge.net/

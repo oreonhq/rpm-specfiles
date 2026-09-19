@@ -1,0 +1,103 @@
+diff -up libmikmod-3.3.12/configure.ac.cflags libmikmod-3.3.12/configure.ac
+--- libmikmod-3.3.12/configure.ac.cflags	2024-11-19 21:33:02.000000000 -0500
++++ libmikmod-3.3.12/configure.ac	2025-01-09 18:57:22.702254043 -0500
+@@ -1203,36 +1203,6 @@ then
+ 	fi
+ fi
+ 
+-# If compiling with gcc, use adequate optimization flags
+-if test $ac_cv_c_compiler_gnu = yes
+-then
+-	CFLAGS="$CFLAGS -Wall"
+-	if test $libmikmod_debug = yes
+-	then
+-		CFLAGS="$CFLAGS -Werror"
+-	fi
+-	CFLAGS="$CFLAGS -ffast-math"
+-	if test $libmikmod_darwin = yes
+-	then
+-		CFLAGS="$CFLAGS -fno-common"
+-	fi
+-
+-	# On at least x86 platforms, gcc 2.7.2.1 and earlier won't work if -O3 (or
+-	# -finline-functions) are used. Versions 2.7.2.3, 2.8.x and egcs are ok
+-	# (didn't test 2.7.2.2). Using flags known to work correctly depending on
+-	# the compiler version:
+-	AC_CACHE_CHECK([if inlining functions is safe],[libmikmod_cv_gcc_inline_safe],
+-	 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+-#if defined __GNUC__ && !(__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 7))
+-#error inlining functions not safe
+-#endif
+-]])], [libmikmod_cv_gcc_inline_safe=yes], [libmikmod_cv_gcc_inline_safe=no])])
+-	if test $libmikmod_cv_gcc_inline_safe = no
+-	then
+-		CFLAGS="$CFLAGS -fno-strength-reduce"
+-	fi
+-fi
+-
+ if test x$libmikmod_threads != xno
+ then
+ 	AC_DEFINE([HAVE_PTHREAD], 1, [Define if your system provides POSIX.4 threads])
+diff -up libmikmod-3.3.12/configure.cflags libmikmod-3.3.12/configure
+--- libmikmod-3.3.12/configure.cflags	2024-12-31 06:11:10.000000000 -0500
++++ libmikmod-3.3.12/configure	2025-01-09 18:56:43.820814387 -0500
+@@ -16473,59 +16473,6 @@ $as_echo "#define MIKMOD_DYNAMIC 1" >>co
+ 	fi
+ fi
+ 
+-# If compiling with gcc, use adequate optimization flags
+-if test $ac_cv_c_compiler_gnu = yes
+-then
+-	CFLAGS="$CFLAGS -Wall"
+-	if test $libmikmod_debug = yes
+-	then
+-		CFLAGS="$CFLAGS -Werror"
+-	fi
+-	CFLAGS="$CFLAGS -ffast-math"
+-	if test $libmikmod_darwin = yes
+-	then
+-		CFLAGS="$CFLAGS -fno-common"
+-	fi
+-
+-	# On at least x86 platforms, gcc 2.7.2.1 and earlier won't work if -O3 (or
+-	# -finline-functions) are used. Versions 2.7.2.3, 2.8.x and egcs are ok
+-	# (didn't test 2.7.2.2). Using flags known to work correctly depending on
+-	# the compiler version:
+-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if inlining functions is safe" >&5
+-$as_echo_n "checking if inlining functions is safe... " >&6; }
+-if ${libmikmod_cv_gcc_inline_safe+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-#if defined __GNUC__ && !(__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 7))
+-#error inlining functions not safe
+-#endif
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  libmikmod_cv_gcc_inline_safe=yes
+-else
+-  libmikmod_cv_gcc_inline_safe=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $libmikmod_cv_gcc_inline_safe" >&5
+-$as_echo "$libmikmod_cv_gcc_inline_safe" >&6; }
+-	if test $libmikmod_cv_gcc_inline_safe = no
+-	then
+-		CFLAGS="$CFLAGS -fno-strength-reduce"
+-	fi
+-fi
+-
+ if test x$libmikmod_threads != xno
+ then
+ 

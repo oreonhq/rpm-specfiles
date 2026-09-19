@@ -1,0 +1,82 @@
+From c4e2ede9b53f8f3fa05ebca7b89047ad6295e48b Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Mon, 17 Feb 2025 10:51:02 +0000
+Subject: [PATCH 8/8] Togl: Replace Tk_ functions with new Tcl_ equivalents for
+ Tcl/Tk 9.0
+
+In Tcl/Tk 9.0, some features which were previously in Tk moved down
+into Tcl.  There is also a small change to the prototype of
+Tcl_FreeProc.
+---
+ Togl/src/Togl/togl.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/Togl/src/Togl/togl.c b/Togl/src/Togl/togl.c
+index 2bae6ea..c5c936b 100644
+--- a/Togl/src/Togl/togl.c
++++ b/Togl/src/Togl/togl.c
+@@ -1339,7 +1339,7 @@ Togl_Widget(ClientData clientData, Tcl_Interp *interp, int argc,
+         return TCL_ERROR;
+     }
+ 
+-    Tk_Preserve((ClientData) togl);
++    Tcl_Preserve((ClientData) togl);
+ 
+     if (!strncmp(argv[1], "configure", MAX(1, strlen(argv[1])))) {
+         if (argc == 2) {
+@@ -1423,7 +1423,7 @@ Togl_Widget(ClientData clientData, Tcl_Interp *interp, int argc,
+         }
+     }
+ 
+-    Tk_Release((ClientData) togl);
++    Tcl_Release((ClientData) togl);
+     return result;
+ }
+ 
+@@ -1613,7 +1613,7 @@ Togl_Cmd(ClientData clientData, Tcl_Interp *interp, int argc,
+ 
+     /* If defined, setup timer */
+     if (togl->TimerProc) {
+-        (void) Tk_CreateTimerHandler(togl->TimerInterval, Togl_Timer,
++        (void) Tcl_CreateTimerHandler(togl->TimerInterval, Togl_Timer,
+                 (ClientData) togl);
+     }
+ 
+@@ -2525,12 +2525,12 @@ ToglCmdDeletedProc(ClientData clientData)
+  */
+ static void
+ Togl_Destroy(
+-#if (TK_MAJOR_VERSION * 100 + TK_MINOR_VERSION) >= 401
+-        char *
++#if TCL_MAJOR_VERSION >= 9
++             void *
+ #else
+-        ClientData
++             char *
+ #endif
+-        clientData)
++             clientData)
+ {
+     Togl   *togl = (Togl *) clientData;
+ 
+@@ -2685,7 +2685,7 @@ Togl_PostRedisplay(Togl *togl)
+ {
+     if (!togl->UpdatePending) {
+         togl->UpdatePending = True;
+-        Tk_DoWhenIdle(Togl_Render, (ClientData) togl);
++        Tcl_DoWhenIdle(Togl_Render, (ClientData) togl);
+     }
+ }
+ 
+@@ -3288,7 +3288,7 @@ Togl_PostOverlayRedisplay(Togl *togl)
+ {
+     if (!togl->OverlayUpdatePending
+             && togl->OverlayWindow && togl->OverlayDisplayProc) {
+-        Tk_DoWhenIdle(RenderOverlay, (ClientData) togl);
++        Tcl_DoWhenIdle(RenderOverlay, (ClientData) togl);
+         togl->OverlayUpdatePending = True;
+     }
+ }
+-- 
+2.48.1
+

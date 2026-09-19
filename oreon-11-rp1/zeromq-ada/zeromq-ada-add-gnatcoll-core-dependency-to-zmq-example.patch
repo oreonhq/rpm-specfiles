@@ -1,0 +1,18 @@
+--- a/examples/zmq-examples.gpr.inst
++++ b/examples/zmq-examples.gpr.inst
+@@ -1,4 +1,6 @@
+ with "zmq.gpr";
++with "gnatcoll_core.gpr";
++
+ project ZMQ.Examples is
+ 
+    for Main use ("zmq-examples-client.adb",
+@@ -10,7 +12,7 @@
+    for Exec_Dir use ".";
+ 
+    package Compiler is
+-      for Default_Switches ("ada") use ("-g", "-O2", "-gnatf", "-gnat05");
++      for Default_Switches ("ada") use ("-g", "-O2", "-gnatf");
+    end Compiler;
+ 
+    package Binder is

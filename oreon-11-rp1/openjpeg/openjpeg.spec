@@ -8,7 +8,7 @@
 # https://bugzilla.redhat.com/show_bug.cgi?id=1751749
 %global _target_platform %{_vendor}-%{_target_os}
 
-%if 0%{?flatpak} || 0%{?rhel}
+%if 0%{?flatpak} || 0%{?rhel} || 0%{?oreon}
 %bcond_with mingw
 %else
 %bcond_without mingw
@@ -16,7 +16,7 @@
 
 Name:           openjpeg
 Version:        2.5.4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        C-Library for JPEG 2000
 
 # windirent.h is MIT, the rest is BSD

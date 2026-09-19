@@ -1,0 +1,39 @@
+From 535d154a765d809815eded5a1e2c7a449fbce96b Mon Sep 17 00:00:00 2001
+From: Juan Orti Alcaine <jortialc@redhat.com>
+Date: Mon, 17 Jan 2022 15:54:24 +0100
+Subject: [PATCH] Use unittest.mock
+
+---
+ tests/unit/test__http.py  | 2 +-
+ tests/unit/test_client.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/unit/test__http.py b/tests/unit/test__http.py
+index 3da656d..285c041 100644
+--- a/tests/unit/test__http.py
++++ b/tests/unit/test__http.py
+@@ -14,7 +14,7 @@
+ 
+ import unittest
+ 
+-import mock
++from unittest import mock
+ 
+ 
+ class TestConnection(unittest.TestCase):
+diff --git a/tests/unit/test_client.py b/tests/unit/test_client.py
+index 81930cd..7ef5421 100644
+--- a/tests/unit/test_client.py
++++ b/tests/unit/test_client.py
+@@ -14,7 +14,7 @@
+ 
+ import unittest
+ 
+-import mock
++from unittest import mock
+ 
+ 
+ def _make_credentials():
+-- 
+2.34.1
+

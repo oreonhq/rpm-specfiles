@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           jsoup
-Version:        1.21.1
+Version:        1.23.2
 Release:        %autorelease
 Summary:        Java library for working with real-world HTML
 License:        MIT

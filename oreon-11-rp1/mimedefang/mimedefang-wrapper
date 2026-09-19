@@ -1,0 +1,76 @@
+#!/bin/sh
+
+# Make sure required variables are set
+SOCKET=${SOCKET:=/var/spool/MIMEDefang/mimedefang.sock}
+MX_SOCKET=${MX_SOCKET:=/var/spool/MIMEDefang/mimedefang-multiplexor.sock}
+
+if [ "$1" = "start" ]; then
+  # Tricky stuff below... "echo -E" won't work, hence the two-step.
+  exec /usr/bin/mimedefang -P /run/mimedefang.pid \
+    -o /var/spool/MIMEDefang/mimedefang.lock \
+    -m $MX_SOCKET -y \
+    $([ -n "$LOOPBACK_RESERVED_CONNECTIONS" ] && echo "-R $LOOPBACK_RESERVED_CONNECTIONS") \
+    $([ -n "$MX_USER" ] && echo "-U $MX_USER") \
+    $([ -n "$SYSLOG_FACILITY" ] && echo "-S $SYSLOG_FACILITY") \
+    $([ "$LOG_FILTER_TIME" = "yes" ] && echo "-T") \
+    $([ "$MX_RELAY_CHECK" = "yes" ] && echo "-r") \
+    $([ "$MX_HELO_CHECK" = "yes" ] && echo "-H") \
+    $([ "$MX_SENDER_CHECK" = "yes" ] && echo "-s") \
+    $([ "$MX_RECIPIENT_CHECK" = "yes" ] && echo "-t") \
+    $([ "$KEEP_FAILED_DIRECTORIES" = "yes" ] && echo "-k") \
+    $([ "$MD_ALLOW_GROUP_ACCESS" = "yes" ] && echo "-G") \
+    $([ "$MD_SKIP_BAD_RCPTS" = "yes" ] && echo "-N") \
+    $([ -n "$MD_EXTRA" ] && echo "$MD_EXTRA") \
+    $([ "$ALLOW_NEW_CONNECTIONS_TO_QUEUE" = "yes" ] && echo "-q") \
+    -p $SOCKET
+fi
+
+if [ "$1" = "configtest" ]; then
+  # Check mimedefang-filter syntax
+  /usr/bin/mimedefang.pl $([ -n "$SUBFILTER" ] && echo "-f $SUBFILTER") -test > /var/spool/MIMEDefang/configtest.out 2>&1
+  if [ $? != 0 ]; then
+    cat /var/spool/MIMEDefang/configtest.out
+    exit 2
+  fi
+  rm -f /var/spool/MIMEDefang/configtest.out
+fi
+
+if [ "$1" = "reload" ]; then
+  /usr/bin/md-mx-ctrl -s $MX_SOCKET reread > /dev/null 2>&1
+fi
+
+if [ "$1" = "multiplexor" ]; then
+  # Tricky stuff below... "echo -E" won't work, hence the two-step.
+  exec /usr/bin/mimedefang-multiplexor -p /run/mimedefang-multiplexor.pid \
+    -o /var/spool/MIMEDefang/mimedefang-multiplexor.lock \
+    $([ -n "$FILTER" ] && echo "-f $FILTER") \
+    $([ -n "$SYSLOG_FACILITY" ] && echo "-S $SYSLOG_FACILITY") \
+    $([ -n "$SUBFILTER" ] && echo "-F $SUBFILTER") \
+    $([ -n "$MX_MINIMUM" ] && echo "-m $MX_MINIMUM") \
+    $([ -n "$MX_MAXIMUM" ] && echo "-x $MX_MAXIMUM") \
+    $([ -n "$MX_RECIPOK_PERDOMAIN_LIMIT" ] && echo "-y $MX_RECIPOK_PERDOMAIN_LIMIT") \
+    $([ -n "$MX_USER" ] && echo "-U $MX_USER") \
+    $([ -n "$MX_IDLE" ] && echo "-i $MX_IDLE") \
+    $([ -n "$MX_BUSY" ] && echo "-b $MX_BUSY") \
+    $([ -n "$MX_QUEUE_SIZE" ] && echo "-q $MX_QUEUE_SIZE") \
+    $([ -n "$MX_QUEUE_TIMEOUT" ] && echo "-Q $MX_QUEUE_TIMEOUT") \
+    $([ -n "$MX_REQUESTS" ] && echo "-r $MX_REQUESTS") \
+    $([ -n "$MX_MAP_SOCKET" ] && echo "-N $MX_MAP_SOCKET") \
+    $([ -n "$MX_WORKER_DELAY" ] && echo "-w $MX_WORKER_DELAY") \
+    $([ -n "$MX_MIN_WORKER_DELAY" ] && echo "-W $MX_MIN_WORKER_DELAY") \
+    $([ -n "$MX_LOG_WORKER_STATUS_INTERVAL" ] && echo "-L $MX_LOG_WORKER_STATUS_INTERVAL") \
+    $([ -n "$MX_MAX_RSS" ] && echo "-R $MX_MAX_RSS") \
+    $([ -n "$MX_MAX_AS" ] && echo "-M $MX_MAX_AS") \
+    $([ -n "$MX_MAX_LIFETIME" ] && echo "-V $MX_MAX_LIFETIME") \
+    $([ "$MX_EMBED_PERL" = "yes" ] && (echo -n "-"; echo "E")) \
+    $([ "$MX_LOG" = "yes" ] && echo "-l") \
+    $([ "$MX_STATS" = "yes" ] && echo "-t /var/log/mimedefang/stats") \
+    $([ "$MX_STATUS_UPDATES" = "yes" ] && echo "-Z") \
+    $([ "$MX_STATS" = "yes" -a "$MX_FLUSH_STATS" = "yes" ] && echo "-u") \
+    $([ -n "$MX_TICK_REQUEST" ] && echo "-X $MX_TICK_REQUEST") \
+    $([ -n "$MX_TICK_PARALLEL" ] && echo "-P $MX_TICK_PARALLEL") \
+    $([ "$MX_STATS_SYSLOG" = "yes" ] && echo "-T") \
+    $([ "$MD_ALLOW_GROUP_ACCESS" = "yes" ] && echo "-G") \
+    $([ -n "$MX_NOTIFIER" ] && echo "-O $MX_NOTIFIER") \
+    -s $MX_SOCKET
+fi

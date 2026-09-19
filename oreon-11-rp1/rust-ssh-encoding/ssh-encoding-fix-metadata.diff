@@ -1,0 +1,11 @@
+--- ssh-encoding-0.2.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ ssh-encoding-0.2.0/Cargo.toml	2025-12-03T13:54:16.299449+00:00
+@@ -65,7 +65,7 @@
+ default-features = false
+ 
+ [dev-dependencies.hex-literal]
+-version = "0.4.1"
++version = ">=0.4.1, <2.0"
+ 
+ [features]
+ alloc = [

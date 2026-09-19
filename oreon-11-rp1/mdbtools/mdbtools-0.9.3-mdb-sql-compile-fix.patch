@@ -1,0 +1,55 @@
+gcc 13 does not like this loop (on i686):
+
+			while (strlen(mybuf) + strlen(s) > bufsz) {
+				bufsz *= 2;
+				mybuf = (char *) g_realloc(mybuf, bufsz);
+			}
+
+and ends up deciding that bufsz may become -1 leading to this compile error:
+
+In file included from /usr/include/stdio.h:959,
+                 from mdb-sql.c:19:
+In function 'fgets',
+    inlined from 'main' at mdb-sql.c:423:9:
+/usr/include/bits/stdio2.h:213:12: error: argument 2 value -1 is negative [-Werror=stringop-overflow=]
+  213 |     return __fgets_alias (__s, __n, __stream);
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/features.h:503,
+                 from /usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdio.h:27:
+/usr/include/bits/stdio2.h: In function 'main':
+/usr/include/bits/stdio2.h:198:14: note: in a call to function '*fgets' declared with attribute 'access (write_only, 1, 2)'
+  198 | extern char *__REDIRECT (__fgets_alias,
+      |              ^~~~~~~~~~
+cc1: all warnings being treated as errors
+make[3]: *** [Makefile:709: mdb-sql.o] Error 1
+
+Only the size of the buffer which stores all statements until the "go"
+command needs to grow dynamically. Limit reading of input to always read
+4096 bytes lines or chunks. Which matches the size which the old code
+would always use for the first line read.
+
+This makes mdb-sql.c build again on i686 with gcc 13.
+
+diff -up mdbtools-0.9.3/src/util/mdb-sql.c~ mdbtools-0.9.3/src/util/mdb-sql.c
+--- mdbtools-0.9.3/src/util/mdb-sql.c~	2023-03-23 15:05:26.000000000 +0100
++++ mdbtools-0.9.3/src/util/mdb-sql.c	2023-03-23 15:14:09.719333781 +0100
+@@ -321,6 +321,7 @@ int
+ main(int argc, char **argv)
+ {
+ 	char *s = NULL;
++	const int s_bufsz = 4096;
+ 	char prompt[20];
+ 	int line = 0;
+ 	char *mybuf;
+@@ -420,8 +420,8 @@ main(int argc, char **argv)
+ 		}
+ 
+ 		if (in) {
+-			s=calloc(bufsz, 1);
+-			if (!fgets(s, bufsz, in)) {
++			s=calloc(s_bufsz, 1);
++			if (!fgets(s, s_bufsz, in)) {
+ 				// Backwards compatibility with older MDBTools
+ 				// Files read from the command line had an
+ 				// implicit "go" at the end

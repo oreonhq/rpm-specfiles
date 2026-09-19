@@ -1,0 +1,68 @@
+Add missing #include directives to improve compatibility with C99
+compilers which do not support implicit function declarations.
+Add missing expressions to return statements.
+
+diff --git a/libgadu/common.c b/libgadu/common.c
+index ae21d2866e25f28e..23d70d6f9091ca68 100644
+--- a/libgadu/common.c
++++ b/libgadu/common.c
+@@ -37,6 +37,7 @@
+ #include <unistd.h>
+ 
+ #include "libgadu.h"
++#include "../connwrap/connwrap.h"
+ 
+ FILE *gg_debug_file = NULL;
+ 
+diff --git a/libjabber/jconn.c b/libjabber/jconn.c
+index 4fc4d3a7bdb11217..37840f575dd53f0d 100644
+--- a/libjabber/jconn.c
++++ b/libjabber/jconn.c
+@@ -824,7 +824,7 @@ void *jabber_recieve_file_fd(void *arg)
+ 		free(hash);
+ 		close(sock);
+ 		close(fd_file);
+-		return;
++		return NULL;
+ 	}
+ 	 
+ 	recv( sock, buff, SEND_BUF, 0 );
+@@ -833,7 +833,7 @@ void *jabber_recieve_file_fd(void *arg)
+ 		free(hash);
+ 		close(sock);
+ 		close(fd_file);
+-		return;
++		return NULL;
+ 	}
+ 	 
+ //socks5 bytestream packet	 
+@@ -851,7 +851,7 @@ void *jabber_recieve_file_fd(void *arg)
+ 		free(hash);
+ 		close(sock);
+ 		close(fd_file);
+-		return;
++		return NULL;
+ 	}
+ 	recv( sock, buff, 47, 0 );
+ 	if( buff[0] != 0x05 || buff[3] != 0x03 )
+@@ -859,7 +859,7 @@ void *jabber_recieve_file_fd(void *arg)
+ 		free(hash);
+ 		close(sock);
+ 		close(fd_file);
+-		return;
++		return NULL;
+ 	}
+ 
+ 
+diff --git a/libjabber/xstream.c b/libjabber/xstream.c
+index 0761d8cf81900d6a..5fdd00c1bd7fba84 100644
+--- a/libjabber/xstream.c
++++ b/libjabber/xstream.c
+@@ -18,6 +18,7 @@
+  */
+ 
+ #include <libxode.h>
++#include <time.h>
+ 
+ /* xstream is a way to have a consistent method of handling incoming XML Stream based events... it doesn't handle the generation of an XML Stream, but provides some facilities to help do that */
+ 

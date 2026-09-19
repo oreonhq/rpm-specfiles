@@ -1,0 +1,10 @@
+--- codespan-reporting-0.11.1/Cargo.toml	1970-01-01T00:00:00+00:00
++++ codespan-reporting-0.11.1/Cargo.toml	2025-03-24T15:18:22.910553+00:00
+@@ -19,7 +19,6 @@
+ description = "Beautiful diagnostic reporting for text-based programming languages"
+ homepage = "https://github.com/brendanzab/codespan"
+ documentation = "https://docs.rs/codespan-reporting"
+-readme = "../README.md"
+ license = "Apache-2.0"
+ repository = "https://github.com/brendanzab/codespan"
+ [dependencies.serde]

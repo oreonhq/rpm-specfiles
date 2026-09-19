@@ -1,8 +1,8 @@
 %global source0_hash 04acb4f177d57c147dcedc4bd70e23806af3db75a532f46f95461b2bc9a94959
 
 Name:          perl-Net-DNS
-Version:       1.53
-Release:       2%{?dist}
+Version:       1.57
+Release:       1%{?dist}
 Summary:       DNS resolver modules for Perl
 License:       MIT
 URL:           https://www.net-dns.org

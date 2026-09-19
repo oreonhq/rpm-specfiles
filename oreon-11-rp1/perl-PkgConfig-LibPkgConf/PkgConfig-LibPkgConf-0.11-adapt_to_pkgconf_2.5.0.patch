@@ -1,0 +1,46 @@
+From 47fc6bb0bc5a12718c8c8a6267d19e96fae2b2be Mon Sep 17 00:00:00 2001
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+Date: Mon, 9 Feb 2026 10:16:39 -0500
+Subject: [PATCH] Adapt to pkgconf 2.5.0
+
+pkgconf_pkg_new_from_file was replaced with pkgconf_pkg_new_from_path
+which does not take a FILE pointer:
+
+https://github.com/pkgconf/pkgconf/commit/61610c65cb7146cb6960ecbbe8902a26226fd794
+
+This applies on top of "Adapt to pkgconf 1.9.4":
+
+https://github.com/PerlAlien/PkgConfig-LibPkgConf/pull/17
+---
+ LibPkgConf.xs | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/LibPkgConf.xs b/LibPkgConf.xs
+index 57e6892..5985144 100644
+--- a/LibPkgConf.xs
++++ b/LibPkgConf.xs
+@@ -334,16 +334,21 @@ _package_from_file(self, filename)
+     FILE *fp;
+     pkgconf_pkg_t *package;
+   CODE:
++#if LIBPKGCONF_VERSION >= 20500
++    package = pkgconf_pkg_new_from_path(&self->client, filename, 0);
++    RETVAL = PTR2IV(package);
++#else
+     fp = fopen(filename, "r");
+     if(fp != NULL) {
+ #if LIBPKGCONF_VERSION >= 10900
+       package = pkgconf_pkg_new_from_file(&self->client, filename, fp, 0);
+ #else
+       package = pkgconf_pkg_new_from_file(&self->client, filename, fp);
+ #endif
+       RETVAL = PTR2IV(package);
+     } else
+       RETVAL = 0;
++#endif
+   OUTPUT:
+     RETVAL
+ 
+-- 
+2.53.0
+

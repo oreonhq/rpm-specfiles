@@ -1,0 +1,86 @@
+--- plplot-5.15.0/bindings/ocaml/CMakeLists.txt.orig	2023-07-09 20:51:53.156518432 -0600
++++ plplot-5.15.0/bindings/ocaml/CMakeLists.txt	2023-07-09 21:34:51.168793754 -0600
+@@ -203,8 +203,8 @@ if(ENABLE_ocaml)
+     #message(STATUS "DEBUG: (internal libraries processed) ocaml_LIBRARIES_FLAGS = ${ocaml_LIBRARIES_FLAGS}")
+   else(NOT BUILD_SHARED_LIBS)
+     # Add plplot library.
+-    list(APPEND ocaml_LIBRARIES_FLAGS -ccopt "-L${CMAKE_BINARY_DIR_ESCAPED}/src" -cclib -l${WRITEABLE_TARGET}plplot)
+-    list(APPEND installed_ocaml_LIBRARIES_FLAGS -ccopt "-L${CMAKE_INSTALL_LIBDIR_ESCAPED}" -cclib -l${WRITEABLE_TARGET}plplot)
++    list(APPEND ocaml_LIBRARIES_FLAGS "-L${CMAKE_BINARY_DIR_ESCAPED}/src" -ldopt -l${WRITEABLE_TARGET}plplot)
++    list(APPEND installed_ocaml_LIBRARIES_FLAGS "-L${CMAKE_BINARY_DIR_ESCAPED}/src" -ldopt -l${WRITEABLE_TARGET}plplot)
+   endif(NOT BUILD_SHARED_LIBS)
+   # ocamlmklib links *.o into *.so and *.a
+   add_custom_command(
+@@ -224,7 +224,7 @@ if(ENABLE_ocaml)
+     # ocamlopt as appropriate).  This failure is likely the cause
+     # of the ldd -r errors for the ocaml examples unless they are created
+     # with ocamlc or ocamlopt using the appropriate rpath option.
+-    COMMAND ${OCAMLMKLIB} -o plplot_stubs -L${CAMLIDL_LIB_DIR} -lcamlidl ${ocaml_LIBRARIES_FLAGS} plplot_core_stubs.o plplot_impl.o
++    COMMAND ${OCAMLMKLIB} -g -o plplot_stubs -L${CAMLIDL_LIB_DIR} -lcamlidl ${ocaml_LIBRARIES_FLAGS} plplot_core_stubs.o plplot_impl.o
+     DEPENDS
+     ${CMAKE_CURRENT_BINARY_DIR}/plplot_core_stubs.o
+     ${CMAKE_CURRENT_BINARY_DIR}/plplot_impl.o
+@@ -249,7 +249,7 @@ if(ENABLE_ocaml)
+     # ocamlopt as appropriate).  This failure is likely the cause
+     # of the ldd -r errors for the ocaml examples unless they are created
+     # with ocamlc or ocamlopt using the appropriate rpath option.
+-    COMMAND ${OCAMLMKLIB} -o installed_plplot_stubs -L${CAMLIDL_LIB_DIR} -lcamlidl ${installed_ocaml_LIBRARIES_FLAGS} plplot_core_stubs.o plplot_impl.o
++    COMMAND ${OCAMLMKLIB} -g -o installed_plplot_stubs -L${CAMLIDL_LIB_DIR} -lcamlidl ${installed_ocaml_LIBRARIES_FLAGS} plplot_core_stubs.o plplot_impl.o
+     DEPENDS
+     ${CMAKE_CURRENT_BINARY_DIR}/plplot_core_stubs.o
+     ${CMAKE_CURRENT_BINARY_DIR}/plplot_impl.o
+@@ -327,10 +327,11 @@ if(ENABLE_ocaml)
+     )
+ 
+   # ocamlc -a builds a *.cma library from *.cmo
++  string(REPLACE "ldopt" "cclib" ocamlc_LIBRARIES_FLAGS ${ocaml_LIBRARIES_FLAGS})
+   add_custom_command(
+     OUTPUT
+     ${CMAKE_CURRENT_BINARY_DIR}/plplot.cma
+-    COMMAND ${OCAMLC} -a -o plplot.cma plplot_core.cmo plplot.cmo -dllib -lplplot_stubs -ccopt -L. -cclib -lplplot_stubs -ccopt -L${CAMLIDL_LIB_DIR} -cclib -lcamlidl ${ocaml_LIBRARIES_FLAGS}
++    COMMAND ${OCAMLC} -a -o plplot.cma plplot_core.cmo plplot.cmo -dllib -lplplot_stubs -ccopt -L. -cclib -lplplot_stubs -ccopt -L${CAMLIDL_LIB_DIR} -cclib -lcamlidl -ccopt ${ocamlc_LIBRARIES_FLAGS}
+     DEPENDS
+     ${CMAKE_CURRENT_BINARY_DIR}/plplot_core.cmo
+     ${CMAKE_CURRENT_BINARY_DIR}/plplot.cmo
+@@ -338,10 +339,11 @@ if(ENABLE_ocaml)
+     VERBATIM
+     )
+ 
++  string(REPLACE "ldopt" "cclib" installed_ocamlc_LIBRARIES_FLAGS ${installed_ocaml_LIBRARIES_FLAGS})
+   add_custom_command(
+     OUTPUT
+     ${CMAKE_CURRENT_BINARY_DIR}/installed_plplot.cma
+-    COMMAND ${OCAMLC} -a -o installed_plplot.cma plplot_core.cmo plplot.cmo -dllib -lplplot_stubs -ccopt -L. -cclib -lplplot_stubs -ccopt -L${CAMLIDL_LIB_DIR} -cclib -lcamlidl ${installed_ocaml_LIBRARIES_FLAGS}
++    COMMAND ${OCAMLC} -a -o installed_plplot.cma plplot_core.cmo plplot.cmo -dllib -lplplot_stubs -ccopt -L. -cclib -lplplot_stubs -ccopt -L${CAMLIDL_LIB_DIR} -cclib -lcamlidl -ccopt ${installed_ocamlc_LIBRARIES_FLAGS}
+     DEPENDS
+     ${CMAKE_CURRENT_BINARY_DIR}/plplot_core.cmo
+     ${CMAKE_CURRENT_BINARY_DIR}/plplot.cmo
+@@ -399,7 +401,7 @@ if(ENABLE_ocaml)
+       OUTPUT
+       ${CMAKE_CURRENT_BINARY_DIR}/plplot.cmxa
+       ${CMAKE_CURRENT_BINARY_DIR}/plplot.a
+-      COMMAND ${OCAMLOPT} -a -o plplot.cmxa plplot_core.cmx plplot.cmx -ccopt -L. -cclib -lplplot_stubs -ccopt -L${CAMLIDL_LIB_DIR} -cclib -lcamlidl ${ocaml_LIBRARIES_FLAGS}
++      COMMAND ${OCAMLOPT} -a -o plplot.cmxa plplot_core.cmx plplot.cmx -ccopt -L. -cclib -lplplot_stubs -ccopt -L${CAMLIDL_LIB_DIR} -cclib -lcamlidl -ccopt ${ocamlc_LIBRARIES_FLAGS}
+       DEPENDS
+       ${CMAKE_CURRENT_BINARY_DIR}/plplot_core.cmx
+       ${CMAKE_CURRENT_BINARY_DIR}/plplot.cmx
+@@ -411,7 +413,7 @@ if(ENABLE_ocaml)
+       OUTPUT
+       ${CMAKE_CURRENT_BINARY_DIR}/installed_plplot.cmxa
+       ${CMAKE_CURRENT_BINARY_DIR}/installed_plplot.a
+-      COMMAND ${OCAMLOPT} -a -o installed_plplot.cmxa plplot_core.cmx plplot.cmx -ccopt -L. -cclib -lplplot_stubs -ccopt -L${CAMLIDL_LIB_DIR} -cclib -lcamlidl ${installed_ocaml_LIBRARIES_FLAGS}
++      COMMAND ${OCAMLOPT} -a -o installed_plplot.cmxa plplot_core.cmx plplot.cmx -ccopt -L. -cclib -lplplot_stubs -ccopt -L${CAMLIDL_LIB_DIR} -cclib -lcamlidl -ccopt ${installed_ocamlc_LIBRARIES_FLAGS}
+       DEPENDS
+       ${CMAKE_CURRENT_BINARY_DIR}/plplot_core.cmx
+       ${CMAKE_CURRENT_BINARY_DIR}/plplot.cmx
+--- plplot-5.15.0/examples/ocaml/CMakeLists.txt.orig	2019-06-01 17:24:33.000000000 -0600
++++ plplot-5.15.0/examples/ocaml/CMakeLists.txt	2023-07-10 07:46:28.408144493 -0600
+@@ -130,7 +130,7 @@ if(BUILD_TEST)
+     # The unescaped I option works for both ocamlopt and ocamlc, but the escaped version
+     # does not work for ocamlopt (and ocamlc?).  WTF?
+     set(I_OPTION ${CMAKE_BINARY_DIR}/bindings/ocaml)
+-    set(ccopt_OPTION -ccopt "-L ${CMAKE_BINARY_DIR_ESCAPED}/src -Wl,-rpath -Wl,${build_tree_ocaml_RPATH_ESCAPED} ")
++    set(ccopt_OPTION -ccopt -L${CMAKE_BINARY_DIR_ESCAPED}/src -cclib -lplplot)
+   else(CORE_BUILD)
+     set(I_OPTION ${OCAML_INSTALL_DIR}/plplot)
+     if(USE_RPATH AND install_tree_ocaml_RPATH_ESCAPED)

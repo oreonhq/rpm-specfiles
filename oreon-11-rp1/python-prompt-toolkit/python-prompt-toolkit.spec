@@ -1,38 +1,34 @@
-%global source0_hash 28cde192929c8e7321de85de1ddbe736f1375148b02f2e17edd840042b1be855
-
-%global common_description %{expand:
-prompt_toolkit is a library for building powerful interactive command line
-applications in Python.}
+%global source0_hash none
 
 Name:           python-prompt-toolkit
-Version:        3.0.52
+Version:        3.0.53
 Release:        %autorelease
-Summary:        Library for building powerful interactive command line applications in Python
-License:        BSD-3-Clause
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Library for building powerful interactive command lines in Python
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/prompt-toolkit/python-prompt-toolkit
-Source:        https://files.pythonhosted.org/packages/source/p/prompt-toolkit/prompt-toolkit-3.0.52.tar.gz
+Source:         %{pypi_source prompt_toolkit}
+
 BuildArch:      noarch
-
-
-%description %{common_description}
-
-
-%package -n python3-prompt-toolkit
-Summary:        %{summary}
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-# https://github.com/jonathanslenders/python-prompt-toolkit/issues/94
-Recommends:     python3-pygments
 
 
-%description -n python3-prompt-toolkit %{common_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'prompt-toolkit' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-prompt-toolkit
+Summary:        %{summary}
+
+%description -n python3-prompt-toolkit %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n prompt_toolkit-%{version}
-# Workaround for https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1988
-sed -i 's/^__version__ = .*/__version__ = "%{version}"/' src/prompt_toolkit/__init__.py
+%autosetup -p1 -n prompt_toolkit-%{version}
 
 
 %generate_buildrequires
@@ -45,16 +41,16 @@ sed -i 's/^__version__ = .*/__version__ = "%{version}"/' src/prompt_toolkit/__in
 
 %install
 %pyproject_install
-%pyproject_save_files prompt_toolkit
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
 
 %files -n python3-prompt-toolkit -f %{pyproject_files}
-%doc README.rst AUTHORS.rst CHANGELOG
-
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.52-1

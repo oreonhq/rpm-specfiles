@@ -1,0 +1,12 @@
+diff -up libfreenect-0.7.5/doc/Doxyfile.tstamp libfreenect-0.7.5/doc/Doxyfile
+--- libfreenect-0.7.5/doc/Doxyfile.tstamp	2024-01-06 17:57:12.000000000 +0100
++++ libfreenect-0.7.5/doc/Doxyfile	2025-11-24 23:51:39.844958326 +0100
+@@ -875,7 +875,7 @@ HTML_COLORSTYLE_GAMMA  = 80
+ # page will contain the date and time when the page was generated. Setting 
+ # this to NO can help when comparing the output of multiple runs.
+ 
+-HTML_TIMESTAMP         = YES
++HTML_TIMESTAMP         = NO
+ 
+ # If the HTML_ALIGN_MEMBERS tag is set to YES, the members of classes, 
+ # files or namespaces will be aligned in HTML using tables. If set to 

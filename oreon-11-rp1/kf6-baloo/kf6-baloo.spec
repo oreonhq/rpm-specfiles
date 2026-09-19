@@ -1,14 +1,14 @@
-%global source0_hash 6b226118bde28e81217f8cd6129f6e24c5d422bd7a322fe682e592b028b72db7
+%global source0_hash be0f85dc22ed8a6ffe06b2b260b739da15bbeed95064a4f663632701e3170ed0
 
 %global framework baloo
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
 Summary: A Tier 3 KDE Frameworks 6 module that provides indexing and search functionality
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND bzip2-1.0.6
@@ -26,16 +26,16 @@ Patch100: baloo-5.67.0-baloofile_config.patch
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6FileMetaData)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6IdleTime)
-BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6Crash) >= %{version}
+BuildRequires:  cmake(KF6DBusAddons) >= %{version}
+BuildRequires:  cmake(KF6FileMetaData) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6IdleTime) >= %{version}
+BuildRequires:  cmake(KF6KIO) >= %{version}
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6Solid)
+BuildRequires:  cmake(KF6Solid) >= %{version}
 
 BuildRequires:  lmdb-devel
 BuildRequires:  qt6-qtbase-devel
@@ -109,7 +109,7 @@ cat baloo_file6.lang baloo_file_extractor6.lang \
 %{_kf6_bindir}/balooshow6
 %{_kf6_bindir}/balooctl6
 %{_kf6_datadir}/qlogging-categories6/%{framework}*
-
+/usr/share/config.kcfg/baloosettings.kcfg
 %files file -f %{name}-file.lang
 %config(noreplace) %{_kf6_sysconfdir}/xdg/autostart/baloo_file.desktop
 %{_userunitdir}/kde-baloo.service
@@ -136,6 +136,9 @@ cat baloo_file6.lang baloo_file_extractor6.lang \
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 
@@ -150,4 +153,3 @@ cat baloo_file6.lang baloo_file_extractor6.lang \
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

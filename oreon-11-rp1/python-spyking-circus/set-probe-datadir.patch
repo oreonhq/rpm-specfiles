@@ -1,0 +1,16 @@
+diff -ur ./spyking-circus-1.1.0.orig/setup.py spyking-circus-1.1.0/setup.py
+--- ./spyking-circus-1.1.0.orig/setup.py	2022-01-16 19:29:50.989623826 +0000
++++ spyking-circus-1.1.0/setup.py	2022-01-16 19:30:38.926250577 +0000
+@@ -21,11 +21,7 @@
+ if sys.version_info < (2, 7):
+     raise RuntimeError('Only Python versions >= 2.7 are supported')
+ 
+-if 'CONDA_BUILD' in os.environ and 'RECIPE_DIR' in os.environ:
+-    # We seem to be running under a "conda build"
+-    data_path = pjoin('data', 'spyking-circus')
+-else:
+-    data_path = pjoin(os.path.expanduser('~'), 'spyking-circus')
++data_path = "SED_ME"
+ 
+ 
+ def _package_tree(pkgroot):

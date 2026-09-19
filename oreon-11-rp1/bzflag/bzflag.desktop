@@ -1,0 +1,9 @@
+[Desktop Entry]
+Categories=Game;ArcadeGame;
+Name=BZFlag
+GenericName=3D multi-player tank battle game
+Comment=Drive around in your tank and shoot others
+Exec=bzflag
+Icon=bzflag.svg
+Terminal=false
+Type=Application

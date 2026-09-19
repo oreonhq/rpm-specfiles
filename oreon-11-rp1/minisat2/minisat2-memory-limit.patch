@@ -1,0 +1,39 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ minisat2 (1:2.2.1-4) unstable; urgency=low
+ .
+   * Require a non-zero memory limit (closes: #716229)
+   * Bumped standards version to 3.9.4 (no changes)
+   * Bumped compatibility level to 9
+Author: Michael Tautschnig <mt@debian.org>
+Bug-Debian: http://bugs.debian.org/716229
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- minisat2-2.2.1.orig/minisat/simp/Main.cc
++++ minisat2-2.2.1/minisat/simp/Main.cc
+@@ -85,7 +85,7 @@ int main(int argc, char** argv)
+         BoolOption   pre    ("MAIN", "pre",    "Completely turn on/off any preprocessing.", true);
+         StringOption dimacs ("MAIN", "dimacs", "If given, stop after preprocessing and write the result to this file.");
+         IntOption    cpu_lim("MAIN", "cpu-lim","Limit on CPU time allowed in seconds.\n", INT32_MAX, IntRange(0, INT32_MAX));
+-        IntOption    mem_lim("MAIN", "mem-lim","Limit on memory usage in megabytes.\n", INT32_MAX, IntRange(0, INT32_MAX));
++        IntOption    mem_lim("MAIN", "mem-lim","Limit on memory usage in megabytes.\n", INT32_MAX, IntRange(64, INT32_MAX));
+ 
+         parseOptions(argc, argv, true);
+         

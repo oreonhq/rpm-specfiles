@@ -1,0 +1,19 @@
+--- kcheckers-0.8.1/main.cc~	2005-12-19 21:16:45 +0300
++++ kcheckers-0.8.1/main.cc	2007-10-02 16:31:55 +0400
+@@ -3,6 +3,7 @@
+ #include <QLocale>
+ #include <QDebug>
+ //#include <QPlastiqueStyle>
++#include <QLibraryInfo>
+ 
+ 
+ #include "toplevel.h"
+@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
+ 
+     // Qt translations
+     QTranslator qt_tr;
+-    if(qt_tr.load("qt_" + QLocale::system().name()))
++    if(qt_tr.load(QLibraryInfo::location(QLibraryInfo::TranslationsPath) + "/qt_"+QLocale::system().name()))
+ 	app.installTranslator(&qt_tr);
+     else
+ 	qDebug() << "Loading Qt translations failed.";

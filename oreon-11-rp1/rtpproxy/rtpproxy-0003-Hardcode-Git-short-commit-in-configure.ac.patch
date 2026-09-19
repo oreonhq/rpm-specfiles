@@ -1,0 +1,29 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sat, 29 Apr 2023 18:40:07 +0200
+Subject: [PATCH] Hardcode Git short commit in configure.ac
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/configure.ac b/configure.ac
+index 7ad323be..f6ad5692 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2,7 +2,7 @@
+ # Process this file with autoconf to produce a configure script.
+ 
+ AC_PREREQ([2.69])
+-AC_INIT([rtpproxy],[3.0-rc.1],[sobomax@sippysoft.com])
++AC_INIT([rtpproxy],[3.0.1],[sobomax@sippysoft.com])
+ AM_MAINTAINER_MODE
+ AC_CONFIG_SRCDIR([src/main.c])
+ AM_INIT_AUTOMAKE([serial-tests])
+@@ -21,8 +21,7 @@ AC_PROG_CPP
+ AC_PROG_MKDIR_P
+ LT_INIT
+ 
+-mydef_version=`git describe --always --dirty || date "+%Y%m%d%H%M%S"`
+-AC_DEFINE_UNQUOTED([VERSION_GIT], ["${mydef_version}"], [Git hash])
++AC_DEFINE_UNQUOTED([VERSION_GIT], ["e11faaa4"], [Git hash])
+ 
+ case "${host_os}" in
+ freebsd*)

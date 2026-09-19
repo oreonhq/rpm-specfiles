@@ -1,0 +1,28 @@
+From 7acb614de1610ea6eb821a76f04bf501ea6ab2a2 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 2 May 2024 10:30:25 -0400
+Subject: [PATCH 1/2] Downstream-only: do not upper-bound the Python
+ interpreter version
+
+We must integrate with new Python interpreter versions whether upstream
+is ready or not.
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index f945424..efa6057 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -11,7 +11,7 @@ authors = [
+   {name = "jrnl contributors", email = "maintainers@jrnl.sh"}
+ ]
+ maintainers = [{name = "Jonathan Wren and Micah Ellison", email = "maintainers@jrnl.sh"}]
+-requires-python = '>=3.10.0,<3.15'
++requires-python = '>=3.10.0'
+ dependencies = [
+   'colorama (>=0.4)', # https://github.com/tartley/colorama/blob/master/CHANGELOG.rst
+   'cryptography (>=3.0)', # https://cryptography.io/en/latest/api-stability.html
+-- 
+2.53.0
+

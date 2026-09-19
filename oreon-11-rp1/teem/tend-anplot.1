@@ -1,0 +1,106 @@
+.TH TEND\-ANPLOT "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-anplot \- graph anisotropy metric in barycentric coords
+.SH SYNOPSIS
+.B tend\ anplot
+.RB [ \-r
+.RI < res >]
+.RB [ \-w ]
+.RB [ \-hflip ]
+.RB [ \-nan ]
+.B \-a
+.RI < aniso >
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Graph anisotropy metric in barycentric coordinates.
+The metrics all vary from
+.B 0.0
+to
+.BR 1.0 ,
+and will be sampled in the lower right half of the image.
+The plane on which they are sampled is a surface of constant trace.
+You may want to use
+.in +4n
+.EX
+.B unu\ resample\ \-s\ =\ x0.57735\ \-k\ tent
+.in
+.EE
+to transform the triangle into a 30-60-90 triangle, and
+.in +4n
+.EX
+.B ilk\ \-t\ 1,\-0.5,0,0,0.866,0\ \-k\ tent\ \-0\ u:0,1\ \-b\ pad\ \-bg\ 0
+.EE
+.in
+(possibly followed by
+.BR teem/src/limntest/triimg )
+to transform the domain into an equilateral triangle.
+.SH OPTIONS
+.TP
+.B \-res\fR <\fIres\fR>
+resolution of anisotropy plot
+.RI ( int );
+default:
+.RB \(lq 256 \(rq
+.TP
+.B \-w
+sample the whole triangle of constant trace, instead of just the sixth of it in
+which the eigenvalues have the traditional sorted order.
+.TP
+.B \-hflip
+flip the two bottom corners (swapping the place of linear and planar)
+.TP
+.B \-nan
+set the pixel values outside the triangle to be
+.BR NaN ,
+instead of
+.B 0
+.TP
+.B \-a\fR <\fIaniso\fR>
+Which anisotropy metric to plot.
+All the Westin metrics come in two versions.
+Currently supported:
+.RS +7n
+.IP \(bu 2
+.RB \(lq cl1 \(rq,
+.RB \(lq cl2 \(rq:
+Westin\(cqs linear
+.IP \(bu 2
+.RB \(lq cp1 \(rq,
+.RB \(lq cp2 \(rq:
+Westin\(cqs planar
+.IP \(bu 2
+.RB \(lq ca1 \(rq,
+.RB \(lq ca2 \(rq:
+Westin\(cqs linear + planar
+.IP \(bu 2
+.RB \(lq cs1 \(rq,
+.RB \(lq cs2 \(rq:
+Westin\(cqs spherical
+.IP \(bu 2
+.RB \(lq ct1 \(rq,
+.RB \(lq ct2 \(rq:
+GK\(cqs anisotropy type (cp/ca)
+.IP \(bu 2
+.RB \(lq ra \(rq:
+Basser/Pierpaoli relative anisotropy/sqrt(2)
+.IP \(bu 2
+.RB \(lq fa \(rq:
+Basser/Pierpaoli fractional anisotropy
+.IP \(bu 2
+.RB \(lq vf \(rq:
+volume fraction = 1\-(Basser/Pierpaoli volume ratio)
+.IP \(bu 2
+.RB \(lq tr \(rq:
+trace
+.RE
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1),
+.BR ilk (1),
+.BR unu\-resample (1)

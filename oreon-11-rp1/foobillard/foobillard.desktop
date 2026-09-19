@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=FooBillard
+GenericName=Billard
+Comment=OpenGL billard game
+Exec=foobillard
+Icon=foobillard
+Terminal=false
+Type=Application
+Categories=Game;SportsGame;X-Fedora;

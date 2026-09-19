@@ -1,0 +1,31 @@
+From b727f1bcf15ee366e94cb6844c562cdec326513f Mon Sep 17 00:00:00 2001
+From: Susi Lehtola <susi.lehtola@gmail.com>
+Date: Wed, 11 Jun 2025 17:10:19 +0300
+Subject: [PATCH] Fix two typos that crash compile
+
+---
+ src/Util/FileDialog.C | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/Util/FileDialog.C b/src/Util/FileDialog.C
+index a856169..de89400 100644
+--- a/src/Util/FileDialog.C
++++ b/src/Util/FileDialog.C
+@@ -48,7 +48,7 @@ QString getSaveFileName(
+     }
+ #else
+    fileName = QFileDialog::getSaveFileName(parent, caption, dir, filter, 
+-      selectedfilter, options);
++      selectedFilter, options);
+ #endif
+    return fileName;
+ }
+@@ -103,7 +103,7 @@ QString getOpenFileName(
+     }
+ #else
+    fileName = QFileDialog::getOpenFileName( parent, caption, dir, filter,
+-      selectedFilter, options)
++      selectedFilter, options);
+ #endif
+ 
+     return fileName;

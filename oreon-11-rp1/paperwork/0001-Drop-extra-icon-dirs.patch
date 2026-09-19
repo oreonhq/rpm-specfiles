@@ -1,0 +1,26 @@
+From 09bafb6f854ac52920560f2a9c10c07ccfad0560 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Fri, 23 Aug 2019 22:23:07 -0400
+Subject: [PATCH] Drop extra icon dirs
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ paperwork-gtk/src/paperwork_gtk/cmd/install.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/paperwork-gtk/src/paperwork_gtk/cmd/install.py b/paperwork-gtk/src/paperwork_gtk/cmd/install.py
+index 8661be4e..d4cbd8a5 100644
+--- a/paperwork-gtk/src/paperwork_gtk/cmd/install.py
++++ b/paperwork-gtk/src/paperwork_gtk/cmd/install.py
+@@ -19,6 +19,8 @@ ICON_SIZES = [
+     16, 22, 24, 30, 32, 36, 42, 48, 50, 64, 72, 96, 100, 128, 150, 160,
+     192, 256, 512
+ ]
++for _size in (30, 50, 100, 150, 160):
++    ICON_SIZES.remove(_size)
+ 
+ 
+ class Plugin(openpaperwork_core.PluginBase):
+-- 
+2.45.2
+

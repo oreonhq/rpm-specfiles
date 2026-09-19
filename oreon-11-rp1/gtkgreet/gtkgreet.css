@@ -1,0 +1,16 @@
+/*
+ * Example CSS with colors from the current GTK theme.
+ */
+window, window.background {
+    background-color: transparent;
+}
+#body {
+  background: @theme_bg_color;
+  padding: 50px;
+  padding-top: 80px;
+  border-radius: 3px;
+  border-width: 0px;
+  /* Based on the CSD shadow style from Adwaita */
+  box-shadow: 0 3px 9px 1px alpha(black, 0.5),
+              0 0 0 1px alpha(@borders, 0.2);
+}

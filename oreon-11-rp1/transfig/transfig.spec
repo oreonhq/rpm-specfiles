@@ -6,7 +6,7 @@
 %global git_short_commit %(echo %{git_commit} | cut -c -7)
 
 Name:           transfig
-Version:        3.2.9
+Version:        3.2.9a
 Release:        %autorelease
 Epoch:          1
 Summary:        Utility for converting FIG files (made by xfig) to other formats

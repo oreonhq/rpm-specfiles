@@ -1,0 +1,123 @@
+.TH ZENON-FORMAT "5" "2008-07" "David A. Wheeler" "User Commands"
+.SH NAME
+zenon-format \- Automated theorem prover for first-order classical logic format
+.SH DESCRIPTION
+.\" Add any additional description here
+.PP
+Zenon can use several input formats, including its own "Zenon" format.
+This document describes this "Zenon" format.
+.PP
+In the Zenon format,
+"#" and ";" introduce comments that continue to the end of the line.
+Identifiers begin with A-Z, a-z, or underscore; they may continue with
+0 or more of the characters A-Z, a-z, 0-9, underscore, and apostrophe.
+Strings are enclosed inside double-quote characters; they may not contain
+the double-quote character, control characters, or characters beyond 126.
+Whitespace is a token separator, but is otherwise ignored.
+Its syntax is as follows:
+.RS
+file:
+  | EOF
+  | phrase file
+
+phrase:
+  | DEF "(" IDENT ident_list ")" expr
+  | HYP int_opt hyp_name expr
+  | GOAL expr
+  | SIG IDENT "(" string_list ")" STRING
+  | INDSET IDENT "(" ident_list ")"
+
+expr:
+  | IDENT
+  | "(" IDENT expr_list ")"
+  | "(" NOT expr ")"
+  | "(" AND expr expr_list ")"
+  | "(" OR expr expr_list ")"
+  | "(" IMPLY expr expr_list ")"
+  | "(" RIMPLY expr expr_list ")"
+  | "(" EQUIV expr expr_list ")"
+  | "(" TRUE ")"
+  | TRUE
+  | "(" FALSE ")"
+  | FALSE
+  | "(" ALL mlambda ")"
+  | "(" EX mlambda ")"
+  | mlambda
+  | "(" TAU lambda ")"
+  | "(" "=" expr expr ")"
+  | "(" MATCH expr case_list ")"
+  | "(" LET id_expr_list_expr ")"
+
+expr_list:
+  | expr expr_list
+  | /* empty */
+
+lambda:
+  | "(" "(" IDENT STRING ")" expr ")"
+  | "(" "(" IDENT ")" expr ")"
+
+mlambda:
+  | "(" "(" ident_list STRING ")" expr ")"
+  | "(" "(" ident_list ")" expr ")"
+
+ident_list:
+  | /* empty */
+  | IDENT ident_list
+
+int_opt:
+  | /* empty */
+  | INT
+
+hyp_name:
+  | /* empty */
+  | STRING
+
+string_list:
+  | /* empty */
+  | STRING string_list
+
+case_list:
+  | /* empty */
+  | "(" IDENT ident_list ")" expr case_list
+
+id_expr_list_expr:
+  | expr
+  | IDENT expr id_expr_list_expr
+
+.RE
+.PP
+With the following token definitions:
+.RS
+ DEF "$def"
+ GOAL "$goal"
+ HYP "$hyp"
+ INDSET "$indset"
+ INDPROP "$indprop"
+ LET "$let"
+ MATCH "$match"
+ SIG "$sig"
+ NOT "-."
+ AND "/\\"
+ OR "\\/"
+ IMPLY "=>"
+ RIMPLY "<="
+ EQUIV "<=>"
+ TRUE "T."
+ FALSE "F."
+ ALL "A."
+ EX "E."
+ TAU "t."
+.RE
+
+.SH "SEE ALSO"
+.PP
+zenon(1)
+
+.SH AUTHOR
+.PP
+This man page was written by David A. Wheeler.
+.SH COPYRIGHT
+Zenon is released under the revised BSD license.
+This man page is released under both the revised BSD and MIT licenses
+(your choice).
+

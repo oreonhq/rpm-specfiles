@@ -1,0 +1,37 @@
+From f4bf4889c0dcfd1b92c3b632a3266b2004d60644 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 25 May 2022 16:26:14 -0400
+Subject: [PATCH] Replace using declaration with typedef
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fixes errors like:
+
+[...]/progress_display.hpp:17:28: error: using-declaration for non-member at class scope
+   17 |                 using std::uint64_t;
+      |                            ^~~~~~~~
+
+Additionally, name the typedef “uint64” instead of “uint64_t”, fixing
+errors like:
+
+[...]/progress_display.hpp:31:30: error: 'uint64' has not been declared
+   31 |                 void restart(uint64 expected_count)
+      |                              ^~~~~~
+---
+ cxxheaderonly/progress_display.hpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cxxheaderonly/progress_display.hpp b/cxxheaderonly/progress_display.hpp
+index acbf2eb..5752768 100644
+--- a/cxxheaderonly/progress_display.hpp
++++ b/cxxheaderonly/progress_display.hpp
+@@ -14,7 +14,7 @@ namespace cxxheaderonly {
+ 
+ 	class progress_display {
+ 	public:
+-		using std::uint64_t;
++		typedef std::uint64_t uint64;
+ 
+ 		explicit progress_display(uint64 expected_count, 
+ 										bool show_scale = true,

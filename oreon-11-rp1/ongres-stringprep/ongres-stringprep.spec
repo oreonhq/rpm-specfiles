@@ -1,7 +1,7 @@
 %global source0_hash ff4791d5d9d3b96f942b38b901b3053f20a141b3e51747430dd38762929b1798
 
 Name:           ongres-stringprep
-Version:        2.2
+Version:        2.4
 Release:        %autorelease
 Summary:        RFC 3454 Preparation of Internationalized Strings in pure Java
 License:        BSD-2-Clause
@@ -14,7 +14,7 @@ BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
 
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.2-3
+Obsoletes:      %{name}-javadoc < 2.4-3
 
 %description
 The stringprep protocol does not stand on its own; it has to be used by other

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+<id>vim-nerdtree</id>
+<extends>gvim.desktop</extends>
+<name>NERDTree</name>
+<summary>A tree explorer plugin for the editor Vim</summary>
+<url type="homepage">http://www.vim.org/scripts/script.php?script_id=1658</url>
+<metadata_license>CC0-1.0</metadata_license>
+<project_license>WTFPL</project_license>
+<updatecontact>v.ondruch@gmail.com</updatecontact>
+</component>

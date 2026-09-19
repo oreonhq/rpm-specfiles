@@ -1,0 +1,67 @@
+From 58541aa0f06b84f5a51676e951ba5b279f583199 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 15 Sep 2020 13:23:25 +0200
+Subject: [PATCH] Fix tests on indeed non-blocking UNIX sockets
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Perl c6439962c995d4d7052af9fb3f92da93c1584b84 commit
+(IO::Socket::UNIX: synchronize behavior with module) fixed setting
+a non-blocking mode for IO::Socket::UNIX handles.
+
+That triggered a synchonization mistake in
+t/64_pending_events_destroyed.t that exhibited as a hang:
+
+    t/63_events_readded.t ............ ok
+    # Test 1 got: "foobarfoobarfoobar" (t/64_pending_events_destroyed.t at line 84)
+    #   Expected: "foobar"
+    #  t/64_pending_events_destroyed.t line 84 is:             ok($buf, "foobar");
+    # Test 2 got: "foobarfoobarfoobar" (t/64_pending_events_destroyed.t at line 84 fail #2)
+    #   Expected: "foobar"
+
+When the socket became trully non-blocking, the client performed the first three
+cycles immeditely without waiting on the server's response and the
+disconnected and sleept for 0.5 seconds. Then the server read all
+three foobars in one lump (because stream UNIX socket coalesces
+adjacent messages), reported an test failure, and attempted to reply.
+But the reply failed on a broken pipe (the client had already closed
+the connection), and thus the server reset itself waiting on a new
+connection.
+
+After waking up, the client established a new connection
+and performed the three writes-reads and disconnected end exited. The
+server again read three messages as one and resorted to a next
+connection. But there was no next connection, because the client
+finished.
+
+This patch fixes the test by addding a sleep in the client between
+writing and reading. This gives enough time to the server to process
+the messages.
+
+Of course this is not a proper fix, because if a process scheduler
+becomes uneven (e.g. on a heavily loaded machine), the race conditions
+will emerge again. But I consider by fix good enough for now, because
+the test has already used a sleep after a client disconnect.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1876460
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/64_pending_events_destroyed.t | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/t/64_pending_events_destroyed.t b/t/64_pending_events_destroyed.t
+index 7b90f42..265fd34 100644
+--- a/t/64_pending_events_destroyed.t
++++ b/t/64_pending_events_destroyed.t
+@@ -35,6 +35,7 @@ unless ($pid) {
+ 	
+         for (1..3) {
+             $real_client->syswrite("foobar");
++            select undef, undef, undef, 0.5;
+             my $read = $real_client->sysread(my $buf, 1024);
+         }
+         $real_client->close;
+-- 
+2.25.4
+

@@ -1,0 +1,180 @@
+diff -uNr widelands-1.3.orig/src/commands/cmd_queue.h widelands-1.3/src/commands/cmd_queue.h
+--- widelands-1.3.orig/src/commands/cmd_queue.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/commands/cmd_queue.h	2025-12-21 13:22:54.968000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef WL_COMMANDS_CMD_QUEUE_H
+ #define WL_COMMANDS_CMD_QUEUE_H
+ 
++#include <cstdint>
+ #include <queue>
+ 
+ #include "commands/command.h"
+diff -uNr widelands-1.3.orig/src/io/filesystem/zip_filesystem.h widelands-1.3/src/io/filesystem/zip_filesystem.h
+--- widelands-1.3.orig/src/io/filesystem/zip_filesystem.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/io/filesystem/zip_filesystem.h	2025-12-21 13:21:40.240000000 +0100
+@@ -23,6 +23,7 @@
+ 
+ #include <unzip.h>
+ #include <zip.h>
++#include <zlib.h>
+ 
+ #include "io/filesystem/filesystem.h"
+ #include "io/streamread.h"
+diff -uNr widelands-1.3.orig/src/logic/addons.h widelands-1.3/src/logic/addons.h
+--- widelands-1.3.orig/src/logic/addons.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/addons.h	2025-12-21 13:22:00.559000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef WL_LOGIC_ADDONS_H
+ #define WL_LOGIC_ADDONS_H
+ 
++#include <cstdint>
+ #include <ctime>
+ #include <functional>
+ #include <map>
+diff -uNr widelands-1.3.orig/src/logic/ai_dna_handler.h widelands-1.3/src/logic/ai_dna_handler.h
+--- widelands-1.3.orig/src/logic/ai_dna_handler.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/ai_dna_handler.h	2025-12-21 13:22:21.467000000 +0100
+@@ -19,6 +19,8 @@
+ #ifndef WL_LOGIC_AI_DNA_HANDLER_H
+ #define WL_LOGIC_AI_DNA_HANDLER_H
+ 
++#include <cstdint>
++
+ #include "logic/player.h"
+ 
+ namespace Widelands {
+diff -uNr widelands-1.3.orig/src/logic/game_controller.h widelands-1.3/src/logic/game_controller.h
+--- widelands-1.3.orig/src/logic/game_controller.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/game_controller.h	2025-12-21 13:23:11.328000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef WL_LOGIC_GAME_CONTROLLER_H
+ #define WL_LOGIC_GAME_CONTROLLER_H
+ 
++#include <cstdint>
+ #include <string>
+ 
+ #include "base/times.h"
+diff -uNr widelands-1.3.orig/src/logic/game.h widelands-1.3/src/logic/game.h
+--- widelands-1.3.orig/src/logic/game.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/game.h	2025-12-21 13:23:32.586000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef WL_LOGIC_GAME_H
+ #define WL_LOGIC_GAME_H
+ 
++#include <cstdint>
+ #include <memory>
+ 
+ #include "base/crypto.h"
+diff -uNr widelands-1.3.orig/src/logic/game_settings.h widelands-1.3/src/logic/game_settings.h
+--- widelands-1.3.orig/src/logic/game_settings.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/game_settings.h	2025-12-21 13:23:53.751000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef WL_LOGIC_GAME_SETTINGS_H
+ #define WL_LOGIC_GAME_SETTINGS_H
+ 
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ 
+diff -uNr widelands-1.3.orig/src/logic/mapastar.h widelands-1.3/src/logic/mapastar.h
+--- widelands-1.3.orig/src/logic/mapastar.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/mapastar.h	2025-12-21 13:24:10.835000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef WL_LOGIC_MAPASTAR_H
+ #define WL_LOGIC_MAPASTAR_H
+ 
++#include <cstdint>
+ #include <memory>
+ 
+ #include "logic/map.h"
+diff -uNr widelands-1.3.orig/src/logic/map.h widelands-1.3/src/logic/map.h
+--- widelands-1.3.orig/src/logic/map.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/map.h	2025-12-21 13:24:25.286000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef WL_LOGIC_MAP_H
+ #define WL_LOGIC_MAP_H
+ 
++#include <cstdint>
+ #include <map>
+ #include <memory>
+ #include <optional>
+diff -uNr widelands-1.3.orig/src/logic/maphollowregion.h widelands-1.3/src/logic/maphollowregion.h
+--- widelands-1.3.orig/src/logic/maphollowregion.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/maphollowregion.h	2025-12-21 13:24:38.671000000 +0100
+@@ -19,6 +19,8 @@
+ #ifndef WL_LOGIC_MAPHOLLOWREGION_H
+ #define WL_LOGIC_MAPHOLLOWREGION_H
+ 
++#include <cstdint>
++
+ #include "logic/map.h"
+ 
+ namespace Widelands {
+diff -uNr widelands-1.3.orig/src/logic/message_queue.h widelands-1.3/src/logic/message_queue.h
+--- widelands-1.3.orig/src/logic/message_queue.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/message_queue.h	2025-12-21 13:24:53.770000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef WL_LOGIC_MESSAGE_QUEUE_H
+ #define WL_LOGIC_MESSAGE_QUEUE_H
+ 
++#include <cstdint>
+ #include <cassert>
+ #include <memory>
+ 
+diff -uNr widelands-1.3.orig/src/logic/pathfield.h widelands-1.3/src/logic/pathfield.h
+--- widelands-1.3.orig/src/logic/pathfield.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/pathfield.h	2025-12-21 13:25:10.868000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef WL_LOGIC_PATHFIELD_H
+ #define WL_LOGIC_PATHFIELD_H
+ 
++#include <cstdint>
+ #include <memory>
+ 
+ #include "logic/cookie_priority_queue.h"
+diff -uNr widelands-1.3.orig/src/logic/player.h widelands-1.3/src/logic/player.h
+--- widelands-1.3.orig/src/logic/player.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/player.h	2025-12-21 13:27:20.228000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef WL_LOGIC_PLAYER_H
+ #define WL_LOGIC_PLAYER_H
+ 
++#include <cstdint>
+ #include <atomic>
+ #include <memory>
+ #include <set>
+diff -uNr widelands-1.3.orig/src/logic/replay_game_controller.h widelands-1.3/src/logic/replay_game_controller.h
+--- widelands-1.3.orig/src/logic/replay_game_controller.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/replay_game_controller.h	2025-12-21 13:28:10.806000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef WL_LOGIC_REPLAY_GAME_CONTROLLER_H
+ #define WL_LOGIC_REPLAY_GAME_CONTROLLER_H
+ 
++#include <cstdint>
+ #include <memory>
+ 
+ #include "commands/command.h"
+diff -uNr widelands-1.3.orig/src/logic/single_player_game_controller.h widelands-1.3/src/logic/single_player_game_controller.h
+--- widelands-1.3.orig/src/logic/single_player_game_controller.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/single_player_game_controller.h	2025-12-21 13:28:30.527000000 +0100
+@@ -19,6 +19,8 @@
+ #ifndef WL_LOGIC_SINGLE_PLAYER_GAME_CONTROLLER_H
+ #define WL_LOGIC_SINGLE_PLAYER_GAME_CONTROLLER_H
+ 
++#include <cstdint>
++
+ #include "ai/computer_player.h"
+ #include "logic/game_controller.h"
+ 
+diff -uNr widelands-1.3.orig/src/logic/single_player_game_settings_provider.h widelands-1.3/src/logic/single_player_game_settings_provider.h
+--- widelands-1.3.orig/src/logic/single_player_game_settings_provider.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/single_player_game_settings_provider.h	2025-12-21 13:28:46.109000000 +0100
+@@ -19,6 +19,8 @@
+ #ifndef WL_LOGIC_SINGLE_PLAYER_GAME_SETTINGS_PROVIDER_H
+ #define WL_LOGIC_SINGLE_PLAYER_GAME_SETTINGS_PROVIDER_H
+ 
++#include <cstdint>
++
+ #include "logic/game_settings.h"
+ 
+ /**

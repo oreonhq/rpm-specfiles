@@ -1,0 +1,248 @@
+diff -r d9e5cb896d4e -r 07c91575e565 src/panocanvas.cpp
+--- a/src/panocanvas.cpp	Fri Jan 11 17:43:59 2019 +0000
++++ b/src/panocanvas.cpp	Fri Jan 11 17:45:43 2019 +0000
+@@ -41,12 +41,20 @@
+     
+ BEGIN_EVENT_TABLE(panoCanvas, wxGLCanvas)
+   EVT_PAINT(panoCanvas::OnPaint)
++#if wxCHECK_VERSION(3,0,0)
++  EVT_SIZE (panoCanvas::resized)
++#else //wxCHECK_VERSION(3,0,0)
+   EVT_SIZE (panoCanvas::OnSize)
++#endif //wxCHECK_VERSION(3,0,0)
+   EVT_ERASE_BACKGROUND(panoCanvas::OnEraseBackground)
+ END_EVENT_TABLE()
+ 
+ panoCanvas::panoCanvas(wxWindow *parent, int id, const wxPoint &position, const wxSize &size) :
++#if wxCHECK_VERSION(3,0,0)
++wxGLCanvas(parent,id,0,position,size),
++#else //wxCHECK_VERSION(3,0,0)
+ wxGLCanvas(parent,id,position,size),
++#endif //wxCHECK_VERSION(3,0,0)
+ m_position(0.0,0.0,50.0),
+ m_aspectratio(size.GetWidth()/(double) size.GetHeight()),
+ m_initialized(false),
+@@ -56,6 +64,9 @@
+                     CAngleRange( -m_position.getFov()              / 2.0, m_position.getFov()               / 2.0),
+                     CAngleRange(                       0.0,                     180.0 )),
+ m_imageboundaries(CPanRange(-180.0,180.0),CAngleRange(-90.0,90.0),CAngleRange(0.0,180.0)),
++#if wxCHECK_VERSION(3,0,0)
++m_context(new wxGLContext(this)),
++#endif //wxCHECK_VERSION(3,0,0)
+ m_divisions(128)
+ {
+   for(int i=0;i<16;++i)
+@@ -68,24 +79,40 @@
+ {
+   if(m_hasimage)
+     deletePanorama();
++#if wxCHECK_VERSION(3,0,0)
++  delete m_context;
++#endif //wxCHECK_VERSION(3,0,0)
+ }
+ 
+ void panoCanvas::OnEraseBackground(wxEraseEvent& event)
+ {
+ }
+ 
++#if wxCHECK_VERSION(3,0,0)
++void panoCanvas::resized(wxSizeEvent &event)
++#else //wxCHECK_VERSION(3,0,0)
+ void panoCanvas::OnSize(wxSizeEvent &event)
++#endif //wxCHECK_VERSION(3,0,0)
+ {
++#if !wxCHECK_VERSION(3,0,0)
+   wxGLCanvas::OnSize(event);
++#endif //!wxCHECK_VERSION(3,0,0)
+ 
+   int w,h;
+   GetClientSize(&w,&h);
++#if wxCHECK_VERSION(3,0,0)
++  if (GetXWindow()) SetCurrent(*m_context);
++#else //wxCHECK_VERSION(3,0,0)
+   SetCurrent();
++#endif //wxCHECK_VERSION(3,0,0)
+ 
+ 
+   glViewport(0,0,(GLint) w, (GLint) h);
+   m_aspectratio = (GLdouble) w/(GLdouble) h;
+   m_winsize = wxSize(w,h);
++#if wxCHECK_VERSION(3,0,0)
++  Refresh();
++#endif //wxCHECK_VERSION(3,0,0)
+ }
+ 
+ void panoCanvas::OnPaint(wxPaintEvent &event)
+@@ -93,7 +120,11 @@
+   /* must always be here */
+   wxPaintDC dc(this);
+ 
++#if wxCHECK_VERSION(3,0,0)
++  SetCurrent(*m_context);
++#else //wxCHECK_VERSION(3,0,0)
+   SetCurrent();
++#endif //wxCHECK_VERSION(3,0,0)
+ 
+   if(!m_initialized){
+     initGL();
+@@ -125,7 +156,11 @@
+ 
+ void panoCanvas::deletePanorama()
+ {
++#if wxCHECK_VERSION(3,0,0)
++  SetCurrent(*m_context);
++#else //wxCHECK_VERSION(3,0,0)
+   SetCurrent();
++#endif //wxCHECK_VERSION(3,0,0)
+   glDeleteTextures(m_numOfTexPatches.x*m_numOfTexPatches.y,m_textures);
+   m_hasimage = false;
+   delete [] m_viewableTexPatches;
+diff -r d9e5cb896d4e -r 07c91575e565 src/panocanvas.h
+--- a/src/panocanvas.h	Fri Jan 11 17:43:59 2019 +0000
++++ b/src/panocanvas.h	Fri Jan 11 17:45:43 2019 +0000
+@@ -148,7 +148,11 @@
+   panoCanvas(wxWindow *parent, int id, const wxPoint &position=wxDefaultPosition, const wxSize &size=wxDefaultSize);
+   virtual ~panoCanvas();
+   void OnPaint(wxPaintEvent &event);
++#if wxCHECK_VERSION(3,0,0)
++  void resized(wxSizeEvent &event);
++#else //wxCHECK_VERSION(3,0,0)
+   void OnSize(wxSizeEvent &event);
++#endif //wxCHECK_VERSION(3,0,0)
+   void OnEraseBackground(wxEraseEvent& event);
+ 
+   CBoundaries calculateViewBoundaries(const CPosition &offset = CPosition());
+@@ -198,6 +202,9 @@
+   CBoundaries m_currentboundaries;
+   CBoundaries m_imageboundaries;
+   bool     m_initialized;
++#if wxCHECK_VERSION(3,0,0)
++  wxGLContext *m_context;
++#endif //wxCHECK_VERSION(3,0,0)
+   DECLARE_EVENT_TABLE();
+ };
+ 
+diff -r d9e5cb896d4e -r 07c91575e565 src/panoframe.cpp
+--- a/src/panoframe.cpp	Fri Jan 11 17:43:59 2019 +0000
++++ b/src/panoframe.cpp	Fri Jan 11 17:45:43 2019 +0000
+@@ -136,7 +136,13 @@
+ PNM files (*.pnm)|*.pnm|\
+ TIFF files (*.tif)|*.tif|\
+ XPM files (*.xpm)|*.xpm|\
+-All files (*.*)|*.*"),wxOPEN|wxFILE_MUST_EXIST);
++All files (*.*)|*.*"),
++#if wxCHECK_VERSION(3,0,0)
++    wxFD_OPEN|wxFD_FILE_MUST_EXIST
++#else //wxCHECK_VERSION(3,0,0)
++    wxOPEN|wxFILE_MUST_EXIST
++#endif //wxCHECK_VERSION(3,0,0)
++  );
+   if (imagename !=wxT(""))
+     openImage(imagename);
+ }
+@@ -153,7 +159,13 @@
+ 
+ void panoFrame::OnOpenProject(wxCommandEvent &event)
+ {
+-  wxString filename = wxFileSelector(_("Open Project"),wxEmptyString,wxEmptyString,wxT("paf"),_("Panorama files (*.paf)|*.paf|All files (*.*)|*.*"),wxOPEN|wxFILE_MUST_EXIST);
++  wxString filename = wxFileSelector(_("Open Project"),wxEmptyString,wxEmptyString,wxT("paf"),_("Panorama files (*.paf)|*.paf|All files (*.*)|*.*"),
++#if wxCHECK_VERSION(3,0,0)
++    wxFD_OPEN|wxFD_FILE_MUST_EXIST
++#else //wxCHECK_VERSION(3,0,0)
++    wxOPEN|wxFILE_MUST_EXIST
++#endif //wxCHECK_VERSION(3,0,0)
++  );
+   if (filename !=wxT("")){
+     openProject(filename);
+   }
+@@ -292,7 +304,13 @@
+ 
+ void panoFrame::OnSaveProject(wxCommandEvent &event)
+ {
+-  wxString filename = wxFileSelector(_("Save Project"),wxEmptyString,wxEmptyString,wxT("paf"),_("Panorama files (*.paf)|*.paf|All files (*.*)|*.*"),wxOVERWRITE_PROMPT|wxSAVE);
++  wxString filename = wxFileSelector(_("Save Project"),wxEmptyString,wxEmptyString,wxT("paf"),_("Panorama files (*.paf)|*.paf|All files (*.*)|*.*"),
++#if wxCHECK_VERSION(3,0,0)
++    wxFD_OPEN|wxFD_FILE_MUST_EXIST
++#else //wxCHECK_VERSION(3,0,0)
++    wxOPEN|wxFILE_MUST_EXIST
++#endif //wxCHECK_VERSION(3,0,0)
++  );
+   if (filename != wxT("")){
+     if (wxFileExists(filename))
+       wxRemoveFile(filename);
+diff -r d9e5cb896d4e -r 07c91575e565 src/panointeractivecanvas.cpp
+--- a/src/panointeractivecanvas.cpp	Fri Jan 11 17:43:59 2019 +0000
++++ b/src/panointeractivecanvas.cpp	Fri Jan 11 17:45:43 2019 +0000
+@@ -62,7 +62,11 @@
+   EVT_KEY_DOWN    (panoInteractiveCanvas::OnKeyDown       )
+   EVT_KEY_UP      (panoInteractiveCanvas::OnKeyUp         )
+   EVT_PAINT       (panoInteractiveCanvas::OnPaint         )
++#if wxCHECK_VERSION(3,0,0)
++  EVT_SIZE        (panoInteractiveCanvas::resized         )
++#else //wxCHECK_VERSION(3,0,0)
+   EVT_SIZE        (panoInteractiveCanvas::OnSize          )
++#endif //wxCHECK_VERSION(3,0,0)
+ END_EVENT_TABLE()
+ 
+ panoInteractiveCanvas::panoInteractiveCanvas(wxWindow* parent, int id, const wxPoint& position, const wxSize& size):
+@@ -96,13 +100,23 @@
+ {
+ }
+ 
++#if wxCHECK_VERSION(3,0,0)
++void panoInteractiveCanvas::resized(wxSizeEvent &event)
++#else //wxCHECK_VERSION(3,0,0)
+ void panoInteractiveCanvas::OnSize(wxSizeEvent &event)
++#endif //wxCHECK_VERSION(3,0,0)
+ {
++#if !wxCHECK_VERSION(3,0,0)
+   wxGLCanvas::OnSize(event);
++#endif //!wxCHECK_VERSION(3,0,0)
+ 
+   int w,h;
+   GetClientSize(&w,&h);
++#if wxCHECK_VERSION(3,0,0)
++  if (GetXWindow()) SetCurrent(*m_context);
++#else //wxCHECK_VERSION(3,0,0)
+   SetCurrent();
++#endif //wxCHECK_VERSION(3,0,0)
+ 
+   // TODO: opengl needs to be initialized here.
+   if(m_initialized){
+@@ -121,6 +135,9 @@
+ 
+   m_aspectratio = (GLdouble) w/(GLdouble) h;
+   m_winsize = wxSize(w,h);
++#if wxCHECK_VERSION(3,0,0)
++  Refresh();
++#endif //wxCHECK_VERSION(3,0,0)
+ }
+ 
+ void panoInteractiveCanvas::OnPaint(wxPaintEvent &event)
+@@ -128,7 +145,11 @@
+   /* must always be here */
+   wxPaintDC dc(this);
+ 
++#if wxCHECK_VERSION(3,0,0)
++  SetCurrent(*m_context);
++#else //wxCHECK_VERSION(3,0,0)
+   SetCurrent();
++#endif //wxCHECK_VERSION(3,0,0)
+ 
+   if(!m_initialized){
+     initGL();
+diff -r d9e5cb896d4e -r 07c91575e565 src/panointeractivecanvas.h
+--- a/src/panointeractivecanvas.h	Fri Jan 11 17:43:59 2019 +0000
++++ b/src/panointeractivecanvas.h	Fri Jan 11 17:45:43 2019 +0000
+@@ -39,7 +39,11 @@
+   void OnMouse(wxMouseEvent& event);
+   void OnTimer(wxTimerEvent &event);
+   void OnPaint(wxPaintEvent &event);
++#if wxCHECK_VERSION(3,0,0)
++  void resized(wxSizeEvent &event);
++#else //wxCHECK_VERSION(3,0,0)
+   void OnSize(wxSizeEvent &event);
++#endif //wxCHECK_VERSION(3,0,0)
+   void setBoundaryMode(int boundarymode);
+   void enableShowBoundaries(bool show);
+   void enableUseBoundaries(bool use);

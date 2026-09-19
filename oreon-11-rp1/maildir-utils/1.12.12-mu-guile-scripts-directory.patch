@@ -1,0 +1,13 @@
+diff --git a/guile/meson.build b/guile/meson.build
+index aceada3..4687edd 100644
+--- a/guile/meson.build
++++ b/guile/meson.build
+@@ -104,7 +104,7 @@ mu_guile_scripts=[
+   join_paths('scripts', 'find-dups.scm'),
+   join_paths('scripts', 'msgs-count.scm'),
+   join_paths('scripts', 'histogram.scm')]
+-mu_guile_script_dir=join_paths(datadir, 'mu', 'scripts')
++mu_guile_script_dir=join_paths(datadir, 'maildir-utils', 'scripts')
+ install_data(mu_guile_scripts, install_dir: mu_guile_script_dir)
+ 
+ guile_builddir=meson.current_build_dir()

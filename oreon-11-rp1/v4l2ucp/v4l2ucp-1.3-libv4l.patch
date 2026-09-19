@@ -1,0 +1,253 @@
+diff -up v4l2ucp-2.0.1/src/mainWindow.cpp.orig v4l2ucp-2.0.1/src/mainWindow.cpp
+--- v4l2ucp-2.0.1/src/mainWindow.cpp.orig	2009-10-30 13:27:28.000000000 +0100
++++ v4l2ucp-2.0.1/src/mainWindow.cpp	2009-11-10 12:06:43.000000000 +0100
+@@ -22,6 +22,7 @@
+ #include <sys/ioctl.h>
+ #include <cerrno>
+ #include <cstring>
++#include <libv4l2.h>
+ 
+ #include <QScrollArea>
+ #include <QFileDialog>
+@@ -114,7 +115,7 @@ void MainWindow::fileOpen()
+ 
+ MainWindow *MainWindow::openFile(const char *fileName)
+ {
+-    int fd = open(fileName, O_RDWR, 0);
++    int fd = v4l2_open(fileName, O_RDWR, 0);
+     if(fd < 0) {
+         QString msg;
+ 	msg.sprintf("Unable to open file %s\n%s", fileName, strerror(errno));
+@@ -123,7 +124,7 @@ MainWindow *MainWindow::openFile(const c
+     }
+     
+     struct v4l2_capability cap;
+-    if(ioctl(fd, VIDIOC_QUERYCAP, &cap) == -1) {
++    if(v4l2_ioctl(fd, VIDIOC_QUERYCAP, &cap) == -1) {
+         QString msg;
+ 	msg.sprintf("%s is not a V4L2 device", fileName);
+ 	QMessageBox::warning(NULL, "v4l2ucp: Not a V4L2 device", msg, "OK");
+@@ -197,11 +198,11 @@ MainWindow *MainWindow::openFile(const c
+ #ifdef V4L2_CTRL_FLAG_NEXT_CTRL
+     /* Try the extended control API first */
+     ctrl.id = V4L2_CTRL_FLAG_NEXT_CTRL;
+-    if(0 == ioctl (fd, VIDIOC_QUERYCTRL, &ctrl)) {
++    if(0 == v4l2_ioctl (fd, VIDIOC_QUERYCTRL, &ctrl)) {
+ 	do {
+ 		mw->add_control(ctrl, fd, grid, gridLayout);
+ 		ctrl.id |= V4L2_CTRL_FLAG_NEXT_CTRL;
+-	} while(0 == ioctl (fd, VIDIOC_QUERYCTRL, &ctrl));
++	} while(0 == v4l2_ioctl (fd, VIDIOC_QUERYCTRL, &ctrl));
+     } else
+ #endif
+     {
+@@ -209,7 +210,7 @@ MainWindow *MainWindow::openFile(const c
+ 	/* Check all the standard controls */
+ 	for(int i=V4L2_CID_BASE; i<V4L2_CID_LASTP1; i++) {
+             ctrl.id = i;
+-            if(ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == 0) {
++            if(v4l2_ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == 0) {
+         	mw->add_control(ctrl, fd, grid, gridLayout);
+             }
+ 	}
+@@ -217,7 +218,7 @@ MainWindow *MainWindow::openFile(const c
+ 	/* Check any custom controls */
+ 	for(int i=V4L2_CID_PRIVATE_BASE; ; i++) {
+             ctrl.id = i;
+-            if(ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == 0) {
++            if(v4l2_ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == 0) {
+         	mw->add_control(ctrl, fd, grid, gridLayout);
+             } else {
+         	break;
+@@ -233,7 +234,7 @@ MainWindow *MainWindow::openFile(const c
+ MainWindow::~MainWindow()
+ {
+     if(fd >= 0)
+-        ::close(fd);
++        v4l2_close(fd);
+ }
+ 
+ void MainWindow::add_control(struct v4l2_queryctrl &ctrl, int fd, QWidget *parent, QGridLayout *layout)
+diff -up v4l2ucp-2.0.1/src/v4l2controls.cpp.orig v4l2ucp-2.0.1/src/v4l2controls.cpp
+--- v4l2ucp-2.0.1/src/v4l2controls.cpp.orig	2009-09-28 22:09:11.000000000 +0200
++++ v4l2ucp-2.0.1/src/v4l2controls.cpp	2009-11-10 12:07:42.000000000 +0100
+@@ -20,6 +20,7 @@
+ #include <sys/ioctl.h>
+ #include <cerrno>
+ #include <cstring>
++#include <libv4l2.h>
+ 
+ #include <QPushButton>
+ #include <QLabel>
+@@ -43,7 +44,7 @@ void V4L2Control::updateHardware()
+     struct v4l2_control c;
+     c.id = cid;
+     c.value = getValue();
+-    if(ioctl(fd, VIDIOC_S_CTRL, &c) == -1) {
++    if(v4l2_ioctl(fd, VIDIOC_S_CTRL, &c) == -1) {
+         QString msg;
+ 	msg.sprintf("Unable to set %s\n%s", name, strerror(errno));
+ 	QMessageBox::warning(this, "Unable to set control", msg, "OK");
+@@ -55,7 +56,7 @@ void V4L2Control::updateStatus()
+ {
+     struct v4l2_control c;
+     c.id = cid;
+-    if(ioctl(fd, VIDIOC_G_CTRL, &c) == -1) {
++    if(v4l2_ioctl(fd, VIDIOC_G_CTRL, &c) == -1) {
+         QString msg;
+ 	msg.sprintf("Unable to get %s\n%s", name,
+ 	            strerror(errno));
+@@ -66,7 +67,7 @@ void V4L2Control::updateStatus()
+     }
+     struct v4l2_queryctrl ctrl;
+     ctrl.id = cid;
+-    if(ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == -1) {
++    if(v4l2_ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == -1) {
+         QString msg;
+ 	msg.sprintf("Unable to get the status of %s\n%s", name,
+ 	            strerror(errno));
+@@ -213,7 +214,7 @@ V4L2MenuControl::V4L2MenuControl
+         struct v4l2_querymenu qm;
+         qm.id = ctrl.id;
+         qm.index = i;
+-        if(ioctl(fd, VIDIOC_QUERYMENU, &qm) == 0) {
++        if(v4l2_ioctl(fd, VIDIOC_QUERYMENU, &qm) == 0) {
+             cb->insertItem(i, (const char *)qm.name);
+         } else {
+             QString msg;
+@@ -261,7 +262,7 @@ void V4L2ButtonControl::updateStatus()
+ {
+     struct v4l2_queryctrl ctrl;
+     ctrl.id = cid;
+-    if(ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == -1) {
++    if(v4l2_ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == -1) {
+         QString msg;
+ 	msg.sprintf("Unable to get the status of %s\n%s", name,
+ 	            strerror(errno));
+diff -up v4l2ucp-2.0.1/src/v4l2ctrl.c.orig v4l2ucp-2.0.1/src/v4l2ctrl.c
+--- v4l2ucp-2.0.1/src/v4l2ctrl.c.orig	2009-08-20 12:00:03.000000000 +0200
++++ v4l2ucp-2.0.1/src/v4l2ctrl.c	2009-11-10 12:08:47.000000000 +0100
+@@ -27,6 +27,7 @@
+ #include <sys/types.h>
+ #include <linux/types.h>
+ #include <linux/videodev.h>
++#include <libv4l2.h>
+ 
+ #define FORMATW "%u:%31s:%d\n"
+ #define FORMATR "%u:%31c:%d\n"
+@@ -51,7 +52,7 @@ int do_save(int fd, FILE *file)
+ #ifdef V4L2_CTRL_FLAG_NEXT_CTRL
+     /* Try the extended control API first */
+     ctrl.id = V4L2_CTRL_FLAG_NEXT_CTRL;
+-    if(0 == ioctl (fd, VIDIOC_QUERYCTRL, &ctrl)) {
++    if(0 == v4l2_ioctl (fd, VIDIOC_QUERYCTRL, &ctrl)) {
+ 	do {
+ 	    c.id = ctrl.id;
+             ctrl.id |= V4L2_CTRL_FLAG_NEXT_CTRL;
+@@ -63,17 +64,17 @@ int do_save(int fd, FILE *file)
+                ctrl.type != V4L2_CTRL_TYPE_MENU) {
+                 continue;
+             }
+-            if(ioctl(fd, VIDIOC_G_CTRL, &c) == 0) {
++            if(v4l2_ioctl(fd, VIDIOC_G_CTRL, &c) == 0) {
+                 fprintf(file, FORMATW, c.id, ctrl.name, c.value);
+             }
+-	} while(0 == ioctl (fd, VIDIOC_QUERYCTRL, &ctrl));
++	} while(0 == v4l2_ioctl (fd, VIDIOC_QUERYCTRL, &ctrl));
+     } else
+ #endif
+     {
+         /* Check all the standard controls */
+         for(i=V4L2_CID_BASE; i<V4L2_CID_LASTP1; i++) {
+             ctrl.id = i;
+-            if(ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == 0) {
++            if(v4l2_ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == 0) {
+                 if(ctrl.flags & V4L2_CTRL_FLAG_DISABLED) {
+                     continue;
+                 }
+@@ -83,7 +84,7 @@ int do_save(int fd, FILE *file)
+                     continue;
+                 }
+                 c.id = i;
+-                if(ioctl(fd, VIDIOC_G_CTRL, &c) == 0) {
++                if(v4l2_ioctl(fd, VIDIOC_G_CTRL, &c) == 0) {
+                     fprintf(file, FORMATW, i, ctrl.name, c.value);
+                 }
+             }
+@@ -92,7 +93,7 @@ int do_save(int fd, FILE *file)
+         /* Check any custom controls */
+         for(i=V4L2_CID_PRIVATE_BASE; ; i++) {
+             ctrl.id = i;
+-            if(ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == 0) {
++            if(v4l2_ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == 0) {
+                 if(ctrl.flags & V4L2_CTRL_FLAG_DISABLED) {
+                     continue;
+                 }
+@@ -102,7 +103,7 @@ int do_save(int fd, FILE *file)
+                     continue;
+                 }
+                 c.id = i;
+-                if(ioctl(fd, VIDIOC_G_CTRL, &c) == 0) {
++                if(v4l2_ioctl(fd, VIDIOC_G_CTRL, &c) == 0) {
+                     fprintf(file, FORMATW, i, ctrl.name, c.value);
+                 }
+             } else {
+@@ -129,7 +130,7 @@ int do_load(int fd, FILE *file)
+             n++;
+         }
+         ctrl.id = id;
+-        if(ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == 0) {
++        if(v4l2_ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == 0) {
+             if(strcmp((char *)ctrl.name, n)) {
+                 fprintf(stderr, "Control name mismatch\n");
+                 return EXIT_FAILURE;
+@@ -148,7 +149,7 @@ int do_load(int fd, FILE *file)
+             
+             c.id = id;
+             c.value = value;
+-            if(ioctl(fd, VIDIOC_S_CTRL, &c) != 0) {
++            if(v4l2_ioctl(fd, VIDIOC_S_CTRL, &c) != 0) {
+                 fprintf(stderr, "Failed to set control \"%s\": %s\n",
+                         ctrl.name, strerror(errno));
+                 continue;
+@@ -199,7 +200,7 @@ int main(int argc, char **argv)
+         return EXIT_FAILURE;
+     }
+     
+-    fd = open(device, O_RDWR, 0);
++    fd = v4l2_open(device, O_RDWR, 0);
+     if(fd < 0) {
+         fprintf(stderr, "Unable to open %s: %s\n", device, strerror(errno));
+         return EXIT_FAILURE;
+@@ -214,7 +215,7 @@ int main(int argc, char **argv)
+     file = fopen(filename, mode);
+     if(!file) {
+         fprintf(stderr, "Unable to open %s: %s\n", filename, strerror(errno));
+-        close(fd);
++        v4l2_close(fd);
+         return EXIT_FAILURE;
+     }
+     
+@@ -225,7 +226,7 @@ int main(int argc, char **argv)
+     }
+     
+     fclose(file);
+-    close(fd);
++    v4l2_close(fd);
+     
+     return ret;
+ }
+diff -up v4l2ucp-2.0.1/src/CMakeLists.txt~ v4l2ucp-2.0.1/src/CMakeLists.txt
+--- v4l2ucp-2.0.1/src/CMakeLists.txt~	2009-10-30 13:25:43.000000000 +0100
++++ v4l2ucp-2.0.1/src/CMakeLists.txt	2009-11-10 12:12:05.000000000 +0100
+@@ -8,8 +8,9 @@ qt4_add_resources(RC_SOURCES ${RCS})
+ include_directories(${CMAKE_BINARY_DIR}/src)
+ 
+ add_executable(v4l2ucp ${SOURCES} ${MOC_SOURCES} ${UI_HEADERS} ${RC_SOURCES})
+-target_link_libraries(v4l2ucp ${QT_LIBRARIES})
++target_link_libraries(v4l2ucp ${QT_LIBRARIES} -lv4l2)
+ 
+ add_executable(v4l2ctrl v4l2ctrl.c)
++target_link_libraries(v4l2ctrl -lv4l2)
+ 
+ install(TARGETS v4l2ucp v4l2ctrl DESTINATION bin)

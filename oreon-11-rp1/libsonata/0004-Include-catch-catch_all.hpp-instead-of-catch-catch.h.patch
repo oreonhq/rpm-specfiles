@@ -1,0 +1,90 @@
+From 5d43040fa9f5357a35276f7dc951ef9272d0fbfe Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Mon, 3 Feb 2025 11:55:30 -0500
+Subject: [PATCH 4/5] Include <catch/catch_all.hpp> instead of
+ <catch/catch.hpp>
+
+---
+ tests/main.cpp               | 2 +-
+ tests/test_config.cpp        | 2 +-
+ tests/test_edges.cpp         | 2 +-
+ tests/test_node_sets.cpp     | 2 +-
+ tests/test_nodes.cpp         | 2 +-
+ tests/test_report_reader.cpp | 2 +-
+ tests/test_selection.cpp     | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/tests/main.cpp b/tests/main.cpp
+index 92476fa..4967c0e 100644
+--- a/tests/main.cpp
++++ b/tests/main.cpp
+@@ -1,5 +1,5 @@
+ #define CATCH_CONFIG_MAIN
+-#include <catch2/catch.hpp>
++#include <catch2/catch_all.hpp>
+ 
+ #include <bbp/sonata/common.h>
+ 
+diff --git a/tests/test_config.cpp b/tests/test_config.cpp
+index ef8e62a..d65ac55 100644
+--- a/tests/test_config.cpp
++++ b/tests/test_config.cpp
+@@ -1,4 +1,4 @@
+-#include <catch2/catch.hpp>
++#include <catch2/catch_all.hpp>
+ 
+ #include <nlohmann/json.hpp>
+ 
+diff --git a/tests/test_edges.cpp b/tests/test_edges.cpp
+index d776e3a..2f8af74 100644
+--- a/tests/test_edges.cpp
++++ b/tests/test_edges.cpp
+@@ -1,4 +1,4 @@
+-#include <catch2/catch.hpp>
++#include <catch2/catch_all.hpp>
+ 
+ #include <bbp/sonata/edges.h>
+ 
+diff --git a/tests/test_node_sets.cpp b/tests/test_node_sets.cpp
+index e427775..53715d2 100644
+--- a/tests/test_node_sets.cpp
++++ b/tests/test_node_sets.cpp
+@@ -1,4 +1,4 @@
+-#include <catch2/catch.hpp>
++#include <catch2/catch_all.hpp>
+ 
+ #include <bbp/sonata/node_sets.h>
+ #include <bbp/sonata/nodes.h>
+diff --git a/tests/test_nodes.cpp b/tests/test_nodes.cpp
+index 3f40d44..f9e7c6b 100644
+--- a/tests/test_nodes.cpp
++++ b/tests/test_nodes.cpp
+@@ -1,4 +1,4 @@
+-#include <catch2/catch.hpp>
++#include <catch2/catch_all.hpp>
+ 
+ #include <bbp/sonata/nodes.h>
+ 
+diff --git a/tests/test_report_reader.cpp b/tests/test_report_reader.cpp
+index 5acdf84..60c1c90 100644
+--- a/tests/test_report_reader.cpp
++++ b/tests/test_report_reader.cpp
+@@ -1,4 +1,4 @@
+-#include <catch2/catch.hpp>
++#include <catch2/catch_all.hpp>
+ 
+ #include <bbp/sonata/report_reader.h>
+ 
+diff --git a/tests/test_selection.cpp b/tests/test_selection.cpp
+index 118e657..d83dd71 100644
+--- a/tests/test_selection.cpp
++++ b/tests/test_selection.cpp
+@@ -1,4 +1,4 @@
+-#include <catch2/catch.hpp>
++#include <catch2/catch_all.hpp>
+ 
+ #include <bbp/sonata/population.h>
+ 
+-- 
+2.48.1
+

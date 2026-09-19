@@ -1,0 +1,118 @@
+.TH LUMINANCE\-HDR "1" "April 2021" "" "User Commands"
+.SH NAME
+luminance\-hdr\-cli \- LuminanceHDR GUI launcher
+.SH SYNOPSIS
+.B luminance\-hdr
+.SH DESCRIPTION
+.P
+Luminance HDR is a graphical user interface (based on the Qt5 toolkit) that
+provides a complete workflow for HDR imaging.
+.P
+Supported HDR formats:
+.RS +7n
+.IP \(bu 2n
+OpenEXR (extension: 
+.BR exr )
+.IP \(bu 2n
+Radiance RGBE (extension:
+.BR hdr )
+.IP \(bu 2n
+Tiff formats: 16bit, 32bit (float) and LogLuv (extension:
+.BR tiff )
+.IP \(bu 2n
+Raw image formats (extension: various)
+.IP \(bu 2n
+PFS native format (extension: 
+.BR pfs )
+.RE
+.P
+Supported LDR formats:
+.RS +7n
+.IP \(bu 2n
+JPEG, PNG, PPM, PBM, TIFF, FITS
+.RE
+.P
+Supported features:
+.RS +7n
+.IP \(bu 2n
+Create an HDR file from a set of images (JPEG, TIFF 8bit and 16bit, RAW) of
+the same scene taken at different exposure settings
+.IP \(bu 2n
+Save and load HDR files
+.IP \(bu 2n
+Rotate and resize HDR files
+.IP \(bu 2n
+Tonemap HDR images
+.IP \(bu 2n
+Projective Transformations
+.IP \(bu 2n
+Copy EXIF data between sets of images
+.IP \(bu 2n
+Supports internationalization
+.RE
+.P
+Raw image formats are supported \(en and treated as HDR \(en thanks to LibRAW.
+.P
+The code is in part based on the existing open source packages:
+.RS +7n
+.IP \(bu 2n
+\(lqpfstools\(rq, \(lqpfstmo\(rq and \(lqpfscalibration\(rq by Grzegorz
+Krawczyk and Rafal Mantiuk
+.IP \(bu 2n
+\(lqqpfstmo\(rq, by Nicholas Phillips.
+.RE
+.P
+Without their contribution all of this would have not been possible.
+.SH "SEE\ ALSO"
+.BR luminance\-hdr\-cli (1)
+.TP
+.I pfstools
+.BR pfsabsolute (1),
+.BR pfscat (1),
+.BR pfsclamp (1),
+.BR pfscolortransform (1),
+.BR pfscut (1),
+.BR pfsdisplayfunction (1),
+.BR pfsextractchannels (1),
+.BR pfsflip (1),
+.BR pfsgamma (1),
+.BR pfsin (1),
+.BR pfsindcraw (1),
+.BR pfsinpfm (1),
+.BR pfsinppm (1),
+.BR pfsinrgbe (1),
+.BR pfsintiff (1),
+.BR pfsinyuv (1),
+.BR pfsout (1),
+.BR pfsouthdrhtml (1),
+.BR pfsoutpfm (1),
+.BR pfsoutppm (1),
+.BR pfsoutrgbe (1),
+.BR pfsouttiff (1),
+.BR pfsoutyuv (1),
+.BR pfspad (1),
+.BR pfspanoramic (1),
+.BR pfsretime (1),
+.BR pfsrotate (1),
+.BR pfssize (1),
+.BR pfstag (1)
+.TP
+.I pfstmo
+.BR pfstmo_drago03 (1),
+.BR pfstmo_durand02 (1),
+.BR pfstmo_fattal02 (1),
+.BR pfstmo_ferradans11 (1),
+.BR pfstmo_mai11 (1),
+.BR pfstmo_mantiuk06 (1),
+.BR pfstmo_mantiuk08 (1),
+.BR pfstmo_pattanaik00 (1),
+.BR pfstmo_reinhard02 (1),
+.BR pfstmo_reinhard05 (1)
+.TP
+.I pfscalibration
+.BR dcraw2hdrgen (1),
+.BR jpeg2hdrgen (1),
+.BR pfshdrcalibrate (1),
+.BR pfsinhdrgen (1),
+.BR pfsinme (1),
+.BR pfsplotresponse (1)

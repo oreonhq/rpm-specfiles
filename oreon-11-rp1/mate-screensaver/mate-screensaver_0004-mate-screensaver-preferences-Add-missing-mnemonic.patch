@@ -1,0 +1,25 @@
+From 925348c120b0d33854886610cbb4154770905210 Mon Sep 17 00:00:00 2001
+From: Colomban Wendling <cwendling@hypra.fr>
+Date: Wed, 15 May 2024 21:57:27 +0200
+Subject: [PATCH 4/6] mate-screensaver-preferences: Add missing mnemonic
+
+---
+ data/mate-screensaver-preferences.ui | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/mate-screensaver-preferences.ui b/data/mate-screensaver-preferences.ui
+index 62a4baf..a6918a8 100644
+--- a/data/mate-screensaver-preferences.ui
++++ b/data/mate-screensaver-preferences.ui
+@@ -440,7 +440,7 @@
+                                             <property name="can_focus">False</property>
+                                             <property name="halign">start</property>
+                                             <property name="hexpand">False</property>
+-                                            <property name="label" translatable="yes">Time before locking:</property>
++                                            <property name="label" translatable="yes">Time before l_ocking:</property>
+                                             <property name="use_underline">True</property>
+                                           </object>
+                                           <packing>
+-- 
+2.49.0
+

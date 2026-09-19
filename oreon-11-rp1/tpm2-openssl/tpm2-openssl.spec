@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:tpm2-openssl
-Version: 1.2.0
-Release: 8%{?candidate:.%{candidate}}%{?dist}
+Version: 1.3.0
+Release: 1%{?candidate:.%{candidate}}%{?dist}
 Summary: Provider for integration of TPM 2.0 to OpenSSL 3.0
 
 License: BSD-3-Clause

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Serguei's Destiny
+Comment=AGI adventure game
+Exec=sergueis-destiny-wrapper.sh
+Icon=sergueis-destiny.xpm
+Terminal=false
+Categories=Game;AdventureGame;

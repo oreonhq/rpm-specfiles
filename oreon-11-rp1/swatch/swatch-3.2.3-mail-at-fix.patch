@@ -1,0 +1,22 @@
+--- swatch-3.2.3/swatch.orig	2018-08-23 15:44:35.000000000 +0100
++++ swatch-3.2.3/swatch	2018-11-05 15:02:42.986515207 +0000
+@@ -577,14 +577,17 @@ 
+ 		 "write" => { 'sub_name' => "&Swatch::Actions::write_message", 'def_arg' => 'USERS' },
+ 		};
+ 
++  my $opt;
+   my %options;
+   my $have_opts = 0;
+ 
+   foreach my $v (split(/,/, $optstr)) {
+     if ($v =~ /(\w+)\s*=\s*"?(\S+[^"]*)/) {
+-      $options{uc $1} = $2;
++      $opt = uc($1);
++      $options{$opt} = $2;
++      $options{$opt} =~ s/@/\\@/g if ($key eq 'mail');
+     } else {
+-      my $opt = $v;
++      $opt = $v;
+       $opt =~ s/@/\\@/g;
+       $opt =~ s/^\s+//o;
+       $opt =~ s/^\s+$//o;

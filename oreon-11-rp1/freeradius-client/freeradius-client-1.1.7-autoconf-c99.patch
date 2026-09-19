@@ -1,0 +1,16 @@
+Add return type to main for autoconf check for C99 compliance.
+https://github.com/FreeRADIUS/freeradius-client/issues/113
+
+diff --git a/configure.in b/configure.in
+index 435e8ca..d1a4090 100644
+--- a/configure.in
++++ b/configure.in
+@@ -212,7 +212,7 @@ then
+ 	AC_TRY_RUN([
+ 	#include <sys/utsname.h>
+ 	
+-	main(int argc, char **argv)
++	int main(int argc, char **argv)
+ 	{
+ 		struct utsname uts;
+ 		uts.domainname[0] = '\0';

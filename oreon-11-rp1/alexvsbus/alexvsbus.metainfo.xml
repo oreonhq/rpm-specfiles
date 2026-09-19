@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+<id>alexvsbus.desktop</id>
+	<name>Alex vs Bus: The Race</name>
+	<project_license>GPL-3.0-only</project_license>
+
+	<developer>
+		<name>M374LX</name>
+	</developer>
+
+	<summary>Side-scrolling platform runner game</summary>
+
+	<description>
+		<p>
+			Alex vs Bus: The Race is a free and open source platform runner game in which Alex is just a man who depends on public transportation in a developing country and needs to run in order to catch the bus, or else he will have to wait an eternity for the next bus to come.
+		</p>
+		<p>Key features include:</p>
+		<ul>
+			<li>A finished game, complete with 13 levels across 3 different difficulties and an ending sequence.</li>
+			<li>Audio and visual style inspired by the 8-bit era, although the game is not bound to all of the technical limitations of the period.</li>
+			<li>Keyboard and gamepad supported as input devices.</li>
+			<li>A different cutscene when clearing each level.</li>
+			<li>Customizable screen size.</li>
+			<li>Scanlines visual effect.</li>
+		</ul>
+	</description>
+
+	<categories>
+		<category>Game</category>
+	</categories>
+
+	<launchable type="desktop-id">alexvsbus.desktop</launchable>
+
+	<requires>
+		<internet>offline-only</internet>
+	</requires>
+	<supports>
+		<control>keyboard</control>
+		<control>gamepad</control>
+	</supports>
+
+	<screenshots>
+		<screenshot type="default">
+			<image>https://raw.githubusercontent.com/M374LX/alexvsbus/refs/tags/2024.11.21.0/docs/img/screenshot1.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/M374LX/alexvsbus/refs/tags/2024.11.21.0/docs/img/screenshot2.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/M374LX/alexvsbus/refs/tags/2024.11.21.0/docs/img/screenshot3.png</image>
+		</screenshot>
+	</screenshots>
+
+	<url type="bugtracker">https://github.com/M374LX/alexvsbus/issues/</url>
+	<url type="vcs-browser">https://github.com/M374LX/alexvsbus/</url>
+
+	<metadata_license>0BSD</metadata_license>
+</component>

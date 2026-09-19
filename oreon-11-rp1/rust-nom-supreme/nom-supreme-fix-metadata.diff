@@ -1,0 +1,8 @@
+--- nom-supreme-0.8.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ nom-supreme-0.8.0/Cargo.toml	2024-09-25T21:03:28.471817+00:00
+@@ -35,4 +35,4 @@
+ version = ">=6.0.1, <8.0.0"
+ 
+ [dev-dependencies.cool_asserts]
+-version = "1.0.3"
++version = "2"

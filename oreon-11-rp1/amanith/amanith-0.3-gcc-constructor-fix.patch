@@ -1,0 +1,379 @@
+diff -up amanith/include/amanith/1d/gbeziercurve1d.h.constructor amanith/include/amanith/1d/gbeziercurve1d.h
+--- amanith/include/amanith/1d/gbeziercurve1d.h.constructor	2006-01-26 04:18:44.000000000 -0500
++++ amanith/include/amanith/1d/gbeziercurve1d.h	2011-06-29 13:52:39.913715303 -0400
+@@ -287,6 +287,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GBezierCurve1DProxy : public GElementProxy {
+ 	public:
++		GBezierCurve1DProxy() {}
+ 		//! Creates a new GBezierCurve1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GBezierCurve1D(Owner);
+diff -up amanith/include/amanith/1d/gbsplinecurve1d.h.constructor amanith/include/amanith/1d/gbsplinecurve1d.h
+--- amanith/include/amanith/1d/gbsplinecurve1d.h.constructor	2006-01-26 04:18:44.000000000 -0500
++++ amanith/include/amanith/1d/gbsplinecurve1d.h	2011-06-29 13:52:39.913715303 -0400
+@@ -524,6 +524,7 @@ N_{i,p}(u) = \frac{u - u_i}{u_{i+p} - u_
+ 	*/
+ 	class G_EXPORT GBSplineCurve1DProxy : public GElementProxy {
+ 	public:
++		GBSplineCurve1DProxy() {}
+ 		//! Creates a new GBSplineCurve1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GBSplineCurve1D(Owner);
+diff -up amanith/include/amanith/1d/gcurve1d.h.constructor amanith/include/amanith/1d/gcurve1d.h
+--- amanith/include/amanith/1d/gcurve1d.h.constructor	2006-01-26 04:18:44.000000000 -0500
++++ amanith/include/amanith/1d/gcurve1d.h	2011-06-29 13:52:39.914715290 -0400
+@@ -307,6 +307,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GCurve1DProxy : public GElementProxy {
+ 	public:
++		GCurve1DProxy() {}
+ 		//! Get class descriptor of elements type "provided" by this proxy.
+ 		const GClassID& ClassID() const {
+ 			return G_CURVE1D_CLASSID;
+diff -up amanith/include/amanith/1d/ghermitecurve1d.h.constructor amanith/include/amanith/1d/ghermitecurve1d.h
+--- amanith/include/amanith/1d/ghermitecurve1d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/1d/ghermitecurve1d.h	2011-06-29 13:52:39.914715290 -0400
+@@ -404,6 +404,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GHermiteCurve1DProxy : public GElementProxy {
+ 	public:
++		GHermiteCurve1DProxy() {}
+ 		//! Creates a new GHermiteCurve1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GHermiteCurve1D(Owner);
+diff -up amanith/include/amanith/1d/gmulticurve1d.h.constructor amanith/include/amanith/1d/gmulticurve1d.h
+--- amanith/include/amanith/1d/gmulticurve1d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/1d/gmulticurve1d.h	2011-06-29 13:52:39.915715277 -0400
+@@ -251,6 +251,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GMultiCurve1DProxy : public GElementProxy {
+ 	public:
++		GMultiCurve1DProxy() {}
+ 		//! Get class descriptor of elements type "provided" by this proxy.
+ 		const GClassID& ClassID() const {
+ 			return G_MULTICURVE1D_CLASSID;
+diff -up amanith/include/amanith/1d/gpolylinecurve1d.h.constructor amanith/include/amanith/1d/gpolylinecurve1d.h
+--- amanith/include/amanith/1d/gpolylinecurve1d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/1d/gpolylinecurve1d.h	2011-06-29 13:52:39.916715264 -0400
+@@ -304,6 +304,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GPolyLineCurve1DProxy : public GElementProxy {
+ 	public:
++		GPolyLineCurve1DProxy() {}
+ 		//! Creates a new GPolyLineCurve1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GPolyLineCurve1D(Owner);
+diff -up amanith/include/amanith/2d/ganimtrsnode2d.h.constructor amanith/include/amanith/2d/ganimtrsnode2d.h
+--- amanith/include/amanith/2d/ganimtrsnode2d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/2d/ganimtrsnode2d.h	2011-06-29 13:52:39.916715264 -0400
+@@ -238,6 +238,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GAnimTRSNode2DProxy : public GElementProxy {
+ 	public:
++		GAnimTRSNode2DProxy() {}
+ 		//! Creates a new GAnimTRSNode2D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GAnimTRSNode2D(Owner);
+diff -up amanith/include/amanith/2d/gbeziercurve2d.h.constructor amanith/include/amanith/2d/gbeziercurve2d.h
+--- amanith/include/amanith/2d/gbeziercurve2d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/2d/gbeziercurve2d.h	2011-06-29 13:52:39.917715251 -0400
+@@ -465,6 +465,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GBezierCurve2DProxy : public GElementProxy {
+ 	public:
++		GBezierCurve2DProxy() {}
+ 		//! Creates a new GBezierCurve2D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GBezierCurve2D(Owner);
+diff -up amanith/include/amanith/2d/gbsplinecurve2d.h.constructor amanith/include/amanith/2d/gbsplinecurve2d.h
+--- amanith/include/amanith/2d/gbsplinecurve2d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/2d/gbsplinecurve2d.h	2011-06-29 13:52:39.917715251 -0400
+@@ -617,6 +617,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GBSplineCurve2DProxy : public GElementProxy {
+ 	public:
++		GBSplineCurve2DProxy() {}
+ 		//! Creates a new GBSplineCurve2D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GBSplineCurve2D(Owner);
+diff -up amanith/include/amanith/2d/gcurve2d.h.constructor amanith/include/amanith/2d/gcurve2d.h
+--- amanith/include/amanith/2d/gcurve2d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/2d/gcurve2d.h	2011-06-29 13:52:39.918715238 -0400
+@@ -414,6 +414,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GCurve2DProxy : public GElementProxy {
+ 	public:
++		GCurve2DProxy() {}
+ 		//! Get class descriptor of elements type "provided" by this proxy.
+ 		const GClassID& ClassID() const {
+ 			return G_CURVE2D_CLASSID;
+diff -up amanith/include/amanith/2d/gellipsecurve2d.h.constructor amanith/include/amanith/2d/gellipsecurve2d.h
+--- amanith/include/amanith/2d/gellipsecurve2d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/2d/gellipsecurve2d.h	2011-06-29 13:52:39.918715238 -0400
+@@ -346,6 +346,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GEllipseCurve2DProxy : public GElementProxy {
+ 	public:
++		GEllipseCurve2DProxy() {}
+ 		//! Creates a new GEllipseCurve2D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GEllipseCurve2D(Owner);
+diff -up amanith/include/amanith/2d/gfont2d.h.constructor amanith/include/amanith/2d/gfont2d.h
+--- amanith/include/amanith/2d/gfont2d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/2d/gfont2d.h	2011-06-29 13:52:39.919715225 -0400
+@@ -807,6 +807,7 @@ Legend:  O on curve  + off curve
+ 
+ 	class G_EXPORT GFont2DProxy : public GElementProxy {
+ 	public:
++		GFont2DProxy() {}
+ 		//! Creates a new GFont2D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GFont2D(Owner);
+diff -up amanith/include/amanith/2d/ghermitecurve2d.h.constructor amanith/include/amanith/2d/ghermitecurve2d.h
+--- amanith/include/amanith/2d/ghermitecurve2d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/2d/ghermitecurve2d.h	2011-06-29 13:52:39.919715225 -0400
+@@ -510,6 +510,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GHermiteCurve2DProxy : public GElementProxy {
+ 	public:
++		GHermiteCurve2DProxy() {}
+ 		//! Creates a new GHermiteCurve2D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GHermiteCurve2D(Owner);
+diff -up amanith/include/amanith/2d/gmulticurve2d.h.constructor amanith/include/amanith/2d/gmulticurve2d.h
+--- amanith/include/amanith/2d/gmulticurve2d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/2d/gmulticurve2d.h	2011-06-29 13:52:39.919715225 -0400
+@@ -273,6 +273,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GMultiCurve2DProxy : public GElementProxy {
+ 	public:
++		GMultiCurve2DProxy() {}
+ 		//! Get class descriptor of elements type "provided" by this proxy.
+ 		const GClassID& ClassID() const {
+ 			return G_MULTICURVE2D_CLASSID;
+diff -up amanith/include/amanith/2d/gpath2d.h.constructor amanith/include/amanith/2d/gpath2d.h
+--- amanith/include/amanith/2d/gpath2d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/2d/gpath2d.h	2011-06-29 13:52:39.920715212 -0400
+@@ -581,6 +581,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GPath2DProxy : public GElementProxy {
+ 	public:
++		GPath2DProxy() {}
+ 		//! Creates a new GPath2D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GPath2D(Owner);
+diff -up amanith/include/amanith/2d/gpixelmap.h.constructor amanith/include/amanith/2d/gpixelmap.h
+--- amanith/include/amanith/2d/gpixelmap.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/2d/gpixelmap.h	2011-06-29 13:52:39.921715199 -0400
+@@ -821,6 +821,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GPixelMapProxy : public GElementProxy {
+ 	public:
++		GPixelMapProxy() {}
+ 		//! Creates a new GPixelMap instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GPixelMap(Owner);
+diff -up amanith/include/amanith/2d/gpolylinecurve2d.h.constructor amanith/include/amanith/2d/gpolylinecurve2d.h
+--- amanith/include/amanith/2d/gpolylinecurve2d.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/include/amanith/2d/gpolylinecurve2d.h	2011-06-29 13:52:39.921715199 -0400
+@@ -347,6 +347,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GPolyLineCurve2DProxy : public GElementProxy {
+ 	public:
++		GPolyLineCurve2DProxy() {}
+ 		//! Creates a new GPolyLineCurve2D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GPolyLineCurve2D(Owner);
+diff -up amanith/include/amanith/gelement.h.constructor amanith/include/amanith/gelement.h
+--- amanith/include/amanith/gelement.h.constructor	2006-01-26 04:18:44.000000000 -0500
++++ amanith/include/amanith/gelement.h	2011-06-29 13:52:39.922715186 -0400
+@@ -191,6 +191,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GElementProxy {
+ 	public:
++		GElementProxy() {}
+ 		//! Create a new element. Every derived class must implements this method.
+ 		virtual GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			if (!Owner)
+@@ -480,6 +481,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GAnimElementProxy : public GElementProxy {
+ 	public:
++		GAnimElementProxy() {}
+ 		//! Get class descriptor of elements type "provided" by this proxy.
+ 		const GClassID& ClassID() const {
+ 			return G_ANIMELEMENT_CLASSID;
+@@ -884,6 +886,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GPropertyProxy : public GElementProxy {
+ 	public:
++		GPropertyProxy() {}
+ 		//! Creates a new GProperty instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GProperty(Owner);
+diff -up amanith/include/amanith/gimpexp.h.constructor amanith/include/amanith/gimpexp.h
+--- amanith/include/amanith/gimpexp.h.constructor	2006-01-26 04:18:44.000000000 -0500
++++ amanith/include/amanith/gimpexp.h	2011-06-29 13:52:39.922715186 -0400
+@@ -218,6 +218,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GImpExpProxy : public GElementProxy {
+ 	public:
++		GImpExpProxy() {}
+ 		//! Get class descriptor of elements type "provided" by this proxy.
+ 		const GClassID& ClassID() const {
+ 			return G_IMPEXP_CLASSID;
+diff -up amanith/include/amanith/gkernel.h.constructor amanith/include/amanith/gkernel.h
+--- amanith/include/amanith/gkernel.h.constructor	2006-01-26 04:18:44.000000000 -0500
++++ amanith/include/amanith/gkernel.h	2011-06-29 13:52:39.922715186 -0400
+@@ -193,6 +193,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GKernelProxy : public GElementProxy {
+ 	public:
++		GKernelProxy() {}
+ 		//! Create a new GKernel class
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GKernel(Owner);
+diff -up amanith/include/amanith/gmultiproperty.h.constructor amanith/include/amanith/gmultiproperty.h
+--- amanith/include/amanith/gmultiproperty.h.constructor	2006-01-26 04:18:44.000000000 -0500
++++ amanith/include/amanith/gmultiproperty.h	2011-06-29 13:52:39.923715173 -0400
+@@ -108,6 +108,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GMultiProperty1DProxy : public GElementProxy {
+ 	public:
++		GMultiProperty1DProxy() {}
+ 		//! Get class descriptor of elements type "provided" by this proxy.
+ 		const GClassID& ClassID() const {
+ 			return G_MULTIPROPERTY1D_CLASSID;
+@@ -164,6 +165,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GTwoHermiteProperty1DProxy : public GElementProxy {
+ 	public:
++		GTwoHermiteProperty1DProxy() {}
+ 		//! Creates a new GTwoHermiteProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GTwoHermiteProperty1D(Owner);
+@@ -223,6 +225,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GThreeHermiteProperty1DProxy : public GElementProxy {
+ 	public:
++		GThreeHermiteProperty1DProxy() {}
+ 		//! Creates a new GThreeHermiteProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GThreeHermiteProperty1D(Owner);
+@@ -282,6 +285,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GFourHermiteProperty1DProxy : public GElementProxy {
+ 	public:
++		GFourHermiteProperty1DProxy() {}
+ 		//! Creates a new GFourHermiteProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GFourHermiteProperty1D(Owner);
+@@ -342,6 +346,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GTwoLinearProperty1DProxy : public GElementProxy {
+ 	public:
++		GTwoLinearProperty1DProxy() {}
+ 		//! Creates a new GTwoLinearProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GTwoLinearProperty1D(Owner);
+@@ -401,6 +406,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GThreeLinearProperty1DProxy : public GElementProxy {
+ 	public:
++		GThreeLinearProperty1DProxy() {}
+ 		//! Creates a new GThreeLinearProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GThreeLinearProperty1D(Owner);
+@@ -461,6 +467,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GFourLinearProperty1DProxy : public GElementProxy {
+ 	public:
++		GFourLinearProperty1DProxy() {}
+ 		//! Creates a new GFourLinearProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GFourLinearProperty1D(Owner);
+@@ -520,6 +527,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GTwoConstantProperty1DProxy : public GElementProxy {
+ 	public:
++		GTwoConstantProperty1DProxy() {}
+ 		//! Creates a new GTwoConstantProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GTwoConstantProperty1D(Owner);
+@@ -579,6 +587,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GThreeConstantProperty1DProxy : public GElementProxy {
+ 	public:
++		GThreeConstantProperty1DProxy() {}
+ 		//! Creates a new GThreeConstantProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GThreeConstantProperty1D(Owner);
+@@ -638,6 +647,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GFourConstantProperty1DProxy : public GElementProxy {
+ 	public:
++		GFourConstantProperty1DProxy() {}
+ 		//! Creates a new GFourConstantProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GFourConstantProperty1D(Owner);
+diff -up amanith/include/amanith/gproperty.h.constructor amanith/include/amanith/gproperty.h
+--- amanith/include/amanith/gproperty.h.constructor	2006-01-26 04:18:44.000000000 -0500
++++ amanith/include/amanith/gproperty.h	2011-06-29 13:52:39.924715160 -0400
+@@ -174,6 +174,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GHermiteProperty1DProxy : public GElementProxy {
+ 	public:
++		GHermiteProperty1DProxy() {}
+ 		//! Creates a new GHermiteProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GHermiteProperty1D(Owner);
+@@ -310,6 +311,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GLinearProperty1DProxy : public GElementProxy {
+ 	public:
++		GLinearProperty1DProxy() {}
+ 		//! Creates a new GLinearProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GLinearProperty1D(Owner);
+@@ -445,6 +447,7 @@ namespace Amanith {
+ 	*/
+ 	class G_EXPORT GConstantProperty1DProxy : public GElementProxy {
+ 	public:
++		GConstantProperty1DProxy() {}
+ 		//! Creates a new GLinearProperty1D instance
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GConstantProperty1D(Owner);
+diff -up amanith/plugins/fonts/gfontsimpexp.h.constructor amanith/plugins/fonts/gfontsimpexp.h
+--- amanith/plugins/fonts/gfontsimpexp.h.constructor	2011-06-29 13:53:00.686446700 -0400
++++ amanith/plugins/fonts/gfontsimpexp.h	2011-06-29 13:53:15.252258394 -0400
+@@ -80,6 +80,7 @@ namespace Amanith {
+ 	// *********************************************************************
+ 	class G_PLUGIN_EXPORT GFontsImpExpProxy : public GElementProxy {
+ 	public:
++		GFontsImpExpProxy() {}
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GFontsImpExp(Owner);
+ 		}
+diff -up amanith/plugins/jpeg/gjpegimpexp.h.constructor amanith/plugins/jpeg/gjpegimpexp.h
+--- amanith/plugins/jpeg/gjpegimpexp.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/plugins/jpeg/gjpegimpexp.h	2011-06-29 13:52:39.924715160 -0400
+@@ -81,6 +81,7 @@ namespace Amanith {
+ 	// *********************************************************************
+ 	class G_PLUGIN_EXPORT GJpegImpExpProxy : public GElementProxy {
+ 	public:
++		GJpegImpExpProxy() {}
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GJpegImpExp(Owner);
+ 		}
+diff -up amanith/plugins/png/gpngimpexp.h.constructor amanith/plugins/png/gpngimpexp.h
+--- amanith/plugins/png/gpngimpexp.h.constructor	2006-01-26 04:18:45.000000000 -0500
++++ amanith/plugins/png/gpngimpexp.h	2011-06-29 13:52:39.924715160 -0400
+@@ -84,6 +84,7 @@ namespace Amanith {
+ 	// *********************************************************************
+ 	class G_PLUGIN_EXPORT GPngImpExpProxy : public GElementProxy {
+ 	public:
++		GPngImpExpProxy() {}
+ 		GElement* CreateNew(const GElement* Owner = NULL) const {
+ 			return new GPngImpExp(Owner);
+ 		}

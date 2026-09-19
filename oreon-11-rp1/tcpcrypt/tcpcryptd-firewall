@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# use iptables manually
+if [ "$1" = "start" ]
+then
+	iptables -t raw -N tcpcrypt
+	iptables -t raw -A tcpcrypt -p tcp -m mark --mark 0x0/0x10 -j NFQUEUE --queue-num 666
+	iptables -t raw -I PREROUTING -j tcpcrypt
+
+	iptables -t mangle -N tcpcrypt
+	iptables -t mangle -A tcpcrypt -p tcp -m mark --mark 0x0/0x10 -j NFQUEUE --queue-num 666
+	iptables -t mangle -I POSTROUTING -j tcpcrypt
+ 
+	# launch `tcpcryptd` with `-x 0x10`
+fi
+if [ "$1" = "stop" ]
+then
+	iptables -t raw -F tcpcrypt
+	iptables -t raw -D PREROUTING -j tcpcrypt
+
+	iptables -t mangle -F tcpcrypt
+	iptables -t mangle -D PREROUTING -j tcpcrypt
+fi

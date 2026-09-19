@@ -1,0 +1,12 @@
+diff -rupN --no-dereference llvm-project-21.1.8.src/llvm/tools/llvm-shlib/CMakeLists.txt llvm-project-21.1.8.src-new/llvm/tools/llvm-shlib/CMakeLists.txt
+--- llvm-project-21.1.8.src/llvm/tools/llvm-shlib/CMakeLists.txt	2025-12-12 11:35:47.000000000 +0100
++++ llvm-project-21.1.8.src-new/llvm/tools/llvm-shlib/CMakeLists.txt	2025-12-27 19:49:10.823580252 +0100
+@@ -47,7 +47,7 @@ if(LLVM_BUILD_LLVM_DYLIB)
+     # if there are symbols that are marked explicitly as dllexport, we'd only
+     # export them and nothing else. Therefore, add --export-all-symbols to
+     # make sure we export all symbols despite potential dllexports.
+-    target_link_options(LLVM PRIVATE LINKER:--export-all-symbols)
++    #target_link_options(LLVM PRIVATE LINKER:--export-all-symbols)
+   endif()
+ 
+   list(REMOVE_DUPLICATES LIB_NAMES)

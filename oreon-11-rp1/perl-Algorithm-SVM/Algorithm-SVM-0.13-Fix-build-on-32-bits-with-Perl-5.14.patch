@@ -1,0 +1,28 @@
+From 3681ab37605bb25f8a9224758f8d697cdb894056 Mon Sep 17 00:00:00 2001
+From: Mathieu Bridon <bochecha@fedoraproject.org>
+Date: Thu, 20 Sep 2012 12:02:58 +0800
+Subject: [PATCH] Fix build on 32 bits with Perl >= 5.14
+
+https://rt.cpan.org/Public/Bug/Display.html?id=79754
+---
+ Makefile.PL |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index ecf843c..f1538a8 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1,8 +1,9 @@
+ use ExtUtils::MakeMaker;
++use Config;
+ 
+ $CC = 'g++';
+ 
+-%args = ('CCFLAGS' => '-Wall');
++%args = ('CCFLAGS' => "-Wall $Config{ccflags}");
+ 
+ if($^O eq 'cygwin') {
+   $args{'LDDLFLAGS'} = '-shared -L/usr/local/lib';
+-- 
+1.7.7.6
+

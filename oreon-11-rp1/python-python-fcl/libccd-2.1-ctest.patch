@@ -1,0 +1,75 @@
+diff -up ./CMakeLists.txt.ctest ./CMakeLists.txt
+--- ./CMakeLists.txt.ctest	2018-12-22 07:13:45.000000000 -0500
++++ ./CMakeLists.txt	2020-04-18 14:10:30.394989892 -0400
+@@ -9,7 +9,7 @@ endif()
+ project(libccd)
+ 
+ set(CCD_VERSION_MAJOR 2)
+-set(CCD_VERSION_MINOR 0)
++set(CCD_VERSION_MINOR 1)
+ set(CCD_VERSION ${CCD_VERSION_MAJOR}.${CCD_VERSION_MINOR})
+ 
+ set(CCD_SOVERSION 2)
+@@ -25,6 +25,8 @@ option(BUILD_SHARED_LIBS "Build libccd a
+ option(ENABLE_DOUBLE_PRECISION
+   "Enable double precision computations instead of single precision" OFF)
+ 
++option(BUILD_TESTING "Build the test suite" OFF)
++
+ # Option for some bundle-like build system in order not to expose
+ # any FCL binary symbols in their public ABI
+ option(CCD_HIDE_ALL_SYMBOLS "Hide all binary symbols" OFF)
+@@ -73,3 +75,8 @@ install(FILES "${CMAKE_BINARY_DIR}/ccd.p
+   DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+ 
+ install(FILES BSD-LICENSE DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/doc/ccd")
++
++if (BUILD_TESTING)
++  enable_testing()
++endif (BUILD_TESTING)
++
+diff -up ./src/testsuites/CMakeLists.txt.ctest ./src/testsuites/CMakeLists.txt
+--- ./src/testsuites/CMakeLists.txt.ctest	2018-12-22 07:13:45.000000000 -0500
++++ ./src/testsuites/CMakeLists.txt	2020-04-18 14:07:25.369371109 -0400
+@@ -1,3 +1,41 @@
++set(CCDTEST_ARGS "" CACHE STRING "Argments to pass to ccdtest executable")
++
++set(TEST_SOURCES
++    common.c 
++    support.c 
++    vec3.c 
++    polytope.c 
++    boxbox.c 
++    spheresphere.c 
++    cylcyl.c 
++    boxcyl.c 
++    mpr_boxbox.c 
++    mpr_cylcyl.c 
++    mpr_boxcyl.c)
++
++add_executable(ccdtest ${TEST_SOURCES} main.c)
++target_link_libraries(ccdtest ccd cu rt)
++add_definitions(-DCU_ENABLE_TIMER)
++include_directories(${CMAKE_CURRENT_SOURCE_DIR})
++add_test(NAME ccdtest 
++    COMMAND ccdtest ${CCDTEST_ARGS}
++    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
++
++add_test(NAME ccdtest-valgrind
++    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
++    COMMAND valgrind -q --leak-check=full --show-reachable=yes --trace-children=yes
++    --error-limit=no 
++    ${CMAKE_CURRENT_BINARY_DIR}/ccdtest ${CCDTEST_ARGS})
++
++add_test(NAME ccdtest-valgrind-gen-suppressions
++    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
++    COMMAND valgrind -q --leak-check=full --show-reachable=yes --trace-children=yes
++        --gen-suppressions=all --log-file=out --error-limit=no 
++        ${CMAKE_CURRENT_BINARY_DIR}/ccdtest ${CCDTEST_ARGS})
++
++add_test(NAME check-regressions
++    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/cu/check-regressions regressions
++    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+ add_subdirectory(cu)
+ 
+ set(MAIN_SOURCES

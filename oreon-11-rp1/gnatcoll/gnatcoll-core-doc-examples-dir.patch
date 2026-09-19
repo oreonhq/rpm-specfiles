@@ -1,0 +1,11 @@
+--- a/docs/core/gnatcoll-scripts.rst
++++ b/docs/core/gnatcoll-scripts.rst
+@@ -172,7 +172,7 @@
+ 
+    GNATColl comes with some examples, which you can use as a reference
+    when building your own application. See the
+-   :file:`<prefix>/share/examples/gnatcoll` directory.
++   :file:`/usr/share/doc/gnatcoll/examples` directory.
+ 
+ Interfacing your application with the scripting module is a multistep
+ process:

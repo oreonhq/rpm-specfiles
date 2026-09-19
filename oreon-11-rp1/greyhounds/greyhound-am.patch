@@ -1,0 +1,9 @@
+--- src/Makefile.am.orig	2010-03-26 22:54:53.000000000 -0500
++++ src/Makefile.am	2010-03-26 22:54:28.000000000 -0500
+@@ -22,5 +22,5 @@
+ 	misc.c non_gui_defs.h \
+ 	load_save.c load_save.h non_gui_defs.h
+ 
+-greyhounds_LDADD = @PACKAGE_LIBS@ $(INTLLIBS)
++greyhounds_LDADD = @PACKAGE_LIBS@ $(INTLLIBS) -lm
+ 

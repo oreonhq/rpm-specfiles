@@ -1,0 +1,37 @@
+--- src/Makefile.common.in	2018-02-04 15:29:36.206241391 +0100
++++ src/Makefile.common.in	2018-02-04 17:57:30.578170338 +0100
+@@ -92,7 +92,7 @@
+ endif
+ 
+ module_ada: force
+-	${GNATMAKE} -P${GPRFILE} -u ${FPIC} ${GPR_BUILD}
++	gprbuild -P${GPRFILE} -u ${GPR_BUILD} -cargs ${FPIC} ${GPRbuild_optflags}
+ 
+ ifneq (${SONAME},)
+ module_install_common: force
+--- src/Makefile.in	2018-02-04 15:29:36.194241501 +0100
++++ src/Makefile.in	2018-02-04 17:57:30.579170329 +0100
+@@ -53,7 +53,7 @@
+ 	-$(MKDIR) $(OBJ_DIR)
+ 
+ ada: gtkada-intl.adb force
+-	${GNATMAKE} -Pgtkada_src -u ${FPIC} ${GPR_BUILD}
++	gprbuild -Pgtkada_src -u ${GPR_BUILD} -cargs ${FPIC} -cargs:C ${CFLAGS} ${GPRbuild_optflags}
+ 
+ gtkada-intl.adb: gtkada-intl.gpb Makefile
+ 	gnatprep -DGETTEXT_INTL=$(GETTEXT_INTL) \
+--- src/tools/Makefile.in	2011-08-16 10:27:17.000000000 +0200
++++ src/tools/Makefile.in	2018-02-04 19:28:29.165971338 +0100
+@@ -14,12 +14,10 @@
+ INSTALL_SCRIPT  = @INSTALL_SCRIPT@
+ 
+ all: force
+-	${GNATMAKE} -Ptools ${GPR_BUILD} ${GNATMAKELDFLAGS} ${LDFLAGS}
+ 
+ install: force
+ 	-${CHMOD} +x ${GTKADA_CONFIG}
+ 	${INSTALL_SCRIPT} ${GTKADA_CONFIG} "${DESTDIR}${bindir}"
+-	${INSTALL_PROGRAM} ${OBJ_DIR}/${GDIALOG}${EXEEXT} "${DESTDIR}${bindir}"
+ 
+ clean: module_clean
+ 

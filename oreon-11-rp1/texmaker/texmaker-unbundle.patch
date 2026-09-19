@@ -1,0 +1,340 @@
+diff --git a/3rdparty/pdfium/core/fxcodec/codec/fx_codec_flate.cpp b/3rdparty/pdfium/core/fxcodec/codec/fx_codec_flate.cpp
+index 9e40d3e..71ede62 100644
+--- a/3rdparty/pdfium/core/fxcodec/codec/fx_codec_flate.cpp
++++ b/3rdparty/pdfium/core/fxcodec/codec/fx_codec_flate.cpp
+@@ -11,7 +11,7 @@
+ 
+ #include "core/fxcodec/fx_codec.h"
+ #include "core/fxcrt/fx_ext.h"
+-#include "third_party/zlib_v128/zlib.h"
++#include <zlib.h>
+ 
+ extern "C" {
+ static void* my_alloc_func(void* opaque,
+diff --git a/3rdparty/pdfium/core/fxcodec/codec/fx_codec_icc.cpp b/3rdparty/pdfium/core/fxcodec/codec/fx_codec_icc.cpp
+index 713dd35..274e190 100644
+--- a/3rdparty/pdfium/core/fxcodec/codec/fx_codec_icc.cpp
++++ b/3rdparty/pdfium/core/fxcodec/codec/fx_codec_icc.cpp
+@@ -6,7 +6,7 @@
+ 
+ #include "core/fxcodec/codec/codec_int.h"
+ #include "core/fxcodec/fx_codec.h"
+-#include "third_party/lcms/include/lcms2.h"
++#include <lcms2.h>
+ 
+ const uint32_t N_COMPONENT_LAB = 3;
+ const uint32_t N_COMPONENT_GRAY = 1;
+diff --git a/3rdparty/pdfium/core/fxcodec/codec/fx_codec_jpx_opj.cpp b/3rdparty/pdfium/core/fxcodec/codec/fx_codec_jpx_opj.cpp
+index c415a5a..14dc8d3 100644
+--- a/3rdparty/pdfium/core/fxcodec/codec/fx_codec_jpx_opj.cpp
++++ b/3rdparty/pdfium/core/fxcodec/codec/fx_codec_jpx_opj.cpp
+@@ -13,7 +13,7 @@
+ #include "core/fxcodec/fx_codec.h"
+ #include "core/fxcrt/fx_memory.h"
+ #include "core/fxcrt/fx_safe_types.h"
+-#include "third_party/lcms/include/lcms2.h"
++#include <lcms2.h>
+ #include "third_party/libopenjpeg20/openjpeg.h"
+ #include "third_party/libopenjpeg20/opj_malloc.h"
+ 
+diff --git a/3rdparty/pdfium/core/fxcodec/codec/fx_codec_png.cpp b/3rdparty/pdfium/core/fxcodec/codec/fx_codec_png.cpp
+index 0b55a97..53c2e05 100644
+--- a/3rdparty/pdfium/core/fxcodec/codec/fx_codec_png.cpp
++++ b/3rdparty/pdfium/core/fxcodec/codec/fx_codec_png.cpp
+@@ -12,7 +12,7 @@
+ 
+ extern "C" {
+ #undef FAR
+-#include "third_party/libpng16/png.h"
++#include <png.h>
+ }
+ 
+ static void _png_error_data(png_structp png_ptr, png_const_charp error_msg) {
+diff --git a/3rdparty/pdfium/samples/image_diff_png.cc b/3rdparty/pdfium/samples/image_diff_png.cc
+index 18753e2..dceb3bc 100644
+--- a/3rdparty/pdfium/samples/image_diff_png.cc
++++ b/3rdparty/pdfium/samples/image_diff_png.cc
+@@ -17,8 +17,8 @@
+ #include <string>
+ 
+ #include "third_party/base/logging.h"
+-#include "third_party/libpng16/png.h"
+-#include "third_party/zlib_v128/zlib.h"
++#include <png.h>
++#include <zlib.h>
+ 
+ namespace image_diff_png {
+ 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ef6a4e6..340f6c4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -387,12 +387,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(CMAKE_AUTORCC ON)
+ 
+ find_package(Qt6 REQUIRED COMPONENTS Gui Concurrent Core Core5Compat Network PrintSupport Qml Widgets Xml LinguistTools)
++include(FindPkgConfig)
++pkg_check_modules(HUNSPELL hunspell REQUIRED)
++pkg_check_modules(FREETYPE freetype2 REQUIRED)
++pkg_check_modules(LCMS2 lcms2 REQUIRED)
++find_package(libjpeg-turbo REQUIRED)
++pkg_check_modules(LIBPNG libpng REQUIRED)
++find_package(ZLIB REQUIRED)
+ 
+ qt_standard_project_setup()
+ 
+ if (UNIX AND NOT APPLE)
+ 	set(texmaker_SRCS_PLATFORM
+-		3rdparty/singleapp/qtlockedfile_unix.cpp
+ 	)
+ elseif (WIN32)
+ 	set(texmaker_SRCS_PLATFORM
+@@ -448,23 +454,6 @@ ${texmaker_SRCS_PLATFORM}
+ 3rdparty/encodingprober/nsSJISProber.cpp 3rdparty/encodingprober/nsSJISProber.h
+ 3rdparty/encodingprober/nsUniversalDetector.cpp 3rdparty/encodingprober/nsUniversalDetector.h
+ 3rdparty/encodingprober/qencodingprober.cpp 3rdparty/encodingprober/qencodingprober.h
+-3rdparty/hunspell/affentry.cxx 3rdparty/hunspell/affentry.hxx
+-3rdparty/hunspell/affixmgr.cxx 3rdparty/hunspell/affixmgr.hxx
+-3rdparty/hunspell/atypes.hxx
+-3rdparty/hunspell/baseaffix.hxx
+-3rdparty/hunspell/csutil.cxx 3rdparty/hunspell/csutil.hxx
+-3rdparty/hunspell/filemgr.cxx 3rdparty/hunspell/filemgr.hxx
+-3rdparty/hunspell/hashmgr.cxx 3rdparty/hunspell/hashmgr.hxx
+-3rdparty/hunspell/htypes.hxx
+-3rdparty/hunspell/hunspell.cxx 3rdparty/hunspell/hunspell.h 3rdparty/hunspell/hunspell.hxx
+-3rdparty/hunspell/hunvisapi.h
+-3rdparty/hunspell/hunzip.cxx 3rdparty/hunspell/hunzip.hxx
+-3rdparty/hunspell/langnum.hxx
+-3rdparty/hunspell/phonet.cxx 3rdparty/hunspell/phonet.hxx
+-3rdparty/hunspell/replist.cxx 3rdparty/hunspell/replist.hxx
+-3rdparty/hunspell/suggestmgr.cxx 3rdparty/hunspell/suggestmgr.hxx
+-3rdparty/hunspell/utf_info.hxx
+-3rdparty/hunspell/w_char.hxx
+ 3rdparty/pdfium/core/fdrm/crypto/fx_crypt.cpp 3rdparty/pdfium/core/fdrm/crypto/fx_crypt.h
+ 3rdparty/pdfium/core/fdrm/crypto/fx_crypt_aes.cpp
+ 3rdparty/pdfium/core/fdrm/crypto/fx_crypt_sha.cpp
+@@ -917,116 +906,6 @@ ${texmaker_SRCS_PLATFORM}
+ 3rdparty/pdfium/third_party/bigint/BigUnsigned.cc 3rdparty/pdfium/third_party/bigint/BigUnsigned.hh
+ 3rdparty/pdfium/third_party/bigint/BigUnsignedInABase.cc 3rdparty/pdfium/third_party/bigint/BigUnsignedInABase.hh
+ 3rdparty/pdfium/third_party/bigint/NumberlikeArray.hh
+-3rdparty/pdfium/third_party/freetype/include/freetype/freetype.h
+-3rdparty/pdfium/third_party/freetype/include/freetype/ftmm.h
+-3rdparty/pdfium/third_party/freetype/include/freetype/ftotval.h
+-3rdparty/pdfium/third_party/freetype/include/freetype/ftoutln.h
+-3rdparty/pdfium/third_party/freetype/include/freetype/internal/ftobjs.h
+-3rdparty/pdfium/third_party/freetype/include/freetype/internal/ftstream.h
+-3rdparty/pdfium/third_party/freetype/include/freetype/internal/tttypes.h
+-3rdparty/pdfium/third_party/freetype/include/freetype/tttables.h
+-3rdparty/pdfium/third_party/freetype/include/ft2build.h
+-3rdparty/pdfium/third_party/freetype/src/base/ftbase.c 3rdparty/pdfium/third_party/freetype/src/base/ftbase.h
+-3rdparty/pdfium/third_party/freetype/src/base/ftbitmap.c
+-3rdparty/pdfium/third_party/freetype/src/base/ftglyph.c
+-3rdparty/pdfium/third_party/freetype/src/base/ftinit.c
+-3rdparty/pdfium/third_party/freetype/src/base/ftlcdfil.c
+-3rdparty/pdfium/third_party/freetype/src/base/ftmm.c
+-3rdparty/pdfium/third_party/freetype/src/base/ftsystem.c
+-3rdparty/pdfium/third_party/freetype/src/cff/cff.c
+-3rdparty/pdfium/third_party/freetype/src/cff/cffobjs.h
+-3rdparty/pdfium/third_party/freetype/src/cff/cfftypes.h
+-3rdparty/pdfium/third_party/freetype/src/cid/type1cid.c
+-3rdparty/pdfium/third_party/freetype/src/psaux/psaux.c
+-3rdparty/pdfium/third_party/freetype/src/pshinter/pshinter.c
+-3rdparty/pdfium/third_party/freetype/src/psnames/psmodule.c
+-3rdparty/pdfium/third_party/freetype/src/raster/raster.c
+-3rdparty/pdfium/third_party/freetype/src/sfnt/sfnt.c
+-3rdparty/pdfium/third_party/freetype/src/smooth/smooth.c
+-3rdparty/pdfium/third_party/freetype/src/truetype/truetype.c
+-3rdparty/pdfium/third_party/freetype/src/type1/type1.c
+-3rdparty/pdfium/third_party/lcms/include/lcms2.h
+-3rdparty/pdfium/third_party/lcms/include/lcms2_plugin.h
+-3rdparty/pdfium/third_party/lcms/src/cmsalpha.c
+-3rdparty/pdfium/third_party/lcms/src/cmscam02.c
+-3rdparty/pdfium/third_party/lcms/src/cmscgats.c
+-3rdparty/pdfium/third_party/lcms/src/cmscnvrt.c
+-3rdparty/pdfium/third_party/lcms/src/cmserr.c
+-3rdparty/pdfium/third_party/lcms/src/cmsgamma.c
+-3rdparty/pdfium/third_party/lcms/src/cmsgmt.c
+-3rdparty/pdfium/third_party/lcms/src/cmshalf.c
+-3rdparty/pdfium/third_party/lcms/src/cmsintrp.c
+-3rdparty/pdfium/third_party/lcms/src/cmsio0.c
+-3rdparty/pdfium/third_party/lcms/src/cmsio1.c
+-3rdparty/pdfium/third_party/lcms/src/cmslut.c
+-3rdparty/pdfium/third_party/lcms/src/cmsmd5.c
+-3rdparty/pdfium/third_party/lcms/src/cmsmtrx.c
+-3rdparty/pdfium/third_party/lcms/src/cmsnamed.c
+-3rdparty/pdfium/third_party/lcms/src/cmsopt.c
+-3rdparty/pdfium/third_party/lcms/src/cmspack.c
+-3rdparty/pdfium/third_party/lcms/src/cmspcs.c
+-3rdparty/pdfium/third_party/lcms/src/cmsplugin.c
+-3rdparty/pdfium/third_party/lcms/src/cmsps2.c
+-3rdparty/pdfium/third_party/lcms/src/cmssamp.c
+-3rdparty/pdfium/third_party/lcms/src/cmssm.c
+-3rdparty/pdfium/third_party/lcms/src/cmstypes.c
+-3rdparty/pdfium/third_party/lcms/src/cmsvirt.c
+-3rdparty/pdfium/third_party/lcms/src/cmswtpnt.c
+-3rdparty/pdfium/third_party/lcms/src/cmsxform.c
+-3rdparty/pdfium/third_party/libjpeg/cderror.h
+-3rdparty/pdfium/third_party/libjpeg/cdjpeg.h
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcapimin.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcapistd.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jccoefct.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jccolor.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcdctmgr.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jchuff.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcinit.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcmainct.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcmarker.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcmaster.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcomapi.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcparam.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcphuff.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcprepct.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jcsample.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jctrans.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdapimin.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdapistd.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdcoefct.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdcolor.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jddctmgr.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdhuff.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdinput.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdmainct.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdmarker.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdmaster.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdmerge.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdphuff.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdpostct.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdsample.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jdtrans.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jerror.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jfdctfst.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jfdctint.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jidctfst.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jidctint.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jidctred.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jmemmgr.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jmemnobs.c
+-3rdparty/pdfium/third_party/libjpeg/fpdfapi_jutils.c
+-3rdparty/pdfium/third_party/libjpeg/jchuff.h
+-3rdparty/pdfium/third_party/libjpeg/jconfig.h
+-3rdparty/pdfium/third_party/libjpeg/jdct.h
+-3rdparty/pdfium/third_party/libjpeg/jdhuff.h
+-3rdparty/pdfium/third_party/libjpeg/jerror.h
+-3rdparty/pdfium/third_party/libjpeg/jinclude.h
+-3rdparty/pdfium/third_party/libjpeg/jmemsys.h
+-3rdparty/pdfium/third_party/libjpeg/jmorecfg.h
+-3rdparty/pdfium/third_party/libjpeg/jpegint.h
+-3rdparty/pdfium/third_party/libjpeg/jpeglib.h
+-3rdparty/pdfium/third_party/libjpeg/jversion.h
+-3rdparty/pdfium/third_party/libjpeg/transupp.h
+ 3rdparty/pdfium/third_party/libopenjpeg20/bio.c
+ 3rdparty/pdfium/third_party/libopenjpeg20/cio.c
+ 3rdparty/pdfium/third_party/libopenjpeg20/dwt.c
+@@ -1046,21 +925,6 @@ ${texmaker_SRCS_PLATFORM}
+ 3rdparty/pdfium/third_party/libopenjpeg20/t2.c
+ 3rdparty/pdfium/third_party/libopenjpeg20/tcd.c
+ 3rdparty/pdfium/third_party/libopenjpeg20/tgt.c
+-3rdparty/pdfium/third_party/zlib_v128/adler32.c
+-3rdparty/pdfium/third_party/zlib_v128/compress.c
+-3rdparty/pdfium/third_party/zlib_v128/crc32.c
+-3rdparty/pdfium/third_party/zlib_v128/deflate.c
+-3rdparty/pdfium/third_party/zlib_v128/gzclose.c
+-3rdparty/pdfium/third_party/zlib_v128/gzlib.c
+-3rdparty/pdfium/third_party/zlib_v128/gzread.c
+-3rdparty/pdfium/third_party/zlib_v128/gzwrite.c
+-3rdparty/pdfium/third_party/zlib_v128/infback.c
+-3rdparty/pdfium/third_party/zlib_v128/inffast.c
+-3rdparty/pdfium/third_party/zlib_v128/inflate.c
+-3rdparty/pdfium/third_party/zlib_v128/inftrees.c
+-3rdparty/pdfium/third_party/zlib_v128/trees.c
+-3rdparty/pdfium/third_party/zlib_v128/uncompr.c
+-3rdparty/pdfium/third_party/zlib_v128/zutil.c
+ src/aboutdialog.cpp src/aboutdialog.h src/aboutdialog.ui
+ src/addoptiondialog.cpp src/addoptiondialog.h src/addoptiondialog.ui
+ src/addtagdialog.cpp src/addtagdialog.h src/addtagdialog.ui
+@@ -1108,10 +972,6 @@ src/quickxelatexdialog.cpp src/quickxelatexdialog.h src/quickxelatexdialog.ui
+ src/refdialog.cpp src/refdialog.h src/refdialog.ui
+ src/replacewidget.cpp src/replacewidget.h src/replacewidget.ui
+ src/scandialog.cpp src/scandialog.h src/scandialog.ui
+-3rdparty/singleapp/qtlocalpeer.cpp 3rdparty/singleapp/qtlocalpeer.h
+-3rdparty/singleapp/qtlockedfile.cpp 3rdparty/singleapp/qtlockedfile.h
+-3rdparty/singleapp/qtsingleapplication.cpp 3rdparty/singleapp/qtsingleapplication.h
+-3rdparty/singleapp/qtsinglecoreapplication.cpp 3rdparty/singleapp/qtsinglecoreapplication.h
+ src/sourceview.cpp src/sourceview.h
+ src/spellerdialog.cpp src/spellerdialog.h src/spellerdialog.ui
+ src/structdialog.cpp src/structdialog.h src/structdialog.ui
+@@ -1227,35 +1087,7 @@ set(TEXMAKER_INCLUDE_DIRECTORIES
+   ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/docs
+   ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party
+   ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/zlib_v128
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/bigint
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/libpng16
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/libpng16/arm
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/libpng16/contrib
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/libpng16/contrib/intel
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/libtiff
+   ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/pymock
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/libjpeg
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/lcms
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/lcms/src
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/lcms/include
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src/psaux
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src/smooth
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src/type1
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src/raster
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src/truetype
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src/sfnt
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src/cff
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src/cid
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src/pshinter
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src/psnames
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/src/base
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/include
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/include/freetype
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/include/freetype/config
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/include/freetype/internal
+-  ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/freetype/include/freetype/internal/services
+   ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/libopenjpeg20
+   ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/base
+   ${CMAKE_SOURCE_DIR}/3rdparty/pdfium/third_party/base/numerics
+@@ -1288,7 +1120,10 @@ set(TEXMAKER_INCLUDE_DIRECTORIES
+ )
+ 
+ 
+-target_include_directories( ${PROJECT_NAME} PUBLIC ${TEXMAKER_INCLUDE_DIRECTORIES})
++target_include_directories( ${PROJECT_NAME} PUBLIC
++    ${TEXMAKER_INCLUDE_DIRECTORIES}
++    ${FREETYPE_INCLUDE_DIRS}
++)
+ 
+ target_compile_definitions(${PROJECT_NAME} PRIVATE
+     TEXMAKERVERSION=${PROJECT_VERSION}
+@@ -1454,6 +1289,13 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
+         Qt6::Qml
+         Qt6::Widgets
+         Qt6::Xml
++        Qt6Solutions_SingleApplication-2.6
++        ${HUNSPELL_LIBRARIES}
++        ${FREETYPE_LIBRARIES}
++        ${LCMS2_LIBRARIES}
++        ${LIBPNG_LIBRARIES}
++        libjpeg-turbo::jpeg
++        ZLIB::ZLIB
+ )
+ 
+ if (${INTERNALBROWSER} STREQUAL "yes")
+diff --git a/src/texmakerapp.h b/src/texmakerapp.h
+index 4f37ee4..dd0b0a6 100644
+--- a/src/texmakerapp.h
++++ b/src/texmakerapp.h
+@@ -17,7 +17,7 @@
+ 
+ #include <QTranslator>
+ #include "texmaker.h"
+-#include "singleapp/qtsingleapplication.h"
++#include <QtSolutions/qtsingleapplication.h>
+ 
+ class TexmakerApp : public QtSingleApplication
+ {

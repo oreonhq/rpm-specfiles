@@ -1,0 +1,31 @@
+Avoid implicit declaration of vsnprintf for improved C99
+compatibility.  Otherwise the configure script will fail
+to detect vsnprintf support with future compilers which
+do not support implicit function declarations.
+
+Submitted upstream: <https://github.com/dajobe/flickcurl/pull/43>
+
+diff --git a/configure b/configure
+index 4f94ae2bdd2042a9..cd370bdce7720eb2 100755
+--- a/configure
++++ b/configure
+@@ -12949,6 +12949,7 @@ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ #include <stdarg.h>
++#include <stdio.h>
+ int is_c99(char *s, ...) {
+   char buffer[32];
+   va_list args;
+diff --git a/configure.ac b/configure.ac
+index fdc80da3a7278d13..6ba8640142d4b5da 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -133,6 +133,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#ifdef HAVE_GETOPT_H
+ if test $ac_cv_func_vsnprintf = yes; then
+   AC_MSG_CHECKING(vsnprintf has C99 compatible return value)
+   AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <stdarg.h>
++#include <stdio.h>
+ int is_c99(char *s, ...) {
+   char buffer[32];
+   va_list args;

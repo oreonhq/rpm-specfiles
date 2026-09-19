@@ -5,11 +5,11 @@
 %global build_type_safety_c 0
 
 Name:           atlas
-Version:        3.10.3
+Version:        3.11.41
 %if "%{?enable_native_atlas}" != "0"
 %define dist .native
 %endif
-Release:        32%{?dist}
+Release:        1%{?dist}
 Summary:        Automatically Tuned Linear Algebra Software
 
 License:        BSD-3-Clause
@@ -53,19 +53,19 @@ BuildRequires: make
 BuildRequires:  gcc-gfortran, lapack-static, gcc
 
 %ifarch x86_64
-Obsoletes:      atlas-sse3 < 3.10.3-1
+Obsoletes:      atlas-sse3 < 3.11.41-1
 %endif
 
 %ifarch %{ix86}
-Obsoletes:      atlas-3dnow < 3.10.3-1
-Obsoletes:      atlas-sse < 3.10.3-1
-Obsoletes:      atlas-sse2 < 3.10.3-1
-Obsoletes:      atlas-sse3 < 3.10.3-1
+Obsoletes:      atlas-3dnow < 3.11.41-1
+Obsoletes:      atlas-sse < 3.11.41-1
+Obsoletes:      atlas-sse2 < 3.11.41-1
+Obsoletes:      atlas-sse3 < 3.11.41-1
 %endif
 
 %ifarch s390 s390x
-Obsoletes:      atlas-z10 < 3.10.3-11
-Obsoletes:      atlas-z196 < 3.10.3-11
+Obsoletes:      atlas-z10 < 3.11.41-11
+Obsoletes:      atlas-z196 < 3.11.41-11
 %endif
 
 
@@ -93,19 +93,19 @@ Requires(posttrans):	/usr/sbin/alternatives
 Requires(postun):	/usr/sbin/alternatives
 
 %ifarch x86_64
-Obsoletes:      atlas-sse3-devel < 3.10.3-1
+Obsoletes:      atlas-sse3-devel < 3.11.41-1
 %endif
 
 %ifarch %{ix86}
-Obsoletes:      atlas-3dnow-devel < 3.10.3-1
-Obsoletes:      atlas-sse-devel < 3.10.3-1
-Obsoletes:      atlas-sse2-devel < 3.10.3-1
-Obsoletes:      atlas-sse3-devel < 3.10.3-1
+Obsoletes:      atlas-3dnow-devel < 3.11.41-1
+Obsoletes:      atlas-sse-devel < 3.11.41-1
+Obsoletes:      atlas-sse2-devel < 3.11.41-1
+Obsoletes:      atlas-sse3-devel < 3.11.41-1
 %endif
 
 %ifarch s390 s390x
-Obsoletes:      atlas-z10-devel < 3.10.3-11
-Obsoletes:      atlas-z196-devel < 3.10.3-11
+Obsoletes:      atlas-z10-devel < 3.11.41-11
+Obsoletes:      atlas-z196-devel < 3.11.41-11
 %endif
 
 %description devel
@@ -119,19 +119,19 @@ Requires(posttrans):	/usr/sbin/alternatives
 Requires(postun):	/usr/sbin/alternatives
 
 %ifarch x86_64
-Obsoletes:      atlas-sse3-static < 3.10.3-1
+Obsoletes:      atlas-sse3-static < 3.11.41-1
 %endif
 
 %ifarch %{ix86}
-Obsoletes:      atlas-3dnow-static < 3.10.3-1
-Obsoletes:      atlas-sse-static < 3.10.3-1
-Obsoletes:      atlas-sse2-static < 3.10.3-1
-Obsoletes:      atlas-sse3-static < 3.10.3-1
+Obsoletes:      atlas-3dnow-static < 3.11.41-1
+Obsoletes:      atlas-sse-static < 3.11.41-1
+Obsoletes:      atlas-sse2-static < 3.11.41-1
+Obsoletes:      atlas-sse3-static < 3.11.41-1
 %endif
 
 %ifarch s390 s390x
-Obsoletes:      atlas-z10-static < 3.10.3-11
-Obsoletes:      atlas-z196-static  < 3.10.3-11
+Obsoletes:      atlas-z10-static < 3.11.41-11
+Obsoletes:      atlas-z196-static  < 3.11.41-11
 %endif
 
 %description static
@@ -324,12 +324,6 @@ CPUs. The base ATLAS builds for the ppc64 architecture are made for the Power 5 
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
-test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
-test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; }
-test "%{source8_hash}" = "none" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source8_hash}" || { echo "oreon: Source8 hash mismatch" >&2; exit 1; }; }
-test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source11_hash}" || { echo "oreon: Source11 hash mismatch" >&2; exit 1; }; }
 test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; }
 %setup -q -n ATLAS
 
@@ -358,7 +352,7 @@ test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "o
 
 cp %{SOURCE2} doc
 tar -xJf %{SOURCE12} debian/archdefs
-find debian/archdefs -type f \( -name '*.tgz' -o -name '*.tar.bz2' \) -exec cp -t CONFIG/ARCHS/ {} +
+find debian/archdefs -type f \( -name '*.tgz' -o -name '*.tar.bz2' \) -exec cp -n -t CONFIG/ARCHS/ '{}' +
 rm -rf debian
 
 %ifarch %{arm}
@@ -369,7 +363,7 @@ sed -i -e 's,MYFLAGS =,MYFLAGS = -fpermissive,' CONFIG/src/Makefile
 # Generate lapack library
 mkdir lapacklib
 cd lapacklib
-ar x %{_libdir}/liblapack_pic.a
+ar x %{_libdir}/liblapack.a
 # Remove functions that have ATLAS implementations
 rm -f cgelqf.f.o cgels.f.o cgeqlf.f.o cgeqrf.f.o cgerqf.f.o cgesv.f.o cgetrf.f.o cgetri.f.o cgetrs.f.o clarfb.f.o clarft.f.o clauum.f.o cposv.f.o cpotrf.f.o cpotri.f.o cpotrs.f.o ctrtri.f.o dgelqf.f.o dgels.f.o dgeqlf.f.o dgeqrf.f.o dgerqf.f.o dgesv.f.o dgetrf.f.o dgetri.f.o dgetrs.f.o dlamch.f.o dlarfb.f.o dlarft.f.o dlauum.f.o dposv.f.o dpotrf.f.o dpotri.f.o dpotrs.f.o dtrtri.f.o ieeeck.f.o ilaenv.f.o lsame.f.o sgelqf.f.o sgels.f.o sgeqlf.f.o sgeqrf.f.o sgerqf.f.o sgesv.f.o sgetrf.f.o sgetri.f.o sgetrs.f.o slamch.f.o slarfb.f.o slarft.f.o slauum.f.o sposv.f.o spotrf.f.o spotri.f.o spotrs.f.o strtri.f.o xerbla.f.o zgelqf.f.o zgels.f.o zgeqlf.f.o zgeqrf.f.o zgerqf.f.o zgesv.f.o zgetrf.f.o zgetri.f.o zgetrs.f.o zlarfb.f.o zlarft.f.o zlauum.f.o zposv.f.o zpotrf.f.o zpotri.f.o zpotrs.f.o ztrtri.f.o 
 # Create new library

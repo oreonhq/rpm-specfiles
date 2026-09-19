@@ -1,0 +1,36 @@
+From 13d776a9b058513717889c4da580d9ede7f6d23a Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Wed, 18 Jun 2025 19:20:20 +0200
+Subject: [PATCH] adapt meson wrapper code for cargo for compatibility with RPM
+ macros
+
+---
+ src/meson.build | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/meson.build b/src/meson.build
+index d99036d..ff059b9 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -22,15 +22,15 @@ cargo_options = [ '--manifest-path', meson.project_source_root() / 'Cargo.toml'
+ cargo_options += [ '--target-dir', meson.project_build_root() / 'src' ]
+ 
+ if get_option('profile') == 'default'
+-  cargo_options += [ '--release' ]
+-  rust_target = 'release'
++  cargo_options += [ '--profile', 'rpm' ]
++  rust_target = 'rpm'
+   message('Building in release mode')
+ else
+   rust_target = 'debug'
+   message('Building in debug mode')
+ endif
+ 
+-cargo_env = [ 'CARGO_HOME=' + meson.project_build_root() / 'cargo-home' ]
++cargo_env = [ 'CARGO_HOME=' + meson.project_source_root() ]
+ 
+ cargo_build = custom_target(
+   'cargo-build',
+-- 
+2.49.0
+

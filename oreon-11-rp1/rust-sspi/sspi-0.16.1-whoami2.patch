@@ -1,0 +1,52 @@
+diff --git a/examples/client.rs b/examples/client.rs
+index a441c7f..d8f1f7a 100644
+--- a/examples/client.rs
++++ b/examples/client.rs
+@@ -22,8 +22,8 @@ fn main() -> Result<(), io::Error> {
+ 
+     let mut ntlm = Ntlm::new();
+ 
+-    let account_name = whoami::username();
+-    let computer_name = whoami::fallible::hostname().unwrap();
++    let account_name = whoami::username().unwrap();
++    let computer_name = whoami::hostname().unwrap();
+     let username =
+         Username::new(&account_name, Some(&computer_name)).map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
+ 
+@@ -78,7 +78,7 @@ fn do_authentication(ntlm: &mut Ntlm, identity: &AuthIdentity, mut stream: &mut
+         .execute(ntlm)?;
+ 
+     let mut output_buffer = vec![SecurityBuffer::new(Vec::new(), BufferType::Token)];
+-    let username = whoami::username();
++    let username = whoami::username().unwrap();
+ 
+     let mut builder = ntlm
+         .initialize_security_context()
+diff --git a/examples/server.rs b/examples/server.rs
+index 6097313..dd5835b 100644
+--- a/examples/server.rs
++++ b/examples/server.rs
+@@ -23,8 +23,8 @@ fn main() -> Result<(), io::Error> {
+ 
+     let mut ntlm = Ntlm::new();
+ 
+-    let account_name = whoami::username();
+-    let computer_name = whoami::fallible::hostname().unwrap();
++    let account_name = whoami::username().unwrap();
++    let computer_name = whoami::hostname().unwrap();
+     let username =
+         Username::new(&account_name, Some(&computer_name)).map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
+ 
+diff --git a/src/lib.rs b/src/lib.rs
+index 80c31ba..d0fd872 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -284,7 +284,7 @@ where
+     /// let mut ntlm = sspi::Ntlm::new();
+     ///
+     /// let identity = sspi::AuthIdentity {
+-    ///     username: Username::new(&whoami::username(), Some(&whoami::hostname())).unwrap(),
++    ///     username: Username::new(&whoami::username().unwrap(), Some(&whoami::hostname().unwrap())).unwrap(),
+     ///     password: String::from("password").into(),
+     /// };
+     ///

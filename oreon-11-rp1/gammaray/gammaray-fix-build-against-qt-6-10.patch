@@ -1,0 +1,52 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f85faf9..4bf3299 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -520,6 +520,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+     endif()
+ endif()
+ 
++if(Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
++    set(QT_NO_PRIVATE_MODULE_WARNING ON)
++    find_package(Qt6WidgetsPrivate REQUIRED NO_MODULE)
++    find_package(Qt6QmlPrivate REQUIRED NO_MODULE)
++    find_package(Qt6QuickPrivate REQUIRED NO_MODULE)
++endif()
++
+ # these need to included after the last Qt-related find_package() call
+ include(Qt5LegacySupport)
+ include(ECMQt5ToQt6Porting)
+diff --git a/plugins/statemachineviewer/CMakeLists.txt b/plugins/statemachineviewer/CMakeLists.txt
+index 64542a1..d0970ee 100644
+--- a/plugins/statemachineviewer/CMakeLists.txt
++++ b/plugins/statemachineviewer/CMakeLists.txt
+@@ -47,9 +47,15 @@ if(NOT GAMMARAY_CLIENT_ONLY_BUILD)
+     target_link_libraries(gammaray_statemachineviewer_plugin gammaray_core)
+ 
+     if(TARGET Qt::Scxml)
++        if(Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
++            find_package(Qt6ScxmlPrivate REQUIRED NO_MODULE)
++        endif()
+         target_link_libraries(gammaray_statemachineviewer_plugin Qt::Scxml Qt::ScxmlPrivate)
+     endif()
+-    if(${QT_VERSION_MAJOR} EQUAL 6 AND TARGET Qt6::StateMachine)
++    if(TARGET Qt6::StateMachine)
++        if(Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
++            find_package(Qt6StateMachinePrivate REQUIRED NO_MODULE)
++        endif()
+         target_link_libraries(gammaray_statemachineviewer_plugin Qt6::StateMachine Qt6::StateMachinePrivate)
+     endif()
+ endif()
+diff --git a/plugins/statemachineviewer/qscxmlstatemachinedebuginterface.cpp b/plugins/statemachineviewer/qscxmlstatemachinedebuginterface.cpp
+index cf3cb00..e804d5b 100644
+--- a/plugins/statemachineviewer/qscxmlstatemachinedebuginterface.cpp
++++ b/plugins/statemachineviewer/qscxmlstatemachinedebuginterface.cpp
+@@ -212,7 +212,7 @@ QString QScxmlStateMachineDebugInterface::transitionLabel(Transition transition)
+         return QString();
+     }
+ 
+-    return QStringLiteral("%1 (%2)").arg(events.first()).arg(transition);
++    return QStringLiteral("%1 (%2)").arg(events.first()).arg(static_cast<int>(transition));
+ }
+ 
+ State QScxmlStateMachineDebugInterface::transitionSource(Transition transition) const

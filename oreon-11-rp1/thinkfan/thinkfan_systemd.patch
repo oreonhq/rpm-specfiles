@@ -1,0 +1,36 @@
+diff -rupN --no-dereference thinkfan-2.0.0/CMakeLists.txt thinkfan-2.0.0-new/CMakeLists.txt
+--- thinkfan-2.0.0/CMakeLists.txt	2025-05-31 21:31:50.000000000 +0200
++++ thinkfan-2.0.0-new/CMakeLists.txt	2025-05-31 23:47:29.736402466 +0200
+@@ -178,17 +178,7 @@ if(SYSTEMD_FOUND)
+ 		rcscripts/systemd/thinkfan-sleep.service
+ 		rcscripts/systemd/thinkfan-wakeup.service
+ 		"${CMAKE_BINARY_DIR}/rcscripts/systemd/thinkfan.service"
+-		DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/systemd/system")
+-	if(NOT EXISTS "/etc/systemd/system/thinkfan.service.d/override.conf")
+-		install(FILES
+-			rcscripts/systemd/override.conf
+-			DESTINATION "/etc/systemd/system/thinkfan.service.d")
+-	else()
+-		install(FILES
+-			rcscripts/systemd/override.conf
+-			DESTINATION "/etc/systemd/system/thinkfan.service.d"
+-			RENAME "default.conf")
+-	endif()
++		DESTINATION "lib/systemd/system")
+ endif(SYSTEMD_FOUND)
+ 
+ if(OPENRC_FOUND)
+diff -rupN --no-dereference thinkfan-2.0.0/rcscripts/systemd/thinkfan.service.cmake thinkfan-2.0.0-new/rcscripts/systemd/thinkfan.service.cmake
+--- thinkfan-2.0.0/rcscripts/systemd/thinkfan.service.cmake	2025-05-31 21:31:50.000000000 +0200
++++ thinkfan-2.0.0-new/rcscripts/systemd/thinkfan.service.cmake	2025-05-31 23:47:29.736618600 +0200
+@@ -5,8 +5,8 @@ After=sysinit.target
+ After=systemd-modules-load.service
+ 
+ [Service]
+-Type=forking
+-ExecStart=@CMAKE_INSTALL_PREFIX@/sbin/thinkfan $THINKFAN_ARGS
++EnvironmentFile=-/etc/sysconfig/thinkfan
++ExecStart=@CMAKE_INSTALL_PREFIX@/sbin/thinkfan -n $OPTIONS
+ PIDFile=/run/thinkfan.pid
+ ExecReload=/bin/kill -HUP $MAINPID
+ 

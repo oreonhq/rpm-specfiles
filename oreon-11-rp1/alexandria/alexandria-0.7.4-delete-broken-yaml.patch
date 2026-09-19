@@ -1,0 +1,87 @@
+--- alexandria-book-collection-manager-0.7.4/lib/alexandria/library_store.rb.delbroken	2020-01-03 17:38:07.340338529 +0900
++++ alexandria-book-collection-manager-0.7.4/lib/alexandria/library_store.rb	2020-01-04 13:04:55.467319713 +0900
+@@ -68,7 +68,7 @@ module Alexandria
+             md = /([\dxX]{10,13})#{Library::EXT[:book]}/.match(filename)
+             if md
+               file_isbn = md[1]
+-              ruined_books << [nil, file_isbn, library]
++              ruined_books << [nil, file_isbn, library, filename, library.path]
+             else
+               log.warn { "Filename #{filename} does not contain an ISBN" }
+               # TODO: delete this file...
+--- alexandria-book-collection-manager-0.7.4/lib/alexandria/ui/ui_manager.rb.delbroken	2020-01-03 17:37:42.404366230 +0900
++++ alexandria-book-collection-manager-0.7.4/lib/alexandria/ui/ui_manager.rb	2020-01-04 13:09:04.588530827 +0900
+@@ -694,6 +694,73 @@ module Alexandria
+                 false
+               end
+             end
++          else ## if response_type == Gtk::Dialog::RESPONSE_OK
++            handle_and_delete_ruined_books
++          end
++        end
++      end
++
++      def handle_and_delete_ruined_books
++        title = _("Delete Book Data")
++        new_message = _("Or do you wish to delete the data files for the following books are malformed or empty?\n")
++
++        @libraries.ruined_books.each { |bi|
++          new_message += "\n#{bi[1] or bi[1].inspect}"
++        }
++        recovery_dialog = Gtk::MessageDialog.new(@main_app, Gtk::Dialog::MODAL,
++                                                 Gtk::MessageDialog::WARNING,
++                                                 Gtk::MessageDialog::BUTTONS_OK_CANCEL,
++                                                 new_message ).show
++        recovery_dialog.signal_connect('response') do |dialog, response_type|
++          recovery_dialog.destroy
++          if response_type == Gtk::Dialog::RESPONSE_OK
++            books_to_add = []
++
++            # progress indicator...
++            @progressbar.fraction = 0
++            @appbar.children.first.visible = true   # show the progress bar
++
++            total_book_count = @libraries.ruined_books.size
++            fraction_per_book = 1.0 / total_book_count
++            prog_percentage = 0
++
++            @libraries.ruined_books.reverse!
++            Gtk.idle_add do
++              ruined_book = @libraries.ruined_books.pop
++              if ruined_book
++                book, isbn, library, filename, path = ruined_book
++                filename_path = File.join(path, filename)
++                begin
++                  File.delete(filename_path)
++                  set_status_label(_("The file '%s' removed") % filename)
++                  log.debug {"The maybe-malformed file #{filename} removed"}
++
++                rescue Exception => ex
++                  log.error { "Could not delete #{filename_path}: #{ex}" }
++                  log.error { ex.backtrace.join("\n") }
++                end
++
++                prog_percentage += fraction_per_book
++                @progressbar.fraction = prog_percentage
++
++                true
++              else
++                ## Totally copied and pasted from refresh_books...
++                ## call this the second strike... (CathalMagus)
++
++                # @iconview.unfreeze
++                # @filtered_model.refilter
++                # @listview.columns_autosize
++
++                @progressbar.fraction = 1
++                ## Hide the progress bar.
++                @appbar.children.first.visible = false
++                ## Refresh the status bar.
++                set_status_label('')
++                # on_books_selection_changed
++                false
++              end
++            end
+           end
+         end
+       end

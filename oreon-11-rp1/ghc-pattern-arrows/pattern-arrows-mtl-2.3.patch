@@ -1,0 +1,10 @@
+--- pattern-arrows-0.0.2/src/Control/PatternArrows.hs~	2014-03-30 00:11:02.000000000 +0800
++++ pattern-arrows-0.0.2/src/Control/PatternArrows.hs	2024-08-13 21:33:41.748258410 +0800
+@@ -18,6 +18,7 @@
+ module Control.PatternArrows where
+ 
+ import Data.Char
++import Control.Monad.Fix
+ import Control.Monad.State
+ import qualified Control.Category as C
+ import Control.Category ((>>>))

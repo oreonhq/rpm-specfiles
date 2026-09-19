@@ -1,0 +1,280 @@
+From 60e346211e53257d2fd0b39d4b89ce60c9053409 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?S=C3=A9rgio=20M=2E=20Basto?= <sergio@serjux.com>
+Date: Wed, 7 Oct 2015 03:59:59 +0100
+Subject: [PATCH 01/10] Fix make dist.
+
+Makes fail because make doc fails .
+for more information please see :
+https://github.com/sergiomb2/libmp4v2/issues/177
+---
+ configure.ac                          |  1 +
+ doc/GNUmakefile.mk                    |  2 +-
+ doc/texi/Authors.texi                 |  2 +-
+ doc/texi/BuildRepository.texi         | 14 +++++++-------
+ doc/texi/BuildSource.texi             | 10 +++++-----
+ doc/texi/Documentation.texi           |  2 +-
+ doc/texi/ReleaseNotes.texi            |  2 +-
+ doc/texi/ToolGuide.texi               |  2 +-
+ doc/texi/build/commands.texi          | 14 +++++++-------
+ doc/texi/build/process.bootstrap.texi |  2 +-
+ doc/texi/build/process.build.texi     |  2 +-
+ doc/texi/build/process.checkout.texi  |  2 +-
+ doc/texi/build/process.configure.texi |  2 +-
+ doc/texi/build/process.dist.texi      |  2 +-
+ doc/texi/build/process.extract.texi   |  2 +-
+ doc/texi/build/process.install.texi   |  2 +-
+ 16 files changed, 32 insertions(+), 31 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 83e9dce..8316c67 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -35,6 +35,7 @@ AC_MSG_NOTICE([
+   -->])
+ 
+ AC_CONFIG_AUX_DIR([autoaux])
++AC_CONFIG_MACRO_DIR([m4])
+ AM_INIT_AUTOMAKE([1.9.6 foreign -Wall -Wno-portability -Werror subdir-objects nostdinc no-dist-gzip dist-bzip2 dist-zip dejagnu])
+ 
+ AC_CONFIG_SRCDIR([src/mp4.cpp])
+diff --git a/doc/GNUmakefile.mk b/doc/GNUmakefile.mk
+index 131b03f..dadb234 100644
+--- a/doc/GNUmakefile.mk
++++ b/doc/GNUmakefile.mk
+@@ -384,4 +384,4 @@ clean-local:
+ ###############################################################################
+ 
+ $(sort $(MKDIRS)):
+-	$(mkdir_p) $@
++	$(mkdir_p) $(sort $(MKDIRS))
+diff --git a/doc/texi/Authors.texi b/doc/texi/Authors.texi
+index 9ec4920..74f2cb8 100644
+--- a/doc/texi/Authors.texi
++++ b/doc/texi/Authors.texi
+@@ -1,4 +1,4 @@
+-@input texinfo @c -*- Texinfo -*-
++\input texinfo @c -*- Texinfo -*-
+ @c %**start of header
+ @setfilename Authors.info
+ @include base/article.texi
+diff --git a/doc/texi/BuildRepository.texi b/doc/texi/BuildRepository.texi
+index dcae56e..f784d69 100644
+--- a/doc/texi/BuildRepository.texi
++++ b/doc/texi/BuildRepository.texi
+@@ -1,4 +1,4 @@
+-@input texinfo @c -*- Texinfo -*-
++\input texinfo @c -*- Texinfo -*-
+ @c %**start of header
+ @setfilename BuildRepository.info
+ @include base/article.texi
+@@ -19,12 +19,12 @@ This document describes the recommended process to build @value{PROJECT.name} fr
+ This chapter is for the impatient or those just looking for a quick summary of all the commands used in a typical build. You may skip this summary and jump to @ref{Build Process}.
+ 
+ @example
+-@COMMAND.checkout{}
+-@COMMAND.bootstrap{}
+-@COMMAND.configure{}
+-@COMMAND.build{}
+-@COMMAND.install{}
+-@COMMAND.dist{}
++@COMMANDcheckout{}
++@COMMANDbootstrap{}
++@COMMANDconfigure{}
++@COMMANDbuild{}
++@COMMANDinstall{}
++@COMMANDdist{}
+ @end example
+ 
+ @anchor{Build Process}
+diff --git a/doc/texi/BuildSource.texi b/doc/texi/BuildSource.texi
+index 233ecdb..853dd30 100644
+--- a/doc/texi/BuildSource.texi
++++ b/doc/texi/BuildSource.texi
+@@ -1,4 +1,4 @@
+-@input texinfo @c -*- Texinfo -*-
++\input texinfo @c -*- Texinfo -*-
+ @c %**start of header
+ @setfilename BuildSource.info
+ @include base/article.texi
+@@ -19,10 +19,10 @@ This document describes the recommended process to build @value{PROJECT.name} fr
+ This chapter is for the impatient or those just looking for a quick summary of all the commands used in a typical build. You may skip this summary and jump to @ref{Build Process}.
+ 
+ @example
+-@COMMAND.extract{}
+-@COMMAND.configure{}
+-@COMMAND.build{}
+-@COMMAND.install{}
++@COMMANDextract{}
++@COMMANDconfigure{}
++@COMMANDbuild{}
++@COMMANDinstall{}
+ @end example
+ 
+ @anchor{Build Process}
+diff --git a/doc/texi/Documentation.texi b/doc/texi/Documentation.texi
+index 7b85fa1..15554aa 100644
+--- a/doc/texi/Documentation.texi
++++ b/doc/texi/Documentation.texi
+@@ -1,4 +1,4 @@
+-@input texinfo @c -*- Texinfo -*-
++\input texinfo @c -*- Texinfo -*-
+ @c %**start of header
+ @setfilename Documentation.info
+ @include base/article.texi
+diff --git a/doc/texi/ReleaseNotes.texi b/doc/texi/ReleaseNotes.texi
+index 2e3d189..ac276a4 100644
+--- a/doc/texi/ReleaseNotes.texi
++++ b/doc/texi/ReleaseNotes.texi
+@@ -1,4 +1,4 @@
+-@input texinfo @c -*- Texinfo -*-
++\input texinfo @c -*- Texinfo -*-
+ @c %**start of header
+ @setfilename ReleaseNotes.info
+ @include base/article.texi
+diff --git a/doc/texi/ToolGuide.texi b/doc/texi/ToolGuide.texi
+index a951f26..7b3398a 100644
+--- a/doc/texi/ToolGuide.texi
++++ b/doc/texi/ToolGuide.texi
+@@ -1,4 +1,4 @@
+-@input texinfo @c -*- Texinfo -*-
++\input texinfo @c -*- Texinfo -*-
+ @c %**start of header
+ @setfilename ToolGuide.info
+ @include base/guide.texi
+diff --git a/doc/texi/build/commands.texi b/doc/texi/build/commands.texi
+index 8ef9ec9..79e42f7 100644
+--- a/doc/texi/build/commands.texi
++++ b/doc/texi/build/commands.texi
+@@ -1,33 +1,33 @@
+-@macro COMMAND.checkout{}
++@macro COMMANDcheckout{}
+ svn checkout @value{PROJECT.repo.url} @value{PROJECT.name.lower}
+ cd @value{PROJECT.name.lower}
+ @end macro
+ 
+-@macro COMMAND.bootstrap{}
++@macro COMMANDbootstrap{}
+ autoreconf -fiv
+ @end macro
+ 
+-@macro COMMAND.extract{}
++@macro COMMANDextract{}
+ tar xf @value{PROJECT.name.lower}-@value{PROJECT.version}.tar.bz2
+ cd @value{PROJECT.name.lower}-@value{PROJECT.version}/
+ @end macro
+ 
+-@macro COMMAND.configure{}
++@macro COMMANDconfigure{}
+ rm -fr build/
+ mkdir build/
+ cd build/
+ ../configure 
+ @end macro
+ 
+-@macro COMMAND.build{}
++@macro COMMANDbuild{}
+ make
+ @end macro
+ 
+-@macro COMMAND.install{}
++@macro COMMANDinstall{}
+ make install
+ make install-man
+ @end macro
+ 
+-@macro COMMAND.dist{}
++@macro COMMANDdist{}
+ make dist
+ @end macro
+diff --git a/doc/texi/build/process.bootstrap.texi b/doc/texi/build/process.bootstrap.texi
+index f8153e9..cb538ac 100644
+--- a/doc/texi/build/process.bootstrap.texi
++++ b/doc/texi/build/process.bootstrap.texi
+@@ -3,7 +3,7 @@
+ The following command causes forces Autotools to regenerate all files and install helper scripts needed at configure-time and to regenerate all files.
+ 
+ @example
+-@COMMAND.bootstrap{}
++@COMMANDbootstrap{}
+ @end example
+ 
+ If you are a project member and preparing for a release, it is important to note that the versions of Autotools available in your path will directly effect files added to the bundle. At the time of writing, the following versions of Autotools are recommended; in some cases a minimum is hard-coded and warnings will be issued if in violation:
+diff --git a/doc/texi/build/process.build.texi b/doc/texi/build/process.build.texi
+index 5e9d7a8..cb178df 100644
+--- a/doc/texi/build/process.build.texi
++++ b/doc/texi/build/process.build.texi
+@@ -3,7 +3,7 @@
+ The following command will build @value{PROJECT.name}.
+ 
+ @example
+-@COMMAND.build{}
++@COMMANDbuild{}
+ @end example
+ 
+ On some platforms @code{make} refers to a BSD-flavor of make which is not compatible with this project. Check if @code{gmake} is installed, and if it is, substitute @code{gmake} wherever you may see @code{make} in this document. Otherwise you will need to install GNU make package version 3.81 or higher. Lower versions might work.
+diff --git a/doc/texi/build/process.checkout.texi b/doc/texi/build/process.checkout.texi
+index 5bf371a..550fd0f 100644
+--- a/doc/texi/build/process.checkout.texi
++++ b/doc/texi/build/process.checkout.texi
+@@ -7,7 +7,7 @@ Sources are checked out from either the trunk, release or a branch. This documen
+ If you are a project member, then you may add the appropriate login/password information as needed.
+ 
+ @example
+-@COMMAND.checkout{}
++@COMMANDcheckout{}
+ @end example
+ 
+ It is recommended to use Subversion 1.5.0 or higher.
+diff --git a/doc/texi/build/process.configure.texi b/doc/texi/build/process.configure.texi
+index 19f427d..6750681 100644
+--- a/doc/texi/build/process.configure.texi
++++ b/doc/texi/build/process.configure.texi
+@@ -3,7 +3,7 @@
+ The following command configures the project for a build.  It is highly recommended that you invoke configure from an empty directory.
+ 
+ @example
+-@COMMAND.configure{}
++@COMMANDconfigure{}
+ @end example
+ 
+ Please see @file{INSTALL} for details on configure usage, and standard options. Additionally, the following custom options have been added to @file{configure}:
+diff --git a/doc/texi/build/process.dist.texi b/doc/texi/build/process.dist.texi
+index 2d8b10b..a9d835b 100644
+--- a/doc/texi/build/process.dist.texi
++++ b/doc/texi/build/process.dist.texi
+@@ -3,7 +3,7 @@
+ The following command will create a @value{PROJECT.name} source distribution. It is during this step that shipped documentation is generated.
+ 
+ @example
+-@COMMAND.dist{}
++@COMMANDdist{}
+ @end example
+ 
+ This step in the build process introduces additional requirements to the host system. While most of the following utilities are generally available, @command{help2man} is used to generate man-pages; however if this command is not available the man-pages will be empty. This is acceptable for non-release builds but for full quality builds this command is required.
+diff --git a/doc/texi/build/process.extract.texi b/doc/texi/build/process.extract.texi
+index b019cac..efad39e 100644
+--- a/doc/texi/build/process.extract.texi
++++ b/doc/texi/build/process.extract.texi
+@@ -2,7 +2,7 @@
+ Extract sources from a @value{TERM.srcdist} bundle. Releases are available from @url{@value{PROJECT.url.website}} in the @url{@value{PROJECT.url.downloads},downloads} section.
+ 
+ @example
+-@COMMAND.extract{}
++@COMMANDextract{}
+ @end example
+ 
+ Older versions of @code{tar} may not automatically uncompress the bundle, so you might have to either enter additional flags manually, or first decompress the bundle before extracting. Some possible command variations for uncompressing a @file{bz2} file:
+diff --git a/doc/texi/build/process.install.texi b/doc/texi/build/process.install.texi
+index 9087853..e3b27dd 100644
+--- a/doc/texi/build/process.install.texi
++++ b/doc/texi/build/process.install.texi
+@@ -4,5 +4,5 @@
+ The following command will install @value{PROJECT.name}.
+ 
+ @example
+-@COMMAND.install{}
++@COMMANDinstall{}
+ @end example
+-- 
+2.21.0
+

@@ -1,0 +1,53 @@
+From: Maik Merten <maik@maik-desktop.(none)>
+Date: Wed, 28 Oct 2009 18:50:41 +0000 (+0100)
+Subject: apply a patch written by Philip Heron: "This fixes a bug where Cortado would die... 
+X-Git-Tag: 0.5.1~21
+X-Git-Url: http://git.xiph.org/?p=cortado.git;a=commitdiff_plain;h=08bad890e3ff664fbb78dcb1c640bc739445369e
+
+apply a patch written by Philip Heron: "This fixes a bug where Cortado would die or display corrupt video when a Theora stream begins with an incomplete packet."
+
+ticket #1565
+---
+
+diff -up jorbis-0.0.17/com/jcraft/jogg/StreamState.java~ jorbis-0.0.17/com/jcraft/jogg/StreamState.java
+--- jorbis-0.0.17/com/jcraft/jogg/StreamState.java~	2008-05-07 10:07:39.000000000 +0200
++++ jorbis-0.0.17/com/jcraft/jogg/StreamState.java	2010-11-04 14:09:06.019015004 +0100
+@@ -294,10 +294,13 @@ public class StreamState{
+         lacing_vals[lacing_fill++]=0x400;
+         lacing_packet++;
+       }
++    }
+ 
+-      // are we a 'continued packet' page?  If so, we'll need to skip
+-      // some segments
+-      if(continued!=0){
++    // are we a 'continued packet' page?  If so, we'll need to skip
++    // some segments
++    if(continued!=0){
++      if(lacing_fill<1 ||
++         lacing_vals[lacing_fill-1]==0x400){
+         bos=0;
+         for(; segptr<segments; segptr++){
+           int val=(header_base[header+27+segptr]&0xff);
+From: Gregory Maxwell <greg@xiph.org>
+Date: Fri, 19 Feb 2010 04:45:21 +0000 (-0500)
+Subject: Fix jorbis for surround sound support. No fancy downmixing yet.
+X-Git-Tag: 0.6.0~30
+X-Git-Url: http://git.xiph.org/?p=cortado.git;a=commitdiff_plain;h=c1d9cef5129e0b452375d7da9129dad435d1a918
+
+Fix jorbis for surround sound support. No fancy downmixing yet.
+---
+
+diff -up jorbis-0.0.17/com/jcraft/jorbis/Util.java~ jorbis-0.0.17/com/jcraft/jorbis/Util.java
+--- jorbis-0.0.17/com/jcraft/jorbis/Util.java~	2008-05-07 10:01:31.000000000 +0200
++++ jorbis-0.0.17/com/jcraft/jorbis/Util.java	2010-11-05 11:46:01.289337997 +0100
+@@ -12,7 +12,8 @@ class Util{
+ 
+   static int ilog2(int v){
+     int ret=0;
+-    while(v>1){
++    if (v>0)v--;
++    while(v>0){
+       ret++;
+       v>>>=1;
+     }

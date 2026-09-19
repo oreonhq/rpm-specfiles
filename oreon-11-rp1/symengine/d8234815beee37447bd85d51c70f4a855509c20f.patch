@@ -1,0 +1,746 @@
+From d8234815beee37447bd85d51c70f4a855509c20f Mon Sep 17 00:00:00 2001
+From: Isuru Fernando <isuruf@gmail.com>
+Date: Mon, 17 Mar 2025 11:45:11 -0700
+Subject: [PATCH] Support no RTTI with option HAVE_SYMENGINE_RTTI
+
+You also need to add `-fno-rtti` to CXXFLAGS env variable before
+you run cmake. This does not happen automatically.
+This disables serialization as cereal does not support disabling
+RTTI using -fno-rtti.
+---
+ .gitignore                                  |  1 +
+ CMakeLists.txt                              |  3 +++
+ benchmarks/add1.cpp                         |  6 ++++--
+ benchmarks/expand1.cpp                      |  6 ++++--
+ benchmarks/expand2.cpp                      |  6 ++++--
+ benchmarks/expand3.cpp                      |  6 ++++--
+ symengine/basic-inl.h                       |  2 ++
+ symengine/basic.cpp                         | 10 +++++++++
+ symengine/dense_matrix.cpp                  | 12 ++++++++++-
+ symengine/matrix.h                          | 20 +++++++++++++++++-
+ symengine/parser/parser.tab.cc              |  2 +-
+ symengine/parser/parser.yy                  |  4 ++--
+ symengine/sets.cpp                          |  4 ++--
+ symengine/sets.h                            |  2 +-
+ symengine/symbol.h                          |  6 ++++++
+ symengine/symengine_config.h.in             |  3 +++
+ symengine/tests/basic/CMakeLists.txt        |  8 ++++---
+ symengine/tests/basic/test_arit.cpp         | 12 ++++++-----
+ symengine/tests/basic/test_basic.cpp        |  2 ++
+ symengine/tests/basic/test_functions.cpp    | 23 ++++++++++++++-------
+ symengine/tests/basic/test_rational.cpp     |  2 ++
+ symengine/tests/basic/test_sets.cpp         | 12 +++++++----
+ symengine/tests/cwrapper/test_cwrapper.c    |  2 ++
+ symengine/tests/eval/test_lambda_double.cpp |  4 ++++
+ symengine/tests/matrix/test_matrix.cpp      |  4 ++++
+ symengine/tests/ntheory/test_ntheory.cpp    |  5 +++--
+ 26 files changed, 129 insertions(+), 38 deletions(-)
+
+diff --git a/.gitignore b/.gitignore
+index a8cde9678d..e0185204b0 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -133,6 +133,7 @@ symengine/utilities/matchpycpp/tests/hopcroft_karp/test_hopcroft_karp
+ 
+ # Benchmarks executables
+ benchmarks/add1
++benchmarks/diff_cache
+ benchmarks/eval_double1
+ benchmarks/expand1
+ benchmarks/expand2
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1203de2d1a..62c367f161 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -124,6 +124,9 @@ set(HAVE_SYMENGINE_IS_CONSTRUCTIBLE yes
+ set(HAVE_SYMENGINE_RESERVE yes
+     CACHE BOOL "C++ compiler supports std::unordered_map<>::reserve()")
+ 
++set(HAVE_SYMENGINE_RTTI yes
++    CACHE BOOL "C++ compiler supports rtti")
++
+ if (MSVC)
+     # MSVC doesn't have cxxabi.h
+     set(HAVE_GCC_ABI_DEMANGLE no)
+diff --git a/benchmarks/add1.cpp b/benchmarks/add1.cpp
+index 6c1ba9b69e..78a1a8fdb5 100644
+--- a/benchmarks/add1.cpp
++++ b/benchmarks/add1.cpp
+@@ -12,11 +12,12 @@
+ using SymEngine::Add;
+ using SymEngine::Basic;
+ using SymEngine::integer;
++using SymEngine::is_a;
+ using SymEngine::Mul;
+ using SymEngine::multinomial_coefficients;
+ using SymEngine::Pow;
+ using SymEngine::RCP;
+-using SymEngine::rcp_dynamic_cast;
++using SymEngine::rcp_static_cast;
+ using SymEngine::Symbol;
+ using SymEngine::symbol;
+ 
+@@ -41,8 +42,9 @@ int main(int argc, char *argv[])
+     std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)
+                      .count()
+               << "ms" << std::endl;
++    assert(is_a<Add>(*a));
+     std::cout << "number of terms: "
+-              << rcp_dynamic_cast<const Add>(a)->get_dict().size() << std::endl;
++              << rcp_static_cast<const Add>(a)->get_dict().size() << std::endl;
+ 
+     return 0;
+ }
+diff --git a/benchmarks/expand1.cpp b/benchmarks/expand1.cpp
+index 4471152ec6..1f23f6c302 100644
+--- a/benchmarks/expand1.cpp
++++ b/benchmarks/expand1.cpp
+@@ -13,11 +13,12 @@ using SymEngine::Add;
+ using SymEngine::Basic;
+ using SymEngine::Integer;
+ using SymEngine::integer;
++using SymEngine::is_a;
+ using SymEngine::Mul;
+ using SymEngine::multinomial_coefficients;
+ using SymEngine::Pow;
+ using SymEngine::RCP;
+-using SymEngine::rcp_dynamic_cast;
++using SymEngine::rcp_static_cast;
+ using SymEngine::Symbol;
+ using SymEngine::symbol;
+ using SymEngine::umap_basic_num;
+@@ -45,8 +46,9 @@ int main(int argc, char *argv[])
+     std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)
+                      .count()
+               << "ms" << std::endl;
++    assert(is_a<Add>(*r));
+     std::cout << "number of terms: "
+-              << rcp_dynamic_cast<const Add>(r)->get_dict().size() << std::endl;
++              << rcp_static_cast<const Add>(r)->get_dict().size() << std::endl;
+ 
+     return 0;
+ }
+diff --git a/benchmarks/expand2.cpp b/benchmarks/expand2.cpp
+index 76e83b9695..71ff5d84af 100644
+--- a/benchmarks/expand2.cpp
++++ b/benchmarks/expand2.cpp
+@@ -13,11 +13,12 @@ using SymEngine::Add;
+ using SymEngine::Basic;
+ using SymEngine::Integer;
+ using SymEngine::integer;
++using SymEngine::is_a;
+ using SymEngine::Mul;
+ using SymEngine::multinomial_coefficients;
+ using SymEngine::Pow;
+ using SymEngine::RCP;
+-using SymEngine::rcp_dynamic_cast;
++using SymEngine::rcp_static_cast;
+ using SymEngine::Symbol;
+ using SymEngine::symbol;
+ using SymEngine::umap_basic_num;
+@@ -52,8 +53,9 @@ int main(int argc, char *argv[])
+     std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)
+                      .count()
+               << "ms" << std::endl;
++    assert(is_a<Add>(*r));
+     std::cout << "number of terms: "
+-              << rcp_dynamic_cast<const Add>(r)->get_dict().size() << std::endl;
++              << rcp_static_cast<const Add>(r)->get_dict().size() << std::endl;
+ 
+     return 0;
+ }
+diff --git a/benchmarks/expand3.cpp b/benchmarks/expand3.cpp
+index 3874c573ec..1a60400416 100644
+--- a/benchmarks/expand3.cpp
++++ b/benchmarks/expand3.cpp
+@@ -13,11 +13,12 @@ using SymEngine::Add;
+ using SymEngine::Basic;
+ using SymEngine::Integer;
+ using SymEngine::integer;
++using SymEngine::is_a;
+ using SymEngine::Mul;
+ using SymEngine::multinomial_coefficients;
+ using SymEngine::Pow;
+ using SymEngine::RCP;
+-using SymEngine::rcp_dynamic_cast;
++using SymEngine::rcp_static_cast;
+ using SymEngine::Symbol;
+ using SymEngine::symbol;
+ using SymEngine::umap_basic_num;
+@@ -45,8 +46,9 @@ int main(int argc, char *argv[])
+     std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)
+                      .count()
+               << "ms" << std::endl;
++    assert(is_a<Add>(*r));
+     std::cout << "number of terms: "
+-              << rcp_dynamic_cast<const Add>(r)->get_dict().size() << std::endl;
++              << rcp_static_cast<const Add>(r)->get_dict().size() << std::endl;
+ 
+     return 0;
+ }
+diff --git a/symengine/basic-inl.h b/symengine/basic-inl.h
+index 652a38704b..6209e60d24 100644
+--- a/symengine/basic-inl.h
++++ b/symengine/basic-inl.h
+@@ -38,11 +38,13 @@ inline bool is_a(const Basic &b)
+     return T::type_code_id == b.get_type_code();
+ }
+ 
++#if HAVE_SYMENGINE_RTTI
+ template <class T>
+ inline bool is_a_sub(const Basic &b)
+ {
+     return dynamic_cast<const T *>(&b) != nullptr;
+ }
++#endif
+ 
+ inline bool is_same_type(const Basic &a, const Basic &b)
+ {
+diff --git a/symengine/basic.cpp b/symengine/basic.cpp
+index 929b2dea94..c622205c1e 100644
+--- a/symengine/basic.cpp
++++ b/symengine/basic.cpp
+@@ -1,6 +1,8 @@
+ #include <symengine/printers.h>
+ #include <symengine/subs.h>
++#if HAVE_SYMENGINE_RTTI
+ #include <symengine/serialize-cereal.h>
++#endif
+ #include <array>
+ 
+ namespace SymEngine
+@@ -50,16 +52,21 @@ std::string Basic::__str__() const
+ 
+ std::string Basic::dumps() const
+ {
++#if HAVE_SYMENGINE_RTTI
+     std::ostringstream oss;
+     unsigned short major = SYMENGINE_MAJOR_VERSION;
+     unsigned short minor = SYMENGINE_MINOR_VERSION;
+     RCPBasicAwareOutputArchive<cereal::PortableBinaryOutputArchive>{oss}(
+         major, minor, this->rcp_from_this());
+     return oss.str();
++#else
++    throw NotImplementedError("Serialization not implemented in no-rtti mode");
++#endif
+ }
+ 
+ RCP<const Basic> Basic::loads(const std::string &serialized)
+ {
++#if HAVE_SYMENGINE_RTTI
+     unsigned short major, minor;
+     RCP<const Basic> obj;
+     std::istringstream iss(serialized);
+@@ -75,6 +82,9 @@ RCP<const Basic> Basic::loads(const std::string &serialized)
+     }
+     iarchive(obj);
+     return obj;
++#else
++    throw NotImplementedError("Serialization not implemented in no-rtti mode");
++#endif
+ }
+ 
+ RCP<const Basic> Basic::subs(const map_basic_basic &subs_dict) const
+diff --git a/symengine/dense_matrix.cpp b/symengine/dense_matrix.cpp
+index 2be761d629..4efbf8fd4f 100644
+--- a/symengine/dense_matrix.cpp
++++ b/symengine/dense_matrix.cpp
+@@ -3,12 +3,14 @@
+ #include <symengine/add.h>
+ #include <symengine/functions.h>
+ #include <symengine/pow.h>
+-#include <symengine/serialize-cereal.h>
+ #include <symengine/subs.h>
+ #include <symengine/symengine_exception.h>
+ #include <symengine/polys/uexprpoly.h>
+ #include <symengine/solve.h>
+ #include <symengine/test_visitors.h>
++#if HAVE_SYMENGINE_RTTI
++#include <symengine/serialize-cereal.h>
++#endif
+ 
+ namespace SymEngine
+ {
+@@ -2059,16 +2061,21 @@ void zeros(DenseMatrix &A)
+ 
+ std::string DenseMatrix::dumps() const
+ {
++#if HAVE_SYMENGINE_RTTI
+     std::ostringstream oss;
+     unsigned short major = SYMENGINE_MAJOR_VERSION;
+     unsigned short minor = SYMENGINE_MINOR_VERSION;
+     RCPBasicAwareOutputArchive<cereal::PortableBinaryOutputArchive>{oss}(
+         major, minor, row_, col_, m_);
+     return oss.str();
++#else
++    throw NotImplementedError("Serialization not implemented in no-rtti mode");
++#endif
+ }
+ 
+ DenseMatrix DenseMatrix::loads(const std::string &serialized)
+ {
++#if HAVE_SYMENGINE_RTTI
+     unsigned short major, minor;
+     unsigned row, col;
+     vec_basic obj;
+@@ -2085,6 +2092,9 @@ DenseMatrix DenseMatrix::loads(const std::string &serialized)
+     }
+     iarchive(row, col, obj);
+     return DenseMatrix(row, col, std::move(obj));
++#else
++    throw NotImplementedError("Serialization not implemented in no-rtti mode");
++#endif
+ }
+ 
+ } // namespace SymEngine
+diff --git a/symengine/matrix.h b/symengine/matrix.h
+index a8a2d903e2..72d21f90ba 100644
+--- a/symengine/matrix.h
++++ b/symengine/matrix.h
+@@ -7,12 +7,19 @@
+ namespace SymEngine
+ {
+ 
++enum MatrixTypeID {
++    SYMENGINE_DENSE_MATRIX,
++    SYMENGINE_CSR_MATRIX,
++};
++
+ // Base class for matrices
+ class MatrixBase
+ {
+ public:
+     virtual ~MatrixBase(){};
+ 
++    virtual MatrixTypeID get_type_code() const;
++
+     bool is_square() const
+     {
+         return ncols() == nrows();
+@@ -111,6 +118,12 @@ class DenseMatrix : public MatrixBase
+     DenseMatrix(unsigned row, unsigned col, const vec_basic &l);
+     DenseMatrix(const vec_basic &column_elements);
+     DenseMatrix &operator=(const DenseMatrix &other) = default;
++    // type_code
++    const static MatrixTypeID type_code_id = SYMENGINE_DENSE_MATRIX;
++    virtual MatrixTypeID get_type_code() const
++    {
++        return SYMENGINE_DENSE_MATRIX;
++    }
+     // Resize
+     void resize(unsigned i, unsigned j);
+ 
+@@ -356,6 +369,11 @@ class CSRMatrix : public MatrixBase
+               std::vector<unsigned> &&j, vec_basic &&x);
+     CSRMatrix &operator=(CSRMatrix &&other);
+     CSRMatrix(const CSRMatrix &) = default;
++    const static MatrixTypeID type_code_id = SYMENGINE_CSR_MATRIX;
++    virtual MatrixTypeID get_type_code() const
++    {
++        return SYMENGINE_CSR_MATRIX;
++    }
+     std::tuple<std::vector<unsigned>, std::vector<unsigned>, vec_basic>
+     as_vectors() const;
+ 
+@@ -576,7 +594,7 @@ void reduced_row_echelon_form(const DenseMatrix &A, DenseMatrix &B,
+ template <class T>
+ inline bool is_a(const MatrixBase &b)
+ {
+-    return typeid(T) == typeid(b);
++    return T::type_code_id == b.get_type_code();
+ }
+ 
+ // Test two matrices for equality
+diff --git a/symengine/parser/parser.tab.cc b/symengine/parser/parser.tab.cc
+index 24628d039a..b5ce819d83 100644
+--- a/symengine/parser/parser.tab.cc
++++ b/symengine/parser/parser.tab.cc
+@@ -1025,7 +1025,7 @@ namespace yy {
+ #line 234 "parser.yy"
+     {
+         auto logical_expr = yystack_[1].value.as < SymEngine::RCP<const SymEngine::Basic> > ();
+-        if (!SymEngine::is_a_sub<Boolean>(*logical_expr)) {
++        if (!SymEngine::is_a_Boolean(*logical_expr)) {
+             throw SymEngine::ParseError(SymEngine::StreamFmt() << "Not of Boolean type in Piecewise arguments: "
+                                         << logical_expr->__str__());
+         }
+diff --git a/symengine/parser/parser.yy b/symengine/parser/parser.yy
+index 7e106d0c84..0657e7a065 100644
+--- a/symengine/parser/parser.yy
++++ b/symengine/parser/parser.yy
+@@ -232,7 +232,7 @@ epair:
+     '(' expr ',' expr ')'
+     {
+         auto logical_expr = $4;
+-        if (!SymEngine::is_a_sub<Boolean>(*logical_expr)) {
++        if (!SymEngine::is_a_Boolean(*logical_expr)) {
+             throw SymEngine::ParseError(SymEngine::StreamFmt() << "Not of Boolean type in Piecewise arguments: "
+                                         << logical_expr->__str__());
+         }
+@@ -273,4 +273,4 @@ expr_list:
+     {
+         $$ = vec_basic(1, $1);
+     }
+-;
+\ No newline at end of file
++;
+diff --git a/symengine/sets.cpp b/symengine/sets.cpp
+index fdb67e427e..47fe08c703 100644
+--- a/symengine/sets.cpp
++++ b/symengine/sets.cpp
+@@ -1454,7 +1454,7 @@ bool ConditionSet::is_canonical(const RCP<const Basic> &sym,
+                                 const RCP<const Boolean> &condition)
+ {
+     if (eq(*condition, *boolFalse) or eq(*condition, *boolTrue)
+-        or not is_a_sub<Symbol>(*sym)) {
++        or not is_a_Symbol(*sym)) {
+         return false;
+     } else if (is_a<Contains>(*condition)) {
+         return false;
+@@ -1569,7 +1569,7 @@ bool ImageSet::is_canonical(const RCP<const Basic> &sym,
+                             const RCP<const Basic> &expr,
+                             const RCP<const Set> &base)
+ {
+-    if (not is_a_sub<Symbol>(*sym) or eq(*expr, *sym) or is_a_Number(*expr)
++    if (not is_a_Symbol(*sym) or eq(*expr, *sym) or is_a_Number(*expr)
+         or eq(*base, *emptyset()))
+         return false;
+     return true;
+diff --git a/symengine/sets.h b/symengine/sets.h
+index 057e9bce83..11be06e62c 100644
+--- a/symengine/sets.h
++++ b/symengine/sets.h
+@@ -625,7 +625,7 @@ inline RCP<const Set> imageset(const RCP<const Basic> &sym,
+                                const RCP<const Basic> &expr,
+                                const RCP<const Set> &base)
+ {
+-    if (not is_a_sub<Symbol>(*sym))
++    if (not is_a_Symbol(*sym))
+         throw SymEngineException("first arg is expected to be a symbol");
+ 
+     if (eq(*expr, *sym) or eq(*base, *emptyset()))
+diff --git a/symengine/symbol.h b/symengine/symbol.h
+index bef4d338a4..4a8d92d22a 100644
+--- a/symengine/symbol.h
++++ b/symengine/symbol.h
+@@ -95,6 +95,12 @@ inline RCP<const Dummy> dummy(const std::string &name)
+     return make_rcp<const Dummy>(name);
+ }
+ 
++inline bool is_a_Symbol(const Basic &b)
++{
++    return b.get_type_code() == SYMENGINE_SYMBOL
++           || b.get_type_code() == SYMENGINE_DUMMY;
++}
++
+ } // namespace SymEngine
+ 
+ #endif
+diff --git a/symengine/symengine_config.h.in b/symengine/symengine_config.h.in
+index a4f406cfdd..f90b99741c 100644
+--- a/symengine/symengine_config.h.in
++++ b/symengine/symengine_config.h.in
+@@ -72,6 +72,9 @@
+ /* Define if the C++ compiler has std::to_string */
+ #cmakedefine HAVE_SYMENGINE_STD_TO_STRING
+ 
++/* Define if the C++ compiler has RTTI */
++#cmakedefine01 HAVE_SYMENGINE_RTTI
++
+ #define SYMENGINE_GMPXX 0
+ #define SYMENGINE_PIRANHA 1
+ #define SYMENGINE_FLINT 2
+diff --git a/symengine/tests/basic/CMakeLists.txt b/symengine/tests/basic/CMakeLists.txt
+index 36ccd35bd0..216157df3c 100644
+--- a/symengine/tests/basic/CMakeLists.txt
++++ b/symengine/tests/basic/CMakeLists.txt
+@@ -68,9 +68,11 @@ add_executable(test_parser test_parser.cpp)
+ target_link_libraries(test_parser symengine catch)
+ add_test(test_parser ${PROJECT_BINARY_DIR}/test_parser)
+ 
+-add_executable(test_serialize-cereal test_serialize-cereal.cpp)
+-target_link_libraries(test_serialize-cereal symengine catch)
+-add_test(test_serialize-cereal ${PROJECT_BINARY_DIR}/test_serialize-cereal)
++if (HAVE_SYMENGINE_RTTI)
++    add_executable(test_serialize-cereal test_serialize-cereal.cpp)
++    target_link_libraries(test_serialize-cereal symengine catch)
++    add_test(test_serialize-cereal ${PROJECT_BINARY_DIR}/test_serialize-cereal)
++endif()
+ 
+ add_executable(test_sbml_parser test_sbml_parser.cpp)
+ target_link_libraries(test_sbml_parser symengine catch)
+diff --git a/symengine/tests/basic/test_arit.cpp b/symengine/tests/basic/test_arit.cpp
+index c06abb9cfb..971675e853 100644
+--- a/symengine/tests/basic/test_arit.cpp
++++ b/symengine/tests/basic/test_arit.cpp
+@@ -42,7 +42,7 @@ using SymEngine::print_stack_on_segfault;
+ using SymEngine::Rational;
+ using SymEngine::rational_class;
+ using SymEngine::RCP;
+-using SymEngine::rcp_dynamic_cast;
++using SymEngine::rcp_static_cast;
+ using SymEngine::real_double;
+ using SymEngine::RealDouble;
+ using SymEngine::set_basic;
+@@ -1199,9 +1199,9 @@ TEST_CASE("Expand1: arit", "[arit]")
+     std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)
+                      .count()
+               << "ms" << std::endl;
++    REQUIRE(is_a<Add>(*r2));
+     std::cout << "number of terms: "
+-              << rcp_dynamic_cast<const Add>(r2)->get_dict().size()
+-              << std::endl;
++              << rcp_static_cast<const Add>(r2)->get_dict().size() << std::endl;
+ }
+ 
+ TEST_CASE("Expand2: arit", "[arit]")
+@@ -1451,8 +1451,9 @@ TEST_CASE("Expand3: arit", "[arit]")
+     std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)
+                      .count()
+               << "ms" << std::endl;
++    REQUIRE(is_a<Add>(*r));
+     std::cout << "number of terms: "
+-              << rcp_dynamic_cast<const Add>(r)->get_dict().size() << std::endl;
++              << rcp_static_cast<const Add>(r)->get_dict().size() << std::endl;
+ 
+     RCP<const Number> rc1, rc2, c1;
+     rc1 = Rational::from_two_ints(*integer(2), *integer(1));
+@@ -1469,8 +1470,9 @@ TEST_CASE("Expand3: arit", "[arit]")
+     std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)
+                      .count()
+               << "ms" << std::endl;
++    REQUIRE(is_a<Add>(*r));
+     std::cout << "number of terms: "
+-              << rcp_dynamic_cast<const Add>(r)->get_dict().size() << std::endl;
++              << rcp_static_cast<const Add>(r)->get_dict().size() << std::endl;
+ 
+     e = pow(c1, integer(-40));
+ 
+diff --git a/symengine/tests/basic/test_basic.cpp b/symengine/tests/basic/test_basic.cpp
+index c6f3ccbd31..a7b7081306 100644
+--- a/symengine/tests/basic/test_basic.cpp
++++ b/symengine/tests/basic/test_basic.cpp
+@@ -87,6 +87,7 @@ TEST_CASE("Symbol hash: Basic", "[basic]")
+ 
+ TEST_CASE("Symbol string serialization: Basic", "[basic]")
+ {
++#if HAVE_SYMENGINE_RTTI
+     RCP<const Symbol> x = symbol("x");
+     RCP<const Symbol> x2
+         = rcp_static_cast<const Symbol>(Basic::loads(x->dumps()));
+@@ -100,6 +101,7 @@ TEST_CASE("Symbol string serialization: Basic", "[basic]")
+     std::hash<Basic> hash_fn;
+     // Hashes of x and x2 must be the same:
+     REQUIRE(hash_fn(*x) == hash_fn(*x2));
++#endif
+ }
+ 
+ TEST_CASE("Symbol dict: Basic", "[basic]")
+diff --git a/symengine/tests/basic/test_functions.cpp b/symengine/tests/basic/test_functions.cpp
+index 955c130ff8..f9a0f0e2d7 100644
+--- a/symengine/tests/basic/test_functions.cpp
++++ b/symengine/tests/basic/test_functions.cpp
+@@ -115,7 +115,7 @@ using SymEngine::print_stack_on_segfault;
+ using SymEngine::rational;
+ using SymEngine::Rational;
+ using SymEngine::RCP;
+-using SymEngine::rcp_dynamic_cast;
++using SymEngine::rcp_static_cast;
+ using SymEngine::real_double;
+ using SymEngine::RealDouble;
+ using SymEngine::sec;
+@@ -842,7 +842,9 @@ TEST_CASE("Csc: functions", "[functions]")
+     REQUIRE(eq(*r1, *r2));
+ 
+     // csc(pi/5 + y) unchanged
+-    r1 = rcp_dynamic_cast<const Csc>(csc(add(div(pi, i5), y)))->get_arg();
++    r1 = csc(add(div(pi, i5), y));
++    REQUIRE(is_a<Csc>(*r1));
++    r1 = rcp_static_cast<const Csc>(r1)->get_arg();
+     r2 = add(div(pi, i5), y);
+     REQUIRE(eq(*r1, *r2));
+ 
+@@ -976,7 +978,9 @@ TEST_CASE("Sec: functions", "[functions]")
+     REQUIRE(eq(*r1, *r2));
+ 
+     // sec(pi/3 + y) unchanged
+-    r1 = rcp_dynamic_cast<const Sec>(sec(add(div(pi, i3), y)))->get_arg();
++    r1 = sec(add(div(pi, i3), y));
++    REQUIRE(is_a<Sec>(*r1));
++    r1 = rcp_static_cast<const Sec>(r1)->get_arg();
+     r2 = add(div(pi, i3), y);
+     REQUIRE(eq(*r1, *r2));
+ 
+@@ -3331,7 +3335,8 @@ TEST_CASE("LogGamma: functions", "[functions]")
+     REQUIRE(eq(*r1, *Inf));
+ 
+     r1 = loggamma(x);
+-    r1 = SymEngine::rcp_dynamic_cast<const LogGamma>(r1)->rewrite_as_gamma();
++    REQUIRE(is_a<LogGamma>(*r1));
++    r1 = SymEngine::rcp_static_cast<const LogGamma>(r1)->rewrite_as_gamma();
+     REQUIRE(eq(*r1, *log(gamma(x))));
+ 
+     r1 = loggamma(x)->diff(x);
+@@ -3693,13 +3698,15 @@ TEST_CASE("Polygamma: functions", "[functions]")
+     r1 = polygamma(i2, im2);
+     REQUIRE(eq(*r1, *ComplexInf));
+ 
+-    r1 = SymEngine::rcp_dynamic_cast<const PolyGamma>(polygamma(i2, x))
+-             ->rewrite_as_zeta();
++    r1 = polygamma(i2, x);
++    REQUIRE(is_a<PolyGamma>(*r1));
++    r1 = SymEngine::rcp_static_cast<const PolyGamma>(r1)->rewrite_as_zeta();
+     r2 = neg(mul(i2, zeta(i3, x)));
+     REQUIRE(eq(*r1, *r2));
+ 
+-    r1 = SymEngine::rcp_dynamic_cast<const PolyGamma>(polygamma(i3, x))
+-             ->rewrite_as_zeta();
++    r1 = polygamma(i3, x);
++    REQUIRE(is_a<PolyGamma>(*r1));
++    r1 = SymEngine::rcp_static_cast<const PolyGamma>(r1)->rewrite_as_zeta();
+     r2 = mul(integer(6), zeta(i4, x));
+     REQUIRE(eq(*r1, *r2));
+ 
+diff --git a/symengine/tests/basic/test_rational.cpp b/symengine/tests/basic/test_rational.cpp
+index 530fbd6dff..80c1640475 100644
+--- a/symengine/tests/basic/test_rational.cpp
++++ b/symengine/tests/basic/test_rational.cpp
+@@ -50,8 +50,10 @@ TEST_CASE("Rational", "[rational]")
+ 
+     CHECK_THROWS_AS(q->pow(*q10_25), NotImplementedError);
+ 
++#if HAVE_SYMENGINE_RTTI
+     RCP<const Basic> r3 = Basic::loads(r1->dumps());
+     REQUIRE(eq(*r1, *r3));
++#endif
+ }
+ 
+ TEST_CASE("Rational compare", "[rational compare]")
+diff --git a/symengine/tests/basic/test_sets.cpp b/symengine/tests/basic/test_sets.cpp
+index 63b4b2b7b0..f03d0d9c9a 100644
+--- a/symengine/tests/basic/test_sets.cpp
++++ b/symengine/tests/basic/test_sets.cpp
+@@ -61,7 +61,7 @@ using SymEngine::rational_class;
+ using SymEngine::Rationals;
+ using SymEngine::rationals;
+ using SymEngine::RCP;
+-using SymEngine::rcp_dynamic_cast;
++using SymEngine::rcp_static_cast;
+ using SymEngine::real_double;
+ using SymEngine::Reals;
+ using SymEngine::reals;
+@@ -205,7 +205,8 @@ TEST_CASE("Interval : Basic", "[basic]")
+     REQUIRE(eq(*r1, *emptyset()));
+ 
+     r1 = interval(zero, one);
+-    RCP<const Interval> r5 = rcp_dynamic_cast<const Interval>(r1);
++    REQUIRE(is_a<Interval>(*r1));
++    RCP<const Interval> r5 = rcp_static_cast<const Interval>(r1);
+ 
+     r2 = interval(zero, one, false, false);
+     REQUIRE(eq(*r5->close(), *r1));
+@@ -958,7 +959,8 @@ TEST_CASE("Union : Basic", "[basic]")
+     i2 = interval(integer(3), integer(4));
+     i3 = interval(integer(2), integer(3));
+     RCP<const Set> r2 = set_union({i1, i2, i3});
+-    RCP<const Union> u = rcp_dynamic_cast<const Union>(r2);
++    REQUIRE(is_a<Union>(*r2));
++    RCP<const Union> u = rcp_static_cast<const Union>(r2);
+     REQUIRE(u->get_container().size() == 2);
+     REQUIRE(u->get_container().find(interval(zero, one))
+             != u->get_container().end());
+@@ -981,7 +983,9 @@ TEST_CASE("Union : Basic", "[basic]")
+ 
+     r2 = set_union({i1, i2, i3});
+     r1 = set_union({finiteset({zero}), i2});
+-    u = rcp_dynamic_cast<const Union>(set_union({r1, r2}));
++    auto r3 = set_union({r1, r2});
++    REQUIRE(is_a<Union>(*r3));
++    u = rcp_static_cast<const Union>(r3);
+     REQUIRE(u->get_container().find(interval(integer(2), integer(4)))
+             != u->get_container().end());
+     REQUIRE(u->get_container().find(interval(zero, one))
+diff --git a/symengine/tests/cwrapper/test_cwrapper.c b/symengine/tests/cwrapper/test_cwrapper.c
+index 3af0227c99..4ac71b6fa9 100644
+--- a/symengine/tests/cwrapper/test_cwrapper.c
++++ b/symengine/tests/cwrapper/test_cwrapper.c
+@@ -113,6 +113,7 @@ void test_cwrapper()
+     SYMENGINE_C_ASSERT(strcmp(s, "exp(sqrt(123))") == 0);
+     basic_str_free(s);
+ 
++#if HAVE_SYMENGINE_RTTI
+     unsigned long size = 0;
+     basic deserialized;
+ 
+@@ -122,6 +123,7 @@ void test_cwrapper()
+     SYMENGINE_C_ASSERT(basic_eq(deserialized, e) == 1);
+     basic_str_free(serialized);
+     basic_free_stack(deserialized);
++#endif
+ 
+     rational_set_si(e, 100, 47);
+     s = basic_str(e);
+diff --git a/symengine/tests/eval/test_lambda_double.cpp b/symengine/tests/eval/test_lambda_double.cpp
+index 4ad8804e23..45f8abc3ab 100644
+--- a/symengine/tests/eval/test_lambda_double.cpp
++++ b/symengine/tests/eval/test_lambda_double.cpp
+@@ -267,8 +267,12 @@ TEST_CASE("Evaluate functions", "[lambda_gamma]")
+ 
+     for (unsigned i = 0; i < testvec.size(); i++) {
+         RCP<const Basic> expr1 = std::get<0>(testvec[i]);
++#if HAVE_SYMENGINE_RTTI
+         RCP<const Basic> expr2
+             = Basic::loads(expr1->dumps()); // test serialization
++#else
++        RCP<const Basic> expr2 = expr1;
++#endif
+         const auto arg = std::get<1>(testvec[i]);
+         const auto ref = std::get<2>(testvec[i]);
+         std::array<RCP<const Basic>, 2> exprs{{expr1, expr2}};
+diff --git a/symengine/tests/matrix/test_matrix.cpp b/symengine/tests/matrix/test_matrix.cpp
+index b704a197e3..fa5306c1bc 100644
+--- a/symengine/tests/matrix/test_matrix.cpp
++++ b/symengine/tests/matrix/test_matrix.cpp
+@@ -190,7 +190,9 @@ TEST_CASE("test_dense_dense_addition(): matrices", "[matrices]")
+                            {add(integer(3), symbol("a")),
+                             add(symbol("b"), integer(2)),
+                             add(symbol("c"), integer(-3)), symbol("d")}));
++#if HAVE_SYMENGINE_RTTI
+     REQUIRE(DenseMatrix::loads(C.dumps()) == C);
++#endif
+ 
+     C = DenseMatrix(2, 3);
+     A = DenseMatrix(2, 3,
+@@ -200,7 +202,9 @@ TEST_CASE("test_dense_dense_addition(): matrices", "[matrices]")
+                     {integer(10), integer(13), integer(5), integer(-7),
+                      symbol("c"), symbol("d")});
+     add_dense_dense(A, B, C);
++#if HAVE_SYMENGINE_RTTI
+     REQUIRE(DenseMatrix::loads(C.dumps()) == C);
++#endif
+ 
+     REQUIRE(C
+             == DenseMatrix(2, 3,
+diff --git a/symengine/tests/ntheory/test_ntheory.cpp b/symengine/tests/ntheory/test_ntheory.cpp
+index 57e4b9c908..76103a9b2c 100644
+--- a/symengine/tests/ntheory/test_ntheory.cpp
++++ b/symengine/tests/ntheory/test_ntheory.cpp
+@@ -40,7 +40,6 @@ using SymEngine::quotient_mod_f;
+ using SymEngine::Rational;
+ using SymEngine::rational;
+ using SymEngine::RCP;
+-using SymEngine::rcp_dynamic_cast;
+ using SymEngine::rcp_static_cast;
+ using SymEngine::real_double;
+ using SymEngine::RealDouble;
+@@ -418,7 +417,9 @@ void _test_prime_factor_multiplicities(const RCP<const Integer> &a)
+     for (auto it : prime_mul) {
+         multiplicity = it.second;
+         while (multiplicity) {
+-            _a = rcp_dynamic_cast<const Integer>(div(_a, it.first));
++            RCP<const Basic> b = div(_a, it.first);
++            REQUIRE(is_a<Integer>(*b));
++            _a = rcp_static_cast<const Integer>(b);
+             multiplicity--;
+         }
+     }

@@ -1,0 +1,11 @@
+--- glaxium_0.5/fighter2.cpp	2002-10-04 20:05:20.000000000 +0200
++++ glaxium_0.5/fighter2.cpp.fix	2012-04-24 16:31:47.615923347 +0200
+@@ -87,7 +87,7 @@ void Fighter2::initList()
+ 	 }
+    
+     
+-    for (i=0;i<587;i++) {
++    for (i=0;i<578;i++) {
+         fighter2_meshes[i*24+7] = 1 - fighter2_meshes[i*24+7];
+         fighter2_meshes[i*24+7+8] = 1 - fighter2_meshes[i*24+7+8];
+         fighter2_meshes[i*24+7+16] = 1 - fighter2_meshes[i*24+7+16];

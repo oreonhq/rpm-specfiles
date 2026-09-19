@@ -1,0 +1,387 @@
+--- extensions/adj2d/adj2D.h.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/adj2d/adj2D.h	2018-08-29 20:03:25.109519358 -0600
+@@ -25,7 +25,7 @@ Word ADJ_2D1P2(Word U, Word V, Word w_l,
+ Word ADJ_2D1P3(Word U, Word w_l, Word B);
+ Word ADJ_2D1_COMPLETE(Word c, Word c_l, Word c_r, Word P, Word J);
+ Word ADJ_2D1_SIMPLE(Word U, Word V, Word w_l, Word B);
+-Word CWD_VECTOR_Q(Word u, Word v);
++Word CWD_VECTOR_Q(Word u, Word v) __pure;
+ Word EQUAL_ON_ONES(Word u, Word v);
+ Word LDCOEFMASK(Word c, Word P, Word J);
+ Word LDCOEFMASK(Word c, Word P, Word J);
+@@ -34,13 +34,13 @@ Word P1(Word U, Word V, Word W, Word v_l
+ Word P2(Word x_l, Word x_r, Word U, Word V, Word W, Word v_l, Word B);
+ Word P3(Word U, Word V, Word W, Word v_l, Word B);
+ Word P4(Word U, Word V, Word W, Word v_l, Word B);
+-Word SUM_NORM_SP(Word v);
++Word SUM_NORM_SP(Word v) __pure;
+ Word VECTOR_DIF(Word u, Word v);
+ Word VECTOR_DIF_S(Word u, Word v, Word *f);
+-Word VECTOR_LTEQ(Word u, Word v);
++Word VECTOR_LTEQ(Word u, Word v) __pure;
+ Word VECTOR_NEG(Word u);
+-Word VECTOR_ODD_E(Word v_);
+-Word VECTOR_SEMI_COMP(Word u, Word v);
++Word VECTOR_ODD_E(Word v_) __pure;
++Word VECTOR_SEMI_COMP(Word u, Word v) __pure;
+ Word VECTOR_SUM(Word u, Word v);
+ Word VECTOR_S_PROD(Word s, Word v);
+ Word ZERO_VECTOR(Word n);
+@@ -55,7 +55,7 @@ Word RIIFACMA(Word I, Word A, Word t, Wo
+ Word  RIIFACMABR(Word P, Word J, Word K, Word *H, Word *I);
+ Word SPRLC(Word c);
+ Word ADJ2DITOEL(Word L, Word c1, Word c0);
+-Word CCTV(Word C);
++Word CCTV(Word C) __pure;
+ void CTVPROPUP(Word C, Word t, Word N, Word by);
+ void TVCLOSURE1D(Word D, Word P, Word J, Word k, Word t);
+ void TVCLOSURE1DS(Word D, Word P, Word J, Word k, Word t);
+--- extensions/adj2d/truthbytop/truthbytop.h.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/adj2d/truthbytop/truthbytop.h	2018-08-29 20:03:25.109519358 -0600
+@@ -4,13 +4,13 @@
+ #include "adj2D.h"
+ 
+ void GADDVERTEX(Word v, Word l, Word *G_);
+-Word GSTACKHANDLE(Word i, Word G_);
++Word GSTACKHANDLE(Word i, Word G_) __pure;
+ Word GVERTEXHANDLE(Word v, Word G_);
+ Word GVERTEXLABEL(Word v, Word G_);
+ void GNEWLABEL(Word v, Word l, Word G_);
+ void GADDEDGE(Word e, Word G_);
+ Word GSUCCLIST(Word v, Word G_);
+-Word vert2dim(Word v);
++Word vert2dim(Word v) __pure;
+ Word GPREDLIST(Word v, Word G_);
+ 
+ #endif
+--- extensions/newadj/HATEST.c.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/newadj/HATEST.c	2018-08-29 20:03:25.111519356 -0600
+@@ -1,5 +1,5 @@
+ #include "newadj2D.h"
+-Word ISSECTOR(Word C) { return LAST(LELTI(C,INDX)) % 2; }
++static Word __pure ISSECTOR(Word C) { return LAST(LELTI(C,INDX)) % 2; }
+ void SAMPLECWR(Word c);
+ void strippedAFLWR(Word M,Word I,Word N,Word a,Word A);
+ void ANDWRITExx(Word M,Word I,Word n);
+--- extensions/rend/Rend_Cell.h.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/rend/Rend_Cell.h	2018-08-29 20:03:25.108519359 -0600
+@@ -49,8 +49,8 @@ public:
+   Rend_Cell& operator[](int i); /* gives child from index   */
+   Rend_Cell* neighbor_l(); /* returns left neighbor cell    */
+   Rend_Cell* neighbor_r(); /* returns right neighbor cell   */
+-  int array_index();       /* returns i such that 
+-			      parent->child[i] is the cell  */
++  int array_index() __pure; /* returns i such that 
++				parent->child[i] is the cell  */
+   void set_extents(Word J);
+   void out_descrip(Rend_Win &W, ostream &out, Mapper &M);
+   void out_descrip_ps(Rend_Win &W, ostream &out, Mapper &M);
+--- extensions/rend/rend.h.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/rend/rend.h	2018-08-29 20:03:25.108519359 -0600
+@@ -34,7 +34,7 @@ extern "C" {
+ 
+ #include <iostream>
+ #include <sstream>
+-istream& qein(); // fetches the current qepcad istream object
++istream& qein() __pure; // fetches the current qepcad istream object
+ 
+ class singlelinestream : public istringstream
+ {
+--- extensions/sfext/addpol/MINPFSETNSC.c.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/sfext/addpol/MINPFSETNSC.c	2018-08-29 20:03:25.110519357 -0600
+@@ -25,6 +25,8 @@ outputs
+ #define BDCOMP(a,b)       ((a) > (b) ? 1 : ((a) < (b) ? -1 : 0))
+ #define CFLCT 5
+ 
++static Word comp1(Word a, Word b) __pure;
++
+ static Word comp1(Word a,Word b) {
+   Word A,B,t;
+   A = RED(a); B = RED(b); t = 0;
+--- extensions/sfext/extlang/CLOSESTINDEX.c.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/sfext/extlang/CLOSESTINDEX.c	2018-08-29 20:03:25.109519358 -0600
+@@ -10,6 +10,8 @@ cp: the ESCAD cell in L with index close
+ 
+ #include "extlang.h"
+ 
++static Word comp(Word u, Word v) __pure;
++
+ static Word comp(Word u, Word v)
+ {
+   Word r,t,U,V,A,B,a,b;
+--- extensions/sfext/minhit/MINHITSETSRDR.c.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/sfext/minhit/MINHITSETSRDR.c	2018-08-29 20:03:25.109519358 -0600
+@@ -24,6 +24,8 @@ Note:  The point is that not only sortin
+ #define BDCOMP(a,b)  ((a) > (b) ? 1 : ((a) < (b) ? -1 : 0))
+ #define MC_FAIL 0
+ 
++static Word comp(Word a, Word b) __pure;
++
+ static Word comp(Word a, Word b) {
+       Word ap,bp,t,q;
+       ap = a; bp = b;
+--- extensions/sfext/mysort.h.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/sfext/mysort.h	2018-08-29 20:03:25.110519357 -0600
+@@ -52,7 +52,7 @@ Side Effects
+ Word GMSDS(Word *A, Word m, Word (*C)(Word,Word));
+ 
+ 
+-extern Word BVC(Word *u_,Word *v_,Word n);
++extern Word BVC(const Word *u_,const Word *v_,Word n) __pure;
+ extern void BVIS(Word **A,Word m,Word n);
+-extern Word BVCI1(Word *u_,Word *v_,Word n);
++extern Word BVCI1(const Word *u_,const Word *v_,Word n) __pure;
+ extern void BVISI1(Word **A,Word m,Word n);
+--- extensions/sfext/sfcons/ESPCADDOPFSUFF.c.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/sfext/sfcons/ESPCADDOPFSUFF.c	2018-08-29 20:03:25.110519357 -0600
+@@ -17,7 +17,7 @@ outputs
+ #include "qepcad.h"
+ #include "espcad.h"
+ 
+-static Word comp(Word A, Word B);
++static Word comp(Word A, Word B) __pure;
+ #define BDCOMP(a,b)   ((a) > (b) ? 1 : ((a) < (b) ? -1 : 0))
+ 	  
+ Word ESPCADDOPFSUFF(Word P, Word K)
+--- extensions/sfext/sort/BVC.c.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/sfext/sort/BVC.c	2018-08-29 20:03:25.110519357 -0600
+@@ -12,9 +12,9 @@ b : -1 if u < v in lex order, 0 if u = v
+   ======================================================================*/
+ #include "mysort.h"
+ 
+-Word BVC(Word *u_, Word *v_, Word n)
++Word BVC(const Word *u_, const Word *v_, Word n)
+ {
+-       Word *w,*u,*v;
++       const Word *w,*u,*v;
+        u = u_;
+        v = v_;
+        w = u + n;
+--- extensions/sfext/sort/BVCI1.c.orig	2018-01-25 14:25:22.000000000 -0700
++++ extensions/sfext/sort/BVCI1.c	2018-08-29 20:03:25.110519357 -0600
+@@ -12,9 +12,9 @@ b : -1 if u < v in lex order, 0 if u = v
+   ======================================================================*/
+ #include "qepcad.h"
+ 
+-Word BVCI1(Word *u_, Word *v_, Word n)
++Word BVCI1(const Word *u_, const Word *v_, Word n)
+ {
+-       Word *w,*u,*v;
++       const Word *w,*u,*v;
+        u = u_+1;
+        v = v_+1;
+        w = u + n;
+--- source/main/qepcadcls.h.orig	2018-03-16 14:22:00.000000000 -0600
++++ source/main/qepcadcls.h	2018-08-29 20:03:25.111519356 -0600
+@@ -222,7 +222,7 @@ UnsatCore UNSATCORE;
+   void CHCELL(Word cs, Word *c_, Word *t_);
+   void ECLI(Word D, Word *c_, Word *t_);
+   BDigit SCREEN(Word c); 
+-  BDigit SCREENBYQUANTIFIER(Word c); 
++  BDigit SCREENBYQUANTIFIER(Word c) __pure; 
+   Word ISFECLI(Word D);
+   Word INITPCAD();
+   void EVALUATE(Word c, Word k, Word F, Word A);
+--- source/qepcad.h.orig	2018-01-25 14:25:22.000000000 -0700
++++ source/qepcad.h	2018-08-29 20:04:27.596451754 -0600
+@@ -134,10 +134,10 @@ void IPLLDWRMOD(Word V, Word A);
+ void IPLSRP(Word A, Word *s_, Word *P_);
+ Word IPRESPRS(Word r, Word A, Word B);
+ Word IPRNEVAL(BDigit r, Word P, BDigit t, Word b);
+-Word ISATOMF(Word F);
++Word ISATOMF(Word F) __pure;
+ Word ISDESIRED(Word c, Word C);
+ Word ISNULL(Word L);
+-Word ISPRIMIT(Word s);
++Word ISPRIMIT(Word s) __pure;
+ void IUPRWR(Word v, Word A, Word I);
+ Word IXCOMP(Word c1, Word c2);
+ void LABELWR(Word N, Word I);
+@@ -148,7 +148,7 @@ Word LOAR(Word k, Word Q, Word F);
+ Word LPFTOLRLP(Word r, Word L);
+ Word LPFZCALL(Word c, Word P, Word D);
+ Word LUNION(Word L1, Word L2);
+-Word LVCOMP(Word c1, Word c2);
++Word LVCOMP(Word c1, Word c2) __pure;
+ Word MAFDIF(Word p,Word a,Word b);
+ Word MAFHOM(Word p,Word M,Word a);
+ Word MAFINV(Word p,Word M,Word a);
+@@ -158,7 +158,7 @@ Word MAFUPEPROD(Word p,Word M,Word a,Wor
+ Word MAFUPGCD(Word p,Word M,Word A,Word B);
+ Word MAFUPMON(Word p, Word M, Word A);
+ Word MAFUPNR(Word p, Word M, Word A, Word B);
+-Word MATCHWORD(Word A, Word B);
++Word MATCHWORD(Word A, Word B) __pure;
+ Word MBPROD(Word A, Word B);
+ Word MCELL(Word a1, Word a2, Word a3, Word a4, Word a5, Word a6, Word a7, Word a8, Word a9, Word a10);
+ Word MKMUL(Word E, Word k);
+@@ -169,7 +169,7 @@ Word MPOLY(Word a1, Word a2, Word a3, Wo
+ Word MUPNR(Word p,Word A,Word B);
+ Word MVLMA(Word H_t, Word H_f);
+ Word MVLMASF(Word H_t, Word H_f);
+-Word NEGRLOP(Word T);
++Word NEGRLOP(Word T) __constfunc;
+ void NEXTCELL(Word D, Word c, Word *cp_, Word *t_);
+ void NEXTCOMB(Word n, Word r, Word Rs, Word *R_, Word *q_);
+ void NEXTLEXI(Word l, Word Rs, Word *R_, Word *q_);
+@@ -188,12 +188,12 @@ void PARENTWR(Word P);
+ void PCADWR(Word c);
+ void PCADSWR(Word c);
+ Word PFCOICQ(Word r, Word A, Word c, Word P, Word D);
+-Word PFPRDQ(Word P);
++Word PFPRDQ(Word P) __pure;
+ void PIMPTBLWR(Word C, Word R, Word V);
+ void PLABELWR(Word P);
+ Word PLDEG(Word P);
+ Word PLPOS(Word P, Word i);
+-Word PPPRDQ(Word P);
++Word PPPRDQ(Word P) __pure;
+ void PQFF(Word F, Word L, Word *Lp_);
+ void PRDADJINFO();
+ void PRDCC();
+@@ -209,7 +209,7 @@ void PRLDB();
+ void PRODWR(Word v);
+ void PROMPT();
+ //void PROPAGATE(Word D, Word c, Word k, Word f, Word Q);
+-void PRQUIT();
++void PRQUIT() __noreturn;
+ void PRTRACEA();
+ void PRTRACED();
+ void PRUDB();
+@@ -217,7 +217,7 @@ void PRWHATIS();
+ void PSIGTBL(Word c, Word f, Word T_t, Word T_f, Word *Tp_t_, Word *Tp_f_);
+ void PSIMREP(Word r, Word P, Word *rs_, Word *Ps_);
+ void QEGLOBALS();
+-const char* QEPCADBVersion();
++const char* QEPCADBVersion() __constfunc;
+ Word QFFFSOP(Word H, Word P, Word f);
+ void QFFLPWR(Word N, Word V, Word F);
+ void QFFLWR(Word N, Word V, Word F);
+@@ -239,7 +239,7 @@ Word RMMPF(Word P, Word k);
+ Word RMMPJ(Word J, Word k);
+ Word RMNOTOP(Word F);
+ Word RMNOTOPN(Word F);
+-Word RNFAF(Word a);
++Word RNFAF(Word a) __pure;
+ Word RVSPTSVSP(BDigit r, Word P, BDigit s);
+ void SALGF(Word f, Word F, Word *G_, Word *H_);
+ void SAMPLEWR(Word r, Word s, Word PCNUMDEC);
+@@ -263,7 +263,7 @@ Word SOPFST(Word T);
+ Word SOSRSUBS(Word L);
+ Word SOSRSUPS(Word L);
+ void SPFRPSFT(Word P, Word c, Word k, Word *R_, Word *F_);
+-Word SSCOMP(Word c1, Word c2);
++Word SSCOMP(Word c1, Word c2) __pure;
+ Word STACKMULT(Word C);
+ void STACKMWR(Word M);
+ Word STFSOP(Word H);
+@@ -631,9 +631,9 @@ Word NEWDERIV(Word KT, Word P, Word Pb,
+ void STRIPPED_BIGLOOP(Word Jb, Word Pb, Word P0, Word D0, Word N, Word *P_, Word *D_);
+ Word CADSCL(Word C, Word i);
+ Word CELLFINDEX(Word D, Word I);
+-Word CRCELL(Word d);
++Word CRCELL(Word d) __pure;
+ void CSN(Word c, Word D, Word *b_, Word *d_);
+-Word BZWAZ(Word a, Word b);
++Word BZWAZ(Word a, Word b) __pure;
+ void LISTOFCWTV(Word C, Word *Lt_, Word *Lf_);
+ BDigit NUMSOLPOINTS(Word D, BDigit k);
+ Word LPFOWCS(Word C, Word B, Word P);
+@@ -670,7 +670,7 @@ void LTFOCWTVMARK(Word C, Word *Lt_, Wor
+ Word OPARTLIST(Word n);
+ Word PARTLIST(Word n);
+ Word SCAD2ESCAD(Word P, Word Ps, Word Ds, Word A);
+-Word SCCONFLICTQ(Word L1, Word L2);
++Word SCCONFLICTQ(Word L1, Word L2) __pure;
+ Word SCFILTER(Word c, Word d);
+ void SETCADTV2MARK(Word D);
+ void SETMARK2FMA(Word D, Word F, Word P);
+@@ -694,7 +694,7 @@ void CSORTSS(Word **A, Word a, Word L);
+ Word ICSIGDIFFL(Word **A, Word a, Word k);
+ Word MINPFSET(Word P, Word S, Word D, Word N);
+ Word PWUDSCWCP(Word D, Word P, Word N);
+-Word SIGEQUALOL(Word *A, Word *B, Word L);
++Word SIGEQUALOL(Word *A, Word *B, Word L) __pure;
+ void TDTOD(Word P, Word N, Word ***P2_, Word *P1_, Word *k_);
+ Word FMA2DNF(Word F);
+ Word FMA2QUNF(Word F, Word P);
+@@ -706,8 +706,8 @@ Word FMADMQ(Word F,Word C,Word k,Word P)
+ Word singleFMADMQ(Word F,Word C,Word k,Word P);
+ void FMAIWRITE(Word F);
+ Word FMALEVEL(Word F);
+-Word FMAOPCOMBINE(Word F);
+-Word FMAQEXTAF(Word F) ;
++Word FMAOPCOMBINE(Word F) __pure;
++Word FMAQEXTAF(Word F) __pure;
+ Word FMAPOLLIST(Word F, Word P);
+ void FMAREAD(Word P,Word V, Word *F_,Word *t_);
+ Word FMASMOOTH(Word F);
+@@ -724,9 +724,9 @@ void FMAWRITENEWLINEp(Word F, Word P, Wo
+ void FMAWRITEQEIN(Word F, Word P, Word V);
+ void FMAWRITEp(Word F, Word P, Word V, Word flag);
+ Word FMA_REMCONST(Word F);
+-Word FTYPEINFO(Word A);
++Word FTYPEINFO(Word A) __pure;
+ void IPDWRITELATEX(Word r, Word A, Word V);
+-Word POLINDEX2SIGINDEX(Word P_i, Word j);
++Word POLINDEX2SIGINDEX(Word P_i, Word j) __pure;
+ void SETTV2FMA(Word D, Word P, Word F, Word k);
+ void SETORDERfromFMA(Word D,Word P,Word F,Word o);
+ void SETORDER(Word D,Word P,Word V);
+@@ -740,7 +740,7 @@ Word RSFHSP(Word A, Word *Ab_);
+ Word CADCL(Word C, Word i);
+ Word CADFPCAD(Word D, Word P, Word S, Word I, Word Pb);
+ Word CADFPCADWI(Word D, Word P, Word S, Word I, Word Pb);
+-Word CATV(Word c);
++Word CATV(Word c) __pure;
+ void CCADCON(Word n, Word P, Word C, Word *Ps_, Word *Cs_);
+ void CCADCONEXT(Word n, Word P, Word C, Word *Ps_, Word *Cs_, Word *N_);
+ void CCADCONFPFS(Word n, Word P, Word C, Word N, Word *Ps_, Word *Cs_);
+@@ -750,7 +750,7 @@ Word CHTVQ(Word cs, Word b);
+ Word CTSEQ(Word as, Word bs);
+ void LTFOCALWTV(Word C, Word n, Word *Lt_, Word *Lf_);
+ void LTFOCWTV(Word C, Word *Lt_, Word *Lf_);
+-Word PCADCFCADC(Word c, Word Cs);
++Word PCADCFCADC(Word c, Word Cs) __pure;
+ Word PCADCINDEX(Word c);
+ Word PCADCL(Word Cs, Word i);
+ Word PCADCSV(Word cs, Word Ps);
+@@ -793,7 +793,7 @@ Word DOPFSUFF(Word P, Word K);
+ Word ESPCADDOPFSUFF(Word P, Word K);
+ Word GEOPARTII(Word F, Word S, Word P, Word Fs);
+ Word GEODATA(Word c, Word A, Word P);
+-Word GEOHEURISTIC(Word a, Word b);
++Word GEOHEURISTIC(Word a, Word b) __pure;
+ Word GEOMERGE(Word c,Word G,Word P);
+ Word GEOFIT(Word c,Word G,Word P);
+ Word ATOMFILTER(Word L_A,Word L_C,Word P);
+@@ -821,7 +821,7 @@ Word NECCONDS(Word L_T, Word L_F, Word L
+ Word DOPFSUFF_FULLD(Word P, Word K);
+ Word ESPCADDOPFSUFF_FULLD(Word P, Word K);
+ Word BVC(Word *u_, Word *v_, Word n);
+-Word BVCI1(Word *u_, Word *v_, Word n);
++Word BVCI1(Word *u_, Word *v_, Word n) __pure;
+ void BVIS(Word **A, Word m, Word n);
+ void BVISI1(Word **A, Word m, Word n);
+ void GIS(Word *A, Word m, Word (*C)(Word,Word));
+--- source/ticad/QFFTEV.c.orig	2018-01-25 14:25:22.000000000 -0700
++++ source/ticad/QFFTEV.c	2018-08-29 20:03:25.112519355 -0600
+@@ -12,7 +12,7 @@ Quantifier-Free Formula Trial Evaluation
+  \parm{t} is the trial truth value of $F$ on the cell $c$.
+ ======================================================================*/
+ #include "qepcad.h"
+-static Word zeroQ(Word s, Word I_L);
++static Word zeroQ(Word s, Word I_L) __pure;
+ static Word ATOMETFEVAL(Word Q, Word D, Word c, Word F);
+ 
+ Word QepcadCls::QFFTEV(Word F, Word c, Word k)
+--- source/userint/PRQUIT.c.orig	2018-01-25 14:25:22.000000000 -0700
++++ source/userint/PRQUIT.c	2018-08-29 20:03:25.112519355 -0600
+@@ -13,7 +13,4 @@ Step1: /* Process. */
+        ENDQEPCAD();
+        ENDSACLIB(SAC_FREEMEM);
+        exit(0);
+-
+-Return: /* Prepare for return. */
+-       return;
+ }

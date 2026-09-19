@@ -1,0 +1,32 @@
+--- configure.ac.orig	2006-07-15 21:27:48.000000000 -0700
++++ configure.ac	2006-07-15 21:28:34.000000000 -0700
+@@ -80,10 +80,10 @@
+     if test "$enableval" = "yes"; then
+       CFLAGS="$CFLAGS -ggdb -O0 -DDEBUG"
+     else
+-      CFLAGS="$CFLAGS -O3 -DNDEBUG"
++      CFLAGS="$CFLAGS -DNDEBUG"
+     fi
+   ],[
+-    CFLAGS="$CFLAGS -O3 -DNDEBUG"
++    CFLAGS="$CFLAGS -DNDEBUG"
+   ]
+ )
+ 
+--- configure.orig	2006-07-15 21:27:52.000000000 -0700
++++ configure	2006-07-15 21:28:26.000000000 -0700
+@@ -22449,12 +22449,12 @@
+     if test "$enableval" = "yes"; then
+       CFLAGS="$CFLAGS -ggdb -O0 -DDEBUG"
+     else
+-      CFLAGS="$CFLAGS -O3 -DNDEBUG"
++      CFLAGS="$CFLAGS -DNDEBUG"
+     fi
+ 
+ else
+ 
+-    CFLAGS="$CFLAGS -O3 -DNDEBUG"
++    CFLAGS="$CFLAGS -DNDEBUG"
+ 
+ 
+ fi;

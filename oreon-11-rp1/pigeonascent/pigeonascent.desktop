@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Pigeon Ascent
+Comment=Take care of your own pigeon as they fight
+Exec=godot3-runner --main-pack /usr/share/pigeonascent/pigeonascent.pck %f
+Terminal=false
+Type=Application
+Icon=pigeonascent
+Categories=Game;RolePlaying;

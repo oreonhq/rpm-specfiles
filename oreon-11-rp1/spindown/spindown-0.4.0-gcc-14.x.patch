@@ -1,0 +1,140 @@
+diff -up spindown-0.4.0/src/disk.cpp.orig spindown-0.4.0/src/disk.cpp
+--- spindown-0.4.0/src/disk.cpp.orig	2024-05-30 15:03:42.968395337 -0400
++++ spindown-0.4.0/src/disk.cpp	2024-05-30 15:11:42.618736160 -0400
+@@ -23,6 +23,7 @@
+ #include <time.h>
+ #include <dirent.h>
+ #include <stddef.h>
++#include <unistd.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <iniparser/iniparser.h>
+@@ -138,7 +139,7 @@ void Disk::findDevName( string dev )
+         //the path to the device
+         dev = DEVID_PATH + dev;
+         //read target of the link
+-        readlink( (char*)dev.data(), (char*)buffer.data(), CHAR_BUF);
++        (void) readlink( (char*)dev.data(), (char*)buffer.data(), CHAR_BUF);
+         //remove empty characters
+         buffer.resize( buffer.find_first_of((char)0) );
+         //remove ../../ from the link target
+@@ -165,6 +166,8 @@ bool Disk::spindown()
+             throw SpindownException( oss.str() );
+         }
+     }
++
++    return false;
+ }
+ 
+ string Disk::getName() const
+diff -up spindown-0.4.0/src/diskset.cpp.orig spindown-0.4.0/src/diskset.cpp
+--- spindown-0.4.0/src/diskset.cpp.orig	2009-04-18 12:32:59.000000000 -0400
++++ spindown-0.4.0/src/diskset.cpp	2024-05-30 15:03:55.457378169 -0400
+@@ -36,7 +36,7 @@ DiskSet::DiskSet(unsigned int sgTime) :
+ DiskSet::~DiskSet()
+ {
+     // remove all stored disks
+-    for( int i=0 ; i < this->size() ; i++ )
++    for( long unsigned int i=0 ; i < this->size() ; i++ )
+     {
+         Disk* disk = this->at(i);
+ 
+@@ -49,7 +49,7 @@ DiskSet::~DiskSet()
+ 
+ void DiskSet::setStatsFrom(DiskSet const & set)
+ {
+-  for( int i=0 ; i < set.size() ; i++ )
++  for( long unsigned int i=0 ; i < set.size() ; i++ )
+   {
+     if (!set[i])
+       continue;
+@@ -78,7 +78,7 @@ Disk* DiskSet::find(Disk const & disk)
+ {
+   Disk* found = 0;
+ 
+-  for( int i=0 ; !found && i < this->size() ; i++ )
++  for( long unsigned int i=0 ; !found && i < this->size() ; i++ )
+   {
+     Disk* check = this->at(i);
+ 
+@@ -95,7 +95,7 @@ int DiskSet::countEntries(Disk const & s
+ {
+   int count = 0;
+ 
+-  for( int i=0 ; i < this->size() ; i++ )
++  for( long unsigned int i=0 ; i < this->size() ; i++ )
+   {
+     if( this->at(i)->getName() == search.getName() )
+       count++;
+diff -up spindown-0.4.0/src/spindown.cpp.orig spindown-0.4.0/src/spindown.cpp
+--- spindown-0.4.0/src/spindown.cpp.orig	2009-04-18 12:32:59.000000000 -0400
++++ spindown-0.4.0/src/spindown.cpp	2024-05-30 15:11:19.040768574 -0400
+@@ -20,6 +20,7 @@
+ * Contact: Dimitri Michaux <dimitri.michaux@gmail.com>
+ */
+ 
++#include <unistd.h>
+ #include <dirent.h>
+ 
+ #include <string>
+@@ -60,9 +61,9 @@ void Spindown::updateDevNames(DiskSet* s
+ 
+     if ( (dp = opendir (DEVID_PATH)) != NULL)
+     {
+-        while (ep = readdir (dp))
++        while ((ep = readdir (dp)))
+         {
+-            for( int i=0 ; i < set->size() ; i++ )
++            for( long unsigned int i=0 ; i < set->size() ; i++ )
+                 set->at(i)->findDevName(ep->d_name);
+         }
+         (void) closedir (dp);
+@@ -79,9 +80,8 @@ void Spindown::updateDiskStats(DiskSet*
+     ifstream fin(STATS_PATH, ios::in);
+     string devNameInp;  //the name of the device read from the configuration
+     unsigned int newRead, newWritten;
+-    unsigned long int blocks;
+     char str[CHAR_BUF];
+-    int i;
++    long unsigned int i;
+ 
+     if(fin)
+     {
+@@ -160,7 +160,7 @@ void Spindown::spinDownIdleDisks()
+     // Commit buffer cache to disk
+     sync();
+ 
+-    for( int i=0 ; i < disks->size() ; i++ )
++    for( long unsigned int i=0 ; i < disks->size() ; i++ )
+     {
+         disk = disks->at(i);
+ 
+@@ -207,7 +207,7 @@ string Spindown::getStatusString( bool a
+ {
+     ostringstream status;
+ 
+-    for( int i=0 ; i < disks->size() ; i++ )
++    for( long unsigned int i=0 ; i < disks->size() ; i++ )
+     {
+         Disk* disk = disks->at(i);
+ 
+diff -up spindown-0.4.0/src/spindownd.cpp.orig spindown-0.4.0/src/spindownd.cpp
+--- spindown-0.4.0/src/spindownd.cpp.orig	2024-05-30 15:03:42.968395337 -0400
++++ spindown-0.4.0/src/spindownd.cpp	2024-05-30 15:12:06.606703184 -0400
+@@ -23,6 +23,7 @@
+ #include <signal.h>
+ #include <fcntl.h>
+ #include <errno.h>
++#include <string.h>
+ #include <sys/stat.h>
+ 
+ #include <iniparser/iniparser.h>
+@@ -118,7 +119,7 @@ void Spindownd::sigHandlerPipe(int)
+     if(errno==0)
+     {
+         string status = spindown->getStatusString();
+-        write (file, status.data(), status.size());
++        (void) write (file, status.data(), status.size());
+     }
+     else
+         Log::get()->message(LOG_INFO, "Failed to write to the fifo.");

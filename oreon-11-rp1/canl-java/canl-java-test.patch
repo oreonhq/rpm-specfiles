@@ -1,0 +1,70 @@
+diff --git a/src/test/java/eu/emi/security/authn/x509/impl/CRLTest.java b/src/test/java/eu/emi/security/authn/x509/impl/CRLTest.java
+index de1c957..5a00ca6 100644
+--- a/src/test/java/eu/emi/security/authn/x509/impl/CRLTest.java
++++ b/src/test/java/eu/emi/security/authn/x509/impl/CRLTest.java
+@@ -24,6 +24,7 @@ import static org.junit.Assert.*;
+ 
+ import org.apache.commons.io.FileUtils;
+ import org.bouncycastle.util.encoders.Base64;
++import org.junit.Ignore;
+ import org.junit.Test;
+ import org.junit.experimental.categories.Category;
+ 
+@@ -199,6 +200,7 @@ public class CRLTest
+ 	
+ 	@Test
+ 	@Category(RiskyIntegrationTests.class)
++	@Ignore
+ 	public void testLoadPlain() throws Exception
+ 	{
+ 		File dir = initDir();
+diff --git a/src/test/java/eu/emi/security/authn/x509/impl/TestSSLHelpers.java b/src/test/java/eu/emi/security/authn/x509/impl/TestSSLHelpers.java
+index 87c7c06..39a6713 100644
+--- a/src/test/java/eu/emi/security/authn/x509/impl/TestSSLHelpers.java
++++ b/src/test/java/eu/emi/security/authn/x509/impl/TestSSLHelpers.java
+@@ -14,7 +14,7 @@ import java.net.SocketAddress;
+ import javax.net.ssl.SSLHandshakeException;
+ 
+ import org.junit.Assert;
+-
++import org.junit.Ignore;
+ import org.junit.Test;
+ 
+ import eu.emi.security.authn.x509.X509CertChainValidator;
+@@ -31,6 +31,7 @@ public class TestSSLHelpers
+ 	
+ 	
+ 	@Test
++	@Ignore
+ 	public void shouldFailOnHostnameMismatch() throws Exception
+ 	{
+ 		X509Credential c = new PEMCredential(new FileReader(CertificateUtilsTest.PFX + "pk-1.pem"), 
+@@ -47,6 +48,7 @@ public class TestSSLHelpers
+ 			"and once with invalid (there should be a connection error)")
+ 	*/
+ 	@Test
++	@Ignore
+ 	public void testCreation() throws Exception
+ 	{
+ 		System.out.println("Running func:cli-srv functional test");
+diff --git a/src/test/java/eu/emi/security/authn/x509/proxy/ProxyGenerationTest.java b/src/test/java/eu/emi/security/authn/x509/proxy/ProxyGenerationTest.java
+index fba63e8..2b912cf 100644
+--- a/src/test/java/eu/emi/security/authn/x509/proxy/ProxyGenerationTest.java
++++ b/src/test/java/eu/emi/security/authn/x509/proxy/ProxyGenerationTest.java
+@@ -43,6 +43,8 @@ import org.bouncycastle.operator.ContentSigner;
+ import org.bouncycastle.operator.OperatorCreationException;
+ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+ import org.bouncycastle.pkcs.PKCS10CertificationRequest;
++
++import org.junit.Ignore;
+ import org.junit.Test;
+ 
+ import eu.emi.security.authn.x509.ValidationResult;
+@@ -429,6 +431,7 @@ public class ProxyGenerationTest
+ 	 * @throws Exception
+ 	 */
+ 	@Test
++	@Ignore
+ 	public void testSha2Proxy() throws Exception
+ 	{
+ 		System.out.println("Running func:cli-srv-sha2 functional test");

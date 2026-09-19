@@ -1,0 +1,12 @@
+diff -up adanaxisgpl-1.2.5/src/Mushcore/MushcoreSingleton.h~ adanaxisgpl-1.2.5/src/Mushcore/MushcoreSingleton.h
+--- adanaxisgpl-1.2.5/src/Mushcore/MushcoreSingleton.h~	2007-04-18 11:23:13.000000000 +0200
++++ adanaxisgpl-1.2.5/src/Mushcore/MushcoreSingleton.h	2012-01-13 10:36:18.638100466 +0100
+@@ -83,7 +83,7 @@ template<class SingletonType>
+ inline void
+ MushcoreSingleton<SingletonType>::SingletonUncheckedNew(void)
+ {
+-    SingletonPtrSet(new SingletonType);
++    MushcoreSingleton::SingletonPtrSet(new SingletonType);
+ 
+ #ifdef MUSHCORE_SINGLETON_TESTING
+     cerr << "Created " << typeid(SingletonType).name() << " singleton " << endl;

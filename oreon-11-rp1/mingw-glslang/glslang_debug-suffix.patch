@@ -1,0 +1,14 @@
+diff -rupN --no-dereference glslang-vulkan-sdk-1.4.328.1/CMakeLists.txt glslang-vulkan-sdk-1.4.328.1-new/CMakeLists.txt
+--- glslang-vulkan-sdk-1.4.328.1/CMakeLists.txt	2025-09-26 00:40:23.000000000 +0200
++++ glslang-vulkan-sdk-1.4.328.1-new/CMakeLists.txt	2025-12-04 23:42:48.776894197 +0100
+@@ -129,7 +129,9 @@ if(ENABLE_HLSL)
+ endif()
+ 
+ if(WIN32)
+-    set(CMAKE_DEBUG_POSTFIX "d")
++    if(MSVC)
++        set(CMAKE_DEBUG_POSTFIX "d")
++    endif(MSVC)
+     add_compile_definitions(GLSLANG_OSINCLUDE_WIN32)
+ elseif(UNIX OR ANDROID)
+     add_compile_definitions(GLSLANG_OSINCLUDE_UNIX)

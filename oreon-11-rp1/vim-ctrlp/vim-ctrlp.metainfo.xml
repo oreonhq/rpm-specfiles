@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+    <id>vim-ctrlp</id>
+    <extends>gvim.desktop</extends>
+    <name>ctrlp.vim</name>
+    <summary>Full path fuzzy file, buffer, mru, tag, ... finder for Vim</summary>
+    <url type="homepage">https://github.com/ctrlpvim/ctrlp.vim</url>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>Vim</project_license>
+    <updatecontact>osoukup@redhat.com</updatecontact>
+</component>

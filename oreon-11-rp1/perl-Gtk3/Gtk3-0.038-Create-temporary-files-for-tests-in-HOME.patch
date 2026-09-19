@@ -1,0 +1,113 @@
+From 1730ad6898154f1de1b66ec5309a2206c0999507 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 31 Mar 2023 10:30:01 +0200
+Subject: [PATCH] Create temporary files for tests in $HOME
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When running tests from a read-only location, some tests failed because
+they were unable to create a file in the working directory:
+
+    Failed to open “testsave.png” for writing: Permission denied at /usr/share/perl5/vendor_perl/Gtk3.pm line 2259.
+    # Looks like your test exited with 13 just after 211.
+    t/overrides.t .................. Dubious, test returned 13 (wstat 3328, 0xd00)
+    Failed 22/233 subtests
+
+    You tried to plan twice at t/zz-GtkBuilder.t line 35.
+    # Looks like your test exited with 13 before it could output anything.
+    t/zz-GtkBuilder.t .............. Dubious, test returned 13 (wstat 3328, 0xd00)
+    Failed 45/45 subtests
+
+This patch creates the temporary files in $HOME instead. $HOME has
+already been overrided in t/inc/setup.pl to a temporary directory. And
+because that overriden location is automatically cleaned on exit, this
+patch removes redundant unlinking of the particular files. This patch
+also fixes doubled test plan ("You tried to plan twice") in
+t/zz-GtkBuilder.t.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ dist.ini          |  1 +
+ t/overrides.t     |  4 ++--
+ t/zz-GtkBuilder.t | 16 +++++++++-------
+ 3 files changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/dist.ini b/dist.ini
+index 03e4342..8b36e9f 100644
+--- a/dist.ini
++++ b/dist.ini
+@@ -24,6 +24,7 @@ version = 2
+ Carp = 0 ; core
+ Exporter = 0 ; core
+ Cairo::GObject = 1.000
++File::Spec = 0 ; core
+ Glib::Object::Introspection = 0.043
+ Test::Simple = 0.96 ; for the fix for is() and objects with overloading
+ 
+diff --git a/t/overrides.t b/t/overrides.t
+index 29fe619..3bc1a8d 100644
+--- a/t/overrides.t
++++ b/t/overrides.t
+@@ -6,6 +6,7 @@ use strict;
+ use warnings;
+ use utf8;
+ use Encode;
++use File::Spec;
+ 
+ plan tests => 233;
+ 
+@@ -790,8 +791,7 @@ SKIP: {
+   $pixbuf->fill (hex '0xFF000000');
+   my $expected_pixels = $pixbuf->get_pixels;
+ 
+-  my $filename = 'testsave.png';
+-  END { unlink $filename if defined $filename; }
++  my $filename = File::Spec->catfile($ENV{HOME}, 'testsave.png');
+   eval {
+     $pixbuf->save ($filename, 'png',
+                    'key_arg_without_value_arg');
+diff --git a/t/zz-GtkBuilder.t b/t/zz-GtkBuilder.t
+index 7dc31a0..4850700 100644
+--- a/t/zz-GtkBuilder.t
++++ b/t/zz-GtkBuilder.t
+@@ -6,8 +6,15 @@ BEGIN { require './t/inc/setup.pl' }
+ 
+ use strict;
+ use warnings;
+-
+-plan tests => 45;
++use File::Spec;
++
++my $ui_file = File::Spec->catfile($ENV{HOME}, 'tmp.ui');
++my $fh;
++if (open $fh, '>', $ui_file) {
++    plan tests => 45;
++} else {
++    plan skip_all => "unable to create ui file: $!";
++}
+ 
+ my $builder;
+ my $ui = <<EOD;
+@@ -29,9 +36,6 @@ EOD
+ 
+ # --------------------------------------------------------------------------- #
+ 
+-my $ui_file = 'tmp.ui';
+-
+-open my $fh, '>', $ui_file or plan skip_all => 'unable to create ui file';
+ print $fh $ui;
+ close $fh;
+ 
+@@ -82,8 +86,6 @@ is ($builder->get_translation_domain, 'de');
+   like ($@, qr/bla/);
+ }
+ 
+-unlink $ui_file;
+-
+ # --------------------------------------------------------------------------- #
+ 
+ $builder = Gtk3::Builder->new;
+-- 
+2.39.2
+

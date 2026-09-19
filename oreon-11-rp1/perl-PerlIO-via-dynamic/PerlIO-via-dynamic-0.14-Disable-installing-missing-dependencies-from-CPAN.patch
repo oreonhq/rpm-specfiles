@@ -1,0 +1,28 @@
+From 8de0306d699b6e6396cc5e4b8d3bf1dd36f30d18 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 15 Oct 2015 09:28:14 +0200
+Subject: [PATCH] Disable installing missing dependencies from CPAN
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index a795dcf..6ee6649 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -10,7 +10,4 @@ license		('perl');
+ version_from	('dynamic.pm');
+ requires        ('Internals') if $] == 5.010000;
+ 
+-include('ExtUtils::AutoInstall');
+-auto_install();
+-
+ WriteAll( sign => 1 );
+-- 
+2.4.3
+

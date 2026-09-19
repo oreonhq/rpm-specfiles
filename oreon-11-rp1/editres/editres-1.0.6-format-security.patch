@@ -1,0 +1,45 @@
+diff -up editres-1.0.7/geometry.c.jx editres-1.0.7/geometry.c
+--- editres-1.0.7/geometry.c.jx	2018-03-04 21:44:23.000000000 -0500
++++ editres-1.0.7/geometry.c	2018-03-12 15:04:59.375740612 -0400
+@@ -63,7 +63,7 @@ _FindWidget(Widget w)
+     Window win;
+     int x, y;			/* location of event in root coordinates. */
+ 
+-    snprintf(msg, sizeof(msg), res_labels[14]);
++    snprintf(msg, sizeof(msg), "%s", res_labels[14]);
+ 
+     SetMessage(global_screen_data.info_label, msg);
+ 
+@@ -103,7 +103,7 @@ DisplayChild(Event *event)
+ 		    find_event->widgets.num_widgets);
+ 
+     if (node == NULL) {
+-	snprintf(msg, sizeof(msg), res_labels[13]);
++	snprintf(msg, sizeof(msg), "%s", res_labels[13]);
+ 	SetMessage(global_screen_data.info_label, msg);
+ 	return;
+     }
+diff -up editres-1.0.7/svpopup.c.jx editres-1.0.7/svpopup.c
+--- editres-1.0.7/svpopup.c.jx	2018-03-04 21:44:23.000000000 -0500
++++ editres-1.0.7/svpopup.c	2018-03-12 15:05:52.674536250 -0400
+@@ -127,7 +127,7 @@ ModifySVEntry(Widget w, XEvent *event, S
+ 	old = global_screen_data.res_text;
+ 	break;
+     default:
+-	snprintf(msg, sizeof(msg), res_labels[22]);
++	snprintf(msg, sizeof(msg), "%s", res_labels[22]);
+ 	SetMessage(global_screen_data.info_label, msg);
+ 	return;
+     }
+diff -up editres-1.0.7/utils.c.jx editres-1.0.7/utils.c
+--- editres-1.0.7/utils.c.jx	2018-03-04 21:44:23.000000000 -0500
++++ editres-1.0.7/utils.c	2018-03-12 15:06:07.865763023 -0400
+@@ -518,7 +518,7 @@ HandleGetResources(Event *event)
+ 			get_event->info[i].widgets.num_widgets);
+ 
+ 	if (node == NULL) {
+-	    snprintf(buf, sizeof(buf), res_labels[16]);
++	    snprintf(buf, sizeof(buf), "%s", res_labels[16]);
+ 	    AddString(&errors, buf);
+ 	    continue;
+ 	}

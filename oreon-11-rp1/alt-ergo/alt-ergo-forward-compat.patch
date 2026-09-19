@@ -1,0 +1,90 @@
+--- alt-ergo-2.4.3-free/alt-ergo-free.opam.orig	2026-02-05 07:02:19.000000000 -0700
++++ alt-ergo-2.4.3-free/alt-ergo-free.opam	2026-02-06 14:01:56.544975724 -0700
+@@ -18,14 +18,11 @@ depends: [
+   "cmdliner" {>= "1.1.0" & < "2.0.0"}
+   "psmt2-frontend" {>= "0.4"}
+   "camlzip" {>= "1.07"}
+-  "stdlib-shims"
+   "dune-configurator"
+   "dune-build-info"
+   "num"
+   "ocplib-simplex" {>= "0.4.1" & < "0.5"}
+   "zarith" {>= "1.4"}
+-  "seq"
+-  "stdlib-shims"
+   "odoc" {with-doc}
+ ]
+ conflicts: ["alt-ergo" "alt-ergo-lib" "alt-ergo-parsers" "altgr-ergo"]
+--- alt-ergo-2.4.3-free/dune-project.orig	2026-02-05 07:02:19.000000000 -0700
++++ alt-ergo-2.4.3-free/dune-project	2026-02-06 14:02:23.720545297 -0700
+@@ -27,14 +27,11 @@ See more details on https://alt-ergo.oca
+   (cmdliner (and (>= 1.1.0) (< 2.0.0)))
+   (psmt2-frontend (>= 0.4))
+   (camlzip (>= 1.07))
+-  stdlib-shims
+   dune-configurator
+   dune-build-info
+   num
+   (ocplib-simplex (and (>= 0.4.1) (< 0.5)))
+   (zarith (>= 1.4))
+-  seq
+-  stdlib-shims
+   (odoc :with-doc)
+  )
+  (conflicts
+--- alt-ergo-2.4.3-free/rsc/extra/ocpchecker/dune.orig	2026-02-05 07:02:19.000000000 -0700
++++ alt-ergo-2.4.3-free/rsc/extra/ocpchecker/dune	2026-02-06 14:07:05.709161811 -0700
+@@ -1,5 +1,4 @@
+ (executable
+   (name ocp_checker)
+   (modules Ocp_checker)
+-  (libraries stdlib-shims)
+ )
+--- alt-ergo-2.4.3-free/rsc/extra/test_lib.sh.orig	2026-02-05 07:02:19.000000000 -0700
++++ alt-ergo-2.4.3-free/rsc/extra/test_lib.sh	2026-02-06 14:07:34.020932585 -0700
+@@ -23,7 +23,7 @@ echo "content of lib == $x"
+ # Compile the lib_usage caml file
+ cd $git_repo/examples
+ ocamlfind ocamlopt -linkpkg -package \
+-	  stdlib-shims,num,zarith,ocplib-simplex,psmt2-frontend,unix,str,zip,dynlink,cmdliner \
++	  num,zarith,ocplib-simplex,psmt2-frontend,unix,str,zip,dynlink,cmdliner \
+ 	  -o lib_usage \
+ 	  -I $lib_path AltErgoLib.cmxa \
+ 	  lib_usage.ml
+--- alt-ergo-2.4.3-free/src/bin/common/dune.orig	2026-02-05 07:02:19.000000000 -0700
++++ alt-ergo-2.4.3-free/src/bin/common/dune	2026-02-06 14:07:54.132918156 -0700
+@@ -1,5 +1,5 @@
+ (library
+  (name        alt_ergo_common)
+- (libraries   AltErgoLib AltErgoParsers stdlib-shims cmdliner)
++ (libraries   AltErgoLib AltErgoParsers cmdliner)
+  (modules     Parse_command Input_frontend Signals_profiling Solving_loop)
+ )
+--- alt-ergo-2.4.3-free/src/lib/dune.orig	2026-02-05 07:02:19.000000000 -0700
++++ alt-ergo-2.4.3-free/src/lib/dune	2026-02-06 14:08:15.580465558 -0700
+@@ -16,14 +16,12 @@
+ 
+   ; external dependencies
+   (libraries
+-    seq
+     unix
+     num
+     str
+     zarith
+     dynlink
+     ocplib-simplex
+-    stdlib-shims
+     dune-build-info
+   )
+ 
+--- alt-ergo-2.4.3-free/src/parsers/dune.orig	2026-02-05 07:02:19.000000000 -0700
++++ alt-ergo-2.4.3-free/src/parsers/dune	2026-02-06 14:08:41.084224639 -0700
+@@ -8,7 +8,7 @@
+ 
+ (library
+     (name             AltErgoParsers)
+-    (libraries        camlzip dynlink psmt2-frontend AltErgoLib stdlib-shims)
++    (libraries        camlzip dynlink psmt2-frontend AltErgoLib)
+     (modules
+       ; common
+       Parsers Parsers_loader MyZip

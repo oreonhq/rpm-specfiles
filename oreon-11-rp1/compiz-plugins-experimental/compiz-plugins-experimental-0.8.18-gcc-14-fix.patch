@@ -1,0 +1,179 @@
+diff --git a/src/anaglyph/anaglyph.c b/src/anaglyph/anaglyph.c
+index 5ee0b32..1c2c2d3 100644
+--- a/src/anaglyph/anaglyph.c
++++ b/src/anaglyph/anaglyph.c
+@@ -18,6 +18,7 @@
+  * Author:	Patryk Kowalczyk <wodor@wodor.org>
+  **/
+ 
++#include <stdlib.h>
+ #include <compiz-core.h>
+ #include "anaglyph_options.h"
+ 
+diff --git a/src/atlantis/atlantis-internal.h b/src/atlantis/atlantis-internal.h
+index 4b3e903..bf3c84c 100644
+--- a/src/atlantis/atlantis-internal.h
++++ b/src/atlantis/atlantis-internal.h
+@@ -102,6 +102,7 @@
+ #define NRAND(n)                ((int) (LRAND() % (n)))
+ #define MAXRAND                 (2147483648.0) /* unsigned 1<<31 as a float */
+ 
++#include <stdlib.h>
+ #include <math.h>
+ #include <float.h>
+ 
+diff --git a/src/elements/elements.c b/src/elements/elements.c
+index 9c3d61f..0da9b14 100644
+--- a/src/elements/elements.c
++++ b/src/elements/elements.c
+@@ -48,6 +48,7 @@
+ 
+ 
+ 
++#include <stdlib.h>
+ #include <compiz-core.h>
+ #include "elements_options.h"
+ #define GET_DISPLAY(d)                            \
+diff --git a/src/fakeargb/fakeargb.c b/src/fakeargb/fakeargb.c
+index 1c8c241..ea123d5 100644
+--- a/src/fakeargb/fakeargb.c
++++ b/src/fakeargb/fakeargb.c
+@@ -19,6 +19,7 @@
+  *
+  **/
+ 
++#include <stdlib.h>
+ #include <compiz-core.h>
+ #include "fakeargb_options.h"
+ 
+diff --git a/src/fireflies/fireflies.c b/src/fireflies/fireflies.c
+index 6d271c2..1de8f24 100644
+--- a/src/fireflies/fireflies.c
++++ b/src/fireflies/fireflies.c
+@@ -27,6 +27,7 @@
+  * for helping me make this possible
+  */
+ 
++#include <stdlib.h>
+ #include <math.h>
+ 
+ #include <compiz-core.h>
+diff --git a/src/freewins/freewins.c b/src/freewins/freewins.c
+index bd55f56..dc1508c 100644
+--- a/src/freewins/freewins.c
++++ b/src/freewins/freewins.c
+@@ -48,6 +48,7 @@
+  *    - 'Rotate' Button
+  */
+ 
++#include <stdlib.h>
+ #include "freewins.h"
+ 
+ static CompMetadata freewinsMetadata;
+diff --git a/src/freewins/input.c b/src/freewins/input.c
+index 96a9009..ae3c827 100644
+--- a/src/freewins/input.c
++++ b/src/freewins/input.c
+@@ -48,6 +48,7 @@
+  */
+ 
+ #include "freewins.h"
++#include <stdlib.h>
+ #include <cairo/cairo-xlib.h>
+ 
+ /* ------ Input Prevention -------------------------------------------*/
+diff --git a/src/freewins/util.c b/src/freewins/util.c
+index 7be9152..0301ccd 100644
+--- a/src/freewins/util.c
++++ b/src/freewins/util.c
+@@ -48,6 +48,7 @@
+  */
+ 
+ #include "freewins.h"
++#include <stdlib.h>
+ 
+ 
+ /* ------ Utility Functions ---------------------------------------------*/
+diff --git a/src/smartput/smartput.c b/src/smartput/smartput.c
+index a43f4c1..2452881 100644
+--- a/src/smartput/smartput.c
++++ b/src/smartput/smartput.c
+@@ -45,6 +45,7 @@
+  *  Animation is based on Put Plugin (Author: Darryll Truchan <moopsy@comcast.net>
+  *
+  */
++#include <stdlib.h>
+ #include <X11/Xatom.h>
+ #include <math.h>
+ #include <compiz-core.h>
+diff --git a/src/snow/snow.c b/src/snow/snow.c
+index 80e94aa..e6649cd 100644
+--- a/src/snow/snow.c
++++ b/src/snow/snow.c
+@@ -27,6 +27,7 @@
+  * for helping me make this possible
+  */
+ 
++#include <stdlib.h>
+ #include <math.h>
+ 
+ #include <compiz-core.h>
+diff --git a/src/snowglobe/movement.c b/src/snowglobe/movement.c
+index cf54dad..2d81376 100644
+--- a/src/snowglobe/movement.c
++++ b/src/snowglobe/movement.c
+@@ -1,5 +1,6 @@
+ #include "snowglobe-internal.h"
+ #include "snowglobe_options.h"
++#include <stdlib.h>
+ #include <math.h>
+ #include <float.h>
+ 
+diff --git a/src/snowglobe/water.c b/src/snowglobe/water.c
+index fc3e51c..a1c4009 100644
+--- a/src/snowglobe/water.c
++++ b/src/snowglobe/water.c
+@@ -24,6 +24,7 @@
+ 
+ /* Uses water amplitude calculation by David Mikos */
+ 
++#include <stdlib.h>
+ #include "snowglobe-internal.h"
+ #include "math.h"
+ #include "snowglobe_options.h"
+diff --git a/src/stars/star.c b/src/stars/star.c
+index 96a26c1..4dee665 100644
+--- a/src/stars/star.c
++++ b/src/stars/star.c
+@@ -38,6 +38,7 @@
+  * for helping me make this possible
+  */
+ 
++#include <stdlib.h>
+ #include <math.h>
+ 
+ #include <compiz-core.h>
+diff --git a/src/tile/tile.c b/src/tile/tile.c
+index d58cac5..fd5974c 100644
+--- a/src/tile/tile.c
++++ b/src/tile/tile.c
+@@ -25,6 +25,7 @@
+  *
+  **/
+ 
++#include <stdlib.h>
+ #include <string.h>
+ #include <math.h>
+ #include <compiz-core.h>
+diff --git a/src/wizard/wizard.c b/src/wizard/wizard.c
+index d60ff94..66297b9 100644
+--- a/src/wizard/wizard.c
++++ b/src/wizard/wizard.c
+@@ -21,6 +21,7 @@
+  *
+  */
+ 
++#include <stdlib.h>
+ #include <math.h>
+ #include <string.h>
+ 

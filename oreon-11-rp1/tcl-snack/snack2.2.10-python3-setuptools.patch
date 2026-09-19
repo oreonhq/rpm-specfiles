@@ -1,0 +1,9 @@
+diff -up snack2.2.10/python/setup.py.setuptools snack2.2.10/python/setup.py
+--- snack2.2.10/python/setup.py.setuptools	2022-12-30 13:58:25.335884637 -0500
++++ snack2.2.10/python/setup.py	2022-12-30 13:58:59.647223431 -0500
+@@ -1,4 +1,4 @@
+-from distutils.core import setup
++from setuptools import setup
+ 
+ setup(name="tkSnack",
+ 	version="2.2.10",

@@ -37,8 +37,8 @@
 %undefine _missing_build_ids_terminate_build
 
 Name:           julia
-Version:        1.12.1
-Release:        2%{?dist}
+Version:        1.13.0
+Release:        1%{?dist}
 Summary:        High-level, high-performance dynamic language for technical computing
 # Julia itself is MIT
 # libuv, libwhich, libblastrampoline and libunwind are MIT

@@ -1,0 +1,49 @@
+diff -Nru t4k_common-0.1.1.orig/src/t4k_loaders.c t4k_common-0.1.1/src/t4k_loaders.c
+--- t4k_common-0.1.1.orig/src/t4k_loaders.c	2019-08-11 22:35:51.961279487 -0400
++++ t4k_common-0.1.1/src/t4k_loaders.c	2019-08-11 22:50:41.074888647 -0400
+@@ -213,16 +213,15 @@
+   new_sprite = malloc(sizeof(sprite));
+   new_sprite->default_img = render_svg_from_handle(file_handle, width, height, "#default");
+ 
+-  /* get number of frames from description */
+-  sscanf(rsvg_handle_get_desc(file_handle), "%d", &new_sprite->num_frames);
+-  DEBUGMSG(debug_loaders, "load_svg_sprite(): loading %d frames\n", new_sprite->num_frames);
+-
+-  for(i = 0; i < new_sprite->num_frames; i++)
+-  {
+-    sprintf(lay_name, "#frame%d", i);
+-    new_sprite->frame[i] = render_svg_from_handle(file_handle, width, height, lay_name);
++  /* get number of frames directly. End when #frame<num> doesn't exist */
++  new_sprite->num_frames = 0;
++  while(1) {
++      sprintf(lay_name, "#frame%d", new_sprite->num_frames);
++      if ( ! (rsvg_handle_has_sub(file_handle, lay_name)) ) break;
++      new_sprite->frame[new_sprite->num_frames] = render_svg_from_handle(file_handle, width, height, lay_name);
++      new_sprite->num_frames++;
+   }
+-
++  
+   g_object_unref(file_handle);
+   rsvg_term();
+ 
+@@ -1028,12 +1027,14 @@
+       {
+         png_init_io(png_ptr, fi);
+ 
+-        info_ptr->width = surf->w;
+-        info_ptr->height = surf->h;
+-        info_ptr->bit_depth = 8;
+-        info_ptr->color_type = PNG_COLOR_TYPE_RGB_ALPHA;
+-        info_ptr->interlace_type = 1;
+-        info_ptr->valid = 0;	/* will be updated by various png_set_FOO() functions */
++        //info_ptr->width = surf->w;
++        //info_ptr->height = surf->h;
++        //info_ptr->bit_depth = 8;
++        //info_ptr->color_type = PNG_COLOR_TYPE_RGB_ALPHA;
++        //info_ptr->interlace_type = 1;
++        png_set_IHDR(png_ptr, info_ptr, surf->w, surf->h, 8, PNG_COLOR_TYPE_RGB_ALPHA, 1, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
++        //info_ptr->valid = 0;	/* will be updated by various png_set_FOO() functions */
++
+ 
+         png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr,
+                        PNG_sRGB_INTENT_PERCEPTUAL);

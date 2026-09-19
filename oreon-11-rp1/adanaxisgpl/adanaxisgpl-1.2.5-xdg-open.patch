@@ -1,0 +1,10 @@
+--- adanaxisgpl-1.2.5/src/Platform/X11/PlatformMiscUtils.cpp~	2013-04-29 16:15:54.000000000 +0200
++++ adanaxisgpl-1.2.5/src/Platform/X11/PlatformMiscUtils.cpp	2013-04-29 16:16:29.356741339 +0200
+@@ -429,6 +429,7 @@ PlatformMiscUtils::LaunchURL(const strin
+     {
+         browserCommands.push_back(browserVar);
+     }
++    browserCommands.push_back("xdg-open");
+     browserCommands.push_back("kfmclient openURL");
+     browserCommands.push_back("galeon --new-window");
+     browserCommands.push_back("opera -newbrowser");

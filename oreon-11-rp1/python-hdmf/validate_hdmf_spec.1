@@ -1,0 +1,23 @@
+.TH VALIDATE_HDMF_SPEC "1" "September 2022" "" "User Commands"
+.SH NAME
+.B validate_hdmf_spec
+\(en validate an HDMF/NWB specification
+.SH SYNOPSIS
+.B validate_hdmf_spec
+.RB [ \-h ]
+.RB [ \-m\ \fIMETASCHEMA ]
+.I paths
+.RI [ paths \ ...]
+.SH OPTIONS
+.SS "POSITIONAL ARGUMENTS"
+.TP
+.I paths
+YAML file paths
+.SS "OPTIONAL ARGUMENTS"
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.TP
+.B \-m\ \fIMETASCHEMA\fR, \fB\-\-metaschema\ \fIMETASCHEMA
+.B .json.schema
+file used to validate YAML files

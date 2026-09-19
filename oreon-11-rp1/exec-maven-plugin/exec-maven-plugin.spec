@@ -1,7 +1,7 @@
 %global source0_hash 50f0f94e8de44a3ca457156943068d694ca88474a94dbf6d85fa369f7e8ec1ae
 
 Name:           exec-maven-plugin
-Version:        3.6.3
+Version:        3.6.4
 Release:        %autorelease
 Summary:        Exec Maven Plugin
 

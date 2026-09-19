@@ -1,0 +1,66 @@
+diff -up qm-dsp-qm-vamp-plugins-v1.8.0/build/general/Makefile.inc.2 qm-dsp-qm-vamp-plugins-v1.8.0/build/general/Makefile.inc
+--- qm-dsp-qm-vamp-plugins-v1.8.0/build/general/Makefile.inc.2	2020-01-17 11:40:31.000000000 +0100
++++ qm-dsp-qm-vamp-plugins-v1.8.0/build/general/Makefile.inc	2025-04-30 19:37:06.859985329 +0200
+@@ -4,10 +4,11 @@ CXX	?= g++
+ CC	?= gcc
+ AR	?= ar
+ RANLIB	?= ranlib
++INSTALL        ?= install -p
+ 
+-KISSFFT_CFLAGS	:= -Iext/kissfft -Iext/kissfft/tools -Dkiss_fft_scalar=double
++KISSFFT_CFLAGS	:= -Dkiss_fft_scalar=double
+ 
+-CFLAGS		:= $(CFLAGS) -I. -DNO_BLAS_WRAP -DADD_ -Iext/clapack/include -Iext/cblas/include $(KISSFFT_CFLAGS)
++CFLAGS		:= $(CFLAGS) -I. -DNO_BLAS_WRAP -DADD_ -Iext/clapack/include $(KISSFFT_CFLAGS)
+ CXXFLAGS	:= $(CXXFLAGS) -I. $(KISSFFT_CFLAGS)
+ 
+ CLAPACK_SRC := ext/clapack/src/dgetrf.c \
+@@ -48,6 +49,7 @@ CBLAS_SRC := ext/cblas/src/dgemm.c \
+ HEADERS := base/Pitch.h \
+            base/Window.h \
+            base/KaiserWindow.h \
++           base/Restrict.h \
+            base/SincWindow.h \
+            dsp/chromagram/Chromagram.h \
+            dsp/chromagram/ConstantQ.h \
+@@ -85,13 +87,12 @@ HEADERS := base/Pitch.h \
+            maths/MathAliases.h \
+            maths/MathUtilities.h \
+ 	   maths/MedianFilter.h \
++           maths/nan-inf.h \
+            maths/Polyfit.h \
+            maths/pca/pca.h \
+            thread/AsynchronousTask.h \
+            thread/BlockAllocator.h \
+-           thread/Thread.h \
+-           ext/kissfft/kiss_fft.h \
+-           ext/kissfft/tools/kiss_fftr.h
++           thread/Thread.h
+ 
+ SOURCES := base/Pitch.cpp \
+            base/KaiserWindow.cpp \
+@@ -131,10 +132,7 @@ SOURCES := base/Pitch.cpp \
+            maths/MathUtilities.cpp \
+            maths/pca/pca.c \
+            thread/Thread.cpp \
+-           ext/kissfft/kiss_fft.c \
+-           ext/kissfft/tools/kiss_fftr.c \
+-           $(CLAPACK_SRC) \
+-           $(CBLAS_SRC)
++           $(CLAPACK_SRC)
+ 
+ OBJECTS := $(SOURCES:.cpp=.o)
+ OBJECTS := $(OBJECTS:.c=.o)
+@@ -150,6 +148,12 @@ test:		$(LIBRARY)
+ depend:
+ 		makedepend -fbuild/general/Makefile.inc -Y -- $(CFLAGS) -- $(SOURCES)
+ 
++install:
++		$(INSTALL) -D -m 0644 $(LIBRARY) $(DESTDIR)$(LIBDIR)/$(LIBRARY)
++		for h in $(HEADERS); do \
++			$(INSTALL) -D -m 0644 $$h $(DESTDIR)$(PREFIX)/include/qm-dsp/$$h; \
++		done
++
+ clean:		
+ 		rm -f $(OBJECTS)
+ 

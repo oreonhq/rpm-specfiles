@@ -1,0 +1,20 @@
+--- rd-hashd-2.2.5/Cargo.toml	1970-01-01T00:00:01+00:00
++++ rd-hashd-2.2.5/Cargo.toml	2025-07-29T11:01:47.043659+00:00
+@@ -27,7 +27,7 @@
+ features = ["serde"]
+ 
+ [dependencies.console]
+-version = "0.15"
++version = ">=0.15, <0.17"
+ 
+ [dependencies.crossbeam]
+ version = "0.8"
+@@ -39,7 +39,7 @@
+ version = "0.3"
+ 
+ [dependencies.indicatif]
+-version = "0.17"
++version = ">=0.17, <0.19"
+ 
+ [dependencies.lazy_static]
+ version = "1.4"

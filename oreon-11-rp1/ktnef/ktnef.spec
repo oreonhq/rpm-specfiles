@@ -1,0 +1,73 @@
+%global source0_hash f31a9008c62b380a615447669fd96b65aa25062ba4d314de42aadb267d1ec747
+
+Name:    ktnef
+Version: 25.12.3
+Release: 1%{?dist}
+Summary: The KTNef Library
+
+License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later
+URL:     https://invent.kde.org/frameworks/%{name}
+
+Source0:        http://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+
+BuildRequires:  cmake
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+
+BuildRequires:  cmake(KF6CalendarCore)
+BuildRequires:  cmake(KPim6CalendarUtils)
+BuildRequires:  cmake(KF6Contacts)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6Codecs)
+
+%description
+%{summary}.
+
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       cmake(KF6CalendarCore)
+%description    devel
+The %{name}-devel package contains libraries and header files for
+developing applications that use %{name}.
+
+%package        doc
+Summary:        Developer Documentation files for %{name}
+BuildArch:      noarch
+%description    doc
+Developer Documentation files for %{name} for use with KDevelop or QtCreator.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{name}-%{version} -p1
+
+# Remove together with move-translations.patch once released
+find ./po -type f -name libktnef5.po -execdir mv {} libktnef6.po \;
+
+%build
+%cmake_kf6
+%cmake_build
+
+%install
+%cmake_install
+%find_lang %{name} --all-name --with-html
+
+%files -f %{name}.lang
+%license LICENSES/*
+%{_kf6_datadir}/qlogging-categories6/*%{name}.*
+%{_kf6_libdir}/libKPim6Tnef.so.*
+
+%files devel
+%{_includedir}/KPim6/KTNEF/
+%{_kf6_libdir}/libKPim6Tnef.so
+%{_kf6_libdir}/cmake/KPim6Tnef/
+%{_qt6_docdir}/*.tags
+
+%files doc
+%{_qt6_docdir}/*.qch
+
+%changelog
+%autochangelog

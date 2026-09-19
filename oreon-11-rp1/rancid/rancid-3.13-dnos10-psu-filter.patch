@@ -1,0 +1,34 @@
+diff -up rancid-3.13/lib/dnos10.pm.in.psu-filter rancid-3.13/lib/dnos10.pm.in
+--- rancid-3.13/lib/dnos10.pm.in.psu-filter	2020-10-02 12:48:05.000000000 -0400
++++ rancid-3.13/lib/dnos10.pm.in	2022-04-25 10:42:42.888049369 -0400
+@@ -122,19 +122,27 @@ REDO:	last if (/$prompt/);
+ 
+ 	if (/-- power supplies --/i) {
+ 	    ProcessHistory("COMMENTS","keysort","C1","! $_");
+-	    # PSU-ID  Status      Type    AirFlow   Fan  Speed(rpm)  Status
+-	    # ----------------------------------------------------------------
+-	    # 1       up          AC      REVERSE   1    25800       up         
+ 	    while (<$INPUT>) {
+ 		s/^\s+\015//g;
+ 		tr/\015//d;
+ 		last if (/$prompt/);
+ 		last if (/^-- /);		# next section
+ 		/^\s*$/ && next;
++		# PSU-ID  Status      Type    AirFlow   Fan  Speed(rpm)  Status
++		# ----------------------------------------------------------------
++		# 1       up          AC      REVERSE   1    25800       up         
+ 		if (/^(\d+\s+\w+\s+\w+\s+\w+\s+\d+\s+)(\d+)(\s+\w+)\s*$/) {
+ 		    my($sl) = length($2);
+                     my($fmt) = "%s%-". $sl ."s%s\n";
+                     $_ = sprintf($fmt, $1, "", $3);
++	        # PSU-ID  Status      Type    Power(w) AvgPower(w) AvgPowerStartTime AirFlow   Fan  Speed(rpm)  Status
++		# -------------------------------------------------------------------------------------------------------
++		# 1       up          AC      34       34          04/05/2022-20:47  REVERSE   1    3600        up         
++		} elsif (/^(\d+\s+\w+\s+\w+\s+)(\d+\s+\d+\s+[^ ]+\s+)(\w+\s+\d+\s+)(\d+)(\s+\w+)\s*$/) {
++		    my($pl) = length($2);
++		    my($sl) = length($4);
++                    my($fmt) = "%s%-". $pl ."s%s%-". $sl ."s%s\n";
++                    $_ = sprintf($fmt, $1, "", $3, "", $5);
+ 		}
+ 		ProcessHistory("COMMENTS","keysort","C1","! $_");
+ 	    }

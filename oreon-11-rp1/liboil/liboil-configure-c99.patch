@@ -1,0 +1,27 @@
+Future compilers will not support implicit function declarations,
+so include <string.h> for the memcpy function.
+
+diff --git a/configure b/configure
+index 84cc82b790adbed8..fe1117a33c022483 100755
+--- a/configure
++++ b/configure
+@@ -12197,6 +12197,7 @@ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ 
++#include <string.h>
+ int main(int argc, char **argv)
+ {
+   char array[] = "ABCDEFGH";
+diff --git a/m4/as-unaligned-access.m4 b/m4/as-unaligned-access.m4
+index ede8bd2a95b9a5f0..10b9563e230a7033 100644
+--- a/m4/as-unaligned-access.m4
++++ b/m4/as-unaligned-access.m4
+@@ -19,6 +19,7 @@ AC_DEFUN([AS_UNALIGNED_ACCESS], [
+   fi
+   if test x"$as_cv_unaligned_access" = x ; then
+     AC_TRY_RUN([
++#include <string.h>
+ int main(int argc, char **argv)
+ {
+   char array[] = "ABCDEFGH";

@@ -1,0 +1,40 @@
+This fixes ClanLib picking 1368x768 when an app asks for 1024x768 and the
+mode list includes both 1368x768 and 1024x768.
+diff -ur ClanLib-0.6.5.new/Sources/Display/Display/X11/display_xwindow.cpp ClanLib-0.6.5/Sources/Display/Display/X11/display_xwindow.cpp
+--- ClanLib-0.6.5.new/Sources/Display/Display/X11/display_xwindow.cpp	2019-11-05 15:30:21.875867133 +0100
++++ ClanLib-0.6.5/Sources/Display/Display/X11/display_xwindow.cpp	2019-11-05 16:31:56.920319672 +0100
+@@ -377,9 +377,12 @@
+ {
+ 	XF86VidModeModeInfo *a = *(XF86VidModeModeInfo**)va;
+ 	XF86VidModeModeInfo *b = *(XF86VidModeModeInfo**)vb;
+-	if(a->hdisplay > b->hdisplay)
+-		return -1;
+-	return b->vdisplay - a->vdisplay;
++	int diff = 0;
++
++	// Prioritize vertical difference over horizontal ones
++	diff += (b->vdisplay - a->vdisplay) * 1000;
++	diff += (b->hdisplay - a->hdisplay);
++	return diff;
+ }
+ #endif
+ 
+diff -ur ClanLib-0.6.5.new/Sources/Display/Display/X11/x11_resolution.cpp ClanLib-0.6.5/Sources/Display/Display/X11/x11_resolution.cpp
+--- ClanLib-0.6.5.new/Sources/Display/Display/X11/x11_resolution.cpp	2019-11-05 12:17:12.069830146 +0100
++++ ClanLib-0.6.5/Sources/Display/Display/X11/x11_resolution.cpp	2019-11-05 16:27:10.609124412 +0100
+@@ -142,9 +142,12 @@
+ {
+ 	XF86VidModeModeInfo *a = *(XF86VidModeModeInfo**)va;
+ 	XF86VidModeModeInfo *b = *(XF86VidModeModeInfo**)vb;
+-	if(a->hdisplay > b->hdisplay)
+-		return -1;
+-	return b->vdisplay - a->vdisplay;
++	int diff = 0;
++
++	// Prioritize vertical difference over horizontal ones
++	diff += (b->vdisplay - a->vdisplay) * 1000;
++	diff += (b->hdisplay - a->hdisplay);
++	return diff;
+ }
+ 
+ XF86VidModeModeInfo CL_X11Resolution::get_best_mode(int width, int height)

@@ -1,0 +1,31 @@
+From 29c290200108cf185fcbc06f5870e6a1c6b8dc66 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 27 Aug 2020 09:38:03 +0200
+Subject: [PATCH] Inhibit installing dependencies from CPAN
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When boostrapping Perl, MRO::Compat is not available and Makefile.PL
+attempts to install this unneeded dependency from CPAN.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1873016
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 3c947e3..4326d66 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -40,6 +40,4 @@ test_requires "Storable"        => '0';   # for cloning in tests
+ 
+ tests_recursive 't';
+ 
+-auto_install();
+-
+ WriteAll();
+-- 
+2.25.4
+

@@ -1,0 +1,87 @@
+diff -up crm114-20090807-BlameThorstenAndJenny.src/crm114_sysincludes.h.tre crm114-20090807-BlameThorstenAndJenny.src/crm114_sysincludes.h
+--- crm114-20090807-BlameThorstenAndJenny.src/crm114_sysincludes.h.tre	2009-08-07 17:22:37.000000000 +0200
++++ crm114-20090807-BlameThorstenAndJenny.src/crm114_sysincludes.h	2009-09-20 15:56:23.000000000 +0200
+@@ -27,7 +27,7 @@
+ #include <sys/types.h>
+ 
+ // Only TRE regex library is currently supported
+-#include <tre/regex.h>
++#include <tre/tre.h>
+ 
+ // Normally declared from tre/regex.h
+ //#ifndef REG_LITERAL
+diff -up crm114-20090807-BlameThorstenAndJenny.src/crmregex_tre.c.tre crm114-20090807-BlameThorstenAndJenny.src/crmregex_tre.c
+--- crm114-20090807-BlameThorstenAndJenny.src/crmregex_tre.c.tre	2009-08-07 17:22:37.000000000 +0200
++++ crm114-20090807-BlameThorstenAndJenny.src/crmregex_tre.c	2009-09-20 15:59:11.000000000 +0200
+@@ -90,7 +90,7 @@ int crm_regcomp (regex_t *preg, char *re
+   //    matches the same thing).
+   if (regex_len == 0)
+     {
+-      return (regncomp (preg, "()", 2, cflags));
++      return (tre_regncomp (preg, "()", 2, cflags));
+     };
+ 
+   //   Are we cacheing compiled regexes?  Maybe not...
+@@ -99,7 +99,7 @@ int crm_regcomp (regex_t *preg, char *re
+   if (internal_trace)
+     fpe_regex("compiling regex ", regex, regex_len, "\n");
+ 
+-  return ( regncomp (preg, regex, regex_len, cflags));
++  return ( tre_regncomp (preg, regex, regex_len, cflags));
+ 
+ #else	// !CRM_REGEX_CACHESIZE == 0
+ 
+@@ -164,7 +164,7 @@ int crm_regcomp (regex_t *preg, char *re
+ 	new.regex_len = regex_len;
+ 	new.cflags = cflags;
+ 	new.status =
+-	  regncomp (&new.reg, new.regex, new.regex_len, new.cflags);
++	  tre_regncomp (&new.reg, new.regex, new.regex_len, new.cflags);
+ 
+ 	// i is the bucket to throw away, if any
+ 	// i may or may not be where new stuff will go
+@@ -172,7 +172,7 @@ int crm_regcomp (regex_t *preg, char *re
+ 	  {
+ 	    if (internal_trace)
+ 	      fpe_bucket("discarding ", i);
+-	    regfree (&regex_cache[i].reg);
++	    tre_regfree (&regex_cache[i].reg);
+ 	    free (regex_cache[i].regex);
+ 	  }
+       }
+@@ -223,7 +223,7 @@ int crm_regexec ( regex_t *preg, char *s
+   if (aux_string == NULL
+       || strlen (aux_string) < 1)
+     {
+-      return (regnexec (preg, string, string_len, nmatch, pmatch, eflags));
++      return (tre_regnexec (preg, string, string_len, nmatch, pmatch, eflags));
+     }
+   else
+     {
+@@ -247,7 +247,7 @@ int crm_regexec ( regex_t *preg, char *s
+ 		 pblock.cost_del);
+ 
+       //  now we can run the actual match
+-      i = reganexec (preg, string, string_len, &mblock, pblock, eflags);
++      i = tre_reganexec (preg, string, string_len, &mblock, pblock, eflags);
+       if (user_trace)
+ 	fprintf (stderr, "approximate Regex match returned %d .\n", i);
+       return (i);
+@@ -259,7 +259,7 @@ size_t crm_regerror (int errorcode, rege
+ 		     size_t errbuf_size)
+ 
+ {
+-  return (regerror (errorcode, preg, errbuf, errbuf_size));
++  return (tre_regerror (errorcode, preg, errbuf, errbuf_size));
+ };
+ 
+ void crm_regfree (regex_t *preg)
+@@ -269,7 +269,7 @@ void crm_regfree (regex_t *preg)
+   //  till and unless we decache, so crm_regfree is a noop.
+   return;
+ #else	// !CRM_REGEX_CACHESIZE > 0
+-   return (regfree (preg));
++   return (tre_regfree (preg));
+ #endif	// !CRM_REGEX_CACHESIZE > 0
+ };
+ 

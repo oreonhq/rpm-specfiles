@@ -1,0 +1,81 @@
+From: Dejan Latinovic <Dejan.Latinovic@imgtec.com>
+Date: Tue, 11 Mar 2014 18:16:39 +0100
+Description: FTBFS: conflicting types for 'cff_parse'
+ Changes to bison input files (src/core/conffile.y and src/core/confline.y),
+ in order to adapt to newer bison version.
+Debian-Bug: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=720833
+
+--- a/src/core/conffile.y
++++ b/src/core/conffile.y
+@@ -17,9 +17,11 @@
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ %define api.pure
++%no-lines
+ %name-prefix "cff_"
+ %defines "conffile.tab.h"
+ %parse-param { struct cfdata *pp }
++%lex-param { yyscan_t cff_scaninfo }
+ %{
+ #if HAVE_CONFIG_H
+ # include <config.h>
+@@ -28,6 +30,11 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include "configuration.h"
++#ifndef YY_TYPEDEF_YY_SCANNER_T
++#define YY_TYPEDEF_YY_SCANNER_T
++typedef void* yyscan_t;
++#endif
++#include "conffile.h"
+ %}
+ 
+ %union value {
+@@ -36,9 +43,7 @@
+ 
+ %{
+ #include "conffile.lex.h"
+-#include "conffile.h"
+-#define YYLEX_PARAM pp->scaninfo
+-
++#define cff_scaninfo pp->scaninfo
+ static int yyerror(struct cfdata *pp, const char* s);
+ %}
+ 
+--- a/src/core/confline.y
++++ b/src/core/confline.y
+@@ -17,9 +17,11 @@
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ %define api.pure
++%no-lines
+ %name-prefix "cfl_"
+ %defines "confline.tab.h"
+ %parse-param { struct cfldata *pp }
++%lex-param { yyscan_t cfl_scaninfo }
+ %{
+ #if HAVE_CONFIG_H
+ # include <config.h>
+@@ -28,6 +30,11 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include "configuration.h"
++#ifndef YY_TYPEDEF_YY_SCANNER_T
++#define YY_TYPEDEF_YY_SCANNER_T
++typedef void* yyscan_t;
++#endif
++#include "confline.h"
+ %}
+ 
+ %union value {
+@@ -36,9 +43,7 @@
+ 
+ %{
+ #include "confline.lex.h"
+-#include "confline.h"
+-#define YYLEX_PARAM pp->scaninfo
+-
++#define cfl_scaninfo pp->scaninfo
+ static int yyerror(struct cfldata *pp, const char* s);
+ %}
+ 

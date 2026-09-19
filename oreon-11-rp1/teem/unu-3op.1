@@ -1,0 +1,171 @@
+.TH UNU\-3OP "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-3op \- ternary operation on three
+.IR nrrd s
+or constants
+.SH SYNOPSIS
+.B unu\ 3op
+.RI < operator >
+.RI < in1 >
+.RI < in2 >
+.RI < in3 >
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-w , \-\-which
+.RI < arg >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Ternary operation on three
+.IR nrrd s
+or constants.
+Can have one, two, or three
+.IR nrrd s,
+but not zero.
+Use
+.RB \(lq \- \(rq
+for an operand to signify a
+.I nrrd
+to be read from
+.I stdin
+(a pipe).
+Note, however, that
+.RB \(lq \- \(rq
+can probably only be used once (reliably).
+.IP \(bu +2n
+Uses
+.B nrrdArithIterTernaryOp
+or (with
+.BR \-w )
+.B nrrdArithIterTernaryOpSelect
+.SH OPTIONS
+.TP
+.I operator
+Ternary operator.
+Possibilities include:
+.RS +7n
+.IP \(bu +2n
+.RB \(lq + \(rq,
+.RB \(lq x \(rq
+sum or product of three values
+.IP \(bu +2n
+.RB \(lq min \(rq,
+.RB \(lq max \(rq
+minimum, maximum
+.IP \(bu +2n
+.RB \(lq min_sm \(rq
+smoothed minimum function;
+.BI min_sm( x ,\  w ,\  M )
+is like
+.BI min( x , M )
+but for
+.IR x \ >\  M \- w
+(with
+.IR w \ >\  \fB0 )
+there is a smooth transition from
+.I x
+to asymptotic to
+.I M
+.IP \(bu +2n
+.RB \(lq max_sm \(rq
+smoothed maximum function;
+max_sm(m, w, x)
+.BI max_sm( m ,\  w ,\  x )
+is like
+.BI max( m , x )
+but for
+.IR x \ <\  m + w
+(with
+.IR w \ >\  m )
+there is a smooth transition from
+.I x
+to asymptotic to
+.I m
+.IP \(bu +2n
+.RB \(lq lt_sm \(rq
+1st less than 3rd, smoothed by 2nd
+.IP \(bu +2n
+.RB \(lq gt_sm \(rq
+1st greater than 3rd, smoothed by 2nd
+.IP \(bu +2n
+.RB \(lq clamp \(rq
+2nd value is clamped to range between the 1st and the 3rd
+.IP \(bu +2n
+.RB \(lq ifelse \(rq
+if 1st value non-zero, then 2nd value, else 3rd value
+.IP \(bu +2n
+.RB \(lq lerp \(rq
+linear interpolation between the 2nd and 3rd values, as the 1st value varies
+between
+.B 0.0
+and
+.BR 1.0 ,
+respectively
+.IP \(bu +2n
+.RB \(lq exists \(rq
+if the 1st value exists, use the 2nd value, otherwise use the 3rd
+.IP \(bu +2n
+.RB \(lq in_op \(rq
+.B 1
+iff 2nd value is > 1st and < 3rd,
+.B 0
+otherwise
+.IP \(bu +2n
+.RB \(lq in_cl \(rq
+.B 1
+iff 2nd value is >= 1st and <= 3rd,
+.B 0
+otherwise
+.IP \(bu +2n
+.RB \(lq gauss \(rq
+evaluate (at 1st value) Gaussian with mean=2nd and stdv=3rd value
+.IP \(bu +2n
+.RB \(lq rician \(rq
+evaluate (at 1st value) Rician with mean=2nd and stdv=3rd value
+.RE
+.TP
+.I in1
+First input.
+Can be a single value or a
+.IR nrrd .
+.TP
+.I in2
+Second input.
+Can be a single value or a
+.IR nrrd .
+.TP
+.I in3
+Third input.
+Can be a single value or a
+.IR nrrd .
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+type to convert all
+.IR nrrd
+inputs to, prior to doing operation.
+This also determines output type.
+By default (not using this option), the types of the input
+.IR nrrd s
+are left unchanged.
+.TP
+.B \-w\fR\ <\fIarg\fR>\ ,\ \fB\-\-which\fR\ <\fIarg\fR>
+Which argument
+.RB ( 0 ,
+.BR 1 ,
+or
+.BR 2 )
+should be used to determine the shape of the output
+.IR nrrd .
+By default (not using this option), the first non-constant argument is used.
+.RI ( int );
+default:
+.RB \(lq \-1 \(rq
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

@@ -1,0 +1,12 @@
+diff --git a/test/test.h b/test/test.h
+index c125f34..0585d60 100644
+--- a/test/test.h
++++ b/test/test.h
+@@ -11,6 +11,7 @@
+ #include <stddef.h>
+ #include <setjmp.h>
+ #include <string.h>
++#include <stdint.h>
+ 
+ #include <cmocka.h>
+ 

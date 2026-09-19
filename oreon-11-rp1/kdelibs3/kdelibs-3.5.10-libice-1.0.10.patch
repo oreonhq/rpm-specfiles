@@ -1,0 +1,191 @@
+diff -ur kdelibs-3.5.10/dcop/client/dcop.cpp kdelibs-3.5.10-libice-1.0.10/dcop/client/dcop.cpp
+--- kdelibs-3.5.10/dcop/client/dcop.cpp	2005-09-10 10:27:22.000000000 +0200
++++ kdelibs-3.5.10-libice-1.0.10/dcop/client/dcop.cpp	2020-06-18 12:43:29.743385950 +0200
+@@ -593,9 +593,29 @@
+ 	    ( getenv( "ICEAUTHORITY" ) == 0 || getenv( "DISPLAY" ) == 0 ) ) )
+ 	{
+ 	    // Check for ICE authority file and if the file can be read by us
+-	    QString home = it.data();
+-	    QString iceFile = it.data() + "/.ICEauthority";
+-	    QFileInfo fi( iceFile );
++	    QString iceFileBase = "ICEauthority";
++	    QString iceFile;
++	    QFileInfo fi;
++
++	    if (getenv("XDG_RUNTIME_DIR") != 0 )
++	    {
++		QFileInfo xdgRuntime(getenv("XDG_RUNTIME_DIR"));
++		passwd* pstruct = getpwnam(it.key().local8Bit());
++		if (pstruct)
++		{
++		    iceFile = QString("%1/%2/%3").arg(xdgRuntime.dirPath()).arg(pstruct->pw_uid).arg(iceFileBase);
++		    fi.setFile(iceFile);
++		}
++		if (!pstruct || !fi.exists())
++		{
++		    iceFile = QString::null;
++		}
++	    }
++	    if (iceFile.isEmpty())
++	    {
++		iceFile = QString("%1/.%2").arg(it.data()).arg(iceFileBase);
++		fi.setFile(iceFile);
++	    }
+ 	    if( iceFile.isEmpty() )
+ 	    {
+ 		cerr_ << "WARNING: Cannot determine home directory for user "
+diff -ur kdelibs-3.5.10/dcop/KDE-ICE/authutil.c kdelibs-3.5.10-libice-1.0.10/dcop/KDE-ICE/authutil.c
+--- kdelibs-3.5.10/dcop/KDE-ICE/authutil.c	2005-09-10 10:27:21.000000000 +0200
++++ kdelibs-3.5.10-libice-1.0.10/dcop/KDE-ICE/authutil.c	2020-06-18 12:43:29.743385950 +0200
+@@ -81,11 +81,13 @@
+ IceAuthFileName ()
+ 
+ {
++    static char baseICEauthority[] = "ICEauthority";
+ #ifdef _WIN32
+-    static char slashDotICEauthority[] = "\\.ICEauthority";
++    static char pathSep[] = "\\";
+ #else
+-    static char slashDotICEauthority[] = "/.ICEauthority";
++    static char pathSep[] = "/";
+ #endif
++    char	fileSep[2];
+     char    	*name;
+     static char	*buf;
+     static int	bsize;
+@@ -95,37 +97,70 @@
+ #endif
+ 
+     name = getenv ("ICEAUTHORITY");
+-    if ( name )
++    if (name && name[0])
+ 	return (name);
+ 
+-    name = getenv ("HOME");
++    name = getenv("XDG_RUNTIME_DIR");
++    if (name && name[0])
++    {
++	char	*testBuf;
++	strcpy(fileSep, "");
++	size = strlen(name) + strlen(pathSep) + strlen(fileSep) + strlen(baseICEauthority) + 1;
++	testBuf = malloc(size);
++	if (!testBuf)
++	{
++	    return (NULL);
++	}
++	snprintf(testBuf, size, "%s%s%s%s", name, pathSep, fileSep, baseICEauthority);
++	if (access(testBuf, F_OK))
++	{
++	    name = NULL;
++	}
++	free(testBuf);
++    }
+ 
+-    if (!name)
++    if (!name || !name[0])
+     {
++	name = getenv ("HOME");
++	strcpy(fileSep, ".");
+ #ifdef _WIN32
+-		if(name = getenv ("HOMEDRIVE"))
++	if (!name || !name[0])
+ 	{
+-			strcpy (dir, name);
+-			if(name = getenv ("HOMEPATH"))
+-	    strcat (dir, name);
+-	}
+-		else
++	    if(name = getenv ("HOMEDRIVE"))
++	    {
++		strcpy (dir, name);
++		if(name = getenv ("HOMEPATH"))
+ 		{
+-			if(name = getenv ("USERPROFILE"))
+-				strcpy (dir, name);
+-    }
+-	    name = dir;
+-	if (!name)
++		    strcat (dir, name);
++		}
++		name = dir;
++	    }
++	    else
++	    {
++		name = getenv ("USERPROFILE");
++	    }
++	}
+ #endif
+ #ifdef __EMX__
+-	strcpy (dir,"c:");
+-	name = dir;
+-	if (!name)
++	if (!name || !name[0])
++	{
++	    strcpy (dir,"c:");
++	    name = dir;
++	}
+ #endif
++    }
++    if (!name || !name[0])
++    {
+ 	return (NULL);
+     }
+ 
+-    size = strlen (name) + strlen (&slashDotICEauthority[1]) + 2;
++    /* Special case for "/".  We will add our own '/' later. */
++    if (strcmp(name, pathSep) == 0)
++    {
++	name++;
++    }
++
++    size = strlen(name) + strlen(pathSep) + strlen(fileSep) + strlen(baseICEauthority) + 1;
+ 
+     if (size > bsize)
+     {
+@@ -137,8 +172,7 @@
+ 	bsize = size;
+     }
+ 
+-    strcpy (buf, name);
+-    strcat (buf, slashDotICEauthority + (name[1] == '\0' ? 1 : 0));
++    snprintf(buf, bsize, "%s%s%s%s", name, pathSep, fileSep, baseICEauthority);
+ 
+     return (buf);
+ }
+diff -ur kdelibs-3.5.10/kinit/kinit.cpp kdelibs-3.5.10-libice-1.0.10/kinit/kinit.cpp
+--- kdelibs-3.5.10/kinit/kinit.cpp	2007-10-08 11:52:03.000000000 +0200
++++ kdelibs-3.5.10-libice-1.0.10/kinit/kinit.cpp	2020-06-18 12:44:24.293631687 +0200
+@@ -59,6 +59,7 @@
+ #include <klibloader.h>
+ #include <kapplication.h>
+ #include <klocale.h>
++#include <dcopglobal.h>
+ 
+ #ifdef Q_OS_LINUX
+ #include <sys/prctl.h>
+@@ -852,12 +853,7 @@
+           exit(255);
+        }
+      }
+-     path = getenv("ICEAUTHORITY");
+-     if (path.isEmpty())
+-     {
+-        path = home_dir;
+-        path += "/.ICEauthority";
+-     }
++     path = IceAuthFileName();
+      if (access(path.data(), R_OK|W_OK) && (errno != ENOENT))
+      {
+        fprintf(stderr, "kdeinit: Aborting. No write access to '%s'.\n", path.data());
+diff -ur kdelibs-3.5.10/kinit/Makefile.am kdelibs-3.5.10-libice-1.0.10/kinit/Makefile.am
+--- kdelibs-3.5.10/kinit/Makefile.am	2007-10-08 11:52:03.000000000 +0200
++++ kdelibs-3.5.10-libice-1.0.10/kinit/Makefile.am	2020-06-18 13:07:46.826851561 +0200
+@@ -33,7 +33,7 @@
+ 
+ kdeinit_LDFLAGS = $(KDE_MT_LDFLAGS) $(QT_LDFLAGS) $(X_LDFLAGS) $(USER_LDFLAGS) \
+                   $(KDE_RPATH)
+-kdeinit_LDADD = $(LIB_KPARTS) 
++kdeinit_LDADD = $(top_builddir)/dcop/KDE-ICE/libkICE.la $(LIB_KPARTS) 
+ 
+ kioslave_SOURCES = kioslave.cpp
+ kioslave_LDFLAGS = $(KDE_MT_LDFLAGS) $(QT_LDFLAGS) $(X_LDFLAGS) $(USER_LDFLAGS) \

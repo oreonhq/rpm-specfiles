@@ -16,13 +16,13 @@
 %bcond argon2 %{undefined rhel}
 
 # When you change "Version: " to the new major version, remember to change this value too
-%global major_version 2.6
+%global major_version 2.7
 
 # Disable automatic .la file removal
 %global __brp_remove_la_files %nil
 
 Name: openldap
-Version: 2.6.13
+Version: 2.7.1
 Release: 1%{?dist}
 Summary: LDAP support libraries
 License: OLDAP-2.8

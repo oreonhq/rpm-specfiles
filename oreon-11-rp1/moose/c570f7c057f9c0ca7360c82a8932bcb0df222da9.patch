@@ -1,0 +1,25 @@
+From c570f7c057f9c0ca7360c82a8932bcb0df222da9 Mon Sep 17 00:00:00 2001
+From: Dilawar Singh <dilawars@ncbs.res.in>
+Date: Wed, 26 Aug 2020 22:14:38 +0000
+Subject: [PATCH] Fixes to BhallaLab/moose-core#419
+
+---
+ pymoose/PyRun.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/pymoose/PyRun.cpp b/pymoose/PyRun.cpp
+index 73d88c0cf8..765226c453 100644
+--- a/pymoose/PyRun.cpp
++++ b/pymoose/PyRun.cpp
+@@ -200,8 +200,11 @@ PyRun::PyRun():mode_(0), initstr_(""), runstr_(""),
+ 
+ PyRun::~PyRun()
+ {
++#if 0
++    // Fixes to BhallaLab/moose-core#420
+     Py_XDECREF(globals_);
+     Py_XDECREF(locals_);
++#endif
+ }
+ 
+ void PyRun::setRunString(string statement)

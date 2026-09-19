@@ -1,0 +1,74 @@
+#! /bin/sh
+# chkconfig: - 55 55
+# description: ipxripd is an implementation of Novell's RIP and SAP \
+#              protocols.
+# processname: ipxd
+#
+### BEGIN INIT INFO
+# Provides: ipxripd
+# Required-Start: $local_fs $network $remote_fs
+# Required-Stop: $local_fs $network $remote_fs
+# Short-Description: start and stop the IPX RIP and SAP daemon
+# Descriptiion: ipxripd is an implementation of Novell's RIP and SAP
+#   protocols.
+### END INIT INFO
+
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Get config.
+. /etc/sysconfig/network
+
+# Check that networking is up.
+[ ${NETWORKING} = "no" ] && exit 1
+
+
+RETVAL=0
+
+start() {
+    echo -n "Starting ipxd services: "
+    daemon ipxd
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && touch /var/lock/subsys/ipxd
+    echo
+}
+
+stop() {
+    echo -n "Stopping ipxd services: "
+    killproc ipxd
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/ipxd
+    echo
+
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	status ipxd
+	RETVAL=$?
+	;;
+  restart|reload|force-reload)
+	stop
+	start
+	;;
+  condrestart|try-restart)
+	[ -f /var/lock/subsys/ipxd ] && {
+	    stop
+	    start
+	}
+	;;
+  *)
+	echo "Usage: $0 {start|stop|status|restart|reload|condrestart}"
+	exit 3
+esac
+
+exit $RETVAL
+

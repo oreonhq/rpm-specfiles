@@ -1,0 +1,10 @@
+--- keyring-ima-signer-0.1.0/Cargo.toml	2024-03-22T21:40:40.037499+00:00
++++ keyring-ima-signer-0.1.0/Cargo.toml	2024-03-22T21:41:18.938673+00:00
+@@ -3,6 +3,7 @@
+ version = "0.1.0"
+ authors = ["Patrick Uiterwijk <patrick@puiterwijk.org>"]
+ edition = "2018"
++license = "EUPL-1.2"
+ 
+ # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+ 

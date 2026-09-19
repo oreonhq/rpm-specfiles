@@ -1,8 +1,8 @@
 %global source0_hash cc1b5c8ef9efa20d44fe90b59515fddf8b4e884d782a0b33b26a70ab48ec04c1
 
 Name:		fio
-Version:	3.40
-Release:	3%{?dist}
+Version:	3.42
+Release:	1%{?dist}
 Summary:	Multithreaded IO generation tool
 
 License:	GPL-2.0-only

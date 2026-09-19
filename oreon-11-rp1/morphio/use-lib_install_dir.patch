@@ -1,0 +1,44 @@
+From 2e1637ec823ccae50c181d92772fa17d411e6014 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Thu, 3 Mar 2022 14:21:13 +0000
+Subject: [PATCH 8/8] use lib_install_dir
+
+---
+ CMakeLists.txt     | 4 ++--
+ src/CMakeLists.txt | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c08b855..6739308 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -56,12 +56,12 @@ install(
+ install(
+   EXPORT MorphIOTargets
+   NAMESPACE MorphIO::
+-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MorphIO
++  DESTINATION ${LIB_INSTALL_DIR}/cmake/MorphIO
+   )
+ 
+ install(
+   FILES ${CMAKE_CURRENT_LIST_DIR}/CMake/MorphIOConfig.cmake
+-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MorphIO
++  DESTINATION ${LIB_INSTALL_DIR}/cmake/MorphIO
+   )
+ 
+ 
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 6fd04c4..687dcd0 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -114,6 +114,6 @@ install(
+   # DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+   TARGETS morphio_shared
+   EXPORT MorphIOTargets
+-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+   PUBLIC_HEADER DESTINATION include
+ )
+-- 
+2.35.1
+

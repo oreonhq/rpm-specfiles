@@ -1,0 +1,11 @@
+diff -up Lucy-0.6.1/Build.PL.orig Lucy-0.6.1/Build.PL
+--- Lucy-0.6.1/Build.PL.orig	2017-05-17 16:38:07.121978895 +0200
++++ Lucy-0.6.1/Build.PL	2017-05-17 16:37:36.045095432 +0200
+@@ -16,6 +16,7 @@
+ use 5.008003;
+ use strict;
+ use warnings;
++BEGIN { push @INC, '.'; }
+ use lib 'buildlib';
+ use File::Spec::Functions qw( catdir updir );
+ use Lucy::Build;

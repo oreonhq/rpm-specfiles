@@ -1,0 +1,44 @@
+# Sample configuration file to run Red Hat Linux or Fedora Core S/390 with the
+# the Hercules ESA/390 emulator
+
+CPUSERIAL 002623        # CPU serial number
+CPUMODEL  2064          # CPU model number: 3090, 7490, 2064
+MAINSIZE  512           # Main storage size in megabytes
+NUMCPU    1             # Number of CPUs
+CNSLPORT  3270          # TCP port number to which consoles connect
+#HTTPPORT 8081          # enable a HTTP server on this port
+OSTAILOR  LINUX         # OS tailoring
+LOADPARM  0120....      # IPL parameter
+ARCHMODE  ESAME         # Architecture mode S/370, ESA/390 or ESAME
+TZOFFSET  +0100         # Central Europe
+LDMOD     hdt3088.so hdt3420.so hdt3505.so
+
+# .----------------- Device number
+# |   .------------- Device type
+# |   |    .-------- File name and parameters
+# |   |    |
+# V   V    V
+#---  ---- --------------------
+# card reader
+000C  3505 kernel.img generic.prm initrd.img autopad
+# card punch
+#000D 3525 punch00d.txt ascii
+# line printer
+#000E 1403 print00e.txt crlf
+# local non-SNA 3270 TN3270 client connection
+#001F 3270
+# CKD direct access storage device
+# initialize with: dasdinit -z /var/lib/hercules/linux.120 3390-3 lin000
+0120  3390 /var/lib/hercules/linux.120
+# local non-SNA 3270 TN3270 client connection
+#0200 3270
+#0201 3270
+# tape drives
+#0580 3420 /etc/hercules/tape.tdf
+#0581 3420 /dev/st0
+#0582 3420 ickdsf.ipl
+# networking, channel-to-channel adapter
+0600  3088 CTCI -n /dev/net/tun -t 1500 192.168.200.3 192.168.200.4
+0601  3088 CTCI -n /dev/net/tun -t 1500 192.168.200.3 192.168.200.4
+# networking, LCS adaptor
+#0700 3088 LCS 192.168.200.4 -n /dev/net/tun -m 01:02:03:04:05:06

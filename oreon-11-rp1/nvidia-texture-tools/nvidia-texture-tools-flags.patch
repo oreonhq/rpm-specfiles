@@ -1,0 +1,12 @@
+diff -up CMakeLists.txt.orig CMakeLists.txt
+--- CMakeLists.txt.orig	2021-02-24 11:32:41.101973054 -0300
++++ CMakeLists.txt	2021-02-24 11:32:46.452001665 -0300
+@@ -19,8 +19,6 @@ else()
+     message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+ endif()
+ 
+-INCLUDE(${NV_CMAKE_DIR}/OptimalOptions.cmake)
+-
+ IF(CMAKE_BUILD_TYPE MATCHES "debug")
+     SET(CMAKE_DEBUG_POSTFIX "_d" CACHE STRING "Postfix for debug build libraries.")
+     ADD_DEFINITIONS(-D_DEBUG=1)

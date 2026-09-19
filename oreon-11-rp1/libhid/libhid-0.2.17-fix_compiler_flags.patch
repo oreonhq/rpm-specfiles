@@ -1,0 +1,16 @@
+diff -up ./configure.fix_compiler_flags ./configure
+--- ./configure.fix_compiler_flags	2010-03-07 19:29:02.000000000 -0800
++++ ./configure	2010-03-07 19:31:53.000000000 -0800
+@@ -13605,9 +13605,9 @@ _ACEOF
+ fi
+ 
+ 
+-
+-    CFLAGS=$(echo $CFLAGS | sed -e 's,-g[^[:space:]]*,,g')
+-    CXXFLAGS=$(echo $CXXFLAGS | sed -e 's,-g[^[:space:]]*,,g')
++    # Avoid remove "-g" flag for Fedora builds 
++    #CFLAGS=$(echo $CFLAGS | sed -e 's,-g[^[:space:]]*,,g')
++    #CXXFLAGS=$(echo $CXXFLAGS | sed -e 's,-g[^[:space:]]*,,g')
+ 
+     if test "$ac_cv_enable_debug" = "yes"; then
+       echo nada > /dev/null

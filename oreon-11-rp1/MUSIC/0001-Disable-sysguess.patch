@@ -1,0 +1,96 @@
+From f4108bec647f657f91f5dee01dd600b91be18375 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Fri, 2 Oct 2020 23:32:15 +0100
+Subject: [PATCH 1/5] Disable sysguess
+
+---
+ configure.ac | 73 ----------------------------------------------------
+ 1 file changed, 73 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 856b541..1a66763 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -11,79 +11,6 @@ fi
+ AC_PROG_CXX([mpiCC mpixlcxx mpixlcxx_r mpicxx CC])
+ MPI_CXX="$CXX"
+ 
+-AC_MSG_CHECKING([which MPI system we think we are using])
+-case "$MPI_CXX" in
+-  mpiCC)
+-    changequote({, })
+-    MPI_C=mpicc
+-    if $MPI_CXX -compile_info >/dev/null 2>/dev/null; then
+-      SYSGUESS=mpich
+-      CXX="`$MPI_CXX -compile_info | sed -e 's/^\([^ ]*\).*/\1/'`"
+-    else
+-      #	mpiCC can be a C compiler under OpenMPI
+-      if mpicxx -showme >/dev/null 2>/dev/null; then
+-        SYSGUESS=openmpi
+-        CXX="`mpicxx -showme | sed -e 's/^\([^ ]*\).*/\1/'`"
+-      else
+-        changequote([, ])
+-        AC_MSG_ERROR([
+-Confused when trying to determine MPI_CXX, MPI_CXXFLAGS etc.
+-Please set them manually.])
+-        changequote({, })
+-      fi
+-    fi
+-    LAUNCHSTYLE=_mpirun
+-    TESTDIR=testsuite
+-    EXTRAS=extras
+-    changequote([, ])
+-    ;;
+-  mpixlcxx_r)
+-    MPI_C=mpixlc_r
+-    SYSGUESS=bgp
+-    CXX="$MPI_CXX"
+-    #CC="`echo $MPI_CXX | sed -e 's/xlcxx$/xlc/;s/cxx$/cc/'`"
+-    CC="$MPI_C"
+-    ;;
+-  mpixlcxx)
+-    MPI_C=mpixlc
+-    SYSGUESS=bgq
+-    CXX="$MPI_CXX"
+-    #CC="`echo $MPI_CXX | sed -e 's/xlcxx$/xlc/;s/cxx$/cc/'`"
+-    CC="$MPI_C"
+-    ;;
+-  mpicxx)
+-    MPI_C=mpicc
+-    CC="$MPI_C"
+-    CXX="$MPI_CXX"
+-    if mpich2version >/dev/null 2>/dev/null; then
+-       SYSGUESS=mpich2
+-       AC_DEFINE(HAVE_MPICH2, 1, [Define to 1 if you have MPICH2.])
+-    else
+-       SYSGUESS=bgl
+-    fi
+-    ;;
+-  CC)
+-    # We should be checking MPI version but for the Cray we do it differently
+-    if uname -r | grep -q cray_gem_s; then
+-      SYSGUESS=cray_xe6
+-      AC_DEFINE(CRAY_XE6, 1, [Define if this is a Cray XE6 system.])
+-      CC=cc
+-      CXX=CC
+-    else
+-      SYSGUESS=unknown
+-    fi
+-    ;;
+-  xlC)
+-    MPI_C=xlc
+-    SYSGUESS=bgq_seq
+-    CXX="$MPI_CXX"
+-    CC="$MPI_C"
+-    ;;
+-
+-  *)
+-    SYSGUESS=unknown
+-    ;;
+-esac
+ echo "SYSGUESS=$SYSGUESS"
+ 
+ AC_MSG_CHECKING(MPI_CXXFLAGS)
+-- 
+2.43.0
+

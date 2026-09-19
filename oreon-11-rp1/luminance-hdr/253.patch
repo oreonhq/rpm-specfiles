@@ -1,0 +1,22 @@
+From ba73e38a3e1df6652150e98aec599faa281b1539 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 5 May 2022 09:00:15 -0400
+Subject: [PATCH] Fix include for std::mutex in init_fftw.h
+
+---
+ src/Common/init_fftw.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Common/init_fftw.h b/src/Common/init_fftw.h
+index 59de68f4..a4aad47f 100644
+--- a/src/Common/init_fftw.h
++++ b/src/Common/init_fftw.h
+@@ -22,7 +22,7 @@
+ #ifndef INIT_FFTW_H
+ #define INIT_FFTW_H
+ 
+-#include <boost/thread/mutex.hpp>
++#include <mutex>
+ 
+ class FFTW_MUTEX {
+    public:

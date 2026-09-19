@@ -1,0 +1,9 @@
+diff --git a/unifying-receiver.rules b/unifying-receiver.rules
+index 603c5ac..9ad9cec 100644
+--- a/unifying-receiver.rules
++++ b/unifying-receiver.rules
+@@ -16,3 +16,4 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ KERNEL=="hidraw*", ATTRS{idVendor}=="046d",ATTRS{idProduct}=="c52b",TAG+="uaccess"
++KERNEL=="hidraw*", ATTRS{idVendor}=="046d",ATTRS{idProduct}=="c52f",TAG+="uaccess"

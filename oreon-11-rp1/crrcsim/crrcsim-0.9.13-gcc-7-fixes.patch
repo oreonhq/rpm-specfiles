@@ -1,0 +1,27 @@
+From 3f21b2fe5e4200bb7a96b78de953ad4d6d7bd73c Mon Sep 17 00:00:00 2001
+From: Damian Wrobel <dwrobel@ertelnet.rybnik.pl>
+Date: Thu, 21 Dec 2017 11:28:30 +0100
+Subject: [PATCH] gcc 7 fixes
+
+ fix for https://bugzilla.redhat.com/show_bug.cgi?id=1307411
+ upstream report: https://sourceforge.net/p/crrcsim/bugs/35/
+---
+ src/mod_video/crrc_animation.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/mod_video/crrc_animation.cpp b/src/mod_video/crrc_animation.cpp
+index ee7d7f4..855b106 100644
+--- a/src/mod_video/crrc_animation.cpp
++++ b/src/mod_video/crrc_animation.cpp
+@@ -84,7 +84,7 @@ void createAnimation(SimpleXMLTransfer *animation, ssgEntity* model)
+       else
+       {
+         std::cerr << "createAnimation: unknown animation type \'"
+-                  << type << "\'" << std::cerr;
++                  << type << "\'" << std::endl;
+       }
+       
+       if (anim != NULL)
+-- 
+2.14.3
+

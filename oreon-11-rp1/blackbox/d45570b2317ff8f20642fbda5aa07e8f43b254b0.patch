@@ -1,0 +1,24 @@
+From d45570b2317ff8f20642fbda5aa07e8f43b254b0 Mon Sep 17 00:00:00 2001
+From: Andrii Batyiev <batyiev@gmail.com>
+Date: Thu, 22 Feb 2024 01:57:55 +0000
+Subject: [PATCH] Toolbar.cc: fix build for systems where time_t != long
+
+---
+ src/Toolbar.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/Toolbar.cc b/src/Toolbar.cc
+index 8ccad201..fc19f346 100644
+--- a/src/Toolbar.cc
++++ b/src/Toolbar.cc
+@@ -45,8 +45,8 @@ long nextTimeout(int resolution)
+ {
+   timeval now;
+   gettimeofday(&now, 0);
+-  return (std::max(1000l, ((((resolution - (now.tv_sec % resolution)) * 1000l))
+-                           - (now.tv_usec / 1000l))));
++  return (std::max<long>(1000l, ((((resolution - (now.tv_sec % resolution)) * 1000l))
++                                - (now.tv_usec / 1000l))));
+ }
+ 
+ 

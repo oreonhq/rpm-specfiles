@@ -1,0 +1,7 @@
+#
+# RPM macros for D applications.
+#
+# Include directory where all .di or .d file are installed.
+%_d_includedir %{_includedir}/d
+# Default D optimization flags for LDC
+%_d_optflags -O -g -release -wi

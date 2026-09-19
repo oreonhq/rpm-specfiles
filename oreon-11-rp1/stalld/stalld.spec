@@ -1,8 +1,8 @@
 %global source0_hash 6aaedfa18f150e7898a633fbde60ec3a9bd583111f6791d7e0adda018f47957b
 
 Name:		stalld
-Version:	1.27.1
-Release:	2%{?dist}
+Version:	1.28.1
+Release:	1%{?dist}
 Summary:	Daemon that finds starving tasks and gives them a temporary boost
 
 License:	GPL-2.0-or-later AND GPL-2.0-only

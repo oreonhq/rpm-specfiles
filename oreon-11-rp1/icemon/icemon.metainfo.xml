@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2021 Jan Kratochvil <jan.kratochvil@redhat.com> -->
+<component type="desktop">
+  <id>icemon.desktop</id>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Icecream Monitor</name>
+  <summary>A GUI monitor for Icecream</summary>
+  <description>
+    <p>
+      Icecream Monitor is a GUI monitor for Icecream, a distributed compiler
+      system.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/icecc/icemon/wiki/screenshots/icemon-starview.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://kfunk.org/tag/icemon/</url>
+  <url type="bugtracker">https://bugzilla.redhat.com/enter_bug.cgi?product=Fedora&amp;component=icemon</url>
+  <update_contact>jan.kratochvil@redhat.com</update_contact>
+</component>

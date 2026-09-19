@@ -1,0 +1,40 @@
+From 7182986bdfb7bdf0e95ede05a4fbbac4cc159e67 Mon Sep 17 00:00:00 2001
+From: David Faure <faure@kde.org>
+Date: Thu, 2 Jul 2015 12:50:02 +0200
+Subject: [PATCH 03/31] Optimization: avoid double-lookup in QHash.
+
+---
+ akonadi/entity.cpp | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/akonadi/entity.cpp b/akonadi/entity.cpp
+index 6bade85..f762b30 100644
+--- a/akonadi/entity.cpp
++++ b/akonadi/entity.cpp
+@@ -126,8 +126,9 @@ bool Akonadi::Entity::operator<(const Entity &other) const
+ 
+ void Entity::addAttribute(Attribute *attr)
+ {
+-    if (d_ptr->mAttributes.contains(attr->type())) {
+-        Attribute *existing = d_ptr->mAttributes.value(attr->type());
++    Q_ASSERT(attr);
++    Attribute *existing = d_ptr->mAttributes.value(attr->type());
++    if (existing) {
+         if (attr == existing) {
+             return;
+         }
+@@ -165,10 +166,7 @@ void Akonadi::Entity::clearAttributes()
+ 
+ Attribute *Entity::attribute(const QByteArray &type) const
+ {
+-    if (d_ptr->mAttributes.contains(type)) {
+-        return d_ptr->mAttributes.value(type);
+-    }
+-    return 0;
++    return d_ptr->mAttributes.value(type);
+ }
+ 
+ uint qHash(const Akonadi::Entity &entity)
+-- 
+2.5.0
+

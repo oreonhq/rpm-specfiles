@@ -1,0 +1,11 @@
+diff -wruN kdebase-3.5.10.orig/kdeprint/printmgr/printers.desktop kdebase-3.5.10/kdeprint/printmgr/printers.desktop
+--- kdebase-3.5.10.orig/kdeprint/printmgr/printers.desktop      2008-08-19 22:17:02.000000000 +0400
++++ kdebase-3.5.10/kdeprint/printmgr/printers.desktop   2012-04-10 02:33:37.008350750 +0400
+@@ -3,7 +3,6 @@
+ Icon=printmgr
+ Type=Application
+ DocPath=kdeprint/index.html
+-MimeType=print/manager;
+ 
+ X-KDE-ModuleType=Library
+ X-KDE-Library=printmgr

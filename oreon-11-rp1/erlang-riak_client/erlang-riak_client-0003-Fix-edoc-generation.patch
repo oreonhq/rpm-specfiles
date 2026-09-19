@@ -1,0 +1,39 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 13 Feb 2026 10:36:14 +0100
+Subject: [PATCH] Fix edoc generation
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/riakc_pb_socket.erl b/src/riakc_pb_socket.erl
+index fd361c1..7c1db00 100644
+--- a/src/riakc_pb_socket.erl
++++ b/src/riakc_pb_socket.erl
+@@ -1816,7 +1816,7 @@ aae_find_tombs(Pid, BucketType, KeyRange, SegmentFilter, ModifiedRange) ->
+ %% reap_tombs can be passed a change_method of count if a count of matching
+ %% tombstones is all that is required - this is an alternative to running
+ %% find_tombs and taking the length of the list.  To actually reap either
+-%% `local` of `{ob, ID}` should be passed as the change_method.  Using `local`
++%% 'local' or '{ob, ID}' should be passed as the change_method.  Using 'local'
+ %% will reap each tombstone from the node local to which it is discovered,
+ %% whch will have the impact of distributing the reap load across the cluster
+ %% and increasing parallelisation of reap activity.  Otherwise a job id can be
+@@ -1896,8 +1896,8 @@ aae_reap_tombs(Pid,
+ %% erase_keys can be passed a change_method of count if a count of matching
+ %% keys is all that is required - this is an alternative to running
+ %% find_keys and taking the length of the list.  To actually erase the object
+-%% either `local` of `{ob, ID}` should be passed as the change_method.  Using
+-%% `local` will delete each object from the node local to which it is
++%% either 'local' or '{ob, ID}' should be passed as the change_method.  Using
++%% 'local' will delete each object from the node local to which it is
+ %% discovered, which will have the impact of distributing the delete load
+ %% across the cluster and increasing parallelisation of delete activity. 
+ %% Otherwise a job id can be passed an a specific eraser process will be
+@@ -2030,7 +2030,7 @@ aae_object_stats(Pid, BucketType, KeyRange, ModifiedRange) ->
+ 
+ %% @doc
+ %% List all the buckets with references in the AAE store.  For reasonable 
+-%% (e.g. < o(1000)) this should be quick and efficient unless using the
++%% (e.g. \&lt; o(1000)) this should be quick and efficient unless using the
+ %% leveled_so parallel store.  A minimum n_val can be passed if known.  If
+ %% there are buckets (with keys) below the minimum n_val they may not be
+ %% detecting in the query.  Will default to 1.

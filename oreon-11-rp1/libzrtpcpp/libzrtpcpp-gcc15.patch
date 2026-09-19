@@ -1,0 +1,11 @@
+diff -rupN ZRTPCPP-4.6.6/zrtp/EmojiBase32.cpp ZRTPCPP-4.6.6-new/zrtp/EmojiBase32.cpp
+--- ZRTPCPP-4.6.6/zrtp/EmojiBase32.cpp	2017-06-02 09:05:34.000000000 +0200
++++ ZRTPCPP-4.6.6-new/zrtp/EmojiBase32.cpp	2025-01-24 00:02:52.201539770 +0100
+@@ -1,6 +1,7 @@
+ //
+ // Created by werner on 26.12.15.
+ //
++#include <cstdint>
+ #include <iostream>
+ // stdlib.h required for Android NDK builds, not included within the above includes
+ #include <stdlib.h>

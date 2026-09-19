@@ -1,0 +1,74 @@
+--- drm-0.14.2/Cargo.toml	2006-07-24T01:21:28+00:00
++++ drm-0.14.2/Cargo.toml	2026-03-05T14:35:04.504303+00:00
+@@ -34,51 +34,12 @@
+ repository = "https://github.com/Smithay/drm-rs"
+ 
+ [features]
++default = ["use_bindgen"]
+ use_bindgen = ["drm-ffi/use_bindgen"]
+ 
+ [lib]
+ name = "drm"
+ path = "src/lib.rs"
+-
+-[[example]]
+-name = "atomic_modeset"
+-path = "examples/atomic_modeset.rs"
+-
+-[[example]]
+-name = "basic"
+-path = "examples/basic.rs"
+-
+-[[example]]
+-name = "ffi"
+-path = "examples/ffi.rs"
+-
+-[[example]]
+-name = "kms_interactive"
+-path = "examples/kms_interactive.rs"
+-
+-[[example]]
+-name = "legacy_modeset"
+-path = "examples/legacy_modeset.rs"
+-
+-[[example]]
+-name = "list_modes"
+-path = "examples/list_modes.rs"
+-
+-[[example]]
+-name = "planes"
+-path = "examples/planes.rs"
+-
+-[[example]]
+-name = "properties"
+-path = "examples/properties.rs"
+-
+-[[example]]
+-name = "resources"
+-path = "examples/resources.rs"
+-
+-[[example]]
+-name = "syncobj"
+-path = "examples/syncobj.rs"
+ 
+ [dependencies.bitflags]
+ version = "^2"
+@@ -106,18 +67,9 @@
+     "fs",
+ ]
+ 
+-[dev-dependencies.image]
+-version = "0.24"
+-features = ["png"]
+-default-features = false
+-
+ [dev-dependencies.rustix]
+ version = "^1"
+ features = [
+     "event",
+     "mm",
+ ]
+-
+-[dev-dependencies.rustyline]
+-version = "13"
+-

@@ -1,0 +1,25 @@
+diff -up kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/debug.cpp.xslt-api-change kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/debug.cpp
+--- kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/debug.cpp.xslt-api-change	2005-09-10 10:23:15.000000000 +0200
++++ kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/debug.cpp	2025-07-29 12:35:53.311860030 +0200
+@@ -16,6 +16,7 @@
+ #include "options.h"
+ 
+ #include <libxslt/xsltutils.h>  /* need for breakpoint callback support */
++#include <libxslt/xsltconfig.h>
+ 
+ /* setup debugger callbacks */
+ struct DebuggerCallbacks {
+@@ -71,11 +72,13 @@ debugInit(void)
+     result = breakPointInit();
+     result = result && callStackInit();
+ 
++#if LIBXSLT_VERSION < 10143
+     /* setup debugger callbacks */
+     debuggerDriver.debuggercallback = debugHandleDebugger;
+     debuggerDriver.addcallback = callStackAdd;
+     debuggerDriver.dropcallback = callStackDrop;
+     xsltSetDebuggerCallbacks(3, &debuggerDriver);
++#endif
+     return result;
+ }
+ 

@@ -1,0 +1,57 @@
+From 25acc6d44db3eb5f944a6992336b00ae97c85e20 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <petr.pisar@atlas.cz>
+Date: Wed, 1 Feb 2023 21:20:27 +0100
+Subject: [PATCH] Use CURLOPT_XFERINFOFUNCTION curl option if available
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+curl-7.32.0 renamed CURLOPT_PROGRESSFUNCTION to
+CURLOPT_XFERINFOFUNCTION. It kept the old option with a warning:
+
+soap.c:798:13: error: 'CURLOPT_PROGRESSFUNCTION' is deprecated: since 7.32.0. Use CURLOPT_XFERINFOFUNCTION [-Werror=deprecated-declarations]
+  798 |             curl_err = curl_easy_setopt(context->curl,
+      |             ^~~~~~~~
+
+To prevent from popping up the warning and -Werror failure, this patch prefers
+the new option.
+
+Signed-off-by: Petr Písař <petr.pisar@atlas.cz>
+---
+ configure.ac | 1 +
+ src/soap.c   | 5 +++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index e166b9b..4bbda59 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -91,6 +91,7 @@ AS_IF([test -z "$LIBCURL"],
+         [[#include <curl/curl.h>]])
+     AC_CHECK_DECLS([CURLOPT_KEYPASSWD], [], [], [[#include <curl/curl.h>]])
+     AC_CHECK_DECLS([CURLOPT_SSLKEYPASSWD], [], [], [[#include <curl/curl.h>]])
++    AC_CHECK_DECLS([CURLOPT_XFERINFOFUNCTION], [], [], [[#include <curl/curl.h>]])
+     CPPFLAGS="$cppflags_orig"
+     ])
+ AM_CONDITIONAL([BUILD_CURL], [test -n "$LIBCURL"])
+diff --git a/src/soap.c b/src/soap.c
+index 9ff04fe..7378fcd 100644
+--- a/src/soap.c
++++ b/src/soap.c
+@@ -795,8 +795,13 @@ static isds_error http(struct isds_ctx *context,
+             curl_err = curl_easy_setopt(context->curl, CURLOPT_NOPROGRESS, 0);
+         }
+         if (!curl_err) {
++#if HAVE_DECL_CURLOPT_XFERINFOFUNCTION /* Since curl-7.32.0 */
++            curl_err = curl_easy_setopt(context->curl,
++                    CURLOPT_XFERINFOFUNCTION, progress_proxy);
++#else
+             curl_err = curl_easy_setopt(context->curl,
+                     CURLOPT_PROGRESSFUNCTION, progress_proxy);
++#endif /* not HAVE_DECL_CURLOPT_XFERINFOFUNCTION */
+         }
+         if (!curl_err) {
+             curl_err = curl_easy_setopt(context->curl, CURLOPT_PROGRESSDATA,
+-- 
+2.39.1
+

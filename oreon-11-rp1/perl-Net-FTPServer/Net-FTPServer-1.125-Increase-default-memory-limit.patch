@@ -1,0 +1,69 @@
+From 9d8cdadb7efef92adbe928374921b675773111eb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 23 Dec 2016 09:55:16 +0100
+Subject: [PATCH] Increase default memory limit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The previous 16384 KB data segment size limit is not enough with
+contemporary systems due too massive NSS plug-ins.
+
+This patch changes the value to 65536 KB. It also removes a limit for
+t/240abort.t test that requies more than 128 MB memory.
+
+<https://bugzilla.redhat.com/show_bug.cgi?id=1381649>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Net/FTPServer.pm | 6 +++---
+ t/240abort.t         | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/lib/Net/FTPServer.pm b/lib/Net/FTPServer.pm
+index fd66a10..42b5a09 100644
+--- a/lib/Net/FTPServer.pm
++++ b/lib/Net/FTPServer.pm
+@@ -358,7 +358,7 @@ process and are important in avoiding denial of service (DoS)
+ attacks against the FTP server.
+ 
+  Resource         Default   Unit
+- limit memory       16384   KBytes  Amount of memory per child
++ limit memory       65536   KBytes  Amount of memory per child
+  limit nr processes    10   (none)  Number of processes
+  limit nr files        20   (none)  Number of open files
+ 
+@@ -367,7 +367,7 @@ limit to C<-1>.
+ 
+ Example:
+ 
+- limit memory:       32768
++ limit memory:      131072
+  limit nr processes:    20
+  limit nr files:        40
+ 
+@@ -2680,7 +2680,7 @@ sub run
+     # Perform normal per-process limits.
+     if ($r == 0)
+       {
+-	my $limit = 1024 * ($self->config ("limit memory") || 16384);
++	my $limit = 1024 * ($self->config ("limit memory") || 65536);
+ 	$self->_set_rlimit ("RLIMIT_DATA", $limit) if $limit >= 0;
+ 
+ 	$limit = $self->config ("limit nr processes") || 10;
+diff --git a/t/240abort.t b/t/240abort.t
+index 8e27185..0d3a350 100644
+--- a/t/240abort.t
++++ b/t/240abort.t
+@@ -29,7 +29,7 @@ unless ($pid) {			# Child process (the server).
+   close INFD1;
+   close OUTFD1;
+   my $ftps = Net::FTPServer::InMem::Server->run
+-    (['--test', '-d', '-C', '/dev/null']);
++    (['--test', '-d', '-C', '/dev/null', '-o', 'limit memory=-1']);
+   exit;
+ }
+ 
+-- 
+2.7.4
+

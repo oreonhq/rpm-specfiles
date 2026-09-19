@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>IBM Plex Sans Devanagari</target>
+    <match>
+      <family>IBM Plex Sans Devanagari</family>
+      <good-lang>bh</good-lang>
+      <good-lang>bho</good-lang>
+      <good-lang>brx</good-lang>
+      <good-lang>doi</good-lang>
+      <good-lang>hi</good-lang>
+      <good-lang>hne</good-lang>
+      <good-lang>kok</good-lang>
+      <good-lang>mai</good-lang>
+      <good-lang>mr</good-lang>
+      <good-lang>ne</good-lang>
+      <good-lang>sa</good-lang>
+      <good-lang>sat</good-lang>
+    </match>
+    <like>
+      <family>IBM Plex Sans</family>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>

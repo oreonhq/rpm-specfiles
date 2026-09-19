@@ -37,9 +37,9 @@
 # testsuite missing deps: tasty-golden
 
 Name:           ghc-%{pkg_name}
-Version:        3.7.0.2
+Version:        3.11
 # can only be reset when all subpkgs bumped
-Release:        39%{?dist}
+Release:        1%{?dist}
 Summary:        Haskell %{name} library
 
 License:        GPL-2.0-or-later

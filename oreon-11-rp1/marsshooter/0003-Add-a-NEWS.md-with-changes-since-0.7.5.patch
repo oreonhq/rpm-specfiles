@@ -1,0 +1,33 @@
+From ac95d51ed00296887a634bf4c1d9f5581c24136c Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hansg@kernel.org>
+Date: Sat, 30 Aug 2025 17:30:16 +0200
+Subject: [PATCH 3/3] Add a NEWS.md with changes since 0.7.5
+
+---
+ NEWS.md | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 NEWS.md
+
+diff --git a/NEWS.md b/NEWS.md
+new file mode 100644
+index 0000000..5119336
+--- /dev/null
++++ b/NEWS.md
+@@ -0,0 +1,14 @@
++## NEWS
++
++# Changes since 0.7.5 (unreleased)
++
++* Replace all non-free resources with free ones:
++    * Replace Ubuntu font with Comfortaa
++    * Replace Tahoma font with Waree
++    * Replace non-free soundjay.com interface sound with free ones by Mike Koenig
++    * Obsidian Shell music relicensed to CC-BY-SA 3.0
++* Now builds with SFML-2.3, no longer requires GLU
++* Binary renamed from (too common) mars to marsshooter
++* Added a man-page and appdata
++* Misc. small bugfixes
++* Fix building on win32
+-- 
+2.51.0
+

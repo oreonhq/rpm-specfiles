@@ -1,0 +1,11 @@
+--- eccodes-2.45.0.p1/docs/conf.py	2026-01-28 10:34:45.205154454 +0100
++++ eccodes-2.45.0.p1p2/docs/conf.py	2026-01-28 10:38:53.433162834 +0100
+@@ -32,7 +32,7 @@ source_suffix = ".rst"
+ master_doc = "index"
+ 
+ # General information about the project.
+-project = "eccodes-python"
++project = "eccodes"
+ copyright = "2017-, European Centre for Medium-Range Weather Forecasts (ECMWF)."
+ 
+ # The version info for the project you're documenting, acts as replacement

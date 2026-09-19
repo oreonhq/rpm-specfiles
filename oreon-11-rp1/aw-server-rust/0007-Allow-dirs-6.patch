@@ -1,0 +1,40 @@
+From 0884573e80feb1b588372a5e911543c389605ddf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Wojni=C5=82owicz?=
+ <lukasz.wojnilowicz@gmail.com>
+Date: Sun, 8 Mar 2026 11:14:59 +0100
+Subject: [PATCH 7/8] Allow dirs 6
+
+---
+ aw-server/Cargo.toml | 2 +-
+ aw-sync/Cargo.toml   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/aw-server/Cargo.toml b/aw-server/Cargo.toml
+index e1320b9..91f03ff 100644
+--- a/aw-server/Cargo.toml
++++ b/aw-server/Cargo.toml
+@@ -19,7 +19,7 @@ rocket_cors = { version = "0.6.0" }
+ serde = { version = "1.0", features = ["derive"] }
+ serde_json = "1.0"
+ chrono = { version = "0.4", features = ["serde"] }
+-dirs = "6"
++dirs = ">=4.0, <7.0"
+ lazy_static = "1.4"
+ log = "0.4"
+ fern = { version = "0.7", features = ["colored"] }
+diff --git a/aw-sync/Cargo.toml b/aw-sync/Cargo.toml
+index 37d6976..999ff2b 100644
+--- a/aw-sync/Cargo.toml
++++ b/aw-sync/Cargo.toml
+@@ -20,7 +20,7 @@ chrono = { version = "0.4", features = ["serde"] }
+ serde = "1.0"
+ serde_json = "1.0"
+ reqwest = { version = "0.11", features = ["json", "blocking"] }
+-dirs = "6"
++dirs = ">=5.0.1, <7.0"
+ gethostname = "0.4.3"
+ 
+ # CLI-only dependencies (optional)
+-- 
+2.51.1
+

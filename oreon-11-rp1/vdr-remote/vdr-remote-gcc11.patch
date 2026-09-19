@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index f535aed..dc0c2ba 100644
+--- a/Makefile
++++ b/Makefile
+@@ -41,7 +41,7 @@ TMPDIR ?= /tmp
+ ### The compiler options:
+ 
+ export CFLAGS   = $(call PKGCFG,cflags)
+-export CXXFLAGS = $(call PKGCFG,cxxflags)
++export CXXFLAGS = -std=c++14 $(call PKGCFG,cxxflags)
+ 
+ ### The version number of VDR's plugin API:
+ 

@@ -3,8 +3,8 @@
 #global candidate rc1
 
 Name:    tpm2-tools
-Version: 5.7
-Release: 5%{?candidate:.%{candidate}}%{?dist}
+Version: 5.8
+Release: 1%{?candidate:.%{candidate}}%{?dist}
 Summary: A bunch of TPM testing toolS build upon tpm2-tss
 
 License: BSD-3-Clause

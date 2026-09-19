@@ -1,0 +1,12 @@
+diff -urp NearTree-5.1.1/Makefile NearTree-5.1.1-fedora/Makefile
+--- NearTree-5.1.1/Makefile	2016-05-01 01:14:10.000000000 +0600
++++ NearTree-5.1.1-fedora/Makefile	2018-07-10 10:11:08.130492266 +0700
+@@ -122,7 +122,7 @@ CPPCOMPILE_COMMAND     =  $(LIBTOOL) --m
+ LIBRARY_LINK_COMMAND   =  $(LIBTOOL) --mode=link $(CC) -version-info $(VERSION) -no-undefined -rpath $(INSTALL_PREFIX)/lib
+ BUILD_COMMAND_LOCAL    =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(INCLUDES)
+ CPPBUILD_COMMAND_LOCAL =  $(LIBTOOL) --mode=link $(CXX) -no-undefined $(CFLAGS) $(INCLUDES)
+-BUILD_COMMAND_DYNAMIC  =  $(LIBTOOL) --mode=link $(CC) -no-undefined $(CFLAGS) -shared -I$(INSTALL_PREFIX)/include
++BUILD_COMMAND_DYNAMIC  =  $(LIBTOOL) --mode=link $(CC) -no-undefined $(CFLAGS) -rdynamic -I$(INSTALL_PREFIX)/include
+ BUILD_COMMAND_STATIC   =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -static-libtool-libs -I$(INSTALL_PREFIX)/include
+ INSTALL_COMMAND        =  $(LIBTOOL) --mode=install cp
+ INSTALL_FINISH_COMMAND =  $(LIBTOOL) --mode=finish

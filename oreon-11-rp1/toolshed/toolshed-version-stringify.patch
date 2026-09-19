@@ -1,0 +1,152 @@
+diff -up ./ar2/ar.c.orig ./ar2/ar.c
+--- ./ar2/ar.c.orig	2022-02-04 15:26:23.682612220 -0500
++++ ./ar2/ar.c	2022-02-04 15:28:00.464944064 -0500
+@@ -128,6 +128,10 @@
+ #include "ar.h"
+ #include "lz1.h"
+ 
++#define TOOLSHED_STR(x) #x
++#define TOOLSHED_VER(num)  TOOLSHED_STR(num)
++#define TOOLSHED_VSTRING TOOLSHED_VER(TOOLSHED_VERSION)
++
+ #if defined(BRAINDEAD)
+ # undef tolower
+ # define tolower ck_tolower
+@@ -885,7 +889,7 @@ void fataln(int code, char *msg, long ar
+  */
+ 
+ static char	*hlpmsg[] = {
+-	"ar2 from Toolshed " TOOLSHED_VERSION "\n",
++	"ar2 from Toolshed " TOOLSHED_VSTRING "\n",
+ 	"Ar V2.02 - archive file manager\n",
+ 	"Usage:  ar2 -<cmd>[<modifier>] archive [file .. ]\n",
+ 	"      <cmd> is one of the following:\n",
+diff -up ./cocofuse/cocofuse.c.orig ./cocofuse/cocofuse.c
+--- ./cocofuse/cocofuse.c.orig	2022-02-04 15:30:29.809473609 -0500
++++ ./cocofuse/cocofuse.c	2022-02-04 15:29:52.210328510 -0500
+@@ -30,6 +30,10 @@
+ 
+ #include <fuse.h>
+ 
++#define TOOLSHED_STR(x) #x
++#define TOOLSHED_VER(num)  TOOLSHED_STR(num)
++#define TOOLSHED_VSTRING TOOLSHED_VER(TOOLSHED_VERSION)
++
+ static int coco_access(const char *path, int mode);
+ static int coco_statfs(const char *path, struct statvfs *stbuf);
+ static int coco_fgetattr(const char *path, struct stat *stbuf,
+@@ -699,7 +703,7 @@ static struct fuse_operations coco_files
+ 
+ void usage(const char *name)
+ {
+-	printf("cocofuse from Toolshed " TOOLSHED_VERSION "\n");
++	printf("cocofuse from Toolshed " TOOLSHED_VSTRING "\n");
+ 	printf("Usage: %s: dskimage mountpoint [FUSE options]\n", name);
+ }
+ 
+diff -up ./makewav/makewav.c.orig ./makewav/makewav.c
+--- ./makewav/makewav.c.orig	2022-02-04 15:34:00.255285749 -0500
++++ ./makewav/makewav.c	2022-02-04 15:34:12.090331422 -0500
+@@ -22,6 +22,10 @@
+ #include <stdlib.h>
+ #include <math.h>
+ 
++#define TOOLSHED_STR(x) #x
++#define TOOLSHED_VER(num)  TOOLSHED_STR(num)
++#define TOOLSHED_VSTRING TOOLSHED_VER(TOOLSHED_VERSION)
++
+ #if defined(__CYGWIN32__) || defined(__linux__) || defined(WIN32)
+ /* implemented based on OSX man page */
+ static inline int digittoint(int c)
+@@ -230,7 +234,7 @@ int main(int argc, char **argv)
+ 	if (argc < 2)
+ 	{
+ 		fprintf(stderr,
+-			"makewav from Toolshed " TOOLSHED_VERSION "\n");
++			"makewav from Toolshed " TOOLSHED_VSTRING "\n");
+ 		fprintf(stderr,
+ 			"makewav - S-record to CoCo/MC-10 audio WAV file\n");
+ 		fprintf(stderr, "Copyright (C) 2007 Tim Lindner\n");
+diff -up ./os9/os9_main.c.orig ./os9/os9_main.c
+--- ./os9/os9_main.c.orig	2022-02-04 15:34:39.767438231 -0500
++++ ./os9/os9_main.c	2022-02-04 15:34:56.591503157 -0500
+@@ -12,13 +12,16 @@
+ #include <cocotypes.h>
+ #include <cocopath.h>
+ 
++#define TOOLSHED_STR(x) #x
++#define TOOLSHED_VER(num)  TOOLSHED_STR(num)
++#define TOOLSHED_VSTRING TOOLSHED_VER(TOOLSHED_VERSION)
+ 
+ static void show_os9_help(char const *const *helpMessage);
+ static int do_command(int argc, char **argv);
+ 
+ /* Help message */
+ static char const *const helpMessage[] = {
+-	"os9 from Toolshed " TOOLSHED_VERSION "\n",
++	"os9 from Toolshed " TOOLSHED_VSTRING "\n",
+ 	"Syntax: os9 {[<opts>]} <command> {[<opts>]}\n",
+ 	"Usage:  OS-9 File Tools Executive\n",
+ 	"Options:\n",
+diff -up ./tocgen/tocgen_main.c.orig ./tocgen/tocgen_main.c
+--- ./tocgen/tocgen_main.c.orig	2022-02-04 15:31:17.642658204 -0500
++++ ./tocgen/tocgen_main.c	2022-02-04 15:33:18.632125119 -0500
+@@ -9,12 +9,15 @@
+ #include <cocopath.h>
+ #include <util.h>
+ 
++#define TOOLSHED_STR(x) #x
++#define TOOLSHED_VER(num)  TOOLSHED_STR(num)
++#define TOOLSHED_VSTRING TOOLSHED_VER(TOOLSHED_VERSION)
+ 
+ static int do_tocgen(char *infile, char *outfile, int quiet);
+ 
+ /* Help message */
+ static char const *const helpMessage[] = {
+-	"tocgen from Toolshed " TOOLSHED_VERSION "\n",
++	"tocgen from Toolshed " TOOLSHED_VSTRING "\n",
+ 	"Syntax: tocgen {[<opts>]} {<infile>} {[<outfile>]} {[<opts>]}\n",
+ 	"Usage:  Table of contents generator for Sierra AGI games.\n",
+ 	"Options:\n",
+diff -up ./cecb/cecb_main.c.orig ./cecb/cecb_main.c
+--- ./cecb/cecb_main.c.orig	2022-02-04 15:41:39.920059662 -0500
++++ ./cecb/cecb_main.c	2022-02-04 15:42:26.617239873 -0500
+@@ -12,12 +12,16 @@
+ #include <util.h>
+ #include <cecbpath.h>
+ 
++#define TOOLSHED_STR(x) #x
++#define TOOLSHED_VER(num)  TOOLSHED_STR(num)
++#define TOOLSHED_VSTRING TOOLSHED_VER(TOOLSHED_VERSION)
++
+ static void show_cecb_help(char const *const *helpMessage);
+ static int do_command(int argc, char **argv);
+ 
+ /* Help message */
+ static char const *const helpMessage[] = {
+-	"cecb from Toolshed " TOOLSHED_VERSION "\n",
++	"cecb from Toolshed " TOOLSHED_VSTRING "\n",
+ 	"Syntax: cecb {[<opts>]} <sub command> {[<opts>]}\n",
+ 	"Usage:  Cassette BASIC File Tools Executive\n",
+ 	"Options:\n",
+diff -up ./decb/decb_main.c.orig ./decb/decb_main.c
+--- ./decb/decb_main.c.orig	2022-02-04 15:41:16.139967884 -0500
++++ ./decb/decb_main.c	2022-02-04 15:41:34.436038498 -0500
+@@ -11,13 +11,16 @@
+ 
+ #include "util.h"
+ 
++#define TOOLSHED_STR(x) #x
++#define TOOLSHED_VER(num)  TOOLSHED_STR(num)
++#define TOOLSHED_VSTRING TOOLSHED_VER(TOOLSHED_VERSION)
+ 
+ static void show_decb_help(char const *const *helpMessage);
+ static int do_command(int argc, char **argv);
+ 
+ /* Help message */
+ static char const *const helpMessage[] = {
+-	"decb from Toolshed " TOOLSHED_VERSION "\n",
++	"decb from Toolshed " TOOLSHED_VSTRING "\n",
+ 	"Syntax: decb {[<opts>]} <command> {[<opts>]}\n",
+ 	"Usage:  Disk BASIC File Tools Executive\n",
+ 	"Options:\n",

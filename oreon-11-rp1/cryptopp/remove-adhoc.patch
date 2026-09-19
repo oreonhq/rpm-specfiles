@@ -1,0 +1,114 @@
+diff --git a/Makefile.am b/Makefile.am
+index 10e9278..a562a7b 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -118,12 +118,10 @@ EXTRA_LTLIBRARIES += libothers.la
+ 
+ ## libcryptopp_la_SOURCES is empty because we need to create the library
+ ## artifact from disjoint libraries due to object file ordering and
+-## per-object file flags requriements. Actually, the adhoc.cpp file is
+-## due to an automake issue of assuming C sources when the list is empty.
++## per-object file flags requriements.
+ ## https://lists.gnu.org/archive/html/automake/2017-11/msg00000.html.
+ 
+-libcryptopp_la_SOURCES = \
+-   adhoc.cpp
++libcryptopp_la_SOURCES = $(NULL)
+ 
+ ## Don't use EXTRA_ prefix for libcryptopp_la_LIBADD. It breaks Solaris.
+ 
+@@ -449,11 +447,8 @@ cryptest_SOURCES = \
+     validat8.cpp validat9.cpp validat10.cpp regtest1.cpp regtest2.cpp \
+     regtest3.cpp regtest4.cpp
+ 
+-nodist_cryptest_SOURCES = adhoc.cpp
+ cryptest_LDADD = $(lib_LTLIBRARIES)
+ 
+-CLEANFILES = adhoc.cpp
+-
+ ## Copy the TestVectors/ and TestData/ to ${pkgdatadir}.
+ ## TestPrograms/ is included in the tarball but not installed.
+ ## https://www.gnu.org/software/automake/manual/html_node/Data.html
+@@ -621,14 +616,6 @@ dist-hook:
+ 	cp -r TestPrograms/ $(distdir)
+ 	rm -f $(distdir)/TestPrograms/dump2def.cpp
+ 
+-## Automake bug workaround. If libcryptopp_la_SOURCES is an empty list, Automake assumes
+-## C source files and drives link through the C compiler. We provide the empty adhoc.cpp
+-## to get things back on course, so adhoc.cpp must always be copied.
+-
+-adhoc.cpp:
+-	cp adhoc.cpp.proto adhoc.cpp
+-	touch adhoc.cpp
+-
+ ## Remove doc directory if present
+ distclean-local:
+ 	-rm -rf html-docs doxyfile.stamp
+diff --git a/Doxyfile b/Doxyfile
+index 8fadb40e..4e6dfad3 100644
+--- a/Doxyfile
++++ b/Doxyfile
+@@ -819,7 +819,7 @@ RECURSIVE              = NO
+ # Note that relative paths are relative to the directory from which doxygen is
+ # run.
+ 
+-EXCLUDE                = adhoc.cpp
++EXCLUDE                =
+ 
+ # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
+ # directories that are symbolic links (a Unix file system feature) are excluded
+diff --git a/Filelist.txt b/Filelist.txt
+index 0639e16e..771ef614 100644
+--- a/Filelist.txt
++++ b/Filelist.txt
+@@ -1,6 +1,5 @@
+ 3way.cpp
+ 3way.h
+-adhoc.cpp.proto
+ adv_simd.h
+ adler32.cpp
+ adler32.h
+diff --git a/adhoc.cpp.proto b/adhoc.cpp.proto
+deleted file mode 100644
+index ffb2dc53..00000000
+--- a/adhoc.cpp.proto
++++ /dev/null
+@@ -1,38 +0,0 @@
+-#include "config.h"
+-#include <iosfwd>
+-#include <string>
+-
+-#if CRYPTOPP_MSC_VERSION
+-# pragma warning(disable: 4189 4996)
+-#endif
+-
+-USING_NAMESPACE(CryptoPP)
+-USING_NAMESPACE(std)
+-
+-#ifndef CRYPTOPP_UNUSED
+-# define CRYPTOPP_UNUSED(x) (void(x))
+-#endif
+-
+-// Used for testing the compiler and linker in cryptest.sh
+-#if defined(CRYPTOPP_ADHOC_MAIN) || defined(ADHOC_MAIN)
+-
+-int main(int argc, char *argv[])
+-{
+-	CRYPTOPP_UNUSED(argc), CRYPTOPP_UNUSED(argv);
+-	return 0;
+-}
+-
+-// Classic use of adhoc to setup calling convention
+-#else
+-
+-extern int (*AdhocTest)(int argc, char *argv[]);
+-
+-int MyAdhocTest(int argc, char *argv[])
+-{
+-	CRYPTOPP_UNUSED(argc), CRYPTOPP_UNUSED(argv);
+-	return 0;
+-}
+-
+-static int s_i = (AdhocTest = &MyAdhocTest, 0);
+-
+-#endif

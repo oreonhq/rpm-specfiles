@@ -1,0 +1,27 @@
+From e09ad86fe161436228759c510c15cbb787be3b3f Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Wed, 6 Jul 2022 04:36:59 -0400
+Subject: [PATCH] Skip docx duplicated import test entirely
+
+It seems to be flaky.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ paperwork-backend/tests/docimport/tests_converted.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/paperwork-backend/tests/docimport/tests_converted.py b/paperwork-backend/tests/docimport/tests_converted.py
+index 1d1ae39b..2da9ae8e 100644
+--- a/paperwork-backend/tests/docimport/tests_converted.py
++++ b/paperwork-backend/tests/docimport/tests_converted.py
+@@ -102,6 +102,7 @@ class TestConvertedImport(unittest.TestCase):
+                 )
+             )
+ 
++    @unittest.skip
+     def test_import_duplicated_docx(self):
+         with tempfile.TemporaryDirectory() as tmp_dir:
+             self.config.settings = {
+-- 
+2.45.2
+

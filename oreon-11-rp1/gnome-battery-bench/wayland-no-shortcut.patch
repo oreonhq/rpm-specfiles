@@ -1,0 +1,36 @@
+commit b89dad66d3cccaca636a83b5f14c2ee937c4ca9d
+Author: Christian Kellner <gicmo@gnome.org>
+Date:   Mon Dec 12 17:33:34 2016 +0100
+
+    Only setup the 'stop-shortcut' when running on X11
+    
+    When running on Wayland (i.e. non-X11) the attempt to setup the
+    stop-shortcut, using X11 specific functions, will lead to a crash.
+    Therefore this disables the setup of the shortcut on non-X11.
+    
+    https://bugzilla.gnome.org/show_bug.cgi?id=775996
+
+diff --git a/src/application.c b/src/application.c
+index 4b365cb..8d57a54 100644
+--- a/src/application.c
++++ b/src/application.c
+@@ -495,7 +495,8 @@ application_start(GbbApplication *application)
+ 
+     gbb_power_graphs_set_test_run(GBB_POWER_GRAPHS(application->test_graphs), application->run);
+ 
+-    setup_stop_shortcut(application);
++    if (GDK_IS_X11_DISPLAY(gtk_widget_get_display(application->window)))
++        setup_stop_shortcut(application);
+ 
+     gbb_test_runner_set_run(application->runner, application->run);
+     gbb_test_runner_start(application->runner);
+@@ -866,7 +867,8 @@ on_runner_phase_changed(GbbTestRunner  *runner,
+ 
+         application->test = NULL;
+ 
+-        remove_stop_shortcut(application);
++        if (GDK_IS_X11_DISPLAY(gtk_widget_get_display(application->window)))
++            remove_stop_shortcut(application);
+ 
+         g_object_set(G_OBJECT(application->start_button), "label", "Start", NULL);
+ 

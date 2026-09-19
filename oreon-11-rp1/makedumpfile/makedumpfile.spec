@@ -3,9 +3,9 @@
 %global eppic_ver 72da440362e20291d5ecbb04b6eb7c7b492f233c
 %global eppic_shortver %(c=%{eppic_ver}; echo ${c:0:7})
 Name: makedumpfile
-Version: 1.7.8
+Version: 1.7.9
 Summary: make a small dumpfile of kdump
-Release: 2%{?dist}
+Release: 1%{?dist}
 
 License: GPL-2.0-only
 URL: https://github.com/makedumpfile/makedumpfile

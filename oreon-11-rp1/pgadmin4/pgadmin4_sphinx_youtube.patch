@@ -1,0 +1,27 @@
+diff -rupN --no-dereference pgadmin4-9.10/docs/en_US/conf.py pgadmin4-9.10-new/docs/en_US/conf.py
+--- pgadmin4-9.10/docs/en_US/conf.py	2025-11-10 10:21:14.000000000 +0100
++++ pgadmin4-9.10-new/docs/en_US/conf.py	2025-11-16 17:35:08.272290555 +0100
+@@ -36,7 +36,8 @@ import config
+ 
+ # Add any Sphinx extension module names here, as strings. They can be
+ # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
+-extensions = ["sphinxcontrib.youtube"]
++# FIXME Unpackaged
++# extensions = ["sphinxcontrib.youtube"]
+ 
+ # Add any paths that contain templates here, relative to this directory.
+ templates_path = ['_templates']
+diff -rupN --no-dereference pgadmin4-9.10/docs/en_US/processes.rst pgadmin4-9.10-new/docs/en_US/processes.rst
+--- pgadmin4-9.10/docs/en_US/processes.rst	2025-11-10 10:21:15.000000000 +0100
++++ pgadmin4-9.10-new/docs/en_US/processes.rst	2025-11-16 17:35:08.272581738 +0100
+@@ -47,9 +47,3 @@ Use the **End Process** button to end th
+ .. note:: If you are running *pgAdmin* in *Server Mode* you can click on the |sm_icon| icon in the process watcher window to open the file location in the Storage Manager. You can use the :ref:`Storage Manager <storage_manager>` to download the backup file on the client machine .
+ 
+ .. |sm_icon| image:: images/sm_icon.png
+-
+-Watch the demo
+-*********************
+-.. youtube:: jjP6O_xuHxE
+-    :align: center
+-    :width: 800
+\ No newline at end of file

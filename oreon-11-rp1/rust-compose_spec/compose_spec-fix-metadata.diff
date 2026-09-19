@@ -1,0 +1,11 @@
+--- compose_spec-0.2.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ compose_spec-0.2.0/Cargo.toml	2025-05-07T12:36:12.091080+00:00
+@@ -28,7 +28,7 @@
+ repository = "https://github.com/k9withabone/compose_spec_rs"
+ 
+ [dependencies.compose_spec_macros]
+-version = "=0.1.0"
++version = "^0.1.0"
+ 
+ [dependencies.indexmap]
+ version = "2.2.3"

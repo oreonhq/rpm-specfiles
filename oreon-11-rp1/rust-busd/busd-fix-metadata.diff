@@ -1,0 +1,10 @@
+--- busd-0.3.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ busd-0.3.1/Cargo.toml	2024-10-11T21:49:13.316284+00:00
+@@ -76,7 +76,6 @@
+     "macros",
+     "rt-multi-thread",
+     "signal",
+-    "tracing",
+     "fs",
+ ]
+ 

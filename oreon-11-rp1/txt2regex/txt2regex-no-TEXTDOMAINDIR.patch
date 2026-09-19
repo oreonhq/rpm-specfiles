@@ -1,0 +1,12 @@
+diff --git a/txt2regex.sh b/txt2regex.sh
+index 011e347..cabc43a 100755
+--- a/txt2regex.sh
++++ b/txt2regex.sh
+@@ -85,7 +85,6 @@
+ export PATH=
+ 
+ TEXTDOMAIN=txt2regex
+-TEXTDOMAINDIR=po
+ VERSION=0.9
+ 
+ printError() {

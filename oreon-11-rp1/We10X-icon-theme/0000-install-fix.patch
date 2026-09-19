@@ -1,0 +1,14 @@
+diff -rU4 We10X-icon-theme-8bc78dd6f60980efc322ea90f67950180afb5fe4--orig/install.sh We10X-icon-theme-8bc78dd6f60980efc322ea90f67950180afb5fe4--patched/install.sh
+--- We10X-icon-theme-8bc78dd6f60980efc322ea90f67950180afb5fe4--orig/install.sh	2025-06-14 04:07:41.000000000 +0200
++++ We10X-icon-theme-8bc78dd6f60980efc322ea90f67950180afb5fe4--patched/install.sh	2025-06-16 20:38:28.550518900 +0200
+@@ -85,9 +85,9 @@
+ 
+     rm -rf "${THEME_DIR}"/places/scalable/user-trash{'','-full'}-dark.svg
+ 
+     cp -r "${SRC_DIR}"/links/{actions,apps,categories,devices,emotes,emblems,mimes,places,status,preferences} "${THEME_DIR}"
+-    ln -s "${THEME_DIR}"/preferences/32 "${THEME_DIR}"/preferences/22
++    ln -sr "${THEME_DIR}"/preferences/32 "${THEME_DIR}"/preferences/22
+   fi
+ 
+   if [[ ${color} == '-light' ]]; then
+     mkdir -p                                                                                 "${THEME_DIR}"/status

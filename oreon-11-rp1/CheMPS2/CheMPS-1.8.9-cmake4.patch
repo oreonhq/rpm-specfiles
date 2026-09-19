@@ -1,0 +1,18 @@
+diff -up CheMPS2-1.8.9/CMakeLists.txt.cmake4 CheMPS2-1.8.9/CMakeLists.txt
+--- CheMPS2-1.8.9/CMakeLists.txt.cmake4	2018-10-29 17:54:17.000000000 +0000
++++ CheMPS2-1.8.9/CMakeLists.txt	2025-08-22 16:10:27.960032164 +0000
+@@ -1,3 +1,5 @@
++cmake_minimum_required(VERSION 3.0...4.0)
++
+ project (CheMPS2)
+ set (CheMPS2_MMP_VERSION   "1.8.9")
+ set (CheMPS2_VERSION       "${CheMPS2_MMP_VERSION} (2018-10-29)")
+@@ -9,8 +11,6 @@ set (CheMPS2_URL           "https://gith
+ set (CheMPS2_LICENSE       "GNU General Public License, version 2")
+ set (CheMPS2_LIB_SOVERSION 3)
+ 
+-cmake_minimum_required (VERSION 3.0.2)
+-
+ # <<<  CMake includes  >>>
+ 
+ include (GNUInstallDirs)

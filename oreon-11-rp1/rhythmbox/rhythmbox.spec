@@ -7,7 +7,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/plugins/.*/.*\\.so.*$
 
 Name:    rhythmbox
-Version: 3.4.9
+Version: 3.5.1
 Release: %autorelease
 Summary: Music Management Application
 

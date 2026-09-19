@@ -1,0 +1,51 @@
+From a2246a4d1fc2335dbd71478e0a629f870f0fd9af Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 28 Jan 2019 17:08:52 +0100
+Subject: [PATCH] Disable locking
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+iptables before 1.6.0 added a fifth argument to do_command4() to
+control locking. Perl module never passed the argument and thus
+invoked in undefined behavior.
+
+This become visible in iptables-1.8.0 that changed the locking and
+that caused an infinite loop in Perl iptables_do_command(). The
+iptables locking mechanmism is not firendly for libraries, it can call
+exit(2).
+
+This this patch fixes the infinite loop by disabling locking
+explicitly.
+
+<https://bugzilla.redhat.com/show_bug.cgi?id=1670047>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ libiptc.xs | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/libiptc.xs b/libiptc.xs
+index 790c93e..512a777 100644
+--- a/libiptc.xs
++++ b/libiptc.xs
+@@ -517,10 +517,13 @@ iptables_do_command(self, array_ref)
+ 	 * actually is a bug), thus we need to assign something valid
+ 	 * to fake_table, to avoid a segfault.
+ 	 */
+-#if XTABLES_VERSION_CODE >= 7
+-#define do_command do_command4
+-#endif
++#if XTABLES_VERSION_CODE >= 11
++	RETVAL = do_command4(argc, argv, &fake_table, &self, true);
++#elif XTABLES_VERSION_CODE >= 7
++	RETVAL = do_command4(argc, argv, &fake_table, &self);
++#else
+ 	RETVAL = do_command(argc, argv, &fake_table, &self);
++#endif
+ 	if (!RETVAL) {
+ 	    SET_ERRNUM(errno);
+ 	    SET_ERRSTR("%s", iptc_strerror(errno));
+-- 
+2.17.2
+

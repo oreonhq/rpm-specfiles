@@ -35,7 +35,7 @@ print(string.sub(hash, 0, 16))
 
 Summary: Utilities from the general purpose cryptography library with TLS implementation
 Name: openssl
-Version: 3.5.5
+Version: 4.0.2
 Release: 1%{?dist}
 Epoch: 1
 Source0:        https://www.openssl.org/source/openssl-3.5.5.tar.gz
@@ -397,21 +397,23 @@ basearch=sparc64
 %endif
 
 # Next step of gradual disablement of ENGINE.
-sed -i '/^\# ifndef OPENSSL_NO_STATIC_ENGINE/i\
-# if %%{?with_engine:!__has_include(<openssl/engine.h>) &&} !defined(OPENSSL_NO_ENGINE)\
-#  define OPENSSL_NO_ENGINE\
-# endif' $RPM_BUILD_ROOT/%%{_prefix}/include/openssl/configuration.h
+%if %{with engine}
+engine_condition='!__has_include(<openssl/engine.h>) && '
+%else
+engine_condition=''
+%endif
+sed -i "/^# ifndef OPENSSL_NO_STATIC_ENGINE/i\\# if ${engine_condition}!defined(OPENSSL_NO_ENGINE)\\n#  define OPENSSL_NO_ENGINE\\n# endif" "$RPM_BUILD_ROOT/usr/include/openssl/configuration.h"
 
 %ifarch %{multilib_arches}
 # Do an configuration.h switcheroo to avoid file conflicts on systems where you
 # can have both a 32- and 64-bit version of the library, and they each need
 # their own correct-but-different versions of opensslconf.h to be usable.
 install -m644 %{SOURCE10} \
-	$RPM_BUILD_ROOT/%{_prefix}/include/openssl/configuration-${basearch}.h
-cat $RPM_BUILD_ROOT/%{_prefix}/include/openssl/configuration.h >> \
-	$RPM_BUILD_ROOT/%{_prefix}/include/openssl/configuration-${basearch}.h
+	$RPM_BUILD_ROOT/usr/include/openssl/configuration-${basearch}.h
+cat $RPM_BUILD_ROOT/usr/include/openssl/configuration.h >> \
+	$RPM_BUILD_ROOT/usr/include/openssl/configuration-${basearch}.h
 install -m644 %{SOURCE9} \
-	$RPM_BUILD_ROOT/%{_prefix}/include/openssl/configuration.h
+	$RPM_BUILD_ROOT/usr/include/openssl/configuration.h
 %endif
 ln -s /etc/crypto-policies/back-ends/openssl_fips.config $RPM_BUILD_ROOT%{_sysconfdir}/pki/tls/fips_local.cnf
 

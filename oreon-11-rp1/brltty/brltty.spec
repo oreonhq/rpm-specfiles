@@ -1,7 +1,7 @@
 %global source0_hash 356680d63fca885806c49987ebd4720107873ecbcb050fe8711a8131cc68c268
 %global _build_id_links none
 
-%define pkg_version 6.9
+%define pkg_version 6.9.1
 %define api_version 0.8.8
 
 # minimal means brltty-minimal subpackage with minimal deps for
@@ -43,8 +43,8 @@
 %global __requires_exclude ^(%{_privatelibs})$
 
 Name: brltty
-Version: 6.9
-Release: 2%{?dist}
+Version: 6.9.1
+Release: 1%{?dist}
 License: LGPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-or-later
 URL: http://brltty.app/
 Source0:        https://brltty.app/archive/%{name}-%{version}.tar.xz

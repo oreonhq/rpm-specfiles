@@ -1,0 +1,65 @@
+From 15ea3b68bb15fd6338cbe76ec94eac055dc28c4e Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 1 Aug 2025 08:47:41 -0400
+Subject: [PATCH] Downstream-only: use Valgrind macro instead of inline
+ assembly
+
+Upstream already has a plan to make this change, but is waiting to be
+able to add a build dependency on valgrind-devel. We have no such
+obstacle, and this change fixes the inline assembly failing to compile
+on aarch64.
+---
+ pxr/exec/vdf/executorDataVector.cpp | 28 +++-------------------------
+ 1 file changed, 3 insertions(+), 25 deletions(-)
+
+diff --git a/pxr/exec/vdf/executorDataVector.cpp b/pxr/exec/vdf/executorDataVector.cpp
+index 96dacca06..7e5625678 100644
+--- a/pxr/exec/vdf/executorDataVector.cpp
++++ b/pxr/exec/vdf/executorDataVector.cpp
+@@ -11,40 +11,18 @@
+ #include "pxr/base/tf/stl.h"
+ #include "pxr/base/trace/trace.h"
+ 
++#include <valgrind/memcheck.h>
++
+ PXR_NAMESPACE_OPEN_SCOPE
+ 
+ 
+ /// Issue a magic instruction sequence which Valgrind will intercept and mark
+ /// the specified memory defined for memcheck.
+ ///
+-/// XXX: We should replace this with the VALGRIND_MAKE_MEM_DEFINED macro
+-///      from memcheck.h, once we can establish a build dependency on
+-///      valgrind-devel.
+-///
+ static inline void
+ Vdf_ExecutorDataVector_ValgrindMakeDefined(void *ptr, size_t size)
+ {
+-#if defined(ARCH_OS_LINUX) && defined(ARCH_CPU_INTEL)
+-    // Pass a result and a pointer to some arguments via registers
+-    volatile unsigned long long int result;
+-    volatile unsigned long long int args[6] = {
+-        0x4D430002,                  // Memcheck: MAKE_MEM_DEFINED
+-        (uintptr_t)(ptr),            // Memory address
+-        size,                        // Size in bytes
+-        0, 0, 0                      // Remaining unused arguments
+-    };
+-
+-    // Magical instruction sequence which Valgrind will interpret as an
+-    // annotation (see valgrind.h)
+-    __asm__ volatile(
+-        "rolq $3,  %%rdi ; rolq $13, %%rdi\n\t"
+-        "rolq $61, %%rdi ; rolq $51, %%rdi\n\t"
+-        "xchgq %%rbx, %%rbx"
+-        : "=d" (result)
+-        : "a" (&args[0]), "0" (0)
+-        : "cc", "memory"
+-    );
+-#endif
++    VALGRIND_MAKE_MEM_DEFINED(ptr, size);
+ }
+ 
+ Vdf_ExecutorDataVector::~Vdf_ExecutorDataVector()
+-- 
+2.53.0
+

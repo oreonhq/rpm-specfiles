@@ -1,0 +1,24 @@
+diff -Naur ed2k_hash-0.4.0.orig/ed2k_hash/GUI/Configuration.cpp ed2k_hash-0.4.0/ed2k_hash/GUI/Configuration.cpp
+--- ed2k_hash-0.4.0.orig/ed2k_hash/GUI/Configuration.cpp	2004-01-09 22:12:11.000000000 +0100
++++ ed2k_hash-0.4.0/ed2k_hash/GUI/Configuration.cpp	2011-06-13 11:16:40.554679474 +0200
+@@ -42,7 +42,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+-
++#include <cstring>
+ #include <iostream>
+ 
+ using namespace std;
+diff -Naur ed2k_hash-0.4.0.orig/ed2k_hash/GUI/JobQueue.cpp ed2k_hash-0.4.0/ed2k_hash/GUI/JobQueue.cpp
+--- ed2k_hash-0.4.0.orig/ed2k_hash/GUI/JobQueue.cpp	2003-05-25 13:55:33.000000000 +0200
++++ ed2k_hash-0.4.0/ed2k_hash/GUI/JobQueue.cpp	2011-06-13 11:16:40.553679454 +0200
+@@ -28,6 +28,8 @@
+ **********************************************************************/
+ // $Id: JobQueue.cpp,v 1.1 2003/05/25 11:55:33 fraca7 Exp $
+ 
++#include <cstdlib>
++#include <cstring>
+ #include "JobQueue.h"
+ #include "MainWindow.h"
+ #include "Event.h"

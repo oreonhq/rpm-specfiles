@@ -1,0 +1,31 @@
+From 3d07b126fb4bb8c3d29e2fa347f9bdc0521b63e0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 7 Aug 2013 09:45:46 +0200
+Subject: [PATCH] Define POD encoding
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+https://rt.cpan.org/Public/Bug/Display.html?id=87667
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Catalyst/Plugin/PageCache.pm | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/lib/Catalyst/Plugin/PageCache.pm b/lib/Catalyst/Plugin/PageCache.pm
+index 0444b44..059f917 100644
+--- a/lib/Catalyst/Plugin/PageCache.pm
++++ b/lib/Catalyst/Plugin/PageCache.pm
+@@ -492,6 +492,8 @@ sub _get_page_cache_key {
+ 1;
+ __END__
+ 
++=encoding utf8
++
+ =head1 NAME
+ 
+ Catalyst::Plugin::PageCache - Cache the output of entire pages
+-- 
+1.8.1.4
+

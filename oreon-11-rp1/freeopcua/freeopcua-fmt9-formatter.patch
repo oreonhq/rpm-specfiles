@@ -1,0 +1,122 @@
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/client/binary_client.cpp.fmt	2021-01-08 00:02:50.000000000 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/client/binary_client.cpp	2022-07-20 17:35:10.726422438 +0900
+@@ -28,6 +28,11 @@
+ #include <thread>
+ #include <iostream>
+ 
++#if FMT_VERSION >= 90000
++template <> struct fmt::formatter<OpcUa::NodeId> : ostream_formatter {};
++template <> struct fmt::formatter<OpcUa::MonitoredItemsParameters> : ostream_formatter {};
++template <> struct fmt::formatter<OpcUa::StatusCode> : ostream_formatter {};
++#endif
+ 
+ namespace
+ {
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/core/subscription.cpp.fmt	2021-01-08 00:02:50.000000000 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/core/subscription.cpp	2022-07-20 17:33:25.077825875 +0900
+@@ -24,6 +24,12 @@
+ #include <boost/asio.hpp>
+ #include <iostream>
+ 
++#if FMT_VERSION >= 90000
++template <> struct fmt::formatter<OpcUa::ExpandedNodeId> : ostream_formatter {};
++template <> struct fmt::formatter<OpcUa::Node> : ostream_formatter {};
++template <> struct fmt::formatter<OpcUa::QualifiedName> : ostream_formatter {};
++#endif
++
+ namespace OpcUa
+ {
+ Subscription::Subscription(Services::SharedPtr server, const CreateSubscriptionParameters & params, SubscriptionHandler & callback, const Common::Logger::SharedPtr & logger)
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/examples/example_client.cpp.fmt	2021-01-08 00:02:50.000000000 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/examples/example_client.cpp	2022-07-20 17:46:00.775940129 +0900
+@@ -18,6 +18,10 @@
+ #include <stdexcept>
+ #include <thread>
+ 
++#if FMT_VERSION >= 90000
++template <> struct fmt::formatter<OpcUa::Node> : ostream_formatter {};
++#endif
++
+ using namespace OpcUa;
+ 
+ class SubClient : public SubscriptionHandler
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/examples/example_server.cpp.fmt	2021-01-08 00:02:50.000000000 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/examples/example_server.cpp	2022-07-20 17:45:02.014164517 +0900
+@@ -16,6 +16,9 @@
+ #include <opc/ua/subscription.h>
+ #include <opc/ua/server/server.h>
+ 
++#if FMT_VERSION >= 90000
++template <> struct fmt::formatter<OpcUa::Node> : ostream_formatter {};
++#endif
+ 
+ 
+ 
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/address_space_internal.cpp.fmt	2021-01-08 00:02:50.000000000 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/address_space_internal.cpp	2022-07-20 17:36:51.110039108 +0900
+@@ -10,6 +10,10 @@
+ 
+ #include "address_space_internal.h"
+ 
++#if FMT_VERSION >= 90000
++template <> struct fmt::formatter<OpcUa::NodeId> : ostream_formatter {};
++template <> struct fmt::formatter<OpcUa::BrowseDirection> : ostream_formatter {};
++#endif
+ 
+ namespace OpcUa
+ {
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/internal_subscription.cpp.fmt	2021-01-08 00:02:50.000000000 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/internal_subscription.cpp	2022-07-20 17:38:25.438678900 +0900
+@@ -2,6 +2,14 @@
+ 
+ #include <boost/thread/locks.hpp>
+ 
++#if FMT_VERSION >= 90000
++template <> struct fmt::formatter<OpcUa::NodeId> : ostream_formatter {};
++template <> struct fmt::formatter<OpcUa::MonitoringFilter> : ostream_formatter {};
++template <> struct fmt::formatter<OpcUa::Event> : ostream_formatter {};
++template <> struct fmt::formatter<OpcUa::QualifiedName> : ostream_formatter {};
++template <> struct fmt::formatter<OpcUa::LocalizedText> : ostream_formatter {};
++#endif
++
+ namespace OpcUa
+ {
+ namespace Internal
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/opc_tcp_async.cpp.fmt	2021-01-08 00:02:50.000000000 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/opc_tcp_async.cpp	2022-07-20 17:40:13.637265726 +0900
+@@ -35,6 +35,9 @@
+ #include <set>
+ 
+ 
++#if FMT_VERSION >= 90000
++template <> struct fmt::formatter<boost::asio::ip::address> : ostream_formatter {};
++#endif
+ 
+ namespace
+ {
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/opc_tcp_processor.cpp.fmt	2021-01-08 00:02:50.000000000 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/opc_tcp_processor.cpp	2022-07-20 17:40:55.093107423 +0900
+@@ -36,6 +36,10 @@
+ #include <sstream>
+ #include <queue>
+ 
++#if FMT_VERSION >= 90000
++template <> struct fmt::formatter<OpcUa::ExpandedNodeId> : ostream_formatter {};
++template <> struct fmt::formatter<OpcUa::NodeId> : ostream_formatter {};
++#endif
+ 
+ namespace OpcUa
+ {
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/subscription_service_internal.cpp.fmt	2021-01-08 00:02:50.000000000 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/subscription_service_internal.cpp	2022-07-20 17:41:56.786871835 +0900
+@@ -11,6 +11,10 @@
+ 
+ #include <boost/thread/locks.hpp>
+ 
++#if FMT_VERSION >= 90000
++template <> struct fmt::formatter<OpcUa::NodeId> : ostream_formatter {};
++#endif
++
+ namespace
+ {
+ OpcUa::ByteString GenerateEventId()

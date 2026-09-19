@@ -1,0 +1,508 @@
+--- aclocal.m4	2011-08-05 16:52:13.000000000 +0200
++++ aclocal.m4	2012-07-03 01:06:57.000000000 +0200
+@@ -122,13 +122,50 @@
+ )
+ 
+ #############################################################
++#  Shall the libraries be put in subdirectories?
++#############################################################
++
++AC_DEFUN(CHECK_SUBDIRS,
++[
++   AC_ARG_ENABLE(subdirs,
++      [AC_HELP_STRING(
++         [--disable-subdirs],
++         [Put the libraries in libdir, allowing installation in
++standard locations on Unix-like systems.])
++AC_HELP_STRING(
++         [--enable-subdirs],
++         [Put static and shared libraries in separate
++subdirectories under libdir. (default)])],
++      [MAKE_SUBDIRS=$enableval],
++      [MAKE_SUBDIRS=yes])
++
++   if test "x$MAKE_SUBDIRS" = xyes ; then
++      libsubdir_static=gtkada/static
++      libsubdir_shared=gtkada/relocatable
++      alisubdir_static=gtkada/static
++      alisubdir_shared=gtkada/relocatable
++   else
++      libsubdir_static=
++      libsubdir_shared=
++      alisubdir_static=gtkada
++      alisubdir_shared=gtkada
++   fi
++
++   AC_SUBST(libsubdir_static)
++   AC_SUBST(libsubdir_shared)
++   AC_SUBST(alisubdir_static)
++   AC_SUBST(alisubdir_shared)
++]
++)
++
++#############################################################
+ #  Checking for build type
+ #############################################################
+ 
+ AC_DEFUN(CHECK_BUILD_TYPE,
+ [
+     AC_ARG_ENABLE(build,
+-                  [--enable-build=<type>       Default build type for the library (Debug, Production)],
++                  [  --enable-build=<type>   Default build type for the library (Debug, Debuginfo, Production)],
+                   BUILD_TYPE=$enableval,
+                   BUILD_TYPE=Production)
+ ]
+--- configure	2011-10-28 10:26:54.000000000 +0200
++++ configure	2012-07-03 01:31:13.000000000 +0200
+@@ -273,7 +273,7 @@
+ PACKAGE_BUGREPORT=
+ 
+ ac_unique_file="src/glib.ads"
+-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os DEFAULT_LIBRARY_TYPE OS_SPECIFIC_LINK_OPTIONS BUILD_STATIC BUILD_SHARED SO_EXT SO_OPTS FPIC TARGET_LFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT GNATMAKE PERL SET_MAKE INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RANLIB ac_ct_RANLIB PKG_CONFIG GTK_PREFIX GTK_CFLAGS GTK_LIBS DEFINE_UNDERLINE_ERROR USE_NLS GETTEXT_INTL HAVE_GETTEXT GL_LIBS GL_CFLAGS HAVE_OPENGL GNOME_CFLAGS GNOME_LIBS GNOME_STATIC_LIBS HAVE_GNOME GTKADA_VERSION GTKADA_MAJOR_VERSION GTKADA_MINOR_VERSION GTKADA_MICRO_VERSION BUILD_TYPE EXEC_PREFIX LIBOBJS LTLIBOBJS'
++ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os DEFAULT_LIBRARY_TYPE OS_SPECIFIC_LINK_OPTIONS BUILD_STATIC BUILD_SHARED SO_EXT SO_OPTS FPIC TARGET_LFLAGS libsubdir_static libsubdir_shared alisubdir_static alisubdir_shared CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT GNATMAKE PERL SET_MAKE INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RANLIB ac_ct_RANLIB PKG_CONFIG GTK_PREFIX GTK_CFLAGS GTK_LIBS DEFINE_UNDERLINE_ERROR USE_NLS GETTEXT_INTL HAVE_GETTEXT GL_LIBS GL_CFLAGS HAVE_OPENGL GNOME_CFLAGS GNOME_LIBS GNOME_STATIC_LIBS HAVE_GNOME GTKADA_VERSION GTKADA_MAJOR_VERSION GTKADA_MINOR_VERSION GTKADA_MICRO_VERSION BUILD_TYPE EXEC_PREFIX LIBOBJS LTLIBOBJS'
+ ac_subst_files=''
+ 
+ # Initialize some variables set by options.
+@@ -2749,6 +2749,25 @@
+ fi
+ 
+ 
++if test "${enable_subdirs+set}" = set; then
++  enableval="$enable_subdirs"
++  MAKE_SUBDIRS=$enableval
++else
++  MAKE_SUBDIRS=yes
++fi;
++
++if test "x$MAKE_SUBDIRS" = xyes ; then
++   libsubdir_static=gtkada/static
++   libsubdir_shared=gtkada/relocatable
++   alisubdir_static=gtkada/static
++   alisubdir_shared=gtkada/relocatable
++else
++   libsubdir_static=
++   libsubdir_shared=
++   alisubdir_static=gtkada
++   alisubdir_shared=gtkada
++fi
++
+ # Are we in devel mode ?
+ 
+     # Check whether --enable-build or --disable-build was given.
+@@ -4362,6 +4381,10 @@
+ s,@SO_OPTS@,$SO_OPTS,;t t
+ s,@FPIC@,$FPIC,;t t
+ s,@TARGET_LFLAGS@,$TARGET_LFLAGS,;t t
++s,@libsubdir_static@,$libsubdir_static,;t t
++s,@libsubdir_shared@,$libsubdir_shared,;t t
++s,@alisubdir_static@,$alisubdir_static,;t t
++s,@alisubdir_shared@,$alisubdir_shared,;t t
+ s,@CC@,$CC,;t t
+ s,@CFLAGS@,$CFLAGS,;t t
+ s,@LDFLAGS@,$LDFLAGS,;t t
+--- configure.in	2011-10-28 10:26:54.000000000 +0200
++++ configure.in	2012-07-03 01:06:57.000000000 +0200
+@@ -19,6 +19,9 @@
+ AC_PROG_INSTALL
+ AC_PROG_RANLIB
+ 
++# Shall the libraries be put in subdirectories?
++CHECK_SUBDIRS
++
+ # Are we in devel mode ?
+ CHECK_BUILD_TYPE
+ 
+--- po/Makefile.in	2009-12-01 19:01:18.000000000 +0100
++++ po/Makefile.in	2012-07-03 01:06:57.000000000 +0200
+@@ -6,7 +6,7 @@
+ INSTALL_PROGRAM = @INSTALL_PROGRAM@
+ INSTALL_DATA = @INSTALL_DATA@
+ prefix        = @prefix@
+-localedir     = $(prefix)/share/locale
++localedir     = @datadir@/locale
+ 
+ all:
+ static:
+--- projects/generate_prj.sh	2011-08-16 10:32:12.000000000 +0200
++++ projects/generate_prj.sh	2012-07-03 01:06:57.000000000 +0200
+@@ -1,10 +1,16 @@
+ #!/bin/sh
+ 
+ module=${1:-}
+-prefix=$2
+-default_library_type="$3"
+-version=$4
+-subdir=$5
++bindir="$2"
++incdir="$3"
++libdir="$4"
++libsubdir_static="$5"
++libsubdir_shared="$6"
++alisubdir_static="$7"
++alisubdir_shared="$8"
++subdir="$9"
++default_library_type="${10}"
++version="${11}"
+ 
+ lcmodule=`echo $module | tr [A-Z] [a-z]`
+ 
+@@ -50,10 +56,10 @@
+             echo "        \"-lopengl32\","
+             echo "        \"-lgdi32\","
+ 	    if [ "$shared" = "1" ]; then
+-		echo "        \"-L../../bin\","
++		echo "        \"-L${bindir}\","
+ 	    fi
+-	    echo "        \"-L..\","
+-	    echo -n "        \"-L../../include/gtkada/$subdir\""
++	    echo "        \"-L${libdir}\","
++	    echo -n "        \"-L${incdir}/$subdir\""
+             ;;
+          *)
+             if [ x"$previous" != x"" ]; then
+@@ -87,7 +93,7 @@
+    type Gtkada_Kind_Type is ("static", "relocatable");
+    Gtkada_Kind : Gtkada_Kind_Type := external ("LIBRARY_TYPE", "$3");
+ 
+-   for Source_Dirs use ("../../include/gtkada/$subdir");
++   for Source_Dirs use ("${incdir}/$subdir");
+    for Library_Kind use Gtkada_Kind;
+ 
+ EOF
+@@ -98,11 +104,12 @@
+    case Gtkada_Kind is
+       when "static" =>
+          for Library_Name use "${library_name}";
+-         for Library_Dir use "../gtkada/static/$subdir";
++         for Library_Dir use "${libdir}/${libsubdir_static}/$subdir";
++         for Library_ALI_Dir use "${libdir}/${alisubdir_static}/${subdir}";
+       when "relocatable" =>
+          for Library_Name use "${library_name}${lcversion}";
+-         for Library_Dir use "../../bin";
+-         for Library_ALI_Dir use "../gtkada/relocatable/$subdir";
++         for Library_Dir use "${bindir}";
++         for Library_ALI_Dir use "${libdir}/${alisubdir_shared}/$subdir";
+    end case;
+ 
+ EOF
+@@ -112,12 +119,14 @@
+    case Gtkada_Kind is
+       when "static" =>
+          for Library_Name use "${library_name}";
++         for Library_Dir use "${libdir}/${libsubdir_static}";
++         for Library_ALI_Dir use "${libdir}/${alisubdir_static}";
+       when "relocatable" =>
+          for Library_Name use "${library_name}${lcversion}";
++         for Library_Dir use "${libdir}/${libsubdir_shared}";
++         for Library_ALI_Dir use "${libdir}/${alisubdir_shared}";
+    end case;
+ 
+-   for Library_Dir use "../gtkada/" & Project'Library_Kind;
+-
+ EOF
+    esac
+ 
+--- projects/gtkada.pc.in	2005-08-19 17:11:22.000000000 +0200
++++ projects/gtkada.pc.in	2012-07-03 01:06:57.000000000 +0200
+@@ -1,6 +1,11 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
++
+ Name: GtkAda
+ Description: Ada binding for gtk+-2.0
+ Version: @GTKADA_MAJOR_VERSION@.@GTKADA_MINOR_VERSION@.@GTKADA_MICRO_VERSION@
+ Requires: gtk+-2.0
+-Libs: -L@prefix@/lib -lgtkada
+-Cflags: -aI@prefix@/include/gtkada -aO@prefix@/lib/gtkada
++Libs: -L${libdir} -lgtkada
++Cflags: -aI${includedir}/gtkada -aO${libdir}/gtkada
+--- projects/Makefile	2011-08-16 10:28:42.000000000 +0200
++++ projects/Makefile	2012-07-03 01:27:56.000000000 +0200
+@@ -5,26 +5,35 @@
+ SOVER=${MAJOR}.${MINOR}
+ 
+ install: force
+-	${MKDIR} "${DESTDIR}$(prefix)/lib/gnat/"
+-	$(MKDIR) "${DESTDIR}$(prefix)/lib/pkgconfig/"
+-	${CP} gtkada.pc "${DESTDIR}$(prefix)/lib/pkgconfig/"
++	${MKDIR} "${DESTDIR}${gprdir}"
++	$(MKDIR) "${DESTDIR}${libdir}/pkgconfig/"
++	${CP} gtkada.pc "${DESTDIR}${libdir}/pkgconfig/"
+ 	-${RM} "${DESTDIR}${prefix}"/projects/gtkada*
+-	./generate_prj.sh GtkAda "${prefix}" ${DEFAULT_LIBRARY_TYPE} ${SOVER} ""
+-	${CP} gtkada.gpr "${DESTDIR}${prefix}/lib/gnat/"
++	./generate_prj.sh GtkAda "${bindir}" "${incdir}" "${libdir}" \
++	        "${libsubdir_static}" "${libsubdir_shared}" \
++	        "${alisubdir_static}" "${alisubdir_shared}" "" \
++	        "${DEFAULT_LIBRARY_TYPE}" "${SOVER}"
++	${CP} gtkada.gpr "${DESTDIR}${gprdir}"
+ ifeq ($(HAVE_LIBGLADE), True)
+ 	./generate_prj.sh GtkAda_Glade "${prefix}" ${DEFAULT_LIBRARY_TYPE} ${SOVER} ""
+ 	${CP} gtkada_glade.gpr ${prefix}/lib/gnat/
+ endif	
+ ifeq ($(HAVE_OPENGL), True)
+-	./generate_prj.sh GtkAda_GL "${prefix}" ${DEFAULT_LIBRARY_TYPE} ${SOVER} opengl
+-	${CP} gtkada_gl.gpr "${DESTDIR}${prefix}/lib/gnat/"
++	./generate_prj.sh GtkAda_GL "${bindir}" "${incdir}" "${libdir}" \
++	        "${libsubdir_static}" "${libsubdir_shared}" \
++	        "${alisubdir_static}" "${alisubdir_shared}" opengl \
++	        "${DEFAULT_LIBRARY_TYPE}" "${SOVER}"
++	${CP} gtkada_gl.gpr "${DESTDIR}${gprdir}"
+ endif	
+ ifeq ($(HAVE_GNOME), True)
+-	./generate_prj.sh GtkAda_Gnome "${prefix}" ${DEFAULT_LIBRARY_TYPE} ${SOVER} ""
+-	${CP} gtkada_gnome.gpr "${DESTDIR}${prefix}/lib/gnat/"
++	./generate_prj.sh GtkAda_Gnome "${bindir}" "${incdir}" "${libdir}" \
++	        "${libsubdir_static}" "${libsubdir_shared}" \
++	        "${alisubdir_static}" "${alisubdir_shared}" "" \
++	        "${DEFAULT_LIBRARY_TYPE}" "${SOVER}"
++	${CP} gtkada_gnome.gpr "${DESTDIR}${gprdir}"
+ endif	
+ ifeq ($(OS),Windows_NT)
+-	${CP} gtkada_install_*.gpr "${DESTDIR}${prefix}/include/gtkada"
++	${CP} gtkada_install_*.gpr "${DESTDIR}${incdir}"
+ endif
+ 
+ clean: force
+--- shared.gpr	2012-05-18 10:04:34.000000000 +0200
++++ shared.gpr	2012-07-03 01:06:57.000000000 +0200
+@@ -1,6 +1,6 @@
+ project Shared is
+ 
+-   type Build_Type is ("Debug", "Production");
++   type Build_Type is ("Debug", "Debuginfo", "Production");
+    Build : Build_Type := external ("BUILD", "Production");
+ 
+    Processors := external ("PROCESSORS", "1");
+@@ -18,6 +18,9 @@
+          when "Debug" =>
+              for Default_Switches ("Ada") use
+                 ("-gnatQ", "-gnatwae", "-gnatay", "-g", "-O1");
++         when "Debuginfo" =>
++             for Default_Switches ("Ada") use
++                ("-gnatQ", "-g", "-O2", "-gnatn", "-gnatws");
+          when "Production" =>
+              for Default_Switches ("Ada") use
+                 ("-gnatQ", "-O2", "-gnatn", "-gnatws");
+@@ -34,7 +37,7 @@
+       case Build is
+          when "Debug" =>
+              for Default_Switches ("Ada") use ("-E");
+-         when "Production" =>
++         when "Debuginfo" | "Production" =>
+              null;
+       end case;
+    end Binder;
+--- src/Makefile.common.in	2011-08-16 10:27:17.000000000 +0200
++++ src/Makefile.common.in	2012-07-05 00:45:14.000000000 +0200
+@@ -41,11 +41,22 @@
+ RANLIB = @RANLIB@
+ 
+ prefix        = @prefix@
+-exec_prefix   = $(prefix)
+-bindir        = $(prefix)/bin
+-libdir        = $(prefix)/lib
+-incdir        = $(prefix)/include/gtkada
+-alidir        = $(prefix)/lib/gtkada
++exec_prefix   = @exec_prefix@
++bindir        = @bindir@
++libdir        = @libdir@
++incdir        = @includedir@/gtkada
++datadir       = @datadir@
++
++libsubdir_static = @libsubdir_static@
++libsubdir_shared = @libsubdir_shared@
++alisubdir_static = @alisubdir_static@
++alisubdir_shared = @alisubdir_shared@
++
++libdir_static = ${libdir}/${libsubdir_static}
++libdir_shared = ${libdir}/${libsubdir_shared}
++alidir_static = ${libdir}/${alisubdir_static}
++alidir_shared = ${libdir}/${alisubdir_shared}
++gprdir        = ${prefix}/lib/gnat
+ 
+ # DESTDIR may be set to the path to a staging directory to install files in
+ # when building packages. If DESTDIR is empty, files will be installed directly
+@@ -89,21 +100,23 @@
+ 	$(CP) *.ads *.adb "${DESTDIR}$(incdir)/$(INC_SUBDIR)"
+ 
+ module_install_static: force
+-	$(MKDIR) "${DESTDIR}$(alidir)/static/$(INC_SUBDIR)/"
+-	$(INSTALL_DATA) ${OBJ_DIR}/$(ARCHIVENAME) "${DESTDIR}$(alidir)/static/$(INC_SUBDIR)/"
+ 	$(RM) "${DESTDIR}$(libdir)/$(ARCHIVENAME)"
+-	${CP} ${OBJ_DIR}/*.ali "${DESTDIR}${alidir}/static"
++	$(MKDIR) "${DESTDIR}${libdir_static}/$(INC_SUBDIR)/"
++	$(INSTALL_DATA) ${OBJ_DIR}/$(ARCHIVENAME) "${DESTDIR}${libdir_static}/$(INC_SUBDIR)/"
++	${CP} ${OBJ_DIR}/*.ali "${DESTDIR}${alidir_static}"
+ 
+ module_install_shared: force
+-	$(MKDIR) "${DESTDIR}$(alidir)/relocatable/$(INC_SUBDIR)/"
+-	$(INSTALL_PROGRAM) ${OBJ_DIR}/$(SONAME) "${DESTDIR}$(alidir)/relocatable/$(INC_SUBDIR)/"
++	$(MKDIR) "${DESTDIR}${libdir_shared}/$(INC_SUBDIR)/"
++	$(INSTALL_PROGRAM) ${OBJ_DIR}/$(SONAME) "${DESTDIR}${libdir_shared}/$(INC_SUBDIR)/"
+ 	$(RM) "${DESTDIR}$(libdir)/$(LIBNAME)"
+ ifneq (${OS},Windows_NT)
+-	$(LN) $(SONAME) "${DESTDIR}$(alidir)/relocatable/$(LIBNAME)"
+-	$(LN) gtkada/relocatable/$(INC_SUBDIR)/$(SONAME) "${DESTDIR}$(libdir)/$(LIBNAME)"
+-	$(LN) gtkada/relocatable/$(INC_SUBDIR)/$(SONAME) "${DESTDIR}$(libdir)/$(SONAME)"
++	$(LN) $(SONAME) "${DESTDIR}${libdir_shared}/$(LIBNAME)"
++ifneq (${libsubdir_shared},)
++	$(LN) "${libsubdir_shared}/$(INC_SUBDIR)/$(SONAME)" "${DESTDIR}$(libdir)/$(LIBNAME)"
++	$(LN) "${libsubdir_shared}/$(INC_SUBDIR)/$(SONAME)" "${DESTDIR}$(libdir)/$(SONAME)"
+ endif
+-	${CP} ${OBJ_DIR}/*.ali "${DESTDIR}${alidir}/relocatable"
++endif
++	${CP} ${OBJ_DIR}/*.ali "${DESTDIR}${alidir_shared}"
+ 
+ ${OBJ_DIR}/${SONAME}: ${wildcard ${SRC_FILES:%=${OBJ_DIR}/%}}
+ 	@echo Building ${SONAME}
+@@ -113,10 +126,12 @@
+ 	@cd ${OBJ_DIR}; $(RM) $(LIBNAME)
+ 	@cd ${OBJ_DIR}; $(LN) $(SONAME) $(LIBNAME)
+ ifneq (${BUILD_TYPE},Debug)
++ifneq (${BUILD_TYPE},Debuginfo)
+ ifneq (${OS},Windows_NT)
+ 	@cd ${OBJ_DIR}; strip $(LIBNAME)
+ endif
+ endif
++endif
+ 	@cd ${OBJ_DIR}; ${CHMOD} +x ${LIBNAME}
+ 
+ ${OBJ_DIR}/${ARCHIVENAME}: ${wildcard ${SRC_FILES:%=${OBJ_DIR}/%}}
+--- src/Makefile.in	2011-06-26 13:23:47.000000000 +0200
++++ src/Makefile.in	2012-07-03 03:03:23.000000000 +0200
+@@ -66,28 +66,30 @@
+ 	   $(MKDIR) "${DESTDIR}$(libdir)"; \
+ 	   $(MKDIR) "${DESTDIR}$(incdir)"; \
+ 	   if [ ${BUILD_STATIC} = yes ]; then \
+-	      $(MKDIR) "${DESTDIR}$(alidir)/static"; \
+-	      $(INSTALL_DATA) ${OBJ_DIR}/$(ARCHIVENAME) "${DESTDIR}$(alidir)/static"; \
++	      $(MKDIR) "${DESTDIR}${alidir_static}"; \
+ 	      $(RM) "${DESTDIR}$(libdir)/$(ARCHIVENAME)"; \
++	      $(INSTALL_DATA) ${OBJ_DIR}/$(ARCHIVENAME) "${DESTDIR}${libdir_static}"; \
+ 	      if [ -f /usr/bin/$(RANLIB) -o -f /bin/$(RANLIB) ]; then \
+-	         $(RANLIB) "${DESTDIR}$(alidir)/static/$(ARCHIVENAME)"; \
++	         $(RANLIB) "${DESTDIR}${libdir_static}/$(ARCHIVENAME)"; \
+ 	      fi; \
+ 	   fi; \
+ 	   if [ $(BUILD_SHARED) = yes ]; then \
+-	        $(MKDIR) "${DESTDIR}$(alidir)/relocatable"; \
++	        $(MKDIR) "${DESTDIR}${alidir_shared}"; \
+ 		if [ "$(OS)" = "Windows_NT" ]; then \
+ 		     $(INSTALL_DATA) ${OBJ_DIR}/$(SONAME) "${DESTDIR}$(bindir)"; \
+ 		     $(CHMOD) +x "${DESTDIR}$(bindir)/$(SONAME)"; \
+ 		else \
+-	             $(INSTALL_PROGRAM) ${OBJ_DIR}/$(SONAME) "${DESTDIR}$(alidir)/relocatable"; \
++	             $(INSTALL_PROGRAM) ${OBJ_DIR}/$(SONAME) "${DESTDIR}${libdir_shared}"; \
+ 		     $(RM) "${DESTDIR}$(libdir)/$(LIBNAME)"; \
+-		     $(LN) $(SONAME) "${DESTDIR}$(alidir)/relocatable/$(LIBNAME)"; \
+-		     $(LN) gtkada/relocatable/$(SONAME) "${DESTDIR}$(libdir)/$(LIBNAME)"; \
+-		     $(LN) gtkada/relocatable/$(SONAME) "${DESTDIR}$(libdir)/$(SONAME)"; \
+-		fi; \
+-	        $(CP) $(OBJ_DIR)/glib*.ali $(OBJ_DIR)/gdk*.ali "${DESTDIR}$(alidir)/relocatable"; \
+-	        $(CP) $(OBJ_DIR)/gtk*.ali $(OBJ_DIR)/pango*.ali "${DESTDIR}$(alidir)/relocatable"; \
+-	        $(CP) $(OBJ_DIR)/cairo*.ali "${DESTDIR}$(alidir)/relocatable"; \
++		     $(LN) $(SONAME) "${DESTDIR}${libdir_shared}/$(LIBNAME)"; \
++		     if [ "x${libsubdir_shared}" != x ]; then \
++		        $(LN) "${libsubdir_shared}/$(SONAME)" "${DESTDIR}$(libdir)/$(LIBNAME)"; \
++		        $(LN) "${libsubdir_shared}/$(SONAME)" "${DESTDIR}$(libdir)/$(SONAME)"; \
++		     fi; \
++		fi; \
++	        $(CP) $(OBJ_DIR)/glib*.ali $(OBJ_DIR)/gdk*.ali "${DESTDIR}${alidir_shared}"; \
++	        $(CP) $(OBJ_DIR)/gtk*.ali $(OBJ_DIR)/pango*.ali "${DESTDIR}${alidir_shared}"; \
++	        $(CP) $(OBJ_DIR)/cairo*.ali "${DESTDIR}${alidir_shared}"; \
+ 	   fi; \
+ 	   $(CP) glib*.ads glib*.adb $(MESA_SPECS) "${DESTDIR}$(incdir)"; \
+ 	   $(CP) gdk*.ads gdk*.adb "${DESTDIR}$(incdir)"; \
+@@ -96,18 +98,18 @@
+ 	   $(CP) cairo*.ads cairo*.adb "${DESTDIR}$(incdir)"; \
+ 		$(CP) generated/*.ad? "${DESTDIR}${incdir}"; \
+ 	   if [ ${BUILD_STATIC} = yes ]; then \
+-	      $(CP) $(OBJ_DIR)/glib*.ali $(OBJ_DIR)/gdk*.ali "${DESTDIR}$(alidir)/static"; \
+-	      $(CP) $(OBJ_DIR)/gtk*.ali $(OBJ_DIR)/pango*.ali "${DESTDIR}$(alidir)/static"; \
+-	      $(CP) $(OBJ_DIR)/cairo*.ali "${DESTDIR}$(alidir)/static"; \
++	      $(CP) $(OBJ_DIR)/glib*.ali $(OBJ_DIR)/gdk*.ali "${DESTDIR}${alidir_static}"; \
++	      $(CP) $(OBJ_DIR)/gtk*.ali $(OBJ_DIR)/pango*.ali "${DESTDIR}${alidir_static}"; \
++	      $(CP) $(OBJ_DIR)/cairo*.ali "${DESTDIR}${alidir_static}"; \
+ 	   fi; \
+            $(MAKE) -C opengl install; \
+            $(MAKE) -C gnome install; \
+            $(MAKE) -C tools install; \
+ 	   if [ ${BUILD_STATIC} = yes ]; then \
+-	      $(CHMOD) ugo-w "${DESTDIR}$(alidir)/static"/*.ali; \
++	      $(CHMOD) ugo-w "${DESTDIR}${alidir_static}"/*.ali; \
+ 	   fi; \
+ 	   if [ $(BUILD_SHARED) = yes ]; then \
+-	      $(CHMOD) ugo-w "${DESTDIR}$(alidir)/relocatable"/*.ali; \
++	      $(CHMOD) ugo-w "${DESTDIR}${alidir_shared}"/*.ali; \
+ 	   fi; \
+ 	fi
+ 
+--- src/tools/gtkada-config.in	2009-02-28 10:45:18.000000000 +0100
++++ src/tools/gtkada-config.in	2012-07-03 01:06:57.000000000 +0200
+@@ -3,21 +3,26 @@
+ 
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+-libdir=@libdir@/gtkada
++bindir=@bindir@
+ includedir=@includedir@/gtkada
++libdir=@libdir@
++libdir_static=${libdir}/@libsubdir_static@
++libdir_shared=${libdir}/@libsubdir_shared@
++alidir_static=${libdir}/@alisubdir_static@
++alidir_shared=${libdir}/@alisubdir_shared@
+ gtk_libs="@GTK_LIBS@"
+ 
+ # OS Specific relocatable settings
+ if [ "$OS" = "Windows_NT" ]; then
+-    os_reloc="-L${prefix}/bin -lgtkada-@GTKADA_MAJOR_VERSION@.@GTKADA_MINOR_VERSION@"
++    os_reloc="-L${bindir} -lgtkada-@GTKADA_MAJOR_VERSION@.@GTKADA_MINOR_VERSION@"
+ else
+-    os_reloc="-L${libdir}/relocatable -lgtkada"
++    os_reloc="-L${libdir_shared} -lgtkada"
+ fi
+ 
+-cflags_static="-aI${includedir} -aO${libdir}/static"
+-cflags_relocatable="-aI${includedir} -aO${libdir}/relocatable"
++cflags_static="-aI${includedir} -aO${alidir_static}"
++cflags_relocatable="-aI${includedir} -aO${alidir_shared}"
+ libs_relocatable="${os_reloc} ${gtk_libs}"
+-libs_static="-L${libdir}/static -lgtkada ${gtk_libs}"
++libs_static="-L${libdir_static} -lgtkada ${gtk_libs}"
+ 
+ usage()
+ {
+@@ -36,7 +41,7 @@
+ 
+ show_cflags=1
+ show_libs=1
+-libtype=relocatable
++libtype=@DEFAULT_LIBRARY_TYPE@
+ 
+ # Can have the following values:
+ #   0 = none
+@@ -83,7 +88,7 @@
+ done
+ 
+ ## Force static if relocatable was not installed
+-if [ -d $libdir/relocatable ]; then
++if [ -d ${libdir_shared} ]; then
+    :
+ else
+    libtype=static
+--- xml/Makefile	2011-03-13 19:00:52.000000000 +0100
++++ xml/Makefile	2012-07-03 01:06:57.000000000 +0200
+@@ -3,8 +3,8 @@
+ MKDIR = mkdir -p
+ 
+ install: force
+-	${MKDIR} "${DESTDIR}$(prefix)/share/gps/plug-ins"
+-	${CP} gtkada.xml "${DESTDIR}${prefix}/share/gps/plug-ins/"
++	${MKDIR} "${DESTDIR}${datadir}/gps/plug-ins"
++	${CP} gtkada.xml "${DESTDIR}${datadir}/gps/plug-ins/"
+ 
+ force:
+ 

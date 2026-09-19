@@ -1,0 +1,51 @@
+diff -ur crack-attack-1.1.14.orig/configure crack-attack-1.1.14/configure
+--- crack-attack-1.1.14.orig/configure	2005-05-13 21:29:09.000000000 +0200
++++ crack-attack-1.1.14/configure	2022-11-24 18:12:38.875843284 +0100
+@@ -2586,7 +2586,7 @@
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; }; then
+   for ac_declaration in \
+-   '' \
++   '#include <stdlib.h>' \
+    'extern "C" void std::exit (int) throw (); using std::exit;' \
+    'extern "C" void std::exit (int); using std::exit;' \
+    'extern "C" void exit (int) throw ();' \
+@@ -3121,7 +3121,7 @@
+   fi
+ fi
+ for ac_declaration in \
+-   '' \
++   '#include <stdlib.h>' \
+    'extern "C" void std::exit (int) throw (); using std::exit;' \
+    'extern "C" void std::exit (int); using std::exit;' \
+    'extern "C" void exit (int) throw ();' \
+@@ -4196,8 +4196,8 @@
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+ 	|| toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext
+@@ -7352,15 +7352,13 @@
+   cat >conftest.$ac_ext <<_ACEOF
+ /* By Ruediger Kuhlmann. */
+       #include <sys/types.h>
+-      #if HAVE_UNISTD_H
+-      # include <unistd.h>
+-      #endif
++      #include <unistd.h>
+       /* Some systems only have a dummy stub for fork() */
+       int main ()
+       {
+ 	if (fork() < 0)
+-	  exit (1);
+-	exit (0);
++	  return 1;
++	return 0;
+       }
+ _ACEOF
+ rm -f conftest$ac_exeext

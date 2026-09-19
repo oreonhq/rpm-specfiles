@@ -1,0 +1,43 @@
+.TH SCOOBY "1" "September 2024" "" "User Commands"
+.B scooby
+\(en Great Dane turned Python environment detective
+.SH SYNOPSIS
+.B scooby
+.RB [ \-h ]
+.RB [ \-\-report\ \fIREPORT ]
+.RB [ \-\-no\-opt ]
+.RB [ \-\-sort ]
+.RB [ \-\-version ]
+.RI [ packages \ ...]
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I packages
+names of the packages to report
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-\-report\ \fIREPORT\fR,\ \fB\-r\ \fIREPORT
+print
+.B Report()
+of this package
+.TP
+.B \-\-no\-opt
+do not show the default optional packages.
+Defaults to
+.B True
+if using
+.B \-\-report
+and defaults to
+.B False
+otherwise.
+.TP
+.B \-\-sort
+ sort the packages when the report is shown
+.TP
+.B \-\-version\fR, \fB\-v
+only display
+.BR scooby (1)
+version

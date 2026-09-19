@@ -1,0 +1,66 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sat, 14 Feb 2026 17:39:19 +0100
+Subject: [PATCH] [PATCH] Modernize CMake build system for CMake 4
+ compatibility
+
+- Bump cmake_minimum_required to 3.10
+- Replace removed INSTALL_TARGETS with install(TARGETS ...)
+- Use GNUInstallDirs for proper lib/lib64 handling
+- Use target-based include propagation instead of deprecated
+  include_directories/link_directories
+- Use EXPAT::EXPAT imported target instead of legacy variables
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+Assisted-by: Claude (Anthropic) <https://claude.ai>
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 971fea4..fa1501b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,8 +1,9 @@
+-
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.10)
+ 
+ project(expatpp)
+ 
++include(GNUInstallDirs)
++
+ find_package(EXPAT REQUIRED)
+ 
+ SET(EXPATPP_MAJOR_VERSION 0)
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index 76bc538..6a999e7 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -1,6 +1,11 @@
+ 
+ add_library(expatpp SHARED expatpp.cpp)
+-target_link_libraries(expatpp ${EXPAT_LIBRARIES})
++target_link_libraries(expatpp EXPAT::EXPAT)
++target_include_directories(expatpp
++  PUBLIC
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
++    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
++)
+ SET_TARGET_PROPERTIES(expatpp PROPERTIES ${EXPATPP_LIBRARY_PROPERTIES})
+-INSTALL_TARGETS(/${LIB_INSTALL_DIR} expatpp)
+-INSTALL (FILES expatpp.h DESTINATION include)
+\ No newline at end of file
++install(TARGETS expatpp DESTINATION ${CMAKE_INSTALL_LIBDIR})
++install(FILES expatpp.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 9d12cc6..4eadf4d 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -1,7 +1,3 @@
+ 
+-include_directories (${expatpp_SOURCE_DIR}/lib)
+-link_directories (${expatpp_BINARY_DIR}/lib ${EXPAT_INCLUDE_DIR})
+-
+-add_executable (testexpatpp1 testexpatpp.cpp)
+-
+-target_link_libraries (testexpatpp1 expatpp) 
+\ No newline at end of file
++add_executable(testexpatpp1 testexpatpp.cpp)
++target_link_libraries(testexpatpp1 expatpp)

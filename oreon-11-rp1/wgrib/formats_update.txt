@@ -1,0 +1,175 @@
+v1.6 update 5/98 update 9/03
+
+                              -H Option
+                              -- ------
+
+Some people have fortran/C programs which read the binary/IEEE
+output from wgrib.  They found that they needed a header to
+identify each record.  I can see the need to identify each
+record but my choice would to have the fortran/C program
+open two files, the data file and the corresponding inventory.
+However, people have different styles.
+
+The -H option adds a "universal" header to the binary/IEEE
+file. The header is "universal" because it contains all the
+meta-data (PDS and GDS).  Nobody can complain that I left out 
+some crucial information from the header.
+
+The PDS (Product Definition Section) and GDS (Grid Definition
+Section) are documented in the GRIB references such as Office
+Note 388 by John Stackpole (available from the NCEP ftp site).
+
+
+                            Output Format
+
+Case 1: (GRIB file has GDS)
+
+        integer:		length of PDS + 4
+        character*4:		"PDS "
+	PDS			sequence of bytes
+	integer:		length of PDS + 4
+
+	integer:		length of GDS + 4
+	character*4:		"GDS "
+	GDS			sequence of bytes
+	integer:		length of GDS + 4
+
+        (decoded GRIB message/record)
+
+Case 2: (missing GDS)
+
+        integer:		length of PDS + 4
+        character*4:		"PDS "
+	PDS			sequence of bytes
+	integer:		length of PDS + 4
+
+	integer:		length of 4
+	character*4:		"GDS "
+	integer:		length of 4
+
+        (decoded GRIB message/record)
+
+When the output file is IEEE, the "integer" is big-endian
+four byte integer.  Otherwise it is the native format 
+integer.  
+
+As you can see, the "universal" header is really two f77-style
+headers.  The first header contains the string "PDS " along with
+the PDS.  The second header contains the string "GDS " along with
+the GDS (if present).
+
+The main complication in reading this header is that it is
+variable length.  C programs will have no problems.  Reading
+the file in fortran as an unformatted sequential file will
+require a trick.
+
+c
+c       sample of reading the PDS in a file created using
+c       -H (include PDS & GDS) and -h (f77 style headers, default)
+c
+c       example: wgrib -d 1 -H grib_file -o dump
+c
+
+        character*1 pds(100),c4(4),gds(1000)
+        open(unit=1,file='dump',form='unformatted')
+c
+c  Read "PDS " and Length of the PDS
+        read(1) c4, (pds(i),i=1,3)
+c
+c  Check for letters "PDS " in  PDS
+        if (c4(1).ne.'P') goto 9999
+        if (c4(2).ne.'D') goto 9999
+        if (c4(3).ne.'S') goto 9999
+        if (c4(4).ne.' ') goto 9999
+c  Calculate length of variable PDS
+        lenpds=ichar(pds(1))*256*256+ichar(pds(2))*256+ichar(pds(3))
+c
+c  Print out length
+        write(*,*) 'Length of variable PDS in the header=', lenpds
+c
+c  Backspace
+        backspace(1)
+c
+c  Read PDS using the length information
+        read(1) c4, (pds(i),i=1,lenpds)
+c
+c  Convert a character argument to an integer based on the character position
+c in the collating sequence
+        idog1=ichar(pds(13))
+        idog2=ichar(pds(14))
+        idog3=ichar(pds(15))
+c
+        write(6,20)idog1,idog2,idog3
+20      format('PDS :',i10,1x,i5,1x,i6)
+c
+c --------------------------------------------------------------------------
+c  Read "GDS " and Length of the GDS
+        read(1) c4, (gds(i),i=1,3)
+c
+c  Check for letters "GDS " in  the GDS
+        if (c4(1).ne.'G') goto 9999
+        if (c4(2).ne.'D') goto 9999
+        if (c4(3).ne.'S') goto 9999
+        if (c4(4).ne.' ') goto 9999
+c
+c  Calculate length of variable GDS
+        lengds=ichar(gds(1))*256*256+ichar(gds(2))*256+ichar(gds(3))
+c
+c  Print out length
+        write(*,*) 'Length of variable GDS in the header=', lengds
+c
+c  Backspace
+        backspace(1)
+c
+c  Read GDS using the length information
+        read(1) c4, (gds(i),i=1,lengds)
+c
+c  Convert a character argument to an integer based on the character position
+c in the collating sequence
+        idog1=ichar(gds(13))
+        idog2=ichar(gds(14))
+        idog3=ichar(gds(15))
+c
+        write(6,22)idog1,idog2,idog3
+22      format('GDS: ',i10,1x,i5,1x,i6)
+c
+        STOP
+c
+c  Error Warning
+9999    write(*,*) 'Error in beginning of PDS or GDS'
+
+        STOP
+        END
+
+
+
+
+
+
+
+
+                              -dwdgrib OPTION
+                              -------- ------
+
+The code for this option was submitted by Hulmut P. Frank (8/03) and completely
+rewritten by WNE for inclusion to wgrib v1.8.0.4.  DWD (Deutscher Wetterdienst,
+the german weather service) has a particular formatting of grib files:
+
+    0                     (4 bytes)
+    rec_len #1            (4 byte integer, big endian, length of grib msg #1 in bytes)
+    grib msg #1
+    rec_len #1            (4 byte integer, big endian, length of grib msg #1 in bytes)
+    rec_len #2            (4 byte integer, big endian, length of grib msg #2 in bytes)
+    grib msg #2
+    rec_len #2            (4 byte integer, big endian, length of grib msg #2 in bytes)
+    ...
+    rec_len #N            (4 byte integer, big endian, length of grib msg #N in bytes)
+    grib msg #N
+    rec_len #N            (4 byte integer, big endian, length of grib msg #N in bytes)
+    0                     (4 bytes)
+ 
+This format looks like a f77 format of grib with a leading/trailing zeros.  Of
+course, this format is perfectly legal grib and older wgribs could read the dwd files.
+With v1.8.04, wgrib can write dwd format grib files.
+
+

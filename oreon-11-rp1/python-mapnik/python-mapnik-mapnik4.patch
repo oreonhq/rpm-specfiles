@@ -1,0 +1,34 @@
+From 086b0b2b4ed1421b87084d8d54e27935190c25fc Mon Sep 17 00:00:00 2001
+From: Tom Hughes <tom@compton.nu>
+Date: Wed, 19 Jun 2024 18:48:24 +0100
+Subject: [PATCH 4/5] Fix for mapnik 4.0.0 compatiblity
+
+---
+ src/mapnik_value_converter.hpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/mapnik_value_converter.hpp b/src/mapnik_value_converter.hpp
+index fdb6be860..e9b11f112 100644
+--- a/src/mapnik_value_converter.hpp
++++ b/src/mapnik_value_converter.hpp
+@@ -126,7 +126,7 @@ public:
+         {
+             PyObject *tmp = PyNumber_Long(source);
+             if (!tmp) return false;
+-            value = PyLong_AsLongLong(tmp);
++            value = static_cast<mapnik::value_integer>(PyLong_AsLongLong(tmp));
+             Py_DecRef(tmp);
+             return !PyErr_Occurred();
+         }
+@@ -180,7 +180,7 @@ public:
+         {
+             PyObject *tmp = PyNumber_Long(source);
+             if (!tmp) return false;
+-            value = PyLong_AsLongLong(tmp);
++            value = static_cast<mapnik::value_integer>(PyLong_AsLongLong(tmp));
+             Py_DecRef(tmp);
+             return !PyErr_Occurred();
+         }
+-- 
+2.51.1
+

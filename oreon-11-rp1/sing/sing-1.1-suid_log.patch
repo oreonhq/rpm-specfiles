@@ -1,0 +1,35 @@
+Re-merged patch by Robert Scheck <robert@fedoraproject.org> for sing >= 1.1, which
+causes sing to drop privileges when opening log file and running sing suid; this is
+CVE-2007-6211. The patch is originally from Nico Golde <nion@debian.org> and then
+afterwards used by Alberto Gonzalez Iniesta <agi@inittab.org>.
+
+Further information:
+ - http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6211
+ - http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=454167
+
+--- SING-1.1/parser.c				2001-04-18 13:11:08.000000000 +0200
++++ SING-1.1/parser.c.suid_log			2009-04-18 04:53:05.000000000 +0200
+@@ -75,6 +75,8 @@
+    struct protoent *proto;
+    static struct mi_ifaz iface;
+    struct sockaddr_in *aux2;
++   uid_t user_id;
++
+    static struct option options[] =
+    {
+     { "help",    0, 0, 'h' },
+@@ -380,8 +382,14 @@
+        break;
+        
+        case 31:
++             user_id = getuid();
++             uid_t tmp_id = geteuid();
++
++             seteuid(user_id);
+              if ( (packet->logfile = fopen(optarg, "a+")) == NULL )
+                 go_out_error(1, "fopen");
++
++             seteuid(tmp_id);
+        break;
+        
+        case 32:

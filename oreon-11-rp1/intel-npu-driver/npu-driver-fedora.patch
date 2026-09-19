@@ -1,0 +1,44 @@
+--- a/third_party/CMakeLists.txt	2025-03-31 19:28:32.644538271 +0300
++++ b/third_party/CMakeLists.txt	2025-03-31 19:32:03.449854979 +0300
+@@ -15,8 +15,8 @@
+ endif()
+ 
+ set(INSTALL_GTEST OFF)
+-add_subdirectory(googletest EXCLUDE_FROM_ALL)
++#add_subdirectory(googletest EXCLUDE_FROM_ALL)
+ 
+ set(YAML_CPP_INSTALL OFF)
+ set(BUILD_SHARED_LIBS OFF)
+-add_subdirectory(yaml-cpp EXCLUDE_FROM_ALL)
++#add_subdirectory(yaml-cpp EXCLUDE_FROM_ALL)
+--- a/third_party/level-zero-npu-extensions/ze_graph_ext.h	2025-03-31 19:45:12.409502927 +0300
++++ b/third_party/level-zero-npu-extensions/ze_graph_ext.h	2025-03-31 19:45:27.556613665 +0300
+@@ -11,7 +11,7 @@
+ #pragma once
+ #endif
+ 
+-#include "ze_api.h"
++#include <level_zero/ze_api.h>
+ #include "ze_graph_profiling_ext.h"
+ 
+ #ifndef ZE_GRAPH_EXT_NAME
+--- a/firmware/CMakeLists.txt	2025-03-31 20:48:28.931558269 +0300
++++ b/firmware/CMakeLists.txt	2025-03-31 20:49:04.915986253 +0300
+@@ -9,10 +9,10 @@
+ add_library(${PROJECT_NAME} INTERFACE)
+ target_include_directories(${PROJECT_NAME} INTERFACE include)
+ 
+-file(GLOB FIRMWARE_BINARIES ${CMAKE_CURRENT_SOURCE_DIR}/bin/*.bin)
+-if (FIRMWARE_BINARIES)
+-  install(FILES ${FIRMWARE_BINARIES}
+-    DESTINATION /lib/firmware/updates/intel/vpu/
+-    PERMISSIONS OWNER_READ
+-    COMPONENT fw-npu)
+-endif()
++#file(GLOB FIRMWARE_BINARIES ${CMAKE_CURRENT_SOURCE_DIR}/bin/*.bin)
++#if (FIRMWARE_BINARIES)
++#  install(FILES ${FIRMWARE_BINARIES}
++#    DESTINATION /lib/firmware/updates/intel/vpu/
++#    PERMISSIONS OWNER_READ
++#    COMPONENT fw-npu)
++#endif()

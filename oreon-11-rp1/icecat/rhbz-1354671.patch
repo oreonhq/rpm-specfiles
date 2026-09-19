@@ -1,0 +1,11 @@
+--- firefox-78.0/layout/base/PresShell.orig.h	2020-06-26 20:10:50.168878803 +0200
++++ firefox-78.0/layout/base/PresShell.h	2020-06-26 23:13:24.174571951 +0200
+@@ -257,7 +257,7 @@
+    * to the same aSize value.  AllocateFrame is infallible and will abort
+    * on out-of-memory.
+    */
+-  void* AllocateFrame(nsQueryFrame::FrameIID aID, size_t aSize) {
++  void* __attribute__((optimize("no-lifetime-dse"))) AllocateFrame(nsQueryFrame::FrameIID aID, size_t aSize) {
+ #define FRAME_ID(classname, ...)                                  \
+   static_assert(size_t(nsQueryFrame::FrameIID::classname##_id) == \
+                     size_t(eArenaObjectID_##classname),           \

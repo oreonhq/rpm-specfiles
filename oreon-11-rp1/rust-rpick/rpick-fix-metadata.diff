@@ -1,0 +1,11 @@
+--- rpick-0.9.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ rpick-0.9.1/Cargo.toml	2026-02-18T08:37:44.183995+00:00
+@@ -28,7 +28,7 @@
+     "command-line-utilities",
+     "games",
+ ]
+-license = "GPL-3.0"
++license = "GPL-3.0-only"
+ repository = "https://github.com/bowlofeggs/rpick"
+ 
+ [profile.release]

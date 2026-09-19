@@ -1,0 +1,44 @@
+diff -durN fbzx-4.8.0.orig/src/emulator.cpp fbzx-4.8.0/src/emulator.cpp
+--- fbzx-4.8.0.orig/src/emulator.cpp	2021-05-30 16:01:40.000000000 +0200
++++ fbzx-4.8.0/src/emulator.cpp	2025-02-03 13:05:59.705609120 +0100
+@@ -19,6 +19,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <unistd.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+diff -durN fbzx-4.8.0.orig/src/microdrive.cpp fbzx-4.8.0/src/microdrive.cpp
+--- fbzx-4.8.0.orig/src/microdrive.cpp	2021-05-30 16:01:40.000000000 +0200
++++ fbzx-4.8.0/src/microdrive.cpp	2025-02-03 13:05:59.706609110 +0100
+@@ -23,6 +23,7 @@
+ #include "osd.hh"
+ 
+ #include <stdio.h>
++#include <string.h>
+ 
+ class Microdrive *microdrive;
+ 
+diff -durN fbzx-4.8.0.orig/src/spk_ay.cpp fbzx-4.8.0/src/spk_ay.cpp
+--- fbzx-4.8.0.orig/src/spk_ay.cpp	2021-05-30 16:01:40.000000000 +0200
++++ fbzx-4.8.0/src/spk_ay.cpp	2025-02-03 13:06:57.329055947 +0100
+@@ -21,6 +21,7 @@
+  */
+ 
+ #include <stdlib.h>
++#include <string.h>
+ #include "emulator.hh"
+ #include "computer.hh"
+ #include "llsound.hh"
+diff -durN fbzx-4.8.0.orig/src/tape.cpp fbzx-4.8.0/src/tape.cpp
+--- fbzx-4.8.0.orig/src/tape.cpp	2021-05-30 16:01:40.000000000 +0200
++++ fbzx-4.8.0/src/tape.cpp	2025-02-03 13:07:27.933762181 +0100
+@@ -27,6 +27,7 @@
+ #include "tape.hh"
+ #include "z80free/Z80free.h"
+ 
++#include <cstring>
+ #include <iostream>
+ #include <fstream>
+ 

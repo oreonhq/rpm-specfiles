@@ -2,7 +2,7 @@
 
 Name: hwdata
 Summary: Hardware identification and configuration data
-Version: 0.405
+Version: 0.411
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 Source:        https://github.com/vcrhonek/hwdata/archive/refs/tags/v%{version}.tar.gz#/hwdata-0.405.tar.gz

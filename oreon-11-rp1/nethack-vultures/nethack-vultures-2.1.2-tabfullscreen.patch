@@ -1,0 +1,21 @@
+diff -up vultures-2.1.2/vultures/vultures_sdl.c~ vultures-2.1.2/vultures/vultures_sdl.c
+--- vultures-2.1.2/vultures/vultures_sdl.c~	2008-07-16 16:59:01.000000000 +0300
++++ vultures-2.1.2/vultures/vultures_sdl.c	2009-05-23 01:04:04.000000000 +0300
+@@ -276,7 +276,7 @@ static void vultures_set_fullscreen(void
+         newwidth  = modes[bestmode]->w;
+     }
+ 
+-    vultures_screen = SDL_SetVideoMode(newwidth, newheight, 0, 
++    vultures_screen = SDL_SetVideoMode(newwidth, newheight, 32, 
+                                        SDL_SWSURFACE | SDL_FULLSCREEN | SDL_ASYNCBLIT);
+ 
+     vultures_win_resize(newwidth, newheight);
+@@ -286,7 +286,7 @@ static void vultures_set_fullscreen(void
+ 
+ static void vultures_set_windowed()
+ {
+-    vultures_screen = SDL_SetVideoMode(vultures_opts.width, vultures_opts.height, 0, 
++    vultures_screen = SDL_SetVideoMode(vultures_opts.width, vultures_opts.height, 32, 
+                                        SDL_SWSURFACE |SDL_ASYNCBLIT | SDL_RESIZABLE);
+     vultures_win_resize(vultures_opts.width, vultures_opts.height);
+ }

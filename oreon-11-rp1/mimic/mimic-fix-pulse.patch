@@ -1,0 +1,36 @@
+From 16c0d5eae37e5347debbcf5279f8b73ccc9e9eb6 Mon Sep 17 00:00:00 2001
+From: Mike Gorse <mgorse@linux-e5s4.suse>
+Date: Thu, 5 Oct 2017 23:56:50 -0500
+Subject: [PATCH] Check for libpulse-simple.pc
+
+Needed to pull in libpulse-simple, which contains the pa_simple_* functions
+that the pulseaudio driver uses.
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index bebcd5d..5db2b93 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -186,7 +186,7 @@ AS_CASE( [ ${AUDIODRIVER} ],
+            [ AUDIODEFS="${AUDIODEFS_PULSEAUDIO}"
+              AUDIOLIBS="${AUDIOLIBS_PULSEAUDIO}"
+              AUDIODETECTED="${AUDIODETECTED_PULSEAUDIO}"
+-             PKGCONFIG_MIMIC_DEPS="${PKGCONFIG_MIMIC_DEPS} libpulse"
++             PKGCONFIG_MIMIC_DEPS="${PKGCONFIG_MIMIC_DEPS} libpulse-simple"
+            ],
+          [ portaudio ],
+            [ AUDIODEFS="${AUDIODEFS_PORTAUDIO}"
+
+--- mimic-1.2.0.2/configure.ac.orig	2019-07-02 17:57:37.748056242 +0100
++++ mimic-1.2.0.2/configure.ac	2019-07-02 17:57:49.992189002 +0100
+@@ -115,7 +115,7 @@
+                    AUDIODETECTED_PULSEAUDIO="true"],
+                   [m4_ignore])
+ AUDIODEFS_PULSEAUDIO="-DCST_AUDIO_PULSEAUDIO ${PULSEAUDIO_CFLAGS}"
+-AUDIOLIBS_PULSEAUDIO="${PULSEAUDIO_LIBS}"
++AUDIOLIBS_PULSEAUDIO="${PULSEAUDIO_LIBS} -lpulse-simple"
+ 
+ dnl Check PortAudio is at least (v19-dev)
+ AUDIODETECTED_PORTAUDIO="false"

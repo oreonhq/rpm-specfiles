@@ -1,0 +1,24 @@
+diff -up ./Makefile.am.fix ./Makefile.am
+--- ./Makefile.am.fix	2009-08-10 11:46:58.000000000 -0500
++++ ./Makefile.am	2009-08-10 11:47:14.000000000 -0500
+@@ -72,7 +72,7 @@ lib_LTLIBRARIES = libcimrpm.la \
+                   libcimrpmv4.la
+ 
+ libcimrpm_la_SOURCES = cimrpm.c
+-# libcimrpm_la_LIBADD = -ldl
++libcimrpm_la_LIBADD = -ldl
+ libcimrpm_la_LDFLAGS = -Wc,-nostartfiles
+ 
+ libcimrpmv4_la_SOURCES = cimrpmv4.c
+diff -up ./Makefile.in.fix ./Makefile.in
+--- ./Makefile.in.fix	2009-08-10 11:47:09.000000000 -0500
++++ ./Makefile.in	2009-08-10 11:47:27.000000000 -0500
+@@ -321,7 +321,7 @@ lib_LTLIBRARIES = libcimrpm.la \
+                   libcimrpmv4.la
+ 
+ libcimrpm_la_SOURCES = cimrpm.c
+-# libcimrpm_la_LIBADD = -ldl
++libcimrpm_la_LIBADD = -ldl
+ libcimrpm_la_LDFLAGS = -Wc,-nostartfiles
+ libcimrpmv4_la_SOURCES = cimrpmv4.c
+ libcimrpmv4_la_LIBADD = -lcmpiOSBase_Common

@@ -79,7 +79,7 @@ ExcludeArch: i686
 
 Summary:          389 Directory Server (%{variant})
 Name:             389-ds-base
-Version:          3.2.1
+Version:          3.3.1
 Release:          %{autorelease -n %{?with_asan:-e asan}}%{?dist}
 License:          GPL-3.0-or-later WITH GPL-3.0-389-ds-base-exception AND (Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT) AND (Apache-2.0 OR LGPL-2.1-or-later OR MIT) AND (Apache-2.0 OR MIT) AND (CC-BY-4.0 AND MIT) AND (MIT OR Apache-2.0) AND Unicode-3.0 AND (MIT OR CC0-1.0) AND (MIT OR Unlicense) AND 0BSD AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MIT AND MIT AND ISC AND MPL-2.0 AND PSF-2.0 AND Zlib
 URL:              https://www.port389.org
@@ -201,7 +201,7 @@ Provides:  bundled(npm(@patternfly/react-log-viewer)) = 5.3.0
 Provides:  bundled(npm(@patternfly/react-styles)) = 5.4.0
 Provides:  bundled(npm(@patternfly/react-table)) = 5.4.1
 Provides:  bundled(npm(@patternfly/react-tokens)) = 5.4.0
-Provides:  bundled(npm(@types/d3-array)) = 3.2.1
+Provides:  bundled(npm(@types/d3-array)) = 3.3.1
 Provides:  bundled(npm(@types/d3-color)) = 3.1.3
 Provides:  bundled(npm(@types/d3-ease)) = 3.0.2
 Provides:  bundled(npm(@types/d3-interpolate)) = 3.0.4

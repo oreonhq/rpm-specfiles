@@ -1,0 +1,64 @@
+%global source0_hash none
+
+Name:           python-listparser
+Version:        0.20
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Parse OPML subscription lists
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/kurtmckee/listparser/
+Source:         %{pypi_source listparser}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'listparser' generated automatically by pyp2spec.}
+
+Patch0:         2to3.patch
+
+%description %_description
+
+%package -n     python3-listparser
+Summary:        %{summary}
+
+%description -n python3-listparser %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-listparser http,lxml
+
+
+%prep
+%autosetup -p1 -n listparser-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x http,lxml
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-listparser -f %{pyproject_files}
+
+%changelog
+%autochangelog

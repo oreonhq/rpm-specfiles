@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>quake3.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+ and proprietary</project_license>
+  <name>Quake3 Demo</name>
+  <summary>Quake 3 Arena tournament 3D shooter game demo installer</summary>
+  <description>
+    <p>
+     Quake 3 Arena tournament 3D shooter game demo installer. The Quake3 engine is
+     Open Source. The original Quake3 datafiles however are not Open Source.
+     There is a gratis, but not Open Source demo available on the internet.
+    </p>
+    <p>
+     This package installs an applications menu entry for playing the Quake3
+     Arena Demo. The first time you click this menu entry, it will offer to
+     download and install the Quake 3 Demo datafiles for you.
+    </p>
+  </description>
+  <url type="homepage">http://ioquake3.org/</url>
+  <screenshots>
+    <screenshot type="default">http://ioquake3.org/wp/wp-content/uploads/2010/08/shot0249.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

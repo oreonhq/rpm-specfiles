@@ -1,0 +1,12 @@
+diff -up asymptote-2.73/doc/asymptote.texi.path-fix asymptote-2.73/doc/asymptote.texi
+--- asymptote-2.73/doc/asymptote.texi.path-fix	2021-12-29 17:46:54.043168884 -0500
++++ asymptote-2.73/doc/asymptote.texi	2021-12-29 17:47:38.943464729 -0500
+@@ -23,7 +23,7 @@ file LICENSE in the top-level source dir
+ 
+ @dircategory Languages
+ @direntry
+-* asymptote: (asymptote/asymptote). Vector graphics language.
++* asymptote: (asymptote). Vector graphics language.
+ @end direntry
+ 
+ @titlepage

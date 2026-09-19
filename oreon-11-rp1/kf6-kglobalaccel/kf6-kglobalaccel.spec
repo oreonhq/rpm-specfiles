@@ -1,13 +1,13 @@
-%global source0_hash e7ba1601a159ea79f424a4d53647415393f90dbeda1e3216d023eeb5420837d3
+%global source0_hash 71f4b08dfa993a1cfaccee004401234ba21754d48955733fc9be13ccc940b444
 
 %global framework kglobalaccel
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 integration module for global shortcuts
 
@@ -22,11 +22,11 @@ BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6Crash) >= %{version}
+BuildRequires:  cmake(KF6DBusAddons) >= %{version}
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
 BuildRequires:  qt6-qtbase-private-devel
 # for systemd-related macros
 BuildRequires:  systemd
@@ -81,6 +81,9 @@ rm -fv %{buildroot}%{_prefix}/lib/systemd/user/plasma-kglobalaccel.service
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

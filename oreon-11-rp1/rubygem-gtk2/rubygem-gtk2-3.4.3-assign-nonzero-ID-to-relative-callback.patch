@@ -1,0 +1,10 @@
+--- gtk2-3.4.3/ext/gtk2/rbgtk.c.orig	2022-11-08 15:25:33.507083460 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtk.c	2022-11-08 15:25:46.160087108 +0900
+@@ -539,6 +539,7 @@ rg_m_show_uri(G_GNUC_UNUSED VALUE self,
+ void 
+ Init_gtk_gtk(void)
+ {
++    id_relative_callbacks = rb_intern("relative_callback");
+     id_call = rb_intern("call");
+     id__windows__ = rb_intern("__windows__");
+     id__quit_callbacks__ = rb_intern("__quit_callbacks__");

@@ -1,0 +1,15 @@
+diff -up luabind-0.9.1/src/pcall.cpp.lua54 luabind-0.9.1/src/pcall.cpp
+--- luabind-0.9.1/src/pcall.cpp.lua54	2020-08-10 15:35:41.209296458 -0400
++++ luabind-0.9.1/src/pcall.cpp	2020-08-10 15:37:31.371091522 -0400
+@@ -47,7 +47,10 @@ namespace luabind { namespace detail
+ 
+ 	int resume_impl(lua_State *L, int nargs, int)
+ 	{
+-#if LUA_VERSION_NUM >= 502
++#if LUA_VERSION_NUM >= 504
++		int nres;
++		int res = lua_resume(L, NULL, nargs, &nres);
++#elif LUA_VERSION_NUM >= 502
+ 		int res = lua_resume(L, NULL, nargs);
+ #else
+ 		int res = lua_resume(L, nargs);

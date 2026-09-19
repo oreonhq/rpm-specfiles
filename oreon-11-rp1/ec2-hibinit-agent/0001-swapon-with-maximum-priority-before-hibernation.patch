@@ -1,0 +1,54 @@
+From f75434659a731ebdfc259990eb37777700900ea2 Mon Sep 17 00:00:00 2001
+From: Dominik Wombacher <dominik@wombacher.cc>
+Date: Thu, 7 Nov 2024 15:27:03 +0000
+Subject: [PATCH 1/1] fix(rhel): Swapon with maximum priority before
+ hibernation
+
+Apply swapon high priority related changes from /acpid.sleep.sh to /packaging/rhel/acpid.sleep.sh
+
+Refs: https://github.com/aws/amazon-ec2-hibinit-agent/commit/a2303d269610a6e7415c5045766da605eaa7e30f
+---
+ packaging/rhel/acpid.sleep.sh | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/packaging/rhel/acpid.sleep.sh b/packaging/rhel/acpid.sleep.sh
+index ca3db22..9b381f9 100755
+--- a/packaging/rhel/acpid.sleep.sh
++++ b/packaging/rhel/acpid.sleep.sh
+@@ -3,11 +3,14 @@
+ PATH=/sbin:/bin:/usr/bin
+ failed='false'
+ 
++# Hibernation selects the swapfile with highest priority. Since there may be
++# other swapfiles configured, ensure /swap is selected as hibernation
++# target by setting to maximum priority.
++swap_priority=32767
++
+ hibernate()
+ {
+-        swapon /swap
+-        systemctl hibernate
+-
++        swapon --priority=$swap_priority /swap && systemctl hibernate
+         if [ $? -ne 0 ]
+         then
+             logger "Hibernation failed, Sleeping 2 mins before retry"
+@@ -15,6 +18,7 @@ hibernate()
+         else
+             failed='false'
+         fi
++        swapoff /swap
+ }
+ 
+ case "$2" in
+@@ -26,6 +30,7 @@ case "$2" in
+           hibernate
+           if [ $failed == 'true' ];
+           then
++            swapoff /swap
+             sleep 2m
+           else
+            break
+-- 
+2.47.0
+

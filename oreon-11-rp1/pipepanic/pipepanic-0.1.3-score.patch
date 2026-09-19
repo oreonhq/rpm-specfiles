@@ -1,0 +1,12 @@
+diff -up pipepanic-0.1.3-source/main.h.orig pipepanic-0.1.3-source/main.h
+--- pipepanic-0.1.3-source/main.h.orig	2006-05-16 22:11:29.000000000 +0200
++++ pipepanic-0.1.3-source/main.h	2012-06-24 19:22:01.141693770 +0200
+@@ -61,7 +61,7 @@ Foundation, Inc., 51 Franklin Street, Fi
+ #define PREVIEWARRAYSIZE 3
+ #define POINTSARRAYSIZE 75
+ 
+-#define LEAKYPIPEVAL +50
++#define LEAKYPIPEVAL +100
+ #define NULLPIPEVAL 255
+ #define DEADPIPEVAL 253
+ #define FILLEDCOUNTERBASE 20

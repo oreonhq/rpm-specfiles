@@ -10,7 +10,7 @@
 %global data_version 1.24
 Name:           proj
 # Also check whether there is a new proj-data release when upgrading!
-Version:        9.8.1
+Version:        9.9.0
 Release:        1%{?dist}
 Summary:        Cartographic projection software (PROJ)
 

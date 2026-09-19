@@ -1,0 +1,67 @@
+#!/bin/bash
+set -x -e
+
+# Took this from rhpkg-simple internally owned by lsedlar@redhat.com
+pkgname=$(basename "$PWD")
+# If running in a git checkout, there will be a config file with url to the
+# remote. We can extract package namespace and name from it. If the file is
+# missing (which it should not really be), let's default to rpms/ namespace.
+ns_pkgname="rpms/$pkgname"
+if [ -r .git/config ]; then
+    url=$(grep " *url *= *" .git/config | cut -d= -f2- | tr -d ' ')
+    namespace=$(basename "$(dirname "$url")")
+    ns_pkgname="$namespace/$pkgname"
+fi
+
+if [ -d SPECS ]; then
+    # We are in the SIG/Exploded SRPM layout so call get_sources.sh
+    exec /usr/bin/get_sources.sh
+fi
+
+
+## This part is also from rhpkg-simple
+
+if [ -s sources ]; then
+    baseurl=https://sources.stream.centos.org/sources
+
+    # curl arguments:
+    #   -L          follow redirects
+    #   -H Pragma:  disable caching
+    #   -o          filename where to save results
+    #   -R          use timestamp from remote server
+    #   -S          display error if there is a problem
+    #   --fail      do now write HTML page when there is error
+    #   --retry     up to 5 retries for transient errors
+    #   --max-time  wait for up to 15 seconds on network error
+
+    # Read first word of first line. For old MD5 format it's the 32 character
+    # hash. Otherwise let's assume the sources have the BSD format where lines
+    # start with hash type.
+    hashtype="$(head -n1 sources | cut -d' ' -f1 | tr '[:upper:]' '[:lower:]')"
+    if [ "${#hashtype}" -ne 32 ]; then
+        # The format is
+        #   SHA512 (filename) = ABCDEF
+        # We don't care about the equals sign. We also assume that all hashes
+        # are of the same type, so we don't have to read it again for each
+        # line.
+        while read -r _ filename _ hash || [[ -n "$filename" && -n "$hash" ]]; do
+            if [ -z "$filename" ] || [ -z "$hash" ]; then
+                continue
+            fi
+            # Remove parenthesis around tarball name
+            filename=${filename#(}
+            tarball=${filename%)}
+            curl -L -H Pragma: -o "./$tarball" -R -S --fail --retry 5 "$baseurl/$ns_pkgname/$tarball/$hashtype/$hash/$tarball"
+        done < sources
+        "${hashtype}sum" -c sources
+    else
+        # Ok, we're working with MD5.
+        while read -r md5sum tarball || [[ -n "$md5sum" && -n "$tarball" ]]; do
+            if [ -z "$md5sum" ] || [ -z "$tarball" ]; then
+                continue
+            fi
+            curl -L -H Pragma: -o "./$tarball" -R -S --fail --retry 5 "$baseurl/$ns_pkgname/$tarball/$md5sum/$tarball"
+        done < sources
+        md5sum -c sources
+    fi
+fi

@@ -4,8 +4,8 @@
 
 Summary: A privileged helper for utmp/wtmp updates
 Name: libutempter
-Version: 1.2.1
-Release: 20%{?dist}
+Version: 1.2.3-alt1
+Release: 1%{?dist}
 License: LGPL-2.1-or-later AND LGPL-2.1-only AND BSD-2-Clause
 URL: https://ftp.altlinux.org/pub/people/ldv/utempter
 

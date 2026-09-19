@@ -1,8 +1,8 @@
 %global source0_hash none
 
-Version:        0.5.1
+Version:        0.5.3
 Name:           md4c
-Release:        5%{?dist}
+Release:        1%{?dist}
 Summary:        Markdown for C
 
 License:        MIT

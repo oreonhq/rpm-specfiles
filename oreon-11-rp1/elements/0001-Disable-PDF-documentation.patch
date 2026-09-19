@@ -1,0 +1,34 @@
+From dc5a205b2e6b7a2e30ecb9006760ad0b80691e83 Mon Sep 17 00:00:00 2001
+From: Alejandro Alvarez Ayllon <a.alvarezayllon@gmail.com>
+Date: Tue, 28 May 2024 13:41:59 +0000
+Subject: Disable PDF documentation
+
+---
+ cmake/doc/Doxyfile.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cmake/doc/Doxyfile.in b/cmake/doc/Doxyfile.in
+index 9b8c48f9..34791479 100644
+--- a/cmake/doc/Doxyfile.in
++++ b/cmake/doc/Doxyfile.in
+@@ -1918,7 +1918,7 @@ EXTRA_SEARCH_MAPPINGS  =
+ # If the GENERATE_LATEX tag is set to YES, doxygen will generate LaTeX output.
+ # The default value is: YES.
+ 
+-GENERATE_LATEX         = YES
++GENERATE_LATEX = NO
+ 
+ # The LATEX_OUTPUT tag is used to specify where the LaTeX docs will be put. If a
+ # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
+@@ -2055,7 +2055,7 @@ PDF_HYPERLINKS         = YES
+ # The default value is: YES.
+ # This tag requires that the tag GENERATE_LATEX is set to YES.
+ 
+-USE_PDFLATEX           = YES
++USE_PDFLATEX           = NO
+ 
+ # If the LATEX_BATCHMODE tag is set to YES, doxygen will add the \batchmode
+ # command to the generated LaTeX files. This will instruct LaTeX to keep running
+-- 
+2.45.1
+

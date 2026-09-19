@@ -1,0 +1,191 @@
+From 2220a51baeecbbd6a3ff7df3f76dfadbe698883a Mon Sep 17 00:00:00 2001
+From: Cristian Le <git@lecris.dev>
+Date: Thu, 24 Jul 2025 14:08:55 +0200
+Subject: [PATCH 1/2] Bump maximum CMake policy
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 522e77af..3881767a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.3)
++cmake_minimum_required(VERSION 3.3...4.0)
+ project(CombBLAS VERSION 2.0.0 LANGUAGES C CXX)
+ 
+ # require c++14
+
+From cb1fea29aa1d8e3468418ff94e42d275e8a87033 Mon Sep 17 00:00:00 2001
+From: Cristian Le <git@lecris.dev>
+Date: Thu, 24 Jul 2025 14:22:24 +0200
+Subject: [PATCH 2/2] Use GNUInstallDirs install paths
+
+---
+ CMakeLists.txt                        | 51 +++++++++++++--------------
+ graph500-1.2/generator/CMakeLists.txt | 16 ++++-----
+ usort/CMakeLists.txt                  | 16 ++++-----
+ 3 files changed, 38 insertions(+), 45 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3881767a..b7723903 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,6 +6,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
+ set(CMAKE_CXX_STANDARD_REQUIRED YES)
+ set(CMAKE_CXX_EXTENSIONS OFF)
+ 
++include(GNUInstallDirs)
++
+ # Main CombBLAS library
+ add_library(CombBLAS src/CommGrid.cpp src/mmio.c src/MPIType.cpp src/MPIOp.cpp src/MemoryPool.cpp src/hash.cpp)
+ 
+@@ -24,9 +26,12 @@ else()
+ endif()
+ 
+ # set include directories
+-target_include_directories(CombBLAS PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>)
+-target_include_directories(CombBLAS PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/psort-1.0/include> $<INSTALL_INTERFACE:include>)
+-target_include_directories(CombBLAS PRIVATE include/CombBLAS)
++target_include_directories(CombBLAS PUBLIC
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/psort-1.0/include>
++        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
++        PRIVATE include/CombBLAS
++)
+ 
+ # MPI and OpenMP dependencies
+ find_package(MPI REQUIRED)
+@@ -63,7 +68,7 @@ target_link_libraries(CombBLAS PUBLIC GraphGenlib)
+ #      modifications to CombBLAS and have the changes automatically recompiled for
+ #      dependent projects.
+ # Either way, we need to create a CombBLASConfig.cmake.
+-set(ConfigPackageLocation lib/cmake/CombBLAS)
++set(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/cmake/CombBLAS)
+ 
+ # Generate version number header
+ include(GenerateExportHeader)
+@@ -71,34 +76,21 @@ generate_export_header(CombBLAS)
+ set_target_properties(CombBLAS PROPERTIES VERSION ${CombBLAS_VERSION})
+ 
+ # installation
+-install(DIRECTORY include/ DESTINATION include)
+-install(DIRECTORY psort-1.0/include/ DESTINATION include)
+-install(TARGETS CombBLAS EXPORT CombBLASTargets
+-        LIBRARY DESTINATION lib
+-        ARCHIVE DESTINATION lib
+-        RUNTIME DESTINATION bin
+-        INCLUDES DESTINATION include
+-        )
++install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++install(DIRECTORY psort-1.0/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++install(TARGETS CombBLAS EXPORT CombBLASTargets)
+ 
+ include(CMakePackageConfigHelpers)
+ 
++configure_package_config_file(cmake/CombBLASConfig.cmake
++        "${CMAKE_CURRENT_BINARY_DIR}/CombBLAS/CombBLASConfig.cmake"
++        INSTALL_DESTINATION ${ConfigPackageLocation}
++)
+ write_basic_package_version_file(
+     "${CMAKE_CURRENT_BINARY_DIR}/CombBLAS/CombBLASConfigVersion.cmake"
+     VERSION ${CombBLAS_VERSION}
+     COMPATIBILITY AnyNewerVersion
+ )
+-
+-# The following commands allow for option 2.
+-export(EXPORT CombBLASTargets
+-       FILE "${CMAKE_CURRENT_BINARY_DIR}/CombBLAS/CombBLASTargets.cmake"
+-       NAMESPACE CombBLAS::
+-       )
+-configure_file(cmake/CombBLASConfig.cmake
+-               "${CMAKE_CURRENT_BINARY_DIR}/CombBLAS/CombBLASConfig.cmake"
+-               COPYONLY
+-               )
+-
+-# Allow for option 2
+ install(EXPORT CombBLASTargets
+         FILE
+         CombBLASTargets.cmake
+@@ -106,11 +98,16 @@ install(EXPORT CombBLASTargets
+         CombBLAS::
+         DESTINATION
+         ${ConfigPackageLocation}
+-        )
+-export(PACKAGE CombBLAS)
++)
++
++# The following command allow for option 2.
++export(EXPORT CombBLASTargets
++       FILE "${CMAKE_CURRENT_BINARY_DIR}/CombBLAS/CombBLASTargets.cmake"
++       NAMESPACE CombBLAS::
++       )
+ install(
+     FILES
+-    cmake/CombBLASConfig.cmake
++    "${CMAKE_CURRENT_BINARY_DIR}/CombBLAS/CombBLASConfig.cmake"
+     "${CMAKE_CURRENT_BINARY_DIR}/CombBLAS/CombBLASConfigVersion.cmake"
+     DESTINATION
+     ${ConfigPackageLocation}
+diff --git a/graph500-1.2/generator/CMakeLists.txt b/graph500-1.2/generator/CMakeLists.txt
+index bf08d307..32cfea16 100644
+--- a/graph500-1.2/generator/CMakeLists.txt
++++ b/graph500-1.2/generator/CMakeLists.txt
+@@ -1,16 +1,14 @@
+ # Top level directory has the include files
+ 
+ ADD_LIBRARY( GraphGenlib btrd_binomial_distribution.c splittable_mrg.c mrg_transitions.c graph_generator.c permutation_gen.c make_graph.c utils.c scramble_edges.c)
+-target_include_directories(GraphGenlib PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>)
+-target_include_directories(GraphGenlib PRIVATE include/graph500/generator)
++target_include_directories(GraphGenlib PUBLIC
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
++        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
++        PRIVATE include/graph500/generator
++)
+ if(CMAKE_C_COMPILER_ID STREQUAL "Intel")
+   target_compile_options(GraphGenlib PRIVATE "-restrict")
+ endif()
+ 
+-install(DIRECTORY include/ DESTINATION include)
+-install(TARGETS GraphGenlib EXPORT CombBLASTargets
+-  LIBRARY DESTINATION lib
+-  ARCHIVE DESTINATION lib
+-  RUNTIME DESTINATION bin
+-  INCLUDES DESTINATION include
+-)
++install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++install(TARGETS GraphGenlib EXPORT CombBLASTargets)
+diff --git a/usort/CMakeLists.txt b/usort/CMakeLists.txt
+index fb8d83a0..5b184ade 100755
+--- a/usort/CMakeLists.txt
++++ b/usort/CMakeLists.txt
+@@ -1,8 +1,11 @@
+ # Top level directory has the include files
+ 
+ add_library(Usortlib src/parUtils.cpp src/binUtils.cpp)
+-target_include_directories(Usortlib PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>)
+-target_include_directories(Usortlib PRIVATE include/usort)
++target_include_directories(Usortlib PUBLIC
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
++        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
++        PRIVATE include/usort
++)
+ 
+ if(TARGET MPI::MPI_CXX) # Use target if available (CMake >= 3.9)
+   target_link_libraries(Usortlib PUBLIC MPI::MPI_CXX)
+@@ -12,11 +15,6 @@ else()
+   target_include_directories(Usortlib PUBLIC "${MPI_CXX_INCLUDE_PATH}")
+ endif()
+ 
+-install(DIRECTORY include/ DESTINATION include)
+-install(TARGETS Usortlib EXPORT CombBLASTargets
+-        LIBRARY DESTINATION lib
+-        ARCHIVE DESTINATION lib
+-        RUNTIME DESTINATION bin
+-        INCLUDES DESTINATION include
+-        )
++install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++install(TARGETS Usortlib EXPORT CombBLASTargets)
+ 

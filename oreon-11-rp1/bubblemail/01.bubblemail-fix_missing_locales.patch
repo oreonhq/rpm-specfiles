@@ -1,0 +1,19 @@
+diff -Naur a/setup.py b/setup.py
+--- a/setup.py	2024-05-26 12:27:34.000000000 +0300
++++ b/setup.py	2025-08-05 13:31:25.696652896 +0300
+@@ -32,7 +32,6 @@
+     def run(self):
+         os.makedirs(BUILD_BIN_DIR, exist_ok=True)
+         # generate translations
+-        gen_locales()
+         build_py.run(self)
+         build_avatar_provider()
+         create_default_avatars()
+@@ -45,6 +44,7 @@
+         os.chmod(avatar_provider_bin, 0o755)
+ 
+ def get_files(src_path, ext):
++    gen_locales()
+     file_map = glob.glob(f'{src_path}/**/{PACKAGE_NAME}.{ext}', recursive=True)
+     root = src_path.split('/')[0]
+     path_map = map(lambda f:f.replace(root, 'share'), file_map)

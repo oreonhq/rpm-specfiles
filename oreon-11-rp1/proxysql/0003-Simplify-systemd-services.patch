@@ -1,0 +1,53 @@
+From 7d8c8e212df56fb4027e6a08063a6fec196dbfa8 Mon Sep 17 00:00:00 2001
+From: Igor Raits <igor.raits@gmail.com>
+Date: Sat, 18 May 2024 17:17:50 +0200
+Subject: [PATCH 3/6] Simplify systemd services
+
+---
+ systemd/system/proxysql-initial.service |  6 +++---
+ systemd/system/proxysql.service         | 11 ++---------
+ 2 files changed, 5 insertions(+), 12 deletions(-)
+
+diff --git a/systemd/system/proxysql-initial.service b/systemd/system/proxysql-initial.service
+index 55f34451..548e2ade 100644
+--- a/systemd/system/proxysql-initial.service
++++ b/systemd/system/proxysql-initial.service
+@@ -4,9 +4,9 @@ After=network.target
+ 
+ [Service]
+ Type=oneshot
+-ExecStartPre=/bin/systemctl set-environment PROXYSQL_OPTS="--initial"
+-ExecStart=/bin/systemctl start proxysql
+-ExecStartPost=/bin/systemctl unset-environment PROXYSQL_OPTS
++ExecStartPre=/usr/bin/systemctl set-environment PROXYSQL_OPTS="--initial"
++ExecStart=/usr/bin/systemctl start proxysql
++ExecStartPost=/usr/bin/systemctl unset-environment PROXYSQL_OPTS
+ RemainAfterExit=yes
+ 
+ [Install]
+diff --git a/systemd/system/proxysql.service b/systemd/system/proxysql.service
+index 6506a57b..5154b1e6 100644
+--- a/systemd/system/proxysql.service
++++ b/systemd/system/proxysql.service
+@@ -3,16 +3,9 @@ Description=High Performance Advanced Proxy for MySQL
+ After=network.target
+ 
+ [Service]
+-Type=forking
++Type=simple
+ RuntimeDirectory=proxysql
+-#PermissionsStartOnly=true
+-#ExecStartPre=/usr/bin/mkdir -p /var/run/proxysql /var/run/proxysql
+-#ExecStartPre=/usr/bin/chown -R proxysql: /var/run/proxysql/
+-ExecStart=/usr/bin/proxysql --idle-threads -c /etc/proxysql.cnf $PROXYSQL_OPTS
+-PIDFile=/var/lib/proxysql/proxysql.pid
+-#StandardError=null  # all output is in stderr
+-SyslogIdentifier=proxysql
+-Restart=no
++ExecStart=/usr/bin/proxysql --idle-threads -c /etc/proxysql.cnf -f $PROXYSQL_OPTS
+ User=proxysql
+ Group=proxysql
+ PermissionsStartOnly=true
+-- 
+2.45.0
+

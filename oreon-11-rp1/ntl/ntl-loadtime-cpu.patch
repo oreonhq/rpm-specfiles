@@ -1,0 +1,2278 @@
+--- ntl-11.6.0/doc/config.txt.orig	2025-11-07 10:30:52.000000000 -0700
++++ ntl-11.6.0/doc/config.txt	2025-11-12 14:31:37.377530563 -0700
+@@ -455,6 +455,7 @@ NTL_AVOID_BRANCHING=off
+ NTL_GF2X_NOINLINE=off
+ NTL_GF2X_ALTCODE=off
+ NTL_GF2X_ALTCODE1=off
++NTL_LOADTIME_CPU=off
+ 
+ 
+ # Here is a more detailed description of these variables.
+@@ -739,4 +740,8 @@ NTL_GF2X_ALTCODE1=off
+ 
+ # Yet another alternative implementation for GF2X multiplication.
+ 
++NTL_LOADTIME_CPU=off
++
++# switch to check CPU characteristics at load time and use routines
++# optimized for the executing CPU.
+ 
+--- ntl-11.6.0/include/NTL/ctools.h.orig	2025-11-07 10:30:51.000000000 -0700
++++ ntl-11.6.0/include/NTL/ctools.h	2025-11-18 15:45:59.877381411 -0700
+@@ -522,6 +522,77 @@ char *_ntl_make_aligned(char *p, long al
+ // The cache line size requirement is not critical for correctness,
+ // but can lead to better memory performance
+ 
++/* Determine CPU characteristics at runtime */
++extern __attribute__((visibility ("hidden"))) bool _ntl_cpu_inited;
++extern __attribute__((visibility ("hidden"))) bool _ntl_have_pclmul;
++extern __attribute__((visibility ("hidden"))) bool _ntl_have_ssse3;
++extern __attribute__((visibility ("hidden"))) bool _ntl_have_avx;
++extern __attribute__((visibility ("hidden"))) bool _ntl_have_fma;
++extern __attribute__((visibility ("hidden"))) bool _ntl_have_avx2;
++extern __attribute__((visibility ("hidden"))) void _ntl_get_cpu_features(void);
++
++#ifdef NTL_LOADTIME_CPU
++#if !defined(__x86_64__)
++#error Runtime CPU support is only available on x86_64.
++#endif
++#ifndef __GNUC__
++#error Runtime CPU support is only available with GCC.
++#endif
++#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)
++#error Runtime CPU support is only available with GCC 4.6 or later.
++#endif
++
++#define BASE_FUNC(type,name) static type name##_base
++#define TARGET_FUNC(arch,suffix,type,name)                              \
++   static type __attribute__((target (arch))) name##_##suffix
++#define PCLMUL_FUNC(type,name) TARGET_FUNC("pclmul",pclmul,type,name)
++#define SSSE3_FUNC(type,name) TARGET_FUNC("ssse3",ssse3,type,name)
++#define AVX_FUNC(type,name) TARGET_FUNC("avx,ssse3",avx,type,name)
++#define FMA_FUNC(type,name) TARGET_FUNC("fma,avx,ssse3",fma,type,name)
++#define AVX2_FUNC(type,name) TARGET_FUNC("avx2,fma,avx,ssse3",avx2,type,name)
++#define PCLMUL_RESOLVER(st,type,name,params)                            \
++   extern "C" {                                                         \
++      static type (*resolve_##name(void)) params {                      \
++         _ntl_get_cpu_features();                                       \
++         return _ntl_have_pclmul ? &name##_pclmul : &name##_base;       \
++      }                                                                 \
++   }                                                                    \
++   st type __attribute__((ifunc ("resolve_" #name))) name params
++#define SSSE3_RESOLVER(st,type,name,params)                             \
++   extern "C" {                                                         \
++      static type (*resolve_##name(void)) params {                      \
++         _ntl_get_cpu_features();                                       \
++         if (_ntl_have_avx2) return &name##_avx2;                       \
++         if (_ntl_have_ssse3) return &name##_ssse3;                     \
++         return &name##_base;                                           \
++      }                                                                 \
++   }                                                                    \
++   st type __attribute__((ifunc ("resolve_" #name))) name params
++#define AVX_RESOLVER(st,type,name,params)                               \
++   extern "C" {                                                         \
++      static type (*resolve_##name(void)) params {                      \
++         _ntl_get_cpu_features();                                       \
++         return _ntl_have_avx ? &name##_avx : &name##_base;             \
++      }                                                                 \
++   }                                                                    \
++   st type __attribute__((ifunc ("resolve_" #name))) name params
++#define FMA_RESOLVER(st,type,name,params)                               \
++   extern "C" {                                                         \
++      static type (*resolve_##name(void)) params {                      \
++         _ntl_get_cpu_features();                                       \
++         return _ntl_have_fma ? &name##_fma : &name##_avx;              \
++      }                                                                 \
++   }                                                                    \
++   st type __attribute__((ifunc ("resolve_" #name))) name params
++#define AVX2_RESOLVER(st,type,name,params)                              \
++   extern "C" {                                                         \
++      static type (*resolve_##name(void)) params {                      \
++         _ntl_get_cpu_features();                                       \
++         return _ntl_have_avx2 ? &name##_avx2 : &name##_fma;            \
++      }                                                                 \
++   }                                                                    \
++   st type __attribute__((ifunc ("resolve_" #name))) name params
++#endif
+ 
+ 
+ #ifdef NTL_HAVE_BUILTIN_CLZL
+--- ntl-11.6.0/include/NTL/MatPrime.h.orig	2025-11-07 10:30:52.000000000 -0700
++++ ntl-11.6.0/include/NTL/MatPrime.h	2025-11-12 14:36:29.485881470 -0700
+@@ -20,7 +20,7 @@ NTL_OPEN_NNS
+ 
+ 
+ 
+-#ifdef NTL_HAVE_AVX
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
+ #define NTL_MatPrime_NBITS (23)
+ #else
+ #define NTL_MatPrime_NBITS NTL_SP_NBITS
+--- ntl-11.6.0/include/NTL/REPORT_ALL_FEATURES.h.orig	2025-11-07 10:30:52.000000000 -0700
++++ ntl-11.6.0/include/NTL/REPORT_ALL_FEATURES.h	2025-11-12 14:38:32.924149824 -0700
+@@ -63,3 +63,7 @@
+    std::cerr << "NTL_HAVE_KMA\n";
+ #endif
+ 
++#ifdef NTL_LOADTIME_CPU
++   std::cerr << "NTL_LOADTIME_CPU\n";
++#endif
++
+--- ntl-11.6.0/include/NTL/simde_avx.h.orig	2025-11-07 10:30:52.000000000 -0700
++++ ntl-11.6.0/include/NTL/simde_avx.h	2025-11-18 10:58:50.214292271 -0700
+@@ -1,7 +1,7 @@
+ #ifndef NTL_SIMDE_AVX__H
+ #define NTL_SIMDE_AVX__H
+ 
+-#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX__))
++#if (defined(__GNUC__) && defined(__x86_64__) && (defined(__AVX__) || defined(NTL_LOADTIME_CPU)))
+ 
+ // On x86, just include the real AVX headers
+ #include <immintrin.h>
+--- ntl-11.6.0/include/NTL/simde_fma.h.orig	2025-11-07 10:30:52.000000000 -0700
++++ ntl-11.6.0/include/NTL/simde_fma.h	2025-11-18 11:00:52.964849893 -0700
+@@ -1,7 +1,7 @@
+ #ifndef NTL_SIMDE_FMA__H
+ #define NTL_SIMDE_FMA__H
+ 
+-#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX2__))
++#if (defined(__GNUC__) && defined(__x86_64__) && (defined(__AVX2__) || defined(NTL_LOADTIME_CPU)))
+ 
+ // On x86, just include the real AVX headers
+ #include <immintrin.h>
+--- ntl-11.6.0/include/NTL/simde_pclmul.h.orig	2025-11-07 10:30:52.000000000 -0700
++++ ntl-11.6.0/include/NTL/simde_pclmul.h	2025-11-17 21:21:50.687274824 -0700
+@@ -1,13 +1,13 @@
+ #ifndef NTL_SIMDE_PCLMUL__H
+ #define NTL_SIMDE_PCLMUL__H
+ 
+-#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX__))
++#if (defined(__GNUC__) && defined(__x86_64__) && (defined(__AVX__) || defined(NTL_LOADTIME_CPU)))
+ 
+ #include <immintrin.h>
+ 
+ namespace {
+ 
+-inline void
++inline void __attribute__((target ("pclmul")))
+ pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
+ {
+    __m128i aa = _mm_setr_epi64( _mm_cvtsi64_m64(a), _mm_cvtsi64_m64(0));
+--- ntl-11.6.0/src/cfile.orig	2025-11-07 10:30:51.000000000 -0700
++++ ntl-11.6.0/src/cfile	2025-11-12 14:39:58.979162834 -0700
+@@ -445,6 +445,19 @@ to be defined.  Of course,  to unset a f
+ 
+ #endif
+ 
++#if @{NTL_LOADTIME_CPU}
++#define NTL_LOADTIME_CPU
++
++/*
++ * With this flag enabled, detect advanced CPU features at load time instead
++ * of at compile time.  This flag is intended for distributions, so that they
++ * can compile for the lowest common denominator CPU, but still support newer
++ * CPUs.
++ *
++ * This flag is useful only on x86_64 platforms with gcc 4.8 or later.
++ */
++
++#endif
+ 
+ 
+ #if @{NTL_CRT_ALTCODE}
+--- ntl-11.6.0/src/DispSettings.cpp.orig	2025-11-07 10:30:51.000000000 -0700
++++ ntl-11.6.0/src/DispSettings.cpp	2025-11-12 14:40:43.202324866 -0700
+@@ -198,6 +198,11 @@ cout << "Performance Options:\n";
+ #endif
+ 
+ 
++#ifdef NTL_LOADTIME_CPU
++   cout << "NTL_LOADTIME_CPU\n";
++#endif
++
++
+    cout << "***************************/\n";
+    cout << "\n\n";
+ 
+--- ntl-11.6.0/src/DoConfig.orig	2025-11-07 10:30:51.000000000 -0700
++++ ntl-11.6.0/src/DoConfig	2025-11-17 14:37:16.144048738 -0700
+@@ -1,6 +1,7 @@
+ # This is a perl script, invoked from a shell
+ 
+ use warnings;  # this doesn't work on older versions of perl
++use Config;
+ 
+ #
+ #
+@@ -118,6 +119,7 @@ system("echo '*** CompilerOutput.log ***
+ 'NTL_GF2X_NOINLINE'       => 'off',
+ 'NTL_GF2X_ALTCODE'        => 'off',
+ 'NTL_GF2X_ALTCODE1'       => 'off',
++'NTL_LOADTIME_CPU'        => 'off',
+ 
+ 'NTL_RANDOM_AES256CTR'    => 'off',
+ 
+@@ -722,6 +724,14 @@ else {
+    $MakeSub{'NODARWIN'} = '';
+ }
+ 
++# special processing: NTL_LOADTIME_CPU on x86/x86_64 only and => NTL_GF2X_NOINLINE
++
++if ($ConfigFlag{'NTL_LOADTIME_CPU'} ne 'off') {
++   if (!($Config{archname} =~ /x86_64/)) {
++      die "Error: NTL_LOADTIME_CPU currently only available with x86_64...sorry\n";
++   }
++   $ConfigSub{'NTL_GF2X_NOINLINE'} = 1;
++}
+ 
+ 
+ 
+--- ntl-11.6.0/src/GF2EX.cpp.orig	2025-11-07 10:30:50.000000000 -0700
++++ ntl-11.6.0/src/GF2EX.cpp	2025-11-17 15:01:19.647268945 -0700
+@@ -801,7 +801,7 @@ void mul(GF2EX& c, const GF2EX& a, const
+ 
+    if (GF2E::WordLength() <= 1) use_kron_mul = true;
+ 
+-#if (defined(NTL_GF2X_LIB) && defined(NTL_HAVE_PCLMUL))
++#if (defined(NTL_GF2X_LIB) && (defined(NTL_HAVE_PCLMUL) || defined(NTL_LOADTIME_CPU)))
+    // With gf2x library and pclmul, KronMul is better in a larger range, but
+    // it is very hard to characterize that range.  The following is very
+    // conservative.
+--- ntl-11.6.0/src/GF2X1.cpp.orig	2025-11-07 10:30:50.000000000 -0700
++++ ntl-11.6.0/src/GF2X1.cpp	2025-11-12 14:44:58.511513910 -0700
+@@ -18,7 +18,7 @@
+ // simple scaling factor for some crossover points:
+ // we use a lower crossover of the underlying multiplication
+ // is faster  
+-#if (defined(NTL_GF2X_LIB) || defined(NTL_HAVE_PCLMUL))
++#if (defined(NTL_GF2X_LIB) || defined(NTL_HAVE_PCLMUL) || defined(NTL_LOADTIME_CPU))
+ #define XOVER_SCALE (1L)
+ #else
+ #define XOVER_SCALE (2L)
+--- ntl-11.6.0/src/GF2X.cpp.orig	2025-11-07 10:30:50.000000000 -0700
++++ ntl-11.6.0/src/GF2X.cpp	2025-11-18 10:39:31.812136746 -0700
+@@ -11,7 +11,7 @@
+ #include <gf2x.h>
+ #endif
+ 
+-#ifdef NTL_HAVE_PCLMUL
++#if defined(NTL_HAVE_PCLMUL) || defined(NTL_LOADTIME_CPU)
+ 
+ #define NTL_INLINE inline
+ 
+@@ -547,6 +547,22 @@ void add(GF2X& x, const GF2X& a, const G
+ 
+ 
+ 
++#ifdef NTL_LOADTIME_CPU
++
++BASE_FUNC(void,mul1)(_ntl_ulong *c, _ntl_ulong a, _ntl_ulong b)
++{
++   NTL_EFF_BB_MUL_CODE0
++}
++
++PCLMUL_FUNC(void,mul1)(_ntl_ulong *c, _ntl_ulong a, _ntl_ulong b)
++{
++   pclmul_mul1(c, a, b);
++}
++
++PCLMUL_RESOLVER(static,void,mul1,(_ntl_ulong *c, _ntl_ulong a, _ntl_ulong b));
++
++#else
++
+ static NTL_INLINE
+ void mul1(_ntl_ulong *c, _ntl_ulong a, _ntl_ulong b)
+ {
+@@ -559,6 +575,7 @@ NTL_EFF_BB_MUL_CODE0
+ 
+ }
+ 
++#endif
+ 
+ #ifdef NTL_GF2X_NOINLINE
+ 
+@@ -583,6 +600,35 @@ NTL_EFF_BB_MUL_CODE0
+ #endif
+ 
+ 
++#ifdef NTL_LOADTIME_CPU
++
++BASE_FUNC(void,Mul1)
++(_ntl_ulong *cp, const _ntl_ulong *bp, long sb, _ntl_ulong a)
++{
++   NTL_EFF_BB_MUL_CODE1
++}
++
++PCLMUL_FUNC(void,Mul1)
++(_ntl_ulong *cp, const _ntl_ulong *bp, long sb, _ntl_ulong a)
++{
++   long i;
++   unsigned long carry, prod[2];
++
++   carry = 0;
++   for (i = 0; i < sb; i++) {
++      pclmul_mul1(prod, bp[i], a);
++      cp[i] = carry ^ prod[0];
++      carry = prod[1];
++   }
++
++   cp[sb] = carry;
++}
++
++PCLMUL_RESOLVER(static,void,Mul1,
++    (_ntl_ulong *cp, const _ntl_ulong *bp, long sb, _ntl_ulong a));
++
++#else
++
+ static 
+ void Mul1(_ntl_ulong *cp, const _ntl_ulong *bp, long sb, _ntl_ulong a)
+ {
+@@ -611,6 +657,37 @@ NTL_EFF_BB_MUL_CODE1
+ // warning #13200: No EMMS instruction before return
+ }
+ 
++#endif
++
++#ifdef NTL_LOADTIME_CPU
++
++BASE_FUNC(void,AddMul1)
++(_ntl_ulong *cp, const _ntl_ulong* bp, long sb, _ntl_ulong a)
++{
++   NTL_EFF_BB_MUL_CODE2
++}
++
++PCLMUL_FUNC(void,AddMul1)
++(_ntl_ulong *cp, const _ntl_ulong* bp, long sb, _ntl_ulong a)
++{
++   long i;
++   unsigned long carry, prod[2];
++
++   carry = 0;
++   for (i = 0; i < sb; i++) {
++      pclmul_mul1(prod, bp[i], a);
++      cp[i] ^= carry ^ prod[0];
++      carry = prod[1];
++   }
++
++   cp[sb] ^= carry;
++}
++
++PCLMUL_RESOLVER(static,void,AddMul1,
++    (_ntl_ulong *cp, const _ntl_ulong* bp, long sb, _ntl_ulong a));
++
++#else
++
+ static 
+ void AddMul1(_ntl_ulong *cp, const _ntl_ulong* bp, long sb, _ntl_ulong a)
+ {
+@@ -639,6 +716,36 @@ NTL_EFF_BB_MUL_CODE2
+ 
+ }
+ 
++#endif
++
++#ifdef NTL_LOADTIME_CPU
++
++BASE_FUNC(void,Mul1_short)
++(_ntl_ulong *cp, const _ntl_ulong *bp, long sb, _ntl_ulong a)
++{
++   NTL_EFF_SHORT_BB_MUL_CODE1
++}
++
++PCLMUL_FUNC(void,Mul1_short)
++(_ntl_ulong *cp, const _ntl_ulong *bp, long sb, _ntl_ulong a)
++{
++   long i;
++   unsigned long carry, prod[2];
++
++   carry = 0;
++   for (i = 0; i < sb; i++) {
++      pclmul_mul1(prod, bp[i], a);
++      cp[i] = carry ^ prod[0];
++      carry = prod[1];
++   }
++
++   cp[sb] = carry;
++}
++
++PCLMUL_RESOLVER(static,void,Mul1_short,
++    (_ntl_ulong *cp, const _ntl_ulong *bp, long sb, _ntl_ulong a));
++
++#else
+ 
+ static 
+ void Mul1_short(_ntl_ulong *cp, const _ntl_ulong *bp, long sb, _ntl_ulong a)
+@@ -668,9 +775,25 @@ NTL_EFF_SHORT_BB_MUL_CODE1
+ // warning #13200: No EMMS instruction before return
+ }
+ 
++#endif
+ 
+ 
+ 
++#ifdef NTL_LOADTIME_CPU
++
++BASE_FUNC(void,mul_half)(_ntl_ulong *c, _ntl_ulong a, _ntl_ulong b)
++{
++   NTL_EFF_HALF_BB_MUL_CODE0
++}
++
++PCLMUL_FUNC(void,mul_half)(_ntl_ulong *c, _ntl_ulong a, _ntl_ulong b)
++{
++   pclmul_mul1(c, a, b);
++}
++
++PCLMUL_RESOLVER(static,void,mul_half,(_ntl_ulong *c, _ntl_ulong a, _ntl_ulong b));
++
++#else
+ 
+ static 
+ void mul_half(_ntl_ulong *c, _ntl_ulong a, _ntl_ulong b)
+@@ -685,6 +808,7 @@ NTL_EFF_HALF_BB_MUL_CODE0
+ 
+ }
+ 
++#endif
+ 
+ // mul2...mul8 hard-code 2x2...8x8 word multiplies.
+ // I adapted these routines from LiDIA (except mul3, see below).
+@@ -1602,6 +1726,58 @@ static const _ntl_ulong sqrtab[256] = {
+ 
+ 
+ 
++#ifdef NTL_LOADTIME_CPU
++
++BASE_FUNC(void,sqr)(GF2X& c, const GF2X& a)
++{
++   long sa = a.xrep.length();
++   if (sa <= 0) {
++      clear(c);
++      return;
++   }
++
++   c.xrep.SetLength(sa << 1);
++   _ntl_ulong *cp = c.xrep.elts();
++   const _ntl_ulong *ap = a.xrep.elts();
++
++   for (long i = sa-1; i >= 0; i--) {
++      _ntl_ulong *c = cp + (i << 1);
++      _ntl_ulong a = ap[i];
++      _ntl_ulong hi, lo;
++
++      NTL_BB_SQR_CODE
++
++      c[0] = lo;
++      c[1] = hi;
++   }
++
++   c.normalize();
++   return;
++}
++
++PCLMUL_FUNC(void,sqr)(GF2X& c, const GF2X& a)
++{
++   long sa = a.xrep.length();
++   if (sa <= 0) {
++      clear(c);
++      return;
++   }
++
++   c.xrep.SetLength(sa << 1);
++   _ntl_ulong *cp = c.xrep.elts();
++   const _ntl_ulong *ap = a.xrep.elts();
++
++   for (long i = sa-1; i >= 0; i--)
++      pclmul_mul1 (cp + (i << 1), ap[i], ap[i]);
++
++   c.normalize();
++   return;
++}
++
++PCLMUL_RESOLVER(,void,sqr,(GF2X& c, const GF2X& a));
++
++#else
++
+ static inline
+ void sqr1(_ntl_ulong *c, _ntl_ulong a)
+ {
+@@ -1642,6 +1818,7 @@ void sqr(GF2X& c, const GF2X& a)
+    return;
+ }
+ 
++#endif
+ 
+ 
+ void LeftShift(GF2X& c, const GF2X& a, long n)
+--- ntl-11.6.0/src/InitSettings.cpp.orig	2025-11-07 10:30:51.000000000 -0700
++++ ntl-11.6.0/src/InitSettings.cpp	2025-11-12 15:21:45.357531458 -0700
+@@ -198,6 +198,12 @@ int main()
+    cout << "NTL_RANGE_CHECK=0\n";
+ #endif
+ 
++#ifdef NTL_LOADTIME_CPU
++   cout << "NTL_LOADTIME_CPU=1\n";
++#else
++   cout << "NTL_LOADTIME_CPU=0\n";
++#endif
++
+ 
+ 
+ // the following are not actual config flags, but help
+--- ntl-11.6.0/src/mat_lzz_p.cpp.orig	2025-11-07 10:30:50.000000000 -0700
++++ ntl-11.6.0/src/mat_lzz_p.cpp	2025-11-19 13:36:58.246961592 -0700
+@@ -6,15 +6,22 @@
+ #include <NTL/BasicThreadPool.h>
+ 
+ 
++#ifdef NTL_LOADTIME_CPU
++#include <NTL/simde_avx.h>
++#include <NTL/simde_fma.h>
++#define AVX_ACTIVE _ntl_have_avx
++#else
+ 
+ #ifdef NTL_HAVE_AVX
+ #include <NTL/simde_avx.h>
++#define AVX_ACTIVE 1
+ #endif
+ 
+ 
+ #ifdef NTL_HAVE_FMA
+ #include <NTL/simde_fma.h>
+ #endif
++#endif
+ 
+ 
+ NTL_START_IMPL
+@@ -640,7 +647,7 @@ void mul(mat_zz_p& X, const mat_zz_p& A,
+ 
+ #ifdef NTL_HAVE_LL_TYPE
+ 
+-#ifdef NTL_HAVE_AVX
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
+ 
+ #define MAX_DBL_INT ((1L << NTL_DOUBLE_PRECISION)-1)
+ // max int representable exactly as a double
+@@ -654,10 +661,12 @@ void mul(mat_zz_p& X, const mat_zz_p& A,
+ 
+ 
+ // MUL_ADD(a, b, c): a += b*c
++#define FMA_MUL_ADD(a, b, c) a = _mm256_fmadd_pd(b, c, a) 
++#define AVX_MUL_ADD(a, b, c) a = _mm256_add_pd(a, _mm256_mul_pd(b, c))
+ #ifdef NTL_HAVE_FMA
+-#define MUL_ADD(a, b, c) a = _mm256_fmadd_pd(b, c, a) 
++#define MUL_ADD(a, b, c) FMA_MUL_ADD(a, b, c)
+ #else
+-#define MUL_ADD(a, b, c) a = _mm256_add_pd(a, _mm256_mul_pd(b, c))
++#define MUL_ADD(a, b, c) AVX_MUL_ADD(a, b, c)
+ #endif
+ 
+ 
+@@ -937,6 +946,94 @@ void muladd3_by_16(double *x, const doub
+ 
+ 
+ #else
++#if defined(NTL_LOADTIME_CPU)
++
++AVX_FUNC(void,muladd1_by_32)
++(double *x, const double *a, const double *b, long n)
++{
++   __m256d avec, bvec;
++
++
++   __m256d acc0=_mm256_load_pd(x + 0*4);
++   __m256d acc1=_mm256_load_pd(x + 1*4);
++   __m256d acc2=_mm256_load_pd(x + 2*4);
++   __m256d acc3=_mm256_load_pd(x + 3*4);
++   __m256d acc4=_mm256_load_pd(x + 4*4);
++   __m256d acc5=_mm256_load_pd(x + 5*4);
++   __m256d acc6=_mm256_load_pd(x + 6*4);
++   __m256d acc7=_mm256_load_pd(x + 7*4);
++
++
++   for (long i = 0; i < n; i++) {
++      avec = _mm256_broadcast_sd(a); a++;
++
++
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc0, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc1, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc2, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc3, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc4, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc5, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc6, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc7, avec, bvec);
++   }
++
++
++   _mm256_store_pd(x + 0*4, acc0);
++   _mm256_store_pd(x + 1*4, acc1);
++   _mm256_store_pd(x + 2*4, acc2);
++   _mm256_store_pd(x + 3*4, acc3);
++   _mm256_store_pd(x + 4*4, acc4);
++   _mm256_store_pd(x + 5*4, acc5);
++   _mm256_store_pd(x + 6*4, acc6);
++   _mm256_store_pd(x + 7*4, acc7);
++}
++
++FMA_FUNC(void,muladd1_by_32)
++(double *x, const double *a, const double *b, long n)
++{
++   __m256d avec, bvec;
++
++
++   __m256d acc0=_mm256_load_pd(x + 0*4);
++   __m256d acc1=_mm256_load_pd(x + 1*4);
++   __m256d acc2=_mm256_load_pd(x + 2*4);
++   __m256d acc3=_mm256_load_pd(x + 3*4);
++   __m256d acc4=_mm256_load_pd(x + 4*4);
++   __m256d acc5=_mm256_load_pd(x + 5*4);
++   __m256d acc6=_mm256_load_pd(x + 6*4);
++   __m256d acc7=_mm256_load_pd(x + 7*4);
++
++
++   for (long i = 0; i < n; i++) {
++      avec = _mm256_broadcast_sd(a); a++;
++
++
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc0, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc1, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc2, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc3, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc4, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc5, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc6, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc7, avec, bvec);
++   }
++
++
++   _mm256_store_pd(x + 0*4, acc0);
++   _mm256_store_pd(x + 1*4, acc1);
++   _mm256_store_pd(x + 2*4, acc2);
++   _mm256_store_pd(x + 3*4, acc3);
++   _mm256_store_pd(x + 4*4, acc4);
++   _mm256_store_pd(x + 5*4, acc5);
++   _mm256_store_pd(x + 6*4, acc6);
++   _mm256_store_pd(x + 7*4, acc7);
++}
++
++FMA_RESOLVER(static,void,muladd1_by_32,
++   (double *x, const double *a, const double *b, long n));
++
++#else
+ 
+ static
+ void muladd1_by_32(double *x, const double *a, const double *b, long n)
+@@ -979,6 +1076,167 @@ void muladd1_by_32(double *x, const doub
+    _mm256_store_pd(x + 7*4, acc7);
+ }
+ 
++#endif
++
++#ifdef NTL_LOADTIME_CPU
++
++AVX_FUNC(void,muladd2_by_32)
++(double *x, const double *a, const double *b, long n)
++{
++   __m256d avec0, avec1, bvec;
++   __m256d acc00, acc01, acc02, acc03;
++   __m256d acc10, acc11, acc12, acc13;
++
++
++   // round 0
++
++   acc00=_mm256_load_pd(x + 0*4 + 0*MAT_BLK_SZ);
++   acc01=_mm256_load_pd(x + 1*4 + 0*MAT_BLK_SZ);
++   acc02=_mm256_load_pd(x + 2*4 + 0*MAT_BLK_SZ);
++   acc03=_mm256_load_pd(x + 3*4 + 0*MAT_BLK_SZ);
++
++   acc10=_mm256_load_pd(x + 0*4 + 1*MAT_BLK_SZ);
++   acc11=_mm256_load_pd(x + 1*4 + 1*MAT_BLK_SZ);
++   acc12=_mm256_load_pd(x + 2*4 + 1*MAT_BLK_SZ);
++   acc13=_mm256_load_pd(x + 3*4 + 1*MAT_BLK_SZ);
++
++   for (long i = 0; i < n; i++) {
++      avec0 = _mm256_broadcast_sd(&a[i]);
++      avec1 = _mm256_broadcast_sd(&a[i+MAT_BLK_SZ]);
++
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4]); AVX_MUL_ADD(acc00, avec0, bvec); AVX_MUL_ADD(acc10, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4]); AVX_MUL_ADD(acc01, avec0, bvec); AVX_MUL_ADD(acc11, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4]); AVX_MUL_ADD(acc02, avec0, bvec); AVX_MUL_ADD(acc12, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4]); AVX_MUL_ADD(acc03, avec0, bvec); AVX_MUL_ADD(acc13, avec1, bvec);
++   }
++
++
++   _mm256_store_pd(x + 0*4 + 0*MAT_BLK_SZ, acc00);
++   _mm256_store_pd(x + 1*4 + 0*MAT_BLK_SZ, acc01);
++   _mm256_store_pd(x + 2*4 + 0*MAT_BLK_SZ, acc02);
++   _mm256_store_pd(x + 3*4 + 0*MAT_BLK_SZ, acc03);
++
++   _mm256_store_pd(x + 0*4 + 1*MAT_BLK_SZ, acc10);
++   _mm256_store_pd(x + 1*4 + 1*MAT_BLK_SZ, acc11);
++   _mm256_store_pd(x + 2*4 + 1*MAT_BLK_SZ, acc12);
++   _mm256_store_pd(x + 3*4 + 1*MAT_BLK_SZ, acc13);
++
++   // round 1
++
++   acc00=_mm256_load_pd(x + 4*4 + 0*MAT_BLK_SZ);
++   acc01=_mm256_load_pd(x + 5*4 + 0*MAT_BLK_SZ);
++   acc02=_mm256_load_pd(x + 6*4 + 0*MAT_BLK_SZ);
++   acc03=_mm256_load_pd(x + 7*4 + 0*MAT_BLK_SZ);
++
++   acc10=_mm256_load_pd(x + 4*4 + 1*MAT_BLK_SZ);
++   acc11=_mm256_load_pd(x + 5*4 + 1*MAT_BLK_SZ);
++   acc12=_mm256_load_pd(x + 6*4 + 1*MAT_BLK_SZ);
++   acc13=_mm256_load_pd(x + 7*4 + 1*MAT_BLK_SZ);
++
++   for (long i = 0; i < n; i++) {
++      avec0 = _mm256_broadcast_sd(&a[i]);
++      avec1 = _mm256_broadcast_sd(&a[i+MAT_BLK_SZ]);
++
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4+MAT_BLK_SZ/2]); AVX_MUL_ADD(acc00, avec0, bvec); AVX_MUL_ADD(acc10, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4+MAT_BLK_SZ/2]); AVX_MUL_ADD(acc01, avec0, bvec); AVX_MUL_ADD(acc11, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4+MAT_BLK_SZ/2]); AVX_MUL_ADD(acc02, avec0, bvec); AVX_MUL_ADD(acc12, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4+MAT_BLK_SZ/2]); AVX_MUL_ADD(acc03, avec0, bvec); AVX_MUL_ADD(acc13, avec1, bvec);
++   }
++
++
++   _mm256_store_pd(x + 4*4 + 0*MAT_BLK_SZ, acc00);
++   _mm256_store_pd(x + 5*4 + 0*MAT_BLK_SZ, acc01);
++   _mm256_store_pd(x + 6*4 + 0*MAT_BLK_SZ, acc02);
++   _mm256_store_pd(x + 7*4 + 0*MAT_BLK_SZ, acc03);
++
++   _mm256_store_pd(x + 4*4 + 1*MAT_BLK_SZ, acc10);
++   _mm256_store_pd(x + 5*4 + 1*MAT_BLK_SZ, acc11);
++   _mm256_store_pd(x + 6*4 + 1*MAT_BLK_SZ, acc12);
++   _mm256_store_pd(x + 7*4 + 1*MAT_BLK_SZ, acc13);
++
++}
++
++FMA_FUNC(void,muladd2_by_32)
++(double *x, const double *a, const double *b, long n)
++{
++   __m256d avec0, avec1, bvec;
++   __m256d acc00, acc01, acc02, acc03;
++   __m256d acc10, acc11, acc12, acc13;
++
++
++   // round 0
++
++   acc00=_mm256_load_pd(x + 0*4 + 0*MAT_BLK_SZ);
++   acc01=_mm256_load_pd(x + 1*4 + 0*MAT_BLK_SZ);
++   acc02=_mm256_load_pd(x + 2*4 + 0*MAT_BLK_SZ);
++   acc03=_mm256_load_pd(x + 3*4 + 0*MAT_BLK_SZ);
++
++   acc10=_mm256_load_pd(x + 0*4 + 1*MAT_BLK_SZ);
++   acc11=_mm256_load_pd(x + 1*4 + 1*MAT_BLK_SZ);
++   acc12=_mm256_load_pd(x + 2*4 + 1*MAT_BLK_SZ);
++   acc13=_mm256_load_pd(x + 3*4 + 1*MAT_BLK_SZ);
++
++   for (long i = 0; i < n; i++) {
++      avec0 = _mm256_broadcast_sd(&a[i]);
++      avec1 = _mm256_broadcast_sd(&a[i+MAT_BLK_SZ]);
++
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4]); FMA_MUL_ADD(acc00, avec0, bvec); FMA_MUL_ADD(acc10, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4]); FMA_MUL_ADD(acc01, avec0, bvec); FMA_MUL_ADD(acc11, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4]); FMA_MUL_ADD(acc02, avec0, bvec); FMA_MUL_ADD(acc12, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4]); FMA_MUL_ADD(acc03, avec0, bvec); FMA_MUL_ADD(acc13, avec1, bvec);
++   }
++
++
++   _mm256_store_pd(x + 0*4 + 0*MAT_BLK_SZ, acc00);
++   _mm256_store_pd(x + 1*4 + 0*MAT_BLK_SZ, acc01);
++   _mm256_store_pd(x + 2*4 + 0*MAT_BLK_SZ, acc02);
++   _mm256_store_pd(x + 3*4 + 0*MAT_BLK_SZ, acc03);
++
++   _mm256_store_pd(x + 0*4 + 1*MAT_BLK_SZ, acc10);
++   _mm256_store_pd(x + 1*4 + 1*MAT_BLK_SZ, acc11);
++   _mm256_store_pd(x + 2*4 + 1*MAT_BLK_SZ, acc12);
++   _mm256_store_pd(x + 3*4 + 1*MAT_BLK_SZ, acc13);
++
++   // round 1
++
++   acc00=_mm256_load_pd(x + 4*4 + 0*MAT_BLK_SZ);
++   acc01=_mm256_load_pd(x + 5*4 + 0*MAT_BLK_SZ);
++   acc02=_mm256_load_pd(x + 6*4 + 0*MAT_BLK_SZ);
++   acc03=_mm256_load_pd(x + 7*4 + 0*MAT_BLK_SZ);
++
++   acc10=_mm256_load_pd(x + 4*4 + 1*MAT_BLK_SZ);
++   acc11=_mm256_load_pd(x + 5*4 + 1*MAT_BLK_SZ);
++   acc12=_mm256_load_pd(x + 6*4 + 1*MAT_BLK_SZ);
++   acc13=_mm256_load_pd(x + 7*4 + 1*MAT_BLK_SZ);
++
++   for (long i = 0; i < n; i++) {
++      avec0 = _mm256_broadcast_sd(&a[i]);
++      avec1 = _mm256_broadcast_sd(&a[i+MAT_BLK_SZ]);
++
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc00, avec0, bvec); FMA_MUL_ADD(acc10, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc01, avec0, bvec); FMA_MUL_ADD(acc11, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc02, avec0, bvec); FMA_MUL_ADD(acc12, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc03, avec0, bvec); FMA_MUL_ADD(acc13, avec1, bvec);
++   }
++
++
++   _mm256_store_pd(x + 4*4 + 0*MAT_BLK_SZ, acc00);
++   _mm256_store_pd(x + 5*4 + 0*MAT_BLK_SZ, acc01);
++   _mm256_store_pd(x + 6*4 + 0*MAT_BLK_SZ, acc02);
++   _mm256_store_pd(x + 7*4 + 0*MAT_BLK_SZ, acc03);
++
++   _mm256_store_pd(x + 4*4 + 1*MAT_BLK_SZ, acc10);
++   _mm256_store_pd(x + 5*4 + 1*MAT_BLK_SZ, acc11);
++   _mm256_store_pd(x + 6*4 + 1*MAT_BLK_SZ, acc12);
++   _mm256_store_pd(x + 7*4 + 1*MAT_BLK_SZ, acc13);
++
++}
++
++FMA_RESOLVER(static,void,muladd2_by_32,
++   (double *x, const double *a, const double *b, long n));
++
++#else
++
+ static
+ void muladd2_by_32(double *x, const double *a, const double *b, long n)
+ {
+@@ -1055,6 +1313,212 @@ void muladd2_by_32(double *x, const doub
+ 
+ }
+ 
++#endif
++
++#ifdef NTL_LOADTIME_CPU
++FMA_FUNC(void,muladd3_by_32)
++(double *x, const double *a, const double *b, long n)
++{
++   __m256d avec0, avec1, avec2, bvec;
++   __m256d acc00, acc01, acc02, acc03;
++   __m256d acc10, acc11, acc12, acc13;
++   __m256d acc20, acc21, acc22, acc23;
++
++
++   // round 0
++
++   acc00=_mm256_load_pd(x + 0*4 + 0*MAT_BLK_SZ);
++   acc01=_mm256_load_pd(x + 1*4 + 0*MAT_BLK_SZ);
++   acc02=_mm256_load_pd(x + 2*4 + 0*MAT_BLK_SZ);
++   acc03=_mm256_load_pd(x + 3*4 + 0*MAT_BLK_SZ);
++
++   acc10=_mm256_load_pd(x + 0*4 + 1*MAT_BLK_SZ);
++   acc11=_mm256_load_pd(x + 1*4 + 1*MAT_BLK_SZ);
++   acc12=_mm256_load_pd(x + 2*4 + 1*MAT_BLK_SZ);
++   acc13=_mm256_load_pd(x + 3*4 + 1*MAT_BLK_SZ);
++
++   acc20=_mm256_load_pd(x + 0*4 + 2*MAT_BLK_SZ);
++   acc21=_mm256_load_pd(x + 1*4 + 2*MAT_BLK_SZ);
++   acc22=_mm256_load_pd(x + 2*4 + 2*MAT_BLK_SZ);
++   acc23=_mm256_load_pd(x + 3*4 + 2*MAT_BLK_SZ);
++
++   for (long i = 0; i < n; i++) {
++      avec0 = _mm256_broadcast_sd(&a[i]);
++      avec1 = _mm256_broadcast_sd(&a[i+MAT_BLK_SZ]);
++      avec2 = _mm256_broadcast_sd(&a[i+2*MAT_BLK_SZ]);
++
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4]); FMA_MUL_ADD(acc00, avec0, bvec); FMA_MUL_ADD(acc10, avec1, bvec); FMA_MUL_ADD(acc20, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4]); FMA_MUL_ADD(acc01, avec0, bvec); FMA_MUL_ADD(acc11, avec1, bvec); FMA_MUL_ADD(acc21, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4]); FMA_MUL_ADD(acc02, avec0, bvec); FMA_MUL_ADD(acc12, avec1, bvec); FMA_MUL_ADD(acc22, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4]); FMA_MUL_ADD(acc03, avec0, bvec); FMA_MUL_ADD(acc13, avec1, bvec); FMA_MUL_ADD(acc23, avec2, bvec);
++   }
++
++
++   _mm256_store_pd(x + 0*4 + 0*MAT_BLK_SZ, acc00);
++   _mm256_store_pd(x + 1*4 + 0*MAT_BLK_SZ, acc01);
++   _mm256_store_pd(x + 2*4 + 0*MAT_BLK_SZ, acc02);
++   _mm256_store_pd(x + 3*4 + 0*MAT_BLK_SZ, acc03);
++
++   _mm256_store_pd(x + 0*4 + 1*MAT_BLK_SZ, acc10);
++   _mm256_store_pd(x + 1*4 + 1*MAT_BLK_SZ, acc11);
++   _mm256_store_pd(x + 2*4 + 1*MAT_BLK_SZ, acc12);
++   _mm256_store_pd(x + 3*4 + 1*MAT_BLK_SZ, acc13);
++
++   _mm256_store_pd(x + 0*4 + 2*MAT_BLK_SZ, acc20);
++   _mm256_store_pd(x + 1*4 + 2*MAT_BLK_SZ, acc21);
++   _mm256_store_pd(x + 2*4 + 2*MAT_BLK_SZ, acc22);
++   _mm256_store_pd(x + 3*4 + 2*MAT_BLK_SZ, acc23);
++
++   // round 1
++
++   acc00=_mm256_load_pd(x + 4*4 + 0*MAT_BLK_SZ);
++   acc01=_mm256_load_pd(x + 5*4 + 0*MAT_BLK_SZ);
++   acc02=_mm256_load_pd(x + 6*4 + 0*MAT_BLK_SZ);
++   acc03=_mm256_load_pd(x + 7*4 + 0*MAT_BLK_SZ);
++
++   acc10=_mm256_load_pd(x + 4*4 + 1*MAT_BLK_SZ);
++   acc11=_mm256_load_pd(x + 5*4 + 1*MAT_BLK_SZ);
++   acc12=_mm256_load_pd(x + 6*4 + 1*MAT_BLK_SZ);
++   acc13=_mm256_load_pd(x + 7*4 + 1*MAT_BLK_SZ);
++
++   acc20=_mm256_load_pd(x + 4*4 + 2*MAT_BLK_SZ);
++   acc21=_mm256_load_pd(x + 5*4 + 2*MAT_BLK_SZ);
++   acc22=_mm256_load_pd(x + 6*4 + 2*MAT_BLK_SZ);
++   acc23=_mm256_load_pd(x + 7*4 + 2*MAT_BLK_SZ);
++
++   for (long i = 0; i < n; i++) {
++      avec0 = _mm256_broadcast_sd(&a[i]);
++      avec1 = _mm256_broadcast_sd(&a[i+MAT_BLK_SZ]);
++      avec2 = _mm256_broadcast_sd(&a[i+2*MAT_BLK_SZ]);
++
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc00, avec0, bvec); FMA_MUL_ADD(acc10, avec1, bvec); FMA_MUL_ADD(acc20, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc01, avec0, bvec); FMA_MUL_ADD(acc11, avec1, bvec); FMA_MUL_ADD(acc21, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc02, avec0, bvec); FMA_MUL_ADD(acc12, avec1, bvec); FMA_MUL_ADD(acc22, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc03, avec0, bvec); FMA_MUL_ADD(acc13, avec1, bvec); FMA_MUL_ADD(acc23, avec2, bvec);
++   }
++
++
++   _mm256_store_pd(x + 4*4 + 0*MAT_BLK_SZ, acc00);
++   _mm256_store_pd(x + 5*4 + 0*MAT_BLK_SZ, acc01);
++   _mm256_store_pd(x + 6*4 + 0*MAT_BLK_SZ, acc02);
++   _mm256_store_pd(x + 7*4 + 0*MAT_BLK_SZ, acc03);
++
++   _mm256_store_pd(x + 4*4 + 1*MAT_BLK_SZ, acc10);
++   _mm256_store_pd(x + 5*4 + 1*MAT_BLK_SZ, acc11);
++   _mm256_store_pd(x + 6*4 + 1*MAT_BLK_SZ, acc12);
++   _mm256_store_pd(x + 7*4 + 1*MAT_BLK_SZ, acc13);
++
++   _mm256_store_pd(x + 4*4 + 2*MAT_BLK_SZ, acc20);
++   _mm256_store_pd(x + 5*4 + 2*MAT_BLK_SZ, acc21);
++   _mm256_store_pd(x + 6*4 + 2*MAT_BLK_SZ, acc22);
++   _mm256_store_pd(x + 7*4 + 2*MAT_BLK_SZ, acc23);
++
++}
++
++AVX2_FUNC(void,muladd3_by_32)
++(double *x, const double *a, const double *b, long n)
++{
++   __m256d avec0, avec1, avec2, bvec;
++   __m256d acc00, acc01, acc02, acc03;
++   __m256d acc10, acc11, acc12, acc13;
++   __m256d acc20, acc21, acc22, acc23;
++
++
++   // round 0
++
++   acc00=_mm256_load_pd(x + 0*4 + 0*MAT_BLK_SZ);
++   acc01=_mm256_load_pd(x + 1*4 + 0*MAT_BLK_SZ);
++   acc02=_mm256_load_pd(x + 2*4 + 0*MAT_BLK_SZ);
++   acc03=_mm256_load_pd(x + 3*4 + 0*MAT_BLK_SZ);
++
++   acc10=_mm256_load_pd(x + 0*4 + 1*MAT_BLK_SZ);
++   acc11=_mm256_load_pd(x + 1*4 + 1*MAT_BLK_SZ);
++   acc12=_mm256_load_pd(x + 2*4 + 1*MAT_BLK_SZ);
++   acc13=_mm256_load_pd(x + 3*4 + 1*MAT_BLK_SZ);
++
++   acc20=_mm256_load_pd(x + 0*4 + 2*MAT_BLK_SZ);
++   acc21=_mm256_load_pd(x + 1*4 + 2*MAT_BLK_SZ);
++   acc22=_mm256_load_pd(x + 2*4 + 2*MAT_BLK_SZ);
++   acc23=_mm256_load_pd(x + 3*4 + 2*MAT_BLK_SZ);
++
++   for (long i = 0; i < n; i++) {
++      avec0 = _mm256_broadcast_sd(&a[i]);
++      avec1 = _mm256_broadcast_sd(&a[i+MAT_BLK_SZ]);
++      avec2 = _mm256_broadcast_sd(&a[i+2*MAT_BLK_SZ]);
++
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4]); FMA_MUL_ADD(acc00, avec0, bvec); FMA_MUL_ADD(acc10, avec1, bvec); FMA_MUL_ADD(acc20, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4]); FMA_MUL_ADD(acc01, avec0, bvec); FMA_MUL_ADD(acc11, avec1, bvec); FMA_MUL_ADD(acc21, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4]); FMA_MUL_ADD(acc02, avec0, bvec); FMA_MUL_ADD(acc12, avec1, bvec); FMA_MUL_ADD(acc22, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4]); FMA_MUL_ADD(acc03, avec0, bvec); FMA_MUL_ADD(acc13, avec1, bvec); FMA_MUL_ADD(acc23, avec2, bvec);
++   }
++
++
++   _mm256_store_pd(x + 0*4 + 0*MAT_BLK_SZ, acc00);
++   _mm256_store_pd(x + 1*4 + 0*MAT_BLK_SZ, acc01);
++   _mm256_store_pd(x + 2*4 + 0*MAT_BLK_SZ, acc02);
++   _mm256_store_pd(x + 3*4 + 0*MAT_BLK_SZ, acc03);
++
++   _mm256_store_pd(x + 0*4 + 1*MAT_BLK_SZ, acc10);
++   _mm256_store_pd(x + 1*4 + 1*MAT_BLK_SZ, acc11);
++   _mm256_store_pd(x + 2*4 + 1*MAT_BLK_SZ, acc12);
++   _mm256_store_pd(x + 3*4 + 1*MAT_BLK_SZ, acc13);
++
++   _mm256_store_pd(x + 0*4 + 2*MAT_BLK_SZ, acc20);
++   _mm256_store_pd(x + 1*4 + 2*MAT_BLK_SZ, acc21);
++   _mm256_store_pd(x + 2*4 + 2*MAT_BLK_SZ, acc22);
++   _mm256_store_pd(x + 3*4 + 2*MAT_BLK_SZ, acc23);
++
++   // round 1
++
++   acc00=_mm256_load_pd(x + 4*4 + 0*MAT_BLK_SZ);
++   acc01=_mm256_load_pd(x + 5*4 + 0*MAT_BLK_SZ);
++   acc02=_mm256_load_pd(x + 6*4 + 0*MAT_BLK_SZ);
++   acc03=_mm256_load_pd(x + 7*4 + 0*MAT_BLK_SZ);
++
++   acc10=_mm256_load_pd(x + 4*4 + 1*MAT_BLK_SZ);
++   acc11=_mm256_load_pd(x + 5*4 + 1*MAT_BLK_SZ);
++   acc12=_mm256_load_pd(x + 6*4 + 1*MAT_BLK_SZ);
++   acc13=_mm256_load_pd(x + 7*4 + 1*MAT_BLK_SZ);
++
++   acc20=_mm256_load_pd(x + 4*4 + 2*MAT_BLK_SZ);
++   acc21=_mm256_load_pd(x + 5*4 + 2*MAT_BLK_SZ);
++   acc22=_mm256_load_pd(x + 6*4 + 2*MAT_BLK_SZ);
++   acc23=_mm256_load_pd(x + 7*4 + 2*MAT_BLK_SZ);
++
++   for (long i = 0; i < n; i++) {
++      avec0 = _mm256_broadcast_sd(&a[i]);
++      avec1 = _mm256_broadcast_sd(&a[i+MAT_BLK_SZ]);
++      avec2 = _mm256_broadcast_sd(&a[i+2*MAT_BLK_SZ]);
++
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc00, avec0, bvec); FMA_MUL_ADD(acc10, avec1, bvec); FMA_MUL_ADD(acc20, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc01, avec0, bvec); FMA_MUL_ADD(acc11, avec1, bvec); FMA_MUL_ADD(acc21, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc02, avec0, bvec); FMA_MUL_ADD(acc12, avec1, bvec); FMA_MUL_ADD(acc22, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4+MAT_BLK_SZ/2]); FMA_MUL_ADD(acc03, avec0, bvec); FMA_MUL_ADD(acc13, avec1, bvec); FMA_MUL_ADD(acc23, avec2, bvec);
++   }
++
++
++   _mm256_store_pd(x + 4*4 + 0*MAT_BLK_SZ, acc00);
++   _mm256_store_pd(x + 5*4 + 0*MAT_BLK_SZ, acc01);
++   _mm256_store_pd(x + 6*4 + 0*MAT_BLK_SZ, acc02);
++   _mm256_store_pd(x + 7*4 + 0*MAT_BLK_SZ, acc03);
++
++   _mm256_store_pd(x + 4*4 + 1*MAT_BLK_SZ, acc10);
++   _mm256_store_pd(x + 5*4 + 1*MAT_BLK_SZ, acc11);
++   _mm256_store_pd(x + 6*4 + 1*MAT_BLK_SZ, acc12);
++   _mm256_store_pd(x + 7*4 + 1*MAT_BLK_SZ, acc13);
++
++   _mm256_store_pd(x + 4*4 + 2*MAT_BLK_SZ, acc20);
++   _mm256_store_pd(x + 5*4 + 2*MAT_BLK_SZ, acc21);
++   _mm256_store_pd(x + 6*4 + 2*MAT_BLK_SZ, acc22);
++   _mm256_store_pd(x + 7*4 + 2*MAT_BLK_SZ, acc23);
++
++}
++
++AVX2_RESOLVER(static,void,muladd3_by_32,
++   (double *x, const double *a, const double *b, long n));
++
++#else
++
+ // NOTE: this makes things slower on an AVX1 platform --- not enough registers
+ // it could be faster on AVX2/FMA, where there should be enough registers
+ static
+@@ -1156,6 +1620,75 @@ void muladd3_by_32(double *x, const doub
+ 
+ }
+ 
++#endif
++
++#ifdef NTL_LOADTIME_CPU
++
++AVX_FUNC(void,muladd1_by_16)
++(double *x, const double *a, const double *b, long n)
++{
++   __m256d avec, bvec;
++
++
++   __m256d acc0=_mm256_load_pd(x + 0*4);
++   __m256d acc1=_mm256_load_pd(x + 1*4);
++   __m256d acc2=_mm256_load_pd(x + 2*4);
++   __m256d acc3=_mm256_load_pd(x + 3*4);
++
++
++   for (long i = 0; i < n; i++) {
++      avec = _mm256_broadcast_sd(a); a++;
++
++
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc0, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc1, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc2, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; AVX_MUL_ADD(acc3, avec, bvec);
++      b += 16;
++   }
++
++
++   _mm256_store_pd(x + 0*4, acc0);
++   _mm256_store_pd(x + 1*4, acc1);
++   _mm256_store_pd(x + 2*4, acc2);
++   _mm256_store_pd(x + 3*4, acc3);
++}
++
++FMA_FUNC(void,muladd1_by_16)
++(double *x, const double *a, const double *b, long n)
++{
++   __m256d avec, bvec;
++
++
++   __m256d acc0=_mm256_load_pd(x + 0*4);
++   __m256d acc1=_mm256_load_pd(x + 1*4);
++   __m256d acc2=_mm256_load_pd(x + 2*4);
++   __m256d acc3=_mm256_load_pd(x + 3*4);
++
++
++   for (long i = 0; i < n; i++) {
++      avec = _mm256_broadcast_sd(a); a++;
++
++
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc0, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc1, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc2, avec, bvec);
++      bvec = _mm256_load_pd(b); b += 4; FMA_MUL_ADD(acc3, avec, bvec);
++      b += 16;
++   }
++
++
++   _mm256_store_pd(x + 0*4, acc0);
++   _mm256_store_pd(x + 1*4, acc1);
++   _mm256_store_pd(x + 2*4, acc2);
++   _mm256_store_pd(x + 3*4, acc3);
++}
++
++FMA_RESOLVER(static,void,muladd1_by_16,
++   (double *x, const double *a, const double *b, long n));
++
++#else
++
+ static
+ void muladd1_by_16(double *x, const double *a, const double *b, long n)
+ {
+@@ -1186,10 +1719,14 @@ void muladd1_by_16(double *x, const doub
+    _mm256_store_pd(x + 3*4, acc3);
+ }
+ 
++#endif
+ 
+ 
+-static
+-void muladd2_by_16(double *x, const double *a, const double *b, long n)
++static void
++#ifdef NTL_LOADTIME_CPU
++__attribute__((target ("avx")))
++#endif
++muladd2_by_16(double *x, const double *a, const double *b, long n)
+ {
+    __m256d avec0, avec1, bvec;
+    __m256d acc00, acc01, acc02, acc03;
+@@ -1212,10 +1749,10 @@ void muladd2_by_16(double *x, const doub
+       avec0 = _mm256_broadcast_sd(&a[i]); 
+       avec1 = _mm256_broadcast_sd(&a[i+MAT_BLK_SZ]); 
+ 
+-      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4]); MUL_ADD(acc00, avec0, bvec); MUL_ADD(acc10, avec1, bvec);
+-      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4]); MUL_ADD(acc01, avec0, bvec); MUL_ADD(acc11, avec1, bvec);
+-      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4]); MUL_ADD(acc02, avec0, bvec); MUL_ADD(acc12, avec1, bvec);
+-      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4]); MUL_ADD(acc03, avec0, bvec); MUL_ADD(acc13, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4]); AVX_MUL_ADD(acc00, avec0, bvec); AVX_MUL_ADD(acc10, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4]); AVX_MUL_ADD(acc01, avec0, bvec); AVX_MUL_ADD(acc11, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4]); AVX_MUL_ADD(acc02, avec0, bvec); AVX_MUL_ADD(acc12, avec1, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4]); AVX_MUL_ADD(acc03, avec0, bvec); AVX_MUL_ADD(acc13, avec1, bvec);
+    }
+ 
+ 
+@@ -1232,8 +1769,11 @@ void muladd2_by_16(double *x, const doub
+ }
+ 
+ 
+-static
+-void muladd3_by_16(double *x, const double *a, const double *b, long n)
++static void
++#ifdef NTL_LOADTIME_CPU
++__attribute__((target("fma")))
++#endif
++muladd3_by_16(double *x, const double *a, const double *b, long n)
+ {
+    __m256d avec0, avec1, avec2, bvec;
+    __m256d acc00, acc01, acc02, acc03;
+@@ -1263,10 +1803,10 @@ void muladd3_by_16(double *x, const doub
+       avec1 = _mm256_broadcast_sd(&a[i+MAT_BLK_SZ]); 
+       avec2 = _mm256_broadcast_sd(&a[i+2*MAT_BLK_SZ]); 
+ 
+-      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4]); MUL_ADD(acc00, avec0, bvec); MUL_ADD(acc10, avec1, bvec); MUL_ADD(acc20, avec2, bvec);
+-      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4]); MUL_ADD(acc01, avec0, bvec); MUL_ADD(acc11, avec1, bvec); MUL_ADD(acc21, avec2, bvec);
+-      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4]); MUL_ADD(acc02, avec0, bvec); MUL_ADD(acc12, avec1, bvec); MUL_ADD(acc22, avec2, bvec);
+-      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4]); MUL_ADD(acc03, avec0, bvec); MUL_ADD(acc13, avec1, bvec); MUL_ADD(acc23, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+0*4]); FMA_MUL_ADD(acc00, avec0, bvec); FMA_MUL_ADD(acc10, avec1, bvec); FMA_MUL_ADD(acc20, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+1*4]); FMA_MUL_ADD(acc01, avec0, bvec); FMA_MUL_ADD(acc11, avec1, bvec); FMA_MUL_ADD(acc21, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+2*4]); FMA_MUL_ADD(acc02, avec0, bvec); FMA_MUL_ADD(acc12, avec1, bvec); FMA_MUL_ADD(acc22, avec2, bvec);
++      bvec = _mm256_load_pd(&b[i*MAT_BLK_SZ+3*4]); FMA_MUL_ADD(acc03, avec0, bvec); FMA_MUL_ADD(acc13, avec1, bvec); FMA_MUL_ADD(acc23, avec2, bvec);
+    }
+ 
+ 
+@@ -1295,6 +1835,29 @@ void muladd3_by_16(double *x, const doub
+ 
+ 
+ 
++#ifdef NTL_LOADTIME_CPU
++static inline
++void muladd_all_by_32(long first, long last, double *x, const double *a, const double *b, long n)
++{
++   long i = first;
++
++   if (_ntl_have_fma) {
++      // process three rows at a time
++      for (; i <= last-3; i+=3)
++         muladd3_by_32(x + i*MAT_BLK_SZ, a + i*MAT_BLK_SZ, b, n);
++      for (; i < last; i++)
++         muladd1_by_32(x + i*MAT_BLK_SZ, a + i*MAT_BLK_SZ, b, n);
++   } else {
++      // process only two rows at a time: not enough registers :-(
++      for (; i <= last-2; i+=2)
++         muladd2_by_32(x + i*MAT_BLK_SZ, a + i*MAT_BLK_SZ, b, n);
++      for (; i < last; i++)
++         muladd1_by_32(x + i*MAT_BLK_SZ, a + i*MAT_BLK_SZ, b, n);
++   }
++}
++
++#else
++
+ static inline
+ void muladd_all_by_32(long first, long last, double *x, const double *a, const double *b, long n)
+ {
+@@ -1314,6 +1877,30 @@ void muladd_all_by_32(long first, long l
+ #endif
+ }
+ 
++#endif
++
++#ifdef NTL_LOADTIME_CPU
++
++static inline
++void muladd_all_by_16(long first, long last, double *x, const double *a, const double *b, long n)
++{
++   long i = first;
++   if (_ntl_have_fma) {
++      // processing three rows at a time is faster
++      for (; i <= last-3; i+=3)
++         muladd3_by_16(x + i*MAT_BLK_SZ, a + i*MAT_BLK_SZ, b, n);
++      for (; i < last; i++)
++         muladd1_by_16(x + i*MAT_BLK_SZ, a + i*MAT_BLK_SZ, b, n);
++   } else {
++      // process only two rows at a time: not enough registers :-(
++      for (; i <= last-2; i+=2)
++         muladd2_by_16(x + i*MAT_BLK_SZ, a + i*MAT_BLK_SZ, b, n);
++      for (; i < last; i++)
++         muladd1_by_16(x + i*MAT_BLK_SZ, a + i*MAT_BLK_SZ, b, n);
++   }
++}
++
++#else
+ 
+ static inline
+ void muladd_all_by_16(long first, long last, double *x, const double *a, const double *b, long n)
+@@ -1334,6 +1921,8 @@ void muladd_all_by_16(long first, long l
+ #endif
+ }
+ 
++#endif
++
+ static inline
+ void muladd_all_by_32_width(long first, long last, double *x, const double *a, const double *b, long n, long width)
+ {
+@@ -1349,6 +1938,74 @@ void muladd_all_by_32_width(long first,
+ 
+ 
+ // this assumes n is a multiple of 16
++#ifdef NTL_LOADTIME_CPU
++AVX_FUNC(void,muladd_interval)
++(double * NTL_RESTRICT x, double * NTL_RESTRICT y, double c, long n)
++{
++   __m256d xvec0, xvec1, xvec2, xvec3;
++   __m256d yvec0, yvec1, yvec2, yvec3;
++
++   __m256d cvec = _mm256_broadcast_sd(&c);
++
++   for (long i = 0; i < n; i += 16, x += 16, y += 16) {
++      xvec0 = _mm256_load_pd(x+0*4);
++      xvec1 = _mm256_load_pd(x+1*4);
++      xvec2 = _mm256_load_pd(x+2*4);
++      xvec3 = _mm256_load_pd(x+3*4);
++
++      yvec0 = _mm256_load_pd(y+0*4);
++      yvec1 = _mm256_load_pd(y+1*4);
++      yvec2 = _mm256_load_pd(y+2*4);
++      yvec3 = _mm256_load_pd(y+3*4);
++
++      AVX_MUL_ADD(xvec0, yvec0, cvec);
++      AVX_MUL_ADD(xvec1, yvec1, cvec);
++      AVX_MUL_ADD(xvec2, yvec2, cvec);
++      AVX_MUL_ADD(xvec3, yvec3, cvec);
++
++      _mm256_store_pd(x + 0*4, xvec0);
++      _mm256_store_pd(x + 1*4, xvec1);
++      _mm256_store_pd(x + 2*4, xvec2);
++      _mm256_store_pd(x + 3*4, xvec3);
++   }
++}
++
++FMA_FUNC(void,muladd_interval)
++(double * NTL_RESTRICT x, double * NTL_RESTRICT y, double c, long n)
++{
++   __m256d xvec0, xvec1, xvec2, xvec3;
++   __m256d yvec0, yvec1, yvec2, yvec3;
++
++   __m256d cvec = _mm256_broadcast_sd(&c);
++
++   for (long i = 0; i < n; i += 16, x += 16, y += 16) {
++      xvec0 = _mm256_load_pd(x+0*4);
++      xvec1 = _mm256_load_pd(x+1*4);
++      xvec2 = _mm256_load_pd(x+2*4);
++      xvec3 = _mm256_load_pd(x+3*4);
++
++      yvec0 = _mm256_load_pd(y+0*4);
++      yvec1 = _mm256_load_pd(y+1*4);
++      yvec2 = _mm256_load_pd(y+2*4);
++      yvec3 = _mm256_load_pd(y+3*4);
++
++      FMA_MUL_ADD(xvec0, yvec0, cvec);
++      FMA_MUL_ADD(xvec1, yvec1, cvec);
++      FMA_MUL_ADD(xvec2, yvec2, cvec);
++      FMA_MUL_ADD(xvec3, yvec3, cvec);
++
++      _mm256_store_pd(x + 0*4, xvec0);
++      _mm256_store_pd(x + 1*4, xvec1);
++      _mm256_store_pd(x + 2*4, xvec2);
++      _mm256_store_pd(x + 3*4, xvec3);
++   }
++}
++
++FMA_RESOLVER(static,void,muladd_interval,
++   (double * NTL_RESTRICT x, double * NTL_RESTRICT y, double c, long n));
++
++#else
++
+ static inline
+ void muladd_interval(double * NTL_RESTRICT x, double * NTL_RESTRICT y, double c, long n)
+ {
+@@ -1380,6 +2037,106 @@ void muladd_interval(double * NTL_RESTRI
+    }
+ }
+ 
++#endif
++
++#ifdef NTL_LOADTIME_CPU
++AVX_FUNC(void,muladd_interval1)
++(double * NTL_RESTRICT x, double * NTL_RESTRICT y, double c, long n)
++{
++
++   __m256d xvec0, xvec1, xvec2, xvec3;
++   __m256d yvec0, yvec1, yvec2, yvec3;
++   __m256d cvec;
++
++   if (n >= 4)
++      cvec = _mm256_broadcast_sd(&c);
++
++   long i=0;
++   for (; i <= n-16; i += 16, x += 16, y += 16) {
++      xvec0 = _mm256_load_pd(x+0*4);
++      xvec1 = _mm256_load_pd(x+1*4);
++      xvec2 = _mm256_load_pd(x+2*4);
++      xvec3 = _mm256_load_pd(x+3*4);
++
++      yvec0 = _mm256_load_pd(y+0*4);
++      yvec1 = _mm256_load_pd(y+1*4);
++      yvec2 = _mm256_load_pd(y+2*4);
++      yvec3 = _mm256_load_pd(y+3*4);
++
++      AVX_MUL_ADD(xvec0, yvec0, cvec);
++      AVX_MUL_ADD(xvec1, yvec1, cvec);
++      AVX_MUL_ADD(xvec2, yvec2, cvec);
++      AVX_MUL_ADD(xvec3, yvec3, cvec);
++
++      _mm256_store_pd(x + 0*4, xvec0);
++      _mm256_store_pd(x + 1*4, xvec1);
++      _mm256_store_pd(x + 2*4, xvec2);
++      _mm256_store_pd(x + 3*4, xvec3);
++   }
++
++   for (; i <= n-4; i += 4, x += 4, y += 4) {
++      xvec0 = _mm256_load_pd(x+0*4);
++      yvec0 = _mm256_load_pd(y+0*4);
++      AVX_MUL_ADD(xvec0, yvec0, cvec);
++      _mm256_store_pd(x + 0*4, xvec0);
++   }
++
++   for (; i < n; i++, x++, y++) {
++      *x += (*y)*c;
++   }
++}
++
++FMA_FUNC(void,muladd_interval1)
++(double * NTL_RESTRICT x, double * NTL_RESTRICT y, double c, long n)
++{
++
++   __m256d xvec0, xvec1, xvec2, xvec3;
++   __m256d yvec0, yvec1, yvec2, yvec3;
++   __m256d cvec;
++
++   if (n >= 4)
++      cvec = _mm256_broadcast_sd(&c);
++
++   long i=0;
++   for (; i <= n-16; i += 16, x += 16, y += 16) {
++      xvec0 = _mm256_load_pd(x+0*4);
++      xvec1 = _mm256_load_pd(x+1*4);
++      xvec2 = _mm256_load_pd(x+2*4);
++      xvec3 = _mm256_load_pd(x+3*4);
++
++      yvec0 = _mm256_load_pd(y+0*4);
++      yvec1 = _mm256_load_pd(y+1*4);
++      yvec2 = _mm256_load_pd(y+2*4);
++      yvec3 = _mm256_load_pd(y+3*4);
++
++      FMA_MUL_ADD(xvec0, yvec0, cvec);
++      FMA_MUL_ADD(xvec1, yvec1, cvec);
++      FMA_MUL_ADD(xvec2, yvec2, cvec);
++      FMA_MUL_ADD(xvec3, yvec3, cvec);
++
++      _mm256_store_pd(x + 0*4, xvec0);
++      _mm256_store_pd(x + 1*4, xvec1);
++      _mm256_store_pd(x + 2*4, xvec2);
++      _mm256_store_pd(x + 3*4, xvec3);
++   }
++
++   for (; i <= n-4; i += 4, x += 4, y += 4) {
++      xvec0 = _mm256_load_pd(x+0*4);
++      yvec0 = _mm256_load_pd(y+0*4);
++      FMA_MUL_ADD(xvec0, yvec0, cvec);
++      _mm256_store_pd(x + 0*4, xvec0);
++   }
++
++   for (; i < n; i++, x++, y++) {
++      *x += (*y)*c;
++   }
++}
++
++FMA_RESOLVER(static,void,muladd_interval1,
++   (double * NTL_RESTRICT x, double * NTL_RESTRICT y, double c, long n));
++
++#else
++
+ // this one is more general: does not assume that n is a
+ // multiple of 16
+ static inline
+@@ -1428,6 +2185,7 @@ void muladd_interval1(double * NTL_RESTR
+    }
+ }
+ 
++#endif
+ 
+ #endif
+ 
+@@ -3015,10 +3773,13 @@ void alt_mul_LL(const mat_window_zz_p& X
+ }  
+ 
+ 
+-#ifdef NTL_HAVE_AVX
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
+ 
+-static
+-void blk_mul_DD(const mat_window_zz_p& X, 
++static void
++#ifdef NTL_LOADTIME_CPU
++__attribute__((target("avx")))
++#endif
++blk_mul_DD(const mat_window_zz_p& X, 
+                 const const_mat_window_zz_p& A, const const_mat_window_zz_p& B)  
+ {  
+    long n = A.NumRows();  
+@@ -3357,12 +4118,13 @@ void mul_base (const mat_window_zz_p& X,
+    long p = zz_p::modulus();
+    long V = MAT_BLK_SZ*4;
+ 
+-#ifdef NTL_HAVE_AVX
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
+ 
+    // experimentally, blk_mul_DD beats all the alternatives
+    // if each dimension is at least 16
+ 
+-   if (n >= 16 && l >= 16 && m >= 16 &&
++   if (AVX_ACTIVE &&
++       n >= 16 && l >= 16 && m >= 16 &&
+        p-1 <= MAX_DBL_INT &&
+        V <= (MAX_DBL_INT-(p-1))/(p-1) &&
+        V*(p-1) <= (MAX_DBL_INT-(p-1))/(p-1)) 
+@@ -3457,7 +4219,8 @@ void mul_strassen(const mat_window_zz_p&
+     // this code determines if mul_base triggers blk_mul_DD,
+     // in which case a higher crossover is used
+ 
+-#if (defined(NTL_HAVE_LL_TYPE) && defined(NTL_HAVE_AVX))
++#if (defined(NTL_HAVE_LL_TYPE) && (defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)))
++    if (AVX_ACTIVE)
+     {
+        long V = MAT_BLK_SZ*4;
+        long p = zz_p::modulus();
+@@ -3956,10 +4719,13 @@ void alt_inv_L(zz_p& d, mat_zz_p& X, con
+ 
+ 
+ 
+-#ifdef NTL_HAVE_AVX
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
+ 
+-static
+-void alt_inv_DD(zz_p& d, mat_zz_p& X, const mat_zz_p& A, bool relax)
++static void
++#ifdef NTL_LOADTIME_CPU
++__attribute__((target("avx")))
++#endif
++alt_inv_DD(zz_p& d, mat_zz_p& X, const mat_zz_p& A, bool relax)
+ {
+    long n = A.NumRows();
+ 
+@@ -4124,10 +4890,13 @@ void alt_inv_DD(zz_p& d, mat_zz_p& X, co
+ 
+ 
+ 
+-#ifdef NTL_HAVE_AVX
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
+ 
+-static
+-void blk_inv_DD(zz_p& d, mat_zz_p& X, const mat_zz_p& A, bool relax)
++static void
++#ifdef NTL_LOADTIME_CPU
++__attribute__((target("avx")))
++#endif
++blk_inv_DD(zz_p& d, mat_zz_p& X, const mat_zz_p& A, bool relax)
+ {
+    long n = A.NumRows();
+ 
+@@ -4885,8 +5654,9 @@ void relaxed_inv(zz_p& d, mat_zz_p& X, c
+    else if (n/MAT_BLK_SZ < 4) {
+       long V = 64;
+ 
+-#ifdef NTL_HAVE_AVX
+-      if (p-1 <= MAX_DBL_INT &&
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
++      if (AVX_ACTIVE &&
++          p-1 <= MAX_DBL_INT &&
+           V <= (MAX_DBL_INT-(p-1))/(p-1) &&
+           V*(p-1) <= (MAX_DBL_INT-(p-1))/(p-1)) {
+ 
+@@ -4911,8 +5681,9 @@ void relaxed_inv(zz_p& d, mat_zz_p& X, c
+    else {
+       long V = 4*MAT_BLK_SZ;
+ 
+-#ifdef NTL_HAVE_AVX
+-      if (p-1 <= MAX_DBL_INT &&
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
++      if (AVX_ACTIVE &&
++          p-1 <= MAX_DBL_INT &&
+           V <= (MAX_DBL_INT-(p-1))/(p-1) &&
+           V*(p-1) <= (MAX_DBL_INT-(p-1))/(p-1)) {
+ 
+@@ -5318,10 +6089,13 @@ void alt_tri_L(zz_p& d, const mat_zz_p&
+ 
+ 
+ 
+-#ifdef NTL_HAVE_AVX
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
+ 
+-static
+-void alt_tri_DD(zz_p& d, const mat_zz_p& A, const vec_zz_p *bp, 
++static void
++#ifdef NTL_LOADTIME_CPU
++__attribute__((target("avx")))
++#endif
++alt_tri_DD(zz_p& d, const mat_zz_p& A, const vec_zz_p *bp, 
+                vec_zz_p *xp, bool trans, bool relax)
+ {
+    long n = A.NumRows();
+@@ -5508,10 +6282,13 @@ void alt_tri_DD(zz_p& d, const mat_zz_p&
+ 
+ 
+ 
+-#ifdef NTL_HAVE_AVX
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
+ 
+-static
+-void blk_tri_DD(zz_p& d, const mat_zz_p& A, const vec_zz_p *bp, 
++static void
++#ifdef NTL_LOADTIME_CPU
++__attribute__((target("avx")))
++#endif
++blk_tri_DD(zz_p& d, const mat_zz_p& A, const vec_zz_p *bp, 
+                vec_zz_p *xp, bool trans, bool relax)
+ {
+    long n = A.NumRows();
+@@ -6322,8 +7099,9 @@ void tri(zz_p& d, const mat_zz_p& A, con
+    else if (n/MAT_BLK_SZ < 4) {
+       long V = 64;
+ 
+-#ifdef NTL_HAVE_AVX
+-      if (p-1 <= MAX_DBL_INT &&
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
++      if (AVX_ACTIVE &&
++          p-1 <= MAX_DBL_INT &&
+           V <= (MAX_DBL_INT-(p-1))/(p-1) &&
+           V*(p-1) <= (MAX_DBL_INT-(p-1))/(p-1)) {
+ 
+@@ -6348,8 +7126,9 @@ void tri(zz_p& d, const mat_zz_p& A, con
+    else {
+       long V = 4*MAT_BLK_SZ;
+ 
+-#ifdef NTL_HAVE_AVX
+-      if (p-1 <= MAX_DBL_INT &&
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
++      if (AVX_ACTIVE &&
++          p-1 <= MAX_DBL_INT &&
+           V <= (MAX_DBL_INT-(p-1))/(p-1) &&
+           V*(p-1) <= (MAX_DBL_INT-(p-1))/(p-1)) {
+ 
+@@ -6595,7 +7374,7 @@ long elim_basic(const mat_zz_p& A, mat_z
+ #ifdef NTL_HAVE_LL_TYPE
+ 
+ 
+-#ifdef NTL_HAVE_AVX
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
+ 
+ 
+ static inline
+@@ -8063,8 +8842,9 @@ long elim(const mat_zz_p& A, mat_zz_p *i
+    else {
+       long V = 4*MAT_BLK_SZ;
+ 
+-#ifdef NTL_HAVE_AVX
+-      if (p-1 <= MAX_DBL_INT &&
++#if defined(NTL_HAVE_AVX) || defined(NTL_LOADTIME_CPU)
++      if (AVX_ACTIVE &&
++          p-1 <= MAX_DBL_INT &&
+           V <= (MAX_DBL_INT-(p-1))/(p-1) &&
+           V*(p-1) <= (MAX_DBL_INT-(p-1))/(p-1)) {
+ 
+--- ntl-11.6.0/src/QuickTest.cpp.orig	2025-11-07 10:30:51.000000000 -0700
++++ ntl-11.6.0/src/QuickTest.cpp	2025-11-17 15:04:32.604819085 -0700
+@@ -365,6 +365,9 @@ cerr << "Performance Options:\n";
+    cerr << "NTL_GF2X_NOINLINE\n";
+ #endif
+ 
++#ifdef NTL_LOADTIME_CPU
++   cerr << "NTL_LOADTIME_CPU\n";
++#endif
+ 
+    cerr << "\n\n";
+ 
+--- ntl-11.6.0/src/WizardAux.orig	2025-11-07 10:30:51.000000000 -0700
++++ ntl-11.6.0/src/WizardAux	2025-11-17 13:45:54.948349055 -0700
+@@ -89,6 +89,7 @@ system("$ARGV[0] InitSettings");
+ 'NTL_GF2X_NOINLINE'    => 0,
+ 'NTL_FFT_BIGTAB'       => 0,
+ 'NTL_FFT_LAZYMUL'      => 0,
++'NTL_LOADTIME_CPU'     => 0,
+ 
+ 'WIZARD_HACK'          => '#define NTL_WIZARD_HACK',
+ 
+--- ntl-11.6.0/src/ZZ.cpp.orig	2025-11-07 10:30:50.000000000 -0700
++++ ntl-11.6.0/src/ZZ.cpp	2025-11-19 13:20:38.185302970 -0700
+@@ -14,6 +14,10 @@
+ #elif defined(NTL_HAVE_SSSE3)
+ #include <emmintrin.h>
+ #include <tmmintrin.h>
++#elif defined(NTL_LOADTIME_CPU)
++#include <immintrin.h>
++#include <emmintrin.h>
++#include <tmmintrin.h>
+ #endif
+ 
+ 
+@@ -22,6 +26,29 @@
+ #include <NTL/linux_s390x.h>
+ #endif
+ 
++#ifdef NTL_LOADTIME_CPU
++/* Runtime CPU feature detection */
++__attribute__((visibility ("hidden"))) bool _ntl_cpu_inited;
++__attribute__((visibility ("hidden"))) bool _ntl_have_pclmul;
++__attribute__((visibility ("hidden"))) bool _ntl_have_ssse3;
++__attribute__((visibility ("hidden"))) bool _ntl_have_avx;
++__attribute__((visibility ("hidden"))) bool _ntl_have_fma;
++__attribute__((visibility ("hidden"))) bool _ntl_have_avx2;
++
++__attribute__((visibility ("hidden"))) void
++_ntl_get_cpu_features(void)
++{
++   if (!_ntl_cpu_inited) {
++      __builtin_cpu_init();
++      _ntl_have_pclmul = __builtin_cpu_supports("pclmul");
++      _ntl_have_ssse3  = __builtin_cpu_supports("ssse3");
++      _ntl_have_avx    = __builtin_cpu_supports("avx");
++      _ntl_have_fma    = __builtin_cpu_supports("fma");
++      _ntl_have_avx2   = __builtin_cpu_supports("avx2");
++      _ntl_cpu_inited  = true;
++   }
++}
++#endif
+ 
+ 
+ NTL_START_IMPL
+@@ -3270,6 +3297,590 @@ struct RandomStream_impl {
+ 
+ };
+ 
++#elif defined(NTL_LOADTIME_CPU)
++
++// round selector, specified values:
++//  8:  low security - high speed
++// 12:  mid security -  mid speed
++// 20: high security -  low speed
++#ifndef CHACHA_RNDS
++#define CHACHA_RNDS 20
++#endif
++
++typedef __m128i ssse3_ivec_t;
++typedef __m256i avx2_ivec_t;
++
++#define SSSE3_DELTA	_mm_set_epi32(0,0,0,1)
++#define AVX2_DELTA	_mm256_set_epi64x(0,2,0,2)
++
++#define SSSE3_START  _mm_setzero_si128()
++#define AVX2_START   _mm256_set_epi64x(0,1,0,0)
++
++#define SSSE3_NONCE(nonce)	_mm_set_epi64x(nonce,0)
++#define AVX2_NONCE(nonce)	_mm256_set_epi64x(nonce, 1, nonce, 0)
++
++#define SSSE3_STOREU_VEC(m,r)	_mm_storeu_si128((__m128i*)(m), r)
++#define AVX2_STOREU_VEC(m,r)	_mm256_storeu_si256((__m256i*)(m), r)
++
++#define SSSE3_STORE_VEC(m,r)	_mm_store_si128((__m128i*)(m), r)
++#define AVX2_STORE_VEC(m,r)	_mm256_store_si256((__m256i*)(m), r)
++
++#define SSSE3_LOAD_VEC(r,m) r = _mm_load_si128((const __m128i *)(m))
++#define AVX2_LOAD_VEC(r,m) r = _mm256_load_si256((const __m256i *)(m))
++
++#define SSSE3_LOADU_VEC_128(r, m) r = _mm_loadu_si128((const __m128i*)(m))
++#define AVX2_LOADU_VEC_128(r, m) r = _mm256_broadcastsi128_si256(_mm_loadu_si128((const __m128i*)(m)))
++
++#define SSSE3_ADD_VEC_32(a,b)	_mm_add_epi32(a, b)
++#define AVX2_ADD_VEC_32(a,b)	_mm256_add_epi32(a, b)
++
++#define SSSE3_ADD_VEC_64(a,b)	_mm_add_epi64(a, b)
++#define AVX2_ADD_VEC_64(a,b)	_mm256_add_epi64(a, b)
++
++#define SSSE3_XOR_VEC(a,b)	_mm_xor_si128(a, b)
++#define AVX2_XOR_VEC(a,b)	_mm256_xor_si256(a, b)
++
++#define SSSE3_ROR_VEC_V1(x)	_mm_shuffle_epi32(x,_MM_SHUFFLE(0,3,2,1))
++#define AVX2_ROR_VEC_V1(x)	_mm256_shuffle_epi32(x,_MM_SHUFFLE(0,3,2,1))
++
++#define SSSE3_ROR_VEC_V2(x)	_mm_shuffle_epi32(x,_MM_SHUFFLE(1,0,3,2))
++#define AVX2_ROR_VEC_V2(x)	_mm256_shuffle_epi32(x,_MM_SHUFFLE(1,0,3,2))
++
++#define SSSE3_ROR_VEC_V3(x)	_mm_shuffle_epi32(x,_MM_SHUFFLE(2,1,0,3))
++#define AVX2_ROR_VEC_V3(x)	_mm256_shuffle_epi32(x,_MM_SHUFFLE(2,1,0,3))
++
++#define SSSE3_ROL_VEC_7(x)	SSSE3_XOR_VEC(_mm_slli_epi32(x, 7), _mm_srli_epi32(x,25))
++#define AVX2_ROL_VEC_7(x)	AVX2_XOR_VEC(_mm256_slli_epi32(x, 7), _mm256_srli_epi32(x,25))
++
++#define SSSE3_ROL_VEC_12(x)	SSSE3_XOR_VEC(_mm_slli_epi32(x,12), _mm_srli_epi32(x,20))
++#define AVX2_ROL_VEC_12(x)	AVX2_XOR_VEC(_mm256_slli_epi32(x,12), _mm256_srli_epi32(x,20))
++
++#define SSSE3_ROL_VEC_8(x)	_mm_shuffle_epi8(x,_mm_set_epi8(14,13,12,15,10,9,8,11,6,5,4,7,2,1,0,3))
++#define AVX2_ROL_VEC_8(x)	_mm256_shuffle_epi8(x,_mm256_set_epi8(14,13,12,15,10,9,8,11,6,5,4,7,2,1,0,3,14,13,12,15,10,9,8,11,6,5,4,7,2,1,0,3))
++
++#define SSSE3_ROL_VEC_16(x)	_mm_shuffle_epi8(x,_mm_set_epi8(13,12,15,14,9,8,11,10,5,4,7,6,1,0,3,2))
++#define AVX2_ROL_VEC_16(x)	_mm256_shuffle_epi8(x,_mm256_set_epi8(13,12,15,14,9,8,11,10,5,4,7,6,1,0,3,2,13,12,15,14,9,8,11,10,5,4,7,6,1,0,3,2))
++
++#define SSSE3_WRITEU_VEC(op, d, v0, v1, v2, v3)	\
++  SSSE3_STOREU_VEC(op + (d + 0*4), v0);		\
++  SSSE3_STOREU_VEC(op + (d + 4*4), v1);		\
++  SSSE3_STOREU_VEC(op + (d + 8*4), v2);		\
++  SSSE3_STOREU_VEC(op + (d +12*4), v3);
++#define AVX2_WRITEU_VEC(op, d, v0, v1, v2, v3)				\
++  AVX2_STOREU_VEC(op + (d + 0*4), _mm256_permute2x128_si256(v0, v1, 0x20)); \
++  AVX2_STOREU_VEC(op + (d + 8*4), _mm256_permute2x128_si256(v2, v3, 0x20)); \
++  AVX2_STOREU_VEC(op + (d +16*4), _mm256_permute2x128_si256(v0, v1, 0x31)); \
++  AVX2_STOREU_VEC(op + (d +24*4), _mm256_permute2x128_si256(v2, v3, 0x31));
++
++#define SSSE3_WRITE_VEC(op, d, v0, v1, v2, v3)	\
++  SSSE3_STORE_VEC(op + (d + 0*4), v0);		\
++  SSSE3_STORE_VEC(op + (d + 4*4), v1);		\
++  SSSE3_STORE_VEC(op + (d + 8*4), v2);		\
++  SSSE3_STORE_VEC(op + (d +12*4), v3);
++#define AVX2_WRITE_VEC(op, d, v0, v1, v2, v3)				\
++  AVX2_STORE_VEC(op + (d + 0*4), _mm256_permute2x128_si256(v0, v1, 0x20)); \
++  AVX2_STORE_VEC(op + (d + 8*4), _mm256_permute2x128_si256(v2, v3, 0x20)); \
++  AVX2_STORE_VEC(op + (d +16*4), _mm256_permute2x128_si256(v0, v1, 0x31)); \
++  AVX2_STORE_VEC(op + (d +24*4), _mm256_permute2x128_si256(v2, v3, 0x31));
++
++#define SSSE3_SZ_VEC (16)
++#define AVX2_SZ_VEC (32)
++
++#define SSSE3_RANSTREAM_NCHUNKS (4)
++// leads to a BUFSZ of 512
++
++#define AVX2_RANSTREAM_NCHUNKS (2)
++// leads to a BUFSZ of 512
++
++#define SSSE3_DQROUND_VECTORS_VEC(a,b,c,d)				\
++  a = SSSE3_ADD_VEC_32(a,b); d = SSSE3_XOR_VEC(d,a); d = SSSE3_ROL_VEC_16(d); \
++  c = SSSE3_ADD_VEC_32(c,d); b = SSSE3_XOR_VEC(b,c); b = SSSE3_ROL_VEC_12(b); \
++  a = SSSE3_ADD_VEC_32(a,b); d = SSSE3_XOR_VEC(d,a); d = SSSE3_ROL_VEC_8(d); \
++  c = SSSE3_ADD_VEC_32(c,d); b = SSSE3_XOR_VEC(b,c); b = SSSE3_ROL_VEC_7(b); \
++  b = SSSE3_ROR_VEC_V1(b); c = SSSE3_ROR_VEC_V2(c); d = SSSE3_ROR_VEC_V3(d); \
++  a = SSSE3_ADD_VEC_32(a,b); d = SSSE3_XOR_VEC(d,a); d = SSSE3_ROL_VEC_16(d); \
++  c = SSSE3_ADD_VEC_32(c,d); b = SSSE3_XOR_VEC(b,c); b = SSSE3_ROL_VEC_12(b); \
++  a = SSSE3_ADD_VEC_32(a,b); d = SSSE3_XOR_VEC(d,a); d = SSSE3_ROL_VEC_8(d); \
++  c = SSSE3_ADD_VEC_32(c,d); b = SSSE3_XOR_VEC(b,c); b = SSSE3_ROL_VEC_7(b); \
++  b = SSSE3_ROR_VEC_V3(b); c = SSSE3_ROR_VEC_V2(c); d = SSSE3_ROR_VEC_V1(d);
++
++#define AVX2_DQROUND_VECTORS_VEC(a,b,c,d)				\
++  a = AVX2_ADD_VEC_32(a,b); d = AVX2_XOR_VEC(d,a); d = AVX2_ROL_VEC_16(d); \
++  c = AVX2_ADD_VEC_32(c,d); b = AVX2_XOR_VEC(b,c); b = AVX2_ROL_VEC_12(b); \
++  a = AVX2_ADD_VEC_32(a,b); d = AVX2_XOR_VEC(d,a); d = AVX2_ROL_VEC_8(d); \
++  c = AVX2_ADD_VEC_32(c,d); b = AVX2_XOR_VEC(b,c); b = AVX2_ROL_VEC_7(b); \
++  b = AVX2_ROR_VEC_V1(b); c = AVX2_ROR_VEC_V2(c); d = AVX2_ROR_VEC_V3(d); \
++  a = AVX2_ADD_VEC_32(a,b); d = AVX2_XOR_VEC(d,a); d = AVX2_ROL_VEC_16(d); \
++  c = AVX2_ADD_VEC_32(c,d); b = AVX2_XOR_VEC(b,c); b = AVX2_ROL_VEC_12(b); \
++  a = AVX2_ADD_VEC_32(a,b); d = AVX2_XOR_VEC(d,a); d = AVX2_ROL_VEC_8(d); \
++  c = AVX2_ADD_VEC_32(c,d); b = AVX2_XOR_VEC(b,c); b = AVX2_ROL_VEC_7(b); \
++  b = AVX2_ROR_VEC_V3(b); c = AVX2_ROR_VEC_V2(c); d = AVX2_ROR_VEC_V1(d);
++
++#define SSSE3_RANSTREAM_STATESZ (4*SSSE3_SZ_VEC)
++#define AVX2_RANSTREAM_STATESZ  (4*AVX2_SZ_VEC)
++
++#define SSSE3_RANSTREAM_CHUNKSZ (2*SSSE3_RANSTREAM_STATESZ)
++#define AVX2_RANSTREAM_CHUNKSZ  (2*AVX2_RANSTREAM_STATESZ)
++
++#define SSSE3_RANSTREAM_BUFSZ  (SSSE3_RANSTREAM_NCHUNKS*SSSE3_RANSTREAM_CHUNKSZ)
++#define AVX2_RANSTREAM_BUFSZ   (AVX2_RANSTREAM_NCHUNKS*AVX2_RANSTREAM_CHUNKSZ)
++
++static void allocate_space(AlignedArray<unsigned char> &state_store,
++                           AlignedArray<unsigned char> &buf_store)
++{
++   if (_ntl_have_avx2) {
++      state_store.SetLength(AVX2_RANSTREAM_STATESZ);
++      buf_store.SetLength(AVX2_RANSTREAM_BUFSZ);
++  } else {
++      state_store.SetLength(SSSE3_RANSTREAM_STATESZ);
++      buf_store.SetLength(SSSE3_RANSTREAM_BUFSZ);
++  }
++};
++
++BASE_FUNC(void, randomstream_impl_init)
++(_ntl_uint32 *state,
++ AlignedArray<unsigned char> &state_store __attribute__((unused)),
++ AlignedArray<unsigned char> &buf_store __attribute__((unused)),
++ const unsigned char *key)
++{
++   salsa20_init(state, key);
++}
++
++SSSE3_FUNC(void, randomstream_impl_init)
++(_ntl_uint32 *state_ignored __attribute__((unused)),
++ AlignedArray<unsigned char> &state_store,
++ AlignedArray<unsigned char> &buf_store,
++ const unsigned char *key)
++{
++  allocate_space(state_store, buf_store);
++
++  unsigned char *state = state_store.elts();
++
++  unsigned int chacha_const[] = {
++    0x61707865,0x3320646E,0x79622D32,0x6B206574
++  };
++
++  ssse3_ivec_t d0, d1, d2, d3;
++  SSSE3_LOADU_VEC_128(d0, chacha_const);
++  SSSE3_LOADU_VEC_128(d1, key);
++  SSSE3_LOADU_VEC_128(d2, key+16);
++
++  d3 = SSSE3_START;
++
++  SSSE3_STORE_VEC(state + 0*SSSE3_SZ_VEC, d0);
++  SSSE3_STORE_VEC(state + 1*SSSE3_SZ_VEC, d1);
++  SSSE3_STORE_VEC(state + 2*SSSE3_SZ_VEC, d2);
++  SSSE3_STORE_VEC(state + 3*SSSE3_SZ_VEC, d3);
++}
++
++AVX2_FUNC(void, randomstream_impl_init)
++(_ntl_uint32 *state_ignored __attribute__((unused)),
++ AlignedArray<unsigned char> &state_store,
++ AlignedArray<unsigned char> &buf_store,
++ const unsigned char *key)
++{
++  allocate_space(state_store, buf_store);
++
++  unsigned char *state = state_store.elts();
++
++  unsigned int chacha_const[] = {
++    0x61707865,0x3320646E,0x79622D32,0x6B206574
++  };
++
++  avx2_ivec_t d0, d1, d2, d3;
++  AVX2_LOADU_VEC_128(d0, chacha_const);
++  AVX2_LOADU_VEC_128(d1, key);
++  AVX2_LOADU_VEC_128(d2, key+16);
++
++  d3 = AVX2_START;
++
++  AVX2_STORE_VEC(state + 0*AVX2_SZ_VEC, d0);
++  AVX2_STORE_VEC(state + 1*AVX2_SZ_VEC, d1);
++  AVX2_STORE_VEC(state + 2*AVX2_SZ_VEC, d2);
++  AVX2_STORE_VEC(state + 3*AVX2_SZ_VEC, d3);
++}
++
++SSSE3_RESOLVER(static, void, randomstream_impl_init,
++  (_ntl_uint32 *state, AlignedArray<unsigned char> &state_store,
++   AlignedArray<unsigned char> &buf_store, const unsigned char *key));
++
++BASE_FUNC(long, randomstream_get_bytes)
++(_ntl_uint32 *state,
++ unsigned char *buf,
++ AlignedArray<unsigned char> &state_store __attribute__((unused)),
++ AlignedArray<unsigned char> &buf_store __attribute__((unused)),
++ long &chunk_count __attribute__((unused)),
++ unsigned char *NTL_RESTRICT res,
++ long n,
++ long pos)
++{
++   if (n < 0) LogicError("RandomStream::get: bad args");
++
++   long i, j;
++
++   if (n <= 64-pos) {
++      for (i = 0; i < n; i++) res[i] = buf[pos+i];
++      pos += n;
++      return pos;
++   }
++
++   // read remainder of buffer
++   for (i = 0; i < 64-pos; i++) res[i] = buf[pos+i];
++   n -= 64-pos;
++   res += 64-pos;
++   pos = 64;
++
++   _ntl_uint32 wdata[16];
++
++   // read 64-byte chunks
++   for (i = 0; i <= n-64; i += 64) {
++      salsa20_apply(state, wdata);
++      for (j = 0; j < 16; j++)
++         FROMLE(res + i + 4*j, wdata[j]);
++   }
++
++   if (i < n) {
++      salsa20_apply(state, wdata);
++
++      for (j = 0; j < 16; j++)
++         FROMLE(buf + 4*j, wdata[j]);
++
++      pos = n-i;
++      for (j = 0; j < pos; j++)
++         res[i+j] = buf[j];
++   }
++
++   return pos;
++}
++
++SSSE3_FUNC(long, randomstream_get_bytes)
++(_ntl_uint32 *state_ignored __attribute__((unused)),
++ unsigned char *buf_ignored __attribute__((unused)),
++ AlignedArray<unsigned char> &state_store,
++ AlignedArray<unsigned char> &buf_store,
++ long &chunk_count,
++ unsigned char *NTL_RESTRICT res,
++ long n,
++ long pos)
++{
++   if (n < 0) LogicError("RandomStream::get: bad args");
++   if (n == 0) return pos;
++
++   unsigned char *NTL_RESTRICT buf = buf_store.elts();
++
++   if (n <= SSSE3_RANSTREAM_BUFSZ-pos) {
++      std::memcpy(&res[0], &buf[pos], n);
++      pos += n;
++      return pos;
++   }
++
++   unsigned char *NTL_RESTRICT state = state_store.elts();
++
++   ssse3_ivec_t d0, d1, d2, d3;
++   SSSE3_LOAD_VEC(d0, state + 0*SSSE3_SZ_VEC);
++   SSSE3_LOAD_VEC(d1, state + 1*SSSE3_SZ_VEC);
++   SSSE3_LOAD_VEC(d2, state + 2*SSSE3_SZ_VEC);
++   SSSE3_LOAD_VEC(d3, state + 3*SSSE3_SZ_VEC);
++
++   // read remainder of buffer
++   std::memcpy(&res[0], &buf[pos], SSSE3_RANSTREAM_BUFSZ-pos);
++   n -= SSSE3_RANSTREAM_BUFSZ-pos;
++   res += SSSE3_RANSTREAM_BUFSZ-pos;
++   pos = SSSE3_RANSTREAM_BUFSZ;
++
++   long i = 0;
++   for (;  i <= n-SSSE3_RANSTREAM_BUFSZ; i += SSSE3_RANSTREAM_BUFSZ) {
++      chunk_count |= SSSE3_RANSTREAM_NCHUNKS;  // disable small buffer strategy
++
++      for (long j = 0; j < SSSE3_RANSTREAM_NCHUNKS; j++) {
++         ssse3_ivec_t v0=d0, v1=d1, v2=d2, v3=d3;
++         ssse3_ivec_t v4=d0, v5=d1, v6=d2, v7=SSSE3_ADD_VEC_64(d3, SSSE3_DELTA);
++
++         for (long k = 0; k < CHACHA_RNDS/2; k++) {
++            SSSE3_DQROUND_VECTORS_VEC(v0,v1,v2,v3)
++            SSSE3_DQROUND_VECTORS_VEC(v4,v5,v6,v7)
++         }
++
++         SSSE3_WRITEU_VEC(res+i+j*(8*SSSE3_SZ_VEC), 0, SSSE3_ADD_VEC_32(v0,d0), SSSE3_ADD_VEC_32(v1,d1), SSSE3_ADD_VEC_32(v2,d2), SSSE3_ADD_VEC_32(v3,d3))
++         d3 = SSSE3_ADD_VEC_64(d3, SSSE3_DELTA);
++         SSSE3_WRITEU_VEC(res+i+j*(8*SSSE3_SZ_VEC), 4*SSSE3_SZ_VEC, SSSE3_ADD_VEC_32(v4,d0), SSSE3_ADD_VEC_32(v5,d1), SSSE3_ADD_VEC_32(v6,d2), SSSE3_ADD_VEC_32(v7,d3))
++         d3 = SSSE3_ADD_VEC_64(d3, SSSE3_DELTA);
++      }
++
++   }
++
++   if (i < n) {
++
++      long nchunks;
++
++      if (chunk_count < SSSE3_RANSTREAM_NCHUNKS) {
++         nchunks = long(cast_unsigned((n-i)+SSSE3_RANSTREAM_CHUNKSZ-1)/SSSE3_RANSTREAM_CHUNKSZ);
++         chunk_count += nchunks;
++      }
++      else
++         nchunks = SSSE3_RANSTREAM_NCHUNKS;
++
++      long pos_offset = SSSE3_RANSTREAM_BUFSZ - nchunks*SSSE3_RANSTREAM_CHUNKSZ;
++      buf += pos_offset;
++
++      for (long j = 0; j < nchunks; j++) {
++         ssse3_ivec_t v0=d0, v1=d1, v2=d2, v3=d3;
++         ssse3_ivec_t v4=d0, v5=d1, v6=d2, v7=SSSE3_ADD_VEC_64(d3, SSSE3_DELTA);
++
++         for (long k = 0; k < CHACHA_RNDS/2; k++) {
++            SSSE3_DQROUND_VECTORS_VEC(v0,v1,v2,v3)
++            SSSE3_DQROUND_VECTORS_VEC(v4,v5,v6,v7)
++         }
++
++         SSSE3_WRITE_VEC(buf+j*(8*SSSE3_SZ_VEC), 0, SSSE3_ADD_VEC_32(v0,d0), SSSE3_ADD_VEC_32(v1,d1), SSSE3_ADD_VEC_32(v2,d2), SSSE3_ADD_VEC_32(v3,d3))
++         d3 = SSSE3_ADD_VEC_64(d3, SSSE3_DELTA);
++         SSSE3_WRITE_VEC(buf+j*(8*SSSE3_SZ_VEC), 4*SSSE3_SZ_VEC, SSSE3_ADD_VEC_32(v4,d0), SSSE3_ADD_VEC_32(v5,d1), SSSE3_ADD_VEC_32(v6,d2), SSSE3_ADD_VEC_32(v7,d3))
++         d3 = SSSE3_ADD_VEC_64(d3, SSSE3_DELTA);
++      }
++
++      pos = n-i+pos_offset;
++      std::memcpy(&res[i], &buf[0], n-i);
++   }
++
++   SSSE3_STORE_VEC(state + 3*SSSE3_SZ_VEC, d3);
++
++   return pos;
++}
++
++AVX2_FUNC(long, randomstream_get_bytes)
++(_ntl_uint32 *state_ignored __attribute__((unused)),
++ unsigned char *buf_ignored __attribute__((unused)),
++ AlignedArray<unsigned char> &state_store,
++ AlignedArray<unsigned char> &buf_store,
++ long &chunk_count,
++ unsigned char *NTL_RESTRICT res,
++ long n,
++ long pos)
++{
++   if (n < 0) LogicError("RandomStream::get: bad args");
++   if (n == 0) return pos;
++
++   unsigned char *NTL_RESTRICT buf = buf_store.elts();
++
++   if (n <= AVX2_RANSTREAM_BUFSZ-pos) {
++      std::memcpy(&res[0], &buf[pos], n);
++      pos += n;
++      return pos;
++   }
++
++   unsigned char *NTL_RESTRICT state = state_store.elts();
++
++   avx2_ivec_t d0, d1, d2, d3;
++   AVX2_LOAD_VEC(d0, state + 0*AVX2_SZ_VEC);
++   AVX2_LOAD_VEC(d1, state + 1*AVX2_SZ_VEC);
++   AVX2_LOAD_VEC(d2, state + 2*AVX2_SZ_VEC);
++   AVX2_LOAD_VEC(d3, state + 3*AVX2_SZ_VEC);
++
++   // read remainder of buffer
++   std::memcpy(&res[0], &buf[pos], AVX2_RANSTREAM_BUFSZ-pos);
++   n -= AVX2_RANSTREAM_BUFSZ-pos;
++   res += AVX2_RANSTREAM_BUFSZ-pos;
++   pos = AVX2_RANSTREAM_BUFSZ;
++
++   long i = 0;
++   for (;  i <= n-AVX2_RANSTREAM_BUFSZ; i += AVX2_RANSTREAM_BUFSZ) {
++      chunk_count |= AVX2_RANSTREAM_NCHUNKS;  // disable small buffer strategy
++
++      for (long j = 0; j < AVX2_RANSTREAM_NCHUNKS; j++) {
++         avx2_ivec_t v0=d0, v1=d1, v2=d2, v3=d3;
++         avx2_ivec_t v4=d0, v5=d1, v6=d2, v7=AVX2_ADD_VEC_64(d3, AVX2_DELTA);
++
++         for (long k = 0; k < CHACHA_RNDS/2; k++) {
++            AVX2_DQROUND_VECTORS_VEC(v0,v1,v2,v3)
++            AVX2_DQROUND_VECTORS_VEC(v4,v5,v6,v7)
++         }
++
++         AVX2_WRITEU_VEC(res+i+j*(8*AVX2_SZ_VEC), 0, AVX2_ADD_VEC_32(v0,d0), AVX2_ADD_VEC_32(v1,d1), AVX2_ADD_VEC_32(v2,d2), AVX2_ADD_VEC_32(v3,d3))
++         d3 = AVX2_ADD_VEC_64(d3, AVX2_DELTA);
++         AVX2_WRITEU_VEC(res+i+j*(8*AVX2_SZ_VEC), 4*AVX2_SZ_VEC, AVX2_ADD_VEC_32(v4,d0), AVX2_ADD_VEC_32(v5,d1), AVX2_ADD_VEC_32(v6,d2), AVX2_ADD_VEC_32(v7,d3))
++         d3 = AVX2_ADD_VEC_64(d3, AVX2_DELTA);
++      }
++
++   }
++
++   if (i < n) {
++
++      long nchunks;
++
++      if (chunk_count < AVX2_RANSTREAM_NCHUNKS) {
++         nchunks = long(cast_unsigned((n-i)+AVX2_RANSTREAM_CHUNKSZ-1)/AVX2_RANSTREAM_CHUNKSZ);
++         chunk_count += nchunks;
++      }
++      else
++         nchunks = AVX2_RANSTREAM_NCHUNKS;
++
++      long pos_offset = AVX2_RANSTREAM_BUFSZ - nchunks*AVX2_RANSTREAM_CHUNKSZ;
++      buf += pos_offset;
++
++      for (long j = 0; j < nchunks; j++) {
++         avx2_ivec_t v0=d0, v1=d1, v2=d2, v3=d3;
++         avx2_ivec_t v4=d0, v5=d1, v6=d2, v7=AVX2_ADD_VEC_64(d3, AVX2_DELTA);
++
++         for (long k = 0; k < CHACHA_RNDS/2; k++) {
++            AVX2_DQROUND_VECTORS_VEC(v0,v1,v2,v3)
++            AVX2_DQROUND_VECTORS_VEC(v4,v5,v6,v7)
++         }
++
++         AVX2_WRITE_VEC(buf+j*(8*AVX2_SZ_VEC), 0, AVX2_ADD_VEC_32(v0,d0), AVX2_ADD_VEC_32(v1,d1), AVX2_ADD_VEC_32(v2,d2), AVX2_ADD_VEC_32(v3,d3))
++         d3 = AVX2_ADD_VEC_64(d3, AVX2_DELTA);
++         AVX2_WRITE_VEC(buf+j*(8*AVX2_SZ_VEC), 4*AVX2_SZ_VEC, AVX2_ADD_VEC_32(v4,d0), AVX2_ADD_VEC_32(v5,d1), AVX2_ADD_VEC_32(v6,d2), AVX2_ADD_VEC_32(v7,d3))
++         d3 = AVX2_ADD_VEC_64(d3, AVX2_DELTA);
++      }
++
++      pos = n-i+pos_offset;
++      std::memcpy(&res[i], &buf[0], n-i);
++   }
++
++   AVX2_STORE_VEC(state + 3*AVX2_SZ_VEC, d3);
++
++   return pos;
++}
++
++SSSE3_RESOLVER(static, long, randomstream_get_bytes,
++  (_ntl_uint32 *state, unsigned char *buf,
++   AlignedArray<unsigned char> &state_store,
++   AlignedArray<unsigned char> &buf_store,
++   long &chunk_count,
++   unsigned char *NTL_RESTRICT res,
++   long n,
++   long pos));
++
++BASE_FUNC(void, randomstream_set_nonce)
++(_ntl_uint32 *state,
++ AlignedArray<unsigned char> &state_store __attribute__((unused)),
++ long &chunk_count __attribute__((unused)),
++ unsigned long nonce)
++{
++   _ntl_uint32 nonce0, nonce1;
++
++   nonce0 = nonce;
++   nonce0 = INT32MASK(nonce0);
++
++   nonce1 = 0;
++
++#if (NTL_BITS_PER_LONG > 32)
++   nonce1 = nonce >> 32;
++   nonce1 = INT32MASK(nonce1);
++#endif
++
++   state[12] = 0;
++   state[13] = 0;
++   state[14] = nonce0;
++   state[15] = nonce1;
++}
++
++SSSE3_FUNC(void, randomstream_set_nonce)
++(_ntl_uint32 *state_ignored __attribute__((unused)),
++ AlignedArray<unsigned char> &state_store,
++ long &chunk_count,
++ unsigned long nonce)
++{
++   unsigned char *state = state_store.elts();
++   ssse3_ivec_t d3;
++   d3 = SSSE3_NONCE(nonce);
++   SSSE3_STORE_VEC(state + 3*SSSE3_SZ_VEC, d3);
++   chunk_count = 0;
++}
++
++AVX2_FUNC(void, randomstream_set_nonce)
++(_ntl_uint32 *state_ignored __attribute__((unused)),
++ AlignedArray<unsigned char> &state_store,
++ long &chunk_count,
++ unsigned long nonce)
++{
++   unsigned char *state = state_store.elts();
++   avx2_ivec_t d3;
++   d3 = AVX2_NONCE(nonce);
++   AVX2_STORE_VEC(state + 3*AVX2_SZ_VEC, d3);
++   chunk_count = 0;
++}
++
++SSSE3_RESOLVER(, void, randomstream_set_nonce,
++  (_ntl_uint32 *state,
++   AlignedArray<unsigned char> &state_store,
++   long &chunk_count,
++   unsigned long nonce));
++
++struct RandomStream_impl {
++   AlignedArray<unsigned char> state_store;
++   AlignedArray<unsigned char> buf_store;
++   long chunk_count;
++   _ntl_uint32 state[16];
++   unsigned char buf[64];
++
++   explicit
++   RandomStream_impl(const unsigned char *key)
++   {
++     randomstream_impl_init(state, state_store, buf_store, key);
++     chunk_count = 0;
++   }
++
++   RandomStream_impl(const RandomStream_impl& other)
++   {
++      if (_ntl_have_avx2 || _ntl_have_ssse3) {
++         allocate_space(state_store, buf_store);
++      }
++      *this = other;
++   }
++
++   RandomStream_impl& operator=(const RandomStream_impl& other)
++   {
++      if (_ntl_have_avx2) {
++         std::memcpy(state_store.elts(), other.state_store.elts(), AVX2_RANSTREAM_STATESZ);
++         std::memcpy(buf_store.elts(), other.buf_store.elts(), AVX2_RANSTREAM_BUFSZ);
++      } else if (_ntl_have_ssse3) {
++         std::memcpy(state_store.elts(), other.state_store.elts(), SSSE3_RANSTREAM_STATESZ);
++         std::memcpy(buf_store.elts(), other.buf_store.elts(), SSSE3_RANSTREAM_BUFSZ);
++      }
++      chunk_count = other.chunk_count;
++      return *this;
++   }
++
++   const unsigned char *
++   get_buf() const
++   {
++      if (_ntl_have_avx2 || _ntl_have_ssse3) {
++         return buf_store.elts();
++      } else {
++         return &buf[0];
++      }
++   }
++
++   long
++   get_buf_len() const
++   {
++      if (_ntl_have_avx2) {
++         return AVX2_RANSTREAM_BUFSZ;
++      } else if (_ntl_have_ssse3) {
++         return SSSE3_RANSTREAM_BUFSZ;
++      } else {
++         return 64;
++      }
++   }
++
++   // bytes are generated in chunks of RANSTREAM_BUFSZ bytes, except that
++   // initially, we may generate a few chunks of RANSTREAM_CHUNKSZ
++   // bytes.  This optimizes a bit for short bursts following a reset.
++
++   long
++   get_bytes(unsigned char *NTL_RESTRICT res,
++             long n, long pos)
++   {
++      return randomstream_get_bytes(state, buf, state_store, buf_store,
++                                    chunk_count, res, n, pos);
++   }
++
++   void
++   set_nonce(unsigned long nonce)
++   {
++      randomstream_set_nonce(state, state_store, chunk_count, nonce);
++   }
++};
+ 
+ #else
+ 

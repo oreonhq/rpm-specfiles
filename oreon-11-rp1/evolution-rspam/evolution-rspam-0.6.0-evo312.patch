@@ -1,0 +1,182 @@
+diff -up evolution-rspam-0.6.0/configure.ac.evo312 evolution-rspam-0.6.0/configure.ac
+--- evolution-rspam-0.6.0/configure.ac.evo312	2014-06-03 12:49:08.359897756 +0200
++++ evolution-rspam-0.6.0/configure.ac	2014-06-03 12:49:08.364897756 +0200
+@@ -64,24 +64,28 @@ AC_SUBST(LIBGNOME_REQUIRED)
+ AC_SUBST(LIBGNOMEUI_REQUIRED)
+ AC_SUBST(EVOLUTION_REQUIRED)
+ 
++EVOLUTION_PLUGIN=evolution-plugin
+ EVOLUTION_VERSION=`echo $EVOLUTION_VERSION|$AWK -F . '{print $1 * 1000000 + $2 * 1000 + $3}'`
+ if test "$EVOLUTION_BASE_VERSION_S" = "-3.0"; then
+ 	LIBGTK_VERSION=3
+ 	LIBGTK_REQUIRED=2.99.3
+ 	EVOLUTION_REQUIRED=2.91.6
+-if test "$EVOLUTION_VERSION" -gt "3003005"; then
+-if test "$EVOLUTION_VERSION" -gt "3007006"; then
+-	EVOLUTION_ADDITIONAL="libemail-engine"
+-else
+-	EVOLUTION_ADDITIONAL="libemail-utils libemail-engine"
+ fi
++if test "$EVOLUTION_VERSION" -gt "3003005"; then
++	if test "$EVOLUTION_VERSION" -gt "3007006"; then
++		EVOLUTION_ADDITIONAL="libemail-engine"
++	else
++		EVOLUTION_ADDITIONAL="libemail-utils libemail-engine"
++	fi
+ fi
++if test "$EVOLUTION_VERSION" -gt "3011090"; then
++	EVOLUTION_PLUGIN=evolution-shell
+ fi
+ 
+ PKG_CHECK_MODULES(RSPAM_EPLUGIN,
+ [
+ 	gtk+-$LIBGTK_VERSION.0 >= $LIBGTK_REQUIRED dnl
+-	evolution-plugin$EVOLUTION_BASE_VERSION_S >= $EVOLUTION_REQUIRED dnl
++	$EVOLUTION_PLUGIN$EVOLUTION_BASE_VERSION_S >= $EVOLUTION_REQUIRED dnl
+ 	evolution-shell$EVOLUTION_BASE_VERSION_S >= $EVOLUTION_REQUIRED dnl
+ 	$EVOLUTION_ADDITIONAL dnl
+ ])
+diff -up evolution-rspam-0.6.0/m4/evolution.m4.evo312 evolution-rspam-0.6.0/m4/evolution.m4
+--- evolution-rspam-0.6.0/m4/evolution.m4.evo312	2012-01-29 21:55:50.000000000 +0100
++++ evolution-rspam-0.6.0/m4/evolution.m4	2014-06-03 12:49:08.364897756 +0200
+@@ -78,11 +78,19 @@ AC_SUBST(MINOR_VERSION)
+ dnl Evolution plugin install directory
+ AC_ARG_WITH(plugin-install-dir, [  --with-plugin-install-dir=PATH path to evolution plugin directory])
+ if test "x$with_plugin_install_dir" = "x"; then
+-        PLUGIN_INSTALL_DIR=`$PKG_CONFIG --variable=plugindir evolution-plugin$EVOLUTION_BASE_VERSION_S`
++	EVOLUTION_PLUGIN=evolution-plugin
++	if test "$evolution_version_int" -gt "31190"; then
++		PLUGIN_INSTALL_DIR=`$PKG_CONFIG --variable=privlibdir evolution-shell$EVOLUTION_BASE_VERSION_S`
++	else
++		PLUGIN_INSTALL_DIR=`$PKG_CONFIG --variable=plugindir evolution-plugin$EVOLUTION_BASE_VERSION_S`
++	fi
+         if test "x$PLUGIN_INSTALL_DIR" = "x"; then
+                 AC_MSG_ERROR(Unable to find plugin directory)
+                 break;
+         fi
++	if test "$evolution_version_int" -gt "31190"; then
++		PLUGIN_INSTALL_DIR=$PLUGIN_INSTALL_DIR/plugins
++	fi
+ fi
+ AC_SUBST(PLUGIN_INSTALL_DIR)
+ 
+@@ -97,7 +105,11 @@ fi
+ AC_SUBST(ICON_DIR)
+ 
+ dnl Evolution e-error install directory
+-ERROR_DIR=`$PKG_CONFIG --variable=errordir evolution-plugin$EVOLUTION_BASE_VERSION_S`
++if test "$evolution_version_int" -gt "31190"; then
++	ERROR_DIR=`$PKG_CONFIG --variable=errordir evolution-shell$EVOLUTION_BASE_VERSION_S`
++else
++	ERROR_DIR=`$PKG_CONFIG --variable=errordir evolution-plugin$EVOLUTION_BASE_VERSION_S`
++fi
+ if test "x$ERROR_DIR" = "x"; then
+    AC_MSG_ERROR(Unable to find error file directory)
+ fi
+@@ -107,7 +119,7 @@ dnl test required for bonobo server inst
+ dnl dnl user might specify wrong prefix or not specify at all
+ AC_ARG_WITH(bonobo-servers-dir, [  --with-bonobo-servers-dir=PATH path to bonobo servers directory])
+ if test "x$with_bonobo_servers_dir" = "x" ; then
+-    BONOBO_LIBDIR=`$PKG_CONFIG --variable=libdir evolution-plugin$EVOLUTION_BASE_VERSION_S`
++    BONOBO_LIBDIR=`$PKG_CONFIG --variable=libdir evolution-shell$EVOLUTION_BASE_VERSION_S`
+     if test "x$BONOBO_LIBDIR" = "x"; then
+        AC_MSG_ERROR(Unable to find bonobo servers file directory)
+     fi
+diff -up evolution-rspam-0.6.0/src/rspam.c.evo312 evolution-rspam-0.6.0/src/rspam.c
+--- evolution-rspam-0.6.0/src/rspam.c.evo312	2014-06-03 12:49:08.363897756 +0200
++++ evolution-rspam-0.6.0/src/rspam.c	2014-06-03 12:49:08.364897756 +0200
+@@ -46,11 +46,16 @@
+ #include <libedataserver/libedataserver.h>
+ #include <e-util/e-util.h>
+ 
++#if EVOLUTION_VERSION >= 31000
++#include <libemail-engine/libemail-engine.h>
++#else
+ #include <libemail-engine/e-mail-folder-utils.h>
+ #include <libemail-engine/mail-ops.h>
+ #include <libemail-engine/mail-tools.h>
+-#include <shell/e-shell-view.h>
+ #include <shell/es-event.h>
++#endif
++
++#include <shell/e-shell-view.h>
+ #include <mail/e-mail-reader.h>
+ #include <mail/em-utils.h>
+ #include <mail/message-list.h>
+@@ -884,7 +889,11 @@ org_gnome_sa_rspam(GtkAction *action, ES
+ 	shell_content = e_shell_view_get_shell_content (shell_view);
+ 
+ 	reader = E_MAIL_READER (shell_content);
++#if EVOLUTION_VERSION >= 31190
++	folder = e_mail_reader_ref_folder(reader);
++#else
+ 	folder = e_mail_reader_get_folder(reader);
++#endif
+ 	uids = e_mail_reader_get_selected_uids(reader);
+ #endif
+ 
+@@ -957,6 +966,10 @@ org_gnome_sa_rspam(GtkAction *action, ES
+ 
+ 	while (gtk_events_pending())
+ 		gtk_main_iteration ();
++
++#if EVOLUTION_VERSION >= 31190
++	g_clear_object (&folder);
++#endif
+ }
+ 
+ void
+@@ -991,7 +1004,11 @@ org_gnome_sa_revoke (GtkAction *action,
+ 
+ 	reader = E_MAIL_READER (shell_content);
+ 	message_list = e_mail_reader_get_message_list (reader);
++#if EVOLUTION_VERSION >= 31190
++	folder = message_list_ref_folder (MESSAGE_LIST(message_list));
++#else
+ 	folder = MESSAGE_LIST(message_list)->folder;
++#endif
+ 	uids = message_list_get_selected (MESSAGE_LIST(message_list));
+ #endif
+ 
+@@ -1034,6 +1051,10 @@ org_gnome_sa_revoke (GtkAction *action,
+ 
+ 	while (gtk_events_pending())
+ 		gtk_main_iteration ();
++
++#if EVOLUTION_VERSION >= 31190
++	g_clear_object (&folder);
++#endif
+ }
+ 
+ 
+@@ -1789,10 +1810,18 @@ rspam_folder_cb (GtkWidget *widget, gpoi
+ #if EVOLUTION_VERSION >= 30303
+ 	dialog = em_folder_selector_new (
+ 			window,
+-			model,
+-			EM_FOLDER_SELECTOR_CAN_CREATE,
++			model
++#if EVOLUTION_VERSION < 31301
++			, EM_FOLDER_SELECTOR_CAN_CREATE,
+ 			_("Move to Folder"), NULL, _("M_ove"));
+ #else
++		);
++	em_folder_selector_set_can_create (EM_FOLDER_SELECTOR (dialog), TRUE);
++	em_folder_selector_set_caption (EM_FOLDER_SELECTOR (dialog), _("Move to Folder"));
++	em_folder_selector_set_default_button_label (EM_FOLDER_SELECTOR (dialog), _("M_ove"));
++#endif /* 31190 */
++
++#else
+ #if EVOLUTION_VERSION < 30101
+ 	folder_tree = em_folder_tree_new ();
+ #endif
+@@ -1900,6 +1929,9 @@ rspam_folder_cb (GtkWidget *widget, gpoi
+ 	gtk_widget_destroy (dialog);
+ }
+ 
++#if EVOLUTION_VERSION >= 31190
++#define ESEventTargetUpgrade void
++#endif
+ 
+ #if EVOLUTION_VERSION < 22900
+ void org_gnome_sa_rspam_startup(void *ep, EMPopupTargetSelect *t);

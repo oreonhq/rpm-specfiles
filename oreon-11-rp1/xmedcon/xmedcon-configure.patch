@@ -1,0 +1,20 @@
+--- configure.ac.orig	2017-12-30 22:27:05.986561808 +0000
++++ configure.ac	2017-12-30 23:04:37.456853321 +0000
+@@ -570,7 +570,7 @@
+  , tpc_prefix="$withval", tpc_prefix="")
+ if test x"$tpc_prefix" != x; then
+     TPC_LDFLAGS="-L$tpc_prefix/lib -ltpcimgio -L$tpc_prefix/lib -ltpcmisc"
+-    TPC_CFLAGS="-I$tpc_prefix/include"
++    TPC_CFLAGS="-I$tpc_prefix/include/libtpcimgio -I$tpc_prefix/include/libtpcmisc"
+     LDFLAGS="$LDFLAGS $TPC_LDFLAGS"
+     CPPFLAGS="$CPPFLAGS $TPC_CFLAGS"
+ else
+@@ -766,8 +766,6 @@
+  libs/Makefile
+  libs/ljpg/Makefile
+  libs/dicom/Makefile
+- libs/nifti/Makefile
+- libs/tpc/Makefile
+  macros/Makefile
+  source/Makefile
+  source/m-config.h

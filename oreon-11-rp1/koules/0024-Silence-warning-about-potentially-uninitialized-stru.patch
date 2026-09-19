@@ -1,0 +1,56 @@
+From ff29b0afcff17673e4c0a6b43d4e82daa16d6a77 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:49 +0200
+Subject: [PATCH 24/41] Silence warning about potentially uninitialized
+ structure members
+
+---
+ xlib/interface.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/xlib/interface.c b/xlib/interface.c
+index da68ab2..26db345 100644
+--- a/xlib/interface.c
++++ b/xlib/interface.c
+@@ -201,6 +201,8 @@ CompileBitmap (CONST int x, CONST int y, CONST RawBitmapType bitmap)
+       if ((cbitmap = malloc (size1)) == NULL)
+ 	perror ("create_bitmap"), exit (1);
+       ShmCompileBitmap (x, y, bitmap.vbuff, cbitmap);
++      pm.bitmap = 0;
++      pm.mask = 0;
+       pm.vbuff = (unsigned char *) cbitmap;
+       free (bitmap.vbuff);
+     }
+@@ -208,6 +210,9 @@ CompileBitmap (CONST int x, CONST int y, CONST RawBitmapType bitmap)
+ #endif
+     {
+       XFlush (dp);
++#ifdef MITSHM
++      pm.vbuff = NULL;
++#endif
+       pm.bitmap = XCreatePixmap (dp, wi, x, y, DefaultDepth (dp, screen));
+       XPutImage (dp, pm.bitmap, whitegc, bitmap.bitmap, 0, 0, 0, 0, x, y);
+       pm.mask = XCreateBitmapFromData (dp, wi, bitmap.mask, x, y);
+@@ -225,13 +230,18 @@ CreateBitmap (CONST int xv, CONST int yv)
+ #ifdef MITSHM
+   if (shm)
+     {
++      img.mask =  NULL;
++      img.bitmap = NULL;
+       img.xsize = xv;
+       img.vbuff = malloc (xv * yv + 10);
+-      return (img);
+     }
+   else
+ #endif
+     {
++#ifdef MITSHM
++      img.vbuff = NULL;
++      img.xsize = 0;
++#endif
+       if ((data = (char *) calloc ((xv + BitmapPad (dp)) * yv * 4, 1)) == NULL)
+ 	perror ("Memory Error"), exit (2);
+       img.bitmap = XCreateImage (dp, DefaultVisual (dp, screen), DefaultDepth (dp, screen),
+-- 
+2.5.0
+

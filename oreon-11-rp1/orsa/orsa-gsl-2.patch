@@ -1,0 +1,64 @@
+diff --git orsa-0.7.0/src/liborsa/orsa_orbit_gsl.cc~ orsa-0.7.0/src/liborsa/orsa_orbit_gsl.cc
+index 8596890618..7be5e9c9ca 100644
+--- orsa-0.7.0/src/liborsa/orsa_orbit_gsl.cc~
++++ orsa-0.7.0/src/liborsa/orsa_orbit_gsl.cc
+@@ -45,6 +45,25 @@
+ #include <gsl/gsl_cblas.h>
+ #include <gsl/gsl_randist.h>
+ #include <gsl/gsl_eigen.h>
++#include <gsl/gsl_version.h>
++
++#if GSL_MAJOR_VERSION >= 2
++#define GSL_INT_PRI "zi"
++
++static void multifit_covar(gsl_multifit_fdfsolver *s, gsl_matrix *covar) {
++      gsl_matrix *J=0;
++      gsl_multifit_fdfsolver_jac (s, J);
++      gsl_multifit_covar (J, 0.0, covar);
++}
++
++#else
++#define GSL_INT_PRI "i"
++
++static void multifit_covar(gsl_multifit_fdfsolver *s, gsl_matrix *covar) {
++      gsl_multifit_covar(s->J,0.0,covar);
++}
++
++#endif
+ 
+ #include "orsa_file.h"
+ #include "orsa_error.h"
+@@ -1002,7 +1021,7 @@ namespace orsa {
+ 	gsl_deriv_central(&diff_f, gsl_vector_get(v,j), gsl_vector_get(v,j)*1.0e4*std::numeric_limits<double>::epsilon(), &result, &abserr);
+ 	gsl_matrix_set (J, i, j, result);  
+ 	//
+-	fprintf(stderr,"[lim]diff[%03i][%i] = %20f +/- %20f at %20.12f\n",
++	fprintf(stderr,"[lim]diff[%03" GSL_INT_PRI "][%" GSL_INT_PRI "] = %20f +/- %20f at %20.12f\n",
+ 		i,j,result,abserr,gsl_vector_get(v,j));
+ 	
+ 	// }
+@@ -1102,7 +1121,7 @@ namespace orsa {
+       
+       { 
+ 	gsl_matrix * covar = gsl_matrix_alloc(6,6);
+-	gsl_multifit_covar(s->J,0.0,covar);
++	multifit_covar(s, covar);
+ 	printf ("more info:\n"
+ 		"a    = %12.6f +/- %12.6f\n"
+ 		"e    = %12.6f +/- %12.6f\n"
+@@ -1113,13 +1132,13 @@ namespace orsa {
+ 		gsl_vector_get(s->x,2)*(180/pi),sqrt(gsl_matrix_get(covar,2,2))*(180/pi));
+       }
+       
+-      gsl_multifit_covar(s->J,0.0,par.covar);
++      multifit_covar(s, par.covar);
+       par.use_covar = true;
+       
+     } while ((status == GSL_CONTINUE) && (iter < 1024));
+     
+     gsl_matrix * covar = gsl_matrix_alloc(6,6);
+-    gsl_multifit_covar(s->J,0.0,covar);
++    multifit_covar(s, covar);
+     // gsl_matrix_fprintf(stdout, covar,"%g");
+     
+ #define FIT(i) gsl_vector_get(s->x, i)

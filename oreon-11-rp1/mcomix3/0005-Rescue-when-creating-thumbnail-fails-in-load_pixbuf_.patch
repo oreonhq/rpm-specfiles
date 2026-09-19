@@ -1,0 +1,44 @@
+From 31f6d516fc044d4748dac98ab6117035d938389e Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Tue, 3 Jun 2025 14:02:01 +0900
+Subject: [PATCH] Rescue when creating thumbnail fails in load_pixbuf_size
+
+---
+ mcomix/mcomix/thumbnail_tools.py | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/mcomix/mcomix/thumbnail_tools.py b/mcomix/mcomix/thumbnail_tools.py
+index 35b4692..3b51cd2 100644
+--- a/mcomix/mcomix/thumbnail_tools.py
++++ b/mcomix/mcomix/thumbnail_tools.py
+@@ -142,8 +142,11 @@ class Thumbnailer(object):
+                     if not os.path.isfile(image_path):
+                         return None, None
+ 
+-                pixbuf = image_tools.load_pixbuf_size(image_path, self.width, self.height)
+-                if self.store_on_disk:
++                try:
++                    pixbuf = image_tools.load_pixbuf_size(image_path, self.width, self.height)
++                except:
++                    pixbuf = None
++                if pixbuf and self.store_on_disk:
+                     tEXt_data = self._get_text_data(image_path)
+                     # Use the archive's mTime instead of the extracted file's mtime
+                     tEXt_data['tEXt::Thumb::MTime'] = str(os.stat(filepath).st_mtime)
+@@ -153,8 +156,11 @@ class Thumbnailer(object):
+                 return pixbuf, tEXt_data
+ 
+         elif image_tools.is_image_file(filepath, check_mimetype=True):
+-            pixbuf = image_tools.load_pixbuf_size(filepath, self.width, self.height)
+-            if self.store_on_disk:
++            try:
++                pixbuf = image_tools.load_pixbuf_size(filepath, self.width, self.height)
++            except:
++                pixbuf = None
++            if pixbuf and self.store_on_disk:
+                 tEXt_data = self._get_text_data(filepath)
+             else:
+                 tEXt_data = None
+-- 
+2.49.0
+

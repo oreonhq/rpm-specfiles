@@ -1,0 +1,35 @@
+diff -up freewrl-6.7-20240420gitb3254b1/src/bin/options.c.fix-midi freewrl-6.7-20240420gitb3254b1/src/bin/options.c
+--- freewrl-6.7-20240420gitb3254b1/src/bin/options.c.fix-midi	2025-03-27 17:01:46.954545180 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/bin/options.c	2025-03-27 17:02:13.177820345 -0400
+@@ -559,6 +559,7 @@ int fv_parseCommandLine (int argc, char
+ 	case 'P': /* --playback, no arg */
+ 		fwl_set_modePlayback();
+ 		break;
++#ifdef HAVE_LIBREMIDI
+ 	case 'M': /* --midi, int 1 or 2 for midi transport */
+ 		{
+ 		int ival = 2;
+@@ -566,7 +567,7 @@ int fv_parseCommandLine (int argc, char
+ 		set_MIDITransport(ival);
+ 		}
+ 		break;
+-
++#endif
+ 
+ 
+ #ifdef HAVE_LIBCURL
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_MIDI.c.fix-midi freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_MIDI.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_MIDI.c.fix-midi	2025-03-27 17:06:05.980944869 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_MIDI.c	2025-03-27 17:07:05.027429620 -0400
+@@ -776,9 +776,11 @@ int MIDITransport() {
+ }
+ #else //HAVE_LIBREMIDI
+ //stubs
++void compile_MIDIFileSource(struct X3D_MIDIFileSource* node) {}
+ void render_MIDIPortSource(struct X3D_MIDIPortSource* node) {}
+ void render_MIDIFileSource(struct X3D_MIDIFileSource* node) {}
+ void render_MIDIPortDestination(struct X3D_MIDIPortDestination* node) {}
++void render_MIDIPrintDestination(struct X3D_MIDIPrintDestination* node) {}
+ void render_MIDIFileDestination(struct X3D_MIDIFileDestination* node) {}
+ void render_MIDIOut(struct X3D_MIDIOut* node) {}
+ void render_MIDIIn(struct X3D_MIDIIn* node) {}

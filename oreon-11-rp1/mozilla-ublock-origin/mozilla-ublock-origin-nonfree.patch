@@ -1,0 +1,11 @@
+diff -up uBlock-1.46.0/tools/make-assets.sh.orig uBlock-1.46.0/tools/make-assets.sh
+--- uBlock-1.46.0/tools/make-assets.sh.orig	2022-12-22 17:10:56.000000000 +0100
++++ uBlock-1.46.0/tools/make-assets.sh	2022-12-27 22:26:00.897541783 +0100
+@@ -16,7 +16,6 @@ mkdir $DES/thirdparties
+ ASSETS_MAIN=dist/build/uAssets/main
+ ASSETS_PROD=dist/build/uAssets/prod
+ 
+-cp -R $ASSETS_MAIN/thirdparties/pgl.yoyo.org     $DES/thirdparties/
+ cp -R $ASSETS_MAIN/thirdparties/publicsuffix.org $DES/thirdparties/
+ cp -R $ASSETS_MAIN/thirdparties/urlhaus-filter   $DES/thirdparties/
+ 

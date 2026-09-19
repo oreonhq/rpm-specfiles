@@ -1,0 +1,19 @@
+Seulement dans a/src/app: document.c.rej
+diff -rup --exclude '*.o' --exclude '*.a' --exclude Makefile --exclude colmap --exclude geomorph --exclude 'config.*' --exclude POTFILES --exclude Makefile.in a/src/app/thisappinit.c b/src/app/thisappinit.c
+--- a/src/app/thisappinit.c	2016-05-19 08:19:17.497909014 +0200
++++ b/src/app/thisappinit.c	2016-05-19 08:24:05.391560188 +0200
+@@ -75,12 +75,12 @@ doc_type_struct doc_type_list[NBDOCTYPES
+ 	NULL, 			// paste
+ 	NULL, 			// paste special
+ 	NULL, 			// run
+-	hf_dialog_defaults,	// defaults
++	(gpointer) hf_dialog_defaults,	// defaults
+ 	hf_stats,
+ 	hf_commit_creation,
+ 	hf_get_last_action,
+ 	hf_get_icon,
+-	set_creation_container,
++	(gpointer) set_creation_container,
+ 	NULL // undo / redo stack struct
+  }
+ // ,

@@ -1,0 +1,29 @@
+--- kitutuki-0.9.6/kitutuki.h.gcc10	2010-02-25 11:36:43.000000000 +0900
++++ kitutuki-0.9.6/kitutuki.h	2020-01-26 11:39:31.396543720 +0900
+@@ -61,7 +61,7 @@
+     // SIGTTOU, SIGTTIN, SIGTSTP, SIGQUIT, SIGPIPE
+ void kitutuki_restore_signal_default();
+     // シグナルを初期値に戻す
+-void (*kitutuki_set_signal_other)();
++extern void (*kitutuki_set_signal_other)();
+     // もし関数ポインタが代入されていたら
+     // kitutuki_set_signalで実行される
+ extern char gErrMsg[512];
+@@ -100,7 +100,7 @@
+ void kitutuki_wait_background_job();
+     // バックグランドジョブの状態のチェック
+     // ジョブ管理をする場合メインループ中に定期的に実行してください
+-void (*kitutuki_job_done)(int job_num, char* job_title);
++extern void (*kitutuki_job_done)(int job_num, char* job_title);
+     // ジョブ管理しているときにジョブが終わったら実行する処理
+     // job_numに終わったジョブの番号が入いれて呼ばれる。
+     // job_titleに終わったジョブのタイトルを入れて呼ばれる
+@@ -117,7 +117,7 @@
+     // 思われるのでkitutuki_job_numで終わっていないジョブがあると
+     // アプリケーションを終われないようにしとくほうがいいかもしれません。
+ 
+-vector_obj* gPrograms;               // 補完候補
++extern vector_obj* gPrograms;               // 補完候補
+ 
+ void kitutuki_rehash();
+     // プログラム補完候補の一覧の再読み込み

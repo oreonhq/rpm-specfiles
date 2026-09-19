@@ -1,0 +1,43 @@
+From 86083db4e7345ff2874899119db963320b278988 Mon Sep 17 00:00:00 2001
+From: Daiki Ueno <dueno@redhat.com>
+Date: Wed, 3 Dec 2025 16:39:23 +0900
+Subject: [PATCH] Remove probe point in agent for testing
+
+The probe crates uses inline assembly, which is still marked as
+experimental on some architectures including ppc64le.
+
+This removes the use of it, as the probe point is solely used in an
+integration test which we don't enable in the Fedora package.
+
+Signed-off-by: Daiki Ueno <dueno@redhat.com>
+---
+ agent/src/log_writer.rs | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/agent/src/log_writer.rs b/agent/src/log_writer.rs
+index 90c95d3..698b7ef 100644
+--- a/agent/src/log_writer.rs
++++ b/agent/src/log_writer.rs
+@@ -4,7 +4,6 @@
+ use crate::config;
+ use anyhow::{Context as _, Result, bail};
+ use crypto_auditing::types::EventGroup;
+-use probe::probe;
+ use serde_cbor::{Serializer, ser::IoWrite};
+ use std::path::PathBuf;
+ use time::{OffsetDateTime, macros::format_description};
+@@ -176,11 +175,6 @@ impl LogWriter {
+                 config::Format::Minimal => to_vec_minimal(&group)?,
+             };
+             self.write_all(v).await?;
+-            probe!(
+-                crypto_auditing_internal_agent,
+-                event_group,
+-                group.events().len()
+-            );
+             self.written_events += group.events().len();
+         }
+         self.groups.clear();
+-- 
+2.52.0
+

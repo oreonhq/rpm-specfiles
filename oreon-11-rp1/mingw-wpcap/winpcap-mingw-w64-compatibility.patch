@@ -1,0 +1,51 @@
+--- wpcap/PRJ/GNUmakefile.mingw-w64	2015-01-04 01:12:38.565026946 +0100
++++ wpcap/PRJ/GNUmakefile	2015-01-04 01:14:36.961893695 +0100
+@@ -35,6 +35,7 @@
+ 	-DHAVE_REMOTE \
+ 	-DHAVE_TC_API \
+ 	-DHAVE_ADDRINFO \
++	-DHAVE___ATTRIBUTE__ \
+ 	-DHAVE_LIMITS_H \
+ 	-DYY_NO_UNISTD_H \
+ 	-mno-cygwin -shared ${OPTFLAGS}
+--- wpcap/libpcap/pcap-win32.c.mingw-w64	2013-02-28 17:22:00.000000000 +0100
++++ wpcap/libpcap/pcap-win32.c	2024-07-30 10:49:27.453649313 +0200
+@@ -38,7 +38,7 @@
+ 
+ #include <pcap-int.h>
+ #include <Packet32.h>
+-#ifdef __MINGW32__
++#if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
+ #include <ddk/ndis.h>
+ #else /*__MINGW32__*/
+ #include <ntddndis.h>
+@@ -47,10 +47,6 @@
+ #include <dagnew.h>
+ #include <dagapi.h>
+ #endif /* HAVE_DAG_API */
+-#ifdef __MINGW32__
+-int* _errno();
+-#define errno (*_errno())
+-#endif /* __MINGW32__ */
+ 
+ #ifdef HAVE_REMOTE
+ #include <pcap-remote.h>
+--- wpcap/libpcap/optimize.c.mingw-w64	2024-07-30 11:34:22.731534949 +0200
++++ wpcap/libpcap/optimize.c	2024-07-30 11:35:04.810361619 +0200
+@@ -31,6 +31,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <memory.h>
+ #include <string.h>
+ 
+@@ -57,6 +58,8 @@
+ int ffs(int mask);
+ #endif
+ 
++int __cdecl ffs(int i);
++
+ /*
+  * Represents a deleted instruction.
+  */

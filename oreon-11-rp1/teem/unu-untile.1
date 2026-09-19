@@ -1,0 +1,90 @@
+.TH UNU\-UNTILE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-untile \- undo
+.BR unu\-tile (1):
+merge slow parts of two axis splits
+.SH SYNOPSIS
+.B unu\ untile
+.BR \-a , \-\-axis
+.RI < axMerge \  ax0 \  ax1 >
+.BR \-s , \-\-size
+.RI < size0 \  size1 >
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Undo
+.BR unu\-tile (1):
+merge slow parts of two axis splits.
+Untiling an array means spliting two axes, permuting the slow parts of those
+axes to be adjecent in the axis ordering, and then merging them.
+This increases the dimension by one.
+Undoing a
+.BR unu\-tile (1)
+uses the same
+.RB \(lq \-s \(rq
+argument, and
+sometimes a different
+.RB \(lq \-a \(rq
+argument, as demonstrated here for a 3\-D array:
+.IP
+.RB \(lq unu\ untile\ \-a\ 2\ 0\ 1 \(rq
+undoes
+.RB \(lq unu\ tile\ \-a\ 2\ 0\ 1 \(rq
+.IP
+.RB \(lq unu\ untile\ \-a\ 1\ 0\ 1 \(rq
+undoes
+.RB \(lq unu\ tile\ \-a\ 1\ 0\ 2 \(rq
+.IP
+.RB \(lq unu\ untile\ \-a\ 0\ 0\ 1 \(rq
+undoes
+.RB \(lq unu\ tile\ \-a\ 0\ 1\ 2 \(rq.
+.IP \(bu +2n
+Uses
+.B nrrdUntile2D
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIaxMerge\fR\ \fIax0\fR\ \fIax1\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxMerge\fR\ \fIax0\fR\ \fIax1\fR>
+the slow parts of axes
+.I ax0
+and
+.I ax1
+are merged into a (new) axis
+.IR axMerge ,
+with the axis
+.I ax0
+part being faster than
+.IR ax1 .
+(3
+.IR unsigned\ int s)
+.TP
+.B \-s\fR\ <\fIsize0\fR\ \fIsize1\fR>\ ,\ \fB\-\-size\fR\ <\fIsize0\fR\ \fIsize1\fR>
+the slow parts of axes
+.I ax0
+and
+.I ax1
+are taken to have size
+.I size0
+and
+.IR size1 ,
+respectively, and axis
+.I axMerge
+will have size
+.IB size0 * size1\fR.
+(2
+.IR size_t s)
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-tile (1)

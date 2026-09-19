@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>feather.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>BSD</project_license>
+  <name>Feather</name>
+  <summary>Monero desktop wallet</summary>
+  <description>
+    <p>
+      Feather is a wallet for the Monero cryptocurrency.
+    </p>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://featherwallet.org/img/home_monero_light.png</image>
+      <caption>Home</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://featherwallet.org/img/history_light.png</image>
+      <caption>History</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://featherwallet.org/img/send_light.png</image>
+      <caption>Send</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://featherwallet.org/img/receive_light.png</image>
+      <caption>Receive</caption>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://featherwallet.org/</url>
+  <update_contact>js_at_nil.im</update_contact>
+</component>

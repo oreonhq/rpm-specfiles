@@ -1,0 +1,39 @@
+=head1 NAME
+ 
+ooo2txt - Convert openoffice documents to simple text
+
+=head1 SYNOPSYS
+
+car2file OPTIONS... file
+
+=head1 DESCRIPTION
+
+Output the B<file> content in simple text.
+
+=head1 OPTIONS
+
+=over
+
+=item -e<encoding>
+
+Convert output to encoding I<< <encoding> >>
+
+=item -h
+
+Short help summary
+
+=item -v
+
+Output the version
+
+=back
+
+=head1 AUTHORS
+
+Frederic Labbe
+
+=head1 COPYRIGHT
+
+This program is covered by the Lesser General Public License
+
+=cut

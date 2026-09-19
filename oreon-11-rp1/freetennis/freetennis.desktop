@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Tennis
+Comment=Play Tennis - single player or multiplayer
+Exec=freetennis -newbie
+Icon=freetennis
+Terminal=false
+Type=Application
+Categories=Game;SportsGame;
+StartupNotify=true

@@ -1,0 +1,12 @@
+diff -up flow-tools-0.68.5.1/src/flow-filter.c.extern flow-tools-0.68.5.1/src/flow-filter.c
+--- flow-tools-0.68.5.1/src/flow-filter.c.extern	2008-01-27 13:48:55.000000000 -0700
++++ flow-tools-0.68.5.1/src/flow-filter.c	2020-01-27 20:44:13.176636051 -0700
+@@ -56,7 +56,7 @@
+ int debug;
+ int ip_net_only;
+ 
+-struct acl_list acl_list;
++extern struct acl_list acl_list;
+ 
+ int yyparse (void);
+ void usage(void);

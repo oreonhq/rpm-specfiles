@@ -1,0 +1,33 @@
+From 7ca0dd10aeeeff7670cd64f1401053a654f049d6 Mon Sep 17 00:00:00 2001
+From: Montel Laurent <montel@kde.org>
+Date: Tue, 27 May 2014 16:44:51 +0200
+Subject: [PATCH 5/9] Fix major for qt5
+
+---
+ lib/prison/CMakeLists.txt | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/lib/prison/CMakeLists.txt b/lib/prison/CMakeLists.txt
+index caf11df..c9458e1 100644
+--- a/lib/prison/CMakeLists.txt
++++ b/lib/prison/CMakeLists.txt
+@@ -1,9 +1,15 @@
+ include(CMakePackageConfigHelpers)
+ 
+-set(PRISON_VERSION_MAJOR "0")
++if(QT5_BUILD)
++   set(PRISON_VERSION_MAJOR "1")
++else()
++   set(PRISON_VERSION_MAJOR "0")
++endif()
+ set(PRISON_VERSION_MINOR "2")
+ set(PRISON_VERSION_PATCH "0")
+ 
++
++
+ set(PRISON_VERSION "${PRISON_VERSION_MAJOR}.${PRISON_VERSION_MINOR}.${PRISON_VERSION_PATCH}")
+ set(PRISON_VERSION_STRING "${PRISON_VERSION}")
+ 
+-- 
+2.5.0
+

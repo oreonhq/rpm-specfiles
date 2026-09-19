@@ -1,0 +1,11 @@
+--- a/fs/etc/xpra/xpra.orig.conf	2025-11-02 12:49:06.000000000 +0100
++++ b/fs/etc/xpra/xpra.conf	2025-11-09 15:18:11.280317871 +0100
+@@ -20,3 +20,8 @@
+ #   may just be specified multiple times.
+ # - You may break a long line into multiple lines
+ #   by ending each line with a backslash '\'.
++
++xvfb = Xvfb -screen 0 1920x1100x24 -nolisten tcp -noreset
++
++# Use PipeWire's PulseAudio socket, do NOT spawn pulseaudio
++pulseaudio = no

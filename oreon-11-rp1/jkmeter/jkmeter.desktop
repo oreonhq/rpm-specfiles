@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Jkmeter
+Comment=Horizontal or vertical bargraph level meter
+Icon=jkmeter
+Type=Application
+Categories=Application;AudioVideo;Audio;X-Jack;X-Audio_Tools
+Exec=jkmeter -C
+Terminal=false
+Encoding=UTF-8

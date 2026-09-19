@@ -1,0 +1,13 @@
+diff --git a/c++-gtk-utils/prog_present.cpp b/c++-gtk-utils/prog_present.cpp
+index a06901b..6ce7a10 100644
+--- a/c++-gtk-utils/prog_present.cpp
++++ b/c++-gtk-utils/prog_present.cpp
+@@ -72,7 +72,7 @@ static GDBusErrorEntry cgu_prog_presenter_errors[] = {
+ };
+ 
+ static GQuark cgu_prog_presenter_error_get_quark() {
+-  static volatile gsize error_quark = 0;
++  static gsize error_quark = 0;
+   if (!error_quark) {
+     g_dbus_error_register_error_domain("CguProgPresenterErrorDomain",
+ 				       &error_quark,

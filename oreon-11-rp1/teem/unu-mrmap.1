@@ -1,0 +1,123 @@
+.TH UNU\-MRMAP "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-mrmap \- map
+.I nrrd
+through whole
+.I nrrd
+of regular univariate maps
+.SH SYNOPSIS
+.B unu\ mrmap
+.BR \-m , \-\-map
+.RI < mmap \ ...>
+.RB [ \-r , \-\-rescale ]
+.RB [ \-min , \-\-minimum
+.RI < value >]
+.RB [ \-max , \-\-maximum
+.RI < value >]
+.RB [ \-blind8
+.RI < bool >]
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Map
+.I nrrd
+through whole
+.I nrrd
+of regular univariate maps, one map per sample in input.
+The
+.BI \(lq mmap \(rq
+.I nrrd
+has the same dimensional constraints as the
+.BI \(lq mlut \(rq
+.I nrrd
+for
+.BR unu\-mlut (1).
+This functionality is a generalization of
+.BR unu\-3op (1) \ lerp :
+it allows you to lerp through multiple
+.IR nrrd s,
+instead of just two.
+.IP \(bu +2n
+Uses
+.B nrrdApplyMulti1DRegMap
+.SH OPTIONS
+.TP
+.B \-m\fR\ <\fImmap\fR>\ ,\ \fB\-\-map\fR\ <\fImmap\fR>
+one
+.I nrrd
+of regular maps to map input
+.I nrrd
+through, or, list of
+.IR nrrd s
+which contain the individual entries of the map at each voxel, which will be
+joined together.
+(1 or more
+.IR nrrd s)
+.TP
+.B \-r\fR ,\ \fB\-\-rescale
+rescale the input values from the input range to the map domain.
+The map domain is either explicitly defined by the axis
+.IR min , max
+along axis
+.B 0
+or
+.BR 1 ,
+or, it is implicitly defined as zero to the length of that axis minus one.
+.TP
+.B \-min\fR\ <\fIvalue\fR>\ ,\ \fB\-\-minimum\fR\ <\fIvalue\fR>
+Low end of input range.
+Defaults to lowest value found in input
+.IR nrrd .
+Explicitly setting this is useful only with rescaling
+.RB (\(lq \-r \(rq)
+.RI ( double )
+.TP
+.B \-max\fR\ <\fIvalue\fR>\ ,\ \fB\-\-maximum\fR\ <\fIvalue\fR>
+High end of input range.
+Defaults to highest value found in input
+.IR nrrd .
+Explicitly setting this is useful only with rescaling
+.RB (\(lq \-r \(rq)
+.RI ( double )
+.TP
+.B \-blind8\fR\ <\fIbool\fR>
+Whether to know the range of 8-bit data blindly
+.RI ( uchar
+is always
+.BR [0,255] ,
+.I signed\ char
+is
+.BR [-128,127] ).
+Explicitly setting this is useful only with rescaling
+.RB (\(lq \-r \(rq)
+.RI ( bool );
+default:
+.RB \(lq true \(rq
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+specify the type
+.RB (\(lq int \(rq,
+.RB \(lq float \(rq,
+etc.) of the output
+.IR nrrd .
+By default (not using this option), the output type is the map\(cqs type.
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-rmap (1),
+.BR unu\-mlut (1),
+.BR unu\-3op (1)

@@ -1,0 +1,61 @@
+Description: Accept go command without arguments
+ Fruit does not calculate a move to make because it expects the go command
+ to have arguments, e.g. 'go wtime 30000'. This is because it looks for a string starting
+ with "go " instead of just "go". If that change is made it appears to just do an infinite
+ search. I've attached a patch that allows the simple go command and searches to depth 5
+ if no arguments are passed to go.
+ Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/fruit/+bug/74764
+Author: Robert Ancell <robert.ancell@canonical.com>
+Last-Update: 2016-09-16
+
+Index: fruit-2.1.dfsg-1.orig/src/protocol.cpp
+===================================================================
+--- fruit-2.1.dfsg-1.orig.orig/src/protocol.cpp	2010-12-09 12:34:30.000000000 +0100
++++ fruit-2.1.dfsg-1.orig/src/protocol.cpp	2010-12-13 09:49:11.000000000 +0100
+@@ -129,7 +129,7 @@
+ 
+       // dummy
+ 
+-   } else if (string_start_with(string,"go ")) {
++   } else if (string_start_with(string,"go")) {
+ 
+       if (!Searching && !Delay) {
+          init();
+@@ -230,7 +230,7 @@
+ 
+    const char * ptr;
+    bool infinite, ponder;
+-   int depth, mate, movestogo;
++   int depth, mate, movestogo, arg_count;
+    sint64 nodes;
+    double binc, btime, movetime, winc, wtime;
+    double time, inc;
+@@ -257,7 +257,10 @@
+ 
+    ptr = strtok(string," "); // skip "go"
+ 
++   arg_count = 0;
+    for (ptr = strtok(NULL," "); ptr != NULL; ptr = strtok(NULL," ")) {
++	arg_count++;
++
+ 
+       if (false) {
+ 
+@@ -344,9 +347,16 @@
+ 
+          wtime = double(atoi(ptr)) / 1000.0;
+          ASSERT(wtime>=0.0);
+-      }
++      } else 
++	arg_count--;
+    }
+ 
++    
++    // If no arguments default to search depth 5
++    if (arg_count == 0)
++       depth = 5;
++
++
+    // init
+ 
+    search_clear();

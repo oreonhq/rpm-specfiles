@@ -1,0 +1,13 @@
+Index: sshexport-2.4/sshexport.xml
+===================================================================
+--- sshexport-2.4.orig/sshexport.xml
++++ sshexport-2.4/sshexport.xml
+@@ -11,7 +11,7 @@
+ <refmiscinfo class='manual'>Internet</refmiscinfo>
+ </refmeta>
+ <refnamediv id='name'>
+-<refname> sshexport</refname>
++<refname>sshexport</refname>
+ <refpurpose>install ssh public keys on remote servers</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv id='synopsis'>

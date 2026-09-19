@@ -1,0 +1,76 @@
+am-utils-6.2 - fix NFSv3 lookup dir attribute return value
+
+From: Ian Kent <raven@themaw.net>
+
+The NFS v3 lookup method, which returns attributes for the directory
+containing the object to be looked up, used incorrect mount point
+attributes which was causing unusual file system object visibility
+problems.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/nfs_subr.c |   29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
+
+diff --git a/amd/nfs_subr.c b/amd/nfs_subr.c
+index 85cf98c..6a1b717 100644
+--- a/amd/nfs_subr.c
++++ b/amd/nfs_subr.c
+@@ -978,6 +978,29 @@ static void fattr_to_wcc_attr(nfsfattr *fattr, am_wcc_attr *wcc_attr)
+   nfstime_to_am_nfstime3(&fattr->na_ctime, &wcc_attr->ctime);
+ }
+ 
++static nfsfattr *get_parent_fattr(am_node *mp)
++{
++  nfsfattr *fattr;
++
++  /* Set attributes to those of the parent only if this
++   * isn't topvol otherwise just use the mp attributes.
++   */
++  fattr = &mp->am_fattr;
++  if (mp->am_parent && mp->am_parent->am_parent &&
++      !(mp->am_parent->am_parent->am_flags & AMF_ROOT))
++    fattr = &mp->am_parent->am_fattr;
++
++  return fattr;
++}
++
++static void parent_fattr_to_fattr3(am_node *mp, am_fattr3 *fattr3)
++{
++  nfsfattr *fattr;
++
++  fattr = get_parent_fattr(mp);
++  fattr_to_fattr3(fattr, fattr3);
++}
++
+ static am_nfsstat3 return_estale_or_rofs(am_nfs_fh3 *fh,
+                                          am_pre_op_attr *pre_op,
+                                          am_post_op_attr *post_op)
+@@ -1177,9 +1200,7 @@ am_nfs3_lookup_3_svc(am_LOOKUP3args *argp, struct svc_req *rqstp)
+ 
+     /* dir attributes */
+     post_op_dir->attributes_follow = 1;
+-    fattr = &mp->am_fattr;
+     fattr3 = &post_op_dir->am_post_op_attr_u.attributes;
+-    fattr_to_fattr3(fattr, fattr3);
+ 
+     post_op_obj->attributes_follow = 0;
+ 
+@@ -1196,6 +1217,7 @@ am_nfs3_lookup_3_svc(am_LOOKUP3args *argp, struct svc_req *rqstp)
+ 	amd_stats.d_drops++;
+ 	return 0;
+       }
++      parent_fattr_to_fattr3(mp, fattr3);
+       result.status = nfs_error(error);
+     } else {
+       /*
+@@ -1206,6 +1228,9 @@ am_nfs3_lookup_3_svc(am_LOOKUP3args *argp, struct svc_req *rqstp)
+       if (ap->am_ttl < mp->am_ttl)
+         ap->am_ttl = mp->am_ttl;
+ 
++      /* dir attrs, update after mount */
++      parent_fattr_to_fattr3(mp, fattr3);
++
+       mp_to_fh3(ap, &result.res_u.ok.object);
+ 
+       /* mount attributes */

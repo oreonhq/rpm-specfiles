@@ -1,0 +1,77 @@
+From 74aeaf35a24dd182f7abbe944c8316ed598a1fb5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ren=C3=A9=20Reucher?= <rene.reucher@batcom-it.net>
+Date: Thu, 9 Jun 2022 11:35:55 +0200
+Subject: [PATCH] imp: added Ubuntu 22.04 build configuration
+
+---
+ arch/Linux/Ubuntu_14.10.cfg                       | 1 -
+ arch/Linux/Ubuntu_15.04.cfg                       | 1 -
+ arch/Linux/Ubuntu_15.10.cfg                       | 1 -
+ arch/Linux/Ubuntu_16.04.cfg                       | 1 -
+ arch/Linux/Ubuntu_16.10.cfg                       | 1 -
+ arch/Linux/Ubuntu_20.04.cfg                       | 1 -
+ arch/Linux/{Ubuntu_14.04.cfg => Ubuntu_22.04.cfg} | 0
+ 7 files changed, 6 deletions(-)
+ delete mode 120000 arch/Linux/Ubuntu_14.10.cfg
+ delete mode 120000 arch/Linux/Ubuntu_15.04.cfg
+ delete mode 120000 arch/Linux/Ubuntu_15.10.cfg
+ delete mode 120000 arch/Linux/Ubuntu_16.04.cfg
+ delete mode 120000 arch/Linux/Ubuntu_16.10.cfg
+ delete mode 120000 arch/Linux/Ubuntu_20.04.cfg
+ rename arch/Linux/{Ubuntu_14.04.cfg => Ubuntu_22.04.cfg} (100%)
+
+diff --git a/arch/Linux/Ubuntu_14.10.cfg b/arch/Linux/Ubuntu_14.10.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Ubuntu_14.10.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Ubuntu_15.04.cfg b/arch/Linux/Ubuntu_15.04.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Ubuntu_15.04.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Ubuntu_15.10.cfg b/arch/Linux/Ubuntu_15.10.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Ubuntu_15.10.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Ubuntu_16.04.cfg b/arch/Linux/Ubuntu_16.04.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Ubuntu_16.04.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Ubuntu_16.10.cfg b/arch/Linux/Ubuntu_16.10.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Ubuntu_16.10.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Ubuntu_20.04.cfg b/arch/Linux/Ubuntu_20.04.cfg
+deleted file mode 120000
+index 7ab1dcc2f..000000000
+--- a/arch/Linux/Ubuntu_20.04.cfg
++++ /dev/null
+@@ -1 +0,0 @@
+-Debian.cfg
+\ No newline at end of file
+diff --git a/arch/Linux/Ubuntu_14.04.cfg b/arch/Linux/Ubuntu_22.04.cfg
+similarity index 100%
+rename from arch/Linux/Ubuntu_14.04.cfg
+rename to arch/Linux/Ubuntu_22.04.cfg
+-- 
+2.44.0
+

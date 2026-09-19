@@ -1,0 +1,4 @@
+You have to install one of mogstored-backend-* and to edit
+/etc/sysconf/mogstored to match HTTP server of your choice if you are not
+satisfied with built-in DAV (mogstored-backend-none).
+

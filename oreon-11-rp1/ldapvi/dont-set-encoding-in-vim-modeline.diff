@@ -1,0 +1,13 @@
+diff --git a/ldapvi/ldapvi.c b/ldapvi/ldapvi.c
+index 7b312f8..d251ee6 100644
+--- a/ldapvi/ldapvi.c
++++ b/ldapvi/ldapvi.c
+@@ -1414,7 +1414,7 @@ write_file_header(FILE *s, cmdline *cmdline)
+ 	int nlines = 0;
+ 
+ 	if (print_binary_mode == PRINT_UTF8 && !cmdline->ldif) {
+-		fputs("# -*- coding: utf-8 -*- vim:encoding=utf-8:\n", s);
++		fputs("# -*- coding: utf-8 -*- \n", s);
+ 		nlines++;
+ 	}
+ 	if (cmdline->ldif) {

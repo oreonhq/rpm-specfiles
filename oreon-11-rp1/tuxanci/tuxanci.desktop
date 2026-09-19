@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Tuxánci
+GenericName=Tuxánci Game
+Comment=First Tux Shooter Game
+Exec=tuxanci
+Icon=tuxanci
+Terminal=false
+Type=Application
+Categories=Game;ActionGame;KidsGame;
+StartupNotify=true

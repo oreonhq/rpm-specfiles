@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=xfbb
+GenericName=xfbb
+Comment=F6FBB BBS software for bulletins and messages distribution
+Exec=pkexec /usr/sbin/xfbb
+Icon=fbb
+Terminal=false
+Type=Application
+Categories=Network;HamRadio;
+Version=1.0

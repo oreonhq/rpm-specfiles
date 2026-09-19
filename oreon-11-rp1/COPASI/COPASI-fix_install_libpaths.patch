@@ -1,0 +1,122 @@
+##This patch sets libraries' installation paths according to the Fedora packaging guidelines
+--- CMakeLists.orig.txt	2015-06-03 14:40:54.000000000 +0200
++++ CMakeLists.txt	2015-06-11 12:29:51.346501583 +0200
+@@ -843,13 +843,13 @@
+ file(GLOB_RECURSE WIZARD_HELP_FILES "${PROJECT_SOURCE_DIR}/copasi/wizard/help_html" copasi/wizard/help_html/*.html)
+ file(GLOB_RECURSE WIZARD_IMAGE_FILES "${PROJECT_SOURCE_DIR}/copasi/wizard/help_html/figures" copasi/wizard/help_html/figures/*.png)
+ file(GLOB_RECURSE EXAMPLE_FILES "${PROJECT_SOURCE_DIR}/TestSuite/distribution" TestSuite/distribution/*.*)
+-install(FILES ${WIZARD_HELP_FILES} DESTINATION share/copasi/doc/html)
+-install(FILES ${WIZARD_IMAGE_FILES} DESTINATION share/copasi/doc/html/figures)
+-install(FILES ${EXAMPLE_FILES} DESTINATION share/copasi/examples)
++install(FILES ${WIZARD_HELP_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/copasi/doc/html)
++install(FILES ${WIZARD_IMAGE_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/copasi/doc/html/figures)
++install(FILES ${EXAMPLE_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/copasi/examples)
+ install(FILES
+     "${PROJECT_SOURCE_DIR}/copasi/UI/icons/Copasi.ico"
+     "${PROJECT_SOURCE_DIR}/copasi/UI/icons/CopasiDoc.ico"
+-        DESTINATION share/copasi/icons)
++        DESTINATION share/icons/copasi/icons)
+ install(FILES
+     "${PROJECT_SOURCE_DIR}/copasi/MIRIAM/MIRIAMResources.xml"
+         DESTINATION share/copasi/config)
+--- copasi/bindings/csharp/CMakeLists.orig.txt	2015-01-07 15:45:42.000000000 +0100
++++ copasi/bindings/csharp/CMakeLists.txt	2015-01-07 16:29:49.830302408 +0100
+@@ -156,9 +156,7 @@
+ 
+ target_link_libraries(binding_csharp_native_lib libCOPASISE-static)
+ 
+-INSTALL(TARGETS binding_csharp_native_lib 
+-        DESTINATION bindings/csharp
+-  )
++INSTALL(TARGETS binding_csharp_native_lib PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/mono/copasicsP)
+ 
+ ####################################################################
+ #
+@@ -186,9 +184,9 @@
+ add_custom_target(binding_csharp_managed_lib ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/copasicsP.dll)
+ add_dependencies(binding_csharp_managed_lib binding_csharp_swig)
+ 
+-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/copasicsP.dll DESTINATION bindings/csharp) 
++INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/copasicsP.dll PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/mono/copasicsP) 
+ file(GLOB examples ${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cs)
+-INSTALL(FILES ${examples} DESTINATION bindings/csharp/examples) 
++INSTALL(FILES ${examples} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/mono/copasicsP/examples) 
+ 
+ # compile cs examples if needed to test whether 
+ # they still work with the current objectmodel
+--- copasi/bindings/perl/CMakeLists.orig.txt	2015-01-07 15:45:42.000000000 +0100
++++ copasi/bindings/perl/CMakeLists.txt	2015-01-07 16:25:59.264689795 +0100
+@@ -153,7 +153,7 @@
+   string(REPLACE "'" "" PERL_PLATFORM ${PERL_PLATFORM})
+   string(REPLACE ";" "" PERL_PLATFORM ${PERL_PLATFORM})
+   string(REPLACE "archname=" "" PERL_PLATFORM ${PERL_PLATFORM})
+-  set(PERL_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/perl5/site-perl/${PERL_VERSION}/${PERL_PLATFORM})
++  set(PERL_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/perl5/vendor_perl)
+   set(PERL_PACKAGE_INSTALL_BIN_DIR ${PERL_PACKAGE_INSTALL_DIR}/auto/COPASI)
+ else()
+   set(PERL_PACKAGE_INSTALL_DIR ${MISC_PREFIX}bindings/perl)
+@@ -170,5 +170,5 @@
+ 	set_target_properties(binding_perl_lib PROPERTIES  SUFFIX ".bundle")
+ endif()
+ 
+-INSTALL(TARGETS binding_perl_lib  DESTINATION ${PERL_PACKAGE_INSTALL_BIN_DIR} )
++INSTALL(TARGETS binding_perl_lib PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE DESTINATION ${PERL_PACKAGE_INSTALL_BIN_DIR})
+
+--- copasi/bindings/python/CMakeLists.orig.txt	2015-01-07 15:45:42.000000000 +0100
++++ copasi/bindings/python/CMakeLists.txt	2015-01-07 19:32:33.235855748 +0100
+@@ -165,13 +165,13 @@
+   set(PYTHON_PACKAGE_INSTALL_DIR ${MISC_PREFIX}bindings/python)
+ endif()
+ 
+-INSTALL(TARGETS binding_python_lib DESTINATION ${PYTHON_PACKAGE_INSTALL_DIR}/copasi )
++INSTALL(TARGETS binding_python_lib PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE DESTINATION ${PYTHON_PACKAGE_INSTALL_DIR}/copasi)
+ 
+ file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/copasi.pth" "copasi\n")
+ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/copasi.pth  DESTINATION ${PYTHON_PACKAGE_INSTALL_DIR})
+ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/COPASI.py  DESTINATION ${PYTHON_PACKAGE_INSTALL_DIR}/copasi )
+ file(GLOB examples ${CMAKE_CURRENT_SOURCE_DIR}/examples/*.py)
+-INSTALL(FILES ${examples} DESTINATION ${MISC_PREFIX}bindings/python) 
++INSTALL(FILES ${examples} DESTINATION ${PYTHON_PACKAGE_INSTALL_DIR}/copasi/examples) 
+ 
+ macro(ADJUST_PYTHONPATH target)
+ 
+--- copasi/bindings/java/CMakeLists.orig.txt	2015-01-07 15:45:42.000000000 +0100
++++ copasi/bindings/java/CMakeLists.txt	2015-01-07 21:08:43.571075012 +0100
+@@ -151,7 +151,7 @@
+ 	set_target_properties (binding_java_lib PROPERTIES SUFFIX ".jnilib")
+ endif()
+ 
+-install(TARGETS binding_java_lib DESTINATION bindings/java )
++install(TARGETS binding_java_lib PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE DESTINATION ${CMAKE_INSTALL_LIBDIR}/copasi)
+ 
+ target_link_libraries(binding_java_lib libCOPASISE-static)
+ 
+@@ -184,9 +184,9 @@
+ 	
+ install(FILES ${COPASI_JAR}
+ 	  ${COPASI_GUI_JAR}
+-        DESTINATION bindings/java) 
++        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/java) 
+ file(GLOB examples ${CMAKE_CURRENT_SOURCE_DIR}/examples/*.java)
+-install(FILES ${examples} DESTINATION bindings/java/examples) 
++install(FILES ${examples} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/java/copasi/examples) 
+ 
+ # compile java examples if needed to test whether 
+ # they still work with the current objectmodel
+--- copasi/bindings/octave/CMakeLists.orig.txt	2015-01-07 15:45:42.000000000 +0100
++++ copasi/bindings/octave/CMakeLists.txt	2015-01-08 18:34:10.609971192 +0100
+@@ -147,12 +147,12 @@
+ #
+ set(OCTAVE_PACKAGE_INSTALL_DIR)
+ if (UNIX OR CYGWIN) 
+-  set(OCTAVE_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
++  set(OCTAVE_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/octave/packages/COPASI-${COPASI_version})
+ else()
+   set(OCTAVE_PACKAGE_INSTALL_DIR ${MISC_PREFIX}bindings/octave)
+ endif()
+ 
+-INSTALL(TARGETS binding_octave_lib DESTINATION ${OCTAVE_PACKAGE_INSTALL_DIR} )
++INSTALL(TARGETS binding_octave_lib PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE DESTINATION ${OCTAVE_PACKAGE_INSTALL_DIR})
+ 
+ set(OCTAVE_INTERPRETER "octave" CACHE STRING "full path to the octave interpreter to be used for running tests." )
+ 

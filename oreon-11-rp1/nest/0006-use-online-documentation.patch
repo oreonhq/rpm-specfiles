@@ -1,0 +1,33 @@
+From 78fa790e7a506e9cd080375ebde87004345852f9 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Mon, 8 Apr 2024 12:00:16 +0100
+Subject: [PATCH 6/7] use online documentation
+
+---
+ pynest/nest/lib/hl_api_info.py | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/pynest/nest/lib/hl_api_info.py b/pynest/nest/lib/hl_api_info.py
+index 5a878c6c1..8461e78ce 100644
+--- a/pynest/nest/lib/hl_api_info.py
++++ b/pynest/nest/lib/hl_api_info.py
+@@ -83,12 +83,10 @@ def helpdesk():
+     docdir = sli_func("statusdict/prgdocdir ::")
+     help_fname = os.path.join(docdir, "html", "index.html")
+ 
+-    if not os.path.isfile(help_fname):
+-        msg = "Sorry, the help index cannot be opened. "
+-        msg += "Did you run 'make html' before running 'make install'?"
+-        raise FileNotFoundError(msg)
+-
+-    webbrowser.open_new(f"file://{help_fname}")
++    if os.path.isfile(help_fname):
++        webbrowser.open_new(f"file://{help_fname}")
++    else:
++        webbrowser.open_new("https://nest-simulator.readthedocs.io/")
+ 
+ 
+ @check_stack
+-- 
+2.44.0
+

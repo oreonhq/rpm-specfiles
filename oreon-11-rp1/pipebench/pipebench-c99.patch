@@ -1,0 +1,17 @@
+Include <stdlib.h>, <string.h> for more function prototypes.
+This avoids future build failures with strict C99 compilers which
+do not support implicit function declarations.
+
+diff --git a/pipebench.c b/pipebench.c
+index 6d4e4475e40f000b..0ae4e5e653bd6354 100644
+--- a/pipebench.c
++++ b/pipebench.c
+@@ -30,6 +30,8 @@
+ #include <unistd.h>
+ #include <time.h>
+ #include <signal.h>
++#include <stdlib.h>
++#include <string.h>
+ #include <sys/time.h>
+ #include <sys/types.h>
+ #include <errno.h>

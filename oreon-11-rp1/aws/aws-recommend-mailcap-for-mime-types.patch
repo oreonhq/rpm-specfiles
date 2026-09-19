@@ -1,0 +1,16 @@
+--- a/docs/source/using_aws.rst
++++ b/docs/source/using_aws.rst
+@@ -1111,6 +1111,13 @@
+   The name of the file containing the MIME types associations. The default
+   file name is |MIME_TYPES|.
+ 
++  .. admonition:: A note from the Fedora package maintainers
++
++     An up-to-date list of MIME types (``/etc/mime.types``) is
++     available from the mailcap_ package.
++
++     .. _mailcap: https://packages.fedoraproject.org/pkgs/mailcap/mailcap/
++
+ *Receive_Timeout (duration)*
+ 
+   .. index:: Receive_Timeout

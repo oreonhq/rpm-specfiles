@@ -1,46 +1,44 @@
-%global source0_hash 302c22c3ba2a0fd5f3911918651341ebb3896176cbdec15bd421f80b1afc7647
-
-%bcond extras %{undefined rhel}
-%bcond tests %[%{undefined rhel} && %{with extras}]
+%global source0_hash none
 
 Name:           python-build
-Version:        1.5.0
+Version:        1.6.1
 Release:        %autorelease
-Summary:        A simple, correct PEP517 package builder
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A simple, correct Python build frontend
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/pypa/build
-Source:         https://files.pythonhosted.org/packages/78/e0/df5e171f685f82f37b12e1f208064e24244911079d7b767447d1af7e0d70/build-%{version}.tar.gz
+URL:            https://build.pypa.io
+Source:         %{pypi_source build}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros >= 0-41
 
-%description
-A simple, correct PEP517 package builder.
 
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'build' generated automatically by pyp2spec.}
+
+%description %_description
 
 %package -n     python3-build
 Summary:        %{summary}
 
-%description -n python3-build
-A simple, correct PEP517 package builder.
+%description -n python3-build %_description
 
-
-%if %{with extras} || %{defined eln}
-%pyproject_extras_subpkg -n python3-build virtualenv uv
-%endif
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-build keyring,uv,virtualenv
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n build-%{version}
-sed -i '/pytest-cov/d; /covdefaults/d' pyproject.toml
 
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-g test} %{?with_extras:-x virtualenv,uv}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x keyring,uv,virtualenv
 
 
 %build
@@ -49,20 +47,17 @@ sed -i '/pytest-cov/d; /covdefaults/d' pyproject.toml
 
 %install
 %pyproject_install
-%pyproject_save_files -l build
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pyproject_check_import
-%if %{with tests}
-%pytest -v -m "not network"
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
 %files -n python3-build -f %{pyproject_files}
-%doc README.md
 %{_bindir}/pyproject-build
-
 
 %changelog
 %autochangelog

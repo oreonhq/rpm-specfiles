@@ -1,0 +1,46 @@
+commit 7f95002f66beaa1cf1af64ffc0c4333858bc0da1
+Author: Thomas Beierlein <tomjbe@gentoo.org>
+Date:   Fri May 1 10:29:54 2020 +0200
+
+    fix compiler warnings
+
+diff --git a/test/test_checklogfile.c b/test/test_checklogfile.c
+index 926531039ca264dd..dc5bddd154a09596 100644
+--- a/test/test_checklogfile.c
++++ b/test/test_checklogfile.c
+@@ -5,6 +5,7 @@
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include "../src/tlf.h"
++#include "../src/ignore_unused.h"
+ 
+ #include "../src/checklogfile.h"
+ 
+@@ -22,7 +23,7 @@ void append_tofile (char *file, char * msg) {
+     int fd;
+ 
+     fd = open(file, O_WRONLY | O_APPEND );
+-    (void)write (fd, msg, strlen(msg));
++    IGNORE(write (fd, msg, strlen(msg)));
+     close(fd);
+ }
+ 
+@@ -30,7 +31,7 @@ void append_tofile (char *file, char * msg) {
+ #define COMMENT "; Node A, 110 : comment                                                                \n"
+ 
+ void append_line (int fd, char *msg) {
+-    (void)write (fd, msg, strlen(msg));
++    IGNORE(write (fd, msg, strlen(msg)));
+ }
+ 
+ void write_log(char * file) {
+diff --git a/test/test_wwv.c b/test/test_wwv.c
+index f4e20ac2e1bd3545..0fa82da47c43be22 100644
+--- a/test/test_wwv.c
++++ b/test/test_wwv.c
+@@ -1,4 +1,5 @@
+ #include "test.h"
++#include <glib.h>
+ 
+ #include "../src/getwwv.h"
+ 

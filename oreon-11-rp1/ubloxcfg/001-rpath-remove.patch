@@ -1,0 +1,42 @@
+diff --git a/cfgtool/CMakeLists.txt b/cfgtool/CMakeLists.txt
+index e5857f0..7064eb0 100644
+--- a/cfgtool/CMakeLists.txt
++++ b/cfgtool/CMakeLists.txt
+@@ -62,9 +62,6 @@ file(GLOB H_FILES *.h)
+ message(STATUS "ff: C_FILES=${C_FILES}")
+ message(STATUS "ff: H_FILES=${H_FILES}")
+
+-list(APPEND CMAKE_INSTALL_RPATH $ORIGIN)
+-list(APPEND CMAKE_INSTALL_RPATH $ORIGIN/../lib)
+-
+ add_executable(${PROJECT_NAME} ${C_FILES})
+ target_link_libraries(${PROJECT_NAME}
+     PRIVATE
+diff --git a/ff/CMakeLists.txt b/ff/CMakeLists.txt
+index 7adfc34..2966e7a 100644
+--- a/ff/CMakeLists.txt
++++ b/ff/CMakeLists.txt
+@@ -59,9 +59,6 @@ file(GLOB H_FILES *.h)
+ message(STATUS "ff: C_FILES=${C_FILES}")
+ message(STATUS "ff: H_FILES=${H_FILES}")
+
+-list(APPEND CMAKE_INSTALL_RPATH $ORIGIN)
+-list(APPEND CMAKE_INSTALL_RPATH $ORIGIN/../lib)
+-
+ add_library(${PROJECT_NAME} SHARED ${C_FILES} ${GEN_FILES})
+
+ target_include_directories(${PROJECT_NAME}
+diff --git a/ubloxcfg/CMakeLists.txt b/ubloxcfg/CMakeLists.txt
+index fd455e5..0166389 100644
+--- a/ubloxcfg/CMakeLists.txt
++++ b/ubloxcfg/CMakeLists.txt
+@@ -75,9 +75,6 @@ file(GLOB H_FILES *.h)
+ message(STATUS "ff: C_FILES=${C_FILES}")
+ message(STATUS "ff: H_FILES=${H_FILES}")
+
+-list(APPEND CMAKE_INSTALL_RPATH $ORIGIN)
+-list(APPEND CMAKE_INSTALL_RPATH $ORIGIN/../lib)
+-
+ add_library(${PROJECT_NAME} SHARED ${C_FILES} ${GEN_FILES})
+
+ if(NOT NO_CODEGEN)

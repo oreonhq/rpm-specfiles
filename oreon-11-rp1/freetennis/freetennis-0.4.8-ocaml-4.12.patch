@@ -1,0 +1,16 @@
+diff -ur freetennis-0.4.8.old/freetennis.ml freetennis-0.4.8/freetennis.ml
+--- freetennis-0.4.8.old/freetennis.ml	2021-07-31 07:17:32.938380442 +0100
++++ freetennis-0.4.8/freetennis.ml	2021-07-31 07:21:54.889563298 +0100
+@@ -38,7 +38,11 @@
+ 
+ 
+ 
+-open List
++let length = List.length
++let hd = List.hd
++let append = List.append
++let mem = List.mem
++let filter = List.filter
+ 
+ open Sdlevent (* for mme_xrel etc *)
+ 

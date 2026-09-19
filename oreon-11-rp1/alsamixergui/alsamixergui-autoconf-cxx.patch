@@ -1,0 +1,14 @@
+diff --git a/configure.in b/configure.in
+index 9307cc2..5817b93 100644
+--- a/configure.in
++++ b/configure.in
+@@ -10,6 +10,9 @@ AC_PROG_CXX
+ AC_PROG_INSTALL
+ AC_PROG_LN_S
+ 
++dnl Do all checks using C++ compiler
++AC_LANG(C++)
++
+ dnl Checks for libraries.
+ AC_CHECK_LIB(fltk,numericsort,,
+ AC_CHECK_LIB(fltk,fl_numericsort,,

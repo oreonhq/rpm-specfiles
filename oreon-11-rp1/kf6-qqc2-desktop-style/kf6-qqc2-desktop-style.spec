@@ -1,13 +1,13 @@
-%global source0_hash 6c005f06c5f8c4ac349238abf14999bb917215a8f7b8c51364e2fdd12e9e6355
+%global source0_hash dfb815380b4297c28ef9e4bc8e3ab350b6fbf7b78e0677c3e2e3d4ca319ae336
 
 %global framework qqc2-desktop-style
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.29.0
 Release:        1%{?dist}
 Summary: QtQuickControls2 style for consistency between QWidget and QML apps
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LicenseRef-KFQF-Accepted-GPL
@@ -20,14 +20,14 @@ BuildRequires: gcc-c++
 BuildRequires: cmake
 BuildRequires: cmake(Qt6LinguistTools)
 BuildRequires: kf6-rpm-macros
-BuildRequires: cmake(KF6ConfigWidgets)
-BuildRequires: cmake(KF6Kirigami2)
-BuildRequires: cmake(KF6IconThemes)
-BuildRequires: cmake(KF6ColorScheme)
+BuildRequires: cmake(KF6ConfigWidgets) >= %{version}
+BuildRequires: cmake(KF6KirigamiPlatform) >= %{version}
+BuildRequires: cmake(KF6IconThemes) >= %{version}
+BuildRequires: cmake(KF6ColorScheme) >= %{version}
 BuildRequires: pkgconfig(Qt6Gui)
 BuildRequires: pkgconfig(Qt6Quick)
 BuildRequires: pkgconfig(Qt6Widgets)
-BuildRequires: cmake(KF6Sonnet)
+BuildRequires: cmake(KF6Sonnet) >= %{version}
 BuildRequires: pkgconfig(xkbcommon)
 
 # Doesn't need qtbase-private-devel, but private stuff from qtdeclarative
@@ -48,10 +48,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 %cmake_kf6
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
 
 %install
-DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
+%cmake_install
 %find_lang %{name} --all-name --with-man --with-qt
 
 %files -f %{name}.lang
@@ -63,6 +63,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_plugindir}/kirigami/platform/org.kde.desktop.so
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-5
 - BR cmake(Qt6LinguistTools) for ecm_install_po_files_as_qm
 - Source URLs https

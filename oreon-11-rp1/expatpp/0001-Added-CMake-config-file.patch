@@ -1,0 +1,27 @@
+From ca4376c9b94b8be9308fd3ec77a18548672213bc Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Thu, 18 Oct 2012 16:07:42 +0200
+Subject: [PATCH 01/15] Added CMake config file
+
+Signed-off-by: Mario Ceresa <mrceresa@gmail.com>
+---
+ CMakeLists.txt | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 CMakeLists.txt
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..a9607b2
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,6 @@
++project(expatpp)
++
++find_package(EXPAT required)
++
++add_library(expatpp SHARED expatpp.cpp)
++target_link_libraries(expatpp ${EXPAT_LIBRARIES})
+\ No newline at end of file
+-- 
+1.7.11.7
+

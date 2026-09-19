@@ -1,0 +1,26 @@
+--- MuseScore-4.6.3/src/framework/vst/CMakeLists.txt.orig	2025-10-21 02:21:23.000000000 -0600
++++ MuseScore-4.6.3/src/framework/vst/CMakeLists.txt	2025-11-24 16:52:34.472832116 -0700
+@@ -21,8 +21,6 @@
+ declare_module(muse_vst)
+ set(MODULE_ALIAS muse::vst)
+ 
+-add_subdirectory("sdk")
+-
+ include(GetPlatformInfo)
+ 
+ set(MODULE_QRC vst.qrc)
+@@ -96,12 +94,9 @@ if (OS_IS_WIN)
+     )
+ endif()
+ 
+-set(MODULE_INCLUDE
+-    ${MUSE_MODULE_VST_VST3_SDK_PATH}
+-    )
+-
+ set(MODULE_LINK
+-    vst_sdk_3
++    vst3sdk_hosting
++    vst3sdk_common
+     )
+ 
+ if (OS_IS_LIN)

@@ -1,0 +1,21 @@
+--- barcode-0.98/Makefile.in.orig	2005-07-07 23:07:48.513990181 +0200
++++ barcode-0.98/Makefile.in	2005-07-07 23:08:53.716905115 +0200
+@@ -11,12 +11,12 @@
+ LDFLAGS = -L. -l$(TARGET) @LIBPAPER@
+ 
+ prefix = @prefix@
+-BINDIR = $(prefix)/bin
+-LIBDIR = $(prefix)/lib
+-INCDIR = $(prefix)/include
+-MAN1DIR = $(prefix)/man/man1
+-MAN3DIR = $(prefix)/man/man3
+-INFODIR = $(prefix)/info
++BINDIR = $(bindir)
++LIBDIR = $(libdir)
++INCDIR = $(includedir)
++MAN1DIR = $(mandir)/man1
++MAN3DIR = $(mandir)/man3
++INFODIR = $(infodir)
+ 
+ # getopt may be installed or not, if not take our copy
+ GETOPT_O = @GETOPT_O@

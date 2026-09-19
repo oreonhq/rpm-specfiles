@@ -1,0 +1,48 @@
+--- atlasrep-2.1.9/makedocrel.g.orig	2024-08-22 03:38:13.000000000 -0600
++++ atlasrep-2.1.9/makedocrel.g	2025-09-17 14:09:44.448305377 -0600
+@@ -9,7 +9,6 @@ pathtodoc:= "doc";;
+ main:= "main.xml";;
+ pkgname:= "AtlasRep";;
+ 
+-SetPackagePath( pkgname, "." );
+ LoadPackage( pkgname );
+ 
+ # Extract the book name from the 'main' file.
+@@ -72,13 +71,26 @@ GAPInfo.CurrentPackageName:= LowercaseSt
+ GAPDoc2HTMLProcs.AdjustExtURL_Orig:= GAPDoc2HTMLProcs.AdjustExtURL;
+ 
+ GAPDoc2HTMLProcs.AdjustExtURL := function( r, url )
+-  local res, pkgpath, self, pos, pos2, prefix, prefixdir, pkgname, suffix;
++  local res, pkgpath, self, pos, pos2, prefix, prefixdir, pkgname, suffix, split, x;
+ 
+   res:= GAPDoc2HTMLProcs.AdjustExtURL_Orig( r, url );
++  # Fedora change: remove the mock buildroot from the prefix
++  if StartsWith( res, "/builddir/build/BUILDROOT" ) then
++    split := SplitString( res, "/" );
++    Remove ( res, 2 );
++    Remove ( res, 2 );
++    Remove ( res, 2 );
++    Remove ( res, 2 );
++    res:= JoinStringsWithSeparator( split, "/" );
++  fi;
+   if IsBound( GAPDoc2HTMLProcs.RelPath ) then
+     # We want to replace absolute paths in links to other package manuals
+     # by relative links.
+-    pkgpath:= Concatenation( GAPInfo.MainRootPath, "pkg/" );
++    for x in GAPInfo.RootPaths do
++      if StartsWith(res, Concatenation( x, "pkg/" )) then
++        pkgpath := Concatenation( x, "pkg/" );
++      fi;
++    od;
+     self:= GAPInfo.PackagesLoaded.( GAPInfo.CurrentPackageName );
+     if StartsWith( res, self[1] ) then
+       # The link points to a file inside the same package
+@@ -87,7 +99,7 @@ GAPDoc2HTMLProcs.AdjustExtURL := functio
+       # not only relative to the GAP root directory.
+       res:= Concatenation( "..",
+                 res{ [ Length( self[1] ) + 1 .. Length( res ) ] } );
+-    elif not StartsWith( res, pkgpath ) then
++    elif not IsBound( pkgpath ) then
+       # Perhaps the link points to a package outside the main root path.
+       # Probably this indicates an error.
+       if ForAny( RecNames( GAPInfo.PackagesLoaded ),

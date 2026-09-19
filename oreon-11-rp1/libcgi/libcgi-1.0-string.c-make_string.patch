@@ -1,0 +1,12 @@
+diff -ruN libcgi-1.0-orig/src/string.c libcgi-1.0/src/string.c
+--- libcgi-1.0-orig/src/string.c	2003-12-15 10:42:26.000000000 +0000
++++ libcgi-1.0/src/string.c	2007-01-02 00:20:51.000000000 +0000
+@@ -584,7 +584,7 @@
+ 
+ 	va_start(ptr, s);
+ 
+-	va_copy(bkp, str);
++	va_copy(bkp, ptr);
+ 	len = strlen(s);
+ 
+ 	while (*str) {

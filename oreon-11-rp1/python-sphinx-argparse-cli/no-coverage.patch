@@ -1,0 +1,94 @@
+diff -ruN sphinx-argparse-cli-1.11.1/pyproject.toml sphinx-argparse-cli-1.11.1-mod/pyproject.toml
+--- sphinx-argparse-cli-1.11.1/pyproject.toml	2023-06-16 06:55:38.000000000 +0300
++++ sphinx-argparse-cli-1.11.1-mod/pyproject.toml	2023-11-04 17:21:55.407092892 +0300
+@@ -41,9 +41,7 @@
+   "sphinx>=7.0.1",
+ ]
+ optional-dependencies.test = [
+-  "covdefaults>=2.3",
+   "pytest>=7.3.2",
+-  "pytest-cov>=4.1",
+ ]
+ urls.Documentation = "https://github.com/tox-dev/sphinx-argparse-cli#sphinx-argparse-cli"
+ urls.Homepage = "https://github.com/tox-dev/sphinx-argparse-cli"
+diff -ruN sphinx-argparse-cli-1.11.1/tox.ini sphinx-argparse-cli-1.11.1-mod/tox.ini
+--- sphinx-argparse-cli-1.11.1/tox.ini	2023-06-16 06:55:38.000000000 +0300
++++ sphinx-argparse-cli-1.11.1-mod/tox.ini	2023-11-04 16:22:16.247130465 +0300
+@@ -2,15 +2,12 @@
+ requires =
+     tox>=4.2
+ env_list =
+-    fix
+     py312
+     py311
+     py310
+     py39
+     py38
+     py37
+-    type
+-    pkg_check
+ skip_missing_interpreters = true
+ 
+ [testenv]
+@@ -19,61 +16,6 @@
+ wheel_build_env = .pkg
+ extras =
+     test
+-set_env =
+-    COVERAGE_FILE = {toxworkdir}/.coverage.{envname}
+-    COVERAGE_PROCESS_START = {toxinidir}/setup.cfg
+-    _COVERAGE_SRC = {envsitepackagesdir}/sphinx_argparse_cli
+ commands =
+     pytest {tty:--color=yes} {posargs: \
+-      --junitxml {toxworkdir}{/}junit.{envname}.xml --cov {envsitepackagesdir}{/}sphinx_argparse_cli \
+-      --cov {toxinidir}{/}tests --cov-fail-under=100 \
+-      --cov-config=pyproject.toml --no-cov-on-fail --cov-report term-missing:skip-covered --cov-context=test \
+-      --cov-report html:{envtmpdir}{/}htmlcov --cov-report xml:{toxworkdir}{/}coverage.{envname}.xml \
+       tests}
+-
+-[testenv:fix]
+-description = run static analysis and style check using flake8
+-base_python = python3.10
+-skip_install = true
+-deps =
+-    pre-commit>=3.3.3
+-pass_env =
+-    HOMEPATH
+-    PROGRAMDATA
+-commands =
+-    pre-commit run --all-files --show-diff-on-failure
+-    python -c 'print("hint: run {envdir}/bin/pre-commit install to add checks as pre-commit hook")'
+-
+-[testenv:type]
+-description = run type check on code base
+-deps =
+-    mypy==1.3
+-    types-docutils>=0.20.0.1
+-set_env =
+-    {tty:MYPY_FORCE_COLOR = 1}
+-commands =
+-    mypy src
+-    mypy tests
+-
+-[testenv:pkg_check]
+-description = check that the long description is valid
+-base_python = python3.10
+-skip_install = true
+-deps =
+-    build[virtualenv]>=0.10
+-    twine>=4.0.2
+-change_dir = {toxinidir}
+-commands =
+-    python -m build --sdist --wheel -o {envtmpdir} .
+-    twine check {envtmpdir}/*
+-
+-[testenv:dev]
+-description = generate a DEV environment
+-base_python = python3.10
+-package = editable
+-extras =
+-    docs
+-    test
+-commands =
+-    python -m pip list --format=columns
+-    python -c 'import sys; print(sys.executable)'

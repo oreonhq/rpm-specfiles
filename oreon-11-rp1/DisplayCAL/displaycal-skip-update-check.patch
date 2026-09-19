@@ -1,0 +1,106 @@
+diff --git a/DisplayCAL/config.py b/DisplayCAL/config.py
+index ff13261..b67afa0 100644
+--- a/DisplayCAL/config.py
++++ b/DisplayCAL/config.py
+@@ -1355,7 +1355,7 @@ defaults = {
+     "untethered.max_delta.chroma": 0.5,
+     "untethered.min_delta": 1.5,
+     "untethered.min_delta.lightness": 1.0,
+-    "update_check": 1,
++    "update_check": 0,
+     "use_fancy_progress": 1,
+     "use_separate_lut_access": 0,
+     "vrml.compress": 1,
+diff --git a/DisplayCAL/display_cal.py b/DisplayCAL/display_cal.py
+index 3b4661c..dde15bc 100644
+--- a/DisplayCAL/display_cal.py
++++ b/DisplayCAL/display_cal.py
+@@ -497,8 +497,8 @@ def app_uptodate(parent=None, appname=ap
+     dlg.sizer0.SetSizeHints(dlg)
+     dlg.sizer0.Layout()
+     dlg.ShowModalThenDestroy()
+-    if parent and getattr(parent, "menuitem_app_auto_update_check", None):
+-        parent.menuitem_app_auto_update_check.Check(bool(getcfg("update_check")))
++    #if parent and getattr(parent, "menuitem_app_auto_update_check", None):
++    #    parent.menuitem_app_auto_update_check.Check(bool(getcfg("update_check")))
+ 
+ 
+ def app_update_confirm(
+@@ -584,8 +584,8 @@ def app_update_confirm(
+     dlg.Center()
+     result = dlg.ShowModal()
+     dlg.Destroy()
+-    if parent and getattr(parent, "menuitem_app_auto_update_check", None):
+-        parent.menuitem_app_auto_update_check.Check(bool(getcfg("update_check")))
++    #if parent and getattr(parent, "menuitem_app_auto_update_check", None):
++    #    parent.menuitem_app_auto_update_check.Check(bool(getcfg("update_check")))
+     if result == wx.ID_OK and (
+         zeroinstall or (sys.platform in ("darwin", "win32") or argyll)
+     ):
+@@ -3118,17 +3118,17 @@ class MainFrame(ReportFrame, BaseFrame,
+         menuitem = help.FindItemById(help.FindItem("help_support"))
+         self.Bind(wx.EVT_MENU, self.help_support_handler, menuitem)
+         menuitem = help.FindItemById(help.FindItem("bug_report"))
+-        self.Bind(wx.EVT_MENU, self.bug_report_handler, menuitem)
+-        self.menuitem_app_auto_update_check = help.FindItemById(
+-            help.FindItem("update_check.onstartup")
+-        )
+-        self.Bind(
+-            wx.EVT_MENU,
+-            self.app_auto_update_check_handler,
+-            self.menuitem_app_auto_update_check,
+-        )
+-        menuitem = help.FindItemById(help.FindItem("update_check"))
+-        self.Bind(wx.EVT_MENU, self.app_update_check_handler, menuitem)
++        #self.Bind(wx.EVT_MENU, self.bug_report_handler, menuitem)
++        #self.menuitem_app_auto_update_check = help.FindItemById(
++        #    help.FindItem("update_check.onstartup")
++        #)
++        #self.Bind(
++        #    wx.EVT_MENU,
++        #    self.app_auto_update_check_handler,
++        #    self.menuitem_app_auto_update_check,
++        #)
++        #menuitem = help.FindItemById(help.FindItem("update_check"))
++        #self.Bind(wx.EVT_MENU, self.app_update_check_handler, menuitem)
+ 
+         if sys.platform == "darwin":
+             wx.GetApp().SetMacAboutMenuItemId(self.menuitem_about.GetId())
+@@ -3257,7 +3257,7 @@ class MainFrame(ReportFrame, BaseFrame,
+         self.menuitem_show_log.Check(bool(getcfg("log.show")))
+         self.menuitem_log_autoshow.Enable(not bool(getcfg("log.show")))
+         self.menuitem_log_autoshow.Check(bool(getcfg("log.autoshow")))
+-        self.menuitem_app_auto_update_check.Check(bool(getcfg("update_check")))
++        #self.menuitem_app_auto_update_check.Check(bool(getcfg("update_check")))
+ 
+     def init_controls(self):
+         """Initialize the main window controls and their event handlers."""
+@@ -19485,7 +19485,7 @@ class StartupFrame(start_cls):
+         app.process_argv(1)
+         wx.CallAfter(app.frame.Raise)
+         # Check for updates if configured
+-        if getcfg("update_check"):
++        if getcfg("update_check") and False:
+             # Give time for the main window to gain focus before checking for
+             # update, otherwise the main window may steal the update
+             # confirmation dialog's focus which looks weird
+diff --git a/DisplayCAL/xrc/mainmenu.xrc b/DisplayCAL/xrc/mainmenu.xrc
+index 2735be4..6c86b09 100644
+--- a/DisplayCAL/xrc/mainmenu.xrc
++++ b/DisplayCAL/xrc/mainmenu.xrc
+@@ -231,6 +231,7 @@
+         <label>bug_report</label>
+       </object>
+       <object class="separator"/>
++      <!--
+       <object class="wxMenuItem" name="update_check.onstartup">
+         <label>update_check.onstartup</label>
+         <checkable>1</checkable>
+@@ -239,6 +240,7 @@
+         <label>update_check</label>
+       </object>
+       <object class="separator"/>
++      -->
+       <label>menu.help</label>
+     </object>
+   </object>

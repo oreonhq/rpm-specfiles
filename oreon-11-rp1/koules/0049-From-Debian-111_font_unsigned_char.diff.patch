@@ -1,0 +1,15 @@
+Description: Declare font data as unsigned.
+Author: Stephen Kitt <skitt@debian.org>
+Bug-Debian: http://bugs.debian.org/688658
+
+--- koules-1.4.orig/xlib/init.c
++++ koules-1.4/xlib/init.c
+@@ -34,7 +34,7 @@
+ #include <unistd.h>
+ #include "../mygetopt.h"
+ #include <sys/signal.h>
+-extern char    *Font8x8;
++extern unsigned char *Font8x8;
+ extern void     fadein1 ();
+ extern void     points ();
+ extern void     points1 ();

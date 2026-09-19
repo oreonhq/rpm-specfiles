@@ -1,8 +1,8 @@
 %global source0_hash 34af2f15cf7367513b352bdcd2493ab14ce43692d2dcd9dfc499492966c64dcf
 
 Name:           gflags
-Version:        2.2.2
-Release:        19%{?dist}
+Version:        2.3.1
+Release:        1%{?dist}
 Summary:        Library for commandline flag processing
 
 # Automatically converted from old format: BSD - review is highly recommended.

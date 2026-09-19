@@ -3,7 +3,7 @@
 %{?mingw_package_header}
 
 Name:           mingw-glib2
-Version:        2.87.3
+Version:        2.90.0
 Release:        1%{?dist}
 Summary:        MinGW Windows GLib2 library
 

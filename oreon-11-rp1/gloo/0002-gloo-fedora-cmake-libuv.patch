@@ -1,0 +1,96 @@
+diff -ruN gloo-01a0c815d1a98eb9b38341cf63546f234fbcc43b/cmake/Dependencies.cmake gloo-01a0c815d1a98eb9b38341cf63546f234fbcc43b-mod/cmake/Dependencies.cmake
+--- gloo-01a0c815d1a98eb9b38341cf63546f234fbcc43b/cmake/Dependencies.cmake	2023-08-24 10:55:59.000000000 +0300
++++ gloo-01a0c815d1a98eb9b38341cf63546f234fbcc43b-mod/cmake/Dependencies.cmake	2023-09-28 16:18:34.209188943 +0300
+@@ -28,72 +28,15 @@
+ endif()
+ 
+ if(USE_LIBUV)
+-  # If the Gloo build is included from another project's build, it may
+-  # have already included libuv and we can use it directly here.
+-  if(TARGET uv_a)
+-    # Note: the CMake files in the libuv don't specify an include
+-    # directory for the uv and uv_a targets. If you're including the
+-    # Gloo build from your own project's build, and include libuv
+-    # there as well, you may need to include the following to tack on
+-    # the include path to the libuv targets.
+-    #
+-    #   set_target_properties(uv_a PROPERTIES
+-    #     INTERFACE_INCLUDE_DIRECTORIES "${libuv_SOURCE_DIR}/include"
+-    #     )
+-    #
++  find_package(libuv REQUIRED)
++  if(libuv_FOUND)
++    message(STATUS "libuv include path: " ${libuv_INCLUDE_DIRS})
++    message(STATUS "libuv libraries: " ${libuv_LIBRARY})
++    include_directories(SYSTEM ${libuv_INCLUDE_DIRS})
++    list(APPEND gloo_DEPENDENCY_LIBS ${libuv_LIBRARY})
+   else()
+-    if(MSVC)
+-      find_library(
+-        libuv_LIBRARY
+-        NAMES uv libuv
+-        HINTS ${libuv_ROOT} ENV libuv_ROOT
+-        PATH_SUFFIXES lib/release lib/debug lib
+-        REQUIRED
+-        NO_DEFAULT_PATH)
+-      if(NOT EXISTS ${libuv_LIBRARY})
+-        message(FATAL_ERROR "Unable to find static libuv library in " $ENV{libuv_ROOT})
+-      endif()
+-
+-      find_file(
+-        libuv_DLL_PATH
+-        NAMES uv.dll
+-        HINTS ${libuv_ROOT} ENV libuv_ROOT
+-        PATH_SUFFIXES lib/release lib/debug bin
+-        REQUIRED
+-        NO_DEFAULT_PATH)
+-      if(NOT EXISTS ${libuv_DLL_PATH})
+-        message(FATAL_ERROR "Unable to find uv.dll in " $ENV{libuv_ROOT})
+-      endif()
+-
+-      find_file(
+-        uv_HEADER_PATH
+-        NAMES uv.h
+-        HINTS ${libuv_ROOT} ENV libuv_ROOT
+-        PATH_SUFFIXES include
+-        REQUIRED
+-        NO_DEFAULT_PATH)
+-      if(NOT EXISTS ${uv_HEADER_PATH})
+-        message(FATAL_ERROR "Unable to find headers of libuv in " $ENV{libuv_ROOT})
+-      endif()
+-      set(libuv_INCLUDE_DIRS ${uv_HEADER_PATH}/..)
+-    else()
+-      include(FindPkgConfig)
+-      pkg_search_module(libuv REQUIRED libuv>=1.26)
+-      find_file(
+-        libuv_LIBRARY
+-        NAMES libuv.a libuv_a.a
+-        PATHS ${libuv_LIBDIR}
+-        NO_DEFAULT_PATH)
+-      if(NOT EXISTS ${libuv_LIBRARY})
+-        message(FATAL_ERROR "Unable to find static libuv library in " ${libuv_LIBDIR})
+-      endif()
+-    endif()
+-
+-    add_library(uv_a INTERFACE IMPORTED)
+-    set_target_properties(uv_a PROPERTIES
+-      INTERFACE_INCLUDE_DIRECTORIES ${libuv_INCLUDE_DIRS}
+-      INTERFACE_LINK_LIBRARIES ${libuv_LIBRARY}
+-      )
++	  message(WARNING "Not compiling with libuv support. Suppress this warning with -DUSE_LIBUV=OFF.")
++    set(USE_LIBUV OFF)
+   endif()
+ endif()
+ 
+diff -ruN gloo-01a0c815d1a98eb9b38341cf63546f234fbcc43b/gloo/CMakeLists.txt gloo-01a0c815d1a98eb9b38341cf63546f234fbcc43b-mod/gloo/CMakeLists.txt
+--- gloo-01a0c815d1a98eb9b38341cf63546f234fbcc43b/gloo/CMakeLists.txt	2023-08-24 10:55:59.000000000 +0300
++++ gloo-01a0c815d1a98eb9b38341cf63546f234fbcc43b-mod/gloo/CMakeLists.txt	2023-09-28 16:35:08.259668577 +0300
+@@ -153,7 +153,7 @@
+   target_link_libraries(gloo_hip gloo)
+ endif()
+ if(USE_LIBUV)
+-  target_link_libraries(gloo PRIVATE uv_a)
++  target_link_libraries(gloo PRIVATE uv)
+ endif()
+ if(USE_TCP_OPENSSL_LINK)
+   target_compile_definitions(gloo PRIVATE USE_TCP_OPENSSL_LINK)

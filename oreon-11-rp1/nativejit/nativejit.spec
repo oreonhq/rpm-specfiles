@@ -1,0 +1,88 @@
+%global source0_hash 08a36987cacf1b579e7dbb957d53d773bfcc13bef9262f1787fa0b954ea0a1d8
+
+## This SPEC file compiles NativeJIT library including specific modifications for
+# COPASI project (see COPASI package).
+## NativeJIT code (fork) repository from COPASI team: https://github.com/copasi/copasi-dependencies/tree/master/src/NativeJIT
+## Original NativeJIT repository: https://github.com/BitFunnel/NativeJIT
+
+%global commit 5e99f66f4fa33518ff522db83c139f324eeb6ba2
+%global gittag %{commit}
+%global shortcommit %(c=%{commit}; echo ${c:0:8})
+%global commitdate 20260128
+
+# This library works specifically on x86_64 systems with SSE4 (Streaming SIMD Extensions 4) 
+# See https://pagure.io/packaging-committee/issue/1044
+ExclusiveArch: x86_64
+
+Name:    nativejit
+Version: 0.1
+Release: 15.%{commitdate}git%{shortcommit}%{?dist}
+Summary: Library for high-performance just-in-time compilation
+License: MIT
+URL:     https://github.com/copasi/copasi-dependencies/tree/master/src/NativeJIT
+Source0: https://gitlab.com/anto.trande/nativejit/-/archive/%{commit}/%{name}-%{commit}.tar.gz
+
+BuildRequires: cmake
+BuildRequires: gcc
+BuildRequires: gcc-c++
+BuildRequires: make
+BuildRequires: gtest-devel
+
+Provides: NativeJIT = 0:%{version}-%{release}
+
+%description
+NativeJIT is an open-source cross-platform library for high-performance
+just-in-time compilation of expressions involving C data structures.
+The compiler is light weight and fast and it takes no dependencies
+beyond the standard C++ runtime. It runs on Linux, OSX, and Windows.
+The generated code is optimized with particular attention paid to
+register allocation.
+It requires CPUs with SSE4 (Streaming SIMD Extensions 4).
+
+%package devel
+Summary: NativeJIT headers and development-related files
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: cmake%{?_isa}
+%description devel
+NativeJIT headers and development-related files, CMake config files.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n %{name}-%{commit}
+
+%build
+%cmake \
+ -DCMAKE_BUILD_TYPE:STRING=Release \
+ -DCMAKE_CXX_FLAGS_RELEASE:STRING="%{build_cxxflags} -DNDEBUG" \
+ -DCMAKE_C_FLAGS_RELEASE:STRING="%{build_cflags} -DNDEBUG" \
+ -DCMAKE_SKIP_INSTALL_RPATH:BOOL=YES \
+ -DNATIVEJIT_VERSION_MAJOR=0 -DNATIVEJIT_VERSION=0
+%cmake_build
+
+%install
+%cmake_install
+
+%check
+if grep -E '\bsse4_2\b' /proc/cpuinfo >/dev/null
+then
+  %ctest -VV
+else
+  echo 'No SSE4.2 support on build host; skipping tests' 1>&2
+fi
+
+%files
+%license LICENSE.txt
+%doc README.md
+%{_libdir}/libCodeGen.so.0
+%{_libdir}/libNativeJIT.so.0
+
+%files devel
+%{_libdir}/libCodeGen.so
+%{_libdir}/libNativeJIT.so
+%{_includedir}/NativeJIT/
+%{_includedir}/Temporary/
+%{_libdir}/cmake/nativejit*.cmake
+
+%changelog
+%autochangelog

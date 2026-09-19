@@ -1,0 +1,79 @@
+From 2857419531c45e542afdc52001a65733f4f9b128 Mon Sep 17 00:00:00 2001
+From: Gianfranco Costamagna <locutusofborg@debian.org>
+Date: Mon, 8 Sep 2025 15:05:10 +0200
+Subject: [PATCH] Bump minimum required cmake version to 3.10, for new cmake 4
+ compatibility fix
+
+---
+ CMakeLists.txt                           | 2 +-
+ cmake/cotire.cmake                       | 2 +-
+ src/test/gtest/CMakeLists.txt            | 2 +-
+ src/test/gtest/googlemock/CMakeLists.txt | 2 +-
+ src/test/gtest/googletest/CMakeLists.txt | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5c0fc020..280d74a6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,7 +2,7 @@
+ # init
+ ####################################
+ 
+-cmake_minimum_required(VERSION 3.5)
++cmake_minimum_required(VERSION 3.10)
+ 
+ project(lucene++)
+ 
+diff --git a/cmake/cotire.cmake b/cmake/cotire.cmake
+index 9a4982d4..071d7b2c 100644
+--- a/cmake/cotire.cmake
++++ b/cmake/cotire.cmake
+@@ -37,7 +37,7 @@ set(__COTIRE_INCLUDED TRUE)
+ if (NOT CMAKE_SCRIPT_MODE_FILE)
+ 	cmake_policy(PUSH)
+ endif()
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.10)
+ if (NOT CMAKE_SCRIPT_MODE_FILE)
+ 	cmake_policy(POP)
+ endif()
+diff --git a/src/test/gtest/CMakeLists.txt b/src/test/gtest/CMakeLists.txt
+index f11bbb52..41b50f64 100644
+--- a/src/test/gtest/CMakeLists.txt
++++ b/src/test/gtest/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ # Note: CMake support is community-based. The maintainers do not use CMake
+ # internally.
+ 
+-cmake_minimum_required(VERSION 2.8.8)
++cmake_minimum_required(VERSION 3.10)
+ 
+ if (POLICY CMP0048)
+   cmake_policy(SET CMP0048 NEW)
+diff --git a/src/test/gtest/googlemock/CMakeLists.txt b/src/test/gtest/googlemock/CMakeLists.txt
+index d32b70b5..838ee9b4 100644
+--- a/src/test/gtest/googlemock/CMakeLists.txt
++++ b/src/test/gtest/googlemock/CMakeLists.txt
+@@ -42,7 +42,7 @@ else()
+   cmake_policy(SET CMP0048 NEW)
+   project(gmock VERSION ${GOOGLETEST_VERSION} LANGUAGES CXX C)
+ endif()
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.10)
+ 
+ if (COMMAND set_up_hermetic_build)
+   set_up_hermetic_build()
+diff --git a/src/test/gtest/googletest/CMakeLists.txt b/src/test/gtest/googletest/CMakeLists.txt
+index db292946..8d6b0719 100644
+--- a/src/test/gtest/googletest/CMakeLists.txt
++++ b/src/test/gtest/googletest/CMakeLists.txt
+@@ -53,7 +53,7 @@ else()
+   cmake_policy(SET CMP0048 NEW)
+   project(gtest VERSION ${GOOGLETEST_VERSION} LANGUAGES CXX C)
+ endif()
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.10)
+ 
+ if (POLICY CMP0063) # Visibility
+   cmake_policy(SET CMP0063 NEW)

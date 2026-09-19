@@ -1,0 +1,10 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -113,7 +113,6 @@ docs = [
+ ]
+ 
+ [tool.pytest.ini_options]
+-addopts = '--cov=flufl --cov-report=term --cov-report=xml -p no:doctest'
+ testpaths = 'test docs'
+ 
+ [tool.coverage.paths]

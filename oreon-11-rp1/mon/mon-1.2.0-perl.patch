@@ -1,0 +1,20 @@
+Originally, a perl scriptlet in Dag's SPEC did this.
+
+diff -rup mon-1.2.0.orig/alerts/hpov/hpov.alert mon-1.2.0/alerts/hpov/hpov.alert
+--- mon-1.2.0.orig/alerts/hpov/hpov.alert	2001-05-23 03:27:54.000000000 +0200
++++ mon-1.2.0/alerts/hpov/hpov.alert	2008-07-13 12:48:53.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ # hpov.alert - generate event in HP OpenView
+ #
+diff -rup mon-1.2.0.orig/mon.cgi-1.52/util/moncgi-appsecret.pl mon-1.2.0/mon.cgi-1.52/util/moncgi-appsecret.pl
+--- mon-1.2.0.orig/mon.cgi-1.52/util/moncgi-appsecret.pl	2001-04-19 01:13:56.000000000 +0200
++++ mon-1.2.0/mon.cgi-1.52/util/moncgi-appsecret.pl	2008-07-13 12:48:53.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl -w
++#!/usr/bin/perl -w
+ #
+ # NAME
+ #  moncgi-appsecret.pl

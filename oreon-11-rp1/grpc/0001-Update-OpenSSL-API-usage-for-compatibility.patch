@@ -1,0 +1,133 @@
+From 83e1250708453f343c200d8c6186af02b2d91509 Mon Sep 17 00:00:00 2001
+From: Simo Sorce <simo@redhat.com>
+Date: Mon, 20 Apr 2026 14:33:30 -0400
+Subject: [PATCH] Update OpenSSL API usage for compatibility
+
+Replaced direct access to ASN1_STRING struct members with standard OpenSSL
+accessors and added a necessary const qualifier to X509_NAME. This ensures
+compatibility with newer OpenSSL versions where these structures are opaque.
+
+Co-authored-by: Gemini <gemini@google.com>
+Signed-off-by: Simo Sorce <simo@redhat.com>
+---
+ src/core/tsi/ssl_transport_security.cc   | 31 +++++++++++++-----------
+ test/core/handshake/client_ssl.cc        |  2 +-
+ test/core/handshake/server_ssl_common.cc |  2 +-
+ 3 files changed, 19 insertions(+), 16 deletions(-)
+
+diff --git a/src/core/tsi/ssl_transport_security.cc b/src/core/tsi/ssl_transport_security.cc
+index 0903a8c..0528393 100644
+--- a/src/core/tsi/ssl_transport_security.cc
++++ b/src/core/tsi/ssl_transport_security.cc
+@@ -271,9 +271,9 @@ static int looks_like_ip_address(absl::string_view name) {
+ static tsi_result ssl_get_x509_common_name(X509* cert, unsigned char** utf8,
+                                            size_t* utf8_size) {
+   int common_name_index = -1;
+-  X509_NAME_ENTRY* common_name_entry = nullptr;
+-  ASN1_STRING* common_name_asn1 = nullptr;
+-  X509_NAME* subject_name = X509_get_subject_name(cert);
++  const X509_NAME_ENTRY* common_name_entry = nullptr;
++  const ASN1_STRING* common_name_asn1 = nullptr;
++  const X509_NAME* subject_name = X509_get_subject_name(cert);
+   int utf8_returned_size = 0;
+   if (subject_name == nullptr) {
+     gpr_log(GPR_INFO, "Could not get subject name from certificate.");
+@@ -331,7 +331,7 @@ static tsi_result peer_property_from_x509_common_name(
+ /* Gets the subject of an X509 cert as a tsi_peer_property. */
+ static tsi_result peer_property_from_x509_subject(X509* cert,
+                                                   tsi_peer_property* property) {
+-  X509_NAME* subject_name = X509_get_subject_name(cert);
++  const X509_NAME* subject_name = X509_get_subject_name(cert);
+   if (subject_name == nullptr) {
+     gpr_log(GPR_INFO, "Could not get subject name from certificate.");
+     return TSI_NOT_FOUND;
+@@ -420,17 +420,19 @@ static tsi_result add_subject_alt_names_properties_to_peer(
+       char ntop_buf[INET6_ADDRSTRLEN];
+       int af;
+ 
+-      if (subject_alt_name->d.iPAddress->length == 4) {
++      if (ASN1_STRING_length(subject_alt_name->d.iPAddress) == 4) {
+         af = AF_INET;
+-      } else if (subject_alt_name->d.iPAddress->length == 16) {
++      } else if (ASN1_STRING_length(subject_alt_name->d.iPAddress) == 16) {
+         af = AF_INET6;
+       } else {
+         gpr_log(GPR_ERROR, "SAN IP Address contained invalid IP");
+         result = TSI_INTERNAL_ERROR;
+         break;
+       }
+-      const char* name = inet_ntop(af, subject_alt_name->d.iPAddress->data,
+-                                   ntop_buf, INET6_ADDRSTRLEN);
++      const char* name = inet_ntop(
++          af,
++          ASN1_STRING_get0_data(subject_alt_name->d.iPAddress),
++          ntop_buf, INET6_ADDRSTRLEN);
+       if (name == nullptr) {
+         gpr_log(GPR_ERROR, "Could not get IP string from asn1 octet.");
+         result = TSI_INTERNAL_ERROR;
+@@ -759,7 +761,8 @@ static tsi_result x509_store_load_certs(X509_STORE* cert_store,
+   tsi_result result = TSI_OK;
+   size_t num_roots = 0;
+   X509* root = nullptr;
+-  X509_NAME* root_name = nullptr;
++  const X509_NAME* root_name = nullptr;
++  X509_NAME* root_name_dup = nullptr;
+   BIO* pem;
+   GPR_ASSERT(pem_roots_size <= INT_MAX);
+   pem = BIO_new_mem_buf(pem_roots, static_cast<int>(pem_roots_size));
+@@ -783,13 +786,13 @@ static tsi_result x509_store_load_certs(X509_STORE* cert_store,
+         result = TSI_INVALID_ARGUMENT;
+         break;
+       }
+-      root_name = X509_NAME_dup(root_name);
+-      if (root_name == nullptr) {
++      root_name_dup = X509_NAME_dup(root_name);
++      if (root_name_dup == nullptr) {
+         result = TSI_OUT_OF_RESOURCES;
+         break;
+       }
+-      sk_X509_NAME_push(*root_names, root_name);
+-      root_name = nullptr;
++      sk_X509_NAME_push(*root_names, root_name_dup);
++      root_name_dup = nullptr;
+     }
+     ERR_clear_error();
+     if (!X509_STORE_add_cert(cert_store, root)) {
+@@ -814,7 +817,7 @@ static tsi_result x509_store_load_certs(X509_STORE* cert_store,
+     if (root_names != nullptr) {
+       sk_X509_NAME_pop_free(*root_names, X509_NAME_free);
+       *root_names = nullptr;
+-      if (root_name != nullptr) X509_NAME_free(root_name);
++      if (root_name_dup != nullptr) X509_NAME_free(root_name_dup);
+     }
+   }
+   BIO_free(pem);
+diff --git a/test/core/handshake/client_ssl.cc b/test/core/handshake/client_ssl.cc
+index 2b5cbac..280d556 100644
+--- a/test/core/handshake/client_ssl.cc
++++ b/test/core/handshake/client_ssl.cc
+@@ -196,7 +196,7 @@ static void server_thread(void* arg) {
+   OpenSSL_add_ssl_algorithms();
+   args->ssl_library_info->Notify();
+ 
+-  const SSL_METHOD* method = TLSv1_2_server_method();
++  const SSL_METHOD* method = TLS_server_method();
+   SSL_CTX* ctx = SSL_CTX_new(method);
+   if (!ctx) {
+     perror("Unable to create SSL context");
+diff --git a/test/core/handshake/server_ssl_common.cc b/test/core/handshake/server_ssl_common.cc
+index 6c20d74..4c6af86 100644
+--- a/test/core/handshake/server_ssl_common.cc
++++ b/test/core/handshake/server_ssl_common.cc
+@@ -186,7 +186,7 @@ bool server_ssl_test(const char* alpn_list[], unsigned int alpn_list_len,
+   // server port.
+   s.Await();
+ 
+-  const SSL_METHOD* method = TLSv1_2_client_method();
++  const SSL_METHOD* method = TLS_client_method();
+   SSL_CTX* ctx = SSL_CTX_new(method);
+   if (!ctx) {
+     perror("Unable to create SSL context");
+-- 
+2.53.0
+

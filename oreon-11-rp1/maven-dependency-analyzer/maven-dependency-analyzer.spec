@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-dependency-analyzer
-Version:        1.13.2
+Version:        1.17.2
 Release:        %autorelease
 Summary:        Maven dependency analyzer
 License:        Apache-2.0
@@ -31,7 +31,7 @@ BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.13.2-19
+Obsoletes:      %{name}-javadoc < 1.17.2-19
 
 %description
 Analyzes the dependencies of a project for undeclared or unused artifacts.

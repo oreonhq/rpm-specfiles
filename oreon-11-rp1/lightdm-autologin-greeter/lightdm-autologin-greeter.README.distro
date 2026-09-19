@@ -1,0 +1,49 @@
+# Using LightDM Autologin Greeter
+
+This package of the LightDM Autologin Greeter is configured by
+default to start a session called `lightdm-xsession`,
+which does not exist.
+
+If you wish to define this session, you can do so by creating
+`/usr/share/xsessions/lightdm-xsession.desktop`.
+
+The file will look something like this:
+
+```
+[Desktop Entry]
+Name=LightDM X11 Session
+Comment=Basic X11 Session invoked by LightDM
+Exec=/usr/local/etc/lightdm-xsession.xinitrc
+TryExec=/usr/local/etc/lightdm-xsession.initrc
+Type=Application
+
+```
+
+The `lightdm-xsession.xinitrc` file is an executable shell script,
+which would look something like this:
+
+```
+#!/bin/bash
+
+exec matchbox-window-manager &
+
+xterm
+
+```
+
+Finally, you'd need to define the autologin parameters, which you
+can do by creating `/etc/lightdm/lightdm.conf.d/99-autologin.conf`.
+
+The file will look something like this:
+
+```
+[Seat:*]
+autologin-user=user
+autologin-user-timeout=0
+```
+
+That will get you a basic autologin kiosk-like section. If you
+want to do a bit more, check out some of the common configuration
+examples for LightDM: https://www.freedesktop.org/wiki/Software/LightDM/CommonConfiguration/
+
+More information is available on the LightDM website: https://www.freedesktop.org/wiki/Software/LightDM/

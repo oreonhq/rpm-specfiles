@@ -1,18 +1,18 @@
-%global source0_hash e094431df5f048b157485ed1cbe66674fb02edcbed55814ec75b441ade919f80
+%global source0_hash 3adb4f9189b4b91d57b78d0a894868d8382451134bcfcc4f235027f23db13b3d
 
 %global stable_kf6 stable
 
 
 Name:    kio-extras
-Version: 26.03.80
-Release: 6%{?dist}
+Version: 26.08.0
+Release: 1%{?dist}
 Summary: Additional components to increase the functionality of KIO Framework
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/network/kio-extras
 
-Source0:        https://invent.kde.org/network/kio-extras/-/archive/v%{version}/%{name}-v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/kio-extras-%{version}.tar.xz
 
 ## upstramable patches
 
@@ -88,7 +88,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-v%{version}
+%autosetup -p1 -n %{name}-%{version}
 
 
 %build
@@ -139,4 +139,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog

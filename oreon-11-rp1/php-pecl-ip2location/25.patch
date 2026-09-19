@@ -1,0 +1,139 @@
+From 8828108300b1b65eab2c631a73898dae33d6c112 Mon Sep 17 00:00:00 2001
+From: Remi Collet <remi@remirepo.net>
+Date: Wed, 3 Sep 2025 09:56:27 +0200
+Subject: [PATCH 1/2] Fix API version check
+
+---
+ ip2location.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ip2location.c b/ip2location.c
+index 2252b3b..6a0904e 100644
+--- a/ip2location.c
++++ b/ip2location.c
+@@ -802,7 +802,7 @@ PHP_FUNCTION(ip2location_get_as)
+ /* }}} */
+ #endif
+ 
+-#if API_VERSION_NUMERIC >= 80600
++#if API_VERSION_NUMERIC >= 80700
+ /* {{{ ip2location_get_as_domain("ip_address")
+  * Returns ip address's internet connection district type information */
+ PHP_FUNCTION(ip2location_get_as_domain)
+
+From af16709c6121365d38398af505ea3579b82f0f5e Mon Sep 17 00:00:00 2001
+From: Remi Collet <remi@remirepo.net>
+Date: Wed, 3 Sep 2025 10:14:37 +0200
+Subject: [PATCH 2/2] regenerate arginfo from stub
+
+---
+ ip2location_arginfo.h        | 10 ++++++----
+ ip2location_legacy_arginfo.h | 32 ++++++++++++++++++++++++++------
+ 2 files changed, 32 insertions(+), 10 deletions(-)
+
+diff --git a/ip2location_arginfo.h b/ip2location_arginfo.h
+index 3897564..9fe1542 100644
+--- a/ip2location_arginfo.h
++++ b/ip2location_arginfo.h
+@@ -1,5 +1,5 @@
+ /* This is a generated file, edit the .stub.php file instead.
+- * Stub hash: c57e18a606ee629525559e7f245e9643c54c59c5 */
++ * Stub hash: ed66f116eb8a1c160a1e2517559e0bef39118179 */
+ 
+ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ip2location_open, 0, 1, _IS_BOOL, 0)
+ 	ZEND_ARG_TYPE_INFO(0, file_path, IS_STRING, 0)
+@@ -90,15 +90,17 @@ ZEND_END_ARG_INFO()
+ #endif
+ 
+ #if API_VERSION_NUMERIC >= 80700
+-#define arginfo_ip2location_get_as_domain arginfo_ip2location_get_district
++ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ip2location_get_as_domain, 0, 1, IS_STRING, 0)
++	ZEND_ARG_TYPE_INFO(0, ip_address, IS_STRING, 0)
++ZEND_END_ARG_INFO()
+ #endif
+ 
+ #if API_VERSION_NUMERIC >= 80700
+-#define arginfo_ip2location_get_as_usage_type arginfo_ip2location_get_district
++#define arginfo_ip2location_get_as_usage_type arginfo_ip2location_get_as_domain
+ #endif
+ 
+ #if API_VERSION_NUMERIC >= 80700
+-#define arginfo_ip2location_get_as_cidr arginfo_ip2location_get_district
++#define arginfo_ip2location_get_as_cidr arginfo_ip2location_get_as_domain
+ #endif
+ 
+ 
+diff --git a/ip2location_legacy_arginfo.h b/ip2location_legacy_arginfo.h
+index 5549a90..ce3b97d 100644
+--- a/ip2location_legacy_arginfo.h
++++ b/ip2location_legacy_arginfo.h
+@@ -1,5 +1,5 @@
+ /* This is a generated file, edit the .stub.php file instead.
+- * Stub hash: c57e18a606ee629525559e7f245e9643c54c59c5 */
++ * Stub hash: ed66f116eb8a1c160a1e2517559e0bef39118179 */
+ 
+ ZEND_BEGIN_ARG_INFO_EX(arginfo_ip2location_open, 0, 0, 1)
+ 	ZEND_ARG_INFO(0, file_path)
+@@ -80,23 +80,25 @@ ZEND_END_ARG_INFO()
+ #endif
+ 
+ #if API_VERSION_NUMERIC >= 80600
+-#define arginfo_ip2location_get_asn arginfo_ip2location_get_asn
++#define arginfo_ip2location_get_asn arginfo_ip2location_get_district
+ #endif
+ 
+ #if API_VERSION_NUMERIC >= 80600
+-#define arginfo_ip2location_get_as arginfo_ip2location_get_as
++#define arginfo_ip2location_get_as arginfo_ip2location_get_district
+ #endif
+ 
+ #if API_VERSION_NUMERIC >= 80700
+-#define arginfo_ip2location_get_as_domain arginfo_ip2location_get_domain
++ZEND_BEGIN_ARG_INFO_EX(arginfo_ip2location_get_as_domain, 0, 0, 1)
++	ZEND_ARG_INFO(0, ip_address)
++ZEND_END_ARG_INFO()
+ #endif
+ 
+ #if API_VERSION_NUMERIC >= 80700
+-#define arginfo_ip2location_get_as_usage_type arginfo_ip2location_get_usage_type
++#define arginfo_ip2location_get_as_usage_type arginfo_ip2location_get_as_domain
+ #endif
+ 
+ #if API_VERSION_NUMERIC >= 80700
+-#define arginfo_ip2location_get_as_cidr arginfo_ip2location_get_cidr
++#define arginfo_ip2location_get_as_cidr arginfo_ip2location_get_as_domain
+ #endif
+ 
+ 
+@@ -143,6 +145,15 @@ ZEND_FUNCTION(ip2location_get_asn);
+ #if API_VERSION_NUMERIC >= 80600
+ ZEND_FUNCTION(ip2location_get_as);
+ #endif
++#if API_VERSION_NUMERIC >= 80700
++ZEND_FUNCTION(ip2location_get_as_domain);
++#endif
++#if API_VERSION_NUMERIC >= 80700
++ZEND_FUNCTION(ip2location_get_as_usage_type);
++#endif
++#if API_VERSION_NUMERIC >= 80700
++ZEND_FUNCTION(ip2location_get_as_cidr);
++#endif
+ 
+ 
+ static const zend_function_entry ext_functions[] = {
+@@ -188,6 +199,15 @@ static const zend_function_entry ext_functions[] = {
+ #endif
+ #if API_VERSION_NUMERIC >= 80600
+ 	ZEND_FE(ip2location_get_as, arginfo_ip2location_get_as)
++#endif
++#if API_VERSION_NUMERIC >= 80700
++	ZEND_FE(ip2location_get_as_domain, arginfo_ip2location_get_as_domain)
++#endif
++#if API_VERSION_NUMERIC >= 80700
++	ZEND_FE(ip2location_get_as_usage_type, arginfo_ip2location_get_as_usage_type)
++#endif
++#if API_VERSION_NUMERIC >= 80700
++	ZEND_FE(ip2location_get_as_cidr, arginfo_ip2location_get_as_cidr)
+ #endif
+ 	ZEND_FE_END
+ };

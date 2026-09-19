@@ -1,0 +1,295 @@
+From cfaea235c7f76e32ff11d7b9e27b4d7ab707f834 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 14 Feb 2025 14:24:57 -0500
+Subject: [PATCH] Reduce exact floating-point equality comparisons in the tests
+
+These tend to be brittle because they rely on exact floating-point
+rounding; see previous commit 7f5f97e9d042d9b9d9acf1cdcc9738fe99c792c5.
+---
+ tests/opytimark/markers/cec/test_year_2013.py |  6 +--
+ .../markers/test_many_dimensional.py          |  4 +-
+ tests/opytimark/markers/test_n_dimensional.py |  4 +-
+ .../opytimark/markers/test_two_dimensional.py | 46 +++++++++----------
+ 4 files changed, 30 insertions(+), 30 deletions(-)
+
+diff --git a/tests/opytimark/markers/cec/test_year_2013.py b/tests/opytimark/markers/cec/test_year_2013.py
+index 5a72cb3..7481455 100644
+--- a/tests/opytimark/markers/cec/test_year_2013.py
++++ b/tests/opytimark/markers/cec/test_year_2013.py
+@@ -9,7 +9,7 @@ def test_T_irregularity():
+ 
+     x_t = year_2013.T_irregularity(x)
+ 
+-    assert np.sum(x_t) == 14.878553613491857
++    assert np.round(np.sum(x_t), 6) == 14.878554
+ 
+ 
+ def test_T_asymmetry():
+@@ -17,13 +17,13 @@ def test_T_asymmetry():
+ 
+     x_t = year_2013.T_asymmetry(x, 0.2)
+ 
+-    assert np.sum(x_t) == 23.061844625640674
++    assert np.round(np.sum(x_t), 6) == 23.061845
+ 
+ 
+ def test_T_diagonal():
+     M = year_2013.T_diagonal(5, 10)
+ 
+-    assert np.sum(M) == 7.905694150420949
++    assert np.round(np.sum(M), 6) == 7.905694
+ 
+ 
+ def test_F1():
+diff --git a/tests/opytimark/markers/test_many_dimensional.py b/tests/opytimark/markers/test_many_dimensional.py
+index b5a69e8..e6bbd3e 100644
+--- a/tests/opytimark/markers/test_many_dimensional.py
++++ b/tests/opytimark/markers/test_many_dimensional.py
+@@ -86,7 +86,7 @@ def test_helical_valley():
+ 
+     y = f(x)
+ 
+-    assert y == 98696.04401089359
++    assert np.round(y, 3) == 98696.044
+ 
+ 
+ def test_miele_cantrell():
+@@ -116,7 +116,7 @@ def test_paviani():
+ 
+     y = f(x)
+ 
+-    assert y == -45.778452053828865
++    assert np.round(y, 3) == -45.778
+ 
+ 
+ def test_schmidt_vetters():
+diff --git a/tests/opytimark/markers/test_n_dimensional.py b/tests/opytimark/markers/test_n_dimensional.py
+index b9fa042..f2b3a5f 100644
+--- a/tests/opytimark/markers/test_n_dimensional.py
++++ b/tests/opytimark/markers/test_n_dimensional.py
+@@ -20,7 +20,7 @@ def test_ackley4():
+ 
+     y = f(x)
+ 
+-    assert y == -4.5901006651507235
++    assert np.round(y, 3) == -4.590
+ 
+ 
+ def test_alpine1():
+@@ -306,7 +306,7 @@ def test_rana():
+ 
+     y = f(x)
+ 
+-    assert y == -22285.14852971478
++    assert np.round(y, 2) == -22285.15
+ 
+ 
+ def test_rastrigin():
+diff --git a/tests/opytimark/markers/test_two_dimensional.py b/tests/opytimark/markers/test_two_dimensional.py
+index e3a568c..3e21dad 100644
+--- a/tests/opytimark/markers/test_two_dimensional.py
++++ b/tests/opytimark/markers/test_two_dimensional.py
+@@ -20,7 +20,7 @@ def test_ackley3():
+ 
+     y = f(x)
+ 
+-    assert y == -195.62902823841935
++    assert np.round(y, 3) == -195.629
+ 
+ 
+ def test_adjiman():
+@@ -120,7 +120,7 @@ def test_branin_hoo():
+ 
+     y = f(x)
+ 
+-    assert y == 0.39788735775266204
++    assert np.round(y, 3) == 0.398
+ 
+ 
+ def test_brent():
+@@ -180,7 +180,7 @@ def test_camel6():
+ 
+     y = f(x)
+ 
+-    assert y == -1.0316284229280819
++    assert np.round(y, 3) == -1.032
+ 
+ 
+ def test_chen_bird():
+@@ -190,7 +190,7 @@ def test_chen_bird():
+ 
+     y = f(x)
+ 
+-    assert y == -2000.0039999840003
++    assert np.round(y, 3) == -2000.004
+ 
+ 
+ def test_chen_v():
+@@ -200,7 +200,7 @@ def test_chen_v():
+ 
+     y = f(x)
+ 
+-    assert y == 2000.0000000000002
++    assert np.round(y, 3) == 2000.000
+ 
+ 
+ def test_chichinadze():
+@@ -210,7 +210,7 @@ def test_chichinadze():
+ 
+     y = f(x)
+ 
+-    assert y == -42.94438701899099
++    assert np.round(y, 3) == -42.944
+ 
+ 
+ def test_cross_tray():
+@@ -280,7 +280,7 @@ def test_el_attar_vidyasagar_dutta():
+ 
+     y = f(x)
+ 
+-    assert y == 1.7127803548622027
++    assert np.round(y, 3) == 1.713
+ 
+ 
+ def test_egg_crate():
+@@ -300,7 +300,7 @@ def test_egg_holder():
+ 
+     y = f(x)
+ 
+-    assert y == -959.6406627106155
++    assert np.round(y, 3) == -959.641
+ 
+ 
+ def test_freudenstein_roth():
+@@ -320,7 +320,7 @@ def test_giunta():
+ 
+     y = f(x)
+ 
+-    assert y == 0.06447042053690571
++    assert np.round(y, 3) == 0.064
+ 
+ 
+ def test_goldenstein_price():
+@@ -370,7 +370,7 @@ def test_jennrich_sampson():
+ 
+     y = f(x)
+ 
+-    assert y == 124.36218236181409
++    assert np.round(y, 3) == 124.362
+ 
+ 
+ def test_keane():
+@@ -380,7 +380,7 @@ def test_keane():
+ 
+     y = f(x)
+ 
+-    assert y == 0.6736675211468548
++    assert np.round(y, 3) == 0.674
+ 
+ 
+ def test_leon():
+@@ -420,7 +420,7 @@ def test_mc_cormick():
+ 
+     y = f(x)
+ 
+-    assert y == -1.9132228873800594
++    assert np.round(y, 3) == -1.913
+ 
+ 
+ def test_mishra3():
+@@ -430,7 +430,7 @@ def test_mishra3():
+ 
+     y = f(x)
+ 
+-    assert y == -0.18465133334298883
++    assert np.round(y, 3) == -0.185
+ 
+ 
+ def test_mishra4():
+@@ -440,7 +440,7 @@ def test_mishra4():
+ 
+     y = f(x)
+ 
+-    assert y == -0.1994069700888328
++    assert np.round(y, 3) == -0.199
+ 
+ 
+ def test_mishra5():
+@@ -450,7 +450,7 @@ def test_mishra5():
+ 
+     y = f(x)
+ 
+-    assert y == -1.019829519930943
++    assert np.round(y, 3) == -1.020
+ 
+ 
+ def test_mishra6():
+@@ -460,7 +460,7 @@ def test_mishra6():
+ 
+     y = f(x)
+ 
+-    assert y == -2.2839498384747587
++    assert np.round(y, 3) == -2.284
+ 
+ 
+ def test_mishra8():
+@@ -550,7 +550,7 @@ def test_quadratic():
+ 
+     y = f(x)
+ 
+-    assert y == -3873.7241821830326
++    assert np.round(y, 3) == -3873.724
+ 
+ 
+ def test_rotated_ellipse1():
+@@ -610,7 +610,7 @@ def test_schaffer3():
+ 
+     y = f(x)
+ 
+-    assert y == 0.0015668545260126288
++    assert np.round(y, 6) == 0.001567
+ 
+ 
+ def test_schaffer4():
+@@ -620,7 +620,7 @@ def test_schaffer4():
+ 
+     y = f(x)
+ 
+-    assert y == 0.29243850703298857
++    assert np.round(y, 3) == 0.292
+ 
+ 
+ def test_schwefel26():
+@@ -700,7 +700,7 @@ def test_trefethen():
+ 
+     y = f(x)
+ 
+-    assert y == -3.3068686465567008
++    assert np.round(y, 3) == -3.307
+ 
+ 
+ def test_venter_sobiezcczanski_sobieski():
+@@ -740,7 +740,7 @@ def test_wayburn_seader3():
+ 
+     y = f(x)
+ 
+-    assert y == 19.105879794568
++    assert np.round(y, 3) == 19.106
+ 
+ 
+ def test_zettl():
+@@ -750,7 +750,7 @@ def test_zettl():
+ 
+     y = f(x)
+ 
+-    assert y == -0.0037912371501199
++    assert np.round(y, 6) == -0.003791
+ 
+ 
+ def test_zirilli():
+@@ -760,4 +760,4 @@ def test_zirilli():
+ 
+     y = f(x)
+ 
+-    assert y == -0.3523860365437344
++    assert np.round(y, 3) == -0.352

@@ -1,0 +1,102 @@
+From 73b291eb61413348c07736208d44a7e0734a5dc5 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Tue, 23 Jan 2024 15:20:53 -0800
+Subject: [PATCH 13/26] Tests: multiple fixes to expected guest XML
+
+The test_xml_generation_1 and _2 tests failed because multiple
+changes were merged which change the generated libvirt guest
+XML without the test data being updated:
+
+f20a5f9b05a05e88a12cff05483649a550e95491 - bumped memory to 2G
+f73d7cff45504deb36b502d073157576528a6eb3 - added host-passthrough
+e8ae9de009d55d73e68f6d0030e88389825a242a - added rng
+7ae8898e4a0264b8eb6ea7b89d3269bf16bc5dce - added discard=unmap
+
+Apparently not one of the authors or reviewers of any of those
+commits ever ran the test suite.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ tests/guest/libvirt/test_xml_generation_1.xml | 11 ++++++++---
+ tests/guest/libvirt/test_xml_generation_2.xml | 11 ++++++++---
+ 2 files changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/tests/guest/libvirt/test_xml_generation_1.xml b/tests/guest/libvirt/test_xml_generation_1.xml
+index e976d85..a8ad4d8 100644
+--- a/tests/guest/libvirt/test_xml_generation_1.xml
++++ b/tests/guest/libvirt/test_xml_generation_1.xml
+@@ -1,7 +1,7 @@
+ <domain type="kvm">
+   <name>tester</name>
+-  <memory>1048576</memory>
+-  <currentMemory>1048576</currentMemory>
++  <memory>2097152</memory>
++  <currentMemory>2097152</currentMemory>
+   <uuid>%s</uuid>
+   <clock offset="utc"/>
+   <vcpu>1</vcpu>
+@@ -10,6 +10,7 @@
+     <apic/>
+     <pae/>
+   </features>
++  <cpu mode="host-passthrough"/>
+   <os>
+     <type>hvm</type>
+     <boot dev="hd"/>
+@@ -33,10 +34,14 @@
+       <protocol type="raw"/>
+       <target port="1"/>
+     </serial>
++    <rng model="virtio">
++      <rate bytes="1024" period="1000"/>
++      <backend model="random">/dev/random</backend>
++    </rng>
+     <disk device="disk" type="file">
+       <target dev="vda" bus="virtio"/>
+       <source file="%s"/>
+-      <driver name="qemu" type="raw"/>
++      <driver name="qemu" type="raw" discard="unmap"/>
+     </disk>
+   </devices>
+ </domain>
+diff --git a/tests/guest/libvirt/test_xml_generation_2.xml b/tests/guest/libvirt/test_xml_generation_2.xml
+index 148c113..cf6feb4 100644
+--- a/tests/guest/libvirt/test_xml_generation_2.xml
++++ b/tests/guest/libvirt/test_xml_generation_2.xml
+@@ -1,7 +1,7 @@
+ <domain type="kvm">
+   <name>tester</name>
+-  <memory>1048576</memory>
+-  <currentMemory>1048576</currentMemory>
++  <memory>2097152</memory>
++  <currentMemory>2097152</currentMemory>
+   <uuid>%s</uuid>
+   <clock offset="utc"/>
+   <vcpu>1</vcpu>
+@@ -10,6 +10,7 @@
+     <apic/>
+     <pae/>
+   </features>
++  <cpu mode="host-passthrough"/>
+   <os>
+     <type>hvm</type>
+     <boot dev="hd"/>
+@@ -36,10 +37,14 @@
+       <protocol type="raw"/>
+       <target port="1"/>
+     </serial>
++    <rng model="virtio">
++      <rate bytes="1024" period="1000"/>
++      <backend model="random">/dev/random</backend>
++    </rng>
+     <disk device="disk" type="file">
+       <target dev="vda" bus="virtio"/>
+       <source file="%s"/>
+-      <driver name="qemu" type="raw"/>
++      <driver name="qemu" type="raw" discard="unmap"/>
+     </disk>
+     <disk type="file" device="blue">
+       <source file="/var/bin/foo"/>
+-- 
+2.46.2
+

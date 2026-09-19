@@ -1,0 +1,13 @@
+diff --git a/plugin/syntastic/registry.vim b/plugin/syntastic/registry.vim
+index 4640bf7..c912307 100644
+--- a/plugin/syntastic/registry.vim
++++ b/plugin/syntastic/registry.vim
+@@ -111,7 +111,7 @@ let s:_DEFAULT_CHECKERS = {
+         \ 'xslt':          ['xmllint'],
+         \ 'xquery':        ['basex'],
+         \ 'yacc':          ['bison'],
+-        \ 'yaml':          ['jsyaml'],
++        \ 'yaml':          ['yamllint'],
+         \ 'yang':          ['pyang'],
+         \ 'yara':          ['yarac'],
+         \ 'z80':           ['z80syntaxchecker'],

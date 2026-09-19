@@ -1,0 +1,16 @@
+diff -up Time-Tiny-1.08/t/02_main.t.orig Time-Tiny-1.08/t/02_main.t
+--- Time-Tiny-1.08/t/02_main.t.orig	2018-04-22 10:50:20.000000000 +0200
++++ Time-Tiny-1.08/t/02_main.t	2021-11-07 15:22:09.301692054 +0100
+@@ -62,8 +62,10 @@ SKIP: {
+ 	# Expand to a DateTime
+ 	my $dt = $date->DateTime;
+ 	isa_ok( $dt, 'DateTime' );
+-	# DateTime::Locale version 1.00 changes "C" to "en-US-POSIX".
+-	my $expected = eval { DateTime::Locale->VERSION(1) } ? "en-US-POSIX" : "C";
++	# DateTime::Locale version 1.33 changes "en-US-POSIX" to "en_US".
++	my $expected = eval { DateTime::Locale->VERSION(1.33) } ? "en-US" :
++		eval { DateTime::Locale->VERSION(1) } ? "en-US-POSIX" :
++		"C";
+ 	is( $dt->locale->id,      $expected,  '->locale ok'   );
+ 	is( $dt->time_zone->name, 'floating', '->timezone ok' );
+ 

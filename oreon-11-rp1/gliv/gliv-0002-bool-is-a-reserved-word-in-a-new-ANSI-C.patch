@@ -1,0 +1,40 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 14 Feb 2025 15:01:45 +0100
+Subject: [PATCH] bool is a reserved word in a new ANSI C
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/options.c b/src/options.c
+index 298c83f..5796667 100644
+--- a/src/options.c
++++ b/src/options.c
+@@ -178,9 +178,9 @@ static void add_spin_button(GtkWidget * button, gint * value)
+ 
+ /* GtkCheckButton */
+ 
+-static gboolean toggled_button(GtkToggleButton * button, gboolean * bool)
++static gboolean toggled_button(GtkToggleButton * button, gboolean * value)
+ {
+-    *bool = gtk_toggle_button_get_active(button);
++    *value = gtk_toggle_button_get_active(button);
+     return TRUE;
+ }
+ 
+diff --git a/src/rcfile.c b/src/rcfile.c
+index 6fd683e..bab0679 100644
+--- a/src/rcfile.c
++++ b/src/rcfile.c
+@@ -223,10 +223,10 @@ static void process_line(const gchar * line)
+             /* Option found. */
+ 
+             if (opt->is_bool) {
+-                gboolean *bool;
++                gboolean *value;
+ 
+-                bool = (gboolean *) opt->option;
+-                *bool = g_strcasecmp(res[1], "true") ? FALSE : TRUE;
++                value = (gboolean *) opt->option;
++                *value = g_strcasecmp(res[1], "true") ? FALSE : TRUE;
+             } else {
+                 /* opt->is_bool == FALSE */
+                 gint *value;

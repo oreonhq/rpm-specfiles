@@ -1,0 +1,25 @@
+From 4f74f5343ff3595872d045c4bf5025e347d18438 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 23 Jan 2024 16:54:51 +0000
+Subject: [PATCH 15/18] v3.5.0: fix linking
+
+---
+ contrib/brl/bpro/core/brip_pro/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/contrib/brl/bpro/core/brip_pro/CMakeLists.txt b/contrib/brl/bpro/core/brip_pro/CMakeLists.txt
+index cfa7d46af8..b8d557cdb9 100644
+--- a/contrib/brl/bpro/core/brip_pro/CMakeLists.txt
++++ b/contrib/brl/bpro/core/brip_pro/CMakeLists.txt
+@@ -14,7 +14,7 @@ aux_source_directory(Templates brip_pro_sources)
+ aux_source_directory(processes brip_pro_sources)
+ 
+ vxl_add_library(LIBRARY_NAME brip_pro LIBRARY_SOURCES ${brip_pro_sources})
+-target_link_libraries(brip_pro bprb brdb brip vil_pro ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vsl bil_algo)
++target_link_libraries(brip_pro bprb brdb brip vpgl_pro vil_pro ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vsl bil_algo)
+ 
+ if( BUILD_TESTING )
+   add_subdirectory(tests)
+-- 
+2.46.1
+

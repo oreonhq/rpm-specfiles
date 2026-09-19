@@ -1,0 +1,48 @@
+diff -rupN --no-dereference flask_security_too-5.6.2/PKG-INFO flask_security_too-5.6.2-new/PKG-INFO
+--- flask_security_too-5.6.2/PKG-INFO	2025-05-29 19:32:34.682923970 +0200
++++ flask_security_too-5.6.2-new/PKG-INFO	2025-05-29 19:32:34.687590015 +0200
+@@ -70,7 +70,6 @@ Requires-Dist: phonenumbers==8.13.11 ; e
+ Requires-Dist: qrcode==7.4.2 ; extra == "low"
+ Requires-Dist: requests ; extra == "low"
+ Requires-Dist: sqlalchemy==2.0.18 ; extra == "low"
+-Requires-Dist: sqlalchemy-utils==0.41.1 ; extra == "low"
+ Requires-Dist: webauthn==2.0.0 ; extra == "low"
+ Requires-Dist: werkzeug==3.0.1 ; extra == "low"
+ Requires-Dist: zxcvbn==4.4.28 ; extra == "low"
+diff -rupN --no-dereference flask_security_too-5.6.2/pyproject-too.toml flask_security_too-5.6.2-new/pyproject-too.toml
+--- flask_security_too-5.6.2/pyproject-too.toml	2025-05-29 19:32:34.683231128 +0200
++++ flask_security_too-5.6.2-new/pyproject-too.toml	2025-05-29 19:32:34.687866409 +0200
+@@ -53,7 +53,7 @@ dependencies = [
+ 
+ [project.optional-dependencies]
+ babel = ["babel>=2.12.1", "flask_babel>=4.0.0"]
+-fsqla = ["flask_sqlalchemy>=3.1.0", "sqlalchemy>=2.0.18", "sqlalchemy-utils>=0.41.1"]
++fsqla = ["flask_sqlalchemy>=3.1.0", "sqlalchemy>=2.0.18"]
+ common = ["argon2_cffi>=21.3.0", "bcrypt>=4.0.1", "flask_mailman>=0.3.0", "bleach>=6.0.0"]
+ mfa = ["cryptography>=40.0.2", "qrcode>=7.4.2", "phonenumbers>=8.13.11", "webauthn>=2.0.0"]
+ low = [
+@@ -83,7 +83,6 @@ low = [
+     # authlib requires requests
+     "requests",
+     "sqlalchemy==2.0.18",
+-    "sqlalchemy-utils==0.41.1",
+     "webauthn==2.0.0",
+     "werkzeug==3.0.1",
+     "zxcvbn==4.4.28"
+diff -rupN --no-dereference flask_security_too-5.6.2/requirements/docs.txt flask_security_too-5.6.2-new/requirements/docs.txt
+--- flask_security_too-5.6.2/requirements/docs.txt	2025-05-04 21:52:25.949992000 +0200
++++ flask_security_too-5.6.2-new/requirements/docs.txt	2025-05-29 19:32:34.688055461 +0200
+@@ -4,4 +4,3 @@ sphinx-issues
+ packaging
+ Flask-SQLAlchemy
+ sqlalchemy
+-sqlalchemy-utils
+diff -rupN --no-dereference flask_security_too-5.6.2/requirements/tests.txt flask_security_too-5.6.2-new/requirements/tests.txt
+--- flask_security_too-5.6.2/requirements/tests.txt	2025-05-29 19:32:34.683408965 +0200
++++ flask_security_too-5.6.2-new/requirements/tests.txt	2025-05-29 19:32:34.688231329 +0200
+@@ -22,5 +22,4 @@ qrcode
+ # authlib requires requests
+ requests
+ sqlalchemy
+-sqlalchemy-utils
+ zxcvbn

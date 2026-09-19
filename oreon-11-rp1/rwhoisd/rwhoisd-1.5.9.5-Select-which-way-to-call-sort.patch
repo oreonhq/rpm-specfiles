@@ -1,0 +1,37 @@
+From 8475839b2d45badf243ddd4175b635fcd1ccc697 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 8 Oct 2013 16:22:10 +0200
+Subject: [PATCH] Select which way to call sort
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+rwhois_indexer executes sort(1). Recent sort(1) requires newer style.
+One can enable it by ./configure --enable-newsort.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ configure.ac | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index 8c2e509..9e89acd 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -223,6 +223,13 @@ AC_ARG_ENABLE(syslock, AS_HELP_STRING([--enable-syslock],
+ [ AC_DEFINE(USE_SYS_LOCK, 1, Define to use filesystem locking instead of dot-locks.) ])
+ 
+ 
++AC_ARG_ENABLE(newsort, AS_HELP_STRING([--enable-newsort], 
++                        [Enable if your sort(1) supports -k option.]),
++[ if test "${enable_newsort}" = 'yes'; then
++    AC_MSG_RESULT(Enabling new style sort.)
++    AC_DEFINE(NEW_STYLE_BIN_SORT, 1, [Define to call sort in new style.])
++  fi])
++
+ 
+ dnl the output
+ AC_CONFIG_FILES([Makefile common/Makefile mkdb/Makefile server/Makefile \
+-- 
+1.8.3.1
+

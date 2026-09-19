@@ -1,0 +1,12 @@
+hash: 9757e4f796a1ca1b0fe25c13fdaac0f5e69d51375a8fed72cf11a3f504d23ab5
+imports:
+- name: golang.org/x/net
+  subpackages:
+  - context
+  version: 01c190206fbdffa42f334f4b2bf2220f50e64920
+- name: github.com/golang/protobuf
+  subpackages:
+  - proto
+  version: 1643683e1b54a9e88ad26d98f81400c8c9d9f4f9
+updated: '2018-06-10T00:12:47.440335+00:00'
+

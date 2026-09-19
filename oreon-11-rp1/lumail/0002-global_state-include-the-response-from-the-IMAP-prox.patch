@@ -1,0 +1,26 @@
+From ddd407823ef31b8c3e6987f211b64a0839021103 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sun, 18 Nov 2018 22:59:26 +0100
+Subject: [PATCH] global_state: include the response from the IMAP proxy in the
+ error message
+
+The IMAP proxy uses the non-JSON string responses to communicate errors:
+
+  Failed to parse JSON response to 'list_folders': Connection failed!
+---
+ src/global_state.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/global_state.cc b/src/global_state.cc
+index 28e77f8..378c12a 100644
+--- a/src/global_state.cc
++++ b/src/global_state.cc
+@@ -272,7 +272,7 @@ void CGlobalState::update_maildirs()
+         if (!parsingSuccessful)
+         {
+             CLua *lua = CLua::instance();
+-            lua->on_error("Failed to parse JSON response to 'list_folders'.");
++            lua->on_error("Failed to parse JSON response to 'list_folders': " + json);
+ 
+             config->set("maildir.max", 0);
+             return;

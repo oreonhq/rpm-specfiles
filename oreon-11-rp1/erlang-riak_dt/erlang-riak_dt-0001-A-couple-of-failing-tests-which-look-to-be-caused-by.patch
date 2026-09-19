@@ -1,0 +1,58 @@
+From: Martin Cox <martin@cox.dev>
+Date: Thu, 27 Jan 2022 09:07:14 +0000
+Subject: [PATCH] A couple of failing tests which look to be caused by an
+ incorrect assumption of the ETF encoded size of elements. Something may have
+ changed in OTP between 20 and 24 that might have impacted this test.
+
+Either way, we now grab the external size of the element and use that
+in the assert, so that we're not pre-empting what the size of the encoded
+value might be - further changes to OTP could occur that might throw
+that out in the future.
+
+Previously, the test hardcoded a size of 11 bytes for an empty binary,
+but this is incorrect according to the most recent ETF spec. I'm
+not sure how or why it passed before. The ETF encoding for an
+empty binary will be <<131,109,0,0,0,0>> = <<Version:1, Tag:1, Size:4>>,
+6 bytes.
+
+Changing the way that the encoded size is evaluated ensures that we
+test the functions in riak_dt, rather than the ETF encoding, which
+could be subject to change I suppose.
+
+diff --git a/src/riak_dt_gset.erl b/src/riak_dt_gset.erl
+index ea2a33e..ce093da 100644
+--- a/src/riak_dt_gset.erl
++++ b/src/riak_dt_gset.erl
+@@ -169,10 +169,11 @@ to_version(_Version, Set) ->
+ stat_test() ->
+     S0 = new(),
+     {ok, S1} = update({add_all, [<<"a">>, <<"b1">>, <<"c23">>, <<"d234">>]}, 1, S0),
++    MaxElementSize = erlang:external_size(<<"d234">>),
+     ?assertEqual([{element_count, 0}, {max_element_size, 0}], stats(S0)),
+-    ?assertEqual([{element_count, 4}, {max_element_size, 15}], stats(S1)),
++    ?assertEqual([{element_count, 4}, {max_element_size, MaxElementSize}], stats(S1)),
+     ?assertEqual(4, stat(element_count, S1)),
+-    ?assertEqual(15, stat(max_element_size, S1)),
++    ?assertEqual(MaxElementSize, stat(max_element_size, S1)),
+     ?assertEqual(undefined, stat(actor_count, S1)).
+ 
+ to_binary_test() ->
+diff --git a/src/riak_dt_lwwreg.erl b/src/riak_dt_lwwreg.erl
+index 657a33a..bf43497 100644
+--- a/src/riak_dt_lwwreg.erl
++++ b/src/riak_dt_lwwreg.erl
+@@ -261,9 +261,11 @@ query_test() ->
+ 
+ stat_test() ->
+     LWW = new(),
++    NewSize = erlang:external_size(<<>>),
++    UpdateSize = erlang:external_size(<<"abcd">>),
+     {ok, LWW1} = update({assign, <<"abcd">>}, 1, LWW),
+-    ?assertEqual([{value_size, 11}], stats(LWW)),
+-    ?assertEqual([{value_size, 15}], stats(LWW1)),
+-    ?assertEqual(15, stat(value_size, LWW1)),
++    ?assertEqual([{value_size, NewSize}], stats(LWW)),
++    ?assertEqual([{value_size, UpdateSize}], stats(LWW1)),
++    ?assertEqual(UpdateSize, stat(value_size, LWW1)),
+     ?assertEqual(undefined, stat(actor_count, LWW1)).
+ -endif.

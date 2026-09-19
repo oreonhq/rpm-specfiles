@@ -1,0 +1,37 @@
+lib-src/SymmetricFlipGraph.hh: In destructor ‘topcom::SymmetricFlipGraph::~SymmetricFlipGraph()’:
+lib-src/SymmetricFlipGraph.hh:572:5: warning: deleting object of polymorphic class type ‘topcom::__sbfs_cout_triang_base’ which has non-virtual destructor might cause undefined behavior [-Wdelete-non-virtual-dtor]
+  572 |     delete _cout_triang_ptr;
+      |     ^~~~~~~~~~~~~~~~~~~~~~~
+lib-src/SymmetricFlipGraph.hh:573:5: warning: deleting object of polymorphic class type ‘topcom::__sbfs_output_pred_base’ which has non-virtual destructor might cause undefined behavior [-Wdelete-non-virtual-dtor]
+  573 |     delete _output_pred_ptr;
+      |     ^~~~~~~~~~~~~~~~~~~~~~~
+lib-src/SymmetricFlipGraph.hh:574:5: warning: deleting object of polymorphic class type ‘topcom::__sbfs_search_pred_base’ which has non-virtual destructor might cause undefined behavior [-Wdelete-non-virtual-dtor]
+  574 |     delete _search_pred_ptr;
+      |     ^~~~~~~~~~~~~~~~~~~~~~~
+
+--- topcom-1.1.2/lib-src/SymmetricFlipGraph.hh.orig	2022-09-12 10:59:47.000000000 -0600
++++ topcom-1.1.2/lib-src/SymmetricFlipGraph.hh	2023-10-23 13:07:42.298561460 -0600
+@@ -70,6 +70,7 @@ namespace topcom {
+ 
+   class __sbfs_cout_triang_base {
+   public:
++    virtual ~__sbfs_cout_triang_base() {}
+     inline virtual void operator()(const size_type no,
+ 				   const TriangNode& tn) const {}
+   };
+@@ -85,6 +86,7 @@ namespace topcom {
+ 
+   class __sbfs_output_pred_base {
+   public:
++    virtual ~__sbfs_output_pred_base() {}
+     inline virtual bool operator()(const PointConfiguration& points,
+ 				   const Chirotope&          chiro,
+ 				   const Incidences&         incidences,
+@@ -169,6 +171,7 @@ namespace topcom {
+ 
+   class __sbfs_search_pred_base {
+   public:
++    virtual ~__sbfs_search_pred_base() {}
+     inline virtual bool operator()(const PointConfiguration& points,
+ 				   const Chirotope&          chiro,
+ 				   const Incidences&         incidences,

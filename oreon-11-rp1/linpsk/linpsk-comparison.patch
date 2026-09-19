@@ -1,0 +1,35 @@
+diff --git a/gui/crxdisplay.cpp b/gui/crxdisplay.cpp
+index 704207d..792876d 100644
+--- a/gui/crxdisplay.cpp
++++ b/gui/crxdisplay.cpp
+@@ -78,7 +78,7 @@ bool CRxDisplay::start_process_loop()
+         Sound = new WaveInput ( -1 );
+     else
+       Sound = new CSound ( settings.serial );
+-    if ( Sound <= NULL )
++    if ( Sound == NULL )
+       return false;
+ 
+     connect ( Sound, SIGNAL ( samplesAvailable() ), this, SLOT ( process_rxdata() ) );
+diff --git a/gui/linpsk.cpp b/gui/linpsk.cpp
+index 5c8ff80..d6c6c0a 100644
+--- a/gui/linpsk.cpp
++++ b/gui/linpsk.cpp
+@@ -410,7 +410,7 @@ void LinPSK::startTx()
+       Modulator = new BpskModulator ( 11025, Frequency, TxBuffer );
+       break; */
+   }
+-  if ( Sound <= NULL ) // Only create Sound Device once for output
++  if ( Sound == NULL ) // Only create Sound Device once for output
+   {
+     if ( settings.DemoMode )
+     {
+@@ -421,7 +421,7 @@ void LinPSK::startTx()
+       Sound = new CSound ( settings.serial );
+     connect ( Sound, SIGNAL ( samplesAvailable() ), this, SLOT ( process_txdata() ) );
+   }
+-  if ( Sound <= NULL )
++  if ( Sound == NULL )
+   {
+     QMessageBox::critical ( 0, " Programm Error! LinPsk", "Could not create Sound Device for Output" );
+     TxDisplay->TxFunctions->setStatus ( ON );

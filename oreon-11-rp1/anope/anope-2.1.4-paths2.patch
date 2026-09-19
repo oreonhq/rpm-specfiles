@@ -1,0 +1,156 @@
+From c08aaa86d1ada72ad6e185837f9c179693b60c22 Mon Sep 17 00:00:00 2001
+From: Sadie Powell <sadie@witchery.services>
+Date: Tue, 2 Apr 2024 16:50:24 +0100
+Subject: [PATCH] Sync the build system directory names with the core.
+
+---
+ CMakeLists.txt                   | 24 ++++++++++++------------
+ include/sysconf.h.cmake          |  6 +++---
+ modules/CMakeLists.txt           |  4 ++--
+ modules/webcpanel/CMakeLists.txt |  2 +-
+ src/modulemanager.cpp            |  4 ++--
+ 5 files changed, 20 insertions(+), 20 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 52f983079c..0b22650cf7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -256,8 +256,8 @@ endif()
+ if(NOT BIN_DIR)
+   set(BIN_DIR "bin")
+ endif()
+-if(NOT DB_DIR)
+-  set(DB_DIR "data")
++if(NOT DATA_DIR)
++  set(DATA_DIR "data")
+ endif()
+ if(NOT DOC_DIR)
+   set(DOC_DIR "doc")
+@@ -265,14 +265,14 @@ endif()
+ if(NOT CONF_DIR)
+   set(CONF_DIR "conf")
+ endif()
+-if(NOT LIB_DIR)
+-  set(LIB_DIR "lib")
++if(NOT MODULE_DIR)
++  set(MODULE_DIR "modules")
+ endif()
+ if(NOT LOCALE_DIR)
+   set(LOCALE_DIR "locale")
+ endif()
+-if(NOT LOGS_DIR)
+-  set(LOGS_DIR "logs")
++if(NOT LOG_DIR)
++  set(LOG_DIR "logs")
+ endif()
+ 
+ # Version number processing
+@@ -350,15 +350,15 @@ set(SERVICES_BINARY "$<TARGET_FILE:${PROGRAM_NAME}>")
+ get_filename_component(SERVICES_BINARY ${SERVICES_BINARY} NAME)
+ 
+ # At install time, create the following additional directories
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${DB_DIR}/backups\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${LOGS_DIR}\")")
++install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${DATA_DIR}/backups\")")
++install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${LOG_DIR}\")")
+ if(WIN32)
+-  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${DB_DIR}/runtime\")")
++  install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${DATA_DIR}/runtime\")")
+ endif()
+ # On non-Windows platforms, if RUNGROUP is set, change the permissions of the below directories, as well as the group of the data directory
+ if(NOT WIN32 AND RUNGROUP)
+-  install(CODE "execute_process(COMMAND ${CHMOD} 2775 \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/\${DB_DIR}/backups\")")
+-  install(CODE "execute_process(COMMAND ${CHMOD} 2775 \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/\${LOGS_DIR}\")")
++  install(CODE "execute_process(COMMAND ${CHMOD} 2775 \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/\${DATA_DIR}/backups\")")
++  install(CODE "execute_process(COMMAND ${CHMOD} 2775 \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/\${LOG_DIR}\")")
+   install(CODE "execute_process(COMMAND ${CHGRP} -R ${RUNGROUP} \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}\")")
+ endif()
+ # On Windows platforms, install extra files
+@@ -368,7 +368,7 @@ if(WIN32)
+   )
+ endif()
+ 
+-install(CODE "file(REMOVE_RECURSE \"$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${LIB_DIR}/modules\")")
++install(CODE "file(REMOVE_RECURSE \"$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${MODULE_DIR}\")")
+ 
+ # Only process the CPack section if we have CPack
+ if(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
+diff --git a/include/sysconf.h.cmake b/include/sysconf.h.cmake
+index 5605976f9d..2b981c7af7 100644
+--- a/include/sysconf.h.cmake
++++ b/include/sysconf.h.cmake
+@@ -24,16 +24,16 @@
+ #define DEFAULT_CONF_DIR "@CONF_DIR@"
+ 
+ // The default data directory.
+-#define DEFAULT_DATA_DIR "@DB_DIR@"
++#define DEFAULT_DATA_DIR "@DATA_DIR@"
+ 
+ // The default locale directory.
+ #define DEFAULT_LOCALE_DIR "@LOCALE_DIR@"
+ 
+ // The default log directory.
+-#define DEFAULT_LOG_DIR "@LOGS_DIR@"
++#define DEFAULT_LOG_DIR "@LOG_DIR@"
+ 
+ // The default module directory.
+-#define DEFAULT_MODULE_DIR "@LIB_DIR@"
++#define DEFAULT_MODULE_DIR "@MODULE_DIR@"
+ 
+ // Whether the clock_gettime() function is available.
+ #cmakedefine01 HAVE_CLOCK_GETTIME
+diff --git a/modules/CMakeLists.txt b/modules/CMakeLists.txt
+index c6a98df7f9..aa9e963c44 100644
+--- a/modules/CMakeLists.txt
++++ b/modules/CMakeLists.txt
+@@ -94,7 +94,7 @@ macro(build_modules SRC)
+             target_link_libraries(${SO} ${PROGRAM_NAME})
+           endif()
+           # Set the module to be installed to the module directory under the data directory
+-          install(TARGETS ${SO} DESTINATION ${LIB_DIR}/modules)
++          install(TARGETS ${SO} DESTINATION ${MODULE_DIR})
+         endif()
+       endif()
+     endforeach()
+@@ -168,7 +168,7 @@ macro(build_subdir)
+   endif()
+ 
+   # Set the module to be installed to the module directory under the data directory
+-  install(TARGETS ${SO} DESTINATION ${LIB_DIR}/modules)
++  install(TARGETS ${SO} DESTINATION ${MODULE_DIR})
+ endmacro()
+ 
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+diff --git a/modules/webcpanel/CMakeLists.txt b/modules/webcpanel/CMakeLists.txt
+index 0770fddb7b..ab19f12b51 100644
+--- a/modules/webcpanel/CMakeLists.txt
++++ b/modules/webcpanel/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ build_subdir(${CMAKE_CURRENT_SOURCE_DIR})
+ 
+ install(DIRECTORY "templates/"
+-  DESTINATION "${DB_DIR}/webcpanel/templates/default"
++  DESTINATION "${DATA_DIR}/webcpanel/templates/default"
+ )
+diff --git a/src/modulemanager.cpp b/src/modulemanager.cpp
+index 4ceae6417b..af7b1f811d 100644
+--- a/src/modulemanager.cpp
++++ b/src/modulemanager.cpp
+@@ -55,7 +55,7 @@ void ModuleManager::CleanupRuntimeDirectory()
+  */
+ static ModuleReturn moduleCopyFile(const Anope::string &name, Anope::string &output)
+ {
+-	const auto input = Anope::ExpandModule("modules/" + name + DLL_EXT);
++	const auto input = Anope::ExpandModule(name + DLL_EXT);
+ 
+ 	struct stat s;
+ 	if (stat(input.c_str(), &s) == -1)
+@@ -146,7 +146,7 @@ ModuleReturn ModuleManager::LoadModule(const Anope::string &modname, User *u)
+ 		return ret;
+ 	}
+ #else
+-	const auto pbuf = Anope::ExpandModule("modules/" + modname + DLL_EXT);
++	const auto pbuf = Anope::ExpandModule(modname + DLL_EXT);
+ #endif
+ 
+ 	dlerror();

@@ -1,0 +1,44 @@
+From a3a69c295dcb0c038513b4892fffc69a5292db82 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Wed, 23 Jul 2025 00:35:50 +0200
+Subject: [PATCH] Fix test code with cmd_lib 1.9.6 (PathBuf does not implement
+ Display)
+
+---
+ src/lib.rs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index c497663..0712e01 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -153,7 +153,7 @@ mod tests {
+ 
+     #[sealed_test]
+     fn a_dummy_test_with_git() {
+-        let current_dir = std::env::current_dir().unwrap();
++        let current_dir = std::env::current_dir().unwrap().to_string_lossy().to_string();
+         run_cmd! (
+             info "Initializing test repo in $current_dir";
+             git init;
+@@ -188,7 +188,7 @@ mod tests {
+ 
+     #[sealed_test]
+     fn another_dummy_test_with_git() {
+-        let current_dir = std::env::current_dir().unwrap();
++        let current_dir = std::env::current_dir().unwrap().to_string_lossy().to_string();
+         run_cmd! (
+             info "Initializing test repo in $current_dir";
+             git init;
+@@ -203,7 +203,7 @@ mod tests {
+ 
+     #[sealed_test]
+     fn a_dummy_test_with_return_type() -> Result<&'static str, &'static str> {
+-        let current_dir = std::env::current_dir().unwrap();
++        let current_dir = std::env::current_dir().unwrap().to_string_lossy().to_string();
+         run_cmd! (
+             info "Initializing test repo in $current_dir";
+             git init;
+-- 
+2.50.1
+

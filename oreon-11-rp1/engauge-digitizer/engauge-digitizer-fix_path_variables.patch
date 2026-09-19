@@ -1,0 +1,47 @@
+--- a/engauge.orig.pro	2018-08-18 11:09:30.376816000 +0200
++++ b/engauge.pro	2018-08-18 11:11:20.963693884 +0200
+@@ -1137,8 +1137,8 @@
+ 
+ jpeg2000 {
+     message("JPEG2000 support:   yes")
+-    _OPENJPEG_INCLUDE = $$(OPENJPEG_INCLUDE)
+-    _OPENJPEG_LIB = $$(OPENJPEG_LIB)
++    _OPENJPEG_INCLUDE = $(OPENJPEG_INCLUDE)
++    _OPENJPEG_LIB = $(OPENJPEG_LIB)
+     isEmpty(_OPENJPEG_INCLUDE) {
+       error("OPENJPEG_INCLUDE and OPENJPEG_LIB environment variables must be defined")
+     } else {
+@@ -1147,9 +1147,9 @@
+       }
+     }
+     DEFINES += "ENGAUGE_JPEG2000"
+-    INCLUDEPATH += $$(OPENJPEG_INCLUDE) \
++    INCLUDEPATH += $(OPENJPEG_INCLUDE) \
+                    src/Jpeg2000
+-    LIBS += -L$$(OPENJPEG_LIB) -lopenjp2
++    LIBS += -L$(OPENJPEG_LIB) -lopenjp2
+     HEADERS += src/Jpeg2000/Jpeg2000.h \
+                src/Jpeg2000/Jpeg2000Callbacks.h \
+                src/Jpeg2000/Jpeg2000Color.h \
+@@ -1168,8 +1168,8 @@
+ 
+ pdf {
+     message("PDF support:        yes")
+-    _POPPLER_INCLUDE = $$(POPPLER_INCLUDE)
+-    _POPPLER_LIB = $$(POPPLER_LIB)
++    _POPPLER_INCLUDE = $(POPPLER_INCLUDE)
++    _POPPLER_LIB = $(POPPLER_LIB)
+     isEmpty(_POPPLER_INCLUDE) {
+       error("POPPLER_INCLUDE and POPPLER_LIB environment variables must be defined")
+     } else {
+@@ -1178,8 +1178,8 @@
+       }
+     }
+     DEFINES += "ENGAUGE_PDF"
+-    LIBS += -L$$(POPPLER_LIB) -lpoppler-qt6
+-    INCLUDEPATH += $$(POPPLER_INCLUDE)
++    LIBS += -L$(POPPLER_LIB) -lpoppler-qt6
++    INCLUDEPATH += $(POPPLER_INCLUDE)
+     HEADERS += src/Dlg/DlgImportCroppingPdf.h \
+                src/Import/ImportCroppingUtilPdf.h \
+                src/Pdf/Pdf.h \

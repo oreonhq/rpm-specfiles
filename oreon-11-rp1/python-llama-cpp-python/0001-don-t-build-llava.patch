@@ -1,0 +1,26 @@
+From 75f66ea3f502cc09dcebdb93fd6b87d0fdfb4c3c Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Wed, 12 Nov 2025 14:37:20 +0100
+Subject: [PATCH] don't build llava
+
+Signed-off-by: Jan Matufka <jmatufka@redhat.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4b06d98..fbe45d3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.21)
+ project(llama_cpp)
+ 
+ option(LLAMA_BUILD "Build llama.cpp shared library and install alongside python package" ON)
+-option(LLAVA_BUILD "Build llava shared library and install alongside python package" ON)
++option(LLAVA_BUILD "Build llava shared library and install alongside python package" OFF)
+ 
+ function(llama_cpp_python_install_target target)
+     if(NOT TARGET ${target})
+-- 
+2.51.1
+

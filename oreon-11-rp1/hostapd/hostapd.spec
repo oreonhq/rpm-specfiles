@@ -3,8 +3,8 @@
 %global _hardened_build 1
 
 Name:           hostapd
-Version:        2.11
-Release:        5%{?dist}
+Version:        2.12
+Release:        1%{?dist}
 Summary:        IEEE 802.11 AP, IEEE 802.1X/WPA/WPA2/EAP/RADIUS Authenticator
 License:        BSD-3-Clause
 URL:            http://w1.fi/hostapd

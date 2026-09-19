@@ -1,0 +1,11 @@
+diff -ur Random123-1.13.2.orig/include/Random123/uniform.hpp Random123-1.13.2/include/Random123/uniform.hpp
+--- Random123-1.13.2.orig/include/Random123/uniform.hpp	2020-02-23 13:48:36.738627640 +0000
++++ Random123-1.13.2/include/Random123/uniform.hpp	2020-02-23 13:48:59.490040126 +0000
+@@ -87,6 +87,7 @@
+ 
+ #include <Random123/features/compilerfeatures.h>
+ #include <limits>
++#include <cstddef>
+ #if R123_USE_CXX11_TYPE_TRAITS
+ #include <type_traits>
+ #endif

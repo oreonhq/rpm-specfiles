@@ -1,0 +1,76 @@
+The PyEval_CallObject API is obsolete in python 3.12, use PyObject_CallObject instead
+diff -ru dionaea-4e459f1b672a5b4c1e8335c0bff1b93738019215.orig/modules/python/module.c dionaea-4e459f1b672a5b4c1e8335c0bff1b93738019215.new/modules/python/module.c
+--- dionaea-4e459f1b672a5b4c1e8335c0bff1b93738019215.orig/modules/python/module.c	2021-02-08 06:48:52.000000000 +0100
++++ dionaea-4e459f1b672a5b4c1e8335c0bff1b93738019215.new/modules/python/module.c	2024-07-04 15:38:00.956643590 +0200
+@@ -138,7 +138,7 @@
+ 		Py_DECREF(module);
+ 		PyObject *func = PyObject_GetAttrString(module, "remoteshell");
+ 		PyObject *arglist = Py_BuildValue("()");
+-		PyObject *r = PyEval_CallObject(func, arglist);
++		PyObject *r = PyObject_CallObject(func, arglist);
+ 		Py_DECREF(arglist);
+ 		g_debug("r %p", r);
+ 		struct head
+@@ -181,7 +181,7 @@
+ 			PyObject *func = PyObject_GetAttrString(i->module, "stop");
+ 			if ( func != NULL ) {
+ 				PyObject *arglist = Py_BuildValue("()");
+-				PyObject *r = PyEval_CallObject(func, arglist);
++				PyObject *r = PyObject_CallObject(func, arglist);
+ 				traceback();
+ 				// PyErr_Print();
+ 				Py_DECREF(arglist);
+@@ -203,7 +203,7 @@
+ 			func = PyObject_GetAttrString(module, "new");
+ 			if( func != NULL ) {
+ 				PyObject *arglist = Py_BuildValue("()");
+-				PyObject *r = PyEval_CallObject(func, arglist);
++				PyObject *r = PyObject_CallObject(func, arglist);
+ 				traceback();
+ 				Py_DECREF(arglist);
+ 				Py_XDECREF(r);
+@@ -214,7 +214,7 @@
+ 			func = PyObject_GetAttrString(module, "start");
+ 			if( func != NULL ) {
+ 				PyObject *arglist = Py_BuildValue("()");
+-				PyObject *r = PyEval_CallObject(func, arglist);
++				PyObject *r = PyObject_CallObject(func, arglist);
+ 				traceback();
+ 				Py_DECREF(arglist);
+ 				Py_XDECREF(r);
+@@ -239,7 +239,7 @@
+ 			PyObject *func = PyObject_GetAttrString(module, "new");
+ 			if( func != NULL ) {
+ 				PyObject *arglist = Py_BuildValue("()");
+-				PyObject *r = PyEval_CallObject(func, arglist);
++				PyObject *r = PyObject_CallObject(func, arglist);
+ 				Py_DECREF(arglist);
+ 				Py_XDECREF(r);
+ 				Py_DECREF(func);
+@@ -273,7 +273,7 @@
+ 		if( func != NULL )
+ 		{
+ 			PyObject *arglist = Py_BuildValue("()");
+-			PyObject *r = PyEval_CallObject(func, arglist);
++			PyObject *r = PyObject_CallObject(func, arglist);
+ 			Py_DECREF(arglist);
+ 			Py_XDECREF(r);
+ 			Py_DECREF(func);
+@@ -306,7 +306,7 @@
+ 		if( func != NULL )
+ 		{
+ 			PyObject *arglist = Py_BuildValue("()");
+-			PyObject *r = PyEval_CallObject(func, arglist);
++			PyObject *r = PyObject_CallObject(func, arglist);
+ 			Py_DECREF(arglist);
+ 			Py_XDECREF(r);
+ 			Py_DECREF(func);
+@@ -389,7 +389,7 @@
+ 		PyObject *func = PyObject_GetAttrString(module, "new");
+ 		if( func != NULL ) {
+ 			PyObject *arglist = Py_BuildValue("()");
+-			PyObject *r = PyEval_CallObject(func, arglist);
++			PyObject *r = PyObject_CallObject(func, arglist);
+ 			Py_DECREF(arglist);
+ 			Py_XDECREF(r);
+ 			Py_DECREF(func);

@@ -1,0 +1,14 @@
+diff -up IQmol3-3.1.2/CMakeLists.txt.builddeps IQmol3-3.1.2/CMakeLists.txt
+--- IQmol3-3.1.2/CMakeLists.txt.builddeps	2023-02-23 09:24:15.038630292 +0000
++++ IQmol3-3.1.2/CMakeLists.txt	2023-02-23 10:24:33.986071820 +0000
+@@ -133,9 +133,9 @@ endif (WIN32)
+ #)
+ 
+ add_dependencies(Process Configurator)
++add_dependencies(Grid Configurator)
+ add_dependencies(Viewer Process)
+ 
+-
+ target_link_libraries (${targetName}
+    Main
+    Process

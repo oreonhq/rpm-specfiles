@@ -1,0 +1,36 @@
+commit bce7c67a35fed8991a1d1f3bf07fa98aefdc1583
+Author: Jonathan Steffan <jsteffan@fedoraproject.org>
+Date:   Sun Mar 17 12:11:00 2024 -0600
+
+    Enable cmake CMP0083 for default PIE.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f2c5c5f..6f8f0e5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,6 +11,18 @@ if (NOT EXISTS ${CMAKE_BINARY_DIR}/CMakeCache.txt)
+     endif()
+ endif()
+ 
++# CMake 3.14 introduced CMP0083 - Control generation of Position Independent Executable (PIE)
++if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.14.0")
++	cmake_policy(SET CMP0083 NEW)
++	include(CheckPIESupported)
++	check_pie_supported()
++endif()
++
++# Default to PIC code
++include(CheckPIESupported)
++check_pie_supported()
++set(CMAKE_POSITION_INDEPENDENT_CODE ON)
++
+ # See: https://github.com/cpm-cmake/CPM.cmake
+ include("cmake/CPM.cmake")
+ if (UNIX)
+@@ -33,4 +45,4 @@ install(TARGETS openxr-explorer xrsetruntime
+ #     sudo cmake --install . --prefix /usr/local
+ #
+ # Command to uninstall afterwards:
+-#     sudo xargs rm < install_manifest.txt
+\ No newline at end of file
++#     sudo xargs rm < install_manifest.txt

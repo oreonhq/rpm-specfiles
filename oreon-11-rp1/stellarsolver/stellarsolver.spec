@@ -4,7 +4,7 @@
 %global minor_soversion 7
 
 Name:           stellarsolver
-Version:        2.7
+Version:        2.8
 Release:        %autorelease
 Summary:        The Cross Platform Sextractor and Internal Astrometric Solver
 License:        BSD-3-Clause and GPL-2.0-or-later and GPL-3.0-or-later and LGPL-2.0-or-later and LGPL-3.0-or-later and MIT

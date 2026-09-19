@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           plexus-classworlds
-Version:        2.8.0
+Version:        2.12.1
 Release:        %autorelease
 Summary:        Plexus Classworlds Classloader Framework
 License:        Apache-2.0 AND Plexus
@@ -22,7 +22,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.8.0-12
+Obsoletes:      %{name}-javadoc < 2.12.1-12
 
 %description
 Classworlds is a framework for container developers who require complex

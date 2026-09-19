@@ -1,0 +1,11 @@
+[Unit]
+Description=Wide DHCPv6 client on %I
+Documentation=man:dhcp6c(8) man:dhcp6c.conf(5) /usr/share/doc/wide-dhcpv6/RELEASENOTES
+
+[Service]
+ExecStart=/usr/sbin/dhcp6c -f -c /etc/wide-dhcpv6/dhcp6c.conf -p /var/run/dhcp6c-%I.pid %I 
+Restart=on-abnormal
+
+[Install]
+WantedBy=network.target
+

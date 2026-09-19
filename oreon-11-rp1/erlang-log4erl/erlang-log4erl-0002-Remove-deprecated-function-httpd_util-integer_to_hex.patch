@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 23 Apr 2024 22:53:36 +0200
+Subject: [PATCH] Remove deprecated function - httpd_util:integer_to_hexlist/1
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/smtp_fsm.erl b/src/smtp_fsm.erl
+index f949c2a..75e5fca 100644
+--- a/src/smtp_fsm.erl
++++ b/src/smtp_fsm.erl
+@@ -99,7 +99,7 @@ hexdigest(Binary) ->
+ 
+ %% returns hex value of integer (always) as 2 chr string
+ hexit(Int) ->
+-    Hex = httpd_util:integer_to_hexlist(Int),
++    Hex = integer_to_list(Int, 16),
+     case string:len(Hex) of
+     1 -> "0" ++ Hex;
+     _ -> Hex

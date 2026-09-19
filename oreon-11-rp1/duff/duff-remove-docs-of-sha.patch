@@ -1,0 +1,11 @@
+--- duff-0.5.2-orig/Makefile.am	2012-11-01 02:02:01.828361343 -0430
++++ duff-0.5.2/Makefile.am	2012-11-01 19:40:27.247597556 -0430
+@@ -5,7 +5,7 @@
+ 
+ EXTRA_DIST = build-aux/config.rpath m4/ChangeLog HACKING
+ 
+-dist_doc_DATA = README.SHA
++dist_doc_DATA = README
+ 
+ ACLOCAL_AMFLAGS = -I m4
+ 

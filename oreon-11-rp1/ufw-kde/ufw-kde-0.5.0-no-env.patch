@@ -1,0 +1,20 @@
+diff -ur ufw-kde-0.5.0/helper/CMakeLists.txt ufw-kde-0.5.0-no-env/helper/CMakeLists.txt
+--- ufw-kde-0.5.0/helper/CMakeLists.txt	2016-10-06 03:38:55.000000000 +0200
++++ ufw-kde-0.5.0-no-env/helper/CMakeLists.txt	2017-02-06 00:38:28.571834139 +0100
+@@ -5,6 +5,7 @@
+ 
+ set_target_properties(kcm_ufw_helper PROPERTIES OUTPUT_NAME kcm_ufw_helper)
+ target_link_libraries(kcm_ufw_helper ${KDE4_KDECORE_LIBS})
++find_package(PythonInterp 3 REQUIRED)
+ configure_file(kcm_ufw_helper.py.cmake ${CMAKE_BINARY_DIR}/kcm_ufw_helper.py)
+ 
+ install(TARGETS kcm_ufw_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
+diff -ur ufw-kde-0.5.0/helper/kcm_ufw_helper.py.cmake ufw-kde-0.5.0-no-env/helper/kcm_ufw_helper.py.cmake
+--- ufw-kde-0.5.0/helper/kcm_ufw_helper.py.cmake	2016-10-06 03:38:55.000000000 +0200
++++ ufw-kde-0.5.0-no-env/helper/kcm_ufw_helper.py.cmake	2017-02-06 00:38:55.860406970 +0100
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!@PYTHON_EXECUTABLE@
+ 
+ #
+ # UFW KControl Module

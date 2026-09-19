@@ -1,0 +1,12 @@
+diff -aur xine-ui-0.99.13.orig/src/xitk/help.c xine-ui-0.99.13/src/xitk/help.c
+--- xine-ui-0.99.13.orig/src/xitk/help.c	2020-09-11 12:09:04.000000000 +0200
++++ xine-ui-0.99.13/src/xitk/help.c	2020-09-12 22:43:57.534208610 +0200
+@@ -192,7 +192,7 @@
+           help_add_section (help, locale_readme, lang->doc_encoding, order_num, section_name);
+ 	}
+ 	else {
+-          help_add_section (help, default_readme, "ISO-8859-1", order_num, section_name);
++          help_add_section (help, default_readme, "UTF-8", order_num, section_name);
+ 	}
+       }
+     }

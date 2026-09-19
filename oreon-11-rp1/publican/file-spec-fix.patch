@@ -1,0 +1,13 @@
+diff --git a/lib/Publican/TreeView.pm b/lib/Publican/TreeView.pm
+index 53191dc6..c631a957 100644
+--- a/lib/Publican/TreeView.pm
++++ b/lib/Publican/TreeView.pm
+@@ -9,7 +9,7 @@ use File::pushd;
+ use Term::ANSIColor qw(:constants);
+ use File::Basename;
+ use Cwd qw(realpath);
+-use File::Spec qw(abs2rel);
++use File::Spec;
+ 
+ =head1 NAME
+

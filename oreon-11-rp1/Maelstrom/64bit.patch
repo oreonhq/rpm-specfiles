@@ -1,0 +1,13 @@
+diff --git a/screenlib/SDL_FrameBuf.cpp b/screenlib/SDL_FrameBuf.cpp
+index 2f7b44c..dbcf379 100644
+--- a/screenlib/SDL_FrameBuf.cpp
++++ b/screenlib/SDL_FrameBuf.cpp
+@@ -888,7 +888,7 @@ FrameBuf:: AddDirtyRect(SDL_Rect *rect)
+ 			for ( i=0; i<dirtymaplen; ++i ) {
+ 				if ( dirtymap[i] != NULL ) {
+ 					dirtymap[i] = (SDL_Rect *)(
+-					((intptr_t)dirtymap[i]-(intptr_t)updatelist) + (intptr_t)newlist
++					((long)dirtymap[i]-(long)updatelist) + (long)newlist
+ 					);
+ 				}
+ 			}

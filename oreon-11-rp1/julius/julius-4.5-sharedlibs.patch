@@ -1,0 +1,198 @@
+diff -up julius-4.5/adinrec/Makefile.in.shared julius-4.5/adinrec/Makefile.in
+--- julius-4.5/adinrec/Makefile.in.shared	2019-05-30 13:30:47.879005667 -0400
++++ julius-4.5/adinrec/Makefile.in	2019-05-30 13:30:47.883005576 -0400
+@@ -28,7 +28,7 @@ TARGET=adinrec@EXEEXT@
+ 
+ all: $(TARGET)
+ 
+-$(TARGET): adinrec.c $(LIBSENT)/libsent.a $(LIBJULIUS)/libjulius.a
++$(TARGET): adinrec.c $(LIBSENT)/libsent.so.0.0.0 $(LIBJULIUS)/libjulius.so.0.0.0
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ adinrec.c $(LDFLAGS)
+ 
+ ############################################################
+diff -up julius-4.5/adintool/Makefile.in.shared julius-4.5/adintool/Makefile.in
+--- julius-4.5/adintool/Makefile.in.shared	2019-05-30 13:30:47.879005667 -0400
++++ julius-4.5/adintool/Makefile.in	2019-05-30 13:30:47.884005554 -0400
+@@ -37,10 +37,10 @@ TARGET=adintool@EXEEXT@ $(GUITARGET)
+ 
+ all: $(TARGET)
+ 
+-adintool@EXEEXT@: $(OBJ) $(LIBSENT)/libsent.a $(LIBJULIUS)/libjulius.a
++adintool@EXEEXT@: $(OBJ) $(LIBSENT)/libsent.so.0.0.0 $(LIBJULIUS)/libjulius.so.0.0.0
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $(OBJ) $(LDFLAGS)
+ 
+-adintool-gui@EXEEXT@: $(GUIOBJ) $(LIBSENT)/libsent.a $(LIBJULIUS)/libjulius.a
++adintool-gui@EXEEXT@: $(GUIOBJ) $(LIBSENT)/libsent.so.0.0.0 $(LIBJULIUS)/libjulius.so.0.0.0
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(SDL_CFLAGS) -o $@ $(GUIOBJ) $(LDFLAGS) $(SDL_LDFLAGS)
+ 
+ install: install.bin
+diff -up julius-4.5/binlm2arpa/Makefile.in.shared julius-4.5/binlm2arpa/Makefile.in
+--- julius-4.5/binlm2arpa/Makefile.in.shared	2019-05-30 13:30:47.879005667 -0400
++++ julius-4.5/binlm2arpa/Makefile.in	2019-05-30 13:30:47.884005554 -0400
+@@ -24,7 +24,7 @@ TARGET=binlm2arpa@EXEEXT@
+ 
+ all: $(TARGET)
+ 
+-$(TARGET): $(OBJ) $(LIBSENT)/libsent.a
++$(TARGET): $(OBJ) $(LIBSENT)/libsent.so.0.0.0
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $(OBJ) $(LDFLAGS)
+ 
+ install: install.bin
+diff -up julius-4.5/generate-ngram/Makefile.in.shared julius-4.5/generate-ngram/Makefile.in
+--- julius-4.5/generate-ngram/Makefile.in.shared	2019-05-30 13:30:47.879005667 -0400
++++ julius-4.5/generate-ngram/Makefile.in	2019-05-30 13:30:47.884005554 -0400
+@@ -27,7 +27,7 @@ TARGET=generate-ngram@EXEEXT@
+ 
+ all: $(TARGET)
+ 
+-$(TARGET): $(OBJ) $(LIBSENT)/libsent.a
++$(TARGET): $(OBJ) $(LIBSENT)/libsent.so.0.0.0
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $(OBJ) $(LDFLAGS)
+ 
+ install: install.bin
+diff -up julius-4.5/julius/Makefile.in.shared julius-4.5/julius/Makefile.in
+--- julius-4.5/julius/Makefile.in.shared	2019-05-30 13:30:47.881005622 -0400
++++ julius-4.5/julius/Makefile.in	2019-05-30 13:30:47.884005554 -0400
+@@ -53,7 +53,7 @@ record.o \
+ 
+ all: $(TARGET)
+ 
+-$(TARGET): $(LIBSENT)/libsent.a $(LIBJULIUS)/libjulius.a $(OBJ)
++$(TARGET): $(LIBSENT)/libsent.so.0.0.0 $(LIBJULIUS)/libjulius.so.0.0.0 $(OBJ)
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $(OBJ) $(LDFLAGS) $(GTK_LIBS)
+ 
+ ############################################################
+diff -up julius-4.5/libjulius/Makefile.in.shared julius-4.5/libjulius/Makefile.in
+--- julius-4.5/libjulius/Makefile.in.shared	2019-05-30 13:30:47.881005622 -0400
++++ julius-4.5/libjulius/Makefile.in	2019-05-30 13:32:59.707068160 -0400
+@@ -16,8 +16,8 @@ SHELL=/bin/sh
+ LIBSENT=../libsent
+ 
+ CC=@CC@
+-CFLAGS=@CFLAGS@
+-CPPFLAGS=-Iinclude -I$(LIBSENT)/include @CPPFLAGS@ `$(LIBSENT)/libsent-config --cflags`
++CFLAGS=@CFLAGS@ -fPIC
++CPPFLAGS=-Iinclude -I$(LIBSENT)/include @CPPFLAGS@ -fPIC `$(LIBSENT)/libsent-config --cflags`
+ LDFLAGS=@LDFLAGS@ @LIBS@ -L$(LIBSENT) `$(LIBSENT)/libsent-config --libs` 
+ RM=@RM@ -f
+ AR=@AR@ @ARFLAGS@
+@@ -37,7 +37,9 @@ INSTALL_PROGRAM=@INSTALL_PROGRAM@
+ ############################################################
+ 
+ PKGCONF_FILE = julius-@JULIUS_MAJOR_VERSION@.pc
+-TARGET = libjulius.a
++BASESHAREDLIB=libjulius.so
++SHAREDLIB=$(BASESHAREDLIB).0
++TARGET=$(SHAREDLIB).0.0
+ 
+ OBJ = \
+ src/recogmain.o \
+@@ -85,8 +87,11 @@ src/version.o @EXTRAOBJ@
+ all: $(TARGET)
+ 
+ $(TARGET): $(OBJ)
+-	$(AR) $@ $?
+-	$(RANLIB) $@
++	$(CC) $(CFLAGS) -shared -Wl,-soname,$(SHAREDLIB) -o $@ $?
++	ln -s $(TARGET) $(SHAREDLIB)
++	ln -s $(TARGET) $(BASESHAREDLIB)
++	# $(AR) $@ $?
++	# $(RANLIB) $@
+ 
+ ############################################################
+ 
+@@ -97,6 +102,8 @@ install.lib: $(TARGET)
+ 	${INSTALL_DATA} $(TARGET) ${DESTDIR}${libdir}
+ 	${INSTALL} -d ${DESTDIR}${pkgconfigdir}
+ 	${INSTALL_DATA} $(PKGCONF_FILE) ${DESTDIR}${pkgconfigdir}
++	ln -s $(TARGET) ${DESTDIR}${libdir}/$(SHAREDLIB)
++	ln -s $(TARGET) ${DESTDIR}${libdir}/$(BASESHAREDLIB)
+ 
+ install.include:
+ 	${INSTALL} -d ${DESTDIR}${includedir}/julius
+diff -up julius-4.5/libsent/Makefile.in.shared julius-4.5/libsent/Makefile.in
+--- julius-4.5/libsent/Makefile.in.shared	2019-05-30 13:30:47.881005622 -0400
++++ julius-4.5/libsent/Makefile.in	2019-05-30 13:34:22.417301136 -0400
+@@ -12,14 +12,16 @@ SHELL=/bin/sh
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
+ 
+ CC=@CC@
+-CFLAGS=@CFLAGS@ @OPENMP_CFLAGS@
+-CPPFLAGS=-Iinclude @CPPFLAGS@ @SOUNDINC@ @DEFS@
++CFLAGS=@CFLAGS@ @OPENMP_CFLAGS@ -fPIC
++CPPFLAGS=-Iinclude @CPPFLAGS@ -fPIC @SOUNDINC@ @DEFS@
+ # LDFLAGS=@LDFLAGS@ @LIBS@
+ RM=@RM@ -f
+ AR=@AR@ @ARFLAGS@
+ RANLIB=@RANLIB@
+ PKGCONF_FILE = sent-@LIBSENT_MAJOR_VERSION@.pc
+-TARGET=libsent.a
++BASESHAREDLIB=libsent.so
++SHAREDLIB=$(BASESHAREDLIB).0
++TARGET=$(SHAREDLIB).0.0
+ 
+ ## install
+ prefix=@prefix@
+@@ -144,8 +146,11 @@ src/wav2mfcc/para.o \
+ all: $(TARGET)
+ 
+ $(TARGET): $(OBJ)
+-	$(AR) $@ $?
+-	$(RANLIB) $@
++	$(CC) $(CFLAGS) -shared -Wl,-soname,$(SHAREDLIB) -o $@ $?
++	ln -s $(TARGET) $(SHAREDLIB)
++	ln -s $(TARGET) $(BASESHAREDLIB)
++	# $(AR) $@ $?
++	# $(RANLIB) $@
+ 
+ src/phmm/calc_dnn_fma.o: src/phmm/calc_dnn_fma.c
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) @SIMD_FMA_CFLAGS@ -o $@ -c $<
+@@ -172,6 +177,8 @@ install.lib: $(TARGET)
+ 	${INSTALL_DATA} $(TARGET) ${DESTDIR}${libdir}
+ 	${INSTALL} -d ${DESTDIR}${pkgconfigdir}
+ 	${INSTALL_DATA} $(PKGCONF_FILE) ${DESTDIR}${pkgconfigdir}
++	ln -s $(TARGET) ${DESTDIR}${libdir}/$(SHAREDLIB)
++	ln -s $(TARGET) ${DESTDIR}${libdir}/$(BASESHAREDLIB)
+ 
+ install.include:
+ 	${INSTALL} -d ${DESTDIR}${includedir}/sent
+diff -up julius-4.5/mkbingram/Makefile.in.shared julius-4.5/mkbingram/Makefile.in
+--- julius-4.5/mkbingram/Makefile.in.shared	2019-05-30 13:30:47.881005622 -0400
++++ julius-4.5/mkbingram/Makefile.in	2019-05-30 13:30:47.885005531 -0400
+@@ -24,7 +24,7 @@ TARGET=mkbingram@EXEEXT@
+ 
+ all: $(TARGET)
+ 
+-$(TARGET): $(OBJ) $(LIBSENT)/libsent.a
++$(TARGET): $(OBJ) $(LIBSENT)/libsent.so.0.0.0
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $(OBJ) $(LDFLAGS)
+ 
+ install: install.bin
+diff -up julius-4.5/mkbinhmm/Makefile.in.shared julius-4.5/mkbinhmm/Makefile.in
+--- julius-4.5/mkbinhmm/Makefile.in.shared	2019-05-30 13:30:47.881005622 -0400
++++ julius-4.5/mkbinhmm/Makefile.in	2019-05-30 13:30:47.885005531 -0400
+@@ -23,10 +23,10 @@ INSTALL=@INSTALL@
+ 
+ all: mkbinhmm@EXEEXT@ mkbinhmmlist@EXEEXT@
+ 
+-mkbinhmm@EXEEXT@: mkbinhmm.o $(LIBSENT)/libsent.a
++mkbinhmm@EXEEXT@: mkbinhmm.o $(LIBSENT)/libsent.so.0.0.0
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ mkbinhmm.o $(LDFLAGS)
+ 
+-mkbinhmmlist@EXEEXT@: mkbinhmmlist.o $(LIBSENT)/libsent.a
++mkbinhmmlist@EXEEXT@: mkbinhmmlist.o $(LIBSENT)/libsent.so.0.0.0
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ mkbinhmmlist.o $(LDFLAGS)
+ 
+ install: install.bin
+diff -up julius-4.5/mkss/Makefile.in.shared julius-4.5/mkss/Makefile.in
+--- julius-4.5/mkss/Makefile.in.shared	2019-05-30 13:30:47.881005622 -0400
++++ julius-4.5/mkss/Makefile.in	2019-05-30 13:30:47.885005531 -0400
+@@ -28,7 +28,7 @@ TARGET=mkss@EXEEXT@
+ 
+ all: $(TARGET)
+ 
+-$(TARGET): mkss.c $(LIBSENT)/libsent.a $(LIBJULIUS)/libjulius.a
++$(TARGET): mkss.c $(LIBSENT)/libsent.so.0.0.0 $(LIBJULIUS)/libjulius.so.0.0.0
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ mkss.c $(LDFLAGS)
+ 
+ ############################################################

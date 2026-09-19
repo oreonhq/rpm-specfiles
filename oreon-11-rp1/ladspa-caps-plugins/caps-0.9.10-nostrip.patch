@@ -1,0 +1,17 @@
+diff -up caps-0.9.24/Makefile.orig caps-0.9.24/Makefile
+--- caps-0.9.24/Makefile.orig	2016-02-20 17:17:59.093173678 +0100
++++ caps-0.9.24/Makefile	2016-02-20 17:18:31.856178004 +0100
+@@ -62,11 +62,10 @@ tags: $(SOURCES) $(HEADERS)
+ 	@-if [ -x /usr/bin/ctags ]; then ctags $(SOURCES) $(HEADERS) >/dev/null 2>&1 ; fi
+ 
+ install: all
+-	@$(STRIP) $(PLUG).so > /dev/null
+ 	install -d $(DESTDIR)$(DEST)
+-	install -m 644 $(PLUG).so $(DESTDIR)$(DEST)
++	install -m 755 $(PLUG).so $(DESTDIR)$(DEST)
+ 	install -d $(DESTDIR)$(RDFDEST)
+-	install -m 644 $(PLUG).rdf $(DESTDIR)$(RDFDEST)
++	install -p -m 644 $(PLUG).rdf $(DESTDIR)$(RDFDEST)
+ 
+ fake-install: all
+ 	-rm $(DESTDIR)$(DEST)/$(PLUG).so

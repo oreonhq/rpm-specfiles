@@ -1,0 +1,22 @@
+From d1a4430ac8da69d3a1cd4a848c9135f093b90123 Mon Sep 17 00:00:00 2001
+From: Philippe F <phil.fremy@free.fr>
+Date: Tue, 17 Nov 2020 15:10:51 +0100
+Subject: [PATCH] Fix typo preventing from launching winpdb debuggee
+
+---
+ rpdb/session_manager.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/rpdb/session_manager.py b/rpdb/session_manager.py
+index ca44fef..3d1701a 100644
+--- a/rpdb/session_manager.py
++++ b/rpdb/session_manager.py
+@@ -1246,7 +1246,7 @@ def _spawn_server(self, fchdir, ExpandedFilename, args, rid, interpreter):
+ 
+         # for .pyc files, strip the c
+         fpath, ext = os.path.splitext(__file__)
+-        debugger = os.path.join( os.path.basename(fpath), '..', 'rpdb2') + ext
++        debugger = os.path.join( os.path.dirname(fpath), '..', 'rpdb2') + ext
+         if debugger[-1:] == 'c':
+             debugger = debugger[:-1]
+ 

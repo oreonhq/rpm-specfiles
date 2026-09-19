@@ -6,8 +6,8 @@
 Summary: English dictionaries for Aspell
 Name: aspell-%{lang}
 Epoch: 50
-Version: 2020.12.07
-Release: 16%{?dist}
+Version: 2026.02.25-0
+Release: 1%{?dist}
 # Automatically converted from old format: MIT and BSD - review is highly recommended.
 License: LicenseRef-Callaway-MIT AND LicenseRef-Callaway-BSD
 URL: http://aspell.net/

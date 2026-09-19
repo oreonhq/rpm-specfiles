@@ -1,0 +1,123 @@
+
+## <summary>policy for trafficserver</summary>
+
+########################################
+## <summary>
+##	Execute trafficserver_exec_t in the trafficserver domain.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`trafficserver_domtrans',`
+	gen_require(`
+		type trafficserver_t, trafficserver_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, trafficserver_exec_t, trafficserver_t)
+')
+
+
+########################################
+## <summary>
+##      Allow the specified domain to read
+##      trafficserver configuration files.
+## </summary>
+## <param name="domain">
+##      <summary>
+##      Domain allowed access.
+##      </summary>
+## </param>
+## <rolecap/>
+#
+interface(`trafficserver_read_config',`
+        gen_require(`
+                type trafficserver_etc_t;
+        ')
+
+        files_search_etc($1)
+        list_dirs_pattern($1, trafficserver_etc_t, trafficserver_etc_t)
+        read_files_pattern($1, trafficserver_etc_t, trafficserver_etc_t)
+')
+
+
+########################################
+## <summary>
+##	Read trafficserver's log files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`trafficserver_read_log',`
+	gen_require(`
+		type trafficserver_log_t;
+	')
+
+	logging_search_logs($1)
+	read_files_pattern($1, trafficserver_log_t, trafficserver_log_t)
+')
+
+########################################
+## <summary>
+##	Append to trafficserver log files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`trafficserver_append_log',`
+	gen_require(`
+		type trafficserver_log_t;
+	')
+
+	logging_search_logs($1)
+	append_files_pattern($1, trafficserver_log_t, trafficserver_log_t)
+')
+
+########################################
+## <summary>
+##	Manage trafficserver log files
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`trafficserver_manage_log',`
+	gen_require(`
+		type trafficserver_log_t;
+	')
+
+	logging_search_logs($1)
+	manage_dirs_pattern($1, trafficserver_log_t, trafficserver_log_t)
+	manage_files_pattern($1, trafficserver_log_t, trafficserver_log_t)
+	manage_lnk_files_pattern($1, trafficserver_log_t, trafficserver_log_t)
+')
+
+########################################
+## <summary>
+##	Connect to trafficserver management sockets
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`trafficserver_connect_sock',`
+	gen_require(`
+		type trafficserver_run_t;
+	')
+
+	rw_sock_files_pattern($1, trafficserver_run_t, trafficserver_run_t)
+')

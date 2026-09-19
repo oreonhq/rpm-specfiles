@@ -1,0 +1,77 @@
+--- src/gtkextra/gtkplotflux.c.orig	2012-05-18 10:04:25.000000000 +0200
++++ src/gtkextra/gtkplotflux.c	2013-11-21 11:20:57.964302605 +0100
+@@ -492,11 +492,11 @@
+     gtk_plot_axis_parse_label(data->gradient, flux->scale_max, flux->labels_precision, flux->labels_style, text);
+     if(flux->labels_prefix){
+       g_snprintf(aux_text, 100, "%s%s", flux->labels_prefix, text);
+-      g_snprintf(text, 100, aux_text);
++      g_strlcpy(text, aux_text, 100);
+     }
+     if(flux->labels_suffix) {
+       g_snprintf(aux_text, 100, "%s%s", text, flux->labels_suffix);
+-      g_snprintf(text, 100, aux_text);
++      g_strlcpy(text, aux_text, 100);
+     }
+ 
+     g_snprintf(new_label, 100, "%s", text);
+@@ -575,12 +575,12 @@
+     if(flux->labels_prefix){
+       gchar aux_text[100];
+       g_snprintf(aux_text, 100, "%s%s", flux->labels_prefix, text_max);
+-      g_snprintf(text_max, 100, aux_text);
++      g_strlcpy(text_max, aux_text, 100);
+     }
+     if(flux->labels_suffix){
+       gchar aux_text[100];
+       g_snprintf(aux_text, 100, "%s%s", text_max, flux->labels_suffix);
+-      g_snprintf(text_max, 100, aux_text);
++      g_strlcpy(text_max, aux_text, 100);
+     }
+     g_snprintf(new_label, 100, "%s", text_max);
+ 
+--- src/misc.c	2017-07-16 18:54:35.554288555 +0200
++++ src/misc.c	2017-07-16 19:08:17.380500536 +0200
+@@ -412,7 +412,7 @@
+ 	   GLogLevelFlags  log_level,
+ 	   const gchar    *format)
+ {
+-  g_log (log_domain, log_level, format);
++  g_log (log_domain, log_level, "%s", format);
+ }
+ 
+ void
+@@ -4295,14 +4295,14 @@
+ ada_gtk_message_dialog_format_secondary_markup
+   (GtkMessageDialog* dialog, gchar* msg)
+ {
+-  gtk_message_dialog_format_secondary_markup (dialog, msg);
++  gtk_message_dialog_format_secondary_markup (dialog, "%s", msg);
+ }
+ 
+ void
+ ada_gtk_message_dialog_format_secondary_text
+   (GtkMessageDialog* dialog, gchar* msg)
+ {
+-  gtk_message_dialog_format_secondary_text (dialog, msg);
++  gtk_message_dialog_format_secondary_text (dialog, "%s", msg);
+ }
+ 
+ GtkWidget*
+@@ -4313,7 +4313,7 @@
+   GtkButtonsType  buttons,
+   const gchar    *message)
+ {
+-  return gtk_message_dialog_new (parent, flags, type, buttons, message);
++  return gtk_message_dialog_new (parent, flags, type, buttons, "%s", message);
+ }
+ 
+ GtkWidget*
+@@ -4325,7 +4325,7 @@
+   const gchar    *message)
+ {
+   return gtk_message_dialog_new_with_markup
+-    (parent, flags, type, buttons, message);
++    (parent, flags, type, buttons, "%s", message);
+ }
+ 
+ /**************************************************************

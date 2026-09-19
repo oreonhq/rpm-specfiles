@@ -1,0 +1,21 @@
+? Atlas-unused-but-set-variable.patch
+Index: src/NavaidsOverlay.cxx
+===================================================================
+RCS file: /cvsroot/atlas/Atlas/src/NavaidsOverlay.cxx,v
+retrieving revision 1.24
+diff -u -p -r1.24 NavaidsOverlay.cxx
+--- src/NavaidsOverlay.cxx	14 Sep 2014 05:43:05 -0000	1.24
++++ src/NavaidsOverlay.cxx	14 Feb 2016 11:43:57 -0000
+@@ -1131,12 +1131,6 @@ void NavaidsOverlay::_renderNDB(const NA
+     // EYE - yes, another magic number
+     dotSize = radius * 0.1;
+ 
+-    // Check if we're tuned into this NDB.
+-    bool live = false;
+-    if (_p && (n->freq == _p->adf_freq)) {
+-	live = true;
+-    }
+-
+     geodPushMatrix(n->_bounds.center, n->lat, n->lon); {
+ 	glPushMatrix(); {
+ 	    ////////////////////

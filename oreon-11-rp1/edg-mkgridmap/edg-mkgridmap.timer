@@ -1,0 +1,11 @@
+[Unit]
+Description=Run edg-mkgridmap periodically
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=6h
+FixedRandomDelay=true
+RandomizedDelaySec=5h
+
+[Install]
+WantedBy=timers.target

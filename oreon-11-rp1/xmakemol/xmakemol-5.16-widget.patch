@@ -1,0 +1,24 @@
+diff -up xmakemol-5.16/globals.h.widget xmakemol-5.16/globals.h
+--- xmakemol-5.16/globals.h.widget	2021-01-10 16:39:47.912005573 +0100
++++ xmakemol-5.16/globals.h	2021-01-10 16:40:34.380887711 +0100
+@@ -186,8 +186,6 @@ Boolean any_hydrogen;
+ Boolean any_hbondpartner;
+ Boolean view_ghost_atoms = False;
+ 
+-Widget main_w,toplevel,label,canvas,message_area;
+-
+ Widget frames_dialog = NULL;
+ Widget anim_dialog   = NULL;
+ Widget meas_dialog   = NULL;
+diff -up xmakemol-5.16/xmakemol.c.widget xmakemol-5.16/xmakemol.c
+--- xmakemol-5.16/xmakemol.c.widget	2021-01-10 16:39:47.915005436 +0100
++++ xmakemol-5.16/xmakemol.c	2021-01-10 16:40:45.961359918 +0100
+@@ -61,6 +61,8 @@ char xmakemol_version[6];
+    until he/she responds to dialog */
+ XtAppContext app;
+ 
++Widget main_w,toplevel,label,canvas,message_area;
++
+ 
+ int
+ main(int argc, char **argv)

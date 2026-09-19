@@ -1,0 +1,11 @@
+--- HSH-2.1.3/HSH/ShellEquivs.hs~	2017-03-04 10:27:22.000000000 +0800
++++ HSH-2.1.3/HSH/ShellEquivs.hs	2024-08-12 19:53:20.344433444 +0800
+@@ -223,7 +223,7 @@
+ fifoOpen :: FilePath -> IO Handle
+ fifoOpen fp = 
+     do fd <- throwErrnoPathIf (< 0) "HSH fifoOpen" fp $ 
+-             openFd fp WriteOnly Nothing defaultFileFlags
++             openFd fp WriteOnly defaultFileFlags
+        fdToHandle fd
+ 
+ #endif

@@ -1,0 +1,45 @@
+From aeea611af1f33b69d971b080febc6d74127e376f Mon Sep 17 00:00:00 2001
+From: Dave Dykstra <2129743+DrDaveD@users.noreply.github.com>
+Date: Fri, 17 Oct 2025 14:51:54 -0500
+Subject: [PATCH] fuse2fs: updates for message reporting journal is not
+ supported
+
+This makes two changes to the message that is shown saying that fuse2fs
+does not support the journal.  First is that it reverts the check to
+what it was before 3875380 to look at the ro option not being set
+instead of checking the RW flag.  That's because I don't think this
+message needs to be shown when the ro option is set even when it was
+opened RW; there should be nothing to corrupt when it is ro.
+
+Second, it changes the message to say that writing is not supported
+rather than using the journal is not supported.  The current message is
+confusing because in fact the journal is used for recovery when needed
+and possible.
+
+Signed-off-by: Dave Dykstra <2129743+DrDaveD@users.noreply.github.com>
+---
+ misc/fuse2fs.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/misc/fuse2fs.c b/misc/fuse2fs.c
+index cb5620c7e..4401b52c1 100644
+--- a/misc/fuse2fs.c
++++ b/misc/fuse2fs.c
+@@ -4774,12 +4774,15 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
+-	if (global_fs->flags & EXT2_FLAG_RW) {
++	if (!fctx.ro) {
+ 		if (ext2fs_has_feature_journal(global_fs->super))
+ 			log_printf(&fctx, "%s",
+- _("Warning: fuse2fs does not support using the journal.\n"
++ _("Warning: fuse2fs does not support writing the journal.\n"
+    "There may be file system corruption or data loss if\n"
+    "the file system is not gracefully unmounted.\n"));
++	}
++
++	if (global_fs->flags & EXT2_FLAG_RW) {
+ 		err = ext2fs_read_inode_bitmap(global_fs);
+ 		if (err) {
+ 			translate_error(global_fs, 0, err);

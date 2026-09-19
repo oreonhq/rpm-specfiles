@@ -1,0 +1,22 @@
+diff --git a/galaxy.yml b/galaxy.yml
+index d877dea..56ec28f 100644
+--- a/galaxy.yml
++++ b/galaxy.yml
+@@ -14,3 +14,17 @@ repository: https://github.com/ansible-collections/community.mysql
+ documentation: https://github.com/ansible-collections/community.mysql
+ homepage: https://github.com/ansible-collections/community.mysql
+ issues: https://github.com/ansible-collections/community.mysql/issues
++build_ignore:
++  - .gitignore
++  - .github
++  - tests
++  - changelogs/fragments/.keep
++  - run_all_tests.py
++  # These files are installed with %doc or %license
++  - simplified_bsd.txt
++  - PSF-license.txt
++  - COPYING
++  - CONTRIBUTING
++  - README.md
++  - CHANGELOG.rst
++  - CONTRIBUTORS

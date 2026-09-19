@@ -1,0 +1,23 @@
+From 94920ac64398901175dc4372a4297817122c52ce Mon Sep 17 00:00:00 2001
+From: Remi Collet <remi@remirepo.net>
+Date: Thu, 17 Jul 2025 10:12:11 +0200
+Subject: [PATCH] use zend_ce_exception instead of zend_exception_get_default()
+ for 8.5
+
+---
+ zmq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/zmq.c b/zmq.c
+index 1fd9736..e4bd627 100644
+--- a/zmq.c
++++ b/zmq.c
+@@ -2864,7 +2864,7 @@ PHP_MINIT_FUNCTION(zmq)
+ #endif
+ 
+ 	INIT_CLASS_ENTRY(ce_exception, "ZMQException", NULL);
+-	php_zmq_exception_sc_entry = zend_register_internal_class_ex(&ce_exception, zend_exception_get_default());
++	php_zmq_exception_sc_entry = zend_register_internal_class_ex(&ce_exception, zend_ce_exception);
+ 	php_zmq_exception_sc_entry->ce_flags &= ~ZEND_ACC_FINAL;
+ 
+ 	INIT_CLASS_ENTRY(ce_context_exception, "ZMQContextException", NULL);

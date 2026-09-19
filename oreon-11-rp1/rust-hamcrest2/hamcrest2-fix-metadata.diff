@@ -1,0 +1,11 @@
+--- hamcrest2-0.3.0/Cargo.toml	1970-01-01T00:00:00+00:00
++++ hamcrest2-0.3.0/Cargo.toml	2023-05-22T11:31:06.434437+00:00
+@@ -23,7 +23,7 @@
+ license = "MIT/Apache-2.0"
+ repository = "https://github.com/Valloric/hamcrest2-rust"
+ [dependencies.num]
+-version = "0.2"
++version = "0.3"
+ 
+ [dependencies.regex]
+ version = "1"

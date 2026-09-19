@@ -1,0 +1,42 @@
+diff -uNr a/plugins/rack/uwsgiplugin.py b/plugins/rack/uwsgiplugin.py
+--- a/plugins/rack/uwsgiplugin.py	2023-07-28 20:02:57.242903528 +0200
++++ b/plugins/rack/uwsgiplugin.py	2023-07-28 20:05:59.933863052 +0200
+@@ -10,14 +10,14 @@
+ rbconfig = 'Config'
+ 
+ version = os.popen(RUBYPATH + " -e \"print RUBY_VERSION\"").read().rstrip()
+-v = version.split('.')
++v = tuple(int(x) for x in version.split('.'))
+ 
+ GCC_LIST = ['rack_plugin', 'rack_api']
+ 
+-if (v[0] == '1' and v[1] == '9') or v[0] >= '2':
++if v >= (1, 9):
+     CFLAGS = os.popen(RUBYPATH + " -e \"require 'rbconfig';print RbConfig::CONFIG['CFLAGS']\"").read().rstrip().split()
+     CFLAGS.append('-DRUBY19')
+-    if version >= '2.7':
++    if v >= (2, 7):
+         CFLAGS.append('-DRUBY27')
+     CFLAGS.append('-Wno-unused-parameter')
+     rbconfig = 'RbConfig'	 
+diff -uNr a/plugins/ruby19/uwsgiplugin.py b/plugins/ruby19/uwsgiplugin.py
+--- a/plugins/ruby19/uwsgiplugin.py	2023-07-28 20:02:57.242903528 +0200
++++ b/plugins/ruby19/uwsgiplugin.py	2023-07-28 20:05:11.560403332 +0200
+@@ -10,14 +10,14 @@
+ rbconfig = 'Config'
+ 
+ version = os.popen(RUBYPATH + " -e \"print RUBY_VERSION\"").read().rstrip()
+-v = version.split('.')
++v = tuple(int(x) for x in version.split('.'))
+ 
+ GCC_LIST = ['../rack/rack_plugin', '../rack/rack_api']
+ 
+-if (v[0] == '1' and v[1] == '9') or v[0] >= '2':
++if v >= (1, 9):
+     CFLAGS = os.popen(RUBYPATH + " -e \"require 'rbconfig';print RbConfig::CONFIG['CFLAGS']\"").read().rstrip().split()
+     CFLAGS.append('-DRUBY19')
+-    if version >= '2.7':
++    if v >= (2, 7):
+         CFLAGS.append('-DRUBY27')
+     CFLAGS.append('-Wno-unused-parameter')
+     rbconfig = 'RbConfig'	 

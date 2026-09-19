@@ -1,0 +1,22 @@
+From e8f408edb8ad36edb88ee3a39698603a467e41ac Mon Sep 17 00:00:00 2001
+From: Herwin <herwinw@users.noreply.github.com>
+Date: Mon, 20 Jan 2025 17:52:07 +0100
+Subject: [PATCH 2/2] Remove logger from test webrick server
+
+This gem is no longer a default gem in Ruby 3.5, but we don't use it.
+---
+ test/test_webrick_server.rb | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/test/test_webrick_server.rb b/test/test_webrick_server.rb
+index 268a013..dc725a3 100644
+--- a/test/test_webrick_server.rb
++++ b/test/test_webrick_server.rb
+@@ -6,7 +6,6 @@
+ require_relative 'webrick_testing'
+ require "xmlrpc/server"
+ require 'xmlrpc/client'
+-require 'logger'
+ 
+ module TestXMLRPC
+ class Test_Webrick < Test::Unit::TestCase

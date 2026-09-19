@@ -1,0 +1,60 @@
+diff -rupN --no-dereference glibmm-2.66.8/glib/src/threads.hg glibmm-2.66.8-new/glib/src/threads.hg
+--- glibmm-2.66.8/glib/src/threads.hg	2025-03-17 10:39:12.000000000 +0100
++++ glibmm-2.66.8-new/glib/src/threads.hg	2025-04-18 11:38:03.722502781 +0200
+@@ -197,7 +197,7 @@ class GLIBMM_API Thread::Exit
+  *
+  * @deprecated Please use std::thread instead.
+  */
+-Thread* wrap(GThread* gobject);
++Thread* GLIBMM_API wrap(GThread* gobject);
+ 
+ /** Represents a mutex (mutual exclusion).
+  * It can be used to protect data against shared access.  Try to use
+@@ -297,7 +297,7 @@ private:
+  *
+  * @relates Glib::Threads::Mutex
+  */
+-Mutex* wrap(GMutex* gobject);
++Mutex* GLIBMM_API wrap(GMutex* gobject);
+ 
+ /** This represents a recursive mutex.
+  * It is similar to a Mutex with the difference
+@@ -365,7 +365,7 @@ private:
+  *
+  * @relates Glib::Threads::RecMutex
+  */
+-RecMutex* wrap(GRecMutex* gobject);
++RecMutex* GLIBMM_API wrap(GRecMutex* gobject);
+ 
+ /** This represents a reader-writer lock.
+  * It is similar to a Mutex in that it allows
+diff -rupN --no-dereference glibmm-2.66.8/untracked/glib/glibmm/threads.h glibmm-2.66.8-new/untracked/glib/glibmm/threads.h
+--- glibmm-2.66.8/untracked/glib/glibmm/threads.h	2025-03-17 11:52:53.390714000 +0100
++++ glibmm-2.66.8-new/untracked/glib/glibmm/threads.h	2025-04-18 11:38:03.723077975 +0200
+@@ -226,7 +226,7 @@ class GLIBMM_API Thread::Exit
+  *
+  * @deprecated Please use std::thread instead.
+  */
+-Thread* wrap(GThread* gobject);
++Thread* GLIBMM_API wrap(GThread* gobject);
+ 
+ /** Represents a mutex (mutual exclusion).
+  * It can be used to protect data against shared access.  Try to use
+@@ -326,7 +326,7 @@ private:
+  *
+  * @relates Glib::Threads::Mutex
+  */
+-Mutex* wrap(GMutex* gobject);
++Mutex* GLIBMM_API wrap(GMutex* gobject);
+ 
+ /** This represents a recursive mutex.
+  * It is similar to a Mutex with the difference
+@@ -394,7 +394,7 @@ private:
+  *
+  * @relates Glib::Threads::RecMutex
+  */
+-RecMutex* wrap(GRecMutex* gobject);
++RecMutex* GLIBMM_API wrap(GRecMutex* gobject);
+ 
+ /** This represents a reader-writer lock.
+  * It is similar to a Mutex in that it allows

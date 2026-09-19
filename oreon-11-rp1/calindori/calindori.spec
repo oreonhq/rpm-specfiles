@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7676478faa6793e8bd37cc7f6323495fc740b887c33b1eaa95f922c78629cc79
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           calindori
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 Summary:        Calendar application for Plasma Mobile
 License:        BSD-2-Clause AND CC-BY-4.0 AND CC-BY-SA-4.0 AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-3.0-or-later

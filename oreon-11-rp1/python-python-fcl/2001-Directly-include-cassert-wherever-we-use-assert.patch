@@ -1,0 +1,190 @@
+From 0d1197a3fda08a55935f9eb010e930e6aef3dd3a Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 15 Oct 2025 11:29:29 +0100
+Subject: [PATCH] Directly include cassert wherever we use assert()
+
+---
+ include/fcl/broadphase/default_broadphase_callbacks.h           | 2 ++
+ include/fcl/geometry/octree/octree-inl.h                        | 2 ++
+ include/fcl/geometry/shape/convex-inl.h                         | 1 +
+ include/fcl/math/motion/taylor_model/taylor_model-inl.h         | 2 ++
+ include/fcl/math/rng-inl.h                                      | 2 ++
+ .../detail/convexity_based_algorithm/gjk_libccd-inl.h           | 1 +
+ .../detail/primitive_shape_algorithm/capsule_capsule-inl.h      | 2 ++
+ .../narrowphase/detail/primitive_shape_algorithm/plane-inl.h    | 2 ++
+ .../detail/primitive_shape_algorithm/sphere_box-inl.h           | 2 ++
+ .../detail/primitive_shape_algorithm/sphere_cylinder-inl.h      | 2 ++
+ .../distance/mesh_conservative_advancement_traversal_node-inl.h | 2 ++
+ include/fcl/narrowphase/distance-inl.h                          | 2 ++
+ .../convexity_based_algorithm/test_gjk_libccd-inl_epa.cpp       | 1 +
+ 13 files changed, 23 insertions(+)
+
+diff --git a/include/fcl/broadphase/default_broadphase_callbacks.h b/include/fcl/broadphase/default_broadphase_callbacks.h
+index 1c9b4fe..9c9a33f 100644
+--- a/include/fcl/broadphase/default_broadphase_callbacks.h
++++ b/include/fcl/broadphase/default_broadphase_callbacks.h
+@@ -47,6 +47,8 @@
+ #include "fcl/narrowphase/distance_request.h"
+ #include "fcl/narrowphase/distance_result.h"
+ 
++#include <cassert>
++
+ namespace fcl {
+ 
+ /// @brief Collision data for use with the DefaultCollisionFunction. It stores
+diff --git a/include/fcl/geometry/octree/octree-inl.h b/include/fcl/geometry/octree/octree-inl.h
+index f50fe81..9cc1fe2 100644
+--- a/include/fcl/geometry/octree/octree-inl.h
++++ b/include/fcl/geometry/octree/octree-inl.h
+@@ -44,6 +44,8 @@
+ 
+ #include "fcl/geometry/shape/utility.h"
+ 
++#include <cassert>
++
+ #if FCL_HAVE_OCTOMAP
+ 
+ namespace fcl
+diff --git a/include/fcl/geometry/shape/convex-inl.h b/include/fcl/geometry/shape/convex-inl.h
+index 10adc69..c50b53f 100644
+--- a/include/fcl/geometry/shape/convex-inl.h
++++ b/include/fcl/geometry/shape/convex-inl.h
+@@ -39,6 +39,7 @@
+ #ifndef FCL_SHAPE_CONVEX_INL_H
+ #define FCL_SHAPE_CONVEX_INL_H
+ 
++#include <cassert>
+ #include <map>
+ #include <set>
+ #include <utility>
+diff --git a/include/fcl/math/motion/taylor_model/taylor_model-inl.h b/include/fcl/math/motion/taylor_model/taylor_model-inl.h
+index 861f72d..ff5481b 100644
+--- a/include/fcl/math/motion/taylor_model/taylor_model-inl.h
++++ b/include/fcl/math/motion/taylor_model/taylor_model-inl.h
+@@ -43,6 +43,8 @@
+ 
+ #include "fcl/math/motion/taylor_model/taylor_model.h"
+ 
++#include <cassert>
++
+ namespace fcl
+ {
+ 
+diff --git a/include/fcl/math/rng-inl.h b/include/fcl/math/rng-inl.h
+index 8877c48..a6b0812 100644
+--- a/include/fcl/math/rng-inl.h
++++ b/include/fcl/math/rng-inl.h
+@@ -40,6 +40,8 @@
+ 
+ #include "fcl/math/rng.h"
+ 
++#include <cassert>
++
+ namespace fcl
+ {
+ 
+diff --git a/include/fcl/narrowphase/detail/convexity_based_algorithm/gjk_libccd-inl.h b/include/fcl/narrowphase/detail/convexity_based_algorithm/gjk_libccd-inl.h
+index 60fd0ad..cc83e16 100644
+--- a/include/fcl/narrowphase/detail/convexity_based_algorithm/gjk_libccd-inl.h
++++ b/include/fcl/narrowphase/detail/convexity_based_algorithm/gjk_libccd-inl.h
+@@ -42,6 +42,7 @@
+ #include "fcl/narrowphase/detail/failed_at_this_configuration.h"
+ 
+ #include <array>
++#include <cassert>
+ #include <unordered_map>
+ #include <unordered_set>
+ 
+diff --git a/include/fcl/narrowphase/detail/primitive_shape_algorithm/capsule_capsule-inl.h b/include/fcl/narrowphase/detail/primitive_shape_algorithm/capsule_capsule-inl.h
+index b316c95..b5d6e1f 100644
+--- a/include/fcl/narrowphase/detail/primitive_shape_algorithm/capsule_capsule-inl.h
++++ b/include/fcl/narrowphase/detail/primitive_shape_algorithm/capsule_capsule-inl.h
+@@ -40,6 +40,8 @@
+ 
+ #include "fcl/narrowphase/detail/primitive_shape_algorithm/capsule_capsule.h"
+ 
++#include <cassert>
++
+ namespace fcl
+ {
+ 
+diff --git a/include/fcl/narrowphase/detail/primitive_shape_algorithm/plane-inl.h b/include/fcl/narrowphase/detail/primitive_shape_algorithm/plane-inl.h
+index 1373dce..30d7f26 100755
+--- a/include/fcl/narrowphase/detail/primitive_shape_algorithm/plane-inl.h
++++ b/include/fcl/narrowphase/detail/primitive_shape_algorithm/plane-inl.h
+@@ -40,6 +40,8 @@
+ 
+ #include "fcl/narrowphase/detail/primitive_shape_algorithm/plane.h"
+ 
++#include <cassert>
++
+ namespace fcl
+ {
+ 
+diff --git a/include/fcl/narrowphase/detail/primitive_shape_algorithm/sphere_box-inl.h b/include/fcl/narrowphase/detail/primitive_shape_algorithm/sphere_box-inl.h
+index 77e0a66..35274e7 100644
+--- a/include/fcl/narrowphase/detail/primitive_shape_algorithm/sphere_box-inl.h
++++ b/include/fcl/narrowphase/detail/primitive_shape_algorithm/sphere_box-inl.h
+@@ -39,6 +39,8 @@
+ 
+ #include "fcl/narrowphase/detail/primitive_shape_algorithm/sphere_box.h"
+ 
++#include <cassert>
++
+ namespace fcl {
+ namespace detail {
+ 
+diff --git a/include/fcl/narrowphase/detail/primitive_shape_algorithm/sphere_cylinder-inl.h b/include/fcl/narrowphase/detail/primitive_shape_algorithm/sphere_cylinder-inl.h
+index abda262..87a2982 100644
+--- a/include/fcl/narrowphase/detail/primitive_shape_algorithm/sphere_cylinder-inl.h
++++ b/include/fcl/narrowphase/detail/primitive_shape_algorithm/sphere_cylinder-inl.h
+@@ -39,6 +39,8 @@
+ 
+ #include "fcl/narrowphase/detail/primitive_shape_algorithm/sphere_cylinder.h"
+ 
++#include <cassert>
++
+ namespace fcl {
+ namespace detail {
+ 
+diff --git a/include/fcl/narrowphase/detail/traversal/distance/mesh_conservative_advancement_traversal_node-inl.h b/include/fcl/narrowphase/detail/traversal/distance/mesh_conservative_advancement_traversal_node-inl.h
+index 44ddde5..9157224 100644
+--- a/include/fcl/narrowphase/detail/traversal/distance/mesh_conservative_advancement_traversal_node-inl.h
++++ b/include/fcl/narrowphase/detail/traversal/distance/mesh_conservative_advancement_traversal_node-inl.h
+@@ -43,6 +43,8 @@
+ #include "fcl/math/bv/RSS.h"
+ #include "fcl/math/motion/triangle_motion_bound_visitor.h"
+ 
++#include <cassert>
++
+ namespace fcl
+ {
+ 
+diff --git a/include/fcl/narrowphase/distance-inl.h b/include/fcl/narrowphase/distance-inl.h
+index 3244631..4704bea 100644
+--- a/include/fcl/narrowphase/distance-inl.h
++++ b/include/fcl/narrowphase/distance-inl.h
+@@ -42,6 +42,8 @@
+ 
+ #include "fcl/narrowphase/collision.h"
+ 
++#include <cassert>
++
+ namespace fcl
+ {
+ 
+diff --git a/test/narrowphase/detail/convexity_based_algorithm/test_gjk_libccd-inl_epa.cpp b/test/narrowphase/detail/convexity_based_algorithm/test_gjk_libccd-inl_epa.cpp
+index 769452d..e6f45e3 100644
+--- a/test/narrowphase/detail/convexity_based_algorithm/test_gjk_libccd-inl_epa.cpp
++++ b/test/narrowphase/detail/convexity_based_algorithm/test_gjk_libccd-inl_epa.cpp
+@@ -42,6 +42,7 @@
+ #include "fcl/narrowphase/detail/convexity_based_algorithm/gjk_libccd-inl.h"
+ 
+ #include <array>
++#include <cassert>
+ #include <memory>
+ 
+ #include <gtest/gtest.h>
+-- 
+2.51.0
+

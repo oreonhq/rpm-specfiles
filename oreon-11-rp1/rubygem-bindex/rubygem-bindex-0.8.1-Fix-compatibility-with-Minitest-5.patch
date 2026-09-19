@@ -1,0 +1,33 @@
+From cf61a04aabdfea0bba45ef23dd9b5cc1c54964ff Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Thu, 17 Aug 2023 18:29:08 +0200
+Subject: [PATCH] Fix compatibility with Minitest 5+
+
+The `MiniTest` was renamed to `Minitest`:
+
+https://github.com/minitest/minitest/commit/9a57c520ceac76abfe6105866f8548a94eb357b6
+
+And the `MiniTest` constant is now loaded just when `MT_COMPAT` environment
+variable is set:
+
+https://github.com/minitest/minitest/commit/a2c6c18570f6f0a1bf6af70fe3b6d9599a13fdd6
+---
+ test/test_helper.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/test_helper.rb b/test/test_helper.rb
+index 68e4b92..f493a57 100644
+--- a/test/test_helper.rb
++++ b/test/test_helper.rb
+@@ -11,7 +11,7 @@ Dir["#{current_directory}/fixtures/**/*.rb"].each do |fixture|
+ end
+ 
+ module Skiptrace
+-  class Test < MiniTest::Test
++  class Test < Minitest::Test
+     def self.test(name, &block)
+       define_method("test_#{name}", &block)
+     end
+-- 
+2.41.0
+

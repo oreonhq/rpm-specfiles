@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 08b11359d1d0aae16dc94faa2a41395d6fee4683a2a0a8d1e4337ea95f65f3e5
 
 %global stable_kf6 stable
 %global majmin_ver_kf6 26.03
@@ -9,7 +9,7 @@ ExcludeArch: %{ix86}
 
 Name:    kwordquiz
 Summary: Flash Card Trainer 
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

@@ -1,0 +1,342 @@
+Unbundle libconfig, libdaemon, sqlite3, pcre, lz4, cul, ev and libssl
+diff -Naur proxysql-3.0.2/deps/Makefile proxysql-3.0.2_patched/deps/Makefile
+--- proxysql-3.0.2/deps/Makefile	2025-08-04 16:59:36.000000000 +0200
++++ proxysql-3.0.2_patched/deps/Makefile	2025-08-07 13:33:08.489460526 +0200
+@@ -45,7 +45,7 @@
+ STDCPP := -std=c++$(shell echo $(CPLUSPLUS) | cut -c3-4) -DCXX$(shell echo $(CPLUSPLUS) | cut -c3-4)
+ 
+ 
+-targets := check_openssl_version libconfig libdaemon jemalloc mariadb_client re2 sqlite3 pcre lz4 cityhash microhttpd curl ev libhttpserver libinjection prometheus-cpp postgresql libusual libscram
++targets := check_openssl_version jemalloc mariadb_client re2 cityhash microhttpd libhttpserver libinjection prometheus-cpp libscram libusual postgresql
+ ifeq ($(UNAME_S),Linux)
+ 	targets += coredumper
+ endif
+@@ -97,17 +97,6 @@
+ 
+ libhttpserver: libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a
+ 
+-
+-libev/libev/.libs/libev.a:
+-	cd libev && rm -rf libev-*/ || true
+-	cd libev && tar -zxf libev-*.tar.gz
+-	cd libev/libev && patch ev.c < ../ev.c-multiplication-overflow.patch
+-	cd libev/libev && ./configure
+-	cd libev/libev && CC=${CC} CXX=${CXX} ${MAKE}
+-
+-ev: libev/libev/.libs/libev.a
+-
+-
+ coredumper/coredumper/src/libcoredumper.a:
+ 	cd coredumper && rm -rf coredumper-*/ || true
+ 	cd coredumper && tar -zxf coredumper-*.tar.gz
+@@ -116,20 +105,6 @@
+ 	cd coredumper/coredumper && CC=${CC} CXX=${CXX} ${MAKE}
+ coredumper: coredumper/coredumper/src/libcoredumper.a
+ 
+-curl/curl/lib/.libs/libcurl.a:
+-	cd curl && rm -rf curl-*/ || true
+-	cd curl && tar -zxf curl-*.tar.gz
+-#	cd curl/curl && ./configure --disable-debug --disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-proxy --disable-dict --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher --disable-manual --disable-ipv6 --disable-sspi --disable-crypto-auth --disable-ntlm-wb --disable-tls-srp --without-nghttp2 --without-libidn2 --without-libssh2 --without-brotli --with-ssl=$(shell pwd)/../../libssl/openssl/ && CC=${CC} CXX=${CXX} ${MAKE}
+-	cd curl/curl && autoreconf -fi
+-ifeq ($(UNAME_S),Darwin)
+-	cd curl/curl && patch configure < ../configure.patch
+-endif
+-	cd curl/curl && CPPFLAGS="-I$(SSL_IDIR)" LDFLAGS="$(LIB_SSL_PATH) $(LIB_CRYPTO_PATH)" ./configure --disable-debug --disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-proxy --disable-dict --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher --disable-manual --disable-ipv6 --disable-sspi --disable-ntlm-wb --disable-tls-srp --without-nghttp2 --without-libidn2 --without-libssh2 --without-brotli --without-librtmp --without-libpsl --without-zstd --with-ssl --enable-shared=yes
+-	cd curl/curl && CFLAGS=-fPIC CC=${CC} CXX=${CXX} ${MAKE}
+-
+-curl: curl/curl/lib/.libs/libcurl.a
+-
+-
+ libmicrohttpd/libmicrohttpd/src/microhttpd/.libs/libmicrohttpd.a:
+ 	cd libmicrohttpd && rm -rf libmicrohttpd-*/ || true
+ 	cd libmicrohttpd && tar -zxf libmicrohttpd-*.tar.gz
+@@ -148,14 +123,6 @@
+ cityhash: cityhash/cityhash/src/.libs/libcityhash.a
+ 
+ 
+-lz4/lz4/lib/liblz4.a:
+-	cd lz4 && rm -rf lz4-*/ || true
+-	cd lz4 && tar -zxf lz4-*.tar.gz
+-	cd lz4/lz4 && CC=${CC} CXX=${CXX} ${MAKE}
+-
+-lz4: lz4/lz4/lib/liblz4.a
+-
+-
+ clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib-static.a:
+ 	cd clickhouse-cpp && rm -rf clickhouse-cpp-*/ || true
+ 	cd clickhouse-cpp && tar -zxf v2.3.0.tar.gz
+@@ -166,17 +133,6 @@
+ 
+ clickhouse-cpp: clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib-static.a
+ 
+-
+-libdaemon/libdaemon/libdaemon/.libs/libdaemon.a:
+-	cd libdaemon && rm -rf libdaemon-*/ || true
+-	cd libdaemon && tar -zxf libdaemon-0.14.tar.gz
+-	cd libdaemon/libdaemon && patch -p0 < ../daemon_fork_umask.patch
+-	cd libdaemon/libdaemon && cp ../config.guess . && chmod +x config.guess && cp ../config.sub . && chmod +x config.sub && ./configure --disable-examples
+-	cd libdaemon/libdaemon && CC=${CC} CXX=${CXX} ${MAKE}
+-
+-libdaemon: libdaemon/libdaemon/libdaemon/.libs/libdaemon.a
+-
+-
+ jemalloc/jemalloc/lib/libjemalloc.a:
+ 	cd jemalloc && rm -rf jemalloc-*/ || true
+ 	cd jemalloc && tar --no-same-owner -jxf jemalloc-5.2.0.tar.bz2
+@@ -239,28 +195,6 @@
+ 
+ mariadb_client: mariadb-client-library/mariadb_client/libmariadb/libmariadbclient.a
+ 
+-
+-sqlite3/sqlite3/sqlite3.o:
+-	cd sqlite3 && rm -rf sqlite-amalgamation-*/ || true
+-	cd sqlite3 && tar -zxf sqlite-amalgamation-*.tar.gz
+-	cd sqlite3/sqlite3 && patch -p1 < ../from_unixtime.patch
+-	cd sqlite3/sqlite3 && patch sqlite3.c < ../sqlite3.c-multiplication-overflow.patch
+-	cd sqlite3/sqlite3 && patch -p0 < ../sqlite3_pass_exts.patch
+-	cd sqlite3/sqlite3 && patch -p0 < ../throw.patch
+-	cd sqlite3/sqlite3 && ${CC} ${MYCFLAGS} -fPIC -c -o sqlite3.o sqlite3.c -DSQLITE_ENABLE_MEMORY_MANAGEMENT -DSQLITE_ENABLE_JSON1 -DSQLITE_DLL=1
+-	cd sqlite3/sqlite3 && ${CC} -shared -o libsqlite3.so sqlite3.o
+-
+-sqlite3: sqlite3/sqlite3/sqlite3.o
+-
+-libconfig/libconfig/lib/.libs/libconfig++.a:
+-	cd libconfig && rm -rf libconfig-*/ || true
+-	cd libconfig && tar -zxf libconfig-*.tar.gz
+-	cd libconfig/libconfig && ./configure --disable-examples
+-	cd libconfig/libconfig && CC=${CC} CXX=${CXX} ${MAKE}
+-
+-libconfig: libconfig/libconfig/lib/.libs/libconfig++.a
+-
+-
+ prometheus-cpp/prometheus-cpp/lib/libprometheus-cpp-core.a:
+ 	cd prometheus-cpp && rm -rf prometheus-cpp-*/ || true
+ 	cd prometheus-cpp && tar -zxf prometheus-cpp-*.tar.gz
+@@ -291,16 +225,6 @@
+ 
+ re2: re2/re2/obj/libre2.a
+ 
+-
+-pcre/pcre/.libs/libpcre.a:
+-	cd pcre && rm -rf pcre-*/ || true
+-	cd pcre && tar -zxf pcre-*.tar.gz
+-	cd pcre/pcre && patch pcretest.c < ../pcretest.c-multiplication-overflow.patch
+-	cd pcre/pcre && ./configure
+-	cd pcre/pcre && CC=${CC} CXX=${CXX} ${MAKE}
+-
+-pcre: pcre/pcre/.libs/libpcre.a
+-
+ postgresql/postgresql/src/interfaces/libpq/libpq.a:
+ 	cd postgresql && rm -rf postgresql-*/ || true
+ 	cd postgresql && tar -zxf postgresql-*.tar.gz
+@@ -334,26 +258,17 @@
+ cleanpart:
+ 	cd mariadb-client-library && rm -rf mariadb-connector-c-*/ || true
+ 	cd jemalloc && rm -rf jemalloc-*/ || true
+-	cd sqlite3 && rm -rf sqlite-amalgamation-*/ || true
+ 	cd postgresql && rm -rf postgresql-*/ || true
+ .PHONY: cleanpart
+ 
+ cleanall:
+ 	cd libinjection && rm -rf libinjection-*/ || true
+ 	cd libhttpserver && rm -rf libhttpserver-*/ || true
+-	cd libdaemon && rm -rf libdaemon-*/ || true
+ 	cd jemalloc && rm -rf jemalloc-*/ || true
+ 	cd mariadb-client-library && rm -rf mariadb-connector-c-*/ || true
+-	cd libconfig && rm -rf libconfig-*/ || true
+ 	cd re2 && rm -rf re2-*/ || true
+-	cd pcre && rm -rf pcre-*/ || true
+-	cd sqlite3 && rm -rf sqlite-amalgamation-*/ || true
+ 	cd clickhouse-cpp/ && rm -rf clickhouse-cpp-* || true
+-	cd lz4 && rm -rf lz4-*/ || true
+ 	cd libmicrohttpd && rm -rf libmicrohttpd-*/ || true
+-	cd curl && rm -rf curl-*/ || true
+-	cd libev && rm -rf libev-*/ || true
+-	cd libconfig && rm -rf libconfig-*/ || true
+ 	cd prometheus-cpp && rm -rf prometheus-cpp-*/ || true
+ 	cd cityhash && rm -rf cityhash-*/ || true
+ 	cd coredumper && rm -rf coredumper-*/ || true
+diff -Naur proxysql-3.0.2/lib/Makefile proxysql-3.0.2_patched/lib/Makefile
+--- proxysql-3.0.2/lib/Makefile	2025-08-04 16:59:36.000000000 +0200
++++ proxysql-3.0.2_patched/lib/Makefile	2025-08-07 14:39:32.430089550 +0200
+@@ -32,19 +32,12 @@
+ JEMALLOC_PATH := $(DEPS_PATH)/jemalloc/jemalloc
+ JEMALLOC_IDIR := $(JEMALLOC_PATH)/include/jemalloc
+ 
+-LIBCONFIG_PATH := $(DEPS_PATH)/libconfig/libconfig
+-LIBCONFIG_IDIR := -I$(LIBCONFIG_PATH)/lib
+-
+ #INJECTION_PATH := $(DEPS_PATH)/libinjection
+ #INJECTION_IDIR := $(INJECTION_PATH)
+ 
+ RE2_PATH := $(DEPS_PATH)/re2/re2
+ RE2_IDIR := $(RE2_PATH)
+ 
+-PCRE_PATH := $(DEPS_PATH)/pcre/pcre
+-
+-SQLITE3_DIR := $(DEPS_PATH)/sqlite3/sqlite3
+-
+ CLICKHOUSE_CPP_DIR := $(DEPS_PATH)/clickhouse-cpp/clickhouse-cpp
+ 
+ LIBINJECTION_DIR := $(DEPS_PATH)/libinjection/libinjection
+@@ -59,14 +52,8 @@
+ COREDUMPER_DIR := $(DEPS_PATH)/coredumper/coredumper
+ COREDUMPER_IDIR := $(COREDUMPER_DIR)/include
+ 
+-CURL_DIR := $(DEPS_PATH)/curl/curl
+-CURL_IDIR := $(CURL_DIR)/include
+-
+ include ../common_mk/openssl_flags.mk
+ 
+-EV_DIR := $(DEPS_PATH)/libev/libev/
+-EV_IDIR := $(EV_DIR)
+-
+ PROMETHEUS_PATH := $(DEPS_PATH)/prometheus-cpp/prometheus-cpp
+ PROMETHEUS_IDIR := $(PROMETHEUS_PATH)/pull/include -I$(PROMETHEUS_PATH)/core/include
+ PROMETHEUS_LDIR := $(PROMETHEUS_PATH)/lib
+@@ -85,7 +72,7 @@
+ 
+ IDIR := ../include
+ 
+-IDIRS := -I$(IDIR) -I$(JEMALLOC_IDIR) -I$(MARIADB_IDIR) $(LIBCONFIG_IDIR) -I$(RE2_IDIR) -I$(SQLITE3_DIR) -I$(PCRE_PATH) -I/usr/local/include -I$(CLICKHOUSE_CPP_DIR) -I$(CLICKHOUSE_CPP_DIR)/contrib/ $(MICROHTTPD_IDIR) $(LIBHTTPSERVER_IDIR) $(LIBINJECTION_IDIR) -I$(CURL_IDIR) -I$(EV_DIR) -I$(PROMETHEUS_IDIR) -I$(LIBUSUAL_IDIR) -I$(LIBSCRAM_IDIR) -I$(POSTGRES_IFACE) -I$(SSL_IDIR)
++IDIRS := -I$(IDIR) -I$(JEMALLOC_IDIR) -I$(MARIADB_IDIR) -I$(RE2_IDIR) -I/usr/local/include -I$(CLICKHOUSE_CPP_DIR) -I$(CLICKHOUSE_CPP_DIR)/contrib/ $(MICROHTTPD_IDIR) $(LIBHTTPSERVER_IDIR) $(LIBINJECTION_IDIR) -I$(PROMETHEUS_IDIR) -I$(LIBUSUAL_IDIR) -I$(LIBSCRAM_IDIR) -I$(POSTGRES_IFACE) -I$(SSL_IDIR)
+ ifeq ($(UNAME_S),Linux)
+ 	IDIRS += -I$(COREDUMPER_IDIR)
+ endif
+@@ -175,8 +162,8 @@
+ $(ODIR)/%.oo: %.cpp $(HEADERS)
+ 	$(CXX) -fPIC -c -o $@ $< $(MYCXXFLAGS) $(CXXFLAGS)
+ 
+-libproxysql.a: $(ODIR) $(OBJ) $(OBJ_CXX) $(SQLITE3_DIR)/sqlite3.o
+-	ar rcs $@ $(OBJ) $(OBJ_CXX) $(SQLITE3_DIR)/sqlite3.o
++libproxysql.a: $(ODIR) $(OBJ) $(OBJ_CXX)
++	ar rcs $@ $(OBJ) $(OBJ_CXX)
+ 
+ $(ODIR):
+ 	mkdir $(ODIR)
+diff -Naur proxysql-3.0.2/src/Makefile proxysql-3.0.2_patched/src/Makefile
+--- proxysql-3.0.2/src/Makefile	2025-08-04 16:59:36.000000000 +0200
++++ proxysql-3.0.2_patched/src/Makefile	2025-08-07 15:37:24.589443112 +0200
+@@ -30,18 +30,10 @@
+ MARIADB_IDIR := $(MARIADB_PATH)/include
+ MARIADB_LDIR := $(MARIADB_PATH)/libmariadb
+ 
+-LIBDAEMON_PATH := $(DEPS_PATH)/libdaemon/libdaemon
+-LIBDAEMON_IDIR := $(LIBDAEMON_PATH)
+-LIBDAEMON_LDIR := $(LIBDAEMON_PATH)/libdaemon/.libs
+-
+ JEMALLOC_PATH := $(DEPS_PATH)/jemalloc/jemalloc
+ JEMALLOC_IDIR := $(JEMALLOC_PATH)/include/jemalloc
+ JEMALLOC_LDIR := $(JEMALLOC_PATH)/lib
+ 
+-LIBCONFIG_PATH := $(DEPS_PATH)/libconfig/libconfig
+-LIBCONFIG_IDIR := $(LIBCONFIG_PATH)/lib
+-LIBCONFIG_LDIR := $(LIBCONFIG_PATH)/lib/.libs
+-
+ PROMETHEUS_PATH := $(DEPS_PATH)/prometheus-cpp/prometheus-cpp
+ PROMETHEUS_IDIR := $(PROMETHEUS_PATH)/pull/include -I$(PROMETHEUS_PATH)/core/include
+ PROMETHEUS_LDIR := $(PROMETHEUS_PATH)/lib
+@@ -50,20 +42,9 @@
+ RE2_IDIR := $(RE2_PATH)
+ RE2_LDIR := $(RE2_PATH)/obj
+ 
+-PCRE_PATH := $(DEPS_PATH)/pcre/pcre
+-PCRE_IDIR := $(PCRE_PATH)
+-PCRE_LDIR := $(PCRE_PATH)/.libs
+-
+-SQLITE3_PATH := $(DEPS_PATH)/sqlite3/sqlite3
+-SQLITE3_IDIR := $(SQLITE3_PATH)
+-SQLITE3_LDIR := $(SQLITE3_PATH)
+-
+ CITYHASH_PATH := $(DEPS_PATH)/cityhash/cityhash
+ CITYHASH_LDIR := $(CITYHASH_PATH)/src/.libs
+ 
+-LZ4_PATH := $(DEPS_PATH)/lz4/lz4
+-LZ4_LDIR := $(LZ4_PATH)/lib
+-
+ CLICKHOUSE_CPP_PATH := $(DEPS_PATH)/clickhouse-cpp/clickhouse-cpp
+ CLICKHOUSE_CPP_CDIR := $(CLICKHOUSE_CPP_PATH)/contrib
+ CLICKHOUSE_CPP_IDIR := $(CLICKHOUSE_CPP_PATH)
+@@ -85,16 +66,8 @@
+ COREDUMPER_IDIR := $(COREDUMPER_PATH)/include
+ COREDUMPER_LDIR := $(COREDUMPER_PATH)/src
+ 
+-CURL_PATH := $(DEPS_PATH)/curl/curl
+-CURL_IDIR := $(CURL_PATH)/include
+-CURL_LDIR := $(CURL_PATH)/lib/.libs
+-
+ include ../common_mk/openssl_flags.mk
+ 
+-EV_PATH := $(DEPS_PATH)/libev/libev/
+-EV_IDIR := $(EV_PATH)
+-EV_LDIR := $(EV_PATH)/.libs
+-
+ POSTGRESQL_PATH := $(DEPS_PATH)/postgresql/postgresql/src
+ POSTGRESQL_IDIR := $(POSTGRESQL_PATH)/include -I$(POSTGRESQL_PATH)/interfaces/libpq
+ POSTGRESQL_LDIR := $(POSTGRESQL_PATH)/interfaces/libpq -L$(POSTGRESQL_PATH)/common -L$(POSTGRESQL_PATH)/port
+@@ -107,8 +80,8 @@
+ LIBSCRAM_IDIR=$(LIBSCRAM_PATH)/include/
+ LIBSCRAM_LDIR=$(LIBSCRAM_PATH)/lib/
+ 
+-IDIRS := -I$(PROXYSQL_IDIR) -I$(JEMALLOC_IDIR) -I$(MARIADB_IDIR) -I$(LIBCONFIG_IDIR) -I$(LIBDAEMON_IDIR) -I$(RE2_IDIR) -L$(PCRE_IDIR) -I$(MICROHTTPD_IDIR) -I$(LIBHTTPSERVER_IDIR) -I$(LIBINJECTION_IDIR) -I$(CURL_IDIR) -I$(EV_IDIR) -I$(PROMETHEUS_IDIR) -I$(POSTGRESQL_IDIR) -I$(LIBSCRAM_IDIR) -I$(SQLITE3_IDIR) -I$(CLICKHOUSE_CPP_IDIR) -I$(CLICKHOUSE_CPP_CDIR) -I$(SSL_IDIR) -I$(0)
+-LDIRS := -L$(PROXYSQL_LDIR) -L$(JEMALLOC_LDIR) -L$(MARIADB_LDIR) -L$(LIBCONFIG_LDIR) -L$(LIBDAEMON_LDIR) -L$(RE2_LDIR) -L$(PCRE_LDIR) -L$(MICROHTTPD_LDIR) -L$(LIBHTTPSERVER_LDIR) -L$(LIBINJECTION_LDIR) -L$(CURL_LDIR) -L$(EV_LDIR) -L$(PROMETHEUS_LDIR) -L$(POSTGRESQL_LDIR) -L$(LIBUSUAL_LDIR) -L$(LIBSCRAM_LDIR) -L$(SSL_LDIR)
++IDIRS := -I$(PROXYSQL_IDIR) -I$(JEMALLOC_IDIR) -I$(MARIADB_IDIR) -I$(RE2_IDIR) -I$(MICROHTTPD_IDIR) -I$(LIBHTTPSERVER_IDIR) -I$(LIBINJECTION_IDIR) -I$(PROMETHEUS_IDIR) -I$(POSTGRESQL_IDIR) -I$(LIBSCRAM_IDIR) -I$(CLICKHOUSE_CPP_IDIR) -I$(CLICKHOUSE_CPP_CDIR) -I$(SSL_IDIR) -I$(0)
++LDIRS := -L$(PROXYSQL_LDIR) -L$(JEMALLOC_LDIR) -L$(MARIADB_LDIR) -L$(RE2_LDIR) -L$(MICROHTTPD_LDIR) -L$(LIBHTTPSERVER_LDIR) -L$(LIBINJECTION_LDIR) -L$(PROMETHEUS_LDIR) -L$(POSTGRESQL_LDIR) -L$(LIBUSUAL_LDIR) -L$(LIBSCRAM_LDIR) -L$(SSL_LDIR)
+ 
+ 
+ ifeq ($(UNAME_S),Linux)
+@@ -179,7 +152,7 @@
+ MYCXXFLAGS += $(IDIRS) $(OPTZ) $(DEBUG) $(PSQLCH) -DGITVERSION=\"$(GIT_VERSION)\" $(NOJEM) $(WGCOV) $(WASAN)
+ 
+ 
+-STATICMYLIBS := -Wl,-Bstatic -lconfig -lproxysql -ldaemon -lconfig++ -lre2 -lpcrecpp -lpcre -lmariadbclient -lhttpserver -lmicrohttpd -linjection -lcurl -lev -lscram -lusual -lpq -lpgcommon -lpgport
++STATICMYLIBS := -Wl,-Bstatic -lproxysql -lre2 -lmariadbclient -lhttpserver -lmicrohttpd -linjection -lscram -lusual -lpq -lpgcommon -lpgport
+ ifneq ($(NOJEMALLOC),1)
+ 	STATICMYLIBS += -ljemalloc
+ endif
+@@ -196,10 +169,6 @@
+ 
+ ifeq ($(UNAME_S),Darwin)
+ 	MYLIBS :=-lre2 -lmariadbclient -lpq -lpthread -lm -lz -liconv -lgnutls -lprometheus-cpp-pull -lprometheus-cpp-core -luuid
+-else
+-	CURL_DIR := $(DEPS_PATH)/curl/curl
+-	IDIRS += -L$(CURL_DIR)/include
+-	LDIRS += -L$(CURL_DIR)/lib/.libs
+ endif
+ ifeq ($(UNAME_S),Linux)
+ 	MYLIBS += -ldl
+@@ -211,20 +180,12 @@
+ 	MYLIBS += -lgcrypt
+ endif
+ 
+-LIBPROXYSQLAR := $(PROXYSQL_LDIR)/libproxysql.a
++LIBPROXYSQLAR := $(PROXYSQL_LDIR)/libproxysql.a -lsqlite3
+ ifeq ($(UNAME_S),Darwin)
+ 	LIBPROXYSQLAR += $(JEMALLOC_LDIR)/libjemalloc.a
+ 	LIBPROXYSQLAR += $(MICROHTTPD_LDIR)/libmicrohttpd.a
+ 	LIBPROXYSQLAR += $(LIBHTTPSERVER_LDIR)/libhttpserver.a
+-	LIBPROXYSQLAR += $(PCRE_LDIR)/libpcre.a
+-	LIBPROXYSQLAR += $(PCRE_LDIR)/libpcrecpp.a
+-	LIBPROXYSQLAR += $(LIBDAEMON_LDIR)/libdaemon.a
+-	LIBPROXYSQLAR += $(LIBCONFIG_LDIR)/libconfig++.a
+-	LIBPROXYSQLAR += $(LIBCONFIG_LDIR)/libconfig.a
+-	LIBPROXYSQLAR += $(CURL_LDIR)/libcurl.a
+-	LIBPROXYSQLAR += $(SQLITE3_LDIR)/sqlite3.o
+ 	LIBPROXYSQLAR += $(LIBINJECTION_LDIR)/libinjection.a
+-	LIBPROXYSQLAR += $(EV_LDIR)/libev.a
+ endif
+ LIBPROXYSQLAR += $(CITYHASH_LDIR)/libcityhash.a
+ 
+@@ -238,9 +199,11 @@
+ $(ODIR)/%.o: %.cpp
+ 	$(CXX) -c -o $@ $< $(MYCXXFLAGS) $(CXXFLAGS) -Wall
+ 
++MYLIBS += -lconfig -ldaemon -lconfig++ -lpcrecpp -lpcre -lcurl -lssl -lcrypto -lev
++
+ $(EXECUTABLE): $(ODIR) $(OBJ) $(LIBPROXYSQLAR)
+ ifeq ($(PROXYSQLCLICKHOUSE),1)
+-	$(CXX) -o $@ $(OBJ) $(CLANGFIX) $(LIBPROXYSQLAR) $(CLICKHOUSE_CPP_LDIR)/libclickhouse-cpp-lib-static.a $(LZ4_LDIR)/liblz4.a $(MYCXXFLAGS) $(CXXFLAGS) $(LDIRS) $(LIBS) $(MYLIBS)
++	$(CXX) -o $@ $(OBJ) $(CLANGFIX) $(LIBPROXYSQLAR) $(CLICKHOUSE_CPP_LDIR)/libclickhouse-cpp-lib-static.a -llz4 $(MYCXXFLAGS) $(CXXFLAGS) $(LDIRS) $(LIBS) $(MYLIBS)
+ else
+ 	$(CXX) -o $@ $(OBJ) $(CLANGFIX) $(LIBPROXYSQLAR) $(MYCXXFLAGS) $(CXXFLAGS) $(LDIRS) $(LIBS) $(MYLIBS)
+ endif

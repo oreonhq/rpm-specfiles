@@ -1,11 +1,11 @@
-%global source0_hash a8193895b420d576fac228388ba8fd1b24d6f229c43b7963e2ed581ef82cad9a
+%global source0_hash 23f2736fb8f3f0a3ee2f2f1944720206a4d5c532cf7a0a00c8f73aa69d75f588
 
 %undefine __cmake_in_source_build
 
 %global framework networkmanager-qt
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 %ifarch aarch64
 %global _lto_cflags %{nil}
@@ -13,7 +13,7 @@
 %endif
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.30.0
 Release:        1%{?dist}
 Summary:        A Tier 1 KDE Frameworks 6 module that wraps NetworkManager DBus API
 License:        LGPL-2.0-or-later AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND CC0-1.0
@@ -80,6 +80,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
 - aarch64: no LTO, -j2 to avoid OOM (cc1plus Killed)
 

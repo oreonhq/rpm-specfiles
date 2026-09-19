@@ -1,0 +1,5 @@
+/usr/bin/routingmanagerd		--	gen_context(system_u:object_r:vsomeip_exec_t,s0)
+/usr/lib/systemd/system/routingmanagerd.service	--	gen_context(system_u:object_r:vsomeip_unit_file_t,s0)
+/var/lib/routingmanagerd(/.*)?		        gen_context(system_u:object_r:vsomeip_var_lib_t,s0)
+/var/run/vsomeip(/.*)?		                gen_context(system_u:object_r:vsomeip_var_run_t,s0)
+/var/run/vsomeip/vsomeip-0		     -s	gen_context(system_u:object_r:vsomeip_var_run_t,s0)

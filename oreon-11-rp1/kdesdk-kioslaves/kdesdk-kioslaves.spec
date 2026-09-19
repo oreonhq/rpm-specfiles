@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bf2b24006229689a38be796d67590efa5677d6ee4439351919fd6071c30166f2
 
 %undefine __cmake_in_source_build
 %global base_name kdesdk-kio
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kdesdk-kioslaves
 Summary: KDESDK KIOslaves
-Version: 26.03.80
+Version: 26.08.0
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2 and GPLv2+ - review is highly recommended.
@@ -67,6 +67,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog	
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

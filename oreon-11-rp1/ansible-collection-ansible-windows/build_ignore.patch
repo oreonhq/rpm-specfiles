@@ -1,0 +1,32 @@
+From 57d0f4683659101fa33dbca98bf60458046a2c46 Mon Sep 17 00:00:00 2001
+From: Daniel Milnes <daniel@daniel-milnes.uk>
+Date: Sun, 2 Jun 2024 14:34:35 +0100
+Subject: [PATCH] Ignore more files during the build
+
+---
+ galaxy.yml | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/galaxy.yml b/galaxy.yml
+index 528bf63..b530c91 100644
+--- a/galaxy.yml
++++ b/galaxy.yml
+@@ -17,5 +17,14 @@ homepage: https://github.com/ansible-collections/ansible.windows
+ issues: https://github.com/ansible-collections/ansible.windows/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
+ build_ignore:
+   - .vscode
+-  - tests/integration/inventory*
++  - tests/integration/*
+   - changelogs/.plugin-cache.yaml
++  - .azure-pipelines
++  - .github
++  - .ansible-lint
++  - .git-blame-ignore-revs
++  - .gitignore
++  - COPYING
++  - CHANGELOG.rst
++  - README.md
++  - tests/.gitignore
+-- 
+2.45.1
+

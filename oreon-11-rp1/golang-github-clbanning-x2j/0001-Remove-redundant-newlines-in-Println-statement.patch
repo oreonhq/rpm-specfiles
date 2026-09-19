@@ -1,0 +1,200 @@
+From 1689a40da568bd8781e806249bc92e9cd64de207 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Mon, 22 Apr 2019 23:29:36 +0200
+Subject: [PATCH] Remove redundant newlines in Println statement
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Robert-André Mauchin <zebob.m@gmail.com>
+---
+ examples/gonuts2.go | 14 +++++++-------
+ x2j_test.go         |  6 +++---
+ x2jpath_test.go     | 24 ++++++++++++------------
+ 3 files changed, 22 insertions(+), 22 deletions(-)
+
+diff --git a/examples/gonuts2.go b/examples/gonuts2.go
+index 5993851..8fed132 100755
+--- a/examples/gonuts2.go
++++ b/examples/gonuts2.go
+@@ -81,7 +81,7 @@ func fullPath(docs []string) {
+ 		}
+ 		fmt.Println("\nPath:", path)
+ 		fmt.Println("Number of code records:", len(av))
+-		fmt.Println("av:", av, "\n")
++		fmt.Println("av:", av)
+ 		for _, v := range av {
+ 			switch v.(type) {
+ 			case map[string]interface{}:
+@@ -111,7 +111,7 @@ func partPath1(doc string) {
+ 	}
+ 	fmt.Println("\nPath:", path)
+ 	fmt.Println("Number of code records:", len(av))
+-	fmt.Println("av:", av, "\n")
++	fmt.Println("av:", av)
+ }
+ 
+ func partPath2(doc string) {
+@@ -128,7 +128,7 @@ func partPath2(doc string) {
+ 	}
+ 	fmt.Println("\nPath:", path)
+ 	fmt.Println("Number of code records:", len(av))
+-	fmt.Println("av:", av, "\n")
++	fmt.Println("av:", av)
+ }
+ 
+ func partPath3(doc string) {
+@@ -145,7 +145,7 @@ func partPath3(doc string) {
+ 	}
+ 	fmt.Println("\nPath:", path)
+ 	fmt.Println("Number of code records:", len(av))
+-	fmt.Println("av:", av, "\n")
++	fmt.Println("av:", av)
+ }
+ 
+ func partPath4(doc string) {
+@@ -162,7 +162,7 @@ func partPath4(doc string) {
+ 	}
+ 	fmt.Println("\nPath:", path)
+ 	fmt.Println("Number of code records:", len(av))
+-	fmt.Println("av:", av, "\n")
++	fmt.Println("av:", av)
+ }
+ 
+ func partPath5(doc string) {
+@@ -179,7 +179,7 @@ func partPath5(doc string) {
+ 	}
+ 	fmt.Println("\nPath:", path)
+ 	fmt.Println("Number of code records:", len(av))
+-	fmt.Println("av:", av, "\n")
++	fmt.Println("av:", av)
+ }
+ 
+ func partPath6(doc string) {
+@@ -196,5 +196,5 @@ func partPath6(doc string) {
+ 	}
+ 	fmt.Println("\nPath:", path)
+ 	fmt.Println("Number of code records:", len(av))
+-	fmt.Println("av:", av, "\n")
++	fmt.Println("av:", av)
+ }
+diff --git a/x2j_test.go b/x2j_test.go
+index b7bebb5..40e362c 100755
+--- a/x2j_test.go
++++ b/x2j_test.go
+@@ -300,13 +300,13 @@ func TestStuff_2(t *testing.T) {
+ }
+ 
+ func procMap(m map[string]interface{}) bool {
+-	fmt.Println("procMap:",WriteMap(m),"\n")
++	fmt.Println("procMap:",WriteMap(m))
+ 	return true
+ }
+ 
+ func procMapToJson(m map[string]interface{}) bool {
+ 	b,_ := json.MarshalIndent(m,"","  ")
+-	fmt.Println("procMap:",string(b),"\n")
++	fmt.Println("procMap:",string(b))
+ 	return true
+ }
+ 
+@@ -424,6 +424,6 @@ func Test_F_DocToMap(t *testing.T) {
+ 	if err != nil {
+ 		fmt.Println("err:",err.Error())
+ 	}
+-	fmt.Println(WriteMap(m),"\n")
++	fmt.Println(WriteMap(m))
+ }
+ */
+diff --git a/x2jpath_test.go b/x2jpath_test.go
+index f8299e0..698251c 100755
+--- a/x2jpath_test.go
++++ b/x2jpath_test.go
+@@ -50,72 +50,72 @@ var doc2 = `
+ 	fmt.Println("\nTestValuesFromTagPath()\n",doc)
+ 
+ 	m,_ := DocToMap(doc)
+-	fmt.Println("map:",WriteMap(m),"\n")
++	fmt.Println("map:",WriteMap(m))
+ 
+ 	v,_ := ValuesFromTagPath(doc,"doc.books")
+ 	fmt.Println("path == doc.books: len(v):",len(v))
+ 	for key,val := range v {
+-		fmt.Println(key,":",val,"\n")
++		fmt.Println(key,":",val)
+ 	}
+ 
+ 	v,_ = ValuesFromTagPath(doc,"doc.books.*")
+ 	fmt.Println("path == doc.books.*: len(v):",len(v))
+ 	for key,val := range v {
+-		fmt.Println(key,":",val,"\n")
++		fmt.Println(key,":",val)
+ 	}
+ 
+ 	v,_ = ValuesFromTagPath(doc,"doc.books.book")
+ 	fmt.Println("path == doc.books.book: len(v):",len(v))
+ 	for key,val := range v {
+-		fmt.Println(key,":",val,"\n")
++		fmt.Println(key,":",val)
+ 	}
+ 
+ 	v,_ = ValuesFromTagPath(doc2,"doc.books.book")
+ 	fmt.Println("doc == doc2 / path == doc.books.book: len(v):",len(v))
+ 	for key,val := range v {
+-		fmt.Println(key,":",val,"\n")
++		fmt.Println(key,":",val)
+ 	}
+ 
+ 	v,_ = ValuesFromTagPath(doc,"doc.books.book.*")
+ 	fmt.Println("path == doc.books.book.*: len(v):",len(v))
+ 	for key,val := range v {
+-		fmt.Println(key,":",val,"\n")
++		fmt.Println(key,":",val)
+ 	}
+ 
+ 	v,_ = ValuesFromTagPath(doc2,"doc.books.book.*")
+ 	fmt.Println("doc == doc2 / path == doc.books.book.*: len(v):",len(v))
+ 	for key,val := range v {
+-		fmt.Println(key,":",val,"\n")
++		fmt.Println(key,":",val)
+ 	}
+ 
+ 	v,_ = ValuesFromTagPath(doc,"doc.books.*.author")
+ 	fmt.Println("path == doc.books.*.author: len(v):",len(v))
+ 	for key,val := range v {
+-		fmt.Println(key,":",val,"\n")
++		fmt.Println(key,":",val)
+ 	}
+ 
+ 	v,_ = ValuesFromTagPath(doc,"doc.*.*.author")
+ 	fmt.Println("path == doc.*.*.author: len(v):",len(v))
+ 	for key,val := range v {
+-		fmt.Println(key,":",val,"\n")
++		fmt.Println(key,":",val)
+ 	}
+ 
+ 	v,_ = ValuesFromTagPath(doc,"doc.*.*.title")
+ 	fmt.Println("path == doc.*.*.title: len(v):",len(v))
+ 	for key,val := range v {
+-		fmt.Println(key,":",val,"\n")
++		fmt.Println(key,":",val)
+ 	}
+ 
+ 	v,_ = ValuesFromTagPath(doc,"doc.*.*.*")
+ 	fmt.Println("path == doc.*.*.*: len(v):",len(v))
+ 	for key,val := range v {
+-		fmt.Println(key,":",val,"\n")
++		fmt.Println(key,":",val)
+ 	}
+ 
+ 	v,_ = ValuesFromTagPath(doc,"doc.*.*.*.*")
+ 	fmt.Println("path == doc.*.*.*.*: len(v):",len(v))
+ 	for key,val := range v {
+-		fmt.Println(key,":",val,"\n")
++		fmt.Println(key,":",val)
+ 	}
+ }
+ 
+-- 
+2.21.0
+

@@ -5,7 +5,7 @@
 
 Summary: Hybrid image/package system
 Name: rpm-ostree
-Version: 2026.1
+Version: 2026.3
 Release: %{autorelease}
 License: LGPL-2.0-or-later
 URL: https://github.com/coreos/rpm-ostree

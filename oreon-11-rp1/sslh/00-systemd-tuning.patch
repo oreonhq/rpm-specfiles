@@ -1,0 +1,78 @@
+diff --git a/basic.cfg b/basic.cfg
+index 4ef602b..8bde5fb 100644
+--- a/basic.cfg
++++ b/basic.cfg
+@@ -2,14 +2,12 @@
+ # sensible values for "standard" setup.
+ 
+ verbose: false;
+-foreground: false;
++foreground: true;
+ inetd: false;
+ numeric: false;
+ transparent: false;
+ timeout: 2;
+-user: "nobody";
+-pidfile: "/var/run/sslh.pid";
+-chroot: "/var/empty";
++user: "sslh";
+ 
+ 
+ # Change hostname with your external address name.
+diff --git a/scripts/systemd.sslh.service b/scripts/systemd.sslh.service
+index 3e5cd14..4d2557f 100644
+--- a/scripts/systemd.sslh.service
++++ b/scripts/systemd.sslh.service
+@@ -1,27 +1,18 @@
+ [Unit]
+ Description=SSL/SSH multiplexer
+ After=network.target
++Documentation=man:sslh(8)
+ 
+ [Service]
+-EnvironmentFile=/etc/conf.d/sslh
+-ExecStart=/usr/sbin/sslh --foreground $DAEMON_OPTS
++EnvironmentFile=/etc/sysconfig/sslh
++ExecStart=/usr/sbin/sslh $DAEMON_OPTS
+ KillMode=process
+ #Hardening
+ PrivateTmp=true
+-CapabilityBoundingSet=CAP_SETGID CAP_SETUID CAP_NET_BIND_SERVICE
+-AmbientCapabilities=CAP_NET_BIND_SERVICE
+-SecureBits=noroot-locked
+-ProtectSystem=strict
++CapabilityBoundingSet=CAP_SETGID CAP_SETUID CAP_NET_BIND_SERVICE CAP_NET_ADMIN
++ProtectSystem=full
+ ProtectHome=true
+-ProtectKernelModules=true
+-ProtectKernelTunables=true
+-ProtectControlGroups=true
+-MountFlags=private
+-NoNewPrivileges=true
+ PrivateDevices=true
+-RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+-MemoryDenyWriteExecute=true
+-DynamicUser=true
+ 
+ [Install]
+ WantedBy=multi-user.target
+diff --git a/sslh.pod b/sslh.pod
+index 5735bad..b457b4d 100644
+--- a/sslh.pod
++++ b/sslh.pod
+@@ -221,12 +221,11 @@ personality disorder).
+ 
+ =over 4
+ 
+-=item F</etc/init.d/sslh>
++=item F</usr/lib/systemd/system/sslh.service>
+ 
+-Start-up script. The standard actions B<start>, B<stop> and
+-B<restart> are supported.
++Systemd unit to control the daemon.
+ 
+-=item F</etc/default/sslh>
++=item F</etc/sysconfig/sslh>
+ 
+ Server configuration. These are environment variables
+ loaded by the start-up script and passed to B<sslh> as

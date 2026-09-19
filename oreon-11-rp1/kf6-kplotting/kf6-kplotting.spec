@@ -1,14 +1,14 @@
-%global source0_hash b2f8d7e720187ea8159653cb3c8caf0d03fb5f3d7ecef1b2b80ac0b2a77b4367
+%global source0_hash 2666c7608349e109ae5e0a39d6e336ddec61d5a02a2a0a2edcfb6fefaef3ea92
 
 %undefine __cmake_in_source_build
 
 %global framework kplotting
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.29.0
 Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 addon for plotting
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -69,6 +69,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

@@ -1,0 +1,22 @@
+From 45cc96c067b444aa6eac2c513819352af11dccf4 Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Fri, 15 Aug 2025 16:33:07 -0600
+Subject: [PATCH] Fix a memset with an incorrect size
+
+---
+ src/lib/mg/rib/mgribtoken.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/mg/rib/mgribtoken.c b/src/lib/mg/rib/mgribtoken.c
+index b060924..d963dcd 100644
+--- a/src/lib/mg/rib/mgribtoken.c
++++ b/src/lib/mg/rib/mgribtoken.c
+@@ -191,7 +191,7 @@ void mrti_delete(TokenBuffer *tkbuf)
+ 	if (_tokenbuffer == tkbuf) {
+ 	    _tokenbuffer = NULL;
+ 	}
+-	memset(tkbuf, 0, sizeof(tkbuf));
++	memset(tkbuf, 0, sizeof(*tkbuf));
+     }
+ }
+ 

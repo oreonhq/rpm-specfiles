@@ -1,0 +1,15 @@
+--- foundation-icons.css	2015-06-10 16:09:55.000000000 +0200
++++ foundation-icons.css	2019-07-17 17:25:10.987319189 +0200
+@@ -6,11 +6,7 @@
+ 
+ @font-face {
+   font-family: "foundation-icons";
+-  src: url("foundation-icons.eot");
+-  src: url("foundation-icons.eot?#iefix") format("embedded-opentype"),
+-       url("foundation-icons.woff") format("woff"),
+-       url("foundation-icons.ttf") format("truetype"),
+-       url("foundation-icons.svg#fontcustom") format("svg");
++  src: url("foundation-icons.ttf") format("truetype");
+   font-weight: normal;
+   font-style: normal;
+ }

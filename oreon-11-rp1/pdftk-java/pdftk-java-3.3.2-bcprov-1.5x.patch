@@ -1,0 +1,46 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for pdftk >= 3.3.2, which reverts the removal of the
+deprecated ASN1OutputStream constructor in Bouncy Castle 1.70, because Red Hat Enterprise Linux 8 (and
+derivatives) only provides Bouncy Castle < 1.63. See also:
+
+ - https://gitlab.com/pdftk-java/pdftk/-/issues/122
+ - https://gitlab.com/pdftk-java/pdftk/-/commit/d8259eaaee8cf3c52504037fe08c180eb94e4b76
+ - https://src.fedoraproject.org/rpms/bouncycastle/blob/epel8/f/bouncycastle.spec
+
+--- pdftk-3.3.2/java/com/gitlab/pdftk_java/com/lowagie/text/pdf/PdfPKCS7.java	2021-12-20 18:20:25.000000000 +0100
++++ pdftk-3.3.2/java/com/gitlab/pdftk_java/com/lowagie/text/pdf/PdfPKCS7.java	2021-12-21 01:16:44.932266645 +0100
+@@ -296,7 +296,7 @@
+             ASN1TaggedObject tagsig = (ASN1TaggedObject)signerInfo.getObjectAt(next);
+             ASN1Sequence sseq = (ASN1Sequence)tagsig.getObject();
+             ByteArrayOutputStream bOut = new ByteArrayOutputStream();            
+-            ASN1OutputStream dout = ASN1OutputStream.create(bOut);
++            ASN1OutputStream dout = new ASN1OutputStream(bOut);
+             try {
+                 ASN1EncodableVector attribute = new ASN1EncodableVector();
+                 for (int k = 0; k < sseq.size(); ++k) {
+@@ -735,7 +735,7 @@
+                 digest = sig.sign();
+             ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
+             
+-            ASN1OutputStream dout = ASN1OutputStream.create(bOut);
++            ASN1OutputStream dout = new ASN1OutputStream(bOut);
+             dout.writeObject(new DEROctetString(digest));
+             dout.close();
+             
+@@ -906,7 +906,7 @@
+             
+             ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
+             
+-            ASN1OutputStream dout = ASN1OutputStream.create(bOut);
++            ASN1OutputStream dout = new ASN1OutputStream(bOut);
+             dout.writeObject(new DERSequence(whole));
+             dout.close();
+             
+@@ -962,7 +962,7 @@
+             attribute.add(new DERSequence(v));
+             ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
+             
+-            ASN1OutputStream dout = ASN1OutputStream.create(bOut);
++            ASN1OutputStream dout = new ASN1OutputStream(bOut);
+             dout.writeObject(new DERSet(attribute));
+             dout.close();
+             

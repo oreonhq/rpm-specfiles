@@ -1,0 +1,11 @@
+--- kitutuki-0.9.3/configure.in.migemo	2010-02-18 22:59:40.000000000 +0900
++++ kitutuki-0.9.3/configure.in	2010-02-20 04:39:39.000000000 +0900
+@@ -22,7 +22,7 @@
+ AC_ARG_WITH(onig-dir,           [  --with-onig-dir=DIR       set directory of oniguruma which located at non standerd directory and installed by user ], [ ONIG_DIR="$with_val"  ], [ ONIG_DIR= ])
+ AC_ARG_WITH(migemo,             [  --with-migemo             enable migemo ], [ ENABLE_MIGEMO=1 ], [ ENABLE_MIGEMO=0 ])
+ AC_ARG_WITH(migemo-dir,         [  --with-migemo-dir=DIR     set migemo directory ], [ MIGEMO_DIR="$with_val"  ], [ MIGEMO_DIR= ])
+-AC_ARG_WITH(system-migemodir,[ --with-system-migemodir       specify the directory of system migemo dictionary. /usr/share/migemo, for example], [ if test -n "$withval" && test -n $LIBMIGEMO ; then echo "system-migemodir = $withval" SYSTEM_MIGEMODIR="$withval" AC_DEFINE_UNQUOTED(SYSTEM_MIGEMODIR, "$withval") fi ], [ SYSTEM_MIGEMODIR=/usr/share/cmigemo ] )
++AC_ARG_WITH(system-migemodir,[ --with-system-migemodir       specify the directory of system migemo dictionary. /usr/share/migemo, for example], [ if test -n "$withval" && test -n $LIBMIGEMO ; then echo "system-migemodir = $withval" ; SYSTEM_MIGEMODIR="$withval" ; { AC_DEFINE_UNQUOTED(SYSTEM_MIGEMODIR, "$withval") } ; fi ], [ SYSTEM_MIGEMODIR=/usr/share/cmigemo ] )
+ 
+ AC_SUBST(SYSTEM_MIGEMODIR)
+ 

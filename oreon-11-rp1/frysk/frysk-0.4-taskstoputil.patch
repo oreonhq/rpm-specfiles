@@ -1,0 +1,370 @@
+diff -up frysk-0.4/frysk-core/frysk/bindir/fauxv.java.taskstoputil frysk-0.4/frysk-core/frysk/bindir/fauxv.java
+--- frysk-0.4/frysk-core/frysk/bindir/fauxv.java.taskstoputil	2010-03-24 14:11:48.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/bindir/fauxv.java	2010-03-24 14:12:04.000000000 -0400
+@@ -42,14 +42,14 @@ package frysk.bindir;
+ import frysk.event.ProcEvent;
+ import frysk.proc.Proc;
+ import frysk.util.AuxvStringBuilder;
+-import frysk.util.ProcStopUtil;
++import frysk.util.TaskStopUtil;
+ 
+ public class fauxv {
+ 
+     static Proc proc = null;
+ 
+     public static void main (String[] args) {
+-        ProcStopUtil fauxv = new ProcStopUtil("fauxv", args, 
++        TaskStopUtil fauxv = new TaskStopUtil("fauxv", args, 
+                                                new PrintAuxvEvent());
+         fauxv.setUsage("Usage: fauxv <PID>  || fauxv <COREFILE> [<EXEFILE>] " +
+         	       "|| fauvx <COREFILE> [<EXEFILE>]");  
+diff -up frysk-0.4/frysk-core/frysk/bindir/fcore.java.taskstoputil frysk-0.4/frysk-core/frysk/bindir/fcore.java
+--- frysk-0.4/frysk-core/frysk/bindir/fcore.java.taskstoputil	2010-03-24 14:10:12.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/bindir/fcore.java	2010-03-24 14:10:47.000000000 -0400
+@@ -44,7 +44,7 @@ import frysk.event.ProcEvent;
+ import frysk.proc.Proc;
+ import frysk.proc.Task;
+ 
+-import frysk.util.ProcStopUtil;
++import frysk.util.TaskStopUtil;
+ import frysk.isa.corefiles.LinuxElfCorefile;
+ import frysk.isa.corefiles.LinuxElfCorefileFactory;
+ import gnu.classpath.tools.getopt.Option;
+@@ -68,7 +68,7 @@ public class fcore {
+      * @param args - pid of the process to core dump
+      */
+     public static void main (String[] args) {
+-	ProcStopUtil fcore = new ProcStopUtil("fcore", args, 
++	TaskStopUtil fcore = new TaskStopUtil("fcore", args, 
+ 		                              new createCoreEvent(),
+ 					      options());
+ 	fcore.setUsage("Usage: fcore PID"); 
+diff -up frysk-0.4/frysk-core/frysk/bindir/fdebugdump.java.taskstoputil frysk-0.4/frysk-core/frysk/bindir/fdebugdump.java
+--- frysk-0.4/frysk-core/frysk/bindir/fdebugdump.java.taskstoputil	2010-03-24 14:48:00.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/bindir/fdebugdump.java	2010-03-24 15:00:05.000000000 -0400
+@@ -3,35 +3,33 @@ package frysk.bindir;
+ import java.io.PrintWriter;
+ import java.util.Iterator;
+ 
++import frysk.dwfl.DwflCache;
++import frysk.event.ProcEvent;
++import frysk.proc.Proc;
++import frysk.util.TaskStopUtil;
+ import lib.dwfl.DwarfDie;
+ import lib.dwfl.Dwfl;
+ import lib.dwfl.DwflModule;
+-import frysk.dwfl.DwflCache;
+-import frysk.isa.signals.Signal;
+-import frysk.proc.Action;
+-import frysk.proc.Task;
+-import frysk.util.ProcRunUtil;
+-import frysk.util.ProcRunUtil.ProcRunObserver;
+-import frysk.util.ProcRunUtil.RunUtilOptions;
+-import gnu.classpath.tools.getopt.OptionGroup;
+ 
+ public class fdebugdump{
+ 
+     private static PrintWriter printWriter = new PrintWriter(System.out);
+     
+     public static void main(String[] args) {
+-	RunUtilOptions options = new RunUtilOptions();
+-	
+-	OptionGroup[] customOptions = new OptionGroup[]{};
+-	 
+-	ProcRunUtil procRunUtil = new ProcRunUtil("fdebugdump", "fdebugdump <exe>", args, procRunObserver, customOptions, options);
+-	procRunUtil.start();
++	TaskStopUtil fdebugdump = new TaskStopUtil("fdebugdump", args,
++						   new DebugDumpEvent(),
++						   null);
++	fdebugdump.setUsage("Usage: fdebugdump <EXE> | fdebugdump <PID> | fdebugdump <COREFILE> [ <EXEFILE> ]");
++	fdebugdump.execute();
++	printWriter.flush();
+     }
+     
+-    private static ProcRunObserver procRunObserver = new ProcRunObserver(){
+-
+-	public Action updateAttached(Task task) {
+-	    Dwfl dwfl = DwflCache.getDwfl(task);
++    private static class DebugDumpEvent implements ProcEvent {
++	public void executeLive(Proc proc) {
++	    executeDead(proc);
++	}
++	public void executeDead(Proc proc) {
++	    Dwfl dwfl = DwflCache.getDwfl(proc.getMainTask());
+ 	    DwflModule[] dwflModules = dwfl.getModules();
+ 	    for (int i = 0; i < dwflModules.length; i++) {
+ 		DwflModule module = dwflModules[i];
+@@ -42,34 +40,15 @@ public class fdebugdump{
+ 		    printDie(die, " ");
+ 		}
+ 	    }
+-	    return Action.CONTINUE;
+ 	}
+-
+-	public void addFailed(Object observable, Throwable w) {}
+-
+-	public void addedTo(Object observable) {}
+-
+-	public void deletedFrom(Object observable) {}
+-
+-	public Action updateForkedOffspring(Task parent, Task offspring) { return Action.CONTINUE; }
+-	public Action updateForkedParent(Task parent, Task offspring) { return Action.CONTINUE; }
+-	public Action updateExeced(Task task) { return Action.CONTINUE; }
+-	public Action updateClonedParent(Task task, Task clone) { return Action.CONTINUE; }
+-	public Action updateTerminated(Task task, Signal signal, int value) { return Action.CONTINUE; }
+-	public Action updateClonedOffspring(Task parent, Task offspring) { return Action.CONTINUE; }
+-	public void existingTask(Task task) {}
+-	public void taskAdded(Task task) {}
+-	public void taskRemoved(Task task) {}
+-	
+-    };
+     
+-    private static void printDie(DwarfDie die, String indent){
+-	printWriter.println(indent + die.getTag() + " " + die.getName());
+-	
+-	die = die.getChild();
+-	while(die != null){
+-	    printDie(die, indent+ "  ");
+-	    die = die.getSibling();
++	private static void printDie(DwarfDie die, String indent){
++	    printWriter.println(indent + die.getTag() + " " + die.getName());
++	    die = die.getChild();
++	    while(die != null){
++		printDie(die, indent+ "  ");
++		die = die.getSibling();
++	    }
+ 	}
+     }
+ }
+diff -up frysk-0.4/frysk-core/frysk/bindir/fdebuginfo.java.taskstoputil frysk-0.4/frysk-core/frysk/bindir/fdebuginfo.java
+--- frysk-0.4/frysk-core/frysk/bindir/fdebuginfo.java.taskstoputil	2010-03-24 14:12:48.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/bindir/fdebuginfo.java	2010-03-24 14:13:08.000000000 -0400
+@@ -44,7 +44,7 @@ import frysk.proc.Proc;
+ import frysk.proc.Task;
+ 
+ import frysk.util.DebuginfoPaths;
+-import frysk.util.ProcStopUtil;
++import frysk.util.TaskStopUtil;
+ 
+ public final class fdebuginfo
+ {    
+@@ -54,7 +54,7 @@ public final class fdebuginfo
+      */  
+     public static void main(String[] args)
+     {
+-	ProcStopUtil fdebuginfo = new ProcStopUtil("fdebuginfo", args, 
++	TaskStopUtil fdebuginfo = new TaskStopUtil("fdebuginfo", args, 
+ 		                                    new PrintDebuginfoEvent());
+ 	fdebuginfo.setUsage("Usage: fdebuginfo <PID> || fdebuginfo <EXEFILE> " +
+ 	                    "|| fdebuginfo <COREFILE> [<EXEFILE>]");   
+diff -up frysk-0.4/frysk-core/frysk/bindir/fexe.java.taskstoputil frysk-0.4/frysk-core/frysk/bindir/fexe.java
+--- frysk-0.4/frysk-core/frysk/bindir/fexe.java.taskstoputil	2010-03-24 14:12:15.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/bindir/fexe.java	2010-03-24 14:12:33.000000000 -0400
+@@ -41,7 +41,7 @@ package frysk.bindir;
+ 
+ import frysk.sys.ProcessIdentifier;
+ import frysk.sys.ProcessIdentifierFactory;
+-import frysk.util.ProcStopUtil;
++import frysk.util.TaskStopUtil;
+ import frysk.event.ProcEvent;
+ import frysk.proc.Proc;
+ import frysk.sys.proc.Exe;
+@@ -64,7 +64,7 @@ public class fexe 
+ 
+     public static void main(String[] args) {
+ 	PrintExeEvent printExe = new PrintExeEvent();
+-	ProcStopUtil fexe = new ProcStopUtil("fexe", args, printExe,
++	TaskStopUtil fexe = new TaskStopUtil("fexe", args, printExe,
+ 					     options());
+ 	fexe.setUsage("Usage: fexe <PID> || fexe <EXEFILE> " +
+                       "|| fexe <COREFILE> [<EXEFILE>]"); 
+diff -up frysk-0.4/frysk-core/frysk/bindir/fmaps.java.taskstoputil frysk-0.4/frysk-core/frysk/bindir/fmaps.java
+--- frysk-0.4/frysk-core/frysk/bindir/fmaps.java.taskstoputil	2010-03-24 14:11:15.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/bindir/fmaps.java	2010-03-24 14:11:33.000000000 -0400
+@@ -39,7 +39,7 @@
+ 
+ package frysk.bindir;
+ 
+-import frysk.util.ProcStopUtil;
++import frysk.util.TaskStopUtil;
+ import frysk.event.ProcEvent;
+ import frysk.proc.Proc;
+ import frysk.proc.MemoryMap;
+@@ -47,7 +47,7 @@ import frysk.proc.MemoryMap;
+ public class fmaps {
+     
+     public static void main (String[] args) {
+-	ProcStopUtil fmaps = new ProcStopUtil("fmaps", args, 
++	TaskStopUtil fmaps = new TaskStopUtil("fmaps", args, 
+ 		                               new PrintMapsEvent());
+ 	fmaps.setUsage("Usage: fmaps <PID> || fmaps <EXEFILE> " +
+ 	               "|| fmaps <COREFILE> [<EXEFILE>]");   
+diff -up frysk-0.4/frysk-core/frysk/bindir/fstack.java.taskstoputil frysk-0.4/frysk-core/frysk/bindir/fstack.java
+--- frysk-0.4/frysk-core/frysk/bindir/fstack.java.taskstoputil	2010-03-24 14:13:32.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/bindir/fstack.java	2010-03-24 15:00:53.000000000 -0400
+@@ -43,12 +43,11 @@ import java.io.PrintWriter;
+ import java.util.Iterator;
+ import java.util.TreeMap;
+ import frysk.debuginfo.PrintDebugInfoStackOptions;
+-import frysk.event.Event;
+ import frysk.event.ProcEvent;
+ import frysk.proc.Proc;
+ import frysk.proc.Task;
+ import frysk.rsl.Log;
+-import frysk.util.ProcStopUtil;
++import frysk.util.TaskStopUtil;
+ import frysk.util.StackPrintUtil;
+ import gnu.classpath.tools.getopt.OptionGroup;
+ 
+@@ -60,11 +59,12 @@ public final class fstack {
+   private static final Log fine = Log.fine(fstack.class);
+   
+     public static void main(String[] args) {
+-	ProcStopUtil fstack = new ProcStopUtil("fstack", args, 
++	TaskStopUtil fstack = new TaskStopUtil("fstack", args, 
+ 					       new StackerEvent(),
+ 					       options());
+ 	fstack.setUsage("Usage: fstack <PID> || fstack <COREFILE> [<EXEFILE>]");   
+ 	fstack.execute();
++	printWriter.flush();
+     }
+   
+   /**
+@@ -74,19 +74,11 @@ public final class fstack {
+       public void executeLive(Proc proc) {
+           fine.log(this, "printTasks");
+           printTasks(proc);
+-          proc.requestAbandonAndRunEvent(new Event()
+-          {
+-              public void execute ()
+-              {   
+-                  printWriter.flush();
+-              }
+-          });
+       }
+ 
+       public void executeDead(Proc proc) {
+           fine.log(this, "printTasks");
+           printTasks(proc);
+-          printWriter.flush();
+       }     
+   }
+   
+diff -up frysk-0.4/frysk-core/frysk/util/TaskStopUtil.java.taskstoputil frysk-0.4/frysk-core/frysk/util/TaskStopUtil.java
+--- frysk-0.4/frysk-core/frysk/util/TaskStopUtil.java.taskstoputil	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/util/TaskStopUtil.java	2010-03-24 14:44:48.000000000 -0400
+@@ -39,6 +39,9 @@
+ 
+ package frysk.util;
+ 
++import java.util.Set;
++import java.util.HashSet;
++
+ import frysk.event.Event;
+ import frysk.event.ProcEvent;
+ import frysk.proc.Manager;
+@@ -57,13 +60,13 @@ import frysk.rsl.Log;
+  * 
+  * Utilities must define a event.ProcEvent to execute.
+  */
+-public class ProcStopUtil {
+-    private static final Log fine = Log.fine(ProcStopUtil.class);
++public class TaskStopUtil {
++    private static final Log fine = Log.fine(TaskStopUtil.class);
+ 
+     private String[] args;
+     private CommandlineParser parser;
+ 	
+-    public ProcStopUtil(String utilName, String[] args, 
++    public TaskStopUtil(String utilName, String[] args, 
+ 			final ProcEvent procEvent,
+ 			OptionGroup[] utilOptionGroups) {
+ 	this.args = args;
+@@ -72,10 +75,10 @@ public class ProcStopUtil {
+ 		public void parsePids(Proc[] procs) { 
+ 		    for (int i= 0; i < procs.length; i++)  {                  
+ 			Proc proc = procs[i];
+-			UtilEvent utilEvent = new UtilEvent(proc, procEvent);
+-			new ProcBlockAction(proc, new UtilAction(proc, utilEvent));
+-			Manager.eventLoop.run();
++			new ProcBlockAction(proc, new TasksBlocked(proc,
++								   procEvent));
+ 		    }
++		    Manager.eventLoop.run();
+ 		}
+ 	    
+ 		//@Override 
+@@ -95,7 +98,7 @@ public class ProcStopUtil {
+ 	    };
+     }    
+     
+-    public ProcStopUtil(String utilName, String[] args, 
++    public TaskStopUtil(String utilName, String[] args, 
+ 			final ProcEvent procEvent) {
+ 	this(utilName, args, procEvent, null);
+     }
+@@ -120,17 +123,32 @@ public class ProcStopUtil {
+ 	}
+     }
+     
+-    private static class UtilAction implements ProcBlockObserver {
++    private static class TasksBlocked implements ProcBlockObserver, Event {
+ 	protected Proc proc;
+-	private Event event;
++	private ProcEvent procEvent;
++	protected Set procs = new HashSet();
+ 
+-	public UtilAction(Proc proc, Event event) {
++	public TasksBlocked(Proc proc, ProcEvent procEvent) {
+ 	    this.proc = proc;
+-	    this.event = event;
++	    this.procEvent = procEvent;
++	    this.procs.add (proc);
+ 	}
+ 
+ 	public void allExistingTasksCompleted() {
+-	    Manager.eventLoop.add(event);
++	    fine.log("allExistingTasksCompleted proc", proc);
++	    procEvent.executeLive(proc);
++	    // Now ask for it to be detached.
++	    proc.requestAbandonAndRunEvent(this);
++	}
++
++	// Called when the process has been abandoned.
++	public void execute () {   
++	    fine.log("execute abandonedProc", proc, "remaining", procs);
++	    procs.remove(proc);
++	    if (procs.isEmpty()) {
++		fine.log("all abandoned");
++		Manager.eventLoop.requestStop();
++	    }
+ 	}
+ 	public void taskAddFailed(Object task, Throwable w) {
+ 	}
+@@ -143,25 +161,4 @@ public class ProcStopUtil {
+ 	public void deletedFrom(Object observable) {
+ 	}
+     }
+-    
+-    private static class UtilEvent
+-    implements Event
+-    {
+-	private Proc proc = null;
+-	private ProcEvent event = null;
+-	
+-	public UtilEvent(Proc proc, ProcEvent event) {
+-	    this.proc = proc;
+-	    this.event = event;
+-	}
+-	
+-	public void execute() {
+-	    fine.log("execute live", proc);
+-	    event.executeLive(proc);
+-	    
+-	    // FIXME: Should request eventloop to stop
+-	    // instead of exit.
+-	    System.exit(0);
+-	}
+-    }
+ }
+\ No newline at end of file

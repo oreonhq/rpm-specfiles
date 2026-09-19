@@ -1,0 +1,25 @@
+From 859bad3673f1c83f7374558961fe4ff4584d96ff Mon Sep 17 00:00:00 2001
+From: Gabriel Somlo <gsomlo@gmail.com>
+Date: Fri, 4 Aug 2023 11:29:29 -0400
+Subject: [PATCH 7/7] fedora: weaken overzealous assert
+
+---
+ src/base/io/ioWritePla.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/base/io/ioWritePla.c b/src/base/io/ioWritePla.c
+index aa6a933d8..45dc74530 100644
+--- a/src/base/io/ioWritePla.c
++++ b/src/base/io/ioWritePla.c
+@@ -174,7 +174,7 @@ int Io_WritePla( Abc_Ntk_t * pNtk, char * pFileName )
+     FILE * pFile;
+ 
+     assert( Abc_NtkIsSopNetlist(pNtk) );
+-    assert( Abc_NtkLevel(pNtk) == 1 );
++    assert( Abc_NtkLevel(pNtk) <= 1 );
+ 
+     pFile = fopen( pFileName, "w" );
+     if ( pFile == NULL )
+-- 
+2.52.0
+

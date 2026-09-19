@@ -1,0 +1,102 @@
+diff -up netkit-ntalk-0.17/talkd/announce.c.person netkit-ntalk-0.17/talkd/announce.c
+--- netkit-ntalk-0.17/talkd/announce.c.person	2011-05-16 12:20:35.141591710 +0200
++++ netkit-ntalk-0.17/talkd/announce.c	2011-05-17 10:00:50.699013450 +0200
+@@ -120,8 +120,12 @@ print_mesg(int fd, CTL_MSG *request, con
+ 	sizes[i] = strlen(line_buf[i]);
+ 	max_size = max(max_size, sizes[i]);
+ 	i++;
+-	snprintf(line_buf[i], N_CHARS, "talk: respond with:  talk %s@%s",
+-		 request->l_name, remote_machine);
++	if (strpbrk(request->l_name, ":!.") != NULL)
++		snprintf(line_buf[i], N_CHARS, "talk: respond with:  talk %s@%s -x",
++			request->l_name, remote_machine);
++	else	
++		snprintf(line_buf[i], N_CHARS, "talk: respond with:  talk %s@%s",
++			request->l_name, remote_machine);
+ 	sizes[i] = strlen(line_buf[i]);
+ 	max_size = max(max_size, sizes[i]);
+ 	i++;
+diff -up netkit-ntalk-0.17/talk/get_names.c.person netkit-ntalk-0.17/talk/get_names.c
+--- netkit-ntalk-0.17/talk/get_names.c.person	1999-11-25 06:05:05.000000000 +0100
++++ netkit-ntalk-0.17/talk/get_names.c	2011-05-16 12:19:28.143944777 +0200
+@@ -58,9 +58,11 @@ get_names(int argc, char *argv[])
+ 	const char *his_tty;
+ 	register char *cp;
+ 	char *names;
++	char sep[5];
++	int opt_flg = 0;
+ 
+ 	if (argc < 2) {
+-		printf("Usage: talk user [ttyname]\n");
++		printf("Usage: talk user [-x] [ttyname]\n");
+ 		exit(1);
+ 	}
+ 	if (!isatty(0)) {
+@@ -78,9 +80,18 @@ get_names(int argc, char *argv[])
+ 	}
+ 	gethostname(hostname, sizeof (hostname));
+ 	my_machine_name = hostname;
++	
++	/* check for optional flag, which will enable only user@machine form */
++	sprintf(sep, "@:!.");
++	if (argc > 2)
++		if (strcmp(argv[2], "-x") == 0) {
++			sprintf(sep, "@");
++			opt_flg = 1;
++		}
++
+ 	/* check for, and strip out, the machine name of the target */
+ 	names = strdup(argv[1]);
+-	for (cp = names; *cp && !index("@:!.", *cp); cp++)
++	for (cp = names; *cp && !index(sep, *cp); cp++)
+ 		;
+ 	if (*cp == '\0') {
+ 		/* this is a local to local talk */
+@@ -98,8 +109,10 @@ get_names(int argc, char *argv[])
+ 		}
+ 		*--cp = '\0';
+ 	}
+-	if (argc > 2)
+-		his_tty = argv[2];	/* tty name is arg 2 */
++	if (argc > 2 && !opt_flg)
++		his_tty = argv[2];	/* tty name is arg 3 */
++	else if (argc > 3 && opt_flg)
++		his_tty = argv[3];	/* tty name is arg 4 */
+ 	else
+ 		his_tty = "";
+ 	get_addrs(his_machine_name);
+diff -up netkit-ntalk-0.17/talk/talk.1.person netkit-ntalk-0.17/talk/talk.1
+--- netkit-ntalk-0.17/talk/talk.1.person	2000-07-31 01:57:02.000000000 +0200
++++ netkit-ntalk-0.17/talk/talk.1	2011-05-16 12:19:28.143944777 +0200
+@@ -41,6 +41,7 @@
+ .Sh SYNOPSIS
+ .Nm talk
+ .Ar person
++.Op Ar -x
+ .Op Ar ttyname
+ .Sh DESCRIPTION
+ .Nm Talk
+@@ -56,7 +57,22 @@ is just the person's login name.  If you
+ another host, then
+ .Ar person
+ is of the form
+-.Ql user@host .
++.Ql user@host
++( or 
++.Ql host.user
++or
++.Ql host!user
++or
++.Ql host:user
++).
++.It Ar -x
++If you wish to talk to a user who has dot character in username, the
++.Ar -x
++argument will force
++.Ql user@host
++form of the
++.Ar person
++and talk will take dots as part of user name.
+ .It Ar ttyname
+ If you wish to talk to a user who is logged in more than once, the
+ .Ar ttyname

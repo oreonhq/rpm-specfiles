@@ -1,0 +1,39 @@
+diff --git a/Makefile b/Makefile
+index 68b5011..396b3b3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -128,7 +128,7 @@ LOCALCW_OBJS   = iambic.o
+ endif
+ 
+ ifeq ($(PTT_INCLUDE),PTT)
+-PTT_OPTIONS=-D PTT
++PTT_OPTIONS=-D OPTT
+ endif
+ 
+ ifeq ($(UNAME_S), Darwin)
+diff --git a/gpio.c b/gpio.c
+index 755f750..7860065 100644
+--- a/gpio.c
++++ b/gpio.c
+@@ -79,7 +79,7 @@ int ENABLE_CW_BUTTONS=1;
+ int CW_ACTIVE_LOW=1;
+ #endif
+ 
+-#ifdef PTT
++#ifdef OPTT
+ int ENABLE_PTT_GPIO=1;
+ int PTT_GPIO=14;
+ int PTT_ACTIVE_LOW=1;
+diff --git a/radio.c b/radio.c
+index 2172460..d6be18f 100644
+--- a/radio.c
++++ b/radio.c
+@@ -602,7 +602,7 @@ if(!radio_is_remote) {
+ #ifdef LOCALCW
+   init_gpio=TRUE;
+ #endif
+-#ifdef PTT
++#ifdef OPTT
+   init_gpio=TRUE;
+ #endif
+ #ifdef GPIO

@@ -1,0 +1,182 @@
+diff -up FoX-4.1.2/configure.dompp FoX-4.1.2/configure
+--- FoX-4.1.2/configure.dompp	2012-01-05 05:04:10.000000000 -0500
++++ FoX-4.1.2/configure	2014-05-30 11:36:05.858484031 -0400
+@@ -5294,7 +5294,7 @@ if test x$wxml_yes$wcml_yes$wkml_yes$sax
+     if test x$wcml_no = x; then wcml_yes=wcml_lib; fi
+     if test x$wkml_no = x; then wkml_yes=wkml_lib; fi
+     if test x$sax_no = x; then sax_yes=sax_lib; fi
+-    if test x$dom_no = x; then dom_yes=dom_lib; fi
++    if test x$dom_no = x; then dom_yes='dom_lib dompp_lib'; fi
+   else
+     eval "$CUTDOWN_TARGET"_yes="$CUTDOWN_TARGET"_lib
+   fi
+diff -up FoX-4.1.2/FoX-config.in.dompp FoX-4.1.2/FoX-config.in
+--- FoX-4.1.2/FoX-config.in.dompp	2014-05-30 11:36:05.822484263 -0400
++++ FoX-4.1.2/FoX-config.in	2014-05-30 11:41:33.032348216 -0400
+@@ -16,6 +16,8 @@ Known values for OPTION are:
+   --fcflags		print pre-processor and compiler flags
+   --help		display this help and exit
+   --version		display version information
++  --shared		use shared libs
++  --pretty		use dom pretty print library
+ EOF
+ 
+     exit $1
+@@ -23,6 +25,8 @@ EOF
+ 
+ FLAGS=both
+ MODULES=
++SHARED=
++PRETTY=
+ while test $# -gt 0; do
+     case "$1" in
+     -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+@@ -47,6 +51,14 @@ while test $# -gt 0; do
+         FLAGS=LD
+        	;;
+ 
++    --shared)
++        SHARED=true
++        ;;
++
++    --pretty)
++	PRETTY=true
++	;;
++
+     --common)
+         MODULES="$MODULES common utils fsys"
+         ;;
+@@ -83,35 +95,72 @@ if [ "x$MODULES" = x ]; then
+ fi
+ 
+ case $MODULES in *fsys*)
+-  LIBS=$libdir/libFoX_fsys.@LIBEXT@
++  if [ "x$SHARED" = x ]; then
++     LIBS=$libdir/libFoX_fsys.@LIBEXT@
++  else
++     LIBS="-lFoX_sys"
++  fi
+   ;;
+ esac
+ case $MODULES in *utils*)
+-  LIBS="$libdir/libFoX_utils.@LIBEXT@ $LIBS"
++  if [ "x$SHARED" = x ]; then
++     LIBS="$libdir/libFoX_utils.@LIBEXT@ $LIBS"
++  else
++     LIBS="-lFoX_utils $LIBS"
++  fi
+   ;;
+ esac
+ case $MODULES in *common*)
+-  LIBS="$libdir/libFoX_common.@LIBEXT@ $LIBS"
++  if [ "x$SHARED" = x ]; then
++     LIBS="$libdir/libFoX_common.@LIBEXT@ $LIBS"
++  else
++     LIBS="-lFoX_common $LIBS"
++  fi
+   ;;
+ esac
+ case $MODULES in *wxml*)
+-  LIBS="$libdir/libFoX_wxml.@LIBEXT@ $LIBS"
++  if [ "x$SHARED" = x ]; then
++     LIBS="$libdir/libFoX_wxml.@LIBEXT@ $LIBS"
++  else
++     LIBS="-lFoX_wxml $LIBS"
++  fi
+   ;;
+ esac
+ case $MODULES in *wcml*)
+-  LIBS="$libdir/libFoX_wcml.@LIBEXT@ $LIBS"
++  if [ "x$SHARED" = x ]; then
++     LIBS="$libdir/libFoX_wcml.@LIBEXT@ $LIBS"
++  else
++     LIBS="-lFoX_wcml $LIBS"
++  fi
+   ;;
+ esac
+ case $MODULES in *sax*)
+-  LIBS="$libdir/libFoX_sax.@LIBEXT@ $LIBS"
++  if [ "x$SHARED" = x ]; then
++     LIBS="$libdir/libFoX_sax.@LIBEXT@ $LIBS"
++  else
++     LIBS="-lFoX_sax $LIBS"
++  fi
+   ;;
+ esac
+ case $MODULES in *dom*)
+-  LIBS="$libdir/libFoX_dom.@LIBEXT@ $LIBS"
++  if [ "x$PRETTY" = x ]; then
++     DOMLIB=dom
++  else
++     DOMLIB=dompp
++  fi
++  if [ "x$SHARED" = x ]; then
++     LIBS="$libdir/libFoX_$DOMLIB.@LIBEXT@ $LIBS"
++  else
++     LIBS="-lFoX_$DOMLIB $LIBS"
++  fi
+   ;;
+ esac
+ case $MODULES in *wkml*)
+-  LIBS="$libdir/libFoX_wkml.@LIBEXT@ $LIBS"
++  if [ "x$SHARED" = x ]; then
++     LIBS="$libdir/libFoX_wkml.@LIBEXT@ $LIBS"
++  else
++     LIBS="-lFoX_wkml $LIBS"
++  fi
+   ;;
+ esac
+ 
+diff -up FoX-4.1.2/Makefile.dompp FoX-4.1.2/Makefile
+--- FoX-4.1.2/Makefile.dompp	2014-05-30 11:36:05.822484263 -0400
++++ FoX-4.1.2/Makefile	2014-05-30 11:36:05.858484031 -0400
+@@ -34,6 +34,19 @@ dom_lib_check: $(BUILD_TARGETS) common_l
+ 	    touch dom_lib_check ; \
+ 	    touch dom_lib_check.out ; \
+ 	fi
++dompp_lib: objsdir sax_lib wxml_lib
++	(cd dompp; $(MAKE) VPATH=$(VPATH)/dompp)
++dompp_lib_clean:
++	if test -d dompp; then (cd dompp; $(MAKE) VPATH=$(VPATH)/dompp clean) fi
++dompp_lib_check: $(BUILD_TARGETS) common_lib utils_lib
++	if test -d examples && ! grep DUMMYLIB arch.make > /dev/null ; \
++	then \
++	    rm -f dompp_lib_check ; \
++	    rm -f dompp_lib_check.out ; \
++	    (cd dompp; $(MAKE) VPATH=$(VPATH)/dompp check) ; \
++	    touch dompp_lib_check ; \
++	    touch dompp_lib_check.out ; \
++	fi
+ #
+ sax_lib: objsdir common_lib utils_lib fsys_lib
+ 	(cd sax; $(MAKE) VPATH=$(VPATH)/sax)
+@@ -148,16 +161,16 @@ cutdown:
+ 	done
+ 
+ cutdown-wxml: cutdown
+-	rm -rf wcml/ wkml/ sax/ dom/
++	rm -rf wcml/ wkml/ sax/ dom/ dompp/
+ 
+ cutdown-wcml: cutdown
+-	rm -rf wkml/ sax/ dom/
++	rm -rf wkml/ sax/ dom/ dompp/
+ 
+ cutdown-wkml: cutdown
+-	rm -rf sax/ dom/ wcml/
++	rm -rf sax/ dom/ dompp/ wcml/
+ 
+ cutdown-sax: cutdown
+-	rm -rf wxml/ wcml/ wkml/ dom/
++	rm -rf wxml/ wcml/ wkml/ dom/ dompp/
+ 
+ cutdown-dom: cutdown
+ 	rm -rf wkml/ wcml/
+@@ -165,7 +178,7 @@ cutdown-dom: cutdown
+ 
+ 
+ #clean: wxml_lib_clean wcml_lib_clean common_lib_clean fsys_lib_clean sax_lib_clean dom_lib_clean utils_lib_clean
+-clean: wkml_lib_clean wxml_lib_clean wcml_lib_clean common_lib_clean fsys_lib_clean sax_lib_clean dom_lib_clean utils_lib_clean
++clean: wkml_lib_clean wxml_lib_clean wcml_lib_clean common_lib_clean fsys_lib_clean sax_lib_clean dom_lib_clean dompp_lib_clean utils_lib_clean
+ 	if test -d examples; then (cd examples; $(MAKE) VPATH=$(VPATH)/examples clean) fi
+ 	rm -rf objs .FoX check.out *_check *_check.out
+ #

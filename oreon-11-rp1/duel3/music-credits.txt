@@ -1,0 +1,106 @@
+Music Created by and used with permission of Antonio Salgado (aka NoOne)
+Email: tognin@hotmail.com
+http://www.s3m.com/dma/displayuser.php?user_id=1061
+
+The permission request mail and permission notice are below for reference:
+
+---
+
+Message-ID: <45C1AEB2.7030804@hhs.nl>
+Date: Thu, 01 Feb 2007 10:11:14 +0100
+From: Hans de Goede <j.w.r.degoede@hhs.nl>
+User-Agent: Thunderbird 1.5.0.9 (X11/20061223)
+MIME-Version: 1.0
+To:  tognin@hotmail.com,  tognin@ole.com
+Subject: BlackIce songs on www.s3m.com
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi,
+
+First let me introduce myself I'm a Linux enthousiast and developer.
+Lately I'm mainly active in porting games to Linux and packaging them
+for the Fedora Linux Distribution.
+
+The last game which I've just finished porting to Linux is a game called 
+duel3, see:
+http://ts-games.com/duel3.php
+
+This game uses your Black Ice 1 - 4 songs (as is stated in the readme) from:
+http://www.s3m.com/dma/displayuser.php?user_id=1061
+However the docs in the game, nor your website contain any further 
+information on under which conditions these songs may be distributed.
+
+Since we (the Fedora community) take intellectual property very serious 
+I would like to ask you if its ok to distribute your songs and if there 
+are any special conditions to distributing other then giving you credit 
+for the songs and linking to your homepage from the docs.
+
+Thanks & Regards,
+
+Hans
+
+---
+
+Return-Path: <tognin@hotmail.com>
+Received: from koko.hhs.nl ([145.52.2.16] verified)
+  by hhs.nl (CommuniGate Pro SMTP 4.3.6)
+  with ESMTP id 59604439 for j.w.r.degoede@hhs.nl; Thu, 01 Feb 2007 12:48:56 +0100
+Received: from exim by koko.hhs.nl with spam-scanned (Exim 4.62)
+	(envelope-from <tognin@hotmail.com>)
+	id 1HCaQv-0005Nx-3o
+	for j.w.r.degoede@hhs.nl; Thu, 01 Feb 2007 12:48:56 +0100
+X-Spam-Checker-Version: SpamAssassin 3.1.0 (2005-09-13) on koko.hhs.nl
+X-Spam-Level: xx
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DNS_FROM_RFC_ABUSE,
+	DNS_FROM_RFC_POST,MSGID_FROM_MTA_HEADER,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY autolearn=no version=3.1.0
+Received: from exim (helo=koko)
+	by koko.hhs.nl with local-smtp (Exim 4.62)
+	(envelope-from <tognin@hotmail.com>)
+	id 1HCaQu-0005Nt-Vp
+	for j.w.r.degoede@hhs.nl; Thu, 01 Feb 2007 12:48:53 +0100
+Received: from [65.54.246.156] (port=2230 helo=bay0-omc2-s20.bay0.hotmail.com)
+	by koko.hhs.nl with esmtp (Exim 4.62)
+	(envelope-from <tognin@hotmail.com>)
+	id 1HCaQu-0005No-H9
+	for j.w.r.degoede@hhs.nl; Thu, 01 Feb 2007 12:48:52 +0100
+Received: from hotmail.com ([65.54.162.24]) by bay0-omc2-s20.bay0.hotmail.com with Microsoft SMTPSVC(6.0.3790.2668);
+	 Thu, 1 Feb 2007 03:48:51 -0800
+Received: from mail pickup service by hotmail.com with Microsoft SMTPSVC;
+	 Thu, 1 Feb 2007 03:48:51 -0800
+Message-ID: <BAY108-F14789FF70667CBA8AF0323DAA40@phx.gbl>
+Received: from 65.54.162.200 by by108fd.bay108.hotmail.msn.com with HTTP;
+	Thu, 01 Feb 2007 11:48:50 GMT
+X-Originating-IP: [195.53.125.135]
+X-Originating-Email: [tognin@hotmail.com]
+X-Sender: tognin@hotmail.com
+In-Reply-To: <45C1AEB2.7030804@hhs.nl>
+From: "Antonio Salgado" <tognin@hotmail.com>
+To: j.w.r.degoede@hhs.nl
+Bcc: 
+Subject: RE: BlackIce songs on www.s3m.com
+Date: Thu, 01 Feb 2007 11:48:50 +0000
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+X-OriginalArrivalTime: 01 Feb 2007 11:48:51.0016 (UTC) FILETIME=[F0F44480:01C745F6]
+X-Anti-Virus: Kaspersky Anti-Virus for MailServers 5.5.2/RELEASE, bases: 01022007 #249122, status: clean
+
+Hi!
+
+the first thing I have to say is that I'm spanish, so I hope that my english 
+will be fine.
+
+thanks for your e-mail. These songs can be used freely. The only thing I 
+want is to be credited on the game as "Antonio Salgado" that  is my real 
+name.
+
+When I'll arrive at home I'll try the game, It looks good.
+
+thanks again.
+
+see you!!
+
+_________________________________________________________________
+¿Estás pensando en cambiar de coche? Todas los modelos de serie y extras en 
+MSN Motor. http://motor.msn.es/researchcentre/

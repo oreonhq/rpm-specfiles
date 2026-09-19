@@ -1,0 +1,350 @@
+diff -rupN ebumeter-0.4.0.org/COPYING ebumeter-0.4.0/COPYING
+--- ebumeter-0.4.0.org/COPYING	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/COPYING	2018-03-12 01:20:30.144927202 -0400
+@@ -2,7 +2,7 @@
+ 		       Version 2, June 1991
+ 
+  Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+-     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  Everyone is permitted to copy and distribute verbatim copies
+  of this license document, but changing it is not allowed.
+ 
+diff -rupN ebumeter-0.4.0.org/source/audiofile.cc ebumeter-0.4.0/source/audiofile.cc
+--- ebumeter-0.4.0.org/source/audiofile.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/audiofile.cc	2018-03-12 01:20:30.145927198 -0400
+@@ -14,7 +14,8 @@
+ //
+ //    You should have received a copy of the GNU General Public License
+ //    along with this program; if not, write to the Free Software
+-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//    Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // -------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/audiofile.h ebumeter-0.4.0/source/audiofile.h
+--- ebumeter-0.4.0.org/source/audiofile.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/audiofile.h	2018-03-12 01:20:30.145927198 -0400
+@@ -14,7 +14,8 @@
+ //
+ //    You should have received a copy of the GNU General Public License
+ //    along with this program; if not, write to the Free Software
+-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//    Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // -------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/button.cc ebumeter-0.4.0/source/button.cc
+--- ebumeter-0.4.0.org/source/button.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/button.cc	2018-03-12 01:20:30.145927198 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ----------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/button.h ebumeter-0.4.0/source/button.h
+--- ebumeter-0.4.0.org/source/button.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/button.h	2018-03-12 01:20:30.146927194 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ----------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/dither.cc ebumeter-0.4.0/source/dither.cc
+--- ebumeter-0.4.0.org/source/dither.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/dither.cc	2018-03-12 01:20:30.146927194 -0400
+@@ -14,7 +14,8 @@
+ //
+ //    You should have received a copy of the GNU General Public License
+ //    along with this program; if not, write to the Free Software
+-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//    Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // -------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/dither.h ebumeter-0.4.0/source/dither.h
+--- ebumeter-0.4.0.org/source/dither.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/dither.h	2018-03-12 01:20:30.146927194 -0400
+@@ -14,7 +14,8 @@
+ //
+ //    You should have received a copy of the GNU General Public License
+ //    along with this program; if not, write to the Free Software
+-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//    Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // -------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/ebumeter.cc ebumeter-0.4.0/source/ebumeter.cc
+--- ebumeter-0.4.0.org/source/ebumeter.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/ebumeter.cc	2018-03-12 01:20:30.147927190 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/ebur128.cc ebumeter-0.4.0/source/ebur128.cc
+--- ebumeter-0.4.0.org/source/ebur128.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/ebur128.cc	2018-03-12 01:20:30.147927190 -0400
+@@ -14,7 +14,8 @@
+ //
+ //    You should have received a copy of the GNU General Public License
+ //    along with this program; if not, write to the Free Software
+-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//    Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // -------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/ebu_r128_disp.cc ebumeter-0.4.0/source/ebu_r128_disp.cc
+--- ebumeter-0.4.0.org/source/ebu_r128_disp.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/ebu_r128_disp.cc	2018-03-12 01:20:30.147927190 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/ebu_r128_disp.h ebumeter-0.4.0/source/ebu_r128_disp.h
+--- ebumeter-0.4.0.org/source/ebu_r128_disp.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/ebu_r128_disp.h	2018-03-12 01:20:30.148927186 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/ebu_r128_proc.cc ebumeter-0.4.0/source/ebu_r128_proc.cc
+--- ebumeter-0.4.0.org/source/ebu_r128_proc.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/ebu_r128_proc.cc	2018-03-12 01:20:30.148927186 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/ebu_r128_proc.h ebumeter-0.4.0/source/ebu_r128_proc.h
+--- ebumeter-0.4.0.org/source/ebu_r128_proc.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/ebu_r128_proc.h	2018-03-12 01:20:30.149927182 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/global.h ebumeter-0.4.0/source/global.h
+--- ebumeter-0.4.0.org/source/global.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/global.h	2018-03-12 01:20:30.149927182 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ----------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/guiclass.cc ebumeter-0.4.0/source/guiclass.cc
+--- ebumeter-0.4.0.org/source/guiclass.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/guiclass.cc	2018-03-12 01:20:30.149927182 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ----------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/guiclass.h ebumeter-0.4.0/source/guiclass.h
+--- ebumeter-0.4.0.org/source/guiclass.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/guiclass.h	2018-03-12 01:20:30.149927182 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ----------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/jclient.cc ebumeter-0.4.0/source/jclient.cc
+--- ebumeter-0.4.0.org/source/jclient.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/jclient.cc	2018-03-12 01:20:30.150927178 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/jclient.h ebumeter-0.4.0/source/jclient.h
+--- ebumeter-0.4.0.org/source/jclient.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/jclient.h	2018-03-12 01:20:30.150927178 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/mainwin.cc ebumeter-0.4.0/source/mainwin.cc
+--- ebumeter-0.4.0.org/source/mainwin.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/mainwin.cc	2018-03-12 01:20:30.150927178 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/mainwin.h ebumeter-0.4.0/source/mainwin.h
+--- ebumeter-0.4.0.org/source/mainwin.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/mainwin.h	2018-03-12 01:20:30.151927174 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/Makefile ebumeter-0.4.0/source/Makefile
+--- ebumeter-0.4.0.org/source/Makefile	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/Makefile	2018-03-12 01:20:30.151927174 -0400
+@@ -14,7 +14,8 @@
+ #
+ #  You should have received a copy of the GNU General Public License
+ #  along with this program; if not, write to the Free Software
+-#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++#  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++#  MA 02110-1301, USA.
+ #
+ #  --------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/peak_proc.cc ebumeter-0.4.0/source/peak_proc.cc
+--- ebumeter-0.4.0.org/source/peak_proc.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/peak_proc.cc	2018-03-12 01:21:11.856760900 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/peak_proc.h ebumeter-0.4.0/source/peak_proc.h
+--- ebumeter-0.4.0.org/source/peak_proc.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/peak_proc.h	2018-03-12 01:21:22.472718575 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/png2img.cc ebumeter-0.4.0/source/png2img.cc
+--- ebumeter-0.4.0.org/source/png2img.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/png2img.cc	2018-03-12 01:20:30.151927174 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ----------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/png2img.h ebumeter-0.4.0/source/png2img.h
+--- ebumeter-0.4.0.org/source/png2img.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/png2img.h	2018-03-12 01:20:30.152927170 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ----------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/styles.cc ebumeter-0.4.0/source/styles.cc
+--- ebumeter-0.4.0.org/source/styles.cc	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/styles.cc	2018-03-12 01:20:30.152927170 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 
+diff -rupN ebumeter-0.4.0.org/source/styles.h ebumeter-0.4.0/source/styles.h
+--- ebumeter-0.4.0.org/source/styles.h	2016-06-01 14:29:02.000000000 -0400
++++ ebumeter-0.4.0/source/styles.h	2018-03-12 01:20:30.152927170 -0400
+@@ -14,7 +14,8 @@
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston,
++//    MA 02110-1301, USA.
+ //
+ // ------------------------------------------------------------------------
+ 

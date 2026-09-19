@@ -1,0 +1,9 @@
+--- textfsm-1.1.3/setup.py	2022-01-27 21:34:22.000000000 -0800
++++ textfsm-1.1.3/setup.py.new	2024-06-12 11:16:32.968472135 -0700
+@@ -53,5 +53,5 @@
+       },      
+       include_package_data=True,
+       package_data={'textfsm': ['../testdata/*']},
+-      install_requires=['six', 'future'],
++      install_requires=['six'],
+      )

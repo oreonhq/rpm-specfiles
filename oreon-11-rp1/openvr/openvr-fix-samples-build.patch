@@ -1,0 +1,24 @@
+diff -ruN openvr-2.12.14.old/samples/drivers/drivers/simpletrackers/src/tracker_device_driver.h openvr-2.12.14/samples/drivers/drivers/simpletrackers/src/tracker_device_driver.h
+--- openvr-2.12.14.old/samples/drivers/drivers/simpletrackers/src/tracker_device_driver.h	2026-03-04 16:17:13.828134187 +0100
++++ openvr-2.12.14/samples/drivers/drivers/simpletrackers/src/tracker_device_driver.h	2026-03-04 16:47:08.961243783 +0100
+@@ -10,8 +10,7 @@
+ 
+ enum MyComponent
+ {
+-	MyComponent_a_touch,
+-	MyComponent_a_click,
++	MyComponent_grip_click,
+ 
+ 	MyComponent_trigger_value,
+ 	MyComponent_trigger_click,
+diff -ruN openvr-2.12.14.old/samples/helloworldoverlay/openvroverlaycontroller.h openvr-2.12.14/samples/helloworldoverlay/openvroverlaycontroller.h
+--- openvr-2.12.14.old/samples/helloworldoverlay/openvroverlaycontroller.h	2026-03-04 16:17:13.833508825 +0100
++++ openvr-2.12.14/samples/helloworldoverlay/openvroverlaycontroller.h	2026-03-04 16:42:49.568877172 +0100
+@@ -67,7 +67,6 @@
+ private:
+ 	vr::HmdError m_eCompositorError;
+ 	vr::HmdError m_eOverlayError;
+-	vr::Compositor_OverlaySettings m_overlaySettings;
+ 	vr::VROverlayHandle_t m_ulOverlayHandle;
+     vr::VROverlayHandle_t m_ulOverlayThumbnailHandle;
+ 

@@ -1,5 +1,5 @@
-%global source0_hash 87a5e588fcab3d435c94b995cf35b92a800971dd19ca57e15e73ef53e016b112
-%global source1_hash 1a7cc88e4376eab1098f6bfba219ecc30b94bcab25b629f39298b49aaefd1afa
+%global source0_hash 85db5b58c56d16d2cf71fc79078650d1b5c7fbf5305f38fb17fee97016017236faaca29a2495ed52d270a5f2a1fefe6bfee623dea75e9c29bd3fbf96b088f0fb
+%global source1_hash 65e14cfa366660dc409ac9a2853da534f262a08bf0d279b507a48feba6df88968bbe113117d1e1adc2e49efff3996f1204f19ceb882a842eef5520418d3ab2b4
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Typeset Japanese with LuaTeX
 License:        BSD
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatexja.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatexja.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/luatexja.tar.xz#/luatexja.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/luatexja.doc.tar.xz#/luatexja.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-luatexja-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-luatexja-doc <= 11:%{version}
@@ -108,8 +108,8 @@ Provides:       tex(ltj-kinsoku.tex)
 Typeset Japanese with LuaTeX.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

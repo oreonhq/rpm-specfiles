@@ -1,0 +1,64 @@
+From fc31cf060af25c641dcfe441fa677a87e907d18e Mon Sep 17 00:00:00 2001
+From: William Wilson <william.wilson@canonical.com>
+Date: Tue, 31 Aug 2021 14:19:17 -0500
+Subject: [PATCH 1/2] Make test case compatible with Go 1.17
+
+---
+ app_test.go | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/app_test.go b/app_test.go
+index 6c95faa61..94df82dcc 100644
+--- a/app_test.go
++++ b/app_test.go
+@@ -471,18 +471,18 @@ func TestApp_RunAsSubCommandIncorrectUsage(t *testing.T) {
+ 	a := App{
+ 		Name: "cmd",
+ 		Flags: []Flag{
+-			&StringFlag{Name: "--foo"},
++			&StringFlag{Name: "foo"},
+ 		},
+ 		Writer: bytes.NewBufferString(""),
+ 	}
+ 
+ 	set := flag.NewFlagSet("", flag.ContinueOnError)
+-	_ = set.Parse([]string{"", "---foo"})
++	_ = set.Parse([]string{"", "foobar"})
+ 	c := &Context{flagSet: set}
+ 
+ 	err := a.RunAsSubcommand(c)
+ 
+-	expect(t, err, errors.New("bad flag syntax: ---foo"))
++	expect(t, err.Error(), "No help topic for 'foobar'")
+ }
+ 
+ func TestApp_CommandWithFlagBeforeTerminator(t *testing.T) {
+
+From 726348c6fde22eb9a04a8d6296772ed421350f6b Mon Sep 17 00:00:00 2001
+From: William Wilson <william.wilson@canonical.com>
+Date: Wed, 1 Sep 2021 08:55:43 -0500
+Subject: [PATCH 2/2] tweak test case to bring coverage back up
+
+---
+ app_test.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/app_test.go b/app_test.go
+index 94df82dcc..0754886d0 100644
+--- a/app_test.go
++++ b/app_test.go
+@@ -477,12 +477,12 @@ func TestApp_RunAsSubCommandIncorrectUsage(t *testing.T) {
+ 	}
+ 
+ 	set := flag.NewFlagSet("", flag.ContinueOnError)
+-	_ = set.Parse([]string{"", "foobar"})
++	_ = set.Parse([]string{"", "-bar"})
+ 	c := &Context{flagSet: set}
+ 
+ 	err := a.RunAsSubcommand(c)
+ 
+-	expect(t, err.Error(), "No help topic for 'foobar'")
++	expect(t, err.Error(), "flag provided but not defined: -bar")
+ }
+ 
+ func TestApp_CommandWithFlagBeforeTerminator(t *testing.T) {

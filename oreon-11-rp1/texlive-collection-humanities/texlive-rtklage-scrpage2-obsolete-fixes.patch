@@ -1,0 +1,12 @@
+diff -up tex/latex/rtklage/rtklage.cls.fixme tex/latex/rtklage/rtklage.cls
+--- tex/latex/rtklage/rtklage.cls.fixme	2020-05-11 11:22:57.281035108 -0400
++++ tex/latex/rtklage/rtklage.cls	2020-05-11 11:23:18.024686393 -0400
+@@ -7,7 +7,7 @@
+ \RequirePackage{scrdate}
+ \RequirePackage{calc}
+ \RequirePackage[np]{numprint}
+-\RequirePackage[plainheadsepline]{scrpage2}
++\RequirePackage[plainheadsepline]{scrlayer-scrpage}
+ \RequirePackage{alphanum}
+ \RequirePackage{eso-pic}
+ \RequirePackage{color}

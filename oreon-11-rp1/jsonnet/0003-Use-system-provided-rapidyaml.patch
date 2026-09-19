@@ -1,0 +1,31 @@
+From: Pat Riehecky <riehecky@fnal.gov>
+Date: Fri, 14 Mar 2025 13:11:16 -0500
+Subject: Use system provided rapidyaml
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 77331f6..03d7d95 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -122,7 +122,7 @@ endif()
+ add_subdirectory(include)
+ add_subdirectory(stdlib)
+ add_subdirectory(third_party/md5)
+-add_subdirectory(third_party/rapidyaml)
++#add_subdirectory(third_party/rapidyaml)
+ add_subdirectory(core)
+ add_subdirectory(cpp)
+ add_subdirectory(cmd)
+diff --git a/core/vm.cpp b/core/vm.cpp
+index 27629fd..9313534 100644
+--- a/core/vm.cpp
++++ b/core/vm.cpp
+@@ -30,7 +30,8 @@ limitations under the License.
+ #include <nlohmann/json.hpp>
+ #include "md5.h"
+ #include "parser.h"
+-#include "ryml_all.hpp"
++#include "ryml.hpp"
++#include "ryml_std.hpp"
+ #include "state.h"
+ #include "static_analysis.h"
+ #include "string_utils.h"

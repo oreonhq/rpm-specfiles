@@ -1,0 +1,90 @@
+%global source0_hash 99f7118355a691efac23f443fcf3cf44cad37074eca1b7bac1fddc24660802d1
+
+Name:           ccluster
+Version:        1.1.8
+Release:        %autorelease
+Summary:        Cluster the roots of a univariate polynomial
+
+%global majver  %{gsub %version ^(%d*)%..*$ %1}
+
+License:        LGPL-2.1-or-later
+URL:            https://github.com/rimbach/Ccluster
+VCS:            git:%{url}.git
+Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+# Public definition of type "number" breaks the Singular build
+Patch:          %{name}-number.patch
+
+# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    %{ix86}
+
+BuildRequires:  flint-devel
+BuildRequires:  gcc
+BuildRequires:  make
+
+%description
+Ccluster is a C library implementing an algorithm for local clustering of the
+complex roots of a univariate polynomial whose coefficients are complex
+numbers.
+
+The inputs of the clustering algorithm are a polynomial P, a square complex
+box B and a rational number eps.
+
+It outputs a set of eps-natural clusters of roots together with the sum of
+multiplicities of the roots in each cluster.  An eps-cluster is a complex disc
+D of radius at most eps containing at least one root, and it is natural when
+3D contains the same roots as D.  Each root of P in B is in exactly one
+cluster of the output, and clusters may contain roots of P in 2B.
+
+The implemented algorithm is described here:
+https://dl.acm.org/citation.cfm?id=2930939.
+
+Please cite https://link.springer.com/chapter/10.1007/978-3-319-96418-8_28 if
+you use it in your research.
+
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       flint-devel%{?_isa}
+
+%description    devel
+This package contains header files and library links for developing
+applications that use %{name}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n Ccluster-%{version} -p1
+
+%conf
+# Use Fedora link flags and add an soname
+sed -i "s|-shared|& %{build_ldflags} -Wl,-h,libccluster.so.%{majver}|" Makefile.in
+# This is NOT an autoconf-generated configure script; do not use %%configure
+./configure \
+    --disable-static \
+    --prefix=%{_prefix} \
+    --with-arb=%{_prefix} \
+    --with-flint=%{_prefix} \
+    --with-gmp=%{_prefix} \
+    --with-mpfr=%{_prefix}
+
+%build
+%make_build library bins AT= QUIET_CC= QUIET_AR=
+
+%install
+%make_install LIBDIR=%{_lib}
+
+%check
+PATH=$PATH:$PWD/test
+%make_build testMignotte testMandelbrot
+
+%files
+%doc README.md README
+%license LICENSE
+%{_libdir}/libccluster.so.1{,.*}
+
+%files devel
+%{_includedir}/ccluster/
+%{_libdir}/libccluster.so
+
+%changelog
+%autochangelog

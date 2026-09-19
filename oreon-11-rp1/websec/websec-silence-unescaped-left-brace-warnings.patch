@@ -1,0 +1,18 @@
+diff -Naur websec-1.9.0.org/websec websec-1.9.0/websec
+--- websec-1.9.0.org/websec	2006-01-20 19:05:25.000000000 +0100
++++ websec-1.9.0/websec	2015-11-22 14:46:52.891549814 +0100
+@@ -229,12 +229,12 @@
+     }
+ 
+     # Allow values from the environment
+-    while ($value =~ m/\${([^}]+)}/) {
++    while ($value =~ m/\$\{([^}]+)}/) {
+         if (not exists $ENV{$1}) {
+             print STDERR "Used environment variable '$1' but it is not defined, aborting.\n";
+             exit 1;
+         }
+-        $value =~ s/\${([^}]+)}/$ENV{$1}/;
++        $value =~ s/\$\{([^}]+)}/$ENV{$1}/;
+     }
+ 
+     $siteinfo{$keyword} = $value;

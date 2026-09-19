@@ -1,0 +1,29 @@
+--- chrono-0.4.45/Cargo.toml	2006-07-23 18:21:28.000000000 -0700
++++ chrono-0.4.45/Cargo.toml	2026-08-11 08:51:45.754878454 -0700
+@@ -58,7 +58,6 @@
+ __internal_bench = []
+ alloc = []
+ clock = [
+-    "winapi",
+     "iana-time-zone",
+     "now",
+ ]
+@@ -67,7 +66,6 @@
+     "clock",
+     "std",
+     "oldtime",
+-    "wasmbind",
+ ]
+ defmt = [
+     "dep:defmt",
+@@ -95,10 +93,6 @@
+ rkyv-validation = ["rkyv?/validation"]
+ std = ["alloc"]
+ unstable-locales = ["pure-rust-locales"]
+-wasmbind = [
+-    "wasm-bindgen",
+-    "js-sys",
+-]
+ winapi = ["windows-link"]
+ 
+ [lib]

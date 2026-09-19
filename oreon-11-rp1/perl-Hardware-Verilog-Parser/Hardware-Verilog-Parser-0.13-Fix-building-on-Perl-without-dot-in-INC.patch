@@ -1,0 +1,24 @@
+diff -up Hardware-Verilog-Parser-0.13/parser.pl.orig Hardware-Verilog-Parser-0.13/parser.pl
+--- Hardware-Verilog-Parser-0.13/parser.pl.orig	2017-05-17 11:30:48.091450745 +0200
++++ Hardware-Verilog-Parser-0.13/parser.pl	2017-05-17 11:52:51.485960186 +0200
+@@ -5,6 +5,8 @@
+ # All Rights Reserved.
+ ####################################################
+ 
++BEGIN { push @INC, '.'; }
++
+ use Hardware::Verilog::Parser;
+ 
+ $parse = new Hardware::Verilog::Parser;
+diff -up Hardware-Verilog-Parser-0.13/test.pl.orig Hardware-Verilog-Parser-0.13/test.pl
+--- Hardware-Verilog-Parser-0.13/test.pl.orig	2017-05-17 11:55:54.210071842 +0200
++++ Hardware-Verilog-Parser-0.13/test.pl	2017-05-17 11:56:25.948917538 +0200
+@@ -8,6 +8,8 @@
+ 
+ BEGIN { $| = 1; print "1..1\n"; }
+ END {print "not ok 1\n" unless $loaded;}
++
++BEGIN { push @INC, '.'; }
+ use Hardware::Verilog::Parser;
+ $loaded = 1;
+ print "ok 1\n";

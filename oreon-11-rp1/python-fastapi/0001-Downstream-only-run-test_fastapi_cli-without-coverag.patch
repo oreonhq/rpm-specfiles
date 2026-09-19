@@ -1,0 +1,27 @@
+From 8d6612c5a4eec6e91dcd21871bfa885b1b4de13c Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 2 Aug 2024 08:02:00 -0400
+Subject: [PATCH] Downstream-only: run test_fastapi_cli without coverage
+
+https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
+---
+ tests/test_fastapi_cli.py | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/tests/test_fastapi_cli.py b/tests/test_fastapi_cli.py
+index 20c92815..068c34c8 100644
+--- a/tests/test_fastapi_cli.py
++++ b/tests/test_fastapi_cli.py
+@@ -11,9 +11,6 @@ def test_fastapi_cli():
+         [
+             sys.executable,
+             "-m",
+-            "coverage",
+-            "run",
+-            "-m",
+             "fastapi",
+             "dev",
+             "non_existent_file.py",
+-- 
+2.45.2
+

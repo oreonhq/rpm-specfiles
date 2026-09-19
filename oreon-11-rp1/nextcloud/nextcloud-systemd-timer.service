@@ -1,0 +1,11 @@
+[Unit]
+Description=Cron for nextcloud background jobs
+
+[Service]
+# https://docs.nextcloud.com/server/25/admin_manual/configuration_server/background_jobs_configuration.html#systemd
+Type=oneshot
+User=apache
+KillMode=process
+ExecStart=/usr/bin/php -f /usr/share/nextcloud/cron.php
+
+

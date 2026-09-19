@@ -1,0 +1,10 @@
+--- plugins/imtex/imtex.cc.orig	2008-02-24 13:58:53.000000000 +0100
++++ plugins/imtex/imtex.cc	2008-02-24 13:59:04.000000000 +0100
+@@ -11,6 +11,7 @@
+ #include <math.h>
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <ctype.h>
+ #include <string>
+ 

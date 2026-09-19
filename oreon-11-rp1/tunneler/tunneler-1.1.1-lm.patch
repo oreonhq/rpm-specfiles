@@ -1,0 +1,10 @@
+diff -up tunneler-1.1.1/src/Makefile.am.linker tunneler-1.1.1/src/Makefile.am
+--- tunneler-1.1.1/src/Makefile.am.linker	2010-02-17 21:21:46.618496390 +0100
++++ tunneler-1.1.1/src/Makefile.am	2010-02-17 21:21:50.959492523 +0100
+@@ -1,5 +1,5 @@
+ bin_PROGRAMS = tunneler
+ tunneler_SOURCES = main.c tunneler.c tunneler.h timer.c timer.h ai.c ai.h \
+   font8x8.h game.h graphics.c graphics.h keys.c keys.h terrain.c terrain.h types.h
+-tunneler_LDADD = -lSDL -lpthread
++tunneler_LDADD = -lSDL -lpthread -lm
+ tunneler_LDFLAGS = -D_REENTRANT

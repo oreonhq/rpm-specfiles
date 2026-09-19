@@ -1,0 +1,14 @@
+[Unit]
+Description=A tool for IPv4/IPv6 and ethernet address pairing monitoring
+Documentation=man:addrwatch(8) https://github.com/fln/addrwatch
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/sysconfig/addrwatch
+Type=simple
+ExecStart=/usr/bin/addrwatch -u $ADDRWATCH_USERNAME $ADDRWATCH_ARGS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+

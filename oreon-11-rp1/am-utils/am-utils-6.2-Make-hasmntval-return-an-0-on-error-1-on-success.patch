@@ -1,0 +1,530 @@
+commit 1c9cd2d03ab1561b7eee831af381eff781fcf41e
+Author: zoulasc <christos@zoulas.com>
+Date:   Fri Apr 8 15:29:33 2016 -0400
+
+    * Make hasmntval() return an 0 on error, 1 on success and
+      place the value in an argument. Update all users and
+      check properly for errors. Get rid of hasmntvalerr().
+    * Add hasmntvaldelim() which takes a string delimiter. This
+      is now used to chop vers=4.1 to 4, so that we can parse the
+      version correctly (we don't care about the .1 part yet)
+
+---
+ amd/autil.c        |   10 ++----
+ amd/ops_cdfs.c     |    7 ++++
+ amd/ops_nfs.c      |    3 --
+ amd/ops_pcfs.c     |   10 ++++--
+ amd/ops_ufs.c      |    6 +++-
+ amd/srvr_nfs.c     |   24 ++++++++++------
+ hlfsd/hlfsd.c      |    3 --
+ include/am_utils.h |    4 +-
+ libamu/mount_fs.c  |   79 ++++++++++++++++++++++++++++++++++++++---------------
+ libamu/mtab.c      |   41 ++++++++-------------------
+ 10 files changed, 109 insertions(+), 78 deletions(-)
+
+--- am-utils-6.2.orig/amd/autil.c
++++ am-utils-6.2/amd/autil.c
+@@ -279,7 +279,7 @@ am_mounted(am_node *mp)
+     if (amu_hasmntopt(&mnt, "nounmount") || amu_hasmntopt(&mnt, "noumount"))
+       notimeout = 1;
+     /* utimeout=N option: user wants to unmount this option AND set timeout */
+-    if ((mp->am_timeo = hasmntval(&mnt, "utimeout")) == 0)
++    if (!hasmntval(&mnt, "utimeout", &mp->am_timeo))
+       mp->am_timeo = gopt.am_timeo; /* otherwise use default timeout */
+     else
+       notimeout = 0;
+@@ -480,8 +480,7 @@ amfs_mount(am_node *mp, mntfs *mf, char
+     mnt.mnt_type = HIDE_MOUNT_TYPE;
+   }
+ 
+-  retry = hasmntval(&mnt, MNTTAB_OPT_RETRY);
+-  if (retry <= 0)
++  if (!hasmntval(&mnt, MNTTAB_OPT_RETRY, &retry) || retry <= 0)
+     retry = 2;			/* XXX: default to 2 retries */
+ 
+   /*
+@@ -526,7 +525,7 @@ again:
+     nfs_args_t nfs_args;
+     am_nfs_handle_t *fhp, anh;
+ #ifndef HAVE_TRANSPORT_TYPE_TLI
+-    u_short port;
++    int port;
+     struct sockaddr_in sin;
+ #endif /* not HAVE_TRANSPORT_TYPE_TLI */
+ 
+@@ -547,8 +546,7 @@ again:
+     /* as per POSIX, sin_len need not be set (used internally by kernel) */
+     sin.sin_family = AF_INET;
+     sin.sin_addr = myipaddr;
+-    port = hasmntval(&mnt, MNTTAB_OPT_PORT);
+-    if (port) {
++    if (hasmntval(&mnt, MNTTAB_OPT_PORT, &port) && port > 0 && port < 65536) {
+       sin.sin_port = htons(port);
+     } else {
+       plog(XLOG_ERROR, "no port number specified for %s", dir);
+--- am-utils-6.2.orig/amd/ops_cdfs.c
++++ am-utils-6.2/amd/ops_cdfs.c
+@@ -190,7 +190,12 @@ mount_cdfs(char *mntdir, char *fs_name,
+ #endif /* HAVE_CDFS_ARGS_T_ISO_FLAGS */
+ 
+ #ifdef HAVE_CDFS_ARGS_T_ISO_PGTHRESH
+-  cdfs_args.iso_pgthresh = hasmntval(&mnt, MNTTAB_OPT_PGTHRESH);
++  {
++    int thresh;
++    if (!hasmntval(&mnt, MNTTAB_OPT_PGTHRESH, &thresh) || thresh < 0)
++      thresh = 0;
++    cdfs_args.iso_pgthresh = thresh;
++  }
+ #endif /* HAVE_CDFS_ARGS_T_ISO_PGTHRESH */
+ 
+ #ifdef HAVE_CDFS_ARGS_T_NORRIP
+--- am-utils-6.2.orig/amd/ops_nfs.c
++++ am-utils-6.2/amd/ops_nfs.c
+@@ -888,8 +888,7 @@ mount_nfs_fh(am_nfs_handle_t *fhp, char
+   plog(XLOG_INFO, "mount_nfs_fh: NFS version %d", (int) nfs_version);
+   plog(XLOG_INFO, "mount_nfs_fh: using NFS transport %s", nfs_proto);
+ 
+-  retry = hasmntval(&mnt, MNTTAB_OPT_RETRY);
+-  if (retry <= 0)
++  if (!hasmntval(&mnt, MNTTAB_OPT_RETRY, &retry) || retry <= 0)
+     retry = 1;			/* XXX */
+ 
+   genflags = compute_mount_flags(&mnt);
+--- am-utils-6.2.orig/amd/ops_pcfs.c
++++ am-utils-6.2/amd/ops_pcfs.c
+@@ -139,17 +139,19 @@ mount_pcfs(char *mntdir, char *fs_name,
+ #endif /* HAVE_PCFS_ARGS_T_FSPEC */
+ 
+ #ifdef HAVE_PCFS_ARGS_T_MASK
+-  pcfs_args.mask = 0777;	/* this may be the msdos file modes */
+-  if ((mask = hasmntval(&mnt, MNTTAB_OPT_MASK)) > 0)
++  if (hasmntval(&mnt, MNTTAB_OPT_MASK, &mask) && mask > 0)
+     pcfs_args.mask = mask;
++  else
++    pcfs_args.mask = 0777;	/* this may be the msdos file modes */
+   if (amuDebug(D_TRACE))
+     plog(XLOG_DEBUG, "mount_pcfs: mask=%o (octal)", (u_int) pcfs_args.mask);
+ #endif /* HAVE_PCFS_ARGS_T_MASK */
+ 
+ #ifdef HAVE_PCFS_ARGS_T_DIRMASK
+-  pcfs_args.dirmask = 0777;    /* this may be the msdos dir modes */
+-  if ((mask = hasmntval(&mnt, MNTTAB_OPT_DIRMASK)) > 0)
++  if (hasmntval(&mnt, MNTTAB_OPT_DIRMASK, &mask) && mask > 0)
+     pcfs_args.dirmask = mask;
++  else
++    pcfs_args.dirmask = 0777;    /* this may be the msdos dir modes */
+   if (amuDebug(D_TRACE))
+     plog(XLOG_DEBUG, "mount_pcfs: dirmask=%o (octal)", (u_int) pcfs_args.dirmask);
+ #endif /* HAVE_PCFS_ARGS_T_DIRMASK */
+--- am-utils-6.2.orig/amd/ops_ufs.c
++++ am-utils-6.2/amd/ops_ufs.c
+@@ -144,7 +144,11 @@ mount_ufs(char *mntdir, char *fs_name, c
+ #endif /* HAVE_UFS_ARGS_T_FSPEC */
+ 
+ #ifdef HAVE_UFS_ARGS_T_UFS_PGTHRESH
+-  ufs_args.ufs_pgthresh = hasmntval(&mnt, MNTTAB_OPT_PGTHRESH);
++  {
++    int thresh;
++    if (!hasmntval(&mnt, MNTTAB_OPT_PGTHRESH, &thresh) || thresh < 0)
++	thresh = 0;
++    ufs_args.ufs_pgthresh = thresh;
+ #endif /* HAVE_UFS_ARGS_T_UFS_PGTHRESH */
+ 
+   /*
+--- am-utils-6.2.orig/amd/srvr_nfs.c
++++ am-utils-6.2/amd/srvr_nfs.c
+@@ -704,10 +704,10 @@ find_nfs_srvr(mntfs *mf)
+   struct hostent *hp = NULL;
+   struct sockaddr_in *ip = NULL;
+   u_long nfs_version = 0;	/* default is no version specified */
++  int val;
+   u_long best_nfs_version = 0;
+   char *nfs_proto = NULL;	/* no IP protocol either */
+-  int nfs_port = 0;
+-  int nfs_port_opt = 0;
++  int nfs_port;
+   int fserver_is_down = 0;
+ 
+   if (mf->mf_fo == NULL) {
+@@ -721,7 +721,8 @@ find_nfs_srvr(mntfs *mf)
+    * are required or not.  < 0 = no pings.
+    */
+   mnt.mnt_opts = mf->mf_mopts;
+-  pingval = hasmntval(&mnt, "ping");
++  if (!hasmntval(&mnt, "ping", &pingval) || pingval < 0)
++    pingval = 0;
+ 
+   if (mf->mf_flags & MFF_NFS_SCALEDOWN) {
+     /*
+@@ -739,7 +740,10 @@ find_nfs_srvr(mntfs *mf)
+      * to decide the highest NFS version to try.
+      */
+ #ifdef MNTTAB_OPT_VERS
+-    nfs_version = hasmntval(&mnt, MNTTAB_OPT_VERS);
++    if (!hasmntvaldelim(&mnt, MNTTAB_OPT_VERS, ",.", &val) || val < 0)
++      nfs_version = 0;
++    else
++      nfs_version = val;
+ #endif /* MNTTAB_OPT_VERS */
+ 
+ #ifdef MNTTAB_OPT_PROTO
+@@ -934,11 +938,11 @@ find_nfs_srvr(mntfs *mf)
+    * If the port has been determined from the portmapper, use that.
+    * Default to NFS_PORT otherwise (cf. RFC 2054, 3).
+    */
+-  nfs_port_opt = hasmntval(&mnt, MNTTAB_OPT_PORT);
+-  if (nfs_port_opt > 0)
+-    nfs_port = htons(nfs_port_opt);
+-  if (!nfs_port)
++  if (!hasmntval(&mnt, MNTTAB_OPT_PORT, &nfs_port)
++    || nfs_port > 65535 || nfs_port <= 0)
+     nfs_port = htons(NFS_PORT);
++  else
++    nfs_port = htons(nfs_port);
+ 
+   dlog("%s: using port %d for nfs on %s", __func__,
+     (int) ntohs(nfs_port), host);
+@@ -1050,7 +1054,9 @@ no_dns:
+   fs->fs_flags |= FSF_PING_UNINIT; /* pinger hasn't been initialized */
+   np = ALLOC(struct nfs_private);
+   memset((voidp) np, 0, sizeof(*np));
+-  np->np_mountd = htons(hasmntval(&mnt, "mountport"));
++  if (!hasmntval(&mnt, "mountport", &val) || val < 0)
++    val = 0;
++  np->np_mountd = htons(val);
+   if (np->np_mountd == 0) {
+     np->np_mountd_inval = 'Y';
+     np->np_xid = XID_ALLOC();
+--- am-utils-6.2.orig/hlfsd/hlfsd.c
++++ am-utils-6.2/hlfsd/hlfsd.c
+@@ -530,8 +530,7 @@ main(int argc, char *argv[])
+ 
+   genflags = compute_mount_flags(&mnt);
+ 
+-  retry = hasmntval(&mnt, MNTTAB_OPT_RETRY);
+-  if (retry <= 0)
++  if (!hasmntval(&mnt, MNTTAB_OPT_RETRY, &retry) || retry <= 0)
+     retry = 1;			/* XXX */
+ 
+   memmove(&anh.v2, root_fhp, sizeof(*root_fhp));
+--- am-utils-6.2.orig/include/am_utils.h
++++ am-utils-6.2/include/am_utils.h
+@@ -290,8 +290,8 @@ extern int compute_mount_flags(mntent_t
+ extern void discard_nfs_args(void *, u_long);
+ extern u_long get_amd_program_number(void);
+ extern int getcreds(struct svc_req *, uid_t *, gid_t *, SVCXPRT *);
+-extern int hasmntval(mntent_t *, char *);
+-extern unsigned int hasmntvalerr(mntent_t *, char *, int *);
++extern int hasmntval(mntent_t *, char *, int *);
++extern int hasmntvaldelim(mntent_t *, char *, const char *, int *);
+ extern char *hasmntstr(mntent_t *, char *);
+ extern char *hasmnteq(mntent_t *, char *);
+ extern char *haseq(char *);
+--- am-utils-6.2.orig/libamu/mount_fs.c
++++ am-utils-6.2/libamu/mount_fs.c
+@@ -188,8 +188,10 @@ static void
+ addvers(char *zopts, size_t l, mntent_t *mnt, u_long have_vers,
+   u_long want_vers)
+ {
+-  if (have_vers == want_vers &&
+-      hasmntval(mnt, MNTTAB_OPT_VERS) != want_vers) {
++  int val;
++  if (have_vers == want_vers
++    && hasmntvaldelim(mnt, MNTTAB_OPT_VERS, ".,", &val)
++    && (u_long)val != want_vers) {
+     char optsbuf[48];
+     xsnprintf(optsbuf, sizeof(optsbuf),
+ 	      "%s=%d", MNTTAB_OPT_VERS, want_vers);
+@@ -391,7 +393,7 @@ compute_nfs_attrcache_flags(struct nfs_c
+    * on the values of the attribute caches.
+    */
+ #ifdef MNTTAB_OPT_ACTIMEO
+-  err_acval = hasmntvalerr(mntp, MNTTAB_OPT_ACTIMEO, &acval);	/* attr cache timeout (sec) */
++  err_acval = !hasmntval(mntp, MNTTAB_OPT_ACTIMEO, &acval);	/* attr cache timeout (sec) */
+ #endif /* MNTTAB_OPT_ACTIMEO */
+ 
+   /*** acregmin ***/
+@@ -402,7 +404,7 @@ compute_nfs_attrcache_flags(struct nfs_c
+   } else {
+ # ifdef MNTTAB_OPT_ACREGMIN
+     int tmp;
+-    err_acrdmm = hasmntvalerr(mntp, MNTTAB_OPT_ACREGMIN, &tmp);
++    err_acrdmm = !hasmntval(mntp, MNTTAB_OPT_ACREGMIN, &tmp);
+     nap->acregmin = tmp;
+ # else /* not MNTTAB_OPT_ACREGMIN */
+     nap->acregmin = 0;
+@@ -423,7 +425,7 @@ compute_nfs_attrcache_flags(struct nfs_c
+   } else {
+ # ifdef MNTTAB_OPT_ACREGMAX
+     int tmp;
+-    err_acrdmm = hasmntvalerr(mntp, MNTTAB_OPT_ACREGMAX, &tmp);
++    err_acrdmm = !hasmntval(mntp, MNTTAB_OPT_ACREGMAX, &tmp);
+     nap->acregmax = tmp;
+ # else /* not MNTTAB_OPT_ACREGMAX */
+     nap->acregmax = 0;
+@@ -444,7 +446,7 @@ compute_nfs_attrcache_flags(struct nfs_c
+   } else {
+ # ifdef MNTTAB_OPT_ACDIRMIN
+     int tmp;
+-    err_acrdmm = hasmntvalerr(mntp, MNTTAB_OPT_ACDIRMIN, &tmp);
++    err_acrdmm = !hasmntval(mntp, MNTTAB_OPT_ACDIRMIN, &tmp);
+     nap->acdirmin = tmp;
+ # else /* not MNTTAB_OPT_ACDIRMIN */
+     nap->acdirmin = 0;
+@@ -465,7 +467,7 @@ compute_nfs_attrcache_flags(struct nfs_c
+   } else {
+ # ifdef MNTTAB_OPT_ACDIRMAX
+     int tmp;
+-    err_acrdmm = hasmntvalerr(mntp, MNTTAB_OPT_ACDIRMAX, &tmp);
++    err_acrdmm = !hasmntval(mntp, MNTTAB_OPT_ACDIRMAX, &tmp);
+     nap->acdirmax = tmp;
+ # else /* not MNTTAB_OPT_ACDIRMAX */
+     nap->acdirmax = 0;
+@@ -492,6 +494,7 @@ static void
+ compute_nfs_common_args(struct nfs_common_args *nap, mntent_t *mntp,
+     const char *nfs_proto, u_long nfs_version)
+ {
++  int val;
+ #ifdef MNT2_NFS_OPT_TCP
+   if (nfs_proto && STREQ(nfs_proto, "tcp"))
+     nap->flags |= MNT2_NFS_OPT_TCP;
+@@ -536,7 +539,10 @@ compute_nfs_common_args(struct nfs_commo
+ # endif /* not MNTTAB_OPT_RESVPORT */
+ #endif /* MNT2_NFS_OPT_RESVPORT */
+ 
+-  nap->rsize = hasmntval(mntp, MNTTAB_OPT_RSIZE);
++  if (!hasmntval(mntp, MNTTAB_OPT_RSIZE, &val) || val <= 0)
++    nap->rsize = 0;
++  else
++    nap->rsize = val;
+ #ifdef MNT2_NFS_OPT_RSIZE
+   if (nap->rsize)
+     nap->flags |= MNT2_NFS_OPT_RSIZE;
+@@ -544,7 +550,10 @@ compute_nfs_common_args(struct nfs_commo
+   if (nfs_version == NFS_VERSION && nap->rsize > 8192)
+     nap->rsize = 8192;
+ 
+-  nap->wsize = hasmntval(mntp, MNTTAB_OPT_WSIZE);
++  if (!hasmntval(mntp, MNTTAB_OPT_WSIZE, &val) || val <= 0)
++    nap->wsize = 0;
++  else
++    nap->wsize = val;
+ #ifdef MNT2_NFS_OPT_WSIZE
+   if (nap->wsize)
+     nap->flags |= MNT2_NFS_OPT_WSIZE;
+@@ -552,13 +561,19 @@ compute_nfs_common_args(struct nfs_commo
+   if (nfs_version == NFS_VERSION && nap->wsize > 8192)
+     nap->wsize = 8192;
+ 
+-  nap->timeo = hasmntval(mntp, MNTTAB_OPT_TIMEO);
++  if (!hasmntval(mntp, MNTTAB_OPT_TIMEO, &val) || val <= 0)
++    nap->timeo = 0;
++  else
++    nap->timeo = val;
+ #ifdef MNT2_NFS_OPT_TIMEO
+   if (nap->timeo)
+     nap->flags |= MNT2_NFS_OPT_TIMEO;
+ #endif /* MNT2_NFS_OPT_TIMEO */
+ 
+-  nap->retrans = hasmntval(mntp, MNTTAB_OPT_RETRANS);
++  if (!hasmntval(mntp, MNTTAB_OPT_RETRANS, &val) || val <= 0)
++    nap->retrans = 0;
++  else
++    nap->retrans = val;
+ #ifdef MNT2_NFS_OPT_RETRANS
+   if (nap->retrans)
+     nap->flags |= MNT2_NFS_OPT_RETRANS;
+@@ -861,6 +876,7 @@ compute_nfs23_args(nfs_args_t *nap,
+ 		   char *host_name,
+ 		   char *fs_name)
+ {
++  int val;
+   struct nfs_common_args a;
+   /* initialize just in case */
+   memset((voidp) nap, 0, sizeof(nfs_args_t));
+@@ -995,18 +1011,30 @@ compute_nfs23_args(nfs_args_t *nap,
+   /************************************************************************/
+ 
+ #ifdef MNT2_NFS_OPT_BIODS
+-  if ((nap->biods = hasmntval(mntp, MNTTAB_OPT_BIODS)))
++  if (!hasmntval(mntp, MNTTAB_OPT_BIODS, &val) || val <= 0)
++    nap->biods = 0;
++  else {
++    nap->biods = val;
+     nap->flags |= MNT2_NFS_OPT_BIODS;
++  }
+ #endif /* MNT2_NFS_OPT_BIODS */
+ 
+ #ifdef MNTTAB_OPT_SYMTTL	/* symlink cache time-to-live */
+-  if ((nap->symttl = hasmntval(mntp, MNTTAB_OPT_SYMTTL)))
++  if (!hasmntval(mntp, MNTTAB_OPT_SYMTTL, &val) || val <= 0)
++    nap->symttl = 0;
++  else {
++    nap->symttl = val;
+     nap->flags |= MNT2_NFS_OPT_SYMTTL;
++  }
+ #endif /* MNTTAB_OPT_SYMTTL */
+ 
+ #ifdef MNT2_NFS_OPT_PGTHRESH	/* paging threshold */
+-  if ((nap->pg_thresh = hasmntval(mntp, MNTTAB_OPT_PGTHRESH)))
++  if (!hasmntval(mntp, MNTTAB_OPT_PGTHRESH, &val) || val <= 0)
++    nap->pg_thresh = 0;
++  else {
++    nap->pg_thresh = val;
+     nap->flags |= MNT2_NFS_OPT_PGTHRESH;
++  }
+ #endif /* MNT2_NFS_OPT_PGTHRESH */
+ 
+ #if defined(MNT2_NFS_OPT_POSIX) && defined(MNTTAB_OPT_POSIX)
+@@ -1020,7 +1048,7 @@ compute_nfs23_args(nfs_args_t *nap,
+ 
+ #ifdef HAVE_TRANSPORT_TYPE_TLI
+   /* set up syncaddr field */
+-  nap->syncaddr = (struct netbuf *) NULL;
++  nap->syncaddr = NULL;
+ 
+   /* set up knconf field */
+   if (get_knetconfig(&nap->knconf, nfsncp, nfs_proto) < 0) {
+@@ -1043,9 +1071,12 @@ compute_nfs23_args(nfs_args_t *nap,
+ #endif /* HAVE_NFS_ARGS_T_OPTSTR */
+ 
+ #if defined(MNT2_NFS_OPT_MAXGRPS) && defined(MNTTAB_OPT_MAXGROUPS)
+-  nap->maxgrouplist = hasmntval(mntp, MNTTAB_OPT_MAXGROUPS);
+-  if (nap->maxgrouplist != 0)
++  if (!hasmntval(mntp, MNTTAB_OPT_MAXGROUPS, &val) || val <= 0)
++    nap->maxgrouplist = 0;
++  else {
++    nap->maxgrouplist = val;
+     nap->flags |= MNT2_NFS_OPT_MAXGRPS;
++  }
+ #endif /* defined(MNT2_NFS_OPT_MAXGRPS) && defined(MNTTAB_OPT_MAXGROUPS) */
+ 
+   /************************************************************************/
+@@ -1267,6 +1298,7 @@ compute_nfs4_args(nfs4_args_t *nap,
+ {
+   char *s;
+   struct nfs_common_args a;
++  int val;
+   uint16_t nfs_port;
+ 
+   /* initialize just in case */
+@@ -1304,11 +1336,10 @@ compute_nfs4_args(nfs4_args_t *nap,
+   nap->host_addr = xmalloc(nap->host_addrlen);
+   memcpy(nap->host_addr, ip_addr, nap->host_addrlen);
+ 
+-  nfs_port = hasmntval(mntp, MNTTAB_OPT_PORT);
+-  if (nfs_port == 0)
++  if (!hasmntval(mntp, MNTTAB_OPT_PORT, &val) || val <= 0 || val > 65536)
+     nfs_port = htons(NFS_PORT);
+   else
+-    nfs_port = htons(nfs_port);
++    nfs_port = htons(val);
+ 
+   ((struct sockaddr_in *)nap->host_addr)->sin_port = nfs_port;
+ 
+@@ -1341,9 +1372,13 @@ compute_nfs4_args(nfs4_args_t *nap,
+ #endif /* MNT2_NFS_OPT_POSIX && MNTTAB_OPT_POSIX */
+ 
+ #if defined(MNT2_NFS_OPT_MAXGRPS) && defined(MNTTAB_OPT_MAXGROUPS)
+-  nap->maxgrouplist = hasmntval(mntp, MNTTAB_OPT_MAXGROUPS);
+-  if (nap->maxgrouplist != 0)
++  nap->maxgrouplist = 
++  if (!hasmntval(mntp, MNTTAB_OPT_MAXGROUPS, &val) || val <= 0)
++    nap->maxgrouplist = 0;
++  else {
++    nap->maxgrouplist = val;
+     nap->flags |= MNT2_NFS_OPT_MAXGRPS;
++  }
+ #endif /* defined(MNT2_NFS_OPT_MAXGRPS) && defined(MNTTAB_OPT_MAXGROUPS) */
+ 
+ #ifdef HAVE_NFS_ARGS_T_OPTSTR
+--- am-utils-6.2.orig/libamu/mtab.c
++++ am-utils-6.2/libamu/mtab.c
+@@ -133,22 +133,12 @@ hasmnteq(mntent_t *mnt, char *opt)
+ 
+ 
+ /*
+- * Wrapper around hasmntvalerr(), which retains backwards compatibiliy with
+- * older use of hasmntval().
+- *
+- * XXX: eventually, all use of hasmntval() should be replaced with
+- * hasmntvalerr().
++ * Wrapper around hasmntvaldelim(), which uses the standard "," delim
+  */
+ int
+-hasmntval(mntent_t *mnt, char *opt)
++hasmntval(mntent_t *mnt, char *opt, int *valp)
+ {
+-  int err, val = 0;
+-
+-  err = hasmntvalerr(mnt, opt, &val);
+-  if (err)	   /* if there was an error (hasmntvalerr returned 1) */
+-    return 0;	   /* redundant: val==0 above, but leave here for clarity */
+-  /* otherwise there was no error */
+-  return val;
++  return hasmntvaldelim(mnt, opt, ",", valp);
+ }
+ 
+ 
+@@ -158,36 +148,31 @@ hasmntval(mntent_t *mnt, char *opt)
+  * valp (argument won't be touched if no value is set, for example due to an
+  * error).
+  *
+- * Returns non-zero (1) on error; returns 0 on success.
+- *
+- * XXX: eventually, all use of hasmntval() should be replaced with
+- * hasmntvalerr().
++ * Returns 0 on error; returns 1 on success.
+  */
+-unsigned int
+-hasmntvalerr(mntent_t *mnt, char *opt, int *valp)
++int
++hasmntvaldelim(mntent_t *mnt, char *opt, const char *delim, int *valp)
+ {
+   char *str = amu_hasmntopt(mnt, opt);
+-  int err = 1;		     /* 1 means no good value was set (an error) */
+   char *eq, *endptr;
+   long int i;
+ 
+   /* exit if no option specificed */
+-  if (!str) {
+-    goto out;
+-  }
++  if (!str)
++    return 0;
+ 
+   eq = hasmnteq(mnt, opt);
+ 
+   if (!eq) {		  /* no argument to option ('=' sign was missing) */
+     plog(XLOG_MAP, "numeric option to \"%s\" missing", opt);
+-    goto out;
++    return 0;
+   }
+ 
+   /* if got here, then we had an '=' after option name */
+   endptr = NULL;
+   i = strtol(eq, &endptr, 0); /* hex and octal allowed ;-) */
+   if (!endptr ||
+-      (endptr != eq && (*endptr == ',' || *endptr == '\0'))) {
++      (endptr != eq && (*endptr == '\0' || strchr(delim, *endptr)))) {
+       /*
+        * endptr set means strtol saw a non-digit.  If the non-digit is a
+        * comma, it's probably the start of the next option.  If the comma is
+@@ -198,15 +183,13 @@ hasmntvalerr(mntent_t *mnt, char *opt, i
+        * string.
+        */
+     *valp = (int) i;		/* set good value */
+-    err = 0;			/* no error */
++    return 1;
+   } else {
+     /* whatever was after the '=' sign wasn't a number */
+     plog(XLOG_MAP, "invalid numeric option in \"%s\": \"%s\"", opt, str);
+     /* fall through to error/exit processing */
++    return 0;
+   }
+-
+- out:
+-  return err;
+ }
+ 
+ 

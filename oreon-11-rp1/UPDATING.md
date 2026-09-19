@@ -1,50 +1,37 @@
 # Updating Packages in Oreon 11 - Release Pack 1 (maintainers guide)
 
-This file is for people who already know how to edit a spec and refresh sources. The goal here is to guide maintainers through what order to build things in when using Oreon Build Service so you do not burn an afternoon on missing `-devel` packages or dependency hell as some call it.
+This file is for people who already know how to edit a spec and refresh sources. This is what top-level packages to queue in Oreon Build Service so layer planning looks through BuildRequires/Requires and builds the rest.
 
-Nothing here replaces reading the spec `BuildRequires` lines. Treat these chains as a default ordering that matches how this tree is usually stacked. If packages change dependencies, update this doc when you update the specs.
-
----
-
-## Chain build syntax (Oreon Build Service)
-
-The UI explains it with two patterns.
-
-### Sequential only
-
-Spaces between names. Each package waits for the previous one to finish. This is the safest default when you are touching a desktop stack or anything with messy deps. Example:
-
-```text
-bash grep coreutils
-```
-
-### Parallel group, then next step
-
-Space inside a group means those builds run together. A colon means wait for the whole group to finish before the next token or group. Example:
-
-```text
-libwidget libaselib : libgizmo
-```
-
-Here `libwidget` and `libaselib` build at the same time, then `libgizmo` runs after both finish.
-
-### What we recommend here
-
-Use sequential chains below unless you know two neighbors are truly independent. Parallel saves waiting time but will piss you off the second anything expects dependency ordering that chain did not order correctly, so be careful when initiating chain builds.
-
-Package names in the strings are directory names under this `oreon-11-rp1` folder, same as what you put in the build service when it asks for the package name.
+https://build.oreonhq.com/
 
 ---
 
-## General workflow (short)
+## Layer planning (chains are now deprecated)
 
-1. Bump versions in the specs and refresh `Source` URLs or vendor scripts the way you always do.
-2. Commit so Oreon Build Service can see the change.
-3. Pick the stack section below that matches your work.
-4. Paste the chain string into the chain build field while logged into Oreon Build Service. https://build.oreonhq.com/
-5. If something fails, check build logs, then fix the spec/package sources or fix this doc. Do not just rebuild again and hope for it to work. (UNLESS ITS A WORKER RESOURCE FAILURE)
+Chain builds have been deprecated. Oreon Build Service now uses a new layering system.
 
-When KDE or Qt does a coordinated release, bump the whole stack in git first, then run the Qt chain, then the KF6 chain, then the Plasma chain. Skipping steps is how you get mismatched `cmake(KF6*)` errors.
+You only submit top-level packages. It resolves build/runtime deps for what you queued, groups packages into layers that can build once deps exist, then builds layer by layer until it finishes.
+
+Package names are directory names under this oreon-11-rp1 folder.
+
+Workflow
+
+1. Bump versions in the specs and refresh Source URLs or vendor scripts the way you always do. ALso don't forget to update the checksums.
+2. Commit and push, then open a PR, then Oreon Build Service can see the change. If you want to skip the PR for now, just make sure to specify your branch name before submitting the builds.
+3. Pick the stack section below and queue those (plus any bootstrap deps noted).
+4. Let layer planning run. If anything fails, wait until the whole layer halts, then fix individual specs and resume the layer.
+5. If something you bumped never shows up in the plan, BR is wrong/renamed or it is a top-level package you have to queue yourself. Fix the spec or add the package name.
+
+Note: if you find any errors or missing top-level package names here, PLEASE let one of us know, or fix it in your PR.
+
+When KDE or Qt does a coordinated release, bump the whole stack in git first, then queue top-levels in waves if newer Qt is not published yet
+
+1. Qt tops (after TeX/firebird deps if needed)
+2. KF6 tops
+3. Plasma tops
+4. Gear tops
+
+make sure to do it right
 
 ---
 
@@ -52,30 +39,32 @@ When KDE or Qt does a coordinated release, bump the whole stack in git first, th
 
 ### When to use
 
-You touched `kernel`, firmware blobs, or userspace tools that hard-track the kernel version.
+You touched kernel, firmware, or other packages that depend on the kernel version.
 
-### Notes
-
-- `linux-firmware` often ships on its own schedule but if you are coordinating a bump with the kernel, build firmware first so the kernel metapackage logic and QA expectations line up.
-- `bpftool` is compiled against the kernel tree in many workflows. If your bump includes bpftool sources tied to that kernel tag, keep it right after `kernel`.
-- `dracut` consumes what the running build root knows about the kernel package set. Rebuild it after the kernel when initrd-related stuff changed.
-- `kmod` is mostly standalone userspace. It is last here so you do not accidentally assume it drags the kernel forward.
-
-### Chain (sequential)
+### Tops to queue
 
 ```text
-kernel-srpm-macros linux-firmware kernel bpftool dracut kmod
+kernel
 ```
 
-### Optional extras
-
-Only if you actually changed them in the same maintenance window:
+### Extras if needed
 
 ```text
-systemtap kernelshark
+linux-firmware
+bpftool
+dracut
+kmod
+kernel-srpm-macros
 ```
 
-`systemtap` and `kernelshark` pull extra deps. Do not add them to the main chain unless you need them.
+linux-firmware often updates on its own schedule.
+
+Optional only if you actually changed them
+
+```text
+systemtap
+kernelshark
+```
 
 ---
 
@@ -83,154 +72,209 @@ systemtap kernelshark
 
 ### When to use
 
-You are rebasing Mesa or the low-level GL/Vulkan stack and want the smallest sane ordering before KDE or games stacks scream.
+You are rebasing Mesa or the low-level GL/Vulkan stack.
 
-### Chain
+### Tops to queue
 
 ```text
-libdrm libglvnd mesa
+mesa
 ```
 
-If your change also touched LLVM used by Mesa, see the LLVM or toolchain section and run that before this block.
+If LLVM used by Mesa also moved, queue the LLVM tops first (see LLVM section), then mesa.
 
 ---
 
-## TeX Live stack
+## TeX Live/firebird bootstrap deps
 
 ### When to use
 
-libtommath doc builds, dblatex, latexmk, or anything else in this tree that BuildRequires texlive-* or tex(*). Run this before the Qt chain if firebird/libtommath is blocking qt6-qtbase-ibase.
+libtommath docs, dblatex, latexmk, or anything that BuildRequires texlive-*/tex(*). Also when qt6-qtbase-ibase/firebird is blocked on those deps.
 
-### Chain
+### Tops to queue
+
+These are deps the planner may not pull in for a Qt tip. Queue them when the failure is missing TeX or firebird bits.
 
 ```text
-libseccomp teckit ghostscript : texlive-base : texlive-collection-basic : texlive-collection-latex : libtiff : libtommath libtomcrypt : firebird
+texlive-collection-latex
+firebird
+```
+
+If that still cannot resolve, also queue
+
+```text
+libseccomp
+teckit
+ghostscript
+texlive-base
+texlive-collection-basic
+libtiff
+libtommath
+libtomcrypt
 ```
 
 ---
 
-## Qt 6 stack (all Qt6 SRPMs in this tree)
+## Qt 6 stack
 
 ### When to use
 
-Any bump to `qt6-qtbase` or a coordinated Qt release. KF6 and Plasma must not be rebuilt until this finishes. If libtommath or firebird are not in the repo yet, run the TeX Live stack section first.
+Any bump to qt6-qtbase or a coordinated Qt release. Do not rebuild KF6 or Plasma until the new Qt is published.
 
-### Chain
+### Tops to queue
 
 ```text
-cmake qt6 : libseccomp teckit ghostscript : texlive-base : texlive-collection-basic : texlive-collection-latex : libtiff : libtommath libtomcrypt : firebird : qt6-qtbase : qt6-qtshadertools qt6-qtlanguageserver qt6-qtsvg qt6-qtimageformats qt6-qtserialport qt6-qtnetworkauth : qt6-qtdeclarative : qt6-qttools qt6-qt5compat qt6-qtwebsockets qt6-qtconnectivity qt6-qtcharts qt6-qtdatavis3d qt6-qtremoteobjects qt6-qtscxml qt6-qtlottie qt6-qtquicktimeline : qt6-qtpositioning qt6-qtserialbus qt6-qtvirtualkeyboard qt6-qtwayland qt6-qthttpserver qt6-qtwebchannel qt6-qtsensors : qt6-qtlocation qt6-qtquick3d qt6-qt3d : qt6-qtmultimedia qt6-qtgraphs : qt6-qtspeech qt6-qttranslations : qt6-qtwebengine : qt6-qtwebview qt6-doc
+qt6-qtwebengine
+qt6-qtwebview
+qt6-doc
+```
+
+Those pull most of the Qt module graph. If planning stops short of something you know you bumped, add that module as another root.
+
+### Bootstrap deps (only if missing from oreon-base)
+
+```text
+cmake
+firebird
+texlive-collection-latex
 ```
 
 ---
 
-## KDE Frameworks 6 stack (KF6)
+## KDE Frameworks 6 (KF6)
 
 ### When to use
 
-Frameworks point release or any rebuild after Qt changed ABI.
+Frameworks point release or any rebuild after Qt ABI changed.
 
 ### Notes
 
-`extra-cmake-modules` unconditionally BuildRequires `pkgconfig(Qt5Core)` for
-its test suite, so `qt5-qtbase` has to be buildable before `extra-cmake-modules`
-even resolves builddeps, this is a real leaf dep of the KF6 chain, not
-optional. `qt5-qtbase` in turn BuildRequires `freetds-devel`, which has its
-own spec dir (`freetds/`) for exactly this reason. Both are one-time builds,
-not something that needs rebuilding on every KF6 bump once they're published.
+extra-cmake-modules BuildRequires pkgconfig(Qt5Core) for tests, so qt5-qtbase has to be buildable first. qt5-qtbase BuildRequires freetds-devel. Those are one-time deps, not something to rebuild on every KF6 bump once published.
 
-### Chain
+### Tops to queue
 
 ```text
-freetds : qt5-qtbase : extra-cmake-modules kf6 : kf6-breeze-icons kf6-kapidox kf6-attica kf6-karchive kf6-kcodecs kf6-kconfig kf6-kcoreaddons kf6-kdbusaddons kf6-kdnssd kf6-kguiaddons kf6-ki18n kf6-kidletime kf6-kitemmodels kf6-kitemviews kf6-kplotting kf6-kwidgetsaddons kf6-kwindowsystem kf6-solid kf6-sonnet kf6-syntax-highlighting kf6-threadweaver kf6-kirigami kf6-bluez-qt kf6-modemmanager-qt kf6-networkmanager-qt kf6-prison kf6-kholidays kf6-kpty kf6-ktexttemplate kf6-kunitconversion kf6-kuserfeedback kf6-kcalendarcore kf6-kquickcharts kf6-kstatusnotifieritem : kf6-kauth kf6-kcompletion kf6-kcrash kf6-kdoctools kf6-kfilemetadata kf6-kimageformats kf6-kjobwidgets kf6-knotifications kf6-kcolorscheme kf6-kconfigwidgets kf6-kglobalaccel kf6-kcontacts : kf6-kpackage kf6-kservice kf6-kiconthemes kf6-kwallet kf6-kded kf6-syndication kf6-kdesu : kf6-kio kf6-ktextwidgets kf6-kxmlgui : kf6-kbookmarks kf6-knotifyconfig kf6-knewstuff kf6-kparts kf6-krunner kf6-kdav : kf6-kcmutils kf6-kdeclarative kf6-ksvg kf6-qqc2-desktop-style kf6-purpose : kf6-ktexteditor kf6-frameworkintegration kf6-kirigami-addons kf6-kpeople kf6-baloo kf6-kglobalacceld
+kf6-baloo
+kf6-ktexteditor
+kf6-frameworkintegration
+kf6-kirigami-addons
+kf6-kpeople
+kf6-purpose
+kf6-kdav
 ```
+
+extra-cmake-modules and the rest of kf6-* should layer under those.
+
+### One-time deps if missing
+
+```text
+freetds
+qt5-qtbase
+extra-cmake-modules
+```
+
+kf6-kglobalacceld is Plasma-versioned. Rebuild it with Plasma packages top-level.
 
 ---
 
-## Plasma desktop stack (workspace and friends)
+## Plasma desktop stack
 
 ### When to use
 
-Coordinated Plasma bump, or rebuild after KF6 or Qt changes.
+Plasma update or rebuild after KF6 or Qt changed.
 
-### Chain
+### Tops to queue
 
 ```text
-polkit-qt-1 plasma-wayland-protocols plasma-activities kdecoration libdisplay-info knighttime libksysguard kinfocenter plasma-drkonqi plasma-disks plasma-firewall plasma-thunderbolt plasma-workspace-wallpapers packagekit-qt phonon plasma-keyboard plasma-settings : layer-shell-qt kwayland libkscreen plasma-activities-stats plasma-breeze qqc2-breeze-style kpipewire plasma-integration : libplasma : kscreenlocker plasma-aurorae plasma5support ksystemstats bluedevil plasma-milou plasma-nm plasma-pa plasma-vault plasma-welcome plasma-oxygen plasma-bigscreen plasma-login-manager plasma-dialer plasma-systemmonitor plasma-sdk xdg-desktop-portal-kde : kwin kwin-x11 : plasma-workspace plasma-workspace-x11 : plasma-desktop plasma-systemsettings powerdevil plasma-browser-integration kde-cli-tools kdeplasma-addons : phonon-backend-gstreamer phonon-backend-vlc plasma-discover plasma-print-manager : plasma-nano kde-gtk-config kwayland-integration ocean-sound-theme oxygen-sounds : plasma-applet-translator plasma-pk-updates plasma-pass plasma-wallpapers-dynamic plasma-camera plasma-phonebook : plasma-setup plasma-mobile-sounds : plasma-mobile
+plasma-desktop
+plasma-workspace
+plasma-workspace-x11
+kwin
+kwin-x11
+plasma-systemsettings
+powerdevil
+plasma-discover
+plasma-mobile
+plasma-setup
+spectacle
+```
+
+### Optional backend deps (queue only if needed)
+
+```text
+liboath
+gocryptfs
+p8-platform
+libcec
+snapd
+snapd-glib
+translate-shell
+xsel
+libcallaudio
+mariadb-server
+pipewire
+wireplumber
 ```
 
 ---
 
-## Plasma optional-subpackage leaf deps
+## KDE Gear apps
 
 ### When to use
 
-You're building one of the optional Plasma leaf subpackages below for the first time, or bumping their non-Plasma backend dependency.
+Gear bump after KF6 (and Plasma if workspace-facing apps changed).
 
-### Notes
-
-- `plasma-pass` needs `liboath` (built standalone from the `oath-toolkit` release tarball, only the `liboath/` subtree, see `liboath.spec`).
-- `plasma-vault` needs `gocryptfs` for its gocryptfs-backed vault type (the ecryptfs/cryfs backends it also supports are already covered elsewhere).
-- `plasma-bigscreen`'s HDMI-CEC remote support needs `libcec`, which itself needs `p8-platform`. Build `p8-platform` first.
-- `plasma-discover`'s snap backend (`plasma-discover-snap`) needs `snapd` (the daemon) and `snapd-glib` (ships `libsnapd-qt`, the Qt wrapper Discover actually links against). `snapd`'s spec here only builds the Go daemon/CLI so far, not the `cmd/snap-confine` C sandboxing helpers (see the note in `snapd.spec`). Needs a follow-up before strict snap confinement actually works.
-- `plasma-applet-translator` needs `translate-shell` (the `trans` CLI) and `xsel` (clipboard access).
-- `plasma-dialer` (mobile-only, not needed for the desktop ISO) needs `libcallaudio`. `libphonenumber-devel` already has a spec in this tree.
-- Akonadi's optional MySQL storage backend (`akonadi-server-mysql`) needs `mariadb-server`. Not required for the default SQLite backend.
-
-### Chain
+### Tops to queue
 
 ```text
-liboath gocryptfs p8-platform snapd snapd-glib translate-shell xsel libcallaudio mariadb-server : libcec : plasma-pass plasma-vault plasma-bigscreen plasma-discover plasma-applet-translator plasma-dialer
+dolphin
+kate
+okular
+konsole
+gwenview
+kde-connect
+kmail
+korganizer
+kontact
+merkuro
+neochat
+tokodon
+ark
+yakuake
 ```
+
+PIM libs and other Gear packages should layer under those. If a bumped app is not pulled in, add that app dir as another root.
 
 ---
 
-## PipeWire and Plasma multimedia stuff
+## LLVM and Clang
 
 ### When to use
 
-You bumped PipeWire or WirePlumber and need KDE bits that wrap PipeWire for the session.
+About to rebuild Mesa, Rust, or anything that needs a matching Clang from the same LLVM drop.
 
-### Notes
-
-`kpipewire` belongs to Plasma but depends on PipeWire client libraries. If you are only touching `kpipewire`, you can build it alone after a successful PipeWire build. If you are rebasing PipeWire itself, use this chain.
-
-### Chain
+### Tops to queue
 
 ```text
-pipewire wireplumber kpipewire
+clang
 ```
+
+That should pull llvm/compiler-rt style deps as layers. Add llvm explicitly if planning does not.
 
 ---
 
-## LLVM and Clang (subset)
-
-### When to use
-
-You are about to rebuild Mesa, Rust, or anything that needs a matching Clang built from the same LLVM drop.
-
-### Notes
-
-This is a conservative ordering. Your exact Requires may vary if Red Hat carried patches that split subpackages differently.
-
-### Chain
-
-```text
-llvm compiler-rt clang
-```
-
----
-
-## GCC and binutils (subset)
+## GCC and binutils
 
 ### When to use
 
 Toolchain refresh before kernel or before mass rebuilds.
 
-### Chain
+### Tops to queue
 
 ```text
-binutils gcc
+gcc
 ```
+
+Add binutils as a root if you bumped it and it is not already under gcc in the plan.
 
 ---
 
@@ -240,81 +284,79 @@ binutils gcc
 
 Rust bumped and Firefox or other Rust-heavy packages need the new compiler.
 
-### Notes
-
-Rust often wants an LLVM stack that matches what the package was tested against. If you bumped LLVM, run the LLVM chain before `rust`.
-
-### Chain
+### Tops to queue
 
 ```text
 rust
 ```
 
+If you bumped LLVM for that Rust, queue Clang/LLVM tops first so the new toolchain is published.
+
 ---
 
-## Grub and generic boot branding (optional)
+## Grub and boot branding (optional)
 
 ### When to use
 
-Kernel command line defaults, theme files, or templates that touches how installers build media.
+Kernel command line defaults, theme files, or installer media templates.
 
-### Chain
+### Tops to queue
 
 ```text
-grub2 lorax-templates-rhel
+grub2
+lorax-templates-rhel
 ```
 
-Add `shim` or other firmware packages only if your update actually needs them.
+Add shim only if your update needs it.
 
 ---
 
-## Crypto and TLS-shaped deps (small leaf stack)
+## Crypto/TLS deps
 
 ### When to use
 
-Firefox, curl, or half the desktop rebuilt and you know the failure is NSS or OpenSSL sonames.
+Firefox, curl, or desktop rebuilds failing on NSS or OpenSSL sonames.
 
 ### Notes
 
-There is no separate `nspr` package dir here. The `nss` SRPM builds the nspr subpackages. Queue `nss` only, then NSS consumers.
+There is no separate nspr package dir. The nss SRPM builds the nspr subpackages.
 
-### Chain
+### Tops to queue
 
 ```text
-nss openssl
+nss
+openssl
 ```
+
+Then queue the failing consumer (firefox, NetworkManager, etc) if it is not already planned.
 
 ---
 
-## OpenSSH, NSS, and libssh (after security fixes or upgrade)
+## OpenSSH, NSS, and libssh
 
 ### When to use
 
-OpenSSH upgrade, nss spec changes, etc... mainly where `%check` or `BuildRequires` need a newer ssh stack.
+OpenSSH upgrade, nss spec changes, or %check/BR needing a newer ssh stack.
 
-### Notes
+### Tops to queue
 
-- openssh builds against openssl. If you bumped crypto and openssh together, put openssl (and nss if that spec moved) before openssh.
-- libssh BRs `openssh-clients` and `openssh-server` for ctests that run sshd. Build openssh before libssh. Missing sshd in `%check` is usually wrong chain order.
-- If NSS ABI or tooling changed, add failing consumers after you read logs and `grep BuildRequires`, not a random full-tree rebuild.
-
-### Chain (full security core, sequential)
-
-When more than one of those layers changed in the same commit or tag:
+Full security core moved together
 
 ```text
-nss openssl openssh libssh
+libssh
+openssh
+nss
+openssl
 ```
 
-Strip packages you did not touch.
-
-OpenSSH only (rest of tag already good):
+OpenSSH only
 
 ```text
-openssh libssh
+libssh
+openssh
 ```
 
-NSS only (no openssh spec change):
+NSS only
 
 ```text
 nss
@@ -326,41 +368,49 @@ nss
 
 ### When to use
 
-You bumped NetworkManager itself or its VPN plugins and want a boring default ordering before plasma-nm screams.
+You bumped NetworkManager itself or need it before plasma-nm.
 
-### Notes
-
-This tree usually builds NetworkManager with NSS in the mix. If you just rebased NSS, run the crypto stack above first.
-
-### Chain
+### Tops to queue
 
 ```text
-nss NetworkManager
+NetworkManager
 ```
 
-If your failure mentions `libnm` from an older split package, open the NetworkManager spec and add whatever subpackage name the build service uses for that SRPM. Here `NetworkManager` is the directory name under `oreon-11-rp1`.
+If NSS just moved, queue nss too.
+
+Directory name under oreon-11-rp1 is NetworkManager.
 
 ---
 
-## NetworkManager VPN plugins (plasma-nm backends)
+## NetworkManager VPN plugins
 
 ### When to use
 
-You bumped NetworkManager and need to rebuild the VPN plugin family that `plasma-nm` pulls in as optional subpackages, or you're bringing one of these packages into the tree for the first time.
+You need the VPN plugin family that plasma-nm optionally pulls, or you are bringing one of these into the tree for the first time.
 
-### Notes
-
-Every plugin here follows the same two-layer shape: a real protocol/tunnel implementation package (the actual client binary and its libs) and a `NetworkManager-<protocol>` plugin package that wraps it for the NetworkManager D-Bus API. Build the protocol implementation before its NetworkManager plugin, always. The plugin package itself also splits into a base subpackage (vpn service only) and a `-gnome` subpackage (auth dialog + editor UI), matching how `NetworkManager-openvpn` and `NetworkManager-libreswan` are already split in this tree. plasma-nm only needs the base subpackage, the `-gnome` one is just extra.
-
-`strongswan` doubles as the IPsec layer for `NetworkManager-l2tp` (L2TP/IPsec) and as its own native IKEv2 VPN plugin via its `charon-nm` NetworkManager backend, so it only needs to be built once for both cases.
-
-### Chain
+### Tops to queue
 
 ```text
-openconnect vpnc sstp-client iodine strongswan xl2tpd NetworkManager-pptp NetworkManager-fortisslvpn NetworkManager-ssh : NetworkManager-openconnect NetworkManager-vpnc NetworkManager-sstp NetworkManager-iodine NetworkManager-l2tp
+NetworkManager-openconnect
+NetworkManager-vpnc
+NetworkManager-sstp
+NetworkManager-iodine
+NetworkManager-l2tp
+NetworkManager-pptp
+NetworkManager-fortisslvpn
+NetworkManager-ssh
 ```
 
-`pptp` (the PPP plugin binary `NetworkManager-pptp` links against) and `ppp` itself already exist in this tree, no new leaf needed there. `NetworkManager-ssh` only needs `openssh-clients` and `sshpass` at runtime, both already packaged.
+Protocol packages if missing from the plan
+
+```text
+openconnect
+vpnc
+sstp-client
+iodine
+strongswan
+xl2tpd
+```
 
 ---
 
@@ -368,33 +418,29 @@ openconnect vpnc sstp-client iodine strongswan xl2tpd NetworkManager-pptp Networ
 
 ### When to use
 
-systemd point release or security rebuild that touches libsystemd consumers across the distro.
+systemd point release or security rebuild that touches libsystemd consumers.
 
-### Notes
-
-systemd is wide. Expect follow-up rebuilds for anything that links `libsystemd` if ABI shifted. This chain is only "build systemd".
-
-### Chain
+### Tops to queue
 
 ```text
 systemd
 ```
 
+Expect follow-up consumer rebuilds if ABI shifted. Queue those when logs say so.
+
 ---
 
-## Apps that sit on top (examples)
+## App tips (examples)
 
-These are not full dependency closures. They are reminders so you do not rebuild Firefox alone and wonder why link failed.
+Not full closures. Just the tip you queue when the lower stack is already current.
 
 ### Firefox
-
-Build after crypto and NSS style deps are stable. Minimal intentional ordering when everything else is already current:
 
 ```text
 firefox
 ```
 
-If you hit NSS or SQLite related link errors, rebuild those leaf deps first (grep Firefox spec `BuildRequires` for the exact package names in this tree).
+If link fails on NSS or SQLite, queue those deps (grep Firefox BuildRequires) then queue firefox again.
 
 ### Flatpak
 
@@ -402,71 +448,27 @@ If you hit NSS or SQLite related link errors, rebuild those leaf deps first (gre
 flatpak
 ```
 
-Flatpak pulls a bubblewrap and OSTree shaped graph. If CMake screams about missing OSTree, rebuild from the spec order bottom-up starting at what failed.
-
----
-
-## Quick reference, colon syntax
-
-Sequential (recommended default):
-
-```text
-pkg-a pkg-b pkg-c
-```
-
-Parallel batch then next:
-
-```text
-pkg-a pkg-b : pkg-c
-```
+If CMake wants OSTree/bubblewrap bits that are not planned, queue those package dirs as roots.
 
 ---
 
 ## Perl minor bump (bootstrap)
 
-When dual-life `perl-*` in the repo already want the new `MODULE_COMPAT` but `perl` itself is still the old release, a normal `perl` builddeps install loops on PathTools etc.
+When dual-life perl-* in the repo already want the new MODULE_COMPAT but perl itself is still old, a normal perl builddeps install loops on PathTools etc.
 
-`perl.spec` uses `%bcond_without perl_bootstrap 1` during the transition so builds bootstrap properly.
+perl.spec uses %bcond_without perl_bootstrap 1 during the transition.
 
-IMPORTANT -- after bootstrapped `perl` is in the repo:
+IMPORTANT after bootstrapped perl is in the repo
 
-1. Flip back to `%bcond_with perl_bootstrap` in `perl.spec`
-2. Rebuild `perl` normally
-3. Rebuild dual-life modules that jumped ahead (e.g. `perl-PathTools`, `perl-version`, etc.)
-4. Then `perl-generators`, `oreon-rpm-config`, and rest of stack
+1. Flip back to %bcond_with perl_bootstrap in perl.spec
+2. Rebuild perl (queue perl)
+3. Rebuild dual-life modules that jumped ahead (queue those perl-* dirs)
+4. Then queue perl-generators and oreon-rpm-config if they need it
 
-Update `gendep.macros` for the new `MODULE_COMPAT` before the bootstrap build. Regenerate from build log with `./generatedependencies` after a normal rebuild for the next bump.
-
----
-
-## oreon-base bootstrap (Fedora mock on build service)
-
-### When to use
-
-or11 mock `dnf builddep` fails because a BuildRequires exists in Fedora but is not published to oreon-base yet. common case: ghostscript needs gtk3-devel, gdk-pixbuf2-devel pulls glycin-devel, glycin-devel needs libseccomp-devel.
-
-do not strip spec BuildRequires or disable subpackages to dodge this.
-
-### How
-
-on Oreon Build Service pick a **Fedora mock env** for the bootstrap package (e.g. `fedora-44-x86_64` / `fedora-44-aarch64` instead of `oreon-11-rp1-*`). fedora mock resolves builddeps from Fedora repos (valgrind for libseccomp, etc.) while the spec still builds oreon-tagged RPMs.
-
-1. queue `libseccomp` on **fedora-44** mock for each arch you need
-2. once those RPMs land in oreon-base, switch back to **oreon-11-rp1** mock for dependents
-3. run `ghostscript` or the full TeX chain
-
-### After bootstrap
-
-rebuild the same package on or11 mock later only if you need it compiled strictly against oreon-base devel headers. for libseccomp that is usually optional once devel is in the repo.
-
-### Other bootstrap candidates
-
-same trick for any package where the builddep error says `nothing provides` and Fedora already ships that provider. grep the error, build the missing leaf on fedora mock, publish to oreon-base, then continue on or11 mock.
+Update gendep.macros for the new MODULE_COMPAT before the bootstrap build. Regenerate from the build log with ./generatedependencies after a normal rebuild for the next bump.
 
 ---
 
 ## Maintaining this document
 
-When you add a new Plasma or KF6 package directory, insert it into the right chain in this file in the same MR as the spec. When you delete or rename a package, delete or rename it here.
-
-If you are not sure where something goes, `grep BuildRequires` on the consumer spec and walk backwards until you hit something already in the chain. That is how the next person should fix gaps too.
+Please propose any changes if you think they are needed.

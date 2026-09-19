@@ -10,8 +10,8 @@ Summary:   Xorg X11 nouveau video driver for NVIDIA graphics chipsets
 Name:      xorg-x11-drv-nouveau
 # need to set an epoch to get version number in sync with upstream
 Epoch:     1
-Version:   1.0.17
-Release:   14%{?dist}
+Version:   1.0.18
+Release:   1%{?dist}
 URL:       http://www.x.org
 License:   MIT
 

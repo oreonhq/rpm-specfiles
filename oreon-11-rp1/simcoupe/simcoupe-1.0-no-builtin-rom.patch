@@ -1,0 +1,122 @@
+diff -ur SimCoupe/Base/Memory.cpp SimCoupe.new/Base/Memory.cpp
+--- SimCoupe/Base/Memory.cpp	2005-01-20 01:10:50.000000000 +0100
++++ SimCoupe.new/Base/Memory.cpp	2008-04-25 21:54:54.000000000 +0200
+@@ -30,7 +30,6 @@
+ #include "HDBOOT.h"
+ #include "Options.h"
+ #include "OSD.h"
+-#include "SAMROM.h"
+ #include "Util.h"
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+@@ -166,7 +165,7 @@
+     const char* pcszROM = GetOption(rom);
+ 
+     // Use a custom ROM if supplied
+-    if (*pcszROM && ((pROM = CStream::Open(OSD::GetFilePath(pcszROM))) || (pROM = CStream::Open(pcszROM))))
++    if ((pROM = CStream::Open(OSD::GetFilePath(pcszROM, true))) || (pROM = CStream::Open(pcszROM)))
+     {
+         // Read the header+bootstrap code from what could be a ZX82 file (for Andy Wright's ROM images)
+         BYTE abHeader[140];
+@@ -181,21 +180,11 @@
+         pROM->Read(pb1_, MEM_PAGE_SIZE);
+ 
+         delete pROM;
+-        return;
+     }
++    else
++        Message(msgFatal, "Error loading custom ROM:\n%s\n", pcszROM);
+ 
+-    // Report the failure if there
+-    if (*pcszROM)
+-    {
+-        Message(msgWarning, "Error loading custom ROM:\n%s\n\nReverting to built-in ROM image.", pcszROM);
+-        SetOption(rom,"");
+-    }
+-
+-    // Use the built-in 3.0 ROM image
+-    memcpy(pb0_, abSAMROM, MEM_PAGE_SIZE);
+-    memcpy(pb1_, &abSAMROM[MEM_PAGE_SIZE], MEM_PAGE_SIZE);
+-
+-    if (GetOption(hdbootrom))
++    if (!strcmp(pcszROM, "SAM30.rom") && GetOption(hdbootrom))
+     {
+         // Apply Edwin Blink's HDBOOT ROM modifications
+ 
+Only in SimCoupe.new/Base: Memory.cpp~
+diff -ur SimCoupe/Base/Options.cpp SimCoupe.new/Base/Options.cpp
+--- SimCoupe/Base/Options.cpp	2006-07-20 22:44:44.000000000 +0200
++++ SimCoupe.new/Base/Options.cpp	2008-04-25 21:46:22.000000000 +0200
+@@ -77,7 +77,7 @@
+     OPT_F("Greyscale",    greyscale,      false),     // Colour display
+     OPT_F("Filter",       filter,         false),     // Filter the OpenGL image when stretching
+ 
+-    OPT_S("ROM",          rom,            ""),        // No custom ROM (use built-in)
++    OPT_S("ROM",          rom,            "SAM30.rom"), // ROM to use (default SAM30.rom)
+     OPT_F("HDBootRom",    hdbootrom,      false),     // Don't use HDBOOT ROM patches
+     OPT_F("FastReset",    fastreset,      true),      // Allow fast Z80 resets
+     OPT_F("AsicDelay",    asicdelay,      true),      // ASIC startup delay of ~50ms
+@@ -101,7 +101,7 @@
+ 
+     OPT_S("FloppyPath",   floppypath,     ""),        // Default floppy path
+     OPT_S("HDDPath",      hddpath,        ""),        // Default hard disk path
+-    OPT_S("ROMPath",      rompath,        ""),        // Default ROM path
++    OPT_S("ROMPath",      rompath,        "/usr/share/simcoupe"), // Default ROM search path
+     OPT_S("DataPath",     datapath,       ""),        // Default data path
+     OPT_S("MRU0",         mru0,           ""),        // No recently used files
+     OPT_S("MRU1",         mru1,           ""),
+Only in SimCoupe.new/Base: Options.cpp~
+Only in SimCoupe.new/Base: test
+Only in SimCoupe.new/Base: test.c
+Only in SimCoupe.new/Base: test.c~
+diff -ur SimCoupe/SDL/OSD.cpp SimCoupe.new/SDL/OSD.cpp
+--- SimCoupe/SDL/OSD.cpp	2006-03-20 23:46:15.000000000 +0100
++++ SimCoupe.new/SDL/OSD.cpp	2008-04-25 22:07:26.000000000 +0200
+@@ -92,7 +92,7 @@
+ 
+ 
+ // Do whatever is necessary to locate an external file
+-const char* OSD::GetFilePath (const char* pcszFile_/*=""*/)
++const char* OSD::GetFilePath (const char* pcszFile_/*=""*/, bool isRom_/*=false*/)
+ {
+     static char szPath[512];
+ 
+@@ -117,12 +117,21 @@
+     if (!*pcszFile_)
+     {
+ #if !defined(__APPLE__)
+-        strcat(strcpy(szPath, getenv("HOME")), "/");
++        return strcat(strcpy(szPath, getenv("HOME")), "/");
+ #else
+-        strcat(strcpy(szPath, getenv("HOME")), "/Documents/");
++        return strcat(strcpy(szPath, getenv("HOME")), "/Documents/");
+ #endif
+     }
+-    else
++
++    // For roms try in the rompath first
++    if (isRom_)
++    {
++        snprintf(szPath, sizeof(szPath), "%s/%s", GetOption(rompath),
++            pcszFile_);
++        if (access(szPath, R_OK) == 0)
++            return szPath;
++    }
++
+     {
+ #if defined(__BEOS__)
+         // Zeta breaks compatability by moving find_directory to libzeta.so :-/
+Only in SimCoupe.new/SDL: OSD.cpp~
+diff -ur SimCoupe/SDL/OSD.h SimCoupe.new/SDL/OSD.h
+--- SimCoupe/SDL/OSD.h	2006-07-07 03:07:26.000000000 +0200
++++ SimCoupe.new/SDL/OSD.h	2008-04-25 21:52:15.000000000 +0200
+@@ -150,7 +150,7 @@
+     static void Exit (bool fReInit_=false);
+ 
+     static DWORD GetTime ();
+-    static const char* GetFilePath (const char* pcszFile_="");
++    static const char* GetFilePath (const char* pcszFile_="", bool isRom_=false);
+     static const char* GetDirPath (const char* pcszDir_="");
+     static const char* GetFloppyDevice (int nDrive_);
+     static bool CheckPathAccess (const char* pcszPath_);
+Only in SimCoupe.new/SDL: OSD.h~

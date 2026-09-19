@@ -1,0 +1,349 @@
+diff --git a/logs/json/json.go b/logs/json/json.go
+index f9bca0f0346c45..8d9ea384d4dc14 100644
+--- a/logs/json/json.go
++++ b/logs/json/json.go
+@@ -21,6 +21,7 @@ import (
+ 	"time"
+
+ 	"github.com/go-logr/logr"
++	"github.com/go-logr/zapr"
+ 	"go.uber.org/zap"
+ 	"go.uber.org/zap/zapcore"
+ )
+@@ -42,9 +43,12 @@ func init() {
+ // NewJSONLogger creates a new json logr.Logger using the given Zap Logger to log.
+ func NewJSONLogger(w zapcore.WriteSyncer) logr.Logger {
+ 	encoder := zapcore.NewJSONEncoder(encoderConfig)
+-	core := zapcore.NewCore(encoder, zapcore.AddSync(w), zapcore.DebugLevel)
+-	l := zap.New(core, zap.WithCaller(true), zap.AddCallerSkip(1))
+-	return &zapLogger{l: l}
++	// The log level intentionally gets set as low as possible to
++	// ensure that all messages are printed when this logger gets
++	// called by klog. The actual verbosity check happens in klog.
++	core := zapcore.NewCore(encoder, zapcore.AddSync(w), zapcore.Level(-127))
++	l := zap.New(core, zap.WithCaller(true))
++	return zapr.NewLoggerWithOptions(l, zapr.WithLogNumeric("v"), zapr.WithErrorFieldName("err"))
+ }
+
+ var encoderConfig = zapcore.EncoderConfig{
+@@ -57,126 +61,8 @@ var encoderConfig = zapcore.EncoderConfig{
+ 	EncodeCaller:   zapcore.ShortCallerEncoder,
+ }
+
+-// this has the same implementation as zapcore.EpochMillisTimeEncoder but
+-// uses timeNow() which is stubbed out for testing purposes.
+ func epochMillisTimeEncoder(_ time.Time, enc zapcore.PrimitiveArrayEncoder) {
+ 	nanos := timeNow().UnixNano()
+ 	millis := float64(nanos) / float64(time.Millisecond)
+ 	enc.AppendFloat64(millis)
+ }
+-
+-// zapLogger is a logr.Logger that uses Zap to record log.
+-type zapLogger struct {
+-	// NB: this looks very similar to zap.SugaredLogger, but
+-	// deals with our desire to have multiple verbosity levels.
+-	l   *zap.Logger
+-	lvl int
+-}
+-
+-// zapLogger implement logr.Logger
+-var _ logr.Logger = &zapLogger{}
+-
+-// Enabled should always return true
+-func (l *zapLogger) Enabled() bool {
+-	return true
+-}
+-
+-// Info write message to error level log
+-func (l *zapLogger) Info(msg string, keysAndVals ...interface{}) {
+-	if checkedEntry := l.l.Check(zapcore.InfoLevel, msg); checkedEntry != nil {
+-		checkedEntry.Write(l.handleFields(keysAndVals)...)
+-	}
+-}
+-
+-// Error write log message to error level
+-func (l *zapLogger) Error(err error, msg string, keysAndVals ...interface{}) {
+-	if checkedEntry := l.l.Check(zap.ErrorLevel, msg); checkedEntry != nil {
+-		checkedEntry.Write(l.handleFields(keysAndVals, handleError(err))...)
+-	}
+-}
+-
+-// dPanic write message to DPanicLevel level log we need implement this because we need
+-// to have the "v" field as well.
+-func (l *zapLogger) dPanic(msg string) {
+-	if checkedEntry := l.l.Check(zapcore.DPanicLevel, msg); checkedEntry != nil {
+-		checkedEntry.Write(zap.Int("v", l.lvl))
+-	}
+-}
+-
+-// handleFields converts a bunch of arbitrary key-value pairs into Zap fields.  It takes
+-// additional pre-converted Zap fields, for use with automatically attached fields, like
+-// `error`.
+-func (l *zapLogger) handleFields(args []interface{}, additional ...zap.Field) []zap.Field {
+-	// a slightly modified version of zap.SugaredLogger.sweetenFields
+-	if len(args) == 0 {
+-		// fast-return if we have no suggared fields.
+-		return append(additional, zap.Int("v", l.lvl))
+-	}
+-
+-	// unlike Zap, we can be pretty sure users aren't passing structured
+-	// fields (since logr has no concept of that), so guess that we need a
+-	// little less space.
+-	fields := make([]zap.Field, 0, len(args)/2+len(additional)+1)
+-	fields = append(fields, zap.Int("v", l.lvl))
+-	for i := 0; i < len(args)-1; i += 2 {
+-		// check just in case for strongly-typed Zap fields, which is illegal (since
+-		// it breaks implementation agnosticism), so we can give a better error message.
+-		if _, ok := args[i].(zap.Field); ok {
+-			l.dPanic("strongly-typed Zap Field passed to logr")
+-			break
+-		}
+-
+-		// process a key-value pair,
+-		// ensuring that the key is a string
+-		key, val := args[i], args[i+1]
+-		keyStr, isString := key.(string)
+-		if !isString {
+-			// if the key isn't a string, stop logging
+-			l.dPanic("non-string key argument passed to logging, ignoring all later arguments")
+-			break
+-		}
+-
+-		fields = append(fields, zap.Any(keyStr, val))
+-	}
+-
+-	return append(fields, additional...)
+-}
+-
+-func handleError(err error) zap.Field {
+-	return zap.NamedError("err", err)
+-}
+-
+-// V return info logr.Logger  with specified level
+-func (l *zapLogger) V(level int) logr.Logger {
+-	return &zapLogger{
+-		lvl: l.lvl + level,
+-		l:   l.l,
+-	}
+-}
+-
+-// WithValues return logr.Logger with some keys And Values
+-func (l *zapLogger) WithValues(keysAndValues ...interface{}) logr.Logger {
+-	l.l = l.l.With(l.handleFields(keysAndValues)...)
+-	return l
+-}
+-
+-// WithName return logger Named with specified name
+-func (l *zapLogger) WithName(name string) logr.Logger {
+-	l.l = l.l.Named(name)
+-	return l
+-}
+-
+-func (l *zapLogger) WithCallDepth(depth int) logr.Logger {
+-	return l.newLoggerWithExtraSkip(depth)
+-}
+-
+-// newLoggerWithExtraSkip allows creation of loggers with variable levels of callstack skipping
+-func (l *zapLogger) newLoggerWithExtraSkip(callerSkip int) logr.Logger {
+-	log := l.l.WithOptions(zap.AddCallerSkip(callerSkip))
+-	return &zapLogger{
+-		l:   log,
+-		lvl: l.lvl,
+-	}
+-}
+-
+-var _ logr.CallDepthLogger = &zapLogger{}
+diff --git a/logs/json/klog_test.go b/logs/json/klog_test.go
+index 244e6302c688f8..7887543aac1358 100644
+--- a/logs/json/klog_test.go
++++ b/logs/json/klog_test.go
+@@ -194,7 +194,7 @@ func TestKlogIntegration(t *testing.T) {
+ 			var buffer bytes.Buffer
+ 			var logger = NewJSONLogger(zapcore.AddSync(&buffer))
+ 			klog.SetLogger(logger)
+-			defer klog.SetLogger(nil)
++			defer klog.ClearLogger()
+
+ 			tc.fun()
+ 			var ts float64
+@@ -218,7 +218,7 @@ func TestKlogV(t *testing.T) {
+ 	var buffer testBuff
+ 	logger := NewJSONLogger(&buffer)
+ 	klog.SetLogger(logger)
+-	defer klog.SetLogger(nil)
++	defer klog.ClearLogger()
+ 	fs := flag.FlagSet{}
+ 	klog.InitFlags(&fs)
+ 	totalLogsWritten := 0
+diff --git a/logs/json/register/register.go b/logs/json/register/register.go
+index 18c2e442144785..4411829b1bf838 100644
+--- a/logs/json/register/register.go
++++ b/logs/json/register/register.go
+@@ -23,5 +23,5 @@ import (
+
+ func init() {
+ 	// JSON format is optional klog format
+-	logs.LogRegistry.Register(logs.JSONLogFormat, json.JSONLogger)
++	logs.LogRegistry.Register(logs.JSONLogFormat, &json.JSONLogger)
+ }
+diff --git a/logs/options.go b/logs/options.go
+index 46e52a0a138cb9..af3a4e17874224 100644
+--- a/logs/options.go
++++ b/logs/options.go
+@@ -59,7 +59,11 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
+ func (o *Options) Apply() {
+ 	// if log format not exists, use nil loggr
+ 	loggr, _ := LogRegistry.Get(o.Config.Format)
+-	klog.SetLogger(loggr)
++	if loggr == nil {
++		klog.ClearLogger()
++	} else {
++		klog.SetLogger(*loggr)
++	}
+ 	if o.Config.Sanitization {
+ 		klog.SetLogFilter(&sanitization.SanitizingFilter{})
+ 	}
+diff --git a/logs/registry.go b/logs/registry.go
+index 150af394c27729..223674ec77f787 100644
+--- a/logs/registry.go
++++ b/logs/registry.go
+@@ -25,20 +25,21 @@ import (
+
+ // LogFormatRegistry store klog format registry
+ type LogFormatRegistry struct {
+-	registry map[string]logr.Logger
++	registry map[string]*logr.Logger
+ 	frozen   bool
+ }
+
+ // NewLogFormatRegistry return new init LogFormatRegistry struct
+ func NewLogFormatRegistry() *LogFormatRegistry {
+ 	return &LogFormatRegistry{
+-		registry: make(map[string]logr.Logger),
++		registry: make(map[string]*logr.Logger),
+ 		frozen:   false,
+ 	}
+ }
+
+-// Register new log format registry to global logRegistry
+-func (lfr *LogFormatRegistry) Register(name string, logger logr.Logger) error {
++// Register new log format registry to global logRegistry.
++// nil is valid and selects the default klog output.
++func (lfr *LogFormatRegistry) Register(name string, logger *logr.Logger) error {
+ 	if lfr.frozen {
+ 		return fmt.Errorf("log format is frozen, unable to register log format")
+ 	}
+@@ -50,7 +51,7 @@ func (lfr *LogFormatRegistry) Register(name string, logger logr.Logger) error {
+ }
+
+ // Get specified log format logger
+-func (lfr *LogFormatRegistry) Get(name string) (logr.Logger, error) {
++func (lfr *LogFormatRegistry) Get(name string) (*logr.Logger, error) {
+ 	re, ok := lfr.registry[name]
+ 	if !ok {
+ 		return nil, fmt.Errorf("log format: %s does not exists", name)
+@@ -59,7 +60,7 @@ func (lfr *LogFormatRegistry) Get(name string) (logr.Logger, error) {
+ }
+
+ // Set specified log format logger
+-func (lfr *LogFormatRegistry) Set(name string, logger logr.Logger) error {
++func (lfr *LogFormatRegistry) Set(name string, logger *logr.Logger) error {
+ 	if lfr.frozen {
+ 		return fmt.Errorf("log format is frozen, unable to set log format")
+ 	}
+diff --git a/logs/json/json.go b/logs/json/json.go
+index 8d9ea384d4dc14..468c5bfe9965b5 100644
+--- a/logs/json/json.go
++++ b/logs/json/json.go
+@@ -48,7 +48,7 @@ func NewJSONLogger(w zapcore.WriteSyncer) logr.Logger {
+ 	// called by klog. The actual verbosity check happens in klog.
+ 	core := zapcore.NewCore(encoder, zapcore.AddSync(w), zapcore.Level(-127))
+ 	l := zap.New(core, zap.WithCaller(true))
+-	return zapr.NewLoggerWithOptions(l, zapr.WithLogNumeric("v"), zapr.WithErrorFieldName("err"))
++	return zapr.NewLoggerWithOptions(l, zapr.LogInfoLevel("v"), zapr.ErrorKey("err"))
+ }
+
+ var encoderConfig = zapcore.EncoderConfig{
+diff --git a/logs/json/json_test.go b/logs/json/json_test.go
+index d16e49be965a02..743b19c1c8b214 100644
+--- a/logs/json/json_test.go
++++ b/logs/json/json_test.go
+@@ -47,12 +47,12 @@ func TestZapLoggerInfo(t *testing.T) {
+ 		},
+ 		{
+ 			msg:        "test for strongly typed Zap field",
+-			format:     "{\"ts\":%f,\"caller\":\"json/json.go:%d\",\"msg\":\"strongly-typed Zap Field passed to logr\",\"v\":0}\n{\"ts\":%f,\"caller\":\"json/json_test.go:%d\",\"msg\":\"test for strongly typed Zap field\",\"v\":0,\"ns\":\"default\",\"podnum\":2}\n",
++			format:     "{\"ts\":%f,\"caller\":\"json/json_test.go:%d\",\"msg\":\"strongly-typed Zap Field passed to logr\",\"zap field\":{\"Key\":\"attempt\",\"Type\":11,\"Integer\":3,\"String\":\"\",\"Interface\":null}}\n{\"ts\":%f,\"caller\":\"json/json_test.go:%d\",\"msg\":\"test for strongly typed Zap field\",\"v\":0,\"ns\":\"default\",\"podnum\":2}\n",
+ 			keysValues: []interface{}{"ns", "default", "podnum", 2, zap.Int("attempt", 3), "attempt", "Running", 10},
+ 		},
+ 		{
+ 			msg:        "test for non-string key argument",
+-			format:     "{\"ts\":%f,\"caller\":\"json/json.go:%d\",\"msg\":\"non-string key argument passed to logging, ignoring all later arguments\",\"v\":0}\n{\"ts\":%f,\"caller\":\"json/json_test.go:%d\",\"msg\":\"test for non-string key argument\",\"v\":0,\"ns\":\"default\",\"podnum\":2}\n",
++			format:     "{\"ts\":%f,\"caller\":\"json/json_test.go:%d\",\"msg\":\"non-string key argument passed to logging, ignoring all later arguments\",\"invalid key\":200}\n{\"ts\":%f,\"caller\":\"json/json_test.go:%d\",\"msg\":\"test for non-string key argument\",\"v\":0,\"ns\":\"default\",\"podnum\":2}\n",
+ 			keysValues: []interface{}{"ns", "default", "podnum", 2, 200, "replica", "Running", 10},
+ 		},
+ 		{
+@@ -147,7 +147,7 @@ func TestZapLoggerError(t *testing.T) {
+ 	logStr := buffer.String()
+ 	var ts float64
+ 	var lineNo int
+-	expectFormat := `{"ts":%f,"caller":"json/json_test.go:%d","msg":"wrong namespace","v":0,"ns":"default","podnum":2,"time":"1µs","err":"invalid namespace:default"}`
++	expectFormat := `{"ts":%f,"caller":"json/json_test.go:%d","msg":"wrong namespace","ns":"default","podnum":2,"time":"1µs","err":"invalid namespace:default"}`
+ 	n, err := fmt.Sscanf(logStr, expectFormat, &ts, &lineNo)
+ 	if n != 2 || err != nil {
+ 		t.Errorf("log format error: %d elements, error %s:\n%s", n, err, logStr)
+diff --git a/logs/json/klog_test.go b/logs/json/klog_test.go
+index 7887543aac1358..5f1b29f998006c 100644
+--- a/logs/json/klog_test.go
++++ b/logs/json/klog_test.go
+@@ -149,28 +149,28 @@ func TestKlogIntegration(t *testing.T) {
+ 			fun: func() {
+ 				klog.Error("test ", 1)
+ 			},
+-			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test 1\n","v":0}`,
++			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test 1\n"}`,
+ 		},
+ 		{
+ 			name: "ErrorDepth",
+ 			fun: func() {
+ 				klog.ErrorDepth(1, "test ", 1)
+ 			},
+-			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test 1\n","v":0}`,
++			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test 1\n"}`,
+ 		},
+ 		{
+ 			name: "Errorln",
+ 			fun: func() {
+ 				klog.Errorln("test", 1)
+ 			},
+-			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test 1\n","v":0}`,
++			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test 1\n"}`,
+ 		},
+ 		{
+ 			name: "Errorf",
+ 			fun: func() {
+ 				klog.Errorf("test %d", 1)
+ 			},
+-			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test 1\n","v":0}`,
++			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test 1\n"}`,
+ 		},
+ 		{
+ 			name: "ErrorS",
+@@ -178,7 +178,7 @@ func TestKlogIntegration(t *testing.T) {
+ 				err := errors.New("fail")
+ 				klog.ErrorS(err, "test", "count", 1)
+ 			},
+-			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test","v":0,"count":1,"err":"fail"}`,
++			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test","count":1,"err":"fail"}`,
+ 		},
+ 		{
+ 			name: "ErrorSDepth",
+@@ -186,7 +186,7 @@ func TestKlogIntegration(t *testing.T) {
+ 				err := errors.New("fail")
+ 				klog.ErrorSDepth(1, err, "test", "count", 1)
+ 			},
+-			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test","v":0,"count":1,"err":"fail"}`,
++			format: `{"ts":%f,"caller":"json/klog_test.go:%d","msg":"test","count":1,"err":"fail"}`,
+ 		},
+ 	}
+ 	for _, tc := range tcs {

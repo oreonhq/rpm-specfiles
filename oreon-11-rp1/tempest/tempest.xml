@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<screensaver name="tempest" _label="Tempest">
+
+	<command arg="-root"/>
+
+	<number id="gridw" type="spinbutton" arg="-gridw %"
+		_label="Number of columns" low="4" high="200" default="64"/>
+
+	<number id="gridh" type="spinbutton" arg="-gridh %"
+		_label="Number of rows" low="4" high="200" default="48"/>
+
+	<number id="step" type="slider" arg="-step %"
+		_label="Movement steps" _low-label="Small" _high-label="Large"
+		low="0.00005" high="0.001" default="0.0003"/>
+
+	<number id="xfreq" type="spinbutton" arg="-xfreq %"
+		_label="X movement frequency" low="1" high="100" default="10"/>
+
+	<number id="yfreq" type="spinbutton" arg="-yfreq %"
+		_label="Y movement frequency" low="1" high="100" default="21"/>
+
+	<number id="wfactor" type="slider" arg="-wfactor %"
+		_label="Movement width" _low-label="Small" _high-label="Large"
+		low="0.1" high="1.0" default="0.9"/>
+
+	<number id="hfactor" type="slider" arg="-hfactor %"
+		_label="Movement height" _low-label="Small" _high-label="Large"
+		low="0.1" high="1.0" default="0.9"/>
+
+	<number id="force" type="slider" arg="-force %"
+		_label="'Force' parameter" _low-label="Small" _high-label="Large"
+		low="20" high="200" default="60"/>
+
+	<number id="threshhold" type="slider" arg="-threshold %"
+		_label="Threshold" _low-label="Low" _high-label="High"
+		low="1" high="100" default="10"/>
+
+	<number id="damp" type="slider" arg="-damp %"
+		_label="Damping parameter" _low-label="Low" _high-label="High"
+		low="0.95" high="1" default="0.995"/>
+
+	<_description>
+Tempest is an xscreensaver hack based on a physical model where 
+particles are attracted to their 8 neightbors. With some tweaking, 
+it can produce some very neat effects.
+	</_description>
+</screensaver>
+

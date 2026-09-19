@@ -1,0 +1,500 @@
+From dd940c01f4ee9dd3263bca844f035bc4a31c76c4 Mon Sep 17 00:00:00 2001
+From: Per Bothner <per@bothner.com>
+Date: Wed, 22 Sep 2021 08:33:11 -0700
+Subject: [PATCH 1/1] gnu/**/*.java, kawa/**/*.java: Fix Java17 depreciation
+ warnings.
+
+Mostly like 'new Double(x)' -> 'Double.valueOf(x)'.
+---
+ gnu/bytecode/ConstantValueAttr.java |  8 ++++----
+ gnu/bytecode/Method.java            | 14 --------------
+ gnu/ecmascript/BinaryOp.java        |  2 +-
+ gnu/ecmascript/Lexer.java           |  4 ++--
+ gnu/expr/LetExp.java                |  2 +-
+ gnu/expr/LitTable.java              | 16 ++++++++--------
+ gnu/kawa/functions/AddOp.java       | 10 +++++-----
+ gnu/kawa/functions/MultiplyOp.java  |  6 +++---
+ gnu/kawa/lispexpr/LangPrimType.java |  2 +-
+ gnu/kawa/reflect/CompileInvoke.java |  4 ++--
+ gnu/kawa/util/RangeTable.java       |  6 +++---
+ gnu/lists/Convert.java              | 24 ++++++++++++------------
+ gnu/text/Options.java               |  2 +-
+ gnu/xquery/lang/XQParser.java       |  6 +++---
+ gnu/xquery/util/ArithOp.java        |  8 ++++----
+ gnu/xquery/util/NumberValue.java    |  2 +-
+ 16 files changed, 51 insertions(+), 65 deletions(-)
+
+diff --git a/gnu/bytecode/ConstantValueAttr.java b/gnu/bytecode/ConstantValueAttr.java
+index af37e4c21..e484828b8 100644
+--- a/gnu/bytecode/ConstantValueAttr.java
++++ b/gnu/bytecode/ConstantValueAttr.java
+@@ -25,18 +25,18 @@ public class ConstantValueAttr extends Attribute
+ 	value = ((CpoolString) entry).getString().getString();
+ 	break;
+       case ConstantPool.INTEGER:
+-	value = new Integer(((CpoolValue1) entry).value);
++	value = Integer.valueOf(((CpoolValue1) entry).value);
+ 	break;
+       case ConstantPool.LONG:
+-	value = new Long(((CpoolValue2) entry).value);
++	value = Long.valueOf(((CpoolValue2) entry).value);
+ 	break;
+       case ConstantPool.FLOAT:
+ 	float f = Float.intBitsToFloat(((CpoolValue1) entry).value);
+-	value = new Float(f);
++	value = Float.valueOf(f);
+ 	break;
+       case ConstantPool.DOUBLE:
+ 	double d = Double.longBitsToDouble(((CpoolValue2) entry).value);
+-	value = new Double(d);
++	value = Double.valueOf(d);
+ 	break;
+       }
+     return value;
+diff --git a/gnu/bytecode/Method.java b/gnu/bytecode/Method.java
+index 2915ef7f2..99d8cdfe7 100644
+--- a/gnu/bytecode/Method.java
++++ b/gnu/bytecode/Method.java
+@@ -153,13 +153,6 @@ public class Method implements AttrContainer, Member {
+         code.pushScope();
+     }
+ 
+-    /**
+-     * @deprecated Use startCode instead
+-     */
+-    public void init_param_slots(){
+-        startCode();
+-    }
+-
+     /** Recommended method to create a new CodeAttr for this Method. */
+     public CodeAttr startCode() {
+         initCode();
+@@ -199,13 +192,6 @@ public class Method implements AttrContainer, Member {
+             code.emitCheckcast(type);
+     }
+ 
+-    /**
+-     * Comple code to push the contents of a local variable onto the statck.
+-     * @param var The variable whose contents we want to push.
+-     * @deprecated
+-     */
+-    public void push_var(Variable var) { code.emitLoad (var); }
+-
+     @Deprecated
+     public void compile_push_value(Variable var) { code.emitLoad(var); }
+ 
+diff --git a/gnu/ecmascript/BinaryOp.java b/gnu/ecmascript/BinaryOp.java
+index ce3527601..3d4a82c06 100644
+--- a/gnu/ecmascript/BinaryOp.java
++++ b/gnu/ecmascript/BinaryOp.java
+@@ -17,7 +17,7 @@ public class BinaryOp extends Procedure2
+ 	return Convert.toNumber(arg1) < Convert.toNumber(arg2)
+ 	  ? Boolean.TRUE : Boolean.FALSE;
+       }
+-    return new Double(apply(Convert.toNumber(arg1), Convert.toNumber(arg2)));
++    return Double.valueOf(apply(Convert.toNumber(arg1), Convert.toNumber(arg2)));
+   }
+   
+   public double apply (double arg1, double arg2)
+diff --git a/gnu/ecmascript/Lexer.java b/gnu/ecmascript/Lexer.java
+index 9a4aecf14..58b0107c1 100644
+--- a/gnu/ecmascript/Lexer.java
++++ b/gnu/ecmascript/Lexer.java
+@@ -106,7 +106,7 @@ public class Lexer extends gnu.text.Lexer
+ 	    else // FIXME - do we want to use gnu.math??
+ 	      dval = gnu.math.IntNum.valueOf(port.buffer, i, port.pos - i,
+ 					     radix, false).doubleValue();
+-	    return new Double(dval);
++	    return Double.valueOf(dval);
+ 	  }
+       }
+     if (radix != 10)
+@@ -162,7 +162,7 @@ public class Lexer extends gnu.text.Lexer
+ 	str.append('e');
+ 	str.append(exp);
+       }
+-    return new Double(str.toString ());
++    return Double.valueOf(str.toString ());
+   }
+ 
+   public String getStringLiteral (char quote)
+diff --git a/gnu/expr/LetExp.java b/gnu/expr/LetExp.java
+index 60c84752c..5b7d9fb4a 100644
+--- a/gnu/expr/LetExp.java
++++ b/gnu/expr/LetExp.java
+@@ -159,7 +159,7 @@ public class LetExp extends ScopeExp
+ 	      {
+ 		// Typically created by letrec.
+ 		if (varType instanceof PrimType)
+-		  init = new QuoteExp(new Byte((byte) 0));
++		  init = new QuoteExp(Byte.valueOf((byte) 0));
+ 		else if (varType != null && varType != Type.pointer_type)
+ 		  init = QuoteExp.nullExp;
+ 	      }
+diff --git a/gnu/expr/LitTable.java b/gnu/expr/LitTable.java
+index ffc813deb..2a590af6a 100644
+--- a/gnu/expr/LitTable.java
++++ b/gnu/expr/LitTable.java
+@@ -152,42 +152,42 @@ public class LitTable extends GeneralHashTable<Object,Object>
+ 
+   public void writeBoolean(boolean v)
+   {
+-    push(new Boolean(v), Type.booleanType);
++    push(Boolean.valueOf(v), Type.booleanType);
+   }
+ 
+   public void writeChar(int v)
+   {
+-    push(new Character((char) v), Type.charType);
++    push(Character.valueOf((char) v), Type.charType);
+   }
+ 
+   public void writeByte(int v)
+   {
+-    push(new Byte((byte) v), Type.byteType);
++    push(Byte.valueOf((byte) v), Type.byteType);
+   }
+ 
+   public void writeShort(int v)
+   {
+-    push(new Short((short) v), Type.shortType);
++    push(Short.valueOf((short) v), Type.shortType);
+   }
+ 
+   public void writeInt(int v)
+   {
+-    push(new Integer(v), Type.intType);
++    push(Integer.valueOf(v), Type.intType);
+   }
+ 
+   public void writeLong(long v)
+   {
+-    push(new Long(v), Type.longType);
++    push(Long.valueOf(v), Type.longType);
+   }
+ 
+   public void writeFloat(float v)
+   {
+-    push(new Float(v), Type.floatType);
++    push(Float.valueOf(v), Type.floatType);
+   }
+ 
+   public void writeDouble(double v)
+   {
+-    push(new Double(v), Type.doubleType);
++    push(Double.valueOf(v), Type.doubleType);
+   }
+ 
+   public void writeUTF(String v) 
+diff --git a/gnu/kawa/functions/AddOp.java b/gnu/kawa/functions/AddOp.java
+index b38629b76..3b90d8c49 100644
+--- a/gnu/kawa/functions/AddOp.java
++++ b/gnu/kawa/functions/AddOp.java
+@@ -72,11 +72,11 @@ public class AddOp extends ArithOp
+       case Arithmetic.FLOAT_CODE:
+ 	float f1 = Arithmetic.asFloat(arg1);
+ 	float f2 = Arithmetic.asFloat(arg2);
+-	return new Float(plusOrMinus > 0 ? f1 + f2 : f1 - f2);
++	return Float.valueOf(plusOrMinus > 0 ? f1 + f2 : f1 - f2);
+       case Arithmetic.DOUBLE_CODE:
+ 	double d1 = Arithmetic.asDouble(arg1);
+ 	double d2 = Arithmetic.asDouble(arg2);
+-	return new Double(plusOrMinus > 0 ? d1 + d2 : d1 - d2);
++	return Double.valueOf(plusOrMinus > 0 ? d1 + d2 : d1 - d2);
+       case Arithmetic.FLONUM_CODE:
+ 	d1 = Arithmetic.asDouble(arg1);
+ 	d2 = Arithmetic.asDouble(arg2);
+@@ -120,11 +120,11 @@ public class AddOp extends ArithOp
+       case Arithmetic.RATNUM_CODE:
+ 	return RatNum.neg(Arithmetic.asRatNum(arg1));
+       case Arithmetic.FLOAT_CODE:
+-	return new Float(- Arithmetic.asFloat(arg1));
++	return Float.valueOf(- Arithmetic.asFloat(arg1));
+       case Arithmetic.DOUBLE_CODE:
+-	return new Double(- Arithmetic.asDouble(arg1));
++	return Double.valueOf(- Arithmetic.asDouble(arg1));
+       case Arithmetic.FLONUM_CODE:
+-	return new DFloNum(- Arithmetic.asDouble(arg1));
++	return DFloNum.valueOf(- Arithmetic.asDouble(arg1));
+       default:
+         return Arithmetic.asNumeric(arg1).neg();
+       }
+diff --git a/gnu/kawa/functions/MultiplyOp.java b/gnu/kawa/functions/MultiplyOp.java
+index 4429610ba..bef1419fa 100644
+--- a/gnu/kawa/functions/MultiplyOp.java
++++ b/gnu/kawa/functions/MultiplyOp.java
+@@ -87,17 +87,17 @@ public class MultiplyOp extends ArithOp
+ 	  case Arithmetic.FLOAT_CODE:
+ 	    float f1 = Arithmetic.asFloat(result);
+ 	    float f2 = Arithmetic.asFloat(arg2);
+-	    result = new Float(f1 * f2);
++	    result = Float.valueOf(f1 * f2);
+ 	    break;
+ 	  case Arithmetic.DOUBLE_CODE:
+ 	    double d1 = Arithmetic.asDouble(result);
+ 	    double d2 = Arithmetic.asDouble(arg2);
+-	    result = new Double(d1 * d2);
++	    result = Double.valueOf(d1 * d2);
+ 	    break;
+ 	  case Arithmetic.FLONUM_CODE:
+ 	    d1 = Arithmetic.asDouble(result);
+ 	    d2 = Arithmetic.asDouble(arg2);
+-	    result = new DFloNum(d1 * d2);
++	    result = DFloNum.valueOf(d1 * d2);
+ 	    break;
+ 	  default:
+ 	    result = Arithmetic.asNumeric(result)
+diff --git a/gnu/kawa/lispexpr/LangPrimType.java b/gnu/kawa/lispexpr/LangPrimType.java
+index 88e2bd4a4..e8f555e89 100644
+--- a/gnu/kawa/lispexpr/LangPrimType.java
++++ b/gnu/kawa/lispexpr/LangPrimType.java
+@@ -167,7 +167,7 @@ public class LangPrimType extends PrimType
+         case 'Z':
+             return language.isTrue(obj) ? Boolean.TRUE : Boolean.FALSE;
+         case 'C':
+-            return new Character(((Char) obj).charValue());
++            return Character.valueOf(((Char) obj).charValue());
+         case 'V':
+             return Values.empty;
+         }
+diff --git a/gnu/kawa/reflect/CompileInvoke.java b/gnu/kawa/reflect/CompileInvoke.java
+index ec12d555b..d7c9ce58e 100644
+--- a/gnu/kawa/reflect/CompileInvoke.java
++++ b/gnu/kawa/reflect/CompileInvoke.java
+@@ -61,7 +61,7 @@ public class CompileInvoke {
+                 }
+             }
+             if (sizeArg == null)
+-                sizeArg = QuoteExp.getInstance(new Integer(args.length-1));
++                sizeArg = QuoteExp.getInstance(Integer.valueOf(args.length-1));
+             sizeArg = visitor.visit(sizeArg, Type.intType);
+             Object constantValue = null;
+             if (visitor.processingAnnotations()
+@@ -122,7 +122,7 @@ public class CompileInvoke {
+                     begin.add(new ApplyExp(new ArraySet(elementType),
+                                            new Expression[] {
+                                                new ReferenceExp(adecl),
+-                                               QuoteExp.getInstance(new Integer(index)),
++                                               QuoteExp.getInstance(index),
+                                                arg}));
+                 index++;
+             }
+diff --git a/gnu/kawa/util/RangeTable.java b/gnu/kawa/util/RangeTable.java
+index 6f3104055..69e29ba98 100644
+--- a/gnu/kawa/util/RangeTable.java
++++ b/gnu/kawa/util/RangeTable.java
+@@ -14,7 +14,7 @@ public class RangeTable implements Cloneable // extends map
+   {
+     if ((key & 127) == key)
+       return index[key];
+-    return hash.get(new Integer(key));
++    return hash.get(key);
+   }
+ 
+   public void set(int lo, int hi, Object value)
+@@ -26,7 +26,7 @@ public class RangeTable implements Cloneable // extends map
+ 	if ((i & 127) == i)
+ 	  index[i] = value;
+ 	else
+-	  hash.put(new Integer(i), value);
++	  hash.put(i, value);
+ 	if (i == hi)
+ 	  break;
+       }
+@@ -46,7 +46,7 @@ public class RangeTable implements Cloneable // extends map
+ 	if ((i & 127) == i)
+ 	  index[i] = null;
+ 	else
+-	  hash.remove(new Integer(i));
++	  hash.remove(i);
+ 	if (i == hi)
+ 	  break;
+       }
+diff --git a/gnu/lists/Convert.java b/gnu/lists/Convert.java
+index 411030fbe..0890cf1e1 100644
+--- a/gnu/lists/Convert.java
++++ b/gnu/lists/Convert.java
+@@ -39,7 +39,7 @@ public class Convert
+ 
+   public Object charToObject(char ch)
+   {
+-    return new Character(ch);
++    return Character.valueOf(ch);
+   }
+ 
+   public char objectToChar(Object obj)
+@@ -59,7 +59,7 @@ public class Convert
+ 
+   public Object byteToObject(byte value)
+   {
+-    return new Byte(value);
++    return Byte.valueOf(value);
+   }
+ 
+   public byte objectToByte(Object obj)
+@@ -79,7 +79,7 @@ public class Convert
+ 
+   public Object byteToObjectUnsigned(byte value)
+   {
+-    return new Integer(value & 0xFF);
++    return Integer.valueOf(value & 0xFF);
+   }
+ 
+   public byte objectToByteUnsigned(Object obj)
+@@ -99,7 +99,7 @@ public class Convert
+ 
+   public Object shortToObject(short value)
+   {
+-    return new Short(value);
++    return Short.valueOf(value);
+   }
+ 
+   public short objectToShort(Object obj)
+@@ -119,7 +119,7 @@ public class Convert
+ 
+   public Object shortToObjectUnsigned(short value)
+   {
+-    return new Integer(value & 0xFFFF);
++    return Integer.valueOf(value & 0xFFFF);
+   }
+ 
+   public short objectToShortUnsigned(Object obj)
+@@ -139,7 +139,7 @@ public class Convert
+ 
+   public Object intToObject(int value)
+   {
+-    return new Integer(value);
++    return Integer.valueOf(value);
+   }
+ 
+   public int objectToInt(Object obj) 
+@@ -160,9 +160,9 @@ public class Convert
+   public Object intToObjectUnsigned(int value)
+   {
+     if (value >= 0)
+-      return new Integer(value);
++      return Integer.valueOf(value);
+     else
+-      return new Long((long) value & 0xffffffffL);
++      return Long.valueOf((long) value & 0xffffffffL);
+   }
+ 
+   public int objectToIntUnsigned(Object obj)
+@@ -182,7 +182,7 @@ public class Convert
+ 
+   public Object longToObject(long value)
+   {
+-    return new Long(value);
++    return Long.valueOf(value);
+   }
+ 
+   public long objectToLong(Object obj)
+@@ -202,7 +202,7 @@ public class Convert
+ 
+   public Object longToObjectUnsigned(long value)
+   {
+-    return new Long(value);  // FIXME use BigInteger?
++    return Long.valueOf(value);  // FIXME use BigInteger?
+   }
+ 
+   public long objectToLongUnsigned(Object obj)
+@@ -222,7 +222,7 @@ public class Convert
+ 
+   public Object floatToObject(float value)
+   {
+-    return new Float(value);
++    return Float.valueOf(value);
+   }
+ 
+   public float objectToFloat(Object obj)
+@@ -242,7 +242,7 @@ public class Convert
+ 
+   public Object doubleToObject(double value)
+   {
+-    return new Double(value);
++    return Double.valueOf(value);
+   }
+ 
+   public double objectToDouble(Object obj)
+diff --git a/gnu/text/Options.java b/gnu/text/Options.java
+index b7ac8b4df..12f16e02a 100644
+--- a/gnu/text/Options.java
++++ b/gnu/text/Options.java
+@@ -89,7 +89,7 @@ public class Options
+         }
+         if ((info.kind & INT_OPTION) != 0) {
+             try {
+-                return new Integer(argument);
++                return Integer.valueOf(argument);
+             } catch (Throwable ex) {
+                 return null;
+             }
+diff --git a/gnu/xquery/lang/XQParser.java b/gnu/xquery/lang/XQParser.java
+index da946efcd..811cafdb4 100644
+--- a/gnu/xquery/lang/XQParser.java
++++ b/gnu/xquery/lang/XQParser.java
+@@ -516,7 +516,7 @@ public class XQParser extends Lexer
+     int next;
+     for (;;)
+       {
+-	next = readUnicodeChar();
++	next = readCodePoint();
+ 	if (next < 0)
+ 	  return setToken(EOF_TOKEN, 0);
+ 	if (next == '\n' || next == '\r')
+@@ -602,7 +602,7 @@ public class XQParser extends Lexer
+ 	char saveReadState = pushNesting ((char) next);
+ 	for (;;)
+ 	  {
+-	    next = readUnicodeChar();
++	    next = readCodePoint();
+ 	    if (next < 0)
+ 	      eofError("unexpected end-of-file in string starting here");
+ 	    if (next == '&')
+@@ -2986,7 +2986,7 @@ public class XQParser extends Lexer
+             if (token == DECIMAL_TOKEN)
+               val = new java.math.BigDecimal(str);
+             else
+-              val = new java.lang.Double(str);
++              val = Double.valueOf(Double.parseDouble(str));
+             exp = new QuoteExp(val);
+           }
+         catch (Exception ex)
+diff --git a/gnu/xquery/util/ArithOp.java b/gnu/xquery/util/ArithOp.java
+index 2d264a82b..1238f8f8f 100644
+--- a/gnu/xquery/util/ArithOp.java
++++ b/gnu/xquery/util/ArithOp.java
+@@ -121,13 +121,13 @@ public class ArithOp extends Procedure1or2
+           }
+         else if (code == Arithmetic.FLOAT_CODE)
+           {
+-            return new Float(((Number) arg1).floatValue()
+-                             / ((Number) arg2).floatValue());
++            return Float.valueOf(((Number) arg1).floatValue()
++                                 / ((Number) arg2).floatValue());
+           }
+         else if (code == Arithmetic.DOUBLE_CODE)
+           {
+-            return new Double(((Number) arg1).doubleValue()
+-                             / ((Number) arg2).doubleValue());
++            return Double.valueOf(((Number) arg1).doubleValue()
++                                  / ((Number) arg2).doubleValue());
+           }
+         else if (arg1 instanceof Duration && arg2 instanceof Duration)
+           {
+diff --git a/gnu/xquery/util/NumberValue.java b/gnu/xquery/util/NumberValue.java
+index 036fd1fc2..09ab1de6d 100644
+--- a/gnu/xquery/util/NumberValue.java
++++ b/gnu/xquery/util/NumberValue.java
+@@ -13,7 +13,7 @@ public class NumberValue extends Procedure1
+ {
+   public static final NumberValue numberValue = new NumberValue();
+  
+-  public static final Double NaN = new Double(Double.NaN);
++  public static final Double NaN = Double.valueOf(Double.NaN);
+ 
+   public static boolean isNaN (Object arg)
+   {
+-- 
+2.47.0
+

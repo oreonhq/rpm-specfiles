@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f56343fbf9c198483da46375e7f17f40b8f9282a02f98131c52ad466adcf5a92
 
 %global stable_kf6 stable
 
@@ -10,7 +10,7 @@
 ExcludeArch: %{ix86}
 
 Name:           kalk
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 License:        BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later
 Summary:        %{name} is a convergent calculator for Plasma.

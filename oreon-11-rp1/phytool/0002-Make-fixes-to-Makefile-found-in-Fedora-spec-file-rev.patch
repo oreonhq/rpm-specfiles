@@ -1,0 +1,36 @@
+From 211dadfea7dd3ec90c29e032d3fbf0445d610aa1 Mon Sep 17 00:00:00 2001
+From: Stephen Smoogen <ssmoogen@redhat.com>
+Date: Wed, 17 Jan 2024 18:08:16 -0500
+Subject: [PATCH] Make changes to Makefile for spec usage * Make sure there is
+ a directory at $PREFIX to install to. * Make sure that copying keeps
+ timesstamps and permissions.
+
+Signed-off-by: Stephen Smoogen <ssmoogen@redhat.com>
+---
+ Makefile | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 2472ad0..cdd5431 100644
+--- a/Makefile
++++ b/Makefile
+@@ -31,12 +31,13 @@ clean:
+ 	@rm -f $(TARGET)
+ 
+ dist:
+-	@echo "Creating $(ARCHIVE), with $(ARCHIVE).md5 in parent dir ..."
++	@echo "Creating $(ARCHIVE), with $(ARCHIVE).sha512 in parent dir ..."
+ 	@git archive --format=tar --prefix=$(PKG)/ v$(VERSION) | xz >../$(ARCHIVE)
+-	@(cd .. && md5sum $(ARCHIVE) > $(ARCHIVE).md5)
++	@(cd .. && sha5125sum $(ARCHIVE) > $(ARCHIVE).sha512)
+ 
+ install: phytool
+-	@cp phytool $(DESTDIR)/$(PREFIX)/bin/
++	@mkdir -p $(DESTDIR)/$(PREFIX)/bin/
++	@cp -p phytool $(DESTDIR)/$(PREFIX)/bin/
+ 	@for app in $(APPLETS); do \
+ 		ln -sf phytool $(DESTDIR)/$(PREFIX)/bin/$$app; \
+ 	done
+-- 
+2.43.0
+

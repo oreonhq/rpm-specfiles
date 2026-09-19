@@ -1,0 +1,25 @@
+--- a/dune	2020-09-04 05:21:59.000000000 -0600
++++ b/dune	2022-02-22 08:41:23.448285550 -0700
+@@ -1,9 +1,8 @@
+ (library
+  (public_name ptmap)
+- (modules ptmap)
+- (libraries seq))
++ (modules ptmap))
+ 
+ (test
+  (name test)
+  (modules test)
+- (libraries stdlib-shims ptmap))
++ (libraries ptmap))
+--- a/ptmap.opam	2020-09-04 05:21:59.000000000 -0600
++++ b/ptmap.opam	2022-02-22 08:41:41.648281776 -0700
+@@ -11,8 +11,6 @@ doc: "https://backtracking.github.io/ptm
+ bug-reports: "https://github.com/backtracking/ptmap/issues"
+ depends: [
+   "ocaml"
+-  "stdlib-shims"
+-  "seq"
+   "dune" {>= "2.0.0"}
+ ]
+ build: [

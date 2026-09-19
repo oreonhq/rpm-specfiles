@@ -1,0 +1,72 @@
+commit 7d3895fb2331f5f9d2304a901c7bce7e32cdf93b
+Author: Andrew Cagney <cagney@gnu.org>
+Date:   Tue Apr 19 16:49:23 2016 -0400
+
+    Install the JNI .so in $(pkglibdir)
+    
+    So it isn't in the default ld library path.
+    
+    Patch: frysk-0.4-fedpkg-lint-solib.patch
+
+diff --git a/frysk-common/Makefile.gen.sh b/frysk-common/Makefile.gen.sh
+index 11a83dc..7802cbb 100755
+--- a/frysk-common/Makefile.gen.sh
++++ b/frysk-common/Makefile.gen.sh
+@@ -508,7 +508,7 @@ for suffix in .java .java-sh .mkenum .shenum .java-in ; do
+ ${name}: Makefile
+ 	mkdir -p ${d}
+ 	echo "#!/bin/sh" >> ${name}.tmp
+-	echo exec /usr/bin/java -cp \"\$(INSTALLED_CLASSPATH)\" ${name} \"\\\$\$@\" >> ${name}.tmp
++	echo exec /usr/bin/java -Djava.library.path=\"\$(pkglibdir)\" -cp \"\$(INSTALLED_CLASSPATH)\" ${name} \"\\\$\$@\" >> ${name}.tmp
+ 	chmod a+x ${name}.tmp
+ 	mv ${name}.tmp ${name}
+ EOF
+@@ -808,7 +808,7 @@ if automake_variable_defined lib${GEN_MAKENAME}_jni_a_SOURCES ; then
+ JNIXX_CLASSES = 
+ noinst_LIBRARIES += lib${GEN_DIRNAME}-jni.a
+ lib${GEN_MAKENAME}_jni_so_SOURCES =
+-solib_PROGRAMS += lib${GEN_DIRNAME}-jni.so
++jni_PROGRAMS += lib${GEN_DIRNAME}-jni.so
+ lib${GEN_DIRNAME}-jni.so: lib${GEN_DIRNAME}-jni.a
+ jni: lib${GEN_DIRNAME}-jni.so
+ lib${GEN_MAKENAME}_jni_a_SOURCES += jni.cxx
+diff --git a/frysk-common/Makefile.rules b/frysk-common/Makefile.rules
+index e109084..ccd1535 100644
+--- a/frysk-common/Makefile.rules
++++ b/frysk-common/Makefile.rules
+@@ -438,14 +438,14 @@ lib$(GEN_DIRNAME)-jni.so: lib$(GEN_DIRNAME)-jni.a
+ 	mv $@.tmp $@
+ 
+ 
+-# Clueless automake: Use a phony DATA entry to convince AUTOMAKE that
+-# it really should install a .so file into LIBDIR.  The obvious
+-# choice, lib_LIBRARIES, attracts an error because .so isn't a valid
+-# extension (serious!); mean while LTLIBRARIES insists that the world
+-# should use LIBTOOL.
+-
+-solibdir = $(libdir)
+-solib_PROGRAMS =
++# Clueless automake: Use a phony entry to convince AUTOMAKE that it
++# really should install a .so file in $(PKGLIBDIR).  The obvious
++# choice, pkglib_LIBRARIES, attracts an error because .so isn't a
++# valid extension (serious!); mean while LTLIBRARIES insists that the
++# world should use LIBTOOL.
++
++jnidir = $(pkglibdir)
++jni_PROGRAMS =
+ 
+ # The shared java directory (typically /usr/share/java/; contains
+ # things like .jar files) but here is architecture specific as frsyk,
+diff --git a/frysk-top/bootstrap.sh b/frysk-top/bootstrap.sh
+index a426ed4..b02af86 100755
+--- a/frysk-top/bootstrap.sh
++++ b/frysk-top/bootstrap.sh
+@@ -44,7 +44,7 @@ cd `dirname $0`
+ 
+ # Update any bootstraped sub directories.
+ 
+-for s in */bootstrap.sh
++for s in frysk-{imports,sys,core}/bootstrap.sh
+ do
+   d=`dirname $s`
+   if test -d $d -a x"$d" != x"frysk-top"; then

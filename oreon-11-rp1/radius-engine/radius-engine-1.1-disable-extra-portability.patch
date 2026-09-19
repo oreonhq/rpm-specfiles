@@ -1,0 +1,11 @@
+diff -up radius-engine-1.1/configure.in.disable-extra-portability radius-engine-1.1/configure.in
+--- radius-engine-1.1/configure.in.disable-extra-portability	2012-09-04 16:32:22.000000000 -0400
++++ radius-engine-1.1/configure.in	2012-09-04 16:32:52.701712486 -0400
+@@ -1,6 +1,6 @@
+ AC_INIT([Radius Engine], [1.1], [deraj@users.sourceforge.net], [radius-engine], [http://radius-engine.sourceforge.net/])
+ AC_CANONICAL_TARGET
+-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
++AM_INIT_AUTOMAKE([-Wall -Wno-extra-portability -Werror foreign])
+ 
+ AC_CANONICAL_BUILD
+ AC_CANONICAL_HOST

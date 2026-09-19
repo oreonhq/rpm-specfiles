@@ -1,0 +1,77 @@
+diff -rup a/src/app/app.c b/src/app/app.c
+--- a/src/app/app.c	2016-05-13 14:01:28.536843007 +0200
++++ b/src/app/app.c	2016-05-13 14:10:56.427117236 +0200
+@@ -588,7 +588,7 @@ gint ok_create_callb(GtkWidget *wdg, gpo
+ 			if (app->docs->last_doc->type->tools_dialog ==
+ 				app->docs->current_doc->type->tools_dialog)
+ 		//	If type of new doc. = type of last one, same controls, do nothing!
+-				return;
++				return FALSE;
+ 		if (app->docs->last_doc)
+ 			if (app->docs->last_doc->type->tools_dialog)  { 
+ 				// Changing type - replace tools dialog
+diff -rup a/src/fourier/fourier_dialog.c b/src/fourier/fourier_dialog.c
+--- a/src/fourier/fourier_dialog.c	2016-05-13 14:01:28.540842981 +0200
++++ b/src/fourier/fourier_dialog.c	2016-05-13 14:07:10.003570250 +0200
+@@ -572,7 +572,7 @@ static gint result_preview (GtkWidget *w
+  	fourier_dialog_struct *fds = (fourier_dialog_struct *) fds_ptr;	
+ 	if (wdg)
+ 		if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wdg)))
+-			return;
++			return FALSE;
+ 	fds->preview_choice = PREVIEW_RESULT;
+ 	gl_set_input_grid (fds->gl_preview, fds->fs->tmp_buf_inv, fds->max_x, fds->max_y, HF_TYPE_ID);
+ 	gl_area_update (fds->gl_preview);
+@@ -585,7 +585,7 @@ static gint transform_preview (GtkWidget
+  	fourier_dialog_struct *fds = (fourier_dialog_struct *) fds_ptr;	
+ 	if (wdg)
+ 		if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wdg)))
+-			return;
++			return FALSE;
+ 	fds->preview_choice = PREVIEW_TRANSFORM;
+ 	gl_set_input_grid (fds->gl_preview, fds->fs->tmp_buf, fds->max_x, fds->max_y, HF_TYPE_ID);
+ 	gl_area_update (fds->gl_preview);
+@@ -617,6 +617,7 @@ static gint reuse_result_callb (GtkWidge
+ 	fourier_compute_inverse (fds->fs);
+ 	set_toolbar_button_from_label (fds->ffds->toolbar, _("No filter"), TRUE);
+ 	draw_fourier(fds);
++	return FALSE;
+ }
+ 
+ GtkWidget *build_fourier_widget (fourier_dialog_struct *fds) {
+diff -rup a/src/hf/gl_preview.c b/src/hf/gl_preview.c
+--- a/src/hf/gl_preview.c	2016-05-13 14:01:28.538842994 +0200
++++ b/src/hf/gl_preview.c	2016-05-13 14:08:17.652136133 +0200
+@@ -106,7 +106,7 @@ static gboolean gl_draw (GtkWidget *gl_a
+ //	Drawing function when idle
+ 
+ 	if (!gl_area)
+-		return;
++		return FALSE;
+ 
+ 	/* Invalidate the whole window. - does not seem to work? */
+ //	gdk_window_invalidate_rect (gl_area->window, &gl_area->allocation, FALSE);
+diff -rup a/src/hf/img_process_dialog.c b/src/hf/img_process_dialog.c
+--- a/src/hf/img_process_dialog.c	2016-05-13 14:01:28.539842988 +0200
++++ b/src/hf/img_process_dialog.c	2016-05-13 14:07:56.228273615 +0200
+@@ -2224,7 +2224,7 @@ static gint apply_math_fn_callb2 (GtkWid
+ 	hf_wrapper_struct *hfw;
+ 	hfw = (hf_wrapper_struct *) * (hf_wrapper_struct **) data;
+ 	if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wdg)))
+-		return;
++		return FALSE;
+ //	if (hfw->if_calculated)
+ //		return;
+ 	apply_math_fn(hfw);
+diff -rup a/src/hf/merge_dialog.c b/src/hf/merge_dialog.c
+--- a/src/hf/merge_dialog.c	2016-05-13 14:01:28.539842988 +0200
++++ b/src/hf/merge_dialog.c	2016-05-13 14:08:50.501925328 +0200
+@@ -21,7 +21,7 @@
+ #include "hf_wrapper.h"
+ #include "../utils/menus_n_tools.h"
+ 
+-static generic_callb (gpointer data, gint merge_op) {
++static void generic_callb (gpointer data, gint merge_op) {
+ 	merge_struct *mrg = (merge_struct *) data;
+ 	mrg->merge_op = merge_op;
+ 	merge_calc (mrg);

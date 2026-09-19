@@ -1,0 +1,76 @@
+diff -ur ClanLib-0.6.5.orig/Sources/SmallJPEG/jpgd/jpegdecoder.cpp ClanLib-0.6.5/Sources/SmallJPEG/jpgd/jpegdecoder.cpp
+--- ClanLib-0.6.5.orig/Sources/SmallJPEG/jpgd/jpegdecoder.cpp	2001-04-25 18:14:41.000000000 +0200
++++ ClanLib-0.6.5/Sources/SmallJPEG/jpgd/jpegdecoder.cpp	2006-07-20 12:25:34.000000000 +0200
+@@ -102,7 +102,7 @@
+   blocks[i] = q;
+ 
+   // Round to qword boundry, to avoid misaligned accesses with MMX code
+-  return ((void *)(((uint)q + 7) & ~7));
++  return ((void *)(((unsigned long)q + 7) & ~7));
+ }
+ //------------------------------------------------------------------------------
+ // Clear buffer to word values.
+@@ -1870,7 +1870,7 @@
+   q = (uchar *)alloc(max_blocks_per_row * 64 * sizeof(BLOCK_TYPE) + 8);
+ 
+   // Align to 8-byte boundry, for MMX code
+-  q = (uchar *)(((uint)q + 7) & ~7);
++  q = (uchar *)(((unsigned long)q + 7) & ~7);
+ 
+   // The block_seg[] array's name dates back to the
+   // 16-bit assembler implementation. "seg" stood for "segment".
+@@ -1880,7 +1880,7 @@
+   for (i = 0; i < max_blocks_per_row; i++)
+     block_max_zag_set[i] = 64;
+ 
+-  Psample_buf = (uchar *)(((uint)alloc(max_blocks_per_row * 64 + 8) + 7) & ~7);
++  Psample_buf = (uchar *)(((unsigned long)alloc(max_blocks_per_row * 64 + 8) + 7) & ~7);
+ 
+   total_lines_left = image_y_size;
+ 
+diff -ur ClanLib-0.6.5.orig/Sources/SmallJPEG/jpgd/jpegdecoder.h ClanLib-0.6.5/Sources/SmallJPEG/jpgd/jpegdecoder.h
+--- ClanLib-0.6.5.orig/Sources/SmallJPEG/jpgd/jpegdecoder.h	2001-05-07 10:36:59.000000000 +0200
++++ ClanLib-0.6.5/Sources/SmallJPEG/jpgd/jpegdecoder.h	2006-07-20 12:24:08.000000000 +0200
+@@ -493,26 +493,26 @@
+ 
+   void find_eoi(void);
+ //------------------
+-  /*inline*/ uint jpeg_decoder::rol(uint i, uchar j);
+-  /*inline*/ uint jpeg_decoder::get_char(void);
+-  /*inline*/ uint jpeg_decoder::get_char(bool *Ppadding_flag);
+-  /*inline*/ void jpeg_decoder::stuff_char(uchar q);
+-  /*inline*/ uchar jpeg_decoder::get_octet(void);
+-  /*inline*/ uint jpeg_decoder::get_bits_1(int num_bits);
+-  /*inline*/ uint jpeg_decoder::get_bits_2(int numbits);
+-  /*inline*/ int jpeg_decoder::huff_decode(Phuff_tables_t Ph);
++  /*inline*/ uint rol(uint i, uchar j);
++  /*inline*/ uint get_char(void);
++  /*inline*/ uint get_char(bool *Ppadding_flag);
++  /*inline*/ void stuff_char(uchar q);
++  /*inline*/ uchar get_octet(void);
++  /*inline*/ uint get_bits_1(int num_bits);
++  /*inline*/ uint get_bits_2(int numbits);
++  /*inline*/ int huff_decode(Phuff_tables_t Ph);
+ #ifdef SUPPORT_X86ASM
+-  /*inline*/ uint jpeg_decoder::huff_extend(uint i, int c);
++  /*inline*/ uint huff_extend(uint i, int c);
+ #endif
+-  /*inline*/ uchar jpeg_decoder::clamp(int i);
++  /*inline*/ uchar clamp(int i);
+ 
+ #ifdef SUPPORT_MMX
+-  /*inline*/ uint jpeg_decoder::get_high_byte_mmx(void);
+-  /*inline*/ uint jpeg_decoder::get_high_word_mmx(void);
+-  /*inline*/ void jpeg_decoder::get_bits_2_mmx_init(void);
+-  /*inline*/ void jpeg_decoder::get_bits_2_mmx_deinit(void);
+-  /*inline*/ uint jpeg_decoder::get_bits_2_mmx(int numbits);
+-  /*inline*/ int jpeg_decoder::huff_decode_mmx(Phuff_tables_t Ph);
++  /*inline*/ uint get_high_byte_mmx(void);
++  /*inline*/ uint get_high_word_mmx(void);
++  /*inline*/ void get_bits_2_mmx_init(void);
++  /*inline*/ void get_bits_2_mmx_deinit(void);
++  /*inline*/ uint get_bits_2_mmx(int numbits);
++  /*inline*/ int huff_decode_mmx(Phuff_tables_t Ph);
+ #endif
+ //------------------
+   int   image_x_size;

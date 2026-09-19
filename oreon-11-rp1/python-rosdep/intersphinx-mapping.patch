@@ -1,0 +1,20 @@
+From 7a126e30834a7975a43272a8146f800c5d488193 Mon Sep 17 00:00:00 2001
+From: Scott K Logan <logans@cottsay.net>
+Date: Fri, 8 Aug 2025 11:29:05 -0500
+Subject: [PATCH] Use modern intersphinx_mapping syntax (#1012)
+
+Support for the legacy syntax was dropped in Sphinx 8.
+---
+ doc/conf.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/doc/conf.py b/doc/conf.py
+index 583cc4d4c..70ac70346 100644
+--- a/doc/conf.py
++++ b/doc/conf.py
+@@ -232,4 +232,4 @@
+ 
+ 
+ # Example configuration for intersphinx: refer to the Python standard library.
+-intersphinx_mapping = {'http://docs.python.org/': None}
++intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}

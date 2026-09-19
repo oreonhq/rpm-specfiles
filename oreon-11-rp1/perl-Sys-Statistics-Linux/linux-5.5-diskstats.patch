@@ -1,0 +1,15 @@
+diff -up ./lib/Sys/Statistics/Linux/DiskStats.pm.orig ./lib/Sys/Statistics/Linux/DiskStats.pm
+--- ./lib/Sys/Statistics/Linux/DiskStats.pm.orig	2023-01-15 18:14:54.004257043 +0100
++++ ./lib/Sys/Statistics/Linux/DiskStats.pm	2023-01-15 18:16:19.026669585 +0100
+@@ -239,9 +239,9 @@ sub _load {
+ 
+     if (open $fh, '<', $file_diskstats) {
+         while (my $line = <$fh>) {
+-            #                   --      --      --      F1     F2     F3     F4     F5     F6     F7     F8    F9    F10   F11
++            #                   --      --      --      F1     F2     F3     F4     F5     F6     F7     F8    F9    F10   F11  (F12..F17)?
+             #                   $1      $2      $3      $4     --     $5     --     $6     --     $7     --    --    --    --
+-            if ($line =~ /^\s+(\d+)\s+(\d+)\s+(.+?)\s+(\d+)\s+\d+\s+(\d+)\s+\d+\s+(\d+)\s+\d+\s+(\d+)\s+\d+\s+\d+\s+\d+\s+\d+$/) {
++            if ($line =~ /^\s+(\d+)\s+(\d+)\s+(\S+)\s+(\d+)\s+\d+\s+(\d+)\s+\d+\s+(\d+)\s+\d+\s+(\d+)\s+\d+\s+\d+\s+\d+\s+\d+(?:(?:\s+\d+){4,})?$/) {
+                 for my $x ($stats{$3}) { # $3 -> the device name
+                     $x->{major}   = $1;
+                     $x->{minor}   = $2;

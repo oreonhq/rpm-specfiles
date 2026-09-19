@@ -1,0 +1,14 @@
+--- README
++++ README
+@@ -30,7 +30,10 @@
+ .emacs (removing the leading `;;').
+ 
+ (require 'color-theme)
+-(color-theme-gnome2)
++(eval-after-load "color-theme"
++  '(progn
++     (color-theme-initialize)
++     (color-theme-gnome2)))
+ 
+ Changing menu colors:
+ 

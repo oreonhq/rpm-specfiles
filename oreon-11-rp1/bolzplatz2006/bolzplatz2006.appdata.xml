@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>bolzplatz2006.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+ and CC-BY-NC-SA-2.5</project_license>
+  <name>Bolzplatz 2006</name>
+  <summary>Slam Soccer 2006 is a funny football game in 3D-comic-style</summary>
+  <description>
+    <p>
+      Bolzplatz 2006 / Slam Soccer 2006 is a funny football game in
+      3D-comic-style. The Bolzplatz 2006 game-engine is Open Source. The
+      Bolzplatz 2006 data-files however are licensed under the Creative Commons
+      Attribution-NonCommercial-ShareAlike 2.5 License and are not included in
+      Fedora because of the no commercial use clause.
+    </p>
+    <p>
+      This package installs the engine and an applications menu entry for
+      playing Bolzplatz 2006. The first time you click this menu entry, it
+      will offer to download and install the datafiles for you.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Funny 3d-comic-style</li>
+      <li>English, French and German translation</li>
+      <li>Enthralling stadium atmosphere</li>
+      <li>Keyboard and gamepad control</li>
+      <li>2-player mode</li>
+      <li>Career and world cup</li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.bolzplatz2006.de/en/</url>
+  <screenshots>
+    <screenshot type="default">http://www.bolzplatz2006.de/global/grafik/screenshots/full/bolzplatz.jpg</screenshot>
+    <screenshot>http://www.bolzplatz2006.de/global/grafik/screenshots/full/mannschafteinlauf.jpg</screenshot>
+    <screenshot>http://www.bolzplatz2006.de/global/grafik/screenshots/full/uebersichtmannschaft.jpg</screenshot>
+    <screenshot>http://www.bolzplatz2006.de/global/grafik/screenshots/full/auswahlmannschaft.jpg</screenshot>
+    <screenshot>http://www.bolzplatz2006.de/global/grafik/screenshots/full/celebration1.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

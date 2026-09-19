@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 4c962c5377c136dd551b822f96c997e0d93b02237381f5f695e7a974824271dd
 
 %global stable_kf6 stable
 
 
 Name:    kde-dev-scripts
 Summary: KDE SDK scripts
-Version: 26.04.1
+Version: 26.08.0
 Release: 1%{?dist}
 
 License: GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND BSD-2-Clause
@@ -141,5 +141,8 @@ rm -fv %{buildroot}%{_kf6_bindir}/krazy-licensecheck
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.04.1-1
 - Import

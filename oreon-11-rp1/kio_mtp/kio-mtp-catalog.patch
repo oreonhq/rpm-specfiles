@@ -1,0 +1,12 @@
+diff -up kio-mtp-0.75/kio_mtp.cpp.catalog kio-mtp-0.75/kio_mtp.cpp
+--- kio-mtp-0.75/kio_mtp.cpp.catalog	2015-01-10 14:04:05.000000000 -0600
++++ kio-mtp-0.75/kio_mtp.cpp	2015-04-07 06:08:03.596846729 -0500
+@@ -42,7 +42,7 @@
+ extern "C"
+ int KDE_EXPORT kdemain ( int argc, char **argv )
+ {
+-    KComponentData instance ( "kio_mtp" );
++    KComponentData instance ( "kio_mtp", "kio_mtp4" );
+ 
+     KGlobal::locale();
+ 

@@ -1,51 +1,57 @@
-%global source0_hash 5a0fa6d2fbca121f02240facd1caa05ad50193152766692e5057b98c926f772b
-
-%bcond_with tests
+%global source0_hash none
 
 Name:           python-pygments-pytest
-Version:        2.4.0
+Version:        2.5.0
 Release:        %autorelease
-Summary:        A pygments lexer for pytest output
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A pygments lexer for pytest output.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/asottile/pygments-pytest
-Source0:        https://github.com/asottile/pygments-pytest/archive/v%{version}/pygments-pytest-%{version}.tar.gz
+Source:         %{pypi_source pygments_pytest}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
-%description
-This library provides a pygments lexer called pytest.
-This library also provides a sphinx extension.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pygments-pytest' generated automatically by pyp2spec.}
+
+%description %_description
 
 %package -n     python3-pygments-pytest
 Summary:        %{summary}
 
-%description -n python3-pygments-pytest
-This library provides a pygments lexer called pytest.
-This library also provides a sphinx extension.
+%description -n python3-pygments-pytest %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n pygments-pytest-%{version}
+%autosetup -p1 -n pygments_pytest-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-t}
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pygments_pytest
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%pytest -v
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pygments-pytest -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

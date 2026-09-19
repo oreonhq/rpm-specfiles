@@ -1,0 +1,121 @@
+From 4d758fc593db84ca5797efca55f151dfcb1aab2d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Nosek?= <onosek@redhat.com>
+Date: Tue, 9 Dec 2025 03:13:39 +0100
+Subject: [PATCH 1/2] `update`: interactive editor is broken
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Revert "Execute shell command: Non-interactive stdin"
+This (partially) reverts commit 0123ce42d214968defe74b8a05ba7d9c7ecfa6c1.
+
+Fixes: #762
+Signed-off-by: Ondřej Nosek <onosek@redhat.com>
+---
+ pyrpkg/__init__.py     |  2 --
+ tests/test_commands.py | 23 ++++++++---------------
+ 2 files changed, 8 insertions(+), 17 deletions(-)
+
+diff --git a/pyrpkg/__init__.py b/pyrpkg/__init__.py
+index a4b4dd7..38ccbcf 100644
+--- a/pyrpkg/__init__.py
++++ b/pyrpkg/__init__.py
+@@ -1302,7 +1302,6 @@ class Commands(object):
+                 # stderr, so....
+                 parent_proc = subprocess.Popen(
+                     command, env=environ, shell=shell, cwd=cwd,  # nosec
+-                    stdin=subprocess.DEVNULL,
+                     stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+ 
+                 proc = subprocess.Popen(
+@@ -1314,7 +1313,6 @@ class Commands(object):
+             else:
+                 proc = subprocess.Popen(
+                     command, env=environ, shell=shell, cwd=cwd,  # nosec
+-                    stdin=subprocess.DEVNULL,
+                     stdout=proc_stdout, stderr=proc_stderr,
+                     universal_newlines=return_text)
+         except KeyboardInterrupt:
+diff --git a/tests/test_commands.py b/tests/test_commands.py
+index a757c7e..012a618 100644
+--- a/tests/test_commands.py
++++ b/tests/test_commands.py
+@@ -1118,8 +1118,7 @@ class TestRunCommand(CommandTestCase):
+         self.assertEqual((0, None, None), result)
+         Popen.assert_called_once_with(   # nosec # noqa: S604
+             'rpmbuild', env=os.environ, shell=True, cwd=None,
+-            stdin=subprocess.DEVNULL, stdout=None, stderr=None,
+-            universal_newlines=False)
++            stdout=None, stderr=None, universal_newlines=False)
+ 
+     @patch('subprocess.Popen')
+     def test_run_command_without_shell(self, Popen):
+@@ -1130,8 +1129,7 @@ class TestRunCommand(CommandTestCase):
+         self.assertEqual((0, None, None), result)
+         Popen.assert_called_once_with(
+             ['rpmbuild'], env=os.environ, shell=False, cwd=None,
+-            stdin=subprocess.DEVNULL, stdout=None, stderr=None,
+-            universal_newlines=False)
++            stdout=None, stderr=None, universal_newlines=False)
+ 
+     @patch('subprocess.Popen')
+     def test_return_stdout(self, Popen):
+@@ -1144,8 +1142,7 @@ class TestRunCommand(CommandTestCase):
+         self.assertEqual((0, 'output', None), result)
+         Popen.assert_called_once_with(
+             ['rpmbuild'], env=os.environ, shell=False, cwd=None,
+-            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=None,
+-            universal_newlines=False)
++            stdout=subprocess.PIPE, stderr=None, universal_newlines=False)
+ 
+     @patch('subprocess.Popen')
+     def test_return_stderr(self, Popen):
+@@ -1158,8 +1155,7 @@ class TestRunCommand(CommandTestCase):
+         self.assertEqual((0, None, 'output'), result)
+         Popen.assert_called_once_with(
+             ['rpmbuild'], env=os.environ, shell=False, cwd=None,
+-            stdin=subprocess.DEVNULL, stdout=None, stderr=subprocess.PIPE,
+-            universal_newlines=False)
++            stdout=None, stderr=subprocess.PIPE, universal_newlines=False)
+ 
+     @patch('subprocess.Popen')
+     def test_pipe(self, Popen):
+@@ -1178,7 +1174,7 @@ class TestRunCommand(CommandTestCase):
+         Popen.assert_has_calls([
+             call(['rpmbuild'],
+                  env=os.environ, shell=False, cwd=None,
+-                 stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.STDOUT),
++                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT),
+             call(['grep', 'src.rpm'],
+                  env=os.environ, shell=False, cwd=None,
+                  stdin=first_proc.stdout, stdout=None, stderr=None,
+@@ -1219,8 +1215,7 @@ class TestRunCommand(CommandTestCase):
+             self.assertEqual((0, None, None), result)
+             Popen.assert_called_once_with(
+                 ['rpmbuild'], env={'myvar': 'test'},
+-                shell=False, cwd=None,
+-                stdin=subprocess.DEVNULL, stdout=None, stderr=None,
++                shell=False, cwd=None, stdout=None, stderr=None,
+                 universal_newlines=False)
+ 
+     @patch('subprocess.Popen')
+@@ -1232,8 +1227,7 @@ class TestRunCommand(CommandTestCase):
+ 
+         Popen.assert_called_once_with(
+             ['rpmbuild'], env=os.environ, shell=False, cwd=tempdir,
+-            stdin=subprocess.DEVNULL, stdout=None, stderr=None,
+-            universal_newlines=False)
++            stdout=None, stderr=None, universal_newlines=False)
+ 
+         shutil.rmtree(tempdir)
+ 
+@@ -1246,5 +1240,4 @@ class TestRunCommand(CommandTestCase):
+ 
+         Popen.assert_called_once_with(
+             ['rpmbuild'], env=os.environ, shell=False, cwd=None,
+-            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=None,
+-            universal_newlines=True)
++            stdout=subprocess.PIPE, stderr=None, universal_newlines=True)
+-- 
+2.52.0
+

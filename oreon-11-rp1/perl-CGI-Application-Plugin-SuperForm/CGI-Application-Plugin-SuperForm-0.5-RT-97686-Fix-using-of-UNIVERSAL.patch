@@ -1,0 +1,12 @@
+diff -up CGI-Application-Plugin-SuperForm-0.5/t/01_basic.t.orig CGI-Application-Plugin-SuperForm-0.5/t/01_basic.t
+--- CGI-Application-Plugin-SuperForm-0.5/t/01_basic.t.orig	2015-04-29 14:53:13.994187199 +0200
++++ CGI-Application-Plugin-SuperForm-0.5/t/01_basic.t	2015-04-29 14:53:28.438364023 +0200
+@@ -24,7 +24,7 @@ like( $t1_output, qr/value="2" selected/
+ 
+ 
+ {
+-	use UNIVERSAL (qw/can/);
++	use UNIVERSAL;
+ 	ok( $t1_obj->can('superform'), "has superform method" );
+ 	ok( $t1_obj->can('sform'),     "has sform method" );
+ 

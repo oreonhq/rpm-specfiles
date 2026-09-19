@@ -1,0 +1,109 @@
+--- geomview-1d6759ec9771fbc6bdc71ec79b7a5a28711cd9fd/configure.ac.orig	2025-08-15 15:33:28.003485443 -0600
++++ geomview-1d6759ec9771fbc6bdc71ec79b7a5a28711cd9fd/configure.ac	2025-08-15 15:37:14.296978072 -0600
+@@ -783,10 +783,10 @@ AC_DEFINE_UNQUOTED([MGGL],${MGGL}, [Leav
+ 
+ # Check for zlib (and maybe bzlib? (image compression/decompression))
+ #GEOMVIEW_CHECK_PACKAGE([bz2lib],[bz2],[],[],[bzlib.h],[],[],[optional enabled])
+-GEOMVIEW_CHECK_PACKAGE([zlib],[z],[],[],[zlib.h],[],[],[optional enabled])
++GEOMVIEW_CHECK_PACKAGE([zlib_ng],[z-ng],[],[],[zlib-ng.h],[],[],[optional enabled])
+ gv_ac_save_LIBS="${LIBS}"
+-LIBS="${LIBS} ${ZLIB_ALL_LIB}"
+-AC_CHECK_FUNCS([compressBound]) # pre-1.2 zlib?
++LIBS="${LIBS} ${ZLIB_NG_ALL_LIB}"
++AC_CHECK_FUNCS([zng_compressBound]) # pre-1.2 zlib?
+ LIBS="${gv_ac_save_LIBS}"
+ 
+ ########################################################################
+--- geomview-1d6759ec9771fbc6bdc71ec79b7a5a28711cd9fd/src/lib/Makefile.am.orig	2019-06-30 06:43:01.000000000 -0600
++++ geomview-1d6759ec9771fbc6bdc71ec79b7a5a28711cd9fd/src/lib/Makefile.am	2025-08-15 15:37:14.297334286 -0600
+@@ -9,6 +9,6 @@ endif
+ 
+ libgeomview_la_SOURCES =
+ libgeomview_la_LIBADD = \
+- $(OOGLLIBS) $(OPENGLLIBS) $(SOCKETLIBS) $(XLIBS) $(ZLIB_LIB)
++ $(OOGLLIBS) $(OPENGLLIBS) $(SOCKETLIBS) $(XLIBS) $(ZLIB_NG_LIB)
+ libgeomview_la_DEPENDENCIES = $(OOGLLIBS) Makefile.am
+ libgeomview_la_LDFLAGS = -release @PACKAGE_VERSION@
+--- geomview-1d6759ec9771fbc6bdc71ec79b7a5a28711cd9fd/src/lib/shade/image.c.orig	2025-08-15 15:35:31.595867822 -0600
++++ geomview-1d6759ec9771fbc6bdc71ec79b7a5a28711cd9fd/src/lib/shade/image.c	2025-08-15 15:37:14.297600892 -0600
+@@ -35,11 +35,11 @@
+ /*#undef HAVE_LIBZ*/
+ 
+ #ifndef HAVE_LIBZ
+-# define HAVE_LIBZ 0
++# define HAVE_LIBZ 1
+ #endif
+ 
+ #if HAVE_LIBZ
+-# include <zlib.h>
++# include <zlib-ng.h>
+ #endif
+ 
+ #include "appearance.h"
+@@ -1777,7 +1777,7 @@ int __zlib_data_pipe(const char *data, i
+   
+   if (cpid == 0) { /* child */
+     Bytef outBuffer[32*1024]; /* 32k, so what */
+-    z_stream stream;
++    zng_stream stream;
+     int err, chunklen;
+ 
+     close(pfd[0]); /* close the reader */
+@@ -1789,14 +1789,14 @@ int __zlib_data_pipe(const char *data, i
+     stream.next_out  = outBuffer;
+     stream.avail_out = (uInt)sizeof(outBuffer);
+ 
+-    err = inflateInit2(&stream, MAX_WBITS + (gzip ? 16 : 0));
++    err = zng_inflateInit2(&stream, MAX_WBITS + (gzip ? 16 : 0));
+     if (err != Z_OK) {
+       OOGLError(1, "zlib_data_pipe(): infalteInite2() failed");
+       _exit(EXIT_FAILURE);
+     }
+ 
+     do {
+-      err = inflate(&stream, false /* no flush */);
++      err = zng_inflate(&stream, false /* no flush */);
+       if (err != Z_OK && err != Z_STREAM_END) {
+ 	OOGLError(1, "zlib_data_pipe(): inflate() returned %d", err);
+ 	_exit(EXIT_FAILURE);
+@@ -1811,7 +1811,7 @@ int __zlib_data_pipe(const char *data, i
+       stream.avail_out = (uInt)sizeof(outBuffer);
+     } while (err != Z_STREAM_END);
+     
+-    inflateEnd(&stream); /* cleanup (should be a no-op here) */
++    zng_inflateEnd(&stream); /* cleanup (should be a no-op here) */
+ 
+     if (close(pfd[1]) < 0) {
+       OOGLError(1, "zlib_data_pipe(): close() failed");
+@@ -1846,7 +1846,7 @@ static int gv_compress2(Bytef *dest, uLo
+ 			const Bytef *source, uLong sourceLen,
+ 			int level)
+ {
+-    z_stream stream;
++    zng_stream stream;
+     int err;
+ 
+     stream.next_in = (Bytef*)source;
+@@ -1860,18 +1860,18 @@ static int gv_compress2(Bytef *dest, uLo
+     stream.zfree = (free_func)0;
+     stream.opaque = (voidpf)0;
+ 
+-    err = deflateInit2(&stream, level, Z_DEFLATED, MAX_WBITS+16, MAX_MEM_LEVEL,
++    err = zng_deflateInit2(&stream, level, Z_DEFLATED, MAX_WBITS+16, MAX_MEM_LEVEL,
+ 		       Z_DEFAULT_STRATEGY);
+     if (err != Z_OK) return err;
+ 
+-    err = deflate(&stream, Z_FINISH);
++    err = zng_deflate(&stream, Z_FINISH);
+     if (err != Z_STREAM_END) {
+-        deflateEnd(&stream);
++        zng_deflateEnd(&stream);
+         return err == Z_OK ? Z_BUF_ERROR : err;
+     }
+     *destLen = stream.total_out;
+ 
+-    err = deflateEnd(&stream);
++    err = zng_deflateEnd(&stream);
+     return err;
+ }
+ #endif

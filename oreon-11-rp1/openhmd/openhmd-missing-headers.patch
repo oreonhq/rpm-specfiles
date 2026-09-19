@@ -1,0 +1,26 @@
+diff --git a/examples/opengl/gl.c b/examples/opengl/gl.c
+index 531667c..6358607 100644
+--- a/examples/opengl/gl.c
++++ b/examples/opengl/gl.c
+@@ -9,6 +9,8 @@
+ 
+ #include "gl.h"
+ #include <string.h>
++#include <stdio.h>
++#include <stdlib.h>
+ #include <math.h>
+ 
+ #ifdef __unix
+diff --git a/examples/opengl/main.c b/examples/opengl/main.c
+index 28876a1..060fe49 100644
+--- a/examples/opengl/main.c
++++ b/examples/opengl/main.c
+@@ -9,6 +9,8 @@
+ 
+ #include <openhmd.h>
+ #include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
+ #include <assert.h>
+ #include <math.h>
+ #include "gl.h"

@@ -1,0 +1,24 @@
+From 26200997f5cffba3b8ca27c2be91894ddd201138 Mon Sep 17 00:00:00 2001
+From: Tom Rix <Tom.Rix@amd.com>
+Date: Thu, 16 Jan 2025 11:03:22 -0800
+Subject: [PATCH] gloo gcc 15 cstdint
+
+---
+ gloo/types.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/gloo/types.h b/gloo/types.h
+index df71d542251a..c984d1bc8156 100644
+--- a/gloo/types.h
++++ b/gloo/types.h
+@@ -28,6 +28,7 @@
+ #endif
+ 
+ #include "gloo/common/common.h"
++#include <cstdint>
+ 
+ #ifdef _WIN32
+ #include <BaseTsd.h>
+-- 
+2.47.1
+

@@ -1,0 +1,11 @@
+--- tealdeer-1.7.3/Cargo.toml	2006-07-24T01:21:28+00:00
++++ tealdeer-1.7.3/Cargo.toml	2026-02-14T18:16:09.270106+00:00
+@@ -41,7 +41,7 @@
+ repository = "https://github.com/tealdeer-rs/tealdeer/"
+ 
+ [features]
+-default = ["native-roots"]
++default = ["native-tls"]
+ logging = ["env_logger"]
+ native-roots = ["reqwest/rustls-tls-native-roots"]
+ native-tls = ["reqwest/native-tls"]

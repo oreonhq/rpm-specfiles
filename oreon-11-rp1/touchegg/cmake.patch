@@ -1,0 +1,32 @@
+From 953c4227253d91c73f5ce46f89947262ebf45b18 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Date: Sat, 14 Jun 2025 17:49:24 +0200
+Subject: [PATCH] CMake: Set minimum version to 3.10.0
+
+Compatibility with versions of CMake older than 3.5 has been removed
+from CMake 4.0.
+
+In addition, compatibility with versions of CMake older than 3.10 has
+been deprecated in CMake 3.31.
+
+Since we don't rely on old features, just update the minimum required
+version to 3.10.0.
+The target version is available even in Debian Bullseye (oldstable) [1].
+
+[1] https://packages.debian.org/bullseye/cmake
+
+Closes: https://github.com/JoseExposito/touchegg/issues/681
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c131bf36..3106c798 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.10.0)
+ 
+ project(touchegg)
+ set(MAJOR_VERSION "2")

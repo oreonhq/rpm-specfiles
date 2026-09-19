@@ -1,0 +1,12 @@
+diff -rupN --no-dereference freeimage-svn-r1909-FreeImage-trunk/Wrapper/FreeImagePlus/doc/FreeImagePlus.dox freeimage-svn-r1909-FreeImage-trunk-new/Wrapper/FreeImagePlus/doc/FreeImagePlus.dox
+--- freeimage-svn-r1909-FreeImage-trunk/Wrapper/FreeImagePlus/doc/FreeImagePlus.dox	2016-03-20 18:08:25.000000000 +0100
++++ freeimage-svn-r1909-FreeImage-trunk-new/Wrapper/FreeImagePlus/doc/FreeImagePlus.dox	2023-09-28 19:34:47.293014040 +0200
+@@ -753,7 +753,7 @@ WARN_FORMAT            = "$file:$line: $
+ # messages should be written. If left blank the output is written to standard
+ # error (stderr).
+ 
+-WARN_LOGFILE           = .\doxygen.log
++WARN_LOGFILE           = ./doxygen.log
+ 
+ #---------------------------------------------------------------------------
+ # Configuration options related to the input files

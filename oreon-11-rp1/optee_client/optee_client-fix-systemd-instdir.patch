@@ -1,0 +1,14 @@
+--- optee_client-4.9.0/tee-supplicant/CMakeLists.txt.orig	2026-01-20 13:52:45.363869533 +0000
++++ optee_client-4.9.0/tee-supplicant/CMakeLists.txt	2026-01-20 13:53:15.244326122 +0000
+@@ -148,9 +148,9 @@
+ install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR})
+ if (CFG_ENABLE_SYSTEMD)
+ 	configure_file(tee-supplicant@.service.in tee-supplicant@.service @ONLY)
+-	install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/tee-supplicant@.service DESTINATION ${SYSTEMD_UNIT_DIR})
++	install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/tee-supplicant@.service DESTINATION /usr/lib/systemd/system)
+ endif()
+ if (CFG_ENABLE_UDEV)
+ 	configure_file(optee-udev.rules.in ${CFG_UDEV_RULESPREFIX}optee-udev.rules @ONLY)
+-	install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/${CFG_UDEV_RULESPREFIX}optee-udev.rules DESTINATION ${UDEV_UDEV_DIR})
++	install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/${CFG_UDEV_RULESPREFIX}optee-udev.rules DESTINATION /usr/lib/udev/rules.d)
+ endif()

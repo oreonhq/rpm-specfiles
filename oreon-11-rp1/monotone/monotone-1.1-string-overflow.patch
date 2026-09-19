@@ -1,0 +1,28 @@
+Ensure that the string in SSH_AUTH_SOCK is not too large to fit in a Unix
+sockaddr, and only copy the bytes of the supplied string.  The original code
+goes on to copy bytes beyond the end of the string.
+
+--- monotone-1.1/src/unix/ssh_agent_platform.cc.orig	2014-05-04 03:15:18.000000000 -0600
++++ monotone-1.1/src/unix/ssh_agent_platform.cc	2020-06-30 12:25:54.068518536 -0600
+@@ -35,8 +35,9 @@ static int
+ connect_to_agent()
+ {
+   const char *authsocket = getenv("SSH_AUTH_SOCK");
++  struct sockaddr_un addr;
+ 
+-  if (!authsocket || !*authsocket)
++  if (!authsocket || !*authsocket || strlen(authsocket) >= sizeof(addr.sun_path))
+     {
+       L(FL("ssh_agent: no agent"));
+       return -1;
+@@ -57,9 +58,8 @@ connect_to_agent()
+       return -1;
+     }
+ 
+-  struct sockaddr_un addr;
+   addr.sun_family = AF_UNIX;
+-  strncpy(addr.sun_path, authsocket, sizeof(addr.sun_path));
++  strcpy(addr.sun_path, authsocket);
+ 
+   if (::connect(sock, (struct sockaddr *)&addr, sizeof addr))
+     {

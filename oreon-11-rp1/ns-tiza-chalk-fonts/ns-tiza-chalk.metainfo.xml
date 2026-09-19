@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>ns-tiza-chalk</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Tiza</name>
+  <summary>Chalky slab-serif fonts</summary>
+  <description>
+    <p>
+      A bold, chalky slab-serif font inspired by the lovely slab-serif Giza.
+      It supports diacritics in addition to the basic latin set of characters.
+      The font was created by Pablo Caro.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://www.nuevostudio.com/project/tiza/</url>
+</component>
+

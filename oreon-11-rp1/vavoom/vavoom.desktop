@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Vavoom
+Comment=Vavoom launcher
+Exec=vlaunch
+Icon=vavoom
+Terminal=false
+Type=Application
+Categories=Game;ActionGame;
+Keywords=game;fps;first;person;shooter;doom;heretic;hexen;strife;

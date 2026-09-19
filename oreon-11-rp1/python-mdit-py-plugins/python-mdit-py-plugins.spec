@@ -1,21 +1,24 @@
-%global source0_hash ebf41856b3876473dd9adabee689d9a79105a4ef7ede09891b7d8ef1015e0ae5
-
-%bcond_without check
+%global source0_hash none
 
 Name:           python-mdit-py-plugins
-Version:        0.4.2
-Release:        1%{?dist}
+Version:        0.6.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Collection of plugins for markdown-it-py
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/executablebooks/mdit-py-plugins
-Source0:        https://github.com/executablebooks/mdit-py-plugins/archive/v%{version}/mdit-py-plugins-%{version}.tar.gz
+Source:         %{pypi_source mdit_py_plugins}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  pyproject-rpm-macros
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Collection of core plugins for markdown-it-py.}
+This is package 'mdit-py-plugins' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -24,32 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-mdit-py-plugins %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-mdit-py-plugins code-style,rtd,testing
+
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n mdit-py-plugins-%{version}
-sed -i '/"coverage",/d' pyproject.toml
-sed -i '/"pytest-cov",/d' pyproject.toml
-sed -i '/"pytest-regressions",/d' pyproject.toml
+%autosetup -p1 -n mdit_py_plugins-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x code-style,rtd,testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files mdit_py_plugins
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-%pyproject_check_import
-%pytest --ignore=tests/test_references.py -k "not test_plugin_parse and not test_custom_renderer and not test_attrs_allowed and not test_no_new_line_issue and not test_tokens"
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mdit-py-plugins -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 
 %changelog
 %autochangelog

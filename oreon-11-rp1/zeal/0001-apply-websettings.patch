@@ -1,0 +1,11 @@
+--- a/src/libs/ui/mainwindow.cpp
++++ b/src/libs/ui/mainwindow.cpp
+@@ -115,7 +115,7 @@ MainWindow::MainWindow(Core::Application
+     m_splitter->restoreState(m_settings->verticalSplitterGeometry);
+ 
+     // Setup web settings.
+-    auto webSettings = new Browser::Settings(m_settings, this);
++    new Browser::Settings(m_settings, this);
+ 
+     // Setup web bridge.
+     m_webBridge = new Browser::WebBridge(this);

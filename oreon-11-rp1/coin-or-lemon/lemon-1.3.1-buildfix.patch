@@ -1,0 +1,36 @@
+# HG changeset patch
+# User Alpar Juttner <alpar@cs.elte.hu>
+# Date 1404909696 -7200
+#      Wed Jul 09 14:41:36 2014 +0200
+# Node ID 5de6a70446f6ed13d456d1df8d0bfd4085bcf2af
+# Parent  1552352f97987f8fea7482cb144ba23cd5466484
+Fix buggy include logic in lemon/lp.h (#503)
+
+diff --git a/lemon/lp.h b/lemon/lp.h
+--- a/lemon/lp.h
++++ b/lemon/lp.h
+@@ -22,15 +22,19 @@
+ #include<lemon/config.h>
+ 
+ 
+-#ifdef LEMON_HAVE_GLPK
++#if LEMON_DEFAULT_LP == _LEMON_GLPK || LEMON_DEFAULT_MIP == _LEMON_GLPK
+ #include <lemon/glpk.h>
+-#elif LEMON_HAVE_CPLEX
++#endif
++#if LEMON_DEFAULT_LP == _LEMON_CPLEX || LEMON_DEFAULT_MIP == _LEMON_CPLEX 
+ #include <lemon/cplex.h>
+-#elif LEMON_HAVE_SOPLEX
++#endif
++#if LEMON_DEFAULT_LP == _LEMON_SOPLEX
+ #include <lemon/soplex.h>
+-#elif LEMON_HAVE_CLP
++#endif
++#if LEMON_DEFAULT_LP == _LEMON_CLP
+ #include <lemon/clp.h>
+-#elif LEMON_HAVE_CBC
++#endif
++#if LEMON_DEFAULT_MIP == _LEMON_CBC
+ #include <lemon/cbc.h>
+ #endif
+ 

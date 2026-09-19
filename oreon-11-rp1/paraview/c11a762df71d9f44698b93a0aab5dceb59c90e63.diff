@@ -1,0 +1,30 @@
+diff --git a/ThirdParty/QtTesting/vtkqttesting/pqAbstractItemViewEventTranslator.cxx b/ThirdParty/QtTesting/vtkqttesting/pqAbstractItemViewEventTranslator.cxx
+index 31b1d44e69db295bb7010ffb7bbd42449267f435..61ce1ddfb2767d106991bf987e89f0076f5a7dfc 100644
+--- a/ThirdParty/QtTesting/vtkqttesting/pqAbstractItemViewEventTranslator.cxx
++++ b/ThirdParty/QtTesting/vtkqttesting/pqAbstractItemViewEventTranslator.cxx
+@@ -90,8 +90,8 @@ bool pqAbstractItemViewEventTranslator::translateEvent(QObject* Object, QEvent*
+ 
+       QString info = QString("%1,%2,%3,%4,%5,%6")
+                        .arg(mouseEvent->button())
+-                       .arg(mouseEvent->buttons())
+-                       .arg(mouseEvent->modifiers())
++                       .arg(static_cast<int>(mouseEvent->buttons()))
++                       .arg(static_cast<int>(mouseEvent->modifiers()))
+                        .arg(relPt.x())
+                        .arg(relPt.y())
+                        .arg(idxStr);
+diff --git a/ThirdParty/QtTesting/vtkqttesting/pqBasicWidgetEventTranslator.cxx b/ThirdParty/QtTesting/vtkqttesting/pqBasicWidgetEventTranslator.cxx
+index afdd3604c844af66f6e7ecf2b9acfe533c5977e5..9217f27b478e0f7474e9c4e17c9f644f33e12461 100644
+--- a/ThirdParty/QtTesting/vtkqttesting/pqBasicWidgetEventTranslator.cxx
++++ b/ThirdParty/QtTesting/vtkqttesting/pqBasicWidgetEventTranslator.cxx
+@@ -53,8 +53,8 @@ bool pqBasicWidgetEventTranslator::translateEvent(
+ #endif
+         QString info = QString("%1,%2,%3,%4,%5")
+                          .arg(mouseEvent->button())
+-                         .arg(mouseEvent->buttons())
+-                         .arg(mouseEvent->modifiers())
++                         .arg(static_cast<int>(mouseEvent->buttons()))
++                         .arg(static_cast<int>(mouseEvent->modifiers()))
+                          .arg(pos.x())
+                          .arg(pos.y());
+ 

@@ -1,0 +1,11 @@
+--- src/compile.c	2021-05-11 13:26:29.000000000 -0400
++++ src/compile.c	2024-01-15 16:45:00.558851171 -0500
+@@ -584,7 +584,7 @@
+         return -ENOENT;
+ 
+ 
+-    newcmd_len = strlen(target_with_vendor) + 1 + strlen(argv[0] + 1);
++    newcmd_len = strlen(target_with_vendor) + 1 + strlen(argv[0]) + 1;
+     newcmd = malloc(newcmd_len);
+     if (!newcmd)
+         return -ENOMEM;

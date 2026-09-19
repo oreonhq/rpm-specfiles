@@ -1,0 +1,10 @@
+--- a/gpr/gpr.gpr
++++ b/gpr/gpr.gpr
+@@ -35,6 +35,7 @@
+    Root_Obj_Dir := external ("OBJDIR", ".");
+ 
+    for Library_Kind use Gnat_Lib_Type;
++   for Library_Version use "libgnatprj.so." & external("VERSION");
+ 
+    for Source_Dirs use ("src");
+ 

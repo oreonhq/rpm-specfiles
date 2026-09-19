@@ -1,0 +1,14 @@
+--- gphotoframe-1.5.1/lib/plugins/base/parseexif.py.zeroden2	2012-12-10 16:09:43.172332099 +0900
++++ gphotoframe-1.5.1/lib/plugins/base/parseexif.py	2012-12-10 17:29:10.830968144 +0900
+@@ -28,7 +28,10 @@
+                 value = str(value)
+ 
+                 if key == 'fstop' or key == 'focallength':
+-                    value = self._convert_from_fraction(value)
++                    try:
++                        value = self._convert_from_fraction(value)
++                    except ZeroDivisionError:
++                        continue   
+                 elif key == 'exposurebias' and value == '0':
+                     continue
+                 elif key == 'flash' and ('Off' in value or 'No' in value):

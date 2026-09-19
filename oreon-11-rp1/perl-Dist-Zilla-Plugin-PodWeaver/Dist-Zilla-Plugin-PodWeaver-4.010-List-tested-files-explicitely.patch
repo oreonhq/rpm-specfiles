@@ -1,0 +1,78 @@
+From bb0cfe1a7dd7e28751a2882017a5a394d543da11 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 12 Jan 2023 12:40:48 +0100
+Subject: [PATCH] List tested files explicitely
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+A dynamic File::Find::Rule approach cannot find any files when
+executing tests out of source tree to test the installed files.
+
+Symlinking the files would unbreak the test, but it would infect tests
+RPM subpackage with dependencies of the symlinked file.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL            | 2 --
+ t/00-report-prereqs.dd | 3 +--
+ t/basic.t              | 3 +--
+ 3 files changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index f96b789..2b957ed 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -33,7 +33,6 @@ my %WriteMakefileArgs = (
+   },
+   "TEST_REQUIRES" => {
+     "ExtUtils::MakeMaker" => 0,
+-    "File::Find::Rule" => 0,
+     "File::Spec" => 0,
+     "Test::More" => "0.96",
+     "strict" => 0
+@@ -50,7 +49,6 @@ my %FallbackPrereqs = (
+   "Dist::Zilla::Role::FileFinderUser" => 0,
+   "Dist::Zilla::Role::FileMunger" => 0,
+   "ExtUtils::MakeMaker" => 0,
+-  "File::Find::Rule" => 0,
+   "File::Spec" => 0,
+   "Moose" => 0,
+   "PPI" => 0,
+diff --git a/t/00-report-prereqs.dd b/t/00-report-prereqs.dd
+index 18fccc3..77994ef 100644
+--- a/t/00-report-prereqs.dd
++++ b/t/00-report-prereqs.dd
+@@ -36,7 +36,6 @@ do { my $x = {
+                                    },
+                    'requires' => {
+                                    'ExtUtils::MakeMaker' => '0',
+-                                   'File::Find::Rule' => '0',
+                                    'File::Spec' => '0',
+                                    'Test::More' => '0.96',
+                                    'strict' => '0'
+@@ -44,4 +43,4 @@ do { my $x = {
+                  }
+      };
+   $x;
+- }
+\ No newline at end of file
++ }
+diff --git a/t/basic.t b/t/basic.t
+index 9fc7cd2..b9f97db 100755
+--- a/t/basic.t
++++ b/t/basic.t
+@@ -2,9 +2,8 @@
+ use strict;
+ use warnings;
+ use Test::More;
+-use File::Find::Rule;
+ 
+-my @files = File::Find::Rule->name('*.pm')->in('lib');
++my @files = ('lib/Dist/Zilla/Plugin/PodWeaver.pm');
+ plan tests => @files + 0;
+ 
+ for (@files) {
+-- 
+2.39.0
+

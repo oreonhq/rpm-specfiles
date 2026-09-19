@@ -1,0 +1,32 @@
+--- wallpapoz-0.6.1/share/wallpapoz/lib/wallpapoz_system.py.kill_multi	2011-12-30 14:49:25.000000000 +0900
++++ wallpapoz-0.6.1/share/wallpapoz/lib/wallpapoz_system.py	2011-12-30 14:49:25.000000000 +0900
+@@ -180,3 +180,17 @@
+     print "os.execvp failed, exiting..."
+     sys.exit(1)
+ 
++  def prevent_multiple_start(self):
++    cpid = os.getpid()
++    cid = os.getuid()
++
++    wallpapoz_cmd = "pgrep -U %i -f daemon_wallpapoz" %cid
++    python_cmd = "pgrep -U %i -f python" %cid
++
++    wallpapoz_id_list = os.popen(wallpapoz_cmd).read().splitlines()
++    python_id_list = os.popen(python_cmd).read().splitlines()
++
++    for id_list in wallpapoz_id_list:
++      if ( id_list in python_id_list ) and ( int(id_list) != cpid) :
++        os.kill(int(id_list), signal.SIGTERM)
++
+--- wallpapoz-0.6.1/src/daemon_wallpapoz.kill_multi	2011-12-30 14:49:25.000000000 +0900
++++ wallpapoz-0.6.1/src/daemon_wallpapoz	2011-12-30 14:52:08.000000000 +0900
+@@ -99,6 +99,9 @@
+   # by calling external program
+   wallpapoz_system = WallpapozSystem()
+ 
++  # Kill other daemon_wallpapoz if running
++  wallpapoz_system.prevent_multiple_start()
++
+   # type of window manager (gnome or xfce)
+   window_manager = wallpapoz_system.window_manager
+ 

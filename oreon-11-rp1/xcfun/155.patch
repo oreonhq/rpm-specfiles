@@ -1,0 +1,70 @@
+From 1c03a9078b8ed2d47be36db6f0d3b8c0d9ba9ddd Mon Sep 17 00:00:00 2001
+From: Roberto Di Remigio <robertodr@users.noreply.github.com>
+Date: Wed, 8 Sep 2021 10:32:00 +0200
+Subject: [PATCH 1/3] Patch py::array_t CTOR usage
+
+---
+ python/export_xcfun.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/python/export_xcfun.cpp b/python/export_xcfun.cpp
+index df5631a..7004299 100644
+--- a/python/export_xcfun.cpp
++++ b/python/export_xcfun.cpp
+@@ -141,8 +141,7 @@ PYBIND11_MODULE(_xcfun, m) {
+           }
+           auto nr_points = density.shape(0);
+           auto output =
+-              py::array_t<double, py::array::c_style | py::array::forcecast>(
+-                  {{nr_points, output_len}});
++              py::array_t<double, py::array::c_style | py::array::forcecast>({nr_points, output_len});
+ 
+           if (dens_ndim == 1) {
+             xcfun::xcfun_eval(fun, density.data(), output.mutable_data());
+
+From ee56726019aa57ab104b3a5cc73967db0ab528f3 Mon Sep 17 00:00:00 2001
+From: Roberto Di Remigio <robertodr@users.noreply.github.com>
+Date: Wed, 8 Sep 2021 10:54:45 +0200
+Subject: [PATCH 2/3] Use correct CTOR
+
+We want to use this one: https://github.com/pybind/pybind11/blob/v2.7.1/include/pybind11/numpy.h#L876
+---
+ python/export_xcfun.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python/export_xcfun.cpp b/python/export_xcfun.cpp
+index 7004299..37fdb92 100644
+--- a/python/export_xcfun.cpp
++++ b/python/export_xcfun.cpp
+@@ -141,7 +141,7 @@ PYBIND11_MODULE(_xcfun, m) {
+           }
+           auto nr_points = density.shape(0);
+           auto output =
+-              py::array_t<double, py::array::c_style | py::array::forcecast>({nr_points, output_len});
++              py::array_t<double, py::array::c_style | py::array::forcecast>({nr_points, output_len}, nullptr);
+ 
+           if (dens_ndim == 1) {
+             xcfun::xcfun_eval(fun, density.data(), output.mutable_data());
+
+From 30c3846671696b585ec16fffac6f9579a81ccedd Mon Sep 17 00:00:00 2001
+From: Roberto Di Remigio <robertodr@users.noreply.github.com>
+Date: Wed, 8 Sep 2021 11:06:53 +0200
+Subject: [PATCH 3/3] Finagling with the CTOR
+
+---
+ python/export_xcfun.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python/export_xcfun.cpp b/python/export_xcfun.cpp
+index 37fdb92..9b74df2 100644
+--- a/python/export_xcfun.cpp
++++ b/python/export_xcfun.cpp
+@@ -141,7 +141,7 @@ PYBIND11_MODULE(_xcfun, m) {
+           }
+           auto nr_points = density.shape(0);
+           auto output =
+-              py::array_t<double, py::array::c_style | py::array::forcecast>({nr_points, output_len}, nullptr);
++              py::array_t<double, py::array::c_style | py::array::forcecast>({{nr_points, output_len}}, nullptr);
+ 
+           if (dens_ndim == 1) {
+             xcfun::xcfun_eval(fun, density.data(), output.mutable_data());

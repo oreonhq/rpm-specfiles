@@ -1,0 +1,49 @@
+diff --git transmission-4.0.6/third-party/rapidjson/example/CMakeLists.txt transmission-4.0.6/third-party/rapidjson/example/CMakeLists.txt
+index 9f53c9a..53f94b1 100644
+--- transmission-4.0.6/third-party/rapidjson/example/CMakeLists.txt
++++ transmission-4.0.6/third-party/rapidjson/example/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.12)
+ 
+ if(POLICY CMP0054)
+   cmake_policy(SET CMP0054 NEW)
+diff --git transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/CMakeLists.txt transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/CMakeLists.txt
+index f8a97fa..b6b6903 100644
+--- transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/CMakeLists.txt
++++ transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.12)
+ 
+ if (POLICY CMP0048)
+   cmake_policy(SET CMP0048 NEW)
+diff --git transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/googlemock/CMakeLists.txt transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/googlemock/CMakeLists.txt
+index bac2e3b..d4b2607 100644
+--- transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/googlemock/CMakeLists.txt
++++ transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/googlemock/CMakeLists.txt
+@@ -43,7 +43,7 @@ else()
+   cmake_policy(SET CMP0048 NEW)
+   project(gmock VERSION 1.9.0 LANGUAGES CXX C)
+ endif()
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.12)
+ 
+ if (COMMAND set_up_hermetic_build)
+   set_up_hermetic_build()
+diff --git transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/googletest/CMakeLists.txt transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/googletest/CMakeLists.txt
+index b09c46e..68f5d4d 100644
+--- transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/googletest/CMakeLists.txt
++++ transmission-4.0.6/third-party/rapidjson/thirdparty/gtest/googletest/CMakeLists.txt
+@@ -50,7 +50,7 @@ else()
+   cmake_policy(SET CMP0048 NEW)
+   project(gtest VERSION 1.9.0 LANGUAGES CXX C)
+ endif()
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.12)
+ 
+ if (POLICY CMP0063) # Visibility
+   cmake_policy(SET CMP0063 NEW)
+-- 
+2.49.0
+

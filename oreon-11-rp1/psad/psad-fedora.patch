@@ -1,0 +1,77 @@
+diff -up psad-2.4.6/init-scripts/systemd/psad.service.f psad-2.4.6/init-scripts/systemd/psad.service
+--- psad-2.4.6/init-scripts/systemd/psad.service.f	2018-08-01 02:41:59.000000000 +0200
++++ psad-2.4.6/init-scripts/systemd/psad.service	2022-06-10 12:36:38.686154384 +0200
+@@ -1,13 +1,14 @@
+ [Unit]
+ Description=The Port Scan Attack Detector (psad)
+ Documentation=man:psad(8) https://www.cipherdyne.org/psad/
++After=firewalld.service iptables.service ip6tables.service
+ 
+ [Service]
+ Type=forking
+ ExecStart=/usr/sbin/psad
+ ExecStop=/usr/sbin/psad --Kill
+ ExecReload=/usr/sbin/psad --HUP
+-PIDFile=/var/run/psad/psad.pid
++PIDFile=/run/psad/psad.pid
+ 
+ [Install]
+ WantedBy=multi-user.target
+diff -up psad-2.4.6/psad.conf.f psad-2.4.6/psad.conf
+--- psad-2.4.6/psad.conf.f	2018-08-01 02:41:59.000000000 +0200
++++ psad-2.4.6/psad.conf	2022-06-10 12:36:46.054125460 +0200
+@@ -24,7 +24,7 @@
+ EMAIL_ADDRESSES             root@localhost;
+ 
+ ### Machine hostname
+-HOSTNAME                    _CHANGEME_;
++HOSTNAME                    localhost;
+ 
+ ### Specify the home and external networks. Note that by default the
+ ### ENABLE_INTF_LOCAL_NETS is enabled, so psad automatically detects
+@@ -64,8 +64,8 @@ FW_MSG_SEARCH               DROP;
+ ### "iproute2" if you want to use the iproute2 type configuration.
+ ### iproute2 does not use aliases for multi-homed interfaces and
+ ### ifconfig does not show secondary addresses for multi-homed interfaces.
+-#IFCFGTYPE  iproute2;
+-IFCFGTYPE                   ifconfig;
++IFCFGTYPE  iproute2;
++#IFCFGTYPE                   ifconfig;
+ 
+ ### Danger levels. These represent the total number of packets required for a
+ ### scan to reach each danger level. A scan may also reach a danger level if
+@@ -181,7 +181,7 @@ SYSLOG_DAEMON               syslogd;
+ 
+ ### This is primarily used to acquire syslog messages from journalctl on
+ ### systems where systemd is running.
+-ENABLE_FW_MSG_READ_CMD      N;
++ENABLE_FW_MSG_READ_CMD      Y;
+ FW_MSG_READ_CMD             /bin/journalctl;
+ FW_MSG_READ_CMD_ARGS        -f -k;
+ USE_FW_MSG_READ_CMD_ARGS    Y;
+@@ -588,12 +588,12 @@ PSADWATCHD_MAX_RETRIES      10;
+ ### Directories
+ INSTALL_ROOT                /;
+ PSAD_DIR                    $INSTALL_ROOT/var/log/psad;
+-PSAD_RUN_DIR                $INSTALL_ROOT/var/run/psad;
++PSAD_RUN_DIR                $INSTALL_ROOT/run/psad;
+ PSAD_FIFO_DIR               $INSTALL_ROOT/var/lib/psad;
+ PSAD_LIBS_DIR               $INSTALL_ROOT/usr/lib/psad;
+ PSAD_CONF_DIR               $INSTALL_ROOT/etc/psad;
+ PSAD_ERR_DIR                $PSAD_DIR/errs;
+-CONF_ARCHIVE_DIR            $PSAD_CONF_DIR/archive;
++CONF_ARCHIVE_DIR            $PSAD_DIR/archive;
+ SCAN_DATA_ARCHIVE_DIR       $PSAD_DIR/scan_archive;
+ ANALYSIS_MODE_DIR           $PSAD_DIR/ipt_analysis;
+ SNORT_RULES_DIR             $PSAD_CONF_DIR/snort_rules;
+@@ -685,9 +685,7 @@ ipCmd            /sbin/ip;
+ killallCmd       /usr/bin/killall;
+ netstatCmd       /bin/netstat;
+ unameCmd         /bin/uname;
+-whoisCmd         $INSTALL_ROOT/usr/bin/whois_psad;
++whoisCmd         /usr/bin/whois;
+ dfCmd            /bin/df;
+ fwcheck_psadCmd  $INSTALL_ROOT/usr/sbin/fwcheck_psad;
+-psadwatchdCmd    $INSTALL_ROOT/usr/sbin/psadwatchd;
+-kmsgsdCmd        $INSTALL_ROOT/usr/sbin/kmsgsd;
+ psadCmd          $INSTALL_ROOT/usr/sbin/psad;

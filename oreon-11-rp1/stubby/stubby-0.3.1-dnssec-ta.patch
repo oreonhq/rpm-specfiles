@@ -1,0 +1,28 @@
+From 3dc07827ba060247b714efdc00f2fc5617163204 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20Men=C5=A1=C3=ADk?= <pemensik@redhat.com>
+Date: Sat, 15 Oct 2022 14:21:39 +0200
+Subject: [PATCH] Use trust anchor path maintained by unbound-anchor
+
+Other packages use it as well. Point to single file, which might be
+reused by other packages. But keep the path commented out and use by
+default just built-in trust anchor.
+---
+ stubby.yml.example | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/stubby.yml.example b/stubby.yml.example
+index 1af0468..b86cd65 100644
+--- a/stubby.yml.example
++++ b/stubby.yml.example
+@@ -171,7 +171,7 @@ listen_addresses:
+ # Specify the location of the installed trust anchor files to override the
+ # default location (see above)
+ # dnssec_trust_anchors:
+-#   - "/etc/unbound/getdns-root.key"
++#   - "/var/lib/unbound/root.key"
+ 
+ 
+ ##################################  UPSTREAMS  ################################
+-- 
+2.37.3
+

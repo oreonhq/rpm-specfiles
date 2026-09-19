@@ -1,0 +1,47 @@
+diff -Naurp openca-ocspd-1.7.0.orig/src/hash-db.c openca-ocspd-1.7.0.new/src/hash-db.c
+--- openca-ocspd-1.7.0.orig/src/hash-db.c	2008-02-15 00:24:15.000000000 +0100
++++ openca-ocspd-1.7.0.new/src/hash-db.c	2013-10-30 12:25:54.851887748 +0100
+@@ -723,26 +723,32 @@ STACK_OF(CA_ENTRY_CERTID) *ocspd_CA_ENTR
+ 
+ 		/* Set the Digest Algorithm used */
+ 		nid = EVP_MD_type(digest);
+-		if (nid == NID_undef ) {
+-			if( cid ) OPENSSL_free (cid);
+-			return (NULL);
++		if (nid == NID_undef) {
++			OPENSSL_free(cid);
++			return NULL;
+ 		};
+-		cid->hashAlgorithm = (X509_ALGOR *) OBJ_nid2obj(nid);
++		cid->hashAlgorithm = X509_ALGOR_new();
+ 		if(cid->hashAlgorithm == NULL) {
+-			if( cid ) OPENSSL_free (cid);
+-			return (NULL);
++			OPENSSL_free(cid);
++			return NULL;
++		};
++		cid->hashAlgorithm->algorithm = OBJ_nid2obj(nid);
++		if(cid->hashAlgorithm->algorithm == NULL) {
++			X509_ALGOR_free(cid->hashAlgorithm);
++			OPENSSL_free(cid);
++			return NULL;
+ 		};
+ 		cid->hashAlgorithm->parameter = ASN1_TYPE_new();
+-		if(cid->hashAlgorithm->parameter == NULL ) {
+-			if( cid->hashAlgorithm ) X509_ALGOR_free( cid->hashAlgorithm);
+-			if( cid ) OPENSSL_free (cid);
++		if(cid->hashAlgorithm->parameter == NULL) {
++			X509_ALGOR_free(cid->hashAlgorithm);
++			OPENSSL_free(cid);
+ 			return (NULL);
+ 		}
+ 		cid->hashAlgorithm->parameter->type = V_ASN1_NULL;
+-		sk_CA_ENTRY_CERTID_push( cid_sk, cid );
++		sk_CA_ENTRY_CERTID_push(cid_sk, cid);
+ 	}
+ 
+-	return( cid_sk );
++	return cid_sk;
+ }
+ 
+ STACK_OF(X509_REVOKED) *ocspd_build_crl_entries_list ( CA_LIST_ENTRY *ca,

@@ -1,8 +1,8 @@
 %global source0_hash 4811586e2963442d4a3b3517d9fd14a8247bd878b1dc54e63b49afc472377f43
 
 Name:           libslirp
-Version:        4.9.1
-Release:        3%{?dist}
+Version:        4.9.4
+Release:        1%{?dist}
 Summary:        A general purpose TCP-IP emulator
 
 # check the SPDX tags in source files for details

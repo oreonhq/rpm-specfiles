@@ -1,65 +1,62 @@
-%global source0_hash 243244743f151ec859ec0bbf1368fa3f70e5f29e977b77f72e1c9b8f8ae670f6
-%global pypi_name xmlschema
+%global source0_hash none
 
-Name:           python-%{pypi_name}
-Version:        3.4.5
+Name:           python-xmlschema
+Version:        4.3.2
 Release:        %autorelease
-Summary:        A Python XML Schema validator and decoder
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An XML Schema validator and decoder
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/brunato/xmlschema
-Source0:        https://files.pythonhosted.org/packages/source/x/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+URL:            https://github.com/sissaschool/xmlschema
+Source:         %{pypi_source xmlschema}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python3-lxml
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The xmlschema library is an implementation of XML Schema for Python.
-
-This library arises from the needs of a solid Python layer for processing XML
-Schema based files for MaX (Materials design at the Exascale) European project.
-A significant problem is the encoding and the decoding of the XML data files
-produced by different simulation software. Another important requirement is
-the XML data validation, in order to put the produced data under control.
-The lack of a suitable alternative for Python in the schema-based decoding
-of XML data has led to build this library. Obviously this library can be
-useful for other cases related to XML Schema based processing, not only for
-the original scope.}
+This is package 'xmlschema' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-xmlschema
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
 
-%description -n python3-%{pypi_name}  %_description
+%description -n python3-xmlschema %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-xmlschema codegen,dev,docs
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{pypi_name}-%{version}
-sed -i 's/==/>=/' tox.ini
-sed -i '/memory_profiler/d' tox.ini
-%py3_shebang_fix %{pypi_name}
+%autosetup -p1 -n xmlschema-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x codegen,dev,docs
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/%{pypi_name}/
-%{python3_sitelib}/%{pypi_name}-%{version}.dist-info/
+
+%files -n python3-xmlschema -f %{pyproject_files}
 %{_bindir}/xmlschema-json2xml
 %{_bindir}/xmlschema-validate
 %{_bindir}/xmlschema-xml2json

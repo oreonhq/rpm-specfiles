@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Quake 3 Arena
+Comment=Quake 3 Arena demo launcher, will automatically download the needed data-files
+Exec=quake3-demo
+Icon=quake3
+Terminal=false
+Type=Application
+Categories=Game;ActionGame;
+Keywords=game;fps;first;person;shooter;quake;quake3;

@@ -1,0 +1,11 @@
+--- src/Map.c~	2005-03-05 10:20:04.000000000 -0600
++++ src/Map.c	2025-01-08 15:30:08.904971564 -0600
+@@ -945,7 +945,7 @@
+         drawMap();              // this calls finishDrawMap
+       } else {
+         // update the screen
+-        finishDrawMap(!map.redraw);
++        finishDrawMap();
+       }
+ 
+       // uncomment to test slow machine game speed

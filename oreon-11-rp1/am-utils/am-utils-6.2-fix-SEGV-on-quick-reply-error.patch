@@ -1,0 +1,33 @@
+am-utils-6.2 - fix SEGV on quick reply error
+
+From: Ian Kent <raven@themaw.net>
+
+Clearly a programming mistake on my part, odd it hasn't been seen
+before ...
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/nfs_subr.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/amd/nfs_subr.c b/amd/nfs_subr.c
+index b88a40c8..c0ca0e42 100644
+--- a/amd/nfs_subr.c
++++ b/amd/nfs_subr.c
+@@ -1293,6 +1293,8 @@ nfs_quick_reply3(am_node *mp, int error)
+   am_post_op_attr *post_op_obj;
+   int ret;
+ 
++  post_op_dir = &result.res_u.ok.dir_attributes;
++
+   if (error) {
+     /*
+      * Return the error that was passed to us.
+@@ -1300,7 +1302,6 @@ nfs_quick_reply3(am_node *mp, int error)
+     post_op_dir->attributes_follow = 0;
+     result.status = nfs_error(error);
+   } else {
+-    post_op_dir = &result.res_u.ok.dir_attributes;
+     post_op_obj = &result.res_u.ok.obj_attributes;
+     am_fattr3 *fattr3;
+     nfsfattr *fattr;

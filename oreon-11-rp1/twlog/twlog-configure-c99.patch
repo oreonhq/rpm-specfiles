@@ -1,0 +1,33 @@
+Avoid an undeclared exit function calls in configure checks.
+This improves compatibility with strict(er) C99 compilers, which may
+not support implicit function declarations because they were removed
+from the C language in 1999.
+
+One issues would be fixed by regeneration of configure with new autotools.
+Other requires change to acinclude.m4 and then regeneration. Now response
+from upstream maintainer.
+
+Issue tracked here: https://bugzilla.redhat.com/show_bug.cgi?id=2151046
+
+diff --git a/configure b/configure
+index 772cb27..a356ee6 100755
+--- a/configure
++++ b/configure
+@@ -5442,7 +5442,7 @@ Display *display=NULL;
+ short   major_version, minor_version;
+ Status rc;
+ rc=XpQueryVersion(display, &major_version, &minor_version);
+-exit(0);
++return 0;
+ }
+ 
+   ;
+@@ -5690,7 +5690,7 @@ Display *display=NULL;
+ short   major_version, minor_version;
+ Status rc;
+ rc=XpQueryVersion(display, &major_version, &minor_version);
+-exit(0);
++return 0;
+ }
+ 
+   ;

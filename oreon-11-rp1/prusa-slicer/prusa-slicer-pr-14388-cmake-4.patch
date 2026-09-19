@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 57b60ea62..3bdc7732e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,6 +11,7 @@
+ cmake_minimum_required(VERSION 3.13)
+ project(PrusaSlicer)
+ 
++set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+ include("version.inc")
+ include(GNUInstallDirs)
+ include(CMakeDependentOption)

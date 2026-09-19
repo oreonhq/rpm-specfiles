@@ -1,0 +1,22 @@
+diff -ur Database-DumpTruck-1.2.orig/Build.PL Database-DumpTruck-1.2/Build.PL
+--- Database-DumpTruck-1.2.orig/Build.PL	2022-09-06 10:13:10.216633140 +0200
++++ Database-DumpTruck-1.2/Build.PL	2022-09-06 10:13:54.469968705 +0200
+@@ -27,6 +27,7 @@
+ 		'Test::More' => 0,
+ 		'Test::Exception' => 0,
+ 		'Test::Deep' => 0,
++		'Test::Deep::JSON' => 0,
+ 		'File::Temp' => 0,
+ 	},
+ );
+diff -ur Database-DumpTruck-1.2.orig/t/dumptruck.t Database-DumpTruck-1.2/t/dumptruck.t
+--- Database-DumpTruck-1.2.orig/t/dumptruck.t	2022-09-06 10:13:10.215633132 +0200
++++ Database-DumpTruck-1.2/t/dumptruck.t	2022-09-06 10:14:02.816026051 +0200
+@@ -3,6 +3,7 @@
+ use Test::More tests => 43;
+ use Test::Exception;
+ use Test::Deep;
++use Test::Deep::JSON;
+ use File::Temp;
+ 
+ use strict;

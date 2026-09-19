@@ -1,0 +1,28 @@
+From 793a337eacce0f5d51d470f0dcd196808541c9d6 Mon Sep 17 00:00:00 2001
+From: Gabriel Somlo <gsomlo@gmail.com>
+Date: Sat, 11 Jan 2025 17:39:16 -0500
+Subject: [PATCH 3/3] fedora yosys-cxxopts patch
+
+Fedora-specific patch:
+Use relative path (instead of assuming a bundled submodule) when
+referencing the cxxopts.hpp include file.
+---
+ kernel/driver.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/driver.cc b/kernel/driver.cc
+index fa78bad59..ea1c01f87 100644
+--- a/kernel/driver.cc
++++ b/kernel/driver.cc
+@@ -21,7 +21,7 @@
+ #include "kernel/hashlib.h"
+ #include "libs/sha1/sha1.h"
+ #define CXXOPTS_VECTOR_DELIMITER '\0'
+-#include "libs/cxxopts/include/cxxopts.hpp"
++#include <cxxopts.hpp>
+ #include <iostream>
+ 
+ #ifdef YOSYS_ENABLE_READLINE
+-- 
+2.52.0
+

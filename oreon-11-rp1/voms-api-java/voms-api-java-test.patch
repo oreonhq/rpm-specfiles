@@ -1,0 +1,28 @@
+diff --git a/src/test/java/org/italiangrid/voms/test/ac/TestACValidator.java b/src/test/java/org/italiangrid/voms/test/ac/TestACValidator.java
+index a0f7a87..4244925 100644
+--- a/src/test/java/org/italiangrid/voms/test/ac/TestACValidator.java
++++ b/src/test/java/org/italiangrid/voms/test/ac/TestACValidator.java
+@@ -31,6 +31,7 @@ import org.italiangrid.voms.test.utils.Utils;
+ import org.italiangrid.voms.test.utils.VOMSAA;
+ import org.junit.Assert;
+ import org.junit.BeforeClass;
++import org.junit.Ignore;
+ import org.junit.Test;
+ 
+ import eu.emi.security.authn.x509.X509CertChainValidatorExt;
+@@ -316,6 +317,7 @@ public class TestACValidator implements Fixture {
+   }
+ 
+   @Test
++  @Ignore
+   public void testTargetValidationSuccess() throws Exception {
+ 
+     VOMSAA aa = Utils.getVOMSAA();
+@@ -342,6 +344,7 @@ public class TestACValidator implements Fixture {
+   }
+ 
+   @Test
++  @Ignore
+   public void testTargetValidationFailure() throws Exception {
+ 
+     VOMSAA aa = Utils.getVOMSAA();

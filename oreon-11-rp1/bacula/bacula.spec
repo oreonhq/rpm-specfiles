@@ -8,7 +8,7 @@
 %global username bacula
 
 Name:               bacula
-Version:            15.0.3
+Version:            17.0.0
 Release:            %autorelease
 Summary:            Cross platform network backup for Linux, Unix, Mac and Windows
 # See LICENSE for details

@@ -1,0 +1,32 @@
+From 1e881d9e0914eaf33b528b04891cfc7c008606b7 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sat, 24 Mar 2018 19:07:41 +0100
+Subject: [PATCH] Don't override the compiler flags with nonsense ones
+
+---
+ configure.ac | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 1666a07..5ebb0c8 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -66,15 +66,11 @@ if test x"$debugit" = x"yes"; then
+     AC_MSG_NOTICE([Debug Mode on.])
+ else
+     AC_DEFINE([NDEBUG],[],[No-debug Mode])
+-    AM_CFLAGS="-O0 $AM_CFLAGS"
+-    AM_CXXFLAGS="-O0 $AM_CXXFLAGS"
+     AC_MSG_NOTICE([Debug Mode off.])
+ fi
+ 
+ AC_PATH_PROG(HELP2MAN, help2man, echo No help2man )
+ 
+-CFLAGS="$AM_CFLAGS"
+-CXXFLAGS="$AM_CXXFLAGS"
+ ##########################################################################
+ 
+ AC_OUTPUT
+-- 
+2.21.0
+

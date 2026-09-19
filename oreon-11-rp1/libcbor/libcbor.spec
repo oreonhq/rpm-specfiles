@@ -1,8 +1,8 @@
 %global source0_hash 95a7f0dd333fd1dce3e4f92691ca8be38227b27887599b21cd3c4f6d6a7abb10
 
 Name:		libcbor
-Version:	0.13.0
-Release:	2%{?dist}
+Version:	0.14.0
+Release:	1%{?dist}
 Summary:	A CBOR parsing library
 
 License:	MIT

@@ -1,0 +1,28 @@
+From 58fed08a2a1b10122360845c780c9fa17cf9d6b3 Mon Sep 17 00:00:00 2001
+From: Michal Sojka <michal.sojka@cvut.cz>
+Date: Tue, 30 Apr 2024 14:03:40 +0200
+Subject: [PATCH] usbrelayd: Add support for paho-mqtt >= 2.0.0
+
+See https://eclipse.dev/paho/files/paho.mqtt.python/html/migrations.html#change-between-version-1-x-and-2-0
+---
+ usbrelayd | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/usbrelayd b/usbrelayd
+index 60c13dc..10bfe1e 100644
+--- a/usbrelayd
++++ b/usbrelayd
+@@ -95,7 +95,12 @@ else:
+ # connect to the mqtt broker
+ 
+ 
+-client = mqtt.Client(clientName)
++if "CallbackAPIVersion" in dir(mqtt):
++    # paho-mqtt >= 2.0.0
++    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, clientName)
++else:
++    # paho-mqtt < 2.0.0
++    client = mqtt.Client(clientName)
+ client.connect(mqttBroker) 
+ publish_states(client)
+ client.on_message=on_message 

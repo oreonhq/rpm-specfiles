@@ -1,0 +1,12 @@
+diff -urp '--exclude=*~' fantasdic-1.0-beta7.orig/lib/fantasdic/preferences.rb fantasdic-1.0-beta7/lib/fantasdic/preferences.rb
+--- fantasdic-1.0-beta7.orig/lib/fantasdic/preferences.rb	2022-11-08 14:12:31.332046254 +0900
++++ fantasdic-1.0-beta7/lib/fantasdic/preferences.rb	2022-11-08 14:37:45.467147000 +0900
+@@ -37,7 +37,7 @@ module Fantasdic
+         def initialize(config_file)
+             @config_file = config_file
+ 
+-            @config = YAML.load(File.open(@config_file,
++            @config = YAML.unsafe_load(File.open(@config_file,
+                                 File::CREAT|File::RDWR))
+             if @config and @config.is_a? Hash
+                 # merge with the default config in case of new parameters 

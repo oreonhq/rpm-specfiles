@@ -1,0 +1,55 @@
+From 88cd6a3e7fc25d3730acf4f1f66d14e8b057c351 Mon Sep 17 00:00:00 2001
+From: Fabrice Bellet <fabrice@bellet.info>
+Date: Thu, 29 Oct 2020 21:59:38 +0100
+Subject: [PATCH] Use system iaxclient instead of bundled one
+
+---
+ 3rdparty/CMakeLists.txt               | 4 ----
+ CMakeModules/SetupFGFSLibraries.cmake | 2 +-
+ utils/fgcom/CMakeLists.txt            | 2 +-
+ 3 files changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/3rdparty/CMakeLists.txt b/3rdparty/CMakeLists.txt
+index 2e7b90a23..105953b0b 100644
+--- a/3rdparty/CMakeLists.txt
++++ b/3rdparty/CMakeLists.txt
+@@ -3,10 +3,6 @@ if (NOT SYSTEM_SQLITE)
+     add_subdirectory(sqlite3)
+ endif()
+ 
+-if (ENABLE_IAX)
+-    add_subdirectory(iaxclient/lib)
+-endif()
+-
+ add_subdirectory(mongoose)
+ add_subdirectory(cjson)
+ 
+diff --git a/CMakeModules/SetupFGFSLibraries.cmake b/CMakeModules/SetupFGFSLibraries.cmake
+index 26930a3b9..aaf51c109 100644
+--- a/CMakeModules/SetupFGFSLibraries.cmake
++++ b/CMakeModules/SetupFGFSLibraries.cmake
+@@ -10,7 +10,7 @@ function(setup_fgfs_libraries target)
+     endif()
+ 
+     if(ENABLE_IAX)
+-        target_link_libraries(${target} iaxclient_lib)
++        target_link_libraries(${target} iaxclient)
+     endif()
+ 
+     if(HAVE_DBUS)
+diff --git a/utils/fgcom/CMakeLists.txt b/utils/fgcom/CMakeLists.txt
+index 99da84e22..c11264192 100644
+--- a/utils/fgcom/CMakeLists.txt
++++ b/utils/fgcom/CMakeLists.txt
+@@ -26,7 +26,7 @@ add_executable(${name}
+ )
+ 
+ target_link_Libraries(${name}
+-                      iaxclient_lib
++                      iaxclient
+                       SimGearCore)
+ 
+ install(TARGETS ${name} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+-- 
+2.48.1
+

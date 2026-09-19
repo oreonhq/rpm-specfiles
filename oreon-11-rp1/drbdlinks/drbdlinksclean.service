@@ -1,0 +1,14 @@
+[Unit]
+Description=drbdlinks links clean up
+After=syslog.target
+Before=heartbeat.service openais.service corosync.service pacemaker.service
+Documentation=man:drbdlinks(8)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/drbdlinksclean
+ExecStop=/usr/libexec/drbdlinksclean
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

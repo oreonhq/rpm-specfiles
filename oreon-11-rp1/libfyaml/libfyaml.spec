@@ -1,7 +1,7 @@
 %global source0_hash 9f813cad43777803dc3618d31a2efe3a03fafacf2592fabb383fffa5e185f2ce
 
 Name:           libfyaml
-Version:        0.8
+Version:        0.9.6
 Release:        1%{?dist}
 Summary:        Complete YAML parser and emitter
 License:        MIT and GPL-2.0-only and BSD-2-Clause

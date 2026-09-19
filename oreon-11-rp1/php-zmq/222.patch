@@ -1,0 +1,52 @@
+From 9af012efcfb256dd96b72ea8d1ac1b8498903118 Mon Sep 17 00:00:00 2001
+From: Remi Collet <remi@remirepo.net>
+Date: Wed, 3 Nov 2021 12:10:19 +0100
+Subject: [PATCH] Fix for PHP 8.1
+
+---
+ tests/053-z85.phpt | 6 +++---
+ zmq_pollset.c      | 7 ++++++-
+ 2 files changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/tests/053-z85.phpt b/tests/053-z85.phpt
+index f486815..549fa5f 100644
+--- a/tests/053-z85.phpt
++++ b/tests/053-z85.phpt
+@@ -41,12 +41,12 @@ for ($i = 4; $i <= 256; $i += 4) {
+ 
+ // Incorrect length
+ test_z85_encode('1234567', null);
+-test_z85_encode(null, null);
++test_z85_encode('', null);
+ 
+ test_z85_decode('1234567', null);
+-test_z85_decode(null, null);
++test_z85_decode('', null);
+ 
+ echo "OK";
+ 
+ --EXPECT--
+-OK
+\ No newline at end of file
++OK
+diff --git a/zmq_pollset.c b/zmq_pollset.c
+index 3e4ed15..0bf1098 100644
+--- a/zmq_pollset.c
++++ b/zmq_pollset.c
+@@ -169,10 +169,15 @@ static
+ zend_string *s_create_key(zval *entry)
+ {
+ 	if (Z_TYPE_P(entry) == IS_RESOURCE) {
+-		return strpprintf(0, "r:%d", Z_RES_P(entry)->handle);
++		/* zend_long since 8.1.0 */
++		return strpprintf(0, "r:%ld", (long)Z_RES_P(entry)->handle);
+ 	}
+ 	else {
++#if PHP_VERSION_ID >= 80100
++		zend_string *hash = php_spl_object_hash(Z_OBJ_P(entry));
++#else
+ 		zend_string *hash = php_spl_object_hash(entry);
++#endif
+ 		zend_string *key = strpprintf(0, "o:%s", hash->val);
+ 		zend_string_release(hash);
+ 		return key;

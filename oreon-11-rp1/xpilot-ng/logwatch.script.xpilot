@@ -1,0 +1,154 @@
+##########################################################################
+##########################################################################
+
+use strict;
+
+my ($pilot, $user, $ip, $version, $reason, $Msg, $total);
+my %Start = ();
+my %Login = ();
+my %TakeChar = ();
+my %Ping = ();
+my %Logout = ();
+
+my $Detail = $ENV{'LOGWATCH_DETAIL_LEVEL'} || 0;
+
+# Interesting events:
+#19 Feb 17:11:10 Server runs at 50 frames per second
+#21 Feb 05:54:27 Welcome Man=Tiago@UR| (217.129.39.100/3086) (version 4501)
+#21 Feb 05:54:28 Man (6) starts at startpos 0.
+#21 Feb 05:54:46 Checking Address:(217.129.39.100)
+#21 Feb 05:54:47 Checking Address:(217.129.39.100)
+#21 Feb 05:54:50 Checking Address:(217.129.39.100)
+#21 Feb 05:54:50 Checking Address:(217.129.39.100)
+#21 Feb 05:55:18 Goodbye Man=Tiago@UR| ("timeout 08")
+
+
+
+while (defined(my $ThisLine = <STDIN>)) {
+   chomp($ThisLine);
+   if ( ($Msg) = ($ThisLine =~ /Server runs at .*$/)) {
+      $Start{$Msg}++;
+   } elsif ( ($pilot,$user,$ip,$version) = ($ThisLine =~ /Welcome ([^=]+)=([^|]+)\|.* \(([^\)]+)\) \(([^\)]+)\)$/)) {
+      $Login{$pilot}{$user}{$ip}{$version}++;
+   } elsif ( ($pilot) = ($ThisLine =~ /([^ ]+) \(\d+\) starts at startpos/)) {
+      $TakeChar{$pilot}++;
+   } elsif ( ($ip) = ($ThisLine =~ /Checking Address:\((.*)\)$/)) {
+      $Ping{$ip}++;
+   } elsif ( ($pilot,$user,$reason) = ($ThisLine =~ /Goodbye ([^=]+)=([^|]+)\|.* \((.*)\)$/)) {
+      $Logout{$pilot}{$user}{$reason}++;
+   }  
+}
+
+if (keys %Start) {
+   if ($Detail >= 5) {
+      foreach my $Msg (sort keys %Start) {
+         if ($Start{$Msg} > 1) {
+            print "Server started ($Start{$Msg} times)\n";
+         } else {
+            print "Server started once\n";
+         }
+      }
+   } else {
+      my $total;
+      foreach my $Msg (keys %Start) {
+         $total += $Start{$Msg};
+      }
+      print "Server started $total times\n";
+   }
+}
+
+if (keys %Login) {
+   print "\n";
+   if ($Detail >= 5) {
+      foreach my $pilot (sort keys %Login) {
+         foreach my $user (sort keys %{ $Login{$pilot} }) {
+            my $total=0;
+            foreach my $ip (keys %{ $Login{$pilot}{$user} }) {
+               foreach my $version (keys %{ $Login{$pilot}{$user}{$ip} }) {
+                  $total += $Login{$pilot}{$user}{$ip}{$version};
+               }
+            }
+            print "Pilot $pilot ($user) logged in $total times\n";
+         }
+      }
+   } else {
+      my $total;
+      foreach my $pilot (keys %Login) {
+         foreach my $user (keys %{ $Login{$pilot} }) {
+            foreach my $ip (keys %{ $Login{$pilot}{$user} }) {
+               foreach my $version (keys %{ $Login{$pilot}{$user}{$ip} }) {
+                  $total += $Login{$pilot}{$user}{$ip}{$version};
+               }
+            }
+         }
+      }
+      print "$total users logged in\n";
+   }
+}
+
+if (keys %TakeChar) {
+   print "\n";
+   if ($Detail >= 5) {
+      foreach my $pilot (sort keys %TakeChar) {
+         if ($TakeChar{$pilot} > 1) {
+            print "Player $pilot joined $TakeChar{$pilot} times\n"
+         } else {
+            print "Player $pilot joined once\n"
+         }
+      }
+   } else {
+      my $total=0;
+      foreach my $pilot (keys %TakeChar) {
+         $total += $TakeChar{$pilot};
+      }
+      print "$total players entered the world\n";
+   }
+}
+
+if (keys %Logout) {
+   print "\n";
+   if ($Detail >= 5) {
+      foreach my $pilot (sort keys %Logout) {
+         foreach my $user (sort keys %{ $Logout{$pilot} }) {
+            foreach my $reason (keys %{ $Logout{$pilot}{$user} }) {
+               print "Pilot $pilot ($user) logged out $Logout{$pilot}{$user}{$reason} times ($reason)\n";
+            }
+         }
+      }
+   } else {
+      my $total=0;
+      foreach my $pilot (keys %Logout) {
+         foreach my $user (keys %{ $Logout{$pilot} }) {
+            foreach my $reason (keys %{ $Logout{$pilot}{$user} }) {
+               $total += $Logout{$pilot}{$user}{$reason};
+            }
+         }
+      }
+      print "$total users logged out\n";
+   }
+}
+
+if (keys %Ping) {
+   print "\n";
+   if ($Detail >= 5) {
+      foreach my $ip (sort keys %Ping) {
+         if ($Ping{$ip} > 1) {
+            printf "Pinged %-16s %3d times\n", ($ip,$Ping{$ip})
+         } else {
+            printf "Pinged %-16s once\n", ($ip)
+         }
+      }
+   } else {
+      my $total=0;
+      foreach my $ip (keys %Ping) {
+         $total += $Ping{$ip};
+      }
+      print "Pinged " . keys(%Ping) . " hosts $total times\n";
+   }
+}
+
+
+exit(0);
+
+# vi: shiftwidth=3 tabstop=3 syntax=perl et
+

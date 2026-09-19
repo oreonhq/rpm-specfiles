@@ -1,0 +1,188 @@
+--- gtk2-3.4.3/ext/gtk2/rbgdk.c.type	2024-01-20 18:05:58.420634944 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgdk.c	2024-01-20 20:36:15.392739204 +0900
+@@ -63,7 +63,7 @@ rbgdk_rval2gdkpoints_body(VALUE value)
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgdk_rval2gdkpoints_rescue(VALUE value)
++rbgdk_rval2gdkpoints_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbgdk_rval2gdkpoints_args *)value)->result);
+ 
+@@ -106,7 +106,7 @@ rbgdk_rval2gdkatoms_body(VALUE value)
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgdk_rval2gdkatoms_rescue(VALUE value)
++rbgdk_rval2gdkatoms_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbgdk_rval2gdkatoms_args *)value)->result);
+ 
+@@ -149,7 +149,7 @@ rbgdk_rval2gdkpixbufglist_body(VALUE val
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgdk_rval2gdkpixbufglist_rescue(VALUE value)
++rbgdk_rval2gdkpixbufglist_rescue(VALUE value, VALUE error)
+ {
+     g_list_free(((struct rval2gdkpixbufglist_args *)value)->result);
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgdkdragcontext.c.type	2024-01-20 18:06:00.006633275 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgdkdragcontext.c	2024-01-20 20:49:39.947199026 +0900
+@@ -185,7 +185,7 @@ rbgdk_rval2gdkatomglist_body(VALUE value
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgdk_rval2gdkatomglist_rescue(VALUE value)
++rbgdk_rval2gdkatomglist_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbgdk_rval2gdkatomglist_args *)value)->result);
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgdkdraw.c.type	2024-01-20 18:06:00.007633274 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgdkdraw.c	2024-01-20 20:49:39.950199027 +0900
+@@ -178,7 +178,7 @@ rbgdk_rval2gdksegments_body(VALUE value)
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgdk_rval2gdksegments_rescue(VALUE value)
++rbgdk_rval2gdksegments_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbgdk_rval2gdksegments_args *)value)->result);
+ 
+@@ -290,7 +290,7 @@ rbgdk_rval2gdktrapezoids_body(VALUE valu
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgdk_rval2gdktrapezoids_rescue(VALUE value)
++rbgdk_rval2gdktrapezoids_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbgdk_rval2gdktrapezoids_args *)value)->result);
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgdkregion.c.type	2024-01-20 18:06:00.008633273 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgdkregion.c	2024-01-20 20:49:39.953199028 +0900
+@@ -121,7 +121,7 @@ rbgdk_rval2gdkspans_body(VALUE value)
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgdk_rval2gdkspans_rescue(VALUE value)
++rbgdk_rval2gdkspans_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbgdk_rval2gdkspans_args *)value)->result);
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgtkactiongroup.c.type	2024-01-20 18:06:00.011633270 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkactiongroup.c	2024-01-20 20:58:40.758451051 +0900
+@@ -130,7 +130,7 @@ rbg_rval2gtkactionentries_body(VALUE val
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbg_rval2gtkactionentries_rescue(VALUE value)
++rbg_rval2gtkactionentries_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbg_rval2gtkactionentries_args *)value)->result);
+ 
+@@ -238,7 +238,7 @@ rbg_rval2gtktoggleactionentries_body(VAL
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbg_rval2gtktoggleactionentries_rescue(VALUE value)
++rbg_rval2gtktoggleactionentries_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbg_rval2gtktoggleactionentries_args *)value)->result);
+ 
+@@ -335,7 +335,7 @@ rbg_rval2gtkradioactionentries_body(VALU
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbg_rval2gtkradioactionentries_rescue(VALUE value)
++rbg_rval2gtkradioactionentries_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbg_rval2gtkradioactionentries_args *)value)->result);
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgtkclipboard.c.type	2024-01-20 18:06:00.019633261 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkclipboard.c	2024-01-20 21:00:08.178475085 +0900
+@@ -114,7 +114,7 @@ clipboard_set_body(VALUE value)
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-clipboard_set_rescue(VALUE value)
++clipboard_set_rescue(VALUE value, VALUE error)
+ {
+     struct clipboard_set_args *args = (struct clipboard_set_args *)value;
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgtkcolorsel.c.type	2024-01-20 18:06:00.019633261 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkcolorsel.c	2024-01-20 20:49:39.954199029 +0900
+@@ -108,7 +108,7 @@ rbgdk_rval2gdkcolors_body(VALUE value)
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgdk_rval2gdkcolors_rescue(VALUE value)
++rbgdk_rval2gdkcolors_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbgdk_rval2gdkcolors_args *)value)->result);
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgtkcontainer.c.type	2024-01-20 18:06:00.021633259 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkcontainer.c	2024-01-20 20:58:40.760451051 +0900
+@@ -369,7 +369,7 @@ rbg_rval2gtkwidgetglist_body(VALUE value
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbg_rval2gtkwidgetglist_rescue(VALUE value)
++rbg_rval2gtkwidgetglist_rescue(VALUE value, VALUE error)
+ {
+     g_list_free(((struct rval2gtkwidgetglist_args *)value)->result);
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgtkdrag.c.type	2024-01-20 18:06:00.021633259 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkdrag.c	2024-01-20 20:58:50.718453787 +0900
+@@ -52,7 +52,7 @@ rbgtk_rval2gtktargetentries_body(VALUE v
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgtk_rval2gtktargetentries_rescue(VALUE value)
++rbgtk_rval2gtktargetentries_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbgtk_rval2gtktargetentries_args *)value)->result);
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgtkprintsettings.c.type	2024-01-20 18:06:00.034633245 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkprintsettings.c	2024-01-20 20:58:50.719453788 +0900
+@@ -534,7 +534,7 @@ rbgtk_rval2gtkpageranges_body(VALUE valu
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgtk_rval2gtkpageranges_rescue(VALUE value)
++rbgtk_rval2gtkpageranges_rescue(VALUE value, VALUE error)
+ {
+     g_free(((struct rbgtk_rval2gtkpageranges_args *)value)->result);
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgtkradioaction.c.type	2024-01-20 18:06:00.034633245 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkradioaction.c	2024-01-20 20:58:50.720453788 +0900
+@@ -68,7 +68,7 @@ rbgtk_rval2gtkradioactiongslist_body(VAL
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgtk_rval2gtkradioactiongslist_rescue(VALUE value)
++rbgtk_rval2gtkradioactiongslist_rescue(VALUE value, VALUE error)
+ {
+     g_slist_free(((struct rbgtk_rval2gtkradioactiongslist_args *)value)->result);
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgtkradiomenuitem.c.type	2024-01-20 18:06:00.035633244 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkradiomenuitem.c	2024-01-20 20:58:50.722453788 +0900
+@@ -46,7 +46,7 @@ rbgtk_rval2gtkradiomenuitemgslist_body(V
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgtk_rval2gtkradiomenuitemgslist_rescue(VALUE value)
++rbgtk_rval2gtkradiomenuitemgslist_rescue(VALUE value, VALUE error)
+ {
+     g_slist_free(((struct rbgtk_rval2gtkradiomenuitemgslist_args *)value)->result);
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgtkradiotoolbutton.c.type	2024-01-20 18:06:00.035633244 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkradiotoolbutton.c	2024-01-20 20:58:50.724453789 +0900
+@@ -45,7 +45,7 @@ rbgtk_rval2gtkradiotoolbuttongslist_body
+ }
+ 
+ static G_GNUC_NORETURN VALUE
+-rbgtk_rval2gtkradiotoolbuttongslist_rescue(VALUE value)
++rbgtk_rval2gtkradiotoolbuttongslist_rescue(VALUE value, VALUE error)
+ {
+     g_slist_free(((struct rbgtk_rval2gtkradiotoolbuttongslist_args *)value)->result);
+ 

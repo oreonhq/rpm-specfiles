@@ -1,0 +1,22 @@
+From 42153e4c993c2b8196f98c5ab6f1150f398e3d0d Mon Sep 17 00:00:00 2001
+From: John Bartholomew <jpab@google.com>
+Date: Wed, 7 May 2025 14:27:10 +0100
+Subject: [PATCH] chore: remove -rc2 tag in CMakeLists.txt VERSION field
+
+---
+ cpp/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cpp/CMakeLists.txt b/cpp/CMakeLists.txt
+index 153a4a1c..55c26e8c 100644
+--- a/cpp/CMakeLists.txt
++++ b/cpp/CMakeLists.txt
+@@ -15,7 +15,7 @@ target_link_libraries(libjsonnet++ libjsonnet)
+ # CMake prepends CMAKE_SHARED_LIBRARY_PREFIX to shared libraries, so without
+ # this step the output would be |liblibjsonnet|.
+ set_target_properties(libjsonnet++ PROPERTIES OUTPUT_NAME jsonnet++
+-	VERSION     "0.21.0-rc2"
++	VERSION     "0.21.0"
+ 	SOVERSION   "0"
+ 	PUBLIC_HEADER "${LIB_HEADER}")
+ install(TARGETS libjsonnet++

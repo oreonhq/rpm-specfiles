@@ -1,0 +1,145 @@
+.TH JSONNNET "1" "June 2021" "" "User Commands"
+.SH NAME
+jsonnet \- jsonnet commandline interpreter
+.SH SYNOPSIS
+.B jsonnet
+.RI [ option \ ...]
+.I filename
+.SH OPTIONS
+In all cases:
+.RS +3n
+.IP \(bu 2
+.I filename
+can be
+.B \-
+(stdin)
+.IP \(bu 2
+Multichar options are expanded e.g. \fB\-abc\fR becomes
+.BR \-a\ \-b\ \-c .
+.IP \(bu 2
+The
+.B \--
+option suppresses option processing for subsequent arguments.
+.IP \(bu 2
+Note that since filenames and jsonnet programs can begin with
+.BR - ,
+it is advised to use
+.B \-\-
+if the argument is unknown, e.g. \fBjsonnet\ \-\-\ "$\fIFILENAME\fB"\fR.
+.RE
+.SS "AVAILABLE OPTIONS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+Print a usage message
+.TP
+.B \-e\fR,\ \fB\-\-exec
+Treat
+.I filename
+as code
+.TP
+.B \-J\fR,\ \fB\-\-jpath \fIdir
+Specify an additional library search directory (right-most wins)
+.TP
+.B \-o\fR,\ \fB\-\-output\-file \fIfile
+Write to the output file rather than stdout
+.TP
+.B \-m\fR,\ \fB\-\-multi \fIdir
+Write multiple files to the directory, list files on stdout
+.TP
+.B \-y\fR,\ \-\-yaml\-stream
+Write output as a YAML stream of JSON documents
+.TP
+.B \-S\fR,\ \-\-string
+Expect a string, manifest as plain text
+.TP
+.B \-s\fR,\ \-\-max\-stack\ \fIn
+Number of allowed stack frames
+.TP
+.B \-t\fR,\ \-\-max\-trace\ \fIn
+Max length of stack trace before cropping
+.TP
+.B \-\-gc\-min\-objects\ \fIn
+Do not run garbage collector until this many
+.TP
+.B \-\-gc\-growth\-trigger\ \fIn
+Run garbage collector after this amount of object growth
+.TP
+.B \-\-version
+Print version
+.SS "AVAILABLE OPTIONS FOR SPECIFYING VALUES OF \(oqEXTERNAL\(cq VARIABLES"
+.P
+Provide the value as a string:
+.TP
+.B \-V\fR,\ \fB-\-ext\-str\ \fIvar\fR[=\fIval\fR]
+If
+.I val
+is omitted, get from environment var
+.I var
+.PD 0
+.TP
+.in +4x
+.B \-\-ext\-str\-file\ \fIvar\fR=\fIfile
+Read the string from the file
+.in
+.PD
+.P
+Provide the value as Jsonnet code:
+.TP
+.B \-\-ext\-code\ \fIvar\fR[=\fIcode\fR]
+If
+.I code
+is omitted, get from environment var
+.I var
+.TP
+.B \-\-ext\-code\-file\ \fIvar\fR=\fIfile
+Read the code from the file
+.SS "AVAILABLE OPTIONS FOR SPECIFYING VALUES OF \(oqTOP-LEVEL ARGUMENTS\(cq"
+.P
+Provide the value as a string:
+.TP
+.B \-V\fR,\ \fB-\-tla\-str\ \fIvar\fR[=\fIval\fR]
+If
+.I val
+is omitted, get from environment var
+.I var
+.PD 0
+.TP
+.in +4x
+.B \-\-tla\-str\-file\ \fIvar\fR=\fIfile
+Read the string from the file
+.in
+.PD
+.P
+Provide the value as Jsonnet code:
+.TP
+.B \-\-tla\-code\ \fIvar\fR[=\fIcode\fR]
+If
+.I code
+is omitted, get from environment var
+.I var
+.TP
+.B \-\-tla\-code\-file\ \fIvar\fR=\fIfile
+Read the code from the file
+.SH ENVIRONMENT
+.TP
+.B JSONNET_PATH
+is a colon (semicolon on Windows) separated list of directories added in
+reverse order before the paths specified by
+.B \-\-jpath
+(i.e. left-most wins)
+.IP
+E.g.
+.in +4n
+.EX
+.B JSONNET_PATH=a:b\ jsonnet\ \-J\ c\ \-J\ d
+.EE
+.in
+is equivalent to:
+.in +4n
+.EX
+.B JSONNET_PATH=d:c:a:b\ jsonnet
+.B jsonnet\ \-J\ b\ \-J\ a\ \-J\ c\ \-J\ d
+.EE
+.in
+.SH "SEE\ ALSO"
+.BR jsonnetfmt (1)

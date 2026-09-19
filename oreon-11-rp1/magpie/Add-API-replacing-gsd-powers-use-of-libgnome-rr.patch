@@ -1,0 +1,899 @@
+From 86bd9a342f8bf52711874aec9c5476bb944238e4 Mon Sep 17 00:00:00 2001
+From: David Mohammed <fossfreedom@ubuntu.com>
+Date: Mon, 16 Sep 2024 19:44:52 +0100
+Subject: [PATCH] =?UTF-8?q?Add=20API=20replacing=20gsd-power's=20use=20of?=
+ =?UTF-8?q?=20libgnome-rr=20This=20patch=20has=20been=20adapted=20from=20h?=
+ =?UTF-8?q?ttps://gitlab.gnome.org/GNOME/mutter/-/merge=5Frequests/3861=20?=
+ =?UTF-8?q?Original=20author=20Jonas=20=C3=85dahl=20This=20is=20required?=
+ =?UTF-8?q?=20to=20adapt=20to=20the=20GNOME-47=20gnome-settings-daemon=20u?=
+ =?UTF-8?q?pdates.=20=20Without=20the=20patch=20gsd-power=20segfaults=20re?=
+ =?UTF-8?q?sulting=20with=20budgie=20exiting=20back=20to=20the=20login=20m?=
+ =?UTF-8?q?anager.?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../org.gnome.Mutter.DisplayConfig.xml        |  37 +++
+ src/backends/meta-monitor-manager-private.h   |   3 -
+ src/backends/meta-monitor-manager.c           | 253 +++++++++++++++---
+ src/backends/meta-monitor.c                   |  59 ++++
+ src/backends/meta-monitor.h                   |  12 +
+ src/backends/meta-output.c                    |  23 ++
+ .../x11/meta-monitor-manager-xrandr.c         |   9 -
+ src/backends/x11/meta-output-xrandr.c         |  64 ++---
+ src/backends/x11/meta-output-xrandr.h         |   3 -
+ 9 files changed, 373 insertions(+), 90 deletions(-)
+
+diff --git a/data/dbus-interfaces/org.gnome.Mutter.DisplayConfig.xml b/data/dbus-interfaces/org.gnome.Mutter.DisplayConfig.xml
+index af78ec0517..907020a558 100644
+--- a/data/dbus-interfaces/org.gnome.Mutter.DisplayConfig.xml
++++ b/data/dbus-interfaces/org.gnome.Mutter.DisplayConfig.xml
+@@ -210,12 +210,42 @@
+         Returns the new value after rounding.
+     -->
+     <method name="ChangeBacklight">
++	  <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
+       <arg name="serial" direction="in" type="u" />
+       <arg name="output" direction="in" type="u" />
+       <arg name="value" direction="in" type="i" />
+       <arg name="new_value" direction="out" type="i" />
+     </method>
+ 
++	    <!--
++	SetBacklight:
++	@serial: configuration serial
++	@connector: the connector name
++	@value: the new backlight value
++
++	Changes the backlight of @output to @value.
++    -->
++    <method name="SetBacklight">
++      <arg name="serial" direction="in" type="u" />
++      <arg name="connector" direction="in" type="s" />
++      <arg name="value" direction="in" type="i" />
++    </method>
++
++    <!--
++	Backlight:
++
++	A set of backlights. Each backlight is a dictionary with the following
++	entries. If an entry is only a connector, it means there is no way to
++	control it via this D-Bus interface.
++
++	  * 'connector' (s) - An associated monitor connector
++	  * 'active' (s) - True if the monitor is active
++	  * 'value' (i) - Current value (optional)
++
++	The initial 'u' is a serial number used when setting the backlight.
++    -->
++    <property name="Backlight" type="(uaa{sv})" access="read" />
++
+     <!--
+         GetCrtcGamma:
+ 	@serial: configuration serial
+@@ -489,5 +519,12 @@
+       <arg name="output" direction="in" type="u" />
+       <arg name="ctm" direction="in" type="(ttttttttt)" />
+     </method>
++
++	<!--
++	HasExternalmonitor:
++
++        True if there is an external monitor connected and activated.
++    -->
++    <property name="HasExternalMonitor" type="b" access="read" />
+   </interface>
+ </node>
+diff --git a/src/backends/meta-monitor-manager-private.h b/src/backends/meta-monitor-manager-private.h
+index d6a92bf2ac..9bf2ce9b23 100644
+--- a/src/backends/meta-monitor-manager-private.h
++++ b/src/backends/meta-monitor-manager-private.h
+@@ -180,9 +180,6 @@ struct _MetaMonitorManager
+  *
+  * @set_power_save_mode: Sets the #MetaPowerSave mode (for all displays).
+  *
+- * @change_backlight: Changes the backlight intensity to the given value (in
+- *   percent).
+- *
+  * @tiled_monitor_added: Should be called by a #MetaMonitor when it is created.
+  *
+  * @tiled_monitor_removed: Should be called by a #MetaMonitor when it is
+diff --git a/src/backends/meta-monitor-manager.c b/src/backends/meta-monitor-manager.c
+index 5c9a540299..52abf414a3 100644
+--- a/src/backends/meta-monitor-manager.c
++++ b/src/backends/meta-monitor-manager.c
+@@ -114,6 +114,8 @@ typedef struct _MetaMonitorManagerPrivate
+ 
+   gboolean has_builtin_panel;
+   gboolean night_light_supported;
++
++  uint32_t backlight_serial;
+ } MetaMonitorManagerPrivate;
+ 
+ G_DEFINE_TYPE_WITH_PRIVATE (MetaMonitorManager, meta_monitor_manager,
+@@ -133,6 +135,9 @@ static gboolean
+ is_global_scale_matching_in_config (MetaMonitorsConfig *config,
+                                     float               scale);
+ 
++static void update_backlight (MetaMonitorManager *manager,
++                              gboolean            bump_serial);
++
+ MetaBackend *
+ meta_monitor_manager_get_backend (MetaMonitorManager *manager)
+ {
+@@ -1188,6 +1193,30 @@ update_night_light_supported (MetaMonitorManager *manager)
+                                                       night_light_supported);
+ }
+ 
++static void
++update_has_external_monitor (MetaMonitorManager *monitor_manager)
++{
++  GList *l;
++  gboolean has_external_monitor = FALSE;
++
++  for (l = meta_monitor_manager_get_monitors (monitor_manager); l; l = l->next)
++    {
++      MetaMonitor *monitor = l->data;
++
++      if (meta_monitor_is_laptop_panel (monitor))
++        continue;
++
++      if (!meta_monitor_is_active (monitor))
++        continue;
++
++      has_external_monitor = TRUE;
++      break;
++    }
++
++  meta_dbus_display_config_set_has_external_monitor (monitor_manager->display_config,
++                                                     has_external_monitor);
++}
++
+ void
+ meta_monitor_manager_setup (MetaMonitorManager *manager)
+ {
+@@ -1215,6 +1244,9 @@ meta_monitor_manager_setup (MetaMonitorManager *manager)
+   if (privacy_screen_needs_update (manager))
+     manager->privacy_screen_change_state = META_PRIVACY_SCREEN_CHANGE_STATE_INIT;
+ 
++  update_has_external_monitor (manager);
++  update_backlight (manager, TRUE);
++
+   manager->in_init = FALSE;
+ }
+ 
+@@ -1573,6 +1605,26 @@ meta_monitor_manager_maybe_emit_privacy_screen_change (MetaMonitorManager *manag
+   manager->privacy_screen_change_state = META_PRIVACY_SCREEN_CHANGE_STATE_NONE;
+ }
+ 
++static int
++normalize_backlight (MetaOutput *output,
++                     int         value)
++{
++  const MetaOutputInfo *output_info = meta_output_get_info (output);
++
++  return (int) round ((double) (value - output_info->backlight_min) /
++                      (output_info->backlight_max - output_info->backlight_min) * 100.0);
++}
++
++static int
++denormalize_backlight (MetaOutput *output,
++                       int         normalized_value)
++{
++  const MetaOutputInfo *output_info = meta_output_get_info (output);
++
++  return (int) round ((double) normalized_value / 100.0 *
++                      (output_info->backlight_max + output_info->backlight_min));
++}
++
+ static gboolean
+ meta_monitor_manager_handle_get_resources (MetaDBusDisplayConfig *skeleton,
+                                            GDBusMethodInvocation *invocation,
+@@ -1652,6 +1704,7 @@ meta_monitor_manager_handle_get_resources (MetaDBusDisplayConfig *skeleton,
+       MetaCrtc *crtc;
+       int crtc_index;
+       int backlight;
++      int normalized_backlight;
+       int min_backlight_step;
+       gboolean is_primary;
+       gboolean is_presentation;
+@@ -1693,6 +1746,7 @@ meta_monitor_manager_handle_get_resources (MetaDBusDisplayConfig *skeleton,
+         }
+ 
+       backlight = meta_output_get_backlight (output);
++      normalized_backlight = normalize_backlight (output, backlight);
+       min_backlight_step =
+         output_info->backlight_max - output_info->backlight_min
+         ? 100 / (output_info->backlight_max - output_info->backlight_min)
+@@ -1721,7 +1775,7 @@ meta_monitor_manager_handle_get_resources (MetaDBusDisplayConfig *skeleton,
+       g_variant_builder_add (&properties, "{sv}", "display-name",
+                              g_variant_new_string (output_info->name));
+       g_variant_builder_add (&properties, "{sv}", "backlight",
+-                             g_variant_new_int32 (backlight));
++                             g_variant_new_int32 (normalized_backlight));
+       g_variant_builder_add (&properties, "{sv}", "min-backlight-step",
+                              g_variant_new_int32 (min_backlight_step));
+       g_variant_builder_add (&properties, "{sv}", "primary",
+@@ -1812,7 +1866,7 @@ meta_monitor_manager_handle_get_resources (MetaDBusDisplayConfig *skeleton,
+   g_list_free (combined_outputs);
+   g_list_free (combined_crtcs);
+ 
+-  return TRUE;
++  return G_DBUS_METHOD_INVOCATION_HANDLED;
+ }
+ 
+ static void
+@@ -2141,7 +2195,7 @@ meta_monitor_manager_handle_get_current_state (MetaDBusDisplayConfig *skeleton,
+     g_variant_builder_end (&logical_monitors_builder),
+     g_variant_builder_end (&properties_builder));
+ 
+-  return TRUE;
++  return G_DBUS_METHOD_INVOCATION_HANDLED;
+ }
+ 
+ #undef MODE_FORMAT
+@@ -2302,7 +2356,7 @@ meta_monitor_manager_is_config_complete (MetaMonitorManager *manager,
+ 
+ static MetaMonitor *
+ find_monitor_from_connector (MetaMonitorManager *manager,
+-                             char               *connector)
++                             const char         *connector)
+ {
+   GList *monitors;
+   GList *l;
+@@ -2631,7 +2685,7 @@ meta_monitor_manager_handle_apply_monitors_config (MetaDBusDisplayConfig *skelet
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_ACCESS_DENIED,
+                                              "The requested configuration is based on stale information");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   config_store =
+@@ -2643,7 +2697,7 @@ meta_monitor_manager_handle_apply_monitors_config (MetaDBusDisplayConfig *skelet
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_ACCESS_DENIED,
+                                              "Monitor configuration via D-Bus is disabled");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   capabilities = meta_monitor_manager_get_capabilities (manager);
+@@ -2668,7 +2722,7 @@ meta_monitor_manager_handle_apply_monitors_config (MetaDBusDisplayConfig *skelet
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_INVALID_ARGS,
+                                              "Can't set layout mode");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   if (!is_valid_layout_mode (layout_mode))
+@@ -2676,7 +2730,7 @@ meta_monitor_manager_handle_apply_monitors_config (MetaDBusDisplayConfig *skelet
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_ACCESS_DENIED,
+                                              "Invalid layout mode specified");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   g_variant_iter_init (&logical_monitor_configs_iter,
+@@ -2705,7 +2759,7 @@ meta_monitor_manager_handle_apply_monitors_config (MetaDBusDisplayConfig *skelet
+           g_error_free (error);
+           g_list_free_full (logical_monitor_configs,
+                             (GDestroyNotify) meta_logical_monitor_config_free);
+-          return TRUE;
++          return G_DBUS_METHOD_INVOCATION_HANDLED;
+         }
+ 
+       logical_monitor_configs = g_list_append (logical_monitor_configs,
+@@ -2723,7 +2777,7 @@ meta_monitor_manager_handle_apply_monitors_config (MetaDBusDisplayConfig *skelet
+                                              "%s", error->message);
+       g_error_free (error);
+       g_object_unref (config);
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   if (!meta_monitor_manager_is_config_applicable (manager, config, &error))
+@@ -2733,7 +2787,7 @@ meta_monitor_manager_handle_apply_monitors_config (MetaDBusDisplayConfig *skelet
+                                              "%s", error->message);
+       g_error_free (error);
+       g_object_unref (config);
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   if (manager->persistent_timeout_id &&
+@@ -2750,7 +2804,7 @@ meta_monitor_manager_handle_apply_monitors_config (MetaDBusDisplayConfig *skelet
+                                              "%s", error->message);
+       g_error_free (error);
+       g_object_unref (config);
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   if (method == META_MONITORS_CONFIG_METHOD_PERSISTENT)
+@@ -2795,20 +2849,21 @@ meta_monitor_manager_handle_change_backlight  (MetaDBusDisplayConfig *skeleton,
+                                                GDBusMethodInvocation *invocation,
+                                                guint                  serial,
+                                                guint                  output_index,
+-                                               gint                   value,
++                                               gint                   normalized_value,
+                                                MetaMonitorManager    *manager)
+ {
+   GList *combined_outputs;
+   MetaOutput *output;
+   const MetaOutputInfo *output_info;
+-  int new_backlight;
++  int value;
++  int renormalized_value;
+ 
+   if (serial != manager->serial)
+     {
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_ACCESS_DENIED,
+                                              "The requested configuration is based on stale information");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   combined_outputs = combine_gpu_lists (manager, meta_gpu_get_outputs);
+@@ -2819,17 +2874,17 @@ meta_monitor_manager_handle_change_backlight  (MetaDBusDisplayConfig *skeleton,
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_INVALID_ARGS,
+                                              "Invalid output id");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+   output = g_list_nth_data (combined_outputs, output_index);
+   g_list_free (combined_outputs);
+ 
+-  if (value < 0 || value > 100)
++  if (normalized_value < 0 || normalized_value > 100)
+     {
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_INVALID_ARGS,
+                                              "Invalid backlight value");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   output_info = meta_output_get_info (output);
+@@ -2840,16 +2895,80 @@ meta_monitor_manager_handle_change_backlight  (MetaDBusDisplayConfig *skeleton,
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_INVALID_ARGS,
+                                              "Output does not support changing backlight");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+-  META_MONITOR_MANAGER_GET_CLASS (manager)->change_backlight (manager, output, value);
++  value = denormalize_backlight (output, normalized_value);
++  meta_output_set_backlight (output, value);
++  renormalized_value = normalize_backlight (output, value);
+ 
+-  new_backlight = meta_output_get_backlight (output);
++  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+   meta_dbus_display_config_complete_change_backlight (skeleton,
+                                                       invocation,
+-                                                      new_backlight);
+-  return TRUE;
++                                                      renormalized_value);
++  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
++
++  update_backlight (manager, FALSE);
++
++  return G_DBUS_METHOD_INVOCATION_HANDLED;
++}
++
++static gboolean
++meta_monitor_manager_handle_set_backlight (MetaDBusDisplayConfig *skeleton,
++                                           GDBusMethodInvocation *invocation,
++                                           uint32_t               serial,
++                                           const char *           connector,
++                                           int                    value,
++                                           MetaMonitorManager    *monitor_manager)
++{
++  MetaMonitorManagerPrivate *priv =
++    meta_monitor_manager_get_instance_private (monitor_manager);
++  MetaMonitor *monitor;
++  int backlight_min;
++  int backlight_max;
++
++  if (serial != priv->backlight_serial)
++    {
++      g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
++                                             G_DBUS_ERROR_INVALID_ARGS,
++                                             "Invalid backlight serial");
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
++    }
++
++  monitor = find_monitor_from_connector (monitor_manager, connector);
++  if (!monitor)
++    {
++      g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
++                                             G_DBUS_ERROR_INVALID_ARGS,
++                                             "Unknown monitor");
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
++    }
++
++  if (!meta_monitor_get_backlight_info (monitor,
++                                        &backlight_min,
++                                        &backlight_max))
++    {
++      g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
++                                             G_DBUS_ERROR_INVALID_ARGS,
++                                             "Monitor doesn't support changing backlight");
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
++    }
++
++  if (value < backlight_min || value > backlight_max)
++    {
++      g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
++                                             G_DBUS_ERROR_INVALID_ARGS,
++                                             "Invalid backlight value");
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
++    }
++
++  meta_monitor_set_backlight (monitor, value);
++
++  meta_dbus_display_config_complete_set_backlight (skeleton, invocation);
++
++  update_backlight (monitor_manager, FALSE);
++
++  return G_DBUS_METHOD_INVOCATION_HANDLED;
+ }
+ 
+ static gboolean
+@@ -2870,7 +2989,7 @@ meta_monitor_manager_handle_get_crtc_gamma  (MetaDBusDisplayConfig *skeleton,
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_ACCESS_DENIED,
+                                              "The requested configuration is based on stale information");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   combined_crtcs = combine_gpu_lists (manager, meta_gpu_get_crtcs);
+@@ -2880,7 +2999,7 @@ meta_monitor_manager_handle_get_crtc_gamma  (MetaDBusDisplayConfig *skeleton,
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_INVALID_ARGS,
+                                              "Invalid crtc id");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   crtc = g_list_nth_data (combined_crtcs, crtc_id);
+@@ -2906,7 +3025,7 @@ meta_monitor_manager_handle_get_crtc_gamma  (MetaDBusDisplayConfig *skeleton,
+   g_bytes_unref (green_bytes);
+   g_bytes_unref (blue_bytes);
+ 
+-  return TRUE;
++  return G_DBUS_METHOD_INVOCATION_HANDLED;
+ }
+ 
+ static gboolean
+@@ -2930,7 +3049,7 @@ meta_monitor_manager_handle_set_crtc_gamma  (MetaDBusDisplayConfig *skeleton,
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_ACCESS_DENIED,
+                                              "The requested configuration is based on stale information");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   combined_crtcs = combine_gpu_lists (manager, meta_gpu_get_crtcs);
+@@ -2941,7 +3060,7 @@ meta_monitor_manager_handle_set_crtc_gamma  (MetaDBusDisplayConfig *skeleton,
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_INVALID_ARGS,
+                                              "Invalid crtc id");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   crtc = g_list_nth_data (combined_crtcs, crtc_id);
+@@ -2963,7 +3082,7 @@ meta_monitor_manager_handle_set_crtc_gamma  (MetaDBusDisplayConfig *skeleton,
+   g_bytes_unref (green_bytes);
+   g_bytes_unref (blue_bytes);
+ 
+-  return TRUE;
++  return G_DBUS_METHOD_INVOCATION_HANDLED;
+ }
+ 
+ static gboolean
+@@ -2985,7 +3104,7 @@ meta_monitor_manager_handle_set_output_ctm  (MetaDBusDisplayConfig *skeleton,
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_ACCESS_DENIED,
+                                              "The requested configuration is based on stale information");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   combined_outputs = combine_gpu_lists (manager, meta_gpu_get_outputs);
+@@ -2996,7 +3115,7 @@ meta_monitor_manager_handle_set_output_ctm  (MetaDBusDisplayConfig *skeleton,
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_INVALID_ARGS,
+                                              "Invalid output id");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   output = g_list_nth_data (combined_outputs, output_id);
+@@ -3007,7 +3126,7 @@ meta_monitor_manager_handle_set_output_ctm  (MetaDBusDisplayConfig *skeleton,
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+                                              G_DBUS_ERROR_INVALID_ARGS,
+                                              "Unexpected color transform matrix variant length");
+-      return TRUE;
++      return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+   for (i = 0; i < 9; i++)
+@@ -3022,7 +3141,7 @@ meta_monitor_manager_handle_set_output_ctm  (MetaDBusDisplayConfig *skeleton,
+     klass->set_output_ctm (output, &ctm);
+   meta_dbus_display_config_complete_set_output_ctm (skeleton, invocation);
+ 
+-  return TRUE;
++  return G_DBUS_METHOD_INVOCATION_HANDLED;
+ }
+ 
+ static void
+@@ -3034,6 +3153,9 @@ monitor_manager_setup_dbus_config_handlers (MetaMonitorManager *manager)
+   g_signal_connect_object (manager->display_config, "handle-change-backlight",
+                            G_CALLBACK (meta_monitor_manager_handle_change_backlight),
+                            manager, 0);
++  g_signal_connect_object (manager->display_config, "handle-set-backlight",
++                           G_CALLBACK (meta_monitor_manager_handle_set_backlight),
++                           manager, 0);
+   g_signal_connect_object (manager->display_config, "handle-get-crtc-gamma",
+                            G_CALLBACK (meta_monitor_manager_handle_get_crtc_gamma),
+                            manager, 0);
+@@ -3512,11 +3634,76 @@ meta_monitor_manager_read_current_state (MetaMonitorManager *manager)
+   manager_class->read_current_state (manager);
+ }
+ 
++static void
++update_backlight (MetaMonitorManager *manager,
++                  gboolean            bump_serial)
++{
++  MetaMonitorManagerPrivate *priv =
++    meta_monitor_manager_get_instance_private (manager);
++  GList *l;
++  GVariantBuilder backlight_builder;
++  g_autoptr (GVariant) backlight = NULL;
++
++  if (bump_serial)
++    priv->backlight_serial++;
++
++  g_variant_builder_init (&backlight_builder, G_VARIANT_TYPE ("(uaa{sv})"));
++  g_variant_builder_add (&backlight_builder, "u", priv->backlight_serial);
++
++  g_variant_builder_open (&backlight_builder, G_VARIANT_TYPE ("aa{sv}"));
++
++  for (l = manager->monitors; l; l = l->next)
++    {
++      MetaMonitor *monitor = META_MONITOR (l->data);
++      const char *connector;
++      gboolean active;
++      int value;
++
++      if (!meta_monitor_is_laptop_panel (monitor))
++        continue;
++
++      g_variant_builder_open (&backlight_builder,
++                              G_VARIANT_TYPE_VARDICT);
++
++      connector = meta_monitor_get_connector (monitor);
++      active = meta_monitor_is_active (monitor);
++      g_variant_builder_add (&backlight_builder, "{sv}",
++                             "connector", g_variant_new_string (connector));
++      g_variant_builder_add (&backlight_builder, "{sv}",
++                             "active", g_variant_new_boolean (active));
++
++      if (meta_monitor_get_backlight (monitor, &value))
++        {
++          int min, max;
++
++          meta_monitor_get_backlight_info (monitor, &min, &max);
++          g_variant_builder_add (&backlight_builder, "{sv}",
++                                 "min", g_variant_new_int32 (min));
++          g_variant_builder_add (&backlight_builder, "{sv}",
++                                 "max", g_variant_new_int32 (max));
++          g_variant_builder_add (&backlight_builder, "{sv}",
++                                 "value", g_variant_new_int32 (value));
++        }
++
++      g_variant_builder_close (&backlight_builder);
++    }
++
++  g_variant_builder_close (&backlight_builder);
++
++  backlight = g_variant_builder_end (&backlight_builder);
++
++  meta_dbus_display_config_set_backlight (manager->display_config,
++                                          g_steal_pointer (&backlight));
++}
++
+ static void
+ meta_monitor_manager_notify_monitors_changed (MetaMonitorManager *manager)
+ {
+   meta_backend_monitors_changed (manager->backend);
+ 
++  update_has_external_monitor (manager);
++  update_backlight (manager, TRUE);
++
+   g_signal_emit (manager, signals[MONITORS_CHANGED_INTERNAL], 0);
+   g_signal_emit (manager, signals[MONITORS_CHANGED], 0);
+ 
+diff --git a/src/backends/meta-monitor.c b/src/backends/meta-monitor.c
+index e9ea57a3b1..ee7712dcf9 100644
+--- a/src/backends/meta-monitor.c
++++ b/src/backends/meta-monitor.c
+@@ -2211,3 +2211,62 @@ meta_monitor_set_privacy_screen_enabled (MetaMonitor  *monitor,
+ 
+   return meta_output_set_privacy_screen_enabled (output, enabled, error);
+ }
++
++
++gboolean
++meta_monitor_get_backlight_info (MetaMonitor *monitor,
++                                 int         *backlight_min,
++                                 int         *backlight_max)
++{
++  MetaOutput *main_output;
++  int value;
++
++  main_output = meta_monitor_get_main_output (monitor);
++  value = meta_output_get_backlight (main_output);
++  if (value >= 0)
++    {
++      const MetaOutputInfo *output_info = meta_output_get_info (main_output);
++      if (backlight_min)
++        *backlight_min = output_info->backlight_min;
++      if (backlight_max)
++        *backlight_max = output_info->backlight_max;
++      return TRUE;
++    }
++  else
++    {
++      return FALSE;
++    }
++}
++
++void
++meta_monitor_set_backlight (MetaMonitor *monitor,
++                            int          value)
++{
++  MetaMonitorPrivate *priv = meta_monitor_get_instance_private (monitor);
++  GList *l;
++
++  for (l = priv->outputs; l; l = l->next)
++    {
++      MetaOutput *output = l->data;
++
++      meta_output_set_backlight (output, value);
++    }
++}
++
++gboolean
++meta_monitor_get_backlight (MetaMonitor *monitor,
++                            int         *value)
++{
++  if (meta_monitor_get_backlight_info (monitor, NULL, NULL))
++    {
++      MetaOutput *main_output;
++
++      main_output = meta_monitor_get_main_output (monitor);
++      *value = meta_output_get_backlight (main_output);
++      return TRUE;
++    }
++  else
++    {
++      return FALSE;
++    }
++}
+diff --git a/src/backends/meta-monitor.h b/src/backends/meta-monitor.h
+index 387938b3b9..ccfffb3a83 100644
+--- a/src/backends/meta-monitor.h
++++ b/src/backends/meta-monitor.h
+@@ -309,4 +309,16 @@ size_t meta_monitor_get_gamma_lut_size (MetaMonitor *monitor);
+ void meta_monitor_set_gamma_lut (MetaMonitor        *monitor,
+                                  const MetaGammaLut *lut);
+ 
++META_EXPORT_TEST
++gboolean meta_monitor_get_backlight_info (MetaMonitor *monitor,
++                                          int         *backlight_min,
++                                          int         *backlight_max);
++
++void meta_monitor_set_backlight (MetaMonitor *monitor,
++                                 int          value);
++
++META_EXPORT_TEST
++gboolean meta_monitor_get_backlight (MetaMonitor *monitor,
++                                     int         *value);
++
+ #endif /* META_MONITOR_H */
+diff --git a/src/backends/meta-output.c b/src/backends/meta-output.c
+index f8dd64fbe6..7bcdfab699 100644
+--- a/src/backends/meta-output.c
++++ b/src/backends/meta-output.c
+@@ -35,6 +35,15 @@ enum
+   N_PROPS
+ };
+ 
++enum
++{
++  BACKLIGHT_CHANGED,
++
++  N_SIGNALS
++};
++
++static guint signals[N_SIGNALS];
++
+ static GParamSpec *obj_props[N_PROPS];
+ 
+ typedef struct _MetaOutputPrivate
+@@ -200,7 +209,12 @@ meta_output_set_backlight (MetaOutput *output,
+ {
+   MetaOutputPrivate *priv = meta_output_get_instance_private (output);
+ 
++  g_return_if_fail (backlight >= priv->info->backlight_min);
++  g_return_if_fail (backlight <= priv->info->backlight_max);
++
+   priv->backlight = backlight;
++
++  g_signal_emit (output, signals[BACKLIGHT_CHANGED], 0);
+ }
+ 
+ int
+@@ -532,6 +546,15 @@ meta_output_class_init (MetaOutputClass *klass)
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS);
+   g_object_class_install_properties (object_class, N_PROPS, obj_props);
++
++  signals[BACKLIGHT_CHANGED] =
++    g_signal_new ("backlight-changed",
++                  G_TYPE_FROM_CLASS (klass),
++                  G_SIGNAL_RUN_LAST,
++                  0,
++                  NULL, NULL, NULL,
++                  G_TYPE_NONE, 0);
++
+ }
+ 
+ gboolean
+diff --git a/src/backends/x11/meta-monitor-manager-xrandr.c b/src/backends/x11/meta-monitor-manager-xrandr.c
+index beb9fb80d2..45b34b4312 100644
+--- a/src/backends/x11/meta-monitor-manager-xrandr.c
++++ b/src/backends/x11/meta-monitor-manager-xrandr.c
+@@ -652,14 +652,6 @@ meta_monitor_manager_xrandr_apply_monitors_config (MetaMonitorManager      *mana
+   return TRUE;
+ }
+ 
+-static void
+-meta_monitor_manager_xrandr_change_backlight (MetaMonitorManager *manager,
+-					      MetaOutput         *output,
+-					      gint                value)
+-{
+-  meta_output_xrandr_change_backlight (META_OUTPUT_XRANDR (output), value);
+-}
+-
+ static MetaMonitorXrandrData *
+ meta_monitor_xrandr_data_from_monitor (MetaMonitor *monitor)
+ {
+@@ -966,7 +958,6 @@ meta_monitor_manager_xrandr_class_init (MetaMonitorManagerXrandrClass *klass)
+   manager_class->ensure_initial_config = meta_monitor_manager_xrandr_ensure_initial_config;
+   manager_class->apply_monitors_config = meta_monitor_manager_xrandr_apply_monitors_config;
+   manager_class->set_power_save_mode = meta_monitor_manager_xrandr_set_power_save_mode;
+-  manager_class->change_backlight = meta_monitor_manager_xrandr_change_backlight;
+   manager_class->tiled_monitor_added = meta_monitor_manager_xrandr_tiled_monitor_added;
+   manager_class->tiled_monitor_removed = meta_monitor_manager_xrandr_tiled_monitor_removed;
+   manager_class->is_transform_handled = meta_monitor_manager_xrandr_is_transform_handled;
+diff --git a/src/backends/x11/meta-output-xrandr.c b/src/backends/x11/meta-output-xrandr.c
+index bb6588de37..01a31d4d3d 100644
+--- a/src/backends/x11/meta-output-xrandr.c
++++ b/src/backends/x11/meta-output-xrandr.c
+@@ -190,41 +190,6 @@ meta_output_xrandr_apply_mode (MetaOutputXrandr *output_xrandr)
+     }
+ }
+ 
+-static int
+-normalize_backlight (MetaOutput *output,
+-                     int         hw_value)
+-{
+-  const MetaOutputInfo *output_info = meta_output_get_info (output);
+-
+-  return round ((double) (hw_value - output_info->backlight_min) /
+-                (output_info->backlight_max - output_info->backlight_min) * 100.0);
+-}
+-
+-void
+-meta_output_xrandr_change_backlight (MetaOutputXrandr *output_xrandr,
+-                                     int               value)
+-{
+-  MetaOutput *output = META_OUTPUT (output_xrandr);
+-  const MetaOutputInfo *output_info = meta_output_get_info (output);
+-  Display *xdisplay = xdisplay_from_output (output);
+-  Atom atom;
+-  int hw_value;
+-
+-  hw_value = round ((double) value / 100.0 * output_info->backlight_max +
+-                    output_info->backlight_min);
+-
+-  atom = XInternAtom (xdisplay, "Backlight", False);
+-
+-  xcb_randr_change_output_property (XGetXCBConnection (xdisplay),
+-                                    (XID) meta_output_get_id (output),
+-                                    atom, XCB_ATOM_INTEGER, 32,
+-                                    XCB_PROP_MODE_REPLACE,
+-                                    1, &hw_value);
+-
+-  /* We're not selecting for property notifies, so update the value immediately */
+-  meta_output_set_backlight (output, normalize_backlight (output, hw_value));
+-}
+-
+ static gboolean
+ ctm_is_equal (const MetaOutputCtm *ctm1,
+               const MetaOutputCtm *ctm2)
+@@ -511,7 +476,6 @@ static int
+ output_get_backlight_xrandr (MetaOutput *output)
+ {
+   Display *xdisplay = xdisplay_from_output (output);
+-  int value = -1;
+   Atom atom, actual_type;
+   int actual_format;
+   unsigned long nitems, bytes_after;
+@@ -528,11 +492,23 @@ output_get_backlight_xrandr (MetaOutput *output)
+   if (actual_type != XA_INTEGER || actual_format != 32 || nitems < 1)
+     return FALSE;
+ 
+-  value = ((int*)buffer)[0];
+-  if (value > 0)
+-    return normalize_backlight (output, value);
+-  else
+-    return -1;
++  return ((int *) buffer)[0];
++}
++
++static void
++on_backlight_changed (MetaOutput *output)
++{
++  Display *xdisplay = xdisplay_from_output (output);
++  int value = meta_output_get_backlight (output);
++  Atom atom;
++
++  atom = XInternAtom (xdisplay, "Backlight", False);
++
++  xcb_randr_change_output_property (XGetXCBConnection (xdisplay),
++                                    (XID) meta_output_get_id (output),
++                                    atom, XCB_ATOM_INTEGER, 32,
++                                    XCB_PROP_MODE_REPLACE,
++                                    1, &value);
+ }
+ 
+ static void
+@@ -1061,7 +1037,11 @@ meta_output_xrandr_new (MetaGpuXrandr *gpu_xrandr,
+     }
+ 
+   if (!(output_info->backlight_min == 0 && output_info->backlight_max == 0))
+-    meta_output_set_backlight (output, output_get_backlight_xrandr (output));
++    {
++      meta_output_set_backlight (output, output_get_backlight_xrandr (output));
++      g_signal_connect (output, "backlight-changed",  
++                        G_CALLBACK (on_backlight_changed), NULL);
++    }
+ 
+   if (output_info->n_modes == 0 || output_info->n_possible_crtcs == 0)
+     {
+diff --git a/src/backends/x11/meta-output-xrandr.h b/src/backends/x11/meta-output-xrandr.h
+index ec5104f30f..9125328301 100644
+--- a/src/backends/x11/meta-output-xrandr.h
++++ b/src/backends/x11/meta-output-xrandr.h
+@@ -36,9 +36,6 @@ G_DECLARE_FINAL_TYPE (MetaOutputXrandr, meta_output_xrandr,
+ 
+ void meta_output_xrandr_apply_mode (MetaOutputXrandr *output_xrandr);
+ 
+-void meta_output_xrandr_change_backlight (MetaOutputXrandr *output_xrandr,
+-                                          int         value);
+-
+ void meta_output_xrandr_set_ctm (MetaOutputXrandr    *output_xrandr,
+                                  const MetaOutputCtm *ctm);
+ 

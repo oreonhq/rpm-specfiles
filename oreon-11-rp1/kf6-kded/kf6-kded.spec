@@ -1,12 +1,12 @@
-%global source0_hash 4f24067915b05a1d0cc87e2c37f37eb0e8c441e8fccdf06ca27ee7b923058243
+%global source0_hash cb0d1ebc1e96cd90dbd6733e875e1f66e6d99fad9c40cbd3c41c5c3b3e11b882
 
 %global framework kded
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon with extensible daemon for system-level services
 
@@ -19,12 +19,12 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6DocTools)
-BuildRequires:  cmake(KF6Service)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6Crash) >= %{version}
+BuildRequires:  cmake(KF6DBusAddons) >= %{version}
+BuildRequires:  cmake(KF6DocTools) >= %{version}
+BuildRequires:  cmake(KF6Service) >= %{version}
 BuildRequires:  kf6-rpm-macros
 
 BuildRequires:  qt6-qtbase-devel
@@ -83,6 +83,9 @@ mkdir -p %{buildroot}%{_kf6_plugindir}/kded
 %{_kf6_datadir}/dbus-1/interfaces/*.xml
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
 

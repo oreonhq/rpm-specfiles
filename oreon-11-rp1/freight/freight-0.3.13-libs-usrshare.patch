@@ -1,0 +1,85 @@
+From fb6c955b6073da116d15ec8a4a8c3acdc3f425f1 Mon Sep 17 00:00:00 2001
+From: Sam P <survient@fedoraproject.org>
+Date: Mon, 15 Mar 2021 12:53:18 -0500
+Subject: [PATCH] libs-usrshare
+
+---
+ bin/freight-add         | 4 ++--
+ bin/freight-cache       | 2 +-
+ bin/freight-clear-cache | 4 ++--
+ lib/freight/conf.sh     | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/bin/freight-add b/bin/freight-add
+index e59b8c9..389ce09 100755
+--- a/bin/freight-add
++++ b/bin/freight-add
+@@ -31,7 +31,7 @@ while [ "$#" -gt 0 ]; do
+     esac
+ done
+ 
+-. "$(dirname "$(dirname "$0")")/lib/freight/conf.sh"
++. "/usr/share/freight/conf.sh"
+ 
+ # The non-option argument(s) following the last option are package files.
+ # Binary packages have only one but source packages require two or three.
+@@ -94,7 +94,7 @@ for PATHNAME in $PATHNAMES; do
+         case "$FILENAME" in
+             *_*_*.deb | *_*_*.ddeb) add "$FILENAME" "$DIRNAME" "$PATHNAME" ;;
+             *.deb | *.ddeb)
+-                . "$(dirname "$(dirname "$0")")/lib/freight/apt.sh"
++                . "/usr/share/freight/apt.sh"
+                 dpkg-deb -I "$TMP/$FILENAME" "control" >"$TMP/$FILENAME-control"
+                 DEBNAME="$(
+                     apt_binary_name "$TMP/$FILENAME-control"
+diff --git a/bin/freight-cache b/bin/freight-cache
+index f1d78a6..7be56db 100755
+--- a/bin/freight-cache
++++ b/bin/freight-cache
+@@ -68,7 +68,7 @@ while [ "$#" -gt 0 ]; do
+     esac
+ done
+ 
+-LIB="$(cd "$(dirname "$(dirname "$0")")/lib/freight" && pwd)"
++LIB="/usr/share/freight"
+ . "$LIB/conf.sh"
+ 
+ # If `GPG_PASSPHRASE_FILE` is set the specified file should exist and be
+diff --git a/bin/freight-clear-cache b/bin/freight-clear-cache
+index 96a9190..e44b9f5 100755
+--- a/bin/freight-clear-cache
++++ b/bin/freight-clear-cache
+@@ -30,7 +30,7 @@ while [ "$#" -gt 0 ]; do
+     esac
+ done
+ 
+-. "$(dirname "$(dirname "$0")")/lib/freight/conf.sh"
++. "/usr/share/freight/conf.sh"
+ 
+ # Create a working directory on the same device as the Freight cache.
+ mkdir -p "$VARCACHE"
+@@ -63,7 +63,7 @@ for DIR in $DIRS; do
+     DIST="$(basename "$DIR")"
+ 
+     # From here the process is customized on a per-manager basis.
+-    . "$(dirname "$(dirname "$0")")/lib/freight/$MANAGER.sh"
++    . "/usr/share/freight/$MANAGER.sh"
+     eval "${MANAGER}_clear_cache" "$DIST"
+ 
+ done
+diff --git a/lib/freight/conf.sh b/lib/freight/conf.sh
+index 8630b03..a5713fa 100644
+--- a/lib/freight/conf.sh
++++ b/lib/freight/conf.sh
+@@ -28,7 +28,7 @@ CACHE="off"
+ SYMLINKS="off"
+ 
+ # Source all existing configuration files from lowest- to highest-priority.
+-PREFIX="$(dirname "$(dirname "$0")")"
++PREFIX="/usr"
+ if [ "$PREFIX" = "/usr" ]; then
+     [ -f "/etc/freight.conf" ] && . "/etc/freight.conf"
+ else
+-- 
+2.26.2
+

@@ -1,0 +1,12 @@
+diff --git a/ilua/kernel.py b/ilua/kernel.py
+index b46eb7f..19abab7 100644
+--- a/ilua/kernel.py
++++ b/ilua/kernel.py
+@@ -88,6 +88,7 @@ class ILuaKernel(KernelBase):
+                                                           INTERPRETER_SCRIPT],
+                                                          None)
+         else:
++            self.reactor._neverUseSpawn = True
+             self.lua_process = self.reactor.spawnProcess(proto,
+                                                          self.lua_interpreter,
+                                                          [self.lua_interpreter,

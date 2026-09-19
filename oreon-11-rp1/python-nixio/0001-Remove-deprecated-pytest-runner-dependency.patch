@@ -1,0 +1,34 @@
+From b550f88e64c01194029a50b92d94955c39bf169f Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Tue, 24 Dec 2024 09:08:28 +0100
+Subject: [PATCH] Remove deprecated pytest-runner dependency
+
+The `pytest-runner` project has been deprecated since 2019 and has been
+archived on git hub in December 2024.
+
+This removes the dependency on the deprecated package and also removes
+deprecated keywords from `setup.py` related to it.
+---
+ setup.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 16379a5..be594d5 100644
+--- a/setup.py
++++ b/setup.py
+@@ -75,9 +75,9 @@ setup(
+     packages=packages,
+     scripts=[],
+     python_requires=">=3.6",
+-    tests_require=['pytest', 'scipy', 'pillow', 'matplotlib'],
+-    test_suite='pytest',
+-    setup_requires=['pytest-runner'],
++    extras_require={
++        "test": ['pytest', 'scipy', 'pillow', 'matplotlib'],
++    },
+     install_requires=['numpy', 'h5py', 'six', 'enum34;python_version<"3.4"'],
+     package_data={'nixio': [license_text, description_text]},
+     include_package_data=True,
+-- 
+2.48.1
+

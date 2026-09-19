@@ -1,0 +1,15 @@
+diff -up system-switch-mail-2.0.1/switchmail.sh.orig system-switch-mail-2.0.1/switchmail.sh
+--- system-switch-mail-2.0.1/switchmail.sh.orig	2018-04-03 17:19:25.867074610 +0200
++++ system-switch-mail-2.0.1/switchmail.sh	2018-04-03 17:20:02.608207996 +0200
+@@ -2,9 +2,9 @@
+ 
+ if [ -f /usr/share/system-switch-mail/system-switch-mail.py ] ; then
+     export PYTHONPATH=/usr/share/system-switch-mail/
+-    /usr/bin/python /usr/share/system-switch-mail/system-switch-mail.py
++    /usr/bin/python3 /usr/share/system-switch-mail/system-switch-mail.py
+ elif [ -f ./system-switch-mail.py ] ; then
+    export  PYTHONPATH=$PWD/
+-   /usr/bin/python ./system-switch-mail.py
++   /usr/bin/python3 ./system-switch-mail.py
+ fi
+ 

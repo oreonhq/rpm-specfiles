@@ -1,0 +1,28 @@
+diff -up psi4-1.9.1/external/upstream/libxc/CMakeLists.txt.libxc7 psi4-1.9.1/external/upstream/libxc/CMakeLists.txt
+--- psi4-1.9.1/external/upstream/libxc/CMakeLists.txt.libxc7	2024-10-12 18:09:47.710962946 +0000
++++ psi4-1.9.1/external/upstream/libxc/CMakeLists.txt	2024-10-12 18:06:20.704708286 +0000
+@@ -1,4 +1,8 @@
+-find_package(Libxc 6.1.0 CONFIG QUIET COMPONENTS C)
++find_package(Libxc 7.0.0 CONFIG QUIET COMPONENTS C)
++if(NOT ${Libxc_FOUND})
++    # LibxcConfig.cmake encodes searching only within major version, so need two calls to allow v6 or v7
++    find_package(Libxc 6.1.0 CONFIG QUIET COMPONENTS C)
++endif()
+ 
+ if(${Libxc_FOUND})
+     get_property(_loc TARGET Libxc::xc PROPERTY LOCATION)
+diff -up psi4-1.9.1/psi4/CMakeLists.txt.libxc7 psi4-1.9.1/psi4/CMakeLists.txt
+--- psi4-1.9.1/psi4/CMakeLists.txt.libxc7	2024-02-08 21:08:35.000000000 +0000
++++ psi4-1.9.1/psi4/CMakeLists.txt	2024-10-12 18:08:15.510631119 +0000
+@@ -223,7 +223,10 @@ else()
+     message(STATUS "Disabled BrianQC ${BrianQC_DIR}")
+ endif()
+ 
+-find_package(Libxc 6.1.0 CONFIG REQUIRED COMPONENTS C)
++find_package(Libxc 7.0.0 CONFIG QUIET COMPONENTS C)
++if(NOT ${Libxc_FOUND})
++  find_package(Libxc 6.1.0 CONFIG REQUIRED COMPONENTS C)
++endif()
+ get_property(_loc TARGET Libxc::xc PROPERTY LOCATION)
+ list(APPEND _addons ${_loc})
+ message(STATUS "${Cyan}Using Libxc${ColourReset}: ${_loc} (version ${Libxc_VERSION})")

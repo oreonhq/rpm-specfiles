@@ -1,0 +1,33 @@
+From bf5527190a3309176282a49f2fc302bfa551866a Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Thu, 27 Aug 2020 10:43:54 +0100
+Subject: [PATCH] Use .so suffix for all arches
+
+---
+ python/setup.cmake.py | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/python/setup.cmake.py b/python/setup.cmake.py
+index 17665e2cf..39637491c 100644
+--- a/python/setup.cmake.py
++++ b/python/setup.cmake.py
+@@ -30,16 +30,7 @@ with open(os.path.join(script_dir, 'VERSION'), 'r') as f:
+     version = f.read()
+ print('Got %s from VERSION file' % version)
+ 
+-# importlib is available only for python3. Since we build wheels, prefer .so
+-# extension. This way a wheel built by any python3.x will work with any python3.
+ suffix = '.so'
+-try:
+-    import importlib.machinery
+-    suffix = importlib.machinery.EXTENSION_SUFFIXES[-1]
+-except Exception as e:
+-    print('[WARN] Failed to determine importlib suffix')
+-    suffix = '.so'
+-assert (suffix)
+ print('[INFO] Suffix for python SO: %s' % suffix)
+ 
+ setup(
+-- 
+2.26.2
+

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Screenie
+GenericName=Screenshot composer
+Comment=Create fancy screenshots
+Exec=screenie-composer
+Icon=screenie-composer
+Terminal=false
+Type=Application
+Categories=Graphics;2DGraphics;
+

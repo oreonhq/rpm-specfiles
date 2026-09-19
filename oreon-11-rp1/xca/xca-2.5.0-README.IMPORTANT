@@ -1,0 +1,28 @@
+When trying to use a private key when working on a database protected by
+a password set by xca version < 2.0.0, version 2.5.0 and above might issue an
+error like:
+
+---
+The following error occurred:
+(8pki_x509[]:foo)
+error:0300009C:digital envelope routines::unsupported algorithm
+error:068C0100:asn1 encoding routines::malloc failure
+error:068C0100:asn1 encoding routines::malloc failure
+
+(pki_x509.cpp:574)
+---
+
+The database is therefore unusable as it is in xca 2.5.0 for any operation
+involving some private key.
+
+The solution is to reset the database password with xca version 2.4.0
+(Extra --> Change Database password). The new password may be the same as
+the old one.
+
+If some private keys have their own password, reset the latter the same
+way (right click --> Change password).
+
+Once these operations have been performed, the database is ready for use with
+xca version >= 2.5.
+
+See https://github.com/chris2511/xca/discussions/468.

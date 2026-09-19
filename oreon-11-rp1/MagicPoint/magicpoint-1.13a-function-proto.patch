@@ -1,0 +1,1033 @@
+diff -up magicpoint-1.13a/image/image.h~ magicpoint-1.13a/image/image.h
+--- magicpoint-1.13a/image/image.h~	2004-07-28 17:47:31.000000000 +0200
++++ magicpoint-1.13a/image/image.h	2025-02-03 21:09:32.345194044 +0100
+@@ -125,78 +125,73 @@ typedef struct {
+ /* function declarations
+  */
+ 
+-Image *clip(); /* clip.c */
++Image *clip(Image *simage, unsigned int clipx, unsigned int clipy,
++            unsigned int clipw, unsigned int cliph, unsigned int verbose); /* clip.c */
+ 
+-void brighten(); /* bright.c */
+-void equalize();
+-void gray();
+-Image *normalize();
++void brighten(Image *image, unsigned int percent, unsigned int verbose); /* bright.c */
++void gray(Image *image, int verbose);
++Image *normalize(Image *image, unsigned int verbose);
++void gammacorrect(Image *image, float disp_gam, unsigned int verbose);
+ 
+-void compress_colormap(); /* compress.c */
++void compress_colormap(Image *image, unsigned int verbose); /* compress.c */
+ 
+-Image *dither(); /* dither.c */
++Image *dither(Image *image, unsigned int verbose); /* dither.c */
+ 
+-void fill(); /* fill.c */
++Image *halftone(Image *cimage, unsigned int verbose); /* halftone.c */
+ 
+-void fold(); /* fold.c */
+-
+-Image *halftone(); /* halftone.c */
+-
+-Image *loadImage(); /* imagetypes.c */
+-void   identifyImage();
+-void   goodImage();
+-
+-Image *merge(); /* merge.c */
++Image *loadImage(char *name, unsigned int verbose); /* imagetypes.c */
++void   identifyImage(char *name);
++void   goodImage(Image *image, char *func);
+ 
+ extern unsigned long DepthToColorsTable[]; /* new.c */
+-unsigned long colorsToDepth();
+-char  *dupString();
+-Image *newBitImage();
+-Image *newRGBImage();
+-Image *newTrueImage();
+-void   freeImage();
+-void   freeImageData();
+-void   newRGBMapData();
+-void   freeRGBMapData();
+-byte  *lcalloc();
+-byte  *lmalloc();
+-void   lfree();
++unsigned long colorsToDepth(unsigned long ncolors);
++char  *dupString(char *s);
++Image *newBitImage(unsigned int width, unsigned int height);
++Image *newRGBImage(unsigned int width, unsigned int height, unsigned int depth);
++Image *newTrueImage(unsigned int width, unsigned int height);
++void   freeImage(Image *image);
++void   freeImageData(Image *image);
++void   newRGBMapData(RGBMap *rgb, unsigned int size);
++void   freeRGBMapData(RGBMap *rgb);
++byte  *lcalloc(unsigned int size);
++byte  *lmalloc(unsigned int size);
++void   lfree(void *area);
+ 
+ #define depthToColors(n) DepthToColorsTable[((n) < 32 ? (n) : 32)]
+ 
+-Image *reduce(); /* reduce.c */
+-Image *expand();
++Image *reduce(Image *image, unsigned int n, unsigned int verbose); /* reduce.c */
++Image *expand(Image *image);
+ 
+-Image *rotate(); /* rotate.c */
++Image *rotate(Image *image, int degrees, int verbose); /* rotate.c */
+ 
+-Image *smooth(); /* smooth.c */
++Image *smooth(Image *image, int iterations, int verbose); /* smooth.c */
+ 
+ /* doMemToVal and doMemToValLSB used to be void type but some compilers
+  * (particularly the 4.1.1 SunOS compiler) couldn't handle the
+  * (void)(thing= value) conversion used in the macros.
+  */
+ 
+-unsigned long doMemToVal(); /* value.c */
+-unsigned long doValToMem();
+-unsigned long doMemToValLSB();
+-unsigned long doValToMemLSB();
+-void          flipBits();
++unsigned long doMemToVal(byte *p, unsigned int len); /* value.c */
++unsigned long doValToMem(unsigned long val, byte *p, unsigned int len);
++unsigned long doMemToValLSB(byte *p, unsigned int len);
++unsigned long doValToMemLSB(unsigned long val, byte *p, unsigned int len);
++void          flipBits(byte *p, unsigned int len);
+ 
+ #ifdef __APPLE__
+ /*  darwin has zopen() */
+-ZFILE *zzopen(); /* zio.c */
++ZFILE *zzopen(char *name); /* zio.c */
+ #define zopen zzopen
+ #else
+-ZFILE *zopen(); /* zio.c */
++ZFILE *zopen(char *name); /* zio.c */
+ #endif
+-int    zread();
+-int    zgetc();
+-char  *zgets();
+-void   zclose();
+-void   znocache();
+-void   zreset();
++int    zread(ZFILE *zf, byte *buf, unsigned int len);
++int    zgetc(ZFILE *zf);
++char  *zgets(byte *buf, unsigned int size, ZFILE *zf);
++void   zclose(ZFILE *zf);
++void   znocache(ZFILE *zf);
++void   zreset(char *filename);
+ 
+-Image *zoom(); /* zoom.c */
++Image *zoom(Image *oimage, float xzoom, float yzoom, int verbose); /* zoom.c */
+ 
+ /* this returns the (approximate) intensity of an RGB triple
+  */
+diff -up magicpoint-1.13a/image/xloadimage.h~ magicpoint-1.13a/image/xloadimage.h
+--- magicpoint-1.13a/image/xloadimage.h~	2007-12-28 21:31:26.000000000 +0100
++++ magicpoint-1.13a/image/xloadimage.h	2025-02-03 21:28:40.458769986 +0100
+@@ -65,33 +65,35 @@ typedef struct {
+ /* function declarations
+  */
+ 
+-void supportedImageTypes(); /* imagetypes.c */
++void supportedImageTypes(void); /* imagetypes.c */
+ 
+-char *tail(); /* misc.c */
+-void memoryExhausted();
+-void internalError();
+-void version();
+-void usage();
+-void goodImage();
+-Image *processImage();
+-int errorHandler();
++char *tail(char *path); /* misc.c */
++void memoryExhausted(void);
++void internalError(int sig);
++void version(void);
++void usage(char *name);
++void goodImage(Image *image, char *func);
++Image *processImage(Display *disp, int scrn, Image *image, ImageOptions *options, unsigned int verbose);
++int errorHandler(Display *disp, XErrorEvent *error);
+ 
+-char *expandPath(); /* path.c */
+-int findImage();
+-void listImages();
+-void loadPathsAndExts();
+-void showPath();
+-
+-void imageOnRoot(); /* root.c */
+-
+-void        sendXImage(); /* send.c */
+-XImageInfo *imageToXImage();
+-Pixmap      ximageToPixmap();
+-void        freeXImage();
+-
+-Visual *getBestVisual(); /* visual.c */
+-
+-int   visualClassFromName(); /* window.c */
+-char *nameOfVisualClass();
+-void cleanUpWindow();
+-char imageInWindow();
++char *expandPath(char *p); /* path.c */
++int findImage(char *name, char *fullname);
++void listImages(void);
++void loadPathsAndExts(void);
++void showPath(void);
++
++void sendXImage(XImageInfo *ximageinfo, int src_x, int src_y, int dst_x, int dst_y,
++                unsigned int w, unsigned int h); /* send.c */
++XImageInfo *imageToXImage(Display *disp, int scrn, Visual *visual, unsigned int ddepth,
++                          Image *image, unsigned int private_cmap, unsigned int fit,
++                          unsigned int back, unsigned int verbose);
++Pixmap      ximageToPixmap(Display *disp, Window parent, XImageInfo *ximageinfo);
++void        freeXImage(XImageInfo *ximageinfo);
++
++int   visualClassFromName(char *name); /* window.c */
++char *nameOfVisualClass(int class);
++void cleanUpWindow(Display *disp);
++char imageInWindow(Display *disp, int scrn, Image *image, char *user_geometry,
++                   unsigned int fullscreen, unsigned int install, unsigned int  private_cmap,
++                   unsigned int fit, unsigned int use_pixmap, unsigned int delay, int visual_class,
++                   int argc, char *argv[], unsigned int verbose);
+diff -up magicpoint-1.13a/draw.c~ magicpoint-1.13a/draw.c
+--- magicpoint-1.13a/draw.c~	2025-02-03 21:42:48.000000000 +0100
++++ magicpoint-1.13a/draw.c	2025-02-03 21:47:41.132385094 +0100
+@@ -2125,7 +2125,7 @@ obj_draw_image(target, x, y, obj, page)
+ 		regist_zimage_position(obj, x, y, xim->width, xim->height, page);
+ 	}
+ #endif
+-	freeXImage(image, ximageinfo);
++	freeXImage(ximageinfo);
+ }
+ 
+ static void
+@@ -4336,7 +4336,7 @@ epstoimage(state, epsfile, x, y, width,
+ 	XColor back;
+ 	char geom[32], device[64], scalebuf[32];
+ 	static char imagefile[MAXPATHLEN];
+-	void (*sigpipe_handler)();
++	void (*sigpipe_handler)(int);
+ 
+ 	fd = -1;
+ 	for (i = 0; i < 3; i++) {
+@@ -4865,7 +4865,7 @@ reset_background_pixmap()
+ 	for (i = 0; i < MAXBGPIXMAP; i ++) {
+ 		if (bgpixmap[i].image){
+ 			XFreePixmap(display, bgpixmap[i].pixmap); 
+-			freeXImage(bgpixmap[i].image, bgpixmap[i].ximageinfo);
++			freeXImage(bgpixmap[i].ximageinfo);
+ 			freeImage(bgpixmap[i].image);
+ 		}
+ 		bgpixmap[i].ctl = NULL;
+@@ -5022,8 +5022,7 @@ regist_background_pixmap(ximageinfo, ima
+ 	if (i == MAXBGPIXMAP){
+ 		/* no empty slot, we need to make one  */
+ 		XFreePixmap(display, bgpixmap[MAXBGPIXMAP -1].pixmap); 
+-		freeXImage(bgpixmap[MAXBGPIXMAP -1].image, 
+-					bgpixmap[MAXBGPIXMAP -1].ximageinfo);
++		freeXImage(bgpixmap[MAXBGPIXMAP -1].ximageinfo);
+ 		freeImage(bgpixmap[MAXBGPIXMAP -1].image);
+ 		for (j = MAXBGPIXMAP -2; j >= 0; j --){
+ 			bgpixmap[j +1].ctl = bgpixmap[j].ctl;
+diff -up magicpoint-1.13a/image/send.c~ magicpoint-1.13a/image/send.c
+--- magicpoint-1.13a/image/send.c~	2007-05-17 18:48:12.000000000 +0200
++++ magicpoint-1.13a/image/send.c	2025-02-03 21:48:08.629207493 +0100
+@@ -37,7 +37,7 @@ Pixmap ximageToPixmap(disp, parent, xima
+      Window      parent;
+      XImageInfo *ximageinfo;
+ {
+-  int         (*old_handler)();
++  int         (*old_handler)(Display *, XErrorEvent *);
+   Pixmap        pixmap;
+ 
+   GotError = 0;
+@@ -376,7 +376,7 @@ again:
+ 	  if (verbose)
+ 	    fprintf(stderr, "done\n");
+ 	  fit= 0;
+-	  lfree(index);
++	  lfree((byte *)index);
+ 	  goto retry;
+ 	}
+       }
+@@ -388,7 +388,7 @@ again:
+ 		goto again;
+ 	} else {
+ 	fprintf(stderr, "imageToXImage: Color allocation failed!\n");
+-	lfree(index);
++	lfree((byte *)index);
+ 	return(NULL);
+ 	}
+       }
+@@ -640,9 +640,7 @@ void sendXImage(ximageinfo, src_x, src_y
+ /* free up anything cached in the local Ximage structure.
+  */
+ 
+-void freeXImage(image, ximageinfo)
+-     Image        *image;
+-     XImageInfo   *ximageinfo;
++void freeXImage(XImageInfo *ximageinfo)
+ {
+   if (ximageinfo->gc)
+     XFreeGC(ximageinfo->disp, ximageinfo->gc);
+diff -up magicpoint-1.13a/image/window.c~ magicpoint-1.13a/image/window.c
+--- magicpoint-1.13a/image/window.c~	2025-02-03 21:42:48.000000000 +0100
++++ magicpoint-1.13a/image/window.c	2025-02-03 21:48:19.124139710 +0100
+@@ -44,7 +44,7 @@ static Colormap  ImageColormap;
+ 
+ static int AlarmWentOff = 0;
+ 
+-static RETSIGTYPE delayAlarmHandler()
++static RETSIGTYPE delayAlarmHandler(int signum)
+ {
+     AlarmWentOff = 1;
+ }
+@@ -212,7 +212,7 @@ static void cleanUpImage(disp, scrn, cur
+   XFreeCursor(disp, cursor);
+   if (pixmap != None)
+       XFreePixmap(disp, pixmap);
+-  freeXImage(image, ximageinfo);
++  freeXImage(ximageinfo);
+ }
+ 
+ /* this sets the colormap and WM_COLORMAP_WINDOWS properly for the
+@@ -661,7 +661,7 @@ char imageInWindow(disp, scrn, image, us
+   }
+ 
+   if (! (ximageinfo= imageToXImage(disp, scrn, visual, depth, image,
+-				   private_cmap, fit, verbose))) {
++				   private_cmap, fit, 0, verbose))) {
+     fprintf(stderr, "Cannot convert Image to XImage\n");
+     cleanup(-1);
+   }
+diff -up magicpoint-1.13a/mng.c~ magicpoint-1.13a/mng.c
+--- magicpoint-1.13a/mng.c~	2025-02-03 21:42:48.000000000 +0100
++++ magicpoint-1.13a/mng.c	2025-02-03 21:47:48.892334969 +0100
+@@ -113,7 +113,6 @@ mng_bool mymngprocessheader(mng_handle m
+ {
+ 	mngstuff	*mymng;
+ 	Image 		*image;
+-	Visual		*get_visual();
+ 
+ 	image = (Image *)malloc(sizeof(Image));
+ 	image->type= ITRUE;
+@@ -189,7 +189,7 @@ mng_bool mymngrefresh(mng_handle mng, mn
+ 	XPutImage(mngdisplay, mymng->window, gcmng, ximageinfo->ximage, 
+ 		0, 0, 0, 0, mymng->image->width, mymng->image->height);
+ 
+-	freeXImage(ximageinfo->ximage, ximageinfo);
++	freeXImage(ximageinfo);
+ 
+ 	return MNG_TRUE;
+ }
+@@ -231,7 +231,7 @@ mng_bool mymngerror(mng_handle mng, mng_
+ 	return (0);
+ }
+ 
+-void mymngquit()
++void mymngquit(int signum)
+ {
+ 	mngstuff	*mymng;
+ 
+@@ -326,8 +325,6 @@ mng_window_setup(mymng, x, y, width, hei
+ 	int x, y;
+ 	int width, height;
+ {
+-	Visual		*get_visual();
+-
+ 	if (!mngdisplay){
+ 	    if ((mngdisplay = XOpenDisplay(NULL)) == NULL) {
+ 			fprintf(stderr, "Can't open display\n");
+diff -up magicpoint-1.13a/image/new.c~ magicpoint-1.13a/image/new.c
+--- magicpoint-1.13a/image/new.c~	2004-09-01 05:50:32.000000000 +0200
++++ magicpoint-1.13a/image/new.c	2025-02-03 22:19:20.830100875 +0100
+@@ -212,8 +212,7 @@ byte *lcalloc(size)
+   return(area);
+ }
+ 
+-void lfree(area)
+-     byte *area;
++void lfree(void *area)
+ {
+   free(area);
+ }
+diff -up magicpoint-1.13a/image/pcx.c~ magicpoint-1.13a/image/pcx.c
+--- magicpoint-1.13a/image/pcx.c~	1998-12-28 09:23:16.000000000 +0100
++++ magicpoint-1.13a/image/pcx.c	2025-02-03 22:26:29.104326426 +0100
+@@ -56,7 +56,7 @@ unsigned int pcxIdent ( fullname, name )
+ 	if (! (zf = zopen ( fullname )))
+ 	    return ( 0 );
+ 	PCXH = (PCXHeader *) lmalloc ( PCXHsize );
+-	if (zread ( zf, PCXH, PCXHsize ) == PCXHsize) {
++	if (zread ( zf, (byte *)PCXH, PCXHsize ) == PCXHsize) {
+ 	    if ((PCXH->Zid == PCX_MAGIC) && (PCXH->Zver <= 5)) {
+ 		xmin = Word ( PCXH->Zxminlo, PCXH->Zxminhi); 
+ 		xmax = Word ( PCXH->Zxmaxlo, PCXH->Zxmaxhi); 
+@@ -310,7 +310,7 @@ Image *pcxLoad ( fullname, name, verbose
+ 	if ( ! (zf = zopen ( fullname )))	/* Open input file	*/
+ 	    return ( (Image *) NULL);
+ 	PCXH = (PCXHeader *) lmalloc ( PCXHsize );
+-	if (zread ( zf, PCXH, PCXHsize ) != PCXHsize) {	/* Read header	*/
++	if (zread ( zf, (byte *)PCXH, PCXHsize ) != PCXHsize) {	/* Read header	*/
+ 	    zclose ( zf );
+ 	    return ( (Image *) NULL );
+ 	}
+@@ -353,7 +353,7 @@ Image *pcxLoad ( fullname, name, verbose
+ 	    while ((i = zgetc(zf)) != PCX_MAPSTART);
+ 	    clen = colors * 3;
+ 	    cmap = (PCXcolor *) lmalloc ( clen );
+-	    if (zread ( zf, cmap, clen ) != clen) {
++	    if (zread ( zf, (byte *)cmap, clen ) != clen) {
+ 		fprintf(stderr, "EOF while reading colormap" );
+ 		cleanup(-1);
+ 	    }
+diff -up magicpoint-1.13a/image/sunraster.c~ magicpoint-1.13a/image/sunraster.c
+--- magicpoint-1.13a/image/sunraster.c~	1998-12-28 09:23:24.000000000 +0100
++++ magicpoint-1.13a/image/sunraster.c	2025-02-03 22:29:44.918057943 +0100
+@@ -215,8 +215,7 @@ Image *sunRasterLoad(fullname, name, ver
+   case 24:
+   case 32:
+     image= newTrueImage(memToVal(header.width, 4),
+-		       memToVal(header.height, 4),
+-		       memToVal(header.depth, 4));
++		        memToVal(header.height, 4));
+     break;
+   default:
+     fprintf(stderr, "sunRasterLoad: Bad depth %d (only 1, 8, 24 are valid)\n", depth);
+diff -up magicpoint-1.13a/print.c~ magicpoint-1.13a/print.c
+--- magicpoint-1.13a/print.c~	2025-02-03 22:35:33.000000000 +0100
++++ magicpoint-1.13a/print.c	2025-02-03 22:36:47.672320858 +0100
+@@ -2037,7 +2037,7 @@ image_load_print(filename, numcolor, xim
+ 	fprintf(fp, "grestore\n");
+ 
+ 	XFreePixmap(display, mypixmap);
+-	freeXImage(myimage, ximageinfo);
++	freeXImage(ximageinfo);
+ 	freeImage(myimage);
+ 	XUndefineCursor(display, window); XFlush(display);
+ }
+diff -up magicpoint-1.13a/parse.c~ magicpoint-1.13a/parse.c
+--- magicpoint-1.13a/parse.c~	2025-02-03 22:40:24.000000000 +0100
++++ magicpoint-1.13a/parse.c	2025-02-03 22:46:34.361523125 +0100
+@@ -384,7 +384,7 @@ read_file(fp, filename, page, line, prea
+ 	int filterfd = -1;
+ 	char filtername[MAXPATHLEN];
+ 	pid_t filterpid = -1;
+-	void (*filtersig)() = (void (*)())NULL;
++	void (*filtersig)(int) = (void (*)(int))NULL;
+ 	int lineno;
+ 	static char *searchpath[] = {
+ 		"",	/*mgp_fname*/
+diff -up magicpoint-1.13a/mgp.h~ magicpoint-1.13a/mgp.h
+--- magicpoint-1.13a/mgp.h~	2025-02-03 22:48:06.000000000 +0100
++++ magicpoint-1.13a/mgp.h	2025-02-03 22:51:13.262717802 +0100
+@@ -795,6 +795,7 @@ extern struct g_color *name2gcolor __P((
+ extern void regist_alloc_colors __P((struct alloc_color *, u_long *, int));
+ extern void free_alloc_colors __P((struct alloc_color *));
+ extern void toggle_fullscreen();
++extern Visual *get_visual(Display *display, int screen, u_int *depthp);
+ 
+ /* background.c */
+ extern double cdist __P((int, int, int, int, int, int));
+diff -up magicpoint-1.13a/image/imagetypes.c~ magicpoint-1.13a/image/imagetypes.c
+--- magicpoint-1.13a/image/imagetypes.c~	2001-01-18 10:07:14.000000000 +0100
++++ magicpoint-1.13a/image/imagetypes.c	2025-02-03 22:55:16.028146410 +0100
+@@ -17,8 +17,8 @@
+  */
+ 
+ static struct imagetypes {
+-  int    (*identifier)(); /* print out image info if this kind of image */
+-  Image *(*loader)();     /* load image if this kind of image */
++  int    (*identifier)(char *, char *); /* print out image info if this kind of image */
++  Image *(*loader)(char *, char *, unsigned int);     /* load image if this kind of image */
+   char  *name;            /* name of this image format */
+ } ImageTypes[] = {
+ #ifdef USE_IMLIB
+diff -up magicpoint-1.13a/image/imagetypes.h~ magicpoint-1.13a/image/imagetypes.h
+--- magicpoint-1.13a/image/imagetypes.h~	2004-09-01 05:50:32.000000000 +0200
++++ magicpoint-1.13a/image/imagetypes.h	2025-02-03 22:56:41.817591116 +0100
+@@ -7,42 +7,42 @@
+  * jim frost 10.15.89
+  */
+ 
+-Image *facesLoad();
+-Image *pbmLoad();
+-Image *sunRasterLoad();
+-Image *gifLoad();
+-Image *rleLoad();
+-Image *xwdLoad();
+-Image *xbitmapLoad();
+-Image *xpixmapLoad();
+-Image *g3Load();
+-Image *fbmLoad();
+-Image *pcxLoad();
+-Image *imgLoad();
+-Image *macLoad();
+-Image *cmuwmLoad();
+-Image *mcidasLoad();
+-Image *jpegLoad();
+-Image *imLoad();
++Image *facesLoad(char *, char *, unsigned int);
++Image *pbmLoad(char *, char *, unsigned int);
++Image *sunRasterLoad(char *, char *, unsigned int);
++Image *gifLoad(char *, char *, unsigned int);
++Image *rleLoad(char *, char *, unsigned int);
++Image *xwdLoad(char *, char *, unsigned int);
++Image *xbitmapLoad(char *, char *, unsigned int);
++Image *xpixmapLoad(char *, char *, unsigned int);
++Image *g3Load(char *, char *, unsigned int);
++Image *fbmLoad(char *, char *, unsigned int);
++Image *pcxLoad(char *, char *, unsigned int);
++Image *imgLoad(char *, char *, unsigned int);
++Image *macLoad(char *, char *, unsigned int);
++Image *cmuwmLoad(char *, char *, unsigned int);
++Image *mcidasLoad(char *, char *, unsigned int);
++Image *jpegLoad(char *, char *, unsigned int);
++Image *imLoad(char *, char *, unsigned int);
+ 
+-int facesIdent();
+-int pbmIdent();
+-int sunRasterIdent();
+-int gifIdent();
+-int rleIdent();
+-int xwdIdent();
+-int xbitmapIdent();
+-int xpixmapIdent();
+-int g3Ident();
+-int fbmIdent();
+-int pcxIdent();
+-int imgIdent();
+-int macIdent();
+-int cmuwmIdent();
+-int mcidasIdent();
+-int jpegIdent();
+-int imIdent();
++int facesIdent(char *, char *);
++int pbmIdent(char *, char *);
++int sunRasterIdent(char *, char *);
++int gifIdent(char *, char *);
++int rleIdent(char *, char *);
++int xwdIdent(char *, char *);
++int xbitmapIdent(char *, char *);
++int xpixmapIdent(char *, char *);
++int g3Ident(char *, char *);
++int fbmIdent(char *, char *);
++int pcxIdent(char *, char *);
++int imgIdent(char *, char *);
++int macIdent(char *, char *);
++int cmuwmIdent(char *, char *);
++int mcidasIdent(char *, char *);
++int jpegIdent(char *, char *);
++int imIdent(char *, char *);
+ #ifdef USE_PNG
+-int pngIdent();
+-Image *pngLoad();
++int pngIdent(char *, char *);
++Image *pngLoad(char *, char *, unsigned int);
+ #endif
+diff -up magicpoint-1.13a/image/reduce.c~ magicpoint-1.13a/image/reduce.c
+--- magicpoint-1.13a/image/reduce.c~	1998-12-28 09:23:17.000000000 +0100
++++ magicpoint-1.13a/image/reduce.c	2025-02-04 11:43:23.178190494 +0100
+@@ -81,8 +81,8 @@ unsigned long colorDistance(rgb, a, b)
+ struct color_area {
+     unsigned short    *pixels;       /* array of pixel values in this area */
+     unsigned short     num_pixels;   /* size of above array */
+-    int              (*sort_func)(); /* predicate func to sort with before
+-				      * splitting */
++    int (*sort_func)(const void *, const void *); /* predicate func to sort with before
++				                   * splitting */
+     unsigned long      pixel_count;  /* # of image pixels we represent */
+     struct color_area *prev, *next;
+ };
+diff -up magicpoint-1.13a/image/misc.c~ magicpoint-1.13a/image/misc.c
+--- magicpoint-1.13a/image/misc.c~	2008-02-13 07:59:01.000000000 +0100
++++ magicpoint-1.13a/image/misc.c	2025-02-04 11:47:18.302735333 +0100
+@@ -129,7 +129,6 @@ Image *processImage(disp, scrn, image, o
+ { Image        *tmpimage;
+   XColor        xcolor;
+   unsigned int  compressed= 0;
+-  void          gammacorrect();
+ 
+   goodImage(image, "processImage");
+ 
+diff -up magicpoint-1.13a/image/rle.c~ magicpoint-1.13a/image/rle.c
+--- magicpoint-1.13a/image/rle.c~	1998-12-28 09:23:18.000000000 +0100
++++ magicpoint-1.13a/image/rle.c	2025-02-04 11:55:53.960548504 +0100
+@@ -25,8 +25,6 @@
+ #include "image.h"
+ #include "rle.h"
+ 
+-void dithermap();
+-
+ /* input file stuff */
+ static int ptype;				/* picture type : */
+ #define BW_NM	0		/* black and white, no map */
+diff -up magicpoint-1.13a/image/rle.h~ magicpoint-1.13a/image/rle.h
+--- magicpoint-1.13a/image/rle.h~	1998-12-28 09:23:19.000000000 +0100
++++ magicpoint-1.13a/image/rle.h	2025-02-04 11:57:23.934000186 +0100
+@@ -1,4 +1,3 @@
+-
+ /*
+  * This software is copyrighted as noted below.  It may be freely copied,
+  * modified, and redistributed, provided that the copyright notice is 
+@@ -144,46 +143,15 @@ extern struct sv_globals {
+ } sv_globals;
+ 
+ 
+-/* 
+- * buildmap - build a more usable colormap from data in globals struct.
+- */
+-extern rle_pixel **
+-buildmap();
+-/* ( globals, minmap, gamma )
+- * struct sv_globals * globals;
+- * int minmap;
+- * double gamma;
+- */
+-
+-/*
+- * rle_getcom - get a specific comment from the image comments.
+- */
+-extern char *
+-rle_getcom();
+-/* ( name, globals )
+- * char * name;
+- * struct sv_globals * globals;
+- */
++/* buildmap - build a more usable colormap from data in globals struct. */
++rle_pixel **buildmap(struct sv_globals *globals, int minmap, double gamma);
+ 
+-/*
+- * rle_putcom - put (or replace) a comment into the image comments.
+- */
+-extern char *
+-rle_putcom();
+-/* ( value, globals )
+- * char * value;
+- * struct sv_globals * globals;
+- */
++/* rle_getcom - get a specific comment from the image comments. */
++char *rle_getcom(char *name, struct sv_globals *globals);
+ 
+-/*
+- * rle_delcom - delete a specific comment from the image comments.
+- */
+-extern char *
+-rle_delcom();
+-/* ( name, globals )
+- * char * name;
+- * struct sv_globals * globals;
+- */
++/* dithermap - Create a color dithering map with a specified number of intensity levels. */
++void dithermap(int levels, double gamma, int rgbmap[][3], int divN[256],
++               int modN[256], int magic[16][16]);
+ 
+ /*
+  * dither globals
+diff -up magicpoint-1.13a/image/rlelib.c~ magicpoint-1.13a/image/rlelib.c
+--- magicpoint-1.13a/image/rlelib.c~	2025-02-04 11:58:25.000000000 +0100
++++ magicpoint-1.13a/image/rlelib.c	2025-02-04 12:50:56.727499236 +0100
+@@ -129,17 +129,16 @@ struct XtndRsetup
+  */
+ typedef void sv_fn();
+ struct sv_dispatch_tab {
+-    char   *magic;			/* magic type flags */
+-    sv_fn  *setup,			/* startup function */
+-	   *skipBlankLines,
+-	   *setColor,
+-	   *skipPixels,
+-	   *newScanLine,
+-	   *putdat,			/* put a set of differing pixels */
+-	   *putrn,			/* put a run all the same */
+-	   *blockHook,			/* hook called at start of new */
+-					/* output block */
+-	   *putEof;		/* write EOF marker (if possible) */
++    char *magic; /* magic type flags */
++    void (*setup)(register struct sv_globals *globals); /* startup function */
++    void (*skipBlankLines)(int nblank, register struct sv_globals *globals);
++    void (*setColor)(int c, register struct sv_globals *globals);
++    void (*skipPixels)(int nskip, int last, int wasrun, register struct sv_globals *globals);
++    void (*newScanLine)(int flag, register struct sv_globals *globals);
++    void (*putdat)(rle_pixel * buf, int n, register struct sv_globals *globals); /* put a set of differing pixels */
++    void (*putrn)(int color, int n, int last, register struct sv_globals *globals); /* put a run all the same */
++    void (*blockHook)(struct sv_globals *globals); /* hook called at start of new output block */
++    void (*putEof)(register struct sv_globals *globals); /* write EOF marker (if possible) */
+ };
+ 
+ struct sv_dispatch_tab sv_DTable[];
+@@ -201,34 +200,6 @@ struct sv_dispatch_tab sv_DTable[];
+  * Copyright (c) 1985,1986 Spencer W. Thomas
+  */
+ 
+-
+-void	RunSetup(),
+-		RunSkipBlankLines(),
+-		RunSetColor(),
+-		RunSkipPixels(),
+-		RunNewScanLine(),
+-		Runputdata(),
+-		Runputrun(),
+-		RunputEof();
+-
+-void	DefaultBlockHook();
+-void	NullputEof();
+-
+-struct sv_dispatch_tab sv_DTable[] = {
+-    {
+-	" OB",
+-	RunSetup,
+-	RunSkipBlankLines,
+-	RunSetColor,
+-	RunSkipPixels,
+-	RunNewScanLine,
+-	Runputdata,
+-	Runputrun,
+-	DefaultBlockHook,
+-	RunputEof
+-    },
+-};
+-
+ static int sv_bg_color[3] = { 0, 0, 0 };
+ 
+ struct sv_globals sv_globals = {
+@@ -513,6 +484,20 @@ struct sv_globals * globals;
+ {
+ }
+ 
++struct sv_dispatch_tab sv_DTable[] = {
++    {
++	" OB",
++	RunSetup,
++	RunSkipBlankLines,
++	RunSetColor,
++	RunSkipPixels,
++	RunNewScanLine,
++	Runputdata,
++	Runputrun,
++	DefaultBlockHook,
++	RunputEof
++    },
++};
+ 
+ /*
+  * This software is copyrighted as noted below.  It may be freely copied,
+@@ -795,7 +795,7 @@ struct inst {
+ #define DATUM(inst) (0x00ff & inst.datum)
+ 
+ static int	   debug_f;		/* if non-zero, print debug info */
+-static void	bfill();
++static void bfill(char *s, int n, int c);
+ 
+ /*****************************************************************
+  * TAG(rle_get_setup)
+@@ -1342,7 +1342,7 @@ int n, c;
+  * Copyright (c) 1987, University of Utah
+  */
+ 
+-void	make_square();
++void make_square(double N, int divN[256], int modN[256], int magic[16][16]);
+ 
+ /* dither globals */
+ int dith_levels = 128;
+diff -up magicpoint-1.13a/image/dither.c~ magicpoint-1.13a/image/dither.c
+--- magicpoint-1.13a/image/dither.c~	1998-02-13 08:48:44.000000000 +0100
++++ magicpoint-1.13a/image/dither.c	2025-02-04 13:03:57.277713622 +0100
+@@ -28,9 +28,9 @@
+ #define Threshold     16384	/* in the dithering process */
+ #define MinGrey           0
+ 
+-static unsigned int tone_scale_adjust();
+-static void         LeftToRight();
+-static void         RightToLeft();
++static unsigned int tone_scale_adjust(unsigned int val);
++static void         LeftToRight(int *curr, int *next, int width);
++static void         RightToLeft(int *curr, int *next, int width);
+ 
+ 
+ /*
+diff -up magicpoint-1.13a/image/xwd.c~ magicpoint-1.13a/image/xwd.c
+--- magicpoint-1.13a/image/xwd.c~	1998-12-28 09:23:29.000000000 +0100
++++ magicpoint-1.13a/image/xwd.c	2025-02-04 13:10:07.344443431 +0100
+@@ -160,7 +160,7 @@ static Image *loadXYBitmap(fullname, zf,
+   int    x, y;           /* horizontal and vertical counters */
+   byte  *line;           /* input scan line */
+   byte  *dptr, *iptr;    /* image data pointers */
+-  unsigned long (*loader)(); /* unit loading function */
++  unsigned long (*loader)(byte *, unsigned int); /* unit loading function */
+ 
+   image= newBitImage(header.pixmap_width, header.pixmap_height);
+   ilinelen= (header.pixmap_width / 8) + (header.pixmap_width % 8 ? 1 : 0);
+@@ -237,7 +237,7 @@ static Image *loadXYPixmap(fullname, zf,
+   byte  *dptr, *iptr;    /* image data pointers */
+   unsigned long pixvals; /* bits for pixels in this unit */
+   unsigned long mask;
+-  unsigned long (*loader)(); /* unit loading function */
++  unsigned long (*loader)(byte *, unsigned int); /* unit loading function */
+ 
+   image= newRGBImage(header.pixmap_width, header.pixmap_height,
+ 		     header.pixmap_depth);
+@@ -323,7 +323,7 @@ static Image *loadZPixmap(fullname, zf,
+   byte  *dptr, *iptr;    /* image data pointers */
+   unsigned long pixmask; /* bit mask within pixel */
+   unsigned long pixel;   /* pixel we're working on */
+-  unsigned long (*loader)(); /* unit loading function */
++  unsigned long (*loader)(byte *, unsigned int); /* unit loading function */
+ 
+   image= newRGBImage(header.pixmap_width, header.pixmap_height,
+ 		     header.pixmap_depth);
+diff -up magicpoint-1.13a/image/mac.h~ magicpoint-1.13a/image/mac.h
+--- magicpoint-1.13a/image/mac.h~	1997-10-26 16:26:15.000000000 +0100
++++ magicpoint-1.13a/image/mac.h	2025-02-04 13:18:56.473195764 +0100
+@@ -32,11 +32,8 @@ typedef unsigned char BYTE;	/* 8 bits un
+ #define MACIN_ERR_NFO      -7   /* no file open */
+ #define MACIN_ERR_NIO      -8   /* no image open */
+ 
+-static int macin_open_image();
+-static int macin_close_file();
+-#if 0
+-static int macin_fatal();
+-#endif
++static int macin_open_image(ZFILE *s);
++static int macin_close_file(void);
+ 
+ #define	MAC_HDR_LEN	512
+ #define ADD_HDR_LEN	128
+diff -up magicpoint-1.13a/image/jpeg.h~ magicpoint-1.13a/image/jpeg.h
+--- magicpoint-1.13a/image/jpeg.h~	1997-10-26 16:26:15.000000000 +0100
++++ magicpoint-1.13a/image/jpeg.h	2025-02-04 13:21:56.615089912 +0100
+@@ -377,6 +377,7 @@ struct decompress_info_struct {
+ };
+ 
+ typedef struct decompress_info_struct * decompress_info_ptr;
++typedef struct compress_info_struct * compress_info_ptr;
+ 
+ 
+ /* Macros for reading data from the decompression input buffer */
+@@ -409,7 +409,7 @@ typedef struct big_barray_control * big_
+ 
+ /* Method types that need typedefs */
+ 
+-#define METHOD(type,methodname,arglist)  type (*methodname) ()
++#define METHOD(type,methodname,arglist)  type (*methodname) arglist
+ 
+ typedef METHOD(void, MCU_output_method_ptr, (compress_info_ptr cinfo,
+ 					     JBLOCK *MCU_data));
+@@ -673,7 +673,7 @@ struct decompress_methods_struct {
+ /* Note: use "j" as first char of names to minimize namespace pollution. */
+ /* The PP macro hides prototype parameters from compilers that can't cope. */
+ 
+-#define PP(arglist)	()
++#define PP(arglist)	arglist
+ 
+ /* main entry for compression */
+ EXTERN void jpeg_compress PP((compress_info_ptr cinfo));
+@@ -686,7 +686,7 @@ EXTERN void j_set_quality PP((compress_i
+ EXTERN void j_free_defaults PP((compress_info_ptr cinfo));
+ 
+ /* main entry for decompression */
+-EXTERN boolean jpeg_decompress PP((decompress_info_ptr cinfo));
++EXTERN boolean jpeg_decompress PP((decompress_info_ptr cinfo, boolean identify));
+ 
+ /* forward DCT */
+ EXTERN void j_fwd_dct PP((DCTBLOCK data));
+diff -up magicpoint-1.13a/image/jpeg.c~ magicpoint-1.13a/image/jpeg.c
+--- magicpoint-1.13a/image/jpeg.c~	1998-12-28 09:23:09.000000000 +0100
++++ magicpoint-1.13a/image/jpeg.c	2025-02-04 13:48:59.243127579 +0100
+@@ -54,7 +54,7 @@
+ #include "image.h"
+ #include "jpeg.h"
+ 
+-METHODDEF int read_jpeg_data ();
++METHODDEF int read_jpeg_data (decompress_info_ptr cinfo);
+ 
+ int jpegIdent(fullname, name)
+      char *fullname, *name;
+diff -up magicpoint-1.13a/image/path.c~ magicpoint-1.13a/image/path.c
+--- magicpoint-1.13a/image/path.c~	2025-02-04 13:57:53.000000000 +0100
++++ magicpoint-1.13a/image/path.c	2025-02-04 13:58:19.684695838 +0100
+@@ -256,8 +256,6 @@ char *expandPath(p)
+   int b1, b2, var;
+   char *ptr;
+ 
+-  char *getenv();
+-
+   buf1[0] = '\0';
+   buf2[0] = '\0';
+   b1 = 0;
+diff -up magicpoint-1.13a/image/mcidas.c~ magicpoint-1.13a/image/mcidas.c
+--- magicpoint-1.13a/image/mcidas.c~	1998-12-28 09:23:11.000000000 +0100
++++ magicpoint-1.13a/image/mcidas.c	2025-02-04 14:32:06.947276140 +0100
+@@ -7,8 +7,6 @@
+ #include "xloadimage.h"
+ #include "mcidas.h"
+ 
+-char *mc_sensor();
+-
+ /*
+  * convert from little endian to big endian four byte object
+  */
+diff -up magicpoint-1.13a/image/mcidas.h~ magicpoint-1.13a/image/mcidas.h
+--- magicpoint-1.13a/image/mcidas.h~	1997-10-26 16:26:16.000000000 +0100
++++ magicpoint-1.13a/image/mcidas.h	2025-02-04 14:32:15.642222917 +0100
+@@ -72,3 +72,5 @@ struct mc_area {
+ 	unsigned char *image ;
+ 	unsigned char *priv ; /* conveninence pointer */
+ } ;
++
++char *mc_sensor(int sscode);
+diff -up magicpoint-1.13a/image/img.c~ magicpoint-1.13a/image/img.c
+--- magicpoint-1.13a/image/img.c~	1998-02-13 08:48:51.000000000 +0100
++++ magicpoint-1.13a/image/img.c	2025-02-04 14:35:08.168166786 +0100
+@@ -21,8 +21,8 @@ static int RowRepeat;				/* number of re
+ static int RowCount;				/* current row */
+ static int ColCount;				/* current column */
+ 
+-static int IMG_ReadHeader();			/* Read file header */
+-static void IMG_WriteByte();			/* Write output byte */
++static int IMG_ReadHeader(ZFILE *zf, IMG_Header *h); /* Read file header */
++static void IMG_WriteByte(unsigned char c, register int cols, unsigned int bpl); /* Write output byte */
+ 
+ /*
+ **  imgIdent
+diff -up magicpoint-1.13a/contrib/xwintoppm/dsimple.h~ magicpoint-1.13a/contrib/xwintoppm/dsimple.h
+--- magicpoint-1.13a/contrib/xwintoppm/dsimple.h~	2025-02-04 14:49:26.699266974 +0100
++++ magicpoint-1.13a/contrib/xwintoppm/dsimple.h	2025-02-04 14:49:43.843321895 +0100
+@@ -41,25 +41,27 @@ from the X Consortium.
+ 
+     /* Global variables used by routines in just_display.c */
+ 
+-char *program_name = "unknown_program";       /* Name of this program */
+-Display *dpy;                                 /* The current display */
+-int screen;                                   /* The current screen */
++extern char *program_name;       /* Name of this program */
++extern Display *dpy;             /* The current display */
++extern int screen;               /* The current screen */
+ 
+ #define INIT_NAME program_name=argv[0]        /* use this in main to setup
+                                                  program_name */
+ 
+     /* Declaritions for functions in just_display.c */
+ 
+-void Fatal_Error();
+-char *Malloc();
+-char *Realloc();
+-char *Get_Display_Name();
+-Display *Open_Display();
+-void Setup_Display_And_Screen();
+-XFontStruct *Open_Font();
+-Pixmap ReadBitmapFile();
+-void WriteBitmapFile();
+-Window Select_Window_Args();
++void Fatal_Error(const char *fmt, ...);
++char *Malloc(unsigned size);
++char *Realloc(char *ptr, int size);
++char *Get_Display_Name(int *pargc, char **argv);
++Display *Open_Display(char *display_name);
++void Setup_Display_And_Screen(int *argc, char **argv);
++XFontStruct *Open_Font(char *name);
++Pixmap ReadBitmapFile(Drawable d, char *filename, int *width, int *height,
++                      int *x_hot, int *y_hot);
++void WriteBitmapFile(char *filename, Pixmap bitmap, int width, int height,
++                     int x_hot, int y_hot);
++Window Select_Window_Args(int *rargc, char **argv);
+ 
+ #define X_USAGE "[host:display]"              /* X arguments handled by
+ 						 Get_Display_Name */
+@@ -73,9 +75,9 @@ Window Select_Window_Args();
+  * Send bugs, etc. to chariot@athena.mit.edu.
+  */
+ 
+-unsigned long Resolve_Color();
+-Pixmap Bitmap_To_Pixmap();
+-Window Select_Window();
++unsigned long Resolve_Color(Window w, char *name);
++Pixmap Bitmap_To_Pixmap(Display *dpy, Drawable d, GC gc, Pixmap bitmap, int width, int height);
++Window Select_Window(Display *dpy);
+ void out();
+-void blip();
+-Window Window_With_Name();
++void blip(void);
++Window Window_With_Name(Display *dpy, Window top, char *name);
+diff -up magicpoint-1.13a/contrib/xwintoppm/dsimple.c~ magicpoint-1.13a/contrib/xwintoppm/dsimple.c
+--- magicpoint-1.13a/contrib/xwintoppm/dsimple.c~	2025-02-04 14:55:05.991374119 +0100
++++ magicpoint-1.13a/contrib/xwintoppm/dsimple.c	2025-02-04 14:55:12.198203007 +0100
+@@ -49,14 +49,13 @@ char *malloc(), realloc();
+ #include <stdlib.h>
+ #endif
+ 
++#include "dsimple.h"
++
++char *program_name = "unknown_program";       /* Name of this program */
++Display *dpy;                                 /* The current display */
++int screen;                                   /* The current screen */
++
+ extern Bool silent;
+-unsigned long Resolve_Color();
+-Pixmap Bitmap_To_Pixmap();
+-Window Select_Window();
+-void out();
+-void blip();
+-Window Window_With_Name();
+-void Fatal_Error();
+ void outl(char *msg, ...);
+ int usage(void);
+ 
+@@ -519,14 +518,18 @@ outl(char *msg, ...)
+  * Does not require dpy or screen defined.
+  */
+ /* VARARGS1 */
+-void Fatal_Error(msg, arg0,arg1,arg2,arg3,arg4,arg5,arg6)
+-char *msg;
+-char *arg0, *arg1, *arg2, *arg3, *arg4, *arg5, *arg6;
++void Fatal_Error(const char *fmt, ...)
+ {
++	va_list ap;
++
+ 	fflush(stdout);
+ 	fflush(stderr);
+ 	fprintf(stderr, "%s: error: ", program_name);
+-	fprintf(stderr, msg, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
++
++	va_start(ap, fmt);
++	vfprintf(stderr, fmt, ap);
++	va_end(ap);
++
+ 	fprintf(stderr, "\n");
+ 	exit(1);
+ }
+diff -up magicpoint-1.13a/contrib/xwintoppm/list.h~ magicpoint-1.13a/contrib/xwintoppm/list.h
+--- magicpoint-1.13a/contrib/xwintoppm/list.h~	1998-02-13 08:48:32.000000000 +0100
++++ magicpoint-1.13a/contrib/xwintoppm/list.h	2025-02-04 15:16:28.384984036 +0100
+@@ -40,6 +40,8 @@ from the X Consortium.
+ #ifndef LIST_DEF
+ #define LIST_DEF
+ 
++#define NeedFunctionPrototypes 1
++
+ #define LESS	-1
+ #define EQUAL	0
+ #define GREATER	1
+diff -up magicpoint-1.13a/contrib/xwintoppm/multiVis.h~ magicpoint-1.13a/contrib/xwintoppm/multiVis.h
+--- magicpoint-1.13a/contrib/xwintoppm/multiVis.h~	1998-02-13 08:48:34.000000000 +0100
++++ magicpoint-1.13a/contrib/xwintoppm/multiVis.h	2025-02-04 15:17:23.297648382 +0100
+@@ -37,6 +37,8 @@ from the X Consortium.
+ 
+  ------------------------------------------------------------------------ **/
+ 
++#define NeedFunctionPrototypes 1
++
+ extern int GetMultiVisualRegions(
+ #if NeedFunctionPrototypes
+     Display *, Window, int, int, unsigned int,
+diff -up magicpoint-1.13a/contrib/xwintoppm/wsutils.h~ magicpoint-1.13a/contrib/xwintoppm/wsutils.h
+--- magicpoint-1.13a/contrib/xwintoppm/wsutils.h~	1998-02-13 08:48:35.000000000 +0100
++++ magicpoint-1.13a/contrib/xwintoppm/wsutils.h	2025-02-04 15:16:59.784792113 +0100
+@@ -43,6 +43,8 @@ from the X Consortium.
+  *
+  ******************************************************************************/
+ 
++#define NeedFunctionPrototypes 1
++
+ /* This is the actual structure returned by the X server describing the
+  * SERVER_OVERLAY_VISUAL property.
+  */

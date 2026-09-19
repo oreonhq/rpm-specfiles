@@ -9,8 +9,8 @@ the backbone of Quaternion, Spectral and other projects. Versions 0.5.x and
 older use the previous name - libQMatrixClient.}
 
 Name: libquotient
-Version: 0.9.5
-Release: 5%{?dist}
+Version: 0.9.6.1
+Release: 1%{?dist}
 
 License: BSD-3-Clause AND LGPL-2.1-or-later
 URL: https://github.com/quotient-im/%{libname}

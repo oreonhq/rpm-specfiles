@@ -13,7 +13,7 @@
 %endif
 
 Name:           lua-filesystem
-Version:        1.9.0
+Version:        1_9_0
 Release:        1%{?dist}
 Summary:        File System Library for the Lua Programming Language
 

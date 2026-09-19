@@ -1,0 +1,63 @@
+%global source0_hash none
+
+Name:           python-pytest-django
+Version:        4.14.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Django plugin for pytest.
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/pytest-dev/pytest-django
+Source:         %{pypi_source pytest_django}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-django' generated automatically by pyp2spec.}
+
+Patch:          pytest_django-lower-pytest-req.diff
+
+%description %_description
+
+%package -n     python3-pytest-django
+Summary:        %{summary}
+
+%description -n python3-pytest-django %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytest-django django,docs
+
+
+%prep
+%autosetup -p1 -n pytest_django-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x django,docs
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-pytest-django -f %{pyproject_files}
+
+%changelog
+%autochangelog

@@ -1,0 +1,10 @@
+--- locale-0.2.2/Cargo.toml	1970-01-01T00:00:00+00:00
++++ locale-0.2.2/Cargo.toml	2025-11-11T13:27:40.156491+00:00
+@@ -20,6 +20,7 @@
+ keywords = ["i18n", "g12n", "l10n"]
+ license = "MIT"
+ repository = "https://github.com/rust-locale/rust-locale/"
++exclude = ["/ci/*", "/.travis.yml", "/appveyor.yml"]
+ 
+ [dependencies]
+ libc = "0.2"

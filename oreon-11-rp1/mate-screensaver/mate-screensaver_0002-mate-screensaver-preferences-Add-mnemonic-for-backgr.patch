@@ -1,0 +1,28 @@
+From 243d9338b49269bde2cd655c213b44a2b89495b5 Mon Sep 17 00:00:00 2001
+From: Colomban Wendling <cwendling@hypra.fr>
+Date: Wed, 15 May 2024 22:03:38 +0200
+Subject: [PATCH 2/6] mate-screensaver-preferences: Add mnemonic for
+ background-picture
+
+---
+ data/mate-screensaver-preferences.ui | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/data/mate-screensaver-preferences.ui b/data/mate-screensaver-preferences.ui
+index c49b04c..7ae6f51 100644
+--- a/data/mate-screensaver-preferences.ui
++++ b/data/mate-screensaver-preferences.ui
+@@ -508,7 +508,9 @@
+                                       <object class="GtkLabel">
+                                         <property name="visible">True</property>
+                                         <property name="can_focus">False</property>
+-                                        <property name="label" translatable="yes">Background picture for lock screen:</property>
++                                        <property name="label" translatable="yes">_Background picture for lock screen:</property>
++                                        <property name="use-underline">True</property>
++                                        <property name="mnemonic-widget">picture_filename</property>
+                                       </object>
+                                       <packing>
+                                         <property name="expand">False</property>
+-- 
+2.49.0
+

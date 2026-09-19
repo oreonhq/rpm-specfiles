@@ -1,0 +1,7 @@
+--- ghc-9.8.4/utils/hp2ps/hp2ps.cabal~	2024-11-28 06:03:58.000000000 +0800
++++ ghc-9.8.4/utils/hp2ps/hp2ps.cabal	2025-01-18 02:45:53.713478132 +0800
+@@ -23,3 +23,4 @@
+        HpFile.c Marks.c Scale.c TraceElement.c
+        Axes.c Dimensions.c Key.c PsFile.c Shade.c
+        Utilities.c
++    ghc-options: -optc=-std=gnu17

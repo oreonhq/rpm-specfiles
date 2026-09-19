@@ -1,0 +1,13 @@
+diff -up xtb-6.5.1/meson.build.fedoraver xtb-6.5.1/meson.build
+--- xtb-6.5.1/meson.build.fedoraver	2022-08-02 18:10:17.034252504 +0000
++++ xtb-6.5.1/meson.build	2022-08-02 18:11:19.065224884 +0000
+@@ -57,9 +57,6 @@ config = configuration_data({
+   'description': 'Semiempirical Extended Tight-Binding Program Package',
+   'version': meson.project_version(),
+   'commit': commit,
+-  'date': run_command(python, '-c', 'import datetime; print(datetime.date.today().strftime("%Y-%m-%d"))').stdout().strip(),
+-  'author': run_command(python, '-c', 'import getpass; print(getpass.getuser())').stdout().strip(),
+-  'origin': run_command(python, '-c', 'import socket; print(socket.gethostname())').stdout().strip(),
+   'prefix': get_option('prefix'),
+   'mandir': get_option('mandir'),
+   'bindir': get_option('bindir'),

@@ -1,0 +1,83 @@
+From 3e51fb244dd264b09179999d29dc7c5afd7e71e3 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 2 Dec 2025 10:43:31 +0000
+Subject: [PATCH] Backport fixes for CVE-2025-64181 etc. in OpenEXRCore
+
+---
+ .../hioOpenEXR/OpenEXR/OpenEXRCore/chunk.c    | 20 ++++++++++++++++---
+ .../OpenEXR/OpenEXRCore/internal_util.h       |  4 ++--
+ .../OpenEXR/OpenEXRCore/parse_header.c        |  4 +++-
+ 3 files changed, 22 insertions(+), 6 deletions(-)
+
+diff --git a/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/chunk.c b/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/chunk.c
+index cfe80b4cd68..e11209fe660 100644
+--- a/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/chunk.c
++++ b/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/chunk.c
+@@ -1292,6 +1292,16 @@ exr_read_tile_chunk_info (
+         return pctxt->report_error (
+             pctxt, EXR_ERR_INVALID_ARGUMENT, "Invalid packed size of 0");
+ 
++    if (part->comp_type == EXR_COMPRESSION_NONE &&
++       cinfo->packed_size != cinfo->unpacked_size)
++    {
++         return pctxt->print_error (
++             pctxt,
++             EXR_ERR_BAD_CHUNK_LEADER,
++             "Mismatch between unpacked and packed size with uncompressed data: packed is %" PRIu64 "; unpacked is %" PRIu64,
++             cinfo->packed_size, cinfo->unpacked_size);
++    }
++
+     return EXR_ERR_SUCCESS;
+ }
+ 
+@@ -1350,11 +1360,15 @@ exr_read_chunk (
+         rv    = pctxt->do_read (
+             pctxt, packed_data, toread, &dataoffset, &nread, rmode);
+ 
+-        if (rmode == EXR_ALLOW_SHORT_READ && nread < (int64_t) toread)
++        if (rmode == EXR_ALLOW_SHORT_READ &&
++            nread >= 0 &&
++            nread < (int64_t) toread)
++        {
+             memset (
+                 ((uint8_t*) packed_data) + nread,
+-                0,
+-                toread - (uint64_t) (nread));
++                    0,
++            (size_t)(toread - (uint64_t)nread));
++        }
+     }
+     else
+         rv = EXR_ERR_SUCCESS;
+diff --git a/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/internal_util.h b/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/internal_util.h
+index 3c6f02786cc..e0fa3933d92 100644
+--- a/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/internal_util.h
++++ b/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/internal_util.h
+@@ -31,10 +31,10 @@ compute_sampled_height (int height, int y_sampling, int start_y)
+         else
+             start = start_y;
+         end = start_y + height - 1;
+-        end -= (end < 0) ? (-end % y_sampling) : (end % y_sampling);
++        end -= (end < 0 ? -end : end) % y_sampling;
+ 
+         if (start > end)
+-            nlines = 0;
++            nlines = start == start_y ? 1 : 0;
+         else
+             nlines = (end - start) / y_sampling + 1;
+     }
+diff --git a/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/parse_header.c b/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/parse_header.c
+index d7230392693..8b6cf78cc59 100644
+--- a/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/parse_header.c
++++ b/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/parse_header.c
+@@ -2293,7 +2293,9 @@ internal_exr_compute_chunk_offset_size (struct _internal_exr_part* curpart)
+ 
+     w = (uint64_t) (((int64_t) dw.max.x) - ((int64_t) dw.min.x) + 1);
+ 
+-    if (curpart->tiles)
++    if (curpart->storage_mode != EXR_STORAGE_SCANLINE &&
++       curpart->storage_mode != EXR_STORAGE_DEEP_SCANLINE &&
++       curpart->tiles)
+     {
+         const exr_attr_tiledesc_t* tiledesc  = curpart->tiles->tiledesc;
+         int64_t                    tilecount = 0;

@@ -1,0 +1,163 @@
+.TH EZDXF\-INFO "1" "May 2024" "" "User Commands"
+.B ezdxf\ info
+\(en show information and optional stats of DXF files as loaded by
+.BR ezdxf (1)
+.SH SYNOPSIS
+.B ezdxf\ info
+.RB [ \-h ]
+.RB [ \-v ]
+.RB [ \-s ]
+.RI [ FILE ]
+.RI [ FILE ...]
+.SH DESCRIPTION
+Show information and optional stats of DXF files as loaded by
+.BR ezdxf (1),
+this may not represent the original content of the file,
+use the
+.BR ezdxf\-browse (1)
+command to see the original content.
+The upgrade is necessary for very old DXF versions prior to R12
+and for the \(lqspecial\(rq versions R13 and R14.
+The
+.B \-s
+option shows some statistics about the DXF content
+like entity count or table count.
+Use the
+.B \-v
+option to show more of everything.
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I FILE
+DXF file to process, wildcards
+.B *
+and
+.B ?
+are supported
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-v\fR,\ \fB\-\-verbose
+give more output
+.TP
+.B \-s\fR,\ \fB\-\-stats
+show content stats
+.SH ENVIRONMENT
+See
+.BR ezdxf (1).
+.SH FILES
+See
+.BR ezdxf (1).
+.SH EXAMPLES
+.P
+This is the verbose output for an old DXF R10 file
+and shows that the loading process created some required structures
+which do not exist in DXF R10 files, like the
+.B BLOCK_RECORD
+table or the
+.B OBJECTS
+section:
+.P
+.in +7n
+.EX
+.B $\ ezdxf\ info\ \-v\ \-s\ test_R10.dxf
+.B \:
+.B Filename:\ "test_R10.dxf"
+.B Loaded\ content\ was\ upgraded\ from\ DXF\ Version\ AC1006\ (R10)
+.B Release:\ R12
+.B DXF\ Version:\ AC1009
+.B Maintenance\ Version:\ <undefined>
+.B Codepage:\ ANSI_1252
+.B Encoding:\ cp1252
+.B Unit\ system:\ Imperial
+.B Modelspace\ units:\ Unitless
+.B $LASTSAVEDBY:\ <undefined>
+.B $HANDSEED:\ 0
+.B $FINGERPRINTGUID:\ {9EADDC7C\-5982\-4C68\-B770\-8A62378C2B90}
+.B $VERSIONGUID:\ {49336E63\-D99B\-45EC\-803C\-4D2BD03A7DE0}
+.B $USERI1=0
+.B $USERI2=0
+.B $USERI3=0
+.B $USERI4=0
+.B $USERI5=0
+.B $USERR1=0.0
+.B $USERR2=0.0
+.B $USERR3=0.0
+.B $USERR4=0.0
+.B $USERR5=0.0
+.B File\ was\ not\ created\ by\ ezdxf\ >=\ 0.16.4
+.B File\ was\ not\ written\ by\ ezdxf\ >=\ 0.16.4
+.B Content\ stats:
+.B LAYER\ table\ entries:\ 18
+.B \ \ 0
+.B \ \ Defpoints
+.B \ \ LYR_00
+.B \ \ LYR_01
+.B \ \ LYR_02
+.B \ \ LYR_03
+.B \ \ LYR_04
+.B \ \ LYR_05
+.B \ \ LYR_06
+.B \ \ LYR_07
+.B \ \ LYR_08
+.B \ \ LYR_09
+.B \ \ LYR_10
+.B \ \ LYR_11
+.B \ \ LYR_12
+.B \ \ LYR_13
+.B \ \ LYR_14
+.B \ \ LYR_15
+.B LTYPE\ table\ entries:\ 13
+.B \ \ BORDER
+.B \ \ ByBlock
+.B \ \ ByLayer
+.B \ \ CENTER
+.B \ \ CONTINUOUS
+.B \ \ CUTTING
+.B \ \ DASHDOT
+.B \ \ DASHED
+.B \ \ DIVIDE
+.B \ \ DOT
+.B \ \ HIDDEN
+.B \ \ PHANTOM
+.B \ \ STITCH
+.B STYLE\ table\ entries:\ 1
+.B \ \ STANDARD
+.B DIMSTYLE\ table\ entries:\ 1
+.B \ \ Standard
+.B APPID\ table\ entries:\ 1
+.B \ \ ACAD
+.B UCS\ table\ entries:\ 0
+.B VIEW\ table\ entries:\ 0
+.B VPORT\ table\ entries:\ 1
+.B \ \ *Active
+.B BLOCK_RECORD\ table\ entries:\ 2
+.B \ \ *Model_Space
+.B \ \ *Paper_Space
+.B Entities\ in\ modelspace:\ 78
+.B \ \ ARC\ (2)
+.B \ \ CIRCLE\ (2)
+.B \ \ LINE\ (74)
+.B Entities\ in\ OBJECTS\ section:\ 20
+.B \ \ ACDBDICTIONARYWDFLT\ (1)
+.B \ \ ACDBPLACEHOLDER\ (1)
+.B \ \ DICTIONARY\ (11)
+.B \ \ LAYOUT\ (2)
+.B \ \ MATERIAL\ (3)
+.B \ \ MLEADERSTYLE\ (1)
+.B \ \ MLINESTYLE\ (1)
+.EE
+.in
+.SH "SEE\ ALSO"
+.BR ezdxf (1)
+.P
+.BR ezdxf\-audit (1),
+.BR ezdxf\-draw (1),
+.BR ezdxf\-view (1),
+.BR ezdxf\-browse (1),
+.BR ezdxf\-browse\-acis (1),
+.BR ezdxf\-strip (1),
+.BR ezdxf\-config (1),
+.BR ezdxf\-hpgl (1)

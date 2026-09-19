@@ -1,0 +1,36 @@
+From bb88e574e8cc926f13c04bd87ff4771e513dc853 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 8 Nov 2018 16:42:58 +0100
+Subject: [PATCH] Adjust httpd configuriation to 2.4
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Apache httpd 2.4 needs to load additional modules. Otherwise it
+reports fatal errors.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/TestModPSGI.pm | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/t/TestModPSGI.pm b/t/TestModPSGI.pm
+index 709d369..356ed98 100644
+--- a/t/TestModPSGI.pm
++++ b/t/TestModPSGI.pm
+@@ -112,8 +112,11 @@ sub run_httpd($) {
+     my $conf = <<"END_CONF";
+ ServerName mod-psgi.test
+ LoadModule psgi_module $topdir/.libs/mod_psgi.so
++LoadModule mpm_event_module modules/mod_mpm_event.so
++LoadModule unixd_module modules/mod_unixd.so
++LoadModule authn_core_module modules/mod_authn_core.so
++LoadModule authz_core_module modules/mod_authz_core.so
+ PidFile  $tmpdir/httpd.pid
+-LockFile $tmpdir/httpd.lock
+ ErrorLog $tmpdir/error_log
+ Listen $port
+ <Location />
+-- 
+2.17.2
+

@@ -1,0 +1,11 @@
+--- a/setup.orig.py	2025-10-10 19:03:34.000000000 +0200
++++ b/setup.py	2025-11-02 19:29:39.818372227 +0100
+@@ -35,8 +35,6 @@
+             py_limited_api=True,
+             sources=[
+                 "src/pylsqpack/binding.c",
+-                "vendor/ls-qpack/lsqpack.c",
+-                "vendor/ls-qpack/deps/xxhash/xxhash.c",
+             ],
+         ),
+     ],

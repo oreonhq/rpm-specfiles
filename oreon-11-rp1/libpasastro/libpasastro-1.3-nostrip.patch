@@ -1,0 +1,16 @@
+diff -U 3 -dHrN -- a/install.sh b/install.sh
+--- a/install.sh	2020-03-02 10:16:07.000000000 +0100
++++ b/install.sh	2020-03-18 19:36:42.003029771 +0100
+@@ -14,9 +14,9 @@
+ install -m 755 -d $destdir/share/doc
+ install -m 755 -d $destdir/share/doc/libpasastro
+ 
+-install -v -m 644 -s getdss/libpasgetdss.so.*  $destdir/lib/
+-install -v -m 644 -s plan404/libpasplan404.so.*  $destdir/lib/
+-install -v -m 644 -s wcs/libpaswcs.so.*  $destdir/lib/
++install -v -m 755 getdss/libpasgetdss.so.*  $destdir/lib/
++install -v -m 755 plan404/libpasplan404.so.*  $destdir/lib/
++install -v -m 755 wcs/libpaswcs.so.*  $destdir/lib/
+ install -v -m 644 changelog $destdir/share/doc/libpasastro/changelog
+ install -v -m 644 copyright $destdir/share/doc/libpasastro/copyright
+ 

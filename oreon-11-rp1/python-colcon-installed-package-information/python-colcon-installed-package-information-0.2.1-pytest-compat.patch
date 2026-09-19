@@ -1,0 +1,43 @@
+diff --git a/test/test_package_augmentation.py b/test/test_package_augmentation.py
+index 2eaf67f7a95b..13224cec93c7 100644
+--- a/test/test_package_augmentation.py
++++ b/test/test_package_augmentation.py
+@@ -14,6 +14,11 @@ from colcon_installed_package_information.package_augmentation.python \
+ import pytest
+ 
+ 
++@pytest.fixture
++def tmp_path(tmpdir):
++    return Path(tmpdir)
++
++
+ @pytest.fixture
+ def mock_egg_package(tmp_path):
+     lib_dir = Path(sysconfig.get_path('purelib', vars={'base': str(tmp_path)}))
+@@ -32,7 +37,7 @@ def mock_egg_package(tmp_path):
+     desc = PackageDescriptor(str(tmp_path))
+     desc.name = 'egg-pkg'
+     desc.type = 'installed'
+-    yield desc
++    return desc
+ 
+ 
+ @pytest.fixture
+@@ -53,7 +58,7 @@ def mock_wheel_package(tmp_path):
+     desc = PackageDescriptor(str(tmp_path))
+     desc.name = 'wheel-pkg'
+     desc.type = 'installed'
+-    yield desc
++    return desc
+ 
+ 
+ @pytest.fixture
+@@ -68,7 +73,7 @@ def mock_colcon_index_package(tmp_path):
+     desc = PackageDescriptor(str(tmp_path))
+     desc.name = 'colcon-index-pkg'
+     desc.type = 'installed'
+-    yield desc
++    return desc
+ 
+ 
+ def test_colcon_index(mock_colcon_index_package):

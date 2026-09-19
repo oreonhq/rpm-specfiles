@@ -1,0 +1,12 @@
+diff -Naur django-health-check-3.20.8-original/pyproject.toml django-health-check-3.20.8/pyproject.toml
+--- django-health-check-3.20.8-original/pyproject.toml	2025-12-22 12:04:57.000000000 +0000
++++ django-health-check-3.20.8/pyproject.toml	2026-01-12 13:54:43.578331169 +0000
+@@ -80,7 +80,7 @@
+ write_to = "health_check/_version.py"
+ 
+ [tool.pytest.ini_options]
+-addopts = "--cov --strict-markers --cov-report=xml --cov-report=term --doctest-modules"
++addopts = "--doctest-modules"
+ testpaths = [
+   "tests",
+ ]

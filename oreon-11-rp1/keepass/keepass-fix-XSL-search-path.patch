@@ -1,0 +1,39 @@
+From a5b7847ffa46bd5b541073705304967bfe0b9f6f Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Thu, 18 Aug 2022 21:16:13 +0200
+Subject: [PATCH] fix XSL search path
+
+---
+ KeePass/App/AppDefs.cs     | 2 ++
+ KeePass/Forms/AboutForm.cs | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/KeePass/App/AppDefs.cs b/KeePass/App/AppDefs.cs
+index 7d67c30..4052244 100644
+--- a/KeePass/App/AppDefs.cs
++++ b/KeePass/App/AppDefs.cs
+@@ -33,6 +33,8 @@ namespace KeePass.App
+ {
+ 	public static class AppDefs
+ 	{
++		public const string DataDir = "/usr/share/keepass/";
++		
+ 		public static readonly Color ColorControlNormal = SystemColors.Window;
+ 		public static readonly Color ColorControlDisabled = SystemColors.Control;
+ 		public static readonly Color ColorEditError = (UIUtil.IsDarkTheme ?
+diff --git a/KeePass/Forms/AboutForm.cs b/KeePass/Forms/AboutForm.cs
+index d682c48..51aae17 100644
+--- a/KeePass/Forms/AboutForm.cs
++++ b/KeePass/Forms/AboutForm.cs
+@@ -133,7 +133,7 @@ namespace KeePass.Forms
+ 			m_lvComponents.Columns.Add(strValueColumn, 100);
+ 
+ 			string strExe = WinUtil.GetExecutable();
+-			string strDir = UrlUtil.GetFileDirectory(strExe, true, false);
++			string strDir = AppDefs.DataDir;
+ 
+ 			AddComponentItem(PwDefs.ShortProductName, strMainVersion, strExe);
+ 
+-- 
+2.37.2
+

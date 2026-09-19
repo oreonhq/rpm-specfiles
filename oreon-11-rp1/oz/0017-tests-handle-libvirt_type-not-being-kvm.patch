@@ -1,0 +1,68 @@
+From cf60791c8fc759f0f1c325db008c86aef25d4842 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Tue, 23 Jan 2024 16:58:45 -0800
+Subject: [PATCH 17/26] tests: handle libvirt_type not being kvm
+
+This seems necessary for testing in a container. I've mostly got
+the tests passing in a rootless container, but libvirt_type is
+qemu not kvm, and I doubt it's easy to get it to come out as
+kvm. It's easier to just make the tests handle it being qemu.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ tests/guest/libvirt/test_xml_generation_1.xml |  2 +-
+ tests/guest/libvirt/test_xml_generation_2.xml |  2 +-
+ tests/guest/test_guest.py                     | 10 ++++++++--
+ 3 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/tests/guest/libvirt/test_xml_generation_1.xml b/tests/guest/libvirt/test_xml_generation_1.xml
+index a8ad4d8..1a64f61 100644
+--- a/tests/guest/libvirt/test_xml_generation_1.xml
++++ b/tests/guest/libvirt/test_xml_generation_1.xml
+@@ -1,4 +1,4 @@
+-<domain type="kvm">
++<domain type="%s">
+   <name>tester</name>
+   <memory>2097152</memory>
+   <currentMemory>2097152</currentMemory>
+diff --git a/tests/guest/libvirt/test_xml_generation_2.xml b/tests/guest/libvirt/test_xml_generation_2.xml
+index cf6feb4..e46e581 100644
+--- a/tests/guest/libvirt/test_xml_generation_2.xml
++++ b/tests/guest/libvirt/test_xml_generation_2.xml
+@@ -1,4 +1,4 @@
+-<domain type="kvm">
++<domain type="%s">
+   <name>tester</name>
+   <memory>2097152</memory>
+   <currentMemory>2097152</currentMemory>
+diff --git a/tests/guest/test_guest.py b/tests/guest/test_guest.py
+index 19b0863..a9383f2 100644
+--- a/tests/guest/test_guest.py
++++ b/tests/guest/test_guest.py
+@@ -456,7 +456,10 @@ def test_xml_generation_1():
+         test_xml = handle.read()
+ 
+     # Replace various smaller items as they are auto generated
+-    test_xml = test_xml % (guest.uuid, route, guest.listen_port, guest.diskimage)
++    test_xml = test_xml % (guest.libvirt_type, guest.uuid, route, guest.listen_port, guest.diskimage)
++    # drop host-passthrough line if libvirt_type is not kvm
++    if guest.libvirt_type != "kvm":
++        test_xml = "\n".join((line for line in test_xml.splitlines() if "host-passthrough" not in line)) + "\n"
+ 
+     bootdev = 'hd'
+     installdev = None
+@@ -472,7 +475,10 @@ def test_xml_generation_2():
+         test_xml = handle.read()
+ 
+     # Replace various smaller items as they are auto generated
+-    test_xml = test_xml % (guest.uuid, route, guest.listen_port, guest.diskimage)
++    test_xml = test_xml % (guest.libvirt_type, guest.uuid, route, guest.listen_port, guest.diskimage)
++    # drop host-passthrough line if libvirt_type is not kvm
++    if guest.libvirt_type != "kvm":
++        test_xml = "\n".join((line for line in test_xml.splitlines() if "host-passthrough" not in line)) + "\n"
+ 
+     bootdev = 'hd'
+     installdev = guest._InstallDev('blue', '/var/bin/foo', 'muni')
+-- 
+2.46.2
+

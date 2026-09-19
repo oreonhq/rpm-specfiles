@@ -1,12 +1,12 @@
-%global source0_hash f5aec7198b161562616c139ed037e562e7ae6822b839f67c8c2e2f97678fc58e
+%global source0_hash 517040fbadcd8206d04f63c190ebc2c2300c17c868becb4b8f0b54eac69303b9
 
 %global		framework kitemmodels
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.30.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with item models
 
@@ -63,6 +63,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

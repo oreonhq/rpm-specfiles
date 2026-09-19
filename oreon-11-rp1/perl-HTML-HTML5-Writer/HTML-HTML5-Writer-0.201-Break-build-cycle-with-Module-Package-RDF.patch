@@ -1,0 +1,24 @@
+From 7c52b739554679c9d5770243ca0f94373e5cb33f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 8 Nov 2016 17:29:05 +0100
+Subject: [PATCH] Break build cycle with Module-Package-RDF
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index ea1da1b..b8d1399 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1,2 +1,2 @@
+-use inc::Module::Package 'RDF:standard';
++use inc::Module::Package;
+ 
+-- 
+2.7.4
+

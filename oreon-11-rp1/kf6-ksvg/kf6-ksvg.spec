@@ -1,9 +1,9 @@
-%global source0_hash 68d43f014639ae6097012cdd67bdbbefd5425b17d2322d94f55be2b138613e0a
+%global source0_hash 1c9cf9e9d286c1682cecba41d2a44898009da3d01d54c3403c40c4868d8c19dc
 
 %global framework ksvg
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 %ifarch aarch64
 # Smaller aarch64 VMs OOM (cc1plus Killed, bogus assembler errors) with flto + high -j
@@ -13,7 +13,7 @@
 
 Name:    kf6-ksvg
 Summary: Components for handling SVGs
-Version: 6.27.0
+Version: 6.29.0
 Release:        1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -33,12 +33,12 @@ BuildRequires: cmake(Qt6)
 BuildRequires: cmake(Qt6Quick)
 BuildRequires: cmake(Qt6Svg)
 BuildRequires: pkgconfig(xkbcommon)
-BuildRequires: cmake(KF6Archive)
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6GuiAddons)
-BuildRequires: cmake(KF6Kirigami2)
-BuildRequires: cmake(KF6ColorScheme)
+BuildRequires: cmake(KF6Archive) >= %{version}
+BuildRequires: cmake(KF6Config) >= %{version}
+BuildRequires: cmake(KF6CoreAddons) >= %{version}
+BuildRequires: cmake(KF6GuiAddons) >= %{version}
+BuildRequires: cmake(KF6Kirigami2) >= %{version}
+BuildRequires: cmake(KF6ColorScheme) >= %{version}
 
 %description
 %{summary}.
@@ -74,6 +74,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
 - aarch64: no LTO, -j2 to avoid OOM (cc1plus Killed)
 

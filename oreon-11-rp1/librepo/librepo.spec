@@ -32,13 +32,13 @@
 %global dnf_conflict 2.8.8
 
 Name:           librepo
-Version:        1.20.0
-Release:        5%{?dist}
+Version:        1.21.1
+Release:        1%{?dist}
 Summary:        Repodata downloading library
 
 License:        LGPL-2.1-or-later
 URL:            https://github.com/rpm-software-management/librepo
-Source0:        https://github.com/rpm-software-management/librepo/archive/refs/tags/1.20.0.tar.gz#/librepo-1.20.0.tar.gz
+Source0:        https://github.com/rpm-software-management/librepo/archive/refs/tags/1.21.1.tar.gz#/librepo-1.20.0.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc

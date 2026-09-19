@@ -32,7 +32,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 Name:           objenesis
-Version:        3.5
+Version:        3.6
 Release:        %autorelease
 Summary:        A library for instantiating Java objects
 License:        Apache-2.0
@@ -88,7 +88,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %pom_remove_plugin :maven-timestamp-plugin
 %pom_remove_plugin :maven-enforcer-plugin
-%pom_remove_plugin :maven-shade-plugin
+%pom_remove_plugin -r :maven-shade-plugin
 %pom_remove_plugin org.sonatype.plugins:nexus-staging-maven-plugin 2>/dev/null || :
 %pom_xpath_remove "pom:dependency[pom:scope='test']" tck
 

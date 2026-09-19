@@ -1,0 +1,64 @@
+diff -rupN openambit-0.5/CMakeLists.txt openambit-0.5-new/CMakeLists.txt
+--- openambit-0.5/CMakeLists.txt	2019-11-12 22:27:23.000000000 +0100
++++ openambit-0.5-new/CMakeLists.txt	2025-07-17 22:53:29.444756617 +0200
+@@ -17,7 +17,7 @@
+ #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ 
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(Openambit
+   LANGUAGES NONE)
+diff -rupN openambit-0.5/src/example/CMakeLists.txt openambit-0.5-new/src/example/CMakeLists.txt
+--- openambit-0.5/src/example/CMakeLists.txt	2019-11-12 22:27:23.000000000 +0100
++++ openambit-0.5-new/src/example/CMakeLists.txt	2025-07-17 22:53:18.052881383 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.5)
++cmake_minimum_required(VERSION 3.5)
+ project (EXAMPLE C)
+ 
+ # Where to lookup modules
+diff -rupN openambit-0.5/src/libambit/CMakeLists.txt openambit-0.5-new/src/libambit/CMakeLists.txt
+--- openambit-0.5/src/libambit/CMakeLists.txt	2025-07-17 22:52:42.722089953 +0200
++++ openambit-0.5-new/src/libambit/CMakeLists.txt	2025-07-17 22:53:24.189256255 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.1.3)
++cmake_minimum_required (VERSION 3.5)
+ project (LIBAMBIT C)
+ 
+ # Where to lookup modules
+diff -rupN openambit-0.5/src/movescount/CMakeLists.txt openambit-0.5-new/src/movescount/CMakeLists.txt
+--- openambit-0.5/src/movescount/CMakeLists.txt	2019-11-12 22:27:23.000000000 +0100
++++ openambit-0.5-new/src/movescount/CMakeLists.txt	2025-07-17 22:53:13.877271691 +0200
+@@ -17,7 +17,7 @@
+ #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ 
+-cmake_minimum_required(VERSION 2.8.5)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(movescount CXX) 
+ 
+diff -rupN openambit-0.5/src/openambit/CMakeLists.txt openambit-0.5-new/src/openambit/CMakeLists.txt
+--- openambit-0.5/src/openambit/CMakeLists.txt	2019-11-12 22:27:23.000000000 +0100
++++ openambit-0.5-new/src/openambit/CMakeLists.txt	2025-07-17 22:53:21.053110553 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.5)
++cmake_minimum_required(VERSION 3.5)
+ project (OPENAMBIT CXX)
+ 
+ set (OPENAMBIT_VERSION 0.4)
+diff -rupN openambit-0.5/wireshark_dissector/CMakeLists.txt openambit-0.5-new/wireshark_dissector/CMakeLists.txt
+--- openambit-0.5/wireshark_dissector/CMakeLists.txt	2019-11-12 22:27:23.000000000 +0100
++++ openambit-0.5-new/wireshark_dissector/CMakeLists.txt	2025-07-17 22:53:43.901421672 +0200
+@@ -23,8 +23,7 @@
+ 
+ project(ambit-wireshark-plugin C)
+ 
+-cmake_minimum_required(VERSION 2.6)
+-set(CMAKE_BACKWARDS_COMPATIBILITY 2.6)
++cmake_minimum_required(VERSION 3.5)
+ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ set(CMAKE_INSTALL_WIRESHARKPLUGINSDIR ~/.wireshark
+     CACHE PATH "Where to install wireshark plugins")

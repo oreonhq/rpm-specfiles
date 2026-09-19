@@ -1,0 +1,29 @@
+From f3134d657bb98df96af2ac35e1592071bc01ff16 Mon Sep 17 00:00:00 2001
+From: Alan Coopersmith <alan.coopersmith@oracle.com>
+Date: Tue, 20 May 2025 16:51:26 -0700
+Subject: [PATCH] Disable postasa plugin by default
+
+The service it talks to was shut down in 2016.
+A small first step towards total removal as called for in issue #31.
+
+Signed-off-by: Alan Coopersmith <alan.coopersmith@oracle.com>
+---
+ meson_options.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson_options.txt b/meson_options.txt
+index fd384bf..748c424 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -5,7 +5,7 @@ option('plugin_fullscreenbg', type: 'boolean')
+ option('plugin_light-theme', type: 'boolean')
+ option('plugin_map', type: 'boolean')
+ option('plugin_maximize-windows', type: 'boolean')
+-option('plugin_postasa', type: 'boolean')
++option('plugin_postasa', type: 'boolean', value: false)
+ option('plugin_postr', type: 'boolean', value: false)
+ option('plugin_pythonconsole', type: 'boolean')
+ option('plugin_send-by-mail', type: 'boolean')
+-- 
+GitLab
+

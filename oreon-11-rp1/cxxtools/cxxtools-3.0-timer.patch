@@ -1,0 +1,10 @@
+--- src/timer.cpp.orig	2022-08-03 17:42:29.273788399 +0200
++++ src/timer.cpp	2022-08-03 17:47:03.287758459 +0200
+@@ -28,6 +28,7 @@
+ #include "cxxtools/selector.h"
+ #include "cxxtools/datetime.h"
+ #include <stdexcept>
++#include <time.h>
+ 
+ namespace cxxtools
+ {

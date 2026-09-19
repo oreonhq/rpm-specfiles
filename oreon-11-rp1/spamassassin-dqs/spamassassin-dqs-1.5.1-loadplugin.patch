@@ -1,0 +1,46 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for spamassassin-dqs >= 1.5.1 to ensure
+correct loadplugin configuration in /etc/mail/spamassassin/sh.pre by default.
+
+--- spamassassin-dqs-1.5.1/3.4.1+/sh.pre		2023-10-17 10:14:17.000000000 +0200
++++ spamassassin-dqs-1.5.1/3.4.1+/sh.pre.loadplugin	2023-10-23 00:33:24.885343625 +0200
+@@ -1,7 +1,10 @@
+-loadplugin      Mail::SpamAssassin::Plugin::SH <config_directory>/SH.pm
+-
+-# In case you already loaded Shortcircuit in v320.pre , you can comment the following line.
+-# Leaving it uncommented with the same line in v320.pre uncommented too doesn't cause problems
+-
+-loadplugin      Mail::SpamAssassin::Plugin::Shortcircuit
++# Spamhaus - Spamhaus Technology Data Query Service (DQS)
++# Read /usr/share/doc/spamassassin-dqs/README.md regarding the
++# configuration *before* uncommenting the 'loadplugin' line.
++#
++#loadplugin Mail::SpamAssassin::Plugin::SH
+ 
++# Shortcircuit - short-circuit evaluation for certain rules
++# Explicitly load plugin as it's commented by default in v320.pre
++#
++loadplugin Mail::SpamAssassin::Plugin::Shortcircuit
+--- spamassassin-dqs-1.5.1/4.0.0+/sh.pre		2023-10-17 10:14:17.000000000 +0200
++++ spamassassin-dqs-1.5.1/4.0.0+/sh.pre.loadplugin	2023-10-23 00:41:51.142486752 +0200
+@@ -1,10 +1,12 @@
+-loadplugin      Mail::SpamAssassin::Plugin::SH <config_directory>/SH.pm
+-
+-# In case you already loaded Shortcircuit and HashBL in v320.pre , you can comment the following line.
+-# Leaving it uncommented with the same line in v320.pre uncommented too doesn't cause problems
+-
+-loadplugin      Mail::SpamAssassin::Plugin::Shortcircuit
+-
+-loadplugin	Mail::SpamAssassin::Plugin::HashBL
+-
++# Spamhaus - Spamhaus Technology Data Query Service (DQS)
++# Read /usr/share/doc/spamassassin-dqs/README.md regarding the
++# configuration *before* uncommenting the 'loadplugin' line.
++#
++#loadplugin Mail::SpamAssassin::Plugin::SH
+ 
++# Shortcircuit - short-circuit evaluation for certain rules
++# HashBL - query hashed (and unhashed) DNS blocklists
++# Explicitly load plugins as they're commented by default in v3*.pre
++#
++loadplugin Mail::SpamAssassin::Plugin::Shortcircuit
++loadplugin Mail::SpamAssassin::Plugin::HashBL

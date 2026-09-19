@@ -1,0 +1,13 @@
+Fix a typo to silence lintian.
+
+--- sofont.c.orig	2011-03-13 22:55:42.000000000 +0100
++++ sofont.c	2011-03-13 22:55:50.000000000 +0100
+@@ -291,7 +291,7 @@
+ 	int     _Spacing[256];
+ 
+ 	if (!FontSurface) {
+-		fprintf (stderr, "SoFont recieved a NULL SDL_Surface\n");
++		fprintf (stderr, "SoFont received a NULL SDL_Surface\n");
+ 		return 0;
+ 	}
+ 	font->picture = FontSurface;

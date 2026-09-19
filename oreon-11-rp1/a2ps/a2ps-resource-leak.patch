@@ -1,0 +1,45 @@
+diff -up a2ps-4.15.5/liba2ps/encoding.c.resource-leak a2ps-4.15.5/liba2ps/encoding.c
+--- a2ps-4.15.5/liba2ps/encoding.c.resource-leak	2023-07-25 18:30:14.422699484 +0200
++++ a2ps-4.15.5/liba2ps/encoding.c	2023-07-25 18:34:22.033401969 +0200
+@@ -479,7 +479,7 @@ encoding_resolve_font_substitute (struct
+   if (!res)
+     {
+       if (encoding->default_font)
+-        res = encoding->default_font;
++        res = xstrdup (encoding->default_font);
+       else
+         error (1, 0, "cannot find font %s, nor any substitute",
+                last_font_name);
+@@ -895,6 +895,7 @@ dump_encoding_setup (FILE * stream,
+                                                          font_names [i]);
+       if (!font_is_to_reencode (job, real_font_name))
+         da_remove_at (encoding->font_names_used, i);
++      free (real_font_name);
+     }
+ 
+   /* The number of fonts that, finally, have to be encoded
+@@ -911,10 +912,15 @@ dump_encoding_setup (FILE * stream,
+   fprintf (stream, "/%sdict %zu dict begin\n", encoding->key,
+            (encoding->composite_flag == true)? nb+nb+ns:nb+ns);
+   for (i = 0 ; i < nb ; i++)
++  {
++    char *real_font = encoding_resolve_font_substitute (job, encoding,
++                                                        font_names [i]);
+     fprintf (stream, "  /f%s %sEncoding /%s reencode_font\n",
+              font_names [i],
+              encoding->name,
+-             encoding_resolve_font_substitute (job, encoding, font_names [i]));
++             real_font);
++    free (real_font);
++  }
+ 
+   /* Slant font setting */
+   for (i = 0 ; encoding->slantfont[i].name ; i++ )
+@@ -1075,6 +1081,7 @@ encoding_build_faces_wx (a2ps_job * job,
+                                    encoding->vector,
+                                    encoding->faces_wx [face]);
+ 
++      free (true_font_name);
+       if (encoding->composite_flag)
+         {
+           encoding->composite_ratio[i] =

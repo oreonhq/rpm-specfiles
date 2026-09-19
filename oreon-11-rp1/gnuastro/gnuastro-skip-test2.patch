@@ -1,0 +1,12 @@
+diff -ur gnuastro-0.23/tests/convertt/fitstopdf.sh b/tests/convertt/fitstopdf.sh
+--- gnuastro-0.23/tests/convertt/fitstopdf.sh	2024-01-16 00:24:54.000000000 +0100
++++ b/tests/convertt/fitstopdf.sh	2026-02-23 17:26:47.239428786 +0100
+@@ -51,7 +51,7 @@
+ fi
+ 
+ 
+-
++exit 77
+ 
+ 
+ # Actual test script

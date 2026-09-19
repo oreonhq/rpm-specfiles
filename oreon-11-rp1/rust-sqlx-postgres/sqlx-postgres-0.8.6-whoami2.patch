@@ -1,0 +1,19 @@
+diff -Naur sqlx-postgres-0.8.6-original/src/options/mod.rs sqlx-postgres-0.8.6/src/options/mod.rs
+--- sqlx-postgres-0.8.6-original/src/options/mod.rs	2006-07-24 02:21:28.000000000 +0100
++++ sqlx-postgres-0.8.6/src/options/mod.rs	2026-01-29 23:40:32.389563879 +0000
+@@ -64,7 +64,14 @@
+             .or_else(|| var("PGHOST").ok())
+             .unwrap_or_else(|| default_host(port));
+ 
+-        let username = var("PGUSER").ok().unwrap_or_else(whoami::username);
++        let username = if let Ok(username) = var("PGUSER") {
++            username
++        } else if let Ok(username) = whoami::username() {
++            username
++        } else {
++            // keep the same fallback as previous version
++            "unknown".to_string()
++        };
+ 
+         let database = var("PGDATABASE").ok();
+ 

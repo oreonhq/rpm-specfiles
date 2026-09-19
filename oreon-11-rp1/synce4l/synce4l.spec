@@ -1,8 +1,8 @@
 %global source0_hash 200100ab77e9b5e11062e0185a6f3d898a9f1c817414df1c5d893243bafabe60
 
 Name:		synce4l
-Version:	1.1.0
-Release:	6%{?dist}
+Version:	1.1.2
+Release:	1%{?dist}
 Summary:	SyncE implementation for Linux
 
 License:	GPL-2.0-or-later

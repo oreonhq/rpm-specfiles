@@ -1,0 +1,3 @@
+USER=root
+PROGRAM=/usr/libexec/hddtemp
+GUI=no

@@ -1,0 +1,386 @@
+diff --git a/src/pydicom/pixels/encoders/base.py b/src/pydicom/pixels/encoders/base.py
+index 2143807..9babb31 100644
+--- a/src/pydicom/pixels/encoders/base.py
++++ b/src/pydicom/pixels/encoders/base.py
+@@ -150,7 +150,7 @@ class EncodeRunner(RunnerBase):
+             itemsize = 8
+ 
+         if arr.dtype.itemsize != itemsize:
+-            arr = arr.astype(f"{arr.dtype.kind}{itemsize}")
++            arr = arr.astype(f"{arr.dtype.byteorder}{arr.dtype.kind}{itemsize}")
+ 
+         # JPEG-LS allows different ordering of the input image data via the
+         #   interleave mode (ILV) parameter. ILV 0 matches a planar configuration
+diff --git a/src/pydicom/pixels/processing.py b/src/pydicom/pixels/processing.py
+index 640a89a..72d731c 100644
+--- a/src/pydicom/pixels/processing.py
++++ b/src/pydicom/pixels/processing.py
+@@ -151,7 +151,13 @@ def apply_color_lut(
+     first_map = lut_desc[1]
+     # Actual bit depth may be larger (8 bit entries in 16 bits allocated)
+     nominal_depth = lut_desc[2]
+-    dtype = np.dtype(f"uint{nominal_depth:.0f}")
++    if nominal_depth % 8:
++        raise ValueError(
++            f"The size of the LUT entries must be 8 or 16-bit, not {nominal_depth}-bit"
++        )
++
++    byte_depth = nominal_depth // 8
++    dtype = np.dtype(f"<u{byte_depth}")
+ 
+     luts: list[bytes] = []
+     if "RedPaletteColorLookupTableData" in ds:
+@@ -164,7 +170,7 @@ def apply_color_lut(
+         )
+ 
+         actual_depth = len(r_lut) / nr_entries * 8
+-        dtype = np.dtype(f"uint{actual_depth:.0f}")
++        dtype = np.dtype(f"<u{actual_depth // 8:.0f}")
+ 
+         luts.extend(
+             np.frombuffer(lut_bytes, dtype=dtype)
+@@ -460,9 +466,9 @@ def apply_presentation_lut(arr: "np.ndarray", ds: "Dataset") -> "np.ndarray":
+         # LUTData is (US or OW)
+         elem = item["LUTData"]
+         if elem.VR == VR.US:
+-            lut = np.asarray(elem.value, dtype="u2")
++            lut = np.asarray(elem.value, dtype="<u2")
+         else:
+-            lut = np.frombuffer(item.LUTData[:nr_bytes], dtype=f"uint{itemsize}")
++            lut = np.frombuffer(item.LUTData[:nr_bytes], dtype=f"<u{itemsize // 8}")
+ 
+         # Set any unused bits to an appropriate value
+         if bit_shift := itemsize - bit_depth:
+@@ -473,10 +479,10 @@ def apply_presentation_lut(arr: "np.ndarray", ds: "Dataset") -> "np.ndarray":
+             np.right_shift(lut, bit_shift, out=lut)
+ 
+         # Linearly scale `arr` to quantize it to `nr_entries` values
+-        arr = arr.astype("float32")
++        arr = arr.astype("<f4")
+         arr -= arr.min()
+         arr /= arr.max() / (nr_entries - 1)
+-        arr = arr.astype("uint16")
++        arr = arr.astype("<u2")
+ 
+         return cast("np.ndarray", lut[arr])
+ 
+diff --git a/src/pydicom/waveforms/numpy_handler.py b/src/pydicom/waveforms/numpy_handler.py
+index 6268847..ce389c8 100644
+--- a/src/pydicom/waveforms/numpy_handler.py
++++ b/src/pydicom/waveforms/numpy_handler.py
+@@ -49,12 +49,12 @@ WAVEFORM_DTYPES = {
+     (8, "UB"): "uint8",
+     (8, "MB"): "uint8",
+     (8, "AB"): "uint8",
+-    (16, "SS"): "int16",
+-    (16, "US"): "uint16",
+-    (32, "SL"): "int32",
+-    (32, "UL"): "uint32",
+-    (64, "SV"): "int64",
+-    (64, "UV"): "uint64",
++    (16, "SS"): "<i2",
++    (16, "US"): "<u2",
++    (32, "SL"): "<i4",
++    (32, "UL"): "<u4",
++    (64, "SV"): "<i8",
++    (64, "UV"): "<u8",
+ }
+ 
+ 
+@@ -130,7 +130,7 @@ def generate_multiplex(
+ 
+         if not as_raw:
+             # Apply correction factor (if possible)
+-            arr = arr.astype("float")
++            arr = arr.astype("<f8")
+             seq = cast(list["Dataset"], item.ChannelDefinitionSequence)
+             for jj, ch in enumerate(seq):
+                 baseline = ch.get("ChannelBaseline", 0.0)
+@@ -205,7 +205,7 @@ def multiplex_array(ds: "Dataset", index: int, as_raw: bool = True) -> "np.ndarr
+ 
+     if not as_raw:
+         # Apply correction factor (if possible)
+-        arr = arr.astype("float")
++        arr = arr.astype("<f8")
+         seq = cast(list["Dataset"], item.ChannelDefinitionSequence)
+         for jj, ch in enumerate(seq):
+             baseline = ch.get("ChannelBaseline", 0.0)
+diff --git a/tests/pixels/pixels_reference.py b/tests/pixels/pixels_reference.py
+index 949ea29..c4de9d2 100644
+--- a/tests/pixels/pixels_reference.py
++++ b/tests/pixels/pixels_reference.py
+@@ -395,7 +395,7 @@ def test(ref, arr, **kwargs):
+     assert arr[40:45, 40].tolist() == [1138, 1165, 1113, 1088, 1072]
+ 
+ 
+-EXPL_16_16_1F = PixelReference("CT_small.dcm", "i2", test)
++EXPL_16_16_1F = PixelReference("CT_small.dcm", "<i2", test)
+ 
+ 
+ # IMPL, (16, 16), (1, 64, 64, 1), OW, MONOCHROME2, 1
+@@ -1756,7 +1756,7 @@ def test(ref, arr, **kwargs):
+     assert 95 == arr[230, 120]
+ 
+ 
+-JPGE_BAD = PixelReference("JPEG-lossy.dcm", "u2", test)
++JPGE_BAD = PixelReference("JPEG-lossy.dcm", "<u2", test)
+ 
+ 
+ # JPGE, (16, 12), (1, 1024, 256, 1), OB, MONOCHROME2,
+@@ -1767,7 +1767,7 @@ def test(ref, arr, **kwargs):
+     assert 95 == arr[230, 120]
+ 
+ 
+-JPGE_16_12_1_0_1F_M2 = PixelReference("JPGExtended.dcm", "u2", test)
++JPGE_16_12_1_0_1F_M2 = PixelReference("JPGExtended.dcm", "<u2", test)
+ 
+ 
+ # JPGS, (8, 8), (1, 768, 1024, 1), OB, MONOCHROME2, 0
+@@ -1892,7 +1892,7 @@ def test(ref, arr, **kwargs):
+     assert arr[59:65, 58].tolist() == [-2073, -2629, -1167, 5566, 11808, 15604]
+ 
+ 
+-JLSL_16_15_1_1_1F = PixelReference("JLSL_16_15_1_1F.dcm", "i2", test)
++JLSL_16_15_1_1_1F = PixelReference("JLSL_16_15_1_1F.dcm", "<i2", test)
+ 
+ 
+ # JLSL, (16, 16), (1, 64, 64, 1), OW, MONOCHROME2, 1
+@@ -1995,7 +1995,7 @@ def test(ref, arr, **kwargs):
+     assert arr[40, 0] == 5
+ 
+ 
+-JLSN_16_16_1_0_1F = PixelReference("JPEGLSNearLossless_16.dcm", "u2", test)
++JLSN_16_16_1_0_1F = PixelReference("JPEGLSNearLossless_16.dcm", "<u2", test)
+ 
+ 
+ PIXEL_REFERENCE[JPEGLSLossless] = [
+diff --git a/tests/pixels/test_decoder_base.py b/tests/pixels/test_decoder_base.py
+index db8b428..dba75d8 100644
+--- a/tests/pixels/test_decoder_base.py
++++ b/tests/pixels/test_decoder_base.py
+@@ -241,9 +241,9 @@ class TestDecodeRunner:
+     def test_pixel_dtype_float(self):
+         runner = DecodeRunner(ExplicitVRLittleEndian)
+         runner.set_option("pixel_keyword", "FloatPixelData")
+-        assert runner.pixel_dtype == np.float32
++        assert runner.pixel_dtype == "<f4"
+         runner.set_option("pixel_keyword", "DoubleFloatPixelData")
+-        assert runner.pixel_dtype == np.float64
++        assert runner.pixel_dtype == "<f8"
+ 
+     @pytest.mark.skipif(not HAVE_NP, reason="Numpy is not available")
+     def test_pixel_dtype_byte_swapping(self):
+diff --git a/tests/pixels/test_encoder_base.py b/tests/pixels/test_encoder_base.py
+index 9085f87..b37707b 100644
+--- a/tests/pixels/test_encoder_base.py
++++ b/tests/pixels/test_encoder_base.py
+@@ -104,7 +104,7 @@ class TestEncodeRunner:
+ 
+         # Test switching byte order to little endian
+         arr = arr.astype(">u2")
+-        assert arr.dtype.byteorder == ">"
++        assert arr.dtype.byteorder in (">", "=")
+         runner.set_source(arr)
+         assert runner.is_array
+         assert runner.src is not arr
+diff --git a/tests/pixels/test_processing.py b/tests/pixels/test_processing.py
+index 1fb069d..ef67c76 100644
+--- a/tests/pixels/test_processing.py
++++ b/tests/pixels/test_processing.py
+@@ -440,8 +440,8 @@ class TestApplyColorLUT:
+         """Test that an invalid bit depth raises an exception."""
+         ds = dcmread(PAL_08_256_0_16_1F)
+         ds.RedPaletteColorLookupTableDescriptor[2] = 15
+-        msg = r"data type ['\"]uint15['\"] not understood"
+-        with pytest.raises(TypeError, match=msg):
++        msg = "The size of the LUT entries must be 8 or 16-bit, not 15-bit"
++        with pytest.raises(ValueError, match=msg):
+             apply_color_lut(ds.pixel_array, ds)
+ 
+     def test_invalid_lut_bit_depth_raises(self):
+@@ -1757,7 +1757,7 @@ class TestApplyPresentationLUT:
+             assert arr[y, x] == result
+ 
+         out = apply_presentation_lut(arr, ds)
+-        assert out.dtype == "uint16"
++        assert out.dtype == "<u2"
+         assert (out.min(), out.max()) == (0, 1023)
+ 
+         results = [0, 100, 205, 305, 409, 509, 614, 714, 818, 919, 1023]
+@@ -1767,7 +1767,7 @@ class TestApplyPresentationLUT:
+         # Reversed output
+         seq[0].LUTData.reverse()
+         out = apply_presentation_lut(arr, ds)
+-        assert out.dtype == "uint16"
++        assert out.dtype == "<u2"
+         assert (out.min(), out.max()) == (0, 1023)
+ 
+         results = [1023, 923, 818, 718, 614, 514, 409, 309, 205, 104, 0]
+@@ -1778,7 +1778,7 @@ class TestApplyPresentationLUT:
+         seq[0].LUTDescriptor = [4096, 0, 16]
+         seq[0].LUTData = [int(round(x * (2**16 - 1) / 4095, 0)) for x in range(0, 4096)]
+         out = apply_presentation_lut(arr, ds)
+-        assert out.dtype == "uint16"
++        assert out.dtype == "<u2"
+         assert (out.min(), out.max()) == (0, 65535)
+ 
+         results = [
+@@ -1872,7 +1872,7 @@ class TestApplyPresentationLUT:
+             assert arr[y, x] == result
+ 
+         out = apply_presentation_lut(arr, ds)
+-        assert out.dtype == "uint16"
++        assert out.dtype == "<u2"
+         assert (out.min(), out.max()) == (0, 1023)
+ 
+         results = [0, 100, 205, 305, 409, 509, 614, 714, 818, 919, 1023]
+@@ -1882,7 +1882,7 @@ class TestApplyPresentationLUT:
+         # Reversed output
+         seq[0].LUTData.reverse()
+         out = apply_presentation_lut(arr, ds)
+-        assert out.dtype == "uint16"
++        assert out.dtype == "<u2"
+         assert (out.min(), out.max()) == (0, 1023)
+ 
+         results = [1023, 923, 818, 718, 614, 514, 409, 309, 205, 104, 0]
+@@ -1893,7 +1893,7 @@ class TestApplyPresentationLUT:
+         seq[0].LUTDescriptor = [4096, 0, 16]
+         seq[0].LUTData = [int(round(x * (2**16 - 1) / 4095, 0)) for x in range(0, 4096)]
+         out = apply_presentation_lut(arr, ds)
+-        assert out.dtype == "uint16"
++        assert out.dtype == "<u2"
+         assert (out.min(), out.max()) == (0, 65535)
+ 
+         results = [
+diff --git a/tests/pixels/test_utils.py b/tests/pixels/test_utils.py
+index 6c54877..f7dd70b 100644
+--- a/tests/pixels/test_utils.py
++++ b/tests/pixels/test_utils.py
+@@ -2180,7 +2180,7 @@ class TestSetPixelData:
+         ds.PlanarConfiguration = 1
+         ds.NumberOfFrames = 2
+ 
+-        arr = np.zeros((3, 5), dtype="u2")
++        arr = np.zeros((3, 5), dtype="<u2")
+         arr[0, 0] = 65535
+         set_pixel_data(ds, arr, "MONOCHROME1", 16)
+ 
+@@ -2206,7 +2206,7 @@ class TestSetPixelData:
+         ds.PlanarConfiguration = 1
+         ds.NumberOfFrames = 2
+ 
+-        arr = np.zeros((3, 5), dtype="i2")
++        arr = np.zeros((3, 5), dtype="<i2")
+         arr[0, 0] = 32767
+         arr[0, 1] = -32768
+         set_pixel_data(ds, arr, "MONOCHROME1", 16)
+diff --git a/tests/test_numpy_pixel_data.py b/tests/test_numpy_pixel_data.py
+index 95083b8..ec89582 100644
+--- a/tests/test_numpy_pixel_data.py
++++ b/tests/test_numpy_pixel_data.py
+@@ -403,14 +403,14 @@ REFERENCE_DATA_LITTLE = [
+     (EXPL_8_1_2F, (EXPL, 8, 1, 0, 2, (2, 600, 800), "uint8")),
+     (EXPL_8_3_1F, (EXPL, 8, 3, 0, 1, (100, 100, 3), "uint8")),
+     (EXPL_8_3_2F, (EXPL, 8, 3, 0, 2, (2, 100, 100, 3), "uint8")),
+-    (EXPL_16_1_1F, (EXPL, 16, 1, 1, 1, (64, 64), "int16")),
+-    (EXPL_16_1_10F, (EXPL, 16, 1, 0, 10, (10, 64, 64), "uint16")),
+-    (EXPL_16_3_1F, (EXPL, 16, 3, 0, 1, (100, 100, 3), "uint16")),
+-    (EXPL_16_3_2F, (EXPL, 16, 3, 0, 2, (2, 100, 100, 3), "uint16")),
+-    (IMPL_32_1_1F, (IMPL, 32, 1, 0, 1, (10, 10), "uint32")),
+-    (IMPL_32_1_15F, (IMPL, 32, 1, 0, 15, (15, 10, 10), "uint32")),
+-    (EXPL_32_3_1F, (EXPL, 32, 3, 0, 1, (100, 100, 3), "uint32")),
+-    (EXPL_32_3_2F, (EXPL, 32, 3, 0, 2, (2, 100, 100, 3), "uint32")),
++    (EXPL_16_1_1F, (EXPL, 16, 1, 1, 1, (64, 64), "<i2")),
++    (EXPL_16_1_10F, (EXPL, 16, 1, 0, 10, (10, 64, 64), "<u2")),
++    (EXPL_16_3_1F, (EXPL, 16, 3, 0, 1, (100, 100, 3), "<u2")),
++    (EXPL_16_3_2F, (EXPL, 16, 3, 0, 2, (2, 100, 100, 3), "<u2")),
++    (IMPL_32_1_1F, (IMPL, 32, 1, 0, 1, (10, 10), "<u4")),
++    (IMPL_32_1_15F, (IMPL, 32, 1, 0, 15, (15, 10, 10), "<u4")),
++    (EXPL_32_3_1F, (EXPL, 32, 3, 0, 1, (100, 100, 3), "<u4")),
++    (EXPL_32_3_2F, (EXPL, 32, 3, 0, 2, (2, 100, 100, 3), "<u4")),
+ ]
+ 
+ 
+@@ -811,7 +811,7 @@ class TestNumpy_NumpyHandler:
+             arr = ds.pixel_array
+ 
+         assert (64, 64) == arr.shape
+-        assert arr.dtype == "int16"
++        assert arr.dtype == "<i2"
+ 
+         assert arr.flags.writeable
+ 
+@@ -1074,7 +1074,7 @@ class TestNumpy_NumpyHandler:
+         ds.PixelRepresentation = 0
+         ds.SamplesPerPixel = 1
+         ds.PhotometricInterpretation = "MONOCHROME2"
+-        arr = np.ones((10, 10), dtype="uint16")
++        arr = np.ones((10, 10), dtype="<u2")
+         ds.PixelData = arr.tobytes()
+ 
+         assert ds.pixel_array.max() == 1
+@@ -1313,7 +1313,7 @@ class TestNumpy_GetPixelData:
+         del ds.PixelData
+         assert 32 == ds.BitsAllocated
+         arr = get_pixeldata(ds)
+-        assert "float32" == arr.dtype
++        assert "<f4" == arr.dtype
+ 
+     def test_double_float_pixel_data(self):
+         """Test handling of Double Float Pixel Data."""
+@@ -1324,7 +1324,7 @@ class TestNumpy_GetPixelData:
+         del ds.PixelData
+         ds.BitsAllocated = 64
+         arr = get_pixeldata(ds)
+-        assert "float64" == arr.dtype
++        assert "<f8" == arr.dtype
+ 
+     def test_big_endian_rgb_data(self):
+         """RGB data encoded as OW in Big Endian transfer syntax shall
+diff --git a/tests/test_waveform.py b/tests/test_waveform.py
+index 6b36c78..50bba33 100644
+--- a/tests/test_waveform.py
++++ b/tests/test_waveform.py
+@@ -74,7 +74,7 @@ class TestHandlerGenerateMultiplex:
+         arr = next(gen)
+         assert [80, 65, 50, 35, 37] == arr[0:5, 0].tolist()
+         assert [90, 85, 80, 75, 77] == arr[0:5, 1].tolist()
+-        assert arr.dtype == "int16"
++        assert arr.dtype == "<i2"
+         assert arr.flags.writeable
+         assert (10000, 12) == arr.shape
+ 
+@@ -85,7 +85,7 @@ class TestHandlerGenerateMultiplex:
+         arr = next(gen)
+         assert [100, 81.25, 62.5, 43.75, 46.25] == arr[0:5, 0].tolist()
+         assert [112.5, 106.25, 100, 93.75, 96.25] == arr[0:5, 1].tolist()
+-        assert arr.dtype == "float"
++        assert arr.dtype == "<f8"
+         assert arr.flags.writeable
+         assert (10000, 12) == arr.shape
+ 
+@@ -121,14 +121,14 @@ class TestHandlerMultiplexArray:
+         arr = multiplex_array(ds, index=0, as_raw=True)
+         assert [80, 65, 50, 35, 37] == arr[0:5, 0].tolist()
+         assert [90, 85, 80, 75, 77] == arr[0:5, 1].tolist()
+-        assert arr.dtype == "int16"
++        assert arr.dtype == "<i2"
+         assert arr.flags.writeable
+         assert (10000, 12) == arr.shape
+ 
+         arr = multiplex_array(ds, index=1, as_raw=True)
+         assert [10, 10, 30, 35, 25] == arr[0:5, 0].tolist()
+         assert [80, 80, 80, 85, 80] == arr[0:5, 1].tolist()
+-        assert arr.dtype == "int16"
++        assert arr.dtype == "<i2"
+         assert arr.flags.writeable
+         assert (1200, 12) == arr.shape
+ 
+@@ -138,6 +138,6 @@ class TestHandlerMultiplexArray:
+         arr = multiplex_array(ds, index=0, as_raw=False)
+         assert [100, 81.25, 62.5, 43.75, 46.25] == arr[0:5, 0].tolist()
+         assert [112.5, 106.25, 100, 93.75, 96.25] == arr[0:5, 1].tolist()
+-        assert arr.dtype == "float"
++        assert arr.dtype == "<f8"
+         assert arr.flags.writeable
+         assert (10000, 12) == arr.shape

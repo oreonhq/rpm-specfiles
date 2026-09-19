@@ -1,0 +1,25 @@
+From 7eeb6a32d2004bc20a156dd8920964c107e99321 Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Tue, 30 Jul 2024 18:00:00 -0600
+Subject: [PATCH 1/2] conda_sys_prefix.patch
+
+---
+ conda/__init__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/conda/__init__.py b/conda/__init__.py
+index 4245cae..a436b1d 100644
+--- a/conda/__init__.py
++++ b/conda/__init__.py
+@@ -54,7 +54,7 @@ __summary__ = __doc__
+ __url__ = "https://github.com/conda/conda"
+ 
+ if os.getenv("CONDA_ROOT") is None:
+-    os.environ["CONDA_ROOT"] = sys.prefix
++    os.environ["CONDA_ROOT"] = '/usr/share/conda'
+ 
+ #: The conda package directory.
+ CONDA_PACKAGE_ROOT = abspath(dirname(__file__))
+-- 
+2.45.2
+

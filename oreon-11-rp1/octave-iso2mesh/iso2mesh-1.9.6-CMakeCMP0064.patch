@@ -1,0 +1,67 @@
+diff -up iso2mesh-1.9.8/tools/cgalmesh/CMakeLists.txt.bak iso2mesh-1.9.8/tools/cgalmesh/CMakeLists.txt
+--- iso2mesh-1.9.8/tools/cgalmesh/CMakeLists.txt.bak	2024-10-22 22:31:02.000000000 -0600
++++ iso2mesh-1.9.8/tools/cgalmesh/CMakeLists.txt	2024-12-21 21:23:12.084664452 -0700
+@@ -4,12 +4,7 @@
+ 
+ project( Mesh_3_example )
+ 
+-cmake_minimum_required(VERSION 2.6.2)
+-if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}" VERSION_GREATER 2.8.3)
+-  cmake_policy(VERSION 2.8.4)
+-else()
+-  cmake_policy(VERSION 2.6)
+-endif()
++cmake_minimum_required(VERSION 3.1...3.21)
+ 
+ include_directories(../../include)
+ include_directories(../../../Triangulation_3/include)
+@@ -83,4 +78,3 @@ if ( CGAL_FOUND )
+ else()
+   message(STATUS "This program requires the CGAL library, and will not be compiled.")
+ endif()
+-
+diff -up iso2mesh-1.9.8/tools/cgalsimp2/CMakeLists.txt.bak iso2mesh-1.9.8/tools/cgalsimp2/CMakeLists.txt
+--- iso2mesh-1.9.8/tools/cgalsimp2/CMakeLists.txt.bak	2024-12-21 21:23:12.084833289 -0700
++++ iso2mesh-1.9.8/tools/cgalsimp2/CMakeLists.txt	2024-12-22 12:49:23.281681850 -0700
+@@ -4,23 +4,10 @@
+ project( Surface_mesh_simplification )
+ 
+ 
+-cmake_minimum_required(VERSION 2.6.2)
+-if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" VERSION_GREATER 2.6)
+-  if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}" VERSION_GREATER 2.8.3)
+-    cmake_policy(VERSION 2.8.4)
+-  else()
+-    cmake_policy(VERSION 2.6)
+-  endif()
+-endif()
++cmake_minimum_required(VERSION 3.1...3.21)
+ 
+ set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true )
+ 
+-if ( COMMAND cmake_policy )
+-
+-  cmake_policy( SET CMP0003 NEW )
+-
+-endif()
+-
+ # CGAL and its components
+ find_package( CGAL QUIET COMPONENTS  )
+ 
+diff -up iso2mesh-1.9.8/tools/cgalsurf/CMakeLists.txt.bak iso2mesh-1.9.8/tools/cgalsurf/CMakeLists.txt
+--- iso2mesh-1.9.8/tools/cgalsurf/CMakeLists.txt.bak	2024-10-22 22:31:02.000000000 -0600
++++ iso2mesh-1.9.8/tools/cgalsurf/CMakeLists.txt	2024-12-21 21:23:12.085474887 -0700
+@@ -3,12 +3,7 @@
+ 
+ project( Surface_mesher_example )
+ 
+-cmake_minimum_required(VERSION 2.6.2)
+-if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}" VERSION_GREATER 2.8.3)
+-  cmake_policy(VERSION 2.8.4)
+-else()
+-  cmake_policy(VERSION 2.6)
+-endif()
++cmake_minimum_required(VERSION 3.1...3.21)
+ 
+ include_directories(../../include)
+ 

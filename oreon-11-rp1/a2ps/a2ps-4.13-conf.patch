@@ -1,0 +1,32 @@
+diff -up a2ps-4.15/configure.ac.conf a2ps-4.15/configure.ac
+--- a2ps-4.15/configure.ac.conf	2023-03-08 09:09:29.694691191 +0100
++++ a2ps-4.15/configure.ac	2023-03-08 09:10:00.210882309 +0100
+@@ -153,8 +153,10 @@ AC_MSG_CHECKING(for PostScript fonts pat
+ # Try to find some PostScript fonts.
+ # Find out if ghostscript is installed
+ ac_psfont_path=
+-for ac_dir in /usr/local/ghostscript/fonts \
+-  /usr/local/share/ghostscript/fonts;
++for ac_dir in /usr/share/fonts/default/Type1 \
++    /usr/share/fonts/default/ghostscript \
++    /usr/share/X11/fonts/Type1 \
++    /usr/share/fonts/culmus ;
+ do
+   if test "cd $ac_dir 2>/dev/null && echo *.afm"; then
+     ac_psfont_path="$ac_psfont_path:$ac_dir";
+diff -up a2ps-4.15/configure.conf a2ps-4.15/configure
+--- a2ps-4.15/configure.conf	2023-03-08 09:09:03.438526754 +0100
++++ a2ps-4.15/configure	2023-03-08 09:10:39.922131011 +0100
+@@ -38619,8 +38619,10 @@ printf %s "checking for PostScript fonts
+ # Try to find some PostScript fonts.
+ # Find out if ghostscript is installed
+ ac_psfont_path=
+-for ac_dir in /usr/local/ghostscript/fonts \
+-  /usr/local/share/ghostscript/fonts;
++for ac_dir in /usr/share/fonts/default/Type1 \
++    /usr/share/fonts/default/ghostscript \
++    /usr/share/X11/fonts/Type1 \
++    /usr/share/fonts/culmus ;
+ do
+   if test "cd $ac_dir 2>/dev/null && echo *.afm"; then
+     ac_psfont_path="$ac_psfont_path:$ac_dir";

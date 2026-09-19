@@ -1,13 +1,13 @@
-%global source0_hash 741934765f0c9f1c535598203fbad3f1b97231cc683a218a7f39fab948c13eab
+%global source0_hash 40a7ec156aa1842216e1377b327efe173a737c0e6434b1dda66d2b098a307824
 
 %global framework kauth
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 module to perform actions as privileged user
 # LGPL-2.0-or-later is also in the project's LICENSES, but is unused according to reuse.
@@ -25,9 +25,8 @@ BuildRequires:  polkit-qt6-1-devel
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qttools-devel
 BuildRequires:  pkgconfig(xkbcommon)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6WindowSystem)
-
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
 Requires:  kf6-filesystem
 
 %description
@@ -72,6 +71,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

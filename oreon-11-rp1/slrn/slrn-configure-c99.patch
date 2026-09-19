@@ -1,0 +1,63 @@
+The exit function is called without including <stdlib.h>, resulting in
+an implicit function declarations. Future compilers will not support
+implicit function declarations by default. This will lead to build
+failures.
+
+Submitted upstream: <https://github.com/jedsoft/slrn/pull/1>
+
+diff --git a/autoconf/configure.ac b/autoconf/configure.ac
+index cb4f0fc8646c8f8b..0cf57b7d4df35f3d 100644
+--- a/autoconf/configure.ac
++++ b/autoconf/configure.ac
+@@ -399,6 +399,7 @@ AC_MSG_CHECKING(for an implementation of va_copy())
+ AC_CACHE_VAL(slrn_cv_va_copy,[
+ 	AC_RUN_IFELSE([AC_LANG_SOURCE([[
+ 	#include <stdarg.h>
++	#include <stdlib.h>
+ 	void f (int i, ...) {
+ 	va_list args1, args2;
+ 	va_start (args1, i);
+@@ -419,6 +420,7 @@ AC_MSG_CHECKING(for an implementation of __va_copy())
+ AC_CACHE_VAL(slrn_cv___va_copy,[
+ 	AC_RUN_IFELSE([AC_LANG_SOURCE([[
+ 	#include <stdarg.h>
++	#include <stdlib.h>
+ 	void f (int i, ...) {
+ 	va_list args1, args2;
+ 	va_start (args1, i);
+@@ -439,6 +441,7 @@ AC_MSG_CHECKING(whether va_lists can be copied by value)
+ AC_CACHE_VAL(slrn_cv_va_val_copy,[
+ 	AC_RUN_IFELSE([AC_LANG_SOURCE([[
+ 	#include <stdarg.h>
++	#include <stdlib.h>
+ 	void f (int i, ...) {
+ 	va_list args1, args2;
+ 	va_start (args1, i);
+diff --git a/configure b/configure
+index 1dabb5d67e468261..07fe10653d3544bd 100755
+--- a/configure
++++ b/configure
+@@ -8307,6 +8307,7 @@ else
+ /* end confdefs.h.  */
+ 
+ 	#include <stdarg.h>
++	#include <stdlib.h>
+ 	void f (int i, ...) {
+ 	va_list args1, args2;
+ 	va_start (args1, i);
+@@ -8352,6 +8353,7 @@ else
+ /* end confdefs.h.  */
+ 
+ 	#include <stdarg.h>
++	#include <stdlib.h>
+ 	void f (int i, ...) {
+ 	va_list args1, args2;
+ 	va_start (args1, i);
+@@ -8397,6 +8399,7 @@ else
+ /* end confdefs.h.  */
+ 
+ 	#include <stdarg.h>
++	#include <stdlib.h>
+ 	void f (int i, ...) {
+ 	va_list args1, args2;
+ 	va_start (args1, i);

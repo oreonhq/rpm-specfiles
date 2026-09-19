@@ -1,0 +1,33 @@
+From 8bf15570d8e741574e5540e56621c26e9cdd5442 Mon Sep 17 00:00:00 2001
+From: J-P Nurmi <jpnurmi@qt.io>
+Date: Fri, 21 Oct 2016 23:58:50 +0200
+Subject: [PATCH 14/16] Build the BB10 style with Qt 5.7 or later only
+
+Change-Id: I18449b542ffc4d43ee31cabb58611f79396983fd
+Reviewed-by: Louai Al-Khanji <louai.al-khanji@qt.io>
+---
+ src/plugins/styles/styles.pro | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/src/plugins/styles/styles.pro b/src/plugins/styles/styles.pro
+index adcf8e4..fa96033 100644
+--- a/src/plugins/styles/styles.pro
++++ b/src/plugins/styles/styles.pro
+@@ -2,8 +2,12 @@ TEMPLATE = subdirs
+ SUBDIRS = \
+     cleanlooks \
+     motif \
+-    plastique \
+-    bb10style
++    plastique
++
++greaterThan(QT_MAJOR_VERSION, 5) | greaterThan(QT_MINOR_VERSION, 6) {
++    # only 5.7 or later
++    SUBDIRS += bb10style
++}
+ 
+ packagesExist(gtk+-2.0 x11) {
+     SUBDIRS += gtk2
+-- 
+2.7.4
+

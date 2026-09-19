@@ -1,0 +1,16 @@
+diff -u -Nr -U5 khal-0.13.0/pyproject.toml khal-0.13.0.reduce-setuptools-req/pyproject.toml
+--- khal-0.13.0/pyproject.toml	2025-04-15 05:18:21.000000000 -0400
++++ khal-0.13.0.reduce-setuptools-req/pyproject.toml	2025-07-14 23:29:24.000228441 -0400
+@@ -64,11 +64,11 @@
+ [project.scripts]
+ khal = "khal.cli:main_khal"
+ ikhal = "khal.cli:main_ikhal"
+ 
+ [build-system]
+-requires = ["setuptools>=77", "setuptools_scm>=8"]
++requires = ["setuptools>=73", "setuptools_scm>=8"]
+ build-backend = "setuptools.build_meta"
+ 
+ [tool.setuptools.packages.find]
+ include = ["khal*"]
+ 

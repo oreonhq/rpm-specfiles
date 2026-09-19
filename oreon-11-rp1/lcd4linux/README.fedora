@@ -1,0 +1,39 @@
+The Fedora package of lcd4linux ships with a demo configuration file, shell
+script and desktop file, to use lcd4linux under your normal desktop. To use
+it with an actual external LCD display you need to configure it for your
+specific display, and likely launch it as root. See the sample config file
+included with the package, and the lcd4linux website for more info:
+http://ssl.bulix.org/projects/lcd4linux/
+
+A note about the i2c_sensors plugin, as it names suggests it was written
+to get information from hardware monitoring sensors attached to the i2c bus.
+But now a days machines often have hwmon sensors attached to difference
+busses (such as those builtin to CPUs). The Fedora package contains a patch
+to the i2c_sensors plugin to also recognize these. There still is a problem
+when you have multiple sensor devices. In this case the i2c_sensors
+plugin will just pick the first one (hwmon0). You can use the i2c_sensors
+plugin with multiple sensor devices by explicitly setting the i2c_sensors-path
+variable and specifying the hwmon device in the i2c_sensors call. Example
+configuration code (note how some hwmon devices need 'hwmon#/device/...',
+and others 'hwmon#/...'):
+
+i2c_sensors-path '/sys/class/hwmon/'
+Widget Temp1 {
+    class 'Text'
+    width 16
+    align 'R'  
+    prefix 'ACPI: ' 
+        postfix '°C'
+        precision 1
+    expression i2c_sensors('hwmon0/temp1_input') / 1000.0
+}
+
+Widget Temp2 {
+    class 'Text'
+    width 16
+    align 'R'
+    prefix 'CPU1: '
+        postfix '°C'
+        precision 1 
+    expression i2c_sensors('hwmon1/device/temp1_input') / 1000.0
+}

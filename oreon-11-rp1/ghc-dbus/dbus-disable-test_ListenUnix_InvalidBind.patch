@@ -1,0 +1,11 @@
+--- dbus-1.2.17/tests/DBusTests/Transport.hs~	2020-12-28 11:59:12.000000000 +0800
++++ dbus-1.2.17/tests/DBusTests/Transport.hs	2022-06-19 13:06:25.613155445 +0800
+@@ -340,7 +340,7 @@
+     , test_ListenUnix_Tmpdir
+     , test_ListenUnix_TooFew
+     , test_ListenUnix_TooMany
+-    , test_ListenUnix_InvalidBind
++    -- , test_ListenUnix_InvalidBind
+     ]
+ 
+ test_ListenUnix_Path :: TestTree

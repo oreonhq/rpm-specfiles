@@ -1,0 +1,25 @@
+From e7e5b4575b2364bf3a7855b59b7865e759da1ed4 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Sat, 7 Feb 2026 15:17:09 +0100
+Subject: [PATCH] Bump git2 dependency from 0.19 to 0.20
+
+---
+ Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index ac94097..db00c1f 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -17,7 +17,7 @@ readme = "README.md"
+ [dependencies]
+ anyhow = "1.0.86"
+ gettext-rs = { version = "0.7.0", features = ["gettext-system"] }
+-git2 = "0.19.0"
++git2 = "0.20.0"
+ gtk = { package = "gtk4", version = "0.9.0", features = ["v4_10"] }
+ lazy_static = "1.5.0"
+ adw = { package = "libadwaita", version = "0.7.0", features = ["v1_5"] }
+-- 
+2.53.0
+

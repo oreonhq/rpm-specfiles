@@ -1,0 +1,99 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 26 Dec 2025 17:25:05 +0100
+Subject: [PATCH] Fix uninitialized va_list warning on ppc64le and i686 with
+ GCC 15
+
+During compilation on ppc64le and i686 architectures with GCC 15, a
+warning appears:
+
+```
+cachedb_redis_dbase.c: In function 'redis_run_command_argv':
+cachedb_redis_dbase.c:659:16: warning: '_' is used uninitialized [-Wuninitialized]
+  659 |         return _redis_run_command(connection, rpl, key, argc, argv, argvlen, NULL, _);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cachedb_redis_dbase.c:657:17: note: '_' was declared here
+  657 |         va_list _;
+      |                 ^
+```
+
+In commit d6ad6d4039fcf68624481f69ee67eff92f7b3ab2, the
+`redis_run_command_argv()` function was modified to pass an
+uninitialized `va_list` to `_redis_run_command()`.
+
+The original logic is:
+```c
+static int redis_run_command_argv(...) {
+    va_list _;
+    return _redis_run_command(connection, rpl, key, argc, argv, argvlen, NULL, _);
+}
+```
+
+The underscore `_` was used as a "don't care" placeholder, since when
+`argc` is non-zero, `_redis_run_command()` uses the `argv` path and
+never accesses the `va_list` parameter:
+
+```c
+if (argc) {
+    reply = redisCommandArgv(node->context, argc, argv, argvlen);
+} else {
+    va_copy(aq, ap);  // Only executed when argc == 0
+    reply = redisvCommand(node->context, cmd_fmt, aq);
+    va_end(aq);
+}
+```
+
+While this worked in practice (the uninitialized `va_list` is never
+actually used), GCC 15 now correctly warns that passing uninitialized
+data is undefined behavior, even if that data is never accessed.
+
+Initialize the `va_list` to a safe value using zero-initialization. This
+satisfies the compiler's uninitialized variable check while maintaining
+the original logic - the `va_list` still won't be used when `argc` is
+non-zero, but it's now validly initialized.
+
+**Changed:**
+```c
+va_list _;
+```
+
+**To:**
+```c
+va_list unused_ap = {0};
+```
+
+Also renamed from `_` to `unused_ap` for clarity, as single underscore
+identifiers can be problematic and don't clearly convey intent.
+
+Even though the uninitialized `va_list` is never accessed in practice,
+passing uninitialized data violates C's rules and can cause issues with:
+
+- Static analysis tools
+- Compiler optimizations that assume no undefined behavior
+- Future architecture-specific `va_list` implementations
+- Code maintainability (unclear intent)
+
+This change makes the code compliant with C standards while preserving
+the original functionality.
+
+Related commit: d6ad6d4039fcf68624481f69ee67eff92f7b3ab2
+("cachedb_redis: properly pass variable arguments to a Redis command")
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+Assisted-by: Claude (Anthropic) <https://claude.ai>
+
+diff --git a/modules/cachedb_redis/cachedb_redis_dbase.c b/modules/cachedb_redis/cachedb_redis_dbase.c
+index 38957e4a9..b34e8da83 100644
+--- a/modules/cachedb_redis/cachedb_redis_dbase.c
++++ b/modules/cachedb_redis/cachedb_redis_dbase.c
+@@ -654,9 +654,9 @@ static int redis_run_command(cachedb_con *connection, redisReply **rpl,
+ static int redis_run_command_argv(cachedb_con *connection, redisReply **rpl,
+               str *key, int argc, const char **argv, const size_t *argvlen)
+ {
+-	va_list _;
++	va_list unused_ap = {0};
+ 
+-	return _redis_run_command(connection, rpl, key, argc, argv, argvlen, NULL, _);
++	return _redis_run_command(connection, rpl, key, argc, argv, argvlen, NULL, unused_ap);
+ }
+ 
+ int redis_get(cachedb_con *connection,str *attr,str *val)

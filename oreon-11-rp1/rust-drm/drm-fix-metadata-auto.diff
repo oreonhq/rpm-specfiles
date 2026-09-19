@@ -1,0 +1,8 @@
+--- drm-0.14.2/Cargo.toml	2006-07-24T01:21:28+00:00
++++ drm-0.14.2/Cargo.toml	2026-03-05T14:34:14.340194+00:00
+@@ -121,5 +121,3 @@
+ [dev-dependencies.rustyline]
+ version = "13"
+ 
+-[target.'cfg(any(target_os = "freebsd", target_os = "dragonfly"))'.dependencies.libc]
+-version = "0.2"

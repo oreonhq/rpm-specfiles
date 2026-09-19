@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>haranoaji</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Harano Aji Fonts</name>
+  <summary>Japanese Font Family</summary>
+  <description>
+    <p>
+      Harano Aji Fonts (Harano Aji Mincho and Harano Aji Gothic) are fonts 
+      obtained by replacing Adobe-Identity-0 (AI0) CIDs of Source Han fonts 
+      (Source Han Serif and Source Han Sans) with Adobe-Japan1 (AJ1) CIDs.
+
+      This package contains the	Regular, Bold, Heavy, and Medium variants of       
+      Harano Aji Gothic, and the Regular, Bold, and Light variants of Harano 
+      Aji Mincho.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/haranoaji</url>
+</component>

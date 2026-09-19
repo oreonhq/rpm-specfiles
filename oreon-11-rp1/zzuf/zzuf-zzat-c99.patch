@@ -1,0 +1,22 @@
+Add declaration of _IO_getc, to avoid an implicit function declaration.
+
+Submitted upstream: <https://github.com/samhocevar/zzuf/pull/30>
+
+diff --git a/src/zzat.c b/src/zzat.c
+index 7acfec6dd46c4d3b..08b6e60c3d5fe86a 100644
+--- a/src/zzat.c
++++ b/src/zzat.c
+@@ -50,6 +50,13 @@ typedef int ssize_t;
+ #include <stdio.h>
+ #include <string.h>
+ 
++#if defined HAVE__IO_GETC
++/* This function is no longer declared in glibc header files, but
++   still available for linking (as of glibc 2.36).  It is an alias of
++   getc.  */
++extern int _IO_getc (FILE *);
++#endif
++
+ #include "util/getopt.h"
+ 
+ static int run(char const *sequence, char const *file);

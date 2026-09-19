@@ -1,13 +1,13 @@
-%global source0_hash 006864dcba5d5fc87b4ca5dcc1239538657a5d052057bae5d3bc3e71eaba0551
+%global source0_hash b039608f79f445a6ccc383ce57bd240699e334613814374006c8a01dc6bc1250
 
 %global framework kcompletion
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.29.0
 Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 addon with auto completion widgets and classes
 # BSD-3-Clause is in the LICENSES folder but goes unused.
@@ -22,9 +22,9 @@ BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  cmake(Qt6Widgets)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6Codecs)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
+BuildRequires:  cmake(KF6Codecs) >= %{version}
 
 %description
 KCompletion provides widgets with advanced completion support as well as a
@@ -65,6 +65,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

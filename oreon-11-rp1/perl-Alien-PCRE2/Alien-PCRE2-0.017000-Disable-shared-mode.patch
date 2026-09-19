@@ -1,0 +1,45 @@
+From 7b2265ffbf8613486a89be72fe915a45c6ba59a1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 6 Feb 2023 10:13:33 +0100
+Subject: [PATCH] Disable shared mode
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It pulls in unnecessary dependencies. We only use system mode.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 1 -
+ alienfile   | 3 ++-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index d1af69b..e2ea71f 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -26,7 +26,6 @@ WriteMakefile($abmm->mm_args(
+     'CONFIGURE_REQUIRES' => {
+         'Alien::Build'          => '1.40',
+         'Alien::Build::MM'      => '0.32',
+-        'Alien::Build::Plugin::Download::GitHub'      => '0.10',
+         'ExtUtils::MakeMaker'   => '6.52'
+     },
+     'PREREQ_PM' => {
+diff --git a/alienfile b/alienfile
+index 7ca8998..e939c57 100644
+--- a/alienfile
++++ b/alienfile
+@@ -14,7 +14,8 @@ plugin 'PkgConfig' => (
+         ? $ENV{ALIEN_PCRE2_MIN_VERSION}
+         : '10.34',
+ );
+- 
++
++__END__ 
+ share {
+     plugin 'Download::GitHub' => (
+         github_user => 'PhilipHazel',
+-- 
+2.39.1
+

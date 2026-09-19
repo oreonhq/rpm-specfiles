@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>crystal-stacker.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>CrystalStacker</project_license>
+  <name>Crystal Stacker</name>
+  <summary>Match 3 or more crystals of the same color in a row</summary>
+  <description>
+    <p>
+     If you've played Columns then you know what Crystal Stacker is all about.
+     Match 3 or more of the same color crystals either horizontally, vertically,
+     or diagonally to destroy them.
+    </p>
+    <p>
+     For every 45 crystals you destroy, the level increases and the crystals
+     fall faster. The higher the level, the more points you are awarded for
+     destroying crystals.
+    </p>
+  </description>
+  <url type="homepage">http://www.t3-i.com/cstacker.htm</url>
+  <screenshots>
+    <screenshot type="default">http://www.t3-i.com/games/crystal_stacker/images/screenshot_0.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="1.5" date="2006-04-07">
+    <description>
+     <p>First release with official Linux support</p>
+    </description>
+    </release>
+  </releases>
+</component>

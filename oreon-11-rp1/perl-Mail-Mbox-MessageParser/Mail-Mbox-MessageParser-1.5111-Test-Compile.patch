@@ -1,0 +1,22 @@
+--- inc/Module/Install/StandardTests.pm
++++ inc/Module/Install/StandardTests.pm
+@@ -71,7 +71,7 @@ sub write_standard_test_compile {
+     $self->write_test_file('000_standard__compile.t', q/
+         BEGIN {
+             use Test::More;
+-            eval "use Test::Compile";
++            eval "use Test::Compile 2 qw( all_pm_files_ok )" || eval "use Test::Compile";
+             Test::More->builder->BAIL_OUT(
+                 "Test::Compile required for testing compilation") if $@;
+             all_pm_files_ok();
+--- Makefile.PL
++++ Makefile.PL
+@@ -83,7 +83,7 @@ WriteAll;
+             } else {
+               require Test::More;
+               Test::More->import();
+-              eval "use Test::Compile";
++              eval "use Test::Compile 2 qw( all_pm_files_ok )" || eval "use Test::Compile";
+               Test::More->builder->BAIL_OUT(
+                   "Test::Compile required for testing compilation") if $@;
+               all_pm_files_ok();

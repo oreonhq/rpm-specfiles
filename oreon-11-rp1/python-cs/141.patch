@@ -1,0 +1,56 @@
+From 2c3a658f5a2b070f138213096d881ce50a8b8e3c Mon Sep 17 00:00:00 2001
+From: Roman Inflianskas <rominf@pm.me>
+Date: Wed, 25 Dec 2024 09:50:04 +0200
+Subject: [PATCH] Remove `pytest-runner`
+
+`pytest-runner` has been considered deprecated upstream since 2019:
+https://github.com/pytest-dev/pytest-runner/commit/78a492cb9f611a4fccaf6556c966b848885833ba
+and the repo upstream was archived over a year ago (December 3, 2023).
+
+`pytest-runner` is deprecated in Fedora:
+https://lists.fedoraproject.org/archives/list/devel@lists.fedoraproject.org/thread/XWRCM4AOKM7KOMR3NLXDD2F7G65ALPKJ/#4BGKLXGODMGMDQKTLLYWD3R4NQ27UAJC
+
+Remove `pytest-runner` and fully migrate to `tox`.
+---
+ setup.cfg | 7 -------
+ tox.ini   | 5 ++++-
+ 2 files changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/setup.cfg b/setup.cfg
+index 0f4b8c7..abd301e 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -26,13 +26,6 @@ zip_safe = false
+ install_requires =
+     pytz
+     requests
+-setup_requires =
+-    pytest-runner
+-tests_require =
+-    aiohttp
+-    pytest-cache
+-    pytest-cov
+-    pytest
+ 
+ [options.packages.find]
+ exclude = tests
+diff --git a/tox.ini b/tox.ini
+index c7de899..5e5b2de 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -14,11 +14,14 @@ python =
+ 
+ [testenv]
+ deps=
++	aiohttp
+ 	check-manifest
+ 	flake8
+ 	flake8-import-order
++	pytest
++	pytest-cache
++	pytest-cov
+ commands =
+-	pip install pytest pytest-cache pytest-cov
+ 	pip wheel --no-deps -w dist .
+ 	test: pytest -v
+ 	check-manifest

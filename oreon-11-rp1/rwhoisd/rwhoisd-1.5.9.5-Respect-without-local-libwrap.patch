@@ -1,0 +1,35 @@
+From 2ddd36a00654950a81b248be5774ae29369bda81 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 8 Oct 2013 15:23:03 +0200
+Subject: [PATCH 4/4] Respect --without-local-libwrap
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Previous code treated --without-local-libwrap as --with-local-libwrap.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ configure.ac | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index f94012c..8c2e509 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -118,8 +118,10 @@ AC_REPLACE_FUNCS(strerror)
+ dnl Optional software.
+ 
+ AC_ARG_WITH(local-libwrap, AS_HELP_STRING([--with-local-libwrap], 
+-                           [Use local copy of tcpd_wrapper.]), 
+-            build_libwrap=yes)
++                           [Use local copy of tcpd_wrapper.]))
++if test "${with_local_libwrap}" = yes; then
++    build_libwrap=yes;
++fi
+ 
+ if test "${build_libwrap}" = "yes"; then
+    AC_SUBST(TCPD_EXTRA_CFLAGS)
+-- 
+1.8.3.1
+

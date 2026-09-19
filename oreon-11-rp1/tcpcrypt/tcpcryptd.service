@@ -1,0 +1,14 @@
+[Unit]
+Description=tcpcryptd Server
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStartPre=mkdir -p /var/run/tcpcryptd
+ExecStartPre=/usr/bin/tcpcryptd-firewall start
+ExecStart=/usr/bin/tcpcryptd -f -x 0x10
+ExecStopPost=/usr/bin/tcpcryptd-firewall stop
+
+[Install]
+WantedBy=multi-user.target
+

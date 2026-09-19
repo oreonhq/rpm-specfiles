@@ -1,0 +1,116 @@
+From 0c2e186d39a0aae6bab99a1ffe89f463d87c7dcc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 18 Aug 2017 16:31:25 +0200
+Subject: [PATCH] Adapt to glibc assert change
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+glibc after 2.26 changed assert() macro and it now compares its
+argument agains ==0. This breaks C++ objects that do not provide the
+operator:
+
+In file included from /usr/include/c++/7/cassert:44:0,
+                 from ../debug.hh:27,
+                 from gtk.cc:24:
+gtk.cc: In member function 'virtual void gtk::View::do_geom()':
+gtk.cc:488:4: error: no match for 'operator==' (operand types are 'Glib::RefPtr<Gtk::Action>' and 'int')
+    assert(a);
+    ^
+gtk.cc:488:4: note: candidate: operator==(int, int) <built-in>
+gtk.cc:488:4: note:   no known conversion for argument 1 from 'Glib::RefPtr<Gtk::Action>' to 'int'
+
+This patch changes all the direct checks to boolean checks. We cannot
+compare against NULL because of Glib::RefPtr containers.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1482990
+http://sourceware.org/bugzilla/show_bug.cgi?id=21242
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ gtk/gtk.cc | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/gtk/gtk.cc b/gtk/gtk.cc
+index 3aaea9e..e70b504 100644
+--- a/gtk/gtk.cc
++++ b/gtk/gtk.cc
+@@ -485,14 +485,14 @@ void View::do_geom()
+ 	case MODE_INIT:
+ 		if (! game_can_init()) {
+ 			Glib::RefPtr<Gtk::Action> a = m_uim->get_action(act_name[persist_mode]);
+-			assert(a);
++			assert(!!a);
+ 			a->activate();
+ 		}
+ 		break;
+ 	case MODE_SETUP:
+ 		if (! node_can_setup()) {
+ 			Glib::RefPtr<Gtk::Action> a = m_uim->get_action(act_name[persist_mode]);
+-			assert(a);
++			assert(!!a);
+ 			a->activate();
+ 		}
+ 		break;
+@@ -756,7 +756,7 @@ void View::do_old_node()
+ 	case MODE_SCORE:
+ 		{
+ 			Glib::RefPtr<Gtk::Action> a = m_uim->get_action(act_name[persist_mode]);
+-			assert(a);
++			assert(!!a);
+ 			a->activate();
+ 		}
+ 		break;
+@@ -810,7 +810,7 @@ void View::do_new_node()
+ 		if (! node_can_setup()) { // can not setup
+ 			msg(DBG_DEBUG) << "node can not setup, changing mode to " << persist_mode << '\n';
+ 			Glib::RefPtr<Gtk::Action> a = m_uim->get_action(act_name[persist_mode]);
+-			assert(a);
++			assert(!!a);
+ 			a->activate();
+ 		} else b->set_track(gtk::Board::TRACK_ALL);
+ 		break;
+@@ -898,7 +898,7 @@ void View::do_new_node()
+ 	} else {
+ 		if (mode == MODE_INIT) {
+ 			Glib::RefPtr<Gtk::Action> a = m_uim->get_action(act_name[persist_mode]);
+-			assert(a);
++			assert(!!a);
+ 			a->activate();
+ 		}
+ 		m_init->set_sensitive(false);
+@@ -1077,7 +1077,7 @@ void View::game_pass()
+ 	}
+ 	if (mode != MODE_PLAY) {
+ 		Glib::RefPtr<Gtk::Action> a = m_uim->get_action(act_name[persist_mode]);
+-		assert(a);
++		assert(!!a);
+ 		a->activate();
+ 	}
+ 	down(i);
+@@ -1098,12 +1098,12 @@ void View::game_mode(Mode new_mode)
+ 		if (new_mode == mode) return;
+ 		msg(DBG_DEBUG) << "mode change triggered by option menu new_mode = " << new_mode << '\n';
+ 		Glib::RefPtr<Gtk::RadioAction> a = Glib::RefPtr<Gtk::RadioAction>::cast_dynamic(m_uim->get_action(act_name[new_mode]));
+-		assert(a);
++		assert(!!a);
+ 		mode = new_mode;
+ 		if (! a->get_active()) a->activate();
+ 	} else { // from menu
+ 		Glib::RefPtr<Gtk::RadioAction> a = Glib::RefPtr<Gtk::RadioAction>::cast_dynamic(m_uim->get_action(act_name[new_mode]));
+-		assert(a);
++		assert(!!a);
+ 		if (new_mode == mode) return;
+ 		if (! a->get_active()) return;
+ 		msg(DBG_DEBUG) << "mode change triggered by menu new_mode = " << new_mode << '\n';
+@@ -1256,7 +1256,7 @@ void View::clear_marks()
+ {
+ 	if (mode == MODE_SCORE) {
+ 		Glib::RefPtr<Gtk::Action> a = m_uim->get_action(act_name[persist_mode]);
+-		assert(a);
++		assert(!!a);
+ 		a->activate();
+ 	}
+ 	where()->set_prop(ccgo::Marking::the_id(), 0);
+-- 
+2.9.5
+

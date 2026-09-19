@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           beust-jcommander
-Version:        1.82
+Version:        3.0
 Release:        %autorelease
 Summary:        Java framework for parsing command line parameters
 License:        Apache-2.0
@@ -25,7 +25,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.testng:testng)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.82-23
+Obsoletes:      %{name}-javadoc < 3.0-23
 
 %description
 JCommander is a very small Java framework that makes it trivial to

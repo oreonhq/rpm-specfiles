@@ -1,0 +1,27 @@
+From c1c480a6f6759025a1ebaaf54c6c16ae516dab95 Mon Sep 17 00:00:00 2001
+From: Charalampos Stratakis <cstratak@redhat.com>
+Date: Tue, 10 Feb 2026 15:46:25 +0100
+Subject: [PATCH] Use fork multiprocessing context in
+ test_handle_shutdown_request
+
+This was missed in upstream commit df29cf6 which fixed the other three
+HerokuWorkerShutdownTestCase tests for Python 3.14+ compatibility.
+---
+ tests/test_worker.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tests/test_worker.py b/tests/test_worker.py
+index de17325c9..603b77cb4 100644
+--- a/tests/test_worker.py
++++ b/tests/test_worker.py
+@@ -1642,7 +1642,9 @@ def test_handle_shutdown_request(self, mock_logger):
+         w = HerokuWorker('foo', connection=self.connection)
+ 
+         path = os.path.join(self.sandbox, 'shouldnt_exist')
+-        p = Process(target=create_file_after_timeout_and_setpgrp, args=(path, 2))
++        # Use 'fork' context to avoid pickling issues with Redis connections in Python 3.14+
++        ForkProcess = multiprocessing.get_context('fork').Process
++        p = ForkProcess(target=create_file_after_timeout_and_setpgrp, args=(path, 2))
+         p.start()
+         self.assertEqual(p.exitcode, None)
+         time.sleep(0.1)

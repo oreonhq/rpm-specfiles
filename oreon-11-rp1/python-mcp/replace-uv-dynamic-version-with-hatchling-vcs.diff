@@ -1,0 +1,21 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -72,16 +72,11 @@
+ ]
+ 
+ [build-system]
+-requires = ["hatchling", "uv-dynamic-versioning"]
++requires = ["hatchling", "hatch-vcs"]
+ build-backend = "hatchling.build"
+ 
+ [tool.hatch.version]
+-source = "uv-dynamic-versioning"
+-
+-[tool.uv-dynamic-versioning]
+-vcs = "git"
+-style = "pep440"
+-bump = true
++source = "vcs"
+ 
+ [project.urls]
+ Homepage = "https://modelcontextprotocol.io"

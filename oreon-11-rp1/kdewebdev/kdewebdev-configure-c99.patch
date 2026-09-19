@@ -1,0 +1,27 @@
+Avoid implicit declaration of exit in historic libtool configure
+fragment.
+
+
+diff -up kdewebdev-3.5.10/admin/libtool.m4.in.c99 kdewebdev-3.5.10/admin/libtool.m4.in
+--- kdewebdev-3.5.10/admin/libtool.m4.in.c99	2023-02-07 08:00:35.555824188 +0100
++++ kdewebdev-3.5.10/admin/libtool.m4.in	2023-02-07 08:01:00.300571478 +0100
+@@ -760,10 +760,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -777,7 +773,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }]
+ EOF
+   if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} 2>/dev/null; then

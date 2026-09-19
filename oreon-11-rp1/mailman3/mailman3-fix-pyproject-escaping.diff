@@ -1,0 +1,11 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -57,7 +57,7 @@ dependencies = [
+     "flufl.lock>=5.1",
+     "gunicorn",
+     "lazr.config",
+-    "nntplib; python_version>=\"3.13\"",
++    'nntplib; python_version>="3.13"',
+     "passlib",
+     "python-dateutil>=2.0",
+     "requests",

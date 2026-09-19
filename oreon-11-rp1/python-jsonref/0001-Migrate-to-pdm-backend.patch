@@ -1,0 +1,33 @@
+From 779353683d991de6ce6725c33dd53506b6b4cb4e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micha=C5=82=20G=C3=B3rny?= <mgorny@gentoo.org>
+Date: Sun, 18 Jun 2023 13:43:04 +0200
+Subject: [PATCH] Migrate to pdm-backend
+
+Migrate from the deprecated pdm-pep517 backend to pdm-backend that
+superseded it.  This required no changes to the project configuration
+and generated equivalent artifacts.  The migration guide is at:
+https://pdm-backend.fming.dev/migration/
+
+(cherry picked from commit f18f30772df086bebdcc9b1b76a35558b4a0a897)
+---
+ pyproject.toml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 9ab76c4..d39f81a 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -23,8 +23,8 @@ version = { source = "file", path = "jsonref.py" }
+ includes = ["jsonref.py", "proxytypes.py"]
+ 
+ [build-system]
+-requires = ["pdm-pep517>=1.0.0"]
+-build-backend = "pdm.pep517.api"
++requires = ["pdm-backend"]
++build-backend = "pdm.backend"
+ 
+ [tool.isort]
+ profile = "black"
+-- 
+2.49.0
+

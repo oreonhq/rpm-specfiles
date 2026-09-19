@@ -1,0 +1,21 @@
+[Unit]
+After=syslog.target
+After=network-online.target
+Description=headscale coordination server for Tailscale
+
+[Service]
+Type=simple
+User=headscale
+Group=headscale
+ExecStart=/usr/bin/headscale serve
+Restart=always
+RestartSec=5
+
+WorkingDirectory=/var/lib/headscale
+ReadWritePaths=/var/lib/headscale /var/run
+
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+[Install]
+WantedBy=multi-user.target

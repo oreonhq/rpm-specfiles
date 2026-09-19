@@ -1,0 +1,33 @@
+--- eccodes-2.45.0.p1p2/gribapi/bindings.py	2026-01-28 10:38:53.435292423 +0100
++++ eccodes-2.45.0.p1p2p3/gribapi/bindings.py	2026-01-28 10:45:39.610424912 +0100
+@@ -99,7 +99,8 @@ def find_binary_libs(name):
+     return foundlib
+ 
+ 
+-library_path = find_binary_libs("eccodes")
++# library_path = find_binary_libs("eccodes")
++library_path = os.path.join(sys.prefix, sys.platlibdir, 'libeccodes.so')
+ 
+ if library_path is None:
+     raise RuntimeError("Cannot find the ecCodes library")
+--- eccodes-2.45.0.p1p2/setup.py	2026-01-28 10:38:53.442694648 +0100
++++ eccodes-2.45.0.p1p2p3/setup.py	2026-01-28 10:45:39.616453423 +0100
+@@ -91,7 +91,7 @@ elif sys.version_info < (3, 9):
+ install_requires += [
+     "attrs",
+     "cffi",
+-    "findlibs",
++#    "findlibs",
+ ]
+ 
+ # only add eccodeslib as dependency if building a distribution that should depend on it
+--- eccodes-2.45.0.p1p2/eccodes.egg-info/requires.txt	2026-01-28 10:38:53.434989473 +0100
++++ eccodes-2.45.0.p1p2p3/eccodes.egg-info/requires.txt	2026-01-28 10:45:39.609938928 +0100
+@@ -1,7 +1,3 @@
+ numpy
+ attrs
+ cffi
+-findlibs
+-
+-[:platform_system != "Windows"]
+-eccodeslib

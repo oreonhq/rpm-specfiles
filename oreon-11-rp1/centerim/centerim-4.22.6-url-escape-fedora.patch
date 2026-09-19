@@ -1,0 +1,205 @@
+This disables actions -- they're mostly useless anyways, and possess a security
+hazard (in past, configuation file with broken escaping was created, and we
+have to ignore it).
+
+Lubomir Rintel <lkundrak@v3.sk>
+
+diff -urp centerim-4.22.6.orig/src/centerim.cc centerim-4.22.6/src/centerim.cc
+--- centerim-4.22.6.orig/src/centerim.cc	2008-10-26 16:53:16.000000000 +0100
++++ centerim-4.22.6/src/centerim.cc	2009-01-07 23:36:20.000000000 +0100
+@@ -755,7 +755,7 @@ void centerim::checkmail() {
+ 
+ void centerim::checkconfigs() {
+     static const char *configs[] = {
+-	"sounds", "colorscheme", "actions", "external", "keybindings", 0
++	"sounds", "colorscheme", "external", "keybindings", 0
+     };
+ 
+     struct stat st;
+@@ -778,12 +778,9 @@ void centerim::checkconfigs() {
+ 			face.redraw();
+ 			break;
+ 		    case 2:
+-			conf->loadactions();
+-			break;
+-		    case 3:
+ 			external.load();
+ 			break;
+-		    case 4:
++		    case 3:
+ 			conf->loadkeys();
+ 			break;
+ 		}
+@@ -1147,8 +1144,13 @@ icqface::eventviewresult centerim::reade
+ 	    break;
+ 
+ 	case icqface::open:
+-	    if(const imurl *m = static_cast<const imurl *>(&ev))
+-		conf->execaction("openurl", m->geturl());
++	    if(const imurl *m = static_cast<const imurl *>(&ev)) {
++		if (fork () == 0) {
++		    face.log (m->geturl());
++		    execlp("xdg-open", "xdg-open", m->geturl().c_str(), NULL);
++		    exit (-1);
++		}
++	    }
+ 	    break;
+ 
+ 	case icqface::accept:
+diff -urp centerim-4.22.6.orig/src/icqconf.cc centerim-4.22.6/src/icqconf.cc
+--- centerim-4.22.6.orig/src/icqconf.cc	2008-10-26 16:53:16.000000000 +0100
++++ centerim-4.22.6/src/icqconf.cc	2009-01-07 23:39:35.000000000 +0100
+@@ -274,7 +274,6 @@ void icqconf::load() {
+     loadmainconfig();
+     loadkeys();
+     loadcolors();
+-    loadactions();
+     loadcaptcha();
+     external.load();
+ }
+@@ -1240,74 +1239,6 @@ void icqconf::setcpconvert(protocolname 
+     cpconvert[pname] = fcpconvert;
+ }
+ 
+-string icqconf::execaction(const string &name, const string &param) {
+-    int inpipe[2], outpipe[2], pid, npos;
+-    struct sigaction sact, osact;
+-    string torun = actions[name], out;
+-    fd_set rfds;
+-    char ch;
+-
+-    if(name == "openurl")
+-    {
+-	string url = param;
+-	int pos = 0, fnd = -1;
+-	
+-	char enc[4];
+-	
+-	while( ((fnd = url.find("'", pos)) != -1) || ((fnd = url.find("\"", pos)) != -1) ) {
+-		snprintf(enc, 4, "%%%02X", url[fnd]);
+-	    url.replace(fnd, 1, enc);
+-    	pos = fnd+3;
+-	}
+-	
+-	while((npos = torun.find("$url$")) != -1)
+-	    torun.replace(npos, 5, url);
+-    }
+-
+-    if(!pipe(inpipe) && !pipe(outpipe)) {
+-	memset(&sact, 0, sizeof(sact));
+-	sigaction(SIGCHLD, &sact, &osact);
+-	pid = fork();
+-
+-	if(!pid) {
+-	    dup2(inpipe[1], STDOUT_FILENO);
+-	    dup2(outpipe[0], STDIN_FILENO);
+-
+-	    close(inpipe[1]);
+-	    close(inpipe[0]);
+-	    close(outpipe[0]);
+-	    close(outpipe[1]);
+-
+-	    execl("/bin/sh", "/bin/sh", "-c", torun.c_str(), (char *)NULL );
+-	    _exit(0);
+-	} else {
+-	    close(outpipe[0]);
+-	    close(inpipe[1]);
+-
+-	    while(1) {
+-		FD_ZERO(&rfds);
+-		FD_SET(inpipe[0], &rfds);
+-
+-		if(select(inpipe[0]+1, &rfds, 0, 0, 0) < 0) break; else {
+-		    if(FD_ISSET(inpipe[0], &rfds)) {
+-			if(read(inpipe[0], &ch, 1) != 1) break; else {
+-			    out += ch;
+-			}
+-		    }
+-		}
+-	    }
+-
+-	    waitpid(pid, 0, 0);
+-	    close(inpipe[0]);
+-	    close(outpipe[1]);
+-	}
+-
+-	sigaction(SIGCHLD, &osact, 0);
+-    }
+-    face.log(_("+ launched the %s action command"), name.c_str());
+-    return out;
+-}
+-
+ string icqconf::getprotocolname(protocolname pname) const {
+     static const string ptextnames[protocolname_size] = {
+ 	"icq", "yahoo", "msn", "aim", "irc", "jab", "rss", "lj", "gg", "infocard"
+diff -urp centerim-4.22.6.orig/src/icqconf.h centerim-4.22.6/src/icqconf.h
+--- centerim-4.22.6.orig/src/icqconf.h	2008-10-26 16:53:16.000000000 +0100
++++ centerim-4.22.6/src/icqconf.h	2009-01-07 23:39:15.000000000 +0100
+@@ -344,8 +344,6 @@ class icqconf {
+ 	bool getshowopenedchats() const { return showopenedchats; }
+ 	void setshowopenedchats(bool fsoc);
+ 
+-	string execaction(const string &action, const string &param = "");
+-
+ 	imstatus getstatus(protocolname pname);
+ 	void savestatus(protocolname pname, imstatus st);
+ 	void setavatar(protocolname pname, const string &ava);
+diff -urp centerim-4.22.6.orig/src/icqdialogs.cc centerim-4.22.6/src/icqdialogs.cc
+--- centerim-4.22.6.orig/src/icqdialogs.cc	2008-10-26 16:53:16.000000000 +0100
++++ centerim-4.22.6/src/icqdialogs.cc	2009-01-07 23:38:51.000000000 +0100
+@@ -1284,7 +1284,6 @@ bool icqface::updateconf(icqconf::regsou
+ 
+ 	i = t.addnode(_(" Communications "));
+ 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
+-	t.addleaff(i, 0, 31, _(" HTTP browser : %s "), browser.c_str());
+ 	t.addleaff(i, 0, 24, _(" HTTP proxy server : %s "), httpproxy.c_str());
+ 
+ 	if(!httpproxy.empty())
+@@ -1438,10 +1437,6 @@ bool icqface::updateconf(icqconf::regsou
+ 		    case 30:
+ 			cm = (cm == icqconf::cmproto ? icqconf::cmstatus : icqconf::cmproto );
+ 			break;
+-		    case 31:
+-		        tmp = inputstr(_("HTTP browser to use: "), browser);
+-			if(!tmp.empty()) browser = tmp;
+-		        break;
+ 		    case 32:    
+ 		        conf->setleftpanelwidth(atol(inputstr(_("Left panel width: "), 
+ 		            strint(conf->getleftpanelwidth())).c_str()));
+@@ -2083,7 +2078,6 @@ bool icqface::setljparams(imxmlevent *ev
+ 			break;
+ 
+ 		    case 20: LJP_LIST("mood", moods, _("(none/custom)")); break;
+-		    case 21: LJP_STR("music", _("Currently playing: ")); break;
+ 		    case 22: LJP_LIST("picture", pictures, _("(default)")); break;
+ 		    case 23: LJP_STR("mood", _("Current mood: ")); break;
+ 		    case 25: LJP_STR("taglist", _("Tags for the entry: ")); break;
+@@ -2093,9 +2087,6 @@ bool icqface::setljparams(imxmlevent *ev
+ 		    case 33: LJP_BOOL("backdated"); break;
+ 		}
+ 
+-	    } else if(b == 1) {
+-		ev->setfield("music", conf->execaction("detectmusic"));
+-
+ 	    } else if(b == 2) {
+ 		r = true;
+ 
+diff -urp centerim-4.22.6.orig/src/icqface.cc centerim-4.22.6/src/icqface.cc
+--- centerim-4.22.6.orig/src/icqface.cc	2008-10-26 16:53:16.000000000 +0100
++++ centerim-4.22.6/src/icqface.cc	2009-01-07 23:38:19.000000000 +0100
+@@ -2371,8 +2371,13 @@ void icqface::showextractedurls() {
+ 	for(i = extractedurls.begin(); i != extractedurls.end(); ++i)
+ 	    m.additem(" " + *i);
+ 
+-	if(n = m.open())
+-	    conf->execaction("openurl", extractedurls[n-1]);
++	if(n = m.open()) {
++	    if (fork () == 0) {
++		log (extractedurls[n-1]);
++		execlp("xdg-open", "xdg-open", extractedurls[n-1].c_str(), NULL);
++		exit (-1);
++	    }
++	}
+ 
+ 	restoreworkarea();
+     }

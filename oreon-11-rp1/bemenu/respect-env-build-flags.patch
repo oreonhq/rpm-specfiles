@@ -1,0 +1,15 @@
+diff -up bemenu-0.6.7/GNUmakefile.orig bemenu-0.6.7/GNUmakefile
+--- bemenu-0.6.7/GNUmakefile.orig	2022-02-22 11:35:22.890334287 +0100
++++ bemenu-0.6.7/GNUmakefile	2022-02-22 11:36:15.068713729 +0100
+@@ -13,9 +13,9 @@ WARNINGS = -Wall -Wextra -Wpedantic -Wfo
+ 	-Wcast-align -Wpointer-arith -Wchar-subscripts -Warray-bounds=2 -Wno-unknown-warning-option
+ VISIBILITY ?= -fvisibility=hidden
+ 
+-override CFLAGS ?= -g -O2 $(WARNINGS) $(EXTRA_WARNINGS)
++override CFLAGS += -g -O2 $(WARNINGS) $(EXTRA_WARNINGS)
+ override CFLAGS += -std=c99 $(VISIBILITY)
+-override CPPFLAGS ?= -D_FORTIFY_SOURCE=2
++override CPPFLAGS += -D_FORTIFY_SOURCE=2
+ override CPPFLAGS += -DBM_VERSION=\"$(VERSION)\" -DBM_PLUGIN_VERSION=\"$(VERSION)-$(GIT_SHA1)\" -DINSTALL_LIBDIR=\"$(PREFIX)$(libdir)\"
+ override CPPFLAGS += -D_DEFAULT_SOURCE -Ilib
+ 

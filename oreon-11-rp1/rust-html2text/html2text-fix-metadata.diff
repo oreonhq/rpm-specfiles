@@ -1,0 +1,38 @@
+--- html2text-0.16.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ html2text-0.16.2/Cargo.toml	2026-02-04T18:26:10.432579+00:00
+@@ -46,18 +46,6 @@
+ name = "html2text"
+ path = "src/lib.rs"
+ 
+-[[example]]
+-name = "html2term"
+-path = "examples/html2term.rs"
+-
+-[[example]]
+-name = "html2text"
+-path = "examples/html2text.rs"
+-
+-[[bench]]
+-name = "tables"
+-path = "benches/tables.rs"
+-
+ [dependencies.backtrace]
+ version = "0.3"
+ optional = true
+@@ -82,9 +70,6 @@
+ [dependencies.unicode-width]
+ version = "0.2"
+ 
+-[dev-dependencies.argparse]
+-version = "0.2.2"
+-
+ [dev-dependencies.env_logger]
+ version = "0.11.6"
+ 
+@@ -93,6 +78,3 @@
+ 
+ [dev-dependencies.syntect]
+ version = "5.2.0"
+-
+-[target."cfg(unix)".dev-dependencies.termion]
+-version = "4.0"

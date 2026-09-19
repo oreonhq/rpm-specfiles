@@ -1,0 +1,10 @@
+--- coreutils-0.7.0/Cargo.toml	2006-07-24T01:21:28+00:00
++++ coreutils-0.7.0/Cargo.toml	2026-03-29T20:06:38.194812+00:00
+@@ -39,6 +39,7 @@
+ [package.metadata.docs.rs]
+ all-features = true
+ 
++# test
+ [features]
+ default = ["feat_common_core"]
+ expensive_tests = []

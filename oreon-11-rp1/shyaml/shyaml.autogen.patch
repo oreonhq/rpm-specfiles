@@ -1,0 +1,54 @@
+diff --git a/setup.cfg b/setup.cfg
+index b0651e8..624413e 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -1,7 +1,7 @@
+ [metadata]
+-name = %%name%%
+-version = %%version%%
+-summary = %%description%%
++name = shyaml
++version = 0.6.1
++summary = YAML for command line
+ description-file =
+     README.rst
+     CHANGELOG.rst
+@@ -10,9 +10,9 @@ requires-dist =
+     pyyaml
+ 
+ ## sdist info
+-author = %%author%%
+-author_email = %%email%%
+-home_page = http://github.com/0k/%%name%%
++author = Valentin Lab
++author_email = valentin.lab@kalysto.org
++home_page = http://github.com/0k/shyaml
+ license = BSD 3-Clause License
+ classifier =
+     Programming Language :: Python
+diff --git a/setup.py b/setup.py
+index 362dc53..a6db632 100644
+--- a/setup.py
++++ b/setup.py
+@@ -15,7 +15,7 @@ from setuptools import setup
+ ## Ensure that ``./autogen.sh`` is run prior to using ``setup.py``
+ ##
+ 
+-if "%%short-version%%".startswith("%%"):
++if "0.6.1".startswith("%%"):
+     import os.path
+     import sys
+     WIN32 = sys.platform == 'win32'
+diff --git a/shyaml.py b/shyaml.py
+index cf1c252..4b36659 100755
+--- a/shyaml.py
++++ b/shyaml.py
+@@ -18,7 +18,7 @@ import textwrap
+ import yaml
+ 
+ 
+-__version__ = "%%version%%"   ## gets filled at release time by ./autogen.sh
++__version__ = "0.6.1"   ## gets filled at release time by ./autogen.sh
+ 
+ 
+ __with_libyaml__ = False

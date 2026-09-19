@@ -1,0 +1,43 @@
+# Upstream version bump removed
+commit 39b35b23b952d620b8ec7cabb13110f586663837
+Author: LCD 47 <lcd047@gmail.com>
+Date:   Wed Nov 20 10:00:33 2019 +0200
+
+    Sanity check: syntastic can't run in rvim.
+
+diff --git a/autoload/syntastic/util.vim b/autoload/syntastic/util.vim
+index 8a17fe64..41b40e6a 100644
+--- a/autoload/syntastic/util.vim
++++ b/autoload/syntastic/util.vim
+@@ -42,6 +42,11 @@ function! syntastic#util#system(command) abort " {{{2
+     try
+         let out = system(a:command)
+     catch
++        if v:exception =~# '\m^Vim\%((\a\+)\)\=:\%(E145\|E484\|E684\)'
++            " XXX re-throwing unmodified v:exception triggers E608
++            throw substitute(v:exception, '.*:\(E145\|E484\|E684\).*', '\1', '')
++        endif
++
+         let crashed = 1
+         call syntastic#log#error('exception running system(' . string(a:command) . '): ' . v:exception)
+         if syntastic#util#isRunningWindows()
+diff --git a/plugin/syntastic.vim b/plugin/syntastic.vim
+index d48a8d12..4a113eee 100644
+--- a/plugin/syntastic.vim
++++ b/plugin/syntastic.vim
+@@ -57,10 +57,13 @@ if s:_running_windows
+ elseif executable('uname')
+     try
+         let g:_SYNTASTIC_UNAME = split(syntastic#util#system('uname'), "\n")[0]
+-    catch /\m^Vim\%((\a\+)\)\=:E484/
++    catch /\m^E145$/
++        call syntastic#log#error("can't run in rvim")
++        finish
++    catch /\m^E484$/
+         call syntastic#log#error("can't run external programs (misconfigured shell options?)")
+         finish
+-    catch /\m^Vim\%((\a\+)\)\=:E684/
++    catch /\m^E684$/
+         let g:_SYNTASTIC_UNAME = 'Unknown'
+     endtry
+ else

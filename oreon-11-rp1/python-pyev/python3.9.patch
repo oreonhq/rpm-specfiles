@@ -1,0 +1,44 @@
+diff --git a/setup.py b/setup.py
+index 4cd36ee..e1e9931 100644
+--- a/setup.py
++++ b/setup.py
+@@ -18,7 +18,7 @@
+ #
+ 
+ 
+-from distutils.version import StrictVersion
++from distutils.version import LooseVersion
+ from distutils.core import setup, Extension
+ 
+ from ctypes.util import find_library
+@@ -37,7 +37,7 @@ min_libev_version = "4.15"
+ version_error = "Aborted: pyev-{0} requires {{0}} >= {{1}}".format(pyev_version)
+ 
+ def check_version(current_version, minimum_version, name):
+-    if StrictVersion(current_version) < StrictVersion(minimum_version):
++    if LooseVersion(current_version) < LooseVersion(minimum_version):
+         raise SystemExit(version_error.format(name, minimum_version))
+ 
+ 
+diff --git a/src/pyev.c b/src/pyev.c
+index 47aa4bf..2e830ed 100644
+--- a/src/pyev.c
++++ b/src/pyev.c
+@@ -338,7 +338,7 @@ PyType_ReadyWatcher(PyTypeObject *type, PyTypeObject *base)
+ 
+ 
+ int
+-PyModule_AddType(PyObject *module, const char *name, PyTypeObject *type)
++PyModule_AddType_(PyObject *module, const char *name, PyTypeObject *type)
+ {
+     if (PyType_Ready(type)) {
+         return -1;
+@@ -555,7 +555,7 @@ init_pyev(void)
+     /* types and constants */
+     if (
+         /* loop */
+-        PyModule_AddType(pyev, "Loop", &LoopType) ||
++        PyModule_AddType_(pyev, "Loop", &LoopType) ||
+         PyModule_AddUnsignedIntMacro(pyev, EVFLAG_AUTO) ||
+         PyModule_AddUnsignedIntMacro(pyev, EVFLAG_NOENV) ||
+         PyModule_AddUnsignedIntMacro(pyev, EVFLAG_FORKCHECK) ||

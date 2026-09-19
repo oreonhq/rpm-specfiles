@@ -1,0 +1,13 @@
+diff -up SVN-Simple-0.27/t/1edit.t.test SVN-Simple-0.27/t/1edit.t
+--- SVN-Simple-0.27/t/1edit.t.test	2010-01-15 16:11:43.000000000 +0100
++++ SVN-Simple-0.27/t/1edit.t	2010-01-15 16:12:39.000000000 +0100
+@@ -98,7 +98,7 @@ $edit->close_edit;
+ $edit = new_edit;
+ 
+ $edit->open_directory ('trunk');
+-$edit->open_directory ('trunk/deep');
+-$edit->delete_entry ('trunk/deep/more');
++$edit->open_directory ('trunk/deep2');
++$edit->delete_entry ('trunk/deep2/more');
+ 
+ $edit->close_edit;

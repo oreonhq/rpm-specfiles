@@ -1,0 +1,62 @@
+From 863539be5f5877ee78f4370e6bf0ddab708f8328 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Mon, 20 Dec 2021 12:47:13 +0100
+Subject: [PATCH] ASN1OutputStream constructor is private - use create() method
+
+---
+ .../src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java     | 2 +-
+ .../src/main/java/org/globus/gsi/util/CertificateIOUtil.java  | 2 +-
+ .../test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java b/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java
+index 4a15433..c99a6e2 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java
+@@ -78,7 +78,7 @@ public class BouncyCastleUtil {
+     public static byte[] toByteArray(ASN1Primitive obj)
+ 	throws IOException {
+ 	ByteArrayOutputStream bout = new ByteArrayOutputStream();
+-	ASN1OutputStream der = new ASN1OutputStream(bout);
++	ASN1OutputStream der = ASN1OutputStream.create(bout);
+ 	der.writeObject(obj);
+ 	return bout.toByteArray();
+     }
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateIOUtil.java b/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateIOUtil.java
+index 4cff1c5..643f397 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateIOUtil.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateIOUtil.java
+@@ -106,7 +106,7 @@ public final class CertificateIOUtil {
+ 
+     public static byte[] encodePrincipal(X509Name subject) throws IOException {
+         ByteArrayOutputStream bout = new ByteArrayOutputStream();
+-        ASN1OutputStream der = new ASN1OutputStream(bout);
++        ASN1OutputStream der = ASN1OutputStream.create(bout);
+         der.writeObject(subject.toASN1Primitive());
+         return bout.toByteArray();
+     }
+diff --git a/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java b/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java
+index 82ecdfd..5806ac2 100644
+--- a/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java
++++ b/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java
+@@ -56,7 +56,7 @@ public class ProxyCertInfoTest extends TestCase {
+ 
+ 
+ 	ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+-        ASN1OutputStream dOut = new ASN1OutputStream(bOut);
++	ASN1OutputStream dOut = ASN1OutputStream.create(bOut);
+ 	dOut.writeObject(info);
+ 
+ 	ByteArrayInputStream bIn =
+@@ -105,7 +105,7 @@ public class ProxyCertInfoTest extends TestCase {
+ 	assertEquals(testOid, info.getProxyPolicy().getPolicyLanguage());
+ 
+ 	ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+-        ASN1OutputStream dOut = new ASN1OutputStream(bOut);
++	ASN1OutputStream dOut = ASN1OutputStream.create(bOut);
+ 	dOut.writeObject(info);
+ 
+ 	ByteArrayInputStream bIn =
+-- 
+2.33.1
+

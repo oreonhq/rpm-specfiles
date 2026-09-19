@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>setBfree.desktop</id>
+  <name>setBfree</name>
+  <summary>A DSP Tonewheel Organ emulator</summary>
+  <developer_name>Fredrik Kilander, Will Panther, Robin Gareus, Ken Restivo</developer_name>
+  <description>
+  <p>
+    A MIDI-controlled, software synthesizer designed to imitate the
+    sound and properties of the electromechanical organs and sound modification
+    devices that brought world-wide fame to the names and products of Laurens
+    Hammond and Don Leslie.
+  </p>
+  </description>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <url type="bugtracker">https://github.com/pantherb/setBfree/issues</url>
+  <url type="help">https://github.com/pantherb/setBfree</url>
+  <url type="homepage">http://setbfree.org/</url>
+  <screenshots>
+    <screenshot type="default">
+      <caption/>
+      <image height="320" width="960">https://raw.githubusercontent.com/pantherb/setBfree/master/doc/b_synth.png</image>
+    </screenshot>
+  </screenshots>
+</component>

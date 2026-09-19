@@ -1,0 +1,17 @@
+diff -up logjam-4.6.2/src/conf.h.gcc10 logjam-4.6.2/src/conf.h
+--- logjam-4.6.2/src/conf.h.gcc10	2020-01-31 06:39:36.321816274 -0500
++++ logjam-4.6.2/src/conf.h	2020-01-31 06:40:20.348003012 -0500
+@@ -66,10 +66,13 @@ typedef struct {
+ #endif /* HAVE_GTK */
+ } Options;
+ 
++/*
++ * Unused enum that gets included everytime src/conf.h is
+ enum {
+ 	POSTMODE_GUI,
+ 	POSTMODE_CMD
+ } PostmodeType;
++*/
+ 
+ typedef struct {
+ 	char *label;

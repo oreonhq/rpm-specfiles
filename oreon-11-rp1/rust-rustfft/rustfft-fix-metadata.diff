@@ -1,0 +1,126 @@
+--- rustfft-6.4.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ rustfft-6.4.0/Cargo.toml	2025-06-21T21:29:35.016748+00:00
+@@ -52,7 +52,6 @@
+ ]
+ neon = []
+ sse = []
+-wasm_simd = []
+ 
+ [lib]
+ name = "rustfft"
+@@ -141,7 +140,6 @@
+ 
+ [dev-dependencies.getrandom]
+ version = "^0.2"
+-features = ["js"]
+ 
+ [dev-dependencies.libc]
+ version = "=0.2.163"
+@@ -154,6 +152,3 @@
+ 
+ [dev-dependencies.rand]
+ version = "0.8"
+-
+-[dev-dependencies.wasm-bindgen-test]
+-version = "^0.3.36"
+diff -up rustfft-6.4.0/Cargo.toml.deps rustfft-6.4.0/Cargo.toml
+--- rustfft-6.4.0/Cargo.toml.deps	2025-06-21 15:30:39.181110049 -0600
++++ rustfft-6.4.0/Cargo.toml	2025-06-21 15:35:32.396233585 -0600
+@@ -136,16 +136,16 @@ version = "0.2.4"
+ version = "0.2"
+ 
+ [dev-dependencies.bumpalo]
+-version = "=3.14.0"
++version = "3.14.0"
+ 
+ [dev-dependencies.getrandom]
+ version = "^0.2"
+ 
+ [dev-dependencies.libc]
+-version = "=0.2.163"
++version = "0.2.163"
+ 
+ [dev-dependencies.once_cell]
+-version = "=1.20.2"
++version = "1.20.2"
+ 
+ [dev-dependencies.paste]
+ version = "1.0.9"
+--- rustfft-6.4.0/tests/accuracy.rs.wasm	2006-07-23 19:21:28.000000000 -0600
++++ rustfft-6.4.0/tests/accuracy.rs	2025-06-21 15:39:54.708844632 -0600
+@@ -16,7 +16,6 @@
+ 
+ use rand::distributions::{uniform::SampleUniform, Distribution, Uniform};
+ use rand::{rngs::StdRng, SeedableRng};
+-use wasm_bindgen_test::wasm_bindgen_test;
+ 
+ /// The seed for the random number generator used to generate
+ /// random signals. It's defined here so that we have deterministic
+@@ -176,67 +175,6 @@
+     let direction = FftDirection::Inverse;
+     let cache: ControlCache<f64> = ControlCache::new(TEST_MAX, direction);
+ 
+-    for len in 1..TEST_MAX {
+-        let control = cache.plan_fft(len);
+-        assert_eq!(control.len(), len);
+-        assert_eq!(control.fft_direction(), direction);
+-
+-        let signal = random_signal(len);
+-        assert!(fft_matches_control(control, &signal), "length = {}", len);
+-    }
+-}
+-
+-#[wasm_bindgen_test]
+-fn wasm_test_planned_fft_forward_f32() {
+-    let direction = FftDirection::Forward;
+-    let cache: ControlCache<f32> = ControlCache::new(TEST_MAX, direction);
+-
+-    for len in 1..TEST_MAX {
+-        println!("len: {len}");
+-        let control = cache.plan_fft(len);
+-        assert_eq!(control.len(), len);
+-        assert_eq!(control.fft_direction(), direction);
+-
+-        let signal = random_signal(len);
+-        assert!(fft_matches_control(control, &signal), "length = {}", len);
+-    }
+-}
+-
+-#[wasm_bindgen_test]
+-fn wasm_test_planned_fft_inverse_f32() {
+-    let direction = FftDirection::Inverse;
+-    let cache: ControlCache<f32> = ControlCache::new(TEST_MAX, direction);
+-
+-    for len in 1..TEST_MAX {
+-        let control = cache.plan_fft(len);
+-        assert_eq!(control.len(), len);
+-        assert_eq!(control.fft_direction(), direction);
+-
+-        let signal = random_signal(len);
+-        assert!(fft_matches_control(control, &signal), "length = {}", len);
+-    }
+-}
+-
+-#[wasm_bindgen_test]
+-fn wasm_test_planned_fft_forward_f64() {
+-    let direction = FftDirection::Forward;
+-    let cache: ControlCache<f64> = ControlCache::new(TEST_MAX, direction);
+-
+-    for len in 1..TEST_MAX {
+-        let control = cache.plan_fft(len);
+-        assert_eq!(control.len(), len);
+-        assert_eq!(control.fft_direction(), direction);
+-
+-        let signal = random_signal(len);
+-        assert!(fft_matches_control(control, &signal), "length = {}", len);
+-    }
+-}
+-
+-#[wasm_bindgen_test]
+-fn wasm_test_planned_fft_inverse_f64() {
+-    let direction = FftDirection::Inverse;
+-    let cache: ControlCache<f64> = ControlCache::new(TEST_MAX, direction);
+-
+     for len in 1..TEST_MAX {
+         let control = cache.plan_fft(len);
+         assert_eq!(control.len(), len);

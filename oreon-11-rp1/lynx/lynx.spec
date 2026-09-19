@@ -5,9 +5,9 @@
 
 Summary: A text-based Web browser
 Name: lynx
-Version: 2.9.2
+Version: 2.9.3
 #Release: %%{devrel}.1%%{?dist}
-Release: 5%{?dist}
+Release: 1%{?dist}
 License: GPL-2.0-only
 
 Source0:        https://invisible-island.net/archives/lynx/tarballs/lynx%{version}%{devrel}.tar.bz2

@@ -1,0 +1,19 @@
+--- a/tests/unit/test_common.py
++++ b/tests/unit/test_common.py
+@@ -1,4 +1,4 @@
+-import mock
++from unittest import mock
+ 
+ from catkin_tools import common
+ 
+--- a/tests/unit/test_config.py
++++ b/tests/unit/test_config.py
+@@ -1,7 +1,7 @@
+ import os
+ import shutil
+ 
+-import mock
++from unittest import mock
+ import pytest
+ 
+ from catkin_tools import config

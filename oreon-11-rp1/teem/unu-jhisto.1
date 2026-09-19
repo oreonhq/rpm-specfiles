@@ -1,0 +1,99 @@
+.TH UNU\-JHISTO "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-jhisto \- create joint histogram of two or more
+.IR nrrd s
+.SH SYNOPSIS
+.B unu\ jhisto
+.BR \-b , \-\-bin
+.RI < bins0 \  bins1 \ ...>
+.RB [ \-w , \-\-weight
+.RI < nweight >]
+.RB [ \-min , \-\-minimum
+.RI < min0 \  min1 \ ...>]
+.RB [ \-max , \-\-maximum
+.RI < max0 \  max1 \ ...>]
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-i , \-\-input
+.RI < nin0 \  nin1 \ ...>]
+.RB [ \-a , \-\-axis
+.RI < axis >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Create joint histogram of two or more
+.IR nrrd s.
+Each axis of the output corresponds to one of the input
+.IR nrrd s,
+and each bin in the output records the number of corresponding positions in the
+inputs with a combination of values represented by the coordinates of the bin.
+.IP \(bu +2n
+Uses
+.B nrrdHistoJoint
+.SH OPTIONS
+.TP
+.B \-b\fR\ <\fIbins0\fR\ \fIbins1\fR\ ...>\ ,\ \fB\-\-bin\fR\ <\fIbins0\fR\ \fIbins1\fR\ ...>
+.IR bins < i >
+is the number of bins to use along axis
+.I i
+(of joint histogram), which
+                       represents the values of
+.IR nin < i >
+(2 or more
+.IR size_t s)
+.TP
+.B \-w\fR\ <\fInweight\fR>\ ,\ \fB\-\-weight\fR\ <\fInweight\fR>
+how to weigh contributions to joint histogram.
+By default (not using this option), the increment is one bin count per sample,
+but by giving a
+.IR nrrd ,
+the value in the
+.I nrrd
+at the corresponding location will be the bin count increment
+.TP
+.B \-min\fR\ <\fImin0\fR\ min1\fR\ ...>\ ,\ \fB\-\-minimum\fR\ <\fImin0\fR\ min1\fR\ ...>
+.IR min < i >
+is the low range of values to be quantized along axis
+.IR i ;
+use
+.RB \(lq nan \(rq
+to represent lowest value present
+(2 or more
+.IR double s)
+.TP
+.B \-max\fR\ <\fImax0\fR\ max1\fR\ ...>\ ,\ \fB\-\-maximum\fR\ <\fImax0\fR\ max1\fR\ ...>
+.IR max < i >
+is the high range of values to be quantized along axis
+.IR i ;
+use
+.RB \(lq nan \(rq
+to represent highest value present
+(2 or more
+.IR double s)
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+type to use for output (the type used to store hit counts in the joint
+histogram).
+Clamping is done on hit counts so that they never overflow a fixed-point type;
+default:
+.RB \(lq uint \(rq
+.TP
+.B \-i\fR\ <\fInin0\fR\ [\fInin1\fR]\ ...>\ ,\ \fB\-\-input\fR\ <\fInin0\fR\ [\fInin1\fR]\ ...>
+list of
+.IR nrrd s
+(one for each axis of joint histogram), or, single
+.I nrrd
+that will be sliced along specified axis.
+(1 or more
+.IR nrrd s);
+default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

@@ -1,0 +1,24 @@
+diff -rupN --no-dereference commoncpp2-1.8.1/src/inaddr.cpp commoncpp2-1.8.1-new/src/inaddr.cpp
+--- commoncpp2-1.8.1/src/inaddr.cpp	2010-11-01 00:43:40.000000000 +0100
++++ commoncpp2-1.8.1-new/src/inaddr.cpp	2020-02-04 23:56:43.241896629 +0100
+@@ -333,7 +333,7 @@ void IPV4Address::setAddress(const char
+             if(ipaddr)
+                 delete[] ipaddr;
+             ipaddr = new struct in_addr[1];
+-            memset((void *)&ipaddr[0], 0, sizeof(ipaddr));
++            memset((void *)&ipaddr[0], 0, sizeof(ipaddr[0]));
+             return;
+         }
+ 
+diff -rupN --no-dereference commoncpp2-1.8.1/src/socket.cpp commoncpp2-1.8.1-new/src/socket.cpp
+--- commoncpp2-1.8.1/src/socket.cpp	2010-11-01 01:33:55.000000000 +0100
++++ commoncpp2-1.8.1-new/src/socket.cpp	2020-02-04 23:56:43.242896624 +0100
+@@ -1560,7 +1560,7 @@ Socket::Error UDPSocket::join(const IPV4
+ 
+     getsockname(so, (struct sockaddr *)&myaddr, &len);
+     memset(&group, 0, sizeof(group));
+-    memcpy(&group.imr_address, &myaddr.sin_addr, sizeof(&myaddr.sin_addr));
++    memcpy(&group.imr_address, &myaddr.sin_addr, sizeof(myaddr.sin_addr));
+     group.imr_multiaddr = getaddress(ia);
+     group.imr_ifindex   = InterfaceIndex;
+     setsockopt(so, IPPROTO_IP, IP_ADD_MEMBERSHIP, (char *)&group, sizeof(group));

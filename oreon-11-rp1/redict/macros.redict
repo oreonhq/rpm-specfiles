@@ -1,0 +1,2 @@
+%redict_modules_abi 1
+%redict_modules_dir %{_libdir}/redict/modules

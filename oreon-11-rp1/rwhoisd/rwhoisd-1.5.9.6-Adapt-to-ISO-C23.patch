@@ -1,0 +1,679 @@
+From cbe2c78b1899af254806555a7347dec13845685a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 11 Feb 2025 14:47:46 +0100
+Subject: [PATCH] Adapt to ISO C23
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+A build failed with GCC 15 because that compiler moved to ISO C23 langauge version:
+
+    misc.h:32:25: error: ‘bool’ cannot be used here
+       32 | char *on_off PROTO((int bool));
+	  |                         ^~~~
+
+The cause is that ISO C23 added "bool" type. This patchs changes the argument
+name to match the function definitions.
+
+    attributes.c: In function ‘add_attribute’:
+    attributes.c:552:39: error: passing argument 3 of ‘dl_list_default’ from incompatible pointer type [-Wincompatible-pointer-types]
+      552 |     dl_list_default(attr_list, FALSE, destroy_attr_data);
+	  |                                       ^~~~~~~~~~~~~~~~~
+	  |                                       |
+	  |                                       int (*)(attribute_struct *) {aka int (*)(struct _attribute_struct *)}
+    In file included from attributes.h:15,
+		     from attributes.c:10:
+    dl_list.h:44:34: note: expected ‘int (*)(void)’ but argument is of type ‘int (*)(attribute_struct *)’ {aka ‘int (*)(struct _attribute_struct *)’}
+       44 |                            int (*destroy_data)()));
+	  |                            ~~~~~~^~~~~~~~~~~~~~~
+
+ISO C23 changed meaning of "int foo()" to "int foo(void)". This patch
+addapts to it.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ common/attributes.c                   |  4 ++--
+ common/auth_area.c                    |  6 +++---
+ common/dir_security.c                 |  2 +-
+ common/directive_conf.c               |  2 +-
+ common/dl_list.c                      |  2 +-
+ common/dl_list.h                      |  2 +-
+ common/misc.h                         |  6 +++---
+ common/punt_ref.c                     |  2 +-
+ common/schema.c                       |  6 +++---
+ mkdb/anon_record.c                    |  2 +-
+ mkdb/delete.c                         |  4 ++--
+ mkdb/fileinfo.c                       | 10 +++++-----
+ mkdb/index.c                          | 14 +++++++-------
+ mkdb/records.c                        |  4 ++--
+ mkdb/search.c                         |  6 +++---
+ regexp/regexp.c                       |  2 +-
+ regexp/regsub.c                       |  2 +-
+ server/guardian.c                     |  2 +-
+ server/referral.c                     |  4 ++--
+ server/register.c                     |  8 ++++----
+ server/session.c                      |  2 +-
+ server/sresponse.c                    |  2 +-
+ server/sstate.c                       |  2 +-
+ server/sxfer.c                        | 10 +++++-----
+ server/xfer.c                         |  8 ++++----
+ tools/rwhois_deleter/rwhois_deleter.c |  2 +-
+ tools/rwhois_indexer/rwhois_indexer.c |  4 ++--
+ tools/rwhois_repack/rwhois_repack.c   | 12 ++++++------
+ 28 files changed, 66 insertions(+), 66 deletions(-)
+
+diff --git a/common/attributes.c b/common/attributes.c
+index 89355b1..2e519f5 100644
+--- a/common/attributes.c
++++ b/common/attributes.c
+@@ -549,7 +549,7 @@ add_attribute(
+   if( !dl_list_last(attr_list))
+   {
+     /* this is the first entry, so default the list */
+-    dl_list_default(attr_list, FALSE, destroy_attr_data);
++    dl_list_default(attr_list, FALSE, (int(*)(void*))destroy_attr_data);
+   }
+   else
+   {
+@@ -600,7 +600,7 @@ add_global_attribute(
+     if (! dl_list_last(attr_ref_list))
+     {
+       *global_id = 0;
+-      dl_list_default(attr_ref_list, FALSE, destroy_attr_ref_data);
++      dl_list_default(attr_ref_list, FALSE, (int(*)(void *))destroy_attr_ref_data);
+     }
+     else
+     {
+diff --git a/common/auth_area.c b/common/auth_area.c
+index fcf0b59..bf2aeb1 100644
+--- a/common/auth_area.c
++++ b/common/auth_area.c
+@@ -1154,7 +1154,7 @@ add_auth_area(auth_area_struct  *aa)
+   {
+     auth_area_list = xcalloc(1, sizeof(*auth_area_list));
+ 
+-    dl_list_default(auth_area_list, TRUE, destroy_auth_area_data);
++    dl_list_default(auth_area_list, TRUE, (int(*)(void *))destroy_auth_area_data);
+   }
+ 
+   /* check the aa for existance, syntax, etc .. first */
+@@ -1616,7 +1616,7 @@ add_server(
+ 
+   if (dl_list_empty(list))
+   {
+-    dl_list_default(list, TRUE, destroy_server_data);
++    dl_list_default(list, TRUE, (int(*)(void*))destroy_server_data);
+   }
+ 
+   dl_list_append(list, server);
+@@ -2228,7 +2228,7 @@ create_auth_area(auth_area_struct *aa)
+   {
+     auth_area_list = xcalloc(1, sizeof(*auth_area_list));
+ 
+-    dl_list_default(auth_area_list, TRUE, destroy_auth_area_data);
++    dl_list_default(auth_area_list, TRUE, (int(*)(void *))destroy_auth_area_data);
+   }
+ 
+   dl_list_append(auth_area_list, newaa);
+diff --git a/common/dir_security.c b/common/dir_security.c
+index 0ebabd3..e80f795 100644
+--- a/common/dir_security.c
++++ b/common/dir_security.c
+@@ -86,7 +86,7 @@ create_dir_security(
+ {
+   *wrap_list = xcalloc(1, sizeof(**wrap_list));
+ 
+-  if (!dl_list_default(*wrap_list, TRUE, destroy_dir_security_data))
++  if (!dl_list_default(*wrap_list, TRUE, (int(*)(void *))destroy_dir_security_data))
+   {
+     log(L_LOG_ERR, CONFIG,
+         "Error in creating %s directive security list", wrap_type);
+diff --git a/common/directive_conf.c b/common/directive_conf.c
+index b259249..1c645a0 100644
+--- a/common/directive_conf.c
++++ b/common/directive_conf.c
+@@ -364,7 +364,7 @@ void initialize_directive_list (void)
+     dl_list_destroy(&directive_list);
+   }
+   
+-  dl_list_default(&directive_list, FALSE, destroy_directive_data);
++  dl_list_default(&directive_list, FALSE, (int(*)(void *))destroy_directive_data);
+ }
+ 
+ 
+diff --git a/common/dl_list.c b/common/dl_list.c
+index 7ac82ac..1393f80 100644
+--- a/common/dl_list.c
++++ b/common/dl_list.c
+@@ -32,7 +32,7 @@ int
+ dl_list_default(
+   dl_list_type  *list,
+   int           destroy_head_flag,
+-  int           (*destroy_data)())
++  int           (*destroy_data)(void *))
+ {
+   if (list) {
+     list->head              = NULL;
+diff --git a/common/dl_list.h b/common/dl_list.h
+index 74be045..05262a9 100644
+--- a/common/dl_list.h
++++ b/common/dl_list.h
+@@ -41,7 +41,7 @@ typedef struct _dl_list_type
+    function pointer to the data free()ing routine. */
+ int dl_list_default PROTO((dl_list_type *list,
+                            int destroy_head_flag,
+-                           int (*destroy_data)()));
++                           int (*destroy_data)(void *data)));
+ 
+ /* returns the value (a pointer to the data element) at the current
+    position */ 
+diff --git a/common/misc.h b/common/misc.h
+index a4b3757..8b4f272 100644
+--- a/common/misc.h
++++ b/common/misc.h
+@@ -29,9 +29,9 @@ char *get_word PROTO((char *cp, char *buf));
+ 
+ void paste PROTO((char *line, char *cut_start, char *cut_end, char *rpl));
+ 
+-char *on_off PROTO((int bool));
++char *on_off PROTO((int b));
+ 
+-int true_false PROTO((char *bool));
++int true_false PROTO((char *b));
+ 
+ int get_tuple PROTO((char *tag1, char *tag2, char *data, char *line));
+ 
+@@ -53,7 +53,7 @@ void *xmemdup PROTO((const void *buf, size_t bytes));
+ 
+ char *regncpy PROTO((char *result, regexp *prog, int item, int len));
+ 
+-char *true_false_str PROTO((int bool));
++char *true_false_str PROTO((int b));
+ 
+ void randomize PROTO((void));
+ 
+diff --git a/common/punt_ref.c b/common/punt_ref.c
+index a0ad6e6..5c9e7a0 100644
+--- a/common/punt_ref.c
++++ b/common/punt_ref.c
+@@ -33,7 +33,7 @@ create_punt_ref(dl_list_type **ref_list)
+ 
+   *ref_list = xcalloc(1, sizeof(**ref_list));
+ 
+-  if (!dl_list_default(*ref_list, TRUE, destroy_punt_ref_data))
++  if (!dl_list_default(*ref_list, TRUE, (int(*)(void *))destroy_punt_ref_data))
+   {
+     log(L_LOG_ERR, CONFIG, "Error in creating punt/root referral list");
+     return FALSE;
+diff --git a/common/schema.c b/common/schema.c
+index 7943755..2b0ca89 100644
+--- a/common/schema.c
++++ b/common/schema.c
+@@ -221,7 +221,7 @@ append_class(
+   if (!dl_list_last(class_list))
+   {
+     class->id = 0;
+-    dl_list_default(class_list, FALSE, destroy_class_data);
++    dl_list_default(class_list, FALSE, (int(*)(void *))destroy_class_data);
+   }
+   else
+   {
+@@ -452,7 +452,7 @@ add_class(
+   if (!dl_list_last(class_list))
+   {
+     class->id = 0;
+-    dl_list_default(class_list, FALSE, destroy_class_data);
++    dl_list_default(class_list, FALSE, (int(*)(void *))destroy_class_data);
+   }
+   else
+   {
+@@ -538,7 +538,7 @@ add_global_class(
+     {
+       class_ref_list = xcalloc(1, sizeof(*class_ref_list));
+ 
+-      dl_list_default(class_ref_list, TRUE, destroy_class_ref_data);
++      dl_list_default(class_ref_list, TRUE, (int(*)(void *))destroy_class_ref_data);
+     }
+ 
+     /* allocate and set the new node */
+diff --git a/mkdb/anon_record.c b/mkdb/anon_record.c
+index 4d72961..748452f 100644
+--- a/mkdb/anon_record.c
++++ b/mkdb/anon_record.c
+@@ -89,7 +89,7 @@ mkdb_read_anon_record(
+   rec->offset       = ftell(fp);
+   
+   av_list = &(rec->anon_av_pair_list);
+-  dl_list_default(av_list, FALSE, destroy_anon_av_pair_data);
++  dl_list_default(av_list, FALSE, (int(*)(void *))destroy_anon_av_pair_data);
+ 
+   eof_flag = TRUE;  /* flag is set differently if loop ends for a different
+                        reason */
+diff --git a/mkdb/delete.c b/mkdb/delete.c
+index bc3739e..98c5031 100644
+--- a/mkdb/delete.c
++++ b/mkdb/delete.c
+@@ -43,8 +43,8 @@ mkdb_delete_record_list (
+   {
+     record = dl_list_value(record_list);
+ 
+-    dl_list_default(&all_file_list, FALSE, destroy_file_struct_data);
+-    dl_list_default(&changed_fi_list, FALSE, destroy_file_struct_data);
++    dl_list_default(&all_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
++    dl_list_default(&changed_fi_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+ 
+     if (!get_file_list(record->class, record->auth_area, &all_file_list))
+     {
+diff --git a/mkdb/fileinfo.c b/mkdb/fileinfo.c
+index 88c03f1..0ceccb0 100644
+--- a/mkdb/fileinfo.c
++++ b/mkdb/fileinfo.c
+@@ -1020,7 +1020,7 @@ get_file(
+   }
+ 
+   /* initialize the list */
+-  dl_list_default(file_list, FALSE, destroy_file_struct_data);
++  dl_list_default(file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+ 
+   auth_area = find_auth_area_by_name(auth_area_name);
+   if (auth_area == NULL)
+@@ -1157,7 +1157,7 @@ add_single_file(
+   file_struct  *list_file;
+   dl_list_type file_list;
+ 
+-  dl_list_default(&file_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+ 
+   file = build_base_file_struct(file_name, type, num_recs);
+   if (!file)
+@@ -1209,7 +1209,7 @@ modify_file_list(
+     return FALSE;
+   }
+ 
+-  dl_list_default(&full_file_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&full_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+ 
+   /* first, we establish the write lock; This prevents staleness
+      problems. */
+@@ -1387,8 +1387,8 @@ records_in_auth_area(
+   long         count    = 0;
+   int          not_done;
+ 
+-  dl_list_default(&master_file_list, FALSE, destroy_file_struct_data);
+-  dl_list_default(&data_file_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&master_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
++  dl_list_default(&data_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+ 
+   if (!get_file(NULL, auth_area->name, &master_file_list))
+   {
+diff --git a/mkdb/index.c b/mkdb/index.c
+index b13962e..079158b 100644
+--- a/mkdb/index.c
++++ b/mkdb/index.c
+@@ -630,9 +630,9 @@ index_files(
+     return TRUE;
+   }
+ 
+-  dl_list_default(&delete_list, FALSE, destroy_file_struct_data);
+-  dl_list_default(&add_list, FALSE, destroy_file_struct_data);
+-  dl_list_default(&unlock_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&delete_list, FALSE, (int(*)(void *))destroy_file_struct_data);
++  dl_list_default(&add_list, FALSE, (int(*)(void *))destroy_file_struct_data);
++  dl_list_default(&unlock_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+ 
+   /* add/update all of our data files to the master file list(s) */
+   if (! modify_file_list(class, auth_area, data_file_list, NULL, NULL, NULL,
+@@ -776,7 +776,7 @@ int index_files_by_name (char *class_name, char *auth_area_name, char *base_dir,
+     return FALSE;
+   }
+ 
+-  dl_list_default(&data_file_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&data_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+   if (! build_file_list_by_names(&data_file_list, MKDB_DATA_FILE,
+                                  base_dir, num_data_files, file_names))
+   {
+@@ -787,7 +787,7 @@ int index_files_by_name (char *class_name, char *auth_area_name, char *base_dir,
+   }
+ 
+ 
+-  dl_list_default(&index_file_list, FALSE, destroy_index_fp_data);
++  dl_list_default(&index_file_list, FALSE, (int(*)(void *))destroy_index_fp_data);
+   if (!build_index_list(class, auth_area, &index_file_list, class->db_dir,
+                         NULL))
+   {
+@@ -838,7 +838,7 @@ int index_files_by_suffix (char *class_name, char *auth_area_name, char *suffix,
+ 
+ 
+   /* create and build the data file list */
+-  dl_list_default(&data_file_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&data_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+   if (!build_file_list_by_suffix(&data_file_list, MKDB_DATA_FILE,
+                                  class->db_dir, suffix))
+   {
+@@ -851,7 +851,7 @@ int index_files_by_suffix (char *class_name, char *auth_area_name, char *suffix,
+ 
+ 
+   /* create and build the index file list */
+-  dl_list_default(&index_file_list, FALSE, destroy_index_fp_data);
++  dl_list_default(&index_file_list, FALSE, (int(*)(void *))destroy_index_fp_data);
+ 
+   if (!build_index_list(class, auth_area, &index_file_list, class->db_dir,
+                         NULL))
+diff --git a/mkdb/records.c b/mkdb/records.c
+index 349a42c..1943971 100644
+--- a/mkdb/records.c
++++ b/mkdb/records.c
+@@ -133,7 +133,7 @@ mkdb_translate_anon_record(
+   rec->class        = class;
+ 
+   av_list           = &(rec->av_pair_list);
+-  dl_list_default(av_list, FALSE, destroy_av_pair_data);
++  dl_list_default(av_list, FALSE, (int(*)(void *))destroy_av_pair_data);
+   
+   /* handle auth_area */
+   anon_av = find_anon_auth_area_in_rec(anon);
+@@ -446,7 +446,7 @@ copy_record(
+   bcopy(rec, copy, sizeof(*copy));
+ 
+   /* copy the av_pair list */
+-  dl_list_default(&(copy->av_pair_list), FALSE, destroy_av_pair_data);
++  dl_list_default(&(copy->av_pair_list), FALSE, (int(*)(void *))destroy_av_pair_data);
+ 
+   not_done = dl_list_first(&(rec->av_pair_list));
+   while (not_done)
+diff --git a/mkdb/search.c b/mkdb/search.c
+index 742d9ee..bb54d6a 100644
+--- a/mkdb/search.c
++++ b/mkdb/search.c
+@@ -345,9 +345,9 @@ search_class(
+ 
+   bzero((char *)index_file, sizeof(index_file));
+ 
+-  dl_list_default(&master_fi_list, FALSE, destroy_file_struct_data);
+-  dl_list_default(&index_fi_list, FALSE, destroy_file_struct_data);
+-  dl_list_default(&data_fi_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&master_fi_list, FALSE, (int(*)(void *))destroy_file_struct_data);
++  dl_list_default(&index_fi_list, FALSE, (int(*)(void *))destroy_file_struct_data);
++  dl_list_default(&data_fi_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+ 
+   /* Ok, this needs a little bit of explaining because there is an
+      implicit filtering function here handled by the indexer. What we
+diff --git a/regexp/regexp.c b/regexp/regexp.c
+index 54fc8ae..63cda01 100644
+--- a/regexp/regexp.c
++++ b/regexp/regexp.c
+@@ -222,7 +222,7 @@ regcomp(char *exp)
+         register char *longest;
+         register int len;
+         int flags;
+-        extern void *malloc();
++        extern void *malloc(size_t);
+ 
+         if (exp == NULL)
+                 FAIL("NULL argument");
+diff --git a/regexp/regsub.c b/regexp/regsub.c
+index 4088d6a..c5e62f7 100644
+--- a/regexp/regsub.c
++++ b/regexp/regsub.c
+@@ -42,7 +42,7 @@ char *dest)
+ 	register char c;
+ 	register int no;
+ 	register int len;
+-	extern char *strncpy();
++	extern char *strncpy(char *, const char*, size_t);
+ 
+ 	if (prog == NULL || source == NULL || dest == NULL) {
+ 		regerror("NULL parm to regsub");
+diff --git a/server/guardian.c b/server/guardian.c
+index faf0cba..c9e893f 100644
+--- a/server/guardian.c
++++ b/server/guardian.c
+@@ -219,7 +219,7 @@ lookup_guardian_record(
+     return NULL;
+   }
+ 
+-  dl_list_default(&new_rec_list, FALSE, destroy_record_data);
++  dl_list_default(&new_rec_list, FALSE, (int(*)(void *))destroy_record_data);
+   num_recs = search(query, &new_rec_list, 2, &ret_code);
+ 
+   destroy_query(query);
+diff --git a/server/referral.c b/server/referral.c
+index b255d48..6937898 100644
+--- a/server/referral.c
++++ b/server/referral.c
+@@ -355,7 +355,7 @@ get_down_referral(
+       break;
+     }
+ 
+-    dl_list_default(&record_list, FALSE, destroy_record_data);
++    dl_list_default(&record_list, FALSE, (int(*)(void *))destroy_record_data);
+ 
+     search(query, &record_list, 1, &ret_code);
+ 
+@@ -621,7 +621,7 @@ refer_query(
+     return(rval);
+   }
+ 
+-  dl_list_default(&referral_list, FALSE, destroy_referral_data);
++  dl_list_default(&referral_list, FALSE, (int(*)(void *))destroy_referral_data);
+ 
+   /* Traverse the query tree to get referral for a particular
+      query term.  Break the loop on the first hit. */
+diff --git a/server/register.c b/server/register.c
+index 6cb484a..7e657e8 100644
+--- a/server/register.c
++++ b/server/register.c
+@@ -203,7 +203,7 @@ check_uniq_record(
+   ret_code_type ret_code;
+   
+   query = xcalloc(1, sizeof(*query));
+-  dl_list_default(&record_list, FALSE, destroy_record_data);
++  dl_list_default(&record_list, FALSE, (int(*)(void *))destroy_record_data);
+   
+   if (!build_primary_key_query(query, record))
+   {
+@@ -325,7 +325,7 @@ index_new_record(
+   /* generate the new filename */
+   create_filename(store_fname, DB_FILE_TEMPLATE, class->db_dir);
+ 
+-  dl_list_default(&index_file_list, FALSE, destroy_index_fp_data);
++  dl_list_default(&index_file_list, FALSE, (int(*)(void *))destroy_index_fp_data);
+   if (!build_index_list(class, aa, &index_file_list, class->db_dir,
+                         "addind"))
+   {
+@@ -349,7 +349,7 @@ index_new_record(
+ 
+   /* index the file */
+   file_ptr = build_base_file_struct(store_fname, MKDB_DATA_FILE, 1);
+-  dl_list_default(&dl_file_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&dl_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+   dl_list_append(&dl_file_list, file_ptr);
+   
+   status = index_files(class, aa, &index_file_list, &dl_file_list,
+@@ -757,7 +757,7 @@ process_registration(
+   }
+   /* CHECK phase -- check for syntactical and usage problems */
+ 
+-  dl_list_default(&del_record_list, FALSE, destroy_record_data);
++  dl_list_default(&del_record_list, FALSE, (int(*)(void *))destroy_record_data);
+   
+   switch (action)
+   {
+diff --git a/server/session.c b/server/session.c
+index d5ed6ea..a264e2d 100644
+--- a/server/session.c
++++ b/server/session.c
+@@ -95,7 +95,7 @@ static int run_query (char *str)
+   
+   query = xcalloc(1, sizeof(*query));
+   
+-  dl_list_default(&record_list, FALSE, destroy_record_data);
++  dl_list_default(&record_list, FALSE, (int(*)(void *))destroy_record_data);
+   
+   if (!str || !*str)
+   {
+diff --git a/server/sresponse.c b/server/sresponse.c
+index a6ead3a..372cc07 100644
+--- a/server/sresponse.c
++++ b/server/sresponse.c
+@@ -166,7 +166,7 @@ recv_response(
+   char line[MAX_LINE];
+   int  not_done        = TRUE;
+ 
+-  dl_list_default(response, FALSE, destroy_response_data);
++  dl_list_default(response, FALSE, (int(*)(void *))destroy_response_data);
+ 
+   /* Read response line by line till delimiter */
+   do
+diff --git a/server/sstate.c b/server/sstate.c
+index b4f3917..c6bd3eb 100644
+--- a/server/sstate.c
++++ b/server/sstate.c
+@@ -130,7 +130,7 @@ init_slave_state_list(
+     return;
+   }
+  
+-  dl_list_default(&slave_state_list, FALSE, destroy_slave_state_data);
++  dl_list_default(&slave_state_list, FALSE, (int(*)(void *))destroy_slave_state_data);
+  
+   not_done = dl_list_first(slave_aa_list);
+   while (not_done)
+diff --git a/server/sxfer.c b/server/sxfer.c
+index 20352e2..cf9ae75 100644
+--- a/server/sxfer.c
++++ b/server/sxfer.c
+@@ -256,7 +256,7 @@ xfer_parse_args(
+   }
+ 
+   xs = xcalloc(1, sizeof(*xs));
+-  dl_list_default(&(xs->xfer_class_list), FALSE, destroy_xfer_class_data);
++  dl_list_default(&(xs->xfer_class_list), FALSE, (int(*)(void *))destroy_xfer_class_data);
+ 
+   for (i = 0; i < argc; i++)
+   {
+@@ -271,7 +271,7 @@ xfer_parse_args(
+       if (STR_EQ(attr, "class"))
+       {
+         cur_xclass = xcalloc(1, sizeof(*cur_xclass));
+-        dl_list_default(&(cur_xclass->attr_list), FALSE, null_destroy_data);
++        dl_list_default(&(cur_xclass->attr_list), FALSE, (int(*)(void *))null_destroy_data);
+         
+         class = find_class_by_name(aa->schema, value);
+         if (!class)
+@@ -530,11 +530,11 @@ index_data_files_by_suffix(
+     }
+     
+     /* Get current data and index files list */ 
+-    dl_list_default(&full_file_list, FALSE, destroy_file_struct_data);
++    dl_list_default(&full_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+     get_file_list(class, aa, &full_file_list);
+ 
+     /* Build new data files list */
+-    dl_list_default(&data_file_list, FALSE, destroy_file_struct_data);
++    dl_list_default(&data_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+     if (!build_file_list_by_suffix(&data_file_list, MKDB_DATA_FILE,
+                                    class->db_dir, suffix))
+     {
+@@ -542,7 +542,7 @@ index_data_files_by_suffix(
+       break;
+     }
+ 
+-    dl_list_default(&index_file_list, FALSE, destroy_index_fp_data);
++    dl_list_default(&index_file_list, FALSE, (int(*)(void *))destroy_index_fp_data);
+     if (!build_index_list(class, aa, &index_file_list, class->db_dir, NULL))
+     {
+       rval = FALSE;
+diff --git a/server/xfer.c b/server/xfer.c
+index aa1ef1c..007df82 100644
+--- a/server/xfer.c
++++ b/server/xfer.c
+@@ -141,7 +141,7 @@ static xfer_arg_struct *xfer_parse_args (char *str)
+   }
+ 
+   xs = xcalloc(1, sizeof(*xs));
+-  dl_list_default(&(xs->xfer_class_list), FALSE, destroy_xfer_class_data);
++  dl_list_default(&(xs->xfer_class_list), FALSE, (int(*)(void *))destroy_xfer_class_data);
+ 
+   if (STR_EQ(world, argv[0]))
+   {
+@@ -211,7 +211,7 @@ static xfer_arg_struct *xfer_parse_args (char *str)
+       if (STR_EQ(attr, "class"))
+       {
+         cur_xclass = xcalloc(1, sizeof(*cur_xclass));
+-        dl_list_default(&(cur_xclass->attr_list), FALSE, null_destroy_data);
++        dl_list_default(&(cur_xclass->attr_list), FALSE, (int(*)(void *))null_destroy_data);
+         
+         class = find_class_by_name(aa->schema, value);
+         if (!class)
+@@ -410,8 +410,8 @@ xfer_class(
+     return FALSE;
+   }
+ 
+-  dl_list_default(&master_file_list, FALSE, destroy_file_struct_data);
+-  dl_list_default(&file_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&master_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
++  dl_list_default(&file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+   
+   /* pull all of the data files for the current class */
+   if (!get_file_list(class, aa, &master_file_list))
+diff --git a/tools/rwhois_deleter/rwhois_deleter.c b/tools/rwhois_deleter/rwhois_deleter.c
+index 94a7667..2eb842b 100644
+--- a/tools/rwhois_deleter/rwhois_deleter.c
++++ b/tools/rwhois_deleter/rwhois_deleter.c
+@@ -110,7 +110,7 @@ query_for_records(
+   *total = 0;
+ 
+   record_list = (dl_list_type *) xcalloc(1, sizeof(*record_list));
+-  dl_list_default(record_list, TRUE, destroy_record_data);
++  dl_list_default(record_list, TRUE, (int(*)(void *))destroy_record_data);
+   
+   if (!parse_query(query_string, &query))
+   {
+diff --git a/tools/rwhois_indexer/rwhois_indexer.c b/tools/rwhois_indexer/rwhois_indexer.c
+index e8ed5c8..53c5bee 100644
+--- a/tools/rwhois_indexer/rwhois_indexer.c
++++ b/tools/rwhois_indexer/rwhois_indexer.c
+@@ -69,8 +69,8 @@ delete_index_files(
+   file_struct  *index_file;
+   int          not_done;
+   
+-  dl_list_default(&master_file_list, FALSE, destroy_file_struct_data);
+-  dl_list_default(&index_file_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&master_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
++  dl_list_default(&index_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+ 
+   /* get the index file_structs for the particular class */
+   if (! get_file_list(class, auth_area, &master_file_list))
+diff --git a/tools/rwhois_repack/rwhois_repack.c b/tools/rwhois_repack/rwhois_repack.c
+index 8694d4f..c25af7b 100644
+--- a/tools/rwhois_repack/rwhois_repack.c
++++ b/tools/rwhois_repack/rwhois_repack.c
+@@ -363,10 +363,10 @@ repack_index_files(class_struct *class,
+   if (dl_list_empty(index_file_list)) return TRUE;
+ 
+ 
+-  dl_list_default(&sub_index_file_list, FALSE, destroy_file_struct_data);
+-  dl_list_default(&base_index_file_list, FALSE, destroy_index_fp_data);
+-  dl_list_default(&new_index_file_list, FALSE, destroy_index_fp_data);
+-  dl_list_default(&add_file_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&sub_index_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
++  dl_list_default(&base_index_file_list, FALSE, (int(*)(void *))destroy_index_fp_data);
++  dl_list_default(&new_index_file_list, FALSE, (int(*)(void *))destroy_index_fp_data);
++  dl_list_default(&add_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+ 
+   /* generate the various possible index files we could create */
+   if (! build_index_list(class, auth_area, &base_index_file_list,
+@@ -532,8 +532,8 @@ run_repack_class_aa(class_struct          *class,
+   }
+ 
+   /* initialize the list */
+-  dl_list_default(&index_file_list, FALSE, destroy_file_struct_data);
+-  dl_list_default(&all_file_list, FALSE, destroy_file_struct_data);
++  dl_list_default(&index_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
++  dl_list_default(&all_file_list, FALSE, (int(*)(void *))destroy_file_struct_data);
+ 
+   /* get the file list from master index file (local.db) */
+   if (! get_file_list(class, auth_area, &all_file_list) )
+-- 
+2.48.1
+

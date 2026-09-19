@@ -1,0 +1,21 @@
+Safekeep is designed such that the same script can be used on both the 
+backup server (which initiates backups from clients), as well as on 
+individual clients to handle client specific tasks such as 
+dedicated ssh key generation and client-side backup processes such as dump. 
+
+As a result, on Fedora safekeep is packaged in such a way that Fedora 
+clients which want to communicate with a safekeep managed backup server 
+can choose to install the safekeep-client subpackage to ensure correct 
+safekeep client configuration. This safekeep-client subpackage does not 
+itself install any additional files at this time. But it does ensure 
+that the correct client side applications are in place for safekeep 
+managed backup services.
+
+It is recommended that all computers acting as safekeep clients install 
+the safekeep-client subpackage, even though at this time it is 
+technically optional if the necessary components such as an ssh server, 
+coreutils and util-linux are installed correctly on the client Fedora 
+system. In future version of safekeep the safekeep-client package may 
+become necessary for correct client operation.
+
+

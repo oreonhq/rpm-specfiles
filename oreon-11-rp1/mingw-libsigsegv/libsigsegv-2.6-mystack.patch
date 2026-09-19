@@ -1,0 +1,112 @@
+From 4f14ef87b2fba9718c1a88b9ed9ca7ba111d60da Mon Sep 17 00:00:00 2001
+From: Paolo Bonzini <pbonzini@redhat.com>
+Date: Tue, 22 Sep 2009 08:10:43 +0000
+Subject: Fix crash of stackoverflow2 on x86_64-linux.
+
+---
+diff --git a/src/sigsegv.h.in b/src/sigsegv.h.in
+index 85f337d..6b8e4c7 100644
+--- a/src/sigsegv.h.in
++++ b/src/sigsegv.h.in
+@@ -121,9 +121,11 @@ typedef void (*stackoverflow_handler_t) (int emergency, stackoverflow_context_t
+ /*
+  * Installs a stack overflow handler.
+  * The extra_stack argument is a pointer to a pre-allocated area used as a
+- * stack for executing the handler. It is typically allocated by use of
+- * `alloca' during `main'. Its size should be sufficiently large.
+- * The following code determines an appropriate size:
++ * stack for executing the handler. It typically comes from a static variable
++ * or from heap-allocated memoty; placing it on the main stack may fail on
++ * some operating systems.
++ * Its size, passed in extra_stack_size, should be sufficiently large.  The
++ * following code determines an appropriate size:
+  *   #include <signal.h>
+  *   #ifndef SIGSTKSZ         / * glibc defines SIGSTKSZ for this purpose * /
+  *   # define SIGSTKSZ 16384  / * on most platforms, 16 KB are sufficient * /
+diff --git a/tests/stackoverflow1.c b/tests/stackoverflow1.c
+index 0970e79..23eff58 100644
+--- a/tests/stackoverflow1.c
++++ b/tests/stackoverflow1.c
+@@ -88,12 +88,13 @@ recurse (volatile int n)
+   return *recurse_1 (n, &n);
+ }
+ 
++/* glibc says: Users should use SIGSTKSZ as the size of user-supplied
++   buffers.  */
++char mystack[2 * SIGSTKSZ];
++
+ int
+ main ()
+ {
+-  /* glibc says: Users should use SIGSTKSZ as the size of user-supplied
+-     buffers.  */
+-  char mystack[SIGSTKSZ];
+   sigset_t emptyset;
+ 
+ #if HAVE_SETRLIMIT && defined RLIMIT_STACK
+diff --git a/tests/stackoverflow2.c b/tests/stackoverflow2.c
+index 2475bf2..4a07c66 100644
+--- a/tests/stackoverflow2.c
++++ b/tests/stackoverflow2.c
+@@ -109,12 +109,13 @@ recurse (volatile int n)
+   return *recurse_1 (n, &n);
+ }
+ 
++/* glibc says: Users should use SIGSTKSZ as the size of user-supplied
++   buffers.  */
++char mystack[2 * SIGSTKSZ];
++
+ int
+ main ()
+ {
+-  /* glibc says: Users should use SIGSTKSZ as the size of user-supplied
+-     buffers.  */
+-  char mystack[SIGSTKSZ];
+   sigset_t emptyset;
+   void *p;
+ 
+--
+cgit v0.8.2.1
+diff -up libsigsegv-2.6/m4/sigaltstack-longjmp.m4.stack2 libsigsegv-2.6/m4/sigaltstack-longjmp.m4
+--- libsigsegv-2.6/m4/sigaltstack-longjmp.m4.stack2	2008-08-24 15:40:16.000000000 -0500
++++ libsigsegv-2.6/m4/sigaltstack-longjmp.m4	2009-09-22 13:26:07.552664938 -0500
+@@ -51,9 +51,9 @@ int recurse (volatile int n)
+   int sum = 0;
+   return *recurse_1 (n, &sum);
+ }
++char mystack[2 * SIGSTKSZ];
+ int main ()
+ {
+-  char mystack[SIGSTKSZ];
+   stack_t altstack;
+   struct sigaction action;
+   sigset_t emptyset;
+diff -up libsigsegv-2.6/m4/sigaltstack.m4.stack2 libsigsegv-2.6/m4/sigaltstack.m4
+--- libsigsegv-2.6/m4/sigaltstack.m4.stack2	2008-08-24 15:41:10.000000000 -0500
++++ libsigsegv-2.6/m4/sigaltstack.m4	2009-09-22 13:25:47.462666140 -0500
+@@ -71,9 +71,10 @@ int recurse (volatile int n)
+   int sum = 0;
+   return *recurse_1 (n, &sum);
+ }
++char mystack[2 * SIGSTKSZ];
++
+ int main ()
+ {
+-  char mystack[SIGSTKSZ];
+   stack_t altstack;
+   struct sigaction action;
+ #if defined HAVE_SETRLIMIT && defined RLIMIT_STACK
+diff -up libsigsegv-2.6/m4/sigaltstack-siglongjmp.m4.stack2 libsigsegv-2.6/m4/sigaltstack-siglongjmp.m4
+--- libsigsegv-2.6/m4/sigaltstack-siglongjmp.m4.stack2	2008-08-24 15:40:49.000000000 -0500
++++ libsigsegv-2.6/m4/sigaltstack-siglongjmp.m4	2009-09-22 13:26:43.994665249 -0500
+@@ -49,9 +49,9 @@ int recurse (volatile int n)
+   int sum = 0;
+   return *recurse_1 (n, &sum);
+ }
++char mystack[2 * SIGSTKSZ];
+ int main ()
+ {
+-  char mystack[SIGSTKSZ];
+   stack_t altstack;
+   struct sigaction action;
+ #ifdef __BEOS__

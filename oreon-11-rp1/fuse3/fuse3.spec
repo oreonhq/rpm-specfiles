@@ -7,12 +7,12 @@
 %global _udevrulesdir %{_prefix}/lib/udev/rules.d
 %endif
 
-%global xyz_version 3.18.1
+%global xyz_version 3.18.3
 %global xy_version %(sed 's/\\(.*\\)\\..*/\\1/'<<<%{xyz_version})
 
 Name:		fuse3
 Version:	%{xyz_version}
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	File System in Userspace (FUSE) v3 utilities
 License:	GPL-1.0-or-later
 URL:		https://github.com/libfuse/libfuse/

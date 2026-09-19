@@ -1,0 +1,11 @@
+--- README
++++ README
+@@ -36,7 +36,7 @@
+ Thanks to David Muir Sharnoff for getting me to actually work out what
+ was going on and fix my code.
+ 
+-All files contained in this installation are copyright © 1996,1997,1999
++All files contained in this installation are copyright Â© 1996,1997,1999
+ Carey Evans except for parts from the Perl distribution.  All rights
+ reserved.
+ 

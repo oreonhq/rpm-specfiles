@@ -1,0 +1,20 @@
+[Unit]
+Description=Amavis mail content checker
+Documentation=http://www.ijs.si/software/amavisd/#doc
+After=network.target
+Wants=clamd@amavisd.service
+
+[Service]
+Type=forking
+PIDFile=/run/amavisd/amavisd.pid
+EnvironmentFile=-/etc/sysconfig/amavisd
+ExecStart=/usr/sbin/amavisd -c /etc/amavisd/amavisd.conf $ARGS
+ExecReload=/usr/sbin/amavisd -c /etc/amavisd/amavisd.conf $ARGS reload
+Restart=on-failure
+PrivateTmp=true
+CapabilityBoundingSet=CAP_DAC_OVERRIDE CAP_SETGID CAP_SETUID
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

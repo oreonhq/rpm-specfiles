@@ -1,0 +1,31 @@
+From c45defc6a27e344f7d3f69dde806d4b187e2aa27 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Mon, 23 Oct 2023 15:55:38 +0100
+Subject: [PATCH 10/18] v3.5.0: more linker fixes
+
+---
+ contrib/brl/bbas/imesh/CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/contrib/brl/bbas/imesh/CMakeLists.txt b/contrib/brl/bbas/imesh/CMakeLists.txt
+index b122b33faf..a8a107e574 100644
+--- a/contrib/brl/bbas/imesh/CMakeLists.txt
++++ b/contrib/brl/bbas/imesh/CMakeLists.txt
+@@ -22,11 +22,11 @@ aux_source_directory(Templates imesh_sources)
+ 
+ vxl_add_library(LIBRARY_NAME imesh LIBRARY_SOURCES  ${imesh_sources})
+ 
+-target_link_libraries(imesh ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
++target_link_libraries(imesh ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul brdb ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
+ 
+ # Algorithms
+ add_subdirectory(algo)
+ 
+ if( BUILD_TESTING )
+   add_subdirectory(tests)
+-endif()
++endif()
+\ No newline at end of file
+-- 
+2.46.1
+

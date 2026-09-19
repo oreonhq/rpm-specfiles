@@ -1,0 +1,11 @@
+[Unit]
+Description=MogileFS tracker
+Documentation=man:mogilefsd(1)
+After=network.target
+
+[Service]
+User=mogilefsd
+ExecStart=/usr/bin/mogilefsd
+
+[Install]
+WantedBy=multi-user.target

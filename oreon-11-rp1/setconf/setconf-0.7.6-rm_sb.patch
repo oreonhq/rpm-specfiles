@@ -1,0 +1,9 @@
+diff --git a/setconf.py b/setconf.py
+index 2e57b4e..0c3abf7 100755
+--- a/setconf.py
++++ b/setconf.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python
+ # -*- coding: utf-8 -*-
+ #
+ # setconf

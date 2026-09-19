@@ -1,0 +1,33 @@
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.c.fix-win32-only freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.c.fix-win32-only	2025-03-27 17:17:09.074132680 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.c	2025-03-27 17:17:59.166516524 -0400
+@@ -214,7 +214,9 @@ void fwl_set_modeRecord() {
+ void fwl_do_keyPress0(int key, int type);
+ int fwl_handle_mouse0(const int mev, const unsigned int button, int x, int y, int windex);
+ int fwl_handle_touch0(int mev, unsigned int ID, int mouseX, int mouseY, int windex);
++#if defined(_MSC_VER)
+ void updateCursorStyle0(int cstyle);
++#endif
+ 
+ static pthread_t playback_thread;
+ void _playbackthread(ttglobal tglobal) {
+@@ -248,7 +250,9 @@ void _playbackthread(ttglobal tglobal) {
+ 			mouseY = (int)((fmouseY + 1.0)/scale + .5f);
+ 			mouseX = (int)((fmouseX + 1.0)/scale + .5f);
+ 			cstyle = fwl_handle_mouse0(mev, butnum, mouseX, mouseY, windex);
++#if defined(_MSC_VER)
+ 			updateCursorStyle0(cstyle);
++#endif
+ 			break;
+ 		case 'T':
+ 			sscanf(line, "%c,%d,%u,%f,%f,%d,%lf\n", &cc, &mev, &ID, &fmouseX, &fmouseY, &windex, &dtime);
+@@ -261,7 +265,9 @@ void _playbackthread(ttglobal tglobal) {
+ 			mouseY = (int)(fmouseY + 1.0) / scale;
+ 			mouseX = (int)(fmouseX + 1.0) / scale;
+ 			cstyle = fwl_handle_touch0(mev, ID, mouseX, mouseY, windex);
++#if defined(_MSC_VER)
+ 			updateCursorStyle0(cstyle);
++#endif
+ 			break;
+ 		case 'K':
+ 			sscanf(line, "%c,%d,%d,%lf\n", &cc, &key, &type, &dtime);

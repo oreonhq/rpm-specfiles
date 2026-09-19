@@ -1,0 +1,12 @@
+diff -up XML-Atom-0.35/t/18-unicode.t.orig XML-Atom-0.35/t/18-unicode.t
+--- XML-Atom-0.35/t/18-unicode.t.orig	2009-04-24 10:34:23.000000000 +0200
++++ XML-Atom-0.35/t/18-unicode.t	2009-05-10 12:36:10.000000000 +0200
+@@ -3,7 +3,7 @@
+ use strict;
+ use utf8;
+ 
+-use Test::More skip_all => "Skipping Unicode test since it depends on LibXML";
++use Test::More tests => 14; # skip_all => "Skipping Unicode test since it depends on LibXML";
+ use XML::Atom;
+ use XML::Atom::Entry;
+ use XML::Atom::Person;

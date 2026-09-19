@@ -1,0 +1,21 @@
+From 9a7f9d5469ec36ed18a1a9242776b75cd7e8ee31 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Sun, 7 Apr 2024 23:26:56 +0200
+Subject: [PATCH] Remove use of draw-background
+
+The key is no longer present in org.gnome.desktop.background
+
+diff --git a/src/SetBG.cc b/src/SetBG.cc
+index f868126..8ceefa6 100644
+--- a/src/SetBG.cc
++++ b/src/SetBG.cc
+@@ -1285,8 +1285,7 @@ Glib::ustring SetBGGnome::get_gsettings_key()
+  */
+ void SetBGGnome::set_show_desktop()
+ {
+-    Glib::RefPtr<Gio::Settings> settings = Gio::Settings::create(get_gsettings_key());
+-    settings->set_boolean("draw-background", true);
++    // this space left blank as show-desktop no longer a thing in GNOME
+ }
+ 
+ /**

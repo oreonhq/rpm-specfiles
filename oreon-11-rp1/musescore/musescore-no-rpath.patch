@@ -1,0 +1,14 @@
+--- MuseScore-4.6.0-beta/src/app/CMakeLists.txt.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/app/CMakeLists.txt	2025-09-19 11:42:36.350600090 -0600
+@@ -56,11 +56,6 @@ elseif(OS_IS_LIN)
+         set(EXECUTABLE_NAME "${EXECUTABLE_NAME}${MUSE_APP_INSTALL_SUFFIX}")
+     endif(MUSE_APP_INSTALL_SUFFIX)
+ 
+-    set(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
+-    if (BUILD_SHARED_LIBS)
+-        set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${SHARED_LIBS_INSTALL_DESTINATION}")
+-    endif(BUILD_SHARED_LIBS)
+-
+ elseif(OS_IS_MAC)
+ 
+     set(MACOSX_BUNDLE_ICON_FILE AppIcon.icns)

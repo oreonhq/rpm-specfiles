@@ -1,0 +1,30 @@
+diff -up IQmol3-278b6382210d8cfad02d24d416a0eed3c5b936bb/src/Util/Preferences.C.fragdir IQmol3-278b6382210d8cfad02d24d416a0eed3c5b936bb/src/Util/Preferences.C
+--- IQmol3-278b6382210d8cfad02d24d416a0eed3c5b936bb/src/Util/Preferences.C.fragdir	2022-12-15 09:02:23.000000000 +0000
++++ IQmol3-278b6382210d8cfad02d24d416a0eed3c5b936bb/src/Util/Preferences.C	2023-01-26 11:16:58.185947477 +0000
+@@ -386,7 +386,7 @@ QString FragmentDirectory()
+       dir.cdUp();
+       dir.cd("share/fragments");
+ #else
+-      dir.setPath("/usr/share/iqmol/fragments");
++      dir.setPath("/usr/share/IQmol/fragments");
+ #endif
+       fragDir = dir.absolutePath();
+    }else {
+@@ -745,7 +745,7 @@ qDebug() << "Server Directory set to" <<
+       dir.cdUp();
+       dir.cd("share/servers");
+ #else
+-      dir.setPath("/usr/share/iqmol/servers");
++      dir.setPath("/usr/share/IQmol/servers");
+ #endif
+       directory = dir.absolutePath();
+    }else {
+@@ -775,7 +775,7 @@ QString DefaultServerFile()
+       dir.cdUp();
+       dir.cd("share");
+ #else
+-      dir.setPath("/usr/share/iqmol");
++      dir.setPath("/usr/share/IQmol");
+ #endif
+       QFileInfo info(dir,"default_server.cfg");
+       filePath = info.absoluteFilePath(); 

@@ -1,0 +1,78 @@
+diff -Naur src/cups-pdf.c src/cups-pdf.c
+--- src/cups-pdf.c	2025-03-23 11:07:07.860429362 -0400
++++ src/cups-pdf.c	2025-10-20 10:58:40.358696865 -0400
+@@ -634,6 +634,58 @@
+ }
+ 
+ /***************************************************************************************
++** getdesktopdir(passwd)
++****************************************************************************************
++**
++** get the XDG Desktop directory for the target user
++**
++** Accepts:	pointer to struct passwd for selected target user
++**
++** Returns:	pointer to char string containing the path of Desktop directory
++**
++** Configuration:
++**    Out		CUPS-PDF output directory
++*/
++static char *getdesktopdir(struct passwd *passwd) {
++  static char bufret[BUFSIZE];
++  char *need, *ret, buftmp[BUFSIZE];
++  FILE *fic;
++
++  // Default (if not found) = $HOME
++  ret=passwd->pw_dir;
++
++  snprintf(buftmp, BUFSIZE, "%s/.config/user-dirs.dirs", passwd->pw_dir);
++  fic = fopen(buftmp, "r");
++  if (fic) {
++    while (fgets(buftmp, BUFSIZE, fic)) {
++      need=strstr(buftmp, "XDG_DESKTOP_DIR=");
++      if (need) {
++        need+=16;
++        // Remove opening quote
++        if ((*need)=='"') need++;
++        if (memcmp(need, "$HOME", 5)) {
++          strncpy(bufret, need, BUFSIZE);
++        }
++        else {
++          snprintf(bufret, BUFSIZE, "%s%s", passwd->pw_dir, need+5);
++        }
++        // Remove closing quote
++        need=strrchr(bufret, '"');
++        if (need) *need=0;
++        // Return internal buffer
++        ret = bufret;
++        
++        log_event(CPDEBUG, "XDG_DESKTOP_DIR:", ret);
++      }
++    } 
++    fclose(fic);
++  }
++  else
++    log_event(CPERROR, "Can't read", buftmp);
++  return ret;
++}
++
++/***************************************************************************************
+ ** preparedirname(passwd,uname)
+ ****************************************************************************************
+ **
+@@ -658,6 +710,15 @@
+ 
+   strncpy(bufin, Conf_Out, BUFSIZE);
+   do {
++    needle=strstr(bufin, "${DESKTOP}");
++    if (needle == NULL)
++      break;
++    needle[0]='\0';
++    cptr=needle+10;
++    snprintf(bufout, BUFSIZE, "%s%s%s", bufin, getdesktopdir(passwd), cptr);
++    strncpy(bufin, bufout, BUFSIZE);
++  } while (needle != NULL);
++  do {
+     needle=strstr(bufin, "${HOME}");
+     if (needle == NULL)
+       break;

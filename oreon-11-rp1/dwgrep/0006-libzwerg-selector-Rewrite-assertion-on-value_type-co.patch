@@ -1,0 +1,49 @@
+From c7a41f8febfc00735144525e53e83edf21dbb232 Mon Sep 17 00:00:00 2001
+From: Petr Machata <petrm@nvidia.com>
+Date: Sun, 8 May 2022 22:39:27 +0200
+Subject: [PATCH 06/10] libzwerg/selector: Rewrite assertion on
+ value_type::code() return type
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The assertion is in place because the selector relies on the fact that
+it can lay out the stact fingerprint in a certain way. However on a newer
+GCC, it started warning:
+
+ libzwerg/selector.hh:45:57: warning: ‘this’ pointer is null [-Wnonnull]
+    45 |   static_assert (sizeof (((value_type *) nullptr)->code ()) == 1,
+
+While it does not break the build, and is a spurious warning, it is noisy
+and annoying. Rewrite the assertions to be inside an unused private method
+that takes a bogus value_type argument, and use that to do the query.
+
+Signed-off-by: Petr Machata <me@pmachata.org>
+---
+ libzwerg/selector.hh | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/libzwerg/selector.hh b/libzwerg/selector.hh
+index 0e16930..1645e6f 100644
+--- a/libzwerg/selector.hh
++++ b/libzwerg/selector.hh
+@@ -41,11 +41,13 @@ struct selector
+ {
+   typedef uint32_t sel_t;
+   static auto const W = sizeof (sel_t);
+-  static_assert (CHAR_BIT == 8, "character has 8 bits");
+-  static_assert (sizeof (((value_type *) nullptr)->code ()) == 1,
+-		 "sizeof of value_type code is 1");
+ 
+ private:
++  void unused(value_type &v)
++  {
++    static_assert (CHAR_BIT == 8, "character has 8 bits");
++    static_assert (sizeof (v.code ()) == 1, "sizeof of value_type code is 1");
++  }
+ 
+   sel_t m_imprint;
+   sel_t m_mask;
+-- 
+2.51.0
+

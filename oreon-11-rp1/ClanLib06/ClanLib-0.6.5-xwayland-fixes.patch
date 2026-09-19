@@ -1,0 +1,124 @@
+diff -ur ClanLib-0.6.5/Sources/Display/Display/X11/display_xwindow.cpp ClanLib-0.6.5.new/Sources/Display/Display/X11/display_xwindow.cpp
+--- ClanLib-0.6.5/Sources/Display/Display/X11/display_xwindow.cpp	2002-08-14 21:33:36.000000000 +0200
++++ ClanLib-0.6.5.new/Sources/Display/Display/X11/display_xwindow.cpp	2019-11-05 15:30:21.875867133 +0100
+@@ -303,8 +303,13 @@
+ 	
+ 	if (fullscreen)
+ 	{
+-		XSetInputFocus(m_dpy, m_win, RevertToParent, CurrentTime);
++		// Wait for it to be mapped
++		XEvent event;
++		do {
++			XMaskEvent(m_dpy, StructureNotifyMask, &event);
++		} while ( (event.type != MapNotify) || (event.xmap.event != m_win) );
+ 		XGrabPointer(m_dpy, m_win, true, 0, GrabModeAsync, GrabModeAsync, m_win, None, CurrentTime);
++		XGrabKeyboard(m_dpy, m_win, true, GrabModeAsync, GrabModeAsync, CurrentTime);
+ 	}
+ 
+ 	m_target = create_target();
+diff -ur ClanLib-0.6.5/Sources/Display/Display/X11/display_xwindow.h ClanLib-0.6.5.new/Sources/Display/Display/X11/display_xwindow.h
+--- ClanLib-0.6.5/Sources/Display/Display/X11/display_xwindow.h	2019-11-05 13:45:37.613392627 +0100
++++ ClanLib-0.6.5.new/Sources/Display/Display/X11/display_xwindow.h	2019-11-05 15:27:57.419753032 +0100
+@@ -106,6 +106,23 @@
+ 		XDefineCursor(get_display(), get_window(), cursor);
+ 	}
+ 	
++	bool has_focus() {
++		// Assume we have focus if we are fullscreen, this is necessary
++		// for correct operation under Xwayland, where our focus check fails
++		if (is_fullscreen())
++			return true;
++
++		// get_window() returns NULL if in DGA mode.
++		if (get_window() == 0)
++			return true;
++
++		// Check if window has focus right now:
++		Window focus_win;
++		int focus_state;
++		XGetInputFocus(get_display(), &focus_win, &focus_state);
++		return get_window() == focus_win;
++	}
++
+ protected:
+ 	virtual void get_real_resolution(int* width, int* height);
+ 	void fill_modelist();
+diff -ur ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp ClanLib-0.6.5.new/Sources/Display/Input/X11/keyboard_x11.cpp
+--- ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp	2019-11-05 13:45:37.625392719 +0100
++++ ClanLib-0.6.5.new/Sources/Display/Input/X11/keyboard_x11.cpp	2019-11-05 15:25:55.666814019 +0100
+@@ -117,17 +117,7 @@
+ 
+ void CL_XWindowKeyboard::keep_alive()
+ {
+-	// Check if window has focus right now:
+-	Window focus_win;
+-	int focus_state;
+-	XGetInputFocus(
+-		card->get_display(),
+-		&focus_win,
+-		&focus_state);
+-		
+-	// get_window() returns NULL if in DGA mode.
+-	if (card->get_window() == 0 ||
+-		card->get_window() == focus_win)
++	if (card->has_focus())
+ 	{
+ 		XQueryKeymap(card->get_display(), keys_return);
+ 	}
+diff -ur ClanLib-0.6.5/Sources/Display/Input/X11/mouse_x11.cpp ClanLib-0.6.5.new/Sources/Display/Input/X11/mouse_x11.cpp
+--- ClanLib-0.6.5/Sources/Display/Input/X11/mouse_x11.cpp	2002-05-17 10:47:58.000000000 +0200
++++ ClanLib-0.6.5.new/Sources/Display/Input/X11/mouse_x11.cpp	2019-11-05 15:27:37.402598649 +0100
+@@ -124,14 +124,6 @@
+ 	axes[0].center = (card->get_width())/2.0;
+ 	axes[1].center = (card->get_height())/2.0;
+ 
+-	// Check if window has focus right now:
+-	Window focus_win;
+-	int focus_state;
+-	XGetInputFocus(
+-		card->get_display(),
+-		&focus_win,
+-		&focus_state);
+-
+ 	XQueryPointer(card->get_display(),
+ 		      card->get_window(),
+ 		      &root,
+@@ -149,8 +141,7 @@
+ 	if (win_x >= cursor->get_max_x()) win_x = (int)cursor->get_max_x() - 1;
+ 	if (win_y >= cursor->get_max_y()) win_y = (int)cursor->get_max_y() - 1;
+ 
+-	// get_window() returns NULL if in DGA mode.	
+-	if (card->get_window() == 0 || card->get_window() == focus_win)
++	if (card->has_focus())
+ 	{
+ 		axes[0].pos = cursor->x;
+ 		axes[1].pos = cursor->y;
+diff -ur ClanLib-0.6.5/Sources/GL/GLX/displaycard_glx.cpp ClanLib-0.6.5.new/Sources/GL/GLX/displaycard_glx.cpp
+--- ClanLib-0.6.5/Sources/GL/GLX/displaycard_glx.cpp	2019-11-05 15:43:10.695796640 +0100
++++ ClanLib-0.6.5.new/Sources/GL/GLX/displaycard_glx.cpp	2019-11-05 15:46:37.803393768 +0100
+@@ -252,8 +252,13 @@
+ 
+ 	if (fullscreen)
+ 	{
+-		XSetInputFocus(dpy, win, RevertToParent, CurrentTime);
++		// Wait for it to be mapped
++		XEvent event;
++		do {
++			XMaskEvent(dpy, StructureNotifyMask, &event);
++		} while ( (event.type != MapNotify) || (event.xmap.event != win) );
+ 		XGrabPointer(dpy, win, true, 0, GrabModeAsync, GrabModeAsync, win, None, CurrentTime);
++		XGrabKeyboard(dpy, win, true, GrabModeAsync, GrabModeAsync, CurrentTime);
+ 	}
+ 
+ 	// Listen for keystrokes...
+diff -ur ClanLib-0.6.5/Sources/Sound/Sound/ClanSound/alsa.cpp ClanLib-0.6.5.new/Sources/Sound/Sound/ClanSound/alsa.cpp
+--- ClanLib-0.6.5/Sources/Sound/Sound/ClanSound/alsa.cpp	2019-11-05 14:30:21.576099991 +0100
++++ ClanLib-0.6.5.new/Sources/Sound/Sound/ClanSound/alsa.cpp	2019-11-05 12:17:12.086830277 +0100
+@@ -47,6 +47,7 @@
+ 	snd_pcm_hw_params_t *hwparams;
+ 	unsigned int mixing_frequency = 22050;
+ 	
++	handle = NULL;
+ 	rc = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
+ 	if (rc < 0)
+ 	{

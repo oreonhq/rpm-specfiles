@@ -1,0 +1,29 @@
+# specify command line arguments for cwdaemon
+#
+# -d Specifies device without /dev/ e.g. ttyS0, ttyS1, ttyUSB0, ttyd0 (FreeBSD), parport0,
+#    parport1, ... or null for no port keying.
+#    Default: parport0 with ppdev driver
+# 
+# -p Specifies udp port
+#    Defualt:  6789
+#
+# -P Specifies priority -20 to +20
+#
+# -s Specifies CW speed in WPM
+#    Default:  24
+#
+# -t Specifies PTT delay
+#    Default:  0
+#
+# -v Specifies volume for soundcard: 0 to 100
+#    Default:  70
+#
+# -w Specifies weight -50 to 50
+#    Default:  0
+#
+# -c Spefifies sound device: c - console, s - soundcard, b - both
+#    Default:  c
+
+#example: 
+#OPTS="-d parport0 -p 6789 -P 0 -s 24 -t 0 -v 70 -w 0 -x c"
+OPTS="-d parport0"

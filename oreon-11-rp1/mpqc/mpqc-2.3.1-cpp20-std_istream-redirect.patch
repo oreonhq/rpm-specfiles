@@ -1,0 +1,29 @@
+--- mpqc-2.3.1/src/lib/util/state/state_text.cc.cpp20	2002-10-11 04:58:21.000000000 +0900
++++ mpqc-2.3.1/src/lib/util/state/state_text.cc	2026-01-15 14:40:20.392566622 +0900
+@@ -138,6 +138,7 @@ StateInText::no_array()
+ 
+ ///////////////////////////////////////////////////////////////////////
+ 
++/*
+ int
+ StateInText::read(char*s)
+ {
+@@ -149,6 +150,7 @@ StateInText::read(char*s)
+     }
+   return strlen(s)+1;
+ }
++*/
+ 
+ int
+ StateInText::read(unsigned int&i)
+--- mpqc-2.3.1/src/lib/util/state/state_text.h.cpp20	2002-04-03 15:44:40.000000000 +0900
++++ mpqc-2.3.1/src/lib/util/state/state_text.h	2026-01-15 14:40:28.004235129 +0900
+@@ -94,7 +94,7 @@ class StateInText: public StateInFile {
+     void no_newline();
+     void no_array();
+ 
+-    int read(char*);
++    /* int read(char*); */
+     int read(unsigned int&);
+     int read(int&);
+     int read(float&);

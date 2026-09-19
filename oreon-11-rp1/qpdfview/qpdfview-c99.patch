@@ -1,0 +1,28 @@
+Integration of this synctex commit has been requested upstream:
+
+  <https://bugs.launchpad.net/qpdfview/+bug/2006446>
+
+commit 2897465154892a7737dcc90e4d6a00a1d1b3922c
+Author: Germán Poo-Caamaño <gpoo@gnome.org>
+Date:   Sat May 30 16:15:27 2020 -0400
+
+    Fix implicit declaration of vasprintf
+    
+    Fix build when compiling with `-Werror=implicit-function-declaration`.
+
+diff --git a/synctex/synctex_parser.c b/synctex/synctex_parser.c
+index 45124ea3bff536ef..cfb637709dfbfe2e 100644
+--- a/synctex/synctex_parser.c
++++ b/synctex/synctex_parser.c
+@@ -83,6 +83,11 @@
+  *  First level objects are sheets and forms, containing boxes, glues, kerns...
+  *  The third tree allows to browse leaves according to tag and line.
+  */
++/* Declare _GNU_SOURCE for accessing vasprintf. For MSC compiler, vasprintf is
++ * defined in this file
++ */
++#define _GNU_SOURCE
++
+ #   if defined(SYNCTEX_USE_LOCAL_HEADER)
+ #       include "synctex_parser_local.h"
+ #   else

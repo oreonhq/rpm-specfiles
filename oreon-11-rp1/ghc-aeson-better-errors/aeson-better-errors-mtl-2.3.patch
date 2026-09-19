@@ -1,0 +1,10 @@
+--- aeson-better-errors-0.9.1.1/src/Data/Aeson/BetterErrors/Internal.hs~	2001-09-09 09:46:40.000000000 +0800
++++ aeson-better-errors-0.9.1.1/src/Data/Aeson/BetterErrors/Internal.hs	2024-08-12 20:11:59.476150302 +0800
+@@ -12,6 +12,7 @@
+ #endif
+ 
+ import Control.Arrow (left)
++import Control.Monad
+ import Control.Monad.Identity
+ import Control.Monad.Reader
+ import Control.Monad.Trans.Except

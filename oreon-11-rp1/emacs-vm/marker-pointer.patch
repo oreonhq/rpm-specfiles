@@ -1,0 +1,10 @@
+--- lisp/vm-virtual.el~	2022-08-07 12:32:31.000000000 +0200
++++ lisp/vm-virtual.el	2022-12-30 17:08:41.000000000 +0100
+@@ -1016,6 +1016,7 @@
+   "Virtual selector to check if any header contains an instance of REGEXP."
+   (with-current-buffer (vm-buffer-of (vm-real-message-of m))
+     (save-excursion
++      (vm-select-folder-buffer)
+       (save-restriction
+ 	(widen)
+ 	(goto-char (vm-headers-of (vm-real-message-of m)))

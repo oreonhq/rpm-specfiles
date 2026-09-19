@@ -1,0 +1,11 @@
+--- Makefile.old	2006-07-06 20:33:34.000000000 +0200
++++ Makefile	2006-07-06 20:33:48.000000000 +0200
+@@ -53,6 +53,6 @@
+ 
+ install : $(NAME)
+ 	install -d $(DESTDIR)/usr/bin
+-	install -d $(DESTDIR)/usr/man/man6
++	install -d $(DESTDIR)/usr/share/man/man6
+ 	install -m755 $(NAME) $(DESTDIR)/usr/bin
+-	install -m644 man/$(NAME).6.gz $(DESTDIR)/usr/man/man6
++	install -m644 man/$(NAME).6.gz $(DESTDIR)/usr/share/man/man6

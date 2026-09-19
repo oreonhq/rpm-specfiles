@@ -1,26 +1,24 @@
-%global source0_hash e15d2f1bab8b3cf18161773b96f34f0199ef483034c577da2731c3a3290cfe76
-
-%bcond doc 0
+%global source0_hash none
 
 Name:           python-pyproject-metadata
-Version:        0.11.0
-Release:        2%{?dist}
+Version:        0.12.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        PEP 621 metadata parsing
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/FFY00/python-pyproject-metadata
-Source0:        https://github.com/FFY00/python-pyproject-metadata/archive/%{version}/pyproject-metadata-%{version}.tar.gz
+URL:            https://github.com/pypa/pyproject-metadata
+Source:         %{pypi_source pyproject_metadata}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  pyproject-rpm-macros
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Dataclass for PEP 621 metadata with support for core metadata generation.
-
-This project does not implement the parsing of pyproject.toml containing PEP
-621 metadata. Instead, given a Python data structure representing PEP 621
-metadata (already parsed), it will validate this input and generate a PEP
-643-compliant metadata file (e.g. PKG-INFO).}
+This is package 'pyproject-metadata' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -29,27 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-pyproject-metadata %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n pyproject-metadata-%{version}
-sed -i /pytest-cov/d pyproject.toml
+%autosetup -p1 -n pyproject_metadata-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pyproject_metadata
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pyproject-metadata -f %{pyproject_files}
-%doc docs/changelog.md README.md
 
 %changelog
 %autochangelog

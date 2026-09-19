@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>xblast.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>XBlast</name>
+  <summary>Lay bombs and Blast the other players of the field</summary>
+  <description>
+    <p>
+     XBlast is a multi-player arcade game where the "purpose" is to Blast
+     the other players of the gamefield by laying bombs close to them.
+     While at the same time you must avoid being blown up yourself.
+    </p>
+    <p>
+     The game can be played with at least two players and up to six players.
+    </p>
+    <p>
+     The game comes with many different types of bombs, player upgrades,
+     levels, etc.
+    </p>
+  </description>
+  <url type="homepage">http://xblast.sourceforge.net/</url>
+  <screenshots>
+    <screenshot type="default">http://freexbresse.free.fr/xblast/pics/levyb/lev66.gif</screenshot>
+    <screenshot>http://freexbresse.free.fr/xblast/pics/levyb/lev22.gif</screenshot>
+    <screenshot>http://freexbresse.free.fr/xblast/pics/levyb/lev09.gif</screenshot>
+    <screenshot>http://freexbresse.free.fr/xblast/pics/levyb/lev43.gif</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-cartoon">mild</content_attribute>
+  </content_rating>
+  <releases>
+    <release version="2.10.4" date="2006-06-14">
+    <description>
+     <p>Latest stable xblast release</p>
+    </description>
+    </release>
+  </releases>
+</component>

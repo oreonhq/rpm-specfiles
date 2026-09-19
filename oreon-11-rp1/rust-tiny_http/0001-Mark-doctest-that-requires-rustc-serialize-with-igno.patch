@@ -1,0 +1,26 @@
+From cefe2f0d48756e0f8d86c33b52e84eb395b8e4c1 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 18 Apr 2025 18:14:42 +0200
+Subject: [PATCH] Mark doctest that requires rustc-serialize with ignore
+ instead of no_run
+
+---
+ src/request.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/request.rs b/src/request.rs
+index 531d6aa..ec4ddcb 100644
+--- a/src/request.rs
++++ b/src/request.rs
+@@ -337,7 +337,7 @@ impl Request {
+     ///
+     /// # Example
+     ///
+-    /// ```no_run
++    /// ```rust,ignore
+     /// # extern crate rustc_serialize;
+     /// # extern crate tiny_http;
+     /// # use rustc_serialize::json::Json;
+-- 
+2.49.0
+

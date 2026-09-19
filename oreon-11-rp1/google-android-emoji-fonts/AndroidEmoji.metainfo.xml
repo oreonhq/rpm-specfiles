@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Peter Oliver <rpm@mavit.org.uk> -->
+<component type="font">
+  <id>AndroidEmoji</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>Apache-2.0</project_license>
+  <name>Android Emoji</name>
+  <summary>Emoji font released by Google</summary>
+  <description>
+    <p>
+      The Android Emoji typeface contains a number of pictographs and smileys,
+      popularly used in instant messages and chat forums.  The style of the
+      typeface is playful.  It is taken from Google's Android Jelly Bean
+      mobile phone operating system.
+    </p>
+    <p>
+      This font hasn’t been updated since 2012.  You may well be better
+      served by its replacement, Noto Emoji.
+    </p>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <image width="1200" height="675">
+        https://src.fedoraproject.org/rpms/google-android-emoji-fonts/raw/master/f/google-android-emoji-fonts.gnome-characters.png
+      </image>
+    </screenshot>
+  </screenshots>
+
+  <updatecontact>rpm@mavit.org.uk</updatecontact>
+
+  <provides>
+    <font>Android Emoji</font>
+  </provides>
+  <languages>
+    <lang>und-zsye</lang>
+  </languages>
+</component>

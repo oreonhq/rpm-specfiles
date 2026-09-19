@@ -1,0 +1,31 @@
+diff -rupN Flask-Gravatar-0.5.0/pytest.ini Flask-Gravatar-0.5.0-new/pytest.ini
+--- Flask-Gravatar-0.5.0/pytest.ini	2021-12-27 14:03:57.303596836 +0100
++++ Flask-Gravatar-0.5.0-new/pytest.ini	2021-12-27 13:56:07.050309138 +0100
+@@ -12,7 +12,7 @@
+ 
+ 
+ [pytest]
+-addopts = --pep8 --doctest-glob="*.rst" --doctest-modules --cov=flask_gravatar --cov-report=term-missing
++addopts = --doctest-glob="*.rst" --doctest-modules
+ pep8ignore = docs/conf.py ALL \
+              docs/_themes/flask_theme_support.py ALL
+-testpaths = docs tests flask_gravatar
++testpaths = docs tests
+diff -rupN Flask-Gravatar-0.5.0/setup.py Flask-Gravatar-0.5.0-new/setup.py
+--- Flask-Gravatar-0.5.0/setup.py	2021-12-27 14:03:57.307596835 +0100
++++ Flask-Gravatar-0.5.0-new/setup.py	2021-12-27 14:03:51.880597152 +0100
+@@ -17,13 +17,8 @@ readme = open('README.rst').read()
+ history = open('CHANGES.rst').read()
+ 
+ tests_require = [
+-    'check-manifest>=0.25',
+-    'coverage>=4.0',
+-    'isort>=4.2.2',
+-    'pydocstyle>=1.0.0',
++    'pygments>=2.0.0',
+     'pytest-cache>=1.0',
+-    'pytest-cov>=1.8.0',
+-    'pytest-pep8>=1.0.6',
+     'pytest>=2.8.0',
+ ]
+ 

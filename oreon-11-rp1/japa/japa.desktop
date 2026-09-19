@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Japa
+Comment=JACK and ALSA Perceptual Audio Analyser
+Icon=japa
+Type=Application
+Exec=japa -J
+Categories=Application;AudioVideo;Audio;X-Jack;X-Audio_Tools;
+Terminal=false
+Encoding=UTF-8

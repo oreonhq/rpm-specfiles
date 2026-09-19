@@ -1,0 +1,38 @@
+From bb2cca0b3a75f0b94064fb9375f503f6cee00261 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 3 Sep 2019 12:21:10 +0200
+Subject: [PATCH] Allow overriding LDFLAGS from the command line
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 6d60610..c3fe89c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@ COPTS = -g
+ 
+ CFLAGS = -Wall $(COPTS)
+ 
+-LDFLAGS = -L/usr/X11R6/lib -lX11 -lXfixes
++LDFLAGS = -L/usr/X11R6/lib
+ 
+ PREFIX = $(DESTDIR)/usr
+ BINDIR = $(PREFIX)/bin
+@@ -14,7 +14,7 @@ SOURCES = root-tail.c
+ all: root-tail man
+ 
+ root-tail: $(SOURCES) config.h
+-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(SOURCES)
++	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(SOURCES) -lX11 -lXfixes
+ 
+ man: root-tail.1.gz
+ 
+-- 
+2.21.0
+

@@ -1,0 +1,43 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 6 Mar 2026 20:45:12 +0100
+Subject: [PATCH] Revert "MATRIX: Skip test for too-large matrices on 32-bit."
+
+This reverts commit 17fb87ae68b887a8d752ffb338badbc0d027046a.
+
+diff --git a/tests/language/commands/matrix.at b/tests/language/commands/matrix.at
+index 53ccdacf4..c657434c9 100644
+--- a/tests/language/commands/matrix.at
++++ b/tests/language/commands/matrix.at
+@@ -5131,31 +5131,13 @@ AT_CLEANUP
+ 
+ dnl Check that attempting to allocate huge matrices fails gracefully
+ AT_SETUP([MATRIX - very large matrices])
++AT_SKIP_IF([test "$(getconf LONG_BIT 2>/dev/null)" -lt 64])
+ AT_DATA([matrix.sps], [dnl
+ MATRIX.
+ PRINT 2:230000000000.
+ END MATRIX.
+ ])
+ 
+-# On 32-bit architectures this test will fail with a different error message
+-# since 230000000000 is greater than SIZE_MAX there.  Skip the test in that
+-# case.
+-#
+-# The error for 32-bit looks like this:
+-#
+-# matrix.sps:2.7-2.20: error: MATRIX: All operands of : must be scalars in the
+-# supported integer range.
+-# 2 | PRINT 2:230000000000.
+-# |         ^~~~~~~~~~~~~~
+-#
+-# matrix.sps:2.9-2.20: note: MATRIX: This operand with value 2.3e+11 is outside
+-# the supported integer range from -2147483648 to 2147483647.
+-#  2 | PRINT 2:230000000000.
+-#  |           ^~~~~~~~~~~~
+-
+-AT_CHECK([pspp matrix.sps], [1], [stdout])
+-AT_SKIP_IF([grep 'must be scalars' stdout])
+-
+ AT_CHECK([pspp matrix.sps], [1], [dnl
+ matrix.sps:2.7-2.20: error: MATRIX: Matrix cannot be allocated.  Too large?
+     2 | PRINT 2:230000000000.

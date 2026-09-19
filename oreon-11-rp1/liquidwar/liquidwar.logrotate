@@ -1,0 +1,5 @@
+/var/log/liquidwar-server.log {
+    copytruncate
+    notifempty
+    missingok
+}

@@ -1,0 +1,26 @@
+From 06fab8d7038ee2e9348cae5ee95ff918e1b8a749 Mon Sep 17 00:00:00 2001
+From: Jonny Heggheim <hegjon@gmail.com>
+Date: Fri, 18 Nov 2022 15:32:20 +0100
+Subject: [PATCH] Only include license and documentation for sdist
+
+---
+ pyproject.toml | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index fabeef1..02d846a 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -20,7 +20,11 @@ homepage = "https://github.com/matejcik/construct-classes"
+ license = "MIT"
+ repository = "https://github.com/matejcik/construct-classes"
+ readme = "README.rst"
+-include = ["CHANGELOG.rst", "LICENSE", "README.rst"]
++include = [
++  { path = "CHANGELOG.rst", format = "sdist" },
++  { path = "LICENSE", format = "sdist" },
++  { path = "README.rst", format = "sdist" }
++]
+ 
+ [tool.poetry.dependencies]
+ python = ">=3.6.2,<4.0"

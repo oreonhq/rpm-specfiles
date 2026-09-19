@@ -1,0 +1,32 @@
+diff -up pax-3.4/src/extern.h.me pax-3.4/src/extern.h
+--- pax-3.4/src/extern.h.me	2020-01-31 13:41:27.520585130 +0100
++++ pax-3.4/src/extern.h	2020-01-31 13:41:46.366376773 +0100
+@@ -185,7 +185,7 @@ void options(int, char **);
+ OPLIST * opt_next(void);
+ int opt_add(const char *);
+ int bad_opt(void);
+-char *chdname;
++extern char *chdname;
+ 
+ /*
+  * pat_rep.c
+diff -up pax-3.4/src/options.c.me pax-3.4/src/options.c
+--- pax-3.4/src/options.c.me	2020-01-31 13:43:45.988955243 +0100
++++ pax-3.4/src/options.c	2020-01-31 14:25:13.558764306 +0100
+@@ -83,6 +83,8 @@ static int my_getline_error;
+ #define GZIP_CMD	"gzip"	/* command to run as gzip */
+ #define COMPRESS_CMD	"compress"	/* command to run as compress */
+ 
++char *chdname;
++
+ /*
+  *	Format specific routine table - MUST BE IN SORTED ORDER BY NAME
+  *	(see pax.h for description of each function)
+@@ -724,6 +726,7 @@ tar_options (int argc, char **argv)
+ 	case 'o':
+ 	  if (opt_add ("write_opt=nodir") < 0)
+ 	    tar_usage ();
++	  /* FALLTHROUGH */
+ 	case 'O':
+ 	  Oflag = 1;
+ 	  break;

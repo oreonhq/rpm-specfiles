@@ -1,0 +1,386 @@
+From 37b5df86077954ff9575f78b485a7205858cc676 Mon Sep 17 00:00:00 2001
+From: Zephyr Lykos <git@mochaa.ws>
+Date: Mon, 8 Sep 2025 16:34:18 +0800
+Subject: [PATCH 1/3] build: refactor CMake build rules
+
+---
+ CMakeLists.txt                        | 55 ++++++---------------------
+ src/qt6ct-common/CMakeLists.txt       | 33 ++++++----------
+ src/qt6ct-common/config.h.in          | 37 ++++++++++++++++++
+ src/qt6ct-common/qt6ct.cpp            |  6 ++-
+ src/qt6ct-common/qt6ct.h              |  4 ++
+ src/qt6ct-qtplugin/CMakeLists.txt     |  8 ++--
+ src/qt6ct-style/CMakeLists.txt        | 11 ++----
+ src/qt6ct/CMakeLists.txt              | 12 +++---
+ src/qt6ct/main.cpp                    |  5 +++
+ src/qt6ct/translations/CMakeLists.txt | 48 +++++++++++++++++++++++
+ 10 files changed, 136 insertions(+), 83 deletions(-)
+ create mode 100644 src/qt6ct-common/config.h.in
+ create mode 100644 src/qt6ct/translations/CMakeLists.txt
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0d88aeb..366c3df 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ cmake_minimum_required(VERSION 3.18.0)
+ 
+-project(qt6ct LANGUAGES CXX)
++project(qt6ct LANGUAGES CXX VERSION 0.11)
+ 
+ if(POLICY CMP0175)
+     cmake_policy(SET CMP0175 NEW)
+@@ -8,6 +8,11 @@ endif()
+ 
+ include(GNUInstallDirs)
+ 
++find_package(ECM REQUIRED NO_MODULE)
++set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
++
++option(QT6CT_IN_TREE "act as an in-tree Qt module, use standard Qt paths, unbundle language files, etc." OFF)
++
+ configure_file(
+   "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+@@ -27,52 +32,16 @@ set(CMAKE_AUTOUIC ON)
+ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
+ 
+-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060200 -DUSE_WIDGETS -DQT_DEPRECATED_WARNINGS -DQT_MESSAGELOGCONTEXT)
++add_compile_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060200 -DUSE_WIDGETS -DQT_DEPRECATED_WARNINGS -DQT_MESSAGELOGCONTEXT)
+ add_compile_options(-Wall -Wextra)
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+ 
+-find_package(Qt6 6.2 CONFIG REQUIRED COMPONENTS BuildInternals Core Widgets OPTIONAL_COMPONENTS QuickControls2 LinguistTools)
+-find_package(KF6Config)
+-find_package(KF6ColorScheme)
+-find_package(KF6IconThemes)
++find_package(Qt6 6.2 CONFIG REQUIRED COMPONENTS BuildInternals Core Widgets LinguistTools OPTIONAL_COMPONENTS QuickControls2)
++find_package(KF6 COMPONENTS Config ColorScheme IconThemes)
+ 
+-get_target_property(QT_QTPATHS_EXECUTABLE Qt6::qtpaths IMPORTED_LOCATION)
+-
+-if(Qt6LinguistTools_FOUND)
+-    get_target_property(QT_LRELEASE_EXECUTABLE Qt6::lrelease IMPORTED_LOCATION)
+-    if(NOT QT_QTPATHS_EXECUTABLE AND QT_LRELEASE_EXECUTABLE)
+-        get_filename_component(QT_LRELEASE_PATH ${QT_LRELEASE_EXECUTABLE} DIRECTORY)
+-        set(QT_QTPATHS_EXECUTABLE ${QT_LRELEASE_PATH}/qtpaths)
+-    endif()
+-endif()
+-
+-if(QT_QTPATHS_EXECUTABLE AND EXISTS ${QT_QTPATHS_EXECUTABLE})
+-    message(STATUS "Found qtpaths executable: ${QT_QTPATHS_EXECUTABLE}")
+-else()
+-    message(FATAL_ERROR "Could NOT find qtpaths executable")
+-endif()
+-
+-if(Qt6LinguistTools_FOUND)
+-    if(QT_LRELEASE_EXECUTABLE AND EXISTS ${QT_LRELEASE_EXECUTABLE})
+-        message(STATUS "Found lrelease executable: ${QT_LRELEASE_EXECUTABLE}")
+-    else()
+-        message(FATAL_ERROR "Could NOT find lrelease executable")
+-    endif()
+-endif()
+-
+-#execute_process(COMMAND ${QT_QTPATHS_EXECUTABLE} -query QT_INSTALL_PLUGINS OUTPUT_VARIABLE PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+-execute_process(COMMAND ${QT_QTPATHS_EXECUTABLE} --plugin-dir OUTPUT_VARIABLE PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+-
+-if(PLUGINDIR)
+-   message(STATUS "Plugin path: ${PLUGINDIR}")
+-else()
+-   message(FATAL_ERROR "Could not get plugin path")
+-endif()
+-
+-if(Qt6LinguistTools_FOUND)
+-    message(STATUS "Generating translations ...")
+-    execute_process(COMMAND find ${CMAKE_CURRENT_SOURCE_DIR}/src -name *.ts COMMAND xargs ${QT_LRELEASE_EXECUTABLE} -silent)
+-endif()
++include(ECMQueryQt)
++ecm_query_qt(QT_INSTALL_PLUGINS QT_INSTALL_PLUGINS)
++ecm_query_qt(QT_INSTALL_TRANSLATIONS QT_INSTALL_TRANSLATIONS)
+ 
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/qt6ct-common)
+ 
+diff --git a/src/qt6ct-common/CMakeLists.txt b/src/qt6ct-common/CMakeLists.txt
+index 2afce8d..e121662 100644
+--- a/src/qt6ct-common/CMakeLists.txt
++++ b/src/qt6ct-common/CMakeLists.txt
+@@ -1,29 +1,18 @@
+-project(qt6ct-common)
++block()
++  set(QT6CT_VERSION_MAJOR "${CMAKE_PROJECT_VERSION_MAJOR}")
++  set(QT6CT_VERSION_MINOR "${CMAKE_PROJECT_VERSION_MINOR}")
++  configure_file(config.h.in config.h @ONLY)
++endblock()
+ 
+-#extract version from qt6ct.h
+-file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/qt6ct.h"
+-     QT6CT_VERSION_DATA REGEX "^#define[ \t]+QT6CT_VERSION_[A-Z]+[ \t]+[0-9]+.*$")
+-
+-if(QT6CT_VERSION_DATA)
+-  foreach(item IN ITEMS MAJOR MINOR)
+-    string(REGEX REPLACE ".*#define[ \t]+QT6CT_VERSION_${item}[ \t]+([0-9]+).*"
+-       "\\1" QT6CT_VERSION_${item} ${QT6CT_VERSION_DATA})
+-  endforeach()
+-  set(QT6CT_VERSION "${QT6CT_VERSION_MAJOR}.${QT6CT_VERSION_MINOR}")
+-  set(QT6CT_SOVERSION "${QT6CT_VERSION_MAJOR}")
+-  message(STATUS "qt6ct version: ${QT6CT_VERSION}")
+-else()
+-  message(FATAL_ERROR "invalid header")
+-endif()
+-
+-add_definitions(-DQT6CT_LIBRARY)
+-
+-set(app_SRCS
++set(lib_SRCS
+   qt6ct.cpp
+ )
+ 
+-add_library(qt6ct-common SHARED ${app_SRCS})
+-set_target_properties(qt6ct-common PROPERTIES VERSION ${QT6CT_VERSION})
++add_library(qt6ct-common SHARED ${lib_SRCS})
++set_target_properties(qt6ct-common PROPERTIES VERSION ${CMAKE_PROJECT_VERSION})
++target_compile_definitions(qt6ct-common PRIVATE -DQT6CT_LIBRARY -DQT6CT_HAVE_CONFIG_H)
++target_include_directories(qt6ct-common PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
++target_include_directories(qt6ct-common INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+ target_link_libraries(qt6ct-common PRIVATE Qt6::Gui $<TARGET_NAME_IF_EXISTS:KF6::ConfigCore> $<TARGET_NAME_IF_EXISTS:KF6::ColorScheme>)
+ target_compile_definitions(qt6ct-common PRIVATE $<$<TARGET_EXISTS:KF6::ConfigCore>:KF_CONFIGCORE_LIB> $<$<TARGET_EXISTS:KF6::ColorScheme>:KF_COLORSCHEME_LIB>)
+ install(TARGETS qt6ct-common DESTINATION ${CMAKE_INSTALL_LIBDIR})
+diff --git a/src/qt6ct-common/config.h.in b/src/qt6ct-common/config.h.in
+new file mode 100644
+index 0000000..586daa6
+--- /dev/null
++++ b/src/qt6ct-common/config.h.in
+@@ -0,0 +1,37 @@
++/*
++ * Copyright (c) 2014-2024, Ilya Kotov <forkotov02@ya.ru>
++ * Copyright (c) 2023-2024, Zephyr Lykos <self@mochaa.ws>
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++ * HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#ifndef QT6CT_CONFIG_H
++#define QT6CT_CONFIG_H
++
++#cmakedefine QT6CT_VERSION_MAJOR @QT6CT_VERSION_MAJOR@
++#cmakedefine QT6CT_VERSION_MINOR @QT6CT_VERSION_MINOR@
++#cmakedefine01 QT6CT_IN_TREE
++
++#endif
+diff --git a/src/qt6ct-common/qt6ct.cpp b/src/qt6ct-common/qt6ct.cpp
+index 896895d..ec040fc 100644
+--- a/src/qt6ct-common/qt6ct.cpp
++++ b/src/qt6ct-common/qt6ct.cpp
+@@ -40,7 +40,7 @@
+ #endif
+ #include "qt6ct.h"
+ 
+-#ifndef QT6CT_DATADIR
++#if !defined(QT6CT_IN_TREE) && !defined(QT6CT_DATADIR)
+ #define QT6CT_DATADIR "/usr/share"
+ #endif
+ 
+@@ -104,7 +104,9 @@ QStringList Qt6CT::sharedStyleSheetPaths()
+     {
+         paths << (p + QStringLiteral("/qt6ct/qss"));
+     }
++#ifndef QT6CT_IN_TREE
+     paths << QStringLiteral(QT6CT_DATADIR"/qt6ct/qss");
++#endif
+     paths.removeDuplicates();
+     return paths;
+ }
+@@ -129,7 +131,9 @@ QStringList Qt6CT::sharedColorSchemePaths()
+         paths << (p + QStringLiteral("/color-schemes"));
+ #endif
+     }
++#ifndef QT6CT_IN_TREE
+     paths << QStringLiteral(QT6CT_DATADIR"/qt6ct/colors");
++#endif
+     paths.removeDuplicates();
+     return paths;
+ }
+diff --git a/src/qt6ct-common/qt6ct.h b/src/qt6ct-common/qt6ct.h
+index 7d6b283..e16c3c6 100644
+--- a/src/qt6ct-common/qt6ct.h
++++ b/src/qt6ct-common/qt6ct.h
+@@ -29,8 +29,12 @@
+ #ifndef QT6CT_H
+ #define QT6CT_H
+ 
++#ifndef QT6CT_HAVE_CONFIG_H
+ #define QT6CT_VERSION_MAJOR 0
+ #define QT6CT_VERSION_MINOR 11
++#else
++#include "config.h"
++#endif
+ 
+ #define QT6CT_TOSTRING(s) #s
+ #define QT6CT_STRINGIFY(s)         QT6CT_TOSTRING(s)
+diff --git a/src/qt6ct-qtplugin/CMakeLists.txt b/src/qt6ct-qtplugin/CMakeLists.txt
+index e5366ef..d986c7b 100644
+--- a/src/qt6ct-qtplugin/CMakeLists.txt
++++ b/src/qt6ct-qtplugin/CMakeLists.txt
+@@ -1,12 +1,10 @@
+-project(qt6ct-qtplugin)
+-
+-set(app_SRCS
++set(lib_SRCS
+   main.cpp
+   qt6ctplatformtheme.cpp
+ )
+ 
+-add_library(qt6ct-qtplugin MODULE ${app_SRCS})
++add_library(qt6ct-qtplugin MODULE ${lib_SRCS})
+ set_target_properties(qt6ct-qtplugin PROPERTIES OUTPUT_NAME qt6ct)
+ target_link_libraries(qt6ct-qtplugin PRIVATE Qt6::Widgets Qt6::GuiPrivate $<TARGET_NAME_IF_EXISTS:Qt6::QuickControls2> $<TARGET_NAME_IF_EXISTS:KF6::IconThemes> qt6ct-common)
+ target_compile_definitions(qt6ct-qtplugin PRIVATE $<$<TARGET_EXISTS:KF6::IconThemes>:KF_ICONTHEMES_LIB>)
+-install(TARGETS qt6ct-qtplugin DESTINATION ${PLUGINDIR}/platformthemes)
++install(TARGETS qt6ct-qtplugin DESTINATION ${QT_INSTALL_PLUGINS}/platformthemes)
+diff --git a/src/qt6ct-style/CMakeLists.txt b/src/qt6ct-style/CMakeLists.txt
+index 5ab1c21..00c73a1 100644
+--- a/src/qt6ct-style/CMakeLists.txt
++++ b/src/qt6ct-style/CMakeLists.txt
+@@ -1,12 +1,9 @@
+-project(qt6ct-style)
+-
+-add_definitions(-DUSE_WIDGETS)
+-
+-set(app_SRCS
++set(lib_SRCS
+   plugin.cpp
+   qt6ctproxystyle.cpp
+ )
+ 
+-add_library(qt6ct-style MODULE ${app_SRCS})
++add_library(qt6ct-style MODULE ${lib_SRCS})
++target_compile_definitions(qt6ct-style PRIVATE -DUSE_WIDGETS)
+ target_link_libraries(qt6ct-style PRIVATE Qt6::Widgets qt6ct-common)
+-install(TARGETS qt6ct-style DESTINATION ${PLUGINDIR}/styles)
++install(TARGETS qt6ct-style DESTINATION ${QT_INSTALL_PLUGINS}/styles)
+diff --git a/src/qt6ct/CMakeLists.txt b/src/qt6ct/CMakeLists.txt
+index 578f3b0..f0aa070 100644
+--- a/src/qt6ct/CMakeLists.txt
++++ b/src/qt6ct/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-project(app)
++add_subdirectory(translations)
+ 
+ set(app_SRCS
+   appearancepage.cpp
+@@ -26,12 +26,14 @@ set(app_SRCS
+   troubleshootingpage.ui
+ )
+ 
+-if(Qt6LinguistTools_FOUND)
+-    list(APPEND app_SRCS translations/translations.qrc)
+-endif()
+-
+ add_executable(qt6ct ${app_SRCS})
++add_dependencies(qt6ct app_translations)
+ target_link_libraries(qt6ct PRIVATE Qt6::Widgets Qt6::WidgetsPrivate $<TARGET_NAME_IF_EXISTS:KF6::ConfigCore> qt6ct-common)
+ target_compile_definitions(qt6ct PRIVATE $<$<TARGET_EXISTS:KF6::ConfigCore>:KF_CONFIGCORE_LIB> $<$<TARGET_EXISTS:KF6::ColorScheme>:KF_COLORSCHEME_LIB>)
++
++if(NOT QT6CT_IN_TREE)
++  target_link_libraries(qt6ct PRIVATE app_resources)
++endif()
++
+ install(TARGETS qt6ct DESTINATION ${CMAKE_INSTALL_BINDIR})
+ install(FILES qt6ct.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+diff --git a/src/qt6ct/main.cpp b/src/qt6ct/main.cpp
+index 753aeec..51f6f8d 100644
+--- a/src/qt6ct/main.cpp
++++ b/src/qt6ct/main.cpp
+@@ -42,8 +42,13 @@ int main(int argc, char **argv)
+ 
+     QTranslator translator;
+ 
++#ifndef QT6CT_IN_TREE
+     if(translator.load(QLocale(), QStringLiteral("qt6ct"), QStringLiteral("_"), QStringLiteral(":/")))
+         QCoreApplication::installTranslator(&translator);
++#else
++    if(translator.load(QLocale(), QStringLiteral("qt6ct"), QStringLiteral("_"), QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
++        QCoreApplication::installTranslator(&translator);
++#endif
+ 
+     QTranslator qt_translator;
+     if(qt_translator.load(QLocale(), QStringLiteral("qtbase"), QStringLiteral("_"), QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
+diff --git a/src/qt6ct/translations/CMakeLists.txt b/src/qt6ct/translations/CMakeLists.txt
+new file mode 100644
+index 0000000..2777d3e
+--- /dev/null
++++ b/src/qt6ct/translations/CMakeLists.txt
+@@ -0,0 +1,48 @@
++set(translation_SRCS
++    qt6ct_ar.ts
++    qt6ct_bg.ts
++    qt6ct_ca.ts
++    qt6ct_cs.ts
++    qt6ct_da.ts
++    qt6ct_de.ts
++    qt6ct_el.ts
++    qt6ct_en.ts
++    qt6ct_es_ES.ts
++    qt6ct_es.ts
++    qt6ct_fi.ts
++    qt6ct_fr.ts
++    qt6ct_gl_ES.ts
++    qt6ct_he.ts
++    qt6ct_hu.ts
++    qt6ct_it_IT.ts
++    qt6ct_it.ts
++    qt6ct_ja.ts
++    qt6ct_kk.ts
++    qt6ct_lt.ts
++    qt6ct_nl_NL.ts
++    qt6ct_nl.ts
++    qt6ct_pl.ts
++    qt6ct_pt_BR.ts
++    qt6ct_pt.ts
++    qt6ct_ru.ts
++    qt6ct_sk.ts
++    qt6ct_sr_BA.ts
++    qt6ct_sr_RS.ts
++    qt6ct_sr.ts
++    qt6ct_tr.ts
++    qt6ct_uk.ts
++    qt6ct_zh_CN.ts
++    qt6ct_zh_TW.ts
++)
++
++qt6_add_translation(app_LANGS ${translation_SRCS} OPTIONS -silent)
++set_source_files_properties(${app_LANGS} PROPERTIES GENERATED TRUE)
++add_custom_target(app_translations DEPENDS ${app_LANGS})
++
++if(QT6CT_IN_TREE)
++  install(FILES ${app_LANGS} DESTINATION ${QT_INSTALL_TRANSLATIONS})
++else()
++  configure_file(translations.qrc translations.qrc COPYONLY)
++  qt6_add_resources(lang_RC ${CMAKE_CURRENT_BINARY_DIR}/translations.qrc)
++  add_library(app_resources INTERFACE ${lang_RC})
++endif()
+-- 
+2.51.0
+

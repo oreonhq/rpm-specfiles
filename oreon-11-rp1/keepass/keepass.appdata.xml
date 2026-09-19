@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014, 2016 Peter Oliver <appdata@mavit.org.uk> -->
+<component type="desktop">
+  <id>keepass.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <name>KeePass</name>
+  <summary>Password manager</summary>
+  <project_license>GPL-2.0+</project_license>
+  <developer_name>Dominik Reichl</developer_name>
+  <description>
+    <p>
+      KeePass is a free open source password manager, which helps you to
+      remember your passwords securely.  You can put all your
+      passwords in one database, which is locked with one master key or a
+      key file.  You only have to remember one single master password or
+      select the key file to unlock the whole database.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot height="351" width="624" type="default">
+      <image>https://mavit.fedorapeople.org/appdata/keepass-main-window.png</image>
+      <caption>KeePass showing the example database</caption>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">http://keepass.info/</url>
+  <url type="bugtracker">https://sourceforge.net/p/keepass/_list/tickets</url>
+  <url type="translate">http://keepass.info/translations_devinfo.html</url>
+  <url type="donation">http://keepass.info/donate.html</url>
+  <url type="help">http://keepass.info/help/base/index.html</url>
+  <update_contact>appdata@mavit.org.uk</update_contact>
+</component>

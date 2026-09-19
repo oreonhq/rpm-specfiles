@@ -1,0 +1,12 @@
+diff -rupN --no-dereference qwt-6.2.0/designer/designer.pro qwt-6.2.0-new/designer/designer.pro
+--- qwt-6.2.0/designer/designer.pro	2021-07-18 13:19:33.632367371 +0200
++++ qwt-6.2.0-new/designer/designer.pro	2022-11-29 15:38:15.087070282 +0100
+@@ -98,7 +98,7 @@ contains(QWT_CONFIG, QwtDesigner) {
+         # compile the path for finding the Qwt library
+         # into the plugin. Not supported on Windows !
+ 
+-        QMAKE_RPATHDIR *= $${QWT_INSTALL_LIBS}
++        #QMAKE_RPATHDIR *= $${QWT_INSTALL_LIBS}
+         qwtAddLibrary($${QWT_OUT_ROOT}/lib, qwt)
+ 
+         contains(QWT_CONFIG, QwtDll) {

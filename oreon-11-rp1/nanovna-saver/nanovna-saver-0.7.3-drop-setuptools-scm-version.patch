@@ -1,0 +1,17 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index a429de2..879ba41 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -82,12 +82,6 @@ backend-path = ["src/tools"]
+ # See https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html for more details
+ where = ["src"]
+ 
+-[tool.setuptools_scm]
+-# For smarter version schemes and other configuration options,
+-# check out https://github.com/pypa/setuptools_scm
+-root='.'
+-version_scheme = 'no-guess-dev'
+-
+ [tool.taskipy.tasks]
+ test = "pytest ."
+ test-cov = "pytest --cov=src ."

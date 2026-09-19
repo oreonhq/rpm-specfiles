@@ -1,0 +1,12 @@
+diff -up bin/perli11ndoc.orig bin/perli11ndoc
+--- ./bin/perli11ndoc.orig	2019-09-05 03:23:21.537516800 +0300
++++ ./bin/perli11ndoc	2019-09-05 03:56:55.223385953 +0300
+@@ -49,7 +49,7 @@ use XML::LibXML qw//;
+ sub find_gir {
+   my ($lib_pattern) = @_;
+ 
+-  if ($lib_pattern !~ /^([^\d\-]+)-?(\d(?:\.\d)?)?$/) {
++  if ($lib_pattern !~ /^([^\d\-]\w+)-?(\d(?:\.\d)?)?$/) {
+     die "Cannot recognize the library name\n";
+   }
+   my $name_wanted = $1;

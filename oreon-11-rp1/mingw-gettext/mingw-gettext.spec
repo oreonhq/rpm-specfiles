@@ -1,14 +1,10 @@
-%global source0_hash none
-
-%ifarch aarch64
-%global mingw_build_win32 0
-%endif
+%global source0_hash d1fb86e260cfe7da6031f94d2e44c0da55903dbae0a2fa0fae78c91ae1b56f00
 
 %{?mingw_package_header}
 
 Name:      mingw-gettext
-Version:   0.26
-Release:   3%{?dist}
+Version:   1.0
+Release:   1%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -18,12 +14,14 @@ Source0:        https://mirrors.kernel.org/gnu/gettext/gettext-%{version}.tar.xz
 BuildArch: noarch
 
 BuildRequires: make
+%if 0%{?mingw_build_win32} == 1
 BuildRequires: mingw32-filesystem >= 95
 BuildRequires: mingw32-gcc
 BuildRequires: mingw32-gcc-c++
 BuildRequires: mingw32-binutils
 BuildRequires: mingw32-win-iconv
 BuildRequires: mingw32-termcap
+%endif
 
 BuildRequires: mingw64-filesystem >= 95
 BuildRequires: mingw64-gcc
@@ -32,18 +30,12 @@ BuildRequires: mingw64-binutils
 BuildRequires: mingw64-win-iconv
 BuildRequires: mingw64-termcap
 
-# Possible extra BRs.  These are used if available, but
-# not required just for building.
-#BuildRequires: mingw32-dlfcn
-#BuildRequires: mingw32-libxml2
-#BuildRequires: mingw32-expat
-#BuildRequires: mingw32-glib2
-
 
 %description
 MinGW Windows Gettext library
 
 
+%if 0%{?mingw_build_win32} == 1
 # Win32
 %package -n mingw32-gettext
 Summary:         GNU libraries and utilities for producing multi-lingual messages
@@ -57,6 +49,7 @@ Requires:       mingw32-gettext = %{version}-%{release}
 
 %description -n mingw32-gettext-static
 Static version of the MinGW Windows Gettext library.
+%endif
 
 # Win64
 %package -n mingw64-gettext
@@ -81,59 +74,76 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n gettext-%{version}
 
 %build
-export CFLAGS="${CFLAGS} -fno-analyzer"
-export CXXFLAGS="${CXXFLAGS} -fno-analyzer"
-export lt_cv_to_host_file_cmd=func_convert_file_noop
-export lt_cv_to_tool_file_cmd=func_convert_file_noop
-%mingw_configure            \
-    --disable-java          \
-    --disable-native-java   \
-    --disable-csharp        \
-    --disable-shared        \
-    --enable-static         \
-    --enable-threads=win32  \
-    --without-emacs         \
-    --disable-openmp        \
-    --disable-dependency-tracking
+%mingw_configure \
+    --disable-java \
+    --disable-native-java \
+    --disable-csharp \
+    --enable-static \
+    --enable-threads=win32 \
+    --without-emacs \
+    --disable-openmp \
+    --disable-namespacing \
+    --disable-more-warnings \
+    ac_cv_header_stdcountof_h=no \
+    gl_cv_warn_c__fanalyzer=no \
+    gl_cv_warn_cxx__fanalyzer=no \
+    lt_cv_to_host_file_cmd=func_convert_file_noop \
+    lt_cv_to_tool_file_cmd=func_convert_file_noop
+for d in build_win32 build_win64; do
+  [ -d "$d" ] || continue
+  find "$d" -name Makefile -print0 | xargs -0 -r sed -i \
+    -e 's/^HAVE_GLOBAL_SYMBOL_PIPE *=.*/HAVE_GLOBAL_SYMBOL_PIPE =/' \
+    -e 's/^NAMESPACING *=.*/NAMESPACING =/'
+  find "$d" -name Makefile -print0 | while IFS= read -r -d '' mf; do
+    objs=$(grep -oE '[A-Za-z0-9_+.-]*localename-unsafe\.(lo|o)' "$mf" | sort -u)
+    [ -n "$objs" ] || continue
+    grep -q 'localename-unsafe.*CFLAGS += -O0' "$mf" && continue
+    for o in $objs; do
+      printf '%s: CFLAGS += -O0\n' "$o"
+    done >> "$mf"
+  done
+done
 %mingw_make_build
 
 
 %install
 %mingw_make_install
 
+%if 0%{?mingw_build_win32} == 1
 rm -f %{buildroot}%{mingw32_datadir}/locale/locale.alias
 rm -f %{buildroot}%{mingw32_libdir}/charset.alias
 
-rm -f %{buildroot}%{mingw64_datadir}/locale/locale.alias
-rm -f %{buildroot}%{mingw64_libdir}/charset.alias
-
-# Remove documentation - already available in base gettext-devel.
 rm -rf %{buildroot}%{mingw32_mandir}
 rm -rf %{buildroot}%{mingw32_docdir}
 rm -rf %{buildroot}%{mingw32_infodir}
+
+rm -rf %{buildroot}%{mingw32_libdir}/gettext
+
+rm -f %{buildroot}%{mingw32_libdir}/libgettextlib.a
+rm -f %{buildroot}%{mingw32_libdir}/libgettextsrc.a
+
+rm -f %{buildroot}%{mingw32_datadir}/gettext/javaversion.class
+%endif
+
+rm -f %{buildroot}%{mingw64_datadir}/locale/locale.alias
+rm -f %{buildroot}%{mingw64_libdir}/charset.alias
 
 rm -rf %{buildroot}%{mingw64_mandir}
 rm -rf %{buildroot}%{mingw64_docdir}
 rm -rf %{buildroot}%{mingw64_infodir}
 
-# Drop some useless tools
-rm -rf %{buildroot}%{mingw32_libdir}/gettext
 rm -rf %{buildroot}%{mingw64_libdir}/gettext
 
-# Drop all .la files and .a files
 find %{buildroot} -name "*.la" -delete
-rm %{buildroot}%{mingw32_libdir}/libgettextlib.a
-rm %{buildroot}%{mingw32_libdir}/libgettextsrc.a
-rm %{buildroot}%{mingw64_libdir}/libgettextlib.a
-rm %{buildroot}%{mingw64_libdir}/libgettextsrc.a
+rm -f %{buildroot}%{mingw64_libdir}/libgettextlib.a
+rm -f %{buildroot}%{mingw64_libdir}/libgettextsrc.a
 
-# Drop javaversion.class since it's a binary blob (RHBZ#2294881)
-rm %{buildroot}%{mingw32_datadir}/gettext/javaversion.class
-rm %{buildroot}%{mingw64_datadir}/gettext/javaversion.class
+rm -f %{buildroot}%{mingw64_datadir}/gettext/javaversion.class
 
 %mingw_find_lang %{name} --all-name
 
 
+%if 0%{?mingw_build_win32} == 1
 # Win32
 %files -n mingw32-gettext -f mingw32-%{name}.lang
 %license COPYING
@@ -182,6 +192,8 @@ rm %{buildroot}%{mingw64_datadir}/gettext/javaversion.class
 %{mingw32_libdir}/libgettextpo.a
 %{mingw32_libdir}/libintl.a
 %{mingw32_libdir}/libtextstyle.a
+
+%endif
 
 # Win64
 %files -n mingw64-gettext -f mingw64-%{name}.lang

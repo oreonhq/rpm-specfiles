@@ -1,0 +1,13 @@
+diff --git a/extra/dist/CMakeLists.txt b/extra/dist/CMakeLists.txt
+index 3045b5aaf..d72b88d22 100644
+--- a/extra/dist/CMakeLists.txt
++++ b/extra/dist/CMakeLists.txt
+@@ -31,7 +31,7 @@ endif()
+ message (STATUS "tarantoolctl datadir: ${TARANTOOL_DATADIR}")
+ set(TARANTOOL_LOGDIR "${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/log/tarantool")
+ message (STATUS "tarantoolctl logdir: ${TARANTOOL_LOGDIR}")
+-set(TARANTOOL_RUNDIR "${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/run/tarantool")
++set(TARANTOOL_RUNDIR "/run/tarantool")
+ message (STATUS "tarantoolctl rundir: ${TARANTOOL_RUNDIR}")
+ set(TARANTOOL_USER "tarantool")
+ set(TARANTOOL_LANGUAGE "lua")

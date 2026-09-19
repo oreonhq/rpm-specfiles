@@ -1,5 +1,5 @@
-%global source0_hash 23d39e30eccc3b650f2a87ad830e1906f1e24d47e41d40cc36d846cd6c32350f
-%global source1_hash 5e11ac8d55376b5c1283440654f065de738bbe1b2c0c6ddcba99672a4814a9c6
+%global source0_hash 1e068a0b402a5c69b44a86d797cb24266b2883c698decd8b8464c99b131d292cc5ac44249ba8e89dc0a414d6f12d73d4c069ffc3081cfa4b9926ca412bfc3dd6
+%global source1_hash f9ac2953877cd830e1cf3402f3f2bac1f8159d05a4a74e89047c494ae04dc8930f1c09701f83871b4361976572ae7d1c5fbdaf3af3d9e6db12347a207f1b82cb
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Chinese font metrics for upTeX
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics-uptex.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics-uptex.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zhmetrics-uptex.tar.xz#/zhmetrics-uptex.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zhmetrics-uptex.doc.tar.xz#/zhmetrics-uptex.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-zhmetrics-uptex-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-zhmetrics-uptex-doc <= 11:%{version}
@@ -23,8 +23,8 @@ Provides:       texlive-zhmetrics-uptex = %{epoch}:%{version}-%{release}
 Chinese font metrics for upTeX.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

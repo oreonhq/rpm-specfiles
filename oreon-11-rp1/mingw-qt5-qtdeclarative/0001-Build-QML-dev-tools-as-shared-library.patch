@@ -1,0 +1,14 @@
+diff -rupN --no-dereference qtdeclarative-everywhere-src-5.15.17/src/qmldevtools/qmldevtools.pro qtdeclarative-everywhere-src-5.15.17-new/src/qmldevtools/qmldevtools.pro
+--- qtdeclarative-everywhere-src-5.15.17/src/qmldevtools/qmldevtools.pro	2024-11-20 14:56:37.000000000 +0100
++++ qtdeclarative-everywhere-src-5.15.17-new/src/qmldevtools/qmldevtools.pro	2025-05-31 11:20:22.813929748 +0200
+@@ -2,6 +2,10 @@ option(host_build)
+ TARGET     = QtQmlDevTools
+ QT         = core-private
+ CONFIG    += minimal_syncqt internal_module generated_privates
++win32:!contains(CONFIG, static) {
++    CONFIG += shared
++    CONFIG -= static staticlib
++}
+ 
+ MODULE_INCNAME = QtQml
+ INCLUDEPATH += $$OUT_PWD/../qml

@@ -5,8 +5,8 @@
 %global majorname pgaudit
 %global pgversion 16
 Name:		postgresql%{pgversion}-%{majorname}
-Version:	16.0
-Release:	9%{?dist}
+Version:	17.1rc1
+Release:	1%{?dist}
 Summary:	PostgreSQL Audit Extension
 
 License:	PostgreSQL

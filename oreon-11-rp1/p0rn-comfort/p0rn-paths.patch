@@ -1,0 +1,57 @@
+--- p0rn-comfort-0.0.4/p0rn-dbrestore.orig	2006-05-22 22:11:20.000000000 +0200
++++ p0rn-comfort-0.0.4/p0rn-dbrestore	2006-05-22 22:11:51.000000000 +0200
+@@ -22,10 +22,10 @@
+ 	}
+ 
+ 	print "clearing table $table\n";
+-	system("p0rn-dblist $table | p0rn-dbdel $table");
++	system("/usr/libexec/p0rn-comfort/p0rn-dblist $table | /usr/libexec/p0rn-comfort/p0rn-dbdel $table");
+ 
+ 	print "loading table $table\n";
+-	open LOAD, "| p0rn-dbadd $table" or die "can't open pipe: $!\n";
++	open LOAD, "| /usr/libexec/p0rn-comfort/p0rn-dbadd $table" or die "can't open pipe: $!\n";
+ 	$db_open = 1;
+ 
+     } else {
+--- p0rn-comfort-0.0.4/p0rn-dbdump.orig	2006-05-22 22:12:15.000000000 +0200
++++ p0rn-comfort-0.0.4/p0rn-dbdump	2006-05-22 22:13:00.000000000 +0200
+@@ -9,6 +9,6 @@
+ for TABLE in thumbz picz downz; do
+     echo dumping table $TABLE 1>&2
+     echo "?${TABLE}&"
+-    p0rn-dblist -v ${TABLE}
++    /usr/libexec/p0rn-comfort/p0rn-dblist -v ${TABLE}
+ done
+ echo finished 1>&2
+--- p0rn-comfort-0.0.4/p0rn-download.orig	2006-05-24 04:44:30.000000000 +0200
++++ p0rn-comfort-0.0.4/p0rn-download	2006-05-24 04:44:30.000000000 +0200
+@@ -78,7 +78,7 @@
+ 
+ $SIG{CHLD} = 'IGNORE';
+ 
+-my $hash = opendb('downz');
++my $hash = P0rn::DB::opendb('downz');
+ while ($done_something) {
+ 
+     $done_something = 0;
+@@ -92,7 +92,7 @@
+ 		exit if ($hash->{$url});
+ 		$hash->{$url} = 1;
+ 
+-		system('./p0rn-grab', $url);
++		system('p0rn-grab', $url);
+ 
+ 		$hash->{$url} = 2;
+ 		warn "[[ FINISHED $url ]]\n";
+--- p0rn-comfort-0.0.4/p0rn-grab.orig	2006-05-24 04:44:49.000000000 +0200
++++ p0rn-comfort-0.0.4/p0rn-grab	2006-05-24 04:44:58.000000000 +0200
+@@ -18,6 +18,9 @@
+ URL=$1
+ DOMAIN=`echo $URL|sed -e 's,^[^/]*//,,' -e 's,/.*$,,'`
+ 
++# Make sure, savepath exists
++[ -d $SAVEPATH ] || mkdir -p $SAVEPATH
++
+ mkdir -p $SAVETMP
+ cd $SAVETMP
+ 

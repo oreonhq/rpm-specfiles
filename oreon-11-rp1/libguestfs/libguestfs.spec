@@ -38,7 +38,7 @@ ExcludeArch: %{ix86}
 Summary:       Access and modify virtual machine disk images
 Name:          libguestfs
 Epoch:         1
-Version:       1.59.4
+Version:       1.61.3
 Release:       1%{?dist}
 License:       LGPL-2.1-or-later
 

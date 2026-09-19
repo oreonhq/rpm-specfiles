@@ -1,0 +1,90 @@
+From 7086b50d632ad60d6335e3752accd00ae43ce847 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Thu, 13 Mar 2025 21:53:05 +0100
+Subject: [PATCH] Avoid a race condition in opt-viewer/optrecord
+
+See https://bugzilla.redhat.com/2336915
+See https://reviews.llvm.org/D41784?id=
+See https://github.com/androm3da/optviewer-demo/issues/4#issuecomment-718787822
+
+Fixes https://github.com/llvm/llvm-project/issues/62403
+
+The race condition happened when the demangler_proc was being set.
+The locking mechanism itself happened too late.
+
+This way, the lock always exists (to avoid a race when creating it)
+and is always used when *creating* demangler_proc.
+
+I don't have any prior experience with the codebase
+and I cannot guarantee the behavior is correct.
+
+It appears to get rid of the race (which I was seeing consistently).
+
+    multiprocessing.pool.RemoteTraceback:
+    """
+    Traceback (most recent call last):
+      File "/usr/lib64/python3.14/multiprocessing/pool.py", line 125, in worker
+        result = (True, func(*args, **kwds))
+                        ~~~~^^^^^^^^^^^^^^^
+      File "/usr/lib64/python3.14/multiprocessing/pool.py", line 48, in mapstar
+        return list(map(*args))
+      File "/builddir/build/BUILD/llvm-19.1.6-build/llvm-project-19.1.6.src/llvm/tools/opt-viewer/optpmap.py", line 25, in _wrapped_func
+        return func(argument, filter_)
+      File "/builddir/build/BUILD/llvm-19.1.6-build/llvm-project-19.1.6.src/llvm/tools/opt-viewer/opt-viewer.py", line 293, in _render_file
+        SourceFileRenderer(source_dir, output_dir, filename, no_highlight).render(remarks)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+      File "/builddir/build/BUILD/llvm-19.1.6-build/llvm-project-19.1.6.src/llvm/tools/opt-viewer/opt-viewer.py", line 216, in render
+        self.render_source_lines(self.source_stream, line_remarks)
+        ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/builddir/build/BUILD/llvm-19.1.6-build/llvm-project-19.1.6.src/llvm/tools/opt-viewer/opt-viewer.py", line 123, in render_source_lines
+        self.render_inline_remarks(remark, html_line)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+      File "/builddir/build/BUILD/llvm-19.1.6-build/llvm-project-19.1.6.src/llvm/tools/opt-viewer/opt-viewer.py", line 126, in render_inline_remarks
+        inlining_context = r.DemangledFunctionName
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+      File "/builddir/build/BUILD/llvm-19.1.6-build/llvm-project-19.1.6.src/llvm/tools/opt-viewer/optrecord.py", line 153, in DemangledFunctionName
+        return self.demangle(self.Function)
+               ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+      File "/builddir/build/BUILD/llvm-19.1.6-build/llvm-project-19.1.6.src/llvm/tools/opt-viewer/optrecord.py", line 77, in demangle
+        with cls.demangler_lock:
+             ^^^^^^^^^^^^^^^^^^
+    AttributeError: type object 'Passed' has no attribute 'demangler_lock'. Did you mean: 'demangler_proc'?
+    """
+---
+ llvm/tools/opt-viewer/optrecord.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/llvm/tools/opt-viewer/optrecord.py b/llvm/tools/opt-viewer/optrecord.py
+index 9e2fc7cb553b5..8014204a64f45 100644
+--- a/llvm/tools/opt-viewer/optrecord.py
++++ b/llvm/tools/opt-viewer/optrecord.py
+@@ -64,17 +64,19 @@ class Remark(yaml.YAMLObject):
+ 
+     default_demangler = "c++filt -n"
+     demangler_proc = None
++    demangler_lock = Lock()
+ 
+     @classmethod
+     def set_demangler(cls, demangler):
+         cls.demangler_proc = subprocess.Popen(
+             demangler.split(), stdin=subprocess.PIPE, stdout=subprocess.PIPE
+         )
+-        cls.demangler_lock = Lock()
+ 
+     @classmethod
+     def demangle(cls, name):
+         with cls.demangler_lock:
++            if not cls.demangler_proc:
++                cls.set_demangler(cls.default_demangler)
+             cls.demangler_proc.stdin.write((name + "\n").encode("utf-8"))
+             cls.demangler_proc.stdin.flush()
+             return cls.demangler_proc.stdout.readline().rstrip().decode("utf-8")
+@@ -323,8 +325,6 @@ def get_remarks(input_file, filter_=None):
+ def gather_results(filenames, num_jobs, should_print_progress, filter_=None):
+     if should_print_progress:
+         print("Reading YAML files...")
+-    if not Remark.demangler_proc:
+-        Remark.set_demangler(Remark.default_demangler)
+     remarks = optpmap.pmap(
+         get_remarks, filenames, num_jobs, should_print_progress, filter_
+     )

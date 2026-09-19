@@ -1,0 +1,11 @@
+--- a/gpr/src/gpr-knowledge.adb
++++ b/gpr/src/gpr-knowledge.adb
+@@ -4341,7 +4341,7 @@
+    --------------------------------------
+ 
+    function Default_Knowledge_Base_Directory return String is
+-      Prog_Dir : constant String := Executable_Prefix_Path;
++      Prog_Dir : constant String := "/usr/";
+       Suffix   : constant String :=
+                    "share" & Directory_Separator & "gprconfig";
+    begin

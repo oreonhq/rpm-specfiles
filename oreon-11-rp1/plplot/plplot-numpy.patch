@@ -1,0 +1,39 @@
+diff --git a/examples/python/x08.py b/examples/python/x08.py
+index 1667b2789..d300504fd 100644
+--- a/examples/python/x08.py
++++ b/examples/python/x08.py
+@@ -18,7 +18,7 @@
+ # along with PLplot; if not, write to the Free Software
+ # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ 
+-from numpy import *
++from numpy import arange, array, double, cos, empty, exp, pi, sqrt
+ 
+ # These values must be odd, for the middle
+ # of the index range to be an integer, and thus
+diff --git a/examples/python/x21.py b/examples/python/x21.py
+index a5a07736d..2f26e5c4a 100644
+--- a/examples/python/x21.py
++++ b/examples/python/x21.py
+@@ -20,7 +20,7 @@
+ #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ #
+ 
+-from numpy import *
++from numpy import arange, cos, exp, isnan, pi, sqrt, zeros
+ import time
+ 
+ pts = 500
+diff --git a/examples/python/x33.py b/examples/python/x33.py
+index 31691683f..1e01dcd3a 100644
+--- a/examples/python/x33.py
++++ b/examples/python/x33.py
+@@ -29,7 +29,7 @@
+ 
+ import sys
+ 
+-from numpy import *
++from numpy import arange, reshape, zeros
+ 
+ # This only needed to define the following lists
+ import plplot as w_alt

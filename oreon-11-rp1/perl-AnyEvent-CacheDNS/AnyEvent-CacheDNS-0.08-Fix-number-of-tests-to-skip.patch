@@ -1,0 +1,34 @@
+From 7f871549a8607bc7f7969ec571724ac67273071a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 8 Jun 2015 09:25:21 +0200
+Subject: [PATCH] Fix number of tests to skip
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If the Internet was unrachable the test plan did not match the number
+of skipped tests. This patch corrects the number of skipped tests.
+
+<https://github.com/potyl/perl-AnyEvent-CacheDNS/issues/5>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/dns.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/t/dns.t b/t/dns.t
+index afad2a1..fd6042c 100644
+--- a/t/dns.t
++++ b/t/dns.t
+@@ -53,7 +53,7 @@ sub main {
+ 		ok(! defined $cached, "Cache has no record for host");
+ 
+ 		SKIP: {
+-			skip "DNS lookup for $host failed", 3;
++			skip "DNS lookup for $host failed", 5;
+ 		};
+ 
+ 		return 0;
+-- 
+2.1.0
+

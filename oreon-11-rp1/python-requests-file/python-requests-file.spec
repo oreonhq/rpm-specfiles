@@ -1,51 +1,56 @@
-%global source0_hash 68789589cfde7098e8933fe3e69bbd864f7f0c22f118937b424d94d0e1b7760f
-
-%global srcname requests_file
+%global source0_hash none
 
 Name:           python-requests-file
-Version:        3.0.0
-Release:        2%{?dist}
-Summary:        Transport adapter for using file:// URLs with python-requests
+Version:        3.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        File transport adapter for Requests
 
-License:        Apache-2.0
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://codeberg.org/dashea/requests-file
-Source0:        https://files.pythonhosted.org/packages/source/r/requests_file/requests_file-3.0.0.tar.gz
+Source:         %{pypi_source requests_file}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Requests-File is a transport adapter for use with the Requests Python
-library to allow local file system access via file:// URLs.}
+This is package 'requests-file' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-requests-file
+%package -n     python3-requests-file
 Summary:        %{summary}
 
 %description -n python3-requests-file %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{srcname}-%{version}
+%autosetup -p1 -n requests_file-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files requests_file
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{pytest}
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-requests-file -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.0-2

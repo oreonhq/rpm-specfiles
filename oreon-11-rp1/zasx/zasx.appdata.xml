@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>zasx.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Zasx</name>
+  <summary>Asteroids like game with powerups</summary>
+  <description>
+    <p>
+      Zasx is a retro styled shooter where you control a spaceship and must
+      destroy asteroids before they collide with your ship and destroy it.
+    </p>
+    <p>
+      Zasx also features a 2 player mode where you both co-operate using 2
+      ships to clear the asteroid field.
+    </p>
+    <p>
+      Zasx can be played using the keyboard our optionally by using 1 or 2
+      joysticks.
+    </p>
+  </description>
+  <url type="homepage">https://www.allegro.cc/depot/Zasx/</url>
+  <screenshots>
+    <screenshot type="default">https://fedorapeople.org/~jwrdegoede/screenshots/zasx1.png</screenshot>
+    <screenshot>https://fedorapeople.org/~jwrdegoede/screenshots/zasx2.png</screenshot>
+    <screenshot>https://fedorapeople.org/~jwrdegoede/screenshots/zasx3.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

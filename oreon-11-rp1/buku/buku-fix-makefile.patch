@@ -1,0 +1,28 @@
+diff -up buku-4.7/Makefile.orig buku-4.7/Makefile
+--- buku-4.7/Makefile.orig	2022-07-01 16:57:59.000000000 +0200
++++ buku-4.7/Makefile	2022-07-03 16:33:21.851216759 +0200
+@@ -1,7 +1,6 @@
+ PREFIX ?= /usr/local
+ BINDIR ?= $(DESTDIR)$(PREFIX)/bin
+ MANDIR ?= $(DESTDIR)$(PREFIX)/share/man/man1
+-DOCDIR ?= $(DESTDIR)$(PREFIX)/share/doc/buku
+ 
+ .PHONY: all install uninstall
+ 
+@@ -10,14 +9,9 @@ all:
+ install:
+ 	install -m755 -d $(BINDIR)
+ 	install -m755 -d $(MANDIR)
+-	install -m755 -d $(DOCDIR)
+-	gzip -c buku.1 > buku.1.gz
+-	install -m755 buku $(BINDIR)/buku
+-	install -m644 buku.1.gz $(MANDIR)
+-	install -m644 README.md $(DOCDIR)
+-	rm -f buku.1.gz
++	install -pm755 buku $(BINDIR)/buku
++	install -pm644 buku.1 $(MANDIR)
+ 
+ uninstall:
+ 	rm -f $(BINDIR)/buku
+ 	rm -f $(MANDIR)/buku.1.gz
+-	rm -rf $(DOCDIR)

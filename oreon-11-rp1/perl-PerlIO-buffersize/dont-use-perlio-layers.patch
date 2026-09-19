@@ -1,0 +1,52 @@
+diff -up PerlIO-buffersize-0.002/Build.PL.orig PerlIO-buffersize-0.002/Build.PL
+--- PerlIO-buffersize-0.002/Build.PL.orig	2019-09-06 09:45:40.334833418 +0200
++++ PerlIO-buffersize-0.002/Build.PL	2019-09-06 09:46:57.828209536 +0200
+@@ -29,7 +29,6 @@ my %module_build_args = (
+     "warnings" => 0
+   },
+   "test_requires" => {
+-    "PerlIO::Layers" => 0,
+     "Test::Exception" => 0,
+     "Test::More" => 0
+   }
+@@ -38,7 +37,6 @@ my %module_build_args = (
+ 
+ my %fallback_build_requires = (
+   "Module::Build" => "0.28",
+-  "PerlIO::Layers" => 0,
+   "Test::Exception" => 0,
+   "Test::More" => 0
+ );
+diff -up PerlIO-buffersize-0.002/META.json.orig PerlIO-buffersize-0.002/META.json
+--- PerlIO-buffersize-0.002/META.json.orig	2019-09-06 09:45:55.180097040 +0200
++++ PerlIO-buffersize-0.002/META.json	2019-09-06 09:47:31.509807624 +0200
+@@ -42,7 +42,6 @@
+       },
+       "test" : {
+          "requires" : {
+-            "PerlIO::Layers" : "0",
+             "Test::Exception" : "0",
+             "Test::More" : "0"
+          }
+diff -up PerlIO-buffersize-0.002/META.yml.orig PerlIO-buffersize-0.002/META.yml
+--- PerlIO-buffersize-0.002/META.yml.orig	2019-09-06 09:46:14.398438310 +0200
++++ PerlIO-buffersize-0.002/META.yml	2019-09-06 09:47:43.688023777 +0200
+@@ -4,7 +4,6 @@ author:
+   - 'Leon Timmermans <leont@cpan.org>'
+ build_requires:
+   Module::Build: '0.28'
+-  PerlIO::Layers: '0'
+   Test::Exception: '0'
+   Test::More: '0'
+ configure_requires:
+diff -up PerlIO-buffersize-0.002/t/10-basics.t.orig PerlIO-buffersize-0.002/t/10-basics.t
+--- PerlIO-buffersize-0.002/t/10-basics.t.orig	2019-09-06 09:45:13.356354340 +0200
++++ PerlIO-buffersize-0.002/t/10-basics.t	2019-09-06 09:46:34.918802711 +0200
+@@ -4,7 +4,6 @@ use strict;
+ use warnings FATAL => 'all';
+ use Test::More;
+ use Test::Exception;
+-use PerlIO::Layers qw/query_handle/;
+ 
+ my $fh;
+ lives_ok { open $fh, '<:buffersize(256)', $0; } 'Can open :buffersize(256)';

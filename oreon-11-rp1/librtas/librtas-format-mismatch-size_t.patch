@@ -1,0 +1,45 @@
+commit 828d2061f784a6bfc3ddfb05b1ec1b3a45603c46
+Author: Tyrel Datwyler <tyreld@linux.ibm.com>
+Date:   Fri Jun 20 16:35:16 2025 -0700
+
+    librtas: fix format specifier mismatch for size_t in indices.c
+    
+    CI complains of several %lu format specifier mismatches to arguments of
+    size_t in indices.c. This is a result of size_t being either 4 bytes or
+    8 bytes depending on if the packages is built on a 32bit or 64bit
+    architecture respectively.
+    
+    Fix this by using the printf size_t format specifier %zu instead.
+    
+    Fixes: 1e254ede1c226 ("librtas: Use /dev/papr-indices when available for ibm,get-indices")
+    Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+
+diff --git a/librtas_src/indices.c b/librtas_src/indices.c
+index 875c576..25a0b11 100644
+--- a/librtas_src/indices.c
++++ b/librtas_src/indices.c
+@@ -172,7 +172,7 @@ static int get_indices_chardev(int is_sensor, int type, char *workarea,
+ 	ssize_t res;
+ 
+ 	if (size != RTAS_GET_INDICES_BUF_SIZE) {
+-		dbg("Invalid buffer size %lu expects %d\n",
++		dbg("Invalid buffer size %zu expects %d\n",
+ 				size, RTAS_GET_INDICES_BUF_SIZE);
+ 		return -EINVAL;
+ 	}
+@@ -260,13 +260,13 @@ static int dynamic_common_io_setup(unsigned long ioctalval,
+ 	length = be32toh(*(uint32_t *)loc_code);
+ 
+ 	if (length < 1) {
+-		dbg("Invalid length(%lu) of location code string\n", length);
++		dbg("Invalid length(%zu) of location code string\n", length);
+ 		goto out;
+ 	}
+ 
+ 	loc_str = (char *)((char *)loc_code + sizeof(uint32_t));
+ 	if (strlen(loc_str) != (length - 1)) {
+-		dbg("location code string length is not matched with the passed length(%lu)\n", length);
++		dbg("location code string length is not matched with the passed length(%zu)\n", length);
+ 		goto out;
+ 	}
+ 

@@ -1,0 +1,12 @@
+diff --color -Nur xpad-5.8.0.orig/configure.ac xpad-5.8.0/configure.ac
+--- xpad-5.8.0.orig/configure.ac	2022-05-23 05:07:02.000000000 -0700
++++ xpad-5.8.0/configure.ac	2025-02-08 15:30:23.465729969 -0800
+@@ -52,7 +52,7 @@
+ # i18n / text translations
+ # The choice for version of gettext is only based on what was installed on the developers desktop (2021).
+ # If another version is more convenient, go for it.
+-AM_GNU_GETTEXT_VERSION([0.21])
++AM_GNU_GETTEXT_REQUIRE_VERSION([0.23.1])
+ AM_GNU_GETTEXT([external])
+ 
+ GETTEXT_PACKAGE="$PACKAGE"

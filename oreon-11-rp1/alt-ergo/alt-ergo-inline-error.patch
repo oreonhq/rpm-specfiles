@@ -1,0 +1,26 @@
+Fixes these warnings:
+
+File "src/lib/util/util.mli", line 104, characters 6-12:
+104 | val [@inline always] compare_algebraic : 'a -> 'a -> (('a * 'a) -> int) -> int
+            ^^^^^^
+Warning 53 [misplaced-attribute]: the inline attribute cannot appear in this context
+
+File "src/lib/util/util.mli", line 106, characters 6-12:
+106 | val [@inline always] cmp_lists: 'a list -> 'a list -> ('a -> 'a -> int) -> int
+            ^^^^^^
+Warning 53 [misplaced-attribute]: the inline attribute cannot appear in this context
+
+--- alt-ergo-2.4.3-free/src/lib/util/util.mli.orig	2026-02-05 07:02:19.000000000 -0700
++++ alt-ergo-2.4.3-free/src/lib/util/util.mli	2026-02-06 15:05:36.970775493 -0700
+@@ -101,9 +101,9 @@ val string_of_th_ext : theories_extensio
+    - Stdlib.compare a b is used if
+ 
+ *)
+-val [@inline always] compare_algebraic : 'a -> 'a -> (('a * 'a) -> int) -> int
++val compare_algebraic : 'a -> 'a -> (('a * 'a) -> int) -> int
+ 
+-val [@inline always] cmp_lists: 'a list -> 'a list -> ('a -> 'a -> int) -> int
++val cmp_lists: 'a list -> 'a list -> ('a -> 'a -> int) -> int
+ 
+ type matching_env =
+   {

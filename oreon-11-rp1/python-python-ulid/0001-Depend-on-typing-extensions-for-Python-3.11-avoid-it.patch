@@ -1,0 +1,61 @@
+From a2719467253b66191b2ae148bb88e47b1101fd3f Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 3 Feb 2026 11:04:29 +0000
+Subject: [PATCH] Depend on typing-extensions for Python<3.11; avoid it
+ otherwise
+
+Conditionalize the import of `typing_extensions`, needed only in Python
+3.10 and older; use `typing` instead for Python 3.11 and later. Add a
+dependency on `typing-extensions`, appropriately conditioned on the
+Python interpreter version.
+
+Based on https://github.com/mdomke/python-ulid/pull/47 and
+https://github.com/mdomke/python-ulid/pull/47#issuecomment-3431221960.
+
+Fixes https://github.com/mdomke/python-ulid/issues/44.
+---
+ pyproject.toml   | 3 +++
+ ulid/__init__.py | 6 +++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 5c3b252..c28114c 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -26,6 +26,9 @@ classifiers = [
+     "Programming Language :: Python :: 3.13",
+     "Topic :: Software Development :: Libraries",
+ ]
++dependencies = [
++    "typing-extensions; python_version < '3.11'",
++]
+ 
+ [project.urls]
+ Homepage = "https://github.com/mdomke/python-ulid"
+diff --git a/ulid/__init__.py b/ulid/__init__.py
+index d327385..d457081 100644
+--- a/ulid/__init__.py
++++ b/ulid/__init__.py
+@@ -2,6 +2,7 @@ from __future__ import annotations
+ 
+ import functools
+ import os
++import sys
+ import time
+ import uuid
+ from datetime import datetime
+@@ -13,7 +14,10 @@ from typing import Generic
+ from typing import TYPE_CHECKING
+ from typing import TypeVar
+ 
+-from typing_extensions import Self
++if sys.version_info >= (3, 11):
++    from typing import Self
++else:
++    from typing_extensions import Self
+ 
+ from ulid import base32
+ from ulid import constants
+-- 
+2.52.0
+

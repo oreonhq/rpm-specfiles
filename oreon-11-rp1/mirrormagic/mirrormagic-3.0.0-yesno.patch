@@ -1,0 +1,22 @@
+diff -up mirrormagic-3.0.0/src/tools.c~ mirrormagic-3.0.0/src/tools.c
+--- mirrormagic-3.0.0/src/tools.c~	2018-04-10 21:44:08.000000000 +0200
++++ mirrormagic-3.0.0/src/tools.c	2018-04-19 16:22:55.428555968 +0200
+@@ -4201,6 +4201,18 @@ static int RequestHandleEvents(unsigned
+ 		result = 0;
+ 		break;
+ 
++	      case KSYM_y:
++	      case KSYM_Y:
++		if (req_state & REQ_ASK)
++		  result = 1;
++		break;
++
++	      case KSYM_n:
++	      case KSYM_N:
++		if (req_state & REQ_ASK)
++		  result = 0;
++		break;
++
+ 	      default:
+ 		HandleKeysDebug(key);
+ 		break;

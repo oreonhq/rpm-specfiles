@@ -1,0 +1,55 @@
+From fdca7ac2d593ead6c8b85cd99268f6b1a27c9373 Mon Sep 17 00:00:00 2001
+From: Mads Kiilerich <mads@kiilerich.com>
+Date: Thu, 27 Jan 2022 17:25:35 +0100
+Subject: [PATCH 4/7] wscript: detect if qm-dsp is self-contained or need
+ linking with kiss
+
+When building with --use-external-libs on Fedora, Ardour would fail at
+runtime with messages like:
+  symbol lookup error: .../vamp/libardourvampplugins.so: undefined symbol: kiss_fftr_alloc
+Try to automate handling of this error situation.
+
+Fedora packaging worked around it with a custom patch that we rather
+would avoid:
+https://src.fedoraproject.org/rpms/ardour6/blob/rawhide/f/ardour6-missing-kissfft.patch .
+---
+ libs/qm-dsp/wscript | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/libs/qm-dsp/wscript b/libs/qm-dsp/wscript
+index 775098e06b..9954b7ff42 100644
+--- a/libs/qm-dsp/wscript
++++ b/libs/qm-dsp/wscript
+@@ -30,6 +30,29 @@ def configure(conf):
+         conf.load('compiler_cxx')
+         autowaf.configure(conf)
+ 
++        # Verify that qm-dsp is self-contained and that FFT transforms actually works
++        if not conf.check_cxx(msg = 'Checking qm-dsp without explicit kiss linking',
++                              features = 'cxx cxxprogram',
++                              fragment = """#include "dsp/transforms/FFT.h"\nint main(void) {\nFFT(4).process(false, nullptr, 0, nullptr, nullptr);\nFFTReal(4).forward(nullptr, nullptr, nullptr);\nreturn 0;\n}""",
++                              uselib = 'QMDSP',
++                              okmsg = 'ok',
++                              errmsg = "-lqm-dsp by itself failed",
++                              mandatory = False,
++                              ):
++            # The external qm-dsp might be built without embedded kiss - try to link with it explicitly and check again
++            conf.check_cxx(lib="kiss_fft_double", uselib_store="KISSFFT", mandatory=True)
++            conf.check_cxx(lib="kiss_fftr_double", uselib_store="KISSFFTR", mandatory=True)
++            conf.env.append_value('LIB_QMDSP', conf.env['LIB_KISSFFT'] + conf.env['LIB_KISSFFTR'])
++
++            conf.check_cxx(msg = 'Checking qm-dsp with explicit kiss linking',
++                           features = 'cxx cxxprogram',
++                           fragment = """#include "dsp/transforms/FFT.h"\nint main(void) {\nFFT(4).process(false, nullptr, 0, nullptr, nullptr);\nFFTReal(4).forward(nullptr, nullptr, nullptr);\nreturn 0;\n}""",
++                           uselib = 'QMDSP',
++                           okmsg = '-lqm-dsp needs explicit kiss linking',
++                           errmsg = "qm-dsp doesn't work, even with kiss libraries",
++                           mandatory = True,
++                           )
++
+ def build(bld):
+     if bld.is_defined('USE_EXTERNAL_LIBS'):
+         return
+-- 
+2.41.0
+

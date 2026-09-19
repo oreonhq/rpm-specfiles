@@ -1,0 +1,21 @@
+diff -up BlockOutII-2.3/contrib/ImageLib/src/png/hpng.c~ BlockOutII-2.3/contrib/ImageLib/src/png/hpng.c
+--- BlockOutII-2.3/ImageLib/src/png/hpng.c~	2011-12-14 11:07:35.000000000 +0100
++++ BlockOutII-2.3/ImageLib/src/png/hpng.c	2011-12-14 11:09:53.542044115 +0100
+@@ -45,7 +45,7 @@ int LoadPngImage(PNG_IMAGE *d) {
+ 	// ---------------- Error handling
+ 
+ 	png_set_error_fn(png,NULL,my_png_error,NULL);
+-  if (setjmp(png->jmpbuf)) {
++  if (setjmp(png_jmpbuf(png))) {
+  	  png_destroy_read_struct(&png, &info, &endinfo);
+ 	  return 0;
+ 	}
+@@ -154,7 +154,7 @@ char *WritePngImage(char *file_name,unsi
+    {
+     	sprintf(PngErrorMessage,"png_create_info_struct() failed");
+       fclose(fp);
+-      png_destroy_write_struct(&png_ptr,  png_infopp_NULL);
++      png_destroy_write_struct(&png_ptr, &info_ptr);
+       return PngErrorMessage;
+    }
+ 

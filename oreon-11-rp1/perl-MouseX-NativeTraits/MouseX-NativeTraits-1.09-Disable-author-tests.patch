@@ -1,0 +1,13 @@
+diff -up MouseX-NativeTraits-1.09/Makefile.PL.orig MouseX-NativeTraits-1.09/Makefile.PL
+--- MouseX-NativeTraits-1.09/Makefile.PL.orig	2015-05-26 15:51:52.550923488 +0200
++++ MouseX-NativeTraits-1.09/Makefile.PL	2015-05-26 15:53:32.863178544 +0200
+@@ -12,9 +12,6 @@ test_requires 'Test::More'  => 0.88; # d
+ test_requires 'Test::Fatal' => 0.003;
+ 
+ tests_recursive 't';
+-author_tests 'xt';
+-
+-auto_set_repository() if -d '.git';
+ 
+ default_test_target
+     env => { ANY_MOOSE => 'Mouse' };

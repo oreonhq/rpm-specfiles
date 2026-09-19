@@ -1,0 +1,8 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+
+Name: mono-reflection
+Description: mono-reflection - Helper Library for Mono Reflection support
+Version: 0.1
+Libs: -r:${libdir}/mono/Mono.Reflection/Mono.Reflection.dll

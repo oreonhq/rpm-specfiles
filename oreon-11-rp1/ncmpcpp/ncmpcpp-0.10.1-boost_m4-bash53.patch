@@ -1,0 +1,11 @@
+--- ncmpcpp-0.10.1/m4/boost.m4.bash53	2024-10-24 21:28:08.000000000 +0900
++++ ncmpcpp-0.10.1/m4/boost.m4	2025-08-14 15:32:29.165911920 +0900
+@@ -172,7 +172,7 @@
+     # I didn't indent this loop on purpose (to avoid over-indented code)
+     boost_layout_system_search_list=`cd "$boost_dir" 2>/dev/null \
+         && ls -1 | "${GREP}" '^boost-' | sort -rn -t- -k2 \
+-        && echo .`
++        ; echo .`
+     for boost_inc in $boost_layout_system_search_list
+     do
+       if test x"$boost_inc" != x.; then

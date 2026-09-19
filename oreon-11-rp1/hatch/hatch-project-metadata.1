@@ -1,0 +1,28 @@
+.TH HATCH\-PROJECT\-METADATA "1" "October 2022" "" "User Commands"
+.SH NAME
+.B hatch\ project\ metadata
+\(en Display project metadata
+.SH SYNOPSIS
+.B hatch\ project\ metadata
+.RI [ OPTIONS ]
+.RI [ FIELD ]
+.SH OPTIONS
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH NOTES
+If you want to view the raw readme file without rendering,
+you can use a JSON parser like
+.UR https://github.com/stedolan/jq
+.BR jq (1)
+.UE :
+.P
+.in +4n
+.EX
+.B hatch\ project\ metadata\ |\ jq\ \-r\ .readme
+.EE
+.SH "SEE ALSO"
+.BR hatch\-project (1),
+.BR hatch (1)
+.P
+.BR jq (1)

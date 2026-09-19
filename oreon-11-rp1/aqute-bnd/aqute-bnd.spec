@@ -9,7 +9,7 @@
 %endif
 
 Name:           aqute-bnd
-Version:        6.3.1
+Version:        7.4.0
 Release:        %autorelease
 Summary:        BND Tool
 # Part of jpm is under BSD, but jpm is not included in binary RPM
@@ -63,7 +63,7 @@ BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
 %endif
 
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 6.3.1-23
+Obsoletes:      %{name}-javadoc < 7.4.0-23
 
 %description
 The bnd tool helps you create and diagnose OSGi bundles.

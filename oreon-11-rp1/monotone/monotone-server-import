@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# Import packages into the Monotone Server database
+#
+# Author: Thomas Moschny <thomas.moschny@gmx.de>
+#
+set -eu
+
+MONOTONE_CONFDIR="${MONOTONE_CONFDIR:-/etc/monotone}"
+MONOTONE_KEYDIR="${MONOTONE_KEYDIR:-/etc/monotone/private-keys}"
+MONOTONE_DBFILE="${MONOTONE_DBFILE:-/var/lib/monotone/server.mtn}"
+MONOTONE_PPFILE="${MONOTONE_PPFILE:-/etc/monotone/passphrase.lua}"
+
+MONOTONE_KEYID="${MONOTONE_KEYID:-monotone@$(hostname -f)}"
+MONOTONE_HOME="${MONOTONE_HOME:-/var/lib/monotone}"
+
+cd "${MONOTONE_HOME}"
+
+echo $"Importing packets into ${MONOTONE_DBFILE}"
+
+runuser -u monotone -- mtn --confdir="${MONOTONE_CONFDIR}" \
+   --db="${MONOTONE_DBFILE}" --keydir="${MONOTONE_KEYDIR}" \
+   read

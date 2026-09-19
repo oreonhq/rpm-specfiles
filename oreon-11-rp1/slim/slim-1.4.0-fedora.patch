@@ -1,0 +1,32 @@
+--- slim.conf.org	2023-01-14 05:47:23.000000000 -0600
++++ slim.conf	2023-03-03 18:58:39.209255029 -0600
+@@ -16,7 +16,7 @@
+ # Commands for halt, login, etc.
+ halt_cmd            /sbin/shutdown -h now
+ reboot_cmd          /sbin/shutdown -r now
+-console_cmd         /usr/bin/xterm -C -fg white -bg black +sb -T "Console login" -e /bin/sh -c "/bin/cat /etc/issue; exec /bin/login"
++console_cmd         /usr/bin/xterm -C -fg white -bg black +sb -T "Console login" -e /bin/sh -c "/bin/cat /etc/issue | sed -e 's/\\\\r/`uname -r`/' -e 's/\\\\m/`uname -m`/'; exec /bin/login"
+ #suspend_cmd        /usr/sbin/suspend
+ 
+ # Activate numlock when slim starts. Valid values: on|off
+@@ -35,7 +35,7 @@
+ # NOTE: if your system does not have bash you need to adjust the command
+ # according to your preferred shell, e.g. for freebsd use:
+ # login_cmd           exec /bin/sh - ~/.xinitrc %session
+-login_cmd           exec /bin/bash -login ~/.xinitrc %session
++login_cmd           if [ -r ~/.xinitrc ]; then exec /bin/bash -login ~/.xinitrc %session; else PREFERRED=%session exec /bin/bash -login /etc/X11/xinit/xinitrc; fi
+ 
+ # Commands executed when starting and exiting a session.
+ # They can be used for registering a X11 session with
+@@ -68,9 +68,9 @@
+ 
+ 
+ # Executed when pressing F11 (requires imagemagick)
+-screenshot_cmd      import -window root /slim.png
++# screenshot_cmd      xwd -root > /slim.xwd
+ # Alternative using scrot.
+-#screenshot_cmd      scrot /root/slim.png
++screenshot_cmd      scrot /root/slim.png
+ 
+ # Delay after failed authentication before allowing another attempt
+ # NOTE: This delay is additional to the time PAM takes to fail, and

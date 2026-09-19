@@ -1,0 +1,57 @@
+.TH UNU\-CONVERT "1" "May 2021" "" "User Commands"
+.SH NAME
+unu\-convert \- convert to another type (as if by cast, w/ optional clamp)
+.SH SYNOPSIS
+.B unu\ convert
+.BR \-t , \-\-type
+.RI < type >
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-clamp ]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Convert to another type (as if by cast, w/ optional clamp).
+By default this does not transform, scale, or intelligently quantize values; it
+just copies them from one type to another, which replicates exactly what
+you\(cqd get in C when you assign from a variable of one type to another, or
+when you cast to a different type.
+However, clamping values to the representable range
+of the output type is possible with
+.RB \(lq \-clamp \(rq.
+See also
+.BR unu\-quantize (1),
+.BR unu\-2op (1)
+.BR x ,
+and
+.BR unu\-3op (1)
+.BR clamp .
+.IP \(bu +2n
+Uses
+.B nrrdConvert
+or
+.B nrrdClampConvert
+.SH OPTIONS
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+type to convert to
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-clamp
+clamp input values to representable range of values of output type, to avoid
+wrap-around problems
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-2op (1),
+.BR unu\-3op (1),
+.BR unu\-quantize (1)

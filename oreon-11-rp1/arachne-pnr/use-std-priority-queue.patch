@@ -1,0 +1,132 @@
+From 8843f4d861c739db8c428d5a24d1e97490d4f6df Mon Sep 17 00:00:00 2001
+From: Jon Burgess <jburgess777@gmail.com>
+Date: Sun, 28 Oct 2018 23:23:22 +0000
+Subject: [PATCH 1/2] Use std::priority_queue instead of custom variant
+
+---
+ src/priorityq.hh | 62 ------------------------------------------------
+ src/route.cc     | 11 +++++----
+ 2 files changed, 7 insertions(+), 66 deletions(-)
+ delete mode 100644 src/priorityq.hh
+
+diff --git a/src/priorityq.hh b/src/priorityq.hh
+deleted file mode 100644
+index d2bf109..0000000
+--- a/src/priorityq.hh
++++ /dev/null
+@@ -1,62 +0,0 @@
+-/* Copyright (C) 2015 Cotton Seed
+-   
+-   This file is part of arachne-pnr.  Arachne-pnr is free software;
+-   you can redistribute it and/or modify it under the terms of the GNU
+-   General Public License version 2 as published by the Free Software
+-   Foundation.
+-   
+-   This program is distributed in the hope that it will be useful, but
+-   WITHOUT ANY WARRANTY; without even the implied warranty of
+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-   General Public License for more details.
+-   
+-   You should have received a copy of the GNU General Public License
+-   along with this program. If not, see <http://www.gnu.org/licenses/>. */
+-
+-#ifndef PNR_PRIORITYQQ_HH
+-#define PNR_PRIORITYQQ_HH
+-
+-#include <functional>
+-#include <vector>
+-
+-template<typename T, typename Comp = std::less<T>>
+-class PriorityQ
+-{
+-public:
+-  Comp comp;
+-  std::vector<T> v;
+-  unsigned n;
+-  
+-public:
+-  PriorityQ() : n(0) {}
+-  PriorityQ(Comp comp_) : comp(comp_), n(0) {}
+-  
+-  size_t size() const { return n; }
+-  void clear() { n = 0; }
+-  bool empty() { return n == 0; }
+-  
+-  void push(const T &x)
+-  {
+-    assert(v.size() >= n);
+-    if (v.size() == n)
+-      v.push_back(x);
+-    else
+-      v[n] = x;
+-    ++n;
+-    std::push_heap(&v[0], &v[n], comp);
+-  }
+-  const T &pop()
+-  {
+-    assert(n > 0);
+-    std::pop_heap(&v[0], &v[n], comp);
+-    --n;
+-    return v[n];
+-  }
+-  const T &top()
+-  {
+-    assert(n > 0);
+-    return v[0];
+-  }
+-};
+-
+-#endif
+diff --git a/src/route.cc b/src/route.cc
+index 25bb54d..a1ccd05 100644
+--- a/src/route.cc
++++ b/src/route.cc
+@@ -21,7 +21,6 @@
+ #include "configuration.hh"
+ #include "bitvector.hh"
+ #include "ullmanset.hh"
+-#include "priorityq.hh"
+ #include "designstate.hh"
+ 
+ #include <cassert>
+@@ -33,6 +32,7 @@
+ #include <map>
+ #include <vector>
+ #include <ctime>
++#include <queue>
+ 
+ class Router;
+ 
+@@ -94,7 +94,9 @@ class Router
+   
+   UllmanSet frontier;
+   // cn, cost[cn]
+-  PriorityQ<std::pair<int, int>, Comp> frontierq;
++  std::priority_queue<std::pair<int, int>,
++		      std::vector<std::pair<int, int>>,
++		      Comp> frontierq;
+   
+   std::vector<int> backptr;
+   std::vector<int> cost;
+@@ -533,7 +535,7 @@ Router::start(int net)
+   visited.clear();
+   
+   frontier.clear();
+-  frontierq.clear();
++  frontierq = decltype(frontierq) ();
+   
+   int source = net_source[net];
+   cost[source] = 0;
+@@ -609,7 +611,8 @@ Router::pop()
+  L:
+   assert(!frontierq.empty());
+   int cn, cn_cost;
+-  std::tie(cn, cn_cost) = frontierq.pop();
++  std::tie(cn, cn_cost) = frontierq.top();
++  frontierq.pop();
+   if (!frontier.contains(cn))
+     goto L;
+   
+-- 
+2.24.1
+

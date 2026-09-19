@@ -1,0 +1,108 @@
+From 64011b3c82746f641ffdb5027e4f5d508f086316 Mon Sep 17 00:00:00 2001
+From: Iustin Pop <iustin@k1024.org>
+Date: Sun, 13 Jul 2025 03:00:49 +0900
+Subject: [PATCH] Disable the reference tests introduced in 2012
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+A very long time ago, I added reference tests in commit d8199ea ("Add
+test for refcount leak"), and then later expanded them to more tests in
+2861715d ("Extend the refcount leak tests").
+
+I do not remember now (13 years later…) whether the main goal was under
+or overflow. The commit messages mention leaks, so I assume it's about
+upper bound, but 1024? That doesn't make a lot of sense, as the tests
+are not done in a loop.
+
+These tests worked fine until 3.14, which introduced changes in how
+reference counters are implemented
+(https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-refcount),
+and especially does some optimisations in cases where references are
+only borrowed temporarily (like I assume `sys.getrefcount()` does), so
+the test fails with "expected minimum 2, actual 1". Since I don't
+understand the actual test, i.e. how it can catch leaks, I will simply
+disable the tests. A better solution would probably be to implement
+actual leak tests (valgrind or so?) instead of proxy-testing the leaks.
+
+This fixes issue #31 and, once I make a new release and it's
+imported, https://bugzilla.redhat.com/show_bug.cgi?id=2359502.
+---
+ tests/test_acls.py | 19 -------------------
+ 1 file changed, 19 deletions(-)
+
+diff --git a/tests/test_acls.py b/tests/test_acls.py
+index 0937fdb..3557b48 100644
+--- a/tests/test_acls.py
++++ b/tests/test_acls.py
+@@ -623,23 +623,10 @@ def test_reapply(self, testdir):
+ class TestModification:
+     """ACL modification tests"""
+ 
+-    def checkRef(self, obj):
+-        """Checks if a given obj has a 'sane' refcount"""
+-        if platform.python_implementation() == "PyPy":
+-            return
+-        ref_cnt = sys.getrefcount(obj)
+-        # FIXME: hardcoded value for the max ref count... but I've
+-        # seen it overflow on bad reference counting, so it's better
+-        # to be safe
+-        if ref_cnt < 2 or ref_cnt > 1024:
+-            pytest.fail("Wrong reference count, expected 2-1024 and got %d" %
+-                        ref_cnt)
+-
+     def test_str(self):
+         """Test str() of an ACL."""
+         acl = posix1e.ACL(text=BASIC_ACL_TEXT)
+         str_acl = str(acl)
+-        self.checkRef(str_acl)
+ 
+     def test_append(self):
+         """Test append a new Entry to the ACL"""
+@@ -648,7 +635,6 @@ def test_append(self):
+         e.tag_type = posix1e.ACL_OTHER
+         ignore_ioerror(errno.EINVAL, acl.calc_mask)
+         str_format = str(e)
+-        self.checkRef(str_format)
+         e2 = acl.append(e)
+         ignore_ioerror(errno.EINVAL, acl.calc_mask)
+         assert not acl.valid()
+@@ -675,7 +661,6 @@ def test_entry_creation(self):
+         e = posix1e.Entry(acl)
+         ignore_ioerror(errno.EINVAL, acl.calc_mask)
+         str_format = str(e)
+-        self.checkRef(str_format)
+ 
+     def test_entry_failed_creation(self):
+         # Checks for partial initialisation and deletion on error
+@@ -890,14 +875,12 @@ def test_permset(self, perm, txt, accessor):
+         ps = e.permset
+         ps.clear()
+         str_ps = str(ps)
+-        self.checkRef(str_ps)
+         assert not ps.test(perm), ("Empty permission set should not"
+                                    " have permission '%s'" % txt)
+         ps.add(perm)
+         assert ps.test(perm), ("Permission '%s' should exist"
+                                " after addition" % txt)
+         str_ps = str(ps)
+-        self.checkRef(str_ps)
+         ps.delete(perm)
+         assert not ps.test(perm), ("Permission '%s' should not exist"
+                                    " after deletion" % txt)
+@@ -923,7 +906,6 @@ def getter():
+         def setter(value):
+             return accessor.__set__(ps, value) # type: ignore
+         str_ps = str(ps)
+-        self.checkRef(str_ps)
+         assert not getter(), ("Empty permission set should not"
+                               " have permission '%s'" % txt)
+         setter(True)
+@@ -932,7 +914,6 @@ def setter(value):
+         assert getter(), ("Permission '%s' should exist"
+                           " after addition" % txt)
+         str_ps = str(ps)
+-        self.checkRef(str_ps)
+         setter(False)
+         assert not ps.test(perm), ("Permission '%s' should not exist"
+                                    " after deletion" % txt)

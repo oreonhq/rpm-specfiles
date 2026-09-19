@@ -1,0 +1,98 @@
+--- src/objects.c	2002-11-01 11:32:28.000000000 +0100
++++ src/objects.c	2004-07-21 17:39:15.081471539 +0200
+@@ -146,6 +146,7 @@
+ 		
+ 		count = 0;
+ 	obj_continue:
++		continue;
+ 	}
+ 	
+ 	// bung in a '\0' at the end if one doesn't exist
+diff -urN ../tmp-orig/nagi-2.07b/src/ui/cmd_input.c ./src/ui/cmd_input.c
+--- src/ui/cmd_input.c	2002-11-01 11:32:28.000000000 +0100
++++ src/ui/cmd_input.c	2004-07-21 17:44:08.445769637 +0200
+@@ -94,7 +94,6 @@
+ 			case 10:	// mouse
+ 				mouse_event_handle(si);	
+ 				break;
+-			default:	
+ 		}
+ 		si = control_key_map(  event_read()  );
+ 	}
+diff -urN ../tmp-orig/nagi-2.07b/src/ui/events.c ./src/ui/events.c
+--- src/ui/events.c	2002-11-01 11:32:30.000000000 +0100
++++ src/ui/events.c	2004-07-21 17:43:56.790022601 +0200
+@@ -314,7 +314,6 @@
+ 				agi_event = event_mouse_button(event.button.button,event.button.x,event.button.y);
+ 				break;
+ 			
+-			default:
+ 		}
+ 	}
+ 
+diff -urN ../tmp-orig/nagi-2.07b/src/ui/list_box.c ./src/ui/list_box.c
+--- src/ui/list_box.c	2002-11-01 11:32:30.000000000 +0100
++++ src/ui/list_box.c	2004-07-21 17:44:33.050013795 +0200
+@@ -204,7 +204,6 @@
+ 							force = 2;
+ 						break;
+ 						
+-					default:
+ 				}
+ 				
+ 				if (item_cur < 0)
+diff -urN ../tmp-orig/nagi-2.07b/src/ui/menu.c ./src/ui/menu.c
+--- src/ui/menu.c	2002-11-01 11:32:30.000000000 +0100
++++ src/ui/menu.c	2004-07-21 17:44:22.444063864 +0200
+@@ -357,7 +357,6 @@
+ 					menu_draw(si);
+ 					break;
+ 				
+-				default:	// NONE?
+ 			}
+ 			break;
+ 	}
+diff -urN ../tmp-orig/nagi-2.07b/src/ui/msg.c ./src/ui/msg.c
+--- src/ui/msg.c	2002-11-01 11:32:30.000000000 +0100
++++ src/ui/msg.c	2004-07-21 17:43:44.723354983 +0200
+@@ -385,7 +385,6 @@
+ 								msg = r_display1f93(word_string[my_num], msg);
+ 							break;
+ 						
+-						default:
+ 					}
+ 					break;
+ 					
+diff -urN ../tmp-orig/nagi-2.07b/src/view/obj_loop.c ./src/view/obj_loop.c
+--- src/view/obj_loop.c	2002-11-01 11:32:30.000000000 +0100
++++ src/view/obj_loop.c	2004-07-21 17:43:09.498163644 +0200
+@@ -62,7 +62,6 @@
+ 				else
+ 					c = max;
+ 				break;
+-			default:
+ 		}
+ 		
+ 		obj_cel_set(v, c);
+diff -urN ../tmp-orig/nagi-2.07b/src/view/obj_motion.c ./src/view/obj_motion.c
+--- src/view/obj_motion.c	2002-11-01 11:32:30.000000000 +0100
++++ src/view/obj_motion.c	2004-07-21 17:43:20.072119818 +0200
+@@ -66,7 +66,6 @@
+ 		case MT_MOVE:
+ 			obj_move_update(v);
+                 	break;
+-	        default:
+         }
+ 
+ 	if (state.block_state == 0)
+diff -urN ../tmp-orig/nagi-2.07b/src/view/obj_proximity.c ./src/view/obj_proximity.c
+--- src/view/obj_proximity.c	2002-11-01 11:32:30.000000000 +0100
++++ src/view/obj_proximity.c	2004-07-21 17:42:50.886760996 +0200
+@@ -40,6 +40,7 @@
+ 					return 1;
+ 			
+ 			loc472e:
++			continue;
+ 		}
+ 	}
+ 	return 0;

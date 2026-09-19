@@ -1,0 +1,42 @@
+From 9365eb35c1eaa4782de51c3ee1c619242bdd0ed8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 27 Jun 2018 13:07:20 +0200
+Subject: [PATCH] Remove build dependency on ExtUtils::HasCompiler
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+ExtUtils::HasCompiler is only used to recommend some XS
+implementations if a system can build XS modules.
+
+The XS implementation should be recommended by the pure-perl
+counterpart packages, not by perl-MongoDB. Especially if MongoDB does
+not use them anyhow in its code.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 5ed641b..e8b358e 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -202,13 +202,11 @@ sub _add_prereq {
+   return;
+ }
+ 
+-use lib 'inc';
+-use ExtUtils::HasCompiler 0.014 'can_compile_loadable_object';
+ {
+   my $can_xs;
+   sub can_xs {
+     return $can_xs if defined $can_xs;
+-    $can_xs = can_compile_loadable_object(quiet => 1) ? 1 : 0;
++    $can_xs = 0;
+   }
+ }
+ 
+-- 
+2.14.4
+

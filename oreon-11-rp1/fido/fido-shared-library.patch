@@ -1,0 +1,44 @@
+diff --git Makefile.am Makefile.am
+index ed3b4d5..86984fa 100644
+--- Makefile.am
++++ Makefile.am
+@@ -26,7 +26,7 @@ WARN_CFLAGS       =    @WARN_CFLAGS@
+ 
+ AM_CFLAGS         =    $(WARN_CFLAGS)
+ 
+-SUBDIRS           =    . include lib src utils doc 
++SUBDIRS           =    . include src utils doc 
+ 
+ DIST_SUBDIRS      =    $(SUBDIRS)
+ 
+diff --git include/Makefile.am include/Makefile.am
+index 77a511a..5d5b20a 100644
+--- include/Makefile.am
++++ include/Makefile.am
+@@ -20,8 +20,6 @@
+ ## Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ ##
+ 
+-SUBDIRS = joedog
+-
+ WARN_CFLAGS = @WARN_CFLAGS@
+ AM_CFLAGS = $(WARN_CFLAGS)
+ 
+diff --git src/Makefile.am src/Makefile.am
+index b7efb29..3aacfae 100644
+--- src/Makefile.am
++++ src/Makefile.am
+@@ -25,11 +25,9 @@ WARN_CFLAGS            =   @WARN_CFLAGS@
+ 
+ AM_CFLAGS              =   $(WARN_CFLAGS) $(PTHREAD_CFLAGS)
+ 
+-LDFLAGS                =   $(PTHREAD_LDFLAGS)
++LDFLAGS                :=   $(PTHREAD_LDFLAGS) $(LDFLAGS)
+ 
+-fido_LDADD             =   $(top_srcdir)/lib/joedog/libjoedog.la
+-
+-fido_DEPENDENCIES      =   $(top_srcdir)/lib/joedog/libjoedog.la
++fido_LDFLAGS = -ljoedog -lpthread
+ 
+ fido_SOURCES           =    \
+ array.c    array.h          \

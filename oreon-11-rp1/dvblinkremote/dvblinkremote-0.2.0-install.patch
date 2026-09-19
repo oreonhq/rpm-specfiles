@@ -1,0 +1,37 @@
+diff -up ./CMakeLists.txt.orig ./CMakeLists.txt
+--- ./CMakeLists.txt.orig	2020-08-13 10:47:53.282561333 +0200
++++ ./CMakeLists.txt	2020-08-13 10:49:31.103186627 +0200
+@@ -122,10 +122,6 @@ ADD_SUBDIRECTORY(libdvblinkremote)
+ ADD_SUBDIRECTORY(doc)
+ 
+ #############################################################
+-# install license file
+-INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/COPYING" DESTINATION .)
+-
+-#############################################################
+ # Enable packaging
+ 
+ SET(CPACK_GENERATOR "ZIP")
+diff -up ./dvblinkremote/src/CMakeLists.txt.orig ./dvblinkremote/src/CMakeLists.txt
+--- ./dvblinkremote/src/CMakeLists.txt.orig	2020-08-13 10:47:53.283561309 +0200
++++ ./dvblinkremote/src/CMakeLists.txt	2020-08-13 10:49:16.271546681 +0200
+@@ -29,11 +29,6 @@ INCLUDE_DIRECTORIES(
+ 
+ ADD_EXECUTABLE(${DVBLINKREMOTE_EXE_NAME} ${DVBLINKREMOTE_SOURCES} ${DVBLINKREMOTE_HEADERS} ${LIBDVBLINKREMOTE_PUBL_HEADERS})
+ 
+-SET_TARGET_PROPERTIES(${DVBLINKREMOTE_EXE_NAME} PROPERTIES
+-    VERSION ${LIBDVBLINKREMOTE_VERSION}
+-    SOVERSION ${LIBDVBLINKREMOTE_VERSION}
+-)
+-
+ TARGET_LINK_LIBRARIES(${DVBLINKREMOTE_EXE_NAME} ${DVBLINKREMOTE_LIBRARY_NAME})
+ 
+ # install
+diff -up ./libdvblinkremote/src/CMakeLists.txt.orig ./libdvblinkremote/src/CMakeLists.txt
+--- ./libdvblinkremote/src/CMakeLists.txt.orig	2020-08-13 10:48:07.658212347 +0200
++++ ./libdvblinkremote/src/CMakeLists.txt	2020-08-13 10:48:29.239688432 +0200
+@@ -110,4 +110,3 @@ ENDIF()
+ # install
+ 
+ INSTALL(TARGETS ${DVBLINKREMOTE_LIBRARY_NAME} DESTINATION ${DVBLINKREMOTE_LIB_DIR} EXPORT libdvblinkremote-targets)
+-install(EXPORT libdvblinkremote-targets DESTINATION ${DVBLINKREMOTE_LIB_DIR})

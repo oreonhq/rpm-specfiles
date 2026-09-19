@@ -1,0 +1,19 @@
+*** script/electromagnet/code.lua.orig	2009-01-10 21:42:47.000000000 +0200
+--- script/electromagnet/code.lua	2021-10-17 04:52:47.107420601 +0300
+***************
+*** 84,90 ****
+                  end
+  
+              local count = game_getCycles()
+!             plutonium.afaze=math.fmod(count, 12)/3
+              plutonium:updateAnim()
+              -- very specific because text wouldn't fit otherwise
+              if damage_wall.damagestate == 0 and killozap.Y == 2 and killozap.X == 3 and killozap.dir == dir_left and big.X < 9 and big.Y == 3 then
+--- 84,90 ----
+                  end
+  
+              local count = game_getCycles()
+!             plutonium.afaze=math.fmod(count, 12)//3
+              plutonium:updateAnim()
+              -- very specific because text wouldn't fit otherwise
+              if damage_wall.damagestate == 0 and killozap.Y == 2 and killozap.X == 3 and killozap.dir == dir_left and big.X < 9 and big.Y == 3 then

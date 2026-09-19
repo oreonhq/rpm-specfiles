@@ -1,0 +1,49 @@
+From 9899fde036fe708a9e73fea144ec2828a6158d11 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Wed, 17 Feb 2016 15:15:34 +0100
+Subject: [PATCH 2/9] dx-open
+
+---
+ src/exec/libdx/fileio.c | 2 +-
+ src/exec/libdx/plock.c  | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/src/exec/libdx/fileio.c b/src/exec/libdx/fileio.c
+index 36a4560..c83e8e2 100644
+--- a/src/exec/libdx/fileio.c
++++ b/src/exec/libdx/fileio.c
+@@ -263,7 +263,7 @@ Error _dxffile_open(char *name, int rw)
+ 	case 2:/* read/write */
+ 		fd = open(name, O_RDWR);
+ 		if (fd < 0) {
+-			fd = open(name, O_WRONLY | O_CREAT);
++			fd = open(name, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+ 			if (fd < 0) {
+ 				DXSetError(ERROR_DATA_INVALID, 
+ 				"can't open/create file '%s'", name);
+diff --git a/src/exec/libdx/plock.c b/src/exec/libdx/plock.c
+index 90b6946..ee093f1 100644
+--- a/src/exec/libdx/plock.c
++++ b/src/exec/libdx/plock.c
+@@ -37,7 +37,8 @@ struct seminfo *__buf;      /* buffer for IPC_INFO */
+ 
+ #define SEM_FLAGS  	 (IPC_CREAT | S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
+ #define SHM_FLAGS  	 (IPC_CREAT | S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
+-#define OPEN_FLAGS 	 (O_CREAT | S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
++#define OPEN_FLAGS	 (O_CREAT)
++#define OPEN_MODE 	 (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
+ #define IS_MINE(a)	 (locks->_owner[a] == getpid())
+ #define SET_OWNER(a)	 (locks->_owner[a] = getpid())
+ #define CLEAR_OWNER(a)	 (locks->_owner[a] = 0)
+@@ -268,7 +269,7 @@ PLockInit()
+ 
+     if (stat(LOCKFILE, &statbuf))
+     {
+-        int fd = open(LOCKFILE, OPEN_FLAGS);
++        int fd = open(LOCKFILE, OPEN_FLAGS, OPEN_MODE);
+ 	if (fd < 0)
+ 	{
+ 	    fprintf(stderr, "initLocks: error accessing locks shared block: open\n");
+-- 
+2.9.3
+

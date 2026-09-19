@@ -1,0 +1,22 @@
+--- src/lib/Sympa/ConfDef.pm.confdef	2020-08-26 11:02:54.503777457 +0900
++++ src/lib/Sympa/ConfDef.pm	2020-08-26 11:21:54.594263353 +0900
+@@ -124,6 +124,19 @@
+         || (($a // '') cmp($b // ''));
+ }
+ 
++# RPM specific customizations
++foreach my $p (@params) {
++    next unless $p->{name};
++    #$p->{default} = 'database'
++    #   if $p->{name} eq 'cache_list_config';
++    $p->{sample} = '/etc/pki/tls/certs'
++        if $p->{name} eq 'capath';
++    $p->{sample} = '/etc/pki/tls/certs/ca-bundle.crt'
++        if $p->{name} eq 'cafile';
++    $p->{default} = '/var/lib/sympa/X509-user-certs'
++        if $p->{name} eq 'ssl_cert_dir';
++}
++
+ 1;
+ __END__
+ 

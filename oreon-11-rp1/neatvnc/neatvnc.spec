@@ -3,8 +3,8 @@
 # -*-Mode: rpm-spec -*-
 
 Name:     neatvnc
-Version:  0.9.0
-Release:  7%{?dist}
+Version:  1.0.1
+Release:  1%{?dist}
 Summary:  Liberally licensed VNC server library
 # main source is ISC
 # include/sys/queue.h is BSD

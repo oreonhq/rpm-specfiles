@@ -1,0 +1,54 @@
+From 43536890043d7f6a9a3a45f3711dd2d719ddf4fd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 8 Oct 2013 14:44:53 +0200
+Subject: [PATCH 2/4] Use configure options instead of GCC test
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+These configure options:
+
+    --enable-gcc-debug
+    --enable-gprof
+    --enable-warnings
+
+never worked because the configure script checked for GCC presence
+instead of the option values.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ configure.ac | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 0b822ac..d7c4c00 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -139,21 +139,21 @@ AC_SUBST(WRAP_LIBS)
+ dnl Package options
+ AC_ARG_ENABLE(gcc-debug, AS_HELP_STRING([--enable-gcc-debug], 
+                          [Use '-g -Wall' if using gcc.]),
+-[ if test -n "$GCC"; then
++[ if test "${enable_gcc_debug}" = 'yes'; then
+ 	AC_MSG_RESULT(Setting CFLAGS to -g -Wall)
+ 	CFLAGS="-g -Wall"
+   fi])
+ 
+ AC_ARG_ENABLE(warnings, AS_HELP_STRING([--enable-warnings], 
+                         [Enable -Wall if using gcc.]),
+-[ if test -n "$GCC"; then
++[ if test "${enable_warnings}" = 'yes'; then
+     AC_MSG_RESULT(Adding -Wall to CFLAGS.)
+     CFLAGS="$CFLAGS -Wall"
+   fi])
+ 
+ AC_ARG_ENABLE(gprof, AS_HELP_STRING([--enable-gprof], 
+                      [Enable -pg if using gcc.]),
+-[ if test -n "$GCC"; then
++[ if test "${enable_gprof}" = 'yes'; then
+     AC_MSG_RESULT(Adding -pg to CFLAGS/LDFLAGS.)
+     CFLAGS="$CFLAGS -pg"
+     LDFLAGS="$LDFLAGS -pg"
+-- 
+1.8.3.1
+

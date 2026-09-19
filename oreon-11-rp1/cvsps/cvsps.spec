@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6906acb3636cdb4a4a9d608111aec22a85530037cb08a62ed5eb74ca0b218f81
 
 %global prever  b1
 
@@ -8,8 +8,8 @@ Release:        0.41.b1%{?dist}
 Summary:        Patchset tool for CVS
 
 License:        GPL-1.0-or-later
-URL:            http://www.cobite.com/cvsps/
-Source0:        http://www.cobite.com/cvsps/%{name}-%{version}%{prever}.tar.gz
+URL:            https://sourceforge.net/projects/cvsps/
+Source0:        https://downloads.sourceforge.net/project/cvsps/%{name}-%{version}%{prever}.tar.gz
 # https://bugzilla.redhat.com/516083
 Patch0:         %{name}-2.2b1-dynamic-logbuf.patch
 Patch1:         %{name}-2.2b1-man.patch

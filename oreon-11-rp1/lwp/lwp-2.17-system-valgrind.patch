@@ -1,0 +1,24 @@
+diff -up lwp-2.17/src/lwp.c.system-valgrind lwp-2.17/src/lwp.c
+--- lwp-2.17/src/lwp.c.system-valgrind	2025-03-12 17:19:00.639132117 -0400
++++ lwp-2.17/src/lwp.c	2025-03-12 17:20:26.919211214 -0400
+@@ -64,7 +64,7 @@ Pittsburgh, PA.
+ #include "lwp_ucontext.h"
+ #include "lwp_stacktrace.h"
+ 
+-#include "valgrind.h"
++#include <valgrind/valgrind.h>
+ 
+ #define ON 1
+ #define OFF 0
+diff -up lwp-2.17/src/Makefile.am.system-valgrind lwp-2.17/src/Makefile.am
+--- lwp-2.17/src/Makefile.am.system-valgrind	2025-03-12 17:10:53.000000000 -0400
++++ lwp-2.17/src/Makefile.am	2025-03-12 17:19:00.639347549 -0400
+@@ -8,7 +8,7 @@ LDADD = liblwp.la
+ 
+ liblwp_la_SOURCES = fasttime.c iomgr.c lock.c lwp.c timer.c process.S \
+ 		    lwp_ucontext.c lwp_ucontext.h lwp_stacktrace.c \
+-		    lwp_stacktrace.h lwp.private.h valgrind.h
++		    lwp_stacktrace.h lwp.private.h
+ liblwp_la_CPPFLAGS = $(AM_CPPFLAGS) -DLWPDEBUG
+ liblwp_la_LDFLAGS = $(LIBTOOL_LDFLAGS)
+ 

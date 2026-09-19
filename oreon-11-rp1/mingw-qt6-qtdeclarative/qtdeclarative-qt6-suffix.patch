@@ -1,0 +1,57 @@
+diff -rupN --no-dereference qtdeclarative-everywhere-src-6.10.0/tools/qml/CMakeLists.txt qtdeclarative-everywhere-src-6.10.0-new/tools/qml/CMakeLists.txt
+--- qtdeclarative-everywhere-src-6.10.0/tools/qml/CMakeLists.txt	2025-10-01 22:12:31.000000000 +0200
++++ qtdeclarative-everywhere-src-6.10.0-new/tools/qml/CMakeLists.txt	2025-12-27 21:46:35.930448877 +0100
+@@ -18,7 +18,7 @@ qt_internal_add_app(qml_tool
+ )
+ 
+ set_target_properties(qml_tool PROPERTIES WIN32_EXECUTABLE FALSE)
+-set_target_properties(qml_tool PROPERTIES OUTPUT_NAME "qml")
++set_target_properties(qml_tool PROPERTIES OUTPUT_NAME "qml-qt6")
+ 
+ # Turn the tool into its own self-contained qml module
+ qt6_add_qml_module(qml_tool
+diff -rupN --no-dereference qtdeclarative-everywhere-src-6.10.0/tools/qmleasing/CMakeLists.txt qtdeclarative-everywhere-src-6.10.0-new/tools/qmleasing/CMakeLists.txt
+--- qtdeclarative-everywhere-src-6.10.0/tools/qmleasing/CMakeLists.txt	2025-10-01 22:12:31.000000000 +0200
++++ qtdeclarative-everywhere-src-6.10.0-new/tools/qmleasing/CMakeLists.txt	2025-12-27 21:46:35.930693505 +0100
+@@ -26,6 +26,7 @@ qt_internal_add_app(qmleasing
+ )
+ 
+ set_target_properties(qmleasing PROPERTIES WIN32_EXECUTABLE FALSE)
++set_target_properties(qmleasing PROPERTIES OUTPUT_NAME "qmleasing-qt6")
+ 
+ # Resources:
+ set(resources_resource_files
+diff -rupN --no-dereference qtdeclarative-everywhere-src-6.10.0/tools/qmlpreview/CMakeLists.txt qtdeclarative-everywhere-src-6.10.0-new/tools/qmlpreview/CMakeLists.txt
+--- qtdeclarative-everywhere-src-6.10.0/tools/qmlpreview/CMakeLists.txt	2025-10-01 22:12:31.000000000 +0200
++++ qtdeclarative-everywhere-src-6.10.0-new/tools/qmlpreview/CMakeLists.txt	2025-12-27 21:46:35.930862901 +0100
+@@ -17,6 +17,7 @@ qt_internal_add_app(qmlpreview
+         Qt::Network
+         Qt::QmlDebugPrivate
+ )
++set_target_properties(qmlpreview PROPERTIES OUTPUT_NAME "qmlpreview-qt6")
+ qt_internal_return_unless_building_tools()
+ 
+ set_target_properties(qmlpreview PROPERTIES WIN32_EXECUTABLE FALSE)
+diff -rupN --no-dereference qtdeclarative-everywhere-src-6.10.0/tools/qmlscene/CMakeLists.txt qtdeclarative-everywhere-src-6.10.0-new/tools/qmlscene/CMakeLists.txt
+--- qtdeclarative-everywhere-src-6.10.0/tools/qmlscene/CMakeLists.txt	2025-10-01 22:12:31.000000000 +0200
++++ qtdeclarative-everywhere-src-6.10.0-new/tools/qmlscene/CMakeLists.txt	2025-12-27 21:46:35.932065504 +0100
+@@ -19,7 +19,7 @@ qt_internal_add_app(qmlscene
+         Qt::Quick
+         Qt::QuickPrivate
+ )
+-
++set_target_properties(qmlscene PROPERTIES OUTPUT_NAME "qmlscene-qt6")
+ set_target_properties(qmlscene PROPERTIES WIN32_EXECUTABLE FALSE)
+ 
+ qt_internal_extend_target(qmlscene CONDITION TARGET Qt::Widgets
+diff -rupN --no-dereference qtdeclarative-everywhere-src-6.10.0/tools/qmltestrunner/CMakeLists.txt qtdeclarative-everywhere-src-6.10.0-new/tools/qmltestrunner/CMakeLists.txt
+--- qtdeclarative-everywhere-src-6.10.0/tools/qmltestrunner/CMakeLists.txt	2025-10-01 22:12:31.000000000 +0200
++++ qtdeclarative-everywhere-src-6.10.0-new/tools/qmltestrunner/CMakeLists.txt	2025-12-27 21:46:35.932290812 +0100
+@@ -50,6 +50,7 @@ qt_internal_add_tool(${target_name}
+         Qt::Qml
+         Qt::QuickTest
+ )
++set_target_properties(${target_name} PROPERTIES OUTPUT_NAME "qmltestrunner-qt6")
+ qt_internal_return_unless_building_tools()
+ 
+ qt_internal_add_entitlements_to_qmltestrunner(${target_name})

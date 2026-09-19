@@ -1,0 +1,114 @@
+
+## <summary>policy for ladvd</summary>
+
+########################################
+## <summary>
+##	Execute a domain transition to run ladvd.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`ladvd_domtrans',`
+	gen_require(`
+		type ladvd_t;
+                type ladvd_exec_t;
+	')
+
+	domtrans_pattern($1,ladvd_exec_t,ladvd_t)
+')
+
+
+########################################
+## <summary>
+##	Execute ladvd server in the ladvd domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	The type of the process performing this action.
+##	</summary>
+## </param>
+#
+interface(`ladvd_script_domtrans',`
+	gen_require(`
+		type ladvd_script_exec_t;
+	')
+
+	init_script_domtrans_spec($1,ladvd_script_exec_t)
+')
+
+########################################
+## <summary>
+##	Execute ladvd server in the ladvd domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed to transition.
+##	</summary>
+## </param>
+#
+interface(`ladvd_systemctl',`
+	gen_require(`
+		type ladvd_t;
+		type ladvd_unit_file_t;
+	')
+
+	systemd_exec_systemctl($1)
+	allow $1 ladvd_unit_file_t:file manage_file_perms;
+	allow $1 ladvd_unit_file_t:service manage_service_perms;
+
+	ps_process_pattern($1, ladvd_t)
+')
+
+########################################
+## <summary>
+##	All of the rules required to administrate 
+##	an ladvd environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	The role to be allowed to manage the ladvd domain.
+##	</summary>
+## </param>
+## <param name="terminal">
+##	<summary>
+##	The type of the user terminal.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`ladvd_admin',`
+	gen_require(`
+		type ladvd_t;
+		type ladvd_script_exec_t;
+		type ladvd_unit_file_t;
+	')
+
+	allow $1 ladvd_t:process { signal_perms };
+	ps_process_pattern($1, ladvd_t)
+
+	tunable_policy(`deny_ptrace',`',`
+		allow $1 ladvd_t:process ptrace;
+	')
+
+	init_labeled_script_domtrans($1, ladvd_initrc_exec_t)
+	domain_system_change_exemption($1)
+	role_transition $2 ladvd_initrc_exec_t system_r;
+	allow $2 system_r;
+
+	# Allow ladvd_t to restart the apache service
+	ladvd_script_domtrans($1)
+	domain_system_change_exemption($1)
+	role_transition $2 ladvd_script_exec_t system_r;
+	allow $2 system_r;
+
+	files_list_pids($1)
+	admin_pattern($1, ladvd_run_t)
+')

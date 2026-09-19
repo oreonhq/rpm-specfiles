@@ -1,0 +1,32 @@
+From 25f57e2b1f6ed8ce8a9d163cf8d2adbf64bf7e7b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 29 Jun 2016 09:08:36 +0200
+Subject: [PATCH] Do not search modules in relative paths
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Having "use lib './lib'" is a security flaw. It allows attackers to
+execute arbitrary code by creating a file under current working
+directory.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/podviewer | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/podviewer b/src/podviewer
+index 57843b4..d8c0e29 100644
+--- a/src/podviewer
++++ b/src/podviewer
+@@ -3,7 +3,6 @@
+ # free software; you can redistribute it and/or modify it under the same
+ # terms as Perl itself. 
+ # $Id: podviewer,v 1.32 2005/10/04 11:18:04 jodrell Exp $
+-use lib 'lib/';
+ use Gtk2 -init;
+ use Gtk2::Ex::PodViewer;
+ use Gtk2::Ex::Simple::List;
+-- 
+2.5.5
+

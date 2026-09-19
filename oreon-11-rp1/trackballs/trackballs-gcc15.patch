@@ -1,0 +1,22 @@
+diff -up trackballs-1.3.4/src/editWindows.cc~ trackballs-1.3.4/src/editWindows.cc
+--- trackballs-1.3.4/src/editWindows.cc~	2022-12-23 19:52:49.000000000 +0100
++++ trackballs-1.3.4/src/editWindows.cc	2026-01-24 17:31:36.334445970 +0100
+@@ -29,6 +29,7 @@
+ #include <SDL2/SDL_keycode.h>
+ #include <SDL2/SDL_mouse.h>
+ #include <SDL2/SDL_timer.h>
++#include <string.h>
+ #include <dirent.h>
+ 
+ EMenuWindow::EMenuWindow() : MyWindow(0, 0, screenWidth, 30) {
+diff -up trackballs-1.3.4/src/enterHighScoreMode.cc~ trackballs-1.3.4/src/enterHighScoreMode.cc
+--- trackballs-1.3.4/src/enterHighScoreMode.cc~	2022-12-23 19:52:49.000000000 +0100
++++ trackballs-1.3.4/src/enterHighScoreMode.cc	2026-01-24 17:31:56.910313706 +0100
+@@ -31,6 +31,7 @@
+ #include <SDL2/SDL_keyboard.h>
+ #include <SDL2/SDL_keycode.h>
+ #include <SDL2/SDL_surface.h>
++#include <ctype.h>
+ #include <string.h>
+ 
+ EnterHighScoreMode* EnterHighScoreMode::enterHighScoreMode = NULL;

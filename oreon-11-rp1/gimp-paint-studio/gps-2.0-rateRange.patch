@@ -1,0 +1,55 @@
+From 774eccb8624bb9a13344ba4f46af1ad1a6259d6f Mon Sep 17 00:00:00 2001
+From: "FeRD (Frank Dana)" <ferdnyc@gmail.com>
+Date: Mon, 3 Jan 2022 05:41:00 -0500
+Subject: [PATCH 1/2] Adjust max rate for airbrush presets
+
+Commit 6cd3c8bc749f52bb6027a1af0828dc4b35b5e2ea upstream lowered the
+max rate from 150.0 to 100.0; scale all presets accordingly
+---
+ tool-presets/GPS-Fx/Desaturate-Color-Saturation.gtp | 2 +-
+ tool-presets/GPS-Set1/AirBrush-Digital.gtp          | 2 +-
+ tool-presets/GPS-Set2/Airbrush-Textured.gtp         | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tool-presets/GPS-Fx/Desaturate-Color-Saturation.gtp b/tool-presets/GPS-Fx/Desaturate-Color-Saturation.gtp
+index 0993720..816f8e9 100644
+--- a/tool-presets/GPS-Fx/Desaturate-Color-Saturation.gtp
++++ b/tool-presets/GPS-Fx/Desaturate-Color-Saturation.gtp
+@@ -11,7 +11,7 @@
+     (gradient "Tropical Colors")
+     (palette "Default")
+     (brush-size 200.000000)
+-    (rate 150.000000)
++    (rate 100.000000)
+     (flow 40.000000))
+ (use-fg-bg no)
+ (use-brush yes)
+diff --git a/tool-presets/GPS-Set1/AirBrush-Digital.gtp b/tool-presets/GPS-Set1/AirBrush-Digital.gtp
+index 7b405b0..017c6c4 100644
+--- a/tool-presets/GPS-Set1/AirBrush-Digital.gtp
++++ b/tool-presets/GPS-Set1/AirBrush-Digital.gtp
+@@ -10,7 +10,7 @@
+     (dynamics "Airbrush Digital")
+     (palette "Default")
+     (brush-size 400.000000)
+-    (rate 135.000000))
++    (rate 90.000000))
+ (use-fg-bg no)
+ (use-brush yes)
+ (use-dynamics yes)
+diff --git a/tool-presets/GPS-Set2/Airbrush-Textured.gtp b/tool-presets/GPS-Set2/Airbrush-Textured.gtp
+index 9d58b44..851d9fc 100644
+--- a/tool-presets/GPS-Set2/Airbrush-Textured.gtp
++++ b/tool-presets/GPS-Set2/Airbrush-Textured.gtp
+@@ -11,7 +11,7 @@
+     (gradient "Dark 1")
+     (palette "Firecode")
+     (brush-size 200.000000)
+-    (rate 150.000000)
++    (rate 100.000000)
+     (flow 40.000000))
+ (use-fg-bg no)
+ (use-brush yes)
+-- 
+2.33.1
+

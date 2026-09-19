@@ -1,0 +1,60 @@
+diff -up frysk-0.4/frysk-core/frysk/util/ProcRunUtil.java.lostfork frysk-0.4/frysk-core/frysk/util/ProcRunUtil.java
+--- frysk-0.4/frysk-core/frysk/util/ProcRunUtil.java.lostfork	2010-03-30 09:44:35.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/util/ProcRunUtil.java	2010-03-30 10:30:47.000000000 -0400
+@@ -41,6 +41,7 @@ package frysk.util;
+ 
+ import java.util.HashSet;
+ 
++import frysk.rsl.Log;
+ import frysk.proc.Action;
+ import frysk.proc.Manager;
+ import frysk.proc.Proc;
+@@ -58,8 +59,13 @@ import gnu.classpath.tools.getopt.Option
+  * Utilities must implement {@link ProcRunObserver} to use.
+  */
+ public class ProcRunUtil {
++    private static final Log fine = Log.fine(ProcRunUtil.class);
+ 
+     private final HashSet knownTasks = new HashSet();
++    // A fork triggers two events, one for the parent, and one for the
++    // child (when the child stops).  This is the set of tasks for
++    // which the child event has yet to arrive.
++    private final HashSet missingForkedOffspring = new HashSet();
+     
+     ForkedObserver forkedObserver = new ForkedObserver();
+     AttachedObserver attachedObserver = new AttachedObserver();
+@@ -115,6 +121,8 @@ public class ProcRunUtil {
+     
+     private void addObservers(Task task) {
+ 	if (knownTasks.add(task)) {
++	    fine.log(this, "addObservers", task);
++	    missingForkedOffspring.remove(task);
+ 	    task.requestAddClonedObserver(procRunObserver);
+ 	    task.requestAddExecedObserver(procRunObserver);
+ 	    task.requestAddForkedObserver(procRunObserver);
+@@ -128,11 +136,14 @@ public class ProcRunUtil {
+     
+     class ForkedObserver implements TaskObserver.Forked {
+ 	public Action updateForkedOffspring(Task parent, Task offspring) {
++	    fine.log(this, "updateForkedOffspring parent", parent, "offspring", offspring);
+ 	    addObservers(offspring.getProc());
+ 	    return Action.BLOCK;
+ 	}
+ 
+ 	public Action updateForkedParent(Task parent, Task offspring) {
++	    fine.log(this, "updateForkedParent parent", parent, "offspring", offspring);
++	    missingForkedOffspring.add(offspring);
+ 	    return Action.CONTINUE;
+ 	}
+ 
+@@ -198,7 +209,9 @@ public class ProcRunUtil {
+ 	public void taskRemoved (Task task)
+ 	{
+ 	    knownTasks.remove(task);
+-	    if(knownTasks.size() == 0){
++	    fine.log(this, "taskRemoved", task, "knownTasks", knownTasks.size(),
++		     "missingForkedOffspring", missingForkedOffspring.size());
++	    if (knownTasks.size() == 0 && missingForkedOffspring.size() == 0){
+ 		Manager.eventLoop.requestStop();
+ 	    }
+ 	}

@@ -3,7 +3,7 @@
 %global source2_key_fpr 11ACBA4F4778E3F6E4EDF38EB27B944E34884E85
 
 Name: radvd
-Version: 2.20
+Version: 2.21
 Release: %autorelease
 Summary: A Router Advertisement daemon
 License: radvd

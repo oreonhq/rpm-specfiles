@@ -1,0 +1,13 @@
+diff --git a/dateprocessing.h.orig b/dateprocessing.h
+index 44190bf..304716a 100644
+--- a/dateprocessing.h.orig
++++ b/dateprocessing.h
+@@ -13,7 +13,7 @@ struct sdate date1;
+ struct sdate date2;
+ struct sdate dtest;
+ struct timeval now, *pnow;
+-struct tm today, *ptoday;
++struct timeval today, *ptoday;
+ long offset, g1, g2;
+ long calstart;   /* Earliest date on Gregorian calendar */
+ long args[6];

@@ -1,0 +1,165 @@
+From 12f9f4e44c35d522b90c842fe26eb641c5db35de Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 28 Aug 2022 09:53:20 -0400
+Subject: [PATCH] No shebang = not executable
+
+Do not set the executable permission bit on shell scripts that lack a
+shebang (#!) line.
+---
+ samples/API/build_all.sh                         | 0
+ samples/API/compile.sh                           | 0
+ samples/API/run.sh                               | 0
+ samples/API/run_all.sh                           | 0
+ samples/OpenGL/build_all.sh                      | 0
+ samples/OpenGL/compile.sh                        | 0
+ samples/OpenGL/run.sh                            | 0
+ samples/OpenGL/run_all.sh                        | 0
+ samples/STL/.travis_build.sh                     | 0
+ samples/STL/build_all.sh                         | 0
+ samples/STL/compile.sh                           | 0
+ samples/STL/run.sh                               | 0
+ samples/STL/run_all.sh                           | 0
+ samples/STL/shared-static-libs/compile_shared.sh | 0
+ samples/STL/shared-static-libs/compile_static.sh | 0
+ samples/async/build.sh                           | 0
+ samples/boost/build_all.sh                       | 0
+ samples/boost/compile.sh                         | 0
+ samples/boost/run.sh                             | 0
+ samples/boost/run_all.sh                         | 0
+ samples/gtkmm/build_all.sh                       | 0
+ samples/gtkmm/compile.sh                         | 0
+ samples/gtkmm/hello_gtkmm/compile.sh             | 0
+ samples/gtkmm/run.sh                             | 0
+ samples/gtkmm/run_all.sh                         | 0
+ samples/send-to-network/compile.sh               | 0
+ samples/wxWidgets/build_all.sh                   | 0
+ samples/wxWidgets/compile.sh                     | 0
+ samples/wxWidgets/run.sh                         | 0
+ samples/wxWidgets/run_all.sh                     | 0
+ test/build_and_run.sh                            | 0
+ 31 files changed, 0 insertions(+), 0 deletions(-)
+ mode change 100755 => 100644 samples/API/build_all.sh
+ mode change 100755 => 100644 samples/API/compile.sh
+ mode change 100755 => 100644 samples/API/run.sh
+ mode change 100755 => 100644 samples/API/run_all.sh
+ mode change 100755 => 100644 samples/OpenGL/build_all.sh
+ mode change 100755 => 100644 samples/OpenGL/compile.sh
+ mode change 100755 => 100644 samples/OpenGL/run.sh
+ mode change 100755 => 100644 samples/OpenGL/run_all.sh
+ mode change 100755 => 100644 samples/STL/.travis_build.sh
+ mode change 100755 => 100644 samples/STL/build_all.sh
+ mode change 100755 => 100644 samples/STL/compile.sh
+ mode change 100755 => 100644 samples/STL/run.sh
+ mode change 100755 => 100644 samples/STL/run_all.sh
+ mode change 100755 => 100644 samples/STL/shared-static-libs/compile_shared.sh
+ mode change 100755 => 100644 samples/STL/shared-static-libs/compile_static.sh
+ mode change 100755 => 100644 samples/async/build.sh
+ mode change 100755 => 100644 samples/boost/build_all.sh
+ mode change 100755 => 100644 samples/boost/compile.sh
+ mode change 100755 => 100644 samples/boost/run.sh
+ mode change 100755 => 100644 samples/boost/run_all.sh
+ mode change 100755 => 100644 samples/gtkmm/build_all.sh
+ mode change 100755 => 100644 samples/gtkmm/compile.sh
+ mode change 100755 => 100644 samples/gtkmm/hello_gtkmm/compile.sh
+ mode change 100755 => 100644 samples/gtkmm/run.sh
+ mode change 100755 => 100644 samples/gtkmm/run_all.sh
+ mode change 100755 => 100644 samples/send-to-network/compile.sh
+ mode change 100755 => 100644 samples/wxWidgets/build_all.sh
+ mode change 100755 => 100644 samples/wxWidgets/compile.sh
+ mode change 100755 => 100644 samples/wxWidgets/run.sh
+ mode change 100755 => 100644 samples/wxWidgets/run_all.sh
+ mode change 100755 => 100644 test/build_and_run.sh
+
+diff --git a/samples/API/build_all.sh b/samples/API/build_all.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/API/compile.sh b/samples/API/compile.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/API/run.sh b/samples/API/run.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/API/run_all.sh b/samples/API/run_all.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/OpenGL/build_all.sh b/samples/OpenGL/build_all.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/OpenGL/compile.sh b/samples/OpenGL/compile.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/OpenGL/run.sh b/samples/OpenGL/run.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/OpenGL/run_all.sh b/samples/OpenGL/run_all.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/STL/.travis_build.sh b/samples/STL/.travis_build.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/STL/build_all.sh b/samples/STL/build_all.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/STL/compile.sh b/samples/STL/compile.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/STL/run.sh b/samples/STL/run.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/STL/run_all.sh b/samples/STL/run_all.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/STL/shared-static-libs/compile_shared.sh b/samples/STL/shared-static-libs/compile_shared.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/STL/shared-static-libs/compile_static.sh b/samples/STL/shared-static-libs/compile_static.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/async/build.sh b/samples/async/build.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/boost/build_all.sh b/samples/boost/build_all.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/boost/compile.sh b/samples/boost/compile.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/boost/run.sh b/samples/boost/run.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/boost/run_all.sh b/samples/boost/run_all.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/gtkmm/build_all.sh b/samples/gtkmm/build_all.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/gtkmm/compile.sh b/samples/gtkmm/compile.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/gtkmm/hello_gtkmm/compile.sh b/samples/gtkmm/hello_gtkmm/compile.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/gtkmm/run.sh b/samples/gtkmm/run.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/gtkmm/run_all.sh b/samples/gtkmm/run_all.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/send-to-network/compile.sh b/samples/send-to-network/compile.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/wxWidgets/build_all.sh b/samples/wxWidgets/build_all.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/wxWidgets/compile.sh b/samples/wxWidgets/compile.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/wxWidgets/run.sh b/samples/wxWidgets/run.sh
+old mode 100755
+new mode 100644
+diff --git a/samples/wxWidgets/run_all.sh b/samples/wxWidgets/run_all.sh
+old mode 100755
+new mode 100644
+diff --git a/test/build_and_run.sh b/test/build_and_run.sh
+old mode 100755
+new mode 100644

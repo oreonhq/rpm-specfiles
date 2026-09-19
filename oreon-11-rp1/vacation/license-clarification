@@ -1,0 +1,113 @@
+Return-Path: <chris@csamuel.org>
+X-Original-To: t.bubeck@reinform.de
+Delivered-To: t.bubeck@reinform.de
+Received: from localhost (amavis2.loef.reinform.de [10.1.1.53])
+	by postfix.loef.reinform.de (Postfix) with ESMTP id 9B1941BBFD
+	for <t.bubeck@reinform.de>; Tue,  4 Aug 2009 15:38:19 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at reinform.de
+X-Spam-Flag: NO
+X-Spam-Score: -2.601
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.601 required=5 tests=[BAYES_00=-2.599,
+	SPF_HELO_PASS=-0.001, SPF_PASS=-0.001] autolearn=ham
+Received: from mx1.reinform.de ([82.141.45.13])
+	by localhost (amavis2.loef.reinform.de [10.1.1.53]) (amavisd-new, port 10024)
+	with ESMTP id kX0K-cx4NTZh for <t.bubeck@reinform.de>;
+	Tue,  4 Aug 2009 15:38:11 +0200 (CEST)
+Received: from csamuel.org (csamuel.org [74.50.50.137])
+	by mx1.reinform.de (Postfix) with ESMTP id 2C6B863735
+	for <t.bubeck@reinform.de>; Tue,  4 Aug 2009 15:38:11 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by csamuel.org (Postfix) with ESMTP id C662D4076A;
+	Tue,  4 Aug 2009 23:37:38 +1000 (EST)
+Received: from csamuel.org ([127.0.0.1])
+ by localhost (csamuel.org [127.0.0.1]) (amavisd-maia, port 10024) with LMTP
+ id 06301-01; Tue,  4 Aug 2009 23:37:33 +1000 (EST)
+Received: from quad.localnet (124-254-75-238-static-dsl.ispone.net.au [124.254.75.238])
+	by csamuel.org (Postfix) with ESMTPS id D9EC44056E;
+	Tue,  4 Aug 2009 23:37:32 +1000 (EST)
+From: Chris Samuel <chris@csamuel.org>
+To: "Dr. Tilmann Bubeck" <t.bubeck@reinform.de>
+Subject: Re: Clarification about license of vacation
+Date: Tue, 4 Aug 2009 23:37:57 +1000
+User-Agent: KMail/1.12.0 (Linux/2.6.30-cs-1-intel-kms-uvc; KDE/4.2.98; x86_64; ; )
+Cc: sean.rima@tcob1.net
+References: <200908031549.23666.t.bubeck@reinform.de>
+In-Reply-To: <200908031549.23666.t.bubeck@reinform.de>
+X-Face: Wcb;^Ll1x`\6);#5&v=2":47)c~M=K)9_=0mp[Ob~p==:85h/k)fj6nBf@^SdaXtmdYGRq
+	[>N&^2m#i\v9ZHe:G-e=OR}-sEf`CdEL2/\).SeCBSC"Cn[(:./c*I|/3KCDO$<{n8m;X_
+	g\Y9LQ=v/b5`)L,WOQdI*?SqUCgiw/9`KxgdU5;z8L.3)F!1M3=w:i9MsWp&v;%usOXL;w
+	6kF?wAZjss.+y(78'qBu";bx]>"2dZd/S$^K)nU^N0HM\^^;s#q
+MIME-Version: 1.0
+Content-Type: multipart/signed;
+  boundary="nextPart2820739.ksyRrFV6lr";
+  protocol="application/pgp-signature";
+  micalg=pgp-sha1
+Content-Transfer-Encoding: 7bit
+Message-Id: <200908042338.00904.chris@csamuel.org>
+
+--nextPart2820739.ksyRrFV6lr
+Content-Type: Text/Plain;
+  charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, 3 Aug 2009 11:49:22 pm Dr. Tilmann Bubeck wrote:
+
+Hi there,
+
+> The key question is wether its GPLv2 (only v2) or also "GPLv2+" (and
+> following GPL versions).
+
+Vacation 1.2.7.0 was completely rebased from the version here:
+
+http://savannah.nongnu.org/projects/vacation/
+
+which is licensed under the modified BSD license (no advertising clause).
+
+The earlier versions I inherited at SourceForge were based on the original =
+BSD=20
+license with advertising clause which wasn't GPL compatible and a big issue=
+=20
+because it was linking against gdbm!
+
+I contacted Eric Allman (the original author) about the licensing before=20
+rebasing in 2006 and he wrote:
+
+# The advertising clause is obsolete at this point --- the Regents declared=
+ it
+# to be null-and-void several years ago.  You can strip it off with no
+# problem.
+
+> The best way to clarify the situation would be to state it in the README =
+or
+> LICENSE file clearly. Otherwise you answer to this mail could fill the ga=
+p.
+
+Agreed! I'll try and get to that in the near future, and clean up the docs.=
+=20
+
+Sorry about the confusion,
+Chris
+=2D-=20
+ Chris Samuel  :  http://www.csamuel.org/  :  Melbourne, VIC
+
+This email may come with a PGP signature as a file. Do not panic.
+=46or more info see: http://en.wikipedia.org/wiki/OpenPGP
+
+--nextPart2820739.ksyRrFV6lr
+Content-Type: application/pgp-signature; name=signature.asc 
+Content-Description: This is a digitally signed message part.
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (GNU/Linux)
+
+iQEVAwUASng5tY1yjaOTJg85AQKZegf9FiOmntfjdKnj66fS+b2A7P8eYWo+Lokr
+0H2pC1PkP3Db6u7Ix0qZYt/+1Eptzr5KsUmPhxRkUwlUfY7QQHpL2fMxpGyKPBOp
+BPaPOQqs6sOzpkwdxVwd3D637SJRtfUrf/+U7xzeh8cNp4SO5qugpBhsGIyLrZVn
+Xzpst5xTtpZHrHeyoi5CmR9lA+YipRiBBowcp8TAXLMH7Sbp/Y2Qu9jodTlCbCW3
+dMyPG83iKJFd5ui0Qxsb+czhK4S5wsqDdSwrtHYfc1Q/cAP6wBhKNIB3aMr/SDHA
+aJJ5ot3jvMddaJqEWEHWLf34Y8XRc3TXcFc8YbRPrAuvaCB4ia2nCQ==
+=O6Dc
+-----END PGP SIGNATURE-----
+
+--nextPart2820739.ksyRrFV6lr--

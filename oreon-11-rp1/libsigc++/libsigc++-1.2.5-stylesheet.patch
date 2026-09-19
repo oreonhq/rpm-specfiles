@@ -1,0 +1,24 @@
+diff -Nur libsigc++-1.2.5-orig/doc/manual/Makefile.am libsigc++-1.2.5/doc/manual/Makefile.am
+--- libsigc++-1.2.5-orig/doc/manual/Makefile.am	2002-09-10 17:13:55.000000000 +0200
++++ libsigc++-1.2.5/doc/manual/Makefile.am	2005-04-12 15:36:44.000000000 +0200
+@@ -9,7 +9,7 @@
+ DOCBOOK_STYLESHEET ?= http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl
+ 
+ html: libsigc_manual.xml
+-	xsltproc -o html/ --catalogs $(DOCBOOK_STYLESHEET) libsigc_manual.xml
++	xsltproc --nonet -o html/ /usr/share/sgml/docbook/xsl-stylesheets/xhtml/chunk.xsl libsigc_manual.xml
+ 
+ libsigc_manual-html.tar.gz: html
+ 	tar -cf - $< | gzip > $@
+diff -Nur libsigc++-1.2.5-orig/doc/manual/Makefile.in libsigc++-1.2.5/doc/manual/Makefile.in
+--- libsigc++-1.2.5-orig/doc/manual/Makefile.in	2003-05-15 23:19:21.000000000 +0200
++++ libsigc++-1.2.5/doc/manual/Makefile.in	2005-04-12 15:37:48.000000000 +0200
+@@ -307,7 +307,7 @@
+ DOCBOOK_STYLESHEET ?= http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl
+ 
+ html: libsigc_manual.xml
+-	xsltproc -o html/ --catalogs $(DOCBOOK_STYLESHEET) libsigc_manual.xml
++	xsltproc --nonet -o html/ /usr/share/sgml/docbook/xsl-stylesheets/xhtml/chunk.xsl libsigc_manual.xml
+ 
+ libsigc_manual-html.tar.gz: html
+ 	tar -cf - $< | gzip > $@

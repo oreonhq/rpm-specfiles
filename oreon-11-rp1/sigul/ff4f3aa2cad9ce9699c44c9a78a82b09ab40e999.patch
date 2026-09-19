@@ -1,0 +1,26 @@
+From ff4f3aa2cad9ce9699c44c9a78a82b09ab40e999 Mon Sep 17 00:00:00 2001
+From: Patrick Uiterwijk <patrick@puiterwijk.org>
+Date: Fri, 13 Oct 2023 08:06:11 +0000
+Subject: [PATCH] Disable digital_signature for CA cert
+
+Disable the digitalSignature key usage flag on
+CA certificates.
+
+Signed-off-by: Patrick Uiterwijk <patrick@puiterwijk.org>
+---
+ src/server.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/server.py b/src/server.py
+index 9f1fdbb..c2aabe2 100644
+--- a/src/server.py
++++ b/src/server.py
+@@ -2242,7 +2242,7 @@ def cmd_sign_certificate(db, conn):
+     key_usage = None
+     if cert_type == 'ca':
+         key_usage = x509.KeyUsage(
+-            digital_signature=True,
++            digital_signature=False,
+             key_cert_sign=True,
+             crl_sign=True,
+             content_commitment=False,

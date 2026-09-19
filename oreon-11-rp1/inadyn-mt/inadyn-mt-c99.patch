@@ -1,0 +1,28 @@
+Include <ctype.h> for the tolower macro/function.  Add an explicit
+return type void for log_bind_result.  This avoids build failures with
+future compilers which do not support implicit function declarations
+or implicit ints.
+
+Submitted upstream: <https://sourceforge.net/p/inadyn-mt/patches/54/>
+
+diff --git a/src/ip.c b/src/ip.c
+index 2c5876d7f8ceef6e..3bf836b37bf95535 100644
+--- a/src/ip.c
++++ b/src/ip.c
+@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "os.h"
+ #endif
+ 
++#include <ctype.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
+@@ -863,7 +864,7 @@ static int do_do_if_bind(struct sockaddr_storage *p_bind_in,SOCKET socket,struct
+ 	return bind_ret;
+ }
+ 
+-static log_bind_result(int bind_ret,char *if_name,char *s_binded_addr)
++static void log_bind_result(int bind_ret,char *if_name,char *s_binded_addr)
+ {
+ 
+ 	if (0==bind_ret) {

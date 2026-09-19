@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# Migrate the Monotone Server database, if needed
+#
+# Author: Thomas Moschny <thomas.moschny@gmx.de>
+#
+set -eu
+
+MONOTONE_CONFDIR="${MONOTONE_CONFDIR:-/etc/monotone}"
+MONOTONE_KEYDIR="${MONOTONE_KEYDIR:-/etc/monotone/private-keys}"
+MONOTONE_DBFILE="${MONOTONE_DBFILE:-/var/lib/monotone/server.mtn}"
+MONOTONE_PPFILE="${MONOTONE_PPFILE:-/etc/monotone/passphrase.lua}"
+
+MONOTONE_KEYID="${MONOTONE_KEYID:-monotone@$(hostname -f)}"
+MONOTONE_HOME="${MONOTONE_HOME:-/var/lib/monotone}"
+
+cd "${MONOTONE_HOME}"
+
+# check database
+version="$(LC_ALL=C runuser -u monotone -- mtn \
+  --confdir="${MONOTONE_CONFDIR}" --db="${MONOTONE_DBFILE}" \
+  --keydir="${MONOTONE_KEYDIR}" db version)"
+
+case ${version} in
+  *"("usable")"*)
+    echo $"Database is usable"
+    exit
+    ;;
+esac
+
+# database needs migration
+echo $"Migrating dababase ${MONOTONE_DBFILE}"
+
+# migrate database
+runuser -u monotone -- mtn --confdir="${MONOTONE_CONFDIR}" \
+  --db="${MONOTONE_DBFILE}" --keydir="${MONOTONE_KEYDIR}" \
+  db migrate
+
+runuser -u monotone -- mtn --confdir="${MONOTONE_CONFDIR}" \
+  --db="${MONOTONE_DBFILE}" --keydir="${MONOTONE_KEYDIR}" \
+  db regenerate_caches

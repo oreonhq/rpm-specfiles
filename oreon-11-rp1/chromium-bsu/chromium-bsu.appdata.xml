@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>chromium-bsu.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>ClArtistic</project_license>
+  <name>Chromium B.S.U.</name>
+  <summary>Fast paced, arcade-style, top-scrolling space shooter</summary>
+  <description>
+    <p>
+      You are captain of the cargo ship Chromium B.S.U., responsible for
+      delivering supplies to our troops on the front line. Your ship has a
+      small fleet of robotic fighters which you control from the relative
+      safety of the Chromium vessel. This is an OpenGL-based shoot 'em up
+      game with fine graphics.
+    </p>
+    <p>Your mission:</p>
+    <ul>
+     <li>Do not let ANY enemy ships get past your fighters! Each enemy ship that makes it past the bottom of the screen will attack the Chromium, and you lose a fighter.</li>
+     <li>Use your fighters as weapons! Crash into enemies to destroy them before they can get past you.</li>
+     <li>Strategic suicide is a powerful tactic! When the Chromium launches a new fighter, it releases a high energy burst which destroys all enemies in range.</li>
+     <li>Self-destruct to preserve your ammunition! A double-right-click will cause your current fighter to self-destruct. Before the ship blows up, it ejects its ammunition so that the next fighter can pick it up.</li>
+    </ul>
+  </description>
+  <url type="homepage">http://chromium-bsu.sourceforge.net/</url>
+  <url type="help">http://chromium-bsu.sourceforge.net/info.htm</url>
+  <screenshots>
+    <screenshot type="default">http://chromium-bsu.sourceforge.net/images/chrom-scr-112400a.jpg</screenshot>
+    <screenshot>http://chromium-bsu.sourceforge.net/images/chrom-scr-112400b.jpg</screenshot>
+    <screenshot>http://chromium-bsu.sourceforge.net/images/annotated.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

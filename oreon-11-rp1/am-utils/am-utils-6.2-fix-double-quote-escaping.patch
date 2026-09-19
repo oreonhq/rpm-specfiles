@@ -1,0 +1,64 @@
+am-utils-6.2 - fix double quote escaping
+
+From: Ian Kent <raven@themaw.net>
+
+autoconf 2.71 autoreconf tells us that back quotes and double quotes
+must not be escaped in certain cases.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ m4/macros/package_bugreport.m4 |    2 +-
+ m4/macros/package_name.m4      |    2 +-
+ m4/macros/package_version.m4   |    2 +-
+ m4/macros/with_addon.m4        |    2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/m4/macros/package_bugreport.m4 b/m4/macros/package_bugreport.m4
+index 8e1688d9..d2d08412 100644
+--- a/m4/macros/package_bugreport.m4
++++ b/m4/macros/package_bugreport.m4
+@@ -3,6 +3,6 @@ dnl Bugreport name
+ AC_DEFUN([AMU_PACKAGE_BUGREPORT],
+ [AC_MSG_CHECKING(bug-reporting address)
+ AC_DEFINE_UNQUOTED(PACKAGE_BUGREPORT, "$1")
+-AC_MSG_RESULT(\"$1\")
++AC_MSG_RESULT("$1")
+ ])
+ dnl ======================================================================
+diff --git a/m4/macros/package_name.m4 b/m4/macros/package_name.m4
+index 27f5711b..c2b3e013 100644
+--- a/m4/macros/package_name.m4
++++ b/m4/macros/package_name.m4
+@@ -3,6 +3,6 @@ dnl Package name
+ AC_DEFUN([AMU_PACKAGE_NAME],
+ [AC_MSG_CHECKING(package name)
+ AC_DEFINE_UNQUOTED(PACKAGE_NAME, "$1")
+-AC_MSG_RESULT(\"$1\")
++AC_MSG_RESULT("$1")
+ ])
+ dnl ======================================================================
+diff --git a/m4/macros/package_version.m4 b/m4/macros/package_version.m4
+index 0d6c6ef2..2ddd4ade 100644
+--- a/m4/macros/package_version.m4
++++ b/m4/macros/package_version.m4
+@@ -3,6 +3,6 @@ dnl Version of package
+ AC_DEFUN([AMU_PACKAGE_VERSION],
+ [AC_MSG_CHECKING(version of package)
+ AC_DEFINE_UNQUOTED(PACKAGE_VERSION, "$1")
+-AC_MSG_RESULT(\"$1\")
++AC_MSG_RESULT("$1")
+ ])
+ dnl ======================================================================
+diff --git a/m4/macros/with_addon.m4 b/m4/macros/with_addon.m4
+index b061621c..d8ea8cfa 100644
+--- a/m4/macros/with_addon.m4
++++ b/m4/macros/with_addon.m4
+@@ -12,7 +12,7 @@ if test "$withval" = "yes"; then
+ elif test "$withval" = "no"; then
+   with_$1=no
+ else
+-  AC_MSG_ERROR(please use \"yes\" or \"no\" with --with-$1)
++  AC_MSG_ERROR(please use "yes" or "no" with --with-$1)
+ fi
+ ],[
+ with_$1=yes

@@ -1,0 +1,21 @@
+--- a/handlers/dup.in	2021-01-25 21:50:45.000000000 +0600
++++ b/handlers/dup.in	2022-05-27 18:19:28.948488094 +0600
+@@ -66,15 +66,15 @@
+    [ -n "$signpassword" ] || fatal "The signpassword option must be set because signkey is different from encryptkey."
+ fi
+ 
+-if [ "`echo $desturl | @AWK@ -F ':' '{print $1}'`" == "s3+http" ]; then
++if [[ "`echo $desturl | @AWK@ -F ':' '{print $1}'`" == "s3+http" ]]; then
+    [ -n "$awsaccesskeyid" -a -n "$awssecretaccesskey" ]  || fatal "AWS access keys must be set for S3 backups."
+ fi
+ 
+-if [ "`echo $desturl | @AWK@ -F ':' '{print $1}'`" == "cf+http" ]; then
++if [[ "`echo $desturl | @AWK@ -F ':' '{print $1}'`" == "cf+http" ]]; then
+    [ -n "$cfusername" -a -n "$cfapikey" ]  || fatal "Cloudfiles access keys must be set for S3 backups."
+ fi
+ 
+-if [ "`echo $desturl | @AWK@ -F ':' '{print $1}'`" == "dpbx" ]; then
++if [[ "`echo $desturl | @AWK@ -F ':' '{print $1}'`" == "dpbx" ]]; then
+    [ -n "$dropboxappkey" -a -n "$dropboxappsecret" ]  || fatal "Dropbox app ID and secret must be set for Dropbox backups."
+ 
+    if [ ! -n "$dropboxaccesstoken" ]; then

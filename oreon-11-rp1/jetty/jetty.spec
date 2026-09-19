@@ -51,8 +51,8 @@
 %bcond_without  jp_minimal
 
 Name:           jetty
-Version:        9.4.40
-Release:        18%{?dist}
+Version:        12.1.13
+Release:        1%{?dist}
 Summary:        Java Webserver and Servlet Container
 
 # Jetty is dual licensed under both ASL 2.0 and EPL 1.0, see NOTICE.txt

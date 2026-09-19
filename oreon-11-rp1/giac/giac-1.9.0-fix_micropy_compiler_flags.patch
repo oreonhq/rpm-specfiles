@@ -1,0 +1,84 @@
+--- micropython-1.12/ports/unix/Makefile.orig	2020-10-21 13:52:17.066827941 +0200
++++ micropython-1.12/ports/unix/Makefile	2020-10-21 13:55:01.614107239 +0200
+@@ -27,14 +27,14 @@
+ # compiler settings
+ CWARN = -Wall -Werror
+ CWARN += -Wpointer-arith -Wuninitialized
+-CFLAGS = $(INC) $(CWARN) -std=gnu99 -DUNIX $(CFLAGS_MOD) $(COPT) $(CFLAGS_EXTRA)
++CFLAGS = $(INC) $(CWARN) -DUNIX $(CFLAGS_MOD) $(COPT) $(CFLAGS_EXTRA) ${CFLAGS_FEDORA} -std=gnu99
+ 
+ # Debugging/Optimization
+ ifdef DEBUG
+ CFLAGS += -g
+ COPT = -O0
+ else
+-COPT = -Os -fdata-sections -ffunction-sections -DNDEBUG
++COPT = -fdata-sections -ffunction-sections -DNDEBUG
+ # _FORTIFY_SOURCE is a feature in gcc/glibc which is intended to provide extra
+ # security for detecting buffer overflows. Some distros (Ubuntu at the very least)
+ # have it enabled by default.
+--- micropython-1.12/xcas/Makefile.orig	2020-10-21 15:27:04.025499976 +0200
++++ micropython-1.12/xcas/Makefile	2020-10-21 15:30:30.579300358 +0200
+@@ -32,16 +32,16 @@
+ ifdef DEBUG
+ COPT =  -g
+ else
+-COPT =  -g #-fomit-frame-pointer -flto
++COPT =  -g
+ endif
+ 
+ # compiler settings
+-CWARN = -Wall #-Werror -Wno-error=cpp -Wno-error=format
+-CFLAGS = -fPIC -DMICROPY_LIB $(INC) $(CWARN) -ansi -std=gnu99 $(CFLAGS_MOD) $(COPT) $(CFLAGS_EXTRA)
++CWARN = -Wall
++CFLAGS = -fPIC -DMICROPY_LIB $(INC) $(CWARN) ${CFLAGS_FEDORA} -std=gnu99 $(CFLAGS_MOD) $(COPT) $(CFLAGS_EXTRA)
+ 
+ 
+ 
+-LDFLAGS = $(LDFLAGS_MOD) -lm $(LDFLAGS_EXTRA) 
++LDFLAGS = ${LDFLAGS_FEDORA} $(LDFLAGS_MOD) -lm $(LDFLAGS_EXTRA) 
+ 
+ # source files
+ SRC_C = $(shell find . -name \*.c)
+--- micropython-1.12/nspire/Makefile.orig	2020-04-30 09:52:40.000000000 +0200
++++ micropython-1.12/nspire/Makefile	2020-10-21 14:02:09.081234972 +0200
+@@ -31,14 +31,14 @@
+ ifdef DEBUG
+ COPT = -O0 -g
+ else
+-COPT = -Os -g #-fomit-frame-pointer -flto
++COPT = -g
+ endif
+ 
+ # compiler settings
+ CWARN = -Wall -Werror -Wno-error=cpp -Wno-error=format -Wno-error=implicit-function-declaration
+-CFLAGS = -DMICROPY_LIB -mthumb-interwork  $(INC) $(CWARN) -ansi -std=gnu99 $(CFLAGS_MOD) $(COPT) $(CFLAGS_EXTRA)
++CFLAGS = -DMICROPY_LIB -mthumb-interwork  $(INC) $(CWARN) $(CFLAGS_FEDORA) -std=gnu99 $(CFLAGS_MOD) $(COPT) $(CFLAGS_EXTRA)
+ 
+-LDFLAGS = $(LDFLAGS_MOD) -lm $(LDFLAGS_EXTRA) -Wl,--nspireio
++LDFLAGS = $(LDFLAGS_FEDORA) $(LDFLAGS_MOD) -lm $(LDFLAGS_EXTRA) -Wl,--nspireio
+ 
+ # source files
+ SRC_C = $(shell find . -name \*.c)
+--- micropython-1.12/numworks/Makefile.orig	2020-04-30 09:52:40.000000000 +0200
++++ micropython-1.12/numworks/Makefile	2020-10-21 14:04:15.408648069 +0200
+@@ -31,16 +31,16 @@
+ ifdef DEBUG
+ COPT = -O0 -g
+ else
+-COPT = -Ofast -g #-fomit-frame-pointer -flto
++COPT = -g
+ endif
+ 
+ # compiler settings
+ CWARN = -Wall -Werror -Wno-error=cpp -Wno-error=format
+-CFLAGS = -DNUMWORKS -DMICROPY_LIB $(INC) $(CWARN) -ansi -std=gnu99 $(CFLAGS_MOD) $(COPT) $(CFLAGS_EXTRA)
++CFLAGS = -DNUMWORKS -DMICROPY_LIB $(INC) $(CWARN) $(CFLAGS_MOD) $(COPT) $(CFLAGS_EXTRA) $(CFLAGS_FEDORA) -std=gnu99
+ CFLAGS += -mthumb -march=armv7e-m -mfloat-abi=hard  -mcpu=cortex-m7 -mfpu=fpv5-sp-d16  -fdata-sections -ffunction-sections -fno-strict-aliasing -fno-exceptions # -fpermissive
+ 
+ 
+-LDFLAGS = $(LDFLAGS_MOD) -lm $(LDFLAGS_EXTRA) 
++LDFLAGS = ${LDFLAGS_FEDORA} $(LDFLAGS_MOD) -lm $(LDFLAGS_EXTRA) 
+ 
+ # source files
+ SRC_C = $(shell find . -name \*.c)

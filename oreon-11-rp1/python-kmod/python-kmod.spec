@@ -3,8 +3,8 @@
 Name:           python-kmod
 License:        LGPL-2.0-or-later
 Summary:        Python module to work with kernel modules
-Version:        0.9.1
-Release:        12%{?dist}
+Version:        0.9.2
+Release:        1%{?dist}
 URL:            https://github.com/maurizio-lombardi/python-kmod/
 Source0:        https://github.com/agrover/python-kmod/archive/refs/tags/v%{version}.tar.gz#/python-kmod-%{version}.tar.gz
 BuildRequires:  gcc

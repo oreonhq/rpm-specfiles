@@ -1,22 +1,26 @@
-%global source0_hash 472eacf90753abcd65739fd1b88f9eb41b14008968f53da23882c4331f36b2b6
-
-%bcond_without check
+%global source0_hash none
 
 Name:           python-myst-parser
-Version:        4.0.1
-Release:        1%{?dist}
-Summary:        A commonmark compliant parser, with bridges to docutils and sphinx
+Version:        5.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An extended _CommonMark__https://spec.commonmark.org/_ compliant parser,
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/executablebooks/MyST-Parser
-Source0:        https://github.com/executablebooks/MyST-Parser/archive/v%{version}/myst-parser-%{version}.tar.gz
-Patch:          Adjust-test-output-to-docutils-0.22.patch
+Source:         %{pypi_source myst_parser}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  pyproject-rpm-macros
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A fully-functional markdown flavor and parser for Sphinx.}
+This is package 'myst-parser' generated automatically by pyp2spec.}
+
+Patch:          Adjust-test-output-to-docutils-0.22.patch
 
 %description %_description
 
@@ -25,50 +29,43 @@ Summary:        %{summary}
 
 %description -n python3-myst-parser %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-myst-parser code-style,linkify,rtd,testing,testing-docutils
+
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n MyST-Parser-%{version}
-sed -i 's/docutils>=0\.19,<0\.22/docutils>=0.19/' pyproject.toml
-sed -i '/"beautifulsoup4",/d' pyproject.toml
-sed -i '/"coverage\[toml\]",/d' pyproject.toml
-sed -i '/"defusedxml",/d' pyproject.toml
-sed -i '/"pytest-cov",/d' pyproject.toml
-sed -i '/"pytest-regressions",/d' pyproject.toml
-sed -i '/"pytest-param-files/d' pyproject.toml
-sed -i '/"sphinx-pytest",/d' pyproject.toml
-sed -i '/"pygments<2.19",/d' pyproject.toml
+%autosetup -p1 -n myst_parser-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x code-style,linkify,rtd,testing,testing-docutils
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files myst_parser
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-%pyproject_check_import
-%pytest \
-  tests/test_anchors.py \
-  tests/test_commonmark \
-  tests/test_docutils.py \
-  tests/test_inventory.py \
-  -k "not test_inv_filter and not test_inv_cli"
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-myst-parser -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 %{_bindir}/myst-anchors
 %{_bindir}/myst-docutils-demo
 %{_bindir}/myst-docutils-html
 %{_bindir}/myst-docutils-html5
 %{_bindir}/myst-docutils-latex
-%{_bindir}/myst-docutils-xml
 %{_bindir}/myst-docutils-pseudoxml
+%{_bindir}/myst-docutils-xml
 %{_bindir}/myst-inv
 
 %changelog

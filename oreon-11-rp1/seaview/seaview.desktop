@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Seaview multiple sequence alignment editor
+GenericName=Multiple sequence alignment editor
+Comment=A graphical multiple sequence alignment editor
+Categories=Science;
+Icon=seaview
+Exec=seaview
+Terminal=false
+Type=Application
+Encoding=UTF-8

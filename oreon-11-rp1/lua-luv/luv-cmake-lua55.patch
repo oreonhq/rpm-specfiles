@@ -1,0 +1,46 @@
+From 3acf94ae43ce44e0fec70f952c95aadee886edc1 Mon Sep 17 00:00:00 2001
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+Date: Wed, 25 Feb 2026 00:35:46 -0500
+Subject: [PATCH] cmake: update FindLua for lua 5.5
+
+https://github.com/Kitware/CMake/commit/261b7b933c6604095687d473503e24bae6ec0d6f
+---
+ cmake/Modules/FindLua.cmake | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/cmake/Modules/FindLua.cmake b/cmake/Modules/FindLua.cmake
+index 523e10c..76635a1 100644
+--- a/cmake/Modules/FindLua.cmake
++++ b/cmake/Modules/FindLua.cmake
+@@ -1,4 +1,4 @@
+-# This is a copy of CMake's builtin FindLua to get support for Lua 5.4
++# This is a copy of CMake's builtin FindLua to get support for Lua 5.5
+ # on earlier CMake versions.
+ 
+ # Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
+@@ -51,7 +51,7 @@ unset(_lua_append_versions)
+ 
+ # this is a function only to have all the variables inside go away automatically
+ function(_lua_get_versions)
+-    set(LUA_VERSIONS5 5.4 5.3 5.2 5.1 5.0)
++    set(LUA_VERSIONS5 5.5 5.4 5.3 5.2 5.1 5.0)
+ 
+     if (Lua_FIND_VERSION_EXACT)
+         if (Lua_FIND_VERSION_COUNT GREATER 1)
+@@ -121,10 +121,10 @@ function(_lua_get_header_version)
+   file(STRINGS "${_hdr_file}" lua_version_strings
+        REGEX "^#define[ \t]+LUA_(RELEASE[ \t]+\"Lua [0-9]|VERSION([ \t]+\"Lua [0-9]|_[MR])).*")
+ 
+-  string(REGEX REPLACE ".*;#define[ \t]+LUA_VERSION_MAJOR[ \t]+\"([0-9])\"[ \t]*;.*" "\\1" LUA_VERSION_MAJOR ";${lua_version_strings};")
++  string(REGEX REPLACE ".*;#define[ \t]+LUA_VERSION_MAJOR(_N)?[ \t]+\"?([0-9])\"?[ \t]*;.*" "\\2" LUA_VERSION_MAJOR ";${lua_version_strings};")
+   if (LUA_VERSION_MAJOR MATCHES "^[0-9]+$")
+-    string(REGEX REPLACE ".*;#define[ \t]+LUA_VERSION_MINOR[ \t]+\"([0-9])\"[ \t]*;.*" "\\1" LUA_VERSION_MINOR ";${lua_version_strings};")
+-    string(REGEX REPLACE ".*;#define[ \t]+LUA_VERSION_RELEASE[ \t]+\"([0-9])\"[ \t]*;.*" "\\1" LUA_VERSION_PATCH ";${lua_version_strings};")
++    string(REGEX REPLACE ".*;#define[ \t]+LUA_VERSION_MINOR(_N)?[ \t]+\"?([0-9])\"?[ \t]*;.*" "\\2" LUA_VERSION_MINOR ";${lua_version_strings};")
++    string(REGEX REPLACE ".*;#define[ \t]+LUA_VERSION_RELEASE(_N)?[ \t]+\"?([0-9])\"?[ \t]*;.*" "\\2" LUA_VERSION_PATCH ";${lua_version_strings};")
+     set(LUA_VERSION_STRING "${LUA_VERSION_MAJOR}.${LUA_VERSION_MINOR}.${LUA_VERSION_PATCH}")
+   else ()
+     string(REGEX REPLACE ".*;#define[ \t]+LUA_RELEASE[ \t]+\"Lua ([0-9.]+)\"[ \t]*;.*" "\\1" LUA_VERSION_STRING ";${lua_version_strings};")
+-- 
+2.53.0
+

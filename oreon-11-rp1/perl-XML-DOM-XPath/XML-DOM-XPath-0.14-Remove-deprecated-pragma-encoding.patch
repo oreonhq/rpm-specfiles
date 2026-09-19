@@ -1,0 +1,12 @@
+diff -up XML-DOM-XPath-0.14/t/test_non_ascii.t.orig XML-DOM-XPath-0.14/t/test_non_ascii.t
+--- XML-DOM-XPath-0.14/t/test_non_ascii.t.orig	2017-05-22 16:39:44.264054939 +0200
++++ XML-DOM-XPath-0.14/t/test_non_ascii.t	2017-05-22 16:40:11.672908547 +0200
+@@ -7,7 +7,7 @@ use strict;
+ use Test::More tests => 10;
+ use XML::DOM::XPath;
+ 
+-use encoding 'utf8';
++use utf8;
+ 
+ my $display_warning=0;
+ 

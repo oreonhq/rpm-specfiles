@@ -1,0 +1,39 @@
+Avoid implicit int, a language feature not in C99.  Future compilers
+are likely to reject programs with implicit ints.
+
+diff --git a/uread.c b/uread.c
+index 111ac78c4fe38699..46611ebc5e729448 100644
+--- a/uread.c
++++ b/uread.c
+@@ -24,6 +24,7 @@ typedef union {
+   int  i;
+ } swap;
+ 
++int
+ main(int argc, char *argv[])
+ {
+   int i, c, alph, ls, le;
+diff --git a/ustrip.c b/ustrip.c
+index 35ca6764f4aaa49f..3dfd71213f01b7f2 100644
+--- a/ustrip.c
++++ b/ustrip.c
+@@ -27,6 +27,7 @@ typedef union {
+ } swap;
+ 
+ 
++int
+ main(int argc, char *argv[])
+ {
+   int i, c, ls, le;
+diff --git a/uswap.c b/uswap.c
+index c171237acb2a7a33..f89af45c38ef46c9 100644
+--- a/uswap.c
++++ b/uswap.c
+@@ -22,6 +22,7 @@ typedef union {
+   int    i[4];
+ } swap;
+ 
++int
+ main(int argc, char *argv[])
+ {
+   int i, j, k = 0, ls, le, s, zog;

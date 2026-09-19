@@ -1,0 +1,30 @@
+From f9f26eb2af6edea1e6b4daa97c33d860f6e8955b Mon Sep 17 00:00:00 2001
+From: Sergey Avseyev <sergey.avseyev@gmail.com>
+Date: Fri, 26 Nov 2021 11:56:32 +0300
+Subject: [PATCH] Enforce system crypto policies
+
+Change-Id: I8efe22a48c43b95f897e8cf2200ea9c606db086f
+---
+ src/ssl/ssl_common.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/src/ssl/ssl_common.c b/src/ssl/ssl_common.c
+index e6c13031..8d3efebe 100644
+--- a/src/ssl/ssl_common.c
++++ b/src/ssl/ssl_common.c
+@@ -304,11 +304,7 @@ lcbio_pSSLCTX lcbio_ssl_new(const char *tsfile, const char *cafile, const char *
+     lcb_STATUS err_s;
+     lcbio_pSSLCTX ret;
+ 
+-    static const char *default_ssl_cipher_list =
+-        "DHE-RSA-AES256-SHA:DHE-DSS-AES256-SHA:AES256-SHA:EDH-RSA-DES-CBC3-SHA:EDH-DSS-DES-CBC3-SHA:DES-CBC3-SHA:DES-"
+-        "CBC3-MD5:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA:AES128-SHA:DHE-RSA-SEED-SHA:DHE-DSS-SEED-SHA:SEED-SHA:RC2-CBC-"
+-        "MD5:RC4-SHA:RC4-MD5:RC4-MD5:EDH-RSA-DES-CBC-SHA:EDH-DSS-DES-CBC-SHA:DES-CBC-SHA:DES-CBC-MD5:EXP-EDH-RSA-DES-"
+-        "CBC-SHA:EXP-EDH-DSS-DES-CBC-SHA:EXP-DES-CBC-SHA:EXP-RC2-CBC-MD5:EXP-RC2-CBC-MD5:EXP-RC4-MD5:EXP-RC4-MD5";
++    static const char *default_ssl_cipher_list = "PROFILE=SYSTEM";
+ 
+     const char *cipher_list = getenv("LCB_SSL_CIPHER_LIST");
+ #ifdef HAVE_CIPHERSUITES
+-- 
+2.33.1
+

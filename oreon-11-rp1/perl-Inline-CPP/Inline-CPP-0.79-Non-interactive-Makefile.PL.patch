@@ -1,0 +1,32 @@
+From 7414dd092ff3033e588a2183f9f610a9299200f8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 21 Jul 2017 10:20:00 +0200
+Subject: [PATCH] Non-interactive Makefile.PL
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 5721689..e0151ed 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -22,11 +22,6 @@ my $guess = ExtUtils::CppGuess->new;
+ my @info = map $guess->$_,
+   qw(compiler_command linker_flags iostream_fname cpp_flavor_defs);
+ 
+-$info[0] = prompt("What C++ compiler would you like to use?", $info[0]);
+-
+-$info[1]
+-  = prompt("What default libraries would you like to include?", $info[1]);
+-
+ configure_distribution(@info);
+ 
+ WriteMakefile(
+-- 
+2.20.1
+

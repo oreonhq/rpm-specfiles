@@ -1,0 +1,20 @@
+Include <sys/uio.h> for the writev function.  This avoids an implicit
+function declaration, increasing compatibility with future compilers.
+
+(The patch is not upstreamable as is because it should probably add a
+configure check, and the inclusion should happen in some project
+header.  But upstream seems to be abandoned anyway.)
+
+diff --git a/dapl/openib_scm/cm.c b/dapl/openib_scm/cm.c
+index 29b45dff75dc8582..cc48ed659bd0185d 100644
+--- a/dapl/openib_scm/cm.c
++++ b/dapl/openib_scm/cm.c
+@@ -61,6 +61,8 @@
+ #include "dapl_sp_util.h"
+ #include "dapl_osd.h"
+ 
++#include <sys/uio.h>
++
+ extern char *gid_str;
+ 
+ #define SCM_BC_DIFF 2 /* cm_msg adjust, pre v8 */

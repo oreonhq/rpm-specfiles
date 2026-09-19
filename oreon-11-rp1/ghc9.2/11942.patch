@@ -1,0 +1,58 @@
+First patch modified for ghc9.2
+
+From dab53ea1188e04fc3e75b7cc7df73f0323aa8d9f Mon Sep 17 00:00:00 2001
+From: Rodrigo Mesquita <rodrigo.m.mesquita@gmail.com>
+Date: Fri, 19 Jan 2024 09:14:18 +0000
+Subject: [PATCH] Work around autotools setting C11 standard in CC/CXX
+
+In autoconf >=2.70, C11 is set by default for $CC and $CXX via the
+-std=...11 flag. In this patch, we split the "-std" flag out of the $CC
+and $CXX variables, which we traditionally assume to be just the
+executable name/path, and move it to $CFLAGS/$CXXFLAGS instead.
+
+Fixes #24324
+---
+ configure.ac                |  3 +++
+ m4/fp_prog_move_to_flags.m4 | 19 +++++++++++++++++++
+ 2 files changed, 22 insertions(+)
+ create mode 100644 m4/fp_prog_move_to_flags.m4
+
+--- ghc-9.2.8/configure.ac~	2023-05-26 07:02:59.000000000 +0800
++++ ghc-9.2.8/configure.ac	2026-01-17 15:11:54.156038365 +0800
+@@ -591,6 +591,8 @@
+ dnl detect compiler (prefer gcc over clang) and set $CC (unless CC already set),
+ dnl later CC is copied to CC_STAGE{1,2,3}
+ AC_PROG_CC([cc gcc clang])
++# Work around #24324
++MOVE_TO_FLAGS([CC],[CFLAGS])
+ 
+ MAYBE_OVERRIDE_STAGE0([ar],[AR_STAGE0])
+ 
+diff --git a/m4/fp_prog_move_to_flags.m4 b/m4/fp_prog_move_to_flags.m4
+new file mode 100644
+index 000000000000..b5fcb005cd04
+--- /dev/null
++++ b/m4/fp_prog_move_to_flags.m4
+@@ -0,0 +1,19 @@
++# MOVE_TO_FLAGS
++# --------------------------------
++# Split off flags from $1 (the compiler) to $2 (the flags).
++# This works around autoconf setting $CC and $CXX to be a program plus the C11
++# `-std=...11` flag (#24324), starting from autotools 2.70.
++AC_DEFUN([MOVE_TO_FLAGS],[
++
++dnl Use IFS=' ' to split off the command from the arguments in $1.
++dnl By expanding $$1, set accounts for quoting correctly, such that splitting
++dnl e.g. '"A B/C" D' results in "A B/C" and "D".
++tmp_IFS="$IFS"
++IFS=' '
++eval set -- $$1
++IFS="$tmp_IFS"
++
++$1="[$]1"
++shift
++$2="[$]@ $$2"
++])
+-- 
+GitLab
+

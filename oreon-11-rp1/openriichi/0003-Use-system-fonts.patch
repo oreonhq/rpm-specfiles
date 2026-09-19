@@ -1,0 +1,35 @@
+From d461214f15f2742ecc848f81f073abe78c7241d9 Mon Sep 17 00:00:00 2001
+From: Julien Rische <jrische@redhat.com>
+Date: Sat, 12 Feb 2022 01:31:10 +0100
+Subject: [PATCH] Use system fonts
+
+---
+ Engine/Helper/LabelLoader.vala | 12 ++---------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/Engine/Helper/LabelLoader.vala b/Engine/Helper/LabelLoader.vala
+index 0767ba2..8a7ff3e 100644
+--- a/Engine/Helper/LabelLoader.vala
++++ b/Engine/Helper/LabelLoader.vala
+@@ -55,16 +55,8 @@ namespace Engine
+             {
+                 EngineLog.log(EngineLogType.DEBUG, "LabelLoader.initialize", "Initializing FontConfig");
+                 void *config = FcConfigCreate();
+-                string? fontsDir = FileLoader.find_directory(GLib.Path.build_filename("Data", "Fonts"));
+-                if (fontsDir == null)
+-                {
+-                    EngineLog.log(EngineLogType.ERROR, "LabelLoader.initialize", "Could not find fonts directory");
+-                }
+-                else
+-                {
+-                    FcConfigAppFontAddDir(config, fontsDir);
+-                    FcConfigSetCurrent(config);
+-                }
++                FcConfigAppFontAddDir(config, "/usr/share/fonts/google-noto-cjk");
++                FcConfigSetCurrent(config);
+                 map = pango_ft2_font_map_new();
+                 initialized = true;
+             }
+--
+2.34.1
+

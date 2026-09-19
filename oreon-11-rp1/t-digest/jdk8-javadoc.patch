@@ -1,0 +1,144 @@
+diff -ruN src/main/java/com/tdunning/math/stats/ArrayDigest.java src/main/java/com/tdunning/math/stats/ArrayDigest.java
+--- src/main/java/com/tdunning/math/stats/ArrayDigest.java	2014-05-13 05:05:45.000000000 +0200
++++ src/main/java/com/tdunning/math/stats/ArrayDigest.java	2015-07-13 09:16:26.231915177 +0200
+@@ -26,7 +26,7 @@
+ 
+ /**
+  * Array based implementation of a TDigest.
+- * <p/>
++ * <br>
+  * This implementation is essentially a one-level b-tree in which nodes are collected into
+  * pages typically with 32 values per page.  Commonly, an ArrayDigest contains 500-3000
+  * centroids.  With 32 values per page, we have about 32 values per page and about 30 pages
+@@ -394,7 +394,7 @@
+     }
+ 
+     /**
+-     * Returns a cursor pointing to the first element <= x.  Exposed only for testing.
++     * Returns a cursor pointing to the first element &lt;= x.  Exposed only for testing.
+      * @param x The value used to find the cursor.
+      * @return The cursor.
+      */
+@@ -418,7 +418,7 @@
+     }
+ 
+     /**
+-     * Returns an iterator which will give each element <= to x in non-increasing order.
++     * Returns an iterator which will give each element &lt;= to x in non-increasing order.
+      *
+      * @param x The upper bound of all returned elements
+      * @return An iterator that returns elements in non-increasing order.
+diff -ruN src/main/java/com/tdunning/math/stats/AVLTreeDigest.java src/main/java/com/tdunning/math/stats/AVLTreeDigest.java
+--- src/main/java/com/tdunning/math/stats/AVLTreeDigest.java	2014-05-13 05:05:45.000000000 +0200
++++ src/main/java/com/tdunning/math/stats/AVLTreeDigest.java	2015-07-13 09:17:02.072307855 +0200
+@@ -234,7 +234,7 @@
+ 
+     /**
+      * @param q The quantile desired.  Can be in the range [0,1].
+-     * @return The minimum value x such that we think that the proportion of samples is <= x is q.
++     * @return The minimum value x such that we think that the proportion of samples is &lt;= x is q.
+      */
+     @Override
+     public double quantile(double q) {
+diff -ruN src/main/java/com/tdunning/math/stats/TDigest.java src/main/java/com/tdunning/math/stats/TDigest.java
+--- src/main/java/com/tdunning/math/stats/TDigest.java	2014-05-13 05:05:45.000000000 +0200
++++ src/main/java/com/tdunning/math/stats/TDigest.java	2015-07-13 09:19:06.591672123 +0200
+@@ -21,21 +21,21 @@
+ 
+ /**
+  * Adaptive histogram based on something like streaming k-means crossed with Q-digest.
+- * <p/>
++ * <br>
+  * The special characteristics of this algorithm are:
+- * <p/>
++ * <br>
+  * a) smaller summaries than Q-digest
+- * <p/>
++ * <br>
+  * b) works on doubles as well as integers.
+- * <p/>
+- * c) provides part per million accuracy for extreme quantiles and typically <1000 ppm accuracy for middle quantiles
+- * <p/>
++ * <br>
++ * c) provides part per million accuracy for extreme quantiles and typically &lt;1000 ppm accuracy for middle quantiles
++ * <br>
+  * d) fast
+- * <p/>
++ * <br>
+  * e) simple
+- * <p/>
+- * f) test coverage > 90%
+- * <p/>
++ * <br>
++ * f) test coverage &gt; 90%
++ * <br>
+  * g) easy to adapt for use with map-reduce
+  */
+ public abstract class TDigest {
+@@ -91,10 +91,10 @@
+     /**
+      * Re-examines a t-digest to determine whether some centroids are redundant.  If your data are
+      * perversely ordered, this may be a good idea.  Even if not, this may save 20% or so in space.
+-     * <p/>
++     * <br>
+      * The cost is roughly the same as adding as many data points as there are centroids.  This
+-     * is typically < 10 * compression, but could be as high as 100 * compression.
+-     * <p/>
++     * is typically &lt; 10 * compression, but could be as high as 100 * compression.
++     * <br>
+      * This is a destructive operation that is not thread-safe.
+      */
+     public abstract void compress();
+@@ -107,7 +107,7 @@
+     public abstract long size();
+ 
+     /**
+-     * Returns the fraction of all points added which are <= x.
++     * Returns the fraction of all points added which are &lt;= x.
+      */
+     public abstract double cdf(double x);
+ 
+diff -ruN src/main/java/com/tdunning/math/stats/TreeDigest.java src/main/java/com/tdunning/math/stats/TreeDigest.java
+--- src/main/java/com/tdunning/math/stats/TreeDigest.java	2014-05-13 05:05:45.000000000 +0200
++++ src/main/java/com/tdunning/math/stats/TreeDigest.java	2015-07-13 09:18:30.988282043 +0200
+@@ -26,21 +26,21 @@
+ 
+ /**
+  * Adaptive histogram based on something like streaming k-means crossed with Q-digest.
+- * <p/>
++ * <br>
+  * The special characteristics of this algorithm are:
+- * <p/>
++ * <br>
+  * a) smaller summaries than Q-digest
+- * <p/>
++ * <br>
+  * b) works on doubles as well as integers.
+- * <p/>
+- * c) provides part per million accuracy for extreme quantiles and typically <1000 ppm accuracy for middle quantiles
+- * <p/>
++ * <br>
++ * c) provides part per million accuracy for extreme quantiles and typically &lt;1000 ppm accuracy for middle quantiles
++ * <br>
+  * d) fast
+- * <p/>
++ * <br>
+  * e) simple
+- * <p/>
+- * f) test coverage > 90%
+- * <p/>
++ * <br>
++ * f) test coverage &gt; 90%
++ * <br>
+  * g) easy to adapt for use with map-reduce
+  */
+ public class TreeDigest extends AbstractTDigest {
+@@ -232,7 +232,7 @@
+ 
+     /**
+      * @param q The quantile desired.  Can be in the range [0,1].
+-     * @return The minimum value x such that we think that the proportion of samples is <= x is q.
++     * @return The minimum value x such that we think that the proportion of samples is &lt;= x is q.
+      */
+     @Override
+     public double quantile(double q) {

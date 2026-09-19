@@ -1,0 +1,21 @@
+Author: František Dvořák <valtri@civ.zcu.cz>
+Date:   Wed Nov 4 14:11:41 2015 +0100
+
+    Build flags and not using internal lapack headers.
+
+diff --git a/Makefile b/Makefile
+index e501466..7f91722 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,9 +1,10 @@
+ 
+-CFLAGS := -DNDEBUG -O3 -fPIC -ffast-math -msse -mfpmath=sse -ftree-vectorize -fomit-frame-pointer -DUSE_PTHREADS -I./include
++CFLAGS := -DNDEBUG -fPIC -ffast-math -ftree-vectorize -fomit-frame-pointer -DUSE_PTHREADS -I./include $(CFLAGS)
+ 
+ #CFLAGS := -DNDEBUG -g -fPIC -DUSE_PTHREADS -I./include
+ 
+ CXXFLAGS := $(CFLAGS)
++LDFLAGS := $(LDFLAGS)
+ 
+ include build/general/Makefile.inc
+ 

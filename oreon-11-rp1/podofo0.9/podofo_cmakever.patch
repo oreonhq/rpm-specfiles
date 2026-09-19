@@ -1,0 +1,9 @@
+diff -rupN podofo-0.9.8/CMakeLists.txt podofo-0.9.8-new/CMakeLists.txt
+--- podofo-0.9.8/CMakeLists.txt	2025-07-17 23:07:22.204383488 +0200
++++ podofo-0.9.8-new/CMakeLists.txt	2025-07-17 23:07:35.312149779 +0200
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
+ 
+ #*****************  IMPORTANT  ************* IMPORTANT **********************
+ # Look at http://www.vtk.org/Wiki/CMake_HowToDoPlatformChecks

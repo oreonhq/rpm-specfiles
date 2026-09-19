@@ -1,0 +1,41 @@
+From 0b209bca7013ca13a28f71f36ae44d9d674ccd1d Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 6 Nov 2013 18:05:42 +0100
+Subject: [PATCH] Link against Xext
+
+Fixes build with newer ld
+/usr/bin/ld: xteddy.o: undefined reference to symbol 'XShapeCombineMask'
+---
+ Makefile.am | 2 +-
+ Makefile.in | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 01f02ca..2ab3ed8 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -7,7 +7,7 @@ man_MANS = xteddy.6
+ bin_SCRIPTS = xtoys xteddy_test
+ 
+ AM_CFLAGS  = @IMLIB2_CFLAGS@
+-AM_LDFLAGS = @IMLIB2_LIBS@ -lX11
++AM_LDFLAGS = @IMLIB2_LIBS@ -lX11 -lXext
+ 
+ DEFS = -DPIXMAP_PATH=\"@PIXMAP_PATH@\" -Wall
+ 
+diff --git a/Makefile.in b/Makefile.in
+index 3d41623..e670e46 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -184,7 +184,7 @@ xteddy_SOURCES = xteddy.c
+ man_MANS = xteddy.6
+ bin_SCRIPTS = xtoys xteddy_test
+ AM_CFLAGS = @IMLIB2_CFLAGS@
+-AM_LDFLAGS = @IMLIB2_LIBS@ -lX11
++AM_LDFLAGS = @IMLIB2_LIBS@ -lX11 -lXext
+ SUBDIRS = html images
+ EXTRA_DIST = $(man_MANS)  $(bin_SCRIPTS) \
+              README xteddy.README images.credit \
+-- 
+1.8.4.2
+

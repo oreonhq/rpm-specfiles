@@ -1,0 +1,11 @@
+diff -up overlayfs-tools-77bf3f7ad3e7b834a15e2166780167646d51cce8/main.c.orig overlayfs-tools-77bf3f7ad3e7b834a15e2166780167646d51cce8/main.c
+--- overlayfs-tools-77bf3f7ad3e7b834a15e2166780167646d51cce8/main.c.orig	2020-08-17 03:57:27.000000000 +0200
++++ overlayfs-tools-77bf3f7ad3e7b834a15e2166780167646d51cce8/main.c	2021-01-14 13:06:46.325632285 +0100
+@@ -8,6 +8,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <errno.h>
+ #include <getopt.h>
+ #include <linux/limits.h>
+ #include <stdbool.h>

@@ -1,0 +1,95 @@
+From b91463c4eb2059da2cbdced3e65f1a7aa2708829 Mon Sep 17 00:00:00 2001
+From: Earlopain <14981592+Earlopain@users.noreply.github.com>
+Date: Wed, 30 Jul 2025 10:13:41 +0200
+Subject: [PATCH] [rb] Allow to use `rubyzip` v3
+
+After quite a while, it was finally released.
+There are a few breaking changes to be aware of:
+https://github.com/rubyzip/rubyzip/wiki/Updating-to-version-3.x
+
+Almost everything is already abstracted away behind he upper module, so the needed
+changes are rather small.
+---
+ .../common/driver_extensions/has_file_downloads.rb |  8 +++++++-
+ rb/lib/selenium/webdriver/common/zipper.rb         | 14 ++++++++++++--
+ rb/selenium-webdriver.gemspec                      |  2 +-
+ 3 files changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/rb/lib/selenium/webdriver/common/driver_extensions/has_file_downloads.rb b/rb/lib/selenium/webdriver/common/driver_extensions/has_file_downloads.rb
+index 0613862db6578..47179a8224a51 100644
+--- a/rb/lib/selenium/webdriver/common/driver_extensions/has_file_downloads.rb
++++ b/rb/lib/selenium/webdriver/common/driver_extensions/has_file_downloads.rb
+@@ -39,7 +39,13 @@ def download_file(file_name, target_directory)
+ 
+           begin
+             Zip::File.open("#{file_name}.zip") do |zip|
+-              zip.each { |entry| zip.extract(entry, "#{target_directory}#{file_name}") }
++              zip.each do |entry|
++                if Zipper::RUBYZIP_V3
++                  zip.extract(entry, file_name, destination_directory: target_directory)
++                else
++                  zip.extract(entry, "#{target_directory}#{file_name}")
++                end
++              end
+             end
+           ensure
+             FileUtils.rm_f("#{file_name}.zip")
+diff --git a/rb/lib/selenium/webdriver/common/zipper.rb b/rb/lib/selenium/webdriver/common/zipper.rb
+index d464df500ad9d..2197068effcf0 100644
+--- a/rb/lib/selenium/webdriver/common/zipper.rb
++++ b/rb/lib/selenium/webdriver/common/zipper.rb
+@@ -18,6 +18,7 @@
+ # under the License.
+ 
+ require 'zip'
++require 'zip/version' # Not required automatically
+ require 'tempfile'
+ require 'find'
+ require 'base64'
+@@ -30,6 +31,7 @@ module WebDriver
+ 
+     module Zipper
+       EXTENSIONS = %w[.zip .xpi].freeze
++      RUBYZIP_V3 = Zip::VERSION >= '3.0.0'
+ 
+       class << self
+         def unzip(path)
+@@ -42,7 +44,11 @@ def unzip(path)
+               dirname = File.dirname(to)
+ 
+               FileUtils.mkdir_p dirname
+-              zip.extract(entry, to)
++              if RUBYZIP_V3
++                zip.extract(entry, entry.name, destination_directory: destination)
++              else
++                zip.extract(entry, to)
++              end
+             end
+           end
+ 
+@@ -75,7 +81,11 @@ def with_tmp_zip(&blk)
+           # Don't use Tempfile since it lacks rb_file_s_rename permission on Windows.
+           Dir.mktmpdir do |tmp_dir|
+             zip_path = File.join(tmp_dir, 'webdriver-zip')
+-            Zip::File.open(zip_path, Zip::File::CREATE, &blk)
++            if RUBYZIP_V3
++              Zip::File.open(zip_path, create: true, &blk)
++            else
++              Zip::File.open(zip_path, Zip::File::CREATE, &blk)
++            end
+           end
+         end
+ 
+diff --git a/rb/selenium-webdriver.gemspec b/rb/selenium-webdriver.gemspec
+index 41a94abec14a3..15783435bb73c 100644
+--- a/rb/selenium-webdriver.gemspec
++++ b/rb/selenium-webdriver.gemspec
+@@ -52,7 +52,7 @@ Gem::Specification.new do |s|
+   s.add_dependency 'base64', ['~> 0.2']
+   s.add_dependency 'logger', ['~> 1.4']
+   s.add_dependency 'rexml', ['~> 3.2', '>= 3.2.5']
+-  s.add_dependency 'rubyzip', ['>= 1.2.2', '< 3.0']
++  s.add_dependency 'rubyzip', ['>= 1.2.2', '< 4.0']
+   s.add_dependency 'websocket', ['~> 1.0']
+ 
+   s.add_development_dependency 'git', ['~> 1.19']

@@ -1,0 +1,364 @@
+diff -up magicpoint-1.13a/ctlwords.c~ magicpoint-1.13a/ctlwords.c
+--- magicpoint-1.13a/ctlwords.c~	1999-02-15 00:02:25.000000000 +0100
++++ magicpoint-1.13a/ctlwords.c	2012-05-15 12:47:15.217838269 +0200
+@@ -23,6 +23,7 @@ BEGIN {
+ #endif
+ 
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
+ 
+ main(int argc, char *argv[])
+diff -up magicpoint-1.13a/draw.c~ magicpoint-1.13a/draw.c
+--- magicpoint-1.13a/draw.c~	2012-05-15 12:45:38.000000000 +0200
++++ magicpoint-1.13a/draw.c	2012-05-15 13:15:23.667815648 +0200
+@@ -65,6 +65,9 @@ static struct pcache {
+ 
+ #define	POSY(size)	(-(int)((size)/2))
+ 
++/* missing/strlcpy.c */
++size_t strlcpy(char *dst, const char *src, size_t siz);
++
+ static void process_direc __P((struct render_state *, int *));
+ 
+ static int set_position __P((struct render_state *));
+@@ -81,10 +84,13 @@ static struct render_object *obj_alloc _
+ static void obj_free __P((struct render_state *, struct render_object *));
+ static int obj_new_xfont __P((struct render_state *, int, int, int,
+ 	u_int, char *));
+-static int obj_new_image __P((struct render_state *, int, int, Image *, int, int));
+ #ifdef USE_IMLIB
+ ImlibImage *search_imdata __P((char *));
+ static int obj_new_image2 __P((struct render_state *, int, int, Image *, int, int, ImlibImage *, int));
++void manage_pixmap(Pixmap pixmap, int add, int page);
++Pixmap pixmap_fromimimage(ImlibImage *imimage, int width, int height);
++#else
++static int obj_new_image __P((struct render_state *, int, int, Image *, int, int));
+ #endif
+ static int obj_new_icon __P((struct render_state *, int, int, u_int, u_int, u_long, u_int, XPoint *));
+ static Pixel obj_image_color __P((Image *, Image *, Pixel, int *));
+@@ -1198,7 +1204,7 @@ cutin(state, lx, ly, dir)
+                                     state->maxascent + state->maxdescent,
+                                     xoff + min(sx, lx),
+                                     ly + yoff);
+-		} else 
++		} else if (!use_copy)
+ 			XMoveWindow(display, cutinWin, x + xoff, ly + yoff);
+ 
+ 		XFlush(display);
+@@ -1788,6 +1794,7 @@ obj_new_xfont(state, x, y, size, code, r
+ 	return 1;
+ }
+ 
++#ifndef USE_IMLIB
+ static int
+ obj_new_image(state, x, y, image, xzoom, yzoom)
+ 	struct render_state *state;
+@@ -1811,8 +1818,7 @@ obj_new_image(state, x, y, image, xzoom,
+ 	obj->vertloc = VL_TOP;
+ 	return 1;
+ }
+-
+-#ifdef USE_IMLIB
++#else
+ static int
+ obj_new_image2(state, x, y, image, xzoom, yzoom, imimage, zoomonclk)
+ 	struct render_state *state;
+@@ -2846,7 +2852,7 @@ draw_onechar_x(state, code, x, y, size,
+ 	char *seed;
+ 	char *registry;
+ 
+-	if (code >= 0xa0 && ((!argregistry || !argregistry[0]) && mgp_charset))
++	if (code >= 0xa0 && (!argregistry || !argregistry[0]))
+ 		registry = mgp_charset;
+ 	else 
+ 		registry = argregistry;
+@@ -2884,7 +2890,7 @@ draw_onechar_x(state, code, x, y, size,
+ 			fprintf(stderr, "X11 font %s:%d:%s has bogus "
+ 				"font metric for glyph 0x%04x\n"
+ 				"\tcs->width=%d, source=%s, coffset=0x%04x\n",
+-				seed, char_size, registry?registry:"NULL",
++				seed, size, registry?registry:"NULL",
+ 				code, cs->width, metricsource, coffset);
+ 		}
+ 		cs = &xfontstruct->max_bounds;
+@@ -3059,7 +3065,7 @@ back_gradation(state, cg0)
+ 			xzoomrate, yzoomrate);
+ 		fprintf(stderr, "background zoom mode %d: "
+ 			"(%d, %d)->(%d, %d)[%d]\n", cg->ct_zoomflag,
+-			srcwidth, srcheight, dstwidth, dstheight, b_quality);
++			srcwidth, srcheight, dstwidth, dstheight, hquality);
+ 	}
+ 
+ 	if (xzoomrate != 100.0 || yzoomrate != 100.0) {
+@@ -3312,7 +3318,7 @@ image_load(state, filename, numcolor, xi
+ 			image = myimage;
+ 			myimage = zoom(image, xzoomrate, yzoomrate, verbose);
+ 			if (!image) {
+-				fprintf(stderr, "image zoom (%dx%d) failed in image_load\n",
++				fprintf(stderr, "image zoom (%fx%f) failed in image_load\n",
+ 					xzoomrate, yzoomrate);
+ 				exit(1);
+ 			}
+@@ -5243,7 +5249,7 @@ xft_draw_fragment(state, p, len, registr
+ 	static char prefix[3][20] = { "\033$B", "\033$A", "\033$(C"};
+ 	char buf16[1024], *p16;
+ 	char out16[1024], *o16;
+-	int ileft, oleft;
++	size_t ileft, oleft;
+ #ifdef HAVE_ICONV
+ 	static iconv_t icv[3];
+ #endif
+@@ -5268,7 +5274,7 @@ xft_draw_fragment(state, p, len, registr
+ 			if (!strncmp(registry, rtab[i], 3)) break;
+ 		}
+ 		if (i == 3) return NULL; /* cannot find codeset */
+-		sprintf(buf16, "%s%s\0", prefix[i], p);  	
++		sprintf(buf16, "%s%s", prefix[i], p);  	
+ 		if (icv[i] == (iconv_t)0) icv[i] = iconv_open("UTF-8", etab[i]);
+ 		if (icv[i] == (iconv_t)-1) {
+ 			fprintf(stderr, "your iconv doesn't support %s\n",
+diff -up magicpoint-1.13a/grammar.y.protos magicpoint-1.13a/grammar.y
+--- magicpoint-1.13a/grammar.y.protos	2008-01-18 18:43:20.000000000 +0100
++++ magicpoint-1.13a/grammar.y	2012-05-15 12:23:49.294857107 +0200
+@@ -74,6 +74,7 @@ int n_errors = 0;
+ struct ctrl *root;
+ char *yyfilename;
+ int yylineno;
++extern int yylex (void);
+ 
+ #ifdef HAVE_STDARG_H
+ /* GCC complains if we declare this function in traditional style */
+diff -up magicpoint-1.13a/image/gif.c.xwintoppm magicpoint-1.13a/image/gif.c
+--- magicpoint-1.13a/image/gif.c.xwintoppm	2000-03-07 07:59:56.000000000 +0100
++++ magicpoint-1.13a/image/gif.c	2012-05-15 12:18:41.071861234 +0200
+@@ -103,7 +103,7 @@ gifLoad(fullname, name, verbose)
+ 			if (GifFile->Image.Left + GifFile->Image.Width > GifFile->SWidth ||
+ 			   GifFile->Image.Top + GifFile->Image.Height > GifFile->SHeight) {
+ 				fprintf(stderr,
+-"Image %d is not confined to screen dimension, aborted.\n");
++"Image %d is not confined to screen dimension, aborted.\n", GifFile->ImageCount);
+ 				exit(-2);
+ 			}
+ 			if (GifFile->Image.Interlace) {
+@@ -200,8 +200,8 @@ gifIdent(fullname, name)
+ 	if (gifp == NULL)
+ 		ret = 0;
+ 	else {
++		tellAboutImage(name, gifp);
+ 		DGifCloseFile(gifp);
+-		tellAboutImage(name);
+ 		ret = 1;
+ 	}
+ 	return ret;
+diff -up magicpoint-1.13a/image/path.c.protos magicpoint-1.13a/image/path.c
+--- magicpoint-1.13a/image/path.c.protos	2004-07-28 17:47:31.000000000 +0200
++++ magicpoint-1.13a/image/path.c	2012-05-15 12:23:44.682857148 +0200
+@@ -20,9 +20,7 @@
+ #if 1 /* SYSV */
+ #include <unistd.h>
+ #endif
+-#ifdef __APPLE__
+ #include <stdlib.h>
+-#endif
+ 
+ /* SUPPRESS 530 */
+ /* SUPPRESS 560 */
+diff -up magicpoint-1.13a/image/pbm.c.xwintoppm magicpoint-1.13a/image/pbm.c
+--- magicpoint-1.13a/image/pbm.c.xwintoppm	1998-12-28 09:23:14.000000000 +0100
++++ magicpoint-1.13a/image/pbm.c	2012-05-15 12:18:41.072861234 +0200
+@@ -359,8 +359,10 @@ Image *pbmLoad(fullname, name, verbose)
+        */
+ 
+       destptr = image->data;
+-      for (y = 0; y < size; y++)
+-	*(destptr++) = PM_SCALE(*destptr, maxval, 0xff);
++      for (y = 0; y < size; y++) {
++	*destptr = PM_SCALE(*destptr, maxval, 0xff);
++	destptr++;
++      }
+       break;
+ 
+     case ITRUE:
+diff -up magicpoint-1.13a/image/png.c.xwintoppm magicpoint-1.13a/image/png.c
+--- magicpoint-1.13a/image/png.c.xwintoppm	2001-04-11 10:37:00.000000000 +0200
++++ magicpoint-1.13a/image/png.c	2012-05-15 12:18:41.072861234 +0200
+@@ -44,7 +44,7 @@
+ #define PNG_CHECK_BYTES 4
+ 
+ int 
+-pngIdent(char *fullname, char *name) {}
++pngIdent(char *fullname, char *name) {return 0;}
+     
+ Image *
+ pngLoad(fullname, name, verbose)
+diff -up magicpoint-1.13a/image/window.c.protos magicpoint-1.13a/image/window.c
+--- magicpoint-1.13a/image/window.c.protos	2004-07-28 17:47:31.000000000 +0200
++++ magicpoint-1.13a/image/window.c	2012-05-15 12:23:44.683857155 +0200
+@@ -16,7 +16,7 @@
+ #include <signal.h>
+ #include <errno.h>
+ #include <sys/types.h>
+-#ifdef SYSV
++#if 1 /* SYSV */
+ #include <unistd.h>
+ #endif
+ #if TIME_WITH_SYS_TIME
+@@ -224,7 +224,7 @@ void setViewportColormap(disp, scrn, vis
+      int scrn;
+      Visual *visual;
+ { XSetWindowAttributes swa;
+-  static cmap_atom= None;
++  static Atom cmap_atom= None;
+   Window cmap_windows[2];
+ 
+   if (cmap_atom == None)
+diff -up magicpoint-1.13a/image/zoom.c~ magicpoint-1.13a/image/zoom.c
+--- magicpoint-1.13a/image/zoom.c~	2003-08-23 08:22:09.000000000 +0200
++++ magicpoint-1.13a/image/zoom.c	2012-05-15 13:39:30.264796267 +0200
+@@ -73,7 +73,7 @@ Image *zoom(oimage, xzoom, yzoom, verbos
+     if (verbose)
+       fprintf(stderr, "  Zooming image by %0.2f%%...", xzoom);
+     if (oimage->title)
+-      sprintf(buf, "%s (%d%% zoom)", oimage->title, xzoom);
++      sprintf(buf, "%s (%f%% zoom)", oimage->title, xzoom);
+   }
+   else {
+     if (verbose)
+diff -up magicpoint-1.13a/mgp.c~ magicpoint-1.13a/mgp.c
+--- magicpoint-1.13a/mgp.c~	2008-02-13 15:16:58.000000000 +0100
++++ magicpoint-1.13a/mgp.c	2012-05-15 12:54:50.062832170 +0200
+@@ -52,7 +52,7 @@ u_long pl_fh, pl_fw;
+ time_t t_start;
+ u_int t_fin;
+ u_int tbar_mode;
+-int zoomin = 0;
++int zid, zoomin = 0;
+ 
+ static int rakugaki = 0;
+ static int rakugaki_x = -1;
+@@ -112,6 +112,11 @@ static int wantreload __P((void));
+ 
+ /*image*/
+ extern char *expandPath __P((char *));
++int search_zimage(int x, int y, int page);
++void zoomin_zimage(int id);
++void zoomout_zimage(int id);
++/* missing/strlcpy.c */
++size_t strlcpy(char *dst, const char *src, size_t siz);
+ 
+ #ifdef TTY_KEYINPUT
+ static void
+@@ -896,7 +901,6 @@ main_loop(start_page)
+ 				if (e.xbutton.button == 1) {
+ 					struct render_state tstate;
+ 					tstate = state;
+-					int zid;
+ #ifdef USE_IMLIB
+ 					if (zoomin == 1){
+ 						zoomin = 0;
+diff -up magicpoint-1.13a/mgp.h.protos magicpoint-1.13a/mgp.h
+--- magicpoint-1.13a/mgp.h.protos	2008-01-18 18:43:20.000000000 +0100
++++ magicpoint-1.13a/mgp.h	2012-05-15 12:23:49.293857109 +0200
+@@ -814,6 +814,7 @@ extern XImage *tfc_image __P((struct tfo
+ 
+ /* unimap.c */
+ extern void latin_unicode_map_init();
++extern void unicode_map_init();
+ 
+ /* embed.c */
+ extern char *embed_fname __P((char *));
+diff -up magicpoint-1.13a/parse.c~ magicpoint-1.13a/parse.c
+--- magicpoint-1.13a/parse.c~	2012-05-15 13:35:23.000000000 +0200
++++ magicpoint-1.13a/parse.c	2012-05-15 13:38:44.553796880 +0200
+@@ -378,7 +378,7 @@ read_file(fp, filename, page, line, prea
+ 	struct ctrl **ch;
+ 	struct ctrl *cp;
+ 	struct ctrl *p;
+-	int line_cont;
++	int i, line_cont;
+ 	char *infilename;
+ 	struct ctrl *filtermode;
+ 	int filterfd = -1;
+@@ -547,7 +547,7 @@ command:
+ 	while (fgets(buf, sizeof(buf), fp) != NULL) {
+ 		lineno++;
+ 		if (filtermode && strncmp(buf, "%endfilter", 10) != 0) {
+-			write(filterfd, buf, strlen(buf));
++			i = write(filterfd, buf, strlen(buf));
+ 			continue;
+ 		}
+ 	    {
+@@ -1259,7 +1259,7 @@ thirdpass()
+ 	 */
+     {
+ 	int textseen;
+-	int contseen;
++	int contseen = 0;
+ 	for (page = 1; page <= maxpage; page++) {
+ 		line = page_attribute[page].pg_linenum;
+ 		for (l = 0; l <= line; l++) {
+diff -up magicpoint-1.13a/print.c~ magicpoint-1.13a/print.c
+--- magicpoint-1.13a/print.c~	2008-01-08 18:49:42.000000000 +0100
++++ magicpoint-1.13a/print.c	2012-05-15 13:22:10.832810193 +0200
+@@ -38,6 +38,7 @@
+ #include <locale.h>
+ #endif
+ #endif
++#include <stdint.h>
+ 
+ static u_int align = AL_LEFT;
+ static char *curprefix = NULL;
+@@ -1297,7 +1298,7 @@ icon_output(tp)
+ 
+ 	paintit = (painticon || colorps);
+ 
+-	switch ((int)tp->font) {	/*XXX*/
++	switch ((intptr_t)tp->font) {	/*XXX*/
+ 	case 0:
+ 		/* XXX: image is not supported yet */
+ 		break;
+@@ -1658,7 +1659,7 @@ icon_remember(icon, fontsize, offset, co
+ 	textpool[ntextpool].xoffset = offset;
+ 	textpool[ntextpool].xsiz = char_size[0];
+ 	textpool[ntextpool].size = fontsize;
+-	textpool[ntextpool].font = (struct fontmap *)icon;	/*XXX*/
++	textpool[ntextpool].font = (struct fontmap *)(intptr_t)icon;	/*XXX*/
+ 	textpool[ntextpool].text = NULL;
+ 	textpool[ntextpool].fore = color;
+ 	textpool[ntextpool].back = back;	/*XXX*/
+@@ -1806,7 +1807,7 @@ image_remember(cp, pool)
+ 				break;
+ 
+ 			default:
+-				fprintf(stderr, "rotation by %d degrees not supported.\n", rotate);
++				fprintf(stderr, "rotation by %d degrees not supported.\n", cp->ctm_rotate);
+ 				cleanup(-1);
+ 		}
+ 		width = myimage->width;
+@@ -1855,7 +1856,7 @@ noneps:
+ 			break;
+ 
+ 		default:
+-			fprintf(stderr, "rotation by %d degrees not supported.\n", rotate);
++			fprintf(stderr, "rotation by %d degrees not supported.\n", cp->ctm_rotate);
+ 			cleanup(-1);
+ 	}
+ 	pool->xsiz = myimage->width;
+diff -up magicpoint-1.13a/x11.c~ magicpoint-1.13a/x11.c
+--- magicpoint-1.13a/x11.c~	2008-01-24 16:43:17.000000000 +0100
++++ magicpoint-1.13a/x11.c	2012-05-15 13:18:30.786813139 +0200
+@@ -355,10 +355,11 @@ init_win3()
+ void
+ toggle_fullscreen()
+ {
+-	static fullscreen = 0;
++	static int fullscreen = 0;
+ 	XClientMessageEvent  xev;
+ 
+-	fullscreen = ++fullscreen % 2;
++	fullscreen ^= 1;
++
+ 	memset(&xev, 0, sizeof(xev));
+ 	xev.type=ClientMessage;
+ 	xev.message_type=XInternAtom(display, "_NET_WM_STATE", False);

@@ -1,8 +1,8 @@
 %global source0_hash f16291a031d86e570394762e9f35eaf2fcbc2337a49910f3feae42d54e1688cb
 
 Name:           opensc
-Version:        0.26.1
-Release:        6%{?dist}
+Version:        0.27.1
+Release:        1%{?dist}
 Summary:        Smart card library and applications
 
 License:        LGPL-2.1-or-later AND BSD-3-Clause

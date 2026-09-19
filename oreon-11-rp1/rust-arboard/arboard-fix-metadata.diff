@@ -1,0 +1,19 @@
+--- arboard-3.6.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ arboard-3.6.1/Cargo.toml	2025-09-19T12:13:18.089103+00:00
+@@ -30,16 +30,12 @@
+ repository = "https://github.com/1Password/arboard"
+ 
+ [features]
+-core-graphics = []
+ default = ["image-data"]
+ image = ["dep:image"]
+ image-data = [
+     "image",
+-    "windows-sys",
+-    "core-graphics",
+ ]
+ wayland-data-control = ["wl-clipboard-rs"]
+-windows-sys = []
+ wl-clipboard-rs = ["dep:wl-clipboard-rs"]
+ 
+ [lib]

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+
+  <mime-type type="application/x-geomview">
+    <comment>OOGL file</comment>
+    <glob pattern="*.oogl" />
+    <glob pattern="*.off" />
+    <glob pattern="*.list" />
+    <glob pattern="*.tlist" />
+    <glob pattern="*.grp" />
+    <glob pattern="*.quad" />
+    <glob pattern="*.mesh" />
+    <glob pattern="*.inst" />
+    <glob pattern="*.bez" />
+    <glob pattern="*.vect" />
+    <alias type="object/x-oogl"/>
+  </mime-type>
+
+</mime-info>
+

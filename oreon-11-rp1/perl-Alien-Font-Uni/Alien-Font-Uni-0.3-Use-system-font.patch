@@ -1,0 +1,157 @@
+From 4765e5c7575b9a6584040d51077c68edc0cde2d2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 1 Dec 2022 16:43:49 +0100
+Subject: [PATCH] Use system font
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ MANIFEST              |  2 --
+ Makefile.PL           | 20 +++-----------------
+ dist.ini              |  7 +------
+ lib/Alien/Font/Uni.pm | 21 ++++++++++++++-------
+ t/01_load..t          |  2 +-
+ 5 files changed, 19 insertions(+), 33 deletions(-)
+
+diff --git a/MANIFEST b/MANIFEST
+index da2d22b..a4edd89 100644
+--- a/MANIFEST
++++ b/MANIFEST
+@@ -10,7 +10,5 @@ README
+ cpanfile
+ dist.ini
+ lib/Alien/Font/Uni.pm
+-share/OFL1.1.txt
+-share/unifont-15.0.01.ttf
+ t/01_load..t
+ xt/author/pod-syntax.t
+diff --git a/Makefile.PL b/Makefile.PL
+index 873cf60..9ded42c 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -6,26 +6,18 @@ use 5.008000;
+ 
+ use ExtUtils::MakeMaker;
+ 
+-use File::ShareDir::Install;
+-$File::ShareDir::Install::INCLUDE_DOTFILES = 1;
+-$File::ShareDir::Install::INCLUDE_DOTDIRS = 1;
+-install_share dist => "share";
+-
+-
+ my %WriteMakefileArgs = (
+   "ABSTRACT" => "access to Unifont truetype file",
+   "AUTHOR" => "Herbert Breunung <lichtkind\@cpan.org>",
+   "CONFIGURE_REQUIRES" => {
+     "ExtUtils::MakeMaker" => 0,
+-    "File::ShareDir::Install" => "0.06"
+   },
+   "DISTNAME" => "Alien-Font-Uni",
+   "LICENSE" => "perl",
+   "MIN_PERL_VERSION" => "5.008000",
+   "NAME" => "Alien::Font::Uni",
+   "PREREQ_PM" => {
+-    "File::ShareDir" => 1,
+-    "File::Spec" => 3
++    "version" => "0.77"
+   },
+   "TEST_REQUIRES" => {
+     "Test::More" => "1.3"
+@@ -38,9 +30,8 @@ my %WriteMakefileArgs = (
+ 
+ 
+ my %FallbackPrereqs = (
+-  "File::ShareDir" => 1,
+-  "File::Spec" => 3,
+-  "Test::More" => "1.3"
++  "Test::More" => "1.3",
++  "version" => "0.77"
+ );
+ 
+ 
+@@ -55,8 +46,3 @@ delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
+ 
+ WriteMakefile(%WriteMakefileArgs);
+ 
+-{
+-package
+-MY;
+-use File::ShareDir::Install qw(postamble);
+-}
+diff --git a/dist.ini b/dist.ini
+index 662c6f2..f25fdc9 100644
+--- a/dist.ini
++++ b/dist.ini
+@@ -9,8 +9,7 @@ copyright_year   = 2022
+ 
+ [Prereqs]
+ perl = v5.8.0
+-File::ShareDir = 1
+-File::Spec = 3
++version = 0.77
+ 
+ [Prereqs / TestRequires]
+ Test::More =  1.3
+@@ -29,10 +28,6 @@ exclude_filename = README.md
+ [VersionFromModule]
+ allow_decimal_underscore = 1
+ 
+-[ShareDir]
+-;[ShareDir::Clean]
+-dir=share
+-
+ [Repository]
+ [AbstractFromPOD]
+ [Pod2Readme]
+diff --git a/lib/Alien/Font/Uni.pm b/lib/Alien/Font/Uni.pm
+index 7c42871..41b6c19 100644
+--- a/lib/Alien/Font/Uni.pm
++++ b/lib/Alien/Font/Uni.pm
+@@ -1,15 +1,22 @@
+ use strict;
++use version 0.77;
+ 
+ package Alien::Font::Uni;
+ our $VERSION = '0.3';
+ 
+-use File::ShareDir 'dist_dir';
+-use File::Spec;
+- 
+-sub get_path { File::Spec->catfile( dist_dir('Alien-Font-Uni') , 'unifont-'.font_version().'.ttf') }
+-
+-sub font_version { '15.0.01' }
+-sub font_vstring { v15.0.01  }
++sub get_path { '/usr/share/fonts/unifont/unifont.ttf' }
++
++sub font_version {
++    open(my $f, '<', get_path()) or return undef;
++    local $/ = undef;
++    my $content = <$f>;
++    close($f) or return undef;
++    return "$1" if $content =~ m{Version\s+(\d+(?:\.\d+)*)};
++    return undef;
++}
++sub font_vstring {
++    return version->parse(font_version())->normal;
++}
+ 
+ 1;
+ 
+diff --git a/t/01_load..t b/t/01_load..t
+index 1394f95..29279b5 100644
+--- a/t/01_load..t
++++ b/t/01_load..t
+@@ -6,7 +6,7 @@ use Test::More tests => 3;
+ 
+ use_ok( 'Alien::Font::Uni' );
+ is(-e Alien::Font::Uni::get_path(), 1, 'font file present');
+-ok(Alien::Font::Uni::get_path() =~ Alien::Font::Uni::font_version(), 'version propably right');
++like(Alien::Font::Uni::font_version(), qr{\A\d+(?:\.\d+)*\z}, 'version propably right');
+ 
+ exit (0);
+ 
+-- 
+2.40.1
+

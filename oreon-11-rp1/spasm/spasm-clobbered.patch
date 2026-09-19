@@ -1,0 +1,22 @@
+Fixes this warning:
+
+linbox_rank_gauss.cpp: In function ‘void alarm_handler(int)’:
+linbox_rank_gauss.cpp:20:24: warning: unused parameter ‘dummy’ [-Wunused-parameter]
+   20 | void alarm_handler(int dummy) {
+      |                    ~~~~^~~~~
+linbox_rank_gauss.cpp: In function ‘main’:
+linbox_rank_gauss.cpp:29:9: warning: variable ‘timer’ might be clobbered by ‘longjmp’ or ‘vfork’ [-Wclobbered]
+   29 |     int timer = -1;
+      |         ^~~~~
+
+--- spasm-1.2/bench/linbox_rank_gauss.cpp.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/bench/linbox_rank_gauss.cpp	2023-11-12 11:36:15.113275458 -0700
+@@ -26,7 +26,7 @@ int main (int argc, char **argv)
+     typedef Givaro::Modular<uint32_t> Field;
+     typedef SparseMatrix<Field, STOR_T> Blackbox;
+     int ch;
+-    int timer = -1;
++    volatile int timer = -1;
+ 
+     /* options descriptor */
+     struct option longopts[2] = {

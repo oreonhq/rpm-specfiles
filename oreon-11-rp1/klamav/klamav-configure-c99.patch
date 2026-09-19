@@ -1,0 +1,155 @@
+Avoid implicit ints and implicit function declarations for
+compatibility with future compiler defaults.
+
+All the changes are generic in nature, but acinclude.m4 is not
+regenerated automatically, so this part theoretically needs to be
+upstreamed.
+
+diff --git a/acinclude.m4 b/acinclude.m4
+index fad2a7fa4aee16e4..95554a8a7642e24e 100644
+--- a/acinclude.m4
++++ b/acinclude.m4
+@@ -6734,10 +6734,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -6751,7 +6747,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }]
+ EOF
+   if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} 2>/dev/null; then
+diff --git a/configure b/configure
+index 0580cb0541d807f5..b9e4f624135927b5 100755
+--- a/configure
++++ b/configure
+@@ -12473,10 +12473,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -12490,7 +12486,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -12571,10 +12567,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -12588,7 +12580,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -16102,10 +16094,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -16119,7 +16107,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -16200,10 +16188,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -16217,7 +16201,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -21444,10 +21428,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -21461,7 +21441,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -21542,10 +21522,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -21559,7 +21535,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5

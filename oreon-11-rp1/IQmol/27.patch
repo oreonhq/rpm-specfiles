@@ -1,0 +1,21 @@
+From e3cbd8196b8736067372520e97df18e81a6f5890 Mon Sep 17 00:00:00 2001
+From: Michael Wang <41721295+zwang20@users.noreply.github.com>
+Date: Thu, 10 Jul 2025 12:07:27 +1000
+Subject: [PATCH] Update CMakeLists.txt
+
+---
+ src/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index d64c958..a36ebb5 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -12,6 +12,7 @@ add_subdirectory(Plot)
+ add_subdirectory(Process)
+ add_subdirectory(Viewer)
+ add_subdirectory(Fortran)
++add_subdirectory(Amber)
+ 
+ add_dependencies(Process Configurator)
+ add_dependencies(Grid Configurator)

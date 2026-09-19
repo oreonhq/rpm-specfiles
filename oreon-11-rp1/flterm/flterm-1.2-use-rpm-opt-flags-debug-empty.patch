@@ -1,0 +1,16 @@
+diff -up milkymist-Release_1.2/tools/Makefile.fix milkymist-Release_1.2/tools/Makefile
+--- milkymist-Release_1.2/tools/Makefile.fix	2013-03-15 16:30:57.597516758 +0530
++++ milkymist-Release_1.2/tools/Makefile	2013-03-15 16:31:35.211524697 +0530
+@@ -4,10 +4,10 @@ CC=clang
+ all: $(TARGETS)
+ 
+ %: %.c
+-	$(CC) -O2 -Wall -I. -s -o $@ $<
++	$(CC) ${RPM_OPT_FLAGS} -I. -o $@ $<
+ 
+ makeraw: makeraw.c
+-	$(CC) -O2 -Wall -s -o $@ $< -lgd
++	$(CC) ${RPM_OPT_FLAGS} -o $@ $< -lgd
+ 
+ install: mkmmimg flterm
+ 	install -d /usr/local/bin

@@ -1,0 +1,26 @@
+diff --git a/metadata/cube.xml.in b/metadata/cube.xml.in
+index 5d2e7a7..2a20012 100644
+--- a/metadata/cube.xml.in
++++ b/metadata/cube.xml.in
+@@ -96,9 +96,9 @@
+ 		    <short>Cube Color</short>
+ 		    <long>Color of top and bottom sides of the cube</long>
+ 		    <default>
+-			<red>0xfefe</red>
+-			<green>0xffff</green>
+-			<blue>0xc7c7</blue>
++			<red>0x0000</red>
++			<green>0x1919</green>
++			<blue>0x4a4a</blue>
+ 		    </default>
+ 		</option>
+ 		<subgroup>
+@@ -114,7 +114,7 @@
+ 			<type>string</type>
+ 			<hints>file;image;</hints>
+ 			<default>
+-			    <value>freedesktop</value>
++			    <value>/usr/share/pixmaps/fedora-logo</value>
+ 			</default>
+ 		    </option>
+ 		    <option name="adjust_image" type="bool">

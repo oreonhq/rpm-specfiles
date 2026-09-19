@@ -1,0 +1,3 @@
+# Decrease biasing (up to -b-10) if your fan speed changes too quickly,
+# Increase biasing (up to -b20) if your fan speed changes too slowly.
+OPTIONS="-q -b0"

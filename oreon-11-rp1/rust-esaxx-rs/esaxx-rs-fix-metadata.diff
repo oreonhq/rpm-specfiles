@@ -1,0 +1,25 @@
+--- esaxx-rs-0.1.10/Cargo.toml	1970-01-01T00:00:01+00:00
++++ esaxx-rs-0.1.10/Cargo.toml	2025-07-31T19:10:45.460461+00:00
+@@ -18,21 +18,10 @@
+ homepage = "https://github.com/Narsil/esaxx-rs"
+ documentation = "https://docs.rs/esaxx-rs"
+ readme = "README.md"
+-license = "Apache-2.0"
++license = "Apache-2.0 AND MIT"
+ repository = "https://github.com/Narsil/esaxx-rs"
+ 
+-[[example]]
+-name = "esaxx"
+-required-features = ["cpp"]
+-
+-[[bench]]
+-name = "bench_suffix"
+-harness = false
+-
+ [dependencies]
+-
+-[dev-dependencies.criterion]
+-version = "0.5"
+ 
+ [build-dependencies.cc]
+ version = "1.0"

@@ -1,0 +1,31 @@
+.TH TEND\-EVALMULT "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-evalmult \- modify shape by multiplying eigenvalues by a constant
+.SH SYNOPSIS
+.B tend\ evalmult
+.B \-v
+.RI < value >
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Modify shape by multiplying eigenvalues by a constant.
+The orientation of the tensor is unchanged.
+.SH OPTIONS
+.TP
+.B \-v\fR <\fIvalue\fR>
+Value to multiply eigenvalues by
+.RI ( float )
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

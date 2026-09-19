@@ -1,0 +1,58 @@
+From 96e3ec53fe9819cf23bc8369e397d12ef1f06b51 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Sun, 8 Dec 2024 12:21:57 +0100
+Subject: [PATCH 1003/1005] Display warning regarding issue tracker
+
+Make sure users know where to report bugs regarding the RPM package of
+Bottles. Revert upstream's outright denial of usage.
+---
+ bottles/frontend/windows/window.py | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
+
+diff --git a/bottles/frontend/windows/window.py b/bottles/frontend/windows/window.py
+index ce76ab42..05c20092 100644
+--- a/bottles/frontend/windows/window.py
++++ b/bottles/frontend/windows/window.py
+@@ -116,29 +116,26 @@ class BottlesWindow(Adw.ApplicationWindow):
+ 
+             def response(dialog, response, *args):
+                 if response == "close":
+-                    quit(1)
++                    return
+ 
+             body = _(
+-                "Bottles is only supported within a sandboxed environment. Official sources of Bottles are available at"
++                "Bottles developers (upstream) only support Flatpak. Please report any issues with the RPM package in"
+             )
+-            download_url = "usebottles.com/download"
++            bug_url = "bugz.fedoraproject.org/bottles"
+ 
+             error_dialog = Adw.AlertDialog.new(
+-                _("Unsupported Environment"),
+-                f"{body} <a href='https://{download_url}' title='https://{download_url}'>{download_url}.</a>",
++                _("RPM Package Note"),
++                f"{body} <a href='https://{bug_url}' title='https://{bug_url}'>Bugzilla.</a>"
+             )
+ 
+-            error_dialog.add_response("close", _("Close"))
++            error_dialog.add_response("close", _("Understood"))
+             error_dialog.set_body_use_markup(True)
+             error_dialog.connect("response", response)
+             error_dialog.present(self)
+-            logging.error(
+-                _(
+-                    "Bottles is only supported within a sandboxed format. Official sources of Bottles are available at:"
+-                )
+-            )
+-            logging.error("https://usebottles.com/download/")
+-            return
++            logging.warn(_("Bottles is only supported within a sandboxed environment. Official sources of Bottles are available at:"))
++            logging.warn("https://usebottles.com/download/")
++            logging.warn(_("Please report any issues using the RPM package to:"))
++            logging.warn("https://bugz.fedoraproject.org/bottles")
+ 
+         # Loading view
+         self.page_loading = LoadingView()
+-- 
+2.51.0
+

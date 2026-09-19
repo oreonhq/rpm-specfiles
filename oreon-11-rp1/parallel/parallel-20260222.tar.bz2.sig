@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# To check the signature run:
+#   echo | gpg
+#   gpg --auto-key-locate keyserver --keyserver-options auto-key-retrieve parallel-20260222.tar.bz2.sig
+
+echo | gpg 2>/dev/null
+gpg --auto-key-locate keyserver --keyserver-options auto-key-retrieve $0
+exit $?
+
+-----BEGIN PGP SIGNATURE-----
+
+iQUHBAABCgAdFiEEzaAaQgjE90UGEH570atFFoiIiIgFAmmbg84ACgkQ0atFFoiI
+iIhGKSagkFKwYK0j9PbfartE1SBFqz745tCWxlyQhdXx8RlOV4NuiZgnSOIukVvC
+WGe1KyM4TY7/mQlF0h+OkX8N6neI+PvpbA4NtqsktXaBSX2A27TvJP0jnYceGBHh
+CAynhW0qBLqtauS7whsLjizcEhl4e5B10DnMKKSfcKgLFD/ouRO9ertgxgPwmkLR
+oi1K2/h8VH/4aNfoiyCdVwpgShspwJVp6P8zIXdA6G8Bkd76NenjJxQ3S/+DQbaP
+Y7raPsYlt4gRliIHGXzYMKK87GTPtTFRG5zGAYVnJA/Oa59fNHWU5z9idSI60MnB
+FVGP3Hl+tpLypDgc/oElwCm6cq7sqcjnWmYlyX1O8nQ/sTkkjls7u/UL8mp8CmGq
+W/lS8ua/sTOVmbWgfdW872H7xTEz5PBAUTUG8XBKRJEoMwWyBKhRxc5mbriv//rN
+pfrpBxj1MjSMh6mzBJANYQLq0JMNqlMuz7aoHRx6FOozODnzzONuM8Eo1ClkJc6n
+nT0WsqGY8RuqRFD8NVhU5dox0pQa9l5nXZJpUTZo7SJ0g8Q8lnEhs1D0R3aqBw2p
+C/UQ+54tTBMh3+X0WKGUX1MVrc2t+yiqJCkEoaglF2EPKD05K1AaWBZ/X0e0UnxR
+FYxv6Q1ZtF6mbQ7+/4eiOh4+BWj6qOcP5OmdZOU7Hzst0u0MIWT+cgGIdAZyEg6Z
+IuiAQkdRHmmefrahiN/BlVFr3CvJGUjRn0Mw+FdnddIS7ptXvHA6jOpBAJ01mrCE
+WKfehAXqV8bazqdW6t/45nj/TSEk31CW593vIfNRmohCeZRw9C7wk0vm2+UOKzce
+5IG33aecihMt1HB3mdD/O/VMHcM4YxCsoEn7tkoMnikiaIulTuW0wOXw6Uy9Oyon
+PykC4558MYH1dQjxiCFR5xeT03p9PrPZUBZml0nACO8SnouN5UGJpH3O6BDOqe3+
+1AuFSYbeJ1YdIX5HBGbjqW2tfZ87+FbcBypaef4q6ZuwnOTSpi4VDnRzemZ86Hea
+dLe7Lm2IBUQNOG/UbVqljlqoiaEGRWl8FU8yryg5sZVgkGqSIJWjZINPH3CAT5Fj
+L8NMphfUUt0TcGgZqW1S16XpSW1FRlFOTWJYepkM6x9Ztd/TCMj1AxFMSmTFTph4
+6+1nzp8R6XhCsd80CSYFVx9B6+2pR8y9UzOjYeY/kG8AdWetdE9p9IryAfq+ykzz
+5ND8z0JCEH4nxDQJEdJ4PXPOVhi2uLr06QwnBgWVB9SmI7N8o8cRyeWzTX1ee9hx
+A89fbpswny/0vmlgmnT3ZZqEoLeHZm2py8iSkPvPjkPIZmWs7ooXrhtyWJx6mgjv
+gQv/n52qvg7SZAfe2+Nk4NvW0cKTZB2idw0NiTOgPEgMOb0UXX0ml8us/0AhDZP1
+bQ5Y6k9TyQX3JPYT4nko/kKy0lI1HDGKMr3TV9Zl5qC394CpYbob8q5jf5dhSXdD
+A7tFeU+En+d7/Vcjkga4iqwZDjCfrzEiE2Dhcw9F43Jbwl/suUK6C/yG9FJ04AzQ
+XsN27vkWa/LzbpuWWyuMheD60MzbhNJ5VHYrNh2/+V3UyhSLgJ35pNdAfseDNUvh
+PSIGILbd94nE+SKDFyY1VS/jxVTdXk/8UFJxnMgyJO5iySKAlpbiF5IP
+=k8Dc
+-----END PGP SIGNATURE-----

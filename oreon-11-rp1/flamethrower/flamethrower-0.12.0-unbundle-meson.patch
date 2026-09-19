@@ -1,0 +1,92 @@
+From 28a2eb989c5ed218db665809a054b76b17d19678 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20Men=C5=A1=C3=ADk?= <pemensik@redhat.com>
+Date: Mon, 26 Jan 2026 19:15:30 +0100
+Subject: [PATCH] Unbundle several packages from the package
+
+Allow simple using of external libraries needed. Use system libraries
+where some fedora packages are available. Keep some small bundles only.
+---
+ flame/trafgen.cpp |  2 +-
+ meson.build       | 16 ++++++++++++++++
+ meson_options.txt |  1 +
+ 3 files changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/flame/trafgen.cpp b/flame/trafgen.cpp
+index da46766..f7973ad 100644
+--- a/flame/trafgen.cpp
++++ b/flame/trafgen.cpp
+@@ -8,7 +8,7 @@
+ #include <netinet/in.h>
+ #include <random>
+ 
+-#include "tcp.h"
++#include <uvw/tcp.h>
+ #include "tcptlssession.h"
+ 
+ #include <uvw/emitter.h>
+diff --git a/meson.build b/meson.build
+index ea0d698..c8bc638 100644
+--- a/meson.build
++++ b/meson.build
+@@ -16,6 +16,9 @@ nghttp2 = dependency('libnghttp2', 'nghttp2', required: get_option('doh'))
+ 
+ # bundled libraries
+ 
++uvw = dependency('uvw', required: not get_option('bundles'))
++
++if not uvw.found()
+ uvw_sources = files(
+   '3rd/uvw/src/async.cpp',
+   '3rd/uvw/src/check.cpp',
+@@ -58,14 +61,23 @@ uvw = declare_dependency(
+   compile_args: ['-DUVW_AS_LIB', '-iquote', meson.current_source_dir() / '3rd/uvw/include/uvw'],
+   include_directories: uvw_includes,
+ )
++endif
+ 
++json = dependency('json', 'nlohmann_json', required: not get_option('bundles'))
++
++if not json.found()
+ json = declare_dependency(
+   include_directories: include_directories('3rd/json/include'),
+ )
++endif
+ 
++httplib = dependency('cpp-httplib', 'httplib', required: not get_option('bundles'))
++
++if not httplib.found()
+ httplib = declare_dependency(
+   include_directories: include_directories('3rd/cpp-httplib/include'),
+ )
++endif
+ 
+ urlparse_sources = files(
+   '3rd/urlparse/src/urlparse.c',
+@@ -105,6 +117,9 @@ base64 = declare_dependency(
+   include_directories: base64_includes,
+ )
+ 
++docopt = dependency('docopt', required: not get_option('bundles'))
++
++if not docopt.found()
+ docopt_includes = include_directories(
+   '3rd/docopt.cpp/include',
+ )
+@@ -123,6 +138,7 @@ docopt = declare_dependency(
+   link_with: [docopt_library],
+   include_directories: docopt_includes,
+ )
++endif
+ 
+ # x
+ 
+diff --git a/meson_options.txt b/meson_options.txt
+index 50fe57c..510d33b 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1 +1,2 @@
+ option('doh', type: 'boolean', value: true, description: 'Enable DNS-over-HTTPS support.')
++option('bundles', type: 'boolean', value: true, description: 'Enable usage of 3rd party bundled libraries.')
+-- 
+2.52.0
+

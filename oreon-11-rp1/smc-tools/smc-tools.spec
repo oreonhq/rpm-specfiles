@@ -1,13 +1,13 @@
 %global source0_hash 36d6f53c2dd2caa5ce36858a89dd811966332177b01c50344ad7d9840880948b
 
 Name:           smc-tools
-Version:        1.8.7
+Version:        1.8.8
 Release:        1%{?dist}
 Summary:        Shared Memory Communication Tools
 
 License:        EPL-1.0
 URL:            https://github.com/ibm-s390-linux/smc-tools
-Source0:        https://github.com/ibm-s390-linux/smc-tools/archive/refs/tags/1.8.7.tar.gz#/smc-tools-1.8.7.tar.gz
+Source0:        https://github.com/ibm-s390-linux/smc-tools/archive/refs/tags/1.8.8.tar.gz#/smc-tools-1.8.7.tar.gz
 
 BuildRequires:  make
 BuildRequires:  gcc

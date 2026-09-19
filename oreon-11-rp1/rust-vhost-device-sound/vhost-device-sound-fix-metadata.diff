@@ -1,0 +1,25 @@
+--- vhost-device-sound-0.3.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ vhost-device-sound-0.3.0/Cargo.toml	2026-03-11T20:18:40.055931+00:00
+@@ -121,19 +121,19 @@
+ optional = true
+ 
+ [target.'cfg(target_env = "gnu")'.dependencies.gst]
+-version = "0.24.2"
++version = ">=0.24.2,<0.26"
+ features = ["v1_24"]
+ optional = true
+ package = "gstreamer"
+ 
+ [target.'cfg(target_env = "gnu")'.dependencies.gst-app]
+-version = "0.24.2"
++version = ">=0.24.2,<0.26"
+ features = ["v1_24"]
+ optional = true
+ package = "gstreamer-app"
+ 
+ [target.'cfg(target_env = "gnu")'.dependencies.gst-audio]
+-version = "0.24.2"
++version = ">=0.24.2,<0.26"
+ features = ["v1_24"]
+ optional = true
+ package = "gstreamer-audio"

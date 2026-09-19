@@ -1,0 +1,25 @@
+From c8cd6ed41af78be98f2748f3f235f32c398a4098 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 20 Jan 2026 13:34:51 +0000
+Subject: [PATCH] Downstream-only: remove the upper bound on the version of
+ uv_build
+
+---
+ python/pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python/pyproject.toml b/python/pyproject.toml
+index 5c93fee1..a4e71142 100644
+--- a/python/pyproject.toml
++++ b/python/pyproject.toml
+@@ -1,6 +1,6 @@
+ [build-system]
+ build-backend = "uv_build"
+-requires = ["uv_build>=0.9.0,<0.10.0"]
++requires = ["uv_build>=0.9.0"]
+ 
+ [project]
+ name = "cucumber-expressions"
+-- 
+2.52.0
+

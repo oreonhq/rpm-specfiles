@@ -1,0 +1,102 @@
+https://bugs.kde.org/show_bug.cgi?id=496733
+https://bugs.kde.org/show_bug.cgi?id=496734
+
+diff --git a/src/contents/ui/dialogs/PrintingDialog.qml b/src/contents/ui/dialogs/PrintingDialog.qml
+index d56fb31..c664290 100644
+--- a/src/contents/ui/dialogs/PrintingDialog.qml
++++ b/src/contents/ui/dialogs/PrintingDialog.qml
+@@ -8,8 +8,6 @@ import QtQuick.Controls
+ import org.kde.kirigami as Kirigami
+ import org.kde.kirigamiaddons.formcard as FormCard
+ 
+-import org.kde.klevernotes
+-
+ FormCard.FormCardDialog {
+     id: textPromptDialog
+ 
+@@ -44,8 +42,6 @@ FormCard.FormCardDialog {
+ 
+     FormCard.FormButtonDelegate {
+         text: i18nc("@label:button", "Print to PDF")
+-        description: enabled ? "" : i18nc("@label:button", "Disabled due to Flatpak limitations.")
+-        enabled: !KleverUtility.isFlatpak()
+         Layout.fillWidth: true
+         onClicked: {
+             pdf()
+diff --git a/src/logic/kleverUtility.cpp b/src/logic/kleverUtility.cpp
+index d8f1424..afccfec 100644
+--- a/src/logic/kleverUtility.cpp
++++ b/src/logic/kleverUtility.cpp
+@@ -4,7 +4,6 @@
+ #include "kleverUtility.h"
+ #include "documentHandler.h"
+ // #include <QDebug>
+-#include <KSandbox>
+ #include <QApplication>
+ #include <QClipboard>
+ #include <QDir>
+@@ -143,11 +142,6 @@ QJsonObject KleverUtility::fontInfo(const QFont &font) const
+     return fontInfo;
+ }
+ 
+-bool KleverUtility::isFlatpak() const
+-{
+-    return KSandbox::isFlatpak();
+-}
+-
+ bool KleverUtility::checkPaste(const QString &tempPath) const
+ {
+     const QClipboard *clipboard = QApplication::clipboard();
+diff --git a/src/logic/kleverUtility.h b/src/logic/kleverUtility.h
+index 6c2265e..75da33e 100644
+--- a/src/logic/kleverUtility.h
++++ b/src/logic/kleverUtility.h
+@@ -23,7 +23,6 @@ public:
+     Q_INVOKABLE bool remove(const QString &path) const;
+     Q_INVOKABLE QJsonObject getCssStylesList() const;
+     Q_INVOKABLE QJsonObject fontInfo(const QFont &font) const;
+-    Q_INVOKABLE bool isFlatpak() const;
+     // TODO: make Clipboard helper singleton
+     Q_INVOKABLE bool checkPaste(const QString &tempPath) const;
+     Q_INVOKABLE void copyToClipboard(const QString &toCopy) const;
+diff --git a/src/logic/parser/plugins/cliHelper.cpp b/src/logic/parser/plugins/cliHelper.cpp
+index e20e100..f539b61 100644
+--- a/src/logic/parser/plugins/cliHelper.cpp
++++ b/src/logic/parser/plugins/cliHelper.cpp
+@@ -3,27 +3,11 @@
+ 
+ #include "cliHelper.h"
+ 
+-#include <KSandbox>
+ #include <QProcess>
+ #include <QStandardPaths>
+ 
+ QString CLIHelper::findExecutable(const QString &command)
+ {
+-    if (KSandbox::isInside()) {
+-        QProcess process;
+-        process.setProgram(QStringLiteral("which"));
+-        process.setArguments(QStringList() << command);
+-        KSandbox::startHostProcess(process);
+-
+-        if (!process.waitForStarted()) {
+-            return {};
+-        }
+-
+-        process.waitForFinished(1000);
+-
+-        return process.exitCode() == 0 ? QString::fromUtf8(process.readAllStandardOutput()).trimmed() : QLatin1String();
+-    }
+-
+     return QStandardPaths::findExecutable(command);
+ }
+ 
+@@ -38,7 +22,7 @@ QString CLIHelper::execCommand(const QString &input)
+     // We let sh handle the pipes and all the args, easier than using multiple QProcess
+     process.setProgram(sh);
+     process.setArguments(QStringList() << QStringLiteral("-c") << input);
+-    KSandbox::startHostProcess(process);
++    process.start();
+ 
+     if (!process.waitForStarted()) {
+         return {};

@@ -1,0 +1,1212 @@
+Backport by Robert Scheck <robert@fedoraproject.org> for PHP PEAR CodeGen_PECL <= 1.0.7
+based on
+
+ - https://github.com/pear/CodeGen_PECL/commit/359a503087966d9480b869ebe2f3df40afad1c48
+ - https://github.com/pear/CodeGen_PECL/commit/a0f4545a62a666e90189699a7fac3a291145506a
+ - https://github.com/pear/CodeGen_PECL/commit/8ae131c9ff230fb841e051afdceede7c1219cf64
+ - https://github.com/pear/CodeGen_PECL/commit/12a7b19feaa779f084d3771c591789df8e0203eb
+ - https://github.com/pear/CodeGen_PECL/commit/71a6051e0229b5bb53d4759d9228374ead95e3f0
+ - https://github.com/pear/CodeGen_PECL/commit/00e096ae7e51691844c3ab641ee8c0ca0ec7c730
+ - https://github.com/pear/CodeGen_PECL/commit/cecfa9a384c9e4b44fa056700ab7a2be54712bb1
+
+to avoid run-time notices, deprecation warnings and/or errors with PHP 5.4 (and 7.2, 8.0),
+too.
+
+--- package.xml						2010-09-27 13:53:30.000000000 +0200
++++ package.xml.php54					2022-06-16 15:54:23.997165597 +0200
+@@ -108,29 +108,29 @@
+    <file baseinstalldir="CodeGen" md5sum="8b7f889fdd2cdc23dffd7aad4aa21e7a" name="PECL/Dependency/Lib.php" role="php" />
+    <file baseinstalldir="CodeGen" md5sum="9574733604a76d7e885f22a56412ada3" name="PECL/Dependency/Platform.php" role="php" />
+    <file baseinstalldir="CodeGen" md5sum="47e4bfb0ecc4ae82bb17499cd0af6c98" name="PECL/Dependency/With.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="c50bc34ed88abe822a41006c729a94fe" name="PECL/Element/Class.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="544998e26d050415c1cb33e2b31a618c" name="PECL/Element/Class.php" role="php" />
+    <file baseinstalldir="CodeGen" md5sum="e964237e7538c8c4013edcb7cc471207" name="PECL/Element/ClassConstant.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="6cca481277229160d823c27a2a492bcf" name="PECL/Element/Constant.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="6129106a2a647f4b0a64d0699d1f13a3" name="PECL/Element/Function.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="157c97a9321286aa521ed72d525d3156" name="PECL/Element/Constant.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="02c29f787254094d3596fe87861d866b" name="PECL/Element/Function.php" role="php" />
+    <file baseinstalldir="CodeGen" md5sum="28a3a671355f86700281fb60669d330e" name="PECL/Element/Global.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="3a583c57b1ea47ccbacd4b7e9270de90" name="PECL/Element/Ini.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="dace4481ccee5aff0c6bc0ed2ce3416e" name="PECL/Element/Interface.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="11a16cbd04930406714dc091f8576370" name="PECL/Element/Logo.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="81eaf835b8572225e3e2da1595d14632" name="PECL/Element/Method.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="1200e9c622e09645d2c005d2381309d8" name="PECL/Element/Ini.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="0469d58f7e004767bd5c6aad2dcfc363" name="PECL/Element/Interface.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="80778970d467b380f73e55febdcb5293" name="PECL/Element/Logo.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="d5140ce88415dc770f214f2660588686" name="PECL/Element/Method.php" role="php" />
+    <file baseinstalldir="CodeGen" md5sum="197af391d6cfd8977502fcc4916b0799" name="PECL/Element/ObjectInterface.php" role="php" />
+    <file baseinstalldir="CodeGen" md5sum="4107b84a2901edb487a80f0b80c4eba8" name="PECL/Element/Property.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="87c597f4a848e198b99e8f5f2e7bcc3e" name="PECL/Element/Resource.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="024e61698c65431e62fb9e6836720ad8" name="PECL/Element/Stream.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="5a6d7e28a7714e34b38a5f81a18ece41" name="PECL/Element/Resource.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="ff7f0139a1a797908cc582f0cac1f3db" name="PECL/Element/Stream.php" role="php" />
+    <file baseinstalldir="CodeGen" md5sum="0cfc4d83fad4b055b4add715af43000c" name="PECL/Element/Test.php" role="php" />
+    <file baseinstalldir="CodeGen" md5sum="d5f11e4cebc8b30d5927cf9dba167b8c" name="PECL/Tools/ProtoLexer.php" role="php" />
+    <file baseinstalldir="CodeGen" md5sum="6b97e1fcb5ab96a8fdec223e7059db56" name="PECL/Tools/ProtoParser.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="434d9ff71cb9aed4623f29028dd314dc" name="PECL/Command.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="b9f06641880c7d8a825e1a0ce2595f24" name="PECL/Element.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="d63982ac842855a6f212882d5c3b8df2" name="PECL/Extension.php" role="php">
++   <file baseinstalldir="CodeGen" md5sum="4c7713e68403918fe6a885323f8f606b" name="PECL/Command.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="67334fecc92b6fac47089c45ab56976a" name="PECL/Element.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="7d741f864f5fba2b6054ddaeadccce91" name="PECL/Extension.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="CodeGen" md5sum="79fb945b73123f8e0858472f6f9cd866" name="PECL/Cli.php" role="php" />
+-   <file baseinstalldir="CodeGen" md5sum="718910ffd1148fefd5e226dc8cacb4b6" name="PECL/ExtensionParser.php" role="php" />
++   <file baseinstalldir="CodeGen" md5sum="bfc8f19dc34404b38af69a82f8520ad1" name="PECL/ExtensionParser.php" role="php" />
+    <file baseinstalldir="CodeGen" md5sum="5703e05126c6f348b9c9bdfe754b79b3" name="PECL/Maintainer.php" role="php" />
+    <file baseinstalldir="CodeGen" md5sum="a39afedac21adc92191603a57e1f7fbc" name="PECL/Release.php" role="php" />
+    <file md5sum="6e807ac28a08246f5257f33a63e21bbf" name="scripts/pecl-gen.sh" role="script">
+--- CodeGen_PECL-1.1.3/PECL/Command.php			2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Command.php.php54		2022-06-16 15:52:36.304474133 +0200
+@@ -139,12 +139,12 @@
+         $func->setRole("public");
+ 
+         $err = $func->setProto(trim($this->options->value("function")), $this->extension);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             $this->terminate($err->getMessage());
+         }   
+         
+         $err = $this->extension->addFunction($func);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             $this->terminate($err->getMessage());
+         }
+         
+@@ -172,7 +172,7 @@
+         $extname = $this->options->value("extname");
+         
+         $err = $this->extension->setName($extname);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             $this->terminate($err->getMessage());
+         }
+         
+@@ -186,13 +186,13 @@
+             foreach (file($proto_file) as $line) {
+                 $func = new CodeGen_PECL_Element_Function;
+                 $func->setRole("public");
+-                $err = $func->setProto(trim($line));
+-                if (PEAR::isError($err)) {
++                $err = $func->setProto(trim($line), $this->extension);
++                if ((new PEAR)->isError($err)) {
+                     $this->terminate($err->getMessage());
+                 }   
+                 
+                 $err = $this->extension->addFunction($func);
+-                if (PEAR::isError($err)) {
++                if ((new PEAR)->isError($err)) {
+                     $this->terminate($err->getMessage());
+                 }
+             }
+@@ -229,14 +229,14 @@
+             }
+             
+             $err = System::mkdir($extname);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 $this->terminate($err->getMessage());
+             }
+            
+             $this->extension->dirpath = realpath("./$extname");
+  
+             $err = $this->extension->generateSource("./$extname");
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 $this->terminate($err->getMessage());
+             }
+             
+@@ -244,12 +244,12 @@
+                 $manpath = "$extname/manual/". str_replace('_', '-', $extname);
+                 
+                 $err = System::mkdir("-p $manpath");
+-                if (PEAR::isError($err)) {
++                if ((new PEAR)->isError($err)) {
+                     $this->terminate($err->getMessage());
+                 }
+                 
+                 $err = $this->extension->generateDocumentation($manpath);
+-                if (PEAR::isError($err)) {
++                if ((new PEAR)->isError($err)) {
+                     $this->terminate($err->getMessage());
+                 }
+             }
+--- CodeGen_PECL-1.1.3/PECL/Element/Class.php		2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Element/Class.php.php54	2022-06-16 15:52:36.305474139 +0200
+@@ -77,6 +77,39 @@
+         return $this->name;
+     }
+ 
++    /**
++     * Namespace of the class
++     *
++     * @var     string
++     */
++    protected $namespace = "";
++
++    /**
++     * class name setter
++     *
++     * @param string Classnamespace
++     */
++    function setNamespace($namespace)
++    {
++        if (!self::isNamespace($namespace)) {
++            return PEAR::raiseError("'$namespace' is not a valid namespace");
++        }
++
++        $this->namespace = $namespace;
++
++        return true;
++    }
++
++    /**
++     * class name getter
++     *
++     * @return string Classnamespace
++     */
++    function getNamespace()
++    {
++        return $this->namespace;
++    }
++
+ 
+ 
+     /**
+@@ -535,7 +568,11 @@
+ 
+         echo "    zend_class_entry ce;\n\n";
+ 
+-        echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
++        if (empty($this->namespace)) {
++            echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
++        } else {
++            echo "    INIT_NS_CLASS_ENTRY(ce, \"{$this->namespace}\", \"{$this->name}\", {$this->name}_methods);\n";
++        }
+ 
+         if ($this->payloadType) {
+             echo "    ce.create_object = {$this->name}_obj_create;\n";
+@@ -664,6 +701,20 @@
+         return $code;
+     }
+         
++    /**
++     * Return minimal PHP version required to support the requested features
++     *
++     * @return  string  version string
++     */
++    function minPhpVersion()
++    {
++               if (!empty($this->namespace)) {
++                       return "5.3.0";
++               }
++
++        // default: 5.0
++        return "5.0.0"; // TODO test for real lower bound
++    }
+ }
+ 
+ ?>
+--- CodeGen_PECL-1.1.3/PECL/Element/Constant.php	2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Element/Constant.php.php54	2022-06-16 15:52:36.306474146 +0200
+@@ -279,11 +279,11 @@
+             $code.= "#define {$this->name} {$this->value}\n";
+             break;
+         case "string":
+-            $code.= "#define {$this->name} \"$value\"\n";
++            $code.= "#define {$this->name} \"{$this->value}\"\n";
+             break;
+         }
+              
+-        $this->ifConditionEnd();
++        $code.= $this->ifConditionEnd();
+ 
+         return $code;
+     }
+@@ -334,7 +334,7 @@
+      * @param  string  Extension name
+      * @return string  DocBook XML snippet
+      */
+-    static function docFooter() 
++    static function docFooter($name) 
+     {
+         return "  </variablelist>\n";
+     }
+--- CodeGen_PECL-1.1.3/PECL/Element/Function.php	2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Element/Function.php.php54	2022-06-16 15:53:45.959920439 +0200
+@@ -598,10 +598,10 @@
+         $len = strlen($proto);
+         $name = "";
+         for ($n = 0; $n < $len; $n++) {
+-            $char = $proto{$n};
++            $char = $proto[$n];
+             if (ctype_alpha($char) || $char == '_' || ($n && ctype_digit($char))) {
+                 $name .= $char;
+-            } else if ($char == '.' && $proto{$n+1} == '.' && $proto{$n+2} == '.') {
++            } else if ($char == '.' && $proto[$n+1] == '.' && $proto[$n+2] == '.') {
+                 $name = "...";
+                 $n    += 2;
+             } else {
+@@ -1136,7 +1136,8 @@
+                     case "array":
+                         $zvalType     = true;
+                         $argString   .= "a";
+-                        $var_decl    .= "    zval * $name = NULL;\n";
++                        $var_decl    .= "    zval * $name;\n";
++                        $var_code    .= "    MAKE_STD_ZVAL($name);\n    array_init($name);\n";
+                         $var_decl    .= "    HashTable * {$name}_hash = NULL;\n";
+                         $postProcess .= "    {$name}_hash = HASH_OF($name);\n";
+                         break;
+@@ -1192,8 +1193,8 @@
+                         $zvalType     = true;
+                         $argString   .= "r";
+                         $var_decl    .= "    zval * {$name}_zval = NULL;\n";
+-                        $var_decl    .= "    php_stream * $name = NULL:\n";
+-                        $postProcess .= "    php_stream_from_zval($name, &_z$name);\n"; 
++                        $var_decl    .= "    php_stream * $name = NULL;\n";
++                        $postProcess .= "    php_stream_from_zval($name, &{$name}_zval);\n";
+                         break;
+ 
+                     case "callback": 
+@@ -1340,6 +1341,8 @@
+                     } else {
+                         $linedef = "";
+                     }
++                } else {
++                    $linedef = "";
+                 }
+ 
+             $code .= $extension->codegen->varblock($linedef . $this->code); 
+--- CodeGen_PECL-1.1.3/PECL/Element/Ini.php		2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Element/Ini.php.php54	2022-06-16 15:52:36.307474152 +0200
+@@ -432,7 +432,7 @@
+      * @param  string extension basename
+      * @return string DocBook XML snippet 
+      */
+-    static function docFooter() 
++    static function docFooter($name) 
+     {
+         return
+             "     </tbody>
+--- CodeGen_PECL-1.1.3/PECL/Element/Interface.php	2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Element/Interface.php.php54	2022-06-16 15:52:36.307474152 +0200
+@@ -45,7 +45,7 @@
+     implements CodeGen_PECL_Element_ObjectInterface
+ {
+     /**
+-     * The class name
++     * The interface name
+      *
+      * @var     string
+      */
+@@ -77,7 +77,38 @@
+         return $this->name;
+     }
+ 
++    /**
++     * namespace get()er
++     *
++     * @return string
++     */
++    function getNamespace()
++    {
++        return $this->namespace;
++    }
++
++    /**
++     * The namespace namespace
++     *
++     * @var     string
++     */
++    protected $namespace  = "";
++
++    /**
++     * namespace set()er
++     *
++     * @param string
++     */
++    function setNamespace($namespace)
++    {
++        if (!self::isNamespace($namespace)) {
++            return PEAR::raiseError("'$namespace' is not a valid namespace");
++        }
+ 
++        $this->namespace = $namespace;
++
++        return true;
++    }
+ 
+     /**
+      * A short description
+@@ -251,7 +282,13 @@
+             echo "    zend_class_entry **parent_ce;\n";
+         }
+         echo "\n";
+-        echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
++
++        if (empty($this->namespace)) {
++            echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
++        } else {
++            echo "    INIT_NS_CLASS_ENTRY(ce, \"{$this->namespace}\", \"{$this->name}\", {$this->name}_methods);\n";
++        }
++
+         echo "    {$this->name}_ce_ptr = zend_register_internal_interface(&ce TSRMLS_CC);\n";
+             
+         if ($this->extends) {
+@@ -302,6 +339,21 @@
+     {
+         return "";
+     }
++
++    /**
++     * Return minimal PHP version required to support the requested features
++     *
++     * @return  string  version string
++     */
++    function minPhpVersion()
++    {
++               if (!empty($this->namespace)) {
++                       return "5.3.0";
++               }
++
++        // default: 5.0
++        return "5.0.0"; // TODO test for real lower bound
++    }
+ }
+ 
+ ?>
+\ No newline at end of file
+--- CodeGen_PECL-1.1.3/PECL/Element/Logo.php		2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Element/Logo.php.php54	2022-06-16 15:52:36.308474158 +0200
+@@ -214,7 +214,7 @@
+      * @access public
+      * @return string C code snippet
+      */
+-    function hCode() 
++    function hCode($extension) 
+     {
+         $len = strlen($this->data);
+         $code = " ";
+--- CodeGen_PECL-1.1.3/PECL/Element/Method.php		2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Element/Method.php.php54	2022-06-16 15:52:36.309474165 +0200
+@@ -245,7 +245,7 @@
+     function setProto($proto, $extension) 
+     {
+         $err = parent::setProto($proto, $extension);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+             
+@@ -391,9 +391,9 @@
+      *
+      * @param  string  code snippet
+      */
+-    function setCode($code)
++    function setCode($code, $line = 0, $file = "")
+     {
+-        parent::setCode($code);
++        parent::setCode($code, $line, $file);
+ 
+         return $this->validate();
+     }
+--- CodeGen_PECL-1.1.3/PECL/Element/Resource.php	2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Element/Resource.php.php54	2022-06-16 15:52:36.309474165 +0200
+@@ -287,15 +287,15 @@
+      * @access public
+      * @return string C code snippet
+      */
+-    function hCode() 
++    function hCode($extension) 
+     {
+         $upname = strtoupper($this->name);
+         
+         $code = $this->ifConditionStart();
+ 
+         $code.= "
+-#define {$upname}_REGISTER(r)   ZEND_REGISTER_RESOURCE(return_value, r, le_{$this->name });
+-#define {$upname}_FETCH(r, z)   ZEND_FETCH_RESOURCE(r, {$this->payload} *, z, -1, ${$this->name}, le_{$this->name }); if (!r) { RETURN_FALSE; }
++#define {$upname}_REGISTER(r)   ZEND_REGISTER_RESOURCE(return_value, r, le_{$this->name});
++#define {$upname}_FETCH(r, z)   ZEND_FETCH_RESOURCE(r, {$this->payload} *, z, -1, {$this->name}, le_{$this->name}); if (!r) { RETURN_FALSE; }
+ ";
+ 
+         $code.= $this->ifConditionEnd();
+--- CodeGen_PECL-1.1.3/PECL/Element/Stream.php		2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Element/Stream.php.php54	2022-06-16 15:52:36.310474171 +0200
+@@ -217,7 +217,7 @@
+      * @access public
+      * @return string C code snippet
+      */
+-    function hCode() 
++    function hCode($extension) 
+     {
+         return "/* ".$this->name." stream goes here */\n";
+     }
+--- CodeGen_PECL-1.1.3/PECL/Element.php			2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Element.php.php54		2022-06-16 15:52:36.310474171 +0200
+@@ -89,10 +89,12 @@
+                                  "array",
+                                  "as",
+                                  "break", 
++                                 "callable",
+                                  "case",
+                                  "catch",
+                                  "class",
+                                  "const",
++                                 "clone",
+                                  "continue",
+                                  "declare",
+                                  "default",
+@@ -106,23 +108,28 @@
+                                  "endfor",
+                                  "endforeach",
+                                  "endif",
++                                 "endswitch",
+                                  "endwhile",
+                                  "eval",
+                                  "exit",
+                                  "extends",
+                                  "final",
++                                 "finally",
+                                  "for", 
+                                  "foreach", 
+                                  "function", 
+                                  "global",
++                                 "goto",
+                                  "if", 
+                                  "implements",
++                                 "insteadof",
+                                  "include",
+                                  "include_once",
+                                  "instanceof",
+                                  "interface",
+                                  "isset",
+                                  "list",
++                                 "namespace",
+                                  "new",
+                                  "or",
+                                  "print",
+@@ -133,7 +140,9 @@
+                                  "require_once",
+                                  "return", 
+                                  "static",
++                                 "switch",
+                                  "throw",
++                                 "trait",
+                                  "try",
+                                  "unset",
+                                  "unset",
+@@ -141,6 +150,7 @@
+                                  "var",
+                                  "while", 
+                                  "xor",
++                                 "yield"
+                                  );
+         
+         foreach ($reserved as $keyword) {
+@@ -152,7 +162,25 @@
+         return false;
+     }
+ 
++    /**
++     * Checks whether a string is a valid namespace
++     *
++     * @access public
++     * @param  string name
++     * @return bool   boolean false if a reserved keyword is used
++     */
++    function isNamespace($name)
++    {
++        $parts = explode('\\\\', $name);
+ 
++        foreach ($parts as $part) {
++            if (self::isKeyword($part)) {
++                return false;
++            }
++
++            return true;
++        }
++    }
+ }
+ 
+ ?>
+--- CodeGen_PECL-1.1.3/PECL/Extension.php		2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/Extension.php.php54		2022-06-16 15:53:12.184703602 +0200
+@@ -278,7 +278,7 @@
+     function setPlatform($type)
+     {
+         $this->platform = new CodeGen_PECL_Dependency_Platform($type);
+-        if (PEAR::isError($this->platform)) {
++        if ((new PEAR)->isError($this->platform)) {
+             return $this->platform;
+         }
+         
+@@ -1174,7 +1174,7 @@
+     function generateFunctionRegistrations()
+     {
+         $code  = "/* {{{ {$this->name}_functions[] */\n";
+-        $code .= "function_entry {$this->name}_functions[] = {\n";
++        $code .= "static zend_function_entry {$this->name}_functions[] = {\n";
+         foreach ($this->functions as $function) {
+             $code.= $function->functionEntry();
+         }
+@@ -2143,7 +2143,7 @@
+ ';
+ 
+         foreach ($this->packageFiles['header'] as $filename) {
+-            if ($filename{0}!='/' && $filename{0}!='.') {
++            if ($filename[0]!='/' && $filename[0]!='.') {
+                 $filename = "./$filename";
+             }
+             $filename = str_replace("/","\\",$filename);
+--- CodeGen_PECL-1.1.3/PECL/ExtensionParser.php		2010-09-27 13:53:30.000000000 +0200
++++ CodeGen_PECL-1.1.3/PECL/ExtensionParser.php.php54	2022-06-16 15:52:36.313474190 +0200
+@@ -66,7 +66,7 @@
+     function tagstart_extension_function($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name", "role", "if"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -80,7 +80,7 @@
+             } else {
+                 $err = $this->helper->setName($attr["name"]);
+                 }
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -88,7 +88,7 @@
+         }
+         
+         $err = $this->helper->setRole($role);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -151,7 +151,7 @@
+     function tagstart_function_code($attr)
+     {
+         $err = $this->checkAttributes($attr, array("src"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -269,7 +269,7 @@
+     function tagstart_extension_resource($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name", "payload", "alloc", "if"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -277,7 +277,7 @@
+         
+         if (isset($attr["name"])) {
+             $err = $this->helper->setName($attr["name"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -286,7 +286,7 @@
+         
+         if (isset($attr["payload"])) {
+             $err = $this->helper->setPayload($attr["payload"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -295,12 +295,12 @@
+         
+         if (isset($attr["alloc"])) {
+             $value = $this->toBool($attr["alloc"], "alloc");
+-            if (PEAR::isError($value)) {
++            if ((new PEAR)->isError($value)) {
+                 return $value;
+             }
+ 
+             $err = $this->helper->setAlloc($value);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } 
+@@ -376,7 +376,7 @@
+         
+         if (isset($attr["src"])) {
+             $err = $logo->loadFile($attr["src"], $attr["mimetype"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -387,7 +387,7 @@
+             }
+             
+             $err = $logo->setData($decoded, $attr["mimetype"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+@@ -410,7 +410,7 @@
+ 
+         if (isset($attr["name"])) {
+             $err = $const->setName($attr["name"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -422,7 +422,7 @@
+         } else {
+             $err = $const->setType("int"); // default
+         }
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -432,14 +432,14 @@
+             $const->setDefine(false);
+             $err = $const->setValue($attr["name"]); // default -> mimic a C #define or enum value                
+         } 
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+             
+         if (isset($attr["define"])) {
+             $err = $const->setDefine($attr["define"]);
+         }
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -448,7 +448,7 @@
+         } else if (is_array($this->helper) && isset($this->helper["group"])) {
+             $err = $const->setGroup($this->helper["group"]);
+         }
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -496,7 +496,7 @@
+ 
+         if (isset($attr["name"])) {
+             $err = $global->setName($attr["name"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -505,7 +505,7 @@
+ 
+         if (isset($attr["type"])) {
+             $err = $global->setType($attr["type"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -514,7 +514,7 @@
+ 
+         if (isset($attr["value"])) {
+             $err = $global->setValue($attr["value"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } 
+@@ -551,7 +551,7 @@
+ 
+         if (isset($attr["name"])) {
+             $err = $ini->setName($attr["name"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -560,28 +560,28 @@
+ 
+         if (isset($attr["type"])) {
+             $err = $ini->setType($attr["type"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } 
+ 
+         if (isset($attr["value"])) {
+             $err = $ini->setValue($attr["value"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } 
+ 
+         if (isset($attr["access"])) {
+             $err = $ini->setAccess($attr["access"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } 
+ 
+         if (isset($attr["onupdate"])) {
+             $err = $ini->setOnUpdate($attr["onupdate"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } 
+@@ -600,18 +600,18 @@
+         $ini->setDesc(CodeGen_Tools_IndentC::linetrim($data));
+ 
+         $err = $this->extension->addPhpini($ini);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+             
+         // php.ini settings are stored in modul-global variables
+         $global = new CodeGen_PECL_Element_Global;
+         $err = $global->setName($ini->getName());
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+         $err = $global->setType($ini->getType());
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+         $global->setIfCondition($ini->getIfCondition());
+@@ -642,7 +642,7 @@
+     function tagstart_deps_lib($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name", "platform", "path", "function"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                  
+@@ -673,7 +673,7 @@
+     function tagstart_deps_header($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name", "prepend", "path"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                  
+@@ -699,13 +699,13 @@
+         $ext = new CodeGen_PECL_Dependency_Extension;
+ 
+         $err = $ext->setName($attr['name']);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+         if (isset($attr["type"])) {
+             $err = $ext->setType($attr['type']);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+@@ -720,7 +720,7 @@
+             }
+ 
+             $err = $ext->setVersion($attr['version'], $attr['rel']);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+@@ -736,7 +736,7 @@
+             $attr["name"] = $this->extension->getName();
+         }
+         $err = $with->setName($attr["name"]);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -750,7 +750,7 @@
+ 
+         if (isset($attr["mode"])) {
+             $err = $with->setMode($attr["mode"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+@@ -767,7 +767,7 @@
+     function tagstart_deps_with_header($attr) 
+     {
+         $err = $this->checkAttributes($attr, array("name", "prepend", "path"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                  
+@@ -788,7 +788,7 @@
+     function tagstart_deps_with_lib($attr) 
+     {
+         $err = $this->checkAttributes($attr, array("name", "platform", "path", "function"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                  
+@@ -841,7 +841,7 @@
+ 
+         if (isset($attr["name"])) {
+             $err = $test->setName($attr["name"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -908,7 +908,7 @@
+     function tagend_test_result($attr, $data) {
+         $err = $this->helper->setOutput(CodeGen_Tools_IndentC::linetrim($data));
+             
+-        if (isset($attr['mode']) && !PEAR::isError($err)) {
++        if (isset($attr['mode']) && !(new PEAR)->isError($err)) {
+             $err = $this->helper->setMode($attr['mode']);
+         }
+             
+@@ -940,8 +940,8 @@
+ 
+     function tagstart_extension_class($attr)
+     {
+-        $err = $this->checkAttributes($attr, array("name", "extends", "final", "abstract", "if"));
+-        if (PEAR::isError($err)) {
++        $err = $this->checkAttributes($attr, array("name", "namespace", "extends", "final", "abstract", "if"));
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -951,16 +951,23 @@
+ 
+         if (isset($attr["name"])) {
+             $err = $class->setName($attr["name"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+             return PEAR::raiseError("name attribut for class missing");
+         }
+ 
++        if (isset($attr["namespace"])) {
++            $err = $class->setNamespace($attr["namespace"]);
++            if ((new PEAR)->isError($err)) {
++                return $err;
++            }
++        }
++
+         if (isset($attr["extends"])) {
+             $err = $class->setExtends($attr["extends"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+@@ -969,7 +976,7 @@
+ 
+         if (isset($attr["final"])) {
+             $value = $this->toBool($attr["final"], "final");
+-            if (PEAR::isError($value)) {
++            if ((new PEAR)->isError($value)) {
+                 return $value;
+             }
+             if ($value) {
+@@ -979,7 +986,7 @@
+ 
+         if (isset($attr["abstract"])) {
+             $value = $this->toBool($attr["abstract"], "abstract");
+-            if (PEAR::isError($value)) {
++            if ((new PEAR)->isError($value)) {
+                 return $value;
+             }
+             if ($value) {
+@@ -1019,7 +1026,7 @@
+     function tagend_class_implements($attr, $data)
+     {
+         $err = $this->checkAttributes($attr, array("interface"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -1033,7 +1040,7 @@
+     function tagstart_class_property($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name", "type", "value", "access", "static", "if"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -1043,13 +1050,13 @@
+             return PEAR::raiseError("name attribute missing for property");
+         }
+         $err = $prop->setName($attr["name"]);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+         if (isset($attr["type"])) {
+             $err = $prop->setType($attr["type"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+@@ -1059,21 +1066,21 @@
+                 return PEAR::raiseError("property value can only be set together with type");
+             }
+             $err = $prop->setValue($attr["value"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }            
+ 
+         if (isset($attr["access"])) {
+             $err = $prop->setAccess($attr["access"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+ 
+         if (isset($attr["static"])) {
+             $value = $this->toBool($attr["static"], "static");
+-            if (PEAR::isError($value)) {
++            if ((new PEAR)->isError($value)) {
+                 return $value;
+             }
+             if ($value) {
+@@ -1091,7 +1098,7 @@
+     function tagstart_class_constant($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name", "type", "value", "if"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -1101,7 +1108,7 @@
+             return PEAR::raiseError("name attribute missing for class constant");
+         }
+         $err = $const->setName($attr["name"]);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -1109,7 +1116,7 @@
+             return PEAR::raiseError("type attribute missing for class constant");
+         }
+         $err = $const->setType($attr["type"]);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -1117,7 +1124,7 @@
+             return PEAR::raiseError("value attribute missing for class constant");
+         }
+         $err = $const->setValue($attr["value"]);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+@@ -1131,7 +1138,7 @@
+     function tagstart_class_payload($attr)
+     {
+         $err = $this->checkAttributes($attr, array("type", "alloc"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+     }
+@@ -1145,7 +1152,7 @@
+         
+         if (isset($attr["alloc"])) {
+             $alloc = $this->toBool($attr["alloc"], "alloc");
+-            if (PEAR::isError($alloc)) {
++            if ((new PEAR)->isError($alloc)) {
+                 return $value;
+             }
+         } else {
+@@ -1168,7 +1175,7 @@
+     function tagstart_class_function($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name", "access", "static", "abstract", "final", "procedural", "if"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -1178,7 +1185,7 @@
+         
+         if (isset($attr["name"])) {
+             $err = $method->setName($attr["name"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -1187,31 +1194,31 @@
+ 
+         if (isset($attr["access"])) {
+             $err = $method->setAccess($attr["access"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+         
+         if (isset($attr["static"])) {
+             $value = $this->toBool($attr["static"], "static");
+-            if (PEAR::isError($value)) {
++            if ((new PEAR)->isError($value)) {
+                 return $value;
+             }
+             if ($value) {
+                 $err = $method->isStatic();
+-                if (PEAR::isError($err)) {
++                if ((new PEAR)->isError($err)) {
+                     return $err;
+                 }
+             }
+         }
+         if (isset($attr["abstract"])) {
+             $value = $this->toBool($attr["abstract"], "abstract");
+-            if (PEAR::isError($value)) {
++            if ((new PEAR)->isError($value)) {
+                 return $value;
+             }
+             if ($value) {
+                 $err = $method->isAbstract();
+-                if (PEAR::isError($err)) {
++                if ((new PEAR)->isError($err)) {
+                     return $err;
+                 }
+             }
+@@ -1219,12 +1226,12 @@
+         
+         if (isset($attr["final"])) {
+             $value = $this->toBool($attr["final"], "final");
+-            if (PEAR::isError($value)) {
++            if ((new PEAR)->isError($value)) {
+                 return $value;
+             }
+             if ($value) {
+                 $err = $method->isFinal();
+-                if (PEAR::isError($err)) {
++                if ((new PEAR)->isError($err)) {
+                     return $err;
+                 }
+             }
+@@ -1235,7 +1242,7 @@
+                 $attr["procedural"] = "default";
+             }
+             $err = $method->setProceduralName($attr["procedural"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+@@ -1269,8 +1276,8 @@
+ 
+     function tagstart_extension_interface($attr)
+     {
+-        $err = $this->checkAttributes($attr, array("name", "extends", "if"));
+-        if (PEAR::isError($err)) {
++        $err = $this->checkAttributes($attr, array("name", "namespace", "extends", "if"));
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -1280,16 +1287,23 @@
+ 
+         if (isset($attr["name"])) {
+             $err = $interface->setName($attr["name"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+             return PEAR::raiseError("name attribut for class missing");
+         }
+ 
++        if (isset($attr["namespace"])) {
++            $err = $interface->setNamespace($attr["namespace"]);
++            if ((new PEAR)->isError($err)) {
++                return $err;
++            }
++        }
++
+         if (isset($attr["extends"])) {
+             $err = $interface->setExtends($attr["extends"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+@@ -1315,7 +1329,7 @@
+     function tagstart_interface_function($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -1326,7 +1340,7 @@
+         
+         if (isset($attr["name"])) {
+             $err = $method->setName($attr["name"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -1360,7 +1374,7 @@
+     function tagstart_extension_stream($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -1368,7 +1382,7 @@
+ 
+         if (isset($attr["name"])) {
+             $err = $this->helper->setName($attr["name"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {

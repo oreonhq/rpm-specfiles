@@ -12,7 +12,7 @@
 BuildArch: noarch
 
 %global forgeurl    https://github.com/dejavu-fonts/dejavu-fonts
-Version: 2.37
+Version: 2_37
 %global tag         %{lua:t=string.gsub(rpm.expand("version %{version}"), "[%p%s]+", "_");print(t)}
 %forgemeta
 
@@ -28,7 +28,7 @@ BuildRequires: make
 %global forgesetupargs -n %{source_name}-%{version}
 %endif
 
-Release: 29%{?dist}
+Release: 1%{?dist}
 # original bitstream glyphs are Bitstream Vera
 # glyphs modifications by dejavu project are Public Domain
 # glyphs imported from Arev fonts are under BitStream Vera compatible license

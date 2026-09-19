@@ -1,0 +1,48 @@
+From 9c12bff363f1c7bba62decc56d06cb17e5f685d6 Mon Sep 17 00:00:00 2001
+From: Dave Dykstra <2129743+DrDaveD@users.noreply.github.com>
+Date: Fri, 10 Oct 2025 08:29:00 -0500
+Subject: [PATCH] fuse2fs: revert change of storing boolean options in bytes
+ instead of ints
+
+This reverts commit c7f2688540d95e7f2cbcd178f8ff62ebe079faf7
+which turned the ints into uint8_t but didn't realize that
+fuse_opt_parse() assumes they are ints.
+
+Signed-off-by: Dave Dykstra <2129743+DrDaveD@users.noreply.github.com>
+---
+ misc/fuse2fs.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/misc/fuse2fs.c b/misc/fuse2fs.c
+index cb5620c7e..f565dbe7c 100644
+--- a/misc/fuse2fs.c
++++ b/misc/fuse2fs.c
+@@ -217,17 +217,17 @@ struct fuse2fs {
+ 	pthread_mutex_t bfl;
+ 	char *device;
+ 	char *shortdev;
+-	uint8_t ro;
+-	uint8_t debug;
+-	uint8_t no_default_opts;
+-	uint8_t panic_on_error;
+-	uint8_t minixdf;
+-	uint8_t fakeroot;
+-	uint8_t alloc_all_blocks;
+-	uint8_t norecovery;
+-	uint8_t kernel;
+-	uint8_t directio;
+-	uint8_t acl;
++	int ro;
++	int debug;
++	int no_default_opts;
++	int panic_on_error;
++	int minixdf;
++	int fakeroot;
++	int alloc_all_blocks;
++	int norecovery;
++	int kernel;
++	int directio;
++	int acl;
+ 
+ 	int logfd;
+ 	int blocklog;

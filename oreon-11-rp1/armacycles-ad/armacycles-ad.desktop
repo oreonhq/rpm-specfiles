@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Armacycles Advanced
+Exec=armacyclesad
+Comment=3d light cycle game
+Icon=armagetronad
+Terminal=false
+Categories=Game;ActionGame;
+StartupNotify=false

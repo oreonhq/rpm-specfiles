@@ -1,0 +1,36 @@
+From 5305097fa027775bc96ae58e0e938a1ef85f1fff Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Sun, 28 Feb 2016 09:33:27 +0100
+Subject: [PATCH 05/10] Use inttypes-macros to print int32_t.
+
+---
+ alliance/src/rds/src/gds_parse.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/alliance/src/rds/src/gds_parse.c b/alliance/src/rds/src/gds_parse.c
+index dfa2239..18e4ec6 100644
+--- a/alliance/src/rds/src/gds_parse.c
++++ b/alliance/src/rds/src/gds_parse.c
+@@ -21,6 +21,7 @@
+ # include <stdio.h>
+ # include <math.h>
+ # include <string.h>
++# include <inttypes.h>
+ 
+ # include <mut.h>
+ # include <mph.h>
+@@ -742,9 +743,9 @@ FILE *fp;
+             }
+          }
+          if ((coord_nb < 5) || (ispolyrec(coord_tab, coord_nb) == 0)) {
+-            sprintf(texte, "(%ld, %ld", coord_tab[0].X, coord_tab[0].Y);
++            sprintf(texte, "(%" PRId32 ", %" PRId32 "", coord_tab[0].X, coord_tab[0].Y);
+             for (i = 1; i < coord_nb; i++)
+-               sprintf(&texte[strlen(texte)], ", %ld, %ld", coord_tab[i].X, coord_tab[i].Y);
++               sprintf(&texte[strlen(texte)], ", %" PRId32 ", %" PRId32 "", coord_tab[i].X, coord_tab[i].Y);
+             strcat(texte, ")");
+             pv_emet_warning(pv_model->NAME, "Non rectangle polygon here", texte);
+             FLAG = -1;
+-- 
+2.5.0
+

@@ -1,0 +1,40 @@
+From: getong <3949379+getong@users.noreply.github.com>
+Date: Wed, 19 Sep 2018 00:54:20 +0800
+Subject: [PATCH] use is_ipv6_host/1 function from httpc
+
+
+diff --git a/src/ibrowse_http_client.erl b/src/ibrowse_http_client.erl
+index e59228c..4385b6b 100644
+--- a/src/ibrowse_http_client.erl
++++ b/src/ibrowse_http_client.erl
+@@ -625,18 +625,25 @@ get_sock_options(Host, Options, SSLOptions) ->
+             [binary, {active, false} | Other_sock_options]
+     end.
+ 
++%% copy from lhttpc_client.erl
+ is_ipv6_host(Host) ->
+     case inet_parse:address(Host) of
+         {ok, {_, _, _, _, _, _, _, _}} ->
+             true;
+         {ok, {_, _, _, _}} ->
+             false;
+-        _  ->
+-            case inet:gethostbyname(Host, inet6) of
+-                {ok, #hostent{h_addrtype = inet6}} ->
+-                    true;
++        _ ->
++            % Prefer IPv4 over IPv6.
++            case inet:getaddr(Host, inet) of
++                {ok, _} ->
++                    false;
+                 _ ->
+-                    false
++                    case inet:getaddr(Host, inet6) of
++                        {ok, _} ->
++                            true;
++                        _ ->
++                            false
++                    end
+             end
+     end.
+ 

@@ -1,0 +1,61 @@
+diff -urp NearTree-5.1.1/Makefile NearTree-5.1.1-lib64/Makefile
+--- NearTree-5.1.1/Makefile	2018-07-10 10:11:08.130492266 +0700
++++ NearTree-5.1.1-lib64/Makefile	2018-07-10 10:13:51.551069961 +0700
+@@ -86,7 +86,7 @@ endif
+ # Directories
+ #
+ ROOT     = .
+-LIB      = $(ROOT)/lib
++LIB      = $(ROOT)/lib64
+ BIN      = $(ROOT)/bin
+ SRC      = $(ROOT)
+ INC      = $(ROOT)
+@@ -119,7 +119,7 @@ CLIBRARIES = $(CVECTOR_LIBLOC) -lCVector
+ 
+ COMPILE_COMMAND        =  $(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c
+ CPPCOMPILE_COMMAND     =  $(LIBTOOL) --mode=compile $(CXX) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c
+-LIBRARY_LINK_COMMAND   =  $(LIBTOOL) --mode=link $(CC) -version-info $(VERSION) -no-undefined -rpath $(INSTALL_PREFIX)/lib
++LIBRARY_LINK_COMMAND   =  $(LIBTOOL) --mode=link $(CC) -version-info $(VERSION) -no-undefined -rpath $(INSTALL_PREFIX)/lib64
+ BUILD_COMMAND_LOCAL    =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(INCLUDES)
+ CPPBUILD_COMMAND_LOCAL =  $(LIBTOOL) --mode=link $(CXX) -no-undefined $(CFLAGS) $(INCLUDES)
+ BUILD_COMMAND_DYNAMIC  =  $(LIBTOOL) --mode=link $(CC) -no-undefined $(CFLAGS) -rdynamic -I$(INSTALL_PREFIX)/include
+@@ -228,11 +228,11 @@ all:	$(LIB) $(BIN) $(SOURCE) $(HEADERS)
+ 		$(LIB)/libCNearTree.$(LIB_EXT) \
+ 		$(BIN)/CPPMain $(BIN)/CMain $(BIN)/CPPNearTreeTest $(BIN)/CNearTreeTest $(BIN)/CNearTreeTestInst 
+ 		
+-install:  all $(INSTALL_PREFIX) $(INSTALL_PREFIX)/lib $(INSTALL_PREFIX)/include \
++install:  all $(INSTALL_PREFIX) $(INSTALL_PREFIX)/lib64 $(INSTALL_PREFIX)/include \
+ 		  $(INC) $(LIB)/libCNearTree.$(LIB_EXT)  $(INC)/TNear.h $(INC)/CNearTree.h \
+ 		  $(INC)/rhrand.h $(INC)/triple.h
+-		  $(INSTALL_COMMAND) $(LIB)/libCNearTree.$(LIB_EXT) $(INSTALL_PREFIX)/lib/libCNearTree.$(LIB_EXT)
+-		  $(INSTALL_FINISH_COMMAND) $(INSTALL_PREFIX)/lib/libCNearTree.$(LIB_EXT)
++		  $(INSTALL_COMMAND) $(LIB)/libCNearTree.$(LIB_EXT) $(INSTALL_PREFIX)/lib64/libCNearTree.$(LIB_EXT)
++		  $(INSTALL_FINISH_COMMAND) $(INSTALL_PREFIX)/lib64/libCNearTree.$(LIB_EXT)
+ 		  -cp $(INSTALL_PREFIX)/include/TNear.h $(INSTALL_PREFIX)/include/TNear_old.h
+ 		  -cp $(INSTALL_PREFIX)/include/CNearTree.h $(INSTALL_PREFIX)/include/CNearTree_old.h
+ 		  cp $(INC)/TNear.h $(INSTALL_PREFIX)/include/TNear.h
+@@ -245,11 +245,11 @@ install:  all $(INSTALL_PREFIX) $(INSTAL
+ 		  chmod 644 $(INSTALL_PREFIX)/include/triple.h
+ 		  echo "Testing final install static"
+ 		  $(BUILD_COMMAND_STATIC) $(INCLUDES) $(EXAMPLES)/CNearTreeTest.c \
+-		  -L$(INSTALL_PREFIX)/lib -lCNearTree $(CLIBRARIES) -o $(BIN)/CNearTreeTest_static
++		  -L$(INSTALL_PREFIX)/lib64 -lCNearTree $(CLIBRARIES) -o $(BIN)/CNearTreeTest_static
+ 		  $(BIN)/CNearTreeTest_static 
+ 		  echo "Testing final install dynamic"
+ 		  $(BUILD_COMMAND_DYNAMIC) $(INCLUDES) $(EXAMPLES)/CNearTreeTest.c \
+-		  -L$(INSTALL_PREFIX)/lib -lCNearTree $(CLIBRARIES) -o $(BIN)/CNearTreeTest_dynamic
++		  -L$(INSTALL_PREFIX)/lib64 -lCNearTree $(CLIBRARIES) -o $(BIN)/CNearTreeTest_dynamic
+ 		  $(BIN)/CNearTreeTest_dynamic 
+ 		
+ 		  
+@@ -260,8 +260,8 @@ install:  all $(INSTALL_PREFIX) $(INSTAL
+ $(INSTALL_PREFIX):
+ 	mkdir -p $(INSTALL_PREFIX)
+ 
+-$(INSTALL_PREFIX)/lib:  $(INSTALL_PREFIX)
+-	mkdir -p $(INSTALL_PREFIX)/lib
++$(INSTALL_PREFIX)/lib64:  $(INSTALL_PREFIX)
++	mkdir -p $(INSTALL_PREFIX)/lib64
+ 
+ $(INSTALL_PREFIX)/bin:  $(INSTALL_PREFIX)
+ 	mkdir -p $(INSTALL_PREFIX)/bin

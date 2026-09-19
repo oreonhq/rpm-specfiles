@@ -3,7 +3,7 @@
 %bcond_without check
 
 Name:           libarchive
-Version:        3.8.6
+Version:        3.8.9
 Release:        1%{?dist}
 Summary:        A library for handling streaming archive formats
 

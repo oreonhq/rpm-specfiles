@@ -1,0 +1,185 @@
+diff -up MySQL-zrm-3.0/usr/bin/mysql-zrm-backup.pipestatus MySQL-zrm-3.0/usr/bin/mysql-zrm-backup
+--- MySQL-zrm-3.0/usr/bin/mysql-zrm-backup.pipestatus	2017-06-15 13:56:00.031528611 -0600
++++ MySQL-zrm-3.0/usr/bin/mysql-zrm-backup	2017-06-15 13:56:00.044528598 -0600
+@@ -286,7 +286,7 @@ sub mailFile()
+                 	if( $verbose ){
+                         	&printLog( "mail command is ".$command.$mcmd."\n" );
+                 	}
+-                	my $r = system( $command.$mcmd );
++                	my $r = &systemPipe( $command.$mcmd );
+                 	if( $r > 0 ) {
+                         	&printError( "mail command failed ".$command.$mcmd."\n" );
+                 	}
+@@ -1817,8 +1817,6 @@ sub doMySqlDump()
+     	my $command = " ".$_[0].$cmpCmd." > \"".$filename."\"";
+         $command .= " 2>>$CMDERR";
+         $command = $p.$command;
+-        my $pipestatus =tmpnam();
+-        $command ="bash -c '$command;echo \${PIPESTATUS[@]} > $pipestatus 2>>$CMDERR'";
+ 	if( $verbose ) {
+ 		&printLog( "Command used for logical backup is ".$p.$command."\n" );
+ 	}
+@@ -1826,23 +1824,22 @@ sub doMySqlDump()
+                 &abortAndDie( );
+         }
+ 	my $ti = time();
+-	my $r = system($command);
++	my $r = &systemPipe($command);
+ 	my $t1 = (time() - $ti);
+ 	$readLocksTime = $readLocksTime + $t1;
+ 	$logicalCet = $t1;
+         if( $abort_flag ){
+                 &abortAndDie( );
+         }
+- 	if( $r > 0 ) {
++        
++        if( $r > 0 ) {
+         	&printLog("Command exit status is : $r \n" );
+         	&printCommandOutputToLog( "ERROR", "command is : $command", $CMDERR );
+-        	&printCommandOutputToLog( "ERROR", "pipe exit status", $pipestatus );
+         	&printAndDie("mysqldump did not succeed.\n");
+         }elsif ( -s $CMDERR ) {
+                 &printCommandOutputToLog( ($CMDERR =~ /warning/i) ? "INFO" : "WARNING", "mysqldump output for command : $command", $CMDERR );
+     	}
+         unlink($CMDERR);
+-        unlink($pipestatus);
+ }
+ 
+ sub checkAndBackupReplicationData()
+diff -up MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm.pipestatus MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm
+--- MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm.pipestatus	2017-06-15 13:56:00.076528566 -0600
++++ MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm	2017-06-15 13:56:53.011450648 -0600
+@@ -53,7 +53,7 @@ require Exporter;
+ 
+ use vars qw(@ISA @EXPORT_OK);
+ our @ISA = qw(Exporter);
+-our @EXPORT = qw($start_time $onWindows $date $ZRM_HOME $PERL_BINARY $MYSQL_ZRM_BASEDIR $TMPDIR $VARLIB $LOGNAME_LOCATION $LOGNAME $LOGGER $INDEX_FILENAME $MYSQL_ZRM_CONFIG_FILE $TAR $TAR_COMPRESS_OPTIONS $TAR_UNCOMPRESS_OPTIONS $TAR_EXCLUDE_OPTION $COMPRESS_FILENAME $COMPRESS_LOGICAL_FILENAME $EXTRACTED_FILENAME $MOUNT_POINT $LINK_POINT $ZRM_MOUNT_DETAILS $GZIP $CAT $CP $BACKUPSQLFILE $abort_flag $def_perm $default_backupset %inputs %indexdata $confFileHandle $zrm_version $backupset_dir $backupset $action $lastBackupDir $log_open $exitRoutine $indexRoutine %opt $zrm_error $verbose $USAGE_COMMON_OPTIONS_STRING $USAGE_STRING &usage &my_exit &abortAndDie &printAndDie &printWarning &printError &lockLog &unlockLog &printLog &printCommandOutputToLog &execCmdAndGetOutput &validateParams &checkForBlank &backSlashesToForwardSlashes &singleQuoteWithDoubleQuote &readOptionsFile &isEmpty &getZrmVersion &getLastBackupDir &removeExtraSlashesFromPath &doCompressAndEncrypt &removeUncompressedBackup &copyOneFileRemote &copyOneFileLocal &copyTo &copyFiles &copyUsingTar &copyUsingTarFromRemote &getUniqueFileName &getRetentionTimeInSecs &parseGeneralOptionFile &parseIndexFile &isNumeric &validateData &removeBlanks &execPlugin &uncompressBackup &processOptionFiles &processLastBackupDir &processCommandLineParams &createConfigFile &openLogFile &processTmpDir &processCopyPlugin &initCommon &convertGlobToPattern &filterPattern &verifySnapshotParams);
++our @EXPORT = qw($start_time $onWindows $date $ZRM_HOME $PERL_BINARY $MYSQL_ZRM_BASEDIR $TMPDIR $VARLIB $LOGNAME_LOCATION $LOGNAME $LOGGER $INDEX_FILENAME $MYSQL_ZRM_CONFIG_FILE $TAR $TAR_COMPRESS_OPTIONS $TAR_UNCOMPRESS_OPTIONS $TAR_EXCLUDE_OPTION $COMPRESS_FILENAME $COMPRESS_LOGICAL_FILENAME $EXTRACTED_FILENAME $MOUNT_POINT $LINK_POINT $ZRM_MOUNT_DETAILS $GZIP $CAT $CP $BACKUPSQLFILE $abort_flag $def_perm $default_backupset %inputs %indexdata $confFileHandle $zrm_version $backupset_dir $backupset $action $lastBackupDir $log_open $exitRoutine $indexRoutine %opt $zrm_error $verbose $USAGE_COMMON_OPTIONS_STRING $USAGE_STRING &usage &my_exit &abortAndDie &printAndDie &printWarning &printError &lockLog &unlockLog &printLog &printCommandOutputToLog &execCmdAndGetOutput &validateParams &checkForBlank &backSlashesToForwardSlashes &singleQuoteWithDoubleQuote &readOptionsFile &isEmpty &getZrmVersion &getLastBackupDir &removeExtraSlashesFromPath &systemPipe &doCompressAndEncrypt &removeUncompressedBackup &copyOneFileRemote &copyOneFileLocal &copyTo &copyFiles &copyUsingTar &copyUsingTarFromRemote &getUniqueFileName &getRetentionTimeInSecs &parseGeneralOptionFile &parseIndexFile &isNumeric &validateData &removeBlanks &execPlugin &uncompressBackup &processOptionFiles &processLastBackupDir &processCommandLineParams &createConfigFile &openLogFile &processTmpDir &processCopyPlugin &initCommon &convertGlobToPattern &filterPattern &verifySnapshotParams);
+ 
+ our $oldPATH = $ENV{'PATH'};
+ our $PERL_BINARY = "";
+@@ -574,6 +574,21 @@ sub removeExtraSlashesFromPath()
+         return $dir;
+ }
+ 
++# Runs command via system() and returns $PIPESTATUS
++sub systemPipe()
++{
++        my $pipestatus = tmpnam();
++	my $r = system($_[0].";echo \$PIPESTATUS > $pipestatus");
++        unless (open(PIPESTATUS, $pipestatus)) {
++                &printAndDie( "Could not read pipestatus file for pipe exitcode ".$pipestatus."\n" );
++        }
++        my $pipe_exit = <PIPESTATUS>;
++        chomp($pipe_exit);
++        close(PIPESTATUS);
++        unlink($pipestatus);
++        return($r or $pipe_exit);
++}
++
+ #Does the compression and encryption
+ #Returns 1 on success
+ #Return 0 on failure
+@@ -627,7 +642,7 @@ sub doCompressAndEncrypt()
+                 &abortAndDie( );
+         }
+ 
+-	my $r = system( $cmd );
++	my $r = &systemPipe( $cmd );
+         if( $abort_flag ){
+                 &abortAndDie( );
+         }
+@@ -955,7 +970,7 @@ sub copyUsingTar()
+                 &printLog( "Copying all tables of database to target\n" );
+                 &printLog( $command."\n" );
+         }
+-        $r = system( $command );
++        $r = &systemPipe( $command );
+         if( $verbose ){
+                 &printCommandOutputToLog( "LOG", "$srcCmd", $cfile );
+                 &printCommandOutputToLog( "LOG", "$destCmd", $xfile );
+@@ -1187,7 +1202,7 @@ sub uncompressBackup()
+ 		&printLog( "Command used is '$cmd'\n" );
+ 	}
+ 
+-	my $r = system( $cmd );
++	my $r = &systemPipe( $cmd );
+ 	if( $r > 0 ){
+ 		&printError( "$msg backup failed \n" );
+ 		&printCommandOutputToLog( "ERROR", "tar", $LOGGER );
+@@ -1230,7 +1245,7 @@ sub uncompressLogicalBackup()
+ 		&printLog( "Command used is '$cmd'\n" );
+ 	}
+ 
+-	my $r = system( $cmd );
++	my $r = &systemPipe( $cmd );
+ 	if( $r > 0 ){
+ 		&printError( "$msg backup failed \n" );
+ 		&printCommandOutputToLog( "ERROR", "uncompress logical", $LOGGER );
+@@ -1451,7 +1466,6 @@ sub processCopyPlugin()
+ 	}
+ }
+ 
+-
+ sub verifySnapshotParams()
+ {
+ 	if( ! defined $inputs{"snapshot-plugin"} || $inputs{"backup-level"} == 1 ){
+diff -up MySQL-zrm-3.0/usr/share/mysql-zrm/plugins/socket-copy.pl.pipestatus MySQL-zrm-3.0/usr/share/mysql-zrm/plugins/socket-copy.pl
+--- MySQL-zrm-3.0/usr/share/mysql-zrm/plugins/socket-copy.pl.pipestatus	2017-06-15 13:55:59.945528698 -0600
++++ MySQL-zrm-3.0/usr/share/mysql-zrm/plugins/socket-copy.pl	2017-06-15 13:55:59.949528694 -0600
+@@ -187,7 +187,7 @@ sub doLocalTar()
+         my $destCmd = "$tarCmd $destDir -x";
+         $cmd = "$srcCmd|$destCmd";
+ 
+-        my $r = system( $cmd );
++        my $r = &systemPipe( $cmd );
+         if( $lsCmd ne "" ){
+ 		unlink $d;
+         }
+diff -up MySQL-zrm-3.0/usr/share/mysql-zrm/plugins/ssh-copy.pl.pipestatus MySQL-zrm-3.0/usr/share/mysql-zrm/plugins/ssh-copy.pl
+--- MySQL-zrm-3.0/usr/share/mysql-zrm/plugins/ssh-copy.pl.pipestatus	2017-06-15 13:55:59.952528691 -0600
++++ MySQL-zrm-3.0/usr/share/mysql-zrm/plugins/ssh-copy.pl	2017-06-15 13:55:59.955528688 -0600
+@@ -33,6 +33,7 @@ use Getopt::Long;
+ use File::Basename;
+ use File::Temp qw/ :POSIX /;
+ use File::Spec::Functions;
++use ZRM::Common;
+ 
+ # Set remote-mysql-binpath in the mysql-zrm.conf if a different path is needed.
+ my $REMOTE_MYSQL_BINPATH="/usr/bin";
+@@ -273,7 +274,7 @@ sub doCreateLinks()
+ 
+ 	my $f = basename($tmpFile);
+ 	my $d = dirname( $tmpFile);
+-	$r = system( "$TAR --same-owner $compress -cphsC $d $f | $SSH $REMOTE_USER\@$host $TAR --same-owner $compress -xphsC $TMP_DIR" );
++	$r = &systemPipe( "$TAR --same-owner $compress -cphC $d $f | $SSH $REMOTE_USER\@$host $TAR --same-owner $compress -xphsC $TMP_DIR" );
+ 
+ 	unlink( $tmpFile );	
+ 	if( $r > 0 ){
+@@ -310,7 +311,7 @@ sub doTar()
+ 		$cmd = "$srcCmd | $SSH $REMOTE_USER\@$destHost $destCmd";
+ 	}
+ 
+-	my $r = system( $cmd );
++	my $r = &systemPipe( $cmd );
+ 	if( $lsCmd ne "" ){
+ 		if( $srcHost ne "localhost" ){
+ 			$host = $srcHost;
+@@ -336,7 +337,7 @@ sub doMySQLHotCopy()
+ 		die( "mysqlhotcopy on host $host failed" );
+ 	}
+ 	
+-	$r = system( "$SSH $REMOTE_USER\@$host $TAR --same-owner $compress -cphsC $TMP_DIR . | $TAR --same-owner $compress -xphsC $destDir" );
++	$r = &systemPipe( "$SSH $REMOTE_USER\@$host $TAR --same-owner $compress -cphC $TMP_DIR . | $TAR --same-owner $compress -xphsC $destDir" );
+ 	
+ 	&removeTmpDir();
+ 	if( $r > 0 ){
+@@ -440,7 +441,7 @@ sub doSnapshotCommand()
+ 
+ 	my $f = basename($fName);
+ 	my $d = dirname( $fName);
+-	$r = system( "$TAR --same-owner $compress -cphsC $d $f | $SSH $REMOTE_USER\@$host $TAR --same-owner $compress -xphsC $TMP_DIR" );
++	$r = &systemPipe( "$TAR --same-owner $compress -cphC $d $f | $SSH $REMOTE_USER\@$host $TAR --same-owner $compress -xphsC $TMP_DIR" );
+ 
+ 	unlink( $fName );	
+ 	if( $r > 0 ){

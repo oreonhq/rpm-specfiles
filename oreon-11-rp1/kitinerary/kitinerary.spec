@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash 2a072650508a95a99647d0ad7d23e658d092270412573f5f819372149cb49f8c
 
 %global stable_kf6 stable
 
 
 Name:    kitinerary
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: A library containing itinerary data model and itinerary extraction code
 

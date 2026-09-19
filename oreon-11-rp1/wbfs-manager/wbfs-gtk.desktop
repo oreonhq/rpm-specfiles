@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=WBFS Manager
+GenericName=WBFS File Manager
+Comment=manipulate wbfs files and partitions
+Exec=wbfs_gtk
+Icon=
+Terminal=false
+Type=Application
+Categories=System;

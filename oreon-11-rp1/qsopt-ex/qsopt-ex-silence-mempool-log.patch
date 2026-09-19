@@ -1,0 +1,12 @@
+--- qsopt-ex-e5d498fde468e4669a3fbc4736e5d3b878e8c148/qsopt_ex/eg_lpnum.c.orig	2017-07-29 15:08:45.000000000 -0600
++++ qsopt-ex-e5d498fde468e4669a3fbc4736e5d3b878e8c148/qsopt_ex/eg_lpnum.c	2023-10-23 11:33:21.757988352 -0600
+@@ -373,8 +373,8 @@ void EGlpNumClear(void)
+ 		if(__nrlarge)
+ 			QSlog("\tlarge size reallocs (cals/avg): %11zd %11zd",
+ 									__nrlarge,__lraverage/__nalarge);
+-		#endif
+ 		QSlog("Disabling EG-GMP mempool");
++		#endif
+ 	}
+ 	__EGlpNum_setup=0;
+ }

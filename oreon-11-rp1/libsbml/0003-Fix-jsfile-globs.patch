@@ -1,0 +1,39 @@
+From d42081c032eac4199fed6b1f0c14a21ea57bb5a9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Wed, 6 Dec 2023 23:23:51 +0100
+Subject: [PATCH 3/5] Fix jsfile globs
+
+---
+ docs/src/Makefile.in | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/docs/src/Makefile.in b/docs/src/Makefile.in
+index a8cafb6500..298c81f6d6 100644
+--- a/docs/src/Makefile.in
++++ b/docs/src/Makefile.in
+@@ -589,9 +589,7 @@ define doxygen_indexing_pass
+   else \
+     $(DOXYGEN) doxygen-config.txt; \
+   fi
+-  cp -f $(2)/navtreeindex*.js .
+   cp -f $(2)/navtree*.js .
+-  cp -f $(2)/files.js .
+ endef
+ 
+ define doxygen_final_pass
+@@ -606,14 +604,8 @@ define doxygen_final_pass
+   else \
+     $(DOXYGEN) doxygen-config.txt; \
+   fi
+-  cp -f navtreeindex*.js $(2)
+-  cp -f navtree.js $(2)
+   cp -f navtree*.js $(2)
+-  cp -f files.js $(2)
+-  rm navtreeindex*.js
+-  rm navtree.js
+-  rm navtreedata.js
+-  rm files.js
++  rm navtree*.js
+ endef
+ 
+ define preprocess_doxygen

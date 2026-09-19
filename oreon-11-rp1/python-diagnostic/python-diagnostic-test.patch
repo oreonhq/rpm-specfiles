@@ -1,0 +1,14 @@
+--- diagnostic-3.0.0/tests/test_parser.py.orig	2025-12-14 20:22:56.000000000 -0700
++++ diagnostic-3.0.0/tests/test_parser.py	2025-12-19 14:38:22.904524580 -0700
+@@ -230,4 +230,11 @@ def test_directory_traversal(tmp_path: P
+             (tmp_path / "folder" / "two.md", 0),
+             (tmp_path / "folder" / "subfolder" / "three.md", 0),
+         ]
++    } or result == {
++        "seen": [
++            (tmp_path / "four.md", 0),
++            (tmp_path / "folder" / "two.md", 0),
++            (tmp_path / "folder" / "one.md", 0),
++            (tmp_path / "folder" / "subfolder" / "three.md", 0),
++        ]
+     }

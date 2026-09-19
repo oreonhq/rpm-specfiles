@@ -1,0 +1,1185 @@
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.app.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.app.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.app.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.app.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanApp: Libs/libclanApp.so Libs/libclanApp.a
+ 
+ installApp: clanApp
+-	@for i in `find Sources/API/Application -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/Application -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/application.h $(INC_PREFIX)/ClanLib/application.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanApp.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanApp.a $(LIB_PREFIX)
+-	@ln -s -f libclanApp.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanApp.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanApp.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanApp.so
++	@for i in `find Sources/API/Application -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/Application -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/application.h $(DESTDIR)$(INC_PREFIX)/ClanLib/application.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanApp.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanApp.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanApp.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanApp.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanApp.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanApp.so
+ 
+ 
+ OBJF_LIB_App = Libs/Intermediate/clanapp.o
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.conf.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.conf.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.conf.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.conf.in	2008-09-07 13:39:37.000000000 +0200
+@@ -13,7 +13,7 @@ INC_PREFIX    = @includedir@
+ BIN_PREFIX    = @bindir@
+ TARGET_PREFIX = @libdir@/ClanLib
+ MAN_PREFIX    = @mandir@
+-
++DESTDIR       =
+ INCLUDE_DIRS  = -I Sources @x_includes@ @extra_includes@
+ 
+ COMP_OPTIONS  = -Wall $(INCLUDE_DIRS) -fPIC -DNOCONTROLS -D__int64=int64_t @DEFS@ @comp_mode@ @directfb_cflags@
+@@ -34,19 +34,19 @@ Libs/Intermediate/%.o : %.cpp
+ 	@echo "Compiling $<"
+ 	-@if [ ! -d Libs ]; then mkdir Libs; fi
+ 	-@if [ ! -d Libs/Intermediate ]; then mkdir Libs/Intermediate; fi
+-	@$(CXX_COMMAND) $< -o $@
++	$(CXX_COMMAND) $< -o $@
+ 
+ Libs/Intermediate/%.o : %.c
+ 	@echo "Compiling $<"
+ 	-@if [ ! -d Libs ]; then mkdir Libs; fi
+ 	-@if [ ! -d Libs/Intermediate ]; then mkdir Libs/Intermediate; fi
+-	@$(CC_COMMAND) -c $< -o $@
++	$(CC_COMMAND) -c $< -o $@
+ 
+ Libs/Intermediate/%.o : %.s
+ 	@echo "Assembling $<"
+ 	-@if [ ! -d Libs ]; then mkdir Libs; fi
+ 	-@if [ ! -d Libs/Intermediate ]; then mkdir Libs/Intermediate; fi
+-	@$(AS_COMMAND) $< -o $@
++	$(AS_COMMAND) $< -o $@
+ 
+ build_info:
+ 	@echo Compile command .cpp = $(CXX_COMMAND)
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.core.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.core.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.core.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.core.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,21 +5,21 @@
+ clanCore: build_info Libs/libclanCore.so Libs/libclanCore.a
+ 
+ installCore: clanCore
+-	@for i in `find Sources/API/Core -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/Core -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/Sound -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/Sound -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/core.h $(INC_PREFIX)/ClanLib/core.h
+-	@install -m 0644 Sources/API/sound.h $(INC_PREFIX)/ClanLib/sound.h
+-	@install -m 0644 Sources/API/efence.h $(INC_PREFIX)/ClanLib/efence.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanCore.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanCore.a $(LIB_PREFIX)
+-	@ln -s -f libclanCore.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanCore.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanCore.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanCore.so
+-	@install -d $(BIN_PREFIX) $(MAN_PREFIX)/man1/
+-	@install Setup/Unix/clanlib-config $(BIN_PREFIX)
+-	@install Setup/Unix/clanlib-config.1 $(MAN_PREFIX)/man1/
++	@for i in `find Sources/API/Core -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/Core -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/Sound -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/Sound -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/core.h $(DESTDIR)$(INC_PREFIX)/ClanLib/core.h
++	@install -m 0644 Sources/API/sound.h $(DESTDIR)$(INC_PREFIX)/ClanLib/sound.h
++	@install -m 0644 Sources/API/efence.h $(DESTDIR)$(INC_PREFIX)/ClanLib/efence.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanCore.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanCore.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanCore.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanCore.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanCore.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanCore.so
++	@install -d $(DESTDIR)$(BIN_PREFIX) $(DESTDIR)$(MAN_PREFIX)/man1/
++	@install Setup/Unix/clanlib-config $(DESTDIR)$(BIN_PREFIX)
++	@install Setup/Unix/clanlib-config.1 $(DESTDIR)$(MAN_PREFIX)/man1/
+ 
+ OBJF_CORE_GENERIC = \
+ 	Libs/Intermediate/cl_assert.o \
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.display.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.display.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.display.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.display.in	2008-09-07 13:39:37.000000000 +0200
+@@ -4,14 +4,14 @@
+ clanDisplay: Libs/libclanDisplay.so Libs/libclanDisplay.a
+ 
+ installDisplay: clanDisplay
+-	@for i in `find Sources/API/Display -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/Display -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/display.h $(INC_PREFIX)/ClanLib/display.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanDisplay.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanDisplay.a $(LIB_PREFIX)
+-	@ln -s -f libclanDisplay.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanDisplay.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanDisplay.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanDisplay.so
++	@for i in `find Sources/API/Display -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/Display -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/display.h $(DESTDIR)$(INC_PREFIX)/ClanLib/display.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanDisplay.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanDisplay.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanDisplay.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanDisplay.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanDisplay.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanDisplay.so
+ 
+ 
+ OBJF_DISP_GENERIC = \
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.gl.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.gl.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.gl.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.gl.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanGL: Libs/libclanGL.so Libs/libclanGL.a
+ 
+ installGL: clanGL
+-	@for i in `find Sources/API/GL -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/GL -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/gl.h $(INC_PREFIX)/ClanLib/gl.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanGL.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanGL.a $(LIB_PREFIX)
+-	@ln -s -f libclanGL.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanGL.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanGL.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanGL.so
++	@for i in `find Sources/API/GL -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/GL -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/gl.h $(DESTDIR)$(INC_PREFIX)/ClanLib/gl.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanGL.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanGL.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanGL.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanGL.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanGL.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanGL.so
+ 
+ OBJF_LIB_GL = Libs/Intermediate/texture_gl.o \
+ 		Libs/Intermediate/opengl.o \
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.gui.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.gui.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.gui.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.gui.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanGUI: Libs/libclanGUI.so Libs/libclanGUI.a
+ 
+ installGUI: clanGUI
+-	@for i in `find Sources/API/GUI -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/GUI -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/gui.h $(INC_PREFIX)/ClanLib/gui.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanGUI.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanGUI.a $(LIB_PREFIX)
+-	@ln -s -f libclanGUI.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanGUI.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanGUI.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanGUI.so
++	@for i in `find Sources/API/GUI -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/GUI -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/gui.h $(DESTDIR)$(INC_PREFIX)/ClanLib/gui.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanGUI.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanGUI.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanGUI.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanGUI.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanGUI.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanGUI.so
+ 
+ OBJF_LIB_GUI = \
+ 	Libs/Intermediate/button.o \
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.jpeg.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.jpeg.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.jpeg.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.jpeg.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanJPEG: Libs/libclanJPEG.so Libs/libclanJPEG.a
+ 
+ installJPEG: clanJPEG
+-	@for i in `find Sources/API/JPEG -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/JPEG -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/jpeg.h $(INC_PREFIX)/ClanLib/jpeg.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanJPEG.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanJPEG.a $(LIB_PREFIX)
+-	@ln -s -f libclanJPEG.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanJPEG.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanJPEG.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanJPEG.so
++	@for i in `find Sources/API/JPEG -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/JPEG -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/jpeg.h $(DESTDIR)$(INC_PREFIX)/ClanLib/jpeg.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanJPEG.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanJPEG.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanJPEG.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanJPEG.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanJPEG.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanJPEG.so
+ 
+ 
+ OBJF_LIB_JPEG = \
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.lua.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.lua.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.lua.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.lua.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanLua: Libs/libclanLua.so Libs/libclanLua.a
+ 
+ installLua: clanLua
+-	@for i in `find Sources/API/Lua -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/Lua -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/lua.h $(INC_PREFIX)/ClanLib/lua.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanLua.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanLua.a $(LIB_PREFIX)
+-	@ln -s -f libclanLua.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanLua.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanLua.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanLua.so
++	@for i in `find Sources/API/Lua -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/Lua -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/lua.h $(DESTDIR)$(INC_PREFIX)/ClanLib/lua.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanLua.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanLua.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanLua.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanLua.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanLua.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanLua.so
+ 
+ OBJF_LIB_LUA = \
+ 	Libs/Intermediate/clanbindings.o 
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.mikmod.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.mikmod.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.mikmod.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.mikmod.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanMikMod: Libs/libclanMikMod.so Libs/libclanMikMod.a
+ 
+ installMikMod: clanMikMod
+-	@for i in `find Sources/API/MikMod -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/MikMod -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/mikmod.h $(INC_PREFIX)/ClanLib/mikmod.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanMikMod.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanMikMod.a $(LIB_PREFIX)
+-	@ln -s -f libclanMikMod.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanMikMod.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanMikMod.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanMikMod.so
++	@for i in `find Sources/API/MikMod -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/MikMod -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/mikmod.h $(DESTDIR)$(INC_PREFIX)/ClanLib/mikmod.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanMikMod.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanMikMod.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanMikMod.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanMikMod.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanMikMod.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanMikMod.so
+ 
+ OBJF_LIB_MIKMOD = \
+ 	Libs/Intermediate/resourcetype_module.o \
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.mpeg.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.mpeg.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.mpeg.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.mpeg.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanMPEG: Libs/libclanMPEG.so Libs/libclanMPEG.a
+ 
+ installMPEG: clanMPEG
+-	@for i in `find Sources/API/MPEG -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/MPEG -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/mpeg.h $(INC_PREFIX)/ClanLib/mpeg.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanMPEG.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanMPEG.a $(LIB_PREFIX)
+-	@ln -s -f libclanMPEG.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanMPEG.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanMPEG.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanMPEG.so
++	@for i in `find Sources/API/MPEG -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/MPEG -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/mpeg.h $(DESTDIR)$(INC_PREFIX)/ClanLib/mpeg.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanMPEG.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanMPEG.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanMPEG.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanMPEG.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanMPEG.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanMPEG.so
+ 
+ OBJF_LIB_MPEG =	\
+ 	Libs/Intermediate/mpeg_soundprovider.o
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.network.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.network.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.network.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.network.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanNetwork: Libs/libclanNetwork.so Libs/libclanNetwork.a
+ 
+ installNetwork: clanNetwork
+-	@for i in `find Sources/API/Network -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/Network -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/network.h $(INC_PREFIX)/ClanLib/network.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanNetwork.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanNetwork.a $(LIB_PREFIX)
+-	@ln -s -f libclanNetwork.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanNetwork.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanNetwork.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanNetwork.so
++	@for i in `find Sources/API/Network -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/Network -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/network.h $(DESTDIR)$(INC_PREFIX)/ClanLib/network.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanNetwork.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanNetwork.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanNetwork.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanNetwork.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanNetwork.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanNetwork.so
+ 
+ OBJF_LIB_NETWORK = Libs/Intermediate/netcomputer.o \
+ 	Libs/Intermediate/browse_client.o \
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.png.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.png.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.png.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.png.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanPNG: Libs/libclanPNG.so Libs/libclanPNG.a
+ 
+ installPNG: clanPNG
+-	@for i in `find Sources/API/PNG -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/PNG -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/png.h $(INC_PREFIX)/ClanLib/png.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanPNG.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanPNG.a $(LIB_PREFIX)
+-	@ln -s -f libclanPNG.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanPNG.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanPNG.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanPNG.so
++	@for i in `find Sources/API/PNG -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/PNG -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/png.h $(DESTDIR)$(INC_PREFIX)/ClanLib/png.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanPNG.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanPNG.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanPNG.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanPNG.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanPNG.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanPNG.so
+ 
+ 
+ OBJF_LIB_PNG = \
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.signals.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.signals.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.signals.in.foo	2001-03-17 00:56:33.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.signals.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,6 +5,6 @@
+ clanSignals:
+ 
+ installSignals: clanSignals
+-	@for i in `find Sources/API/Signals -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/Signals -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/signals.h $(INC_PREFIX)/ClanLib/signals.h
++	@for i in `find Sources/API/Signals -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/Signals -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/signals.h $(DESTDIR)$(INC_PREFIX)/ClanLib/signals.h
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.smalljpeg.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.smalljpeg.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.smalljpeg.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.smalljpeg.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanSmallJPEG: Libs/libclanSmallJPEG.so Libs/libclanSmallJPEG.a
+ 
+ installSmallJPEG: clanSmallJPEG
+-	@for i in `find Sources/API/SmallJPEG -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/SmallJPEG -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/jpeg.h $(INC_PREFIX)/ClanLib/jpeg.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanSmallJPEG.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanSmallJPEG.a $(LIB_PREFIX)
+-	@ln -s -f libclanSmallJPEG.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanSmallJPEG.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanSmallJPEG.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanSmallJPEG.so
++	@for i in `find Sources/API/SmallJPEG -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/SmallJPEG -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/jpeg.h $(DESTDIR)$(INC_PREFIX)/ClanLib/jpeg.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanSmallJPEG.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanSmallJPEG.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanSmallJPEG.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanSmallJPEG.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanSmallJPEG.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanSmallJPEG.so
+ 
+ 
+ OBJF_LIB_SMALLJPEG = \
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.sound.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.sound.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.sound.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.sound.in	2008-09-07 13:39:37.000000000 +0200
+@@ -4,14 +4,14 @@
+ clanSound: Libs/libclanSound.so Libs/libclanSound.a
+ 
+ installSound: clanSound
+-	@for i in `find Sources/API/Sound -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/Sound -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/sound.h $(INC_PREFIX)/ClanLib/sound.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanSound.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanSound.a $(LIB_PREFIX)
+-	@ln -s -f libclanSound.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanSound.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanSound.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanSound.so
++	@for i in `find Sources/API/Sound -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/Sound -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/sound.h $(DESTDIR)$(INC_PREFIX)/ClanLib/sound.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanSound.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanSound.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanSound.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanSound.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanSound.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanSound.so
+ 
+ OBJF_SOUND_GENERIC = \
+ 	Libs/Intermediate/sound.o \
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.ttf.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.ttf.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.ttf.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.ttf.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanTTF: Libs/libclanTTF.so Libs/libclanTTF.a
+ 
+ installTTF: clanTTF
+-	@for i in `find Sources/API/TTF -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/TTF -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/ttf.h $(INC_PREFIX)/ClanLib/ttf.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanTTF.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanTTF.a $(LIB_PREFIX)
+-	@ln -s -f libclanTTF.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanTTF.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanTTF.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanTTF.so
++	@for i in `find Sources/API/TTF -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/TTF -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/ttf.h $(DESTDIR)$(INC_PREFIX)/ClanLib/ttf.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanTTF.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanTTF.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanTTF.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanTTF.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanTTF.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanTTF.so
+ 
+ 
+ OBJF_LIB_TTF = \
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.vorbis.in.foo ClanLib-0.6.5/Setup/Unix/Makefile.vorbis.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.vorbis.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.vorbis.in	2008-09-07 13:39:37.000000000 +0200
+@@ -5,14 +5,14 @@
+ clanVorbis: Libs/libclanVorbis.so Libs/libclanVorbis.a
+ 
+ installVorbis: clanVorbis
+-	@for i in `find Sources/API/Vorbis -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(INC_PREFIX)/ClanLib/$$i; done
+-	@for i in `find Sources/API/Vorbis -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(INC_PREFIX)/ClanLib/$$i; done
+-	@install -m 0644 Sources/API/vorbis.h $(INC_PREFIX)/ClanLib/vorbis.h
+-	@install -d $(LIB_PREFIX)
+-	@install Libs/libclanVorbis.so.$(D_VERSION_MINOR) $(LIB_PREFIX)
+-	@install Libs/libclanVorbis.a $(LIB_PREFIX)
+-	@ln -s -f libclanVorbis.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanVorbis.so.$(D_VERSION_MAJOR)
+-	@ln -s -f libclanVorbis.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanVorbis.so
++	@for i in `find Sources/API/Vorbis -type d | grep -v CVS | sed "s/Sources\/API\///;"`; do install -d $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@for i in `find Sources/API/Vorbis -type f | grep -v CVS | sed "s/Sources\/API\///;"`; do install -m 0644 Sources/API/$$i $(DESTDIR)$(INC_PREFIX)/ClanLib/$$i; done
++	@install -m 0644 Sources/API/vorbis.h $(DESTDIR)$(INC_PREFIX)/ClanLib/vorbis.h
++	@install -d $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanVorbis.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)
++	@install Libs/libclanVorbis.a $(DESTDIR)$(LIB_PREFIX)
++	@ln -s -f libclanVorbis.so.$(D_VERSION_MINOR) $(DESTDIR)$(LIB_PREFIX)/libclanVorbis.so.$(D_VERSION_MAJOR)
++	@ln -s -f libclanVorbis.so.$(D_VERSION_MAJOR) $(DESTDIR)$(LIB_PREFIX)/libclanVorbis.so
+ 
+ OBJF_LIB_VORBIS = \
+ 	Libs/Intermediate/vorbis_soundprovider_generic.o \
+diff -up ClanLib-0.6.5/Sources/API/Core/IOData/inputsource_file.h.foo ClanLib-0.6.5/Sources/API/Core/IOData/inputsource_file.h
+--- ClanLib-0.6.5/Sources/API/Core/IOData/inputsource_file.h.foo	2001-12-11 21:44:18.000000000 +0100
++++ ClanLib-0.6.5/Sources/API/Core/IOData/inputsource_file.h	2008-09-07 13:39:37.000000000 +0200
+@@ -23,7 +23,11 @@
+ 
+ #include <string>
+ #include <stack>
++#ifndef WIN32
++#include <cstdio>
++#else
+ #include <stdio.h>
++#endif
+ 
+ //: Inputsource reading from file.
+ class CL_InputSource_File : public CL_InputSource
+diff -up ClanLib-0.6.5/Sources/API/Core/IOData/outputsource_file.h.foo ClanLib-0.6.5/Sources/API/Core/IOData/outputsource_file.h
+--- ClanLib-0.6.5/Sources/API/Core/IOData/outputsource_file.h.foo	2001-12-11 21:44:18.000000000 +0100
++++ ClanLib-0.6.5/Sources/API/Core/IOData/outputsource_file.h	2008-09-07 13:39:37.000000000 +0200
+@@ -22,7 +22,11 @@
+ #include "outputsource.h"
+ 
+ #include <string>
++#ifndef WIN32
++#include <cstdio>
++#else
+ #include <stdio.h>
++#endif
+ 
+ //: Outputsource writing to file.
+ class CL_OutputSource_File : public CL_OutputSource
+diff -up ClanLib-0.6.5/Sources/API/Core/Math/math.h.foo ClanLib-0.6.5/Sources/API/Core/Math/math.h
+--- ClanLib-0.6.5/Sources/API/Core/Math/math.h.foo	2001-09-06 20:52:05.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Core/Math/math.h	2008-09-07 13:39:37.000000000 +0200
+@@ -16,7 +16,11 @@
+ #ifndef header_math
+ #define header_math
+ 
++#ifndef WIN32
++#include <cmath>
++#else
+ #include <math.h>
++#endif
+ 
+ #ifndef PI
+ #ifndef M_PI
+diff -up ClanLib-0.6.5/Sources/API/Core/System/cl_assert.h.foo ClanLib-0.6.5/Sources/API/Core/System/cl_assert.h
+--- ClanLib-0.6.5/Sources/API/Core/System/cl_assert.h.foo	2001-09-22 17:52:11.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Core/System/cl_assert.h	2008-09-07 13:39:37.000000000 +0200
+@@ -81,7 +81,7 @@ public:
+ 	static void die(bool a, const char *file, int line, const char *func, const char *assert_str);
+ 
+ 	//: Writes an info statements on the specified channel.
+-	//: <p>Don't callthis one directly, instead use the cl_info macro.
++	//: <p>Don't call this one directly, instead use the cl_info macro.
+ 	//:  For example: cl_info(info_network, "MyClass::my_funx - Hello World.");</p>
+ 	//- channel - Channel to use. (Use the ErrorChannels enum's)
+ 	//- text - text to print.
+diff -up ClanLib-0.6.5/Sources/API/Core/System/clanstring.h.foo ClanLib-0.6.5/Sources/API/Core/System/clanstring.h
+--- ClanLib-0.6.5/Sources/API/Core/System/clanstring.h.foo	2002-02-20 09:06:28.000000000 +0100
++++ ClanLib-0.6.5/Sources/API/Core/System/clanstring.h	2008-09-07 13:39:37.000000000 +0200
+@@ -21,11 +21,19 @@
+ 
+ #include <string>
+ 
++#ifndef WIN32
++#include <cstdio>
++#include <cstdlib>
++#include <cstring>
++#include <cstdio>
++#else
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#include <iostream>
+ #include <stdio.h>
++#endif
++
++#include <iostream>
+ 
+ #ifndef WIN32
+ #include <cctype>
+@@ -53,7 +61,8 @@ extern char *fcvt (double, int, int *, i
+ #include "../Resources/resource_manager.h"
+ #include "error.h"
+ 
+-using namespace std;
++//this should *never* appear in a header
++//using namespace std;
+ 
+ //: Clan String Class
+ class CL_String
+diff -up ClanLib-0.6.5/Sources/API/Display/Display/pixeldata.h.foo ClanLib-0.6.5/Sources/API/Display/Display/pixeldata.h
+--- ClanLib-0.6.5/Sources/API/Display/Display/pixeldata.h.foo	2001-11-01 14:56:50.000000000 +0100
++++ ClanLib-0.6.5/Sources/API/Display/Display/pixeldata.h	2008-09-07 13:39:37.000000000 +0200
+@@ -167,24 +167,24 @@ public:
+ 			case 15:
+ 			case 16:
+ 				{
+-					unsigned short *ptr =
+-						(unsigned short *) m_provider->get_data();
++					unsigned char *ptr =
++						(unsigned char *) m_provider->get_data();
+ 
+ 					for (int x=0; x<width; x++)
+ 					{
+-						dest[x] = (unsigned char) (ptr[x+y*width]&255);
++						dest[x] = ptr[(x+y*width)*2];
+ 					}
+ 				}
+ 				return;
+ 
+ 			case 32:
+ 				{
+-					unsigned int *ptr =
+-						(unsigned int *) m_provider->get_data();
++					unsigned char *ptr =
++						(unsigned char *) m_provider->get_data();
+ 
+ 					for (int x=0; x<width; x++)
+ 					{
+-						dest[x] = (unsigned char) (ptr[x+y*width]&255);
++						dest[x] = ptr[(x+y*width)*4];
+ 					}
+ 				}
+ 				return;
+diff -up ClanLib-0.6.5/Sources/API/GUI/component_options.h.foo ClanLib-0.6.5/Sources/API/GUI/component_options.h
+--- ClanLib-0.6.5/Sources/API/GUI/component_options.h.foo	2002-02-20 08:47:11.000000000 +0100
++++ ClanLib-0.6.5/Sources/API/GUI/component_options.h	2008-09-07 13:39:37.000000000 +0200
+@@ -23,7 +23,12 @@
+ #include "../Core/System/error.h"
+ #include <map>
+ #include <string>
++
++#ifndef WIN32
++#include <cstdio>
++#else
+ #include <stdio.h>
++#endif
+ 
+ #ifdef WIN32
+ #define snprintf _snprintf
+diff -up ClanLib-0.6.5/Sources/API/GUI/gui_manager.h.foo ClanLib-0.6.5/Sources/API/GUI/gui_manager.h
+--- ClanLib-0.6.5/Sources/API/GUI/gui_manager.h.foo	2002-01-30 14:17:16.000000000 +0100
++++ ClanLib-0.6.5/Sources/API/GUI/gui_manager.h	2008-09-07 13:39:37.000000000 +0200
+@@ -19,7 +19,11 @@
+ #ifndef header_gui_manager
+ #define header_gui_manager
+ 
++#ifndef WIN32
++#include <cstddef>
++#else
+ #include <stddef.h>
++#endif
+ 
+ #include "component.h"
+ 
+diff -up ClanLib-0.6.5/Sources/API/MikMod/streamed_mikmod_sample.h.foo ClanLib-0.6.5/Sources/API/MikMod/streamed_mikmod_sample.h
+--- ClanLib-0.6.5/Sources/API/MikMod/streamed_mikmod_sample.h.foo	2001-12-11 21:44:20.000000000 +0100
++++ ClanLib-0.6.5/Sources/API/MikMod/streamed_mikmod_sample.h	2008-09-07 13:39:37.000000000 +0200
+@@ -22,7 +22,12 @@
+ #ifndef header_streamed_mikmod_sample
+ #define header_streamed_mikmod_sample
+ 
++#ifndef WIN32
++#include <cstdlib>
++#else
+ #include <stdlib.h>
++#endif
++
+ #include "../core.h"
+ #include "../Sound/stream_soundprovider.h"
+ #include "../Sound/soundbuffer.h"
+diff -up ClanLib-0.6.5/Sources/API/Signals/slot.h.foo ClanLib-0.6.5/Sources/API/Signals/slot.h
+--- ClanLib-0.6.5/Sources/API/Signals/slot.h.foo	2001-09-22 17:52:17.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Signals/slot.h	2008-09-07 13:39:37.000000000 +0200
+@@ -20,7 +20,11 @@
+ #define header_slot
+ 
+ #include "slot_generic.h"
++#ifndef WIN32
++#include <cstdlib>
++#else
+ #include <stdlib.h>
++#endif
+ 
+ //: Slot class
+ class CL_Slot
+diff -up ClanLib-0.6.5/Sources/API/Sound/SoundProviders/stream_provider_raw.h.foo ClanLib-0.6.5/Sources/API/Sound/SoundProviders/stream_provider_raw.h
+--- ClanLib-0.6.5/Sources/API/Sound/SoundProviders/stream_provider_raw.h.foo	2001-12-11 21:44:21.000000000 +0100
++++ ClanLib-0.6.5/Sources/API/Sound/SoundProviders/stream_provider_raw.h	2008-09-07 13:39:37.000000000 +0200
+@@ -22,7 +22,12 @@
+ #ifndef header_streamed_raw_sample
+ #define header_streamed_raw_sample
+ 
++#ifndef WIN32
++#include <cstdlib>
++#else
+ #include <stdlib.h>
++#endif
++
+ #include "../stream_soundprovider.h"
+ #include "../soundbuffer.h"
+ 
+diff -up ClanLib-0.6.5/Sources/API/Sound/SoundProviders/stream_provider_wave.h.foo ClanLib-0.6.5/Sources/API/Sound/SoundProviders/stream_provider_wave.h
+--- ClanLib-0.6.5/Sources/API/Sound/SoundProviders/stream_provider_wave.h.foo	2001-12-11 21:44:21.000000000 +0100
++++ ClanLib-0.6.5/Sources/API/Sound/SoundProviders/stream_provider_wave.h	2008-09-07 13:39:37.000000000 +0200
+@@ -22,7 +22,12 @@
+ #ifndef header_streamed_wave_sample
+ #define header_streamed_wave_sample
+ 
++#ifndef WIN32
++#include <cstdlib>
++#else
+ #include <stdlib.h>
++#endif
++
+ #include "../../Core/IOData/inputsource.h"
+ #include "../stream_soundprovider.h"
+ #include "../soundbuffer.h"
+diff -up ClanLib-0.6.5/Sources/API/Sound/sound.h.foo ClanLib-0.6.5/Sources/API/Sound/sound.h
+--- ClanLib-0.6.5/Sources/API/Sound/sound.h.foo	2002-06-13 16:43:17.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Sound/sound.h	2008-09-07 13:39:37.000000000 +0200
+@@ -20,7 +20,11 @@
+ #define header_sound
+ 
+ #include <vector>
++#ifndef WIN32
++#include <cstdlib>
++#else
+ #include <stdlib.h>
++#endif
+ #include "soundbuffer.h"
+ #include "../Core/System/cl_assert.h"
+ 
+diff -up ClanLib-0.6.5/Sources/API/Sound/soundbuffer_session.h.foo ClanLib-0.6.5/Sources/API/Sound/soundbuffer_session.h
+--- ClanLib-0.6.5/Sources/API/Sound/soundbuffer_session.h.foo	2001-09-22 17:52:18.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Sound/soundbuffer_session.h	2008-09-07 13:39:37.000000000 +0200
+@@ -19,7 +19,11 @@
+ #ifndef header_soundbuffer_session
+ #define header_soundbuffer_session
+ 
++#ifndef WIN32
++#include <cstdlib>
++#else
+ #include <stdlib.h>
++#endif
+ 
+ class CL_SoundCard;
+ class CL_SoundPlayBackDesc;
+diff -up ClanLib-0.6.5/Sources/API/efence.h.foo ClanLib-0.6.5/Sources/API/efence.h
+--- ClanLib-0.6.5/Sources/API/efence.h.foo	2001-09-06 20:52:04.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/efence.h	2008-09-07 13:39:37.000000000 +0200
+@@ -23,7 +23,7 @@
+ 
+ #ifndef WIN32
+ 
+-#include <stdlib.h>
++#include <cstdlib>
+ 
+ void *operator new(size_t size)
+ {
+diff -up ClanLib-0.6.5/Sources/Core/IOData/Unix/directory_scanner_unix.cpp.foo ClanLib-0.6.5/Sources/Core/IOData/Unix/directory_scanner_unix.cpp
+--- ClanLib-0.6.5/Sources/Core/IOData/Unix/directory_scanner_unix.cpp.foo	2002-01-10 11:23:30.000000000 +0100
++++ ClanLib-0.6.5/Sources/Core/IOData/Unix/directory_scanner_unix.cpp	2008-09-07 13:39:37.000000000 +0200
+@@ -13,6 +13,7 @@
+         ------------------------------------------------------------------------
+ */
+ 
++#include <cassert>
+ #include <API/Core/System/error.h>
+ #include <iostream>
+ #include <libgen.h>
+diff -up ClanLib-0.6.5/Sources/Core/IOData/Unix/directory_scanner_unix.h.foo ClanLib-0.6.5/Sources/Core/IOData/Unix/directory_scanner_unix.h
+--- ClanLib-0.6.5/Sources/Core/IOData/Unix/directory_scanner_unix.h.foo	2002-01-10 00:45:16.000000000 +0100
++++ ClanLib-0.6.5/Sources/Core/IOData/Unix/directory_scanner_unix.h	2008-09-07 13:39:37.000000000 +0200
+@@ -21,7 +21,11 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <dirent.h>
+-#include <stdio.h>
++#ifndef WIN32
++#include <cstdio>
++#else
++#include <cstdio>
++#endif
+ #include <unistd.h>
+ 
+ class CL_DirectoryScanner_Unix : public CL_DirectoryScanner_Generic
+diff -up ClanLib-0.6.5/Sources/Core/System/Unix/appconf.h.foo ClanLib-0.6.5/Sources/Core/System/Unix/appconf.h
+--- ClanLib-0.6.5/Sources/Core/System/Unix/appconf.h.foo	2000-05-03 20:29:00.000000000 +0200
++++ ClanLib-0.6.5/Sources/Core/System/Unix/appconf.h	2008-09-07 13:39:37.000000000 +0200
+@@ -435,6 +435,7 @@ private:
+ 
+ class FileConfig : public BaseConfig
+ {
++protected: class ConfigGroup; /* prototype for later definition */
+ public:
+   /** @name Constructors and destructor */
+   //@{
+@@ -527,7 +528,6 @@ public:
+ 
+ //protected: --- if FileConfig::ConfigEntry is not public, functions in
+ //               ConfigGroup such as Find/AddEntry can't return ConfigEntry*!
+-  class ConfigGroup;
+   class ConfigEntry
+   {
+   private:
+diff -up ClanLib-0.6.5/Sources/Display/Display/DirectFB/display_directfb.cpp.foo ClanLib-0.6.5/Sources/Display/Display/DirectFB/display_directfb.cpp
+--- ClanLib-0.6.5/Sources/Display/Display/DirectFB/display_directfb.cpp.foo	2002-02-26 21:38:11.000000000 +0100
++++ ClanLib-0.6.5/Sources/Display/Display/DirectFB/display_directfb.cpp	2008-09-07 13:39:37.000000000 +0200
+@@ -17,12 +17,12 @@
+ #ifdef USE_DIRECTFB
+ 
+ 
+-#include <stdlib.h>
+-#include <stdio.h>
+-#include <string.h>
+-#include <iostream>
++#include <cstdlib>
++#include <cstdio>
++#include <cstring>
++#include <cmath>
+ 
+-#include <math.h>
++#include <iostream>
+ 
+ #include <API/Display/Display/mousecursor.h>
+ #include <API/Display/Display/cliprect.h>
+@@ -177,7 +177,7 @@ void CL_DirectFB_DisplayCard::set_videom
+ 
+       if (fullscreen)
+ 	{
+-	  cerr << "CL_DirectFB_DisplayCard: Falling back to DFSCL_NORMAL" << endl;
++	  std::cerr << "CL_DirectFB_DisplayCard: Falling back to DFSCL_NORMAL" << std::endl;
+ 	  dfb->SetCooperativeLevel (dfb, DFSCL_NORMAL);
+ 	  ret = dfb->SetVideoMode (dfb, get_width(), get_height(), bpp);
+ 	}
+diff -up ClanLib-0.6.5/Sources/Display/Display/DirectFB/target_directfb.cpp.foo ClanLib-0.6.5/Sources/Display/Display/DirectFB/target_directfb.cpp
+--- ClanLib-0.6.5/Sources/Display/Display/DirectFB/target_directfb.cpp.foo	2002-02-26 21:38:11.000000000 +0100
++++ ClanLib-0.6.5/Sources/Display/Display/DirectFB/target_directfb.cpp	2008-09-07 13:39:37.000000000 +0200
+@@ -104,7 +104,7 @@ unsigned int CL_Target_DirectFB::get_num
+ 
+ unsigned int CL_Target_DirectFB::get_width() const
+ {
+-  unsigned int width = 0;
++  int width = 0;
+ 
+   surface->GetSize (surface, &width, NULL);
+ 
+@@ -113,7 +113,7 @@ unsigned int CL_Target_DirectFB::get_wid
+ 
+ unsigned int CL_Target_DirectFB::get_height() const
+ {
+-  unsigned int height = 0;
++  int height = 0;
+ 
+   surface->GetSize (surface, NULL, &height);
+ 
+@@ -147,7 +147,7 @@ unsigned int CL_Target_DirectFB::get_red
+     {
+     case DSPF_A8:
+       return 0;
+-    case DSPF_RGB15:
++    case DSPF_ARGB1555:
+       return 0x007c00;
+     case DSPF_RGB16:
+       return 0x00f800;
+@@ -170,7 +170,7 @@ unsigned int CL_Target_DirectFB::get_gre
+     {
+     case DSPF_A8:
+       return 0;
+-    case DSPF_RGB15:
++    case DSPF_ARGB1555:
+       return 0x0003e0;
+     case DSPF_RGB16:
+       return 0x0007e0;
+@@ -193,7 +193,7 @@ unsigned int CL_Target_DirectFB::get_blu
+     {
+     case DSPF_A8:
+       return 0;
+-    case DSPF_RGB15:
++    case DSPF_ARGB1555:
+     case DSPF_RGB16:
+       return 0x00001f;
+     case DSPF_RGB24:
+@@ -215,7 +215,7 @@ unsigned int CL_Target_DirectFB::get_alp
+     {
+     case DSPF_A8:
+       return 0xff;
+-    case DSPF_RGB15:
++    case DSPF_ARGB1555:
+     case DSPF_RGB16:
+     case DSPF_RGB24:
+     case DSPF_RGB32:
+@@ -263,7 +263,7 @@ void CL_Target_DirectFB::Flip (DFBRegion
+ 
+ void CL_Target_DirectFB::Clear (float r, float g, float b, float a)
+ {
+-  unsigned int width, height;
++  int width, height;
+ 
+   surface->GetSize (surface, &width, &height);
+ 
+diff -up ClanLib-0.6.5/Sources/Display/Display/Generic/blit_alphamask_rle.h.foo ClanLib-0.6.5/Sources/Display/Display/Generic/blit_alphamask_rle.h
+--- ClanLib-0.6.5/Sources/Display/Display/Generic/blit_alphamask_rle.h.foo	2001-09-02 19:33:37.000000000 +0200
++++ ClanLib-0.6.5/Sources/Display/Display/Generic/blit_alphamask_rle.h	2008-09-07 13:39:37.000000000 +0200
+@@ -107,14 +107,14 @@ public:
+ 		{
+ 			T a = alpha_data[x];
+ 			T destval = dst_data[x];
+-			T r = lookup_r[(((destval&rmask)>>rstart)<<8)+a];	//(((destval&rmask)>>rstart)*a)>>8;
+-			T g = lookup_g[(((destval&gmask)>>gstart)<<8)+a];	//(((destval&gmask)>>gstart)*a)>>8;
+-			T b = lookup_b[(((destval&bmask)>>bstart)<<8)+a];	//(((destval&bmask)>>bstart)*a)>>8;
++			T r = this->lookup_r[(((destval&this->rmask)>>this->rstart)<<8)+a];	//(((destval&rmask)>>rstart)*a)>>8;
++			T g = this->lookup_g[(((destval&this->gmask)>>this->gstart)<<8)+a];	//(((destval&gmask)>>gstart)*a)>>8;
++			T b = this->lookup_b[(((destval&this->bmask)>>this->bstart)<<8)+a];	//(((destval&bmask)>>bstart)*a)>>8;
+ 
+ 			T amix = 
+-				(r<<rstart) +
+-				(g<<gstart) + 
+-				(b<<bstart);
++				(r<<this->rstart) +
++				(g<<this->gstart) + 
++				(b<<this->bstart);
+ 
+ 			dst_data[x] = amix + *(src_data++);
+ 		}
+@@ -151,13 +151,13 @@ public:
+ 		{
+ 			T a = alpha_data[x];
+ 			T destval = dst_buf[x];
+-			T r = lookup_r[(((destval&rmask)>>rstart)<<8)+a];
+-			T g = lookup_g[(((destval&gmask)>>gstart)<<8)+a];
+-			T b = lookup_b[(((destval&bmask)>>bstart)<<8)+a];
++			T r = this->lookup_r[(((destval&this->rmask)>>this->rstart)<<8)+a];
++			T g = this->lookup_g[(((destval&this->gmask)>>this->gstart)<<8)+a];
++			T b = this->lookup_b[(((destval&this->bmask)>>this->bstart)<<8)+a];
+ 			T amix = 
+-				(r<<rstart) +
+-				(g<<gstart) + 
+-				(b<<bstart);
++				(r<<this->rstart) +
++				(g<<this->gstart) + 
++				(b<<this->bstart);
+ 			dst_buf[x] = amix + *(src_data++);
+ 		}
+ 		memcpy(dst_data, dst_buf, sizeof(T)*rep);
+diff -up ClanLib-0.6.5/Sources/Display/Display/Generic/blit_transparent.cpp.foo ClanLib-0.6.5/Sources/Display/Display/Generic/blit_transparent.cpp
+--- ClanLib-0.6.5/Sources/Display/Display/Generic/blit_transparent.cpp.foo	2001-09-02 04:24:43.000000000 +0200
++++ ClanLib-0.6.5/Sources/Display/Display/Generic/blit_transparent.cpp	2008-09-07 13:39:37.000000000 +0200
+@@ -278,7 +278,7 @@ void SubBlitter_Transparent<T>::blt_nocl
+ 	unsigned int dest_pitch = target->get_pitch();
+ 
+ 	unsigned char *dest = (unsigned char *) target->get_data();
+-	dest += x*sizeof(T) + (y-1)*dest_pitch;
++	dest += x*sizeof(T) + y*dest_pitch - dest_pitch;
+ 
+ //	T *dd;
+ 	
+diff -up ClanLib-0.6.5/Sources/Display/Display/Generic/blitters.h.foo ClanLib-0.6.5/Sources/Display/Display/Generic/blitters.h
+--- ClanLib-0.6.5/Sources/Display/Display/Generic/blitters.h.foo	2001-04-12 21:58:17.000000000 +0200
++++ ClanLib-0.6.5/Sources/Display/Display/Generic/blitters.h	2008-09-07 13:39:37.000000000 +0200
+@@ -20,7 +20,11 @@
+ #define header_blitters
+ 
+ class CL_Target;
++#ifndef WIN32
++#include <cstdlib>
++#else
+ #include <stdlib.h>
++#endif
+ #include "API/Display/Display/cliprect.h"
+ /*
+ #include "API/Display/Display/surfaceprovider.h"
+diff -up ClanLib-0.6.5/Sources/Display/Display/Generic/target_generic.cpp.foo ClanLib-0.6.5/Sources/Display/Display/Generic/target_generic.cpp
+--- ClanLib-0.6.5/Sources/Display/Display/Generic/target_generic.cpp.foo	2002-02-18 23:47:37.000000000 +0100
++++ ClanLib-0.6.5/Sources/Display/Display/Generic/target_generic.cpp	2008-09-07 13:39:37.000000000 +0200
+@@ -713,13 +713,13 @@ void cl_fill_rect_opaque(
+ 				}
+ 			}
+ 		}
+-	
++		break;	
+ 	case 2:
+ 		{
+ 			register unsigned short _color = (unsigned short) color;
+ 			int skip = dest_pitch - delta_x * 2;
+ 			// the blitter probes if it can perform a memset (when hi and lo byte of _color are equal)
+-			if ((_color & 0x00FF) != (_color & 0xFF00))
++			if ((_color & 0x00FF) != ((_color & 0xFF00) >> 8))
+ 			{
+ 				for (unsigned int y = 0; y < delta_y; y++)
+ 				{
+@@ -758,8 +758,8 @@ void cl_fill_rect_opaque(
+ 				for (unsigned int x = 0; x < delta_x; x++)
+ 				{
+ 					*(dest++) = color & 0x0000FF;
+-					*(dest++) = color & 0x00FF00;
+-					*(dest++) = color & 0xFF0000;
++					*(dest++) = (color & 0x00FF00) >> 8;
++					*(dest++) = (color & 0xFF0000) >> 16;
+ 				}
+ 				dest += skip;
+ 			}
+diff -up ClanLib-0.6.5/Sources/Display/Display/X11/target_ximage_std.cpp.foo ClanLib-0.6.5/Sources/Display/Display/X11/target_ximage_std.cpp
+--- ClanLib-0.6.5/Sources/Display/Display/X11/target_ximage_std.cpp.foo	2001-03-06 16:09:19.000000000 +0100
++++ ClanLib-0.6.5/Sources/Display/Display/X11/target_ximage_std.cpp	2008-09-07 13:39:37.000000000 +0200
+@@ -153,15 +153,12 @@ unsigned int CL_Target_XImage_Std::get_h
+ 
+ unsigned int CL_Target_XImage_Std::get_pitch() const
+ {
+-	int bytes_per_pixel = (get_depth()+7)/8;
+-
+-	return m_width*bytes_per_pixel;
++	return m_pitch;
+ }
+ 	
+ unsigned int CL_Target_XImage_Std::get_depth() const
+ {
+-	int hack = (m_visual_info.bits_per_rgb+7)/8;
+-	return hack*8;
++	return m_depth;
+ }
+ 
+ unsigned int CL_Target_XImage_Std::get_red_mask() const
+diff -up ClanLib-0.6.5/Sources/Display/Display/X11/x11_resolution.cpp.foo ClanLib-0.6.5/Sources/Display/Display/X11/x11_resolution.cpp
+--- ClanLib-0.6.5/Sources/Display/Display/X11/x11_resolution.cpp.foo	2002-04-04 03:16:11.000000000 +0200
++++ ClanLib-0.6.5/Sources/Display/Display/X11/x11_resolution.cpp	2008-09-07 13:39:37.000000000 +0200
+@@ -51,12 +51,32 @@ void CL_X11Resolution::set_mode(int widt
+ 
+ 	if (!mode_set) // save original mode
+ 	{
++	        XF86VidModeModeLine l;
+ 		memset(&orig_mode, 0, sizeof(orig_mode));
+ 		memset(&orig_view, 0, sizeof(orig_view));
++		memset(&l, 0, sizeof(l));
+ 
+ 		// Get mode info. (missing XF86VidModeGetModeInfo)
+-		XF86VidModeModeLine *l = (XF86VidModeModeLine*)((char*) &orig_mode + sizeof orig_mode.dotclock);
+-		cl_assert(XF86VidModeGetModeLine(dpy, scr, (int*) &orig_mode.dotclock, l) == True);
++		//  XF86VidModeModeLine *l = (XF86VidModeModeLine*)((char*) &orig_mode + sizeof orig_mode.dotclock);
++		//  there is a problem with alignment on 64bit platforms
++		
++		
++		cl_assert(XF86VidModeGetModeLine(dpy, scr, (int*) &orig_mode.dotclock, &l) == True);
++
++		
++		// this should be ok on all platforms
++		orig_mode.hdisplay = l.hdisplay;
++		orig_mode.hsyncstart = l.hsyncstart;
++		orig_mode.hsyncend = l.hsyncend;
++		orig_mode.htotal = l.htotal;
++		orig_mode.hskew = l.hskew;
++		orig_mode.vdisplay = l.vdisplay;
++		orig_mode.vsyncstart = l.vsyncstart;
++		orig_mode.vsyncend = l.vsyncend;
++		orig_mode.vtotal = l.vtotal;
++		orig_mode.flags = l.flags;
++		orig_mode.privsize = l.privsize;
++		orig_mode.c_private = l.c_private;
+ 
+ 		// Get the viewport position.
+ 		cl_assert(XF86VidModeGetViewPort(dpy, scr, &orig_view.x, &orig_view.y) == True);
+diff -up ClanLib-0.6.5/Sources/GL/GLX/displaycard_glx.cpp.foo ClanLib-0.6.5/Sources/GL/GLX/displaycard_glx.cpp
+--- ClanLib-0.6.5/Sources/GL/GLX/displaycard_glx.cpp.foo	2002-02-16 17:10:41.000000000 +0100
++++ ClanLib-0.6.5/Sources/GL/GLX/displaycard_glx.cpp	2008-09-07 13:39:37.000000000 +0200
+@@ -363,7 +363,8 @@ void CL_GLX_DisplayCard::keep_alive()
+ 
+ void (*CL_GLX_DisplayCard::get_proc_address(const std::string& function_name))()
+ {
+-	return glXGetProcAddressARB((GLubyte*)function_name.c_str());
++	return glXGetProcAddress(reinterpret_cast<GLubyte*>(
++			const_cast<char *>(function_name.c_str())));
+ }
+ 
+ 
+diff -up ClanLib-0.6.5/Sources/GUI/component_manager_generic.h.foo ClanLib-0.6.5/Sources/GUI/component_manager_generic.h
+--- ClanLib-0.6.5/Sources/GUI/component_manager_generic.h.foo	2002-01-08 11:17:25.000000000 +0100
++++ ClanLib-0.6.5/Sources/GUI/component_manager_generic.h	2008-09-07 13:39:37.000000000 +0200
+@@ -14,7 +14,11 @@
+ #include <string>
+ #include <stack>
+ #include <vector>
++#ifndef WIN32
++#include <cstdio>
++#else
+ #include <stdio.h>
++#endif
+ 
+ #include "API/GUI/component_manager.h"
+ #include "API/GUI/stylemanager.h"
+diff -up ClanLib-0.6.5/Sources/JPEG/provider_jpeg_generic.h.foo ClanLib-0.6.5/Sources/JPEG/provider_jpeg_generic.h
+--- ClanLib-0.6.5/Sources/JPEG/provider_jpeg_generic.h.foo	2001-09-08 21:12:52.000000000 +0200
++++ ClanLib-0.6.5/Sources/JPEG/provider_jpeg_generic.h	2008-09-07 13:39:37.000000000 +0200
+@@ -23,7 +23,12 @@
+ #define XMD_H
+ #endif
+ 
++#ifndef WIN32
++#include <cstdio>
++#else
+ #include <stdio.h>
++#endif
++
+ extern "C"
+ {
+ 	#include <jpeglib.h>
+diff -up ClanLib-0.6.5/Sources/Network/Generic/network_delivery_socket.h.foo ClanLib-0.6.5/Sources/Network/Generic/network_delivery_socket.h
+--- ClanLib-0.6.5/Sources/Network/Generic/network_delivery_socket.h.foo	2001-11-01 21:27:57.000000000 +0100
++++ ClanLib-0.6.5/Sources/Network/Generic/network_delivery_socket.h	2008-09-07 13:39:37.000000000 +0200
+@@ -20,18 +20,19 @@
+ 
+ #ifdef WIN32
+ 	#include <windows.h>
++	#include <string.h>
+ #else
++	#include <cstring>
++	#include <cerrno>
+ 	#include <sys/time.h>
+ 	#include <sys/types.h>
+ 	#include <sys/socket.h>
+ 	#include <arpa/inet.h>
+ 	#include <netinet/in.h>
+ 	#include <unistd.h>
+-	#include <errno.h>
+ 	#include <fcntl.h>
+ #endif
+ 
+-#include <string.h>
+ #include <list>
+ #include <queue>
+ 
+diff -up ClanLib-0.6.5/Sources/Network/Unix/unix_pipe_connection.h.foo ClanLib-0.6.5/Sources/Network/Unix/unix_pipe_connection.h
+--- ClanLib-0.6.5/Sources/Network/Unix/unix_pipe_connection.h.foo	2001-09-08 21:24:20.000000000 +0200
++++ ClanLib-0.6.5/Sources/Network/Unix/unix_pipe_connection.h	2008-09-07 13:39:37.000000000 +0200
+@@ -20,14 +20,20 @@
+ #ifndef header_network_delivery_pipe
+ #define header_network_delivery_pipe
+ 
++#ifndef WIN32
++#include <cerrno>
++#include <cstring>
++#else
++#include <errno.h>
++#include <string.h>
++#endif
++
+ #include <sys/time.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <arpa/inet.h>
+ #include <netinet/in.h>
+ #include <unistd.h>
+-#include <errno.h>
+-#include <string.h>
+ #include <list>
+ 
+ #include "Network/Generic/network_delivery_impl.h"
+diff -up ClanLib-0.6.5/Sources/SmallJPEG/jpgd/main.h.foo ClanLib-0.6.5/Sources/SmallJPEG/jpgd/main.h
+--- ClanLib-0.6.5/Sources/SmallJPEG/jpgd/main.h.foo	2001-04-20 14:54:18.000000000 +0200
++++ ClanLib-0.6.5/Sources/SmallJPEG/jpgd/main.h	2008-09-07 13:39:37.000000000 +0200
+@@ -22,6 +22,15 @@
+ #ifndef MAIN_H
+ #define MAIN_H
+ 
++#ifndef WIN32
++#include <cstdlib>
++#include <cstdio>
++#include <cmath>
++#include <cstring>
++#include <cctype>
++#include <csetjmp>
++#include <cassert>
++#else
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <math.h>
+@@ -29,6 +38,7 @@
+ #include <ctype.h>
+ #include <setjmp.h>
+ #include <assert.h>
++#endif
+ 
+ typedef   signed char  schar;       /*  8 bits     */
+ typedef unsigned char  uchar;       /*  8 bits     */
+diff -up ClanLib-0.6.5/Sources/Sound/SoundProviders/static_provider_wave.cpp.foo ClanLib-0.6.5/Sources/Sound/SoundProviders/static_provider_wave.cpp
+--- ClanLib-0.6.5/Sources/Sound/SoundProviders/static_provider_wave.cpp.foo	2002-08-14 15:58:29.000000000 +0200
++++ ClanLib-0.6.5/Sources/Sound/SoundProviders/static_provider_wave.cpp	2008-09-07 13:39:37.000000000 +0200
+@@ -27,6 +27,7 @@
+ #include "API/Core/System/error.h"
+ #include "API/Sound/SoundProviders/static_provider_raw.h"
+ #include "API/Sound/SoundProviders/static_provider_wave.h"
++#include "API/Core/IOData/cl_endian.h"
+ 
+ CL_SoundBuffer *CL_Sample::create(const std::string &sample_id, CL_InputSourceProvider *provider)
+ {
+diff -up ClanLib-0.6.5/Sources/Sound/SoundProviders/stream_provider_wave.cpp.foo ClanLib-0.6.5/Sources/Sound/SoundProviders/stream_provider_wave.cpp
+--- ClanLib-0.6.5/Sources/Sound/SoundProviders/stream_provider_wave.cpp.foo	2002-08-14 16:00:13.000000000 +0200
++++ ClanLib-0.6.5/Sources/Sound/SoundProviders/stream_provider_wave.cpp	2008-09-07 13:39:37.000000000 +0200
+@@ -22,6 +22,7 @@
+ 
+ #include "API/Core/System/cl_assert.h"
+ #include "API/Core/System/error.h"
++#include "API/Core/IOData/cl_endian.h"
+ #include "API/Core/IOData/inputsource.h"
+ #include "API/Core/IOData/inputsource_provider.h"
+ #include "API/Sound/SoundProviders/stream_provider_wave.h"
+@@ -118,10 +119,13 @@ CL_Streamed_WaveSample_Session::CL_Strea
+ //	cl_assert(!(memcmp(temp, "data", 4)));
+ 
+ 	sample_size = input->read_uint32();
++	SWAP_IF_BIG(format.nSamplesPerSec);
+ 	sample_freq = format.nSamplesPerSec;
+ 
++	SWAP_IF_BIG(format.nAvgBytesPerSec);
+ 	int bytes_per_sample = format.nAvgBytesPerSec / format.nSamplesPerSec;
+ 
++	SWAP_IF_BIG(format.nChannels);
+ 	if (format.nChannels == 2 && bytes_per_sample == 4) sample_format = sf_16bit_signed_stereo;
+ 	else if (format.nChannels == 2 && bytes_per_sample == 2) sample_format = sf_8bit_signed_stereo;
+ 	else if (format.nChannels == 1 && bytes_per_sample == 2) sample_format = sf_16bit_signed;
+diff -up ClanLib-0.6.5/configure.in.foo ClanLib-0.6.5/configure.in
+--- ClanLib-0.6.5/configure.in.foo	2008-09-07 13:39:25.000000000 +0200
++++ ClanLib-0.6.5/configure.in	2008-09-07 13:39:37.000000000 +0200
+@@ -217,7 +217,7 @@ dnl CHECK_LIB(ggi,Setup/Tests/ggi.cpp, G
+ 
+ CHECK_LIB(GL,Setup/Tests/opengl.cpp, OPENGL=enabled, OPENGL=disabled, [$x_libraries -lGL -lGLU -lpthread])
+ CHECK_LIB(mikmod,Setup/Tests/mikmod.cpp, mikmod=enabled, mikmod=disabled, [$x_libraries -lmikmod])
+-CHECK_LIB(png,Setup/Tests/png.cpp, png=enabled, png=disabled, [$x_libraries -lpng])
++CHECK_LIB(png,Setup/Tests/png.cpp, png=enabled, png=disabled, [$x_libraries -lpng -lz])
+ CHECK_LIB(jpeg,Setup/Tests/jpeg.cpp, jpeg=enabled, jpeg=disabled, [$x_libraries -ljpeg])
+ for lib in lua40 lua; do
+ 	dnl setting back OLDLIBS is needed because of the break

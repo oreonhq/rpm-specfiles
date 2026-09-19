@@ -1,0 +1,372 @@
+From f11fc555ff5f0ce728e6beb1239cc3967af3124c Mon Sep 17 00:00:00 2001
+From: Petr Machata <me@pmachata.org>
+Date: Mon, 13 May 2024 12:29:23 +0200
+Subject: [PATCH 08/10] libzwerg: Drop std-memory.hh, std-utility.hh
+
+These two header files were used to cover the feature gap between C++11 and
+then-too-fresh C++14. Now that C++ has been switched to >=14 in a recent
+commit, drop the files and their inclusions. The features are now available
+through the system headers.
+
+Signed-off-by: Petr Machata <me@pmachata.org>
+---
+ dwgrep/dwgrep.cc            |   1 -
+ libzwerg/builtin-closure.cc |   1 -
+ libzwerg/dwfl_context.cc    |   1 -
+ libzwerg/libzwergP.hh       |   1 -
+ libzwerg/overload.hh        |   2 -
+ libzwerg/std-memory.hh      |  67 -----------------------
+ libzwerg/std-utility.hh     | 102 ------------------------------------
+ libzwerg/test-op.cc         |   1 -
+ libzwerg/test-zw-aux.cc     |   1 -
+ libzwerg/tree.cc            |   1 -
+ libzwerg/tree_cr.hh         |   1 -
+ libzwerg/value-aset.cc      |   1 -
+ libzwerg/value-closure.cc   |   1 -
+ libzwerg/value-dw.hh        |   1 -
+ libzwerg/value-symbol.cc    |   1 -
+ 15 files changed, 183 deletions(-)
+ delete mode 100644 libzwerg/std-memory.hh
+ delete mode 100644 libzwerg/std-utility.hh
+
+diff --git a/dwgrep/dwgrep.cc b/dwgrep/dwgrep.cc
+index 39bb023..15eac00 100644
+--- a/dwgrep/dwgrep.cc
++++ b/dwgrep/dwgrep.cc
+@@ -45,7 +45,6 @@
+ #include "libzwerg.hh"
+ #include "libzwerg-dw.h"
+ #include "options.hh"
+-#include "libzwerg/std-memory.hh"
+ #include "libzwerg/strip.hh"
+ #include "version.h"
+ #include "libzwerg/flag_saver.hh"
+diff --git a/libzwerg/builtin-closure.cc b/libzwerg/builtin-closure.cc
+index 82cdf34..4156ddc 100644
+--- a/libzwerg/builtin-closure.cc
++++ b/libzwerg/builtin-closure.cc
+@@ -28,7 +28,6 @@
+    not, see <http://www.gnu.org/licenses/>.  */
+ 
+ #include <iostream>
+-#include "std-memory.hh"
+ 
+ #include "builtin-closure.hh"
+ #include "value-closure.hh"
+diff --git a/libzwerg/dwfl_context.cc b/libzwerg/dwfl_context.cc
+index 2c6766a..b8a06d9 100644
+--- a/libzwerg/dwfl_context.cc
++++ b/libzwerg/dwfl_context.cc
+@@ -26,7 +26,6 @@
+    the GNU Lesser General Public License along with this program.  If
+    not, see <http://www.gnu.org/licenses/>.  */
+ 
+-#include "std-memory.hh"
+ #include "dwfl_context.hh"
+ #include "cache.hh"
+ #include "dwit.hh"
+diff --git a/libzwerg/libzwergP.hh b/libzwerg/libzwergP.hh
+index 44b2ac4..dcee518 100644
+--- a/libzwerg/libzwergP.hh
++++ b/libzwerg/libzwergP.hh
+@@ -30,7 +30,6 @@
+ #include "libzwerg-dw.h"
+ 
+ #include <string>
+-#include "std-memory.hh"
+ #include <iostream>
+ 
+ #include "scon.hh"
+diff --git a/libzwerg/overload.hh b/libzwerg/overload.hh
+index 487ef05..c124647 100644
+--- a/libzwerg/overload.hh
++++ b/libzwerg/overload.hh
+@@ -32,8 +32,6 @@
+ 
+ #include <vector>
+ #include <tuple>
+-#include "std-memory.hh"
+-#include "std-utility.hh"
+ #include <iostream>
+ 
+ #include "op.hh"
+diff --git a/libzwerg/std-memory.hh b/libzwerg/std-memory.hh
+deleted file mode 100644
+index f5d4fa7..0000000
+--- a/libzwerg/std-memory.hh
++++ /dev/null
+@@ -1,67 +0,0 @@
+-// <memory> plus unique_ptr -*- C++ -*-
+-
+-// Copyright (C) 2008-2013 Free Software Foundation, Inc.
+-//
+-// This file is part of the GNU ISO C++ Library.  This library is free
+-// software; you can redistribute it and/or modify it under the
+-// terms of the GNU General Public License as published by the
+-// Free Software Foundation; either version 3, or (at your option)
+-// any later version.
+-
+-// This library is distributed in the hope that it will be useful,
+-// but WITHOUT ANY WARRANTY; without even the implied warranty of
+-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-// GNU General Public License for more details.
+-
+-// Under Section 7 of GPL version 3, you are granted additional
+-// permissions described in the GCC Runtime Library Exception, version
+-// 3.1, as published by the Free Software Foundation.
+-
+-// You should have received a copy of the GNU General Public License and
+-// a copy of the GCC Runtime Library Exception along with this program;
+-// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+-// <http://www.gnu.org/licenses/>.
+-
+-// N.B.: This was taken from here:
+-//  http://gcc.gnu.org/ml/libstdc++/2013-05/msg00048.html
+-
+-#include <memory>
+-
+-#ifndef STD_MEMORY_HH
+-#define STD_MEMORY_HH
+-
+-#if __cplusplus <= 201103L
+-namespace std
+-{
+-  template<typename _Tp>
+-    struct _MakeUniq
+-    { typedef unique_ptr<_Tp> __single_object; };
+-
+-  template<typename _Tp>
+-    struct _MakeUniq<_Tp[]>
+-    { typedef unique_ptr<_Tp[]> __array; };
+-
+-  template<typename _Tp, size_t _Bound>
+-    struct _MakeUniq<_Tp[_Bound]>
+-    { struct __invalid_type { }; };
+-
+-  /// std::make_unique for single objects
+-  template<typename _Tp, typename... _Args>
+-    typename _MakeUniq<_Tp>::__single_object
+-    make_unique(_Args&&... __args)
+-    { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+-
+-  /// std::make_unique for arrays of unknown bound
+-  template<typename _Tp>
+-    typename _MakeUniq<_Tp>::__array
+-    make_unique(size_t __num)
+-    { return unique_ptr<_Tp>(new typename remove_extent<_Tp>::type[__num]()); }
+-
+-  /// Disable std::make_unique for arrays of known bound
+-  template<typename _Tp, typename... _Args>
+-    typename _MakeUniq<_Tp>::__invalid_type
+-    make_unique(_Args&&...) = delete;
+-}
+-#endif
+-
+-#endif//STD_MEMORY_HH
+diff --git a/libzwerg/std-utility.hh b/libzwerg/std-utility.hh
+deleted file mode 100644
+index 3d660b5..0000000
+--- a/libzwerg/std-utility.hh
++++ /dev/null
+@@ -1,102 +0,0 @@
+-// <utility> -*- C++ -*-
+-
+-// Copyright (C) 2001-2014 Free Software Foundation, Inc.
+-//
+-// This file is part of the GNU ISO C++ Library.  This library is free
+-// software; you can redistribute it and/or modify it under the
+-// terms of the GNU General Public License as published by the
+-// Free Software Foundation; either version 3, or (at your option)
+-// any later version.
+-
+-// This library is distributed in the hope that it will be useful,
+-// but WITHOUT ANY WARRANTY; without even the implied warranty of
+-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-// GNU General Public License for more details.
+-
+-// Under Section 7 of GPL version 3, you are granted additional
+-// permissions described in the GCC Runtime Library Exception, version
+-// 3.1, as published by the Free Software Foundation.
+-
+-// You should have received a copy of the GNU General Public License and
+-// a copy of the GCC Runtime Library Exception along with this program;
+-// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+-// <http://www.gnu.org/licenses/>.
+-
+-/*
+- *
+- * Copyright (c) 1994
+- * Hewlett-Packard Company
+- *
+- * Permission to use, copy, modify, distribute and sell this software
+- * and its documentation for any purpose is hereby granted without fee,
+- * provided that the above copyright notice appear in all copies and
+- * that both that copyright notice and this permission notice appear
+- * in supporting documentation.  Hewlett-Packard Company makes no
+- * representations about the suitability of this software for any
+- * purpose.  It is provided "as is" without express or implied warranty.
+- *
+- *
+- * Copyright (c) 1996,1997
+- * Silicon Graphics Computer Systems, Inc.
+- *
+- * Permission to use, copy, modify, distribute and sell this software
+- * and its documentation for any purpose is hereby granted without fee,
+- * provided that the above copyright notice appear in all copies and
+- * that both that copyright notice and this permission notice appear
+- * in supporting documentation.  Silicon Graphics makes no
+- * representations about the suitability of this software for any
+- * purpose.  It is provided "as is" without express or implied warranty.
+- */
+-
+-// N.B.: This was taken from GCC 4.9.
+-
+-#include <utility>
+-
+-#ifndef STD_UTILITY_HH
+-#define STD_UTILITY_HH
+-
+-#if __cplusplus <= 201103L
+-namespace std
+-{
+-  /// Class template integer_sequence
+-  template<typename _Tp, _Tp... _Idx>
+-    struct integer_sequence
+-    {
+-      typedef _Tp value_type;
+-      static constexpr size_t size() { return sizeof...(_Idx); }
+-    };
+-
+-  template<typename _Tp, _Tp _Num,
+-	   typename _ISeq = typename _Build_index_tuple<_Num>::__type>
+-    struct _Make_integer_sequence;
+-
+-  template<typename _Tp, _Tp _Num,  size_t... _Idx>
+-    struct _Make_integer_sequence<_Tp, _Num, _Index_tuple<_Idx...>>
+-    {
+-      static_assert( _Num >= 0,
+-		     "Cannot make integer sequence of negative length" );
+-
+-      typedef integer_sequence<_Tp, static_cast<_Tp>(_Idx)...> __type;
+-    };
+-
+-  /// Alias template make_integer_sequence
+-  template<typename _Tp, _Tp _Num>
+-    using make_integer_sequence
+-      = typename _Make_integer_sequence<_Tp, _Num>::__type;
+-
+-  /// Alias template index_sequence
+-  template<size_t... _Idx>
+-    using index_sequence = integer_sequence<size_t, _Idx...>;
+-
+-  /// Alias template make_index_sequence
+-  template<size_t _Num>
+-    using make_index_sequence = make_integer_sequence<size_t, _Num>;
+-
+-  /// Alias template index_sequence_for
+-  template<typename... _Types>
+-    using index_sequence_for = make_index_sequence<sizeof...(_Types)>;
+-
+-} // namespace
+-#endif
+-
+-#endif//STD_UTILITY_HH
+diff --git a/libzwerg/test-op.cc b/libzwerg/test-op.cc
+index c5500ca..47b7f7f 100644
+--- a/libzwerg/test-op.cc
++++ b/libzwerg/test-op.cc
+@@ -28,7 +28,6 @@
+    not, see <http://www.gnu.org/licenses/>.  */
+ 
+ #include <gtest/gtest.h>
+-#include "std-memory.hh"
+ 
+ #include "op.hh"
+ #include "init.hh"
+diff --git a/libzwerg/test-zw-aux.cc b/libzwerg/test-zw-aux.cc
+index 9380fe3..ae13465 100644
+--- a/libzwerg/test-zw-aux.cc
++++ b/libzwerg/test-zw-aux.cc
+@@ -32,7 +32,6 @@
+ #include "parser.hh"
+ #include "scon.hh"
+ 
+-#include "std-memory.hh"
+ 
+ std::unique_ptr <stack>
+ stack_with_value (std::unique_ptr <value> v)
+diff --git a/libzwerg/tree.cc b/libzwerg/tree.cc
+index 6a822ff..a2c35ad 100644
+--- a/libzwerg/tree.cc
++++ b/libzwerg/tree.cc
+@@ -31,7 +31,6 @@
+ #include <cassert>
+ #include <climits>
+ #include <iostream>
+-#include "std-memory.hh"
+ #include <set>
+ #include <stdexcept>
+ 
+diff --git a/libzwerg/tree_cr.hh b/libzwerg/tree_cr.hh
+index b1cfc14..e42e43f 100644
+--- a/libzwerg/tree_cr.hh
++++ b/libzwerg/tree_cr.hh
+@@ -29,7 +29,6 @@
+ #ifndef _TREE_CR_H_
+ #define _TREE_CR_H_
+ 
+-#include "std-memory.hh"
+ #include "tree.hh"
+ 
+ template <tree_type TT>
+diff --git a/libzwerg/value-aset.cc b/libzwerg/value-aset.cc
+index 363b9b3..05b9cca 100644
+--- a/libzwerg/value-aset.cc
++++ b/libzwerg/value-aset.cc
+@@ -26,7 +26,6 @@
+    not, see <http://www.gnu.org/licenses/>.  */
+ 
+ #include "value-aset.hh"
+-#include "std-memory.hh"
+ 
+ value_type const value_aset::vtype = value_type::alloc ("T_ASET",
+ R"docstring(
+diff --git a/libzwerg/value-closure.cc b/libzwerg/value-closure.cc
+index 74c7cbe..8d5503e 100644
+--- a/libzwerg/value-closure.cc
++++ b/libzwerg/value-closure.cc
+@@ -29,7 +29,6 @@
+ 
+ #include <iostream>
+ #include <algorithm>
+-#include "std-memory.hh"
+ 
+ #include "value-closure.hh"
+ #include "tree.hh"
+diff --git a/libzwerg/value-dw.hh b/libzwerg/value-dw.hh
+index 16ddf64..b4279c3 100644
+--- a/libzwerg/value-dw.hh
++++ b/libzwerg/value-dw.hh
+@@ -30,7 +30,6 @@
+ #define _VALUE_DW_H_
+ 
+ #include <elfutils/libdwfl.h>
+-#include "std-memory.hh"
+ #include "value.hh"
+ #include "dwfl_context.hh"
+ 
+diff --git a/libzwerg/value-symbol.cc b/libzwerg/value-symbol.cc
+index c7d5cdb..e97a926 100644
+--- a/libzwerg/value-symbol.cc
++++ b/libzwerg/value-symbol.cc
+@@ -29,7 +29,6 @@
+ #include <iostream>
+ #include <climits>
+ #include "value-symbol.hh"
+-#include "std-memory.hh"
+ #include "known-elf.h"
+ #include "dwcst.hh"
+ 
+-- 
+2.51.0
+

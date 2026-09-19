@@ -1,0 +1,5953 @@
+--- ai_util.c	2003-04-30 16:27:17.000000000 +0200
++++ ai_util.c	2008-06-15 23:02:37.000000000 +0200
+@@ -141,7 +141,7 @@
+ {
+     Point u_point3d, position;
+     Point2d u_point2d, position2d, u, v, v_point2d;
+-    long dx, dy, len, result, u_theta, v_theta;
++    int dx, dy, len, result, u_theta, v_theta;
+     float temp;
+ 
+     position[X] = rounding_ftom( o->position[X] );
+@@ -300,7 +300,7 @@
+ 
+ void center( Point2d center, Point2d point, Point2d new_point )
+ {
+-    long x_shift;
++    int x_shift;
+ 
+     x_shift = point[X] + MAGIC_CYLINDER_CENTER - center[X];
+ 
+@@ -321,7 +321,7 @@
+ float Point_Distance_2D( Float_Point2d point, Float_Point2d position )
+ {
+     Point2d p, q, new_p, new_q;
+-    long x, y;
++    int x, y;
+     float temp;
+ 
+     p[X] = rounding_ftom( position[X] );
+@@ -406,7 +406,7 @@
+ 
+ int fixed_ill2( Point2d p1, Point2d p2, Point2d q1, Point2d q2, Point2d v )
+ {
+-    long mu, delta, lambda;
++    int mu, delta, lambda;
+     Point2d v1, v2, v3, v4;
+ 
+     v[X] = 0;
+@@ -458,9 +458,9 @@
+ 
+ int Old_Is_Visible_2D( Float_Point2d point, Float_Point2d position, Pylons *pylons )
+ {
+-    long i, pos_x;
++    int i, pos_x;
+     Point2d p1, p2, inter, p, q;
+-    long x_shift, min_x, max_x;
++    int x_shift, min_x, max_x;
+ 
+     pos_x = rounding_ftom( position[X] );
+ 
+@@ -591,9 +591,9 @@
+ 
+ */
+ 
+-long CompOutCode( Float_Point2d p, BoundingBox2d *box )
++int CompOutCode( Float_Point2d p, BoundingBox2d *box )
+ {
+-    long outcode;
++    int outcode;
+ 
+     outcode = 0;
+ 
+@@ -616,11 +616,11 @@
+ /* Detects whether or not a ray and a 2d bounding box intersect.  It uses
+    a hacked version of Cohen-Sutherland line clipping algorithm */
+ 
+-long ray_bounding_box_intersect_2d( Float_Point2d start, Float_Point2d end,
++int ray_bounding_box_intersect_2d( Float_Point2d start, Float_Point2d end,
+                                     BoundingBox2d *box )
+ {
+-    long accept, done;
+-    long outcode0, outcode1, outcodeOut;
++    int accept, done;
++    int outcode0, outcode1, outcodeOut;
+     Float_Point2d p0, p1;
+     float x = 0.0, y = 0.0;
+ 
+@@ -694,7 +694,7 @@
+     Float_Point2d p, q;
+     float x_shift, min_x, max_x;
+     BoundingBox2d box, ray_box;
+-    long i;
++    int i;
+ 
+ 
+     p[X] = 31.5;
+@@ -807,7 +807,7 @@
+ 
+ void iCylinder_x_y( Point point, Point2d point2d )
+ {
+-    long theta, radius, temp;
++    int theta, radius, temp;
+ 
+     /* find the radius of point w.r.t. the x-y plane */
+ 
+@@ -866,7 +866,7 @@
+ void Cylinder_x_y( Float_Point point, Float_Point2d point2d )
+ {
+     Point2d ipoint2d;
+-    long theta, radius, temp;
++    int theta, radius, temp;
+ 
+     ipoint2d[X] = rounding_ftom( point[X] );
+     ipoint2d[Y] = rounding_ftom( point[Y] );
+@@ -1004,10 +1004,10 @@
+ int Is_Visible_3D( Float_Point point, Float_Point pos, Pylons *pylons )
+ {
+     BoundingBox ray_box;
+-    long vert[2][3];
++    int vert[2][3];
+     EdgeTable et;
+-    long edge[1][2];
+-    long dummy, i;
++    int edge[1][2];
++    int dummy, i;
+ 
+ 
+     /* build the EdgeTable */
+@@ -1337,7 +1337,7 @@
+     Float_Point2d p, q;
+     float x_shift, min_x, max_x;
+     BoundingBox2d box, ray_box;
+-    long i;
++    int i;
+ 
+ 
+     p[X] = 31.5;
+@@ -1443,10 +1443,10 @@
+ int Is_Visible_3D_Pylon( Float_Point point, Float_Point pos, Pylons *pylons, int pylon_index )
+ {
+     BoundingBox ray_box;
+-    long vert[2][3];
++    int vert[2][3];
+     EdgeTable et;
+-    long edge[1][2];
+-    long dummy, i;
++    int edge[1][2];
++    int dummy, i;
+ 
+ 
+     /* build the EdgeTable */
+@@ -1742,9 +1742,9 @@
+     } /* End of Point_Square_3D */
+ 
+ 
+-void update_leader( long view_vehicle )
++void update_leader( int view_vehicle )
+     {
+-     long i;
++     int i;
+      boolean blue_leader_picked = FALSE;
+      boolean red_leader_picked = FALSE;
+ 
+
+--- ai_util.h	2001-12-18 21:08:43.000000000 +0100
++++ ai_util.h	2008-06-15 23:02:38.000000000 +0200
+@@ -111,7 +111,7 @@
+  
+ int Find_Bullet_Owner( Projectile *p );
+ 
+-void update_leader( long view_vehicle );
++void update_leader( int view_vehicle );
+ 
+ int Decoys_Active( WorldStuff *world_stuff, int index );
+ 
+
+--- base.c	2003-04-30 16:27:17.000000000 +0200
++++ base.c	2008-06-15 23:02:37.000000000 +0200
+@@ -66,7 +66,7 @@
+ 
+ void init_red_radar_base( RadarBase *red_base )
+ {
+-    long i;
++    int i;
+ 
+     red_base->team = RED_TEAM;
+ 
+@@ -262,7 +262,7 @@
+ 
+ void init_blue_radar_base( RadarBase *blue_base )
+ {
+-    long i;
++    int i;
+ 
+     blue_base->team = BLUE_TEAM;
+ 
+@@ -462,7 +462,7 @@
+ void move_base_projectiles_forward( RadarBase *base, Pylons *pylons, Player *player )
+ {
+     Projectile *p, *last;
+-    long face_index;
++    int face_index;
+     Orientation o;
+     Vehicle v; /* Hack Alert */
+ 
+@@ -999,7 +999,7 @@
+ {
+     Float_Vector new_front, axis, temp;
+     float theta, len, min_len, foo;
+-    long i, valid_target;
++    int i, valid_target;
+     const float rot_inc = 0.174532; /* 10 degrees in radians */
+     const float max_attack_radius = 15.0;
+     Float_Matrix rot_matrix;
+
+--- cdrom.h	2001-12-18 21:08:43.000000000 +0100
++++ cdrom.h	2008-06-15 23:02:38.000000000 +0200
+@@ -73,17 +73,17 @@
+   unsigned short drives             PACKED_STRUCT;
+   unsigned char  first_drive        PACKED_STRUCT;
+   unsigned short current_track      PACKED_STRUCT;
+-  unsigned long  track_position     PACKED_STRUCT;
++  unsigned int  track_position     PACKED_STRUCT;
+   unsigned char  track_type         PACKED_STRUCT;
+   unsigned char  low_audio          PACKED_STRUCT;
+   unsigned char  high_audio         PACKED_STRUCT;
+   unsigned char  disk_length_min    PACKED_STRUCT;
+   unsigned char  disk_length_sec    PACKED_STRUCT;
+   unsigned char  disk_length_frames PACKED_STRUCT;
+-  unsigned long  endofdisk          PACKED_STRUCT;
++  unsigned int  endofdisk          PACKED_STRUCT;
+   unsigned char  upc[7]             PACKED_STRUCT;
+   unsigned char  diskid[6]          PACKED_STRUCT;
+-  unsigned long  status             PACKED_STRUCT;
++  unsigned int  status             PACKED_STRUCT;
+   unsigned short error              PACKED_STRUCT;
+ } cdrom_data_type;
+ 
+@@ -97,8 +97,8 @@
+ void cd_get_audio_info (void);
+ void cd_set_track (short tracknum);
+ void cd_status (void);
+-void cd_seek (unsigned long location);
+-void cd_play_audio (unsigned long begin, unsigned long end);
++void cd_seek (unsigned int location);
++void cd_play_audio (unsigned int begin, unsigned int end);
+ void cd_stop_audio (void);
+ void cd_resume_audio (void);
+ void cd_cmd (unsigned char mode);
+
+--- clipping.c	2001-12-18 21:08:43.000000000 +0100
++++ clipping.c	2008-06-15 23:02:37.000000000 +0200
+@@ -36,7 +36,7 @@
+ extern level_type level; /* From omega.c...we need it for yon_clipping_plane */
+  
+ 
+-int region( Point p, long hither)
++int region( Point p, int hither)
+ {
+     int location = INSIDE;
+ 
+@@ -64,7 +64,7 @@
+     return location;
+ }
+ 
+-int new_region( Point p, long hither)
++int new_region( Point p, int hither)
+ {
+     int location = INSIDE;
+ 
+@@ -89,9 +89,9 @@
+     return location;
+ }
+ 
+-void old_intersect( Point p1, Point p2, int plane, long hither, Point inter )
++void old_intersect( Point p1, Point p2, int plane, int hither, Point inter )
+ {
+-    long t;
++    int t;
+ 
+     if (plane == RIGHT) {
+ 	t = ((p1[X] + p1[Z]) << MEXP) / ((p1[Z] - p2[Z]) - (p2[X] - p1[X]));
+@@ -131,7 +131,7 @@
+     }
+ }
+ 
+-void intersect( Point p1, Point p2, int plane, long hither, Point inter )
++void intersect( Point p1, Point p2, int plane, int hither, Point inter )
+ {
+     float t;
+     Float_Point fp1, fp2, finter;
+@@ -190,8 +190,8 @@
+ 
+ 
+ /* void poly_clip_plane( Point poly[], Point polyout[], int n, int *len,
+-			 long hither, int plane) */
+-void poly_clip_plane( PointFace *clip_obj, Face *face, long hither, int plane )
++			 int hither, int plane) */
++void poly_clip_plane( PointFace *clip_obj, Face *face, int hither, int plane )
+ {
+     Point v1, v2, inter;
+     Face new_face;
+@@ -281,7 +281,7 @@
+     }
+ }
+ 
+-void poly_clip_3D( PointFace *clip_obj, Face *face, long hither )
++void poly_clip_3D( PointFace *clip_obj, Face *face, int hither )
+ {
+     int outcode[MAX_FACE_SIZE], i, result0, result1;
+ 
+@@ -315,7 +315,7 @@
+     }
+ }
+ 
+-void clip_obj( PointFace *clip_obj, long hither )
++void clip_obj( PointFace *clip_obj, int hither )
+ {
+     int i;
+ 
+@@ -324,10 +324,10 @@
+     }
+ }
+ 
+-void edge_clip_3D( PointEdge *pe, Edge e, long hither )
++void edge_clip_3D( PointEdge *pe, Edge e, int hither )
+ {
+-    long accept, done;
+-    long outcode0, outcode1, outcodeOut;
++    int accept, done;
++    int outcode0, outcode1, outcodeOut;
+     Edge out_edge;
+     Point inter;
+ 
+@@ -462,14 +462,14 @@
+     else {
+ 	/* if this edge is rejected make e the null edge */
+ 
+-	e[0] = (long)NULL_INDEX;
+-	e[1] = (long)NULL_INDEX;
++	e[0] = (int)NULL_INDEX;
++	e[1] = (int)NULL_INDEX;
+     }
+ }
+ 
+-void clip_edges( PointEdge *pe, long hither )
++void clip_edges( PointEdge *pe, int hither )
+ {
+-    long i;
++    int i;
+ 
+     for( i = 0; i < pe->edges; i++ ) {
+ 	edge_clip_3D( pe, pe->edge[i], hither );
+
+--- clipping.h	2003-04-28 17:52:34.000000000 +0200
++++ clipping.h	2008-06-15 23:02:38.000000000 +0200
+@@ -44,11 +44,11 @@
+ /* clip_obj clips all the faces of obj against the cannonical view volume
+    hither is the MAGIC value of the front clipping plane */
+ 
+-void clip_obj( PointFace *clip_obj, long hither );
++void clip_obj( PointFace *clip_obj, int hither );
+ 
+-void clip_edges( PointEdge *pe, long hither );
++void clip_edges( PointEdge *pe, int hither );
+ 
+-int region( Point p, long hither );
++int region( Point p, int hither );
+ 
+ #endif
+ 
+
+--- collide.c	2003-04-30 16:27:17.000000000 +0200
++++ collide.c	2008-06-15 23:02:37.000000000 +0200
+@@ -41,7 +41,7 @@
+ extern WorldStuff world_stuff;
+ 
+ const float Cylinder_Length = 60.0; /* 60.0 */
+-const long Magic_Cylinder_Length = 61440; /* 61440 */
++const int Magic_Cylinder_Length = 61440; /* 61440 */
+ 
+ void print_bounding_box( BoundingBox *b )
+ {
+@@ -51,7 +51,7 @@
+ 
+ void print_magic_bounding_box( MagicBoundingBox *b )
+ {
+-    printf("BoundingBox (%ld,%ld,%ld,%ld,%ld,%ld)\n",
++    printf("BoundingBox (%d,%d,%d,%d,%d,%d)\n",
+         b->min_x, b->max_x, b->min_y, b->max_y, b->min_z, b->max_z );
+ }
+ 
+@@ -271,7 +271,7 @@
+ }
+ 
+ 
+-long absolute_val( long num )
++int absolute_val( int num )
+ {
+     if( num < 0 ) {
+         return -num;
+@@ -284,26 +284,26 @@
+ int edge_poly_intersect( Point *edge_vert, Edge edge,
+                          Point *face_vert, Face *face )
+ {
+-    long A, B, C, D, t, max_coeff, t_denom;
++    int A, B, C, D, t, max_coeff, t_denom;
+     Point inter;
+     Vector v;
+ 
+     /*
+     if( debug ) {
+         printf("\nedge_poly_intersect()\n");
+-        printf("edge = ( %ld, %ld )\n", edge[0], edge[1] );
+-        printf("edge_vert[%ld] = ( %ld, %ld, %ld )\n", edge[0],
++        printf("edge = ( %d, %d )\n", edge[0], edge[1] );
++        printf("edge_vert[%d] = ( %d, %d, %d )\n", edge[0],
+                edge_vert[edge[0]][X], edge_vert[edge[0]][Y],
+                edge_vert[edge[0]][Z] );
+-        printf("edge_vert[%ld] = ( %ld, %ld, %ld )\n", edge[1],
++        printf("edge_vert[%d] = ( %d, %d, %d )\n", edge[1],
+                edge_vert[edge[1]][X], edge_vert[edge[1]][Y],
+                edge_vert[edge[1]][Z] );
+ 
+-        printf("face = ( %ld, %ld, %ld, %ld )\n", face->index[0],
++        printf("face = ( %d, %d, %d, %d )\n", face->index[0],
+             face->index[1], face->index[2], face->index[3] );
+ 
+         for( i = 0; i < 4; i++ ) {
+-            printf("face_vert[%ld] = ( %ld, %ld, %ld)\n", i,
++            printf("face_vert[%d] = ( %d, %d, %d)\n", i,
+                 face_vert[face->index[i]][X],
+                 face_vert[face->index[i]][Y],
+                 face_vert[face->index[i]][Z] );
+@@ -331,7 +331,7 @@
+ 
+     /*
+     if( debug ) {
+-        printf("v = ( %ld, %ld, %ld )\n", v[X], v[Y], v[Z] );
++        printf("v = ( %d, %d, %d )\n", v[X], v[Y], v[Z] );
+     }
+     */
+ 
+@@ -415,9 +415,9 @@
+ }
+ 
+ int pointface_edge_intersect( PointFace *obj, Point *edge_vert, EdgeTable *et,
+-                              long *face_index )
++                              int *face_index )
+ {
+-    long i, j;
++    int i, j;
+ 
+     for( i = 0; i < obj->faces; i++ ) {
+         for( j = 0; j < et->edges; j++ ) {
+@@ -438,7 +438,7 @@
+ int super_pointface_edge_intersect( PointFace *obj, Point *edge_vert,
+                                     EdgeTable *et, Float_Vector reflect )
+ {
+-    long i, j;
++    int i, j;
+     int intersect = FALSE;
+ 
+     for( i = 0; i < obj->faces; i++ ) {
+@@ -470,7 +470,7 @@
+ 
+ int super_pylon_collision( Pylons *p, Vehicle *v, Float_Vector reflect )
+ {
+-    long i, collision = 0;
++    int i, collision = 0;
+ 
+     for( i = 0; i < p->pylons; i++ ) {
+         if( magic_bounding_box_overlap( &(p->pylon[i].mbox), &(v->mbox) ) &&
+@@ -547,9 +547,9 @@
+     }
+ }
+ 
+-int pylon_projectile_collision( Pylons *pylons, Projectile *p, long *face_index )
++int pylon_projectile_collision( Pylons *pylons, Projectile *p, int *face_index )
+ {
+-    long i;
++    int i;
+     Float_Point point; /* To convert projectile position */
+ 
+ 
+@@ -575,7 +575,7 @@
+ 
+ int vehicle_projectile_collision( Vehicle *v, Projectile *p )
+ {
+-    long face_index;
++    int face_index;
+ 
+     if( magic_bounding_box_overlap( &(p->box), &(v->mbox) ) &&
+         pointface_edge_intersect( v->world_collision_obj, p->world_obj->point,
+@@ -841,7 +841,7 @@
+ 
+ int radar_base_projectile_collision( RadarBase *base, Projectile *p, Vehicle *v )
+ {
+-    long face_index;
++    int face_index;
+     MagicBoundingBox mbox;
+     Float_Point point;
+     PointFace temp_obj;
+@@ -945,7 +945,7 @@
+ void init_bounding_box( Vehicle *v )
+ {
+     Point *ptr;
+-    long j, temp;
++    int j, temp;
+ 
+     if( (ptr = v->world_collision_obj->point) == NULL ) {
+         printf("init_bounding_box(): null ptr in v->world_collision_obj->point\n");
+@@ -1024,7 +1024,7 @@
+ void find_bounding_box( PointFace *obj, BoundingBox *box )
+ {
+     Point *ptr;
+-    long j, temp;
++    int j, temp;
+ 
+     if( (ptr = obj->point) == NULL ) {
+         printf("find_bounding_box(): null ptr in obj->point\n");
+@@ -1097,7 +1097,7 @@
+ void init_projectile_bounding_box( Projectile *p )
+ {
+     Point *ptr;
+-    long j, temp;
++    int j, temp;
+ 
+     if( (ptr = p->world_obj->point) == NULL ) {
+         printf("init_projectile_bounding_box(): null ptr in p->world_obj->point\n");
+@@ -1201,7 +1201,7 @@
+ int projectile_cylinder_collision( Projectile *p )
+ {
+     Vector v;
+-    long len;
++    int len;
+     Float_Point point; /* For conversion of position */
+ 
+     point[X] = mtof( p->orient.position[X] );
+@@ -1414,7 +1414,7 @@
+                             Player p[], Pylons *pylons, RadarBase *red_base,
+                             RadarBase *blue_base )
+ {
+-    long i;
++    int i;
+ 
+     for( i = 0; i < 6; i++ ) {
+         c_table[i].collision = FALSE;
+@@ -1444,7 +1444,7 @@
+                                 Pylons *pylons, RadarBase *red_base,
+                                 RadarBase *blue_base )
+ {
+-    long i;
++    int i;
+ 
+     for( i = 0; i < 6; i++ ) {
+         new_table[i].collision = FALSE;
+
+--- collide.h	2001-12-18 21:08:43.000000000 +0100
++++ collide.h	2008-06-15 23:02:38.000000000 +0200
+@@ -25,11 +25,11 @@
+ void find_bounding_box( PointFace *obj, BoundingBox *box );
+ void print_bounding_box( BoundingBox *b );
+ void print_magic_bounding_box( MagicBoundingBox *b );
+-int pylon_collision( Pylons *p, Vehicle *v, long *face_index );
++int pylon_collision( Pylons *p, Vehicle *v, int *face_index );
+ int super_pylon_collision( Pylons *p, Vehicle *v, Float_Vector reflect );
+ int player_collision( Player *player, Vehicle *v );
+ int super_player_collision( Player *player, Vehicle *v, Float_Vector reflect );
+-int pylon_projectile_collision( Pylons *pylons, Projectile *p, long *face_index );
++int pylon_projectile_collision( Pylons *pylons, Projectile *p, int *face_index );
+ int vehicle_projectile_collision( Vehicle *v, Projectile *p );
+ int player_projectile_collision( Player *player, Projectile *p, Vehicle *v );
+ void init_bounding_box( Vehicle *v );
+@@ -56,6 +56,6 @@
+ int bounding_box_overlap_2d( BoundingBox2d *p, BoundingBox2d *q );
+ int bounding_box_overlap( BoundingBox *p, BoundingBox *q );
+ int pointface_edge_intersect( PointFace *obj, Point *edge_vert, EdgeTable *et,
+-                              long *face_index );
++                              int *face_index );
+ #endif
+ 
+
+--- dosbuff.c	2001-12-18 21:08:43.000000000 +0100
++++ dosbuff.c	2008-06-15 23:02:37.000000000 +0200
+@@ -30,30 +30,30 @@
+ /* Globals */
+ 
+ unsigned short segment_of_dos_buffer, offset_of_dos_buffer;
+-unsigned long address_of_dos_buffer;
+-unsigned long linear_address_of_dos_buffer;
++unsigned int address_of_dos_buffer;
++unsigned int linear_address_of_dos_buffer;
+ 
+ unsigned short segment_of_dos_buffer_two, offset_of_dos_buffer_two;
+-unsigned long address_of_dos_buffer_two;
+-unsigned long linear_address_of_dos_buffer_two;
++unsigned int address_of_dos_buffer_two;
++unsigned int linear_address_of_dos_buffer_two;
+ 
+ 
+ unsigned short segment_of_ecb_send_buffer, offset_of_ecb_send_buffer;
+-unsigned long address_of_ecb_send_buffer;
+-unsigned long linear_address_of_ecb_send_buffer;
++unsigned int address_of_ecb_send_buffer;
++unsigned int linear_address_of_ecb_send_buffer;
+ 
+ unsigned short segment_of_ecb_recieve_buffer, offset_of_ecb_recieve_buffer;
+-unsigned long address_of_ecb_recieve_buffer;
+-unsigned long linear_address_of_ecb_recieve_buffer;
++unsigned int address_of_ecb_recieve_buffer;
++unsigned int linear_address_of_ecb_recieve_buffer;
+ 
+ 
+ unsigned short segment_of_send_buffer, offset_of_send_buffer;
+-unsigned long address_of_send_buffer;
+-unsigned long linear_address_of_send_buffer;
++unsigned int address_of_send_buffer;
++unsigned int linear_address_of_send_buffer;
+ 
+ unsigned short segment_of_recieve_buffer, offset_of_recieve_buffer;
+-unsigned long address_of_recieve_buffer;
+-unsigned long linear_address_of_recieve_buffer;
++unsigned int address_of_recieve_buffer;
++unsigned int linear_address_of_recieve_buffer;
+ 
+ 
+ 
+@@ -90,7 +90,7 @@
+      offset_of_dos_buffer  = new_offset;
+ 
+      linear_address_of_dos_buffer = address;
+-     address_of_dos_buffer = ((unsigned long)new_segment << 16) | new_offset;
++     address_of_dos_buffer = ((unsigned int)new_segment << 16) | new_offset;
+      
+ 
+      // Do the same for buffer two 
+@@ -121,7 +121,7 @@
+      offset_of_dos_buffer_two  = new_offset;
+ 
+      linear_address_of_dos_buffer_two = address;
+-     address_of_dos_buffer_two = ((unsigned long)new_segment << 16) | new_offset;
++     address_of_dos_buffer_two = ((unsigned int)new_segment << 16) | new_offset;
+ 
+ 
+      // Do the same for send buffer 
+@@ -150,7 +150,7 @@
+      offset_of_send_buffer  = new_offset;
+ 
+      linear_address_of_send_buffer = address;
+-     address_of_send_buffer = ((unsigned long)new_segment << 16) | new_offset;
++     address_of_send_buffer = ((unsigned int)new_segment << 16) | new_offset;
+ 
+ 
+      // Do the same for recieve buffer 
+@@ -179,7 +179,7 @@
+      offset_of_recieve_buffer  = new_offset;
+ 
+      linear_address_of_recieve_buffer = address;
+-     address_of_recieve_buffer = ((unsigned long)new_segment << 16) | new_offset;
++     address_of_recieve_buffer = ((unsigned int)new_segment << 16) | new_offset;
+ 
+ 
+ 
+@@ -209,7 +209,7 @@
+      offset_of_ecb_send_buffer  = new_offset;
+ 
+      linear_address_of_ecb_send_buffer = address;
+-     address_of_ecb_send_buffer = ((unsigned long)new_segment << 16) | new_offset;
++     address_of_ecb_send_buffer = ((unsigned int)new_segment << 16) | new_offset;
+ 
+ 
+      // Do the same for recieve buffer 
+@@ -238,7 +238,7 @@
+      offset_of_ecb_recieve_buffer  = new_offset;
+ 
+      linear_address_of_ecb_recieve_buffer = address;
+-     address_of_ecb_recieve_buffer = ((unsigned long)new_segment << 16) | new_offset;
++     address_of_ecb_recieve_buffer = ((unsigned int)new_segment << 16) | new_offset;
+ 
+ */
+ 
+@@ -391,12 +391,12 @@
+ } /* End of Test_Dos_Buffer() */
+ 
+ 
+-unsigned long Make_Far_Pointer( unsigned short segment, unsigned short offset ) {
++unsigned int Make_Far_Pointer( unsigned short segment, unsigned short offset ) {
+ return(0); /* Johnm 12/1/2001 */
+ /*
+-	unsigned long temp;
++	unsigned int temp;
+ 
+-     temp = ((unsigned long)segment << 16) | offset;
++     temp = ((unsigned int)segment << 16) | offset;
+ 
+      return(temp);
+ */
+
+--- dosbuff.h	2001-12-18 21:08:43.000000000 +0100
++++ dosbuff.h	2008-06-15 23:02:38.000000000 +0200
+@@ -38,7 +38,7 @@
+ void Copy_Into_Ecb_Recieve_Buffer( void *block, short length );
+ void Copy_From_Ecb_Recieve_Buffer( void *block, short length );
+ void Test_Dos_Buffers( void );
+-unsigned long Make_Far_Pointer( unsigned short segment, unsigned short offset );
++unsigned int Make_Far_Pointer( unsigned short segment, unsigned short offset );
+ 
+ #endif
+ 
+
+--- energy.c	2003-04-28 17:52:34.000000000 +0200
++++ energy.c	2008-06-15 23:02:37.000000000 +0200
+@@ -35,7 +35,7 @@
+ {
+     Float_Point temp;
+     Float_Point2d temp2d;
+-    long i;
++    int i;
+ 
+     e->refresh_rate = 0;
+     e->frames_till_burst = 0;
+@@ -99,7 +99,7 @@
+ void update_energy( EnergyPowerUp *e, Player *p )
+ {
+     Float_Point2d temp;
+-    long i;
++    int i;
+ 
+     for( i = 0; i < 6; i++ ) {
+ 
+
+--- explode.c	2003-04-28 17:52:34.000000000 +0200
++++ explode.c	2008-06-15 23:02:37.000000000 +0200
+@@ -30,7 +30,7 @@
+ 
+ void split_pfd( PointFace *obj, PointFace *result )
+ {
+-    long num_points, i, j, point_index;
++    int num_points, i, j, point_index;
+ 
+     /* figure out exactly how many points result will need */
+ 
+@@ -82,7 +82,7 @@
+                     Gradient gradient )
+ {
+     Explosion *ptr, *last;
+-    long i;
++    int i;
+ 
+     last = world_stuff.explosion_list;
+     ptr = world_stuff.explosion_list;
+@@ -349,7 +349,7 @@
+ 
+ void explode_object_fast( PointFace *obj )
+ {
+-    long i, j;
++    int i, j;
+ 
+     for( i = 0; i < obj->faces; i++ ) {
+         for( j = 0; j < obj->face[i].size; j++ ) {
+@@ -364,7 +364,7 @@
+ 
+ void explode_object_slow( PointFace *obj )
+ {
+-    long i, j;
++    int i, j;
+ 
+     for( i = 0; i < obj->faces; i++ ) {
+         for( j = 0; j < obj->face[i].size; j++ ) {
+
+--- fli.c	2008-06-15 22:57:03.000000000 +0200
++++ fli.c	2008-06-15 23:02:37.000000000 +0200
+@@ -25,15 +25,15 @@
+ 
+ extern char g_DataPath[255];
+ 
+-extern long TIMER_CLICKS_PER_SECOND; /* from omega.c */
+-extern long GAME_CLICKS_PER_SECOND;  /* */
++extern int TIMER_CLICKS_PER_SECOND; /* from omega.c */
++extern int GAME_CLICKS_PER_SECOND;  /* */
+ extern boolean ceiling_on;           /* */
+ 
+ 
+ int current_frame;
+ 
+-unsigned long first_frame = 0;
+-unsigned long file_length = 0;
++unsigned int first_frame = 0;
++unsigned int file_length = 0;
+ 
+ #if 0
+ 
+@@ -42,22 +42,22 @@
+    frame */
+ void Delta_Chunk( FILE *fp )
+     {
+-     unsigned long line_index;       /* Number of lines processed  */
+-     unsigned long pixel_index = 0;  /* Number of pixels processed */
+-     unsigned long pos;              /* Position in file           */
++     unsigned int line_index;       /* Number of lines processed  */
++     unsigned int pixel_index = 0;  /* Number of pixels processed */
++     unsigned int pos;              /* Position in file           */
+      
+      short lines_to_skip;           /* Number of lines to skip    */
+      unsigned short number_lines;   /* Number of lines encoded for frame */
+      
+      unsigned char num_packets;     /* Number of packets in line  */
+      
+-     unsigned long packet_index;     /* Index for loop             */
++     unsigned int packet_index;     /* Index for loop             */
+      unsigned char skip_count;      /* Number of xpixels to skip  */
+      char packet_type;              /* Type of delta encoding     */
+      
+      unsigned char pixel_data;      /* One pixel to put on screen */
+-     unsigned long byte_count;       /* Index for loop             */
+-     long x, y;
++     unsigned int byte_count;       /* Index for loop             */
++     int x, y;
+ 
+ 
+      pos = ftell( fp ); /* Record our position in the file */
+@@ -134,7 +134,7 @@
+      unsigned char color_count;
+      unsigned char color_index = 0; /* Index into 256 palette */
+      unsigned char r,g,b;
+-     long i, j;
++     int i, j;
+      
+      fread( &num_packets, sizeof( unsigned short ), 1, fp );     
+ 
+@@ -184,7 +184,7 @@
+ 
+ void Copy_Chunk( FILE *fp )  
+     {
+-     long x, y;
++     int x, y;
+      unsigned char pixel_data;
+ 
+      /* A copy chunk just has 64000 bytes of data to pop
+@@ -204,9 +204,9 @@
+ 
+ void Byte_Run_Chunk( FILE *fp )
+     {
+-     long i, index;
++     int i, index;
+      char temp_char, temp_char_two;
+-     long x, y;
++     int x, y;
+ 
+      x = y = 0;
+      index = 0;
+@@ -261,7 +261,7 @@
+ int Read_Sub_Chunk( FILE *fp ) {
+      sub_chunk_header header;
+      
+-     fread( &header.chunk_size, sizeof( unsigned long ), 1, fp );     
++     fread( &header.chunk_size, sizeof( unsigned int ), 1, fp );     
+      fread( &header.chunk_type, sizeof( unsigned short ), 1, fp );
+ 
+      if( header.chunk_type == 0xC )
+@@ -294,11 +294,11 @@
+ }
+ 
+ /* Process one frame chunk */
+-long Read_Chunk( FILE *fp )
++int Read_Chunk( FILE *fp )
+     {
+      chunk_header header;
+-     long i;
+-     long pos;
++     int i;
++     int pos;
+ 
+      /* Read in frame chunk header */
+      fread( &header, sizeof( chunk_header ), 1, fp );
+@@ -383,7 +383,7 @@
+ /* Beginning of Ram based fli reading */
+ 
+ static int read_intel_int32(unsigned char *file_buffer,
+-  unsigned long *file_pos)
++  unsigned int *file_pos)
+ {
+    int res;
+    
+@@ -396,7 +396,7 @@
+ }
+ 
+ static short read_intel_int16(unsigned char *file_buffer,
+-  unsigned long *file_pos)
++  unsigned int *file_pos)
+ {
+    short res;
+ 
+@@ -406,23 +406,23 @@
+    return res;
+ }
+ 
+-void Delta_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
++void Delta_Chunk_Ram( unsigned char *file_buffer, unsigned int *file_pos )
+     {
+-     unsigned long line_index;       /* Number of lines processed  */
+-     unsigned long pixel_index = 0;  /* Number of pixels processed */
++     unsigned int line_index;       /* Number of lines processed  */
++     unsigned int pixel_index = 0;  /* Number of pixels processed */
+      
+      short lines_to_skip;           /* Number of lines to skip    */
+      unsigned short number_lines;   /* Number of lines encoded for frame */
+      
+      unsigned char num_packets;     /* Number of packets in line  */
+      
+-     unsigned long packet_index;     /* Index for loop             */
++     unsigned int packet_index;     /* Index for loop             */
+      unsigned char skip_count;      /* Number of xpixels to skip  */
+      char packet_type;              /* Type of delta encoding     */
+      
+      unsigned char pixel_data;      /* One pixel to put on screen */
+-     unsigned long byte_count;       /* Index for loop             */
+-     long x, y;
++     unsigned int byte_count;       /* Index for loop             */
++     int x, y;
+ 
+ 
+      /* Get the y position we start on */ 
+@@ -488,7 +488,7 @@
+     } /* End of Delta_Chunk_Ram() */
+ 
+ 
+-void Color_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
++void Color_Chunk_Ram( unsigned char *file_buffer, unsigned int *file_pos )
+     {
+      unsigned short num_packets; 
+      RGB_color color;
+@@ -499,7 +499,7 @@
+      unsigned char color_count;
+      unsigned char color_index = 0; /* Index into 256 palette */
+      unsigned char r,g,b;
+-     long i, j;
++     int i, j;
+      
+ 
+      num_packets = read_intel_int16(file_buffer, file_pos);
+@@ -548,9 +548,9 @@
+     } /* End of Color_Chunk_Ram() */
+  
+ 
+-void Copy_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos  )  
++void Copy_Chunk_Ram( unsigned char *file_buffer, unsigned int *file_pos  )  
+     {
+-     long x, y;
++     int x, y;
+      unsigned char pixel_data;
+ 
+      /* A copy chunk just has 64000 bytes of data to pop
+@@ -568,11 +568,11 @@
+ 
+ 
+ 
+-void Byte_Run_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
++void Byte_Run_Chunk_Ram( unsigned char *file_buffer, unsigned int *file_pos )
+     {
+-     long i, index;
++     int i, index;
+      char temp_char, temp_char_two;
+-     long x, y;
++     int x, y;
+      
+ 
+      x = y = 0;
+@@ -630,7 +630,7 @@
+ 
+ /* Read a sub chunk and branch to the appropriate
+    function for each type of chunk */
+-int Read_Sub_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
++int Read_Sub_Chunk_Ram( unsigned char *file_buffer, unsigned int *file_pos )
+     {
+      sub_chunk_header header;
+ 
+@@ -670,11 +670,11 @@
+ } /* End of Read_Sub_Chunk_Ram() */
+ 
+ /* Process one frame chunk */
+-long Read_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
++int Read_Chunk_Ram( unsigned char *file_buffer, unsigned int *file_pos )
+     {
+      chunk_header header;
+-     long i;
+-     unsigned long pos;
++     int i;
++     unsigned int pos;
+ 
+      if( *file_pos >= file_length )
+          return 0;
+@@ -719,9 +719,9 @@
+      FILE *fp;               /* Pointer to opened .fli file */
+      unsigned char exit = 0; /* Flag for the loop           */
+      unsigned char *file_buffer;
+-     unsigned long file_pos = 0;
+-     long temp;
+-     long i;
++     unsigned int file_pos = 0;
++     int temp;
++     int i;
+      unsigned char *temp_buffer;
+ 	char newfilename[512];
+ 
+@@ -791,9 +791,9 @@
+ typedef struct
+     {
+      unsigned char *file_buffer;
+-     unsigned long file_length;
+-     unsigned long file_pos;
+-     unsigned long first_frame;
++     unsigned int file_length;
++     unsigned int file_pos;
++     unsigned int first_frame;
+     } fli_file_type;
+ */
+ 
+@@ -801,8 +801,8 @@
+     {
+      flic_header header;     /* Header for the entire file  */
+      FILE *fp;               /* Pointer to opened .fli file */
+-     long temp;
+-     long i;
++     int temp;
++     int i;
+      unsigned char *temp_buffer;
+ 	char newfilename[512];
+ 
+@@ -896,7 +896,7 @@
+ 
+ void One_Frame( fli_file_type *fli_file )
+     {
+-     long done = 0;
++     int done = 0;
+ 
+      
+      file_length = fli_file->file_length; /* Update global */
+@@ -923,9 +923,9 @@
+ typedef struct
+     {
+      unsigned char *file_buffer;
+-     unsigned long file_length;
+-     unsigned long file_pos;
+-     unsigned long first_frame;
++     unsigned int file_length;
++     unsigned int file_pos;
++     unsigned int first_frame;
+     } fli_file_type;
+ */
+ 
+@@ -937,12 +937,12 @@
+      FILE *fp;
+      unsigned char *buffer_one, *buffer_two, *current_buffer, *old_buffer;
+      flic_header header;
+-     unsigned long file_pos = 0;
++     unsigned int file_pos = 0;
+      int flip = 0;
+-     unsigned long bytes_left = 0;
+-     unsigned long end_file_pos, current_file_pos;
++     unsigned int bytes_left = 0;
++     unsigned int end_file_pos, current_file_pos;
+      int done_reading = 0; /* Flag to say we're done reading file */
+-     long i, temp;
++     int i, temp;
+    	char newfilename[512];
+    	unsigned char header_buf[i386_flic_header_size];
+ 
+@@ -1049,7 +1049,7 @@
+                end_file_pos = ftell( fp );
+                fseek( fp, current_file_pos, SEEK_SET );
+                bytes_left = end_file_pos - current_file_pos;
+-               /* fprintf(stderr, "bytes left is %ld \n", bytes_left );  */
++               /* fprintf(stderr, "bytes left is %d \n", bytes_left );  */
+                
+                if( bytes_left > 0 )
+                    {
+
+--- fli.h	2008-06-15 22:56:57.000000000 +0200
++++ fli.h	2008-06-15 23:02:38.000000000 +0200
+@@ -36,34 +36,34 @@
+ 
+ typedef struct
+     {
+-     unsigned long  file_size        PACKED_STRUCT; /* Total size of the file       */
++     unsigned int  file_size        PACKED_STRUCT; /* Total size of the file       */
+      unsigned short file_id          PACKED_STRUCT; /* File format indicator        */
+      unsigned short number_of_frames PACKED_STRUCT; /* Total number of frames       */
+      unsigned short width            PACKED_STRUCT; /* Screen width in pixels       */
+      unsigned short height           PACKED_STRUCT; /* Screen height in pixels      */
+      unsigned short pixel_depth      PACKED_STRUCT; /* Number of bits per pixel (8) */
+      unsigned short flags            PACKED_STRUCT; /* Set to 0x03                  */
+-     unsigned long  frame_delay      PACKED_STRUCT; /* Time delay between frames    */
++     unsigned int  frame_delay      PACKED_STRUCT; /* Time delay between frames    */
+      unsigned short reserved1        PACKED_STRUCT; /* Not used ( set to 0x00 )     */
+   
+      /* The following fields are set to zero in a .fli file */
+      
+-     unsigned long  date_created  PACKED_STRUCT; /* Time/date file was created      */
+-     unsigned long  creator_sn    PACKED_STRUCT; /* Serial number of the program    */
+-     unsigned long  last_updated  PACKED_STRUCT; /* Time/date file was last changed */
+-     unsigned long  updater_sn    PACKED_STRUCT; /* Serial number of updater prog   */
++     unsigned int  date_created  PACKED_STRUCT; /* Time/date file was created      */
++     unsigned int  creator_sn    PACKED_STRUCT; /* Serial number of the program    */
++     unsigned int  last_updated  PACKED_STRUCT; /* Time/date file was last changed */
++     unsigned int  updater_sn    PACKED_STRUCT; /* Serial number of updater prog   */
+      unsigned short x_aspect      PACKED_STRUCT; /* X of display aspect ratio       */
+      unsigned short y_aspect      PACKED_STRUCT; /* Y of display aspect ratio       */
+      char           reserved2[38];               /* Not used (set to 0x00)          */
+-     unsigned long  frame1_offset PACKED_STRUCT; /* Offset of first frame           */
+-     unsigned long  frame2_offset PACKED_STRUCT; /* Offset of second frame          */
++     unsigned int  frame1_offset PACKED_STRUCT; /* Offset of first frame           */
++     unsigned int  frame2_offset PACKED_STRUCT; /* Offset of second frame          */
+      char           reserved3[40];               /* Not used (set to 0x00)          */
+     } flic_header;
+ 
+ 
+ typedef struct
+     {
+-     unsigned long  chunk_size       PACKED_STRUCT; /* Total size of the chunk */
++     unsigned int  chunk_size       PACKED_STRUCT; /* Total size of the chunk */
+      unsigned short chunk_type       PACKED_STRUCT; /* Chunk identifier */
+      unsigned short number_of_chunks PACKED_STRUCT; /* Number of subchunks in this chunk */
+      char           reserved[8];                    /* Not used (set to 0x00 ) */
+@@ -71,7 +71,7 @@
+ 
+ typedef struct
+     {
+-     unsigned long  chunk_size PACKED_STRUCT; /* Total size of the chunk */
++     unsigned int  chunk_size PACKED_STRUCT; /* Total size of the chunk */
+      unsigned short chunk_type PACKED_STRUCT; /* Chunk identifier */
+     } sub_chunk_header;
+ 
+@@ -79,9 +79,9 @@
+ typedef struct
+     {
+      unsigned char *file_buffer;
+-     unsigned long file_length;
+-     unsigned long file_pos;
+-     unsigned long first_frame;
++     unsigned int file_length;
++     unsigned int file_pos;
++     unsigned int first_frame;
+     } fli_file_type;
+ 
+ 
+
+--- gameipx.c	2003-04-30 16:27:17.000000000 +0200
++++ gameipx.c	2008-06-15 23:02:37.000000000 +0200
+@@ -31,15 +31,15 @@
+ #include <dos.h>
+ */
+ 
+-/* How long we delay before sending another packet */
++/* How int we delay before sending another packet */
+ #define PACKET_DELAY 10
+ 
+ 
+ node_address_type broadcast_node = { 0xff,0xff,0xff,0xff,0xff,0xff };
+ 
+ 
+-extern long exit_loop;  /* From omega.c */
+-extern long game_over;
++extern int exit_loop;  /* From omega.c */
++extern int game_over;
+ 
+ 
+ extern local_address_type local_address;
+@@ -67,7 +67,7 @@
+      int short_index = 0; /* Index into short_ptr thing */
+      int process_node = 0;
+      int done = 0;
+-     long game_over = FALSE;
++     int game_over = FALSE;
+ 
+ 
+      /* Clear out the send and recieve strings */
+
+--- hud.c	2002-09-06 20:09:47.000000000 +0200
++++ hud.c	2008-06-15 23:02:37.000000000 +0200
+@@ -70,7 +70,7 @@
+ 
+     Player *player_array : array containing all six players
+ 
+-    long view_vehicle : index into the player_array that indicates the vehicle
++    int view_vehicle : index into the player_array that indicates the vehicle
+                         who's hud we're drawing
+ 
+     PointEdge *wire_tube : pointer to the wire_tube object that is used when
+@@ -83,7 +83,7 @@
+ 
+ 
+ void draw_hud( enum VehicleType type, PixMap *pixmap,
+-               Player *player_array, long view_vehicle, PointEdge *wire_tube,
++               Player *player_array, int view_vehicle, PointEdge *wire_tube,
+                RadarBase *red_base, RadarBase *blue_base )
+ {
+     Point p;                    /* the fixed-point version of the view_vehicles position */
+@@ -100,12 +100,12 @@
+     Point2d wing_one_order_offset; /* used to anchor the wingman order text */
+     Point2d wing_two_order_offset; /* used to anchor the wingman order text */
+ 
+-    long wing_one_index;        /* the player_array index of wingman 1 */
+-    long wing_two_index;        /* the player_array index of wingman 2 */
++    int wing_one_index;        /* the player_array index of wingman 1 */
++    int wing_two_index;        /* the player_array index of wingman 2 */
+ 
+-    long i;
++    int i;
+ 
+-    long found_index_one;       /* tells us if we have found wingman 1 */
++    int found_index_one;       /* tells us if we have found wingman 1 */
+ 
+     BarInfo wing_one_bar;       /* needed to draw the hitpoints of wingman 1 */
+     BarInfo wing_two_bar;       /* needed to draw the hitpoints of wingman 2 */
+@@ -120,13 +120,13 @@
+     /* draw hud bitmap background on the screen */
+ 
+     if( profile ) {
+-        printf("    blit_screen( pixmap ), timer = %ld\n", Check_Timer() );
++        printf("    blit_screen( pixmap ), timer = %d\n", Check_Timer() );
+     }
+ 
+     blit_pixmap( pixmap, 2 /* green for the cross-hair */ );
+ 
+     if( profile ) {
+-        printf("    find view_vehicles wingmen, timer = %ld\n", Check_Timer() );
++        printf("    find view_vehicles wingmen, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* find view_vehicles wingmen */
+@@ -147,7 +147,7 @@
+     }
+ 
+     if( profile ) {
+-        printf("    initialize bars, timer = %ld\n", Check_Timer() );
++        printf("    initialize bars, timer = %d\n", Check_Timer() );
+     }
+ 
+     if( type == Beetle ) {
+@@ -855,7 +855,7 @@
+     }
+ 
+     if( profile ) {
+-        printf("    draw_bar's, timer = %ld\n", Check_Timer() );
++        printf("    draw_bar's, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* draw the bars */
+@@ -869,7 +869,7 @@
+     /* draw the radar */
+ 
+     if( profile ) {
+-        printf("    view_radar, timer = %ld\n", Check_Timer() );
++        printf("    view_radar, timer = %d\n", Check_Timer() );
+     }
+     
+     /* draw the message if needed */
+@@ -1020,7 +1020,7 @@
+     }
+ 
+     if( profile ) {
+-        printf("    draw target box, timer = %ld\n", Check_Timer() );
++        printf("    draw target box, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* draw a box around the missile target */
+@@ -1180,7 +1180,7 @@
+     }
+ 
+     if( profile ) {
+-        printf("    end of draw_hud, timer = %ld\n", Check_Timer() );
++        printf("    end of draw_hud, timer = %d\n", Check_Timer() );
+     }
+ }
+ 
+@@ -1188,8 +1188,8 @@
+ 
+ void draw_missile_box( Point upper_left, Point lower_right, unsigned char color )
+ {
+-    long i;
+-    long h_stub_len, v_stub_len;
++    int i;
++    int h_stub_len, v_stub_len;
+ 
+     h_stub_len = (lower_right[X] - upper_left[X]) / 3;
+     v_stub_len = (lower_right[Y] - upper_left[Y]) / 3;
+@@ -1214,10 +1214,10 @@
+ 
+ void draw_cross_box( Point upper_left, Point lower_right, unsigned char color )
+ {
+-    long vert[2][4];
++    int vert[2][4];
+     Point2d top, left, right, bottom;
+     Point2d new_upper_left, new_lower_right, center;
+-    long len;
++    int len;
+     Edge e;
+ 
+     center[X] = upper_left[X] + ((lower_right[X] - upper_left[X]) / 2);
+@@ -1308,8 +1308,8 @@
+ 
+ void draw_horizontal_left_justified_bar( BarInfo *barinfo )
+ {
+-    long i, j;
+-    long bar_start_x, bar_end_x;
++    int i, j;
++    int bar_start_x, bar_end_x;
+ 
+     /* draw the outline first */
+ 
+@@ -1352,8 +1352,8 @@
+ 
+ void draw_horizontal_right_justified_bar( BarInfo *barinfo )
+ {
+-    long i, j;
+-    long bar_start_x, bar_end_x, bar_length;
++    int i, j;
++    int bar_start_x, bar_end_x, bar_length;
+ 
+     /* draw the outline first */
+ 
+@@ -1396,8 +1396,8 @@
+ 
+ void draw_vertical_top_justified_bar( BarInfo *barinfo )
+ {
+-    long i, j;
+-    long bar_start_y, bar_end_y;
++    int i, j;
++    int bar_start_y, bar_end_y;
+ 
+     /* draw the outline first */
+ 
+@@ -1440,8 +1440,8 @@
+ 
+ void draw_vertical_bottom_justified_bar( BarInfo *barinfo )
+ {
+-    long i, j;
+-    long bar_start_y, bar_end_y, bar_length;
++    int i, j;
++    int bar_start_y, bar_end_y, bar_length;
+ 
+     /* draw the outline first */
+ 
+@@ -1501,7 +1501,7 @@
+ 
+ void init_pixmap( PixMap *pixmap, unsigned char *buffer )
+ {
+-    long i, count;
++    int i, count;
+ 
+     count = 0;
+ 
+@@ -1538,7 +1538,7 @@
+ 
+ void blit_pixmap( PixMap *pixmap, unsigned char new_cross_hair_color )
+ {
+-    long i;
++    int i;
+ 
+     for( i = 0; i < pixmap->pixels; i++ ) {
+         if( pixmap->pixel[i].color != CROSS_HAIR_COLOR ) {
+@@ -1550,10 +1550,10 @@
+     }
+ }
+ 
+-void draw_third_person_hud( Player *player_array, long view_vehicle,
++void draw_third_person_hud( Player *player_array, int view_vehicle,
+                             RadarBase *red_base, RadarBase *blue_base )
+ {
+-    long wing_one_index, wing_two_index, found_index_one, i;
++    int wing_one_index, wing_two_index, found_index_one, i;
+ 
+     Point p;                    /* the fixed-point version of the view_vehicles position */
+     Point target;               /* used to transform the target into screen coords */
+
+--- hud.h	2001-12-18 21:08:44.000000000 +0100
++++ hud.h	2008-06-15 23:02:38.000000000 +0200
+@@ -22,10 +22,10 @@
+ #define HUD_H
+ 
+ void draw_hud( enum VehicleType type, PixMap *pixmap,
+-               Player *player_array, long view_vehicle, PointEdge *wire_tube,
++               Player *player_array, int view_vehicle, PointEdge *wire_tube,
+                RadarBase *red_base, RadarBase *blue_base );
+                
+-void draw_third_person_hud( Player *player_array, long view_vehicle, 
++void draw_third_person_hud( Player *player_array, int view_vehicle, 
+                             RadarBase *red_base, RadarBase *blue_base );
+ 
+ void draw_missile_box( Point upper_left, Point lower_right, unsigned char color );
+
+--- joncd.c	2001-12-18 21:08:44.000000000 +0100
++++ joncd.c	2008-06-15 23:02:37.000000000 +0200
+@@ -44,12 +44,12 @@
+ cdrom_data_type cdrom_data;
+ 
+ extern unsigned short segment_of_dos_buffer, offset_of_dos_buffer;
+-extern unsigned long address_of_dos_buffer;
+-extern unsigned long linear_address_of_dos_buffer;
++extern unsigned int address_of_dos_buffer;
++extern unsigned int linear_address_of_dos_buffer;
+ 
+ extern unsigned short segment_of_dos_buffer_two, offset_of_dos_buffer_two;
+-extern unsigned long address_of_dos_buffer_two;
+-extern unsigned long linear_address_of_dos_buffer_two;
++extern unsigned int address_of_dos_buffer_two;
++extern unsigned int linear_address_of_dos_buffer_two;
+ 
+ 
+ /* End of Globals */
+@@ -85,7 +85,7 @@
+      offset_of_dos_buffer  = new_offset;
+ 
+      linear_address_of_dos_buffer = address;
+-     address_of_dos_buffer = ((unsigned long)new_segment << 16) | new_offset;
++     address_of_dos_buffer = ((unsigned int)new_segment << 16) | new_offset;
+      
+ 
+      memset( &info, 0, sizeof(info) );
+@@ -113,7 +113,7 @@
+      offset_of_dos_buffer_two  = new_offset;
+ 
+      linear_address_of_dos_buffer_two = address;
+-     address_of_dos_buffer_two = ((unsigned long)new_segment << 16) | new_offset;
++     address_of_dos_buffer_two = ((unsigned int)new_segment << 16) | new_offset;
+ 
+ 
+     } 
+@@ -176,7 +176,7 @@
+ 
+ */
+ 
+-void red_book (unsigned long value, unsigned char *min, unsigned char *sec, unsigned char *frame)
++void red_book (unsigned int value, unsigned char *min, unsigned char *sec, unsigned char *frame)
+ {
+ 	/*
+   *frame = value & 0x000000ff;
+@@ -186,12 +186,12 @@
+ }
+ 
+ 
+-unsigned long hsg (unsigned long value)
++unsigned int hsg (unsigned int value)
+ {
+   unsigned char min, sec, frame;
+ 
+   red_book (value, &min, &sec, &frame);
+-  value = (unsigned long)min * 4500;
++  value = (unsigned int)min * 4500;
+   value += (short)sec * 75;
+   value += frame - 150;
+   return value;
+@@ -317,7 +317,7 @@
+      unsigned short status       __attribute__((packed));
+      unsigned char  unused[8]    __attribute__((packed));
+      unsigned char  media        __attribute__((packed));
+-     unsigned long  address      __attribute__((packed));
++     unsigned int  address      __attribute__((packed));
+      unsigned short num_bytes    __attribute__((packed));
+     } IOCTL_header_type;
+ */
+@@ -377,10 +377,10 @@
+      unsigned short status       __attribute__((packed));
+      unsigned char  unused[8]    __attribute__((packed));
+      unsigned char  media        __attribute__((packed));
+-     unsigned long  address      __attribute__((packed));
++     unsigned int  address      __attribute__((packed));
+      unsigned short num_bytes    __attribute__((packed));
+      unsigned short sector __attribute__((packed));  // Take these out
+-     unsigned long  volid  __attribute__((packed));  
++     unsigned int  volid  __attribute__((packed));  
+     } status_header_type;
+ 
+      
+@@ -431,7 +431,7 @@
+       unsigned char mode    __attribute__((packed));
+       unsigned char lowest  __attribute__((packed));
+       unsigned char highest __attribute__((packed));
+-      unsigned long address __attribute__((packed));
++      unsigned int address __attribute__((packed));
+      } track_data_type;
+ 
+ */
+@@ -468,7 +468,7 @@
+ 
+ 
+      
+-     //printf("First track is %d and last track is %d, address is %ld \n",
++     //printf("First track is %d and last track is %d, address is %d \n",
+      //cdrom_data.first_track, cdrom_data.last_track, cdrom_data.lead_address );
+      //while( !Jon_Kbhit() );
+      
+@@ -481,12 +481,12 @@
+     {
+      unsigned char  mode            __attribute__((packed));
+      unsigned char  track_num       __attribute__((packed));
+-     unsigned long  track_start     __attribute__((packed)); // In red book 
++     unsigned int  track_start     __attribute__((packed)); // In red book 
+      unsigned char  track_control   __attribute__((packed)); // I ignore this 
+     } track_info_type;
+ */
+ 
+-unsigned long Track_Pos( int tracknum ) {
++unsigned int Track_Pos( int tracknum ) {
+      return(1); //Johnm 12/1/2001
+ /*
+ 	 IOCTL_header_type header;
+@@ -534,15 +534,15 @@
+      unsigned short status       __attribute__((packed));
+      unsigned char  unused[8]    __attribute__((packed));
+      unsigned char  mode         __attribute__((packed)); // Addressing mode 
+-     unsigned long  start        __attribute__((packed));
+-     unsigned long  play_length  __attribute__((packed)); 
++     unsigned int  start        __attribute__((packed));
++     unsigned int  play_length  __attribute__((packed)); 
+     } play_header_type;
+ */
+ 
+ void Play_Song( int tracknum ) {
+ 	/*
+      play_header_type header;
+-     unsigned long temp_pos;
++     unsigned int temp_pos;
+ 
+ 
+ 
+
+--- joncd.h	2001-12-18 21:08:44.000000000 +0100
++++ joncd.h	2008-06-15 23:02:38.000000000 +0200
+@@ -194,8 +194,8 @@
+      unsigned char  drive_number;  /* First cdrom drive # 0=A 1=B etc */
+      unsigned char  first_track;   /* First track on the cd */
+      unsigned char  last_track;    /* Last track on the cd */
+-     unsigned long  lead_address;  /* Address of lead out track in red book format */
+-     unsigned long  end_of_disk;   /* End of disk in hsg */
++     unsigned int  lead_address;  /* Address of lead out track in red book format */
++     unsigned int  end_of_disk;   /* End of disk in hsg */
+      unsigned short status;        /* Bit encode status */
+     } cdrom_data_type;
+ 
+@@ -215,7 +215,7 @@
+ void Cd_Lock( unsigned char lock_mode );
+ void Cd_Status( void );
+ void Get_Audio_Info( void );
+-unsigned long Track_Pos( int tracknum );
++unsigned int Track_Pos( int tracknum );
+ void Play_Song( int tracknum );
+ void Set_Cd_Volume( int volume );
+ void Stop_Audio( void );
+
+--- jonipx.c	2001-12-18 21:08:44.000000000 +0100
++++ jonipx.c	2008-06-15 23:02:37.000000000 +0200
+@@ -37,37 +37,37 @@
+ /* EXTERNS */
+ 
+ 
+-extern long exit_loop;  /* From omega.c */
+-extern long game_over;
++extern int exit_loop;  /* From omega.c */
++extern int game_over;
+ 
+ 
+ /* The rest are from dosbuff.c */
+ 
+ extern unsigned short segment_of_dos_buffer, offset_of_dos_buffer;
+-extern unsigned long address_of_dos_buffer;
+-extern unsigned long linear_address_of_dos_buffer;
++extern unsigned int address_of_dos_buffer;
++extern unsigned int linear_address_of_dos_buffer;
+ 
+ extern unsigned short segment_of_dos_buffer_two, offset_of_dos_buffer_two;
+-extern unsigned long address_of_dos_buffer_two;
+-extern unsigned long linear_address_of_dos_buffer_two;
++extern unsigned int address_of_dos_buffer_two;
++extern unsigned int linear_address_of_dos_buffer_two;
+ 
+ extern unsigned short segment_of_ecb_send_buffer, offset_of_ecb_send_buffer;
+-extern unsigned long address_of_ecb_send_buffer;
+-extern unsigned long linear_address_of_ecb_send_buffer;
++extern unsigned int address_of_ecb_send_buffer;
++extern unsigned int linear_address_of_ecb_send_buffer;
+ 
+ extern unsigned short segment_of_ecb_recieve_buffer, offset_of_ecb_recieve_buffer;
+-extern unsigned long address_of_ecb_recieve_buffer;
+-extern unsigned long linear_address_of_ecb_recieve_buffer;
++extern unsigned int address_of_ecb_recieve_buffer;
++extern unsigned int linear_address_of_ecb_recieve_buffer;
+ 
+ 
+ extern unsigned short segment_of_send_buffer, offset_of_send_buffer;
+-extern unsigned long address_of_send_buffer;
+-extern unsigned long linear_address_of_send_buffer;
++extern unsigned int address_of_send_buffer;
++extern unsigned int linear_address_of_send_buffer;
+ 
+ 
+ extern unsigned short segment_of_recieve_buffer, offset_of_recieve_buffer;
+-extern unsigned long address_of_recieve_buffer;
+-extern unsigned long linear_address_of_recieve_buffer;
++extern unsigned int address_of_recieve_buffer;
++extern unsigned int linear_address_of_recieve_buffer;
+ 
+ /* End of EXTERNS */
+ 
+@@ -84,7 +84,7 @@
+ //unsigned short socket = MY_SOCKET;
+ packet_type send_packet, recieve_packet;
+ 
+-unsigned long  address_of_callback;
++unsigned int  address_of_callback;
+ unsigned short segment_of_callback;
+ unsigned short offset_of_callback;
+ 
+@@ -93,7 +93,7 @@
+ _go32_dpmi_seginfo   callback_info;
+ */
+ 
+-unsigned long recieve_count = 0;
++unsigned int recieve_count = 0;
+ 
+ packet_buffer_type packet_buffer;
+ 
+
+--- jonipx.h	2008-06-15 22:56:57.000000000 +0200
++++ jonipx.h	2008-06-15 23:02:38.000000000 +0200
+@@ -103,7 +103,7 @@
+ typedef struct
+     {
+      address_type      link              PACKED_STRUCT; /* Pointer to next ECB */
+-     unsigned long     ESR               PACKED_STRUCT; /* Event service routine 00000000h if none */
++     unsigned int     ESR               PACKED_STRUCT; /* Event service routine 00000000h if none */
+      unsigned char     in_use                         ; /* In use flag */
+      unsigned char     complete                       ; /* Completing flag */
+      unsigned short    socket            PACKED_STRUCT; /* Big endian socket number */
+@@ -111,7 +111,7 @@
+      unsigned char     D_work[12]                     ; /* Driver work space */
+      node_address_type immediate_address              ; /* Immediate local node address */
+      unsigned short    fragment_count    PACKED_STRUCT; /* Fragment count */
+-     unsigned long     fragment_data     PACKED_STRUCT; /* Pointer to data fragment */
++     unsigned int     fragment_data     PACKED_STRUCT; /* Pointer to data fragment */
+      unsigned short    fragment_size     PACKED_STRUCT; /* Size of data fragment */
+     } ECB_type;
+ 
+
+--- joy.c	2003-04-30 16:27:17.000000000 +0200
++++ joy.c	2008-06-15 23:02:38.000000000 +0200
+@@ -159,7 +159,7 @@
+ unsigned int Joystick(unsigned char stick)
+ {
+ 	return(0); //Johnm 12/4/2001
+-// reads the joystick values manually by conting how long the capacitors take to charge/discharge
++// reads the joystick values manually by conting how int the capacitors take to charge/discharge
+ /*
+    unsigned char test_byte;
+    unsigned char done = 0;
+
+--- main.c	2003-04-30 17:30:01.000000000 +0200
++++ main.c	2008-06-15 23:02:38.000000000 +0200
+@@ -74,8 +74,8 @@
+ extern boolean test_anim;
+ extern boolean show_readout;
+ extern boolean test_samples;
+-extern long exit_loop;  /* From omega.c */
+-extern long game_over;
++extern int exit_loop;  /* From omega.c */
++extern int game_over;
+ 
+ extern boolean ceiling_on;
+ extern game_stats_type game_stats;
+@@ -107,13 +107,13 @@
+ 
+ Float_Point cylinder_center = { 0.0, 0.0, 0.0 }; /* used by anti_missile_update */
+ 
+-extern long sb_installed;  /* True if the sound driver thing is installed */
+-extern long keyboard_installed;
+-extern long timer_installed;
+-extern long ignore_sound_card;  /* True if we want to completely ignore the sound card */
++extern int sb_installed;  /* True if the sound driver thing is installed */
++extern int keyboard_installed;
++extern int timer_installed;
++extern int ignore_sound_card;  /* True if we want to completely ignore the sound card */
+ 
+ 
+-long destination_vehicle_index;
++int destination_vehicle_index;
+ 
+ 
+ void print_p_mem( char *str )
+@@ -126,12 +126,12 @@
+ }
+ 
+ 
+-void print_all_input_tables( Player p[], long frame_counter )
++void print_all_input_tables( Player p[], int frame_counter )
+ {
+-    printf("player 0, frame %ld\n", frame_counter );
++    printf("player 0, frame %d\n", frame_counter );
+     print_player_info( p, frame_counter );
+ 
+-    printf("player 3, frame %ld\n", frame_counter );
++    printf("player 3, frame %d\n", frame_counter );
+     print_player_info( p, frame_counter );
+ 
+     printf("\n");
+@@ -160,10 +160,10 @@
+ void display_next_opponent()
+ {
+     pcx_picture *pcx = NULL;
+-    long anchor_x = 0, anchor_y = 0;
++    int anchor_x = 0, anchor_y = 0;
+     palette_type menu_palette;
+     RGB_color *character_palette = NULL;
+-    long i;
++    int i;
+ 
+     DB_Clear_Screen();
+     Wait_For_Vsync();
+@@ -360,7 +360,7 @@
+ void tournament_init_print( char str[] )
+ {
+     pcx_picture *pcx = NULL;
+-    long anchor_x = 0, anchor_y = 0;
++    int anchor_x = 0, anchor_y = 0;
+ 
+     Pop_Buffer( menu_stuff.wingman_menu_background.buffer );
+ 
+@@ -789,7 +789,7 @@
+ 
+ void init_color_info( ColorInfo *color_info )
+ {
+-    long i;
++    int i;
+ 
+     /* copy level.color_info into color_info */
+ 
+@@ -1086,7 +1086,7 @@
+ 
+ void init_world_stuff( WorldStuff *world_stuff )
+ {
+-    long i;
++    int i;
+     pcx_picture temp_pcx;
+ 
+     /* make sure all pointers in worldstuff are NULL (to prevent the freeing
+@@ -1713,7 +1713,7 @@
+ void check_command_line_args( int argc, char *argv[],
+                               unsigned char *ai_active )
+ {
+-    long i;
++    int i;
+ 
+     /* check for command line argument flags */
+ 
+@@ -1985,7 +1985,7 @@
+ 
+ void anti_missile_update( WorldStuff *world_stuff )
+ {
+-    long i, j;
++    int i, j;
+     Projectile *ptr;
+ 
+     for( i = 0; i < 6; i++ ) {
+@@ -2026,7 +2026,7 @@
+ 
+ void move_everything_one_click()
+ {
+-    long i, j;
++    int i, j;
+     unsigned char temp;
+ 
+     for( i = 0; i < 6; i++ ) {
+@@ -2162,7 +2162,7 @@
+     }
+ 
+     if( profile ) {
+-        printf("move_vehicles(), timer = %ld\n", Check_Timer() );
++        printf("move_vehicles(), timer = %d\n", Check_Timer() );
+     }
+ 
+     /* moves the vehicles and aims the radar_bases */
+@@ -2171,7 +2171,7 @@
+                    &(world_stuff.blue_radar_base), &(world_stuff.laser_obj) );
+ 
+     if( profile ) {
+-        printf("move all projectiles forward, timer = %ld\n", Check_Timer() );
++        printf("move all projectiles forward, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < 6; i++ ) {
+@@ -2406,7 +2406,7 @@
+        based on the number of pylons they own */
+ 
+     if( profile ) {
+-        printf("Tally_Pylons(), timer = %ld\n", Check_Timer() );
++        printf("Tally_Pylons(), timer = %d\n", Check_Timer() );
+     }
+ 
+     Tally_Pylons( world_stuff.player_array, &(world_stuff.pylons) );
+@@ -2524,7 +2524,7 @@
+ 
+     if( ceiling_on )
+         {
+-         sprintf(path_string[0], "CEILING ON %ld CLICKS", Check_Timer());
++         sprintf(path_string[0], "CEILING ON %d CLICKS", Check_Timer());
+ 
+          micro_string_blit( path_string[0], 10, 180, menu_stuff.micro_text.buffer,
+              menu_stuff.micro_text.xpixels + 1, menu_stuff.micro_text.ypixels + 1, 191 );
+@@ -2554,10 +2554,10 @@
+ 
+ 
+ 
+-void draw_everything( long view_vehicle, long status_bar,
+-                      long first_person_view, long transporting )
++void draw_everything( int view_vehicle, int status_bar,
++                      int first_person_view, int transporting )
+ {
+-	long i;
++	int i;
+ 	int nLoop;
+ 
+ 	//This loop should loop once on 1 player, twice on two player 
+@@ -2809,7 +2809,7 @@
+ 
+ void free_pylons( Pylons *pylons )
+ {
+-    long i;
++    int i;
+ 
+     for( i = 0; i < pylons->pylons; i++ ) {
+         free_pointface( &(pylons->pylon[i].obj) );
+@@ -2902,7 +2902,7 @@
+ 
+ void free_world_stuff( WorldStuff *w )
+ {
+-    long i;
++    int i;
+ 
+     reset_game_to_start( w, &level, &game_configuration, TRUE );
+ 
+@@ -2998,11 +2998,11 @@
+    It returns true when it reaches it's destination, and updates the view_vehicle to be
+    the index of the player's whose vehicle we are commendeering. */
+ 
+-int transport_towards( long *view_vehicle, WorldStuff *world_stuff )
++int transport_towards( int *view_vehicle, WorldStuff *world_stuff )
+ {
+     Orientation *target;
+-    long target_vehicle_index = 0;
+-    long i;
++    int target_vehicle_index = 0;
++    int i;
+     float len;
+     Float_Vector temp;
+     Float_Vector axis;
+@@ -3115,8 +3115,8 @@
+ } //transport_towards
+ 
+ 
+-void get_current_view_orient( Orientation *view_o, Orientation *old_o, team_type team, long *transporting,
+-                              long *first_person_view )
++void get_current_view_orient( Orientation *view_o, Orientation *old_o, team_type team, int *transporting,
++                              int *first_person_view )
+ {
+ 
+     if( (world_stuff.player_array[user_vehicle_index()].tank.alive == FALSE) && !(*transporting) ) {
+@@ -3188,10 +3188,10 @@
+ 
+ 
+ 
+-void get_current_view_orient_during_fadeout( Orientation *view_o, Orientation *old_o, team_type team, long *transporting,
+-                                             long *first_person_view )
++void get_current_view_orient_during_fadeout( Orientation *view_o, Orientation *old_o, team_type team, int *transporting,
++                                             int *first_person_view )
+ {
+-    static long destination_vehicle_index;
++    static int destination_vehicle_index;
+     
+ 
+     if( (*first_person_view) && !(*transporting) ) {
+@@ -3410,7 +3410,7 @@
+ 
+ void free_all_samples( WorldStuff *world_stuff )
+ {
+-    long i, j;
++    int i, j;
+     
+     /* free all the computer samples */
+     for( i = 0; i < MAX_COMPUTER_SAMPLES; i++ ) {
+
+--- main.h	2001-12-18 21:08:44.000000000 +0100
++++ main.h	2008-06-15 23:02:38.000000000 +0200
+@@ -32,11 +32,11 @@
+ void check_command_line_args( int argc, char *argv[],
+                               unsigned char *ai_active );
+ 
+-void init_modem_connection( unsigned char master, long *movement_vehicle,
+-                            long *view_vehicle, long *remote_player );
++void init_modem_connection( unsigned char master, int *movement_vehicle,
++                            int *view_vehicle, int *remote_player );
+ 
+-void init_serial_game_state( unsigned char master, long *movement_vehicle,
+-                             long *view_vehicle, long *remote_player );
++void init_serial_game_state( unsigned char master, int *movement_vehicle,
++                             int *view_vehicle, int *remote_player );
+ 
+ void get_user_key_table( input_table table );
+ 
+@@ -44,14 +44,14 @@
+ 
+ void move_everything_one_click();
+ 
+-void draw_everything( long view_vehicle, long status_bar,
+-                      long first_person_view, long transporting );
++void draw_everything( int view_vehicle, int status_bar,
++                      int first_person_view, int transporting );
+ 
+ void free_world_stuff( WorldStuff *w );
+ 
+ void free_menu_stuff( MenuStuff *menu_stuff );
+ 
+-void update_leader( long view_vehicle );
++void update_leader( int view_vehicle );
+ 
+ void free_pcx_picture( pcx_picture *pic );
+ 
+@@ -68,8 +68,8 @@
+ 
+ int num_vehicles_remaining( team_type team );
+ 
+-void get_current_view_orient( Orientation *o, Orientation *old_o, team_type team, long *transporting,
+-                              long *first_person_view );
++void get_current_view_orient( Orientation *o, Orientation *old_o, team_type team, int *transporting,
++                              int *first_person_view );
+                               
+ int is_round_over();
+ 
+@@ -92,13 +92,13 @@
+ 
+ void print_game_configuration_info( game_configuration_type *game_configuration, int master );
+ 
+-void get_current_view_orient_during_fadeout( Orientation *view_o, Orientation *old_o, team_type team, long *transporting,
+-                                             long *first_person_view );
++void get_current_view_orient_during_fadeout( Orientation *view_o, Orientation *old_o, team_type team, int *transporting,
++                                             int *first_person_view );
+ 
+-void print_all_input_tables( Player p[], long frame_counter );
++void print_all_input_tables( Player p[], int frame_counter );
+ 
+-void ipx_get_current_view_orient( Orientation *view_o, Orientation *old_o, team_type team, long *transporting,
+-                                  long *first_person_view );
++void ipx_get_current_view_orient( Orientation *view_o, Orientation *old_o, team_type team, int *transporting,
++                                  int *first_person_view );
+ 
+ void display_next_opponent();
+ 
+
+--- menu.c	2003-09-17 20:55:52.000000000 +0200
++++ menu.c	2008-06-15 23:02:38.000000000 +0200
+@@ -59,12 +59,12 @@
+ 
+ //From main.c
+ 
+-extern long exit_loop;  /* From omega.c */
+-extern long game_over;
++extern int exit_loop;  /* From omega.c */
++extern int game_over;
+ 
+ extern char version_string[];
+ 
+-extern long program_over;    /* TRUE when user wishes to leave the program */
++extern int program_over;    /* TRUE when user wishes to leave the program */
+ 
+ extern MenuStuff menu_stuff;
+ 
+@@ -76,12 +76,12 @@
+ 
+ extern int master;
+ 
+-extern long sb_installed;           /* true if the sound card is installed */
+-extern long timer_installed;        /* true if the timer interrupt is installed */
+-extern long keyboard_installed;     /* true if the keyboard interrupt is installed */
+-extern long multiplayer_game_only;  /* true if the cylindrix disk aint in the drive */
++extern int sb_installed;           /* true if the sound card is installed */
++extern int timer_installed;        /* true if the timer interrupt is installed */
++extern int keyboard_installed;     /* true if the keyboard interrupt is installed */
++extern int multiplayer_game_only;  /* true if the cylindrix disk aint in the drive */
+ 
+-long quit_game = FALSE;
++int quit_game = FALSE;
+ 
+ extern game_stats_type game_stats;
+ 
+@@ -515,7 +515,7 @@
+ 
+ /* exit_event_loop tells the event loop when to exit */
+ 
+-long exit_event_loop = FALSE;
++int exit_event_loop = FALSE;
+ 
+ void make_menu_current( MenuScreen *menu )
+ {
+@@ -946,12 +946,12 @@
+ 
+ void pilot_selection_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 80;
+-    const long y_start = 45;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 80;
++    const int y_start = 45;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -1457,12 +1457,12 @@
+ 
+ void pilot_delete_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 80;
+-    const long y_start = 45;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 80;
++    const int y_start = 45;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -1561,9 +1561,9 @@
+ 
+ void pilot_input_menu_draw_menu()
+ {
+-    const long x_start = 10;
+-    const long y_start = 90;
+-    const long y_spacing = 15;
++    const int x_start = 10;
++    const int y_start = 90;
++    const int y_spacing = 15;
+     int exit_loop = FALSE;
+     char prompt[80] = "PILOT NAME:";
+     char pilot_name[80] = "";
+@@ -2116,12 +2116,12 @@
+ 
+ void main_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color = SELECTED_TEXT_COLOR;
+-    const long x_start = 75;
+-    const long y_start = 55;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 75;
++    const int y_start = 55;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -2284,12 +2284,12 @@
+ 
+ void options_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 75;
+-    const long y_start = 70;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 75;
++    const int y_start = 70;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -2457,12 +2457,12 @@
+ 
+ void detail_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 75;
+-    const long y_start = 70;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 75;
++    const int y_start = 70;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -2685,12 +2685,12 @@
+ 
+ void sound_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 75;
+-    const long y_start = 70;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 75;
++    const int y_start = 70;
++    const int y_spacing = 15;
++    int x, y;
+     BarInfo bar_info;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+@@ -2803,7 +2803,7 @@
+ 
+ void keyboard_menu_return_key()
+ {
+-    unsigned long scancode;
++    unsigned int scancode;
+ 
+     if( sb_installed ) {
+         Play_Menu_Sound( menu_stuff.menu_sounds.enter_sound );
+@@ -2936,13 +2936,13 @@
+ 
+ void keyboard_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 10;
+-    const long y_start = 30;
+-    const long y_spacing = 7;
+-    long x, y;
+-    unsigned long current_scancode = 0;
++    const int x_start = 10;
++    const int y_start = 30;
++    const int y_spacing = 7;
++    int x, y;
++    unsigned int current_scancode = 0;
+     char temp_str[80];
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+@@ -3019,7 +3019,7 @@
+             current_scancode = game_configuration.keyboard_config.wing_2_cancel;
+ 
+ 
+-        /* sprintf( temp_str, "%ld", current_scancode ); */
++        /* sprintf( temp_str, "%d", current_scancode ); */
+ 
+         Index_To_String( temp_str, current_scancode );
+ 
+@@ -3161,12 +3161,12 @@
+ 
+ void joystick_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 55;
+-    const long y_start = 70;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 55;
++    const int y_start = 70;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -3577,13 +3577,13 @@
+ 
+ void joystick_config_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 50;
+-    const long y_start = 50;
+-    const long y_spacing = 10;
+-    long x, y;
+-    unsigned long current_action = 0;
++    const int x_start = 50;
++    const int y_start = 50;
++    const int y_spacing = 10;
++    int x, y;
++    unsigned int current_action = 0;
+     char temp_str[80];
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+@@ -3788,12 +3788,12 @@
+ 
+ void game_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 75;
+-    const long y_start = 70;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 75;
++    const int y_start = 70;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -3950,12 +3950,12 @@
+ 
+ void custom_game_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 25;
+-    const long y_start = 45;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 25;
++    const int y_start = 45;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -4021,7 +4021,7 @@
+ /* methods for wingman_menu */
+ 
+ 
+-long selection_to_ai( long selection )
++int selection_to_ai( int selection )
+ {
+     if( selection == 0 ) {  /* Megan Hunter */
+         return 9;
+@@ -4145,7 +4145,7 @@
+     }
+ }
+ 
+-long ai_to_selection( long ai )
++int ai_to_selection( int ai )
+ {
+     if( ai == 9 ) {  /* Megan Hunter */
+         return 0;
+@@ -4371,7 +4371,7 @@
+ 
+ void custom_wingman1_menu_return_key()
+ {
+-    long current_selection;
++    int current_selection;
+ 
+     current_selection = (wingman_menu_data.current_row * 3) + wingman_menu_data.current_col;
+ 
+@@ -4396,7 +4396,7 @@
+ 
+ void custom_wingman2_menu_return_key()
+ {
+-    long current_selection;
++    int current_selection;
+ 
+     current_selection = (wingman_menu_data.current_row * 3) + wingman_menu_data.current_col;
+ 
+@@ -4423,7 +4423,7 @@
+ 
+ void custom_opponent1_menu_return_key()
+ {
+-    long current_selection;
++    int current_selection;
+ 
+     current_selection = (wingman_menu_data.current_row * 3) + wingman_menu_data.current_col;
+ 
+@@ -4446,7 +4446,7 @@
+ 
+ void custom_opponent2_menu_return_key()
+ {
+-    long current_selection;
++    int current_selection;
+ 
+     current_selection = (wingman_menu_data.current_row * 3) + wingman_menu_data.current_col;
+ 
+@@ -4469,7 +4469,7 @@
+ 
+ void custom_opponent3_menu_return_key()
+ {
+-    long current_selection;
++    int current_selection;
+ 
+     current_selection = (wingman_menu_data.current_row * 3) + wingman_menu_data.current_col;
+ 
+@@ -4549,10 +4549,10 @@
+     }
+ }
+ 
+-void character_picture_blit( long anchor_x, long anchor_y, pcx_picture *pcx )
++void character_picture_blit( int anchor_x, int anchor_y, pcx_picture *pcx )
+ {
+ 
+-    long i = 0, x, y;
++    int i = 0, x, y;
+ 
+     for( y = anchor_y; y < anchor_y + pcx->ypixels + 1; y++ ) {
+         for( x = anchor_x; x < anchor_x + pcx->xpixels + 1; x++ ) {
+@@ -4566,26 +4566,26 @@
+ 
+ void wingman_menu_draw_menu()
+ {
+-    long current_selection, i;
++    int current_selection, i;
+ 
+-    const long name_x = 60;
+-    const long name_y = 120;
++    const int name_x = 60;
++    const int name_y = 120;
+ 
+-    const long race_x = 220;
+-    const long race_y = 120;
++    const int race_x = 220;
++    const int race_y = 120;
+ 
+-    const long description_x = 110;
+-    const long description_x_2 = 30;
+-    const long description_y = 130;
+-    const long description_space = 10;
++    const int description_x = 110;
++    const int description_x_2 = 30;
++    const int description_y = 130;
++    const int description_space = 10;
+ 
+-    const long vehicle_x = 150;
+-    const long vehicle_y = 170;
++    const int vehicle_x = 150;
++    const int vehicle_y = 170;
+ 
+     RGB_color *character_palette = NULL;
+     pcx_picture *pcx = NULL;
+ 
+-    long anchor_x = 0, anchor_y = 0;
++    int anchor_x = 0, anchor_y = 0;
+     Point upper_left, lower_right;
+ 
+     char temp_str[50];
+@@ -4868,7 +4868,7 @@
+ 
+ void init_custom_wingman1_menu()
+ {
+-    long selection;
++    int selection;
+ 
+     custom_wingman1_menu.up_arrow = (Method)wingman_menu_up_arrow;
+     custom_wingman1_menu.down_arrow = (Method)wingman_menu_down_arrow;
+@@ -4894,7 +4894,7 @@
+ 
+ void init_custom_wingman2_menu()
+ {
+-    long selection;
++    int selection;
+ 
+     custom_wingman2_menu.up_arrow = (Method)wingman_menu_up_arrow;
+     custom_wingman2_menu.down_arrow = (Method)wingman_menu_down_arrow;
+@@ -4920,7 +4920,7 @@
+ 
+ void init_custom_opponent1_menu()
+ {
+-    long selection;
++    int selection;
+ 
+     custom_opponent1_menu.up_arrow = (Method)wingman_menu_up_arrow;
+     custom_opponent1_menu.down_arrow = (Method)wingman_menu_down_arrow;
+@@ -4946,7 +4946,7 @@
+ 
+ void init_custom_opponent2_menu()
+ {
+-    long selection;
++    int selection;
+ 
+     custom_opponent2_menu.up_arrow = (Method)wingman_menu_up_arrow;
+     custom_opponent2_menu.down_arrow = (Method)wingman_menu_down_arrow;
+@@ -4972,7 +4972,7 @@
+ 
+ void init_custom_opponent3_menu()
+ {
+-    long selection;
++    int selection;
+ 
+     custom_opponent3_menu.up_arrow = (Method)wingman_menu_up_arrow;
+     custom_opponent3_menu.down_arrow = (Method)wingman_menu_down_arrow;
+@@ -6205,7 +6205,7 @@
+ void init_custom_vehicle1_menu()
+ {
+     string temp_str;
+-    long character_index;
++    int character_index;
+ 
+     custom_vehicle1_menu.up_arrow = (Method)vehicle_menu_up_arrow;
+     custom_vehicle1_menu.down_arrow = (Method)vehicle_menu_down_arrow;
+@@ -6271,7 +6271,7 @@
+ void init_custom_vehicle2_menu()
+ {
+     string temp_str;
+-    long character_index;
++    int character_index;
+ 
+     custom_vehicle2_menu.up_arrow = (Method)vehicle_menu_up_arrow;
+     custom_vehicle2_menu.down_arrow = (Method)vehicle_menu_down_arrow;
+@@ -6338,7 +6338,7 @@
+ 
+ void init_custom_vehicle3_menu()
+ {
+-    long character_index;
++    int character_index;
+     string temp_str;
+ 
+     custom_vehicle3_menu.up_arrow = (Method)vehicle_menu_up_arrow;
+@@ -6406,7 +6406,7 @@
+ void init_custom_vehicle4_menu()
+ {
+     string temp_str;
+-    long character_index;
++    int character_index;
+ 
+     custom_vehicle4_menu.up_arrow = (Method)vehicle_menu_up_arrow;
+     custom_vehicle4_menu.down_arrow = (Method)vehicle_menu_down_arrow;
+@@ -6472,7 +6472,7 @@
+ 
+ void init_custom_vehicle5_menu()
+ {
+-    long character_index;
++    int character_index;
+     string temp_str;
+ 
+     custom_vehicle5_menu.up_arrow = (Method)vehicle_menu_up_arrow;
+@@ -6686,12 +6686,12 @@
+ 
+ void cylindrix_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 60;
+-    const long y_start = 30;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 60;
++    const int y_start = 30;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -7064,7 +7064,7 @@
+ void init_tournament_vehicle1_menu()
+ {
+     string temp_str;
+-    long character_index;
++    int character_index;
+ 
+     tournament_vehicle1_menu.up_arrow = (Method)vehicle_menu_up_arrow;
+     tournament_vehicle1_menu.down_arrow = (Method)vehicle_menu_down_arrow;
+@@ -7130,7 +7130,7 @@
+ void init_tournament_vehicle2_menu()
+ {
+     string temp_str;
+-    long character_index;
++    int character_index;
+ 
+     tournament_vehicle2_menu.up_arrow = (Method)vehicle_menu_up_arrow;
+     tournament_vehicle2_menu.down_arrow = (Method)vehicle_menu_down_arrow;
+@@ -7304,7 +7304,7 @@
+ 
+ void tournament_wingman1_menu_return_key()
+ {
+-    long current_selection;
++    int current_selection;
+     
+     current_selection = (wingman_menu_data.current_row * 3) + wingman_menu_data.current_col;
+     
+@@ -7329,7 +7329,7 @@
+ 
+ void tournament_wingman2_menu_return_key()
+ {
+-    long current_selection;
++    int current_selection;
+ 
+     current_selection = (wingman_menu_data.current_row * 3) + wingman_menu_data.current_col;
+         
+@@ -7380,7 +7380,7 @@
+ 
+ void init_tournament_wingman1_menu()
+ {
+-    long selection;
++    int selection;
+ 
+     tournament_wingman1_menu.up_arrow = (Method)tournament_wingman_menu_up_arrow;
+     tournament_wingman1_menu.down_arrow = (Method)tournament_wingman_menu_down_arrow;
+@@ -7418,7 +7418,7 @@
+ 
+ void init_tournament_wingman2_menu()
+ {
+-    long selection;
++    int selection;
+ 
+     tournament_wingman2_menu.up_arrow = (Method)tournament_wingman_menu_up_arrow;
+     tournament_wingman2_menu.down_arrow = (Method)tournament_wingman_menu_down_arrow;
+@@ -7564,12 +7564,12 @@
+ 
+ void tournament_game_setup_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 25;
+-    const long y_start = 55;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 25;
++    const int y_start = 55;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -7736,15 +7736,15 @@
+ 
+ void view_stats_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 5;
+-    const long y_start = 170;
+-    const long y_spacing = 15;
+-    const long stat_x_start = 200;
+-    const long stat_y_start = 35;
+-    const long stat_y_spacing = 9;
+-    long x, y;
++    const int x_start = 5;
++    const int y_start = 170;
++    const int y_spacing = 15;
++    const int stat_x_start = 200;
++    const int stat_y_start = 35;
++    const int stat_y_spacing = 9;
++    int x, y;
+     char str[80];
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+@@ -8056,7 +8056,7 @@
+ 
+ void menu_event_loop()
+ {
+-    unsigned long key;
++    unsigned int key;
+     
+     init_wingman_data();  /* initalizes all the characters names & descriptions */
+     init_vehicle_data();  /* initalizes all the vehicles characteristics */
+@@ -8168,12 +8168,12 @@
+ 
+ void during_game_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 75;
+-    const long y_start = 70;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 75;
++    const int y_start = 70;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -8311,12 +8311,12 @@
+ 
+ void during_game_options_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 75;
+-    const long y_start = 70;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 75;
++    const int y_start = 70;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -8474,12 +8474,12 @@
+ 
+ void during_game_detail_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 75;
+-    const long y_start = 70;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 75;
++    const int y_start = 70;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -8703,12 +8703,12 @@
+ 
+ void during_game_sound_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 75;
+-    const long y_start = 70;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 75;
++    const int y_start = 70;
++    const int y_spacing = 15;
++    int x, y;
+     BarInfo bar_info;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+@@ -8821,7 +8821,7 @@
+ 
+ void during_game_keyboard_menu_return_key()
+ {
+-    unsigned long scancode;
++    unsigned int scancode;
+ 
+     /* change color 2 to red */
+     
+@@ -8949,13 +8949,13 @@
+ 
+ void during_game_keyboard_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 10;
+-    const long y_start = 30;
+-    const long y_spacing = 7;
+-    long x, y;
+-    unsigned long current_scancode = 0;
++    const int x_start = 10;
++    const int y_start = 30;
++    const int y_spacing = 7;
++    int x, y;
++    unsigned int current_scancode = 0;
+     char temp_str[80];
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+@@ -9032,7 +9032,7 @@
+             current_scancode = game_configuration.keyboard_config.wing_2_cancel;
+ 
+ 
+-        /* sprintf( temp_str, "%ld", current_scancode ); */
++        /* sprintf( temp_str, "%d", current_scancode ); */
+ 
+         Index_To_String( temp_str, current_scancode );
+ 
+@@ -9174,12 +9174,12 @@
+ 
+ void during_game_joystick_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 55;
+-    const long y_start = 70;
+-    const long y_spacing = 15;
+-    long x, y;
++    const int x_start = 55;
++    const int y_start = 70;
++    const int y_spacing = 15;
++    int x, y;
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+ 
+@@ -9589,13 +9589,13 @@
+ 
+ void during_game_joystick_config_menu_draw_menu()
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 50;
+-    const long y_start = 50;
+-    const long y_spacing = 10;
+-    long x, y;
+-    unsigned long current_action = 0;
++    const int x_start = 50;
++    const int y_start = 50;
++    const int y_spacing = 10;
++    int x, y;
++    unsigned int current_action = 0;
+     char temp_str[80];
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+@@ -9707,7 +9707,7 @@
+ 
+ int during_game_menu_event_loop()
+ {
+-    unsigned long key;
++    unsigned int key;
+     
+     if( sb_installed ) {
+         Play_Menu_Sound( menu_stuff.menu_sounds.enter_sound );
+@@ -9887,15 +9887,15 @@
+ 
+ void custom_game_stat_menu_draw_menu( int victory )
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 5;
+-    const long y_start = 170;
+-    const long y_spacing = 15;
+-    const long stat_x_start = 200;
+-    const long stat_y_start = 35;
+-    const long stat_y_spacing = 10;
+-    long x, y;
++    const int x_start = 5;
++    const int y_start = 170;
++    const int y_spacing = 15;
++    const int stat_x_start = 200;
++    const int stat_y_start = 35;
++    const int stat_y_spacing = 10;
++    int x, y;
+     char str[80];
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+@@ -10140,7 +10140,7 @@
+ 
+ void custom_game_stat_menu_event_loop( int victory )
+ {
+-    unsigned long key;
++    unsigned int key;
+ 
+     /* init all the menus : the indenting shows the menu structure */
+ 
+@@ -10299,15 +10299,15 @@
+ 
+ void tournament_game_stat_menu_draw_menu( int victory )
+ {
+-    long i;
++    int i;
+     unsigned char color;
+-    const long x_start = 5;
+-    const long y_start = 170;
+-    const long y_spacing = 15;
+-    const long stat_x_start = 200;
+-    const long stat_y_start = 35;
+-    const long stat_y_spacing = 10;
+-    long x, y;
++    const int x_start = 5;
++    const int y_start = 170;
++    const int y_spacing = 15;
++    const int stat_x_start = 200;
++    const int stat_y_start = 35;
++    const int stat_y_spacing = 10;
++    int x, y;
+     char str[80];
+ 
+     Pop_Buffer( menu_stuff.general_menu_background.buffer );
+@@ -10552,7 +10552,7 @@
+ 
+ void tournament_game_stat_menu_event_loop( int victory )
+ {
+-    unsigned long key;
++    unsigned int key;
+ 
+     /* init all the menus : the indenting shows the menu structure */
+ 
+
+--- menu.h	2001-12-18 21:08:45.000000000 +0100
++++ menu.h	2008-06-15 23:02:38.000000000 +0200
+@@ -39,8 +39,8 @@
+ 
+ typedef struct {
+     string item[50];            /* holds all the menu selections */
+-    long current_selection;     /* the users currently selected selection */
+-    long num_items;             /* the number of selections */
++    int current_selection;     /* the users currently selected selection */
++    int num_items;             /* the number of selections */
+ } GeneralMenuData;
+ 
+ typedef struct {
+@@ -55,12 +55,12 @@
+ } CharacterInfo;
+ 
+ typedef struct {
+-    long wingman_index;         /* identifies the player whose ai we are selecting (unused) */
++    int wingman_index;         /* identifies the player whose ai we are selecting (unused) */
+     string menu_title;          /* title of menu */
+     CharacterInfo info[39];     /* each characters info (name, race, description ... ) */
+-    long current_row;
+-    long current_col;
+-    long num_items;               /* the number of characters able to be selected must be a multiple of 3 */
++    int current_row;
++    int current_col;
++    int num_items;               /* the number of characters able to be selected must be a multiple of 3 */
+     boolean palette_active;       /* true if pallete is active */
+     palette_type menu_palette;
+ } WingmanMenuData;
+@@ -74,9 +74,9 @@
+ } VehicleInfo;
+ 
+ typedef struct {
+-    long current_selection;
++    int current_selection;
+     string menu_title;
+-    long num_items;
++    int num_items;
+     VehicleInfo info[8];
+     PointFace world_obj;
+     Orientation orient;
+@@ -102,8 +102,8 @@
+ 
+ void make_menu_current( MenuScreen *menu );
+ 
+-void character_picture_blit( long anchor_x, long anchor_y, pcx_picture *pcx );
++void character_picture_blit( int anchor_x, int anchor_y, pcx_picture *pcx );
+ 
+-long ai_to_selection( long ai );
++int ai_to_selection( int ai );
+ 
+ #endif
+
+--- movement.c	2001-12-18 21:08:45.000000000 +0100
++++ movement.c	2008-06-15 23:02:38.000000000 +0200
+@@ -33,7 +33,7 @@
+ extern int profile;
+ extern level_type level;
+ 
+-/* Will move the vehicle's position along its velocity vector, while keeping
++/* Will move the vehicle's position aint its velocity vector, while keeping
+    its front vector tangent to the cylinder and the up vector normal to the
+    surface. */
+ 
+@@ -208,7 +208,7 @@
+     v->vel[Z] = -v->vel[Z];
+ }
+ 
+-/* Move the vehicle's position along its velocity vector, the
++/* Move the vehicle's position aint its velocity vector, the
+    front and up vectors remain unchanged */
+ 
+ void move_along_velocity_3d( Vehicle *v )
+@@ -640,7 +640,7 @@
+     float len, theta, temp;
+     Float_Point new_position, new_front, new_up, p, axis, i, j;
+     Float_Matrix front_rotate, up_rotate, rotation;
+-    long done = FALSE;
++    int done = FALSE;
+     const float rotation_increment = 0.1745329; /* 10 degrees in radians */
+     const float epsilon = 0.005;
+ 
+@@ -1240,7 +1240,7 @@
+ {
+     Float_Vector left, projection;
+     float length;
+-    long alignment_finished, movement_finished;
++    int alignment_finished, movement_finished;
+ 
+     if( v->vehicle_mode == Surface && v->alive ) {
+ 
+@@ -1456,7 +1456,7 @@
+ 
+ void bounce_colliding_vehicles( CollisionTable c_table, Player p[] )
+ {
+-    long i;
++    int i;
+ 
+     for( i = 0; i < 6; i++ ) {
+         if( c_table[i].collision ) {
+@@ -1496,13 +1496,13 @@
+ void move_vehicles( Player p[], Pylons *pylons, RadarBase *red_base,
+                     RadarBase *blue_base, PointFace *base_laser )
+ {
+-    long i;
++    int i;
+     CollisionTable c_table, new_c_table, new_new_c_table;
+ 
+-    /* move all the vehicles along their velocity vectors */
++    /* move all the vehicles aint their velocity vectors */
+ 
+     if( profile ) {
+-        printf("    move each vehicle forward, timer = %ld\n", Check_Timer());
++        printf("    move each vehicle forward, timer = %d\n", Check_Timer());
+     }
+ 
+     for( i = 0; i < 6; i++ ) {
+@@ -1510,7 +1510,7 @@
+     }
+ 
+     if( profile ) {
+-        printf("    init vehicles bbox and world_obj, timer = %ld\n", Check_Timer());
++        printf("    init vehicles bbox and world_obj, timer = %d\n", Check_Timer());
+     }
+ 
+     /* initalize every vehicles world_object and bounding box which
+@@ -1522,7 +1522,7 @@
+     }
+ 
+     if( profile ) {
+-        printf("    aim radar bases, timer = %ld\n", Check_Timer());
++        printf("    aim radar bases, timer = %d\n", Check_Timer());
+     }
+ 
+     /* aim the both radar_bases now so that we only have to orient their
+@@ -1532,7 +1532,7 @@
+     aim_radar_base( blue_base, p, base_laser );
+ 
+     if( profile ) {
+-        printf("    update radar bases, timer = %ld\n", Check_Timer());
++        printf("    update radar bases, timer = %d\n", Check_Timer());
+     }
+ 
+     /* initalize both radar_bases world_union_object and bounding boxes which
+@@ -1544,7 +1544,7 @@
+     /* find collisions */
+ 
+     if( profile ) {
+-        printf("    build_collision_table(), timer = %ld\n", Check_Timer());
++        printf("    build_collision_table(), timer = %d\n", Check_Timer());
+     }
+ 
+     build_collision_table( c_table, p, pylons, red_base, blue_base );
+@@ -1552,7 +1552,7 @@
+     /* move colliding vehicles backward */
+ 
+     if( profile ) {
+-        printf("    move colliding vehicle backward, timer = %ld\n", Check_Timer());
++        printf("    move colliding vehicle backward, timer = %d\n", Check_Timer());
+     }
+ 
+     for( i = 0; i < 6; i++ ) {
+@@ -1564,15 +1564,15 @@
+     /* add bouncing vectors to all colliding vehicles */
+ 
+     if( profile ) {
+-        printf("    bounce_colliding_vehicles(), timer = %ld\n", Check_Timer());
++        printf("    bounce_colliding_vehicles(), timer = %d\n", Check_Timer());
+     }
+ 
+     bounce_colliding_vehicles( c_table, p );
+ 
+-    /* move colliding vehicles along their velocity vectors */
++    /* move colliding vehicles aint their velocity vectors */
+ 
+     if( profile ) {
+-        printf("    move colliding vehicles forward, timer = %ld\n", Check_Timer());
++        printf("    move colliding vehicles forward, timer = %d\n", Check_Timer());
+     }
+ 
+     for( i = 0; i < 6; i++ ) {
+@@ -1587,7 +1587,7 @@
+        colliding vehicles */
+ 
+     if( profile ) {
+-        printf("    build_new_collision_table, timer = %ld\n", Check_Timer());
++        printf("    build_new_collision_table, timer = %d\n", Check_Timer());
+     }
+ 
+     build_new_collision_table( c_table, new_c_table, p, pylons, red_base,
+@@ -1596,7 +1596,7 @@
+     /* move the new colliding vehicles backward */
+ 
+     if( profile ) {
+-        printf("    move stuck vehicle backward, timer = %ld\n", Check_Timer());
++        printf("    move stuck vehicle backward, timer = %d\n", Check_Timer());
+     }
+ 
+     for( i = 0; i < 6; i++ ) {
+@@ -1604,7 +1604,7 @@
+             /* printf("pre_force_vel = (%.5f,%.5f,%.5f)\n", p[i].tank.vel[X], p[i].tank.vel[Y], p[i].tank.vel[Z] );
+             move_vehicle_backward( &(p[i].tank) ); */
+             force_bounce_vehicle( &(p[i].tank), new_c_table[i].reflect );
+-            /* printf("p[%ld] : Force\n", i );
++            /* printf("p[%d] : Force\n", i );
+             printf("post_force_vel = (%.5f,%.5f,%.5f)\n", p[i].tank.vel[X], p[i].tank.vel[Y], p[i].tank.vel[Z] ); */
+             move_vehicle_forward( &(p[i].tank) );
+             init_world_collision_obj( &(p[i].tank) );
+@@ -1618,7 +1618,7 @@
+     for( i = 0; i < 6; i++ ) {
+         if( new_new_c_table[i].collision ) {
+             move_vehicle_backward( &(p[i].tank) );
+-            /* printf("p[%ld] : Stuck!!!\n", i );
++            /* printf("p[%d] : Stuck!!!\n", i );
+             printf("   vel = (%.5f,%.5f,%.5f)\n", p[i].tank.vel[X], p[i].tank.vel[Y], p[i].tank.vel[Z] ); */
+         }
+     }
+@@ -1636,7 +1636,7 @@
+     /* reduce every vehicles velocity by friction */
+ 
+     if( profile ) {
+-        printf("    reduce_by_friction(), timer = %ld\n", Check_Timer());
++        printf("    reduce_by_friction(), timer = %d\n", Check_Timer());
+     }
+ 
+     for( i = 0; i < 6; i++ ) {
+
+--- object.c	2004-03-01 23:24:48.000000000 +0100
++++ object.c	2008-06-15 23:06:02.000000000 +0200
+@@ -57,13 +57,13 @@
+ 
+ extern char g_DataPath[255];
+ 
+-long vrpz = (-3 << MEXP);           /* z coord of the view reference point */
+-long xmin = (-4383);   /* -3.0 */   /* min x coord of window on view plane */
+-long xmax = (4383);    /* 3.0 */    /* max x coord of window on view plane */
+-long ymin = (-3159);   /* -2.5 */   /* min y coord of window on view plane */
+-long ymax = (3159);    /* 2.5 */    /* max y coord of window on view plane */
+-long yon = ( -1024 );  /*was 1024*/ /* back clipping plane (see HackAlert) */
+-long new_hither = ( -50 );          /* front clipping plane */
++int vrpz = (-3 << MEXP);           /* z coord of the view reference point */
++int xmin = (-4383);   /* -3.0 */   /* min x coord of window on view plane */
++int xmax = (4383);    /* 3.0 */    /* max x coord of window on view plane */
++int ymin = (-3159);   /* -2.5 */   /* min y coord of window on view plane */
++int ymax = (3159);    /* 2.5 */    /* max y coord of window on view plane */
++int yon = ( -1024 );  /*was 1024*/ /* back clipping plane (see HackAlert) */
++int new_hither = ( -50 );          /* front clipping plane */
+ 
+ /* Hack Alert !!!!!!
+    The variable yon is NOT the actual back clipping plane.  It is used so
+@@ -79,16 +79,16 @@
+ Matrix inv_scale_matrix;       /* inverse of scale_matrix */
+ Matrix wtov_matrix;            /* window to viewport mapping matrix */
+ 
+-long view_vertices[MAX_POINTS][3];   /* holds the vertices of obj after
++int view_vertices[MAX_POINTS][3];   /* holds the vertices of obj after
+ 					rotation */
+ 
+-long projected_vertices[MAX_POINTS][4]; /* vertices of obj after rotation &
++int projected_vertices[MAX_POINTS][4]; /* vertices of obj after rotation &
+ 					   projection & scaling */
+ 
+ /* Hack Alert !!!!!!!!!!!
+     The projected_vertices array should be an array of Points (3 longs) not
+     4 longs.  Each element of projected_vertices contains 4 longs because the
+-    forth long can contain the color of that vertex.  This is so the polygon
++    forth int can contain the color of that vertex.  This is so the polygon
+     scan converter can interpolate the colors of each vertex to produce
+     smooth shading.
+ */
+@@ -143,10 +143,10 @@
+ 
+ void print_matrix( Matrix m )
+ {
+-    printf("| %-10ld %-10ld %-10ld %-10ld |\n",m[0],m[1],m[2],m[3]);
+-    printf("| %-10ld %-10ld %-10ld %-10ld |\n",m[4],m[5],m[6],m[7]);
+-    printf("| %-10ld %-10ld %-10ld %-10ld |\n",m[8],m[9],m[10],m[11]);
+-    printf("| %-10ld %-10ld %-10ld %-10ld |\n",m[12],m[13],m[14],m[15]);
++    printf("| %-10d %-10d %-10d %-10d |\n",m[0],m[1],m[2],m[3]);
++    printf("| %-10d %-10d %-10d %-10d |\n",m[4],m[5],m[6],m[7]);
++    printf("| %-10d %-10d %-10d %-10d |\n",m[8],m[9],m[10],m[11]);
++    printf("| %-10d %-10d %-10d %-10d |\n",m[12],m[13],m[14],m[15]);
+ }
+ 
+ /* Multiplies two 4x4 matrices, p & q, and sticks the result in r.
+@@ -221,7 +221,7 @@
+     float r[16];  /* temp float matrix, holds result */
+     float p[16];  /* temp float matrix, holds ip */
+     float q[16];  /* temp float matrix, holds iq */
+-    long i;
++    int i;
+ 
+     /* copy ip into p */
+ 
+@@ -317,19 +317,19 @@
+ 
+ void print_edge_table( EdgeTable *et )
+ {
+-    long i;
+-    printf( "%ld\n", et->edges );
++    int i;
++    printf( "%d\n", et->edges );
+ 
+     for( i = 0; i < et->edges; i++ ) {
+-	printf( "%ld %ld\n", et->edge[i][0], et->edge[i][1] );
++	printf( "%d %d\n", et->edge[i][0], et->edge[i][1] );
+     }
+ }
+ 
+ void print_wire_object( PointEdge *pe )
+ {
+-    long i;
++    int i;
+ 
+-    printf("%ld %ld\n", pe->points, pe->edges );
++    printf("%d %d\n", pe->points, pe->edges );
+ 
+     for( i = 0; i < pe->points; i++ ) {
+ 	printf("%f %f %f\n", mtof( pe->point[i][X] ), mtof( pe->point[i][Y] ),
+@@ -337,14 +337,14 @@
+     }
+ 
+     for( i = 0; i < pe->edges; i++ ) {
+-	printf("%ld %ld\n", pe->edge[i][0], pe->edge[i][1] );
++	printf("%d %d\n", pe->edge[i][0], pe->edge[i][1] );
+     }
+ }
+ 
+ void get_wire_object( PointEdge *pe, char *filename )
+ {
+     FILE *fp;
+-    long points, edges, i;
++    int points, edges, i;
+     float x, y, z;
+ 	char newfilename[512];
+ 
+@@ -368,7 +368,7 @@
+ 
+     /* get the size of the object */
+ 
+-    fscanf( fp, " %ld %ld ", &points, &edges );
++    fscanf( fp, " %d %d ", &points, &edges );
+     pe->points = points;
+     pe->edges = edges;
+ 
+@@ -400,7 +400,7 @@
+     /* scan in the edges */
+ 
+     for( i = 0; i < edges; i++ ) {
+-	fscanf( fp, " %ld %ld ", &(pe->edge[i][0]), &(pe->edge[i][1]) );
++	fscanf( fp, " %d %d ", &(pe->edge[i][0]), &(pe->edge[i][1]) );
+     }
+ 
+     fclose( fp );
+@@ -411,7 +411,7 @@
+ 
+ int in_edge_table( EdgeTable *et, Edge edge )
+ {
+-    long i;
++    int i;
+ 
+     for( i = 0; i < et->edges; i++ ) {
+ 	if( ( edge[0] == et->edge[i][0] ) && ( edge[1] == et->edge[i][1] ) ) {
+@@ -429,13 +429,13 @@
+ 
+ /* Hack Alert !!!!!!!!
+     This functions assumes that each face will have no more than 6 vertices
+-    in each face( on average ).  It will work fine as long as the vehicle
++    in each face( on average ).  It will work fine as int as the vehicle
+     PointFace adheres to this rule.
+ */
+ 
+ void init_edge_table( Vehicle *v )
+ {
+-    long i, j;
++    int i, j;
+     EdgeTable et;
+     Edge edge;
+ 
+@@ -484,7 +484,7 @@
+ 
+ void create_edge_table( PointFace *obj, EdgeTable *et )
+ {
+-    long i, j;
++    int i, j;
+     Edge edge;
+ 
+     /* malloc the edges (see above Hack Alert) */
+@@ -532,7 +532,7 @@
+ 
+ void init_projectile_edge_table( Projectile *p )
+ {
+-    long i, j;
++    int i, j;
+     EdgeTable et;
+     Edge edge;
+ 
+@@ -581,7 +581,7 @@
+ 
+ void orient_object( PointFace *obj, Orientation *o, PointFace *result )
+ {
+-    long i;
++    int i;
+     Point p;
+     Matrix trans_rotation_matrix;
+ 
+@@ -643,7 +643,7 @@
+ 
+ void magic_orient_object( PointFace *obj, MagicOrientation *o, PointFace *result )
+ {
+-    long i;
++    int i;
+     Matrix trans_rotation_matrix;
+ 
+     free_object( result );
+@@ -717,10 +717,10 @@
+ void transform_and_union( Orientation *obj_orient, PointFace *obj,
+ 			  PointFace *result )
+ {
+-    long i, j;
++    int i, j;
+     Point p;
+     Point temp;
+-    long point_start, face_start;
++    int point_start, face_start;
+ 
+     /* realloc the extra space needed for the union */
+ 
+@@ -795,8 +795,8 @@
+ 
+ void union_object( PointFace *obj, PointFace *result )
+ {
+-    long i, j;
+-    long point_start, face_start;
++    int i, j;
++    int point_start, face_start;
+ 
+     if( result->point == NULL || result->points == 0 ) {
+ 
+@@ -985,15 +985,15 @@
+ {
+     int i, j;
+ 
+-    printf("points = %ld, faces = %ld\n", obj->points, obj->faces );
++    printf("points = %d, faces = %d\n", obj->points, obj->faces );
+ 
+     for( i = 0; i < obj->points; i++ ) {
+-	printf("(%ld,%ld,%ld)\n", obj->point[i][X], obj->point[i][Y],
++	printf("(%d,%d,%d)\n", obj->point[i][X], obj->point[i][Y],
+ 				  obj->point[i][Z]);
+     }
+     for( i = 0; i < obj->faces; i++ ) {
+ 	for( j = 0; j < obj->face[i].size; j++ ) {
+-	    printf("%ld ", obj->face[i].index[j]);
++	    printf("%d ", obj->face[i].index[j]);
+ 	}
+ 	printf("\n");
+     }
+@@ -1120,7 +1120,7 @@
+ 	fscanf( fp, " %d ", &pts );
+ 	obj->face[i].size = pts;
+ 	for( j = 0; j < pts; j++ ) {
+-	    fscanf( fp, " %ld ", &obj->face[i].index[j]);
++	    fscanf( fp, " %d ", &obj->face[i].index[j]);
+ 	    obj->face[i].index[j]--; /* face indices start at 1 in file but */
+ 	}                            /* start at 0 in C. */
+     }
+@@ -1196,7 +1196,7 @@
+ /* Transforms vertex according to wtov_matrix.  Optomized for the
+    wtov_matrix. */
+ 
+-void wtov_transformation( long *wtov_matrix, long *vertex )
++void wtov_transformation( int *wtov_matrix, int *vertex )
+ {
+      vertex[X] = rounding_fixed_multiply(wtov_matrix[0], vertex[X]) + wtov_matrix[3];
+      vertex[Y] = rounding_fixed_multiply(wtov_matrix[5], vertex[Y]) + wtov_matrix[7];
+@@ -1206,10 +1206,10 @@
+ /* Matrix mult of the per_matrix and vertex. Optomized for the projection
+    transformation. */
+ 
+-void projection_transformation( long *per_matrix, long *vertex )
++void projection_transformation( int *per_matrix, int *vertex )
+ {
+-    long homo;
+-    long temp_vertex[3];
++    int homo;
++    int temp_vertex[3];
+ 
+     temp_vertex[X] = rounding_fixed_multiply( per_matrix[0], vertex[X] );
+     temp_vertex[Y] = rounding_fixed_multiply( per_matrix[5], vertex[Y] );
+@@ -1227,7 +1227,7 @@
+ /* transformation of vertex by mat, optomized for the scale and inv_scale
+    matrices. */
+ 
+-void scale_transformation( long *mat, long *vertex )
++void scale_transformation( int *mat, int *vertex )
+ {
+     vertex[X] = rounding_fixed_multiply(vertex[X], mat[0]);
+     vertex[Y] = rounding_fixed_multiply(vertex[Y], mat[5]);
+@@ -1237,9 +1237,9 @@
+ /* matrix multiplication of matix m and vector v
+    optimized for the rotation transformation */
+ 
+-void rotation_transformation( long *rot_matrix, long *vertex )
++void rotation_transformation( int *rot_matrix, int *vertex )
+ {
+-    long temp_vertex[3];
++    int temp_vertex[3];
+ 
+     temp_vertex[X] = rounding_fixed_multiply(rot_matrix[0], vertex[X]) +
+                      rounding_fixed_multiply(rot_matrix[1], vertex[Y]) +
+@@ -1257,10 +1257,10 @@
+ }
+ 
+ 
+-/* moves vertex by tx along the x-axis, by ty along y-axis and by tz
+-   along z-axis */
++/* moves vertex by tx aint the x-axis, by ty aint y-axis and by tz
++   aint z-axis */
+ 
+-void translation_transformation( long tx, long ty, long tz, long *vertex )
++void translation_transformation( int tx, int ty, int tz, int *vertex )
+ {
+     vertex[X] = vertex[X] + tx;
+     vertex[Y] = vertex[Y] + ty;
+@@ -1270,12 +1270,12 @@
+ 
+ /* returns the largest z value of face f */
+ 
+-long find_max_z( Face *f, Point vert[] )
++int find_max_z( Face *f, Point vert[] )
+ {
+-    long max;
++    int max;
+     int i;
+     int size = f->size;
+-    long *index = f->index;
++    int *index = f->index;
+ 
+     max = vert[index[0]][Z];
+     for( i = 1; i < size; i++ ) {
+@@ -1289,7 +1289,7 @@
+ 
+ int cmp( Face *p, Face *q )
+ {
+-    long pmax, qmax;
++    int pmax, qmax;
+ 
+     pmax = p->max_z;
+     qmax = q->max_z;
+@@ -1302,10 +1302,10 @@
+ 	return 0;
+ }
+ 
+-/* Initalizes the matrix t, to translate a point tx along the x-axis,
+-   ty along the y-axis and tz along the z-axis. */
++/* Initalizes the matrix t, to translate a point tx aint the x-axis,
++   ty aint the y-axis and tz aint the z-axis. */
+ 
+-void translation_matrix_init( Matrix t, long tx, long ty, long tz )
++void translation_matrix_init( Matrix t, int tx, int ty, int tz )
+ {
+     t[0] = MAGIC;
+     t[1] = 0;
+@@ -1326,16 +1326,16 @@
+ }
+ 
+ /* general transformation of point v by matrix m.  Works for ANY 4x4 matrix
+-   and ANY point (as long as there is no overflow).
++   and ANY point (as int as there is no overflow).
+ 
+    | a b c d |
+    | e f g h |
+    | i j k l |
+    | m n o p | */
+ 
+-void linear_transformation( long *m, long *v )
++void linear_transformation( int *m, int *v )
+ {
+-    long tv[4];
++    int tv[4];
+ 
+     tv[X] = rounding_fixed_multiply(m[0], v[X]) +
+             rounding_fixed_multiply(m[1], v[Y]) +
+@@ -1373,9 +1373,9 @@
+    | i j k l |
+    | 0 0 0 1 | */
+ 
+-void linear_transformation1( long *m, long *v )
++void linear_transformation1( int *m, int *v )
+ {
+-    long tv[4];
++    int tv[4];
+ 
+     tv[X] = rounding_fixed_multiply(m[0], v[X]) +
+             rounding_fixed_multiply(m[1], v[Y]) +
+@@ -1402,9 +1402,9 @@
+    | 0 0 1 0 |
+    | 0 0 i 1 | */
+ 
+-void linear_transformation2( long *m, long *v )
++void linear_transformation2( int *m, int *v )
+ {
+-    long tv[3];
++    int tv[3];
+ 
+     tv[X] = rounding_fixed_multiply(m[0], v[X]) +
+             rounding_fixed_multiply(m[1], v[Y]) +
+@@ -1420,10 +1420,10 @@
+     v[Y] = (tv[Y] << MEXP) / tv[3];
+ }
+ 
+-void view_point_tube( Point tube_points[], long num_points,
++void view_point_tube( Point tube_points[], int num_points,
+                       Orientation *view_orientation, Point light )
+ {
+-    long i;
++    int i;
+     Point p;
+     Matrix translation_matrix, temp_matrix, result_matrix;
+     unsigned char shade = 0;
+@@ -1433,7 +1433,7 @@
+     memcpy( view_vertices, tube_points, sizeof( Point ) * num_points );
+ 
+     if( profile ) {
+-	printf("    translation_matrix_init(), timer = %ld\n", Check_Timer() );
++	printf("    translation_matrix_init(), timer = %d\n", Check_Timer() );
+     }
+ 
+     /* figure out matrix needed to translate, rotate and scale into
+@@ -1446,20 +1446,20 @@
+     translation_matrix_init( translation_matrix, -p[X], -p[Y], -p[Z] );
+ 
+     if( profile ) {
+-	printf("    rot_matrix_init(), timer = %ld\n", Check_Timer() );
++	printf("    rot_matrix_init(), timer = %d\n", Check_Timer() );
+     }
+ 
+     rot_matrix_init( rotation_matrix, view_orientation->front,
+ 		     view_orientation->up );
+ 
+     if( profile ) {
+-	printf("    matrix_mult(), timer = %ld\n", Check_Timer() );
++	printf("    matrix_mult(), timer = %d\n", Check_Timer() );
+     }
+ 
+     matrix_mult( rotation_matrix, translation_matrix, temp_matrix );
+ 
+     if( profile ) {
+-	printf("    transform view_vert for clipping, timer = %ld\n", Check_Timer() );
++	printf("    transform view_vert for clipping, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* transform view_vertices into cannonical view volume (for clipping) */
+@@ -1470,7 +1470,7 @@
+     }
+ 
+     if( profile ) {
+-        printf("    clip the points, timer = %ld\n", Check_Timer() );
++        printf("    clip the points, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* assume all points are clipped_away */
+@@ -1484,7 +1484,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    translation_matrix_init, timer = %ld\n", Check_Timer() );
++	printf("    translation_matrix_init, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* figure out matrix needed to unscale from cannonical view volume,
+@@ -1494,7 +1494,7 @@
+     translation_matrix_init( translation_matrix, 0, 0, vrpz );
+ 
+     if( profile ) {
+-	printf("    2 matrix mults, timer = %ld\n", Check_Timer() );
++	printf("    2 matrix mults, timer = %d\n", Check_Timer() );
+     }
+ 
+     matrix_mult( translation_matrix, inv_scale_matrix, temp_matrix );
+@@ -1503,7 +1503,7 @@
+     /* transform everything */
+ 
+     if( profile ) {
+-	printf("    transform view_vert into projected_vert, timer = %ld\n", Check_Timer() );
++	printf("    transform view_vert into projected_vert, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < num_points; i++ ) {
+@@ -1522,7 +1522,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    shade and draw loop, timer = %ld\n", Check_Timer() );
++	printf("    shade and draw loop, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < num_points; i++ ) {
+@@ -1533,7 +1533,7 @@
+     }
+ 
+     if( profile ) {
+-        printf("    end of view_point_tube(), timer = %ld\n", Check_Timer() );
++        printf("    end of view_point_tube(), timer = %d\n", Check_Timer() );
+     }
+ }
+ 
+@@ -1541,7 +1541,7 @@
+ void view_wire_tube( PointEdge *wire_tube, Orientation *view_orientation,
+ 		     Point light )
+ {
+-    long i, len, temp;
++    int i, len, temp;
+     Point p;
+     Matrix translation_matrix, temp_matrix, result_matrix;
+     PointEdge clip_pe;
+@@ -1553,7 +1553,7 @@
+     memcpy( view_vertices, wire_tube->point, sizeof( Point ) * wire_tube->points );
+ 
+     if( profile ) {
+-	printf("    translation_matrix_init(), timer = %ld\n", Check_Timer() );
++	printf("    translation_matrix_init(), timer = %d\n", Check_Timer() );
+     }
+ 
+     /* figure out matrix needed to translate, rotate and scale into
+@@ -1566,20 +1566,20 @@
+     translation_matrix_init( translation_matrix, -p[X], -p[Y], -p[Z] );
+ 
+     if( profile ) {
+-	printf("    rot_matrix_init(), timer = %ld\n", Check_Timer() );
++	printf("    rot_matrix_init(), timer = %d\n", Check_Timer() );
+     }
+ 
+     rot_matrix_init( rotation_matrix, view_orientation->front,
+ 		     view_orientation->up );
+ 
+     if( profile ) {
+-	printf("    matrix_mult(), timer = %ld\n", Check_Timer() );
++	printf("    matrix_mult(), timer = %d\n", Check_Timer() );
+     }
+ 
+     matrix_mult( rotation_matrix, translation_matrix, temp_matrix );
+ 
+     if( profile ) {
+-	printf("    transform view_vert for clipping, timer = %ld\n", Check_Timer() );
++	printf("    transform view_vert for clipping, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* transform view_vertices into cannonical view volume (for clipping) */
+@@ -1590,7 +1590,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    initialize clip_pe for clipping, timer = %ld\n", Check_Timer() );
++	printf("    initialize clip_pe for clipping, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* initialize clip_pe for clipping */
+@@ -1602,7 +1602,7 @@
+     clip_pe.edges = wire_tube->edges;
+ 
+     if( profile ) {
+-        printf("    clip_edges(), timer = %ld\n", Check_Timer() );
++        printf("    clip_edges(), timer = %d\n", Check_Timer() );
+     }
+ 
+     /* clip */
+@@ -1610,7 +1610,7 @@
+     clip_edges( &clip_pe, new_hither );
+ 
+     if( profile ) {
+-        printf( "init clipped_away array, timer = %ld\n", Check_Timer() );
++        printf( "init clipped_away array, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* loop through all the edges and flag the vertices that are used */
+@@ -1627,7 +1627,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    translation_matrix_init, timer = %ld\n", Check_Timer() );
++	printf("    translation_matrix_init, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* figure out matrix needed to unscale from cannonical view volume,
+@@ -1637,7 +1637,7 @@
+     translation_matrix_init( translation_matrix, 0, 0, vrpz );
+ 
+     if( profile ) {
+-	printf("    2 matrix mults, timer = %ld\n", Check_Timer() );
++	printf("    2 matrix mults, timer = %d\n", Check_Timer() );
+     }
+ 
+     matrix_mult( translation_matrix, inv_scale_matrix, temp_matrix );
+@@ -1646,7 +1646,7 @@
+     /* transform everything */
+ 
+     if( profile ) {
+-	printf("    transform view_vert into projected_vert, timer = %ld\n", Check_Timer() );
++	printf("    transform view_vert into projected_vert, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < clip_pe.points; i++ ) {
+@@ -1664,7 +1664,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    shade and draw loop, timer = %ld\n", Check_Timer() );
++	printf("    shade and draw loop, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < clip_pe.edges; i++ ) {
+@@ -1693,7 +1693,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    end of view_wire_tube(), timer = %ld\n", Check_Timer() );
++	printf("    end of view_wire_tube(), timer = %d\n", Check_Timer() );
+     }
+ }
+ 
+@@ -1708,7 +1708,7 @@
+ {
+     int i, j;
+     Point p;
+-    long f_size;   /* total number of faces */
++    int f_size;   /* total number of faces */
+     unsigned char shade = 0;  /* the final color sent to polygon scaner */
+     PointFace clipped_obj;
+     Window win;
+@@ -1717,11 +1717,11 @@
+     Matrix translation_matrix;
+     Point center;
+     Vector l;
+-    long temp, len;
++    int temp, len;
+     Float_Vector f_temp_vect;
+ 
+     if( profile ) {
+-	printf("    initialize win, timer = %ld\n", Check_Timer() );
++	printf("    initialize win, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* initalize 2d-clipping window */
+@@ -1732,7 +1732,7 @@
+     win.y1 = 199;
+ 
+     if( profile ) {
+-	printf("    copy tube->point to view_vertices, timer = %ld\n", Check_Timer() );
++	printf("    copy tube->point to view_vertices, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* copy the points from tube into view_vertices */
+@@ -1740,7 +1740,7 @@
+     memcpy( view_vertices, tube->point, sizeof( Point ) * tube->points );
+ 
+     if( profile ) {
+-	printf("    translation_matrix_init(), timer = %ld\n", Check_Timer() );
++	printf("    translation_matrix_init(), timer = %d\n", Check_Timer() );
+     }
+ 
+     /* figure out matrix needed to translate, rotate and scale into
+@@ -1753,20 +1753,20 @@
+     translation_matrix_init( translation_matrix, -p[X], -p[Y], -p[Z] );
+ 
+     if( profile ) {
+-	printf("    rot_matrix_init(), timer = %ld\n", Check_Timer() );
++	printf("    rot_matrix_init(), timer = %d\n", Check_Timer() );
+     }
+ 
+     rot_matrix_init( rotation_matrix, view_orientation->front,
+ 		     view_orientation->up );
+ 
+     if( profile ) {
+-	printf("    matrix_mult(), timer = %ld\n", Check_Timer() );
++	printf("    matrix_mult(), timer = %d\n", Check_Timer() );
+     }
+ 
+     matrix_mult( rotation_matrix, translation_matrix, temp_matrix );
+ 
+     if( profile ) {
+-	printf("    transform view_vert for clipping, timer = %ld\n", Check_Timer() );
++	printf("    transform view_vert for clipping, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* transform view_vertices into cannonical view volume (for clipping) */
+@@ -1777,7 +1777,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    copy into clipped_obj, timer = %ld\n", Check_Timer() );
++	printf("    copy into clipped_obj, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* copy the tubes transformed points and faces into clipped_obj */
+@@ -1789,7 +1789,7 @@
+     clipped_obj.faces = tube->faces;
+ 
+     if( profile ) {
+-	printf("    clip_obj(), timer = %ld\n", Check_Timer() );
++	printf("    clip_obj(), timer = %d\n", Check_Timer() );
+     }
+ 
+     /* clip everything */
+@@ -1797,7 +1797,7 @@
+     clip_obj( &clipped_obj, new_hither );
+ 
+     if( profile ) {
+-	printf("    set clipped_away array, timer = %ld\n", Check_Timer() );
++	printf("    set clipped_away array, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* assume all points have been clipped away */
+@@ -1807,7 +1807,7 @@
+     /* Intialize the array of faces. */
+ 
+     if( profile ) {
+-	printf("    copy clipped_obj's faces into f, timer = %ld\n", Check_Timer() );
++	printf("    copy clipped_obj's faces into f, timer = %d\n", Check_Timer() );
+     }
+ 
+     f_size = 0;
+@@ -1827,7 +1827,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    translation_matrix_init, timer = %ld\n", Check_Timer() );
++	printf("    translation_matrix_init, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* figure out matrix needed to unscale from cannonical view volume,
+@@ -1837,7 +1837,7 @@
+     translation_matrix_init( translation_matrix, 0, 0, vrpz );
+ 
+     if( profile ) {
+-	printf("    2 matrix mults, timer = %ld\n", Check_Timer() );
++	printf("    2 matrix mults, timer = %d\n", Check_Timer() );
+     }
+ 
+     matrix_mult( translation_matrix, inv_scale_matrix, temp_matrix );
+@@ -1846,7 +1846,7 @@
+     /* transform everything */
+ 
+     if( profile ) {
+-	printf("    transform view_vert into projected_vert, timer = %ld\n", Check_Timer() );
++	printf("    transform view_vert into projected_vert, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < clipped_obj.points; i++ ) {
+@@ -1865,7 +1865,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    shade and draw loop, timer = %ld\n", Check_Timer() );
++	printf("    shade and draw loop, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < f_size; i++ ) {
+@@ -1966,7 +1966,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    end of draw_tube(), timer = %ld\n", Check_Timer() );
++	printf("    end of draw_tube(), timer = %d\n", Check_Timer() );
+     }
+ }
+ 
+@@ -1975,19 +1975,19 @@
+    shaded, light source attinuated faces into the double buffer. */
+ 
+ void super_view_object( PointFace *obj, Orientation *view_orientation, Point light,
+-                        long offsetx, long offsety, long scale )
++                        int offsetx, int offsety, int scale )
+ {
+     int i, j;
+     Point p;
+     int f_size;   /* total number of faces */
+-    long d = -vrpz;  /* distance from center of projection */
+-    long norm[3];      /* normal vector for a face */
+-    long e[3];        /* vector from vertex to center of projection */
+-    long dotprod;     /* holds the dotprod of uxv with itself */
+-    long l[3];        /* vector from vertex to light */
+-    long temp;        /* holds value of (e * e) then later (l * l) */
+-    long len = 0;         /* holds the lenght of a vector */
+-    long tempshade;   /* holds (uxv * l) = the cos of the angle between them */
++    int d = -vrpz;  /* distance from center of projection */
++    int norm[3];      /* normal vector for a face */
++    int e[3];        /* vector from vertex to center of projection */
++    int dotprod;     /* holds the dotprod of uxv with itself */
++    int l[3];        /* vector from vertex to light */
++    int temp;        /* holds value of (e * e) then later (l * l) */
++    int len = 0;         /* holds the lenght of a vector */
++    int tempshade;   /* holds (uxv * l) = the cos of the angle between them */
+     unsigned char shade = 0;  /* the final color sent to polygon scaner */
+     PointFace clipped_obj;
+     Window win;
+@@ -1995,7 +1995,7 @@
+     Float_Vector f_temp_vect;
+ 
+     if( profile ) {
+-	printf("    init win, timer = %ld\n", Check_Timer() );
++	printf("    init win, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* initalize 2d-clipping window */
+@@ -2006,7 +2006,7 @@
+     win.y1 = 199;
+ 
+     if( profile ) {
+-	printf("    copy obj->point into view_vert, timer = %ld\n", Check_Timer() );
++	printf("    copy obj->point into view_vert, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* copy the points from tube into view_vertices */
+@@ -2014,7 +2014,7 @@
+     memcpy( view_vertices, obj->point, sizeof( Point ) * obj->points );
+ 
+     if( profile ) {
+-       printf("    setup matrices, timer = %ld\n", Check_Timer() );
++       printf("    setup matrices, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* transform the objects vertices into the view volume */
+@@ -2031,7 +2031,7 @@
+     matrix_mult( rotation_matrix, translation_matrix, temp_matrix );
+ 
+     if( profile ) {
+-	printf("    transform view_vert, timer = %ld\n", Check_Timer() );
++	printf("    transform view_vert, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* transform view_vertices into cannonical view volume (for clipping) */
+@@ -2044,7 +2044,7 @@
+     /* copy the tubes transformed points and faces into clipped_obj */
+ 
+     if( profile ) {
+-	printf("    copy into clipped_obj, timer = %ld\n", Check_Timer() );
++	printf("    copy into clipped_obj, timer = %d\n", Check_Timer() );
+     }
+ 
+     clipped_obj.point = view_vertices;
+@@ -2054,7 +2054,7 @@
+     clipped_obj.faces = obj->faces;
+ 
+     if( profile ) {
+-	printf("    clip_obj(), timer = %ld\n", Check_Timer() );
++	printf("    clip_obj(), timer = %d\n", Check_Timer() );
+     }
+ 
+     /* clip everything */
+@@ -2062,7 +2062,7 @@
+     clip_obj( &clipped_obj, new_hither );
+ 
+     if( profile ) {
+-	printf("    setup matrices, timer = %ld\n", Check_Timer() );
++	printf("    setup matrices, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* unscale all the vertices and translate by vrp */
+@@ -2072,7 +2072,7 @@
+     matrix_mult( translation_matrix, inv_scale_matrix, temp_matrix );
+ 
+     if( profile ) {
+-	printf("    translate and inv_scale view_vert, timer = %ld\n", Check_Timer() );
++	printf("    translate and inv_scale view_vert, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < clipped_obj.points; i++ ) {
+@@ -2083,7 +2083,7 @@
+        to viewport mapping */
+ 
+     if( profile ) {
+-	printf("    project and wtov projected_vert, timer = %ld\n", Check_Timer() );
++	printf("    project and wtov projected_vert, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < clipped_obj.points; i++ ) {
+@@ -2095,7 +2095,7 @@
+     /* Intialize the array of faces. */
+ 
+     if( profile ) {
+-	printf("    copy front_faces into f, timer = %ld\n", Check_Timer() );
++	printf("    copy front_faces into f, timer = %d\n", Check_Timer() );
+     }
+ 
+     f_size = 0;
+@@ -2180,7 +2180,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    sort the faces, timer = %ld\n", Check_Timer() );
++	printf("    sort the faces, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* sort the array according to maxz (far...close) */
+@@ -2188,7 +2188,7 @@
+     qsort( (void *)f, (size_t)f_size, sizeof( Face ), (void *)cmp );
+ 
+     if( profile ) {
+-	printf("    shade and draw loop, timer = %ld\n", Check_Timer() );
++	printf("    shade and draw loop, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < f_size; i++ ) {
+@@ -2274,7 +2274,7 @@
+ 	}
+ 
+     if( profile ) {
+-	printf("    end of draw_object(), timer = %ld\n", Check_Timer() );
++	printf("    end of draw_object(), timer = %d\n", Check_Timer() );
+     }
+ }
+ 
+@@ -2288,14 +2288,14 @@
+     int i, j;
+     Point p;
+     int f_size;   /* total number of faces */
+-    long d = -vrpz;  /* distance from center of projection */
+-    long norm[3];      /* normal vector for a face */
+-    long e[3];        /* vector from vertex to center of projection */
+-    long dotprod;     /* holds the dotprod of uxv with itself */
+-    long l[3];        /* vector from vertex to light */
+-    long temp;        /* holds value of (e * e) then later (l * l) */
+-    long len = 0;         /* holds the lenght of a vector */
+-    long tempshade;   /* holds (uxv * l) = the cos of the angle between them */
++    int d = -vrpz;  /* distance from center of projection */
++    int norm[3];      /* normal vector for a face */
++    int e[3];        /* vector from vertex to center of projection */
++    int dotprod;     /* holds the dotprod of uxv with itself */
++    int l[3];        /* vector from vertex to light */
++    int temp;        /* holds value of (e * e) then later (l * l) */
++    int len = 0;         /* holds the lenght of a vector */
++    int tempshade;   /* holds (uxv * l) = the cos of the angle between them */
+     unsigned char shade = 0;  /* the final color sent to polygon scaner */
+     Point center;
+     PointFace clipped_obj;
+@@ -2304,7 +2304,7 @@
+     Float_Vector f_temp_vect;
+ 
+     if( profile ) {
+-	printf("    init win, timer = %ld\n", Check_Timer() );
++	printf("    init win, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* initalize 2d-clipping window */
+@@ -2315,7 +2315,7 @@
+     win.y1 = 199;
+ 
+     if( profile ) {
+-	printf("    copy obj->point into view_vert, timer = %ld\n", Check_Timer() );
++	printf("    copy obj->point into view_vert, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* copy the points from tube into view_vertices */
+@@ -2323,7 +2323,7 @@
+     memcpy( view_vertices, obj->point, sizeof( Point ) * obj->points );
+ 
+     if( profile ) {
+-       printf("    setup matrices, timer = %ld\n", Check_Timer() );
++       printf("    setup matrices, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* transform the objects vertices into the view volume */
+@@ -2340,7 +2340,7 @@
+     matrix_mult( rotation_matrix, translation_matrix, temp_matrix );
+ 
+     if( profile ) {
+-	printf("    transform view_vert, timer = %ld\n", Check_Timer() );
++	printf("    transform view_vert, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* transform view_vertices into cannonical view volume (for clipping) */
+@@ -2353,7 +2353,7 @@
+     /* copy the tubes transformed points and faces into clipped_obj */
+ 
+     if( profile ) {
+-	printf("    copy into clipped_obj, timer = %ld\n", Check_Timer() );
++	printf("    copy into clipped_obj, timer = %d\n", Check_Timer() );
+     }
+ 
+     clipped_obj.point = view_vertices;
+@@ -2363,7 +2363,7 @@
+     clipped_obj.faces = obj->faces;
+ 
+     if( profile ) {
+-	printf("    clip_obj(), timer = %ld\n", Check_Timer() );
++	printf("    clip_obj(), timer = %d\n", Check_Timer() );
+     }
+ 
+     /* clip everything */
+@@ -2371,7 +2371,7 @@
+     clip_obj( &clipped_obj, new_hither );
+ 
+     if( profile ) {
+-	printf("    setup matrices, timer = %ld\n", Check_Timer() );
++	printf("    setup matrices, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* unscale all the vertices and translate by vrp */
+@@ -2381,7 +2381,7 @@
+     matrix_mult( translation_matrix, inv_scale_matrix, temp_matrix );
+ 
+     if( profile ) {
+-	printf("    translate and inv_scale view_vert, timer = %ld\n", Check_Timer() );
++	printf("    translate and inv_scale view_vert, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < clipped_obj.points; i++ ) {
+@@ -2392,7 +2392,7 @@
+        to viewport mapping */
+ 
+     if( profile ) {
+-	printf("    project and wtov projected_vert, timer = %ld\n", Check_Timer() );
++	printf("    project and wtov projected_vert, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < clipped_obj.points; i++ ) {
+@@ -2404,7 +2404,7 @@
+     /* Intialize the array of faces. */
+ 
+     if( profile ) {
+-	printf("    copy front_faces into f, timer = %ld\n", Check_Timer() );
++	printf("    copy front_faces into f, timer = %d\n", Check_Timer() );
+     }
+ 
+     f_size = 0;
+@@ -2488,7 +2488,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    sort the faces, timer = %ld\n", Check_Timer() );
++	printf("    sort the faces, timer = %d\n", Check_Timer() );
+     }
+ 
+     /* sort the array according to maxz (far...close) */
+@@ -2496,7 +2496,7 @@
+     qsort( (void *)f, (size_t)f_size, sizeof( Face ), (void *)cmp );
+ 
+     if( profile ) {
+-	printf("    shade and draw loop, timer = %ld\n", Check_Timer() );
++	printf("    shade and draw loop, timer = %d\n", Check_Timer() );
+     }
+ 
+     for( i = 0; i < f_size; i++ ) {
+@@ -2689,7 +2689,7 @@
+     }
+ 
+     if( profile ) {
+-	printf("    end of draw_object(), timer = %ld\n", Check_Timer() );
++	printf("    end of draw_object(), timer = %d\n", Check_Timer() );
+     }
+ }
+ 
+@@ -2698,7 +2698,7 @@
+    and up to the -y-axis. It uses an orthoganal matrix, to transform between
+    the coordinate systems. */
+ 
+-void rot_matrix_init( long *rotation_matrix, Float_Point front,
++void rot_matrix_init( int *rotation_matrix, Float_Point front,
+ 		      Float_Point up )
+ {
+     Point x_axis;
+@@ -2766,7 +2766,7 @@
+    the coordinate systems. Note: this matrix is just the transposition
+    of the same matrix produced by rot_matrix_init. */
+ 
+-void trans_rot_matrix_init( long *rotation_matrix, Float_Point front,
++void trans_rot_matrix_init( int *rotation_matrix, Float_Point front,
+ 			    Float_Point up )
+ {
+     Point x_axis;
+@@ -2856,13 +2856,13 @@
+ /* Same as trans_rot_matrix_init except that it expects fixed-point vectors
+    rather than floating-point ones. */
+ 
+-void magic_trans_rot_matrix_init( long *rotation_matrix, Vector front,
++void magic_trans_rot_matrix_init( int *rotation_matrix, Vector front,
+ 				  Vector up )
+ {
+     Point x_axis;
+     Point y_axis;
+     Point z_axis;
+-    long temp, len;
++    int temp, len;
+ 
+     /* normalize front_vector */
+ 
+@@ -2948,7 +2948,7 @@
+ 
+ void scale_matrix_init()
+ {
+-    long sx, sy, sz, one_over_sx, one_over_sy, one_over_sz;
++    int sx, sy, sz, one_over_sx, one_over_sy, one_over_sz;
+     const float fudge = 0.0;
+ 
+     sx = rounding_ftom( (2.0 * mtof(vrpz)) / ((mtof(xmax) - mtof(xmin) + fudge) * (mtof(vrpz) + mtof(yon))) );
+
+--- object.h	2001-12-18 21:08:45.000000000 +0100
++++ object.h	2008-06-15 23:02:38.000000000 +0200
+@@ -43,37 +43,37 @@
+ 
+ void get_object( PointFace *obj, char *filename );
+ 
+-void wtov_transformation( long *wtov_matrix, long *vertex );
++void wtov_transformation( int *wtov_matrix, int *vertex );
+ 
+-void projection_transformation( long *per_matrix, long *vertex );
++void projection_transformation( int *per_matrix, int *vertex );
+ 
+-void scale_transformation( long *mat, long *vertex );
++void scale_transformation( int *mat, int *vertex );
+ 
+-void rotation_transformation( long *rot_matrix, long *vertex );
++void rotation_transformation( int *rot_matrix, int *vertex );
+ 
+-void translation_transformation( long tx, long ty, long tz, long *vertex );
++void translation_transformation( int tx, int ty, int tz, int *vertex );
+ 
+-long find_max_z( Face *f, Point vert[] );
++int find_max_z( Face *f, Point vert[] );
+ 
+ int cmp( Face *p, Face *q );
+ 
+ void view_object( PointFace *obj, Orientation *view_orientation, Point light );
+ 
+ void super_view_object( PointFace *obj, Orientation *view_orientation, Point light,
+-                        long offsetx, long offsety, long scale );
++                        int offsetx, int offsety, int scale );
+ 
+ void view_tube( PointFace *tube, Orientation *view_orientation,
+                 Point light );
+ 
+ void matrix_mult( Matrix l, Matrix r, Matrix result );
+ 
+-void rot_matrix_init( long *rotation_matrix, Float_Point front,
++void rot_matrix_init( int *rotation_matrix, Float_Point front,
+                       Float_Point up );
+ 
+-void trans_rot_matrix_init( long *rotation_matrix, Float_Point front,
++void trans_rot_matrix_init( int *rotation_matrix, Float_Point front,
+                       Float_Point up );
+ 
+-void magic_trans_rot_matrix_init( long *rotation_matrix, Point front,
++void magic_trans_rot_matrix_init( int *rotation_matrix, Point front,
+                                   Point up );
+ 
+ void scale_matrix_init();
+@@ -86,7 +86,7 @@
+ void view_wire_tube( PointEdge *tube, Orientation *view_orientation,
+                      Point light );
+ 
+-void view_point_tube( Point tube_points[], long num_points,
++void view_point_tube( Point tube_points[], int num_points,
+                       Orientation *view_orientation, Point light );
+ 
+ void create_edge_table( PointFace *obj, EdgeTable *et );
+@@ -95,11 +95,11 @@
+ 
+ void get_wire_object( PointEdge *pe, char *filename );
+ 
+-void translation_matrix_init( Matrix t, long tx, long ty, long tz );
++void translation_matrix_init( Matrix t, int tx, int ty, int tz );
+ 
+-void linear_transformation( long *m, long *v );
++void linear_transformation( int *m, int *v );
+ 
+-void linear_transformation1( long *m, long *v );
++void linear_transformation1( int *m, int *v );
+ 
+ void object_copy( PointFace *result, PointFace *obj );
+ 
+
+--- omega.c	2003-04-30 16:27:18.000000000 +0200
++++ omega.c	2008-06-15 23:02:38.000000000 +0200
+@@ -174,8 +174,8 @@
+ int g_bRenderingFirstPlayer = 0;
+ int g_bRenderingSecondPlayer = 0;
+ 
+-extern long TIMER_CLICKS_PER_SECOND;
+-extern long GAME_CLICKS_PER_SECOND;
++extern int TIMER_CLICKS_PER_SECOND;
++extern int GAME_CLICKS_PER_SECOND;
+ 
+ int     level_warp   = -1;
+ boolean test_anim    = FALSE;
+@@ -186,7 +186,7 @@
+ 
+ /* Stat shit */
+ 
+-long program_over = FALSE;    /* TRUE when user wishes to leave the program */
++int program_over = FALSE;    /* TRUE when user wishes to leave the program */
+ 
+ game_stats_type game_stats;        /* Keep track of the current pilots stats for one game */
+ overall_stats_type overall_stats;  /* Keep track of the current pilots overall stats */
+@@ -210,8 +210,8 @@
+ int profile = FALSE;      /* When true the program prints profileing info */
+ 
+ 
+-long exit_loop = FALSE;        /* tells us to exit the main game loop */
+-long game_over = FALSE;        /* true if one team is victorious */
++int exit_loop = FALSE;        /* tells us to exit the main game loop */
++int game_over = FALSE;        /* true if one team is victorious */
+ 
+ extern WingmanMenuData wingman_menu_data;
+ 
+@@ -229,11 +229,11 @@
+ WorldStuff world_stuff;
+ MenuStuff menu_stuff;
+ 
+-long sb_installed = FALSE;
+-long timer_installed = FALSE;
+-long keyboard_installed = FALSE;
+-long ignore_sound_card = FALSE;
+-long multiplayer_game_only = FALSE;
++int sb_installed = FALSE;
++int timer_installed = FALSE;
++int keyboard_installed = FALSE;
++int ignore_sound_card = FALSE;
++int multiplayer_game_only = FALSE;
+ 
+ int temp_int;
+ 
+@@ -247,7 +247,7 @@
+ 
+ void init_game( int argc, char *argv[] )
+ {
+-    unsigned long key;
++    unsigned int key;
+ 
+ 	//Johnm 12/1/2001 - removed go32 stuff
+ 	//    _go32_dpmi_meminfo info;      /* used to get memory information */
+@@ -569,25 +569,25 @@
+ 
+ int play_one_tournament_game( int song_number, int wingman1_alive, int wingman2_alive, int bTournamentGame )
+ {
+-    long status_bar = FALSE;       /* Tells if the status bar is to be drawn. */
++    int status_bar = FALSE;       /* Tells if the status bar is to be drawn. */
+     Orientation old_orient;        /* holds the last frames view_orientation, used for the third person view */
+-    long first_person_view = TRUE; /* TRUE if camera is inside the cockpit */
+-    long transporting = FALSE;     /* TRUE if user is being transported to a new vehicle */
+-    long round_over = FALSE;       /* true if one team has won a round */
+-    long user_victories = 0;       /* number of user_victories */
+-    long enemy_victories = 0;      /* number of enemy_victoies */
+-    long frame_counter = 0;        /* number of frames processed so far, used for debugging */
+-    long round = 0;                /* indicates the round being played */
+-    long display_menu = FALSE;     /* if the user hits escape in the middle of the game this becomes true */
++    int first_person_view = TRUE; /* TRUE if camera is inside the cockpit */
++    int transporting = FALSE;     /* TRUE if user is being transported to a new vehicle */
++    int round_over = FALSE;       /* true if one team has won a round */
++    int user_victories = 0;       /* number of user_victories */
++    int enemy_victories = 0;      /* number of enemy_victoies */
++    int frame_counter = 0;        /* number of frames processed so far, used for debugging */
++    int round = 0;                /* indicates the round being played */
++    int display_menu = FALSE;     /* if the user hits escape in the middle of the game this becomes true */
+     int temp_key;
+     int i;
+     Float_Vector temp_vect;
+     pcx_picture temp_pcx;
+-    long return_state = 2;             /* 0 if the user lost, 1 if the user won, 2 if the user quit */
+-    long color_cycle = FALSE;
++    int return_state = 2;             /* 0 if the user lost, 1 if the user won, 2 if the user quit */
++    int color_cycle = FALSE;
+     int bStoreTwoPlayer; //Tournament games set two_player to 0, need to store initial state to set back
+ 
+-    const long num_rounds = 3;     /* total number of rounds allowed */
++    const int num_rounds = 3;     /* total number of rounds allowed */
+      
+     //Don't allow split screen on tournament games
+     if( bTournamentGame ) {
+
+--- packets.c	2003-09-17 20:57:26.000000000 +0200
++++ packets.c	2008-06-15 23:02:38.000000000 +0200
+@@ -32,8 +32,8 @@
+ 
+ extern MenuScreen main_menu; /* From menu.c */
+ 
+-extern long exit_loop;  /* From omega.c */
+-extern long game_over;
++extern int exit_loop;  /* From omega.c */
++extern int game_over;
+ 
+ 
+ void Encode_Input_Table( input_table table, encoded_input_table_type encoded_input_table )
+@@ -375,7 +375,7 @@
+     {
+      int exit = 0;
+      FILE * fp;
+-     unsigned long file_size;
++     unsigned int file_size;
+      int i = 0;
+      char filename_length = 0;
+      char *temp_ptr; /* For sending integers */
+@@ -403,7 +403,7 @@
+      fseek( fp, 0, SEEK_SET ); /* Move back to beginning of file */
+ 
+ 
+-     printf("Sending packet %s size is %ld \n", filename, file_size );
++     printf("Sending packet %s size is %d \n", filename, file_size );
+ 
+ 
+      Serial_Write( FILE_TRANSFER_PACKET ); /* Identify type of packet */
+@@ -449,7 +449,7 @@
+      char filename_length, ch;
+      char filename[20];
+      int i;
+-     unsigned long file_size;
++     unsigned int file_size;
+      char *temp_ptr;
+      FILE *fp;
+      int send_count;
+@@ -476,7 +476,7 @@
+      Get_One_Character( &temp_ptr[3] ); 
+ 
+ 
+-     printf("Got packet %s size is %ld \n", filename, file_size );
++     printf("Got packet %s size is %d \n", filename, file_size );
+ 
+ 	sprintf(newfilename,"%s%s",g_DataPath,filename);
+      fp = fopen( newfilename, "wb" );
+
+--- pcx.c	2008-06-15 22:57:03.000000000 +0200
++++ pcx.c	2008-06-15 23:02:38.000000000 +0200
+@@ -55,8 +55,8 @@
+     {
+ 
+      FILE *fp;              /* File pointer */
+-     long index;            /* Multipurpose index  */
+-     long new_pos = 0;      /* Position in the image->buffer */
++     int index;            /* Multipurpose index  */
++     int new_pos = 0;      /* Position in the image->buffer */
+      int num_bytes;         /* Number of bytes in current RLE run */
+      int info;              /* Data from temp_buffer */
+      char *p;
+@@ -104,7 +104,7 @@
+ 
+ 
+       /* Allocate memory for picture...the +100 is just to be safe */
+-      image->buffer = (unsigned char *)malloc( ((long)(image->xpixels + 1 ) * (long)(image->ypixels + 1)) + 100 );
++      image->buffer = (unsigned char *)malloc( ((int)(image->xpixels + 1 ) * (int)(image->ypixels + 1)) + 100 );
+       if ( image->buffer == NULL )
+           {
+            printf("Not Enough Memory!!!");
+@@ -118,7 +118,7 @@
+       fseek( fp, 128, SEEK_SET ); /* Move to 128 bytes from beginning of file */
+ 
+ 
+-     while( new_pos < ( ((long)image->xpixels + 1 ) * (long)(image->ypixels + 1) ) )  /* Loop till beginning of color palette  */
++     while( new_pos < ( ((int)image->xpixels + 1 ) * (int)(image->ypixels + 1) ) )  /* Loop till beginning of color palette  */
+          {                                                                            /* And end of data */
+ 
+           info = getc(fp);              /* Store one char from the buffer  */
+
+--- prim.c	2002-09-06 20:11:05.000000000 +0200
++++ prim.c	2008-06-15 23:02:38.000000000 +0200
+@@ -94,7 +94,7 @@
+    int xEnd;   /* X coordinate of rightmost pixel in line */
+ };
+ 
+-/* Describes a Length-long series of horizontal lines, all assumed to
++/* Describes a Length-int series of horizontal lines, all assumed to
+    be on contiguous scan lines starting at YStart and proceeding
+    downward (used to describe a scan-converted polygon to the
+    low-level hardware-dependent drawing code) */
+@@ -134,11 +134,11 @@
+ 
+ /* wrapper */
+ 
+-void fast_DB_poly_scan( Face *p, long vert[][4], Window *win,
++void fast_DB_poly_scan( Face *p, int vert[][4], Window *win,
+ 			unsigned char color )
+ {
+     struct PointListHeader plh;
+-    long i;
++    int i;
+ 
+     plh.Length = p->size;
+ 
+@@ -278,7 +278,7 @@
+       DeltaxP = VertexPtr[PreviousIndex].x - VertexPtr[MinIndexL].x;
+       DeltayP = VertexPtr[PreviousIndex].y - VertexPtr[MinIndexL].y;
+ 
+-      if (((long)DeltaxN * DeltayP - (long)DeltayN * DeltaxP) < 0L) {
++      if (((int)DeltaxN * DeltayP - (int)DeltayN * DeltaxP) < 0L) {
+ 	 LeftEdgeDir = 1;  /* left edge runs up through vertex list */
+ 	 Temp = MinIndexL;       /* swap the indices so MinIndexL   */
+ 	 MinIndexL = MinIndexR;  /* points to the start of the left */
+@@ -493,7 +493,7 @@
+ /* Clear the double buffer by filling it with zeros */
+ void DB_Clear_Screen( void )
+ {
+-     long i;
++     int i;
+      unsigned int *ptr = word_double_buffer;
+ 
+      for( i = 0; i < 800; i++ ) {
+@@ -524,7 +524,7 @@
+ void draw_border()
+ {
+    Edge e;
+-   long vert[2][4];
++   int vert[2][4];
+ 
+    /* draw top edge */
+ 
+@@ -569,7 +569,7 @@
+ 
+ void Fade_Screen( void )
+     {
+-     long i;
++     int i;
+ 
+      for( i = 0; i < 64000; i++ )
+ 	 {
+@@ -587,7 +587,7 @@
+ void H_Line_Fast( int x1, int x2, int y, unsigned int color )
+     {
+      int i;
+-     long line_offset;
++     int line_offset;
+      unsigned short middle_word;
+      unsigned short first_word;
+      unsigned short last_word;
+@@ -631,7 +631,7 @@
+ /* Clear the video buffer by filling it with zeros */
+ void Clear_Screen( void )
+     {
+-     long i;
++     int i;
+ 
+      for( i = 0; i < 64000; i++ )
+ 	 video_buffer[i] = 0;
+@@ -745,7 +745,7 @@
+ 	release_screen();
+ 
+ /*
+-    long i, end;
++    int i, end;
+     int index = 0;
+ 
+ 
+@@ -761,7 +761,7 @@
+ /* copy buffer into the double buffer */
+ void Pop_Buffer( char *buffer )
+     {
+-     long i;
++     int i;
+ 
+      for( i = 0; i < 64000; i++ )
+ 	 double_buffer[i] = buffer[i];
+@@ -795,23 +795,23 @@
+ 
+ /* Function prototypes so they are all visible to one another */
+ 
+-void DB_scanline( long y, long l[4], long r[4], Window *win,
++void DB_scanline( int y, int l[4], int r[4], Window *win,
+ 		  unsigned char mask, unsigned char color );
+-void shade_DB_scanline( long y, long l[4], long r[4], Window *win,
++void shade_DB_scanline( int y, int l[4], int r[4], Window *win,
+ 			unsigned char mask, unsigned char color );
+-void DB_zbuff_scanline( long y, long l[4], long r[4], Window *win,
+-    unsigned char mask, unsigned char color, long *zbuff );
+-void shade_DB_zbuff_scanline( long y, long l[4], long r[4], Window *win,
+-    unsigned char mask, unsigned char color, long *zbuff );
++void DB_zbuff_scanline( int y, int l[4], int r[4], Window *win,
++    unsigned char mask, unsigned char color, int *zbuff );
++void shade_DB_zbuff_scanline( int y, int l[4], int r[4], Window *win,
++    unsigned char mask, unsigned char color, int *zbuff );
+ 
+-void inc_y4( long p1[4], long p2[4], long p[4], long dp[4], long y,
++void inc_y4( int p1[4], int p2[4], int p[4], int dp[4], int y,
+ 	     unsigned char mask );
+-void inc_x4( long p1[4], long p2[4], long p[4], long dp[4], long x,
++void inc_x4( int p1[4], int p2[4], int p[4], int dp[4], int x,
+ 	     unsigned char mask );
+-void increment4( long p[4], long dp[4], unsigned char mask );
++void increment4( int p[4], int dp[4], unsigned char mask );
+ 
+ 
+-void DB_poly_scan( Face *p, long vert[][4], Window *win, unsigned char color )
++void DB_poly_scan( Face *p, int vert[][4], Window *win, unsigned char color )
+ /* scan converts concave polygons. */
+ /* p is a pointer to the face to be scan converted. */
+ /* vert is an array of vertices. p hold indices into this array. */
+@@ -819,8 +819,8 @@
+ /* color will be the color of the filled polygon. */
+ {
+     int i, li, ri, y, ly, ry, top, rem;
+-    long ymin; /* MAGIC */
+-    long l[4], r[4], dl[4], dr[4]; /* MAGIC */
++    int ymin; /* MAGIC */
++    int l[4], r[4], dl[4], dr[4]; /* MAGIC */
+     unsigned char mask;
+ 
+     top = 0;
+@@ -872,11 +872,11 @@
+     }
+ }
+ 
+-void DB_scanline( long y, long l[4], long r[4], Window *win,
++void DB_scanline( int y, int l[4], int r[4], Window *win,
+ 		  unsigned char mask, unsigned char color )
+ {
+-    long lx, rx;
+-    long p[4], dp[4]; /* MAGIC */
++    int lx, rx;
++    int p[4], dp[4]; /* MAGIC */
+ 
+     mask &= ~0x1; /* stop interpolating x */
+ 
+@@ -892,7 +892,7 @@
+ 
+ }
+ 
+-void shade_DB_poly_scan( Face *p, long vert[][4], Window *win,
++void shade_DB_poly_scan( Face *p, int vert[][4], Window *win,
+ 			 unsigned char color )
+ /* scan converts concave polygons. */
+ /* p is a pointer to the face to be scan converted. */
+@@ -901,8 +901,8 @@
+ /* color will be the color of the filled polygon. */
+ {
+     int i, li, ri, y, ly, ry, top, rem;
+-    long ymin; /* MAGIC */
+-    long l[4], r[4], dl[4], dr[4]; /* MAGIC */
++    int ymin; /* MAGIC */
++    int l[4], r[4], dl[4], dr[4]; /* MAGIC */
+     unsigned char mask;
+ 
+     top = 0;
+@@ -954,11 +954,11 @@
+     }
+ }
+ 
+-void shade_DB_scanline( long y, long l[4], long r[4], Window *win,
++void shade_DB_scanline( int y, int l[4], int r[4], Window *win,
+ 			unsigned char mask, unsigned char color )
+ {
+-    long x, lx, rx;
+-    long p[4], dp[4]; /* MAGIC */
++    int x, lx, rx;
++    int p[4], dp[4]; /* MAGIC */
+     unsigned char *db_ptr;
+ 
+     mask &= ~0x1; /* stop interpolating x */
+@@ -990,7 +990,7 @@
+     }
+ }
+ 
+-void DB_zbuff_poly_scan( Face *p, long vert[][4], Window *win, unsigned char color, long *zbuff )
++void DB_zbuff_poly_scan( Face *p, int vert[][4], Window *win, unsigned char color, int *zbuff )
+ /* scan converts concave polygons. */
+ /* p is a pointer to the face to be scan converted. */
+ /* vert is an array of vertices. p hold indices into this array. */
+@@ -998,8 +998,8 @@
+ /* color will be the color of the filled polygon. */
+ {
+     int i, li, ri, y, ly, ry, top, rem;
+-    long ymin; /* MAGIC */
+-    long l[4], r[4], dl[4], dr[4]; /* MAGIC */
++    int ymin; /* MAGIC */
++    int l[4], r[4], dl[4], dr[4]; /* MAGIC */
+     unsigned char mask;
+ 
+     top = 0;
+@@ -1051,12 +1051,12 @@
+     }
+ }
+ 
+-void DB_zbuff_scanline( long y, long l[4], long r[4], Window *win,
+-			unsigned char mask, unsigned char color, long *zbuff )
++void DB_zbuff_scanline( int y, int l[4], int r[4], Window *win,
++			unsigned char mask, unsigned char color, int *zbuff )
+ {
+-    long x, lx, rx;
+-    long p[4], dp[4]; /* MAGIC */
+-    long *zb_ptr;
++    int x, lx, rx;
++    int p[4], dp[4]; /* MAGIC */
++    int *zb_ptr;
+     unsigned char *db_ptr;
+ 
+     mask &= ~0x1; /* stop interpolating x */
+@@ -1084,8 +1084,8 @@
+     }
+ }
+ 
+-void shade_DB_zbuff_poly_scan( Face *p, long vert[][4], Window *win,
+-			       unsigned char color, long *zbuff )
++void shade_DB_zbuff_poly_scan( Face *p, int vert[][4], Window *win,
++			       unsigned char color, int *zbuff )
+ /* scan converts concave polygons. */
+ /* p is a pointer to the face to be scan converted. */
+ /* vert is an array of vertices. p hold indices into this array. */
+@@ -1093,8 +1093,8 @@
+ /* color will be the color of the filled polygon. */
+ {
+     int i, li, ri, y, ly, ry, top, rem;
+-    long ymin; /* MAGIC */
+-    long l[4], r[4], dl[4], dr[4]; /* MAGIC */
++    int ymin; /* MAGIC */
++    int l[4], r[4], dl[4], dr[4]; /* MAGIC */
+     unsigned char mask;
+ 
+     top = 0;
+@@ -1146,12 +1146,12 @@
+     }
+ }
+ 
+-void shade_DB_zbuff_scanline( long y, long l[4], long r[4], Window *win,
+-			unsigned char mask, unsigned char color, long *zbuff )
++void shade_DB_zbuff_scanline( int y, int l[4], int r[4], Window *win,
++			unsigned char mask, unsigned char color, int *zbuff )
+ {
+-    long x, lx, rx;
+-    long p[4], dp[4]; /* MAGIC */
+-    long *zb_ptr;
++    int x, lx, rx;
++    int p[4], dp[4]; /* MAGIC */
++    int *zb_ptr;
+     unsigned char *db_ptr;
+ 
+     mask &= ~0x1; /* stop interpolating x */
+@@ -1178,10 +1178,10 @@
+     }
+ }
+ 
+-void DB_transparent_scanline( long y, long l[4], long r[4], Window *win,
++void DB_transparent_scanline( int y, int l[4], int r[4], Window *win,
+ 		              unsigned char mask, unsigned char color );
+ 
+-void DB_transparent_poly_scan( Face *p, long vert[][4], Window *win, unsigned char color )
++void DB_transparent_poly_scan( Face *p, int vert[][4], Window *win, unsigned char color )
+ 
+ /* scan converts concave polygons. */
+ /* p is a pointer to the face to be scan converted. */
+@@ -1190,8 +1190,8 @@
+ /* color will be the color of the filled polygon. */
+ {
+     int i, li, ri, y, ly, ry, top, rem;
+-    long ymin; /* MAGIC */
+-    long l[4], r[4], dl[4], dr[4]; /* MAGIC */
++    int ymin; /* MAGIC */
++    int l[4], r[4], dl[4], dr[4]; /* MAGIC */
+     unsigned char mask;
+ 
+     top = 0;
+@@ -1243,14 +1243,14 @@
+     }
+ }
+ 
+-void DB_transparent_scanline( long y, long l[4], long r[4], Window *win,
++void DB_transparent_scanline( int y, int l[4], int r[4], Window *win,
+ 		              unsigned char mask, unsigned char color )
+ {
+-    long lx, rx;
+-    long p[4], dp[4]; /* MAGIC */
+-    long new_color, old_color;
+-    long x;
+-    long i;
++    int lx, rx;
++    int p[4], dp[4]; /* MAGIC */
++    int new_color, old_color;
++    int x;
++    int i;
+     unsigned char *db_ptr;
+ 
+     mask &= ~0x1; /* stop interpolating x */
+@@ -1297,10 +1297,10 @@
+ }
+ 
+ 
+-void inc_y4( long p1[4], long p2[4], long p[4], long dp[4], long y,
++void inc_y4( int p1[4], int p2[4], int p[4], int dp[4], int y,
+ 	     unsigned char mask )
+ {
+-    long dy, frac; /* MAGIC */
++    int dy, frac; /* MAGIC */
+ 
+     dy = p2[Y] - p1[Y];
+     if( dy == 0 ) dy = MAGIC;
+@@ -1324,10 +1324,10 @@
+     }
+ }
+ 
+-void inc_x4( long p1[4], long p2[4], long p[4], long dp[4], long x,
++void inc_x4( int p1[4], int p2[4], int p[4], int dp[4], int x,
+ 	    unsigned char mask )
+ {
+-    long dx, frac; /* MAGIC */
++    int dx, frac; /* MAGIC */
+ 
+     dx = p2[X] - p1[X];
+     if( dx == 0 ) dx = MAGIC;
+@@ -1351,7 +1351,7 @@
+     }
+ }
+ 
+-void increment4( long p[4], long dp[4], unsigned char mask )
++void increment4( int p[4], int dp[4], unsigned char mask )
+ {
+     if( mask & 0x1 ) {
+ 	p[X] += dp[X];
+@@ -1368,10 +1368,10 @@
+ }
+ 
+ 
+-void inc_y( long p1[3], long p2[3], long p[3], long dp[3], long y,
++void inc_y( int p1[3], int p2[3], int p[3], int dp[3], int y,
+ 	    unsigned char mask )
+ {
+-    long dy, frac; /* MAGIC */
++    int dy, frac; /* MAGIC */
+ 
+     dy = p2[Y] - p1[Y];
+     if( dy == 0 ) dy = MAGIC;
+@@ -1388,10 +1388,10 @@
+ }
+ 
+ 
+-void inc_x( long p1[3], long p2[3], long p[3], long dp[3], long x,
++void inc_x( int p1[3], int p2[3], int p[3], int dp[3], int x,
+ 	    unsigned char mask )
+ {
+-    long dx, frac; /* MAGIC */
++    int dx, frac; /* MAGIC */
+ 
+     dx = p2[X] - p1[X];
+     if( dx == 0 ) dx = MAGIC;
+@@ -1407,7 +1407,7 @@
+     }
+ }
+ 
+-void increment( long p[3], long dp[3], unsigned char mask )
++void increment( int p[3], int dp[3], unsigned char mask )
+ {
+     if( mask & 0x1 ) {
+ 	p[X] += dp[X];
+@@ -1419,7 +1419,7 @@
+ 
+ /* draws a line into the double buffer */
+ 
+-void DB_draw_edge( long vert[][4], Edge e, unsigned char color )
++void DB_draw_edge( int vert[][4], Edge e, unsigned char color )
+ {
+     int d, x, y, ax, ay, sx, sy, dx, dy, x1, y1, x2, y2;
+ 
+
+--- prim.h	2001-12-18 21:08:45.000000000 +0100
++++ prim.h	2008-06-15 23:02:38.000000000 +0200
+@@ -82,23 +82,23 @@
+ void Pop_Buffer( char *buffer );
+ 
+ /* Draw the polygon into the double buffer */
+-void DB_poly_scan( Face *p, long vert[][4], Window *win, unsigned char color );
++void DB_poly_scan( Face *p, int vert[][4], Window *win, unsigned char color );
+ 
+ /* Improved db_poly_scan */
+-void shade_DB_poly_scan( Face *p, long vert[][4], Window *win, unsigned char color );
++void shade_DB_poly_scan( Face *p, int vert[][4], Window *win, unsigned char color );
+ 
+-void DB_zbuff_poly_scan( Face *p, long vert[][4], Window *win, unsigned char color, long *zbuff );
++void DB_zbuff_poly_scan( Face *p, int vert[][4], Window *win, unsigned char color, int *zbuff );
+ 
+-void shade_DB_zbuff_poly_scan( Face *p, long vert[][4], Window *win, unsigned char color, long *zbuff );
++void shade_DB_zbuff_poly_scan( Face *p, int vert[][4], Window *win, unsigned char color, int *zbuff );
+ 
+-void fast_DB_poly_scan( Face *p, long vert[][4], Window *win,
++void fast_DB_poly_scan( Face *p, int vert[][4], Window *win,
+                         unsigned char color );
+                         
+-void DB_transparent_poly_scan( Face *p, long vert[][4], Window *win, unsigned char color );
++void DB_transparent_poly_scan( Face *p, int vert[][4], Window *win, unsigned char color );
+ 
+ /* draws an edge in the double buffer */
+ 
+-void DB_draw_edge( long vert[][4], Edge e, unsigned char color );
++void DB_draw_edge( int vert[][4], Edge e, unsigned char color );
+ 
+ /* draw 1 pixel border around the double buffer */
+ 
+
+--- project.c	2001-12-18 21:08:45.000000000 +0100
++++ project.c	2008-06-15 23:02:38.000000000 +0200
+@@ -42,10 +42,10 @@
+ extern game_configuration_type game_configuration;
+ extern WorldStuff world_stuff;
+ 
+-void update_missile_target( Player *player_array, long index,
++void update_missile_target( Player *player_array, int index,
+ 			    RadarBase *red_base, RadarBase *blue_base )
+ {
+-    long enemy_found, i;
++    int enemy_found, i;
+     float len, temp, *enemy_ptr = NULL;
+     Float_Point pos;
+     Projectile *p;
+@@ -833,11 +833,11 @@
+     }
+ }
+ 
+-void create_decoy_projectile( Vehicle *v, long type )
++void create_decoy_projectile( Vehicle *v, int type )
+ {
+     Projectile *p;
+     short count = 0;
+-    long i;
++    int i;
+     unsigned char owner = 99;
+ 
+     /* find the owner of this projectile */
+@@ -1094,11 +1094,11 @@
+ void move_projectile_forward_surface( Projectile *p, Vehicle *v )
+ {
+     Point temp, new_front;
+-    long theta, phi;
+-    long len;
+-    const long surface_radius = 10086;
+-    const long two_pi = (6434);
+-    long proj_speed;
++    int theta, phi;
++    int len;
++    const int surface_radius = 10086;
++    const int two_pi = (6434);
++    int proj_speed;
+ 
+     if( p->type == LASER ) {
+         proj_speed = ftom( v->laser_speed );
+@@ -1187,10 +1187,10 @@
+ void old_move_missile_forward( Projectile *p, Vehicle *vehicle )
+ {
+     Vector t, v, new_front, new_up;
+-    long zrot, xrot, theta, phi, diff, len;
+-    const long two_pi = (6434);
+-    const long pi = (3217);
+-    const long delta = 178;  /* max amount missile can rotate (10 degrees) */
++    int zrot, xrot, theta, phi, diff, len;
++    const int two_pi = (6434);
++    const int pi = (3217);
++    const int delta = 178;  /* max amount missile can rotate (10 degrees) */
+ 
+     /* first figure out the amount to rotate missile around z-axis */
+ 
+@@ -1205,7 +1205,7 @@
+     len = ftom( sqrt( mtof( ((t[X] * t[X]) >> MEXP) +
+                             ((t[Y] * t[Y]) >> MEXP) ) ) );
+ 
+-    /* printf("xy-plane, t len = %ld\n", len ); */
++    /* printf("xy-plane, t len = %d\n", len ); */
+ 
+     if( len != 0 ) {
+ 
+@@ -1224,7 +1224,7 @@
+         len = ftom( sqrt( mtof( ((v[X] * v[X]) >> MEXP) +
+                                 ((v[Y] * v[Y]) >> MEXP) ) ) );
+ 
+-        /* printf("xy-plane, v len = %ld\n", len ); */
++        /* printf("xy-plane, v len = %d\n", len ); */
+ 
+ 
+         if( len != 0 ) {
+@@ -1239,7 +1239,7 @@
+             if( v[X] < -1024 ) {
+                 v[X] = -1024;
+             }
+-            /* printf("xy_plane, v[X] = %ld\n", v[X] ); */
++            /* printf("xy_plane, v[X] = %d\n", v[X] ); */
+ 
+             /* figure out the angle v is from the x-axis (theta) */
+ 
+@@ -1258,7 +1258,7 @@
+             if( t[X] < -1024 ) {
+                 t[X] = -1024;
+             }
+-            /* printf("xy_plane, t[X] = %ld\n", t[X] ); */
++            /* printf("xy_plane, t[X] = %d\n", t[X] ); */
+ 
+             if( t[Y] >= 0 ) {
+                 phi = iarccos( (t[X] << 3) ) >> 3;
+@@ -1326,7 +1326,7 @@
+     len = ftom( sqrt( mtof( ((t[Y] * t[Y]) >> MEXP) +
+                             ((t[Z] * t[Z]) >> MEXP) ) ) );
+ 
+-    /* printf("yz_plane, t len = %ld\n", len ); */
++    /* printf("yz_plane, t len = %d\n", len ); */
+ 
+     if( len != 0 ) {
+ 
+@@ -1345,7 +1345,7 @@
+         len = ftom( sqrt( mtof( ((v[Y] * v[Y]) >> MEXP) +
+                                 ((v[Z] * v[Z]) >> MEXP) ) ) );
+ 
+-        /* printf("yz_plane, v len = %ld\n", len ); */
++        /* printf("yz_plane, v len = %d\n", len ); */
+ 
+         if( len != 0 ) {
+ 
+@@ -1361,7 +1361,7 @@
+             if( v[Y] < -1024 ) {
+                 v[Y] = -1024;
+             }
+-            /* printf("yz_plane, v[Y] = %ld\n", v[Y] ); */
++            /* printf("yz_plane, v[Y] = %d\n", v[Y] ); */
+ 
+             if( v[Z] >= 0 ) {
+                 theta = iarccos( (v[Y] << 3) ) >> 3;
+@@ -1378,7 +1378,7 @@
+             if( t[Y] < -1024 ) {
+                 t[Y] = -1024;
+             }
+-            /* printf("yz_plane, t[Y] = %ld\n", t[Y] ); */
++            /* printf("yz_plane, t[Y] = %d\n", t[Y] ); */
+ 
+             if( t[Z] >= 0 ) {
+                 phi = iarccos( (t[Y] << 3) ) >> 3;
+@@ -1462,7 +1462,7 @@
+                       ((new_up[Z] * icos( xrot ) ) >> MEXP);
+ 
+     /* printf("target = (%.5f, %.5f, %.5f)\n", p->target[X], p->target[Y], p->target[Z] );
+-    printf("zrot = %ld, xrot = %ld\n", zrot, xrot);
++    printf("zrot = %d, xrot = %d\n", zrot, xrot);
+ 
+     Get_Keypress(); */
+ 
+@@ -1612,7 +1612,7 @@
+ void move_decoy_projectile( Projectile *p, Vehicle *v, Player player_array[] )
+ {
+     Vehicle temp_vehicle;
+-    long player_index;
++    int player_index;
+ 
+     /* copy a bunch of shit from v into temp_vehicle so the movement functions
+        will work */
+@@ -1905,7 +1905,7 @@
+ {
+     Projectile *p, *last;
+     Orientation o;
+-    long face_index;
++    int face_index;
+ 
+     last = NULL;
+     p = v->projectile_list;
+
+--- project.h	2001-12-18 21:08:45.000000000 +0100
++++ project.h	2008-06-15 23:02:38.000000000 +0200
+@@ -33,10 +33,10 @@
+ 
+ void move_projectile_forward_3d( Projectile *p, Vehicle *v );
+ 
+-void update_missile_target( Player *player_array, long index,
++void update_missile_target( Player *player_array, int index,
+                 RadarBase *red_base, RadarBase *blue_base );
+                 
+-void create_decoy_projectile( Vehicle *v, long type );
++void create_decoy_projectile( Vehicle *v, int type );
+ 
+ #endif
+ 
+
+--- pylon.c	2003-09-17 20:58:14.000000000 +0200
++++ pylon.c	2008-06-15 23:02:38.000000000 +0200
+@@ -30,7 +30,7 @@
+ 
+ void change_pylon_color( Pylon *pylon, Gradient gradient )
+ {
+-    long i;
++    int i;
+ 
+     pylon->gradient = gradient;
+     for( i = 0; i < pylon->obj.faces; i++ ) {
+@@ -40,13 +40,13 @@
+ 
+ void pylon_union( Pylons *pylons, PointFace *result )
+ {
+-    long i, j, k;
++    int i, j, k;
+     Point *point_ptr;
+     Face *face_ptr;
+     PointFace *obj_ptr;
+-    long point_start;
+-    long points_added = 0;
+-    long faces_added = 0;
++    int point_start;
++    int points_added = 0;
++    int faces_added = 0;
+ 
+     /* Remalloc the point array of result. Worst case 16 points per pylon. */
+ 
+@@ -105,23 +105,23 @@
+ void get_pylons( Pylons *pylons, char *filename )
+ {
+     FILE *fp;
+-    long num_pylons;
+-    long i, x, y, j;
++    int num_pylons;
++    int i, x, y, j;
+     float height;
+     int grad;
+-    long index;
++    int index;
+     float h, z_step, theta;
+     const float top_edge = -30.0;
+     const float bottom_edge = 30.0;
+     const int n = 30; /* 25 */
+     const int m = 30; /* 30 */
+     const float r = 10.0;
+-    long point1, point2, point3, point4;
+-    long temp;
++    int point1, point2, point3, point4;
++    int temp;
+     Point *point_ptr;  /* used to avoid a lot of dereferencing */
+     Face *face_ptr;    /* same here */
+-    long point_size;
+-    long face_size;
++    int point_size;
++    int face_size;
+     Float_Point u, v, uxv;
+     float uxv_dot_uxv, len;
+     Float_Point2d temp2d;
+@@ -142,7 +142,7 @@
+ 
+     /* get the number of pylons in file */
+ 
+-    fscanf( fp, " %ld ", &num_pylons );
++    fscanf( fp, " %d ", &num_pylons );
+     pylons->pylons = num_pylons;
+ 
+     /* malloc the pylons */
+@@ -158,7 +158,7 @@
+ 
+         /* get the pylons x y and h fields */
+ 
+-        fscanf( fp, " %ld %ld %f ", &x, &y, &height );
++        fscanf( fp, " %d %d %f ", &x, &y, &height );
+ 
+         pylons->pylon[i].x = x;
+         pylons->pylon[i].y = y;
+@@ -640,9 +640,9 @@
+     }
+ }
+ 
+-int pylon_exists( Pylons* pylons, short x, short y, long* index )
++int pylon_exists( Pylons* pylons, short x, short y, int* index )
+ {
+-    long i;
++    int i;
+ 
+     for( i = 0; i < pylons->pylons; i++ ) {
+         if( ( pylons->pylon[i].x == x ) && ( pylons->pylon[i].y == y ) ) {
+
+--- pylon.h	2001-12-18 21:08:45.000000000 +0100
++++ pylon.h	2008-06-15 23:02:38.000000000 +0200
+@@ -22,7 +22,7 @@
+ #define PYLON_H
+ 
+ void pylon_union( Pylons* pylons, PointFace *result );
+-int pylon_exists( Pylons* pylons, short x, short y, long* index );
++int pylon_exists( Pylons* pylons, short x, short y, int* index );
+ void get_pylons( Pylons *pylons, char *filename );
+ void print_pylons( Pylons *pylons );
+ void pylons_to_pfd( Pylons *pylons, PointFace *obj );
+
+--- radar.c	2003-04-30 16:27:18.000000000 +0200
++++ radar.c	2008-06-15 23:02:38.000000000 +0200
+@@ -31,10 +31,10 @@
+ extern Matrix inv_scale_matrix;       /* inverse of scale_matrix */
+ extern Matrix wtov_matrix;            /* window to viewport mapping matrix */
+ 
+-extern long view_vertices[MAX_POINTS][3];   /* holds the vertices of obj after
++extern int view_vertices[MAX_POINTS][3];   /* holds the vertices of obj after
+                                         rotation */
+ 
+-extern long projected_vertices[MAX_POINTS][4]; /* vertices of obj after rotation &
++extern int projected_vertices[MAX_POINTS][4]; /* vertices of obj after rotation &
+                                            projection & scaling */
+ 
+ extern Edge global_edge_array[3000];
+@@ -42,7 +42,7 @@
+ extern unsigned char clipped_away[MAX_POINTS];  /* tells if a point has been clipped
+                                             away or not */
+ 
+-extern long new_hither;
++extern int new_hither;
+ 
+ /* initalizes the edgetable that is used by view_radar */
+ 
+@@ -54,9 +54,9 @@
+ /* it assumes that pe the cylider of radius 1.5 and length of 4 centered
+    at the origin */
+ 
+-void view_radar( PointEdge *pe, Player *player_array, long view_vehicle, Point2d offset )
++void view_radar( PointEdge *pe, Player *player_array, int view_vehicle, Point2d offset )
+ {
+-    long i;
++    int i;
+     Point p;
+     Matrix translation_matrix, temp_matrix;
+     PointEdge clip_pe;
+
+--- radar.h	2001-12-18 21:08:45.000000000 +0100
++++ radar.h	2008-06-15 23:02:38.000000000 +0200
+@@ -22,7 +22,7 @@
+ #define RADAR_H
+ 
+ void init_radar( PointEdge *pe );
+-void view_radar( PointEdge *pe, Player *player_array, long view_vehicle, Point2d offset );
++void view_radar( PointEdge *pe, Player *player_array, int view_vehicle, Point2d offset );
+ 
+ #endif
+ 
+
+--- rotbmp.c	2001-12-18 21:08:45.000000000 +0100
++++ rotbmp.c	2008-06-15 23:02:38.000000000 +0200
+@@ -33,17 +33,17 @@
+ 
+ char *funky_buffer; /* pointer we will use for the double
+                            buffer */ 
+-long max_index;         /* The ending index of the image->buffer */
+-unsigned long image_index = 0;   /* our position in the image buffer */
+-long y_offset;          /* For scaling along the y axis */
+-long total_ystep;      /* Determines how often we repeat or skip scan(?) lines */
+-long total_index;      /* This is our ystep position in the image->buffer */
++int max_index;         /* The ending index of the image->buffer */
++unsigned int image_index = 0;   /* our position in the image buffer */
++int y_offset;          /* For scaling aint the y axis */
++int total_ystep;      /* Determines how often we repeat or skip scan(?) lines */
++int total_index;      /* This is our ystep position in the image->buffer */
+              
+ 
+-long left_step = 0;
+-long right_step = 0;
+-long left_index = 0;
+-long right_index = 0;
++int left_step = 0;
++int right_step = 0;
++int left_index = 0;
++int right_index = 0;
+ 
+ 
+ 
+@@ -51,18 +51,18 @@
+ 
+ /* Digline draws a line from x1,y1 to x2,y2 but instead of drawing a
+    Solid color it draws a strip from the image->buffer it is sent.  It
+-   Keeps track of its position in the buffer with the static long image_index.
++   Keeps track of its position in the buffer with the static int image_index.
+    It also scales the line so one horizontal line from the buffer maps
+    Onto our line (x1,y1),(x2,y2) */
+ 
+ void digline( int x1, int y1, int x2, int y2, pcx_picture_ptr image )
+     {
+     
+-     long temp_image_index = image_index; 
++     int temp_image_index = image_index; 
+      int d, x, y, ax, ay, sx, sy, dx, dy;
+-     long xstep, ystep;
++     int xstep, ystep;
+      char *buffer_ptr; /* temporary pointer for easy buffer reference */
+-     long local_xpixels = image->xpixels;
++     int local_xpixels = image->xpixels;
+      
+      int hackx, hacky; /* Temporary solution to nasty clipping problem */
+ 
+@@ -246,7 +246,7 @@
+      funky_buffer = Return_Double_Buffer(); /* Alias our pointer to the double buffer
+                                                For the pixel plot macro */
+ 
+-     max_index = ((long)(image->xpixels + 1) * (long)(image->ypixels + 1)) << MEXP2;           
++     max_index = ((int)(image->xpixels + 1) * (int)(image->ypixels + 1)) << MEXP2;           
+      /* This is the end of the image buffer we are mapping */
+ 
+ 
+@@ -256,18 +256,18 @@
+      line_length2 = figure_line( newx2, newy2, newx3, newy3, x2, y2 ); /* Get values for right 'vertical' bar */
+ 
+ 
+-     /* Here we figure out the y axis ratios of ypixels along the 
+-        Left side and along the right side of the image to the area 
++     /* Here we figure out the y axis ratios of ypixels aint the 
++        Left side and aint the right side of the image to the area 
+         We're mapping them onto */
+ 
+      if( line_length > line_length2 )
+          {
+-          right_step = ((long)line_length2 << MEXP2) / (long)line_length;
++          right_step = ((int)line_length2 << MEXP2) / (int)line_length;
+           left_step = MAGIC2;  /*  1:1 ratio of pixels  */
+          }
+      else if( line_length < line_length2 )
+          {
+-          left_step = ((long)line_length << MEXP2) / (long)line_length2;
++          left_step = ((int)line_length << MEXP2) / (int)line_length2;
+           right_step = MAGIC2; /*  1:1 ratio of pixels */
+          }
+       else /* if theyre the same */
+@@ -283,12 +283,12 @@
+ 
+       
+      if( line_length < image->ypixels + 1)
+-         y_offset = (long)(image->xpixels + 1) << MEXP2;
++         y_offset = (int)(image->xpixels + 1) << MEXP2;
+      else
+-         y_offset = -(long)(image->xpixels + 1) << MEXP2;
++         y_offset = -(int)(image->xpixels + 1) << MEXP2;
+ 
+      
+-     total_ystep = ((long)image->ypixels << MEXP2) / ((long)line_length);
++     total_ystep = ((int)image->ypixels << MEXP2) / ((int)line_length);
+ 
+           
+ total_index = 0;                        
+
+--- sb_defs.h	2001-12-18 21:08:45.000000000 +0100
++++ sb_defs.h	2008-06-15 23:02:38.000000000 +0200
+@@ -29,7 +29,7 @@
+ #define WORD                    unsigned short
+ #endif
+ #ifndef DWORD
+-#define DWORD                   unsigned long
++#define DWORD                   unsigned int
+ #endif
+ 
+ /* Formats to pass to the sb_load_sample() function.                          */
+
+--- sb_stub.c	2004-03-01 23:37:32.000000000 +0100
++++ sb_stub.c	2008-06-15 23:02:38.000000000 +0200
+@@ -36,7 +36,7 @@
+ const int g_XResolution = 640;
+ const int g_YResolution = 480;
+ 
+-extern long program_over;    /* TRUE when user wishes to leave the program */
++extern int program_over;    /* TRUE when user wishes to leave the program */
+ 
+ /* Base path of data files */
+ char g_DataPath[255];
+
+--- serial.c	2003-04-30 16:27:18.000000000 +0200
++++ serial.c	2008-06-15 23:02:38.000000000 +0200
+@@ -30,7 +30,7 @@
+ /* G L O B A L S ///////////////////////////////////////////////////////////// */
+ 
+ 
+-extern unsigned long absolute_time; /* From timer.c */
++extern unsigned int absolute_time; /* From timer.c */
+ 
+ char ser_buffer[SERIAL_BUFF_SIZE];  /* the receive buffer */
+ 
+@@ -378,11 +378,11 @@
+     }  /* End of Handshake() */
+ 
+ 
+-/* Get one character from the remote computer...if it takes long enough...
++/* Get one character from the remote computer...if it takes int enough...
+    return 0 */
+ int Get_One_Character( char *ch )
+      {
+-      unsigned long starting_time;
++      unsigned int starting_time;
+       int error = 1; /* One means no error */
+ 
+ 
+
+--- smartmem.c	2003-04-30 16:27:18.000000000 +0200
++++ smartmem.c	2008-06-15 23:07:47.000000000 +0200
+@@ -23,7 +23,7 @@
+ #include "types.h"
+ 
+ 
+-typedef long Align;  /* for alignment to long boundary */
++typedef int Align;  /* for alignment to int boundary */
+ 
+ union smart_heap_header {                /* block header: */
+     struct {
+@@ -149,9 +149,9 @@
+     }
+     
+     /*
+-    printf("best_fit = %ld\n", (long)best_fit );
+-    printf("best_fit->s.size = %ld\n", (long)best_fit->s.size );
+-    printf("best_fit->s.next = %ld\n", (long)best_fit->s.next );
++    printf("best_fit = %d\n", (int)best_fit );
++    printf("best_fit->s.size = %d\n", (int)best_fit->s.size );
++    printf("best_fit->s.next = %d\n", (int)best_fit->s.next );
+     */
+     
+     /* if there isn't a best_fit then barf */
+@@ -170,8 +170,8 @@
+         old_next = best_fit->s.next;
+         
+         /*
+-        printf("old_size = %ld\n", (long)old_size );
+-        printf("old_next = %ld\n", (long)old_next );
++        printf("old_size = %d\n", (int)old_size );
++        printf("old_next = %d\n", (int)old_next );
+         */
+         
+         best_fit->s.size = size + (size % sizeof(SmartHeapHeader) );
+@@ -182,9 +182,9 @@
+         new_free_node->s.next = old_next;
+         
+         /*
+-        printf("new_free_node = %ld\n", (long)new_free_node );
+-        printf("new_free_node->s.size = %ld\n", (long)new_free_node->s.size );
+-        printf("new_free_node->s.next = %ld\n", (long)new_free_node->s.next );        
++        printf("new_free_node = %d\n", (int)new_free_node );
++        printf("new_free_node->s.size = %d\n", (int)new_free_node->s.size );
++        printf("new_free_node->s.next = %d\n", (int)new_free_node->s.next );        
+         */
+         
+         if( best_fit != free_list ) {
+@@ -259,9 +259,9 @@
+     
+     while( current != NULL ) {
+         printf("-------------------------\n");
+-        printf("address = %ld\n", (long)current );
+-        printf("size = %ld\n", (long)current->s.size );
+-        printf("next = %ld\n", (long)current->s.next );
++        printf("address = %p\n", current );
++        printf("size = %d\n", (int)current->s.size );
++        printf("next = %p\n", current->s.next );
+         current = current->s.next;
+     }
+     
+
+--- stats.h	2001-12-18 21:08:45.000000000 +0100
++++ stats.h	2008-06-15 23:02:38.000000000 +0200
+@@ -37,27 +37,27 @@
+      float          average_d;      /* Your average d throughout the game */
+ 
+      int            user_vehicle;   /* Current vehicle controlled by user...for internal use */
+-     unsigned long  total_frames;   /* Number of frames a game took...for internal use */
+-     unsigned long  total_d;        /* Added d from every frame...used to compute average d */
++     unsigned int  total_frames;   /* Number of frames a game took...for internal use */
++     unsigned int  total_d;        /* Added d from every frame...used to compute average d */
+     } game_stats_type;
+ 
+ 
+ typedef struct
+     {
+      char          name[80];        /* This characters name */
+-     unsigned long number_of_games; /* How many games you have played (unsigned long...hehe) */
+-     unsigned long victories;       /* Number of victories */
+-     unsigned long defeats;         /* Number of defeats */
++     unsigned int number_of_games; /* How many games you have played (unsigned long...hehe) */
++     unsigned int victories;       /* Number of victories */
++     unsigned int defeats;         /* Number of defeats */
+      float         win_percentage;  /* Percent of the time you won */
+-     unsigned long kills;           /* How many cats has this cat killed */
+-     unsigned long times_killed;    /* How many times character was killed */
+-     unsigned long shots_fired;     /* How many projectiles you've fired */
+-     unsigned long enemy_hits;      /* How many times you hit an enemy with a projectile */
+-     unsigned long friendly_hits;   /* How many times you hit an friend with a projectile */
+-     unsigned long misses;          /* How many shots you fired that did nothing */
+-     unsigned long times_hit;       /* How many times you were hit with projectiles */
++     unsigned int kills;           /* How many cats has this cat killed */
++     unsigned int times_killed;    /* How many times character was killed */
++     unsigned int shots_fired;     /* How many projectiles you've fired */
++     unsigned int enemy_hits;      /* How many times you hit an enemy with a projectile */
++     unsigned int friendly_hits;   /* How many times you hit an friend with a projectile */
++     unsigned int misses;          /* How many shots you fired that did nothing */
++     unsigned int times_hit;       /* How many times you were hit with projectiles */
+      float         hit_percentage;  /* Hit to miss ratio */
+-     unsigned long pylons_grabbed;  /* How many pylons you grabbed */
++     unsigned int pylons_grabbed;  /* How many pylons you grabbed */
+     } overall_stats_type;
+ 
+ 
+
+--- tanks.c	2008-06-15 22:57:03.000000000 +0200
++++ tanks.c	2008-06-15 23:02:38.000000000 +0200
+@@ -235,7 +235,7 @@
+ 
+ void init_vehicle_gradient( Vehicle *tank )
+ {
+-    long i;
++    int i;
+ 
+     if( tank->team == RED_TEAM ) {
+ 
+
+--- timer.c	2001-12-18 21:08:45.000000000 +0100
++++ timer.c	2008-06-15 23:02:38.000000000 +0200
+@@ -32,19 +32,19 @@
+ /* GLOBALS */
+ 
+ 
+-long TIMER_CLICKS_PER_SECOND = 220;
+-long GAME_CLICKS_PER_SECOND  = 15;
++int TIMER_CLICKS_PER_SECOND = 220;
++int GAME_CLICKS_PER_SECOND  = 15;
+ 
+ 
+ 
+ //_go32_dpmi_seginfo Old_Timer_Isr, New_Timer_Isr, Old_Real_Timer_Isr, New_Real_Timer_Isr;   
+ //_go32_dpmi_registers regs;      
+ 
+-long timer = 0;
+-unsigned long absolute_time = 0; /* Absolute number of clicks since the beginning of the game */
++int timer = 0;
++unsigned int absolute_time = 0; /* Absolute number of clicks since the beginning of the game */
+ 
+ 
+-long click_threshold = 15; /* 15 is arbitrary */
++int click_threshold = 15; /* 15 is arbitrary */
+ 
+ /* */
+ 
+@@ -100,14 +100,14 @@
+ 	 */
+ }
+ 
+-long Check_Timer( void )
++int Check_Timer( void )
+     {
+ //	return(10000); //Johnm 12/2/2001
+ 
+      return timer;
+     }
+ 
+-void Set_Timer( long number )
++void Set_Timer( int number )
+     {
+      timer = number;
+     }
+
+--- timer.h	2001-12-18 21:08:45.000000000 +0100
++++ timer.h	2008-06-15 23:02:38.000000000 +0200
+@@ -47,7 +47,7 @@
+ void Timer( void );
+ void Init_Timer( void );
+ void Kill_Timer( void );    
+-long Check_Timer( void );
+-void Set_Timer( long number );
++int Check_Timer( void );
++void Set_Timer( int number );
+ void Set_Timer_Speed( unsigned short new_count );
+ int Test_Timer( void );
+
+--- types.h	2008-06-15 22:56:57.000000000 +0200
++++ types.h	2008-06-15 23:02:38.000000000 +0200
+@@ -217,15 +217,15 @@
+ 
+ /* Point2d is a 2d point in fixed-point */
+ 
+-typedef long Point2d[2];
++typedef int Point2d[2];
+ 
+ /* Point is a 3d point in fixed-point */
+ 
+-typedef long Point[3];
++typedef int Point[3];
+ 
+ /* Vector is a 3d vector in fixed-point (equivilent to Point) */
+ 
+-typedef long Vector[3];
++typedef int Vector[3];
+ 
+ /* Float_Point2d is a 2d point in floating-point */
+ 
+@@ -269,10 +269,10 @@
+ /* Face holds all the important information about 3d polygon */
+ 
+ typedef struct {
+-    long index[MAX_FACE_SIZE];  /* index into a list of vertices */
++    int index[MAX_FACE_SIZE];  /* index into a list of vertices */
+     unsigned char size;         /* number of vertices in this face */
+     Vector normal;              /* normal vector of this face */
+-    long max_z;                 /* maximum z-coord in this face */
++    int max_z;                 /* maximum z-coord in this face */
+     Gradient gradient;          /* gradient to use when shading this face */
+     unsigned char transparent;  /* true if this face is transparent */
+ } Face;
+@@ -281,30 +281,30 @@
+ 
+ typedef struct {
+     Point *point;   /* pointer to an array of Points */
+-    long points;    /* length of the point array */
++    int points;    /* length of the point array */
+     Face *face;     /* pointer to an array of Faces */
+-    long faces;     /* length of the face array */
++    int faces;     /* length of the face array */
+ } PointFace;
+ 
+ /* Edge identifies a line between to vertices */
+ 
+-typedef long Edge[2];
++typedef int Edge[2];
+ 
+ /* PointEdge is a collection of 3d points and edges that define a wireframe
+    object */
+ 
+ typedef struct {
+     Point *point;  /* array of points */
+-    long points;   /* length of point array */
++    int points;   /* length of point array */
+     Edge *edge;    /* array of edges */
+-    long edges;    /* length of edge aray */
++    int edges;    /* length of edge aray */
+ } PointEdge;
+ 
+ /* EdgeTable is just a list of edges, there are no vertices */
+ 
+ typedef struct {
+     Edge *edge;
+-    long edges;
++    int edges;
+ } EdgeTable;
+ 
+ /* Window used by the polygon scanner's 2D-clipper */
+@@ -315,7 +315,7 @@
+ 
+ /* Matrix type is a 4x4 matrix of longs */
+ 
+-typedef long Matrix[16];
++typedef int Matrix[16];
+ 
+ /* Float_Matrix is a 4x4 matrix of floats */
+ 
+@@ -335,12 +335,12 @@
+ /* MagicBoundingBox defines a cube in fixed_point coords */
+ 
+ typedef struct {
+-    long min_x;
+-    long max_x;
+-    long min_y;
+-    long max_y;
+-    long min_z;
+-    long max_z;
++    int min_x;
++    int max_x;
++    int min_y;
++    int max_y;
++    int min_z;
++    int max_z;
+ } MagicBoundingBox;
+ 
+ /* BoundingBox2d defines a 2d square */
+@@ -483,8 +483,8 @@
+ 
+     /* Information about this vehicles hitpoints */
+ 
+-    long max_hitpoints;      /* maximum hitpoints allowed */
+-    long current_hitpoints;  /* current number of hitpoints */
++    int max_hitpoints;      /* maximum hitpoints allowed */
++    int current_hitpoints;  /* current number of hitpoints */
+ 
+     short ramming_active;    /* ramming on indicator */
+     short ramming_damage;    /* hitpoints of damage resulting from one ram */
+@@ -540,7 +540,7 @@
+ 
+ typedef struct {
+     GradientInfo gradient[ NUM_GRADIENTS ]; /* array of gradients */
+-    long size;                              /* number of active gradients */
++    int size;                              /* number of active gradients */
+ } ColorInfo;
+ 
+ 
+@@ -750,7 +750,7 @@
+      float angular_friction;  /* Radians per frame */
+      float surface_friction;   /* Units per frame */
+      float air_friction;       /* Units per frame */
+-     long yon_clipping_plane; /* Magic Fixed point */
++     int yon_clipping_plane; /* Magic Fixed point */
+ 
+      Orientation base_orientations[2];
+      Orientation turret_orientations[2];
+@@ -768,8 +768,8 @@
+ typedef struct {
+     PointFace *world_obj;    /* 3d object in (world coords) */
+     BoundingBox2d box;       /* the 2d bounding box */
+-    long refresh_rate;       /* number of frames between bursts */
+-    long frames_till_burst;  /* frames till next energy burst. */
++    int refresh_rate;       /* number of frames between bursts */
++    int frames_till_burst;  /* frames till next energy burst. */
+     Float_Point center;      /* used by ai */
+ } EnergyPowerUp;
+ 
+@@ -822,9 +822,9 @@
+ typedef struct {
+     Point2d upper_left;
+     Point2d lower_right;
+-    long min_val;
+-    long max_val;
+-    long val;
++    int min_val;
++    int max_val;
++    int val;
+     unsigned char bar_color;
+     unsigned char outline_color;
+     BarType type;
+@@ -838,14 +838,14 @@
+ 
+ typedef struct {
+     Pixel *pixel;
+-    long pixels;
++    int pixels;
+ } PixMap;
+ 
+ 
+ /* CollisionInfo holds collision info for 1 vehicles */
+ 
+ typedef struct {
+-    long collision;        /* True if vehicle is colliding with something */
++    int collision;        /* True if vehicle is colliding with something */
+     Float_Vector reflect;  /* The sum of the normal vectors of the faces that
+                               this vehicle is colliding with */
+ } CollisionInfo;
+@@ -865,7 +865,7 @@
+     PointFace world_debris;
+     PointFace cloud;
+     PointFace world_cloud;
+-    long frames_left;
++    int frames_left;
+     struct explosion *next;
+ } Explosion;
+ 
+@@ -1067,7 +1067,7 @@
+ 
+ typedef struct {
+     Snapshot snapshot[15];
+-    long size;
++    int size;
+ } SnapshotQueue;
+ 
+ typedef RGB_color palette_type[256];
+
+--- util.c	2003-04-30 16:27:18.000000000 +0200
++++ util.c	2008-06-15 23:02:38.000000000 +0200
+@@ -33,7 +33,7 @@
+ #include "clipping.h"  /* needed in point_visible */
+ #include "util.h"
+ 
+-extern long new_hither;     /* needed in point_visible */
++extern int new_hither;     /* needed in point_visible */
+ extern Matrix scale_matrix; /* needed in point_visible */
+ extern game_configuration_type game_configuration; /* From omega.c */
+ extern level_type level; /* From omega.c...we need it for yon_clipping_plane */
+@@ -41,13 +41,13 @@
+ extern WorldStuff world_stuff;
+ 
+ 
+-long sine_table[1609]; /* sin( 0.0 ) to sin( PI/2 ) */
+-long arc_cos_table[8193]; /* arccos( 0.0 ) to arccos( 1.0 ) in fixed-point
++int sine_table[1609]; /* sin( 0.0 ) to sin( PI/2 ) */
++int arc_cos_table[8193]; /* arccos( 0.0 ) to arccos( 1.0 ) in fixed-point
+ 			     19.13 */
+ 			     
+-extern long sb_installed;        /* True if the sound card driver is installed */
+-extern long keyboard_installed;  /* True if the keyboard interrupt is installed */
+-extern long timer_installed;     /* True if the timer interrrupt is installed */
++extern int sb_installed;        /* True if the sound card driver is installed */
++extern int keyboard_installed;  /* True if the keyboard interrupt is installed */
++extern int timer_installed;     /* True if the timer interrrupt is installed */
+ 
+ void exit_gracefully()
+ {
+@@ -83,7 +83,7 @@
+ 
+ void init_sine_table()
+ {
+-    long i;
++    int i;
+ 
+     for( i = 0; i < 1609; i++ ) {
+ 	sine_table[i] = ftom( sin( mtof( i ) ) );
+@@ -92,47 +92,47 @@
+ 
+ void init_arc_cos_table()
+ {
+-     long i;
++     int i;
+ 
+      for( i = 0; i < 8193; i++ ) {
+-	 arc_cos_table[i] = (long)(acos( ((float)i / 8192.0) ) * 8192.0);
++	 arc_cos_table[i] = (int)(acos( ((float)i / 8192.0) ) * 8192.0);
+      }
+ }
+ 
+ /* converts 22.10 fixed-point to float */
+ 
+-float mtof( long magic )
++float mtof( int magic )
+ {
+     return (float)((float)magic/(float)MAGIC);
+ }
+ 
+ /* converts float to 22.10 fixed-point */
+ 
+-long ftom( float num )
++int ftom( float num )
+ {
+-    return (long)(num * MAGIC);
++    return (int)(num * MAGIC);
+ }
+ 
+-long rounding_ftom( float num )
++int rounding_ftom( float num )
+ {
+     double integer_part, fractional_part;
+ 
+     fractional_part = modf( num * (float)MAGIC, &integer_part );
+ 
+     if( ( fractional_part > 0.0 ) && ( fractional_part >= 0.5 ) ) {
+-	return (long)(integer_part + 1.0);
++	return (int)(integer_part + 1.0);
+     }
+     else if( ( fractional_part < 0.0 ) && ( -fractional_part >= 0.5 ) ) {
+-	return (long)(integer_part - 1.0);
++	return (int)(integer_part - 1.0);
+     }
+     else {
+-	return (long)(integer_part);
++	return (int)(integer_part);
+     }
+ }
+ 
+-long rounding_fixed_multiply( long x, long y )
++int rounding_fixed_multiply( int x, int y )
+ {
+-    long temp;
++    int temp;
+ 
+     temp = (x * y) >> (MEXP - 1);
+ 
+@@ -144,7 +144,7 @@
+     }
+ }
+ 
+-long rounding_fixed_to_long( long fixed )
++int rounding_fixed_to_long( int fixed )
+ {
+     fixed = fixed >> (MEXP - 1);
+ 
+@@ -159,7 +159,7 @@
+ /* warning x is expected to be in 19.13 fixed-point not 22.10 */
+ /* the result is also in 19.13 fixed-point */
+ 
+-long iarccos( long x )
++int iarccos( int x )
+ {
+     if( x > 8192 ) {
+ 	x = 8192;
+@@ -178,9 +178,9 @@
+ 
+ /* gives you the sin of the angle x(radians) in fixed-point */
+ 
+-long isin( long x )
++int isin( int x )
+ {
+-    long factor = 1;
++    int factor = 1;
+ 
+     while( x < 0 ) {
+ 	x += 6434;     /* 2 pi */
+@@ -199,7 +199,7 @@
+ 
+ /* gives you the cos of the angle x(radians) in fixed-point */
+ 
+-long icos( long x )
++int icos( int x )
+ {
+     return (isin(x+1608));
+ }
+@@ -210,7 +210,7 @@
+    pixel.  This function finds the color based solely on the angle of the
+    light source. */
+ 
+-unsigned char diffuse_shade( long dotprod, Gradient gradient )
++unsigned char diffuse_shade( int dotprod, Gradient gradient )
+ {
+     unsigned char num_colors = world_stuff.color_info.gradient[gradient].num_colors;
+     unsigned char offset = world_stuff.color_info.gradient[gradient].first;
+@@ -220,11 +220,11 @@
+     }
+     else {
+ 
+-	long d_theta; /* number of radians each color in the gradient sweeps
++	int d_theta; /* number of radians each color in the gradient sweeps
+ 			 through */
+ 
+-	long theta;   /* angle of face to light source (arccos(dotprod)) */
+-	long i;
++	int theta;   /* angle of face to light source (arccos(dotprod)) */
++	int i;
+ 
+ 	theta = iarccos( dotprod << 3 );
+ 
+@@ -247,17 +247,17 @@
+    source.  This function finds the color based the angle of the light souce
+    and the distance from the light source. */
+ 
+-unsigned char distance_diffuse_shade( long dotprod, long distance, Gradient gradient )
++unsigned char distance_diffuse_shade( int dotprod, int distance, Gradient gradient )
+ {
+     unsigned char num_colors = world_stuff.color_info.gradient[gradient].num_colors;
+     unsigned char offset = world_stuff.color_info.gradient[gradient].first;
+-    long d_theta; /* number of radians each color in the gradient sweeps
++    int d_theta; /* number of radians each color in the gradient sweeps
+ 		     through */
+-    long theta;   /* angle of face to light source (arccos(dotprod)) */
+-    long i;
+-    long max_distance = ((((25 << MEXP) << MEXP) / -5120) * level.yon_clipping_plane) >> MEXP;
+-    long factor = ((num_colors << MEXP) << MEXP) / max_distance; /* (num_colors / max_distance) */
+-    long shade;
++    int theta;   /* angle of face to light source (arccos(dotprod)) */
++    int i;
++    int max_distance = ((((25 << MEXP) << MEXP) / -5120) * level.yon_clipping_plane) >> MEXP;
++    int factor = ((num_colors << MEXP) << MEXP) / max_distance; /* (num_colors / max_distance) */
++    int shade;
+ 
+     dotprod = (dotprod >> 1) + 512 + 50; /* shading hack to make things brighter */
+ 
+@@ -301,17 +301,17 @@
+ }
+ 
+ 
+-unsigned char vehicle_menu_distance_diffuse_shade( long dotprod, long distance, Gradient gradient )
++unsigned char vehicle_menu_distance_diffuse_shade( int dotprod, int distance, Gradient gradient )
+ {
+     unsigned char num_colors = 64;
+     unsigned char offset = 5;
+-    long d_theta; /* number of radians each color in the gradient sweeps
++    int d_theta; /* number of radians each color in the gradient sweeps
+ 		     through */
+-    long theta;   /* angle of face to light source (arccos(dotprod)) */
+-    long i;
+-    long max_distance = ((((25 << MEXP) << MEXP) / -5120) * level.yon_clipping_plane) >> MEXP;
+-    long factor = ((num_colors << MEXP) << MEXP) / max_distance; /* (num_colors / max_distance) */
+-    long shade;
++    int theta;   /* angle of face to light source (arccos(dotprod)) */
++    int i;
++    int max_distance = ((((25 << MEXP) << MEXP) / -5120) * level.yon_clipping_plane) >> MEXP;
++    int factor = ((num_colors << MEXP) << MEXP) / max_distance; /* (num_colors / max_distance) */
++    int shade;
+ 
+     dotprod = (dotprod >> 1) + 512 + 50; /* shading hack to make things brighter */
+ 
+@@ -358,12 +358,12 @@
+ /* Finds the actual color of a pixel that is some distance away from the
+    light soruce. */
+ 
+-unsigned char tube_shade( long distance, Gradient gradient )
++unsigned char tube_shade( int distance, Gradient gradient )
+ {
+     unsigned char num_colors = world_stuff.color_info.gradient[gradient].num_colors;
+     unsigned char offset = world_stuff.color_info.gradient[gradient].first;
+-    long shade;
+-    long factor = ((num_colors << MEXP) << MEXP) / level.yon_clipping_plane; /* (num_colors / max_distance) */
++    int shade;
++    int factor = ((num_colors << MEXP) << MEXP) / level.yon_clipping_plane; /* (num_colors / max_distance) */
+ 
+     if( num_colors == 1 ) {
+ 	return offset;
+@@ -382,12 +382,12 @@
+     }
+ }
+ 
+-unsigned char radar_tube_shade( long distance, Gradient gradient )
++unsigned char radar_tube_shade( int distance, Gradient gradient )
+ {
+-    long num_colors = world_stuff.color_info.gradient[gradient].num_colors;
+-    long offset = world_stuff.color_info.gradient[gradient].first;
+-    long shade;
+-    long factor = (num_colors << MEXP) / 4;
++    int num_colors = world_stuff.color_info.gradient[gradient].num_colors;
++    int offset = world_stuff.color_info.gradient[gradient].first;
++    int shade;
++    int factor = (num_colors << MEXP) / 4;
+ 
+     distance -= (3 << MEXP);
+ 
+@@ -722,13 +722,13 @@
+     printf("  vel      = (%.25f,%.25f,%.25f)\n", v->vel[X], v->vel[Y], v->vel[Z] );
+ }
+ 
+-void print_player_info( Player *p, long frame )
++void print_player_info( Player *p, int frame )
+ {
+-    printf("%ld  position = (%.25f,%.25f,%.25f)\n", frame, p->tank.orient.position[X], p->tank.orient.position[Y], p->tank.orient.position[Z] );
+-    printf("%ld  front    = (%.25f,%.25f,%.25f)\n", frame, p->tank.orient.front[X], p->tank.orient.front[Y], p->tank.orient.front[Z] );
+-    printf("%ld  up       = (%.25f,%.25f,%.25f)\n", frame, p->tank.orient.up[X], p->tank.orient.up[Y], p->tank.orient.up[Z] );
+-    printf("%ld  vel      = (%.25f,%.25f,%.25f)\n", frame, p->tank.vel[X], p->tank.vel[Y], p->tank.vel[Z] );
+-    printf("%ld  input_table = (%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)\n", frame, (int)p->table[0], (int)p->table[1],
++    printf("%d  position = (%.25f,%.25f,%.25f)\n", frame, p->tank.orient.position[X], p->tank.orient.position[Y], p->tank.orient.position[Z] );
++    printf("%d  front    = (%.25f,%.25f,%.25f)\n", frame, p->tank.orient.front[X], p->tank.orient.front[Y], p->tank.orient.front[Z] );
++    printf("%d  up       = (%.25f,%.25f,%.25f)\n", frame, p->tank.orient.up[X], p->tank.orient.up[Y], p->tank.orient.up[Z] );
++    printf("%d  vel      = (%.25f,%.25f,%.25f)\n", frame, p->tank.vel[X], p->tank.vel[Y], p->tank.vel[Z] );
++    printf("%d  input_table = (%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)\n", frame, (int)p->table[0], (int)p->table[1],
+         (int)p->table[2], (int)p->table[3], (int)p->table[4], (int)p->table[5], (int)p->table[6], (int)p->table[7],
+         (int)p->table[8], (int)p->table[9], (int)p->table[10], (int)p->table[11], (int)p->table[12] );
+ }
+
+--- util.h	2003-04-28 17:52:34.000000000 +0200
++++ util.h	2008-06-15 23:02:38.000000000 +0200
+@@ -25,22 +25,22 @@
+ 
+ void init_sine_table();
+ void init_arc_cos_table();
+-long isin( long x );
+-long icos( long x );
+-long iarccos( long x );
+-
+-unsigned char diffuse_shade( long dotprod, Gradient gradient );
+-unsigned char distance_diffuse_shade( long dotprod, long distance, Gradient gradient );
+-unsigned char vehicle_menu_distance_diffuse_shade( long dotprod, long distance, Gradient gradient );
+-unsigned char tube_shade( long distance, Gradient gradient );
+-unsigned char radar_tube_shade( long distance, Gradient gradient );
+-
+-
+-float mtof( long magic );
+-long ftom( float num );
+-long rounding_ftom( float num );
+-long rounding_fixed_multiply( long x, long y );
+-long rounding_fixed_to_long( long fixed );
++int isin( int x );
++int icos( int x );
++int iarccos( int x );
++
++unsigned char diffuse_shade( int dotprod, Gradient gradient );
++unsigned char distance_diffuse_shade( int dotprod, int distance, Gradient gradient );
++unsigned char vehicle_menu_distance_diffuse_shade( int dotprod, int distance, Gradient gradient );
++unsigned char tube_shade( int distance, Gradient gradient );
++unsigned char radar_tube_shade( int distance, Gradient gradient );
++
++
++float mtof( int magic );
++int ftom( float num );
++int rounding_ftom( float num );
++int rounding_fixed_multiply( int x, int y );
++int rounding_fixed_to_long( int fixed );
+ 
+ /* floating point linear algabra functions */
+ 
+@@ -61,7 +61,7 @@
+ 
+ void print_vehicle_info( Vehicle *v );
+ void print_player_array_info( Player p[] );
+-void print_player_info( Player *p, long frame );
++void print_player_info( Player *p, int frame );
+ 
+ #endif
+ 
+
+--- voices.c	2003-04-30 16:27:18.000000000 +0200
++++ voices.c	2008-06-15 23:02:38.000000000 +0200
+@@ -62,7 +62,7 @@
+ 
+ 
+ /* Handle the gloat and despair voices */
+-void Gloat_Despair( WorldStuff *world_stuff, long view_vehicle )
++void Gloat_Despair( WorldStuff *world_stuff, int view_vehicle )
+     {
+      int i;
+      Player *player_array;
+@@ -101,7 +101,7 @@
+ 
+     } /* End of Gloat_Despair */
+ 
+-void Handle_Voices( WorldStuff *world_stuff, long view_vehicle, unsigned char first_person_view, unsigned char teleporting )
++void Handle_Voices( WorldStuff *world_stuff, int view_vehicle, unsigned char first_person_view, unsigned char teleporting )
+     {
+      int i;
+      team_type current_team;
+
+--- voices.h	2001-12-18 21:08:45.000000000 +0100
++++ voices.h	2008-06-15 23:02:38.000000000 +0200
+@@ -34,6 +34,6 @@
+ 
+ 
+ void Init_Voices( void );
+-void Handle_Voices( WorldStuff *world_stuff, long view_vehicle, unsigned char first_person_view, unsigned char teleporting );
++void Handle_Voices( WorldStuff *world_stuff, int view_vehicle, unsigned char first_person_view, unsigned char teleporting );
+ void Zero_Voice( int wingman_number );
+ void No_Despair( int wingman_number );

@@ -3,7 +3,7 @@
 %bcond mingw %[%{undefined rhel} && %{undefined flatpak}]
 
 Name:          enchant2
-Version:       2.8.15
+Version:       2.8.21
 Release:       1%{?dist}
 Summary:       An Enchanting Spell Checking Library
 

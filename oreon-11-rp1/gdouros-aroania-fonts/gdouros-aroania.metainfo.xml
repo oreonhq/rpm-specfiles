@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Alexander Ploumistos <alexpl@fedoraproject.org> -->
+<component type="font">
+	<id>gdouros-aroania</id>
+	<metadata_license> CC0-1.0</metadata_license>
+	<name>Aroania</name>
+	<summary>A font based on Victor Julius Scholderer's "New Hellenic"</summary>
+	<description>
+		<p>
+			Aroania is a modern recast of Victor Scholderer's "New Hellenic" font, on the
+			basis of Verdana. In 1927, Victor Julius Scholderer (1880-1971), on behalf of
+			the "Society for the Promotion of Greek Studies", got involved in choosing and
+			consulting the design and production of a Greek type called "New Hellenic", cut
+			by the Lanston Monotype Corporation. He chose the revival of a round, and
+			almost monoline type which had first appeared in 1492 in the edition of
+			Macrobius, ascribable to the printing shop of Giovanni Rosso (Joannes Rubeus)
+			in Venice.
+		</p>
+		<p>
+			The font covers the Windows Glyph List, IPA Extensions, Greek Extended, Ancient
+			Greek Numbers, Byzantine and Ancient Greek Musical Notation, various
+			typographic extras and several Open Type features (Case-Sensitive Forms, Small
+			Capitals, Subscript, Superscript, Numerators, Denominators, Fractions, Old
+			Style Figures, Historical Forms, Stylistic Alternates, Ligatures).
+			
+			It was created by George Douros.
+		</p>
+	</description>
+	<url type="homepage">http://users.teilar.gr/~g1951d/Textfonts.htm</url>
+	<updatecontact>alexpl@fedoraproject.org</updatecontact>
+</component>

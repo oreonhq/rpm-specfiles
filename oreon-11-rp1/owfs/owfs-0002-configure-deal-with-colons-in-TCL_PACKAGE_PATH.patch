@@ -1,0 +1,26 @@
+From 82187db499c5a6081296c79bd956a6f58db14a25 Mon Sep 17 00:00:00 2001
+From: Tomasz Torcz <tomek@pipebreaker.pl>
+Date: Thu, 13 Mar 2025 12:21:23 +0100
+Subject: [PATCH] configure: deal with colons in TCL_PACKAGE_PATH
+
+Tcl-8.6.15 has changed the TCL_PACKAGE_PATH delimiter from space to a colon.
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 5335920a..2997398e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -819,7 +819,7 @@ if test "${ENABLE_OWTCL}" = "true" ; then
+ 				OWTCL_INSTALL_PATH="`echo ${TCL_BIN_DIR} | cut -d' ' -f1`"
+ 				;;
+ 			*)
+-				OWTCL_INSTALL_PATH="`echo ${TCL_PACKAGE_PATH} | cut -d' ' -f1`"
++				OWTCL_INSTALL_PATH="`echo ${TCL_PACKAGE_PATH} | cut -d' ' -f1 | cut -d':' -f1`"
+ 				;;
+ 		esac
+ 		# Debian Hack: do not install in /usr/local/lib/tcltk
+-- 
+2.48.1
+

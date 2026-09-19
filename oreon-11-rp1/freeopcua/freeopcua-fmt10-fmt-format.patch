@@ -1,0 +1,91 @@
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/client/binary_client.cpp.fmt10	2023-06-29 23:44:17.182431167 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/client/binary_client.cpp	2023-06-30 00:05:55.766458890 +0900
+@@ -884,7 +884,7 @@ private:
+     Callbacks.insert(std::make_pair(request.Header.RequestHandle, responseCallback));
+     lock.unlock();
+ 
+-    LOG_DEBUG(Logger, "binary_client         | send: id: {} handle: {}, UtcTime: {}", ToString(request.TypeId, true), request.Header.RequestHandle, request.Header.UtcTime);
++    LOG_DEBUG(Logger, "binary_client         | send: id: {} handle: {}, UtcTime: {}", ToString(request.TypeId, true), request.Header.RequestHandle, static_cast<int64_t>(request.Header.UtcTime));
+ 
+     Send(request);
+ 
+@@ -933,7 +933,7 @@ private:
+   {
+     Binary::SecureHeader responseHeader;
+     Stream >> responseHeader;
+-    LOG_DEBUG(Logger, "binary_client         | received message: Type: {}, ChunkType: {}, Size: {}, ChannelId: {}", responseHeader.Type, responseHeader.Chunk, responseHeader.Size, responseHeader.ChannelId);
++    LOG_DEBUG(Logger, "binary_client         | received message: Type: {}, ChunkType: {}, Size: {}, ChannelId: {}", static_cast<int>(responseHeader.Type), static_cast<int>(responseHeader.Chunk), responseHeader.Size, responseHeader.ChannelId);
+ 
+     size_t algo_size;
+ 
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/core/subscription.cpp.fmt10	2023-06-29 23:44:17.182431167 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/core/subscription.cpp	2023-06-29 23:53:18.424665040 +0900
+@@ -106,7 +106,7 @@ void Subscription::CallDataChangeCallbac
+ 
+       if (mapit == AttributeValueMap.end())
+         {
+-          LOG_WARN(Logger, "subscription          | got PublishResult for an unknown monitoreditem id: {}", item.ClientHandle);
++          LOG_WARN(Logger, "subscription          | got PublishResult for an unknown monitoreditem id: {}", static_cast<uint32_t>(item.ClientHandle));
+         }
+ 
+       else
+@@ -115,7 +115,7 @@ void Subscription::CallDataChangeCallbac
+           Node node = mapit->second.TargetNode;
+           lock.unlock(); //unlock before calling client cades, you never know what they may do
+ 
+-          LOG_DEBUG(Logger, "subscription          | calling DataChange user callback: {} and node: {}", item.ClientHandle, mapit->second.TargetNode);
++          LOG_DEBUG(Logger, "subscription          | calling DataChange user callback: {} and node: {}", static_cast<uint32_t>(item.ClientHandle), mapit->second.TargetNode);
+ 
+           Client.DataValueChange(mapit->second.MonitoredItemId, node, item.Value, attr);
+           Client.DataChange(mapit->second.MonitoredItemId, node, item.Value.Value, attr);
+@@ -138,7 +138,7 @@ void Subscription::CallEventCallback(con
+ 
+       if (mapit == AttributeValueMap.end())
+         {
+-          LOG_WARN(Logger, "subscription          | got PublishResult for an unknown MonitoredItem id: {}", ef.ClientHandle);
++          LOG_WARN(Logger, "subscription          | got PublishResult for an unknown MonitoredItem id: {}", static_cast<uint32_t>(ef.ClientHandle));
+         }
+ 
+       else
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/internal_subscription.cpp.fmt10	2023-06-29 23:44:17.184431161 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/internal_subscription.cpp	2023-06-30 00:09:06.964454095 +0900
+@@ -492,7 +492,7 @@ void InternalSubscription::DataChangeCal
+   event.Data.ClientHandle = monitoredDataChange.ClientHandle;
+   event.Data.Value = value;
+ 
+-  LOG_DEBUG(Logger, "internal_subscription | id: {}, enqueue TriggeredDataChange event: ClientHandle: {}", Data.SubscriptionId, event.Data.ClientHandle);
++  LOG_DEBUG(Logger, "internal_subscription | id: {}, enqueue TriggeredDataChange event: ClientHandle: {}", Data.SubscriptionId, static_cast<uint32_t>(event.Data.ClientHandle));
+ 
+   ++monitoredDataChange.TriggerCount;
+   TriggeredDataChangeEvents.push_back(event);
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/opc_tcp_async.cpp.fmt10	2023-06-29 23:44:17.184431161 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/opc_tcp_async.cpp	2023-06-30 00:11:38.416451695 +0900
+@@ -212,7 +212,7 @@ void OpcTcpConnection::ProcessHeader(con
+ 
+   const std::size_t messageSize = header.Size - GetHeaderSize();
+ 
+-  LOG_DEBUG(Logger, "opc_tcp_async         | received message: Type: {}, ChunkType: {}, Size: {}: DataSize: {}", header.Type, header.Chunk, header.Size, messageSize);
++  LOG_DEBUG(Logger, "opc_tcp_async         | received message: Type: {}, ChunkType: {}, Size: {}: DataSize: {}", static_cast<int>(header.Type), static_cast<int>(header.Chunk), header.Size, messageSize);
+ 
+   // do not lose reference to shared instance even if another
+   // async operation decides to call GoodBye()
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/opc_tcp_processor.cpp.fmt10	2023-06-29 23:44:17.184431161 +0900
++++ freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/src/server/opc_tcp_processor.cpp	2023-06-30 00:15:29.238507111 +0900
+@@ -135,7 +135,7 @@ bool OpcTcpMessages::ProcessMessage(Mess
+ 
+     default:
+     {
+-      LOG_ERROR(Logger, "opc_tcp_processor     | unknown message type '{}' received", msgType);
++      LOG_ERROR(Logger, "opc_tcp_processor     | unknown message type '{}' received", static_cast<int>(msgType));
+ 
+       throw std::logic_error("unknown message type received.");
+     }
+@@ -896,7 +896,7 @@ void OpcTcpMessages::ProcessRequest(IStr
+       secureHeader.AddSize(RawSize(sequence));
+       secureHeader.AddSize(RawSize(response));
+ 
+-      LOG_WARN(Logger, "opc_tcp_processor     | sending 'ServiceFaultResponse' to unsupported request of id: {}", message);
++      LOG_WARN(Logger, "opc_tcp_processor     | sending 'ServiceFaultResponse' to unsupported request of id: {}", static_cast<int>(message));
+ 
+       ostream << secureHeader << algorithmHeader << sequence << response << flush;
+       return;

@@ -1,0 +1,58 @@
+Adjustments for C99 compatbility.  Newer autoconf already generates
+compatible code for this, so there is no need to upstream this patch.
+
+diff --git a/configure b/configure
+index cd5bd519a173d024..160b79eba700630d 100755
+--- a/configure
++++ b/configure
+@@ -3164,8 +3164,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext
+@@ -3478,6 +3478,7 @@ else
+   cat >conftest.$ac_ext <<_ACEOF
+ #line $LINENO "configure"
+ #include "confdefs.h"
++#include <string.h>
+ 
+ #ifdef F77_DUMMY_MAIN
+ #  ifdef __cplusplus
+@@ -3492,7 +3493,7 @@ main ()
+   /* Some versions of memcmp are not 8-bit clean.  */
+   char c0 = 0x40, c1 = 0x80, c2 = 0x81;
+   if (memcmp(&c0, &c2, 1) >= 0 || memcmp(&c1, &c2, 1) >= 0)
+-    exit (1);
++    return 1;
+ 
+   /* The Next x86 OpenStep bug shows up only when comparing 16 bytes
+      or more and with at least one buffer not starting on a 4-byte boundary.
+@@ -3508,9 +3509,9 @@ main ()
+         strcpy (a, "--------01111111");
+         strcpy (b, "--------10000000");
+         if (memcmp (a, b, 16) >= 0)
+-          exit (1);
++          return 1;
+       }
+-    exit (0);
++    return 0;
+   }
+ 
+   ;
+@@ -5329,8 +5330,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

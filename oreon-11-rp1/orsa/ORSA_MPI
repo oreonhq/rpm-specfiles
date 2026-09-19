@@ -1,0 +1,29 @@
+# USING ORSA WITH MPI SUPPORT IN FEDORA
+# Last change: Milos Jakubicek, July 24, 2009
+
+There are 4 different builds of orsa with different MPI support:
+
+orsa(-devel) -- No MPI support
+orsa-openmpi(-devel) -- Built with OpenMPI support
+orsa-mpich(-devel) -- Built with MPICH MPI support
+
+Environment-modules are used to enable parallel installation and usage of all of the supported MPI implementations.
+Before using orsa with MPI support, you have to load the particular module, which ensures setting proper PATH and LD_LIBRARY_PATH variables:
+
+First you have to load the functions:
+
+. /etc/profile.d/modules.sh
+
+followed by:
+
+module load openmpi-%{_arch} 
+OR
+module load mpich-%{_arch}
+
+You can use 
+
+rpm --eval "%{_arch}" 
+
+to find out proper values for your machine.
+
+For unloading a module substitute "load" with "unload" in the above commands.

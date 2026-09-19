@@ -1,0 +1,24 @@
+--- sc/lex.c.orig	2016-07-19 16:34:21.047629536 +0100
++++ sc/lex.c	2016-07-19 16:36:20.889308966 +0100
+@@ -650,21 +650,18 @@
+ initkbd()
+ {
+     keypad(stdscr, TRUE);
+-    notimeout(stdscr,TRUE);
+ }
+ 
+ void
+ kbd_again()
+ {
+     keypad(stdscr, TRUE);
+-    notimeout(stdscr,TRUE);
+ }
+ 
+ void
+ resetkbd()
+ {
+     keypad(stdscr, FALSE);
+-    notimeout(stdscr, FALSE);
+ }
+ 
+ int

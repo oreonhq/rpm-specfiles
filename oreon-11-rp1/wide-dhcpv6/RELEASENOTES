@@ -1,0 +1,223 @@
+WHY USE WIDE-DHCPv6?
+
+Generally speaking the main DHCP package for Fedora/RedHat from ISC is 
+a much more complete implementation with a nearly full set of features.
+
+Unfortunately there are a few things it does not do, or does not do well (yet!).  
+
+This is where it might be appropriate to use an alternative such as wide-dhcpv6.
+
+Things wide-dhcpv6 is not.
+ 1. Being further developed.
+ 2. Fully RFC compilant.
+ 3. Able to do prefix delegation from a pool of addresses.
+ 4. Able to service (serve to) more than one interface per instance.
+
+
+Reasons to choose wide dhcp for IPv6.
+ 1. Your ISP wants to assign you a static /128 link address 
+    and a /64 or greater prefix for your LAN, both by DHCP. (eg comcast cable)
+    (until https://bugzilla.redhat.com/show_bug.cgi?id=836702 is finished)
+ 2. You need the client to assign IP addresses to your LAN interfaces for radvd.
+    (until https://bugzilla.redhat.com/show_bug.cgi?id=626514 is finished)
+ 3. Your ISP gave you a working sample configuration file for wide-dhcpv6
+ 4. You want a basic dhcpv6 server to run many separate instances 
+    on a range of interfaces (eg in a VPN concentrator)
+
+
+WIDE DHCPv6 Client Script Variables (ISC DHCP has many more)
+     REASON  The reason why the script is invoked.  
+             The value is always "NBI" and thus meaningless.
+     new_domain_name_servers
+             A list of available DNS servers.
+     new_domain_name
+             A list of DNS names, which provides DNS name search path.
+     new_ntp_servers
+             A list of available NTP servers.
+     new_sip_servers
+             A list of available SIP server addresses.
+     new_sip_name
+             A list of SIP server domain names.
+     new_nis_servers
+             A list of available NIS server addresses.
+     new_nis_name
+             A list of NIS domain names.
+     new_nisp_servers
+             A list of available NIS+ server addresses.
+     new_nisp_name
+             A list of NIS+ domain names.
+     new_bcmcs_servers
+             A list of available BCMCS server addresses.
+     new_bcmcs_name
+             A list of BCMCS server domain names.
+
+
+SAMPLE MINIMUM CONFIGURATIONS for /etc/wide-dhcp/dhcp6c.conf
+
+For these configurations, I assume that the user has IPv4
+for DNS or can use a well known DNS such as the google
+anycast address eg 2001:4860:4860::8888.
+
+There is a whole range of configuration options such as
+DNS domain search list that are supported, but these only
+need to be configured once, either via IPv4 or IPv6.  
+These are normally already set by IPv4.
+Therefore I do not cover them here.
+Read the man pages if you are IPv6 Only.
+
+Just Prefix Delegation for a single LAN (ppp0 WAN, eth0 LAN)
+============================================================
+interface ppp0 {
+        send ia-pd 0;
+};
+id-assoc pd {
+        prefix-interface eth0 { };
+};
+
+Just Prefix Delegation but for three LANs.
+=========================================
+interface ppp0 {
+        send ia-pd 0;
+};
+id-assoc pd {
+        prefix-interface eth0 { };
+        prefix-interface eth1 { };
+        prefix-interface eth2 { };
+};
+
+Prefix Delegation on two LANS plus link address
+===============================================
+interface wlan0 {
+        send ia-na 0;
+        send ia-pd 0;
+};
+id-assoc na { };
+id-assoc pd {
+        prefix-interface eth0 { };
+        prefix-interface eth1 { };
+};
+
+Prefix Delegation on two LANS plus link address where
+the ISP needs a separate PD request for each LAN
+=====================================================
+interface wlan0 {
+        send ia-na 0;
+        send ia-pd 0;
+        send ia-pd 1;
+};
+id-assoc na 0 { };
+id-assoc pd 0 {
+        prefix-interface eth0 { };
+id-assoc pd 1 {
+        prefix-interface eth1 { };
+};
+
+
+
+Some versions of wide-dhcpv6 require that you set 
+an sla-len as well as an sla-id.
+
+The default sla-len is 16 in most wide-dhcpv6 implementations.
+This assumes that the ISP always allocates a /48.
+In this release if the ISP allocates smaller than /48,
+sla-len defaults to the largest size that fits,
+so it is better to leave it out of the configuration.
+
+This version of wide-dhcpv6 will also set the sla_id.
+The default for the sla_id is to use the interface counter.
+So, 0 for the first, 1 for the second, 2 third etc.
+If you want to set the sla_id, it is best to set it
+for all interfaces.
+
+
+IPv6 ROUTER USE CASE CONFIGURATION EXAMPLE
+==========================================
+
+Since NetworkManager does not support Prefix Delegation,
+if you are wanting to use your machine as an IPv6 Internet
+Gateway, then Wide-DHCPv6 is a good way to do this.
+
+Here is an example configuration of setting this up.
+1. Prevent NetworkManager from trying to configure IPv6
+2. Set up the IPv6 DHCP client.
+3. Enable IPv6 Forwarding
+4. Set up Router Advertisements on your LAN(s)
+5. Firewall.
+
+1. PREVENT NETWORK MANAGER FROM TRYING TO CONFIGURE IPv6
+
+   Edit the network interface files ifcfg-XXX in /etc/sysconfig/network-scripts
+
+   Make sure NetworkManager is not trying to initialise the interfaces
+     IPV6INIT=no
+     IPV6_AUTOCONF=no
+
+   Make sure Network Manager isn't trying to have a DHCPv6 Client of it's own
+     not DHCPV6C=yes, so set it to no or leave it out entirely
+
+   Make sure that only your WAN port has a default route
+     IPV6_DEFROUTE=yes
+
+   You probably want this
+     ONBOOT=yes
+
+2. SET UP THE IPv6 CLIENT
+
+   Use one of the examples above to configure Wide-dhcpv6 or
+   this example has eth1 WAN(outside) eth0 LAN(inside)
+   with a network address for eth1 and prefix delegation for eth0
+   /etc/wide-dhcpv6/dhcp6c.conf
+
+interface eth1 {
+        send ia-na 0;
+        send ia-pd 0;
+};
+
+id-assoc na { };
+id-assoc pd {
+        prefix-interface eth0 {
+        };
+};
+
+   # systemctl enable --now dhcp6c@eth1
+
+3. ENABLE IPv6 FORWARDING
+
+   Create a file /etc/sysctl.d/10-ip-forward
+
+net.ipv6.conf.all.forwarding=1
+
+4. SET UP ROUTER ADVERTISEMENTS ON YOUR LAN(s)
+
+   Install the router advertisement daemon.
+
+   # dnf install radvd
+
+   Here is a sample configuration file /etc/radvd.conf
+
+interface eth0
+{
+        AdvSendAdvert on;
+        MinRtrAdvInterval 30;
+        MaxRtrAdvInterval 100;
+        prefix ::/64 {
+                AdvOnLink on;
+                AdvAutonomous on;
+                AdvRouterAddr on;
+                AdvValidLifetime 3600;
+                AdvPreferredLifetime 3600;
+        };
+};
+
+   # systemctl enable radvd
+
+
+5. FIREWALL
+
+   Allow IPv6 traffic through firewall.
+
+   # firewall-cmd --permanent --direct --add-rule ipv6 filter FORWARD 0 -i eth0 -j ACCEPT
+   # firewall-cmd --permanent --direct --add-rule ipv6 filter FORWARD 0 -i eth1 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+   Or consider creating a custom nftables ruleset.
+

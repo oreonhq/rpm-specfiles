@@ -1,0 +1,16 @@
+#!/bin/sh
+
+NUM=0
+TOL=0
+for cow in /usr/share/cowsay/cows/*.cow ; do
+    TOL=$((TOL+1))
+done
+
+SELECT=$(((`date +%M | sed -e 's|^0||'`*60+`date +%S | sed -e 's|^0||'`)%(TOL)))
+
+for cow in /usr/share/cowsay/cows/*.cow ; do
+    NUM=$((NUM+1))
+    if [ $NUM = $SELECT ] ; then break ; fi
+done
+
+exec /usr/bin/cowsay -f $cow "$@"

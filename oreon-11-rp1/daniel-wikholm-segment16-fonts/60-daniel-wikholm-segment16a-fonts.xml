@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+	<alias>
+		<family>Segment 16</family>
+		<prefer>
+			<family>Segment 16A</family>
+		</prefer>
+	</alias>
+</fontconfig>

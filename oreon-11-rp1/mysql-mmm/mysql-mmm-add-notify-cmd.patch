@@ -1,0 +1,50 @@
+diff --git a/lib/Agent/Agent.pm b/lib/Agent/Agent.pm
+index 2e2480b..c98f39a 100644
+--- a/lib/Agent/Agent.pm
++++ b/lib/Agent/Agent.pm
+@@ -37,6 +37,7 @@ struct 'MMM::Agent::Agent' => {
+ 	mysql_password		=> '$',
+ 	writer_role			=> '$',
+ 	bin_path			=> '$',
++	notify_cmd			=> '$',
+ 
+ 	active_master		=> '$',
+ 	state				=> '$',
+@@ -50,6 +51,8 @@ sub main($) {
+ 	$self->roles([]);
+ 	$self->active_master('');
+ 
++	if ($self->notify_cmd) { system($self->notify_cmd); }
++
+ 	while (!$main::shutdown) {
+ 
+ 		DEBUG 'Listener: Waiting for connection...';
+@@ -236,6 +239,8 @@ sub cmd_set_status($$) {
+ 		foreach my $role (@added_roles)		{ $role->add(); }
+ 
+ 		$self->roles(\@new_roles);
++
++		if ($self->notify_cmd) { system($self->notify_cmd); }
+ 	}
+ 	
+ 	# Process state change
+@@ -272,6 +277,7 @@ sub from_config($%) {
+ 	$self->mysql_password	($host->{agent_password});
+ 	$self->writer_role		($config->{active_master_role});
+ 	$self->bin_path			($host->{bin_path});
++	$self->notify_cmd		($host->{notify_cmd});
+ }
+ 
+ 1;
+diff --git a/lib/Common/Config.pm b/lib/Common/Config.pm
+index 1870d5e..6c0af28 100644
+--- a/lib/Common/Config.pm
++++ b/lib/Common/Config.pm
+@@ -99,6 +99,7 @@ our $RULESET = {
+ 		'lvm_volume_group'		=> { 'required' => ['TOOLS'] },
+ 		'lvm_mount_dir'			=> { 'required' => ['TOOLS'] },
+ 		'lvm_mount_opts'		=> { 'required' => ['TOOLS'] },
++		'notify_cmd'			=> { 'default' => '' },
+ 		}
+ 	},
+ 	'check'					=> { 'create_if_empty' => ['MONITOR'], 'multiple' => 1, 'template' => 'default', 'values' => ['ping', 'mysql', 'rep_backlog', 'rep_threads'], 'section' => {

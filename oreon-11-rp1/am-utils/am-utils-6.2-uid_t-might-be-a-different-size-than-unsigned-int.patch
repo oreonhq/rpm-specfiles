@@ -1,0 +1,59 @@
+commit 76e1a5ddc9ef9730205b2da2ed6b654d8fbaef40
+Author: Christos Zoulas <christos@zoulas.com>
+Date:   Sat Jan 17 12:27:56 2015 -0500
+
+    uid_t might be a different size than unsigned int, so XXX: truncate.
+
+diff --git a/hlfsd/stubs.c b/hlfsd/stubs.c
+index b26e5f4..70876b7 100644
+--- a/hlfsd/stubs.c
++++ b/hlfsd/stubs.c
+@@ -60,6 +60,21 @@ static int started;
+ static am_nfs_fh slink;
+ static am_nfs_fh un_fhandle;
+ 
++static void
++xgetuid(uid_t *uid, const void *p)
++{
++  u_int xuid;
++  (void)memcpy(&xuid, p, sizeof(xuid));
++  *uid = xuid;
++}
++
++static void
++xputuid(void *p, uid_t uid)
++{
++  u_int xuid = uid;
++  (void)memcpy(p, &xuid, sizeof(xuid));
++}
++
+ /*
+  * GLOBALS:
+  */
+@@ -160,7 +175,7 @@ nfsproc_getattr_2_svc(am_nfs_fh *argp, struct svc_req *rqstp)
+     if (gid != hlfs_gid) {
+       res.ns_status = NFSERR_STALE;
+     } else {
+-      (void)memcpy(&uid, argp->fh_data, sizeof(uid));
++      xgetuid(&uid, argp->fh_data);
+       if (plt_search(uid) != (uid2home_t *) NULL) {
+ 	res.ns_status = NFS_OK;
+ 	un_fattr.na_fileid = uid;
+@@ -278,7 +293,7 @@ nfsproc_lookup_2_svc(nfsdiropargs *argp, struct svc_req *rqstp)
+       un_fattr.na_fileid = untab[idx].uid;
+       res.dr_u.dr_drok_u.drok_attributes = un_fattr;
+       memset(&un_fhandle, 0, sizeof(un_fhandle));
+-      memcpy(un_fhandle.fh_data, &untab[idx].uid, sizeof(untab[idx].uid));
++      xputuid(un_fhandle.fh_data, untab[idx].uid);
+       xstrlcpy((char *) &un_fhandle.fh_data[sizeof(int)],
+ 	       untab[idx].username,
+ 	       sizeof(am_nfs_fh) - sizeof(int));
+@@ -333,7 +348,7 @@ nfsproc_readlink_2_svc(am_nfs_fh *argp, struct svc_req *rqstp)
+     }
+ 
+     if (groupid == hlfs_gid) {
+-      memcpy(&userid, argp->fh_data, sizeof(userid));
++      xgetuid(&userid, argp->fh_data);
+       username = (char *) &argp->fh_data[sizeof(int)];
+       if (!(res.rlr_u.rlr_data_u = mailbox(userid, username)))
+ 	return (nfsreadlinkres *) NULL;

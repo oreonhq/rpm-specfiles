@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 19 Jun 2024 20:08:39 +0200
+Subject: [PATCH] Don't care about return value
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/test/ranch_ct_hook.erl b/test/ranch_ct_hook.erl
+index 9ce009a..10eab52 100644
+--- a/test/ranch_ct_hook.erl
++++ b/test/ranch_ct_hook.erl
+@@ -22,7 +22,7 @@ init(_, _) ->
+ 	%% ranch_sup children.
+ 	application:set_env(ranch, ranch_sup_intensity, 10),
+ 	application:set_env(ranch, ranch_sup_period, 1),
+-	ok = application:load(ssl),
++	_ = application:load(ssl),
+ 	case {os:type(), application:get_key(ssl, vsn)} of
+ 		%% Internal active,N is broken on Windows since
+ 		%% OTP 21.2/ssl 9.1.

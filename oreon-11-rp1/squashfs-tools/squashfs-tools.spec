@@ -1,7 +1,7 @@
 %global source0_hash 91c49f9a1ed972ad00688a38222119e2baf49ba74cf5fda05729a79d7d59d335
 
 Name: squashfs-tools
-Version: 4.7.4
+Version: 4.7.5
 Summary: Utility for the creation of squashfs filesystems
 %global forgeurl https://github.com/plougher/%{name}
 %global tag %{version}

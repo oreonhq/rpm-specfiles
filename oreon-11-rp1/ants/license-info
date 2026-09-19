@@ -1,0 +1,84 @@
+Return-Path: <phr00t@gmail.com>
+Received: from koko.hhs.nl ([145.52.2.16] verified)
+  by hhs.nl (CommuniGate Pro SMTP 4.3.6)
+  with ESMTP id 66135380 for j.w.r.degoede@hhs.nl; Fri, 04 May 2007 04:47:36 +0200
+Received: from exim by koko.hhs.nl with spam-scanned (Exim 4.62)
+	(envelope-from <phr00t@gmail.com>)
+	id 1HjnpV-0006WI-Ov
+	for j.w.r.degoede@hhs.nl; Fri, 04 May 2007 04:47:36 +0200
+X-Spam-Checker-Version: SpamAssassin 3.1.8 (2007-02-13) on koko.hhs.nl
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,SPF_PASS
+	autolearn=ham version=3.1.8
+Received: from exim (helo=koko)
+	by koko.hhs.nl with local-smtp (Exim 4.62)
+	(envelope-from <phr00t@gmail.com>)
+	id 1HjnpV-0006WF-LR
+	for j.w.r.degoede@hhs.nl; Fri, 04 May 2007 04:47:33 +0200
+Received: from [209.85.132.243] (port=5710 helo=an-out-0708.google.com)
+	by koko.hhs.nl with esmtp (Exim 4.62)
+	(envelope-from <phr00t@gmail.com>)
+	id 1HjnpV-0006WA-A8
+	for j.w.r.degoede@hhs.nl; Fri, 04 May 2007 04:47:33 +0200
+Received: by an-out-0708.google.com with SMTP id d11so708260and
+        for <j.w.r.degoede@hhs.nl>; Thu, 03 May 2007 19:47:32 -0700 (PDT)
+DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
+        d=gmail.com; s=beta;
+        h=domainkey-signature:received:received:message-id:date:from:to:subject:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
+        b=dE/miU4ABruHtTs1Tg6m3OU60RS7utPkPTCQnTys/RGZZVnqicJMVsh/bnOhi50BehA0qEOJBk0BEp09gX/mkXuuGaxFRb5UXINB39q4+btPlZFLXkvlv5sIWVGcrqMqEdl8jfj9Pnj/713s9NQU8DkgZm6bvWc/lROeebaKd7k=
+DomainKey-Signature: a=rsa-sha1; c=nofws;
+        d=gmail.com; s=beta;
+        h=received:message-id:date:from:to:subject:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
+        b=JIQC1AyTb427GVKeZ8XqQ3wrWMu+UYU5tO2MFTbTH40T9rIc7TDlpDODniHLK3jDlDlEdag7iJt50X/MhpctVQ6a3/rvDyuonGkO3YcizbNmFINaAaX4k3QkysygdRwu1v5xDmwe8JBIKJE8oPuQXGTauMYlRQDKnOR3V+fkPII=
+Received: by 10.100.212.15 with SMTP id k15mr2260807ang.1178246851654;
+        Thu, 03 May 2007 19:47:31 -0700 (PDT)
+Received: by 10.100.4.15 with HTTP; Thu, 3 May 2007 19:47:31 -0700 (PDT)
+Message-ID: <206fec2b0705031947j4f5fe616kf571078721941030@mail.gmail.com>
+Date: Thu, 3 May 2007 22:47:31 -0400
+From: "Jeremy Vight" <phr00t@gmail.com>
+To: "Hans de Goede" <j.w.r.degoede@hhs.nl>
+Subject: Re: ants (lemmings-ish game) license
+In-Reply-To: <463A3EA6.1080209@hhs.nl>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+References: <463A3EA6.1080209@hhs.nl>
+X-Anti-Virus: Kaspersky Anti-Virus for MailServers 5.5.2/RELEASE, bases: 04052007 #294256, status: clean
+
+Ants Is free, public domain -- do with it what you want (it would be
+nice if you gave me credit for the original game). I think I have
+unfortunately lost the source code to 3059 :(
+
+Let me know what you do with Ants!, I am glad to see you using it!
+
+Thank you,
+- Jeremy
+
+On 5/3/07, Hans de Goede <j.w.r.degoede@hhs.nl> wrote:
+> Hi Jeremy,
+>
+> First a short intro I'm a Linux enthousiast and developer for the Fedora Linux
+> distribution.
+>
+> I encountered the game ants made by you on this site:
+> http://games.linux.sk/i
+> and I would like to "port" it to Linux (make some changes to make it behave
+> more like a native unix program) and package it, so that it can be installed by
+> Fedora users with a simple click. I will ofcourse send any changes back to you.
+>
+> However I couldn't find any license info in the tarbal. Under which
+> license/conditions may ants be redistributed and used?
+>
+> Thnaks & Regards,
+>
+> Hans
+>
+>
+> p.s.
+>
+> While looking for your email address I also encountered 3039, which also looks
+> like a fun game, if you are willing to distribute the source under a suitable
+> license I can port it to Linux too.
+>
+

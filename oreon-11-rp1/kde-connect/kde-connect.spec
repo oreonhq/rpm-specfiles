@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9acf2e9bed4537eda6cd009eccfc9cce80dafbe2f9bfdb8054c2f0ebf92d0bfc
 
 %global stable_kf6 stable
 
@@ -6,7 +6,7 @@
 %global base_name kdeconnect-kde
 
 Name:    kde-connect
-Version: 26.04.1
+Version: 26.08.0
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 Summary: KDE Connect client for communication with smartphones
@@ -184,7 +184,8 @@ done
 %{_kf6_plugindir}/kfileitemaction/kdeconnectfileitemaction.so
 %{_kf6_plugindir}/kio/kdeconnect.so
 %{_qt6_archdatadir}/qml/org/kde/kdeconnect/
-
+/usr/share/remoteview/kdeconnect-network.desktop
+/usr/share/solid/actions/solid_kdeconnect.desktop
 %files -n kdeconnectd
 %{_kf6_libdir}/udev/rules.d/40-kdeconnect-uinput.rules
 %{_sysconfdir}/xdg/autostart/org.kde.kdeconnect.daemon.desktop
@@ -201,6 +202,9 @@ done
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

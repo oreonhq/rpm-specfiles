@@ -1,0 +1,14 @@
+--- flex-2.5.4/Makefile.in	2005-12-16 19:32:59.000000000 -0800
++++ flex-2.5.4/Makefile.in.pic	2005-12-16 19:31:18.000000000 -0800
+@@ -118,6 +118,11 @@
+ scan.o: scan.c parse.h flexdef.h config.h
+ yylex.o: yylex.c parse.h flexdef.h config.h
+ 
++libmain.o: libmain.c
++	$(CC) -c $(CPPFLAGS) -fPIC $(CFLAGS) $<
++libyywrap.o: libyywrap.c
++	$(CC) -c $(CPPFLAGS) -fPIC $(CFLAGS) $<
++
+ skel.c: flex.skl mkskel.sh
+ 	$(SHELL) $(srcdir)/mkskel.sh $(srcdir)/flex.skl >skel.c
+ 

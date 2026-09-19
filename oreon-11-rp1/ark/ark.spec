@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d4627791d17d17f0c4472f8bc464778d7b5526adeca9bba27565e77ff8b44db7
 
 %if 0%{?fedora}
 %global p7zip 1
@@ -10,7 +10,7 @@ ExcludeArch: %{ix86}
 
 Name:    ark
 Summary: Archive manager
-Version: 26.03.80
+Version: 26.08.0
 Release: 1%{?dist}
 
 # icons are LGPL-3.0-only
@@ -139,6 +139,8 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.ark.deskt
 %{_kf6_datadir}/icons/hicolor/*/apps/ark.*
 %{_mandir}/man1/ark.1*
 
+/usr/share/kconf_update/ark_move_dirhistory_to_state_config.py
+/usr/share/kconf_update/ark_move_dirhistory_to_state_config.upd
 %files libs
 %{_kf6_libdir}/libkerfuffle.so.*
 %{_kf6_plugindir}/parts/arkpart.so
@@ -149,6 +151,9 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.ark.deskt
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

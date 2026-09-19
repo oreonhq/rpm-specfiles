@@ -1,0 +1,20 @@
+--- a/lib/gnat/aunit.gpr
++++ b/lib/gnat/aunit.gpr
+@@ -51,13 +51,13 @@
+ 
+    package Install is
+       for Artifacts ("share/doc/aunit/pdf")
+-        use ("../../doc/pdf/**");
++        use ("../../doc/build/aunit_cb/pdf/**");
+       for Artifacts ("share/doc/aunit/txt")
+-        use ("../../doc/txt/**");
++        use ("../../doc/build/aunit_cb/txt/**");
+       for Artifacts ("share/doc/aunit/info")
+-        use ("../../doc/info/**");
++        use ("../../doc/build/aunit_cb/info/**");
+       for Artifacts ("share/doc/aunit/html")
+-        use ("../../doc/html/**");
++        use ("../../doc/build/aunit_cb/html/**");
+ 
+       for Artifacts ("share/gps/plug-ins") use ("../../support/aunit.xml");
+       for Artifacts ("share/examples/aunit") use ("../../examples/*");

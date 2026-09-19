@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+<id>pipewalker.desktop</id>
+	<metadata_license>CC-BY-SA-3.0</metadata_license>
+	<project_license>MIT</project_license>
+	<name>PipeWalker</name>
+	<summary>&quot;Complete the circuit&quot; puzzle game</summary>
+	<description>
+		<p>
+			PipeWalker is a puzzle game in which you need to combine the components
+			into a single circuit: connect all computers to a network server,
+			bring water to the taps, etc.
+		</p>
+	</description>
+	<launchable type="desktop-id">pipewalker.desktop</launchable>
+	<screenshots>
+		<screenshot type="default">
+			<image>https://suve.fedorapeople.org/pipewalker0.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://suve.fedorapeople.org/pipewalker1.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://suve.fedorapeople.org/pipewalker2.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://suve.fedorapeople.org/pipewalker3.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://suve.fedorapeople.org/pipewalker4.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://suve.fedorapeople.org/pipewalker5.png</image>
+		</screenshot>
+	</screenshots>
+	<url type="homepage">https://github.com/artemsen/pipewalker</url>
+	<developer id="github.com/artemsen">
+		<name>Artem Senichev</name>
+	</developer>
+	<releases>
+		<release version="1.0" date="2024-01-14" />
+		<release version="0.9.5" date="2022-10-13" />
+		<release version="0.9.4" date="2012-03-19" />
+	</releases>
+	<content_rating type="oars-1.1" />
+</component>

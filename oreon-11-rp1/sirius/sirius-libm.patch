@@ -1,0 +1,9 @@
+--- src/Makefile.am.orig	2011-11-05 14:49:31.217887208 -0500
++++ src/Makefile.am	2011-11-05 14:49:46.288802644 -0500
+@@ -17,5 +17,5 @@
+ 	search.c search.h				\
+ 	timer.c timer.h
+ 
+-sirius_LDADD = $(PACKAGE_LIBS)
++sirius_LDADD = $(PACKAGE_LIBS) -lm
+ 

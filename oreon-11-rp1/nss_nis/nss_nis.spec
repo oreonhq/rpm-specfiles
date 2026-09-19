@@ -1,8 +1,8 @@
 %global source0_hash 1c62306a379e8e6720fcb464b6c29883a93203df28657d9c8195e6160b95ec24
 
 Name:           nss_nis
-Version:        3.2
-Release:        9%{?dist}
+Version:        3.4
+Release:        1%{?dist}
 Summary:        Name Service Switch (NSS) module using NIS
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+

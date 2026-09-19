@@ -1,0 +1,18 @@
+Based on patch for dwarves.
+
+DW_TAG_mutable_type was a mistake in an early DWARFv3 draft and was
+removed in the final version.
+
+http://dwarfstd.org/ShowIssue.php?issue=050223.1
+Index: pmachata-dwlocstat-c55cb50/dwarfstrings.c
+===================================================================
+--- pmachata-dwlocstat-c55cb50.orig/dwarfstrings.c
++++ pmachata-dwlocstat-c55cb50/dwarfstrings.c
+@@ -93,7 +93,6 @@ dwarf_tag_string (unsigned int tag)
+       [DW_TAG_unspecified_type] = "unspecified_type",
+       [DW_TAG_partial_unit] = "partial_unit",
+       [DW_TAG_imported_unit] = "imported_unit",
+-      [DW_TAG_mutable_type] = "mutable_type",
+       [DW_TAG_condition] = "condition",
+       [DW_TAG_shared_type] = "shared_type",
+       [DW_TAG_type_unit] = "type_unit",

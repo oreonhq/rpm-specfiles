@@ -13,7 +13,11 @@
 %global enable_writecache 1
 %global enable_integrity 1
 
+%if 0%{?oreon} >= 11
+%global system_release_version 11
+%else
 %global system_release_version 23
+%endif
 %global systemd_version 256~rc1
 %global dracut_version 002-18
 %global util_linux_version 2.24
@@ -51,7 +55,7 @@ Name: lvm2
 %if 0%{?rhel}
 Epoch: %{rhel}
 %endif
-Version: 2.03.39
+Version: 2.03.42
 Release: %autorelease
 License: GPL-2.0-only
 URL: https://sourceware.org/lvm2
@@ -89,7 +93,7 @@ BuildRequires: device-mapper-persistent-data >= %{persistent_data_version}
 BuildRequires: sanlock-devel >= %{sanlock_version}
 %endif
 Requires: %{name}-libs = %{?epoch}:%{version}-%{release}
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Requires(post): (system-release >= %{system_release_version} if system-release)
 %endif
 Requires: bash >= %{bash_version}

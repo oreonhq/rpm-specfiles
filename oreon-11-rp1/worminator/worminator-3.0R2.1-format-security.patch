@@ -1,0 +1,12 @@
+diff -up worminator-3.0R2.1/Worminator.c~ worminator-3.0R2.1/Worminator.c
+--- worminator-3.0R2.1/Worminator.c~	2014-06-17 18:28:31.000000000 +0200
++++ worminator-3.0R2.1/Worminator.c	2014-06-17 18:38:12.468303945 +0200
+@@ -2150,7 +2150,7 @@ if ((map_file = fopen(file_name, "rb"))
+ 
+ // Set current level & clear player if requested
+ current_level = new_level;
+-snprintf(current_level_mapfile_path, sizeof(current_level_mapfile_path), file_name);
++snprintf(current_level_mapfile_path, sizeof(current_level_mapfile_path), "%s", file_name);
+ if (_clear_player) {
+ 	clear_player();
+ 	player.score = 0;

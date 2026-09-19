@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 21 Mar 2018 17:47:37 +0300
+Subject: [PATCH] Don't threat warnings as errors
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index d2de9a5..0b7b04b 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -3,7 +3,7 @@
+ 
+ {cover_enabled, true}.
+ 
+-{erl_opts, [warnings_as_errors,
++{erl_opts, [
+             {parse_transform, lager_transform},
+             debug_info,
+             {platform_define, "^[0-9]+", namespaced_types},

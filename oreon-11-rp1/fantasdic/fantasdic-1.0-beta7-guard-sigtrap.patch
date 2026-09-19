@@ -1,0 +1,26 @@
+--- fantasdic-1.0-beta7/lib/fantasdic/ui/ipc.rb.sigtrap	2009-03-25 01:14:57.000000000 +0900
++++ fantasdic-1.0-beta7/lib/fantasdic/ui/ipc.rb	2012-08-02 10:06:54.263510567 +0900
+@@ -166,7 +166,11 @@
+         def self.send(window, name, value)
+             window.set_string(MESSAGE_ARGS, Marshal.dump(value))
+             window.set_string(name, window.xid)
++            # Guard sigtrap here
++            Gdk::error_trap_push()
+             Gdk::flush()
++            # Remove guard
++            Gdk::error_trap_pop()
+             Gtk.main_iteration while Gtk.events_pending?
+         end
+ 
+@@ -185,7 +189,11 @@
+ 
+             realize()
+             window.set_string( atom_name, window.xid )
++            # Guard sigtrap here
++            Gdk::error_trap_push()
+             Gdk::flush()
++            # Remove guard
++            Gdk::error_trap_pop()
+             add_events(Gdk::Event::PROPERTY_CHANGE_MASK)
+ 
+             signal_connect("property-notify-event") do |widget,event|

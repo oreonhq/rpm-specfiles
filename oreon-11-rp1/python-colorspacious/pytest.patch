@@ -1,0 +1,248 @@
+diff --git a/README.rst b/README.rst
+index 1d09b94..13ea0a0 100644
+--- a/README.rst
++++ b/README.rst
+@@ -62,7 +62,7 @@ Dependencies:
+   * NumPy
+ 
+ Developer dependencies (only needed for hacking on source):
+-  * nose: needed to run tests
++  * pytest: needed to run tests
+ 
+ License:
+   MIT, see LICENSE.txt for details.
+diff --git a/colorspacious/ciecam02.py b/colorspacious/ciecam02.py
+index f22508a..f860e93 100644
+--- a/colorspacious/ciecam02.py
++++ b/colorspacious/ciecam02.py
+@@ -472,40 +472,36 @@ def test_inverse():
+                         check_roundtrip(vc, XYZ100)
+ 
+ def test_misc():
+-    from nose.tools import assert_raises
++    from pytest import raises
+     # Only one whitepoint can be specified
+-    assert_raises(ValueError, CIECAM02Space,
+-                  [[20, 100, 80], [80, 100, 20]], 20, 30)
++    raises(ValueError, CIECAM02Space,
++           [[20, 100, 80], [80, 100, 20]], 20, 30)
+ 
+     # smoke test
+     repr(CIECAM02Space.sRGB)
+     repr(CIECAM02Space("D65", 20, 4, surround=CIECAM02Surround.DIM))
+ 
+     # input shape check
+-    assert_raises(ValueError,
+-                  CIECAM02Space.sRGB.XYZ100_to_CIECAM02,
+-                  np.ones((10, 4)))
++    raises(ValueError, CIECAM02Space.sRGB.XYZ100_to_CIECAM02, np.ones((10, 4)))
+ 
+     # on_negative_A validity check
+-    assert_raises(ValueError,
+-                  CIECAM02Space.sRGB.XYZ100_to_CIECAM02,
+-                  np.ones((10, 3)),
+-                  on_negative_A="asdfasdf")
++    raises(ValueError, CIECAM02Space.sRGB.XYZ100_to_CIECAM02,
++           np.ones((10, 3)), on_negative_A="asdfasdf")
+ 
+ def test_exactly_one():
+-    from nose.tools import assert_raises
++    from pytest import raises
+     vc = CIECAM02Space.sRGB
+ 
+     # Redundant specifications not allowed
+-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, Q=1)
+-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, M=1)
+-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, s=1)
+-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, H=1)
++    raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, Q=1)
++    raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, M=1)
++    raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, s=1)
++    raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, H=1)
+ 
+     # Underspecified colors not allowed either
+-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1)
+-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, h=1)
+-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, C=1, h=1)
++    raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1)
++    raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, h=1)
++    raises(ValueError, vc.CIECAM02_to_XYZ100, C=1, h=1)
+ 
+ def test_vectorized():
+     vc = CIECAM02Space.sRGB
+@@ -521,20 +517,20 @@ def test_vectorized():
+     check_roundtrip(vc, XYZ100s)
+ 
+ def test_on_negative_A():
+-    from nose.tools import assert_raises
++    from pytest import raises
+ 
+     vc = CIECAM02Space("D65", 20, 30)
+     bad_XYZ100 = [8.71292997, 2.02183974, 83.26198455]
+     good_XYZ100 = [20, 30, 40]
+ 
+-    assert_raises(NegativeAError, vc.XYZ100_to_CIECAM02, bad_XYZ100)
+-    assert_raises(NegativeAError, vc.XYZ100_to_CIECAM02,
+-                  [bad_XYZ100, good_XYZ100])
+-    assert_raises(NegativeAError, vc.XYZ100_to_CIECAM02, bad_XYZ100,
+-                  on_negative_A="raise")
+-    assert_raises(NegativeAError, vc.XYZ100_to_CIECAM02,
+-                  [bad_XYZ100, good_XYZ100],
+-                  on_negative_A="raise")
++    raises(NegativeAError, vc.XYZ100_to_CIECAM02, bad_XYZ100)
++    raises(NegativeAError, vc.XYZ100_to_CIECAM02,
++                      [bad_XYZ100, good_XYZ100])
++    raises(NegativeAError, vc.XYZ100_to_CIECAM02, bad_XYZ100,
++                      on_negative_A="raise")
++    raises(NegativeAError, vc.XYZ100_to_CIECAM02,
++                      [bad_XYZ100, good_XYZ100],
++                      on_negative_A="raise")
+ 
+     bad_CIECAM02 = vc.XYZ100_to_CIECAM02(bad_XYZ100, on_negative_A="nan")
+     for bad_attr in "JCQMs":
+diff --git a/colorspacious/conversion.py b/colorspacious/conversion.py
+index 94c7a16..9c8d718 100644
+--- a/colorspacious/conversion.py
++++ b/colorspacious/conversion.py
+@@ -370,9 +370,8 @@ def test_cspace_convert_long_paths():
+     )
+ 
+ def test_CIECAM02_subset_error_checking():
+-    from nose.tools import assert_raises
+-    assert_raises(ValueError,
+-                  cspace_convert, np.ones((5, 4)), "JCh", "XYZ100")
++    from pytest import raises
++    raises(ValueError, cspace_convert, np.ones((5, 4)), "JCh", "XYZ100")
+ 
+ def test_name_aliases():
+     # "CAM02-UCS" is not a primitive name, but rather an alias
+@@ -399,8 +398,6 @@ def test_name_aliases():
+                         "ciecam02_space": weird_space,
+                         "luoetal2006_space": CAM02UCS}))
+ 
+-    from nose.tools import assert_raises
+-    assert_raises(ValueError,
+-                  cspace_convert, [1, 2, 3], "sRGB255", object())
+-    assert_raises(ValueError,
+-                  cspace_convert, [1, 2, 3], "sRGB255", "qwertyuiop")
++    from pytest import raises
++    raises(ValueError, cspace_convert, [1, 2, 3], "sRGB255", object())
++    raises(ValueError, cspace_convert, [1, 2, 3], "sRGB255", "qwertyuiop")
+diff --git a/colorspacious/illuminants.py b/colorspacious/illuminants.py
+index 1154c5b..ede01df 100644
+--- a/colorspacious/illuminants.py
++++ b/colorspacious/illuminants.py
+@@ -89,9 +89,9 @@ def test_standard_illuminant_XYZ100():
+         standard_illuminant_XYZ100("D65", observer="CIE 1964 10 deg"),
+         [ 94.811, 100, 107.304])
+ 
+-    from nose.tools import assert_raises
+-    assert_raises(ValueError, standard_illuminant_XYZ100, "D65",
+-                  observer="something else")
++    from pytest import raises
++    raises(ValueError, standard_illuminant_XYZ100, "D65",
++           observer="something else")
+ 
+ # Convenience function
+ def as_XYZ100_w(whitepoint):
+@@ -120,6 +120,6 @@ def test_as_XYZ100_w():
+     assert np.allclose(as_XYZ100_w([1, 2, 3]), [1, 2, 3])
+     assert as_XYZ100_w([1, 2, 3]).dtype == float
+ 
+-    from nose.tools import assert_raises
+-    assert_raises(KeyError, as_XYZ100_w, "D666")
+-    assert_raises(ValueError, as_XYZ100_w, [1, 2, 3, 4])
++    from pytest import raises
++    raises(KeyError, as_XYZ100_w, "D666")
++    raises(ValueError, as_XYZ100_w, [1, 2, 3, 4])
+diff --git a/colorspacious/transform_graph.py b/colorspacious/transform_graph.py
+index fb14c15..0f15959 100644
+--- a/colorspacious/transform_graph.py
++++ b/colorspacious/transform_graph.py
+@@ -46,13 +46,12 @@ def check_node(node, allowed_placeholders):
+             assert_(v in allowed_placeholders)
+ 
+ def test_check_node():
+-    from nose.tools import assert_raises
+-    assert_raises(AssertionError, check_node, {}, [])
++    from pytest import raises
++    raises(AssertionError, check_node, {}, [])
+     check_node({"name": "asdf"}, [])
+-    assert_raises(AssertionError, check_node, {"name": 1}, [])
++    raises(AssertionError, check_node, {"name": 1}, [])
+     check_node({"name": "asdf", "a": "b"}, [])
+-    assert_raises(AssertionError, check_node,
+-                  {"name": "asdf", "a": MATCH}, [ANY])
++    raises(AssertionError, check_node, {"name": "asdf", "a": MATCH}, [ANY])
+     check_node({"name": "asdf", "a": ANY, "b": "c"}, [ANY])
+ 
+ # edge_node = edge node, can have MATCH or ANY or concrete values
+@@ -92,7 +91,7 @@ def check_edge(edge):
+             assert_(set([start_v, end_v]) == set([ANY, NOTHING]))
+ 
+ def test_check_edge():
+-    from nose.tools import assert_raises
++    from pytest import raises
+ 
+     check_edge(Edge({"name": "foo"}, {"name": "bar"}, "fake transform"))
+     check_edge(Edge({"name": "foo", "start_any": ANY, "match": MATCH},
+@@ -110,7 +109,7 @@ def test_check_edge():
+             Edge({"name": "foo", "a": "asdf"}, {"name": "bar", "a": MATCH},
+                  "fake transform"),
+             ]:
+-        assert_raises(AssertionError, check_edge, bad)
++        raises(AssertionError, check_edge, bad)
+ 
+ def check_path(path):
+     for node in path.nodes:
+@@ -129,7 +128,7 @@ def check_path(path):
+     assert_(len(path.nodes) == len(path.transforms) + 1)
+ 
+ def test_check_path():
+-    from nose.tools import assert_raises
++    from pytest import raises
+ 
+     check_path(Path(({"name": "foo"}, {"name": "bar"}), ("t1",)))
+     check_path(Path(({"name": "foo"},
+@@ -154,7 +153,7 @@ def test_check_path():
+             Path([{"name": "foo"}, {"name": "bar"}], []),
+             Path([{"name": "foo"}, {"name": "bar"}], ["t1", "t2"]),
+             ]:
+-        assert_raises(AssertionError, check_path, bad)
++        raises(AssertionError, check_path, bad)
+ 
+ ################################################################
+ # Dict manipulation utilities
+@@ -509,16 +508,15 @@ def transform_kwargs(start_concrete_node, end_concrete_node):
+     return kwargs
+ 
+ def test_transform_kwargs():
+-    from nose.tools import assert_raises
++    from pytest import raises
+ 
+     assert_(transform_kwargs({"name": "start"}, {"name": "end"}) == {})
+     assert_(transform_kwargs(
+         {"name": "start", "a": 1, "b": 2},
+         {"name": "end", "b": 2, "c": 3}
+         ) == {"a": 1, "b": 2, "c": 3})
+-    assert_raises(AssertionError, transform_kwargs,
+-                  {"name": "start", "a": 1},
+-                  {"name": "end",   "a": 2})
++    raises(AssertionError, transform_kwargs, {"name": "start", "a": 1},
++                                             {"name": "end",   "a": 2})
+ 
+ def path_matches(path, desired_concrete_start, desired_concrete_end):
+     # check that path[0] and path[-1] match concrete_start and concrete_end
+diff --git a/doc/overview.rst b/doc/overview.rst
+index af1a1de..a96422a 100644
+--- a/doc/overview.rst
++++ b/doc/overview.rst
+@@ -24,7 +24,7 @@ Dependencies:
+   * NumPy
+ 
+ Developer dependencies (only needed for hacking on source):
+-  * nose: needed to run tests
++  * pytest: needed to run tests
+ 
+ License:
+   MIT, see LICENSE.txt for details.

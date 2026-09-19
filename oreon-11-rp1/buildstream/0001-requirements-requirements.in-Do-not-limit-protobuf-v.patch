@@ -1,0 +1,25 @@
+From 35283a9e961d1c470a5bd59dab38649272713887 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Javier=20Jard=C3=B3n?= <jjardon@gnome.org>
+Date: Thu, 9 Oct 2025 16:24:30 +0100
+Subject: [PATCH] requirements/requirements.in: Do not limit protobuf version
+
+---
+ requirements/requirements.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/requirements/requirements.in b/requirements/requirements.in
+index 73b011fda..cc8238b79 100644
+--- a/requirements/requirements.in
++++ b/requirements/requirements.in
+@@ -3,7 +3,7 @@ grpcio
+ Jinja2 >= 2.10
+ packaging
+ pluginbase
+-protobuf <9,>=5.29
++protobuf
+ psutil
+ ruamel.yaml >= 0.16.7
+ ruamel.yaml.clib >= 0.1.2
+-- 
+2.53.0
+

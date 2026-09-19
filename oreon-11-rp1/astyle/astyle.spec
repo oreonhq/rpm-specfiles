@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           astyle
-Version:        3.6.16
+Version:        3.6.18
 Release:        1%{?dist}
 Summary:        Source code formatter for C-like programming languages
 

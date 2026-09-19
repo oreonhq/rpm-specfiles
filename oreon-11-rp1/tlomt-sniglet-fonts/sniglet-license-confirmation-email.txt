@@ -1,0 +1,58 @@
+*****
+This is a copy of the email received from the copyright holder of the Sniglet font, confirming that the license is OFL.
+It was taken from https://fedoraproject.org/wiki/TLOMT_Sniglet_fonts/LicenseEmail on Feb 22, 2010.
+*****
+
+Return-Path: haley@kingdomofawesome.com Received: from mx1.redhat.com (ext-mx04.extmail.prod.ext.phx2.redhat.com [10.5.110.8]) by int-mx03.intmail.prod.int.phx2.redhat.com (8.13.8/8.13.8) with ESMTP id n9IK9iNE010514 for <duffy@redhat.com>; Sun, 18 Oct 2009 16:09:44 -0400
+Received: from japan.nswebhost.com (japan.nswebhost.com [174.132.225.227]) by mx1.redhat.com (8.13.8/8.13.8) with ESMTP id n9IK9TQI022423 for <duffy@redhat.com>; Sun, 18 Oct 2009 16:09:29 -0400
+Received: from [127.0.0.1] (port=52758 helo=localhost) by japan.nswebhost.com with esmtpa (Exim 4.69) (envelope-from <haley@kingdomofawesome.com>) id 1Mzc4G-0005GB-4E for duffy@redhat.com; Sun, 18 Oct 2009 15:09:28 -0500
+Received: from 99.231.170.28 ([99.231.170.28]) by kingdomofawesome.com (Horde MIME library) with HTTP; Sun, 18 Oct 2009 15:09:27 -0500
+Message-ID: <20091018150927.zo6n1a1hc0sc4s80@kingdomofawesome.com>
+Date: Sun, 18 Oct 2009 15:09:27 -0500
+From: Haley Fiege <haley@kingdomofawesome.com>
+To: =?utf-8?b?TcOhaXLDrcKtbg==?= Duffy <duffy@redhat.com>
+Subject: Re: Sniglet font license?
+References: <4ADB65A1.7020807@redhat.com>
+In-Reply-To: <4ADB65A1.7020807@redhat.com>
+MIME-Version: 1.0
+
+Hey!
+I'm actually in the middle of updating the license for Sniglet right =20
+now. It is licensed under OFL, so you can include it in Fedora Linux. =20
+Dafont doesn't allow for custom licensing, which is why is says =20
+personal use right now (there's a drop down menu with like 4 choices), =20
+so I'm waiting for them up update the font file which includes meta =20
+data but they're super slow.
+
+Thanks for the email and good luck with your project.
+
+Haley
+
+
+Quoting M=C3=A1ir=C3=AD=C2=ADn Duffy <duffy@redhat.com>:
+
+> Hi Haley,
+>
+> The League of Moveable Type is showcasing your font as an example of a
+> font licensed under the Open Font License [1]. While the Sniglet page
+> on your website [2] doesn't seem to indicate any particular license,
+> the dafont.com page your site refers to [3] indicates "Free for
+> personal use." That doesn't seem consistent with the Open Font License
+> to me, since the OFL does allow for commercial uage.
+>
+> So, I just wanted to ask you - did you intend for Sniglet to be
+> licensed under the OFL?
+>
+> I ask because we think it's an awesome font and would like to include
+> it in Fedora Linux - we can't if it's limited to free for personal use
+> only, though [4] since such a license would limit the distributability
+> of Linux. We can include Sniglet if it's OFL-licensed, though. The font
+> itself doesn't provide any guidance in its metadata.
+>
+> Thanks for any guidance you may be able to provide,
+> ~m
+>
+> [1] http://www.theleagueofmoveabletype.com/fonts/2-sniglet
+> [2] http://www.kingdomofawesome.com/sniglet.php
+> [3] http://www.dafont.com/sniglet.font
+> [4] https://fedoraproject.org/wiki/Licensing#Font_Licenses 

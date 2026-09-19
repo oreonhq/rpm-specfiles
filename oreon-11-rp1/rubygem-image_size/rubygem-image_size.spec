@@ -1,0 +1,90 @@
+%global source0_hash c6a580513fe74947e25e5d3f0aea1e33add6c20f7d0007efa65504317b7f029a
+
+%global	gem_name	image_size
+
+Name:		rubygem-%{gem_name}
+Version:	3.4.0
+Release:	5%{?dist}
+
+Summary:	Measure image size using pure Ruby
+# SPDX confirmed
+License:	Ruby OR GPL-2.0-only
+URL:		https://github.com/toy/image_size
+
+Source0:	https://rubygems.org/gems/%{gem_name}-%{version}.gem
+BuildRequires:	ruby(release)
+BuildRequires:	rubygems-devel
+BuildRequires:	ruby
+#%%check
+BuildRequires:	rubygem(rspec)
+BuildRequires:	rubygem(webrick)
+BuildArch:		noarch
+
+%description
+Measure following file dimensions: apng, bmp, cur, emf, gif, heic, heif, ico, j2c, jp2,
+jpeg, jpx, mng, pam, pbm, pcx, pgm, png, ppm, psd, svg, swf, tiff, webp, xbm,
+xpm.
+
+%package	doc
+Summary:	Documentation for %{name}
+Requires:	%{name} = %{version}-%{release}
+
+%description	doc
+Documentation for %{name}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{gem_name}-%{version} -p1
+mv ../%{gem_name}-%{version}.gemspec .
+
+%build
+gem build ./%{gem_name}-%{version}.gemspec
+%gem_install
+
+%install
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+	%{buildroot}%{gem_dir}/
+
+rm -f %{buildroot}%{gem_cache}
+pushd %{buildroot}%{gem_instdir}
+rm -rf \
+	.github \
+	.gitignore \
+	.rubocop* \
+	Gemfile \
+	%{gem_name}.gemspec \
+	spec \
+	%{nil}
+
+popd
+
+%check
+pushd .%{gem_instdir}
+
+# "gemspec" test reads gemspec, which needs `git',
+# providing fake git.
+rm -rf TMPBINDIR
+mkdir TMPBINDIR
+ln -sf /bin/true TMPBINDIR/git
+export PATH=$(pwd)/TMPBINDIR:$PATH
+
+rspec spec
+rm -rf TMPBINDIR
+popd
+
+%files
+%dir	%{gem_instdir}
+%license	%{gem_instdir}/GPL
+%license	%{gem_instdir}/LICENSE.txt
+%doc	%{gem_instdir}/README.markdown
+%{gem_libdir}
+%{gem_spec}
+
+%files doc
+%doc	%{gem_docdir}
+%doc	%{gem_instdir}/CHANGELOG.markdown
+
+%changelog
+%autochangelog

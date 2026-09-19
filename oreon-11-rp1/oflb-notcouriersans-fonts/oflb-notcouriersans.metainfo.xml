@@ -1,0 +1,21 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>oflb-notcouriersans</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>NotCourierSans</name>
+  <summary>NotCourier Sans is a re-interpretation of Nimbus Mono</summary>
+  <description>
+    <p>
+      This is a new release of the NotCourier-sans, with its bold.
+
+      NotCourier-sans is a re-interpretation of Nimbus Mono and was designed 
+      in Wroclaw at the occasion of Linux Graphics Meeting (LGM 2008).For more
+      detailed information: ospublish.constantvzw.org.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://openfontlibrary.org/media/files/OSP/411</url>
+</component>
+

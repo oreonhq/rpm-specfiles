@@ -1,0 +1,67 @@
+diff -up ./ttcp.1.orig ./ttcp.1
+--- ./ttcp.1.orig	2011-08-29 11:47:53.211780496 +0200
++++ ./ttcp.1	2011-08-29 11:48:16.653449623 +0200
+@@ -1,4 +1,12 @@
+ '\"macro stdmacro
++.de EX
++.nf
++.ft CW
++..
++.de EE
++.ft R
++.fi
++..
+ .TH TTCP 1 local
+ .SH NAME
+ ttcp \- test TCP and UDP performance
+@@ -16,7 +24,6 @@ ttcp \- test TCP and UDP performance
+ .RB [ \-D ]
+ .RB [ \-v]
+ .RB host
+-.RB [ < in ]
+ .br
+ .B ttcp \-r
+ .RB [ \-u ]
+@@ -30,7 +37,6 @@ ttcp \- test TCP and UDP performance
+ .RB [ \-B ]
+ .RB [ \-T ]
+ .RB [ \-v ]
+-.RB [ > out ]
+ .SH DESCRIPTION
+ .I Ttcp
+ times the transmission and reception of data between two systems using 
+@@ -52,26 +58,26 @@ bottlenecks.
+ can also be used as a ``network pipe'' for moving directory hierarchies
+ between systems when routing problems exist or when the use of other
+ mechanisms is undesirable. For example, on the destination machine, use:
+-.Ex
++.EX
+ ttcp \-r \-B | tar xvpf \-
+-.Ee
++.EE
+ .PP
+ and on the source machine:
+-.Ex
++.EX
+ tar cf \- directory | ttcp \-t dest_machine
+-.Ee
++.EE
+ .PP
+ Additional intermediate machines can be included by:
+-.Ex
++.EX
+ ttcp \-r | ttcp \-t next_machine
+-.Ee
++.EE
+ .SH OPTIONS
+ .TP 10
+ \-t
+-Transmit mode.
++Transmit mode.  Transmit data presented on standard input.
+ .TP 10
+ \-r
+-Receive mode.
++Receive mode. Send received data to standard output.
+ .TP 10
+ \-u
+ Use UDP instead of TCP.

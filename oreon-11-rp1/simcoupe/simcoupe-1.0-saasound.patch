@@ -1,0 +1,23 @@
+--- SimCoupe/SDL/Sound.cpp.orig	2006-07-03 21:21:47.000000000 +0100
++++ SimCoupe/SDL/Sound.cpp	2006-08-06 01:47:58.000000000 +0100
+@@ -37,7 +37,7 @@
+ #include "SimCoupe.h"
+ 
+ #include "Sound.h"
+-#include "../Extern/SAASound.h"
++#include "SAASound.h"
+ 
+ #include "CPU.h"
+ #include "GUI.h"
+--- SimCoupe/SDL/Makefile.orig	2006-03-21 22:46:44.000000000 +0000
++++ SimCoupe/SDL/Makefile	2006-08-06 01:55:00.000000000 +0100
+@@ -41,8 +42,7 @@
+  ${BASE}/GUIIcons.cpp ${BASE}/HardDisk.cpp ${BASE}/IO.cpp ${BASE}/Main.cpp \
+  ${BASE}/Memory.cpp ${BASE}/Mouse.cpp ${BASE}/Options.cpp ${BASE}/Parallel.cpp \
+  ${BASE}/PNG.cpp ${BASE}/Profile.cpp ${BASE}/SDIDE.cpp ${BASE}/Util.cpp \
+- ${BASE}/YATBus.cpp \
+- ${EXTERN}/SAASound.cpp
++ ${BASE}/YATBus.cpp 
+ 
+ SDL_SRC=${SDL}/Display.cpp ${SDL}/Floppy.cpp ${SDL}/IDEDisk.cpp \
+  ${SDL}/Input.cpp ${SDL}/MIDI.cpp ${SDL}/OSD.cpp ${SDL}/Sound.cpp \

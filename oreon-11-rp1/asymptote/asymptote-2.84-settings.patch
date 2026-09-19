@@ -1,0 +1,12 @@
+diff -up asymptote-2.84/settings.cc.settings asymptote-2.84/settings.cc
+--- asymptote-2.84/settings.cc.settings	2023-01-27 10:10:29.726992629 -0500
++++ asymptote-2.84/settings.cc	2023-01-27 10:11:49.213842466 -0500
+@@ -103,7 +103,7 @@ string defaultHTMLViewer="open";
+ #else
+ string defaultPSViewer="evince";
+ string defaultPDFViewer="evince";
+-string defaultHTMLViewer="google-chrome";
++string defaultHTMLViewer="xdg-open";
+ #endif
+ string defaultGhostscript="gs";
+ string defaultGhostscriptLibrary="";

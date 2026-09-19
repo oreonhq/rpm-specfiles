@@ -1,0 +1,29 @@
+From ed405234702a32e779d88ebf74d4faa3ffc31069 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 29 Sep 2015 09:02:18 +0200
+Subject: [PATCH] Convert to UTF-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Changes | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Changes b/Changes
+index 71da23e..7e18eac 100644
+--- a/Changes
++++ b/Changes
+@@ -65,7 +65,7 @@ Revision history and release notes for Event::RPC:
+       to 2 GB.
+     - Fixed test suite for parallel execution by using
+       different port numbers for the test server.
+-      Thanks for the report to Andreas K�nig.
++      Thanks for the report to Andreas König.
+     - Applied a patch from Salvatore Bonaccorso which
+       fixes missing encoding declarations in POD. Thanks!
+     - Fixed some POD typos. Thanks for the report to
+-- 
+2.4.3
+

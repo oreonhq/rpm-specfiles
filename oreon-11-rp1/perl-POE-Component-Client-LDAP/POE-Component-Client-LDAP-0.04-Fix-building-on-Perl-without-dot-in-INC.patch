@@ -1,0 +1,9 @@
+diff -up POE-Component-Client-LDAP-0.04/Makefile.PL.orig POE-Component-Client-LDAP-0.04/Makefile.PL
+--- POE-Component-Client-LDAP-0.04/Makefile.PL.orig	2017-05-17 14:44:06.885501272 +0200
++++ POE-Component-Client-LDAP-0.04/Makefile.PL	2017-05-17 14:44:26.995416245 +0200
+@@ -1,4 +1,5 @@
+ # Load the Module::Install bundled in ./inc/
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ # Name of your distribution

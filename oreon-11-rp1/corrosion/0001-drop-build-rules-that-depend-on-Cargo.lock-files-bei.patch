@@ -1,0 +1,45 @@
+From 543e19524acd1c944b0669a892ac0faa63d00f92 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Sat, 2 Dec 2023 13:21:21 +0100
+Subject: [PATCH 1/7] drop build rules that depend on Cargo.lock files being
+ present
+
+---
+ generator/CMakeLists.txt | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
+
+diff --git a/generator/CMakeLists.txt b/generator/CMakeLists.txt
+index c3f9a32..9a8754f 100644
+--- a/generator/CMakeLists.txt
++++ b/generator/CMakeLists.txt
+@@ -3,26 +3,16 @@ message(STATUS "Building CMake Generator for Corrosion - This may take a while")
+ set(generator_src "${CMAKE_CURRENT_BINARY_DIR}/legacy_generator_src")
+ set(generator_destination "${CMAKE_CURRENT_BINARY_DIR}/legacy_generator")
+ set(generator_build_quiet "")
++file(COPY Cargo.toml DESTINATION "${generator_src}")
+ 
+ file(MAKE_DIRECTORY "${generator_src}")
+ file(COPY src DESTINATION "${generator_src}")
+-if(Rust_VERSION VERSION_LESS "1.56")
+-    message(STATUS "Corrosion Generator: Using Compatibility lock file, due to rust version less than 1.56")
+-    file(COPY Compat.Cargo.lock Compat.Cargo.toml DESTINATION "${generator_src}")
+-    file(RENAME "${generator_src}/Compat.Cargo.lock" "${generator_src}/Cargo.lock")
+-    file(RENAME "${generator_src}/Compat.Cargo.toml" "${generator_src}/Cargo.toml")
+-else()
+-    file(COPY Cargo.lock Cargo.toml DESTINATION "${generator_src}")
+-endif()
+ 
+ # Using cargo install has the advantage of caching the build in the user .cargo directory,
+ # so likely the rebuild will be very cheap even after deleting the build directory.
+ execute_process(
+         COMMAND ${CMAKE_COMMAND}
+         -E env
+-        # If the Generator is built at configure of a project (instead of being pre-installed)
+-        # We don't want environment variables like `RUSTFLAGS` affecting the Generator build.
+-        --unset=RUSTFLAGS
+         "CARGO_BUILD_RUSTC=${RUSTC_EXECUTABLE}"
+         "${CARGO_EXECUTABLE}" install
+         --path "."
+-- 
+2.46.0
+

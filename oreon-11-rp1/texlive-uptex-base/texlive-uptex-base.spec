@@ -1,5 +1,5 @@
-%global source0_hash b56449f827a13da8e199a6beba37f7f68be6db516d63b61cc49c067fd387f426
-%global source1_hash 5cd0b6791b8f09e5f8132d512a1868ee9004cacf906ed90cee8f05f157ef3a00
+%global source0_hash 3e30ef7f14bb136c8ba3029077502f4c854c6d231e4776a412a0c02926d9475225c54af2d897445506e5cbf719ef37177898798513db5108f5a5c96c10ce10f2
+%global source1_hash 1974cf5e8ba3989e72a59b250012b880da357d08756a2a13dda7fad56623a3bad4b5b2d16494db51a6cef924a1e6b872f8fd59a39d62a792f6e15a3497c61904
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Plain TeX formats and documents for upTeX
 License:        BSD
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/uptex-base.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/uptex-base.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/uptex-base.tar.xz#/uptex-base.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/uptex-base.doc.tar.xz#/uptex-base.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-uptex-base-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-uptex-base-doc <= 11:%{version}
@@ -24,8 +24,8 @@ Provides:       tex(uptex.tex)
 Plain TeX formats and documents for upTeX.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

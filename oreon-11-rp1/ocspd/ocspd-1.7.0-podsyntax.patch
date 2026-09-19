@@ -1,0 +1,36 @@
+diff -Naur openca-ocspd-1.5.1-rc1.orig/docs/ocspd.conf.3.pod openca-ocspd-1.5.1-rc1.new/docs/ocspd.conf.3.pod
+--- openca-ocspd-1.5.1-rc1.orig/docs/ocspd.conf.3.pod	2013-01-21 13:05:32.780688588 +0100
++++ openca-ocspd-1.5.1-rc1.new/docs/ocspd.conf.3.pod	2013-01-21 13:17:31.530154407 +0100
+@@ -159,6 +159,8 @@
+ 
+ Let's analyze the options in detail.
+ 
++=over 2
++
+ =item B<default_ocspd section>
+ 
+ In this section of the configuration file are set the general options
+@@ -260,7 +262,7 @@
+ 
+ Here are kept options tied to the revoked certificates' list.
+ 
+-=over 4
++=over 6
+ 
+ =item B<ocsp_add_response_certs>
+ 
+@@ -345,6 +347,8 @@
+ 
+ =back
+ 
++=back
++
+ =head1 AUTHOR
+ 
+ Massimiliano Pala <madwolf@openca.org>
+@@ -354,5 +358,3 @@
+ L<ocspd(3)>,L<openca(3)>,L<openssl(1)>, L<ocsp(1)>
+ 
+ =cut
+-
+-

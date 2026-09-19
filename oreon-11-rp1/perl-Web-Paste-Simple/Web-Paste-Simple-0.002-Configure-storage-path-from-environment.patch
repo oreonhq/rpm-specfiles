@@ -1,0 +1,38 @@
+From 64ff9ac39cb76a5c5d3a936ea5d3f0747c2ec129 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 10 Sep 2015 16:14:26 +0200
+Subject: [PATCH] Configure storage path from environment
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+plackup consumes @ARGV. Use WEB_PASTE_SIMPLE_STORAGE to redefine path
+to Web::Paste::Simple storage.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ bin/web-paste-simple.psgi | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/bin/web-paste-simple.psgi b/bin/web-paste-simple.psgi
+index c4a3e79..823784a 100644
+--- a/bin/web-paste-simple.psgi
++++ b/bin/web-paste-simple.psgi
+@@ -1,4 +1,13 @@
+ #!/usr/bin/plackup
+ 
+ use Web::Paste::Simple;
+-Web::Paste::Simple->new->app;
++
++use Path::Class::Dir;
++my @arguments;
++if (exists $ENV{WEB_PASTE_SIMPLE_STORAGE}) {
++    @arguments = (storage => Path::Class::Dir->new(
++        $ENV{WEB_PASTE_SIMPLE_STORAGE}
++    ));
++}
++
++Web::Paste::Simple->new(@arguments)->app;
+-- 
+2.4.3
+

@@ -2,7 +2,7 @@
 
 Summary: A utility for converting amounts from one unit to another
 Name: units
-Version: 2.26
+Version: 2.27
 Release: 1%{?dist}
 Source:        https://mirrors.kernel.org/gnu/units/%{name}-%{version}.tar.gz
 URL: https://www.gnu.org/software/units/units.html

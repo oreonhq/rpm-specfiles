@@ -1,0 +1,22 @@
+--- a/tests/test_progressbar.py
++++ b/tests/test_progressbar.py
+@@ -31,7 +31,7 @@ Test the progressbar 'FileTransferSpeed'
+ from . import TestCase
+ import bitmath
+ from bitmath.integrations import BitmathFileTransferSpeed
+-import mock
++from unittest import mock
+ import progressbar
+ 
+ 
+--- a/tests/test_query_device_capacity.py
++++ b/tests/test_query_device_capacity.py
+@@ -30,7 +30,7 @@ Test reading block device capacities
+ 
+ from . import TestCase
+ import bitmath
+-import mock
++from unittest import mock
+ import struct
+ 
+ try:

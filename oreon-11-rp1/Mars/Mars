@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# Mars script
+# JPackage Project <http://www.jpackage.org/>
+
+# Source functions library
+_prefer_jre="true"
+. /usr/share/java-utils/java-functions
+
+# Configuration
+MAIN_CLASS="Mars"
+BASE_FLAGS="-Dswing.aatext=true -Dawt.useSystemAAFontSettings=on"
+BASE_OPTIONS=""
+BASE_JARS="Mars"
+
+# Set parameters
+set_jvm
+set_classpath $BASE_JARS
+set_flags $BASE_FLAGS
+set_options $BASE_OPTIONS
+
+# Let's start
+run "$@"

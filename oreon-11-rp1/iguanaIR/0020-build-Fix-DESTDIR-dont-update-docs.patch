@@ -1,0 +1,60 @@
+From 89f10c5f0c4374fb8ac51f1878b8b79329123c5b Mon Sep 17 00:00:00 2001
+From: Alec Leamas <leamas.alec@gmail.com>
+Date: Wed, 25 Jan 2017 16:35:50 +0100
+Subject: [PATCH] fix
+
+---
+ .../Makefile                                       | 22 +++++-----------------
+ 1 file changed, 5 insertions(+), 17 deletions(-)
+
+diff --git a/iguanair-lirc-e23b9d3726b010c9e747786ffe72e38debc8cfef/Makefile b/iguanair-lirc-e23b9d3726b010c9e747786ffe72e38debc8cfef/Makefile
+index dd093eb..be86c43 100755
+--- a/iguanair-lirc-e23b9d3726b010c9e747786ffe72e38debc8cfef/Makefile
++++ b/iguanair-lirc-e23b9d3726b010c9e747786ffe72e38debc8cfef/Makefile
+@@ -3,9 +3,6 @@
+ # Requires that lirc is installed in system locations, in
+ # particular that the /usr/lib[64]/pkgconfig/lirc-driver.pc
+ # is in place (/usr/local/lib/pkgconfig/... is also OK).
+-# The required file plugindocs.mk might live in a -doc
+-# package which then is needed.
+-#
+ 
+ 
+ driver          = iguanair
+@@ -18,13 +15,7 @@ PLUGINDIR       ?= $(shell pkg-config --variable=plugindir lirc-driver)
+ CONFIGDIR       ?= $(shell pkg-config --variable=configdir lirc-driver)
+ PLUGINDOCS      ?= $(shell pkg-config --variable=plugindocs lirc-driver)
+ 
+-PLUGINDOCS_MK   = $(PLUGINDOCS)/plugindocs.mk
+-MODPROBE_CONF   = 60-blacklist-kernel-iguanair.conf
+-
+-ifneq ($(wildcard $(PLUGINDOCS_MK)),)
+-	include $(PLUGINDOCS_MK)
+-endif
+-
++MODPROBE_CONF    = 60-blacklist-kernel-iguanair.conf
+ 
+ $(driver).o: $(driver).c
+ 
+@@ -32,14 +23,11 @@ $(driver).so: $(driver).o
+ 	gcc --shared -fpic $(LDFLAGS) -o $@ $<
+ 
+ install: $(driver).so
+-	install -pDm 755 $< $(DESTDIR)$(PLUGINDIR)/$<
+-	install -pDm 644 $(driver).html $(DESTDIR)$(PLUGINDOCS)/$(driver).html
+-	install -pDm 644 $(driver).conf $(DESTDIR)$(CONFIGDIR)/$(driver).conf
+-	install -pDm 644 $(MODPROBE_CONF) \
++	install -D $<  $(DESTDIR)$(PLUGINDIR)/$<
++	install -D $(driver).conf  $(DESTDIR)$(CONFIGDIR)/$(driver).conf
++	install -D $(driver).html $(DESTDIR)$(PLUGINDOCS)/$(driver).html
++	install -Dm 644 $(MODPROBE_CONF) \
+ 	    $(DESTDIR)/etc/modprobe.d/$(MODPROBE_CONF)
+-ifneq ($(wildcard $(PLUGINDOCS_MK)),)
+-	$(MAKE) update
+-endif
+ 
+ clean:
+ 	rm -f *.o *.so
+-- 
+2.9.3
+

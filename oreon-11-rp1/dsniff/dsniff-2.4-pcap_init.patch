@@ -1,0 +1,61 @@
+Patch by Dennis Filder <d.filder@web.de> for dsniff >= 2.4b1 to resolve naming
+collision due to libpcap API changes. Dsniff was written with a function named
+pcap_init() that predates the one in libpcap and is entirely different. This patch
+renames it out of the way. For some more information, please have a look to Debian
+bug ID #980588.
+
+--- dsniff-2.4/dnsspoof.c			2021-07-25 01:00:08.445636429 +0200
++++ dsniff-2.4/dnsspoof.c.pcap_init		2021-07-25 01:00:53.540928897 +0200
+@@ -309,7 +309,7 @@
+ 	else snprintf(buf, sizeof(buf), "udp dst port 53 and not src %s",
+ 		      libnet_addr2name4(lnet_ip, LIBNET_DONT_RESOLVE));
+ 	
+-	if ((pcap_pd = pcap_init(dev, buf, 128)) == NULL)
++	if ((pcap_pd = pcap_init_dsniff(dev, buf, 128)) == NULL)
+ 		errx(1, "couldn't initialize sniffing");
+ 
+ 	if ((pcap_off = pcap_dloff(pcap_pd)) < 0)
+--- dsniff-2.4/pcaputil.c			2021-07-25 01:00:08.469636585 +0200
++++ dsniff-2.4/pcaputil.c.pcap_init		2021-07-25 01:00:59.816969598 +0200
+@@ -111,7 +111,7 @@
+ }
+ 
+ pcap_t *
+-pcap_init(char *intf, char *filter, int snaplen)
++pcap_init_dsniff(char *intf, char *filter, int snaplen)
+ {
+ 	pcap_t *pd;
+ 	u_int net, mask;
+--- dsniff-2.4/pcaputil.h			2001-03-15 09:33:06.000000000 +0100
++++ dsniff-2.4/pcaputil.h.pcap_init		2021-07-25 01:07:46.246603851 +0200
+@@ -11,7 +11,7 @@
+ #ifndef PCAPUTIL_H
+ #define PCAPUTIL_H
+ 
+-pcap_t *pcap_init(char *intf, char *filter, int snaplen);
++pcap_t *pcap_init_dsniff(char *intf, char *filter, int snaplen);
+ 
+ int	pcap_dloff(pcap_t *pd);
+ 
+--- dsniff-2.4/tcpkill.c			2021-07-25 01:00:08.426636306 +0200
++++ dsniff-2.4/tcpkill.c.pcap_init		2021-07-25 01:01:06.728014416 +0200
+@@ -130,7 +130,7 @@
+ 	
+ 	filter = copy_argv(argv);
+ 	
+-	if ((pd = pcap_init(intf, filter, 64)) == NULL)
++	if ((pd = pcap_init_dsniff(intf, filter, 64)) == NULL)
+ 		errx(1, "couldn't initialize sniffing");
+ 
+ 	if ((pcap_off = pcap_dloff(pd)) < 0)
+--- dsniff-2.4/tcpnice.c			2021-07-25 01:00:08.426636306 +0200
++++ dsniff-2.4/tcpnice.c.pcap_init		2021-07-25 01:01:13.816060381 +0200
+@@ -204,7 +204,7 @@
+ 	
+ 	filter = copy_argv(argv);
+ 	
+-	if ((pd = pcap_init(intf, filter, 128)) == NULL)
++	if ((pd = pcap_init_dsniff(intf, filter, 128)) == NULL)
+ 		errx(1, "couldn't initialize sniffing");
+ 
+ 	if ((pcap_off = pcap_dloff(pd)) < 0)

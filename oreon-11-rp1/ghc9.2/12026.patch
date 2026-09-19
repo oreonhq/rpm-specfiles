@@ -1,0 +1,25 @@
+Modified for ghc9.2
+
+From 1181b555148e42a618df27eaeca91d3bec2d32de Mon Sep 17 00:00:00 2001
+From: Rodrigo Mesquita <rodrigo.m.mesquita@gmail.com>
+Date: Tue, 6 Feb 2024 11:35:02 +0000
+Subject: [PATCH] Synchronize bindist configure for #24324
+
+In cdddeb0f1280b40cc194028bbaef36e127175c4c, we set up a
+workaround for #24324 in the in-tree configure script, but forgot to
+update the bindist configure script accordingly. This updates it.
+---
+ distrib/configure.ac.in | 3 +++
+ 1 file changed, 3 insertions(+)
+
+--- ghc-9.2.8/distrib/configure.ac.in~	2023-05-26 07:02:59.000000000 +0800
++++ ghc-9.2.8/distrib/configure.ac.in	2026-01-17 15:14:28.418161805 +0800
+@@ -84,6 +84,8 @@
+ dnl ** Which gcc to use?
+ dnl --------------------------------------------------------------
+ AC_PROG_CC([gcc clang])
++# Work around #24324
++MOVE_TO_FLAGS([CC],[CFLAGS])
+ 
+ dnl ** figure out how to invoke the C preprocessor (i.e. `gcc -E`)
+ AC_PROG_CPP

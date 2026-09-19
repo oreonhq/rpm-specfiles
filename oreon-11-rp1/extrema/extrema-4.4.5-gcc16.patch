@@ -1,0 +1,13 @@
+diff --git a/src/Commands/CMD_write.cpp b/src/Commands/CMD_write.cpp
+index 47c57de..e5e01e1 100644
+--- a/src/Commands/CMD_write.cpp
++++ b/src/Commands/CMD_write.cpp
+@@ -173,7 +173,7 @@ void CMD_write::Execute( ParseLine const *p )
+     {
+       wxChar c[32000];
+       ::wxSnprintf( c, 32000, format.c_str(), line.c_str() );
+-      ofStream_ << c << std::endl;
++      ofStream_ << wxString(c).ToUTF8().data() << std::endl;
+     }
+     else
+     {

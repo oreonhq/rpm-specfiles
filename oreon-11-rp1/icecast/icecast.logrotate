@@ -1,0 +1,8 @@
+/var/log/icecast/*log {
+    missingok
+    notifempty
+    sharedscripts
+    postrotate
+	/usr/bin/systemctl try-reload-or-restart icecast.service 1>/dev/null 2>/dev/null || true
+    endscript
+}

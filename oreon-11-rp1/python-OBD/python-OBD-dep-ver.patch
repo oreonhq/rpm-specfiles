@@ -1,0 +1,10 @@
+diff -up python-OBD-0.7.2/setup.py.orig python-OBD-0.7.2/setup.py
+--- python-OBD-0.7.2/setup.py.orig	2023-07-10 05:08:02.000000000 +0200
++++ python-OBD-0.7.2/setup.py	2023-08-31 12:51:26.887643714 +0200
+@@ -30,5 +30,5 @@ setup(
+     packages=find_packages(),
+     include_package_data=True,
+     zip_safe=False,
+-    install_requires=["pyserial==3.*", "pint==0.20.*"],
++    install_requires=["pyserial>=3", "pint>=0.16"],
+ )

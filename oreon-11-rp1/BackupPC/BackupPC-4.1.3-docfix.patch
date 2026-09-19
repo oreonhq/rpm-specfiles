@@ -1,0 +1,43 @@
+Index: BackupPC-4.4.0/configure.pl
+===================================================================
+--- BackupPC-4.4.0.orig/configure.pl
++++ BackupPC-4.4.0/configure.pl
+@@ -946,7 +946,7 @@ sub DoInstall
+     # Create install directories
+     #
+     foreach my $dir ( qw(bin
+-        share share/doc share/doc/BackupPC
++        doc
+         lib lib/BackupPC
+         lib/BackupPC/CGI
+         lib/BackupPC/Config
+@@ -1074,13 +1074,13 @@ sub DoInstall
+     print("Making Apache configuration file for suid-perl\n");
+     InstallFile("httpd/src/BackupPC.conf", "httpd/BackupPC.conf", 0644);
+ 
+-    print("Installing docs in $DestDir$Conf{InstallDir}/share/doc/BackupPC\n");
++    print("Installing docs in $DestDir$Conf{InstallDir}/doc\n");
+     foreach my $doc ( qw(BackupPC.pod BackupPC.html) ) {
+-        InstallFile("doc/$doc", "$DestDir$Conf{InstallDir}/share/doc/BackupPC/$doc", 0444);
++        InstallFile("doc/$doc", "$DestDir$Conf{InstallDir}/doc/$doc", 0444);
+         #
+         # clean up files from old directory
+         #
+-        unlink("$DestDir$Conf{InstallDir}/doc/$doc") if ( -f "$DestDir$Conf{InstallDir}/doc/$doc" );
++        #unlink("$DestDir$Conf{InstallDir}/doc/$doc") if ( -f "$DestDir$Conf{InstallDir}/doc/$doc" );
+     }
+     #
+     # clean up old directory (ok if it quietly fails if there are other files in that directory)
+Index: BackupPC-4.4.0/lib/BackupPC/CGI/View.pm
+===================================================================
+--- BackupPC-4.4.0.orig/lib/BackupPC/CGI/View.pm
++++ BackupPC-4.4.0/lib/BackupPC/CGI/View.pm
+@@ -104,7 +104,7 @@ sub action
+         $file      = $bpc->ConfDir() . "/hosts";
+         $linkHosts = 1;
+     } elsif ( $type eq "docs" ) {
+-        $file = $bpc->InstallDir() . "/share/doc/BackupPC/BackupPC.html";
++        $file = $bpc->InstallDir() . "/doc/BackupPC.html";
+     } elsif ( $host ne "" ) {
+         if ( !defined($In{num}) ) {
+ 

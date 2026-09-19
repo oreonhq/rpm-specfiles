@@ -1,0 +1,45 @@
+From eb4c5eb2f49a1789464e29da67da4ed4d43af3bc Mon Sep 17 00:00:00 2001
+From: Orion Poplawski <orion@nwra.com>
+Date: Sun, 17 Mar 2024 10:53:22 -0600
+Subject: [PATCH 1/2] Pass LFLAGS as args to mkoctfile
+
+---
+ src/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Makefile b/src/Makefile
+index 7b03537..8524972 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -157,7 +157,7 @@ mex oct:    CCOPT+=$(DLLFLAG) -DMCX_CONTAINER -DMATLAB_MEX_FILE
+ mex:        LINKOPT+=mcxlabcl.cpp -outdir $(OUTPUT_DIR) $(INCLUDEDIRS)
+ 
+ oct:        BINARY=mcxcl.mex
+-oct:        AR=XTRA_CFLAGS=' ' XTRA_CXXFLAGS=' ' CXXFLAGS='-std=c++11 $(CPPOPT) $(MEXCCOPT) $(USERCCOPT)' LFLAGS='$(LDFLAGS) -g -L$(LIBOPENCLDIR) $(LIBOPENCL)' LDFLAGS='$(MEXLINKOPT)' mkoctfile
++oct:        AR=XTRA_CFLAGS=' ' XTRA_CXXFLAGS=' ' CXXFLAGS='-std=c++11 $(CPPOPT) $(MEXCCOPT) $(USERCCOPT)' LDFLAGS='$(MEXLINKOPT)' mkoctfile $(LDFLAGS) -g -L$(LIBOPENCLDIR) $(LIBOPENCL)
+ oct:        LINKOPT=--mex -DMATLAB_MEX_FILE mcxlabcl.cpp $(INCLUDEDIRS)
+ 
+ OBJS      := $(addsuffix $(OBJSUFFIX), $(FILES))
+
+From a5cec15b462650e0be852a8c16f5e791bf8eeaf4 Mon Sep 17 00:00:00 2001
+From: Orion Poplawski <orion@nwra.com>
+Date: Sun, 17 Mar 2024 11:04:38 -0600
+Subject: [PATCH 2/2] Pass -v to mkoctfile to help debug build issues
+
+---
+ src/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Makefile b/src/Makefile
+index 8524972..76b4a9f 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -157,7 +157,7 @@ mex oct:    CCOPT+=$(DLLFLAG) -DMCX_CONTAINER -DMATLAB_MEX_FILE
+ mex:        LINKOPT+=mcxlabcl.cpp -outdir $(OUTPUT_DIR) $(INCLUDEDIRS)
+ 
+ oct:        BINARY=mcxcl.mex
+-oct:        AR=XTRA_CFLAGS=' ' XTRA_CXXFLAGS=' ' CXXFLAGS='-std=c++11 $(CPPOPT) $(MEXCCOPT) $(USERCCOPT)' LDFLAGS='$(MEXLINKOPT)' mkoctfile $(LDFLAGS) -g -L$(LIBOPENCLDIR) $(LIBOPENCL)
++oct:        AR=XTRA_CFLAGS=' ' XTRA_CXXFLAGS=' ' CXXFLAGS='-std=c++11 $(CPPOPT) $(MEXCCOPT) $(USERCCOPT)' LDFLAGS='$(MEXLINKOPT)' mkoctfile -v $(LDFLAGS) -g -L$(LIBOPENCLDIR) $(LIBOPENCL)
+ oct:        LINKOPT=--mex -DMATLAB_MEX_FILE mcxlabcl.cpp $(INCLUDEDIRS)
+ 
+ OBJS      := $(addsuffix $(OBJSUFFIX), $(FILES))

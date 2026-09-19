@@ -1,0 +1,21 @@
+diff -up Zasx/Makefile~ Zasx/Makefile
+--- Zasx/Makefile~	2025-08-07 23:05:43.000000000 +0200
++++ Zasx/Makefile	2025-08-08 16:18:49.071125278 +0200
+@@ -1,7 +1,7 @@
+ PREFIX  = /usr/local
+ DATADIR = $(PREFIX)/share/$(TARGET)
+ CFLAGS  = -g -Wall -Wno-deprecated-declarations -O2 -fsigned-char
+-LDFLAGS = `allegro-config --libs` -ldumb -laldmb -lm -lpthread
++LIBS    = `allegro-config --libs` -ldumb -laldmb -lm -lpthread
+ DEFINES = -DDATADIR=\"$(DATADIR)/\" -Iinclude
+ OBJS    = obj/anim.o obj/dataload.o obj/gamemenu.o obj/input.o obj/log.o \
+  obj/particle.o obj/scorer.o obj/asteroid.o obj/drs.o obj/gametimer.o \
+@@ -10,7 +10,7 @@ OBJS    = obj/anim.o obj/dataload.o obj/
+ TARGET  = zasx
+ 
+ $(TARGET): $(OBJS)
+-	$(CC) $(LDFLAGS) -o $@ $^
++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+ 
+ obj/%.o: src/%.c
+ 	$(CC) $(CFLAGS) $(DEFINES) -o $@ -c $<

@@ -1,0 +1,42 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index d4757da..5fe5e82 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -15,18 +15,12 @@ add_coverage(test_ht_spkitable)
+ add_executable(test_ht_spkitable_locks test_ht_spkitable_locks.c)
+ target_link_libraries(test_ht_spkitable_locks rtrlib_static)
+ add_coverage(test_ht_spkitable_locks)
+-add_executable(test_live_validation test_live_validation.c)
+-target_link_libraries(test_live_validation rtrlib_static)
+-add_coverage(test_live_validation)
+ add_executable(test_ipaddr test_ipaddr.c)
+ target_link_libraries(test_ipaddr rtrlib_static)
+ add_coverage(test_ipaddr)
+ add_executable(test_getbits test_getbits.c)
+ target_link_libraries(test_getbits rtrlib_static)
+ add_coverage(test_getbits)
+-add_executable(test_dynamic_groups test_dynamic_groups.c)
+-target_link_libraries(test_dynamic_groups rtrlib_static)
+-add_coverage(test_dynamic_groups)
+ 
+ 
+ if(UNIT_TESTING AND NOT APPLE)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7e9aa98..7b1fea9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -112,14 +112,10 @@ ADD_TEST(test_trie tests/test_trie)
+ ADD_TEST(test_ht_spkitable tests/test_ht_spkitable)
+ ADD_TEST(test_ht_spkitable_locks tests/test_ht_spkitable_locks)
+ 
+-ADD_TEST(test_live_validation tests/test_live_validation)
+-
+ ADD_TEST(test_ipaddr tests/test_ipaddr)
+ 
+ ADD_TEST(test_getbits tests/test_getbits)
+ 
+-ADD_TEST(test_dynamic_groups tests/test_dynamic_groups)
+-
+ #install lib
+ set (RTRLIB_VERSION_MAJOR 0)
+ set (RTRLIB_VERSION_MINOR 8)

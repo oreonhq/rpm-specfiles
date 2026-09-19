@@ -1,0 +1,28 @@
+diff --git a/Maelstrom-netd.c b/Maelstrom-netd.c
+index 3e6e942..4ed40ae 100644
+--- a/Maelstrom-netd.c
++++ b/Maelstrom-netd.c
+@@ -2,6 +2,7 @@
+ /* Here we go... */
+ 
+ #include <stdlib.h>
++#include <time.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <signal.h>
+@@ -14,6 +15,10 @@
+ #include <netdb.h>
+ #include <unistd.h>
+ 
++#ifdef unix
++#include <arpa/inet.h>
++#endif
++
+ /* We wait in a loop for players to connect and tell us how many people
+    are playing.  Then, once all players have connected, then we broadcast
+    the addresses of all players, and then start again.
+@@ -376,4 +381,3 @@ printf("  the remote address is %s:%hu\n",
+ 	}
+ 	/* Never reached */
+ }
+-

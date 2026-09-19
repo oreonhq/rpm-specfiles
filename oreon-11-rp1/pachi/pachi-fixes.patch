@@ -1,0 +1,176 @@
+diff -ur Pachi/data/Makefile.in Pachi.new/data/Makefile.in
+--- Pachi/data/Makefile.in	2002-12-08 15:01:27.000000000 +0100
++++ Pachi.new/data/Makefile.in	2006-11-10 14:44:29.000000000 +0100
+@@ -229,8 +229,8 @@
+ 
+ install-data-local:
+ 	for file in $(score_DATA); do\
+-	    chgrp $(group) $(scoredir)/$$file; \
+-	    chmod $(perms) $(scoredir)/$$file; \
++	    chgrp $(group) $(DESTDIR)$(scoredir)/$$file; \
++	    chmod $(perms) $(DESTDIR)$(scoredir)/$$file; \
+ 	done					    
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+diff -ur Pachi/src/faes.cpp Pachi.new/src/faes.cpp
+--- Pachi/src/faes.cpp	2004-03-28 20:14:10.000000000 +0200
++++ Pachi.new/src/faes.cpp	2006-11-10 14:57:33.000000000 +0100
+@@ -16,6 +16,7 @@
+     *                                                                 *
+     *******************************************************************/
+ 
++#include <unistd.h>
+ #include<stdio.h>
+ #include<stdlib.h>
+ #include<stdarg.h>
+@@ -31,6 +32,8 @@
+ #include"proto.h"
+ #include"credits.h"
+ 
++FILE *highscore_fp = NULL;
++
+ #include"text.c"
+ #include"init.c"
+ #include"gfx.c"
+@@ -55,6 +59,19 @@
+ 
+ int main(int argc, char *argv[])
+ {
++    gid_t realgid;
++    
++    highscore_fp = fopen("/var/games/pachi.hs", "r+");
++    
++    /* Figure out who we really are. */
++    realgid = getgid();
++
++    /* This is where we drop our setgid privileges. */
++    if (setresgid(-1, realgid, realgid) != 0) {
++        perror("Could not drop setgid privileges.  Aborting.");
++        return 1;
++    }
++
+     initsdl();
+ 
+     if(argc > 1)
+@@ -86,6 +102,9 @@
+ 	    do_hiscores();
+ 	}
+     }
++    if (highscore_fp)
++        fclose(highscore_fp);
++
+ //    outro();
+     SDL_JoystickClose(joystick);
+     SDL_Quit();
+diff -ur Pachi/src/file.c Pachi.new/src/file.c
+--- Pachi/src/file.c	2004-03-28 21:55:10.000000000 +0200
++++ Pachi.new/src/file.c	2006-11-10 14:57:31.000000000 +0100
+@@ -96,7 +96,8 @@
+     LoadT(&scorefont,DATADIR"/fonts/font16b.T");
+     LoadT(&scorefont1,DATADIR"/fonts/font16d.T");
+ 
+-    FILE *file = fopen(SCOREDIR"/data/scores.dat","rb");
++    FILE *file = highscore_fp; /* FIXME, this will crash if (file == NULL) */
++    rewind(file);
+     for(int a=0; a < 10; a++)
+     {
+ 	for(int b=0; b < 10; b++)
+@@ -124,7 +125,8 @@
+ }
+ void save_hiscoredata()
+ {
+-    FILE *file = fopen(SCOREDIR"/data/scores.dat","rb+");
++    FILE *file = highscore_fp; /* FIXME, this will crash if (file == NULL) */
++    rewind(file);
+ 
+     for(int a=0;a<10;a++)
+     {    
+--- pachi-1.0.orig/src/game.c
++++ pachi-1.0/src/game.c
+@@ -324,7 +324,7 @@
+ 	}
+     }
+     int object_is_here=0; // esta variable indica si el objeto que sigue en la secuencia esta en la pantalla actual
+-    int bright_x, bright_y; // variables que indica en que posicion debe aparecer el brillo del proximo objeto a recoger
++    int bright_x = 0, bright_y = 0; // variables que indica en que posicion debe aparecer el brillo del proximo objeto a recoger
+     for(n=0;n<5;n++)
+     {
+ 	if(mobject[(R_current-1)*5+n].seq==sequence)
+--- pachi-1.0.orig/src/gameover.c
++++ pachi-1.0/src/gameover.c
+@@ -21,7 +21,6 @@
+     SDL_SetColorKey(scorefont,SDL_SRCCOLORKEY,SDL_MapRGB(scorefont->format,0,0,0));
+     SDL_SetColorKey(scorefont1,SDL_SRCCOLORKEY,SDL_MapRGB(scorefont1->format,0,0,0));
+     SDL_SetColorKey(scorefont1,SDL_SRCCOLORKEY,SDL_MapRGB(scorefont1->format,0,0,0));
+-    char plyername[]="          ";
+     char diflevel[] ="      ";
+     print_text(scorefont1,screen,16,16,30, 55,"         PACHI EL MARCIANO    TOP TEN         ");//scorename[a]);
+     print_text(scorefont1,screen,16,16,30, 95,"NAME         STAGE    TIME    LEVEL     SCORE ");//scorename[a]);
+@@ -103,7 +102,8 @@
+ 	    hiscore_events();
+ 	    SDL_FillRect(screen,&box,SDL_MapRGB(screen->format,0,0,0));
+ 	    print_text(scorefont1,screen,16,16,box.x+10,box.y+5,"ENTER YOUR NAME");
+-	    print_text(scorefont1,screen,16,16,box.x+51+(namechar*16),box.y+29,".");
++	    for (int i = namechar; i < 10; i++)
++		print_text(scorefont1,screen,16,16,box.x+51+(i*16),box.y+29,".");
+ 	    print_text(scorefont,screen,16,16,box.x+51,box.y+24,"%s",playername);
+ 	    SDL_Flip(screen);
+ 	}
+--- pachi-1.0.orig/src/intro.c
++++ pachi-1.0/src/intro.c
+@@ -52,7 +52,6 @@
+     double introtime=0;
+     escape_exit=0;
+     float title_alpha=0;
+-    int title_done=0;
+     int n=1;
+     while(escape_exit==0)
+     {
+--- pachi-1.0.orig/src/input.c
++++ pachi-1.0/src/input.c
+@@ -68,7 +68,7 @@
+ 		    {
+ 			namechar=0;
+ 			for(n=0;n<10;n++)
+-			    playername[n] = '.';
++			    playername[n] = ' ';
+ 		    }
+ 		}
+ 	    }
+@@ -167,7 +167,6 @@
+ 
+ void code_events()
+ {
+-    int n;
+     SDL_Event event;
+     
+     while(SDL_PollEvent(&event)==1)
+@@ -304,7 +303,6 @@
+ 
+ void game_events()
+ {
+-    int n;
+     SDL_Event event;
+     Uint8 *keys;
+     
+--- pachi-1.0.orig/src/output.c
++++ pachi-1.0/src/output.c
+@@ -300,7 +300,6 @@
+     if(num==CEMETERY || num==CAVES || num==CASTLE || num==CASTLE+1 || num==LAB)
+     {
+ 	escape_exit=0;
+-	SDL_Surface *temp;
+ 	switch(num)
+ 	{
+ 	    case CEMETERY:
+--- pachi-1.0.orig/src/text.c
++++ pachi-1.0/src/text.c
+@@ -15,7 +15,7 @@
+     srctxt.y = 0;
+     int linecounter = 0 ; // este contador se utiliza para saber en que linea imprimimos el texto
+     int charpos = 0;
+-    for(int charcounter = 0; charcounter <= (strlen(texto));charcounter++)
++    for(unsigned charcounter = 0; charcounter <= (strlen(texto));charcounter++)
+     {
+ 	int curchar=texto[charcounter];
+ 	if(curchar == 94)

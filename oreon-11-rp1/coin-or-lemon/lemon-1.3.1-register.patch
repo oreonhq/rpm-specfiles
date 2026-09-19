@@ -1,0 +1,24 @@
+Fixes these warnings:
+
+In file included from /builddir/build/BUILD/coin-or-lemon-1.3.1-build/lemon-1.3.1/lemon/random.cc:22:
+/builddir/build/BUILD/coin-or-lemon-1.3.1-build/lemon-1.3.1/lemon/random.h: In member function ‘void lemon::_random_bits::RandomCore<_Word>::fillState()’:
+/builddir/build/BUILD/coin-or-lemon-1.3.1-build/lemon-1.3.1/lemon/random.h:252:24: warning: ISO C++17 does not allow ‘register’ storage class specifier [-Wregister]
+  252 |         register Word *curr = state + length - 1;
+      |                        ^~~~
+/builddir/build/BUILD/coin-or-lemon-1.3.1-build/lemon-1.3.1/lemon/random.h:253:23: warning: ISO C++17 does not allow ‘register’ storage class specifier [-Wregister]
+  253 |         register long num;
+      |                       ^~~
+
+--- lemon-1.3.1/lemon/random.h.orig	2014-07-07 08:40:24.966315812 -0600
++++ lemon-1.3.1/lemon/random.h	2024-06-11 12:18:22.364735653 -0600
+@@ -249,8 +249,8 @@ namespace lemon {
+ 
+         current = state + length;
+ 
+-        register Word *curr = state + length - 1;
+-        register long num;
++        Word *curr = state + length - 1;
++        long num;
+ 
+         num = length - shift;
+         while (num--) {

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Gentoo File Manager
+Comment=Manage files in a split view window
+Icon=gentoo
+Exec=gentoo
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=System;FileTools;FileManager;

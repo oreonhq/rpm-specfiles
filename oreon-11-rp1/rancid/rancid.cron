@@ -1,0 +1,7 @@
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+HOME=/var/rancid
+# Run config differ hourly
+1 * * * * rancid RANCIDBINDIR/rancid-run
+3 3 * * * rancid /usr/bin/find /var/log/rancid -type f -mtime +30 -exec /usr/bin/rm {} \;

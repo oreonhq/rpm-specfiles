@@ -1,0 +1,52 @@
+From a5be73c60acb8d1be506f7b5e48e784492ba96ce Mon Sep 17 00:00:00 2001
+From: Simon Larsen <simonhffh@gmail.com>
+Date: Sat, 18 Aug 2018 16:56:32 +0200
+Subject: [PATCH] Updated conf.lua to 11.0 template
+
+---
+ conf.lua | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/conf.lua b/conf.lua
+index f00b216..41d3cbf 100644
+--- a/conf.lua
++++ b/conf.lua
+@@ -1,10 +1,14 @@
+ function love.conf(t)
+     t.identity = "mrrescue"
++    t.appendidentity = false
+     t.version = "11.0"
+     t.console = false
+     t.accelerometerjoystick = true
++    t.externalstorage = false
+     t.gammacorrect = false
+- 
++
++    t.audio.mixwithsystem = true
++
+     t.window.title = "Mr. Rescue"
+     t.window.icon = nil
+     t.window.width = 256*3
+@@ -15,15 +19,17 @@ function love.conf(t)
+     t.window.minheight = 1
+     t.window.fullscreen = false
+     t.window.fullscreentype = "desktop"
+-    t.window.vsync = true
++    t.window.vsync = 1
+     t.window.msaa = 0
+     t.window.display = 1
+     t.window.highdpi = false
+     t.window.x = nil
+     t.window.y = nil
+- 
++
+     t.modules.audio = true
++    t.modules.data = true
+     t.modules.event = true
++    t.modules.font = true
+     t.modules.graphics = true
+     t.modules.image = true
+     t.modules.joystick = true
+-- 
+2.21.1
+

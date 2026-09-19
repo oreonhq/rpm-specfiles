@@ -1,0 +1,14 @@
+Description: Only declare controls once
+Author: Stephen Kitt <skitt@debian.org>
+
+--- a/koules.c
++++ b/koules.c
+@@ -50,7 +50,7 @@
+ 
+ int             lastlevel = 0, maxlevel = 0;
+ unsigned char   control[MAXROCKETS];
+-struct control  controls[MAXROCKETS];
++extern struct control  controls[MAXROCKETS];
+ int             dosprings = 0;
+ int             randsprings = 0;
+ int             nomouse = 0;

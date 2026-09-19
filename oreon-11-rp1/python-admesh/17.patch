@@ -1,0 +1,39 @@
+From 52a68f3d1dd3568dd399ec10b1e5029d0889397d Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 27 May 2025 08:33:05 -0400
+Subject: [PATCH] Drop pytest-runner and "setup.py test" support
+
+---
+ setup.py | 4 ++--
+ tox.ini  | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 0f003dd..9476806 100755
+--- a/setup.py
++++ b/setup.py
+@@ -19,8 +19,8 @@ def _autogen(*args, **kwargs):
+     author_email='miro@hroncok.cz',
+     url='https://github.com/admesh/python-admesh',
+     license='GPLv2+',
+-    setup_requires=['Cython>=0.22', 'pytest-runner'],
+-    tests_require=['pytest'],
++    setup_requires=['Cython>=0.22'],
++    extras_require={'test': ['pytest']},
+     packages=find_packages(),
+     cmdclass={'build_ext': _autogen},
+     ext_modules=[Extension("admesh", ["admesh.pyx"], libraries=["admesh"])],
+diff --git a/tox.ini b/tox.ini
+index b41f291..3e0e723 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -2,7 +2,8 @@
+ envlist = py37,py36,py35,py34,py27,pypy3,pypy
+ [testenv]
+ deps=Cython
+-commands=python setup.py test
++extras=test
++commands=pytest
+ passenv =
+   CFLAGS
+   LDFLAGS

@@ -1,0 +1,11 @@
+--- configure~	2019-09-02 13:38:21.000000000 -0500
++++ configure	2019-09-06 14:52:22.732521608 -0500
+@@ -6225,7 +6225,7 @@
+ 
+ # Flags
+ datdir=$datadir/$PACKAGE
+-hiscoredir=$localstatedir
++hiscoredir=$localstatedir/games
+ configdir="~/.config"
+ debugflags=""
+ # Check whether --enable-install was given.

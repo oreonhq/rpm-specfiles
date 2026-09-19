@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+<id>vim-vala</id>
+<extends>gvim.desktop</extends>
+<name>vim-vala</name>
+<summary>Vala syntax highlighting, indentation, snippets and more for Vim</summary>
+<url type="homepage">https://github.com/vala-lang/vala.vim</url>
+<metadata_license>CC0-1.0</metadata_license>
+<project_license>GPL-3.0-or-later</project_license>
+<update_contact>vim-vala-owner@fedoraproject.org</update_contact>
+</component>

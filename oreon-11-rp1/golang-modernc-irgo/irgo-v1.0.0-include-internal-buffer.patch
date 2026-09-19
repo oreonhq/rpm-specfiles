@@ -1,0 +1,83 @@
+Only in irgo-v1.0.0/: buffer.go
+diff -u irgo-v1.0.0-vanilla/irgo.go irgo-v1.0.0/irgo.go
+--- irgo-v1.0.0-vanilla/irgo.go	2018-11-06 11:48:52.000000000 -0600
++++ irgo-v1.0.0/irgo.go	2023-08-14 10:11:00.613158178 -0500
+@@ -21,7 +21,6 @@
+ 	"strings"
+ 	"unsafe"
+ 
+-	"modernc.org/internal/buffer"
+ 	"modernc.org/ir"
+ 	"modernc.org/mathutil"
+ 	"modernc.org/xc"
+@@ -95,14 +94,14 @@
+ 	mangled   map[cname]ir.NameID
+ 	model     ir.MemoryModel
+ 	obj       []ir.Object
+-	out       *buffer.Bytes
++	out       *Bytes
+ 	postIncs  map[ir.TypeID]struct{}
+ 	preIncs   map[ir.TypeID]struct{}
+ 	stable    map[ir.TypeID]int
+ 	storebits map[ir.TypeID]struct{}
+ 	stores    map[ir.TypeID]struct{}
+ 	strTab    map[ir.StringID]int
+-	strings   buffer.Bytes
++	strings   Bytes
+ 	tc        ir.TypeCache
+ 	tm        map[ir.TypeID]string
+ 	types     map[ir.TypeID]struct{}
+@@ -122,7 +121,7 @@
+ 		mangled:   map[cname]ir.NameID{},
+ 		model:     model,
+ 		obj:       obj,
+-		out:       &buffer.Bytes{},
++		out:       &Bytes{},
+ 		postIncs:  map[ir.TypeID]struct{}{},
+ 		preIncs:   map[ir.TypeID]struct{}{},
+ 		stable:    map[ir.TypeID]int{},
+@@ -176,7 +175,7 @@
+ 		return x
+ 	}
+ 
+-	var buf buffer.Bytes
++	var buf Bytes
+ 
+ 	defer buf.Close()
+ 
+@@ -217,7 +216,7 @@
+ 	}
+ }
+ 
+-func (g *gen) typ0(buf *buffer.Bytes, t ir.Type, full bool) {
++func (g *gen) typ0(buf *Bytes, t ir.Type, full bool) {
+ 	if !full {
+ 		if v, ok := g.tm[t.ID()]; ok {
+ 			buf.WriteString(v)
+@@ -326,7 +325,7 @@
+ }
+ 
+ func (g *gen) fullType(t ir.TypeID) ir.NameID {
+-	var buf buffer.Bytes
++	var buf Bytes
+ 
+ 	defer buf.Close()
+ 
+@@ -335,7 +334,7 @@
+ }
+ 
+ func (g *gen) typ(t ir.Type) ir.NameID {
+-	var buf buffer.Bytes
++	var buf Bytes
+ 
+ 	defer buf.Close()
+ 
+@@ -2097,7 +2096,7 @@
+ 	g.f = newFn(g.tc, f)
+ 	ft := g.f.t
+ 
+-	var buf buffer.Bytes
++	var buf Bytes
+ 
+ 	defer buf.Close()
+ 

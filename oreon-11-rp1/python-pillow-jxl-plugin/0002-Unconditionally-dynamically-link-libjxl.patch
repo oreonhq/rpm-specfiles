@@ -1,0 +1,105 @@
+From 59558aa6a55b9be6c5a0adeb5f1f6ee44cf60957 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Sat, 22 Mar 2025 13:30:36 +0100
+Subject: [PATCH 2/2] Unconditionally dynamically link libjxl
+
+---
+ Cargo.toml     |  4 +---
+ build.rs       | 52 +-------------------------------------------------
+ pyproject.toml |  2 +-
+ 3 files changed, 3 insertions(+), 55 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index e39d868..02e8f8c 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -2,7 +2,6 @@
+ name = "pillow-jxl-plugin"
+ version = "1.3.4"
+ edition = "2021"
+-build = "build.rs"
+ 
+ # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+ [lib]
+@@ -14,6 +13,5 @@ pyo3 = { version="0.25.1", features = ["extension-module"] }
+ jpegxl-rs = { version="0.12.0", default-features = false }
+ 
+ [features]
+-# Enables parallel processing support by enabling the "rayon" feature of jpeg-decoder.
+-vendored = ["jpegxl-rs/vendored"]
++default = ["dynamic"]
+ dynamic = []
+diff --git a/build.rs b/build.rs
+index e8f0895..4eddb1f 100644
+--- a/build.rs
++++ b/build.rs
+@@ -1,55 +1,5 @@
+-use std::env;
+-
+-fn dynamic_link() {
++fn main() {
+     println!("cargo:rustc-link-lib=jxl");
+     println!("cargo:rustc-link-lib=jxl_threads");
+-
+     println!("cargo:rustc-link-lib=hwy");
+-    if let Ok(path) = env::var("DEP_HWY_LIB") {
+-        println!("cargo:rustc-link-search=native={}", path);
+-    }
+-
+-    println!("cargo:rustc-link-lib:+whole-archive=brotlidec");
+-    println!("cargo:rustc-link-lib=brotlienc");
+-    println!("cargo:rustc-link-lib=brotlicommon");
+-    if let Ok(path) = env::var("DEP_BROTLI_LIB") {
+-        println!("cargo:rustc-link-search=native={}", path);
+-    }
+-}
+-
+-fn static_link() {
+-    println!("cargo:rustc-link-lib=static=jxl");
+-    println!("cargo:rustc-link-lib=static=jxl_cms");
+-    println!("cargo:rustc-link-lib=static=jxl_threads");
+-
+-    println!("cargo:rustc-link-lib=static=hwy");
+-    if let Ok(path) = env::var("DEP_HWY_LIB") {
+-        println!("cargo:rustc-link-search=native={}", path);
+-    }
+-
+-    println!("cargo:rustc-link-lib=static:+whole-archive=brotlidec");
+-    println!("cargo:rustc-link-lib=static=brotlienc");
+-    println!("cargo:rustc-link-lib=static=brotlicommon");
+-    if let Ok(path) = env::var("DEP_BROTLI_LIB") {
+-        println!("cargo:rustc-link-search=native={}", path);
+-    }
+-}
+-
+-fn main() {
+-    // Static link libjxl
+-    #[cfg(all(not(feature = "vendored"), not(feature = "dynamic")))]
+-    static_link();
+-
+-    #[cfg(all(not(feature = "vendored"), feature = "dynamic"))]
+-    dynamic_link();
+-
+-    // Dynamic link c++
+-    #[cfg(target_os = "linux")]
+-    {
+-        println!("cargo:rustc-link-lib=stdc++");
+-    }
+-    #[cfg(target_os = "macos")]
+-    {
+-        println!("cargo:rustc-link-lib=c++");
+-    }
+ }
+diff --git a/pyproject.toml b/pyproject.toml
+index a76ac34..f64afba 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -31,4 +31,4 @@ dev = ["numpy", "pytest", "pyexiv2"]
+ "Releases" = "https://github.com/Isotr0py/pillow-jpegxl-plugin/releases"
+ 
+ [tool.maturin]
+-features = ["pyo3/extension-module", "vendored"]
++features = ["pyo3/extension-module"]
+-- 
+2.53.0
+

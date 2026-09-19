@@ -1,0 +1,14 @@
+[Unit]
+Description=CalDAV/CardDAV server with git storage
+After=network-online.target
+Documentation=man:calypso
+
+[Service]
+Type=simple
+User=calypso
+Group=calypso
+PrivateTmp=yes
+ExecStart=/usr/bin/calypso
+
+[Install]
+WantedBy=multi-user.target

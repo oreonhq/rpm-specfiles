@@ -1,0 +1,13 @@
+[Unit]
+Description=vsomeip routing manager
+After=systemd-tmpfiles-setup.service
+Requires=dlt.service
+
+[Service]
+Type=simple
+User=routingmanagerd
+ExecStart=/usr/bin/routingmanagerd
+LimitCORE=infinity
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,11 @@
+--- a/gpr/src/gpr-conf.adb
++++ b/gpr/src/gpr-conf.adb
+@@ -2630,7 +2630,7 @@
+             if Comp_Driver /= null and then Comp_Driver'Length > 0 then
+                Comp_Dir :=
+                  new String'
+-                   (Containing_Directory (Comp_Driver.all));
++                   (Containing_Directory (Normalize_Pathname (Comp_Driver.all, Resolve_Links => True)));
+ 
+                --  Consider only the compiler drivers that are in "bin"
+                --  subdirectories.

@@ -1,0 +1,10 @@
+--- plotlib-0.5.1/Cargo.toml	2020-03-28T11:28:55+00:00
++++ plotlib-0.5.1/Cargo.toml	2023-05-25T11:10:14.724132+00:00
+@@ -25,6 +25,6 @@
+ version = "0.1.7"
+ 
+ [dependencies.svg]
+-version = "0.7.1"
++version = "0.10"
+ [badges.travis-ci]
+ repository = "milliams/plotlib"

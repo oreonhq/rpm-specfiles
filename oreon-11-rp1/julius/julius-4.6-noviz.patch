@@ -1,0 +1,65 @@
+diff -up julius-4.6/julius/configure.in.noviz julius-4.6/julius/configure.in
+--- julius-4.6/julius/configure.in.noviz	2020-09-01 21:28:43.000000000 -0400
++++ julius-4.6/julius/configure.in	2023-10-03 15:31:27.767438179 -0400
+@@ -19,14 +19,6 @@ AC_ARG_ENABLE(charconv,
+ use_charconv=$enableval
+ ,use_charconv=auto)
+ 
+-# visualization (use GTK)
+-AC_ARG_ENABLE(visualize,
+-[  --enable-visualize         enable search space visualization on X11 and GTK],
+-if test "$enableval" = yes; then
+-	want_gtk=yes
+-fi
+-,want_gtk=no)
+-
+ dnl Checks for system.
+ AC_CANONICAL_HOST
+ 
+@@ -57,25 +49,6 @@ dnl Checks for libraries.
+ dnl add '-lLIBRARY' to LIBS and define 'HAVE_LIBLIBRARY'
+ dnl AC_CHECK_LIB(m, log10)
+ 
+-dnl Check for HTK and define GTK_CFLAGS and GTK_LIBS
+-if test "$want_gtk" = yes; then
+-   AC_DEFINE(VISUALIZE)
+-   AM_PATH_GTK(,,AC_MSG_ERROR([gtk not found for visualization]))
+-   AC_MSG_CHECKING(for playing capability)
+-   case "$host_os" in
+-   linux*)
+-	AC_MSG_RESULT([yes])
+-	AC_DEFINE(PLAYCOMMAND, ["sox -r %d -c 1 -s -w -t .raw -x %s -t ossdsp /dev/dsp"])
+-	;;
+-   solaris2*)
+-	AC_MSG_RESULT([yes])
+-	AC_DEFINE(PLAYCOMMAND, ["sox -r %d -c 1 -s -w -t .raw %s -t sunau /dev/audio"])
+-	;;
+-   *)
+-	AC_MSG_RESULT([no])
+-   esac
+-fi
+-
+ dnl Checks for header files.
+ AC_HEADER_STDC
+ 
+diff -up julius-4.6/julius/Makefile.in.noviz julius-4.6/julius/Makefile.in
+--- julius-4.6/julius/Makefile.in.noviz	2023-10-03 15:32:47.952642801 -0400
++++ julius-4.6/julius/Makefile.in	2023-10-03 15:33:13.422025427 -0400
+@@ -19,8 +19,6 @@ CC=@CC@
+ CFLAGS=@CFLAGS@
+ CPPFLAGS=-I. -I$(LIBJULIUS)/include -I$(LIBSENT)/include @CPPFLAGS@ `$(LIBSENT)/libsent-config --cflags` `$(LIBJULIUS)/libjulius-config --cflags`
+ LDFLAGS=@LDFLAGS@ -L$(LIBJULIUS) `$(LIBJULIUS)/libjulius-config --libs` -L$(LIBSENT) `$(LIBSENT)/libsent-config --libs` @LIBICONV@
+-GTK_CFLAGS=@GTK_CFLAGS@
+-GTK_LIBS=@GTK_LIBS@
+ RM=@RM@ -f
+ 
+ ## install
+@@ -54,7 +52,7 @@ record.o \
+ all: $(TARGET)
+ 
+ $(TARGET): $(LIBSENT)/libsent.so.0.0.0 $(LIBJULIUS)/libjulius.so.0.0.0 $(OBJ)
+-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $(OBJ) $(LDFLAGS) $(GTK_LIBS)
++	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $(OBJ) $(LDFLAGS)
+ 
+ ############################################################
+ 

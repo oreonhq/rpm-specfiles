@@ -1,0 +1,1413 @@
+diff --git a/contrib/removespikes.pl b/contrib/removespikes.pl
+index e52908d3..7061cea8 100755
+--- a/contrib/removespikes.pl
++++ b/contrib/removespikes.pl
+@@ -97,10 +97,10 @@ while (<FICH>) {
+   $cdo=0;
+   if ($linea=~/^(.*)<row>/) { $tstamp=$1; }
+   if ($linea=~/(<row>.*)$/) { $tresto=$1; }
+-  if (/<v>\s\d\.\d+e.(\d+)\s<\/v>/) {
++  if (/<v>\s?\d\.\d+e.(\d+)\s?<\/v>/) {
+     @dump = split(/<\/v>/, $tresto);
+     for ($lino=0; $lino<=$#dump-1; $lino++) {   # scans DS's within each row 
+-      if ( $dump[$lino]=~/\d\.\d+e.(\d+)\s/ ) { # make sure it is a number (and not NaN)
++      if ( $dump[$lino]=~/\d\.\d+e.(\d+)\s?/ ) { # make sure it is a number (and not NaN)
+         $a=substr("0$lino",-2).":".$1;
+         $exp{$a}++;                             # store exponents
+         $tot{substr("0$lino",-2)}++;            # and keep a per DS total
+@@ -146,11 +146,11 @@ while (<FICH>) {
+   $cdo=0;
+   if ($linea=~/^(.*)<row>/) { $tstamp=$1; }     # Grab timestamp
+   if ($linea=~/(<row>.*)$/) { $tresto=$1; }     # grab rest-of-line :-)
+-  if (/<v>\s\d\.\d+e.(\d+)\s<\/v>/) {           # are there DS's?
++  if (/<v>\s?\d\.\d+e.(\d+)\s?<\/v>/) {           # are there DS's?
+     @dump=split(/<\/v>/, $tresto);              # split them
+     if ($linbak ne '') {
+       for ($lino=0;$lino<=$#dump-1;$lino++) {   # for each DS:
+-        if ($dump[$lino]=~/\d\.\d+e.(\d+)\s/) { # grab number (and not a NaN)
++        if ($dump[$lino]=~/\d\.\d+e.(\d+)\s?/) { # grab number (and not a NaN)
+ 	  $c=$&;
+           $a=$1*1;                              # and exponent
+           $b=substr("0$lino",-2).":$1";         # calculate the max percentage of this DS
+diff --git a/ganglia.inc b/ganglia.inc
+index 733196a0..df8634a6 100644
+--- a/ganglia.inc
++++ b/ganglia.inc
+@@ -1,11 +1,11 @@
+ 
+ 
+-FIXCONFIG = $(top_srcdir)/scripts/fixconfig
++FIXCONFIG = $(top_builddir)/scripts/fixconfig
+ 
+ # Unfortunately, we can't do this here with a pattern rule because
+ # that is a GNU make feature and is not fully portable
+ #%:	%.in $(FIXCONFIG)
+-#	$(FIXCONFIG) $<
++#	$(FIXCONFIG) $< $@
+ 
+ # For the moment, it is necessary to provide a rule for each file
+ # we want to generate - see the rule for ganglia-config in Makefile.am
+diff --git a/ganglia.pod b/ganglia.pod
+index 42c3a507..de709cbc 100644
+--- a/ganglia.pod
++++ b/ganglia.pod
+@@ -1,5 +1,7 @@
+ =pod
+ 
++=encoding UTF-8
++
+ =for comment The ganglia documentation is written in POD (Plain Old Documentation) 
+ format.  If you want to edit this file but don't know the POD format, it is very
+ easy to learn.  Visit http://www.linuxgazette.com/issue73/spiel.html for a nice intro
+@@ -605,10 +607,12 @@ is only partially complete).
+   machine_type
+   mem_buffers   Amount of buffered memory                l,f
+   mem_cached    Amount of cached memory                  l,f
+-  mem_free      Amount of available memory               l,f
++  mem_free      Amount of free memory available          l,f
+   mem_shared    Amount of shared memory                  l,f
++  mem_slab      Amount of in-kernel data struct cache    l
+   mem_sreclaimable    Amount of slab reclaimable memory  l (kernel >= 2.6.19)
+-  mem_total     Amount of available memory               l,f
++  mem_available Amount of application memory available   l (kernel >= 3.14)
++  mem_total     Amount of total memory available         l,f
+   mtu           Network maximum transmission unit        l,f
+   os_name       Operating system name                    l,f
+   os_release    Operating system release (version)       l,f
+diff --git a/gmetad-python/gmetad-python.service.in b/gmetad-python/gmetad-python.service.in
+index 16918db7..11243979 100644
+--- a/gmetad-python/gmetad-python.service.in
++++ b/gmetad-python/gmetad-python.service.in
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Ganglia Meta Daemon in Python
+-After=network.target
++After=network-online.target
+ 
+ [Service]
+ ExecStart=@bindir@/gmetad.py -f
+diff --git a/gmetad/export_helpers.c b/gmetad/export_helpers.c
+index 2c126e2e..8ee3b6c8 100644
+--- a/gmetad/export_helpers.c
++++ b/gmetad/export_helpers.c
+@@ -349,10 +349,11 @@ path_macro_replace(char *path, graphite_path_macro *patrn)
+ 	char *prefix; 
+ 	char *suffix;
+ 	char *offset;     
++	int i;
+ 
+ 	strncpy(final, path, PATHSIZE);
+ 	strncpy(path_cp, path, PATHSIZE);
+-	for(int i=0; patrn[i].torepl != 0; i++){
++	for(i=0; patrn[i].torepl != 0; i++){
+ 		while((offset = strstr(path_cp, patrn[i].torepl)))
+ 		{
+ 			prefix=path_cp; //pointer to the beginning of path_cp (for clarity)
+diff --git a/gmetad/gmetad.c b/gmetad/gmetad.c
+index 60ade92c..21d5b2f3 100644
+--- a/gmetad/gmetad.c
++++ b/gmetad/gmetad.c
+@@ -323,7 +323,7 @@ write_root_summary(datum_t *key, datum_t *val, void *arg)
+        return 0;
+ 
+    /* Don't write a summary for metris that appears to be sFlow VM metrics */
+-   if (gmetad_config.unsummarized_sflow_vm_metrics && (p = strchr(name, '.')) != NULL && *(p+1) == 'v')
++   if (gmetad_config.unsummarized_sflow_vm_metrics && (p = strrchr(name, '.')) != NULL && *(p+1) == 'v')
+      return 0;
+ 
+    ganglia_scoreboard_inc(METS_SUMRZ_ROOT);
+@@ -341,7 +341,8 @@ write_root_summary(datum_t *key, datum_t *val, void *arg)
+ 
+    debug_msg("Writing Root Summary data for metric %s", name);
+ 
+-   rc = write_data_to_rrd( NULL, NULL, name, sum, num, 15, 0, metric->slope);
++   rc = write_data_to_rrd( NULL, NULL, name, sum, num, 15, 0,
++      cstr_to_slope(getfield(metric->strings, metric->slope)));
+    if (rc)
+       {
+          err_msg("Unable to write meta data for metric %s to RRD", name);
+@@ -610,12 +611,12 @@ main ( int argc, char *argv[] )
+          /* Sum the new values */
+          hash_foreach(root.authority, do_root_summary, NULL );
+ 
+-         /* summary completed */
+-         pthread_mutex_unlock(root.sum_finished);
+-
+          /* Save them to RRD */
+          hash_foreach(root.metric_summary, write_root_summary, NULL);
+ 
++         /* summary completed */
++         pthread_mutex_unlock(root.sum_finished);
++
+          /* Remember our last run */
+          now = apr_time_now();
+          last_metadata = now;  //Updating global variable
+diff --git a/gmetad/gmetad.service.in b/gmetad/gmetad.service.in
+index 8234e90e..d7800655 100644
+--- a/gmetad/gmetad.service.in
++++ b/gmetad/gmetad.service.in
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Ganglia Meta Daemon
+-After=network.target
++After=network-online.target
+ 
+ [Service]
+ Type=forking
+diff --git a/gmetad/process_xml.c b/gmetad/process_xml.c
+index 15abc75c..fc28701e 100644
+--- a/gmetad/process_xml.c
++++ b/gmetad/process_xml.c
+@@ -1172,7 +1172,7 @@ finish_processing_source(datum_t *key, datum_t *val, void *arg)
+       return 0;
+ 
+    /* Don't save to RRD if this metrics appears to be an sFlow VM metrics */
+-   if (gmetad_config.unsummarized_sflow_vm_metrics && (p = strchr(name, '.')) != NULL && *(p+1) == 'v')
++   if (gmetad_config.unsummarized_sflow_vm_metrics && (p = strrchr(name, '.')) != NULL && *(p+1) == 'v')
+        return 0;
+ 
+    switch (tt->type)
+diff --git a/gmetad/rrd_helpers.c b/gmetad/rrd_helpers.c
+index 740799a5..e38c6514 100644
+--- a/gmetad/rrd_helpers.c
++++ b/gmetad/rrd_helpers.c
+@@ -276,8 +276,8 @@ RRD_create( char *rrd, int summary, unsigned int step,
+            heartbeat);
+    argv[argc++] = sum;
+    if (summary) {
+-      sprintf(num,"DS:num:%s:%d:U:U", 
+-              data_source_type,
++      sprintf(num,"DS:num:%s:%d:U:U",
++              "GAUGE",
+               heartbeat);
+       argv[argc++] = num;
+    }
+diff --git a/gmetad/server.c b/gmetad/server.c
+index 28188e75..24083122 100644
+--- a/gmetad/server.c
++++ b/gmetad/server.c
+@@ -68,7 +68,11 @@ static const struct metricinfo
+   {
+   "cpu_sintr", cpu_sintr_func, g_float},
+   {
+-  "cpu_steal", cpu_steal_func, g_uint16},
++  "cpu_steal", cpu_steal_func, g_float},
++  {
++  "cpu_guest", cpu_guest_func, g_float},
++  {
++  "cpu_gnice", cpu_gnice_func, g_float},
+   {
+   "load_one", load_one_func, g_float},
+   {
+@@ -115,6 +119,10 @@ static const struct metricinfo
+   #ifdef LINUX
+   "mem_sreclaimable", mem_sreclaimable_func, g_float},
+   {
++  "mem_slab", mem_slab_func, g_float},
++  {
++  "mem_available", mem_available_func, g_float},
++  {
+   #endif
+   #ifdef SOLARIS
+   "bread_sec", bread_sec_func, g_float},
+diff --git a/gmetric/gmetric.c b/gmetric/gmetric.c
+index 8e8da980..3328b08a 100644
+--- a/gmetric/gmetric.c
++++ b/gmetric/gmetric.c
+@@ -113,7 +113,8 @@ main( int argc, char *argv[] )
+   if(args_info.group_given)
+     {
+       char *last;
+-      for (char *group = apr_strtok(args_info.group_arg, ", ", &last); group != NULL; group = apr_strtok(NULL, ", ", &last)) {
++      char *group;
++      for (group = apr_strtok(args_info.group_arg, ", ", &last); group != NULL; group = apr_strtok(NULL, ", ", &last)) {
+         Ganglia_metadata_add(gmetric, "GROUP", group);
+       }
+     }
+diff --git a/gmond/conf.pod b/gmond/conf.pod
+index 96531574..a4971631 100644
+--- a/gmond/conf.pod
++++ b/gmond/conf.pod
+@@ -166,6 +166,10 @@ For example, in a 32-bit Intel compatible Linux host that is usually:
+ 
+   /usr/lib/ganglia
+ 
++The B<tags> parameter is optional, and may be used to include arbitrary
++information in various output produced by Gmond, including the XML.
++It will be included as the I<TAGS> attribute of the <HOST> XML tab.
++
+ =head2 udp_send_channel
+ 
+ You can define as many B<udp_send_channel> sections as you like within
+diff --git a/gmond/g25_config.c b/gmond/g25_config.c
+index d295ab64..98721817 100644
+--- a/gmond/g25_config.c
++++ b/gmond/g25_config.c
+@@ -373,5 +373,6 @@ print_ganglia_25_config( char *path )
+    dotconf_cleanup(configfile);
+ 
+    print_config(path, &gmond_config);
++   fclose(fp);
+    return 0;
+ }
+diff --git a/gmond/gmond.c b/gmond/gmond.c
+index 7790e981..04a4b024 100644
+--- a/gmond/gmond.c
++++ b/gmond/gmond.c
+@@ -775,16 +775,15 @@ setup_listen_channels_pollset( void )
+ 
+                   if(buffer)
+                     {
+-                      /* RB: getsockopt() returns double SO_RCVBUF since kernel reserves overhead space */
++                      /* NOTE: getsockopt() returns double SO_RCVBUF on Linux for reserved overhead space */
+                       if(rx_buf_sz!=(buffer*2))
+                         {
+-                          err_msg("Error setting UDP receive buffer for port %d bind=%s to size: %d.\n",
++                          err_msg("WARNING When setting UDP receive buffer for port %d bind=%s to size: %d.\n",
+                             port, bindaddr? bindaddr: "unspecified", (apr_int32_t) buffer);
+-                          err_msg("Reported buffer size by OS: %d : does not match config setting %d.\n",
+-                            (int) (rx_buf_sz/2), (int) buffer);
+-                          err_msg("NOTE: only supported on systems that have Apache Portable Runtime library version 0.9.4 or higher.\n");
+-                          err_msg("Check Operating System (kernel) limits, change or disable buffer size. Exiting.\n");
+-                          exit(EXIT_FAILURE);
++                          err_msg("Reported raw buffer size by OS: %d : config setting %d. Unable to verify\n",
++                            (int) rx_buf_sz, (int) buffer);
++                          err_msg("NOTE: Linux will report twice the configured value.  See socket(7).\n");
++                          err_msg("Check Operating System (kernel) limits, change or disable buffer size.\n");
+                         }
+                       else
+                         { /* RB: Eureka */
+@@ -1013,34 +1012,49 @@ Ganglia_host_get( char *remIP, apr_sockaddr_t *sa, Ganglia_metric_id *metric_id)
+ 
+   /* split out the spoofed host name and ip address so that it can
+    * be used to get the spoofed host. */
+-  if(metric_id && metric_id->spoof)
++  if(metric_id && metric_id->spoof && metric_id->host)
+     {
+-      char *spoofName;
+-      char *spoofIP;
+       int spoof_info_len;
+ 
+       spoof_info_len = strlen(metric_id->host);
+-      buff = malloc(spoof_info_len+1);
+-      strncpy(buff, metric_id->host, spoof_info_len + 1);
+-      spoofIP = buff;
+-      if( !(spoofName = strchr(buff+1,':')) ){
+-          err_msg("Incorrect format for spoof argument. exiting.\n");
+-          if (spoofIP) debug_msg("spoofIP: %s \n",spoofIP);
+-          if (buff) debug_msg("buff: %s \n",buff);
+-          if (buff) free(buff);
++      /* don't bother if the host string is empty */
++      if(spoof_info_len > 0)
++        {
++          char *spoofName;
++          char *spoofIP;
++          
++          buff = malloc(spoof_info_len+1);
++          if(buff == NULL)
++            {
++              err_msg("Unable to allocate spoof argument parse buffer. exiting.\n");
++              return NULL;
++            }
++          strncpy(buff, metric_id->host, spoof_info_len + 1);
++          spoofIP = buff;
++          if( !(spoofName = strchr(buff+1,':')) ){
++              err_msg("Incorrect format for spoof argument (no colon delimiter). exiting.\n");
++              if (spoofIP) debug_msg("spoofIP: %s \n",spoofIP);
++              if (buff) debug_msg("buff: %s \n",buff);
++              if (buff) free(buff);
++              return NULL;
++          }
++          *spoofName = 0;
++          spoofName++;
++          if(!(*spoofName)){
++              err_msg("Incorrect format for spoof argument (empty hostname). exiting.\n");
++              if (buff) free(buff);
++              return NULL;
++          }
++          debug_msg(" spoofName: %s    spoofIP: %s \n",spoofName,spoofIP);
++          
++          hostname = spoofName;
++          remoteip = spoofIP;
++        }
++      else
++        {
++          err_msg("Incorrect format for spoof argument (host string empty). exiting.\n");
+           return NULL;
+-      }
+-      *spoofName = 0;
+-      spoofName++;
+-      if(!(*spoofName)){
+-          err_msg("Incorrect format for spoof argument. exiting.\n");
+-          if (buff) free(buff);
+-          return NULL;
+-      }
+-      debug_msg(" spoofName: %s    spoofIP: %s \n",spoofName,spoofIP);
+-
+-      hostname = spoofName;
+-      remoteip = spoofIP;
++        }
+     }
+ 
+   apr_thread_mutex_lock(hosts_mutex);
+@@ -2030,13 +2044,20 @@ process_tcp_accept_channel(const apr_pollfd_t *desc, apr_time_t now)
+   channel        = desc->client_data;
+ 
+   /* Create a context for the client connection */
+-  apr_pool_create(&client_context, global_context);
++  status = apr_pool_create(&client_context, global_context);
++  if(status != APR_SUCCESS)
++    {
++      return;
++    }
+ 
+   /* Accept the connection */
+   status = apr_socket_accept(&client, server, client_context);
+   if(status != APR_SUCCESS)
+     {
+-      goto close_accept_socket;
++      debug_msg("failed to accept");
++      /* Failed to accept, socket was not created
++       * Clear a prepared client context */
++      goto clear_client_context;
+     }
+ 
+   /* Set the timeout for writing to the client */
+@@ -2144,6 +2165,7 @@ process_tcp_accept_channel(const apr_pollfd_t *desc, apr_time_t now)
+ close_accept_socket:
+   apr_socket_shutdown(client, APR_SHUTDOWN_READ);
+   apr_socket_close(client);
++clear_client_context:
+   apr_pool_destroy(client_context);
+ }
+ 
+@@ -2298,6 +2320,7 @@ load_metric_modules( void )
+ {
+     cfg_t *tmp;
+     int j;
++    apr_hash_t *modules_loaded = apr_hash_make(global_context);
+ 
+     tmp = cfg_getsec( config_file, "modules");
+     for (j = 0; j < cfg_size(tmp, "module"); j++) 
+@@ -2309,6 +2332,7 @@ load_metric_modules( void )
+         apr_array_header_t *modParams_list = NULL;
+         int k, modEnabled;
+         apr_status_t merge_ret;
++        char *module_key = NULL;
+ 
+         cfg_t *module = cfg_getnsec(tmp, "module", j);
+ 
+@@ -2345,6 +2369,17 @@ load_metric_modules( void )
+           }
+         modName = cfg_getstr(module, "name");
+         modparams = cfg_getstr(module, "params");
++
++
++        /* Check that we haven't loaded this module already, now
++         * that we've pulled the module name and path */
++        module_key = apr_pstrcat(global_context, modName, ":", modPath, NULL);
++        debug_msg("loading %s @ %s", modName, modPath);
++        if (NULL != apr_hash_get(modules_loaded, module_key, APR_HASH_KEY_STRING)) {
++            err_quit("Attempt to load module %s @ %s more than once.", modName, modPath);
++            continue;
++        }
++
+         modParams_list = apr_array_make(global_context, 2, sizeof(mmparam));
+ 
+         for (k = 0; k < cfg_size(module, "param"); k++) 
+@@ -2372,6 +2407,7 @@ load_metric_modules( void )
+             continue;
+           }
+         debug_msg("loaded module: %s", modName);
++        apr_hash_set(modules_loaded, module_key, APR_HASH_KEY_STRING, apr_pstrdup(global_context, "true"));
+ 
+         /*
+          * Retrieve the pointer to the module structure through the module name.
+@@ -2976,7 +3012,13 @@ Ganglia_collection_group_send( Ganglia_collection_group *group, apr_time_t now)
+             name = cb->msg.Ganglia_value_msg_u.gstr.metric_id.name;
+             if (override_hostname != NULL)
+               {
+-                cb->msg.Ganglia_value_msg_u.gstr.metric_id.host = apr_pstrcat(gm_pool, (char *)( override_ip != NULL ? override_ip : override_hostname ), ":", (char *) override_hostname, NULL);
++                /* Since cb will live beyond this function call, we need to
++                 * allocate the host field from the global pool and NOT the
++                 * temporary gm_pool from the metric object.  (Note that
++                 * Ganglia_metric_callback objects are allocated from
++                 * global_context elsewhere in this file.)
++                 */
++                cb->msg.Ganglia_value_msg_u.gstr.metric_id.host = apr_pstrcat(global_context, (char *)( override_ip != NULL ? override_ip : override_hostname ), ":", (char *) override_hostname, NULL);
+                 cb->msg.Ganglia_value_msg_u.gstr.metric_id.spoof = TRUE;
+               }
+             val = apr_pstrdup(gm_pool, host_metric_value(cb->info, &(cb->msg)));
+@@ -3294,6 +3336,7 @@ main ( int argc, char *argv[] )
+ {
+   apr_time_t now, next_collection, last_cleanup;
+   apr_pool_t *cleanup_context;
++  apr_thread_t *tcp_listener_thread = NULL;
+ 
+   gmond_argv = argv;
+ 
+@@ -3415,8 +3458,7 @@ main ( int argc, char *argv[] )
+   /* Create TCP listener thread */
+   if(!deaf)
+     {
+-      apr_thread_t *thread;
+-      if (apr_thread_create(&thread, NULL, tcp_listener, NULL, global_context) != APR_SUCCESS)
++      if (apr_thread_create(&tcp_listener_thread, NULL, tcp_listener, NULL, global_context) != APR_SUCCESS)
+         {
+           err_msg("Failed to create TCP listener thread. Exiting.\n");
+           exit(EXIT_FAILURE);
+@@ -3477,6 +3519,16 @@ main ( int argc, char *argv[] )
+         }
+     }
+ 
++  if(tcp_listener_thread)
++    {
++      apr_status_t status = SUCCESS;
++      if((status = apr_thread_join(&status, tcp_listener_thread)) != APR_SUCCESS)
++        {
++          char buff[512];
++          debug_msg("apr_thread_join returned unexpected status %d = %s\n", status, apr_strerror(status, buff, 511));
++        }
++    }
++
+   apr_pool_destroy(global_context);
+ 
+   if(reload_required == 1)
+diff --git a/gmond/gmond.service.in b/gmond/gmond.service.in
+index 3fd136b4..13774e80 100644
+--- a/gmond/gmond.service.in
++++ b/gmond/gmond.service.in
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Ganglia Monitor Daemon
+-After=network.target
++After=network-online.target
+ 
+ [Service]
+ Type=forking
+diff --git a/gmond/modules/cpu/mod_cpu.c b/gmond/modules/cpu/mod_cpu.c
+index c5323a7b..f510dabb 100644
+--- a/gmond/modules/cpu/mod_cpu.c
++++ b/gmond/modules/cpu/mod_cpu.c
+@@ -58,6 +58,10 @@ static g_val_t cpu_metric_handler ( int metric_index )
+         return cpu_sintr_func();
+     case 10:
+         return cpu_steal_func();
++    case 11:
++        return cpu_guest_func();
++    case 12:
++        return cpu_gnice_func();
+     }
+ 
+     /* default case */
+@@ -78,6 +82,8 @@ static Ganglia_25metric cpu_metric_info[] =
+     {0, "cpu_intr",     90, GANGLIA_VALUE_FLOAT,          "%",    "both", "%.1f", UDP_HEADER_SIZE+8, "cpu_intr"},
+     {0, "cpu_sintr",    90, GANGLIA_VALUE_FLOAT,          "%",    "both", "%.1f", UDP_HEADER_SIZE+8, "cpu_sintr"},
+     {0, "cpu_steal",    90, GANGLIA_VALUE_FLOAT,          "%",    "both", "%.1f", UDP_HEADER_SIZE+8, "cpu_steal"},
++    {0, "cpu_guest",    90, GANGLIA_VALUE_FLOAT,          "%",    "both", "%.1f", UDP_HEADER_SIZE+8, "cpu_guest"},
++    {0, "cpu_gnice",    90, GANGLIA_VALUE_FLOAT,          "%",    "both", "%.1f", UDP_HEADER_SIZE+8, "cpu_gnice"},
+     {0, NULL}
+ 
+ };
+diff --git a/gmond/modules/cpu/mod_multicpu.c b/gmond/modules/cpu/mod_multicpu.c
+index 253e0969..f57bad76 100644
+--- a/gmond/modules/cpu/mod_multicpu.c
++++ b/gmond/modules/cpu/mod_multicpu.c
+@@ -76,6 +76,8 @@ static cpu_util *cpu_wio = NULL;
+ static cpu_util *cpu_intr = NULL;
+ static cpu_util *cpu_sintr = NULL;
+ static cpu_util *cpu_steal = NULL;
++static cpu_util *cpu_guest = NULL;
++static cpu_util *cpu_gnice = NULL;
+ 
+ /*
+  * A helper function to determine the number of cpustates in /proc/stat (MKN)
+@@ -102,6 +104,10 @@ static void init_cpu_info (void)
+     ** Loop over file until next "cpu" token is found.
+     ** i=4 : Linux 2.4.x
+     ** i=7 : Linux 2.6.x
++    **
++    ** i=8 : Linux 2.6.11+
++    ** i=9 : Linux 2.6.24+
++    ** i=10: Linux 2.6.33+
+     */
+     while (strncmp(p,"cpu",3)) {
+         p = skip_token(p);
+@@ -190,7 +196,8 @@ static char *find_cpu (char *p, int cpu_index, double *total_jiffies)
+ static double total_jiffies_func (char *p)
+ {
+     unsigned long user_jiffies, nice_jiffies, system_jiffies, idle_jiffies,
+-        wio_jiffies, irq_jiffies, sirq_jiffies, steal_jiffies;
++        wio_jiffies, irq_jiffies, sirq_jiffies, steal_jiffies,
++        guest_jiffies, gnice_jiffies;
+ 
+     user_jiffies = strtod( p, &p );
+     p = skip_whitespace(p);
+@@ -216,6 +223,10 @@ static double total_jiffies_func (char *p)
+ 
+     p = skip_whitespace(p);
+     steal_jiffies = strtod( p , &p );
++    p = skip_whitespace(p);
++    guest_jiffies = strtod( p , &p ); /* "guest" included in user already */
++    p = skip_whitespace(p);
++    gnice_jiffies = strtod( p , &p ); /* "gnice" included in nice already */
+     return user_jiffies + nice_jiffies + system_jiffies + idle_jiffies +
+         wio_jiffies + irq_jiffies + sirq_jiffies + steal_jiffies;
+ }   
+@@ -457,7 +468,7 @@ static cpu_util *init_metric (apr_pool_t *p, apr_array_header_t *ar, int cpu_cou
+ static g_val_t multi_cpu_steal_func (int cpu_index)
+ {
+     char *p;
+-    cpu_util *cpu = &(cpu_user[cpu_index]);
++    cpu_util *cpu = &(cpu_steal[cpu_index]);
+ 
+     p = update_file(&proc_stat);
+     if((proc_stat.last_read.tv_sec != cpu->stamp.tv_sec) &&
+@@ -479,6 +490,59 @@ static g_val_t multi_cpu_steal_func (int cpu_index)
+     return cpu->val;
+ }
+ 
++static g_val_t multi_cpu_guest_func (int cpu_index)
++{
++    char *p;
++    cpu_util *cpu = &(cpu_guest[cpu_index]);
++
++    p = update_file(&proc_stat);
++    if((proc_stat.last_read.tv_sec != cpu->stamp.tv_sec) &&
++       (proc_stat.last_read.tv_usec != cpu->stamp.tv_usec)) {
++        cpu->stamp = proc_stat.last_read;
++
++        p = find_cpu (p, cpu_index, &cpu->curr_total_jiffies);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_whitespace(p);
++        calculate_utilization (p, cpu);
++    }
++
++    return cpu->val;
++}
++
++static g_val_t multi_cpu_gnice_func (int cpu_index)
++{
++    char *p;
++    cpu_util *cpu = &(cpu_gnice[cpu_index]);
++
++    p = update_file(&proc_stat);
++    if((proc_stat.last_read.tv_sec != cpu->stamp.tv_sec) &&
++       (proc_stat.last_read.tv_usec != cpu->stamp.tv_usec)) {
++        cpu->stamp = proc_stat.last_read;
++
++        p = find_cpu (p, cpu_index, &cpu->curr_total_jiffies);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_token(p);
++        p = skip_whitespace(p);
++        calculate_utilization (p, cpu);
++    }
++
++    return cpu->val;
++}
++
+ static int ex_metric_init (apr_pool_t *p)
+ {
+     int i;
+@@ -515,6 +579,10 @@ static int ex_metric_init (apr_pool_t *p)
+                             "executing at the sintr level");
+     cpu_steal = init_metric (pool, metric_info, cpu_count, "multicpu_steal",
+                             "Percentage of CPU preempted by the hypervisor");
++    cpu_guest = init_metric (pool, metric_info, cpu_count, "multicpu_guest",
++                            "Percentage of CPU running a virtual CPU");
++    cpu_gnice = init_metric (pool, metric_info, cpu_count, "multicpu_gnice",
++                            "Percentage of CPU running a niced guest");
+ 
+     /* Add a terminator to the array and replace the empty static metric definition 
+         array with the dynamic array that we just created 
+@@ -574,6 +642,12 @@ static g_val_t ex_metric_handler ( int metric_index )
+     if (strcmp(name, "multicpu_steal") == 0)
+         return multi_cpu_steal_func(index);
+ 
++    if (strcmp(name, "multicpu_guest") == 0)
++        return multi_cpu_guest_func(index);
++
++    if (strcmp(name, "multicpu_gnice") == 0)
++        return multi_cpu_gnice_func(index);
++
+     /* default case */
+     val.f = 0;
+     return val;
+diff --git a/gmond/modules/memory/mod_mem.c b/gmond/modules/memory/mod_mem.c
+index feb8d99c..98c0812c 100644
+--- a/gmond/modules/memory/mod_mem.c
++++ b/gmond/modules/memory/mod_mem.c
+@@ -50,6 +50,10 @@ static g_val_t mem_metric_handler ( int metric_index )
+ #ifdef LINUX
+     case 7:
+         return mem_sreclaimable_func();
++    case 8:
++        return mem_slab_func();
++    case 9:
++        return mem_available_func();
+ #endif
+ #if HPUX
+     case 7:
+@@ -79,6 +83,8 @@ static Ganglia_25metric mem_metric_info[] =
+     {0, "swap_total", 1200, GANGLIA_VALUE_FLOAT, "KB", "zero", "%.0f", UDP_HEADER_SIZE+8, "Total amount of swap space displayed in KBs"},
+ #ifdef LINUX
+     {0, "mem_sreclaimable", 180, GANGLIA_VALUE_FLOAT, "KB", "both", "%.0f", UDP_HEADER_SIZE+8, "Amount of reclaimable slab memory"},
++    {0, "mem_slab",    180, GANGLIA_VALUE_FLOAT, "KB", "both", "%.0f", UDP_HEADER_SIZE+8, "Amount of in-kernel data structures cache"},
++    {0, "mem_available",    180, GANGLIA_VALUE_FLOAT, "KB", "both", "%.0f", UDP_HEADER_SIZE+8, "Estimate of how much memory is available"},
+ #endif
+ #if HPUX
+     {0, "mem_arm",     180, GANGLIA_VALUE_FLOAT, "KB", "both", "%.0f", UDP_HEADER_SIZE+8, "mem_arm"},
+diff --git a/gmond/python_modules/apache_status/apache_status.py b/gmond/python_modules/apache_status/apache_status.py
+index e33e5ea9..580e8931 100755
+--- a/gmond/python_modules/apache_status/apache_status.py
++++ b/gmond/python_modules/apache_status/apache_status.py
+@@ -86,6 +86,10 @@ def get_metrics():
+                     for sck in split_line[1]:
+                         metrics[ Scoreboard_bykey[sck] ] += 1
+                 else:
++                    # Apache > 2.4.16 inserts the hostname as the first line, so ignore
++                    if len(split_line) == 1:
++                        continue
++                    
+                     if long_metric_name in Metric_Map:
+                         metric_name = Metric_Map[long_metric_name]
+                     else:
+diff --git a/gmond/python_modules/network/multi_interface.py b/gmond/python_modules/network/multi_interface.py
+index 3f9b45d0..456704b8 100644
+--- a/gmond/python_modules/network/multi_interface.py
++++ b/gmond/python_modules/network/multi_interface.py
+@@ -247,7 +247,7 @@ def get_aggregates(name):
+         except KeyError:
+             delta = 0.0
+ 
+-    sum += delta
++        sum += delta
+ 
+     return sum
+ 
+diff --git a/gmond/python_modules/network/netstats.py b/gmond/python_modules/network/netstats.py
+index f9c6795f..66c378d2 100644
+--- a/gmond/python_modules/network/netstats.py
++++ b/gmond/python_modules/network/netstats.py
+@@ -19,6 +19,8 @@ stats_files = ["/proc/net/netstat", "/proc/net/snmp"]
+ 
+ LAST_METRICS = copy.deepcopy(METRICS)
+ METRICS_CACHE_MAX = 5
++# Metrics that are not counters but absolute values
++ABSOLUTE_VALUES = ["currestab"]
+ 
+ stats_pos = {}
+ 
+@@ -46,6 +48,8 @@ def get_metrics():
+                     count = 0
+                     metrics = re.split("\s+", line)
+                     metric_group = metrics[0].replace(":", "").lower()
++                    if metric_group not in stats_pos:
++                        continue
+                     new_metrics[metric_group] = dict()
+                     for value in metrics:
+                         # Skip first
+@@ -69,12 +73,15 @@ def get_metrics():
+ def get_value(name):
+     """Return a value for the requested metric"""
+ 
+-    metrics = get_metrics()[0]
++    # get metrics
++    [curr_metrics, last_metrics] = get_metrics()
+ 
+-    name = name[len(NAME_PREFIX):]  # remove prefix from name
++    parts = name.split("_")
++    group = parts[0]
++    metric = "_".join(parts[1:])
+ 
+     try:
+-        result = metrics['data'][name]
++        result = float(curr_metrics['data'][group][metric])
+     except StandardError:
+         result = 0
+ 
+@@ -209,11 +216,17 @@ def metric_init(params):
+ 
+     for group in stats_pos:
+         for item in stats_pos[group]:
+-            descriptors.append(create_desc(Desc_Skel, {
++            if stats_pos[group][item] in ABSOLUTE_VALUES:
++                descriptors.append(create_desc(Desc_Skel, {
+                     "name"       : group + "_" + stats_pos[group][item],
+-                    "description": stats_pos[group][item],
+-                    'groups'     : group
+-                    }))
++                    "call_back"  : get_value,
++                    "groups"     : group
++                }))
++            else:
++                descriptors.append(create_desc(Desc_Skel, {
++                    "name"       : group + "_" + stats_pos[group][item],
++                    "groups"     : group
++                }))
+ 
+     descriptors.append(create_desc(Desc_Skel, {
+         "name"       : "tcpext_tcploss_percentage",
+@@ -221,7 +234,7 @@ def metric_init(params):
+         "description": "TCP percentage loss, tcploss / insegs + outsegs",
+         "units"      : "pct",
+         'groups'     : 'tcpext'
+-        }))
++    }))
+ 
+     descriptors.append(create_desc(Desc_Skel, {
+         "name"       : "tcp_attemptfails_percentage",
+@@ -229,7 +242,7 @@ def metric_init(params):
+         "description": "TCP attemptfail percentage, tcpattemptfail / insegs + outsegs",
+         "units"      : "pct",
+         'groups'     : 'tcp'
+-        }))
++    }))
+ 
+     descriptors.append(create_desc(Desc_Skel, {
+         "name"       : "tcp_retrans_percentage",
+@@ -237,7 +250,7 @@ def metric_init(params):
+         "description": "TCP retrans percentage, retranssegs / insegs + outsegs",
+         "units"      : "pct",
+         'groups'     : 'tcp'
+-        }))
++    }))
+ 
+     return descriptors
+ 
+@@ -247,12 +260,12 @@ def metric_cleanup():
+     pass
+ 
+ 
+-#This code is for debugging and unit testing
++# This code is for debugging and unit testing
+ if __name__ == '__main__':
+     descriptors = metric_init(PARAMS)
+     while True:
+         for d in descriptors:
+             v = d['call_back'](d['name'])
+-            print '%s = %s' % (d['name'],  v)
++            print '%s = %s' % (d['name'], v)
+         print 'Sleeping 15 seconds'
+         time.sleep(15)
+diff --git a/gmond/python_modules/process/procstat.py b/gmond/python_modules/process/procstat.py
+index b26849b2..93ff9a9c 100644
+--- a/gmond/python_modules/process/procstat.py
++++ b/gmond/python_modules/process/procstat.py
+@@ -383,6 +383,8 @@ def metric_init(params):
+ 
+         mem = {
+             'units': 'B',
++            'value_type': 'float',
++            'format': '%.0f',
+             'description': 'The total memory utilization'}
+     )
+ 
+diff --git a/gmond/sflow.c b/gmond/sflow.c
+index 80154ed7..5e633634 100644
+--- a/gmond/sflow.c
++++ b/gmond/sflow.c
+@@ -303,7 +303,8 @@ submit_sflow_string(Ganglia_host *hostdata, char *metric_prefix, EnumSFLOWGMetri
+   char mtitle_buf[SFLOW_MAX_METRIC_NAME_LEN];
+   if(ok || sflowCFG.submit_null_str) {
+     set_metric_name_and_title(&mname, &mtitle, mname_buf, mtitle_buf, metric_prefix, tag);
+-    fmsg.id = vmsg.id = gmetric_uint;
++    //fmsg.id = vmsg.id = gmetric_uint;
++    fmsg.id = vmsg.id = gmetric_string;
+     fmsg.Ganglia_metadata_msg_u.gfull.metric.type = "string";
+     vmsg.Ganglia_value_msg_u.gstr.metric_id.name = mname;
+     vmsg.Ganglia_value_msg_u.gstr.str = (ok ? (char *)val : sflowCFG.null_str);
+@@ -400,7 +401,7 @@ process_struct_CPU(SFlowXDR *x, SFlowDataSource *dataSource, Ganglia_host *hostd
+ 
+     if(steal_and_guest) {
+       cpu_total += delta_cpu_steal;
+-      /* Note: cpu_guest is included in cpu_idle
++      /* Note: cpu_guest is included in cpu_user
+        * and cpu_guest_nice is included in cpu_nice
+        * so they do not contribute to cpu_total.
+        */
+@@ -1188,6 +1189,7 @@ processCounterSample(SFlowXDR *x, char **errorMsg)
+     SFLOWXDR_skip(x,4);
+     
+     machine_type = SFLOWXDR_next(x);
++
+     os_name = SFLOWXDR_next(x);
+     osrelease_len = SFLOWXDR_next(x);
+     if(osrelease_len > 0 && osrelease_len <= SFLOW_MAX_OSRELEASE_LEN) {
+diff --git a/gmond/sflow_gmetric.h b/gmond/sflow_gmetric.h
+index d85c36e7..f8811da2 100644
+--- a/gmond/sflow_gmetric.h
++++ b/gmond/sflow_gmetric.h
+@@ -20,7 +20,7 @@ SFLOW_GMETRIC(SFLOW_M_cpu_intr, "cpu_intr", "", GANGLIA_SLOPE_BOTH, "%.2f", "cpu
+ SFLOW_GMETRIC(SFLOW_M_cpu_sintr, "cpu_sintr", "", GANGLIA_SLOPE_BOTH, "%.2f", "cpu", NULL, "CPU Soft Interrupts" )
+ SFLOW_GMETRIC(SFLOW_M_cpu_steal, "cpu_steal", "%", GANGLIA_SLOPE_BOTH, "%.2f", "cpu", NULL, "CPU Steal" )
+ SFLOW_GMETRIC(SFLOW_M_cpu_guest, "cpu_guest", "%", GANGLIA_SLOPE_BOTH, "%.2f", "cpu", NULL, "CPU Guest" )
+-SFLOW_GMETRIC(SFLOW_M_cpu_guest_nice, "cpu_guest_nice", "%", GANGLIA_SLOPE_BOTH, "%.2f", "cpu", NULL, "CPU Guest Nice" )
++SFLOW_GMETRIC(SFLOW_M_cpu_guest_nice, "cpu_gnice", "%", GANGLIA_SLOPE_BOTH, "%.2f", "cpu", NULL, "CPU Guest Nice" )
+ SFLOW_GMETRIC(SFLOW_M_interrupts, "interrupts", "", GANGLIA_SLOPE_BOTH, "%.0f", "cpu", NULL, "Interrupts" )
+ SFLOW_GMETRIC(SFLOW_M_contexts, "contexts", "", GANGLIA_SLOPE_BOTH, "%.0f", "cpu", NULL, "Context Switches" )
+ SFLOW_GMETRIC(SFLOW_M_mem_total, "mem_total", "KB", GANGLIA_SLOPE_ZERO, "%.0f", "memory", NULL, "Memory Total" )
+diff --git a/lib/default_conf.h.in b/lib/default_conf.h.in
+index 142115f6..3f9e5b9f 100644
+--- a/lib/default_conf.h.in
++++ b/lib/default_conf.h.in
+@@ -71,7 +71,7 @@ udp_recv_channel {\n\
+   bind = 239.2.11.71\n\
+   retry_bind = true\n\
+   # Size of the UDP buffer. If you are handling lots of metrics you really\n\
+-  # should bump it up to e.g. 10MB or even higher.\n\ 
++  # should bump it up to e.g. 10MB or even higher.\n\
+   # buffer = 10485760\n\
+ }\n\
+ \n\
+@@ -270,6 +270,19 @@ collection_group {\n\
+     title = \"CPU sintr\"\n\
+   }\n\
+   */\n\
++  /* The next two metrics are optional if you want more detail...\n\
++     ... since they are accounted for in cpu_user and cpu_nice.\n\
++  metric {\n\
++    name = \"cpu_guest\"\n\
++    value_threshold = \"1.0\"\n\
++    title = \"CPU guest\"\n\
++  }\n\
++  metric {\n\
++    name = \"cpu_gnice\"\n\
++    value_threshold = \"1.0\"\n\
++    title = \"CPU gnice\"\n\
++  }\n\
++  */\n\
+ }\n\
+ \n\
+ collection_group {\n\
+@@ -397,6 +410,24 @@ include (\"" SYSCONFDIR "/conf.d/*.conf\")\n\
+ \n\
+ "
+ 
++#define LINUX_SPECIFIC_CONFIGURATION "\
++collection_group {\n\
++  collect_every = 40\n\
++  time_threshold = 180\n\
++  metric {\n\
++    name = \"mem_available\"\n\
++    value_threshold = \"1024.0\"\n\
++    title = \"Available Memory\"\n\
++  }\n\
++  metric {\n\
++    name = \"mem_sreclaimable\"\n\
++    value_threshold = \"1024.0\"\n\
++    title = \"Slab Memory Reclaimable\"\n\
++  }\n\
++}\n\
++\n\
++"
++
+ #define SOLARIS_SPECIFIC_CONFIGURATION "\
+ /* solaris specific metrics begin */\n\
+ collection_group {\n\
+diff --git a/lib/hash.c b/lib/hash.c
+index a1d41e76..de922533 100644
+--- a/lib/hash.c
++++ b/lib/hash.c
+@@ -346,6 +346,10 @@ hash_delete (datum_t *key, hash_t * hash)
+   for (; bucket != NULL; last = bucket, bucket = bucket->next)
+     {
+       node_t tmp;
++      if (bucket->key && !hash_keycmp(hash, key, bucket->key))
++        {
++          continue;
++        }
+       if (bucket == &hash->node[i]) 
+         {
+           tmp.key = bucket->key;
+diff --git a/lib/libgmond.c b/lib/libgmond.c
+index f5eb32f1..d378d8e9 100644
+--- a/lib/libgmond.c
++++ b/lib/libgmond.c
+@@ -26,7 +26,11 @@
+ #include <dirent.h>
+ #include <fnmatch.h>
+ 
+-static char myhost[APRMAXHOSTLEN+1];
++/* functions throughout this file will initialize this
++ * variable if myhost[0] == '\0', so ensure the compiler
++ * initializes it as an empty string:
++ */
++static char myhost[APRMAXHOSTLEN+1] = "";
+ 
+ /***** IMPORTANT ************
+ Any changes that you make to this file need to be reconciled in ./conf.pod
+@@ -210,6 +214,9 @@ build_default_gmond_configuration(Ganglia_pool p)
+   default_gmond_configuration = apr_pstrcat(context, default_gmond_configuration, SFLOW_CONFIGURATION, NULL);
+ #endif
+   default_gmond_configuration = apr_pstrcat(context, default_gmond_configuration, COLLECTION_GROUP_LIST, NULL);
++#if LINUX
++  default_gmond_configuration = apr_pstrcat(context, default_gmond_configuration, LINUX_SPECIFIC_CONFIGURATION, NULL);
++#endif
+ #if SOLARIS
+   default_gmond_configuration = apr_pstrcat(context, default_gmond_configuration, SOLARIS_SPECIFIC_CONFIGURATION, NULL);
+ #endif
+diff --git a/libmetrics/darwin/metrics.c b/libmetrics/darwin/metrics.c
+index 690e88ed..c9940eba 100644
+--- a/libmetrics/darwin/metrics.c
++++ b/libmetrics/darwin/metrics.c
+@@ -37,7 +37,7 @@
+ #include <sys/socket.h>
+ #include <stdio.h>
+ 
+-/* Added for disk statstics */
++/* Added for disk statistics */
+ #include <sys/param.h>
+ #include <sys/ucred.h>
+ #include <sys/mount.h>
+@@ -467,6 +467,28 @@ cpu_sintr_func ( void )
+    return val;
+ }
+ 
++/*
++** FIXME
++*/
++g_val_t 
++cpu_guest_func ( void )
++{
++   g_val_t val;
++   val.f = 0.0;
++   return val;
++}
++
++/*
++** FIXME
++*/
++g_val_t 
++cpu_gnice_func ( void )
++{
++   g_val_t val;
++   val.f = 0.0;
++   return val;
++}
++
+ 
+ g_val_t 
+ bytes_in_func ( void )
+diff --git a/libmetrics/libmetrics.h b/libmetrics/libmetrics.h
+index fab9a092..947a387f 100644
+--- a/libmetrics/libmetrics.h
++++ b/libmetrics/libmetrics.h
+@@ -55,6 +55,8 @@ void libmetrics_init( void );
+  g_val_t cpu_intr_func(void);
+  g_val_t cpu_sintr_func(void);
+  g_val_t cpu_steal_func(void);
++ g_val_t cpu_guest_func(void);
++ g_val_t cpu_gnice_func(void);
+  g_val_t bytes_in_func(void);
+  g_val_t bytes_out_func(void);
+  g_val_t pkts_in_func(void);
+@@ -77,7 +79,10 @@ void libmetrics_init( void );
+  g_val_t location_func(void);
+ 
+ #ifdef LINUX
++ g_val_t mem_available_func (void);
++ g_val_t mem_slab_func (void);
+  g_val_t mem_sreclaimable_func (void);
++ g_val_t mem_sunreclaim_func (void);
+ #endif
+ 
+ /* the following are additional internal metrics added by swagner
+diff --git a/libmetrics/linux/metrics.c b/libmetrics/linux/metrics.c
+index 62e7314b..456abe33 100644
+--- a/libmetrics/linux/metrics.c
++++ b/libmetrics/linux/metrics.c
+@@ -104,6 +104,8 @@ num_cpustates_func ( void )
+ ** i=4 : Linux 2.4.x
+ ** i=7 : Linux 2.6.x
+ ** i=8 : Linux 2.6.11
++** i=9 : Linux 2.6.24
++** i=10 : Linux 2.6.33
+ */
+    while (strncmp(p, "cpu", 3)) {
+      p = skip_token(p);
+@@ -262,7 +264,11 @@ void update_ifdata ( char *caller )
+                        l_bytes_in += rbi - ns->rbi;
+                     } else {
+                        debug_msg("update_ifdata(%s) - Overflow in rbi: %"PRI_STAT" -> %"PRI_STAT,caller,ns->rbi,rbi);
+-                       l_bytes_in += STAT_MAX - ns->rbi + rbi;
++                       if ( ns->rbi <= ULONG_MAX ) { /* assume it's more reasonable that the counter rolled over at ULONG_MAX than ULLONG_MAX */
++                          l_bytes_in += ULONG_MAX - ns->rbi + rbi;
++                       } else {
++                          l_bytes_in += STAT_MAX - ns->rbi + rbi;
++                       }
+                     }
+                     ns->rbi = rbi;
+ 
+@@ -271,7 +277,11 @@ void update_ifdata ( char *caller )
+                        l_pkts_in += rpi - ns->rpi;
+                     } else {
+                        debug_msg("updata_ifdata(%s) - Overflow in rpi: %"PRI_STAT" -> %"PRI_STAT,caller,ns->rpi,rpi);
+-                       l_pkts_in += STAT_MAX - ns->rpi + rpi;
++                       if ( ns->rpi <= ULONG_MAX ) {
++                          l_pkts_in += ULONG_MAX - ns->rpi + rpi;
++                       } else {
++                          l_pkts_in += STAT_MAX - ns->rpi + rpi;
++                       }
+                     }
+                     ns->rpi = rpi;
+ 
+@@ -284,7 +294,11 @@ void update_ifdata ( char *caller )
+                        l_bytes_out += rbo - ns->rbo;
+                     } else {
+                        debug_msg("update_ifdata(%s) - Overflow in rbo: %"PRI_STAT" -> %"PRI_STAT,caller,ns->rbo,rbo);
+-                       l_bytes_out += STAT_MAX - ns->rbo + rbo;
++                       if ( ns->rbo <= ULONG_MAX ) {
++                          l_bytes_out += ULONG_MAX - ns->rbo + rbo;
++                       } else {
++                          l_bytes_out += STAT_MAX - ns->rbo + rbo;
++                       }
+                     }
+                     ns->rbo = rbo;
+ 
+@@ -293,7 +307,11 @@ void update_ifdata ( char *caller )
+                        l_pkts_out += rpo - ns->rpo;
+                     } else {
+                        debug_msg("update_ifdata(%s) - Overflow in rpo: %"PRI_STAT" -> %"PRI_STAT,caller,ns->rpo,rpo);
+-                       l_pkts_out += STAT_MAX - ns->rpo + rpo;
++                       if ( ns->rpo <= ULONG_MAX ) {
++                          l_pkts_out += ULONG_MAX - ns->rpo + rpo;
++                       } else {
++                          l_pkts_out += STAT_MAX - ns->rpo + rpo;
++                       }
+                     }
+                     ns->rpo = rpo;
+                   }
+@@ -593,36 +611,30 @@ machine_type_func ( void )
+ 
+ #ifdef __i386__
+    snprintf(val.str, MAX_G_STRING_SIZE, "x86");
+-#endif
+-#ifdef __x86_64__
++#elif __x86_64__
+    snprintf(val.str, MAX_G_STRING_SIZE, "x86_64");
+-#endif
+-#ifdef __ia64__
++#elif __ia64__
+    snprintf(val.str, MAX_G_STRING_SIZE, "ia64");
+-#endif
+-#ifdef __sparc__
++#elif __sparc__
+    snprintf(val.str, MAX_G_STRING_SIZE, "sparc");
+-#endif
+-#ifdef __alpha__
++#elif __alpha__
+    snprintf(val.str, MAX_G_STRING_SIZE, "alpha");
+-#endif
+-#ifdef __powerpc__
++#elif __powerpc__
+    snprintf(val.str, MAX_G_STRING_SIZE, "powerpc");
+-#endif
+-#ifdef __m68k__
++#elif __m68k__
+    snprintf(val.str, MAX_G_STRING_SIZE, "m68k");
+-#endif
+-#ifdef __mips__
++#elif __mips__
+    snprintf(val.str, MAX_G_STRING_SIZE, "mips");
+-#endif
+-#ifdef __arm__
++#elif __arm__
+    snprintf(val.str, MAX_G_STRING_SIZE, "arm");
+-#endif
+-#ifdef __hppa__
++#elif __aarch64__
++   snprintf(val.str, MAX_G_STRING_SIZE, "aarch64");
++#elif __hppa__
+    snprintf(val.str, MAX_G_STRING_SIZE, "hppa");
+-#endif
+-#ifdef __s390__
++#elif __s390__
+    snprintf(val.str, MAX_G_STRING_SIZE, "s390");
++#else
++   snprintf(val.str, MAX_G_STRING_SIZE, "unknown");
+ #endif
+ 
+    return val;
+@@ -691,6 +703,8 @@ total_jiffies_func ( void )
+    p = skip_whitespace(p);
+    steal_jiffies = strtod( p, &p );
+ 
++   /* guest is included in user already, and gnice is included in nice */
++
+    return user_jiffies + nice_jiffies + system_jiffies + idle_jiffies +
+           wio_jiffies + irq_jiffies + sirq_jiffies + steal_jiffies;
+ }
+@@ -1056,6 +1070,89 @@ cpu_steal_func ( void )
+    return val;
+ }
+ 
++g_val_t
++cpu_guest_func ( void )
++{
++   char *p;
++   static g_val_t val;
++   static struct timeval stamp={0,0};
++   static double last_guest_jiffies,  guest_jiffies,
++                 last_total_jiffies, total_jiffies, diff;
++
++   p = update_file(&proc_stat);
++   if((proc_stat.last_read.tv_sec != stamp.tv_sec) &&
++      (proc_stat.last_read.tv_usec != stamp.tv_usec)) {
++     stamp = proc_stat.last_read;
++
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     guest_jiffies  = strtod( p , (char **)NULL );
++     total_jiffies = total_jiffies_func();
++
++     diff = guest_jiffies - last_guest_jiffies;
++
++     if ( diff )
++       val.f = (diff/(total_jiffies - last_total_jiffies))*100;
++     else
++       val.f = 0.0;
++
++     last_guest_jiffies  = guest_jiffies;
++     last_total_jiffies = total_jiffies;
++
++   }
++
++   return val;
++}
++
++g_val_t
++cpu_gnice_func ( void )
++{
++   char *p;
++   static g_val_t val;
++   static struct timeval stamp={0,0};
++   static double last_gnice_jiffies,  gnice_jiffies,
++                 last_total_jiffies, total_jiffies, diff;
++
++   p = update_file(&proc_stat);
++   if((proc_stat.last_read.tv_sec != stamp.tv_sec) &&
++      (proc_stat.last_read.tv_usec != stamp.tv_usec)) {
++     stamp = proc_stat.last_read;
++
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     p = skip_token(p);
++     gnice_jiffies  = strtod( p , (char **)NULL );
++     total_jiffies = total_jiffies_func();
++
++     diff = gnice_jiffies - last_gnice_jiffies;
++
++     if ( diff )
++       val.f = (diff/(total_jiffies - last_total_jiffies))*100;
++     else
++       val.f = 0.0;
++
++     last_gnice_jiffies  = gnice_jiffies;
++     last_total_jiffies = total_jiffies;
++
++   }
++
++   return val;
++}
++
+ g_val_t
+ load_one_func ( void )
+ {
+@@ -1150,6 +1247,23 @@ mem_free_func ( void )
+    return val;
+ }
+ 
++g_val_t
++mem_available_func ( void )
++{
++   char *p;
++   g_val_t val;
++
++   p = strstr( update_file(&proc_meminfo), "MemAvailable:" );
++   if (p) {
++     p = skip_token(p);
++     val.f = atof( p );
++   } else {
++     val.f = 0.0;
++   }
++
++   return val;
++}
++
+ g_val_t
+ mem_shared_func ( void )
+ {
+@@ -1187,6 +1301,23 @@ mem_buffers_func ( void )
+    return val;
+ }
+ 
++g_val_t
++mem_slab_func ( void )
++{
++   char *p;
++   g_val_t val;
++
++   p = strstr( update_file(&proc_meminfo), "Slab:" );
++   if(p) {
++     p = skip_token(p);
++     val.f = atof( p );
++   } else {
++     val.f = 0;
++   }
++
++   return val;
++}
++
+ g_val_t
+ mem_sreclaimable_func ( void )
+ {
+@@ -1204,6 +1335,23 @@ mem_sreclaimable_func ( void )
+    return val;
+ }
+ 
++g_val_t
++mem_sunreclaim_func ( void )
++{
++   char *p;
++   g_val_t val;
++
++   p = strstr( update_file(&proc_meminfo), "SUnreclaim:" );
++   if(p) {
++     p = skip_token(p);
++     val.f = atof( p );
++   } else {
++     val.f = 0;
++   }
++
++   return val;
++}
++
+ g_val_t
+ mem_cached_func ( void )
+ {
+@@ -1388,7 +1536,8 @@ float find_disk_space(double *total_size, double *total_free)
+       if (!strncmp(mode, "ro", 2)) continue;
+       if (remote_mount(device, type)) continue;
+       if (strncmp(device, "/dev/", 5) != 0 &&
+-          strncmp(device, "/dev2/", 6) != 0) continue;
++          strncmp(device, "/dev2/", 6) != 0 &&
++          strncmp(type, "zfs", 3) != 0) continue;
+       thispct = device_space(mount, device, total_size, total_free);
+       debug_msg("Counting device %s (%.2f %%)", device, thispct);
+       if (!max || max<thispct)
+diff --git a/libmetrics/openbsd/metrics.c b/libmetrics/openbsd/metrics.c
+index c148deb9..5ea5f3c7 100644
+--- a/libmetrics/openbsd/metrics.c
++++ b/libmetrics/openbsd/metrics.c
+@@ -21,6 +21,7 @@
+ #include <sys/swap.h>
+ #include <uvm/uvm_param.h>
+ #include <sys/proc.h>
++#include <sys/vmmeter.h>
+ 
+ #include <sys/socket.h>
+ #include <net/if.h>
+@@ -485,6 +486,28 @@ cpu_steal_func ( void )
+ 	return val;
+ }
+ 
++/*
++** FIXME
++*/
++g_val_t 
++cpu_guest_func ( void )
++{
++   g_val_t val;
++   val.f = 0.0;
++   return val;
++}
++
++/*
++** FIXME
++*/
++g_val_t 
++cpu_gnice_func ( void )
++{
++   g_val_t val;
++   val.f = 0.0;
++   return val;
++}
++
+ g_val_t
+ mem_free_func ( void )
+ {
+diff --git a/libmetrics/solaris/metrics.c b/libmetrics/solaris/metrics.c
+index 93ca213b..b7000171 100644
+--- a/libmetrics/solaris/metrics.c
++++ b/libmetrics/solaris/metrics.c
+@@ -1366,3 +1366,26 @@ cpu_steal_func ( void )
+    return val;
+ }
+ 
++
++/*
++** FIXME
++*/
++g_val_t 
++cpu_guest_func ( void )
++{
++   g_val_t val;
++   val.f = 0.0;
++   return val;
++}
++
++/*
++** FIXME
++*/
++g_val_t 
++cpu_gnice_func ( void )
++{
++   g_val_t val;
++   val.f = 0.0;
++   return val;
++}
++
+diff --git a/libmetrics/tests/test-metrics.c b/libmetrics/tests/test-metrics.c
+index e87717f4..b3ae3bac 100644
+--- a/libmetrics/tests/test-metrics.c
++++ b/libmetrics/tests/test-metrics.c
+@@ -41,6 +41,10 @@ static const struct metricinfo
+   {
+   "cpu_nice", cpu_nice_func, g_float},
+   {
++  "cpu_guest", cpu_guest_func, g_float},
++  {
++  "cpu_gnice", cpu_gnice_func, g_float},
++  {
+   "cpu_system", cpu_system_func, g_float},
+   {
+   "cpu_idle", cpu_idle_func, g_float},

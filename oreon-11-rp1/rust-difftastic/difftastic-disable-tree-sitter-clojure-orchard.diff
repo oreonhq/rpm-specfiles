@@ -1,0 +1,75 @@
+--- a/src/parse/guess_language.rs
++++ b/src/parse/guess_language.rs
+@@ -22,7 +22,6 @@ pub(crate) enum Language {
+     Apex,
+     Bash,
+     C,
+-    Clojure,
+     CMake,
+     CommonLisp,
+     CPlusPlus,
+@@ -123,7 +122,6 @@ pub(crate) fn language_name(language: La
+         Apex => "Apex",
+         Bash => "Bash",
+         C => "C",
+-        Clojure => "Clojure",
+         CMake => "CMake",
+         CommonLisp => "Common Lisp",
+         CPlusPlus => "C++",
+@@ -245,10 +243,6 @@ pub(crate) fn language_globs(language: L
+         ],
+         Apex => &["*.cls", "*.apexc", "*.trigger"],
+         C => &["*.c"],
+-        Clojure => &[
+-            "*.bb", "*.boot", "*.clj", "*.cljc", "*.clje", "*.cljs", "*.cljx", "*.edn", "*.joke",
+-            "*.joker",
+-        ],
+         CMake => &["*.cmake", "*.cmake.in", "CMakeLists.txt"],
+         CommonLisp => &["*.lisp", "*.lsp", "*.asd"],
+         // Treat .h as C++ rather than C. This is an arbitrary choice, but
+@@ -528,7 +522,6 @@ fn from_emacs_mode_header(src: &str) ->
+         return Some(match mode_name.to_ascii_lowercase().trim() {
+             "ada" => Ada,
+             "c" => C,
+-            "clojure" => Clojure,
+             "csharp" => CSharp,
+             "css" => Css,
+             "dart" => Dart,
+--- a/src/parse/tree_sitter_parser.rs
++++ b/src/parse/tree_sitter_parser.rs
+@@ -181,24 +181,6 @@ pub(crate) fn from_language(language: gu
+                 sub_languages: vec![],
+             }
+         }
+-        Clojure => {
+-            let language_fn = tree_sitter_clojure_orchard::LANGUAGE;
+-            let language = tree_sitter::Language::new(language_fn);
+-
+-            TreeSitterConfig {
+-                language: language.clone(),
+-                atom_nodes: ["kwd_lit", "regex_lit"].into_iter().collect(),
+-                delimiter_tokens: vec![("{", "}"), ("(", ")"), ("[", "]")]
+-                    .into_iter()
+-                    .collect(),
+-                highlight_query: ts::Query::new(
+-                    &language,
+-                    tree_sitter_clojure_orchard::HIGHLIGHTS_QUERY,
+-                )
+-                .unwrap(),
+-                sub_languages: vec![],
+-            }
+-        }
+         CMake => {
+             let language_fn = tree_sitter_cmake::LANGUAGE;
+             let language = tree_sitter::Language::new(language_fn);
+--- a/src/diff/sliders.rs
++++ b/src/diff/sliders.rs
+@@ -60,7 +60,7 @@ fn prefer_outer_delimiter(language: gues
+     match language {
+         // For Lisp family languages, we get the best result with the
+         // outer delimiter.
+-        EmacsLisp | Clojure | CommonLisp | Janet | Racket | Scheme | Newick => true,
++        EmacsLisp | CommonLisp | Janet | Racket | Scheme | Newick => true,
+         // JSON and TOML are like Lisp: the outer delimiter in an array object
+         // is the most relevant.
+         Json | Toml | Hcl => true,

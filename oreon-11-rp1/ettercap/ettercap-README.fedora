@@ -1,0 +1,17 @@
+Ettercap has been split into the following 4 packages:
+
+1. ettercap: Ettercap without GTK support
+2. ettercap-gtk: Ettercap with GTK support
+3. ettercap-plugins: The plugins provided in the upstream source.
+4. ettercan-commons: Files and documentation needed by both ettercap and 
+ettercap-gtk
+
+To run the GTK version, simply use the Desktop icon provided.  To run the
+Text or Curses verions, use the ettercap-tui binary.  In any case, you
+may still select your UI with command-line flags, -T, -C and -G, or use
+ettercap-text and ettercap-curses.
+
+"alternatives --config ettercap" allows switching between default tui and
+default gui if both packages are installed.
+
+If upgrading from 0.7.3-13.1 or earlier, please run "rpm -e ettercap ettercap-gtk --noscripts" prior to upgrading.

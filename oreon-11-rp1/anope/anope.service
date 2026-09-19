@@ -1,0 +1,16 @@
+[Unit]
+Description=Anope IRC services
+After=network.target
+
+[Service]
+User=anope
+Group=anope
+Type=forking
+PIDFile=/run/anope/anope.pid
+EnvironmentFile=-/etc/sysconfig/anope
+ExecStart=/usr/sbin/anope $OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

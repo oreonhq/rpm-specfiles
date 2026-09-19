@@ -1,5 +1,5 @@
-%global source0_hash d53877d3f17d2848be99ad9eb0a8986d31ad759db8a6834f6a8c6afa4eccc139
-%global source1_hash 4b8334d9a5d7842dea9a677a7146397e22d215f062f5af2a7384e86c9d6c26c9
+%global source0_hash b1909754c3b531853dae44d17d788f9b7a7d0b10f76893d13ce8848cb7ed5a055f448dc829bfaab64a3cda1326dacec07949bdd8d2e543ed05b09ce28efeaf2e
+%global source1_hash 6261a9ab885bc2575dc8b6167a70530ef13a6cd2277d4983afe72fef6b74c2edad55bc29a9bc8c8b863a5ec4b46e07d250391d20964caab9bdb1416575d25130
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        A range of footnote options
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/footmisc.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/footmisc.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/footmisc.tar.xz#/footmisc.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/footmisc.doc.tar.xz#/footmisc.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-footmisc-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-footmisc-doc <= 11:%{version}
@@ -25,8 +25,8 @@ Provides:       tex(footmisc.sty)
 A range of footnote options.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

@@ -1,0 +1,25 @@
+From 51dcbb15216d3ee4bae3cae54478a1783ddbdd6e Mon Sep 17 00:00:00 2001
+From: Charalampos Stratakis <cstratak@redhat.com>
+Date: Thu, 10 Jul 2025 00:22:21 +0200
+Subject: [PATCH] Remove click's upper version bound
+
+---
+ requirements.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/requirements.txt b/requirements.txt
+index 7c2cfe8..b87247a 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -3,7 +3,7 @@ mnemonic>=0.20
+ shamir-mnemonic>=0.3.0
+ slip10>=1.0.1
+ requests>=2.4.0
+-click>=7,<8.2
++click>=7
+ libusb1>=1.6.4
+ construct>=2.9,!=2.10.55
+ typing_extensions>=4.7.1
+-- 
+2.50.0
+

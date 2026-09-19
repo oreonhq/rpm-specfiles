@@ -1,0 +1,30 @@
+--- dua-cli-2.32.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ dua-cli-2.32.2/Cargo.toml	2026-02-14T21:31:24.720164+00:00
+@@ -60,9 +60,6 @@
+ [dependencies.anyhow]
+ version = "1.0.31"
+ 
+-[dependencies.atty]
+-version = "0.2.11"
+-
+ [dependencies.bstr]
+ version = "1.8.0"
+ 
+@@ -93,7 +90,7 @@
+ version = "0.2.0"
+ 
+ [dependencies.gix-glob]
+-version = "0.17.0"
++version = "0.22.1"
+ 
+ [dependencies.gix-path]
+ version = "0.10.10"
+@@ -134,7 +131,7 @@
+ version = "0.12.1"
+ 
+ [dependencies.trash]
+-version = "5.2.0"
++version = ">=3,<6"
+ features = [
+     "coinit_apartmentthreaded",
+     "chrono",

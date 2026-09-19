@@ -1,0 +1,22 @@
+From 2cd3a04050f2fa447d8a9c8265f32f25f4cb6546 Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Mon, 13 Nov 2023 09:36:10 -0700
+Subject: [PATCH] Give cblas_ssyrk a return type
+
+---
+ fflas-ffpack/config-blas.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fflas-ffpack/config-blas.h b/fflas-ffpack/config-blas.h
+index e503ab382..ea452a1be 100644
+--- a/fflas-ffpack/config-blas.h
++++ b/fflas-ffpack/config-blas.h
+@@ -288,7 +288,7 @@ extern "C" {
+             sgemm_ ( EXT_BLAS_TRANSPOSE(TransA), EXT_BLAS_TRANSPOSE(TransB), &M, &N, &K, &alpha, A, &lda, B, &ldb, &beta, C, &ldc);
+     }
+ 
+-    static inline cblas_ssyrk(const enum CBLAS_ORDER Order, const enum CBLAS_UPLO Uplo,
++    static inline void cblas_ssyrk(const enum CBLAS_ORDER Order, const enum CBLAS_UPLO Uplo,
+                               const enum CBLAS_TRANSPOSE Trans, const int N, const int K,
+                               const float alpha, const float *A, const int lda,
+                               const float beta, float *C, const int ldc){

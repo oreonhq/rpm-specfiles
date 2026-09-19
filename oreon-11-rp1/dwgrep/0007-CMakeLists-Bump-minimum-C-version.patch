@@ -1,0 +1,37 @@
+From cdbcb214a57ecc00422537ec8a041f67c369f9fb Mon Sep 17 00:00:00 2001
+From: Petr Machata <me@pmachata.org>
+Date: Mon, 13 May 2024 12:12:08 +0200
+Subject: [PATCH 07/10] CMakeLists: Bump minimum C++ version
+
+As of v1.14.0, gtest requires C++>=14. This as a ten-year old standard at
+this point, so bumping the minimum requirement to that version seems
+reasonable. Do it.
+
+Signed-off-by: Petr Machata <me@pmachata.org>
+---
+ CMakeLists.txt | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 24be3cf..4dd1ae2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,11 +16,11 @@ INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR})
+ SET (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+ 
+ INCLUDE (CheckCXXCompilerFlag)
+-CHECK_CXX_COMPILER_FLAG ("-std=c++11" COMPILER_SUPPORTS_CXX11)
+-IF (COMPILER_SUPPORTS_CXX11)
+-  SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
++CHECK_CXX_COMPILER_FLAG ("-std=c++14" COMPILER_SUPPORTS_CXX14)
++IF (COMPILER_SUPPORTS_CXX14)
++  SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+ ELSE ()
+-  MESSAGE (FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support.")
++  MESSAGE (FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support.")
+ ENDIF ()
+ 
+ SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wnon-virtual-dtor -O2 -g")
+-- 
+2.51.0
+

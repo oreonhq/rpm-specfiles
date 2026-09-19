@@ -1,0 +1,29 @@
+--- vcsgraph-0.2.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ vcsgraph-0.2.0/Cargo.toml	2025-01-18T17:50:09.488795+00:00
+@@ -22,15 +22,6 @@
+ [lib]
+ name = "vcsgraph"
+ 
+-[[bin]]
+-name = "testing"
+-path = "src/testing/main.rs"
+-required-features = ["cli"]
+-
+-[[bin]]
+-name = "analytics"
+-path = "src/analytics/main.rs"
+-required-features = ["cli"]
+ [dependencies.hex]
+ version = "0.4.2"
+ 
+@@ -39,10 +30,3 @@
+ 
+ [dependencies.sha-1]
+ version = "0.9.6"
+-
+-[dependencies.structopt]
+-version = "0.3"
+-optional = true
+-
+-[features]
+-cli = ["structopt"]

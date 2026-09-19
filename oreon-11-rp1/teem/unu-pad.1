@@ -1,0 +1,92 @@
+.TH UNU\-PAD "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-pad \- pad along each axis to make a bigger
+.I nrrd
+.SH SYNOPSIS
+.B unu\ pad
+.BR \-min , \-\-minimum
+.RI < pos0 \ ...>
+.BR \-max , \-\-maximum
+.RI < pos0 \ ...>
+.RB [ \-b , \-\-boundary
+.RI < behavior >]
+.RB [ \-v , \-\-value
+.RI < val >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Pad along each axis to make a bigger
+.IR nrrd .
+.IP \(bu +2n
+Uses
+.B nrrdPad_nva
+.SH OPTIONS
+.TP
+.B \-min\fR\ <\fIpos0\fR\ ...>\ ,\ \fB\-\-minimum\fR\ <\fIpos0\fR\ ...>
+low corner of bounding box.
+.RS +7n
+.IP \(bu 2
+.RI < int >
+gives 0\-based index
+.IP \(bu 2
+.BR M ,
+.BR M\+ <\fIint\fR>,
+.BR M\- <\fIint\fR>
+give index relative to the last sample on the axis
+.RB ( M== \fI#samples \-1 ).
+.RE
+.IP
+(1 or more
+.IR position s)
+.TP
+.B \-max\fR\ <\fIpos0\fR\ ...>\ ,\ \fB\-\-maximum\fR\ <\fIpos0\fR\ ...>
+high corner of bounding box.
+.RS +7n
+.IP \(bu 2
+.RI < int >
+gives 0\-based index
+.IP \(bu 2
+.BR M ,
+.BR M\+ <\fIint\fR>,
+.BR M\- <\fIint\fR>
+give index relative to the last sample on the axis
+.RB ( M== \fI#samples \-1 ).
+.RE
+.IP
+(1 or more
+.IR position s)
+.TP
+.B \-b\fR\ <\fIbehavior\fR>\ ,\ \fB\-\-boundary\fR\ <\fIbehavior\fR>
+How to handle samples beyond the input bounds:
+.RS +7n
+.IP \(bu 2
+.RB \(lq pad \(rq:
+use some specified value
+.IP \(bu 2
+.RB \(lq bleed \(rq:
+extend border values outward
+.IP \(bu 2
+.RB \(lq mirror \(rq:
+repeated reflections
+.IP \(bu 2
+.RB \(lq wrap \(rq:
+wrap-around to other side
+.RE
+.IP
+default:
+.RB \(lq bleed \(rq
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

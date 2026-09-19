@@ -1,0 +1,112 @@
+From fc65e21b1fe12cb3d51a8bc8152efbebedabbd6f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?S=C3=A9rgio=20M=2E=20Basto?= <sergio@serjux.com>
+Date: Wed, 7 Oct 2015 04:25:20 +0100
+Subject: [PATCH 02/10] Install man/man3/, BTW like in libmp4v2-1.5.0.1
+
+And fix 30 annoying warnings "target x given more than once in the same
+rule"
+---
+ GNUmakefile.am     | 73 ++++++++++++++++++++++++++++++++++++++++++++++
+ doc/GNUmakefile.mk |  2 +-
+ 2 files changed, 74 insertions(+), 1 deletion(-)
+
+diff --git a/GNUmakefile.am b/GNUmakefile.am
+index 947e6e3..ea45d75 100644
+--- a/GNUmakefile.am
++++ b/GNUmakefile.am
+@@ -296,6 +296,79 @@ if ADD_MANS
+         doc/man/man1/mp4file.1      \
+         doc/man/man1/mp4subtitle.1  \
+         doc/man/man1/mp4track.1
++    man3_MANS = \
++		doc/MP4.3 \
++		doc/MP4AddRtpESConfigurationPacket.3 \
++		doc/MP4AddRtpHint.3 \
++		doc/MP4AddRtpImmediateData.3 \
++		doc/MP4AddRtpPacket.3 \
++		doc/MP4AddRtpSampleData.3 \
++		doc/MP4AddRtpVideoHint.3 \
++		doc/MP4AddTrackEdit.3 \
++		doc/MP4AppendHintTrackSdp.3 \
++		doc/MP4AppendSessionSdp.3 \
++		doc/MP4BinaryToBase16.3 \
++		doc/MP4BinaryToBase64.3 \
++		doc/MP4CloneTrack.3 \
++		doc/MP4ConvertFromMovieDuration.3 \
++		doc/MP4ConvertFromTrackTimestamp.3 \
++		doc/MP4ConvertToTrackTimestamp.3 \
++		doc/MP4CopyTrack.3 \
++		doc/MP4DeleteTrack.3 \
++		doc/MP4DeleteTrackEdit.3 \
++		doc/MP4FindTrackId.3 \
++		doc/MP4FindTrackIndex.3 \
++		doc/MP4GetAudioProfileLevel.3 \
++		doc/MP4GetDuration.3 \
++		doc/MP4GetGraphicsProfileLevel.3 \
++		doc/MP4GetHintTrackReferenceTrackId.3 \
++		doc/MP4GetHintTrackRtpPayload.3 \
++		doc/MP4GetHintTrackSdp.3 \
++		doc/MP4GetNumberOfTracks.3 \
++		doc/MP4GetODProfileLevel.3 \
++		doc/MP4GetRtpHintNumberOfPackets.3 \
++		doc/MP4GetRtpPacketBFrame.3 \
++		doc/MP4GetRtpPacketTransmitOffset.3 \
++		doc/MP4GetRtpTimestampStart.3 \
++		doc/MP4GetSampleIdFromEditTime.3 \
++		doc/MP4GetSceneProfileLevel.3 \
++		doc/MP4GetSessionSdp.3 \
++		doc/MP4GetTrackAudioMpeg4Type.3 \
++		doc/MP4GetTrackAudioType.3 \
++		doc/MP4GetTrackBitRate.3 \
++		doc/MP4GetTrackDuration.3 \
++		doc/MP4GetTrackEditDuration.3 \
++		doc/MP4GetTrackEditDwell.3 \
++		doc/MP4GetTrackEditMediaStart.3 \
++		doc/MP4GetTrackEditStart.3 \
++		doc/MP4GetTrackEditTotalDuration.3 \
++		doc/MP4GetTrackESConfiguration.3 \
++		doc/MP4GetTrackFixedSampleDuration.3 \
++		doc/MP4GetTrackNumberOfEdits.3 \
++		doc/MP4GetTrackNumberOfSamples.3 \
++		doc/MP4GetTrackVideoFrameRate.3 \
++		doc/MP4GetTrackVideoHeight.3 \
++		doc/MP4GetTrackVideoType.3 \
++		doc/MP4GetTrackVideoWidth.3 \
++		doc/MP4GetVideoProfileLevel.3 \
++		doc/MP4MakeIsmaCompliant.3 \
++		doc/MP4ReadRtpHint.3 \
++		doc/MP4ReadRtpPacket.3 \
++		doc/MP4ReadSampleFromEditTime.3 \
++		doc/MP4SetAudioProfileLevel.3 \
++		doc/MP4SetGraphicsProfileLevel.3 \
++		doc/MP4SetHintTrackRtpPayload.3 \
++		doc/MP4SetHintTrackSdp.3 \
++		doc/MP4SetODProfileLevel.3 \
++		doc/MP4SetRtpTimestampStart.3 \
++		doc/MP4SetSceneProfileLevel.3 \
++		doc/MP4SetSessionSdp.3 \
++		doc/MP4SetTrackEditDuration.3 \
++		doc/MP4SetTrackEditDwell.3 \
++		doc/MP4SetTrackEditMediaStart.3 \
++		doc/MP4SetTrackESConfiguration.3 \
++		doc/MP4SetVideoProfileLevel.3 \
++		doc/MP4WriteRtpHint.3
+ endif
+ endif
+ 
+diff --git a/doc/GNUmakefile.mk b/doc/GNUmakefile.mk
+index dadb234..1e6188e 100644
+--- a/doc/GNUmakefile.mk
++++ b/doc/GNUmakefile.mk
+@@ -98,7 +98,7 @@ DOC.m4.out = \
+ DOC.man.utils = mp4art mp4file mp4subtitle mp4track
+ DOC.man.out   = $(DOC.man.utils:%=$(DOC.out/)man/man1/%.1)
+ 
+-DOC.texi.articles = $(wildcard $(DOC.in/)texi/*.texi $(DOC.out/)texi/*.texi)
++DOC.texi.articles = $(wildcard $(DOC.in/)texi/*.texi)
+ 
+ DOC.texi.includes = \
+     doc/texi/base/project.texi \
+-- 
+2.21.0
+

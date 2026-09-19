@@ -1,0 +1,11 @@
+[Unit]
+Description = AMPR IPIP Encapsulation Daemon
+After = network.target
+
+[Service]
+Type = forking
+PIDFile = /run/amprd.pid
+ExecStart = /usr/sbin/amprd
+
+[Install]
+WantedBy = multi-user.target

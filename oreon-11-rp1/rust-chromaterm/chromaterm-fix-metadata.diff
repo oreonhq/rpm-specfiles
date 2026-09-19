@@ -1,0 +1,10 @@
+--- chromaterm-0.1.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ chromaterm-0.1.1/Cargo.toml	2025-08-05T02:31:34.490327+00:00
+@@ -66,6 +66,6 @@
+ version = "0.9"
+ 
+ [dev-dependencies.rstest]
+-version = "0.25"
++version = "0.26"
+ features = ["crate-name"]
+ default-features = false

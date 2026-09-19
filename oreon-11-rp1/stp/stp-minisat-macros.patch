@@ -1,0 +1,51 @@
+--- stp-2.3.4/include/stp/Sat/CryptoMinisat5.h.orig	2024-06-10 22:53:24.000000000 -0600
++++ stp-2.3.4/include/stp/Sat/CryptoMinisat5.h	2024-06-14 12:21:55.336965870 -0600
+@@ -31,6 +31,11 @@ THE SOFTWARE.
+ #include "stp/Sat/SATSolver.h"
+ #include <unordered_set>
+ 
++#undef var_Undef
++#undef l_True
++#undef l_False
++#undef l_Undef
++
+ namespace CMSat
+ {
+ class SATSolver;
+--- stp-2.3.4/lib/Sat/MinisatCore.cpp.orig	2024-06-10 22:53:24.000000000 -0600
++++ stp-2.3.4/lib/Sat/MinisatCore.cpp	2024-06-14 12:23:46.487500797 -0600
+@@ -78,7 +78,7 @@ bool MinisatCore::propagateWithAssumptio
+   setMaxConflicts(0);
+   Minisat::lbool ret = s->solveLimited(assumps);
+   assert(s->conflicts ==0);
+-  return ret != (Minisat::lbool)Minisat::l_False;
++  return ret != (Minisat::lbool)l_False;
+ }
+ 
+ bool MinisatCore::solve(bool& timeout_expired) // Search without assumptions.
+@@ -88,12 +88,12 @@ bool MinisatCore::solve(bool& timeout_ex
+ 
+   Minisat::vec<Minisat::Lit> assumps;
+   Minisat::lbool ret = s->solveLimited(assumps);
+-  if (ret == (Minisat::lbool)Minisat::l_Undef)
++  if (ret == (Minisat::lbool)l_Undef)
+   {
+     timeout_expired = true;
+   }
+ 
+-  return ret == (Minisat::lbool)Minisat::l_True;
++  return ret == (Minisat::lbool)l_True;
+ }
+ 
+ uint8_t MinisatCore::modelValue(uint32_t x) const
+--- stp-2.3.4/lib/Sat/SimplifyingMinisat.cpp.orig	2024-06-10 22:53:24.000000000 -0600
++++ stp-2.3.4/lib/Sat/SimplifyingMinisat.cpp	2024-06-14 12:24:20.791048657 -0600
+@@ -71,7 +71,7 @@ bool SimplifyingMinisat::solve(
+ 
+   Minisat::vec<Minisat::Lit> assumps;
+   Minisat::lbool ret = s->solveLimited(assumps);
+-  if (ret == (Minisat::lbool)Minisat::l_Undef)
++  if (ret == (Minisat::lbool)l_Undef)
+   {
+     timeout_expired = true;
+   }

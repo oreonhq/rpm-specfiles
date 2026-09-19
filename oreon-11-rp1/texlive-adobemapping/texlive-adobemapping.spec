@@ -1,4 +1,4 @@
-%global source0_hash a387389a11bd1220be3016ef74342bb9a4e1e888cee21379f3aadac786da1da1
+%global source0_hash 363f7fd337e5a34737608a2bc37521bb526ce726f5c9b5b4d08416e534448306002bc7af1be3f5e6fefcaba16ffc2260c4dea8a486d44dbccad577fb04d6da5b
 %global source1_hash none
 
 %global _texdir /usr/share/texlive
@@ -12,7 +12,7 @@ Summary:        Adobe CMap resources for CJK fonts
 License:        BSD
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/adobemapping.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/adobemapping.tar.xz#/adobemapping.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-adobemapping-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-adobemapping-doc <= 11:%{version}
@@ -22,7 +22,7 @@ Provides:       texlive-adobemapping = %{epoch}:%{version}-%{release}
 Adobe CMap resources for CJK fonts.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || true
 
 %build

@@ -10,8 +10,8 @@
 
 
 Name:    pinentry
-Version: 1.3.2
-Release: 2%{?dist}
+Version: 1.3.3
+Release: 1%{?dist}
 Summary: Collection of simple PIN or passphrase entry dialogs
 
 License: GPL-2.0-or-later

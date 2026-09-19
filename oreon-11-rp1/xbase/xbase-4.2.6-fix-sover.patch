@@ -1,0 +1,12 @@
+diff -up xbase64-4.2.6/build/linux64/CMakeLists.txt.fix-sover xbase64-4.2.6/build/linux64/CMakeLists.txt
+--- xbase64-4.2.6/build/linux64/CMakeLists.txt.fix-sover	2025-11-06 11:53:25.847743173 -0500
++++ xbase64-4.2.6/build/linux64/CMakeLists.txt	2025-11-06 11:53:30.928265938 -0500
+@@ -937,7 +937,7 @@ install (FILES ${PROJECT_PARENT_DIR}/doc
+ ENDIF( NOT WIN32 )
+ 
+ 
+-SET_TARGET_PROPERTIES( ${XB_LIBNAME} PROPERTIES VERSION 4.2.6 SOVERSION 0 )
++SET_TARGET_PROPERTIES( ${XB_LIBNAME} PROPERTIES VERSION ${xbase_VERSION_MAJOR}.${xbase_VERSION_MINOR}.${xbase_VERSION_PATCH} SOVERSION ${xbase_VERSION_MAJOR} )
+ 
+ IF( WIN32 )
+   install (TARGETS ${XB_LIBNAME}     DESTINATION bin)

@@ -1,0 +1,44 @@
+To configure MIMEDefang, you have to edit the file /etc/mail/mimedefang-filter.
+This is a Perl source file, so you have to know Perl. Go ahead and read the man
+pages mimedefang(8), mimedefang.pl(8) and mimedefang-filter(5). There are some
+sample filters in the /usr/share/doc/mimedefang-* directory.
+
+In order to complete the installation of MIMEDefang, you will need to add for
+example the following lines to your /etc/mail/sendmail.mc file (which requires,
+in turn, the installation of sendmail-cf package):
+
+  define(`MILTER', `1')dnl
+  define(`confMILTER_LOG_LEVEL', `6')dnl
+  INPUT_MAIL_FILTER(`mimedefang', `S=unix:/var/spool/MIMEDefang/mimedefang.sock, F=T, T=S:1m;R:1m;E:5m')dnl
+
+Use "systemctl restart sendmail.service" to rebuild your /etc/mail/sendmail.cf
+file, run "systemctl enable mimedefang.service" to start MIMEDefang during boot
+time per default and execute "systemctl enable mimedefang.service" to start the
+service. When everything was correct, MIMEDefang should now do its job...
+
+
+For the integration of MIMEDefang and ClamAV, some manual steps are required:
+
+(1) Add the user clam to the defang group after installing MIMEDefang
+
+    usermod -a -G defang clam
+
+(2) Find and modify the following lines in /etc/clamd.conf:
+
+    LocalSocketGroup defang
+    LocalSocketMode 660
+
+    and optionally disable the TCP listener if you are only using the UNIX
+    socket from MIMEDefang (below):
+
+    #TCPSocket 3310
+    #TCPAddr 127.0.0.1
+
+(3) Enable MD_ALLOW_GROUP_ACCESS=yes in /etc/sysconfig/mimedefang
+
+(4) Configure /etc/mail/mimedefang-filter to use clamd via UNIX socket:
+
+    $Features{'Virus:CLAMD'} = 1;
+    $ClamdSock = '/var/run/clamav/clamd.sock';
+
+(5) Restart the MIMEDefang and clamd services (clamd first).

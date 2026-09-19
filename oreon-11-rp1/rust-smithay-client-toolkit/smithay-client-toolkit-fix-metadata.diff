@@ -1,0 +1,59 @@
+--- smithay-client-toolkit-0.19.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ smithay-client-toolkit-0.19.2/Cargo.toml	2025-12-28T15:49:07.683108+00:00
+@@ -85,10 +85,6 @@
+ path = "examples/list_shm_formats.rs"
+ 
+ [[example]]
+-name = "relative_pointer"
+-path = "examples/relative_pointer.rs"
+-
+-[[example]]
+ name = "session_lock"
+ path = "examples/session_lock.rs"
+ 
+@@ -103,11 +99,6 @@
+ [[example]]
+ name = "themed_window"
+ path = "examples/themed_window.rs"
+-
+-[[example]]
+-name = "wgpu"
+-path = "examples/wgpu.rs"
+-required-features = ["wayland-backend/client_system"]
+ 
+ [dependencies.bitflags]
+ version = "2.4"
+@@ -175,7 +166,7 @@
+ version = "0.31.0"
+ 
+ [dependencies.xkbcommon]
+-version = "0.7.0"
++version = ">=0.7.0, <0.9.0"
+ features = ["wayland"]
+ optional = true
+ 
+@@ -191,23 +182,8 @@
+ [dev-dependencies.env_logger]
+ version = "0.10"
+ 
+-[dev-dependencies.font-kit]
+-version = "0.11.0"
+-
+ [dev-dependencies.image]
+-version = "0.24"
+-
+-[dev-dependencies.pollster]
+-version = "0.3.0"
+-
+-[dev-dependencies.raqote]
+-version = "0.8.2"
+-
+-[dev-dependencies.raw-window-handle]
+-version = "0.6.0"
+-
+-[dev-dependencies.wgpu]
+-version = "0.19.0"
++version = "0.25"
+ 
+ [build-dependencies.pkg-config]
+ version = "0.3"

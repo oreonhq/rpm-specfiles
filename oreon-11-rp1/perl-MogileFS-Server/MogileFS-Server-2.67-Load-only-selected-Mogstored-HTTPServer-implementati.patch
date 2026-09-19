@@ -1,0 +1,37 @@
+From ee6898992fb65f51a3b88899d8cabebab21408a8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 26 Feb 2013 10:37:02 +0100
+Subject: [PATCH] Load only selected Mogstored::HTTPServer implementation
+
+---
+ mogstored | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/mogstored b/mogstored
+index 38d911c..2692ebc 100755
+--- a/mogstored
++++ b/mogstored
+@@ -19,11 +19,6 @@ use POSIX qw(WNOHANG);
+ use Perlbal 1.73;
+ use FindBin qw($Bin $RealScript);
+ 
+-use Mogstored::HTTPServer::Perlbal;
+-use Mogstored::HTTPServer::Lighttpd;
+-use Mogstored::HTTPServer::None;
+-use Mogstored::HTTPServer::Apache;
+-use Mogstored::HTTPServer::Nginx;
+ use Mogstored::SideChannelListener;
+ use Mogstored::SideChannelClient;
+ 
+@@ -91,6 +86,8 @@ Perlbal::run_manage_commands($perlbal_init , sub { print STDERR "$_[0]\n"; });
+ 
+ # start HTTP server
+ my $httpsrv_class = "Mogstored::HTTPServer::" . ucfirst($server);
++eval "use $httpsrv_class";
++if ($@) { die "Could not use $httpsrv_class: $@\n"; }
+ my $httpsrv       = $httpsrv_class->new(
+                                         listen   => $http_listen,
+                                         docroot  => $docroot,
+-- 
+1.8.1.4
+

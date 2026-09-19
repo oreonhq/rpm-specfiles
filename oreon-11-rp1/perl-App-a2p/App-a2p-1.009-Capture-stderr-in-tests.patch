@@ -1,0 +1,63 @@
+From b8bdc6e201a203e3e340c8c277904e030bba0288 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 29 Feb 2016 10:40:39 +0100
+Subject: [PATCH 1/2] Capture stderr in tests
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/10-basics.t | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/t/10-basics.t b/t/10-basics.t
+index d0c59dd..d1f2026 100644
+--- a/t/10-basics.t
++++ b/t/10-basics.t
+@@ -6,7 +6,8 @@ use Test::More 0.89;
+ use Test::More 0.89;
+ 
+ use Config;
+-use IPC::Open2;
++use IPC::Open3;
++use Symbol;
+ use File::Spec::Functions 'catfile';
+ use File::Temp 'tempdir';
+ 
+@@ -24,11 +25,11 @@ my $input_perl = catfile($tempdir, 'input.perl');
+ 
+ #mkdir $tempdir or die "Couldn't mkdir $tempdir: $!";
+ spew($input_awk, "/awk2perl/\n");
+-my $program = runa2p(progfile => $input_awk);
++my ($program, undef) = runa2p(progfile => $input_awk);
+ like($program, qr{print \$_ if /awk2perl/;}, 'Output looks like expected output');
+ 
+ spew($input_perl, $program);
+-my $output = runperl(progfile => $input_perl, args => [ $0 ]);
++my ($output, $undef) = runperl(progfile => $input_perl, args => [ $0 ]);
+ open my $self, '<', $0;
+ chomp(my @expected = grep { /awk2perl/ } <$self>);
+ is_deeply([ split /\n/, $output ], \@expected, 'Output is identical to … code');
+@@ -38,11 +39,15 @@ done_testing;
+ sub run_command {
+ 	my %args = @_;
+ 	my @command = @{ $args{command} };
+-	my $pid = open2(my ($in, $out), @command) or die "Couldn't open2($?): $!";
++    my ($in, $out, $err);
++    $err = Symbol::gensym;
++	my $pid = open3($in, $out, $err, @command) or die "Couldn't open2($?): $!";
+ 	binmode $in, ':crlf' if $^O eq 'MSWin32';
+-	my $ret = do { local $/; <$in> };
++    my @ret;
++	$ret[0] = do { local $/; <$out> };
++    $ret[1] = do { local $/; <$err> };
+ 	waitpid $pid, 0;
+-	return $ret;
++	return @ret;
+ }
+ 
+ sub runa2p {
+-- 
+2.5.0
+

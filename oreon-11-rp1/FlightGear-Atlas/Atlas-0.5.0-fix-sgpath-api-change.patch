@@ -1,0 +1,60 @@
+Index: src/Map.cxx
+===================================================================
+RCS file: /cvsroot/atlas/Atlas/src/Map.cxx,v
+retrieving revision 1.64
+diff -u -p -r1.64 Map.cxx
+--- src/Map.cxx	24 Aug 2012 23:36:35 -0000	1.64
++++ src/Map.cxx	14 Sep 2016 19:52:03 -0000
+@@ -165,6 +165,14 @@ void print_help() 
+     printf("  --help             Print this message\n");
+ }
+ 
++// set path
++void SGPath::set( const string& p ) {
++    path = p;
++    fix();
++    _cached = false;
++    _rwCached = false;
++}
++
+ bool parse_arg(char* arg) 
+ {
+     if (strncmp(arg, "--fg-root=", 10) == 0) {
+Index: src/Preferences.cxx
+===================================================================
+RCS file: /cvsroot/atlas/Atlas/src/Preferences.cxx,v
+retrieving revision 1.29
+diff -u -p -r1.29 Preferences.cxx
+--- src/Preferences.cxx	26 Nov 2012 19:51:16 -0000	1.29
++++ src/Preferences.cxx	14 Sep 2016 19:52:03 -0000
+@@ -312,6 +312,14 @@ inline bool TypedPrefVector<T>::save(ost
+ // SGPath
+ //////////////////////////////////////////////////////////////////////
+ 
++// set path
++void SGPath::set( const string& p ) {
++    path = p;
++    fix();
++    _cached = false;
++    _rwCached = false;
++}
++
+ // operator>> for SGPath
+ istream& operator>> (istream& is, SGPath& p)
+ {
+Index: src/Subbucket.cxx
+===================================================================
+RCS file: /cvsroot/atlas/Atlas/src/Subbucket.cxx,v
+retrieving revision 1.21
+diff -u -p -r1.21 Subbucket.cxx
+--- src/Subbucket.cxx	2 Oct 2014 00:39:17 -0000	1.21
++++ src/Subbucket.cxx	14 Sep 2016 19:58:15 -0000
+@@ -346,7 +346,7 @@ bool Subbucket::load(Bucket::Projection 
+     // http://wiki.flightgear.org/index.php/BTG_File_Format
+ 
+     SGBinObject btg;
+-    if (!btg.read_bin(_path.c_str())) {
++    if (!btg.read_bin(_path)) {
+ 	// EYE - throw an error?
+ 	// EYE - will the cache continue to call load() then?
+ 	return false;

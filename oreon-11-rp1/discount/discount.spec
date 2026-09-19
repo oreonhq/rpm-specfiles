@@ -5,8 +5,8 @@
 %global _lto_cflags %{nil}
 
 Name:           discount
-Version:        2.2.7
-Release:        7%{?dist}
+Version:        3.0.2.0
+Release:        1%{?dist}
 Summary:        C implementation of Markdown
 License:        BSD-3-Clause
 URL:            https://github.com/Orc/discount

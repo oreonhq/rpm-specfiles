@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4c50538..80bd921 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -196,7 +196,7 @@ message(STATUS "Link with: ${NAPI_LINK_LIBS}")
+ if(ENABLE_FORTRAN90 OR ENABLE_FORTRAN77)
+     enable_language(Fortran)
+     
+-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Wall -fbacktrace -pedantic -fcheck=all -Wextra")
++    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Wall -fbacktrace -pedantic -Wextra")
+     message(STATUS ${CMAKE_Fortran_FLAGS})
+ endif()
+ 

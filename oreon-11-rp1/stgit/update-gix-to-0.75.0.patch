@@ -1,0 +1,108 @@
+From 630b77d1288811b6d5b959b7165f1d9d13e86f0b Mon Sep 17 00:00:00 2001
+From: Peter Grayson <pete@jpgrayson.net>
+Date: Thu, 27 Nov 2025 13:15:30 -0500
+Subject: [PATCH] chore: update gix to 0.75.0
+
+---
+ Cargo.toml                    |   2 +-
+ src/cmd/export.rs             |   4 +-
+ src/ext/time.rs               |   1 +
+ src/patch/edit/description.rs |   2 +-
+ src/stack/state.rs            |   2 +-
+ src/stupid/context.rs         |   4 +-
+ 7 files changed, 49 insertions(+), 317 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index b962c8db..314f3eec 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -43,7 +43,7 @@ clap = { version = "~4.5", default-features = false, features = [
+ ctrlc = "3.4"
+ encoding_rs = "0.8"
+ flate2 = "1"
+-gix = { version = "0.74", default-features = false, features = [
++gix = { version = "0.75", default-features = false, features = [
+   "command",
+   "revision",
+ ] }
+diff --git a/src/cmd/export.rs b/src/cmd/export.rs
+index 33f8a391..c58b41c2 100644
+--- a/src/cmd/export.rs
++++ b/src/cmd/export.rs
+@@ -236,7 +236,7 @@ fn run(matches: &clap::ArgMatches) -> Result<()> {
+             Cow::Owned(
+                 author
+                     .time()?
+-                    .format(gix::date::time::format::ISO8601)
++                    .format(gix::date::time::format::ISO8601)?
+                     .into(),
+             ),
+         );
+@@ -248,7 +248,7 @@ fn run(matches: &clap::ArgMatches) -> Result<()> {
+             Cow::Owned(
+                 committer
+                     .time()?
+-                    .format(gix::date::time::format::ISO8601)
++                    .format(gix::date::time::format::ISO8601)?
+                     .into(),
+             ),
+         );
+diff --git a/src/ext/time.rs b/src/ext/time.rs
+index 44a8d2dc..6c46fb33 100644
+--- a/src/ext/time.rs
++++ b/src/ext/time.rs
+@@ -86,6 +86,7 @@ mod tests {
+         let time = Time::parse_time(time_str).unwrap();
+         assert!(time
+             .format(gix::date::time::format::ISO8601_STRICT)
++            .unwrap()
+             .starts_with(time_str));
+     }
+
+diff --git a/src/patch/edit/description.rs b/src/patch/edit/description.rs
+index bfb6aeb6..992066ec 100644
+--- a/src/patch/edit/description.rs
++++ b/src/patch/edit/description.rs
+@@ -71,7 +71,7 @@ impl EditablePatchDescription {
+         };
+         writeln!(stream, "Patch:  {patchname}")?;
+         if let Some(author) = self.author.as_ref() {
+-            let authdate = author.time.format(gix::date::time::format::ISO8601);
++            let authdate = author.time.format(gix::date::time::format::ISO8601)?;
+             write!(stream, "Author: ")?;
+             stream.write_all(author.name.as_bstr())?;
+             write!(stream, " <")?;
+diff --git a/src/stack/state.rs b/src/stack/state.rs
+index 8403d4a3..430736a2 100644
+--- a/src/stack/state.rs
++++ b/src/stack/state.rs
+@@ -412,7 +412,7 @@ impl<'repo> StackState<'repo> {
+         let parent_tree_id = parent.tree_id()?;
+         let commit_tree_id = commit_ref.tree();
+         let author = commit_ref.author();
+-        let date = commit_ref.time().format(gix::date::time::format::ISO8601);
++        let date = commit_ref.time().format(gix::date::time::format::ISO8601)?;
+
+         let mut patch_meta: BString = Vec::with_capacity(1024).into();
+         patch_meta.push_str(format!(
+diff --git a/src/stupid/context.rs b/src/stupid/context.rs
+index df203ff1..3f626b39 100644
+--- a/src/stupid/context.rs
++++ b/src/stupid/context.rs
+@@ -417,11 +417,11 @@ impl StupidContext<'_, '_> {
+             // TODO: re-encode dates?
+             .env(
+                 "GIT_AUTHOR_DATE",
+-                author.time.format(gix::date::time::format::RAW),
++                author.time.format(gix::date::time::format::RAW)?,
+             )
+             .env(
+                 "GIT_COMMITTER_DATE",
+-                committer.time.format(gix::date::time::format::RAW),
++                committer.time.format(gix::date::time::format::RAW)?,
+             )
+             .stdin(Stdio::piped())
+             .stdout(Stdio::piped())
+--
+2.52.0
+

@@ -1,0 +1,11 @@
+--- SOIL-1.07/projects/makefile/alternate Makefile.txt.link-correctly	2008-07-07 18:13:28.000000000 +0200
++++ SOIL-1.07/projects/makefile/alternate Makefile.txt	2011-12-23 12:59:17.186345220 +0100
+@@ -29,7 +29,7 @@ lib: $(OFILES)
+ 	# create static library
+ 	ar -cvq $(LIBNAME).a $(OFILES)
+ 	# create shared library
+-	gcc -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES)
++	gcc -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES) -lGL -lm
+ 
+ install:
+ 	$(INSTALL_DIR) $(DESTDIR)/$(INCLUDEDIR)

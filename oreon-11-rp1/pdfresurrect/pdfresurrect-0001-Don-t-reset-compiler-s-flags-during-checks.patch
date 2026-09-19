@@ -1,0 +1,21 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Mon, 1 Oct 2018 14:13:01 +0300
+Subject: [PATCH] Don't reset compiler's flags during checks
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/configure.ac b/configure.ac
+index 34fc035..0283f83 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -10,10 +10,7 @@ AC_PREFIX_DEFAULT(/usr/local)
+ 
+ 
+ # Checks for programs, and clears CFLAGS during the check.
+-X="$CFLAGS"
+-CFLAGS=""
+ AC_PROG_CC
+-CFLAGS="$X"
+ 
+ 
+ # Checks for header files.

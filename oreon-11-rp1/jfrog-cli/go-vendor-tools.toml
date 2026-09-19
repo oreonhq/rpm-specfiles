@@ -1,0 +1,43 @@
+[archive]
+
+[licensing]
+detector = "askalono"
+
+[[licensing.licenses]]
+path = "vendor/github.com/cloudflare/circl/LICENSE"
+sha256sum = "b0da1764fe4d13d610b695536fc3f2ebc362482d053a1cd258e36975bc6b97a7"
+expression = "BSD-3-Clause"
+
+[[licensing.licenses]]
+path = "vendor/github.com/emirpasic/gods/LICENSE"
+sha256sum = "871b440e9b348d6b2485c72e15f1d18f4cf8ee7bb424cbcd854b6a4a772b61d8"
+expression = "BSD-2-Clause AND ISC"
+
+[[licensing.licenses]]
+path = "vendor/github.com/kevinburke/ssh_config/LICENSE"
+sha256sum = "a15a6f732df3a033a71853ce1d255bd671f00fbc537fa629b78d71baecda0ace"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/shirou/gopsutil/v3/LICENSE"
+sha256sum = "ad1e64b82c04fb2ee6bfe521bff01266971ffaa70500024d4ac767c6033aafb9"
+expression = "BSD-3-Clause"
+
+[[licensing.licenses]]
+path = "vendor/github.com/xi2/xz/LICENSE"
+sha256sum = "5c640056d513f276d56635af7a0bed81cb7eac02a31b6e56d40c416557a8d8ce"
+expression = "LicenseRef-Fedora-Public-Domain"
+
+[[licensing.licenses]]
+path = "vendor/gopkg.in/yaml.v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "Apache-2.0"
+
+[[licensing.licenses]]
+path = "vendor/github.com/agnivade/levenshtein/License.txt"
+sha256sum = "911d0fb30ff3345e4df60da21c2f2340a69bd98c0e3d1e79d27ae6177ebeb617"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/go.yaml.in/yaml/v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "MIT AND (MIT AND Apache-2.0)"

@@ -1,0 +1,13 @@
+--- a/setup.py
++++ b/setup.py
+@@ -350,8 +350,8 @@ if has_option('--with-lua-dlopen'):
+ 
+ 
+ # find Lua
+-option_no_bundle = has_option('--no-bundle')
+-option_use_bundle = has_option('--use-bundle')
++option_no_bundle = True
++option_use_bundle = False
+ option_no_luajit = has_option('--no-luajit')
+ 
+ configs = get_lua_build_from_arguments()

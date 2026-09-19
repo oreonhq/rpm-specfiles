@@ -1,0 +1,29 @@
+This patch fixes some historic autoconf-generate code to avoid an
+implicit in return type, a C language feature that was removed in 1999.
+No need to upstream this because the issue will go away once the
+configure script is regenerated with current autoconf.
+
+diff --git a/configure b/configure
+index 98c2c75c2d54f832..a12ff5bc0d531bf3 100755
+--- a/configure
++++ b/configure
+@@ -653,7 +653,7 @@ cat > conftest.$ac_ext << EOF
+ #line 654 "configure"
+ #include "confdefs.h"
+ 
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:659: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes
+@@ -991,8 +991,8 @@ else
+ #define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
+ #define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
+ int main () { int i; for (i = 0; i < 256; i++)
+-if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
+-exit (0); }
++if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) return 2;
++return 0; }
+ 
+ EOF
+ if { (eval echo configure:999: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null

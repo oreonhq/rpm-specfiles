@@ -1,0 +1,121 @@
+diff --git a/Makefile b/Makefile
+index 6d2dd1b..a3ab48a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -30,7 +30,7 @@ PHPCBF = phpcbf
+ ##########################################################
+ 
+ # Gweb version
+-GWEB_VERSION = 3.7.5
++GWEB_VERSION = 3.7.7
+ 
+ DIST_NAME = ganglia-web
+ DIST_DIR = $(DIST_NAME)-$(GWEB_VERSION)
+diff --git a/cluster_view.php b/cluster_view.php
+index 998ad65..fed4ed8 100644
+--- a/cluster_view.php
++++ b/cluster_view.php
+@@ -372,7 +372,7 @@ function get_cluster_overview($showhosts,
+   $overview["cluster_load"] = join(", ", $cluster_load);
+ 
+   $avg_cpu_num = find_avg($clustername, "", "cpu_num");
+-  if ($avg_cpu_num == 0)
++  if ((float)$avg_cpu_num == 0)
+     $avg_cpu_num = 1;
+   $cluster_util =
+     sprintf("%.0f%%",
+diff --git a/ganglia.php b/ganglia.php
+index 262b88e..3d1b325 100644
+--- a/ganglia.php
++++ b/ganglia.php
+@@ -350,7 +350,7 @@ function Gmetad () {
+       }
+ 
+    if ($debug) print "<br/>DEBUG: Creating parser\n";
+-   if ( isset($context) && is_array($context) && isset($SKIP_GMETAD_CONTEXTS) && is_array($SKIP_GMETAD_CONTEXTS) && in_array($context, $SKIP_GMETAD_CONTEXTS) ) {
++   if ( is_array($SKIP_GMETAD_CONTEXTS) && in_array($context, $SKIP_GMETAD_CONTEXTS) ) {
+       return TRUE;
+    }
+    $parser = xml_parser_create();
+diff --git a/get_ganglia.php b/get_ganglia.php
+index 50e5fe8..d9c4f2e 100644
+--- a/get_ganglia.php
++++ b/get_ganglia.php
+@@ -7,7 +7,7 @@
+ 
+ # If we are in compare_hosts, views and decompose_graph context we shouldn't attempt
+ # any connections to the gmetad
+-if (! in_array($context, $SKIP_GMETAD_CONTEXTS) ) {
++if (! ( is_array($SKIP_GMETAD_CONTEXTS) && in_array($context, $SKIP_GMETAD_CONTEXTS) ) ) {
+    if (! Gmetad($conf['ganglia_ip'], $conf['ganglia_port']) )
+       {
+          print "<H4>There was an error collecting ganglia data ".
+diff --git a/graph.php b/graph.php
+index e8a7a9c..bf34014 100644
+--- a/graph.php
++++ b/graph.php
+@@ -1552,7 +1552,7 @@ if ($sourcetime) {
+ 
+ // Fix from Phil Radden, but step is not always 15 anymore.
+ if ($range == "month")
+-  $rrdtool_graph['end'] = floor($rrdtool_graph['end'] / 672) * 672;
++  $rrdtool_graph['end'] = floor((int)$rrdtool_graph['end'] / 672) * 672;
+ 
+ ///////////////////////////////////////////////////////////////////////////////
+ // Are we generating aggregate graphs
+diff --git a/meta_view.php b/meta_view.php
+index aa79e15..e6490af 100644
+--- a/meta_view.php
++++ b/meta_view.php
+@@ -119,7 +119,7 @@ foreach ( $sorted_sources as $source => $val )
+ 
+       $clusname = $source == $self ? '' : $source;
+       $avg_cpu_num = find_avg($clusname, "", "cpu_num");
+-      if ($avg_cpu_num == 0) $avg_cpu_num = 1;
++      if ((float)$avg_cpu_num == 0) $avg_cpu_num = 1;
+       $cluster_util = sprintf("%.0f", ((double) find_avg($clusname, "", "load_one") / $avg_cpu_num ) * 100);
+ 
+       $sources[$source]["name"] = $name;
+diff --git a/mobile_helper.php b/mobile_helper.php
+index db45bb7..d9e20cb 100644
+--- a/mobile_helper.php
++++ b/mobile_helper.php
+@@ -266,7 +266,7 @@ foreach ($metrics as $metric_name => $metric_attributes) {
+   } else if (isset($reports[$metric_name]) and $reports[$metric])
+     continue;
+   else {
+-    $metric_graphargs = "c=".rawurlencode($clustername)."&amp;h=".rawurlencode($hostname)."&amp;v=".rawurlencode($metric_attributes[VAL])
++    $metric_graphargs = "c=".rawurlencode($clustername)."&amp;h=".rawurlencode($hostname)."&amp;v=".rawurlencode($metric_attributes['VAL'])
+       ."&amp;m=$metric_name&amp;r=".rawurlencode($range)."&amp;z=$size&amp;jr=$jobrange"
+       ."&amp;js=$jobstart&amp;st=$cluster[LOCALTIME]";
+     if ($cs)
+diff --git a/pie.php b/pie.php
+index 0e94bbe..24afad9 100644
+--- a/pie.php
++++ b/pie.php
+@@ -276,7 +276,11 @@ $to = 0;
+ 
+       $x; //PHPCS
+       $y; //PHPCS
+-      $pie_count = count( $angles );
++      if is_null( $angles ) {
++        $pie_count = 0;
++      } else {
++        $pie_count = count( $angles );
++      }
+       $PIE_THICKNESS = ($this->diameter * 0.075);
+ 
+       for( $j = ($this->center_y+$PIE_THICKNESS); $j > $this->center_y; $j-- ) {
+diff --git a/templates/default/footer.tpl b/templates/default/footer.tpl
+index af9fb5e..548a8e4 100644
+--- a/templates/default/footer.tpl
++++ b/templates/default/footer.tpl
+@@ -92,7 +92,7 @@ Loading view, please wait...<img src="img/spinner.gif" />
+ <div align="center" class="footer" style="font-size:small;clear:both;" {if $hide_footer} style="visibility:hidden;display:none;" {/if}>
+ <hr />
+ Ganglia Web Frontend version {$webfrontend_version}
+-<a href="http://ganglia.sourceforge.net/downloads.php?component=ganglia-webfrontend&amp;version={$webfrontend_version}">Check for Updates.</a><br />
++<a href="https://github.com/ganglia/ganglia-web" target="_blank">Check for Updates.</a><br />
+ 
+ Ganglia Web Backend <i>({$webbackend_component})</i> version {$webbackend_version}
+ <a href="http://ganglia.sourceforge.net/downloads.php?component={$webbackend_component}&amp;version={$webbackend_version}">Check for Updates.</a><br />

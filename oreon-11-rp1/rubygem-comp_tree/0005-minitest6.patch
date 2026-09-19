@@ -1,0 +1,85 @@
+diff -urp '--exclude=*~' comp_tree-1.1.3.orig/devel/levitate.rb comp_tree-1.1.3/devel/levitate.rb
+--- comp_tree-1.1.3.orig/devel/levitate.rb	2025-12-28 13:12:04.607333617 +0900
++++ comp_tree-1.1.3/devel/levitate.rb	2025-12-28 13:15:47.062060733 +0900
+@@ -338,13 +338,7 @@ class Levitate
+         test_files.each { |file| require file }
+ 
+         # if we use at_exit hook instead, it won't run before :release
+-        if MiniTest::Unit.method_defined? :run
+-          # minitest 4
+-          MiniTest::Unit.new.run ARGV
+-        else
+-          # minitest 5
+-          Minitest.run ARGV
+-        end
++        Minitest.run ARGV
+       end
+       
+       desc "run tests with coverage"
+@@ -787,7 +781,7 @@ class Levitate
+ 
+     def doc_to_test(file, *sections, &block)
+       levitate = self
+-      klass = Class.new MiniTest::Unit::TestCase do
++      klass = Class.new Minitest::Test do
+         sections.each { |section|
+           define_method "test_#{file}_#{section}" do
+             if block
+diff -urp '--exclude=*~' comp_tree-1.1.3.orig/test/basic_test.rb comp_tree-1.1.3/test/basic_test.rb
+--- comp_tree-1.1.3.orig/test/basic_test.rb	2025-12-28 13:12:04.614049082 +0900
++++ comp_tree-1.1.3/test/basic_test.rb	2025-12-28 13:20:47.813329452 +0900
+@@ -34,7 +34,11 @@ class BasicTest < CompTreeTest
+       CompTree.build { |driver|
+         driver.define(:a) { result }
+         (0..6).each { |n|
+-          assert_equal(result, driver.compute(:a, n))
++          if nil == result
++            assert_nil driver.compute(:a, n)
++          else
++            assert_equal(result, driver.compute(:a, n))
++          end
+         }
+       }
+     }
+@@ -176,7 +180,11 @@ class BasicTest < CompTreeTest
+             result
+           }
+           
+-          assert_equal(result, driver.compute(:area, threads))
++          if nil == result
++            assert_nil driver.compute(:area, threads)
++          else
++            assert_equal(result, driver.compute(:area, threads))
++          end
+         }
+       }
+     }
+diff -urp '--exclude=*~' comp_tree-1.1.3.orig/test/comp_tree_test_base.rb comp_tree-1.1.3/test/comp_tree_test_base.rb
+--- comp_tree-1.1.3.orig/test/comp_tree_test_base.rb	2025-12-28 13:12:04.614248767 +0900
++++ comp_tree-1.1.3/test/comp_tree_test_base.rb	2025-12-28 13:13:41.641282894 +0900
+@@ -2,11 +2,11 @@ $LOAD_PATH.unshift File.dirname(__FILE__
+ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../devel'
+ 
+ gem 'minitest'
+-require 'minitest/unit'
++require 'minitest/test'
+ require 'minitest/autorun' unless defined? Rake
+ require 'comp_tree'
+ 
+-class CompTreeTest < MiniTest::Unit::TestCase
++class CompTreeTest < Minitest::Test
+   if ARGV.include?("--bench")
+     require 'benchmark'
+ 
+diff -urp '--exclude=*~' comp_tree-1.1.3.orig/test/exception_test.rb comp_tree-1.1.3/test/exception_test.rb
+--- comp_tree-1.1.3.orig/test/exception_test.rb	2025-12-28 13:12:04.614398136 +0900
++++ comp_tree-1.1.3/test/exception_test.rb	2025-12-28 13:17:16.544817924 +0900
+@@ -89,7 +89,7 @@ class ExceptionTest < CompTreeTest
+         error = assert_raises(CompTree::NoNodeError) {
+           driver.compute(nil, num_threads)
+         }
+-        assert_equal nil, error.node_name
++        assert_nil error.node_name
+         assert_equal "no node named `nil'", error.message
+         assert_equal "#<CompTree::NoNodeError: #{error.message}>", error.inspect
+       end

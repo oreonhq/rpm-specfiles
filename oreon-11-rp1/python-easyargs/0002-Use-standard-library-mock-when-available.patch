@@ -1,0 +1,51 @@
+From 37c95c526d607ad6abfaf9779743f4990b38b337 Mon Sep 17 00:00:00 2001
+From: Carl George <carl@george.computer>
+Date: Tue, 19 Apr 2022 23:17:55 -0500
+Subject: [PATCH 2/3] Use standard library mock when available
+
+Mock has been available in the standard library since Python 3.3. There
+is no need to install the pypi package on modern Pythons.
+
+(cherry picked from commit 609caae6dbd809c261271a6245e2b7ccd0d068a0)
+---
+ setup.py             | 5 ++++-
+ test/test_parsers.py | 7 ++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 6e7ebe4..ab1c0cd 100644
+--- a/setup.py
++++ b/setup.py
+@@ -87,7 +87,10 @@ setup(
+     # $ pip install -e .[dev,test]
+     extras_require={
+         'dev': ['check-manifest'],
+-        'test': ['coverage'],
++        'test': [
++            'pytest',
++            'mock; python_version<"3.3"'
++        ],
+     },
+ 
+     # If there are data files included in your packages that need to be
+diff --git a/test/test_parsers.py b/test/test_parsers.py
+index 86d4c83..5b42012 100644
+--- a/test/test_parsers.py
++++ b/test/test_parsers.py
+@@ -1,7 +1,12 @@
+ from __future__ import print_function
+ 
+ import unittest
+-import mock
++
++try:
++    import unittest.mock as mock
++except ImportError:
++    import mock
++
+ import six
+ 
+ import easyargs
+-- 
+2.35.1
+

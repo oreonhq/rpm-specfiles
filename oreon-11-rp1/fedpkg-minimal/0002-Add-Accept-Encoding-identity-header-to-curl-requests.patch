@@ -1,0 +1,38 @@
+From 2398a07c8c6a8fbe5bf8ef2c62456b4dc3ca4bd6 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Mon, 3 Nov 2025 16:51:08 +0100
+Subject: [PATCH] Add Accept-Encoding: identity header to curl requests
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Ondřej Nosek <onosek@redhat.com>
+---
+ bin/fedpkg-base | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/bin/fedpkg-base b/bin/fedpkg-base
+index b31a6a7..3b0e2ac 100755
+--- a/bin/fedpkg-base
++++ b/bin/fedpkg-base
+@@ -36,7 +36,7 @@ if [[ -s sources ]]; then
+             # Remove parenthesis around tarball name
+             filename=${filename#(}
+             tarball=${filename%)}
+-            curl -L -H Pragma: -o "./$tarball" -R -S --fail --retry 5 --max-time 900 "$baseurl/$pkgname/$tarball/$hashtype/$hash/$tarball"
++            curl -L -H Pragma: -H "Accept-Encoding: identity" -o "./$tarball" -R -S --fail --retry 5 --max-time 900 "$baseurl/$pkgname/$tarball/$hashtype/$hash/$tarball"
+         done < sources
+         "${hashtype}sum" -c sources
+     else
+@@ -45,7 +45,7 @@ if [[ -s sources ]]; then
+             if [ -z "$md5sum" ] || [ -z "$tarball" ]; then
+                 continue
+             fi
+-            curl -L -H Pragma: -o "./$tarball" -R -S --fail --retry 5 --max-time 900 "$baseurl/$pkgname/$tarball/$md5sum/$tarball"
++            curl -L -H Pragma: -H "Accept-Encoding: identity" -o "./$tarball" -R -S --fail --retry 5 --max-time 900 "$baseurl/$pkgname/$tarball/$md5sum/$tarball"
+         done < sources
+         md5sum -c sources
+     fi
+-- 
+2.51.1
+

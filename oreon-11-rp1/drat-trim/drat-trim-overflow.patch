@@ -1,0 +1,12 @@
+diff -up a/drat-trim.c b/drat-trim.c
+--- a/drat-trim.c	2023-07-28 15:30:42.702457108 -0600
++++ b/drat-trim.c	2023-07-28 15:31:22.140932024 -0600
+@@ -1108,7 +1108,7 @@ int parse (struct solver* S) {
+     hashTable[i] = (long*) malloc (sizeof (long) * hashMax[i]); }
+ 
+   int fileSwitchFlag = 0;
+-  int finalClause = 0;
++  long finalClause = 0;
+   size = 0;
+   while (1) {
+     int lit = 0; tmp = 0;

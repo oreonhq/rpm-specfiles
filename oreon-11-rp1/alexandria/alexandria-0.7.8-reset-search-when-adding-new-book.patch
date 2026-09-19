@@ -1,0 +1,15 @@
+diff -urp '--exclude=*~' alexandria-book-collection-manager-0.7.8/lib/alexandria/ui/ui_manager.rb alexandria-book-collection-manager-0.7.8.new/lib/alexandria/ui/ui_manager.rb
+--- alexandria-book-collection-manager-0.7.8/lib/alexandria/ui/ui_manager.rb	2021-03-05 00:06:46.604012398 +0900
++++ alexandria-book-collection-manager-0.7.8.new/lib/alexandria/ui/ui_manager.rb	2021-03-04 23:53:11.560895622 +0900
+@@ -569,7 +569,10 @@ module Alexandria
+           end
+           @iconview.unfreeze
+           @listview.unfreeze # NEW
+-          select_a_book(book) if [Library::BOOK_ADDED, Library::BOOK_UPDATED].include? kind
++          if [Library::BOOK_ADDED, Library::BOOK_UPDATED].include? kind
++            on_clear_search_results
++            select_a_book(book) 
++          end
+         elsif selected_library.is_a?(SmartLibrary)
+           refresh_books
+         end

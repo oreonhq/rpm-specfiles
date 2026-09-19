@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.macaulay2.macaulay2</id>
+  <metadata_license>0BSD</metadata_license>
+  <project_license>GPL-2.0-only OR GPL-3.0-only</project_license>
+  <name>Macaulay2</name>
+  <summary>System for algebraic geometry and commutative algebra</summary>
+  <description>
+    <p>
+      Macaulay 2 is a software system devoted to supporting research in
+      algebraic geometry and commutative algebra written by Daniel R. Grayson
+      and Michael E. Stillman.
+    </p>
+  </description>
+  <launchable type="desktop-id">com.macaulay2.macaulay2.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://faculty.math.illinois.edu/Macaulay2/Screenshots/texmacs.png</image>
+      <caption>Macaulay2 with TeXmacs</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://faculty.math.illinois.edu/Macaulay2/Screenshots/emacs-M2-c.png</image>
+      <caption>Macaulay2 with Emacs</caption>
+    </screenshot>
+  </screenshots>
+  <update_contact>Macaulay2-maintainers@fedoraproject.org</update_contact>
+  <url type="homepage">https://macaulay2.com/</url>
+  <url type="bugtracker">https://github.com/Macaulay2/M2/issues</url>
+  <url type="contact">https://groups.google.com/g/macaulay2</url>
+  <content_rating type="oars-1.0"></content_rating>
+  <provides>
+    <binary>M2</binary>
+    <binary>M2-binary</binary>
+  </provides>
+</component>

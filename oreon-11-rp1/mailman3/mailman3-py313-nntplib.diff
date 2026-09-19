@@ -1,0 +1,20 @@
+From 3a22537382d41ab3e46b859054547755963b069d Mon Sep 17 00:00:00 2001
+From: Mark Sapiro <mark@msapiro.net>
+Date: Mon, 5 May 2025 15:34:52 -0700
+Subject: [PATCH] Fix requirement for standard-nntplib with Python >= 3.13.
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -57,7 +57,7 @@ dependencies = [
+     "flufl.lock>=5.1",
+     "gunicorn",
+     "lazr.config",
+-    'nntplib; python_version>="3.13"',
++    'standard-nntplib; python_version>="3.13"',
+     "passlib",
+     "python-dateutil>=2.0",
+     "requests",

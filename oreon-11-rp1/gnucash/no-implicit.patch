@@ -1,0 +1,20 @@
+--- gnucash-5.5/bindings/python/CMakeLists.txt~	2023-12-10 14:01:40.000000000 -0600
++++ gnucash-5.5/bindings/python/CMakeLists.txt	2024-01-23 16:53:50.930568668 -0600
+@@ -81,7 +81,7 @@
+ 
+   target_link_libraries(gnucash_core_c gnc-app-utils gnc-engine ${Python3_LIBRARIES})
+   set_target_properties(gnucash_core_c PROPERTIES PREFIX "_")
+-  target_compile_options(gnucash_core_c PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
++  target_compile_options(gnucash_core_c PRIVATE -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
+   if (HAVE_STRINGOP_TRUNCATION)
+     target_compile_options(gnucash_core_c PRIVATE -Wno-error=stringop-truncation)
+   endif()
+@@ -89,7 +89,7 @@
+   add_executable(sqlite3test EXCLUDE_FROM_ALL sqlite3test.c ${SWIG_GNUCASH_CORE_C})
+   target_link_libraries(sqlite3test gnc-app-utils gnc-engine ${Python3_LIBRARIES})
+   target_include_directories(sqlite3test PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
+-  target_compile_options(sqlite3test PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
++  target_compile_options(sqlite3test PRIVATE -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
+   if (HAVE_STRINGOP_TRUNCATION)
+     target_compile_options(sqlite3test PRIVATE -Wno-error=stringop-truncation)
+   endif()

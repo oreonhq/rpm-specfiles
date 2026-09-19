@@ -1,0 +1,26 @@
+From f9f75db7c65cd4739fb39b5fd0f259a8ee6dbff9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 13 Nov 2015 08:27:16 +0100
+Subject: [PATCH] Remove script attributes from bidi
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ misc/bidi | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/misc/bidi b/misc/bidi
+index 4304ee7..7ac1a86 100644
+--- a/misc/bidi
++++ b/misc/bidi
+@@ -1,5 +1,3 @@
+-#! perl
+-
+ =head1 NAME
+ 
+ bidi - Make urxvt present Bidi text correctly
+-- 
+2.7.4
+

@@ -1,0 +1,11 @@
+--- a/handlers/dup.in	2021-01-25 21:50:45.000000000 +0600
++++ b/handlers/dup.in	2022-05-27 18:19:28.948488094 +0600
+@@ -130,7 +130,7 @@
+ fi
+ 
+ ### duplicity version (ignore anything else than 0-9 and ".")
+-duplicity_version="`duplicity --version | @AWK@ '{print $2}' | @SED@ 's/[^.[:digit:]]//g'`"
++duplicity_version="`duplicity --version | @AWK@ 'END{print $2}' | @SED@ 's/[^.[:digit:]]//g'`"
+ 
+ ### ssh/scp/sftp options (duplicity < 0.4.3 is unsupported)
+ ## duplicity >= 0.6.17 : paramiko backend

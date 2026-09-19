@@ -1,0 +1,41 @@
+From 8ba36f552a597164122a62b4f2dc2e5268921dd6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Mon, 8 May 2017 08:50:01 +0200
+Subject: [PATCH 02/18] Fix formating/buffers
+
+---
+ src/libMesh/memory.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/libMesh/memory.c b/src/libMesh/memory.c
+index 77ca49a0e..75274329d 100644
+--- a/src/libMesh/memory.c
++++ b/src/libMesh/memory.c
+@@ -222,18 +222,18 @@ void M_free(void *ptr) {
+ 
+ /* dump memory requirements */
+ void primem(int np) {
+-  int memsize;
++  size_t memsize;
+ 
+   memsize = M_memSize();
+   if ( memsize ) {
+     fprintf(stdout,"\n  -- MEMORY REQUIREMENTS\n");
+     if (memsize > 1024*1024)
+-      fprintf(stdout,"  Total size :  %10zd Mbytes",
+-	      (long int)(memsize/(1024.*1024.)));
++      fprintf(stdout,"  Total size :  %10Zd Mbytes",
++	      (memsize/(1024*1024)));
+     else if (memsize > 1024)
+-      fprintf(stdout,"  Total size :  %10zd Kbytes",(long int)(memsize/1024.));
++      fprintf(stdout,"  Total size :  %10Zd Kbytes",(memsize/1024));
+     else
+-      fprintf(stdout,"  Total size :  %10zd bytes ",(long int)memsize);
+-    fprintf(stdout,"    (i.e. %d bytes/point)\n",memsize / np);
++      fprintf(stdout,"  Total size :  %10Zd bytes ",memsize);
++    fprintf(stdout,"    (i.e. %zd bytes/point)\n",memsize / np);
+   }
+ }
+-- 
+2.47.1
+

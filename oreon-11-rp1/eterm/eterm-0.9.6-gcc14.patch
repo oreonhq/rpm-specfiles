@@ -1,0 +1,28 @@
+diff --git a/src/options.c b/src/options.c
+index 865cd99..6cc66ee 100644
+--- a/src/options.c
++++ b/src/options.c
+@@ -3888,7 +3888,7 @@ save_config(char *path, unsigned char save_theme)
+     fprintf(fp, "    min_anchor_size %d\n", rs_min_anchor_size);
+     fprintf(fp, "    border_width %d\n", TermWin.internalBorder);
+     fprintf(fp, "    term_name %s\n", getenv("TERM"));
+-    fprintf(fp, "    beep_command \"%s\"\n", (char *) ((rs_beep_command) ? (rs_beep_command) : ("")));
++    fprintf(fp, "    beep_command \"%s\"\n", (rs_beep_command) ? (char *) (rs_beep_command) : (""));
+ 
+     fprintf(fp, "    debug %d\n", DEBUG_LEVEL);
+     if (save_theme && rs_exec_args && rs_theme && strcmp(rs_theme, PACKAGE)) {
+diff --git a/src/screen.c b/src/screen.c
+index d4f8c5c..8864b58 100644
+--- a/src/screen.c
++++ b/src/screen.c
+@@ -2910,9 +2910,8 @@ selection_delimit_word(int col, int row, row_col_t *beg, row_col_t *end)
+     if (!screen.text[end_row + row_offset + 1] || !screen.rend[end_row + row_offset + 1])
+         return;
+ #endif
+-
+     stp1 = stp = &(screen.text[beg_row + row_offset][beg_col]);
+-    w1 = DELIMIT_TEXT(*stp);
++    w1 = (int) DELIMIT_TEXT(*stp);
+     if (w1 == 2)
+         w1 = 0;
+ #ifdef MULTI_CHARSET

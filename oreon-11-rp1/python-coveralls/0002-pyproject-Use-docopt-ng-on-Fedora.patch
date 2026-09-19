@@ -1,0 +1,25 @@
+From 8992d756c1eda7ddc1737eb7cb23d63a767df15c Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Mon, 14 Jul 2025 14:57:25 -0700
+Subject: [PATCH] pyproject: Use docopt-ng on Fedora
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index a3e208a..2b945ba 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -33,7 +33,7 @@ python-coveralls = "coveralls.cli:main"
+ [tool.poetry.dependencies]
+ python = ">=3.8"
+ coverage = { version = ">=5.0,<8.0,!=6.0.*,!=6.1,!=6.1.1", extras = ["toml"] }
+-docopt = ">=0.6.1,<0.7.0"
++docopt-ng = ">=0.9.0"
+ requests = ">=1.0.0,<3.0.0"
+ 
+ pyyaml = { version = ">=3.10,<7.0", optional = true }
+-- 
+2.50.1
+

@@ -1,0 +1,21 @@
+#!/bin/bash
+# Run dehydrated if there is configured domains
+if [ -s /etc/dehydrated/domains.txt ]; then
+    tempfile=$(mktemp -p /run/dehydrated)
+    if [ $? -gt 0 ]; then
+	echo "ERROR, could not create tempfile" >&2
+	exit 1
+    else
+	# clean up tempfile on exit
+	trap "rm -f ${tempfile}" EXIT TERM
+    fi
+    set -o pipefail
+    /usr/bin/dehydrated --cron 2>&1 | tee -a ${tempfile}
+    RC=$?
+    if [ ${RC} -gt 0 ]; then
+	cat ${tempfile} | mailx -S sendwait -s "dehydrated --cron returned error" ${NOTIFY_EMAIL:=root}
+    fi
+    exit ${RC}
+else
+    echo "No domains configured" >&2
+fi

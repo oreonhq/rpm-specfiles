@@ -1,0 +1,313 @@
+diff --git a/setup.py b/setup.py
+index 3e75aee..dab99a0 100755
+--- a/setup.py
++++ b/setup.py
+@@ -52,6 +52,7 @@ setup(name='thefuck',
+                                       'tests', 'tests.*', 'release']),
+       include_package_data=True,
+       zip_safe=False,
++      python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
+       install_requires=install_requires,
+       extras_require=extras_require,
+       entry_points={'console_scripts': [
+diff --git a/tests/functional/plots.py b/tests/functional/plots.py
+index 131e4c3..60c68a7 100644
+--- a/tests/functional/plots.py
++++ b/tests/functional/plots.py
+@@ -20,10 +20,12 @@ def with_confirmation(proc, TIMEOUT):
+     assert proc.expect([TIMEOUT, u'test'])
+ 
+ 
+-def history_changed(proc, TIMEOUT, to):
++def history_changed(proc, TIMEOUT, *to):
+     """Ensures that history changed."""
+     proc.send('\033[A')
+-    assert proc.expect([TIMEOUT, to])
++    pattern = [TIMEOUT]
++    pattern.extend(to)
++    assert proc.expect(pattern)
+ 
+ 
+ def history_not_changed(proc, TIMEOUT):
+@@ -44,14 +46,14 @@ def select_command_with_arrows(proc, TIMEOUT):
+     proc.send('\033[B')
+     assert proc.expect([TIMEOUT, u'git push'])
+     proc.send('\033[B')
+-    assert proc.expect([TIMEOUT, u'git help'])
++    assert proc.expect([TIMEOUT, u'git help', u'git hook'])
+     proc.send('\033[A')
+     assert proc.expect([TIMEOUT, u'git push'])
+     proc.send('\033[B')
+-    assert proc.expect([TIMEOUT, u'git help'])
++    assert proc.expect([TIMEOUT, u'git help', u'git hook'])
+     proc.send('\n')
+ 
+-    assert proc.expect([TIMEOUT, u'usage'])
++    assert proc.expect([TIMEOUT, u'usage', u'fatal: not a git repository'])
+ 
+ 
+ def refuse_with_confirmation(proc, TIMEOUT):
+diff --git a/tests/functional/test_bash.py b/tests/functional/test_bash.py
+index dbb6fed..489ca25 100644
+--- a/tests/functional/test_bash.py
++++ b/tests/functional/test_bash.py
+@@ -4,12 +4,12 @@ from tests.functional.plots import with_confirmation, without_confirmation, \
+     select_command_with_arrows, how_to_configure
+ 
+ 
+-python_3 = (u'thefuck/python3-bash',
+-            u'FROM python:3',
++python_3 = (u'thefuck/python3',
++            u'',
+             u'sh')
+ 
+-python_2 = (u'thefuck/python2-bash',
+-            u'FROM python:2',
++python_2 = (u'thefuck/python2',
++            u'',
+             u'sh')
+ 
+ 
+@@ -28,8 +28,6 @@ echo "instant mode ready: $THEFUCK_INSTANT_MODE"
+ def proc(request, spawnu, TIMEOUT):
+     container, instant_mode = request.param
+     proc = spawnu(*container)
+-    proc.sendline(u"pip install /src")
+-    assert proc.expect([TIMEOUT, u'Successfully installed'])
+     proc.sendline(init_bashrc.format(
+         u'--enable-experimental-instant-mode' if instant_mode else ''))
+     proc.sendline(u"bash")
+@@ -47,7 +45,7 @@ def test_with_confirmation(proc, TIMEOUT):
+ @pytest.mark.functional
+ def test_select_command_with_arrows(proc, TIMEOUT):
+     select_command_with_arrows(proc, TIMEOUT)
+-    history_changed(proc, TIMEOUT, u'git help')
++    history_changed(proc, TIMEOUT, u'git help', u'git hook')
+ 
+ 
+ @pytest.mark.functional
+diff --git a/tests/functional/test_fish.py b/tests/functional/test_fish.py
+index 657ebf1..cbf04f2 100644
+--- a/tests/functional/test_fish.py
++++ b/tests/functional/test_fish.py
+@@ -2,29 +2,13 @@ import pytest
+ from tests.functional.plots import with_confirmation, without_confirmation, \
+     refuse_with_confirmation, select_command_with_arrows
+ 
+-containers = (('thefuck/python3-fish',
+-               u'''FROM python:3
+-                   # Use jessie-backports since it has the fish package. See here for details:
+-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+-                   RUN awk '$1 ~ "^deb" { $3 = $3 "-backports"; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+-                   RUN apt-get update
+-                   RUN apt-get install -yy fish''',
+-               u'fish'),
+-              ('thefuck/python2-fish',
+-               u'''FROM python:2
+-                   # Use jessie-backports since it has the fish package. See here for details:
+-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+-                   RUN awk '$1 ~ "^deb" { $3 = $3 "-backports"; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+-                   RUN apt-get update
+-                   RUN apt-get install -yy fish''',
+-               u'fish'))
++containers = ((u'thefuck/python3', u'', u'fish'),
++              (u'thefuck/python2', u'', u'fish'))
+ 
+ 
+ @pytest.fixture(params=containers)
+ def proc(request, spawnu, TIMEOUT):
+     proc = spawnu(*request.param)
+-    proc.sendline(u"pip install /src")
+-    assert proc.expect([TIMEOUT, u'Successfully installed'])
+     proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
+     proc.sendline(u'fish')
+     return proc
+diff --git a/tests/functional/test_tcsh.py b/tests/functional/test_tcsh.py
+index 12cabe3..06dcad0 100644
+--- a/tests/functional/test_tcsh.py
++++ b/tests/functional/test_tcsh.py
+@@ -2,23 +2,13 @@ import pytest
+ from tests.functional.plots import with_confirmation, without_confirmation, \
+     refuse_with_confirmation, select_command_with_arrows
+ 
+-containers = (('thefuck/python3-tcsh',
+-               u'''FROM python:3
+-                   RUN apt-get update
+-                   RUN apt-get install -yy tcsh''',
+-               u'tcsh'),
+-              ('thefuck/python2-tcsh',
+-               u'''FROM python:2
+-                   RUN apt-get update
+-                   RUN apt-get install -yy tcsh''',
+-               u'tcsh'))
++containers = ((u'thefuck/python3', u'', u'tcsh'),
++              (u'thefuck/python2', u'', u'tcsh'))
+ 
+ 
+ @pytest.fixture(params=containers)
+ def proc(request, spawnu, TIMEOUT):
+     proc = spawnu(*request.param)
+-    proc.sendline(u'pip install /src')
+-    assert proc.expect([TIMEOUT, u'Successfully installed'])
+     proc.sendline(u'tcsh')
+     proc.sendline(u'setenv PYTHONIOENCODING utf8')
+     proc.sendline(u'eval `thefuck --alias`')
+diff --git a/tests/functional/test_zsh.py b/tests/functional/test_zsh.py
+index f8ea2af..a6c2733 100644
+--- a/tests/functional/test_zsh.py
++++ b/tests/functional/test_zsh.py
+@@ -4,17 +4,8 @@ from tests.functional.plots import with_confirmation, without_confirmation, \
+     select_command_with_arrows, how_to_configure
+ 
+ 
+-python_3 = ('thefuck/python3-zsh',
+-            u'''FROM python:3
+-                RUN apt-get update
+-                RUN apt-get install -yy zsh''',
+-            u'sh')
+-
+-python_2 = ('thefuck/python2-zsh',
+-            u'''FROM python:2
+-                RUN apt-get update
+-                RUN apt-get install -yy zsh''',
+-            u'sh')
++python_3 = (u'thefuck/python3', u'', u'sh')
++python_2 = (u'thefuck/python2', u'', u'sh')
+ 
+ 
+ init_zshrc = u'''echo '
+@@ -35,8 +26,6 @@ echo "instant mode ready: $THEFUCK_INSTANT_MODE"
+ def proc(request, spawnu, TIMEOUT):
+     container, instant_mode = request.param
+     proc = spawnu(*container)
+-    proc.sendline(u'pip install /src')
+-    assert proc.expect([TIMEOUT, u'Successfully installed'])
+     proc.sendline(init_zshrc.format(
+         u'--enable-experimental-instant-mode' if instant_mode else ''))
+     proc.sendline(u"zsh")
+@@ -54,7 +43,7 @@ def test_with_confirmation(proc, TIMEOUT):
+ @pytest.mark.functional
+ def test_select_command_with_arrows(proc, TIMEOUT):
+     select_command_with_arrows(proc, TIMEOUT)
+-    history_changed(proc, TIMEOUT, u'git help')
++    history_changed(proc, TIMEOUT, u'git help', u'git hook')
+ 
+ 
+ @pytest.mark.functional
+diff --git a/tests/output_readers/test_rerun.py b/tests/output_readers/test_rerun.py
+index 1d3a2c8..adae902 100644
+--- a/tests/output_readers/test_rerun.py
++++ b/tests/output_readers/test_rerun.py
+@@ -1,5 +1,7 @@
+ # -*- encoding: utf-8 -*-
+ 
++import pytest
++import sys
+ from mock import Mock, patch
+ from psutil import AccessDenied, TimeoutExpired
+ 
+@@ -30,6 +32,7 @@ class TestRerun(object):
+         actual = rerun.get_output('', '')
+         assert actual == expected
+ 
++    @pytest.mark.skipif(sys.platform == 'win32', reason="skip when running on Windows")
+     @patch('thefuck.output_readers.rerun._wait_output')
+     def test_get_output_unicode_misspell(self, wait_output_mock):
+         rerun.get_output(u'pácman', u'pácman')
+diff --git a/tests/rules/test_fix_file.py b/tests/rules/test_fix_file.py
+index caeb1c6..909e8ed 100644
+--- a/tests/rules/test_fix_file.py
++++ b/tests/rules/test_fix_file.py
+@@ -157,7 +157,7 @@ ReferenceError: conole is not defined
+ ./tests/rules/test_whois.py:22:80: E501 line too long (83 > 79 characters)
+ """),
+ 
+-    FixFileTest('py.test', '/home/thefuck/tests/rules/test_fix_file.py', 218, None, """
++    FixFileTest('pytest', '/home/thefuck/tests/rules/test_fix_file.py', 218, None, """
+ monkeypatch = <_pytest.monkeypatch.monkeypatch object at 0x7fdb76a25b38>
+ test = ('fish a.sh', '/tmp/fix-error/a.sh', 2, None, '', "\\nfish: Unknown command 'foo'\\n/tmp/fix-error/a.sh (line 2): foo\\n                              ^\\n")
+ 
+diff --git a/tests/test_utils.py b/tests/test_utils.py
+index eae743f..95f92bc 100644
+--- a/tests/test_utils.py
++++ b/tests/test_utils.py
+@@ -245,7 +245,7 @@ class TestGetValidHistoryWithoutCurrent(object):
+     def history(self, mocker):
+         mock = mocker.patch('thefuck.shells.shell.get_history')
+         #  Passing as an argument causes `UnicodeDecodeError`
+-        #  with newer py.test and python 2.7
++        #  with newer pytest and python 2.7
+         mock.return_value = ['le cat', 'fuck', 'ls cat',
+                              'diff x', 'nocommand x', u'café ô']
+         return mock
+diff --git a/thefuck/conf.py b/thefuck/conf.py
+index 27876ef..611ec84 100644
+--- a/thefuck/conf.py
++++ b/thefuck/conf.py
+@@ -1,4 +1,3 @@
+-from imp import load_source
+ import os
+ import sys
+ from warnings import warn
+@@ -6,6 +5,17 @@ from six import text_type
+ from . import const
+ from .system import Path
+ 
++try:
++    import importlib.util
++
++    def load_source(name, pathname, _file=None):
++        module_spec = importlib.util.spec_from_file_location(name, pathname)
++        module = importlib.util.module_from_spec(module_spec)
++        module_spec.loader.exec_module(module)
++        return module
++except ImportError:
++    from imp import load_source
++
+ 
+ class Settings(dict):
+     def __getattr__(self, item):
+diff --git a/thefuck/rules/test.py.py b/thefuck/rules/test.py.py
+index b898db5..47406b8 100644
+--- a/thefuck/rules/test.py.py
++++ b/thefuck/rules/test.py.py
+@@ -3,7 +3,7 @@ def match(command):
+ 
+ 
+ def get_new_command(command):
+-    return 'py.test'
++    return 'pytest'
+ 
+ 
+ # make it come before the python_command rule
+diff --git a/thefuck/types.py b/thefuck/types.py
+index 96e6ace..b3b64c3 100644
+--- a/thefuck/types.py
++++ b/thefuck/types.py
+@@ -1,9 +1,8 @@
+-from imp import load_source
+ import os
+ import sys
+ from . import logs
+ from .shells import shell
+-from .conf import settings
++from .conf import settings, load_source
+ from .const import DEFAULT_PRIORITY, ALL_ENABLED
+ from .exceptions import EmptyCommand
+ from .utils import get_alias, format_raw_script
+diff --git a/tox.ini b/tox.ini
+index 6e0646d..e95f481 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -1,9 +1,9 @@
+ [tox]
+-envlist = py27,py35,py36,py37,py38
++envlist = py{27,35,36,37,38,39,310,311}
+ 
+ [testenv]
+ deps = -rrequirements.txt
+-commands = py.test -v --capture=sys
++commands = pytest -v --capture=sys
+ 
+ [flake8]
+ ignore = E501,W503,W504

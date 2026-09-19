@@ -1,0 +1,11 @@
+diff -rup a/src/hf/view_area.c b/src/hf/view_area.c
+--- a/src/hf/view_area.c	2016-05-09 11:12:42.243751306 +0200
++++ b/src/hf/view_area.c	2016-05-09 11:15:44.661612529 +0200
+@@ -23,6 +23,7 @@
+ #include "view_area.h"
+ #include <stdlib.h>
+ #include <stdio.h>
++#include "../utils/x_alloc.h"
+ 
+ void resize_area (view_struct *vs, gint new_width, gint new_height) {
+ 	if (vs->if_rgb)

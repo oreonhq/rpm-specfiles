@@ -1,0 +1,22 @@
+--- ugene-49.1/src/plugins_3rdparty/ball/src/include/BALL/DATATYPE/hashGrid.h.orig	2023-11-26 02:17:11.000000000 +0900
++++ ugene-49.1/src/plugins_3rdparty/ball/src/include/BALL/DATATYPE/hashGrid.h	2024-01-22 16:42:22.536722206 +0900
+@@ -37,7 +37,7 @@ namespace BALL
+ {
+ 	namespace __private
+ 	{
+-		extern const char BALL_EXPORT neighbour_table_[27][3];
++		extern const signed char BALL_EXPORT neighbour_table_[27][3];
+ 	}
+ 
+ 	template <typename Item> class HashGrid3;
+--- ugene-49.1/src/plugins_3rdparty/ball/src/source/DATATYPE/hashGrid.cpp.orig	2023-11-26 02:17:11.000000000 +0900
++++ ugene-49.1/src/plugins_3rdparty/ball/src/source/DATATYPE/hashGrid.cpp	2024-01-22 16:42:28.199724474 +0900
+@@ -9,7 +9,7 @@ namespace BALL
+ {
+ 	namespace __private
+ 	{
+-		const char neighbour_table_[27][3] =
++		const signed char neighbour_table_[27][3] =
+ 		{
+ 			{ 0,  0,  0 }, { 0,  0, -1 }, { 0,  0,  1 },
+ 			{ 0, -1, -1 }, { 0, -1,  0 }, { 0, -1,  1 },

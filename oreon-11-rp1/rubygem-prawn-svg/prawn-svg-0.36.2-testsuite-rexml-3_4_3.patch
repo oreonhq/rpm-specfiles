@@ -1,0 +1,38 @@
+From 9538e0211ce0b38df9bb893c7698ea0e204ece2e Mon Sep 17 00:00:00 2001
+From: Mog Nesbitt <mog@seriousorange.com>
+Date: Thu, 23 Oct 2025 22:00:15 +1300
+Subject: [PATCH] upgrade rexml and fix tests to align with new behviour
+
+---
+ Gemfile.lock                           | 4 ++--
+ lib/prawn/svg/css/stylesheets.rb       | 2 +-
+ prawn-svg.gemspec                      | 2 +-
+ spec/prawn/svg/css/stylesheets_spec.rb | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/lib/prawn/svg/css/stylesheets.rb b/lib/prawn/svg/css/stylesheets.rb
+index 519222b..75feb8d 100644
+--- a/lib/prawn/svg/css/stylesheets.rb
++++ b/lib/prawn/svg/css/stylesheets.rb
+@@ -119,7 +119,7 @@ def css_selector_to_xpath(selector)
+           when '^='
+             result << "[starts-with(@#{key}, #{xpath_quote value})]"
+           when '$='
+-            result << "[substring(@#{key}, string-length(@#{key}) - #{value.length - 1}) = #{xpath_quote value})]"
++            result << "[substring(@#{key}, string-length(@#{key}) - #{value.length - 1}) = #{xpath_quote value}]"
+           when '*='
+             result << "[contains(@#{key}, #{xpath_quote value})]"
+           when '~='
+diff --git a/spec/prawn/svg/css/stylesheets_spec.rb b/spec/prawn/svg/css/stylesheets_spec.rb
+index 0affdf1..162a022 100644
+--- a/spec/prawn/svg/css/stylesheets_spec.rb
++++ b/spec/prawn/svg/css/stylesheets_spec.rb
+@@ -73,7 +73,7 @@
+       ]
+ 
+       expected << [5,
+-                   [['fill', '#ff0000', false], ['fill', '#330000', false], ['fill', '#330000', false], ['fill', '#440000', false],
++                   [['fill', '#ff0000', false], ['fill', '#330000', false], ['fill', '#440000', false],
+                     ['fill', '#00ff00', false]]]
+ 
+       expected.push(

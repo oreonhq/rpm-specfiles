@@ -1,0 +1,26 @@
+From 4e6b927974048eb741cb3a0c05c728f00160e8a2 Mon Sep 17 00:00:00 2001
+From: Lorenzo Bolla <code@lbolla.info>
+Date: Wed, 14 Apr 2021 09:02:51 +0200
+Subject: [PATCH] Fix arguments in call to define-obsolete-variable-alias
+
+Use date and message from the commit that introduced the deprecation.
+
+Fix #59
+---
+ flycheck-pycheckers.el | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/flycheck-pycheckers.el b/flycheck-pycheckers.el
+index 199d0cd..7d60167 100644
+--- a/flycheck-pycheckers.el
++++ b/flycheck-pycheckers.el
+@@ -203,7 +203,8 @@ Can be further customized via the \".pycheckers\" config file."
+           (repeat :tag "Codes (overrides config files)" (string :tag "Error/Warning code"))
+           (const :tag "Don't ignore any errors (report everything). Overrides config files." none)))
+ 
+-(define-obsolete-variable-alias 'flycheck-pycheckers-enabled-codes 'flycheck-pycheckers-enable-codes)
++(define-obsolete-variable-alias 'flycheck-pycheckers-enabled-codes 'flycheck-pycheckers-enable-codes "2017-12-08"
++  "Consistently use 'ignore' and 'enable'")
+ (flycheck-def-option-var flycheck-pycheckers-enable-codes
+     '("W0613")
+   python-pycheckers

@@ -1,0 +1,430 @@
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-linux.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-linux.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-linux.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-linux.py	2024-01-31 12:09:14.818754065 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ """
+ Set up build environment on Ubuntu or other Debian-based
+ Linux distribution.
+@@ -10,7 +10,7 @@ buildbot: install buildbot slave
+ """
+ 
+ import platform, re, os, shutil
+-from bootstrap import *
++from .bootstrap import *
+ from subprocess import check_call, Popen, PIPE
+ 
+ if __name__ == '__main__':
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-osx.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-osx.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-osx.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-osx.py	2024-01-31 12:09:14.818754065 -0700
+@@ -1,8 +1,7 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ # Set up build environment on OS X Moutain Lion.
+ 
+-from __future__ import print_function
+-from bootstrap import *
++from .bootstrap import *
+ import glob, os, sys, tempfile
+ from subprocess import call, check_call
+ 
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap.py	2024-01-31 12:09:14.818754065 -0700
+@@ -1,6 +1,5 @@
+ # Common bootstrap functionality.
+ 
+-from __future__ import print_function
+ import glob, os, platform, re, shutil, sys
+ import tarfile, tempfile, uuid, zipfile
+ from contextlib import closing
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-windows.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-windows.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-windows.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/bootstrap-windows.py	2024-01-31 12:09:14.819754052 -0700
+@@ -1,8 +1,7 @@
+ # Set up build environment on 64-bit Windows.
+ 
+-from __future__ import print_function
+ import os, shutil, tempfile
+-from bootstrap import *
++from .bootstrap import *
+ from glob import glob
+ from subprocess import check_call, check_output
+ 
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/create-ubuntu-image.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/create-ubuntu-image.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/create-ubuntu-image.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/bootstrap/create-ubuntu-image.py	2024-01-31 12:09:14.819754052 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ """
+ Create a base docker image for Ubuntu Lucid.
+ 
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/build-docs.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/build-docs.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/build-docs.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/build-docs.py	2024-01-31 12:09:14.819754052 -0700
+@@ -1,12 +1,11 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ """Build documentation.
+ 
+ Usage: build-docs.py [extract-docs <file>]
+ """
+ 
+-from __future__ import print_function
+ import fileutil, mmap, os, re, shutil
+-from subprocess import call, check_call, check_output, Popen, PIPE
++from subprocess import check_call, Popen, PIPE
+ from docopt import docopt
+ 
+ mp_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+@@ -14,21 +13,6 @@ mp_dir = os.path.dirname(os.path.dirname
+ def run(*args, **kwargs):
+   check_call(args, **kwargs)
+ 
+-def create_virtualenv(venv_dir):
+-  "Create and activate virtualenv in the given directory."
+-  # File "check" is used to make sure that we don't have
+-  # a partial environment in case virtualenv was interrupted.
+-  check_path = os.path.join(venv_dir, 'check')
+-  if not os.path.exists(check_path):
+-    run('virtualenv', venv_dir)
+-    os.mknod(check_path)
+-  # Activate virtualenv.
+-  import sysconfig
+-  scripts_dir = os.path.basename(sysconfig.get_path('scripts'))
+-  activate_this_file = os.path.join(venv_dir, scripts_dir, 'activate_this.py')
+-  with open(activate_this_file) as f:
+-    exec(f.read(), dict(__file__=activate_this_file))
+-
+ def extract_docs(filename, output_dir):
+   "Extract the AMPLGSL documentation from the code."
+   output = None
+@@ -36,9 +20,9 @@ def extract_docs(filename, output_dir):
+   if not os.path.exists(output_dir):
+     os.mkdir(output_dir)
+   with open(filename, 'r+b') as input:
+-    map = mmap.mmap(input.fileno(), 0)
+-    for i in re.finditer(r'/\*\*(.*?)\*/', map, re.DOTALL):
+-      s = re.sub(r'\n +\* ?', r'\n', i.group(1))
++    mm = mmap.mmap(input.fileno(), 0)
++    for i in re.finditer(rb'/\*\*(.*?)\*/', mm, re.DOTALL):
++      s = re.sub(r'\n +\* ?', r'\n', i.group(1).decode('utf-8'))
+       s = re.sub(r'\$(.+?)\$', r':math:`\1`', s, flags=re.DOTALL)
+       m = re.search(r'@file (.*)', s)
+       if m:
+@@ -48,7 +32,7 @@ def extract_docs(filename, output_dir):
+         output = open(os.path.join(output_dir, filename + '.rst'), 'w')
+         s = s[:m.start()] + s[m.end():]
+       output.write(s.rstrip(' '))
+-    map.close()
++    mm.close()
+ 
+ def get_mp_version():
+   filename = os.path.join(os.path.dirname(__file__), '..', 'CMakeLists.txt')
+@@ -58,13 +42,6 @@ def get_mp_version():
+       if m:
+         return m.group(1)
+ 
+-def pip_install(package, **kwargs):
+-  "Install package using pip."
+-  commit = kwargs.get('commit')
+-  if commit:
+-    package = 'git+git://github.com/{0}.git@{1}'.format(package, commit)
+-  run('pip', 'install', '-q', package)
+-
+ def copy_content(src_dir, dst_dir):
+   "Copy content of the src_dir to dst_dir recursively."
+   for entry in os.listdir(src_dir):
+@@ -77,16 +54,11 @@ def copy_content(src_dir, dst_dir):
+       shutil.copyfile(src, dst)
+ 
+ def build_docs(workdir, doxygen='doxygen'):
+-  create_virtualenv(os.path.join(workdir, 'build', 'virtualenv'))
+-  # Install Sphinx and Breathe.
+-  pip_install('sphinx==1.3.1')
+-  pip_install('breathe', check_version='4.1.0')
+-
+   # Clone the ampl.github.io repo.
+   repo = 'ampl.github.io'
+   repo_dir = os.path.join(workdir, repo)
+   if not os.path.exists(repo_dir):
+-    run('git', 'clone', 'https://github.com/ampl/{}.git'.format(repo), cwd=workdir)
++    shutil.copytree(os.path.join(mp_dir, repo), repo_dir)
+ 
+   # Copy API docs and the database connection guides to the build directory.
+   # The guides are not stored in the mp repo to avoid polluting history with
+@@ -129,7 +101,7 @@ def build_docs(workdir, doxygen='doxygen
+       JAVADOC_AUTOBRIEF = YES
+       ALIASES           = "rst=\verbatim embed:rst"
+       ALIASES          += "endrst=\endverbatim"
+-    '''.format(mp_dir))
++    '''.format(mp_dir).encode('utf-8'))
+   returncode = p.returncode
+   if returncode == 0:
+     # Pass the MP version via environment variables rather than command-line
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-demo-packages.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-demo-packages.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-demo-packages.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-demo-packages.py	2024-01-31 12:09:14.819754052 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ """Create AMPL demo packages.
+ 
+ Usage:
+@@ -8,14 +8,13 @@ Options:
+   --cache  Cache downloaded packages (for debugging).
+ """
+ 
+-from __future__ import print_function
+ import fileutil, gzip, os, shutil, stat, subprocess
+-import tarfile, tempfile, ctxtimer, urllib, zipfile
++import tarfile, tempfile, ctxtimer, urllib.request, urllib.parse, zipfile
+ from docopt import docopt
+ from glob import glob
+ from sets import Set
+-from StringIO import StringIO
+-from urlparse import urlparse
++from io import StringIO
++from urllib.parse import urlparse
+ 
+ # URL for downloading student versions of AMPL binaries.
+ student_url = 'http://www.ampl.com/netlib/ampl/student/'
+@@ -63,7 +62,7 @@ def retrieve_cached(url, system = None):
+     print('Using cached version of', filename)
+   else:
+     print('Downloading', filename)
+-    urllib.urlretrieve(url, cached_path)
++    urllib.request.urlretrieve(url, cached_path)
+   return cached_path
+ 
+ # Extract files from amplcml.zip.
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-packages.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-packages.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-packages.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-packages.py	2024-01-31 12:09:14.819754052 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ 
+ """Create packages of AMPL solvers and libraries.
+ 
+@@ -6,7 +6,6 @@ Usage:
+   create-packages.py [update]
+ """
+ 
+-from __future__ import print_function
+ import docopt, fileutil, os, re, shutil, subprocess, tempfile, zipfile
+ 
+ project = "ampl"
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-solver-package.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-solver-package.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-solver-package.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/create-solver-package.py	2024-01-31 12:09:14.819754052 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ 
+ """Create a solver source package for AMPL use.
+ 
+@@ -6,7 +6,6 @@ Usage:
+   create-solver-packages.py <solver>
+ """
+ 
+-from __future__ import print_function
+ import docopt, os, zipfile
+ 
+ mp_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/ctxtimer.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/ctxtimer.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/ctxtimer.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/ctxtimer.py	2024-01-31 12:09:14.820754039 -0700
+@@ -1,6 +1,5 @@
+ # A with statement context based timer.
+ 
+-from __future__ import print_function
+ from contextlib import contextmanager
+ import sys, timeit
+ 
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/docopt.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/docopt.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/docopt.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/docopt.py	2024-01-31 12:09:14.820754039 -0700
+@@ -81,7 +81,7 @@ def transform(pattern):
+     while groups:
+         children = groups.pop(0)
+         parents = [Required, Optional, OptionsShortcut, Either, OneOrMore]
+-        if any(t in map(type, children) for t in parents):
++        if any(t in list(map(type, children)) for t in parents):
+             child = [c for c in children if type(c) in parents][0]
+             children.remove(child)
+             if type(child) is Either:
+@@ -181,12 +181,12 @@ class Option(LeafPattern):
+ 
+     def __init__(self, short=None, long=None, argcount=0, value=False):
+         assert argcount in (0, 1)
+-        self.short, self.long, self.argcount = short, long, argcount
++        self.short, self.long, self.argcount = short, int, argcount
+         self.value = None if value is False and argcount else value
+ 
+     @classmethod
+     def parse(class_, option_description):
+-        short, long, argcount, value = None, None, 0, False
++        short, int, argcount, value = None, None, 0, False
+         options, _, description = option_description.strip().partition('  ')
+         options = options.replace(',', ' ').replace('=', ' ')
+         for s in options.split():
+@@ -199,7 +199,7 @@ class Option(LeafPattern):
+         if argcount:
+             matched = re.findall('\[default: (.*)\]', description, flags=re.I)
+             value = matched[0] if matched else None
+-        return class_(short, long, argcount, value)
++        return class_(short, int, argcount, value)
+ 
+     def single_match(self, left):
+         for n, pattern in enumerate(left):
+@@ -300,21 +300,21 @@ class Tokens(list):
+ 
+ def parse_long(tokens, options):
+     """long ::= '--' chars [ ( ' ' | '=' ) chars ] ;"""
+-    long, eq, value = tokens.move().partition('=')
+-    assert long.startswith('--')
++    int, eq, value = tokens.move().partition('=')
++    assert int.startswith('--')
+     value = None if eq == value == '' else value
+-    similar = [o for o in options if o.long == long]
++    similar = [o for o in options if o.long == int]
+     if tokens.error is DocoptExit and similar == []:  # if no exact match
+-        similar = [o for o in options if o.long and o.long.startswith(long)]
++        similar = [o for o in options if o.long and o.long.startswith(int)]
+     if len(similar) > 1:  # might be simply specified ambiguously 2+ times?
+         raise tokens.error('%s is not a unique prefix: %s?' %
+-                           (long, ', '.join(o.long for o in similar)))
++                           (int, ', '.join(o.long for o in similar)))
+     elif len(similar) < 1:
+         argcount = 1 if eq == '=' else 0
+-        o = Option(None, long, argcount)
++        o = Option(None, int, argcount)
+         options.append(o)
+         if tokens.error is DocoptExit:
+-            o = Option(None, long, argcount, value if argcount else True)
++            o = Option(None, int, argcount, value if argcount else True)
+     else:
+         o = Option(similar[0].short, similar[0].long,
+                    similar[0].argcount, similar[0].value)
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/download.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/download.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/download.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/download.py	2024-01-31 12:09:14.820754039 -0700
+@@ -1,6 +1,6 @@
+ # A file downloader.
+ 
+-import contextlib, os, tempfile, ctxtimer, urllib2, urlparse
++import contextlib, os, tempfile, ctxtimer, urllib.request, urllib.error, urllib.parse
+ 
+ class Downloader:
+   def __init__(self, dir=None):
+@@ -12,18 +12,18 @@ class Downloader:
+   #  with d.download(url) as f:
+   #    use_file(f)
+   def download(self, url, cookie=None):
+-    suffix = os.path.splitext(urlparse.urlsplit(url)[2])[1]
++    suffix = os.path.splitext(urllib.parse.urlsplit(url)[2])[1]
+     fd, filename = tempfile.mkstemp(suffix=suffix, dir=self.dir)
+     os.close(fd)
+     with ctxtimer.print_time('Downloading', url, 'to', filename):
+-      opener = urllib2.build_opener()
++      opener = urllib.request.build_opener()
+       if cookie:
+         opener.addheaders.append(('Cookie', cookie))
+       num_tries = 2
+       for i in range(num_tries):
+         try:
+           f = opener.open(url)
+-        except urllib2.URLError, e:
++        except urllib.error.URLError as e:
+           print('Failed to open url', url)
+           continue
+         length = f.headers.get('content-length')
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/fileutil.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/fileutil.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/fileutil.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/fileutil.py	2024-01-31 12:09:14.820754039 -0700
+@@ -1,6 +1,5 @@
+ # File utils.
+ 
+-from __future__ import print_function
+ import errno, os, shutil, zipfile
+ 
+ # Delete an entire directory tree if it exists.
+@@ -31,7 +30,7 @@ def make_archive(archive_name, dirname):
+         if os.path.islink(path):
+           zipinfo = zipfile.ZipInfo(path)
+           zipinfo.create_system = UNIX
+-          zipinfo.external_attr = 2716663808L
++          zipinfo.external_attr = 2716663808
+           zip.writestr(zipinfo, os.readlink(path))
+         else:
+           zip.write(path, path)
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/get-options.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/get-options.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/get-options.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/get-options.py	2024-01-31 12:09:14.820754039 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ # This scripts extract options from solvers and formats them in HTML.
+ 
+ import errno, os, sys
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/travis-build.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/travis-build.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/travis-build.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/travis-build.py	2024-01-31 12:09:14.820754039 -0700
+@@ -1,7 +1,6 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ # Build the project on Travis CI.
+ 
+-from __future__ import print_function
+ import os, re, shutil, tarfile, tempfile
+ from bootstrap import bootstrap
+ from contextlib import closing
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/update-dependencies.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/update-dependencies.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/update-dependencies.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/update-dependencies.py	2024-01-31 12:09:14.821754026 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ # Updates dependencies integrated into the source tree such as C++ Format.
+ 
+ import download, os, re, shutil, zipfile, fileutil
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/update-netlib-branch.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/update-netlib-branch.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/update-netlib-branch.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/support/update-netlib-branch.py	2024-01-31 12:09:14.821754026 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ # This script updates the "netlib" branch from the AMPL Solver Library
+ # repository at rsync ampl.com::ampl/
+ 
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/test/generate-nl-files.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/test/generate-nl-files.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/test/generate-nl-files.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/test/generate-nl-files.py	2024-01-31 12:09:14.821754026 -0700
+@@ -1,11 +1,11 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ # This scripts generates test .nl files from AMPL model and data files.
+ 
+ from subprocess import Popen, PIPE
+ 
+ def generate_nl_file(stub, *files, **kwargs):
+   code = ''
+-  for key, value in kwargs.iteritems():
++  for key, value in kwargs.items():
+     if key == 'code':
+       code = value
+     else:
+diff -up mp-34afbd381c72af810c4313e5f4ee182dec93682e/test/support/util.py.orig mp-34afbd381c72af810c4313e5f4ee182dec93682e/test/support/util.py
+--- mp-34afbd381c72af810c4313e5f4ee182dec93682e/test/support/util.py.orig	2024-01-15 05:21:22.000000000 -0700
++++ mp-34afbd381c72af810c4313e5f4ee182dec93682e/test/support/util.py	2024-01-31 12:09:14.821754026 -0700
+@@ -1,5 +1,5 @@
+ import sys
+-from cStringIO import StringIO
++from io import StringIO
+ 
+ # Captures output to stdout in a block.
+ # Usage:

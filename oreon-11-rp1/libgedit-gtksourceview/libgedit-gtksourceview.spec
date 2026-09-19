@@ -3,7 +3,7 @@
 %global api_version 300
 
 Name:           libgedit-gtksourceview
-Version:        299.7.0
+Version:        299.7.1
 Release:        %autorelease
 Summary:        Gedit Technology - Source code editing widget
 License:        LGPL-2.1-or-later

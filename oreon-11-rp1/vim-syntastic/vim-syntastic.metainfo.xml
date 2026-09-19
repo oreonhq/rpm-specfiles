@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+<id>vim-syntastic</id>
+<extends>gvim.desktop</extends>
+<name>syntastic</name>
+<summary>A vim plugins to check syntax for programming languages</summary>
+<url type="homepage">https://github.com/scrooloose/syntastic</url>
+<metadata_license>CC0-1.0</metadata_license>
+<project_license>WTFPL</project_license>
+<updatecontact>vim-syntastic-owner@fedoraproject.org</updatecontact>
+</component>

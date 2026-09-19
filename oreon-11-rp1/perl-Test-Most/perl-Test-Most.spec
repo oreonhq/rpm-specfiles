@@ -2,11 +2,11 @@
 
 Name:           perl-Test-Most
 Version:        0.42
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Perl module with test functions and features
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Most
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Most-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DC/DCANTRELL/Test-Most-%{version}.tar.gz
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

@@ -1,0 +1,425 @@
+From efe1368c2db8c46844d2e4bb5b1dca1ed73a46b1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 4 Feb 2016 13:59:18 +0100
+Subject: [PATCH] Port to libsigc++-2.6.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+libsigc++-2.6.0 changed API
+<https://bugzilla.gnome.org/show_bug.cgi?id=756299>. <sigc++/object.h>
+header file was removed.
+
+Also it seems that bind() invocations must be qualified as
+sigc::bind(), otherwise compiler is not able to locate matching
+implementation.
+
+This patch adjusts the code.
+
+<https://bugs.gentoo.org/show_bug.cgi?id=569528>
+<https://bugzilla.redhat.com/show_bug.cgi?id=1304679>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ ccgo.cc            |  2 +-
+ gmp/device.hh      |  1 -
+ gtk/gtk.cc         | 20 ++++++++++----------
+ igs/connect.hh     |  1 -
+ igs/control.cc     |  2 +-
+ igs/game.hh        |  1 -
+ igs/game_list.cc   | 32 ++++++++++++++++----------------
+ igs/match_box.cc   |  2 +-
+ igs/player.hh      |  1 -
+ igs/player_list.cc | 12 ++++++------
+ setting_win.cc     | 22 +++++++++++-----------
+ time.hh            |  1 -
+ 12 files changed, 46 insertions(+), 51 deletions(-)
+
+diff --git a/ccgo.cc b/ccgo.cc
+index 3d0f700..d498a93 100644
+--- a/ccgo.cc
++++ b/ccgo.cc
+@@ -153,7 +153,7 @@ void ccGo::open_sgf_file(std::string fn)
+ 		ov->view.set_list(& game_list);
+ 		ov->view.set_node(game);
+ 		view_list.push_back(ov);
+-		ov->view.signal_hide().connect(bind(mem_fun(* this, & ccGo::view_closed), ov));
++		ov->view.signal_hide().connect(sigc::bind(mem_fun(* this, & ccGo::view_closed), ov));
+ 		ov->view.show_all();
+ 	}
+ }
+diff --git a/gmp/device.hh b/gmp/device.hh
+index 25a3d72..ef63632 100644
+--- a/gmp/device.hh
++++ b/gmp/device.hh
+@@ -22,7 +22,6 @@
+ #ifndef GMP_DEVICE_HH
+ #define GMP_DEVICE_HH
+ #include "gmp.hh"
+-#include <sigc++/object.h>
+ #include <sigc++/signal.h>
+ #include <string>
+ #include <queue>
+diff --git a/gtk/gtk.cc b/gtk/gtk.cc
+index 8b28ffe..3aaea9e 100644
+--- a/gtk/gtk.cc
++++ b/gtk/gtk.cc
+@@ -60,28 +60,28 @@ MarkWin::MarkWin() :
+ 	vb->pack_start(* Gtk::manage(new Gtk::Label(_("Use Mark:"))));
+ 	Gtk::RadioButton::Group gp;
+ 	rbs.push_back(Gtk::manage(new Gtk::RadioButton(gp, _("None"))));
+-	rbs.back()->signal_clicked().connect(bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_NONE));
++	rbs.back()->signal_clicked().connect(sigc::bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_NONE));
+ 	vb->pack_start(* rbs.back());
+ 	rbs.push_back(Gtk::manage(new Gtk::RadioButton(gp, _("Circle"))));
+-	rbs.back()->signal_clicked().connect(bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_CIRCLE));
++	rbs.back()->signal_clicked().connect(sigc::bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_CIRCLE));
+ 	vb->pack_start(* rbs.back());
+ 	rbs.push_back(Gtk::manage(new Gtk::RadioButton(gp, _("Triangle"))));
+-	rbs.back()->signal_clicked().connect(bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_TRIANGLE));
++	rbs.back()->signal_clicked().connect(sigc::bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_TRIANGLE));
+ 	vb->pack_start(* rbs.back());
+ 	rbs.push_back(Gtk::manage(new Gtk::RadioButton(gp, _("Square"))));
+-	rbs.back()->signal_clicked().connect(bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_SQUARE));
++	rbs.back()->signal_clicked().connect(sigc::bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_SQUARE));
+ 	vb->pack_start(* rbs.back());
+ 	rbs.push_back(Gtk::manage(new Gtk::RadioButton(gp, _("Cross Mark"))));
+-	rbs.back()->signal_clicked().connect(bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_CROSS));
++	rbs.back()->signal_clicked().connect(sigc::bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_CROSS));
+ 	vb->pack_start(* rbs.back());
+ 	rbs.push_back(Gtk::manage(new Gtk::RadioButton(gp, _("Select"))));
+-	rbs.back()->signal_clicked().connect(bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_SELECT));
++	rbs.back()->signal_clicked().connect(sigc::bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_SELECT));
+ 	vb->pack_start(* rbs.back());
+ 	rbs.push_back(Gtk::manage(new Gtk::RadioButton(gp, _("White Territory"))));
+-	rbs.back()->signal_clicked().connect(bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_W_TERRITORY));
++	rbs.back()->signal_clicked().connect(sigc::bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_W_TERRITORY));
+ 	vb->pack_start(* rbs.back());
+ 	rbs.push_back(Gtk::manage(new Gtk::RadioButton(gp, _("Black Territory"))));
+-	rbs.back()->signal_clicked().connect(bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_B_TERRITORY));
++	rbs.back()->signal_clicked().connect(sigc::bind(mem_fun(* this, & MarkWin::select_mark), ccgo::MARK_B_TERRITORY));
+ 	vb->pack_start(* rbs.back());
+ 
+ 	vb->pack_start(* Gtk::manage(new Gtk::HSeparator));
+@@ -386,7 +386,7 @@ View::View() :
+ 	om->items().push_back(Gtk::Menu_Helpers::MenuElem(_("Set")));
+ 	om->items().push_back(Gtk::Menu_Helpers::MenuElem(_("Score")));
+ 	o_mode.set_history(mode);
+-	o_mode.signal_changed().connect(bind(mem_fun(* this, & View::game_mode), MODE_UNKNOWN));
++	o_mode.signal_changed().connect(sigc::bind(mem_fun(* this, & View::game_mode), MODE_UNKNOWN));
+ 
+ 	// turn options
+ 	al = Gtk::manage(new Gtk::Alignment(0.5, 0.5, 0, 0));
+@@ -1325,7 +1325,7 @@ void View::check_list() // update record list
+ 			msg(DBG_DEBUG) << "adding " << nm << ": " << lb << '\n';
+ 			Act * ac = new Act;
+ 			ac->act = Gtk::Action::create(nm, lb);
+-			ac->act->signal_activate().connect(bind(mem_fun(* this, & View::list_select), n));
++			ac->act->signal_activate().connect(sigc::bind(mem_fun(* this, & View::list_select), n));
+ 			m_act->add(ac->act);
+ 			ac->id = m_uim->new_merge_id();
+ 			m_uim->add_ui(ac->id, "/MenuBar/RecordMenu", nm, nm, Gtk::UI_MANAGER_AUTO, false);
+diff --git a/igs/connect.hh b/igs/connect.hh
+index 0c7af95..e517989 100644
+--- a/igs/connect.hh
++++ b/igs/connect.hh
+@@ -21,7 +21,6 @@
+ 
+ #ifndef IGS_CONNECT_HH
+ #define IGS_CONNECT_HH
+-#include <sigc++/object.h>
+ #include <sigc++/signal.h>
+ #include <glibmm/refptr.h>
+ #include <glibmm/object.h>
+diff --git a/igs/control.cc b/igs/control.cc
+index cd5476d..196d3c7 100644
+--- a/igs/control.cc
++++ b/igs/control.cc
+@@ -86,7 +86,7 @@ bool Control::open()
+ 	}
+ 	conn->recv_line.connect(mem_fun(* this, & Control::process_line));
+ // 	conn->conn_lost.connect(mem_fun(* this, & Control::conn_lost));
+-	conn->conn_lost.connect(bind(ptr_fun(& Control::_conn_lost), this));
++	conn->conn_lost.connect(sigc::bind(ptr_fun(& Control::_conn_lost), this));
+ 	conn->check_prompt.connect(mem_fun(* this, & Control::check_prompt));
+ 
+ 	if (! conn->is_ok()) {
+diff --git a/igs/game.hh b/igs/game.hh
+index 7a63f2e..fbcb7df 100644
+--- a/igs/game.hh
++++ b/igs/game.hh
+@@ -23,7 +23,6 @@
+ #define IGS_GAME_HH
+ #include "player.hh"
+ #include <string>
+-#include <sigc++/object.h>
+ namespace igs
+ {
+ 	class Game :
+diff --git a/igs/game_list.cc b/igs/game_list.cc
+index 61b94b2..7f0d834 100644
+--- a/igs/game_list.cc
++++ b/igs/game_list.cc
+@@ -165,34 +165,34 @@ GameList::GameList()
+ 	v = view.get_column(c = view.append_column(_("num"), m_col.num) - 1);
+ 	v->set_clickable();
+ 	v->set_reorderable();
+-	v->signal_clicked().connect(bind(mem_fun(* this, & GameList::sort_by), v));
++	v->signal_clicked().connect(sigc::bind(mem_fun(* this, & GameList::sort_by), v));
+ 	v->set_sort_column_id(c);
+ 
+ 	v = view.get_column(c = view.append_column(_("white"), m_col.white) - 1);
+ 	v->set_clickable();
+ 	v->set_reorderable();
+-	v->signal_clicked().connect(bind(mem_fun(* this, & GameList::sort_by), v));
++	v->signal_clicked().connect(sigc::bind(mem_fun(* this, & GameList::sort_by), v));
+ 	v->set_sort_column_id(c);
+ 
+ 	v = view.get_column(c = view.append_column(_("w rank"), w_render) - 1);
+ 	v->add_attribute(w_render.property_user_data(), m_col.w_rank);
+ 	v->set_clickable();
+ 	v->set_reorderable();
+-	v->signal_clicked().connect(bind(mem_fun(* this, & GameList::sort_by), v));
++	v->signal_clicked().connect(sigc::bind(mem_fun(* this, & GameList::sort_by), v));
+ 	store->set_sort_func(c, sigc::bind(sigc::ptr_fun(& CustomText::compare), m_col.w_rank));
+ 	v->set_sort_column_id(c);
+ 
+ 	v = view.get_column(c = view.append_column(_("black"), m_col.black) - 1);
+ 	v->set_clickable();
+ 	v->set_reorderable();
+-	v->signal_clicked().connect(bind(mem_fun(* this, & GameList::sort_by), v));
++	v->signal_clicked().connect(sigc::bind(mem_fun(* this, & GameList::sort_by), v));
+ 	v->set_sort_column_id(c);
+ 
+ 	v = view.get_column(c = view.append_column(_("b rank"), b_render) - 1);
+ 	v->add_attribute(b_render.property_user_data(), m_col.b_rank);
+ 	v->set_clickable();
+ 	v->set_reorderable();
+-	v->signal_clicked().connect(bind(mem_fun(* this, & GameList::sort_by), v));
++	v->signal_clicked().connect(sigc::bind(mem_fun(* this, & GameList::sort_by), v));
+ 	store->set_sort_func(c, sigc::bind(sigc::ptr_fun(& CustomText::compare), m_col.b_rank));
+ 	v->set_sort_column_id(c);
+ 
+@@ -253,20 +253,20 @@ void GameList::update(const Game & g)
+ 
+ 			skip_move(i->game.get_num());
+ 			i->state = GS_NORMAL;
+-			i->show->input_line.connect(bind(game_input_kibitz.make_slot(), i->game.get_num()));
++			i->show->input_line.connect(sigc::bind(game_input_kibitz.make_slot(), i->game.get_num()));
+ 			i->show->set_play(i->game.get_white() == name, i->game.get_black() == name);
+ 			if (i->game.get_white() == name || i->game.get_black() == name) { // am i playing
+ 				my_match = i->game.get_num();
+-				i->show->input_handicap.connect(bind(game_input_handicap.make_slot(), my_match));
+-				i->show->input_put.connect(bind(game_input_put.make_slot(), my_match));
+-				i->show->input_pass.connect(bind(game_input_pass.make_slot(), my_match));
+-				i->show->input_undo.connect(bind(game_input_undo.make_slot(), my_match));
+-				i->show->input_terri.connect(bind(game_input_terri.make_slot(), my_match));
+-				i->show->input_reset.connect(bind(game_input_reset.make_slot(), my_match));
+-				i->show->input_done.connect(bind(game_input_done.make_slot(), my_match));
+-
+-				i->show->input_adjourn.connect(bind(game_input_adjourn.make_slot(), my_match));
+-				i->show->input_resign.connect(bind(game_input_resign.make_slot(), my_match));
++				i->show->input_handicap.connect(sigc::bind(game_input_handicap.make_slot(), my_match));
++				i->show->input_put.connect(sigc::bind(game_input_put.make_slot(), my_match));
++				i->show->input_pass.connect(sigc::bind(game_input_pass.make_slot(), my_match));
++				i->show->input_undo.connect(sigc::bind(game_input_undo.make_slot(), my_match));
++				i->show->input_terri.connect(sigc::bind(game_input_terri.make_slot(), my_match));
++				i->show->input_reset.connect(sigc::bind(game_input_reset.make_slot(), my_match));
++				i->show->input_done.connect(sigc::bind(game_input_done.make_slot(), my_match));
++
++				i->show->input_adjourn.connect(sigc::bind(game_input_adjourn.make_slot(), my_match));
++				i->show->input_resign.connect(sigc::bind(game_input_resign.make_slot(), my_match));
+ 				// i->show->set_no_close();
+ 			}
+ 		}
+diff --git a/igs/match_box.cc b/igs/match_box.cc
+index 9d6654c..f80c2f1 100644
+--- a/igs/match_box.cc
++++ b/igs/match_box.cc
+@@ -134,7 +134,7 @@ MatchBox::MatchBox(const std::string & n) :
+ 
+ 	bt = Gtk::manage(new Gtk::Button(Gtk::Stock::CANCEL));
+ 	button_area.pack_end(* bt);
+-	bt->signal_clicked().connect(bind(match_cancel.make_slot(), this));
++	bt->signal_clicked().connect(sigc::bind(match_cancel.make_slot(), this));
+ 
+ 	button_area.pack_end(decline_button);
+ 	decline_button.signal_clicked().connect(mem_fun(* this, & MatchBox::decline_match));
+diff --git a/igs/player.hh b/igs/player.hh
+index 2615582..8b54133 100644
+--- a/igs/player.hh
++++ b/igs/player.hh
+@@ -24,7 +24,6 @@
+ #include "custom_text.hh"
+ #include "datetime.hh"
+ #include <string>
+-#include <sigc++/object.h>
+ #include <ctime>
+ 
+ namespace igs
+diff --git a/igs/player_list.cc b/igs/player_list.cc
+index 25c9421..51e2e2b 100644
+--- a/igs/player_list.cc
++++ b/igs/player_list.cc
+@@ -408,14 +408,14 @@ PlayerList::PlayerList() :
+ 	v = view.get_column(c = view.append_column(_("name"), m_col.name) - 1);
+ 	v->set_clickable();
+ 	v->set_reorderable();
+-	v->signal_clicked().connect(bind(mem_fun(* this, & PlayerList::sort_by), v));
++	v->signal_clicked().connect(sigc::bind(mem_fun(* this, & PlayerList::sort_by), v));
+ 	v->set_sort_column_id(c);
+ 
+ 	v = view.get_column(c = view.append_column(_("rank"), rank_render) - 1);
+ 	v->add_attribute(rank_render.property_user_data(), m_col.rank);
+ 	v->set_clickable();
+ 	v->set_reorderable();
+-	v->signal_clicked().connect(bind(mem_fun(* this, & PlayerList::sort_by), v));
++	v->signal_clicked().connect(sigc::bind(mem_fun(* this, & PlayerList::sort_by), v));
+ 	store->set_sort_func(c, sigc::bind(sigc::ptr_fun(& CustomText::compare), m_col.rank));
+ 	v->set_sort_column_id(c);
+ 
+@@ -423,7 +423,7 @@ PlayerList::PlayerList() :
+ 	v->add_attribute(state_render.property_user_data(), m_col.state);
+ 	v->set_clickable();
+ 	v->set_reorderable();
+-	v->signal_clicked().connect(bind(mem_fun(* this, & PlayerList::sort_by), v));
++	v->signal_clicked().connect(sigc::bind(mem_fun(* this, & PlayerList::sort_by), v));
+ 	store->set_sort_func(c, sigc::bind(sigc::ptr_fun(& CustomText::compare), m_col.state));
+ 	v->set_sort_column_id(c);
+ 
+@@ -431,7 +431,7 @@ PlayerList::PlayerList() :
+ 	v->add_attribute(idle_render.property_user_data(), m_col.idle);
+ 	v->set_clickable();
+ 	v->set_reorderable();
+-	v->signal_clicked().connect(bind(mem_fun(* this, & PlayerList::sort_by), v));
++	v->signal_clicked().connect(sigc::bind(mem_fun(* this, & PlayerList::sort_by), v));
+ 	store->set_sort_func(c, sigc::bind(sigc::ptr_fun(& CustomText::compare), m_col.idle));
+ 	v->set_sort_column_id(c);
+ 
+@@ -730,7 +730,7 @@ void PlayerList::add_stored(const std::vector<Storage> & r)
+ 		bt = Gtk::manage(new Gtk::Button(file)); // hope bt can be deleted correctly...
+ 		text_area.add_child_at_anchor(* bt, anchor);
+ 		bt->show();
+-		bt->signal_clicked().connect(bind(mem_fun(* this, & PlayerList::open_stored), file));
++		bt->signal_clicked().connect(sigc::bind(mem_fun(* this, & PlayerList::open_stored), file));
+ 
+ 		if (i->white == name || i->black == name) {
+ 			iter = text_area.get_buffer()->end();
+@@ -741,7 +741,7 @@ void PlayerList::add_stored(const std::vector<Storage> & r)
+ 			text_area.add_child_at_anchor(* bt, anchor);
+ 			bt->show();
+ 			im->show();
+-			bt->signal_clicked().connect(bind(mem_fun(* this, & PlayerList::execute_stored), file));
++			bt->signal_clicked().connect(sigc::bind(mem_fun(* this, & PlayerList::execute_stored), file));
+ 		}
+ 
+ 	}
+diff --git a/setting_win.cc b/setting_win.cc
+index 95bb746..f5ee3ac 100644
+--- a/setting_win.cc
++++ b/setting_win.cc
+@@ -89,70 +89,70 @@ SettingWin::SettingWin() :
+ 	cb = Gtk::manage(new Gtk::CheckButton(_("Dump all communications with IGS to stdout")));
+ 	cb->set_active(settings.get_option(Settings::OPT_DUMP_IGS));
+ 	hb->pack_start(* cb, Gtk::PACK_SHRINK);
+-	cb->signal_toggled().connect(bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_DUMP_IGS));
++	cb->signal_toggled().connect(sigc::bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_DUMP_IGS));
+ 
+ 	hb = Gtk::manage(new Gtk::HBox);
+ 	get_vbox()->pack_start(* hb, Gtk::PACK_SHRINK);
+ 	cb = Gtk::manage(new Gtk::CheckButton(_("Show unprocessed messages from IGS")));
+ 	cb->set_active(settings.get_option(Settings::OPT_LEAK_RAW));
+ 	hb->pack_start(* cb, Gtk::PACK_SHRINK);
+-	cb->signal_toggled().connect(bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_LEAK_RAW));
++	cb->signal_toggled().connect(sigc::bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_LEAK_RAW));
+ 
+ 	hb = Gtk::manage(new Gtk::HBox);
+ 	get_vbox()->pack_start(* hb, Gtk::PACK_SHRINK);
+ 	cb = Gtk::manage(new Gtk::CheckButton(_("Client-side time control")));
+ 	cb->set_active(settings.get_option(Settings::OPT_CLIENT_TIME_CONTROL));
+ 	hb->pack_start(* cb, Gtk::PACK_SHRINK);
+-	cb->signal_toggled().connect(bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_CLIENT_TIME_CONTROL));
++	cb->signal_toggled().connect(sigc::bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_CLIENT_TIME_CONTROL));
+ 
+ 	hb = Gtk::manage(new Gtk::HBox);
+ 	get_vbox()->pack_start(* hb, Gtk::PACK_SHRINK);
+ 	cb = Gtk::manage(new Gtk::CheckButton(_("Popup Player List on tell message")));
+ 	cb->set_active(settings.get_option(Settings::OPT_POP_PLAYERS_ON_TELL));
+ 	hb->pack_start(* cb, Gtk::PACK_SHRINK);
+-	cb->signal_toggled().connect(bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_POP_PLAYERS_ON_TELL));
++	cb->signal_toggled().connect(sigc::bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_POP_PLAYERS_ON_TELL));
+ 
+ 	hb = Gtk::manage(new Gtk::HBox);
+ 	get_vbox()->pack_start(* hb, Gtk::PACK_SHRINK);
+ 	cb = Gtk::manage(new Gtk::CheckButton(_("Popup Player List on stats message")));
+ 	cb->set_active(settings.get_option(Settings::OPT_POP_PLAYERS_ON_STATS));
+ 	hb->pack_start(* cb, Gtk::PACK_SHRINK);
+-	cb->signal_toggled().connect(bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_POP_PLAYERS_ON_STATS));
++	cb->signal_toggled().connect(sigc::bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_POP_PLAYERS_ON_STATS));
+ 
+ 	hb = Gtk::manage(new Gtk::HBox);
+ 	get_vbox()->pack_start(* hb, Gtk::PACK_SHRINK);
+ 	cb = Gtk::manage(new Gtk::CheckButton(_("Popup Player List on match request")));
+ 	cb->set_active(settings.get_option(Settings::OPT_POP_PLAYERS_ON_MATCH));
+ 	hb->pack_start(* cb, Gtk::PACK_SHRINK);
+-	cb->signal_toggled().connect(bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_POP_PLAYERS_ON_MATCH));
++	cb->signal_toggled().connect(sigc::bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_POP_PLAYERS_ON_MATCH));
+ 
+ 	hb = Gtk::manage(new Gtk::HBox);
+ 	get_vbox()->pack_start(* hb, Gtk::PACK_SHRINK);
+ 	cb = Gtk::manage(new Gtk::CheckButton(_("Fetch player stats on player popup")));
+ 	cb->set_active(settings.get_option(Settings::OPT_GET_STATS_ON_POP));
+ 	hb->pack_start(* cb, Gtk::PACK_SHRINK);
+-	cb->signal_toggled().connect(bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_GET_STATS_ON_POP));
++	cb->signal_toggled().connect(sigc::bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_GET_STATS_ON_POP));
+ 
+ 	hb = Gtk::manage(new Gtk::HBox);
+ 	get_vbox()->pack_start(* hb, Gtk::PACK_SHRINK);
+ 	cb = Gtk::manage(new Gtk::CheckButton(_("Show coordinates beside the board")));
+ 	cb->set_active(settings.get_option(Settings::OPT_SHOW_COORDINATE));
+ 	hb->pack_start(* cb, Gtk::PACK_SHRINK);
+-	cb->signal_toggled().connect(bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_SHOW_COORDINATE));
++	cb->signal_toggled().connect(sigc::bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_SHOW_COORDINATE));
+ 
+ 	hb = Gtk::manage(new Gtk::HBox);
+ 	get_vbox()->pack_start(* hb, Gtk::PACK_SHRINK);
+ 	cb = Gtk::manage(new Gtk::CheckButton(_("Use picture stone images")));
+ 	cb->set_active(settings.get_option(Settings::OPT_PICTURE_STONE));
+ 	hb->pack_start(* cb, Gtk::PACK_SHRINK);
+-	cb->signal_toggled().connect(bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_PICTURE_STONE));
++	cb->signal_toggled().connect(sigc::bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_PICTURE_STONE));
+ 
+ 	hb = Gtk::manage(new Gtk::HBox);
+ 	get_vbox()->pack_start(* hb, Gtk::PACK_SHRINK);
+ 	cb = Gtk::manage(new Gtk::CheckButton(_("Use picture board image")));
+ 	cb->set_active(settings.get_option(Settings::OPT_PICTURE_BOARD));
+ 	hb->pack_start(* cb, Gtk::PACK_SHRINK);
+-	cb->signal_toggled().connect(bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_PICTURE_BOARD));
++	cb->signal_toggled().connect(sigc::bind(mem_fun(* this, & SettingWin::toggle_option), cb, Settings::OPT_PICTURE_BOARD));
+ 
+ 	hb = Gtk::manage(new Gtk::HBox);
+ 	get_vbox()->pack_start(* hb, Gtk::PACK_SHRINK);
+@@ -166,7 +166,7 @@ SettingWin::SettingWin() :
+ 	cb = Gtk::manage(new Gtk::CheckButton(_("Direct connection to IGS server")));
+ 	cb->set_active(settings.get_option(Settings::OPT_IGS_DIRECT));
+ 	hb->pack_start(* cb, Gtk::PACK_SHRINK);
+-	cb->signal_toggled().connect(bind(mem_fun(* this, & SettingWin::toggle_igs_direct), cb));
++	cb->signal_toggled().connect(sigc::bind(mem_fun(* this, & SettingWin::toggle_igs_direct), cb));
+ 
+ 	hb = Gtk::manage(new Gtk::HBox);
+ 	get_vbox()->pack_start(* hb, Gtk::PACK_SHRINK);
+diff --git a/time.hh b/time.hh
+index 4f4eed3..dadde90 100644
+--- a/time.hh
++++ b/time.hh
+@@ -21,7 +21,6 @@
+ 
+ #ifndef TIME_HH
+ #define TIME_HH
+-// #include <sigc++/object.h>
+ #include "go.hh"
+ #include <gtkmm/box.h>
+ #include <gtkmm/label.h>
+-- 
+2.5.0
+

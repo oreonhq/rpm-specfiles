@@ -1,0 +1,64 @@
+--- api/alsa/src/Clib/bglalsa.h.orig	2025-01-26 23:54:39.000000000 -0700
++++ api/alsa/src/Clib/bglalsa.h	2025-02-12 15:50:40.623395637 -0700
+@@ -13,7 +13,7 @@
+ 
+ #include <bigloo.h>
+ 
+-extern int bgl_alsa_error( char *, char *, obj_t );
++extern _Noreturn int bgl_alsa_error( char *, char *, obj_t );
+ 
+ extern int bgl_snd_pcm_close( obj_t );
+ extern int bgl_snd_pcm_open( obj_t, char *, snd_pcm_stream_t, int );
+--- runtime/Clib/capply.c.orig	2025-01-26 23:54:39.000000000 -0700
++++ runtime/Clib/capply.c	2025-02-12 15:50:40.624395624 -0700
+@@ -13,7 +13,7 @@
+ /*---------------------------------------------------------------------*/
+ /*    Les recuperations externes                                       */
+ /*---------------------------------------------------------------------*/
+-extern void c_error();
++extern _Noreturn void c_error( char *, char *, int );
+ extern long bgl_list_length(obj_t);
+ 
+ /*---------------------------------------------------------------------*/
+--- runtime/Clib/cmain.c.orig	2025-01-26 23:54:39.000000000 -0700
++++ runtime/Clib/cmain.c	2025-02-12 15:51:24.717820451 -0700
+@@ -40,7 +40,7 @@ extern obj_t cref(obj_t);
+ extern void memshow(char *, char *, long);
+ extern void bgl_init_eval_cnst();
+ extern obj_t c_constant_string_to_string(char *);
+-extern void c_error(char *, char *, int);
++extern _Noreturn void c_error(char *, char *, int);
+ extern void bgl_init_objects();
+ extern obj_t bigloo_exit_apply(obj_t);
+ extern void *bgl_callcc_get_top_of_stack(void *);
+--- runtime/Clib/csocket.c.orig	2025-01-26 23:54:39.000000000 -0700
++++ runtime/Clib/csocket.c	2025-02-12 15:50:40.625395611 -0700
+@@ -273,7 +273,7 @@ bgl_init_socket() {
+ /*    static void                                                      */
+ /*    socket_error ...                                                 */
+ /*---------------------------------------------------------------------*/
+-static void
++static _Noreturn void
+ socket_error(const char *who, const char *message, obj_t object) {
+    C_SYSTEM_FAILURE(BGL_IO_ERROR, (char *)who, (char *)message, object);
+ }
+@@ -282,7 +282,7 @@ socket_error(const char *who, const char
+ /*    static void                                                      */
+ /*    socket_timeout_error ...                                         */
+ /*---------------------------------------------------------------------*/
+-static void
++static _Noreturn void
+ socket_timeout_error(obj_t hostname, int port) {
+    char buffer[ 512 ];
+    
+--- runtime/Include/bigloo.h.orig	2025-01-26 23:54:39.000000000 -0700
++++ runtime/Include/bigloo.h	2025-02-12 15:50:40.625395611 -0700
+@@ -2647,7 +2647,7 @@ BGL_RUNTIME_DECL obj_t (*bgl_multithread
+ /*---------------------------------------------------------------------*/
+ /*    The external declarations                                        */
+ /*---------------------------------------------------------------------*/
+-BGL_RUNTIME_DECL obj_t bigloo_exit(obj_t);
++BGL_RUNTIME_DECL _Noreturn obj_t bigloo_exit(obj_t);
+ 
+ BGL_RUNTIME_DECL obj_t va_generic_entry(obj_t, ...);
+ BGL_RUNTIME_DECL obj_t bgl_va_stack_entry(obj_t, ...);

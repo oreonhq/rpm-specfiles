@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sun, 6 Mar 2016 22:27:37 +0300
+Subject: [PATCH] Migrate to a new Meck
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/test/mustache_ctx_tests.erl b/test/mustache_ctx_tests.erl
+index df579d8..e25ef19 100644
+--- a/test/mustache_ctx_tests.erl
++++ b/test/mustache_ctx_tests.erl
+@@ -62,7 +62,7 @@ get_from_module_not_found_test() ->
+ 
+ get_from_module_test_() ->
+     {foreach,
+-        fun() -> ok = meck:new(mock_module) end,
++        fun() -> ok = meck:new(mock_module,[non_strict]) end,
+         fun(_) -> ok = meck:unload(mock_module) end,
+         [
+             {"fun/1",               fun get_from_module_fun_1_/0},

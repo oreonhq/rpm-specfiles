@@ -1,0 +1,4 @@
+#!/bin/sh
+export PYTHONPATH=@python3_sitelib@/mcomix3/mcomix3
+exec @python3_sitelib@/mcomix3/mcomixstarter.py "$@"
+

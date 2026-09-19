@@ -1,0 +1,18 @@
+diff -uNr freecol-1.1.0.orig/build.xml freecol-1.1.0/build.xml
+--- freecol-1.1.0.orig/build.xml	2023-05-07 12:51:32.000000000 +0200
++++ freecol-1.1.0/build.xml	2023-10-01 12:51:58.468000000 +0200
+@@ -165,14 +165,9 @@
+ 
+     <target name="manifest" depends="git-revision"
+             description="Creates the Manifest file.">
+-        <manifestclasspath property="jar.classpath"
+-                           jarfile="Freecol.jar">
+-            <classpath refid="libraries.classpath" />
+-        </manifestclasspath>
+         <manifest file="${basedir}/src/MANIFEST.MF">
+             <attribute name="Created-By" value="FreeCol Team"/>
+             <attribute name="Main-Class" value="${freecol.main.class}"/>
+-            <attribute name="Class-Path" value="${jar.classpath}"/>
+             <attribute name="Product-Name" value="FreeCol"/>
+             <attribute name="Package-Title" value="FreeCol"/>
+             <attribute name="Package-Version" value="${FreeCol.Revision}"/>

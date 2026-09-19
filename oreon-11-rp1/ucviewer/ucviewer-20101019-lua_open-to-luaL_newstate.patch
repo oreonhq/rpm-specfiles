@@ -1,0 +1,12 @@
+diff -urN ucviewer-20101019.old/src/controller/LuaController.cpp ucviewer-20101019/src/controller/LuaController.cpp
+--- ucviewer-20101019.old/src/controller/LuaController.cpp	2010-09-26 22:04:58.000000000 +0530
++++ ucviewer-20101019/src/controller/LuaController.cpp	2013-09-18 13:47:29.866668026 +0530
+@@ -152,7 +152,7 @@
+ void LuaController::init ()
+ {
+     // initialize Lua
+-    L_ = lua_open();
++    L_ = luaL_newstate();
+ 
+     // load Lua base libraries
+     luaL_openlibs ( L_ );

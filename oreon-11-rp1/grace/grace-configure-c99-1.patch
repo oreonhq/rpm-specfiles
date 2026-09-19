@@ -1,0 +1,27 @@
+Do not call the XmRegisterConverters function because current Motif
+does not declare it (but still exports it).  With this call, the
+result of this configure check depends on whether the compiler
+supports implicit function declarations or not.
+
+diff -ur grace-5.1.25.orig/ac-tools/aclocal.m4 grace-5.1.25/ac-tools/aclocal.m4
+--- grace-5.1.25.orig/ac-tools/aclocal.m4	2014-08-16 23:54:51.000000000 +0200
++++ grace-5.1.25/ac-tools/aclocal.m4	2022-12-22 10:22:57.579378019 +0100
+@@ -280,7 +280,6 @@
+       int main(void) {
+         int vlibn, vincn;
+         vincn = XmVersion;
+-        XmRegisterConverters();
+         vlibn = xmUseVersion;
+         if (vincn < [$1]) {
+           exit(1);
+diff -ur grace-5.1.25.orig/configure grace-5.1.25/configure
+--- grace-5.1.25.orig/configure	2022-12-22 10:24:10.869603703 +0100
++++ grace-5.1.25/configure	2022-12-22 10:23:12.843216734 +0100
+@@ -9556,7 +9556,6 @@
+       int main(void) {
+         int vlibn, vincn;
+         vincn = XmVersion;
+-        XmRegisterConverters();
+         vlibn = xmUseVersion;
+         if (vincn < 1002) {
+           exit(1);

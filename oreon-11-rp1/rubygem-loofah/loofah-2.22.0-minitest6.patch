@@ -1,0 +1,14 @@
+diff -urp '--exclude=*~' loofah-2.22.0.orig/test/helper.rb loofah-2.22.0/test/helper.rb
+--- loofah-2.22.0.orig/test/helper.rb	2023-11-14 06:39:10.000000000 +0900
++++ loofah-2.22.0/test/helper.rb	2025-12-25 00:11:46.262861426 +0900
+@@ -1,8 +1,9 @@
+ # frozen_string_literal: true
+ 
+ require "minitest/autorun"
+-require "minitest/unit"
++require "minitest/mock"
+ require "minitest/spec"
++MiniTest = Minitest
+ 
+ require "loofah"
+ require "loofah/helpers"

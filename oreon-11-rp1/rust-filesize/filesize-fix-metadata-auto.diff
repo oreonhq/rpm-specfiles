@@ -1,0 +1,11 @@
+--- filesize-0.2.0/Cargo.toml	2020-03-19T04:47:30+00:00
++++ filesize-0.2.0/Cargo.toml	2023-05-10T13:02:20.127254+00:00
+@@ -21,8 +21,5 @@
+ categories = ["os"]
+ license = "MIT"
+ repository = "https://github.com/Freaky/rust-filesize"
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3.8"
+-features = ["fileapi", "winerror"]
+ [badges.travis-ci]
+ repository = "Freaky/rust-filesize"

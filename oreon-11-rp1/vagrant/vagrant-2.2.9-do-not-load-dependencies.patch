@@ -1,0 +1,24 @@
+From 068df794f81fb7ec410595d85ca9b4841a6034ec Mon Sep 17 00:00:00 2001
+From: Pavel Valena <pvalena@redhat.com>
+Date: Thu, 7 May 2020 22:40:54 +0200
+Subject: [PATCH] Do not activate gems if gemspec is not found
+
+diff --git a/lib/vagrant/bundler.rb b/lib/vagrant/bundler.rb
+index eb2caab..bd9f8a0 100644
+--- a/lib/vagrant/bundler.rb
++++ b/lib/vagrant/bundler.rb
+@@ -645,12 +645,10 @@ module Vagrant
+       if !self_spec
+         @logger.warn("Failed to locate activated vagrant specification. Activating...")
+         self_spec = Gem::Specification.find { |s| s.name == "vagrant" }
+-        if !self_spec
+-          @logger.error("Failed to locate Vagrant RubyGem specification")
+-          raise Vagrant::Errors::SourceSpecNotFound
+-        end
++        if self_spec
+         self_spec.activate
+         @logger.info("Activated vagrant specification version - #{self_spec.version}")
++        end
+       end
+       # discover all the gems we have available
+       list = {}

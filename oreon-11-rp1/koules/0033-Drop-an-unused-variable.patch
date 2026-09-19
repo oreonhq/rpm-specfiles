@@ -1,0 +1,33 @@
+From e1882747ebb3c5e0f1ae6a323f7de5375810eefd Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sun, 8 Nov 2015 17:57:01 +0100
+Subject: [PATCH 33/41] Drop an unused variable
+
+---
+ server.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/server.c b/server.c
+index 5463244..3e8be27 100644
+--- a/server.c
++++ b/server.c
+@@ -678,7 +678,7 @@ contact ()
+   int             bytes;
+   int             sock, my_port;
+   int             accept = 1;
+-  char           *in_host, version = 1;
++  char           version = 1;
+   if (connected >= 6)
+     {
+       printf ("Maximum number of clients reached!\n");
+@@ -729,7 +729,6 @@ contact ()
+       accept = 0;
+   }
+ /*Is server able to accept it? */
+-  in_host = DgramLastaddr ();
+   connp = conn + connected;
+   connp->version = buffer[8];
+   strcpy (connp->hostname, DgramLastaddr ());
+-- 
+2.5.0
+

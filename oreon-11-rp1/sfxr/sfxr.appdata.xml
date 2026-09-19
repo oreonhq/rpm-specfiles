@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>sfxr.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>sfxr</name>
+  <summary>Simple and fun sound effect generator</summary>
+  <description>
+    <p>
+     This little tool was made to provide a simple means of getting basic
+     sound effects into a game. You just need to hit a few buttons in this
+     application to get some largely randomized effects.
+    </p>
+    <p>
+     Basic usage involves hitting the randomize button (or one of the other
+     buttons to your left if you need a specific standard sound), listen to
+     the generated sound, then deciding if it sounds ok or not. If it does,
+     then export it to .WAV and you're done, if not - just hit the button
+     again and get something different.
+    </p>
+    <p>
+      All the parameters used to create each sound are manually tweakable to
+      allow fine-tuning if you feel like getting your hands dirty. Space is
+      a useful shortcut to play the current sound.
+    </p>
+  </description>
+  <url type="homepage">http://www.drpetter.se/project_sfxr.html</url>
+  <screenshots>
+    <screenshot type="default">http://www.drpetter.se/images/sfxr.gif</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

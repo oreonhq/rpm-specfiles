@@ -1,0 +1,23 @@
+--- zvariant-4.2.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ zvariant-4.2.0/Cargo.toml	2024-12-31T18:40:58.733837+00:00
+@@ -36,10 +36,6 @@
+ 
+ [lib]
+ bench = false
+-
+-[[bench]]
+-name = "benchmarks"
+-harness = false
+ 
+ [dependencies.arrayvec]
+ version = "0.7.4"
+@@ -94,9 +90,6 @@
+ [dependencies.zvariant_derive]
+ version = "=4.2.0"
+ 
+-[dev-dependencies.criterion]
+-version = "0.5.1"
+-
+ [dev-dependencies.glib]
+ version = "0.20.0"
+ 

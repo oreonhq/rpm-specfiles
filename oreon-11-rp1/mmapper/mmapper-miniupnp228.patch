@@ -1,0 +1,25 @@
+diff -Naur MMapper-24.03.1.old/src/pandoragroup/GroupPortMapper.cpp MMapper-24.03.1/src/pandoragroup/GroupPortMapper.cpp
+--- MMapper-24.03.1.old/src/pandoragroup/GroupPortMapper.cpp	2024-10-09 08:33:40.045438282 +0200
++++ MMapper-24.03.1/src/pandoragroup/GroupPortMapper.cpp	2024-10-09 08:35:07.468025257 +0200
+@@ -74,11 +74,21 @@
+         deviceList = UPNPDev_ptr(upnpDiscover(1000, nullptr, nullptr, 0, 0, 2, &result),
+                                  ::freeUPNPDevlist);
+ #endif
++#if (MINIUPNPC_API_VERSION < 18)        
+         validIGDState = UPNP_GetValidIGD(deviceList.get(),
+                                          &urls,
+                                          &igdData,
+                                          lanAddress,
+                                          sizeof lanAddress);
++#else
++        validIGDState = UPNP_GetValidIGD(deviceList.get(),
++                                         &urls,
++                                         &igdData,
++                                         lanAddress,
++                                         sizeof lanAddress,
++                                         nullptr,
++                                         0);
++#endif
+         switch (validIGDState) {
+         case 0:
+             qInfo() << "No IGD found";

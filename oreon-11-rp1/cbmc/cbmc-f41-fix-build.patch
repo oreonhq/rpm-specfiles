@@ -1,0 +1,27 @@
+From bfa6203a05c4f3910457c96512d1adabb54e0929 Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Wed, 23 Apr 2025 02:00:00 +0200
+Subject: [PATCH] cbmc-f41-fix-build.patch
+
+---
+ src/libcprover-cpp/CMakeLists.txt | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/src/libcprover-cpp/CMakeLists.txt b/src/libcprover-cpp/CMakeLists.txt
+index d32b407..9ab73fc 100644
+--- a/src/libcprover-cpp/CMakeLists.txt
++++ b/src/libcprover-cpp/CMakeLists.txt
+@@ -64,10 +64,6 @@ foreach(dep ${LIBRARY_DEPENDENCIES})
+         list(APPEND DEPENDENCY_TARGETS "$<TARGET_FILE:${dep}>")
+     else()
+         find_library(dep_path ${dep})
+-        string(REGEX REPLACE "[.]so$" ".a" dep_static_path ${dep_path})
+-        if (NOT EXISTS "${dep_static_path}")
+-          message(FATAL_ERROR "libcprover-cpp cannot be linked as dependency ${dep_path} does not have a static correspondent file (${dep_static_path})")
+-        endif()
+         list(APPEND DEPENDENCY_TARGETS ${dep_static_path})
+     endif()
+ endforeach(dep LIBRARY_DEPENDENCIES)
+--
+2.49.0
+

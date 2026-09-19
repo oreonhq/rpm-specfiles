@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 74cd7e55f2a0a72a8211043122bdaaf1d15fe8393466baa57b593feb3ae1fd04
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    krdc
 Summary: Remote desktop client
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ and GFDL - review is highly recommended.

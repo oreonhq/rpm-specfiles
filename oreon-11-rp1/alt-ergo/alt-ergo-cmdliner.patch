@@ -1,0 +1,22 @@
+--- alt-ergo-2.4.3-free/alt-ergo-free.opam.orig	2026-02-06 14:01:56.544975724 -0700
++++ alt-ergo-2.4.3-free/alt-ergo-free.opam	2026-02-06 16:21:46.915747379 -0700
+@@ -15,7 +15,7 @@ depends: [
+   "dune" {>= "3.0"}
+   "ocaml" {>= "4.05.0"}
+   "menhir"
+-  "cmdliner" {>= "1.1.0" & < "2.0.0"}
++  "cmdliner" {>= "1.1.0"}
+   "psmt2-frontend" {>= "0.4"}
+   "camlzip" {>= "1.07"}
+   "dune-configurator"
+--- alt-ergo-2.4.3-free/dune-project.orig	2026-02-06 14:02:23.720545297 -0700
++++ alt-ergo-2.4.3-free/dune-project	2026-02-06 16:22:10.419427124 -0700
+@@ -24,7 +24,7 @@ See more details on https://alt-ergo.oca
+  (depends
+   (ocaml (>= 4.05.0))
+   menhir
+-  (cmdliner (and (>= 1.1.0) (< 2.0.0)))
++  (cmdliner (>= 1.1.0))
+   (psmt2-frontend (>= 0.4))
+   (camlzip (>= 1.07))
+   dune-configurator

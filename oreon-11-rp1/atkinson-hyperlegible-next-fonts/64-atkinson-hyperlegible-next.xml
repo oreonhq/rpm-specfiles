@@ -1,0 +1,9 @@
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+    <group>
+        <target>Atkinson Hyperlegible Next</target>
+        <like>
+            <family>sans-serif</family>
+        </like>
+    </group>
+</fontconfig>

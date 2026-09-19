@@ -1,0 +1,12 @@
+diff -up koules1.4/koules.sndsrv.linux.c.c23 koules1.4/koules.sndsrv.linux.c
+--- koules1.4/koules.sndsrv.linux.c.c23	1998-03-04 13:59:19.000000000 -0500
++++ koules1.4/koules.sndsrv.linux.c	2025-01-21 21:23:57.386772410 -0500
+@@ -43,7 +43,7 @@ int             fragsize;
+ 
+ /* Terminate: Signal Handler */
+ void
+-quit ()
++quit (int)
+ {
+   exit (0);
+ }

@@ -1,0 +1,13 @@
+--- a/tox.ini
++++ b/tox.ini
+@@ -14,8 +14,8 @@ deps =
+     django-debug-toolbar
+     pytest-django
+     pytest-cov
+-    head: git+https://gitlab.com/mailman/django-mailman3.git
+-    head: git+https://gitlab.com/mailman/mailmanclient.git
++    django-mailman3
++    mailmanclient
+     dev: -e../django-haystack
+     dev: -e../mailmanclient
+     dev: -e../django-mailman3

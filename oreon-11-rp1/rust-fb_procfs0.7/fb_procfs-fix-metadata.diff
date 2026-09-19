@@ -1,0 +1,12 @@
+--- fb_procfs-0.7.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ fb_procfs-0.7.1/Cargo.toml	2026-01-29T21:27:37.840378+00:00
+@@ -30,7 +30,8 @@
+ version = "0.2.139"
+ 
+ [dependencies.nix]
+-version = "0.25"
++version = "0.30"
++features = ["fs"]
+ 
+ [dependencies.openat]
+ version = "0.1.21"

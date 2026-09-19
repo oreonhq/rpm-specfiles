@@ -1,0 +1,28 @@
+diff --git a/imp_1199.xml b/imp_1199.xml
+index 594b012..7bbb939 100644
+--- a/imp_1199.xml
++++ b/imp_1199.xml
+@@ -41,10 +41,9 @@
+ 
+       #define IMP_LENGTH(a) (sizeof(a) / sizeof(float))
+ 
++      static void impulse2freq(int id, float *imp, unsigned int length, fftw_real *out);
+       #define MK_IMP(i) impulse2freq(c, i, IMP_LENGTH(i), impulse_freq[c]); c++
+ 
+-      static inline void impulse2freq(int id, float *imp, unsigned int length, fftw_real *out);
+-
+       #include "impulses/all.h"
+ 
+       fft_plan plan_rc[IMPULSES],
+@@ -54,11 +53,7 @@
+ 
+       unsigned int fft_length[IMPULSES];
+ 
+-#ifdef __clang__
+       static void impulse2freq(int id, float *imp, unsigned int length, fftw_real *out)
+-#else
+-      static inline void impulse2freq(int id, float *imp, unsigned int length, fftw_real *out)
+-#endif
+       {
+         fftw_real impulse_time[MAX_FFT_LENGTH];
+ #ifdef FFTW3

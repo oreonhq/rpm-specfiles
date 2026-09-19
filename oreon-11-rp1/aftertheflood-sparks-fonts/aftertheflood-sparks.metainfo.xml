@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="font">
+  <id>aftertheflood-spark</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>OFL</project_license>
+  <name>After the Flood Sparks</name>
+  <summary>After the Flood Sparks, a font to display charts within text</summary>
+  <description>
+    <p>
+      After the Flood Sparks is a font that allows for the combination of text
+      and visual data to show an idea and evidence in one headline. This builds
+      on the principle of Sparkslines defined by Edward Tufte and makes them 
+      easier to use. Sparkslines are currently available as plugins or 
+      javascript elements. By installing the Sparks font you can use them 
+      immediately without the need for custom code.
+    </p>
+    <p>
+      Sparks data needs to be formatted as comma-separated values, with curly
+      brackets at both ends of the set, e.g., {30,60,90}. You can also have 
+      numbers at the beginning and end of the set, which are useful for 
+      providing the start and end points, e.g., 123{30,60,90}456 – Sparks has 
+      numerals built in.
+    </p>
+  </description>
+  <updatecontact>eclipseo@fedoraproject.org</updatecontact>
+  <url type="homepage">https://aftertheflood.co/projects/sparks/</url>
+</component>

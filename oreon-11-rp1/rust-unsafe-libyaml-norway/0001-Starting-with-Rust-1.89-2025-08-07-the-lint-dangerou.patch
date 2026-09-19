@@ -1,0 +1,59 @@
+From 92658b14c6ba795816c41d5b24521d237eaa9ab4 Mon Sep 17 00:00:00 2001
+From: Bourumir Wyngs <bourumir.wyngs@gmail.com>
+Date: Tue, 16 Sep 2025 12:04:44 +0200
+Subject: [PATCH 1/2] Starting with Rust 1.89 (2025-08-07) the lint
+ dangerous_implicit_autorefs became deny-by-default, so code like your match
+ (*emitter).error that implicitly creates a reference from a raw-pointer deref
+ now hard-errors. Earlier compilers only warned (or allowed it).
+
+---
+ src/bin/run-emitter-test-suite.rs | 6 +++---
+ src/bin/run-parser-test-suite.rs  | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/src/bin/run-emitter-test-suite.rs b/src/bin/run-emitter-test-suite.rs
+index 08694bf..6b4e4db 100644
+--- a/src/bin/run-emitter-test-suite.rs
++++ b/src/bin/run-emitter-test-suite.rs
+@@ -135,13 +135,13 @@ pub(crate) unsafe fn unsafe_main(
+             break Err("Memory error: Not enough memory for creating an event".into());
+         }
+         if yaml_emitter_emit(emitter, event).fail {
+-            break Err(match (*emitter).error {
++            break Err(match (&(*emitter)).error {
+                 YAML_MEMORY_ERROR => "Memory error: Not enough memory for emitting".into(),
+                 YAML_WRITER_ERROR => {
+-                    format!("Writer error: {}", CStr::from_ptr((*emitter).problem)).into()
++                    format!("Writer error: {}", CStr::from_ptr((&(*emitter)).problem)).into()
+                 }
+                 YAML_EMITTER_ERROR => {
+-                    format!("Emitter error: {}", CStr::from_ptr((*emitter).problem)).into()
++                    format!("Emitter error: {}", CStr::from_ptr((&(*emitter)).problem)).into()
+                 }
+                 // Couldn't happen.
+                 _ => "Internal error".into(),
+diff --git a/src/bin/run-parser-test-suite.rs b/src/bin/run-parser-test-suite.rs
+index ea38dfa..a357f6e 100644
+--- a/src/bin/run-parser-test-suite.rs
++++ b/src/bin/run-parser-test-suite.rs
+@@ -68,13 +68,13 @@ pub(crate) unsafe fn unsafe_main(
+     let event = event.as_mut_ptr();
+     loop {
+         if yaml_parser_parse(parser, event).fail {
+-            let mut error = format!("Parse error: {}", CStr::from_ptr((*parser).problem));
+-            if (*parser).problem_mark.line != 0 || (*parser).problem_mark.column != 0 {
++            let mut error = format!("Parse error: {}", CStr::from_ptr((&(*parser)).problem));
++            if (&(*parser)).problem_mark.line != 0 || (&(*parser)).problem_mark.column != 0 {
+                 let _ = write!(
+                     error,
+                     "\nLine: {} Column: {}",
+-                    ((*parser).problem_mark.line).wrapping_add(1_u64),
+-                    ((*parser).problem_mark.column).wrapping_add(1_u64),
++                    ((&(*parser)).problem_mark.line).wrapping_add(1_u64),
++                    ((&(*parser)).problem_mark.column).wrapping_add(1_u64),
+                 );
+             }
+             yaml_parser_delete(parser);
+-- 
+2.51.1
+

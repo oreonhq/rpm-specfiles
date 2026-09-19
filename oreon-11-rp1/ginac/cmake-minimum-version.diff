@@ -1,0 +1,8 @@
+--- ginac-1.8.9/CMakeLists.txt~	2022-12-31 19:47:20.000000000 +0100
++++ ginac-1.8.9/CMakeLists.txt	2025-09-14 14:13:43.278944691 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.5)
+ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+ 
+ project(GiNaC)

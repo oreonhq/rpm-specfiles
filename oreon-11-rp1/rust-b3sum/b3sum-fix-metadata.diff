@@ -1,0 +1,20 @@
+--- b3sum-1.8.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ b3sum-1.8.3/Cargo.toml	2026-01-09T11:33:47.283190+00:00
+@@ -22,7 +22,7 @@
+ autobenches = false
+ description = "a command line implementation of the BLAKE3 hash function"
+ readme = "README.md"
+-license = "CC0-1.0 OR Apache-2.0 OR Apache-2.0 WITH LLVM-exception"
++license = "Apache-2.0 OR Apache-2.0 WITH LLVM-exception"
+ repository = "https://github.com/BLAKE3-team/BLAKE3"
+ 
+ [features]
+@@ -65,7 +65,7 @@
+ version = "2.0.3"
+ 
+ [dev-dependencies.duct]
+-version = "1.0.0"
++version = ">=0.13.0, <2.0.0"
+ 
+ [dev-dependencies.tempfile]
+ version = "3.1.0"

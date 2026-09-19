@@ -1,0 +1,110 @@
+Subject: Start showing inlined functions in stack trace
+Bug-Debian: https://bugs.debian.org/1098550
+Forwarded: https://github.com/bugsnag/bugsnag-go/pull/256
+From: Nicolas Peugnet <nicolas@club1.fr>
+
+Date: Tue, 4 Mar 2025 18:39:52 +0100
+
+This is a modified version of commit c6d59e66f3630108d84dcce59aaae871e4eb2b30
+by Daria Bialobrzeska:
+
+    Start showing inlined functions in stack trace (#208)
+
+    * Start showing inlined functions in stack trace
+    * Fix notifier tests
+    * Added change to CHANGELOG
+
+I selected only the code changes in the errors packages and also applied it
+on the version 1 of this package (which is still used by notary as of writing).
+
+This fixes the backtrace generated when using go 1.24, thus fixing the
+TestUnwrapPkgError failure.
+
+
+---
+ errors/error.go      | 35 ++++++++++++++++++++++++-----------
+ errors/stackframe.go |  4 ++++
+ 2 files changed, 28 insertions(+), 11 deletions(-)
+
+diff --git a/errors/error.go b/errors/error.go
+index 3d30168..a878673 100644
+--- a/errors/error.go
++++ b/errors/error.go
+@@ -4,9 +4,10 @@ package errors
+ import (
+ 	"bytes"
+ 	"fmt"
+-	"github.com/pkg/errors"
+ 	"reflect"
+ 	"runtime"
++
++	"github.com/pkg/errors"
+ )
+ 
+ // The maximum number of stackframes on any error.
+@@ -64,7 +65,7 @@ func New(e interface{}, skip int) *Error {
+ 		trace := e.StackTrace()
+ 		stack := make([]uintptr, len(trace))
+ 		for i, ptr := range trace {
+-			stack[i] = uintptr(ptr) - 1
++			stack[i] = uintptr(ptr)
+ 		}
+ 		return &Error{
+ 			Err:   e,
+@@ -132,20 +133,32 @@ func (err *Error) StackFrames() []StackFrame {
+ 	if err.frames == nil {
+ 		callers := runtime.CallersFrames(err.stack)
+ 		err.frames = make([]StackFrame, 0, len(err.stack))
++
+ 		for frame, more := callers.Next(); more; frame, more = callers.Next() {
+-			if frame.Func == nil {
+-				// Ignore fully inlined functions
+-				continue
+-			}
+-			pkg, name := packageAndName(frame.Func)
+-			err.frames = append(err.frames, StackFrame{
++			processedStackFrame := StackFrame{
+ 				function:       frame.Func,
+ 				File:           frame.File,
+ 				LineNumber:     frame.Line,
+-				Name:           name,
+-				Package:        pkg,
+ 				ProgramCounter: frame.PC,
+-			})
++			}
++
++			frameFunc := frame.Func
++			if frameFunc == nil {
++				newFrameFunc := runtime.FuncForPC(frame.PC)
++				if newFrameFunc != nil {
++					file, line := newFrameFunc.FileLine(frame.PC)
++					// Unwrap fully inlined functions
++					processedStackFrame.File = file
++					processedStackFrame.LineNumber = line
++					processedStackFrame.function = newFrameFunc
++					frameFunc = newFrameFunc
++				}
++			}
++
++			pkg, name := packageAndName(frameFunc)
++			processedStackFrame.Name = name
++			processedStackFrame.Package = pkg
++			err.frames = append(err.frames, processedStackFrame)
+ 		}
+ 	}
+ 
+diff --git a/errors/stackframe.go b/errors/stackframe.go
+index 3d03119..163a434 100644
+--- a/errors/stackframe.go
++++ b/errors/stackframe.go
+@@ -70,6 +70,10 @@ func (frame *StackFrame) SourceLine() (string, error) {
+ }
+ 
+ func packageAndName(fn *runtime.Func) (string, string) {
++	if fn == nil {
++		return "", ""
++	}
++
+ 	name := fn.Name()
+ 	pkg := ""
+ 

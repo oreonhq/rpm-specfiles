@@ -1,0 +1,26 @@
+--- tempest.desktop.orig	2007-02-11 08:37:35.000000000 +0900
++++ tempest.desktop	2007-10-01 16:36:44.000000000 +0900
+@@ -4,18 +4,17 @@
+ Icon=kscreensaver
+ Type=Application
+ Actions=InWindow;Root
++Categories=Screensaver;  
++X-KDE-Category=OpenGL Screen Savers  
++X-KDE-Type=OpenGL
+ Name=Tempest (GL)
+ 
+-[Desktop Action Setup]
+-Exec=kxsconfig tempest
+-Name=Setup...
+-
+ [Desktop Action InWindow]
+-Exec=kxsrun tempest -- -window-id %w
++Exec=tempest -window-id %w
+ Name=Display in specified window
+ NoDisplay=true
+  
+ [Desktop Action Root]
+-Exec=kxsrun tempest -- -root
++Exec=tempest -root
+ Name=Display in root window
+ NoDisplay=true

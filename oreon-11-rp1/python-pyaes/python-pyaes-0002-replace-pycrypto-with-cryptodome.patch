@@ -1,0 +1,24 @@
+--- pyaes-1.6.1/tests/test-aes.py
++++ pyaes-1.6.1/tests/test-aes.py
+@@ -38,8 +38,8 @@ else:
+     pass
+ 
+ # compare against a known working implementation
+-from Crypto.Cipher import AES as KAES
+-from Crypto.Util import Counter as KCounter
++from Cryptodome.Cipher import AES as KAES
++from Cryptodome.Util import Counter as KCounter
+ for mode in [ 'CBC', 'CTR',  'CFB', 'ECB', 'OFB' ]:
+ 
+     (tt_ksetup, tt_kencrypt, tt_kdecrypt) = (0.0, 0.0, 0.0)
+@@ -151,8 +151,8 @@ for mode in [ 'CBC', 'CTR',  'CFB', 'ECB
+ 
+     better = (tt_setup + tt_encrypt + tt_decrypt) / (tt_ksetup + tt_kencrypt + tt_kdecrypt)
+     print("Mode: %s" % mode)
+-    print("  Average time: PyCrypto: encrypt=%fs decrypt=%fs setup=%f" % (tt_kencrypt / count, tt_kdecrypt / count, tt_ksetup / count))
+-    print("  Average time: pyaes:    encrypt=%fs decrypt=%fs setup=%f" % (tt_encrypt / count, tt_decrypt / count, tt_setup / count))
++    print("  Average time: PyCryptodome: encrypt=%fs decrypt=%fs setup=%f" % (tt_kencrypt / count, tt_kdecrypt / count, tt_ksetup / count))
++    print("  Average time: pyaes:        encrypt=%fs decrypt=%fs setup=%f" % (tt_encrypt / count, tt_decrypt / count, tt_setup / count))
+     print("  Native better by: %dx" % better)
+ 
+ print("All test cases passes!")

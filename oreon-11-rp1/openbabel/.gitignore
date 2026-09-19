@@ -1,1 +1,3 @@
-/openbabel-*
+*.tar.*
+*.tar
+*.tgz

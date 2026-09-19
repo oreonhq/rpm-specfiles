@@ -1,0 +1,16 @@
+Some additional info about openlierox's license for those who are interested.
+
+According to the openlierox webpage, openlierox is the continuation of the
+opensource release of Liero Extreme under the zlib License. Unfortunately the
+sources distributed by openlierox do not seem to contain any of the original
+license info other then an old readme under the original_lx_docs dir which
+predates the opensource release.
+
+Liero extreme however was indeed released under the zlib License, as is cleary
+stated by its original author here:
+http://forums.thegaminguniverse.com/showthread.php?t=28565
+
+The openlierox work / extensions to Liero Xtreme are licensed under the 
+GNU LGPL, see COPYING.lib . This is ok as the original zlib License is
+compatible with the (L)GPL, see: http://www.gnu.org/licenses/license-list.html
+This means that openlierox as a whole is properly licensed, under the LGPL.

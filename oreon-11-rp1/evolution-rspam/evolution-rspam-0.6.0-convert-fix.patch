@@ -1,0 +1,11 @@
+diff -up evolution-rspam-0.6.0/src/evolution-rspam.convert.fixed evolution-rspam-0.6.0/src/evolution-rspam.convert
+--- evolution-rspam-0.6.0/src/evolution-rspam.convert.fixed	2013-05-02 11:45:27.980918703 +0200
++++ evolution-rspam-0.6.0/src/evolution-rspam.convert	2013-05-02 11:45:35.355010677 +0200
+@@ -1,7 +1,3 @@
+-[org.gnome.evolution]
+-version = /apps/evolution/version
+-last-upgraded-version = /apps/evolution/last_version
+-
+ [org.gnome.evolution.plugin.evolution-rspam]
+ use-dcc = /apps/evolution/plugin/evolution-rspam/use_dcc
+ use-razor2 = /apps/evolution/plugin/evolution-rspam/use_razor2

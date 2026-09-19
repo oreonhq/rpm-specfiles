@@ -1,0 +1,16 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 11 Feb 2026 19:23:52 +0100
+Subject: [PATCH] FIXME disable plugins
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index 67cf39b..9a303b0 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -5,5 +5,3 @@
+ {xref_checks,[undefined_function_calls,undefined_functions,locals_not_used,
+     deprecated_function_calls, deprecated_functions]}.
+ {edoc_opts, [{preprocess, true}]}.
+-
+-{plugins, [{eqc_rebar, {git, "https://github.com/Quviq/eqc-rebar", {branch, "master"}}}]}.

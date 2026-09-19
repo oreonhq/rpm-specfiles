@@ -1,0 +1,45 @@
+From 2bd00ac2e816a341723fa9209389dd9a246f8858 Mon Sep 17 00:00:00 2001
+From: Theodore Ts'o <tytso@mit.edu>
+Date: Thu, 11 Aug 2016 09:48:27 -0400
+Subject: [PATCH] [PATCH] guilt: fix portability problem with using find -perm
+ +111
+
+GNU find no longers accepts -perm +111, even though the rest of the
+world (MacOS, Solaris, BSD) still do.  Workaround this problem by
+using -executable if the system find utility will accept it.
+
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+[jeffpc: fixed typo in fallback predicate]
+Signed-off-by: Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
+---
+ guilt | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/guilt b/guilt
+index 35177b9..8209738 100755
+--- a/guilt
++++ b/guilt
+@@ -73,8 +73,17 @@ GUILT_PATH="$(dirname "$0")"
+ 
+ guilt_commands()
+ {
+-	find "$GUILT_PATH/../lib/guilt" -maxdepth 1 -name "guilt-*" -type f -perm +111 2> /dev/null | sed -e "s/.*\\/$GUILT-//"
+-	find "$GUILT_PATH" -maxdepth 1 -name "guilt-*" -type f -perm +111 | sed -e "s/.*\\/$GUILT-//"
++	# GNU Find no longer accepts -perm +111, even though the rest
++	# world (MacOS, Solaris, BSD, etc.) does.  Sigh.  Using -executable
++	# is arugably better, but it is a GNU extension.  Since this isn't
++	# a fast path and guilt doesn't use autoconf, test for it as needed.
++	if find . -maxdepth 0 -executable > /dev/null 2>&1 ; then
++		exe_test="-executable"
++	else
++		exe_test="-perm +111"
++	fi
++	find "$GUILT_PATH/../lib/guilt" -maxdepth 1 -name "guilt-*" -type f $exe_test 2> /dev/null | sed -e "s/.*\\/$GUILT-//"
++	find "$GUILT_PATH" -maxdepth 1 -name "guilt-*" -type f $exe_test | sed -e "s/.*\\/$GUILT-//"
+ }
+ 
+ # by default, we shouldn't fail
+-- 
+2.11.4.GIT
+
+

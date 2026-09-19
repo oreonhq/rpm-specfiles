@@ -1,0 +1,40 @@
+From 3d5160c4bc135c05b52828f840840354e110bb3d Mon Sep 17 00:00:00 2001
+From: Dominik Wombacher <dominik@wombacher.cc>
+Date: Mon, 25 Nov 2024 14:13:04 +0000
+Subject: [PATCH] patch: Disable SHA1 related tests.
+
+Fedora 41 distrusts SHA1 signatures by default, similar as RHEL 9.
+
+Refs: https://fedoraproject.org/wiki/Changes/OpenSSLDistrustSHA1SigVer
+
+Refs: https://www.redhat.com/en/blog/rhel-security-sha-1-package-signatures-distrusted-rhel-9
+---
+ tests/CMakeLists.txt | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 1c92c08..2503f70 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -77,18 +77,15 @@ add_test_case(rsa_encryption_roundtrip_oaep_sha256_from_user)
+ add_test_case(rsa_encryption_roundtrip_oaep_sha512_from_user)
+ add_test_case(rsa_signing_roundtrip_pkcs1_sha256_from_user)
+ add_test_case(rsa_signing_roundtrip_pss_sha256_from_user)
+-add_test_case(rsa_signing_roundtrip_pkcs1_sha1_from_user)
+ add_test_case(rsa_getters)
+ add_test_case(rsa_private_pkcs1_der_parsing)
+ add_test_case(rsa_public_pkcs1_der_parsing)
+ add_test_case(rsa_verify_signing_pkcs1_sha256)
+-add_test_case(rsa_verify_signing_pkcs1_sha1)
+ add_test_case(rsa_verify_signing_pss_sha256)
+ add_test_case(rsa_decrypt_pkcs1)
+ add_test_case(rsa_decrypt_oaep256)
+ add_test_case(rsa_decrypt_oaep512)
+ add_test_case(rsa_signing_mismatch_pkcs1_sha256)
+-add_test_case(rsa_signing_mismatch_pkcs1_sha1)
+ add_test_case(rsa_encryption_roundtrip_pkcs15_from_user_pkcs8)
+ 
+ add_test_case(aes_cbc_NIST_CBCGFSbox256_case_1)
+-- 
+2.49.0
+

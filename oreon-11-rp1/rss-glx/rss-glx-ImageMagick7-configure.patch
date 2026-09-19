@@ -1,0 +1,230 @@
+diff '--color=auto' -rup rss-glx_0.9.1.p-orig/configure rss-glx_0.9.1.p/configure
+--- rss-glx_0.9.1.p-orig/configure	2022-12-04 19:48:00.239307236 -0500
++++ rss-glx_0.9.1.p/configure	2022-12-04 19:51:49.287547331 -0500
+@@ -621,8 +621,8 @@ freealut_LIBS
+ freealut_CFLAGS
+ WITHSOUND_FALSE
+ WITHSOUND_TRUE
+-Wand_LIBS
+-Wand_CFLAGS
++MagickWand_LIBS
++MagickWand_CFLAGS
+ PKG_CONFIG_LIBDIR
+ PKG_CONFIG_PATH
+ PKG_CONFIG
+@@ -777,8 +777,8 @@ XMKMF
+ PKG_CONFIG
+ PKG_CONFIG_PATH
+ PKG_CONFIG_LIBDIR
+-Wand_CFLAGS
+-Wand_LIBS
++MagickWand_CFLAGS
++MagickWand_LIBS
+ freealut_CFLAGS
+ freealut_LIBS
+ quesoglc_CFLAGS
+@@ -1443,8 +1443,8 @@ Some influential environment variables:
+               directories to add to pkg-config's search path
+   PKG_CONFIG_LIBDIR
+               path overriding pkg-config's built-in search path
+-  Wand_CFLAGS C compiler flags for Wand, overriding pkg-config
+-  Wand_LIBS   linker flags for Wand, overriding pkg-config
++  MagickWand_CFLAGS C compiler flags for MagickWand, overriding pkg-config
++  MagickWand_LIBS   linker flags for MagickWand, overriding pkg-config
+   freealut_CFLAGS
+               C compiler flags for freealut, overriding pkg-config
+   freealut_LIBS
+@@ -16124,35 +16124,35 @@ $as_echo "no" >&6; }
+ fi
+ 
+ pkg_failed=no
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Wand" >&5
+-$as_echo_n "checking for Wand... " >&6; }
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MagickWand" >&5
++$as_echo_n "checking for MagickWand... " >&6; }
+ 
+-if test -n "$Wand_CFLAGS"; then
+-    pkg_cv_Wand_CFLAGS="$Wand_CFLAGS"
++if test -n "$MagickWand_CFLAGS"; then
++    pkg_cv_MagickWand_CFLAGS="$MagickWand_CFLAGS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Wand >= 6.4\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "Wand >= 6.4") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"MagickWand >= 6.4\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "MagickWand >= 6.4") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_Wand_CFLAGS=`$PKG_CONFIG --cflags "Wand >= 6.4" 2>/dev/null`
++  pkg_cv_MagickWand_CFLAGS=`$PKG_CONFIG --cflags "MagickWand >= 6.4" 2>/dev/null`
+ else
+   pkg_failed=yes
+ fi
+  else
+     pkg_failed=untried
+ fi
+-if test -n "$Wand_LIBS"; then
+-    pkg_cv_Wand_LIBS="$Wand_LIBS"
++if test -n "$MagickWand_LIBS"; then
++    pkg_cv_MagickWand_LIBS="$MagickWand_LIBS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Wand >= 6.4\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "Wand >= 6.4") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"MagickWand >= 6.4\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "MagickWand >= 6.4") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_Wand_LIBS=`$PKG_CONFIG --libs "Wand >= 6.4" 2>/dev/null`
++  pkg_cv_MagickWand_LIBS=`$PKG_CONFIG --libs "MagickWand >= 6.4" 2>/dev/null`
+ else
+   pkg_failed=yes
+ fi
+@@ -16172,22 +16172,22 @@ else
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        Wand_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "Wand >= 6.4" 2>&1`
++	        MagickWand_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "MagickWand >= 6.4" 2>&1`
+         else
+-	        Wand_PKG_ERRORS=`$PKG_CONFIG --print-errors "Wand >= 6.4" 2>&1`
++	        MagickWand_PKG_ERRORS=`$PKG_CONFIG --print-errors "MagickWand >= 6.4" 2>&1`
+         fi
+ 	# Put the nasty error message in config.log where it belongs
+-	echo "$Wand_PKG_ERRORS" >&5
++	echo "$MagickWand_PKG_ERRORS" >&5
+ 
+-	as_fn_error $? "Package requirements (Wand >= 6.4) were not met:
++	as_fn_error $? "Package requirements (MagickWand >= 6.4) were not met:
+ 
+-$Wand_PKG_ERRORS
++$MagickWand_PKG_ERRORS
+ 
+ Consider adjusting the PKG_CONFIG_PATH environment variable if you
+ installed software in a non-standard prefix.
+ 
+-Alternatively, you may set the environment variables Wand_CFLAGS
+-and Wand_LIBS to avoid the need to call pkg-config.
++Alternatively, you may set the environment variables MagickWand_CFLAGS
++and MagickWand_LIBS to avoid the need to call pkg-config.
+ See the pkg-config man page for more details." "$LINENO" 5
+ 
+ elif test $pkg_failed = untried; then
+@@ -16199,16 +16199,16 @@ as_fn_error $? "The pkg-config script co
+ is in your PATH or set the PKG_CONFIG environment variable to the full
+ path to pkg-config.
+ 
+-Alternatively, you may set the environment variables Wand_CFLAGS
+-and Wand_LIBS to avoid the need to call pkg-config.
++Alternatively, you may set the environment variables MagickWand_CFLAGS
++and MagickWand_LIBS to avoid the need to call pkg-config.
+ See the pkg-config man page for more details.
+ 
+ To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+ See \`config.log' for more details" "$LINENO" 5; }
+ 
+ else
+-	Wand_CFLAGS=$pkg_cv_Wand_CFLAGS
+-	Wand_LIBS=$pkg_cv_Wand_LIBS
++	MagickWand_CFLAGS=$pkg_cv_MagickWand_CFLAGS
++	MagickWand_LIBS=$pkg_cv_MagickWand_LIBS
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+ 
+diff '--color=auto' -rup rss-glx_0.9.1.p-orig/Makefile.in rss-glx_0.9.1.p/Makefile.in
+--- rss-glx_0.9.1.p-orig/Makefile.in	2022-12-04 19:48:00.246307213 -0500
++++ rss-glx_0.9.1.p/Makefile.in	2022-12-04 19:57:46.709369115 -0500
+@@ -171,8 +171,8 @@ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+ STRIP = @STRIP@
+ VERSION = @VERSION@
+-Wand_CFLAGS = @Wand_CFLAGS@
+-Wand_LIBS = @Wand_LIBS@
++MagickWand_CFLAGS = @MagickWand_CFLAGS@
++MagickWand_LIBS = @MagickWand_LIBS@
+ XMKMF = @XMKMF@
+ X_CFLAGS = @X_CFLAGS@
+ X_EXTRA_LIBS = @X_EXTRA_LIBS@
+diff '--color=auto' -rup rss-glx_0.9.1.p-orig/src/Implicit/Makefile.in rss-glx_0.9.1.p/src/Implicit/Makefile.in
+--- rss-glx_0.9.1.p-orig/src/Implicit/Makefile.in	2022-12-04 19:48:00.246307213 -0500
++++ rss-glx_0.9.1.p/src/Implicit/Makefile.in	2022-12-04 19:56:27.070631528 -0500
+@@ -159,8 +159,8 @@ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+ STRIP = @STRIP@
+ VERSION = @VERSION@
+-Wand_CFLAGS = @Wand_CFLAGS@
+-Wand_LIBS = @Wand_LIBS@
++MagickWand_CFLAGS = @MagickWand_CFLAGS@
++MagickWand_LIBS = @MagickWand_LIBS@
+ XMKMF = @XMKMF@
+ X_CFLAGS = @X_CFLAGS@
+ X_EXTRA_LIBS = @X_EXTRA_LIBS@
+diff '--color=auto' -rup rss-glx_0.9.1.p-orig/src/Makefile.in rss-glx_0.9.1.p/src/Makefile.in
+--- rss-glx_0.9.1.p-orig/src/Makefile.in	2022-12-04 19:48:00.258307174 -0500
++++ rss-glx_0.9.1.p/src/Makefile.in	2022-12-04 19:55:53.893740843 -0500
+@@ -348,8 +348,8 @@ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+ STRIP = @STRIP@
+ VERSION = @VERSION@
+-Wand_CFLAGS = @Wand_CFLAGS@
+-Wand_LIBS = @Wand_LIBS@
++MagickWand_CFLAGS = @MagickWand_CFLAGS@
++MagickWand_LIBS = @MagickWand_LIBS@
+ XMKMF = @XMKMF@
+ X_CFLAGS = @X_CFLAGS@
+ X_EXTRA_LIBS = @X_EXTRA_LIBS@
+@@ -423,8 +423,8 @@ colorfire_LDADD = @BZIP2@
+ cyclone_SOURCES = driver.c cyclone.cpp rgbhsl.h rgbhsl.cpp rsRand.h
+ cyclone_LDADD = -LrsMath -lrsMath
+ drempels_SOURCES = driver.h driver.c drempels.cpp gpoly.h gpoly.cpp TexMgr.h TexMgr.cpp rgbhsl.h rgbhsl.cpp noise1234.h noise1234.c
+-drempels_CXXFLAGS = @Wand_CFLAGS@
+-drempels_LDADD = @PTHREAD_LIBS@ @Wand_LIBS@
++drempels_CXXFLAGS = @MagickWand_CFLAGS@
++drempels_LDADD = @PTHREAD_LIBS@ @MagickWand_LIBS@
+ euphoria_SOURCES = driver.h driver.c euphoria.cpp euphoria_textures.h euphoria_textures.c rgbhsl.h rgbhsl.cpp
+ euphoria_LDADD = -LrsMath -lrsMath @BZIP2@
+ feedback_SOURCES = driver.c feedback.cpp rgbhsl.h rgbhsl.cpp
+diff '--color=auto' -rup rss-glx_0.9.1.p-orig/src/PixelCity/Makefile.in rss-glx_0.9.1.p/src/PixelCity/Makefile.in
+--- rss-glx_0.9.1.p-orig/src/PixelCity/Makefile.in	2022-12-04 19:48:00.248307207 -0500
++++ rss-glx_0.9.1.p/src/PixelCity/Makefile.in	2022-12-04 19:57:07.414498596 -0500
+@@ -169,8 +169,8 @@ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+ STRIP = @STRIP@
+ VERSION = @VERSION@
+-Wand_CFLAGS = @Wand_CFLAGS@
+-Wand_LIBS = @Wand_LIBS@
++MagickWand_CFLAGS = @MagickWand_CFLAGS@
++MagickWand_LIBS = @MagickWand_LIBS@
+ XMKMF = @XMKMF@
+ X_CFLAGS = @X_CFLAGS@
+ X_EXTRA_LIBS = @X_EXTRA_LIBS@
+diff '--color=auto' -rup rss-glx_0.9.1.p-orig/src/rsMath/Makefile.in rss-glx_0.9.1.p/src/rsMath/Makefile.in
+--- rss-glx_0.9.1.p-orig/src/rsMath/Makefile.in	2022-12-04 19:48:00.248307207 -0500
++++ rss-glx_0.9.1.p/src/rsMath/Makefile.in	2022-12-04 19:56:10.994684496 -0500
+@@ -167,8 +167,8 @@ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+ STRIP = @STRIP@
+ VERSION = @VERSION@
+-Wand_CFLAGS = @Wand_CFLAGS@
+-Wand_LIBS = @Wand_LIBS@
++MagickWand_CFLAGS = @MagickWand_CFLAGS@
++MagickWand_LIBS = @MagickWand_LIBS@
+ XMKMF = @XMKMF@
+ X_CFLAGS = @X_CFLAGS@
+ X_EXTRA_LIBS = @X_EXTRA_LIBS@
+diff '--color=auto' -rup rss-glx_0.9.1.p-orig/utils/Makefile.in rss-glx_0.9.1.p/utils/Makefile.in
+--- rss-glx_0.9.1.p-orig/utils/Makefile.in	2022-12-04 19:48:00.248307207 -0500
++++ rss-glx_0.9.1.p/utils/Makefile.in	2022-12-04 19:57:23.374446007 -0500
+@@ -139,8 +139,8 @@ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+ STRIP = @STRIP@
+ VERSION = @VERSION@
+-Wand_CFLAGS = @Wand_CFLAGS@
+-Wand_LIBS = @Wand_LIBS@
++MagickWand_CFLAGS = @MagickWand_CFLAGS@
++MagickWand_LIBS = @MagickWand_LIBS@
+ XMKMF = @XMKMF@
+ X_CFLAGS = @X_CFLAGS@
+ X_EXTRA_LIBS = @X_EXTRA_LIBS@

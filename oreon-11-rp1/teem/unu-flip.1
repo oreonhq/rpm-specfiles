@@ -1,0 +1,37 @@
+.TH UNU\-FLIP "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-flip \- reverse order of slices along one axis
+.SH SYNOPSIS
+.B unu\ flip
+.BR \-a , \-\-axis
+.RI < axis >
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Reverse order of slices along one axis.
+Special case of
+.BR unu\-shuffle (1).
+.IP \(bu +2n
+Uses
+.B nrrdFlip
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIaxis\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxis\fR>
+axis to flip along
+.RI ( unsigned\ int )
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-shuffle (1)

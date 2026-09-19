@@ -1,0 +1,11 @@
+[Unit]
+Description=Hedgewars Server
+After=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/sysconfig/hedgewars-server
+ExecStart=/usr/bin/hedgewars-server --port=$PORT --dedicated=TRUE
+
+[Install]
+WantedBy=multi-user.target

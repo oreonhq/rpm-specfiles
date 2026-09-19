@@ -1,0 +1,12 @@
+diff -rup --exclude '*.o' --exclude '*.a' --exclude Makefile --exclude colmap --exclude geomorph --exclude 'config.*' --exclude POTFILES --exclude Makefile.in a/src/app/main.c b/src/app/main.c
+--- a/src/app/main.c	2016-05-18 19:04:34.033178547 +0200
++++ b/src/app/main.c	2016-05-18 19:06:26.888484729 +0200
+@@ -114,7 +114,7 @@ gchar *find_config_file() {
+ 					// Geomorph directory ("default_dir") doesn't exist
+ 					// Create one with default scenes and rc file
+ 					buf = (gchar *) x_malloc(strlen(_("Creation of the default working directory?"))+1+strlen(default_dir), "const gchar (buf - Creation of the default working directory MSG)");
+-					sprintf(buf,"Creation of the default working directory?",default_dir);
++					sprintf(buf,"Creation of the default working directory: %s?",default_dir);
+ 					if (!yes_no(buf,TRUE))
+ 						exit(0);
+ //					if (buf) x_free(buf);

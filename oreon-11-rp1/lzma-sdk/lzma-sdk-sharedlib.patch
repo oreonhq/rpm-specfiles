@@ -1,0 +1,76 @@
+diff -up lzma-sdk/CPP/7zip/7zip_gcc.mak.orig lzma-sdk/CPP/7zip/7zip_gcc.mak
+--- lzma-sdk/CPP/7zip/7zip_gcc.mak.orig	2024-06-16 10:00:00.000000000 +0200
++++ lzma-sdk/CPP/7zip/7zip_gcc.mak	2024-09-20 00:19:37.000000000 +0200
+@@ -134,7 +134,7 @@ ifdef IS_MINGW
+ ifdef MSYSTEM
+ RM = rm -f
+ MY_MKDIR=mkdir -p
+-DEL_OBJ_EXE = -$(RM) $(PROGPATH) $(PROGPATH_STATIC) $(OBJS)
++DEL_OBJ_EXE = -$(RM) $(PROGPATH) $(PROGPATH_STATIC) $(LIBRARYMINOR) $(OBJS)
+ LIB_HTMLHELP=-lhtmlhelp
+ else
+ RM = del
+@@ -218,7 +218,7 @@ STATIC_TARGET=$(PROGPATH_STATIC)
+ endif
+ 
+ 
+-all: $(O) $(PROGPATH) $(STATIC_TARGET)
++all: $(O) $(LIBRARYMINOR)
+ 
+ # we need $(O) as order-only-prerequisites:
+ $(OBJS): | $(O)
+@@ -251,7 +251,7 @@ endif
+ endif
+ 
+ 
+-LFLAGS_ALL = $(LFLAGS_STRIP) $(MY_ARCH_2) $(LDFLAGS) $(FLAGS_FLTO) $(LD_arch) $(LFLAGS_NOEXECSTACK) $(OBJS) $(MY_LIBS) $(LIB2)
++LFLAGS_ALL = $(MY_ARCH_2) $(LDFLAGS) $(FLAGS_FLTO) $(LD_arch) $(LFLAGS_NOEXECSTACK) $(OBJS) $(MY_LIBS) $(LIB2)
+ 
+ # -s : GCC : Remove all symbol table and relocation information from the executable.
+ # -s : CLANG : unsupported
+@@ -263,6 +263,9 @@ $(PROGPATH): $(OBJS)
+ $(PROGPATH_STATIC): $(OBJS)
+ 	$(CXX) -static -o $(PROGPATH_STATIC) $(LFLAGS_ALL)
+ 
++$(LIBRARYMINOR): $(OBJS)
++	$(CXX) -o $(LIBRARYMINOR) -shared -Wl,-soname=$(LIBRARYMAJOR) $(LFLAGS_ALL)
++
+ #	-s strips debug sections from executable in GCC
+ 
+ 
+diff -up lzma-sdk/CPP/7zip/Bundles/LzmaCon/makefile.gcc.orig lzma-sdk/CPP/7zip/Bundles/LzmaCon/makefile.gcc
+--- lzma-sdk/CPP/7zip/Bundles/LzmaCon/makefile.gcc.orig	2024-01-27 17:00:00.000000000 +0100
++++ lzma-sdk/CPP/7zip/Bundles/LzmaCon/makefile.gcc	2024-09-20 00:19:37.000000000 +0200
+@@ -1,4 +1,7 @@
+ PROG = lzma
++LIBRARY = liblzmasdk.so
++LIBRARYMAJOR = $(LIBRARY).25
++LIBRARYMINOR = $(LIBRARYMAJOR).01.0
+ 
+ # IS_X64 = 1
+ # USE_ASM = 1
+@@ -29,6 +32,8 @@ else
+ MT_OBJS = \
+   $O/LzFindMt.o \
+   $O/LzFindOpt.o \
++  $O/MtDec.o \
++  $O/MtCoder.o \
+   $O/Threads.o \
+   $O/Synchronization.o \
+ 
+@@ -106,12 +111,15 @@ CONSOLE_OBJS = \
+ C_OBJS = \
+   $O/7zCrc.o \
+   $O/7zCrcOpt.o \
++  $O/7zStream.o \
+   $O/Alloc.o \
+   $O/Bra86.o \
+   $O/CpuArch.o \
+   $O/LzFind.o \
+   $O/LzmaDec.o \
+   $O/LzmaEnc.o \
++  $O/Lzma2Dec.o \
++  $O/Lzma2Enc.o \
+   $O/Lzma86Dec.o \
+   $O/Lzma86Enc.o \
+ 

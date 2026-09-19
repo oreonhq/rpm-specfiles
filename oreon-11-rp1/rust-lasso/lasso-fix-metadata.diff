@@ -1,0 +1,44 @@
+--- lasso-0.7.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ lasso-0.7.3/Cargo.toml	2025-07-30T22:51:01.209326+00:00
+@@ -64,31 +64,6 @@
+ name = "static_rodeo"
+ path = "tests/static_rodeo.rs"
+ 
+-[[bench]]
+-name = "multi_threaded"
+-path = "benches/multi_threaded.rs"
+-harness = false
+-required-features = ["multi-threaded"]
+-
+-[[bench]]
+-name = "reader"
+-path = "benches/reader.rs"
+-harness = false
+-
+-[[bench]]
+-name = "resolver"
+-path = "benches/resolver.rs"
+-harness = false
+-
+-[[bench]]
+-name = "setup"
+-path = "benches/setup.rs"
+-
+-[[bench]]
+-name = "single_threaded"
+-path = "benches/single_threaded.rs"
+-harness = false
+-
+ [dependencies.abomonation]
+ version = "0.7.3"
+ optional = true
+@@ -124,9 +99,6 @@
+ version = "0.8.0"
+ default-features = false
+ 
+-[dev-dependencies.criterion]
+-version = "0.3.4"
+-
+ [dev-dependencies.fxhash]
+ version = "0.2.1"
+ 

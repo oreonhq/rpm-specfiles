@@ -1,0 +1,12 @@
+diff -uNr beaker-1.12.1.orig/tests/test_memcached.py beaker-1.12.1/tests/test_memcached.py
+--- beaker-1.12.1.orig/tests/test_memcached.py	2023-05-02 14:53:52.483453023 -0500
++++ beaker-1.12.1/tests/test_memcached.py	2023-05-02 14:54:16.794046270 -0500
+@@ -1,7 +1,7 @@
+ # coding: utf-8
+ from beaker._compat import u_
+ 
+-import mock
++import unittest.mock
+ 
+ from beaker.cache import Cache, CacheManager, util
+ from beaker.middleware import CacheMiddleware, SessionMiddleware

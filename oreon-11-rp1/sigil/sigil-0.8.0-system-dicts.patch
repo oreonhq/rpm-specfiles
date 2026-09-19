@@ -1,0 +1,11 @@
+diff -up sigil-0.9.3/src/Resource_Files/bash/sigil-sh_install~ sigil-0.9.3/src/Resource_Files/bash/sigil-sh_install
+--- sigil-0.9.3/src/Resource_Files/bash/sigil-sh_install~	2016-01-24 17:32:06.000000000 +0100
++++ sigil-0.9.3/src/Resource_Files/bash/sigil-sh_install	2016-02-24 17:10:47.396203369 +0100
+@@ -1,5 +1,7 @@
+ #!/bin/sh
+ 
++export SIGIL_DICTIONARIES=/usr/share/myspell
++
+ # Entry point for Sigil on Unix systems.
+ # Adds linked Qt's lib directory to the LD_LIBRARY_PATH
+ 

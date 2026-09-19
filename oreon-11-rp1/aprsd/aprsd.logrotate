@@ -1,0 +1,33 @@
+/var/log/aprsd/aprsd.log {
+	missingok
+        weekly
+        rotate 4
+}
+
+/var/log/aprsd/thirdparty.log {
+	missingok
+        daily
+        rotate 4
+}
+/var/log/aprsd/udp.log {
+	missingok
+        daily
+        rotate 4
+}
+/var/log/aprsd/rf.log {
+	missingok
+        daily
+        rotate 4
+}
+
+/var/log/aprsd/loop.log {
+	missingok
+        daily
+        rotate 4
+}
+
+/var/log/aprsd/reject.log {
+	missingok
+        daily
+        rotate 2
+}

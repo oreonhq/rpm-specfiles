@@ -1,0 +1,20 @@
+--- runtime-decompiler/src/plugins/ProcyonAssemblerDecompilerWrapper.json	2018-11-12 15:25:47.000000000 +0100
++++ runtime-decompiler/src/plugins/ProcyonAssemblerDecompilerWrapper.json	2019-01-16 12:13:37.317778036 +0100
+@@ -2,10 +2,10 @@
+   "Name": "Procyon-Assembler",
+-  "WrapperURL": "file://${XDG_CONFIG_HOME}/plugins/ProcyonAssemblerDecompilerWrapper.java",
++  "WrapperURL": "file:/etc/java-runtime-decompiler/plugins/ProcyonAssemblerDecompilerWrapper.java",
+   "DependencyURL": [
+-    "file://${HOME}/.m2/repository/com/github/mstrobel/procyon-core/1.0-SNAPSHOT/procyon-core-1.0-SNAPSHOT.jar",
+-    "file://${HOME}/.m2/repository/com/github/mstrobel/procyon-compilertools/1.0-SNAPSHOT/procyon-compilertools-1.0-SNAPSHOT.jar",
+-    "file://${HOME}/.m2/repository/com/github/mstrobel/procyon-decompiler/1.0-SNAPSHOT/procyon-decompiler-1.0-SNAPSHOT.jar",
+-    "file://${HOME}/.m2/repository/com/beust/jcommander/1.82/jcommander-1.82.jar"
++    "/usr/share/java/procyon/procyon-core.jar",
++    "/usr/share/java/procyon/procyon-compilertools.jar",
++    "/usr/share/java/procyon/procyon-decompiler.jar",
++    "/usr/share/java/beust-jcommander.jar"
+   ],
+   "DecompilerDownloadURL": "https://github.com/mstrobel/procyon/"
+ }
+
+

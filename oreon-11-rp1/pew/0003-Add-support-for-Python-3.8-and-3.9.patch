@@ -1,0 +1,52 @@
+From fc020f124406ccb306006e46e40ccb5f2dadee07 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Jane=C5=BE?= <tadej.j@nez.si>
+Date: Wed, 31 Jul 2019 12:39:44 +0200
+Subject: [PATCH 03/15] Add support for Python 3.8 and 3.9
+
+---
+ .travis.yml | 16 ++++++++++++++++
+ tox.ini     |  2 +-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/.travis.yml b/.travis.yml
+index 0281fe5..98dbcf9 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -37,6 +37,22 @@ matrix:
+         - pip install -e . --upgrade
+         - pip install pytest
+       script: py.test -rws tests/ --ignore=tests/test_install.py
++    - language: python
++      dist: xenial
++      sudo: required
++      python: "3.8"
++      install:
++        - pip install -e . --upgrade
++        - pip install pytest
++      script: py.test -rws tests/ --ignore=tests/test_install.py
++    - language: python
++      dist: xenial
++      sudo: required
++      python: "3.9"
++      install:
++        - pip install -e . --upgrade
++        - pip install pytest
++      script: py.test -rws tests/ --ignore=tests/test_install.p
+     - language: python
+       sudo: false
+       python: "pypy"
+diff --git a/tox.ini b/tox.ini
+index 5cac4f3..192215a 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -1,6 +1,6 @@
+ [tox]
+ skip_missing_interpreters=True
+-envlist = py27, py34, py35, py36, py37, pypy
++envlist = py27, py34, py35, py36, py37, py38, py39, pypy
+ 
+ [testenv]
+ passenv = CI HOME
+-- 
+2.31.1
+

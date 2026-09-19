@@ -1,0 +1,89 @@
+From 24ccce3d80677433384207ea16263014a693cb78 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Tue, 10 Nov 2020 10:19:58 +0100
+Subject: [PATCH 2/2] DEROutputStream is private
+
+---
+ .../src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java   | 4 ++--
+ .../main/java/org/globus/gsi/util/CertificateIOUtil.java    | 4 ++--
+ .../java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java    | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java b/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java
+index 57d82b7..4a15433 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java
+@@ -36,7 +36,7 @@ import org.bouncycastle.asn1.ASN1Sequence;
+ import org.bouncycastle.asn1.ASN1Set;
+ import org.bouncycastle.asn1.ASN1String;
+ import org.bouncycastle.asn1.DERBitString;
+-import org.bouncycastle.asn1.DEROutputStream;
++import org.bouncycastle.asn1.ASN1OutputStream;
+ import org.bouncycastle.asn1.x500.X500Name;
+ import org.bouncycastle.asn1.x500.style.BCStyle;
+ import org.bouncycastle.asn1.x509.BasicConstraints;
+@@ -78,7 +78,7 @@ public class BouncyCastleUtil {
+     public static byte[] toByteArray(ASN1Primitive obj)
+ 	throws IOException {
+ 	ByteArrayOutputStream bout = new ByteArrayOutputStream();
+-	DEROutputStream der = new DEROutputStream(bout);
++	ASN1OutputStream der = new ASN1OutputStream(bout);
+ 	der.writeObject(obj);
+ 	return bout.toByteArray();
+     }
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateIOUtil.java b/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateIOUtil.java
+index c3d4ca7..4cff1c5 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateIOUtil.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateIOUtil.java
+@@ -35,7 +35,7 @@ import java.security.cert.X509Certificate;
+ import javax.security.auth.x500.X500Principal;
+ 
+ import org.bouncycastle.util.encoders.Base64;
+-import org.bouncycastle.asn1.DEROutputStream;
++import org.bouncycastle.asn1.ASN1OutputStream;
+ import org.bouncycastle.asn1.x509.X509Name;
+ 
+ /**
+@@ -106,7 +106,7 @@ public final class CertificateIOUtil {
+ 
+     public static byte[] encodePrincipal(X509Name subject) throws IOException {
+         ByteArrayOutputStream bout = new ByteArrayOutputStream();
+-        DEROutputStream der = new DEROutputStream(bout);
++        ASN1OutputStream der = new ASN1OutputStream(bout);
+         der.writeObject(subject.toASN1Primitive());
+         return bout.toByteArray();
+     }
+diff --git a/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java b/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java
+index 4665235..82ecdfd 100644
+--- a/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java
++++ b/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java
+@@ -24,7 +24,7 @@ import org.bouncycastle.asn1.ASN1InputStream;
+ import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+ import org.bouncycastle.asn1.ASN1Primitive;
+ import org.bouncycastle.asn1.ASN1Sequence;
+-import org.bouncycastle.asn1.DEROutputStream;
++import org.bouncycastle.asn1.ASN1OutputStream;
+ 
+ import junit.framework.TestCase;
+ 
+@@ -56,7 +56,7 @@ public class ProxyCertInfoTest extends TestCase {
+ 
+ 
+ 	ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+-        DEROutputStream dOut = new DEROutputStream(bOut);
++        ASN1OutputStream dOut = new ASN1OutputStream(bOut);
+ 	dOut.writeObject(info);
+ 
+ 	ByteArrayInputStream bIn =
+@@ -105,7 +105,7 @@ public class ProxyCertInfoTest extends TestCase {
+ 	assertEquals(testOid, info.getProxyPolicy().getPolicyLanguage());
+ 
+ 	ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+-        DEROutputStream dOut = new DEROutputStream(bOut);
++        ASN1OutputStream dOut = new ASN1OutputStream(bOut);
+ 	dOut.writeObject(info);
+ 
+ 	ByteArrayInputStream bIn =
+-- 
+2.28.0
+

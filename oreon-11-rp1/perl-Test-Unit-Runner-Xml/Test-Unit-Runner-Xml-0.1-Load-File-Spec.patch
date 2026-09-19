@@ -1,0 +1,25 @@
+From e03a5a9600750bdfd1c97e819ae2df85558a8ca4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 19 Jun 2012 11:40:31 +0200
+Subject: [PATCH] Load File::Spec
+
+https://rt.cpan.org/Public/Bug/Display.html?id=77898
+---
+ lib/Test/Unit/Runner/XML.pm |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/lib/Test/Unit/Runner/XML.pm b/lib/Test/Unit/Runner/XML.pm
+index 9521a5e..a606e78 100644
+--- a/lib/Test/Unit/Runner/XML.pm
++++ b/lib/Test/Unit/Runner/XML.pm
+@@ -2,6 +2,7 @@ package Test::Unit::Runner::XML;
+ 
+ use XML::Generator;
+ use Time::HiRes qw(time);
++use File::Spec;
+ 
+ use strict;
+ use warnings;
+-- 
+1.7.7.6
+

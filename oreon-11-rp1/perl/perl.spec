@@ -1,6 +1,6 @@
 %global source0_hash 0a585eeb9e363c0f80482ddb3571625250c2c86aeb408853e8ea50805cfb14bb
 
-%global perl_version    5.42.2
+%global perl_version    5.44.0
 %global perl_epoch      4
 %global perl_arch_stem -thread-multi
 %global perl_archname %{_arch}-%{_os}%{perl_arch_stem}
@@ -126,7 +126,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          %{perl_epoch}
 Version:        %{perl_version}
 # release number must be even higher, because dual-lived modules will be broken otherwise
-Release:        524%{?dist}
+Release:        1%{?dist}
 Summary:        Practical Extraction and Report Language
 Url:            https://www.perl.org/
 Source0:        https://www.cpan.org/src/5.0/perl-%{perl_version}.tar.xz
@@ -1190,8 +1190,8 @@ in CPAN::Meta::Spec.
 %package CPAN-Meta-Requirements
 Summary:        Set of version requirements for a CPAN dist
 Epoch:          0
-# Real version 2.140
-Version:        2.140
+# Real version 2.143
+Version:        2.143
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 BuildArch:      noarch
 # CPAN-Meta-Requirements used to have six decimal places
@@ -4756,8 +4756,9 @@ rm %{buildroot}%{privlib}/constant.pm
 rm %{buildroot}%{_mandir}/man3/constant.3*
 
 # CPAN-Meta-Requirements
+rm -rf %{buildroot}%{privlib}/CPAN/Meta/Requirements
 rm %{buildroot}%{privlib}/CPAN/Meta/Requirements.pm
-rm %{buildroot}%{_mandir}/man3/CPAN::Meta::Requirements.3*
+rm %{buildroot}%{_mandir}/man3/CPAN::Meta::Requirements*
 
 # CPAN-Meta-YAML
 rm %{buildroot}%{privlib}/CPAN/Meta/YAML.pm
@@ -5799,7 +5800,9 @@ ln -s /app/bin/perl %{buildroot}/usr/bin/perl
 %dir %{privlib}/CPAN
 %dir %{privlib}/CPAN/Meta
 %{privlib}/CPAN/Meta/Requirements.pm
-%{_mandir}/man3/CPAN::Meta::Requirements.3*
+%dir %{privlib}/CPAN/Meta/Requirements
+%{privlib}/CPAN/Meta/Requirements/Range.pm
+%{_mandir}/man3/CPAN::Meta::Requirements*
 %endif
 
 %if %{dual_life} || %{rebuild_from_scratch}

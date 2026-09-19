@@ -1,0 +1,38 @@
+From d3adcdb503619d62b18e3edd7845ca560e32b738 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Rapha=C3=ABl=20Droz?= <raphael.droz@gmail.com>
+Date: Tue, 21 Jan 2025 02:18:13 -0300
+Subject: [PATCH 7/8] fix an autoconf problem from d89aeb1: -lvformat wasn't
+ added at the right position in the generated gcc command
+
+---
+ Makefile.am | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 4a7bc3b..f06c071 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -3,9 +3,10 @@ bin_PROGRAMS = abook
+ 
+ if ENABLE_VFORMAT_SUPPORT
+ vformat_SOURCE = vcard.c vcard.h
+-AM_LDFLAGS = -lvformat
++vformat_LIBADD = -lvformat
+ else
+ vformat_SOURCE =
++vformat_LIBADD =
+ endif
+ 
+ abook_SOURCES = abook.c abook_rl.c database.c edit.c \
+@@ -22,7 +23,7 @@ abook_SOURCES = abook.c abook_rl.c database.c edit.c \
+ EXTRA_DIST = config.rpath  ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc \
+ 		abook.spec contrib doc/HOWTO.translating_abook RELEASE_NOTES
+ 
+-abook_LDADD = @LIBINTL@
++abook_LDADD = @LIBINTL@ $(vformat_LIBADD)
+ 
+ 
+ install-data-local:
+-- 
+2.53.0
+

@@ -1,0 +1,91 @@
+diff --git a/gnome/src/rbgnome-app-helper.c b/gnome/src/rbgnome-app-helper.c
+index 700d9b8091c9ad2a..faf310f143b3a96f 100644
+--- a/gnome/src/rbgnome-app-helper.c
++++ b/gnome/src/rbgnome-app-helper.c
+@@ -536,7 +536,7 @@ fill_ui_info(uiinfo, ary, uitype)
+           case GNOME_APP_UI_ITEM_CONFIGURABLE:
+             break;
+           default:
+-            if (NIL_P(uiinfo[i].user_data))
++            if (NIL_P((VALUE) uiinfo[i].user_data))
+                 uiinfo[i].user_data = NULL;
+         }
+ 
+diff --git a/gnome/src/rbgnome-client.c b/gnome/src/rbgnome-client.c
+index 3277552da89d69d4..8c9a22da500a4165 100644
+--- a/gnome/src/rbgnome-client.c
++++ b/gnome/src/rbgnome-client.c
+@@ -315,16 +315,16 @@ client_interact_function(client, key, dialog_type, data)
+     GnomeDialogType dialog_type;
+     gpointer data;
+ {
+-    VALUE proc = RARRAY_PTR(data)[0];
+-    int argc = RARRAY_LEN(data) + 2;
++    VALUE proc = RARRAY_PTR((VALUE) data)[0];
++    int argc = RARRAY_LEN((VALUE) data) + 2;
+     VALUE *argv = ALLOCA_N(VALUE, argc);
+     int i;
+ 
+     argv[0] = GOBJ2RVAL(client);
+     argv[1] = INT2NUM(key);
+     argv[2] = GENUM2RVAL(dialog_type, GNOME_TYPE_DIALOG_TYPE);
+-    for (i = 1; i < RARRAY_LEN(data); i++) {
+-        argv[i + 2] = RARRAY_PTR(data)[i];
++    for (i = 1; i < RARRAY_LEN((VALUE) data); i++) {
++        argv[i + 2] = RARRAY_PTR((VALUE) data)[i];
+     }
+     rb_funcall2(proc, id_call, argc, argv);
+ }
+diff --git a/gnomevfs/src/gnomevfs.c b/gnomevfs/src/gnomevfs.c
+index 4df66bfd2622c186..7f527b04ca548ada 100644
+--- a/gnomevfs/src/gnomevfs.c
++++ b/gnomevfs/src/gnomevfs.c
+@@ -82,19 +82,19 @@ glist2strary(list)
+ }
+ 
+ static VALUE
+-gnomevfs_init(void)
++gnomevfs_init(VALUE ignored)
+ {
+ 	return CBOOL2RVAL(gnome_vfs_init());
+ }
+ 
+ static VALUE
+-gnomevfs_initialized(void)
++gnomevfs_initialized(VALUE ignored)
+ {
+ 	return CBOOL2RVAL(gnome_vfs_initialized());
+ }
+ 
+ static VALUE
+-gnomevfs_shutdown(void)
++gnomevfs_shutdown(VALUE ignored)
+ {
+ 	gnome_vfs_shutdown();
+ 	return Qnil;
+diff --git a/libart/src/rbart_bpath.c b/libart/src/rbart_bpath.c
+index b2a466e1a5c47e45..a0194aeeda0c9f36 100644
+--- a/libart/src/rbart_bpath.c
++++ b/libart/src/rbart_bpath.c
+@@ -57,7 +57,7 @@ bpath_initialize(argc, argv, self)
+     if (argc == 1){
+         VALUE ary;
+         rb_scan_args(argc, argv, "1", &ary);
+-        if (TYPE(RARRAY_PTR(ary)) == T_ARRAY){
++        if (TYPE(ary) == T_ARRAY){
+             r_array = (VALUE)(RARRAY_PTR(ary)[0]);
+         } else {
+             r_array = ary;
+diff --git a/libart/src/rbart_vpath.c b/libart/src/rbart_vpath.c
+index 12c047e5adf314fa..834b17f4333355ad 100644
+--- a/libart/src/rbart_vpath.c
++++ b/libart/src/rbart_vpath.c
+@@ -56,7 +56,7 @@ vpath_initialize(argc, argv, self)
+     if (argc == 1){
+         VALUE ary;
+         rb_scan_args(argc, argv, "1", &ary);
+-        if (TYPE(RARRAY_PTR(ary)) == T_ARRAY){
++        if (TYPE(ary) == T_ARRAY){
+             r_array = (VALUE)(RARRAY_PTR(ary)[0]);
+         } else {
+             r_array = ary;

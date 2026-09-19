@@ -1,0 +1,20 @@
+diff --git a/src/meson.build b/src/meson.build
+index aa999fb..24804c1 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -21,6 +21,7 @@ percetto_lib = shared_library(
+   cpp_args : ['-fvisibility=hidden', '-fdata-sections', '-ffunction-sections', '-Os'],
+   link_args : ['-Wl,--gc-sections', '-Wl,--exclude-libs,ALL'],
+   install : true,
++  soversion : '0.1.6',
+ )
+ 
+ percetto_dep = declare_dependency(
+@@ -35,6 +36,7 @@ atrace_lib = shared_library(
+   c_args : ['-fvisibility=hidden', '-fdata-sections', '-ffunction-sections', '-Os'],
+   link_args : ['-Wl,--gc-sections', '-Wl,--exclude-libs,ALL'],
+   install : true,
++  soversion : '0.1.6',
+ )
+ 
+ atrace_dep = declare_dependency(

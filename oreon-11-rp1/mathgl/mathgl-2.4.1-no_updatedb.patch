@@ -1,0 +1,28 @@
+diff -up mathgl-8.0.2/mgllab/CMakeLists.txt.no_updatedb mathgl-8.0.2/mgllab/CMakeLists.txt
+--- mathgl-8.0.2/mgllab/CMakeLists.txt.no_updatedb	2024-10-02 04:37:08.000000000 -0600
++++ mathgl-8.0.2/mgllab/CMakeLists.txt	2024-12-15 22:11:01.723410031 -0700
+@@ -51,7 +51,7 @@ if(MGL_HAVE_FLTK)
+ 	find_program(findupmdb update-mime-database)
+ 	if(findupmdb)
+ 		install(FILES ${CMAKE_BINARY_DIR}/mgllab/mgl.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/mime/packages/)
+-		install(CODE "execute_process(COMMAND \"${findupmdb}\" \"${CMAKE_INSTALL_PREFIX}/share/mime\")")
++#		install(CODE "execute_process(COMMAND \"${findupmdb}\" \"${CMAKE_INSTALL_PREFIX}/share/mime\")")
+ 	endif(findupmdb)
+ 
+ 	mgl_po_src(${mgllab_src} ${mgllab_hdr})
+diff -up mathgl-8.0.2/udav/CMakeLists.txt.no_updatedb mathgl-8.0.2/udav/CMakeLists.txt
+--- mathgl-8.0.2/udav/CMakeLists.txt.no_updatedb	2024-12-15 22:11:01.723943934 -0700
++++ mathgl-8.0.2/udav/CMakeLists.txt	2024-12-15 22:11:47.950093502 -0700
+@@ -48,10 +48,10 @@ install(FILES udav_ru.qm DESTINATION ${C
+ find_program(findupddb update-desktop-database)
+ if(findupddb)
+ 	install(FILES udav.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications/)
+-	install(CODE "execute_process(COMMAND \"${findupddb}\" \"${CMAKE_INSTALL_PREFIX}/share/applications\")")
++#	install(CODE "execute_process(COMMAND \"${findupddb}\" \"${CMAKE_INSTALL_PREFIX}/share/applications\")")
+ endif(findupddb)
+ find_program(findupmdb update-mime-database)
+ if(findupmdb)
+ 	install(FILES ${CMAKE_BINARY_DIR}/udav/mgl.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/mime/packages/)
+-	install(CODE "execute_process(COMMAND \"${findupmdb}\" \"${CMAKE_INSTALL_PREFIX}/share/mime\")")
++#	install(CODE "execute_process(COMMAND \"${findupmdb}\" \"${CMAKE_INSTALL_PREFIX}/share/mime\")")
+ endif(findupmdb)

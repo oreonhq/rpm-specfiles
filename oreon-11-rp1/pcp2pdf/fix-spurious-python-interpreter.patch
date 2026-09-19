@@ -1,0 +1,8 @@
+diff -up pcp2pdf-0.3/src/pcp2pdf/__main__.py.orig pcp2pdf-0.3/src/pcp2pdf/__main__.py
+--- pcp2pdf-0.3/src/pcp2pdf/__main__.py.orig	2015-06-03 20:23:27.710239276 +0200
++++ pcp2pdf-0.3/src/pcp2pdf/__main__.py	2015-06-03 20:23:23.134210160 +0200
+@@ -1,4 +1,3 @@
+-#!/usr/bin/python
+ # pcp2pdf - pcp(1) report graphing utility
+ # Copyright (C) 2014  Michele Baldessari
+ #

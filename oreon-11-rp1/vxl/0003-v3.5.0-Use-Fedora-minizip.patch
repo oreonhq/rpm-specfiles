@@ -1,0 +1,37 @@
+From c0cc5459f8ee3dfc40cefb26487a1449d5100d8e Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Thu, 15 Nov 2018 15:31:18 +0000
+Subject: [PATCH 03/18] v3.5.0 Use Fedora minizip
+
+---
+ contrib/brl/b3p/CMakeLists.txt                                | 4 ----
+ .../bseg/bmdl/pro/processes/bmdl_generate_mesh_process.cxx    | 1 +
+ 2 files changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/contrib/brl/b3p/CMakeLists.txt b/contrib/brl/b3p/CMakeLists.txt
+index 7fefd89f41..b2f4b5f6bd 100644
+--- a/contrib/brl/b3p/CMakeLists.txt
++++ b/contrib/brl/b3p/CMakeLists.txt
+@@ -19,7 +19,3 @@ add_subdirectory(expatpp)
+ option( VXL_FORCE_B3P_SHAPELIB "Use B3P instead of any native SHAPELIB library?" YES)
+ mark_as_advanced( VXL_FORCE_B3P_SHAPELIB )
+ add_subdirectory(shapelib)
+-
+-add_subdirectory(minizip)
+-
+-
+diff --git a/contrib/brl/bseg/bmdl/pro/processes/bmdl_generate_mesh_process.cxx b/contrib/brl/bseg/bmdl/pro/processes/bmdl_generate_mesh_process.cxx
+index daf78da93f..1a2241adbf 100644
+--- a/contrib/brl/bseg/bmdl/pro/processes/bmdl_generate_mesh_process.cxx
++++ b/contrib/brl/bseg/bmdl/pro/processes/bmdl_generate_mesh_process.cxx
+@@ -38,6 +38,7 @@
+ 
+ #if HAS_ZLIB
+ #include <minizip/zip.h>
++#include <zlib.h>
+ #endif
+ 
+ #define WRITEBUFFERSIZE (16384)
+-- 
+2.46.1
+

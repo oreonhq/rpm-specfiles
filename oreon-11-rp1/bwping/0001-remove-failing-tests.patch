@@ -1,0 +1,13 @@
+--- a/Makefile.am.orig
++++ b/Makefile.am
+@@ -5,10 +5,7 @@ sbin_PROGRAMS      = bwping
+ bwping_SOURCES     = src/bwping.c src/cygwin.h
+ 
+ TESTS              = tests/invalid-pkt-size \
+-                     tests/min-max-pkt-size \
+                      tests/negative-reporting-period \
+-                     tests/sanity \
+-                     tests/unknown-host \
+                      tests/usage
+ 
+ dist_man_MANS      = man/bwping.8

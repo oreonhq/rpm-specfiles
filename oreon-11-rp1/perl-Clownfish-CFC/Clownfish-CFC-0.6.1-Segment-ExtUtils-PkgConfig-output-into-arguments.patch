@@ -1,0 +1,47 @@
+From 81e7e9e0a688b961decde546333ba8bb75b4e7af Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 25 Jan 2017 15:51:53 +0100
+Subject: [PATCH] Segment ExtUtils::PkgConfig output into arguments
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If "pkg-config --libs libmark" output multiple words, like
+"-L/usr/lib -lcmark", each word must be pushed into
+Clownfish::CFC::Perl::Build::Charmonic::extra_linker_flags separately.
+Otherwise the whole string will be passed as one argument to the
+C compiler resulting in no linking to libcmark at all.
+
+This patch simply splits the string on white space sequences. This is
+not probably perfect because I think the string is actually a POSIX
+shell string (quoting and escaping), but I think this covers most
+common cases.
+
+<https://bugzilla.redhat.com/show_bug.cgi?id=1416443>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ buildlib/Clownfish/CFC/Build.pm | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/buildlib/Clownfish/CFC/Build.pm b/buildlib/Clownfish/CFC/Build.pm
+index a300fa5..6418783 100644
+--- a/buildlib/Clownfish/CFC/Build.pm
++++ b/buildlib/Clownfish/CFC/Build.pm
+@@ -97,9 +97,10 @@ sub new {
+             push @{ $self->extra_linker_flags }, '-lcmark';
+         }
+         else {
+-            push @{ $self->extra_compiler_flags }, $pkg_info{cflags}
+-                if defined $pkg_info{cflags};
+-            push @{ $self->extra_linker_flags }, $pkg_info{libs}
++            push @{ $self->extra_compiler_flags },
++                split(/\s+/, $pkg_info{cflags})
++                    if defined $pkg_info{cflags};
++            push @{ $self->extra_linker_flags }, split(/\s+/, $pkg_info{libs})
+                 if defined $pkg_info{libs};
+         }
+     }
+-- 
+2.7.4
+

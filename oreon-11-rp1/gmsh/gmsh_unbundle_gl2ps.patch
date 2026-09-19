@@ -1,0 +1,23 @@
+diff -rupN --no-dereference gmsh-4.15.0-source/CMakeLists.txt gmsh-4.15.0-source-new/CMakeLists.txt
+--- gmsh-4.15.0-source/CMakeLists.txt	2025-11-16 12:11:30.943987998 +0100
++++ gmsh-4.15.0-source-new/CMakeLists.txt	2025-11-16 12:11:30.948218140 +0100
+@@ -1728,6 +1728,8 @@ if(NOT ENABLE_BUILD_DYNAMIC AND NOT ENAB
+   endif()
+ endif()
+ 
++list(APPEND LINK_LIBRARIES -lgl2ps -lGL)
++
+ # Linux-specific linker options
+ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+   if(HAVE_OCC)
+diff -rupN --no-dereference gmsh-4.15.0-source/src/graphics/CMakeLists.txt gmsh-4.15.0-source-new/src/graphics/CMakeLists.txt
+--- gmsh-4.15.0-source/src/graphics/CMakeLists.txt	2025-10-01 16:39:02.000000000 +0200
++++ gmsh-4.15.0-source-new/src/graphics/CMakeLists.txt	2025-11-16 12:11:30.948782419 +0100
+@@ -15,7 +15,6 @@ set(SRC
+   drawScales.cpp
+   drawGraph2d.cpp
+   drawGlyph.cpp
+-  gl2ps.cpp
+   gl2gif.cpp
+   gl2jpeg.cpp
+   gl2png.cpp

@@ -1,0 +1,48 @@
+*** t/153_fonts.t~	2024-08-30 11:34:16.416620004 +0200
+--- t/153_fonts.t	2024-08-30 13:13:39.412462090 +0200
+***************
+*** 18,31 ****
+  
+  for my $face ( qw( Serif ) ) {
+      for my $style ( "", qw( Bold Italic BoldItalic ) ) {
+! 	my $font = "Free$face$style.ttf";
+  	ok( -s CP->findres( $font, class => "fonts" ), $font );
+      }
+  }
+  
+  for my $face ( qw( Sans Mono ) ) {
+      for my $style ( "", qw( Bold Oblique BoldOblique ) ) {
+! 	my $font = "Free$face$style.ttf";
+  	ok( -s CP->findres( $font, class => "fonts" ), $font );
+      }
+  }
+--- 18,31 ----
+  
+  for my $face ( qw( Serif ) ) {
+      for my $style ( "", qw( Bold Italic BoldItalic ) ) {
+! 	my $font = "/usr/share/fonts/gnu-free/Free$face$style.ttf";
+  	ok( -s CP->findres( $font, class => "fonts" ), $font );
+      }
+  }
+  
+  for my $face ( qw( Sans Mono ) ) {
+      for my $style ( "", qw( Bold Oblique BoldOblique ) ) {
+! 	my $font = "/usr/share/fonts/gnu-free/Free$face$style.ttf";
+  	ok( -s CP->findres( $font, class => "fonts" ), $font );
+      }
+  }
+*** lib/ChordPro/Output/PDF/Writer.pm~	2024-11-22 13:34:35.183147323 +0100
+--- lib/ChordPro/Output/PDF/Writer.pm	2024-12-05 15:26:18.416865479 +0100
+***************
+*** 685,690 ****
+--- 685,694 ----
+      my @d = ( @{$ps->{fontdir}}, @{ CP->findresdirs("fonts") }, $ENV{FONTDIR} );
+      # Avoid rsc result if dummy.
+      splice( @d, -2, 1 ) if $d[-2] eq "fonts/";
++
++     # Add font path (Fedora).
++     push( @d, "/usr/share/fonts/gnu-free" );
++
+      for my $fontdir ( @d ) {
+  	next unless $fontdir;
+  	$fontdir = expand_tilde($fontdir);

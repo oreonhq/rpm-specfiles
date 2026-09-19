@@ -1,0 +1,132 @@
+diff -up dd2-0.2.1/src/main.c~ dd2-0.2.1/src/main.c
+--- dd2-0.2.1/src/main.c~	2007-08-06 11:45:11.000000000 +0200
++++ dd2-0.2.1/src/main.c	2007-08-06 11:45:52.000000000 +0200
+@@ -64,6 +64,22 @@ Mix_Music *bgm=NULL, *bgm_boss=NULL;
+ int sound;
+ bool done;
+ 
++/* When fullscreen, drawing is done to screen, which then is blitted to 
++   real_screen stretched 2x, because modern LCD's cannot display 320x240,
++   resulting in a stamp fullscreen mode */
++static SDL_Surface *real_screen = NULL;
++
++void flipScreen(void)
++{
++	if(real_screen) {
++		SDL_Rect src_rect = { 0, 0, SCREENW, SCREENH };
++		SDL_Rect dst_rect = { 0, 0, 640, 480 };
++		SDL_SoftStretch(screen, &src_rect, real_screen, &dst_rect);
++		SDL_UpdateRect(real_screen, 0, 0, 640, 480);
++	} else
++		SDL_Flip(screen);
++}
++
+ /* load all the sound stuff */
+ void
+ soundLoad()
+@@ -136,7 +152,7 @@ gameLoop()
+ 					if(event.key.keysym.sym==SDLK_p && pause_tick<SDL_GetTicks())
+ 					{
+ 						writeCString(gfx, screen, 98, 20, "game paused", 0);
+-						SDL_Flip(screen);
++						flipScreen();
+ 						paused=paused ? false : true;
+ 						pause_tick=SDL_GetTicks()+200;
+ 						continue;
+@@ -265,7 +281,7 @@ gameLoop()
+ 			/* panel */
+ 			drawPanel(gfx,screen,player);
+ 
+-			SDL_Flip(screen);
++			flipScreen();
+ 		}
+ 	}
+ }
+@@ -356,9 +372,19 @@ main (int argc, char *argv[])
+ 	if(vi)
+ 		bpp=vi->vfmt->BitsPerPixel;
+ 
+-	if(conf.fullscreen)
+-		screen=SDL_SetVideoMode(SCREENW, SCREENH, bpp, SDL_HWSURFACE|SDL_HWPALETTE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
+-	else
++	if(conf.fullscreen) {
++		real_screen = SDL_SetVideoMode(640, 480, bpp, SDL_HWSURFACE|SDL_HWPALETTE|SDL_FULLSCREEN);
++		if (real_screen)
++			screen = SDL_CreateRGBSurface(SDL_SWSURFACE,
++					SCREENW, SCREENH,
++					real_screen->format->BitsPerPixel,
++					real_screen->format->Rmask,
++					real_screen->format->Gmask,
++					real_screen->format->Bmask,
++					real_screen->format->Amask);
++		else
++			screen = NULL;
++	} else
+ 		screen=SDL_SetVideoMode(SCREENW, SCREENH, bpp, SDL_HWSURFACE|SDL_HWPALETTE|SDL_DOUBLEBUF);
+ 
+ 	if(!screen) {
+@@ -401,7 +427,7 @@ main (int argc, char *argv[])
+ 		engine_init();
+ 
+ 		SDL_FillRect(screen,NULL,SDL_MapRGB(screen->format,0,0,0));
+-		SDL_Flip(screen);
++		flipScreen();
+ 
+ 		if(sound && bgm) {
+ 			Mix_VolumeMusic(MIX_MAX_VOLUME);
+diff -up dd2-0.2.1/src/menu.c~ dd2-0.2.1/src/menu.c
+--- dd2-0.2.1/src/menu.c~	2007-08-06 11:46:31.000000000 +0200
++++ dd2-0.2.1/src/menu.c	2007-08-06 11:46:31.000000000 +0200
+@@ -40,6 +40,7 @@ extern cfg conf;
+ extern float scroll,scroll2;
+ 
+ void soundLoad(void);
++void flipScreen(void);
+ 
+ void
+ drawGetName(char *name, int place, int playern)
+@@ -79,7 +80,7 @@ drawGetName(char *name, int place, int p
+ 
+ 	writeCString(gfx, screen, 175, 131, buffer, 1);
+ 
+-	SDL_Flip(screen);
++	flipScreen();
+ }
+ 
+ int
+@@ -262,7 +263,7 @@ drawHiscores(int max)
+ 		writeNumber(gfx, screen, 260, 23+i*17, hiscore[i].score,6);
+ 	}
+ 
+-	SDL_Flip(screen);
++	flipScreen();
+ }
+ 
+ int
+@@ -337,7 +338,7 @@ drawConfigure(int option)
+ 	else
+ 		writeCString(gfx, screen, 20, 156,  "   windowed", (option==4));
+ 
+-	SDL_Flip(screen);
++	flipScreen();
+ }
+ 
+ int
+@@ -507,7 +508,7 @@ drawMenu(int option)
+ 	b.h=16;
+ 	SDL_BlitSurface(gfx, &b, screen, &a);
+ 
+-	SDL_Flip(screen);
++	flipScreen();
+ }
+ 
+ int
+@@ -642,7 +643,7 @@ drawCredits()
+ 	writeCString(gfx, screen, 40, 105, "juan j. martinez", 0);
+ 	writeCString(gfx, screen, 40, 140, "thanks you for playing...", 0);
+ 	
+-	SDL_Flip(screen);
++	flipScreen();
+ }
+ 
+ int

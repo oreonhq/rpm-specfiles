@@ -1,0 +1,464 @@
+%global source0_hash none
+
+%{?mingw_package_header}
+
+%global qt_module qt3d
+#global pre rc
+
+#global commit bdb98baf8253c69949a8c259369203da9ffb269c
+#global shortcommit %(c=%{commit}; echo ${c:0:7})
+
+%if 0%{?commit:1}
+%global source_folder %{qt_module}-%{commit}
+%else
+%global source_folder %{qt_module}-everywhere-src-%{qt_version}%{?pre:-%{pre}}
+%endif
+
+# first two digits of version
+%define release_version %(echo %{version} | awk -F. '{print $1"."$2}')
+%define qt_version %(echo %{version} | cut -d~ -f1)
+
+Name:           mingw-qt6-%{qt_module}
+Version:        6.10.2
+Release:        1%{?dist}
+Summary:        Qt6 for Windows - Qt3d component
+
+License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
+URL:            http://qt.io/
+
+BuildArch:      noarch
+
+%if 0%{?commit:1}
+Source0:        https://github.com/qt/%{qt_module}/archive/%{commit}/%{qt_module}-everywhere-src-%{commit}.tar.gz
+%else
+Source0:        http://download.qt.io/%{?pre:development}%{?!pre:official}_releases/qt/%{release_version}/%{qt_version}%{?pre:-%pre}/submodules/%{qt_module}-everywhere-src-%{qt_version}%{?pre:-%pre}.tar.xz
+%endif
+
+BuildRequires:  cmake
+BuildRequires:  ninja-build
+
+BuildRequires:  mingw32-filesystem
+BuildRequires:  mingw32-gcc-c++
+BuildRequires:  mingw32-qt6-qtbase = %{version}
+BuildRequires:  mingw32-qt6-qtdeclarative = %{version}
+BuildRequires:  mingw32-qt6-qtshadertools = %{version}
+
+BuildRequires:  mingw64-filesystem
+BuildRequires:  mingw64-gcc-c++
+BuildRequires:  mingw64-qt6-qtbase = %{version}
+BuildRequires:  mingw64-qt6-qtdeclarative = %{version}
+BuildRequires:  mingw64-qt6-qtshadertools = %{version}
+
+%description
+This package contains the Qt software toolkit for developing
+cross-platform applications.
+
+This is the Windows version of Qt, for use in conjunction with the
+Fedora Windows cross-compiler.
+
+# Win32
+%package -n mingw32-qt6-%{qt_module}
+Summary:        Qt6 for Windows - Qt3d component
+
+%description -n mingw32-qt6-%{qt_module}
+This package contains the Qt software toolkit for developing
+cross-platform applications.
+
+This is the 32-bit Windows version of Qt, for use in conjunction with the
+Fedora Windows cross-compiler.
+
+# Win64
+%package -n mingw64-qt6-%{qt_module}
+Summary:        Qt6 for Windows - Qt3d component
+
+%description -n mingw64-qt6-%{qt_module}
+This package contains the Qt software toolkit for developing
+cross-platform applications.
+
+This is the 64-bit Windows version of Qt, for use in conjunction with the
+Fedora Windows cross-compiler.
+
+%{?mingw_debug_package}
+
+%prep
+%autosetup -p1 -n %{source_folder}
+
+%build
+export MINGW32_CXXFLAGS="%{mingw32_cflags} -msse2"
+export MINGW64_CXXFLAGS="%{mingw64_cflags} -msse2"
+%mingw_cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo
+%mingw_ninja
+
+%install
+%mingw_ninja_install
+
+# Win32
+%files -n mingw32-qt6-%{qt_module}
+%license LICENSES/*GPL*
+%{mingw32_bindir}/Qt63DAnimation.dll
+%{mingw32_bindir}/Qt63DCore.dll
+%{mingw32_bindir}/Qt63DExtras.dll
+%{mingw32_bindir}/Qt63DInput.dll
+%{mingw32_bindir}/Qt63DLogic.dll
+%{mingw32_bindir}/Qt63DRender.dll
+%{mingw32_bindir}/Qt63DQuick.dll
+%{mingw32_bindir}/Qt63DQuickAnimation.dll
+%{mingw32_bindir}/Qt63DQuickExtras.dll
+%{mingw32_bindir}/Qt63DQuickInput.dll
+%{mingw32_bindir}/Qt63DQuickLogic.dll
+%{mingw32_bindir}/Qt63DQuickRender.dll
+%{mingw32_bindir}/Qt63DQuickScene2D.dll
+%{mingw32_bindir}/Qt63DQuickScene3D.dll
+%{mingw32_includedir}/qt6/Qt3DAnimation/
+%{mingw32_includedir}/qt6/Qt3DCore/
+%{mingw32_includedir}/qt6/Qt3DExtras/
+%{mingw32_includedir}/qt6/Qt3DInput/
+%{mingw32_includedir}/qt6/Qt3DLogic/
+%{mingw32_includedir}/qt6/Qt3DQuick/
+%{mingw32_includedir}/qt6/Qt3DRender/
+%{mingw32_includedir}/qt6/Qt3DQuickAnimation/
+%{mingw32_includedir}/qt6/Qt3DQuickExtras/
+%{mingw32_includedir}/qt6/Qt3DQuickInput
+%{mingw32_includedir}/qt6/Qt3DQuickLogic/
+%{mingw32_includedir}/qt6/Qt3DQuickRender/
+%{mingw32_includedir}/qt6/Qt3DQuickScene2D/
+%{mingw32_includedir}/qt6/Qt3DQuickScene3D/
+%{mingw32_libdir}/cmake/Qt63DAnimation/
+%{mingw32_libdir}/cmake/Qt63DAnimationPrivate/
+%{mingw32_libdir}/cmake/Qt63DCore/
+%{mingw32_libdir}/cmake/Qt63DCorePrivate/
+%{mingw32_libdir}/cmake/Qt63DExtras/
+%{mingw32_libdir}/cmake/Qt63DExtrasPrivate/
+%{mingw32_libdir}/cmake/Qt63DInput/
+%{mingw32_libdir}/cmake/Qt63DInputPrivate/
+%{mingw32_libdir}/cmake/Qt63DLogic/
+%{mingw32_libdir}/cmake/Qt63DLogicPrivate/
+%{mingw32_libdir}/cmake/Qt63DRender/
+%{mingw32_libdir}/cmake/Qt63DRenderPrivate/
+%{mingw32_libdir}/cmake/Qt63DQuick/
+%{mingw32_libdir}/cmake/Qt63DQuickPrivate/
+%{mingw32_libdir}/cmake/Qt63DQuickAnimation/
+%{mingw32_libdir}/cmake/Qt63DQuickAnimationPrivate/
+%{mingw32_libdir}/cmake/Qt63DQuickExtras/
+%{mingw32_libdir}/cmake/Qt63DQuickExtrasPrivate/
+%{mingw32_libdir}/cmake/Qt63DQuickInput/
+%{mingw32_libdir}/cmake/Qt63DQuickInputPrivate/
+%{mingw32_libdir}/cmake/Qt63DQuickLogic/
+%{mingw32_libdir}/cmake/Qt63DQuickLogicPrivate/
+%{mingw32_libdir}/cmake/Qt63DQuickRender/
+%{mingw32_libdir}/cmake/Qt63DQuickRenderPrivate/
+%{mingw32_libdir}/cmake/Qt63DQuickScene2D/
+%{mingw32_libdir}/cmake/Qt63DQuickScene2DPrivate/
+%{mingw32_libdir}/cmake/Qt63DQuickScene3D/
+%{mingw32_libdir}/cmake/Qt63DQuickScene3DPrivate/
+%{mingw32_libdir}/cmake/Qt6BuildInternals/StandaloneTests/Qt3DTestsConfig.cmake
+%{mingw32_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6qtquickscene2dplugin*
+%{mingw32_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6qtquickscene3dplugi*
+%{mingw32_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3danimationplugin*
+%{mingw32_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3dcoreplugin*
+%{mingw32_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3dextrasplugin*
+%{mingw32_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3dinputplugin*
+%{mingw32_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3dlogicplugin*
+%{mingw32_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3drenderplugin*
+%{mingw32_libdir}/cmake/Qt6/FindWrapQt3DAssimp.cmake
+%{mingw32_libdir}/pkgconfig/Qt63DAnimation.pc
+%{mingw32_libdir}/pkgconfig/Qt63DCore.pc
+%{mingw32_libdir}/pkgconfig/Qt63DExtras.pc
+%{mingw32_libdir}/pkgconfig/Qt63DInput.pc
+%{mingw32_libdir}/pkgconfig/Qt63DLogic.pc
+%{mingw32_libdir}/pkgconfig/Qt63DRender.pc
+%{mingw32_libdir}/pkgconfig/Qt63DQuick.pc
+%{mingw32_libdir}/pkgconfig/Qt63DQuickAnimation.pc
+%{mingw32_libdir}/pkgconfig/Qt63DQuickExtras.pc
+%{mingw32_libdir}/pkgconfig/Qt63DQuickInput.pc
+%{mingw32_libdir}/pkgconfig/Qt63DQuickLogic.pc
+%{mingw32_libdir}/pkgconfig/Qt63DQuickRender.pc
+%{mingw32_libdir}/pkgconfig/Qt63DQuickScene2D.pc
+%{mingw32_libdir}/pkgconfig/Qt63DQuickScene3D.pc
+%{mingw32_libdir}/libQt63DAnimation.dll.a
+%{mingw32_libdir}/libQt63DCore.dll.a
+%{mingw32_libdir}/libQt63DExtras.dll.a
+%{mingw32_libdir}/libQt63DInput.dll.a
+%{mingw32_libdir}/libQt63DLogic.dll.a
+%{mingw32_libdir}/libQt63DRender.dll.a
+%{mingw32_libdir}/libQt63DQuick.dll.a
+%{mingw32_libdir}/libQt63DQuickAnimation.dll.a
+%{mingw32_libdir}/libQt63DQuickExtras.dll.a
+%{mingw32_libdir}/libQt63DQuickInput.dll.a
+%{mingw32_libdir}/libQt63DQuickLogic.dll.a
+%{mingw32_libdir}/libQt63DQuickRender.dll.a
+%{mingw32_libdir}/libQt63DQuickScene2D.dll.a
+%{mingw32_libdir}/libQt63DQuickScene3D.dll.a
+%{mingw32_libdir}/Qt63DAnimation.prl
+%{mingw32_libdir}/Qt63DCore.prl
+%{mingw32_libdir}/Qt63DExtras.prl
+%{mingw32_libdir}/Qt63DInput.prl
+%{mingw32_libdir}/Qt63DLogic.prl
+%{mingw32_libdir}/Qt63DRender.prl
+%{mingw32_libdir}/Qt63DQuick.prl
+%{mingw32_libdir}/Qt63DQuickAnimation.prl
+%{mingw32_libdir}/Qt63DQuickExtras.prl
+%{mingw32_libdir}/Qt63DQuickInput.prl
+%{mingw32_libdir}/Qt63DQuickLogic.prl
+%{mingw32_libdir}/Qt63DQuickRender.prl
+%{mingw32_libdir}/Qt63DQuickScene2D.prl
+%{mingw32_libdir}/Qt63DQuickScene3D.prl
+%{mingw32_libdir}/qt6/metatypes/qt63danimation_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dcore_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dextras_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dinput_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dlogic_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63drender_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dquick_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dquickanimation_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dquickextras_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dquickinput_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dquicklogic_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dquickrender_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dquickscene2d_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt63dquickscene3d_metatypes.json
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquick.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3danimation.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3danimation_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dcore.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dcore_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dextras.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dextras_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dinput.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dinput_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dlogic.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dlogic_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3drender.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3drender_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquick_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickanimation.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickanimation_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickextras.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickextras_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickinput.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickinput_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquicklogic.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquicklogic_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickrender.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickrender_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickscene2d.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickscene2d_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickscene3d.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_3dquickscene3d_private.pri
+%dir %{mingw32_libdir}/qt6/plugins/geometryloaders/
+%{mingw32_libdir}/qt6/plugins/geometryloaders/defaultgeometryloader.dll
+%{mingw32_libdir}/qt6/plugins/geometryloaders/gltfgeometryloader.dll
+%dir %{mingw32_libdir}/qt6/plugins/renderers/
+%{mingw32_libdir}/qt6/plugins/renderers/openglrenderer.dll
+%{mingw32_libdir}/qt6/plugins/renderers/rhirenderer.dll
+%dir %{mingw32_libdir}/qt6/plugins/renderplugins/
+%{mingw32_libdir}/qt6/plugins/renderplugins/scene2d.dll
+%dir %{mingw32_libdir}/qt6/plugins/sceneparsers/
+%{mingw32_libdir}/qt6/plugins/sceneparsers/assimpsceneimport.dll
+%{mingw32_libdir}/qt6/plugins/sceneparsers/gltfsceneexport.dll
+%{mingw32_libdir}/qt6/plugins/sceneparsers/gltfsceneimport.dll
+%{mingw32_libdir}/qt6/qml/Qt3D/
+%{mingw32_libdir}/qt6/qml/QtQuick/Scene2D/
+%{mingw32_libdir}/qt6/qml/QtQuick/Scene3D/
+%{mingw32_libdir}/qt6/modules/3DAnimation.json
+%{mingw32_libdir}/qt6/modules/3DCore.json
+%{mingw32_libdir}/qt6/modules/3DExtras.json
+%{mingw32_libdir}/qt6/modules/3DInput.json
+%{mingw32_libdir}/qt6/modules/3DLogic.json
+%{mingw32_libdir}/qt6/modules/3DRender.json
+%{mingw32_libdir}/qt6/modules/3DQuick.json
+%{mingw32_libdir}/qt6/modules/3DQuickAnimation.json
+%{mingw32_libdir}/qt6/modules/3DQuickExtras.json
+%{mingw32_libdir}/qt6/modules/3DQuickInput.json
+%{mingw32_libdir}/qt6/modules/3DQuickLogic.json
+%{mingw32_libdir}/qt6/modules/3DQuickRender.json
+%{mingw32_libdir}/qt6/modules/3DQuickScene2D.json
+%{mingw32_libdir}/qt6/modules/3DQuickScene3D.json
+%{mingw32_libdir}/qt6/sbom/%{qt_module}-%{qt_version}.spdx
+
+# Win64
+%files -n mingw64-qt6-%{qt_module}
+%license LICENSES/*GPL*
+%{mingw64_bindir}/Qt63DAnimation.dll
+%{mingw64_bindir}/Qt63DCore.dll
+%{mingw64_bindir}/Qt63DExtras.dll
+%{mingw64_bindir}/Qt63DInput.dll
+%{mingw64_bindir}/Qt63DLogic.dll
+%{mingw64_bindir}/Qt63DRender.dll
+%{mingw64_bindir}/Qt63DQuick.dll
+%{mingw64_bindir}/Qt63DQuickAnimation.dll
+%{mingw64_bindir}/Qt63DQuickExtras.dll
+%{mingw64_bindir}/Qt63DQuickInput.dll
+%{mingw64_bindir}/Qt63DQuickLogic.dll
+%{mingw64_bindir}/Qt63DQuickRender.dll
+%{mingw64_bindir}/Qt63DQuickScene2D.dll
+%{mingw64_bindir}/Qt63DQuickScene3D.dll
+%{mingw64_includedir}/qt6/Qt3DAnimation/
+%{mingw64_includedir}/qt6/Qt3DCore/
+%{mingw64_includedir}/qt6/Qt3DExtras/
+%{mingw64_includedir}/qt6/Qt3DInput/
+%{mingw64_includedir}/qt6/Qt3DLogic/
+%{mingw64_includedir}/qt6/Qt3DQuick/
+%{mingw64_includedir}/qt6/Qt3DRender/
+%{mingw64_includedir}/qt6/Qt3DQuickAnimation/
+%{mingw64_includedir}/qt6/Qt3DQuickExtras/
+%{mingw64_includedir}/qt6/Qt3DQuickInput
+%{mingw64_includedir}/qt6/Qt3DQuickLogic/
+%{mingw64_includedir}/qt6/Qt3DQuickRender/
+%{mingw64_includedir}/qt6/Qt3DQuickScene2D/
+%{mingw64_includedir}/qt6/Qt3DQuickScene3D/
+%{mingw64_libdir}/cmake/Qt63DAnimation/
+%{mingw64_libdir}/cmake/Qt63DAnimationPrivate/
+%{mingw64_libdir}/cmake/Qt63DCore/
+%{mingw64_libdir}/cmake/Qt63DCorePrivate/
+%{mingw64_libdir}/cmake/Qt63DExtras/
+%{mingw64_libdir}/cmake/Qt63DExtrasPrivate/
+%{mingw64_libdir}/cmake/Qt63DInput/
+%{mingw64_libdir}/cmake/Qt63DInputPrivate/
+%{mingw64_libdir}/cmake/Qt63DLogic/
+%{mingw64_libdir}/cmake/Qt63DLogicPrivate/
+%{mingw64_libdir}/cmake/Qt63DRender/
+%{mingw64_libdir}/cmake/Qt63DRenderPrivate/
+%{mingw64_libdir}/cmake/Qt63DQuick/
+%{mingw64_libdir}/cmake/Qt63DQuickPrivate/
+%{mingw64_libdir}/cmake/Qt63DQuickAnimation/
+%{mingw64_libdir}/cmake/Qt63DQuickAnimationPrivate/
+%{mingw64_libdir}/cmake/Qt63DQuickExtras/
+%{mingw64_libdir}/cmake/Qt63DQuickExtrasPrivate/
+%{mingw64_libdir}/cmake/Qt63DQuickInput/
+%{mingw64_libdir}/cmake/Qt63DQuickInputPrivate/
+%{mingw64_libdir}/cmake/Qt63DQuickLogic/
+%{mingw64_libdir}/cmake/Qt63DQuickLogicPrivate/
+%{mingw64_libdir}/cmake/Qt63DQuickRender/
+%{mingw64_libdir}/cmake/Qt63DQuickRenderPrivate/
+%{mingw64_libdir}/cmake/Qt63DQuickScene2D/
+%{mingw64_libdir}/cmake/Qt63DQuickScene2DPrivate/
+%{mingw64_libdir}/cmake/Qt63DQuickScene3D/
+%{mingw64_libdir}/cmake/Qt63DQuickScene3DPrivate/
+%{mingw64_libdir}/cmake/Qt6BuildInternals/StandaloneTests/Qt3DTestsConfig.cmake
+%{mingw64_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6qtquickscene2dplugin*
+%{mingw64_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6qtquickscene3dplugi*
+%{mingw64_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3danimationplugin*
+%{mingw64_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3dcoreplugin*
+%{mingw64_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3dextrasplugin*
+%{mingw64_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3dinputplugin*
+%{mingw64_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3dlogicplugin*
+%{mingw64_libdir}/cmake/Qt6Qml/QmlPlugins/Qt6quick3drenderplugin*
+%{mingw64_libdir}/cmake/Qt6/FindWrapQt3DAssimp.cmake
+%{mingw64_libdir}/pkgconfig/Qt63DAnimation.pc
+%{mingw64_libdir}/pkgconfig/Qt63DCore.pc
+%{mingw64_libdir}/pkgconfig/Qt63DExtras.pc
+%{mingw64_libdir}/pkgconfig/Qt63DInput.pc
+%{mingw64_libdir}/pkgconfig/Qt63DLogic.pc
+%{mingw64_libdir}/pkgconfig/Qt63DRender.pc
+%{mingw64_libdir}/pkgconfig/Qt63DQuick.pc
+%{mingw64_libdir}/pkgconfig/Qt63DQuickAnimation.pc
+%{mingw64_libdir}/pkgconfig/Qt63DQuickExtras.pc
+%{mingw64_libdir}/pkgconfig/Qt63DQuickInput.pc
+%{mingw64_libdir}/pkgconfig/Qt63DQuickLogic.pc
+%{mingw64_libdir}/pkgconfig/Qt63DQuickRender.pc
+%{mingw64_libdir}/pkgconfig/Qt63DQuickScene2D.pc
+%{mingw64_libdir}/pkgconfig/Qt63DQuickScene3D.pc
+%{mingw64_libdir}/libQt63DAnimation.dll.a
+%{mingw64_libdir}/libQt63DCore.dll.a
+%{mingw64_libdir}/libQt63DExtras.dll.a
+%{mingw64_libdir}/libQt63DInput.dll.a
+%{mingw64_libdir}/libQt63DLogic.dll.a
+%{mingw64_libdir}/libQt63DRender.dll.a
+%{mingw64_libdir}/libQt63DQuick.dll.a
+%{mingw64_libdir}/libQt63DQuickAnimation.dll.a
+%{mingw64_libdir}/libQt63DQuickExtras.dll.a
+%{mingw64_libdir}/libQt63DQuickInput.dll.a
+%{mingw64_libdir}/libQt63DQuickLogic.dll.a
+%{mingw64_libdir}/libQt63DQuickRender.dll.a
+%{mingw64_libdir}/libQt63DQuickScene2D.dll.a
+%{mingw64_libdir}/libQt63DQuickScene3D.dll.a
+%{mingw64_libdir}/Qt63DAnimation.prl
+%{mingw64_libdir}/Qt63DCore.prl
+%{mingw64_libdir}/Qt63DExtras.prl
+%{mingw64_libdir}/Qt63DInput.prl
+%{mingw64_libdir}/Qt63DLogic.prl
+%{mingw64_libdir}/Qt63DRender.prl
+%{mingw64_libdir}/Qt63DQuick.prl
+%{mingw64_libdir}/Qt63DQuickAnimation.prl
+%{mingw64_libdir}/Qt63DQuickExtras.prl
+%{mingw64_libdir}/Qt63DQuickInput.prl
+%{mingw64_libdir}/Qt63DQuickLogic.prl
+%{mingw64_libdir}/Qt63DQuickRender.prl
+%{mingw64_libdir}/Qt63DQuickScene2D.prl
+%{mingw64_libdir}/Qt63DQuickScene3D.prl
+%{mingw64_libdir}/qt6/metatypes/qt63danimation_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dcore_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dextras_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dinput_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dlogic_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63drender_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dquick_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dquickanimation_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dquickextras_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dquickinput_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dquicklogic_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dquickrender_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dquickscene2d_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt63dquickscene3d_metatypes.json
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquick.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3danimation.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3danimation_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dcore.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dcore_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dextras.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dextras_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dinput.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dinput_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dlogic.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dlogic_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3drender.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3drender_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquick_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickanimation.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickanimation_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickextras.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickextras_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickinput.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickinput_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquicklogic.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquicklogic_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickrender.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickrender_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickscene2d.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickscene2d_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickscene3d.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_3dquickscene3d_private.pri
+%dir %{mingw64_libdir}/qt6/plugins/geometryloaders/
+%{mingw64_libdir}/qt6/plugins/geometryloaders/defaultgeometryloader.dll
+%{mingw64_libdir}/qt6/plugins/geometryloaders/gltfgeometryloader.dll
+%dir %{mingw64_libdir}/qt6/plugins/renderers/
+%{mingw64_libdir}/qt6/plugins/renderers/openglrenderer.dll
+%{mingw64_libdir}/qt6/plugins/renderers/rhirenderer.dll
+%dir %{mingw64_libdir}/qt6/plugins/renderplugins/
+%{mingw64_libdir}/qt6/plugins/renderplugins/scene2d.dll
+%dir %{mingw64_libdir}/qt6/plugins/sceneparsers/
+%{mingw64_libdir}/qt6/plugins/sceneparsers/assimpsceneimport.dll
+%{mingw64_libdir}/qt6/plugins/sceneparsers/gltfsceneexport.dll
+%{mingw64_libdir}/qt6/plugins/sceneparsers/gltfsceneimport.dll
+%{mingw64_libdir}/qt6/qml/Qt3D/
+%{mingw64_libdir}/qt6/qml/QtQuick/Scene2D/
+%{mingw64_libdir}/qt6/qml/QtQuick/Scene3D/
+%{mingw64_libdir}/qt6/modules/3DAnimation.json
+%{mingw64_libdir}/qt6/modules/3DCore.json
+%{mingw64_libdir}/qt6/modules/3DExtras.json
+%{mingw64_libdir}/qt6/modules/3DInput.json
+%{mingw64_libdir}/qt6/modules/3DLogic.json
+%{mingw64_libdir}/qt6/modules/3DRender.json
+%{mingw64_libdir}/qt6/modules/3DQuick.json
+%{mingw64_libdir}/qt6/modules/3DQuickAnimation.json
+%{mingw64_libdir}/qt6/modules/3DQuickExtras.json
+%{mingw64_libdir}/qt6/modules/3DQuickInput.json
+%{mingw64_libdir}/qt6/modules/3DQuickLogic.json
+%{mingw64_libdir}/qt6/modules/3DQuickRender.json
+%{mingw64_libdir}/qt6/modules/3DQuickScene2D.json
+%{mingw64_libdir}/qt6/modules/3DQuickScene3D.json
+%{mingw64_libdir}/qt6/sbom/%{qt_module}-%{qt_version}.spdx
+
+%changelog
+%autochangelog

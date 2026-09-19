@@ -1,0 +1,20 @@
+.TH openjdk-asmtools 1 "01 March 2021" "version 0.1"
+.SH NAME
+openjdk-asmtools \- To develop tools create proper & improper Java '.class' files
+.SH SYNOPSIS
+openjdk-asmtools
+.SH DESCRIPTION
+AsmTools helps develop tools to create proper and improper Java '.class' files.
+Aids various Java .class based testing and OpenJDK development applications.
+Asmtools supports latest class file formats, in lock-step with JDK development.
+.SH Usage:
+.IP to\ run\ an\ assembly\ tool: 
+$ java -jar asmtools.jar toolName [args...] 
+where toolName one of: jasm, jdis, jcoder, jdec, jcdec
+.IP to\ get\ the\ version: 
+$ java -jar asmtools.jar -version 
+.IP to\ get\ this\ message 
+$ java -jar asmtools.jar -?|-h|-help
+.SH AUTHOR
+Jayashree Huttanagoudar (jaya.huttanagoudar@gmail.com)
+Jiri Vanek (judovana@email.com)

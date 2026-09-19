@@ -1,0 +1,80 @@
+From: Alec Leamas <leamas.alec@gmail.com>
+Date: Wed, 6 Apr 2022 15:49:59 +0200
+Subject: ddupdate_netrc_to_keyring -> ddupdate-netrc-to-keyring
+
+---
+ ddupdate-netrc-to-keyring | 17 +++++++++++++++++
+ ddupdate_netrc_to_keyring | 17 -----------------
+ setup.py                  |  4 ++--
+ 3 files changed, 19 insertions(+), 19 deletions(-)
+ create mode 100755 ddupdate-netrc-to-keyring
+ delete mode 100755 ddupdate_netrc_to_keyring
+
+diff --git a/ddupdate-netrc-to-keyring b/ddupdate-netrc-to-keyring
+new file mode 100755
+index 0000000..efe07f3
+--- /dev/null
++++ b/ddupdate-netrc-to-keyring
+@@ -0,0 +1,17 @@
++#!/usr/bin/python3
++
++''' Move entries from netrc file to keyring. See auth_keyring plugin '''
++
++import os.path
++import sys
++
++sys.path.pop(0)
++HOME = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
++sys.path.insert(0, os.path.join(HOME, 'lib'))
++
++try:
++    import ddupdate.netrc_to_keyring as main
++except ImportError:
++    import netrc_to_keyring.main as main
++
++main.main()
+diff --git a/ddupdate_netrc_to_keyring b/ddupdate_netrc_to_keyring
+deleted file mode 100755
+index efe07f3..0000000
+--- a/ddupdate_netrc_to_keyring
++++ /dev/null
+@@ -1,17 +0,0 @@
+-#!/usr/bin/python3
+-
+-''' Move entries from netrc file to keyring. See auth_keyring plugin '''
+-
+-import os.path
+-import sys
+-
+-sys.path.pop(0)
+-HOME = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
+-sys.path.insert(0, os.path.join(HOME, 'lib'))
+-
+-try:
+-    import ddupdate.netrc_to_keyring as main
+-except ImportError:
+-    import netrc_to_keyring.main as main
+-
+-main.main()
+diff --git a/setup.py b/setup.py
+index 2e72f92..4e899b1 100644
+--- a/setup.py
++++ b/setup.py
+@@ -27,7 +27,7 @@ def systemd_unitdir():
+ 
+ 
+ DATA = [
+-    (systemd_unitdir(), glob('systemd/*')),
++    ("lib/systemd/user", glob('systemd/*')),
+     ('share/bash-completion/completions/', ['bash_completion.d/ddupdate']),
+     ('share/man/man8', ['ddupdate.8', 'ddupdate-config.8',
+                         'ddupdate-netrc-to-keyring.8']),
+@@ -111,7 +111,7 @@ setup(
+     keywords=['dyndns', 'dhcp', 'dns'],
+     package_dir={'': 'lib'},
+     packages=['ddupdate'],
+-    scripts=['ddupdate', 'ddupdate-config', 'ddupdate_netrc_to_keyring'],
++    scripts=['ddupdate', 'ddupdate-config', 'ddupdate-netrc-to-keyring'],
+     data_files=DATA,
+     cmdclass={'clean': _ProjectClean, 'install': _ProjectInstall}
+ )

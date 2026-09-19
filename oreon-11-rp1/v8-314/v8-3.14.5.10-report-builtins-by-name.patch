@@ -1,0 +1,16 @@
+diff -up v8-3.14.5.10/src/log.cc.builtinnames v8-3.14.5.10/src/log.cc
+--- v8-3.14.5.10/src/log.cc.builtinnames	2016-07-06 11:25:12.341766992 -0400
++++ v8-3.14.5.10/src/log.cc	2016-07-06 11:25:41.065609632 -0400
+@@ -1485,7 +1485,11 @@ void Logger::LogCodeObject(Object* objec
+         tag = Logger::STUB_TAG;
+         break;
+       case Code::BUILTIN:
+-        description = "A builtin from the snapshot";
++        description =
++            Isolate::Current()->builtins()->Lookup(code_object->entry());
++        if (description == NULL) {
++          description = "A builtin from the snapshot";
++        }
+         tag = Logger::BUILTIN_TAG;
+         break;
+       case Code::KEYED_LOAD_IC:

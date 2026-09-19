@@ -1,0 +1,35 @@
+diff -ur beanstalkd-1.10.org/ct/ct.c beanstalkd-1.10/ct/ct.c
+--- beanstalkd-1.10.org/ct/ct.c	2014-08-04 21:39:54.000000000 -0600
++++ beanstalkd-1.10/ct/ct.c	2016-01-08 11:40:40.867677319 -0700
+@@ -13,7 +13,9 @@
+ #include <dirent.h>
+ #include <errno.h>
+ #include <sys/time.h>
++#include <time.h>
+ #include <stdint.h>
++#include <inttypes.h>
+ #include "internal.h"
+ #include "ct.h"
+
+@@ -23,9 +24,9 @@
+ static int64 bstart, bdur;
+ static int btiming; // bool
+ static int64 bbytes;
+-static const int64 Second = 1000 * 1000 * 1000;
+-static const int64 BenchTime = Second;
+-static const int MaxN = 1000 * 1000 * 1000;
++const int64 Second = 1000 * 1000 * 1000;
++const int64 BenchTime = 1000 * 1000 * 1000;
++const int MaxN = 1000 * 1000 * 1000;
+ 
+ 
+ 
+@@ -416,7 +417,7 @@
+         runbenchn(b, n);
+     }
+     if (b->status == 0) {
+-        printf("%8d\t%10lld ns/op", n, b->dur/n);
++        printf("%8d\t%10"PRId64" ns/op", n, b->dur/n);
+         if (b->bytes > 0) {
+             double mbs = 0;
+             if (b->dur > 0) {

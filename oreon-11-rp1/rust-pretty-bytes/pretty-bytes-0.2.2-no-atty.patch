@@ -1,0 +1,32 @@
+diff --git a/src/cli.rs b/src/cli.rs
+index 2d497a8..4121b19 100644
+--- a/src/cli.rs
++++ b/src/cli.rs
+@@ -3,7 +3,7 @@ use ::converter;
+ use std::io;
+ use std::env;
+ use getopts::Options;
+-use atty::{self, Stream};
++use std::io::{stdin, IsTerminal};
+ 
+ fn print_usage(program: &str, opts: Options) {
+     let brief = format!(
+@@ -18,7 +18,7 @@ fn print_version() {
+ }
+ 
+ pub fn run(args: env::Args) -> () {
+-    let num: f64 = if atty::is(Stream::Stdin) {
++    let num: f64 = if stdin().is_terminal() {
+         let args: Vec<String> = args.collect();
+         let ref program = args[0];
+ 
+diff --git a/src/lib.rs b/src/lib.rs
+index 034a1fc..4ff2c44 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1,5 +1,4 @@
+ extern crate getopts;
+-extern crate atty;
+ 
+ pub mod cli;
+ pub mod converter;

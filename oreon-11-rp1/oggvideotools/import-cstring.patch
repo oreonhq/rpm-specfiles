@@ -1,0 +1,10 @@
+--- oggvideotools-0.9.1.orig/src/base/test/decoderTest.cpp
++++ oggvideotools-0.9.1/src/base/test/decoderTest.cpp
+@@ -4,6 +4,7 @@
+ 
+ #include "oggDecoder.h"
+ #include <vector>
++#include <cstring>
+ #include <iostream>
+
+ int main(int argc, char* argv[])

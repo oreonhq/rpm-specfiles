@@ -5,7 +5,7 @@
 %if %{defined rhel} || %{defined flatpak}
 %bcond_with mingw
 %else
-%bcond_without mingw
+%bcond_with mingw
 %endif
 
 Name:          shapelib
@@ -23,9 +23,7 @@ Source0:       http://download.osgeo.org/shapelib/%{name}-%{version}%{?pre:%pre}
 # Man pages from debian package
 # wget https://salsa.debian.org/debian-gis-team/shapelib/-/archive/master/shapelib-master.tar.gz
 # tar --strip-components=2 -xvf shapelib-master.tar.gz shapelib-master/debian/man
-# tar -czf shapelib-man.tar.gz man/
 # rm -r man
-Source1:       %{name}-man.tar.gz
 # Add library version suffix for mingw dlls
 Patch1:        shapelib_libver.patch
 
@@ -117,7 +115,7 @@ BuildArch:     noarch
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -a1
+%autosetup -p1
 
 
 %build
@@ -140,11 +138,6 @@ MINGW64_CMAKE_ARGS="-DCMAKE_INSTALL_CMAKEDIR=%{mingw64_libdir}/cmake/%{name}" \
 %mingw_make_install
 %endif
 
-# Build man pages
-ronn -r --date="$(LC_ALL=C date -u "+%Y-%m-%d")" --manual=%{name} man/*.md
-mkdir -p %{buildroot}%{_mandir}/man1/
-install -pm 0644 man/*.1 %{buildroot}%{_mandir}/man1/
-
 
 %{?mingw_debug_install_post}
 
@@ -164,8 +157,6 @@ install -pm 0644 man/*.1 %{buildroot}%{_mandir}/man1/
 %files tools
 %doc contrib/doc/
 %{_bindir}/*
-%{_mandir}/man1/*.1*
-
 %if %{with mingw}
 %files -n mingw32-%{name}
 %license LICENSE*

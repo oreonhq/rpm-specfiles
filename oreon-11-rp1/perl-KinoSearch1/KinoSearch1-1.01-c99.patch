@@ -1,0 +1,17 @@
+Include "KinoSearch1StoreOutStream.h" for the
+Kino1_OutStream_encode_vint function.
+
+Submitted upstream: <https://rt.cpan.org/Ticket/Display.html?id=147184>
+
+diff --git a/lib/KinoSearch1/Analysis/TokenBatch.pm b/lib/KinoSearch1/Analysis/TokenBatch.pm
+index acdf1ee6131a2923..913249babbf87c45 100644
+--- a/lib/KinoSearch1/Analysis/TokenBatch.pm
++++ b/lib/KinoSearch1/Analysis/TokenBatch.pm
+@@ -315,6 +315,7 @@ void   Kino1_TokenBatch_build_plist(TokenBatch*, U32, U16);
+ __C__
+ 
+ #include "KinoSearch1AnalysisTokenBatch.h"
++#include "KinoSearch1StoreOutStream.h"
+ 
+ TokenBatch*
+ Kino1_TokenBatch_new() {

@@ -1,0 +1,16 @@
+diff -up evolution-rspam-0.6.0/configure.ac.14 evolution-rspam-0.6.0/configure.ac
+--- evolution-rspam-0.6.0/configure.ac.14	2025-02-25 09:59:35.884642737 +0100
++++ evolution-rspam-0.6.0/configure.ac	2025-02-25 09:59:37.586642633 +0100
+@@ -128,12 +128,6 @@ if test "x${RAZOREP}" == "xno"; then
+         AC_MSG_WARN([Could not find pyzor. You won't be able to report spam to Pyzor])
+ fi
+ 
+-dnl ***********
+-dnl GConf stuff
+-dnl ***********
+-AC_PATH_PROG(GCONFTOOL, gconftool-2, no)
+-AM_GCONF_SOURCE_2
+-
+ dnl ***************
+ dnl Gsettings stuff
+ dnl ***************

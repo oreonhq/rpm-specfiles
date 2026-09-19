@@ -1,0 +1,26 @@
+From f8f9a23a2a7540ec39cab9606f8b95aa8b346b65 Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Mon, 24 Nov 2025 17:30:20 -0700
+Subject: [PATCH 2/2] Use main entry point for conda and re-add conda-env entry
+
+---
+ pyproject.toml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 7c8f24f..049859b 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -51,7 +51,8 @@ readme = "README.md"
+ requires-python = ">=3.10"
+ 
+ [project.scripts]
+-conda = "conda.cli.main_pip:main"
++conda = "conda.cli.main:main"
++conda-env = "conda_env.cli.main:main"
+ 
+ [project.urls]
+ changelog = "https://github.com/conda/conda/blob/main/CHANGELOG.md"
+-- 
+2.51.1
+

@@ -1,0 +1,12 @@
+diff -rupN --no-dereference thinkfan-2.0.0/CMakeLists.txt thinkfan-2.0.0-new/CMakeLists.txt
+--- thinkfan-2.0.0/CMakeLists.txt	2025-05-31 23:47:29.750420871 +0200
++++ thinkfan-2.0.0-new/CMakeLists.txt	2025-05-31 23:47:29.755060942 +0200
+@@ -165,7 +165,7 @@ configure_file(src/thinkfan.1.cmake thin
+ configure_file(src/thinkfan.conf.5.cmake thinkfan.conf.5)
+ configure_file(src/thinkfan.conf.legacy.5.cmake thinkfan.conf.legacy.5)
+ 
+-install(TARGETS thinkfan DESTINATION "${CMAKE_INSTALL_SBINDIR}")
++install(TARGETS thinkfan DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ install(FILES COPYING README.md examples/thinkfan.yaml DESTINATION "${CMAKE_INSTALL_DOCDIR}")
+ install(FILES ${CMAKE_BINARY_DIR}/thinkfan.1 DESTINATION "${CMAKE_INSTALL_MANDIR}/man1")
+ install(FILES ${CMAKE_BINARY_DIR}/thinkfan.conf.5 DESTINATION "${CMAKE_INSTALL_MANDIR}/man5")

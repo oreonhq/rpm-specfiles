@@ -1,0 +1,66 @@
+From bab11e7910d37bcf8b90d9be664757a9be568077 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Aur=C3=A9lien=20G=C3=A2teau?=
+ <aurelien.gateau@canonical.com>
+Date: Fri, 25 Sep 2015 16:19:18 +0200
+Subject: [PATCH 06/12] GTK style: Disable Ubuntu scrollbars
+
+They don't play well with Qt.
+
+Change-Id: I1c64bc65441a975eb5c7558895e7df7eb88e2fd4
+Reviewed-by: Dmitry Shachnev <mitya57@gmail.com>
+Reviewed-by: J-P Nurmi <jpnurmi@theqtcompany.com>
+Reviewed-by: Gabriel de Dietrich <gabriel.dedietrich@theqtcompany.com>
+---
+ src/plugins/styles/gtk2/qgtkstyle_p.cpp | 6 ++++++
+ src/plugins/styles/gtk2/qgtkstyle_p_p.h | 4 ++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/src/plugins/styles/gtk2/qgtkstyle_p.cpp b/src/plugins/styles/gtk2/qgtkstyle_p.cpp
+index 8ab2a03..44a5878 100644
+--- a/src/plugins/styles/gtk2/qgtkstyle_p.cpp
++++ b/src/plugins/styles/gtk2/qgtkstyle_p.cpp
+@@ -88,6 +88,8 @@ QT_BEGIN_NAMESPACE
+ 
+ Q_GLOBAL_STATIC(QGtkStyleUpdateScheduler, styleScheduler)
+ 
++Ptr_ubuntu_gtk_set_use_overlay_scrollbar QGtkStylePrivate::ubuntu_gtk_set_use_overlay_scrollbar = 0;
++
+ typedef int (*x11ErrorHandler)(Display*, XErrorEvent*);
+ 
+ QT_END_NAMESPACE
+@@ -276,6 +278,10 @@ void QGtkStylePrivate::initGtkWidgets() const
+     gtk_init (NULL, NULL);
+     XSetErrorHandler(qt_x_errhandler);
+ 
++    ubuntu_gtk_set_use_overlay_scrollbar = (Ptr_ubuntu_gtk_set_use_overlay_scrollbar)QLibrary::resolve(QLS("gtk-x11-2.0"), "ubuntu_gtk_set_use_overlay_scrollbar");
++    if (ubuntu_gtk_set_use_overlay_scrollbar)
++        ubuntu_gtk_set_use_overlay_scrollbar(false);
++
+     // make a window
+     GtkWidget* gtkWindow = gtk_window_new(GTK_WINDOW_POPUP);
+     gtk_widget_realize(gtkWindow);
+diff --git a/src/plugins/styles/gtk2/qgtkstyle_p_p.h b/src/plugins/styles/gtk2/qgtkstyle_p_p.h
+index 87ffee5..820b59b 100644
+--- a/src/plugins/styles/gtk2/qgtkstyle_p_p.h
++++ b/src/plugins/styles/gtk2/qgtkstyle_p_p.h
+@@ -107,6 +107,8 @@ bool operator==(const QHashableLatin1Literal &l1, const QHashableLatin1Literal &
+ inline bool operator!=(const QHashableLatin1Literal &l1, const QHashableLatin1Literal &l2) { return !operator==(l1, l2); }
+ uint qHash(const QHashableLatin1Literal &key);
+ 
++typedef void (*Ptr_ubuntu_gtk_set_use_overlay_scrollbar) (gboolean);
++
+ class QGtkPainter;
+ class QGtkStylePrivate;
+ 
+@@ -168,6 +170,8 @@ public:
+ 
+     virtual QPalette gtkWidgetPalette(const QHashableLatin1Literal &gtkWidgetName) const;
+ 
++    static Ptr_ubuntu_gtk_set_use_overlay_scrollbar ubuntu_gtk_set_use_overlay_scrollbar;
++
+ protected:
+     typedef QHash<QHashableLatin1Literal, GtkWidget*> WidgetMap;
+ 
+-- 
+2.7.4
+

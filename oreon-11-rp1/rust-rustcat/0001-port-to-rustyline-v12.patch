@@ -1,0 +1,57 @@
+From cfd6670a0bb76743a919b5379b31480c201e18da Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Sun, 22 Oct 2023 15:32:04 +0200
+Subject: [PATCH] port to rustyline v12
+
+---
+ src/listener/mod.rs | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/src/listener/mod.rs b/src/listener/mod.rs
+index d952fee..8ba1ad1 100755
+--- a/src/listener/mod.rs
++++ b/src/listener/mod.rs
+@@ -5,8 +5,7 @@ Description: Listens on given arguments.
+ 
+ use super::utils;
+ use colored::Colorize;
+-use rustyline::error::ReadlineError;
+-use rustyline::Editor;
++use rustyline::{error::ReadlineError, history::DefaultHistory, Editor};
+ use std::io::{self, Write};
+ 
+ #[cfg(unix)]
+@@ -86,13 +85,13 @@ pub fn listen(opts: &utils::Opts) -> std::io::Result<()> {
+                 }
+                 utils::Mode::LocalHistory => {
+                     let t = pipe_thread(stream.try_clone().unwrap(), std::io::stdout());
+-                    let mut rl = Editor::<()>::new();
++                    let mut rl = Editor::<(), DefaultHistory>::new().expect("Failed to initialize readline support.");
+                     print_connection_recieved();
+                     loop {
+                         let readline = rl.readline(">> ");
+                         match readline {
+                             Ok(command) => {
+-                                rl.add_history_entry(command.as_str());
++                                let _ = rl.add_history_entry(command.as_str());
+                                 let command = command.clone() + "\n";
+                                 stream
+                                     .write_all(command.as_bytes())
+@@ -136,12 +135,12 @@ pub fn listen(opts: &utils::Opts) -> std::io::Result<()> {
+                 io::stdout().flush().unwrap();
+             });
+             loop {
+-                let mut rl = Editor::<()>::new();
++                let mut rl = Editor::<(), DefaultHistory>::new().expect("Failed to initialize readline support.");
+                 loop {
+                     let readline = rl.readline(">> ");
+                     match readline {
+                         Ok(command) => {
+-                            rl.add_history_entry(command.as_str());
++                            let _ = rl.add_history_entry(command.as_str());
+                             let command = command.clone() + "\n";
+                             let addr_option = *addr.lock().unwrap();
+                             if let Some(addr) = addr_option {
+-- 
+2.41.0
+

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Gnujump
+GenericName=A clone jumping game of xjump
+Comment=Keep jumping to stay alive
+Exec=gnujump
+Icon=/usr/share/gnujump/skins/default/hero1.0.png
+Terminal=false
+Type=Application
+Categories=Game;ArcadeGame;

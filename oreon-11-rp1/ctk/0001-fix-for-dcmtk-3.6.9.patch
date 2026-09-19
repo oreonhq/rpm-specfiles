@@ -1,0 +1,59 @@
+From 62bef9ab8e00e39ffb41b8e2e7b5d507339cf919 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 18 Feb 2025 15:09:00 +0000
+Subject: [PATCH] fix for dcmtk 3.6.9
+
+Backported from the master branch
+
+https://github.com/commontk/CTK/commit/a8db18390da6539151b0cb9890395edf266700ba
+---
+ Libs/DICOM/Core/ctkDICOMDatabase.cpp              | 2 +-
+ Libs/DICOM/Widgets/ctkDICOMThumbnailGenerator.cpp | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Libs/DICOM/Core/ctkDICOMDatabase.cpp b/Libs/DICOM/Core/ctkDICOMDatabase.cpp
+index fb5d4050..cee90c35 100644
+--- a/Libs/DICOM/Core/ctkDICOMDatabase.cpp
++++ b/Libs/DICOM/Core/ctkDICOMDatabase.cpp
+@@ -825,7 +825,7 @@ bool ctkDICOMDatabasePrivate::storeThumbnailFile(const QString& originalFilePath
+   {
+     destinationDir.mkpath(".");
+   }
+-  DicomImage dcmImage(QDir::toNativeSeparators(originalFilePath).toUtf8());
++  DicomImage dcmImage(QDir::toNativeSeparators(originalFilePath).toUtf8().data());
+   return this->ThumbnailGenerator->generateThumbnail(&dcmImage, thumbnailPath);
+ }
+ 
+diff --git a/Libs/DICOM/Widgets/ctkDICOMThumbnailGenerator.cpp b/Libs/DICOM/Widgets/ctkDICOMThumbnailGenerator.cpp
+index a99ee517..ff4321ec 100644
+--- a/Libs/DICOM/Widgets/ctkDICOMThumbnailGenerator.cpp
++++ b/Libs/DICOM/Widgets/ctkDICOMThumbnailGenerator.cpp
+@@ -171,7 +171,7 @@ bool ctkDICOMThumbnailGenerator::generateThumbnail(DicomImage *dcmImage, QImage&
+   /* create output buffer for DicomImage class */
+   QByteArray buffer;
+   /* copy header to output buffer and resize it for pixel data */
+-  buffer.append(header.toUtf8());
++  buffer.append(header.toUtf8().data());
+   buffer.resize(length);
+ 
+   /* render pixel data to buffer */
+@@ -202,14 +202,14 @@ bool ctkDICOMThumbnailGenerator::generateThumbnail(DicomImage *dcmImage, const Q
+ //------------------------------------------------------------------------------
+ bool ctkDICOMThumbnailGenerator::generateThumbnail(const QString dcmImagePath, QImage& image)
+ {
+-  DicomImage dcmImage(QDir::toNativeSeparators(dcmImagePath).toUtf8());
++  DicomImage dcmImage(QDir::toNativeSeparators(dcmImagePath).toUtf8().data());
+   return this->generateThumbnail(&dcmImage, image); 
+ }
+ 
+ //------------------------------------------------------------------------------
+ bool ctkDICOMThumbnailGenerator::generateThumbnail(const QString dcmImagePath, const QString& thumbnailPath)
+ {
+-  DicomImage dcmImage(QDir::toNativeSeparators(dcmImagePath).toUtf8());
++  DicomImage dcmImage(QDir::toNativeSeparators(dcmImagePath).toUtf8().data());
+   return this->generateThumbnail(&dcmImage, thumbnailPath); 
+ }
+ 
+-- 
+2.48.1
+

@@ -1,0 +1,54 @@
+diff -ur pipenightdreams-0.10.0.orig/README pipenightdreams-0.10.0/README
+--- pipenightdreams-0.10.0.orig/README	2001-10-12 22:02:34.000000000 +0200
++++ pipenightdreams-0.10.0/README	2006-04-07 17:15:52.000000000 +0200
+@@ -9,7 +9,7 @@
+               http:://www.libsdl.org/projects/pipenightdreams
+ 
+ 
+-This game is a pseudo-clon of an old game called PipeDream. I say pseudo-clon
++This game is a pseudo-clon of an old pipeline arcade game. I say pseudo-clon
+ because I don't have the original one so I've been working just with the facts
+ I remember. I've written it in my spare time during the last twelve months (as you
+ can see my spare time is not much).
+diff -ur pipenightdreams-0.10.0.orig/man/pipenightdreams.6 pipenightdreams-0.10.0/man/pipenightdreams.6
+--- pipenightdreams-0.10.0.orig/man/pipenightdreams.6	2002-03-23 22:17:05.000000000 +0100
++++ pipenightdreams-0.10.0/man/pipenightdreams.6	2006-04-07 17:30:39.000000000 +0200
+@@ -6,23 +6,19 @@
+ 
+ .SH SYNOPSIS 
+ 
+-\fB pipenightdreams\fP [\--datadir <DATADIR>] [\--fullscreen]
++\fBpipenightdreams\fP [\--datadir <DATADIR>] [\--fullscreen]
+ 
+ .SH DESCRIPTION
+ 
+-\fB pipenightdreams\fP is a PipeDream style game. The objetive of the game is to carry
+-liquid from some point to the exit using different kinds of pipes. On each level
+-there is a minimum number of required pipes that should be at least reached for it
++\fBpipenightdreams\fP is a puzzle-game where the objective is to carry liquid
++from some point to the exit using different kinds of pipes. On each level there
++is a minimum number of required pipes that should be at least reached for it
+ to be completed.
+ 
+ The score is increased by using as many pipes as possible an by collecting various bonus
+ tokens making the liquid pass through their pipes. There are also life bonus and,
+ hopefully soon, "freeze tokens".
+ 
+-The game is not exactly a copy of PipeDream. It's based only on the facts
+-I remember and on many other things which have been added, or changed hoping for making
+-it better.
+-
+ .SS KEYS
+ The game is entirely played using the keyboard and the key layout is as follows:
+ .IP SPACE
+@@ -49,9 +45,7 @@
+ 
+ .SH OPTIONS
+ \fB --datadir <CUSTOM DATA DIR> \fP is used when
+-the data directory is not the default one (\fB /usr/share/games/pipenightdreams\fP
+-if installed from a rpm package and \fB /usr/local/share/games/pipenightdreams\fP
+-when installed by compiling the source package).
++the data directory is not the default one (\fB/usr/share/pipenightdreams\fP).
+ 
+ \fB --fullscreen \fP switchs to fullscreen mode.
+ 

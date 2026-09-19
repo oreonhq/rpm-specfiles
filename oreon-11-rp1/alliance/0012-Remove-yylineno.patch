@@ -1,0 +1,28 @@
+From ac0697c6f79155677668a3f096da3403f72b9ded Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Fri, 20 May 2016 06:11:20 +0200
+Subject: [PATCH 12/12] Remove yylineno.
+
+---
+ alliance/src/sea/src/DEF_grammar_lex.l | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/alliance/src/sea/src/DEF_grammar_lex.l b/alliance/src/sea/src/DEF_grammar_lex.l
+index 752e2f8..ca527ab 100644
+--- a/alliance/src/sea/src/DEF_grammar_lex.l
++++ b/alliance/src/sea/src/DEF_grammar_lex.l
+@@ -21,11 +21,6 @@
+ #define    yylineno     DEF_grammarlineno
+ 
+ 
+-#ifndef FLEX_BETA 
+-        int  yylineno = 1;
+-#endif
+-
+-
+ static  int  yywrap(void);
+ static  int  string(void);
+ static  int  history(void);
+-- 
+2.5.5
+

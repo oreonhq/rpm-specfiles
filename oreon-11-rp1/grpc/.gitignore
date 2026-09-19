@@ -1,1 +1,4 @@
+/*.tar.gz
 /grpc-*
+!/grpc-*.patch
+!/grpc_cli*.1

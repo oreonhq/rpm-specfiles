@@ -1,0 +1,77 @@
+From c9e735f97d1f2767f95de4175ca6e0155d0d5706 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 24 Jul 2024 14:55:07 +0200
+Subject: [PATCH] Skip SHA-1 signature tests if OpenSSL errors
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fedora 41 DEFAULT crypto policy disabled SHA-1 in signatures
+<https://fedoraproject.org/wiki/Changes/OpenSSLDistrustSHA1SigVer>. As
+a result OpenSSL cannot make or verify signatures using SHA-1 digest
+algorithm and two tests fail like this:
+
+    t/31-DSA-SHA1.t .... 1/13 libcrypto error (SEC.xs line 208) at /home/test/fedora/perl-Net-DNS-SEC/Net-DNS-SEC-1.25/blib/lib/Net/DNS/SEC/DSA.pm line 73.
+    # Looks like your test exited with 255 just after 7.
+    t/31-DSA-SHA1.t .... Dubious, test returned 255 (wstat 65280, 0xff00)
+    Failed 6/13 subtests
+
+Unfortunately OpenSSL does not provide a way how to detect the
+support/nonsupport. The only way is try it and check for errors.
+
+This patch does that.
+
+TODO: One could split computing the digest from computing/verifying
+the signature on Net-DNS-SEC level and check the policy before
+computing/verifying the signature.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=2299447
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/31-DSA-SHA1.t | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
+
+diff --git a/t/31-DSA-SHA1.t b/t/31-DSA-SHA1.t
+index 90c3d6d..2902eb1 100644
+--- a/t/31-DSA-SHA1.t
++++ b/t/31-DSA-SHA1.t
+@@ -110,23 +110,27 @@ ok( $wrongprivate, 'set up non-DSA private key' );
+ my $sigdata = Net::DNS::RR->new('. TXT arbitrary data')->txtdata;    # character set independent
+ my $corrupt = 'corrupted data';
+ 
+-my $signature = $class->sign( $sigdata, $private );
+-ok( $signature, 'signature created using private key' );
++my $signature = eval { $class->sign( $sigdata, $private ) };
++SKIP: {
++    skip 'DSA with SHA-1 disabled', 6 if $@;
+ 
++    ok( $signature, 'signature created using private key' );
+ 
+-my $verified = $class->verify( $sigdata, $key, $signature );
+-is( $verified, 1, 'signature verified using public key' );
+ 
++    my $verified = $class->verify( $sigdata, $key, $signature );
++    is( $verified, 1, 'signature verified using public key' );
+ 
+-my $verifiable = $class->verify( $corrupt, $key, $signature );
+-is( $verifiable, 0, 'signature not verifiable if data corrupted' );
+ 
++    my $verifiable = $class->verify( $corrupt, $key, $signature );
++    is( $verifiable, 0, 'signature not verifiable if data corrupted' );
+ 
+-is( eval { $class->sign( $sigdata, $wrongprivate ) }, undef, 'signature not created using wrong private key' );
+ 
+-is( eval { $class->verify( $sigdata, $wrongkey, $signature ) }, undef, 'verify fails using wrong public key' );
++    is( eval { $class->sign( $sigdata, $wrongprivate ) }, undef, 'signature not created using wrong private key' );
+ 
+-is( eval { $class->verify( $sigdata, $key, undef ) }, undef, 'verify fails if signature undefined' );
++    is( eval { $class->verify( $sigdata, $wrongkey, $signature ) }, undef, 'verify fails using wrong public key' );
++
++    is( eval { $class->verify( $sigdata, $key, undef ) }, undef, 'verify fails if signature undefined' );
++}
+ 
+ exit;
+ 
+-- 
+2.45.2
+

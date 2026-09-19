@@ -1,0 +1,37 @@
+diff -Naur dxcc-20071205-orig/dxcc dxcc-20071205/dxcc
+--- dxcc-20071205-orig/dxcc	2007-12-10 11:29:46.000000000 +0100
++++ dxcc-20071205/dxcc	2007-12-10 11:24:56.000000000 +0100
+@@ -85,7 +85,7 @@
+ 	}
+ 	
+ 	unless ($hastk) {
+-		die "Tk.pm not found. Exiting.";
++		die "No GUI available, install dxcc-gui.";
+ 	}
+ 
+ 	# This is like 'use Tk', except that use is always done at compile
+diff -Naur dxcc-20071205-orig/dxcc-gui dxcc-20071205/dxcc-gui
+--- dxcc-20071205-orig/dxcc-gui	1970-01-01 01:00:00.000000000 +0100
++++ dxcc-20071205/dxcc-gui	2007-12-10 11:43:15.000000000 +0100
+@@ -0,0 +1,3 @@
++#!/bin/bash
++#execute gui
++dxcc -g
+diff -Naur dxcc-20071205-orig/dxcc-gui~ dxcc-20071205/dxcc-gui~
+--- dxcc-20071205-orig/dxcc-gui~	1970-01-01 01:00:00.000000000 +0100
++++ dxcc-20071205/dxcc-gui~	2007-12-10 11:43:13.000000000 +0100
+@@ -0,0 +1,3 @@
++#!/bin/bash
++#execute gui
++dxcc -g
+diff -Naur dxcc-20071205-orig/Makefile dxcc-20071205/Makefile
+--- dxcc-20071205-orig/Makefile	2007-12-10 11:29:46.000000000 +0100
++++ dxcc-20071205/Makefile	2007-12-10 11:30:35.000000000 +0100
+@@ -12,6 +12,7 @@
+ 	install -D -m 0644 dxcc.1	$(DESTDIR)/usr/share/man/man1/
+ 	install -D -m 0644 earth.gif	$(DESTDIR)/usr/share/dxcc/
+ 	install -D -m 0755 dxcc		$(DESTDIR)/usr/bin/dxcc
++	install -D -m 0755 dxcc-gui	$(DESTDIR)/usr/bin/dxcc-gui
+ 	
+ uninstall:
+ 	rm -f $(DESTDIR)/bin/dxcc

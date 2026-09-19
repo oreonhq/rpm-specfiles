@@ -1,0 +1,23 @@
+From f331ce72528a7cca35ede168d2fa26f9872a6e1e Mon Sep 17 00:00:00 2001
+From: David Runge <dave@sleepmap.de>
+Date: Tue, 20 Feb 2024 16:38:37 +0100
+Subject: [PATCH] Add missing include for iostream, needed for taglib >= 2
+
+Signed-off-by: David Runge <dave@sleepmap.de>
+---
+ libs/ardour/audiofile_tagger.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libs/ardour/audiofile_tagger.cc b/libs/ardour/audiofile_tagger.cc
+index 4c132cbcc68..e7445613464 100644
+--- a/libs/ardour/audiofile_tagger.cc
++++ b/libs/ardour/audiofile_tagger.cc
+@@ -34,6 +34,8 @@
+ #include <taglib/taglib.h>
+ #include <taglib/xiphcomment.h>
+ 
++#include <iostream>
++
+ /* Convert string to TagLib::String */
+ #define TL_STR(string) TagLib::String ((string).c_str(), TagLib::String::UTF8)
+ 

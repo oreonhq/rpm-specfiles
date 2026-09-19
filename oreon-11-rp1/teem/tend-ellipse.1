@@ -1,0 +1,99 @@
+.TH TEND\-ELLIPSE "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-ellipse \- generate postscript renderings of 2D glyphs
+.SH SYNOPSIS
+.B tend\ ellipse
+.RB [ \-ctr
+.RI < conf\ thresh >]
+.RB [ \-gsc
+.RI < scale >]
+.RB [ \-dot
+.RI < radius >]
+.RB [ \-wid
+.RI < width >]
+.RB [ \-inv ]
+.RB [ \-min
+.RI < minX \  minY >]
+.RB [ \-max
+.RI < maxX \  maxY >]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-p
+.RI < pos\ array >]
+.RB [ \-s
+.RI < stn\ array >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Generate postscript renderings of 2D glyphs.
+Not much to look at here.
+.SH OPTIONS
+.TP
+.B \-ctr\fR <\fIconf\ thresh\fR>
+Glyphs will be drawn only for tensors with confidence values greater than this
+threshold
+.RI ( float );
+default:
+.RB \(lq 0.5 \(rq
+.TP
+.B \-gsc\fR <\fIscale\fR>
+over-all glyph size
+.RI ( float );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-dot\fR <\fIradius\fR>
+radius of little dot to put in middle of ellipse, or
+.RB \(lq 0 \(rq
+for no such dot
+.RI ( float );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-wid\fR <\fIwidth\fR>
+width of lines for tractlets
+.RI ( float );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-inv
+use white ellipses on black background, instead of reverse
+.TP
+.B \-min\fR <\fIminX\fR \fIminY\fR>
+when using
+.RB \(lq \-p \(rq,
+minimum corner (2
+.IR float s);
+default:
+.RB \(lq \-1\ \-1 \(rq
+.TP
+.B \-max\fR <\fImaxX\fR \fImaxY\fR>
+when using
+.RB \(lq \-p \(rq,
+maximum corner (2
+.IR float s);
+default:
+.RB \(lq 1\ 1 \(rq
+.TP
+.B \-i\fR <\fInin\fR>
+image of 2D tensors; default:
+.RB \(lq \- \(rq
+.TP
+.B \-p\fR <\fIpos\ array\fR>
+Instead of being on a grid, tensors are at arbitrary locations, as defined by
+this 2-by-N array of
+.IR float s);
+default: \(lq\(rq
+.TP
+.B \-s\fR <\fIstn\ array\fR>
+Locations given by
+.RB \(lq \-p \(rq
+have this connectivity; default: \(lq\(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output PostScript file
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

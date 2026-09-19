@@ -1,0 +1,13 @@
+diff -up hawknl1.68/src/nlinternal.h~ hawknl1.68/src/nlinternal.h
+--- hawknl1.68/src/nlinternal.h~	2003-12-30 10:06:00.000000000 +0100
++++ hawknl1.68/src/nlinternal.h	2019-02-18 17:56:55.200281469 +0100
+@@ -23,7 +23,8 @@
+ #ifndef INTERNAL_H
+ #define INTERNAL_H
+ 
+-#include "../include/nl.h"
++#include "nl.h"
++#include <netinet/in.h> /* for htons/ntohs in macros */
+ 
+ /* for malloc and free */
+ #include <stdlib.h>

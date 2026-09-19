@@ -1,0 +1,15 @@
+Remove the call to the obsolete _XmGrabTheFocus function.  This call
+causes the build to fail with strict(er) C99 compilers.
+
+diff --git a/src/X11/xeditor.c b/src/X11/xeditor.c
+index 89373a8418c2215f..476682c99d096b93 100644
+--- a/src/X11/xeditor.c
++++ b/src/X11/xeditor.c
+@@ -1504,7 +1504,6 @@ void ManageFindDB()
+     char		*findstr;
+ 
+     XtManageChild( find_db );
+-    _XmGrabTheFocus( find_txt );
+ 
+     findstr = XmTextGetSelection( textwin );
+     if (findstr)

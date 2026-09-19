@@ -1,0 +1,43 @@
+From d97c3197ce658bab0b8ae7f781a9f5df0d1b9746 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 8 Jan 2018 16:24:47 +0100
+Subject: [PATCH] Disable unwanted build-time dependecies
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+They are not relevant for building a binary package and and they pulls
+in otherwise unneeded depencies.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index ee3af78..1e705f3 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1,7 +1,6 @@
+ use strict;
+ use warnings;
+ 
+-use lib '.';
+ use inc::Module::Install;
+ 
+ name			'Attean';
+@@ -59,11 +58,6 @@ resources(
+ 	'IRC'			=> "irc://irc.perl.org/#perlrdf",
+ );
+ 
+-author_tests('xt');
+-
+ install_script glob('bin/attean_*');
+ 
+-write_doap_changes "meta/changes.ttl", "Changes", "turtle";
+-
+-sign if ! exists $ENV{CI};
+ WriteAll;
+-- 
+2.45.2
+

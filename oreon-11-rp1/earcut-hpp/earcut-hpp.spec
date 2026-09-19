@@ -4,7 +4,7 @@
 
 Name:           earcut-hpp
 Summary:        Fast, header-only polygon triangulation
-Version:        2.2.4
+Version:        3.2.3
 Release:        1%{?dist}
 License:        ISC
 SourceLicense:  %{license} AND SGI-B-2.0

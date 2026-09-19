@@ -1,0 +1,51 @@
+From f908c8fc7a12b91f404f21cf4bf24037050767e7 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:49 +0200
+Subject: [PATCH 23/41] Fix socket types
+
+---
+ sock.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/sock.c b/sock.c
+index 1e854e0..9bb5333 100644
+--- a/sock.c
++++ b/sock.c
+@@ -52,14 +52,14 @@ void SetTimeout(int s,int us)
+ int GetPortNum(int fd)
+ {
+   struct sockaddr_in a;
+-  int s=sizeof(a);
++  socklen_t s=sizeof(a);
+   if(getsockname(fd,(struct sockaddr *)&a,&s)<0) return -1;
+   return(ntohs(a.sin_port));
+ }
+ char *GetSockAddr(int fd)
+ {
+   struct sockaddr_in a;
+-  int s=sizeof(a);
++  socklen_t s=sizeof(a);
+   if(getsockname(fd,(struct sockaddr *)&a,&s)<0) return NULL;
+   return(inet_ntoa(a.sin_addr));
+ }
+@@ -142,7 +142,7 @@ int SetSocketNonBlocking (int fd, int flag)
+ 
+ int GetSocketError(int fd)
+ {
+-	int size=sizeof(errno);
++	socklen_t size=sizeof(errno);
+ 	return (getsockopt(fd,SOL_SOCKET,SO_ERROR,(char *)&errno,&size));
+ }
+ 
+@@ -217,7 +217,7 @@ int DgramSend(int fd, char *host, int port, char *sbuf, int size)
+ }
+ int DgramReceiveAny(int fd,char *buf, int size)
+ {
+-	int len=sizeof (struct sockaddr_in);
++	socklen_t len=sizeof (struct sockaddr_in);
+ 	return(recvfrom (fd, buf, size, 0, (struct sockaddr *) &lastaddr, &len));
+ }
+ int DgramReceiveConnected(int fd,char *buf, int size)
+-- 
+2.5.0
+

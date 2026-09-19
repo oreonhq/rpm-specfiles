@@ -1,0 +1,125 @@
+From e1ead08494760b6f26818724d30848dac9ddfeea Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 7 Jun 2017 09:44:28 +0200
+Subject: [PATCH] Do not use /usr/bin/env in shell bangs
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ examples/Benchmarks/benchmark_datafetch.pl       | 2 +-
+ examples/Benchmarks/benchmark_hashrefinflator.pl | 2 +-
+ examples/MiscTools/determine_cpan_joint_deps.pl  | 2 +-
+ examples/Schema/insertdb.pl                      | 2 +-
+ examples/Schema/testdb.pl                        | 2 +-
+ maint/gen_pod_authors                            | 2 +-
+ maint/gen_pod_index                              | 2 +-
+ maint/gen_pod_inherit                            | 2 +-
+ maint/gen_sqlite_schema_files                    | 2 +-
+ script/dbicadmin                                 | 2 +-
+ 10 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/examples/Benchmarks/benchmark_datafetch.pl b/examples/Benchmarks/benchmark_datafetch.pl
+index 7283e87..3c591cf 100755
+--- a/examples/Benchmarks/benchmark_datafetch.pl
++++ b/examples/Benchmarks/benchmark_datafetch.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ 
+ use strict;
+ use warnings;
+diff --git a/examples/Benchmarks/benchmark_hashrefinflator.pl b/examples/Benchmarks/benchmark_hashrefinflator.pl
+index 3d566f9..87e4e73 100755
+--- a/examples/Benchmarks/benchmark_hashrefinflator.pl
++++ b/examples/Benchmarks/benchmark_hashrefinflator.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ 
+ #
+ # So you wrote a new mk_hash implementation which passed all tests
+diff --git a/examples/MiscTools/determine_cpan_joint_deps.pl b/examples/MiscTools/determine_cpan_joint_deps.pl
+index 8c16a7d..35ef99e 100755
+--- a/examples/MiscTools/determine_cpan_joint_deps.pl
++++ b/examples/MiscTools/determine_cpan_joint_deps.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ 
+ use warnings;
+ use strict;
+diff --git a/examples/Schema/insertdb.pl b/examples/Schema/insertdb.pl
+index ae919b3..bc82061 100755
+--- a/examples/Schema/insertdb.pl
++++ b/examples/Schema/insertdb.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ 
+ use strict;
+ use warnings;
+diff --git a/examples/Schema/testdb.pl b/examples/Schema/testdb.pl
+index 32cbd6d..04afd8f 100755
+--- a/examples/Schema/testdb.pl
++++ b/examples/Schema/testdb.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ 
+ use warnings;
+ use strict;
+diff --git a/maint/gen_pod_authors b/maint/gen_pod_authors
+index e814dc5..b219fb6 100755
+--- a/maint/gen_pod_authors
++++ b/maint/gen_pod_authors
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ 
+ use warnings;
+ use strict;
+diff --git a/maint/gen_pod_index b/maint/gen_pod_index
+index feb758c..d21d3c7 100755
+--- a/maint/gen_pod_index
++++ b/maint/gen_pod_index
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ 
+ # Originally by: Zbigniew Lukasiak, C<zz bb yy@gmail.com>
+ #  but refactored and modified to our nefarious purposes
+diff --git a/maint/gen_pod_inherit b/maint/gen_pod_inherit
+index e441e88..ae9757d 100755
+--- a/maint/gen_pod_inherit
++++ b/maint/gen_pod_inherit
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ 
+ use warnings;
+ use strict;
+diff --git a/maint/gen_sqlite_schema_files b/maint/gen_sqlite_schema_files
+index a3793d3..af7cc45 100755
+--- a/maint/gen_sqlite_schema_files
++++ b/maint/gen_sqlite_schema_files
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ 
+ use strict;
+ use warnings;
+diff --git a/script/dbicadmin b/script/dbicadmin
+index 78e530b..6aea4d1 100755
+--- a/script/dbicadmin
++++ b/script/dbicadmin
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ 
+ use strict;
+ use warnings;
+-- 
+2.9.4
+

@@ -1,0 +1,22 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 2 Dec 2020 17:59:05 +0100
+Subject: [PATCH] Don't hide dependency on mochiweb
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/clique_json_writer.erl b/src/clique_json_writer.erl
+index c53a7da..b498b52 100644
+--- a/src/clique_json_writer.erl
++++ b/src/clique_json_writer.erl
+@@ -54,10 +54,8 @@
+ 
+ -spec write(status()) -> {iolist(), iolist()}.
+ write(Status) ->
+-    % make xref and dialyzer happy
+-    JsonMod = mochijson2,
+     PreparedOutput = lists:reverse(prepare(Status)),
+-    {[JsonMod:encode(PreparedOutput), "\n"], []}.
++    {[mochijson2:encode(PreparedOutput), "\n"], []}.
+ 
+ %% @doc Returns status data that's been prepared for conversion to JSON.
+ %% Just reverse the list and pass it to mochijson2:encode and you're set.

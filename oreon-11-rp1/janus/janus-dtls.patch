@@ -1,0 +1,11 @@
+--- janus-gateway-1.1.2/src/dtls.c	2023-01-30 20:24:51.952382892 +0000
++++ janus-gateway-1.1.2.orig/src/dtls.c	2023-01-30 20:24:17.388979693 +0000
+@@ -102,7 +102,7 @@
+ }
+
+ /* DTLS stuff */
+-#define DTLS_DEFAULT_CIPHERS	"DEFAULT:!NULL:!aNULL:!SHA256:!SHA384:!aECDH:!AESGCM+AES256:!aPSK"
++#define DTLS_DEFAULT_CIPHERS   "PROFILE=SYSTEM"
+ static const char *dtls_ciphers = DTLS_DEFAULT_CIPHERS;
+ /* Duration for the self-generated certs: 1 year */
+ #define DTLS_AUTOCERT_DURATION	60*60*24*365

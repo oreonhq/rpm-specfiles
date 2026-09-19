@@ -8,7 +8,7 @@
 %global crate fastrand
 
 Name:           rust-fastrand
-Version:        2.4.1
+Version:        2.5.0
 Release:        %autorelease
 Summary:        Simple and fast random number generator
 

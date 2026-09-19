@@ -1,0 +1,459 @@
+From a46f1967474e7a39cf82e45464000373503fabbe Mon Sep 17 00:00:00 2001
+From: sand1024 <sand72@mail.ru>
+Date: Wed, 13 Nov 2024 22:56:22 +0200
+Subject: [PATCH] Views and actions (#1958)
+
+* source files layout (WIP)
+
+* initial support for Named Views (dxf support, widget, toolbar and menu changes).
+
+* displaying drawing variables in drawing options
+
+* localization update for drawing variables
+
+* better support of shortcuts for 1..5 views
+
+* option to show current action's icon options widget
+
+* PR readme
+
+* PR readme
+
+---------
+
+Co-authored-by: sand1024 <sand1024@gmail.com>
+---
+ libraries/libdxfrw/src/drw_interface.h        |    3 +
+ libraries/libdxfrw/src/drw_objects.cpp        |  139 ++
+ libraries/libdxfrw/src/drw_objects.h          |   68 +-
+ libraries/libdxfrw/src/libdxfrw.cpp           |  116 +-
+ libraries/libdxfrw/src/libdxfrw.h             |    3 +
+
+diff --git a/libraries/libdxfrw/src/drw_interface.h b/libraries/libdxfrw/src/drw_interface.h
+index 353ef65b9e..6559ba12f9 100644
+--- a/src/drw_interface.h
++++ b/src/drw_interface.h
+@@ -44,6 +44,8 @@ class DRW_Interface {
+     virtual void addDimStyle(const DRW_Dimstyle& data) = 0;
+     /** Called for every VPORT table. */
+     virtual void addVport(const DRW_Vport& data) = 0;
++    /** Called for every VIEW table. */
++    virtual void addView(const DRW_View& data) = 0;
+     /** Called for every text style. */
+     virtual void addTextStyle(const DRW_Textstyle& data) = 0;
+     /** Called for every AppId entry. */
+@@ -196,6 +198,7 @@ class DRW_Interface {
+     virtual void writeEntities() = 0;
+     virtual void writeLTypes() = 0;
+     virtual void writeLayers() = 0;
++    virtual void writeViews() = 0;
+     virtual void writeTextstyles() = 0;
+     virtual void writeVports() = 0;
+     virtual void writeDimstyles() = 0;
+diff --git a/libraries/libdxfrw/src/drw_objects.cpp b/libraries/libdxfrw/src/drw_objects.cpp
+index 80703edab3..7cbf5794cb 100644
+--- a/src/drw_objects.cpp
++++ b/src/drw_objects.cpp
+@@ -1297,3 +1297,142 @@ bool DRW_AppId::parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs){
+     //    RS crc;   //RS */
+     return buf->isGood();
+ }
++
++
++bool DRW_View::parseCode(int code, dxfReader *reader) {
++    switch (code) {
++        case 40: {
++            size.y = reader->getDouble();
++            break;
++        }
++        case 41: {
++            size.x = reader->getDouble();
++            break;
++        }
++        case 10: {
++            center.x = reader->getDouble();
++            break;
++        }
++        case 20: {
++            center.y = reader->getDouble();
++            break;
++        }
++        case 11: {
++            viewDirectionFromTarget.x = reader->getDouble();
++            break;
++        }
++        case 21: {
++            viewDirectionFromTarget.y = reader->getDouble();
++            break;
++        }
++        case 31: {
++            viewDirectionFromTarget.z = reader->getDouble();
++            break;
++        }
++        case 12: {
++            targetPoint.x = reader->getDouble();
++            break;
++        }
++        case 22: {
++            targetPoint.y = reader->getDouble();
++            break;
++        }
++        case 32: {
++            targetPoint.z = reader->getDouble();
++            break;
++        }
++        case 42: {
++            lensLen = reader->getDouble();
++            break;
++        }
++        case 43: {
++            frontClippingPlaneOffset = reader->getDouble();
++            break;
++        }
++        case 44: {
++            backClippingPlaneOffset = reader->getDouble();
++            break;
++        }
++        case 50: {
++            twistAngle = reader->getDouble();
++            break;
++        }
++        case 71: {
++            viewMode = reader->getInt32(); // tmp - check size to read
++            break;
++        }
++        case 281: {
++            renderMode = reader->getInt32(); // tmp - check size to read
++            break;
++        }
++        case 72: {
++            hasUCS = reader->getBool();
++            break;
++        }
++        case 73: {
++            cameraPlottable = reader->getBool();
++            break;
++        }
++        case 110: {
++            ucsOrigin.x = reader->getDouble();
++            break;
++        }
++        case 120: {
++            ucsOrigin.y = reader->getDouble();
++            break;
++        }
++        case 130: {
++            ucsOrigin.z = reader->getDouble();
++            break;
++        }
++        case 111: {
++            ucsXAxis.x = reader->getDouble();
++            break;
++        }
++        case 121: {
++            ucsXAxis.y = reader->getDouble();
++            break;
++        }
++        case 131: {
++            ucsXAxis.z = reader->getDouble();
++            break;
++        }
++        case 112: {
++            ucsYAxis.x = reader->getDouble();
++            break;
++        }
++        case 122: {
++            ucsYAxis.y = reader->getDouble();
++            break;
++        }
++        case 132: {
++            ucsYAxis.z = reader->getDouble();
++            break;
++        }
++        case 79: {
++            ucsOrthoType = reader->getInt32();
++            break;
++        }
++        case 146: {
++            ucsElevation = reader->getDouble();
++            break;
++        }
++        case 345: {
++            namedUCS_ID = reader->getHandleString();// ID/handle of AcDbUCSTableRecord if UCS is a named UCS. If not present, then UCS is unnamed, code 345
++            break;
++        }
++        case 346:{
++            baseUCS_ID = reader->getHandleString();// ID/handle of AcDbUCSTableRecord of base UCS if UCS is orthographic, If not present and 79 code is non-zero, then base UCS is taken to be WORLD, code 346
++            break;
++        }
++        default:
++            return DRW_TableEntry::parseCode(code, reader);
++    }
++    return true;
++}
++
++bool DRW_View::parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs) {
++    // fixme - sand - complete reading VIEW from DWG
++    DRW_DBG("\n********************** parsing VIEW Settings from DWG is not yet implemented **************************\n");
++    return buf->isGood();
++}
+diff --git a/libraries/libdxfrw/src/drw_objects.h b/libraries/libdxfrw/src/drw_objects.h
+index 0cd9d5fb8c..9620689a3c 100644
+--- a/src/drw_objects.h
++++ b/src/drw_objects.h
+@@ -375,6 +375,72 @@ class DRW_Textstyle : public DRW_TableEntry {
+     int fontFamily;         /*!< ttf font family, italic and bold flags, code 1071 */
+ };
+ 
++class DRW_View:public DRW_TableEntry{
++    SETOBJFRIENDS
++public:
++    DRW_View() { reset();}
++
++    void reset(){
++        size.x = size.y = size.z = 0.0;
++        center.x = center.y = center.z = 0.0;
++        viewDirectionFromTarget.x = viewDirectionFromTarget.y = viewDirectionFromTarget.z = 0.0;
++        targetPoint.x = targetPoint.y = targetPoint.z = 0.0;
++        lensLen = 0.0;
++        frontClippingPlaneOffset = 0.0;
++        backClippingPlaneOffset = 0.0;
++        twistAngle = 0.0;
++        viewMode = 0;
++        renderMode = 0;
++        hasUCS = false;
++        cameraPlottable = false;
++
++        ucsOrigin.x = ucsOrigin.y = ucsOrigin.z = 0.0;
++        ucsXAxis.x = ucsXAxis.y = ucsXAxis.z = 0.0;
++        ucsYAxis.x = ucsYAxis.y = ucsYAxis.z = 0.0;
++        ucsOrthoType = 1;
++        ucsElevation = 0.0;
++        namedUCS_ID = 0;
++        baseUCS_ID = 0;
++        DRW_TableEntry::reset();
++    }
++
++protected:
++    bool parseCode(int code, dxfReader *reader) override;
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
++
++public:
++    DRW_Coord size;     // view width/height in DCS, codes 40 & 41
++    DRW_Coord center;   // View center point (in DCS) code 10 & 20
++    DRW_Coord viewDirectionFromTarget;   //View direction from target (in WCS), code 11, 21, 31
++    DRW_Coord targetPoint;   //Target point (in WCS), code 12, 22, 32
++    double lensLen; // Lens length, code 42
++    double frontClippingPlaneOffset; // Front clipping plane (offset from target point), code 43
++    double backClippingPlaneOffset; // Back clipping plane (offset from target point), code 44
++    double twistAngle; // Twist angle, code 50
++    int viewMode; //(?? type) View mode (see VIEWMODE system variable), code 71
++    unsigned int renderMode;  // Render mode: code 281.
++    // 0 = 2D Optimized (classic 2D)
++//    1 = Wireframe
++//    2 = Hidden line
++//    3 = Flat shaded
++//    4 = Gouraud shaded
++//    5 = Flat shaded with wireframe
++//    6 = Gouraud shaded with wireframe
++//    All rendering modes other than 2D Optimized engage the new 3D graphics pipeline. These values directly correspond to the SHADEMODE command and the AcDbAbstractViewTableRecord::RenderMode enum
++
++    bool hasUCS; // 72, 1 if there is a UCS associated to this view; 0 otherwise
++    bool cameraPlottable; // 73, 1 if the camera is plottable
++
++    DRW_Coord ucsOrigin; // UCS origin, 110, 120, 130
++    DRW_Coord ucsXAxis; // UCS X-axis, 111, 121, 131
++    DRW_Coord ucsYAxis; // UCS Y-axis, 112, 122, 132
++    int ucsOrthoType;// Orthographic type of UCS, 0 = UCS is not orthographic, 1 = Top; 2 = Bottom, 3 = Front; 4 = Back, 5 = Left; 6 = Right, code 79
++    double ucsElevation; // UCS elevation, code 146
++    /*dwgHandle*/
++    duint32         namedUCS_ID;// ID/handle of AcDbUCSTableRecord if UCS is a named UCS. If not present, then UCS is unnamed, code 345
++    duint32         baseUCS_ID;// ID/handle of AcDbUCSTableRecord of base UCS if UCS is orthographic, If not present and 79 code is non-zero, then base UCS is taken to be WORLD, code 346
++};
++
+ //! Class to handle vport entries
+ /*!
+ *  Class to handle vport symbol table entries
+@@ -798,4 +864,4 @@ const unsigned char dxfColors[][3] = {
+ 
+ }
+ 
+-#endif
+\ No newline at end of file
++#endif
+diff --git a/libraries/libdxfrw/src/libdxfrw.cpp b/libraries/libdxfrw/src/libdxfrw.cpp
+index 919aefe900..5b0093f775 100644
+--- a/src/libdxfrw.cpp
++++ b/src/libdxfrw.cpp
+@@ -312,6 +312,90 @@ bool dxfRW::writeLayer(DRW_Layer *ent){
+     return true;
+ }
+ 
++bool dxfRW::writeView(DRW_View *ent){
++    writer->writeString(0, "VIEW");
++    if (version > DRW::AC1009) {
++        writer->writeString(5, toHexStr(++entCount));
++    }
++    if (version > DRW::AC1012) {
++        writer->writeString(330, "42"); // 	Soft-pointer ID/handle to owner object, fixme - check whether id is fixed as for layers?
++    }
++    if (version > DRW::AC1009) {
++        writer->writeString(100, "AcDbSymbolTableRecord");
++        writer->writeString(100, "AcDbViewTableRecord");
++        writer->writeUtf8String(2, ent->name);
++    } else {
++        writer->writeUtf8Caps(2, ent->name);
++    }
++    writer->writeInt16(70, ent->flags);
++
++    writer->writeDouble(40, ent->size.y);
++    writer->writeDouble(10, ent->center.x);
++    writer->writeDouble(20, ent->center.y);
++    writer->writeDouble(41, ent->size.x);
++
++    writer->writeDouble(11, ent->viewDirectionFromTarget.x);
++    writer->writeDouble(21, ent->viewDirectionFromTarget.y);
++    if (ent->viewDirectionFromTarget.z != 0.0) {
++        writer->writeDouble(31, ent->viewDirectionFromTarget.z);
++    }
++
++    writer->writeDouble(12, ent->targetPoint.x);
++    writer->writeDouble(22, ent->targetPoint.y);
++    if (ent->targetPoint.z != 0.0) {
++        writer->writeDouble(32, ent->targetPoint.z);
++    }
++
++    writer->writeDouble(42, ent->lensLen);
++    writer->writeDouble(43, ent->frontClippingPlaneOffset);
++    writer->writeDouble(44, ent->backClippingPlaneOffset);
++    writer->writeDouble(50, ent->twistAngle);
++    writer->writeInt16(71, ent->viewMode);
++    writer->writeInt16(281, ent->renderMode);
++
++    writer->writeBool(72, ent->hasUCS);
++    writer->writeBool(73, ent->cameraPlottable);
++
++    /*
++     * fixme - investigate deep whether we should support these attributes
++    writer->writeString(332, "42"); // Soft-pointer ID/handle to background object (optional)
++    writer->writeString(334, "42"); // Soft-pointer ID/handle to live section object (optional)
++    writer->writeString(348, "42"); // Hard-pointer ID/handle to visual style object (optional)
++    */
++
++    if (ent->hasUCS){
++        writer->writeDouble(110, ent->ucsOrigin.x);
++        writer->writeDouble(120, ent->ucsOrigin.y);
++        if (ent->ucsOrigin.z != 0.0) {
++            writer->writeDouble(130, ent->ucsOrigin.z);
++        }
++
++        writer->writeDouble(111, ent->ucsXAxis.x);
++        writer->writeDouble(121, ent->ucsXAxis.y);
++        if (ent->ucsXAxis.z != 0.0) {
++            writer->writeDouble(131, ent->ucsXAxis.z);
++        }
++
++        writer->writeDouble(112, ent->ucsYAxis.x);
++        writer->writeDouble(122, ent->ucsYAxis.y);
++        if (ent->ucsYAxis.z != 0.0) {
++            writer->writeDouble(132, ent->ucsYAxis.z);
++        }
++
++        writer->writeInt16(79, ent->ucsOrthoType);
++        writer->writeDouble(146, ent->ucsElevation);
++
++   /*
++     * fixme - investigate deep whether we should support these attributes
++    //ID/handle of AcDbUCSTableRecord if UCS is a named UCS. If not present, then UCS is unnamed (appears only if code 72 is set to 1)
++    writer->writeString(345, "42");
++    // Soft-pointer ID/handle to live section object (optional)
++    writer->writeString(346, "42");
++    */
++    }
++    return true;
++}
++
+ bool dxfRW::writeTextstyle(DRW_Textstyle *ent){
+     writer->writeString(0, "STYLE");
+     //stringstream cause crash in OS/X, bug#3597944
+@@ -1551,6 +1635,7 @@ bool dxfRW::writeTables() {
+         writer->writeString(100, "AcDbSymbolTable");
+     }
+     writer->writeInt16(70, 0); //end table def
++    iface->writeViews();
+     writer->writeString(0, "ENDTAB");
+ 
+     writer->writeString(0, "TABLE");
+@@ -2029,7 +2114,7 @@ bool dxfRW::processTables() {
+                     } else if (sectionstr == "VPORT") {
+                         processVports();
+                     } else if (sectionstr == "VIEW") {
+-//                        processView();
++                       processView();
+                     } else if (sectionstr == "UCS") {
+ //                        processUCS();
+                     } else if (sectionstr == "APPID") {
+@@ -2049,6 +2134,35 @@ bool dxfRW::processTables() {
+     return setError(DRW::BAD_READ_TABLES);
+ }
+ 
++bool dxfRW::processView() {
++    DRW_DBG("dxfRW::processView\n");
++    int code;
++    std::string sectionstr;
++    bool reading = false;
++    DRW_View view;
++    while (reader->readRec(&code)) {
++        DRW_DBG(code); DRW_DBG("\n");
++        if (code == 0) {
++            if (reading) {
++                iface->addView(view);
++            }
++            sectionstr = reader->getString();
++            DRW_DBG(sectionstr); DRW_DBG("\n");
++            if (sectionstr == "VIEW") {
++                reading = true;
++                view.reset();
++            } else if (sectionstr == "ENDTAB") {
++                return true;  //found ENDTAB terminate
++            }
++        } else if (reading) {
++            if (!view.parseCode(code, reader)) {
++                return setError( DRW::BAD_CODE_PARSED);
++            }
++        }
++    }
++    return setError(DRW::BAD_READ_TABLES);
++}
++
+ bool dxfRW::processLType() {
+     DRW_DBG("dxfRW::processLType\n");
+     int code;
+diff --git a/libraries/libdxfrw/src/libdxfrw.h b/libraries/libdxfrw/src/libdxfrw.h
+index 8b7e0375e3..4f4c9b0c03 100644
+--- a/src/libdxfrw.h
++++ b/src/libdxfrw.h
+@@ -44,6 +44,7 @@ class dxfRW {
+     bool write(DRW_Interface *interface_, DRW::Version ver, bool bin);
+     bool writeLineType(DRW_LType *ent);
+     bool writeLayer(DRW_Layer *ent);
++    bool writeView(DRW_View *ent);
+     bool writeDimstyle(DRW_Dimstyle *ent);
+     bool writeTextstyle(DRW_Textstyle *ent);
+     bool writeVport(DRW_Vport *ent);
+@@ -92,6 +93,7 @@ class dxfRW {
+     bool processDimStyle();
+     bool processTextStyle();
+     bool processVports();
++    bool processView();
+     bool processAppId();
+ 
+     bool processPoint();
+@@ -155,6 +157,7 @@ class dxfRW {
+ 
+     int currHandle;
+ 
++
+ };
+ 
+ #endif // LIBDXFRW_H

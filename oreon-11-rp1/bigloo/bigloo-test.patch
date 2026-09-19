@@ -1,0 +1,9 @@
+--- api/text/recette/recette.scm.orig	2018-12-18 06:25:53.000000000 -0700
++++ api/text/recette/recette.scm	2019-01-09 20:43:01.779795257 -0700
+@@ -159,4 +159,5 @@
+ 		 (format " ~a succeeded\n ~a failed ~a"
+ 			 *success*
+ 			 (length *failure*)
+-			 (reverse *failure*))))))
++			 (reverse *failure*))))
++      (exit (length *failure*))))

@@ -1,0 +1,79 @@
+--- a/src/CMakeLists.orig.txt	2020-10-27 15:01:43.000000000 +0100
++++ b/src/CMakeLists.txt	2020-11-16 15:34:18.575070052 +0100
+@@ -124,22 +124,23 @@
+ endif()
+ add_dependencies(qrm_common qrm_api_headers)
+ add_dependencies(qrm_common qrm_internal_headers)
++set_target_properties(qrm_common PROPERTIES LIBRARY_OUTPUT_NAME qrm_common SOVERSION ${QRM_VERSION_MAJOR} VERSION ${QRM_VERSION})
+ set_property(TARGET qrm_common PROPERTY Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
+-set_property(TARGET qrm_common PROPERTY ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
+-set_property(TARGET qrm_common PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
+-set_property(TARGET qrm_common PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
++set_property(TARGET qrm_common PROPERTY ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LIB_SUFFIX} )
++set_property(TARGET qrm_common PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LIB_SUFFIX} )
++set_property(TARGET qrm_common PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LIB_SUFFIX} )
+ 
+ # export target qrm_common
+ install(EXPORT qrm_commonTargets
+         NAMESPACE QRM::
+-        DESTINATION lib/cmake/qrm
++        DESTINATION lib${LIB_SUFFIX}/cmake/qrm
+         )
+ # installation of target qrm_common
+ install(TARGETS qrm_common
+         EXPORT qrm_commonTargets
+-        ARCHIVE DESTINATION lib
+-        LIBRARY DESTINATION lib
+-        RUNTIME DESTINATION lib
++        ARCHIVE DESTINATION lib${LIB_SUFFIX}
++        LIBRARY DESTINATION lib${LIB_SUFFIX}
++        RUNTIME DESTINATION lib${LIB_SUFFIX}
+         )
+ 
+ 
+@@ -211,28 +212,29 @@
+   endif()
+   add_dependencies(${_arith}qrm qrm_api_headers)
+   add_dependencies(${_arith}qrm qrm_internal_headers)
++  set_target_properties(${_arith}qrm PROPERTIES LIBRARY_OUTPUT_NAME ${_arith}qrm SOVERSION ${QRM_VERSION_MAJOR} VERSION ${QRM_VERSION})
+   set_property(TARGET ${_arith}qrm PROPERTY Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
+-  set_property(TARGET ${_arith}qrm PROPERTY ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
+-  set_property(TARGET ${_arith}qrm PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
+-  set_property(TARGET ${_arith}qrm PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
++  set_property(TARGET ${_arith}qrm PROPERTY ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LIB_SUFFIX} )
++  set_property(TARGET ${_arith}qrm PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LIB_SUFFIX} )
++  set_property(TARGET ${_arith}qrm PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LIB_SUFFIX} )
+   # export target ?qrm
+   install(EXPORT ${_arith}qrmTargets
+           NAMESPACE QRM::
+-          DESTINATION lib/cmake/qrm
++          DESTINATION lib${LIB_SUFFIX}/cmake/qrm
+           )
+   # installation of target ?qrm
+   install(TARGETS ${_arith}qrm
+           EXPORT ${_arith}qrmTargets
+-          ARCHIVE DESTINATION lib
+-          LIBRARY DESTINATION lib
+-          RUNTIME DESTINATION lib
++          ARCHIVE DESTINATION lib${LIB_SUFFIX}
++          LIBRARY DESTINATION lib${LIB_SUFFIX}
++          RUNTIME DESTINATION lib${LIB_SUFFIX}
+           )
+ 
+ endforeach()
+ 
+ add_subdirectory(include)
+ 
+-install(DIRECTORY ${CMAKE_BINARY_DIR}/include DESTINATION ${CMAKE_INSTALL_PREFIX} PATTERN "CMakeFiles" EXCLUDE)
++install(DIRECTORY ${CMAKE_BINARY_DIR}/include/ DESTINATION ${LIB_INSTALL_DIR}/gfortran/modules/qrm USE_SOURCE_PERMISSIONS FILES_MATCHING PATTERN "*.mod" PATTERN "CMakeFiles" EXCLUDE)
+ 
+ ###############################################################################
+ # Export targets #
+--- a/include/CMakeLists.orig.txt	2020-10-27 15:01:43.000000000 +0100
++++ b/include/CMakeLists.txt	2020-11-16 16:10:14.642503709 +0100
+@@ -63,4 +63,4 @@
+ foreach(_hdr ${all_headers})
+   list(APPEND install_list ${CMAKE_CURRENT_BINARY_DIR}/${_hdr})
+ endforeach()
+-install(FILES ${install_list}  DESTINATION include)
++install(FILES ${install_list}  DESTINATION include/qrm)

@@ -1,0 +1,22 @@
+diff -Naur proxysql-3.0.2/deps/Makefile proxysql-3.0.2_patched/deps/Makefile
+--- proxysql-3.0.2/deps/Makefile	2025-08-04 16:59:36.000000000 +0200
++++ proxysql-3.0.2_patched/deps/Makefile	2025-08-07 09:18:52.750235007 +0200
+@@ -234,6 +234,7 @@
+ 	cd mariadb-client-library/mariadb_client && patch -p0 < ../mariadb_rpl.patch
+ 	cd mariadb-client-library/mariadb_client && patch -p0 < ../cmakelists.txt.patch
+ 	cd mariadb-client-library/mariadb_client && patch -p0 < ../mariadb_lib.c.metadata_column_check.patch
++	cd mariadb-client-library/mariadb_client && patch -p0 < ../ma_global.h.patch
+ 	cd mariadb-client-library/mariadb_client && CC=${CC} CXX=${CXX} ${MAKE} mariadbclient
+ #	cd mariadb-client-library/mariadb_client/include && make my_config.h
+ 
+diff -Naur proxysql-3.0.2/deps/Makefile proxysql-3.0.2_gcc_15_patch/deps/Makefile
+--- proxysql-3.0.2/deps/Makefile	2025-08-04 16:59:36.000000000 +0200
++++ proxysql-3.0.2_gcc_15_patch/deps/Makefile	2025-08-07 12:12:54.730137196 +0200
+@@ -307,6 +307,7 @@
+ 	cd postgresql/postgresql && patch -p0 < ../get_result_from_pgconn.patch
+ 	cd postgresql/postgresql && patch -p0 < ../handle_row_data.patch
+ 	cd postgresql/postgresql && patch -p0 < ../fmt_err_msg.patch
++	cd postgresql/postgresql && patch -p0 < ../c.h.patch
+ 	#cd postgresql/postgresql && LD_LIBRARY_PATH="$(shell pwd)/libssl/openssl" ./configure --with-ssl=openssl --with-includes="$(shell pwd)/libssl/openssl/include/" --with-libraries="$(shell pwd)/libssl/openssl/" --without-readline --enable-debug  CFLAGS="-ggdb -O0 -fno-omit-frame-pointer" CPPFLAGS="-g -O0"
+ 	cd postgresql/postgresql && LD_LIBRARY_PATH="$(SSL_LDIR)" ./configure --with-ssl=openssl --with-includes="$(SSL_IDIR)" --with-libraries="$(SSL_LDIR)" --without-readline
+ 	cd postgresql/postgresql/src/interfaces/libpq && CC=${CC} CXX=${CXX} ${MAKE} MAKELEVEL=0

@@ -1,0 +1,29 @@
+From 35686baa2be5de8bc87983b47926c3a15ee1d92b Mon Sep 17 00:00:00 2001
+From: Robin Gareus <robin@gareus.org>
+Date: Sat, 17 Feb 2024 00:50:29 +0100
+Subject: [PATCH] Potential fix for taglib v2.0 crashes when exporting wav
+
+Note that taglib's documentation states that ID3v2Tag()
+always returns a valid pointer regardless of whether or not
+the file on disk has an ID3v2 tag.
+---
+ libs/ardour/audiofile_tagger.cc | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/libs/ardour/audiofile_tagger.cc b/libs/ardour/audiofile_tagger.cc
+index 591b8e92385..4c132cbcc68 100644
+--- a/libs/ardour/audiofile_tagger.cc
++++ b/libs/ardour/audiofile_tagger.cc
+@@ -88,11 +88,9 @@ AudiofileTagger::tag_file (std::string const& filename, SessionMetadata const& m
+ 		TagLib::RIFF::Info::Tag* info_tag = dynamic_cast<TagLib::RIFF::Info::Tag*> (wav_file->InfoTag ());
+ 		assert (info_tag);
+ 		tag_riff_info (*info_tag, metadata);
+-#if 1 // Also add id3v2 header to .wav
+-		TagLib::ID3v2::Tag* id3v2_tag = dynamic_cast<TagLib::ID3v2::Tag*> (wav_file->tag ());
++		TagLib::ID3v2::Tag* id3v2_tag = wav_file->ID3v2Tag ();
+ 		assert (id3v2_tag);
+ 		tag_id3v2 (*id3v2_tag, metadata);
+-#endif
+ 	}
+ 
+ 	TagLib::RIFF::AIFF::File* aiff_file;

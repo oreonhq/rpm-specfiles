@@ -1,0 +1,80 @@
+.TH UNU\-DICE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-dice \- save all slices along one axis into separate files
+.SH SYNOPSIS
+.B unu\ dice
+.BR \-a , \-\-axis
+.RI < axis >
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-s , \-\-start
+.RI < start >]
+.RB [ \-ff , \-\-format
+.RI < form >]
+.RB [ \-l , \-\-limit
+.RI < max# >]
+.RB [ \-o , \-\-output
+.RI < above \  below >]
+.SH DESCRIPTION
+Save all slices along one axis into separate files.
+Calls
+.BR unu\-slice (1)
+for each position along the indicated axis, and saves out a different
+file for each sample along that axis.
+.IP \(bu +2n
+Uses repeated calls to
+.B nrrdSlice
+and
+.B nrrdSave
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIaxis\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxis\fR>
+axis to slice along
+.RI ( unsigned\ int )
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-s\fR\ <\fIstart\fR>\ ,\ \fB\-\-start\fR\ <\fIstart\fR>
+integer value to start numbering with
+.RI ( unsigned\ int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-ff\fR\ <\fIform\fR>\ ,\ \fB\-\-format\fR\ <\fIform\fR>
+a
+.BR printf (3)-style
+format to use for generating all filenames.
+Use this to override the number of characters used to represent the slice
+position, or the file format of the output, e.g.
+.RB \(lq \-ff\ %03d.ppm \(rq
+for
+.BR 000.ppm ,
+.BR 001.ppm ,
+etc.
+By default (not using this option), slices are saved in NRRD format (or PNM or
+PNG where possible) with shortest possible filenames.
+.RI ( string )
+.TP
+.B \-l\fR\ <\fImax#\fR>\ ,\ \fB\-\-limit\fR\ <\fImax#\fR>
+a sanity check on how many slice files should be saved out, to prevent
+accidentally dicing the wrong axis or the wrong array.
+Can raise this value if needed.
+.RI ( unsigned\ int );
+default:
+.RB \(lq 9999 \(rq
+.TP
+.B \-o\fR\ <\fIprefix\fR>\ ,\ \fB\-\-output\fR\ <\fIprefix\fR>
+output filename
+.I prefix
+(excluding info set via
+.RB \(lq \-ff \(rq,
+basically to set path of output files (so be sure to end with
+.RB \(lq / \(rq).
+.RI ( string )
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-slice (1)
+.P
+.BR printf (3)

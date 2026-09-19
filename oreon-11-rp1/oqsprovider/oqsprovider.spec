@@ -1,10 +1,10 @@
 %global source0_hash 36d83229c360d694c1ce968f985375aa4e1d15b262ca4f8c354e53ea99fe9195
 
-%global oqs_version 0.8.0
+%global oqs_version 0.11.0
 %global liboqs_min_version 0.12.0-1
 Name:       oqsprovider
 Version:    %{oqs_version}
-Release:    5%{?dist}
+Release:    1%{?dist}
 Summary:    oqsprovider is an OpenSSL provider for quantum-safe algorithms based on liboqs
 
 License:    Apache-2.0 AND MIT

@@ -1,0 +1,90 @@
+diff -up rancid-3.13/configure.ac.no-ping-test rancid-3.13/configure.ac
+--- rancid-3.13/configure.ac.no-ping-test	2020-10-02 12:51:17.000000000 -0400
++++ rancid-3.13/configure.ac	2021-03-08 10:30:51.630729052 -0500
+@@ -353,24 +353,24 @@ fi
+ # ping seems to take one of two formats for count (N)
+ # BSD: ping -c N host
+ # SVR: ping host N
+-$PING_PATH -c 1 -v 127.0.0.1 > /dev/null 2>&1
+-if test $? -eq 0 ; then
++#$PING_PATH -c 1 -v 127.0.0.1 > /dev/null 2>&1
++#if test $? -eq 0 ; then
+     LG_PING_CMD="$PING_PATH -c 1"
+-else
+-    $PING_PATH 127.0.0.1 56 1 > /dev/null 2>&1
+-    if test $? -eq 0 ; then
+-	LG_PING_CMD="$PING_PATH"
+-    else
+-	# cygwin using windows ping?
+-	$PING_PATH -n 1 127.0.0.1 > /dev/null 2>&1
+-	if test $? -eq 0 ; then
+-	    LG_PING_CMD="$PING_PATH -n 1" 
+-	else
+-            AC_MSG_ERROR([can't figure out how to pass count == 1 to $PING_PATH.])
+-	    exit 1
+-	fi
+-    fi
+-fi
++#else
++#    $PING_PATH 127.0.0.1 56 1 > /dev/null 2>&1
++#    if test $? -eq 0 ; then
++#	LG_PING_CMD="$PING_PATH"
++#    else
++#	# cygwin using windows ping?
++#	$PING_PATH -n 1 127.0.0.1 > /dev/null 2>&1
++#	if test $? -eq 0 ; then
++#	    LG_PING_CMD="$PING_PATH -n 1" 
++#	else
++#            AC_MSG_ERROR([can't figure out how to pass count == 1 to $PING_PATH.])
++#	    exit 1
++#	fi
++#    fi
++#fi
+ AC_SUBST(LG_PING_CMD)
+ rd_cv_lg_ping_cmd=$LG_PING_CMD
+ 
+diff -up rancid-3.13/configure.no-ping-test rancid-3.13/configure
+--- rancid-3.13/configure.no-ping-test	2020-10-02 14:41:02.000000000 -0400
++++ rancid-3.13/configure	2021-03-08 10:31:41.711878332 -0500
+@@ -5500,24 +5500,24 @@ fi
+ # ping seems to take one of two formats for count (N)
+ # BSD: ping -c N host
+ # SVR: ping host N
+-$PING_PATH -c 1 -v 127.0.0.1 > /dev/null 2>&1
+-if test $? -eq 0 ; then
++#$PING_PATH -c 1 -v 127.0.0.1 > /dev/null 2>&1
++#if test $? -eq 0 ; then
+     LG_PING_CMD="$PING_PATH -c 1"
+-else
+-    $PING_PATH 127.0.0.1 56 1 > /dev/null 2>&1
+-    if test $? -eq 0 ; then
+-	LG_PING_CMD="$PING_PATH"
+-    else
+-	# cygwin using windows ping?
+-	$PING_PATH -n 1 127.0.0.1 > /dev/null 2>&1
+-	if test $? -eq 0 ; then
+-	    LG_PING_CMD="$PING_PATH -n 1"
+-	else
+-            as_fn_error $? "can't figure out how to pass count == 1 to $PING_PATH." "$LINENO" 5
+-	    exit 1
+-	fi
+-    fi
+-fi
++#else
++#    $PING_PATH 127.0.0.1 56 1 > /dev/null 2>&1
++#    if test $? -eq 0 ; then
++#	LG_PING_CMD="$PING_PATH"
++#    else
++#	# cygwin using windows ping?
++#	$PING_PATH -n 1 127.0.0.1 > /dev/null 2>&1
++#	if test $? -eq 0 ; then
++#	    LG_PING_CMD="$PING_PATH -n 1"
++#	else
++#            as_fn_error $? "can't figure out how to pass count == 1 to $PING_PATH." "$LINENO" 5
++#	    exit 1
++#	fi
++#    fi
++#fi
+ 
+ rd_cv_lg_ping_cmd=$LG_PING_CMD
+ 

@@ -1,0 +1,56 @@
+From 2e0c42735f5c8738bb58e4760e7f8079a14e2754 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Mon, 15 Dec 2025 17:04:38 +0100
+Subject: [PATCH 2/2] Fix warnings about wrong argument types when calling
+ curl_easy_setopt
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+src/oidc-agent/http/http_handler.c: In function ‘init’:
+src/oidc-agent/http/http_handler.c:69:3: warning: call to ‘_curl_easy_setopt_err_long’ declared with attribute warning: curl_easy_setopt expects a long argument [-Wattribute-warning]
+   69 |   curl_easy_setopt(curl, CURLOPT_TIMEOUT, AGENT_CURL_TIMEOUT);
+      |   ^
+src/oidc-agent/http/http_handler.c:70:3: warning: call to ‘_curl_easy_setopt_err_long’ declared with attribute warning: curl_easy_setopt expects a long argument [-Wattribute-warning]
+   70 |   curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, AGENT_CURL_CONNECT_TIMEOUT);
+      |   ^
+src/oidc-agent/http/http_handler.c: In function ‘setWriteFunction’:
+src/oidc-agent/http/http_handler.c:103:3: warning: call to ‘_curl_easy_setopt_err_write_callback’ declared with attribute warning: curl_easy_setopt expects a curl_write_callback argument [-Wattribute-warning]
+  103 |   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+      |   ^
+---
+ src/oidc-agent/http/http_handler.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/src/oidc-agent/http/http_handler.c b/src/oidc-agent/http/http_handler.c
+index 5c81e1cd..a6f6935d 100644
+--- a/src/oidc-agent/http/http_handler.c
++++ b/src/oidc-agent/http/http_handler.c
+@@ -12,8 +12,9 @@
+ #include "utils/string/oidc_string.h"
+ #include "utils/string/stringUtils.h"
+ 
+-static size_t write_callback(void* ptr, size_t size, size_t nmemb,
+-                             struct string* s) {
++static size_t write_callback(char* ptr, size_t size, size_t nmemb,
++                             void* str) {
++  struct string* s = str;
+   size_t new_len = s->len + size * nmemb;
+   void*  tmp     = secRealloc(s->ptr, new_len + 1);
+   if (tmp == NULL) {
+@@ -28,10 +29,10 @@ static size_t write_callback(void* ptr, size_t size, size_t nmemb,
+ }
+ 
+ #ifndef AGENT_CURL_CONNECT_TIMEOUT
+-#define AGENT_CURL_CONNECT_TIMEOUT 5
++#define AGENT_CURL_CONNECT_TIMEOUT 5L
+ #endif
+ #ifndef AGENT_CURL_TIMEOUT
+-#define AGENT_CURL_TIMEOUT 10
++#define AGENT_CURL_TIMEOUT 10L
+ #endif
+ 
+ static unsigned char mem_init = 0;
+-- 
+2.52.0
+

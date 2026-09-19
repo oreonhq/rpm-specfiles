@@ -1,0 +1,27 @@
+From b337d486412845813907cd7847f987e00c96ede1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Wojni=C5=82owicz?=
+ <lukasz.wojnilowicz@gmail.com>
+Date: Mon, 9 Dec 2024 17:13:00 +0100
+Subject: [PATCH 1/8] Remove vendored openssl
+
+---
+ aw-sync/Cargo.toml | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/aw-sync/Cargo.toml b/aw-sync/Cargo.toml
+index 28aee92..fc2deeb 100644
+--- a/aw-sync/Cargo.toml
++++ b/aw-sync/Cargo.toml
+@@ -32,9 +32,6 @@ aw-models = { path = "../aw-models" }
+ aw-datastore = { path = "../aw-datastore" }
+ aw-client-rust = { path = "../aw-client-rust" }
+ 
+-[target.'cfg(target_os="linux")'.dependencies]
+-openssl = { version = "0.10.64", features = ["vendored"] }  # https://github.com/ActivityWatch/aw-server-rust/issues/478
+-
+ [target.'cfg(target_os="android")'.dependencies]
+ jni = { version = "0.21", default-features = false }
+ 
+-- 
+2.51.1
+

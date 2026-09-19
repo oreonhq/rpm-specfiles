@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>oldstandard</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Old Standard</name>
+  <summary>Old Standard True-Type Fonts</summary>
+  <description>
+    <p>
+      The Old Standard font family is an attempt to revive
+      a specific type of Modern (classicist) style of serif
+      typefaces, very commonly used in various editions
+      printed in the late 19th and early 20th century,
+      but almost completely  abandoned later.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://www.thessalonica.org.ru/en/fonts.html</url>
+</component>

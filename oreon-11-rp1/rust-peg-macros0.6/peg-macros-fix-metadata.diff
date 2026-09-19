@@ -1,0 +1,14 @@
+--- peg-macros-0.6.3/Cargo.toml	2020-07-22T03:04:04+00:00
++++ peg-macros-0.6.3/Cargo.toml	2023-09-09T17:20:12.018191+00:00
+@@ -24,11 +24,6 @@
+ path = "lib.rs"
+ proc-macro = true
+ 
+-[[bin]]
+-name = "rust-peg"
+-path = "bin.rs"
+-test = false
+-bench = false
+ [dependencies.peg-runtime]
+ version = "= 0.6.3"
+ 

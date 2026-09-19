@@ -1,5 +1,5 @@
-%global source0_hash cc6c6782d6509c57bb04987c95e425cb192705da610f161bd374e9ba09a26562
-%global source1_hash 23b8dbcb68736d49ddd9c5e85bf3edd979de6ecdec7d6324cb290c7fd487b656
+%global source0_hash 7cc319f1655044a9c5396740180b30b4cae94cc8d6d37b7ef547ee6ae8c7e8e7c394764fda0cce2e31c7c9449f7f4587e06e7c4f6c20ca31e92f69708fd4fe4e
+%global source1_hash a8a4d06974f46b4918d6fc86b5543a2af089f97b2553a26c532f6000ea135979c5ee2fd09d9ffc858c2440a3d2f237da149e4eaa79bb6d33f1f02afc31a583e8
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Access OpenType subscript and superscript glyphs
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/realscripts.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/realscripts.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/realscripts.tar.xz#/realscripts.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/realscripts.doc.tar.xz#/realscripts.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-realscripts-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-realscripts-doc <= 11:%{version}
@@ -23,8 +23,8 @@ Provides:       tex(realscripts.sty)
 Access OpenType subscript and superscript glyphs.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

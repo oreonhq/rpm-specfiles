@@ -1,0 +1,12 @@
+diff -up ./epcs.el.orig ./epcs.el
+--- ./epcs.el.orig	2013-08-04 07:28:49.000000000 +0200
++++ ./epcs.el	2021-09-07 21:52:35.582000840 +0200
+@@ -54,7 +54,7 @@ This variable is used for the management
+         (make-network-process 
+          :name name
+          :buffer buf
+-         :family 'ipv4 :server t :nowait t
++         :family 'ipv4 :server t :nowait (< emacs-major-version 26)
+          :host "127.0.0.1" :service (or port t)
+          :sentinel 
+          (lambda (process message) 

@@ -1,0 +1,76 @@
+diff --git a/language-ecmascript.cabal b/language-ecmascript.cabal
+index 0eadac8..0119be2 100644
+--- a/language-ecmascript.cabal
++++ b/language-ecmascript.cabal
+@@ -35,7 +35,7 @@ Library
+   Hs-Source-Dirs:
+     src
+   Build-Depends:
+-    base >= 4 && < 4.15,
++    base >= 4 && < 4.19,
+     mtl >= 1 && < 3,
+     parsec > 3 && < 3.2.0,
+     ansi-wl-pprint >= 0.6 && < 1,
+@@ -86,23 +86,23 @@ Test-Suite test
+     Test.Pretty
+     Test.Arbitrary
+   Build-Depends:
+-    base >= 4 && < 4.14,
+-    mtl >= 1 && < 3,
+-    parsec >= 3 && < 3.2.0,
+-    ansi-wl-pprint >= 0.6 && < 1,
++    base,
++    mtl,
++    parsec,
++    ansi-wl-pprint,
+     charset >= 0.3,
+-    containers == 0.*,
++    containers,
+     directory >= 1.2 && < 1.4,
+     filepath >= 1.3 && < 1.5,
+     HUnit >= 1.2 && < 1.7,
+     QuickCheck >= 2.5 && < 3,
+-    data-default-class >= 0.0.1 && < 0.2,
++    data-default-class,
+     testing-feat >= 0.4.0.2 && < 1.2,
+     test-framework >= 0.8 && < 0.9,
+     test-framework-hunit >= 0.3.0 && < 0.4,
+     test-framework-quickcheck2 >= 0.3.0.1 && < 0.4,
+-    uniplate >= 1.6 && <1.7,
+-    Diff == 0.4.*,
++    uniplate,
++    Diff,
+     language-ecmascript
+   Default-Extensions: DeriveDataTypeable, ScopedTypeVariables, DeriveFunctor, DeriveFoldable, DeriveTraversable, FlexibleContexts
+   Default-Language: Haskell2010
+diff --git a/src/Language/ECMAScript3/Parser.hs b/src/Language/ECMAScript3/Parser.hs
+index c78cd65..78100d8 100644
+--- a/src/Language/ECMAScript3/Parser.hs
++++ b/src/Language/ECMAScript3/Parser.hs
+@@ -780,12 +780,12 @@ parseFromString = parse program ""
+ -- | A convenience function that takes a filename and tries to parse
+ -- the file contents an ECMAScript program, it fails with an error
+ -- message if it can't.
+-parseFromFile :: (Error e, MonadIO m, MonadError e m) => String -- ^ file name
++parseFromFile :: (MonadIO m, MonadError String m) => String -- ^ file name
+                 -> m (JavaScript SourcePos)
+ parseFromFile fname =
+   liftIO (readFile fname) >>= \source ->
+   case parse program fname source of
+-    Left err -> throwError $ strMsg $ show err
++    Left err -> throwError $ show err
+     Right js -> return js
+ 
+ -- | Read a JavaScript program from file an parse it into a list of
+diff --git a/src/Language/ECMAScript3/Syntax.hs b/src/Language/ECMAScript3/Syntax.hs
+index 8b17d12..680c943 100644
+--- a/src/Language/ECMAScript3/Syntax.hs
++++ b/src/Language/ECMAScript3/Syntax.hs
+@@ -46,6 +46,7 @@ import Data.Traversable (Traversable)
+ import Data.Default.Class
+ import Data.Generics.Uniplate.Data
+ import Data.Char
++import Control.Monad
+ import Control.Monad.State
+ import Control.Arrow
+ 

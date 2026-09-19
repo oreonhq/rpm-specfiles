@@ -1,0 +1,248 @@
+Index: libpqxx-7.10.5/include/pqxx/array.hxx
+===================================================================
+--- libpqxx-7.10.5.orig/include/pqxx/array.hxx
++++ libpqxx-7.10.5/include/pqxx/array.hxx
+@@ -17,6 +17,7 @@
+ 
+ #include <algorithm>
+ #include <cassert>
++#include <optional>
+ #include <stdexcept>
+ #include <string>
+ #include <type_traits>
+Index: libpqxx-7.10.5/include/pqxx/composite.hxx
+===================================================================
+--- libpqxx-7.10.5.orig/include/pqxx/composite.hxx
++++ libpqxx-7.10.5/include/pqxx/composite.hxx
+@@ -5,6 +5,7 @@
+ #  error "Include libpqxx headers as <pqxx/header>, not <pqxx/header.hxx>."
+ #endif
+ 
++#include <optional>
+ #include "pqxx/internal/array-composite.hxx"
+ #include "pqxx/internal/concat.hxx"
+ #include "pqxx/util.hxx"
+Index: libpqxx-7.10.5/include/pqxx/connection.hxx
+===================================================================
+--- libpqxx-7.10.5.orig/include/pqxx/connection.hxx
++++ libpqxx-7.10.5/include/pqxx/connection.hxx
+@@ -24,6 +24,7 @@
+ #include <list>
+ #include <map>
+ #include <memory>
++#include <optional>
+ #include <string_view>
+ #include <tuple>
+ #include <utility>
+Index: libpqxx-7.10.5/include/pqxx/params.hxx
+===================================================================
+--- libpqxx-7.10.5.orig/include/pqxx/params.hxx
++++ libpqxx-7.10.5/include/pqxx/params.hxx
+@@ -16,6 +16,7 @@
+ #endif
+ 
+ #include <array>
++#include <variant>
+ 
+ #include "pqxx/internal/concat.hxx"
+ #include "pqxx/internal/statement_parameters.hxx"
+Index: libpqxx-7.10.5/include/pqxx/range.hxx
+===================================================================
+--- libpqxx-7.10.5.orig/include/pqxx/range.hxx
++++ libpqxx-7.10.5/include/pqxx/range.hxx
+@@ -5,6 +5,7 @@
+ #  error "Include libpqxx headers as <pqxx/header>, not <pqxx/header.hxx>."
+ #endif
+ 
++#include <optional>
+ #include <utility>
+ #include <variant>
+ 
+Index: libpqxx-7.10.5/include/pqxx/result.hxx
+===================================================================
+--- libpqxx-7.10.5.orig/include/pqxx/result.hxx
++++ libpqxx-7.10.5/include/pqxx/result.hxx
+@@ -21,6 +21,7 @@
+ #include <ios>
+ #include <list>
+ #include <memory>
++#include <optional>
+ #include <stdexcept>
+ 
+ #include "pqxx/except.hxx"
+Index: libpqxx-7.10.5/include/pqxx/strconv.hxx
+===================================================================
+--- libpqxx-7.10.5.orig/include/pqxx/strconv.hxx
++++ libpqxx-7.10.5/include/pqxx/strconv.hxx
+@@ -19,6 +19,7 @@
+ #include <charconv>
+ #include <cstring>
+ #include <limits>
++#include <optional>
+ #include <sstream>
+ #include <stdexcept>
+ #include <typeinfo>
+Index: libpqxx-7.10.5/include/pqxx/stream_from.hxx
+===================================================================
+--- libpqxx-7.10.5.orig/include/pqxx/stream_from.hxx
++++ libpqxx-7.10.5/include/pqxx/stream_from.hxx
+@@ -18,6 +18,7 @@
+ #endif
+ 
+ #include <cassert>
++#include <optional>
+ #include <variant>
+ 
+ #include "pqxx/connection.hxx"
+Index: libpqxx-7.10.5/include/pqxx/stream_to.hxx
+===================================================================
+--- libpqxx-7.10.5.orig/include/pqxx/stream_to.hxx
++++ libpqxx-7.10.5/include/pqxx/stream_to.hxx
+@@ -17,6 +17,7 @@
+ #  error "Include libpqxx headers as <pqxx/header>, not <pqxx/header.hxx>."
+ #endif
+ 
++#include <optional>
+ #include "pqxx/separated_list.hxx"
+ #include "pqxx/transaction_base.hxx"
+ 
+Index: libpqxx-7.10.5/include/pqxx/transaction_base.hxx
+===================================================================
+--- libpqxx-7.10.5.orig/include/pqxx/transaction_base.hxx
++++ libpqxx-7.10.5/include/pqxx/transaction_base.hxx
+@@ -18,6 +18,7 @@
+ #  error "Include libpqxx headers as <pqxx/header>, not <pqxx/header.hxx>."
+ #endif
+ 
++#include <optional>
+ #include <string_view>
+ 
+ /* End-user programs need not include this file, unless they define their own
+Index: libpqxx-7.10.5/src/result.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/src/result.cxx
++++ libpqxx-7.10.5/src/result.cxx
+@@ -12,6 +12,7 @@
+ 
+ #include <cstdlib>
+ #include <cstring>
++#include <optional>
+ #include <stdexcept>
+ 
+ extern "C"
+Index: libpqxx-7.10.5/src/strconv.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/src/strconv.cxx
++++ libpqxx-7.10.5/src/strconv.cxx
+@@ -15,6 +15,7 @@
+ #include <functional>
+ #include <limits>
+ #include <locale>
++#include <optional>
+ #include <string_view>
+ #include <system_error>
+ 
+Index: libpqxx-7.10.5/test/test26.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/test/test26.cxx
++++ libpqxx-7.10.5/test/test26.cxx
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <map>
++#include <optional>
+ 
+ #include <pqxx/nontransaction>
+ #include <pqxx/transaction>
+Index: libpqxx-7.10.5/test/test60.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/test/test60.cxx
++++ libpqxx-7.10.5/test/test60.cxx
+@@ -1,4 +1,5 @@
+ #include <iostream>
++#include <optional>
+ 
+ #include <pqxx/nontransaction>
+ #include <pqxx/pipeline>
+Index: libpqxx-7.10.5/test/unit/test_array.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/test/unit/test_array.cxx
++++ libpqxx-7.10.5/test/unit/test_array.cxx
+@@ -1,3 +1,4 @@
++#include <optional>
+ #include <pqxx/transaction>
+ 
+ #include "../test_helpers.hxx"
+Index: libpqxx-7.10.5/test/unit/test_composite.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/test/unit/test_composite.cxx
++++ libpqxx-7.10.5/test/unit/test_composite.cxx
+@@ -1,3 +1,4 @@
++#include <optional>
+ #include "../test_helpers.hxx"
+ 
+ #include "pqxx/composite"
+Index: libpqxx-7.10.5/test/unit/test_prepared_statement.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/test/unit/test_prepared_statement.cxx
++++ libpqxx-7.10.5/test/unit/test_prepared_statement.cxx
+@@ -2,6 +2,7 @@
+ #include <iostream>
+ #include <iterator>
+ #include <list>
++#include <optional>
+ 
+ #include <pqxx/transaction>
+ 
+Index: libpqxx-7.10.5/test/unit/test_range.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/test/unit/test_range.cxx
++++ libpqxx-7.10.5/test/unit/test_range.cxx
+@@ -1,3 +1,4 @@
++#include <optional>
+ #include <pqxx/range>
+ #include <pqxx/strconv>
+ 
+Index: libpqxx-7.10.5/test/unit/test_stream_from.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/test/unit/test_stream_from.cxx
++++ libpqxx-7.10.5/test/unit/test_stream_from.cxx
+@@ -6,6 +6,7 @@
+ 
+ #include <cstring>
+ #include <iostream>
++#include <optional>
+ #include <set>
+ #include <string>
+ #include <tuple>
+Index: libpqxx-7.10.5/test/unit/test_stream_query.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/test/unit/test_stream_query.cxx
++++ libpqxx-7.10.5/test/unit/test_stream_query.cxx
+@@ -5,6 +5,7 @@
+ 
+ #include <cstring>
+ #include <iostream>
++#include <optional>
+ #include <set>
+ #include <string>
+ #include <tuple>
+Index: libpqxx-7.10.5/test/unit/test_stream_to.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/test/unit/test_stream_to.cxx
++++ libpqxx-7.10.5/test/unit/test_stream_to.cxx
+@@ -1,5 +1,6 @@
+ #include <iostream>
+ #include <optional>
++#include <variant>
+ 
+ #include <pqxx/stream_to>
+ #include <pqxx/transaction>
+Index: libpqxx-7.10.5/test/unit/test_transaction_base.cxx
+===================================================================
+--- libpqxx-7.10.5.orig/test/unit/test_transaction_base.cxx
++++ libpqxx-7.10.5/test/unit/test_transaction_base.cxx
+@@ -1,3 +1,4 @@
++#include <optional>
+ #include <pqxx/stream_to>
+ #include <pqxx/transaction>
+ 

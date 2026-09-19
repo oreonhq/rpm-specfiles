@@ -1,0 +1,36 @@
+diff -rupN --no-dereference qtactiveqt-everywhere-src-6.10/src/tools/idc/CMakeLists.txt qtactiveqt-everywhere-src-6.10-new/src/tools/idc/CMakeLists.txt
+--- qtactiveqt-everywhere-src-6.10/src/tools/idc/CMakeLists.txt	2025-08-17 21:32:08.000000000 +0200
++++ qtactiveqt-everywhere-src-6.10-new/src/tools/idc/CMakeLists.txt	2025-09-03 08:48:04.380915818 +0200
+@@ -5,7 +5,7 @@
+ ## idc Tool:
+ #####################################################################
+ 
+-qt_get_tool_target_name(target_name idc)
++qt_get_tool_target_name(target_name idc-qt6)
+ qt_internal_add_tool(${target_name}
+     TARGET_DESCRIPTION "Active Qt Interface Description Compiler"
+     TOOLS_TARGET AxServer
+diff -rupN --no-dereference qtactiveqt-everywhere-src-6.10/tools/dumpcpp/CMakeLists.txt qtactiveqt-everywhere-src-6.10-new/tools/dumpcpp/CMakeLists.txt
+--- qtactiveqt-everywhere-src-6.10/tools/dumpcpp/CMakeLists.txt	2025-08-17 21:32:08.000000000 +0200
++++ qtactiveqt-everywhere-src-6.10-new/tools/dumpcpp/CMakeLists.txt	2025-09-03 08:48:04.381139064 +0200
+@@ -5,7 +5,7 @@
+ ## dumpcpp Tool:
+ #####################################################################
+ 
+-qt_get_tool_target_name(target_name dumpcpp)
++qt_get_tool_target_name(target_name dumpcpp-qt6)
+ qt_internal_add_tool(${target_name}
+     TARGET_DESCRIPTION "Active Qt DumpCpp"
+     TOOLS_TARGET AxContainer
+diff -rupN --no-dereference qtactiveqt-everywhere-src-6.10/tools/dumpdoc/CMakeLists.txt qtactiveqt-everywhere-src-6.10-new/tools/dumpdoc/CMakeLists.txt
+--- qtactiveqt-everywhere-src-6.10/tools/dumpdoc/CMakeLists.txt	2025-08-17 21:32:08.000000000 +0200
++++ qtactiveqt-everywhere-src-6.10-new/tools/dumpdoc/CMakeLists.txt	2025-09-03 08:48:04.381287167 +0200
+@@ -5,7 +5,7 @@
+ ## dumpdoc Tool:
+ #####################################################################
+ 
+-qt_get_tool_target_name(target_name dumpdoc)
++qt_get_tool_target_name(target_name dumpdoc-qt6)
+ qt_internal_add_tool(${target_name}
+     TARGET_DESCRIPTION "Active Qt DumpDoc"
+     TOOLS_TARGET AxContainer

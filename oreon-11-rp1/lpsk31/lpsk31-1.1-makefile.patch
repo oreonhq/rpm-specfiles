@@ -1,0 +1,38 @@
+--- a/Makefile
++++ b/Makefile
+@@ -2,10 +2,13 @@
+ 
+ SHELL   = /bin/sh
+ PROJECT = lpsk31
+-BINDIR  = /usr/local/bin
+-DOCDIR  = /usr/local/share/doc/
++BINDIR  = /usr/libexec
++DATADIR = /usr/share
++DOCDIR  = /usr/share/doc/
+ CC      = gcc -Wall -march=native -O2 -D_FORTIFY_CODE=2
+ 
++DESTDIR =
++
+ objects = cat.o main.o phase.o pskcodec.o screen.o sound.o
+ 
+ $(PROJECT) : $(objects)
+@@ -20,15 +23,13 @@ screen.o : screen.h
+ sound.o : sound.h
+ 
+ install : $(PROJECT)
+-	install -m 755 --strip $(PROJECT) $(BINDIR)
+-	install -m 644 doc/$(PROJECT).html $(DOCDIR)
+-	if test ! -d $(HOME)/$(PROJECT); then mkdir $(HOME)/$(PROJECT); fi
+-	install -m 644 default/$(PROJECT)rc $(HOME)/$(PROJECT)
++	install -Dm 755 $(PROJECT) $(DESTDIR)$(BINDIR)/$(PROJECT)
++	install -Dm 644 default/$(PROJECT)rc $(DESTDIR)$(DATADIR)/$(PROJECT)/$(PROJECT)rc
+ 
+ uninstall :
+ 	if test -d $(HOME)/$(PROJECT); then rm -r $(HOME)/$(PROJECT); fi
+-	rm $(BINDIR)/$(PROJECT)
+-	rm $(DOCDIR)/$(PROJECT).html
++	rm $(DESTDIR)$(BINDIR)/$(PROJECT)
++	rm $(DESTDIR)$(DOCDIR)/$(PROJECT).html
+ 
+ clean :
+ 	rm -f *.o *~

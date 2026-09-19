@@ -1,0 +1,43 @@
+From 6953a671205242a2d22e81b5fa30252bab24d4ba Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Sun, 30 Mar 2025 16:59:44 +0200
+Subject: [PATCH] Use raw string to avoid invalid escape sequence
+
+---
+ tests/test_merge.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tests/test_merge.py b/tests/test_merge.py
+index d18b8e2..c86d063 100644
+--- a/tests/test_merge.py
++++ b/tests/test_merge.py
+@@ -18,7 +18,7 @@ class test_merge(common.basetest):
+         rev, node2 = self.client.commit(b('new file'), addremove=True)
+         self.client.merge(self.node1)
+         rev, node = self.client.commit(b('merge'))
+-        diff = b("diff -r ") + node2[:12] + b(" -r ") + node[:12] + b(""" a
++        diff = b("diff -r ") + node2[:12] + b(" -r ") + node[:12] + b(r""" a
+ --- a/a
+ +++ b/a
+ @@ -1,1 +1,1 @@
+@@ -49,7 +49,7 @@ class test_merge(common.basetest):
+         else:
+             self.client.merge(cb=hglib.merge.handlers.noninteractive)
+ 
+-        diff = b("diff -r ") + node[:12] + b(""" a
++        diff = b("diff -r ") + node[:12] + b(r""" a
+ --- /dev/null
+ +++ b/a
+ @@ -0,0 +1,1 @@
+@@ -68,7 +68,7 @@ class test_merge(common.basetest):
+ 
+         self.client.merge(cb=cb)
+ 
+-        diff = b("diff -r ") + node[:12] + b(""" a
++        diff = b("diff -r ") + node[:12] + b(r""" a
+ --- /dev/null
+ +++ b/a
+ @@ -0,0 +1,1 @@
+-- 
+2.49.0
+

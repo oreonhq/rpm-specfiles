@@ -1,0 +1,179 @@
+:100644 100644 cdd5431 e9b1f7d M	Makefile
+:000000 100644 0000000 3f0208e A	mv6tool.8
+:000000 100644 0000000 2801574 A	phytool.8
+
+diff --git a/Makefile b/Makefile
+index cdd5431..e9b1f7d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -12,6 +12,7 @@ APPLETS = mv6tool
+ PREFIX ?= /usr/local/
+ CFLAGS ?= -Wall -Wextra -Werror
+ LDLIBS  = 
++MANDIR ?= $(PREFIX)/share/man
+ 
+ objs = $(patsubst %.c, %.o, $(wildcard *.c))
+ hdrs = $(wildcard *.h)
+@@ -41,3 +42,5 @@ install: phytool
+ 	@for app in $(APPLETS); do \
+ 		ln -sf phytool $(DESTDIR)/$(PREFIX)/bin/$$app; \
+ 	done
++	@mkdir -p $(DESTDIR)/$(MANDIR)/man8/
++	@cp -p phytool.8 mv6tool.8 -p $(DESTDIR)/$(MANDIR)/man8/
+diff --git a/mv6tool.8 b/mv6tool.8
+new file mode 100644
+index 0000000..3f0208e
+--- /dev/null
++++ b/mv6tool.8
+@@ -0,0 +1,77 @@
++.TH MV6TOOL "8" "January 2024" "" "System Management Commands"
++.SH NAME
++.B mv6tool
++\- Marvell Link Street register access
++.SH SYNOPSIS
++.B mv6tool read
++.IR LOCATION / REG
++.P
++.B mv6tool write
++.IR LOCATION / REG
++.RI < 0-0xffff >
++.P
++.B mv6tool print
++.IR LOCATION [/ REG ]
++.P
++.B mv6tool print
++.IR IFACE
++.P
++where
++.TP
++.I LOCATION
++:=
++.IR IFACE /< port | phy >
++|
++.IR DEV /< ADDR | phyN | portN | globalG | serdes >
++.TP
++DEV
++:=
++.RI < 0\-0x1f >
++.TP
++ADDR
++:=
++.RI < 0\-0x1f >
++.TP
++N
++:=
++.RI < 0\-0xa >
++.TP
++G
++:=
++.RI < 0\-2 >
++.TP
++REG
++:=
++.RI < 0\-0x1f >
++.SH DESCRIPTION
++The
++.B read
++and
++.B write
++commands are simple register level accessors.
++The
++.B print
++command will pretty-print a register.
++When using the
++.B print
++command, the register is optional.
++If left out, the most common registers will be shown.
++.SH EXAMPLES
++.P
++.EX
++.B mv6tool\ read\ cpu0/port/0
++.EE
++.P
++.EX
++.B mv6tool\ write\ 1/global1/2\ 0x1337
++.EE
++.P
++.EX
++.B mv6tool\ print\ eth2\-1
++.EE
++.SH "REPORTING BUGS"
++.UR https://github.com/wkz/phytool/issues
++Bug report address
++.UE
++.SH "SEE ALSO"
++.BR phytool (8)
+diff --git a/phytool.8 b/phytool.8
+new file mode 100644
+index 0000000..2801574
+--- /dev/null
++++ b/phytool.8
+@@ -0,0 +1,68 @@
++.TH PHYTOOL "8" "January 2024" "" "System Management Commands"
++.SH NAME
++.B phytool
++\- Linux MDIO register access
++.SH SYNOPSIS
++.B phytool read
++.IR IFACE / ADDR / REG
++.P
++.B phytool write
++.IR IFACE / ADDR / REG
++.RI < 0\-0xffff >
++.P
++.B phytool print
++.IR IFACE / ADDR [/ REG ]
++.P
++where
++.TP
++.I ADDR
++:=
++.IR C22 \ |\  C45
++.TP
++.I C22
++:=
++.RI < 0\-0x1f >
++.TP
++.I C45
++:=
++.RI < 0\-0x1f >:< 0\-0x1f >
++.TP
++.I REG
++:=
++.RI < 0\-0x1f >
++.SH DESCRIPTION
++The
++.B read
++and
++.B write
++commands are simple register level accessors.
++The
++.B print
++command will pretty-print a register.
++When using the
++.B print
++command, the register is optional.
++If left out, the most common registers will be shown.
++.SH NOTES
++Not all MDIO drivers support the
++.IB port : device
++Clause 45 address format.
++.SH EXAMPLES
++.P
++.EX
++.B phytool\ read\ eth0/0:3/1
++.EE
++.P
++.EX
++.B phytool\ write\ eth0/0xa/0\ 0x1140
++.EE
++.P
++.EX
++.B phytool\ print\ eth0/0x1c
++.EE
++.SH "REPORTING BUGS"
++.UR https://github.com/wkz/phytool/issues
++Bug report address
++.UE
++.SH "SEE ALSO"
++.BR mv6tool (8)

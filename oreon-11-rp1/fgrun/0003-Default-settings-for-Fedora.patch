@@ -1,0 +1,28 @@
+From 4331de94be0d8891dbc2ddf583d7d8ad0bf5d81c Mon Sep 17 00:00:00 2001
+From: Fabrice Bellet <fabrice@bellet.info>
+Date: Sun, 22 Sep 2013 12:53:13 +0200
+Subject: [PATCH] Default settings for Fedora
+
+---
+ fgrun.prefs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/fgrun.prefs b/fgrun.prefs
+index c52be0b..26d153f 100644
+--- a/fgrun.prefs
++++ b/fgrun.prefs
+@@ -4,8 +4,8 @@
+ 
+ [.]
+ 
+-fg_exe:/usr/local/bin/fgfs
+-fg_root:/usr/local/lib/FlightGear/data
+-fg_scenery:/usr/local/lib/FlightGear/data/Scenery
++fg_exe:/usr/bin/fgfs
++fg_root:/usr/share/flightgear
++fg_scenery:/usr/share/flightgear/Scenery
+ aircraft:c172-3d
+ airport:KSFO
+-- 
+2.5.0
+

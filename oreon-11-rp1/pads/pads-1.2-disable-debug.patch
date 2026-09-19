@@ -1,0 +1,12 @@
+diff -ur pads-1.2.orig/src/global.h pads-1.2/src/global.h
+--- pads-1.2.orig/src/global.h	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/global.h	2008-07-01 13:57:59.000000000 -0400
+@@ -45,7 +45,7 @@
+ 
+ #define I_ATTEMPTS 4
+ 
+-#define DEBUG
++//#define DEBUG
+ 
+ #define PADS_SIGNATURE_LIST "pads-signature-list"
+ #define PADS_ETHER_CODES "pads-ether-codes"

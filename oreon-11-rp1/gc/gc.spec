@@ -2,8 +2,8 @@
 
 Summary: Garbage collector for C and C++
 Name:    gc
-Version: 8.2.6
-Release: 6%{?dist}
+Version: 8.2.8
+Release: 1%{?dist}
 
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD

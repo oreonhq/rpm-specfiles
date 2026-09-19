@@ -1,0 +1,26 @@
+diff --git a/X11/configure b/X11/configure
+index 8a623269ddc8971c..cc143bbbedea14e4 100755
+--- a/X11/configure
++++ b/X11/configure
+@@ -2943,7 +2943,7 @@ _ACEOF
+ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+- main(int ac, char **av) { return 0; }
++ int main(int ac, char **av) { return 0; }
+ _ACEOF
+ rm -f conftest$ac_exeext
+ if { (ac_try="$ac_link"
+diff --git a/gtk/configure b/gtk/configure
+index 4812b87d4eb04e50..9445f0dc2f577cc5 100755
+--- a/gtk/configure
++++ b/gtk/configure
+@@ -3006,7 +3006,7 @@ _ACEOF
+ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+- main(int ac, char **av) { return 0; }
++ int main(int ac, char **av) { return 0; }
+ _ACEOF
+ rm -f conftest$ac_exeext
+ if { (ac_try="$ac_link"

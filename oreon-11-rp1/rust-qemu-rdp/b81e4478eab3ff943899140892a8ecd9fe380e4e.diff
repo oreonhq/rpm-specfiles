@@ -1,0 +1,103 @@
+From 621c01b12cd7bb8c5039befcd45093414b5ab3b4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Marc-Andr=C3=A9=20Lureau?= <marcandre.lureau@redhat.com>
+Date: Mon, 11 Aug 2025 12:54:56 +0400
+Subject: [PATCH] Drop rustc_util
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com>
+---
+ Cargo.toml |  6 ------
+ build.rs   | 58 +++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 57 insertions(+), 7 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 577ae2a..c4e332e 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -88,9 +88,6 @@ version = "0.1.0"
+ [dependencies.qemu-display]
+ version = "0.2"
+ 
+-[dependencies.rustc_tools_util]
+-version = "0.4.0"
+-
+ [dependencies.rustls-pemfile]
+ version = "2.1"
+ 
+@@ -111,6 +108,3 @@ features = [
+     "p2p",
+     "serde_bytes",
+ ]
+-
+-[build-dependencies.rustc_tools_util]
+-version = "0.4.0"
+diff --git a/build.rs b/build.rs
+index 7163220..cd488ef 100644
+--- a/build.rs
++++ b/build.rs
+@@ -1,3 +1,59 @@
++// SPDX-License-Identifier: MIT OR Apache-2.0
++// Code adapted from rustc_tools_util
++
++use std::{path::PathBuf, process::Command};
++
+ fn main() {
+-    rustc_tools_util::setup_version_info!();
++    let _ = rerun_if_git_changes();
++    println!(
++        "cargo:rustc-env=GIT_HASH={}",
++        get_commit_hash().unwrap_or_default()
++    );
++}
++
++#[must_use]
++pub fn rerun_if_git_changes() -> Option<()> {
++    // Make sure we get rerun when the git commit changes.
++    // We want to watch two files: HEAD, which tracks which branch we are on,
++    // and the file for that branch that tracks which commit is checked out.
++
++    // First, find the `HEAD` file. This should work even with worktrees.
++    let git_head_file = PathBuf::from(get_output("git", &["rev-parse", "--git-path", "HEAD"])?);
++    if git_head_file.exists() {
++        println!("cargo::rerun-if-changed={}", git_head_file.display());
++    }
++
++    // Determine the name of the current ref.
++    // This will quit if HEAD is detached.
++    let git_head_ref = get_output("git", &["symbolic-ref", "-q", "HEAD"])?;
++    // Ask git where this ref is stored.
++    let git_head_ref_file = PathBuf::from(get_output(
++        "git",
++        &["rev-parse", "--git-path", &git_head_ref],
++    )?);
++    // If this ref is packed, the file does not exist. However, the checked-out branch is never (?)
++    // packed, so we should always be able to find this file.
++    if git_head_ref_file.exists() {
++        println!("cargo::rerun-if-changed={}", git_head_ref_file.display());
++    }
++
++    Some(())
++}
++
++#[must_use]
++pub fn get_commit_hash() -> Option<String> {
++    let mut stdout = get_output("git", &["rev-parse", "HEAD"])?;
++    stdout.truncate(10);
++    Some(stdout)
++}
++
++#[must_use]
++fn get_output(cmd: &str, args: &[&str]) -> Option<String> {
++    let output = Command::new(cmd).args(args).output().ok()?;
++    let mut stdout = output.status.success().then_some(output.stdout)?;
++    // Remove trailing newlines.
++    while stdout.last().copied() == Some(b'\n') {
++        stdout.pop();
++    }
++    String::from_utf8(stdout).ok()
+ }
+-- 
+2.50.1
+

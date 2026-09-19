@@ -1,0 +1,12 @@
+--- ratatui-0.30.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ ratatui-0.30.2/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -282,9 +282,6 @@
+ features = ["local-offset"]
+ default-features = false
+ 
+-[target."cfg(not(windows))".dependencies.ratatui-termion]
+-version = "0.1.2"
+-optional = true
+ 
+ [lints.clippy]
+ as_underscore = "warn"

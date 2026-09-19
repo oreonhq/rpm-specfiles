@@ -1,0 +1,34 @@
+From bb87625d031816b456585fe33c347aa84d85a2f4 Mon Sep 17 00:00:00 2001
+From: Maxwell G <maxwell@gtmx.me>
+Date: Fri, 2 Feb 2024 00:04:40 +0000
+Subject: [PATCH ] galaxy.yml: add unnecessary files to build_ignore
+
+---
+ galaxy.yml | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/galaxy.yml b/galaxy.yml
+index b3635c4..645dac7 100644
+--- a/galaxy.yml
++++ b/galaxy.yml
+@@ -20,3 +20,17 @@ repository: https://github.com/ansible-collections/community.internal_test_tools
+ documentation: https://ansible-collections.github.io/community.internal_test_tools/branch/main/
+ homepage: https://github.com/ansible-collections/community.internal_test_tools
+ issues: https://github.com/ansible-collections/community.internal_test_tools/issues
++build_ignore:
++  - .*lint
++  - .gitignore
++  - .github
++  - changelogs/fragments
++  - tools
++  # Included in %license / %doc
++  - "CHANGELOG.rst*"
++  - COPYING
++  - "LICENSE*"
++  - REUSE.toml
++  - README.md
++  - changelogs/changelog.yaml.license
++  - tests/sanity/extra/*.json.license
+-- 
+2.46.0
+

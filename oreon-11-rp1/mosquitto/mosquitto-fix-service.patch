@@ -1,0 +1,10 @@
+--- mosquitto-2.1.0/service/systemd/mosquitto.service.notify.orig	2026-01-30 11:05:23.612727310 +0000
++++ mosquitto-2.1.0/service/systemd/mosquitto.service.notify	2026-01-30 11:05:49.989057863 +0000
+@@ -6,6 +6,7 @@
+ 
+ [Service]
+ User=mosquitto
++Group=mosquitto
+ Type=notify
+ WatchdogSec=3min
+ NotifyAccess=main

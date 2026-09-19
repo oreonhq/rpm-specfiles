@@ -1,0 +1,16 @@
+# ochusha-prefs-gtkrc for Fedora
+
+style "ochusha-tree-view-style"
+{
+  font_name="Mona-VLGothic 12"
+}
+
+class "OchushaTreeSelectorView" style "ochusha-tree-view-style"
+
+style "ochusha-thread-view-style"
+{
+  font_name="Mona-VLGothic 12"
+}
+
+class "OchushaHypertextView" style "ochusha-thread-view-style"
+

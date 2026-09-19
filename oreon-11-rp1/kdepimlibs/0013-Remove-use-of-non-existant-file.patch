@@ -1,0 +1,24 @@
+From 3c747bb54a1572fbf65cd1c8b58c4c22144543dc Mon Sep 17 00:00:00 2001
+From: Stephen Kelly <steveire@gmail.com>
+Date: Tue, 28 Jul 2015 07:48:03 +0200
+Subject: [PATCH 13/31] Remove use of non-existant file.
+
+---
+ gpgme++/GpgmeppConfig.cmake.in | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/gpgme++/GpgmeppConfig.cmake.in b/gpgme++/GpgmeppConfig.cmake.in
+index fc71012..c82ce10 100644
+--- a/gpgme++/GpgmeppConfig.cmake.in
++++ b/gpgme++/GpgmeppConfig.cmake.in
+@@ -1,7 +1,5 @@
+ set( GPGMEPP_INCLUDES "@GPGMEPP_INCLUDE@" )
+ 
+-include( "@LIB_INSTALL_DIR@/gpgmepp/GpgmeppLibraryDepends.cmake" )
+-
+ set( GPGMEPP_VANILLA_FOUND @HAVE_GPGME_VANILLA@ )
+ if ( GPGMEPP_VANILLA_FOUND )
+   set( GPGMEPP_VANILLA_LIBRARIES "@GPGMEPP_VANILLA_LIBRARY@" )
+-- 
+2.5.0
+

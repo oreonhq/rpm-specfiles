@@ -1,0 +1,74 @@
+# cryptlib Security Toolkit - Official Site
+
+cryptlib is a security toolkit focused on long-term stability and reliability
+that implements a wide range of protocols including S/MIME and PGP/OpenPGP
+secure messaging, SSL/TLS and SSH secure sessions, a full range of CA services
+such as CMP, SCEP, RTCS, OCSP, SCVP and TSP, and secure authentication
+protocols like EAP-TLS, EAP-TTLS, and PEAP.
+
+## Overview
+
+cryptlib's primary goal is stability and reliability, consisting of a highly
+mature code base with a 30-year history and an API that's been stable for the
+last 20 years - you should be able to take 20-year-old code, recompile it
+against the current code base, and it'll still work (you'll just get the
+latest algorithms and crypto mechanisms).  This emphasis on long-term
+stability means that what you deploy today will still be fine in 10-20 years -
+there's no need to roll out patches every two weeks to deal with bugs and
+security vulnerabilities.
+
+cryptlib provides a strong emphasis on safe, reliable operation.  Main memory
+sections are statically allocated (only variable-sized items like certificates
+use dynamic allocation, and even this is done in a FIFO manner where storage
+can be drawn from a static memory block if required), allowing the memory
+footprint to be determined in advance.  All cryptovariables and algorithms
+have extensive protection through self-testing, pairwise consistency checks on
+crypto operations, and checksumming of cryptovariables to prevent
+modifications, either indirectly (faults) or deliberately (glitch attacks).
+All parameters are range-checked and bounds-checked, all loops and array
+accesses are statically-bounded, pointers and critical variables are protected
+against data corruption and faults, and critical code sections involving
+crypto operations have control flow integrity protections to prevent glitches.
+
+cryptlib's development has been driven by user feedback over its 30-year
+lifetime, evolving to maximise ease-of-use and minimise the need to plough
+through the manual or online forums for every task, augmented by a
+comprehensive 400-page manual with extensive ready-to-use code samples for
+most tasks.  Requests or bug reports result in a fix and test suite and/or
+documentation update to resolve the issue for the future.
+
+The code base is highly tuneable and configurable to allow use in constrained
+environments, minimising code size and memory footprints.  The emphasis is on
+providing a high-level API that makes it easy to get things right, providing
+fully functional interfaces rather than stub APIs that need to be crafted into
+a working system.  cryptlib's cross-platform nature means that you can develop
+in your preferred environment (Windows, Unix, Mac OS) and then deploy the same
+code to the target embedded or RTOS environment, bypassing the need to do
+extensive development directly on the embedded hardware.
+
+Alongside the security services, cryptlib provides a sophisticated key storage
+interface that allows the use of a wide range of key database types ranging
+from PKCS #11 devices, PKCS #15 key files, and PGP/OpenPGP key rings through
+to commercial-grade RDBMS' and LDAP directories, as well as interfacing to
+cryptographic hardware like PKCS #11 tokens and crypto accelerators, TPMs, and
+fully custom crypto hardware via plugin modules.
+
+cryptlib is written in C, with language bindings for C / C++, C# / .NET,
+Delphi, Java, Python, Perl, and Visual Basic (VB).
+
+## The Official Documentation - The Manual (Remarks by Ralf Senderek)
+
+The official 385 page Cryptlib manual, written by Peter Gutmann, has a very 
+liberal copyright notice, that allows commercial
+use under the condition that the manual isn't distributed for a fee.
+
+Unfortunately, due to this use restriction it cannot be included in 
+the Fedora distribution.
+
+But you can download this excellent manual as a PDF file from Peter's web page.
+
+<b>https://github.com/cryptlib/cryptlib/blob/main/manual.pdf</b>
+
+If you refer to the numerous code examples, you will be able to use
+cryptlib in your own (commercial) projects quite easily.
+

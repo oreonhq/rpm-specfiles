@@ -1,0 +1,75 @@
+From 46530d0865cd4c1c33fa013ad161809703270b6a Mon Sep 17 00:00:00 2001
+From: fujiwarat <takao.fujiwara1@gmail.com>
+Date: Thu, 15 Jan 2026 04:15:44 +0900
+Subject: [PATCH] Provide --xml option to genate engine XML
+
+Separate Vietnamese US layout engine from others and make
+default.xml and us.xml from bamboo.xml.
+Now us.xml is installed by default and default.xml is an additional
+option.
+---
+ main.go | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/main.go b/main.go
+index 4419877..6911cf8 100644
+--- a/main.go
++++ b/main.go
+@@ -22,6 +22,7 @@ package main
+ import (
+ 	"flag"
+ 	"fmt"
++	"io/ioutil"
+ 	"log"
+ 	"os"
+ 	"strings"
+@@ -36,6 +37,7 @@ const (
+ 
+ var embedded = flag.Bool("ibus", false, "Run the embedded ibus component")
+ var version = flag.Bool("version", false, "Show version")
++var xml = flag.Bool("xml", false, "Parse IBusEngineDesc")
+ var gui = flag.Bool("gui", false, "Show GUI")
+ var isWayland = false
+ var isGnome = false
+@@ -60,6 +62,38 @@ func main() {
+ 	}
+ 	if *version {
+ 		fmt.Println(Version)
++	} else if *xml {
++		var isUs = false
++		var isDefault  = false
++		var usFile = "/usr/share/ibus-bamboo/engines/us.xml"
++		var defFile = "/usr/share/ibus-bamboo/engines/others.xml"
++		var usBody []byte
++		var defBody []byte
++		if sta, err := os.Stat(usFile); err == nil && !sta.IsDir() {
++			usBody, err = ioutil.ReadFile(usFile)
++			if err == nil {
++				isUs = true
++			}
++		}
++		if sta, err := os.Stat(defFile); err == nil && !sta.IsDir() {
++			defBody, err = ioutil.ReadFile(defFile)
++			if err == nil {
++				isDefault = true
++			}
++		}
++		if isDefault || isUs {
++			fmt.Println("<?xml version=\"1.0\" encoding=\"utf-8\"?>")
++			fmt.Println("<engines>")
++		}
++		if isUs {
++			fmt.Print(string(usBody))
++		}
++		if isDefault {
++			fmt.Print(string(defBody))
++		}
++		if isDefault || isUs {
++			fmt.Println("</engines>")
++		}
+ 	} else if *embedded {
+ 		engine := GetIBusEngineCreator()
+ 		bus := ibus.NewBus()
+-- 
+2.52.0
+

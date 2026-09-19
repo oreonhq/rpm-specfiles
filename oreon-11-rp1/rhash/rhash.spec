@@ -1,8 +1,8 @@
 %global source0_hash 6db837e7bbaa7c72c5fd43ca5af04b1d370c5ce32367b9f6a1f7b49b2338c09a
 
 Name:           rhash
-Version:        1.4.5
-Release:        4%{?dist}
+Version:        1.4.6
+Release:        1%{?dist}
 Summary:        Great utility for computing hash sums
 
 License:        MIT

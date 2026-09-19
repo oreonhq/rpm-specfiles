@@ -1,0 +1,24 @@
+From a1983b7a8880fb4ae0277ce3ff92c9a9120ca261 Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <ignatenko@redhat.com>
+Date: Sat, 9 Apr 2016 19:18:03 +0200
+Subject: [PATCH 3/5] docs: install to share/man
+
+Signed-off-by: Igor Gnatenko <ignatenko@redhat.com>
+---
+ docs/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/docs/CMakeLists.txt b/docs/CMakeLists.txt
+index 365ee2e..fa07e0a 100644
+--- a/docs/CMakeLists.txt
++++ b/docs/CMakeLists.txt
+@@ -8,5 +8,5 @@ IF ( $ENV{MAKE_PACKAGE} )
+  INSTALL ( FILES ${MAN_SRC} DESTINATION doc )
+  INSTALL ( FILES ${HTML_SRC} DESTINATION doc )
+ ELSE ( $ENV{MAKE_PACKAGE} )
+-INSTALL ( FILES ${MAN_SRC} DESTINATION man/man1 )
++INSTALL ( FILES ${MAN_SRC} DESTINATION share/man/man1 )
+ ENDIF ( $ENV{MAKE_PACKAGE} )
+-- 
+2.7.3
+

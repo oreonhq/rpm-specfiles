@@ -1,0 +1,12 @@
+diff --git a/frysk-sys/jnixx/Printer.java b/frysk-sys/jnixx/Printer.java
+index 4469027d0..933bd6b05 100644
+--- a/frysk-sys/jnixx/Printer.java
++++ b/frysk-sys/jnixx/Printer.java
+@@ -320,6 +320,7 @@ class Printer {
+ 	    || name.equals("register")
+ 	    || name.equals("signed")
+ 	    || name.equals("unsigned")
++	    || name.equals("union")
+ 	    ) {
+ 	    return name + "$";
+ 	} else {

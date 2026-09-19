@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fa2a0d4c7058fff729a2eb04d2a5f46a3a9192a6f472eac3e669c72d62ab3cf7
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    krfb
 Summary: Desktop sharing
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-only AND LGPL-2.1-only AND GFDL-1.2-no-invariants-only

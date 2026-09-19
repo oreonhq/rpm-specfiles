@@ -1,0 +1,22 @@
+From 659b66c6dc0e5598546ce987319adaf59cf01a0b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C3=A9clairevoyant?=
+ <848000+eclairevoyant@users.noreply.github.com>
+Date: Sun, 11 Jun 2023 06:04:28 -0400
+Subject: [PATCH] fix missing include
+
+---
+ src/fe_net.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/fe_net.hpp b/src/fe_net.hpp
+index c089681e..3fe6f668 100644
+--- a/src/fe_net.hpp
++++ b/src/fe_net.hpp
+@@ -27,6 +27,7 @@
+ #include <thread>
+ #include <deque>
+ #include <queue>
++#include <string>
+ 
+ class FeNetWorker;
+ 

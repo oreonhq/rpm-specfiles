@@ -1,0 +1,42 @@
+From d0b04114b33ee997e2f4eb5d0f56126616ad21d5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 30 Jul 2013 19:04:39 +0200
+Subject: [PATCH] Parenthesise qw explicitly
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Perl 5.18 stopped to put surrounding parentheses around qw operator.
+Current code causes would cause syntax error.
+
+<https://rt.cpan.org/Public/Bug/Display.html?id=87450>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Kwiki/ModPerl.pm | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/Kwiki/ModPerl.pm b/lib/Kwiki/ModPerl.pm
+index f5a2140..6ba42f2 100644
+--- a/lib/Kwiki/ModPerl.pm
++++ b/lib/Kwiki/ModPerl.pm
+@@ -9,14 +9,14 @@ BEGIN {
+         require Apache2::RequestUtil;
+         require Apache2::RequestIO;
+         require Apache2::Const;
+-        Apache2::Const->import qw(:common);
++        Apache2::Const->import( qw/:common/);
+     } else {
+         if ( $mod_perl::VERSION >= 1.99 ) {
+             require Apache::RequestRec;
+             require Apache::RequestUtil;
+             require Apache::RequestIO;
+             require Apache::Const;
+-            Apache::Const->import qw(:common);
++            Apache::Const->import( qw/:common/);
+         } else {
+             require Apache;
+             require Apache::Constants;
+-- 
+1.8.1.4
+

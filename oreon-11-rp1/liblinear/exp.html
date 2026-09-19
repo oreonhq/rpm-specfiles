@@ -1,0 +1,277 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="description" content="logistic regression, support vector machines, linear classification, document classification">
+   <title>LIBLINEAR Experiments
+</title>
+</head>
+<body text="#000000" bgcolor="#FFEFD5" link="#FF0000" vlink="#0000FF">
+
+<h2>
+LIBLINEAR Experiments
+</h2>
+
+<h3>
+<a href="http://www.csie.ntu.edu.tw/~cjlin/mlgroup">Machine Learning Group</a> at
+National Taiwan University
+<br>
+</h3>
+
+<p>
+This page provides the source codes for the papers related to <b>LIBLINEAR</b>.
+<hr>
+
+<h3>
+<a name=linear_ranksvm>
+Experiments on linear rankSVM</h3>
+
+Programs used to generate experiment results
+in the paper
+C.-P. Lee and
+C.-J. Lin.
+<a href=../papers/ranksvm/ranksvml2.pdf>
+Large-scale Linear RankSVM</a>.
+Technical report, 2013.
+<p>
+can be found in this
+
+<a href=../papers/ranksvm/ranksvml2_exp-1.3.tgz>tar.gz file</a>.
+<p>
+Use files here only if you are interested in redoing our
+experiments. To apply the method
+for your applications, all
+you need is a LIBLINEAR extension. Check "Large-scale linear rankSVM" at
+<a href=../libsvmtools>LIBSVM Tools</a>.
+<hr>
+
+
+<h3>
+<a name=linear_svr>
+Experiments on linear support vector regression</h3>
+
+Programs used to generate experiment results
+in the paper
+C.-H. Ho, and
+C.-J. Lin.
+<a href=../papers/linear-svr.pdf>
+Large-scale Linear Support Vector Regression</a>.
+JMLR, 2012.
+<p>
+can be found in this
+<a href="http://www.csie.ntu.edu.tw/~cjlin/liblinear/exps/svr/linear_svr_exp-1.2.zip">zip file</a>.
+<hr>
+
+
+<h3>
+<a name=disk_decomposition>
+Experiments on linear classification when data cannot fit in memory</h3>
+
+An algorithm in
+<p>
+H.-F. Yu, 
+C.-J. Hsieh,
+K.-W. Chang,
+and
+C.-J. Lin</b>,
+<A HREF="../papers/disk_decomposition/tkdd_disk_decomposition.pdf">
+Large linear classification when data cannot fit in memory</a>. ACM KDD 2010 (Best research paper award). Extended version appeared
+in <a href=http://portal.acm.org/tkdd/>ACM Transactions on Knowledge Discovery from Data</a>, 5:23:1--23:23, 2012.
+
+<p>
+has been implemented as 
+an extension of LIBLINEAR. It aims to handle data
+larger than your memory capacity.
+It can be found in 
+<a href=../libsvmtools>LIBSVM Tools</a>. 
+
+<p> To repeat experiments in our paper, check
+this
+<a href="http://www.csie.ntu.edu.tw/~cjlin/liblinear/exps/cdblock/cdblock_exp-2.0.tgz">tgz file</a>.
+Don't use it unlesse you want to regenerate
+figures.
+For you own experiments, you should use the LIBLINEAR extension at 
+LIBSVM tools.
+
+<hr>
+
+<h3>
+<a name=maxent_dual_exp>
+Experiments on Dual Logistic Regression and Maximum Entropy</h3>
+
+Programs used to generate experiment results
+in the paper
+<p>
+Hsiang-Fu Yu, Fang-Lan Huang, and Chih-Jen Lin.
+<a href=../papers/maxent_dual.pdf>
+Dual Coordinate Descent Methods for Logistic Regression
+and Maximum Entropy Models
+</a>. <I><A HREF=
+"http://www.springer.com/computer/ai/journal/10994">
+Machine Learning</A></I>, 85(2011), 41-75.
+<p>
+can be found in this
+<a href="http://www.csie.ntu.edu.tw/~cjlin/liblinear/maxent/maxent_dual_exp-1.0.zip">zip file</a>.
+<hr>
+
+<h3>
+<a name=l1_exp>
+Comparing
+Large-scale L1-regularized Linear Classifiers
+</h3>
+
+<ul>
+<li>
+The following paper compares various L1-regularized 
+solvers for logistic regression and SVM.
+The algorithm CDN used in <b>LIBLINEAR</b> now for L1-regularized
+SVM was proposed here.
+<p>
+Guo-Xun Yuan, Kai-Wei Chang, Cho-Jui Hsieh, and Chih-Jen Lin.
+<a href=../papers/l1.pdf>
+A Comparison of Optimization Methods for Large-scale
+L1-regularized Linear Classification.</a>
+JMLR 2010.
+
+<p>
+Programs for generating experimental results 
+can be found in this
+<a href="http://www.csie.ntu.edu.tw/~cjlin/liblinear/l1paper/l1_exp-1.2.zip">zip file</a>.
+</li>
+
+<li>
+For L1-regularized logistic regression, the 
+following paper proposes an algorithm (newGLMNET)
+to succeed CDN in <b>LIBLINEAR</b>.
+<p>
+Guo-Xun Yuan, Chia-Hua Ho, and Chih-Jen Lin.
+<a href=../papers/long-glmnet.pdf>
+An Improved GLMNET for L1-regularized Logistic Regression
+and Support Vector Machines.
+</a> JMLR, 2012
+<p>
+Programs for generating experimental results
+can be found in this
+<a href="http://www.csie.ntu.edu.tw/~cjlin/liblinear/l1paper/newGLMNET_exp-1.0.zip">zip file</a>.
+</li>
+</ul>
+
+<p>
+You can directly use LIBLINEAR for efficient L1-regularized
+classification.
+Use code here <b>only</b> if you are interested in redoing our
+experiments. The running time is long because we run each solver to accurately
+solve optimization problems.
+<hr>
+
+
+<h3>
+<a name=lowpoly_exp>
+Experiments on Degree-2 Polynomial Mappings of Data</h3>
+
+Programs used to generate experiment results
+in Section 5 of the paper
+<p>
+Yin-Wen Chang, Cho-Jui Hsieh, Kai-Wei Chang, 
+Michael Ringgaard and Chih-Jen Lin.
+<a href=../papers/lowpoly_journal.pdf>
+Low-Degree Polynomial Mapping of Data for SVM</a>,
+JMLR 2010,
+<p>
+can be found in this
+<a href="http://www.csie.ntu.edu.tw/~cjlin/liblinear/lowpoly/lowpoly_exp-1.1.zip">zip file</a>.
+
+<p>
+Use files here only if you are interested in redoing our
+experiments. To apply the method
+for your applications, all
+you need is a LIBLINEAR extension. Check "fast training/testing of
+degree-2 polynomial mappings of data" at
+<a href=../libsvmtools>LIBSVM Tools</a>.
+<hr>
+
+
+<h3>
+<a name=maxent_exp>
+Experiments on Maximum Entropy models</h3>
+
+Programs used to generate experiment results
+in the paper
+<p>
+Fang-Lan Huang, Cho-Jui Hsieh, Kai-Wei Chang, and Chih-Jen Lin.
+<a href=../papers/maxent_journal.pdf>
+Iterative Scaling and Coordinate Descent Methods for
+Maximum Entropy Models</a>, JMLR 2010,
+<p>
+can be found in this
+<a href="http://www.csie.ntu.edu.tw/~cjlin/liblinear/maxent/maxent_exp-1.0.zip">zip file</a>.
+
+<hr>
+
+<h3>
+<a name=dual_exp>
+Comparing various methods for large-scale linear SVM</h3>
+
+Programs used to generate experiment results
+in the paper
+<p>
+C.-J. Hsieh, K.-W. Chang, C.-J. Lin, S. Sundararajan, and
+S. Sathiya Keerthi. 
+<a href=../papers/cddual.pdf>
+A Dual Coordinate Descent Method for Large-scale Linear SVM</a>, ICML 2008,
+<p>
+can be found in this 
+<a href="http://www.csie.ntu.edu.tw/~cjlin/liblinear/dualpaper/dual_exp-1.0.zip">zip file</a>.
+
+<hr>
+
+<h3>
+<a name=cdl2_exp>
+Comparing various methods for large-scale linear SVM</h3>
+
+Programs used to generate experiment results
+in the paper
+<p>
+K.-W. Chang, C.-J. Hsieh, and C.-J. Lin,
+<a href=../papers/cdl2.pdf>
+Coordinate Descent Method for Large-scale L2-loss Linear SVM
+</a>, JMLR 2008,
+<p>
+can be found in this 
+<a href="liblinear/cdl2paper">zip file</a>.
+
+<hr>
+
+<h3>
+<a name=lrpaper>
+Comparing various methods
+for logistic regression</h3>
+
+Programs used to generate experiment results
+in the paper
+<p>
+C.-J. Lin, R. C. Weng, and S. S. Keerthi.
+<a href=../papers/logistic.pdf>
+Trust region Newton method for large-scale logistic
+regression</a>, JMLR 2008, 
+<p>
+can be found in this 
+<a href="http://www.csie.ntu.edu.tw/~cjlin/liblinear/lrpaper/lrpaper-1.04.zip">zip file</a>.
+
+<p>
+
+We include 
+<a href="http://www.ece.northwestern.edu/~nocedal/lbfgs.html">LBFGS</a>
+and 
+<a href="http://people.cs.uchicago.edu/~vikass/svmlin.html">SVMlin</a>
+(a <b>modified</b> version) 
+for experiments. Please check their respective
+COPYRIGHT notices.
+
+<hr>
+Please send comments and suggestions to <a href="../index.html">Chih-Jen
+Lin</a>.
+
+</body>
+</html>
+

@@ -1,0 +1,83 @@
+.TH UNU\-UNQUANTIZE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-unquantize \- recover floating point values from quantized data
+.SH SYNOPSIS
+.B unu\ unquantize
+.BR \-i , \-\-input
+.RI < nin >
+.RB [ \-min , \-\-minimum
+.RI < value >]
+.RB [ \-max , \-\-maximum
+.RI < value >]
+.RB [ \-double ]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Recover floating point values from quantized data.
+Uses the
+.B oldMin
+and
+.B oldMax
+fields in the
+.I nrrd
+of quantized values to regenerate approximate versions of the original
+unquantized values.
+Can also override these with
+.RB \(lq \-min \(rq
+and
+.RB \(lq \-max \(rq.
+.IP \(bu +2n
+Uses
+.B nrrdUnquantize
+.SH OPTIONS
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.IR nrrd .
+That this argument is required instead of optional, as with most
+.BR unu (1)
+commands, is a quirk caused by the need to have
+.BR unu\-unquantize (1)
+generate usage info, combined with the fact that all the other arguments have
+sensible defaults.
+.TP
+.B \-min\fR\ <\fIvalue\fR>\ ,\ \fB\-\-minimum\fR\ <\fIvalue\fR>
+Defaults to
+.IB nin ->oldMin
+if it exists, otherwise
+.B 0.0
+.RI ( double )
+.TP
+.B \-max\fR\ <\fIvalue\fR>\ ,\ \fB\-\-maximum\fR\ <\fIvalue\fR>
+Defaults to
+.IB nin ->oldMax
+if it exists, otherwise
+.B 1.0
+.RI ( double )
+.TP
+.B \-double
+If not using
+.RB \(lq \-min \(rq
+or
+.RB \(lq \-max \(rq,
+whether to know the range of 8-bit data blindly
+.RI ( uchar
+is always
+.BR [0,255] ,
+.I signed char
+is
+.BR [-128,127] )
+.RI ( bool );
+default:
+.RB \(lq true \(rq,
+"true"
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-quantize (1)

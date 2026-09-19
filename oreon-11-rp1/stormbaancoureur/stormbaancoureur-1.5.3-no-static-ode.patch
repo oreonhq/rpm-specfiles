@@ -1,0 +1,21 @@
+diff -up stormbaancoureur-1.5.3/src-stormbaancoureur/Makefile~ stormbaancoureur-1.5.3/src-stormbaancoureur/Makefile
+--- stormbaancoureur-1.5.3/src-stormbaancoureur/Makefile~	2007-10-18 15:04:52.000000000 +0200
++++ stormbaancoureur-1.5.3/src-stormbaancoureur/Makefile	2007-10-18 15:04:52.000000000 +0200
+@@ -38,7 +38,7 @@ OBJS=\
+ 
+ 
+ LIBS=\
+-  $(ODEPREFIX)/$(LIBDIRNAME)/libode.a \
++  -lode \
+   -lplibssgaux -lplibssg -lplibsg -lplibpu -lplibfnt -lplibul \
+   -lglut -lGLU -lGL -lasound
+ 
+@@ -46,7 +46,7 @@ LIBS=\
+ all: stormbaancoureur
+ 
+ 
+-stormbaancoureur: $(OBJS) $(ODEPREFIX)/$(LIBDIRNAME)/libode.a
++stormbaancoureur: $(OBJS)
+ 	$(CXX) -o stormbaancoureur $(OBJS) $(LFLAGS) $(LIBS)
+ 
+ staticworldobject.o: ../src-common/staticworldobject.cxx ../src-common/staticworldobject.h ../src-common/worldobject.h

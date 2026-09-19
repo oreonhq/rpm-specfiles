@@ -14,7 +14,7 @@
 %bcond malcontent %[!0%{?rhel}]
 
 Name:           flatpak
-Version:        1.17.2
+Version:        1.18.2
 Release:        %autorelease
 Summary:        Application deployment framework for desktop apps
 

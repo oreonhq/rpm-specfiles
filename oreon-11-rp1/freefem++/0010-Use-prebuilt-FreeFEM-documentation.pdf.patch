@@ -1,0 +1,35 @@
+From d6d60439c082be893c3e58769b5125cae76c23f5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Wed, 12 Jun 2019 06:29:35 +0200
+Subject: [PATCH 10/18] Use prebuilt FreeFEM-documentation.pdf
+
+---
+ Makefile.am | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index f2a794f12..badc0d77f 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -308,15 +308,9 @@ bin/script/PostInstall.sh:./Makefile bin/script/PostInstall.m4
+ 	m4 "-DFF__FVER=$(PACKAGE_VERSION)" "-DFF_BINDIR=$(bindir)" "-DFF__DATADIR=$(pkgdatadir)" bin/script/PostInstall.m4 > bin/script/PostInstall.sh
+ 	chmod a+x bin/script/PostInstall.sh
+ 
+-FreeFEM-documentation.pdf:Makefile
+-if DOWNLOAD
+-	-rm FreeFEM-documentation.pdf.md5
+-	-$(WGET) https://github.com/FreeFem/FreeFem-doc/raw/pdf/FreeFEM-documentation.pdf.md5
+-	-md5sum -c FreeFEM-documentation.pdf.md5 || (rm FreeFEM-documentation.pdf ; $(WGET) https://github.com/FreeFem/FreeFem-doc/raw/pdf/FreeFEM-documentation.pdf)
+-else
+-	touch FreeFEM-documentation.pdf
+-	echo "no downloaded documentation"
+-endif
++# FreeFEM-documentation.pdf:Makefile
++#	-rm FreeFEM-documentation.pdf
++#	$(WGET) https://doc.freefem.org/pdf/FreeFEM-documentation.pdf
+ 
+ ListFiles-natives: .FORCE
+ 	test `uname` != Darwin || $(MAKE)  FreeFem++-CoCoa
+-- 
+2.47.1
+

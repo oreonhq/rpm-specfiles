@@ -1,0 +1,24 @@
+diff -ru smf-spf-2.5.1/Makefile smf-spf-2.5.1.new/Makefile
+--- smf-spf-2.5.1/Makefile	2020-11-12 22:44:54.000000000 +0100
++++ smf-spf-2.5.1.new/Makefile	2020-11-19 17:33:15.932774861 +0100
+@@ -7,10 +7,10 @@
+ CONFDIR = /etc/mail/smfs
+ USER = smfs
+ GROUP = smfs
+-CFLAGS = -O2 -D_REENTRANT -fomit-frame-pointer -I/usr/local/include 
++CFLAGS = -pthread $(OPTFLAGS)
+ 
+ # Linux
+-LDFLAGS = -lmilter -lpthread -L/usr/lib/libmilter -L/usr/local/lib -lspf2
++LDFLAGS = -lmilter -lpthread -lspf2
+ 
+ # FreeBSD
+ #LDFLAGS = -lmilter -pthread -L/usr/local/lib -lspf2
+@@ -25,7 +25,6 @@
+ 
+ smf-spf: smf-spf.o
+ 	$(CC) -o smf-spf smf-spf.o $(LDFLAGS)
+-	strip smf-spf
+ 
+ smf-spf.o: smf-spf.c
+ 	$(CC) $(CFLAGS) -c smf-spf.c

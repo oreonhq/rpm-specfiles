@@ -1,0 +1,22 @@
+diff -up Promises-1.05/t/late-warning.t.orig Promises-1.05/t/late-warning.t
+--- Promises-1.05/t/late-warning.t.orig	2025-06-30 13:26:55.711148931 +0200
++++ Promises-1.05/t/late-warning.t	2025-06-30 13:27:18.199594586 +0200
+@@ -4,7 +4,6 @@ use warnings;
+ 
+ use Test::More;
+ use Test::Warn;
+-
+ use Promises qw(deferred);
+ 
+ warning_like {
+diff -up Promises-1.05/t/warnings.t.orig Promises-1.05/t/warnings.t
+--- Promises-1.05/t/warnings.t.orig	2025-06-30 13:26:55.714148990 +0200
++++ Promises-1.05/t/warnings.t	2025-06-30 13:27:30.463543473 +0200
+@@ -4,7 +4,6 @@ use warnings;
+ 
+ use Test::More;
+ use Test::Warn;
+-
+ use Promises qw(deferred), 'warn_on_unhandled_reject' => [1];
+ 
+ warning_like {

@@ -1,0 +1,11 @@
+diff -up xscorch-0.2.1/sgtk/sgtk.h~ xscorch-0.2.1/sgtk/sgtk.h
+--- xscorch-0.2.1/sgtk/sgtk.h~	2009-04-26 19:39:48.000000000 +0200
++++ xscorch-0.2.1/sgtk/sgtk.h	2016-01-25 20:29:16.289502917 +0100
+@@ -28,6 +28,7 @@
+ /* This file implies xscorch.h. */
+ #include <xscorch.h>
+ 
++#include <gdk/gdk.h>
+ 
+ #ifndef __ALLOW_DEPRECATED_GDK__
+    /* For reasons beyond my comprehension, they deprecated this in 2.0 */

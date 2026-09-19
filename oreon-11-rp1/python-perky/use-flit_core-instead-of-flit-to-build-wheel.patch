@@ -1,0 +1,25 @@
+From 273eb6d871c484d94cf9f3b797250fd09a1aa34f Mon Sep 17 00:00:00 2001
+From: Maxwell G <maxwell@gtmx.me>
+Date: Mon, 29 Jan 2024 23:55:51 +0000
+Subject: [PATCH] use flit_core instead of flit to build wheel
+
+---
+ pyproject.toml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index cde1cd0..967d321 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,6 +1,6 @@
+ [build-system]
+-requires = ["flit"]
+-build-backend = "flit.buildapi"
++requires = ["flit_core"]
++build-backend = "flit_core.buildapi"
+ 
+ [tool.flit.metadata]
+ module = "perky"
+-- 
+2.43.0
+

@@ -1,0 +1,108 @@
+From 04c541d97aeb5ccc75615dd537e8a64c1e1f3814 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Thu, 25 Apr 2019 14:11:31 +0100
+Subject: [PATCH 04/18] v3.5.0 Add cmake module to find RPLY
+
+---
+ CMakeLists.txt                                |  3 +-
+ config/cmake/fedora-modules/FindRPLY.cmake    | 39 +++++++++++++++++++
+ contrib/brl/bbas/bmsh3d/algo/CMakeLists.txt   |  2 +-
+ contrib/brl/bseg/boxm2/cpp/CMakeLists.txt     |  2 +-
+ .../brl/bseg/boxm2/cpp/algo/CMakeLists.txt    |  2 +-
+ 5 files changed, 44 insertions(+), 4 deletions(-)
+ create mode 100644 config/cmake/fedora-modules/FindRPLY.cmake
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e52a8c0abb..e1aa0390d4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -142,7 +142,8 @@ include(${CMAKE_CURRENT_LIST_DIR}/config/cmake/doxygen/doxygen.cmake)
+ 
+ # Location of VXL's FindXXX.cmake CMake modules.
+ # This is identical to VXL_CMAKE_DIR.  Perhaps we should eliminate MODULE_PATH?
+-set( MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/config/cmake/Modules CACHE STATIC "VXL module path" )
++set( MODULE_PATH "${CMAKE_SOURCE_DIR}/config/cmake/Modules" CACHE PATH "VXL module path" )
++set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/config/cmake/fedora-modules")
+ 
+ # Options to add extra compiler and linker flags
+ #
+diff --git a/config/cmake/fedora-modules/FindRPLY.cmake b/config/cmake/fedora-modules/FindRPLY.cmake
+new file mode 100644
+index 0000000000..abe415bd9e
+--- /dev/null
++++ b/config/cmake/fedora-modules/FindRPLY.cmake
+@@ -0,0 +1,39 @@
++# Adapted from https://github.com/jirihnidek/verse-ply-uploader/blob/master/build_files/cmake/modules/FindRPLY.cmake
++# This module tries to find RPLY library and include files
++#
++# RPLY_INCLUDE_DIR, where to find verse.h
++# RPLY_LIBRARY_DIR, where to find libverse.so
++# RPLY_LIBRARIES, the library to link against
++# RPLY_FOUND, IF false, do not try to use Verse
++#
++
++FIND_PATH ( RPLY_INCLUDE_DIR rply.h
++    /usr/include
++    /usr/include/rply
++    /usr/local/include
++    /usr/local/include/rply
++)
++
++FIND_LIBRARY ( RPLY_LIBRARIES rply
++    /usr/local/lib
++    /usr/local/lib64
++    /usr/lib
++    /usr/lib64
++)
++
++GET_FILENAME_COMPONENT( RPLY_LIBRARY_DIR ${RPLY_LIBRARIES} PATH )
++
++SET ( RPLY_FOUND "NO" )
++IF ( RPLY_INCLUDE_DIR )
++    IF ( RPLY_LIBRARIES )
++        SET ( RPLY_LIBRARY ${RPLY_LIBRARIES} )
++        SET ( RPLY_FOUND "YES" )
++    ENDIF ( RPLY_LIBRARIES )
++ENDIF ( RPLY_INCLUDE_DIR )
++
++MARK_AS_ADVANCED (
++    RPLY_LIBRARY_DIR
++    RPLY_INCLUDE_DIR
++    RPLY_LIBRARIES
++    RPLY_LIBRARY
++)
+diff --git a/contrib/brl/bbas/bmsh3d/algo/CMakeLists.txt b/contrib/brl/bbas/bmsh3d/algo/CMakeLists.txt
+index 662ec284e9..1c2e6a7089 100644
+--- a/contrib/brl/bbas/bmsh3d/algo/CMakeLists.txt
++++ b/contrib/brl/bbas/bmsh3d/algo/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ # This is bbas/bmsh3d/algo/CMakeLists.txt
+ # Brown 3D Mesh Algorithm Library
+-FIND_PACKAGE(rply REQUIRED)
++FIND_PACKAGE(RPLY REQUIRED)
+ 
+ include_directories( ${BRL_INCLUDE_DIR} )
+ include_directories( ${RPLY_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/boxm2/cpp/CMakeLists.txt b/contrib/brl/bseg/boxm2/cpp/CMakeLists.txt
+index fff9ae2d84..d7ef6ed5fa 100644
+--- a/contrib/brl/bseg/boxm2/cpp/CMakeLists.txt
++++ b/contrib/brl/bseg/boxm2/cpp/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-FIND_PACKAGE(rply REQUIRED)
++FIND_PACKAGE(RPLY REQUIRED)
+ 
+ include_directories( ${BRL_INCLUDE_DIR}/bseg )
+ include_directories( ${RPLY_INCLUDE_DIR} )
+diff --git a/contrib/brl/bseg/boxm2/cpp/algo/CMakeLists.txt b/contrib/brl/bseg/boxm2/cpp/algo/CMakeLists.txt
+index c3ed4ed27d..19763fbd71 100644
+--- a/contrib/brl/bseg/boxm2/cpp/algo/CMakeLists.txt
++++ b/contrib/brl/bseg/boxm2/cpp/algo/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-FIND_PACKAGE(rply REQUIRED)
++FIND_PACKAGE(RPLY REQUIRED)
+ 
+ include_directories( ${BRL_INCLUDE_DIR}/bseg )
+ include_directories( ${MUL_INCLUDE_DIR} )
+-- 
+2.46.1
+

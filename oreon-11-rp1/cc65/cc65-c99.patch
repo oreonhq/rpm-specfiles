@@ -1,0 +1,17 @@
+Build test suite which is largely C89 with -std=gnu89.
+
+Submitted upstream: <https://github.com/cc65/cc65/issues/2277>
+
+diff --git a/test/ref/Makefile b/test/ref/Makefile
+index 5f0b86164d7145d7..42ca263efecbb832 100644
+--- a/test/ref/Makefile
++++ b/test/ref/Makefile
+@@ -38,7 +38,7 @@ OPTIONS = g O Os Osi Osir Osr Oi Oir Or
+ DIFF = $(WORKDIR)$Sbdiff$(EXE)
+ 
+ CC = gcc
+-CFLAGS = -O2 -Wall -W -Wextra -funsigned-char -fwrapv -fno-strict-overflow
++CFLAGS = -std=gnu89 -O2 -Wall -W -Wextra -funsigned-char -fwrapv -fno-strict-overflow
+ 
+ .PHONY: all clean
+ 

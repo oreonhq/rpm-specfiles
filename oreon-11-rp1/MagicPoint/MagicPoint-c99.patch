@@ -1,0 +1,216 @@
+Avoid implicit function declarations and implicit int, to prevent
+build failures with future compilers.
+
+diff --git a/contrib/xwintoppm/multiVis.c b/contrib/xwintoppm/multiVis.c
+index 8255f3bceef190ee..d7dfab26aa3fbdfd 100644
+--- a/contrib/xwintoppm/multiVis.c
++++ b/contrib/xwintoppm/multiVis.c
+@@ -982,6 +982,7 @@ static void add_window_to_list( image_wins, w, xrr, yrr, x_vis, y_vis,
+     int 	y_vis;
+     int 	width;
+     int 	height;
++    int		border_width;
+     Visual	*vis;
+     Colormap	cmap;
+     Window	parent;
+diff --git a/ctlwords.c b/ctlwords.c
+index d98f5e89bf31dab2..179df919d7aede4a 100644
+--- a/ctlwords.c
++++ b/ctlwords.c
+@@ -22,10 +22,12 @@ BEGIN {
+ 
+ #endif
+ 
++#include <ctype.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+ 
++int
+ main(int argc, char *argv[])
+ {
+ 	char buf[1024];
+diff --git a/draw.c b/draw.c
+index b102f4c393708712..86b89f38e6de064f 100644
+--- a/draw.c
++++ b/draw.c
+@@ -5506,6 +5506,7 @@ xft_setfont(xfontarg, csize, registry)
+ }
+ #endif
+ #ifdef USE_M17N
++int
+ obj_new_mtext(state, x, y, mt, from, to, drawframe, ascent, descent)
+ 	struct render_state *state;
+ 	int x, y;
+diff --git a/image/bright.c b/image/bright.c
+index dc78a25e44641917..d784dd4871fed9ab 100644
+--- a/image/bright.c
++++ b/image/bright.c
+@@ -248,6 +248,7 @@ Image *normalize(image, verbose)
+ 
+ void gray(image, verbose)
+      Image *image;
++     int verbose;
+ { int a;
+   unsigned int size;
+   Intensity intensity, red, green, blue;
+diff --git a/image/faces.c b/image/faces.c
+index 1c90b8332a2ded8a..39d7c91a2264d4a4 100644
+--- a/image/faces.c
++++ b/image/faces.c
+@@ -86,6 +86,7 @@ static int nextInt(zf, len)
+ 
+ Image *facesLoad(fullname, name, verbose)
+      char *fullname, *name;
++     int verbose;
+ { ZFILE        *zf;
+   Image        *image;
+   char          fname[BUFSIZ];
+diff --git a/image/gif.c b/image/gif.c
+index 0833c821f62c0889..37287c77b47c925e 100644
+--- a/image/gif.c
++++ b/image/gif.c
+@@ -18,6 +18,8 @@
+ #include "image.h"
+ #include <gif_lib.h>
+ 
++#include <stdlib.h>
++
+ static void
+ tellAboutImage(name, gifp)
+ 	char *name;
+diff --git a/image/rlelib.c b/image/rlelib.c
+index d3b8c654873de189..f10915fe4d9862d9 100644
+--- a/image/rlelib.c
++++ b/image/rlelib.c
+@@ -428,6 +428,7 @@ register struct sv_globals * globals;
+  */
+ void
+ RunSkipBlankLines(nblank, globals)
++int nblank;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -439,6 +440,7 @@ register struct sv_globals * globals;
+  */
+ void
+ RunSetColor(c, globals)
++int c;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -451,6 +453,7 @@ register struct sv_globals * globals;
+ /* ARGSUSED */
+ void
+ RunSkipPixels(nskip, last, wasrun, globals)
++int nskip, last, wasrun;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -462,6 +465,7 @@ register struct sv_globals * globals;
+  */
+ void
+ RunNewScanLine(flag, globals)
++int flag;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -473,6 +477,7 @@ register struct sv_globals * globals;
+ void
+ Runputdata(buf, n, globals)
+ rle_pixel * buf;
++int n;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -485,6 +490,7 @@ register struct sv_globals * globals;
+ /* ARGSUSED */
+ void
+ Runputrun(color, n, last, globals)
++int color, n, last;
+ register struct sv_globals * globals;
+ {
+ }
+@@ -1391,6 +1397,7 @@ int dith_size = 16;
+  */
+ void
+ dithermap(levels, gamma, rgbmap, divN, modN, magic)
++int levels;
+ double gamma;
+ int rgbmap[][3];
+ int divN[256];
+@@ -1451,6 +1458,7 @@ int magic[16][16];
+  */
+ void
+ bwdithermap(levels, gamma, bwmap, divN, modN, magic)
++int levels;
+ double gamma;
+ int bwmap[];
+ int divN[256];
+@@ -1677,6 +1685,7 @@ int gammamap[256];
+  */
+ int
+ dithergb(x, y, r, g, b, levels, divN, modN, magic)
++int x, y, r, g, b, levels;
+ int divN[256];
+ int modN[256];
+ int magic[16][16];
+@@ -1708,6 +1717,7 @@ int magic[16][16];
+  */
+ int
+ ditherbw(x, y, val, divN, modN, magic)
++int x, y, val;
+ int divN[256];
+ int modN[256];
+ int magic[16][16];
+diff --git a/image/rotate.c b/image/rotate.c
+index b81ff001b0d94e14..943bb4aed18824f6 100644
+--- a/image/rotate.c
++++ b/image/rotate.c
+@@ -40,6 +40,7 @@ int *new_pos;				/* Destination bit position */
+ Image *rotate(simage, degrees, verbose)
+ Image *simage;				/* Image to rotate             */
+ int    degrees;				/* Number of degrees to rotate */
++int    verbose;
+ { 
+   char buf[BUFSIZ];			/* New title                   */
+   Image    *image1;			/* Source image                */
+diff --git a/image/smooth.c b/image/smooth.c
+index 90c77d3a3c81f291..5daf3fe417c837f9 100644
+--- a/image/smooth.c
++++ b/image/smooth.c
+@@ -74,6 +74,7 @@ static Image *doSmooth(image)
+ 
+ Image *smooth(image, iterations, verbose)
+      Image *image;
++     int    iterations;
+      int    verbose;
+ { int a;
+   Image *old, *new;
+diff --git a/image/zoom.c b/image/zoom.c
+index 933f43083cf843bc..dab0d9261121e280 100644
+--- a/image/zoom.c
++++ b/image/zoom.c
+@@ -39,6 +39,7 @@ static unsigned int *buildIndex(width, zoom, rwidth)
+ Image *zoom(oimage, xzoom, yzoom, verbose)
+      Image        *oimage;
+      float        xzoom, yzoom;
++     int          verbose;
+ { char          buf[BUFSIZ];
+   Image        *image=NULL;
+   unsigned int *xindex, *yindex;
+diff --git a/mgp.h b/mgp.h
+index 4f350de92819c916..ea7d3ec0187a8664 100644
+--- a/mgp.h
++++ b/mgp.h
+@@ -853,4 +853,10 @@ extern void M17N_set_color __P((u_long));
+ extern void M17N_process_direc __P((char *, char *));
+ extern void M17N_draw_string __P((struct render_state *, struct ctrl *cp));
+ extern void M17N_draw_object __P((struct render_object *, Drawable, int, int));
++extern void M17N_write_text __P((FILE *, struct ctrl *));
++#endif
++
++#ifdef MNG
++extern void mngload __P((char *, int, int, int, int));
++extern void mngpreload __P((struct render_state *, char *, int *, int *));
+ #endif

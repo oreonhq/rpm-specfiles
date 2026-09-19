@@ -1,0 +1,51 @@
+--- fetchlog-1.4/fetchlog.c	2010-07-02 06:10:08.000000000 -0400
++++ fetchlog-1.4/fetchlog.c.new	2011-12-18 16:00:13.108131721 -0500
+@@ -129,7 +129,6 @@
+ void perr( char *msg1, char *msg2, int err ) {
+     char *msg = NULL;
+     int len = 0;
+-    int r;
+ 
+     if( !msg1 ) return;
+ 
+@@ -156,7 +155,7 @@
+ 	msg[fetchlen_G-2] = '~';
+ 	len = fetchlen_G + 1;
+     }
+-    r = write( STDOUT_FILENO, msg, len-1 );
++    (void)write( STDOUT_FILENO, msg, len-1 );
+     free( msg );
+ }
+ 
+@@ -270,8 +269,6 @@
+     int lastlinepos = 0;	/*   pos of beginning of lastline in obuf */
+     int lastlinelen = 0;	/*   len of lastline, excl. trailing '\' 'n' */
+ 
+-    int r;			/* write's returncode */
+-
+     int i;
+     int fd = -1;
+     struct stat sb;
+@@ -298,7 +295,7 @@
+     /* something changed meanwhile ? */
+     if( obm.mtime==nbm.mtime && obm.inode==nbm.inode && obm.last==nbm.last ) {
+ 	if( conv_G & CONV_OKMSG ) 
+-	    r = write( STDOUT_FILENO, OK_MESSAGE "\n", sizeof( OK_MESSAGE ) );
++	    (void)write( STDOUT_FILENO, OK_MESSAGE "\n", sizeof( OK_MESSAGE ));
+ 	close( fd );
+ 	return RET_OK;
+     }
+@@ -487,11 +484,11 @@
+ 	      ((conv_G & CONV_NAGIOS3)!= 0 && fetchlen_G-opos==4 )    )  ) ) {
+ 
+ 	if( conv_G & CONV_OKMSG ) {
+-	    r = write( STDOUT_FILENO, OK_MESSAGE "\n", sizeof( OK_MESSAGE ) );
++	    (void)write( STDOUT_FILENO, OK_MESSAGE "\n", sizeof( OK_MESSAGE ) );
+ 	}
+ 	i = RET_OK;
+     }else{
+-	r = write( STDOUT_FILENO, obuf+opos,fetchlen_G-opos);
++	(void)write( STDOUT_FILENO, obuf+opos,fetchlen_G-opos);
+ 	i = RET_NEWMSG;
+     }
+ 

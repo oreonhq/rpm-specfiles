@@ -1,0 +1,65 @@
+.TH FASTAPI\-CLOUD\-LOGS "1" "March 2026" "" "User Commands"
+.SH NAME
+.B fastapi\ cloud\ logs
+\(en Stream or fetch logs from your deployed app.
+.SH SYNOPSIS
+.B fastapi\ cloud\ logs
+.RI [ OPTIONS ]
+.RI [ PATH ]
+.SH OPTIONS
+.TP
+.B \-\-tail, \-t\ \fIINTEGER
+Number of log lines to show before streaming.
+[default:
+.BR 100 ]
+.TP
+.B \-\-since, \-s\ \fITEXT
+Show logs since a specific time (e.g.,
+.RB \(oq 5m \(cq,
+.RB \(oq 1h \(cq,
+.RB \(oq 2d \(cq).
+[default:
+.BR 5m ]
+.TP
+.B \-\-follow, \-f, \-\-no\-follow
+Stream logs in real-time
+(use
+.B \-\-no\-follow
+to fetch and exit).
+[default:
+.BR follow ]
+.TP
+.B \-\-help\fR, \fB\-h
+Show a help message and exit.
+.SS "ARGUMENTS"
+.TP
+.I PATH
+Path to the folder containing the app (defaults to current directory).
+.SH EXAMPLES
+.EX
+.B #\ Stream\ logs\ in\ real\-time
+.B fastapi\ cloud\ logs
+.EE
+.P
+.EX
+.B #\ Fetch\ recent\ logs\ and\ exit
+.B fastapi\ cloud\ logs\ \-\-no\-follow
+.EE
+.P
+.EX
+.B #\ Last\ 50\ logs\ from\ the\ past\ hour
+.B fastapi\ cloud\ logs\ \-\-tail\ 50\ \-\-since\ 1h
+.EE
+.SH "SEE ALSO"
+.BR fastapi\-cloud\-deploy (1),
+.BR fastapi\-cloud\-link (1),
+.BR fastapi\-cloud\-login (1),
+.BR fastapi\-cloud\-logout (1),
+.BR fastapi\-cloud\-whoami (1),
+.BR fastapi\-cloud\-unlink (1),
+.BR fastapi\-cloud\-setup\-ci (1),
+.BR fastapi\-cloud\-env (1)
+.P
+.BR fastapi\-cloud (1)
+.P
+.BR fastapi (1)

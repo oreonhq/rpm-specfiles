@@ -2,19 +2,19 @@
 
 %global _hardened_build 1
 
-%global upstream_version 2.1.1
+%global upstream_version 2.2.1
 
 Name: libcupsfilters
 Epoch: 1
-Version: 2.1.1
-Release: 7%{?dist}
+Version: 2.2.1
+Release: 1%{?dist}
 Summary: Library for developing printing filters
 # the CUPS exception text is the same as LLVM exception, so using that name with
 # agreement from legal team
 # https://lists.fedoraproject.org/archives/list/legal@lists.fedoraproject.org/message/A7GFSD6M3GYGSI32L2FC5KB22DUAEQI3/
 License: Apache-2.0 WITH LLVM-exception
 URL: https://github.com/OpenPrinting/libcupsfilters
-Source0:        https://github.com/OpenPrinting/libcupsfilters/releases/download/2.1.1/libcupsfilters-2.1.1.tar.gz
+Source0:        https://github.com/OpenPrinting/libcupsfilters/releases/download/2.2.1/libcupsfilters-2.1.1.tar.gz
 
 
 # Patches

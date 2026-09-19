@@ -1,0 +1,113 @@
+From 1b2e8d10c6b4b3553b7c80eafbc35871658ddec1 Mon Sep 17 00:00:00 2001
+From: Stefano Miccoli <stefano.miccoli@polimi.it>
+Date: Tue, 31 Jan 2023 22:21:21 +0100
+Subject: [PATCH] Use declarative package configuration and PEP 517 build API
+
+---
+ pyproject.toml |  3 +++
+ setup.cfg      | 32 ++++++++++++++++++++++++++++++--
+ setup.py       | 48 +-----------------------------------------------
+ 3 files changed, 34 insertions(+), 49 deletions(-)
+ create mode 100644 pyproject.toml
+
+diff --git a/pyproject.toml b/pyproject.toml
+new file mode 100644
+index 0000000..5a2e0eb
+--- /dev/null
++++ b/pyproject.toml
+@@ -0,0 +1,3 @@
++[build-system]
++requires = ["setuptools<58.0", "wheel>=0.37.1"]
++build-backend = "setuptools.build_meta"
+diff --git a/setup.cfg b/setup.cfg
+index 526aeb2..1c4ff4e 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -1,2 +1,30 @@
+-[bdist_wheel]
+-universal = 0
++[metadata]
++name = pyownet
++version = attr: pyownet.__version__
++description = Python OWFS client library (owserver protocol)
++long_description = file: README.rst
++author = Stefano Miccoli
++author_email = stefano.miccoli@polimi.it
++url = https://github.com/miccoli/pyownet
++license = LGPLv3
++license_file = LICENSE.txt
++keywords = OWFS
++classifiers =
++        Development Status :: 3 - Alpha
++        Environment :: Other Environment
++        Intended Audience :: Developers
++        License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)
++        Programming Language :: Python
++        Programming Language :: Python :: 2.7
++        Programming Language :: Python :: 3
++        Programming Language :: Python :: 3.3
++        Programming Language :: Python :: 3.4
++        Programming Language :: Python :: 3.5
++        Programming Language :: Python :: 3.6
++        Programming Language :: Python :: 3.7
++        Topic :: Home Automation
++
++[options]
++packages = pyownet
++package_dir = =src
++use_2to3 = True
+diff --git a/setup.py b/setup.py
+index 14c94fc..6068493 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1,49 +1,3 @@
+ from setuptools import setup
+-import re
+ 
+-with open('README.rst') as infile:
+-    long_description = infile.read()
+-
+-regex = re.compile(
+-    r"__version__ = (?P<quot>['\"])(?P<ver>[\w.+-]+?)(?P=quot)$", )
+-
+-with open('src/pyownet/__init__.py') as infile:
+-    for line in infile:
+-        version_match = regex.match(line)
+-        if version_match:
+-            __version__ = version_match.group('ver')
+-            break
+-    else:
+-        raise RuntimeError("Unable to find version string.")
+-
+-
+-setup(
+-    name='pyownet',
+-    version=__version__,
+-    description='Python OWFS client library (owserver protocol)',
+-    long_description=long_description,
+-    author='Stefano Miccoli',
+-    author_email='stefano.miccoli@polimi.it',
+-    url='https://github.com/miccoli/pyownet',
+-    license='LGPLv3',
+-    keywords=['OWFS', ],
+-    classifiers=[
+-        'Development Status :: 3 - Alpha',
+-        'Environment :: Other Environment',
+-        'Intended Audience :: Developers',
+-        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
+-        'Programming Language :: Python',
+-        'Programming Language :: Python :: 2.7',
+-        'Programming Language :: Python :: 3',
+-        'Programming Language :: Python :: 3.3',
+-        'Programming Language :: Python :: 3.4',
+-        'Programming Language :: Python :: 3.5',
+-        'Programming Language :: Python :: 3.6',
+-        'Programming Language :: Python :: 3.7',
+-        'Topic :: Home Automation',
+-    ],
+-    package_dir={'': 'src'},
+-    packages=['pyownet', ],
+-    test_suite="tests.test_protocol",
+-    use_2to3=True,
+-)
++setup()

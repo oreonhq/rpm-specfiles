@@ -1,0 +1,27 @@
+From 3c41d2f96007697b4fc36df74f691bf77fd8e297 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 14 Nov 2021 08:19:44 -0500
+Subject: [PATCH 2/3] Fix an include path in schelptreemodel.h
+
+Adapt to the LuminanceHDR source layout after copying an updated version
+of this file from Scribus.
+---
+ src/HelpBrowser/schelptreemodel.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/HelpBrowser/schelptreemodel.h b/src/HelpBrowser/schelptreemodel.h
+index d023191a..78d3929c 100644
+--- a/src/HelpBrowser/schelptreemodel.h
++++ b/src/HelpBrowser/schelptreemodel.h
+@@ -48,7 +48,7 @@
+ #include <QModelIndex>
+ #include <QVariant>
+ 
+-#include "./tt/simpletreemodel/treemodel.h"
++#include "treemodel.h"
+ 
+ 
+ class ScHelpTreeModel : public TreeModel
+-- 
+2.33.1
+

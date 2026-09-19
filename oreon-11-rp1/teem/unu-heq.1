@@ -1,0 +1,82 @@
+.TH UNU\-HEQ "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-heq \- perform histogram equalization
+.SH SYNOPSIS
+.B unu\ heq
+.BR \-b , \-\-bin
+.RI < bins >
+.RB [ \-s , \-\-smart
+.RI [< bins >]]
+.RB [ \-a , \-\-amount
+.RI < amount >]
+.RB [ \-m , \-\-map
+.RI < filename >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Perform histogram equalization.
+If this seems to be doing nothing, try increasing the number of histograms bins
+by an order of magnitude or two (or more).
+Or, use
+.BR unu\-gamma (1)
+to warp the values in the direction you know they need to go.
+Either of these might work because extremely tall and narrow peaks in the
+equalization histogram will produce poor results.
+.IP \(bu +2n
+Uses
+.B nrrdHistoEq
+.SH OPTIONS
+.TP
+.B \-b\fR\ <\fIbins\fR>\ ,\ \fB\-\-bin\fR\ <\fIbins\fR>
+# bins to use in histogram that is created in order to calculate the mapping
+that achieves the equalization.
+.RI ( int )
+.TP
+.B \-s\fR\ [<\fIbins\fR>]\ ,\ \fB\-\-smart\fR\ [<\fIbins\fR>]
+# bins in value histogram to ignore in calculating the mapping.
+Bins are ignored when they get more hits than other bins, and when the values
+that fall in them are constant.
+This is an effective way to prevent large regions of background value from
+distorting the equalization mapping.
+(optional
+.IR int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-a\fR\ <\fIamount\fR>\ ,\ \fB\-\-amount\fR\ <\fIamount\fR>
+extent to which the histogram equalizing mapping should be applied;
+.BR 0.0 :
+no change,
+.BR 1.0 :
+full equalization
+.RI ( float );
+default:
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+output type; default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-m\fR\ <\fIfilename\fR>\ ,\ \fB\-\-map\fR\ <\fIfilename\fR>
+The value mapping used to achieve histogram equalization is represented by a
+univariate regular map.
+By giving a filename here, that map can be saved out and applied to other
+.IR nrrd s
+with
+.BR unu\-rmap (1)
+.RI ( string )
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-gamma (1),
+.BR unu\-rmap (1)

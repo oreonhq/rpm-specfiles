@@ -1,0 +1,38 @@
+diff -up avr-gcc-12.1.0/gcc-12.1.0/gcc/config/avr/avr.h.mint8 avr-gcc-12.1.0/gcc-12.1.0/gcc/config/avr/avr.h
+--- avr-gcc-12.1.0/gcc-12.1.0/gcc/config/avr/avr.h.mint8	2022-06-21 22:06:30.569035678 +0200
++++ avr-gcc-12.1.0/gcc-12.1.0/gcc/config/avr/avr.h	2022-06-21 22:09:54.498675915 +0200
+@@ -153,6 +153,9 @@ FIXME: DRIVER_SELF_SPECS has changed.
+ #define SIZE_TYPE (INT_TYPE_SIZE == 8 ? "long unsigned int" : "unsigned int")
+ #define PTRDIFF_TYPE (INT_TYPE_SIZE == 8 ? "long int" :"int")
+ 
++#define CHAR16_TYPE (INT_TYPE_SIZE == 8 ? "long unsigned int" : "unsigned int")
++#define CHAR32_TYPE (INT_TYPE_SIZE == 8 ? "long long unsigned int" : "long unsigned int")
++
+ #define WCHAR_TYPE_SIZE 16
+ 
+ #define FIRST_PSEUDO_REGISTER 37
+diff -up avr-gcc-12.1.0/gcc-12.1.0/gcc/defaults.h.mint8 avr-gcc-12.1.0/gcc-12.1.0/gcc/defaults.h
+--- avr-gcc-12.1.0/gcc-12.1.0/gcc/defaults.h.mint8	2022-05-06 09:30:57.000000000 +0200
++++ avr-gcc-12.1.0/gcc-12.1.0/gcc/defaults.h	2022-06-21 22:06:30.570035686 +0200
+@@ -597,17 +597,21 @@ see the files COPYING3 and COPYING.RUNTI
+ #define CHAR8_TYPE "unsigned char"
+ #endif
+ 
++#ifndef CHAR16_TYPE
+ #ifdef UINT_LEAST16_TYPE
+ #define CHAR16_TYPE UINT_LEAST16_TYPE
+ #else
+ #define CHAR16_TYPE "short unsigned int"
+ #endif
++#endif
+ 
++#ifndef CHAR32_TYPE
+ #ifdef UINT_LEAST32_TYPE
+ #define CHAR32_TYPE UINT_LEAST32_TYPE
+ #else
+ #define CHAR32_TYPE "unsigned int"
+ #endif
++#endif
+ 
+ #ifndef WCHAR_TYPE
+ #define WCHAR_TYPE "int"

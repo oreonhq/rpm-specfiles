@@ -1,0 +1,11 @@
+--- protox-0.8.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ protox-0.8.0/Cargo.toml	2025-04-14T08:54:04.031917+00:00
+@@ -52,7 +52,7 @@
+     "encoding",
+     "development-tools::build-utils",
+ ]
+-license = "MIT OR Apache-2.0"
++license = "(MIT OR Apache-2.0) AND BSD-3-Clause"
+ repository = "https://github.com/andrewhickman/protox"
+ 
+ [package.metadata.docs.rs]

@@ -1,0 +1,22 @@
+diff --git a/mu4e/meson.build b/mu4e/meson.build
+index cfccce1..0e9ffaa 100644
+--- a/mu4e/meson.build
++++ b/mu4e/meson.build
+@@ -26,7 +26,7 @@ mu4e_meta = configure_file(
+   configuration: {
+       'VERSION'           : meson.project_version(),
+       'MU_VERSION_EXTRA'  : version_extra,
+-      'MU_DOC_DIR'        : join_paths(datadir, 'doc', 'mu'),
++      'MU_DOC_DIR'        : join_paths(datadir, 'doc', 'maildir-utils'),
+     })
+ 
+ mu4e_pkg_desc = configure_file(
+@@ -134,7 +134,7 @@ mu4e_autoloads = configure_file(
+ install_data(mu4e_srcs, install_dir: mu4e_lispdir)
+ 
+ # install mu4e-about.org
+-install_data('mu4e-about.org', install_dir : join_paths(datadir, 'doc', 'mu'))
++install_data('mu4e-about.org', install_dir : join_paths(datadir, 'doc', 'maildir-utils'))
+ 
+ if makeinfo.found()
+   custom_target('mu4e_info',

@@ -1,7 +1,7 @@
 %global source0_hash 07600d6745f5199ad210c7f39e934dcd9716b54615e44ccf1f830001a0da3597
 
-Version:        3.0.4
-Release:        17%{?dist}
+Version:        3.0.5
+Release:        1%{?dist}
 URL:            https://github.com/RedHatBrand/overpass/
 
 %global         fontlicense     OFL-1.1 or LGPL-2.0-or-later

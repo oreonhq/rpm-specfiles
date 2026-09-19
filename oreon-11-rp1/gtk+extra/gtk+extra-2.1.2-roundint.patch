@@ -1,0 +1,235 @@
+diff -u gtkextra/gtkplot3d.c ../../gtkextra/gtkplot3d.c
+--- gtkextra/gtkplot3d.c	2015-06-22 11:35:29.202317159 +1000
++++ ../../gtkextra/gtkplot3d.c	2015-06-18 13:40:10.661665737 +1000
+@@ -129,7 +129,6 @@
+                           			 gdouble *px, 
+ 						 gdouble *py, 
+ 						 gdouble *pz);
+-extern inline gint roundint			(gdouble x);
+ 
+ static GtkPlotClass *parent_class = NULL;
+ 
+diff -u gtkextra/gtkplotbar.c ../../gtkextra/gtkplotbar.c
+--- gtkextra/gtkplotbar.c	2015-06-22 11:35:29.230317985 +1000
++++ ../../gtkextra/gtkplotbar.c	2015-06-18 13:28:49.105731100 +1000
+@@ -55,7 +55,6 @@
+ 					 gint x, gint y);
+ static void gtk_plot_bar_clone		(GtkPlotData *data, GtkPlotData *copy);
+ 
+-extern inline gint roundint (gdouble x);
+ 
+ enum {
+   ARG_0,
+diff -u gtkextra/gtkplotbox.c ../../gtkextra/gtkplotbox.c
+--- gtkextra/gtkplotbox.c	2015-06-22 11:35:29.243318369 +1000
++++ ../../gtkextra/gtkplotbox.c	2015-06-18 13:34:41.987053969 +1000
+@@ -53,7 +53,6 @@
+ 					 gdouble da);
+ static void gtk_plot_box_clone          (GtkPlotData *data, GtkPlotData *copy);
+ 
+-extern inline gint roundint (gdouble x);
+ 
+ enum {
+   ARG_0,
+diff -u gtkextra/gtkplotbubble.c ../../gtkextra/gtkplotbubble.c
+--- gtkextra/gtkplotbubble.c	2014-06-15 18:17:57.000000000 +1000
++++ ../../gtkextra/gtkplotbubble.c	2015-06-22 11:51:14.275173269 +1000
+@@ -56,7 +56,6 @@
+ 					 gdouble dz, 
+ 					 gdouble da);
+ 
+-extern inline gint roundint (gdouble x);
+ 
+ enum {
+   ARG_0,
+diff -u gtkextra/gtkplot.c ../../gtkextra/gtkplot.c
+--- gtkextra/gtkplot.c	2014-06-15 18:17:57.000000000 +1000
++++ ../../gtkextra/gtkplot.c	2015-06-18 13:59:56.154337846 +1000
+@@ -219,7 +219,6 @@
+ 					 	 gdouble *px, gdouble *py);
+ void   gtk_plot_remove_dimension		(GtkPlot *plot, 
+ 						 const gchar *dimension);
+-inline gint roundint				(gdouble x);
+ static void update_datasets			(GtkPlot *plot, gboolean new_range);
+ 
+ static GtkWidgetClass *parent_class = NULL;
+@@ -2929,12 +2928,6 @@
+     return point;
+ }
+ 
+-inline gint
+-roundint (gdouble x)
+-{
+- return (x+.50999999471);
+-}
+-
+ void
+ gtk_plot_parse_label(GtkPlotAxis *axis, gdouble val, gint precision, gint style, gchar *label)
+ {
+diff -u gtkextra/gtkplotcandle.c ../../gtkextra/gtkplotcandle.c
+--- gtkextra/gtkplotcandle.c	2015-06-22 11:35:29.252318635 +1000
++++ ../../gtkextra/gtkplotcandle.c	2015-06-18 13:35:27.716391279 +1000
+@@ -42,7 +42,6 @@
+ 					 gdouble dz, 
+ 					 gdouble da);
+ 
+-extern inline gint roundint (gdouble x);
+ 
+ 
+ static GtkPlotDataClass *parent_class = NULL;
+diff -u gtkextra/gtkplotcanvas.c ../../gtkextra/gtkplotcanvas.c
+--- gtkextra/gtkplotcanvas.c	2015-06-22 11:35:29.255318724 +1000
++++ ../../gtkextra/gtkplotcanvas.c	2015-06-18 13:39:45.525930663 +1000
+@@ -134,7 +134,6 @@
+ /* Auxiliary functions */
+ GtkPlotCanvasPos 	possible_selection	(GtkAllocation area, 
+ 						 gint x, gint y);
+-extern inline gint roundint                     (gdouble x);
+ 
+ 
+ /* Signals */
+diff -u gtkextra/gtkplotcanvasellipse.c ../../gtkextra/gtkplotcanvasellipse.c
+--- gtkextra/gtkplotcanvasellipse.c	2004-12-17 13:05:02.000000000 +1100
++++ ../../gtkextra/gtkplotcanvasellipse.c	2015-06-18 13:30:04.931949252 +1000
+@@ -62,7 +62,6 @@
+                                                  GParamSpec      *pspec);
+ 
+ 
+-extern inline gint roundint                     (gdouble x);
+ static GtkPlotCanvasChildClass *parent_class = NULL;
+ 
+ GtkType
+diff -u gtkextra/gtkplotcanvasplot.c ../../gtkextra/gtkplotcanvasplot.c
+--- gtkextra/gtkplotcanvasplot.c	2005-11-08 08:07:59.000000000 +1100
++++ ../../gtkextra/gtkplotcanvasplot.c	2015-06-18 13:30:53.484369562 +1000
+@@ -59,7 +59,6 @@
+ 						 GtkPlotCanvasChild *child);
+ static void reset_plot_allocation		(GtkPlotCanvas *canvas, 
+ 						 GtkPlotCanvasPlot *child);
+-extern inline gint roundint                     (gdouble x);
+ static GtkPlotCanvasChildClass *parent_class = NULL;
+ 
+ extern GtkPlotCanvasPos possible_selection	(GtkAllocation area, 
+diff -u gtkextra/gtkplotcanvasrectangle.c ../../gtkextra/gtkplotcanvasrectangle.c
+--- gtkextra/gtkplotcanvasrectangle.c	2004-12-17 13:05:02.000000000 +1100
++++ ../../gtkextra/gtkplotcanvasrectangle.c	2015-06-18 13:29:41.522264446 +1000
+@@ -60,7 +60,6 @@
+                                                  const GValue          *value,
+                                                  GParamSpec      *pspec);
+ 
+-extern inline gint roundint                     (gdouble x);
+ static GtkPlotCanvasChildClass *parent_class = NULL;
+ 
+ GtkType
+diff -u gtkextra/gtkplotcanvastext.c ../../gtkextra/gtkplotcanvastext.c
+--- gtkextra/gtkplotcanvastext.c	2004-12-17 13:05:02.000000000 +1100
++++ ../../gtkextra/gtkplotcanvastext.c	2015-06-18 13:30:25.443549280 +1000
+@@ -53,7 +53,6 @@
+                                                  const GValue          *value,
+                                                  GParamSpec      *pspec);
+ 
+-extern inline gint roundint                     (gdouble x);
+ static GtkPlotCanvasChildClass *parent_class = NULL;
+ 
+ GtkType
+diff -u gtkextra/gtkplotcsurface.c ../../gtkextra/gtkplotcsurface.c
+--- gtkextra/gtkplotcsurface.c	2015-06-22 11:35:29.281319491 +1000
++++ ../../gtkextra/gtkplotcsurface.c	2015-06-18 13:39:15.322047382 +1000
+@@ -85,7 +85,6 @@
+ 						 gdouble normal,
+ 						 gdouble ambient);
+ static void clear_polygons			(GtkPlotCSurface *surface);
+-extern inline gint roundint			(gdouble x);
+ static void hsv_to_rgb 				(gdouble  h, 
+ 						 gdouble  s, 
+ 						 gdouble  v,
+diff -u gtkextra/gtkplotdata.c ../../gtkextra/gtkplotdata.c
+--- gtkextra/gtkplotdata.c	2015-06-22 11:35:29.306320230 +1000
++++ ../../gtkextra/gtkplotdata.c	2015-06-18 13:38:55.910479711 +1000
+@@ -130,7 +130,6 @@
+ static void gtk_plot_data_connect_points	(GtkPlotData *data,
+ 						 gint npoints);
+ 
+-extern inline gint roundint			(gdouble x);
+ static void spline_solve 			(int n,
+                                                  gdouble x[], gdouble y[],
+ 						 gdouble y2[]);
+diff -u gtkextra/gtkplotflux.c ../../gtkextra/gtkplotflux.c
+--- gtkextra/gtkplotflux.c	2014-06-15 18:17:57.000000000 +1000
++++ ../../gtkextra/gtkplotflux.c	2015-06-18 13:38:26.832629357 +1000
+@@ -60,7 +60,6 @@
+                                          gdouble x2, gdouble y2);
+ 
+ 
+-extern inline gint roundint (gdouble x);
+ 
+ enum {
+   ARG_0,
+diff -u gtkextra/gtkplotgdk.c ../../gtkextra/gtkplotgdk.c
+--- gtkextra/gtkplotgdk.c	2015-06-22 11:35:29.320320643 +1000
++++ ../../gtkextra/gtkplotgdk.c	2015-06-18 13:38:07.028050192 +1000
+@@ -122,7 +122,6 @@
+ 						     gdouble scale_x,
+ 						     gdouble scale_y);
+ 
+-extern inline gint roundint                         (gdouble x);
+ 
+ static GtkPlotPCClass *parent_class = NULL;
+ 
+diff -u gtkextra/gtkplot.h ../../gtkextra/gtkplot.h
+--- gtkextra/gtkplot.h	2005-11-22 08:15:26.000000000 +1100
++++ ../../gtkextra/gtkplot.h	2015-06-18 14:10:41.382211655 +1000
+@@ -26,6 +26,9 @@
+ #include "gtkplotpc.h"
+ #include "gtkplotarray.h"
+ 
++#ifndef roundint
++#define roundint(x) ((gint)((x)+.50999999471))
++#endif
+ #define GTK_PLOT(obj)        GTK_CHECK_CAST (obj, gtk_plot_get_type (), GtkPlot)
+ 
+ #define GTK_TYPE_PLOT   (gtk_plot_get_type ())
+diff -u gtkextra/gtkplotpixmap.c ../../gtkextra/gtkplotpixmap.c
+--- gtkextra/gtkplotpixmap.c	2015-06-22 11:35:29.364321943 +1000
++++ ../../gtkextra/gtkplotpixmap.c	2015-06-18 13:28:19.334860210 +1000
+@@ -67,7 +67,6 @@
+ 
+ 
+ 
+-extern inline gint roundint 			(gdouble x);
+ 
+ static GtkPlotDataClass *parent_class = NULL;
+ 
+diff -u gtkextra/gtkplotpolar.c ../../gtkextra/gtkplotpolar.c
+--- gtkextra/gtkplotpolar.c	2015-06-22 11:35:29.374322238 +1000
++++ ../../gtkextra/gtkplotpolar.c	2015-06-18 13:37:50.012552591 +1000
+@@ -63,7 +63,6 @@
+ 						 gint py,
+                           			 gdouble *x, 
+ 						 gdouble *y); 
+-extern inline gint roundint			(gdouble x);
+ 
+ static GtkPlotClass *parent_class = NULL;
+ 
+diff -u gtkextra/gtkplotsegment.c ../../gtkextra/gtkplotsegment.c
+--- gtkextra/gtkplotsegment.c	2015-06-22 11:35:29.387322622 +1000
++++ ../../gtkextra/gtkplotsegment.c	2015-06-18 13:37:36.435155531 +1000
+@@ -57,7 +57,6 @@
+                                          gdouble x2, gdouble y2);
+ 
+ 
+-extern inline gint roundint (gdouble x);
+ 
+ enum {
+   ARG_0,
+diff -u gtkextra/gtkplotsurface.c ../../gtkextra/gtkplotsurface.c
+--- gtkextra/gtkplotsurface.c	2015-06-22 11:35:29.408323242 +1000
++++ ../../gtkextra/gtkplotsurface.c	2015-06-18 13:37:18.944644041 +1000
+@@ -63,7 +63,6 @@
+ 						 gdouble normal,
+ 						 gdouble ambient);
+ static void clear_polygons                      (GtkPlotSurface *surface);
+-extern inline gint roundint				(gdouble x);
+ static void hsv_to_rgb 				(gdouble  h, 
+ 						 gdouble  s, 
+ 						 gdouble  v,

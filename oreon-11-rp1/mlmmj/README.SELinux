@@ -1,0 +1,18 @@
+=========================
+SELinux support for mlmmj
+=========================
+
+The "mlmmj-selinux" package provides SELinux enforcement support for mlmmj.
+Checked with Postfix MTA, any suggestions and PRs for support of other agents are welcome.
+
+A general approach is as follows:
+- a mlmmj queue writer process (e.g. mlmmj-receive caller) should have a security context,
+  which is specified in the mlmmj SELinux policy module (see "mlmmj.te" for more details);
+- mlmmj spool files and directory(-ies) (by default, /var/spool/mlmml) should have
+  'mlmmj_spool_t' SELinux type assigned.
+
+You can view the assigned SELinux security context with: `ls -laZ /var/spool/mlmmj`.
+
+Change the context recursively: `chcon -R -v -u system_u -r object_r -t mlmmj_spool_t /var/spool/mlmmj`.
+
+Check and restore the default context: `fixfiles -v -R mlmmj check` (use `restore` if needed).

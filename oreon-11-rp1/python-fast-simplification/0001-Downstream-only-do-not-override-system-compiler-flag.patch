@@ -1,0 +1,30 @@
+From cb4ce675a549165e3b014948f4ef2ab79f2fe285 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Mon, 2 Sep 2024 09:22:20 -0400
+Subject: [PATCH] Downstream-only: do not override system compiler flags
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Don’t compile with -O3 unless we can point to benchmarks that justify it.
+https://docs.fedoraproject.org/en-US/packaging-guidelines/#_compiler_flags
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 16bebfa..6587a1c 100644
+--- a/setup.py
++++ b/setup.py
+@@ -16,7 +16,7 @@ if os.name == "nt":  # windows
+     extra_compile_args = ["/openmp", "/O2", "/w", "/GS"]
+ elif os.name == "posix":  # linux org mac os
+     if sys.platform == "linux":
+-        extra_compile_args = ["-std=gnu++11", "-O3", "-w"]
++        extra_compile_args = ["-std=gnu++11", "-w"]
+     else:  # probably mac os
+         extra_compile_args = ["-std=c++11", "-O3", "-w"]
+ else:
+-- 
+2.47.1
+

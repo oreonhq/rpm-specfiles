@@ -1,0 +1,47 @@
+diff -rupN --no-dereference qttools-everywhere-src-6.10.0/src/qdbus/qdbus/CMakeLists.txt qttools-everywhere-src-6.10.0-new/src/qdbus/qdbus/CMakeLists.txt
+--- qttools-everywhere-src-6.10.0/src/qdbus/qdbus/CMakeLists.txt	2025-08-18 01:36:20.000000000 +0200
++++ qttools-everywhere-src-6.10.0-new/src/qdbus/qdbus/CMakeLists.txt	2025-09-03 10:09:26.073140118 +0200
+@@ -20,4 +20,5 @@ if(WIN32)
+     set_target_properties(qdbus PROPERTIES
+         WIN32_EXECUTABLE FALSE
+     )
++    set_target_properties(qdbus PROPERTIES OUTPUT_NAME "qdbus-qt6")
+ endif()
+diff -rupN --no-dereference qttools-everywhere-src-6.10.0/src/qdbus/qdbusviewer/CMakeLists.txt qttools-everywhere-src-6.10.0-new/src/qdbus/qdbusviewer/CMakeLists.txt
+--- qttools-everywhere-src-6.10.0/src/qdbus/qdbusviewer/CMakeLists.txt	2025-08-18 01:36:20.000000000 +0200
++++ qttools-everywhere-src-6.10.0-new/src/qdbus/qdbusviewer/CMakeLists.txt	2025-09-03 10:09:26.073459794 +0200
+@@ -59,4 +59,5 @@ if(WIN32)
+     set_target_properties(qdbusviewer PROPERTIES
+         QT_TARGET_RC_ICONS "${CMAKE_CURRENT_SOURCE_DIR}/images/qdbusviewer.ico"
+     )
++    set_target_properties(qdbusviewer PROPERTIES OUTPUT_NAME "qdbusviewer-qt6")
+ endif()
+diff -rupN --no-dereference qttools-everywhere-src-6.10.0/src/qtdiag/CMakeLists.txt qttools-everywhere-src-6.10.0-new/src/qtdiag/CMakeLists.txt
+--- qttools-everywhere-src-6.10.0/src/qtdiag/CMakeLists.txt	2025-08-18 01:36:20.000000000 +0200
++++ qttools-everywhere-src-6.10.0-new/src/qtdiag/CMakeLists.txt	2025-09-03 10:09:26.073728790 +0200
+@@ -6,7 +6,6 @@
+ #####################################################################
+ 
+ qt_internal_add_app(qtdiag
+-    INSTALL_VERSIONED_LINK
+     SOURCES
+         main.cpp
+         qtdiag.cpp qtdiag.h
+@@ -19,6 +18,8 @@ set_target_properties(qtdiag PROPERTIES
+     WIN32_EXECUTABLE FALSE
+ )
+ 
++set_target_properties(qtdiag PROPERTIES OUTPUT_NAME "qtdiag-qt6")
++
+ ## Scopes:
+ #####################################################################
+ 
+diff -rupN --no-dereference qttools-everywhere-src-6.10.0/src/qtplugininfo/CMakeLists.txt qttools-everywhere-src-6.10.0-new/src/qtplugininfo/CMakeLists.txt
+--- qttools-everywhere-src-6.10.0/src/qtplugininfo/CMakeLists.txt	2025-08-18 01:36:20.000000000 +0200
++++ qttools-everywhere-src-6.10.0-new/src/qtplugininfo/CMakeLists.txt	2025-09-03 10:09:26.073956825 +0200
+@@ -12,3 +12,5 @@ qt_internal_add_app(qtplugininfo
+ set_target_properties(qtplugininfo PROPERTIES
+     WIN32_EXECUTABLE FALSE
+ )
++
++set_target_properties(qtplugininfo PROPERTIES OUTPUT_NAME "qtplugininfo-qt6")

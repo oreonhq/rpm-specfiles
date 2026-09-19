@@ -1,0 +1,17 @@
+This ensures that sched_setaffinity is declared in <sched.h> when
+building against glibc, so that there is no implicit function
+declaration in netlib.c.
+
+Submitted upstream: <https://github.com/HewlettPackard/netperf/pull/73>
+
+diff -ur netperf-3bc455b23f901dae377ca0a558e1e32aa56b31c4.orig/configure.ac netperf-3bc455b23f901dae377ca0a558e1e32aa56b31c4/configure.ac
+--- netperf-3bc455b23f901dae377ca0a558e1e32aa56b31c4.orig/configure.ac	2021-01-21 17:02:24.000000000 +0100
++++ netperf-3bc455b23f901dae377ca0a558e1e32aa56b31c4/configure.ac	2022-12-18 18:02:34.003525461 +0100
+@@ -55,6 +55,7 @@
+ AC_C_CONST
+ AC_TYPE_OFF_T
+ AC_TYPE_SIZE_T
++AC_GNU_SOURCE
+ # AC_TYPE_SOCKLEN_T
+ 
+ OLD_TYPE_SOCKLEN_T

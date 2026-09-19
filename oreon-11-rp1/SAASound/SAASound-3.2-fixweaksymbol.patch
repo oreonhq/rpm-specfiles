@@ -1,0 +1,19 @@
+--- SAASound-3.2/src/Makefile.am.orig	2004-03-08 03:25:52.000000000 +0000
++++ SAASound-3.2/src/Makefile.am	2007-06-11 01:06:54.000000000 +0100
+@@ -9,3 +9,5 @@
+ libSAASound_la_LDFLAGS = 	\
+         -release $(LT_RELEASE)	\
+ 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
++libSAASound_la_LIBADD = -lstdc++
++
+--- SAASound-3.2/src/Makefile.in~	2008-04-17 14:20:18.000000000 +0200
++++ SAASound-3.2/src/Makefile.in	2008-04-17 14:20:18.000000000 +0200
+@@ -160,7 +160,7 @@ CONFIG_HEADER = $(top_builddir)/config.h
+ CONFIG_CLEAN_FILES =
+ LTLIBRARIES = $(lib_LTLIBRARIES)
+ 
+-libSAASound_la_LIBADD =
++libSAASound_la_LIBADD = -lstdc++
+ am__objects_1 = SAAAmp.lo SAAEnv.lo SAAFreq.lo SAANoise.lo SAAImpl.lo \
+ 	SAASndC.lo
+ am_libSAASound_la_OBJECTS = $(am__objects_1)

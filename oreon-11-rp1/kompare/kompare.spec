@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fc1299b3cfcad81ec8488a5ea25f189fe7cf727ef91242972cc04e6635d52005
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kompare
 Summary: Diff tool
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GFDL-1.2-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only)

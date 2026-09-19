@@ -1,0 +1,243 @@
+
+## <summary>policy for vsomeip</summary>
+
+########################################
+## <summary>
+##	Execute vsomeip_exec_t in the vsomeip domain.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`vsomeip_domtrans',`
+	gen_require(`
+		type vsomeip_t, vsomeip_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, vsomeip_exec_t, vsomeip_t)
+')
+
+######################################
+## <summary>
+##	Execute vsomeip in the caller domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`vsomeip_exec',`
+	gen_require(`
+		type vsomeip_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	can_exec($1, vsomeip_exec_t)
+')
+
+########################################
+## <summary>
+##	Search vsomeip lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`vsomeip_search_lib',`
+	gen_require(`
+		type vsomeip_var_lib_t;
+	')
+
+	allow $1 vsomeip_var_lib_t:dir search_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	Read vsomeip lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`vsomeip_read_lib_files',`
+	gen_require(`
+		type vsomeip_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	read_files_pattern($1, vsomeip_var_lib_t, vsomeip_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage vsomeip lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`vsomeip_manage_lib_files',`
+	gen_require(`
+		type vsomeip_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_files_pattern($1, vsomeip_var_lib_t, vsomeip_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage vsomeip lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`vsomeip_manage_lib_dirs',`
+	gen_require(`
+		type vsomeip_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_dirs_pattern($1, vsomeip_var_lib_t, vsomeip_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Read vsomeip PID files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`vsomeip_read_pid_files',`
+	gen_require(`
+		type vsomeip_var_run_t;
+	')
+
+	files_search_pids($1)
+	read_files_pattern($1, vsomeip_var_run_t, vsomeip_var_run_t)
+')
+
+########################################
+## <summary>
+##	Connect to vsomeip over a unix stream socket.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`vsomeip_stream_connect',`
+	gen_require(`
+		type vsomeip_t, vsomeip_var_run_t;
+	')
+
+	files_search_pids($1)
+	stream_connect_pattern($1, vsomeip_var_run_t, vsomeip_var_run_t, vsomeip_t)
+')
+########################################
+## <summary>
+##	Execute vsomeip server in the vsomeip domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed to transition.
+##	</summary>
+## </param>
+#
+interface(`vsomeip_systemctl',`
+	gen_require(`
+		type vsomeip_t;
+		type vsomeip_unit_file_t;
+	')
+
+	systemd_exec_systemctl($1)
+        systemd_read_fifo_file_passwd_run($1)
+	allow $1 vsomeip_unit_file_t:file read_file_perms;
+	allow $1 vsomeip_unit_file_t:service manage_service_perms;
+
+	ps_process_pattern($1, vsomeip_t)
+')
+
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	an vsomeip environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`vsomeip_admin',`
+	gen_require(`
+		type vsomeip_t;
+		type vsomeip_var_lib_t;
+		type vsomeip_var_run_t;
+	type vsomeip_unit_file_t;
+	')
+
+	allow $1 vsomeip_t:process { signal_perms };
+	ps_process_pattern($1, vsomeip_t)
+
+    tunable_policy(`deny_ptrace',`',`
+        allow $1 vsomeip_t:process ptrace;
+    ')
+
+	files_search_var_lib($1)
+	admin_pattern($1, vsomeip_var_lib_t)
+
+	files_search_pids($1)
+	admin_pattern($1, vsomeip_var_run_t)
+
+	vsomeip_systemctl($1)
+	admin_pattern($1, vsomeip_unit_file_t)
+	allow $1 vsomeip_unit_file_t:service all_service_perms;
+	optional_policy(`
+		systemd_passwd_agent_exec($1)
+		systemd_read_fifo_file_passwd_run($1)
+	')
+')
+
+interface(`vsomeip_use',`
+        gen_require(`
+		type vsomeip_t;
+                type vsomeip_var_run_t;
+        ')
+        # create and use vsomeip sockets:
+        allow $1 vsomeip_var_run_t:dir { add_name remove_name write };
+        allow $1 vsomeip_var_run_t:sock_file { create setattr write unlink };
+
+        # Talk to routing manager (and back)
+        allow $1 vsomeip_t:unix_stream_socket connectto;
+        allow vsomeip_t $1:unix_stream_socket connectto;
+')
+
+interface(`vsomeip_talk_to',`
+        allow $1 $2:unix_stream_socket connectto;
+')

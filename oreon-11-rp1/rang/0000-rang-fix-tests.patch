@@ -1,0 +1,58 @@
+diff -r -U4 rang-3.2--orig/test/CMakeLists.txt rang-3.2--patched/test/CMakeLists.txt
+--- rang-3.2--orig/test/CMakeLists.txt	2021-07-30 16:22:25.000000000 +0200
++++ rang-3.2--patched/test/CMakeLists.txt	2023-05-04 13:43:30.178872277 +0200
+@@ -7,9 +7,8 @@
+ set(CMAKE_CXX_EXTENSIONS        OFF)
+ 
+ function(rang_add_test file_name)
+     add_executable("${file_name}" "${file_name}.cpp")
+-    target_link_libraries("${file_name}" rang)
+ endfunction()
+ 
+ # simple tests #################################################################
+ 
+@@ -22,9 +21,9 @@
+ find_package(doctest)
+ 
+ if (${doctest_FOUND} EQUAL 1)
+     add_executable(all_rang_tests "test.cpp")
+-    target_link_libraries(all_rang_tests rang doctest::doctest)
++    target_link_libraries(all_rang_tests doctest::doctest)
+ 
+     enable_testing()
+ 
+     # cd build_dir && ctest --test-command all_tests
+diff -r -U4 rang-3.2--orig/test/colorTest.cpp rang-3.2--patched/test/colorTest.cpp
+--- rang-3.2--orig/test/colorTest.cpp	2021-07-30 16:22:25.000000000 +0200
++++ rang-3.2--patched/test/colorTest.cpp	2023-05-04 13:43:43.470979635 +0200
+@@ -1,5 +1,5 @@
+-#include "rang.hpp"
++#include "../include/rang.hpp"
+ #include <string>
+ 
+ using namespace std;
+ using namespace rang;
+diff -r -U4 rang-3.2--orig/test/envTermMissing.cpp rang-3.2--patched/test/envTermMissing.cpp
+--- rang-3.2--orig/test/envTermMissing.cpp	2021-07-30 16:22:25.000000000 +0200
++++ rang-3.2--patched/test/envTermMissing.cpp	2023-05-04 13:43:50.909039712 +0200
+@@ -1,5 +1,5 @@
+-#include "rang.hpp"
++#include "../include/rang.hpp"
+ #include <cstdlib>
+ 
+ using std::cout;
+ using std::endl;
+diff -r -U4 rang-3.2--orig/test/test.cpp rang-3.2--patched/test/test.cpp
+--- rang-3.2--orig/test/test.cpp	2021-07-30 16:22:25.000000000 +0200
++++ rang-3.2--patched/test/test.cpp	2023-05-04 13:44:05.771159747 +0200
+@@ -1,8 +1,8 @@
+ #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+-#include "doctest.h"
++#include "doctest/doctest.h"
+ 
+-#include "rang.hpp"
++#include "../include/rang.hpp"
+ #include <fstream>
+ #include <string>
+ 
+ using namespace std;

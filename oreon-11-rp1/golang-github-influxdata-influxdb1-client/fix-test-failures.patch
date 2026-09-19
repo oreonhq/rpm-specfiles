@@ -1,0 +1,35 @@
+From c9074e0c3947a7d6baf7e48ebedbdfc0ea1b46db Mon Sep 17 00:00:00 2001
+From: Pavel Zavora <pavel.zavora@bonitoo.io>
+Date: Wed, 2 Mar 2022 07:49:48 +0100
+Subject: [PATCH] fix(tests): repair tests to pass with go 1.16+
+
+---
+ influxdb_test.go | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/influxdb_test.go b/influxdb_test.go
+index ef6738d..330bfa1 100644
+--- a/influxdb_test.go
++++ b/influxdb_test.go
+@@ -15,7 +15,7 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	"github.com/influxdata/influxdb1-client"
++	client "github.com/influxdata/influxdb1-client"
+ )
+ 
+ func BenchmarkWrite(b *testing.B) {
+@@ -746,8 +746,10 @@ func TestClient_Timeout(t *testing.T) {
+ 	_, err = c.Query(query)
+ 	if err == nil {
+ 		t.Fatalf("unexpected success. expected timeout error")
+-	} else if !strings.Contains(err.Error(), "request canceled") &&
+-		!strings.Contains(err.Error(), "use of closed network connection") {
++		return
++	}
++	if !strings.Contains(err.Error(), "request canceled") &&
++		!strings.Contains(err.Error(), "use of closed network connection") && !strings.Contains(err.Error(), "Timeout") {
+ 		t.Fatalf("unexpected error. expected 'request canceled' error, got %v", err)
+ 	}
+ }

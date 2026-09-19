@@ -1,0 +1,27 @@
+Patch by Sergei Golovan (Debian) to add trivial processing for BIO_CTRL_GET_KTLS_SEND and
+BIO_CTRL_GET_KTLS_RECV control commands to make tcltls working with OpenSSL 3.0. See also:
+
+ - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1006587
+ - https://bugzilla.redhat.com/show_bug.cgi?id=2088363
+
+--- tcltls-1.7.22/tlsBIO.c				2020-10-12 22:39:22.000000000 +0200
++++ tcltls-1.7.22/tlsBIO.c.openssl3			2022-05-28 21:29:30.840891179 +0200
+@@ -282,6 +282,18 @@
+ 			ret = ((Tcl_WriteRaw(chan, "", 0) >= 0) ? 1 : -1);
+ 			dprintf("BIO_CTRL_FLUSH returning value %li", ret);
+ 			break;
++#ifdef BIO_CTRL_GET_KTLS_SEND
++		case BIO_CTRL_GET_KTLS_SEND:
++			dprintf("Got BIO_CTRL_GET_KTLS_SEND");
++			ret = 0;
++			break;
++#endif
++#ifdef BIO_CTRL_GET_KTLS_RECV
++		case BIO_CTRL_GET_KTLS_RECV:
++			dprintf("Got BIO_CTRL_GET_KTLS_RECV");
++			ret = 0;
++			break;
++#endif
+ 		default:
+ 			dprintf("Got unknown control command (%i)", cmd);
+ 			ret = -2;

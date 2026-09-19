@@ -1,0 +1,38 @@
+From 68bb706d1b802cb8dd6ab11462e7d11719ce1573 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 20 Apr 2025 11:01:51 -0400
+Subject: [PATCH 1/4] Downstream-only: handle system cbc renamed to Cbc
+
+Beginning with Fedora 42, the cbc executable in coin-or-Cbc is renamed to Cbc
+due to a file conflict with libcouchbase-tools (RHBZ#2335063).
+---
+ pulp/apis/coin_api.py | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/pulp/apis/coin_api.py b/pulp/apis/coin_api.py
+index c69d278..509ee45 100644
+--- a/pulp/apis/coin_api.py
++++ b/pulp/apis/coin_api.py
+@@ -48,7 +48,9 @@ import ctypes
+ import warnings
+ from tempfile import mktemp
+ 
+-cbc_path = "cbc"
++# Beginning with Fedora 42, the cbc executable in coin-or-Cbc is renamed to Cbc
++# due to a file conflict with libcouchbase-tools (RHBZ#2335063).
++cbc_path = "Cbc"
+ if operating_system == "win":
+     cbc_path += ".exe"
+ 
+@@ -57,7 +59,7 @@ coinMP_path = ["libCoinMP.so"]
+ if operating_system == "osx":
+     arch = "i64"
+ pulp_cbc_path = os.path.join(
+-    os.path.dirname(__file__), f"../solverdir/cbc/{operating_system}/{arch}/{cbc_path}"
++    os.path.dirname(__file__), f"../solverdir/cbc/{operating_system}/{arch}/{cbc_path.lower()}"
+ )
+ 
+ 
+-- 
+2.52.0
+

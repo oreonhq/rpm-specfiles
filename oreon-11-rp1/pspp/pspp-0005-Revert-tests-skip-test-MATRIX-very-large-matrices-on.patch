@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 6 Mar 2026 20:45:18 +0100
+Subject: [PATCH] Revert "tests: skip test "MATRIX - very large matrices" on 32
+ Bit systems"
+
+This reverts commit 370d190717f9a14d34e714ee25acb99dcc2d2356.
+
+diff --git a/tests/language/commands/matrix.at b/tests/language/commands/matrix.at
+index c657434c9..91222ad8b 100644
+--- a/tests/language/commands/matrix.at
++++ b/tests/language/commands/matrix.at
+@@ -5131,7 +5131,6 @@ AT_CLEANUP
+ 
+ dnl Check that attempting to allocate huge matrices fails gracefully
+ AT_SETUP([MATRIX - very large matrices])
+-AT_SKIP_IF([test "$(getconf LONG_BIT 2>/dev/null)" -lt 64])
+ AT_DATA([matrix.sps], [dnl
+ MATRIX.
+ PRINT 2:230000000000.

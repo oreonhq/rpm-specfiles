@@ -1,0 +1,9 @@
+The Fedora packages of rss-glx contain a patched tarball without the matrixview
+hack. To generate this patched tarball from upstream sources, simply run:
+
+sh ./rss-glx-rm-matrixview.sh <orig_tarball> <diff_file> <new_tarball>
+
+with e.g.:
+orig_tarball: rss-glx_0.8.1.tar.bz2
+diff_file:    rss-glx-0.8.1-0.8.1.p.diff
+new_tarball:  rss-glx-0.8.1.p.tar.bz2

@@ -1,0 +1,45 @@
+commit e7d1bd38b1d1de6b1bec603eeff915ebb57f3c37
+Author: zoulasc <christos@zoulas.com>
+Date:   Thu Mar 10 17:50:34 2016 -0500
+
+    - There is really no ti-rpc nfsv4, so don't send one; instead send a v3 for now.
+
+diff --git a/amd/srvr_nfs.c b/amd/srvr_nfs.c
+index b7c852c..1418a1a 100644
+--- a/amd/srvr_nfs.c
++++ b/amd/srvr_nfs.c
+@@ -140,6 +140,7 @@ create_ping_payload(u_long nfs_version)
+ {
+   XDR ping_xdr;
+   struct rpc_msg ping_msg;
++  int rpc_version;
+ 
+   /*
+    * Non nfs mounts like /afs/glue.umd.edu have ended up here.
+@@ -150,7 +151,17 @@ create_ping_payload(u_long nfs_version)
+   } else
+     plog(XLOG_INFO, "%s: nfs_version: %d", __func__, (int) nfs_version);
+ 
+-  rpc_msg_init(&ping_msg, NFS_PROGRAM, nfs_version, NFSPROC_NULL);
++  /*
++   * There is really no ti-rpc version for NFSv4; most servers respond
++   * with "program unavailable", which is ok since we don't check the
++   * payload, we just care about the pings. Some servers though are
++   * antisocial (Isilon) and don't respond (which is their right to do).
++   * Eventually we should make a new mechanism to do server pings for
++   * NFSv4, but for now it is easiest to downgrade the RPC version to 3.
++   */
++  rpc_version = nfs_version == 4 ? 3 : nfs_version;
++
++  rpc_msg_init(&ping_msg, NFS_PROGRAM, rpc_version, NFSPROC_NULL);
+ 
+   /*
+    * Create an XDR endpoint
+@@ -600,6 +611,7 @@ nfs_keepalive(voidp v)
+   case ENETUNREACH:
+   case EHOSTDOWN:
+   case EHOSTUNREACH:
++    dlog("Failed to NFS ping to %s (%d)", fs->fs_host, error);
+     np->np_ping = MAX_ALLOWED_PINGS;	/* immediately down */
+     np->np_ttl = (time_t) 0;
+     /*

@@ -1,0 +1,8 @@
+--- Text-Kakasi-1.04/Makefile.PL.perl580	1999-09-29 15:55:02.000000000 +0900
++++ Text-Kakasi-1.04/Makefile.PL	2002-06-25 19:26:01.000000000 +0900
+@@ -6,4 +6,5 @@
+ 	      'INC' => '-I/usr/local/include',
+ 	      'LIBS' => ['-L/usr/local/lib -lkakasi'],
+ 	      'DEFINE' => '-DWAKATIGAKI',
++	      'PREFIX' => '$(DESTDIR)/usr',
+ );

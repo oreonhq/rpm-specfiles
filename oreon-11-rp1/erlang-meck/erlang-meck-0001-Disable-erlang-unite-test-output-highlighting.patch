@@ -1,0 +1,21 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Thu, 7 Apr 2022 12:42:59 +0200
+Subject: [PATCH] Disable erlang-unite (test output highlighting)
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index 5705f32..f9fc5ea 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -4,8 +4,8 @@
+ 
+ {profiles, [
+     {test, [
+-        {deps, [unite]},
+-        {eunit_opts, [no_tty, {report, {unite_compact, []}}]},
++        {deps, []},
++        {eunit_opts, [no_tty]},
+         {erl_opts, [debug_info]},
+         {cover_enabled, true},
+         {cover_opts, [verbose]}

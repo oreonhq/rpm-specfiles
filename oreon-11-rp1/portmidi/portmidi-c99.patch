@@ -1,0 +1,60 @@
+Declare the find_default function, to avoid an implicit function
+declaration.  This avoids build failures with future compilers.
+
+Fixed upstream via:
+
+commit 9abb601e41ff2872feffa51131c40c5aed2bbaa0
+Author: Roger B. Dannenberg <rbd@cs.cmu.edu>
+Date:   Tue Sep 28 10:03:55 2021 -0400
+
+    Added missing pm_linux/finddefault.h and added Doxygen output to doc.
+
+commit cf3fb35415987df6fc6d6950c7b8272a2d454cd8
+Author: rbd <rbd@96ce424f-0a23-4c7b-8751-9736cf04b3c0>
+Date:   Thu Sep 16 19:53:13 2021 +0000
+
+    Implemented CreateVirtualInput and CreateVirtualOutput on linux. Changed "de
+scriptor" to "api-info", so this needs to be changed for macOS and Windows. Adde
+d pm_test/README.txt with detailed description/checklist for running tests.
+
+diff --git a/pm_linux/finddefault.c b/pm_linux/finddefault.c
+index 6340316896416d42..df3b438dfa1056c6 100644
+--- a/pm_linux/finddefault.c
++++ b/pm_linux/finddefault.c
+@@ -2,10 +2,14 @@
+    Roger Dannenberg, Jan 2009
+ */
+ 
++#include <ctype.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include "portmidi.h"
++#include "pmutil.h"
++#include "pminternal.h"
++#include "pmlinux.h"
+ 
+ #define STRING_MAX 256
+ 
+diff --git a/pm_linux/pmlinux.c b/pm_linux/pmlinux.c
+index 49e266d7805964e8..f43da639e332acdc 100755
+--- a/pm_linux/pmlinux.c
++++ b/pm_linux/pmlinux.c
+@@ -14,6 +14,7 @@
+ #include "portmidi.h"
+ #include "pmutil.h"
+ #include "pminternal.h"
++#include "pmlinux.h"
+ 
+ #ifdef PMALSA
+   #include "pmlinuxalsa.h"
+diff --git a/pm_linux/pmlinux.h b/pm_linux/pmlinux.h
+index 75c91f1421d4f1b2..de2cc2b09448082e 100755
+--- a/pm_linux/pmlinux.h
++++ b/pm_linux/pmlinux.h
+@@ -2,4 +2,4 @@
+ 
+ extern PmDeviceID pm_default_input_device_id;
+ extern PmDeviceID pm_default_output_device_id;
+-
++PmDeviceID find_default_device(char *path, int input, PmDeviceID id);

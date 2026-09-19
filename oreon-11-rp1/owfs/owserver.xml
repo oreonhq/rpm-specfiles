@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>owserver</short>
+  <description>Backend server for 1-wire control</description>
+  <port protocol="tcp" port="4304"/>
+</service>
+

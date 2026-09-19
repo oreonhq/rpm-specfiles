@@ -1,0 +1,11 @@
+--- ruby-shadow-2.5.1/extconf.rb.orig	2022-11-30 15:03:24.946310154 +0900
++++ ruby-shadow-2.5.1/extconf.rb	2022-11-30 15:04:27.984276887 +0900
+@@ -7,7 +7,7 @@
+ require 'mkmf'
+ require 'rbconfig'
+ 
+-$CFLAGS = case RUBY_VERSION
++$CFLAGS = "#{$CFLAGS} " + case RUBY_VERSION
+           when /^1\.9/; '-DRUBY19'
+           when /^2\./; '-DRUBY19'
+           when /^[34]\./; '-DRUBY19 -DRUBY30'

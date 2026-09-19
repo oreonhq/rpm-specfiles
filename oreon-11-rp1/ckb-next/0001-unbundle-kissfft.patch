@@ -1,0 +1,46 @@
+diff -r -U4 ckb-next-0.6.0--orig/src/animations/mviz/CMakeLists.txt ckb-next-0.6.0--patched/src/animations/mviz/CMakeLists.txt
+--- ckb-next-0.6.0--orig/src/animations/mviz/CMakeLists.txt	2023-06-22 23:07:29.000000000 +0200
++++ ckb-next-0.6.0--patched/src/animations/mviz/CMakeLists.txt	2024-01-23 13:15:01.273772139 +0100
+@@ -65,14 +65,16 @@
+ 
+     set(AUDIO_LIBRARIES "${PULSEAUDIO_LIBRARIES}")
+ endif ()
+ 
++find_package(kissfft REQUIRED)
++
+ if (MACOS)
+     target_link_libraries(
+         mviz
+             PRIVATE
+               m
+-              KissFFT::KissFFT
++              kissfft::kissfft-float
+               ${CMAKE_PROJECT_NAME}::Animation
+               ${CORESERVICES_LIBRARY}
+               ${COREFOUNDATION_LIBRARY}
+               ${AUDIOUNIT_LIBRARY}
+@@ -83,9 +85,9 @@
+         target_link_libraries(
+         mviz
+             PRIVATE
+               m
+-              KissFFT::KissFFT
++              kissfft::kissfft-float
+               ${CMAKE_PROJECT_NAME}::Animation
+               "${AUDIO_LIBRARIES}")
+ else()
+     message(WARNING "PortAudio link library has not been specified for this OS.")
+diff -r -U4 ckb-next-0.6.0--orig/src/libs/CMakeLists.txt ckb-next-0.6.0--patched/src/libs/CMakeLists.txt
+--- ckb-next-0.6.0--orig/src/libs/CMakeLists.txt	2023-06-22 23:07:29.000000000 +0200
++++ ckb-next-0.6.0--patched/src/libs/CMakeLists.txt	2023-06-25 22:59:56.191319405 +0200
+@@ -24,10 +24,6 @@
+ #   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ #   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ #   POSSIBILITY OF SUCH DAMAGE.
+ 
+-if (WITH_MVIZ) # otherwise doesn't make sense to include
+-    add_subdirectory(kissfft)
+-endif ()
+-
+ # ckb-next libraries
+ add_subdirectory(ckb-next)

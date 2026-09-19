@@ -1,0 +1,50 @@
+diff -up xgalaga-2.0.34/libsprite/makewindow.c.fs xgalaga-2.0.34/libsprite/makewindow.c
+--- xgalaga-2.0.34/libsprite/makewindow.c.fs	2007-08-31 19:32:40.000000000 +0200
++++ xgalaga-2.0.34/libsprite/makewindow.c	2007-08-31 19:41:36.000000000 +0200
+@@ -536,7 +536,7 @@ void W_ToggleFullscreen(_win)
+ {
+ #ifdef XF86VIDMODE      
+   int i;
+-  XF86VidModeModeLine mode;
++  XF86VidModeModeLine mode = { .hdisplay = 0, .privsize = 0 };
+   XF86VidModeModeInfo **modes;
+   int mode_count;
+ #endif
+@@ -609,8 +609,6 @@ void W_ToggleFullscreen(_win)
+       fs_width  = mode.hdisplay;
+       fs_height = mode.vdisplay;
+     }
+-    else   /* If we can't get the currentmode force setting of a new mode. */
+-      mode.hdisplay = 0;
+       
+     /* Get list of modelines.  */
+     if (!XF86VidModeGetAllModeLines(W_Display, W_Screen, &mode_count, &modes))
+@@ -645,7 +643,8 @@ void W_ToggleFullscreen(_win)
+     }
+         
+     /* Switch video mode.  */
+-    if (((modes[i]->hdisplay != mode.hdisplay) ||
++    if ((i >= 0) &&
++        ((modes[i]->hdisplay != mode.hdisplay) ||
+          (modes[i]->vdisplay != mode.vdisplay)) &&
+         XF86VidModeSwitchToMode(W_Display, W_Screen, modes[i]))
+     {
+@@ -658,6 +657,18 @@ void W_ToggleFullscreen(_win)
+            
+     /* Set viewport. */
+     XF86VidModeSetViewPort(W_Display, W_Screen, 0, 0);
++
++    /* clean up */
++    if (mode.privsize)
++      XFree(mode.private);
++
++    if (mode_count)
++    {
++      for (i = 0; i < mode_count; i++)
++        if (modes[i]->privsize)
++          XFree(modes[i]->private);
++      XFree(modes);
++    }
+ #endif
+     
+     /* Center the window (if nescesarry) */

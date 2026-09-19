@@ -1,0 +1,10 @@
+#!/usr/local/bin/fontforge
+# Arguments
+# 1 temporary sfd font file name to open
+# 2 foundry name
+# 3 file to save as
+Open($1)
+# Update foundry
+SetOS2Value("VendorID",$2);
+# Regenerate from sfd file to get names updated
+Generate($3)

@@ -1,0 +1,32 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Thu, 11 Aug 2011 16:37:04 +0400
+Subject: [PATCH] Consistently use rtpproxy switches
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/modules/rtpproxy/doc/rtpproxy_admin.xml b/modules/rtpproxy/doc/rtpproxy_admin.xml
+index 2ae4c9b2b..c17b77d05 100644
+--- a/modules/rtpproxy/doc/rtpproxy_admin.xml
++++ b/modules/rtpproxy/doc/rtpproxy_admin.xml
+@@ -637,7 +637,7 @@ modparam("rtpproxy", "generated_sdp_media_ip", "10.0.0.1")
+ 				connection information.
+ 				</para></listitem>
+ 				<listitem><para>
+-				<emphasis>s/w</emphasis> - flags that for the UA from which 
++				<emphasis>s</emphasis> - flags that for the UA from which 
+ 				message is received, support symmetric RTP must be forced.
+ 				</para></listitem>
+ 				<listitem><para>
+diff --git a/modules/rtpproxy/rtpproxy.c b/modules/rtpproxy/rtpproxy.c
+index 8f1682207..b99679df8 100644
+--- a/modules/rtpproxy/rtpproxy.c
++++ b/modules/rtpproxy/rtpproxy.c
+@@ -3696,8 +3696,6 @@ static int rtpproxy_offer_answer(struct sip_msg *msg, struct rtpp_args *args,
+ 			}
+ 			break;
+ 
+-		case 'w':
+-		case 'W':
+ 		case 's':
+ 		case 'S':
+ 			if (append_opts(&opts, 'S') == -1) {

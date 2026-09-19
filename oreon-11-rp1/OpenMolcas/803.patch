@@ -1,0 +1,154 @@
+From b45b1721b7c0a801fa75f97981624028ea774928 Mon Sep 17 00:00:00 2001
+From: Susi Lehtola <susi.lehtola@gmail.com>
+Date: Mon, 16 Jun 2025 17:51:40 +0300
+Subject: [PATCH 1/2] Make the ifdef more consistent and the code a bit more
+ compact
+
+---
+ src/misc_util/sorting.F90 | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/src/misc_util/sorting.F90 b/src/misc_util/sorting.F90
+index 9275fa984b..e6c6b1c33a 100644
+--- a/src/misc_util/sorting.F90
++++ b/src/misc_util/sorting.F90
+@@ -131,15 +131,13 @@ function I1D_argsort(V,compare,algorithm) result(idx)
+ 
+   idx = [(i,i=1,size(idx))]
+ 
+-# ifdef INTERNAL_PROC_ARG
+-  call sort(idx,my_compare,algorithm_)
+-# else
++# ifndef INTERNAL_PROC_ARG
+   mod_iV => V
+   mod_comp_int => compare
+   call sort(idx,my_compare_iV,algorithm_)
+-# endif
++# else
++  call sort(idx,my_compare,algorithm_)
+ 
+-# ifdef INTERNAL_PROC_ARG
+   contains
+   pure function my_compare(x,y)
+     logical(kind=iwp) :: my_compare
+@@ -167,15 +165,13 @@ function R1D_argsort(V,compare,algorithm) result(idx)
+ 
+   idx = [(i,i=1,size(idx))]
+ 
+-# ifdef INTERNAL_PROC_ARG
+-  call sort(idx,my_compare,algorithm_)
+-# else
++# ifndef INTERNAL_PROC_ARG
+   mod_rV => V
+   mod_comp_real => compare
+   call sort(idx,my_compare_rV,algorithm_)
+-# endif
++# else
++  call sort(idx,my_compare,algorithm_)
+ 
+-# ifdef INTERNAL_PROC_ARG
+   contains
+   pure function my_compare(x,y)
+     logical(kind=iwp) :: my_compare
+-- 
+GitLab
+
+
+From 5e985e59fb3a2220c76d4a2f71a6530fd58d04f7 Mon Sep 17 00:00:00 2001
+From: Susi Lehtola <susi.lehtola@gmail.com>
+Date: Mon, 16 Jun 2025 18:14:39 +0300
+Subject: [PATCH 2/2] Just drop the implementation that causes an issue on
+ Fedora
+
+---
+ src/misc_util/sorting.F90 | 28 ----------------------------
+ 1 file changed, 28 deletions(-)
+
+diff --git a/src/misc_util/sorting.F90 b/src/misc_util/sorting.F90
+index e6c6b1c33a..f9cf5f627f 100644
+--- a/src/misc_util/sorting.F90
++++ b/src/misc_util/sorting.F90
+@@ -20,9 +20,7 @@ private
+ 
+ #include "compiler_features.h"
+ public :: algorithms, argsort, bubble_sort_trsh, sort, swap, tAlgorithm
+-#ifndef INTERNAL_PROC_ARG
+ public :: compare_int_t
+-#endif
+ 
+ ! TODO: Should be changed to default construction in the future.
+ ! As of July 2019 the Sun and PGI compiler have problems.
+@@ -87,12 +85,10 @@ interface argsort
+   module procedure :: I1D_argsort, R1D_argsort
+ end interface
+ 
+-#ifndef INTERNAL_PROC_ARG
+ integer(kind=iwp), pointer :: mod_iV(:)
+ real(kind=wp), pointer :: mod_rV(:)
+ procedure(compare_int_t), pointer :: mod_comp_int
+ procedure(compare_real_t), pointer :: mod_comp_real
+-#endif
+ 
+ interface swap
+   module procedure :: i_swap, r_swap
+@@ -100,7 +96,6 @@ end interface
+ 
+ contains
+ 
+-#ifndef INTERNAL_PROC_ARG
+ pure function my_compare_iV(x,y)
+   logical(kind=iwp) :: my_compare_iV
+   integer(kind=iwp), intent(in) :: x, y
+@@ -112,7 +107,6 @@ pure function my_compare_rV(x,y)
+   integer(kind=iwp), intent(in) :: x, y
+   my_compare_rV = mod_comp_real(mod_rV(x),mod_rV(y))
+ end function my_compare_rV
+-#endif
+ 
+ function I1D_argsort(V,compare,algorithm) result(idx)
+ 
+@@ -131,20 +125,9 @@ function I1D_argsort(V,compare,algorithm) result(idx)
+ 
+   idx = [(i,i=1,size(idx))]
+ 
+-# ifndef INTERNAL_PROC_ARG
+   mod_iV => V
+   mod_comp_int => compare
+   call sort(idx,my_compare_iV,algorithm_)
+-# else
+-  call sort(idx,my_compare,algorithm_)
+-
+-  contains
+-  pure function my_compare(x,y)
+-    logical(kind=iwp) :: my_compare
+-    integer(kind=iwp), intent(in) :: x, y
+-    my_compare = compare(V(x),V(y))
+-  end function my_compare
+-# endif
+ 
+ end function I1D_argsort
+ 
+@@ -165,20 +148,9 @@ function R1D_argsort(V,compare,algorithm) result(idx)
+ 
+   idx = [(i,i=1,size(idx))]
+ 
+-# ifndef INTERNAL_PROC_ARG
+   mod_rV => V
+   mod_comp_real => compare
+   call sort(idx,my_compare_rV,algorithm_)
+-# else
+-  call sort(idx,my_compare,algorithm_)
+-
+-  contains
+-  pure function my_compare(x,y)
+-    logical(kind=iwp) :: my_compare
+-    integer(kind=iwp), intent(in) :: x, y
+-    my_compare = compare(V(x),V(y))
+-  end function my_compare
+-# endif
+ 
+ end function R1D_argsort
+ 
+-- 
+GitLab
+

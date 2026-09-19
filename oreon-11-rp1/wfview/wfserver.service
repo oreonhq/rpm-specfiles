@@ -1,0 +1,13 @@
+[Unit]
+Description=wfview server
+After=network.target sound.target
+
+[Service]
+PrivateTmp=true
+User=wfserver
+Group=wfserver
+SupplementaryGroups=audio dialout
+ExecStart=/usr/bin/wfserver -s /etc/wfserver.conf
+
+[Install]
+WantedBy=multi-user.target

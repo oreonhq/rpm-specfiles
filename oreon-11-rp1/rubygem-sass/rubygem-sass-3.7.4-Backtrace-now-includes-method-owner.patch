@@ -1,0 +1,39 @@
+From d6a68a9eea3364d816671d3eaff8a67962d8930e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Thu, 20 Nov 2025 16:08:21 +0100
+Subject: [PATCH] Backtrace now includes method owner
+
+Previously, the backtrace could start with a line such as:
+
+~~~
+["test/sass/script_test.rb:11:in 'arg_error'",
+~~~
+
+However since Ruby 4.0, this included the method owner:
+
+~~~
+["test/sass/script_test.rb:11:in 'Sass::Script::Functions::UserFunctions#arg_error'",
+~~~
+
+This strated already in Ruby 3.4 [[1]] and was extended to ArgumentError
+in Ruby 4.0 [[2]].
+
+[1]: https://bugs.ruby-lang.org/issues/19117
+[2]: https://bugs.ruby-lang.org/issues/21698
+---
+ lib/sass/script/tree/funcall.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/sass/script/tree/funcall.rb b/lib/sass/script/tree/funcall.rb
+index 0ed9338b..40594459 100644
+--- a/lib/sass/script/tree/funcall.rb
++++ b/lib/sass/script/tree/funcall.rb
+@@ -301,7 +301,7 @@ module Sass::Script::Tree
+           end
+         end
+       elsif (md = /^wrong number of arguments \(given (\d+), expected (\d+)\)/.match(e.message)) &&
+-            e.backtrace[0] =~ /:in [`']#{ruby_name}'$/
++            e.backtrace[0] =~ /:in [`'](.+#)?#{ruby_name}'$/
+         # Handle ruby 2.3 error formatting
+         message = "wrong number of arguments (#{md[1]} for #{md[2]})"
+       elsif e.message =~ /^wrong number of arguments/ &&

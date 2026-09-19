@@ -1,0 +1,11 @@
+--- nuon-0.99.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ nuon-0.99.1/Cargo.toml	2026-02-03T11:48:05.213313+00:00
+@@ -20,7 +20,7 @@
+ repository = "https://github.com/nushell/nushell/tree/main/crates/nuon"
+ 
+ [dependencies.fancy-regex]
+-version = "0.13"
++version = "0.16"
+ 
+ [dependencies.nu-engine]
+ version = "0.99.1"

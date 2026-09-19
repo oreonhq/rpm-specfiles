@@ -1,0 +1,29 @@
+From 0aa64b0be506f38d77576126b5141d2ac52884e3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Tue, 4 Feb 2020 22:18:52 +0100
+Subject: [PATCH] Change NewBasicKeyRequest to NewKeyRequest to use cfssl 1.4.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Robert-André Mauchin <zebob.m@gmail.com>
+---
+ trustpinning/certs_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/trustpinning/certs_test.go b/trustpinning/certs_test.go
+index 4f5dc96f..606ee68e 100644
+--- a/trustpinning/certs_test.go
++++ b/trustpinning/certs_test.go
+@@ -74,7 +74,7 @@ func sampleCertChain(t *testing.T) *certChain {
+ 		// Create a simple CSR for the CA using the default CA validator and policy
+ 		req := &csr.CertificateRequest{
+ 			CN:         "docker.io/notary/root",
+-			KeyRequest: csr.NewBasicKeyRequest(),
++			KeyRequest: csr.NewKeyRequest(),
+ 			CA:         &csr.CAConfig{},
+ 		}
+ 
+-- 
+2.24.1
+

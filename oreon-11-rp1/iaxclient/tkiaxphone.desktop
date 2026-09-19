@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Tkphone
+GenericName=Tk IAX Phone Client
+Exec=/usr/bin/run-tkiaxphone.sh
+Icon=tkiaxphone
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Network;Telephony;

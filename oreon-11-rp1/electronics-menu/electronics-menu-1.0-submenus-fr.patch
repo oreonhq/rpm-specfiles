@@ -1,0 +1,54 @@
+diff -ru electronics-menu-1.0-submenu/electronics-Analog.directory electronics-menu-1.0-submenu-fr/electronics-Analog.directory
+--- electronics-menu-1.0-submenu/electronics-Analog.directory	2009-08-28 19:18:19.000000000 +0200
++++ electronics-menu-1.0-submenu-fr/electronics-Analog.directory	2013-04-07 11:02:25.091477063 +0200
+@@ -2,4 +2,5 @@
+ Type=Directory
+ Version=1.0
+ Name=Analog/Mixed Signal Design
++Name[fr]=Conception de circuits intégrés mixtes analogiques/numériques
+ Icon=applications-electronics-Analog
+diff -ru electronics-menu-1.0-submenu/electronics-Automation.directory electronics-menu-1.0-submenu-fr/electronics-Automation.directory
+--- electronics-menu-1.0-submenu/electronics-Automation.directory	2009-08-28 19:17:53.000000000 +0200
++++ electronics-menu-1.0-submenu-fr/electronics-Automation.directory	2013-04-07 11:02:57.811351384 +0200
+@@ -2,4 +2,5 @@
+ Type=Directory
+ Version=1.0
+ Name=Automation
++Name[fr]=Cybernétique
+ Icon=applications-electronics-Automation
+diff -ru electronics-menu-1.0-submenu/electronics-Digital.directory electronics-menu-1.0-submenu-fr/electronics-Digital.directory
+--- electronics-menu-1.0-submenu/electronics-Digital.directory	2009-08-28 19:17:56.000000000 +0200
++++ electronics-menu-1.0-submenu-fr/electronics-Digital.directory	2013-04-07 11:03:49.532733451 +0200
+@@ -2,4 +2,5 @@
+ Type=Directory
+ Version=1.0
+ Name=Digital IC Design
++Name[fr]=Conception de circuits intégrés numériques
+ Icon=applications-electronics-Digital
+diff -ru electronics-menu-1.0-submenu/electronics-Embedded.directory electronics-menu-1.0-submenu-fr/electronics-Embedded.directory
+--- electronics-menu-1.0-submenu/electronics-Embedded.directory	2009-08-28 19:18:00.000000000 +0200
++++ electronics-menu-1.0-submenu-fr/electronics-Embedded.directory	2013-04-07 11:04:44.873212225 +0200
+@@ -2,4 +2,5 @@
+ Type=Directory
+ Version=1.0
+ Name=Embedded Design
++Name[fr]=Environnements de développement intégré
+ Icon=applications-electronics-Embedded
+diff -ru electronics-menu-1.0-submenu/electronics-SchematicPCB.directory electronics-menu-1.0-submenu-fr/electronics-SchematicPCB.directory
+--- electronics-menu-1.0-submenu/electronics-SchematicPCB.directory	2009-09-28 20:36:30.000000000 +0200
++++ electronics-menu-1.0-submenu-fr/electronics-SchematicPCB.directory	2013-04-07 11:05:21.810199231 +0200
+@@ -2,4 +2,5 @@
+ Type=Directory
+ Version=1.0
+ Name=Circuit and PCB design
++Name[fr]=Saisie de schémas et routage de circuits imprimés
+ Icon=applications-electronics-SchematicPCB
+diff -ru electronics-menu-1.0-submenu/electronics-Spice.directory electronics-menu-1.0-submenu-fr/electronics-Spice.directory
+--- electronics-menu-1.0-submenu/electronics-Spice.directory	2009-09-28 20:37:08.000000000 +0200
++++ electronics-menu-1.0-submenu-fr/electronics-Spice.directory	2013-04-07 11:06:39.796283123 +0200
+@@ -2,4 +2,5 @@
+ Type=Directory
+ Version=1.0
+ Name=Circuit Simulation
++Name[fr]=Simulation de circuits
+ Icon=applications-electronics-Spice

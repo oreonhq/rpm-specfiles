@@ -1,0 +1,26 @@
+From 4b7ad97fc66c156a58255e2b988b8d97c30f6f3e Mon Sep 17 00:00:00 2001
+From: "Peter F. Patel-Schneider" <pfpschneider@gmail.com>
+Date: Wed, 31 Dec 2025 06:31:09 -0500
+Subject: [PATCH] device: handle inaccessiable devices when determining
+ protocol
+
+---
+ lib/logitech_receiver/device.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/lib/logitech_receiver/device.py b/lib/logitech_receiver/device.py
+index 82e4ae128..7f4e0ad0a 100644
+--- a/lib/logitech_receiver/device.py
++++ b/lib/logitech_receiver/device.py
+@@ -216,7 +216,10 @@ def find(self, id):  # find a device by serial number or unit ID or name or code
+     @property
+     def protocol(self):
+         if not self._protocol:
+-            self.ping()
++            try:
++                self.ping()
++            except exceptions.NoSuchDevice:
++                logger.warning("device %s inaccessible - no protocol set", self)
+         return self._protocol or 0
+ 
+     @property

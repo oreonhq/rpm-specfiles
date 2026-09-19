@@ -1,0 +1,63 @@
+--- doc/HAPcryst.bib.orig	2022-03-10 09:59:35.267200262 -0700
++++ doc/HAPcryst.bib	2022-03-10 10:00:07.976185820 -0700
+@@ -1,14 +1,14 @@
+ @Misc{polymake,
+   author = 	 "Ewgenij Gawrilow and Michael Joswig",
+   title = 	 {polymake},
+-  howpublished = {{https://polymake.org}}
++  howpublished = {\url{https://polymake.org}}
+ }
+ 
+ 
+ @Misc{polyhedral,
+   author = 	 {Dutour Sikiric, Mathieu},
+   title =        {Polyhedral},
+-  howpublished = {{http://www.liga.ens.fr/~dutour/Polyhedral/index.html}}
++  howpublished = {\url{http://www.liga.ens.fr/~dutour/Polyhedral/index.html}}
+ }
+ 
+ 
+@@ -16,13 +16,13 @@
+ @Misc{hap,
+   author = 	 {Graham Ellis},
+   title =        {HAP},
+-  howpublished = {{http://hamilton.nuigalway.ie/Hap/www/}}
++  howpublished = {\url{http://hamilton.nuigalway.ie/Hap/www/}}
+ }
+ 
+ 
+ @Misc{cryst,
+   author = 	 "Bettina Eick and Franz Gahler and Werner Nickel",
+   title =        {cryst},
+-  howpublished = {{https://www.gap-system.org/Packages/cryst.html}}
++  howpublished = {\url{https://www.gap-system.org/Packages/cryst.html}}
+ }
+ 
+--- makedoc.g.orig	2022-03-09 10:24:19.000000000 -0700
++++ makedoc.g	2022-03-10 09:59:35.267200262 -0700
+@@ -3,12 +3,6 @@
+ ##  Call this with GAP from within the package directory.
+ ##
+ 
+-if fail = LoadPackage("AutoDoc", ">= 2016.01.21") then
+-    Error("AutoDoc 2016.01.21 or newer is required");
+-fi;
+-
+-AutoDoc(rec( scaffold := rec( MainPage := false )));
+-
+ MakeGAPDocDoc( "lib/datatypes/doc", # path to the directory containing the main file
+                "resolutionAccess",  # the name of the main file (without extension)
+                           # list of (probably source code) files relative 
+@@ -35,4 +29,11 @@ CopyHTMLStyleFiles( "lib/datatypes/doc"
+ # Create the manual.lab file which is needed if the main manuals or another 
+ # package is referring to your package
+ GAPDocManualLab( "HAPcryst" );; 
+- 
++
++HELP_ADD_BOOK( "HAPprog", "An experimental framework for objectifying the data structures of Hap", Directory( "./lib/datatypes/doc" ) );
++
++if fail = LoadPackage("AutoDoc", ">= 2016.01.21") then
++    Error("AutoDoc 2016.01.21 or newer is required");
++fi;
++
++AutoDoc(rec( scaffold := rec( MainPage := false )));

@@ -1,0 +1,29 @@
+diff -up cmrt-1.0.6/configure.ac.replace_obsolete_AC_PROG_LIBTOOL cmrt-1.0.6/configure.ac
+--- cmrt-1.0.6/configure.ac.replace_obsolete_AC_PROG_LIBTOOL	2016-09-08 01:51:38.000000000 +0200
++++ cmrt-1.0.6/configure.ac	2017-07-25 18:49:51.550451408 +0200
+@@ -122,8 +122,8 @@ AC_SUBST(CMRT_LT_VERSION)
+ AC_SUBST(CMRT_LT_LDFLAGS)
+ 
+ 
+-AC_DISABLE_STATIC
+-AC_PROG_LIBTOOL
++LT_INIT([disable-static])
++AC_SUBST([LIBTOOL_DEPS])
+ AC_PROG_CC
+ AM_PROG_CC_C_O
+ AC_PROG_CXX
+diff -up cmrt-1.0.6/Makefile.am.replace_obsolete_AC_PROG_LIBTOOL cmrt-1.0.6/Makefile.am
+--- cmrt-1.0.6/Makefile.am.replace_obsolete_AC_PROG_LIBTOOL	2016-09-08 01:51:38.000000000 +0200
++++ cmrt-1.0.6/Makefile.am	2017-07-25 18:49:30.622509929 +0200
+@@ -24,6 +24,11 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+ 
+ AUTOMAKE_OPTIONS = foreign
+ 
++LIBTOOL_DEPS = @LIBTOOL_DEPS@
++
++libtool: $(LIBTOOL_DEPS)
++	$(SHELL) ./config.status libtool
++
+ SUBDIRS = src pkgconfig
+ 
+ # Extra clean files so that maintainer-clean removes *everything*

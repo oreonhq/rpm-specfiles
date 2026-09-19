@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 434d30601214b0645366448de9397e6f0e013bade3b49cb1af845f6a741c4dd0
 
 %global stable_kf6 stable
 
 
 Name:    keditbookmarks
 Summary: Bookmark organizer and editor
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Documentation is GFDL, rest GPLv2 and GPLv3 (note: NOT any later version)

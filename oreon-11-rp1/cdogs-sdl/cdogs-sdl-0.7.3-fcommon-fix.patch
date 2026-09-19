@@ -1,0 +1,23 @@
+diff -up cdogs-sdl-0.7.3/src/cdogs/log.c~ cdogs-sdl-0.7.3/src/cdogs/log.c
+--- cdogs-sdl-0.7.3/src/cdogs/log.c~	2020-01-01 01:04:04.000000000 +0100
++++ cdogs-sdl-0.7.3/src/cdogs/log.c	2020-02-24 23:20:51.856239948 +0100
+@@ -52,6 +52,7 @@ static LogModuleInfo sModuleInfo[] =
+ 	{ LL_INFO, "PATH" },
+ };
+ 
++FILE *gLogFile;
+ 
+ const char *LogModuleName(const LogModule m)
+ {
+diff -up cdogs-sdl-0.7.3/src/cdogs/log.h~ cdogs-sdl-0.7.3/src/cdogs/log.h
+--- cdogs-sdl-0.7.3/src/cdogs/log.h~	2020-01-01 01:04:04.000000000 +0100
++++ cdogs-sdl-0.7.3/src/cdogs/log.h	2020-02-24 23:19:06.926684782 +0100
+@@ -61,7 +61,7 @@ void LogModuleSetLevel(const LogModule m
+ const char *LogLevelName(const LogLevel l);
+ LogLevel StrLogLevel(const char *s);
+ 
+-FILE *gLogFile;
++extern FILE *gLogFile;
+ void LogInit(void);
+ void LogOpenFile(const char *filename);
+ void LogTerminate(void);

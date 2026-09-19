@@ -1,0 +1,13 @@
+Index: browser/anyterm.js
+===================================================================
+--- browser/anyterm.js	(revision 5727)
++++ browser/anyterm.js	(working copy)
+@@ -19,7 +19,7 @@
+ 
+ var undefined;
+ 
+-var url_prefix = "";
++var url_prefix = "proxy/";
+ 
+ var frame;
+ var term;

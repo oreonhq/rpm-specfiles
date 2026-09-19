@@ -1,0 +1,49 @@
+From 855dc43e6f22c362a055b306b40cc91b843c7cb3 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Mon, 24 Jun 2024 12:10:47 -0700
+Subject: [PATCH] Base64IO: set write buffer before doing attr check
+
+TestBase64IO.test_init_fails() fails in current Fedora Rawhide
+(with Python 3.13) because pytest complains about an unraisable
+exception:
+
+AttributeError: 'Base64IO' object has no attribute '_Base64IO__write_buffer'
+
+it seems like we're reaching `close()` (via `__exit__()`, I
+guess) even after raising an exception in `__init__()`, and that
+causes a problem because we never set `self.__write_buffer` if
+the required attrs check fails.
+
+To solve this, we can just set `self.__write_buffer` before doing
+the attr check.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ src/ansible_runner/utils/base64io.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/ansible_runner/utils/base64io.py b/src/ansible_runner/utils/base64io.py
+index 0a2422f..d9cf927 100644
+--- a/src/ansible_runner/utils/base64io.py
++++ b/src/ansible_runner/utils/base64io.py
+@@ -78,6 +78,9 @@ class Base64IO(io.IOBase):
+ 
+         :raises TypeError: if ``wrapped`` does not have attributes needed to determine the stream's state
+         """
++        # set before the attr check as we may reach close() after that
++        # check fails
++        self.__write_buffer = b""
+         required_attrs = ("read", "write", "close", "closed", "flush")
+         if not all(hasattr(wrapped, attr) for attr in required_attrs):
+             raise TypeError(
+@@ -86,7 +89,6 @@ class Base64IO(io.IOBase):
+         super().__init__()
+         self.__wrapped = wrapped
+         self.__read_buffer = b""
+-        self.__write_buffer = b""
+ 
+     def __enter__(self):
+         """Return self on enter."""
+-- 
+2.45.2
+

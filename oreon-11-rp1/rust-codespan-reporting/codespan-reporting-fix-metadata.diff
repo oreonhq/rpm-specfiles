@@ -1,0 +1,54 @@
+--- codespan-reporting-0.13.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ codespan-reporting-0.13.1/Cargo.toml	2025-12-11T12:18:31.142835+00:00
+@@ -51,30 +51,6 @@
+ name = "codespan_reporting"
+ path = "src/lib.rs"
+ 
+-[[example]]
+-name = "custom_files"
+-path = "examples/custom_files.rs"
+-
+-[[example]]
+-name = "peg_calculator"
+-path = "examples/peg_calculator.rs"
+-
+-[[example]]
+-name = "readme_preview"
+-path = "examples/readme_preview.rs"
+-
+-[[example]]
+-name = "reusable_diagnostic"
+-path = "examples/reusable_diagnostic.rs"
+-
+-[[example]]
+-name = "term"
+-path = "examples/term.rs"
+-
+-[[test]]
+-name = "term"
+-path = "tests/term.rs"
+-
+ [dependencies.serde]
+ version = "1"
+ features = [
+@@ -91,20 +67,8 @@
+ [dependencies.unicode-width]
+ version = ">=0.1,<0.3"
+ 
+-[dev-dependencies.anyhow]
+-version = "1"
+-
+ [dev-dependencies.insta]
+ version = "1.6.3"
+-
+-[dev-dependencies.peg]
+-version = "0.7"
+-
+-[dev-dependencies.pico-args]
+-version = "0.5.0"
+-
+-[dev-dependencies.rustyline]
+-version = "6"
+ 
+ [dev-dependencies.unindent]
+ version = "0.1"

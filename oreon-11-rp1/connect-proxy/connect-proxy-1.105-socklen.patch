@@ -1,0 +1,11 @@
+--- a/connect.c	2024-05-17 09:06:35.176046528 +0200
++++ b/connect.c	2024-05-17 09:02:00.234749758 +0200
+@@ -2822,7 +2822,7 @@
+     int connection;
+     struct sockaddr_in name;
+     struct sockaddr client;
+-    SOCKLEN_T socklen;
++    socklen_t socklen;
+     fd_set ifds;
+     int nfds;
+     int sockopt;

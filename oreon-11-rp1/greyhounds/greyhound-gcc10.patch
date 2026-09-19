@@ -1,0 +1,177 @@
+--- src/gui_defs.h.orig	2003-12-14 11:38:58.000000000 -0600
++++ src/gui_defs.h	2020-02-08 22:53:53.810506771 -0600
+@@ -2,7 +2,7 @@
+ /* ### Structures and global variables ### */
+ /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+ 
+-static GList *my_pixmaps_directories = NULL;
++extern GList *my_pixmaps_directories;
+ 
+ GtkWidget *main_window;
+ 
+--- src/main.c.orig	2003-12-14 11:38:58.000000000 -0600
++++ src/main.c	2020-02-08 22:56:23.537513257 -0600
+@@ -5,6 +5,7 @@
+ 
+ #include "non_gui_defs.h"
+ #include "gui_defs.h"
++GList *my_pixmaps_directories = NULL; /* reserve the storage here */
+ #include "interface.h"
+ #include "support.h"
+ 
+--- src/main.c.orig	2020-02-08 23:10:55.434551029 -0600
++++ src/main.c	2020-02-08 23:24:28.895586269 -0600
+@@ -4,6 +4,23 @@
+  */
+ 
+ #include "non_gui_defs.h"
++/* reserve storage for global variables */
++dog dogs[420];
++kennel kennels[20];
++gint qualified_kennels[6];
++gint order[421];
++gint statistics_order[2][420];
++gint season, month, week;
++gchar names_kept[500][19];
++race races[2][12];
++history_element *first_history;
++dog_record dog_records[7];
++kennel_record kennel_records[5];
++gchar *game_file;
++gint options_kennel_block[2][19];
++gint options_confirm[12];
++gint options_show_news[12];
++gint options_misc[50];
+ #include "gui_defs.h"
+ GList *my_pixmaps_directories = NULL; /* reserve the storage here */
+ #include "interface.h"
+--- src/non_gui_defs.h.orig	2003-12-14 11:38:58.000000000 -0600
++++ src/non_gui_defs.h	2020-02-08 23:18:00.554569446 -0600
+@@ -170,55 +170,55 @@
+ 
+ /* all dogs in the game */
+ /* 400 to 419 are the human player's puppies */
+-dog dogs[420];
++extern dog dogs[420];
+ 
+ /* all kennels in the game */
+-kennel kennels[20];
++extern kennel kennels[20];
+ 
+ /* the six kennels qualified for the champions'
+    trophy races */
+-gint qualified_kennels[6];
++extern gint qualified_kennels[6];
+ 
+ /* the order in which the dogs are shown to the human player 
+    plus type of ordering stored in 420.
+    example: the dogs from 0 to 19 are shown to the human player
+    in the order dogs[ order[0] ] to dogs[ order[19] ]*/
+-gint order[421];
++extern gint order[421];
+ 
+ /* the order in which the dogs in the dog statistics window
+    are shown. as there are two pages of statistics we have two
+    arrays */
+-gint statistics_order[2][420];
++extern gint statistics_order[2][420];
+ 
+ /* season, month and week numbers.
+    week alternates between 1 and 3 */
+-gint season, month, week;
++extern gint season, month, week;
+ 
+ /* a buffer of names kept in memory to name each new dog in the game */
+-gchar names_kept[500][19];
++extern gchar names_kept[500][19];
+ 
+ /* the results of last 'semi-month''s races ([0]) and races of
+    current semi-month */
+-race races[2][12];
++extern race races[2][12];
+ 
+ /* a the first history element  */
+-history_element *first_history;
++extern history_element *first_history;
+ 
+ /* all-time records */
+ 
+ /* entries 0 - 2: fastest times over 1, 2 or 3 laps
+    3, 4: most points, most points / race
+    5, 6: most wins, best winning rate  */
+-dog_record dog_records[7];
++extern dog_record dog_records[7];
+ 
+ /* entry 0: weighted average time
+    1, 2: most points, most points / race
+    3, 4: most wins, best winning rate  */
+-kennel_record kennel_records[5];
++extern kennel_record kennel_records[5];
+ 
+ /* the name of the file under which the game
+    has been most recently saved */
+-gchar *game_file;
++extern gchar *game_file;
+ 
+ /* some options */
+ 
+@@ -227,7 +227,7 @@
+    for some weeks.
+    options_kennel_block[0][i] is the value for kennel i + 1 for
+    interbreeding dogs, options_kennel_block[1][i] for trading dogs */
+-gint options_kennel_block[2][19];
++extern gint options_kennel_block[2][19];
+ 
+ /* confirmation options. default value is 1, so that
+    the user is always asked to confirm things like giving
+@@ -238,7 +238,7 @@
+    2: disadvantageous mating
+    3: incest
+    4: quit when not saved*/
+-gint options_confirm[12];
++extern gint options_confirm[12];
+ 
+ /* whether to show news
+    0: new puppies born
+@@ -248,7 +248,7 @@
+    4: old dogs given away
+    5: fighting in the kennel
+    6: awards at the end of the season */
+-gint options_show_news[12];
++extern gint options_show_news[12];
+ 
+ /* 0: whether or not to show the 'racing...' progress
+    bar or live races before showing the race results
+@@ -282,7 +282,7 @@
+    default value is 199 (-> no notification)
+ 
+    19: the stamina value */
+-gint options_misc[50];
++extern gint options_misc[50];
+ 
+ 
+ 
+--- src/gui_defs.h.orig	2020-02-08 23:26:27.721591417 -0600
++++ src/gui_defs.h	2020-02-08 23:31:15.287603875 -0600
+@@ -4,7 +4,7 @@
+ 
+ extern GList *my_pixmaps_directories;
+ 
+-GtkWidget *main_window;
++extern GtkWidget *main_window;
+ 
+ 
+ /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+--- src/main.c.orig	2020-02-08 23:32:48.282607903 -0600
++++ src/main.c	2020-02-08 23:41:51.161631421 -0600
+@@ -22,7 +22,9 @@
+ gint options_show_news[12];
+ gint options_misc[50];
+ #include "gui_defs.h"
+-GList *my_pixmaps_directories = NULL; /* reserve the storage here */
++/* reserve the storage here */
++GList *my_pixmaps_directories = NULL;
++GtkWidget *main_window;
+ #include "interface.h"
+ #include "support.h"
+ 

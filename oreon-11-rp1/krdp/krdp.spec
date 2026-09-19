@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash dd952892bfafd06281fd9fd239fb5f3b5807f3f346be456554061183881abf8b
 
 %global stable_kf6 stable
 
@@ -12,7 +12,7 @@ ExcludeArch: %{ix86}
 
 Name:           krdp
 Summary:        Desktop sharing using RDP
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 License:        LGPL-2.1-only OR LGPL-3.0-only

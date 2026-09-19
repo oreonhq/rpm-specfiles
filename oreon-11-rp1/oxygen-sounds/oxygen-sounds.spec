@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4e7b942544e5ebdecda5eb23a6858ac2a9429c0c54ffba8a2455f1ff4b9ca9de
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           oxygen-sounds
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary:        The Oxygen Sound Theme
 

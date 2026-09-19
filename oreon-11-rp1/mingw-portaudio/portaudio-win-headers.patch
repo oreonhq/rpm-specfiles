@@ -1,0 +1,25 @@
+Index: portaudio/Makefile.in
+===================================================================
+--- portaudio.orig/Makefile.in
++++ portaudio/Makefile.in
+@@ -44,7 +44,7 @@ PALIB = libportaudio.la
+ PAINC = include/portaudio.h
+ 
+ PA_LDFLAGS = $(LDFLAGS) $(SHARED_FLAGS) -rpath $(libdir) -no-undefined \
+-	     -export-symbols-regex "(Pa|PaMacCore|PaJack|PaAlsa|PaAsio|PaOSS|PaWasapi|PaWasapiWinrt)_.*" \
++	     -export-symbols-regex "(Pa|PaMacCore|PaJack|PaAlsa|PaAsio|PaOSS|PaWasapi|PaWasapiWinrt|PaUtil_GetTime|PaWinDS|PaWinMME)_.*" \
+ 	     -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
+ 
+ COMMON_OBJS = \
+Index: portaudio/configure.in
+===================================================================
+--- portaudio.orig/configure.in
++++ portaudio/configure.in
+@@ -285,6 +285,7 @@ case "${host_os}" in
+         PADLL="portaudio.dll"
+         THREAD_CFLAGS="-mthreads"
+         CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/win -DPA_USE_WMME=0 -DPA_USE_ASIO=0 -DPA_USE_WDMKS=0 -DPA_USE_DS=0 -DPA_USE_WASAPI=0"
++        INCLUDES="$INCLUDES pa_win_waveformat.h"
+ 
+         if [[ "x$with_directx" = "xyes" ]]; then
+             DXDIR="$with_dxdir"

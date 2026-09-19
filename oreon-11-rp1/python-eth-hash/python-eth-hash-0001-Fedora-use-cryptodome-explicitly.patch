@@ -1,0 +1,67 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 16 Nov 2022 19:25:05 +0100
+Subject: [PATCH] Fedora: use cryptodome explicitly
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/eth_hash/backends/pycryptodome.py b/eth_hash/backends/pycryptodome.py
+index a095774..d8c0063 100644
+--- a/eth_hash/backends/pycryptodome.py
++++ b/eth_hash/backends/pycryptodome.py
+@@ -3,7 +3,7 @@ from typing import (
+     cast,
+ )
+ 
+-from Crypto.Hash import (
++from Cryptodome.Hash import (
+     keccak,
+ )
+ 
+diff --git a/setup.py b/setup.py
+index ce150b1..e7878fc 100644
+--- a/setup.py
++++ b/setup.py
+@@ -26,8 +26,8 @@ extras_require = {
+         "pytest-xdist>=2.4.0",
+     ],
+     # optional backends:
+-    "pycryptodome": [
+-        "pycryptodome>=3.6.6,<4",
++    "pycryptodomex": [
++        "pycryptodomex>=3.6.6,<4",
+     ],
+     "pysha3": [
+         "pysha3>=1.0.0,<2.0.0;python_version<'3.9'",
+@@ -54,7 +54,9 @@ setup(
+     author_email="snakecharmers@ethereum.org",
+     url="https://github.com/ethereum/eth-hash",
+     include_package_data=True,
+-    install_requires=[],
++    install_requires=[
++        "pycryptodomex>=3.6.6,<4",
++    ],
+     python_requires=">=3.8, <4",
+     extras_require=extras_require,
+     py_modules=["eth_hash"],
+diff --git a/tests/core/test_import_and_version.py b/tests/core/test_import_and_version.py
+index df1cd48..a5df720 100644
+--- a/tests/core/test_import_and_version.py
++++ b/tests/core/test_import_and_version.py
+@@ -25,7 +25,7 @@ def test_import_auto_empty_crash(monkeypatch):
+         keccak,
+     )
+ 
+-    with mock.patch.dict("sys.modules", {"sha3": None, "Crypto.Hash": None}):
++    with mock.patch.dict("sys.modules", {"sha3": None, "Cryptodome.Hash": None}):
+         with pytest.raises(
+             ImportError, match="None of these hashing backends are installed"
+         ):
+@@ -53,7 +53,7 @@ def test_load_by_env(monkeypatch, backend):
+     )
+ 
+     monkeypatch.setenv("ETH_HASH_BACKEND", backend)
+-    with mock.patch.dict("sys.modules", {"sha3": None, "Crypto.Hash": None}):
++    with mock.patch.dict("sys.modules", {"sha3": None, "Cryptodome.Hash": None}):
+         with pytest.raises(ImportError) as excinfo:
+             keccak(b"triggered")
+     expected_msg = (

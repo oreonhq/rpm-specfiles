@@ -1,0 +1,12 @@
+diff -ruN python-oldmemo-2.1.0/pyproject.toml python-oldmemo-2.1.0-mod/pyproject.toml
+--- python-oldmemo-2.1.0/pyproject.toml	2026-01-30 00:30:46.000000000 +0300
++++ python-oldmemo-2.1.0-mod/pyproject.toml	2026-02-02 15:54:08.540389986 +0300
+@@ -20,7 +20,7 @@
+     "X3DH>=1.2.0,<2",
+     "XEdDSA>=1.0.0,<2",
+     "cryptography>=3.3.2",
+-    "protobuf>=3.20.3",
++    "protobuf>=3.19.0",
+     "typing-extensions>=4.3.0"
+ ]
+ classifiers = [

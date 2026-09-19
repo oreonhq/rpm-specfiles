@@ -1,0 +1,86 @@
+--- nogravity-2.00/rlx32/src/linux/snd_sdlmixer.c	2005-04-21 22:22:18.000000000 +0200
++++ nogravity/rlx32/src/linux/snd_sdlmixer.c	2006-05-27 11:04:29.000000000 +0200
+@@ -46,6 +46,7 @@
+   size_t pos;
+   ssize_t start;
+   ssize_t end;
++  u_int8_t vol;
+   int8_t buf[409600];
+ };
+ 
+@@ -224,6 +225,17 @@
+   return g_pchannels[channel].sam;
+ }
+ 
++static void CopySample16(int16_t *dst, const int16_t *src, int len)
++{
++  while (len > 0)
++  {
++    *dst = (((int32_t)*src) * g_stream.vol) >> 8;
++    src ++;
++    dst ++;
++    len --;
++  }
++}
++
+ static void StreamFill(void *dummy, Uint8 *stream, int len)
+ {
+   int music_len;
+@@ -232,13 +244,13 @@
+   music_len = (music_len > len) ? len : music_len;
+   if (g_stream.start + music_len <= 409600)
+   {
+-    memcpy(stream, &g_stream.buf[g_stream.start], music_len);
++    CopySample16((int16_t *)stream, (int16_t *)&g_stream.buf[g_stream.start], music_len / 2);
+     g_stream.start += music_len;
+   }
+   else
+   {
+-    memcpy(stream, &g_stream.buf[g_stream.start], 409600 - g_stream.start);
+-    memcpy(&stream[409600 - g_stream.start], g_stream.buf, g_stream.start + music_len - 409600);
++    CopySample16((int16_t *)stream, (int16_t *)&g_stream.buf[g_stream.start], (409600 - g_stream.start) / 2);
++    CopySample16((int16_t *)&stream[409600 - g_stream.start], (int16_t *)g_stream.buf, (g_stream.start + music_len - 409600) / 2);
+     g_stream.start = g_stream.start + music_len - 409600;
+   }
+   g_stream.pos += music_len;
+@@ -265,6 +277,7 @@
+     g_stream.pos = 0;
+     g_stream.start = 0;
+     g_stream.end = 0;
++    g_stream.vol = 255;
+   }
+   else
+   {
+@@ -298,7 +311,7 @@
+ 
+ static void StreamSetVolume(V3XA_STREAM handle, float volume)
+ {
+-  // TODO: Implement.
++  g_stream.vol = volume * 255;
+ }
+ 
+ static int StreamLoad(V3XA_STREAM handle, void *data, size_t size)
+--- nogravity-2.00/rlx32/src/renderers/opengl/gl_v3x.h	2005-06-17 21:58:20.000000000 +0200
++++ nogravity/rlx32/src/renderers/opengl/gl_v3x.h	2006-04-15 14:11:43.000000000 +0200
+@@ -59,9 +59,9 @@
+ #endif
+ 
+ #elif (defined __LINUX__)
++#define GL_GLEXT_PROTOTYPES
+ #include <GL/gl.h>
+ #include <GL/glext.h>
+-
+ #ifndef GL_ARB_texture_rectangle
+ #define GL_TEXTURE_RECTANGLE_ARB 0x84F5
+ #endif
+--- nogravity-2.00/src/lt_info.c	2006-01-25 21:10:16.000000000 +0100
++++ nogravity/src/lt_info.c	2006-04-15 14:11:43.000000000 +0200
+@@ -77,6 +77,8 @@
+                 table[i]=j;
+                 d++;
+             }
++	    else
++		table[i]=0;
+         }
+     }
+     return d>=LK_MAX-1;

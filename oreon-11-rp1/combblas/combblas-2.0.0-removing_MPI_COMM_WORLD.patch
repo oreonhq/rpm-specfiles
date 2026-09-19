@@ -1,0 +1,205 @@
+From eb4811a59a4043a2d0c9d933b71a1e1ef1db287d Mon Sep 17 00:00:00 2001
+From: Ariful Azad <azad@iu.edu>
+Date: Tue, 25 Oct 2022 23:10:44 -0400
+Subject: [PATCH] removing MPI_COMM_WORLD from BPMaximalMatching.h
+
+---
+ .../BipartiteMatchings/BPMaximalMatching.h    | 23 +++++++++++--------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/Applications/BipartiteMatchings/BPMaximalMatching.h b/Applications/BipartiteMatchings/BPMaximalMatching.h
+index 365b7c70..eef74142 100644
+--- a/Applications/BipartiteMatchings/BPMaximalMatching.h
++++ b/Applications/BipartiteMatchings/BPMaximalMatching.h
+@@ -26,9 +26,10 @@ void MaximalMatching(Par_DCSC_Bool & A, Par_DCSC_Bool & AT, FullyDistVec<IT, IT>
+ {
+ 
+ 	typedef VertexTypeML < IT, IT> VertexType;
++    MPI_Comm comm = A.getcommgrid()->GetWorld();
+     int nprocs, myrank;
+-    MPI_Comm_size(MPI_COMM_WORLD,&nprocs);
+-    MPI_Comm_rank(MPI_COMM_WORLD,&myrank);
++    MPI_Comm_size(comm,&nprocs);
++    MPI_Comm_rank(comm,&myrank);
+     int nthreads = 1;
+ #ifdef _OPENMP
+ #pragma omp parallel
+@@ -76,7 +77,7 @@ void MaximalMatching(Par_DCSC_Bool & A, Par_DCSC_Bool & AT, FullyDistVec<IT, IT>
+         cout << "=======================================================\n";
+     }
+ #endif
+-    MPI_Barrier(MPI_COMM_WORLD);
++    MPI_Barrier(comm);
+ 
+     
+     while(curUnmatchedCol !=0 && curUnmatchedRow!=0 && newlyMatched != 0 )
+@@ -178,7 +179,7 @@ void MaximalMatching(Par_DCSC_Bool & A, Par_DCSC_Bool & AT, FullyDistVec<IT, IT>
+ #endif
+         curUnmatchedCol = unmatchedCol.getnnz();
+         curUnmatchedRow = unmatchedRow.getnnz();
+-        MPI_Barrier(MPI_COMM_WORLD);
++        MPI_Barrier(comm);
+         
+     }
+     
+@@ -249,9 +250,10 @@ void WeightedGreedy(Par_MAT_Double & A, FullyDistVec<IT, IT>& mateRow2Col,
+     }
+ #endif
+     PreAllocatedSPA<VertexType> SPA(A.seq(), nthreads*4);
+-	int nprocs, myrank;
+-	MPI_Comm_size(MPI_COMM_WORLD,&nprocs);
+-	MPI_Comm_rank(MPI_COMM_WORLD,&myrank);
++    int nprocs, myrank;
++    MPI_Comm comm = A.getcommgrid()->GetWorld();
++    MPI_Comm_size(comm,&nprocs);
++    MPI_Comm_rank(comm,&myrank);
+ 	
+     
+ 	//unmatched row and column vertices
+@@ -288,7 +290,7 @@ void WeightedGreedy(Par_MAT_Double & A, FullyDistVec<IT, IT>& mateRow2Col,
+ 		cout << "=======================================================\n";
+ 	}
+ #endif
+-	MPI_Barrier(MPI_COMM_WORLD);
++	MPI_Barrier(comm);
+ 	
+ 	
+ 	while(curUnmatchedCol !=0 && curUnmatchedRow!=0 && newlyMatched != 0 )
+@@ -348,7 +350,7 @@ void WeightedGreedy(Par_MAT_Double & A, FullyDistVec<IT, IT>& mateRow2Col,
+ #endif
+ 		curUnmatchedCol = unmatchedCol.getnnz();
+ 		curUnmatchedRow = unmatchedRow.getnnz();
+-		MPI_Barrier(MPI_COMM_WORLD);
++		MPI_Barrier(comm);
+ 		
+ 	}
+     
+@@ -402,7 +404,8 @@ bool isMaximalmatching(Par_DCSC_Bool & A, FullyDistVec<IT,NT> & mateRow2Col, Ful
+ {
+ 	typedef VertexTypeML < IT, IT> VertexType;
+     int myrank;
+-    MPI_Comm_rank(MPI_COMM_WORLD,&myrank);
++    MPI_Comm comm = A.getcommgrid()->GetWorld();
++    MPI_Comm_rank(comm,&myrank);
+     FullyDistSpVec<IT, IT> fringeRow(A.getcommgrid(), A.getnrow());
+     FullyDistSpVec<IT, IT> fringeCol(A.getcommgrid(), A.getncol());
+     FullyDistSpVec<IT, IT> unmatchedRow(mateRow2Col, [](IT mate){return mate==-1;});
+From ecf96214a0c666662954cf24b84df97f61d52dc9 Mon Sep 17 00:00:00 2001
+From: Ariful Azad <azad@iu.edu>
+Date: Tue, 25 Oct 2022 23:32:42 -0400
+Subject: [PATCH] removing MPI_COMM_WORLD from other matching codes
+
+---
+ .../BipartiteMatchings/BPMaximalMatching.cpp         |  7 ++++---
+ Applications/BipartiteMatchings/BPMaximalMatching.h  |  3 ++-
+ .../BipartiteMatchings/BPMaximumMatching.cpp         | 12 +++++++-----
+ Applications/BipartiteMatchings/BPMaximumMatching.h  | 12 +++++++-----
+ 4 files changed, 20 insertions(+), 14 deletions(-)
+
+diff --git a/Applications/BipartiteMatchings/BPMaximalMatching.cpp b/Applications/BipartiteMatchings/BPMaximalMatching.cpp
+index d116e761..0b2cc1d0 100644
+--- a/Applications/BipartiteMatchings/BPMaximalMatching.cpp
++++ b/Applications/BipartiteMatchings/BPMaximalMatching.cpp
+@@ -70,8 +70,9 @@ void removeIsolated(PSpMat_Bool & A)
+ {
+     
+     int nprocs, myrank;
+-    MPI_Comm_size(MPI_COMM_WORLD,&nprocs);
+-    MPI_Comm_rank(MPI_COMM_WORLD,&myrank);
++    MPI_Comm comm = A.getcommgrid()->GetWorld();
++    MPI_Comm_size(comm,&nprocs);
++    MPI_Comm_rank(comm,&myrank);
+     
+     
+     FullyDistVec<int64_t, int64_t> * ColSums = new FullyDistVec<int64_t, int64_t>(A.getcommgrid());
+@@ -121,7 +122,7 @@ void removeIsolated(PSpMat_Bool & A)
+         cout << nrows2 << " " << ncols2 << " " << nnz2 << " " << avgDeg2 << " \n";
+     }
+     
+-    MPI_Barrier(MPI_COMM_WORLD);
++    MPI_Barrier(comm);
+     
+     
+ }
+diff --git a/Applications/BipartiteMatchings/BPMaximalMatching.h b/Applications/BipartiteMatchings/BPMaximalMatching.h
+index eef74142..01ee8551 100644
+--- a/Applications/BipartiteMatchings/BPMaximalMatching.h
++++ b/Applications/BipartiteMatchings/BPMaximalMatching.h
+@@ -26,8 +26,9 @@ void MaximalMatching(Par_DCSC_Bool & A, Par_DCSC_Bool & AT, FullyDistVec<IT, IT>
+ {
+ 
+ 	typedef VertexTypeML < IT, IT> VertexType;
+-    MPI_Comm comm = A.getcommgrid()->GetWorld();
++    
+     int nprocs, myrank;
++    MPI_Comm comm = A.getcommgrid()->GetWorld();
+     MPI_Comm_size(comm,&nprocs);
+     MPI_Comm_rank(comm,&myrank);
+     int nthreads = 1;
+diff --git a/Applications/BipartiteMatchings/BPMaximumMatching.cpp b/Applications/BipartiteMatchings/BPMaximumMatching.cpp
+index b917ca7d..4b168f24 100644
+--- a/Applications/BipartiteMatchings/BPMaximumMatching.cpp
++++ b/Applications/BipartiteMatchings/BPMaximumMatching.cpp
+@@ -49,8 +49,9 @@ void removeIsolated(Par_DCSC_Bool & A)
+ {
+     
+     int nprocs, myrank;
+-    MPI_Comm_size(MPI_COMM_WORLD,&nprocs);
+-    MPI_Comm_rank(MPI_COMM_WORLD,&myrank);
++    MPI_Comm comm = A.getcommgrid()->GetWorld();
++    MPI_Comm_size(comm,&nprocs);
++    MPI_Comm_rank(comm,&myrank);
+     
+     
+     FullyDistVec<int64_t, int64_t> * ColSums = new FullyDistVec<int64_t, int64_t>(A.getcommgrid());
+@@ -100,7 +101,7 @@ void removeIsolated(Par_DCSC_Bool & A)
+         cout << nrows2 << " " << ncols2 << " " << nnz2 << " " << avgDeg2 << " \n";
+     }
+     
+-    MPI_Barrier(MPI_COMM_WORLD);
++    MPI_Barrier(comm);
+     
+     
+ }
+@@ -282,8 +283,9 @@ void experiment_maximal(Par_DCSC_Bool & A, Par_DCSC_Bool & AT, FullyDistVec<int6
+ {
+     
+     int nprocs, myrank;
+-    MPI_Comm_size(MPI_COMM_WORLD,&nprocs);
+-    MPI_Comm_rank(MPI_COMM_WORLD,&myrank);
++    MPI_Comm comm = A.getcommgrid()->GetWorld();
++    MPI_Comm_size(comm,&nprocs);
++    MPI_Comm_rank(comm,&myrank);
+     
+     FullyDistVec<int64_t, int64_t> mateRow2Col ( A.getcommgrid(), A.getnrow(), (int64_t) -1);
+     FullyDistVec<int64_t, int64_t> mateCol2Row ( A.getcommgrid(), A.getncol(), (int64_t) -1);
+diff --git a/Applications/BipartiteMatchings/BPMaximumMatching.h b/Applications/BipartiteMatchings/BPMaximumMatching.h
+index 86ff625f..9d66823a 100644
+--- a/Applications/BipartiteMatchings/BPMaximumMatching.h
++++ b/Applications/BipartiteMatchings/BPMaximumMatching.h
+@@ -183,9 +183,10 @@ void AugmentPath(FullyDistVec<IT, IT>& mateRow2Col, FullyDistVec<IT, IT>& mateCo
+     IT locind_row, locind_col;
+     int myrank;
+     
+-    MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
+-    
+-    
++    MPI_Comm comm = mateRow2Col.getcommgrid()->GetWorld();
++    MPI_Comm_rank(comm,&myrank);
++
++
+     for(IT i=0; i<leaves.LocArrSize(); i++)
+     {
+         int depth=0;
+@@ -244,8 +245,9 @@ void maximumMatching(SpParMat < IT, NT, DER > & A, FullyDistVec<IT, IT>& mateRow
+     
+     double tstart = MPI_Wtime();
+     int nprocs, myrank;
+-    MPI_Comm_size(MPI_COMM_WORLD,&nprocs);
+-    MPI_Comm_rank(MPI_COMM_WORLD,&myrank);
++    MPI_Comm comm = A.getcommgrid()->GetWorld();
++    MPI_Comm_size(comm,&nprocs);
++    MPI_Comm_rank(comm,&myrank);
+     
+     IT nrow = A.getnrow();
+     IT ncol = A.getncol();

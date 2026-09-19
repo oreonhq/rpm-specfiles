@@ -1,0 +1,875 @@
+diff --git a/src/audio.c b/src/audio.c
+index 148e167..53e2762 100644
+--- a/src/audio.c
++++ b/src/audio.c
+@@ -47,7 +47,7 @@ void recordmenue(void) {
+     attron(modify_attr(COLOR_PAIR(C_WINDOW) | A_STANDOUT));
+ 
+     for (j = 0; j <= 24; j++)
+-	mvprintw(j, 0, backgrnd_str);
++	mvprintw(j, 0, "%s", backgrnd_str);
+ 
+     mvprintw(1, 20, "--- TLF SOUND RECORDER UTILITY ---");
+     mvprintw(6, 20, "F1 ... F12, S, C: Record Messages");
+diff --git a/src/autocq.c b/src/autocq.c
+index fa948b3..10cc829 100644
+--- a/src/autocq.c
++++ b/src/autocq.c
+@@ -104,7 +104,7 @@ int auto_cq(void) {
+ 	    }
+ 	}
+ 
+-	mvprintw(12, 29, spaces(13));
++	mvprintw(12, 29, "%s", spaces(13));
+ 	mvprintw(12, 29, "");
+ 	refreshp();
+     }
+@@ -116,7 +116,7 @@ int auto_cq(void) {
+ 
+     attron(modify_attr(COLOR_PAIR(NORMCOLOR)));
+ 
+-    mvprintw(12, 29, spaces(13));
++    mvprintw(12, 29, "%s", spaces(13));
+     printcall();
+ 
+     return toupper(key);
+diff --git a/src/calledit.c b/src/calledit.c
+index 3fac4fb..ed7769a 100644
+--- a/src/calledit.c
++++ b/src/calledit.c
+@@ -56,7 +56,7 @@ void calledit(void) {
+ 	attron(COLOR_PAIR(C_HEADER));
+ 
+ 	mvprintw(12, 29, "            ");
+-	mvprintw(12, 29, hiscall);
++	mvprintw(12, 29, "%s", hiscall);
+ 	mvprintw(12, 29 + b, "");
+ 	/* no refreshp() here as getch() calls wrefresh() for the
+ 	 * panel with last output (whre the cursor should go */
+@@ -194,7 +194,7 @@ void calledit(void) {
+     attron(COLOR_PAIR(C_HEADER));
+ 
+     mvprintw(12, 29, "            ");
+-    mvprintw(12, 29, hiscall);
++    mvprintw(12, 29, "%s", hiscall);
+     refreshp();
+ 
+     attron(A_STANDOUT);
+@@ -256,7 +256,7 @@ int insert_char(int curposition) {
+ 	attroff(A_STANDOUT);
+ 	attron(COLOR_PAIR(C_HEADER));
+ 
+-	mvprintw(12, 29, hiscall);
++	mvprintw(12, 29, "%s", hiscall);
+ 	curposition++;
+ 	mvprintw(12, 29 + curposition, "");
+ 	refreshp();
+diff --git a/src/callinput.c b/src/callinput.c
+index 7760b3a..4b3d28c 100644
+--- a/src/callinput.c
++++ b/src/callinput.c
+@@ -459,8 +459,8 @@ int callinput(void) {
+ 			his_rst[1]++;
+ 
+ 			if (!no_rst)
+-			    mvprintw(12, 44, his_rst);
+-			mvprintw(12, 29, hiscall);
++			    mvprintw(12, 44, "%s", his_rst);
++			mvprintw(12, 29, "%s", hiscall);
+ 		    }
+ 
+ 		} else {	// change cw speed
+@@ -482,8 +482,8 @@ int callinput(void) {
+ 			his_rst[1]--;
+ 
+ 			if (!no_rst)
+-			    mvprintw(12, 44, his_rst);
+-			mvprintw(12, 29, hiscall);
++			    mvprintw(12, 44, "%s", his_rst);
++			mvprintw(12, 29, "%s", hiscall);
+ 		    }
+ 
+ 		} else {
+@@ -552,7 +552,7 @@ int callinput(void) {
+ 		attron(COLOR_PAIR(C_LOG) | A_STANDOUT);
+ 
+ 		for (j = 13; j <= 23; j++) {
+-		    mvprintw(j, 0, backgrnd_str);
++		    mvprintw(j, 0, "%s", backgrnd_str);
+ 		}
+ 
+ 		attron(modify_attr(COLOR_PAIR(NORMCOLOR)));
+@@ -979,7 +979,7 @@ int callinput(void) {
+ 			mvprintw(14 + t, 1,
+ 				 "                                                            ");
+ 		    for (t = 0; t <= 4; t++)
+-			mvprintw(15 + t, 1, talkarray[t]);
++			mvprintw(15 + t, 1, "%s", talkarray[t]);
+ 		    nicebox(14, 0, 5, 59, "Messages");
+ 
+ 		    refreshp();
+@@ -1334,7 +1334,7 @@ void handle_bandswitch(int direction) {
+     }
+ 
+     attron(COLOR_PAIR(C_WINDOW) | A_STANDOUT);
+-    mvprintw(12, 0, band[bandinx]);
++    mvprintw(12, 0, "%s", band[bandinx]);
+ 
+     if (trx_control) {
+ 	freq = bandfrequency[bandinx]; // TODO: is this needed?
+diff --git a/src/changepars.c b/src/changepars.c
+index b0c3eb8..bb90c84 100644
+--- a/src/changepars.c
++++ b/src/changepars.c
+@@ -1058,5 +1058,5 @@ void wipe_display() {
+     attron(modify_attr(COLOR_PAIR(C_WINDOW) | A_STANDOUT));
+ 
+     for (j = 0; j < LINES; j++)
+-	mvprintw(j, 0, backgrnd_str);
++	mvprintw(j, 0, "%s", backgrnd_str);
+ }
+diff --git a/src/clusterinfo.c b/src/clusterinfo.c
+index 09a509f..9760bcf 100644
+--- a/src/clusterinfo.c
++++ b/src/clusterinfo.c
+@@ -77,7 +77,7 @@ void clusterinfo(void) {
+ 	attron(COLOR_PAIR(C_LOG) | A_STANDOUT);
+ 
+ 	for (int i = 14; i < LINES - 1; i++)
+-	    mvprintw(i, 0, backgrnd_str);
++	    mvprintw(i, 0, "%s", backgrnd_str);
+ 	refreshp();
+ 
+     }
+diff --git a/src/edit_last.c b/src/edit_last.c
+index 36da642..cdf8220 100644
+--- a/src/edit_last.c
++++ b/src/edit_last.c
+@@ -48,7 +48,7 @@ static void highlight_line(int row, char *line, int column) {
+ 
+     g_strlcpy(ln, line, NR_COLS + 1);
+     attron(COLOR_PAIR(C_HEADER) | A_STANDOUT);
+-    mvprintw(7 + row, 0, ln);
++    mvprintw(7 + row, 0, "%s", ln);
+     mvprintw(7 + row, column, "");
+     refreshp();
+ }
+@@ -60,7 +60,7 @@ static void unhighlight_line(int row, char *line) {
+ 
+     g_strlcpy(ln, line, NR_COLS + 1);
+     attron(COLOR_PAIR(C_LOG) | A_STANDOUT);
+-    mvprintw(7 + row, 0, ln);
++    mvprintw(7 + row, 0, "%s", ln);
+ }
+ 
+ 
+diff --git a/src/editlog.c b/src/editlog.c
+index 7359c49..6a8ddf5 100644
+--- a/src/editlog.c
++++ b/src/editlog.c
+@@ -91,7 +91,7 @@ void logedit(void) {
+     attron(COLOR_PAIR(C_LOG) | A_STANDOUT);
+ 
+     for (j = 13; j < LINES - 1; j++) {
+-	mvprintw(j, 0, backgrnd_str);
++	mvprintw(j, 0, "%s", backgrnd_str);
+     }
+     refreshp();
+ }
+diff --git a/src/err_utils.c b/src/err_utils.c
+index 180b2c7..4b0bb52 100644
+--- a/src/err_utils.c
++++ b/src/err_utils.c
+@@ -35,8 +35,8 @@ void handle_logging(enum log_lvl lvl, ...) {
+     str = g_strdup_vprintf(fmt, args);
+     va_end(args);
+ 
+-    mvprintw(LINES - 1, 0, backgrnd_str);
+-    mvprintw(LINES - 1, 0, str);
++    mvprintw(LINES - 1, 0, "%s", backgrnd_str);
++    mvprintw(LINES - 1, 0, "%s", str);
+     refreshp();
+ 
+     g_free(str);
+diff --git a/src/freq_display.c b/src/freq_display.c
+index 16e672c..71d1d28 100644
+--- a/src/freq_display.c
++++ b/src/freq_display.c
+@@ -270,7 +270,7 @@ void clear_freq_display(int y, int x) {
+     attron(modify_attr(COLOR_PAIR(C_LOG)));
+ 
+     for (int i = 0; i < 5; ++i) {
+-	mvprintw(y + i, x, spaces(35));
++	mvprintw(y + i, x, "%s", spaces(35));
+     }
+ 
+ }
+diff --git a/src/getexchange.c b/src/getexchange.c
+index e6d9aed..9e56128 100644
+--- a/src/getexchange.c
++++ b/src/getexchange.c
+@@ -303,7 +303,7 @@ int getexchange(void) {
+ 			my_rst[1]++;
+ 
+ 			if (!no_rst)
+-			    mvprintw(12, 49, my_rst);
++			    mvprintw(12, 49, "%s", my_rst);
+ 		    }
+ 		} else {	/* speed up */
+ 		    speedup();
+@@ -321,7 +321,7 @@ int getexchange(void) {
+ 			my_rst[1]--;
+ 
+ 			if (!no_rst)
+-			    mvprintw(12, 49, my_rst);
++			    mvprintw(12, 49, "%s", my_rst);
+ 		    }
+ 		} else {	/* speed down */
+ 		    speeddown();
+@@ -460,21 +460,21 @@ int getexchange(void) {
+ 
+ 	    if ((arrlss == 1) && (x != TAB) && (strlen(section) < 2)) {
+ 		mvprintw(13, 54, "section?");
+-		mvprintw(12, 54, comment);
++		mvprintw(12, 54, "%s", comment);
+ 		x = 0;
+ 	    } else if (((serial_section_mult == 1) || (sectn_mult == 1))
+ 		       && ((x != TAB) && (strlen(section) < 1))) {
+ 		if (serial_or_section == 0 || (serial_or_section == 1
+ 					       && country_found(hiscall))) {
+ 		    mvprintw(13, 54, "section?", section);
+-		    mvprintw(12, 54, comment);
++		    mvprintw(12, 54, "%s", comment);
+ 		    refreshp();
+ 		}
+ 		break;
+ 
+ 	    } else if (serial_grid4_mult == 1) {
+ 		//      mvprintw(13,54, "section?");
+-		mvprintw(12, 54, comment);
++		mvprintw(12, 54, "%s", comment);
+ 		refreshp();
+ 		gridmult = getgrid(comment);
+ 		strcpy(section, gridmult);
+@@ -486,7 +486,7 @@ int getexchange(void) {
+ 	    } else if (stewperry_flg == 1) {
+ 		if (check_qra(comment) == 0) {
+ 		    mvprintw(13, 54, "locator?");
+-		    mvprintw(12, 54, comment);
++		    mvprintw(12, 54, "%s", comment);
+ 		    break;
+ 		}
+ 		refreshp();
+@@ -495,7 +495,7 @@ int getexchange(void) {
+ 		       || (countrynr == ve_cty))) {
+ 		if (strlen(comment) < 5) {
+ 		    mvprintw(13, 54, "state/prov?");
+-		    mvprintw(12, 54, comment);
++		    mvprintw(12, 54, "%s", comment);
+ 		    if (x == '\n' || x == KEY_ENTER || x == BACKSLASH) {
+ 			x = 0;
+ 		    } else {
+@@ -882,7 +882,7 @@ int checkexchange(int x) {
+ 	strcat(ssexchange, " ");
+ 	strcat(ssexchange, section);
+ 
+-	mvprintw(12, 54, comment);
++	mvprintw(12, 54, "%s", comment);
+ 	refreshp();
+ 
+ 	return (x);		// end arrlss
+@@ -1048,7 +1048,7 @@ int checkexchange(int x) {
+     strcat(ssexchange, section);
+ 
+     // ---------------------------end mults --------------------------
+-    mvprintw(12, 54, comment);
++    mvprintw(12, 54, "%s", comment);
+     refreshp();
+ 
+     return (x);
+@@ -1126,8 +1126,8 @@ void exchange_edit(void) {
+ 	attroff(A_STANDOUT);
+ 	attron(COLOR_PAIR(C_HEADER));
+ 
+-	mvprintw(12, 54, spaces(80 - 54));
+-	mvprintw(12, 54, comment);
++	mvprintw(12, 54, "%s", spaces(80 - 54));
++	mvprintw(12, 54, "%s", comment);
+ 	mvprintw(12, 54 + b, "");
+ 
+ 	i = key_get();
+diff --git a/src/getmessages.c b/src/getmessages.c
+index bdc8414..5ec77b5 100644
+--- a/src/getmessages.c
++++ b/src/getmessages.c
+@@ -64,13 +64,13 @@ void getmessages(void) {
+     getstationinfo();
+ 
+     printw("\n     Call = ");
+-    printw(call);
++    printw("%s", call);
+ 
+     printw("     My Zone = ");
+-    printw(mycqzone);
++    printw("%s", mycqzone);
+ 
+     printw("     My Continent = ");
+-    printw(mycontinent);
++    printw("%s", mycontinent);
+ 
+     printw("\n\n");
+     refreshp();
+diff --git a/src/getwwv.c b/src/getwwv.c
+index e8d5709..0ded3d7 100644
+--- a/src/getwwv.c
++++ b/src/getwwv.c
+@@ -110,6 +110,6 @@ void wwv_add(const char *s) {
+ //
+ void wwv_show_footer() {
+     if (lastwwv_time > time(NULL) - 3 * 60) {
+-	mvprintw(LINES - 1, 0, lastwwv);
++	mvprintw(LINES - 1, 0, "%s", lastwwv);
+     }
+ }
+diff --git a/src/lancode.c b/src/lancode.c
+index 9c130e4..23ce095 100644
+--- a/src/lancode.c
++++ b/src/lancode.c
+@@ -340,7 +340,7 @@ void talk(void) {
+ 
+     char talkline[61] = "";
+ 
+-    mvprintw(LINES - 1, 0, backgrnd_str);
++    mvprintw(LINES - 1, 0, "%s", backgrnd_str);
+     mvprintw(LINES - 1, 0, "T>");
+     refreshp();
+     echo();
+@@ -353,7 +353,7 @@ void talk(void) {
+ 
+     talkline[0] = '\0';
+     attron(COLOR_PAIR(C_HEADER));
+-    mvprintw(LINES - 1, 0, backgrnd_str);
++    mvprintw(LINES - 1, 0, "%s", backgrnd_str);
+     refreshp();
+ }
+ 
+diff --git a/src/listmessages.c b/src/listmessages.c
+index d9912eb..286a800 100644
+--- a/src/listmessages.c
++++ b/src/listmessages.c
+@@ -79,7 +79,7 @@ void listmessages(void) {
+ 
+     attron(COLOR_PAIR(C_LOG)  |  A_STANDOUT);
+     for (i = 13 ;  i  <= 23 ; i++) {
+-	mvprintw(i, 0, backgrnd_str);
++	mvprintw(i, 0, "%s", backgrnd_str);
+     }
+ 
+     refreshp();
+diff --git a/src/log_to_disk.c b/src/log_to_disk.c
+index 6b49ab6..e384549 100644
+--- a/src/log_to_disk.c
++++ b/src/log_to_disk.c
+@@ -119,21 +119,21 @@ void log_to_disk(int from_lan) {
+     attron(modify_attr(COLOR_PAIR(NORMCOLOR)));	/* erase comment  field */
+ 
+     if (!from_lan)
+-	mvprintw(12, 54, spaces(80 - 54));
++	mvprintw(12, 54, "%s", spaces(80 - 54));
+ 
+     attron(COLOR_PAIR(C_LOG) | A_STANDOUT);
+     if (!from_lan) {
+-	mvprintw(7, 0, logline0);
+-	mvprintw(8, 0, logline1);
+-	mvprintw(9, 0, logline2);
++	mvprintw(7, 0, "%s", logline0);
++	mvprintw(8, 0, "%s", logline1);
++	mvprintw(9, 0, "%s", logline2);
+     }
+-    mvprintw(10, 0, logline3);
+-    mvprintw(11, 0, logline4);
++    mvprintw(10, 0, "%s", logline3);
++    mvprintw(11, 0, "%s", logline4);
+     refreshp();
+ 
+     attron(COLOR_PAIR(C_WINDOW));
+ 
+-    mvprintw(12, 23, qsonrstr);
++    mvprintw(12, 23, "%s", qsonrstr);
+ 
+     if (no_rst) {
+ 	mvaddstr(12, 44, "   ");
+diff --git a/src/logit.c b/src/logit.c
+index aff62d9..03091b1 100644
+--- a/src/logit.c
++++ b/src/logit.c
+@@ -225,8 +225,8 @@ void refresh_comment(void) {
+ 
+     attron(modify_attr(COLOR_PAIR(NORMCOLOR)));
+ 
+-    mvprintw(12, 54, spaces(80 - 54));
+-    mvprintw(12, 54, comment);
++    mvprintw(12, 54, "%s", spaces(80 - 54));
++    mvprintw(12, 54, "%s", comment);
+ }
+ 
+ void change_mode(void) {
+diff --git a/src/logview.c b/src/logview.c
+index 0e99da1..6c73023 100644
+--- a/src/logview.c
++++ b/src/logview.c
+@@ -48,7 +48,7 @@ int logview(void) {
+     attron(COLOR_PAIR(C_LOG)  |  A_STANDOUT);
+ 
+     for (j = 13 ;  j  <= 23 ; j++) {
+-	mvprintw(j, 0, backgrnd_str);
++	mvprintw(j, 0, "%s", backgrnd_str);
+     }
+ 
+     refreshp();
+diff --git a/src/main.c b/src/main.c
+index 187d97b..da4c8d9 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -921,7 +921,7 @@ int main(int argc, char *argv[]) {
+     if (isFirstStart()) {
+ 	/* first time called in this directory */
+ 	verbose = 1;
+-	printw(welcome);
++	printw("%s", welcome);
+ 	show_GPL();
+ 	sleep(5);
+ 	clear();
+@@ -977,7 +977,7 @@ int main(int argc, char *argv[]) {
+     clear_display();		/* tidy up the display */
+     attron(COLOR_PAIR(C_LOG) | A_STANDOUT);
+     for (j = 13; j <= LINES - 1; j++) {	/* wipe lower window */
+-	mvprintw(j, 0, backgrnd_str);
++	mvprintw(j, 0, "%s", backgrnd_str);
+     }
+     refreshp();
+ 
+diff --git a/src/messagechange.c b/src/messagechange.c
+index e341a49..2e2fb97 100644
+--- a/src/messagechange.c
++++ b/src/messagechange.c
+@@ -79,7 +79,7 @@ void message_change() {
+ 
+     attron(COLOR_PAIR(C_LOG) | A_STANDOUT);
+     for (int y = 13; y < LINES - 1; y++) {
+-	mvprintw(y, 0, backgrnd_str);
++	mvprintw(y, 0, "%s", backgrnd_str);
+     }
+ 
+     nicebox(14, 3, 2, 60, "Enter message (F1-12, C, S)");
+diff --git a/src/muf.c b/src/muf.c
+index 7ec204d..53ffb89 100644
+--- a/src/muf.c
++++ b/src/muf.c
+@@ -367,7 +367,7 @@ void muf(void) {
+     wattron(win, modify_attr(COLOR_PAIR(C_WINDOW) | A_STANDOUT));
+ 
+     for (i = 0; i < LINES; i++)
+-	mvwprintw(win, i, 0, backgrnd_str);
++	mvwprintw(win, i, 0, "%s", backgrnd_str);
+ 
+     mvwprintw(win, 1, 0, "        SSN: %3.0f ", ssn_r);
+ 
+@@ -400,7 +400,7 @@ void muf(void) {
+ 	su_min = (int)((sunrise - su) * 60);
+ 	sd_min = (int)((sundown - sd) * 60);
+ 
+-	mvwprintw(win, 3, 0, time_buf);
++	mvwprintw(win, 3, 0, "%s", time_buf);
+ 	mvwprintw(win, 7, 40, "Sun   : %02d:%02d-%02d:%02d UTC", su, su_min, sd,
+ 		  sd_min);
+     }
+diff --git a/src/nicebox.c b/src/nicebox.c
+index 8023d71..67b0ce0 100644
+--- a/src/nicebox.c
++++ b/src/nicebox.c
+@@ -42,7 +42,7 @@ void wnicebox(WINDOW *win, int y, int x, int height, int width, char *boxname) {
+     mvwaddch(win, y + height, x + width, ACS_LRCORNER);
+     mvwvline(win, y + 1, x + width, ACS_VLINE, height - 1);
+     mvwvline(win, y + 1, x, ACS_VLINE, height - 1);
+-    mvwprintw(win, y, x + 2, boxname);
++    mvwprintw(win, y, x + 2, "%s", boxname);
+ 
+     return;
+ }
+diff --git a/src/note.c b/src/note.c
+index 4f2afd8..46a956e 100644
+--- a/src/note.c
++++ b/src/note.c
+@@ -87,7 +87,7 @@ int include_note(void) {
+     attron(COLOR_PAIR(C_LOG | A_STANDOUT));
+ 
+     for (i = 14; i <= 16; i++)
+-	mvprintw(i, 0, backgrnd_str);
++	mvprintw(i, 0, "%s", backgrnd_str);
+ 
+     return (0);
+ }
+diff --git a/src/printcall.c b/src/printcall.c
+index 3e88d57..73afe02 100644
+--- a/src/printcall.c
++++ b/src/printcall.c
+@@ -43,7 +43,7 @@ void printcall(void) {
+     attron(COLOR_PAIR(C_INPUT) | attrib);
+ 
+     mvprintw(12, 29, "            ");
+-    mvprintw(12, 29, hiscall);
++    mvprintw(12, 29, "%s", hiscall);
+     if ((cqmode == CQ) && (cwstart > 0))
+ 	mvchgat(12, 29 + cwstart, 12 - cwstart,
+ 		attrib | A_UNDERLINE, C_INPUT, NULL);
+diff --git a/src/qtcwin.c b/src/qtcwin.c
+index d14c0d6..0c91e3e 100644
+--- a/src/qtcwin.c
++++ b/src/qtcwin.c
+@@ -1216,7 +1216,7 @@ void showfield(int fidx) {
+ 	wattrset(qtcwin, LINE_NORMAL);
+     }
+ 
+-    mvwprintw(qtcwin, winrow, pos[posidx][0], filled);
++    mvwprintw(qtcwin, winrow, pos[posidx][0], "%s", filled);
+     mvwprintw(qtcwin, winrow, pos[posidx][0], "%s", fieldval);
+     if (fidx == activefield) {
+ 	show_help_msg(posidx);
+@@ -1519,14 +1519,14 @@ void show_help_msg(int msgidx) {
+ 		mvwprintw(qtcwin, ++j, 36, "Press ENTER to mark as RCVD");
+ 	    }
+ 	} else {
+-	    mvwprintw(qtcwin, ++j, 36, help_rec_msgs[msgidx]);
++	    mvwprintw(qtcwin, ++j, 36, "%s", help_rec_msgs[msgidx]);
+ 	}
+     }
+     if (qtccurrdirection == SEND) {
+ 	if (msgidx > 2 && msgidx < 6) {
+ 	    msgidx = 3;
+ 	}
+-	mvwprintw(qtcwin, ++j, 36, help_send_msgs[msgidx]);
++	mvwprintw(qtcwin, ++j, 36, "%s", help_send_msgs[msgidx]);
+     }
+     wattrset(qtcwin, LINE_INVERTED);
+     mvwprintw(qtcwin, ++j, 36, "PgUP/PgDW: QRQ/QRS      CTRL-N: NO QTC");
+diff --git a/src/recall_exchange.c b/src/recall_exchange.c
+index 71bccca..cfd6025 100644
+--- a/src/recall_exchange.c
++++ b/src/recall_exchange.c
+@@ -97,7 +97,7 @@ int recall_exchange(void) {
+     }
+ 
+     if (found) {
+-	mvprintw(12, 54, comment);
++	mvprintw(12, 54, "%s", comment);
+ 	refreshp();
+     }
+ 
+diff --git a/src/rtty.c b/src/rtty.c
+index 573f3a9..2ae874f 100644
+--- a/src/rtty.c
++++ b/src/rtty.c
+@@ -187,20 +187,20 @@ void show_rtty(void) {
+     attroff(A_STANDOUT);
+     attron(modify_attr(COLOR_PAIR(C_HEADER)));
+ 
+-    mvprintw(1, 0, spaces(40));
++    mvprintw(1, 0, "%s", spaces(40));
+     mvprintw(1, 0, "%s", ry_term[0]);
+-    mvprintw(2, 0, spaces(40));
++    mvprintw(2, 0, "%s", spaces(40));
+     mvprintw(2, 0, "%s", ry_term[1]);
+-    mvprintw(3, 0, spaces(40));
++    mvprintw(3, 0, "%s", spaces(40));
+     mvprintw(3, 0, "%s", ry_term[2]);
+-    mvprintw(4, 0, spaces(40));
++    mvprintw(4, 0, "%s", spaces(40));
+     mvprintw(4, 0, "%s", ry_term[3]);
+-    mvprintw(5, 0, spaces(40));
++    mvprintw(5, 0, "%s", spaces(40));
+     mvprintw(5, 0, "%s", ry_term[4]);
+     if (commentfield == 0) {
+ 	printcall();
+     } else {
+-	mvprintw(12, 54, comment);
++	mvprintw(12, 54, "%s", comment);
+     }
+     refreshp();
+     attron(A_STANDOUT);
+diff --git a/src/searchlog.c b/src/searchlog.c
+index 8aff086..7f76ab6 100644
+--- a/src/searchlog.c
++++ b/src/searchlog.c
+@@ -113,7 +113,7 @@ void drawSearchWin(void) {
+ 
+     wattrset(search_win, COLOR_PAIR(C_LOG) | A_STANDOUT);
+     for (i = 0; i < nr_bands; i++)
+-	mvwprintw(search_win, i + 1, 1, spaces(37));
++	mvwprintw(search_win, i + 1, 1, "%s", spaces(37));
+ 
+     mvwprintw(search_win, 1, 1, " 10");
+     mvwprintw(search_win, 2, 1, " 15");
+@@ -134,7 +134,7 @@ void displayCallInfo(dxcc_data *dx, int z, char *pxstr) {
+     wattroff(search_win, A_STANDOUT);
+     wattron(search_win, COLOR_PAIR(C_BORDER));
+ 
+-    mvwprintw(search_win, nr_bands + 1, 2, dx->countryname);
++    mvwprintw(search_win, nr_bands + 1, 2, "%s", dx->countryname);
+     mvwprintw(search_win, nr_bands + 1, 32, "%02d", dx->cq);
+ 
+     if (itumult != 1)
+@@ -144,7 +144,7 @@ void displayCallInfo(dxcc_data *dx, int z, char *pxstr) {
+ 
+     if (wpx == 1) {
+ 	i = strlen(dx->countryname);
+-	mvwprintw(search_win, nr_bands + 1, 2 + i + 3, pxstr);
++	mvwprintw(search_win, nr_bands + 1, 2 + i + 3, "%s", pxstr);
+     }
+ }
+ 
+@@ -775,7 +775,7 @@ void searchlog() {
+ 	if (dupe == ISDUPE) {
+ 	    isdupe = 1;		// LZ3NY auto-b4 patch
+ 	    attrset(COLOR_PAIR(C_DUPE));
+-	    mvprintw(12, 29, hiscall);
++	    mvprintw(12, 29, "%s", hiscall);
+ 	    refreshp();
+ 	    usleep(500000);
+ 	} else
+@@ -878,7 +878,7 @@ void show_needed_sections(void) {
+ 	wattron(search_win, modify_attr(COLOR_PAIR(C_WINDOW) | A_STANDOUT));
+ 
+ 	for (j = 1; j < 7; j++)
+-	    mvwprintw(search_win, j, 1, spaces(37));
++	    mvwprintw(search_win, j, 1, "%s", spaces(37));
+ 
+ 	for (vert = 1; vert < 7; vert++) {
+ 	    if (cnt >= get_mult_count())
+@@ -925,5 +925,5 @@ void OnLowerSearchPanel(int x, char *str) {
+     int y = 1 + (IsAllBand() ? 10 : 6);
+ 
+     wattrset(search_win, modify_attr(COLOR_PAIR(C_BORDER)));
+-    mvwprintw(search_win, y, x, str);
++    mvwprintw(search_win, y, x, "%s", str);
+ }
+diff --git a/src/sendbuf.c b/src/sendbuf.c
+index 225608c..15830e2 100644
+--- a/src/sendbuf.c
++++ b/src/sendbuf.c
+@@ -294,7 +294,7 @@ void sendbuf(void) {
+ 	attron(COLOR_PAIR(C_LOG) | A_STANDOUT);
+ 
+ 	if (simulator_mode == 0) {
+-	    mvprintw(5, 0, printlinebuffer);
++	    mvprintw(5, 0, "%s", printlinebuffer);
+ 	    refreshp();
+ 	}
+ 	refreshp();
+diff --git a/src/showpxmap.c b/src/showpxmap.c
+index 1f84acd..e3d7043 100644
+--- a/src/showpxmap.c
++++ b/src/showpxmap.c
+@@ -87,7 +87,7 @@ void show_mults(void) {
+ 	    attron(COLOR_PAIR(C_LOG) | A_STANDOUT);
+ 
+ 	    for (l = 1; l < 6; l++)
+-		mvprintw(l, 0, backgrnd_str);
++		mvprintw(l, 0, "%s", backgrnd_str);
+ 
+ 	    i = 0;
+ 
+@@ -111,7 +111,7 @@ void show_mults(void) {
+ 
+ 			attron(modify_attr(COLOR_PAIR(C_INPUT)));
+ 
+-			mvprintw(k, j * 4, prefix);
++			mvprintw(k, j * 4, "%s", prefix);
+ 			refreshp();
+ 			i++;
+ 
+@@ -138,7 +138,7 @@ void show_mults(void) {
+ 
+ 	attron(COLOR_PAIR(C_LOG) | A_STANDOUT);
+ 	for (l = 1; l < 6; l++)
+-	    mvprintw(l, 0, backgrnd_str);
++	    mvprintw(l, 0, "%s", backgrnd_str);
+     } else
+ 
+ 	multiplierinfo();
+diff --git a/src/showscore.c b/src/showscore.c
+index 361e289..9bbbf87 100644
+--- a/src/showscore.c
++++ b/src/showscore.c
+@@ -64,7 +64,7 @@ void stewperry_show_summary(int points, float fixedmult);
+ void stewperry_show_summary(int points, float fixedmult) {
+     float mult;
+ 
+-    mvprintw(5, START_COL, spaces(80 - START_COL));
++    mvprintw(5, START_COL, "%s", spaces(80 - START_COL));
+     /* TODO: respect field boundaries for large numbers */
+     mult = (fixedmult == 0.0) ? 1.0 : fixedmult;
+ 
+@@ -75,7 +75,7 @@ void stewperry_show_summary(int points, float fixedmult) {
+ 
+ /* show summary line */
+ void show_summary(int points, int multi) {
+-    mvprintw(5, START_COL, spaces(80 - START_COL));
++    mvprintw(5, START_COL, "%s", spaces(80 - START_COL));
+     /* TODO: respect field boundaries for large numbers */
+     mvprintw(5, START_COL, "Pts: %d  Mul: %d Score: %d",
+ 	     points, multi, points * multi);
+@@ -111,9 +111,9 @@ void display_header(int *bi) {
+ 	printfield(2, band_cols[i], band_score[bi[i]]);
+     }
+ 
+-    mvprintw(3, START_COL, spaces(80 - START_COL));
+-    mvprintw(4, START_COL, spaces(80 - START_COL));
+-    mvprintw(5, START_COL, spaces(80 - START_COL));
++    mvprintw(3, START_COL, "%s", spaces(80 - START_COL));
++    mvprintw(4, START_COL, "%s", spaces(80 - START_COL));
++    mvprintw(5, START_COL, "%s", spaces(80 - START_COL));
+ 
+ }
+ 
+@@ -362,7 +362,7 @@ void showscore(void) {
+ 
+     /* show statistics */
+     attron(COLOR_PAIR(C_HEADER));
+-    mvprintw(6, 55, spaces(19));
++    mvprintw(6, 55, "%s", spaces(19));
+ 
+     if ((cqww == 1) || (wpx == 1) || (arrldx_usa == 1) || (pacc_pa_flg == 1)
+             || (wysiwyg_once == 1) || (universal == 1)) {	/* cqww or wpx */
+diff --git a/src/splitscreen.c b/src/splitscreen.c
+index f47497d..31b7be4 100644
+--- a/src/splitscreen.c
++++ b/src/splitscreen.c
+@@ -426,7 +426,7 @@ void resume_editing(void) {
+     viewbottom();
+     wattrset(sclwin, curattr);
+     werase(entwin);
+-    mvwprintw(entwin, 0, 0, entry_text);
++    mvwprintw(entwin, 0, 0, "%s", entry_text);
+     wmove(entwin, currow, curcol);
+     viewing = NULL;
+     view_state = STATE_EDITING;
+@@ -647,14 +647,14 @@ void addtext(char *s) {
+     if (strncmp(s, call, strlen(call) - 1) == 0
+ 	    && strlen(s) < 81 && strchr(s, '>') == NULL) {
+ 
+-	mvprintw(LINES - 1, 0, backgrnd_str);
++	mvprintw(LINES - 1, 0, "%s", backgrnd_str);
+ 
+ 	if ((strlen(s) + strlen(call) + 3) < 80) {
+ 	    strcpy(dxtext, s + strlen(call) + 3);
+ 	    if (dxtext[strlen(dxtext) - 1] == '\n')
+ 		dxtext[strlen(dxtext) - 1] = '\0';	// remove the newline
+-	    mvprintw(LINES - 1, 0, dxtext);
+-	    mvprintw(12, 29, hiscall);
++	    mvprintw(LINES - 1, 0, "%s", dxtext);
++	    mvprintw(12, 29, "%s", hiscall);
+ 	}
+ 	refreshp();
+ 
+@@ -1236,7 +1236,7 @@ int send_cluster(void) {
+     char line[MAX_CMD_LEN + 2] = "";
+ 
+     cluster = CLUSTER;
+-    mvprintw(LINES - 1, 0, backgrnd_str);
++    mvprintw(LINES - 1, 0, "%s", backgrnd_str);
+     mvprintw(LINES - 1, 0, ">");
+     refreshp();
+     echo();
+@@ -1257,7 +1257,7 @@ int send_cluster(void) {
+ 
+     attron(COLOR_PAIR(C_HEADER) | A_STANDOUT);
+ 
+-    mvprintw(LINES - 1, 0, backgrnd_str);
++    mvprintw(LINES - 1, 0, "%s", backgrnd_str);
+     refreshp();
+     line[0] = '\0';	/* not needed */
+ 
+diff --git a/src/startmsg.c b/src/startmsg.c
+index 853eb8c..bb64bbc 100644
+--- a/src/startmsg.c
++++ b/src/startmsg.c
+@@ -62,7 +62,7 @@ static int has_room_for_message() {
+ void showmsg(char *message) {
+     if (!has_room_for_message())
+ 	clearmsg_wait();
+-    mvprintw(linectr, 0, message);
++    mvprintw(linectr, 0, "%s", message);
+     refreshp();
+     linectr++;
+ }
+diff --git a/src/time_update.c b/src/time_update.c
+index bd153a9..be43cb0 100644
+--- a/src/time_update.c
++++ b/src/time_update.c
+@@ -97,13 +97,13 @@ void show_freq(void) {
+ 	mvprintw(13, 67, FREQ_DISPLAY_FORMAT, "TRX", freq / 1000.0);
+ 	memfreq = memory_get_freq();
+     } else {
+-	mvprintw(13, 67, spaces(80 - 67));
++	mvprintw(13, 67, "%s", spaces(80 - 67));
+     }
+ 
+     if (memfreq > 0) {
+ 	mvprintw(14, 67, FREQ_DISPLAY_FORMAT, "MEM", memfreq / 1000.0);
+     } else {
+-	mvprintw(14, 67, spaces(80 - 67));
++	mvprintw(14, 67, "%s", spaces(80 - 67));
+     }
+ 
+ }
+@@ -179,7 +179,7 @@ void time_update(void) {
+ 	if (lastwwv_time > prev_wwv_time) { // is there a newer WWV message?
+ 	    prev_wwv_time = lastwwv_time;
+ 	    attron(COLOR_PAIR(C_HEADER) | A_STANDOUT);
+-	    mvprintw(LINES - 1, 0, backgrnd_str);
++	    mvprintw(LINES - 1, 0, "%s", backgrnd_str);
+ 	    wwv_show_footer();              // print WWV info
+ 	}
+ 
+@@ -191,14 +191,14 @@ void time_update(void) {
+ 
+ 	attron(COLOR_PAIR(C_LOG) | A_STANDOUT);
+ 
+-	mvprintw(7, 0, logline0);
+-	mvprintw(8, 0, logline1);
+-	mvprintw(9, 0, logline2);
+-	mvprintw(10, 0, logline3);
+-	mvprintw(11, 0, logline4);
+-	mvprintw(13, 0, spaces(67));
++	mvprintw(7, 0, "%s", logline0);
++	mvprintw(8, 0, "%s", logline1);
++	mvprintw(9, 0, "%s", logline2);
++	mvprintw(10, 0, "%s", logline3);
++	mvprintw(11, 0, "%s", logline4);
++	mvprintw(13, 0, "%s", spaces(67));
+ 	attron(COLOR_PAIR(C_WINDOW));
+-	mvprintw(12, 23, qsonrstr);
++	mvprintw(12, 23, "%s", qsonrstr);
+ 	printcall();
+ 
+ 	showscore();	/* update  score  window every 2 seconds */
+diff --git a/test/data.c b/test/data.c
+index b8ab96a..bec557d 100644
+--- a/test/data.c
++++ b/test/data.c
+@@ -461,7 +461,13 @@ int mvprintw(int y, int x, const char *fmt, ...) {
+ int mvwprintw(WINDOW *win, int y, int x, const char *fmt, ...) {
+     va_list args;
+     va_start(args, fmt);
+-    mvprintw(y, x, fmt, args);
++    // shift history
++    for (int i = NLAST - 1; i >= 1; --i) {
++	strcpy(mvprintw_history[i], mvprintw_history[i - 1]);
++    }
++
++    sprintf(mvprintw_history[0], "%02d|%02d|", y, x);
++    vsnprintf(mvprintw_history[0] + 6, 100 - 6, fmt, args);
+     va_end(args);
+ 
+     return 0;

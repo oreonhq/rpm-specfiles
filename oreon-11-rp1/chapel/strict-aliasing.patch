@@ -1,0 +1,12 @@
+diff -ruN chapel-2.6.0/compiler/resolution/preFold.cpp chapel-2.6.0-mod/compiler/resolution/preFold.cpp
+--- chapel-2.6.0/compiler/resolution/preFold.cpp	2025-09-15 18:55:07.000000000 +0300
++++ chapel-2.6.0-mod/compiler/resolution/preFold.cpp	2025-10-03 06:44:51.970095108 +0300
+@@ -2156,7 +2156,7 @@
+       }
+ 
+       if (blk) {
+-        (unsigned&)(blk->blockTag) &= ~(unsigned)BLOCK_TYPE_ONLY;
++        blk->blockTag = (BlockTag)((unsigned)(blk->blockTag) & ~(unsigned)BLOCK_TYPE_ONLY);
+       }
+     } else if (type->symbol->hasFlag(FLAG_TUPLE)) {
+       Type* newt = computeNonRefTuple(toAggregateType(type));

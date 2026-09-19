@@ -1,0 +1,1590 @@
+diff -up mrcpp-1.5.0/cmake/DownloadProject.cmake.catchv3 mrcpp-1.5.0/cmake/DownloadProject.cmake
+--- mrcpp-1.5.0/cmake/DownloadProject.cmake.catchv3	2023-08-09 21:32:20.780484329 +0000
++++ mrcpp-1.5.0/cmake/DownloadProject.cmake	2023-08-09 21:32:20.780484329 +0000
+@@ -0,0 +1,202 @@
++# The MIT License (MIT)
++# 
++# Copyright (c) 2015 Crascit
++# 
++# Permission is hereby granted, free of charge, to any person obtaining a copy
++# of this software and associated documentation files (the "Software"), to deal
++# in the Software without restriction, including without limitation the rights
++# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++# copies of the Software, and to permit persons to whom the Software is
++# furnished to do so, subject to the following conditions:
++# 
++# The above copyright notice and this permission notice shall be included in all
++# copies or substantial portions of the Software.
++# 
++# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++# SOFTWARE.
++#
++# MODULE:   DownloadProject
++#
++# PROVIDES:
++#   download_project( PROJ projectName
++#                    [PREFIX prefixDir]
++#                    [DOWNLOAD_DIR downloadDir]
++#                    [SOURCE_DIR srcDir]
++#                    [BINARY_DIR binDir]
++#                    [QUIET]
++#                    ...
++#   )
++#
++#       Provides the ability to download and unpack a tarball, zip file, git repository,
++#       etc. at configure time (i.e. when the cmake command is run). How the downloaded
++#       and unpacked contents are used is up to the caller, but the motivating case is
++#       to download source code which can then be included directly in the build with
++#       add_subdirectory() after the call to download_project(). Source and build
++#       directories are set up with this in mind.
++#
++#       The PROJ argument is required. The projectName value will be used to construct
++#       the following variables upon exit (obviously replace projectName with its actual
++#       value):
++#
++#           projectName_SOURCE_DIR
++#           projectName_BINARY_DIR
++#
++#       The SOURCE_DIR and BINARY_DIR arguments are optional and would not typically
++#       need to be provided. They can be specified if you want the downloaded source
++#       and build directories to be located in a specific place. The contents of
++#       projectName_SOURCE_DIR and projectName_BINARY_DIR will be populated with the
++#       locations used whether you provide SOURCE_DIR/BINARY_DIR or not.
++#
++#       The DOWNLOAD_DIR argument does not normally need to be set. It controls the
++#       location of the temporary CMake build used to perform the download.
++#
++#       The PREFIX argument can be provided to change the base location of the default
++#       values of DOWNLOAD_DIR, SOURCE_DIR and BINARY_DIR. If all of those three arguments
++#       are provided, then PREFIX will have no effect. The default value for PREFIX is
++#       CMAKE_BINARY_DIR.
++#
++#       The QUIET option can be given if you do not want to show the output associated
++#       with downloading the specified project.
++#
++#       In addition to the above, any other options are passed through unmodified to
++#       ExternalProject_Add() to perform the actual download, patch and update steps.
++#       The following ExternalProject_Add() options are explicitly prohibited (they
++#       are reserved for use by the download_project() command):
++#
++#           CONFIGURE_COMMAND
++#           BUILD_COMMAND
++#           INSTALL_COMMAND
++#           TEST_COMMAND
++#
++#       Only those ExternalProject_Add() arguments which relate to downloading, patching
++#       and updating of the project sources are intended to be used. Also note that at
++#       least one set of download-related arguments are required.
++#
++#       If using CMake 3.2 or later, the UPDATE_DISCONNECTED option can be used to
++#       prevent a check at the remote end for changes every time CMake is run
++#       after the first successful download. See the documentation of the ExternalProject
++#       module for more information. It is likely you will want to use this option if it
++#       is available to you. Note, however, that the ExternalProject implementation contains
++#       bugs which result in incorrect handling of the UPDATE_DISCONNECTED option when
++#       using the URL download method or when specifying a SOURCE_DIR with no download
++#       method. Fixes for these have been created, the last of which is scheduled for
++#       inclusion in CMake 3.8.0. Details can be found here:
++#
++#           https://gitlab.kitware.com/cmake/cmake/commit/bdca68388bd57f8302d3c1d83d691034b7ffa70c
++#           https://gitlab.kitware.com/cmake/cmake/issues/16428
++#
++#       If you experience build errors related to the update step, consider avoiding
++#       the use of UPDATE_DISCONNECTED.
++#
++# EXAMPLE USAGE:
++#
++#   include(DownloadProject)
++#   download_project(PROJ                googletest
++#                    GIT_REPOSITORY      https://github.com/google/googletest.git
++#                    GIT_TAG             master
++#                    UPDATE_DISCONNECTED 1
++#                    QUIET
++#   )
++#
++#   add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
++#
++#========================================================================================
++
++
++set(_DownloadProjectDir "${CMAKE_CURRENT_LIST_DIR}")
++
++include(CMakeParseArguments)
++
++function(download_project)
++
++    set(options QUIET)
++    set(oneValueArgs
++        PROJ
++        PREFIX
++        DOWNLOAD_DIR
++        SOURCE_DIR
++        BINARY_DIR
++        # Prevent the following from being passed through
++        CONFIGURE_COMMAND
++        BUILD_COMMAND
++        INSTALL_COMMAND
++        TEST_COMMAND
++    )
++    set(multiValueArgs "")
++
++    cmake_parse_arguments(DL_ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
++
++    # Hide output if requested
++    if (DL_ARGS_QUIET)
++        set(OUTPUT_QUIET "OUTPUT_QUIET")
++    else()
++        unset(OUTPUT_QUIET)
++        message(STATUS "Downloading/updating ${DL_ARGS_PROJ}")
++    endif()
++
++    # Set up where we will put our temporary CMakeLists.txt file and also
++    # the base point below which the default source and binary dirs will be.
++    # The prefix must always be an absolute path.
++    if (NOT DL_ARGS_PREFIX)
++        set(DL_ARGS_PREFIX "${CMAKE_BINARY_DIR}")
++    else()
++        get_filename_component(DL_ARGS_PREFIX "${DL_ARGS_PREFIX}" ABSOLUTE
++                               BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
++    endif()
++    if (NOT DL_ARGS_DOWNLOAD_DIR)
++        set(DL_ARGS_DOWNLOAD_DIR "${DL_ARGS_PREFIX}/${DL_ARGS_PROJ}-download")
++    endif()
++
++    # Ensure the caller can know where to find the source and build directories
++    if (NOT DL_ARGS_SOURCE_DIR)
++        set(DL_ARGS_SOURCE_DIR "${DL_ARGS_PREFIX}/${DL_ARGS_PROJ}-src")
++    endif()
++    if (NOT DL_ARGS_BINARY_DIR)
++        set(DL_ARGS_BINARY_DIR "${DL_ARGS_PREFIX}/${DL_ARGS_PROJ}-build")
++    endif()
++    set(${DL_ARGS_PROJ}_SOURCE_DIR "${DL_ARGS_SOURCE_DIR}" PARENT_SCOPE)
++    set(${DL_ARGS_PROJ}_BINARY_DIR "${DL_ARGS_BINARY_DIR}" PARENT_SCOPE)
++
++    # The way that CLion manages multiple configurations, it causes a copy of
++    # the CMakeCache.txt to be copied across due to it not expecting there to
++    # be a project within a project.  This causes the hard-coded paths in the
++    # cache to be copied and builds to fail.  To mitigate this, we simply
++    # remove the cache if it exists before we configure the new project.  It
++    # is safe to do so because it will be re-generated.  Since this is only
++    # executed at the configure step, it should not cause additional builds or
++    # downloads.
++    file(REMOVE "${DL_ARGS_DOWNLOAD_DIR}/CMakeCache.txt")
++
++    # Create and build a separate CMake project to carry out the download.
++    # If we've already previously done these steps, they will not cause
++    # anything to be updated, so extra rebuilds of the project won't occur.
++    # Make sure to pass through CMAKE_MAKE_PROGRAM in case the main project
++    # has this set to something not findable on the PATH.
++    configure_file("${_DownloadProjectDir}/DownloadProject.CMakeLists.cmake.in"
++                   "${DL_ARGS_DOWNLOAD_DIR}/CMakeLists.txt")
++    execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}"
++                        -D "CMAKE_MAKE_PROGRAM:FILE=${CMAKE_MAKE_PROGRAM}"
++                        .
++                    RESULT_VARIABLE result
++                    ${OUTPUT_QUIET}
++                    WORKING_DIRECTORY "${DL_ARGS_DOWNLOAD_DIR}"
++    )
++    if(result)
++        message(FATAL_ERROR "CMake step for ${DL_ARGS_PROJ} failed: ${result}")
++    endif()
++    execute_process(COMMAND ${CMAKE_COMMAND} --build .
++                    RESULT_VARIABLE result
++                    ${OUTPUT_QUIET}
++                    WORKING_DIRECTORY "${DL_ARGS_DOWNLOAD_DIR}"
++    )
++    if(result)
++        message(FATAL_ERROR "Build step for ${DL_ARGS_PROJ} failed: ${result}")
++    endif()
++
++endfunction()
++
+diff -up mrcpp-1.5.0/tests/CMakeLists.txt.catchv3 mrcpp-1.5.0/tests/CMakeLists.txt
+--- mrcpp-1.5.0/tests/CMakeLists.txt.catchv3	2023-08-09 21:32:20.778484365 +0000
++++ mrcpp-1.5.0/tests/CMakeLists.txt	2023-08-09 21:36:25.303139508 +0000
+@@ -1,7 +1,21 @@
+-# Prepare "Catch" library for other executables, if not already available
+-if(NOT TARGET Catch)
+-  add_library(Catch INTERFACE)
+-  target_include_directories(Catch INTERFACE ${PROJECT_SOURCE_DIR}/external/catch)
++find_package( Catch2 3.0.1 CONFIG)
++if( NOT Catch2_FOUND )
++  message( STATUS "Could NOT Find Catch2 (Building v3.3.2 Locally)" )
++  include( FetchContent )
++  FetchContent_Declare(
++    catch2
++    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
++    GIT_TAG        v3.3.2
++  )
++  if( NOT catch2_POPULATED )
++    FetchContent_Populate( catch2 )
++    set(CATCH_BUILD_TESTING OFF CACHE BOOL "Build SelfTest project" FORCE)
++    set(CATCH_INSTALL_DOCS OFF CACHE BOOL "Install documentation alongside library" FORCE)
++    set(CATCH_INSTALL_HELPERS OFF CACHE BOOL "Install contrib alongside library" FORCE)
++    add_subdirectory( ${catch2_SOURCE_DIR} ${catch2_BINARY_DIR} )
++  endif()
++else()
++  message( STATUS "Found Catch2 VERSION ${Catch2_VERSION} DIR ${Catch2_DIR}" )
+ endif()
+ 
+ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+@@ -15,8 +29,7 @@ add_subdirectory(trees)
+ add_subdirectory(scalingfactor)
+ 
+ target_link_libraries(mrcpp-tests
+-  mrcpp
+-  Catch
++  PUBLIC mrcpp Catch2::Catch2WithMain
+   )
+ 
+ install(
+diff -up mrcpp-1.5.0/tests/core/gauss_quadrature.cpp.catchv3 mrcpp-1.5.0/tests/core/gauss_quadrature.cpp
+--- mrcpp-1.5.0/tests/core/gauss_quadrature.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/core/gauss_quadrature.cpp	2023-08-09 21:32:20.781484311 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ using namespace mrcpp;
+ 
+diff -up mrcpp-1.5.0/tests/core/mw_filter.cpp.catchv3 mrcpp-1.5.0/tests/core/mw_filter.cpp
+--- mrcpp-1.5.0/tests/core/mw_filter.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/core/mw_filter.cpp	2023-08-09 21:32:20.781484311 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "MRCPP/constants.h"
+ #include "core/FilterCache.h"
+@@ -47,8 +47,8 @@ TEST_CASE("Interpolating filters", "[mw_
+                     double sc = F.col(i).dot(F.col(j));
+                     double sr = F.row(i).dot(F.row(j));
+                     if (i == j) {
+-                        REQUIRE(sc == Approx(1.0));
+-                        REQUIRE(sr == Approx(1.0));
++                        REQUIRE(sc == Catch::Approx(1.0));
++                        REQUIRE(sr == Catch::Approx(1.0));
+                     } else {
+                         off_diag_col += std::abs(sc);
+                         off_diag_row += std::abs(sr);
+@@ -56,8 +56,8 @@ TEST_CASE("Interpolating filters", "[mw_
+                 }
+             }
+         }
+-        REQUIRE(off_diag_col == Approx(0.0).margin(1.0e-12));
+-        REQUIRE(off_diag_row == Approx(0.0).margin(1.0e-12));
++        REQUIRE(off_diag_col == Catch::Approx(0.0).margin(1.0e-12));
++        REQUIRE(off_diag_row == Catch::Approx(0.0).margin(1.0e-12));
+     }
+ }
+ 
+diff -up mrcpp-1.5.0/tests/core/scaling_basis.cpp.catchv3 mrcpp-1.5.0/tests/core/scaling_basis.cpp
+--- mrcpp-1.5.0/tests/core/scaling_basis.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/core/scaling_basis.cpp	2023-08-09 21:32:20.781484311 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "core/InterpolatingBasis.h"
+ #include "core/LegendreBasis.h"
+@@ -41,8 +41,8 @@ TEST_CASE("InterpolatingBasis", "[interp
+         SECTION("Constructor") {
+             for (int k = 0; k < 1; k++) {
+                 const Polynomial &P_k = basis.getFunc(k);
+-                REQUIRE(P_k.getScaledLowerBound() == Approx(0.0));
+-                REQUIRE(P_k.getScaledUpperBound() == Approx(1.0));
++                REQUIRE(P_k.getScaledLowerBound() == Catch::Approx(0.0));
++                REQUIRE(P_k.getScaledUpperBound() == Catch::Approx(1.0));
+                 REQUIRE(P_k.getOrder() == 1);
+             }
+         }
+@@ -53,8 +53,8 @@ TEST_CASE("InterpolatingBasis", "[interp
+         SECTION("Constructor") {
+             for (int k = 0; k < 6; k++) {
+                 const Polynomial &P_k = basis.getFunc(k);
+-                REQUIRE(P_k.getScaledLowerBound() == Approx(0.0));
+-                REQUIRE(P_k.getScaledUpperBound() == Approx(1.0));
++                REQUIRE(P_k.getScaledLowerBound() == Catch::Approx(0.0));
++                REQUIRE(P_k.getScaledUpperBound() == Catch::Approx(1.0));
+                 REQUIRE(P_k.getOrder() == 6);
+             }
+         }
+@@ -65,8 +65,8 @@ TEST_CASE("InterpolatingBasis", "[interp
+         SECTION("Constructor") {
+             for (int k = 0; k < 10; k++) {
+                 const Polynomial &P_k = basis.getFunc(k);
+-                REQUIRE(P_k.getScaledLowerBound() == Approx(0.0));
+-                REQUIRE(P_k.getScaledUpperBound() == Approx(1.0));
++                REQUIRE(P_k.getScaledLowerBound() == Catch::Approx(0.0));
++                REQUIRE(P_k.getScaledUpperBound() == Catch::Approx(1.0));
+                 REQUIRE(P_k.getOrder() == 10);
+             }
+         }
+@@ -80,8 +80,8 @@ TEST_CASE("LegendreBasis", "[legendre_ba
+         SECTION("Constructor") {
+             for (int k = 0; k < 1; k++) {
+                 const Polynomial &P_k = basis.getFunc(k);
+-                REQUIRE(P_k.getScaledLowerBound() == Approx(0.0));
+-                REQUIRE(P_k.getScaledUpperBound() == Approx(1.0));
++                REQUIRE(P_k.getScaledLowerBound() == Catch::Approx(0.0));
++                REQUIRE(P_k.getScaledUpperBound() == Catch::Approx(1.0));
+                 REQUIRE(P_k.getOrder() == k);
+             }
+         }
+@@ -92,8 +92,8 @@ TEST_CASE("LegendreBasis", "[legendre_ba
+         SECTION("Test constructor") {
+             for (int k = 0; k < 6; k++) {
+                 const Polynomial &P_k = basis.getFunc(k);
+-                REQUIRE(P_k.getScaledLowerBound() == Approx(0.0));
+-                REQUIRE(P_k.getScaledUpperBound() == Approx(1.0));
++                REQUIRE(P_k.getScaledLowerBound() == Catch::Approx(0.0));
++                REQUIRE(P_k.getScaledUpperBound() == Catch::Approx(1.0));
+                 REQUIRE(P_k.getOrder() == k);
+             }
+         }
+@@ -104,8 +104,8 @@ TEST_CASE("LegendreBasis", "[legendre_ba
+         SECTION("Test constructor") {
+             for (int k = 0; k < 10; k++) {
+                 const Polynomial &P_k = basis.getFunc(k);
+-                REQUIRE(P_k.getScaledLowerBound() == Approx(0.0));
+-                REQUIRE(P_k.getScaledUpperBound() == Approx(1.0));
++                REQUIRE(P_k.getScaledLowerBound() == Catch::Approx(0.0));
++                REQUIRE(P_k.getScaledUpperBound() == Catch::Approx(1.0));
+                 REQUIRE(P_k.getOrder() == k);
+             }
+         }
+@@ -117,11 +117,11 @@ template <int K> void testOrthonormality
+     for (int i = 0; i < K; i++) {
+         const Polynomial &P_i = basis.getFunc(i);
+         double S_ii = P_i.innerProduct(P_i);
+-        REQUIRE(S_ii == Approx(1.0));
++        REQUIRE(S_ii == Catch::Approx(1.0));
+         for (int j = 0; j < i; j++) {
+             const Polynomial &P_j = basis.getFunc(j);
+             double S_ij = P_i.innerProduct(P_j);
+-            REQUIRE(S_ij == Approx(0.0).margin(1.0e-10));
++            REQUIRE(S_ij == Catch::Approx(0.0).margin(1.0e-10));
+         }
+     }
+ }
+diff -up mrcpp-1.5.0/tests/functions/gaussians.cpp.catchv3 mrcpp-1.5.0/tests/functions/gaussians.cpp
+--- mrcpp-1.5.0/tests/functions/gaussians.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/functions/gaussians.cpp	2023-08-09 21:32:20.781484311 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -77,9 +77,9 @@ SCENARIO("Gaussians", "[gaussians]") {
+     project(prec, f_tree, gauss);
+ 
+     WHEN("Gaussians are projected") {
+-        THEN("The gaussian can be evaluated") { REQUIRE(gauss.evalf(r_ref) == Approx(ref_val)); }
++        THEN("The gaussian can be evaluated") { REQUIRE(gauss.evalf(r_ref) == Catch::Approx(ref_val)); }
+ 
+-        THEN("the integral is normalized") { REQUIRE(f_tree.integrate() == Approx(1.0)); }
++        THEN("the integral is normalized") { REQUIRE(f_tree.integrate() == Catch::Approx(1.0)); }
+ 
+         THEN("multiply") {
+             auto prod_gauss = gauss.mult(gauss);
+diff -up mrcpp-1.5.0/tests/functions/legendre_poly.cpp.catchv3 mrcpp-1.5.0/tests/functions/legendre_poly.cpp
+--- mrcpp-1.5.0/tests/functions/legendre_poly.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/functions/legendre_poly.cpp	2023-08-09 21:32:20.782484293 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "functions/LegendrePoly.h"
+ 
+@@ -42,12 +42,12 @@ TEST_CASE("Legendre polynomials", "[lege
+     SECTION("LegendrePoly constructor") {
+         for (int k = 0; k < nLeg; k++) {
+             LegendrePoly &L_k = *L[k];
+-            REQUIRE(L_k.getScaledLowerBound() == Approx(0.0));
+-            REQUIRE(L_k.getScaledUpperBound() == Approx(1.0));
++            REQUIRE(L_k.getScaledLowerBound() == Catch::Approx(0.0));
++            REQUIRE(L_k.getScaledUpperBound() == Catch::Approx(1.0));
+             REQUIRE(L_k.getOrder() == k);
+             // Legendre polynomials are normalized so that L_k(1.0) = 1.0
+             Coord<1> one{1.0};
+-            REQUIRE(L_k.evalf(one) == Approx(1.0));
++            REQUIRE(L_k.evalf(one) == Catch::Approx(1.0));
+         }
+     }
+ 
+@@ -59,7 +59,7 @@ TEST_CASE("Legendre polynomials", "[lege
+             for (int j = 0; j < i; j++) {
+                 LegendrePoly &L_j = *L[j];
+                 double S_ij = L_i.innerProduct(L_j);
+-                REQUIRE(S_ij == Approx(0.0).margin(1.0e-12));
++                REQUIRE(S_ij == Catch::Approx(0.0).margin(1.0e-12));
+             }
+         }
+     }
+diff -up mrcpp-1.5.0/tests/functions/periodify_gaussians.cpp.catchv3 mrcpp-1.5.0/tests/functions/periodify_gaussians.cpp
+--- mrcpp-1.5.0/tests/functions/periodify_gaussians.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/functions/periodify_gaussians.cpp	2023-08-09 21:32:20.782484293 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "functions/function_utils.h"
+ #include "functions/GaussExp.h"
+@@ -73,7 +73,7 @@ template <int D> void testIsNarrowGaussi
+     WHEN("The gaussian is generated it is constructed, it is not periodic") {
+         auto gauss = GaussFunc<D>(beta, alpha, pos);
+         THEN("The Gaussian should be close to zero at the bondary of the unit cell") {
+-            REQUIRE(gauss.evalf(new_pos) == Approx(0.0));
++            REQUIRE(gauss.evalf(new_pos) == Catch::Approx(0.0));
+         }
+         AND_WHEN("The gaussian is made periodic, it is periodic") {
+             auto gexp = gauss.periodify(period);
+@@ -100,12 +100,12 @@ template <int D> void testIsWideGaussian
+     WHEN("The gaussian is generated it is constructed, it is not periodic") {
+         auto gauss = GaussFunc<D>(beta, alpha, pos);
+         THEN("The Gaussian should be close to zero at the bondary of the unit cell") {
+-            REQUIRE(gauss.evalf(new_pos) != Approx(0.0));
++            REQUIRE(gauss.evalf(new_pos) != Catch::Approx(0.0));
+         }
+         AND_WHEN("The gaussian is made periodc, it is periodic") {
+             auto gexp = gauss.periodify(period);
+             THEN("The gaussian should have the same value at -0.2 and 1.8") {
+-                REQUIRE(gexp.evalf(pos) == Approx(gexp.evalf(new_pos)));
++                REQUIRE(gexp.evalf(pos) == Catch::Approx(gexp.evalf(new_pos)));
+             }
+         }
+     }
+@@ -135,12 +135,12 @@ template <int D> void testIsGaussExpMade
+         gauss_exp.append(gauss_1);
+         gauss_exp.append(gauss_2);
+         REQUIRE(gauss_exp.size() == 2);
+-        REQUIRE(gauss_exp.evalf(r0) != Approx(gauss_exp.evalf(r1)));
++        REQUIRE(gauss_exp.evalf(r0) != Catch::Approx(gauss_exp.evalf(r1)));
+ 
+         AND_WHEN("The gaussians are make periodic") {
+             auto per_exp = gauss_exp.periodify(period);
+             REQUIRE(per_exp.size() > 2);
+-            REQUIRE(per_exp.evalf(r0) == Approx(per_exp.evalf(r1)));
++            REQUIRE(per_exp.evalf(r0) == Catch::Approx(per_exp.evalf(r1)));
+         }
+     }
+ }
+diff -up mrcpp-1.5.0/tests/functions/polynomial.cpp.catchv3 mrcpp-1.5.0/tests/functions/polynomial.cpp
+--- mrcpp-1.5.0/tests/functions/polynomial.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/functions/polynomial.cpp	2023-08-09 21:32:20.782484293 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "functions/Polynomial.h"
+ 
+@@ -40,34 +40,34 @@ TEST_CASE("Polynomial constructors", "[p
+ 
+     SECTION("Constructor") {
+         REQUIRE(P.getOrder() == 1);
+-        REQUIRE(P.getCoefs()[0] == Approx(0.0));
+-        REQUIRE(P.getDilation() == Approx(1.0));
+-        REQUIRE(P.getTranslation() == Approx(0.0));
++        REQUIRE(P.getCoefs()[0] == Catch::Approx(0.0));
++        REQUIRE(P.getDilation() == Catch::Approx(1.0));
++        REQUIRE(P.getTranslation() == Catch::Approx(0.0));
+         REQUIRE(P.isBounded());
+     }
+ 
+     SECTION("Copy constructor") {
+         Polynomial Q(P);
+         REQUIRE(Q.getOrder() == 1);
+-        REQUIRE(Q.getCoefs()[0] == Approx(0.0));
+-        REQUIRE(Q.getCoefs()[1] == Approx(1.0));
+-        REQUIRE(Q.getLowerBound(0) == Approx(0.0));
+-        REQUIRE(Q.getUpperBound(0) == Approx(2.0));
++        REQUIRE(Q.getCoefs()[0] == Catch::Approx(0.0));
++        REQUIRE(Q.getCoefs()[1] == Catch::Approx(1.0));
++        REQUIRE(Q.getLowerBound(0) == Catch::Approx(0.0));
++        REQUIRE(Q.getUpperBound(0) == Catch::Approx(2.0));
+     }
+ 
+     SECTION("Default constructor") {
+         Polynomial Q;
+         REQUIRE(Q.getOrder() == 0);
+-        REQUIRE(Q.getCoefs()[0] == Approx(0.0));
+-        REQUIRE(Q.getDilation() == Approx(1.0));
+-        REQUIRE(Q.getTranslation() == Approx(0.0));
++        REQUIRE(Q.getCoefs()[0] == Catch::Approx(0.0));
++        REQUIRE(Q.getDilation() == Catch::Approx(1.0));
++        REQUIRE(Q.getTranslation() == Catch::Approx(0.0));
+         REQUIRE_FALSE(Q.isBounded());
+ 
+         SECTION("Assignment operator") {
+             Q = P;
+             REQUIRE(Q.getOrder() == 1);
+-            REQUIRE(Q.getCoefs()[0] == Approx(0.0));
+-            REQUIRE(Q.getCoefs()[1] == Approx(1.0));
++            REQUIRE(Q.getCoefs()[0] == Catch::Approx(0.0));
++            REQUIRE(Q.getCoefs()[1] == Catch::Approx(1.0));
+             REQUIRE_FALSE(Q.isBounded());
+         }
+     }
+@@ -83,14 +83,14 @@ TEST_CASE("Polynomial evaluation", "[pol
+         Coord<1> x{1.5};
+         double calc_val = P.evalf(x);
+         double ref_val = 1.0 + 2.0 * x[0] * x[0];
+-        REQUIRE(calc_val == Approx(ref_val));
++        REQUIRE(calc_val == Catch::Approx(ref_val));
+     }
+ 
+     SECTION("Evaluation out of bounds") {
+         Coord<1> x{2.5};
+         double calc_val = P.evalf(x);
+         double ref_val = 0.0;
+-        REQUIRE(calc_val == Approx(ref_val));
++        REQUIRE(calc_val == Catch::Approx(ref_val));
+     }
+ }
+ 
+@@ -105,21 +105,21 @@ SCENARIO("Polynomials can be scaled and
+             double l = 1.0;
+             P.translate(l);
+             P.dilate(n);
+-            THEN("The dilation changes") { REQUIRE(P.getDilation() == Approx(2.0)); }
+-            THEN("The translation changes") { REQUIRE(P.getTranslation() == Approx(1.0)); }
++            THEN("The dilation changes") { REQUIRE(P.getDilation() == Catch::Approx(2.0)); }
++            THEN("The translation changes") { REQUIRE(P.getTranslation() == Catch::Approx(1.0)); }
+             THEN("The scaled bounds change") {
+-                REQUIRE(P.getScaledLowerBound() == Approx(0.0));
+-                REQUIRE(P.getScaledUpperBound() == Approx(1.0));
++                REQUIRE(P.getScaledLowerBound() == Catch::Approx(0.0));
++                REQUIRE(P.getScaledUpperBound() == Catch::Approx(1.0));
+             }
+             THEN("The unscaled bounds don't change") {
+-                REQUIRE(P.getLowerBound(0) == Approx(-1.0));
+-                REQUIRE(P.getUpperBound(0) == Approx(1.0));
++                REQUIRE(P.getLowerBound(0) == Catch::Approx(-1.0));
++                REQUIRE(P.getUpperBound(0) == Catch::Approx(1.0));
+             }
+             THEN("The scaled evaluation is known") {
+                 Coord<1> x{0.3};
+                 double calc_val = P.evalf(x);
+                 double ref_val = (2.0 * x[0] - 1.0) + (2.0 * x[0] - 1.0) * (2.0 * x[0] - 1.0);
+-                REQUIRE(calc_val == Approx(ref_val));
++                REQUIRE(calc_val == Catch::Approx(ref_val));
+             }
+         }
+         WHEN("P is dilated then translated") {
+@@ -127,21 +127,21 @@ SCENARIO("Polynomials can be scaled and
+             double l = 1.0;
+             P.dilate(n);
+             P.translate(l);
+-            THEN("The dilation changes") { REQUIRE(P.getDilation() == Approx(2.0)); }
+-            THEN("The translation changes") { REQUIRE(P.getTranslation() == Approx(2.0)); }
++            THEN("The dilation changes") { REQUIRE(P.getDilation() == Catch::Approx(2.0)); }
++            THEN("The translation changes") { REQUIRE(P.getTranslation() == Catch::Approx(2.0)); }
+             THEN("The scaled bounds change") {
+-                REQUIRE(P.getScaledLowerBound() == Approx(0.5));
+-                REQUIRE(P.getScaledUpperBound() == Approx(1.5));
++                REQUIRE(P.getScaledLowerBound() == Catch::Approx(0.5));
++                REQUIRE(P.getScaledUpperBound() == Catch::Approx(1.5));
+             }
+             THEN("The unscaled bounds don't change") {
+-                REQUIRE(P.getLowerBound(0) == Approx(-1.0));
+-                REQUIRE(P.getUpperBound(0) == Approx(1.0));
++                REQUIRE(P.getLowerBound(0) == Catch::Approx(-1.0));
++                REQUIRE(P.getUpperBound(0) == Catch::Approx(1.0));
+             }
+             THEN("The scaled evaluation is known") {
+                 Coord<1> x{0.7};
+                 double calc_val = P.evalf(x);
+                 double ref_val = (2.0 * x[0] - 2.0) + (2.0 * x[0] - 2.0) * (2.0 * x[0] - 2.0);
+-                REQUIRE(calc_val == Approx(ref_val));
++                REQUIRE(calc_val == Catch::Approx(ref_val));
+             }
+         }
+     }
+@@ -158,15 +158,15 @@ SCENARIO("Polynomials can be added and m
+             Q += P;
+             THEN("The coefficients of P are unchanged") {
+                 REQUIRE(P.getOrder() == 2);
+-                REQUIRE(P.getCoefs()[0] == Approx(0.0));
+-                REQUIRE(P.getCoefs()[1] == Approx(1.0));
+-                REQUIRE(P.getCoefs()[2] == Approx(1.0));
++                REQUIRE(P.getCoefs()[0] == Catch::Approx(0.0));
++                REQUIRE(P.getCoefs()[1] == Catch::Approx(1.0));
++                REQUIRE(P.getCoefs()[2] == Catch::Approx(1.0));
+             }
+             THEN("The coefficients of Q change") {
+                 REQUIRE(Q.getOrder() == 2);
+-                REQUIRE(Q.getCoefs()[0] == Approx(0.0));
+-                REQUIRE(Q.getCoefs()[1] == Approx(2.0));
+-                REQUIRE(Q.getCoefs()[2] == Approx(1.0));
++                REQUIRE(Q.getCoefs()[0] == Catch::Approx(0.0));
++                REQUIRE(Q.getCoefs()[1] == Catch::Approx(2.0));
++                REQUIRE(Q.getCoefs()[2] == Catch::Approx(1.0));
+             }
+         }
+ 
+@@ -175,9 +175,9 @@ SCENARIO("Polynomials can be added and m
+             R = P + Q;
+             THEN("The coefficients of R are known") {
+                 REQUIRE(R.getOrder() == 2);
+-                REQUIRE(R.getCoefs()[0] == Approx(0.0));
+-                REQUIRE(R.getCoefs()[1] == Approx(2.0));
+-                REQUIRE(R.getCoefs()[2] == Approx(1.0));
++                REQUIRE(R.getCoefs()[0] == Catch::Approx(0.0));
++                REQUIRE(R.getCoefs()[1] == Catch::Approx(2.0));
++                REQUIRE(R.getCoefs()[2] == Catch::Approx(1.0));
+             }
+         }
+ 
+@@ -185,9 +185,9 @@ SCENARIO("Polynomials can be added and m
+             P *= 2.0;
+             THEN("The coefficients of P change") {
+                 REQUIRE(P.getOrder() == 2);
+-                REQUIRE(P.getCoefs()[0] == Approx(0.0));
+-                REQUIRE(P.getCoefs()[1] == Approx(2.0));
+-                REQUIRE(P.getCoefs()[2] == Approx(2.0));
++                REQUIRE(P.getCoefs()[0] == Catch::Approx(0.0));
++                REQUIRE(P.getCoefs()[1] == Catch::Approx(2.0));
++                REQUIRE(P.getCoefs()[2] == Catch::Approx(2.0));
+             }
+         }
+ 
+@@ -196,9 +196,9 @@ SCENARIO("Polynomials can be added and m
+             R = P * 3.0;
+             THEN("The coefficients of R are known") {
+                 REQUIRE(R.getOrder() == 2);
+-                REQUIRE(R.getCoefs()[0] == Approx(0.0));
+-                REQUIRE(R.getCoefs()[1] == Approx(3.0));
+-                REQUIRE(R.getCoefs()[2] == Approx(3.0));
++                REQUIRE(R.getCoefs()[0] == Catch::Approx(0.0));
++                REQUIRE(R.getCoefs()[1] == Catch::Approx(3.0));
++                REQUIRE(R.getCoefs()[2] == Catch::Approx(3.0));
+             }
+         }
+ 
+@@ -206,16 +206,16 @@ SCENARIO("Polynomials can be added and m
+             Q *= P;
+             THEN("The coefficients of P are unchanged") {
+                 REQUIRE(P.getOrder() == 2);
+-                REQUIRE(P.getCoefs()[0] == Approx(0.0));
+-                REQUIRE(P.getCoefs()[1] == Approx(1.0));
+-                REQUIRE(P.getCoefs()[2] == Approx(1.0));
++                REQUIRE(P.getCoefs()[0] == Catch::Approx(0.0));
++                REQUIRE(P.getCoefs()[1] == Catch::Approx(1.0));
++                REQUIRE(P.getCoefs()[2] == Catch::Approx(1.0));
+             }
+             THEN("The coefficients of Q change") {
+                 REQUIRE(Q.getOrder() == 3);
+-                REQUIRE(Q.getCoefs()[0] == Approx(0.0));
+-                REQUIRE(Q.getCoefs()[1] == Approx(0.0));
+-                REQUIRE(Q.getCoefs()[2] == Approx(1.0));
+-                REQUIRE(Q.getCoefs()[3] == Approx(1.0));
++                REQUIRE(Q.getCoefs()[0] == Catch::Approx(0.0));
++                REQUIRE(Q.getCoefs()[1] == Catch::Approx(0.0));
++                REQUIRE(Q.getCoefs()[2] == Catch::Approx(1.0));
++                REQUIRE(Q.getCoefs()[3] == Catch::Approx(1.0));
+             }
+         }
+ 
+@@ -224,10 +224,10 @@ SCENARIO("Polynomials can be added and m
+             R = P * Q;
+             THEN("The coefficients of R are known") {
+                 VectorXd &cr = R.getCoefs();
+-                REQUIRE(R.getCoefs()[0] == Approx(0.0));
+-                REQUIRE(R.getCoefs()[1] == Approx(0.0));
+-                REQUIRE(R.getCoefs()[2] == Approx(1.0));
+-                REQUIRE(R.getCoefs()[3] == Approx(1.0));
++                REQUIRE(R.getCoefs()[0] == Catch::Approx(0.0));
++                REQUIRE(R.getCoefs()[1] == Catch::Approx(0.0));
++                REQUIRE(R.getCoefs()[2] == Catch::Approx(1.0));
++                REQUIRE(R.getCoefs()[3] == Catch::Approx(1.0));
+             }
+         }
+     }
+@@ -240,15 +240,15 @@ TEST_CASE("Polynomial differentiation",
+     SECTION("Derivative in place") {
+         P.calcDerivativeInPlace();
+         REQUIRE(P.getOrder() == 1);
+-        REQUIRE(P.getCoefs()[0] == Approx(1.0));
+-        REQUIRE(P.getCoefs()[1] == Approx(4.0));
++        REQUIRE(P.getCoefs()[0] == Catch::Approx(1.0));
++        REQUIRE(P.getCoefs()[1] == Catch::Approx(4.0));
+     }
+ 
+     SECTION("Derivative") {
+         Polynomial Q = P.calcDerivative();
+         REQUIRE(Q.getOrder() == 1);
+-        REQUIRE(Q.getCoefs()[0] == Approx(1.0));
+-        REQUIRE(Q.getCoefs()[1] == Approx(4.0));
++        REQUIRE(Q.getCoefs()[0] == Catch::Approx(1.0));
++        REQUIRE(Q.getCoefs()[1] == Catch::Approx(4.0));
+     }
+ }
+ 
+@@ -259,19 +259,19 @@ TEST_CASE("Polynomial integration", "[po
+     SECTION("Antiderivative in place") {
+         P.calcAntiDerivativeInPlace();
+         REQUIRE(P.getOrder() == 3);
+-        REQUIRE(P.getCoefs()[0] == Approx(0.0));
+-        REQUIRE(P.getCoefs()[1] == Approx(0.0));
+-        REQUIRE(P.getCoefs()[2] == Approx(1.0 / 2.0));
+-        REQUIRE(P.getCoefs()[3] == Approx(2.0 / 3.0));
++        REQUIRE(P.getCoefs()[0] == Catch::Approx(0.0));
++        REQUIRE(P.getCoefs()[1] == Catch::Approx(0.0));
++        REQUIRE(P.getCoefs()[2] == Catch::Approx(1.0 / 2.0));
++        REQUIRE(P.getCoefs()[3] == Catch::Approx(2.0 / 3.0));
+     }
+ 
+     SECTION("Antiderivative") {
+         Polynomial Q = P.calcAntiDerivative();
+         REQUIRE(Q.getOrder() == 3);
+-        REQUIRE(Q.getCoefs()[0] == Approx(0.0));
+-        REQUIRE(Q.getCoefs()[1] == Approx(0.0));
+-        REQUIRE(Q.getCoefs()[2] == Approx(1.0 / 2.0));
+-        REQUIRE(Q.getCoefs()[3] == Approx(2.0 / 3.0));
++        REQUIRE(Q.getCoefs()[0] == Catch::Approx(0.0));
++        REQUIRE(Q.getCoefs()[1] == Catch::Approx(0.0));
++        REQUIRE(Q.getCoefs()[2] == Catch::Approx(1.0 / 2.0));
++        REQUIRE(Q.getCoefs()[3] == Catch::Approx(2.0 / 3.0));
+     }
+ 
+     GIVEN("A bounded polynomial P on [-1.0, 1.0]") {
+@@ -281,13 +281,13 @@ TEST_CASE("Polynomial integration", "[po
+         THEN("P can be integrated on its full domain") {
+             double calc_int = P.integrate();
+             double ref_int = 4.0 / 3.0;
+-            REQUIRE(calc_int == Approx(ref_int));
++            REQUIRE(calc_int == Catch::Approx(ref_int));
+         }
+         THEN("P can be integrated on the subdomain [0.0, 1.0]") {
+             a = 0.0;
+             double calc_int = P.integrate(&a, &b);
+             double ref_int = 7.0 / 6.0;
+-            REQUIRE(calc_int == Approx(ref_int));
++            REQUIRE(calc_int == Catch::Approx(ref_int));
+         }
+     }
+ }
+@@ -306,17 +306,17 @@ SCENARIO("Bounded polynomials have inner
+             THEN("The inner product <P|Q> is defined") {
+                 double ref_inner = 2.0 / 3.0;
+                 double calc_inner = P.innerProduct(Q);
+-                REQUIRE(calc_inner == Approx(ref_inner));
++                REQUIRE(calc_inner == Catch::Approx(ref_inner));
+             }
+             THEN("The norm of P is defined") {
+                 double ref_norm = 16.0 / 15.0;
+                 double calc_norm = P.calcSquareNorm();
+-                REQUIRE(calc_norm == Approx(ref_norm));
++                REQUIRE(calc_norm == Catch::Approx(ref_norm));
+             }
+             THEN("P can be normalized") {
+                 P.normalize();
+                 double calc_norm = P.calcSquareNorm();
+-                REQUIRE(calc_norm == Approx(1.0));
++                REQUIRE(calc_norm == Catch::Approx(1.0));
+             }
+         }
+     }
+diff -up mrcpp-1.5.0/tests/operators/derivative_operator.cpp.catchv3 mrcpp-1.5.0/tests/operators/derivative_operator.cpp
+--- mrcpp-1.5.0/tests/operators/derivative_operator.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/operators/derivative_operator.cpp	2023-08-09 21:32:20.783484276 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -117,7 +117,7 @@ template <int D> void testDifferentiatio
+     double abs_err = std::sqrt(err_tree.getSquareNorm());
+     double rel_err = abs_err / df_norm;
+ 
+-    REQUIRE(rel_err == Approx(0.0).margin(prec));
++    REQUIRE(rel_err == Catch::Approx(0.0).margin(prec));
+ 
+     delete mra;
+ }
+@@ -158,7 +158,7 @@ template <int D> void testDifferentiatio
+     double abs_err = std::sqrt(err_tree.getSquareNorm());
+     double rel_err = abs_err / df_norm;
+ 
+-    REQUIRE(rel_err == Approx(0.0).margin(prec));
++    REQUIRE(rel_err == Catch::Approx(0.0).margin(prec));
+ 
+     delete mra;
+ }
+@@ -179,10 +179,10 @@ template <int D> void testDifferentiatio
+     apply(dg_tree, diff, g_tree, 0);
+     refine_grid(dg_tree, 1); // for accurate evalf
+ 
+-    REQUIRE(dg_tree.evalf({0.0, 0.0, 0.0}) == Approx(dg_func({0.0, 0.0, 0.0})).margin(prec));
+-    REQUIRE(dg_tree.evalf({12.0, 0.0, 0.0}) == Approx(dg_func({12.0, 0.0, 0.0})).margin(prec));
+-    REQUIRE(dg_tree.evalf({20.0, 0.0, 0.0}) == Approx(dg_func({20.0, 0.0, 0.0})).margin(prec));
+-    REQUIRE(dg_tree.evalf({-5.0, 0.0, 0.0}) == Approx(dg_func({-5.0, 0.0, 0.0})).margin(prec));
++    REQUIRE(dg_tree.evalf({0.0, 0.0, 0.0}) == Catch::Approx(dg_func({0.0, 0.0, 0.0})).margin(prec));
++    REQUIRE(dg_tree.evalf({12.0, 0.0, 0.0}) == Catch::Approx(dg_func({12.0, 0.0, 0.0})).margin(prec));
++    REQUIRE(dg_tree.evalf({20.0, 0.0, 0.0}) == Catch::Approx(dg_func({20.0, 0.0, 0.0})).margin(prec));
++    REQUIRE(dg_tree.evalf({-5.0, 0.0, 0.0}) == Catch::Approx(dg_func({-5.0, 0.0, 0.0})).margin(prec));
+ 
+     delete mra;
+ }
+@@ -207,10 +207,10 @@ template <int D> void testDifferentiatio
+     apply(dg_tree, diff, g_tree, 0);
+     refine_grid(dg_tree, 1); // for accurate evalf
+ 
+-    REQUIRE(dg_tree.evalf({0.0, 0.0, 0.0}) == Approx(dg_func({0.0, 0.0, 0.0})).margin(prec));
+-    REQUIRE(dg_tree.evalf({12.0, 0.0, 0.0}) == Approx(dg_func({12.0, 0.0, 0.0})).margin(prec));
+-    REQUIRE(dg_tree.evalf({20.0, 0.0, 0.0}) == Approx(dg_func({20.0, 0.0, 0.0})).margin(prec));
+-    REQUIRE(dg_tree.evalf({-5.0, 0.0, 0.0}) == Approx(dg_func({-5.0, 0.0, 0.0})).margin(prec));
++    REQUIRE(dg_tree.evalf({0.0, 0.0, 0.0}) == Catch::Approx(dg_func({0.0, 0.0, 0.0})).margin(prec));
++    REQUIRE(dg_tree.evalf({12.0, 0.0, 0.0}) == Catch::Approx(dg_func({12.0, 0.0, 0.0})).margin(prec));
++    REQUIRE(dg_tree.evalf({20.0, 0.0, 0.0}) == Catch::Approx(dg_func({20.0, 0.0, 0.0})).margin(prec));
++    REQUIRE(dg_tree.evalf({-5.0, 0.0, 0.0}) == Catch::Approx(dg_func({-5.0, 0.0, 0.0})).margin(prec));
+ 
+     delete mra;
+ }
+@@ -252,7 +252,7 @@ template <int D> void testDifferentiatio
+     double abs_err = std::sqrt(err_tree.getSquareNorm());
+     double rel_err = abs_err / df_norm;
+ 
+-    REQUIRE(rel_err == Approx(0.0).margin(prec * 10.0));
++    REQUIRE(rel_err == Catch::Approx(0.0).margin(prec * 10.0));
+     // Multiplying prec by 10.0 to make the less accurate 3rd order pass.
+     delete mra;
+ }
+@@ -341,9 +341,9 @@ TEST_CASE("Gradient operator", "[derivat
+     REQUIRE(grad_f.size() == 3);
+ 
+     const Coord<3> r{1.1, 0.4, 0.2};
+-    REQUIRE(mrcpp::get_func(grad_f, 0).evalf_precise(r) == Approx(fx(r)).epsilon(prec));
+-    REQUIRE(mrcpp::get_func(grad_f, 1).evalf_precise(r) == Approx(fy(r)).epsilon(prec));
+-    REQUIRE(mrcpp::get_func(grad_f, 2).evalf_precise(r) == Approx(fz(r)).epsilon(prec));
++    REQUIRE(mrcpp::get_func(grad_f, 0).evalf_precise(r) == Catch::Approx(fx(r)).epsilon(prec));
++    REQUIRE(mrcpp::get_func(grad_f, 1).evalf_precise(r) == Catch::Approx(fy(r)).epsilon(prec));
++    REQUIRE(mrcpp::get_func(grad_f, 2).evalf_precise(r) == Catch::Approx(fz(r)).epsilon(prec));
+     mrcpp::clear(grad_f, true);
+ 
+     delete mra;
+@@ -385,7 +385,7 @@ TEST_CASE("Divergence operator", "[deriv
+     for (int i = 0; i < 10; i++) {
+         const Coord<3> r{-0.8 + 0.3 * i, 0.4 - 0.1 * i, 0.2 + 0.01 * i};
+         const double ref = 1.0 * fx(r) + 2.0 * fy(r) + 3.0 * fz(r);
+-        REQUIRE(div_f.evalf(r) == Approx(ref).epsilon(prec));
++        REQUIRE(div_f.evalf(r) == Catch::Approx(ref).epsilon(prec));
+     }
+ 
+     delete mra;
+diff -up mrcpp-1.5.0/tests/operators/helmholtz_operator.cpp.catchv3 mrcpp-1.5.0/tests/operators/helmholtz_operator.cpp
+--- mrcpp-1.5.0/tests/operators/helmholtz_operator.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/operators/helmholtz_operator.cpp	2023-08-09 21:32:20.783484276 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -69,7 +69,7 @@ TEST_CASE("Helmholtz' kernel", "[init_he
+ 
+         Coord<1> x{r_min};
+         while (x[0] < r_max) {
+-            REQUIRE(helmholtz.evalf(x) == Approx(std::exp(-mu * x[0]) / x[0]).epsilon(2.0 * exp_prec));
++            REQUIRE(helmholtz.evalf(x) == Catch::Approx(std::exp(-mu * x[0]) / x[0]).epsilon(2.0 * exp_prec));
+             x[0] *= 1.5;
+         }
+         SECTION("Project Helmholtz' kernel") {
+@@ -188,14 +188,14 @@ TEST_CASE("Apply Helmholtz' operator", "
+     psi_np1.rescale(-1.0 / (2.0 * pi));
+ 
+     double norm = std::sqrt(psi_np1.getSquareNorm());
+-    REQUIRE(norm == Approx(1.0).epsilon(apply_prec));
++    REQUIRE(norm == Catch::Approx(1.0).epsilon(apply_prec));
+ 
+     FunctionTree<3> d_psi(MRA);
+     copy_grid(d_psi, psi_np1);
+     add(-1.0, d_psi, 1.0, psi_np1, -1.0, psi_n);
+ 
+     double error = std::sqrt(d_psi.getSquareNorm());
+-    REQUIRE(error == Approx(0.0).margin(apply_prec));
++    REQUIRE(error == Catch::Approx(0.0).margin(apply_prec));
+ }
+ 
+ TEST_CASE("Apply Periodic Helmholtz' operator", "[apply_periodic_helmholtz], [helmholtz_operator], [mw_operator]") {
+@@ -235,10 +235,10 @@ TEST_CASE("Apply Periodic Helmholtz' ope
+ 
+     add(apply_prec, in_out_tree, 1.0, in_tree, 1.0, out_tree);
+ 
+-    REQUIRE(sol_tree.evalf({0.0, 0.0, 0.0}) == Approx(1.0).epsilon(apply_prec));
+-    REQUIRE(sol_tree.evalf({pi, 0.0, 0.0}) == Approx(-1.0).epsilon(apply_prec));
+-    REQUIRE(in_out_tree.evalf({0.0, 0.0, 0.0}) == Approx(1.0).epsilon(apply_prec));
+-    REQUIRE(in_out_tree.evalf({pi, 0.0, 0.0}) == Approx(-1.0).epsilon(apply_prec));
++    REQUIRE(sol_tree.evalf({0.0, 0.0, 0.0}) == Catch::Approx(1.0).epsilon(apply_prec));
++    REQUIRE(sol_tree.evalf({pi, 0.0, 0.0}) == Catch::Approx(-1.0).epsilon(apply_prec));
++    REQUIRE(in_out_tree.evalf({0.0, 0.0, 0.0}) == Catch::Approx(1.0).epsilon(apply_prec));
++    REQUIRE(in_out_tree.evalf({pi, 0.0, 0.0}) == Catch::Approx(-1.0).epsilon(apply_prec));
+ }
+ 
+ TEST_CASE("Apply negative scale Helmholtz' operator", "[apply_periodic_helmholtz], [helmholtz_operator], [mw_operator]. [negative_scale]") {
+@@ -271,7 +271,7 @@ TEST_CASE("Apply negative scale Helmholt
+ 
+     apply(apply_prec, sol_tree, H, source_tree);
+ 
+-    REQUIRE(sol_tree.evalf({0.0, 0.0, 0.0}) == Approx(1.0).epsilon(apply_prec));
+-    REQUIRE(sol_tree.evalf({pi, 0.0, 0.0}) == Approx(-1.0).epsilon(apply_prec));
++    REQUIRE(sol_tree.evalf({0.0, 0.0, 0.0}) == Catch::Approx(1.0).epsilon(apply_prec));
++    REQUIRE(sol_tree.evalf({pi, 0.0, 0.0}) == Catch::Approx(-1.0).epsilon(apply_prec));
+ }
+ } // namespace helmholtz_operator
+diff -up mrcpp-1.5.0/tests/operators/identity_convolution.cpp.catchv3 mrcpp-1.5.0/tests/operators/identity_convolution.cpp
+--- mrcpp-1.5.0/tests/operators/identity_convolution.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/operators/identity_convolution.cpp	2023-08-09 21:32:20.783484276 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -70,7 +70,7 @@ TEST_CASE("Initialize identity convoluti
+             FunctionTree<1> kern_tree(kern_mra);
+             build_grid(kern_tree, id_kern);
+             project(proj_prec, kern_tree, id_kern);
+-            REQUIRE(kern_tree.integrate() == Approx(1.0).epsilon(proj_prec));
++            REQUIRE(kern_tree.integrate() == Catch::Approx(1.0).epsilon(proj_prec));
+ 
+             SECTION("Build operator tree by cross correlation") {
+                 NodeIndex<2> idx(n);
+@@ -133,7 +133,7 @@ template <int D> void applyIdentity() {
+ 
+     REQUIRE(gTree.getDepth() <= fTree.getDepth());
+     REQUIRE(gTree.getNNodes() <= fTree.getNNodes());
+-    REQUIRE(gTree.integrate() == Approx(fTree.integrate()).epsilon(apply_prec));
++    REQUIRE(gTree.integrate() == Catch::Approx(fTree.integrate()).epsilon(apply_prec));
+ 
+     finalize(&fFunc);
+     finalize(&mra);
+@@ -176,7 +176,7 @@ template <int D> void applyPeriodicIdent
+     project(proj_prec, fTree, pFunc);
+     apply(apply_prec, gTree, I, fTree);
+ 
+-    REQUIRE(fTree.integrate() == Approx(1.0).epsilon(apply_prec));
+-    REQUIRE(gTree.integrate() == Approx(1.0).epsilon(apply_prec));
++    REQUIRE(fTree.integrate() == Catch::Approx(1.0).epsilon(apply_prec));
++    REQUIRE(gTree.integrate() == Catch::Approx(1.0).epsilon(apply_prec));
+ }
+ } // namespace identity_convolution
+diff -up mrcpp-1.5.0/tests/operators/poisson_operator.cpp.catchv3 mrcpp-1.5.0/tests/operators/poisson_operator.cpp
+--- mrcpp-1.5.0/tests/operators/poisson_operator.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/operators/poisson_operator.cpp	2023-08-09 21:32:20.784484258 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -67,7 +67,7 @@ TEST_CASE("Initialize Poisson operator",
+ 
+         Coord<1> x{r_min};
+         while (x[0] < r_max) {
+-            REQUIRE(poisson.evalf(x) == Approx(1.0 / x[0]).epsilon(2.0 * exp_prec));
++            REQUIRE(poisson.evalf(x) == Catch::Approx(1.0 / x[0]).epsilon(2.0 * exp_prec));
+             x[0] *= 1.5;
+         }
+         SECTION("Project Poisson's kernel") {
+@@ -148,7 +148,7 @@ TEST_CASE("Apply Poisson's operator", "[
+     double E_num = dot(gTree, fTree);
+     double E_ana = fFunc->calcCoulombEnergy(*fFunc);
+ 
+-    REQUIRE(E_num == Approx(E_ana).epsilon(apply_prec));
++    REQUIRE(E_num == Catch::Approx(E_ana).epsilon(apply_prec));
+ 
+     finalize(&fFunc);
+     finalize(&mra);
+@@ -193,8 +193,8 @@ TEST_CASE("Apply Periodic Poisson' opera
+ 
+     apply(apply_prec, sol_tree, P, source_tree);
+ 
+-    REQUIRE(sol_tree.evalf({0.0, 0.0, 0.0}) == Approx(1.0).epsilon(apply_prec));
+-    REQUIRE(sol_tree.evalf({pi, 0.0, 0.0}) == Approx(-1.0).epsilon(apply_prec));
++    REQUIRE(sol_tree.evalf({0.0, 0.0, 0.0}) == Catch::Approx(1.0).epsilon(apply_prec));
++    REQUIRE(sol_tree.evalf({pi, 0.0, 0.0}) == Catch::Approx(-1.0).epsilon(apply_prec));
+ }
+ 
+ } // namespace poisson_operator
+diff -up mrcpp-1.5.0/tests/scalingfactor/scaling_factor.cpp.catchv3 mrcpp-1.5.0/tests/scalingfactor/scaling_factor.cpp
+--- mrcpp-1.5.0/tests/scalingfactor/scaling_factor.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/scalingfactor/scaling_factor.cpp	2023-08-09 21:32:20.784484258 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -86,8 +86,8 @@ template <int D> void testScaling() {
+     auto lower_bound = node.getLowerBounds()[0];
+ 
+ 
+-    REQUIRE(Approx(1.0) == f_tree.integrate());
+-    REQUIRE(Approx(center) == (upper_bound-lower_bound)/2.0);
++    REQUIRE(Catch::Approx(1.0) == f_tree.integrate());
++    REQUIRE(Catch::Approx(center) == (upper_bound-lower_bound)/2.0);
+ 
+ }
+ 
+diff -up mrcpp-1.5.0/tests/treebuilders/addition.cpp.catchv3 mrcpp-1.5.0/tests/treebuilders/addition.cpp
+--- mrcpp-1.5.0/tests/treebuilders/addition.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/treebuilders/addition.cpp	2023-08-09 21:32:20.784484258 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -106,16 +106,16 @@ template <int D> void testAddition() {
+         THEN("their integrals add up") {
+             double c_int = c_tree.integrate();
+             double int_sum = a_coef * a_int + b_coef * b_int;
+-            REQUIRE(c_int == Approx(int_sum));
++            REQUIRE(c_int == Catch::Approx(int_sum));
+         }
+ 
+         AND_THEN("the MW sum equals the analytic sum") {
+             double c_int = c_tree.integrate();
+             double c_dot = dot(c_tree, ref_tree);
+             double c_norm = c_tree.getSquareNorm();
+-            REQUIRE(c_int == Approx(ref_int));
+-            REQUIRE(c_dot == Approx(ref_norm));
+-            REQUIRE(c_norm == Approx(ref_norm));
++            REQUIRE(c_int == Catch::Approx(ref_int));
++            REQUIRE(c_dot == Catch::Approx(ref_norm));
++            REQUIRE(c_norm == Catch::Approx(ref_norm));
+         }
+ 
+         AND_WHEN("the first function is subtracted") {
+@@ -128,7 +128,7 @@ template <int D> void testAddition() {
+             THEN("the integral is the same as the second function") {
+                 double d_int = d_tree.integrate();
+                 double ref_int = b_coef * b_int;
+-                REQUIRE(d_int == Approx(ref_int));
++                REQUIRE(d_int == Catch::Approx(ref_int));
+             }
+ 
+             AND_WHEN("the second function is subtracted") {
+@@ -141,7 +141,7 @@ template <int D> void testAddition() {
+                 THEN("the integral is zero") {
+                     double e_int = e_tree.integrate();
+                     double ref_int = 0.0;
+-                    REQUIRE(e_int == Approx(ref_int).margin(prec * prec));
++                    REQUIRE(e_int == Catch::Approx(ref_int).margin(prec * prec));
+                 }
+             }
+             AND_WHEN("the second function is subtracted in-place") {
+@@ -150,7 +150,7 @@ template <int D> void testAddition() {
+                 THEN("the integral is zero") {
+                     double d_int = d_tree.integrate();
+                     double ref_int = 0.0;
+-                    REQUIRE(d_int == Approx(ref_int).margin(prec * prec));
++                    REQUIRE(d_int == Catch::Approx(ref_int).margin(prec * prec));
+                 }
+             }
+         }
+diff -up mrcpp-1.5.0/tests/treebuilders/build_grid.cpp.catchv3 mrcpp-1.5.0/tests/treebuilders/build_grid.cpp
+--- mrcpp-1.5.0/tests/treebuilders/build_grid.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/treebuilders/build_grid.cpp	2023-08-09 21:32:20.784484258 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -52,7 +52,7 @@ template <int D> void testBuildGrid() {
+         FunctionTree<D> f_tree(*mra);
+ 
+         THEN("we get an empty tree of root nodes") {
+-            REQUIRE(f_tree.getSquareNorm() == Approx(-1.0));
++            REQUIRE(f_tree.getSquareNorm() == Catch::Approx(-1.0));
+             REQUIRE(f_tree.getDepth() == 1);
+             REQUIRE(f_tree.getNNodes() == f_tree.getNEndNodes());
+             REQUIRE(f_tree.getNGenNodes() == 0);
+@@ -61,7 +61,7 @@ template <int D> void testBuildGrid() {
+                 build_grid(f_tree, *f_func, 2);
+ 
+                 THEN("the empty tree gets adapted") {
+-                    REQUIRE(f_tree.getSquareNorm() == Approx(-1.0));
++                    REQUIRE(f_tree.getSquareNorm() == Catch::Approx(-1.0));
+                     REQUIRE(f_tree.getDepth() == 3);
+                     REQUIRE(f_tree.getNNodes() > f_tree.getNEndNodes());
+                     REQUIRE(f_tree.getNGenNodes() == 0);
+@@ -75,7 +75,7 @@ template <int D> void testBuildGrid() {
+         build_grid(f_tree, *f_func, 2);
+ 
+         THEN("we get an empty adapted tree structure") {
+-            REQUIRE(f_tree.getSquareNorm() == Approx(-1.0));
++            REQUIRE(f_tree.getSquareNorm() == Catch::Approx(-1.0));
+             REQUIRE(f_tree.getDepth() == 3);
+             REQUIRE(f_tree.getNNodes() > f_tree.getNEndNodes());
+             REQUIRE(f_tree.getNGenNodes() == 0);
+@@ -85,7 +85,7 @@ template <int D> void testBuildGrid() {
+                 build_grid(g_tree, f_tree);
+ 
+                 THEN("we get an identical empty grid") {
+-                    REQUIRE(g_tree.getSquareNorm() == Approx(-1.0));
++                    REQUIRE(g_tree.getSquareNorm() == Catch::Approx(-1.0));
+                     REQUIRE(g_tree.getDepth() == f_tree.getDepth());
+                     REQUIRE(g_tree.getNNodes() == f_tree.getNNodes());
+                     REQUIRE(g_tree.getNEndNodes() == f_tree.getNEndNodes());
+diff -up mrcpp-1.5.0/tests/treebuilders/clear_grid.cpp.catchv3 mrcpp-1.5.0/tests/treebuilders/clear_grid.cpp
+--- mrcpp-1.5.0/tests/treebuilders/clear_grid.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/treebuilders/clear_grid.cpp	2023-08-09 21:32:20.785484240 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -63,16 +63,16 @@ template <int D> void testClearGrid() {
+         THEN("it represents an undefined function on the root grid") {
+             REQUIRE(tree.getDepth() == 1);
+             REQUIRE(tree.getNNodes() == tree.getRootBox().size());
+-            REQUIRE(tree.integrate() == Approx(0.0));
+-            REQUIRE(tree.getSquareNorm() == Approx(-1.0));
++            REQUIRE(tree.integrate() == Catch::Approx(0.0));
++            REQUIRE(tree.getSquareNorm() == Catch::Approx(-1.0));
+             AND_WHEN("the function is re-projected") {
+                 build_grid(tree, *func);
+                 project(prec, tree, *func);
+                 THEN("the representation is the same as before it was cleared") {
+                     REQUIRE(tree.getDepth() == refDepth);
+                     REQUIRE(tree.getNNodes() == refNodes);
+-                    REQUIRE(tree.integrate() == Approx(refInt));
+-                    REQUIRE(tree.getSquareNorm() == Approx(refNorm));
++                    REQUIRE(tree.integrate() == Catch::Approx(refInt));
++                    REQUIRE(tree.getSquareNorm() == Catch::Approx(refNorm));
+                 }
+             }
+         }
+@@ -82,15 +82,15 @@ template <int D> void testClearGrid() {
+         THEN("it represents an undefined function on the same grid") {
+             REQUIRE(tree.getDepth() == refDepth);
+             REQUIRE(tree.getNNodes() == refNodes);
+-            REQUIRE(tree.integrate() == Approx(0.0));
+-            REQUIRE(tree.getSquareNorm() == Approx(-1.0));
++            REQUIRE(tree.integrate() == Catch::Approx(0.0));
++            REQUIRE(tree.getSquareNorm() == Catch::Approx(-1.0));
+             AND_WHEN("the function is re-projected on the same grid") {
+                 project(-1.0, tree, *func);
+                 THEN("the representation is the same as before") {
+                     REQUIRE(tree.getDepth() == refDepth);
+                     REQUIRE(tree.getNNodes() == refNodes);
+-                    REQUIRE(tree.integrate() == Approx(refInt));
+-                    REQUIRE(tree.getSquareNorm() == Approx(refNorm));
++                    REQUIRE(tree.integrate() == Catch::Approx(refInt));
++                    REQUIRE(tree.getSquareNorm() == Catch::Approx(refNorm));
+                 }
+             }
+         }
+@@ -101,8 +101,8 @@ template <int D> void testClearGrid() {
+         THEN("it represents the same function on a larger grid") {
+             REQUIRE(tree.getDepth() >= refDepth);
+             REQUIRE(tree.getNNodes() > refNodes);
+-            REQUIRE(tree.integrate() == Approx(refInt).epsilon(1.0e-8));
+-            REQUIRE(tree.getSquareNorm() == Approx(refNorm).epsilon(1.0e-8));
++            REQUIRE(tree.integrate() == Catch::Approx(refInt).epsilon(1.0e-8));
++            REQUIRE(tree.getSquareNorm() == Catch::Approx(refNorm).epsilon(1.0e-8));
+         }
+     }
+     finalize(&mra);
+diff -up mrcpp-1.5.0/tests/treebuilders/map.cpp.catchv3 mrcpp-1.5.0/tests/treebuilders/map.cpp
+--- mrcpp-1.5.0/tests/treebuilders/map.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/treebuilders/map.cpp	2023-08-09 21:32:20.785484240 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -87,9 +87,9 @@ template <int D> void testMapping() {
+         THEN("the MW map equals the analytic map") {
+             double out_int = out_tree.integrate();
+             double out_norm = out_tree.getSquareNorm();
+-            REQUIRE(out_int == Approx(ref_int));
+-            REQUIRE(out_norm == Approx(ref_norm));
+-            REQUIRE(inp_norm == Approx(out_int));
++            REQUIRE(out_int == Catch::Approx(ref_int));
++            REQUIRE(out_norm == Catch::Approx(ref_norm));
++            REQUIRE(inp_norm == Catch::Approx(out_int));
+         }
+     }
+     WHEN("the functions is mapped in-place") {
+@@ -97,8 +97,8 @@ template <int D> void testMapping() {
+         THEN("the first function equals the analytic product") {
+             double inp_int = inp_tree.integrate();
+             double inp_norm = inp_tree.getSquareNorm();
+-            REQUIRE(inp_int == Approx(ref_int));
+-            REQUIRE(inp_norm == Approx(ref_norm));
++            REQUIRE(inp_int == Catch::Approx(ref_int));
++            REQUIRE(inp_norm == Catch::Approx(ref_norm));
+         }
+     }
+     finalize(&mra);
+diff -up mrcpp-1.5.0/tests/treebuilders/multiplication.cpp.catchv3 mrcpp-1.5.0/tests/treebuilders/multiplication.cpp
+--- mrcpp-1.5.0/tests/treebuilders/multiplication.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/treebuilders/multiplication.cpp	2023-08-09 21:32:20.785484240 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -95,9 +95,9 @@ template <int D> void testMultiplication
+             double c_int = c_tree.integrate();
+             double c_dot = dot(c_tree, ref_tree);
+             double c_norm = c_tree.getSquareNorm();
+-            REQUIRE(c_int == Approx(ref_int));
+-            REQUIRE(c_dot == Approx(ref_norm));
+-            REQUIRE(c_norm == Approx(ref_norm));
++            REQUIRE(c_int == Catch::Approx(ref_int));
++            REQUIRE(c_dot == Catch::Approx(ref_norm));
++            REQUIRE(c_norm == Catch::Approx(ref_norm));
+         }
+     }
+     WHEN("the functions are multiplied in-place") {
+@@ -107,9 +107,9 @@ template <int D> void testMultiplication
+             double a_int = a_tree.integrate();
+             double a_dot = dot(a_tree, ref_tree);
+             double a_norm = a_tree.getSquareNorm();
+-            REQUIRE(a_int == Approx(ref_int));
+-            REQUIRE(a_dot == Approx(ref_norm));
+-            REQUIRE(a_norm == Approx(ref_norm));
++            REQUIRE(a_int == Catch::Approx(ref_int));
++            REQUIRE(a_dot == Catch::Approx(ref_norm));
++            REQUIRE(a_norm == Catch::Approx(ref_norm));
+         }
+     }
+     finalize(&mra);
+@@ -158,9 +158,9 @@ template <int D> void testSquare() {
+             double ff_int = ff_tree.integrate();
+             double ff_dot = dot(ff_tree, ref_tree);
+             double ff_norm = ff_tree.getSquareNorm();
+-            REQUIRE(ff_int == Approx(ref_int));
+-            REQUIRE(ff_dot == Approx(ref_norm));
+-            REQUIRE(ff_norm == Approx(ref_norm));
++            REQUIRE(ff_int == Catch::Approx(ref_int));
++            REQUIRE(ff_dot == Catch::Approx(ref_norm));
++            REQUIRE(ff_norm == Catch::Approx(ref_norm));
+         }
+     }
+     WHEN("the function is squared in-place") {
+@@ -170,9 +170,9 @@ template <int D> void testSquare() {
+             double f_int = f_tree.integrate();
+             double f_dot = dot(f_tree, ref_tree);
+             double f_norm = f_tree.getSquareNorm();
+-            REQUIRE(f_int == Approx(ref_int));
+-            REQUIRE(f_dot == Approx(ref_norm));
+-            REQUIRE(f_norm == Approx(ref_norm));
++            REQUIRE(f_int == Catch::Approx(ref_int));
++            REQUIRE(f_dot == Catch::Approx(ref_norm));
++            REQUIRE(f_norm == Catch::Approx(ref_norm));
+         }
+     }
+     WHEN("the function is raised to the second power out-of-place") {
+@@ -183,9 +183,9 @@ template <int D> void testSquare() {
+             double ff_int = ff_tree.integrate();
+             double ff_dot = dot(ff_tree, ref_tree);
+             double ff_norm = ff_tree.getSquareNorm();
+-            REQUIRE(ff_int == Approx(ref_int));
+-            REQUIRE(ff_dot == Approx(ref_norm));
+-            REQUIRE(ff_norm == Approx(ref_norm));
++            REQUIRE(ff_int == Catch::Approx(ref_int));
++            REQUIRE(ff_dot == Catch::Approx(ref_norm));
++            REQUIRE(ff_norm == Catch::Approx(ref_norm));
+         }
+     }
+     WHEN("the function is raised to second power in-place") {
+@@ -195,9 +195,9 @@ template <int D> void testSquare() {
+             double f_int = f_tree.integrate();
+             double f_dot = dot(f_tree, ref_tree);
+             double f_norm = f_tree.getSquareNorm();
+-            REQUIRE(f_int == Approx(ref_int));
+-            REQUIRE(f_dot == Approx(ref_norm));
+-            REQUIRE(f_norm == Approx(ref_norm));
++            REQUIRE(f_int == Catch::Approx(ref_int));
++            REQUIRE(f_dot == Catch::Approx(ref_norm));
++            REQUIRE(f_norm == Catch::Approx(ref_norm));
+         }
+     }
+     finalize(&mra);
+@@ -248,7 +248,7 @@ TEST_CASE("Dot product FunctionTreeVecto
+     for (int i = 0; i < 10; i++) {
+         const Coord<3> r = {-0.4 + 0.01 * i, 0.9 - 0.05 * i, 0.7 + 0.1 * i};
+         const double ref = 1.0 * fx(r) * fz(r) + 4.0 * fy(r) * fy(r) + 9.0 * fz(r) * fx(r);
+-        REQUIRE(dot_ab.evalf(r) == Approx(ref).margin(prec));
++        REQUIRE(dot_ab.evalf(r) == Catch::Approx(ref).margin(prec));
+     }
+ 
+     finalize(&mra);
+diff -up mrcpp-1.5.0/tests/treebuilders/projection.cpp.catchv3 mrcpp-1.5.0/tests/treebuilders/projection.cpp
+--- mrcpp-1.5.0/tests/treebuilders/projection.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/treebuilders/projection.cpp	2023-08-09 21:32:20.786484222 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -62,30 +62,30 @@ template <int D> void testProjectFunctio
+     WHEN("the function is projected on the default grid") {
+         FunctionTree<D> tree(*mra);
+         project(-1.0, tree, *func);
+-        THEN("it integrates to approximately one") { REQUIRE(tree.integrate() == Approx(1.0).margin(1.0)); }
++        THEN("it integrates to approximately one") { REQUIRE(tree.integrate() == Catch::Approx(1.0).margin(1.0)); }
+         THEN("the dot product with itself is equal to its squared norm") {
+             const double norm = tree.getSquareNorm();
+-            REQUIRE(dot(tree, tree) == Approx(norm));
++            REQUIRE(dot(tree, tree) == Catch::Approx(norm));
+         }
+     }
+     WHEN("the function is projected on an adapted grid") {
+         FunctionTree<D> tree(*mra);
+         build_grid(tree, *func);
+         project(-1.0, tree, *func);
+-        THEN("it integrates to approximately one") { REQUIRE(tree.integrate() == Approx(1.0).epsilon(1.0e-3)); }
++        THEN("it integrates to approximately one") { REQUIRE(tree.integrate() == Catch::Approx(1.0).epsilon(1.0e-3)); }
+         THEN("the dot product with itself is equal to its squared norm") {
+             const double norm = tree.getSquareNorm();
+-            REQUIRE(dot(tree, tree) == Approx(norm));
++            REQUIRE(dot(tree, tree) == Catch::Approx(norm));
+         }
+     }
+     WHEN("the function is projected with guaranteed precision") {
+         const double prec = 1.0e-4;
+         FunctionTree<D> f_tree(*mra);
+         project(prec, f_tree, *func);
+-        THEN("it integrates to approximately one") { REQUIRE(f_tree.integrate() == Approx(1.0).epsilon(1.0e-8)); }
++        THEN("it integrates to approximately one") { REQUIRE(f_tree.integrate() == Catch::Approx(1.0).epsilon(1.0e-8)); }
+         THEN("the dot product with itself is equal to its squared norm") {
+             const double norm = f_tree.getSquareNorm();
+-            REQUIRE(dot(f_tree, f_tree) == Approx(norm));
++            REQUIRE(dot(f_tree, f_tree) == Catch::Approx(norm));
+         }
+         AND_WHEN("the function is projected on an identical grid") {
+             FunctionTree<D> g_tree(*mra);
+@@ -94,11 +94,11 @@ template <int D> void testProjectFunctio
+             project(-1.0, g_tree, *func);
+             THEN("it integrates to the same value") {
+                 const double charge = f_tree.integrate();
+-                REQUIRE(g_tree.integrate() == Approx(charge));
++                REQUIRE(g_tree.integrate() == Catch::Approx(charge));
+             }
+             THEN("the dot product with the original is equal to their squared norm") {
+                 const double norm = f_tree.getSquareNorm();
+-                REQUIRE(dot(g_tree, f_tree) == Approx(norm));
++                REQUIRE(dot(g_tree, f_tree) == Catch::Approx(norm));
+             }
+         }
+     }
+@@ -124,7 +124,7 @@ template <int D> void testProjectNarrowP
+     FunctionTree<D> f_tree(*mra);
+     build_grid<D>(f_tree, periodic_func);
+     project<D>(prec, f_tree, periodic_func);
+-    REQUIRE(f_tree.integrate() == Approx(1.0));
++    REQUIRE(f_tree.integrate() == Catch::Approx(1.0));
+ }
+ 
+ template <int D> void testProjectWidePeriodicGaussian() {
+@@ -146,7 +146,7 @@ template <int D> void testProjectWidePer
+     FunctionTree<D> f_tree(*mra);
+     build_grid<D>(f_tree, periodic_func);
+     project<D>(prec, f_tree, periodic_func);
+-    REQUIRE(f_tree.integrate() == Approx(1.0));
++    REQUIRE(f_tree.integrate() == Catch::Approx(1.0));
+ }
+ 
+ TEST_CASE("Crop FunctionTree", "[function_tree], [crop]") {
+diff -up mrcpp-1.5.0/tests/trees/band_width.cpp.catchv3 mrcpp-1.5.0/tests/trees/band_width.cpp
+--- mrcpp-1.5.0/tests/trees/band_width.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/trees/band_width.cpp	2023-08-09 21:32:20.786484222 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "trees/BandWidth.h"
+ 
+diff -up mrcpp-1.5.0/tests/trees/bounding_box.cpp.catchv3 mrcpp-1.5.0/tests/trees/bounding_box.cpp
+--- mrcpp-1.5.0/tests/trees/bounding_box.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/trees/bounding_box.cpp	2023-08-09 21:32:20.786484222 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+diff -up mrcpp-1.5.0/tests/trees/function_tree.cpp.catchv3 mrcpp-1.5.0/tests/trees/function_tree.cpp
+--- mrcpp-1.5.0/tests/trees/function_tree.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/trees/function_tree.cpp	2023-08-09 21:32:20.786484222 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -53,11 +53,11 @@ template <int D> void testZeroFunction()
+             if (r.size() >= 1) r[0] = -0.20;
+             if (r.size() >= 2) r[1] = 0.60;
+             if (r.size() >= 3) r[2] = 0.76;
+-            REQUIRE(tree.evalf(r) == Approx(0.0));
++            REQUIRE(tree.evalf(r) == Catch::Approx(0.0));
+         }
+-        THEN("its squared norm is zero") { REQUIRE(tree.getSquareNorm() == Approx(0.0)); }
+-        THEN("it integrates to zero") { REQUIRE(tree.integrate() == Approx(0.0)); }
+-        THEN("the dot product with itself is zero") { REQUIRE(dot(tree, tree) == Approx(0.0)); }
++        THEN("its squared norm is zero") { REQUIRE(tree.getSquareNorm() == Catch::Approx(0.0)); }
++        THEN("it integrates to zero") { REQUIRE(tree.integrate() == Catch::Approx(0.0)); }
++        THEN("the dot product with itself is zero") { REQUIRE(dot(tree, tree) == Catch::Approx(0.0)); }
+     }
+     finalize(&mra);
+ }
+diff -up mrcpp-1.5.0/tests/trees/mw_tree.cpp.catchv3 mrcpp-1.5.0/tests/trees/mw_tree.cpp
+--- mrcpp-1.5.0/tests/trees/mw_tree.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/trees/mw_tree.cpp	2023-08-09 21:32:20.787484204 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ #include "trees/MWNode.h"
+diff -up mrcpp-1.5.0/tests/trees/node_box.cpp.catchv3 mrcpp-1.5.0/tests/trees/node_box.cpp
+--- mrcpp-1.5.0/tests/trees/node_box.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/trees/node_box.cpp	2023-08-09 21:32:20.787484204 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ #include "trees/MWNode.h"
+diff -up mrcpp-1.5.0/tests/trees/node_index.cpp.catchv3 mrcpp-1.5.0/tests/trees/node_index.cpp
+--- mrcpp-1.5.0/tests/trees/node_index.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/trees/node_index.cpp	2023-08-09 21:32:20.787484204 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+diff -up mrcpp-1.5.0/tests/trees/tree_io.cpp.catchv3 mrcpp-1.5.0/tests/trees/tree_io.cpp
+--- mrcpp-1.5.0/tests/trees/tree_io.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/trees/tree_io.cpp	2023-08-09 21:32:20.787484204 +0000
+@@ -23,7 +23,7 @@
+  * <https://mrcpp.readthedocs.io/>
+  */
+ 
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"
+ 
+ #include "factory_functions.h"
+ 
+@@ -54,16 +54,16 @@ SCENARIO("FunctionTree IO", "[tree_io],
+     WHEN("a function is saved") {
+         f_tree.saveTree("f");
+         THEN("the old tree remains unchanged") {
+-            REQUIRE(f_tree.integrate() == Approx(ref_charge).epsilon(1.0e-12));
+-            REQUIRE(f_tree.getSquareNorm() == Approx(ref_norm).epsilon(1.0e-12));
++            REQUIRE(f_tree.integrate() == Catch::Approx(ref_charge).epsilon(1.0e-12));
++            REQUIRE(f_tree.getSquareNorm() == Catch::Approx(ref_norm).epsilon(1.0e-12));
+             REQUIRE(f_tree.getNNodes() == ref_nodes);
+         }
+         AND_WHEN("the saved function is load into a new tree") {
+             FunctionTree<3> g_tree(*mra);
+             g_tree.loadTree("f");
+             THEN("the new tree is identical to the old") {
+-                REQUIRE(g_tree.integrate() == Approx(ref_charge).epsilon(1.0e-12));
+-                REQUIRE(g_tree.getSquareNorm() == Approx(ref_norm).epsilon(1.0e-12));
++                REQUIRE(g_tree.integrate() == Catch::Approx(ref_charge).epsilon(1.0e-12));
++                REQUIRE(g_tree.getSquareNorm() == Catch::Approx(ref_norm).epsilon(1.0e-12));
+                 REQUIRE(g_tree.getNNodes() == ref_nodes);
+             }
+         }
+diff -up mrcpp-1.5.0/tests/unit_tests.cpp.catchv3 mrcpp-1.5.0/tests/unit_tests.cpp
+--- mrcpp-1.5.0/tests/unit_tests.cpp.catchv3	2023-05-24 16:54:18.000000000 +0000
++++ mrcpp-1.5.0/tests/unit_tests.cpp	2023-08-09 21:32:20.787484204 +0000
+@@ -24,4 +24,4 @@
+  */
+ 
+ #define CATCH_CONFIG_MAIN
+-#include "catch.hpp"
++#include "catch2/catch_all.hpp"

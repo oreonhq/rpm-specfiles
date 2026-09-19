@@ -1,0 +1,158 @@
+From e871bb1c784dfa89bc9b900556f25fe8f5f6f4af Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Mon, 8 May 2017 06:01:46 +0200
+Subject: [PATCH 05/18] Wreorder
+
+---
+ plugin/mpi/mpi-cmaes.cpp | 6 +++---
+ plugin/seq/BasicMath.h   | 2 +-
+ plugin/seq/Geometry.hpp  | 4 ++--
+ plugin/seq/lapack.cpp    | 8 ++++----
+ src/femlib/FQuadTree.cpp | 6 +++---
+ src/femlib/RNM.hpp       | 3 ++-
+ src/fflib/AFunction2.cpp | 2 +-
+ 7 files changed, 16 insertions(+), 15 deletions(-)
+
+diff --git a/plugin/mpi/mpi-cmaes.cpp b/plugin/mpi/mpi-cmaes.cpp
+index c80ee72ef..90eae0fdd 100644
+--- a/plugin/mpi/mpi-cmaes.cpp
++++ b/plugin/mpi/mpi-cmaes.cpp
+@@ -175,7 +175,7 @@ class OptimCMA_ES : public OneOperator
+ 					: CMAES(d,xstart.n ? xstart:0,stddev,seed,lambda,"non"),x(&xstart),fit(&_ff) {}*/
+ 
+ 				CMA_ES_MPI(ffcalfunc &_ff,Rn &xstart,const Rn &stddev,long seed,int lambda,MPI_Comm *_com)
+-					: CMAES(),x(0),fit(&_ff),com(_com),myid(0),nproc(1),my_number_of_fitness_eval(0),index(0)
++					: CMAES(),x(0),fit(&_ff),com(_com),nproc(1),myid(0),my_number_of_fitness_eval(0),index(0)
+ 				{
+ 					MPI_Comm_size(*com,&nproc);
+ 					MPI_Comm_rank(*com,&myid);
+@@ -191,7 +191,7 @@ class OptimCMA_ES : public OneOperator
+ 					if(myid==0) cout << SayHello() << endl;
+ 				}
+ 				CMA_ES_MPI(ffcalfunc &_ff,Rn &xstart,const Rn &stddev,long seed,int lambda,MPI_Comm *_com,const char *ifname)
+-					: CMAES(),x(0),fit(&_ff),com(_com),myid(0),nproc(1),my_number_of_fitness_eval(0),index(0)
++					: CMAES(),x(0),fit(&_ff),com(_com),nproc(1),myid(0),my_number_of_fitness_eval(0),index(0)
+ 				{
+ 					MPI_Comm_size(*com,&nproc);
+ 					MPI_Comm_rank(*com,&myid);
+@@ -242,8 +242,8 @@ class OptimCMA_ES : public OneOperator
+ 			private:
+ 				CMA_ES_MPI(const CMA_ES_MPI &);
+ 				CMA_ES_MPI& operator=(const CMA_ES_MPI &);
+-				ffcalfunc *fit;
+ 				Rn *x;
++				ffcalfunc *fit;
+ 				MPI_Comm *com;
+ 				int nproc,myid,my_number_of_fitness_eval;
+ 				int * index;
+diff --git a/plugin/seq/BasicMath.h b/plugin/seq/BasicMath.h
+index 894578968..aca3618b7 100644
+--- a/plugin/seq/BasicMath.h
++++ b/plugin/seq/BasicMath.h
+@@ -101,7 +101,7 @@ class ostream_math {    // This class only contains a reference to an ostream, a
+  public:
+   Format_Math format;
+   ostream &os;
+-  ostream_math(ostream &OS, Format_Math Format) : os(OS), format(Format) {}
++  ostream_math(ostream &OS, Format_Math Format) : format(Format), os(OS) {}
+ };
+ 
+ inline ostream_math operator<<(ostream &f, Format_Math Format) { return ostream_math(f, Format); }
+diff --git a/plugin/seq/Geometry.hpp b/plugin/seq/Geometry.hpp
+index f087314d3..fd9b1102c 100644
+--- a/plugin/seq/Geometry.hpp
++++ b/plugin/seq/Geometry.hpp
+@@ -31,8 +31,8 @@ using namespace std;
+ 
+ /**************** Vertex ******************/
+ class Vertex : public R2 {    // heritage is perhaps not totally justified here, but...
+-  sym2 m;
+   int gen;
++  sym2 m;
+   // friend int main(int argc, const char * argv[]); //for Debug purposes
+ 
+  public:
+@@ -86,7 +86,7 @@ class Edge {    // edges are oriented. t is on the left.
+ 
+ #ifdef _FLAGGED_BOUNDARY_
+   Edge(Vertex const *U, Vertex const *V, Edge *S, Edge *N, int OnBoundary_ = 0)
+-    : u(U), v(V), sister(S), next(N), onBoundary_(OnBoundary_){};
++    : u(U), v(V), next(N), sister(S), onBoundary_(OnBoundary_){};
+   int onBoundary( ) const {
+     return onBoundary_;
+   }    // {if(sister!=NULL) return 0; if(onBoundary_>0) return onBoundary_; return 10;}
+diff --git a/plugin/seq/lapack.cpp b/plugin/seq/lapack.cpp
+index f3a0e8c2b..c94b9a073 100644
+--- a/plugin/seq/lapack.cpp
++++ b/plugin/seq/lapack.cpp
+@@ -924,14 +924,14 @@ class Mult {
+   bool ta;
+   T b;
+   bool tb;
+-  Mult(T aa, T bb) : a(aa), b(bb), ta(0), tb(0) {}
++  Mult(T aa, T bb) : a(aa), ta(0), b(bb), tb(0) {}
+ 
+   // Transpose<
+-  Mult(Transpose< T > aa, T bb) : a(aa), b(bb), ta(1), tb(0) {}
++  Mult(Transpose< T > aa, T bb) : a(aa), ta(1), b(bb), tb(0) {}
+ 
+-  Mult(Transpose< T > aa, Transpose< T > bb) : a(aa), b(bb), ta(1), tb(1) {}
++  Mult(Transpose< T > aa, Transpose< T > bb) : a(aa), ta(1), b(bb), tb(1) {}
+ 
+-  Mult(T aa, Transpose< T > bb) : a(aa), b(bb), ta(0), tb(1) {}
++  Mult(T aa, Transpose< T > bb) : a(aa), ta(1), b(bb), tb(1) {}
+ };
+ 
+ template< class K >
+diff --git a/src/femlib/FQuadTree.cpp b/src/femlib/FQuadTree.cpp
+index beb3fcc7f..54a679329 100644
+--- a/src/femlib/FQuadTree.cpp
++++ b/src/femlib/FQuadTree.cpp
+@@ -491,12 +491,12 @@ void  FQuadTree::Add( Vertex & w)
+ 
+ FQuadTree::FQuadTree(Vertex * v,R2 Pmin,R2 Pmax,long nbv)
+   :
+-  th(0),
+   lenStorageQuadTreeBox(Max(abs(nbv),1000L)),
+-  NbQuadTreeBox(0),
+-  NbVertices(0),
++  th(0),
+   NbQuadTreeBoxSearch(0),
+   NbVerticesSearch(0),
++  NbQuadTreeBox(0),
++  NbVertices(0),
+   cMin(Pmin-(Pmax-Pmin)/2),
+   cMax(Pmax+(Pmax-Pmin)/2),
+   coef( MaxISize/Norme_infty(cMax-cMin))
+diff --git a/src/femlib/RNM.hpp b/src/femlib/RNM.hpp
+index 3168b92e9..00a551aa5 100644
+--- a/src/femlib/RNM.hpp
++++ b/src/femlib/RNM.hpp
+@@ -382,8 +382,9 @@ template<class R> istream & operator>>(istream & f, KN<R> & v);
+ 
+ template<class R>
+ class SetArray { public:
+-    R o,step;
++    R o;
+     long n;
++    R step;
+     explicit SetArray(long nn,R oo=R(),R sstep=R(1)): o(oo),n(nn),step(sstep) {}
+     template<class K>   SetArray(SetArray<K> sa): o(sa.o),n(sa.n),step(sa.step) {}
+ 
+diff --git a/src/fflib/AFunction2.cpp b/src/fflib/AFunction2.cpp
+index 0fc8ccdb1..ffce6f61d 100644
+--- a/src/fflib/AFunction2.cpp
++++ b/src/fflib/AFunction2.cpp
+@@ -439,8 +439,8 @@ basicForEachType::basicForEachType(const type_info  & k,
+         un_ptr_type(rr?rr:this),
+         casting(0), // no casting to
+         un_ptr(p),
+-        InitExp(iv),
+         DoOnReturn(dreturn),
++        InitExp(iv),
+         //funct_type(0),
+         destroy(id) {}
+  void basicForEachType::SetArgs(const ListOfId *lid) const
+-- 
+2.47.1
+

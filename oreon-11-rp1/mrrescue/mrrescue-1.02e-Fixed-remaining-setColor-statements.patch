@@ -1,0 +1,162 @@
+From 5a58668d9a1e661f6591bd44a76cf242b3aabf3e Mon Sep 17 00:00:00 2001
+From: Simon Larsen <simonhffh@gmail.com>
+Date: Sat, 18 Aug 2018 16:51:03 +0200
+Subject: [PATCH 1/2] Fixed remaining setColor statements
+
+---
+ ingame.lua   | 22 +++++++++++-----------
+ keyboard.lua |  8 ++++----
+ splash.lua   | 30 +++++++++++++++---------------
+ 3 files changed, 30 insertions(+), 30 deletions(-)
+
+diff --git a/ingame.lua b/ingame.lua
+index f5c6f7c..4fcfcfe 100644
+--- a/ingame.lua
++++ b/ingame.lua
+@@ -196,7 +196,7 @@ function ingame.draw()
+ 
+ 		-- Draw red screen if hit
+ 		if player.heat > 0 then
+-			lg.setColor(1,1,1,cap(player.heat*255, 16, 255)/255)
++			lg.setColor(1,1,1,cap(player.heat, 0.063, 1))
+ 			lg.draw(img.red_screen, quad.red_screen, 0,0)
+ 			lg.setColor(1,1,1,1)
+ 		end
+@@ -249,13 +249,13 @@ end
+  
+ function drawWonMessage()
+ 	local alpha = cap((-translate_y)/100, 0, 1)
+-	lg.setColor(0,0,0,alpha*255)
++	lg.setColor(0,0,0,alpha)
+ 	lg.rectangle("fill", 0, 40, WIDTH, #WON_MESSAGES[level]*10+12)
+-	lg.setColor(255,255,255,alpha*255)
++	lg.setColor(1,1,1,alpha)
+ 	for i,v in ipairs(WON_MESSAGES[level]) do
+ 		lg.printf(v, 0, 48+(i-1)*10, WIDTH, "center")
+ 	end
+-	lg.setColor(255,255,255,255)
++	lg.setColor(1,1,1,1)
+ end
+ 
+ function drawHUD()
+@@ -296,13 +296,13 @@ function drawHUD()
+ 	if player:isDying() then
+ 		local color = 0
+ 		if warning_frame <= 1 then
+-			color = 30 + warning_frame * 225
++			color = 0.118 + warning_frame
+ 		else
+-			color = 255 - (warning_frame % 1)*225
++			color = 1 - (warning_frame % 1)
+ 		end
+-		lg.setColor(255,color,color)
++		lg.setColor(1,color,color)
+ 		lg.draw(img.temperature_bar_blink, 74, HEIGHT-26)
+-		lg.setColor(255,255,255)
++		lg.setColor(1,1,1)
+ 	end
+ 
+ 	-- Draw item slots
+@@ -320,11 +320,11 @@ function drawHUD()
+ 
+ 	-- Draw score
+ 	lg.setFont(font.bold)
+-	lg.setColor(16,12,9)
++	lg.setColor(16/255,12/255,9/255)
+ 	lg.print("SCORE: "..score,150,187)
+-	lg.setColor(246,247,221)
++	lg.setColor(246/255,247/255,221/255)
+ 	lg.print("SCORE: "..score,150,186)
+-	lg.setColor(255,255,255)
++	lg.setColor(1,1,1)
+ 
+ 	-- Draw boss health bar
+ 	if map.type == MT_BOSS and ingame_state ~= INGAME_WON then
+diff --git a/keyboard.lua b/keyboard.lua
+index 5cada98..a4d0db8 100644
+--- a/keyboard.lua
++++ b/keyboard.lua
+@@ -22,19 +22,19 @@ function keyboard.draw()
+ 	lg.printf("SET KEYBOARD", 0, 26, WIDTH, "center")
+ 	for i,v in ipairs(keynames) do
+ 		if keyboard.waiting == true and i == keyboard.selection then
+-			lg.setColor(195,52,41)
++			lg.setColor(195/255,52/255,41/255)
+ 		end
+ 		lg.print(string.upper(v), 65, 40+i*13)
+ 		if config.keys[v] == " " then
+ 			lg.print("SPACE", 154, 40+i*13)
+ 		elseif config.keys[v] == "none" then
+-			lg.setColor(118,31,25)
++			lg.setColor(118/255,31/255,25/255)
+ 			lg.print("NONE", 154, 40+i*13)
+-			lg.setColor(255,255,255)
++			lg.setColor(1,1,1)
+ 		else
+ 			lg.print(string.upper(config.keys[v]:sub(1,7)), 154, 40+i*13)
+ 		end
+-		lg.setColor(255,255,255)
++		lg.setColor(1,1,1)
+ 	end
+ 	lg.print("DEFAULT", 65, 144)
+ 	lg.print("BACK", 65, 157)
+diff --git a/splash.lua b/splash.lua
+index 6c779cd..0ef225b 100644
+--- a/splash.lua
++++ b/splash.lua
+@@ -19,37 +19,37 @@ function splash.draw()
+ 
+ 	if transition_time < 4 then
+ 		if transition_time < 1 then
+-			local alpha = cap(255*transition_time, 0,255)
+-			lg.setColor(255,255,255,alpha)
++			local alpha = cap(transition_time, 0, 1)
++			lg.setColor(1,1,1,alpha)
+ 			lg.draw(img.tangram, quad.screen, 0,0)
+-			lg.setColor(255,255,255,255)
++			lg.setColor(1,1,1,1)
+ 		elseif transition_time > 3 then
+-			local alpha = cap(255*(1-(transition_time-3)), 0,255)
+-			lg.setColor(255,255,255,alpha)
++			local alpha = cap(1-(transition_time-3), 0, 1)
++			lg.setColor(1,1,1,alpha)
+ 			lg.draw(img.tangram, quad.screen, 0,0)
+-			lg.setColor(255,255,255,255)
++			lg.setColor(1,1,1,1)
+ 		else
+ 			lg.draw(img.tangram, quad.screen, 0,0)
+ 		end
+ 	elseif transition_time < 8 then
+ 		if transition_time < 5 then
+-			local alpha = cap(255*(transition_time-4), 0,255)
+-			lg.setColor(255,255,255,alpha)
++			local alpha = cap(transition_time-4, 0, 1)
++			lg.setColor(1,1,1,alpha)
+ 			lg.draw(img.lovesplashpixel, quad.screen, 0,0)
+-			lg.setColor(255,255,255,255)
++			lg.setColor(1,1,1,1)
+ 		elseif transition_time > 7 then
+-			local alpha = cap(255*(1-(transition_time-7)), 0,255)
+-			lg.setColor(255,255,255,alpha)
++			local alpha = cap(1-(transition_time-7), 0, 1)
++			lg.setColor(1,1,1,alpha)
+ 			lg.draw(img.lovesplashpixel, quad.screen, 0,0)
+-			lg.setColor(255,255,255,255)
++			lg.setColor(1,1,1,1)
+ 		else
+ 			lg.draw(img.lovesplashpixel, quad.screen, 0,0)
+ 		end
+ 	elseif transition_time < 10 then
+-		local alpha = cap(128*(transition_time-8), 0, 255)
+-		lg.setColor(255,255,255,alpha)
++		local alpha = cap(0.5*(transition_time-8), 0, 1)
++		lg.setColor(1,1,1,alpha)
+ 		lg.draw(img.splash, quad.screen, 0,0)
+-		lg.setColor(255,255,255,255)
++		lg.setColor(1,1,1,1)
+ 	else
+ 		lg.draw(img.splash, quad.screen, 0,0)
+ 		lg.setFont(font.bold)
+-- 
+2.14.4
+

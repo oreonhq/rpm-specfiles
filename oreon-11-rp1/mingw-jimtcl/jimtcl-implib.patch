@@ -1,0 +1,22 @@
+--- Makefile.in.implib	2020-05-03 10:28:06.165247183 +0200
++++ Makefile.in	2020-05-03 10:29:14.761108502 +0200
+@@ -98,7 +98,9 @@
+ @if JIM_INSTALL
+ install: all @TCL_EXTS@ install-exec install-docs
+ 	$(INSTALL_DATA_DIR) $(DESTDIR)@libdir@/jim
+-	$(INSTALL_DATA) $(LIBJIM) $(DESTDIR)@libdir@
++	$(INSTALL_DATA_DIR) $(DESTDIR)@bindir@
++	$(INSTALL_DATA) $(LIBJIM) $(DESTDIR)@bindir@
++	$(INSTALL_DATA) $(LIBJIM).a $(DESTDIR)@libdir@
+ 	$(INSTALL_DATA) @srcdir@/README.extensions @C_EXT_SHOBJS@ $(DESTDIR)@datadir@/doc/jimtcl
+ 	for i in tcltest.tcl @TCL_EXTS@; do $(INSTALL_DATA) @srcdir@/$$i $(DESTDIR)@libdir@/jim; done
+ 	$(INSTALL_DATA_DIR) $(DESTDIR)@includedir@
+@@ -151,7 +153,7 @@
+ 	$(Q)$(RANLIB) $@
+ @else
+ 	$(ECHO) "	LDSO	$@"
+-	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(SH_LDFLAGS) -o $@ $(OBJS) $(LDLIBS) $(LIBS)
++	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(SH_LDFLAGS) -o $@ -Wl,--out-implib,$(LIBJIM).a $(OBJS) $(LDLIBS) $(LIBS)
+ @endif
+ 
+ @BUILD_SHOBJS@

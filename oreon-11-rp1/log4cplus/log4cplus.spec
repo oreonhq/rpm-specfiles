@@ -5,7 +5,7 @@
 #%%global prever rc3
 
 Name: log4cplus
-Version: 2.1.2
+Version: 2.2.0.1
 Release: %autorelease
 Summary: Logging Framework for C++
 

@@ -1,0 +1,12 @@
+diff -up julius-4.6/libsent/src/phmm/calc_dnn.c.cast-fix julius-4.6/libsent/src/phmm/calc_dnn.c
+--- julius-4.6/libsent/src/phmm/calc_dnn.c.cast-fix	2024-02-10 08:13:52.730614225 -0500
++++ julius-4.6/libsent/src/phmm/calc_dnn.c	2024-02-10 08:14:30.054209779 -0500
+@@ -284,7 +284,7 @@ static boolean load_npy(float *array, ch
+     return FALSE;
+   }
+ #ifdef WORDS_BIGENDIAN
+-  swap_bytes(&header_len, 2, 1);
++  swap_bytes((char *)&header_len, 2, 1);
+ #endif
+   header = (char *)mymalloc(header_len + 1);
+   if ((len = myfread(header, 1, header_len, fp)) < header_len) {

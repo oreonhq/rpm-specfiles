@@ -1,0 +1,22 @@
+From 65f609da762eded553d618d711f944fbfe39d2f5 Mon Sep 17 00:00:00 2001
+From: gbtami <gbtami@gmail.com>
+Date: Wed, 23 Jul 2025 18:59:44 +0200
+Subject: [PATCH] Heh, 'writer' is 'stream_writer'
+
+---
+ lib/pychess/ic/TimeSeal.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/pychess/ic/TimeSeal.py b/lib/pychess/ic/TimeSeal.py
+index 61b0c197e..3adacb402 100644
+--- a/lib/pychess/ic/TimeSeal.py
++++ b/lib/pychess/ic/TimeSeal.py
+@@ -90,7 +90,7 @@ def cook_some(self, data):
+ 
+             if self.timeseal:
+                 for i in range(g_count):
+-                    self._stream_reader.writer.write(
++                    self._stream_reader.stream_writer.write(
+                         self.encode(bytearray(G_RESPONSE, "utf-8")) + b"\n"
+                     )
+         return data

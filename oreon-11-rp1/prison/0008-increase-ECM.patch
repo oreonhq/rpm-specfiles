@@ -1,0 +1,25 @@
+From 004a27f8c1ef60a61c2b60272d815a09332a66b1 Mon Sep 17 00:00:00 2001
+From: Montel Laurent <montel@kde.org>
+Date: Sun, 22 Jun 2014 13:35:45 +0200
+Subject: [PATCH 8/9] increase ECM
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 11c0643..ca39df5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -18,7 +18,7 @@ include_directories(${CMAKE_SOURCE_DIR}/lib ${QT_INCLUDES} ${CMAKE_CURRENT_BINAR
+ 
+ #### Qt 4 and 5 ####
+ if(QT5_BUILD)
+-  find_package(ECM 0.0.13 REQUIRED NO_MODULE)
++  find_package(ECM 0.0.14 REQUIRED NO_MODULE)
+   set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+   include(KDEInstallDirs)
+ 
+-- 
+2.5.0
+

@@ -1,0 +1,27 @@
+diff -urp fantasdic-1.0-0.16.100.beta7.fc32.7.x86_64/usr/share/ruby/vendor_ruby/fantasdic/ui/utils.rb fantasdic-1.0-0.16.101.beta7.fc32.7.x86_64/usr/share/ruby/vendor_ruby/fantasdic/ui/utils.rb
+--- fantasdic-1.0-0.16.100.beta7.fc32.7.x86_64/usr/share/ruby/vendor_ruby/fantasdic/ui/utils.rb	2019-10-03 11:16:23.287658469 +0900
++++ fantasdic-1.0-0.16.101.beta7.fc32.7.x86_64/usr/share/ruby/vendor_ruby/fantasdic/ui/utils.rb	2019-10-03 11:46:41.691254008 +0900
+@@ -196,7 +196,9 @@ class Gtk::TextBuffer
+ 
+             tag = Gtk::TextTag.new
+ 
+-            paiter.get.each do |attr|
++            Pango::AttrType.constants.each do |attrtype|
++                attr = paiter.get(attrtype)
++                #paiter.get.each do |attr|
+                 # transform Pango::AttrStyle into style
+                 key = attr.class.name.split("::").last
+                 key = key.gsub("Attr", "").downcase
+@@ -223,9 +225,9 @@ class Gtk::TextBuffer
+ 
+             #iter = get_iter_at_mark(mark)
+ 
+-        end while paiter.next!
++        end while paiter.next
+ 
+         # delete_mark(mark)
+     end
+ 
+-end
+\ No newline at end of file
++end

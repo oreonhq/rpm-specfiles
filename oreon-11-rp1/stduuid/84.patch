@@ -1,0 +1,57 @@
+From 071709533b530d3b956693c3c74e98071da2dd2d Mon Sep 17 00:00:00 2001
+From: topazus <topazus@outlook.com>
+Date: Tue, 19 Dec 2023 11:19:31 +0800
+Subject: [PATCH] Use GNUInstallDirs instead of hardcoded paths
+
+---
+ CMakeLists.txt | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 73b5658..feb7dc9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -8,6 +8,8 @@ endif()
+ project(stduuid CXX)
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+ 
++include(GNUInstallDirs)
++
+ option(UUID_BUILD_TESTS "Build the unit tests" ${UUID_MAIN_PROJECT})
+ option(UUID_SYSTEM_GENERATOR "Enable operating system uuid generator" OFF)
+ option(UUID_TIME_GENERATOR "Enable experimental time-based uuid generator" OFF)
+@@ -47,21 +49,21 @@ if (NOT UUID_USING_CXX20_SPAN)
+     target_include_directories(${PROJECT_NAME} INTERFACE
+             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+             $<INSTALL_INTERFACE:include>)
+-    install(DIRECTORY gsl DESTINATION include)
++    install(DIRECTORY gsl DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+ endif ()
+ 
+ if(UUID_ENABLE_INSTALL)
+     # Install step and imported target
+-    install(FILES include/uuid.h DESTINATION include)
++    install(FILES include/uuid.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+     install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}-targets)
+     install(EXPORT ${PROJECT_NAME}-targets
+-            DESTINATION lib/cmake/${PROJECT_NAME})
++            DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+ 
+     # Config files for find_package()
+     include(CMakePackageConfigHelpers)
+     configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
+             "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+-            INSTALL_DESTINATION lib/cmake/${PROJECT_NAME})
++            INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+     write_basic_package_version_file(
+             "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-version.cmake"
+             VERSION "1.0"
+@@ -70,7 +72,7 @@ if(UUID_ENABLE_INSTALL)
+             "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+             "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-version.cmake"
+             "${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindLibuuid.cmake"
+-            DESTINATION lib/cmake/${PROJECT_NAME})
++            DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+     export(EXPORT ${PROJECT_NAME}-targets
+             FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}-targets.cmake")
+ endif()

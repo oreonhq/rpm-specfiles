@@ -1,0 +1,25 @@
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c.fix-peek_audio_context freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c.fix-peek_audio_context	2025-03-27 16:42:24.634876169 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c	2025-03-27 16:43:04.681891336 -0400
+@@ -640,6 +640,10 @@ void push_audio_context(int audio_contex
+ 	ppComponent_Sound p = (ppComponent_Sound)gglobal()->Component_Sound.prv;
+ 	stack_push(int, p->audio_context_stack, audio_context);
+ }
++int peek_audio_context() {
++	ppComponent_Sound p = (ppComponent_Sound)gglobal()->Component_Sound.prv;
++	return stack_top(int, p->audio_context_stack);
++}
+ void create_and_push_audio_context(struct X3D_Node* node) {
+ 	//Hypothesis: Destination / output audio nodes create a context, and child source and processing audio nodes use the context
+ 	struct X3D_SoundRep* srep = getSoundRep(node);
+@@ -657,10 +661,6 @@ void pop_audio_context() {
+ 	ppComponent_Sound p = (ppComponent_Sound)gglobal()->Component_Sound.prv;
+ 	stack_pop(int, p->audio_context_stack);
+ }
+-int peek_audio_context() {
+-	ppComponent_Sound p = (ppComponent_Sound)gglobal()->Component_Sound.prv;
+-	return stack_top(int, p->audio_context_stack);
+-}
+ void push_audio_parent(int inode) {
+ 	ppComponent_Sound p = (ppComponent_Sound)gglobal()->Component_Sound.prv;
+ 	icset aps = { 0, 0, 0, 0, 0, 0 };

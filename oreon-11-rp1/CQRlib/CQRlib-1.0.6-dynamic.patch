@@ -1,0 +1,17 @@
+--- CQRlib-1.0.6/Makefile.dynamic	2010-07-23 04:40:10.000000000 +0900
++++ CQRlib-1.0.6/Makefile	2010-08-25 20:38:56.991145821 +0900
+@@ -90,12 +90,12 @@
+ COMPILE_COMMAND         =  $(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c
+ LIBRARY_LINK_COMMAND    =  $(LIBTOOL) --mode=link  $(CC) -version-info $(VERSION) -rpath $(INSTALLDIR)/lib
+ BUILD_COMMAND_LOCAL     =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(INCLUDES)
+-BUILD_COMMAND_DYNAMIC   =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -dynamic -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
++BUILD_COMMAND_DYNAMIC   =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -rdynamic -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
+ BUILD_COMMAND_STATIC    =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -static -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
+ CPPCOMPILE_COMMAND      =  $(LIBTOOL) --mode=compile $(CXX) $(CPPFLAGS) $(INCLUDES) $(WARNINGS) -c
+ CPPLIBRARY_LINK_COMMAND =  $(LIBTOOL) --mode=link $(CXX) -version-info $(VERSION) -rpath $(INSTALLDIR)/lib
+ CPPBUILD_COMMAND_LOCAL  =  $(LIBTOOL) --mode=link $(CXX) $(CPPFLAGS) $(INCLUDES)
+-CPPBUILD_COMMAND_DYNAMIC=  $(LIBTOOL) --mode=link $(CXX) $(CPPFLAGS) -dynamic -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
++CPPBUILD_COMMAND_DYNAMIC=  $(LIBTOOL) --mode=link $(CXX) $(CPPFLAGS) -rdynamic -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
+ CPPBUILD_COMMAND_STATIC =  $(LIBTOOL) --mode=link $(CXX) $(CPPFLAGS) -static -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
+ INSTALL_COMMAND         =  $(LIBTOOL) --mode=install cp
+ INSTALL_FINISH_COMMAND  =  $(LIBTOOL) --mode=finish

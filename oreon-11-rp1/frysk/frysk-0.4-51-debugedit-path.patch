@@ -1,0 +1,13 @@
+--- frysk-0.4/frysk-core/Makefile.am.orig	2021-08-05 14:51:10.741080868 -0400
++++ frysk-0.4/frysk-core/Makefile.am	2021-08-05 14:51:29.595873910 -0400
+@@ -225,8 +225,8 @@
+ 	(cd $@/usr/src/debug; \
+ 	 $(COMPILE) funit-bubblesort.c -fpic -shared -o ../../lib/libbubble.so -g; \
+ 	 $(COMPILE) funit-quicksort.c -L ../../lib -lbubble  -g -o ../../bin/funit-quicksort -DNO_MAIN)
+-	/usr/lib/rpm/debugedit -b $(abspath $@) -d / $@/usr/bin/funit-quicksort
+-	/usr/lib/rpm/debugedit -b $(abspath $@) -d / $@/usr/lib/libbubble.so
++	debugedit -b $(abspath $@) -d / $@/usr/bin/funit-quicksort
++	debugedit -b $(abspath $@) -d / $@/usr/lib/libbubble.so
+ 	eu-strip --remove-comment -f $@/usr/lib/debug/usr/bin/funit-quicksort.debug $@/usr/bin/funit-quicksort; \
+ 	eu-strip --remove-comment -f $@/usr/lib/debug/usr/lib/funit-bubblesort.debug $@/usr/lib/libbubble.so; 
+ 

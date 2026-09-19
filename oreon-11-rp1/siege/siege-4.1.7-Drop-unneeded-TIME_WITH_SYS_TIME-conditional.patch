@@ -1,0 +1,145 @@
+From eda6459c20776222a5fe1adc7a4c6fa4daab1bdc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Esser?= <besser82@fedoraproject.org>
+Date: Thu, 13 Feb 2025 13:45:25 +0100
+Subject: [PATCH] Drop unneeded TIME_WITH_SYS_TIME conditional
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ src/cookie.h | 13 ++++---------
+ src/data.c   | 13 ++++---------
+ src/data.h   | 13 ++++---------
+ src/date.c   | 13 ++++---------
+ src/setup.h  | 13 ++++---------
+ 5 files changed, 20 insertions(+), 45 deletions(-)
+
+diff --git a/src/cookie.h b/src/cookie.h
+index 2d7d53a..be161e0 100644
+--- a/src/cookie.h
++++ b/src/cookie.h
+@@ -9,16 +9,11 @@
+ # include <sys/times.h>
+ #endif/*HAVE_SYS_TIMES_H*/
+ 
+-#if  TIME_WITH_SYS_TIME
++#include <time.h>
++
++#ifdef HAVE_SYS_TIME_H
+ # include <sys/time.h>
+-# include <time.h>
+-#else
+-# if HAVE_SYS_TIME_H
+-#  include <sys/time.h>
+-# else
+-#  include <time.h>
+-# endif
+-#endif/*TIME_WITH_SYS_TIME*/
++#endif
+ 
+ #include <stddef.h>
+ #include <joedog/defs.h>
+diff --git a/src/data.c b/src/data.c
+index fcf44ff..c107490 100644
+--- a/src/data.c
++++ b/src/data.c
+@@ -33,16 +33,11 @@
+ # include <sys/times.h>
+ #endif/*HAVE_SYS_TIMES_H*/
+ 
+-#if TIME_WITH_SYS_TIME
++#include <time.h>
++
++#ifdef HAVE_SYS_TIME_H
+ # include <sys/time.h>
+-# include <time.h>
+-#else
+-# if HAVE_SYS_TIME_H
+-#  include <sys/time.h>
+-# else
+-#  include <time.h>
+-# endif/*HAVE_SYS_TIME_H   */
+-#endif /*TIME_WITH_SYS_TIME*/
++#endif/*HAVE_SYS_TIME_H*/
+ 
+ 
+ struct DATA_T
+diff --git a/src/data.h b/src/data.h
+index 0c0af10..4ca46d0 100644
+--- a/src/data.h
++++ b/src/data.h
+@@ -30,16 +30,11 @@
+ # include <sys/times.h>
+ #endif/*HAVE_SYS_TIMES_H*/
+ 
+-#if TIME_WITH_SYS_TIME
++#include <time.h>
++
++#ifdef HAVE_SYS_TIME_H
+ # include <sys/time.h>
+-# include <time.h>
+-#else
+-# if HAVE_SYS_TIME_H
+-#  include <sys/time.h>
+-# else
+-#  include <time.h>
+-# endif/*HAVE_SYS_TIME_H   */
+-#endif /*TIME_WITH_SYS_TIME*/
++#endif/*HAVE_SYS_TIME_H*/
+ 
+ typedef struct DATA_T *DATA;
+ 
+diff --git a/src/date.c b/src/date.c
+index 8357fd9..d0da11a 100644
+--- a/src/date.c
++++ b/src/date.c
+@@ -35,16 +35,11 @@
+ #include <util.h>
+ #include <locale.h>
+ 
+-#if  TIME_WITH_SYS_TIME
++#include <time.h>
++
++#ifdef HAVE_SYS_TIME_H
+ # include <sys/time.h>
+-# include <time.h>
+-#else
+-# if HAVE_SYS_TIME_H
+-#  include <sys/time.h>
+-# else
+-#  include <time.h>
+-# endif
+-#endif/*TIME_WITH_SYS_TIME*/
++#endif
+ 
+ #include <setup.h>
+ #include <memory.h>
+diff --git a/src/setup.h b/src/setup.h
+index a8e8a28..52efefa 100644
+--- a/src/setup.h
++++ b/src/setup.h
+@@ -72,16 +72,11 @@ char *strchr (), *strrchr ();
+ # include <sys/times.h>
+ #endif/*HAVE_SYS_TIMES_H*/
+ 
+-#if  TIME_WITH_SYS_TIME
++#include <time.h>
++
++#ifdef HAVE_SYS_TIME_H
+ # include <sys/time.h>
+-# include <time.h>
+-#else
+-# if HAVE_SYS_TIME_H
+-#  include <sys/time.h>
+-# else
+-#  include <time.h>
+-# endif
+-#endif/*TIME_WITH_SYS_TIME*/
++#endif
+ 
+ #if HAVE_ERRNO_H
+ # include <errno.h>
+-- 
+2.48.1
+

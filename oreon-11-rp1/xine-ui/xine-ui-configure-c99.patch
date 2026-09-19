@@ -1,0 +1,65 @@
+Fix C compatibility issues in the configure script
+
+This is necessary to avoid incorrectly failing probes due to expected
+compiler errors.
+
+Include <stdlib.h> for the exit function, and <string.h> for the
+strdup function.
+
+Use fake prototypes to avoid implicit function declarations in the
+xine_* function probes.
+
+Submitted upstream: <https://sourceforge.net/p/xine/tickets/22/>
+
+diff -ur xine-ui-0.99.14.orig/configure.ac xine-ui-0.99.14/configure.ac
+--- xine-ui-0.99.14.orig/configure.ac	2023-01-07 20:28:52.000000000 +0100
++++ xine-ui-0.99.14/configure.ac	2023-12-19 08:23:25.368687930 +0100
+@@ -198,6 +198,7 @@
+   if test "$ac_cv_header_sys_shm_h" = "yes"; then
+     AC_MSG_CHECKING(whether shmctl IPC_RMID allowes subsequent attaches)
+     AC_TRY_RUN([
++	  #include <stdlib.h>
+           #include <sys/types.h>
+           #include <sys/ipc.h>
+           #include <sys/shm.h>
+diff -ur xine-ui-0.99.14.orig/m4/aa.m4 xine-ui-0.99.14/m4/aa.m4
+--- xine-ui-0.99.14.orig/m4/aa.m4	2023-01-07 20:28:52.000000000 +0100
++++ xine-ui-0.99.14/m4/aa.m4	2023-12-19 08:22:50.481984296 +0100
+@@ -52,6 +52,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <aalib.h>
++#include <string.h>
+ 
+ int main () {
+   int major, minor;
+diff -ur xine-ui-0.99.14.orig/m4/_xine.m4 xine-ui-0.99.14/m4/_xine.m4
+--- xine-ui-0.99.14.orig/m4/_xine.m4	2023-01-07 20:28:52.000000000 +0100
++++ xine-ui-0.99.14/m4/_xine.m4	2023-12-19 08:22:02.665390504 +0100
+@@ -218,7 +218,7 @@
+      CFLAGS="$CFLAGS $XINE_CFLAGS"
+      LIBS="$LIBS $XINE_LIBS"
+      AC_LINK_IFELSE(
+-         [AC_LANG_PROGRAM([],[xine_open_cloexec();])],
++         [AC_LANG_PROGRAM([char xine_open_cloexec(void);],[xine_open_cloexec();])],
+          [AC_DEFINE([HAVE_XINE_OPEN_CLOEXEC], [1], [Define if xine-lib supports xine_open_cloexec])
+           AC_MSG_RESULT([yes])],
+          [AC_MSG_RESULT([no])])
+@@ -234,7 +234,7 @@
+      CFLAGS="$CFLAGS $XINE_CFLAGS"
+      LIBS="$LIBS $XINE_LIBS"
+      AC_LINK_IFELSE(
+-         [AC_LANG_PROGRAM([],[xine_socket_cloexec();])],
++         [AC_LANG_PROGRAM([char xine_socket_cloexec(void);],[xine_socket_cloexec();])],
+          [AC_DEFINE([HAVE_XINE_SOCKET_CLOEXEC], [1], [Define if xine-lib supports xine_socket_cloexec])
+           AC_MSG_RESULT([yes])],
+          [AC_MSG_RESULT([no])])
+@@ -250,7 +250,7 @@
+      CFLAGS="$CFLAGS $XINE_CFLAGS"
+      LIBS="$LIBS $XINE_LIBS"
+      AC_LINK_IFELSE(
+-         [AC_LANG_PROGRAM([
++         [AC_LANG_PROGRAM([char xine_list_next_value(void);
+          ],[
+ xine_list_next_value ();
+          ])],

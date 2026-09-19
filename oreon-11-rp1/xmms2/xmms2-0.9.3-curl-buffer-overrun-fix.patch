@@ -1,0 +1,29 @@
+diff -up xmms2-0.9.3/src/plugins/curl/curl_http.c.underrunfix xmms2-0.9.3/src/plugins/curl/curl_http.c
+--- xmms2-0.9.3/src/plugins/curl/curl_http.c.underrunfix	2023-09-15 10:00:07.480047876 -0400
++++ xmms2-0.9.3/src/plugins/curl/curl_http.c	2023-09-15 10:00:49.812658794 -0400
+@@ -31,6 +31,7 @@
+ /*
+  * Type definitions
+  */
++#define XMMS2_CURL_BUFFER_SIZE 0x200000
+ 
+ typedef struct {
+ 	CURL *curl_easy;
+@@ -212,7 +213,7 @@ xmms_curl_init (xmms_xform_t *xform)
+ 	g_snprintf (proxyuserpass, sizeof (proxyuserpass), "%s:%s", proxyuser,
+ 	            proxypass);
+ 
+-	data->buffer = g_malloc (CURL_MAX_WRITE_SIZE);
++	data->buffer = g_malloc (XMMS2_CURL_BUFFER_SIZE);
+ 	data->url = g_strdup (url);
+ 
+ 	/* check for broken version of curl here */
+@@ -463,7 +464,7 @@ xmms_curl_callback_write (void *ptr, siz
+ 
+ 	len = size * nmemb;
+ 
+-	g_return_val_if_fail ((data->bufferlen + len) <= CURL_MAX_WRITE_SIZE, 0);
++	g_return_val_if_fail ((data->bufferlen + len) <= XMMS2_CURL_BUFFER_SIZE, 0);
+ 
+ 	memcpy (data->buffer + data->bufferlen, ptr, len);
+ 	data->bufferlen = data->bufferlen + len;

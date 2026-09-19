@@ -1,0 +1,33 @@
+--- cvc5-cvc5-1.3.3/cmake/ConfigProduction.cmake.orig	2026-02-25 13:39:59.000000000 -0700
++++ cvc5-cvc5-1.3.3/cmake/ConfigProduction.cmake	2026-03-20 14:14:45.805225501 -0600
+@@ -9,7 +9,7 @@
+ ##
+ 
+ # OPTLEVEL=3
+-set(OPTIMIZATION_LEVEL 3)
++set(OPTIMIZATION_LEVEL 2)
+ # enable_debug_symbols=no
+ cvc5_set_option(ENABLE_DEBUG_SYMBOLS OFF)
+ # enable_statistics=yes
+--- cvc5-cvc5-1.3.3/cmake/FindCaDiCaL.cmake.orig	2026-02-25 13:39:59.000000000 -0700
++++ cvc5-cvc5-1.3.3/cmake/FindCaDiCaL.cmake	2026-03-20 14:14:45.805449327 -0600
+@@ -90,7 +90,7 @@ if(NOT CaDiCaL_FOUND_SYSTEM)
+   # avoid configure script and instantiate the makefile manually the configure
+   # scripts unnecessarily fails for cross compilation thus we do the bare
+   # minimum from the configure script here
+-  set(CaDiCaL_CXXFLAGS "-fPIC -O3 -DNDEBUG -DQUIET -std=c++11")
++  set(CaDiCaL_CXXFLAGS "-fPIC -O2 -DNDEBUG -DQUIET -std=c++11")
+   if(CMAKE_CROSSCOMPILING_MACOS)
+     set(CaDiCaL_CXXFLAGS "${CaDiCaL_CXXFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}")
+   endif()
+--- cvc5-cvc5-1.3.3/CMakeLists.txt.orig	2026-02-25 13:39:59.000000000 -0700
++++ cvc5-cvc5-1.3.3/CMakeLists.txt	2026-03-20 14:14:45.805661012 -0600
+@@ -197,7 +197,7 @@ endif()
+ #-----------------------------------------------------------------------------#
+ # Internal cmake variables
+ 
+-set(OPTIMIZATION_LEVEL 3)
++set(OPTIMIZATION_LEVEL 2)
+ set(GPL_LIBS "")
+ 
+ if(ENABLE_CLANG_TIDY)

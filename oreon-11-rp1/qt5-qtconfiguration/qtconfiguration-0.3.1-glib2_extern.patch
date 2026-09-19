@@ -1,0 +1,31 @@
+diff -up qtconfiguration-0.3.1/src/configuration/qdconfconfigurationbackend.cpp.glib2 qtconfiguration-0.3.1/src/configuration/qdconfconfigurationbackend.cpp
+--- qtconfiguration-0.3.1/src/configuration/qdconfconfigurationbackend.cpp.glib2	2021-08-01 11:58:39.803435139 -0500
++++ qtconfiguration-0.3.1/src/configuration/qdconfconfigurationbackend.cpp	2021-08-01 11:57:17.863031361 -0500
+@@ -36,10 +36,10 @@
+ **
+ ****************************************************************************/
+ 
+-extern "C" {
++// extern "C" {
+ #include <dconf/client/dconf-client.h>
+ #include <dconf/common/dconf-paths.h>
+-}
++//}
+ 
+ #include <QtCore/QCoreApplication>
+ #include <QtCore/QDebug>
+diff -up qtconfiguration-0.3.1/src/configuration/qgvariantutils.h.glib2 qtconfiguration-0.3.1/src/configuration/qgvariantutils.h
+--- qtconfiguration-0.3.1/src/configuration/qgvariantutils.h.glib2	2021-08-01 11:58:26.193368072 -0500
++++ qtconfiguration-0.3.1/src/configuration/qgvariantutils.h	2021-08-01 11:57:29.216087306 -0500
+@@ -39,9 +39,9 @@
+ #ifndef QGVARIANTUTILS_H
+ #define QGVARIANTUTILS_H
+ 
+-extern "C" {
++//extern "C" {
+ #include <glib.h>
+-}
++//}
+ 
+ QT_BEGIN_NAMESPACE
+ 

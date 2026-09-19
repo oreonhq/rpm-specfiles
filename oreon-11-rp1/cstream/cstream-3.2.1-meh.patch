@@ -1,0 +1,16 @@
+Ignore write errors inside sighup()
+
+--- cstream-3.0.0/cstream.c	2011-09-12 12:38:46.535528045 +0200
++++ cstream-3.0.0/cstream.c.fixed	2011-09-12 12:40:31.389644368 +0200
+@@ -278,7 +278,10 @@
+ static void
+ sighup(int signal)
+ {
+-  int meh = write(2, "SIGHUP\n", sizeof("SIGHUP\n") - 1);
++  const ssize_t meh = write(2, "SIGHUP\n", sizeof("SIGHUP\n") - 1);
++  if (meh != sizeof("SIGHUP\n")) {
++    /* ignore write error */
++  }
+   n_sighups++;
+ }
+ 

@@ -1,0 +1,10 @@
+--- utils/Makefile.old	2006-07-06 20:47:38.000000000 +0200
++++ utils/Makefile	2006-07-06 20:48:05.000000000 +0200
+@@ -1,6 +1,6 @@
+ # Makefile for TuxPuck Utils , Copyright Jacob Kroon 2001-2002
+ CC		= gcc
+-CFLAGS		+= -g -Wall -Werror
++CFLAGS		+= -g -Wall
+ #############################################################
+ 
+ all : ttf2font data2c anim

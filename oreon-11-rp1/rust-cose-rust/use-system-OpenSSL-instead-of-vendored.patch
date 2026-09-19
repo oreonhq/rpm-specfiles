@@ -1,0 +1,11 @@
+diff -up cose-rust-0.1.7/Cargo.toml.orig cose-rust-0.1.7/Cargo.toml
+--- cose-rust-0.1.7/Cargo.toml.orig	2025-11-27 13:10:23.069507529 +0100
++++ cose-rust-0.1.7/Cargo.toml	2025-11-27 13:10:38.658466408 +0100
+@@ -42,7 +42,6 @@ optional = true
+ 
+ [dependencies.openssl]
+ version = "0.10"
+-features = ["vendored"]
+ 
+ [dependencies.rand]
+ version = "0.8.3"

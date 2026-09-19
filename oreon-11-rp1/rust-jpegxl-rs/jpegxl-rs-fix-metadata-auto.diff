@@ -1,0 +1,16 @@
+--- jpegxl-rs-0.12.0+libjxl-0.11.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ jpegxl-rs-0.12.0+libjxl-0.11.1/Cargo.toml	2026-03-13T16:37:10.372068+00:00
+@@ -13,7 +13,7 @@
+ edition = "2021"
+ rust-version = "1.85.0"
+ name = "jpegxl-rs"
+-version = "0.12.0+libjxl-0.11.1"
++version = "0.12.0"
+ build = false
+ autolib = false
+ autobins = false
+@@ -116,3 +116,4 @@
+ level = "warn"
+ priority = 0
+ check-cfg = ["cfg(coverage_nightly)"]
++

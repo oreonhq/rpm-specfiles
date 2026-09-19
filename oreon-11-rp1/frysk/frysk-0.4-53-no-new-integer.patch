@@ -1,0 +1,1622 @@
+diff --git a/frysk-common/antlr-warnings.awk b/frysk-common/antlr-warnings.awk
+index 6656fb721..fcd01131e 100644
+--- a/frysk-common/antlr-warnings.awk
++++ b/frysk-common/antlr-warnings.awk
+@@ -106,6 +106,16 @@ function sed_comment(code) {
+     return "s," code ",// " code ","
+ }
+ 
++# warning: [removal] Integer(int) in Integer has been deprecated and marked for removal
++prob ~ /Integer.int. in Integer has been deprecated/ {
++    sed = "s,new Integer(,Integer.valueOf(,"
++}
++
++# warning: [removal] Long(long) in Long has been deprecated and marked for removal
++prob ~ /Long.long. in Long has been deprecated/ {
++    sed = "s,new Long(,Long.valueOf(,"
++}
++
+ prob ~ /Unnecessary semicolon/ || prob ~ /An empty declaration is a deprecated feature/ {
+     if (code ~ /};/) {
+ 	sed = "s,};,} // ;,"
+diff --git a/frysk-core/frysk/bindir/fstack.java b/frysk-core/frysk/bindir/fstack.java
+index a945fcaa7..18ddad26f 100644
+--- a/frysk-core/frysk/bindir/fstack.java
++++ b/frysk-core/frysk/bindir/fstack.java
+@@ -88,7 +88,7 @@ public final class fstack {
+ 
+       TreeMap sortedTasks = new TreeMap();
+       for (int i=0; i<tasks.length; i++)
+-          sortedTasks.put(new Integer(tasks[i].getTid()), tasks[i]);
++          sortedTasks.put(Integer.valueOf(tasks[i].getTid()), tasks[i]);
+ 
+       for (Iterator i = sortedTasks.values().iterator(); i.hasNext(); ) {
+           Task task = (Task) i.next();
+diff --git a/frysk-core/frysk/bindir/ftrace.java b/frysk-core/frysk/bindir/ftrace.java
+index f4349a51f..0a01027a2 100644
+--- a/frysk-core/frysk/bindir/ftrace.java
++++ b/frysk-core/frysk/bindir/ftrace.java
+@@ -251,7 +251,7 @@ class ftrace {
+ 
+ 	    if (sysnumPat.matcher(str).matches()) {
+ 		fine.log(i + ": " + str + ": by number rule");
+-		final int number = (new Integer(str)).intValue();
++		final int number = (Integer.valueOf(str)).intValue();
+ 		rule = new SigSysRule(addition, opts) {
+ 			public boolean matches(final Object traceable) {
+ 			    return number == examiner.traceableNumber(traceable);
+diff --git a/frysk-core/frysk/debuginfo/LocationExpression.java b/frysk-core/frysk/debuginfo/LocationExpression.java
+index 73281368e..381698032 100644
+--- a/frysk-core/frysk/debuginfo/LocationExpression.java
++++ b/frysk-core/frysk/debuginfo/LocationExpression.java
+@@ -133,7 +133,7 @@ public class LocationExpression {
+ 	    case DwOp.LIT29_:
+ 	    case DwOp.LIT30_:
+ 	    case DwOp.LIT31_:
+-		stack.addFirst(new Long(operator - DwOp.LIT0_));
++		stack.addFirst(Long.valueOf(operator - DwOp.LIT0_));
+ 		break;
+ 
+ 		// Register name Operators	
+@@ -208,7 +208,7 @@ public class LocationExpression {
+ 	    case DwOp.BREG31_:
+ 		register = registerMap.getRegister(operator - DwOp.BREG0_);
+ 		long regval = frame.getRegister(register);
+-		stack.addFirst(new Long((regval + operand1) & wordMask));
++		stack.addFirst(Long.valueOf((regval + operand1) & wordMask));
+ 		break;
+ 
+ 	    case DwOp.REGX_:
+@@ -219,11 +219,11 @@ public class LocationExpression {
+ 	    case DwOp.BREGX_:
+ 		register = registerMap.getRegister((int)operand1);
+ 		regval = frame.getRegister(register);
+-		stack.addFirst(new Long((operand2 + regval) & wordMask));
++		stack.addFirst(Long.valueOf((operand2 + regval) & wordMask));
+ 		break;
+ 
+ 	    case DwOp.ADDR_:
+-		stack.addFirst(new Long(operand1));
++		stack.addFirst(Long.valueOf(operand1));
+ 		break;
+ 
+ 		// DW_OP_fbreg calls recursively and pushes that value on the stack
+@@ -233,7 +233,7 @@ public class LocationExpression {
+ 		
+ 		// FBREG is expected to return a memory address
+ 		// so we make that assumption when casting element 0 to MemoryPiece
+-		stack.addFirst(new Long(operand1
++		stack.addFirst(Long.valueOf(operand1
+ 			+ ((MemoryPiece) frameBaseOps.decode(frame,
+ 				die.getFrameBase(pc), Host.wordSize())
+ 				.get(0)).getMemory()));
+@@ -248,7 +248,7 @@ public class LocationExpression {
+ 	    case DwOp.CONST4S_:
+ 	    case DwOp.CONSTU_:
+ 	    case DwOp.CONSTS_:
+-		stack.addFirst(new Long(operand1));
++		stack.addFirst(Long.valueOf(operand1));
+ 		break;
+ 
+ 		// Stack Operations
+@@ -288,126 +288,126 @@ public class LocationExpression {
+ 	    case DwOp.PLUS_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(operand1 + operand2));
++		stack.addFirst(Long.valueOf(operand1 + operand2));
+ 		break;
+ 
+ 	    case DwOp.PLUS_UCONST_:
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(operand1 + operand2));
++		stack.addFirst(Long.valueOf(operand1 + operand2));
+ 		break;
+ 
+ 	    case DwOp.MINUS_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(operand2 - operand1)); 
++		stack.addFirst(Long.valueOf(operand2 - operand1)); 
+ 		break;
+ 
+ 	    case DwOp.MUL_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(operand1 * operand2));
++		stack.addFirst(Long.valueOf(operand1 * operand2));
+ 		break;
+ 
+ 	    case DwOp.DIV_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+ 		// Should there be a check here for operand1!=0 ?
+-		stack.addFirst(new Long(operand2 / operand1));
++		stack.addFirst(Long.valueOf(operand2 / operand1));
+ 		break;
+ 
+ 	    case DwOp.MOD_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+ 		// Should there be a check here for operand1!=0 ?
+-		stack.addFirst(new Long(operand2 % operand1));
++		stack.addFirst(Long.valueOf(operand2 % operand1));
+ 		break;
+ 
+ 	    case DwOp.ABS_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(Math.abs(operand1)));
++		stack.addFirst(Long.valueOf(Math.abs(operand1)));
+ 		break;
+ 
+ 	    case DwOp.AND_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(operand1 & operand2));
++		stack.addFirst(Long.valueOf(operand1 & operand2));
+ 		break;
+ 
+ 	    case DwOp.OR_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(operand1 | operand2));
++		stack.addFirst(Long.valueOf(operand1 | operand2));
+ 		break;
+ 
+ 	    case DwOp.SHL_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(operand2 << operand1));
++		stack.addFirst(Long.valueOf(operand2 << operand1));
+ 		break;
+ 
+ 	    case DwOp.SHR_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(operand2 >>> operand1));
++		stack.addFirst(Long.valueOf(operand2 >>> operand1));
+ 		break;
+ 
+ 	    case DwOp.SHRA_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(operand2 >> operand1));
++		stack.addFirst(Long.valueOf(operand2 >> operand1));
+ 		break;
+ 
+ 	    case DwOp.XOR_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(operand1 ^ operand2));
++		stack.addFirst(Long.valueOf(operand1 ^ operand2));
+ 		break;
+ 
+ 	    case DwOp.NEG_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(0-operand1));
++		stack.addFirst(Long.valueOf(0-operand1));
+ 		break;
+ 
+ 	    case DwOp.NOT_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long(~operand1));
++		stack.addFirst(Long.valueOf(~operand1));
+ 		break;
+ 
+ 		// Control flow operations
+ 	    case DwOp.LE_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long((operand2 <= operand1)? 1:0));
++		stack.addFirst(Long.valueOf((operand2 <= operand1)? 1:0));
+ 		break;	
+ 
+ 	    case DwOp.GE_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long((operand2 >= operand1)? 1:0));
++		stack.addFirst(Long.valueOf((operand2 >= operand1)? 1:0));
+ 		break;	
+ 
+ 	    case DwOp.EQ_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long((operand2 == operand1)? 1:0));
++		stack.addFirst(Long.valueOf((operand2 == operand1)? 1:0));
+ 		break;	
+ 
+ 	    case DwOp.LT_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long((operand2 < operand1)? 1:0));
++		stack.addFirst(Long.valueOf((operand2 < operand1)? 1:0));
+ 		break;	
+ 
+ 	    case DwOp.GT_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long((operand2 > operand1)? 1:0));
++		stack.addFirst(Long.valueOf((operand2 > operand1)? 1:0));
+ 		break;	
+ 
+ 	    case DwOp.NE_:
+ 		operand1 = ((Long)stack.removeFirst()).longValue();
+ 		operand2 = ((Long)stack.removeFirst()).longValue();
+-		stack.addFirst(new Long((operand2 != operand1)? 1:0));
++		stack.addFirst(Long.valueOf((operand2 != operand1)? 1:0));
+ 		break;	
+ 
+ 		//Special Operations
+diff --git a/frysk-core/frysk/debuginfo/TestDebugInfoStackTrace.java b/frysk-core/frysk/debuginfo/TestDebugInfoStackTrace.java
+index c803bdcdd..d705aeb3f 100644
+--- a/frysk-core/frysk/debuginfo/TestDebugInfoStackTrace.java
++++ b/frysk-core/frysk/debuginfo/TestDebugInfoStackTrace.java
+@@ -325,13 +325,13 @@ public class TestDebugInfoStackTrace
+     DebugInfoFrame frame = DebugInfoStackFactory.createDebugInfoStackTrace(myTask);
+     
+     if (frame.getLine() == SourceLocation.UNKNOWN) {
+-        this.lineMap.put(myTask, new Integer(0));
++        this.lineMap.put(myTask, Integer.valueOf(0));
+         steppingEngine.stepLine(myTask.getProc().getTasks());
+         return;
+       }
+       
+     SourceLocation line = frame.getLine();
+-    this.lineMap.put(myTask, new Integer(line.getLine()));
++    this.lineMap.put(myTask, Integer.valueOf(line.getLine()));
+     steppingEngine.stepLine(myTask.getProc().getTasks());
+   }
+   
+@@ -514,7 +514,7 @@ public class TestDebugInfoStackTrace
+                 line = sFrame.getLine();
+                 lineNum = line.getLine();
+               }
+-            this.lineMap.put(myTask, new Integer(lineNum));
++            this.lineMap.put(myTask, Integer.valueOf(lineNum));
+             if (this.testState == PUSH)
+               this.testState = PUSH_GO;
+             else if (this.testState == POP)
+@@ -529,7 +529,7 @@ public class TestDebugInfoStackTrace
+         if (this.testState != PUSH_STEPPING && this.testState != POP_STEPPING)
+           {
+             int prev = ((Integer) this.lineMap.get(myTask)).intValue();
+-            this.lineMap.put(myTask, new Integer(line.getLine()));
++            this.lineMap.put(myTask, Integer.valueOf(line.getLine()));
+ 
+             if (this.testState == PUSH_GO)
+               {
+diff --git a/frysk-core/frysk/debuginfo/TypeFactory.java b/frysk-core/frysk/debuginfo/TypeFactory.java
+index 26bcb3162..5d833cced 100644
+--- a/frysk-core/frysk/debuginfo/TypeFactory.java
++++ b/frysk-core/frysk/debuginfo/TypeFactory.java
+@@ -115,7 +115,7 @@ public class TypeFactory {
+ 	ArrayList dims = new ArrayList();
+ 	while (subrange != null) {
+ 	    int arrDim = subrange.getAttrConstant(DwAt.UPPER_BOUND);
+-	    dims.add(new Integer(arrDim));
++	    dims.add(Integer.valueOf(arrDim));
+ 	    subrange = subrange.getSibling();
+ 	    elementCount *= arrDim + 1;
+ 	}
+@@ -254,7 +254,7 @@ public class TypeFactory {
+ 	else
+ 	    type = new GccStructOrClassType(name, getByteSize(classDie));
+ 
+-	dieHash.put(new Long(classDie.getOffset()), type);
++	dieHash.put(Long.valueOf(classDie.getOffset()), type);
+ 	addMembers(classDie, type);
+ 
+ 	return type;
+@@ -272,7 +272,7 @@ public class TypeFactory {
+ 	dumpDie("classDie=", classDie);
+ 
+ 	ClassType classType = new ClassType(name, getByteSize(classDie));
+-	dieHash.put(new Long(classDie.getOffset()), classType);
++	dieHash.put(Long.valueOf(classDie.getOffset()), classType);
+ 	addMembers(classDie, classType);
+ 	return classType;
+     }
+@@ -320,7 +320,7 @@ public class TypeFactory {
+ 	dumpDie("unionDie=", classDie);
+ 
+ 	UnionType classType = new UnionType(name, getByteSize(classDie));
+-	dieHash.put(new Long(classDie.getOffset()), classType);
++	dieHash.put(Long.valueOf(classDie.getOffset()), classType);
+ 
+ 	for (DwarfDie member = classDie.getChild(); 
+ 	     member != null; 
+@@ -434,14 +434,14 @@ public class TypeFactory {
+ 	} else
+ 	    type = typeDie;
+ 
+-	Type mappedType = (Type) dieHash.get(new Long(type.getOffset()));
++	Type mappedType = (Type) dieHash.get(Long.valueOf(type.getOffset()));
+ 	if (mappedType != null)
+ 	    return mappedType;
+-	else if (dieHash.containsKey(new Long(type.getOffset()))) {
++	else if (dieHash.containsKey(Long.valueOf(type.getOffset()))) {
+ 	    // This is a self reference
+-	    return (Type)dieHash.get(new Long(type.getOffset()));
++	    return (Type)dieHash.get(Long.valueOf(type.getOffset()));
+ 	}
+-	dieHash.put(new Long(type.getOffset()), null);
++	dieHash.put(Long.valueOf(type.getOffset()), null);
+ 	Type returnType = null;
+ 
+ 	switch (type.getTag().hashCode()) {
+@@ -536,7 +536,7 @@ public class TypeFactory {
+ 	}
+ 
+ 	if (returnType != null) {
+-	    dieHash.put(new Long(type.getOffset()), returnType);
++	    dieHash.put(Long.valueOf(type.getOffset()), returnType);
+ 	    return returnType;
+ 	} else
+ 	    return new UnknownType(typeDie.getName());
+diff --git a/frysk-core/frysk/expr/FQIdentifier.java b/frysk-core/frysk/expr/FQIdentifier.java
+index 8a58dd4fc..3611276af 100644
+--- a/frysk-core/frysk/expr/FQIdentifier.java
++++ b/frysk-core/frysk/expr/FQIdentifier.java
+@@ -88,14 +88,14 @@ public class FQIdentifier {
+ 	    if (tok.threadId == null || tok.frameNumber == null)
+ 		throw new AssertionError("Either I need a pid, a tid, AND a " +
+ 					 "frame number, or neither of them.");
+-	    this.processId = new Long(Long.parseLong(tok.processId, 10));
+-	    this.threadId = new Long(Long.parseLong(tok.threadId, 10));
+-	    this.frameNumber = new Long(Long.parseLong(tok.frameNumber, 10));
++	    this.processId = Long.valueOf(Long.parseLong(tok.processId, 10));
++	    this.threadId = Long.valueOf(Long.parseLong(tok.threadId, 10));
++	    this.frameNumber = Long.valueOf(Long.parseLong(tok.frameNumber, 10));
+ 	} else
+ 	    this.processId = this.threadId = this.frameNumber = null;
+ 
+ 	if (tok.line != null)
+-	    this.line = new Long(Long.parseLong(tok.line, 10));
++	    this.line = Long.valueOf(Long.parseLong(tok.line, 10));
+ 	else
+ 	    this.line = null;
+ 
+diff --git a/frysk-core/frysk/expr/TestbedSymTab.java b/frysk-core/frysk/expr/TestbedSymTab.java
+index b89051d6a..b1747185a 100644
+--- a/frysk-core/frysk/expr/TestbedSymTab.java
++++ b/frysk-core/frysk/expr/TestbedSymTab.java
+@@ -78,7 +78,7 @@ public class TestbedSymTab implements ExprSymTab {
+ 
+     private static ArrayList dims() {
+ 	final ArrayList a = new ArrayList();
+-	a.add(new Integer(3));
++	a.add(Integer.valueOf(3));
+ 	return a;
+     }
+     private Type arrayType = new ArrayType(StandardTypes.INT32B_T, 12, dims());
+diff --git a/frysk-core/frysk/ftrace/FtraceController.java b/frysk-core/frysk/ftrace/FtraceController.java
+index b22655079..31e542baa 100644
+--- a/frysk-core/frysk/ftrace/FtraceController.java
++++ b/frysk-core/frysk/ftrace/FtraceController.java
+@@ -227,7 +227,7 @@ public class FtraceController
+ 	for (Iterator it = rules.iterator(); it.hasNext(); ) {
+ 	    final AddrRule rule = (AddrRule)it.next();
+ 	    final List candidate = new ArrayList(1);
+-	    candidate.add(new Long(rule.addr));
++	    candidate.add(Long.valueOf(rule.addr));
+ 
+ 	    fine.log("Considering addr rule", rule);
+ 
+diff --git a/frysk-core/frysk/ftrace/IA32Arch.java b/frysk-core/frysk/ftrace/IA32Arch.java
+index 21e4aa0ec..4181a1faa 100644
+--- a/frysk-core/frysk/ftrace/IA32Arch.java
++++ b/frysk-core/frysk/ftrace/IA32Arch.java
+@@ -83,7 +83,7 @@ public class IA32Arch implements Arch {
+ 	*/
+ 	    Object[] ret = new Object[6];
+ 	    for (int i = 0; i < ret.length; ++i) {
+-		ret[i] = new Integer(memBuf.getInt(esp));
++		ret[i] = Integer.valueOf(memBuf.getInt(esp));
+ 		esp += 4;
+ 	    }
+ 	    return ret;
+@@ -91,6 +91,6 @@ public class IA32Arch implements Arch {
+     }
+ 
+     public Object getReturnValue(Task task) {
+-	return new Long(task.getRegister(IA32Registers.EAX));
++	return Long.valueOf(task.getRegister(IA32Registers.EAX));
+     }
+ }
+diff --git a/frysk-core/frysk/ftrace/MappingGuard.java b/frysk-core/frysk/ftrace/MappingGuard.java
+index 1cef4c7cc..12e961adc 100644
+--- a/frysk-core/frysk/ftrace/MappingGuard.java
++++ b/frysk-core/frysk/ftrace/MappingGuard.java
+@@ -90,7 +90,7 @@ class MappingGuard
+ 	    if (v == 0)
+ 		observers.remove(observer);
+ 	    else
+-		observers.put(observer, new Integer(v));
++		observers.put(observer, Integer.valueOf(v));
+ 
+ 	    // XXX: again, probably too early for the last observer
+ 	    // which was requestDeleted.
+@@ -101,9 +101,9 @@ class MappingGuard
+ 	public synchronized void addObserver(MappingObserver observer) {
+ 	    Integer i = (Integer)observers.get(observer);
+ 	    if (i == null)
+-		i = new Integer(1);
++		i = Integer.valueOf(1);
+ 	    else
+-		i = new Integer(i.intValue() + 1);
++		i = Integer.valueOf(i.intValue() + 1);
+ 	    observers.put(observer, i);
+ 
+ 
+diff --git a/frysk-core/frysk/ftrace/TaskTracer.java b/frysk-core/frysk/ftrace/TaskTracer.java
+index 9a654ec97..139c5d449 100644
+--- a/frysk-core/frysk/ftrace/TaskTracer.java
++++ b/frysk-core/frysk/ftrace/TaskTracer.java
+@@ -201,7 +201,7 @@ class TaskTracer
+ 	    // been hit.
+ 	    if (symbolList.isEmpty()) {
+ 		fine.log("Removing leave breakpoint.");
+-		functionReturnObservers.remove(new Long(address));
++		functionReturnObservers.remove(Long.valueOf(address));
+ 		task.requestDeleteCodeObserver(this, address);
+ 
+ 		// Take time to retract
+@@ -311,7 +311,7 @@ class TaskTracer
+ 		ftrace.reporter.eventEntry(task, tracePoint, "call",
+ 					   eventName, arch.getCallArguments(task));
+ 
+-		Long retAddressL = new Long(retAddress);
++		Long retAddressL = Long.valueOf(retAddress);
+ 		FunctionReturnObserver retObserver
+ 		    = (FunctionReturnObserver)functionReturnObservers.get(retAddressL);
+ 		if (retObserver == null) {
+@@ -368,7 +368,7 @@ class TaskTracer
+ 
+     private Long getAddress(DwflSymbol sym, PLTEntry entry) {
+ 	long addr = entry != null ? entry.getAddress() : sym.getAddress();
+-	Long addrL = new Long(addr);
++	Long addrL = Long.valueOf(addr);
+ 	return addrL;
+     }
+ 
+diff --git a/frysk-core/frysk/ftrace/X8664Arch.java b/frysk-core/frysk/ftrace/X8664Arch.java
+index 05f267caf..da8c69d26 100644
+--- a/frysk-core/frysk/ftrace/X8664Arch.java
++++ b/frysk-core/frysk/ftrace/X8664Arch.java
+@@ -72,10 +72,10 @@ public class X8664Arch implements Arch {
+ 	case 5: reg = X8664Registers.R9;  break;
+ 	default:
+ 	    long address = task.getRegister(X8664Registers.RSP) + 8 * (i - 5);
+-	    return new Long(memBuf.getLong(address));
++	    return Long.valueOf(memBuf.getLong(address));
+ 	}
+ 
+-	return new Long(task.getRegister(reg));
++	return Long.valueOf(task.getRegister(reg));
+     }
+   
+     public Object[] getCallArguments(Task task) {
+@@ -86,6 +86,6 @@ public class X8664Arch implements Arch {
+     }
+   
+     public Object getReturnValue(Task task) { 
+-	return new Long(task.getRegister(X8664Registers.RAX));
++	return Long.valueOf(task.getRegister(X8664Registers.RAX));
+     }
+ }
+diff --git a/frysk-core/frysk/hpd/AllPTSet.java b/frysk-core/frysk/hpd/AllPTSet.java
+index 5af83567a..ee1e08c64 100644
+--- a/frysk-core/frysk/hpd/AllPTSet.java
++++ b/frysk-core/frysk/hpd/AllPTSet.java
+@@ -371,15 +371,15 @@ class AllPTSet implements PTSet
+ 				tempSet = (ArrayList)taskSets.get(procP);
+ 			}
+ 
+-			if (!proctasks.containsKey(new Integer(procP))) // if this process hasn't been added yet
++			if (!proctasks.containsKey(Integer.valueOf(procP))) // if this process hasn't been added yet
+ 			{
+ 				//create a new ProcTasks for this process
+ 				tempPT = new ProcTasks(new ProcData( getProc(procP), procP ));
+-				proctasks.put( new Integer(procP), tempPT);
++				proctasks.put( Integer.valueOf(procP), tempPT);
+ 			}
+ 			else
+ 			{
+-				tempPT = (ProcTasks) proctasks.get(new Integer(procP));
++				tempPT = (ProcTasks) proctasks.get(Integer.valueOf(procP));
+ 			}
+ 
+ 			tempPT.addTaskData(new TaskData( (Task)tempSet.get(taskP), taskP, procP ));
+@@ -435,15 +435,15 @@ class AllPTSet implements PTSet
+ 				tempSet = (ArrayList)taskSets.get(procP);
+ 			}
+ 
+-			if (!proctasks.containsKey(new Integer(procP))) // if this process hasn't been added yet
++			if (!proctasks.containsKey(Integer.valueOf(procP))) // if this process hasn't been added yet
+ 			{
+ 				//create a new ProcTasks for this process
+ 				tempPT = new ProcTasks(new ProcData( getProc(procP), procP ));
+-				proctasks.put( new Integer(procP), tempPT);
++				proctasks.put( Integer.valueOf(procP), tempPT);
+ 			}
+ 			else
+ 			{
+-				tempPT = (ProcTasks) proctasks.get(new Integer(procP));
++				tempPT = (ProcTasks) proctasks.get(Integer.valueOf(procP));
+ 			}
+ 
+ 			tempPT.addTaskData(new TaskData( (Task)tempSet.get(taskP), taskP, procP ));
+diff --git a/frysk-core/frysk/hpd/CoreCommand.java b/frysk-core/frysk/hpd/CoreCommand.java
+index 514545984..1123d3b84 100644
+--- a/frysk-core/frysk/hpd/CoreCommand.java
++++ b/frysk-core/frysk/hpd/CoreCommand.java
+@@ -138,8 +138,8 @@ public class CoreCommand extends ParameterizedCommand {
+ 	}
+ 	// Finally, done.
+ 	synchronized (cli) {
+-	    cli.coreProcs.put(new Integer(procID), coreProc);
+-	    cli.ptsetParams.put(new Integer(procID), coreProc.getCmdLine());
++	    cli.coreProcs.put(Integer.valueOf(procID), coreProc);
++	    cli.ptsetParams.put(Integer.valueOf(procID), coreProc.getCmdLine());
+ 	}
+ 	cli.outWriter.println("Attached to core file: "
+ 			      + coreProc.getHost().getName());
+diff --git a/frysk-core/frysk/hpd/DbgVariables.java b/frysk-core/frysk/hpd/DbgVariables.java
+index 4b3dda94e..da4c08625 100644
+--- a/frysk-core/frysk/hpd/DbgVariables.java
++++ b/frysk-core/frysk/hpd/DbgVariables.java
+@@ -109,10 +109,10 @@ public class DbgVariables {
+ 	vars.put("EVENT_INTERRUPT", new Value(VARTYPE_CUSTOM, "ON", new String[] {"ON", "OFF"}));
+ 	vars.put("VERBOSE", new Value(VARTYPE_CUSTOM, "WARN", new String[] {"WARN", "ERR", "ALL"}));
+ 	vars.put("ERROR_CHECKS", new Value(VARTYPE_CUSTOM, "NORMAL", new String[] {"NORMAL", "MIN", "MAX"}));
+-	vars.put("MAX_PROMPT", new Value(VARTYPE_INT, new Integer(40)));
+-	vars.put("MAX_HISTORY", new Value(VARTYPE_INT, new Integer(20)));
+-	vars.put("MAX_LEVELS", new Value(VARTYPE_INT, new Integer(20)));
+-	vars.put("MAX_LIST", new Value(VARTYPE_INT, new Integer(20)));
++	vars.put("MAX_PROMPT", new Value(VARTYPE_INT, Integer.valueOf(40)));
++	vars.put("MAX_HISTORY", new Value(VARTYPE_INT, Integer.valueOf(20)));
++	vars.put("MAX_LEVELS", new Value(VARTYPE_INT, Integer.valueOf(20)));
++	vars.put("MAX_LIST", new Value(VARTYPE_INT, Integer.valueOf(20)));
+ 	vars.put("PROMPT", new Value(VARTYPE_STRING, "(frysk) "));
+ 	vars.put("SOURCE_PATH", new Value(VARTYPE_STRING, ""));
+ 	vars.put("EXECUTABLE_PATH", new Value(VARTYPE_STRING, "./:" + System.getenv("PATH")));
+diff --git a/frysk-core/frysk/hpd/InfoArgsCommand.java b/frysk-core/frysk/hpd/InfoArgsCommand.java
+index 33d99a76c..24fb66fca 100644
+--- a/frysk-core/frysk/hpd/InfoArgsCommand.java
++++ b/frysk-core/frysk/hpd/InfoArgsCommand.java
+@@ -57,7 +57,7 @@ class InfoArgsCommand extends ParameterizedCommand {
+ 	    td.printHeader(cli.outWriter);
+ 	    int parentID = td.getParentID();
+ 	    String[] args = (String[]) cli.ptsetParams
+-		    .get(new Integer(parentID));
++		    .get(Integer.valueOf(parentID));
+ 	    cli.outWriter.println("The args list for: " + args[0] +
+ 		    " is.....");
+ 	    if (args.length > 1)
+diff --git a/frysk-core/frysk/hpd/KillCommand.java b/frysk-core/frysk/hpd/KillCommand.java
+index e9debcd81..54c9367ae 100644
+--- a/frysk-core/frysk/hpd/KillCommand.java
++++ b/frysk-core/frysk/hpd/KillCommand.java
+@@ -151,7 +151,7 @@ public class KillCommand extends ParameterizedCommand {
+ 			+ " that was created from " + proc.getExeFile().getSysRootedPath(),
+ 			Message.TYPE_NORMAL);
+ 		// Save the procs we are killing so we can re-load them later
+-		saveProcs.put(new Integer(taskData.getParentID()), proc.getExeFile());
++		saveProcs.put(Integer.valueOf(taskData.getParentID()), proc.getExeFile());
+ 		procPID = proc.getPid();
+ 		// Now, call the Proc object to kill off the executable(s)
+ 		proc.requestKill();
+@@ -199,7 +199,7 @@ public class KillCommand extends ParameterizedCommand {
+ 		Proc taskProc = taskData.getTask().getProc();
+ 		procId = taskProc.getPid();
+ 		if (taskProc == proc && tempId != procId) {
+-		    saveProcs.put(new Integer(taskData.getParentID()), proc.getExeFile());
++		    saveProcs.put(Integer.valueOf(taskData.getParentID()), proc.getExeFile());
+ 		    cli.addMessage("Killing process " + proc.getPid()
+ 			+ " that was created from " + proc.getExeFile().getSysRootedPath(),
+ 			Message.TYPE_NORMAL);
+diff --git a/frysk-core/frysk/hpd/LoadCommand.java b/frysk-core/frysk/hpd/LoadCommand.java
+index 63535fc6c..ad6a1c1e4 100644
+--- a/frysk-core/frysk/hpd/LoadCommand.java
++++ b/frysk-core/frysk/hpd/LoadCommand.java
+@@ -134,7 +134,7 @@ public class LoadCommand extends ParameterizedCommand {
+ 	cli.idManager.manageProc(exeProc, procID);
+ 	
+ 	if (params.length == 1)
+-	    params = (String []) cli.ptsetParams.get(new Integer(procID));
++	    params = (String []) cli.ptsetParams.get(Integer.valueOf(procID));
+ 
+ 	Iterator foo = cli.targetset.getTasks();
+ 	while (foo.hasNext()) {
+@@ -148,15 +148,15 @@ public class LoadCommand extends ParameterizedCommand {
+ 	}
+ 
+ 	synchronized (cli) {
+-	    cli.loadedProcs.put(new Integer(procID), 
++	    cli.loadedProcs.put(Integer.valueOf(procID), 
+ 		    exeProc.getExeFile().getSysRootedPath());
+ 	    if (params != null) {
+ 		params[0] = exeProc.getExeFile().getSysRootedPath();
+-		cli.ptsetParams.put(new Integer(procID), params);
++		cli.ptsetParams.put(Integer.valueOf(procID), params);
+ 	    }
+ 	    else {
+ 		String[] command = { exeProc.getExeFile().getSysRootedPath() };
+-		cli.ptsetParams.put(new Integer(procID), command);
++		cli.ptsetParams.put(Integer.valueOf(procID), command);
+ 	    }
+ 	}
+ 
+diff --git a/frysk-core/frysk/hpd/ProcTasks.java b/frysk-core/frysk/hpd/ProcTasks.java
+index f1f73ca23..add151ca4 100644
+--- a/frysk-core/frysk/hpd/ProcTasks.java
++++ b/frysk-core/frysk/hpd/ProcTasks.java
+@@ -76,7 +76,7 @@ class ProcTasks
+ 			if (temp.getParentID() == proc.getID())
+ 			{
+ 				//task id -> task
+-				tasks.put(new Integer(temp.getID()), temp);
++				tasks.put(Integer.valueOf(temp.getID()), temp);
+ 			}
+ 			else
+ 				throw new IllegalArgumentException("ProcTasks was passed" +
+@@ -86,7 +86,7 @@ class ProcTasks
+ 
+ 	public boolean containsTask(int taskID)
+ 	{
+-		return tasks.containsKey(new Integer(taskID));
++		return tasks.containsKey(Integer.valueOf(taskID));
+ 	}
+ 
+ 	public ProcData getProcData()
+@@ -108,7 +108,7 @@ class ProcTasks
+ 		if (task.getParentID() == proc.getID())
+ 		{
+ 			//task id -> task
+-			tasks.put(new Integer(task.getID()), task);
++			tasks.put(Integer.valueOf(task.getID()), task);
+ 		}
+ 		else
+ 			throw new IllegalArgumentException("ProcTasks was passed Task not from this instance's process.");
+diff --git a/frysk-core/frysk/hpd/StartRun.java b/frysk-core/frysk/hpd/StartRun.java
+index a7b0e4bd7..e7c411d7d 100644
+--- a/frysk-core/frysk/hpd/StartRun.java
++++ b/frysk-core/frysk/hpd/StartRun.java
+@@ -143,7 +143,7 @@ abstract class StartRun extends ParameterizedCommand {
+ 	    while (foo.hasNext()) {
+ 		taskData = (TaskData) foo.next();
+ 		int parentID = taskData.getParentID();
+-		String command = (String) cli.loadedProcs.get(new Integer(parentID));
++		String command = (String) cli.loadedProcs.get(Integer.valueOf(parentID));
+ 		run(cli, cmd, command, runToBreak, 
+ 			taskData.getParentID());
+ 		counter++;
+@@ -160,7 +160,7 @@ abstract class StartRun extends ParameterizedCommand {
+ 	    TaskData taskData = (TaskData) foo.next();
+ 	    Task task = taskData.getTask();
+ 	    if (!cli.loadedProcs.isEmpty() && 
+-		    cli.loadedProcs.containsKey(new Integer(taskData.getParentID()))) {
++		    cli.loadedProcs.containsKey(Integer.valueOf(taskData.getParentID()))) {
+ 		run(cli, cmd, task.getProc().getExeFile().getSysRootedPath(),
+ 			runToBreak, taskData.getParentID());
+ 		synchronized (cli) {
+@@ -169,11 +169,11 @@ abstract class StartRun extends ParameterizedCommand {
+ 	    }
+ 	    // Take care of core procs  
+ 	    else if (!cli.coreProcs.isEmpty() &&
+-		    cli.coreProcs.containsKey(new Integer(taskData.getParentID()))) {
++		    cli.coreProcs.containsKey(Integer.valueOf(taskData.getParentID()))) {
+ 		run(cli, cmd, task.getProc().getExeFile().getSysRootedPath(), 
+ 			runToBreak, taskData.getParentID());
+ 		synchronized (cli) {
+-		    cli.coreProcs.remove(new Integer(taskData.getParentID()));
++		    cli.coreProcs.remove(Integer.valueOf(taskData.getParentID()));
+ 		}
+ 	    }
+ 	}
+@@ -210,16 +210,16 @@ abstract class StartRun extends ParameterizedCommand {
+ 		    int index = cmd.getFullCommand().indexOf("--");
+ 		    if (index != -1) {
+ 			String[] command = new String[1];
+-			String[] oldCommand = (String[]) cli.ptsetParams.get(new Integer(parentID));
++			String[] oldCommand = (String[]) cli.ptsetParams.get(Integer.valueOf(parentID));
+ 			command[0] = oldCommand[0];
+ 			// Set proc params to null so we won't run with them again
+-			cli.ptsetParams.put(new Integer(parentID), command);
++			cli.ptsetParams.put(Integer.valueOf(parentID), command);
+ 		    }
+ 		    break;
+ 		    
+ 		    // Params were passed
+ 		default:
+-		    cli.ptsetParams.put(new Integer(parentID),
++		    cli.ptsetParams.put(Integer.valueOf(parentID),
+ 			    makeCommand(cmd.stringArrayValue(), parentID, cli));
+ 		    break;
+ 	    }
+@@ -236,7 +236,7 @@ abstract class StartRun extends ParameterizedCommand {
+     
+     private String[] makeCommand(String[] params, int parentID, CLI cli) {
+ 	String[] newParams = new String[params.length + 1];
+-	String[] oldParams = (String[]) cli.ptsetParams.get(new Integer(parentID));
++	String[] oldParams = (String[]) cli.ptsetParams.get(Integer.valueOf(parentID));
+ 	newParams[0] = oldParams[0];
+ 	for (int i = 1; i < newParams.length; i++)
+ 	    newParams[i] = params[i-1];
+@@ -267,7 +267,7 @@ abstract class StartRun extends ParameterizedCommand {
+ 		    // Don't kill loaded procs, don't have a PID assigned yet
+ 		    task.getProc().getPid() > 0 &&
+ 		    // Don't kill core procs either, they have the old PID number
+-		    cli.coreProcs.get(new Integer(taskData.getParentID())) == null) {
++		    cli.coreProcs.get(Integer.valueOf(taskData.getParentID())) == null) {
+ 		cli.execCommand("kill " + task.getProc().getPid() + "\n");
+ 		oldPid = task.getProc().getPid();
+ 	    }
+@@ -301,10 +301,10 @@ abstract class StartRun extends ParameterizedCommand {
+ 
+ 	cli.addMessage(startrun
+ 		+ " with this command: "
+-		+ asString((String[]) cli.ptsetParams.get(new Integer(
++		+ asString((String[]) cli.ptsetParams.get(Integer.valueOf(
+ 			taskid))), Message.TYPE_NORMAL);
+ 	Manager.host.requestCreateAttachedProc((String[]) cli.ptsetParams
+-		.get(new Integer(taskid)), runner);
++		.get(Integer.valueOf(taskid)), runner);
+ 
+ 	while (true) {
+ 	    try {
+diff --git a/frysk-core/frysk/hpd/UnloadCommand.java b/frysk-core/frysk/hpd/UnloadCommand.java
+index edbcfce23..0c601e987 100644
+--- a/frysk-core/frysk/hpd/UnloadCommand.java
++++ b/frysk-core/frysk/hpd/UnloadCommand.java
+@@ -78,7 +78,7 @@ public class UnloadCommand extends ParameterizedCommand {
+ 		throw new InvalidCommandException("Not enough parameters");
+ 	    int id = Integer.parseInt(cmd.parameter(1));
+ 	    synchronized (cli) {
+-		if (cli.loadedProcs.remove(new Integer(id)) == null) {
++		if (cli.loadedProcs.remove(Integer.valueOf(id)) == null) {
+ 		    cli.addMessage(
+ 			    "Trying to remove a proc that has not been loaded",
+ 			    Message.TYPE_ERROR);
+diff --git a/frysk-core/frysk/hpd/ViewsetCommand.java b/frysk-core/frysk/hpd/ViewsetCommand.java
+index 0bd3fbd9e..91c357607 100644
+--- a/frysk-core/frysk/hpd/ViewsetCommand.java
++++ b/frysk-core/frysk/hpd/ViewsetCommand.java
+@@ -99,7 +99,7 @@ class ViewsetCommand extends ParameterizedCommand {
+ 	cli.outWriter.println("\tpid\tid\tpath-to-executable");
+ 	for (Iterator iter = tempset.getTaskData(); iter.hasNext();) {
+ 	    temptd = (TaskData) iter.next();
+-	    if (loadedOnly && cli.loadedProcs.containsValue(new Integer(temptd.getID()))
++	    if (loadedOnly && cli.loadedProcs.containsValue(Integer.valueOf(temptd.getID()))
+ 		    || loadedOnly && cli.loadedProcs.containsKey(temptd.getTask().getProc())
+ 		    || !loadedOnly) {
+ 		cli.outWriter.print("[");
+diff --git a/frysk-core/frysk/isa/ElfMap.java b/frysk-core/frysk/isa/ElfMap.java
+index be2abd113..3cb3626a2 100644
+--- a/frysk-core/frysk/isa/ElfMap.java
++++ b/frysk-core/frysk/isa/ElfMap.java
+@@ -52,7 +52,7 @@ import java.util.HashMap;
+ public final class ElfMap {
+     private static final Map isaToMachine;
+     private static void add(int m, ISA isa) {
+-	Integer machine = new Integer(m);
++	Integer machine = Integer.valueOf(m);
+ 	isaToMachine.put(isa, machine);
+     }
+     static {
+diff --git a/frysk-core/frysk/isa/registers/RegisterMap.java b/frysk-core/frysk/isa/registers/RegisterMap.java
+index fd5e1a46d..743c0e167 100644
+--- a/frysk-core/frysk/isa/registers/RegisterMap.java
++++ b/frysk-core/frysk/isa/registers/RegisterMap.java
+@@ -66,7 +66,7 @@ public class RegisterMap {
+     public final RegisterMap add(Register register,
+ 				 Number number) {
+ 	registerToNumber.put(register, number);
+-	integerToRegister.put(new Integer(number.intValue()), register);
++	integerToRegister.put(Integer.valueOf(number.intValue()), register);
+ 	numberToRegister.put(number, register);
+ 	return this;
+     }
+@@ -90,7 +90,7 @@ public class RegisterMap {
+      */
+     public Register getRegister(int regNum) {
+ 	Register register
+-	    = (Register) integerToRegister.get(new Integer(regNum));
++	    = (Register) integerToRegister.get(Integer.valueOf(regNum));
+ 	if (register == null)
+ 	    throw new NullPointerException("register number <" + regNum
+ 					   + "> not found in " + what
+@@ -127,6 +127,6 @@ public class RegisterMap {
+      * Return true if REG_NUM (as a Number) is known.
+      */
+     public boolean containsKey(int regNum) {
+-	return integerToRegister.containsKey(new Integer(regNum));
++	return integerToRegister.containsKey(Integer.valueOf(regNum));
+     }
+ }
+diff --git a/frysk-core/frysk/isa/registers/TestRegisterMap.java b/frysk-core/frysk/isa/registers/TestRegisterMap.java
+index 0e8c72744..95d8419c4 100644
+--- a/frysk-core/frysk/isa/registers/TestRegisterMap.java
++++ b/frysk-core/frysk/isa/registers/TestRegisterMap.java
+@@ -46,10 +46,10 @@ import frysk.junit.TestCase;
+ public class TestRegisterMap extends TestCase {
+     private final RegisterMap map
+ 	= new RegisterMap("testing")
+-	.add(IA32Registers.EAX, new Long(0))
+-	.add(IA32Registers.EBX, new Long(1))
+-	.add(IA32Registers.ECX, new Long(2))
+-	.add(IA32Registers.EDX, new Long(3));
++	.add(IA32Registers.EAX, Long.valueOf(0))
++	.add(IA32Registers.EBX, Long.valueOf(1))
++	.add(IA32Registers.ECX, Long.valueOf(2))
++	.add(IA32Registers.EDX, Long.valueOf(3));
+ 
+     public void testContainsRegister() {
+ 	assertEquals("contains EAX", true,
+@@ -58,8 +58,8 @@ public class TestRegisterMap extends TestCase {
+ 		     map.containsKey(IA32Registers.ESP));
+     }
+     public void testContainsNumber() {
+-	assertEquals("contains 1", true, map.containsKey(new Long(1)));
+-	assertEquals("contains 5", false, map.containsKey(new Long(4)));
++	assertEquals("contains 1", true, map.containsKey(Long.valueOf(1)));
++	assertEquals("contains 5", false, map.containsKey(Long.valueOf(4)));
+     }
+     public void testContainsInt() {
+ 	assertEquals("contains 1", true, map.containsKey(1));
+@@ -67,12 +67,12 @@ public class TestRegisterMap extends TestCase {
+     }
+ 
+     public void testRegisterToNumber() {
+-	assertEquals("EAX to 0", new Long(0),
++	assertEquals("EAX to 0", Long.valueOf(0),
+ 		     map.getRegisterNumber(IA32Registers.EAX));
+     }
+     public void testNumberToRegister() {
+ 	assertEquals("1 to EBX", IA32Registers.EBX,
+-		     map.getRegister(new Long(1)));
++		     map.getRegister(Long.valueOf(1)));
+     }
+     public void testIntToRegister() {
+ 	assertEquals("2 to ECX", IA32Registers.ECX, map.getRegister(2));
+@@ -91,7 +91,7 @@ public class TestRegisterMap extends TestCase {
+     public void testNoSuchNumber() {
+ 	boolean npe = false;
+ 	try {
+-	    map.getRegister(new Long(4));
++	    map.getRegister(Long.valueOf(4));
+ 	} catch (NullPointerException e) {
+ 	    npe = true;
+ 	}
+diff --git a/frysk-core/frysk/isa/syscalls/SyscallTable.java b/frysk-core/frysk/isa/syscalls/SyscallTable.java
+index 9e1527aa0..bbc36cb46 100644
+--- a/frysk-core/frysk/isa/syscalls/SyscallTable.java
++++ b/frysk-core/frysk/isa/syscalls/SyscallTable.java
+@@ -53,7 +53,7 @@ public abstract class SyscallTable {
+      */
+     Syscall unknownSyscall(long num) {
+ 	synchronized (unknownSyscalls) {
+-	    Long key = new Long(num);
++	    Long key = Long.valueOf(num);
+ 	    Syscall syscall = (Syscall)unknownSyscalls.get(key);
+ 	    if (syscall == null) {
+ 		syscall = new Syscall("UNKNOWN SYSCALL " + num, (int)num) {
+diff --git a/frysk-core/frysk/isa/syscalls/TestSyscallsWithAudit.java b/frysk-core/frysk/isa/syscalls/TestSyscallsWithAudit.java
+index 87c21c4e3..85a683a3e 100644
+--- a/frysk-core/frysk/isa/syscalls/TestSyscallsWithAudit.java
++++ b/frysk-core/frysk/isa/syscalls/TestSyscallsWithAudit.java
+@@ -47,10 +47,10 @@ import frysk.testbed.IsaTestbed;
+ public class TestSyscallsWithAudit extends TestLib {
+   
+     private static final ISAMap machines = new ISAMap("syscall machines")
+-	.put(ISA.IA32, new Integer(AuditLibs.MACH_X86))
+-	.put(ISA.PPC32BE, new Integer(AuditLibs.MACH_PPC))
+-	.put(ISA.PPC64BE, new Integer(AuditLibs.MACH_PPC64))
+-	.put(ISA.X8664, new Integer(AuditLibs.MACH_86_64))
++	.put(ISA.IA32, Integer.valueOf(AuditLibs.MACH_X86))
++	.put(ISA.PPC32BE, Integer.valueOf(AuditLibs.MACH_PPC))
++	.put(ISA.PPC64BE, Integer.valueOf(AuditLibs.MACH_PPC64))
++	.put(ISA.X8664, Integer.valueOf(AuditLibs.MACH_86_64))
+ 	;
+ 
+     private void syscallTest(ISA isa) {
+diff --git a/frysk-core/frysk/proc/live/TestTaskObserverCode.java b/frysk-core/frysk/proc/live/TestTaskObserverCode.java
+index 5d1571a99..88b0f3c7d 100644
+--- a/frysk-core/frysk/proc/live/TestTaskObserverCode.java
++++ b/frysk-core/frysk/proc/live/TestTaskObserverCode.java
+@@ -1060,12 +1060,12 @@ public class TestTaskObserverCode extends TestLib
+       CountingCodeObserver(Task[] tasks)
+       {
+ 	  for (int i = 0; i < tasks.length; ++i)
+-	      hitmap.put(tasks[i], new Integer(0));
++	      hitmap.put(tasks[i], Integer.valueOf(0));
+       }
+ 
+       public Action updateHit (Task task, long addr)
+       {
+-	  hitmap.put(task, new Integer(hitsFor(task) + 1));
++	  hitmap.put(task, Integer.valueOf(hitsFor(task) + 1));
+ 	  Manager.eventLoop.requestStop();
+ 	  return Action.BLOCK;
+       }
+diff --git a/frysk-core/frysk/rt/BreakpointManager.java b/frysk-core/frysk/rt/BreakpointManager.java
+index c465c99b4..b7458729a 100644
+--- a/frysk-core/frysk/rt/BreakpointManager.java
++++ b/frysk-core/frysk/rt/BreakpointManager.java
+@@ -127,7 +127,7 @@ public class BreakpointManager extends Observable {
+     private HashMap watchers = new HashMap();
+ 
+     private synchronized void addBreakpoint(SourceBreakpoint bp) {
+-        breakpointMap.put(new Integer(bp.getId()), bp);
++        breakpointMap.put(Integer.valueOf(bp.getId()), bp);
+         setChanged();
+         notifyObservers();
+     }
+@@ -247,7 +247,7 @@ public class BreakpointManager extends Observable {
+ 
+     public SourceBreakpoint getBreakpoint(int bptId) {
+         SourceBreakpoint bpt
+-            = (SourceBreakpoint)breakpointMap.get(new Integer(bptId));
++            = (SourceBreakpoint)breakpointMap.get(Integer.valueOf(bptId));
+         return bpt;
+     }
+ 
+diff --git a/frysk-core/frysk/rt/DisplayManager.java b/frysk-core/frysk/rt/DisplayManager.java
+index 67074e6f9..ee804c4f1 100644
+--- a/frysk-core/frysk/rt/DisplayManager.java
++++ b/frysk-core/frysk/rt/DisplayManager.java
+@@ -87,7 +87,7 @@ public class DisplayManager {
+ 	    value = new UpdatingDisplayValue(text, myTask, fIdent, engine,
+ 		    CountManager.getNextId());
+ 	    displays.add(value);
+-	    displaysByNum.put(new Integer(value.getId()), value);
++	    displaysByNum.put(Integer.valueOf(value.getId()), value);
+ 	}
+ 	
+ 	return value;
+@@ -102,7 +102,7 @@ public class DisplayManager {
+      */
+     public static void deleteDisplay(UpdatingDisplayValue value) {
+ 	displays.remove(value);
+-	displaysByNum.remove(new Integer(value.getId()));
++	displaysByNum.remove(Integer.valueOf(value.getId()));
+ 	value.disable();
+     }
+ 
+@@ -116,7 +116,7 @@ public class DisplayManager {
+      */
+     public static boolean disableDisplay(int num) {
+ 	UpdatingDisplayValue val = (UpdatingDisplayValue) displaysByNum
+-		.get(new Integer(num));
++		.get(Integer.valueOf(num));
+ 	if (val != null) {
+ 	    if (val.isEnabled())
+ 		val.disable();
+@@ -135,7 +135,7 @@ public class DisplayManager {
+      */
+     public static boolean enableDisplay(int num) {
+ 	UpdatingDisplayValue val = (UpdatingDisplayValue) displaysByNum
+-		.get(new Integer(num));
++		.get(Integer.valueOf(num));
+ 
+ 	if (val != null) {
+ 	    if (!val.isEnabled())
+@@ -156,12 +156,12 @@ public class DisplayManager {
+      */
+     public static boolean deleteDisplay(int num) {
+ 	UpdatingDisplayValue val = (UpdatingDisplayValue) displaysByNum
+-		.get(new Integer(num));
++		.get(Integer.valueOf(num));
+ 	if (val != null) {
+ 	    if (val.isEnabled())
+ 		val.disable();
+ 	    displays.remove(val);
+-	    displaysByNum.remove(new Integer(val.getId()));
++	    displaysByNum.remove(Integer.valueOf(val.getId()));
+ 	    
+ 	    return true;
+ 	}
+@@ -187,7 +187,7 @@ public class DisplayManager {
+      *         exists
+      */
+     public static UpdatingDisplayValue getDisplay(int id) {
+-	return (UpdatingDisplayValue) displaysByNum.get(new Integer(id));
++	return (UpdatingDisplayValue) displaysByNum.get(Integer.valueOf(id));
+     }
+ 
+ }
+diff --git a/frysk-core/frysk/rt/FunctionBreakpoint.java b/frysk-core/frysk/rt/FunctionBreakpoint.java
+index 1e1874a9b..214c6c43b 100644
+--- a/frysk-core/frysk/rt/FunctionBreakpoint.java
++++ b/frysk-core/frysk/rt/FunctionBreakpoint.java
+@@ -83,7 +83,7 @@ public class FunctionBreakpoint
+ 	    if (function instanceof OutOfLineFunction) {
+ 		long address = ((OutOfLineFunction) function).getBreakPointAddress();
+ 		LinkedList addrs = new LinkedList();
+-		addrs.add(new Long(address));
++		addrs.add(Long.valueOf(address));
+ 		return addrs;
+ 	    }
+ 
+@@ -93,7 +93,7 @@ public class FunctionBreakpoint
+ 		LinkedList addrs = new LinkedList();
+ 		while (iterator.hasNext()) {
+ 		    ConcreteInlinedFunction concreteInlinedFunction = (ConcreteInlinedFunction) iterator.next();
+-		    addrs.add(new Long(concreteInlinedFunction.getBreakPointAddress()));
++		    addrs.add(Long.valueOf(concreteInlinedFunction.getBreakPointAddress()));
+ 		}
+ 		return addrs;
+ 	    }
+@@ -118,7 +118,7 @@ public class FunctionBreakpoint
+ 		for (ListIterator i = inlineDies.listIterator();
+ 		     i.hasNext(); ) {
+ 		    DwarfDie inlinedSubroutine = (DwarfDie)i.next();
+-                    addrs.add(new Long(inlinedSubroutine.getLowPC()));
++                    addrs.add(Long.valueOf(inlinedSubroutine.getLowPC()));
+                 }
+ 		containsInlineInstances = true;
+ 	    }
+@@ -128,7 +128,7 @@ public class FunctionBreakpoint
+             LinkedList addrs = SymbolFactory.getAddresses(task, name);
+ 
+             // Filter any null values that have sneaked in.
+-            Long nullVal = new Long(0);
++            Long nullVal = Long.valueOf(0);
+             while (addrs.remove(nullVal)) {
+             }
+ 	    return addrs;
+diff --git a/frysk-core/frysk/rt/LineBreakpoint.java b/frysk-core/frysk/rt/LineBreakpoint.java
+index 89c5c173d..50a665326 100644
+--- a/frysk-core/frysk/rt/LineBreakpoint.java
++++ b/frysk-core/frysk/rt/LineBreakpoint.java
+@@ -102,7 +102,7 @@ public class LineBreakpoint extends SourceBreakpoint {
+       LinkedList result = new LinkedList();
+       ListIterator iterator = dies.listIterator();
+       while (iterator.hasNext()) {
+-          result.add(new Long(((DwflLine)iterator.next()).getAddress()));
++          result.add(Long.valueOf(((DwflLine)iterator.next()).getAddress()));
+       }
+       
+       fine.log(this, "getBreakpointRawAddresses ... returns", result);
+diff --git a/frysk-core/frysk/rt/PLTBreakpoint.java b/frysk-core/frysk/rt/PLTBreakpoint.java
+index 7ed9e550b..580963a84 100644
+--- a/frysk-core/frysk/rt/PLTBreakpoint.java
++++ b/frysk-core/frysk/rt/PLTBreakpoint.java
+@@ -59,7 +59,7 @@ public class PLTBreakpoint
+ 
+     public LinkedList getBreakpointRawAddresses(Task task) {
+ 	LinkedList addrs = new LinkedList();
+-	addrs.add(new Long(entry.getAddress()));
++	addrs.add(Long.valueOf(entry.getAddress()));
+ 	return addrs;
+     }
+ 
+diff --git a/frysk-core/frysk/rt/ProcTaskIDManager.java b/frysk-core/frysk/rt/ProcTaskIDManager.java
+index da0a5afaf..ddbac668f 100644
+--- a/frysk-core/frysk/rt/ProcTaskIDManager.java
++++ b/frysk-core/frysk/rt/ProcTaskIDManager.java
+@@ -70,7 +70,7 @@ public class ProcTaskIDManager
+             taskMap = new HashMap();
+             for (int i = 0; i < tasks.size(); i++) {
+                 Task task = (Task)tasks.get(i);
+-                taskMap.put(task, new Integer(i));
++                taskMap.put(task, Integer.valueOf(i));
+                 addTaskObservers(task);
+             }
+         }
+@@ -93,7 +93,7 @@ public class ProcTaskIDManager
+         synchronized (this) {
+             entry = new ProcEntry(proc, reservedID);
+             procList.set(reservedID, entry);
+-            procMap.put(proc, new Integer(reservedID));
++            procMap.put(proc, Integer.valueOf(reservedID));
+         }
+     }
+ 
+@@ -185,7 +185,7 @@ public class ProcTaskIDManager
+         synchronized (this) {
+             int taskID = entry.tasks.size();
+             entry.tasks.add(offspring);
+-            entry.taskMap.put(offspring, new Integer(taskID));
++            entry.taskMap.put(offspring, Integer.valueOf(taskID));
+         }
+         addTaskObservers(offspring);
+         parent.requestUnblock(this);
+diff --git a/frysk-core/frysk/rt/SymbolBreakpoint.java b/frysk-core/frysk/rt/SymbolBreakpoint.java
+index f079b2469..a59694f29 100644
+--- a/frysk-core/frysk/rt/SymbolBreakpoint.java
++++ b/frysk-core/frysk/rt/SymbolBreakpoint.java
+@@ -71,7 +71,7 @@ public class SymbolBreakpoint
+             LinkedList addrs = SymbolFactory.getAddresses(task, name, matcher);
+ 
+             // Filter any null values that have sneaked in.
+-            Long nullVal = new Long(0);
++            Long nullVal = Long.valueOf(0);
+             while (addrs.remove(nullVal)) {
+             }
+ 	    return addrs;
+diff --git a/frysk-core/frysk/stepping/SteppingEngine.java b/frysk-core/frysk/stepping/SteppingEngine.java
+index 7fb9b7d0e..3d0eab66c 100644
+--- a/frysk-core/frysk/stepping/SteppingEngine.java
++++ b/frysk-core/frysk/stepping/SteppingEngine.java
+@@ -184,7 +184,7 @@ public class SteppingEngine {
+ 	    this.taskStateMap.put(t, new TaskStepEngine(t, this));
+ 	}
+ 
+-	this.contextMap.put(proc, new Integer(tasksList.size()));
++	this.contextMap.put(proc, Integer.valueOf(tasksList.size()));
+     }
+     
+     /***********************************************************************
+@@ -207,7 +207,7 @@ public class SteppingEngine {
+ 
+ 	tse.setState(new InstructionStepState(task, false));
+ 	this.steppingObserver.notifyNotBlocked(tse);
+-	this.contextMap.put(task.getProc(), new Integer(1));
++	this.contextMap.put(task.getProc(), Integer.valueOf(1));
+ 
+ 	continueForStepping(task, true);
+ 	return true;
+@@ -229,7 +229,7 @@ public class SteppingEngine {
+ 	    return false;
+ 
+ 	Task t = (Task) tasks.getFirst();
+-	this.contextMap.put(t.getProc(), new Integer(tasks.size()));
++	this.contextMap.put(t.getProc(), Integer.valueOf(tasks.size()));
+ 
+ 	Iterator iter = tasks.iterator();
+ 	while (iter.hasNext()) {
+@@ -256,7 +256,7 @@ public class SteppingEngine {
+ 	if (isTaskRunning(task))
+ 	    return false;
+ 
+-	this.contextMap.put(task.getProc(), new Integer(1));
++	this.contextMap.put(task.getProc(), Integer.valueOf(1));
+ 	TaskStepEngine tse = (TaskStepEngine) this.taskStateMap.get(task);
+ 
+ 	/* Check to see if either the TaskStepEngine for this Task has not had its
+@@ -342,7 +342,7 @@ public class SteppingEngine {
+ 	}
+ 
+ 	/* Record how many Tasks we're dealing with here */
+-	this.contextMap.put(t.getProc(), new Integer(tasks.size()));
++	this.contextMap.put(t.getProc(), Integer.valueOf(tasks.size()));
+ 
+ 	i = tasks.iterator();
+ 	while (i.hasNext()) {
+@@ -372,7 +372,7 @@ public class SteppingEngine {
+ 	this.steppingObserver.notifyNotBlocked(tse);
+ 
+ 	int i = ((Integer) this.contextMap.get(task.getProc())).intValue();
+-	this.contextMap.put(task.getProc(), new Integer(++i));
++	this.contextMap.put(task.getProc(), Integer.valueOf(++i));
+ 
+ 	/*
+ 	 * Set a breakpoint on the current address of the given frame, which is the
+@@ -396,7 +396,7 @@ public class SteppingEngine {
+ 	this.steppingObserver.notifyNotBlocked(tse);
+ 
+ 	int i = ((Integer) this.contextMap.get(task.getProc())).intValue();
+-	this.contextMap.put(task.getProc(), new Integer(++i));
++	this.contextMap.put(task.getProc(), Integer.valueOf(++i));
+ 	continueForStepping(task, true);
+     }
+ 
+@@ -413,7 +413,7 @@ public class SteppingEngine {
+ 
+ 	Task t = (Task) tasks.getFirst();
+ 	int i = ((Integer) this.contextMap.get(t.getProc())).intValue();
+-	this.contextMap.put(t.getProc(), new Integer(i += tasks.size()));
++	this.contextMap.put(t.getProc(), Integer.valueOf(i += tasks.size()));
+ 
+ 	Iterator iter = tasks.iterator();
+ 	while (iter.hasNext()) {
+@@ -449,7 +449,7 @@ public class SteppingEngine {
+ 	tse.setState(new StepOverTestState(task));
+ 
+ 	int i = ((Integer) this.contextMap.get(task.getProc())).intValue();
+-	this.contextMap.put(task.getProc(), new Integer(++i));
++	this.contextMap.put(task.getProc(), Integer.valueOf(++i));
+ 
+ 	if (continueForStepping(task, true)) {
+ 	    this.steppingObserver.notifyNotBlocked(tse);
+@@ -468,7 +468,7 @@ public class SteppingEngine {
+ 
+ 	Task t = (Task) tasks.getFirst();
+ 	int i = ((Integer) this.contextMap.get(t.getProc())).intValue();
+-	this.contextMap.put(t.getProc(), new Integer(i += tasks.size()));
++	this.contextMap.put(t.getProc(), Integer.valueOf(i += tasks.size()));
+ 
+ 	Iterator iter = tasks.iterator();
+ 	while (iter.hasNext()) {
+@@ -503,7 +503,7 @@ public class SteppingEngine {
+ 	this.steppingObserver.notifyNotBlocked(tse);
+ 
+ 	int i = ((Integer) this.contextMap.get(task.getProc())).intValue();
+-	this.contextMap.put(task.getProc(), new Integer(++i));
++	this.contextMap.put(task.getProc(), Integer.valueOf(++i));
+ 
+ 	this.breakpoint = new SteppingBreakpoint(this, address);
+ 	this.breakpointMap.put(task, this.breakpoint);
+@@ -519,7 +519,7 @@ public class SteppingEngine {
+ 	this.steppingObserver.notifyNotBlocked(tse);
+ 
+ 	int i = ((Integer) this.contextMap.get(task.getProc())).intValue();
+-	this.contextMap.put(task.getProc(), new Integer(++i));
++	this.contextMap.put(task.getProc(), Integer.valueOf(++i));
+ 
+ 	this.breakpoint = new SteppingBreakpoint(this, address);
+ 	this.breakpointMap.put(task, this.breakpoint);
+@@ -539,7 +539,7 @@ public class SteppingEngine {
+ 
+ 	Task t = (Task) tasks.getFirst();
+ 	int i = ((Integer) this.contextMap.get(t.getProc())).intValue();
+-	this.contextMap.put(t.getProc(), new Integer(i += tasks.size()));
++	this.contextMap.put(t.getProc(), Integer.valueOf(i += tasks.size()));
+ 
+ 	Iterator iter = tasks.iterator();
+ 	while (iter.hasNext()) {
+@@ -588,7 +588,7 @@ public class SteppingEngine {
+      */
+     public void continueExecution(LinkedList list) {
+ 	TaskStepEngine tse = null;
+-	this.contextMap.put(((Task) list.getFirst()).getProc(), new Integer(
++	this.contextMap.put(((Task) list.getFirst()).getProc(), Integer.valueOf(
+ 		list.size()));
+ 
+ 	Iterator i = list.iterator();
+@@ -761,7 +761,7 @@ public class SteppingEngine {
+ 	    }
+ 
+ 	    this.contextMap.put(((Task) tasks.getFirst()).getProc(),
+-		    new Integer(numRunning));
++		    Integer.valueOf(numRunning));
+ 	    this.runningTasks = temp;
+ 	}
+ 	return;
+@@ -816,7 +816,7 @@ public class SteppingEngine {
+ 	Task t;
+ 
+ 	if (kill) {
+-	    Integer context = new Integer(list.size());
++	    Integer context = Integer.valueOf(list.size());
+ 	    this.contextMap.put(proc, context);
+ 	    this.threadLifeObservable.setExitingTasks(list);
+ 	}
+@@ -1131,15 +1131,15 @@ public class SteppingEngine {
+ 			.intValue();
+ 		if (--i <= 0) {
+ 		    if (threadsList.size() > 0) {
+-			SteppingEngine.this.contextMap.put(proc, new Integer(
++			SteppingEngine.this.contextMap.put(proc, Integer.valueOf(
+ 				threadsList.size() + i));
+ 			requestAdd();
+ 		    } else {
+                         SteppingEngine.this.contextMap.put(proc,
+-                                                           new Integer(i));
++                                                           Integer.valueOf(i));
+                     }
+                 } else {
+-                    SteppingEngine.this.contextMap.put(proc, new Integer(i));
++                    SteppingEngine.this.contextMap.put(proc, Integer.valueOf(i));
+                 }
+                 this.setChanged();
+                 this.notifyObservers(tse);
+@@ -1226,7 +1226,7 @@ public class SteppingEngine {
+ 	public Action updateClonedOffspring(Task parent, Task offspring) {
+ 	    Integer i = (Integer) SteppingEngine.this.contextMap.get(parent
+ 		    .getProc());
+-	    SteppingEngine.this.contextMap.put(parent.getProc(), new Integer(i
++	    SteppingEngine.this.contextMap.put(parent.getProc(), Integer.valueOf(i
+ 		    .intValue() + 1));
+ 	    SteppingEngine.this.taskStateMap.put(offspring, new TaskStepEngine(
+ 		    offspring, SteppingEngine.this));
+@@ -1268,7 +1268,7 @@ public class SteppingEngine {
+             Proc proc = task.getProc();
+ 	    Integer context = (Integer)SteppingEngine.this.contextMap.get(proc);
+ 	    if (!SteppingEngine.this.contextMap.isEmpty() && context != null)
+-		SteppingEngine.this.contextMap.put(proc, new Integer(
++		SteppingEngine.this.contextMap.put(proc, Integer.valueOf(
+ 		    context.intValue() - 1));
+ 
+             TaskStepEngine tse
+@@ -1323,7 +1323,7 @@ public class SteppingEngine {
+ 		int i = ((Integer) SteppingEngine.this.contextMap.get(task
+ 			.getProc())).intValue();
+ 		if (--i > 0) {
+-		    contextMap.put(task.getProc(), new Integer(i));
++		    contextMap.put(task.getProc(), Integer.valueOf(i));
+ 		} else {
+ 		    contextMap.remove(task.getProc());
+ 		    ProcessIdentifier pid
+diff --git a/frysk-core/frysk/symtab/SymbolFactory.java b/frysk-core/frysk/symtab/SymbolFactory.java
+index d19ca2885..60beb451c 100644
+--- a/frysk-core/frysk/symtab/SymbolFactory.java
++++ b/frysk-core/frysk/symtab/SymbolFactory.java
+@@ -235,7 +235,7 @@ public class SymbolFactory
+ 				   lib.dwfl.ElfSymbolVisibility visibility,
+ 				   boolean defined)
+ 		{
+-		    addrs.add(new Long(value));
++		    addrs.add(Long.valueOf(value));
+ 		}
+ 	};
+ 	for (int i = 0; i < modules.length; i++) {
+diff --git a/frysk-core/frysk/symtab/SymbolObjectDeclaration.java b/frysk-core/frysk/symtab/SymbolObjectDeclaration.java
+index 1a581321f..577fed246 100644
+--- a/frysk-core/frysk/symtab/SymbolObjectDeclaration.java
++++ b/frysk-core/frysk/symtab/SymbolObjectDeclaration.java
+@@ -92,7 +92,7 @@ public class SymbolObjectDeclaration implements ObjectDeclaration {
+ 	    // treat all other types as array lists
+ 	    // if any special handling is needed add an if statement.
+ 	    ArrayList dims = new ArrayList();
+-	    dims.add(new Integer((int) (size-1)));
++	    dims.add(Integer.valueOf((int) (size-1)));
+ 	    this.type = new ArrayType(StandardTypes.uint8_t(isa.order()), (int) size, dims);	
+ 	}
+ 	
+diff --git a/frysk-core/frysk/util/StacktraceAction.java b/frysk-core/frysk/util/StacktraceAction.java
+index ef1a474be..78a6e7315 100644
+--- a/frysk-core/frysk/util/StacktraceAction.java
++++ b/frysk-core/frysk/util/StacktraceAction.java
+@@ -116,7 +116,7 @@ public abstract class StacktraceAction implements ProcBlockObserver {
+     if (sortedTasks == null)
+       sortedTasks = new TreeMap();
+ 
+-    sortedTasks.put(new Integer(task.getTid()), task);
++    sortedTasks.put(Integer.valueOf(task.getTid()), task);
+   }
+ 
+   public void taskAddFailed (Object observable, Throwable w)
+diff --git a/frysk-core/frysk/value/ArrayType.java b/frysk-core/frysk/value/ArrayType.java
+index 4fe9b60ce..22d658b51 100644
+--- a/frysk-core/frysk/value/ArrayType.java
++++ b/frysk-core/frysk/value/ArrayType.java
+@@ -148,7 +148,7 @@ public class ArrayType
+         {            
+             ArrayList dims = new ArrayList();
+             // For an n-dimensional array, create (n-1) dimensional array, where n>1
+-            dims.add(new Integer(dimension[dimension.length - 1]-1));
++            dims.add(Integer.valueOf(dimension[dimension.length - 1]-1));
+             ArrayType arrayType = new ArrayType(type, dimension[dimension.length - 1] 
+                                                       * type.getSize(), dims);
+             return new Value(arrayType, v.getLocation().slice(idx.asLong() 
+@@ -176,9 +176,9 @@ public class ArrayType
+         ArrayList dims = new ArrayList();  
+         // Length of elements at 0th dimension changes.
+         // Rest remain same.
+-        dims.add(new Integer(len-1));
++        dims.add(Integer.valueOf(len-1));
+         for (int k=1; k<dimension.length; k++)
+-            dims.add(new Integer(dimension[k]-1));        
++            dims.add(Integer.valueOf(dimension[k]-1));        
+         
+         // Case of one dimensional array.
+         if (dimension.length == 1) {
+@@ -197,7 +197,7 @@ public class ArrayType
+     
+     public Type getSliceType() {
+ 	ArrayList dims = new ArrayList();
+-	dims.add(new Integer(-1));
++	dims.add(Integer.valueOf(-1));
+ 	return new ArrayType(type, 0, dims);
+     }    
+     
+diff --git a/frysk-core/frysk/value/PointerType.java b/frysk-core/frysk/value/PointerType.java
+index 9c3236e2c..6a0198ac0 100644
+--- a/frysk-core/frysk/value/PointerType.java
++++ b/frysk-core/frysk/value/PointerType.java
+@@ -179,7 +179,7 @@ public class PointerType
+ 	               (offset, len*type.getSize(), taskMem);
+ 
+ 	ArrayList dims = new ArrayList();
+-	dims.add(new Integer(len - 1));
++	dims.add(Integer.valueOf(len - 1));
+ 	Type resultType = new ArrayType(type, len * type.getSize(), dims);
+ 
+ 	return new Value(resultType, loc);
+@@ -187,7 +187,7 @@ public class PointerType
+     
+     public Type getSliceType() {
+ 	ArrayList dims = new ArrayList();
+-	dims.add(new Integer(-1));
++	dims.add(Integer.valueOf(-1));
+ 	return new ArrayType(type, 0, dims);
+     }
+     
+diff --git a/frysk-core/frysk/value/TestArray.java b/frysk-core/frysk/value/TestArray.java
+index f9ee26aa9..18b70d9dc 100644
+--- a/frysk-core/frysk/value/TestArray.java
++++ b/frysk-core/frysk/value/TestArray.java
+@@ -59,7 +59,7 @@ public class TestArray extends TestCase {
+      */
+     public void testArrayOfNumber () {
+ 	ArrayList dims = new ArrayList();
+-	dims.add(new Integer(4 - 1));
++	dims.add(Integer.valueOf(4 - 1));
+ 	ArrayType arrayType = new ArrayType(int4_t, buf.length, dims);
+ 	Value c1 = new Value(arrayType, new ScratchLocation(buf));
+ 	String s = c1.toPrint();
+@@ -75,7 +75,7 @@ public class TestArray extends TestCase {
+ 	helloWorld["Hello".length()] = 0;
+ 	// Create a string value
+ 	ArrayList dims = new ArrayList();
+-	dims.add(new Integer(helloWorld.length - 1));
++	dims.add(Integer.valueOf(helloWorld.length - 1));
+ 	Type char_t = new CharType("char", ByteOrder.BIG_ENDIAN, 1, true);
+ 	ArrayType t = new ArrayType(char_t, helloWorld.length, dims);
+ 	Value v = new Value(t, new ScratchLocation(helloWorld));
+@@ -88,7 +88,7 @@ public class TestArray extends TestCase {
+      */
+     public void testIndexOneD() {
+ 	ArrayList dims = new ArrayList();
+-	dims.add(new Integer(4 - 1));
++	dims.add(Integer.valueOf(4 - 1));
+ 	ArrayType arrayType = new ArrayType(int4_t, buf.length , dims);
+ 	Value arr = new Value(arrayType, new ScratchLocation(buf));
+ 	Location l = new ScratchLocation(new byte[] { 2 });
+@@ -103,7 +103,7 @@ public class TestArray extends TestCase {
+      */
+     public void testSlice() {
+ 	ArrayList dims = new ArrayList();
+-	dims.add(new Integer(4 - 1));
++	dims.add(Integer.valueOf(4 - 1));
+ 	ArrayType arrayType = new ArrayType(int4_t, buf.length , dims);
+ 	Value arr = new Value(arrayType, new ScratchLocation(buf));
+ 	Location l1 = new ScratchLocation(new byte[] { 1 });
+@@ -121,7 +121,7 @@ public class TestArray extends TestCase {
+     public void testAdd() {
+ 	// Create array
+ 	ArrayList dims = new ArrayList();
+-	dims.add(new Integer(4 - 1));
++	dims.add(Integer.valueOf(4 - 1));
+ 	ArrayType arrayType = new ArrayType(int4_t, buf.length , dims);
+ 	ByteBuffer arrVal = new ArrayByteBuffer(buf);
+ 	Value arr = new Value(arrayType, new ByteBufferLocation(arrVal, 0, 4));
+@@ -140,8 +140,8 @@ public class TestArray extends TestCase {
+     public void testIndexTwoD() {
+ 	// Create array
+ 	ArrayList dims = new ArrayList();
+-	dims.add(new Integer(2-1));
+-	dims.add(new Integer(4-1));
++	dims.add(Integer.valueOf(2-1));
++	dims.add(Integer.valueOf(4-1));
+ 	ArrayType arrayType = new ArrayType(int2_t, 16, dims);
+ 	Value arr = new Value(arrayType, new ScratchLocation(buf));
+ 	// Create indices 1 and 3
+diff --git a/frysk-gui/frysk/gui/monitor/ProcWiseDataModel.java b/frysk-gui/frysk/gui/monitor/ProcWiseDataModel.java
+index 22d12fed7..3b86a66e5 100644
+--- a/frysk-gui/frysk/gui/monitor/ProcWiseDataModel.java
++++ b/frysk-gui/frysk/gui/monitor/ProcWiseDataModel.java
+@@ -281,7 +281,7 @@ public class ProcWiseDataModel
+     // behind the scenes. Rewrite
+     for (int i = 0; true; i++)
+       {
+-        TreeIter item = treeStore.getIter(new Integer(i).toString());
++        TreeIter item = treeStore.getIter(Integer.valueOf(i).toString());
+         if (item == null)
+           break;
+ 
+diff --git a/frysk-gui/frysk/gui/srcwin/CurrentStackView.java b/frysk-gui/frysk/gui/srcwin/CurrentStackView.java
+index ab748471b..66b7a99ff 100644
+--- a/frysk-gui/frysk/gui/srcwin/CurrentStackView.java
++++ b/frysk-gui/frysk/gui/srcwin/CurrentStackView.java
+@@ -231,7 +231,7 @@ public class CurrentStackView
+ 			       + t.getProc().getPid());
+ 
+ 	treeModel.setValue(procIter, (DataColumnObject) stackColumns[1],
+-			   new Integer(i));
++			   Integer.valueOf(i));
+ 
+ 	Task task = frames[i][0].getTask();
+ 
+@@ -326,7 +326,7 @@ public class CurrentStackView
+ 						   + t.getProc().getPid());
+ 
+ 	treeModel.setValue(procIter, (DataColumnObject) stackColumns[1],
+-					   new Integer(current));
++					   Integer.valueOf(current));
+ 
+ 	Task task = frames[0].getTask();
+ 
+@@ -365,7 +365,7 @@ public class CurrentStackView
+ 	while (iter != null && this.treeModel.isIterValid(iter))
+ 	  {
+ 		treeModel.setValue(iter, (DataColumnObject) stackColumns[1],
+-				   new Integer(loc));
++				   Integer.valueOf(loc));
+ 		++loc;
+ 		iter = iter.getNextIter();
+ 	  }
+diff --git a/frysk-imports/tests/frysk2299/GCTest.java b/frysk-imports/tests/frysk2299/GCTest.java
+index d0799eed0..fb4d2a6a6 100644
+--- a/frysk-imports/tests/frysk2299/GCTest.java
++++ b/frysk-imports/tests/frysk2299/GCTest.java
+@@ -155,7 +155,7 @@ public class GCTest
+ 	
+ 	public void testObj()
+ 	{
+-		Integer i = new Integer(42);
++		Integer i = Integer.valueOf(42);
+ 		gc();
+ 		if (i.intValue() != 42)
+ 			failure("testObj");
+diff --git a/frysk-sys/frysk/sys/GarbageCollect.java b/frysk-sys/frysk/sys/GarbageCollect.java
+index c08fec3a5..012f78dac 100644
+--- a/frysk-sys/frysk/sys/GarbageCollect.java
++++ b/frysk-sys/frysk/sys/GarbageCollect.java
+@@ -61,7 +61,7 @@ public class GarbageCollect {
+     }
+     private static void leakMemory(int amount) {
+ 	for (int i = 0; i < amount; i++) {
+-	    new Long(i);
++	    Long.valueOf(i);
+ 	}
+     }
+     public static synchronized boolean run() {
+diff --git a/frysk-sys/lib/dwfl/Dwfl.java b/frysk-sys/lib/dwfl/Dwfl.java
+index 6c78e4116..42aa5c1d2 100644
+--- a/frysk-sys/lib/dwfl/Dwfl.java
++++ b/frysk-sys/lib/dwfl/Dwfl.java
+@@ -203,7 +203,7 @@ public class Dwfl {
+ 		// Could the pointer be changed; will the pointer
+ 		// change?
+ 		finest.log(this, "reportModule reusing", module);
+-		modules.put(new Long(modulePointer), module);
++		modules.put(Long.valueOf(modulePointer), module);
+ 		return;
+ 	    }
+ 	}
+@@ -220,7 +220,7 @@ public class Dwfl {
+ 	DwflModule module = new DwflModule(modulePointer, this, moduleName,
+ 					   low, high, bytes);
+ 	finest.log(this, "reportModule creating", module);
+-	modules.put(new Long(modulePointer), module);
++	modules.put(Long.valueOf(modulePointer), module);
+     }
+     private static native long dwfl_report_module(long pointer,
+ 						  String moduleName,
+diff --git a/frysk-sys/lib/dwfl/DwflDie.java b/frysk-sys/lib/dwfl/DwflDie.java
+index 7e5f554e4..ac628ef1b 100644
+--- a/frysk-sys/lib/dwfl/DwflDie.java
++++ b/frysk-sys/lib/dwfl/DwflDie.java
+@@ -52,7 +52,7 @@ public class DwflDie extends DwarfDie {
+ 	ArrayList biased = new ArrayList();
+ 	for (Iterator it = bps.iterator(); it.hasNext(); ) {
+ 	    Long l = (Long)it.next();
+-	    biased.add(new Long(l.longValue() + module.getBias()));
++	    biased.add(Long.valueOf(l.longValue() + module.getBias()));
+ 	}
+ 	return biased;
+     }
+diff --git a/frysk-sys/lib/dwfl/ElfSymbol.java b/frysk-sys/lib/dwfl/ElfSymbol.java
+index b4d57e2f5..99cd1b46f 100644
+--- a/frysk-sys/lib/dwfl/ElfSymbol.java
++++ b/frysk-sys/lib/dwfl/ElfSymbol.java
+@@ -251,7 +251,7 @@ public class ElfSymbol {
+ 
+ 	    for (int i = 0; i < verdefCount; ++i)
+ 	      {
+-		Integer key = new Integer(verdef[i].index);
++		Integer key = Integer.valueOf(verdef[i].index);
+ 		ArrayList verList = (ArrayList)versionMap.get(key);
+ 		if (verList == null)
+ 		  {
+@@ -282,7 +282,7 @@ public class ElfSymbol {
+ 	    for (int i = 0; i < verneedCount; ++i)
+ 	      for (int j = 0; j < verneed[i].aux.length; ++j)
+ 		{
+-		  Integer key = new Integer(verneed[i].aux[j].index);
++		  Integer key = Integer.valueOf(verneed[i].aux[j].index);
+ 		  ArrayList verList = (ArrayList)versionMap.get(key);
+ 		  if (verList == null)
+ 		    {
+@@ -313,7 +313,7 @@ public class ElfSymbol {
+ 		version ^= 0x8000;
+ 	      }
+ 
+-	    versions = (List)versionMap.get(new Integer(version));
++	    versions = (List)versionMap.get(Integer.valueOf(version));
+ 	  }
+ 
+ 	if (!elf_buildsymbol(parent, symbolsP, index, symbolsH.link, versions, builder))

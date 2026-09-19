@@ -1,0 +1,11 @@
+--- GNUmakefile.in~	2019-09-16 08:12:45.000000000 -0500
++++ GNUmakefile.in	2019-09-16 08:13:09.418519281 -0500
+@@ -14,7 +14,7 @@
+ srcdir=@srcdir@
+ VPATH=$(srcdir)
+ NAME=mftrace
+-MANPAGES=mftrace.1 gf2pbm.1
++MANPAGES=mftrace.1
+ VERSION=@VERSION@
+ distdir=$(NAME)-$(VERSION)
+ prefix=@prefix@

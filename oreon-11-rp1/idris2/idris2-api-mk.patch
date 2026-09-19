@@ -1,0 +1,15 @@
+--- Idris2-0.8.0/Makefile~	2025-11-01 01:11:29.000000000 +0800
++++ Idris2-0.8.0/Makefile	2026-03-03 13:42:19.086732380 +0800
+@@ -190,10 +190,10 @@
+ bootstrap-install: install-idris2 install-support install-bootstrap-libs
+ 
+ install-api: src/IdrisPaths.idr
+-	${IDRIS2_BOOT} --install ${IDRIS2_LIB_IPKG}
++	${DESTDIR}/usr/bin/${IDRIS2_BOOT} --install ${IDRIS2_LIB_IPKG}
+ 
+ install-with-src-api: src/IdrisPaths.idr
+-	${IDRIS2_BOOT} --install-with-src ${IDRIS2_LIB_IPKG}
++	${DESTDIR}/usr/bin/${IDRIS2_BOOT} --install-with-src ${IDRIS2_LIB_IPKG}
+ 
+ install-idris2:
+ 	mkdir -p ${DESTDIR}${PREFIX}/bin/

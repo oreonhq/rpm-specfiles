@@ -1,0 +1,21 @@
+diff -Naur splat-1.4.2.orig/build splat-1.4.2/build
+--- splat-1.4.2.orig/build	2014-02-07 20:32:58.000000000 -0600
++++ splat-1.4.2/build	2015-06-14 15:13:08.818248708 -0500
+@@ -33,7 +33,7 @@
+ 	fi
+ 
+ 	echo -n "Compiling SPLAT!... "
+-	g++ -O2 -s -fomit-frame-pointer -ffast-math -pipe -march=$cpu $model itwom3.0.cpp splat.cpp -lm -lbz2 -o splat
++	g++ -ffast-math $RPM_OPT_FLAGS $model itwom3.0.cpp splat.cpp -lm -lbz2 -o splat
+ 
+ 	if [ -x splat ]; then
+ 		echo "Done!"
+@@ -44,7 +44,7 @@
+ 	if [ -r hd-parms.h ]; then
+ 		cp hd-parms.h splat.h
+ 		echo -n "Compiling SPLAT! HD... "
+-		g++ -O2 -s -fomit-frame-pointer -ffast-math -pipe -march=$cpu $model itwom3.0.cpp splat.cpp -lm -lbz2 -o splat-hd
++		g++ -ffast-math $RPM_OPT_FLAGS $model itwom3.0.cpp splat.cpp -lm -lbz2 -o splat-hd
+ 
+ 		if [ -x splat-hd ]; then
+ 			echo "Done!"

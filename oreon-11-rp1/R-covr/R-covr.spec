@@ -1,0 +1,49 @@
+%global source0_hash 20d3a98c1d751c68115e0dacd9ac46d83a112bbadf1f46da7c9672afee7e8986
+
+Name:           R-covr
+Version:        %R_rpm_version 3.6.5
+Release:        %autorelease
+Summary:        Test Coverage for Packages
+
+License:        MIT
+URL:            %{cran_url}
+Source:         %{cran_source}
+
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    %{ix86}
+
+BuildRequires:  R-devel
+
+Provides:       bundled(xstatic-bootstrap-common) = 3.3.5
+Provides:       bundled(js-highlight) = 6.2
+
+%description
+Track and report code coverage for your package and (optionally) upload the
+results to a coverage service like 'Codecov' <https://codecov.io> or
+'Coveralls' <https://coveralls.io>. Code coverage is a measure of the amount of
+code being exercised by a set of tests. It is an indirect measure of test
+quality and completeness. This package is compatible with any testing
+methodology or framework and tracks coverage of both R code and compiled
+C/C++/FORTRAN code.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -c
+
+%generate_buildrequires
+%R_buildrequires
+
+%build
+
+%install
+%R_install
+%R_save_files
+
+%check
+%R_check \--no-tests
+
+%files -f %{R_files}
+
+%changelog
+%autochangelog

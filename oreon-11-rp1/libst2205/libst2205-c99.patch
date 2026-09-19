@@ -1,0 +1,21 @@
+Include <fcntl.h> instead of <asm/fcntl.h> for the open function.
+
+This avoids an implicit function declaration, increasing compatibility
+with future compilers which are like to reject such declarations by
+default.
+
+NB: Now needs -D_GNU_SOURCE for the definition of O_DIRECT.
+
+diff --git a/libst2205/st2205.c b/libst2205/st2205.c
+index 898c8f75c3080c38..5202bca1a3067afd 100644
+--- a/libst2205/st2205.c
++++ b/libst2205/st2205.c
+@@ -26,7 +26,7 @@
+ #include <unistd.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <asm/fcntl.h>
++#include <fcntl.h>
+ #include "st2205.h"
+ 
+ #define BUFF_SIZE 0x10000

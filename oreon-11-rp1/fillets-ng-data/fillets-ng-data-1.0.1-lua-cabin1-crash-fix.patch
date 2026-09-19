@@ -1,0 +1,21 @@
+*** script/cabin1/code.lua.orig	2004-09-14 17:51:28.000000000 +0300
+--- script/cabin1/code.lua	2021-10-17 04:46:15.041991736 +0300
+***************
+*** 137,144 ****
+                      end
+                  end
+                  if room.mov == 1 or room.mov == 2 then
+!                     screenShiftX = screenShiftX - screenShiftX / 10
+!                     screenShiftY = screenShiftY - screenShiftY / 10
+                      game_setScreenShift(screenShiftX, screenShiftY)
+                  end
+              end
+--- 137,144 ----
+                      end
+                  end
+                  if room.mov == 1 or room.mov == 2 then
+!                     screenShiftX = screenShiftX - screenShiftX // 10
+!                     screenShiftY = screenShiftY - screenShiftY // 10
+                      game_setScreenShift(screenShiftX, screenShiftY)
+                  end
+              end

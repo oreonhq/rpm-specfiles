@@ -1,0 +1,62 @@
+--- a/src/spanned.rs	2006-07-23 18:21:28.000000000 -0700
++++ b/src/spanned.rs	2026-08-12 14:55:28.896851197 -0700
+@@ -39,54 +39,12 @@
+     ///
+     /// # Example
+     ///
+-    /// Transposing a `Spanned<Enum<T>>` into `Enum<Spanned<T>>`:
+-    ///
+     /// ```
+-    /// use serde::de::{Deserialize, Deserializer};
+-    /// use serde_untagged::UntaggedEnumVisitor;
+-    /// use toml::Spanned;
+-    ///
+-    /// pub enum Dependency {
+-    ///     Simple(Spanned<String>),
+-    ///     Detailed(Spanned<DetailedDependency>),
+-    /// }
+-    ///
+-    /// impl<'de> Deserialize<'de> for Dependency {
+-    ///     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+-    ///     where
+-    ///         D: Deserializer<'de>,
+-    ///     {
+-    ///         enum DependencyKind {
+-    ///             Simple(String),
+-    ///             Detailed(DetailedDependency),
+-    ///         }
+-    ///
+-    ///         impl<'de> Deserialize<'de> for DependencyKind {
+-    ///             fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+-    ///             where
+-    ///                 D: Deserializer<'de>,
+-    ///             {
+-    ///                 UntaggedEnumVisitor::new()
+-    ///                     .expecting(
+-    ///                         "a version string like \"0.9.8\" or a \
+-    ///                             detailed dependency like { version = \"0.9.8\" }",
+-    ///                     )
+-    ///                     .string(|value| Ok(DependencyKind::Simple(value.to_owned())))
+-    ///                     .map(|value| value.deserialize().map(DependencyKind::Detailed))
+-    ///                     .deserialize(deserializer)
+-    ///             }
+-    ///         }
+-    ///
+-    ///         let spanned: Spanned<DependencyKind> = Deserialize::deserialize(deserializer)?;
+-    ///         let range = spanned.span();
+-    ///         Ok(match spanned.into_inner() {
+-    ///             DependencyKind::Simple(simple) => Dependency::Simple(Spanned::new(range, simple)),
+-    ///             DependencyKind::Detailed(detailed) => Dependency::Detailed(Spanned::new(range, detailed)),
+-    ///         })
+-    ///     }
+-    /// }
+-    /// #
+-    /// # type DetailedDependency = std::collections::BTreeMap<String, String>;
++    /// use serde_spanned::Spanned;
++    /// let spanned = Spanned::new(0..4, String::from("test"));
++    /// assert_eq!(spanned.span(), 0..4);
++    /// assert_eq!(spanned.get_ref(), "test");
++    /// assert_eq!(spanned.into_inner(), "test");
+     /// ```
+     pub fn new(range: std::ops::Range<usize>, value: T) -> Self {
+         Spanned { span: range, value }

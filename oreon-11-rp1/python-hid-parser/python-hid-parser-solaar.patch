@@ -1,0 +1,13 @@
+diff -up python-hid-parser-4b7944f4999e152c678cd7fa76278b7e2535c3ff/hid_parser/__init__.py.orig python-hid-parser-4b7944f4999e152c678cd7fa76278b7e2535c3ff/hid_parser/__init__.py
+--- python-hid-parser-4b7944f4999e152c678cd7fa76278b7e2535c3ff/hid_parser/__init__.py.orig	2021-12-06 20:38:52.000000000 +0100
++++ python-hid-parser-4b7944f4999e152c678cd7fa76278b7e2535c3ff/hid_parser/__init__.py	2025-05-09 11:01:33.633847097 +0200
+@@ -902,6 +902,9 @@ class ReportDescriptor():
+                         "Data specifies a unit or unit exponent, but we don't support those yet"
+                     ))
+ 
++                elif tag in (TagGlobal.PUSH, TagGlobal.POP):
++                    warnings.warn(HIDUnsupportedWarning("Push and pop are not supported yet"))  # noqa
++
+                 elif tag == TagGlobal.REPORT_COUNT:
+                     report_count = data
+ 

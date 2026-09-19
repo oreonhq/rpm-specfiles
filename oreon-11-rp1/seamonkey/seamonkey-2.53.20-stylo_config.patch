@@ -1,0 +1,37 @@
+diff -Nrup mozilla/js/moz.configure mozilla-OK/js/moz.configure
+--- mozilla/js/moz.configure	2024-12-11 23:05:11.000000000 +0300
++++ mozilla-OK/js/moz.configure	2024-12-19 20:07:59.482183664 +0300
+@@ -30,7 +30,7 @@ include('../build/moz.configure/nspr.con
+ include('../build/moz.configure/rust.configure',
+         when='--enable-compile-environment')
+ include('../build/moz.configure/bindgen.configure',
+-        when='--enable-compile-environment')
++        when=building_stylo_bindgen)
+ 
+ set_config('JS_STANDALONE', js_standalone)
+ set_define('JS_STANDALONE', js_standalone)
+diff -Nrup mozilla/toolkit/moz.configure mozilla-OK/toolkit/moz.configure
+--- mozilla/toolkit/moz.configure	2024-12-19 20:00:02.909834564 +0300
++++ mozilla-OK/toolkit/moz.configure	2024-12-19 20:08:56.772744763 +0300
+@@ -140,10 +140,6 @@ pulseaudio = pkg_check_modules('MOZ_PULS
+ set_config('MOZ_PULSEAUDIO', depends_if(pulseaudio)(lambda _: True))
+ set_define('MOZ_PULSEAUDIO', depends_if(pulseaudio)(lambda _: True))
+ 
+-# Javascript engine
+-# ==============================================================
+-include('../js/moz.configure')
+-
+ 
+ # NodeJS
+ # ==============================================================
+@@ -719,6 +715,10 @@ def servo_target_dir(value):
+ 
+ set_config('SERVO_TARGET_DIR', servo_target_dir)
+ 
++# Javascript engine
++# ==============================================================
++include('../js/moz.configure')
++
+ # WebRender integration
+ option('--enable-webrender', nargs='?', choices=('build',),
+        help='Include WebRender in the build and/or enable it at runtime')

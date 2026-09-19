@@ -1,10 +1,10 @@
-%global source0_hash 031c8f00095c174214ab8ffb1d807662df551966d72c3e367dccab2c3098eaac
+%global source0_hash 8acf6eaa0fa5ffacd8f296d942a2bd4a9ac07964fa8d69fd00b5db072c1d7023
 
 %global stable_kf6 stable
 
 
 Name:          plasma-camera
-Version: 26.03.80
+Version: 26.08.0
 Release: 1%{?dist}
 License:       BSD-3-Clause AND GPL-2.0-or-later AND CC0-1.0 AND GPL-3.0-or-later
 Summary:       Camera application for Plasma Mobile
@@ -47,7 +47,7 @@ switching between different camera devices.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n plasma-camera-v26.03.80
+%autosetup -p1 -n %{name}-%{version}
 
 
 %build
@@ -70,6 +70,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
 %{_metainfodir}/org.kde.plasma.camera.appdata.xml
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

@@ -1,0 +1,45 @@
+From c42c0eeb1e466c03233967d464140998bf956bc7 Mon Sep 17 00:00:00 2001
+From: Peter Georg <peter.georg@physik.uni-regensburg.de>
+Date: Mon, 14 Jul 2025 17:24:18 +0200
+Subject: [PATCH] Check if required dependencies are available
+
+---
+ contrib/dmenu/passmenu | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/contrib/dmenu/passmenu b/contrib/dmenu/passmenu
+index 76d92ab..2f0a1d7 100755
+--- a/contrib/dmenu/passmenu
++++ b/contrib/dmenu/passmenu
+@@ -6,16 +6,23 @@ typeit=0
+ if [[ $1 == "--type" ]]; then
+ 	typeit=1
+ 	shift
++
++	if [[ -n $WAYLAND_DISPLAY ]] && command -v ydotool &> /dev/null; then
++		xdotool="ydotool type --file -"
++elif [[ -n $DISPLAY ]] && command -v xdotool &> /dev/null; then
++		xdotool="xdotool type --clearmodifiers --file -"
++	else
++		echo "Error: No Wayland or X11 display and command-line automation tool detected" >&2
++		exit 1
++	fi
+ fi
+ 
+-if [[ -n $WAYLAND_DISPLAY ]]; then
++if [[ -n $WAYLAND_DISPLAY ]] && command -v dmenu-wl &> /dev/null; then
+ 	dmenu=dmenu-wl
+-	xdotool="ydotool type --file -"
+-elif [[ -n $DISPLAY ]]; then
++elif [[ -n $DISPLAY ]] && command -v dmenu &> /dev/null; then
+ 	dmenu=dmenu
+-	xdotool="xdotool type --clearmodifiers --file -"
+ else
+-	echo "Error: No Wayland or X11 display detected" >&2
++	echo "Error: No Wayland or X11 display and dynamic menu detected" >&2
+ 	exit 1
+ fi
+ 
+-- 
+2.47.1
+

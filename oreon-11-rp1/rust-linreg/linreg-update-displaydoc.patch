@@ -1,0 +1,27 @@
+diff -Naur a/Cargo.toml b/Cargo.toml
+--- a/Cargo.toml	1969-12-31 16:00:00.000000000 -0800
++++ b/Cargo.toml	2021-08-05 08:38:54.484222554 -0700
+@@ -21,7 +21,7 @@
+ license = "MIT"
+ repository = "https://github.com/49nord/linreg-rs.git"
+ [dependencies.displaydoc]
+-version = "0.1.5"
++version = "0.2"
+ default-features = false
+ 
+ [dependencies.num-traits]
+diff -Naur a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs	2019-12-08 08:38:28.000000000 -0800
++++ b/src/lib.rs	2021-08-05 08:39:12.167403464 -0700
+@@ -53,9 +53,8 @@
+ pub enum Error {
+     /// The slope is too steep to represent, approaching infinity.
+     TooSteep,
+-    /// Failed to calculate mean.
+-    ///
+-    /// This means the input was empty or had too many elements.
++    /** Failed to calculate mean.
++        This means the input was empty or had too many elements. */
+     Mean,
+     /// Lengths of the inputs are different.
+     InputLenDif,

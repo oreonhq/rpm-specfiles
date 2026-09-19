@@ -1,0 +1,94 @@
+--- ./packetNtx/Dll/Project/GNUmakefile.orig	2009-02-16 19:35:23.000000000 +0100
++++ ./packetNtx/Dll/Project/GNUmakefile	2009-02-16 19:35:35.000000000 +0100
+@@ -5,7 +5,7 @@
+ OPTFLAGS = -O -D_WINNT4
+ # I am suspicious of -O2 since it hosed wpcap.dll. To be safe, use -O only
+ 
+-CFLAGS = -I ../../../common -shared -mno-cygwin ${OPTFLAGS} -I..
++CFLAGS = -I ../../../Common -shared -mno-cygwin ${OPTFLAGS} -I..
+ LDFLAGS = -Wl,--out-implib,libpacket.a
+ OBJS = ../Packet32.o ../AdInfo.o
+ LIBS = -lws2_32 -lversion
+--- ./packetNtx/Dll/Packet32-Int.h.build	2015-01-04 00:49:16.544281679 +0100
++++ ./packetNtx/Dll/Packet32-Int.h	2015-01-04 00:49:59.426220977 +0100
+@@ -43,7 +43,7 @@
+ #endif //HAVE_NPFIM_API
+ 
+ #ifdef __MINGW32__
+-#ifdef __MINGW64__
++#if defined(__MINGW64__) || defined(__MINGW64_VERSION_MAJOR)
+ #include <ntddndis.h>
+ #else /*__MINGW64__*/
+ #include <ddk/ntddndis.h>
+--- ./wpcap/libpcap/inet.c.orig	2009-02-16 19:40:53.000000000 +0100
++++ ./wpcap/libpcap/inet.c	2009-02-16 19:41:37.000000000 +0100
+@@ -804,7 +804,7 @@
+ 		while(NAdapts--)
+ 		{
+ 			strcpy((char*)tUstr, tAstr);
+-			(char*)tUstr += strlen(tAstr) + 1;;
++			tUstr = (WCHAR *)((char *)tUstr + strlen(tAstr) + 1);
+ 			tAstr += strlen(tAstr) + 1;
+ 		}
+ 
+--- ./wpcap/libpcap/Win32/Include/net/netdb.h.xx	2015-01-04 01:05:54.205913893 +0100
++++ ./wpcap/libpcap/Win32/Include/net/netdb.h	2015-01-04 01:06:54.381436947 +0100
+@@ -57,7 +57,7 @@
+ #ifndef _NETDB_H_
+ #define _NETDB_H_
+ 
+-#if defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(_REENTRANT)
++#if 0 && (defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(_REENTRANT))
+ #include <stdio.h>
+ #include <netinet/in.h>
+ #endif
+@@ -80,7 +80,7 @@
+ };
+ 
+ #ifndef WIN32
+-#if defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(_REENTRANT)
++#if 0 && (defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(_REENTRANT))
+ 
+ #define __NETDB_MAXALIASES	35
+ #define __NETDB_MAXADDRS	35
+@@ -122,7 +122,7 @@
+ void		setservent (int);
+ void		setrpcent (int);
+ 
+-#if defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(_REENTRANT)
++#if 0 && (defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(_REENTRANT))
+ struct hostent	*gethostbyaddr_r (const char *__addr,
+ 			int __length, int __type,
+ 			struct hostent *__result,
+--- ./wpcap/PRJ/GNUmakefile.build	2015-01-04 01:10:28.164058431 +0100
++++ ./wpcap/PRJ/GNUmakefile	2015-01-04 01:11:09.182823232 +0100
+@@ -32,7 +32,7 @@
+ 	-DSIZEOF_CHAR=1 -DSIZEOF_SHORT=2 -DSIZEOF_INT=4 -DSIZEOF_LONG_LONG=8 -DWPCAP -D'_U_=' \
+ 	-DHAVE_SNPRINTF -DHAVE_VSNPRINTF \
+ 	-DSIZEOF_LONG_LONG=8 \
+-	-DHAVE_REMOTE -DHAVE_AIRPCAP_API \
++	-DHAVE_REMOTE \
+ 	-DHAVE_TC_API \
+ 	-DHAVE_ADDRINFO \
+ 	-DHAVE_LIMITS_H \
+--- ./packetNtx/Dll/strsafe.h.build	2024-07-30 10:34:02.382470122 +0200
++++ ./packetNtx/Dll/strsafe.h	2024-07-30 10:34:32.147347102 +0200
+@@ -4,17 +4,12 @@
+ #include <stdlib.h>
+ #include <stdarg.h>
+ #include <string.h>
++#include <stdio.h>
+ 
+ #ifdef _MSC_VER
+ #error Trying to use strsafe.h for GCC within Visual Studio
+ #endif
+ 
+-static int vsnprintf(char *buffer,size_t count, const char *format, va_list argptr )
+-{
+-	return vsprintf(buffer, format, argptr);
+-}
+-
+-
+ static void StringCchPrintfA(char *pszDest,size_t cbDest, char *pszFormat, ...)
+  {
+ 	va_list marker;

@@ -1,0 +1,29 @@
+--- tower-http-0.5.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ tower-http-0.5.2/Cargo.toml	2024-10-08T20:25:31.169862+00:00
+@@ -64,7 +64,7 @@
+ optional = true
+ 
+ [dependencies.base64]
+-version = "0.21"
++version = "0.22"
+ optional = true
+ 
+ [dependencies.bitflags]
+@@ -156,7 +156,7 @@
+ version = "0.1"
+ 
+ [dev-dependencies.brotli]
+-version = "3"
++version = "7"
+ 
+ [dev-dependencies.bytes]
+ version = "1"
+@@ -182,7 +182,7 @@
+ version = "1.0"
+ 
+ [dev-dependencies.sync_wrapper]
+-version = "0.1.1"
++version = "1"
+ 
+ [dev-dependencies.tokio]
+ version = "1"

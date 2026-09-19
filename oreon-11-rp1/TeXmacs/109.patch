@@ -1,0 +1,115 @@
+From 7c871e281d32fd06c0c35233a6d2c24df64692e2 Mon Sep 17 00:00:00 2001
+From: Orion Poplawski <orion@nwra.com>
+Date: Wed, 29 Jan 2025 19:59:22 -0700
+Subject: [PATCH] Some C++20 fixups for template constructors/destructors
+
+---
+ src/Kernel/Abstractions/resource.hpp  | 4 ++--
+ src/Kernel/Containers/hashmap.hpp     | 8 ++++----
+ src/Kernel/Containers/iterator.cpp    | 2 +-
+ src/Kernel/Containers/iterator.hpp    | 4 ++--
+ src/Kernel/Containers/list.hpp        | 4 ++--
+ src/Kernel/Containers/rel_hashmap.hpp | 2 +-
+ 6 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/src/Kernel/Abstractions/resource.hpp b/src/Kernel/Abstractions/resource.hpp
+index 483fa0ffaf..01b33074fc 100644
+--- a/src/Kernel/Abstractions/resource.hpp
++++ b/src/Kernel/Abstractions/resource.hpp
+@@ -15,9 +15,9 @@
+ 
+ template<class T> struct rep {
+   string res_name;
+-  inline rep<T> (string res_name2):res_name (res_name2) {
++  inline rep (string res_name2):res_name (res_name2) {
+     T::instances (res_name)= static_cast<pointer>(this); }
+-  inline virtual ~rep<T> () {
++  inline virtual ~rep () {
+     T::instances -> reset (res_name); }
+ };
+ 
+diff --git a/src/Kernel/Containers/hashmap.hpp b/src/Kernel/Containers/hashmap.hpp
+index 4ab312d6af..606886183e 100644
+--- a/src/Kernel/Containers/hashmap.hpp
++++ b/src/Kernel/Containers/hashmap.hpp
+@@ -32,8 +32,8 @@ template<class T, class U> struct hashentry {
+   int code;
+   T key;
+   U im;
+-  hashentry<T,U> () { }
+-  hashentry<T,U> (int code, T key2, U im2);
++  hashentry () { }
++  hashentry (int code, T key2, U im2);
+   operator tree ();
+ };
+ 
+@@ -45,10 +45,10 @@ template<class T, class U> class hashmap_rep: concrete_struct {
+   list<hashentry<T,U> >* a;  // the array of entries
+ 
+ public:
+-  inline hashmap_rep<T,U>(U init2, int n2=1, int max2=1):
++  inline hashmap_rep(U init2, int n2=1, int max2=1):
+     size(0), n(n2), max(max2), init(init2),
+     a(tm_new_array<list<hashentry<T,U> > > (n)) {}
+-  inline ~hashmap_rep<T,U> () { tm_delete_array (a); }
++  inline ~hashmap_rep () { tm_delete_array (a); }
+   void resize (int n);
+   void reset (T x);
+   void generate (void (*routine) (T));
+diff --git a/src/Kernel/Containers/iterator.cpp b/src/Kernel/Containers/iterator.cpp
+index 7720d9918b..ccdcb99459 100644
+--- a/src/Kernel/Containers/iterator.cpp
++++ b/src/Kernel/Containers/iterator.cpp
+@@ -51,7 +51,7 @@ class hashset_iterator_rep: public iterator_rep<T> {
+   void spool ();
+ 
+ public:
+-  hashset_iterator_rep<T> (hashset<T> h);
++  hashset_iterator_rep (hashset<T> h);
+   bool busy ();
+   T next ();
+ };
+diff --git a/src/Kernel/Containers/iterator.hpp b/src/Kernel/Containers/iterator.hpp
+index bbccf4647f..8cb3ae7f54 100644
+--- a/src/Kernel/Containers/iterator.hpp
++++ b/src/Kernel/Containers/iterator.hpp
+@@ -18,8 +18,8 @@ extern int iterator_count;
+ 
+ template<class T> class iterator_rep: public abstract_struct {
+ public:
+-  inline iterator_rep<T> () { TM_DEBUG(iterator_count++); }
+-  inline virtual ~iterator_rep<T> () { TM_DEBUG(iterator_count--); }
++  inline iterator_rep () { TM_DEBUG(iterator_count++); }
++  inline virtual ~iterator_rep () { TM_DEBUG(iterator_count--); }
+   virtual bool busy () = 0;
+   virtual T next () = 0;
+   virtual int remains ();
+diff --git a/src/Kernel/Containers/list.hpp b/src/Kernel/Containers/list.hpp
+index f8c6750f86..da0ce070d9 100644
+--- a/src/Kernel/Containers/list.hpp
++++ b/src/Kernel/Containers/list.hpp
+@@ -41,9 +41,9 @@ template<class T> class list_rep: concrete_struct {
+   T       item;
+   list<T> next;
+ 
+-  inline list_rep<T> (T item2, list<T> next2): item(item2), next(next2) {
++  inline list_rep (T item2, list<T> next2): item(item2), next(next2) {
+     TM_DEBUG(list_count++); }
+-  inline ~list_rep<T> () { TM_DEBUG(list_count--); }
++  inline ~list_rep () { TM_DEBUG(list_count--); }
+   friend class list<T>;
+ };
+ 
+diff --git a/src/Kernel/Containers/rel_hashmap.hpp b/src/Kernel/Containers/rel_hashmap.hpp
+index 650798d197..096e4fb3a8 100644
+--- a/src/Kernel/Containers/rel_hashmap.hpp
++++ b/src/Kernel/Containers/rel_hashmap.hpp
+@@ -31,7 +31,7 @@ template<class T, class U> class rel_hashmap_rep: concrete_struct {
+   hashmap<T,U>     item;
+   rel_hashmap<T,U> next;
+ 
+-  inline rel_hashmap_rep<T,U> (hashmap<T,U> item2, rel_hashmap<T,U> next2):
++  inline rel_hashmap_rep (hashmap<T,U> item2, rel_hashmap<T,U> next2):
+     item(item2), next(next2) {}
+   bool contains (T x);
+   void extend ();

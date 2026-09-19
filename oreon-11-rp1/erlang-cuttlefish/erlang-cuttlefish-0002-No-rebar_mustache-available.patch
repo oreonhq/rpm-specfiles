@@ -1,0 +1,124 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Mon, 7 Mar 2016 16:26:49 +0300
+Subject: [PATCH] No rebar_mustache available
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/cuttlefish_unit.erl b/src/cuttlefish_unit.erl
+index e67826f..7736abd 100644
+--- a/src/cuttlefish_unit.erl
++++ b/src/cuttlefish_unit.erl
+@@ -294,110 +294,14 @@ path([H|T], Proplist) when is_list(H)->
+ -spec render_template(FileName :: file:name_all(), Context :: mustache_ctx())
+             -> string().
+ render_template(FileName, Context) ->
+-    %% The mustache module may only be available in the context of a rebar run.
+-    case find_mustache() of
+-        false ->
+-            erlang:error(
+-                "No suitable mustache module loaded. "
+-                "Run this test in a rebar context.");
+-        Mod ->
+-            {ok, Bin} = file:read_file(FileName),
+-            render_template(Mod, Bin, Context)
+-    end.
++    {ok, Bin} = file:read_file(FileName),
++    unicode:characters_to_list(
++        bbmustache:render(Bin, [mkey_string(Elem) || Elem <- Context])).
+ 
+ %% ===================================================================
+ %% Internal
+ %% ===================================================================
+ 
+--spec render_template(
+-        Mustache    :: module(),
+-        Template    :: binary(),
+-        Context     :: mustache_ctx())
+-            -> string().
+-%
+-% Even where we're matching on the module, always use the Module variable so
+-% xref and dialyzer don't complain. If running in Rebar there will be a
+-% suitable module available at runtime, but usually there won't be an explicit
+-% project dependency on one.
+-%
+-% Unicode support is sketchy, as it is throughout cuttlefish. Someday...
+-%
+-render_template(bbmustache = Mustache, Template, Context) ->
+-    % It's unclear whether there could be supplementary UTF-8 bytes that could
+-    % be misinterpreted as relevant characters by the scanner, but as noted
+-    % above we're not putting much effort into Unicode for now.
+-    % The render call raises an error if there's a problem, so no need to
+-    % check return pattern.
+-    unicode:characters_to_list(
+-        Mustache:render(Template, mustache_context(Mustache, Context)));
+-
+-render_template(Mustache, Template, Context) ->
+-    % Previous versions of this file escaped the template, but that actually
+-    % seems to break things I've tested, so it's just converted to a list.
+-    Data = case unicode:characters_to_list(Template, utf8) of
+-        Utf8 when erlang:is_list(Utf8) ->
+-            Utf8;
+-        _ ->
+-            % Not legal UTF-8, treat it as an 8-bit ISO-8859 encoding, which
+-            % will always succeed but _may_ be improperly mapped if it's not
+-            % specifically Latin-1. However, all of the punctuation characters
+-            % the scanner cares about should be fine.
+-            unicode:characters_to_list(Template, latin1)
+-    end,
+-    Mustache:render(Data, mustache_context(Mustache, Context)).
+-
+--spec find_mustache() -> module() | false.
+-%
+-% Finds a module that is likely to be a mustache implementation that
+-% render_template/3 knows how to use.
+-% Once identified, the module is cached in the process environment, so it'll
+-% be lost when the process goes away, which should coincide with eunit test
+-% setup/teardown when the available modules might change.
+-%
+-find_mustache() ->
+-    Key = {?MODULE, mustache_module},
+-    case erlang:get(Key) of
+-        undefined ->
+-            Ret = find_mustache([bbmustache, mustache, rebar_mustache]),
+-            _ = erlang:put(Key, Ret),
+-            Ret;
+-        Val ->
+-            Val
+-    end.
+-
+--spec find_mustache(Mods :: [module()]) -> module() | false.
+-%
+-% Let find_mustache/0 call this, not much use anywhere else.
+-%
+-find_mustache([Mod | Mods]) ->
+-    case code:ensure_loaded(Mod) of
+-        {module, _} ->
+-            case erlang:function_exported(Mod, render, 2) of
+-                true ->
+-                    Mod;
+-                _ ->
+-                    find_mustache(Mods)
+-            end;
+-        _ ->
+-            find_mustache(Mods)
+-    end;
+-find_mustache([]) ->
+-    false.
+-
+--spec mustache_context(Module :: module(), Context :: mustache_ctx()) -> term().
+-%
+-% Returns an appropriate mapping context for the mustache Module.
+-%
+-mustache_context(bbmustache, Context) ->
+-    % Despite what the docs say, bbmustache seems to need the keys to be
+-    % strings. This _could_ be limited to the pre-OTP-17 code, but we need R16
+-    % compatibility during the transition so I'm not going to sweat it.
+-    [mkey_string(Elem) || Elem <- Context];
+-mustache_context(rebar_mustache, Context) ->
+-    dict:from_list(Context);
+-mustache_context(_, Context) ->
+-    Context.
+-
+ -spec mkey_string(Elem :: mustache_def()) -> {string(), mustache_val()}.
+ %
+ % Ensure the Key of the specified Elem is a string.

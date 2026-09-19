@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>emacs-vm</id>
+  <extends>emacs.desktop</extends>
+  <name>ViewMail</name>
+  <summary>Emacs VM mail reader</summary>
+  <url type="homepage">https://launchpad.net/vm</url>
+  <url type="bugtracker">https://bugs.launchpad.net/vm</url>
+  <metadata_license>CC-BY-SA-4.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+</component>

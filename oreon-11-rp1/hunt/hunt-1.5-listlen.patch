@@ -1,0 +1,15 @@
+2005-03-03 Enrico Scholz <enrico.scholz@informatik.tu-chemnitz.de>
+	* hostup.c: make the len of the host-list to be checked signed;
+	  else the 'len < 0' check would be always false
+
+--- hunt-1.5/hostup.c.listlen	2005-03-03 14:07:54.000000000 +0100
++++ hunt-1.5/hostup.c	2005-03-03 14:13:38.000000000 +0100
+@@ -225,7 +225,7 @@ void host_up(void)
+ 	struct ifunc_item ifunc_arp;
+ 	struct host_up_info *hui;
+ 	struct timespec ts;
+-	unsigned int len;
++	int len;
+ 	char buf_mac[BUFSIZE];
+ 	unsigned char fake_mac[ETH_ALEN];
+ 	

@@ -1,0 +1,21 @@
+diff -up ikiwiki-3.20180105/plugins/proxy.py.orig ikiwiki-3.20180105/plugins/proxy.py
+--- ikiwiki-3.20180105/plugins/proxy.py.orig	2018-01-29 22:28:59.344175943 +0100
++++ ikiwiki-3.20180105/plugins/proxy.py	2018-01-29 22:29:56.832575125 +0100
+@@ -39,13 +39,13 @@ __licence__ = 'BSD-2-clause'
+ import sys
+ import time
+ import xml.parsers.expat
+-try:  # Python 3
++if sys.version_info >= (3, 0):
+     import xmlrpc.client as _xmlrpc_client
+-except ImportError:  # Python 2
++else:
+     import xmlrpclib as _xmlrpc_client
+-try:  # Python 3
++if sys.version_info >= (3, 0):
+     import xmlrpc.server as _xmlrpc_server
+-except ImportError:  # Python 2
++else:
+     import SimpleXMLRPCServer as _xmlrpc_server
+ 
+ 

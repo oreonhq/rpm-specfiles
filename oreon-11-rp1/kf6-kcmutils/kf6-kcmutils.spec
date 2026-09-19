@@ -1,13 +1,13 @@
-%global source0_hash beb0a50a22230fdd94164a5d6e53ea7f4cbc97b86cbab3ff2a592ea8663efa41
+%global source0_hash 762943ea8eff8c27a5b89bc483aef0af5955b716270b0820e0addae2c38392a6
 
 %global framework kcmutils
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon with extra API to write KConfigModules
 
@@ -20,19 +20,19 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6ItemViews)
-BuildRequires:  cmake(KF6Package)
-BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6IconThemes) >= %{version}
+BuildRequires:  cmake(KF6ItemViews) >= %{version}
+BuildRequires:  cmake(KF6Package) >= %{version}
+BuildRequires:  cmake(KF6XmlGui) >= %{version}
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6KIO) >= %{version}
+BuildRequires:  cmake(KF6GuiAddons) >= %{version}
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
+BuildRequires:  cmake(KF6ColorScheme) >= %{version}
 BuildRequires:  pkgconfig(xkbcommon)
-BuildRequires:  cmake(KF6Kirigami)
+BuildRequires:  cmake(KF6Kirigami) >= %{version}
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtdeclarative-devel
 
@@ -91,6 +91,9 @@ mkdir -p %{buildroot}%{_kf6_qtplugindir}/kcms
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

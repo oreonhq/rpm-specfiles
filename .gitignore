@@ -1,4 +1,9 @@
 # remove all tarballs kept in most packages but keep tarballs only for oreon-specific packages
+oreon-10/**/*.tar.gz
+oreon-10/**/*.tar.bz2
+oreon-10/**/*.tar.xz
+oreon-10/**/*.tar.zstd
+oreon-10/**/*.tar.Z
 oreon-11-rp1/**/*.tar.gz
 oreon-11-rp1/**/*.tar.bz2
 oreon-11-rp1/**/*.tar.xz
@@ -47,6 +52,7 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/or11-**/*.zst
 
 !oreon-11-rp1/libunibreak/libunibreak-test-data.tar.gz
+!oreon-11-rp1/python-pandas/pandas-2.3.3-testdata.tar.gz
 !oreon-11-rp1/hyphen-mi/hunspell-hyphen-mi-0.1.20080630-beta.tar.gz
 !oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-00
 !oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-01
@@ -69,6 +75,11 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/google-droid-fonts/google-droid-fonts-20200215.tar.xz
 !oreon-11-rp1/grafana-pcp/grafana-pcp-vendor-5.3.0-1.tar.xz
 !oreon-11-rp1/grafana-pcp/grafana-pcp-webpack-5.3.0-1.tar.gz
+!oreon-11-rp1/sbctl/sbctl-0.18-vendor.tar.gz
+!oreon-11-rp1/golist/golist-0.11.0-vendor.tar.bz2
+!oreon-11-rp1/trivy/trivy-0.69.3-vendor.tar.bz2
+!oreon-11-rp1/rust-askalono-cli/askalono-cache-3.22.bin.zstd
+
 !oreon-11-rp1/hunspell-se/hunspell-se.tar.gz
 !oreon-11-rp1/hunspell-shs/hunspell-shs-ca.tar.gz
 !oreon-11-rp1/hunspell-smj/hunspell-smj.tar.gz

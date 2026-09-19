@@ -1,0 +1,34 @@
+--- lsd-1.2.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ lsd-1.2.0/Cargo.toml	2026-03-18T11:57:49.154624+00:00
+@@ -49,7 +49,7 @@
+ version = "0.2"
+ 
+ [dependencies.clap]
+-version = "4.5.*"
++version = "4.5"
+ features = [
+     "derive",
+     "wrap_help",
+@@ -72,7 +72,7 @@
+ version = "0.2.*"
+ 
+ [dependencies.lscolors]
+-version = "0.20.0"
++version = "0.21.0"
+ 
+ [dependencies.once_cell]
+ version = "1.21"
+@@ -133,11 +133,11 @@
+ version = "3"
+ 
+ [build-dependencies.clap]
+-version = "4.5.*"
++version = "4.5"
+ features = ["derive"]
+ 
+ [build-dependencies.clap_complete]
+-version = "4.5.*"
++version = "4.5"
+ 
+ [build-dependencies.version_check]
+ version = "0.9.*"

@@ -1,0 +1,117 @@
+diff -up ClanLib-0.6.5/Sources/API/Display/Input/key.h~ ClanLib-0.6.5/Sources/API/Display/Input/key.h
+--- ClanLib-0.6.5/Sources/API/Display/Input/key.h~	2001-10-18 11:23:04.000000000 +0200
++++ ClanLib-0.6.5/Sources/API/Display/Input/key.h	2009-11-29 20:44:19.000000000 +0100
+@@ -56,6 +56,23 @@ enum
+ 	CL_MOUSE_WHEELDOWN,
+ 	CL_MOUSE_WHEELBUTTON,
+ 
++	/* Additional key enums added by Fedora for complete keyb coverage */
++	CL_KEY_GRAVE,
++	CL_KEY_SUBTRACT,
++	CL_KEY_EQUALS,
++	CL_KEY_LEFT_BRACKET,
++	CL_KEY_RIGHT_BRACKET,
++	CL_KEY_SEMICOLON,
++	CL_KEY_QUOTE,
++	CL_KEY_COMMA,
++	CL_KEY_PERIOD,
++	CL_KEY_DIVIDE,
++	CL_KEY_BACKSLASH,
++	CL_KEY_LWIN,
++	CL_KEY_RWIN,
++	CL_KEY_APPS,
++	CL_KEY_COMPOSE,
++
+ 	CL_NUM_KEYS
+ };
+ 
+diff -up ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp~ ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp
+--- ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp~	2002-03-02 17:43:48.000000000 +0100
++++ ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp	2009-11-29 20:56:59.000000000 +0100
+@@ -197,7 +197,7 @@ int CL_XWindowKeyboard::map_keysym_to_id
+ //	case XK_Clear: return CL_KEY_CLEAR;
+ 	case XK_Return: return CL_KEY_ENTER;
+ 	case XK_Pause: return CL_KEY_PAUSE;
+-//	case XK_Scroll_Lock: return CL_KEY_SCROLL;
++	case XK_Scroll_Lock: return CL_KEY_SCRLOCK;
+ 	case XK_Escape: return CL_KEY_ESCAPE;
+ 	case XK_Delete: return CL_KEY_DELETE;
+ //	case XK_Kanji: return CL_KEY_KANJI;
+@@ -243,12 +243,11 @@ int CL_XWindowKeyboard::map_keysym_to_id
+ 	case XK_Meta_R: return CL_KEY_ALTGR;
+ 	case XK_Alt_L: return CL_KEY_ALT;
+ 	case XK_Alt_R: return CL_KEY_ALTGR;
+-
++	case XK_Super_L: return CL_KEY_LWIN;
++	case XK_Super_R: return CL_KEY_RWIN;
++	case XK_Menu: return CL_KEY_APPS;
++	case XK_Multi_key: return CL_KEY_COMPOSE;
+ 	case XK_space: return CL_KEY_SPACE;
+-//	case XK_comma: return CL_KEY_COMMA;
+-//	case XK_minus: return CL_KEY_MINUS;
+-//	case XK_period: return CL_KEY_PERIOD;
+-//	case XK_slash: return CL_KEY_SLASH;
+ 	case XK_0: return CL_KEY_0;
+ 	case XK_1: return CL_KEY_1;
+ 	case XK_2: return CL_KEY_2;
+@@ -259,11 +258,6 @@ int CL_XWindowKeyboard::map_keysym_to_id
+ 	case XK_7: return CL_KEY_7;
+ 	case XK_8: return CL_KEY_8;
+ 	case XK_9: return CL_KEY_9;
+-//	case XK_semicolon: return CL_KEY_PUNKTUM;
+-//	case XK_equal: return CL_KEY_EQUAL;
+-//	case XK_bracketleft: return CL_KEY_BRACKETLEFT;
+-//	case XK_backslash: return CL_KEY_BACKSLASH;
+-//	case XK_bracketright: return CL_KEY_BRACKETRIGHT;
+ 	case XK_a: return CL_KEY_A;
+ 	case XK_b: return CL_KEY_B;
+ 	case XK_c: return CL_KEY_C;
+@@ -290,6 +284,17 @@ int CL_XWindowKeyboard::map_keysym_to_id
+ 	case XK_x: return CL_KEY_X;
+ 	case XK_y: return CL_KEY_Y;
+ 	case XK_z: return CL_KEY_Z;
++	case XK_grave: return CL_KEY_GRAVE;
++	case XK_minus: return CL_KEY_SUBTRACT;
++	case XK_equal: return CL_KEY_EQUALS;
++	case XK_bracketleft: return CL_KEY_LEFT_BRACKET;
++	case XK_bracketright: return CL_KEY_RIGHT_BRACKET;
++	case XK_semicolon: return CL_KEY_SEMICOLON;
++	case XK_apostrophe: return CL_KEY_QUOTE;
++	case XK_comma: return CL_KEY_COMMA;
++	case XK_period: return CL_KEY_PERIOD;
++	case XK_slash: return CL_KEY_DIVIDE;
++	case XK_backslash: return CL_KEY_BACKSLASH;
+ 	}
+ 
+ 	return CL_KEY_NONE_OF_THE_ABOVE;
+@@ -386,6 +386,7 @@ int CL_XWindowKeyboard::map_id_to_keysym
+ 	case CL_KEY_KP_MINUS: return 82;
+ 	case CL_KEY_KP_PLUS: return 86;
+ 	case CL_KEY_KP_ENTER: return 108;
++	case CL_KEY_KP_DECIMAL: return 91;
+  
+  	/* Found these codes in /usr/X11R6/lib/X11/xkb/keycodes/xfree86
+  	 * from an XFree86 4.0.1 installation. 
+@@ -401,6 +402,22 @@ int CL_XWindowKeyboard::map_id_to_keysym
+  	case CL_KEY_KP_7: return 79;
+  	case CL_KEY_KP_8: return 80;
+  	case CL_KEY_KP_9: return 81;
++
++	case CL_KEY_GRAVE: return 49;
++	case CL_KEY_SUBTRACT: return 20;
++	case CL_KEY_EQUALS: return 21;
++	case CL_KEY_LEFT_BRACKET: return 34;
++	case CL_KEY_RIGHT_BRACKET: return 35;
++	case CL_KEY_SEMICOLON: return 47;
++	case CL_KEY_QUOTE: return 48;
++	case CL_KEY_COMMA: return 59;
++	case CL_KEY_PERIOD: return 60;
++	case CL_KEY_DIVIDE: return 61;
++	case CL_KEY_BACKSLASH: return 51;
++	case CL_KEY_LWIN: return 133;
++	case CL_KEY_RWIN: return 134;
++	case CL_KEY_APPS: return 135;
++	case CL_KEY_COMPOSE: return 108;
+ 	}
+ 	
+ 	return -1;

@@ -1,0 +1,9 @@
+[Unit]
+Description=Network Directory Transfer Protocol Server
+After=local-fs.target
+PartOf=ndtpd-instances.target
+
+[Service]
+Environment=HOME=/var/run/ebnetd
+ExecStart=/usr/sbin/ndtpd --inetd
+StandardInput=socket

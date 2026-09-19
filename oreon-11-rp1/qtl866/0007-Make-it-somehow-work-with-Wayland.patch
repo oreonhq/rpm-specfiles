@@ -1,0 +1,25 @@
+From 006d5dfa129ea42a92c8dbbdafdae41dc93fa399 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sat, 29 Oct 2016 14:50:51 +0200
+Subject: [PATCH] Make it somehow work with Wayland
+
+Needs to be fixed in qgtk instead.
+---
+ main.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/main.cpp b/main.cpp
+index 05e8485..7cdb786 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -21,6 +21,10 @@ qtl866 - GUI driver for minipro EPROM/Device programmer software
+ 
+ int main(int argc, char *argv[])
+ {
++    // Silly workaround to avoid qgtk from running a file picker
++    // on wayland while it assumes a X11 window.
++    setenv("WAYLAND_DISPLAY", "", 1);
++
+     QApplication a(argc, argv);
+ 
+     a.setApplicationName("qtl866");

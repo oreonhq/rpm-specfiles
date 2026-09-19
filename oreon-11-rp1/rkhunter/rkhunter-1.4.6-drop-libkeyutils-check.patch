@@ -1,0 +1,43 @@
+diff --color -Nur rkhunter-1.4.6.orig/files/rkhunter rkhunter-1.4.6/files/rkhunter
+--- rkhunter-1.4.6.orig/files/rkhunter	2018-02-24 15:08:27.000000000 -0800
++++ rkhunter-1.4.6/files/rkhunter	2021-01-15 12:47:54.399665856 -0800
+@@ -8370,9 +8370,7 @@
+ 		     /lib/libsbr.so
+ 		     /lib64/libsbr.so
+ 		     /lib/libslr.so
+-		     /lib64/libslr.so
+-		     /lib/tls/libkeyutils.so.1
+-		     /lib64/tls/libkeyutils.so.1"
++		     /lib64/libslr.so"
+ 	EBURY_DIRS=
+ 	EBURY_KSYMS=
+ 
+@@ -9762,10 +9760,6 @@
+ 		  file:/usr/share/sshd.sync:Trojaned SSH daemon
+ 		  file:/bin/zcut:Trojaned SSH daemon
+ 		  file:/usr/bin/zmuie:Trojaned SSH daemon
+-		  file:/lib/libkeyutils.so.1.9:Sniffer component
+-		  file:/lib64/libkeyutils.so.1.9:Sniffer component
+-		  file:/usr/lib/libkeyutils.so.1.9:Sniffer component
+-		  file:/usr/lib64/libkeyutils.so.1.9:Sniffer component
+ 		  file:/IptabLes:malware component
+ 		  file:/.IptabLex:malware component
+ 		  file:/boot/.IptabLex:malware component
+@@ -9956,7 +9950,6 @@
+ 			 ssh-scan:Port scanner
+ 			 atac:Port scanner component
+ 			 \[pdflush\]:IRC bot
+-			 libkeyutils.so.1.9:Spam tool component
+ 			 .IptabLex:malware component
+ 			 .IptabLes:malware component
+ 			 .flush:malware component
+diff --color -Nur rkhunter-1.4.6.orig/files/signatures/RKH_libkeyutils1.ldb rkhunter-1.4.6/files/signatures/RKH_libkeyutils1.ldb
+--- rkhunter-1.4.6.orig/files/signatures/RKH_libkeyutils1.ldb	2017-11-29 08:14:02.000000000 -0800
++++ rkhunter-1.4.6/files/signatures/RKH_libkeyutils1.ldb	1969-12-31 16:00:00.000000000 -0800
+@@ -1 +0,0 @@
+-RKH_libkeyutils.so.1.9-v1;Target:0;(((0&1&2)|(3&4&5))&((6&7&8)|(9&10)));58636174;58766572;58626e64;73686d6174;73686d6474;73686d676574;62696e64;636f6e6e656374;736f636b6574;737973636f6e66;746d7066696c65
+diff --color -Nur rkhunter-1.4.6.orig/files/signatures/RKH_libkeyutils.ldb rkhunter-1.4.6/files/signatures/RKH_libkeyutils.ldb
+--- rkhunter-1.4.6.orig/files/signatures/RKH_libkeyutils.ldb	2017-11-29 08:14:02.000000000 -0800
++++ rkhunter-1.4.6/files/signatures/RKH_libkeyutils.ldb	1969-12-31 16:00:00.000000000 -0800
+@@ -1 +0,0 @@
+-RKH_libkeyutils.1.9.so;Target:0;(0&1&2&3&4&5&6&7&8&9&10&11&12&13&14&15&16);737973636f6e66;746d7066696c65;77616974706964;736f636b6574;636f6e6e656374;73686d6174;73686d6474;73686d676574;73656d676574;73656d74696d65646f70;736c656570;737072696e7466;7372616e64;7374646f7574;737472636174;737472637079;5f5f737472647570

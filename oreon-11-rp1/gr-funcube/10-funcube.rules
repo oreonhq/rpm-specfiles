@@ -1,0 +1,4 @@
+# FUNcube Dongle Pro+
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="fb31", GROUP:="rtlsdr", MODE:="0660", ENV{ID_SOFTWARE_RADIO}="1"
+# FUNcube Dongle Pro
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="fb56", GROUP:="rtlsdr", MODE:="0660", ENV{ID_SOFTWARE_RADIO}="1"

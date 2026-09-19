@@ -1,0 +1,20 @@
+Avoid implicit declaration of exit in ac_cv_header_stdc
+
+This is fixed in newer autoconf versions, so no need to patch
+configure.in.
+
+diff --git a/configure b/configure
+index f5bab28675937533..5af49397a60b4811 100755
+--- fftw-2.1.5/configure~
++++ fftw-2.1.5/configure
+@@ -4459,8 +4459,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

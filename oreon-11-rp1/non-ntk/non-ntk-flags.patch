@@ -1,0 +1,17 @@
+diff --git a/wscript b/wscript
+index 2b10dd8..cd76019 100644
+--- a/wscript
++++ b/wscript
+@@ -209,11 +209,7 @@ def configure(conf):
+     conf.define( 'WORDS_BIGENDIAN', 0 )
+ 
+     optimization_flags = [
+-        "-O3",
+-        "-fomit-frame-pointer",
+-        "-ffast-math",
+-        #            "-fstrength-reduce",
+-        "-pipe"
++        "-ffast-math"
+         ]
+ 
+     debug_flags = [

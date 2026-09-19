@@ -1,0 +1,13 @@
+diff -ru adanaxisgpl-1.2.5.orig/src/Platform/X11/PlatformMiscUtils.cpp adanaxisgpl-1.2.5/src/Platform/X11/PlatformMiscUtils.cpp
+--- adanaxisgpl-1.2.5.orig/src/Platform/X11/PlatformMiscUtils.cpp	2009-03-02 16:58:02.000000000 +0000
++++ adanaxisgpl-1.2.5/src/Platform/X11/PlatformMiscUtils.cpp	2009-03-02 16:59:05.000000000 +0000
+@@ -1237,7 +1237,8 @@
+ char *
+ br_dirname (const char *path)
+ {
+-	char *end, *result;
++	const char *end;
++	char *result;
+ 
+ 	if (path == (const char *) NULL)
+ 		return (char *) NULL;

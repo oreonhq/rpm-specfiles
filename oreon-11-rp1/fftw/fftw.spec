@@ -23,8 +23,8 @@
 %endif
 
 Name:           fftw
-Version:        3.3.10
-Release:        17%{?dist}
+Version:        3.3.11
+Release:        1%{?dist}
 Summary:        A Fast Fourier Transform library
 # LTO on this package pushes mock builds past Oreon worker limits (same failure mode as Fedora koji timeouts on huge autotools+LTO trees).
 %define _lto_cflags %{nil}

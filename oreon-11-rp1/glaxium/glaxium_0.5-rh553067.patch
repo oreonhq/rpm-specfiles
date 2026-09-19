@@ -1,0 +1,63 @@
+diff -up glaxium_0.5/tank.cpp~ glaxium_0.5/tank.cpp
+--- glaxium_0.5/tank.cpp~	2002-10-04 20:05:22.000000000 +0200
++++ glaxium_0.5/tank.cpp	2010-01-07 10:34:02.000000000 +0100
+@@ -348,11 +348,11 @@ void Tank::move()
+             float pos;
+ 			Sprite *current;
+             toShot = NULL;
+-		   if (mlist->mfirst) {
++		    if (mlist->mfirst) {
+ 				current=(Sprite*)mlist->mfirst;
+ 				do {
+-                    if (((Sprite *)mlist->mcurrent)->getType()==TYPE_MY_SPACE_SHIP)
+-                        toShot = (Sprite *)mlist->mcurrent;
++                    if (current->getType()==TYPE_MY_SPACE_SHIP)
++                        toShot = current;
+                     break;
+ 					current = (Sprite*)current->GetNext();
+ 				} while (current!=NULL);
+diff -up glaxium_0.5/elem.cpp~ glaxium_0.5/elem.cpp
+--- glaxium_0.5/elem.cpp~	2002-10-04 20:05:20.000000000 +0200
++++ glaxium_0.5/elem.cpp	2010-01-07 11:27:22.000000000 +0100
+@@ -25,32 +25,17 @@
+ void Elem::RemoveMe(void) 
+ {
+     mlist->DecMnumber();
+-    
+-    
+-    
+-    if (mlist->mnumber==0)
+-    {
+-        
+-        mlist->mfirst=NULL;
+-        mlist->mlast=NULL;
+-        return;
+-    }
+-    
+-    if (mprev) {
++
++    if (mprev)
+         mprev->mnext=mnext; 
+-    } else if (mnext) {
+-        mnext->mprev=NULL;
++    else
+         mlist->mfirst=mnext;
+-        return;
+-    }
+-    
+-    if (mnext) {
++
++    if (mnext)
+         mnext->mprev=mprev;
+-    } else if (mprev) {
+-        mprev->mnext=NULL;
++    else
+         mlist->mlast=mprev;
+-        return;
+-    }
+-}
+-
+ 
++    if (mlist->mcurrent == this)
++        mlist->mcurrent = mlist->mfirst;
++}

@@ -1,0 +1,9 @@
+--- backoff-0.4.0/Cargo.toml	1970-01-01T00:00:00+00:00
++++ backoff-0.4.0/Cargo.toml	2024-02-16T20:20:22.090580+00:00
+@@ -85,6 +85,5 @@
+ default = []
+ futures = ["futures-core", "pin-project-lite"]
+ tokio = ["futures", "tokio_1"]
+-wasm-bindgen = ["instant/wasm-bindgen", "getrandom/js"]
+ [badges.travis-ci]
+ repository = "ihrwein/backoff"

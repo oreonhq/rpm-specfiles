@@ -1,0 +1,10 @@
+--- a/ssl/ssl.gpr
++++ b/ssl/ssl.gpr
+@@ -59,6 +59,7 @@
+    for Library_Dir use "../" & Shared'Library_Dir & "/ssl";
+ 
+    for Library_Name use "aws_ssl";
++   for Library_Version use "lib" & Project'Library_Name & ".so." & external ("VERSION");
+    for Library_Kind use Shared.Library_Type;
+    for Leading_Library_Options use Shared.Leading_Library_Options;
+ 

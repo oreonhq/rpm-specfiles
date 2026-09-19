@@ -1,0 +1,53 @@
+From 363dc814f5e23b99a3c16601bccc7985c9d11eaf Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Wed, 21 Jun 2023 17:18:32 -0600
+Subject: [PATCH 3/8] Make library linkage explicit.
+
+---
+ code/src/equeue-tcl/Makefile | 2 +-
+ code/src/netstring/Makefile  | 2 +-
+ code/src/netsys/Makefile     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/code/src/equeue-tcl/Makefile b/code/src/equeue-tcl/Makefile
+index 35e1606..b7b9ca9 100644
+--- a/code/src/equeue-tcl/Makefile
++++ b/code/src/equeue-tcl/Makefile
+@@ -8,7 +8,7 @@ OBJECTS  = uq_tcl.cmo
+ DOBJECTS = uq_tcl.mli
+ COBJECTS = tclqueue.o
+ 
+-LINK_OPTIONS = $(EQUEUE_TCL_LIBS)
++LINK_OPTIONS = $(EQUEUE_TCL_LIBS) -cclib -ltcl
+ CC_OPTIONS = $(EQUEUE_TCL_DEFS)
+ 
+ OCAMLC_OPTIONS += $(STRING_OPTS)
+diff --git a/code/src/netstring/Makefile b/code/src/netstring/Makefile
+index 08b81e2..0663142 100644
+--- a/code/src/netstring/Makefile
++++ b/code/src/netstring/Makefile
+@@ -54,7 +54,7 @@ DOBJECTS = netconversion.mli netchannels.mli netstream.mli netmime_string.mli \
+ 	netulex_tut.txt neturl_tut.txt
+ 
+ OCAMLC_OPTIONS += $(STRING_OPTS)
+-OCAMLOPT_OPTIONS += $(STRING_OPTS)
++OCAMLOPT_OPTIONS += $(STRING_OPTS) -cclib -lm
+ 
+ PP_OPTIONS = -pp "$(CPPO) $(NETNUMBER_DEFS) $(REGEXP_DEFS) $(PP_BYTES) $(PP_DEPRECATED)"
+ 
+diff --git a/code/src/netsys/Makefile b/code/src/netsys/Makefile
+index bda186a..edda029 100644
+--- a/code/src/netsys/Makefile
++++ b/code/src/netsys/Makefile
+@@ -33,7 +33,7 @@ DOBJECTS = netsys.mli netsys_posix.mli netsys_pollset.mli netlog.mli \
+ 	   netsys_ciphers.mli netsys_digests.mli netsys_crypto_modes.mli \
+ 	   netsys_gssapi.mli netsys_sasl_types.mli netsys_sasl.mli \
+ 	   netsys_polypipe.mli netsys_polysocket.mli netsys_global.mli
+-LINK_OPTIONS = $(NETSYS_LINK_OPTIONS)
++LINK_OPTIONS = $(NETSYS_LINK_OPTIONS) -cclib -lm
+ 
+ ALL_EXTRA = netsys_oothr.cma $(OOH_OBJECT)
+ ALLMT_EXTRA = netsys_oothr_mt.cma netsys_oothr_mt_init.cmo
+-- 
+2.50.1
+

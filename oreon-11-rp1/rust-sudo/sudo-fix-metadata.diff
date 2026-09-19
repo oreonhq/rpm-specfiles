@@ -1,0 +1,11 @@
+--- sudo-0.6.0/Cargo.toml	2021-01-12T21:43:49+00:00
++++ sudo-0.6.0/Cargo.toml	2023-12-15T23:18:20.287016+00:00
+@@ -15,7 +15,7 @@
+ name = "sudo"
+ version = "0.6.0"
+ authors = ["Stefan Schindler <dns2utf8@estada.ch>"]
+-include = ["README.md", "LICENSE", "src/**"]
++include = ["README.md", "LICENSE", "LICENSE-MIT", "src/**"]
+ description = "Detect if you are running as root, restart self with sudo if needed or setup uid zero when running with the SUID flag set."
+ readme = "README.md"
+ license = "MIT/Apache-2.0"

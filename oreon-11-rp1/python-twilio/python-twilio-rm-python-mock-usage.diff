@@ -1,0 +1,55 @@
+--- a/tests/unit/http/test_async_http_client.py
++++ b/tests/unit/http/test_async_http_client.py
+@@ -1,7 +1,7 @@
+ import aiounittest
+ 
+ from aiohttp import ClientSession
+-from mock import patch, AsyncMock
++from unittest.mock import patch, AsyncMock
+ from twilio.http.async_http_client import AsyncTwilioHttpClient
+ 
+ 
+--- a/tests/unit/http/test_http_client.py
++++ b/tests/unit/http/test_http_client.py
+@@ -3,7 +3,7 @@ import os
+ import unittest
+ from collections import OrderedDict
+ 
+-from mock import Mock, patch
++from unittest.mock import Mock, patch
+ from requests import Session
+ 
+ from twilio.base.exceptions import TwilioRestException
+--- a/tests/unit/http/test_validation_client.py
++++ b/tests/unit/http/test_validation_client.py
+@@ -2,7 +2,7 @@
+ 
+ import unittest
+ 
+-from mock import patch, Mock
++from unittest.mock import patch, Mock
+ from requests import Request
+ from requests import Session
+ 
+--- a/tests/unit/jwt/test_jwt.py
++++ b/tests/unit/jwt/test_jwt.py
+@@ -2,7 +2,7 @@ import time as real_time
+ import unittest
+ 
+ import jwt as jwt_lib
+-from mock import patch
++from unittest.mock import patch
+ 
+ from twilio.jwt import Jwt, JwtDecodeError
+ 
+--- a/tests/unit/rest/test_client.py
++++ b/tests/unit/rest/test_client.py
+@@ -3,7 +3,7 @@ import warnings
+ 
+ import aiounittest
+ 
+-from mock import AsyncMock, Mock
++from unittest.mock import AsyncMock, Mock
+ 
+ from twilio.http.response import Response
+ from twilio.rest import Client

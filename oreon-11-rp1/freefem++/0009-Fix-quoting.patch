@@ -1,0 +1,25 @@
+From cf2ef6f91e8451b7ca2e140411092febb56e7b21 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Sun, 14 Apr 2019 07:40:31 +0200
+Subject: [PATCH 09/18] Fix quoting
+
+---
+ etc/config/m4/acmpi.m4 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/etc/config/m4/acmpi.m4 b/etc/config/m4/acmpi.m4
+index 1e0962326..d03f47202 100644
+--- a/etc/config/m4/acmpi.m4
++++ b/etc/config/m4/acmpi.m4
+@@ -184,7 +184,7 @@ fi
+    		  AC_SUBST(MPIPROG,"$ff_mpiprog")
+    		  AC_SUBST(MPISCRIPT,"ff-mpirun")
+    		  AC_SUBST(MPIRUN,"$MPIRUN")
+-                  AC_SUBST(MPICXX,$MPICXX)
++                  AC_SUBST(MPICXX,"$MPICXX")
+ 	else
+ 	        AC_SUBST(MPICXX,$ff_save_cxx)
+ 	fi
+-- 
+2.47.1
+

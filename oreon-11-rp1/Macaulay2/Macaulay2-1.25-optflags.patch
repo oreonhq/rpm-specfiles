@@ -1,0 +1,42 @@
+--- M2/configure.ac.orig	2025-11-14 04:03:48.000000000 -0700
++++ M2/configure.ac	2025-11-14 13:57:06.905244494 -0700
+@@ -318,12 +318,12 @@ fi
+ ]
+ 
+ if test "$OPTIMIZE" = yes
+-then CFLAGS="$CFLAGS -O2"
+-     CXXFLAGS="$CXXFLAGS -O2"
+-     FCFLAGS="$FCFLAGS -O2"
+-else CFLAGS="$CFLAGS -O0"
+-     CXXFLAGS="$CXXFLAGS -O0"
+-     FCFLAGS="$FCFLAGS -O0"
++then CFLAGS="-O2 $CFLAGS"
++     CXXFLAGS="-O2 $CXXFLAGS"
++     FCFLAGS="-O2 $FCFLAGS"
++else CFLAGS="-O0 $CFLAGS"
++     CXXFLAGS="-O0 $CXXFLAGS"
++     FCFLAGS="-O0 $FCFLAGS"
+ fi
+ 
+ AC_SUBST(GCCVERSION)
+--- M2/libraries/factory/Makefile.in.orig	2025-11-14 04:03:48.000000000 -0700
++++ M2/libraries/factory/Makefile.in	2025-11-14 13:57:56.926954878 -0700
+@@ -7,7 +7,7 @@
+ URL = https://macaulay2.com/Downloads/OtherSourceCode
+ VERSION = 4.4.1
+ PATCHFILE = @abs_srcdir@/patch-$(VERSION)
+-PRECONFIGURE = autoreconf -vif
++PRECONFIGURE = sed -i 's/-g0 -O3 //' m4/flags.m4 && autoreconf -vif
+ 
+ BUILDTARGET = all ftmpl_inst.o
+ LIBRARIES = ftmpl_inst.o
+--- M2/libraries/mpfr/Makefile.in.orig	2025-11-14 04:03:48.000000000 -0700
++++ M2/libraries/mpfr/Makefile.in	2025-11-14 13:57:06.905816340 -0700
+@@ -36,6 +36,7 @@ CONFIGOPTIONS += --disable-shared
+ # endif
+ 
+ # PRECONFIGURE = autoreconf -i
++PRECONFIGURE = sed -i '/LDFLAGS/s/ -Wl,--disable-new-dtags//g' configure
+ include ../Makefile.library
+ 
+ BUILDOPTIONS += CPPFLAGS="$(CPPFLAGS)"

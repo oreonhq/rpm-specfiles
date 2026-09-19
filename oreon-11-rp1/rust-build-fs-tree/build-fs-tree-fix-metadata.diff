@@ -1,0 +1,21 @@
+--- build-fs-tree-0.6.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ build-fs-tree-0.6.0/Cargo.toml	2024-01-03T21:44:29.816098+00:00
+@@ -46,18 +46,6 @@
+ path = "lib.rs"
+ doc = true
+ 
+-[[bin]]
+-name = "build-fs-tree"
+-path = "_cli/build-fs-tree.rs"
+-doc = false
+-required-features = ["cli"]
+-
+-[[bin]]
+-name = "build-fs-tree-completions"
+-path = "_cli/build-fs-tree-completions.rs"
+-doc = false
+-required-features = ["cli-completions"]
+-
+ [dependencies.clap]
+ version = "^4.0.32"
+ optional = true

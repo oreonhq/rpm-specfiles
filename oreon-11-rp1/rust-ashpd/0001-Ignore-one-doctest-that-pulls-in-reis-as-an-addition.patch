@@ -1,0 +1,26 @@
+From a7fbf3f020fd3459910640e41d57155ded6f3a7a Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Wed, 11 Mar 2026 19:15:54 +0100
+Subject: [PATCH 1/2] Ignore one doctest that pulls in reis as an additional
+ dev-dependency
+
+---
+ src/desktop/input_capture.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/desktop/input_capture.rs b/src/desktop/input_capture.rs
+index 3053315..fc41a47 100644
+--- a/src/desktop/input_capture.rs
++++ b/src/desktop/input_capture.rs
+@@ -151,7 +151,7 @@
+ //!
+ //! Input Capture can be released using ESC.
+ //!
+-//! ```rust,no_run
++//! ```rust,ignore
+ //! use std::{collections::HashMap, os::unix::net::UnixStream, sync::OnceLock, time::Duration};
+ //!
+ //! use ashpd::desktop::input_capture::{
+-- 
+2.53.0
+

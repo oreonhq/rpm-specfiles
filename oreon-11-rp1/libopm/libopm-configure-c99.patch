@@ -1,0 +1,135 @@
+Avoid implicit function declarations in the configure scripts.  This
+avoids failures with future compilers which enforce C99 restrictions
+more rigiorously.
+
+The acsite.m4 fixes are package-specific and could be upstreamed
+(if there was an upstream).
+
+diff --git a/aclocal.m4 b/aclocal.m4
+index 7b489721a47fee9f..9a726bd85f7e2d3e 100644
+--- a/aclocal.m4
++++ b/aclocal.m4
+@@ -4371,6 +4371,8 @@ AC_MSG_CHECKING(for working snprintf)
+ AC_CACHE_VAL(ac_cv_have_working_snprintf,
+ [AC_TRY_RUN(
+ [#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
+ 
+ int main(void)
+ {
+@@ -4391,6 +4393,8 @@ AC_CACHE_VAL(ac_cv_have_working_vsnprintf,
+ [AC_TRY_RUN(
+ [#include <stdio.h>
+ #include <stdarg.h>
++#include <stdlib.h>
++#include <string.h>
+ 
+ int my_vsnprintf (char *buf, const char *tmpl, ...)
+ {
+diff --git a/acsite.m4 b/acsite.m4
+index 261ddae1935b7596..b16ac973f43944db 100644
+--- a/acsite.m4
++++ b/acsite.m4
+@@ -6,6 +6,8 @@ AC_MSG_CHECKING(for working snprintf)
+ AC_CACHE_VAL(ac_cv_have_working_snprintf,
+ [AC_TRY_RUN(
+ [#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
+ 
+ int main(void)
+ {
+@@ -26,6 +28,8 @@ AC_CACHE_VAL(ac_cv_have_working_vsnprintf,
+ [AC_TRY_RUN(
+ [#include <stdio.h>
+ #include <stdarg.h>
++#include <stdlib.h>
++#include <string.h>
+ 
+ int my_vsnprintf (char *buf, const char *tmpl, ...)
+ {
+diff --git a/configure b/configure
+index 3a94d34938c5013b..02a683bd6f3756be 100755
+--- a/configure
++++ b/configure
+@@ -3942,8 +3942,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext
+@@ -6881,10 +6881,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -6898,7 +6894,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -6979,10 +6975,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -6996,7 +6988,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -7962,8 +7954,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext
+@@ -8605,6 +8597,8 @@ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ #include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
+ 
+ int main(void)
+ {
+@@ -8663,6 +8657,8 @@ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ #include <stdio.h>
+ #include <stdarg.h>
++#include <stdlib.h>
++#include <string.h>
+ 
+ int my_vsnprintf (char *buf, const char *tmpl, ...)
+ {

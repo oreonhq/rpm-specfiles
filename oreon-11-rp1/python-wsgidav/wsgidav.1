@@ -1,0 +1,112 @@
+.TH WSGIDAV "1" "March 2024" "" "User Commands"
+.SH NAME
+.B wsgidav
+\(en Run a WEBDAV server to share file system folders
+.SH SYNOPSIS
+.B wsgidav
+.RB [ \-h ]
+.RB [ \-p\ \fIPORT ]
+.RB [ \-H\ \fIHOST ]
+.RB [ \-r\ \fIROOT_PATH ]
+.RB [ \-\-auth\  \fR{ anonymous , nt , pam\-login }]
+.RB [ \-\-server\  \fR{ cheroot , ext\-wsgiutils , gevent , gunicorn , paste , uvicorn , wsgiref }]
+.RB [ \-\-ssl\-adapter\  \fR{ builtin , pyopenssl }]
+.RB [ \-v \ |\  \-q ]
+.RB [ \-c\ \fICONFIG_FILE \ |\  \-\-no\-config ]
+.RB [ \-\-browse ]
+.RB [ \-V ]
+.SH OPTIONS
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit
+.TP
+.B \-p\ \fIPORT\fR,\ \fB\-\-port\ \fIPORT
+port to serve on
+(default:
+.BR 8080 )
+.TP
+.B \-H\ \fIHOST\fR,\ \fB\-\-host\ \fIHOST
+host to serve from
+(default:
+.BR localhost )
+.B localhost
+is only accessible from the local computer.
+Use
+.B 0.0.0.0
+to make your application public
+.TP
+.B \-r\ \fIROOT_PATH\fR,\ \fB\-\-root\ \fIROOT_PATH
+path to a file system folder to publish for RW as share
+.BR / .
+.TP
+.BR \-\-auth\  { anonymous , nt , pam\-login }
+quick configuration of a domain controller when no config file is used
+.TP
+.BR \-\-server\  { cheroot , ext\-wsgiutils , gevent , gunicorn , paste , uvicorn , wsgiref }
+type of pre-installed WSGI server to use
+(default:
+.BR cheroot ).
+.TP
+.BR \-\-ssl\-adapter\  { builtin , pyopenssl }
+used by
+.B cheroot
+server if SSL certificates are configured
+(default:
+.BR builtin ).
+.TP
+.B \-v\fR,\ \fB\-\-verbose
+increment verbosity by one
+(default:
+.BR 3 ,
+range:
+.BR 0 .. 5 )
+.TP
+.B \-q\fR,\ \fB\-\-quiet
+decrement verbosity by one
+.TP
+.B \-c\ \fICONFIG_FILE\fR,\ \fB\-\-config\ \fICONFIG_FILE
+configuration file
+(default:
+.RB ( wsgidav.yaml ,
+.BR wsgidav.json )
+in current directory)
+.TP
+.B \-\-no\-config
+do not try to load default
+.RB ( wsgidav.yaml ,
+.BR wsgidav.json )
+.TP
+.B \-\-browse
+open browser on start
+.TP
+.B \-V\fR,\ \fB\-\-version
+print version info and exit (may be combined with
+.BR \-\-verbose )
+.SH EXAMPLES
+.P
+Share filesystem folder
+.B /temp
+for anonymous access (no config file used):
+.in +7n
+.EX
+wsgidav\ \-\-port=80\ \-\-host=0.0.0.0\ \-\-root=/temp\ \-\-auth=anonymous
+.EE
+.i
+.P
+Run using a specific configuration file:
+.in +7n
+.EX
+wsgidav\ \-\-port=80\ \-\-host=0.0.0.0\ \-\-config=~/my_wsgidav.yaml
+.EE
+.i
+.P
+If no config file is specified, the application will look for a file named
+.B wsgidav.yaml
+in the current directory.
+See
+.UR http://wsgidav.readthedocs.io/en/latest/run-configure.html
+.UE
+for some explanation of the configuration file format.
+.SH "SEE ALSO"
+.UR https://github.com/mar10/wsgidav
+.UE

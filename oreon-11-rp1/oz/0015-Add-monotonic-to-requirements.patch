@@ -1,0 +1,25 @@
+From 523eb1338e6c2474bd57061e61e5d53056772292 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Tue, 23 Jan 2024 16:05:40 -0800
+Subject: [PATCH 15/26] Add monotonic to requirements
+
+We started using this back in 2017, but it was never added to
+requirements.txt.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ requirements.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/requirements.txt b/requirements.txt
+index 2f5b4d6..c0a8d46 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -2,3 +2,4 @@ requests
+ m2crypto
+ libvirt-python
+ lxml
++monotonic
+-- 
+2.46.2
+

@@ -1,0 +1,26 @@
+diff --git a/core/src/xmake/hash/xxhash.c b/core/src/xmake/hash/xxhash.c
+index 9901f58f6..ef523c2d9 100644
+--- a/core/src/xmake/hash/xxhash.c
++++ b/core/src/xmake/hash/xxhash.c
+@@ -32,7 +32,7 @@
+ #define XXH_NAMESPACE XM_
+ #define XXH_STATIC_LINKING_ONLY
+ #define XXH_IMPLEMENTATION
+-#include "xxhash/xxhash.h"
++#include "xxhash.h"
+ 
+ /* //////////////////////////////////////////////////////////////////////////////////////
+  * implementation
+diff --git a/core/src/xmake/semver/prefix.h b/core/src/xmake/semver/prefix.h
+index 2112d73f1..9077b49ca 100644
+--- a/core/src/xmake/semver/prefix.h
++++ b/core/src/xmake/semver/prefix.h
+@@ -25,7 +25,7 @@
+  * includes
+  */
+ #include "../prefix.h"
+-#include "semver.h"
++#include "sv/semver.h"
+ 
+ /* //////////////////////////////////////////////////////////////////////////////////////
+  * extern

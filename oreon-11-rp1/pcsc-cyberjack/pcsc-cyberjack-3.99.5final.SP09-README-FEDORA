@@ -1,0 +1,21 @@
+If you run into problems check on pcscd with
+"sudo /usr/bin/systemctl status pcscd.service"
+do this both with the reader plugged and unplugged.
+
+If your reader was recently plugged in, you should see
+CYBERJACK: Started
+
+systemd's display of the the last few log lines comes in handy here.
+
+Before trying foreground mode,  you should stop current running pcscd by typing
+"sudo /usr/bin/systemctl stop pcscd.service" or "sudo killall pcscd"
+and start the pcscd in debug mode by typing
+"sudo /usr/sbin/pcscd -d -a -f"
+in a console and watch its output.
+
+and read http://www.shredzone.de/cilla/page/347/fedora-15-cyberjack-kartenleser-in-betrieb-nehmen.html
+
+If you use the package with hibiscus (http://www.willuhn.de/products/hibiscus/), you need to install
+the libpcsc-lite-devel package also, or symlink /usr/lib{64}/libpcsclite.so to the versioned
+/usr/lib{64}/libpcsclite.so.x.x.x. This might also be valid for other programs, that depend on the
+unversioned *.so .

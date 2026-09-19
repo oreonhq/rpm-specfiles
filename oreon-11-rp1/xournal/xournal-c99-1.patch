@@ -1,0 +1,78 @@
+commit 430d9502547856943df531b700bb5843fcc8bd1f
+Author: Denis Auroux <auroux@users.sourceforge.net>
+Date:   Sun Jan 24 15:48:16 2021 -0500
+
+    Fix implicit function declarations by including config.h in ttsubset/*.c
+
+diff --git a/src/ttsubset/list.c b/src/ttsubset/list.c
+index 0cf958e43468c5ee..6b764ae7dabbe0ef 100644
+--- a/src/ttsubset/list.c
++++ b/src/ttsubset/list.c
+@@ -33,7 +33,7 @@
+  *
+  */
+ 
+-/* $Id$ */
++/* $Id: list.c,v 1.4 2004/09/10 18:59:06 jody Exp $ */
+ /* @(#)list.c 1.7 03/02/06 SMI */
+ 
+ /*
+@@ -44,6 +44,10 @@
+  *
+  */
+ 
++#ifdef HAVE_CONFIG_H
++#  include <config.h>
++#endif
++
+ #include <stdlib.h>
+ #include <assert.h>
+ #ifdef MALLOC_TRACE
+diff --git a/src/ttsubset/sft.c b/src/ttsubset/sft.c
+index 249fbdf03b074575..678359eb580f9b56 100644
+--- a/src/ttsubset/sft.c
++++ b/src/ttsubset/sft.c
+@@ -33,7 +33,7 @@
+  *
+  */
+ 
+-/* $Id$ */
++/* $Id: sft.c,v 1.9 2005/01/04 20:10:46 jody Exp $ */
+ /* @(#)sft.c 1.17 03/01/08 SMI */
+ 
+ /*
+@@ -43,6 +43,10 @@
+  * @version 1.0
+  */
+ 
++#ifdef HAVE_CONFIG_H
++#  include <config.h>
++#endif
++
+ #include <assert.h>
+ #include <stdlib.h>
+ #include <string.h>
+diff --git a/src/ttsubset/ttcr.c b/src/ttsubset/ttcr.c
+index eecfcade1a5f1b5d..38962def32de00c3 100644
+--- a/src/ttsubset/ttcr.c
++++ b/src/ttsubset/ttcr.c
+@@ -33,7 +33,7 @@
+  *
+  */
+ 
+-/* $Id$ */
++/* $Id: ttcr.c,v 1.7 2005/01/04 20:10:46 jody Exp $ */
+ /* @(#)ttcr.c 1.7 03/01/08 SMI */
+ 
+ /*
+@@ -44,6 +44,10 @@
+  *
+  */
+ 
++#ifdef HAVE_CONFIG_H
++#  include <config.h>
++#endif
++
+ #include <sys/types.h>
+ #ifdef HAVE_UNISTD_H
+ #include <unistd.h>

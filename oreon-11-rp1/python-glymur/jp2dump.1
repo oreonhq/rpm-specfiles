@@ -1,0 +1,44 @@
+.TH JP2DUMP "1" "April 2025" "" "User Commands"
+.SH NAME
+.B jp2dump
+\(en print JPEG2000 metadata
+.SH SYNOPSIS
+.B jp2dump
+.RB [ \-h ]
+.RB [ \-x ]
+.RB [ \-s ]
+.RB [ \-c\ \fILEVEL ]
+.I filename
+.SH OPTIONS
+.SS "POSITIONAL ARGUMENTS"
+.TP
+.I filename
+.SS "OPTIONAL ARGUMENTS"
+.TP
+.BR \-h ,\  \-\-help
+show a help message and exit
+.TP
+.BR \-x ,\  \-\-noxml
+suppress XML (default:
+.BR False )
+.TP
+.BR \-s ,\  \-\-short
+only print box id, offset, and length
+(default:
+.BR False )
+.TP
+.BR \-c\ \fILEVEL ,\  \-\-codestream\ \fILEVEL
+Level of codestream information.
+.B 0
+suppresses all details,
+.B 1
+prints the main header,
+.B 2
+prints the full codestream.
+(default:
+.BR 1 )
+.SH "SEE ALSO"
+.BR jpeg2jp2 (1),
+.BR tiff2jp2 (1)
+.P
+.BR j2k_dump (1)

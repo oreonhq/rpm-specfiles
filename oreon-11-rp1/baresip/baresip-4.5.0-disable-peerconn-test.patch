@@ -1,0 +1,22 @@
+From c09b9ff1d11edf9609c8f91f9bf1c4a1c1d3b767 Mon Sep 17 00:00:00 2001
+From: "Alfred E. Heggestad" <114750+alfredh@users.noreply.github.com>
+Date: Sun, 8 Feb 2026 11:52:04 +0100
+Subject: [PATCH] test: disable peerconn test (ref #3645)
+
+---
+ test/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/main.c b/test/main.c
+index 6a810dfc7..307f82318 100644
+--- a/test/main.c
++++ b/test/main.c
+@@ -72,7 +72,7 @@ static const struct test tests[] = {
+ 	TEST(test_jbuf_gnack),
+ 	TEST(test_message),
+ 	TEST(test_network),
+-	TEST(test_peerconn),
++	/*TEST(test_peerconn),*/
+ 	TEST(test_play),
+ 	TEST(test_stunuri),
+ 	TEST(test_ua_alloc),

@@ -1,0 +1,75 @@
+%global source0_hash 12a02fe1b7131f0a2b8ce45b46f1e0cdd28b9818fe4499554c26884987ea0c32
+
+%bcond check 0
+%global pname mmtf-python
+
+%global desc \
+The Macromolecular Transmission Format (MMTF) is a new compact binary format to\
+transmit and store biomolecular structures for fast 3D visualization and\
+analysis.\
+\
+Bradley AR, Rose AS, Pavelka A, Valasatava Y, Duarte JM, Prlić A, Rose PW (2017)\
+MMTF - an efficient file format for the transmission, visualization, and\
+analysis of macromolecular structures. bioRxiv 122689. doi: 10.1101/122689\
+\
+Valasatava Y, Bradley AR, Rose AS, Duarte JM, Prlić A, Rose PW (2017) Towards an\
+efficient compression of 3D coordinates of macromolecular structures. PLOS ONE\
+12(3): e0174846. doi: 10.1371/journal.pone.01748464\
+\
+Rose AS, Bradley AR, Valasatava Y, Duarte JM, Prlić A, Rose PW (2016) Web-based\
+molecular graphics for large complexes. In Proceedings of the 21st International\
+Conference on Web3D Technology (Web3D '16). ACM, New York, NY, USA, 185-186.\
+doi: 10.1145/2945292.2945324\
+
+Name: python-mmtf
+Version: 1.1.3
+Release: %autorelease
+Summary: A decoding library for the macromolecular transmission format (MMTF) 
+License: Apache-2.0
+URL: https://github.com/rcsb/mmtf-python
+Source0: https://files.pythonhosted.org/packages/source/m/%{pname}/%{pname}-%{version}.tar.gz
+BuildArch: noarch
+
+%description
+%{desc}
+
+%package -n python3-mmtf
+Summary: %{summary}
+BuildRequires: python3-devel
+%if %{with check}
+BuildRequires: python3-msgpack
+BuildRequires: python3-pytest
+BuildRequires: python3-numpy
+%endif
+Requires: python3-msgpack
+
+%description -n python3-mmtf
+%{desc}
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%setup -q -n %{pname}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files -l mmtf
+
+%if %{with check}
+%check
+%pyproject_check_import
+
+%pytest mmtf/tests/codec_tests.py
+%endif
+
+%files -n python3-mmtf -f %{pyproject_files}
+%doc CHANGELOG.md README.md
+
+%changelog
+%autochangelog

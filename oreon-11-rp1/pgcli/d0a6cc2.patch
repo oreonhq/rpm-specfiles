@@ -1,0 +1,28 @@
+From d0a6cc2fe35186bc9616ecc61b5679ca7ee78b1d Mon Sep 17 00:00:00 2001
+From: stratakis <cstratak@redhat.com>
+Date: Sun, 22 Feb 2026 04:42:48 +0100
+Subject: [PATCH] Bump click minimum version to 8.3.1 (#1556)
+
+Click 8.1.8 through 8.3.0 have broken pager invocation for
+multi-argument PAGER values, which causes behave test failures.
+
+Fixed on https://github.com/pallets/click/commit/7db1f20
+---
+ AUTHORS        | 1 +
+ pyproject.toml | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index c3268cd8c..6f3d28e4c 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -24,7 +24,8 @@ urls = { Homepage = "https://pgcli.com" }
+ requires-python = ">=3.9"
+ dependencies = [
+     "pgspecial>=2.0.0",
+-    "click >= 4.1,<8.1.8",
++    # Click 8.1.8 through 8.3.0 have broken pager invocation for multi-argument PAGER values, which causes behave test failures.
++    "click >= 4.1, != 8.1.8, != 8.2.*, != 8.3.0, < 9",
+     "Pygments>=2.0",       # Pygments has to be Capitalcased.
+     # We still need to use pt-2 unless pt-3 released on Fedora32
+     # see: https://github.com/dbcli/pgcli/pull/1197

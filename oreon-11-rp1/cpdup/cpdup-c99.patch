@@ -1,0 +1,17 @@
+Declare strlcpy to avoid an implicit function declaration in
+hc_readdir in hcproto.c.  This improves compatibility with future
+compilers which might not accept implicit function declarations by
+default.
+
+diff --git a/cpdup.h b/cpdup.h
+index 4843f8f98c8c2c52..67b81b9b56975c57 100644
+--- a/cpdup.h
++++ b/cpdup.h
+@@ -40,6 +40,7 @@
+ #define __printf0like(a,b)
+ #define __aligned(x)
+ #define __unused
++size_t strlcpy(char *dst, const char *src, size_t size);
+ #endif
+ 
+ void logstd(const char *ctl, ...) __printflike(1, 2);

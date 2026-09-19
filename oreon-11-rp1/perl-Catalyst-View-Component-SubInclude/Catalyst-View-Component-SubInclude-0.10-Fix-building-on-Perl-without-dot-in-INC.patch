@@ -1,0 +1,8 @@
+diff -up Catalyst-View-Component-SubInclude-0.10/Makefile.PL.orig Catalyst-View-Component-SubInclude-0.10/Makefile.PL
+--- Catalyst-View-Component-SubInclude-0.10/Makefile.PL.orig	2017-05-24 16:19:00.751112976 +0200
++++ Catalyst-View-Component-SubInclude-0.10/Makefile.PL	2017-05-24 16:19:11.710047308 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use strict;
+ use warnings;
+ use inc::Module::Install 0.91;

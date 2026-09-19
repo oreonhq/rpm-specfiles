@@ -1,0 +1,15 @@
+--- zoxide-0.9.8/Cargo.toml	1970-01-01T00:00:01+00:00
++++ zoxide-0.9.8/Cargo.toml	2025-08-18T10:56:14.581658+00:00
+@@ -177,11 +177,9 @@
+ ]
+ default-features = false
+ 
+-[target."cfg(windows)".dependencies.which]
+-version = "7.0.3"
+-
+ [profile.release]
+ lto = true
+ codegen-units = 1
+ debug = 0
+ strip = true
++

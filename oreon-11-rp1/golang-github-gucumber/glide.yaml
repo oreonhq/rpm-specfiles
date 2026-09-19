@@ -1,0 +1,22 @@
+import:
+- package: github.com/stretchr/testify
+  subpackages:
+  - assert
+  version: f6abca593680b2315d2075e0f5e2a9751e3f431a
+- package: github.com/pmezard/go-difflib
+  subpackages:
+  - difflib
+  version: 792786c7400a136282c1664665ae0a8db921c6c2
+- package: github.com/davecgh/go-spew
+  subpackages:
+  - spew
+  version: 782f4967f2dc4564575ca782fe2d04090b5faca8
+- package: github.com/gucumber/gucumber
+  subpackages:
+  - gherkin
+  - ''
+  version: 5903a8deba47bd11299556c6151b3cbe0fbec3d4
+- package: github.com/shiena/ansicolor
+  version: a422bbe96644373c5753384a59d678f7d261ff10
+package: github.com/lsegal/gucumber
+

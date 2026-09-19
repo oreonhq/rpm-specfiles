@@ -1,0 +1,26 @@
+From 61691e0d386c77844299edd73098e094cb65fe65 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 12 Sep 2025 10:38:31 +0100
+Subject: [PATCH] Downstream-only: omit pytest options for pytest-html
+
+---
+ pytest.ini | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/pytest.ini b/pytest.ini
+index d6eb342..13bf69c 100644
+--- a/pytest.ini
++++ b/pytest.ini
+@@ -20,8 +20,7 @@ minversion    = 4.2
+ testpaths     = tests
+ python_files  = test_*.py
+ junit_family = xunit2
+-addopts = --metadata PACKAGE_UNDER_TEST behave
+-    --html=build/testing/report.html --self-contained-html
++addopts =
+     --junit-xml=build/testing/report.xml
+ markers =
+     smoke
+-- 
+2.51.0
+

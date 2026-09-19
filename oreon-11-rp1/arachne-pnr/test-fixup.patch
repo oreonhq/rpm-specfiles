@@ -1,0 +1,18 @@
+diff -ur arachne-pnr-c40fb2289952f4f120cc10a5a4c82a6fb88442dc-orig/tests/io/tri.v arachne-pnr-c40fb2289952f4f120cc10a5a4c82a6fb88442dc/tests/io/tri.v
+--- arachne-pnr-c40fb2289952f4f120cc10a5a4c82a6fb88442dc-orig/tests/io/tri.v	2019-07-28 18:12:45.000000000 -0400
++++ arachne-pnr-c40fb2289952f4f120cc10a5a4c82a6fb88442dc/tests/io/tri.v	2025-08-17 22:02:39.072647502 -0400
+@@ -6,10 +6,10 @@
+ // IO Cell (0, 9, 1)
+ assign io_0_9_1 = n4 ? n2 : 1'bz;
+ 
+-assign n8 = /* LUT    1  9  3 */ (io_0_10_1 ? io_0_8_0 : io_0_9_0);
+-assign n9 = /* LUT    1 10  5 */ (io_0_10_1 ? io_0_10_0 : 1'b1);
+-/* FF  1  9  3 */ assign n2 = n8;
+-/* FF  1 10  5 */ assign n4 = n9;
++assign n8 = /* LUT    1 10  5 */ (io_0_10_1 ? io_0_10_0 : 1'b1);
++assign n9 = /* LUT    1  9  3 */ (io_0_10_1 ? io_0_8_0 : io_0_9_0);
++/* FF  1 10  5 */ assign n4 = n8;
++/* FF  1  9  3 */ assign n2 = n9;
+ 
+ endmodule
+ 

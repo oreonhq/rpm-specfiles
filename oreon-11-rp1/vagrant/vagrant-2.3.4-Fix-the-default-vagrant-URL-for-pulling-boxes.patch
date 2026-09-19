@@ -1,0 +1,22 @@
+From 27440fdd8cebf57882e3672376d409b139cc1e86 Mon Sep 17 00:00:00 2001
+From: Jarek Prokop <jprokop@redhat.com>
+Date: Thu, 16 Jan 2025 13:36:05 +0100
+Subject: [PATCH] Fix the default vagrant URL for pulling boxes.
+
+---
+ lib/vagrant/shared_helpers.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/vagrant/shared_helpers.rb b/lib/vagrant/shared_helpers.rb
+index b07c89a48..3c57cad6d 100644
+--- a/lib/vagrant/shared_helpers.rb
++++ b/lib/vagrant/shared_helpers.rb
+@@ -10,7 +10,7 @@ module Vagrant
+   # of Vagrant that may require remote access.
+   #
+   # @return [String]
+-  DEFAULT_SERVER_URL = "https://vagrantcloud.com".freeze
++  DEFAULT_SERVER_URL = "https://vagrantcloud.com/api/v2/vagrant".freeze
+ 
+   # Max number of seconds to wait for joining an active thread.
+   #

@@ -1,0 +1,12 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -31,8 +31,7 @@ dev = ["pytest", "pytest-codeblocks", "p
+ publish = ["build", "twine"]
+ 
+ [tool.pytest.ini_options]
+-addopts = "--codeblocks --mypy --flake8"
+-testpaths = ["README.md", "*.py"]
++testpaths = ["*.py"]
+ filterwarnings = ["ignore::DeprecationWarning"]
+ 
+ [tool.coverage.run]

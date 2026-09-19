@@ -1,0 +1,24 @@
+From c424747899825c27f48591ea01b02fcea2b9be68 Mon Sep 17 00:00:00 2001
+From: Tom Rix <trix@redhat.com>
+Date: Sat, 27 Jul 2024 09:13:29 -0400
+Subject: [PATCH] Add soversion to nnpack
+
+---
+ CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5ecd2df1b098..58ca44c92fd4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -490,6 +490,7 @@ ELSE()
+   TARGET_COMPILE_DEFINITIONS(nnpack PUBLIC NNP_INFERENCE_ONLY=0)
+ ENDIF()
+ SET_TARGET_PROPERTIES(nnpack PROPERTIES PUBLIC_HEADER include/nnpack.h)
++SET_TARGET_PROPERTIES(nnpack PROPERTIES VERSION "23.2.2" SOVERSION "23.2.2")
+ 
+ ADD_LIBRARY(nnpack_reference_layers STATIC ${NNPACK_REFERENCE_LAYERS_SRCS})
+ NNPACK_TARGET_ENABLE_C99(nnpack_reference_layers)
+-- 
+2.45.2
+

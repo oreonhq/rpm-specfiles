@@ -1,0 +1,11 @@
+--- Makefile.orig	2025-09-10 15:36:32.000000000 +0100
++++ Makefile	2025-09-10 15:36:50.000000000 +0100
+@@ -18,7 +18,7 @@
+ ANNOTATE = true
+ PACKS = camlpdf
+ 
+-CFLAGS = -fPIC
++CFLAGS = -g -fPIC
+ OCAMLFLAGS = -bin-annot
+ OCAMLNCFLAGS = -g -safe-string
+ OCAMLBCFLAGS = -g -safe-string

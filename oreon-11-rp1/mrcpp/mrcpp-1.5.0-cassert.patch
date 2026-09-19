@@ -1,0 +1,11 @@
+diff -rupN mrcpp-1.5.0/src/treebuilders/ProjectionCalculator.cpp mrcpp-1.5.0-new/src/treebuilders/ProjectionCalculator.cpp
+--- mrcpp-1.5.0/src/treebuilders/ProjectionCalculator.cpp	2023-05-24 18:54:18.000000000 +0200
++++ mrcpp-1.5.0-new/src/treebuilders/ProjectionCalculator.cpp	2025-10-15 14:15:14.343692218 +0200
+@@ -25,6 +25,7 @@
+ 
+ #include "ProjectionCalculator.h"
+ #include "trees/MWNode.h"
++#include <cassert>
+ 
+ using Eigen::MatrixXd;
+ 

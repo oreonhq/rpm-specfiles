@@ -1,0 +1,24 @@
+diff -up serdisplib-1.97.9/src/serdisp_fctptr.c~ serdisplib-1.97.9/src/serdisp_fctptr.c
+--- serdisplib-1.97.9/src/serdisp_fctptr.c~	2010-02-21 20:49:29.000000000 +0100
++++ serdisplib-1.97.9/src/serdisp_fctptr.c	2024-06-26 11:21:13.672014507 +0200
+@@ -58,7 +58,7 @@ struct usb_bus* (*fp_usb_get_busses)
+ int             (*fp_usb_claim_interface)  (usb_dev_handle* dev, int interface);
+ 
+ int             (*fp_usb_bulk_read)        (usb_dev_handle* dev, int ep, char* bytes, int size, int timeout);
+-int             (*fp_usb_bulk_write)       (usb_dev_handle* dev, int ep, char* bytes, int size, int timeout);
++int             (*fp_usb_bulk_write)       (usb_dev_handle* dev, int ep, const char* bytes, int size, int timeout);
+ int             (*fp_usb_control_msg)      (usb_dev_handle* dev, int requesttype, int request,
+                                             int value, int index, char *bytes, int size, int timeout);
+ int             (*fp_usb_clear_halt)       (usb_dev_handle *dev, unsigned int ep);
+diff -up serdisplib-1.97.9/include/serdisplib/serdisp_fctptr.h~ serdisplib-1.97.9/include/serdisplib/serdisp_fctptr.h
+--- serdisplib-1.97.9/include/serdisplib/serdisp_fctptr.h~	2010-02-21 20:49:28.000000000 +0100
++++ serdisplib-1.97.9/include/serdisplib/serdisp_fctptr.h	2024-06-26 11:23:53.806110999 +0200
+@@ -76,7 +76,7 @@ extern struct usb_bus* (*fp_usb_get_buss
+ extern int             (*fp_usb_claim_interface)  (usb_dev_handle* dev, int interface);
+ 
+ extern int             (*fp_usb_bulk_read)        (usb_dev_handle* dev, int ep, char* bytes, int size, int timeout);
+-extern int             (*fp_usb_bulk_write)       (usb_dev_handle* dev, int ep, char* bytes, int size, int timeout);
++extern int             (*fp_usb_bulk_write)       (usb_dev_handle* dev, int ep, const char* bytes, int size, int timeout);
+ extern int             (*fp_usb_control_msg)      (usb_dev_handle* dev, int requesttype, int request,
+                                                    int value, int index, char *bytes, int size, int timeout);
+ extern int             (*fp_usb_clear_halt)       (usb_dev_handle *dev, unsigned int ep);

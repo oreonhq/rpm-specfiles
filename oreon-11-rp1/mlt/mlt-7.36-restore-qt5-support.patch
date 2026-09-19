@@ -1,0 +1,146 @@
+From 972e3792690b026aa0a5d164483c18c263c699b3 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa@fedoraproject.org>
+Date: Fri, 20 Feb 2026 09:27:50 -0500
+Subject: [PATCH] Revert "Drop support for Qt 5"
+
+This is temporary and only so backward compatibility isn't broken
+in existing Fedora releases.
+
+This reverts commit 7707aaca0f935640be6a9b4df8b533bbe5702e25.
+---
+ CMakeLists.txt                        | 19 +++++++++++++++++--
+ src/modules/CMakeLists.txt            |  4 ++--
+ src/modules/glaxnimate/CMakeLists.txt |  4 ++++
+ src/modules/qt/CMakeLists.txt         |  4 ++++
+ 4 files changed, 27 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2856ab6a..3c89ad91 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -18,6 +18,7 @@ option(MOD_AVFORMAT "Enable avformat module" ON)
+ option(MOD_DECKLINK "Enable DeckLink module" ON)
+ option(MOD_FREI0R "Enable Frei0r module" ON)
+ option(MOD_GDK "Enable GDK module" ON)
++option(MOD_GLAXNIMATE "Enable Glaxnimate module (Qt5)" OFF)
+ option(MOD_GLAXNIMATE_QT6 "Enable Glaxnimate module (Qt6)" OFF)
+ option(MOD_JACKRACK "Enable JACK Rack module" ON)
+ option(USE_LV2 "Enable LV2 features" ON)
+@@ -30,6 +31,7 @@ option(MOD_OPENCV "Enable OpenCV module" OFF)
+ option(MOD_MOVIT "Enable OpenGL module" ON)
+ option(MOD_PLUS "Enable Plus module" ON)
+ option(MOD_PLUSGPL "Enable PlusGPL module (GPL)" ON)
++option(MOD_QT "Enable Qt5 module (GPL)" OFF)
+ option(MOD_QT6 "Enable Qt6 module (GPL)" ON)
+ option(MOD_RESAMPLE "Enable Resample module (GPL)" ON)
+ option(MOD_RTAUDIO "Enable RtAudio module" ON)
+@@ -173,6 +175,7 @@ endif()
+ if(NOT GPL)
+   set(MOD_NORMALIZE OFF)
+   set(MOD_PLUSGPL OFF)
++  set(MOD_QT OFF)
+   set(MOD_QT6 OFF)
+   set(MOD_RESAMPLE OFF)
+   set(MOD_RUBBERBAND OFF)
+@@ -199,11 +202,11 @@ endif()
+ 
+ find_package(SDL2)
+ 
+-if(MOD_QT6 OR MOD_PLUS)
++if(MOD_QT OR MOD_QT6 OR MOD_PLUS)
+   find_package(FFTW3)
+ endif()
+ 
+-if(MOD_QT6 OR MOD_GDK)
++if(MOD_QT OR MOD_QT6 OR MOD_GDK)
+   pkg_check_modules(libexif IMPORTED_TARGET libexif)
+ endif()
+ 
+@@ -328,6 +331,16 @@ if(BUILD_TESTING)
+   enable_testing()
+ endif()
+ 
++if(MOD_QT)
++  find_package(Qt5 REQUIRED COMPONENTS Core Xml Gui Svg Widgets)
++  list(APPEND MLT_SUPPORTED_COMPONENTS qt)
++endif()
++
++if(MOD_GLAXNIMATE)
++  find_package(Qt5 REQUIRED COMPONENTS Core Gui Network Widgets Xml)
++  list(APPEND MLT_SUPPORTED_COMPONENTS glaxnimate)
++endif()
++
+ if(MOD_RESAMPLE)
+   pkg_check_modules(samplerate REQUIRED IMPORTED_TARGET samplerate)
+   list(APPEND MLT_SUPPORTED_COMPONENTS resample)
+@@ -545,6 +558,7 @@ add_feature_info("Module: avformat" MOD_AVFORMAT "")
+ add_feature_info("Module: DeckLink" MOD_DECKLINK "")
+ add_feature_info("Module: Frei0r" MOD_FREI0R "")
+ add_feature_info("Module: GDK" MOD_GDK "")
++add_feature_info("Module: Glaxnimate (Qt5)" MOD_GLAXNIMATE "")
+ add_feature_info("Module: Glaxnimate (Qt6)" MOD_GLAXNIMATE_QT6 "")
+ add_feature_info("Module: JACKRack" MOD_JACKRACK "")
+ add_feature_info("Module: Kdenlive" MOD_KDENLIVE "")
+@@ -555,6 +569,7 @@ add_feature_info("Module: OpenCV" MOD_OPENCV "")
+ add_feature_info("Module: Movit" MOD_MOVIT "")
+ add_feature_info("Module: Plus" MOD_PLUS "")
+ add_feature_info("Module: PlusGPL" MOD_PLUSGPL "")
++add_feature_info("Module: Qt (Qt5)" MOD_QT "")
+ add_feature_info("Module: Qt6" MOD_QT6 "")
+ add_feature_info("Module: Resample" MOD_RESAMPLE "")
+ add_feature_info("Module: RtAudio" MOD_RTAUDIO "")
+diff --git a/src/modules/CMakeLists.txt b/src/modules/CMakeLists.txt
+index bdc46c88..9b04d900 100644
+--- a/src/modules/CMakeLists.txt
++++ b/src/modules/CMakeLists.txt
+@@ -16,7 +16,7 @@ if(MOD_GDK)
+   add_subdirectory(gdk)
+ endif()
+ 
+-if(MOD_GLAXNIMATE_QT6)
++if(MOD_GLAXNIMATE OR MOD_GLAXNIMATE_QT6)
+   add_subdirectory(glaxnimate)
+ endif()
+ 
+@@ -56,7 +56,7 @@ if(MOD_PLUSGPL)
+   add_subdirectory(plusgpl)
+ endif()
+ 
+-if(MOD_QT6)
++if(MOD_QT OR MOD_QT6)
+   add_subdirectory(qt)
+ endif()
+ 
+diff --git a/src/modules/glaxnimate/CMakeLists.txt b/src/modules/glaxnimate/CMakeLists.txt
+index a117c8dc..1c9388a0 100644
+--- a/src/modules/glaxnimate/CMakeLists.txt
++++ b/src/modules/glaxnimate/CMakeLists.txt
+@@ -213,6 +213,10 @@ function(mlt_add_glaxnimate_module ARG_TARGET)
+     )
+ endfunction()
+ 
++if(MOD_GLAXNIMATE)
++    mlt_add_glaxnimate_module(mltglaxnimate QT_VERSION 5 DATADIR glaxnimate)
++endif()
++
+ if(MOD_GLAXNIMATE_QT6)
+     mlt_add_glaxnimate_module(mltglaxnimate-qt6 QT_VERSION 6 DATADIR glaxnimate-qt6)
+ endif()
+diff --git a/src/modules/qt/CMakeLists.txt b/src/modules/qt/CMakeLists.txt
+index c176e520..7d05417b 100644
+--- a/src/modules/qt/CMakeLists.txt
++++ b/src/modules/qt/CMakeLists.txt
+@@ -125,6 +125,10 @@ function(mlt_add_qt_module ARG_TARGET)
+     )
+ endfunction()
+ 
++if (MOD_QT)
++    mlt_add_qt_module(mltqt QT_VERSION 5 DATADIR qt)
++endif()
++
+ if (MOD_QT6)
+     mlt_add_qt_module(mltqt6 QT_VERSION 6 DATADIR qt6)
+ endif()
+-- 
+2.53.0
+

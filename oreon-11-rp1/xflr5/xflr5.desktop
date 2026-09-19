@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Exec=xflr5
+Name=XFLR5
+GenericName=Airfoil analysis tool
+Icon=xflr5
+Terminal=false
+Categories=Science;

@@ -1,0 +1,152 @@
+--- frysk-0.4/frysk-sys/jnixx/PrintHxxDefinitions.java.jmethodid	2016-04-06 16:06:04.482142069 -0400
++++ frysk-0.4/frysk-sys/jnixx/PrintHxxDefinitions.java	2016-04-06 16:12:30.247740400 -0400
+@@ -1,5 +1,6 @@
+ // This file is part of the program FRYSK.
+ //
++// Copyright 2016, Andrew Cagney
+ // Copyright 2008, Red Hat Inc.
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+@@ -75,27 +76,20 @@
+ 	    if (isStatic) {
+ 		p.println("jclass _class = _class_(_env);");
+ 	    } else {
+-		p.print("if (_class == NULL)");
+-		while (p.dent(1, "{", "}")) {
+-		    p.println("_class = _class_(_env);");
+-		}
++		p.println("jclass _class = _env.GetObjectClass(_object);");
+ 	    }
+-	    p.print("if (");
++	    p.print("jfieldID ");
+ 	    p.printID(field);
+-	    p.print(" == NULL)");
+-	    while (p.dent(1, "{", "}")) {
+-		p.printID(field);
+-		p.print(" = _env.Get");
+-		if (isStatic) {
+-		    p.print("Static");
+-		}
+-		p.print("FieldID(_class, \"");
+-		p.print(field.getName());
+-		p.print("\", \"");
+-		p.printJniSignature(type);
+-		p.print("\"");
+-		p.println(");");
++	    p.print(" = _env.Get");
++	    if (isStatic) {
++		p.print("Static");
+ 	    }
++	    p.print("FieldID(_class, \"");
++	    p.print(field.getName());
++	    p.print("\", \"");
++	    p.printJniSignature(type);
++	    p.print("\"");
++	    p.println(");");
+ 	    if (get) {
+ 		p.printJniType(type);
+ 		p.print(" ret = ");
+@@ -135,33 +129,22 @@
+ 	p.printFormalCxxParameters(method, true);
+ 	p.print(")");
+ 	while (p.dent(0, "{", "}")) {
+-	    p.print("static jmethodID ");
+-	    p.printID(method);
+-	    p.println(";");
+ 	    if (isStatic) {
+ 		p.println("jclass _class = _class_(_env);");
++	    } else {
++		p.println("jclass _class = _env.GetObjectClass(_object);");
+ 	    }
+-	    p.print("if (");
++	    p.print("jmethodID ");
+ 	    p.printID(method);
+-	    p.print(" == NULL)");
+-	    while (p.dent(1, "{", "}")) {
+-		if (!isStatic) {
+-		    p.print("if (_class == NULL)");
+-		    while (p.dent(2, "{", "}")) {
+-			p.println("_class = _class_(_env);");
+-		    }
+-		}
+-		p.printID(method);
+-		p.print(" = _env.Get");
+-		if (isStatic) {
+-		    p.print("Static");
+-		}
+-		p.print("MethodID(_class, \"");
+-		p.print(method.getName());
+-		p.print("\", \"");
+-		p.printJniSignature(method);
+-		p.println("\");");
++	    p.print(" = _env.Get");
++	    if (isStatic) {
++		p.print("Static");
+ 	    }
++	    p.print("MethodID(_class, \"");
++	    p.print(method.getName());
++	    p.print("\", \"");
++	    p.printJniSignature(method);
++	    p.println("\");");
+ 	    if (returnType != Void.TYPE) {
+ 		if (returnType.isPrimitive()) {
+ 		    p.printJniType(returnType);
+@@ -201,18 +184,11 @@
+ 		p.print(")");
+ 		while (p.dent(0, "{", "}")) {
+ 		    p.println("jclass _class = _class_(_env);");
+-		    p.print("static jmethodID ");
+-		    p.printID(constructor);
+-		    p.println(";");
+-		    p.print("if (");
++		    p.print("jmethodID ");
+ 		    p.printID(constructor);
+-		    p.print(" == NULL)");
+-		    while (p.dent(1, "{", "}")) {
+-			p.printID(constructor);
+-			p.print(" = _env.GetMethodID(_class, \"<init>\", \"(");
+-			p.printJniSignature(constructor.getParameterTypes());
+-			p.println(")V\");");
+-		    }
++		    p.print(" = _env.GetMethodID(_class, \"<init>\", \"(");
++		    p.printJniSignature(constructor.getParameterTypes());
++		    p.println(")V\");");
+ 		    p.print("jobject object = _env.NewObject(");
+ 		    p.printActualJniParameters(constructor);
+ 		    p.println(");");
+--- frysk-0.4/frysk-sys/jnixx/PrintDeclarations.java.jmethodid	2016-04-06 16:22:40.595194032 -0400
++++ frysk-0.4/frysk-sys/jnixx/PrintDeclarations.java	2016-04-06 16:25:16.964016994 -0400
+@@ -88,9 +88,6 @@
+ 	    }
+ 	    public void acceptField(Field field) {
+ 		p.println();
+-		p.print("private: static jfieldID ");
+-		p.printID(field);
+-		p.println("; public:");
+ 		printCxxFieldAccessorDeclaration(field, true);
+ 		if (!Modifier.isFinal(field.getModifiers())) {
+ 		    printCxxFieldAccessorDeclaration(field, false);
+@@ -143,8 +140,6 @@
+ 	    p.printGlobalCxxName(parent);
+ 	    p.println("() { }");
+ 	}
+-	// cached per-instance copy - a local-ref
+-	p.println("private: jclass _class = NULL;");
+ 	// Static get-class method - a class knows its own class.
+ 	p.println("public: static inline jclass _class_(::jnixx::env _env);");
+ 	JniBindings.printDeclarations(p, klass);
+--- frysk-0.4/frysk-sys/jnixx/PrintCxxDefinitions.java.jmethodid	2016-04-06 16:32:15.056208875 -0400
++++ frysk-0.4/frysk-sys/jnixx/PrintCxxDefinitions.java	2016-04-06 16:33:01.466564144 -0400
+@@ -137,12 +137,6 @@
+ 	    void acceptConstructor(Constructor constructor) {
+ 	    }
+ 	    void acceptField(Field field) {
+-		p.println();
+-		p.print("jfieldID ");
+-		p.printGlobalCxxName(field.getDeclaringClass());
+-		p.print("::");
+-		p.printID(field);
+-		p.println(";");
+ 	    }
+ 	    void acceptClass(Class klass) {
+ 	    }

@@ -1,0 +1,21 @@
+diff -rupN --no-dereference mrcpp-1.5.0/external/upstream/fetch_eigen3.cmake mrcpp-1.5.0-new/external/upstream/fetch_eigen3.cmake
+--- mrcpp-1.5.0/external/upstream/fetch_eigen3.cmake	2023-05-24 18:54:18.000000000 +0200
++++ mrcpp-1.5.0-new/external/upstream/fetch_eigen3.cmake	2025-10-15 14:07:38.982925276 +0200
+@@ -1,4 +1,4 @@
+-find_package(Eigen3 3.4 CONFIG QUIET
++find_package(Eigen3 CONFIG QUIET
+   NO_CMAKE_PATH
+   NO_CMAKE_PACKAGE_REGISTRY
+   )
+diff -rupN mrcpp-1.5.0/cmake/MRCPPConfig.cmake.in mrcpp-1.5.0-new/cmake/MRCPPConfig.cmake.in
+--- mrcpp-1.5.0/cmake/MRCPPConfig.cmake.in	2023-05-24 18:54:18.000000000 +0200
++++ mrcpp-1.5.0-new/cmake/MRCPPConfig.cmake.in	2025-10-15 14:08:01.272584977 +0200
+@@ -94,7 +94,7 @@ if(NOT TARGET ${PN}::mrcpp)
+   get_filename_component(_fext ${${PN}_LIBRARY} EXT)
+   include("${CMAKE_CURRENT_LIST_DIR}/${PN}Targets.cmake")
+ 
+-  find_package(Eigen3 3.3 CONFIG REQUIRED)
++  find_package(Eigen3 CONFIG REQUIRED)
+ 
+   get_target_property(MRCPP_HAS_OMP MRCPP::mrcpp MRCPP_HAS_OMP)
+   if(MRCPP_HAS_OMP)

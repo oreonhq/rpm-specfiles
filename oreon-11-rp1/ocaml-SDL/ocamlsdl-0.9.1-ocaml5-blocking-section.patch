@@ -1,0 +1,72 @@
+diff -ur ocamlsdl-0.9.1/src/sdlevent_stub.c ocamlsdl-0.9.1.new/src/sdlevent_stub.c
+--- ocamlsdl-0.9.1/src/sdlevent_stub.c	2023-08-04 22:26:50.303629526 +0100
++++ ocamlsdl-0.9.1.new/src/sdlevent_stub.c	2023-08-04 22:26:28.685823145 +0100
+@@ -403,9 +403,9 @@
+ CAMLprim value mlsdlevent_wait(value unit)
+ {
+   int status;
+-  enter_blocking_section();
++  caml_enter_blocking_section();
+   status = SDL_WaitEvent(NULL);
+-  leave_blocking_section();
++  caml_leave_blocking_section();
+   if(! status)
+     raise_event_exn(SDL_GetError());
+   return Val_unit;
+@@ -415,9 +415,9 @@
+ {
+   SDL_Event evt;
+   int status;
+-  enter_blocking_section();
++  caml_enter_blocking_section();
+   status = SDL_WaitEvent(&evt);
+-  leave_blocking_section();
++  caml_leave_blocking_section();
+   if(! status)
+     raise_event_exn(SDL_GetError());
+   return value_of_SDLEvent(evt);
+diff -ur ocamlsdl-0.9.1/src/sdlgl_stub.c ocamlsdl-0.9.1.new/src/sdlgl_stub.c
+--- ocamlsdl-0.9.1/src/sdlgl_stub.c	2023-08-04 22:26:50.303629526 +0100
++++ ocamlsdl-0.9.1.new/src/sdlgl_stub.c	2023-08-04 22:26:28.685823145 +0100
+@@ -10,9 +10,9 @@
+ 
+ CAMLprim value ml_SDL_GL_SwapBuffers(value unit)
+ {
+-  enter_blocking_section();
++  caml_enter_blocking_section();
+   SDL_GL_SwapBuffers();
+-  leave_blocking_section();
++  caml_leave_blocking_section();
+   return Val_unit;
+ }
+ 
+diff -ur ocamlsdl-0.9.1/src/sdlloader_stub.c ocamlsdl-0.9.1.new/src/sdlloader_stub.c
+--- ocamlsdl-0.9.1/src/sdlloader_stub.c	2023-08-04 22:26:50.303629526 +0100
++++ ocamlsdl-0.9.1.new/src/sdlloader_stub.c	2023-08-04 22:26:28.685823145 +0100
+@@ -48,9 +48,9 @@
+ {
+   SDL_Surface *s;
+   char *fname = strdup(String_val(file));
+-  enter_blocking_section();
++  caml_enter_blocking_section();
+   s = IMG_Load(fname);
+-  leave_blocking_section();
++  caml_leave_blocking_section();
+   free(fname);
+   if(! s)
+     sdlloader_raise_exception(IMG_GetError());
+diff -ur ocamlsdl-0.9.1/src/sdltimer_stub.c ocamlsdl-0.9.1.new/src/sdltimer_stub.c
+--- ocamlsdl-0.9.1/src/sdltimer_stub.c	2003-11-16 14:26:38.000000000 +0000
++++ ocamlsdl-0.9.1.new/src/sdltimer_stub.c	2023-08-04 22:26:28.685823145 +0100
+@@ -30,9 +30,9 @@
+ CAMLprim value
+ sdltimer_delay (value ms)
+ {
+-  enter_blocking_section();
++  caml_enter_blocking_section();
+   SDL_Delay(Int_val(ms));
+-  leave_blocking_section();
++  caml_leave_blocking_section();
+   return Val_unit;
+ }
+ 

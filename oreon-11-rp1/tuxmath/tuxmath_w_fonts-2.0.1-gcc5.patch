@@ -1,0 +1,11 @@
+--- tuxmath_w_fonts-2.0.1/src/titlescreen.c~	2011-04-11 05:05:58.000000000 +0200
++++ tuxmath_w_fonts-2.0.1/src/titlescreen.c	2015-07-24 05:48:03.385868605 +0200
+@@ -50,7 +50,7 @@
+ SDL_Color bright_green;
+ 
+ // Type needed for trans_wipe():
+-struct blit {
++static struct blit {
+     SDL_Surface *src;
+     SDL_Rect *srcrect;
+     SDL_Rect *dstrect;

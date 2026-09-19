@@ -1,0 +1,108 @@
+From c9074247899440fdc69d5bbe1271b98fb427d333 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 30 Nov 2017 15:04:33 +0100
+Subject: [PATCH] Allow disabling TCP wrappers
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This adds ./confifure --disable-tcpwrappers option to disable use of
+internal and external TCP wrappers library.
+
+<https://bugzilla.redhat.com/show_bug.cgi?id=1518781>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ configure.ac       | 44 ++++++++++++++++++++++++++++----------------
+ server/Makefile.in |  5 +----
+ 2 files changed, 29 insertions(+), 20 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 9e89acd..d2edb0e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -49,6 +49,15 @@ AC_CHECK_LIB(resolv, res_search)
+ AC_CHECK_LIB(socket, connect)
+ AC_CHECK_LIB(inet, connect)
+ 
++AC_ARG_ENABLE(tcpwrappers, AS_HELP_STRING([--disable-tcpwrappers],
++              [Do not use TCP Wrappers]))
++AC_MSG_CHECKING([whether to enable TCP wrappers])
++if test "${enable_tcpwrappers}" = "no"; then
++    AC_MSG_RESULT([disabled])
++else
++    AC_MSG_RESULT([enabled])
++    AC_DEFINE(USE_TCP_WRAPPERS, 1, [TCP Wrappers])
++
+ # check for the libwrap library: we (apparently) cannot just use the
+ # standard AC_CHECK_LIB() macro, because the test program may need to
+ # define a few variables.  Some OS versions of libwrap don't have this
+@@ -80,6 +89,7 @@ int main(void)
+ )
+ 
+ fi
++fi
+ 
+ dnl Checks for header files.
+ AC_HEADER_STDC
+@@ -119,23 +129,25 @@ dnl Optional software.
+ 
+ AC_ARG_WITH(local-libwrap, AS_HELP_STRING([--with-local-libwrap], 
+                            [Use local copy of tcpd_wrapper.]))
+-if test "${with_local_libwrap}" = yes; then
+-    build_libwrap=yes;
+-fi
+-
+-if test "${build_libwrap}" = "yes"; then
+-   AC_SUBST(TCPD_EXTRA_CFLAGS)
+-   LIBWRAP=libwrap
+-   AC_SUBST(LIBWRAP)
+-   wrap_dir=../tools/tcpd_wrapper
+-   WRAP_INCLUDE=-I'$(srcdir)'/$wrap_dir
+-   WRAP_LIBS="-L$wrap_dir -lwrap"
+-else
+-   WRAP_INCLUDE=
+-   WRAP_LIBS="-lwrap"
++if test "${enable_tcpwrappers}" != "no"; then
++    if test "${with_local_libwrap}" = yes; then
++        build_libwrap=yes;
++    fi
++
++    if test "${build_libwrap}" = "yes"; then
++       AC_SUBST(TCPD_EXTRA_CFLAGS)
++       LIBWRAP=libwrap
++       AC_SUBST(LIBWRAP)
++       wrap_dir=../tools/tcpd_wrapper
++       WRAP_INCLUDE=-I'$(srcdir)'/$wrap_dir
++       WRAP_LIBS="-L$wrap_dir -lwrap"
++    else
++       WRAP_INCLUDE=
++       WRAP_LIBS="-lwrap"
++    fi
++    AC_SUBST(WRAP_INCLUDE)
++    AC_SUBST(WRAP_LIBS)       
+ fi
+-AC_SUBST(WRAP_INCLUDE)
+-AC_SUBST(WRAP_LIBS)       
+ 
+ 
+ dnl Package options
+diff --git a/server/Makefile.in b/server/Makefile.in
+index 0da66ce..fcf4825 100644
+--- a/server/Makefile.in
++++ b/server/Makefile.in
+@@ -30,10 +30,7 @@ REGEXP_LIBS   = -L../regexp -lregexp
+ LOCAL_INC     = -I. -I.. -I$(srcdir) $(COMMON_INC) $(WRAP_INC) $(MKDB_INC) $(REGEXP_INC)
+ LOCAL_LIBS    = $(WRAP_LIBS) $(MKDB_LIBS) $(COMMON_LIBS) $(REGEXP_LIBS)
+ 
+-# use tcp_wrappers to control access to directives 
+-USE_TCP_WRAP = -DUSE_TCP_WRAPPERS
+-
+-CFLAGS  = @CFLAGS@ $(USE_TCP_WRAP)
++CFLAGS  = @CFLAGS@
+ ALL_CFLAGS = $(CFLAGS) $(LOCAL_INC) @DEFS@ @IPV6INCLUDES@
+ 
+ LDFLAGS = @LDFLAGS@
+-- 
+2.13.6
+

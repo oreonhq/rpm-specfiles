@@ -1,0 +1,12 @@
+diff -Naur mailnag-2.2.0.org/Mailnag/daemon/conntest.py mailnag-2.2.0/Mailnag/daemon/conntest.py
+--- mailnag-2.2.0.org/Mailnag/daemon/conntest.py	2021-02-14 19:45:38.000000000 +0100
++++ mailnag-2.2.0/Mailnag/daemon/conntest.py	2021-09-17 10:39:42.341168521 +0200
+@@ -20,7 +20,7 @@
+ from enum import Enum
+ from gi.repository import Gio
+ 
+-TEST_HOST = 'www.google.com'
++TEST_HOST = 'fedoraproject.org'
+ 
+ 
+ class TestModes(Enum):

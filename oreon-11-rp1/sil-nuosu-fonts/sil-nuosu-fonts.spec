@@ -2,8 +2,8 @@
 
 # SPDX-License-Identifier: MIT
 
-Version: 2.200
-Release: 14%{?dist}
+Version: 2.300
+Release: 1%{?dist}
 URL:     http://scripts.sil.org/SILYi_home
 
 %global foundry           SIL

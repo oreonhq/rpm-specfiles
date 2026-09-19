@@ -4,8 +4,8 @@
 %global priority 90
 
 Name:           vala
-Version:        0.56.18
-Release:        6%{?dist}
+Version:        0.56.19
+Release:        1%{?dist}
 Summary:        A modern programming language for GNOME
 
 # Most files are LGPLv2.1+, curses.vapi is 2-clause BSD

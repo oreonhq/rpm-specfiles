@@ -1,0 +1,9 @@
+service uronode
+{
+	disable		= yes
+	socket_type	= stream
+	protocol	= tcp
+	user		= root
+	server		= /usr/sbin/uronode
+	wait		= no
+}

@@ -1,0 +1,21 @@
+diff -uNr widelands-1.2.orig/src/ui_basic/box.cc widelands-1.2/src/ui_basic/box.cc
+--- widelands-1.2.orig/src/ui_basic/box.cc	2024-03-28 11:12:05.000000000 +0100
++++ widelands-1.2/src/ui_basic/box.cc	2024-08-25 12:02:46.697000000 +0200
+@@ -180,7 +180,7 @@
+ 	int infspace_count = 0;
+ 
+ 	for (size_t idx = 0; idx < items_.size(); ++idx) {
+-		int depth;
++		int depth = 0;
+ 		int unused = 0;
+ 		get_item_desired_size(idx, &depth, &unused);
+ 		totaldepth += depth;
+@@ -274,7 +274,7 @@
+ 			// Do not modify hidden items
+ 			continue;
+ 		}
+-		int depth;
++		int depth = 0;
+ 		int breadth = 0;
+ 		get_item_size(idx, &depth, &breadth);
+ 

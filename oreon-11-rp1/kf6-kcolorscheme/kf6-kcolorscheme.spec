@@ -1,13 +1,13 @@
-%global source0_hash 574e12350ea1adf248c5263cf18d145476d368664a302514d1065aa2563e1efd
+%global source0_hash a868d9c62d402474ba063735f674967826aa905f0b9a5a176999588cde57d662
 
 %global framework kcolorscheme
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.29.0
 Release:        1%{?dist}
 Summary: Classes to read and interact with KColorScheme
 License: BSD-2-Clause and CC0-1.0 and LGPL-2.0-or-later and LGPL-2.1-only and LGPL-3.0-only and (LGPL-2.1-only OR LGPL-3.0-only)
@@ -18,9 +18,9 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6GuiAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
 BuildRequires:  cmake(Qt6Qml)
 BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  pkgconfig(xkbcommon)
@@ -63,6 +63,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

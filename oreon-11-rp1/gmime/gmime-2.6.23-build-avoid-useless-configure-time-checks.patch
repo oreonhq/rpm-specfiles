@@ -1,0 +1,78 @@
+From c376dc95e6e542879f5e50528c752e8e513ca470 Mon Sep 17 00:00:00 2001
+From: Eli Schwartz <eschwartz93@gmail.com>
+Date: Sun, 12 Feb 2023 11:40:08 -0500
+Subject: [PATCH] build: avoid useless configure-time checks
+
+Checking for the sizeof various types and defining preprocessor macros
+for them, is pointless, since the *only* effect these had was defining
+said macros... and the code never did anything with them.
+
+This speeds up running configure and is less confusing to readers. It's
+also less confusing to porters, as evidenced by the VS projects which
+contain out of date copies of the config.h files that are missing some
+of these unused checks.
+---
+ build/vs2008/config-win32.h.in | 9 ---------
+ build/vs2010/config-win32.h.in | 9 ---------
+ configure.ac                   | 9 ---------
+ 3 files changed, 27 deletions(-)
+
+diff --git a/build/vs2008/config-win32.h.in b/build/vs2008/config-win32.h.in
+index 1a6663e..f98c4b0 100644
+--- a/build/vs2008/config-win32.h.in
++++ b/build/vs2008/config-win32.h.in
+@@ -153,15 +153,6 @@
+ /* Define to the version of this package. */
+ #define PACKAGE_VERSION "@GMIME_VERSION@"
+ 
+-/* The size of `off_t', as computed by sizeof. */
+-#define SIZEOF_OFF_T 4
+-
+-/* The size of `size_t', as computed by sizeof. */
+-#define SIZEOF_SIZE_T 4
+-
+-/* The size of `ssize_t', as computed by sizeof. */
+-#define SIZEOF_SSIZE_T 4
+-
+ /* Define to 1 if you have the ANSI C header files. */
+ #define STDC_HEADERS 1
+ 
+diff --git a/build/vs2010/config-win32.h.in b/build/vs2010/config-win32.h.in
+index 1a6663e..f98c4b0 100644
+--- a/build/vs2010/config-win32.h.in
++++ b/build/vs2010/config-win32.h.in
+@@ -153,15 +153,6 @@
+ /* Define to the version of this package. */
+ #define PACKAGE_VERSION "@GMIME_VERSION@"
+ 
+-/* The size of `off_t', as computed by sizeof. */
+-#define SIZEOF_OFF_T 4
+-
+-/* The size of `size_t', as computed by sizeof. */
+-#define SIZEOF_SIZE_T 4
+-
+-/* The size of `ssize_t', as computed by sizeof. */
+-#define SIZEOF_SSIZE_T 4
+-
+ /* Define to 1 if you have the ANSI C header files. */
+ #define STDC_HEADERS 1
+ 
+diff --git a/configure.ac b/configure.ac
+index a2d0e6d..ef33e45 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -535,14 +535,6 @@ else
+ fi
+ AM_CONDITIONAL(ENABLE_LARGEFILE, test "x$enable_largefile" = "xyes")
+ 
+-dnl Check type sizes
+-CFLAGS_save="$CFLAGS"
+-CFLAGS="$CFLAGS $LFS_CFLAGS"
+-AC_CHECK_SIZEOF(ssize_t)
+-AC_CHECK_SIZEOF(size_t)
+-AC_CHECK_SIZEOF(off_t)
+-CFLAGS="$CFLAGS_save"
+-
+ dnl Check for some network functions
+ AC_CHECK_FUNCS(gethostname getdomainname getaddrinfo)
+ 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 75242b4019b2e873ab82d0e5d0149236779f4e9931782bf0cd5c6b67bcb69208
 
 %global stable_kf6 stable
 
@@ -6,7 +6,7 @@
 Name:    marble
 Summary: Virtual globe and world atlas
 Epoch:   1
-Version: 26.03.80
+Version: 26.08.1
 Release: 1%{?dist}
 
 License: Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND MIT AND (LGPL-2.1-only WITH Qt-LGPL-exception-1.1)
@@ -174,9 +174,10 @@ mv src/3rdparty/zlib src/3rdparty/zlib.UNUSED ||:
   -DMARBLE_DATA_PATH:PATH="%{_datadir}/marble/data" \
   -DMARBLE_PRI_INSTALL_DIR:PATH="%{_qt6_archdatadir}/mkspecs/modules" \
   -DWITH_DESIGNER_PLUGIN:BOOL=OFF \
-  -DBUILD_MARBLE_TOOLS=ON
+     -DBUILD_MARBLE_TOOLS=ON \
+     -DBUILD_DOC:BOOL=OFF
 
-%cmake_build
+cmake --build "%{_vpath_builddir}" -j${RPM_BUILD_NCPUS}
 
 
 %install
@@ -1108,4 +1109,3 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/{marble_geojson,marbl
 
 * Tue Aug 30 2011 Rex Dieter <rdieter@fedoraproject.org> 1:4.7.0-10
 - first try
-

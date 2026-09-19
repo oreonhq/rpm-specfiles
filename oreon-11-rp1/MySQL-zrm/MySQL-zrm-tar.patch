@@ -1,0 +1,25 @@
+diff -up MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm.tar MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm
+--- MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm.tar	2023-12-08 10:26:47.008818622 -0700
++++ MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm	2023-12-08 10:27:31.243661445 -0700
+@@ -612,6 +612,12 @@ sub doCompressAndEncrypt()
+ 	}
+ 	my $d = $inputs{"destination"};
+ 	my $compfile = catfile( $d, $COMPRESS_FILENAME );
++
++	if( $verbose ){
++		&printLog( "Creating $compfile\n" );
++	}
++	my $r = &systemPipe( "touch $compfile" );
++
+ 	my $logicalCompFile = catfile( $d, $COMPRESS_LOGICAL_FILENAME );
+ 	my $cmd = "$TAR $TAR_COMPRESS_OPTIONS \"$d\" $TAR_EXCLUDE_OPTION=$COMPRESS_FILENAME $TAR_EXCLUDE_OPTION=$INDEX_FILENAME $TAR_EXCLUDE_OPTION=zrm_checksum";
+ 	if( ! $inputs{"encrypt"} ){
+@@ -642,7 +648,7 @@ sub doCompressAndEncrypt()
+                 &abortAndDie( );
+         }
+ 
+-	my $r = &systemPipe( $cmd );
++	$r = &systemPipe( $cmd );
+         if( $abort_flag ){
+                 &abortAndDie( );
+         }

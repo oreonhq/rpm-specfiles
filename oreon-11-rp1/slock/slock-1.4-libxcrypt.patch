@@ -1,0 +1,31 @@
+From 56409aeb8c687dd72415961a0dda28afc007c98a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20=C5=A0abata?= <contyk@redhat.com>
+Date: Tue, 10 Apr 2018 18:23:41 +0200
+Subject: [PATCH] Make slock work with libxcrypt
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+crypt() was moved out of glibc into libxcrypt, we need to include its
+header.
+
+Signed-off-by: Petr Šabata <contyk@redhat.com>
+---
+ slock.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/slock.c b/slock.c
+index d2f0886..31e3ffe 100644
+--- a/slock.c
++++ b/slock.c
+@@ -13,6 +13,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <crypt.h>
+ #include <sys/types.h>
+ #include <X11/extensions/Xrandr.h>
+ #include <X11/keysym.h>
+-- 
+2.17.0
+

@@ -1,0 +1,12 @@
+diff -up kbilliards-0.8.7b/src/aiplayer.cpp~ kbilliards-0.8.7b/src/aiplayer.cpp
+--- kbilliards-0.8.7b/src/aiplayer.cpp~	2008-01-08 22:46:26.000000000 +0100
++++ kbilliards-0.8.7b/src/aiplayer.cpp	2008-01-08 22:46:26.000000000 +0100
+@@ -20,7 +20,7 @@
+ #include "aiplayer.h"
+ #include <iostream>
+ #include <sstream>
+-
++#include <stdlib.h>
+ 
+ #include <qnamespace.h>
+ #include <qpen.h>

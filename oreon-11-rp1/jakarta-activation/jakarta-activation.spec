@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           jakarta-activation
-Version:        2.1.3
+Version:        2.1.4
 Release:        %autorelease
 Summary:        Jakarta Activation API
 # the whole project is licensed under (EPL-2.0 or BSD)
@@ -24,7 +24,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.1.3-13
+Obsoletes:      %{name}-javadoc < 2.1.4-13
 
 %description
 Jakarta Activation defines a set of standard services to: determine

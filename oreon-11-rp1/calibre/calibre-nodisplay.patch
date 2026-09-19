@@ -1,0 +1,27 @@
+diff --color -Nur calibre-7.14.0.orig/src/calibre/linux.py calibre-7.14.0/src/calibre/linux.py
+--- calibre-7.14.0.orig/src/calibre/linux.py	2024-07-13 14:37:06.990160321 -0700
++++ calibre-7.14.0/calibre-7.14.0/src/calibre/linux.py	2024-07-13 14:38:32.010565211 -0700
+@@ -1095,6 +1095,7 @@
+ TryExec=lrfviewer
+ Exec=lrfviewer %f
+ Icon=calibre-viewer
++NoDisplay=true
+ MimeType=application/x-sony-bbeb;
+ Categories=Office;Viewer;
+ Keywords=lrf;viewer;
+@@ -1109,6 +1110,7 @@
+ Comment=Viewer for E-books in all the major formats
+ TryExec=ebook-viewer
+ Exec=ebook-viewer --detach %f
++NoDisplay=true
+ Icon=calibre-viewer
+ Categories=Office;Viewer;
+ Keywords=epub;ebook;viewer;
+@@ -1124,6 +1126,7 @@
+ TryExec=ebook-edit
+ Exec=ebook-edit --detach %f
+ Icon=calibre-ebook-edit
++NoDisplay=true
+ Categories=Office;WordProcessor
+ Keywords=epub;ebook;editor;
+ '''

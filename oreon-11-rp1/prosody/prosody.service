@@ -1,0 +1,16 @@
+[Unit]
+Description=Prosody XMPP (Jabber) server
+After=network-online.target
+
+[Service]
+Type=simple
+User=prosody
+Group=prosody
+PIDFile=/run/prosody/prosody.pid
+ExecStart=/usr/bin/prosody -F
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

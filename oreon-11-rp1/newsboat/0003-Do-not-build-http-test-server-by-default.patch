@@ -1,0 +1,33 @@
+From cfb88e6b40e8d35b0ea76b3a36c75d7593a05acf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jan=20Stan=C4=9Bk?= <jstanek@redhat.com>
+Date: Tue, 14 Jan 2025 15:31:29 +0100
+Subject: [PATCH] Do not build http-test-server by default
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This is a testing utility; addition of this utility is under the same
+banner as other `--with=check` dependencies.
+
+Signed-off-by: Jan Staněk <jstanek@redhat.com>
+Signed-off-by: rpm-build <rpm-build>
+---
+ Cargo.toml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 8a4c61d..5f8050a 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -4,6 +4,8 @@ members = [
+     "rust/libnewsboat-ffi",
+     "rust/strprintf",
+     "rust/regex-rs",
++]
++exclude = [
+     "rust/http-test-server",
+ ]
+ resolver = "3"
+-- 
+2.51.1
+

@@ -1,0 +1,39 @@
+diff --color -upr R03-00-00-beta1/cmake/Modules/EvtGenCompilerFlags.cmake R03-00-00-beta1_patched/cmake/Modules/EvtGenCompilerFlags.cmake
+--- R03-00-00-beta1/cmake/Modules/EvtGenCompilerFlags.cmake	2024-10-09 12:13:57.000000000 +0100
++++ R03-00-00-beta1_patched/cmake/Modules/EvtGenCompilerFlags.cmake	2025-11-28 11:43:12.491715976 +0000
+@@ -86,6 +86,3 @@ endif()
+ set(CMAKE_MACOSX_RPATH TRUE)
+ set(CMAKE_SKIP_BUILD_RPATH FALSE)
+ set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+-
+diff --color -upr R03-00-00-beta1/src/CMakeLists.txt R03-00-00-beta1_patched/src/CMakeLists.txt
+--- R03-00-00-beta1/src/CMakeLists.txt	2024-10-09 12:13:57.000000000 +0100
++++ R03-00-00-beta1_patched/src/CMakeLists.txt	2025-11-28 11:44:30.316509123 +0000
+@@ -148,6 +148,7 @@ if( EVTGEN_PYTHIA OR EVTGEN_PHOTOS OR EV
+     set_target_properties(EvtGenExternal PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR} )
+     set_target_properties(EvtGenExternal PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+     target_include_directories(EvtGenExternal PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
++    target_link_libraries(EvtGenExternal PUBLIC EvtGen)
+     if(EVTGEN_PYTHIA)
+         target_compile_definitions(EvtGenExternal PUBLIC EVTGEN_PYTHIA)
+         target_include_directories(EvtGenExternal PUBLIC ${PYTHIA8_INCLUDE_DIRS})
+@@ -276,7 +277,7 @@ endif()
+ 
+ # Install the libraries
+ install(
+-    TARGETS EvtGen EvtGenStatic
++    TARGETS EvtGen
+     EXPORT "EvtGenTargets"
+     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+@@ -284,7 +285,7 @@ install(
+ 
+ if( EVTGEN_PYTHIA OR EVTGEN_PHOTOS OR EVTGEN_TAUOLA OR EVTGEN_SHERPA)
+     install(
+-        TARGETS EvtGenExternal EvtGenExternalStatic
++        TARGETS EvtGenExternal
+         EXPORT "EvtGenTargets"
+         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

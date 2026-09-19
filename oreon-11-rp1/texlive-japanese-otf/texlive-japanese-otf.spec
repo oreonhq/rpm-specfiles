@@ -1,5 +1,5 @@
-%global source0_hash 6fe02cc75d2b655392c7e6e4b756ad8963a10e1d3bd42da820fa78f7be98c2e5
-%global source1_hash 51223b4d2b4ddead6d5f1368a029203f3b6ba0a9b87ccc5454c117937690e5bf
+%global source0_hash 5bd0133833979011ea643e8b54ad7b0e116abf1dab0ba83656168afd35d397c19c0486efb4e48111a9bb009c5061bc94aee69769cf519b0eb0aebb168679ac6e
+%global source1_hash f1c7eaba6f87d61b46ede616a9b9fa7edc7d9f0fc472ade3bd839cb10b1a0893ddbbf035668cb301cf98fa9e732499a12b19fa8b46a49d413771b533bbecc2e0
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Advanced font selection for platex
 License:        BSD
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/japanese-otf.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/japanese-otf.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/japanese-otf.tar.xz#/japanese-otf.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/japanese-otf.doc.tar.xz#/japanese-otf.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-japanese-otf-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-japanese-otf-doc <= 11:%{version}
@@ -27,8 +27,8 @@ Provides:       tex(redeffont.sty)
 Advanced font selection for platex.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

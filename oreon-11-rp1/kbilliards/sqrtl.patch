@@ -1,0 +1,32 @@
+diff -up kbilliards-0.8.7b/src/aiplayer.cpp.foo kbilliards-0.8.7b/src/aiplayer.cpp
+--- kbilliards-0.8.7b/src/aiplayer.cpp.foo	2008-09-07 16:43:45.000000000 +0200
++++ kbilliards-0.8.7b/src/aiplayer.cpp	2008-09-07 16:43:53.000000000 +0200
+@@ -160,12 +160,12 @@ void AIplayer::stroke()
+ 
+                               //determine approximate power
+ 
+-                              power1 = sqrtl( 2*(kbill->actualconfig.decel)* tr.abs() )  ;
++                              power1 = sqrt( 2*(kbill->actualconfig.decel)* tr.abs() )  ;
+ 
+                               power = power1 ;
+ 
+                               cos=tr.unit()*to_hole.unit();
+-                              v2=sqrtl( 2*(kbill->actualconfig.decel)*to_hole.abs() ) ;
++                              v2=sqrt( 2*(kbill->actualconfig.decel)*to_hole.abs() ) ;
+ 
+                               if ( cos != 0 ) {
+                                    power2 = v2/cos ;
+diff -up kbilliards-0.8.7b/src/ball.cpp.foo kbilliards-0.8.7b/src/ball.cpp
+--- kbilliards-0.8.7b/src/ball.cpp.foo	2008-09-07 16:43:45.000000000 +0200
++++ kbilliards-0.8.7b/src/ball.cpp	2008-09-07 16:43:53.000000000 +0200
+@@ -214,8 +214,8 @@ double Ball::BallCPrediction(Ball *B) {
+     if ( my_sqrt < 0 )
+         return -1;
+ 
+-    result1=( ( -b - sqrtl(my_sqrt) ) / (2*a) );
+-    result2=( ( -b + sqrtl(my_sqrt) ) / (2*a) );
++    result1=( ( -b - sqrt(my_sqrt) ) / (2*a) );
++    result2=( ( -b + sqrt(my_sqrt) ) / (2*a) );
+ 
+ /*
+     if ( ( result1 > result2 )&&( ((result1 < 1)&&(result1 > 0))||((result2 < 1)&&(result2 > 0)) ))

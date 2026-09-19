@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 51901b4407fb5d6c7ae43df4ef224b0672339a7d3834a7bc470feb2f169bb3b6
 
 %global stable_kf6 stable
 
 
 Name:    kalgebra
 Summary: 2D and 3D Graph Calculator
-Version: 26.03.80
+Version: 26.08.1
 Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later
@@ -29,6 +29,7 @@ BuildRequires: cmake(Qt6Test)
 BuildRequires: cmake(Qt6Core5Compat)
 BuildRequires: cmake(Qt6OpenGLWidgets)
 BuildRequires: cmake(Qt6WebEngineWidgets)
+BuildRequires: qt6-qtwebengine-devel >= 6.11.1-5
 
 BuildRequires: cmake(Analitza6)
 BuildRequires: cmake(KF6I18n)
@@ -770,4 +771,3 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.kalgebram
 
 * Tue Aug 30 2011 Rex Dieter <rdieter@fedoraproject.org> 4.7.0-10
 - first try
-

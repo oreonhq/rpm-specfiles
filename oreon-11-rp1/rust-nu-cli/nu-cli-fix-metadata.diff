@@ -1,0 +1,47 @@
+--- nu-cli-0.99.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ nu-cli-0.99.1/Cargo.toml	2026-03-18T13:53:59.551001+00:00
+@@ -31,7 +31,7 @@
+ version = "0.28.1"
+ 
+ [dependencies.fancy-regex]
+-version = "0.13"
++version = "0.16"
+ 
+ [dependencies.fuzzy-matcher]
+ version = "0.3"
+@@ -43,7 +43,7 @@
+ version = "0.4"
+ 
+ [dependencies.lscolors]
+-version = "0.17"
++version = ">=0.17,<0.22"
+ features = ["nu-ansi-term"]
+ default-features = false
+ 
+@@ -86,7 +86,7 @@
+ version = "2"
+ 
+ [dependencies.reedline]
+-version = "0.36.0"
++version = "0.37.0"
+ features = [
+     "bashisms",
+     "sqlite",
+@@ -103,7 +103,7 @@
+ features = ["v4"]
+ 
+ [dependencies.which]
+-version = "6.0.0"
++version = ">=6.0.0, <9.0.0"
+ 
+ [dev-dependencies.nu-cmd-lang]
+ version = "0.99.1"
+@@ -115,7 +115,7 @@
+ version = "0.99.1"
+ 
+ [dev-dependencies.rstest]
+-version = "0.18"
++version = "0.26.0"
+ default-features = false
+ 
+ [dev-dependencies.tempfile]

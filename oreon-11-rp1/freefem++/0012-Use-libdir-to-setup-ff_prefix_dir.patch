@@ -1,0 +1,25 @@
+From a979c19552f31f2b0febf0a2683aa45d919e97d1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Wed, 12 Jun 2019 10:46:17 +0200
+Subject: [PATCH 12/18] Use libdir to setup ff_prefix_dir
+
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index beb83eeed..a3c23335f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -677,7 +677,7 @@ AC_DEFINE_UNQUOTED(VersionFreeFem,$ff_numver,FreeFEM version as a float)
+ # date is only useful for config-version.h
+ 
+ test "$prefix" = NONE && prefix="$ac_default_prefix"
+-ff_prefix_dir="${prefix}/lib/ff++/$VERSION"
++ff_prefix_dir="${libdir}/ff++/$VERSION"
+ AC_MSG_CHECKING(prefix dir freefem++  )
+ AC_MSG_RESULT($ff_prefix_dir)
+ 
+-- 
+2.47.1
+

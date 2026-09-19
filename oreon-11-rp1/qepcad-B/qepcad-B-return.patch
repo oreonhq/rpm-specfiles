@@ -1,0 +1,34 @@
+--- extensions/sfext/formula/FTYPEINFO.c.orig	2021-03-01 14:24:45.000000000 -0700
++++ extensions/sfext/formula/FTYPEINFO.c	2021-03-02 08:50:20.822621402 -0700
+@@ -23,6 +23,6 @@ Word FTYPEINFO(Word A)
+     return TRUE;
+   if (FIRST(A) == FALSE)
+     return FALSE;
+-  
++  FAIL("FTYPEINFO","Unknown formula type!"); 
+ }
+       
+--- source/db/SingSacPolicy.h.orig	2021-03-01 14:24:45.000000000 -0700
++++ source/db/SingSacPolicy.h	2021-03-02 08:50:42.059574090 -0700
+@@ -28,17 +28,17 @@ public:
+   Word IPRES(Word r, Word A, Word B)
+   {
+     if (r > 2)
+-      sing->IPRES(r,A,B);
++      return sing->IPRES(r,A,B);
+     else
+-      sac ->IPRES(r,A,B);
++      return sac ->IPRES(r,A,B);
+   }
+ 
+   Word IPDSCR(Word r, Word A)
+   {
+     if (r > 2)
+-      sing->IPDSCR(r,A);
++      return sing->IPDSCR(r,A);
+     else
+-      sac ->IPDSCR(r,A);
++      return sac ->IPDSCR(r,A);
+   }
+ 
+   Word IPFACTGB(Word r, Word I, Word N)  

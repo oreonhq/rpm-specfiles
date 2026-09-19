@@ -1,0 +1,11 @@
+diff -ru ncdu-2.8.2-ORIGINAL/build.zig ncdu-2.8.2/build.zig
+--- ncdu-2.8.2-ORIGINAL/build.zig
++++ ncdu-2.8.2/build.zig
+@@ -24,6 +24,7 @@ pub fn build(b: *std.Build) void {
+         .name = "ncdu",
+         .root_module = main_mod,
+     });
++    exe.linker_allow_shlib_undefined = true;
+     exe.pie = pie;
+     // https://github.com/ziglang/zig/blob/faccd79ca5debbe22fe168193b8de54393257604/build.zig#L745-L748
+     if (target.result.os.tag.isDarwin()) {

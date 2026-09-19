@@ -1,0 +1,305 @@
+.TH FPLLL "1" "December 2022" "" "User Commands"
+.SH NAME
+.B fplll
+\(en
+does LLL, BKZ, HKZ or SVP on a matrix
+.SH SYNOPSIS
+.B fplll \fR[\fIoptions\fR] [\fIfile\fR]
+.SH DESCRIPTION
+.BR fplll (1)
+does LLL, BKZ, HKZ or SVP on a matrix
+(considered as a set of row vectors) given in
+.I stdin
+or in a file as parameter.
+.SH OPTIONS
+.TP
+.BR \-a\  [ lll | bkz | hkz | svp | sdb | sld | cvp ]
+.IP
+.BR lll :
+LLL-reduce the input matrix
+.RI ( default )
+.IP
+.BR bkz :
+BKZ-reduce the input matrix
+.IP
+.BR hkz :
+HKZ-reduce the input matrix
+.IP
+.BR svp :
+compute a shortest non-zero vector of the lattice
+.IP
+.BR sdb :
+reduce the input matrix using the self dual BKZ variant
+.IP
+.BR sld :
+slide reduce the input matrix
+.IP
+.BR cvp :
+compute the vector in the input lattice closest to an input vector
+.IP
+.BR hlll :
+HLLL-reduce the input matrix
+.TP
+.B \-v
+Enable verbose mode
+.TP
+.B \-nolll
+Does not apply initial LLL-reduction.
+In the case of
+.BR bkz ,
+.BR hkz
+and
+.BR svp ,
+by default, the input basis is LLL-reduced before anything else.
+This option allows to remove that initial LLL-reduction
+(note that other calls to LLL-reduction may occur during the execution).
+In the case of
+.BR hlll ,
+verify if the input basis is HLLL-reduced.
+.\" .TP
+.\" .B \-r\ \fIsize
+.\" Was the number of rows
+.\" .RB ( ignored `)
+.SS "OPTIONS FOR LLL-REDUCTION"
+With the wrapper or the proved version,
+it is guaranteed that the basis is LLL-reduced with
+\[*d]'=2\[mu]\[*d]\-1 
+and
+\[*y]'=2\[mu]\[*y]\-1/2.
+For instance, with the default options,
+it is guaranteed that the basis is
+(0.98,0.52)\-LLL\-reduced.
+.TP
+.B \-d\ \fIdelta\fR, \fB\-delta\ \fIdelta
+\[*d]
+.RB (default= 0.99 )
+.TP
+.B \-e\ \fIeta\fR, \fB\-eta\ \fIeta
+\[*h]
+.RB (default= 0.51 ).
+See
+.B P.\ Q.\ Nguyen and D.\ Stehle.
+.B An LLL Algorithm with Quadratic Complexity.
+.B SIAM J.\ Comput. 39(3):\ 874\[en]903 (2009)
+for the definition of
+(\[*d],\[*y])-LLL-reduced
+bases.
+.B \-l\ \fIlovasz
+If
+.I lovasz
+!=\ 0, Lovasz\(cq)s condition.
+Otherwise, Siegel\(cq)s condition
+(default: Lovasz).
+See
+.B A.\ Akhavi.
+.B Random lattices, threshold phenomena and efficient reduction algorithms.
+.B  Theor. Comput. Sci. 287(2):\ 359\[en]385 (2002)
+for the definition of Siegel condition.
+.TP
+.BR \-f\  [ mpfr | dd | qd | dp | double | longdouble ]
+Floating-point type in LLL.
+.IP
+.BR mpfr :
+Sets the floating-point type to MPFR
+(default if
+.BR \-m\ proved ).
+.IP
+.BR dd :
+Sets the floating-point type to double-double.
+.IP
+.BR qd :
+Sets the floating-point type to quad-double.
+.IP
+.BR dpe :
+Sets the floating-point type to DPE
+(default if
+.BR \-m\ heuristic ).
+.IP
+.BR double :
+Sets the floating-point type to double
+(default if
+.BR \-m\ fast ).
+.IP
+.BR longdouble :
+Sets the floating-point type to long double.
+.TP
+.B \-p\ \fIprecision
+Precision of the floating-point arithmetic, works only with
+.BR \-f\ mpfr .
+.TP
+.BR \-z\  [ mpz | int | long | double ]
+Integer type in LLL
+.IP
+.BR mpz :
+Sets the integer type to
+.BR mpz ,
+the integer type of GMP
+(default).
+.IP
+.BR int :
+Sets the integer type to
+.BR int .
+.IP
+.BR long :
+Same as
+.BR int .
+.IP
+.BR double :
+Sets the integer type to
+.BR double .
+.TP
+.BR \-m\  [ wrapper | fast | heuristic | proved ]
+LLL version
+.IP
+.BR wrapper :
+Uses the wrapper
+(default if
+.BR \-z\ mpz ).
+.IP
+.BR fast :
+Uses the fast method, works only with
+.BR \-f\ double .
+.IP
+.BR heuristic :
+Uses the heuristic method.
+.IP
+.BR proved :
+Uses the proved version of the algorithm.
+.TP
+.B \-y
+Enable early reduction.
+.SS "OPTIONS FOR BKZ-REDUCTION"
+.TP
+.B \-b\ \fIblock_size
+Size of BKZ blocks, mandatory,
+between 2 and the number of vectors.
+.B \-f\ \fIfloat_type
+Same as for LLL
+.RB ( \-p
+is required if
+.BR \-f\ mpfr ).
+.TP
+.B \-bkzmaxloops\ \fIloops
+Maximum number of full loop iterations.
+.TP
+.B \-bkzmaxtime\ \fItime
+Stops after
+.I time
+seconds (up to completion of the current loop iteration).
+.TP
+.B \-bkzautoabort
+Stops when the average slope of the
+log\ ||b_i*||\(cq)s
+does not decrease fast enough.
+.P
+Without any of
+the last three options,
+BKZ runs until no block has been updated for a full loop iteration.
+.TP
+.B \-s\ \fIfilename.json
+Use strategies for preprocessing and pruning parameter
+.RB ( strategies/default.json
+provided).
+.IR Experimental .
+.TP
+.B \-bkzghbound\ \fIfactor
+Multiplies the Gaussian heuristic by
+.I factor
+(of float type)
+to set the enumeration radius of the SVP calls.
+.TP
+.B \-bkzboundedlll
+Restricts the LLL call before considering a block
+to vector indices within that block.
+.TP
+.B \-bkzdumpgso\ \fIfile_name
+Dumps the log of the Gram-Schmidt vectors
+(log\ ||b_i*||\(cq)s)
+in specified file
+.SS "OUTPUT FORMATS"
+.TP
+.BR \-of\  [ b | bk | c | s | t | u | uk | v | vk]
+Output formats.
+A combination of these option is allowed (e.g.,
+.BR \-of\ bkut ).
+.IP
+(empty;
+.BR \-of\ \  ):
+Prints new line
+(if
+.BR \-a\  [ lll | bkz ]).
+.IP
+.BR b :
+Prints the basis
+(if
+.BR \-a\  [ lll | bkz ],
+this value by default).
+.IP
+.BR bk :
+Prints the basis
+(if
+.BR \-a\  [ lll | bkz ],
+format compatible with sage).
+.IP
+.BR c :
+Prints the closest vector
+(if
+.BR \-a\ cvp ,
+this value by default).
+.IP
+.BR s :
+Prints the closest vector
+(if
+.BR \-a\ svp ,
+this value by default).
+.IP
+.BR s :
+Prints status
+(if
+.BR \-a\  [ lll | bkz | cvp | svp ]).
+.IP
+.BR u :
+Prints unimodular matrix
+(if
+.BR \-a\  [ lll | bkz ]).
+.IP
+.BR uk :
+Prints unimodular matrix
+(if
+.BR \-a\  [ lll | bkz ],
+format compatible with sage).
+.IP
+.BR u :
+Prints inverse of
+.B u
+(if
+.BR \-a\ lll ).
+.IP
+.BR uk :
+Prints inverse of
+.B u
+(if
+.BR \-a\ lll ,
+format compatible with sage).
+.SS "OPTIONS FOR HLLL-REDUCTION"
+.TP
+.B \-t\ \fItheta\fR, \fB-theta\ \fItheta
+\[*h]
+.RB (default= 0.001 ).
+See
+.B I.\ Morel, D.\ Stehle and G.\ Villard.
+.B H\-LLL: using Householder inside LLL.
+.B ISSAC 2009: 271\[en]278
+for the definition of
+(\[*d],\[*y],\[*h])-HLLL-reduced bases.
+.TP
+.B \-c\ \fIc
+An arbitrary double constant > 0
+for HLLL during the size-reduction;
+only used if
+.BR fplll (1)
+is compiled with
+.B \-DHOUSEHOLDER_USE_SIZE_REDUCTION_TEST
+.RB (default= 0.1 )
+.SH "SEE ALSO"
+.BR latticegen (1)

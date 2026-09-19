@@ -1,0 +1,32 @@
+From 91e8eab3a76987156dffae6c77c2186923d11fdd Mon Sep 17 00:00:00 2001
+From: Stefan Hoops <shoops@copasi.org>
+Date: Thu, 31 Jul 2025 09:56:51 -0400
+Subject: [PATCH] Bug 3304: Adapts bison and flex targets for CMake >= 4.0.0
+
+---
+ copasi/function/CMakeLists.txt  | 18 +++++++++-----
+ copasi/model/CMakeLists.txt     | 18 +++++++++-----
+ copasi/utilities/CMakeLists.txt | 42 ++++++++++++++++++++-------------
+ 3 files changed, 50 insertions(+), 28 deletions(-)
+
+--- a/CMakeModules/FindLIBSBML.orig.cmake	2025-03-28 15:55:26.000000000 +0100
++++ b/CMakeModules/FindLIBSBML.cmake	2025-08-15 15:16:48.319158911 +0200
+@@ -165,12 +165,12 @@
+     message(FATAL_ERROR "LIBSBML library not found!")
+ endif (NOT LIBSBML_LIBRARY)
+ 
+-add_library(${LIBSBML_LIBRARY_NAME} UNKNOWN IMPORTED)
+-set_target_properties(${LIBSBML_LIBRARY_NAME} 
+-  PROPERTIES
+-    IMPORTED_LOCATION ${LIBSBML_LIBRARY}
+-    INTERFACE_INCLUDE_DIRECTORIES ${LIBSBML_INCLUDE_DIR}
+-)
++#add_library(${LIBSBML_LIBRARY_NAME} UNKNOWN IMPORTED)
++#set_target_properties(${LIBSBML_LIBRARY_NAME} 
++#  PROPERTIES
++#    IMPORTED_LOCATION ${LIBSBML_LIBRARY}
++#    INTERFACE_INCLUDE_DIRECTORIES ${LIBSBML_INCLUDE_DIR}
++#)
+ 
+ endif()
+ 

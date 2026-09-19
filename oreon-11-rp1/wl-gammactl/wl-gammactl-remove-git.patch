@@ -1,0 +1,29 @@
+diff -ruN wl-gammactl-611846ce8f5f6e7fe1afb100416cceb8af54afb2-orig/meson.build wl-gammactl-611846ce8f5f6e7fe1afb100416cceb8af54afb2/meson.build
+--- wl-gammactl-611846ce8f5f6e7fe1afb100416cceb8af54afb2-orig/meson.build	2020-02-16 22:53:36.000000000 +1000
++++ wl-gammactl-611846ce8f5f6e7fe1afb100416cceb8af54afb2/meson.build	2020-04-16 09:52:36.377839440 +1000
+@@ -27,25 +27,6 @@
+ 	gres_xml
+ )
+ 
+-
+-# Get protocol extensions
+-git = find_program('git')
+-run_command(
+-	git,
+-	'submodule',
+-	'add',
+-	'https://github.com/swaywm/wlr-protocols.git',
+-	'wlr-protocols/'
+-)
+-run_command(
+-	git,
+-	'submodule',
+-	'update',
+-	'--init',
+-	'--recursive'
+-)
+-
+-
+ # Run wayland-scanner
+ wayland_scanner = find_program('wayland-scanner')
+ run_command(

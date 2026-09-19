@@ -1,0 +1,106 @@
+diff -Naur trash-cli-0.24.5.26-original/requirements-dev.txt trash-cli-0.24.5.26/requirements-dev.txt
+--- trash-cli-0.24.5.26-original/requirements-dev.txt	2024-05-26 10:31:07.000000000 +0100
++++ trash-cli-0.24.5.26/requirements-dev.txt	2025-11-15 08:59:50.713467488 +0000
+@@ -2,7 +2,6 @@
+ pytest
+ mock
+ flexmock
+-parameterized
+ tox
+ PyYAML <= 5.4.1; python_version ~= '2.7'
+ PyYAML <= 5.2; python_version ~= '3.4'
+diff -Naur trash-cli-0.24.5.26-original/tests/test_put/components/test_original_location.py trash-cli-0.24.5.26/tests/test_put/components/test_original_location.py
+--- trash-cli-0.24.5.26-original/tests/test_put/components/test_original_location.py	2024-05-26 10:31:07.000000000 +0100
++++ trash-cli-0.24.5.26/tests/test_put/components/test_original_location.py	2025-11-15 08:59:50.713578031 +0000
+@@ -1,7 +1,6 @@
+ import os
+-import unittest
+ 
+-from parameterized import parameterized  # type: ignore
++import pytest
+ 
+ from tests.support.put.fake_fs.fake_fs import FakeFs
+ from trashcli.put.core.path_maker_type import PathMakerType
+@@ -11,29 +10,34 @@
+ RelativePaths = PathMakerType.RelativePaths
+ 
+ 
+-class TestOriginalLocation(unittest.TestCase):
+-
+-    def setUp(self):
+-        self.original_location = OriginalLocation(FakeFsWithRealpath())
+-
+-    @parameterized.expand([
+-        ('/volume', '/file', AbsolutePaths, '/file',),
+-        ('/volume', '/file/././', AbsolutePaths, '/file',),
+-        ('/volume', '/dir/../file', AbsolutePaths, '/file'),
+-        ('/volume', '/dir/../././file', AbsolutePaths, '/file'),
+-        ('/volume', '/outside/file', AbsolutePaths, '/outside/file'),
+-        ('/volume', '/volume/file', AbsolutePaths, '/volume/file',),
+-        ('/volume', '/volume/dir/file', AbsolutePaths, '/volume/dir/file'),
+-        ('/volume', '/file', RelativePaths, '/file'),
+-        ('/volume', '/dir/../file', RelativePaths, '/file'),
+-        ('/volume', '/outside/file', RelativePaths, '/outside/file'),
+-        ('/volume', '/volume/file', RelativePaths, 'file'),
+-        ('/volume', '/volume/dir/file', RelativePaths, 'dir/file'),
+-    ])
++@pytest.fixture()
++def original_location():
++    yield OriginalLocation(FakeFsWithRealpath())
++
++
++class TestOriginalLocation:
++
++    @pytest.mark.parametrize(
++        "volume,file_to_be_trashed,path_type,expected_result",
++        [
++            ('/volume', '/file', AbsolutePaths, '/file',),
++            ('/volume', '/file/././', AbsolutePaths, '/file',),
++            ('/volume', '/dir/../file', AbsolutePaths, '/file'),
++            ('/volume', '/dir/../././file', AbsolutePaths, '/file'),
++            ('/volume', '/outside/file', AbsolutePaths, '/outside/file'),
++            ('/volume', '/volume/file', AbsolutePaths, '/volume/file',),
++            ('/volume', '/volume/dir/file', AbsolutePaths, '/volume/dir/file'),
++            ('/volume', '/file', RelativePaths, '/file'),
++            ('/volume', '/dir/../file', RelativePaths, '/file'),
++            ('/volume', '/outside/file', RelativePaths, '/outside/file'),
++            ('/volume', '/volume/file', RelativePaths, 'file'),
++            ('/volume', '/volume/dir/file', RelativePaths, 'dir/file'),
++        ]
++    )
+     def test_original_location(self, volume, file_to_be_trashed, path_type,
+-                               expected_result):
+-        result = self.original_location.for_file(file_to_be_trashed, path_type,
+-                                                 volume)
++                               expected_result, original_location):
++        result = original_location.for_file(file_to_be_trashed, path_type,
++                                            volume)
+         assert expected_result == result
+ 
+ 
+diff -Naur trash-cli-0.24.5.26-original/tests/test_support/test_help_reformatting/test_split_paragraphs.py trash-cli-0.24.5.26/tests/test_support/test_help_reformatting/test_split_paragraphs.py
+--- trash-cli-0.24.5.26-original/tests/test_support/test_help_reformatting/test_split_paragraphs.py	2024-05-26 10:31:07.000000000 +0100
++++ trash-cli-0.24.5.26/tests/test_support/test_help_reformatting/test_split_paragraphs.py	2025-11-15 08:59:50.713639281 +0000
+@@ -1,9 +1,9 @@
+-from parameterized import parameterized  # type: ignore
++import pytest
+ 
+ from tests.support.help.help_reformatting import split_paragraphs
+ 
+ 
+-@parameterized.expand([
++@pytest.mark.parametrize("text,expected_result", [
+     ('one line', ['one line']),
+     ('one line\n', ['one line\n']),
+     ('one\ntwo\n', ['one\ntwo\n']),
+diff -Naur trash-cli-0.24.5.26-original/tox.ini trash-cli-0.24.5.26/tox.ini
+--- trash-cli-0.24.5.26-original/tox.ini	2024-05-26 10:31:07.000000000 +0100
++++ trash-cli-0.24.5.26/tox.ini	2025-11-15 08:59:50.713681281 +0000
+@@ -13,7 +13,6 @@
+     pytest
+     mock
+     flexmock
+-    parameterized
+     # build testing
+     setuptools
+ commands =

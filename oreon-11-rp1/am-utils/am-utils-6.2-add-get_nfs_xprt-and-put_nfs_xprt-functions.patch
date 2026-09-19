@@ -1,0 +1,170 @@
+am-utils-6.2 - add get_nfs_xprt() and put_nfs_xprt() functions
+
+From: Ian Kent <raven@themaw.net>
+
+The nfs_quick_reply() functionality relies on taking a copy of the
+current transport for later use.
+
+The problem with this is the context of the RPC message is kept in
+the transport and if any RPC message arrives before nfs_quick_reply()
+is called that context will be corrupted.
+
+So add a function get_nfs_xprt() to replace the current transport
+with a new one returning the passed in transort so nfs_quick_reply()
+can use it later.
+
+A function put_nfs_xprt() is also added (although not really needed
+since it just destroys the now unused transport) for completeness.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ conf/transp/transp_sockets.c |   44 ++++++++++++++++++++++++++++++++++++++++
+ conf/transp/transp_tli.c     |   46 +++++++++++++++++++++++++++++++++++++++++-
+ include/am_utils.h           |    2 ++
+ 3 files changed, 91 insertions(+), 1 deletion(-)
+
+diff --git a/conf/transp/transp_sockets.c b/conf/transp/transp_sockets.c
+index 6326007..98f79c8 100644
+--- a/conf/transp/transp_sockets.c
++++ b/conf/transp/transp_sockets.c
+@@ -45,6 +45,7 @@
+ #include <am_defs.h>
+ #include <amu.h>
+ 
++static int soNFS = RPC_ANYSOCK;
+ 
+ /*
+  * find the IP address that can be used to connect to the local host
+@@ -273,9 +274,52 @@ create_nfs_service(int *soNFSp, u_short *nfs_portp, SVCXPRT **nfs_xprtp, void (*
+     return 3;
+   }
+ 
++  soNFS = *soNFSp;
++
+   return 0;			/* all is well */
+ }
+ 
++/*
++ * Get a pointer to the current NFS SVCXPRT and replace it
++ * with a new one.
++ */
++SVCXPRT *
++get_nfs_xprt(SVCXPRT *nfs_xprt)
++{
++  SVCXPRT *newxprt;
++  int newfd;
++
++  if (!nfs_xprt || soNFS == RPC_ANYSOCK)
++    return NULL;
++
++  newfd = dup(soNFS);
++  if (newfd < 0)
++    return NULL;
++
++  xprt_unregister(nfs_xprt);
++  newxprt = svcudp_create(newfd);
++  if (!newxprt) {
++    plog(XLOG_FATAL, "Can't switch to new transport");
++    xprt_register(nfs_xprt);
++    close(newfd);
++    return NULL;
++  }
++
++  soNFS = newfd;
++
++  return nfs_xprt;
++}
++
++/*
++ * Destroy a transport previously obtained by get_nfs_xprt().
++ */
++void put_nfs_xprt(SVCXPRT *nfs_xprt)
++{
++  if (!nfs_xprt || soNFS == RPC_ANYSOCK)
++    return;
++
++  svc_destroy(nfs_xprt);
++}
+ 
+ /*
+  * Create the amq service for amd (both TCP and UDP)
+diff --git a/conf/transp/transp_tli.c b/conf/transp/transp_tli.c
+index d26a511..ea565cc 100644
+--- a/conf/transp/transp_tli.c
++++ b/conf/transp/transp_tli.c
+@@ -45,7 +45,8 @@
+ #include <am_defs.h>
+ #include <amu.h>
+ 
+-struct netconfig *nfsncp;
++struct netconfig *nfsncp = NULL;
++static int soNFS = RPC_ANYSOCK;
+ 
+ 
+ /*
+@@ -456,9 +457,52 @@ create_nfs_service(int *soNFSp, u_short *nfs_portp, SVCXPRT **nfs_xprtp, void (*
+     return 1;
+   }
+ 
++  soNFS = *soNFSp;
++
+   return 0;			/* all is well */
+ }
+ 
++/*
++ * Get a pointer to the current NFS SVCXPRT and replace it
++ * with a new one.
++ */
++SVCXPRT *
++get_nfs_xprt(SVCXPRT *nfs_xprt)
++{
++  SVCXPRT *newxprt;
++  int newfd;
++
++  if (!nfs_xprt || soNFS == RPC_ANYSOCK)
++    return NULL;
++
++  newfd = dup(soNFS);
++  if (newfd < 0)
++    return NULL;
++
++  xprt_unregister(nfs_xprt);
++  newxprt = svc_tli_create(newfd, nfsncp, NULL, 0, 0);
++  if (!newxprt) {
++    plog(XLOG_FATAL, "Can't switch to new transport");
++    xprt_register(nfs_xprt);
++    close(newfd);
++    return NULL;
++  }
++
++  soNFS = newfd;
++
++  return nfs_xprt;
++}
++
++/*
++ * Destroy a transport previously obtained by get_nfs_xprt().
++ */
++void put_nfs_xprt(SVCXPRT *nfs_xprt)
++{
++  if (!nfs_xprt || soNFS == RPC_ANYSOCK)
++    return;
++
++  svc_destroy(nfs_xprt);
++}
+ 
+ /*
+  * Bind to preferred AMQ port.
+diff --git a/include/am_utils.h b/include/am_utils.h
+index 0de881a..ff13c26 100644
+--- a/include/am_utils.h
++++ b/include/am_utils.h
+@@ -378,6 +378,8 @@ extern void compute_nfs_args(void *nap, mntent_t *mntp, int genflags, struct net
+ extern void destroy_nfs_args(void *nap, u_long nfs_version);
+ extern int create_amq_service(int *udp_soAMQp, SVCXPRT **udp_amqpp, struct netconfig **udp_amqncpp, int *tcp_soAMQp, SVCXPRT **tcp_amqpp, struct netconfig **tcp_amqncpp, u_short preferred_amq_port);
+ extern int create_nfs_service(int *soNFSp, u_short *nfs_portp, SVCXPRT **nfs_xprtp, void (*dispatch_fxn)(struct svc_req *rqstp, SVCXPRT *transp), u_long nfs_version);
++extern SVCXPRT *get_nfs_xprt(SVCXPRT *nfs_xprt);
++extern void put_nfs_xprt(SVCXPRT *nfs_xprt);
+ extern int amu_svc_register(SVCXPRT *, u_long, u_long, void (*)(struct svc_req *, SVCXPRT *), u_long, struct netconfig *);
+ 
+ #ifdef HAVE_TRANSPORT_TYPE_TLI

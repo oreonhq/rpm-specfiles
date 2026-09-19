@@ -1,0 +1,52 @@
+diff --git a/doc/fbb.conf.sample.in b/doc/fbb.conf.sample.in
+index 83e1c4f..945c4da 100644
+--- a/doc/fbb.conf.sample.in
++++ b/doc/fbb.conf.sample.in
+@@ -15,22 +15,27 @@
+ version = FBB@package_version@
+ 
+ # Callsign of BBS with hierarchical information
+-callsign = F6FBB.FMLR.FRA.EU
++# callsign = F6FBB.FMLR.FRA.EU
++callsign =
+ 
+ # SSID of BBS
+ ssid = 1
+ 
+ # Qra Locator of BBS
+-qraloc = JN03QL
++# qraloc = JN03QL
++qraloc =
+ 
+ # Qth of BBS
+-city = Toulouse
++# city = Toulouse
++city =
+ 
+ # First name of SYSOP
+-name = Jean-Paul
++# name = Jean-Paul
++name =
+ 
+ # Callsign of SYSOP
+-sysop = F6FBB
++# sysop = F6FBB
++sysop =
+ 
+ ##################################################################
+ 
+@@ -39,10 +44,12 @@ sysop = F6FBB
+ #
+ 
+ # Callsign (and route if needed) that will have copy of SYSOP messages
+-sysmail = F6XXX F5XXX@F6XXX.FMLR.FRA.EU
++# sysmail = F6XXX F5XXX@F6XXX.FMLR.FRA.EU
++sysmail =
+ 
+ # Line to send WP messages
+-wpcalls = F1XXX
++# wpcalls = F1XXX
++wpcalls =
+ 
+ # BBS-UP batch or program
+ upbatch =

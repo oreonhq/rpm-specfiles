@@ -1,0 +1,22 @@
+diff --git a/pick.c b/pick.c
+index 0d45534..ab3687b 100644
+--- a/pick.c
++++ b/pick.c
+@@ -58,7 +58,7 @@ struct choice {
+ 
+ static int			 choicecmp(const void *, const void *);
+ static void			 delete_between(char *, size_t, size_t, size_t);
+-static char			*eager_strpbrk(const char *, const char *);
++static char			*eager_strpbrk(char *, const char *);
+ static int			 filter_choices(size_t);
+ static char			*get_choices(void);
+ static enum key			 get_key(const char **);
+@@ -253,7 +253,7 @@ get_choices(void)
+ }
+ 
+ char *
+-eager_strpbrk(const char *string, const char *separators)
++eager_strpbrk(char *string, const char *separators)
+ {
+ 	char	*tmp_ptr;
+ 	char	*ptr = NULL;

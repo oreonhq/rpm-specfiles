@@ -1,0 +1,86 @@
+--- seeker_baryluk.c~	2009-09-15 15:10:05.000000000 +0900
++++ seeker_baryluk.c	2021-02-14 21:53:03.620000000 +0900
+@@ -14,14 +14,16 @@
+ #include <signal.h>
+ #include <sys/fcntl.h>
+ #include <sys/ioctl.h>
++#include <sys/mman.h>
+ #include <linux/fs.h>
+ 
+ #define BLOCKSIZE 512
+-#define TIMEOUT 30
++#define DEFAULT_TIMEOUT 30
+ 
+ pthread_mutex_t muteks = PTHREAD_MUTEX_INITIALIZER;
+ 
+ int count;
++int TIMEOUT;
+ time_t start;
+ off64_t maxoffset = 0;
+ off64_t minoffset = 249994674176000uLL;
+@@ -90,7 +92,9 @@
+ 
+ 	while (p->run) {
+ 		offset = (off64_t) ( (unsigned long long) (p->numbytes * (rand_r(&(p->seed)) / (RAND_MAX + 1.0) )));
+-		//printf("%d %llu\n", p->id, (unsigned long long )offset);
++		// do blocksize aligned seeks
++		offset = offset & (~((off64_t) 0) & (~(BLOCKSIZE-1))) ;
++		//printf("%d %x\n", p->id, (unsigned long long )offset);
+ 		retval = lseek64(p->fd, offset, SEEK_SET);
+ 		handle("lseek64", retval == (off64_t) -1);
+ 		retval = read(p->fd, p->buffer, BLOCKSIZE);
+@@ -121,31 +125,30 @@
+ 
+ 	setvbuf(stdout, NULL, _IONBF, 0);
+ 
+-	printf("Seeker v3.0, 2009-06-17, "
++	printf("Seeker v3.0+Fedora, 2009-06-17, "
+ 	       "http://www.linuxinsight.com/how_fast_is_your_disk.html\n");
+ 
+-	if (!(argc == 2 || argc == 3)) {
+-		printf("Usage: %s device [threads]\n", argv[0]);
++	if (!(argc == 2 || argc == 3 || argc == 4)) {
++		printf("Usage: %s device [threads] [seconds]\n", argv[0]);
+ 		exit(1);
+ 	}
+ 
+ 	threads = 1;
+-	if (argc == 3) {
++	TIMEOUT = DEFAULT_TIMEOUT;
++	if (argc > 2) {
+ 		threads = atoi(argv[2]);
++		if (argc > 3) {
++			TIMEOUT = atoi(argv[3]);
++		}
+ 	}
+ 
+ 	//pthread_mutex_init(&muteks, NULL); 
+ 
+-	fd = open(argv[1], O_RDONLY | O_LARGEFILE);
++	fd = open(argv[1], O_RDONLY | O_LARGEFILE | O_DIRECT);
+ 	handle("open", fd < 0);
+ 
+-#ifdef BLKGETSIZE64
+ 	retval = ioctl(fd, BLKGETSIZE64, &ull);
+ 	numbytes = (unsigned long long)ull;
+-#else
+-	retval = ioctl(fd, BLKGETSIZE, &ul);
+-	numbytes = (unsigned long long)ul;
+-#endif
+ 	handle("ioctl", retval == -1);
+ 	retval = ioctl(fd, BLKBSZGET, &logical_sector_size);
+ 	handle("ioctl", retval == -1 && logical_sector_size > 0);
+@@ -177,9 +180,11 @@
+ 		p[i].seed = rand()+i;
+ 		p[i].fd = dup(fd);
+ 		handle("dup", p[i].fd < 0);
+-		p[i].buffer = malloc(sizeof(char)*BLOCKSIZE);
++		p[i].buffer = mmap(NULL, BLOCKSIZE, PROT_READ | PROT_WRITE,
++					MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++
+ 		p[i].numbytes = numbytes;
+-		handle("malloc", p[i].buffer == NULL);
++		handle("malloc", p[i].buffer == MAP_FAILED);
+ 		p[i].run = 1;
+ 		p[i].count = 0;
+ 		p[i].minoffset = minoffset;

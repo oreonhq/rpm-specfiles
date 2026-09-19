@@ -1,0 +1,87 @@
+%global source0_hash 0bfe8bdaab18853ac18080da661b21f0b122491cc76f8627c271779ee159e877
+
+%global srcname aiohttp-cors
+%global common_desc aiohttp_cors library implements Cross Origin Resource Sharing (CORS) support \
+for aiohttp asyncio-powered asynchronous HTTP server.
+
+Name:           python-%{srcname}
+Version:        0.8.1
+Release:        %autorelease
+Summary:        CORS (Cross Origin Resource Sharing) support for aiohttp
+
+# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+License:        Apache-2.0
+URL:            https://github.com/aio-libs/aiohttp-cors
+Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+
+# Compatibility with pytest 8.4+
+# Upstream PR: https://github.com/aio-libs/aiohttp-cors/pull/557
+Patch:          Set-asyncio_mode-auto-for-compatibility-with-pytest-.patch
+
+BuildArch:      noarch
+
+%description
+%{common_desc}
+
+%package -n python3-%{srcname}
+Summary:        %{summary}
+BuildRequires: python3-devel
+
+# For tes suite
+BuildRequires: python3-pytest
+BuildRequires: python3-pytest-aiohttp
+BuildRequires: python3-pytest-asyncio
+BuildRequires: python3-aiohttp >= 1.1
+BuildRequires: python3-anyio
+
+# Browser tests not possible yet
+# BuildRequires: python3-selenium
+#
+# ifarch on noarch?
+# BuildRequires: chromium
+# BuildRequires: chromedriver
+# Chrome failed to start: exited abnormally
+#     (unknown error: DevToolsActivePort file doesn't exist)
+#
+# BuildRequires: firefox
+# BuildRequires: geckodriver -- not available
+
+%description -n python3-%{srcname}
+%{common_desc}
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{srcname}-%{version} -p1
+
+# remove non-essential pytest plugins
+sed -i '/pytest-cov/d' setup.py
+sed -i '/pytest-pylint/d' setup.py
+
+# Don't treat warnings as errors, that's what upstream testing is for
+# In 0.7.0, nothing else is in this config
+sed -i 's/error/default/' pytest.ini
+
+# Don't add --cov options to pytest
+# In 0.7.0, nothing else is in this config
+rm setup.cfg
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files -l aiohttp_cors
+
+%check
+%pyproject_check_import
+%{python3} -m pytest -v --ignore tests/integration/test_real_browser.py
+
+%files -n python3-%{srcname} -f %{pyproject_files}
+%doc README.rst CHANGES.rst
+
+%changelog
+%autochangelog

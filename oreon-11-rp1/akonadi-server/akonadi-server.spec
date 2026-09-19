@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 441ecb818ad39c1fbec95f2979e5447c24196d72ad74a7d08331a0e874f30114
 
 %global stable_kf6 stable
 
@@ -9,8 +9,8 @@
 
 Name:    akonadi-server
 Summary: PIM Storage Service
-Version: 26.03.80
-Release: 4%{?dist}
+Version: 26.08.0
+Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:     https://invent.kde.org/pim/akonadi
@@ -32,6 +32,7 @@ Source11:       akonadiserverrc.sqlite
 %define mysql_conf_timestamp 20170512
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  python3-devel
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  desktop-file-utils
@@ -262,6 +263,9 @@ fi
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.03.80-4
 - Remove RPM_BUILD_NCPUS and CMAKE_BUILD_PARALLEL_LEVEL OOM workarounds
 

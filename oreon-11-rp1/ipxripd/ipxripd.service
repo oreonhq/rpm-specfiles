@@ -1,0 +1,10 @@
+[Unit]
+Description=IPX RIP and SAP daemon
+After=syslog.target network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/ipxd
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,29 @@
+https://android.googlesource.com/platform/hardware/google/aemu/+/5eb26295f38f74a4b8fb76e4c416249b2ec2b808%5E%21/#F0
+
+commit 5eb26295f38f74a4b8fb76e4c416249b2ec2b808
+Date: Tue Feb 27 20:03:06 2024 +0000
+Author: Chris Masone <cmasone@google.com>
+
+
+Index: aemu-20231031/base/include/aemu/base/synchronization/Lock.h
+===================================================================
+--- aemu-20231031.orig/base/include/aemu/base/synchronization/Lock.h
++++ aemu-20231031/base/include/aemu/base/synchronization/Lock.h
+@@ -237,6 +237,8 @@ static inline __attribute__((always_inli
+         asm volatile("dmb ishst" ::: "memory");
+ #elif defined(__x86_64__)
+         std::atomic_thread_fence(std::memory_order_release);
++#elif defined(__riscv) && (__riscv_xlen == 64)
++        std::atomic_thread_fence(std::memory_order_release);
+ #else
+ #error "Unimplemented SmpWmb for current CPU architecture"
+ #endif
+@@ -247,6 +249,8 @@ static inline __attribute__((always_inli
+         asm volatile("dmb ishld" ::: "memory");
+ #elif defined(__x86_64__)
+         std::atomic_thread_fence(std::memory_order_acquire);
++#elif defined(__riscv) && (__riscv_xlen == 64)
++        std::atomic_thread_fence(std::memory_order_acquire);
+ #else
+ #error "Unimplemented SmpRmb for current CPU architecture"
+ #endif

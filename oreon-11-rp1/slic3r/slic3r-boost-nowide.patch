@@ -1,0 +1,33 @@
+--- Slic3r-1.3.0/src/CMakeLists.txt~	2020-06-02 23:18:23.296847282 +0100
++++ Slic3r-1.3.0/src/CMakeLists.txt	2020-06-02 23:18:25.377848192 +0100
+@@ -22,7 +22,7 @@
+ set(Boost_USE_STATIC_LIBS ON)
+ set(Boost_USE_STATIC_RUNTIME ON)
+ set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+-find_package(Boost COMPONENTS system thread filesystem)
++find_package(Boost COMPONENTS system thread filesystem nowide)
+ 
+ set(LIBDIR ${CMAKE_CURRENT_SOURCE_DIR}/../xs/src/)
+ 
+--- Slic3r-1.3.0/xs/Build.PL~	2020-06-02 23:28:00.109099715 +0100
++++ Slic3r-1.3.0/xs/Build.PL	2020-06-02 23:28:04.078101452 +0100
+@@ -147,7 +147,7 @@
+ }
+ # In order to generate the -l switches we need to know how Boost libraries are named
+ my $have_boost = 0;
+-my @boost_libraries = qw(system thread filesystem);  # we need these
++my @boost_libraries = qw(system thread filesystem nowide);  # we need these
+ # check without explicit lib path (works on Linux)
+ if (! $mswin) {
+     $have_boost = 1
+--- Slic3r-1.3.0/xs/src/libslic3r/Config.cpp~	2020-06-02 22:39:49.772898701 +0100
++++ Slic3r-1.3.0/xs/src/libslic3r/Config.cpp	2020-06-02 22:39:53.419900049 +0100
+@@ -13,7 +13,7 @@
+ #include <boost/config.hpp>
+ #include <boost/foreach.hpp>
+ #include <boost/lexical_cast.hpp>
+-#include <boost/nowide/cenv.hpp>
++#include <boost/nowide/cstdlib.hpp>
+ #include <boost/nowide/fstream.hpp>
+ #include <boost/property_tree/ini_parser.hpp>
+ #include <boost/property_tree/ptree.hpp>

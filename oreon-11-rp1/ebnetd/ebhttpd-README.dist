@@ -1,0 +1,11 @@
+How to set up ebhttpd to listen on non-"port 80"
+===================================================
+ebhttpd defaults to listen on Port 80 as it's designed to work as web server.
+However ebhttpd doesn't meant to replace other web server with it. so we
+would recommend to change the port before using it.
+
+For systemd users:
+Just changing the port number in /lib/systemd/system/ebhttpd.socket would works.
+
+For users who wants to run as standalone:
+You need to change the http-port number in /etc/ebnetd.conf.

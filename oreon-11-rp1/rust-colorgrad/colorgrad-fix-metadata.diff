@@ -1,0 +1,13 @@
+--- colorgrad-0.8.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ colorgrad-0.8.0/Cargo.toml	2025-12-28T11:38:27.035407+00:00
+@@ -147,10 +147,6 @@
+ [dependencies.libm]
+ version = "0.2.15"
+ 
+-[dev-dependencies.criterion]
+-version = "0.5.1"
+-features = ["html_reports"]
+-
+ [dev-dependencies.image]
+ version = "0.25.2"
+ features = ["png"]

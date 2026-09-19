@@ -1,0 +1,11 @@
+--- kdebase-3.3.92/kcontrol/konq/desktopbehavior_impl.cpp.orig	2005-02-15 18:57:09.717565337 +0100
++++ kdebase-3.3.92/kcontrol/konq/desktopbehavior_impl.cpp	2005-02-15 18:57:30.992421648 +0100
+@@ -298,7 +298,7 @@
+     else
+         desktopMenuGroup->setButton( 0 );
+     g_pConfig->setGroup( "General" );
+-    vrootBox->setChecked( g_pConfig->readBoolEntry( "SetVRoot", false ) );
++    vrootBox->setChecked( g_pConfig->readBoolEntry( "SetVRoot", true ) );
+     iconsEnabledBox->setChecked( g_pConfig->readBoolEntry( "Enabled", true ) );
+     autoLineupIconsBox->setChecked( g_pConfig->readBoolEntry( "AutoLineUpIcons", false ) );
+ 

@@ -1,0 +1,14 @@
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c.fix-missing-types freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c.fix-missing-types	2025-03-27 16:52:08.173790790 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c	2025-03-27 16:53:26.351727362 -0400
+@@ -52,6 +52,10 @@ X3D Sound Component
+ #ifdef HAVE_ALUT
+ #include <AL/alut.h>
+ #endif //HAVE_ALUT
++
++typedef struct ivec2 {int X; int Y;} ivec2;
++typedef struct icset { int p; int d; int ld; int n; int s; int ls; } icset;
++
+ /* InitAL opens the default device and sets up a context using default
+  * attributes, making the program ready to call OpenAL functions. */
+ void* fwInitAL(void)

@@ -1,0 +1,25 @@
+From 3b430834de4a1ef76f8b6601ee27d40b582b81dd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Thu, 23 Feb 2017 10:55:16 -0500
+Subject: [PATCH] Adjust test2 to pass
+
+---
+ tests/test2/expected.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/test2/expected.txt b/tests/test2/expected.txt
+index 4145946f23..9f076a7c45 100644
+--- a/tests/test2/expected.txt
++++ b/tests/test2/expected.txt
+@@ -28,7 +28,7 @@ Code
+ null
+ 22b
+ 1
+-20
++0
+ NaN
+ 40815c70a3d70a3d
+ 0x0.0p0
+-- 
+2.9.0
+

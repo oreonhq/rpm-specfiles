@@ -1,0 +1,11 @@
+diff -ruN picasso-2.8.0/ext/image_loader/gif/gif_module.c picasso-2.8.0-mod5/ext/image_loader/gif/gif_module.c
+--- picasso-2.8.0/ext/image_loader/gif/gif_module.c	2024-07-15 13:12:46.000000000 +0300
++++ picasso-2.8.0-mod5/ext/image_loader/gif/gif_module.c	2025-04-02 18:10:34.386259064 +0300
+@@ -18,6 +18,7 @@
+ #include <windows.h>
+ #endif
+ #include <gif_lib.h>
++#include <gif_getarg.h>
+ 
+ #if GIFLIB_MAJOR > 5 || GIFLIB_MAJOR == 5 && GIFLIB_MINOR >= 1
+ #define GIF_CLOSE_DFILE(gif) DGifCloseFile(gif, NULL)

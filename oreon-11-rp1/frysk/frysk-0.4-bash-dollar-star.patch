@@ -1,0 +1,19 @@
+--- frysk-0.4/common/Makefile.gen.sh.orig	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/common/Makefile.gen.sh	2009-02-09 07:56:30.000000000 -0500
+@@ -191,8 +191,14 @@
+ 	fi
+     else
+ 	local variable=variable_${name}_set
+-	eval $variable=\'$name $op "$*"\'
+-	echo "$name" = "$@"
++	# bash 4 gets an error when "$*" is empty
++	if [ $# -eq 0 ] ; then
++	    eval $variable=\'$name $op\'
++	    echo "$name" =
++	else
++	    eval $variable=\'$name $op "$*"\'
++	    echo "$name" = "$@"
++	fi
+     fi
+ }
+ 

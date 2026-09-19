@@ -1,0 +1,64 @@
+diff -up redis-6.15.7/bench_test.go.orig redis-6.15.7/bench_test.go
+--- redis-6.15.7/bench_test.go.orig	2020-02-02 09:52:57.000000000 +0100
++++ redis-6.15.7/bench_test.go	2020-03-02 23:01:32.529458045 +0100
+@@ -12,7 +12,7 @@ import (
+ 
+ func benchmarkRedisClient(poolSize int) *redis.Client {
+ 	client := redis.NewClient(&redis.Options{
+-		Addr:         ":6379",
++		Addr:         ":28126",
+ 		DialTimeout:  time.Second,
+ 		ReadTimeout:  time.Second,
+ 		WriteTimeout: time.Second,
+diff -up redis-6.15.7/example_instrumentation_test.go.orig redis-6.15.7/example_instrumentation_test.go
+--- redis-6.15.7/example_instrumentation_test.go.orig	2020-02-02 09:52:57.000000000 +0100
++++ redis-6.15.7/example_instrumentation_test.go	2020-03-02 23:01:32.530458046 +0100
+@@ -8,7 +8,7 @@ import (
+ 
+ func Example_instrumentation() {
+ 	redisdb := redis.NewClient(&redis.Options{
+-		Addr: ":6379",
++		Addr: ":28126",
+ 	})
+ 	redisdb.WrapProcess(func(old func(cmd redis.Cmder) error) func(cmd redis.Cmder) error {
+ 		return func(cmd redis.Cmder) error {
+@@ -26,7 +26,7 @@ func Example_instrumentation() {
+ 
+ func ExamplePipeline_instrumentation() {
+ 	redisdb := redis.NewClient(&redis.Options{
+-		Addr: ":6379",
++		Addr: ":28126",
+ 	})
+ 
+ 	redisdb.WrapProcessPipeline(func(old func([]redis.Cmder) error) func([]redis.Cmder) error {
+diff -up redis-6.15.7/example_test.go.orig redis-6.15.7/example_test.go
+--- redis-6.15.7/example_test.go.orig	2020-02-02 09:52:57.000000000 +0100
++++ redis-6.15.7/example_test.go	2020-03-02 23:14:58.894901898 +0100
+@@ -13,7 +13,7 @@ var redisdb *redis.Client
+ 
+ func init() {
+ 	redisdb = redis.NewClient(&redis.Options{
+-		Addr:         ":6379",
++		Addr:         ":28126",
+ 		DialTimeout:  10 * time.Second,
+ 		ReadTimeout:  30 * time.Second,
+ 		WriteTimeout: 30 * time.Second,
+@@ -24,7 +24,7 @@ func init() {
+ 
+ func ExampleNewClient() {
+ 	redisdb := redis.NewClient(&redis.Options{
+-		Addr:     "localhost:6379", // use default Addr
++		Addr:     "localhost:28126", // use default Addr
+ 		Password: "",               // no password set
+ 		DB:       0,                // use default DB
+ 	})
+@@ -56,7 +56,7 @@ func ExampleNewFailoverClient() {
+ 	// setup Redis Sentinel.
+ 	redisdb := redis.NewFailoverClient(&redis.FailoverOptions{
+ 		MasterName:    "master",
+-		SentinelAddrs: []string{":26379"},
++		SentinelAddrs: []string{":38126"},
+ 	})
+ 	redisdb.Ping()
+ }
+

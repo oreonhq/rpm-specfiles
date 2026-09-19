@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=zita-rev1
+Comment=Pro-audio reverb for JACK
+GenericName=Stereo Reverb
+Icon=zita-rev1
+Type=Application
+Exec=zita-rev1
+Terminal=false
+Categories=Audio;AudioVideo;X-Jack;

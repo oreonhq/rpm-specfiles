@@ -1,0 +1,21 @@
+diff -up ./dump1090-de61bd564f1aa929bae414a70e421acd0b81789a/dump1090.c.sigwin ./dump1090-de61bd564f1aa929bae414a70e421acd0b81789a/dump1090.c
+--- ./dump1090-de61bd564f1aa929bae414a70e421acd0b81789a/dump1090.c.sigwin	2025-08-02 11:57:59.727482650 -0400
++++ ./dump1090-de61bd564f1aa929bae414a70e421acd0b81789a/dump1090.c	2025-08-02 11:57:47.427266165 -0400
+@@ -241,7 +241,7 @@ void useModesMessage(struct modesMessage
+ int fixSingleBitErrors(unsigned char *msg, int bits);
+ int fixTwoBitsErrors(unsigned char *msg, int bits);
+ int modesMessageLenByType(int type);
+-void sigWinchCallback();
++void sigWinchCallback(int);
+ int getTermRows();
+ 
+ /* ============================= Utility functions ========================== */
+@@ -2421,7 +2421,7 @@ void modesWaitReadableClients(int timeou
+ /* ============================ Terminal handling  ========================== */
+ 
+ /* Handle resizing terminal. */
+-void sigWinchCallback() {
++void sigWinchCallback(int) {
+     signal(SIGWINCH, SIG_IGN);
+     Modes.interactive_rows = getTermRows();
+     interactiveShowData();

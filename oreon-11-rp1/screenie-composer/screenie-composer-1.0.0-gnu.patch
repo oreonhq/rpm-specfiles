@@ -1,0 +1,15 @@
+diff -r 38a9bdb91128 src/Utils/src/.Version.h.swp
+Binary file src/Utils/src/.Version.h.swp has changed
+diff -r 38a9bdb91128 src/Utils/src/Version.h
+--- a/src/Utils/src/Version.h	Wed Aug 17 08:03:20 2011 +0200
++++ b/src/Utils/src/Version.h	Wed Aug 17 08:04:03 2011 +0200
+@@ -26,6 +26,9 @@
+ 
+ #include "UtilsLib.h"
+ 
++#undef major
++#undef minor
++
+ class VersionPrivate;
+ 
+ /*!

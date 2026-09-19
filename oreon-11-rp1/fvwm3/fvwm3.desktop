@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=FVWM 3
+Comment=ICCCM-compliant multiple virtual desktop window manager
+Exec=fvwm3
+Type=Application
+Terminal=false
+
+[X-Window Manager]
+SessionManaged=true

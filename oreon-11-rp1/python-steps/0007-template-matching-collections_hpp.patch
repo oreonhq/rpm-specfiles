@@ -1,0 +1,21 @@
+--- STEPS-3.6.0/src/steps/util/collections.hpp.debug	2021-02-19 20:08:41.000000000 +0900
++++ STEPS-3.6.0/src/steps/util/collections.hpp	2022-07-05 23:31:46.844588413 +0900
+@@ -55,6 +55,7 @@
+         hash_ref(H hasher_): hasher(hasher_) {}
+         H hasher;
+         template <typename V> size_t operator()(std::reference_wrapper<V> v) const { return hasher(v.get()); }
++        template <typename V> size_t operator()(V v) const { return hasher(v); }
+     };
+ 
+     struct equal_to_ref {
+@@ -62,6 +63,10 @@
+         size_t operator()(const std::reference_wrapper<V> &u,const std::reference_wrapper<V> &v) const {
+             return u.get()==v.get();
+         }
++        template <typename V>
++        size_t operator()(V &u,const std::reference_wrapper<V> &v) const {
++            return u==v.get();
++        }
+     };
+ 
+     template <typename Table, typename C1, typename C2, typename H>

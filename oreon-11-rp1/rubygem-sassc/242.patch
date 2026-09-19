@@ -1,0 +1,162 @@
+From 6a59496c74f607e8a47637a058e04c8220994e27 Mon Sep 17 00:00:00 2001
+From: Otto Liljalaakso <otto.liljalaakso@iki.fi>
+Date: Sat, 2 Sep 2023 22:04:43 +0300
+Subject: [PATCH 1/2] Use Minitest module instead of MiniTest compatibility
+ layer
+
+The Minitest package has long been capitalized like that. The variant
+MiniTest is retained only as a compatibility layer. Switch to the
+current module name.
+
+This change is motivated by Fedora, which already uses minitest 5.19.
+That version requires setting the env variable MT_COMPAT to import the
+compatibility module, and thus revealed the problem in Fedora build
+system.
+
+Signed-off-by: Otto Liljalaakso <otto.liljalaakso@iki.fi>
+---
+ test/custom_importer_test.rb | 2 +-
+ test/engine_test.rb          | 2 +-
+ test/error_test.rb           | 2 +-
+ test/functions_test.rb       | 2 +-
+ test/native_test.rb          | 6 +++---
+ test/output_style_test.rb    | 2 +-
+ test/sass_2_scss_test.rb     | 2 +-
+ 7 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/test/custom_importer_test.rb b/test/custom_importer_test.rb
+index b803b139..5954674f 100644
+--- a/test/custom_importer_test.rb
++++ b/test/custom_importer_test.rb
+@@ -3,7 +3,7 @@
+ require_relative "test_helper"
+ 
+ module SassC
+-  class CustomImporterTest < MiniTest::Test
++  class CustomImporterTest < Minitest::Test
+     include TempFileTest
+ 
+     class CustomImporter < Importer
+diff --git a/test/engine_test.rb b/test/engine_test.rb
+index 29681d7a..800ef5ad 100644
+--- a/test/engine_test.rb
++++ b/test/engine_test.rb
+@@ -3,7 +3,7 @@
+ require_relative "test_helper"
+ 
+ module SassC
+-  class EngineTest < MiniTest::Test
++  class EngineTest < Minitest::Test
+     include TempFileTest
+ 
+     def render(data)
+diff --git a/test/error_test.rb b/test/error_test.rb
+index 1caa316c..474c2378 100644
+--- a/test/error_test.rb
++++ b/test/error_test.rb
+@@ -3,7 +3,7 @@
+ require_relative "test_helper"
+ 
+ module SassC
+-  class ErrorTest < MiniTest::Test
++  class ErrorTest < Minitest::Test
+     def render(data, opts={})
+       Engine.new(data, opts).render
+     end
+diff --git a/test/functions_test.rb b/test/functions_test.rb
+index 77716722..fd8407f7 100644
+--- a/test/functions_test.rb
++++ b/test/functions_test.rb
+@@ -4,7 +4,7 @@
+ require "stringio"
+ 
+ module SassC
+-  class FunctionsTest < MiniTest::Test
++  class FunctionsTest < Minitest::Test
+     include FixtureHelper
+ 
+     def setup
+diff --git a/test/native_test.rb b/test/native_test.rb
+index 876f56cd..a3589bcf 100644
+--- a/test/native_test.rb
++++ b/test/native_test.rb
+@@ -9,13 +9,13 @@ module NativeTest
+     SAMPLE_CSS_OUTPUT = ".hi {\n  width: 30px; }\n"
+     BAD_SASS_STRING = "$size = 30px;"
+ 
+-    class General < MiniTest::Test
++    class General < Minitest::Test
+       def test_it_reports_the_libsass_version
+         assert_equal "3.6.4", Native.version
+       end
+     end
+ 
+-    class DataContext < MiniTest::Test
++    class DataContext < Minitest::Test
+       def teardown
+         Native.delete_data_context(@data_context) if @data_context
+       end
+@@ -105,7 +105,7 @@ def test_custom_function
+       end
+     end
+ 
+-    class FileContext < MiniTest::Test
++    class FileContext < Minitest::Test
+       include TempFileTest
+ 
+       def teardown
+diff --git a/test/output_style_test.rb b/test/output_style_test.rb
+index f9a90597..20b8e20d 100644
+--- a/test/output_style_test.rb
++++ b/test/output_style_test.rb
+@@ -3,7 +3,7 @@
+ require_relative "test_helper"
+ 
+ module SassC
+-  class OutputStyleTest < MiniTest::Test
++  class OutputStyleTest < Minitest::Test
+     def input_scss
+       input_scss = <<-CSS
+ $color: #fff;
+diff --git a/test/sass_2_scss_test.rb b/test/sass_2_scss_test.rb
+index 85282f31..fd368a54 100644
+--- a/test/sass_2_scss_test.rb
++++ b/test/sass_2_scss_test.rb
+@@ -3,7 +3,7 @@
+ require_relative "test_helper"
+ 
+ module SassC
+-  class Sass2ScssTest < MiniTest::Test
++  class Sass2ScssTest < Minitest::Test
+     def test_compact_output
+       assert_equal ".blat { color: red; }", Sass2Scss.convert(<<SASS)
+ .blat
+
+From e44a8b1d865b7de80e1f9dc65aad7cbcba90063e Mon Sep 17 00:00:00 2001
+From: Otto Liljalaakso <otto.liljalaakso@iki.fi>
+Date: Sat, 2 Sep 2023 22:11:12 +0300
+Subject: [PATCH 2/2] Allow newer minitest versions
+
+sassc-ruby build in Fedora ignores the dependency version constaints
+given in gemspec and uses the versions included in the Fedora
+distribution. Currently, Fedora is on 5.19.0, which works. Based on
+this, the version constaint can be considerably relaxed.
+
+Signed-off-by: Otto Liljalaakso <otto.liljalaakso@iki.fi>
+---
+ sassc.gemspec | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sassc.gemspec b/sassc.gemspec
+index 912df0df..cbda5243 100644
+--- a/sassc.gemspec
++++ b/sassc.gemspec
+@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
+   spec.platform      = Gem::Platform::RUBY
+   spec.extensions    = ["ext/extconf.rb"]
+ 
+-  spec.add_development_dependency "minitest", "~> 5.5.1"
++  spec.add_development_dependency "minitest", ">= 5.5.1", "< 5.20"
+   spec.add_development_dependency "minitest-around"
+   spec.add_development_dependency "test_construct"
+   spec.add_development_dependency "pry"

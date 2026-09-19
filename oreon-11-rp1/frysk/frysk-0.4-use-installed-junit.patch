@@ -1,0 +1,290 @@
+commit 312b37c31d06ffb54bc3a174badf9daa6e781a14
+Author: Andrew Cagney <cagney@gnu.org>
+Date:   Wed Apr 13 09:52:58 2016 -0400
+
+    Use installed junit, don't bundle junit.jar.
+    
+    Patch: frysk-0.4-use-installed-junit.patch
+
+diff --git a/frysk-common/Makefile.gen.sh b/frysk-common/Makefile.gen.sh
+index 6213a7e..c83a85e 100755
+--- a/frysk-common/Makefile.gen.sh
++++ b/frysk-common/Makefile.gen.sh
+@@ -509,7 +509,7 @@ for suffix in .java .java-sh .mkenum .shenum .java-in ; do
+ ${name}: Makefile
+ 	mkdir -p ${d}
+ 	echo "#!/bin/sh" >> ${name}.tmp
+-	echo exec /usr/bin/java -cp \"\$(javadir)/*\$(INSTALLED_CLASSPATH)\" ${name} \"\\\$\$@\" >> ${name}.tmp
++	echo exec /usr/bin/java -cp \"\$(INSTALLED_CLASSPATH)\" ${name} \"\\\$\$@\" >> ${name}.tmp
+ 	chmod a+x ${name}.tmp
+ 	mv ${name}.tmp ${name}
+ EOF
+diff --git a/frysk-common/Makefile.rules b/frysk-common/Makefile.rules
+index 84ee611..92e4c3d 100644
+--- a/frysk-common/Makefile.rules
++++ b/frysk-common/Makefile.rules
+@@ -140,7 +140,7 @@ ACLOCAL_AMFLAGS = -I common/m4
+ 
+ SOURCEPATH = $(subst $(space),:,$(strip $(GEN_SOURCEPATH)))
+ CLASSPATH = $(subst $(space),:,$(strip $(GEN_CLASSPATH)))
+-INSTALLED_CLASSPATH = $(patsubst %,:%,$(subst $(space),:,$(filter /%.jar,$(GEN_CLASSPATH))))
++INSTALLED_CLASSPATH = $(subst $(space),:,$(javadir)/* $(filter /%.jar,$(GEN_CLASSPATH)))
+ 
+ AM_CXXFLAGS = \
+ 	-I$(srcdir) \
+@@ -499,7 +499,7 @@ SUFFIXES += .antlred .g
+ 	    mv $$gen $$t/$$b.gen ; \
+ 	    i=@abs_srcdir@/$$d/$$b.sed ; \
+ 	    o=$$t/$$b.sed ; \
+-   	    if test -r $$i ; then \
++	    if test -r $$i ; then \
+ 		cp $$i $$o.sed ; \
+ 	    else \
+ 		cp /dev/null $$o ; \
+@@ -536,7 +536,7 @@ SUFFIXES += .antlred .g
+ 		for fix in $$t/*.antlr-fixes ; do \
+ 		    b=`basename $$fix .antlr-fixes` ; \
+ 		    test -r "$$t/$$b.sed" || continue ; \
+- 		    sort -n $$t/$$b.sed $$fix | uniq > $$t/$$b.tmp ; \
++		    sort -n $$t/$$b.sed $$fix | uniq > $$t/$$b.tmp ; \
+ 		    if ( set -x ; cmp -s $$t/$$b.tmp $$t/$$b.sed ) ; then \
+ 			echo "***" ; \
+ 			echo "*** $$t/$$b.sed already contains all fixes!" ; \
+@@ -545,7 +545,7 @@ SUFFIXES += .antlred .g
+ 			continue ; \
+ 		    fi ; \
+ 		    mv -f $$t/$$b.tmp $$t/$$b.sed ; \
+- 		    edits=true ; \
++		    edits=true ; \
+ 	        done ; \
+ 	    done ; \
+ 	done || true
+@@ -599,7 +599,7 @@ SUFFIXES += .fig .jpg .pdf .eps .gif .txt
+ clean-local: clean-local-po
+ .PHONY: clean-local-po
+ clean-local-po:
+-	find $(GEN_DIRS) -name '*.Po' -exec cp /dev/null \{\} \;
++	test "x$(GEN_DIRS)" == x || find $(GEN_DIRS) -name '*.Po' -exec cp /dev/null \{\} \;
+ 
+ # Remove any directories, why isn't this part of automake?
+ 
+@@ -662,18 +662,16 @@ ${GEN_DIRNAME}.jar: files-java.list $(GEN_CLASSPATH)
+ check-local: checked-for-import-junit-framework
+ .PHONY: checked-for-import-junit-framework
+ checked-for-import-junit-framework: $(if $(GEN_DIRS),$(GEN_DIRNAME).jar)
+-	@echo "" ; \
+-	if for dir in $(GEN_DIRS) ; do \
++	@if test "x$(GEN_DIRS)" != x && for dir in $(GEN_DIRS) ; do \
+ 		find $(srcdir)/$$dir ./$$dir \
+ 			-type f -name '[a-zA-Z]*.java' -print \
+-			-o -name inua -prune \
+-			-o -name junit -prune ; \
++			-o -name inua -prune ; \
+ 	   done | xargs -r grep -H -n -e 'import *junit\.framework' ; \
+ 	then \
+-		echo "FAIL: code uses frysk.junit" ; \
++		echo "FAIL: code only uses frysk.junit" ; \
+ 		exit 1 ; \
+ 	else \
+-		echo "PASS: code uses frysk.junit" ; \
++		echo "PASS: code only uses frysk.junit" ; \
+ 	fi
+ 
+ # Check that everything is calling fail() with a parameter.
+@@ -681,7 +679,7 @@ checked-for-import-junit-framework: $(if $(GEN_DIRS),$(GEN_DIRNAME).jar)
+ check-local: checked-for-parameterless-junit-fail
+ .PHONY: checked-for-parameterless-junit-fail
+ checked-for-parameterless-junit-fail: $(if $(GEN_DIRS),$(GEN_DIRNAME).jar)
+-	@if for dir in $(GEN_DIRS) ; do \
++	@if test "x$(GEN_DIRS)" != x && for dir in $(GEN_DIRS) ; do \
+ 		find $(srcdir)/$$dir ./$$dir \
+ 			-type f -name '[a-zA-Z]*.java' -print \
+ 			-o -name inua -prune \
+@@ -699,7 +697,7 @@ checked-for-parameterless-junit-fail: $(if $(GEN_DIRS),$(GEN_DIRNAME).jar)
+ check-local: checked-for-null-equals
+ .PHONY: checked-for-null-equals
+ checked-for-null-equals: $(if $(GEN_DIRS),$(GEN_DIRNAME).jar)
+-	@if for dir in $(GEN_DIRS) ; do \
++	@if test "x$(GEN_DIRS)" != x && for dir in $(GEN_DIRS) ; do \
+ 		find $(srcdir)/$$dir \
+ 			-type f -name '[a-zA-Z]*.java' -print \
+ 			-o -type f -name '[a-zA-Z]*.cxx' -print \
+@@ -720,7 +718,7 @@ checked-for-null-equals: $(if $(GEN_DIRS),$(GEN_DIRNAME).jar)
+ check-local: checked-for-at-author
+ .PHONY: checked-for-at-author
+ checked-for-at-author: $(if $(GEN_DIRS),$(GEN_DIRNAME).jar)
+-	@if for dir in $(GEN_DIRS) ; do \
++	@if test "x$(GEN_DIRS)" != x && for dir in $(GEN_DIRS) ; do \
+ 		find $(srcdir)/$$dir \
+ 			-type f -name '[a-zA-Z]*.java' -print \
+ 			-o -name inua -prune \
+@@ -737,7 +735,7 @@ checked-for-at-author: $(if $(GEN_DIRS),$(GEN_DIRNAME).jar)
+ check-local: checked-for-eclipse-residue
+ .PHONY: checked-for-eclipse-residue
+ checked-for-eclipse-residue: $(if $(GEN_DIRS),$(GEN_DIRNAME).jar)
+-	@if for dir in $(GEN_DIRS) ; do \
++	@if test "x$(GEN_DIRS)" != x && for dir in $(GEN_DIRS) ; do \
+ 		find $(srcdir)/$$dir \
+ 			-type f -name '[a-zA-Z]*.java' -print \
+ 			-o -name inua -prune \
+diff --git a/frysk-common/frysk-common.ac b/frysk-common/frysk-common.ac
+index 511c4fc..a112cfb 100644
+--- a/frysk-common/frysk-common.ac
++++ b/frysk-common/frysk-common.ac
+@@ -96,7 +96,7 @@ AU_DEFUN([AC_LANG_JAVAC], [AC_LANG(Java)])
+ AC_LANG(Java)
+ 
+ JAVAC='$(JAVA) -cp $(ECJ_JAR):$(CLASSPATH) org.eclipse.jdt.internal.compiler.batch.Main -1.4'
+-JAVACFLAGS='-warn:+semicolon -sourcepath $(SOURCEPATH) -classpath $(CLASSPATH)'
++JAVACFLAGS='-warn:+semicolon $(if $(SOURCEPATH),-sourcepath $(SOURCEPATH)) $(if $(CLASSPATH),-classpath $(CLASSPATH))'
+ AC_SUBST([JAVAC])
+ AC_SUBST([JAVACFLAGS])
+ 
+diff --git a/frysk-core/Makefile.am b/frysk-core/Makefile.am
+index fbe11ef..7938aa8 100644
+--- a/frysk-core/Makefile.am
++++ b/frysk-core/Makefile.am
+@@ -45,7 +45,7 @@ include Makefile.gen
+ GEN_CLASSPATH += ../frysk-sys/frysk-sys.jar
+ GEN_CLASSPATH += ../frysk-imports/jline.jar
+ GEN_CLASSPATH += $(ANTLR_JAR)
+-GEN_CLASSPATH += ../frysk-imports/junit.jar
++GEN_CLASSPATH += $(JUNIT_JAR)
+ GEN_CLASSPATH += ../frysk-imports/getopt.jar
+ 
+ # For TestExec.java
+diff --git a/frysk-core/bootstrap.sh b/frysk-core/bootstrap.sh
+index 4ed9a1c..ce80e1c 100755
+--- a/frysk-core/bootstrap.sh
++++ b/frysk-core/bootstrap.sh
+@@ -43,7 +43,7 @@ set -e
+ 
+ # Generate everything (always run with --add-missing).
+ 
+-sh -eu ./common/Makefile.gen.sh frysk prog ANTLR_JAR
++sh -eu ./common/Makefile.gen.sh frysk prog ANTLR_JAR JUNIT_JAR
+ 
+ echo "Running aclocal ..."
+ aclocal -I common/m4
+diff --git a/frysk-core/configure.ac b/frysk-core/configure.ac
+index 7abf364..910dd0c 100644
+--- a/frysk-core/configure.ac
++++ b/frysk-core/configure.ac
+@@ -47,6 +47,7 @@ m4_include([common/frysk-common.ac])
+ 
+ AM_INIT_AUTOMAKE([subdir-objects foreign no-installinfo no-exeext no-dist])
+ AC_FIND_FILE([antlr.jar], [/usr/share/java], ANTLR_JAR)
++AC_FIND_FILE([junit.jar], [/usr/share/java], JUNIT_JAR)
+ 
+ AC_CONFIG_FILES([Makefile])
+ AC_OUTPUT
+diff --git a/frysk-imports/Makefile.am b/frysk-imports/Makefile.am
+index c94af36..c09f9cf 100644
+--- a/frysk-imports/Makefile.am
++++ b/frysk-imports/Makefile.am
+@@ -1,6 +1,7 @@
+ # This file is part of the program FRYSK.
+ #
+ # Copyright 2005, 2006, 2007, 2008, Red Hat Inc.
++# Copyright 2016, Andrew Cagney
+ #
+ # FRYSK is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -57,7 +58,6 @@ LIBUNWIND_ARCH_DIRS = libunwind-i386 libunwind-x86_64 libunwind-ppc32 libunwind-
+ # tests.
+ CHECK_SUBDIRS = \
+ 	jline \
+-	junit \
+ 	getopt \
+ 	$(LIBUNWIND_DIR)
+ 
+@@ -81,16 +81,6 @@ uninstall-info-recursive \
+ uninstall-recursive: SUBDIRS =
+ 
+ GEN_CLASSPATH += getopt.jar
+-GEN_CLASSPATH += junit.jar
+-GEN_GCJ_LDADD_LIST += libfrysk-getopt.a
+-GEN_GCJ_LDADD_LIST += libfrysk-junit.a
+-GEN_GCJ_LDADD_LIST += -lstdc++
+-GEN_GCJ_LDADD_LIST += ./libunwind-i386/src/.libs/libunwind-x86.a
+-GEN_GCJ_LDADD_LIST += ./libunwind-x86_64/src/.libs/libunwind-x86_64.a
+-GEN_GCJ_LDADD_LIST += ./libunwind-ppc32/src/.libs/libunwind-ppc32.a
+-GEN_GCJ_LDADD_LIST += ./libunwind-ppc64/src/.libs/libunwind-ppc64.a
+-# For auding of system calls.
+-GEN_GCJ_LDADD_LIST += -laudit
+ 
+ # Need to get this into the distribution
+ noinst_HEADERS = \
+diff --git a/frysk-imports/bootstrap.sh b/frysk-imports/bootstrap.sh
+index 87ddd6b..9b878e5 100755
+--- a/frysk-imports/bootstrap.sh
++++ b/frysk-imports/bootstrap.sh
+@@ -42,7 +42,6 @@
+ set -e
+ 
+ FILE_LIST="\
+-    junit/junit.jar \
+     jline/jline.jar \
+     getopt/getopt.jar \
+     "
+diff --git a/frysk-imports/configure.ac b/frysk-imports/configure.ac
+index df4ad25..2652f47 100644
+--- a/frysk-imports/configure.ac
++++ b/frysk-imports/configure.ac
+@@ -52,8 +52,7 @@ AC_FIND_FILE([libaudit.h], [/usr/include/], LIBAUDIT_H)
+ AC_CONFIG_FILES([
+ 	Makefile
+ 	jline/Makefile
+-	getopt/Makefile
+-	junit/Makefile])
++	getopt/Makefile])
+ 
+ # Even though "libunwind" is not built, it is still included in the
+ # list of configured subdirectories so that it can be included in
+diff --git a/frysk-sys/Makefile.am b/frysk-sys/Makefile.am
+index 7465edf..d5ab9bc 100644
+--- a/frysk-sys/Makefile.am
++++ b/frysk-sys/Makefile.am
+@@ -45,8 +45,8 @@ include Makefile.gen
+ GEN_SOURCEPATH += ../frysk-imports/
+ GEN_SOURCEPATH += $(top_srcdir)/../frysk-imports/
+ GEN_CLASSPATH += ../frysk-imports/jline.jar
+-GEN_CLASSPATH += ../frysk-imports/junit.jar
+ GEN_CLASSPATH += ../frysk-imports/getopt.jar
++GEN_CLASSPATH += $(JUNIT_JAR)
+ 
+ # Force a few dependencies
+ lib/unwind/cni/Unwind%.cxx: lib/unwind/Unwind%.java lib/unwind/cni/UnwindH.hxx
+diff --git a/frysk-sys/bootstrap.sh b/frysk-sys/bootstrap.sh
+index a3c1eb6..076cb94 100755
+--- a/frysk-sys/bootstrap.sh
++++ b/frysk-sys/bootstrap.sh
+@@ -2,6 +2,7 @@
+ # This file is part of the program FRYSK.
+ #
+ # Copyright 2005, 2006, 2007, 2008, Red Hat Inc.
++# Copyright 2016, Andrew Cagney
+ #
+ # FRYSK is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -45,7 +46,7 @@ FILE_LIST="frysk \
+     inua \
+     lib"
+ 
+-./common/Makefile.gen.sh $FILE_LIST
++./common/Makefile.gen.sh $FILE_LIST JUNIT_JAR
+ 
+ # Generate everything (always run with --add-missing).
+ 
+diff --git a/frysk-sys/configure.ac b/frysk-sys/configure.ac
+index d92c4f4..675ee80 100644
+--- a/frysk-sys/configure.ac
++++ b/frysk-sys/configure.ac
+@@ -45,6 +45,7 @@ AC_INIT(frysk, [FRYSK_VERSION])
+ m4_include([common/frysk-common.ac])
+ 
+ AM_INIT_AUTOMAKE([subdir-objects foreign no-installinfo no-exeext no-dist])
++AC_FIND_FILE([junit.jar], [/usr/share/java], JUNIT_JAR)
+ 
+ AC_CONFIG_FILES([Makefile])
+ AC_OUTPUT

@@ -1,0 +1,27 @@
+diff '--color=auto' -urdN qdigidoc4-orig/client/CMakeLists.txt qdigidoc4/client/CMakeLists.txt
+--- qdigidoc4-orig/client/CMakeLists.txt	2025-11-07 08:19:21.000000000 +0100
++++ qdigidoc4/client/CMakeLists.txt	2025-11-22 21:32:28.295615393 +0100
+@@ -3,22 +3,6 @@
+ get_filename_component(TSL_FILENAME ${TSL_URL} NAME_WLE)
+ set(TSL_LIST ${TSL_FILENAME} ${TSL_INCLUDE})
+ list(TRANSFORM TSL_LIST APPEND .xml)
+-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${TSL_FILENAME}.xml)
+-	set(TSL_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+-	list(TRANSFORM TSL_LIST PREPEND ${TSL_DIR}/)
+-else()
+-	set(TSL_DIR ${CMAKE_CURRENT_BINARY_DIR})
+-	list(TRANSFORM TSL_LIST PREPEND ${TSL_DIR}/)
+-	add_executable(TSLDownload TSLDownload.cpp)
+-	target_link_libraries(TSLDownload Qt6::Network)
+-	set_target_properties(TSLDownload PROPERTIES AUTOMOC OFF)
+-	add_custom_command(
+-		OUTPUT ${TSL_LIST}
+-		DEPENDS TSLDownload
+-		COMMAND $<TARGET_FILE:TSLDownload> ${CMAKE_CURRENT_BINARY_DIR} ${TSL_URL} ${TSL_INCLUDE}
+-		WORKING_DIRECTORY ${qtCore_install_prefix}
+-	)
+-endif()
+ 
+ file(GLOB WIDGETS CONFIGURE_DEPENDS
+ 	"dialogs/*.cpp" "dialogs/*.h" "dialogs/*.ui"
+

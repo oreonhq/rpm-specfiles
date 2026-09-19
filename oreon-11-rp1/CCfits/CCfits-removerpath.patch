@@ -1,0 +1,27 @@
+diff -ur CCfits-2.6/Makefile.in CCfits-2.6.rpath/Makefile.in
+--- CCfits-2.6/Makefile.in	2021-05-27 22:13:46.000000000 +0200
++++ CCfits-2.6.rpath/Makefile.in	2021-07-21 14:01:48.701599355 +0200
+@@ -450,12 +450,12 @@
+ # generation like gcc does
+ AUTOMAKE_OPTIONS = foreign # no-dependencies
+ SUBDIRS = vs.net
+-R_LIB_PATH = @RDFLAGS@
++R_LIB_PATH = 
+ MSVC_FILES = MSconfig.h
+ EXTRA_DIST = config CHANGES README.INSTALL License.txt file1.pha CMakeLists.txt FindCFITSIO.cmake $(MSVC_FILES)
+ cookbook_SOURCES = cookbook.cxx
+ cookbook_LDADD = libCCfits.la
+-cookbook_LDFLAGS = -R $(R_LIB_PATH) -R $(CXX_LIB_PATH)
++cookbook_LDFLAGS =
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = CCfits.pc
+ AM_CPPFLAGS = -I$(top_srcdir)/..
+@@ -484,7 +484,7 @@
+ # This will tell shared library which STD C++ library to use without
+ # needing the user to use LD_LIBRARY_PATH environment variable
+ libCCfits_la_LIBADD = $(LIBSTDCPP)
+-libCCfits_la_LDFLAGS = -R $(R_LIB_PATH) -R $(CXX_LIB_PATH)
++libCCfits_la_LDFLAGS = 
+ libCCfits_ladir = $(pkgincludedir)
+ libCCfits_la_HEADERS = \
+ 	AsciiTable.h				\

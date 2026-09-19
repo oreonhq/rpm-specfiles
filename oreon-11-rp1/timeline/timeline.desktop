@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Timeline
+Exec=timeline
+Comment=Displays and navigates events on a timeline
+Icon=timeline
+Terminal=false
+Categories=Office
+StartupNotify=false
+Version=1.0

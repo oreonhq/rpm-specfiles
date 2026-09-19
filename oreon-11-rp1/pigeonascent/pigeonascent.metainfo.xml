@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2021 Dennis Payne <dulsi@identicalsoftware.com> -->
+<component type="desktop-application">
+  <id>pigeonascent</id>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>MIT</project_license>
+  <name>Pigeon Ascent</name>
+  <summary>Take care of your own pigeon as they fight</summary>
+
+  <description>
+    <p>
+      Take care of your own pigeon as they fight increasingly stronger foes, and
+      then facing the legendary Pigeon God at the end… can you keep death far from
+      your bird?
+    </p>
+  </description>
+
+  <launchable type="desktop-id">pigeonascent.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://static.jam.vg/raw/777/31/z/30974.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://static.jam.vg/raw/777/31/z/3097c.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://static.jam.vg/raw/777/31/z/30982.png</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://escada-games.itch.io/pigeon-ascent</url>
+
+  <releases>
+    <release version="1.5.2" date="2021-07-16" />
+  </releases>
+
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-cartoon">moderate</content_attribute>
+    <content_attribute id="language-humor">mild</content_attribute>
+  </content_rating>
+</component>

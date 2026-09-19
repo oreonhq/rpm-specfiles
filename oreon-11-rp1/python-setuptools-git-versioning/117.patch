@@ -1,0 +1,70 @@
+From 5baeae90cbcb84fb8cec1689a8efcd16943bb73f Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 22 Oct 2025 12:23:06 +0100
+Subject: [PATCH] Remove test dependency on unmaintained PyPI toml package
+
+Use tomli-w for writing TOML instead.
+
+See also https://fedoraproject.org/wiki/Changes/DeprecatePythonToml.
+---
+ requirements-test.txt                 | 3 ++-
+ tests/lib/util.py                     | 4 ++--
+ tests/test_integration/test_config.py | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/requirements-test.txt b/requirements-test.txt
+index 736dcd7..3f259cb 100644
+--- a/requirements-test.txt
++++ b/requirements-test.txt
+@@ -2,5 +2,6 @@ build
+ coverage
+ pytest
+ pytest-rerunfailures
+-toml
++# Some tests need to write TOML, but tomli and tomllib are read-only, and toml package is unmaintained
++tomli-w
+ wheel
+diff --git a/tests/lib/util.py b/tests/lib/util.py
+index 30a6b57..ddfe901 100644
+--- a/tests/lib/util.py
++++ b/tests/lib/util.py
+@@ -10,7 +10,7 @@
+ from secrets import token_hex
+ from typing import Any, Callable
+ 
+-import toml
++import tomli_w
+ 
+ log = logging.getLogger(__name__)
+ root = Path(__file__).parent.parent
+@@ -217,7 +217,7 @@ def create_pyproject_toml(
+     if config != NotImplemented:
+         cfg["tool"] = {"setuptools-git-versioning": config}
+ 
+-    return create_file(cwd, "pyproject.toml", toml.dumps(cfg), commit=commit, **kwargs)
++    return create_file(cwd, "pyproject.toml", tomli_w.dumps(cfg), commit=commit, **kwargs)
+ 
+ 
+ def create_setup_py(
+diff --git a/tests/test_integration/test_config.py b/tests/test_integration/test_config.py
+index 5e40988..6d7dadf 100644
+--- a/tests/test_integration/test_config.py
++++ b/tests/test_integration/test_config.py
+@@ -3,7 +3,7 @@
+ import textwrap
+ 
+ import pytest
+-import toml
++import tomli_w
+ 
+ from tests.lib.util import (
+     create_file,
+@@ -66,7 +66,7 @@ def test_config_not_used(repo):
+     create_file(
+         repo,
+         "pyproject.toml",
+-        toml.dumps(cfg),
++        tomli_w.dumps(cfg),
+     )
+ 
+     assert get_version(repo, isolated=False) == "0.0.0"

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Jiri Vanek <judovana@email.cz> -->
+<application>
+  <id type="desktop">jpanoramamaker.desktop</id>
+  <metadata_license>CC0</metadata_license>
+  <description>
+    <p>
+      Tool for stitching photos to panorama in linear curved space.
+    </p>
+    <p>
+      This tool is unique in number of manual touches you can do to affect final result.
+    </p>
+    <p>
+      Sometimes simple changing of order of image or lying a bit on position where they meet can do miracles.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot width="1099" height="849">http://jpanoramamaker.wz.cz/images/tutorial/Image7.jpg</screenshot>
+    <screenshot width="1342" height="945">http://jpanoramamaker.wz.cz/images/tutorial/Image12.jpg</screenshot>
+    <screenshot width="915"  height="538">http://jpanoramamaker.wz.cz/images/tutorial/Image13.jpg</screenshot>
+    <screenshot width="883"  height="364">http://jpanoramamaker.wz.cz/images/tutorial/Image14.jpg</screenshot>
+    <screenshot type="default" width="2906" height="944">http://jpanoramamaker.wz.cz/images/tutorial/result.jpg</screenshot>
+  </screenshots>
+  <url type="homepage">http://jpanoramamaker.wz.cz/</url>
+  <updatecontact>judovana_at_email.cz</updatecontact>
+</application>
+

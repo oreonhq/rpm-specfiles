@@ -1,0 +1,36 @@
+From d74d70d9695c464b602c96c2383d391b38ed51ac Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?C=C3=A9dric=20Krier?= <ced@b2ck.com>
+Date: Thu, 12 Oct 2023 15:39:37 +0200
+Subject: [PATCH] Remove unused context stack
+
+_app_ctx_stack and _request_ctx_stack have been remove in Flask 3.0
+---
+ flask_gravatar/__init__.py | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/flask_gravatar/__init__.py b/flask_gravatar/__init__.py
+index aba7a09..589aee9 100644
+--- a/flask_gravatar/__init__.py
++++ b/flask_gravatar/__init__.py
+@@ -18,19 +18,16 @@
+ 
+ import hashlib
+ 
+-from flask import _request_ctx_stack, current_app, has_request_context, request
++from flask import current_app, has_request_context, request
+ 
+ from .version import __version__
+ 
+ try:
+-    from flask import _app_ctx_stack, has_app_context
++    from flask import has_app_context
+ except ImportError:  # pragma: no cover
+-    _app_ctx_stack = None
+     has_app_context = None
+ 
+ 
+-# Which stack should we use? _app_ctx_stack is new in 0.9
+-connection_stack = _app_ctx_stack or _request_ctx_stack
+ has_context = has_app_context or has_request_context
+ 
+ 

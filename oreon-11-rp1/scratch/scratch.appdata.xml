@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+ <id type="desktop">scratch.desktop</id>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>GPLv2 and ASL 2.0 and MIT and CC-BY-SA</project_license>
+ <name>Scratch</name>
+ <summary>Programming language learning environment for stories, games, music and art</summary>
+ <description>
+  <p>
+  Scratch is a programming language that makes it easy to create your own
+interactive stories, animations, games, music, and art -- and share your
+creations on the web.
+  </p><p>
+As young people create and share Scratch projects, they learn important
+mathematical and computational ideas, while also learning to think
+creatively, reason systematically, and work collaboratively.
+  </p><p>
+This package brings in all of the various subpackages which comprise the
+full Scratch distribution.
+  </p>
+  </description>
+ <url type="homepage">http://scratch.mit.edu/</url>
+  <screenshots>
+    <screenshot type="default">https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Scratch_1.4_Initial_Screen.png/800px-Scratch_1.4_Initial_Screen.png</screenshot>
+  </screenshots>
+</application>
+

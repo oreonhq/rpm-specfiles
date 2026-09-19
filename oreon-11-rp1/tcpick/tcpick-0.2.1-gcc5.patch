@@ -1,0 +1,49 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for tcpick <= 0.2.1 to avoid
+build failures with GCC 5.x such as "tcpick-0.2.1/src/loop.c:101: undefined
+reference to `verify'", "tcpick-0.2.1/src/verify.c:115: undefined reference to
+`flush_ack'", "tcpick-0.2.1/src/verify.c:106: undefined reference to `addfr'",
+"tcpick-0.2.1/src/verify.c:119: undefined reference to `flush_ack'" and also
+"tcpick-0.2.1/src/fragments.c:174: undefined reference to `flowflush'".
+
+--- tcpick-0.2.1/src/verify.c			2005-01-13 16:35:33.000000000 +0100
++++ tcpick-0.2.1/src/verify.c.gcc5		2015-06-20 16:33:03.000000000 +0200
+@@ -121,7 +121,7 @@
+ 
+ }
+ 
+-__inline__ int  
++int  
+ verify()
+ /* called by got_packet().
+    this is the engine that matches the packets with their connection */
+--- tcpick-0.2.1/src/fragments.c		2004-12-31 16:56:38.000000000 +0100
++++ tcpick-0.2.1/src/fragments.c.gcc5		2015-06-20 16:37:31.000000000 +0200
+@@ -83,7 +83,7 @@
+                         * list = ( * list )->next;      \
+                         FREE_FR (tmp)                   \
+                         }
+-__inline__ int 
++int 
+ addfr( struct FRAGMENT ** first,
+        int wlen,
+        u_int32_t data_off,
+@@ -156,7 +156,7 @@
+ 	}
+ }
+ 
+-__inline__ int
++int
+ flush_ack ( struct HOST_DESC * desc,
+ 	    struct CONN * conn_ptr,
+ 	    int ack_num )
+--- tcpick-0.2.1/src/write.c			2005-01-09 00:54:47.000000000 +0100
++++ tcpick-0.2.1/src/write.c.gcc5		2015-06-20 19:47:25.000000000 +0200
+@@ -181,7 +181,7 @@
+ 	return;
+ }
+ 
+-__inline__ int
++int
+ flowflush ( struct CONN * conn_ptr, 
+ 	    struct HOST_DESC * desc, 
+ 	    u_char * buf,

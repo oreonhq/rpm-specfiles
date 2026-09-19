@@ -1,0 +1,30 @@
+diff --git a/setup.py b/setup.py
+index c815271..dbf21a3 100755
+--- a/setup.py
++++ b/setup.py
+@@ -69,15 +69,9 @@ class uninstall (_install):
+             except:
+                 self.warn ("Could not remove file %s" % file)
+ 
+-ops = ("install", "build", "sdist", "uninstall", "clean")
+-
+-if len (sys.argv) < 2 or sys.argv[1] not in ops:
+-    print("Please specify operation : %s" % " | ".join (ops))
+-    raise SystemExit(1)
+-
+ prefix = None
+ gtkver = "3.0"
+-enableDesktopEffects = False
++enableDesktopEffects = True
+ if "--enableDesktopEffects" in sys.argv:
+     enableDesktopEffects = True
+     sys.argv.remove ("--enableDesktopEffects")
+@@ -187,7 +181,7 @@ if os.path.isdir (podir):
+     for name in os.listdir (podir):
+         if name[-2:] == "po":
+             name = name[:-3]
+-            if sys.argv[1] == "build" \
++            if sys.argv[1] in ["build", "bdist_wheel"] \
+                or (sys.argv[1] == "install" and \
+                    not os.path.exists (mopath % name)):
+                 if not os.path.isdir ("build/locale/" + name):

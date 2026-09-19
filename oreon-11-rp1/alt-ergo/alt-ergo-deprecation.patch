@@ -1,0 +1,7 @@
+--- alt-ergo-2.4.3-free/configure.orig	2026-02-05 07:02:19.000000000 -0700
++++ alt-ergo-2.4.3-free/configure	2026-02-06 14:47:54.903627612 -0700
+@@ -1,3 +1,3 @@
+ #!/bin/sh -ue
+ 
+-ocaml unix.cma configure.ml "$@"
++ocaml -I +unix unix.cma configure.ml "$@"

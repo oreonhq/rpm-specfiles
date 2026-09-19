@@ -1,0 +1,12 @@
+diff -up traitsui-8.0.0/traitsui/qt/image_enum_editor.py.pyqt6 traitsui-8.0.0/traitsui/qt/image_enum_editor.py
+--- traitsui-8.0.0/traitsui/qt/image_enum_editor.py.pyqt6	2023-05-22 09:01:55.000000000 -0600
++++ traitsui-8.0.0/traitsui/qt/image_enum_editor.py	2023-06-11 15:52:38.666507815 -0600
+@@ -196,7 +196,7 @@ class ImageEnumComboBox(QtGui.QComboBox)
+         arrow = self.style().subControlRect(
+             QtGui.QStyle.ComplexControl.CC_ComboBox,
+             option,
+-            QtGui.QStyle.SC_ComboBoxArrow,
++            QtGui.QStyle.SubControl.SC_ComboBoxArrow,
+             None,
+         )
+         option.rect.setWidth(int(option.rect.width() - arrow.width()))

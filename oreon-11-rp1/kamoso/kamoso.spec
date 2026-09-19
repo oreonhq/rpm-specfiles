@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 11c361923764e5d33db524e204b45b83d1a84d223bcf605c2bd9c8b653e9cb66
 
 # uncomment to enable bootstrap mode
 #global bootstrap 1
@@ -13,7 +13,7 @@ ExcludeArch: %{ix86}
 
 Name:    kamoso
 Summary: Application for taking pictures and videos from a webcam
-Version: 26.03.80
+Version: 26.08.1
 Release: 1%{?dist}
 
 License: GFDL-1.2-or-later AND GPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later
@@ -97,7 +97,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.kamoso.appdata.xml
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.kamoso.desktop
 %if 0%{?tests}
-xvfb-run -a bash -c "%ctest"
+xvfb-run -f ${XDG_RUNTIME_DIR:-/tmp}/.%{name}-xvfb.auth -a bash -c "%ctest"
 %endif
 
 

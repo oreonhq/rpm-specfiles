@@ -1,0 +1,173 @@
+Description: fix typos in manual pages
+ typos discovered by lintian.
+Author: Petter Reinholdtsen <pere@hungry.com>
+Last-Update: 2014-10-22
+
+Index: oggvideotools/docs/oggDump.1
+===================================================================
+--- oggvideotools.orig/docs/oggDump.1	2016-09-05 10:58:34.259747897 +0000
++++ oggvideotools/docs/oggDump.1	2016-09-05 10:58:34.255747851 +0000
+@@ -7,9 +7,9 @@
+ .B OggDump 
+ gives detailed information about an ogg video file and prints these information with a given detail level.
+ 
+-Ogg files consist of a number of streams (video and audio). From the Ogg-container perspective, the streams are devided into pages. These pages usually have nearly the same size. The pages can be printed out with the -g option.
++Ogg files consist of a number of streams (video and audio). From the Ogg-container perspective, the streams are divided into pages. These pages usually have nearly the same size. The pages can be printed out with the \-g option.
+ 
+-From the stream perspective, every stream consists of packets. These packets carry a bunch of compressed audio samples in case of a vorbis stream or one video frame in case of a theora video stream. These packets could be of variable length and are places into the ogg pages. To toString the packets, use the -p option.
++From the stream perspective, every stream consists of packets. These packets carry a bunch of compressed audio samples in case of a vorbis stream or one video frame in case of a theora video stream. These packets could be of variable length and are places into the ogg pages. To toString the packets, use the \-p option.
+ 
+ .SH OPTIONS
+ .IP \-g
+Index: oggvideotools/docs/oggSlideshow.1
+===================================================================
+--- oggvideotools.orig/docs/oggSlideshow.1	2016-05-24 09:32:05.566912824 +0000
++++ oggvideotools/docs/oggSlideshow.1	2016-05-24 09:32:05.562912790 +0000
+@@ -52,7 +52,7 @@
+ .I Example: \-t p
+ 
+ .IP \-e
+-Enables the reframing. In case a picture does not match the aspect ratio of the video frame, it can be "reframed", which means black borders are inserted. This option is only usefull with the Ken Burns effect (option \-t kb). The pictures are automaticaly "reframed" with the other two slideshow types to match the aspect ratio.
++Enables the reframing. In case a picture does not match the aspect ratio of the video frame, it can be "reframed", which means black borders are inserted. This option is only useful with the Ken Burns effect (option \-t kb). The pictures are automatically "reframed" with the other two slideshow types to match the aspect ratio.
+ 
+ .I Example: \-e
+ 
+Index: oggvideotools/docs/oggTranscode.1
+===================================================================
+--- oggvideotools.orig/docs/oggTranscode.1	2016-05-24 09:32:05.566912824 +0000
++++ oggvideotools/docs/oggTranscode.1	2016-05-24 09:32:05.562912790 +0000
+@@ -57,7 +57,7 @@
+ Adds comments to the video (theora) stream. Comments are given by a pair 
+ of type and value in the form 'type=value'. More than one comment can be 
+ concatenated with a semicolon. It is recommended to use apostrophes 
+-as the command line may use the semicolon as a seperator.
++as the command line may use the semicolon as a separator.
+ 
+ .I Example: \-c 'AUTHOR=yorn;DATE=03.07.09'
+ 
+@@ -65,7 +65,7 @@
+ Adds comments to the audio (vorbis) stream. Comments are given by a pair 
+ of type and value in the form 'type=value'. More than one comment can be 
+ concatenated with a semicolon. It is recommended to use apostrophes 
+-as the command line may use the semicolon as a seperator.
++as the command line may use the semicolon as a separator.
+ 
+ .I Example: \-C 'AUTHOR=yorn;DATE=03.07.09'
+ 
+Index: oggvideotools/docs/oggCat.1
+===================================================================
+--- oggvideotools.orig/docs/oggCat.1	2016-05-24 09:32:05.566912824 +0000
++++ oggvideotools/docs/oggCat.1	2016-05-24 09:32:05.562912790 +0000
+@@ -53,7 +53,7 @@
+ Adds comments to the video (theora) stream. Comments are given by a pair 
+ of type and value in the form 'type=value'. More than one comment can be 
+ concatenated with a semicolon. It is recommended to use apostrophes 
+-as the command line may use the semicolon as a seperator.
++as the command line may use the semicolon as a separator.
+ 
+ .I Example: \-c 'AUTHOR=yorn;DATE=03.07.09'
+ 
+@@ -61,7 +61,7 @@
+ Adds comments to the audio (vorbis) stream. Comments are given by a pair 
+ of type and value in the form 'type=value'. More than one comment can be 
+ concatenated with a semicolon. It is recommended to use apostrophes 
+-as the command line may use the semicolon as a seperator.
++as the command line may use the semicolon as a separator.
+ 
+ .I Example: \-C 'AUTHOR=yorn;DATE=03.07.09'
+ 
+@@ -71,7 +71,7 @@
+ .I Example: \-q 63
+ 
+ .IP \-rv
+-Force to reencode the video stream. This is sometimes neccessary, if the video stream match in video parameters, but not in the theora version. In that case, reencoding the video stream helps creating good results.
++Force to re-encode the video stream. This is sometimes necessary, if the video stream match in video parameters, but not in the theora version. In that case, reencoding the video stream helps creating good results.
+ 
+ .IP \-x
+ Force to overwrite the output file, even if it exists. This is mainly helpful if the oggCat is server controlled.   
+Index: oggvideotools/docs/oggThumb.html
+===================================================================
+--- oggvideotools.orig/docs/oggThumb.html	2016-05-24 09:32:05.566912824 +0000
++++ oggvideotools/docs/oggThumb.html	2016-05-24 09:32:05.562912790 +0000
+@@ -35,13 +35,13 @@
+ 
+ <DL COMPACT>
+ <DT>-t<DD>
+-Time at which a thumbnail should be created. More than one thumbnail time can be concatenated by komas. The times can be set by integer or floating point values in seconds. If the time is not exactly matching, the next frame is used. The times don't have to be sorted incrementally.
++Time at which a thumbnail should be created. More than one thumbnail time can be concatenated by commas. The times can be set by integer or floating point values in seconds. If the time is not exactly matching, the next frame is used. The times don't have to be sorted incrementally.
+ <P>
+ <I>Example: -t 12.4,14.157,13.23</I>
+ 
+ <P>
+ <DT>-f<DD>
+-Number of a frame that should be created as a thumbnail. More than one thumbnail frame can be concatenated by komas. The frame numbers must be an integers. The frame numbers don't have to be sorted incrementally.
++Number of a frame that should be created as a thumbnail. More than one thumbnail frame can be concatenated by commas. The frame numbers must be an integers. The frame numbers don't have to be sorted incrementally.
+ <P>
+ <I>Example: -f 12000,13000,11000</I>
+ 
+Index: oggvideotools/docs/oggThumb.1
+===================================================================
+--- oggvideotools.orig/docs/oggThumb.1	2016-05-24 09:32:05.566912824 +0000
++++ oggvideotools/docs/oggThumb.1	2016-05-24 09:32:05.562912790 +0000
+@@ -11,16 +11,16 @@
+ 
+ .I <filename_without_extension>_x.<picture_extension>
+ 
+-Where x starts with 0 and is incremented with every created thumbnail. So the thumbnails are successivly numbered by the appearence order. This is even valid, if time positions and frame numbers are mixed.
++Where x starts with 0 and is incremented with every created thumbnail. So the thumbnails are successively numbered by the appearance order. This is even valid, if time positions and frame numbers are mixed.
+  
+ .SH OPTIONS
+ .IP -t
+-Time at which a thumbnail should be created. More than one thumbnail time can be concatenated by komas. The times can be set by integer or floating point values in seconds. If the time is not exactly matching, the next frame is used. The times don't have to be sorted incrementally.
++Time at which a thumbnail should be created. More than one thumbnail time can be concatenated by commas. The times can be set by integer or floating point values in seconds. If the time is not exactly matching, the next frame is used. The times don't have to be sorted incrementally.
+ 
+ .I Example: \-t 12.4,14.157,13.23
+ 
+ .IP -f
+-Number of a frame that should be created as a thumbnail. More than one thumbnail frame can be concatenated by komas. The frame numbers must be an integers. The frame numbers don't have to be sorted incrementally.
++Number of a frame that should be created as a thumbnail. More than one thumbnail frame can be concatenated by commas. The frame numbers must be an integers. The frame numbers don't have to be sorted incrementally.
+ 
+ .I Example: \-f 12000,13000,11000
+ 
+@@ -58,4 +58,4 @@
+ .BR oggSplit (1),
+ .BR oggTranscode (1),
+ .BR oggSlideshow (1),
+-.BR oggSilence (1)
+\ No newline at end of file
++.BR oggSilence (1)
+Index: oggvideotools/docs/oggCut.1
+===================================================================
+--- oggvideotools.orig/docs/oggCut.1	2016-05-24 09:32:05.566912824 +0000
++++ oggvideotools/docs/oggCut.1	2016-05-24 09:33:13.831477966 +0000
+@@ -36,13 +36,15 @@
+ .I Example: \-l 10000
+ 
+ .IP \-e
+-Cut end position in ms. If \-l is also used, the end position is prefered. If the end position is set to \-1, the end of the stream is assumed.
++Cut end position in ms. If \-l is also used, the end position is preferred. If the end position is set to \-1, the end of the stream is assumed.
+ 
+ Default: \-1
+ 
+ .I Example: \-e 20000
+ 
+-.IP \-i \-o
++.IP \-i
++
++.IP \-o
+ Input file and output file set (alternative). 
+ These parameters can be used alternatively. They are overwritten by the arguments after the options. If there is one argument given, it is used as the input file (and overwrites a file given with -i). If there are two arguments, the input and output files from the -i and -o option values are overwritten.  
+ 
+Index: oggvideotools/docs/oggSplit.1
+===================================================================
+--- oggvideotools.orig/docs/oggSplit.1	2016-05-24 09:32:05.566912824 +0000
++++ oggvideotools/docs/oggSplit.1	2016-05-24 09:32:05.562912790 +0000
+@@ -7,7 +7,7 @@
+ .B oggSplit
+ demultiplexes a multiplexed ogg file into several files with one stream each. 
+  
+-An ogg video file (with extension .ogv) usually consist of an audio and a video stream. The command line tool oggSplit disjoins these streams into seperate files. This is also often called demultiplexing.
++An ogg video file (with extension .ogv) usually consist of an audio and a video stream. The command line tool oggSplit disjoins these streams into separate files. This is also often called demultiplexing.
+ 
+ After that you have all embedded files of this input file with the following naming:
+ 

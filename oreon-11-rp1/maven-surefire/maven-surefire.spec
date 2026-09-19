@@ -4,7 +4,7 @@
 %global upstream_version %(echo '%{version}' | tr '~' '-')
 
 Name:           maven-surefire
-Version:        3.2.2
+Version:        3.6.0
 Release:        %autorelease
 Summary:        Test framework project
 License:        Apache-2.0 AND CPL-1.0
@@ -12,10 +12,9 @@ URL:            https://maven.apache.org/surefire/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-# ./generate-tarball.sh
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/3.2.2/surefire-3.2.2-source-release.zip#/maven-surefire-3.2.2.tar.gz
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/3.6.0/surefire-3.2.2-source-release.zip
 # Remove bundled binaries which cannot be easily verified for licensing
-Source1:        https://www.eclipse.org/legal/cpl-v10.html#/cpl-v10.html
+Source1:        https://www.eclipse.org/legal/cpl-v10.html
 
 Patch0:        0001-Port-to-TestNG-7.4.0.patch
 Patch1:        0002-Disable-JUnit-4.8-test-grouping.patch
@@ -49,7 +48,7 @@ BuildRequires:  mvn(org.testng:testng::jdk15:)
 # PpidChecker relies on /usr/bin/ps to check process uptime
 Requires:       procps-ng
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.2.2-19
+Obsoletes:      %{name}-javadoc < 3.6.0-19
 
 %description
 Surefire is a test framework project.
@@ -103,7 +102,7 @@ to execute.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -T -b1 -n surefire-%{upstream_version}
+%setup -q -n surefire-%{upstream_version}
 %autopatch -p1
 cp -p %{SOURCE1} .
 

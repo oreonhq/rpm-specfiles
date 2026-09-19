@@ -1,0 +1,11 @@
+diff -up ./setup.py.orig ./setup.py
+--- ./setup.py.orig	2021-05-03 15:31:09.000000000 +0200
++++ ./setup.py	2021-09-11 11:19:59.059569815 +0200
+@@ -17,7 +17,6 @@ setup(
+     install_requires=[
+         "jedi>=0.11.0",
+         "epc>=0.0.4",
+-        "argparse",
+         "setuptools",
+     ],
+     entry_points={

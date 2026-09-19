@@ -1,0 +1,32 @@
+diff --git a/tests/test_00_setup.py b/tests/test_00_setup.py
+index d5a5709..f24bd20 100644
+--- a/tests/test_00_setup.py
++++ b/tests/test_00_setup.py
+@@ -22,12 +22,12 @@ class ZoneCreator:
+         key_dir = get_key_dir()
+         self.create_dir(key_dir)
+ 
+-        self.keys['KSK_RSASHA1'] = \
+-                subprocess.check_output(['dnssec-keygen', '-q', '-K', key_dir, '-f', 'KSK', '-b', '2048', '-a', 'RSASHA1', ZONE_ORIGIN]) \
+-                .decode('utf-8').strip()
+-        self.keys['ZSK_RSASHA1'] = \
+-                subprocess.check_output(['dnssec-keygen', '-q', '-K', key_dir, '-b', '1024', '-a', 'RSASHA1', ZONE_ORIGIN]) \
+-                .decode('utf-8').strip()
++        #self.keys['KSK_RSASHA1'] = \
++        #        subprocess.check_output(['dnssec-keygen', '-q', '-K', key_dir, '-f', 'KSK', '-b', '2048', '-a', 'RSASHA1', ZONE_ORIGIN]) \
++        #        .decode('utf-8').strip()
++        #self.keys['ZSK_RSASHA1'] = \
++        #        subprocess.check_output(['dnssec-keygen', '-q', '-K', key_dir, '-b', '1024', '-a', 'RSASHA1', ZONE_ORIGIN]) \
++        #        .decode('utf-8').strip()
+         self.keys['KSK_RSASHA256'] = \
+                 subprocess.check_output(['dnssec-keygen', '-q', '-K', key_dir, '-f', 'KSK', '-b', '2048', '-a', 'RSASHA256', ZONE_ORIGIN]) \
+                 .decode('utf-8').strip()
+@@ -82,7 +82,7 @@ class ZoneCreator:
+         os.unlink('dsset-' + ZONE_ORIGIN + '.')
+         with open(delegation_file, 'wb') as fh:
+             subprocess.check_call(['cat', unsigned_delegation_file], stdout=fh)
+-            subprocess.check_call(['dnssec-dsfromkey', '-a', 'SHA-1', ksk_file], stdout=fh)
++            #subprocess.check_call(['dnssec-dsfromkey', '-a', 'SHA-1', ksk_file], stdout=fh)
+             subprocess.check_call(['dnssec-dsfromkey', '-a', 'SHA-256', ksk_file], stdout=fh)
+             subprocess.check_call(['dnssec-dsfromkey', '-a', 'SHA-384', ksk_file], stdout=fh)
+ 

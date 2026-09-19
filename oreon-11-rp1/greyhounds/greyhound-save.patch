@@ -1,0 +1,33 @@
+--- src/load_save.c.orig	2010-03-27 09:29:20.000000000 -0500
++++ src/load_save.c	2010-03-27 10:39:00.000000000 -0500
+@@ -46,7 +46,7 @@
+ 	fwrite((void*)&statistics_order[0][i], sizeof(gint), 1, fil);
+ 	fwrite((void*)&statistics_order[1][i], sizeof(gint), 1, fil);
+     }
+-    fwrite((void*)&order[421], sizeof(gint), 1, fil);
++    fwrite((void*)&order[420], sizeof(gint), 1, fil);
+ 
+     /*  read names !! */
+ 
+@@ -74,9 +74,9 @@
+     gint i;
+     
+     /* first all the names and integers */
+-    fwrite((void*)Dog.name, 19, 1, fil);
+-    fwrite((void*)Dog.mother_name, 19, 1, fil);
+-    fwrite((void*)Dog.father_name, 19, 1, fil);
++    fwrite((void*)&Dog.name, 19, 1, fil);
++    fwrite((void*)&Dog.mother_name, 19, 1, fil);
++    fwrite((void*)&Dog.father_name, 19, 1, fil);
+     fwrite((void*)&Dog.id, sizeof(gint), 1, fil);
+     fwrite((void*)&Dog.gender, sizeof(gint), 1, fil);
+     fwrite((void*)&Dog.level, sizeof(gint), 1, fil);
+@@ -283,7 +283,7 @@
+ 	fread((void*)&statistics_order[0][i], sizeof(gint), 1, fil);
+ 	fread((void*)&statistics_order[1][i], sizeof(gint), 1, fil);
+     }
+-    fread((void*)&order[421], sizeof(gint), 1, fil);
++    fread((void*)&order[420], sizeof(gint), 1, fil);
+ 
+     /* date */
+     fread((void*)&season, sizeof(gint), 1, fil);

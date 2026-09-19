@@ -8,8 +8,8 @@
 %global libsigc_version 2.9.1
 
 Name:           glibmm2.4
-Version:        2.66.8
-Release:        3%{?dist}
+Version:        2.66.10
+Release:        1%{?dist}
 Summary:        C++ interface for the GLib library
 
 # Library sources are LGPL 2.1+, tools used to generate sources are GPL 2+.

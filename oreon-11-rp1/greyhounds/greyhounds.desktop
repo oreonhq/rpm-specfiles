@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Greyhounds
+GenericName=Greyhounds
+Comment= Greyhounds is a greyhounds racing and breeding game
+Comment[pl_PL]= Greyhounds to wyścigi i hodowla chartów
+Exec=greyhounds
+Icon=greyhounds
+Terminal=false
+Type=Application
+Categories=Game;Simulation;
+GenericName[pl_PL]=Greyhounds

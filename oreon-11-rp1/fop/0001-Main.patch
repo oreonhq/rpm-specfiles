@@ -1,0 +1,22 @@
+From: Michael Simacek <msimacek@redhat.com>
+Date: Tue, 14 Jul 2015 16:54:43 +0200
+Subject: [PATCH] Main
+
+
+diff --git a/fop-core/src/main/java/org/apache/fop/cli/Main.java b/fop-core/src/main/java/org/apache/fop/cli/Main.java
+index a14d20c78..ef11c0839 100644
+--- a/fop-core/src/main/java/org/apache/fop/cli/Main.java
++++ b/fop-core/src/main/java/org/apache/fop/cli/Main.java
+@@ -215,11 +215,7 @@ public final class Main {
+      * @param args the command line parameters
+      */
+     public static void main(String[] args) {
+-        if (checkDependencies()) {
+-            startFOP(args);
+-        } else {
+-            startFOPWithDynamicClasspath(args);
+-        }
++    	startFOP(args);
+     }
+ 
+     /**

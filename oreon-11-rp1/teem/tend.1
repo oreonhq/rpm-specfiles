@@ -1,0 +1,202 @@
+.TH TEND "1" "April 2021" "" "User Commands"
+.SH NAME
+tend \- diffusion image processing and analysis
+.SH SYNOPSIS
+.B tend
+.I COMMAND
+.RI [ OPTION ]...\:
+.SH DESCRIPTION
+.BR tend (1)
+is a command-line interface to much of the functionality in \(lqten\(rq, a C
+library for diffusion image processing.
+Ten is one library in the \(lqTeem\(rq collection of libraries.
+More information about Teem is at
+.UR http://teem.sf.net
+http://teem.sf.net
+.UE .
+A checkout of Teem source is available via:
+.in +4n
+.EX
+.B svn co https://svn.code.sf.net/p/teem/code/teem/trunk teem
+.EE
+.in
+.P
+Long-term maintenance of this software depends on funding, and funding depends
+on being able to document who is using it for what.
+If
+.BR tend (1)
+or Ten has helped in your research, including for simple one-off experiments or
+mundane data hacking, the developers of Teem would love to know.
+There are multiple ways of communicating this.
+In your publications, consider adding a line such as this in the
+Acknowledgments:
+.in +4n
+Data processing performed with the tend tool, part of the Teem toolkit
+available at
+.UR http://teem.sf.net
+http://teem.sf.net
+.UE .
+.in
+Alternatively, please email
+.MT glk@uchicago.edu
+glk@uchicago.edu
+.ME
+and briefly describe how Teem software has helped in your work.
+Please also consider joining the
+.UR https://lists.sourceforge.net/lists/listinfo/teem-users
+teem\-users mailing list
+.UE .
+This is the primary forum for feedback, questions, and feature requests.
+.P
+Like
+.BR unu (1),
+another Teem command-line binary, it is often useful to chain together invocations of
+.BR tend (1)
+with pipes, as in the following, which estimates tensors from DWIs, takes a
+slice of the tensor volume, computes the standard RGB colormap of the principal
+eigenvector, and then quantizes it to an 8-bit PNG:
+.in +4n
+.EX
+\fBtend\ estim\ \-i\ dwi.nhdr\ \-B\ kvp\ \-knownB0\ true\ \(rs
+\ |\ tend\ slice\ \-a\ 2\ \-p\ 30\ \(rs
+\ |\ tend\ evecrgb\ \-c\ 0\ \-a\ cl2\ \-gam\ 1.2\ \(rs
+\ |\ unu\ quantize\ \-b\ 8\ \-min\ 0\ \-max\ 1\ \-o\ z30\-rgb.png
+.EE
+.in
+.SH OPTIONS
+.SH COMMANDS
+.P
+Each of the following has a corresponding man page: for example,
+.BR tend\-about (1)
+for
+.RB \(lq tend\ about \(rq.
+.SS tend\ about
+Information about this program and its use
+.SS tend\ grads
+Calculate balanced gradient directions for DWI acquisition
+.SS tend\ epireg
+Register diffusion-weighted echo-planar images
+.SS tend\ bmat
+Calculate B-matrix given gradient directions
+.SS tend\ estim
+Estimate tensors from a set of DW images
+.SS tend\ sim
+Simulate DW images from a tensor field
+.SS tend\ mfit
+Estimate models from a set of DW images
+.SS tend\ mconv
+Convert from one model to another
+.SS tend\ msim
+Simulate DW images from an image of models
+.SS tend\ make
+Create DT volume from confidence and eigensystem
+.SS tend\ avg
+Average across tensor volumes
+.SS tend\ helix
+Generate twisting helical tensor field
+.SS tend\ sten
+Calculate structure tensors from a scalar field
+.SS tend\ glyph
+Generate postscript or ray-traced renderings of 3D glyphs
+.SS tend\ ellipse
+Generate postscript renderings of 2D glyphs
+.SS tend\ anplot
+Graph anisotropy metric in barycentric coords
+.SS tend\ anvol
+Apply an anisotropy metric to a DT volume
+.SS tend\ anscale
+Scale the anisotropic component of the tensors
+.SS tend\ anhist
+Generate barycentric histograms of anisotropy
+.SS tend\ triple
+Compute volume of shape triples
+.SS tend\ tconv
+Convert between different shape triples
+.SS tend\ point
+Describe everything about one sample in a DT volume
+.SS tend\ slice
+Slice 3D tensors to get slab/image of 3D/2D tensors
+.SS tend\ norm
+Normalize tensor size
+.SS tend\ fiber
+Fiber tractography, from one or more seeds
+.SS tend\ eval
+Calculate one or more eigenvalues in a DT volume
+.SS tend\ evalpow
+Modify shape by raising eigenvalues to some power
+.SS tend\ evalclamp
+Modify shape by clamping eigenvalues in some range
+.SS tend\ evaladd
+Modify shape by adding a constant to all eigenvalues
+.SS tend\ evalmult
+Modify shape by multiplying eigenvalues by a constant
+.SS tend\ log
+Calculates logarithm of the tensor
+.SS tend\ exp
+Calculates \fBexp()\fR of the tensor
+.SS tend\ evec
+Calculate one or more eigenvectors in a DT volume
+.SS tend\ evecrgb
+Make an RGB volume from an eigenvector and an anisotropy
+.SS tend\ evq
+Quantize directions of diffusion
+.SS tend\ unmf
+Applies and removes the measurement frame
+.SS tend\ expand
+Converts masked non-redundant tensor images to redundant
+.SS tend\ shrink
+Converts a 9-value DT volume to a 7-value DT volume
+.SS tend\ bfit
+Non-linear least-squares fitting of b-value curves
+.SS tend\ satin
+Generate a pretty synthetic DT volume
+.SH "SEE\ ALSO"
+.BR gprobe (1),
+.BR ilk (1),
+.BR mrender (1),
+.BR miter (1),
+.BR nrrdSanity (1),
+.BR overrgb (1),
+.BR puller (1),
+.BR unu (1),
+.BR vprobe (1),
+.BR tend\-about (1),
+.BR tend\-anhist (1),
+.BR tend\-anplot (1),
+.BR tend\-anscale (1),
+.BR tend\-anvol (1),
+.BR tend\-avg (1),
+.BR tend\-bfit (1),
+.BR tend\-bmat (1),
+.BR tend\-ellipse (1),
+.BR tend\-epireg (1),
+.BR tend\-estim (1),
+.BR tend\-eval (1),
+.BR tend\-evaladd (1),
+.BR tend\-evalclamp (1),
+.BR tend\-evalmult (1),
+.BR tend\-evalpow (1),
+.BR tend\-evec (1),
+.BR tend\-evecrgb (1),
+.BR tend\-evq (1),
+.BR tend\-exp (1),
+.BR tend\-expand (1),
+.BR tend\-fiber (1),
+.BR tend\-glyph (1),
+.BR tend\-grads (1),
+.BR tend\-helix (1),
+.BR tend\-log (1),
+.BR tend\-make (1),
+.BR tend\-mconv (1),
+.BR tend\-mfit (1),
+.BR tend\-msim (1),
+.BR tend\-norm (1),
+.BR tend\-point (1),
+.BR tend\-satin (1),
+.BR tend\-shrink (1),
+.BR tend\-sim (1),
+.BR tend\-slice (1),
+.BR tend\-sten (1),
+.BR tend\-tconv (1),
+.BR tend\-triple (1),
+.BR tend\-unmf (1)

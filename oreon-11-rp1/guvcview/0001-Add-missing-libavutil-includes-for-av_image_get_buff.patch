@@ -1,0 +1,41 @@
+From 995a8144311015b00978b6bfc5901f3b59f50f24 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Thu, 28 Mar 2024 11:50:56 -0700
+Subject: [PATCH] Add missing libavutil includes for av_image_get_buffer_size
+
+These two files use av_image_get_buffer_size, from libavutil
+imgutils.h, but since 4a03ec5 , they no longer include it.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ gview_v4l2core/jpeg_decoder.c | 1 +
+ gview_v4l2core/uvc_h264.c     | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/gview_v4l2core/jpeg_decoder.c b/gview_v4l2core/jpeg_decoder.c
+index 9d30ea2..d60fdf8 100644
+--- a/gview_v4l2core/jpeg_decoder.c
++++ b/gview_v4l2core/jpeg_decoder.c
+@@ -36,6 +36,7 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <assert.h>
++#include <libavutil/imgutils.h>
+ 
+ #include "gviewv4l2core.h"
+ #include "colorspaces.h"
+diff --git a/gview_v4l2core/uvc_h264.c b/gview_v4l2core/uvc_h264.c
+index ed0c6a8..a02271e 100644
+--- a/gview_v4l2core/uvc_h264.c
++++ b/gview_v4l2core/uvc_h264.c
+@@ -24,6 +24,7 @@
+ /* support for internationalization - i18n */
+ #include <inttypes.h>
+ #include <libavcodec/avcodec.h>
++#include <libavutil/imgutils.h>
+ #include <math.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+-- 
+2.44.0
+

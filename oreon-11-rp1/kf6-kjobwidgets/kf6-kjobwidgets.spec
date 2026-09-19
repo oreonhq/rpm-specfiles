@@ -1,12 +1,12 @@
-%global source0_hash 3149cd07d82204c6bfa8d86c590bf0c92905e1b5b075c7b543540916a61d7a03
+%global source0_hash 062cdb2ed80ee1fdba5dddd3e267f90259460d1e91871d340da80c44ae458609
 
 %global framework kjobwidgets
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.29.0
 Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 addon for KJobs
 # The following are in the LICENSES folder, but go unused: LGPL-3.0-only, LicenseRef-KDE-Accepted-LGPL
@@ -24,9 +24,9 @@ BuildRequires:  libX11-devel
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qttools-devel
 BuildRequires:  qt6-qtbase-private-devel
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6Notifications) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
 BuildRequires:  pkgconfig(shiboken6)
 BuildRequires:  pkgconfig(pyside6)
 BuildRequires:  python3-devel
@@ -85,6 +85,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

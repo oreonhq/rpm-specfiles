@@ -1,0 +1,17 @@
+*** t/01_prereq.t~	2024-08-22 07:24:50.000000000 +0200
+--- t/01_prereq.t	2024-08-28 09:31:15.835193258 +0200
+***************
+*** 50,55 ****
+  ++$test; use_ok( "List::Util", 1.33 );
+  ++$test; use_ok( "Storable", 3.08 );
+  ++$test; use_ok( "Object::Pad", 0.818 );
+! ++$test; use_ok( "JavaScript::QuickJS", 0.18 );
+  
+  done_testing($test);
+--- 50,55 ----
+  ++$test; use_ok( "List::Util", 1.33 );
+  ++$test; use_ok( "Storable", 3.08 );
+  ++$test; use_ok( "Object::Pad", 0.818 );
+! #++$test; use_ok( "JavaScript::QuickJS", 0.18 );
+  
+  done_testing($test);

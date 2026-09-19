@@ -1,0 +1,104 @@
+From 7838da61f71baf93c722c05f7c4c80f802cd06a1 Mon Sep 17 00:00:00 2001
+From: sand1024 <sand72@mail.ru>
+Date: Thu, 28 Nov 2024 01:06:20 +0200
+Subject: [PATCH] Arcs and splines (#1967)
+
+* source files layout (WIP)
+
+* initial support for Named Views (dxf support, widget, toolbar and menu changes).
+
+* displaying drawing variables in drawing options
+
+* localization update for drawing variables
+
+* better support of shortcuts for 1..5 views
+
+* option to show current action's icon options widget
+
+* PR readme
+
+* PR readme
+
+* remove spline point action
+
+* restoring fit points on spline points from dxf, restored getNearestPoint on Spline, SplineAppendPoint actions
+
+* Spline Add Point action
+
+* spline modification actions refactoring, localization strings
+
+* explode spline action
+
+* option for showing ID entities in dialog/entity info - #1951
+
+* fix for check version on startup if disabled - #1920
+
+* spline from polyline action
+
+* spline delete between two points action, menu/toolbars adjustments, localization
+
+* arc3points - alternative points mode added
+
+* arc 2 points commands
+
+* draw arc center radius alternative mode, localization
+
+* fix for #1950
+
+* intersections with construction lines which are not in construction layer (as a fix for angle snap with entity snap)
+
+* fix for polyline append command (support of arcs), changes in draw polyline UI options (buttons), commands for polyline daw mode
+
+* ArcTangental - alternative arc mode support by CTRL
+
+* selection entities by type in SelectWindow, alternative mode for selection/deselection
+
+* deselecting entities with SHIFT pressed
+
+* translations update
+
+* draw points lattice command, select points command
+
+* out RS_Vector to debug
+
+* paste to points command
+
+* cleanup
+
+* commands for arc2p commands
+
+* source code layout
+
+* changes readme
+
+---------
+
+Co-authored-by: sand1024 <sand1024@gmail.com>
+---
+ libraries/libdxfrw/src/libdxfrw.cpp           |    7 +
+
+diff --git a/libraries/libdxfrw/src/libdxfrw.cpp b/libraries/libdxfrw/src/libdxfrw.cpp
+index 5b0093f775..78df1f8a90 100644
+--- a/src/libdxfrw.cpp
++++ b/src/libdxfrw.cpp
+@@ -1014,6 +1014,7 @@ bool dxfRW::writeSpline(DRW_Spline *ent){
+         writer->writeInt16(74, ent->nfit);
+         writer->writeDouble(42, ent->tolknot);
+         writer->writeDouble(43, ent->tolcontrol);
++        writer->writeDouble(44, ent->tolfit);
+         //RLZ: warning check if nknots are correct and ncontrol
+         for (int i = 0;  i< ent->nknots; i++){
+             writer->writeDouble(40, ent->knotslist.at(i));
+@@ -1027,6 +1028,12 @@ bool dxfRW::writeSpline(DRW_Spline *ent){
+             writer->writeDouble(20, crd->y);
+             writer->writeDouble(30, crd->z);
+         }
++        for (int i = 0;  i< ent->nfit; i++){
++            auto crd = ent->fitlist.at(i);
++            writer->writeDouble(11, crd->x);
++            writer->writeDouble(21, crd->y);
++            writer->writeDouble(31, crd->z);
++        }
+     } else {
+         //RLZ: TODO convert spline in polyline (not exist in acad 12)
+     }

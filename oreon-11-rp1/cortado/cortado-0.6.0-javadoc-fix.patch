@@ -1,0 +1,13 @@
+diff -up cortado-0.6.0/src/com/fluendo/plugin/OggPayload.java~ cortado-0.6.0/src/com/fluendo/plugin/OggPayload.java
+--- cortado-0.6.0/src/com/fluendo/plugin/OggPayload.java~	2010-03-19 17:46:49.000000000 +0100
++++ cortado-0.6.0/src/com/fluendo/plugin/OggPayload.java	2015-06-18 12:26:22.334495990 +0200
+@@ -30,7 +30,8 @@ public interface OggPayload
+   public boolean isType (Packet op);
+   /**
+    * Initialize the payload with a header packet.
+-   * Returns < 0 for error, 0 if OK, 1 if OK and ready for decoding data.
++   * Returns a negative value for error, 0 if OK,
++   * 1 if OK and ready for decoding data.
+    */
+   public int takeHeader (Packet op);
+   /**

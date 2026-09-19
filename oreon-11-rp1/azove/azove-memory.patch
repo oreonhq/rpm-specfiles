@@ -1,0 +1,24 @@
+--- azove.cpp.orig	2007-04-07 07:16:25.000000000 -0600
++++ azove.cpp	2020-03-18 16:24:44.740182853 -0600
+@@ -300,6 +300,7 @@ void azove::buildConstraintBDDs(void){
+ //-----------------------------------------------------------------------------------
+ 
+ void azove::andBDDs(void){
++#if 0
+   FILE* pf = fopen("/proc/meminfo", "r");
+   if(pf){
+     unsigned int memtotal = 0;
+@@ -324,10 +325,13 @@ void azove::andBDDs(void){
+     fclose(pf);
+   }
+   else{
++#endif
+ #define FIXED_MDDNODEBASESIZE 10000000
+     sigMDDnodeBaseSize = FIXED_MDDNODEBASESIZE;
++#if 0
+     cerr<<"/proc/meminfo not found! Using fixed number of signature nodes."<<endl;
+   }
++#endif
+   cerr<<"Allocating "<<sigMDDnodeBaseSize<<" signature nodes... ";
+   sigMDDnodeBase = new sigMDDnode[sigMDDnodeBaseSize];
+   cerr<<"done"<<endl;

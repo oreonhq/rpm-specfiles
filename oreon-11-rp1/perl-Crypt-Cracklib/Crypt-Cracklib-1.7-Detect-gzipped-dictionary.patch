@@ -1,0 +1,33 @@
+From 00087482ca6cd538f6209e3dff07cfce689db0c7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 2 Aug 2013 11:42:09 +0200
+Subject: [PATCH] Detect gzipped dictionary
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+cracklib supports compressed dictionaries. Then the suffix is 'pwd.gz'.
+
+<https://github.com/dsully/perl-crypt-cracklib/issues/1>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Cracklib.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Cracklib.pm b/Cracklib.pm
+index a7e07a0..f047add 100644
+--- a/Cracklib.pm
++++ b/Cracklib.pm
+@@ -20,7 +20,7 @@ $DEFAULT_DICT = "";
+     /usr/lib64/cracklib_dict
+     /usr/share/dict/cracklib_words)) {
+ 
+-    if (-f "$path.pwd") {
++    if (-f "$path.pwd" or -f "$path.pwd.gz") {
+ 
+       $DEFAULT_DICT = $path;
+       last;
+-- 
+1.8.1.4
+

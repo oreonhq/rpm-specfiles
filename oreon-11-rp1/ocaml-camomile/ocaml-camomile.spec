@@ -8,8 +8,8 @@ ExcludeArch: %{ix86}
 %endif
 
 Name:           ocaml-camomile
-Version:        2.0.0
-Release:        21%{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        Unicode library for OCaml
 
 # LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception: the project as a whole

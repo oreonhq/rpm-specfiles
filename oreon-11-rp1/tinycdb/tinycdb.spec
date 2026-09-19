@@ -2,8 +2,8 @@
 
 Name:		tinycdb
 Summary:	Utility and library for manipulating constant databases
-Version:	0.80
-Release:	6%{?dist}
+Version:	0.81
+Release:	1%{?dist}
 License:	LicenseRef-Fedora-Public-Domain
 URL:		http://www.corpit.ru/mjt/tinycdb.html
 Source0:        http://www.corpit.ru/mjt/%{name}/%{name}-%{version}.tar.gz

@@ -1,0 +1,54 @@
+.TH TABBED\-USER 1 tabbed\-user\-VERSION\-RELEASE
+.SH NAME
+tabbed\-user \- tabbed reconfiguration helper and launcher script
+.SH SYNOPSIS
+.B tabbed\-user
+.SH DESCRIPTION
+.BR tabbed\-user
+is a helper script for running and reconfiguring
+.BR tabbed
+if neccessarry.
+.P
+Running
+.BR tabbed\-user
+starts the Fedora build by default.  If you wish to customize your
+configuration, put your
+.BR tabbed
+configuration header file to $HOME/.tabbed/config.h and adjust it according to
+your needs. The official Fedora configuration file might be a useful template.
+See the
+.BR FILES
+section of this manual.
+.P
+Every time the user configuration file has changed or new patches have
+been added,
+.BR tabbed\-user
+will rebuild the user
+.BR tabbed
+binary prior to its execution.
+.P
+Fedora utilizes
+.BR alternatives
+to choose whether the system build, also installed as
+.BR tabbed\-fedora ,
+or the custom build is run.  If available, custom builds are preferred.
+.SH FILES
+.nf
+$HOME/.tabbed
+    - User tabbed directory
+$HOME/.tabbed/config.h
+    - User tabbed configuration
+$HOME/.tabbed/patches
+    - Optional patches to apply
+/usr/src/tabbed\-user\-VERSION\-RELEASE
+    - tabbed sources
+/usr/src/tabbed\-VERSION\-RELEASE/config.def.h
+    - Fedora build configuration
+.fi
+.SH SEE ALSO
+.BR tabbed (1) ,
+.BR update-alternatives (8)
+.SH BUGS
+Report bugs to Red Hat Bugzilla, http://bugzilla.redhat.com/
+.SH AUTHOR
+Written by Petr Šabata <contyk@redhat.com>, 2014.

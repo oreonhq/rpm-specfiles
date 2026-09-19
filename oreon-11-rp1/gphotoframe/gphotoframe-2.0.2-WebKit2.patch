@@ -1,0 +1,20 @@
+--- gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/facebook/authdialog.py.wk	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/facebook/authdialog.py	2017-03-31 15:17:43.243296343 +0900
+@@ -9,7 +9,7 @@
+ import re
+ # from gettext import gettext as _
+ 
+-from gi.repository import GObject, Gtk, Gdk, WebKit
++from gi.repository import GObject, Gtk, Gdk, WebKit2
+ 
+ from ..flickr.authdialog import PluginFlickrDialog
+ from ...utils.urlgetautoproxy import urlget_with_autoproxy
+--- gphotoframe-2.0.2-hg2084299dffb6/lib/utils/authwebkit.py.wk	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/utils/authwebkit.py	2017-03-31 15:17:39.507286152 +0900
+@@ -1,5 +1,5 @@
+ import re
+-from gi.repository import Gtk, GObject, WebKit
++from gi.repository import Gtk, GObject, WebKit2
+ 
+ class AuthWebKitScrolledWindow(Gtk.ScrolledWindow):
+ 

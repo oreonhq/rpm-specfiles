@@ -1,0 +1,111 @@
+diff -up src/nvcore/CMakeLists.txt.orig src/nvcore/CMakeLists.txt
+--- src/nvcore/CMakeLists.txt.orig	2021-02-24 15:38:17.873472614 -0300
++++ src/nvcore/CMakeLists.txt	2021-02-24 15:38:20.228485954 -0300
+@@ -3,7 +3,6 @@ PROJECT(nvcore)
+ SET(CORE_SRCS
+     nvcore.h
+     Array.h
+-    Debug.h Debug.cpp
+     DefsGnucDarwin.h
+     DefsGnucLinux.h
+     DefsGnucWin32.h
+diff -up src/bc7/avpcl_mode4.cpp.orig src/bc7/avpcl_mode4.cpp
+--- src/bc7/avpcl_mode4.cpp.orig	2021-02-24 15:51:20.362903501 -0300
++++ src/bc7/avpcl_mode4.cpp	2021-02-24 15:51:52.829087279 -0300
+@@ -519,7 +519,7 @@ static float map_colors(const Vector4 co
+ 			}
+ 			palette_alpha = (rotatemode == ROTATEMODE_RGBA_AGBR) ? (palette_rgb[bestindex]).x :
+ 							(rotatemode == ROTATEMODE_RGBA_RABG) ? (palette_rgb[bestindex]).y :
+-							(rotatemode == ROTATEMODE_RGBA_RGAB) ? (palette_rgb[bestindex]).z : nvCheckMacro(0);
++							(rotatemode == ROTATEMODE_RGBA_RGAB) ? (palette_rgb[bestindex]).z : 0;
+ 			toterr += besterr;
+ 
+ 			// do A index
+@@ -647,7 +647,7 @@ static void assign_indices(const Tile &t
+ 			}
+ 			palette_alpha = (rotatemode == ROTATEMODE_RGBA_AGBR) ? (palette_rgb[region][bestindex]).x :
+ 							(rotatemode == ROTATEMODE_RGBA_RABG) ? (palette_rgb[region][bestindex]).y :
+-							(rotatemode == ROTATEMODE_RGBA_RGAB) ? (palette_rgb[region][bestindex]).z : nvCheckMacro(0);
++							(rotatemode == ROTATEMODE_RGBA_RGAB) ? (palette_rgb[region][bestindex]).z : 0;
+ 			toterr[region] += besterr;
+ 
+ 			// do A index
+diff -up src/bc7/avpcl_mode5.cpp.orig src/bc7/avpcl_mode5.cpp
+--- src/bc7/avpcl_mode5.cpp.orig	2021-02-24 15:51:27.342943012 -0300
++++ src/bc7/avpcl_mode5.cpp	2021-02-24 15:51:46.341050553 -0300
+@@ -520,7 +520,7 @@ static float map_colors(const Vector4 co
+ 			}
+ 			palette_alpha = (rotatemode == ROTATEMODE_RGBA_AGBR) ? (palette_rgb[bestindex]).x :
+ 							(rotatemode == ROTATEMODE_RGBA_RABG) ? (palette_rgb[bestindex]).y :
+-							(rotatemode == ROTATEMODE_RGBA_RGAB) ? (palette_rgb[bestindex]).z : nvCheckMacro(0);
++							(rotatemode == ROTATEMODE_RGBA_RGAB) ? (palette_rgb[bestindex]).z : 0;
+ 			toterr += besterr;
+ 
+ 			// do A index
+@@ -648,7 +648,7 @@ static void assign_indices(const Tile &t
+ 			}
+ 			palette_alpha = (rotatemode == ROTATEMODE_RGBA_AGBR) ? (palette_rgb[region][bestindex]).x :
+ 							(rotatemode == ROTATEMODE_RGBA_RABG) ? (palette_rgb[region][bestindex]).y :
+-							(rotatemode == ROTATEMODE_RGBA_RGAB) ? (palette_rgb[region][bestindex]).z : nvCheckMacro(0);
++							(rotatemode == ROTATEMODE_RGBA_RGAB) ? (palette_rgb[region][bestindex]).z : 0;
+ 			toterr[region] += besterr;
+ 
+ 			// do A index
+diff -up CMakeLists.txt.orig CMakeLists.txt
+--- CMakeLists.txt.orig	2021-02-25 09:37:08.120845257 -0300
++++ CMakeLists.txt	2021-02-25 09:37:14.926885247 -0300
+@@ -28,6 +28,9 @@ IF(BUILD_SQUISH_WITH_ALTIVEC)
+     ADD_DEFINITIONS(-maltivec)
+ ENDIF(BUILD_SQUISH_WITH_ALTIVEC)
+ 
++SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNV_NO_ASSERT=1 -DNV_DEBUG_PRINT=0")
++SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNV_NO_ASSERT=1 -DNV_DEBUG_PRINT=0")
++
+ IF(NVTT_SHARED)
+     SET(NVCORE_SHARED TRUE)
+     SET(NVMATH_SHARED TRUE)
+diff -up src/nvtt/tools/cmdline.h.orig src/nvtt/tools/cmdline.h
+--- src/nvtt/tools/cmdline.h.orig	2021-02-25 11:03:12.258338108 -0300
++++ src/nvtt/tools/cmdline.h	2021-02-25 11:04:02.152643276 -0300
+@@ -33,10 +33,14 @@
+ 
+ struct MyMessageHandler : public nv::MessageHandler {
+     MyMessageHandler() {
++#if !NV_NO_ASSERT
+         nv::debug::setMessageHandler( this );
++#endif
+     }
+     ~MyMessageHandler() {
++#if !NV_NO_ASSERT
+         nv::debug::resetMessageHandler();
++#endif
+     }
+ 
+     virtual void log( const char * str, va_list arg ) {
+@@ -50,20 +54,26 @@ struct MyMessageHandler : public nv::Mes
+ 
+ struct MyAssertHandler : public nv::AssertHandler {
+     MyAssertHandler() {
++#if !NV_NO_ASSERT
+         nv::debug::setAssertHandler( this );
+         nv::debug::enableSigHandler(/*interactive=*/true);
++#endif
+     }
+     ~MyAssertHandler() {
++#if !NV_NO_ASSERT
+         nv::debug::resetAssertHandler();
++#endif
+     }
+ 
+     // Handler method, note that func might be NULL!
+     virtual int assertion( const char *exp, const char *file, int line, const char *func, const char *msg, va_list arg ) {
+         fprintf(stderr, "Assertion failed: %s\nIn %s:%d\n", exp, file, line);
++#if !NV_NO_ASSERT
+         nv::debug::dumpInfo();
+         if (nv::debug::isDebuggerPresent()) {
+             return NV_ABORT_DEBUG;
+         }
++#endif
+         exit(1);
+     }
+ };

@@ -1,0 +1,25 @@
+From 141baf0c3a33e5a177fbfa2ccd5b114f4a882876 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 20 Sep 2024 23:36:26 +0200
+Subject: [PATCH 7/7] generator: restore --help CLI argument
+
+---
+ generator/Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/generator/Cargo.toml b/generator/Cargo.toml
+index 9964e5d..4e90281 100644
+--- a/generator/Cargo.toml
++++ b/generator/Cargo.toml
+@@ -12,7 +12,7 @@ serde = { version = " 1.0.186", features = ["derive"] }
+ [dependencies.clap]
+ version = "4"
+ default-features = false
+-features = ["std"]
++features = ["std", "help"]
+ 
+ # Make sure this crate still compiles while it is checked out
+ # in a sub-directory of a repository that has a Cargo.toml.
+-- 
+2.46.0
+

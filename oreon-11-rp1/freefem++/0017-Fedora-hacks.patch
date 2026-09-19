@@ -1,0 +1,221 @@
+From ed1d03fbbbf9b04bb44a784399c14d7371cbf98a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Tue, 24 Dec 2024 12:04:01 +0100
+Subject: [PATCH 17/18] Fedora hacks
+
+---
+ 3rdparty/getall                         |  6 +++---
+ 3rdparty/gmm/Makefile                   |  1 +
+ 3rdparty/scalapack/Makefile             |  4 ++--
+ 3rdparty/scalapack/SLmake-scalapack.inc |  4 ++--
+ configure.ac                            | 15 +++++++--------
+ plugin/mpi/MUMPS.cpp                    |  4 ++--
+ plugin/mpi/MUMPS_mpi.cpp                |  4 ++--
+ plugin/seq/MUMPS.cpp                    |  4 ++--
+ plugin/seq/MUMPS_seq.cpp                |  4 ++--
+ plugin/seq/SuperLu.cpp                  |  6 +++---
+ scotch_wrapper.h                        |  3 +++
+ 11 files changed, 29 insertions(+), 26 deletions(-)
+ create mode 100644 scotch_wrapper.h
+
+diff --git a/3rdparty/getall b/3rdparty/getall
+index f1806e5c5..41598925d 100755
+--- a/3rdparty/getall
++++ b/3rdparty/getall
+@@ -139,10 +139,10 @@ download('NLopt','http://ab-initio.mit.edu/nlopt/nlopt-2.2.4.tar.gz',
+ 	'http://ab-initio.mit.edu/wiki/index.php/NLopt',
+ 	'nlopt-2.2.4.tar.gz',
+ 	'9c60c6380a10c6d2a06895f0e8756d4f');
+-download('ScaLAPACK','http://www.netlib.org/scalapack/scalapack-2.1.0.tgz',
++download('ScaLAPACK','http://www.netlib.org/scalapack/scalapack-2.2.1.tgz',
+ 	'http://www.netlib.org/scalapack/',
+-	'scalapack-2.1.0.tgz',
+-	'3b239ef80353c67354a0a62d54946fa8');
++	'scalapack-2.2.1.tgz',
++	'58f32e40b0082012f1564c7f712a0ba1');
+ download('Scotch','https://gitlab.inria.fr/scotch/scotch/-/archive/v6.1.0/scotch-v6.1.0.tar.gz',
+ 	'https://gitlab.inria.fr/scotch/',
+ 	'scotch-v6.1.0.tar.gz',
+diff --git a/3rdparty/gmm/Makefile b/3rdparty/gmm/Makefile
+index 0688129a9..343a546d5 100644
+--- a/3rdparty/gmm/Makefile
++++ b/3rdparty/gmm/Makefile
+@@ -35,6 +35,7 @@ install: FAIRE
+ 
+ $(SRCDIR): $(PKGDIR)/$(PACKAGE)
+ 	gunzip -c   $^ | tar xf - 
++	cp ../../config.guess ../../config.sub gmm-$(PKG_VERSION)
+ 
+ $(PKGDIR)/$(PACKAGE):
+ 	../getall -o Gmm++ -a
+diff --git a/3rdparty/scalapack/Makefile b/3rdparty/scalapack/Makefile
+index 0ba13728a..9d2dc46ed 100644
+--- a/3rdparty/scalapack/Makefile
++++ b/3rdparty/scalapack/Makefile
+@@ -12,8 +12,8 @@ all-local: scalapack
+ # http://www.netlib.org/scalapack/
+ # Hips information
+ DIRPKG=../pkg
+-SRCDIR=scalapack-2.1.0
+-PACKAGE1=$(DIRPKG)/scalapack-2.1.0.tgz
++SRCDIR=scalapack-2.2.1
++PACKAGE1=$(DIRPKG)/scalapack-2.2.1.tar.gz
+ SERVER=http://www.netlib.org/scalapack/
+ INSTALL=../..
+ 
+diff --git a/3rdparty/scalapack/SLmake-scalapack.inc b/3rdparty/scalapack/SLmake-scalapack.inc
+index 6accab241..34aa9ac77 100644
+--- a/3rdparty/scalapack/SLmake-scalapack.inc
++++ b/3rdparty/scalapack/SLmake-scalapack.inc
+@@ -33,8 +33,8 @@ NOOPT         = -O0 @CNOFLAGS@
+ # FFCS - some return statements without value cause trouble on MacOS
+ # FFCS - add path to mpi.h (required for MacOS 10.8 + MacPorts OpenMPI)
+ # FFCS - added @CNOFLAGS@ according to upstream changes
+-CCFLAGS       = -O3 -Wreturn-type @CFLAGS@ -I'@MPI_INC_DIR@' @CNOFLAGS@ -Wno-implicit-function-declaration
+-FCFLAGS       = -O3 @CNOFLAGS@ @FCFLAGS@
++CCFLAGS       = -Wreturn-type @CFLAGS@ -I'@MPI_INC_DIR@' @CNOFLAGS@ -Wno-implicit-function-declaration
++FCFLAGS       = @CNOFLAGS@ @FCFLAGS@
+ FCLOADER      = $(FC)
+ CCLOADER      = $(CC)
+ FCLOADFLAGS   = $(FCFLAGS)
+diff --git a/configure.ac b/configure.ac
+index 213763969..c15bf25da 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1277,7 +1277,7 @@ if test "$enable_download"  = "yes"  ; then
+  *no*)
+      AC_MSG_NOTICE([ to install missing package  under debian or ubuntu, try ])
+      test "$ff_git" = no && AC_MSG_NOTICE([ sudo apt-get install git])
+-     AC_MSG_ERROR([ Sorry missing  git command !]);;
++     AC_MSG_WARN([ Sorry missing  git command !]);;
+  esac
+ fi
+ 
+@@ -2226,23 +2226,22 @@ if test "$ff_with_gsl" = "yes"; then
+ fi
+ 
+ m4_map([AC_FF_WHERELIB],[
+-	[[mumps],[-ldmumps -lzmumps  -lmumps_common  -lpord],[dmumps_c.h],[]],
++	[[mumps],[-ldmumps -lzmumps  -lmumps_common  -lpord],[MUMPS/dmumps_c.h],[]],
+ 	[[mumps_seq],[-ldmumps_seq -lzmumps_seq  -lmumps_common_seq  -lpord_seq -lmpiseq_seq],[dmumps_c.h],[]],
+ 	[[libseq],[-lmpiseq_seq],[${inc_usr_include}mumps_seq/mpi.h]],
+ 	[[mumps_ptscotch],[-lpord_ptscotch -lmumps_common_ptscotch -ldmumps_ptscotch -lzmumps_ptscotch -lpord_ptscotch],[dmumps_c.h]],
+ 	[[mumps_scotch],[-lpord_scotch -lmumps_common_scotch -ldmumps_scotch -lzmumps_scotch -lpord_scotch],[dmumps_c.h]],
+ 	[[fftw3],[-lfftw3],[${inc_usr_include}fftw3.h],[]],
+-	[[superlu],[-lsuperlu],[${inc_usr_include}superlu/superlu_enum_consts.h],[]],
++	[[superlu],[-lsuperlu],[SuperLU/superlu_enum_consts.h],[]],
+         [[blacs],[ -lblacsCinit$ff_with_mpi	-lblacsF77init$ff_with_mpi	-lblacs$ff_with_mpi],[]],
+         [[scalapack],[-lscalapack$ff_with_mpi],[]],
+-        [[scotch],[-lscotch -lscotcherr],[scotch.h]],
++        [[scotch],[-lscotch -lscotcherr],[scotch_wrapper.h]],
+         [[ptscotch],[-lptscotch -lptscotcherr],[ptscotch.h]],
+-	[[metis],[-lmetis],[${inc_usr_include}metis/metis.h],[]],
+ 	[[metis],[-lmetis],[metis.h],[]],
+ 	[[parmetis],[-lparmetis -lmetis],[],[]],
+ 	[[freeyams],[-lfreeyams],[freeyamslib.h],[]],
+-	[[mmg3d],[-lmmg3d-v4],[libmmg3d.h],[]],
+-        [[mmg],[-lmmg],[libmmg.h],[]],
++	[[mmg3d],[-lmmg3d],[mmg/mmg3d/libmmg3d.h],[]],
++        [[mmg],[-lmmg],[mmg/libmmg.h],[]],
+         [[zlib],[-lz],[zlib.h],[]],
+         [[parmmg],[-lparmmg],[libparmmg.h],[]],
+ 	[[mshmet],[-lmshmet],[mshmetlib.h],[]],
+@@ -2258,7 +2257,7 @@ TOOL_DISABLE(tetgen,tetgen.$DYLIB_SUFFIX)
+ TOOL_DISABLE(lapack,lapack.$DYLIB_SUFFIX)
+ TOOL_DISABLE(metis,metis.$DYLIB_SUFFIX)
+ TOOL_DISABLE(parmetis,parmetis.$DYLIB_SUFFIX)
+-TOOL_DISABLE(mmg3d,mmg3d-v4.0.$DYLIB_SUFFIX)
++TOOL_DISABLE(mmg3d,mmg3d.$DYLIB_SUFFIX)
+ if test "$ff_cmake" = yes -o \( "$ff_mmg_ok" = yes -a -z "$TOOL_COMPILE_mmg" \); then
+      TOOL_DISABLE(mmg,mmg.$DYLIB_SUFFIX)
+ fi
+diff --git a/plugin/mpi/MUMPS.cpp b/plugin/mpi/MUMPS.cpp
+index 201056fbd..f7e795147 100644
+--- a/plugin/mpi/MUMPS.cpp
++++ b/plugin/mpi/MUMPS.cpp
+@@ -41,8 +41,8 @@ using namespace std;
+ #include "ff++.hpp"
+ 
+ 
+-#include <dmumps_c.h>
+-#include <zmumps_c.h>
++#include <MUMPS/dmumps_c.h>
++#include <MUMPS/zmumps_c.h>
+ 
+ const int JOB_INIT = -1;
+ const int JOB_END = -2;
+diff --git a/plugin/mpi/MUMPS_mpi.cpp b/plugin/mpi/MUMPS_mpi.cpp
+index 56e4d544c..2e968a7f9 100644
+--- a/plugin/mpi/MUMPS_mpi.cpp
++++ b/plugin/mpi/MUMPS_mpi.cpp
+@@ -41,8 +41,8 @@ using namespace std;
+ #include "ff++.hpp"
+ 
+ 
+-#include <dmumps_c.h>
+-#include <zmumps_c.h>
++#include <MUMPS/dmumps_c.h>
++#include <MUMPS/zmumps_c.h>
+ 
+ const int JOB_INIT = -1;
+ const int JOB_END = -2;
+diff --git a/plugin/seq/MUMPS.cpp b/plugin/seq/MUMPS.cpp
+index fdc464c63..89df1115e 100644
+--- a/plugin/seq/MUMPS.cpp
++++ b/plugin/seq/MUMPS.cpp
+@@ -35,8 +35,8 @@ using namespace std;
+ #include "ff++.hpp"
+ 
+ #include "mumps_seq/mpi.h"
+-#include "dmumps_c.h"
+-#include "zmumps_c.h"
++#include <MUMPS/dmumps_c.h>
++#include <MUMPS/zmumps_c.h>
+ 
+ const int JOB_INIT = -1;
+ const int JOB_END = -2;
+diff --git a/plugin/seq/MUMPS_seq.cpp b/plugin/seq/MUMPS_seq.cpp
+index 1e20bcef7..85316a5a7 100644
+--- a/plugin/seq/MUMPS_seq.cpp
++++ b/plugin/seq/MUMPS_seq.cpp
+@@ -35,8 +35,8 @@ using namespace std;
+ #include "ff++.hpp"
+ 
+ #include "mumps_seq/mpi.h"
+-#include "dmumps_c.h"
+-#include "zmumps_c.h"
++#include <MUMPS/dmumps_c.h>
++#include <MUMPS/zmumps_c.h>
+ 
+ const int JOB_INIT = -1;
+ const int JOB_END = -2;
+diff --git a/plugin/seq/SuperLu.cpp b/plugin/seq/SuperLu.cpp
+index 351090cae..6cd618f74 100644
+--- a/plugin/seq/SuperLu.cpp
++++ b/plugin/seq/SuperLu.cpp
+@@ -26,10 +26,10 @@
+ /* clang-format on */
+ 
+ #include "ff++.hpp"
+-#include "slu_ddefs.h"
+-#include "superlu_enum_consts.h"
++#include <SuperLU/slu_ddefs.h>
++#include <SuperLU/superlu_enum_consts.h>
+ 
+-#include "slu_zdefs.h"
++#include <SuperLU/slu_zdefs.h>
+ 
+ template< class R >
+ struct SuperLUDriver {};
+diff --git a/scotch_wrapper.h b/scotch_wrapper.h
+new file mode 100644
+index 000000000..f1bee2eb6
+--- /dev/null
++++ b/scotch_wrapper.h
+@@ -0,0 +1,3 @@
++#include <stdint.h>
++#include <stdio.h>
++#include <scotch.h>
+-- 
+2.47.1
+

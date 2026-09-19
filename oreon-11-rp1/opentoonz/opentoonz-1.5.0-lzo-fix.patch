@@ -1,0 +1,13 @@
+diff --git a/toonz/sources/CMakeLists.txt b/toonz/sources/CMakeLists.txt
+index 7cf3d7c5..71a5d27f 100644
+--- a/toonz/sources/CMakeLists.txt
++++ b/toonz/sources/CMakeLists.txt
+@@ -614,7 +614,7 @@ add_subdirectory(image)
+ add_subdirectory(toonzqt)
+ add_subdirectory(tnztools)
+ 
+-add_subdirectory(${SDKROOT}/lzo/driver lzodriver)
++# add_subdirectory(${SDKROOT}/lzo/driver lzodriver)
+ 
+ add_subdirectory(toonz)
+ add_subdirectory(tcleanupper)

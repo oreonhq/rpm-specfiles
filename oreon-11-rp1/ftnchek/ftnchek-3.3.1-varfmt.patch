@@ -1,0 +1,51 @@
+diff -c ftnchek-3.3.1/forlex.c ftnchek-3.3.1-1/forlex.c
+*** ftnchek-3.3.1/forlex.c	2004-12-31 12:22:16.000000000 -0500
+--- ftnchek-3.3.1-1/forlex.c	2006-06-25 12:59:02.000000000 -0400
+***************
+*** 755,760 ****
+--- 755,766 ----
+  	  }
+  	  break;
+  
++ 	  /* Next case can only occur in illegal code */
++         case 'H':
++ 	      syntax_error(token->line_num,token->col_num,
++ 			   "H specifier missing preceding number");
++ 	      break;
++ 
+  	default:
+  	  if(f77_format_extensions || f90_format_extensions) {
+  	    nonstandard(token->line_num,token->col_num,f90_format_extensions,0);
+***************
+*** 1553,1558 ****
+--- 1559,1575 ----
+                  advance();
+  		src_text_buf[src_text_len++] = curr_char;
+  	}
++ 	/* Catch closing > of variable format here so it taken as
++ 	   delimiter not f90 relops.   Note that inside_format is
++ 	   turned off while scanning the expr inside < > so we use
++ 	   curr_stmt_class instead to detect this case.  Assumes that
++ 	   a > as relop cannot occur in var fmt expr.  This could be
++ 	   made sure by checking if outside of parens.
++ 	*/
++ 	else if( curr_char == '>'  && curr_stmt_class == tok_FORMAT ) {
++ 	  get_simple_punctuation(token);
++ 	  return;
++ 	}
+  				/* recognize F90 rel-ops here */
+  	else if( f90_relop(token,&multichar) ) {
+  	  token->tclass = tok_relop;
+diff -c ftnchek-3.3.1/fortran.y ftnchek-3.3.1-1/fortran.y
+*** ftnchek-3.3.1/fortran.y	2004-11-17 21:06:04.000000000 -0500
+--- ftnchek-3.3.1-1/fortran.y	2006-06-25 13:03:34.000000000 -0400
+***************
+*** 3496,3501 ****
+--- 3496,3502 ----
+  			{
+  			  if(f77_variable_format || f90_variable_format)
+  			     nonstandard($1.line_num,$1.col_num,f90_variable_format,0);
++ 			  msg_tail(": variable format");
+  			}
+  		;
+  

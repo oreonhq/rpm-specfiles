@@ -1,0 +1,47 @@
+diff -uNr widelands-1.3.orig/src/graphic/text/test/render_richtext.cc widelands-1.3/src/graphic/text/test/render_richtext.cc
+--- widelands-1.3.orig/src/graphic/text/test/render_richtext.cc	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/graphic/text/test/render_richtext.cc	2025-12-21 13:16:33.279000000 +0100
+@@ -114,6 +114,9 @@
+ 	if (parse_arguments(argc, argv, &w, outname, inname, allowed_tags))
+ 		return 0;
+ 
++	// GLEW only supports glx atm, force use of X11 even under Wayland
++	// https://github.com/nigels-com/glew/issues/172
++	setenv("SDL_VIDEODRIVER", "x11", 0);
+ 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+ 		std::cerr << "SDLInit did not succeed: " << SDL_GetError() << std::endl;
+ 		return 1;
+diff -uNr widelands-1.3.orig/src/website/website_common.cc widelands-1.3/src/website/website_common.cc
+--- widelands-1.3.orig/src/website/website_common.cc	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/website/website_common.cc	2025-12-21 13:17:16.715000000 +0100
+@@ -18,6 +18,7 @@
+ 
+ #include "website/website_common.h"
+ 
++#include <cstdlib>
+ #include <SDL.h>
+ 
+ #include "base/i18n.h"
+@@ -33,6 +34,9 @@
+ 	set_initializer_thread();
+ 	g_verbose = true;
+ 
++	// GLEW only supports glx atm, force use of X11 even under Wayland
++	// https://github.com/nigels-com/glew/issues/172
++	setenv("SDL_VIDEODRIVER", "x11", 0);
+ 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+ 		// We sometimes run into a missing video driver in our CI environment, so we exit 0 to prevent
+ 		// too frequent failures
+diff -uNr widelands-1.3.orig/src/wlapplication.cc widelands-1.3/src/wlapplication.cc
+--- widelands-1.3.orig/src/wlapplication.cc	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/wlapplication.cc	2025-12-21 13:17:48.848000000 +0100
+@@ -401,6 +401,9 @@
+ #endif
+ 
+ 	// Start the SDL core
++	// GLEW only supports glx atm, force use of X11 even under Wayland
++	// https://github.com/nigels-com/glew/issues/172
++	setenv("SDL_VIDEODRIVER", "x11", 0);
+ 	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
+ 		// We sometimes run into a missing video driver in our CI environment, so we exit 0 to prevent
+ 		// too frequent failures

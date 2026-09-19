@@ -1,0 +1,13 @@
+diff -rupN NCEPLIBS-g2c-2.2.0/src/CMakeLists.txt NCEPLIBS-g2c-2.2.0-new/src/CMakeLists.txt
+--- NCEPLIBS-g2c-2.2.0/src/CMakeLists.txt	2025-04-24 17:45:10.000000000 +0200
++++ NCEPLIBS-g2c-2.2.0-new/src/CMakeLists.txt	2025-08-10 15:11:42.984319548 +0200
+@@ -179,6 +179,9 @@ endif()
+ 
+ if (WIN32)
+   target_link_libraries(${lib_name}_objlib INTERFACE ws2_32)
++  if (BUILD_SHARED_LIBS)
++    target_link_libraries(${lib_name}_shared PRIVATE ws2_32)
++  endif()
+ endif()
+ 
+ # Install g2c library

@@ -1,0 +1,4 @@
+z /var/spool/MD-Quarantine 0750 defang defang - -
+z /var/spool/MIMEDefang 0750 defang defang - -
+d /var/spool/MIMEDefang/.razor 0750 defang defang - -
+L+ /var/spool/MIMEDefang/.razor/razor-agent.log - - - - /dev/null

@@ -1,0 +1,11 @@
+diff -urp mathgl-2.4.1/CMakeLists.txt mathgl-2.4.1-fluid/CMakeLists.txt
+--- mathgl-2.4.1/CMakeLists.txt	2017-12-05 11:49:15.767073586 +0700
++++ mathgl-2.4.1-fluid/CMakeLists.txt	2017-12-05 11:53:07.085161409 +0700
+@@ -556,6 +556,7 @@ endif(enable-glut)
+ 
+ if(enable-fltk)
+ 	set(MGL_HAVE_FLTK 1)
++	set(FLTK_SKIP_FLUID 1)
+ 	FIND_PACKAGE(FLTK)
+ 	if(NOT FLTK_FOUND)
+ 		message(SEND_ERROR "Couldn't find FLTK library.")

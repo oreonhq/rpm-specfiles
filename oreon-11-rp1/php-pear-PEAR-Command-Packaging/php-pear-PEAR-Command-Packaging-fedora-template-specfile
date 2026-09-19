@@ -1,0 +1,81 @@
+%{!?pear_metadir: %global pear_metadir %{pear_phpdir}}
+%{!?__pear: %{expand: %%global __pear %{_bindir}/pear}}
+%global pear_name @package@
+
+Name:           @rpm_package@
+Version:        @version@
+Release:        @release@%{?dist}
+Summary:        @summary@
+
+Group:          Development/Libraries
+License:        @release_license@
+URL:            http://@master_server@/package/@package@
+Source0:        http://@master_server@/get/%{pear_name}-%{version}.tgz
+
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:      noarch
+BuildRequires:  php-pear(PEAR)
+
+Requires(post): %{__pear}
+Requires(postun): %{__pear}
+Requires:       php-pear(PEAR)
+@extra_headers@
+
+%description
+@description@
+
+%prep
+%setup -q -c
+[ -f package2.xml ] || mv package.xml package2.xml
+mv package2.xml %{pear_name}-%{version}/%{name}.xml
+
+cd %{pear_name}-%{version}
+
+
+%build
+cd %{pear_name}-%{version}
+# Empty build section, most likely nothing required.
+
+
+%install
+cd %{pear_name}-%{version}
+rm -rf $RPM_BUILD_ROOT
+%{__pear} install --nodeps --packagingroot $RPM_BUILD_ROOT %{name}.xml
+
+# Clean up unnecessary files
+rm -rf $RPM_BUILD_ROOT%{pear_metadir}/.??*
+
+# Install XML package description
+mkdir -p $RPM_BUILD_ROOT%{pear_xmldir}
+install -pm 644 %{name}.xml $RPM_BUILD_ROOT%{pear_xmldir}
+
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+
+%post
+%{__pear} install --nodeps --soft --force --register-only \
+    %{pear_xmldir}/%{name}.xml >/dev/null || :
+
+%postun
+if [ $1 -eq 0 ] ; then
+    %{__pear} uninstall --nodeps --ignore-errors --register-only \
+        @possible_channel@/%{pear_name} >/dev/null || :
+fi
+
+
+%files
+%defattr(-,root,root,-)
+@doc_files_statement@
+@cfg_files_statement@
+@www_files_statement@
+%{pear_xmldir}/%{name}.xml
+# Expand this as needed to avoid owning dirs owned by our dependencies
+# and to avoid unowned dirs
+@php_files_statement@
+@data_files_statement@
+@test_files_statement@
+@script_files_statement@
+
+%changelog

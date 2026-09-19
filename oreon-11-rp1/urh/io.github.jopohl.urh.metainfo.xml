@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.jopohl.urh</id>
+  <launchable type="desktop-id">urh.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+  <name>Universal Radio Hacker</name>
+  <developer_name>Dr. Johannes Pohl</developer_name>
+  <summary>Investigate Wireless Protocols Like A Boss</summary>
+  <description>
+    <p>
+      The Universal Radio Hacker (URH) is a complete suite for wireless protocol investigation with native support for many
+      common Software Defined Radios. URH allows easy demodulation of signals combined with an automatic detection of
+      modulation parameters making it a breeze to identify the bits and bytes that fly over the air.
+    </p>
+    <p>
+      As data often gets encoded before transmission, URH offers customizable decodings to crack even sophisticated encodings
+      like CC1101 data whitening. When it comes to protocol reverse-engineering, URH is helpful in two ways. You can either
+      manually assign protocol fields and message types or let URH automatically infer protocol fields with a rule-based
+      intelligence. Finally, URH entails a fuzzing component aimed at stateless protocols and a simulation environment
+      for stateful attacks.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://asciiwolf.fedorapeople.org/appstream/screenshots/urh/1.png</image>
+      <caption>Get the data out of raw signals</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://asciiwolf.fedorapeople.org/appstream/screenshots/urh/2.png</image>
+      <caption>Keep an overview even on complex protocols</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://asciiwolf.fedorapeople.org/appstream/screenshots/urh/3.png</image>
+      <caption>Record and send signals</caption>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://github.com/jopohl/urh</url>
+  <url type="bugtracker">https://github.com/jopohl/urh/issues</url>
+  <content_rating type="oars-1.1"/>
+</component>

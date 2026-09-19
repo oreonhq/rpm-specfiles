@@ -1,0 +1,75 @@
+From 3b78e9d35c0acf8899be91ca4af4fdd4f7fcff92 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Martin=20Gr=C3=A4=C3=9Flin?= <mgraesslin@kde.org>
+Date: Sat, 24 May 2014 09:56:12 +0200
+Subject: [PATCH 6/9] Use ECM to locate the correct install paths on a Qt5
+ build
+
+Main motivation is installing the library to a proper multi-arch location
+on debian based systems.
+
+REVIEW: 118291
+---
+ CMakeLists.txt            |  4 ++++
+ lib/prison/CMakeLists.txt | 17 ++++++++++++++---
+ 2 files changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 68ad2fe..11c0643 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -18,6 +18,10 @@ include_directories(${CMAKE_SOURCE_DIR}/lib ${QT_INCLUDES} ${CMAKE_CURRENT_BINAR
+ 
+ #### Qt 4 and 5 ####
+ if(QT5_BUILD)
++  find_package(ECM 0.0.13 REQUIRED NO_MODULE)
++  set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
++  include(KDEInstallDirs)
++
+   find_package(Qt5Core REQUIRED)
+   find_package(Qt5Gui REQUIRED)
+   find_package(Qt5Widgets REQUIRED)
+diff --git a/lib/prison/CMakeLists.txt b/lib/prison/CMakeLists.txt
+index c9458e1..6560db6 100644
+--- a/lib/prison/CMakeLists.txt
++++ b/lib/prison/CMakeLists.txt
+@@ -46,7 +46,11 @@ if (CMAKE_COMPILER_IS_GNUCXX AND NOT WIN32)
+     endif (_HAVE_GCC_VISIBILITY)
+ endif (CMAKE_COMPILER_IS_GNUCXX AND NOT WIN32)
+ 
+-install( TARGETS prison DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX} )
++if(QT5_BUILD)
++  install(TARGETS prison ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
++else()
++  install( TARGETS prison DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX} )
++endif()
+ 
+ install( FILES
+          abstractbarcode.h
+@@ -70,7 +74,14 @@ install( FILES
+ set(INCLUDE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/include)
+ get_target_property(LIB_OUT_NAME prison LOCATION)
+ get_filename_component(LIB_OUT_NAME ${LIB_OUT_NAME} NAME)
+-set(LIBPATH ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
++
++if(QT5_BUILD)
++  set(LIBPATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
++  set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/Prison")
++else()
++  set(LIBPATH ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
++  set(CMAKECONFIG_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/cmake/Prison")
++endif()
+ 
+ configure_file(
+    PrisonConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/PrisonConfig.cmake @ONLY
+@@ -86,7 +97,7 @@ write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/PrisonConfigVersion
+ install( FILES
+          ${CMAKE_CURRENT_BINARY_DIR}/PrisonConfig.cmake
+          ${CMAKE_CURRENT_BINARY_DIR}/PrisonConfigVersion.cmake
+-	 DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/cmake/Prison
++	 DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+ )
+ 
+ 
+-- 
+2.5.0
+

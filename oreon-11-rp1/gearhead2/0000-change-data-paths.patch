@@ -1,0 +1,61 @@
+diff --git a/gears.pp b/gears.pp
+index db92302..95f9f27 100644
+--- a/gears.pp
++++ b/gears.pp
+@@ -241,11 +241,13 @@ Const
+ 	Default_File_Ending = '.txt';
+ 	Default_Search_Pattern = '*.txt';
+ 
++	RPM_Data_Dir = __RPM_DATA_DIR__;
++
+ 	Design_DirName = 'design';
+-	Design_Directory = Design_DirName + OS_Dir_Separator;
++	Design_Directory = RPM_Data_Dir + OS_Dir_Separator + Design_DirName + OS_Dir_Separator;
+ 	PC_Equipment_Pattern = 'PC_*.txt';
+ 	Series_DirName = 'series';
+-	Series_Directory = Series_DirName + OS_Dir_Separator;
++	Series_Directory = RPM_Data_Dir + OS_Dir_Separator + Series_DirName + OS_Dir_Separator;
+ 	Archetypes_File = Series_Directory + 'ANPCdefault.txt';
+ 	Adventure_File_Base = Series_Directory + 'ADV_';
+ 	STC_Item_Pattern = 'STC_*.txt';
+@@ -255,7 +257,7 @@ Const
+ 	Monsters_File_Pattern = 'WMON_*.txt';
+ 
+ 	Data_DirName = 'gamedata';
+-	Data_Directory = Data_DirName + OS_Dir_Separator;
++	Data_Directory = RPM_Data_Dir + OS_Dir_Separator + Data_DirName + OS_Dir_Separator;
+ 	MetaTerrain_File_Base = Data_Directory + 'meta';
+ 	Trait_Chatter_Base = Data_Directory + 'TC_';
+ 	Standard_Message_File = Data_Directory + 'messages.txt';
+@@ -275,13 +277,13 @@ Const
+ 	NPC_Chatter_File = Data_Directory + 'taunts.txt';
+ 
+ 	Doc_DirName = 'doc';
+-	Doc_Directory = Doc_DirName + OS_Dir_Separator;
++	Doc_Directory = RPM_Data_Dir + OS_Dir_Separator + Doc_DirName + OS_Dir_Separator;
+ 	Mecha_Help_File = Doc_Directory + 'man_umek.txt';
+ 	FieldHQ_Help_File = Doc_Directory + 'man_mecha.txt';
+ 	Chara_Help_File = Doc_Directory + 'man_chara.txt';
+ 
+ 	Graphics_DirName = 'image';
+-	Graphics_Directory = Graphics_Dirname + OS_Dir_Separator;
++	Graphics_Directory = RPM_Data_DIr + OS_Dir_Separator + Graphics_Dirname + OS_Dir_Separator;
+ 
+ 
+ 
+@@ -1506,11 +1508,11 @@ begin
+ 
+ 
+ 	{ Check to make sure all the other directories can be found. }
+-	Startup_OK := DirectoryExists( Design_DirName );
+-	Startup_OK := Startup_OK and DirectoryExists( Series_DirName );
+-	Startup_OK := Startup_OK and DirectoryExists( Data_DirName );
++	Startup_OK := DirectoryExists( Design_Directory );
++	Startup_OK := Startup_OK and DirectoryExists( Series_Directory );
++	Startup_OK := Startup_OK and DirectoryExists( Data_Directory );
+ {$IFNDEF ASCII}
+-	Startup_OK := Startup_OK and DirectoryExists( Graphics_DirName );
++	Startup_OK := Startup_OK and DirectoryExists( Graphics_Directory );
+ {$ENDIF}
+ end;
+ 

@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name: libaio
-Version: 0.3.111
-Release: 23%{?dist}
+Version: 0.3.113
+Release: 1%{?dist}
 Summary: Linux-native asynchronous I/O access library
 License: LGPL-2.0-or-later
 Source: https://snapshot.debian.org/archive/debian/20180318T163348Z/pool/main/liba/libaio/libaio_0.3.111.orig.tar.gz#/libaio-%{version}.tar.gz

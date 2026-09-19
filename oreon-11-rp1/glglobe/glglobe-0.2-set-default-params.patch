@@ -1,0 +1,36 @@
+--- glglobe/glglobe.c	2001-09-25 00:50:31.000000000 +1000
++++ glglobe-patched/glglobe.c	2006-06-25 19:17:08.000000000 +1000
+@@ -96,7 +96,7 @@
+ 
+ 
+ static char map_path[256];
+-static char * map_path_default = "/usr/X11R6/lib/X11/xglobe/";
++static char * map_path_default = "/usr/share/glglobe/";
+ //static char * map_path = "./";
+ static struct dirent ** map_namelist;
+ 
+@@ -881,9 +881,11 @@
+ 
+    strcpy(map_path, map_path_default);
+ //   strcpy(mapfilename,map_path);
+-   strcpy(mapfilename,"depths_1440.jpg");
++   strcpy(mapfilename, map_path);
++   strcat(mapfilename,"depths_1440.jpg");
+ //   strcpy(mapfilename,"depths_1440.jpg");
+-   strcpy(markerfilename,"xglobe-markers");
++   strcpy(markerfilename, map_path);
++   strcat(markerfilename,"xglobe-markers");
+ 
+    tact=time(NULL);
+ 
+@@ -925,6 +927,10 @@
+        }
+    }
+ 
++   printf("map_path=%s\n",map_path);
++   printf("mapfilename=%s\n",mapfilename);
++   printf("markerfilename=%s\n",markerfilename);
++
+    glutInitWindowPosition(0, 0);
+    //   glutInitWindowSize( 800, 800 );
+    glutInitWindowSize(WIDTH, HEIGHT);

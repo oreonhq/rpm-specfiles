@@ -1,0 +1,50 @@
+From 2bfdff30fdae00b09b77a8b82ad9e19424911a71 Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Wed, 26 Nov 2025 10:07:17 -0700
+Subject: [PATCH] Do not discard const qualifiers from pointers
+
+---
+ src/arb/set_str.c     | 2 +-
+ src/arf/io.c          | 2 +-
+ src/qqbar/set_fexpr.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/arb/set_str.c b/src/arb/set_str.c
+index d1d12f85e9..4d192081bd 100644
+--- a/src/arb/set_str.c
++++ b/src/arb/set_str.c
+@@ -16,7 +16,7 @@
+ static int
+ arb_set_float_str(arb_t res, const char * inp, slong prec)
+ {
+-    char * emarker;
++    const char * emarker;
+     char * buf;
+     int error;
+     slong i;
+diff --git a/src/arf/io.c b/src/arf/io.c
+index 810663cb41..6f6db2660c 100644
+--- a/src/arf/io.c
++++ b/src/arf/io.c
+@@ -86,7 +86,7 @@ int
+ arf_load_str(arf_t x, const char* data)
+ {
+     fmpz_t mantissa, exponent;
+-    char * e_str;
++    const char * e_str;
+     char * m_str;
+     int err = 0;
+ 
+diff --git a/src/qqbar/set_fexpr.c b/src/qqbar/set_fexpr.c
+index 93f34bc8db..e1189aad81 100644
+--- a/src/qqbar/set_fexpr.c
++++ b/src/qqbar/set_fexpr.c
+@@ -223,7 +223,7 @@ _fexpr_parse_acb(acb_t res, const fexpr_t expr)
+ static int
+ fmpq_set_decimal(fmpq_t res, const char * inp, slong max_bits)
+ {
+-    char * emarker;
++    const char * emarker;
+     char * buf;
+     int success;
+     slong i;

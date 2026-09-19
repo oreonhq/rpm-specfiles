@@ -1,0 +1,13 @@
+diff -up ParaView-v6.0.1/Remoting/Core/vtkPVFileInformation.cxx.resources ParaView-v6.0.1/Remoting/Core/vtkPVFileInformation.cxx
+--- ParaView-v6.0.1/Remoting/Core/vtkPVFileInformation.cxx.resources	2025-09-25 03:26:45.000000000 -0600
++++ ParaView-v6.0.1/Remoting/Core/vtkPVFileInformation.cxx	2025-09-30 07:35:38.221183285 -0600
+@@ -1255,7 +1255,8 @@ std::string vtkPVFileInformation::GetPar
+ #if defined(_WIN32) || defined(__APPLE__)
+     ".."
+ #else
+-    "share/paraview-" PARAVIEW_VERSION
++    "share/paraview-" PARAVIEW_VERSION,
++    "share/paraview"
+ #endif
+   };
+ 

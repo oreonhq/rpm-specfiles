@@ -1,0 +1,36 @@
+From afc5330f56d74b4a9142b800d994d623d7cd29e8 Mon Sep 17 00:00:00 2001
+From: Michael Tremer <michael.tremer@ipfire.org>
+Date: Mon, 10 Mar 2025 15:13:07 +0000
+Subject: [PATCH] address: Fix endianess problem when fetching octets in IPv4
+ addresses
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fixes: #13828
+Signed-off-by: Michael Tremer <michael.tremer@ipfire.org>
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/libloc/address.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/libloc/address.h b/src/libloc/address.h
+index ff6e943..e85d761 100644
+--- a/src/libloc/address.h
++++ b/src/libloc/address.h
+@@ -324,7 +324,11 @@ static inline int loc_address_get_octet(const struct in6_addr* address, const un
+ 		if (i >= 4)
+ 			return -ERANGE;
+ 
+-		return (address->s6_addr32[3] >> (i * 8)) & 0xff;
++		// Format the IPv4 in host-byte order
++		unsigned int a4 = be32toh(address->s6_addr32[3]);
++
++		// Return the nth byte from the left
++		return a4 >> ((3 - i) * 8) & 0xff;
+ 
+ 	} else {
+ 		if (i >= 32)
+-- 
+2.48.1
+

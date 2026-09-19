@@ -1,0 +1,39 @@
+From 53621c0068a31baa5bb74927a3828343872da68c Mon Sep 17 00:00:00 2001
+From: Kleis Auke Wolthuizen <github@kleisauke.nl>
+Date: Sat, 20 Dec 2025 10:06:58 +0100
+Subject: [PATCH 1/1] vector: mask supported Highway targets by builtin targets
+ (#4816)
+
+Ensure `vips_vector_get_supported_targets()` only reports targets that
+were actually compiled into libvips by intersecting the CPU supported
+targets with the builtin targets.
+
+Resolves: #4815.
+
+Upstream-Status: Backport [https://github.com/libvips/libvips/commit/53621c0068a31baa5bb74927a3828343872da68c]
+---
+ libvips/iofuncs/vector.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libvips/iofuncs/vector.cpp b/libvips/iofuncs/vector.cpp
+index e1c3119d3c..f251696817 100644
+--- a/libvips/iofuncs/vector.cpp
++++ b/libvips/iofuncs/vector.cpp
+@@ -132,7 +132,7 @@ vips_vector_get_builtin_targets()
+ /**
+  * vips_vector_get_supported_targets:
+  *
+- * Gets a bitfield of enabled targets that are supported on this CPU. The
++ * Gets a bitfield of builtin targets that are supported on this CPU. The
+  * targets returned may change after calling [func@vector_disable_targets].
+  *
+  * Returns: a bitfield of supported CPU targets.
+@@ -141,7 +141,7 @@ gint64
+ vips_vector_get_supported_targets()
+ {
+ #ifdef HAVE_HWY
+-	return hwy::SupportedTargets() & ~(HWY_EMU128 | HWY_SCALAR);
++	return hwy::SupportedTargets() & HWY_TARGETS & ~(HWY_EMU128 | HWY_SCALAR);
+ #elif defined(HAVE_ORC)
+ 	return orc_target_get_default_flags(orc_target_get_default());
+ #else

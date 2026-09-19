@@ -1,57 +1,62 @@
 %global source0_hash none
 
-%global pypi_name xmltodict
+Name:           python-xmltodict
+Version:        1.0.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Makes working with XML feel like you are working with JSON
 
-Name:               python-xmltodict
-Version:            0.14.2
-Release:            6%{?dist}
-Summary:            Python to transform XML to JSON
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/martinblech/xmltodict
+Source:         %{pypi_source xmltodict}
 
-License:            MIT
-URL:                https://github.com/martinblech/xmltodict
-Source0:            %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
-BuildArch:          noarch
-
-%description
-xmltodict is a Python module that makes working with XML feel like you are
-working with JSON.  It's very fast (Expat-based) and has a streaming mode
-with a small memory footprint, suitable for big XML dumps like Discogs or
-Wikipedia.
-
-%package -n python3-%{pypi_name}
-Summary:            %{summary}
-
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
-%description -n python3-%{pypi_name}
-xmltodict is a Python module that makes working with XML feel like you are
-working with JSON. It's very fast (Expat-based) and has a streaming mode
-with a small memory footprint, suitable for big XML dumps like Discogs or
-Wikipedia.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'xmltodict' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-xmltodict
+Summary:        %{summary}
+
+%description -n python3-xmltodict %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-xmltodict test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n xmltodict-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l %{pypi_name}
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n %files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+
+%files -n python3-xmltodict -f %{pyproject_files}
 
 %changelog
 %autochangelog

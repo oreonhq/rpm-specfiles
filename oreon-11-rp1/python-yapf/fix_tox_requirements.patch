@@ -1,0 +1,14 @@
+diff --git a/tox.ini b/tox.ini
+index ebf2d03..4f59b0a 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -1,8 +1,6 @@
+ [tox]
+ requires =
+-    tox<4
+-    tox-pyenv
+-    tox-wheel
++    tox
+ envlist = py37,py38,py39,py310,py311
+ # tox-wheel alias for `wheel_pep517 = true`
+ isolated_build = True

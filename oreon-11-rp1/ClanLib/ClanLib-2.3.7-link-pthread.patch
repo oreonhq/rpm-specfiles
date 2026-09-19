@@ -1,0 +1,51 @@
+diff -up ClanLib-2.3.7/configure.ac~ ClanLib-2.3.7/configure.ac
+--- ClanLib-2.3.7/configure.ac~	2021-08-02 14:15:48.000000000 +0200
++++ ClanLib-2.3.7/configure.ac	2021-08-02 14:23:20.421967995 +0200
+@@ -259,6 +259,7 @@ fi
+ 
+ if test "$WIN32" = "no"; then
+ 	extra_CFLAGS_clanCore="$extra_CFLAGS_clanCore -pthread"
++	extra_LIBS_clanCore="$extra_LIBS_clanCore -lpthread"
+ else
+ 	extra_CFLAGS_clanCore="$extra_CFLAGS_clanCore -mthreads -std=c++0x"
+ fi
+diff -up ClanLib-2.3.7/Sources/Core/System/mutex.cpp~ ClanLib-2.3.7/Sources/Core/System/mutex.cpp
+--- ClanLib-2.3.7/Sources/Core/System/mutex.cpp~	2011-04-06 17:33:13.000000000 +0200
++++ ClanLib-2.3.7/Sources/Core/System/mutex.cpp	2021-08-02 15:52:07.631909837 +0200
+@@ -30,19 +30,6 @@
+ #include "API/Core/System/mutex.h"
+ #include "API/Core/System/exception.h"
+ 
+-#ifndef WIN32
+-// We need to do this because the posix threads library under linux obviously
+-// suck:
+-extern "C"
+-{
+-#if defined(__APPLE__) || defined (__FreeBSD__) || defined(__OpenBSD__)
+-	int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int kind);
+-#else
+-	int pthread_mutexattr_setkind_np(pthread_mutexattr_t *attr, int kind);
+-#endif
+-}
+-#endif
+-
+ /////////////////////////////////////////////////////////////////////////////
+ // CL_Mutex Construction:
+ 
+@@ -53,15 +40,7 @@ CL_Mutex::CL_Mutex()
+ #else
+ 	pthread_mutexattr_t attr;
+ 	pthread_mutexattr_init(&attr);
+-	#if defined(__FreeBSD__) || defined(__APPLE__)
+-	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+-	#else
+-	#if PTHREAD_MUTEX_RECURSIVE_NP
+-	pthread_mutexattr_setkind_np(&attr, PTHREAD_MUTEX_RECURSIVE);
+-	#else
+-	pthread_mutexattr_setkind_np(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
+-	#endif
+-	#endif
++	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
+ 	pthread_mutex_init(&handle, &attr);
+ 	pthread_mutexattr_destroy(&attr);
+ #endif

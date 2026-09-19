@@ -1,0 +1,164 @@
+--- jonipx.h	2001-12-18 21:08:44.000000000 +0100
++++ jonipx.h	2008-06-15 11:05:20.000000000 +0200
+@@ -25,7 +25,7 @@
+ /* #define __LINUX__ */
+ /* Only use linux specific __attribute__ tag on Linux */
+ #ifndef PACKED_STRUCT 
+-	#ifdef __LINUX__
++	#ifdef __linux__
+ 		#define PACKED_STRUCT __attribute__((packed))
+ 	#else
+ 		#define PACKED_STRUCT 
+@@ -89,27 +89,27 @@
+ 
+ typedef struct 
+     {                                                        
+-     net_type          net           PACKED_STRUCT;  /* Network address */
+-     node_address_type node_address  PACKED_STRUCT;  /* Node address */
++     net_type          net                        ;  /* Network address */
++     node_address_type node_address               ;  /* Node address */
+      unsigned short    socket        PACKED_STRUCT;  /* Big endian socket number */
+     } net_address_type;
+ 
+ typedef struct
+     {
+-     net_type           net          PACKED_STRUCT; /* My network address */
+-     node_address_type  node_address PACKED_STRUCT; /* My node address */
++     net_type           net                       ; /* My network address */
++     node_address_type  node_address              ; /* My node address */
+     } local_address_type;
+ 
+ typedef struct
+     {
+      address_type      link              PACKED_STRUCT; /* Pointer to next ECB */
+      unsigned long     ESR               PACKED_STRUCT; /* Event service routine 00000000h if none */
+-     unsigned char     in_use            PACKED_STRUCT; /* In use flag */
+-     unsigned char     complete          PACKED_STRUCT; /* Completing flag */
++     unsigned char     in_use                         ; /* In use flag */
++     unsigned char     complete                       ; /* Completing flag */
+      unsigned short    socket            PACKED_STRUCT; /* Big endian socket number */
+-     unsigned char     IPX_work[4]       PACKED_STRUCT; /* IPX work space */
+-     unsigned char     D_work[12]        PACKED_STRUCT; /* Driver work space */
+-     node_address_type immediate_address PACKED_STRUCT; /* Immediate local node address */
++     unsigned char     IPX_work[4]                    ; /* IPX work space */
++     unsigned char     D_work[12]                     ; /* Driver work space */
++     node_address_type immediate_address              ; /* Immediate local node address */
+      unsigned short    fragment_count    PACKED_STRUCT; /* Fragment count */
+      unsigned long     fragment_data     PACKED_STRUCT; /* Pointer to data fragment */
+      unsigned short    fragment_size     PACKED_STRUCT; /* Size of data fragment */
+@@ -119,19 +119,19 @@
+     {
+      unsigned short   checksum          PACKED_STRUCT;   /* Big endian checksum */
+      unsigned short   length            PACKED_STRUCT;   /* Big endian length in bytes */
+-     unsigned char    transport_control PACKED_STRUCT;   /* Transport control */
+-     unsigned char    packet_type       PACKED_STRUCT;   /* Packet type */
+-     net_address_type destination       PACKED_STRUCT;   /* Destination network address */
+-     net_address_type source            PACKED_STRUCT;   /* Source network address */
++     unsigned char    transport_control              ;   /* Transport control */
++     unsigned char    packet_type                    ;   /* Packet type */
++     net_address_type destination                    ;   /* Destination network address */
++     net_address_type source                         ;   /* Source network address */
+     } IPX_header_type;
+ 
+ 
+ 
+ typedef struct
+     {
+-     ECB_type        ecb         PACKED_STRUCT;
+-     IPX_header_type ipx_header  PACKED_STRUCT;
+-     string_type     string      PACKED_STRUCT;
++     ECB_type        ecb;
++     IPX_header_type ipx_header;
++     string_type     string;
+     } packet_type;
+ 
+ 
+--- fli.h	2001-12-18 21:08:44.000000000 +0100
++++ fli.h	2008-06-15 10:42:13.000000000 +0200
+@@ -54,10 +54,10 @@
+      unsigned long  updater_sn    PACKED_STRUCT; /* Serial number of updater prog   */
+      unsigned short x_aspect      PACKED_STRUCT; /* X of display aspect ratio       */
+      unsigned short y_aspect      PACKED_STRUCT; /* Y of display aspect ratio       */
+-     char           reserved2[38] PACKED_STRUCT; /* Not used (set to 0x00)          */
++     char           reserved2[38];               /* Not used (set to 0x00)          */
+      unsigned long  frame1_offset PACKED_STRUCT; /* Offset of first frame           */
+      unsigned long  frame2_offset PACKED_STRUCT; /* Offset of second frame          */
+-     char           reserved3[40] PACKED_STRUCT; /* Not used (set to 0x00)          */
++     char           reserved3[40];               /* Not used (set to 0x00)          */
+     } flic_header;
+ 
+ 
+@@ -66,7 +66,7 @@
+      unsigned long  chunk_size       PACKED_STRUCT; /* Total size of the chunk */
+      unsigned short chunk_type       PACKED_STRUCT; /* Chunk identifier */
+      unsigned short number_of_chunks PACKED_STRUCT; /* Number of subchunks in this chunk */
+-     char           reserved[8]      PACKED_STRUCT; /* Not used (set to 0x00 ) */
++     char           reserved[8];                    /* Not used (set to 0x00 ) */
+     } chunk_header;
+ 
+ typedef struct
+--- packets.h	2001-12-18 21:08:45.000000000 +0100
++++ packets.h	2008-06-15 10:42:58.000000000 +0200
+@@ -77,13 +77,13 @@
+ 
+ typedef struct
+     {
+-     unsigned char vehicle_one   PACKED_STRUCT;
+-     unsigned char vehicle_two   PACKED_STRUCT;
+-     unsigned char vehicle_three PACKED_STRUCT;
+-     unsigned char wingman_one   PACKED_STRUCT;
+-     unsigned char wingman_two   PACKED_STRUCT;
+-     unsigned char wingman_three PACKED_STRUCT;
+-     string   cylinder_filename  PACKED_STRUCT;
++     unsigned char vehicle_one;
++     unsigned char vehicle_two;
++     unsigned char vehicle_three;
++     unsigned char wingman_one;
++     unsigned char wingman_two;
++     unsigned char wingman_three;
++     string   cylinder_filename;
+     } game_info_type;
+ 
+ 
+--- types.h	2003-04-30 16:27:18.000000000 +0200
++++ types.h	2008-06-15 22:35:00.000000000 +0200
+@@ -44,7 +44,7 @@
+ 
+ /* #define __LINUX__ */
+ /* Only use linux specific __attribute__ tag on Linux */
+-#ifdef __LINUX__
++#ifdef __linux__
+ 	#define PACKED_STRUCT __attribute__((packed))
+ #else
+ 	#define PACKED_STRUCT 
+@@ -188,21 +188,21 @@
+ 
+ /* The packed is so we can read in the header using sizeof header */
+ typedef struct pcx_header_typ {
+-    unsigned char manufacturer    PACKED_STRUCT;
+-    unsigned char version         PACKED_STRUCT;
+-    unsigned char encoding        PACKED_STRUCT;
+-    unsigned char bits_per_pixel  PACKED_STRUCT;
++    unsigned char manufacturer;
++    unsigned char version;
++    unsigned char encoding;
++    unsigned char bits_per_pixel;
+     unsigned short xstart,ystart  PACKED_STRUCT;
+     unsigned short xend, yend     PACKED_STRUCT;
+     unsigned short horz_res       PACKED_STRUCT;
+     unsigned short vert_res       PACKED_STRUCT;
+-    unsigned char ega_palette[48] PACKED_STRUCT;
+-    unsigned char reserved        PACKED_STRUCT;
+-    unsigned char num_bit_planes  PACKED_STRUCT;
++    unsigned char ega_palette[48];
++    unsigned char reserved;
++    unsigned char num_bit_planes;
+     unsigned short bytes_per_line PACKED_STRUCT;
+     unsigned short palette_type   PACKED_STRUCT;
+-    unsigned char padding[58]     PACKED_STRUCT;
+-} pcx_header, *pcx_header_ptr;
++    unsigned char padding[58];
++} PACKED_STRUCT pcx_header, *pcx_header_ptr;
+ 
+ 
+ typedef struct pcx_picture_typ { /* Structure to hold a PCX picture */

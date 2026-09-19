@@ -1,0 +1,11 @@
+diff -up PDL-2.072/t/pp_line_numbers.t.orig PDL-2.072/t/pp_line_numbers.t
+--- PDL-2.072/t/pp_line_numbers.t.orig	2022-01-31 12:10:24.473350937 +0100
++++ PDL-2.072/t/pp_line_numbers.t	2022-01-31 12:10:38.291430810 +0100
+@@ -1,7 +1,6 @@
+ # DO NOT MODIFY - IT IS VERY FINICKY; see notes below.
+ use strict;
+ use warnings;
+-
+ # Five tests for each of two types:
+ use Test::More tests => 10;
+ use PDL::PP qw(foo::bar foo::bar foobar);

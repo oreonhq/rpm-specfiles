@@ -1,0 +1,53 @@
+%global source0_hash ec71499d33ef5d72b7fb3359b8320639e06e413abad61a070201178a254b153e
+
+Name:           R-colorspace
+Version:        %R_rpm_version 2.1-2
+Release:        %autorelease
+Summary:        A Toolbox for Manipulating and Assessing Colors and Palettes
+
+License:        BSD-3-Clause
+URL:            %{cran_url}
+Source:         %{cran_source}
+
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    %{ix86}
+
+BuildRequires:  R-devel
+
+%description
+Carries out mapping between assorted color spaces including RGB, HSV, HLS,
+CIEXYZ, CIELUV, HCL (polar CIELUV), CIELAB, and polar CIELAB. Qualitative,
+sequential, and diverging color palettes based on HCL colors are provided along
+with corresponding ggplot2 color scales. Color palette choice is aided by an
+interactive app (with either a Tcl/Tk or a shiny graphical user interface) and
+shiny apps with an HCL color picker and a color vision deficiency emulator.
+Plotting functions for displaying and assessing palettes include color
+swatches, visualizations of the HCL space, and trajectories in HCL and/or RGB
+spectrum. Color manipulation functions include: desaturation,
+lightening/darkening, mixing, and simulation of color vision deficiencies
+(deutanomaly, protanomaly, tritanomaly). Details can be found on the project
+web page at <http://colorspace.R-Forge.R-project.org/> and in the accompanying
+scientific paper: Zeileis et al. (2020, Journal of Statistical Software,
+<doi:10.18637/jss.v096.i01>).
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -c
+
+%generate_buildrequires
+%R_buildrequires
+
+%build
+
+%install
+%R_install
+%R_save_files
+
+%check
+%R_check \--no-examples
+
+%files -f %{R_files}
+
+%changelog
+%autochangelog

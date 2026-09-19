@@ -1,0 +1,22 @@
+From 0a50a455feedc0761ccf4ebeda3038bd98b67248 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Mon, 15 May 2023 14:36:00 +0200
+Subject: [PATCH] Switch build-backend to flit_core
+
+---
+ pyproject.toml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 1a2f070..48f79f1 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,6 +1,6 @@
+ [build-system]
+-requires = ["flit"]
+-build-backend = "flit.buildapi"
++requires = ["flit_core"]
++build-backend = "flit_core.buildapi"
+ 
+ [tool.flit.metadata]
+ module = "requests_download"

@@ -1,0 +1,27 @@
+From 6d6017f906c5aa95594dba0fd75e7a512f87883a Mon Sep 17 00:00:00 2001
+From: Felix Yan <felixonmars@archlinux.org>
+Date: Tue, 23 Aug 2022 13:52:07 +0300
+Subject: [PATCH] Allow libffi 0.2
+
+Tested to build fine with the new version.
+---
+ idris.cabal | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/idris.cabal b/idris.cabal
+index 7904ce6df..19b32aded 100644
+--- a/idris.cabal
++++ b/idris.cabal
+@@ -374,10 +374,10 @@ Library
+   else
+      build-depends: unix < 2.8
+   if flag(FFI)
+-     build-depends: libffi < 0.2
++     build-depends: libffi < 0.3
+      cpp-options:   -DIDRIS_FFI
+   if flag(GMP)
+-     build-depends: libffi < 0.2
++     build-depends: libffi < 0.3
+      extra-libraries: gmp
+      cpp-options:   -DIDRIS_GMP
+   if flag(freestanding)

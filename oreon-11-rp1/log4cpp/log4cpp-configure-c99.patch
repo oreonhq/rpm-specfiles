@@ -1,0 +1,18 @@
+Do not call the undeclared exit function.  This avoids an implicit
+function declaration, which future compilers may reject by default.
+
+Submitted upstream: <https://sourceforge.net/p/log4cpp/patches/49/>
+
+diff --git a/m4/AC_FUNC_SNPRINTF.m4 b/m4/AC_FUNC_SNPRINTF.m4
+index 08af5218eaf90e56..3d77d0f874f39ba0 100644
+--- a/m4/AC_FUNC_SNPRINTF.m4
++++ b/m4/AC_FUNC_SNPRINTF.m4
+@@ -13,7 +13,7 @@ dnl
+ AC_DEFUN([AC_FUNC_SNPRINTF],
+ [AC_CACHE_CHECK(for working snprintf, ac_cv_func_snprintf,
+ [AC_TRY_RUN([#include <stdio.h>
+-int main () { int l = snprintf(NULL,0,"%d",100); exit (!((3 <= l) || (-1 == l))); }
++int main () { int l = snprintf(NULL,0,"%d",100); return !((3 <= l) || (-1 == l)); }
+ ], ac_cv_func_snprintf=yes, ac_cv_func_snprintf=no,
+ ac_cv_func_snprintf=no)])
+ if test $ac_cv_func_snprintf = yes; then

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e917a5e37e8c7b9283af30fcd017433a0966d9d4236e4021f817acd2723a5426
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kapptemplate
 Summary: KDE Template generator
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

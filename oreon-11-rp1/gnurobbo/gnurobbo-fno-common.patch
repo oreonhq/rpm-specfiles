@@ -1,0 +1,1237 @@
+--- board.c.orig	2014-02-15 13:48:19.000000000 -0700
++++ board.c	2020-02-07 09:06:44.108081526 -0700
+@@ -32,7 +32,11 @@
+ /*
+  * Variables 
+  */
+-
++int restart_timeout;            /* Time to wait before restarting a level after Robbo dies */
++struct object board[MAX_W][MAX_H];
++struct robbo_struct robbo;
++struct viewport_struct viewport;
++struct game_mechanics_struct game_mechanics;
+ 
+ /*
+  * Function prototypes 
+--- board.h.orig	2014-02-12 13:22:57.000000000 -0700
++++ board.h	2020-02-07 09:06:45.443058579 -0700
+@@ -125,7 +125,7 @@
+ #define EFFECT_NONE   -1
+ 
+ /* Variables */
+-int restart_timeout;		/* Time to wait before restarting a level after Robbo dies */
++extern int restart_timeout;		/* Time to wait before restarting a level after Robbo dies */
+ 
+ struct Coords
+ {
+@@ -162,9 +162,9 @@ struct object
+ #endif
+   struct Coords icon[MAX_ICONS];	/* Coords of left-up point of icons drawed on bitmap */
+ };
+-struct object board[MAX_W][MAX_H];	/* This is the game area. Each board location holds one and only one of the above objects */
++extern struct object board[MAX_W][MAX_H];	/* This is the game area. Each board location holds one and only one of the above objects */
+ 
+-struct
++struct robbo_struct
+ {
+   int x;			/* Board x position */
+   int y;			/* Board y position */
+@@ -180,10 +180,11 @@ struct
+   int blocked;			/* robbo cannot move - possible magnet moving */
+   int blocked_direction;	/* where robbo should be moved after blocking */
+   int teleporting;		/* Set to TRUE when Robbo is teleporting */
+-} robbo;
++};
++extern struct robbo_struct robbo;
+ 
+ /* What is shown of the board is seen through this viewport */
+-struct
++struct viewport_struct
+ {
+   int x;			/* Board x position */
+   int y;			/* Board y position */
+@@ -199,15 +200,17 @@ struct
+   int yoffset;
+   int cycles_to_dest;
+   int maximise;
+-} viewport;
++};
++extern struct viewport_struct viewport;
+ 
+ /* Some game mechanics that I have made available for modification via the rcfile */
+-struct
++struct game_mechanics_struct
+ {
+   int sensible_bears;
+   int sensible_questionmarks;
+   int sensible_solid_lasers;
+-} game_mechanics;
++};
++extern struct game_mechanics_struct game_mechanics;
+ 
+ /* Function prototypes */
+ void update_game (void);
+--- controls.c.orig	2011-04-17 10:55:41.000000000 -0600
++++ controls.c	2020-02-07 09:08:36.106156353 -0700
+@@ -83,6 +83,27 @@
+ 
+ /* Variables */
+ SDL_Event event;
++SDL_Joystick *joystick;
++
++char default_joystick_name[MAX_JOYSTICK_NAME_LENGTH];
++int joystick_count;
++char joystick_list[MAX_JOYSTICKS][MAX_JOYSTICK_NAME_LENGTH];
++
++/* Configurable options */
++int key_repeat_delay;                   /* 20 to 1000 ms */
++int temp_key_repeat_delay;              /* 20 to 1000 ms */
++int key_repeat_interval;                /* 20 to 1000 ms */
++int temp_key_repeat_interval;   /* 20 to 1000 ms */
++int default_joystick;
++int temp_default_joystick;
++int joystick_dead_zone;
++int temp_joystick_dead_zone;
++
++struct control user_controls[USER_CONTROLS];
++struct control temp_user_controls[USER_CONTROLS];
++
++ROB_OpEnv gnurobbo_op_env;
++ROB_OpEnv temp_gnurobbo_op_env;
+ 
+ /* Function prototypes */
+ 
+--- controls.h.orig	2010-01-04 17:18:39.000000000 -0700
++++ controls.h	2020-02-07 09:08:34.442184954 -0700
+@@ -85,21 +85,21 @@
+ 
+ 
+ /* Variables */
+-SDL_Joystick *joystick;
++extern SDL_Joystick *joystick;
+ 
+-char default_joystick_name[MAX_JOYSTICK_NAME_LENGTH];
+-int joystick_count;
+-char joystick_list[MAX_JOYSTICKS][MAX_JOYSTICK_NAME_LENGTH];
++extern char default_joystick_name[MAX_JOYSTICK_NAME_LENGTH];
++extern int joystick_count;
++extern char joystick_list[MAX_JOYSTICKS][MAX_JOYSTICK_NAME_LENGTH];
+ 
+ /* Configurable options */
+-int key_repeat_delay;			/* 20 to 1000 ms */
+-int temp_key_repeat_delay;		/* 20 to 1000 ms */
+-int key_repeat_interval;		/* 20 to 1000 ms */
+-int temp_key_repeat_interval;	/* 20 to 1000 ms */
+-int default_joystick;
+-int temp_default_joystick;
+-int joystick_dead_zone;
+-int temp_joystick_dead_zone;
++extern int key_repeat_delay;		/* 20 to 1000 ms */
++extern int temp_key_repeat_delay;	/* 20 to 1000 ms */
++extern int key_repeat_interval;		/* 20 to 1000 ms */
++extern int temp_key_repeat_interval;	/* 20 to 1000 ms */
++extern int default_joystick;
++extern int temp_default_joystick;
++extern int joystick_dead_zone;
++extern int temp_joystick_dead_zone;
+ 
+ struct control {
+ 	int device;			/* Keyboard, joystick or mouse */
+@@ -110,11 +110,11 @@ struct control {
+ 	int delay;			/* The initial delay in cycles before repeating - 0 disables the delay */
+ 	int interval;		/* The repeat interval in cycles - 0 disables the interval */
+ };
+-struct control user_controls[USER_CONTROLS];
+-struct control temp_user_controls[USER_CONTROLS];
++extern struct control user_controls[USER_CONTROLS];
++extern struct control temp_user_controls[USER_CONTROLS];
+ 
+-ROB_OpEnv gnurobbo_op_env;
+-ROB_OpEnv temp_gnurobbo_op_env;
++extern ROB_OpEnv gnurobbo_op_env;
++extern ROB_OpEnv temp_gnurobbo_op_env;
+ 
+ /* Function prototypes */
+ int get_user_action(int *actionid, int pollall, int *device, int *id, int *state);
+--- game.c.orig	2011-04-17 10:55:41.000000000 -0600
++++ game.c	2020-02-07 09:35:29.728219156 -0700
+@@ -66,6 +66,24 @@ int gua_device;			/* Used when getting a
+ int gua_id;			/* Used when getting actions */
+ int gua_state;			/* Used when getting actions */
+ 
++#ifdef DEBUG_COLOUR_SELECT
++int debug_colour_select_r;
++int debug_colour_select_g;
++int debug_colour_select_b;
++int debug_colour_select_component;
++#endif
++int game_mode;
++int game_cycle_delay;           /* Defaults to 10ms */
++int game_cycle_limit;           /* 20, 25, 33 Hz */
++int temp_game_cycle_limit;      /* 20, 25, 33 Hz */
++int cycle_count;                /* A running cycle count used for time stamping objects */
++int introscreenselecteditem;
++int helppage;
++int helppageselecteditem;
++int options[104];
++int optionspage;
++int optionspageselecteditem[OPTIONS_SCREEN_PAGES];
++
+ /* Function prototypes */
+ Uint32 game_timer (Uint32 interval, void *param);
+ void clean_up_before_exit (void);
+--- game.h.orig	2011-04-17 10:55:41.000000000 -0600
++++ game.h	2020-02-07 09:05:50.715999302 -0700
+@@ -184,25 +184,25 @@
+ 
+ /* Variables */
+ #ifdef DEBUG_COLOUR_SELECT
+-int debug_colour_select_r;
+-int debug_colour_select_g;
+-int debug_colour_select_b;
+-int debug_colour_select_component;
++extern int debug_colour_select_r;
++extern int debug_colour_select_g;
++extern int debug_colour_select_b;
++extern int debug_colour_select_component;
+ #endif
+-int sound;
+-int game_mode;
+-int game_cycle_delay;		/* Defaults to 10ms */
+-int game_cycle_limit;		/* 20, 25, 33 Hz */
+-int temp_game_cycle_limit;	/* 20, 25, 33 Hz */
+-int cycle_count;		/* A running cycle count used for time stamping objects */
+-int temp_game_sound;
+-int temp_sfx_vol;
+-int introscreenselecteditem;
+-int helppage;
+-int helppageselecteditem;
+-int options[104];
+-int optionspage;
+-int optionspageselecteditem[OPTIONS_SCREEN_PAGES];
++extern int sound;
++extern int game_mode;
++extern int game_cycle_delay;		/* Defaults to 10ms */
++extern int game_cycle_limit;		/* 20, 25, 33 Hz */
++extern int temp_game_cycle_limit;	/* 20, 25, 33 Hz */
++extern int cycle_count;		/* A running cycle count used for time stamping objects */
++extern int temp_game_sound;
++extern int temp_sfx_vol;
++extern int introscreenselecteditem;
++extern int helppage;
++extern int helppageselecteditem;
++extern int options[104];
++extern int optionspage;
++extern int optionspageselecteditem[OPTIONS_SCREEN_PAGES];
+ 
+ /* Function prototypes */
+ int my_rand ();
+--- konstruktor.c.orig	2012-01-18 13:03:07.000000000 -0700
++++ konstruktor.c	2020-02-07 09:11:13.695447503 -0700
+@@ -79,6 +79,15 @@ struct k_icon_init K_icons_list[] = {
+ };
+ 
+ struct k_icons  K_icons[K_MAXICONS];
++struct k_view_struct k_view;
++SDL_Surface    *k_icons;
++int K_exit;
++int             lastclick;
++int             K_direction;
++char            infostring[255];
++int             inforedraw;
++int             kmx,
++                kmy;
+ 
+ /*
+  * designer state variables 
+--- konstruktor.h.orig	2012-01-18 13:03:07.000000000 -0700
++++ konstruktor.h	2020-02-07 09:11:12.815462629 -0700
+@@ -93,33 +93,33 @@ struct k_icon_init {
+ 
+ /* Thunor: This is now being defined and declared at the same
+  * time since we only require one of them */
+-struct {
++struct k_view_struct {
+ 	int x;
+ 	int y;
+ 	int w;
+ 	int h;
+ 	int offsetx;
+ 	int offsety;
+-} k_view;
+-
++};
++extern struct k_view_struct k_view;
+ 
+ 
+ 
+ 
+ 
+ 
+-SDL_Surface    *k_icons;
++extern SDL_Surface    *k_icons;
+ 
+ /*
+  * variables 
+  */
+-int K_exit;
+-int             lastclick;
+-int             K_direction;
+-char            infostring[255];
+-int             inforedraw;
+-int             kmx,
+-                kmy;
++extern int K_exit;
++extern int             lastclick;
++extern int             K_direction;
++extern char            infostring[255];
++extern int             inforedraw;
++extern int             kmx,
++                       kmy;
+ /*
+  * prototypes 
+  */
+--- levels.c.orig	2014-02-20 11:15:52.000000000 -0700
++++ levels.c	2020-02-07 09:12:05.607555176 -0700
+@@ -30,6 +30,13 @@
+ /* Variables */
+ extern char *data_state[];
+ 
++struct level_struct level;
++struct pack level_packs[MAX_LEVEL_PACKS];
++
++int found_pack_count;           /* How many packs were physically found */
++int level_pack_count;           /* How many packs are in the list (historical entries from the rc are added to the end) */
++int selected_pack;                      /* Which pack in the list is currently selected */
++
+ /* Function prototypes */
+ int transform_char (char c);
+ 
+--- levels.h.orig	2010-08-24 15:57:10.000000000 -0600
++++ levels.h	2020-02-07 09:12:06.492539964 -0700
+@@ -31,7 +31,7 @@
+ #define DEFAULT_LEVEL_COLOUR 0x608050
+ 
+ /* Variables */
+-struct {
++struct level_struct {
+ 	int w;
+ 	int h;
+ 	char author[60];		/* The text displayed on the authorline above the viewport */
+@@ -39,7 +39,8 @@ struct {
+ 	Uint32 colour;			/* The colour if found or the default_level_colour if found in the level pack */
+ 	Uint32 colour_override;	/* The colour if found or the default_level_colour if found in the skinrc */
+ 	char notes[1024];		/* This is displayed nowhere now, but contains information about notes */
+-} level;
++};
++extern struct level_struct level;
+ 
+ struct pack {
+ 	char filename[256];		/* e.g. /usr/local/share/gnurobbo/levels/original.dat or ~/.gnurobbo/levels/mylevels.dat */
+@@ -49,11 +50,11 @@ struct pack {
+ 	int level_selected;		/* e.g. 3 is currently selected by the user */
+ 	int selected;			/* e.g. This pack is currently selected by the user */
+ };
+-struct pack level_packs[MAX_LEVEL_PACKS];
++extern struct pack level_packs[MAX_LEVEL_PACKS];
+ 
+-int found_pack_count;		/* How many packs were physically found */
+-int level_pack_count;		/* How many packs are in the list (historical entries from the rc are added to the end) */
+-int selected_pack;			/* Which pack in the list is currently selected */
++extern int found_pack_count;		/* How many packs were physically found */
++extern int level_pack_count;		/* How many packs are in the list (historical entries from the rc are added to the end) */
++extern int selected_pack;			/* Which pack in the list is currently selected */
+ 
+ /* Function prototypes */
+ int level_init(void);
+--- locales.c.orig	2012-01-18 13:03:07.000000000 -0700
++++ locales.c	2020-02-07 09:13:50.422753469 -0700
+@@ -35,6 +35,202 @@
+ /* Variables */
+ extern char *data_state[];
+ 
++char txt_intro_story[TXT_INTRO_STORY_ROWS * TXT_MAX_COLS];
++char txt_intro_keys[TXT_INTRO_KEYS_ROWS * TXT_MAX_COLS];
++char txt_intro_keys_description[TXT_INTRO_KEYS_DESCRIPTION_ROWS * TXT_MAX_COLS];
++char txt_intro_menu[TXT_INTRO_MENU_ROWS * TXT_MAX_COLS];
++char txt_of[TXT_MAX_COLS];
++char txt_intro_credits[TXT_INTRO_CREDITS_ROWS * TXT_MAX_COLS];
++
++char txt_help_page0[TXT_HELP_PAGE0_ROWS * TXT_MAX_COLS];
++char txt_help_page1[TXT_HELP_PAGE1_ROWS * TXT_MAX_COLS];
++char txt_help_page2[TXT_HELP_PAGE2_ROWS * TXT_MAX_COLS];
++char txt_help_page3[TXT_HELP_PAGE3_ROWS * TXT_MAX_COLS];
++char txt_Back[TXT_MAX_COLS];
++char txt_Next[TXT_MAX_COLS];
++char txt_Exit[TXT_MAX_COLS];
++
++char txt_options_page1[TXT_OPTIONS_PAGE1_ROWS * TXT_MAX_COLS];
++char txt_Save[TXT_MAX_COLS];
++char txt_Game_Speed[TXT_MAX_COLS];
++char txt_Fast[TXT_MAX_COLS];
++char txt_Normal[TXT_MAX_COLS];
++char txt_Slow[TXT_MAX_COLS];
++char txt_Key_Repeat[TXT_MAX_COLS];
++char txt_Delay[TXT_MAX_COLS];
++char txt_Interval[TXT_MAX_COLS];
++char txt_Default_Joystick[TXT_MAX_COLS];
++char txt_No_joystick_found[TXT_MAX_COLS];
++char txt_Joystick_Axes_Dead_Zone[TXT_MAX_COLS];
++char txt_Language[TXT_MAX_COLS];
++char txt_Translation_by[TXT_MAX_COLS];
++char txt_Save_Frequency[TXT_MAX_COLS];
++char txt_On_Exit[TXT_MAX_COLS];
++char txt_On_Change[TXT_MAX_COLS];
++char txt_Move_Up[TXT_MAX_COLS];
++char txt_Move_Up_Right[TXT_MAX_COLS];
++char txt_Move_Right[TXT_MAX_COLS];
++char txt_Move_Down_Right[TXT_MAX_COLS];
++char txt_Move_Down[TXT_MAX_COLS];
++char txt_Move_Down_Left[TXT_MAX_COLS];
++char txt_Move_Left[TXT_MAX_COLS];
++char txt_Move_Up_Left[TXT_MAX_COLS];
++char txt_Shoot_Up[TXT_MAX_COLS];
++char txt_Shoot_Down[TXT_MAX_COLS];
++char txt_Shoot_Left[TXT_MAX_COLS];
++char txt_Shoot_Right[TXT_MAX_COLS];
++char txt_Restart[TXT_MAX_COLS];
++char txt_Confirm[TXT_MAX_COLS];
++char txt_Help[TXT_MAX_COLS];
++char txt_Options[TXT_MAX_COLS];
++char txt_Previous_Level[TXT_MAX_COLS];
++char txt_Next_Level[TXT_MAX_COLS];
++char txt_Previous_Pack[TXT_MAX_COLS];
++char txt_Next_Pack[TXT_MAX_COLS];
++char txt_Toggle_Fullscreen[TXT_MAX_COLS];
++char txt_Home[TXT_MAX_COLS];
++char txt_End[TXT_MAX_COLS];
++char txt_Page_Up[TXT_MAX_COLS];
++char txt_Page_Down[TXT_MAX_COLS];
++char txt_Volume_Up[TXT_MAX_COLS];
++char txt_Volume_Down[TXT_MAX_COLS];
++char txt_Modifier[TXT_MAX_COLS];
++char txt_Restore_Default_Controls[TXT_MAX_COLS];
++char txt_Toggle_Designer[TXT_MAX_COLS];
++char txt_Scroll_Up[TXT_MAX_COLS];
++char txt_Scroll_Down[TXT_MAX_COLS];
++char txt_Primary_Click[TXT_MAX_COLS];
++char txt_System_Pointer[TXT_MAX_COLS];
++char txt_Disabled[TXT_MAX_COLS];
++char txt_Enabled[TXT_MAX_COLS];
++char txt_Pointer_Controls_Pad_Type[TXT_MAX_COLS];
++char txt_Viewport[TXT_MAX_COLS];
++char txt_Screen[TXT_MAX_COLS];
++char txt_Sound[TXT_MAX_COLS];
++char txt_Sfx_Volume[TXT_MAX_COLS];
++char txt_Simulated_Pointer[TXT_MAX_COLS];
++
++char txt_Key[TXT_MAX_COLS];
++char txt_Joy[TXT_MAX_COLS];
++char txt_Ptr[TXT_MAX_COLS];
++char txt_Mod[TXT_MAX_COLS];
++char txt_Skin[TXT_MAX_COLS];
++char txt_By[TXT_MAX_COLS];
++
++char txt_Level_Author[TXT_MAX_COLS];
++char txt_endscreen_congrats[TXT_ENDSCREEN_CONGRATS_ROWS * TXT_MAX_COLS];
++
++char txt_Volume[TXT_MAX_COLS];
++char txt_Changes_saved[TXT_MAX_COLS];
++char txt_Default_controls_restored[TXT_MAX_COLS];
++char txt_Press_something_and_release[TXT_MAX_COLS];
++char txt_No_input_was_detected[TXT_MAX_COLS];
++
++char txt_ptr_BtnLeft[TXT_MAX_COLS];
++char txt_ptr_BtnMiddle[TXT_MAX_COLS];
++char txt_ptr_BtnRight[TXT_MAX_COLS];
++char txt_ptr_WheelUp[TXT_MAX_COLS];
++char txt_ptr_WheelDown[TXT_MAX_COLS];
++
++char txt_key_Backspace[TXT_MAX_COLS];
++char txt_key_Tab[TXT_MAX_COLS];
++char txt_key_Clear[TXT_MAX_COLS];
++char txt_key_Return[TXT_MAX_COLS];
++char txt_key_Pause[TXT_MAX_COLS];
++char txt_key_Escape[TXT_MAX_COLS];
++char txt_key_Space[TXT_MAX_COLS];
++char txt_key_Delete[TXT_MAX_COLS];
++char txt_key_KP[TXT_MAX_COLS];
++char txt_key_Up[TXT_MAX_COLS];
++char txt_key_Down[TXT_MAX_COLS];
++char txt_key_Right[TXT_MAX_COLS];
++char txt_key_Left[TXT_MAX_COLS];
++char txt_key_Insert[TXT_MAX_COLS];
++char txt_key_Home[TXT_MAX_COLS];
++char txt_key_End[TXT_MAX_COLS];
++char txt_key_PgUp[TXT_MAX_COLS];
++char txt_key_PgDn[TXT_MAX_COLS];
++char txt_key_NumLk[TXT_MAX_COLS];
++char txt_key_CapsLk[TXT_MAX_COLS];
++char txt_key_ScrlLk[TXT_MAX_COLS];
++char txt_key_RShift[TXT_MAX_COLS];
++char txt_key_LShift[TXT_MAX_COLS];
++char txt_key_RCtrl[TXT_MAX_COLS];
++char txt_key_LCtrl[TXT_MAX_COLS];
++char txt_key_RAlt[TXT_MAX_COLS];
++char txt_key_LAlt[TXT_MAX_COLS];
++char txt_key_RMeta[TXT_MAX_COLS];
++char txt_key_LMeta[TXT_MAX_COLS];
++char txt_key_LSuper[TXT_MAX_COLS];
++char txt_key_RSuper[TXT_MAX_COLS];
++char txt_key_AltGr[TXT_MAX_COLS];
++char txt_key_Compose[TXT_MAX_COLS];
++char txt_key_Help[TXT_MAX_COLS];
++char txt_key_PrScr[TXT_MAX_COLS];
++char txt_key_SysRq[TXT_MAX_COLS];
++char txt_key_Break[TXT_MAX_COLS];
++char txt_key_Menu[TXT_MAX_COLS];
++char txt_key_Power[TXT_MAX_COLS];
++char txt_key_Euro[TXT_MAX_COLS];
++char txt_key_Undo[TXT_MAX_COLS];
++
++char txt_konstruktor_Ground[TXT_MAX_COLS];
++char txt_konstruktor_Stop[TXT_MAX_COLS];
++char txt_konstruktor_Radioactive_Field[TXT_MAX_COLS];
++char txt_konstruktor_Push_Box[TXT_MAX_COLS];
++char txt_konstruktor_Capsule[TXT_MAX_COLS];
++char txt_konstruktor_Bomb[TXT_MAX_COLS];
++char txt_konstruktor_Bomb2[TXT_MAX_COLS];
++char txt_konstruktor_Door[TXT_MAX_COLS];
++char txt_konstruktor_Box[TXT_MAX_COLS];
++char txt_konstruktor_Empty_Field[TXT_MAX_COLS];
++char txt_konstruktor_Butterfly[TXT_MAX_COLS];
++char txt_konstruktor_Gun_Fire[TXT_MAX_COLS];
++char txt_konstruktor_Force_Field[TXT_MAX_COLS];
++char txt_konstruktor_Screw[TXT_MAX_COLS];
++char txt_konstruktor_Wall[TXT_MAX_COLS];
++char txt_konstruktor_Black_Wall[TXT_MAX_COLS];
++char txt_konstruktor_Teleport[TXT_MAX_COLS];
++char txt_konstruktor_Gun[TXT_MAX_COLS];
++char txt_konstruktor_Magnet[TXT_MAX_COLS];
++char txt_konstruktor_Bear[TXT_MAX_COLS];
++char txt_konstruktor_Black_Bear[TXT_MAX_COLS];
++char txt_konstruktor_Bird[TXT_MAX_COLS];
++char txt_konstruktor_Key[TXT_MAX_COLS];
++char txt_konstruktor_Bullets[TXT_MAX_COLS];
++char txt_konstruktor_on_map[TXT_MAX_COLS];
++char txt_konstruktor_Laser_Gun[TXT_MAX_COLS];
++char txt_konstruktor_Blaster_Gun[TXT_MAX_COLS];
++char txt_konstruktor_Regular_Gun[TXT_MAX_COLS];
++char txt_konstruktor_Fixed[TXT_MAX_COLS];
++char txt_konstruktor_Moveable[TXT_MAX_COLS];
++char txt_konstruktor_Rotating[TXT_MAX_COLS];
++char txt_konstruktor_Moveable_Rotating[TXT_MAX_COLS];
++char txt_konstruktor_Direction_right[TXT_MAX_COLS];
++char txt_konstruktor_Direction_down[TXT_MAX_COLS];
++char txt_konstruktor_Direction_left[TXT_MAX_COLS];
++char txt_konstruktor_Direction_up[TXT_MAX_COLS];
++char txt_konstruktor_Welcome_to_GNU_Robbo_Designer[TXT_MAX_COLS];
++char txt_konstruktor_Exit_designer_select_again_to_exit[TXT_MAX_COLS];
++char txt_konstruktor_Reload_level_select_again_to_reload[TXT_MAX_COLS];
++char txt_konstruktor_Level_reloaded[TXT_MAX_COLS];
++char txt_konstruktor_New_level_select_again_to_create[TXT_MAX_COLS];
++char txt_konstruktor_Level_created[TXT_MAX_COLS];
++char txt_konstruktor_Save_select_again_to_save_new_level[TXT_MAX_COLS];
++char txt_konstruktor_New_level_appended_to_pack[TXT_MAX_COLS];
++char txt_konstruktor_Clear_level_select_again_to_clear[TXT_MAX_COLS];
++char txt_konstruktor_Level_cleared[TXT_MAX_COLS];
++char txt_konstruktor_Save_select_again_to_save_changes[TXT_MAX_COLS];
++char txt_konstruktor_Changes_saved[TXT_MAX_COLS];
++char txt_konstruktor_Level_resized_to[TXT_MAX_COLS];
++char txt_konstruktor_Screws[TXT_MAX_COLS];
++
++struct locale locales[MAX_LOCALES];
++
++int locale_count;
++int selected_locale;
++int temp_selected_locale;
++
+ /* Function prototypes */
+ 
+ 
+--- locales.h.orig	2012-01-18 13:03:07.000000000 -0700
++++ locales.h	2020-02-07 09:16:29.851162510 -0700
+@@ -36,206 +36,206 @@
+ #define TXT_MAX_COLS 100
+ 
+ /* Variables */
+-char txt_intro_story[TXT_INTRO_STORY_ROWS * TXT_MAX_COLS];
+-char txt_intro_keys[TXT_INTRO_KEYS_ROWS * TXT_MAX_COLS];
+-char txt_intro_keys_description[TXT_INTRO_KEYS_DESCRIPTION_ROWS * TXT_MAX_COLS];
+-char txt_intro_menu[TXT_INTRO_MENU_ROWS * TXT_MAX_COLS];
+-char txt_of[TXT_MAX_COLS];
+-char txt_intro_credits[TXT_INTRO_CREDITS_ROWS * TXT_MAX_COLS];
++extern char txt_intro_story[TXT_INTRO_STORY_ROWS * TXT_MAX_COLS];
++extern char txt_intro_keys[TXT_INTRO_KEYS_ROWS * TXT_MAX_COLS];
++extern char txt_intro_keys_description[TXT_INTRO_KEYS_DESCRIPTION_ROWS * TXT_MAX_COLS];
++extern char txt_intro_menu[TXT_INTRO_MENU_ROWS * TXT_MAX_COLS];
++extern char txt_of[TXT_MAX_COLS];
++extern char txt_intro_credits[TXT_INTRO_CREDITS_ROWS * TXT_MAX_COLS];
+ 
+-char txt_help_page0[TXT_HELP_PAGE0_ROWS * TXT_MAX_COLS];
+-char txt_help_page1[TXT_HELP_PAGE1_ROWS * TXT_MAX_COLS];
+-char txt_help_page2[TXT_HELP_PAGE2_ROWS * TXT_MAX_COLS];
+-char txt_help_page3[TXT_HELP_PAGE3_ROWS * TXT_MAX_COLS];
+-char txt_Back[TXT_MAX_COLS];
+-char txt_Next[TXT_MAX_COLS];
+-char txt_Exit[TXT_MAX_COLS];
++extern char txt_help_page0[TXT_HELP_PAGE0_ROWS * TXT_MAX_COLS];
++extern char txt_help_page1[TXT_HELP_PAGE1_ROWS * TXT_MAX_COLS];
++extern char txt_help_page2[TXT_HELP_PAGE2_ROWS * TXT_MAX_COLS];
++extern char txt_help_page3[TXT_HELP_PAGE3_ROWS * TXT_MAX_COLS];
++extern char txt_Back[TXT_MAX_COLS];
++extern char txt_Next[TXT_MAX_COLS];
++extern char txt_Exit[TXT_MAX_COLS];
+ 
+-char txt_options_page1[TXT_OPTIONS_PAGE1_ROWS * TXT_MAX_COLS];
+-char txt_Save[TXT_MAX_COLS];
+-char txt_Game_Speed[TXT_MAX_COLS];
+-char txt_Fast[TXT_MAX_COLS];
+-char txt_Normal[TXT_MAX_COLS];
+-char txt_Slow[TXT_MAX_COLS];
+-char txt_Key_Repeat[TXT_MAX_COLS];
+-char txt_Delay[TXT_MAX_COLS];
+-char txt_Interval[TXT_MAX_COLS];
+-char txt_Default_Joystick[TXT_MAX_COLS];
+-char txt_No_joystick_found[TXT_MAX_COLS];
+-char txt_Joystick_Axes_Dead_Zone[TXT_MAX_COLS];
+-char txt_Language[TXT_MAX_COLS];
+-char txt_Translation_by[TXT_MAX_COLS];
+-char txt_Save_Frequency[TXT_MAX_COLS];
+-char txt_On_Exit[TXT_MAX_COLS];
+-char txt_On_Change[TXT_MAX_COLS];
+-char txt_Move_Up[TXT_MAX_COLS];
+-char txt_Move_Up_Right[TXT_MAX_COLS];
+-char txt_Move_Right[TXT_MAX_COLS];
+-char txt_Move_Down_Right[TXT_MAX_COLS];
+-char txt_Move_Down[TXT_MAX_COLS];
+-char txt_Move_Down_Left[TXT_MAX_COLS];
+-char txt_Move_Left[TXT_MAX_COLS];
+-char txt_Move_Up_Left[TXT_MAX_COLS];
+-char txt_Shoot_Up[TXT_MAX_COLS];
+-char txt_Shoot_Down[TXT_MAX_COLS];
+-char txt_Shoot_Left[TXT_MAX_COLS];
+-char txt_Shoot_Right[TXT_MAX_COLS];
+-char txt_Restart[TXT_MAX_COLS];
+-char txt_Confirm[TXT_MAX_COLS];
+-char txt_Help[TXT_MAX_COLS];
+-char txt_Options[TXT_MAX_COLS];
+-char txt_Previous_Level[TXT_MAX_COLS];
+-char txt_Next_Level[TXT_MAX_COLS];
+-char txt_Previous_Pack[TXT_MAX_COLS];
+-char txt_Next_Pack[TXT_MAX_COLS];
+-char txt_Toggle_Fullscreen[TXT_MAX_COLS];
+-char txt_Home[TXT_MAX_COLS];
+-char txt_End[TXT_MAX_COLS];
+-char txt_Page_Up[TXT_MAX_COLS];
+-char txt_Page_Down[TXT_MAX_COLS];
+-char txt_Volume_Up[TXT_MAX_COLS];
+-char txt_Volume_Down[TXT_MAX_COLS];
+-char txt_Modifier[TXT_MAX_COLS];
+-char txt_Restore_Default_Controls[TXT_MAX_COLS];
+-char txt_Toggle_Designer[TXT_MAX_COLS];
+-char txt_Scroll_Up[TXT_MAX_COLS];
+-char txt_Scroll_Down[TXT_MAX_COLS];
+-char txt_Primary_Click[TXT_MAX_COLS];
+-char txt_System_Pointer[TXT_MAX_COLS];
+-char txt_Disabled[TXT_MAX_COLS];
+-char txt_Enabled[TXT_MAX_COLS];
+-char txt_Pointer_Controls_Pad_Type[TXT_MAX_COLS];
+-char txt_Viewport[TXT_MAX_COLS];
+-char txt_Screen[TXT_MAX_COLS];
+-char txt_Sound[TXT_MAX_COLS];
+-char txt_Sfx_Volume[TXT_MAX_COLS];
+-char txt_Simulated_Pointer[TXT_MAX_COLS];
++extern char txt_options_page1[TXT_OPTIONS_PAGE1_ROWS * TXT_MAX_COLS];
++extern char txt_Save[TXT_MAX_COLS];
++extern char txt_Game_Speed[TXT_MAX_COLS];
++extern char txt_Fast[TXT_MAX_COLS];
++extern char txt_Normal[TXT_MAX_COLS];
++extern char txt_Slow[TXT_MAX_COLS];
++extern char txt_Key_Repeat[TXT_MAX_COLS];
++extern char txt_Delay[TXT_MAX_COLS];
++extern char txt_Interval[TXT_MAX_COLS];
++extern char txt_Default_Joystick[TXT_MAX_COLS];
++extern char txt_No_joystick_found[TXT_MAX_COLS];
++extern char txt_Joystick_Axes_Dead_Zone[TXT_MAX_COLS];
++extern char txt_Language[TXT_MAX_COLS];
++extern char txt_Translation_by[TXT_MAX_COLS];
++extern char txt_Save_Frequency[TXT_MAX_COLS];
++extern char txt_On_Exit[TXT_MAX_COLS];
++extern char txt_On_Change[TXT_MAX_COLS];
++extern char txt_Move_Up[TXT_MAX_COLS];
++extern char txt_Move_Up_Right[TXT_MAX_COLS];
++extern char txt_Move_Right[TXT_MAX_COLS];
++extern char txt_Move_Down_Right[TXT_MAX_COLS];
++extern char txt_Move_Down[TXT_MAX_COLS];
++extern char txt_Move_Down_Left[TXT_MAX_COLS];
++extern char txt_Move_Left[TXT_MAX_COLS];
++extern char txt_Move_Up_Left[TXT_MAX_COLS];
++extern char txt_Shoot_Up[TXT_MAX_COLS];
++extern char txt_Shoot_Down[TXT_MAX_COLS];
++extern char txt_Shoot_Left[TXT_MAX_COLS];
++extern char txt_Shoot_Right[TXT_MAX_COLS];
++extern char txt_Restart[TXT_MAX_COLS];
++extern char txt_Confirm[TXT_MAX_COLS];
++extern char txt_Help[TXT_MAX_COLS];
++extern char txt_Options[TXT_MAX_COLS];
++extern char txt_Previous_Level[TXT_MAX_COLS];
++extern char txt_Next_Level[TXT_MAX_COLS];
++extern char txt_Previous_Pack[TXT_MAX_COLS];
++extern char txt_Next_Pack[TXT_MAX_COLS];
++extern char txt_Toggle_Fullscreen[TXT_MAX_COLS];
++extern char txt_Home[TXT_MAX_COLS];
++extern char txt_End[TXT_MAX_COLS];
++extern char txt_Page_Up[TXT_MAX_COLS];
++extern char txt_Page_Down[TXT_MAX_COLS];
++extern char txt_Volume_Up[TXT_MAX_COLS];
++extern char txt_Volume_Down[TXT_MAX_COLS];
++extern char txt_Modifier[TXT_MAX_COLS];
++extern char txt_Restore_Default_Controls[TXT_MAX_COLS];
++extern char txt_Toggle_Designer[TXT_MAX_COLS];
++extern char txt_Scroll_Up[TXT_MAX_COLS];
++extern char txt_Scroll_Down[TXT_MAX_COLS];
++extern char txt_Primary_Click[TXT_MAX_COLS];
++extern char txt_System_Pointer[TXT_MAX_COLS];
++extern char txt_Disabled[TXT_MAX_COLS];
++extern char txt_Enabled[TXT_MAX_COLS];
++extern char txt_Pointer_Controls_Pad_Type[TXT_MAX_COLS];
++extern char txt_Viewport[TXT_MAX_COLS];
++extern char txt_Screen[TXT_MAX_COLS];
++extern char txt_Sound[TXT_MAX_COLS];
++extern char txt_Sfx_Volume[TXT_MAX_COLS];
++extern char txt_Simulated_Pointer[TXT_MAX_COLS];
+ 
+-char txt_Key[TXT_MAX_COLS];
+-char txt_Joy[TXT_MAX_COLS];
+-char txt_Ptr[TXT_MAX_COLS];
+-char txt_Mod[TXT_MAX_COLS];
+-char txt_Skin[TXT_MAX_COLS];
+-char txt_By[TXT_MAX_COLS];
++extern char txt_Key[TXT_MAX_COLS];
++extern char txt_Joy[TXT_MAX_COLS];
++extern char txt_Ptr[TXT_MAX_COLS];
++extern char txt_Mod[TXT_MAX_COLS];
++extern char txt_Skin[TXT_MAX_COLS];
++extern char txt_By[TXT_MAX_COLS];
+ 
+-char txt_Level_Author[TXT_MAX_COLS];
+-char txt_endscreen_congrats[TXT_ENDSCREEN_CONGRATS_ROWS * TXT_MAX_COLS];
++extern char txt_Level_Author[TXT_MAX_COLS];
++extern char txt_endscreen_congrats[TXT_ENDSCREEN_CONGRATS_ROWS * TXT_MAX_COLS];
+ 
+-char txt_Volume[TXT_MAX_COLS];
+-char txt_Changes_saved[TXT_MAX_COLS];
+-char txt_Default_controls_restored[TXT_MAX_COLS];
+-char txt_Press_something_and_release[TXT_MAX_COLS];
+-char txt_No_input_was_detected[TXT_MAX_COLS];
++extern char txt_Volume[TXT_MAX_COLS];
++extern char txt_Changes_saved[TXT_MAX_COLS];
++extern char txt_Default_controls_restored[TXT_MAX_COLS];
++extern char txt_Press_something_and_release[TXT_MAX_COLS];
++extern char txt_No_input_was_detected[TXT_MAX_COLS];
+ 
+-char txt_ptr_BtnLeft[TXT_MAX_COLS];
+-char txt_ptr_BtnMiddle[TXT_MAX_COLS];
+-char txt_ptr_BtnRight[TXT_MAX_COLS];
+-char txt_ptr_WheelUp[TXT_MAX_COLS];
+-char txt_ptr_WheelDown[TXT_MAX_COLS];
++extern char txt_ptr_BtnLeft[TXT_MAX_COLS];
++extern char txt_ptr_BtnMiddle[TXT_MAX_COLS];
++extern char txt_ptr_BtnRight[TXT_MAX_COLS];
++extern char txt_ptr_WheelUp[TXT_MAX_COLS];
++extern char txt_ptr_WheelDown[TXT_MAX_COLS];
+ 
+-char txt_key_Backspace[TXT_MAX_COLS];
+-char txt_key_Tab[TXT_MAX_COLS];
+-char txt_key_Clear[TXT_MAX_COLS];
+-char txt_key_Return[TXT_MAX_COLS];
+-char txt_key_Pause[TXT_MAX_COLS];
+-char txt_key_Escape[TXT_MAX_COLS];
+-char txt_key_Space[TXT_MAX_COLS];
+-char txt_key_Delete[TXT_MAX_COLS];
+-char txt_key_KP[TXT_MAX_COLS];
+-char txt_key_Up[TXT_MAX_COLS];
+-char txt_key_Down[TXT_MAX_COLS];
+-char txt_key_Right[TXT_MAX_COLS];
+-char txt_key_Left[TXT_MAX_COLS];
+-char txt_key_Insert[TXT_MAX_COLS];
+-char txt_key_Home[TXT_MAX_COLS];
+-char txt_key_End[TXT_MAX_COLS];
+-char txt_key_PgUp[TXT_MAX_COLS];
+-char txt_key_PgDn[TXT_MAX_COLS];
+-char txt_key_NumLk[TXT_MAX_COLS];
+-char txt_key_CapsLk[TXT_MAX_COLS];
+-char txt_key_ScrlLk[TXT_MAX_COLS];
+-char txt_key_RShift[TXT_MAX_COLS];
+-char txt_key_LShift[TXT_MAX_COLS];
+-char txt_key_RCtrl[TXT_MAX_COLS];
+-char txt_key_LCtrl[TXT_MAX_COLS];
+-char txt_key_RAlt[TXT_MAX_COLS];
+-char txt_key_LAlt[TXT_MAX_COLS];
+-char txt_key_RMeta[TXT_MAX_COLS];
+-char txt_key_LMeta[TXT_MAX_COLS];
+-char txt_key_LSuper[TXT_MAX_COLS];
+-char txt_key_RSuper[TXT_MAX_COLS];
+-char txt_key_AltGr[TXT_MAX_COLS];
+-char txt_key_Compose[TXT_MAX_COLS];
+-char txt_key_Help[TXT_MAX_COLS];
+-char txt_key_PrScr[TXT_MAX_COLS];
+-char txt_key_SysRq[TXT_MAX_COLS];
+-char txt_key_Break[TXT_MAX_COLS];
+-char txt_key_Menu[TXT_MAX_COLS];
+-char txt_key_Power[TXT_MAX_COLS];
+-char txt_key_Euro[TXT_MAX_COLS];
+-char txt_key_Undo[TXT_MAX_COLS];
++extern char txt_key_Backspace[TXT_MAX_COLS];
++extern char txt_key_Tab[TXT_MAX_COLS];
++extern char txt_key_Clear[TXT_MAX_COLS];
++extern char txt_key_Return[TXT_MAX_COLS];
++extern char txt_key_Pause[TXT_MAX_COLS];
++extern char txt_key_Escape[TXT_MAX_COLS];
++extern char txt_key_Space[TXT_MAX_COLS];
++extern char txt_key_Delete[TXT_MAX_COLS];
++extern char txt_key_KP[TXT_MAX_COLS];
++extern char txt_key_Up[TXT_MAX_COLS];
++extern char txt_key_Down[TXT_MAX_COLS];
++extern char txt_key_Right[TXT_MAX_COLS];
++extern char txt_key_Left[TXT_MAX_COLS];
++extern char txt_key_Insert[TXT_MAX_COLS];
++extern char txt_key_Home[TXT_MAX_COLS];
++extern char txt_key_End[TXT_MAX_COLS];
++extern char txt_key_PgUp[TXT_MAX_COLS];
++extern char txt_key_PgDn[TXT_MAX_COLS];
++extern char txt_key_NumLk[TXT_MAX_COLS];
++extern char txt_key_CapsLk[TXT_MAX_COLS];
++extern char txt_key_ScrlLk[TXT_MAX_COLS];
++extern char txt_key_RShift[TXT_MAX_COLS];
++extern char txt_key_LShift[TXT_MAX_COLS];
++extern char txt_key_RCtrl[TXT_MAX_COLS];
++extern char txt_key_LCtrl[TXT_MAX_COLS];
++extern char txt_key_RAlt[TXT_MAX_COLS];
++extern char txt_key_LAlt[TXT_MAX_COLS];
++extern char txt_key_RMeta[TXT_MAX_COLS];
++extern char txt_key_LMeta[TXT_MAX_COLS];
++extern char txt_key_LSuper[TXT_MAX_COLS];
++extern char txt_key_RSuper[TXT_MAX_COLS];
++extern char txt_key_AltGr[TXT_MAX_COLS];
++extern char txt_key_Compose[TXT_MAX_COLS];
++extern char txt_key_Help[TXT_MAX_COLS];
++extern char txt_key_PrScr[TXT_MAX_COLS];
++extern char txt_key_SysRq[TXT_MAX_COLS];
++extern char txt_key_Break[TXT_MAX_COLS];
++extern char txt_key_Menu[TXT_MAX_COLS];
++extern char txt_key_Power[TXT_MAX_COLS];
++extern char txt_key_Euro[TXT_MAX_COLS];
++extern char txt_key_Undo[TXT_MAX_COLS];
+ 
+-char txt_konstruktor_Ground[TXT_MAX_COLS];
+-char txt_konstruktor_Stop[TXT_MAX_COLS];
+-char txt_konstruktor_Radioactive_Field[TXT_MAX_COLS];
+-char txt_konstruktor_Push_Box[TXT_MAX_COLS];
+-char txt_konstruktor_Capsule[TXT_MAX_COLS];
+-char txt_konstruktor_Bomb[TXT_MAX_COLS];
+-char txt_konstruktor_Bomb2[TXT_MAX_COLS];
+-char txt_konstruktor_Door[TXT_MAX_COLS];
+-char txt_konstruktor_Box[TXT_MAX_COLS];
+-char txt_konstruktor_Empty_Field[TXT_MAX_COLS];
+-char txt_konstruktor_Butterfly[TXT_MAX_COLS];
+-char txt_konstruktor_Gun_Fire[TXT_MAX_COLS];
+-char txt_konstruktor_Force_Field[TXT_MAX_COLS];
+-char txt_konstruktor_Screw[TXT_MAX_COLS];
+-char txt_konstruktor_Wall[TXT_MAX_COLS];
+-char txt_konstruktor_Black_Wall[TXT_MAX_COLS];
+-char txt_konstruktor_Teleport[TXT_MAX_COLS];
+-char txt_konstruktor_Gun[TXT_MAX_COLS];
+-char txt_konstruktor_Magnet[TXT_MAX_COLS];
+-char txt_konstruktor_Bear[TXT_MAX_COLS];
+-char txt_konstruktor_Black_Bear[TXT_MAX_COLS];
+-char txt_konstruktor_Bird[TXT_MAX_COLS];
+-char txt_konstruktor_Key[TXT_MAX_COLS];
+-char txt_konstruktor_Bullets[TXT_MAX_COLS];
+-char txt_konstruktor_on_map[TXT_MAX_COLS];
+-char txt_konstruktor_Laser_Gun[TXT_MAX_COLS];
+-char txt_konstruktor_Blaster_Gun[TXT_MAX_COLS];
+-char txt_konstruktor_Regular_Gun[TXT_MAX_COLS];
+-char txt_konstruktor_Fixed[TXT_MAX_COLS];
+-char txt_konstruktor_Moveable[TXT_MAX_COLS];
+-char txt_konstruktor_Rotating[TXT_MAX_COLS];
+-char txt_konstruktor_Moveable_Rotating[TXT_MAX_COLS];
+-char txt_konstruktor_Direction_right[TXT_MAX_COLS];
+-char txt_konstruktor_Direction_down[TXT_MAX_COLS];
+-char txt_konstruktor_Direction_left[TXT_MAX_COLS];
+-char txt_konstruktor_Direction_up[TXT_MAX_COLS];
+-char txt_konstruktor_Welcome_to_GNU_Robbo_Designer[TXT_MAX_COLS];
+-char txt_konstruktor_Exit_designer_select_again_to_exit[TXT_MAX_COLS];
+-char txt_konstruktor_Reload_level_select_again_to_reload[TXT_MAX_COLS];
+-char txt_konstruktor_Level_reloaded[TXT_MAX_COLS];
+-char txt_konstruktor_New_level_select_again_to_create[TXT_MAX_COLS];
+-char txt_konstruktor_Level_created[TXT_MAX_COLS];
+-char txt_konstruktor_Save_select_again_to_save_new_level[TXT_MAX_COLS];
+-char txt_konstruktor_New_level_appended_to_pack[TXT_MAX_COLS];
+-char txt_konstruktor_Clear_level_select_again_to_clear[TXT_MAX_COLS];
+-char txt_konstruktor_Level_cleared[TXT_MAX_COLS];
+-char txt_konstruktor_Save_select_again_to_save_changes[TXT_MAX_COLS];
+-char txt_konstruktor_Changes_saved[TXT_MAX_COLS];
+-char txt_konstruktor_Level_resized_to[TXT_MAX_COLS];
+-char txt_konstruktor_Screws[TXT_MAX_COLS];
++extern char txt_konstruktor_Ground[TXT_MAX_COLS];
++extern char txt_konstruktor_Stop[TXT_MAX_COLS];
++extern char txt_konstruktor_Radioactive_Field[TXT_MAX_COLS];
++extern char txt_konstruktor_Push_Box[TXT_MAX_COLS];
++extern char txt_konstruktor_Capsule[TXT_MAX_COLS];
++extern char txt_konstruktor_Bomb[TXT_MAX_COLS];
++extern char txt_konstruktor_Bomb2[TXT_MAX_COLS];
++extern char txt_konstruktor_Door[TXT_MAX_COLS];
++extern char txt_konstruktor_Box[TXT_MAX_COLS];
++extern char txt_konstruktor_Empty_Field[TXT_MAX_COLS];
++extern char txt_konstruktor_Butterfly[TXT_MAX_COLS];
++extern char txt_konstruktor_Gun_Fire[TXT_MAX_COLS];
++extern char txt_konstruktor_Force_Field[TXT_MAX_COLS];
++extern char txt_konstruktor_Screw[TXT_MAX_COLS];
++extern char txt_konstruktor_Wall[TXT_MAX_COLS];
++extern char txt_konstruktor_Black_Wall[TXT_MAX_COLS];
++extern char txt_konstruktor_Teleport[TXT_MAX_COLS];
++extern char txt_konstruktor_Gun[TXT_MAX_COLS];
++extern char txt_konstruktor_Magnet[TXT_MAX_COLS];
++extern char txt_konstruktor_Bear[TXT_MAX_COLS];
++extern char txt_konstruktor_Black_Bear[TXT_MAX_COLS];
++extern char txt_konstruktor_Bird[TXT_MAX_COLS];
++extern char txt_konstruktor_Key[TXT_MAX_COLS];
++extern char txt_konstruktor_Bullets[TXT_MAX_COLS];
++extern char txt_konstruktor_on_map[TXT_MAX_COLS];
++extern char txt_konstruktor_Laser_Gun[TXT_MAX_COLS];
++extern char txt_konstruktor_Blaster_Gun[TXT_MAX_COLS];
++extern char txt_konstruktor_Regular_Gun[TXT_MAX_COLS];
++extern char txt_konstruktor_Fixed[TXT_MAX_COLS];
++extern char txt_konstruktor_Moveable[TXT_MAX_COLS];
++extern char txt_konstruktor_Rotating[TXT_MAX_COLS];
++extern char txt_konstruktor_Moveable_Rotating[TXT_MAX_COLS];
++extern char txt_konstruktor_Direction_right[TXT_MAX_COLS];
++extern char txt_konstruktor_Direction_down[TXT_MAX_COLS];
++extern char txt_konstruktor_Direction_left[TXT_MAX_COLS];
++extern char txt_konstruktor_Direction_up[TXT_MAX_COLS];
++extern char txt_konstruktor_Welcome_to_GNU_Robbo_Designer[TXT_MAX_COLS];
++extern char txt_konstruktor_Exit_designer_select_again_to_exit[TXT_MAX_COLS];
++extern char txt_konstruktor_Reload_level_select_again_to_reload[TXT_MAX_COLS];
++extern char txt_konstruktor_Level_reloaded[TXT_MAX_COLS];
++extern char txt_konstruktor_New_level_select_again_to_create[TXT_MAX_COLS];
++extern char txt_konstruktor_Level_created[TXT_MAX_COLS];
++extern char txt_konstruktor_Save_select_again_to_save_new_level[TXT_MAX_COLS];
++extern char txt_konstruktor_New_level_appended_to_pack[TXT_MAX_COLS];
++extern char txt_konstruktor_Clear_level_select_again_to_clear[TXT_MAX_COLS];
++extern char txt_konstruktor_Level_cleared[TXT_MAX_COLS];
++extern char txt_konstruktor_Save_select_again_to_save_changes[TXT_MAX_COLS];
++extern char txt_konstruktor_Changes_saved[TXT_MAX_COLS];
++extern char txt_konstruktor_Level_resized_to[TXT_MAX_COLS];
++extern char txt_konstruktor_Screws[TXT_MAX_COLS];
+ 
+ struct locale {
+ 	char foldername[100];		/* e.g. de_DE, en_GB, es_ES, pl_PL ... */
+ 	char name[60];				/* e.g. Deutsch, English, Español, Polski ... */
+ 	char author[60];			/* Enables translators to get recognition for their work */
+ };
+-struct locale locales[MAX_LOCALES];
++extern struct locale locales[MAX_LOCALES];
+ 
+-int locale_count;
+-int selected_locale;
+-int temp_selected_locale;
++extern int locale_count;
++extern int selected_locale;
++extern int temp_selected_locale;
+ 
+ /* Function prototypes */
+ int find_all_locales(void);
+--- pointer_controls.c.orig	2010-01-16 13:41:55.000000000 -0700
++++ pointer_controls.c	2020-02-07 09:17:11.371496412 -0700
+@@ -39,6 +39,9 @@ SDL_Rect toolbar_designer_image_srcrect;
+ SDL_Rect toolbar_restart_image_srcrect;
+ SDL_Rect toolbar_hide_image_srcrect;
+ 
++struct pointercontrols pointer_controls;
++struct pointercontrols temp_pointer_controls;
++
+ /* Function prototypes */
+ 
+ 
+--- pointer_controls.h.orig	2010-01-16 08:10:33.000000000 -0700
++++ pointer_controls.h	2020-02-07 09:17:18.713378625 -0700
+@@ -53,8 +53,8 @@ struct pointercontrols {
+ 	int shoot_state;
+ 	int pad_type;
+ };
+-struct pointercontrols pointer_controls;
+-struct pointercontrols temp_pointer_controls;
++extern struct pointercontrols pointer_controls;
++extern struct pointercontrols temp_pointer_controls;
+ 
+ /* Function prototypes */
+ void pointer_controls_event_processor(ROB_Event *rob_event);
+--- rcfile.c.orig	2011-04-17 10:55:41.000000000 -0600
++++ rcfile.c	2020-02-07 09:18:32.914188233 -0700
+@@ -28,7 +28,9 @@
+ #define UNDEFINED2 -2
+ 
+ /* Variables */
+-
++char path_resource_file[100];
++struct rcfile_struct rcfile;
++int temp_rcfile_save_frequency;
+ 
+ /* Function prototypes */
+ 
+--- rcfile.h.orig	2011-04-17 10:55:41.000000000 -0600
++++ rcfile.h	2020-02-07 09:18:45.330989034 -0700
+@@ -37,13 +37,14 @@
+ #define RCFILE_SAVE_ON_CHANGE 1
+ 
+ /* Variables */
+-char path_resource_file[100];
++extern char path_resource_file[100];
+ 
+-struct {
++struct rcfile_struct {
+ 	int save_frequency;
+-} rcfile;
++};
++extern struct rcfile_struct rcfile;
+ 
+-int temp_rcfile_save_frequency;
++extern int temp_rcfile_save_frequency;
+ 
+ /* Function prototypes */
+ int read_resource_file(char *filename);
+--- ROB_engine.c.orig	2010-08-23 14:41:09.000000000 -0600
++++ ROB_engine.c	2020-02-07 09:20:17.090516958 -0700
+@@ -79,6 +79,7 @@ ROB_Object *rob_oup = NULL;
+ ROB_Object *rob_pressed_object = NULL;
+ int rob_object_count = 0;
+ char rob_last_error[ROB_ERROR_LENGTH];
++ROB_Object *rob_lyr_pointer;
+ 
+ /* Function prototypes */
+ int ROB_SetObjectZOrder(ROB_Object *rob_object, int position, ROB_Object *target);
+--- ROB_engine.h.orig	2010-01-16 13:41:55.000000000 -0700
++++ ROB_engine.h	2020-02-07 09:20:19.817473210 -0700
+@@ -118,7 +118,7 @@ typedef struct robobject {
+ 	void *pob;			/* Parent object pointer */
+ } ROB_Object;
+ 
+-ROB_Object *rob_lyr_pointer;
++extern ROB_Object *rob_lyr_pointer;
+ 
+ typedef struct robevent {
+ 	ROB_Object *rob_object;
+--- screen.c.orig	2014-02-05 08:00:57.000000000 -0700
++++ screen.c	2020-02-07 09:23:35.929259654 -0700
+@@ -39,6 +39,15 @@
+ SDL_Color bgcolor, fgcolor;	/* General purpose colours */
+ SDL_Surface *image;		/* General purpose surface */
+ 
++SDL_Surface *screen;
++struct intro_screen_struct intro_screen;
++struct help_screen_struct help_screen;
++struct options_screen_struct options_screen;
++struct game_area_struct game_area;
++struct scoreline_struct scoreline;
++struct authorline_struct authorline;
++struct video_struct video;
++
+ /* Used for animating banners */
+ int bannerstate = 0;
+ int bannerframe = 0;
+--- screen.h.orig	2014-02-04 11:41:12.000000000 -0700
++++ screen.h	2020-02-07 09:23:33.087307614 -0700
+@@ -49,43 +49,50 @@
+ #define EFX_SHOOT 8
+ 
+ /* Variables */
+-SDL_Surface *screen;
++extern SDL_Surface *screen;
+ 
+-struct {
++struct intro_screen_struct {
+ 	int redraw;			/* An ORed combination of REDRAW_* bits */
+-} intro_screen;
++};
++extern struct intro_screen_struct intro_screen;
+ 
+-struct {
++struct help_screen_struct {
+ 	int redraw;			/* An ORed combination of REDRAW_* bits */
+-} help_screen;
++};
++extern struct help_screen_struct help_screen;
+ 
+-struct {
++struct options_screen_struct {
+ 	int redraw;			/* An ORed combination of REDRAW_* bits */
+-} options_screen;
++};
++extern struct options_screen_struct options_screen;
+ 
+-struct {
++struct game_area_struct {
+ 	int redraw;			/* An ORed combination of REDRAW_* bits */
+-} game_area;
++};
++extern struct game_area_struct game_area;
+ 
+-struct {
++struct scoreline_struct {
+ 	int xoffset;
+ 	int yoffset;
+ 	int redraw;			/* An ORed combination of SCORELINE_* bits */
+-} scoreline;
++};
++extern struct scoreline_struct scoreline;
+ 
+-struct {
++struct authorline_struct {
+ 	int xoffset;
+ 	int yoffset;
+-} authorline;
++};
++extern struct authorline_struct authorline;
+ 
+-struct {
++struct video_struct {
+ 	int xres;
+ 	int yres;
+ 	int field_size;
+ 	int fullscreen;		/* 0 or SDL_FULLSCREEN */
+ 	int xshift;
+ 	int yshift;
+-} video;
++};
++extern struct video_struct video;
+ 
+ typedef struct msgbox {
+ 	char name[256];			/* A unique name */
+--- skins.c.orig	2014-02-04 11:41:12.000000000 -0700
++++ skins.c	2020-02-07 09:25:13.342615731 -0700
+@@ -60,6 +60,29 @@
+ char *data_state[] =
+   { "DATA_UNREAD", "DATA_READING", "DATA_READ", "DATA_INCOMPLETE" };
+ 
++SDL_Surface *wm_icon;
++SDL_Surface *icons;
++#ifdef LIGHTNINGENABLED
++SDL_Surface *efx;
++#endif
++SDL_Surface *ciphers;
++SDL_Surface *alpha;
++SDL_Surface *bgrnd;
++TTF_Font *font;
++
++SDL_Rect robbo_images_srcrect[8];
++SDL_Rect score_images_srcrect[10];
++SDL_Rect score_screw_srcrect;
++SDL_Rect score_key_srcrect;
++SDL_Rect score_bullet_srcrect;
++SDL_Rect score_level_srcrect;
++
++struct skin skins[MAX_SKINS];
++
++int skin_count;                 /* How many skins are in the list */
++int selected_skin;              /* Which skin in the list is currently selected */
++int temp_selected_skin;
++
+ /* Function prototypes */
+ void read_skin_project_colours (void);
+ 
+--- skins.h.orig	2014-02-04 11:41:12.000000000 -0700
++++ skins.h	2020-02-07 09:25:12.206634902 -0700
+@@ -44,22 +44,22 @@
+ #define DESIGNER_OBJV_TILE_COLOUR 0x202020
+ 
+ /* Variables */
+-SDL_Surface *wm_icon;
+-SDL_Surface *icons;
++extern SDL_Surface *wm_icon;
++extern SDL_Surface *icons;
+ #ifdef LIGHTNINGENABLED
+-SDL_Surface *efx;
++extern SDL_Surface *efx;
+ #endif
+-SDL_Surface *ciphers;
+-SDL_Surface *alpha;
+-SDL_Surface *bgrnd;
+-TTF_Font *font;
++extern SDL_Surface *ciphers;
++extern SDL_Surface *alpha;
++extern SDL_Surface *bgrnd;
++extern TTF_Font *font;
+ 
+-SDL_Rect robbo_images_srcrect[8];
+-SDL_Rect score_images_srcrect[10];
+-SDL_Rect score_screw_srcrect;
+-SDL_Rect score_key_srcrect;
+-SDL_Rect score_bullet_srcrect;
+-SDL_Rect score_level_srcrect;
++extern SDL_Rect robbo_images_srcrect[8];
++extern SDL_Rect score_images_srcrect[10];
++extern SDL_Rect score_screw_srcrect;
++extern SDL_Rect score_key_srcrect;
++extern SDL_Rect score_bullet_srcrect;
++extern SDL_Rect score_level_srcrect;
+ 
+ struct skin
+ {
+@@ -85,11 +85,11 @@ struct skin
+   Uint32 designer_OBJS_tile_colour;
+   Uint32 designer_OBJV_tile_colour;
+ };
+-struct skin skins[MAX_SKINS];
++extern struct skin skins[MAX_SKINS];
+ 
+-int skin_count;			/* How many skins are in the list */
+-int selected_skin;		/* Which skin in the list is currently selected */
+-int temp_selected_skin;
++extern int skin_count;			/* How many skins are in the list */
++extern int selected_skin;		/* Which skin in the list is currently selected */
++extern int temp_selected_skin;
+ 
+ /* Function prototypes */
+ int find_all_skins (void);
+--- sound.c.orig	2011-04-17 10:55:41.000000000 -0600
++++ sound.c	2020-02-07 09:35:15.455459696 -0700
+@@ -122,6 +122,14 @@ struct snd_sample sounds[] = {
+ 
+ struct snd_music playlist[MUS_MAXSONGS];
+ 
++int sound;
++int temp_game_sound;
++int sfx_vol;
++int temp_sfx_vol;
++#ifdef HAVE_MUSIC
++int             volume;
++#endif
++
+ /*
+  * Function prototypes 
+  */
+--- sound.h.orig	2010-02-20 09:38:41.000000000 -0700
++++ sound.h	2020-02-07 09:26:35.245233568 -0700
+@@ -78,15 +78,15 @@ struct snd_music {
+ /*
+  * Variables 
+  */
+-int sound;
+-int temp_game_sound;
+-int             sfx_vol;
+-int temp_sfx_vol;
++extern int sound;
++extern int temp_game_sound;
++extern int             sfx_vol;
++extern int temp_sfx_vol;
+ /*
+  * if we do not support music, we assume, that volume is sfx_volume 
+  */
+ #ifdef HAVE_MUSIC
+-int             volume;
++extern int             volume;
+ #else
+ #define volume sfx_vol
+ #endif

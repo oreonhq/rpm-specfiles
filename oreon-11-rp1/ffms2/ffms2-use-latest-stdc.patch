@@ -1,0 +1,12 @@
+diff -up ffms2-5.0/Makefile.am.orig ffms2-5.0/Makefile.am
+--- ffms2-5.0/Makefile.am.orig	2024-05-28 16:52:48.000000000 +0200
++++ ffms2-5.0/Makefile.am	2024-09-06 23:22:01.082701979 +0200
+@@ -16,7 +16,7 @@ AM_CPPFLAGS = \
+ 	@FFMPEG_CFLAGS@ \
+ 	@ZLIB_CPPFLAGS@ \
+ 	-include config.h
+-AM_CXXFLAGS = -std=c++11 -fvisibility=hidden
++AM_CXXFLAGS = -fvisibility=hidden
+ 
+ lib_LTLIBRARIES = src/core/libffms2.la
+ src_core_libffms2_la_LDFLAGS = @src_core_libffms2_la_LDFLAGS@

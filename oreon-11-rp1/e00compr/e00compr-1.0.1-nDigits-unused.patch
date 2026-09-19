@@ -1,0 +1,20 @@
+diff -Naur e00compr-1.0.1-original/e00write.c e00compr-1.0.1/e00write.c
+--- e00compr-1.0.1-original/e00write.c	2009-02-24 15:09:10.000000000 -0500
++++ e00compr-1.0.1/e00write.c	2022-01-05 12:32:44.662368925 -0500
+@@ -278,7 +278,7 @@
+ static int _CompressLine(E00WritePtr psInfo, const char *pszLine)
+ {
+     int     nStatus = 0;
+-    int     nDigits, nExpSign, nDotPosition, iCurPos;
++    int     nExpSign, nDotPosition, iCurPos;
+     int     numTotalDigits, numExpDigits;
+     char    n, *pszCodePos;
+ 
+@@ -329,7 +329,6 @@
+ 
+             /* Reset flags used for parsing numeric format
+              */
+-            nDigits = 0;
+             nDotPosition = 0; /* 0 means no decimal point */
+             nExpSign = 0;     /* 0 means no exponent      */
+             numExpDigits = 0;

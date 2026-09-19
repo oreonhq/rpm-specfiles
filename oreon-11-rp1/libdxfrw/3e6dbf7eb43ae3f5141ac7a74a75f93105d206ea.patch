@@ -1,0 +1,186 @@
+From 3e6dbf7eb43ae3f5141ac7a74a75f93105d206ea Mon Sep 17 00:00:00 2001
+From: Dongxu Li <dongxuli2011@gmail.com>
+Date: Tue, 13 Jun 2023 22:40:02 -0400
+Subject: [PATCH] more override fixes
+
+---
+ libraries/libdxfrw/src/drw_objects.h          |   2 +-
+ libraries/libdxfrw/src/intern/dxfreader.h     |  40 +++---
+ libraries/libdxfrw/src/intern/dxfwriter.h     |  30 ++---
+ libraries/libdxfrw/src/libdxfrw.h             |  18 +--
+
+diff --git a/libraries/libdxfrw/src/drw_objects.h b/libraries/libdxfrw/src/drw_objects.h
+index 1e04abf01a..b7d7afe5ac 100644
+--- a/src/drw_objects.h
++++ b/src/drw_objects.h
+@@ -324,7 +324,7 @@ class DRW_Block_Record : public DRW_TableEntry {
+     }
+ 
+ protected:
+-    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0);
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
+ 
+ public:
+ //Note:    int DRW_TableEntry::flags; contains code 70 of block
+diff --git a/libraries/libdxfrw/src/intern/dxfreader.h b/libraries/libdxfrw/src/intern/dxfreader.h
+index e4bba4b038..7956fe488a 100644
+--- a/src/intern/dxfreader.h
++++ b/src/intern/dxfreader.h
+@@ -31,7 +31,7 @@ class dxfReader {
+         filestr = stream;
+         type = INVALID;
+     }
+-    virtual ~dxfReader(){}
++    virtual ~dxfReader() = default;
+     bool readRec(int *code);
+ 
+     std::string getString() {return strData;}
+@@ -74,31 +74,29 @@ class dxfReader {
+ class dxfReaderBinary : public dxfReader {
+ public:
+     dxfReaderBinary(std::ifstream *stream):dxfReader(stream){skip = false; }
+-    virtual ~dxfReaderBinary() {}
+-    virtual bool readCode(int *code);
+-    virtual bool readString(std::string *text);
+-    virtual bool readString();
+-    virtual bool readBinary();
+-    virtual bool readInt16();
+-    virtual bool readInt32();
+-    virtual bool readInt64();
+-    virtual bool readDouble();
+-    virtual bool readBool();
++    bool readCode(int *code) override;
++    bool readString(std::string *text) override;
++    bool readString() override;
++    bool readBinary() override;
++    bool readInt16() override;
++    bool readInt32() override;
++    bool readInt64() override;
++    bool readDouble() override;
++    bool readBool() override;
+ };
+ 
+ class dxfReaderAscii : public dxfReader {
+ public:
+     dxfReaderAscii(std::ifstream *stream):dxfReader(stream){skip = true; }
+-    virtual ~dxfReaderAscii(){}
+-    virtual bool readCode(int *code);
+-    virtual bool readString(std::string *text);
+-    virtual bool readString();
+-    virtual bool readBinary();
+-    virtual bool readInt16();
+-    virtual bool readDouble();
+-    virtual bool readInt32();
+-    virtual bool readInt64();
+-    virtual bool readBool();
++    bool readCode(int *code) override;
++    bool readString(std::string *text) override;
++    bool readString() override;
++    bool readBinary() override;
++    bool readInt16() override;
++    bool readDouble() override;
++    bool readInt32() override;
++    bool readInt64() override;
++    bool readBool() override;
+ };
+ 
+ #endif // DXFREADER_H
+diff --git a/libraries/libdxfrw/src/intern/dxfwriter.h b/libraries/libdxfrw/src/intern/dxfwriter.h
+index 6532f904c9..866427090e 100644
+--- a/src/intern/dxfwriter.h
++++ b/src/intern/dxfwriter.h
+@@ -18,7 +18,7 @@
+ class dxfWriter {
+ public:
+     dxfWriter(std::ofstream *stream){filestr = stream; /*count =0;*/}
+-    virtual ~dxfWriter(){}
++    virtual ~dxfWriter() = default;
+     virtual bool writeString(int code, std::string text) = 0;
+     bool writeUtf8String(int code, std::string text);
+     bool writeUtf8Caps(int code, std::string text);
+@@ -32,7 +32,7 @@ class dxfWriter {
+     void setCodePage(const std::string &c){encoder.setCodePage(c, true);}
+     std::string getCodePage(){return encoder.getCodePage();}
+ protected:
+-    std::ofstream *filestr;
++    std::ofstream *filestr = nullptr;
+ private:
+     DRW_TextCodec encoder;
+ };
+@@ -40,25 +40,23 @@ class dxfWriter {
+ class dxfWriterBinary : public dxfWriter {
+ public:
+     dxfWriterBinary(std::ofstream *stream):dxfWriter(stream){}
+-    virtual ~dxfWriterBinary() {}
+-    virtual bool writeString(int code, std::string text);
+-    virtual bool writeInt16(int code, int data);
+-    virtual bool writeInt32(int code, int data);
+-    virtual bool writeInt64(int code, unsigned long long int data);
+-    virtual bool writeDouble(int code, double data);
+-    virtual bool writeBool(int code, bool data);
++    bool writeString(int code, std::string text) override;
++    bool writeInt16(int code, int data) override;
++    bool writeInt32(int code, int data) override;
++    bool writeInt64(int code, unsigned long long int data) override;
++    bool writeDouble(int code, double data) override;
++    bool writeBool(int code, bool data) override;
+ };
+ 
+ class dxfWriterAscii : public dxfWriter {
+ public:
+     dxfWriterAscii(std::ofstream *stream);
+-    virtual ~dxfWriterAscii(){}
+-    virtual bool writeString(int code, std::string text);
+-    virtual bool writeInt16(int code, int data);
+-    virtual bool writeInt32(int code, int data);
+-    virtual bool writeInt64(int code, unsigned long long int data);
+-    virtual bool writeDouble(int code, double data);
+-    virtual bool writeBool(int code, bool data);
++    bool writeString(int code, std::string text) override;
++    bool writeInt16(int code, int data) override;
++    bool writeInt32(int code, int data) override;
++    bool writeInt64(int code, unsigned long long int data) override;
++    bool writeDouble(int code, double data) override;
++    bool writeBool(int code, bool data) override;
+ };
+ 
+ #endif // DXFWRITER_H
+diff --git a/libraries/libdxfrw/src/libdxfrw.h b/libraries/libdxfrw/src/libdxfrw.h
+index a79b2cfa03..8b7e0375e3 100644
+--- a/src/libdxfrw.h
++++ b/src/libdxfrw.h
+@@ -28,7 +28,7 @@ class dxfWriter;
+ class dxfRW {
+ public:
+     dxfRW(const char* name);
+-    ~dxfRW();
++    virtual ~dxfRW();
+     void setDebug(DRW::DebugLevel lvl);
+     /// reads the file specified in constructor
+     /*!
+@@ -136,17 +136,17 @@ class dxfRW {
+     DRW::error error {DRW::BAD_NONE};
+     std::string fileName;
+     std::string codePage;
+-    bool binFile;
+-    dxfReader *reader;
+-    dxfWriter *writer;
+-    DRW_Interface *iface;
++    bool binFile = false;
++    dxfReader *reader = nullptr;
++    dxfWriter *writer = nullptr;
++    DRW_Interface *iface = nullptr;
+     DRW_Header header;
+ //    int section;
+     std::string nextentity;
+-    int entCount;
+-    bool wlayer0;
+-    bool dimstyleStd;
+-    bool applyExt;
++    int entCount = 0;
++    bool wlayer0 = false;
++    bool dimstyleStd = false;
++    bool applyExt =false;
+     bool writingBlock;
+     int elParts;  /*!< parts number when convert ellipse to polyline */
+     std::unordered_map<std::string,int> blockMap;

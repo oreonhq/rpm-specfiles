@@ -1,0 +1,92 @@
+From 03edaa61aaa18ae05b46f750b5310f27e9add122 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Thu, 25 Jan 2024 15:55:03 -0800
+Subject: [PATCH 26/26] tests: mock network functions so tests work with no
+ network
+
+There's a few places where the tests implicitly need a network
+connection. Mainly, since the TDL XML test blocks in test_guest
+are for a subclass of RedHatLinuxCDYumGuest and specify a URL,
+we wind up hitting RedHatLinuxCDYumGuest._check_url which tries
+to get the headers for the URL to figure out if the server
+supports byte ranges. Let's just mock out the header retrieval
+to make that method happy. Secondly, test-53-command-http-url.tdl
+specifies an HTTP URL, so we wind up trying to retrieve it;
+mock out the actual download, since that's not what this test is
+really exercising.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ README                    | 2 +-
+ tests/guest/test_guest.py | 9 ++++++++-
+ tests/tdl/test_tdl.py     | 7 ++++++-
+ 3 files changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/README b/README
+index 770e7ce..8dcfc0f 100644
+--- a/README
++++ b/README
+@@ -28,7 +28,7 @@ dnf install python3-requests python3-cryptography python3-libvirt python3-lxml p
+ 
+ If you wish to test on EL 7, make that:
+ 
+-yum install python-requests python-cryptography libvirt-python python-lxml python-libguestfs pytest python-monotonic
++yum install python-requests python-cryptography libvirt-python python-lxml python-libguestfs pytest python-monotonic python-mock
+ 
+ then run the tests:
+ 
+diff --git a/tests/guest/test_guest.py b/tests/guest/test_guest.py
+index 85f6b03..a763787 100644
+--- a/tests/guest/test_guest.py
++++ b/tests/guest/test_guest.py
+@@ -12,6 +12,10 @@ except:
+     from io import StringIO
+ import logging
+ import os
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ 
+ # Find oz library
+ prefix = '.'
+@@ -72,7 +76,10 @@ def setup_guest(xml, macaddress=None):
+         config = configparser.ConfigParser()
+         config.read_file(StringIO("[libvirt]\nuri=qemu:///session\nbridge_name=%s" % route))
+ 
+-    guest = oz.GuestFactory.guest_factory(tdl, config, None, macaddress=macaddress)
++    # mock this - it's used in RedHatLinuxCDYumGuest._check_url() -
++    # so the tests can run without a network connection
++    with mock.patch("oz.ozutil.http_get_header", return_value={}):
++        guest = oz.GuestFactory.guest_factory(tdl, config, None, macaddress=macaddress)
+     return guest
+ 
+ tdlxml = """
+diff --git a/tests/tdl/test_tdl.py b/tests/tdl/test_tdl.py
+index 366f1bc..dec7e6c 100644
+--- a/tests/tdl/test_tdl.py
++++ b/tests/tdl/test_tdl.py
+@@ -2,6 +2,10 @@
+ 
+ import sys
+ import os
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ 
+ try:
+     import lxml.etree
+@@ -100,7 +104,8 @@ tests = {
+ }
+ 
+ # Test that iterates over all .tdl files
+-def test_all():
++@mock.patch("oz.ozutil.http_download_file")
++def test_all(fakedl):
+     for (tdl, expected_pass) in list(tests.items()):
+ 
+         # locate full path for tdl file
+-- 
+2.46.2
+

@@ -1,0 +1,22 @@
+From 3daddf1f516cb72060ff2cded61fc95215297436 Mon Sep 17 00:00:00 2001
+From: Robert Lechte <djrobstep@users.noreply.github.com>
+Date: Thu, 4 Sep 2025 22:33:08 +1000
+Subject: [PATCH] Fix a typo in RFC3987_SYNTAX_TERMS
+
+---
+ src/rfc3987_syntax/syntax_helpers.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/rfc3987_syntax/syntax_helpers.py b/src/rfc3987_syntax/syntax_helpers.py
+index fcb3f32..0ec8bc3 100644
+--- a/src/rfc3987_syntax/syntax_helpers.py
++++ b/src/rfc3987_syntax/syntax_helpers.py
+@@ -12,7 +12,7 @@
+     "absolute_iri",
+     "scheme",
+     "irelative_ref",
+-    "irelative_part"
++    "irelative_part",
+     "ihier_part",
+     "iauthority",
+     "iuserinfo",

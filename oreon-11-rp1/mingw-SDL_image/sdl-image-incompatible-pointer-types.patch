@@ -1,0 +1,35 @@
+diff -rupN SDL_image-1.2.12/IMG_png.c SDL_image-1.2.12-new/IMG_png.c
+--- SDL_image-1.2.12/IMG_png.c	2012-01-21 02:51:33.000000000 +0100
++++ SDL_image-1.2.12-new/IMG_png.c	2024-07-24 22:48:47.694800158 +0200
+@@ -263,15 +263,15 @@ void IMG_QuitPNG()
+ int IMG_InitPNG()
+ {
+ 	if ( lib.loaded == 0 ) {
+-		lib.png_create_info_struct = png_create_info_struct;
++		lib.png_create_info_struct = (png_infop (*) (png_structp)) png_create_info_struct;
+ 		lib.png_create_read_struct = png_create_read_struct;
+ 		lib.png_destroy_read_struct = png_destroy_read_struct;
+-		lib.png_get_IHDR = png_get_IHDR;
+-		lib.png_get_channels = png_get_channels;
+-		lib.png_get_io_ptr = png_get_io_ptr;
+-		lib.png_get_PLTE = png_get_PLTE;
+-		lib.png_get_tRNS = png_get_tRNS;
+-		lib.png_get_valid = png_get_valid;
++		lib.png_get_IHDR = (png_uint_32 (*) (png_structp, png_infop, png_uint_32 *, png_uint_32 *, int *, int *, int *, int *, int *)) png_get_IHDR;
++		lib.png_get_channels = (png_byte (*) (png_structp, png_infop)) png_get_channels;
++		lib.png_get_io_ptr = (png_voidp (*) (png_structp)) png_get_io_ptr;
++		lib.png_get_PLTE = (png_uint_32 (*) (png_structp, png_infop, png_colorp *, int *)) png_get_PLTE;
++		lib.png_get_tRNS = (png_uint_32 (*) (png_structp, png_infop, png_bytep *, int *, png_color_16p *)) png_get_tRNS;
++		lib.png_get_valid = (png_uint_32 (*) (png_structp, png_infop, png_uint_32)) png_get_valid;
+ 		lib.png_read_image = png_read_image;
+ 		lib.png_read_info = png_read_info;
+ 		lib.png_read_update_info = png_read_update_info;
+@@ -280,7 +280,7 @@ int IMG_InitPNG()
+ 		lib.png_set_packing = png_set_packing;
+ 		lib.png_set_read_fn = png_set_read_fn;
+ 		lib.png_set_strip_16 = png_set_strip_16;
+-		lib.png_sig_cmp = png_sig_cmp;
++		lib.png_sig_cmp = (int (*) (png_bytep, png_size_t, png_size_t)) png_sig_cmp;
+ #ifndef LIBPNG_VERSION_12
+ 		lib.png_set_longjmp_fn = png_set_longjmp_fn;
+ #endif

@@ -1,0 +1,37 @@
+From fff20a33df897406fc94782a35f09196ccbef41a Mon Sep 17 00:00:00 2001
+From: Florian Weimer <fweimer@redhat.com>
+Date: Thu, 27 Apr 2023 17:00:02 +0200
+Subject: [PATCH 1/8] configure: Avoid implicit ints
+
+Implicit int was removed from C with the C99 revision, and future
+compilers will not support them by default, leading to build
+failures.
+---
+ code/configure | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/code/configure b/code/configure
+index 32e6f17..1e8568d 100755
+--- a/code/configure
++++ b/code/configure
+@@ -829,7 +829,7 @@ if [ $enable_tcl -gt 0 ]; then
+     cat <<EOF >tmp/t.c
+ #include "tcl.h"
+ 
+-main () {
++int main (void) {
+ }
+ EOF
+ 
+@@ -849,7 +849,7 @@ EOF
+ #include <stdio.h>
+ #include "tcl.h"
+ 
+-do_something () {
++int do_something (void) {
+     void (*x)(int);
+     x = Tcl_Exit;
+     exit(0);
+-- 
+2.50.1
+

@@ -12,8 +12,8 @@
 
 Name:    qca
 Summary: Qt Cryptographic Architecture
-Version: 2.3.10
-Release: 4%{?dist}
+Version: 2.3.12
+Release: 1%{?dist}
 
 License: LGPL-2.1-only
 URL:     https://userbase.kde.org/QCA

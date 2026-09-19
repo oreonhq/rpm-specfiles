@@ -1,0 +1,66 @@
+diff -up IQmol-2.13/src/Main/IQmolApplication.C.openbabel IQmol-2.13/src/Main/IQmolApplication.C
+--- IQmol-2.13/src/Main/IQmolApplication.C.openbabel	2019-05-15 13:44:28.228104253 +0300
++++ IQmol-2.13/src/Main/IQmolApplication.C	2019-05-15 13:45:10.402833674 +0300
+@@ -88,61 +88,7 @@ void IQmolApplication::queueOpenFiles(QS
+ 
+ void IQmolApplication::initOpenBabel()
+ {
+-   QDir dir(QApplication::applicationDirPath());
+-   QString path;
+-
+-#ifdef Q_OS_MAC
+-   // Assumed directory structure: IQmol.app/Contents/MacOS/IQmol
+-   dir.cdUp();  
+-   path = dir.absolutePath();
+-   QApplication::addLibraryPath(path + "/Frameworks");
+-   QApplication::addLibraryPath(path + "/PlugIns");
+-#endif
+-
+-#ifdef Q_OS_WIN32
+-   // Assumed directory structure: IQmol/bin/IQmol
+-   dir.cdUp();  
+-   path = dir.absolutePath();
+-   QApplication::addLibraryPath(path + "/lib");
+-   QApplication::addLibraryPath(path + "/lib/plugins");
+-#endif
+-
+-#ifdef Q_OS_LINUX
+-   // Assumed directory structure: IQmol/IQmol
+-   // This is so that when the executable is created it can be 
+-   // run from the main IQmol directory 
+-   path = dir.absolutePath();
+-   QApplication::addLibraryPath(path + "/lib");
+-   QApplication::addLibraryPath(path + "/lib/plugins");
+-#endif
+-   
+-
+-   // This is not used any more as we ship with a static
+-   // version of OpenBabel
+-   QString env(qgetenv("BABEL_LIBDIR"));
+-   if (env.isEmpty()) {
+-      env = path + "/lib/openbabel";
+-      qputenv("BABEL_LIBDIR", env.toLatin1());
+-      QLOG_INFO() << "Setting BABEL_LIBDIR = " << env;
+-   }else {
+-      QLOG_INFO() << "BABEL_LIBDIR already set: " << env;
+-   }
+-
+-   env = qgetenv("BABEL_DATADIR");
+-   if (env.isEmpty()) {
+-#if defined(Q_OS_LINUX)
+-      // Overide the above for the deb package installation.
+-      env ="/usr/share/iqmol/openbabel";
+-#else
+-      env = path + "/share/openbabel";
+-#endif
+-      qputenv("BABEL_DATADIR", env.toLatin1());
+-      QLOG_INFO() << "Setting BABEL_DATADIR = " << env;
+-   }else {
+-      QLOG_INFO() << "BABEL_DATADIR already set: " << env;
+-   }
+-
+-
++  // Do nothing here; Fedora OpenBabel is already configured
+ }
+ 
+ 

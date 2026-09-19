@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=RoboCup 2D Soccer Monitor
+Comment=A monitor for RoboCup 2D Soccer Simulator
+Exec=rcssmonitor
+Icon=rcss
+Terminal=false
+Type=Application
+Categories=Education;Science;Robotics;
+

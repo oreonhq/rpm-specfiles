@@ -1,0 +1,112 @@
+From: William Desportes <williamdes@wdes.fr>
+Date: Sat, 18 Mar 2023 15:36:58 +0100
+Subject: Fix Creation of dynamic property
+
+- Deprecated: Creation of dynamic property page::$index is deprecated in /usr/share/phpldapadmin/lib/page.php on line 38
+- Deprecated: Creation of dynamic property page::$sysmsg is deprecated in /usr/share/phpldapadmin/lib/page.php on line 468
+- Deprecated: Creation of dynamic property page::$_block is deprecated in /usr/share/phpldapadmin/lib/page.php on line 241
+- Creation of dynamic property Template::$askcontainer is deprecated
+- Creation of dynamic property PLAAttribute::$js is deprecated (on create entry of type Thunderbird)
+- On import feature
+- On export feature
+- And others..
+
+Origin: vendor
+Forwarded: https://github.com/leenooks/phpLDAPadmin/pull/202
+Bug-Debian: https://bugs.debian.org/1100771
+---
+ lib/PLAAttribute.php     | 1 +
+ lib/Query.php            | 1 +
+ lib/Template.php         | 1 +
+ lib/TemplateRender.php   | 2 ++
+ lib/import_functions.php | 1 +
+ lib/page.php             | 1 +
+ lib/schema_functions.php | 2 +-
+ 7 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/lib/PLAAttribute.php b/lib/PLAAttribute.php
+index a2f0091..dfcc8e6 100644
+--- a/lib/PLAAttribute.php
++++ b/lib/PLAAttribute.php
+@@ -12,6 +12,7 @@
+  * @package phpLDAPadmin
+  * @subpackage Templates
+  */
++#[\AllowDynamicProperties]
+ class PLAAttribute {
+ 	# Attribute Name
+ 	public $name;
+diff --git a/lib/Query.php b/lib/Query.php
+index c79940f..3348ad3 100644
+--- a/lib/Query.php
++++ b/lib/Query.php
+@@ -12,6 +12,7 @@
+  * @package phpLDAPadmin
+  * @subpackage Queries
+  */
++#[\AllowDynamicProperties]
+ class Query extends xmlTemplate {
+ 	protected $description = '';
+ 	public $results = array();
+diff --git a/lib/Template.php b/lib/Template.php
+index 9eb3a88..e458b98 100644
+--- a/lib/Template.php
++++ b/lib/Template.php
+@@ -28,6 +28,7 @@
+  * @todo RDN attributes need to be checked that are included in the schema, otherwise mark it is invalid
+  * @todo askcontainer is no longer used?
+  */
++#[\AllowDynamicProperties]
+ class Template extends xmlTemplate {
+ 	# If this template visible on the template choice list
+ 	private $visible = true;
+diff --git a/lib/TemplateRender.php b/lib/TemplateRender.php
+index b19d764..d273e35 100644
+--- a/lib/TemplateRender.php
++++ b/lib/TemplateRender.php
+@@ -15,6 +15,8 @@
+ class TemplateRender extends PageRender {
+ 	# Page number
+ 	private $pagelast;
++	private $url_base;
++	private $layout;
+ 
+ 	/** CORE FUNCTIONS **/
+ 
+diff --git a/lib/import_functions.php b/lib/import_functions.php
+index 685676f..3b68340 100644
+--- a/lib/import_functions.php
++++ b/lib/import_functions.php
+@@ -144,6 +144,7 @@ abstract class Import {
+  * @package phpLDAPadmin
+  * @subpackage Import
+  */
++#[\AllowDynamicProperties]
+ class ImportLDIF extends Import {
+ 	private $_currentLineNumber = 0;
+ 	private $_currentLine = '';
+diff --git a/lib/page.php b/lib/page.php
+index 43efc2a..e8241a9 100644
+--- a/lib/page.php
++++ b/lib/page.php
+@@ -12,6 +12,7 @@
+  * @package phpLDAPadmin
+  * @subpackage Page
+  */
++#[\AllowDynamicProperties]
+ class page {
+ 	# pre-HTML headers
+ 	protected $_pageheader;
+diff --git a/lib/schema_functions.php b/lib/schema_functions.php
+index 6218064..70c6e8b 100644
+--- a/lib/schema_functions.php
++++ b/lib/schema_functions.php
+@@ -24,7 +24,7 @@ abstract class SchemaItem {
+ 	# The description of this schema item.
+ 	protected $description = '';
+ 	# Boolean value indicating whether this objectClass is obsolete
+-	private $is_obsolete = false;
++	protected $is_obsolete = false;
+ 
+ 	public function setOID($oid) {
+ 		if (DEBUG_ENABLED && (($fargs=func_get_args())||$fargs='NOARGS'))

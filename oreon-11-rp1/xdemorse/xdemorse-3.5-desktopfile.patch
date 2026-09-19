@@ -1,0 +1,15 @@
+diff -Naur xdemorse-3.5/files/xdemorse.desktop xdemorse-3.5-mod/files/xdemorse.desktop
+--- xdemorse-3.5/files/xdemorse.desktop	2017-12-22 13:41:33.000000000 +0100
++++ xdemorse-3.5-mod/files/xdemorse.desktop	2018-06-22 15:24:42.024926912 +0200
+@@ -1,10 +1,9 @@
+ [Desktop Entry]
+ Version=1.0
+-Encoding=UTF-8
+ Name=xdemorse
+ Comment=Decode Morse signals to Text
+ Exec=xdemorse
+ Icon=xdemorse
+ Terminal=false
+ Type=Application
+-Categories=HamRadio;Utility;Other
++Categories=HamRadio;Utility;

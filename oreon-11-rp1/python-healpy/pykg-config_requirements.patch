@@ -1,0 +1,13 @@
+diff -U 3 -dHrN a/pyproject.toml b/pyproject.toml
+--- a/pyproject.toml	2024-11-02 22:09:08.000000000 +0100
++++ b/pyproject.toml	2024-12-26 11:51:59.016724793 +0100
+@@ -44,8 +44,7 @@
+ requires = ["setuptools>=60",
+             "setuptools-scm>=8.0",
+             "cython>=0.16",
+-            "numpy>=2.0.0rc1",
+-            "pykg-config"]
++            "numpy>=2.0.0rc1"]
+ 
+ build-backend = 'setuptools.build_meta'
+ 

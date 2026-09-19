@@ -1,0 +1,13 @@
+diff -Naur mysql-connector-odbc-8.0.42-src/driver/CMakeLists.txt mysql-connector-odbc-8.0.42-src_patched/driver/CMakeLists.txt
+--- mysql-connector-odbc-8.0.42-src/driver/CMakeLists.txt	2025-03-18 10:45:50.000000000 +0100
++++ mysql-connector-odbc-8.0.42-src_patched/driver/CMakeLists.txt	2025-07-17 14:18:43.393644300 +0200
+@@ -174,9 +174,6 @@
+     set_property(TARGET ${DRIVER_NAME} APPEND PROPERTY INSTALL_RPATH "/usr/local/iODBC/lib")
+     set_property(TARGET ${DRIVER_NAME} APPEND PROPERTY INSTALL_RPATH "/usr/local/var/homebrew/linked/libiodbc/lib")
+     mangle_osx_rpaths(${DRIVER_NAME})
+-  elseif(NOT WIN32)
+-    set_property(TARGET ${DRIVER_NAME} APPEND PROPERTY INSTALL_RPATH "$ORIGIN")
+-    set_property(TARGET ${DRIVER_NAME} APPEND PROPERTY INSTALL_RPATH "$ORIGIN/private")
+   endif()
+ 
+   # FIXME: RPATH not set anywhere...

@@ -1,0 +1,15 @@
+diff -Naur audacious-plugins-fc-0.9.4-orig/src/audfc.cpp audacious-plugins-fc-0.9.4/src/audfc.cpp
+--- audacious-plugins-fc-0.9.4-orig/src/audfc.cpp	2025-12-01 20:53:10.000000000 +0100
++++ audacious-plugins-fc-0.9.4/src/audfc.cpp	2025-12-11 22:45:27.053002607 +0100
+@@ -230,6 +230,11 @@
+ #else
+     const char *tmpPath = uri_to_filename(uri);
+ #endif
++    if (!tmpPath) {
++        path.clear();
++        ext.clear();
++        return -1;
++    }
+     path = std::string(tmpPath, strlen(tmpPath) - strlen(sub));
+     ext = std::string(tmpExt, strlen(tmpExt) - strlen(sub));
+ 

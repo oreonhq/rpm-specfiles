@@ -1,0 +1,14 @@
+--- a/data/carla-single.orig	2025-08-01 13:07:28.678170670 +0200
++++ b/data/carla-single	2025-08-01 13:08:57.877305799 +0200
+@@ -25,9 +25,9 @@
+ # --------------------------------------------------------------------------------------------------------
+ # Setup
+ 
+-INSTALL_PREFIX = "X-PREFIX-X"
++INSTALL_PREFIX = "/usr"
+ 
+-CARLA_LIBDIR = os.path.join(INSTALL_PREFIX, "lib", "carla")
++CARLA_LIBDIR = os.path.join(INSTALL_PREFIX, "lib64", "carla")
+ CARLA_RESDIR = os.path.join(INSTALL_PREFIX, "share", "carla", "resources")
+ 
+ # --------------------------------------------------------------------------------------------------------

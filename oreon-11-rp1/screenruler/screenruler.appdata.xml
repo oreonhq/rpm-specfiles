@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Samuel Gyger <gygers@fsfe.org> -->
+<component type="desktop">
+ <id>screenruler.desktop</id>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>GPL-2.0+</project_license>
+ <name>Screenruler</name>
+ <summary>Measure distances on your screen</summary>
+ <description>
+  <p>
+   Screenruler is a program used to measure distances on your screen. You can
+   change the ruler to apply to your zoomlevel. Different measurment units e.g.
+   Centimeters can be chosen. It is easy to use and does what you would expect 
+   from a virtual ruler without any additional gimmicks.
+  </p>
+ </description>
+ <screenshots>
+  <screenshot type="default">
+   <image>http://pnemade.fedorapeople.org/screenruler.png</image>
+   <caption>Measure the image width on the screen</caption>
+  </screenshot>
+  <screenshot>
+   <image>https://gnomecoder.files.wordpress.com/2007/09/gnome-screen-ruler.png</image>
+   <caption>Different Designs of the screenruler</caption>
+  </screenshot>
+ </screenshots>
+ <url type="homepage">https://launchpad.net/screenruler/</url>
+</component>

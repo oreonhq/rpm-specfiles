@@ -1,0 +1,12 @@
+diff -ur transaction-5.0.orig/pyproject.toml transaction-5.0/pyproject.toml
+--- transaction-5.0.orig/pyproject.toml	2024-09-18 09:21:56.000000000 +0200
++++ transaction-5.0/pyproject.toml	2025-07-14 14:52:08.433723636 +0200
+@@ -3,7 +3,7 @@
+ # https://github.com/zopefoundation/meta/tree/master/config/pure-python
+ 
+ [build-system]
+-requires = ["setuptools<74"]
++requires = ["setuptools"]
+ build-backend = "setuptools.build_meta"
+ 
+ [tool.coverage.run]

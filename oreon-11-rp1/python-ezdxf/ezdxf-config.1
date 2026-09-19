@@ -1,0 +1,50 @@
+.TH EZDXF\-CONFIG "1" "May 2024" "" "User Commands"
+.B ezdxf\ config
+\(en manage config files
+.SH SYNOPSIS
+.B ezdxf\ config
+.RB [ \-h ]
+.RB [ \-p ]
+.RB [ \-w\ \fIFILE ]
+.RB [ \-\-home ]
+.RB [ \-\-reset ]
+.SH OPTIONS
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-p\fR,\ \fB\-\-print
+print configuration
+.TP
+.B \-w\ \fIFILE\fR,\ \fB\-\-write\ \fIFILE
+write configuration
+.TP
+.B \-\-home
+create config file
+.B ezdxf.ini
+in the user home directory
+.BR ~/.config/ezdxf ,
+.B $XDG_CONFIG_HOME
+is supported if set
+.TP
+.B \-\-reset
+factory reset, delete default config file
+.B ezdxf.ini
+.SH ENVIRONMENT
+See
+.BR ezdxf (1).
+.SH FILES
+See
+.BR ezdxf (1).
+.SH "SEE\ ALSO"
+.BR ezdxf (1)
+.P
+.BR ezdxf\-audit (1),
+.BR ezdxf\-draw (1),
+.BR ezdxf\-view (1),
+.BR ezdxf\-browse (1),
+.BR ezdxf\-browse\-acis (1),
+.BR ezdxf\-strip (1),
+.BR ezdxf\-info (1),
+.BR ezdxf\-hpgl (1)

@@ -1,0 +1,32 @@
+.TH NRRDSANITY "1" "April 2021" "" "User Commands"
+.SH NAME
+nrrdSanity \- nrrd sanity check
+.SH SYNOPSIS
+.B nrrdSanity
+.SH DESCRIPTION
+.P
+.BR nrrdSanity (1)
+calls the
+.B nrrdSanity()
+check to verify the correctness of all the information (set at compile-time)
+about the architecture, such as endianness, 32/64-bit, and the size of various
+types, as well as running sanity checks on the global default
+.RB ( nrrdDefault* )
+and state
+.RB ( nrrdState* )
+variables.
+.P
+As a convenience,
+.BR nrrdSanity (1)
+also lists the availability of the different formats and data encodings (for
+Nrrd files) supported by this build.
+.SH "SEE\ ALSO"
+.BR gprobe (1),
+.BR ilk (1),
+.BR miter (1),
+.BR mrender (1),
+.BR overrgb (1),
+.BR puller (1),
+.BR tend (1),
+.BR unu (1),
+.BR vprobe (1)

@@ -1,0 +1,36 @@
+From 665c532745987fb1c7a8fc2a9a57bffa330480b4 Mon Sep 17 00:00:00 2001
+From: Dilawar <dilawars@ncbs.res.in>
+Date: Sat, 29 Aug 2020 06:44:37 +0000
+Subject: [PATCH] A better fix to #419
+
+dict `locals_` is not Py_XINCREF anywhere that is why Py_XDECREF caused segfault.
+While `globals_` does not have this issue. In the previous fix https://github.com/BhallaLab/moose-core/pull/420/commits/c570f7c057f9c0ca7360c82a8932bcb0df222da9,
+I removed the `Py_XINCREF(globals_)` line as well which would cause memory leak.
+---
+ pymoose/PyRun.cpp | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/pymoose/PyRun.cpp b/pymoose/PyRun.cpp
+index 765226c453..d7d6a7974a 100644
+--- a/pymoose/PyRun.cpp
++++ b/pymoose/PyRun.cpp
+@@ -188,6 +188,7 @@ PyRun::PyRun():mode_(0), initstr_(""), runstr_(""),
+         cerr << "Could not initialize locals dict" << endl;
+         return;
+     }
++
+     PyObject * value = PyFloat_FromDouble(0.0);
+     if (!value && PyErr_Occurred()){
+         PyErr_Print();
+@@ -200,11 +201,7 @@ PyRun::PyRun():mode_(0), initstr_(""), runstr_(""),
+ 
+ PyRun::~PyRun()
+ {
+-#if 0
+-    // Fixes to BhallaLab/moose-core#420
+     Py_XDECREF(globals_);
+-    Py_XDECREF(locals_);
+-#endif
+ }
+ 
+ void PyRun::setRunString(string statement)

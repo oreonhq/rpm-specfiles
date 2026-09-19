@@ -1,5 +1,5 @@
-%global source0_hash 2ad957bc338cf44b86531f883ba7a44158457faa32807c34b35d5969bb95f160
-%global source1_hash 9b4635a5757529f42027125330dd4acae32ec2a61c18bf919d40eb213a151578
+%global source0_hash 1e0caa85414f9d857531da65de2edeb47d9a45f5889a7692330e86cacaae1e697cf04b8a70fef2698c3260a376b516599ebe8c812860208565c2870407e9f33a
+%global source1_hash 05752f37111971b768f7e967f63d01b394cf169f629b9e05e5495280ef0e25d7a435383960c7af4d94ced24f3e3f6205ca3f6a468a08c7b5f92f8bc67d7482f9
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Display the value of a LaTeX counter in formatting
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fmtcount.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fmtcount.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/fmtcount.tar.xz#/fmtcount.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/fmtcount.doc.tar.xz#/fmtcount.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-fmtcount-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-fmtcount-doc <= 11:%{version}
@@ -43,8 +43,8 @@ Provides:       tex(fc-spanish.def)
 Display the value of a LaTeX counter in formatting.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

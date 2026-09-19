@@ -1,0 +1,60 @@
+From 6f0604e0a4e20d0f25dfb9881fa6216b93964352 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 29 Feb 2016 11:04:04 +0100
+Subject: [PATCH 2/2] Check for -n argument length
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If a2p's -n argument is long enough, a static 2-KB array overflows in
+the parser:
+
+$ a2p -n"$(perl -e 'print q{a}x25000')" < /dev/null
+
+<vlmarek@volny.cz> provided the fix, I wrote the test.
+
+https://rt.cpan.org/Public/Bug/Display.html?id=100361
+https://bugs.debian.org/769606
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/10-basics.t | 5 +++++
+ walk.c        | 5 ++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/t/10-basics.t b/t/10-basics.t
+index d1f2026..8f45ec2 100644
+--- a/t/10-basics.t
++++ b/t/10-basics.t
+@@ -34,6 +34,11 @@ open my $self, '<', $0;
+ chomp(my @expected = grep { /awk2perl/ } <$self>);
+ is_deeply([ split /\n/, $output ], \@expected, 'Output is identical to … code');
+ 
++spew($input_awk, '');
++my (undef, $error) = runa2p(progfile => $input_awk,
++    args => [ '-n' . q{a} x 25000 ] );
++like($error, qr{Internal error:}, 'Too long -n argument raises an error');
++
+ done_testing;
+ 
+ sub run_command {
+# Already applied
+#diff --git a/walk.c b/walk.c
+#index 82d5346..26b378f 100644
+#--- a/walk.c
+#+++ b/walk.c
+#@@ -72,8 +72,11 @@ walk(int useval, int level, int node, int *numericptr, int minprec)
+# 	if (namelist) {
+# 	    while (isALPHA(*namelist)) {
+# 		for (d = tokenbuf,s=namelist;
+#-		  isWORDCHAR(*s);
+#+		  d - tokenbuf < sizeof(tokenbuf) && isWORDCHAR(*s);
+# 		  *d++ = *s++) ;
+#+		if (d - tokenbuf == sizeof(tokenbuf))
+#+		   fatal("Internal error: argument longer than %d: %s",
+#+			   sizeof(tokenbuf) - 1, namelist);
+# 		*d = '\0';
+# 		while (*s && !isALPHA(*s)) s++;
+# 		namelist = s;
+-- 
+2.5.0
+

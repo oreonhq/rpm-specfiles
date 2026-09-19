@@ -1,0 +1,24 @@
+diff -ruN arts-1.5.10.orig/soundserver/gslplayobject_impl.cc arts-1.5.10/soundserver/gslplayobject_impl.cc
+--- arts-1.5.10.orig/soundserver/gslplayobject_impl.cc	2005-09-10 10:13:31.000000000 +0200
++++ arts-1.5.10/soundserver/gslplayobject_impl.cc	2020-12-02 11:51:56.830633446 +0100
+@@ -134,7 +134,7 @@
+ 	 */
+ 	std::string description()
+ 	{
+-		return "no description available (see "__FILE__")";
++		return "no description available (see gslplayobject_impl.cc)";
+ 	}
+ 
+ 	poTime currentTime()
+diff -ruN arts-1.5.10.orig/soundserver/wavplayobject_impl.cc arts-1.5.10/soundserver/wavplayobject_impl.cc
+--- arts-1.5.10.orig/soundserver/wavplayobject_impl.cc	2005-09-10 10:13:31.000000000 +0200
++++ arts-1.5.10/soundserver/wavplayobject_impl.cc	2020-12-02 11:52:22.896555247 +0100
+@@ -74,7 +74,7 @@
+ 	 * KMedia2 interface
+ 	 */
+ 	string description() {
+-		return "no description (see "__FILE__")";
++		return "no description (see wavplayobject_impl.cc)";
+ 	}
+ 
+ 	poTime currentTime() {

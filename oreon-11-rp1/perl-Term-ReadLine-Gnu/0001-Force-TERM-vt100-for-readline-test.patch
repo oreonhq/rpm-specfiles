@@ -1,0 +1,11 @@
+diff -up Term-ReadLine-Gnu-1.46/t/readline.t.term Term-ReadLine-Gnu-1.46/t/readline.t
+--- Term-ReadLine-Gnu-1.46/t/readline.t.term	2023-05-29 08:45:06.000000000 -0400
++++ Term-ReadLine-Gnu-1.46/t/readline.t	2025-01-24 10:19:29.886689802 -0500
+@@ -26,6 +26,7 @@ use warnings 'redefine';
+ BEGIN {
+     $ENV{PERL_RL} = 'Gnu';      # force to use Term::ReadLine::Gnu
+     $ENV{LC_ALL} = 'C';         # LC_ALL is stronger than LANG
++    $ENV{TERM} = 'vt100';
+ }
+ 
+ # 'define @ARGV' is deprecated

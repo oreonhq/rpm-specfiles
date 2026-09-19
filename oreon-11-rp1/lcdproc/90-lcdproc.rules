@@ -1,0 +1,57 @@
+# lcdproc udev rules
+
+ACTION!="add", GOTO="lcdproc_end"
+
+### 1. Check for USB LCD panels which we access directly through libusb ###
+
+# Till Harbaum's LCD2USB device
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="c630", GOTO="lcdproc_lcd_found"
+
+### 2. Check for HID LCD panels accessed through their hidraw device ###
+
+# Logitech MX5000 keyboard Bluetooth and USB (BT receiver as HID-proxy) modes
+DEVPATH=="*/0003:046D:B305.*/hidraw/hidraw*", GOTO="lcdproc_lcd_found"
+DEVPATH=="*/0005:046D:B305.*/hidraw/hidraw*", GOTO="lcdproc_lcd_found"
+
+# Logitech MX5500 keyboard Bluetooth and USB (BT receiver as HID-proxy) modes
+DEVPATH=="*/0003:046D:B30B.*/hidraw/hidraw*", GOTO="lcdproc_lcd_found"
+DEVPATH=="*/0005:046D:B30B.*/hidraw/hidraw*", GOTO="lcdproc_lcd_found"
+
+# Logitech G15 gaming keyboard
+DEVPATH=="*/0003:046D:C222.*/hidraw/hidraw*", GOTO="lcdproc_lcd_found"
+
+# Logitech G15 v2 gaming keyboard
+DEVPATH=="*/0003:046D:C227.*/hidraw/hidraw*", GOTO="lcdproc_lcd_found"
+
+# Logitech G510 gaming keyboard, note we only want interface 1
+DEVPATH=="*/0003:046D:C22D.*/hidraw/hidraw*", ATTRS{bInterfaceNumber}=="01", GOTO="lcdproc_lcd_found"
+DEVPATH=="*/0003:046D:C22E.*/hidraw/hidraw*", ATTRS{bInterfaceNumber}=="01", GOTO="lcdproc_lcd_found"
+
+# Logitech Z-10 speakers with G15 style LCD screen, note we only want interface 2
+DEVPATH=="*/0003:046D:0A07.*/hidraw/hidraw*", ATTRS{bInterfaceNumber}=="02", GOTO="lcdproc_lcd_found"
+
+### 3. Check for input devices for LCD menu buttons ###
+
+# Logitech G15, G15 v2 and G510 Gaming and LCD menu keys
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="Logitech Gaming Keyboard Gaming Keys", GOTO="lcdproc_input_found"
+# Logitech MX5000 keyboard connected over Bluetooth
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="Logitech MX5000 Keyboard", GOTO="lcdproc_input_found"
+# Logitech MX5000 keyboard connected through its receiver in USB HID proxy mode
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="Logitech Wireless Keyboard PID:b305", GOTO="lcdproc_input_found"
+# Logitech Z-10 speakers LCD menu keys
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="Logitech Z-10 LCD Menu Keys", GOTO="lcdproc_input_found"
+
+
+### Nothing found, leave ###
+GOTO="lcdproc_end"
+
+
+LABEL="lcdproc_lcd_found"
+TAG+="systemd"
+ENV{SYSTEMD_WANTS}+="lcdproc.target"
+
+LABEL="lcdproc_input_found"
+# Grant rw permission to the lcdd group using acl(5), for both LCD and input devs
+RUN+="/usr/bin/sh -c '/usr/bin/setfacl -m g:lcdd:rw %E{DEVNAME} 2>/dev/null || :'"
+
+LABEL="lcdproc_end"

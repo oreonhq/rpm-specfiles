@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Petr Hracek <phracek@redhat.com> -->
+<component type="addon">
+    <id>vim-javabrowser</id>
+    <extends>gvim.desktop</extends>
+    <name>vim-javabrowser</name>
+    <summary>JavaBrowser: Shows java file class, package in a tree as in IDEs.</summary>
+    <url type="homepage">http://www.vim.org/scripts/script.php?script_id=588</url>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>Vim</project_license>
+    <updatecontact>phracek@redhat.com</updatecontact>
+</component>

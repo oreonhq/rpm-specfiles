@@ -1,0 +1,28 @@
+From 51a5468bb865b3d326edc386a3512873b6beea07 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <neal@gompa.dev>
+Date: Sun, 1 Jun 2025 07:59:21 -0400
+Subject: [PATCH] doc: Fix intersphinx mapping for Sphinx 8
+
+Fixes the following error:
+
+ERROR: Invalid value `None` in intersphinx_mapping['http://docs.python.org/']. Expected a two-element tuple or list.
+
+Configuration error:
+Invalid `intersphinx_mapping` configuration (1 error).
+---
+ docs/conf.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/docs/conf.py b/docs/conf.py
+index c1148f1..700e25d 100644
+--- a/docs/conf.py
++++ b/docs/conf.py
+@@ -250,4 +250,4 @@ texinfo_documents = [
+ 
+ 
+ # Example configuration for intersphinx: refer to the Python standard library.
+-intersphinx_mapping = {'http://docs.python.org/': None}
++intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
+-- 
+2.49.0
+

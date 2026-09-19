@@ -1,0 +1,48 @@
+From 6e279eb720d65802fa13a7a79262ccfeeed978a2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bernhard=20=C3=9Cbelacker?= <bernhardu@mailbox.org>
+Date: Sat, 13 Dec 2025 16:01:47 +0100
+Subject: [PATCH] Fix use of std::prev.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Followup to f94c6adb07.
+
+Bug: https://bugs.kde.org/show_bug.cgi?id=505497
+Debian-Bug: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1103728
+
+Signed-off-by: Bernhard Übelacker <bernhardu@mailbox.org>
+---
+ src/dvb/dvbchannel.cpp | 2 +-
+ src/sqlinterface.h     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/dvb/dvbchannel.cpp b/src/dvb/dvbchannel.cpp
+index 164cca4c..303fc5ab 100644
+--- a/src/dvb/dvbchannel.cpp
++++ b/src/dvb/dvbchannel.cpp
+@@ -524,7 +524,7 @@ void DvbChannelModel::dndMoveChannels(const QList<DvbSharedChannel> &selectedCha
+ 	int currentNumber = 1;
+ 
+ 	if (it != channelNumbers.constBegin()) {
+-		currentNumber = (std::prev(it, -1).key() + 1);
++		currentNumber = (std::prev(it).key() + 1);
+ 	}
+ 
+ 	while (!channelQueue.isEmpty()) {
+diff --git a/src/sqlinterface.h b/src/sqlinterface.h
+index fd1541de..838e2b61 100644
+--- a/src/sqlinterface.h
++++ b/src/sqlinterface.h
+@@ -87,7 +87,7 @@ public:
+ 		SqlKey sqlKey(1);
+ 
+ 		if (!container.isEmpty()) {
+-			sqlKey = SqlKey(std::prev(container.constEnd(), -1).key().sqlKey + 1);
++			sqlKey = SqlKey(std::prev(container.constEnd()).key().sqlKey + 1);
+ 
+ 			while (container.contains(sqlKey) || !sqlKey.isSqlKeyValid()) {
+ #if QT_VERSION >= 0x050a00
+-- 
+GitLab
+

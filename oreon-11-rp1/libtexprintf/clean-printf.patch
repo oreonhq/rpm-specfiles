@@ -1,0 +1,50 @@
+diff -ruN libtexprintf-1.25/src/drawbox.c libtexprintf-1.25-mod/src/drawbox.c
+--- libtexprintf-1.25/src/drawbox.c	2023-07-19 23:42:22.000000000 +0300
++++ libtexprintf-1.25-mod/src/drawbox.c	2023-09-04 22:55:07.788788528 +0300
+@@ -85,7 +85,7 @@
+ 							Na+=strlen(str)+2;
+ 							buffer=realloc(buffer, Na*sizeof(char));
+ 						}
+-						sprintf(buffer+i, str);
++						sprintf(buffer+i, "%s", str);
+ 						i+=strlen(str);
+ 						free(str);
+ 					}
+diff -ruN libtexprintf-1.25/src/testfonts.c libtexprintf-1.25-mod/src/testfonts.c
+--- libtexprintf-1.25/src/testfonts.c	2023-07-19 23:42:22.000000000 +0300
++++ libtexprintf-1.25-mod/src/testfonts.c	2023-09-04 22:36:20.421963806 +0300
+@@ -149,7 +149,7 @@
+ 		s+=k;
+ 		free(c);
+ 	}
+-	printf(str);
++	printf("%s",str);
+ 	free(str);
+ }
+ 
+@@ -162,11 +162,11 @@
+ 	char *scale="|---------+---------+---------+---------+---------+---------+\n";
+ 	char *str;
+ 	j=0;
+-	printf(col);
+-	printf(scale);
++	printf("%s",col);
++	printf("%s",scale);
+ 	while (font_tests[j].str)
+ 	{
+-		printf(font_tests[j].descr);
++		printf("%s",font_tests[j].descr);
+ 		str=AlignChars(j++);
+ 		root=ParseString(str, 0, styles[i]);
+ 		free(str);
+@@ -174,8 +174,8 @@
+ 		PrintBox(&root);
+ 		FreeBox(&root);
+ 	}
+-	printf(scale);
+-	printf(col);
++	printf("%s",scale);
++	printf("%s",col);
+ 	printf("\n");
+ 	i++;
+ 	

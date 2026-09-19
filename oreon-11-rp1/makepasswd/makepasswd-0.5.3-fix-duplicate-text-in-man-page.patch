@@ -1,0 +1,20 @@
+diff -ur ../makepasswd-0.5.3.orig/doc/makepasswd.xml ./doc/makepasswd.xml
+--- ../makepasswd-0.5.3.orig/doc/makepasswd.xml	2014-01-03 17:52:34.933292100 +0100
++++ ./doc/makepasswd.xml	2014-01-03 17:51:59.437292617 +0100
+@@ -158,15 +158,6 @@
+ 				</listitem>
+ 			</varlistentry>
+ 			<varlistentry>
+-				<term><option>-i</option></term>
+-				<listitem>
+-					<para>Force a number of iterations to be performed when hashing
+-						passwords, for algorithms effectively supporting it. It otherwise
+-						defaults to a random value, in a range considered reasonable for the
+-						hashing algorithm selected.</para>
+-				</listitem>
+-			</varlistentry>
+-			<varlistentry>
+ 				<term><option>-l</option></term>
+ 				<listitem>
+ 					<para>Force the passwords generated to be of a fixed length.</para>
+Only in ./doc: makepasswd.xml.bak

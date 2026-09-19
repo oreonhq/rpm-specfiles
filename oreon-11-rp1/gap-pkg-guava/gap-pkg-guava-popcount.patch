@@ -1,0 +1,68 @@
+--- src/ctjhai/config.h.orig	2023-01-03 09:30:10.000000000 -0700
++++ src/ctjhai/config.h	2023-08-11 09:16:06.987030975 -0600
+@@ -45,6 +45,10 @@
+ #endif /* BITS_PER_LONG */
+ #define BITSIZE			BITS_PER_LONG
+ 
++#if defined(__i686__) || defined(__x86_64__)
++#define POPCOUNT_STD 1
++#else
+ #define POPCOUNT_LUT16	1
++#endif
+ 
+ #endif
+--- src/ctjhai/popcount.c.orig	2023-01-03 09:30:10.000000000 -0700
++++ src/ctjhai/popcount.c	2023-08-11 09:18:36.582993509 -0600
+@@ -64,7 +64,7 @@ void __clear_popcount_LUT() {
+ 
+ /* Population count function */
+ #if	POPCOUNT_STD
+-unsigned int popcount(unsigned long x) {
++static unsigned int slow_popcount(unsigned long x) {
+ #if  BITS_PER_LONG == 32
+     x -=  (x>>1) & 0x55555555UL;
+     x  = ((x>>2) & 0x33333333UL) + (x & 0x33333333UL);
+@@ -79,4 +79,19 @@ unsigned int popcount(unsigned long x) {
+     return  x>>56;
+ #endif	/* BITS_PER_LONG */
+ }
++
++static unsigned int __attribute__((target ("popcnt")))
++fast_popcount(unsigned long x) {
++    return __builtin_popcountl(x);
++}
++
++static unsigned int (*resolve_popcount(void))(unsigned long) {
++    __builtin_cpu_init();
++    return __builtin_cpu_supports("popcnt")
++        ? &fast_popcount
++        : &slow_popcount;
++}
++
++unsigned int __attribute__((ifunc ("resolve_popcount")))
++popcount(unsigned long x);
+ #endif	/* POPCOUNT_STD */
+--- src/ctjhai/popcount.h.orig	2023-01-03 09:30:10.000000000 -0700
++++ src/ctjhai/popcount.h	2023-08-11 09:16:06.987030975 -0600
+@@ -30,7 +30,9 @@ void __clear_popcount_LUT();
+ 
+ /* The following contains the macros that actually do the population count */
+ #if defined(POPCOUNT_LUT8)		/* 8-bit LUT */
+-#	if BITS_PER_LONG == 64	/* 64-bit machine */
++#	if defined(__powerpc__)
++#		define popcount(__v)   __builtin_popcount(__v)
++#	elif BITS_PER_LONG == 64	/* 64-bit machine */
+ #		define popcount(__v)   (__popcnt_LUT[__v & 0xFFUL] + __popcnt_LUT[(__v>>8) & 0xFFUL] + \
+         		                __popcnt_LUT[(__v>>16) & 0xFFUL] + __popcnt_LUT[(__v>>24) & 0xFFUL] + \
+         		                __popcnt_LUT[(__v>>32) & 0xFFUL] + __popcnt_LUT[(__v>>40) & 0xFFUL] + \
+@@ -40,7 +42,9 @@ void __clear_popcount_LUT();
+ 		                        __popcnt_LUT[(__v>>16) & 0xFFU] + __popcnt_LUT[(__v>>24) & 0xFFU])
+ #	endif					
+ #elif defined(POPCOUNT_LUT16)	/* 16-bit LUT */
+-#	if BITS_PER_LONG == 64	/* 64-bit machine */
++#	if defined(__powerpc__)
++#		define popcount(__v)   __builtin_popcount(__v)
++#	elif BITS_PER_LONG == 64	/* 64-bit machine */
+ #		define popcount(__v)   (__popcnt_LUT[__v & 0xFFFFUL] + __popcnt_LUT[(__v>>16) & 0xFFFFUL] + \
+         		                __popcnt_LUT[(__v>>32) & 0xFFFFUL] + __popcnt_LUT[(__v>>48) & 0xFFFFUL])
+ #	else					/* 32-bit machine */

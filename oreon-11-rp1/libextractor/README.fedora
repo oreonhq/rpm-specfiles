@@ -1,0 +1,39 @@
+To make it short: most people can execute
+
+| # yum install libextractor-plugins
+
+to install a full-featured 'libextractor' library. By executing
+
+| # yum install libextractor-plugins-base
+
+instead of, only base plugins will installed. This costs some
+functionality (because some filetypes will not be supported) but
+it avoids expensive dependencies.
+
+It is possible to install only a subset of the expensive plugins (and
+their dependencies), too.
+
+
+The libextractor library is split into the following Fedora packages:
+
+* 'libextractor' ... the main package containing only the base library
+                     and small utilities.
+
+* 'libextractor-devel'
+                 ... contains the usual development stuff
+
+* 'libextractor-plugins'
+                 ... this is a meta package which brings in all available
+                     plugins shipped by the upstream project
+
+* 'libextractor-plugins-base'
+                 ... a set of plugins which require only a minimal
+                     amount of foreign libraries
+
+* 'libextractor-plugins-XXX'
+                 ... plugins which support certain filetypes but have
+                     additional dependencies
+
+
+Please report (packaging-related) bugs at http://bugzilla.redhat.com;
+Enrico Scholz is the author of this document.

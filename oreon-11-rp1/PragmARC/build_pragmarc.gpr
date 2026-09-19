@@ -1,0 +1,91 @@
+-- This project file works together with the RPM spec file to compile the
+-- PragmARCs into an RPM package.
+-- Copyright 2009 - 2012 B. Persson, Bjorn@Rombobeorn.se
+--
+-- This is free software; you can redistribute it and/or modify it under
+-- terms of the GNU General Public License as published by the Free Software
+-- Foundation; either version 2, or (at your option) any later version.
+
+with "directories";
+project Build_PragmARC is
+
+   Version := external("RPM_PACKAGE_VERSION");
+   Destdir := external("DESTDIR");
+
+   for Library_Name    use "pragmarc";
+   for Library_Kind    use "relocatable";
+   for Library_Version use "libpragmarc.so." & Version;
+   for Library_Src_Dir use Destdir & Directories.Includedir & "/pragmarc";
+   for Library_Dir     use Destdir & Directories.Libdir;
+   for Library_ALI_Dir use Destdir & Directories.Libdir & "/pragmarc";
+
+   for Library_Interface use
+           ("PragmARC",
+            "PragmARC.Ansi_Tty_Control",
+            "PragmARC.Assertion_Handler",
+            "PragmARC.Assignment",
+            "PragmARC.Bag_Unbounded",
+            "PragmARC.Bag_Unbounded_Unprotected",
+            "PragmARC.Binary_Searcher",
+            "PragmARC.Binary_Semaphore_Handler",
+            "PragmARC.Character_Regular_Expression_Matcher",
+            "PragmARC.Complex",
+            "PragmARC.Date_Handler",
+            "PragmARC.Deck_Handler",
+            "PragmARC.Forwarder",
+            "PragmARC.Genetic_Algorithm",
+            "PragmARC.Get_Line",
+            "PragmARC.Hash_Fast_Variable_Length",
+            "PragmARC.Images",
+            "PragmARC.Images.Image",
+            "PragmARC.Least_Squares_Fitting",
+            "PragmARC.Linear_Equation_Solver",
+            "PragmARC.List_Bounded",
+            "PragmARC.List_Bounded_Unprotected",
+            "PragmARC.List_Unbounded",
+            "PragmARC.List_Unbounded_Unprotected",
+            "PragmARC.Math",
+            "PragmARC.Math.Integer_Functions",
+            "PragmARC.Math.Functions",
+            "PragmARC.Matrix_Math",
+            "PragmARC.Menu_Handler",
+            "PragmARC.Min_Max",
+            "PragmARC.Mixed_Case",
+            "PragmARC.Monitor_Handler",
+            "PragmARC.Postfix_Calculator",
+            "PragmARC.Protected_Option",
+            "PragmARC.Queue_Bounded",
+            "PragmARC.Queue_Bounded_Blocking",
+            "PragmARC.Queue_Bounded_Unprotected",
+            "PragmARC.Queue_Unbounded",
+            "PragmARC.Queue_Unbounded_Blocking",
+            "PragmARC.Queue_Unbounded_Unprotected",
+            "PragmARC.Quick_Searcher",
+            "PragmARC.Reflection",
+            "PragmARC.Regular_Expression_Matcher",
+            "PragmARC.REM_NN_Wrapper",
+            "PragmARC.Safe_Pointers",
+            "PragmARC.Safe_Suspension_Objects",
+            "PragmARC.Safe_Semaphore_Handler",
+            "PragmARC.Set_Discrete",
+            "PragmARC.Skip_List_Unbounded",
+            "PragmARC.Skip_List_Unbounded.Put",
+            "PragmARC.Sort_Heap",
+            "PragmARC.Sort_Insertion",
+            "PragmARC.Sort_Quick_In_Place",
+            "PragmARC.Sort_Radix",
+            "PragmARC.Stack_Unbounded",
+            "PragmARC.Stack_Unbounded_Unprotected",
+            "PragmARC.Three_Way",
+            "PragmARC.Transporter_Handler",
+            "PragmARC.Universal_Random",
+            "PragmARC.Us_Card",
+            "PragmARC.Us_Deck",
+            "PragmARC.Word_Input",
+            "PragmARC.Wrapping");
+
+   package Builder is
+      for Default_Switches ("Ada") use ("-gnato", "-gnat95");
+   end Builder;
+
+end Build_PragmARC;

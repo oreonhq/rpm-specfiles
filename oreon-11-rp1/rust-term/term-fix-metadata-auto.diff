@@ -1,0 +1,15 @@
+--- term-0.7.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ term-0.7.0/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -28,12 +28,6 @@
+ 
+ [features]
+ default = []
+-[target."cfg(windows)".dependencies.rustversion]
+-version = "1"
+-
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3"
+-features = ["consoleapi", "wincon", "handleapi", "fileapi"]
+ [badges.appveyor]
+ repository = "Stebalien/term"
+ 

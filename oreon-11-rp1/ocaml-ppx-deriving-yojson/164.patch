@@ -1,0 +1,183 @@
+From ea6ca9385dc55db41af51bdd550aa1d779b1a9ae Mon Sep 17 00:00:00 2001
+From: Niols <niols@niols.fr>
+Date: Sat, 17 May 2025 11:31:10 +0200
+Subject: [PATCH 1/5] Add test for mutually recursive types
+
+---
+ src_test/test_ppx_yojson.ml | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/src_test/test_ppx_yojson.ml b/src_test/test_ppx_yojson.ml
+index ca4d95b..63f45c3 100644
+--- a/src_test/test_ppx_yojson.ml
++++ b/src_test/test_ppx_yojson.ml
+@@ -502,6 +502,16 @@ let test_recursive _ctxt =
+   assert_roundtrip pp_bar bar_to_yojson bar_of_yojson
+                    {lhs="x"; rhs=42} "{\"lhs\":\"x\",\"rhs\":42}"
+ 
++type recursive2 = Nil2 | Rec3 of recursive2'
++and recursive2' = Nil3 | Rec2 of recursive2
++[@@deriving show, yojson]
++
++let test_recursive_2 _ctxt =
++  assert_roundtrip pp_recursive2
++                   recursive2_to_yojson
++                   recursive2_of_yojson
++                   (Rec3 (Rec2 Nil2)) "[\"Rec3\", [\"Rec2\", [\"Nil2\"]]]"
++
+ let test_int_redefined ctxt =
+   let module M = struct
+     type int = Break_things
+@@ -593,6 +603,7 @@ let suite = "Test ppx_yojson" >::: [
+     "test_nostrict"  >:: test_nostrict;
+     "test_opentype"  >:: test_opentype;
+     "test_recursive" >:: test_recursive;
++    "test_recursive_2" >:: test_recursive_2;
+     "test_int_redefined" >:: test_int_redefined;
+     "test_equality_redefined" >:: test_equality_redefined;
+   ]
+
+From 1eee4a6135de028880883a03c4dcee8debb69b4e Mon Sep 17 00:00:00 2001
+From: Niols <niols@niols.fr>
+Date: Sat, 17 May 2025 11:34:45 +0200
+Subject: [PATCH 2/5] Add test for mutually recursive type sharing constructor
+ names
+
+---
+ src_test/test_ppx_yojson.ml | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/src_test/test_ppx_yojson.ml b/src_test/test_ppx_yojson.ml
+index 63f45c3..7df967d 100644
+--- a/src_test/test_ppx_yojson.ml
++++ b/src_test/test_ppx_yojson.ml
+@@ -512,6 +512,20 @@ let test_recursive_2 _ctxt =
+                    recursive2_of_yojson
+                    (Rec3 (Rec2 Nil2)) "[\"Rec3\", [\"Rec2\", [\"Nil2\"]]]"
+ 
++module Recursive3 = struct
++  [@@@ocaml.warning "-30"]
++  type t = Nil | Rec of t'
++  and t' = Nil | Rec of t
++  [@@deriving show, yojson]
++
++  let test _ctxt =
++    assert_roundtrip pp
++      to_yojson
++      of_yojson
++      (Rec (Rec Nil)) "[\"Rec\", [\"Rec\", [\"Nil\"]]]"
++end
++let test_recursive_3 = Recursive3.test
++
+ let test_int_redefined ctxt =
+   let module M = struct
+     type int = Break_things
+@@ -604,6 +618,7 @@ let suite = "Test ppx_yojson" >::: [
+     "test_opentype"  >:: test_opentype;
+     "test_recursive" >:: test_recursive;
+     "test_recursive_2" >:: test_recursive_2;
++    "test_recursive_3" >:: test_recursive_3;
+     "test_int_redefined" >:: test_int_redefined;
+     "test_equality_redefined" >:: test_equality_redefined;
+   ]
+
+From 0aa767f9fe7aa80313ee6ac37bd604a2157e69f6 Mon Sep 17 00:00:00 2001
+From: Niols <niols@niols.fr>
+Date: Sat, 17 May 2025 13:07:37 +0200
+Subject: [PATCH 3/5] Add test for mutually recursive type sharing record
+ constructor names
+
+---
+ src_test/test_ppx_yojson.ml | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/src_test/test_ppx_yojson.ml b/src_test/test_ppx_yojson.ml
+index 7df967d..a5162b7 100644
+--- a/src_test/test_ppx_yojson.ml
++++ b/src_test/test_ppx_yojson.ml
+@@ -526,6 +526,20 @@ module Recursive3 = struct
+ end
+ let test_recursive_3 = Recursive3.test
+ 
++module Recursive4 = struct
++  [@@@ocaml.warning "-30"]
++  type t = Nil | Rec of {x: t'}
++  and t' = Nil | Rec of {x: t}
++  [@@deriving show, yojson]
++
++  let test _ctxt =
++    assert_roundtrip pp
++      to_yojson
++      of_yojson
++      (Rec {x = Rec {x = Nil }}) "[\"Rec\", {\"x\": [\"Rec\", {\"x\": [\"Nil\"]}]}]"
++end
++let test_recursive_4 = Recursive4.test
++
+ let test_int_redefined ctxt =
+   let module M = struct
+     type int = Break_things
+@@ -619,6 +633,7 @@ let suite = "Test ppx_yojson" >::: [
+     "test_recursive" >:: test_recursive;
+     "test_recursive_2" >:: test_recursive_2;
+     "test_recursive_3" >:: test_recursive_3;
++    "test_recursive_4" >:: test_recursive_4;
+     "test_int_redefined" >:: test_int_redefined;
+     "test_equality_redefined" >:: test_equality_redefined;
+   ]
+
+From 60ee93ff2f9aebefa7b8f69508120d2cb8d59f64 Mon Sep 17 00:00:00 2001
+From: Niols <niols@niols.fr>
+Date: Sat, 17 May 2025 12:30:32 +0200
+Subject: [PATCH 4/5] Add type constraint in `of_yojson` variant constructor
+ cases
+
+---
+ src/ppx_deriving_yojson.ml | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/ppx_deriving_yojson.ml b/src/ppx_deriving_yojson.ml
+index 15df80e..09ddb15 100644
+--- a/src/ppx_deriving_yojson.ml
++++ b/src/ppx_deriving_yojson.ml
+@@ -609,7 +609,12 @@ let desu_str_of_type ~options ~path ({ ptype_loc = loc } as type_decl) =
+             Exp.case
+               [%pat? `List ((`String [%p pstr name]) ::
+                                      [%p plist (List.mapi (fun i _ -> pvar (argn i)) args)])]
+-              (desu_fold ~quoter ~loc ~path (fun x -> constr name' x) args)
++              (desu_fold ~quoter ~loc ~path
++                 (fun x ->
++                    (* https://github.com/ocaml-ppx/ppx_deriving_yojson/issues/163 *)
++                    let typ = Ppx_deriving.core_type_of_type_decl type_decl in
++                    Exp.constraint_ (constr name' x) typ)
++                 args)
+           | Pcstr_record labels ->
+             let wrap_record r = constr name' [r] in
+             let sub =
+
+From 821b2b771ff285edf266c6393a46ca7388485179 Mon Sep 17 00:00:00 2001
+From: Niols <niols@niols.fr>
+Date: Sat, 17 May 2025 13:08:00 +0200
+Subject: [PATCH 5/5] Add type constraint in `of_yojson` record variant
+ constructor case
+
+---
+ src/ppx_deriving_yojson.ml | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/ppx_deriving_yojson.ml b/src/ppx_deriving_yojson.ml
+index 09ddb15..c933ca2 100644
+--- a/src/ppx_deriving_yojson.ml
++++ b/src/ppx_deriving_yojson.ml
+@@ -616,7 +616,11 @@ let desu_str_of_type ~options ~path ({ ptype_loc = loc } as type_decl) =
+                     Exp.constraint_ (constr name' x) typ)
+                  args)
+           | Pcstr_record labels ->
+-            let wrap_record r = constr name' [r] in
++            let wrap_record r =
++              (* https://github.com/ocaml-ppx/ppx_deriving_yojson/issues/163 *)
++              let typ = Ppx_deriving.core_type_of_type_decl type_decl in
++              Exp.constraint_ (constr name' [r]) typ
++            in
+             let sub =
+               desu_str_of_record ~quoter ~loc ~is_strict ~error ~path wrap_record labels in
+             let name = match Attribute.get constr_attr_name constr' with Some s -> s | None -> name' in

@@ -1,0 +1,56 @@
+From 433fc0f973b4b0ce7a61559d2f1cd96ba12972c4 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sat, 28 Jun 2025 08:20:43 -0400
+Subject: [PATCH] Only compile nanojpeg/ujpeg when TurboJPEG is disabled
+
+---
+ console/CMakeLists.txt | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/console/CMakeLists.txt b/console/CMakeLists.txt
+index 988f7e04..00436aa0 100644
+--- a/console/CMakeLists.txt
++++ b/console/CMakeLists.txt
+@@ -86,12 +86,15 @@ set(DCM2NIIX_SRCS
+     main_console.cpp
+     nii_dicom.cpp
+     jpg_0XC3.cpp
+-    ujpeg.cpp
+     nifti1_io_core.cpp
+     nii_foreign.cpp
+     nii_ortho.cpp
+     nii_dicom_batch.cpp)
+ 
++if(NOT USE_TURBOJPEG)
++    set(DCM2NIIX_SRCS ${DCM2NIIX_SRCS} ujpeg.cpp)
++endif()
++
+ 
+ option(USE_JNIFTI "Build with JNIfTI support" ON)
+ if(USE_JNIFTI)
+@@ -101,6 +104,8 @@ endif()
+ 
+ if(BUILD_DCM2NIIXFSLIB)
+     set(DCM2NIIXFSLIB dcm2niixfs)
++    # BUILD_DCM2NIIXFSLIB and USE_TURBOJPEG are not allowed to be enabled at
++    # the same time, so ujpeg.cpp is unconditionaly in this sources list:
+     set(DCM2NIIXFSLIB_SRCS
+         dcm2niix_fswrapper.cpp
+         nii_dicom.cpp
+@@ -195,12 +200,15 @@ if(BATCH_VERSION)
+         main_console_batch.cpp
+         nii_dicom.cpp
+         jpg_0XC3.cpp
+-        ujpeg.cpp
+         nifti1_io_core.cpp
+         nii_foreign.cpp
+         nii_ortho.cpp
+         nii_dicom_batch.cpp)
+ 
++    if(NOT USE_TURBOJPEG)
++	set(DCM2NIIBATCH_SRCS ${DCM2NIIBATCH_SRCS} ujpeg.cpp)
++    endif()
++
+     if(USE_JNIFTI)
+         set(DCM2NIIBATCH_SRCS ${DCM2NIIBATCH_SRCS} cJSON.cpp base64.cpp)
+     endif()

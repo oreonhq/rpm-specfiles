@@ -1,0 +1,127 @@
+--- methane-1.5.1/sources/doc.cpp	2011-04-05 09:08:02.000000000 +0200
++++ methane-1.5.1.new/sources/doc.cpp	2011-12-11 13:35:23.888049882 +0100
+@@ -15,6 +15,9 @@
+ #include "doc.h"
+ #include "target.h"
+ #include "snddef.h"
++#include <stdio.h>
++
++extern FILE *methanescoresfptr;
+ 
+ //------------------------------------------------------------------------------
+ //! \brief Initialise Document
+@@ -110,28 +113,14 @@
+ //------------------------------------------------------------------------------
+ void CMethDoc::LoadScores(void)
+ {
+-	CL_String dirname = CL_Directory::get_appdata("clanlib", "methane", "1.5", false);
+-
+-	try
+-	{
+-		CL_File file(dirname+"highscores");
+-		HISCORES *hs;
+-		int cnt;
+-		for (cnt=0, hs=m_GameTarget.m_Game.m_HiScores; cnt<MAX_HISCORES; cnt++, hs++)
+-		{
+-			char buffer[5];
+-			file.read(buffer, 4, true);
+-			buffer[4] = 0;
+-			int score = file.read_int32();
+-
+-			m_GameTarget.m_Game.InsertHiScore( score, buffer );
++	size_t ign;
+ 
+-		}
+-	}
+-	catch(CL_Exception& exception)
+-	{
+-	}
++	if (!methanescoresfptr) return;	// No scores available
+ 
++	rewind(methanescoresfptr);
++	ign = fread(m_GameTarget.m_Game.m_HiScores, sizeof(HISCORES),
++		    MAX_HISCORES, methanescoresfptr);
++	ign++;
+ }
+ 
+ //------------------------------------------------------------------------------
+@@ -139,21 +128,12 @@
+ //------------------------------------------------------------------------------
+ void CMethDoc::SaveScores(void)
+ {
+-	CL_String dirname = CL_Directory::get_appdata("clanlib", "methane", "1.5");
++	size_t ign;
+ 
+-	try
+-	{
+-		CL_File file(dirname+"highscores", CL_File::create_always, CL_File::access_write);
+-		HISCORES *hs;
+-		int cnt;
+-		for (cnt=0, hs=m_GameTarget.m_Game.m_HiScores; cnt<MAX_HISCORES; cnt++, hs++)
+-		{
+-			file.write(hs->name, 4, true);
+-			file.write_int32(hs->score);
+-		}
+-	}
+-	catch(CL_Exception& exception)
+-	{
+-	}
+-}
++	if (!methanescoresfptr) return;	// No scores available
+ 
++	rewind(methanescoresfptr);
++	ign = fwrite(m_GameTarget.m_Game.m_HiScores, sizeof(HISCORES),
++		     MAX_HISCORES, methanescoresfptr);
++	ign++;
++}
+--- methane-1.5.1/sources/methane.cpp	2011-04-05 09:08:02.000000000 +0200
++++ methane-1.5.1.new/sources/methane.cpp	2011-12-11 13:38:30.252055844 +0100
+@@ -12,6 +12,14 @@
+ //------------------------------------------------------------------------------
+ // Methane brothers main source file
+ //------------------------------------------------------------------------------
++#ifndef _GNU_SOURCE
++#define _GNU_SOURCE /* this must be done before the first include of unistd.h */
++#endif
++#include <unistd.h>
++#include <string.h>
++#include <stdio.h>
++#include <stdlib.h>
++
+ #include <ClanLib/core.h>
+ #include <ClanLib/application.h>
+ #include <ClanLib/display.h>
+@@ -25,6 +33,8 @@
+ 
+ #include "doc.h"
+ 
++FILE *methanescoresfptr = NULL;
++
+ RenderTarget GLOBAL_RenderTarget = opengl2;
+ bool GLOBAL_SoundEnable = true;
+ 
+@@ -238,6 +248,8 @@
+ 				last_time = last_time + game_speed; 
+ 			}
+ 			Game.SaveScores();
++			if (methanescoresfptr)
++				fclose(methanescoresfptr);
+ 		}
+ 		catch(CL_Exception& exception)
+ 		{
+@@ -367,6 +379,15 @@
+ public:
+ 	static int main(const std::vector<CL_String> &args)
+ 	{
++ 		gid_t realgid = getgid();
++ 		
++ 		methanescoresfptr = fopen("/var/games/methane.scores", "r+");
++ 		
++ 		if (setresgid(-1, realgid, realgid) != 0) {
++ 			perror("Could not drop setgid privileges.  Aborting.");
++ 			exit(1);
++ 		}
++
+ 		CL_SetupCore setup_core;
+ 		CL_SetupDisplay setup_display;
+ 

@@ -1,0 +1,39 @@
+From 3456cb45f5734fee6127928190932915d5b3a57c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 14 Mar 2017 13:42:15 +0100
+Subject: [PATCH] Remove shell bangs
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ examples/example.pl  | 3 +--
+ examples/example2.pl | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/examples/example.pl b/examples/example.pl
+index b89903a..bbd9488 100644
+--- a/examples/example.pl
++++ b/examples/example.pl
+@@ -1,5 +1,4 @@
+-#!/usr/local/bin/perl -w
+-
++use warnings;
+ use strict;
+ use Proc::InvokeEditor;
+ 
+diff --git a/examples/example2.pl b/examples/example2.pl
+index 27a6799..3ba5b1c 100644
+--- a/examples/example2.pl
++++ b/examples/example2.pl
+@@ -1,5 +1,4 @@
+-#!/usr/local/bin/perl -w
+-
++use warnings;
+ use strict;
+ use Proc::InvokeEditor;
+ 
+-- 
+2.7.4
+

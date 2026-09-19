@@ -1,0 +1,28 @@
+diff -r -U4 peazip-10.8.0--orig/dev/peach.pas peazip-10.8.0--patched/dev/peach.pas
+--- peazip-10.8.0--orig/dev/peach.pas	2025-12-01 21:52:38.000000000 +0100
++++ peazip-10.8.0--patched/dev/peach.pas	2025-12-06 11:33:14.419968985 +0100
+@@ -22326,9 +22326,9 @@
+ {$IFDEF DARWIN}
+ resource_path:=executable_path+'../Resources/';
+ binpath:=executable_path+'bin'+directoryseparator;//binaries, architecture dependant
+ {$ELSE}
+-resource_path:=executable_path+'res'+directoryseparator;
++resource_path:=executable_path+'..'+directoryseparator+'share'+directoryseparator+'peazip'+directoryseparator;
+ binpath:=resource_path+'bin'+directoryseparator;//binaries, architecture dependant
+ {$ENDIF}
+ sharepath:=resource_path+'share'+directoryseparator;//non binaries resources, non-architecture dependant
+ confpath:=resource_path+'conf'+directoryseparator;//configuration files, non-architecture dependant
+diff -r -U4 peazip-10.8.0--orig/dev/pea.pas peazip-10.8.0--patched/dev/pea.pas
+--- peazip-10.8.0--orig/dev/pea.pas	2025-11-25 10:50:10.000000000 +0100
++++ peazip-10.8.0--patched/dev/pea.pas	2025-12-06 11:33:14.422969006 +0100
+@@ -8316,9 +8316,9 @@
+ setcurrentdir(executable_path);
+ {$IFDEF Darwin}
+    resource_path:=executable_path+'../Resources/';
+ {$ELSE}
+-   resource_path:=executable_path+'res'+directoryseparator;
++   resource_path:=executable_path+'..'+directoryseparator+'share'+directoryseparator+'peazip'+directoryseparator;
+ {$ENDIF}
+ SetFocusedControl(EditPW);
+ pmode:=0;
+ list_utils.pmode:=pmode;

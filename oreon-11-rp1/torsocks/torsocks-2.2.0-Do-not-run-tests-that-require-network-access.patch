@@ -1,0 +1,22 @@
+Description: do not run tests that require network access
+Forwarded: not-needed
+Origin: vendor
+Author: intrigeri <intrigeri@boum.org>
+
+---
+ tests/Makefile.am | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index a1ee8b1..564497d 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -2,9 +2,6 @@ SUBDIRS = utils unit
+ 
+ TESTS = \
+ 	test_connect \
+-	test_dns \
+-	test_fd_passing \
+-	test_getpeername \
+ 	test_socket \
+ 	# end of TESTS

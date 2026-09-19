@@ -1,0 +1,28 @@
+diff -ruN whereami-1.0/whereami.c whereami-1.0-mod/whereami.c
+--- whereami-1.0/whereami.c	2010-04-17 20:56:39.000000000 +0300
++++ whereami-1.0-mod/whereami.c	2025-09-21 11:36:13.435249786 +0300
+@@ -80,6 +80,7 @@
+ main (int argc, char *argv[])
+ {
+     uint32_t ip = 0;
++    uint32_t* sip;
+     char *s = NULL, optstr[] = "dhintv";
+     int n = 0, indx = 0, pflag = P_ALL, oflag = 0;
+ 
+@@ -144,11 +145,11 @@
+     {
+         ip = getip ();
+ 
+-        s = &ip;
+-        printf ("%hhu.", *s++);
+-        printf ("%hhu.", *s++);
+-        printf ("%hhu.", *s++);
+-        printf ("%hhu", *s);
++        sip = &ip;
++        printf ("%hhu.", *sip++);
++        printf ("%hhu.", *sip++);
++        printf ("%hhu.", *sip++);
++        printf ("%hhu", *sip);
+     }
+     printf ("\n");
+ 

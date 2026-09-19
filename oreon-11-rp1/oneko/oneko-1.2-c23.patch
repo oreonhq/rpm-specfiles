@@ -1,0 +1,54 @@
+diff -up oneko-1.2.sakura.5/oneko.c.c23 oneko-1.2.sakura.5/oneko.c
+--- oneko-1.2.sakura.5/oneko.c.c23	2025-03-21 17:10:41.468053446 -0400
++++ oneko-1.2.sakura.5/oneko.c	2025-03-21 17:16:29.087204418 -0400
+@@ -8,6 +8,7 @@ static char rcsid[] = "$Header: /home/su
+ 
+ #include "oneko.h"
+ #include "patchlevel.h"
++#include <signal.h>
+ /*
+  *	グローバル変数
+  */
+@@ -264,7 +265,7 @@ Animation	AnimationPattern[][2] =
+     { &RightTogi2GC, &RightTogi2Msk } },	/* NekoState == NEKO_R_TOGI */
+ };
+ 
+-static void NullFunction();
++static void NullFunction(int signum);
+ 
+ /*
+  *	ビットマップデータ・GC 初期化
+@@ -712,7 +713,7 @@ InitScreen(DisplayName)
+  */
+ 
+ void
+-RestoreCursor()
++RestoreCursor(int signum)
+ {
+   XSetWindowAttributes	theWindowAttributes;
+   BitmapGCData *BitmapGCDataTablePtr;
+@@ -1030,7 +1031,7 @@ CalcDxDy()
+ 
+       if (ToWindow && status == 0) {
+ 	fprintf(stderr, "%s: '%s', Target Lost.\n",ProgramName, WindowName);
+-	RestoreCursor();
++	RestoreCursor(SIGTERM);
+       }
+ 
+       if (theTargetAttributes.x+theTargetAttributes.width > 0 
+@@ -1330,7 +1331,7 @@ ProcessNeko()
+  */
+ 
+ static void
+-NullFunction()
++NullFunction(int signum)
+ {
+   /* No Operation */
+ #if defined(SYSV) || defined(SVR4)
+@@ -1565,5 +1566,5 @@ main(argc, argv)
+ 
+   ProcessNeko();
+ 
+-  RestoreCursor();
++  RestoreCursor(SIGTERM);
+ }

@@ -1,0 +1,95 @@
+.TH TEMPLATES2ADA 1 "2008-05-04" "GNU Ada Tools" "Templates Parser User's Guide"
+.SH NAME
+templates2ada \- generate Ada sources from a templates file
+.SH SYNOPSIS
+\fBtemplates2ada\fR [options]
+.SH DESCRIPTION
+\fBtemplates2ada\fR parses all the template files in a directory and
+then generates an output file from these, based on a template file (a
+default example of which is provided as
+\fI/usr/share/doc/libtemplates-parser-dev/examples/templates.tads\fR). The
+latter contains in fact two examples, depending on whether one Ada
+package should be generated per template, or whether a single package
+should be built.  In the former case, if you are using the GNAT
+compiler, you should run `gnatchop' on the resulting file. Here is an
+example:
+
+     $ rm -f src/templates/*.ads
+     $ templates2ada -d resources/ -o src/templates/generated -r
+     $ cd src/templates; gnatchop -w -q generated
+     $ rm -f src/templates/generated
+
+One of the goals of \fBtemplates2ada\fR is to ensure that you are only
+setting tags that actually exist in the template (and thus prevent, as
+much as possibly, typos in the name of tags); also, when combined with
+other tools, to help ensure that all tags needed by the template are
+properly set.
+
+\fBtemplates2ada\fR also has special knowledge about HTTP constructs
+and will generate Ada constants for the HTTP parameters you might
+receive in return. Once more the goal is to help avoid typos in the
+Ada code.
+
+For instance, we will consider a simple template file, found in a
+local file `resources/block1.thtml'. This template contains the
+following simple html code:
+
+     <form>
+       <input name="PARAM1" value="@_TAG1_@" />
+       <input name="PARAM2" value="@_TAG2_@" />
+     </form>
+
+When you run \fBtemplates2ada\fR, the following Ada package will be
+generated. Note that this is only the default output of
+\fBtemplates2ada\fR, which can be fully tailored to your needs.
+
+     package Templates.Block1 is
+       pragma Style_Checks (Off);
+       Template : constant string := "resources/block1.thtml";
+       Tag1 : constant String := "TAG1";
+       Tag2 : constant String := "TAG2";
+       package Http is
+         Param1 : constant String := "PARAM1";
+         Param2 : constant String := "PARAM2";
+       end Http;
+     end Templates.Block1;
+
+.SH OPTIONS
+.IP "\fB-d\fR \fIdir\fR"
+Search for template files in \fIdir\fR.
+
+.IP \fB-h\fR
+Display a summary of options.
+
+.IP "\fB-o\fR \fIfile\fR"
+Write the output to \fIfile\fR.
+
+.IP "\fB-e\fR \fIext\fR"
+Process all files with extension \fIext\fR that are in the input
+directory; consider these files as template files.
+
+.IP \fB-r\fR
+Recurse into subdirectories.
+
+.IP "\fB-t\fR \fIfile\fR"
+Use \fIfile\fR as the output template file. The templates parser comes
+with an example for such a file,
+\fI/usr/share/doc/templates-parser/examples/templates.tads\fR, that
+you can adapt to your own needs.
+
+.IP \fB-v\fR
+Verbose mode.  This will output a warning when an http parameter has a
+name made only of template parser tags, since no matching entry can
+then be created for it in the output file.
+
+.SH "SEE ALSO"
+.BR templatespp (1)
+
+The Template Parsers User's Guide in package libtemplates-parser-dev.
+
+.SH AUTHOR
+\fBtemplates2ada\fR was written by Pascal Obry <p.obry@wanadoo.fr> as
+part of the Ada Web Server.
+
+This manual page was written by Ludovic Brenta <lbrenta@debian.org>
+for Debian GNU/Linux.

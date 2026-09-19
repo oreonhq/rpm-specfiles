@@ -1,0 +1,46 @@
+From 8b0dc944284def804b99bcee436f93d19b44c0da Mon Sep 17 00:00:00 2001
+From: Mattia Verga <mattia.verga@tiscali.it>
+Date: Thu, 1 Sep 2022 10:22:20 +0200
+Subject: [PATCH] Make build parallel safe
+
+---
+ GUI/xephem/Makefile | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/GUI/xephem/Makefile b/GUI/xephem/Makefile
+index ddfbef9..da10016 100644
+--- a/GUI/xephem/Makefile
++++ b/GUI/xephem/Makefile
+@@ -185,21 +185,23 @@ OBJS =			\
+ 	xephem.o	\
+ 	xmisc.o
+ 
+-all: libs xephem xephem.1
++LIBRARIES := libip liblilxml libjpegd libpng libz
+ 
+-xephem: $(INCS) $(OBJS)
++all: $(LIBRARIES) xephem xephem.1
++
++xephem: $(INCS) $(OBJS) $(LIBRARIES)
+ 	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+ 
+ xephem.1: xephem.man
+ 	nroff -man $? > $@
+ 
+-libs:
+-	cd ../../libastro; make
+-	cd ../../libip; make
+-	cd ../../libjpegd; make
+-	cd ../../liblilxml; make
+-	cd ../../libpng; make
+-	cd ../../libz; make
++libs: $(LIBRARIES)
++
++$(LIBRARIES): libastro
++	$(MAKE) --directory=../../$@
++
++libastro:
++	$(MAKE) --directory=../../$@
+ 
+ clean:
+ 	rm -fr *.o ../../lib*/*.[ao]

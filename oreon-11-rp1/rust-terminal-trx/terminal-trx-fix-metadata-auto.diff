@@ -1,0 +1,22 @@
+--- terminal-trx-0.2.6/Cargo.toml	1970-01-01T00:00:01+00:00
++++ terminal-trx-0.2.6/Cargo.toml	2025-12-29T14:36:36.583205+00:00
+@@ -44,14 +44,6 @@
+ [target."cfg(unix)".dependencies.libc]
+ version = "0.2.152"
+ 
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.61"
+-features = [
+-    "Win32_System_Console",
+-    "Win32_Storage_FileSystem",
+-    "Win32_Foundation",
+-]
+-
+ [lints.clippy]
+ dbg_macro = "warn"
+ exhaustive_enums = "warn"
+@@ -69,3 +61,4 @@
+ level = "warn"
+ priority = 0
+ check-cfg = ["cfg(terminal_trx_test_unsupported)"]
++

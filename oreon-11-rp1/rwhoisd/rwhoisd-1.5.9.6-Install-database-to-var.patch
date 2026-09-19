@@ -1,0 +1,29 @@
+From 5460be41550933fdcb07128777ec608c2024aed3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 8 Oct 2013 14:26:10 +0200
+Subject: [PATCH] Install database to /var
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ sample.data/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sample.data/Makefile.in b/sample.data/Makefile.in
+index 584ce5b..0aecbb5 100644
+--- a/sample.data/Makefile.in
++++ b/sample.data/Makefile.in
+@@ -15,7 +15,7 @@ etcdir      = @sysconfdir@
+ srcdir	    = @srcdir@
+ VPATH       = @srcdir@
+ 
+-RWHOIS_ROOT_DIR = $(etcdir)/rwhoisd/samples
++RWHOIS_ROOT_DIR = /var/rwhoisd/samples
+ 
+ FILES = \
+         a.com \
+-- 
+1.8.3.1
+

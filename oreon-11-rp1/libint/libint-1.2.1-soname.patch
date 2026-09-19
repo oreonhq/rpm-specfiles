@@ -1,0 +1,10 @@
+diff -up libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/configure.ac.orig libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/configure.ac
+--- libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/configure.ac.orig	2017-05-17 16:52:07.000000000 +0200
++++ libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/configure.ac	2017-05-19 05:22:35.525132979 +0200
+@@ -1,5 +1,5 @@
+ define([libint_mmm_version],[1.2.1])
+-define([libint_buildid],[])
++define([libint_buildid],[stable])
+ define([libint_so_version],[1:0:0])
+ 
+ dnl Process this file with autoconf to produce a configure script.

@@ -1,0 +1,141 @@
+.\" SuperTuxKart -- 3D GoKart racing game
+.\" Copyright (c) 2001 Steve Baker, Daniel Kobras
+.\" Copyright (c) 2006 The SuperTuxKart Team (See AUTHORS file)
+.\"
+.\" This manual page is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or
+.\" (at your option) any later version.
+.\" 
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\" 
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program; if not, write to the Free Software
+.\" Foundation, Inc.,59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+.\"
+.\" This manual page was written especially for Debian Linux. It is based
+.\" on information available from tuxkart's website at
+.\" http://tuxkart.sourceforge.net
+.\"
+.TH SUPERTUXKART 6 "November 15, 2001"
+.SH NAME
+SuperTuxKart \- 3D GoKart racing game
+.SH SYNOPSIS
+.B supertuxkart
+.SH DESCRIPTION
+\fBsupertuxkart\fP is an arcade-style game where driving faster than your
+opponents will do the trick. You're taking the role of Tux, the Linux mascot,
+steering its go-kart around various courses, racing against computer-controlled
+vehicles.
+.PP
+The main window that opens on startup provides a menu to select the racemode,
+track to race on, the number of laps to go, etc. In the race, you can either
+use a joystick, or the keyboard for steering.
+.PP
+During the race, several goodies can make your life easier while other gadgets
+shall give you a really tough ride. Go for the arrow shaped red and black
+zipper patches on the track, as they boost your cart onwards. The question mark
+cubes hide some nice powerups. Beware of the big spinning banana's though, they
+are yucky and slow you down. The herring coins on the other hand make for a
+fine appetizer. Eat enough of them, and the next question mark cube might yield
+not only one, but up to five powerups at once. Note that bad things happen at
+once, while the good things (well, good for you...) need to be activated.
+Here's the list of available extras:
+.PP
+.TP
+.B Goodies
+.TP
+.I Missiles
+Unguided but fast. If they hit anything, they explode impressively. The effect
+on a cart is to stop it dead, so it has to accelerate again.
+.TP
+.I Homing missiles
+Slower than the regular kind, but they track the nearest kart and are quite
+hard to shake off.
+.TP
+.I Fuzzy blobs
+Even slower still - a kart can outrun them quite easily. They ricochet off the
+sides of the track and only explode when they hit a cart.
+.TP
+.I Magnets
+If you activate a magnet then it hangs around for about 15 seconds. If anyone
+comes within about 20 meters, you'll be pulled towards them and end up glued to
+their tail until the magnet 'expires'. Great for catching up with someone -
+hopeless for passing them.
+.TP
+.I Portable Zippers
+These are just like the zipper patches on the track itself. They give you 
+sudden acceleration and temporarily increase the top speed of your cart.
+.TP
+.B Badies
+.TP
+.I Parachute
+This pops out the back of your cart and slows you down a little for a few
+seconds only. Enough to drop you back one place if it's a close race though.
+.TP
+.I Anvil
+Gets dragged behind your cart on a rope for an even shorter amount of time than
+the parachute, but the drag effect is much stronger. Your cart hardly moves at
+all.
+.PP
+.SH CONTROLS
+.TP
+.B \fRJoystick\fB Left/Right \fRor Key\fB Left/Right
+Steer.
+.TP
+.B \fRJoystick\fB Button 1 \fRor Key\fB Up
+Accelerate.
+.TP
+.B \fRJoystick\fB Button 2 \fRor Key\fB Down
+Brake.
+.TP
+.B \fRJoystick\fB Button 3 \fRor Key\fB f
+Use a special item (if you've collected one).
+.TP
+.B \fRJoystick\fB Button 4 \fRor Key\fB d
+Ask to be rescued by Tinytux.
+.TP
+.B \fRJoystick\fB Button 5 \fRor Key\fB a
+Pop a wheelie--makes you go really fast, but you'll be unable to steer.
+.TP
+.B \fRKey\fB Esc
+Pop up or hide the menu.
+.PP
+.SH KNOWN BUGS
+.PP
+No drive-with-the-mouse support.
+.PP
+Slow performance on CPUs less than ~450MHz.
+.PP
+If you (or one of the computer players) goes off the edge of the
+track, or calls for rescue then Tinytux doesn't always manage to
+put you back onto the track correctly. If this happens, you may
+need to goto the menu to restart the race.
+.PP
+Sometimes you can be pushed through a solid object if you are hit
+by another player when in contact with the surface.
+.PP
+.SH ENVIRONMENT
+.TP
+.B MESA_GLX_FX
+If this environment variable is set, the game's resolution
+will switch from the default 640x480 to 320x240. This is mostly of interest
+if you have a Voodoo-1/2 graphics card and usually set this variable to
+fullscreen.
+.TP
+.B TUXKART_DATADIR
+Path to the location of game data. Usually you don't have to mess with this
+variable.
+.TP
+.B TUXKART_TRACKLIST
+Path to the location of track data. Usually you don't have to mess with this
+variable.
+.PP
+.SH AUTHOR
+This manual page was written by Daniel Kobras <kobras@debian.org>,
+for the Debian GNU/Linux system (but may be used by others). It was updated
+for supertuxkart by Hans de Goede <j.w.r.degoede@hhs.nl> for the Fedora
+GNU/Linux distribution.

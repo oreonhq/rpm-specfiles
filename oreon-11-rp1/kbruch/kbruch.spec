@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3eae3f9a99ead74cd509f87d7c9e9c6cd91977ec8b6ee68cf0c80371d6b5e273
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kbruch
 Summary: Practice Fractions 
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

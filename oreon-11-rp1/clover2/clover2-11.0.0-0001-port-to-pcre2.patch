@@ -1,0 +1,192 @@
+From 4b2ce8ab238fb961c07cf6d87b771ad5eef1b141 Mon Sep 17 00:00:00 2001
+From: clover2 Fedora maintainer <clover2-owner@fedoraproject.org>
+Date: Fri, 16 Aug 2024 21:23:04 +0900
+Subject: [PATCH] port to pcre2
+
+---
+ configure          | 15 ++++++++++-----
+ configure.in       |  9 +++++++--
+ src/class_system.c | 13 +++++++------
+ src/common.h       |  5 +++--
+ src/regex.c        | 16 ++++++++++------
+ 5 files changed, 37 insertions(+), 21 deletions(-)
+
+diff --git a/configure b/configure
+index b1bfbdf..f1fc2a4 100755
+--- a/configure
++++ b/configure
+@@ -4419,21 +4419,26 @@ then
+     LIBS="$LIBS -liconv"
+ fi
+ 
+-ac_fn_c_check_header_compile "$LINENO" "pcre.h" "ac_cv_header_pcre_h" "$ac_includes_default"
++CFLAGS_ORIG="$CFLAGS"
++CFLAGS="$CFLAGS_ORIG -DPCRE2_CODE_UNIT_WIDTH=8"
++export CFLAGS
++ac_fn_c_check_header_compile "$LINENO" "pcre2.h" "ac_cv_header_pcre_h" "$ac_includes_default"
+ if test "x$ac_cv_header_pcre_h" = xyes
+ then :
+   printf "%s\n" "#define HAVE_PCRE_H 1" >>confdefs.h
+ 
+ fi
++CFLAGS="$CFLAGS_ORIG"
++export CFLAGS
+ 
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for main in -lpcre" >&5
+-printf %s "checking for main in -lpcre... " >&6; }
++{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for main in -lpcre2-8" >&5
++printf %s "checking for main in -lpcre2-8... " >&6; }
+ if test ${ac_cv_lib_pcre_main+y}
+ then :
+   printf %s "(cached) " >&6
+ else $as_nop
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lpcre  $LIBS"
++LIBS="-lpcre2-8  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -4460,7 +4465,7 @@ fi
+ printf "%s\n" "$ac_cv_lib_pcre_main" >&6; }
+ if test "x$ac_cv_lib_pcre_main" = xyes
+ then :
+-   LIBS="$LIBS -lpcre";
++   LIBS="$LIBS -lpcre2-8";
+ else $as_nop
+    eixt
+ fi
+diff --git a/configure.in b/configure.in
+index 335c1d7..d54d2a2 100644
+--- a/configure.in
++++ b/configure.in
+@@ -242,8 +242,13 @@ then
+     LIBS="$LIBS -liconv"
+ fi
+ 
+-AC_CHECK_HEADER(pcre.h, [AC_DEFINE(HAVE_PCRE_H,1)], [])
+-AC_HAVE_LIBRARY(pcre, [ LIBS="$LIBS -lpcre"; ], [ eixt ])
++CFLAGS_ORIG="$CFLAGS"
++CFLAGS="$CFLAGS_ORIG -DPCRE2_CODE_UNIT_WIDTH=8"
++export CFLAGS
++AC_CHECK_HEADER(pcre2.h, [AC_DEFINE(HAVE_PCRE_H,1)], [])
++CFLAGS="$CFLAGS_ORIG"
++export CFLAGS
++AC_HAVE_LIBRARY(pcre2-8, [ LIBS="$LIBS -lpcre2-8"; ], [ eixt ])
+ 
+ AC_HAVE_LIBRARY(rt, [ LIBS="$LIBS -lrt"; ], [])
+ 
+diff --git a/src/class_system.c b/src/class_system.c
+index 907b41a..3fd5c33 100644
+--- a/src/class_system.c
++++ b/src/class_system.c
+@@ -902,7 +902,7 @@ BOOL System_pcre_exec(CLVALUE** stack_ptr, CLVALUE* lvar, sVMInfo* info)
+     /// convert Clover value to C value ///
+     sRegexObject* regex_object_data = CLREGEX(regex->mObjectValue);
+ 
+-    pcre* regex_value = regex_object_data->mRegex;
++    pcre2_code* regex_value = regex_object_data->mRegex;
+ 
+     sCLObject* object_data = CLOBJECT(str->mObjectValue);
+ 
+@@ -910,13 +910,14 @@ BOOL System_pcre_exec(CLVALUE** stack_ptr, CLVALUE* lvar, sVMInfo* info)
+     int len = object_data->mFields[1].mULongValue;
+ 
+     int ovec_max_value = ovec_max->mIntValue;
+-    int* ovec_value = MCALLOC(1, sizeof(int)*ovec_max_value * 3);
++    PCRE2_SIZE* ovec_value = NULL;
+ 
+     int offset_value = offset->mIntValue;
+ 
+     /// go ///
+-    int options = PCRE_NEWLINE_LF;
+-    int result = pcre_exec(regex_value, 0, str_value, len, offset_value, options, ovec_value, ovec_max_value*3);
++    pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(regex_value, NULL);
++    int result = pcre2_match(regex_value, (PCRE2_SPTR)str_value, len, offset_value, 0, match_data, NULL);
++    ovec_value = pcre2_get_ovector_pointer(match_data);
+ 
+     /// set result data on ovec object ///
+     CLObject pcre_ovec_object = pcre_ovec->mObjectValue;
+@@ -938,7 +939,7 @@ BOOL System_pcre_exec(CLVALUE** stack_ptr, CLVALUE* lvar, sVMInfo* info)
+     sCLObject* pcre_ovec_end_array_data = CLOBJECT(pcre_ovec_end_array);
+ 
+     int i;
+-    for(i=0; i<ovec_max_value; i++) {
++    for(i=0; i<result; i++) {
+         if(i < pcre_ovec_start_array_data->mArrayNum) {
+             pcre_ovec_start_array_data->mFields[i].mIntValue = ovec_value[i*2];
+         }
+@@ -950,7 +951,7 @@ BOOL System_pcre_exec(CLVALUE** stack_ptr, CLVALUE* lvar, sVMInfo* info)
+     (*stack_ptr)->mIntValue = result;
+     (*stack_ptr)++;
+ 
+-    MFREE(ovec_value);
++    pcre2_match_data_free(match_data);
+ 
+     return TRUE;
+ }
+diff --git a/src/common.h b/src/common.h
+index cd3ef23..bf457a5 100644
+--- a/src/common.h
++++ b/src/common.h
+@@ -18,7 +18,8 @@
+ #include <ctype.h>
+ #include <stdarg.h>
+ #include <locale.h>
+-#include <pcre.h>
++#define PCRE2_CODE_UNIT_WIDTH 8
++#include <pcre2.h>
+ #include <dlfcn.h>
+ #ifndef __USE_XOPEN
+ #define __USE_XOPEN
+@@ -2209,7 +2210,7 @@ struct sRegexObjectStruct
+     char* mType;
+     int mSize;
+     int mArrayNum;
+-    pcre* mRegex;
++    pcre2_code* mRegex;
+     char* mRegexString;
+     BOOL mGlobal;
+     BOOL mIgnoreCase;
+diff --git a/src/regex.c b/src/regex.c
+index 135d142..26b6a56 100644
+--- a/src/regex.c
++++ b/src/regex.c
+@@ -16,7 +16,7 @@ void regex_free_fun(CLObject obj)
+ {
+     sRegexObject* object_data = CLREGEX(obj);
+ 
+-    pcre_free(object_data->mRegex);
++    pcre2_code_free(object_data->mRegex);
+     MFREE(object_data->mRegexString);
+ }
+ 
+@@ -32,17 +32,21 @@ CLObject create_regex_object(char* regex, BOOL global, BOOL ignore_case, BOOL mu
+ 
+     sRegexObject* object_data = CLREGEX(obj);
+ 
+-    int option = ignore_case ? PCRE_CASELESS:0;
++    int option = ignore_case ? PCRE2_CASELESS:0;
+ 
+-    const char* err;
+-    int erro_ofs;
++    int err;
++    PCRE2_SIZE erro_ofs;
+ 
+-    int options = PCRE_UTF8 | (ignore_case ? PCRE_CASELESS:0) | (multiline ? PCRE_MULTILINE : 0) | (extended ? PCRE_EXTENDED :0) | (dotall ? PCRE_DOTALL :0) | (dollar_endonly ? PCRE_DOLLAR_ENDONLY:0) | (ungreedy ? PCRE_UNGREEDY:0);
++    int options = PCRE2_UTF | (ignore_case ? PCRE2_CASELESS:0) | (multiline ? PCRE2_MULTILINE : 0) | (extended ? PCRE2_EXTENDED :0) | (dotall ? PCRE2_DOTALL :0) | (dollar_endonly ? PCRE2_DOLLAR_ENDONLY:0) | (ungreedy ? PCRE2_UNGREEDY:0);
+     //int options = PCRE_UTF8 | (ignore_case ? PCRE_CASELESS:0) | (multiline ? PCRE_MULTILINE : 0) | (extended ? PCRE_EXTENDED :0) | (dotall ? PCRE_DOTALL :0) | (anchored ? PCRE_ANCHORED : 0) | (dollar_endonly ? PCRE_DOLLAR_ENDONLY) | (ungreedy ? PCRE_UNGREEDY);
+ 
+     object_data->mRegexString = MSTRDUP(regex);
+ 
+-    object_data->mRegex = pcre_compile(regex, options,&err, &erro_ofs, NULL);
++    pcre2_compile_context *context = pcre2_compile_context_create(NULL);
++    pcre2_set_newline(context, PCRE2_NEWLINE_LF);
++    object_data->mRegex = pcre2_compile((PCRE2_SPTR)regex, PCRE2_ZERO_TERMINATED ,options,&err, &erro_ofs, context);
++    pcre2_compile_context_free(context);
++
+     object_data->mGlobal = global;
+     object_data->mIgnoreCase = ignore_case;
+     object_data->mMultiline = multiline;
+-- 
+2.46.0
+

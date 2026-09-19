@@ -1,8 +1,8 @@
 %global source0_hash af9384f05917adbf6ac8e554eeb7e37a8d97a734abb01db988b304a3a11e1230
 
 Name: liburing
-Version: 2.13
-Release: 2%{?dist}
+Version: 2.15
+Release: 1%{?dist}
 Summary: Linux-native io_uring I/O access library
 License: (GPL-2.0-only WITH Linux-syscall-note OR MIT) AND (LGPL-2.0-or-later OR MIT)
 Source0:        https://brick.kernel.dk/snaps/%{name}-%{version}.tar.gz

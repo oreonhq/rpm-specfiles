@@ -1,0 +1,13 @@
+diff --git a/d52pass2.c b/d52pass2.c
+index ec45973..9acbb30 100644
+--- a/d52pass2.c
++++ b/d52pass2.c
+@@ -932,7 +932,7 @@ void dodir(FILE *fp, int adrs)
+ 	}
+ 	else if (dir < 0x80)
+ 	{
+-		kcnt += fprintf(fp, rbname[dir].dent);
++		kcnt += fprintf(fp, "%s", rbname[dir].dent);
+ 		dirregs[dir] |= 1;
+ 	}
+ 	else

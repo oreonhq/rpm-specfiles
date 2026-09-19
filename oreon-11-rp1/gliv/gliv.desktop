@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Gliv Image Viewer
+Comment=View images fast and smoothly
+Exec=gliv
+Icon=gliv
+Terminal=false
+Type=Application
+MimeType=image/gif;image/x-xpixmap;image/jpeg;image/x-bmp;image/png;image/tiff;image/x-tga;
+Categories=GNOME;Graphics;

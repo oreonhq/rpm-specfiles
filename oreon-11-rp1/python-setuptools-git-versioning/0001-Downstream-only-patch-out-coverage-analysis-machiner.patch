@@ -1,0 +1,385 @@
+From 48e8cfb473aee7bfe65bc1271467acca9349d2a6 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 22 Oct 2025 13:01:36 +0100
+Subject: [PATCH] Downstream-only: patch out coverage-analysis machinery
+
+https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
+---
+ requirements-test.txt                         |  1 -
+ tests/conftest.py                             | 12 ----
+ tests/lib/util.py                             | 52 +++++---------
+ .../test_integration/test_branch_formatter.py | 47 ++++++-------
+ tests/test_integration/test_config.py         | 18 ++---
+ tests/test_integration/test_tag_formatter.py  | 41 +++++------
+ .../test_integration/test_version_callback.py | 68 +++++++------------
+ 7 files changed, 80 insertions(+), 159 deletions(-)
+
+diff --git a/requirements-test.txt b/requirements-test.txt
+index 3f259cb..a526ea2 100644
+--- a/requirements-test.txt
++++ b/requirements-test.txt
+@@ -1,5 +1,4 @@
+ build
+-coverage
+ pytest
+ pytest-rerunfailures
+ # Some tests need to write TOML, but tomli and tomllib are read-only, and toml package is unmaintained
+diff --git a/tests/conftest.py b/tests/conftest.py
+index bf99c3d..f5c0ac2 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -12,26 +12,15 @@ root = os.path.dirname(os.path.dirname(__file__))
+ @pytest.fixture
+ def repo_dir(tmpdir):
+     repo_dir = str(tmpdir.mkdir(rand_str()))
+-    # collect coverage data
+-    with open(os.path.join(root, ".coveragerc")) as f:
+-        create_file(repo_dir, ".coveragerc", f.read(), add=False, commit=False)
+-    os.mkdir(os.path.join(repo_dir, "reports"))
+ 
+     yield repo_dir
+ 
+-    if os.environ.get("CI", "false").lower() in ["1", "true"]:
+-        # move collect coverage data to reports directory
+-        for root_path, _dirs, files in os.walk(os.path.join(repo_dir, "reports")):
+-            for file in files:
+-                shutil.move(os.path.join(root_path, file), os.path.join(root, "reports", file))
+-
+ 
+ @pytest.fixture
+ def repo(repo_dir):
+     execute(repo_dir, "git init -b master")
+     execute(repo_dir, "git config --local user.email 'tests@example.com'")
+     execute(repo_dir, "git config --local user.name 'Tests runner'")
+-    execute(repo_dir, "git add .coveragerc")
+     create_file(
+         repo_dir,
+         ".gitignore",
+@@ -43,7 +32,6 @@ def repo(repo_dir):
+             build
+             dist
+             *.py[oc]
+-            reports/
+             """
+         ),
+     )
+diff --git a/tests/lib/util.py b/tests/lib/util.py
+index ddfe901..2d7a468 100644
+--- a/tests/lib/util.py
++++ b/tests/lib/util.py
+@@ -176,20 +176,11 @@ def create_pyproject_toml(
+         "setup.py",
+         textwrap.dedent(
+             """
+-            from coverage.control import Coverage
++            import setuptools
+ 
+-            coverage = Coverage()
+-            coverage.start()
+-
+-            try:
+-                import setuptools
+-
+-                setuptools.setup(
+-                    name="mypkg",
+-                )
+-            finally:
+-                coverage.stop()
+-                coverage.save()
++            setuptools.setup(
++                name="mypkg",
++            )
+             """
+         ),
+         commit=False,
+@@ -202,7 +193,6 @@ def create_pyproject_toml(
+             "setuptools>=41",
+             "wheel",
+             "setuptools-git-versioning",
+-            "coverage",
+         ],
+         # with default "setuptools.build_meta" it is not possible to build package
+         # which uses its own source code to get version number,
+@@ -238,27 +228,17 @@ def create_setup_py(
+         "setup.py",
+         textwrap.dedent(
+             f"""
+-            from coverage.control import Coverage
+-
+-            coverage = Coverage()
+-            coverage.start()
+-
+-            try:
+-                import setuptools
+-
+-                setuptools.setup(
+-                    name="mypkg",
+-                    {cfg}
+-                    setup_requires=[
+-                        "setuptools>=41",
+-                        "wheel",
+-                        "coverage",
+-                        "setuptools-git-versioning",
+-                    ]
+-                )
+-            finally:
+-                coverage.stop()
+-                coverage.save()
++            import setuptools
++
++            setuptools.setup(
++                name="mypkg",
++                {cfg}
++                setup_requires=[
++                    "setuptools>=41",
++                    "wheel",
++                    "setuptools-git-versioning",
++                ]
++            )
+             """
+         ),
+         **kwargs,
+@@ -307,7 +287,7 @@ def get_version_module(cwd: str | os.PathLike, args: list[str] | None = None, **
+ 
+     return execute(
+         cwd,
+-        f"{sys.executable} -m coverage run -m setuptools_git_versioning {args_str} -vv",
++        f"{sys.executable} -m setuptools_git_versioning {args_str} -vv",
+         **kwargs,
+     ).strip()
+ 
+diff --git a/tests/test_integration/test_branch_formatter.py b/tests/test_integration/test_branch_formatter.py
+index c6547f2..0f57b34 100644
+--- a/tests/test_integration/test_branch_formatter.py
++++ b/tests/test_integration/test_branch_formatter.py
+@@ -122,34 +122,25 @@ def test_branch_formatter_external_setup_py_direct_import(repo, template_config)
+             "setup.py",
+             textwrap.dedent(
+                 f"""
+-                from coverage.control import Coverage
+-
+-                coverage = Coverage()
+-                coverage.start()
+-
+-                try:
+-                    import re
+-                    import setuptools
+-                    import pickle
+-
+-                    def branch_formatter(branch):
+-                        return re.sub("[^\\d]+", "", branch)
+-
+-                    version_config = {cfg}
+-                    version_config["branch_formatter"] = branch_formatter
+-
+-                    setuptools.setup(
+-                        name="mypkg",
+-                        setuptools_git_versioning=version_config,
+-                        setup_requires=[
+-                            "setuptools>=41",
+-                            "wheel",
+-                            "setuptools-git-versioning",
+-                        ]
+-                    )
+-                finally:
+-                    coverage.stop()
+-                    coverage.save()
++                import re
++                import setuptools
++                import pickle
++
++                def branch_formatter(branch):
++                    return re.sub("[^\\d]+", "", branch)
++
++                version_config = {cfg}
++                version_config["branch_formatter"] = branch_formatter
++
++                setuptools.setup(
++                    name="mypkg",
++                    setuptools_git_versioning=version_config,
++                    setup_requires=[
++                        "setuptools>=41",
++                        "wheel",
++                        "setuptools-git-versioning",
++                    ]
++                )
+             """
+             ),
+         )
+diff --git a/tests/test_integration/test_config.py b/tests/test_integration/test_config.py
+index 6d7dadf..6462017 100644
+--- a/tests/test_integration/test_config.py
++++ b/tests/test_integration/test_config.py
+@@ -33,20 +33,11 @@ def test_config_not_used(repo):
+         "setup.py",
+         textwrap.dedent(
+             """
+-            from coverage.control import Coverage
++            import setuptools
+ 
+-            coverage = Coverage()
+-            coverage.start()
+-
+-            try:
+-                import setuptools
+-
+-                setuptools.setup(
+-                    name="mypkg",
+-                )
+-            finally:
+-                coverage.stop()
+-                coverage.save()
++            setuptools.setup(
++                name="mypkg",
++            )
+             """
+         ),
+     )
+@@ -57,7 +48,6 @@ def test_config_not_used(repo):
+             "requires": [
+                 "setuptools>=41",
+                 "wheel",
+-                "coverage",
+             ],
+             "build-backend": "setuptools.build_meta",
+         }
+diff --git a/tests/test_integration/test_tag_formatter.py b/tests/test_integration/test_tag_formatter.py
+index f01938d..8ba978d 100644
+--- a/tests/test_integration/test_tag_formatter.py
++++ b/tests/test_integration/test_tag_formatter.py
+@@ -113,32 +113,23 @@ def test_tag_formatter_external_setup_py_direct_import(repo):
+         "setup.py",
+         textwrap.dedent(
+             r"""
+-            from coverage.control import Coverage
+-
+-            coverage = Coverage()
+-            coverage.start()
+-
+-            try:
+-                import re
+-                import setuptools
+-
+-                def tag_formatter(tag):
+-                    return re.sub(r"[^\d.]+", "", tag)
++            import re
++            import setuptools
+ 
+-                setuptools.setup(
+-                    name="mypkg",
+-                    setuptools_git_versioning={
+-                        "tag_formatter": tag_formatter
+-                    },
+-                    setup_requires=[
+-                        "setuptools>=41",
+-                        "wheel",
+-                        "setuptools-git-versioning",
+-                    ]
+-                )
+-            finally:
+-                coverage.stop()
+-                coverage.save()
++            def tag_formatter(tag):
++                return re.sub(r"[^\d.]+", "", tag)
++
++            setuptools.setup(
++                name="mypkg",
++                setuptools_git_versioning={
++                    "tag_formatter": tag_formatter
++                },
++                setup_requires=[
++                    "setuptools>=41",
++                    "wheel",
++                    "setuptools-git-versioning",
++                ]
++            )
+         """
+         ),
+     )
+diff --git a/tests/test_integration/test_version_callback.py b/tests/test_integration/test_version_callback.py
+index 3479493..5b8c346 100644
+--- a/tests/test_integration/test_version_callback.py
++++ b/tests/test_integration/test_version_callback.py
+@@ -22,54 +22,36 @@ __version__ = "{version}"
+ """
+ 
+ 
+-SETUP_PY_CALLABLE = """from coverage.control import Coverage
+-
+-coverage = Coverage()
+-coverage.start()
+-
+-try:
+-    import setuptools
+-    from version import get_version
+-
+-    setuptools.setup(
+-        setuptools_git_versioning={
+-            "version_callback": get_version
+-        },
+-        setup_requires=[
+-            "setuptools>=41",
+-            "wheel",
+-            "setuptools-git-versioning",
+-        ]
+-    )
+-finally:
+-    coverage.stop()
+-    coverage.save()
++SETUP_PY_CALLABLE = """import setuptools
++from version import get_version
++
++setuptools.setup(
++    setuptools_git_versioning={
++        "version_callback": get_version
++    },
++    setup_requires=[
++        "setuptools>=41",
++        "wheel",
++        "setuptools-git-versioning",
++    ]
++)
+ """
+ 
+ 
+-SETUP_PY_STR = """from coverage.control import Coverage
++SETUP_PY_STR = """import setuptools
+ 
+-coverage = Coverage()
+-coverage.start()
++from version import __version__
+ 
+-try:
+-    import setuptools
+-
+-    from version import __version__
+-
+-    setuptools.setup(
+-        setuptools_git_versioning={
+-            "version_callback": __version__
+-        },
+-        setup_requires=[
+-            "setuptools>=41",
+-            "wheel",
+-            "setuptools-git-versioning",
+-        ]
+-    )
+-finally:
+-    coverage.stop()
+-    coverage.save()
++setuptools.setup(
++    setuptools_git_versioning={
++        "version_callback": __version__
++    },
++    setup_requires=[
++        "setuptools>=41",
++        "wheel",
++        "setuptools-git-versioning",
++    ]
++)
+ """
+ 
+ 
+-- 
+2.51.0
+

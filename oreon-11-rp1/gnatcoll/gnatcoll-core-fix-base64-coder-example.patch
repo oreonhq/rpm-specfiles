@@ -1,0 +1,18 @@
+--- a/examples/coders/base64_coder.adb
++++ b/examples/coders/base64_coder.adb
+@@ -126,8 +126,12 @@
+       exit when Last < Buffer'Last;
+    end loop;
+ 
+-   if Output = Stream'Access then
+-      Stream.Flush (Finish);
+-   end if;
++   declare
++      SA : constant Streams.Stream_Access := Stream'Unchecked_Access;
++   begin
++      if Output = SA then
++         Stream.Flush (Finish);
++      end if;
++   end;
+ 
+ end Base64_Coder;

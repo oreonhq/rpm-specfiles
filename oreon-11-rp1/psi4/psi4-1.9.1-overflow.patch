@@ -1,0 +1,34 @@
+diff -up psi4-1.9.1/psi4/src/psi4/libmints/eribase.cc.overflow psi4-1.9.1/psi4/src/psi4/libmints/eribase.cc
+--- psi4-1.9.1/psi4/src/psi4/libmints/eribase.cc.overflow	2024-02-08 21:08:35.000000000 +0000
++++ psi4-1.9.1/psi4/src/psi4/libmints/eribase.cc	2024-09-03 17:41:08.448741131 +0000
+@@ -3242,7 +3242,11 @@ size_t Libint2TwoElectronInt::compute_sh
+         }
+     } else {
+         for (int i = 0; i < 12; ++i) {
++	  if(i<engines_[1].results().size()) {
+             buffers_[i] = engines_[1].results()[i];
++	  } else {
++	    buffers_[i] = zero_vec_.data();
++	  }
+         }
+         ntot = 12 * sh1.size() * sh2.size() * sh3.size() * sh4.size();
+     }
+@@ -3272,10 +3276,14 @@ size_t Libint2TwoElectronInt::compute_sh
+             buffers_[i] = zero_vec_.data();
+         }
+     } else {
+-        for (int i = 0; i < 78; ++i) {
+-            buffers_[i] = engines_[2].results()[i];
+-        }
+-        ntot = 78 * sh1.size() * sh2.size() * sh3.size() * sh4.size();
++      for (int i = 0; i < 78; ++i) {
++	if(i<engines_[2].results().size()) {
++	  buffers_[i] = engines_[2].results()[i];
++	} else {
++	  buffers_[i] = zero_vec_.data();
++	}
++      }
++      ntot = 78 * sh1.size() * sh2.size() * sh3.size() * sh4.size();
+     }
+ 
+ #ifdef MINTS_TIMER

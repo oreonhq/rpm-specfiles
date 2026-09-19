@@ -1,13 +1,13 @@
-%global source0_hash 3736c6d6cd389efc89adbcb64fe7ba25ffc9d62eb8eaf6393f42bb85f655a8c7
+%global source0_hash 0ebde9435d0c0badecec2f96daef972de7b5600d92dddbfc1f5f81c01cfff87c
 
 %global framework kservice
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:    kf6-%{framework}
 Summary: KDE Frameworks 6 Tier 3 solution for advanced plugin and service introspection
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 
 # The following licenses are in the LICENSES folder but go unused: GPL-2.0-only, GPL-2.0-or-later, GPL-3.0-only, LicenseRef-KDE-Accepted-GPL
@@ -20,12 +20,12 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6DocTools)
-BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6Crash) >= %{version}
+BuildRequires:  cmake(KF6DBusAddons) >= %{version}
+BuildRequires:  cmake(KF6DocTools) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 
@@ -79,6 +79,9 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kservicetypes6
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

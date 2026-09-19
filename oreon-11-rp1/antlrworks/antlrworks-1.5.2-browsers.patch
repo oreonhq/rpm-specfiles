@@ -1,0 +1,12 @@
+diff -up ./src/org/antlr/xjlib/appkit/utils/BrowserLauncher.java.orig ./src/org/antlr/xjlib/appkit/utils/BrowserLauncher.java
+--- ./src/org/antlr/xjlib/appkit/utils/BrowserLauncher.java.orig	2013-10-09 01:50:02.000000000 +0200
++++ ./src/org/antlr/xjlib/appkit/utils/BrowserLauncher.java	2014-07-01 23:55:10.384195029 +0200
+@@ -464,7 +464,7 @@ public class BrowserLauncher {
+ 			case OTHER:
+ 			default:
+                 // Jean Bovet: look for multiple browser in case netscape is not installed
+-				browser = new String[] {"firefox", "mozilla", "netscape", "opera", "konqueror", "galeon", "firebird"};
++				browser = new String[] {"xdg-open", "firefox", "mozilla", "netscape", "opera", "konqueror", "galeon", "firebird"};
+ 				break;
+ 		}
+ 		return browser;

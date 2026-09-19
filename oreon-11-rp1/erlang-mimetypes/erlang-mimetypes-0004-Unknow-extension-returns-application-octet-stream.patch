@@ -1,0 +1,21 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 1 Jun 2016 15:26:47 +0300
+Subject: [PATCH] Unknow extension returns application/octet-stream
+
+See commit 102066196adca9675c38836e01b68ab05fd5dbc6 for further details.
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/test/mimetypes_tests.erl b/test/mimetypes_tests.erl
+index f6b0d68..02d6917 100644
+--- a/test/mimetypes_tests.erl
++++ b/test/mimetypes_tests.erl
+@@ -130,7 +130,7 @@ async_loader_test_() ->
+         ]}.
+ 
+ async_loader_onstart() ->
+-    ?_assertEqual(undefined, mimetypes:ext_to_mimes(<<"foo2">>)).
++    ?_assertEqual([<<"application/octet-stream">>], mimetypes:ext_to_mimes(<<"foo2">>)).
+ 
+ async_loader_wait() ->
+     receive after 5000 -> ok end, %% @todo don't use an arbitrary time

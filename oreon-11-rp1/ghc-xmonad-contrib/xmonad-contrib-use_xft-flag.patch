@@ -1,0 +1,12 @@
+diff --git a/xmonad-contrib.cabal b/xmonad-contrib.cabal
+index 4fd93927..ce1fce15 100644
+--- a/xmonad-contrib.cabal
++++ b/xmonad-contrib.cabal
+@@ -42,6 +42,7 @@ source-repository head
+ 
+ flag use_xft
+   description: Use Xft to render text
++  default: True
+ 
+ flag pedantic
+   description: Be pedantic (-Werror and the like)

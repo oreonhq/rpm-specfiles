@@ -1,0 +1,17 @@
+--- a/examples/coders/base64_coder.gpr
++++ b/examples/coders/base64_coder.gpr
+@@ -1,4 +1,4 @@
+-with "gnatcoll";
++with "gnatcoll_core";
+ project Base64_Coder is
+    for Main use ("base64_coder.adb");
+ end Base64_Coder;
+--- a/examples/projects/gpr_sources.gpr
++++ b/examples/projects/gpr_sources.gpr
+@@ -1,4 +1,5 @@
+-with "gnatcoll";
++with "gnatcoll_core";
++with "gnatcoll_projects";
+ 
+ project GPR_Sources is
+    for Main use ("gpr_sources.adb");

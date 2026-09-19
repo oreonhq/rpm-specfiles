@@ -1,0 +1,51 @@
+From f805c5baeae271dee3827c6bd590d56262f1dec1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Sat, 6 May 2023 17:12:33 +0200
+Subject: [PATCH] Allow non-vendored deps to be used
+
+---
+ pyinstrument/__main__.py | 11 ++++++++++-
+ pyinstrument/util.py     |  5 ++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/pyinstrument/__main__.py b/pyinstrument/__main__.py
+index c216af0dee..06b989270a 100644
+--- a/pyinstrument/__main__.py
++++ b/pyinstrument/__main__.py
+@@ -21,7 +21,16 @@ from pyinstrument.util import (
+     file_supports_unicode,
+     object_with_import_path,
+ )
+-from pyinstrument.vendor import appdirs, keypath
++
++try:
++    from pyinstrument.vendor import appdirs
++except ImportError:
++    import appdirs
++
++try:
++    from pyinstrument.vendor import keypath
++except ImportError:
++    import keypath
+ 
+ # pyright: strict
+ 
+diff --git a/pyinstrument/util.py b/pyinstrument/util.py
+index 7b06f39a60..25501cb2ab 100644
+--- a/pyinstrument/util.py
++++ b/pyinstrument/util.py
+@@ -5,7 +5,10 @@ import sys
+ import warnings
+ from typing import IO, Any, AnyStr, Callable
+ 
+-from pyinstrument.vendor.decorator import decorator
++try:
++    from pyinstrument.vendor.decorator import decorator
++except ImportError:
++    from decorator import decorator
+ 
+ 
+ def object_with_import_path(import_path: str) -> Any:
+-- 
+2.40.1
+

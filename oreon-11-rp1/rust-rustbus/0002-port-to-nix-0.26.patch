@@ -1,0 +1,37 @@
+From 5e0d927c591d1a6004f0e6798aab1032966ac92f Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 26 Dec 2025 20:59:27 +0100
+Subject: [PATCH 2/4] port to nix 0.26
+
+---
+ src/connection/ll_conn.rs | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/connection/ll_conn.rs b/src/connection/ll_conn.rs
+index 8919080..5ef91a3 100644
+--- a/src/connection/ll_conn.rs
++++ b/src/connection/ll_conn.rs
+@@ -62,6 +62,7 @@ impl RecvConn {
+ 
+         const BUFSIZE: usize = 512;
+         let mut tmpbuf = [0u8; BUFSIZE];
++
+         let iovec = IoSliceMut::new(&mut tmpbuf[..usize::min(bytes_to_read, BUFSIZE)]);
+ 
+         let mut cmsgspace = cmsg_space!([RawFd; 10]);
+@@ -95,9 +96,10 @@ impl RecvConn {
+ 
+         let msg = msg?;
+ 
+-        self.msg_buf_in
+-            .extend(&mut tmpbuf[..msg.bytes].iter().copied());
+         self.cmsgs_in.extend(msg.cmsgs());
++        let bytes = msg.bytes;
++        self.msg_buf_in
++            .extend(&mut tmpbuf[..bytes].iter().copied());
+         Ok(())
+     }
+ 
+-- 
+2.52.0
+

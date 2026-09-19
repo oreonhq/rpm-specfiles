@@ -1,0 +1,267 @@
+From 50fed6d7f519f2c45a5776338d7e275f0a93622c Mon Sep 17 00:00:00 2001
+From: Zephyr Lykos <git@mochaa.ws>
+Date: Mon, 8 Sep 2025 20:03:25 +0800
+Subject: [PATCH 4/6] Make KDE theming support optional
+
+---
+ qt5ct/CMakeLists.txt                           |  4 ++--
+ qt5ct/src/qt5ct-common/CMakeLists.txt          |  3 ++-
+ qt5ct/src/qt5ct-common/qt5ct.cpp               |  6 ++++++
+ qt5ct/src/qt5ct-qtplugin/CMakeLists.txt        |  3 ++-
+ .../src/qt5ct-qtplugin/qt5ctplatformtheme.cpp  | 11 ++++++++++-
+ qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.h  |  2 ++
+ qt5ct/src/qt5ct/CMakeLists.txt                 |  3 ++-
+ qt5ct/src/qt5ct/appearancepage.cpp             | 18 +++++++++++++++++-
+ qt5ct/src/qt5ct/iconthemepage.cpp              | 17 +++++++++++++++--
+ 9 files changed, 58 insertions(+), 9 deletions(-)
+
+diff --git a/qt5ct/CMakeLists.txt b/qt5ct/CMakeLists.txt
+index 55683f7..18a4dc7 100644
+--- a/qt5ct/CMakeLists.txt
++++ b/qt5ct/CMakeLists.txt
+@@ -31,9 +31,9 @@ set(QT_MINIMUM_VERSION "5.15.0")
+ 
+ add_compile_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050C00 -DUSE_WIDGETS)
+ 
+-find_package(Qt5 ${QT_MINIMUM_VERSION} COMPONENTS Widgets Concurrent LinguistTools QuickControls2 REQUIRED)
++find_package(Qt5 ${QT_MINIMUM_VERSION} COMPONENTS Widgets Concurrent LinguistTools OPTIONAL_COMPONENTS QuickControls2 REQUIRED)
+ find_package(Qt5Gui ${QT_MINIMUM_VERSION} CONFIG REQUIRED Private)
+-find_package(KF5 COMPONENTS Config ConfigWidgets IconThemes REQUIRED)
++find_package(KF5 COMPONENTS Config ConfigWidgets IconThemes)
+ 
+ if(NOT DISABLE_DBUS)
+     find_package(Qt5 ${QT_MINIMUM_VERSION} COMPONENTS DBus ThemeSupport REQUIRED)
+diff --git a/qt5ct/src/qt5ct-common/CMakeLists.txt b/qt5ct/src/qt5ct-common/CMakeLists.txt
+index 494357d..7323ee1 100644
+--- a/qt5ct/src/qt5ct-common/CMakeLists.txt
++++ b/qt5ct/src/qt5ct-common/CMakeLists.txt
+@@ -13,5 +13,6 @@ set_target_properties(qt5ct-common PROPERTIES VERSION ${CMAKE_PROJECT_VERSION})
+ target_compile_definitions(qt5ct-common PRIVATE -DQT5CT_LIBRARY -DQT5CT_HAVE_CONFIG_H)
+ target_include_directories(qt5ct-common PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+ target_include_directories(qt5ct-common INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+-target_link_libraries(qt5ct-common PRIVATE Qt5::Core Qt5::Gui KF5::ConfigCore KF5::ConfigWidgets)
++target_link_libraries(qt5ct-common PRIVATE Qt5::Core Qt5::Gui $<TARGET_NAME_IF_EXISTS:KF5::ConfigCore> $<TARGET_NAME_IF_EXISTS:KF5::ConfigWidgets>)
++target_compile_definitions(qt5ct-common PRIVATE $<$<TARGET_EXISTS:KF5::ConfigCore>:KF_CONFIGCORE_LIB> $<$<TARGET_EXISTS:KF5::ConfigWidgets>:KF_CONFIGWIDGETS_LIB>)
+ install(TARGETS qt5ct-common DESTINATION ${CMAKE_INSTALL_LIBDIR})
+diff --git a/qt5ct/src/qt5ct-common/qt5ct.cpp b/qt5ct/src/qt5ct-common/qt5ct.cpp
+index 27bd83b..c9dc629 100644
+--- a/qt5ct/src/qt5ct-common/qt5ct.cpp
++++ b/qt5ct/src/qt5ct-common/qt5ct.cpp
+@@ -34,8 +34,10 @@
+ #include <QFile>
+ #include <QSettings>
+ #include <QtDebug>
++#if defined KF_CONFIGCORE_LIB && defined KF_CONFIGWIDGETS_LIB
+ #include <KSharedConfig>
+ #include <KColorScheme>
++#endif
+ #include "qt5ct.h"
+ 
+ #if !defined(QT5CT_IN_TREE) && !defined(QT5CT_DATADIR)
+@@ -122,7 +124,9 @@ QStringList Qt5CT::sharedColorSchemePaths()
+     for(const QString &p : QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation))
+     {
+         paths << (p + QLatin1String("/qt5ct/colors"));
++#if defined KF_CONFIGCORE_LIB && defined KF_CONFIGWIDGETS_LIB
+         paths << (p + QLatin1String("/color-schemes"));
++#endif
+     }
+ #ifndef QT5CT_IN_TREE
+     paths << QLatin1String(QT5CT_DATADIR"/qt5ct/colors");
+@@ -159,8 +163,10 @@ bool Qt5CT::isKColorScheme(const QString &filePath)
+ 
+ QPalette Qt5CT::loadColorScheme(const QString &filePath, const QPalette &fallback)
+ {
++#if defined KF_CONFIGCORE_LIB && defined KF_CONFIGWIDGETS_LIB
+     if(isKColorScheme(filePath))
+         return KColorScheme::createApplicationPalette(KSharedConfig::openConfig(filePath));
++#endif
+ 
+     QPalette customPalette;
+     QSettings settings(filePath, QSettings::IniFormat);
+diff --git a/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt b/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt
+index 1af458f..0e39277 100644
+--- a/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt
++++ b/qt5ct/src/qt5ct-qtplugin/CMakeLists.txt
+@@ -5,7 +5,8 @@ set(lib_SRCS
+ 
+ add_library(qt5ct-qtplugin MODULE ${lib_SRCS})
+ set_target_properties(qt5ct-qtplugin PROPERTIES OUTPUT_NAME qt5ct)
+-target_link_libraries(qt5ct-qtplugin PRIVATE Qt5::Widgets Qt5::GuiPrivate Qt5::QuickControls2 KF5::IconThemes qt5ct-common)
++target_link_libraries(qt5ct-qtplugin PRIVATE Qt5::Widgets Qt5::GuiPrivate $<TARGET_NAME_IF_EXISTS:Qt5::QuickControls2> $<TARGET_NAME_IF_EXISTS:KF5::IconThemes> qt5ct-common)
++target_compile_definitions(qt5ct-qtplugin PRIVATE $<$<TARGET_EXISTS:KF5::IconThemes>:KF_ICONTHEMES_LIB>)
+ if(NOT DISABLE_DBUS)
+     target_link_libraries(qt5ct-qtplugin PRIVATE Qt5::DBus Qt5::ThemeSupportPrivate)
+ endif()
+diff --git a/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.cpp b/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.cpp
+index ad920f2..505decd 100644
+--- a/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.cpp
++++ b/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.cpp
+@@ -45,7 +45,9 @@
+ #endif
+ #include <QFile>
+ #include <QFileSystemWatcher>
++#ifdef QT_QUICKCONTROLS2_LIB
+ #include <QQuickStyle>
++#endif
+ 
+ #include "qt5ct.h"
+ #include "qt5ctplatformtheme.h"
+@@ -59,8 +61,10 @@
+ #include <QStringList>
+ #include <qpa/qplatformthemefactory_p.h>
+ 
++#ifdef KF_ICONTHEMES_LIB
+ #include <KIconEngine>
+ #include <KIconLoader>
++#endif
+ 
+ Q_LOGGING_CATEGORY(lqt5ct, "qt5ct", QtWarningMsg)
+ 
+@@ -77,7 +81,10 @@ Qt5CTPlatformTheme::Qt5CTPlatformTheme()
+         QMetaObject::invokeMethod(this, "createFSWatcher", Qt::QueuedConnection);
+ #endif
+         QGuiApplication::setFont(m_generalFont);
+-#ifdef QT_WIDGETS_LIB
++        //must be applied before Q_COREAPP_STARTUP_FUNCTION execution
++        if(Qt5CT::isKColorScheme(m_schemePath))
++            qApp->setProperty("KDE_COLOR_SCHEME_PATH", m_schemePath);
++#if defined QT_WIDGETS_LIB && defined QT_QUICKCONTROLS2_LIB
+         if(hasWidgets())
+             //don't override the value explicitly set by the user
+             if(QQuickStyle::name().isEmpty() || QQuickStyle::name() == QLatin1String("Fusion"))
+@@ -193,10 +200,12 @@ QIcon Qt5CTPlatformTheme::fileIcon(const QFileInfo &fileInfo, QPlatformTheme::Ic
+ }
+ #endif
+ 
++#ifdef KF_ICONTHEMES_LIB
+ QIconEngine *Qt5CTPlatformTheme::createIconEngine(const QString &iconName) const
+ {
+     return new KIconEngine(iconName, KIconLoader::global());
+ }
++#endif
+ 
+ void Qt5CTPlatformTheme::applySettings()
+ {
+diff --git a/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.h b/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.h
+index 3f3f700..89724cb 100644
+--- a/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.h
++++ b/qt5ct/src/qt5ct-qtplugin/qt5ctplatformtheme.h
+@@ -88,7 +88,9 @@ public:
+     //virtual QPixmap fileIconPixmap(const QFileInfo &fileInfo, const QSizeF &size,
+     //                               QPlatformTheme::IconOptions iconOptions = 0) const;
+ 
++#ifdef KF_ICONTHEMES_LIB
+     virtual QIconEngine *createIconEngine(const QString &iconName) const override;
++#endif
+     //virtual QList<QKeySequence> keyBindings(QKeySequence::StandardKey key) const;
+     //virtual QString standardButtonText(int button) const;
+ 
+diff --git a/qt5ct/src/qt5ct/CMakeLists.txt b/qt5ct/src/qt5ct/CMakeLists.txt
+index 0248e02..d19ef7c 100644
+--- a/qt5ct/src/qt5ct/CMakeLists.txt
++++ b/qt5ct/src/qt5ct/CMakeLists.txt
+@@ -28,7 +28,8 @@ set(app_SRCS
+ 
+ add_executable(qt5ct ${app_SRCS})
+ add_dependencies(qt5ct app_translations)
+-target_link_libraries(qt5ct PRIVATE Qt5::Widgets Qt5::Concurrent Qt5::WidgetsPrivate KF5::ConfigCore qt5ct-common)
++target_link_libraries(qt5ct PRIVATE Qt5::Widgets Qt5::Concurrent Qt5::WidgetsPrivate $<TARGET_NAME_IF_EXISTS:KF5::ConfigCore> $<TARGET_NAME_IF_EXISTS:KF5::ConfigWidgets> qt5ct-common)
++target_compile_definitions(qt5ct PRIVATE $<$<TARGET_EXISTS:KF5::ConfigCore>:KF_CONFIGCORE_LIB> $<$<TARGET_EXISTS:KF5::ConfigWidgets>:KF_CONFIGWIDGETS_LIB>)
+ 
+ if(NOT QT5CT_IN_TREE)
+   target_link_libraries(qt5ct PRIVATE app_resources)
+diff --git a/qt5ct/src/qt5ct/appearancepage.cpp b/qt5ct/src/qt5ct/appearancepage.cpp
+index 2106c37..2204250 100644
+--- a/qt5ct/src/qt5ct/appearancepage.cpp
++++ b/qt5ct/src/qt5ct/appearancepage.cpp
+@@ -35,8 +35,10 @@
+ #include <QMenu>
+ #include <QIcon>
+ #include <QStringList>
++#ifdef KF_CONFIGCORE_LIB
+ #include <KSharedConfig>
+ #include <KConfigGroup>
++#endif
+ #include <qpa/qplatformthemefactory_p.h>
+ #include <qpa/qplatformtheme.h>
+ #include "qt5ct.h"
+@@ -124,6 +126,13 @@ void AppearancePage::writeSettings()
+ 
+     settings.setValue("standard_dialogs", m_ui->dialogComboBox->currentData().toString());
+     settings.endGroup();
++
++#ifdef KF_CONFIGCORE_LIB
++    KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
++    KConfigGroup group(config, "KDE");
++    group.writeEntry("widgetStyle", "qt6ct-style");
++    group.sync();
++#endif
+ }
+ 
+ void AppearancePage::on_styleComboBox_activated(const QString &text)
+@@ -430,18 +439,25 @@ void AppearancePage::findColorSchemes(const QString &path)
+ {
+     QDir dir(path);
+     dir.setFilter(QDir::Files);
+-    dir.setNameFilters(QStringList() << "*.conf" << "*.colors");
++    QStringList nameFilters;
++    nameFilters << "*.conf";
++#if defined KF_CONFIGCORE_LIB && defined KF_CONFIGWIDGETS_LIB
++    nameFilters << "*.colors";
++#endif
++    dir.setNameFilters(nameFilters);
+ 
+     for(const QFileInfo &info : dir.entryInfoList())
+     {
+         QString name = info.baseName();
+         QString path = info.filePath();
++#if defined KF_CONFIGCORE_LIB && defined KF_CONFIGWIDGETS_LIB
+         if(Qt5CT::isKColorScheme(path))
+         {
+             KSharedConfigPtr config = KSharedConfig::openConfig(path, KConfig::SimpleConfig);
+             KConfigGroup group(config, "General");
+             name = group.readEntry("Name", name) + " (KColorScheme)";
+         }
++#endif
+         m_ui->colorSchemeComboBox->addItem(name, path);
+     }
+ }
+diff --git a/qt5ct/src/qt5ct/iconthemepage.cpp b/qt5ct/src/qt5ct/iconthemepage.cpp
+index 08ff6d2..de462f4 100644
+--- a/qt5ct/src/qt5ct/iconthemepage.cpp
++++ b/qt5ct/src/qt5ct/iconthemepage.cpp
+@@ -34,6 +34,10 @@
+ #include <QtConcurrent>
+ #include <QProgressBar>
+ #include <QMetaObject>
++#ifdef KF_CONFIGCORE_LIB
++#include <KConfigGroup>
++#include <KSharedConfig>
++#endif
+ #include "qt5ct.h"
+ #include "iconthemepage.h"
+ #include "ui_iconthemepage.h"
+@@ -65,8 +69,17 @@ void IconThemePage::writeSettings()
+ {
+     QSettings settings(Qt5CT::configFile(), QSettings::IniFormat);
+     QTreeWidgetItem *item = m_ui->treeWidget->currentItem();
+-    if(item)
+-        settings.setValue("Appearance/icon_theme", item->data(3, Qt::UserRole));
++    if(!item)
++        return;
++
++    settings.setValue("Appearance/icon_theme", item->data(3, Qt::UserRole));
++
++#ifdef KF_CONFIGCORE_LIB
++    KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
++    KConfigGroup group(config, "Icons");
++    group.writeEntry("Theme", item->data(3, Qt::UserRole));
++    group.sync();
++#endif
+ }
+ 
+ void IconThemePage::onFinished()
+-- 
+2.51.0
+

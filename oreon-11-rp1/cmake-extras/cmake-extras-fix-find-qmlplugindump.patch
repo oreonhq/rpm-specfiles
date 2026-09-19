@@ -1,0 +1,13 @@
+diff --git a/src/QmlPlugins/QmlPluginsConfig.cmake b/src/QmlPlugins/QmlPluginsConfig.cmake
+index f9750b8..6134f65 100644
+--- a/src/QmlPlugins/QmlPluginsConfig.cmake
++++ b/src/QmlPlugins/QmlPluginsConfig.cmake
+@@ -7,7 +7,7 @@ if (NOT DEFINED QT_VERSION_MAJOR)
+ endif()
+ 
+ if(NOT TARGET qmlplugindump)
+-    find_program(qmlplugindump_exe qmlplugindump HINTS /usr/lib/qt${QT_VERSION_MAJOR}/bin/)
++    find_program(qmlplugindump_exe qmlplugindump HINTS /usr/lib/qt${QT_VERSION_MAJOR}/bin/ /usr/lib64/qt${QT_VERSION_MAJOR}/bin/)
+ 
+     if(NOT qmlplugindump_exe)
+       message(FATAL_ERROR "Could not locate qmlplugindump.")

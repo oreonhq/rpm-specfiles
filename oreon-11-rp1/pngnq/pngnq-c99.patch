@@ -1,0 +1,17 @@
+Include <string.h> for the strncmp function.  This avoids an implicit
+function declaration and build failures with future compilers.
+
+Submitted upstream: <https://sourceforge.net/p/pngnq/patches/6/>
+
+diff --git a/src/rwpng.c b/src/rwpng.c
+index 7bdbf9e1a839ca9d..d178fd4bb1000ee0 100644
+--- a/src/rwpng.c
++++ b/src/rwpng.c
+@@ -31,6 +31,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ 
+ #include "png.h"        /* libpng header */
+ #include "zlib.h"       /* need a few symbols from this */

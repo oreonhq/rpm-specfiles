@@ -1,0 +1,47 @@
+From 7aa47640c202cc4a9c16aa7df98191236743c8ba Mon Sep 17 00:00:00 2001
+From: Alexander Volkov <a.volkov@rusbitech.ru>
+Date: Thu, 1 Dec 2016 17:29:33 +0300
+Subject: [PATCH 16/16] Remove obsolete and unused QBB10StylePlugin::keys()
+
+It was supposed to be an overrider of QStylePlugin::keys(),
+but QStylePlugin::keys() was removed by
+09992c654db860b22d6b109707462346bfb5ca26 in qtbase (before Qt 5.0).
+
+Change-Id: I8d61dcf2c6c5a0ea43bcdbc9608b72f0edd4d196
+Reviewed-by: J-P Nurmi <jpnurmi@qt.io>
+---
+ src/plugins/styles/bb10style/qbb10styleplugin.cpp | 5 -----
+ src/plugins/styles/bb10style/qbb10styleplugin.h   | 1 -
+ 2 files changed, 6 deletions(-)
+
+diff --git a/src/plugins/styles/bb10style/qbb10styleplugin.cpp b/src/plugins/styles/bb10style/qbb10styleplugin.cpp
+index 98607f1..e77e258 100644
+--- a/src/plugins/styles/bb10style/qbb10styleplugin.cpp
++++ b/src/plugins/styles/bb10style/qbb10styleplugin.cpp
+@@ -56,11 +56,6 @@ QStyle *QBB10StylePlugin::create(const QString &key)
+     return 0;
+ }
+ 
+-QStringList QBB10StylePlugin::keys() const
+-{
+-    return QStringList() << QLatin1String("bb10bright") << QLatin1String("bb10dark");
+-}
+-
+ QT_END_NAMESPACE
+ 
+ #include "moc_qbb10styleplugin.cpp"
+diff --git a/src/plugins/styles/bb10style/qbb10styleplugin.h b/src/plugins/styles/bb10style/qbb10styleplugin.h
+index e013926..2264dfe 100644
+--- a/src/plugins/styles/bb10style/qbb10styleplugin.h
++++ b/src/plugins/styles/bb10style/qbb10styleplugin.h
+@@ -48,7 +48,6 @@ public:
+     ~QBB10StylePlugin();
+ 
+     QStyle *create(const QString &key) Q_DECL_OVERRIDE;
+-    QStringList keys() const;
+ };
+ 
+ QT_END_NAMESPACE
+-- 
+2.7.4
+

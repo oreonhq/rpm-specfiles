@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+set -e
+#set -x
+
+# java-jd-decompiler launch script
+
+# JPackage Project <http://www.jpackage.org/>
+# Source functions library
+
+. /usr/share/java-utils/java-functions
+
+: ${MAIN_CLASS:=Main}
+
+# set java and jvm arguments
+_set_java_home
+set_jvm
+
+# all dependencies must be on classpath
+CLASSPATH=$CLASSPATH:/usr/share/java/java-jd-decompiler/jd-core.jar:/usr/share/java/java-jd-decompiler/launcher.jar
+run "$@"

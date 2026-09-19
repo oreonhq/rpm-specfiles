@@ -1,0 +1,34 @@
+diff -uprN ubuntu-mate-mate-menu-7af4f232dc12-orig/mate_menu/plugins/system_management.py ubuntu-mate-mate-menu-7af4f232dc12/mate_menu/plugins/system_management.py
+--- ubuntu-mate-mate-menu-7af4f232dc12-orig/mate_menu/plugins/system_management.py	2017-05-14 01:47:13.000000000 +0200
++++ ubuntu-mate-mate-menu-7af4f232dc12/mate_menu/plugins/system_management.py	2017-05-16 18:31:52.802555453 +0200
+@@ -149,18 +149,21 @@ class pluginclass( object ):
+                     return True
+ 
+         if ( self.showPackageManager == True ):
+-            if pathExists("synaptic-pkexec"):
+-                Button2 = easyButton("synaptic", self.iconsize, [_("Package Manager")], -1, -1 )
+-                Button2.connect( "clicked", self.ButtonClicked, "synaptic-pkexec" )
++            if pathExists("yumex"):
++                Button2 = easyButton("yumex", self.iconsize, [_("Package Manager")], -1, -1 )
++                Button2.connect( "clicked", self.ButtonClicked, "/usr/bin/yumex -n" )
++            elif pathExists("dnfdragora"):
++                Button2 = easyButton("dnfdragora", self.iconsize, [_("Package Manager")], -1, -1 )
++                Button2.connect( "clicked", self.ButtonClicked, "/usr/bin/dnfdragora" )
++            elif pathExists("yumex-dnf"):
++                Button2 = easyButton("yumex-dnf", self.iconsize, [_("Package Manager")], -1, -1 )
++                Button2.connect( "clicked", self.ButtonClicked, "/usr/bin/yumex-dnf" )
++            elif pathExists("gpk-application"):
++                Button2 = easyButton("system-software-install", self.iconsize, [_("Package Manager")], -1, -1 )
++                Button2.connect("clicked", self.ButtonClicked, "/usr/bin/gpk-application")
+             elif pathExists("gnome-software"):
+                 Button2 = easyButton("org.gnome.Software", self.iconsize, [_("Package Manager")], -1, -1 )
+                 Button2.connect( "clicked", self.ButtonClicked, "gnome-software" )
+-            elif pathExists("software-center"):
+-                Button2 = easyButton("softwarecenter", self.iconsize, [_("Package Manager")], -1, -1 )
+-                Button2.connect( "clicked", self.ButtonClicked, "software-center" )
+-            elif pathExists("ubuntu-mate-welcome"):
+-                Button2 = easyButton("system-software-install", self.iconsize, [_("Package Manager")], -1, -1 )
+-                Button2.connect("clicked", self.ButtonClicked, "ubuntu-mate-welcome --software-only")
+             try:
+                 Button2.show()
+                 self.systemBtnHolder.pack_start( Button2, False, False, 0 )

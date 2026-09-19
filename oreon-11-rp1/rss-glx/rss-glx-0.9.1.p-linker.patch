@@ -1,0 +1,12 @@
+diff -ru rss-glx_0.9.1.p.orig/src/Makefile.in rss-glx_0.9.1.p/src/Makefile.in
+--- rss-glx_0.9.1.p.orig/src/Makefile.in.linker	2018-08-31 15:13:51.668365086 +0200
++++ rss-glx_0.9.1.p/src/Makefile.in	2018-08-31 15:16:21.985747074 +0200
+@@ -446,7 +446,7 @@
+ lorenz_LDADD = -LrsMath -lrsMath
+ plasma_SOURCES = driver.c plasma.cpp rsDefines.h rsRand.h
+ pixelcity_SOURCES = driver.c
+-pixelcity_LDADD = @quesoglc_LIBS@ -LPixelCity -lPixelCity
++pixelcity_LDADD = -LPixelCity -lPixelCity @quesoglc_LIBS@ 
+ pixelcity_LINK = $(CXXLINK)
+ skyrocket_SOURCES = driver.c skyrocket.cpp skyrocket_flare.cpp skyrocket_particle.cpp skyrocket_shockwave.cpp skyrocket_smoke.cpp skyrocket_sound.cpp skyrocket_world.cpp skyrocket_textures.cpp rsDefines.h rsRand.h
+ solarwinds_SOURCES = driver.c solarwinds.cpp rsDefines.h rsRand.h

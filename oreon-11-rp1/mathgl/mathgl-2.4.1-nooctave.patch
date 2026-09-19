@@ -1,0 +1,13 @@
+diff -urp mathgl-2.4.1/CMakeLists.txt mathgl-2.4.1-nooctave/CMakeLists.txt
+--- mathgl-2.4.1/CMakeLists.txt	2017-12-05 11:59:25.413103840 +0700
++++ mathgl-2.4.1-nooctave/CMakeLists.txt	2017-12-05 12:01:15.317779072 +0700
+@@ -233,7 +233,8 @@ CMAKE_DEPENDENT_OPTION(enable-json-sampl
+ CMAKE_DEPENDENT_OPTION(enable-json-sample-we "Enable JSON sample (WebEngine variant)." OFF "enable-json-sample" OFF)
+ MGL_DEPENDENT_OPTION(enable-python "Enable python interface" OFF "NOT enable-lgpl" ON "NOT enable-all-swig" ON)
+ MGL_DEPENDENT_OPTION(enable-lua "Enable Lua (v.5.1) interface" OFF "NOT enable-lgpl" ON "NOT enable-all-swig" ON)
+-MGL_DEPENDENT_OPTION(enable-octave "Enable octave interface" OFF "NOT enable-lgpl" ON "NOT enable-all-swig" ON)
++#MGL_DEPENDENT_OPTION(enable-octave "Enable octave interface" OFF "NOT enable-lgpl" ON "NOT enable-all-swig" ON)
++SET(enable-octave OFF)
+ MGL_DEPENDENT_OPTION(enable-octave-install "Octave interface will install for all users" ON "NOT enable-lgpl" ON "NOT enable-all-swig" ON)
+ 
+ include_directories( ${MathGL2_SOURCE_DIR}/include ${MathGL2_BINARY_DIR}/include)

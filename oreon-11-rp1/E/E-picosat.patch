@@ -1,0 +1,227 @@
+--- EXTERNAL/Makefile.orig	2023-11-26 11:15:16.000000000 -0700
++++ EXTERNAL/Makefile	2023-12-28 16:16:09.952069905 -0700
+@@ -34,7 +34,7 @@ include ../Makefile.services
+ 
+ CSSCPA = CSSCPA_filter.o cex_csscpa.o \
+             ../lib/CLAUSES.a ../lib/ORDERINGS.a ../lib/TERMS.a\
+-            ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/INOUT.a ../lib/BASICS.a
+ 
+ $(LIB): $(CSSCPA)
+ 	$(LD) -o CSSCPA_filter $(CSSCPA) $(LIBS)
+--- Makefile.orig	2023-11-26 11:15:16.000000000 -0700
++++ Makefile	2023-12-28 16:16:44.286581082 -0700
+@@ -22,7 +22,7 @@ include Makefile.vars
+ 
+ PROJECT  = $(shell basename `pwd`)
+ 
+-LIBS     = CONTRIB BASICS INOUT TERMS ORDERINGS CLAUSES PROPOSITIONAL LEARN \
++LIBS     = BASICS INOUT TERMS ORDERINGS CLAUSES PROPOSITIONAL LEARN \
+            PCL2 HEURISTICS CONTROL
+ HEADERS  = $(LIBS) EXTERNAL PROVER
+ CODE     = $(LIBS) SIMPLE_APPS EXTERNAL PROVER
+@@ -167,7 +167,6 @@ config:
+ 	echo 'Configuring build system'
+ 	$(MAKE) links
+ 	$(MAKE) depend
+-	cd CONTRIB; $(MAKE) config
+ 
+ 
+ # Configure and copy executables to the installation directory
+@@ -186,7 +185,6 @@ install:
+ 	-sh -c 'development_tools/e_install PROVER/ekb_delete     $(EXECPATH)'
+ 	-sh -c 'development_tools/e_install PROVER/ekb_ginsert    $(EXECPATH)'
+ 	-sh -c 'development_tools/e_install PROVER/ekb_insert     $(EXECPATH)'
+-	-sh -c 'development_tools/e_install CONTRIB/picosat-965/picosat $(EXECPATH)'
+ 	-sh -c 'mkdir -p $(MANPATH)'
+ 	-sh -c 'development_tools/e_install DOC/man/eprover.1      $(MANPATH)'
+ 	-sh -c 'development_tools/e_install DOC/man/epclextract.1  $(MANPATH)'
+--- Makefile.vars.orig	2023-11-26 11:15:16.000000000 -0700
++++ Makefile.vars	2023-12-28 16:16:09.953069891 -0700
+@@ -49,7 +49,7 @@ DVIPS      = dvips     # Optional, see a
+ 
+ # System libraries:
+ 
+-LIBS = -lm
++LIBS = -lpicosat-trace -lm
+ 
+ # Use the C compiler to generate dependencies:
+ MAKEDEPEND = $(CC) -M $(CFLAGS) *.c > Makefile.dependencies
+--- PROVER/Makefile.orig	2023-11-26 11:15:16.000000000 -0700
++++ PROVER/Makefile	2023-12-28 16:16:09.953069891 -0700
+@@ -41,14 +41,14 @@ include ../Makefile.services
+ EPROVER = eprover.o ../lib/CONTROL.a ../lib/HEURISTICS.a\
+             ../lib/LEARN.a\
+             ../lib/CLAUSES.a ../lib/ORDERINGS.a ../lib/TERMS.a\
+-            ../lib/INOUT.a ../lib/BASICS.a  ../lib/CONTRIB.a
++            ../lib/INOUT.a ../lib/BASICS.a
+ 
+ $(EPROVER_BIN): $(EPROVER)
+ 	$(LD) -o $(EPROVER_BIN) $(EPROVER) $(LIBS)
+ 
+ E_LTB_RUNNER = e_ltb_runner.o ../lib/CONTROL.a ../lib/HEURISTICS.a\
+             ../lib/CLAUSES.a ../lib/ORDERINGS.a ../lib/TERMS.a\
+-            ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/INOUT.a ../lib/BASICS.a
+ 
+ e_ltb_runner: $(E_LTB_RUNNER)
+ 	$(LD) -o e_ltb_runner $(E_LTB_RUNNER) $(LIBS)
+@@ -56,7 +56,7 @@ e_ltb_runner: $(E_LTB_RUNNER)
+ 
+ E_STRATPAR = e_stratpar.o ../lib/CONTROL.a ../lib/HEURISTICS.a\
+             ../lib/CLAUSES.a ../lib/ORDERINGS.a ../lib/TERMS.a\
+-            ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/INOUT.a ../lib/BASICS.a
+ 
+ e_stratpar: $(E_STRATPAR)
+ 	$(LD) -o e_stratpar $(E_STRATPAR) $(LIBS)
+@@ -64,7 +64,7 @@ e_stratpar: $(E_STRATPAR)
+ 
+ E_DEDUCTION_SERVER = e_deduction_server.o ../lib/CONTROL.a ../lib/HEURISTICS.a\
+             ../lib/CLAUSES.a ../lib/ORDERINGS.a ../lib/TERMS.a\
+-            ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/INOUT.a ../lib/BASICS.a
+ 
+ e_deduction_server: $(E_DEDUCTION_SERVER)
+ 	$(LD) -o e_deduction_server $(E_DEDUCTION_SERVER) $(LIBS)
+@@ -72,7 +72,7 @@ e_deduction_server: $(E_DEDUCTION_SERVER
+ 
+ E_AXFILTER = e_axfilter.o ../lib/CONTROL.a ../lib/HEURISTICS.a\
+             ../lib/CLAUSES.a ../lib/ORDERINGS.a ../lib/TERMS.a\
+-            ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/INOUT.a ../lib/BASICS.a
+ 
+ e_axfilter: $(E_AXFILTER)
+ 	$(LD) -o e_axfilter $(E_AXFILTER) $(LIBS)
+@@ -86,7 +86,7 @@ e_server: $(E_SERVER)
+ 
+ E_CLIENT = e_client.o ../lib/CONTROL.a ../lib/HEURISTICS.a\
+             ../lib/CLAUSES.a ../lib/ORDERINGS.a ../lib/TERMS.a\
+-            ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/INOUT.a ../lib/BASICS.a
+ 
+ e_client: $(E_CLIENT)
+ 	$(LD) -o e_client $(E_CLIENT) $(LIBS)
+@@ -94,14 +94,14 @@ e_client: $(E_CLIENT)
+ 
+ EGROUND = eground.o ../lib/HEURISTICS.a\
+             ../lib/CLAUSES.a ../lib/ORDERINGS.a ../lib/TERMS.a\
+-            ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/INOUT.a ../lib/BASICS.a
+ 
+ eground: $(EGROUND)
+ 	$(LD) -o eground $(EGROUND) $(LIBS)
+ 
+ ENORMALIZER = enormalizer.o ../lib/HEURISTICS.a\
+             ../lib/CLAUSES.a ../lib/ORDERINGS.a ../lib/TERMS.a\
+-            ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/INOUT.a ../lib/BASICS.a
+ 
+ enormalizer: $(ENORMALIZER)
+ 	$(LD) -o enormalizer $(ENORMALIZER) $(LIBS)
+@@ -109,14 +109,14 @@ enormalizer: $(ENORMALIZER)
+ 
+ EDPLL = edpll.o ../lib/PROPOSITIONAL.a ../lib/CLAUSES.a\
+         ../lib/ORDERINGS.a ../lib/TERMS.a ../lib/INOUT.a\
+-	../lib/BASICS.a ../lib/CONTRIB.a
++	../lib/BASICS.a
+ 
+ edpll: $(EDPLL)
+ 	$(LD) -o edpll $(EDPLL) $(LIBS)
+ 
+ CLASSIFY = classify_problem.o ../lib/CONTROL.a ../lib/HEURISTICS.a\
+             ../lib/CLAUSES.a ../lib/ORDERINGS.a ../lib/TERMS.a\
+-            ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/INOUT.a ../lib/BASICS.a
+ 
+ classify_problem: $(CLASSIFY)
+ 	$(LD) -o classify_problem $(CLASSIFY) $(LIBS)
+@@ -124,7 +124,7 @@ classify_problem: $(CLASSIFY)
+ EPATTERNIZE = epatternize.o ../lib/CONTROL.a ../lib/HEURISTICS.a\
+             ../lib/LEARN.a\
+             ../lib/CLAUSES.a ../lib/ORDERINGS.a ../lib/TERMS.a\
+-            ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/INOUT.a ../lib/BASICS.a
+ 
+ epatternize: $(EPATTERNIZE)
+ 	$(LD) -o epatternize $(EPATTERNIZE) $(LIBS)
+@@ -138,7 +138,7 @@ epatternize: $(EPATTERNIZE)
+ 
+ DIRECT_EXAMPLES = direct_examples.o \
+             ../lib/PCL2.a ../lib/CLAUSES.a ../lib/ORDERINGS.a \
+-            ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a
+ 
+ direct_examples: $(DIRECT_EXAMPLES)
+ 	$(LD) -o direct_examples $(DIRECT_EXAMPLES) $(LIBS)
+@@ -146,7 +146,7 @@ direct_examples: $(DIRECT_EXAMPLES)
+ 
+ EPCLANALYSE = epclanalyse.o \
+         ../lib/PCL2.a ../lib/HEURISTICS.a ../lib/CLAUSES.a ../lib/ORDERINGS.a \
+-        ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++        ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a
+ 
+ epclanalyse: $(EPCLANALYSE)
+ 	$(LD) -o epclanalyse $(EPCLANALYSE) $(LIBS)
+@@ -154,7 +154,7 @@ epclanalyse: $(EPCLANALYSE)
+ 
+ EPCLLEMMA = epcllemma.o \
+         ../lib/PCL2.a ../lib/HEURISTICS.a ../lib/CLAUSES.a ../lib/ORDERINGS.a \
+-        ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++        ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a
+ 
+ epcllemma: $(EPCLLEMMA)
+ 	$(LD) -o epcllemma $(EPCLLEMMA) $(LIBS)
+@@ -162,14 +162,14 @@ epcllemma: $(EPCLLEMMA)
+ 
+ EPCLEXTRACT = epclextract.o \
+         ../lib/PCL2.a ../lib/HEURISTICS.a ../lib/CLAUSES.a ../lib/ORDERINGS.a \
+-        ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++        ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a
+ 
+ epclextract: $(EPCLEXTRACT)
+ 	$(LD) -o epclextract $(EPCLEXTRACT) $(LIBS)
+ 
+ CHECKPROOF = checkproof.o \
+         ../lib/PCL2.a ../lib/CLAUSES.a ../lib/ORDERINGS.a \
+-        ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++        ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a
+ 
+ checkproof: $(CHECKPROOF)
+ 	$(LD) -o checkproof $(CHECKPROOF) $(LIBS)
+@@ -177,7 +177,7 @@ checkproof: $(CHECKPROOF)
+ EKB_CREATE = ekb_create.o \
+             ../lib/LEARN.a ../lib/CLAUSES.a \
+             ../lib/ORDERINGS.a \
+-            ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a
+ 
+ ekb_create: $(EKB_CREATE)
+ 	$(LD) -o ekb_create $(EKB_CREATE) $(LIBS)
+@@ -185,7 +185,7 @@ ekb_create: $(EKB_CREATE)
+ EKB_INSERT = ekb_insert.o \
+             ../lib/LEARN.a ../lib/CLAUSES.a \
+             ../lib/ORDERINGS.a \
+-            ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a
+ 
+ ekb_insert: $(EKB_INSERT)
+ 	$(LD) -o ekb_insert $(EKB_INSERT) $(LIBS)
+@@ -193,7 +193,7 @@ ekb_insert: $(EKB_INSERT)
+ EKB_GINSERT = ekb_ginsert.o \
+ 	    ../lib/PCL2.a ../lib/LEARN.a ../lib/CLAUSES.a \
+             ../lib/ORDERINGS.a \
+-            ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a
+ 
+ ekb_ginsert: $(EKB_GINSERT)
+ 	$(LD) -o ekb_ginsert $(EKB_GINSERT) $(LIBS)
+@@ -201,7 +201,7 @@ ekb_ginsert: $(EKB_GINSERT)
+ EKB_DELETE = ekb_delete.o \
+             ../lib/LEARN.a ../lib/CLAUSES.a \
+             ../lib/ORDERINGS.a \
+-            ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a ../lib/CONTRIB.a
++            ../lib/TERMS.a ../lib/INOUT.a ../lib/BASICS.a
+ 
+ ekb_delete: $(EKB_DELETE)
+ 	$(LD) -o ekb_delete $(EKB_DELETE) $(LIBS)

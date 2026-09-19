@@ -1,0 +1,11 @@
+--- a/setup.py	2024-04-15 17:56:05.560501673 +0300
++++ b/setup.py	2024-04-15 17:56:15.710474879 +0300
+@@ -61,8 +61,6 @@
+     data_files=get_data_files("share/man/man1", "docs/man1") + \
+                get_data_files("share/wult/helpers/wult-freq-helper", "helpers/wult-freq-helper",
+                               exclude=_PYTHON_HELPERS) + \
+-               get_data_files("share/wult/drivers", "drivers") + \
+-               get_data_files("share/wult/helpers", "helpers") + \
+                get_data_files("share/wult/defs/wult", "defs/wult"),
+     scripts=_TOOLNAMES + _PYTHON_HELPERS,
+     packages=find_packages(),

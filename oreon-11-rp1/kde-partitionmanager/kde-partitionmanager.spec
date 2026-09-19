@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ce72282efa8a8fdf5b97b358e408dbaa8f326a29d0c792ff7cf8e6da80553ed6
 
 %global stable_kf6 stable
 
@@ -14,7 +14,7 @@
 ExcludeArch: %{ix86}
 
 Name:           kde-partitionmanager
-Version:        26.03.80
+Version:        26.08.1
 Release:        1%{?dist}
 Summary:        KDE Partition Manager
 
@@ -96,6 +96,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/*.appdata.
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

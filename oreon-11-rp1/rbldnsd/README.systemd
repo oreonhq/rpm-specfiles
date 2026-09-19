@@ -1,0 +1,76 @@
+Using rbldnsd with systemd
+==========================
+
+The traditional SysV initscript shipped with rbldnsd supports using
+multiple instances with arbitrary command lines. This is difficult
+to achieve with systemd so a wrapper script, rbldnsctl, has been
+provided to assist with the creation and use of native systemd unit
+files for each required instance, using exactly the same configuration
+in /etc/sysconfig/rbldnsd as the SysV initscript used.
+
+Having edited /etc/sysconfig/rbldnsd to specify the rbldnsd
+instance(s) required, individual unit files for each instance can be
+created by:
+
+  rbldnsctl create
+
+This creates unit files /etc/systemd/system/rbldnsd-<instancename>.service
+for each required instance. These units can then be manipulated
+individually using /bin/systemctl as usual, or all at once by using
+other rbldnsctl commands:
+
+  rbldnsctl enable
+
+This enables all configured rbldnsd instances to start at boot time
+(equivalent of chkconfig rbldnsd on).
+ 
+  rbldnsctl disable
+
+This disables all configured rbldnsd instances from starting at boot time
+(equivalent of chkconfig rbldnsd off).
+ 
+  rbldnsctl start
+
+This starts all configured rbldnsd instances immediately
+(equivalent of service rbldnsd start).
+ 
+  rbldnsctl stop
+
+This stops all configured rbldnsd instances
+(equivalent of service rbldnsd stop).
+ 
+  rbldnsctl reload
+
+This reloads all configured rbldnsd instances
+(equivalent of service rbldnsd reload).
+ 
+  rbldnsctl restart
+
+This restarts all configured rbldnsd instances
+(equivalent of service rbldnsd restart).
+ 
+  rbldnsctl condrestart
+  rbldnsctl try-restart
+
+These restart all configured rbldnsd instances immediately, if they are
+already running (equivalent of service rbldnsd condrestart).
+ 
+  rbldnsctl status
+
+This shows status of all configured rbldnsd instances
+(equivalent of service rbldnsd status).
+
+When editing /etc/sysconfig/rbldnsd to specify rbldnsd instance options,
+bear in mind:
+
+* systemd prefers the daemons it controls not to fork, so the unit files
+  created by rbldnsctl start rbldnsd with the "-n" option to prevent
+  it from forking; this also means that systemd knows the PIDs of all
+  instances itself, so there is no need to specify any forking/pidfile related
+  options in /etc/sysconfig/rbldnsd
+
+* if you want just a single instance of rbldnsd and use the traditional "-"
+  identifier for it, rbldnsctl will create a unit file
+  /etc/systemd/system/rbldnsd-single.service, i.e. the instance name will be
+  set to "single"
+

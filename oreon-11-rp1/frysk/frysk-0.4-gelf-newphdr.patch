@@ -1,0 +1,98 @@
+commit cd3f1f8c78b488a30218c8201d4d510e15428965
+Author: Andrew Cagney <cagney@gnu.org>
+Date:   Fri Jan 6 16:09:16 2017 -0500
+
+    Ignore return type of gelf_newphdr()
+    
+    At some point it changes from long int to void *.
+    
+    Patch: frysk-0.4-gelf-newphdr.patch
+
+diff --git a/frysk-sys/lib/dwfl/Elf.java b/frysk-sys/lib/dwfl/Elf.java
+index 5ac8cd5..0c93dd0 100644
+--- a/frysk-sys/lib/dwfl/Elf.java
++++ b/frysk-sys/lib/dwfl/Elf.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, 2006, 2007, 2008 Red Hat Inc.
++// Copyright 2017 Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -213,8 +214,8 @@ public class Elf {
+      * @param count
+      * @return The program header table
+      */
+-    public int createNewPHeader (long count) {
+-	return elf_newphdr(count);
++    public void createNewPHeader (long count) {
++	elf_newphdr(count);
+     }
+ 
+     /**
+@@ -426,7 +427,7 @@ public class Elf {
+ 
+     protected native int elf_updatephdr(int index, ElfPHeader header);
+ 
+-    protected native int elf_newphdr (long __cnt);
++    protected native void elf_newphdr (long __cnt);
+ 
+     protected native long elf_offscn (long offset);
+ 
+diff --git a/frysk-sys/lib/dwfl/jni/DwarfDie.cxx b/frysk-sys/lib/dwfl/jni/DwarfDie.cxx
+index b4071c7..1e6d294 100644
+--- a/frysk-sys/lib/dwfl/jni/DwarfDie.cxx
++++ b/frysk-sys/lib/dwfl/jni/DwarfDie.cxx
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, 2007, 2008, Red Hat Inc.
++// Copyright (C) 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -405,7 +406,7 @@ lib::dwfl::DwarfDie::get_framebase(jnixx::env env, jlong var_die,
+   Dwarf_Attribute *fb_attr;
+   size_t fb_len;
+   
+-  if (dwarf_attr_integrate (die, DW_AT_location, &loc_attr) >= 0) {
++  if (dwarf_attr_integrate (die, DW_AT_location, &loc_attr)) {
+     size_t i = 0;
+     code = dwarf_getlocation_addr (&loc_attr,pc, &fb_expr, &fb_len, 5);
+ 
+@@ -436,7 +437,7 @@ lib::dwfl::DwarfDie::get_data_member_location(jnixx::env env, jlong var_die) {
+   Dwarf_Op *fb_expr;
+   size_t fb_len;
+   
+-  if (dwarf_attr_integrate (die, DW_AT_data_member_location, &loc_attr) >= 0) {
++  if (dwarf_attr_integrate (die, DW_AT_data_member_location, &loc_attr)) {
+     dwarf_getlocation (&loc_attr, &fb_expr, &fb_len);
+     if (fb_len > 0 && fb_expr[0].atom == DW_OP_plus_uconst)
+       return fb_expr[0].number;
+diff --git a/frysk-sys/lib/dwfl/jni/Elf.cxx b/frysk-sys/lib/dwfl/jni/Elf.cxx
+index da9d2a9..c22fa58 100644
+--- a/frysk-sys/lib/dwfl/jni/Elf.cxx
++++ b/frysk-sys/lib/dwfl/jni/Elf.cxx
+@@ -1,7 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2005, 2007, 2008, Red Hat Inc.
+-// Copyright 2016, Andrew Cagney
++// Copyright 2016-2017, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -254,10 +254,9 @@ lib::dwfl::Elf::elf_updatephdr(jnixx::env env, jint index,
+   return ::gelf_update_phdr (elf, index, &header);
+ } 
+ 
+-
+-jint
++void
+ lib::dwfl::Elf::elf_newphdr(jnixx::env env, jlong cnt) {
+-  return (jint) ::gelf_newphdr(ELF_POINTER, (size_t) cnt);
++  ::gelf_newphdr(ELF_POINTER, (size_t) cnt);
+ }
+ 
+ jlong

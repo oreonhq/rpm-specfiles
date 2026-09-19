@@ -1,0 +1,14 @@
+--- tokio-0.2.25/Cargo.toml	1970-01-01T00:00:01+00:00
++++ tokio-0.2.25/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -133,11 +133,4 @@
+ [target."cfg(unix)".dependencies.signal-hook-registry]
+ version = "1.1.1"
+ optional = true
+-[target."cfg(windows)".dependencies.mio-named-pipes]
+-version = "0.1.6"
+-optional = true
+ 
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3.8"
+-optional = true
+-default-features = false

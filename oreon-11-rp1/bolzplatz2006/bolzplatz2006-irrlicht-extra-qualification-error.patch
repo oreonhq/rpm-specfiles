@@ -1,0 +1,55 @@
+diff -Naur bolzplatz2006/libsrc/irrlicht-0.14-patched/CCrowdSceneNode.h bolzplatz2006-new/libsrc/irrlicht-0.14-patched/CCrowdSceneNode.h
+--- bolzplatz2006/libsrc/irrlicht-0.14-patched/CCrowdSceneNode.h	2006-04-22 10:49:56.000000000 +0200
++++ bolzplatz2006-new/libsrc/irrlicht-0.14-patched/CCrowdSceneNode.h	2007-06-18 17:30:55.000000000 +0200
+@@ -46,12 +46,12 @@
+ 		//! returns amount of materials used by this scene node.
+ 		virtual s32 getMaterialCount();
+ 
+-    void CCrowdSceneNode::createCharacter(
++    void createCharacter(
+       s32 characterIndex, f32 x, f32 y, f32 z, f32 rotY, f32 width, f32 height);
+ 
+-    void CCrowdSceneNode::updateBox();
++    void updateBox();
+ 
+-    void CCrowdSceneNode::setCharacterTCords(s32 characterIndex,
++    void setCharacterTCords(s32 characterIndex,
+       f32 x0, f32 y0, f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3);
+ 
+ 	private:
+diff -Naur bolzplatz2006/libsrc/irrlicht-0.14-patched/COpenGLTexture.h bolzplatz2006-new/libsrc/irrlicht-0.14-patched/COpenGLTexture.h
+--- bolzplatz2006/libsrc/irrlicht-0.14-patched/COpenGLTexture.h	2006-03-25 20:11:38.000000000 +0100
++++ bolzplatz2006-new/libsrc/irrlicht-0.14-patched/COpenGLTexture.h	2007-06-18 17:31:48.000000000 +0200
+@@ -53,7 +53,7 @@
+ 	//! unlock function
+ 	virtual void unlock();
+ 
+-  virtual void COpenGLTexture::snowPixel(s32 count);
++  virtual void snowPixel(s32 count);
+ 
+ 	//! Returns original size of the texture.
+ 	virtual const core::dimension2d<s32>& getOriginalSize();
+diff -Naur bolzplatz2006/libsrc/irrlicht-0.14-patched/include/matrix4.h bolzplatz2006-new/libsrc/irrlicht-0.14-patched/include/matrix4.h
+--- bolzplatz2006/libsrc/irrlicht-0.14-patched/include/matrix4.h	2006-03-21 15:26:20.000000000 +0100
++++ bolzplatz2006-new/libsrc/irrlicht-0.14-patched/include/matrix4.h	2007-06-18 17:31:20.000000000 +0200
+@@ -59,7 +59,7 @@
+ 			void setTranslation( const vector3df& translation );			
+ 
+ 			//! Gets the current translation
+-			vector3df matrix4::getTranslation() const;
++			vector3df getTranslation() const;
+ 
+ 			//! Set the inverse translation of the current matrix. Will erase any previous values.
+ 			void setInverseTranslation( const vector3df& translation );	
+diff -Naur bolzplatz2006/libsrc/irrlicht-0.14-patched/include/quaternion.h bolzplatz2006-new/libsrc/irrlicht-0.14-patched/include/quaternion.h
+--- bolzplatz2006/libsrc/irrlicht-0.14-patched/include/quaternion.h	2006-03-21 15:26:20.000000000 +0100
++++ bolzplatz2006-new/libsrc/irrlicht-0.14-patched/include/quaternion.h	2007-06-18 17:31:16.000000000 +0200
+@@ -52,7 +52,7 @@
+ 		quaternion& operator*=(f32 s);
+ 
+ 		//! multiplication operator
+-		vector3df quaternion::operator* (const vector3df& v) const;
++		vector3df operator* (const vector3df& v) const;
+ 
+ 		//! multiplication operator
+ 		quaternion& operator*=(const quaternion& other);

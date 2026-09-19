@@ -1,0 +1,97 @@
+diff -uNrp a/configure.ac b/configure.ac
+--- a/configure.ac	2024-04-05 01:04:33.000000000 +0100
++++ b/configure.ac	2024-12-22 23:18:58.136480494 +0000
+@@ -166,6 +166,30 @@ if test "x$USE_SELINUX" != "xno" ; then
+     )
+ fi
+ 
++AX_DEFINE_DIR(DEF_HAVE_LIBAUDIT, HAVE_LIBAUDIT, [Add linux audit support])
++
++AC_ARG_WITH(libaudit,
++  [  --with-libaudit=[auto/yes/no]  Add Linux audit support [default=auto]],,
++  with_libaudit=auto)
++
++# Check for Linux auditing API
++#
++# libaudit detection
++if test x$with_libaudit = xno ; then
++    have_libaudit=no;
++else
++    # See if we have audit daemon library
++    AC_CHECK_LIB(audit, audit_log_user_message,
++                 have_libaudit=yes, have_libaudit=no)
++fi
++
++AM_CONDITIONAL(HAVE_LIBAUDIT, test x$have_libaudit = xyes)
++
++if test x$have_libaudit = xyes ; then
++    XDMGREET_LIBS="$XDMGREET_LIBS -laudit"
++    AC_DEFINE(HAVE_LIBAUDIT,1,[linux audit support])
++fi
++
+ # Check whether to install systemd unit files, as suggested in daemon(7).
+ # When a full path is specified, this does not require systemd installed.
+ AC_ARG_WITH([systemdsystemunitdir], AS_HELP_STRING([--with-systemdsystemunitdir=DIR],
+diff -uNrp a/greeter/greet.c b/greeter/greet.c
+--- a/greeter/greet.c	2024-04-05 01:04:33.000000000 +0100
++++ b/greeter/greet.c	2024-12-22 23:18:58.137480538 +0000
+@@ -86,6 +86,13 @@ from The Open Group.
+ # endif
+ #endif
+ 
++#ifdef HAVE_LIBAUDIT
++#include <libaudit.h>
++#include <pwd.h>
++#else
++#define log_to_audit_system(l,h,s)   do { ; } while (0)
++#endif
++
+ #include <string.h>
+ 
+ #if defined(SECURE_RPC) && defined(sun)
+@@ -418,6 +425,29 @@ FailedLogin (struct display *d, const ch
+     DrawFail (login);
+ }
+ 
++#ifdef USE_PAM
++#ifdef HAVE_LIBAUDIT
++static void
++log_to_audit_system(const pam_handle_t *pamhp, int success)
++{
++    struct passwd *pw = NULL;
++    char *hostname = NULL, *tty = NULL, *login=NULL;
++    int audit_fd;
++
++    audit_fd = audit_open();
++    pam_get_item(pamhp, PAM_RHOST, (const void **) &hostname);
++    pam_get_item(pamhp, PAM_TTY,   (const void **) &tty);
++    pam_get_item(pamhp, PAM_USER,  (const void **) &login);
++    if (login)
++        pw = getpwnam(login);
++    audit_log_acct_message(audit_fd, AUDIT_USER_LOGIN,
++        NULL, "login", login ? login : "(unknown)",
++        pw ? pw->pw_uid : -1, hostname, NULL, tty, success);
++    close(audit_fd);
++}
++#endif
++#endif
++
+ _X_EXPORT
+ greet_user_rtn GreetUser(
+     struct display          *d,
+@@ -602,6 +632,7 @@ greet_user_rtn GreetUser(
+ 	if ((pam_error == PAM_SUCCESS) && (Verify (d, greet, verify))) {
+ 	    SetPrompt (login, 1, "Login Successful", LOGIN_TEXT_INFO, False);
+ 	    SetValue (login, 1, NULL);
++            log_to_audit_system(*pamhp, 1);
+ 	    break;
+ 	} else {
+ 	    /* Try to fill in username for failed login error log */
+@@ -613,6 +644,7 @@ greet_user_rtn GreetUser(
+ 					 (XDM_PAM_QUAL void **) &username));
+ 	    }
+ 	    FailedLogin (d, username);
++            log_to_audit_system(*pamhp, 0);
+ 	    RUN_AND_CHECK_PAM_ERROR(pam_end,
+ 				    (*pamhp, pam_error));
+ 	}

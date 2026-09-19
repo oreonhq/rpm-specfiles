@@ -1,0 +1,11 @@
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -13,7 +13,7 @@
+
+ CC = gcc
+ CXX = g++
+-LIBS = -lgsl -lgslcblas -lboost_regex -lhts -lboost_iostreams -lz -llapack -lblas 
++LIBS = -lgsl -lgslcblas -lboost_regex -lhts -lboost_iostreams -llapack -lblas -Wl,--as-needed -lz
+ OMP = -fopenmp
+ OPT = -O3
+ OPTSAFE = -O2

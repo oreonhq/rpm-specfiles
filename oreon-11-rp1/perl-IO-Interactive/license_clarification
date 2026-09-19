@@ -1,0 +1,86 @@
+From noreply@github.com Fri Jan 29 00:07:16 2016
+Return-Path: noreply@github.com
+Received: from zmta01.collab.prod.int.phx2.redhat.com (LHLO
+ zmta01.collab.prod.int.phx2.redhat.com) (10.5.81.8) by
+ zmail14.collab.prod.int.phx2.redhat.com with LMTP; Thu, 28 Jan 2016
+ 18:07:16 -0500 (EST)
+Received: from int-mx11.intmail.prod.int.phx2.redhat.com (int-mx11.intmail.prod.int.phx2.redhat.com [10.5.11.24])
+	by zmta01.collab.prod.int.phx2.redhat.com (Postfix) with ESMTP id 1D0D91858DC
+	for <ppisar@mail.corp.redhat.com>; Thu, 28 Jan 2016 18:07:16 -0500 (EST)
+Received: from mx1.redhat.com (ext-mx02.extmail.prod.ext.phx2.redhat.com [10.5.110.26])
+	by int-mx11.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id u0SN7GsH010697
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
+	for <ppisar@redhat.com>; Thu, 28 Jan 2016 18:07:16 -0500
+Received: from github-smtp2a-ext-cp1-prd.iad.github.net (github-smtp2-ext1.iad.github.net [192.30.252.192])
+	by mx1.redhat.com (Postfix) with ESMTPS id 67E2B14AB3
+	for <ppisar@redhat.com>; Thu, 28 Jan 2016 23:07:15 +0000 (UTC)
+Date: Thu, 28 Jan 2016 15:07:14 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=github.com;
+	s=pf2014; t=1454022434;
+	bh=e4MNImD1Xhn7YJZ6s8nOSxLu3LEA+y+Ebd2sNINLHtc=;
+	h=From:Reply-To:To:Cc:In-Reply-To:References:Subject:List-ID:
+	 List-Archive:List-Post:List-Unsubscribe:From;
+	b=hkOAg1zHbp37kDqiP/puvNuoiGQ7cNi7ii09lfrWY5Br9C+LfNzq4CoElEDlO98Gl
+	 JaBfE9mamyX7Qs1iPSsLOh7Fm8noDuhRw5DlzpzOlHW5l+q+mFddSIWU7ANNgGpURl
+	 rzD9xwvhTFMxbDC/QZMeUaytl6Itd3NOYj6UwiQA=
+From: brian d foy <notifications@github.com>
+Reply-To: briandfoy/io-interactive <reply+00103fee6f508850385273bbfad07c49f6e1e68b5177de3892cf0000000112c2612292a169ce07b66d17@reply.github.com>
+To: briandfoy/io-interactive <io-interactive@noreply.github.com>
+Cc: Petr Pisar <ppisar@redhat.com>
+Message-ID: <briandfoy/io-interactive/issues/2/176474019@github.com>
+In-Reply-To: <briandfoy/io-interactive/issues/2@github.com>
+References: <briandfoy/io-interactive/issues/2@github.com>
+Subject: Re: [io-interactive] License mismatch in 1.021 (#2)
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="--==_mimepart_56aa9f22d5986_3e313fee8c2332b8148915bb";
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Precedence: list
+X-GitHub-Sender: briandfoy
+X-GitHub-Recipient: ppisar
+X-GitHub-Reason: author
+List-ID: briandfoy/io-interactive <io-interactive.briandfoy.github.com>
+List-Archive: https://github.com/briandfoy/io-interactive
+List-Post: <mailto:reply+00103fee6f508850385273bbfad07c49f6e1e68b5177de3892cf0000000112c2612292a169ce07b66d17@reply.github.com>
+List-Unsubscribe: <mailto:unsub+00103fee6f508850385273bbfad07c49f6e1e68b5177de3892cf0000000112c2612292a169ce07b66d17@reply.github.com>,
+ <https://github.com/notifications/unsubscribe/ABA_7sF5TRgA0ycgALdSrLPi6IN8yoUfks5pepaigaJpZM4HOJIx>
+X-Auto-Response-Suppress: All
+X-GitHub-Recipient-Address: ppisar@redhat.com
+X-RedHat-Spam-Score: -1.569  (BAYES_50,DCC_CHECK,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HTML_IMAGE_ONLY_08,HTML_MESSAGE,RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_PASS) 192.30.252.192 github-smtp2-ext1.iad.github.net 192.30.252.192 github-smtp2-ext1.iad.github.net <noreply@github.com>
+X-Scanned-By: MIMEDefang 2.68 on 10.5.11.24
+X-Scanned-By: MIMEDefang 2.75 on 10.5.110.26
+Status: RO
+X-Status: A
+Content-Length: 1259
+Lines: 28
+
+
+----==_mimepart_56aa9f22d5986_3e313fee8c2332b8148915bb
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+As it says, Artistic 2.0. 
+
+---
+Reply to this email directly or view it on GitHub:
+https://github.com/briandfoy/io-interactive/issues/2#issuecomment-176474019
+----==_mimepart_56aa9f22d5986_3e313fee8c2332b8148915bb
+Content-Type: text/html;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<p>As it says, Artistic 2.0. </p>
+
+<p style="font-size:small;-webkit-text-size-adjust:none;color:#666;">&mdash;<br>Reply to this email directly or <a href="https://github.com/briandfoy/io-interactive/issues/2#issuecomment-176474019">view it on GitHub</a>.<img alt="" height="1" src="https://github.com/notifications/beacon/ABA_7ksEulGjFzJtHQENkxsk2IIdtZdzks5pepaigaJpZM4HOJIx.gif" width="1" /></p>
+<div itemscope itemtype="http://schema.org/EmailMessage">
+<div itemprop="action" itemscope itemtype="http://schema.org/ViewAction">
+  <link itemprop="url" href="https://github.com/briandfoy/io-interactive/issues/2#issuecomment-176474019"></link>
+  <meta itemprop="name" content="View Issue"></meta>
+</div>
+<meta itemprop="description" content="View this Issue on GitHub"></meta>
+</div>
+
+----==_mimepart_56aa9f22d5986_3e313fee8c2332b8148915bb--
+

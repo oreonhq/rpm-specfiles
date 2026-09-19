@@ -1,0 +1,49 @@
+From 75b71c027cbbd7559a197ed958d0ae3c6f140f31 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Jane=C5=BE?= <tadej.j@nez.si>
+Date: Tue, 14 Sep 2021 14:00:04 +0200
+Subject: [PATCH 04/15] Unify Pipfile and requirements.txt with dependencies in
+ setup.py
+
+---
+ Pipfile          | 8 ++++----
+ requirements.txt | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/Pipfile b/Pipfile
+index 45cfe2a..a4240d4 100644
+--- a/Pipfile
++++ b/Pipfile
+@@ -5,11 +5,11 @@ name = "pypi"
+ 
+ [packages]
+ 
+-virtualenv = "==1.11.6"
+-"virtualenv-clone" = "==0.2.5"
+-"pythonz-bd" = {"version" = "*", "sys_platform" = "!='win32'" }
++virtualenv = ">=1.11"
++"virtualenv-clone" = ">=0.2.5"
++"pythonz-bd" = {"version" = ">1.10.2", "sys_platform" = "!='win32'" }
+ "shellingham" = {"version" = "*", "sys_platform" = "=='win32'" }
+ 
+ [dev-packages]
+ 
+-pytest = "==2.6.2"
++pytest = "*"
+diff --git a/requirements.txt b/requirements.txt
+index 6ca3096..1cded1c 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,7 +1,7 @@
+ setuptools>=17.1
+-virtualenv
+-virtualenv-clone==0.2.5
++virtualenv>=1.11
++virtualenv-clone>=0.2.5
+ pytest
+-pythonz-bd==1.11.2 ; sys_platform != 'win32'
++pythonz-bd>=1.10.2 ; sys_platform != 'win32'
+ shellingham ; sys_platform == 'win32'
+ stdeb ; sys_platform == 'linux'
+-- 
+2.31.1
+

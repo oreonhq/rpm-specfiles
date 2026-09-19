@@ -1,0 +1,36 @@
+commit d8b74e4df86fb526ee9caad284b9eb3efe528ac5
+Author: dghart <dghart@users.sourceforge.net>
+Date:   Thu Jan 9 14:14:10 2025 +0000
+
+    When previewing an svg file, make the string name unguessable; see https://sourceforge.net/p/fourpane/bugs/22/
+    
+        Previewing an svg called foo.svg was creating (briefly) in /tmp a file predictably called foo.png. This might have allowed an attacker to overwrite genuine files. Prevent this by prepending a random string to each name.
+
+diff --git a/MyTreeCtrl.cpp b/MyTreeCtrl.cpp
+index fd19465..d82cfc8 100644
+--- a/MyTreeCtrl.cpp
++++ b/MyTreeCtrl.cpp
+@@ -1890,15 +1890,20 @@ void PreviewPopup::DisplayImage(const wxString& fpath)
+ {
+ wxLogNull NoErrorMessages;
+ wxString filepath(fpath);
+-wxString pngfilepath;
++wxString pngfilepath, rndstr;
+ wxImage image;
+ 
+ if (filepath.Right(4) == ".svg")
+   { void* handle = wxGetApp().GetRsvgHandle();
+     if (!handle) return; // Presumably librsvg is not available at present
+     
+-    wxFileName fn(filepath); // Create a filepath in /tmp/ to store the .png
+-    pngfilepath = "/tmp/" + fn.GetName() + ".png";
++    // Create a filepath in /tmp/ to store the .png
++    rndstr = ""; srand(time(NULL));
++    wxString allowedchars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
++    for (size_t n=0; n < 9; ++n) // Make the string name unguessable; see https://sourceforge.net/p/fourpane/bugs/22/
++       rndstr << wxString::Format("%c", allowedchars[(char)(rand() % 52)]);
++    wxFileName fn(filepath);
++    pngfilepath = "/tmp/" + rndstr + fn.GetName() + ".png";
+     if (SvgToPng(filepath, pngfilepath, handle))
+       image = wxImage(pngfilepath);
+     wxRemoveFile(pngfilepath);

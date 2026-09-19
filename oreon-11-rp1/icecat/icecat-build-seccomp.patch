@@ -1,0 +1,12 @@
+diff -up a/security/sandbox/chromium/sandbox/linux/system_headers/linux_seccomp.h.seccomp b/security/sandbox/chromium/sandbox/linux/system_headers/linux_seccomp.h
+--- a/security/sandbox/chromium/sandbox/linux/system_headers/linux_seccomp.h.seccomp	2025-12-09 13:42:31.378958842 +0100
++++ b/security/sandbox/chromium/sandbox/linux/system_headers/linux_seccomp.h	2025-12-09 13:42:37.886937626 +0100
+@@ -5,6 +5,8 @@
+ #ifndef SANDBOX_LINUX_SYSTEM_HEADERS_LINUX_SECCOMP_H_
+ #define SANDBOX_LINUX_SYSTEM_HEADERS_LINUX_SECCOMP_H_
+ 
++#include <signal.h>
++
+ // The Seccomp2 kernel ABI is not part of older versions of glibc.
+ // As we can't break compilation with these versions of the library,
+ // we explicitly define all missing symbols.

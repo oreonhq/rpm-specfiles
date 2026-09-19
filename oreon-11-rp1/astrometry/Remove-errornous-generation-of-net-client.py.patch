@@ -1,0 +1,26 @@
+From: Ole Streicher <olebole@debian.org>
+Date: Fri, 15 Nov 2019 20:40:20 +0100
+Subject: Remove errornous generation of net/client.py
+
+---
+ Makefile | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 3870c68..4b3fc9c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -182,13 +182,6 @@ install-core:
+ 	$(MAKE) -C qfits-an install
+ 	$(MAKE) -C solver install
+ 	$(MAKE) -C sdss install
+-	$(MKDIR) -p '$(PY_BASE_INSTALL_DIR)'/net/client
+-	@for x in net/client/client.py; do \
+-		echo $(SED) 's+$(PYTHON_SCRIPT_DEFAULT)+$(PYTHON_SCRIPT)+' $$x > '$(PY_BASE_INSTALL_DIR)/'$$x; \
+-		$(SED) 's+$(PYTHON_SCRIPT_DEFAULT)+$(PYTHON_SCRIPT)+' $$x > '$(PY_BASE_INSTALL_DIR)/'$$x; \
+-		echo $(CHMOD_EXECUTABLE) '$(PY_BASE_INSTALL_DIR)/'$$x; \
+-		$(CHMOD_EXECUTABLE) '$(PY_BASE_INSTALL_DIR)/'$$x; \
+-	done
+ .PHONY: install install-core
+ 
+ install-cfitsio-utils:

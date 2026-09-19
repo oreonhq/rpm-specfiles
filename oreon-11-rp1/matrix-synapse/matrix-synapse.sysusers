@@ -1,0 +1,2 @@
+#Type  Name     ID  GECOS                                 Home directory  Shell
+u      synapse  -   "Runs the Synapse Matrix homeserver"  /run/synapse    /sbin/nologin

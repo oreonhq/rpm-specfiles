@@ -1,0 +1,30 @@
+--- zmat-0.9.8/src/Makefile_orig	2022-08-15 11:04:27.531961978 -0400
++++ zmat-0.9.8/src/Makefile	2022-08-15 11:03:31.298329901 -0400
+@@ -107,16 +107,15 @@
+ dll:   CPPOPT     +=$(DLLFLAG)
+ dll:   AR         :=gcc
+ dll:   ARFLAGS    ?=-shared -Wl,-soname,$(BINARY).1
+-dll:   LINKOPT    :=
++dll:   LINKOPT    :=$(LDFLAGS)
+ dll:   AROUTPUT   :=-o
+ 
+ oct mex: CPPOPT+= $(DLLFLAG)
+ oct:   OUTPUT_DIR=..
+-oct:   AR= CXXFLAGS='-O3' LFLAGS='$(-lz)' LDFLAGS='$(LFLAGS)' mkoctfile zmat.cpp
++oct:   AR= CXXFLAGS='$(CXXFLAGS)' LDFLAGS='$(LFLAGS)' mkoctfile zmat.cpp
+ oct:   BINARY=zmat.mex
+ oct:   ARFLAGS    :=
+ oct:   LINKOPT+=--mex $(INCLUDEDIRS)
+-oct:   CXX=mkoctfile
+ 
+ mex:   CXX=$(MEX)
+ mex:   OUTPUTFLAG:=-output
+@@ -152,7 +151,7 @@
+ 
+ %$(OBJSUFFIX): %.c
+ 	@$(ECHO) Building $@
+-	$(CC) $(INCLUDEDIRS) $(CPPOPT) -c -o $@ $<
++	$(CC) $(CPPFLAGS) $(CFLAGS) $(INCLUDEDIRS) $(CPPOPT) -c -o $@ $<
+ 
+ %$(OBJSUFFIX): %.cu
+ 	@$(ECHO) Building $@

@@ -1,0 +1,70 @@
+From 561141f750344f6713b7d2d022bb5d24585a29aa Mon Sep 17 00:00:00 2001
+From: Hillwood Yang <hillwood@opensuse.org>
+Date: Wed, 4 Feb 2026 21:36:21 +0800
+Subject: [PATCH] fix: Fix build with Qt 6.10.2
+
+Qt 6.10.2 removed QTabBarPrivate::paintWithOffsets, causing
+build failures in DTabBar.
+
+Adjust tab button positioning logic to rely solely on
+dragOffset for Qt >= 6.10.2, while preserving the original
+behavior for older Qt versions.
+
+This aligns the implementation with the updated QTabBar
+internals and restores compatibility with Qt 6.10.2.
+---
+ src/widgets/dtabbar.cpp | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/src/widgets/dtabbar.cpp b/src/widgets/dtabbar.cpp
+index 9a890a7f3..279f0730b 100644
+--- a/src/widgets/dtabbar.cpp
++++ b/src/widgets/dtabbar.cpp
+@@ -699,7 +699,11 @@ void DTabBarPrivate::layoutTab(int index)
+     if (tab->leftWidget) {
+         QRect rect = style()->subElementRect(QStyle::SE_TabBarTabLeftButton, &opt, this);
+         QPoint p = rect.topLeft();
++#if QT_VERSION <= QT_VERSION_CHECK(6, 10, 1)
+         if ((index == d->pressedIndex) || d->paintWithOffsets) {
++#else
++        if (d->at(index)->dragOffset != 0) {
++#endif
+             if (vertical)
+                 p.setY(p.y() + d->at(index)->dragOffset);
+             else
+@@ -711,7 +715,11 @@ void DTabBarPrivate::layoutTab(int index)
+     if (tab->rightWidget) {
+         QRect rect = style()->subElementRect(QStyle::SE_TabBarTabRightButton, &opt, this);
+         QPoint p = rect.topLeft();
++#if QT_VERSION <= QT_VERSION_CHECK(6, 10, 1)
+         if ((index == d->pressedIndex) || d->paintWithOffsets) {
++#else
++        if (d->at(index)->dragOffset != 0) {
++#endif
+             if (vertical)
+                 p.setY(p.y() + tab->dragOffset);
+             else
+@@ -1234,7 +1242,11 @@ void DTabBarPrivate::paintEvent(QPaintEvent *e)
+         // 强制让文本居中
+         tab.rightButtonSize = QSize();
+ 
++#if QT_VERSION <= QT_VERSION_CHECK(6, 10, 1)
+         if (d->paintWithOffsets && d->at(i)->dragOffset != 0) {
++#else
++        if (d->at(i)->dragOffset != 0) {
++#endif
+             if (vertical) {
+                 tab.rect.moveTop(tab.rect.y() + d->at(i)->dragOffset);
+             } else {
+@@ -1286,7 +1298,11 @@ void DTabBarPrivate::paintEvent(QPaintEvent *e)
+         // 强制让文本居中
+         tab.rightButtonSize = QSize();
+ 
++#if QT_VERSION <= QT_VERSION_CHECK(6, 10, 1)
+         if (d->paintWithOffsets && d->at(selected)->dragOffset != 0) {
++#else
++        if (d->at(selected)->dragOffset != 0) {
++#endif
+             if (vertical) {
+                 tab.rect.moveTop(tab.rect.y() + d->at(selected)->dragOffset);
+             } else {

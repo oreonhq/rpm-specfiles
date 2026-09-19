@@ -1,0 +1,62 @@
+From 103d1392cf85eee076a02624134b57b3b3539cb3 Mon Sep 17 00:00:00 2001
+From: Mrmaxmeier <Mrmaxmeier@gmail.com>
+Date: Sat, 3 Jan 2026 15:23:24 +0100
+Subject: [PATCH] tests: Update click to >8.2.0
+
+The was previously blocked by removed support of Python 3.9, butwe
+have since dropped support as
+well:dd227cdcd18b3e26853d494f4d0115963b797a9d
+---
+ pyproject.toml                  | 2 +-
+ tests/test_cli_openai_models.py | 4 ++--
+ tests/test_embed_cli.py         | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 6c3c5e70c..d78046d73 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -44,7 +44,7 @@ dependencies = [
+ [dependency-groups]
+ dev = [
+     "build",
+-    "click<8.2.0", # https://github.com/simonw/llm/issues/1024
++    "click>=8.2.0",
+     "pytest",
+     "numpy",
+     "pytest-httpx>=0.33.0",
+diff --git a/tests/test_cli_openai_models.py b/tests/test_cli_openai_models.py
+index fbb382de7..6a9bcd52c 100644
+--- a/tests/test_cli_openai_models.py
++++ b/tests/test_cli_openai_models.py
+@@ -182,7 +182,7 @@ def test_gpt4o_mini_sync_and_async(monkeypatch, tmpdir, httpx_mock, async_, usag
+         },
+         headers={"Content-Type": "application/json"},
+     )
+-    runner = CliRunner(mix_stderr=False)
++    runner = CliRunner()
+     args = ["-m", "gpt-4o-mini", "--key", "x", "--no-stream"]
+     if usage:
+         args.append(usage)
+@@ -190,7 +190,7 @@ def test_gpt4o_mini_sync_and_async(monkeypatch, tmpdir, httpx_mock, async_, usag
+         args.append("--async")
+     result = runner.invoke(cli, args, catch_exceptions=False)
+     assert result.exit_code == 0
+-    assert result.output == "Ho ho ho\n"
++    assert result.stdout == "Ho ho ho\n"
+     if usage:
+         assert result.stderr == "Token usage: 1,000 input, 2,000 output\n"
+     # Confirm it was correctly logged
+diff --git a/tests/test_embed_cli.py b/tests/test_embed_cli.py
+index afee77122..c8e8b8ce6 100644
+--- a/tests/test_embed_cli.py
++++ b/tests/test_embed_cli.py
+@@ -582,7 +582,7 @@ def test_embed_multi_files_errors(multi_files, args, expected_error):
+ )
+ def test_embed_multi_files_encoding(multi_files, extra_args, expected_error):
+     db_path, files = multi_files
+-    runner = CliRunner(mix_stderr=False)
++    runner = CliRunner()
+     result = runner.invoke(
+         cli,
+         [

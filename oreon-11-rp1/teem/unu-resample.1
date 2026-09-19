@@ -1,0 +1,344 @@
+.TH UNU\-RESAMPLE "1" "May 2021" "" "User Commands"
+.SH NAME
+unu\-resample \- filtering and {up,down}sampling with a separable kernel
+.SH SYNOPSIS
+.B unu\ resample
+.RB [ \-old ]
+.BR \-s , \-\-size
+.RI < sz0 \ ...>
+.RB [ \-off , \-\-offset
+.RI [< off0 \ ...>]]
+.RB [ \-min , \-\-minimum
+.RI [< min0 \ ...>]]
+.RB [ \-max , \-\-maximum
+.RI [< max0 \ ...>]]
+.RB [ \-k , \-\-kernel
+.RI < kern \ ...>]
+.RB [ \-nrn ]
+.RB [ \-ne , \-\-nonexistent
+.RI < behavior >]
+.RB [ \-b , \-\-boundary
+.RI < behavior >]
+.RB [ \-v , \-\-value
+.RI < value >]
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-cheap ]
+.RB [ \-c , \-\-center
+.RI < center >]
+.RB [ \-co , \-\-center\-override ]
+.RB [ \-verbose
+.RI < v >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Filtering and {up,down}sampling with a separable kernel.
+Simplifies access to the
+.B NrrdResampleContext
+functions by assuming (among other things) that the same kernel is used for
+resampling every axis that is being resampled.
+Only required option is
+.RB \(lq \-s \(rq
+to specify which axes to resample and how many output samples to generate.
+Resampling kernel
+.RB \(lq \-k \(rq
+defaults to an interpolating cubic, but many other choices are available.
+By default, resampling an axis resamples the full extent of its samples, but it
+is possible to offset this range via
+.RB \(lq \-off \(rq,
+or to crop and/or pad via
+.RB \(lq \-min \(rq
+and
+.RB \(lq \-max \(rq.
+The resampling respects the difference between cell- and node-centered data,
+but you can over-ride known centering with
+.RB \(lq \-co \(rq.
+.IP \(bu +2n
+Uses the many
+.B nrrdResample*
+functions operating on a
+.B nrrdResampleContext
+.SH OPTIONS
+.TP
+.B \-old
+instead of using the new
+.B nrrdResampleContext
+implementation, use the old
+.B nrrdSpatialResample
+implementation
+.TP
+.B \-s\fR\ <\fIsz0\fR\ ...>\ ,\ \fB\-\-size\fR\ <\fIsz0\fR\ ...>
+For each axis, information about how many samples in output:
+.RS +7n
+.IP \(bu 2
+.RB \(lq = \(rq:
+leave this axis completely untouched: no resampling whatsoever
+.IP \(bu 2
+.RB \(lq x\fIfloat \(rq:
+multiply the number of input samples by
+.IR float ,
+and round to the nearest integer, to get the number of output samples.
+Use
+.RB \(lq x1 \(rq
+to resample the axis but leave the number of samples unchanged
+.IP \(bu 2
+.RB \(lq /\fIfloat \(rq:
+divide number of input samples by
+.I float
+.IP \(bu 2
+.RB \(lq +=\fIuint \(rq,
+.RB \(lq \-=\fIuint \(rq:
+add
+.I uint
+to or subtract
+.I uint
+from number input samples to get number output samples
+.IP \(bu 2
+.RI \(lq uint \(rq:
+exact number of output samples
+.IP \(bu 2
+.RI \(lq a \(rq:
+resample this axis to whatever number of samples preserves the aspect ratio of
+other resampled axes.
+Currently needs to be used on all but one of the resampled axes, if at all. 
+.RE
+.IP
+(1 or more sampling specifications)
+.TP
+.B \-off\fR\ [<\fIoff0\fR\ ...>]\ ,\ \fB\-\-offset\fR\ [<\fIoff0\fR\ ...>]
+For each axis, an offset or shift to the position (in index space) of the lower
+end of the sampling domain.
+Either
+.B \-off
+can be used, or
+.B \-min
+and
+.B \-max
+together, or none of these (so that, by default, the full domain of the axis is
+resampled).
+(0 or more
+.IR double s);
+default: \(lq\(rq
+.TP
+.B \-min\fR\ [<\fImin0\fR\ ...>]\ ,\ \fB\-\-minimum\fR\ [<\fImin0\fR\ ...>]
+For each axis, the lower end (in index space) of the domain of the resampling.
+Either
+.B \-off
+can be used, or
+.B \-min
+and
+.B \-max
+together, or none of these (so that, by default, the full domain of the axis is
+resampled).
+(0 or more
+.IR double s);
+default: \(lq\(rq
+.TP
+.B \-max\fR\ [<\fImax0\fR\ ...>]\ ,\ \fB\-\-maximum\fR\ [<\fImax0\fR\ ...>]
+For each axis, the upper end (in index space) of the domain of the resampling.
+Either
+.B \-off
+can be used, or
+.B \-max
+and
+.B \-max
+together, or none of these (so that, by default, the full domain of the axis is
+resampled).
+(0 or more
+.IR double s);
+default: \(lq\(rq
+.TP
+.B \-k\fR\ <\fIkern\fR>\ , \fB\-\-kernel\fR\ <\fIkern\fR>
+The kernel to use for resampling.
+Kernels logically live in the input index space for upsampling, and in the
+output index space for downsampling.
+Possibilities include:
+.RS +7n
+.IP \(bu 2
+.RB \(lq box \(rq:
+nearest neighbor interpolation on upsampling, and uniform averaging on
+downsampling
+.IP \(bu 2
+.RB \(lq cheap \(rq:
+nearest neighbor interpolation for upsampling, and non-blurring sub-sampling
+(pick subset of input samples) on downsampling
+.IP \(bu 2
+.RB \(lq tent \(rq:
+linear interpolation
+.IP \(bu 2
+.RB \(lq cubic:\fIB\fR,\fIC \(rq:
+Mitchell/Netravali BC-family of cubics:
+.IP
+.RB \(lq cubic:1,0 \(rq:
+B-spline; maximal blurring
+.IP
+.RB \(lq cubic:0,0.5 \(rq:
+Catmull-Rom; good interpolating kernel
+.IP \(bu 2
+.RB \(lq c4h \(rq:
+6-sample-support, C^4 continuous, accurate
+.IP \(bu 2
+.RB \(lq c4hai \(rq:
+discrete pre-filter to make
+.B c4h
+interpolate
+.IP \(bu 2
+.RB \(lq bspl3 \(rq,
+.RB \(lq bspl5 \(rq,
+.RB \(lq bspl7 \(rq:
+cubic (same as
+.BR cubic:1,0 ),
+quintic, and 7th order B-spline
+.IP \(bu 2
+.RB \(lq bspl3ai \(rq,
+.RB \(lq bspl5ai \(rq,
+.RB \(lq bspl7ai \(rq:
+discrete pre-filters to make
+.BR bspl3 ,
+.BR bspl5 ,
+.B bspl7
+interpolate
+.IP \(bu 2
+.RB \(lq hann:\fIR \(rq:
+Hann (cosine bell) windowed sinc, radius
+.I R
+.IP \(bu 2
+.RB \(lq black:\fIR \(rq:
+Blackman windowed sinc, radius
+.I R
+.IP \(bu 2
+.RB \(lq gauss:\fIS\fB,\fIC \(rq:
+Gaussian blurring, with standard deviation
+.I S
+and cut-off at
+.I C
+standard deviations
+.IP \(bu 2
+.RB \(lq dgauss:\fIS\fB,\fIC \(rq:
+Lindeberg\(cqs discrete Gaussian.
+.RE
+.IP
+default:
+.RB \(lq cubic:0,0.5 \(rq
+.TP
+.B \-nrn
+do NOT do per-pass kernel weight renormalization.
+Doing the renormalization is not a performance hit (hence is enabled by
+default), and the renormalization is sometimes needed to avoid \(lqgrating\(rq
+on non-integral down-sampling.
+Disabling the renormalization is needed for correct results with artificially
+narrow kernels.
+.TP
+.B \-ne\fR\ <\fIbehavior\fR>\ , \fB\-\-nonexistent\fR\ <\fIbehavior\fR>
+When resampling floating-point values, how to handle non-existent values within
+kernel support:
+.RS +7n
+.IP \(bu 2
+.RB \(lq noop \(rq:
+do nothing; let them pollute result
+.IP \(bu 2
+.RB \(lq renorm \(rq:
+ignore them and renormalize weights of existent values
+.IP \(bu 2
+.RB \(lq wght \(rq:
+ignore them and simply use weights of existent values
+.RE
+.IP
+default:
+.RB \(lq noop \(rq
+.TP
+.B \-b\fR\ <\fIbehavior\fR>\ , \fB\-\-boundary\fR\ <\fIbehavior\fR>
+How to handle samples beyond the input bounds:
+.RS +7n
+.IP \(bu 2
+.RB \(lq pad \(rq:
+use some specified value
+.IP \(bu 2
+.RB \(lq bleed \(rq:
+extend border values outward
+.IP \(bu 2
+.RB \(lq mirror \(rq:
+repeated reflections
+.IP \(bu 2
+.RB \(lq wrap \(rq:
+wrap-around to other side
+.RE
+.IP
+default:
+.RB \(lq noop \(rq
+.TP
+.B \-v\fR\ <\fIvalue\fR>\ , \fB\-\-value\fR\ <\fIvalue\fR>
+for
+.RB \(lq pad \(rq
+boundary behavior, pad with this value
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-t\fR\ <\fItype\fR>\ , \fB\-\-type\fR\ <\fItype\fR>
+type to save output as.
+By default (not using this option), the output type is the same as the input
+type; default:
+.RB \(lq default \(rq
+.TP
+.B \-cheap
+.RI [ DEPRECATED :
+the
+.RB \(lq \-k\ cheap \(rq
+option is the new (and more reliable) way to access this functionality.
+.RB \(lq \-cheap \(rq
+is only here for legacy use in combination with
+.RB \(lq \-old \(rq.]
+.IP
+When downsampling (reducing number of samples), don\(cqt try to do correct
+filtering by scaling kernel to match new (stretched) index space; keep it in
+old index space.
+When used in conjunction with
+.RB \(lq \-k\ box \(rq,
+this can implement subsampling which chooses every Nth value.
+.TP
+.B \-c\fR\ <\fIcenter\fR>\ , \fB\-\-center\fR\ <\fIcenter\fR>
+(not available with
+.RB \(lq \-old \(rq)
+default centering of axes when input
+.I nrrd
+axes don\(cqt have a known centering:
+.RB \(lq cell \(rq
+or
+.RB \(lq node \(rq;
+default:
+.RB \(lq cell \(rq
+.TP
+.B \-co\fR\ , \fB\-\-center-override
+(not available with
+.RB \(lq \-old \(rq)
+centering info specified via
+.RB \(lq \-c \(rq
+should
+.B over-ride
+known centering, rather than simply be used when centering is unknown.
+.TP
+.B \-verbose\fR\ <\fIv\fR>
+(not available with
+.RB \(lq \-old \(rq)
+verbosity level
+.RI ( int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-i\fR\ <\fInin\fR>\ , \fB\-\-input\fR\ <\fInin\fR>
+input
+.IR nrrd ;
+default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR\ <\fInout\fR>\ , \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

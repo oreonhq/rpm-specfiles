@@ -1,0 +1,1326 @@
+From 40c9da19decb68e1bf4be6fef7b0592c19a8cacd Mon Sep 17 00:00:00 2001
+From: Matthew Pickering <matthewtpickering@gmail.com>
+Date: Tue, 13 Dec 2022 12:30:36 +0000
+Subject: [PATCH] Add flag to control whether self-recompilation information is
+ written to interface
+
+This patch adds the flag -fwrite-self-recomp-info which controls whether
+interface files contain the information necessary to answer the
+question:
+
+  Do I need to recompile myself or is this current interface file
+  suitable?
+
+Why? Most packages are only built once either by a distribution or cabal
+and then placed into an immutable store, after which we will never ask
+this question. Therefore we can derive two benefits from omitting this
+information.
+
+* Primary motivation: It vastly reduces the surface area for creating
+  non-deterministic interface files. See issue #10424 which motivated a
+  proper fix to that issue. Distributions have long contained versions
+  of GHC which just have broken self-recompilation checking (in order to
+  get deterministic interface files).
+
+* Secondary motivation: This reduces the size of interface files
+  slightly.. the `mi_usages` field can be quite big but probably this
+  isn't such a great benefit.
+
+* Third motivation: Conceptually clarity about which parts of an
+  interface file are used in order to **communicate** with subsequent
+  packages about the **interface** for a module. And which parts are
+  used to self-communicate during recompilation checking.
+
+In addition to this, the change alerted me to the incorrect
+implemenation of the reifyModule function. See #8489 for more discussion
+about how to fix this if anyone was so inclined. For now I just added a
+warning `-Wreify-module-missing-info` which triggers if the module you
+are trying to reify doesn't have a suitable interface. Interfaces which
+are unsuitable include:
+
+  * The GHC.Prim interface, which is a fake interface
+  * Interfaces compiled with -fno-write-self-recomp-info
+
+The main tracking issue is #22188 but fixes issues such as #10424 in a
+proper way.
+---
+ compiler/GHC/Driver/Flags.hs                  |   6 +-
+ compiler/GHC/Driver/Session.hs                |   8 +-
+ compiler/GHC/HsToCore.hs                      |  23 +-
+ compiler/GHC/Iface/Binary.hs                  |  10 +-
+ compiler/GHC/Iface/Load.hs                    |  22 +-
+ compiler/GHC/Iface/Make.hs                    |  59 ++--
+ compiler/GHC/Iface/Recomp.hs                  |  77 +++---
+ compiler/GHC/Tc/Errors/Ppr.hs                 |   6 +
+ compiler/GHC/Tc/Errors/Types.hs               |   6 +
+ compiler/GHC/Tc/Gen/Splice.hs                 |  21 +-
+ compiler/GHC/Types/Error/Codes.hs             |   2 +
+ compiler/GHC/Unit/Module/ModGuts.hs           |   2 +-
+ compiler/GHC/Unit/Module/ModIface.hs          | 253 +++++++++++++-----
+ docs/users_guide/phases.rst                   |  18 ++
+ docs/users_guide/using-warnings.rst           |  15 ++
+ .../should_compile/th/annth_compunits.stderr  |  11 +
+ .../should_compile/th/annth_make.stderr       |  11 +
+ testsuite/tests/driver/self-recomp/Makefile   |  38 +++
+ .../tests/driver/self-recomp/SelfRecomp01.hs  |   2 +
+ .../tests/driver/self-recomp/SelfRecomp02.hs  |   6 +
+ .../tests/driver/self-recomp/SelfRecomp03.hs  |   2 +
+ .../tests/driver/self-recomp/SelfRecomp04.hs  |   1 +
+ .../driver/self-recomp/SelfRecomp04.stdout    |   2 +
+ testsuite/tests/driver/self-recomp/all.T      |   4 +
+ 24 files changed, 449 insertions(+), 156 deletions(-)
+ create mode 100644 testsuite/tests/annotations/should_compile/th/annth_compunits.stderr
+ create mode 100644 testsuite/tests/annotations/should_compile/th/annth_make.stderr
+ create mode 100644 testsuite/tests/driver/self-recomp/Makefile
+ create mode 100644 testsuite/tests/driver/self-recomp/SelfRecomp01.hs
+ create mode 100644 testsuite/tests/driver/self-recomp/SelfRecomp02.hs
+ create mode 100644 testsuite/tests/driver/self-recomp/SelfRecomp03.hs
+ create mode 100644 testsuite/tests/driver/self-recomp/SelfRecomp04.hs
+ create mode 100644 testsuite/tests/driver/self-recomp/SelfRecomp04.stdout
+ create mode 100644 testsuite/tests/driver/self-recomp/all.T
+
+diff --git a/compiler/GHC/Driver/Flags.hs b/compiler/GHC/Driver/Flags.hs
+index f45397d8872..fbae3c7a242 100644
+--- a/compiler/GHC/Driver/Flags.hs
++++ b/compiler/GHC/Driver/Flags.hs
+@@ -302,6 +302,7 @@ data GeneralFlag
+    | Opt_OmitInterfacePragmas
+    | Opt_ExposeAllUnfoldings
+    | Opt_WriteInterface -- forces .hi files to be written even with -fno-code
++   | Opt_WriteSelfRecompInfo
+    | Opt_WriteHie -- generate .hie files
+ 
+    -- profiling opts
+@@ -624,6 +625,7 @@ data WarningFlag =
+    | Opt_WarnGADTMonoLocalBinds                      -- Since 9.4
+    | Opt_WarnTypeEqualityOutOfScope                  -- Since 9.4
+    | Opt_WarnTypeEqualityRequiresOperators           -- Since 9.4
++   | Opt_WarnReifyModuleMissingInfo                  -- Since 9.6
+    deriving (Eq, Ord, Show, Enum)
+ 
+ -- | Return the names of a WarningFlag
+@@ -729,6 +731,7 @@ warnFlagNames wflag = case wflag of
+   Opt_WarnGADTMonoLocalBinds                      -> "gadt-mono-local-binds" :| []
+   Opt_WarnTypeEqualityOutOfScope                  -> "type-equality-out-of-scope" :| []
+   Opt_WarnTypeEqualityRequiresOperators           -> "type-equality-requires-operators" :| []
++  Opt_WarnReifyModuleMissingInfo                  -> "reify-module-missing-info" :| []
+ 
+ -- -----------------------------------------------------------------------------
+ -- Standard sets of warning options
+@@ -824,7 +827,8 @@ standardWarnings -- see Note [Documenting warning flags]
+         Opt_WarnForallIdentifier,
+         Opt_WarnUnicodeBidirectionalFormatCharacters,
+         Opt_WarnGADTMonoLocalBinds,
+-        Opt_WarnTypeEqualityRequiresOperators
++        Opt_WarnTypeEqualityRequiresOperators,
++        Opt_WarnReifyModuleMissingInfo
+       ]
+ 
+ -- | Things you get with -W
+diff --git a/compiler/GHC/Driver/Session.hs b/compiler/GHC/Driver/Session.hs
+index 831267e2bf6..0dd79006999 100644
+--- a/compiler/GHC/Driver/Session.hs
++++ b/compiler/GHC/Driver/Session.hs
+@@ -3327,7 +3327,8 @@ wWarningFlagsDeps = mconcat [
+   warnSpec    Opt_WarnUnicodeBidirectionalFormatCharacters,
+   warnSpec    Opt_WarnGADTMonoLocalBinds,
+   warnSpec    Opt_WarnTypeEqualityOutOfScope,
+-  warnSpec    Opt_WarnTypeEqualityRequiresOperators
++  warnSpec    Opt_WarnTypeEqualityRequiresOperators,
++  warnSpec    Opt_WarnReifyModuleMissingInfo
+  ]
+ 
+ -- | These @-\<blah\>@ flags can all be reversed with @-no-\<blah\>@
+@@ -3486,6 +3487,7 @@ fFlagsDeps = [
+   flagSpec "use-rpaths"                       Opt_RPath,
+   flagSpec "write-interface"                  Opt_WriteInterface,
+   flagSpec "write-if-simplified-core"         Opt_WriteIfSimplifiedCore,
++  flagSpec "write-self-recomp-info"           Opt_WriteSelfRecompInfo,
+   flagSpec "write-ide-info"                   Opt_WriteHie,
+   flagSpec "unbox-small-strict-fields"        Opt_UnboxSmallStrictFields,
+   flagSpec "unbox-strict-fields"              Opt_UnboxStrictFields,
+@@ -3809,7 +3811,9 @@ defaultFlags settings
+       Opt_DumpWithWays,
+       Opt_CompactUnwind,
+       Opt_ShowErrorContext,
+-      Opt_SuppressStgReps
++      Opt_SuppressStgReps,
++      Opt_WriteSelfRecompInfo
++
+     ]
+ 
+     ++ [f | (ns,f) <- optLevelFlags, 0 `elem` ns]
+diff --git a/compiler/GHC/HsToCore.hs b/compiler/GHC/HsToCore.hs
+index 3c6ec710790..dd578475864 100644
+--- a/compiler/GHC/HsToCore.hs
++++ b/compiler/GHC/HsToCore.hs
+@@ -22,14 +22,12 @@ import GHC.Driver.Session
+ import GHC.Driver.Config
+ import GHC.Driver.Config.Core.Lint ( endPassHscEnvIO )
+ import GHC.Driver.Config.HsToCore.Ticks
+-import GHC.Driver.Config.HsToCore.Usage
+ import GHC.Driver.Env
+ import GHC.Driver.Backend
+ import GHC.Driver.Plugins
+ 
+ import GHC.Hs
+ 
+-import GHC.HsToCore.Usage
+ import GHC.HsToCore.Monad
+ import GHC.HsToCore.Errors.Types
+ import GHC.HsToCore.Expr
+@@ -41,7 +39,7 @@ import GHC.HsToCore.Coverage
+ import GHC.HsToCore.Docs
+ 
+ import GHC.Tc.Types
+-import GHC.Tc.Utils.Monad  ( finalSafeMode, fixSafeInstances, initIfaceLoad )
++import GHC.Tc.Utils.Monad  ( finalSafeMode, fixSafeInstances )
+ import GHC.Tc.Module ( runTcInteractive )
+ 
+ import GHC.Core.Type
+@@ -98,6 +96,7 @@ import GHC.Unit.Module.Deps
+ import Data.List (partition)
+ import Data.IORef
+ import Data.Traversable (for)
++import GHC.Iface.Make (mkRecompUsageInfo)
+ 
+ {-
+ ************************************************************************
+@@ -125,12 +124,10 @@ deSugar hsc_env
+                             tcg_fix_env      = fix_env,
+                             tcg_inst_env     = inst_env,
+                             tcg_fam_inst_env = fam_inst_env,
+-                            tcg_merged       = merged,
+                             tcg_warns        = warns,
+                             tcg_anns         = anns,
+                             tcg_binds        = binds,
+                             tcg_imp_specs    = imp_specs,
+-                            tcg_dependent_files = dependent_files,
+                             tcg_ev_binds     = ev_binds,
+                             tcg_th_foreign_files = th_foreign_files_var,
+                             tcg_fords        = fords,
+@@ -224,8 +221,7 @@ deSugar hsc_env
+ 
+         ; endPassHscEnvIO hsc_env name_ppr_ctx CoreDesugarOpt ds_binds ds_rules_for_imps
+ 
+-        ; let used_names = mkUsedNames tcg_env
+-              pluginModules = map lpModule (loadedPlugins (hsc_plugins hsc_env))
++        ; let pluginModules = map lpModule (loadedPlugins (hsc_plugins hsc_env))
+               home_unit = hsc_home_unit hsc_env
+         ; let deps = mkDependencies home_unit
+                                     (tcg_mod tcg_env)
+@@ -233,17 +229,10 @@ deSugar hsc_env
+                                     (map mi_module pluginModules)
+ 
+         ; used_th <- readIORef tc_splice_used
+-        ; dep_files <- readIORef dependent_files
+         ; safe_mode <- finalSafeMode dflags tcg_env
+-        ; (needed_mods, needed_pkgs) <- readIORef (tcg_th_needed_deps tcg_env)
+-
+-        ; let uc = initUsageConfig hsc_env
+-        ; let plugins = hsc_plugins hsc_env
+-        ; let fc = hsc_FC hsc_env
+-        ; let unit_env = hsc_unit_env hsc_env
+-        ; usages <- initIfaceLoad hsc_env $
+-                      mkUsageInfo uc plugins fc unit_env mod (imp_mods imports) used_names
+-                        dep_files merged needed_mods needed_pkgs
++
++        ; usages <- mkRecompUsageInfo hsc_env tcg_env
++
+         -- id_mod /= mod when we are processing an hsig, but hsigs
+         -- never desugared and compiled (there's no code!)
+         -- Consequently, this should hold for any ModGuts that make
+diff --git a/compiler/GHC/Iface/Binary.hs b/compiler/GHC/Iface/Binary.hs
+index 78045aa782f..48dc54fa8ba 100644
+--- a/compiler/GHC/Iface/Binary.hs
++++ b/compiler/GHC/Iface/Binary.hs
+@@ -45,7 +45,6 @@ import GHC.Types.Name.Cache
+ import GHC.Types.SrcLoc
+ import GHC.Platform
+ import GHC.Settings.Constants
+-import GHC.Utils.Fingerprint
+ 
+ import Data.Array
+ import Data.Array.IO
+@@ -75,7 +74,7 @@ readBinIfaceHeader
+   -> CheckHiWay
+   -> TraceBinIFace
+   -> FilePath
+-  -> IO (Fingerprint, BinHandle)
++  -> IO BinHandle
+ readBinIfaceHeader profile _name_cache checkHiWay traceBinIFace hi_path = do
+     let platform = profilePlatform profile
+ 
+@@ -117,8 +116,7 @@ readBinIfaceHeader profile _name_cache checkHiWay traceBinIFace hi_path = do
+     when (checkHiWay == CheckHiWay) $
+         errorOnMismatch "mismatched interface file profile tag" tag check_tag
+ 
+-    src_hash <- get bh
+-    pure (src_hash, bh)
++    pure bh
+ 
+ -- | Read an interface file.
+ readBinIface
+@@ -129,7 +127,7 @@ readBinIface
+   -> FilePath
+   -> IO ModIface
+ readBinIface profile name_cache checkHiWay traceBinIface hi_path = do
+-    (src_hash, bh) <- readBinIfaceHeader profile name_cache checkHiWay traceBinIface hi_path
++    bh <- readBinIfaceHeader profile name_cache checkHiWay traceBinIface hi_path
+ 
+     extFields_p <- get bh
+ 
+@@ -140,7 +138,6 @@ readBinIface profile name_cache checkHiWay traceBinIface hi_path = do
+ 
+     return mod_iface
+       { mi_ext_fields = extFields
+-      , mi_src_hash = src_hash
+       }
+ 
+ -- | This performs a get action after reading the dictionary and symbol
+@@ -182,7 +179,6 @@ writeBinIface profile traceBinIface hi_path mod_iface = do
+     put_ bh (show hiVersion)
+     let tag = profileBuildTag profile
+     put_  bh tag
+-    put_  bh (mi_src_hash mod_iface)
+ 
+     extFields_p_p <- tellBin bh
+     put_ bh extFields_p_p
+diff --git a/compiler/GHC/Iface/Load.hs b/compiler/GHC/Iface/Load.hs
+index bf7ae8e0059..400782628be 100644
+--- a/compiler/GHC/Iface/Load.hs
++++ b/compiler/GHC/Iface/Load.hs
+@@ -1105,28 +1105,31 @@ pprModIfaceSimple unit_state iface =
+ -- The UnitState is used to pretty-print units
+ pprModIface :: UnitState -> ModIface -> SDoc
+ pprModIface unit_state iface@ModIface{ mi_final_exts = exts }
+- = vcat [ text "interface"
++ = vcat $ [ text "interface"
+                 <+> ppr (mi_module iface) <+> pp_hsc_src (mi_hsc_src iface)
++                <+> whenIsSelfRecomp (text "[self-recomp]")
+                 <+> (if mi_orphan exts then text "[orphan module]" else Outputable.empty)
+                 <+> (if mi_finsts exts then text "[family instance module]" else Outputable.empty)
+                 <+> (if mi_hpc iface then text "[hpc]" else Outputable.empty)
+                 <+> integer hiVersion
+-        , nest 2 (text "interface hash:" <+> ppr (mi_iface_hash exts))
+         , nest 2 (text "ABI hash:" <+> ppr (mi_mod_hash exts))
+         , nest 2 (text "export-list hash:" <+> ppr (mi_exp_hash exts))
++        , whenIsSelfRecomp $ vcat
++                [ nest 2 (text "interface hash:" <+> ppr (mi_iface_hash exts))
++                , nest 2 (text "flag hash:" <+> ppr (mi_flag_hash exts))
++                , nest 2 (text "opt_hash:" <+> ppr (mi_opt_hash exts))
++                , nest 2 (text "hpc_hash:" <+> ppr (mi_hpc_hash exts))
++                , nest 2 (text "plugin_hash:" <+> ppr (mi_plugin_hash exts))
++                ]
+         , nest 2 (text "orphan hash:" <+> ppr (mi_orphan_hash exts))
+-        , nest 2 (text "flag hash:" <+> ppr (mi_flag_hash exts))
+-        , nest 2 (text "opt_hash:" <+> ppr (mi_opt_hash exts))
+-        , nest 2 (text "hpc_hash:" <+> ppr (mi_hpc_hash exts))
+-        , nest 2 (text "plugin_hash:" <+> ppr (mi_plugin_hash exts))
+-        , nest 2 (text "src_hash:" <+> ppr (mi_src_hash iface))
+         , nest 2 (text "sig of:" <+> ppr (mi_sig_of iface))
+         , nest 2 (text "used TH splices:" <+> ppr (mi_used_th iface))
++        , whenIsSelfRecomp $ nest 2 (text "src_hash:" <+> ppr (mi_src_hash iface))
+         , nest 2 (text "where")
+         , text "exports:"
+         , nest 2 (vcat (map pprExport (mi_exports iface)))
+         , pprDeps unit_state (mi_deps iface)
+-        , vcat (map pprUsage (mi_usages iface))
++        , whenIsSelfRecomp $ vcat (map pprUsage (mi_usages iface))
+         , vcat (map pprIfaceAnnotation (mi_anns iface))
+         , pprFixities (mi_fixities iface)
+         , vcat [ppr ver $$ nest 2 (ppr decl) | (ver,decl) <- mi_decls iface]
+@@ -1145,6 +1148,9 @@ pprModIface unit_state iface@ModIface{ mi_final_exts = exts }
+         , text "extensible fields:" $$ nest 2 (pprExtensibleFields (mi_ext_fields iface))
+         ]
+   where
++    whenIsSelfRecomp action =
++      if (isSelfRecompilationInterface iface) then action else empty
++
+     pp_hsc_src HsBootFile = text "[boot]"
+     pp_hsc_src HsigFile = text "[hsig]"
+     pp_hsc_src HsSrcFile = Outputable.empty
+diff --git a/compiler/GHC/Iface/Make.hs b/compiler/GHC/Iface/Make.hs
+index ac55220cbfb..f55e943dbe1 100644
+--- a/compiler/GHC/Iface/Make.hs
++++ b/compiler/GHC/Iface/Make.hs
+@@ -13,6 +13,7 @@ module GHC.Iface.Make
+    ( mkPartialIface
+    , mkFullIface
+    , mkIfaceTc
++   , mkRecompUsageInfo
+    , mkIfaceExports
+    , coAxiomToIfaceDecl
+    , tyThingToIfaceDecl -- Converting things to their Iface equivalents
+@@ -203,14 +204,11 @@ mkIfaceTc hsc_env safe_mode mod_details mod_summary mb_program
+                       tcg_imports = imports,
+                       tcg_rdr_env = rdr_env,
+                       tcg_fix_env = fix_env,
+-                      tcg_merged = merged,
+                       tcg_warns = warns,
+                       tcg_hpc = other_hpc_info,
+-                      tcg_th_splice_used = tc_splice_used,
+-                      tcg_dependent_files = dependent_files
++                      tcg_th_splice_used = tc_splice_used
+                     }
+   = do
+-          let used_names = mkUsedNames tc_result
+           let pluginModules = map lpModule (loadedPlugins (hsc_plugins hsc_env))
+           let home_unit = hsc_home_unit hsc_env
+           let deps = mkDependencies home_unit
+@@ -219,47 +217,58 @@ mkIfaceTc hsc_env safe_mode mod_details mod_summary mb_program
+                                     (map mi_module pluginModules)
+           let hpc_info = emptyHpcInfo other_hpc_info
+           used_th <- readIORef tc_splice_used
+-          dep_files <- (readIORef dependent_files)
+-          (needed_links, needed_pkgs) <- readIORef (tcg_th_needed_deps tc_result)
+-          let uc = initUsageConfig hsc_env
+-              plugins = hsc_plugins hsc_env
+-              fc = hsc_FC hsc_env
+-              unit_env = hsc_unit_env hsc_env
+-          -- Do NOT use semantic module here; this_mod in mkUsageInfo
+-          -- is used solely to decide if we should record a dependency
+-          -- or not.  When we instantiate a signature, the semantic
+-          -- module is something we want to record dependencies for,
+-          -- but if you pass that in here, we'll decide it's the local
+-          -- module and does not need to be recorded as a dependency.
+-          -- See Note [Identity versus semantic module]
+-          usages <- initIfaceLoad hsc_env $ mkUsageInfo uc plugins fc unit_env this_mod (imp_mods imports) used_names
+-                      dep_files merged needed_links needed_pkgs
+ 
++          usage <- mkRecompUsageInfo hsc_env tc_result
+           docs <- extractDocs (ms_hspp_opts mod_summary) tc_result
+ 
+           let partial_iface = mkIface_ hsc_env
+                    this_mod (fromMaybe [] mb_program) hsc_src
+                    used_th deps rdr_env
+                    fix_env warns hpc_info
+-                   (imp_trust_own_pkg imports) safe_mode usages
++                   (imp_trust_own_pkg imports) safe_mode usage
+                    docs mod_summary
+                    mod_details
+ 
+           mkFullIface hsc_env partial_iface Nothing Nothing
+ 
++mkRecompUsageInfo :: HscEnv -> TcGblEnv -> IO (Maybe [Usage])
++mkRecompUsageInfo hsc_env tc_result = do
++  let dflags = hsc_dflags hsc_env
++  if not (gopt Opt_WriteSelfRecompInfo dflags)
++    then return Nothing
++    else do
++     let used_names = mkUsedNames tc_result
++     dep_files <- (readIORef (tcg_dependent_files tc_result))
++     (needed_links, needed_pkgs) <- readIORef (tcg_th_needed_deps tc_result)
++     let uc = initUsageConfig hsc_env
++         plugins = hsc_plugins hsc_env
++         fc = hsc_FC hsc_env
++         unit_env = hsc_unit_env hsc_env
++
++     -- Do NOT use semantic module here; this_mod in mkUsageInfo
++     -- is used solely to decide if we should record a dependency
++     -- or not.  When we instantiate a signature, the semantic
++     -- module is something we want to record dependencies for,
++     -- but if you pass that in here, we'll decide it's the local
++     -- module and does not need to be recorded as a dependency.
++     -- See Note [Identity versus semantic module]
++     usages <- initIfaceLoad hsc_env $ mkUsageInfo uc plugins fc unit_env (tcg_mod tc_result) (imp_mods (tcg_imports tc_result)) used_names
++                 dep_files (tcg_merged tc_result) needed_links needed_pkgs
++     return (Just usages)
++
+ mkIface_ :: HscEnv -> Module -> CoreProgram -> HscSource
+          -> Bool -> Dependencies -> GlobalRdrEnv
+          -> NameEnv FixItem -> Warnings GhcRn -> HpcInfo
+          -> Bool
+          -> SafeHaskellMode
+-         -> [Usage]
++         -> Maybe [Usage]
+          -> Maybe Docs
+          -> ModSummary
+          -> ModDetails
+          -> PartialModIface
+ mkIface_ hsc_env
+          this_mod core_prog hsc_src used_th deps rdr_env fix_env src_warns
+-         hpc_info pkg_trust_req safe_mode usages
++         hpc_info pkg_trust_req safe_mode musages
+          docs mod_summary
+          ModDetails{  md_insts     = insts,
+                       md_fam_insts = fam_insts,
+@@ -307,6 +316,9 @@ mkIface_ hsc_env
+         trust_info  = setSafeMode safe_mode
+         annotations = map mkIfaceAnnotation anns
+         icomplete_matches = map mkIfaceCompleteMatch complete_matches
++        self_recomp = case musages of
++                        Nothing -> NoSelfRecomp
++                        Just usages -> ModIfaceSelfRecomp (ms_hs_hash mod_summary) usages
+ 
+     ModIface {
+           mi_module      = this_mod,
+@@ -317,7 +329,6 @@ mkIface_ hsc_env
+                             else Just semantic_mod,
+           mi_hsc_src     = hsc_src,
+           mi_deps        = deps,
+-          mi_usages      = usages,
+           mi_exports     = mkIfaceExports exports,
+ 
+           -- Sort these lexicographically, so that
+@@ -340,7 +351,7 @@ mkIface_ hsc_env
+           mi_docs        = docs,
+           mi_final_exts  = (),
+           mi_ext_fields  = emptyExtensibleFields,
+-          mi_src_hash = ms_hs_hash mod_summary
++          mi_self_recomp_info = self_recomp
+           }
+   where
+      cmp_rule     = lexicalCompareFS `on` ifRuleName
+diff --git a/compiler/GHC/Iface/Recomp.hs b/compiler/GHC/Iface/Recomp.hs
+index 886bc12192e..8abf38d5373 100644
+--- a/compiler/GHC/Iface/Recomp.hs
++++ b/compiler/GHC/Iface/Recomp.hs
+@@ -171,6 +171,7 @@ data RecompReason
+   = UnitDepRemoved UnitId
+   | ModulePackageChanged FastString
+   | SourceFileChanged
++  | NoSelfRecompInfo
+   | ThisUnitIdChanged
+   | ImpurePlugin
+   | PluginsChanged
+@@ -203,6 +204,7 @@ instance Outputable RecompReason where
+     UnitDepRemoved uid       -> ppr uid <+> text "removed"
+     ModulePackageChanged s   -> ftext s <+> text "package changed"
+     SourceFileChanged        -> text "Source file changed"
++    NoSelfRecompInfo         -> text "Old interface lacks recompilation info"
+     ThisUnitIdChanged        -> text "-this-unit-id changed"
+     ImpurePlugin             -> text "Impure plugin forced recompilation"
+     PluginsChanged           -> text "Plugins changed"
+@@ -373,6 +375,8 @@ checkVersions hsc_env mod_summary iface
+        -- but we ALSO must make sure the instantiation matches up.  See
+        -- test case bkpcabal04!
+        ; hsc_env <- getTopEnv
++       ; if not (isSelfRecompilationInterface iface)
++            then return $ outOfDateItemBecause NoSelfRecompInfo Nothing else do {
+        ; if mi_src_hash iface /= ms_hs_hash mod_summary
+             then return $ outOfDateItemBecause SourceFileChanged Nothing else do {
+        ; if not (isHomeModule home_unit (mi_module iface))
+@@ -407,7 +411,7 @@ checkVersions hsc_env mod_summary iface
+                              | u <- mi_usages iface]
+        ; case recomp of (NeedsRecompile reason) -> return $ OutOfDateItem reason (Just iface) ; _ -> do {
+        ; return $ UpToDateItem iface
+-    }}}}}}}
++    }}}}}}}}
+   where
+     logger = hsc_logger hsc_env
+     dflags = hsc_dflags hsc_env
+@@ -1210,18 +1214,6 @@ addFingerprints hsc_env iface0
+        sorted_extra_decls :: Maybe [IfaceBindingX IfaceMaybeRhs IfaceTopBndrInfo]
+        sorted_extra_decls = sortOn binding_key <$> mi_extra_decls iface0
+ 
+-   -- the flag hash depends on:
+-   --   - (some of) dflags
+-   -- it returns two hashes, one that shouldn't change
+-   -- the abi hash and one that should
+-   flag_hash <- fingerprintDynFlags hsc_env this_mod putNameLiterally
+-
+-   opt_hash <- fingerprintOptFlags dflags putNameLiterally
+-
+-   hpc_hash <- fingerprintHpcFlags dflags putNameLiterally
+-
+-   plugin_hash <- fingerprintPlugins (hsc_plugins hsc_env)
+-
+    -- the ABI hash depends on:
+    --   - decls
+    --   - export list
+@@ -1233,29 +1225,18 @@ addFingerprints hsc_env iface0
+                        export_hash,  -- includes orphan_hash
+                        mi_warns iface0)
+ 
+-   -- The interface hash depends on:
+-   --   - the ABI hash, plus
+-   --   - the source file hash,
+-   --   - the module level annotations,
+-   --   - usages
+-   --   - deps (home and external packages, dependent files)
+-   --   - hpc
+-   iface_hash <- computeFingerprint putNameLiterally
+-                      (mod_hash,
+-                       mi_src_hash iface0,
+-                       ann_fn (mkVarOccFS (fsLit "module")),  -- See mkIfaceAnnCache
+-                       mi_usages iface0,
+-                       sorted_deps,
+-                       mi_hpc iface0)
++   -- the flag hash depends on:
++   --   - (some of) dflags
++   -- it returns two hashes, one that shouldn't change
++   -- the abi hash and one that should
++   self_recomp <- if gopt Opt_WriteSelfRecompInfo dflags
++                    then mkSelfRecomp mod_hash sorted_deps
++                    else return NoSelfRecompBackend
+ 
+    let
+     final_iface_exts = ModIfaceBackend
+-      { mi_iface_hash  = iface_hash
++      { mi_self_recomp_backend_info = self_recomp
+       , mi_mod_hash    = mod_hash
+-      , mi_flag_hash   = flag_hash
+-      , mi_opt_hash    = opt_hash
+-      , mi_hpc_hash    = hpc_hash
+-      , mi_plugin_hash = plugin_hash
+       , mi_orphan      = not (   all ifRuleAuto orph_rules
+                                    -- See Note [Orphans and auto-generated rules]
+                               && null orph_insts
+@@ -1280,6 +1261,38 @@ addFingerprints hsc_env iface0
+     (non_orph_fis,   orph_fis)   = mkOrphMap ifFamInstOrph (mi_fam_insts iface0)
+     ann_fn = mkIfaceAnnCache (mi_anns iface0)
+ 
++    mkSelfRecomp mod_hash sorted_deps = do
++
++      flag_hash <- fingerprintDynFlags hsc_env this_mod putNameLiterally
++
++      opt_hash <- fingerprintOptFlags dflags putNameLiterally
++
++      hpc_hash <- fingerprintHpcFlags dflags putNameLiterally
++
++      plugin_hash <- fingerprintPlugins (hsc_plugins hsc_env)
++
++      -- The interface hash depends on:
++      --   - the ABI hash, plus
++      --   - the source file hash,
++      --   - the module level annotations,
++      --   - usages
++      --   - deps (home and external packages, dependent files)
++      --   - hpc
++      iface_hash <- computeFingerprint putNameLiterally
++                         (mod_hash,
++                          mi_src_hash iface0,
++                          ann_fn (mkVarOccFS (fsLit "module")),  -- See mkIfaceAnnCache
++                          mi_usages iface0,
++                          sorted_deps,
++                          mi_hpc iface0)
++
++      return (ModIfaceSelfRecompBackend
++                                 { mi_sr_flag_hash = flag_hash
++                                 , mi_sr_hpc_hash = hpc_hash
++                                 , mi_sr_opt_hash = opt_hash
++                                 , mi_sr_iface_hash = iface_hash
++                                 , mi_sr_plugin_hash = plugin_hash })
++
+ -- | Retrieve the orphan hashes 'mi_orphan_hash' for a list of modules
+ -- (in particular, the orphan modules which are transitively imported by the
+ -- current module).
+diff --git a/compiler/GHC/Tc/Errors/Ppr.hs b/compiler/GHC/Tc/Errors/Ppr.hs
+index 33b75e3eb15..014ffe33c2e 100644
+--- a/compiler/GHC/Tc/Errors/Ppr.hs
++++ b/compiler/GHC/Tc/Errors/Ppr.hs
+@@ -1223,6 +1223,9 @@ instance Diagnostic TcRnMessage where
+     TcRnSectionWithoutParentheses expr -> mkSimpleDecorated $
+       hang (text "A section must be enclosed in parentheses")
+          2 (text "thus:" <+> (parens (ppr expr)))
++    TcRnReifyModuleMissingInfo m -> mkSimpleDecorated $
++      vcat [ (ppr m) <+> text "can't be reified due to missing information in its interface file."
++           , text "Possible cause:" <+> ppr m <+> text "was compiled with -fno-write-self-recomp-info" ]
+ 
+ 
+   diagnosticReason = \case
+@@ -1628,6 +1631,8 @@ instance Diagnostic TcRnMessage where
+       -> ErrorWithoutFlag
+     TcRnIllegalTupleSection{}
+       -> ErrorWithoutFlag
++    TcRnReifyModuleMissingInfo {} ->
++      WarningWithFlag Opt_WarnReifyModuleMissingInfo
+ 
+   diagnosticHints = \case
+     TcRnUnknownMessage m
+@@ -2037,6 +2042,7 @@ instance Diagnostic TcRnMessage where
+       -> noHints
+     TcRnIllegalTupleSection{}
+       -> [suggestExtension LangExt.TupleSections]
++    TcRnReifyModuleMissingInfo {} -> noHints
+ 
+ 
+   diagnosticCode = constructorCode
+diff --git a/compiler/GHC/Tc/Errors/Types.hs b/compiler/GHC/Tc/Errors/Types.hs
+index 335e7c49653..b7b1a32b871 100644
+--- a/compiler/GHC/Tc/Errors/Types.hs
++++ b/compiler/GHC/Tc/Errors/Types.hs
+@@ -2762,6 +2762,12 @@ data TcRnMessage where
+   -}
+   TcRnSectionWithoutParentheses :: HsExpr GhcPs -> TcRnMessage
+ 
++  {-| TcRnReifyModuleMissingInfo is a warning triggered by attempting to
++      call reifyModule on a module whose interface file lacks the necessary information
++      to satisfy the query. This normally occurs when the module is compiled with `-fno-write-self-recomp-info`.
++  -}
++  TcRnReifyModuleMissingInfo:: Module -> TcRnMessage
++
+   deriving Generic
+ 
+ -- | Things forbidden in @type data@ declarations.
+diff --git a/compiler/GHC/Tc/Gen/Splice.hs b/compiler/GHC/Tc/Gen/Splice.hs
+index 6ba304be169..3bbe9a9af7c 100644
+--- a/compiler/GHC/Tc/Gen/Splice.hs
++++ b/compiler/GHC/Tc/Gen/Splice.hs
+@@ -2808,6 +2808,10 @@ modToTHMod :: Module -> TH.Module
+ modToTHMod m = TH.Module (TH.PkgName $ unitString  $ moduleUnit m)
+                          (TH.ModName $ moduleNameString $ moduleName m)
+ 
++-- | Note that reifyModule will not work if the module is compiled with `-fno-write-self-recomp-info`
++-- because the implementation works by consulting the `mi_usages` field which is intended to be only
++-- used for recompilation checking. See #8489 for a ticket which tracks improvement
++-- of this function.
+ reifyModule :: TH.Module -> TcM TH.ModuleInfo
+ reifyModule (TH.Module (TH.PkgName pkgString) (TH.ModName mString)) = do
+   this_mod <- getModule
+@@ -2820,9 +2824,20 @@ reifyModule (TH.Module (TH.PkgName pkgString) (TH.ModName mString)) = do
+ 
+       reifyFromIface reifMod = do
+         iface <- loadInterfaceForModule (text "reifying module from TH for" <+> ppr reifMod) reifMod
+-        let usages = [modToTHMod m | usage <- mi_usages iface,
+-                                     Just m <- [usageToModule (moduleUnit reifMod) usage] ]
+-        return $ TH.ModuleInfo usages
++        case mi_self_recomp_info iface of
++          NoSelfRecomp -> do
++            -- Arguably this should fail here but GHC.Prim always has NoSelfRecomp, so
++            -- any existing traversals would just stop working. Now they will start warning
++            -- and a user is expected to add a special case to avoid GHC.Prim in their traversal.
++
++            -- An alternative would be to add that special case for GHC.Prim here and make it a hard
++            -- error if reifyModule was attempted to be used with these partial interface files.
++            addDiagnosticTc (TcRnReifyModuleMissingInfo reifMod)
++            return (TH.ModuleInfo [])
++          ModIfaceSelfRecomp{ mi_sr_usages } -> do
++            let usages = [modToTHMod m | usage <- mi_sr_usages
++                                       , Just m <- [usageToModule (moduleUnit reifMod) usage] ]
++            return $ TH.ModuleInfo usages
+ 
+       usageToModule :: Unit -> Usage -> Maybe Module
+       usageToModule _ (UsageFile {}) = Nothing
+diff --git a/compiler/GHC/Types/Error/Codes.hs b/compiler/GHC/Types/Error/Codes.hs
+index ad8028ef387..e157c14a2ba 100644
+--- a/compiler/GHC/Types/Error/Codes.hs
++++ b/compiler/GHC/Types/Error/Codes.hs
+@@ -500,6 +500,8 @@ type family GhcDiagnosticCode c = n | n -> c where
+   GhcDiagnosticCode "TcRnMissingClassAssoc"                         = 06205
+   GhcDiagnosticCode "TcRnBadFamInstDecl"                            = 06206
+   GhcDiagnosticCode "TcRnNotOpenFamily"                             = 06207
++  GhcDiagnosticCode "TcRnReifyModuleMissingInfo"                    = 89264
++
+ 
+   -- IllegalNewtypeReason
+   GhcDiagnosticCode "DoesNotHaveSingleField"                        = 23517
+diff --git a/compiler/GHC/Unit/Module/ModGuts.hs b/compiler/GHC/Unit/Module/ModGuts.hs
+index d54e836d714..9f14ba91651 100644
+--- a/compiler/GHC/Unit/Module/ModGuts.hs
++++ b/compiler/GHC/Unit/Module/ModGuts.hs
+@@ -52,7 +52,7 @@ data ModGuts
+         mg_exports   :: ![AvailInfo],    -- ^ What it exports
+         mg_deps      :: !Dependencies,   -- ^ What it depends on, directly or
+                                          -- otherwise
+-        mg_usages    :: ![Usage],        -- ^ What was used?  Used for interfaces.
++        mg_usages    :: !(Maybe [Usage]), -- ^ What was used?  Used for interfaces.
+ 
+         mg_used_th   :: !Bool,           -- ^ Did we run a TH splice?
+         mg_rdr_env   :: !GlobalRdrEnv,   -- ^ Top-level lexical environment
+diff --git a/compiler/GHC/Unit/Module/ModIface.hs b/compiler/GHC/Unit/Module/ModIface.hs
+index 1d5280f4fa7..9a748c9ea0b 100644
+--- a/compiler/GHC/Unit/Module/ModIface.hs
++++ b/compiler/GHC/Unit/Module/ModIface.hs
+@@ -3,12 +3,16 @@
+ {-# LANGUAGE FlexibleContexts #-}
+ {-# LANGUAGE FlexibleInstances #-}
+ {-# LANGUAGE UndecidableInstances #-}
++{-# LANGUAGE NamedFieldPuns #-}
+ 
+ module GHC.Unit.Module.ModIface
+    ( ModIface
+    , ModIface_ (..)
+    , PartialModIface
+    , ModIfaceBackend (..)
++   , ModIfaceSelfRecompBackend (..)
++   , ModIfaceSelfRecomp (..)
++   , isSelfRecompilationInterface
+    , IfaceDeclExts
+    , IfaceBackendExts
+    , IfaceExport
+@@ -19,6 +23,13 @@ module GHC.Unit.Module.ModIface
+    , mi_semantic_module
+    , mi_free_holes
+    , mi_mnwib
++   , mi_flag_hash
++   , mi_iface_hash
++   , mi_opt_hash
++   , mi_hpc_hash
++   , mi_plugin_hash
++   , mi_usages
++   , mi_src_hash
+    , renameFreeHoles
+    , emptyPartialModIface
+    , emptyFullModIface
+@@ -57,6 +68,9 @@ import GHC.Utils.Binary
+ 
+ import Control.DeepSeq
+ import Control.Exception
++import GHC.Utils.Panic
++import GHC.Utils.Outputable
++import GHC.Utils.Misc
+ 
+ {- Note [Interface file stages]
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@@ -82,19 +96,11 @@ type ModIface = ModIface_ 'ModIfaceFinal
+ -- * Or computed just before writing the iface to disk. (Hashes)
+ -- In order to fully instantiate it.
+ data ModIfaceBackend = ModIfaceBackend
+-  { mi_iface_hash :: !Fingerprint
+-    -- ^ Hash of the whole interface
+-  , mi_mod_hash :: !Fingerprint
++  { mi_mod_hash :: !Fingerprint
+     -- ^ Hash of the ABI only
+-  , mi_flag_hash :: !Fingerprint
+-    -- ^ Hash of the important flags used when compiling the module, excluding
+-    -- optimisation flags
+-  , mi_opt_hash :: !Fingerprint
+-    -- ^ Hash of optimisation flags
+-  , mi_hpc_hash :: !Fingerprint
+-    -- ^ Hash of hpc flags
+-  , mi_plugin_hash :: !Fingerprint
+-    -- ^ Hash of plugins
++  , mi_self_recomp_backend_info :: !ModIfaceSelfRecompBackend
++    -- ^ Information needed for checking self-recompilation.
++    -- See Note [Self recompilation information in interface files]
+   , mi_orphan :: !WhetherHasOrphans
+     -- ^ Whether this module has orphans
+   , mi_finsts :: !WhetherHasFamInst
+@@ -136,6 +142,81 @@ type family IfaceBackendExts (phase :: ModIfacePhase) = bk | bk -> phase where
+   IfaceBackendExts 'ModIfaceCore = ()
+   IfaceBackendExts 'ModIfaceFinal = ModIfaceBackend
+ 
++-- | The information for a module which is only used when deciding whether to recompile
++-- itself. In particular the external interface of a module is recorded by the ABI
++-- hash
++data ModIfaceSelfRecompBackend = NoSelfRecompBackend | ModIfaceSelfRecompBackend {
++    mi_sr_flag_hash :: !Fingerprint
++    -- ^ Hash of the important flags used when compiling the module, excluding
++    -- optimisation flags
++  , mi_sr_iface_hash :: !Fingerprint
++    -- ^ Hash of the whole interface
++  , mi_sr_opt_hash :: !Fingerprint
++    -- ^ Hash of optimisation flags
++  , mi_sr_hpc_hash :: !Fingerprint
++    -- ^ Hash of hpc flags
++  , mi_sr_plugin_hash :: !Fingerprint
++    -- ^ Hash of plugins
++}
++withSelfRecompBackend :: HasCallStack => (ModIfaceSelfRecompBackend-> t) -> ModIfaceBackend-> t
++
++withSelfRecompBackend f mi =
++  case mi_self_recomp_backend_info mi of
++    NoSelfRecompBackend -> panic "Trying to use self-recomp info"
++    x -> f x
++
++mi_flag_hash :: HasCallStack => ModIfaceBackend -> Fingerprint
++mi_flag_hash = withSelfRecompBackend mi_sr_flag_hash
++mi_iface_hash :: HasCallStack => ModIfaceBackend -> Fingerprint
++mi_iface_hash = withSelfRecompBackend mi_sr_iface_hash
++mi_opt_hash :: HasCallStack => ModIfaceBackend -> Fingerprint
++mi_opt_hash   = withSelfRecompBackend mi_sr_opt_hash
++mi_hpc_hash :: HasCallStack => ModIfaceBackend -> Fingerprint
++mi_hpc_hash   = withSelfRecompBackend mi_sr_hpc_hash
++mi_plugin_hash :: HasCallStack => ModIfaceBackend -> Fingerprint
++mi_plugin_hash = withSelfRecompBackend mi_sr_plugin_hash
++
++isSelfRecompilationInterface :: ModIface -> Bool
++isSelfRecompilationInterface iface =
++  case mi_self_recomp_info iface of
++    NoSelfRecomp -> False
++    ModIfaceSelfRecomp {} -> True
++
++{-
++Note [Self recompilation information in interface files]
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++The flag -fwrite-self-recomp-info controls whether
++interface files contain the information necessary to answer the
++question:
++
++  Do I need to recompile myself or is this current interface file
++  suitable?
++
++Why? Most packages are only built once either by a distribution or cabal
++and then placed into an immutable store, after which we will never ask
++this question. Therefore we can derive two benefits from omitting this
++information.
++
++* Primary motivation: It vastly reduces the surface area for creating
++  non-deterministic interface files. See issue #10424 which motivated a
++  proper fix to that issue. Distributions have long contained versions
++  of GHC which just have broken self-recompilation checking (in order to
++  get deterministic interface files).
++
++* Secondary motivation: This reduces the size of interface files
++  slightly.. the `mi_usages` field can be quite big but probably this
++  isn't such a great benefit.
++
++* Third motivation: Conceptually clarity about which parts of an
++  interface file are used in order to **communicate** with subsequent
++  packages about the **interface** for a module. And which parts are
++  used to self-communicate during recompilation checking.
++
++The main tracking issue is #22188 but fixes issues such as #10424 in a
++proper way.
++
++-}
+ 
+ 
+ -- | A 'ModIface' plus a 'ModDetails' summarises everything we know
+@@ -162,12 +243,6 @@ data ModIface_ (phase :: ModIfacePhase)
+                 -- consulted for directly-imported modules, but not
+                 -- for anything else (hence lazy)
+ 
+-        mi_usages   :: [Usage],
+-                -- ^ Usages; kept sorted so that it's easy to decide
+-                -- whether to write a new iface file (changing usages
+-                -- doesn't affect the hash of this module)
+-                -- NOT STRICT!  we read this field lazily from the interface file
+-                -- It is *only* consulted by the recompilation checker
+ 
+         mi_exports  :: ![IfaceExport],
+                 -- ^ Exports
+@@ -259,10 +334,40 @@ data ModIface_ (phase :: ModIfacePhase)
+                 -- chosen over `ByteString`s.
+                 --
+ 
+-        mi_src_hash :: !Fingerprint
+-                -- ^ Hash of the .hs source, used for recompilation checking.
++        mi_self_recomp_info :: !ModIfaceSelfRecomp
++                -- ^ Information needed for checking self-recompilation.
++                -- See Note [Self recompilation information in interface files]
+      }
+ 
++data ModIfaceSelfRecomp = NoSelfRecomp
++  | ModIfaceSelfRecomp { mi_sr_src_hash :: !Fingerprint
++                       -- ^ Hash of the .hs source, used for recompilation checking.
++                       , mi_sr_usages   :: [Usage]
++                       -- ^ Usages; kept sorted so that it's easy to decide
++                       -- whether to write a new iface file (changing usages
++                       -- doesn't affect the hash of this module)
++                       -- NOT STRICT!  we read this field lazily from the interface file
++                       -- It is *only* consulted by the recompilation checker
++                       }
++
++instance Outputable ModIfaceSelfRecomp where
++  ppr NoSelfRecomp = text "NoSelfRecomp"
++  ppr (ModIfaceSelfRecomp{mi_sr_src_hash, mi_sr_usages}) = vcat [text "Self-Recomp"
++                                                                , nest 2 (vcat [text "src hash:" <+> ppr mi_sr_src_hash
++                                                                , text "usages:" <+> ppr (length mi_sr_usages)])]
++
++withSelfRecomp :: HasCallStack => (ModIfaceSelfRecomp-> t) -> ModIface_ phase -> t
++withSelfRecomp f mi =
++  case mi_self_recomp_info mi of
++    NoSelfRecomp -> panic "Trying to use self-recomp info"
++    x -> f x
++
++mi_usages :: HasCallStack => ModIface_ phase -> [Usage]
++mi_usages = withSelfRecomp mi_sr_usages
++mi_src_hash :: HasCallStack => ModIface_ phase -> Fingerprint
++mi_src_hash = withSelfRecomp mi_sr_src_hash
++
++
+ {-
+ Note [Strictness in ModIface]
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@@ -337,17 +442,53 @@ renameFreeHoles fhs insts =
+         -- It wasn't actually a hole
+         | otherwise                           = emptyUniqDSet
+ 
++instance Binary ModIfaceSelfRecompBackend where
++  put_ bh NoSelfRecompBackend = put_ bh (0 :: Int)
++  put_ bh (ModIfaceSelfRecompBackend {mi_sr_flag_hash, mi_sr_iface_hash, mi_sr_plugin_hash, mi_sr_opt_hash, mi_sr_hpc_hash}) = do
++    put_ bh (1 :: Int)
++    put_ bh mi_sr_flag_hash
++    put_ bh mi_sr_iface_hash
++    put_ bh mi_sr_plugin_hash
++    put_ bh mi_sr_opt_hash
++    put_ bh mi_sr_hpc_hash
++
++  get bh = do
++    (tag :: Int) <- get bh
++    case tag of
++      0 -> return NoSelfRecompBackend
++      1 -> do
++        mi_sr_flag_hash <- get bh
++        mi_sr_iface_hash <- get bh
++        mi_sr_plugin_hash <- get bh
++        mi_sr_opt_hash <- get bh
++        mi_sr_hpc_hash <- get bh
++        return (ModIfaceSelfRecompBackend {mi_sr_flag_hash, mi_sr_iface_hash, mi_sr_plugin_hash, mi_sr_opt_hash, mi_sr_hpc_hash})
++      x -> pprPanic "get_ModIfaceSelfRecomp" (ppr x)
++
++instance Binary ModIfaceSelfRecomp where
++  put_ bh NoSelfRecomp = put_ bh (0 :: Int)
++  put_ bh (ModIfaceSelfRecomp{mi_sr_src_hash, mi_sr_usages}) = do
++    put_ bh (1 :: Int)
++    put_ bh mi_sr_src_hash
++    lazyPut bh mi_sr_usages
++
++  get bh = do
++    (tag :: Int) <- get bh
++    case tag of
++      0 -> return NoSelfRecomp
++      1 -> do
++        src_hash    <- get bh
++        usages      <- {-# SCC "bin_usages" #-} lazyGet bh
++        return $ ModIfaceSelfRecomp { mi_sr_src_hash = src_hash, mi_sr_usages = usages }
++      x -> pprPanic "get_ModIfaceSelfRecomp" (ppr x)
++
+ -- See Note [Strictness in ModIface] about where we use lazyPut vs put
+ instance Binary ModIface where
+    put_ bh (ModIface {
+                  mi_module    = mod,
+                  mi_sig_of    = sig_of,
+                  mi_hsc_src   = hsc_src,
+-                 mi_src_hash = _src_hash, -- Don't `put_` this in the instance
+-                                          -- because we are going to write it
+-                                          -- out separately in the actual file
+                  mi_deps      = deps,
+-                 mi_usages    = usages,
+                  mi_exports   = exports,
+                  mi_used_th   = used_th,
+                  mi_fixities  = fixities,
+@@ -366,13 +507,10 @@ instance Binary ModIface where
+                  mi_ext_fields = _ext_fields, -- Don't `put_` this in the instance so we
+                                               -- can deal with it's pointer in the header
+                                               -- when we write the actual file
++                 mi_self_recomp_info = self_recomp,
+                  mi_final_exts = ModIfaceBackend {
+-                   mi_iface_hash = iface_hash,
++                   mi_self_recomp_backend_info = self_recomp_backend,
+                    mi_mod_hash = mod_hash,
+-                   mi_flag_hash = flag_hash,
+-                   mi_opt_hash = opt_hash,
+-                   mi_hpc_hash = hpc_hash,
+-                   mi_plugin_hash = plugin_hash,
+                    mi_orphan = orphan,
+                    mi_finsts = hasFamInsts,
+                    mi_exp_hash = exp_hash,
+@@ -381,16 +519,12 @@ instance Binary ModIface where
+         put_ bh mod
+         put_ bh sig_of
+         put_ bh hsc_src
+-        put_ bh iface_hash
++        put_ bh self_recomp
++        put_ bh self_recomp_backend
+         put_ bh mod_hash
+-        put_ bh flag_hash
+-        put_ bh opt_hash
+-        put_ bh hpc_hash
+-        put_ bh plugin_hash
+         put_ bh orphan
+         put_ bh hasFamInsts
+         lazyPut bh deps
+-        lazyPut bh usages
+         put_ bh exports
+         put_ bh exp_hash
+         put_ bh used_th
+@@ -413,16 +547,12 @@ instance Binary ModIface where
+         mod         <- get bh
+         sig_of      <- get bh
+         hsc_src     <- get bh
+-        iface_hash  <- get bh
++        self_recomp_info <- get bh
++        self_recomp_backend_info <- get bh
+         mod_hash    <- get bh
+-        flag_hash   <- get bh
+-        opt_hash    <- get bh
+-        hpc_hash    <- get bh
+-        plugin_hash <- get bh
+         orphan      <- get bh
+         hasFamInsts <- get bh
+         deps        <- lazyGet bh
+-        usages      <- {-# SCC "bin_usages" #-} lazyGet bh
+         exports     <- {-# SCC "bin_exports" #-} get bh
+         exp_hash    <- get bh
+         used_th     <- get bh
+@@ -444,10 +574,7 @@ instance Binary ModIface where
+                  mi_module      = mod,
+                  mi_sig_of      = sig_of,
+                  mi_hsc_src     = hsc_src,
+-                 mi_src_hash = fingerprint0, -- placeholder because this is dealt
+-                                             -- with specially when the file is read
+                  mi_deps        = deps,
+-                 mi_usages      = usages,
+                  mi_exports     = exports,
+                  mi_used_th     = used_th,
+                  mi_anns        = anns,
+@@ -467,13 +594,10 @@ instance Binary ModIface where
+                  mi_docs        = docs,
+                  mi_ext_fields  = emptyExtensibleFields, -- placeholder because this is dealt
+                                                          -- with specially when the file is read
++                 mi_self_recomp_info = self_recomp_info,
+                  mi_final_exts = ModIfaceBackend {
+-                   mi_iface_hash = iface_hash,
++                   mi_self_recomp_backend_info = self_recomp_backend_info,
+                    mi_mod_hash = mod_hash,
+-                   mi_flag_hash = flag_hash,
+-                   mi_opt_hash = opt_hash,
+-                   mi_hpc_hash = hpc_hash,
+-                   mi_plugin_hash = plugin_hash,
+                    mi_orphan = orphan,
+                    mi_finsts = hasFamInsts,
+                    mi_exp_hash = exp_hash,
+@@ -491,9 +615,7 @@ emptyPartialModIface mod
+   = ModIface { mi_module      = mod,
+                mi_sig_of      = Nothing,
+                mi_hsc_src     = HsSrcFile,
+-               mi_src_hash    = fingerprint0,
+                mi_deps        = noDependencies,
+-               mi_usages      = [],
+                mi_exports     = [],
+                mi_used_th     = False,
+                mi_fixities    = [],
+@@ -511,6 +633,7 @@ emptyPartialModIface mod
+                mi_complete_matches = [],
+                mi_docs        = Nothing,
+                mi_final_exts  = (),
++               mi_self_recomp_info = NoSelfRecomp,
+                mi_ext_fields  = emptyExtensibleFields
+              }
+ 
+@@ -518,13 +641,9 @@ emptyFullModIface :: Module -> ModIface
+ emptyFullModIface mod =
+     (emptyPartialModIface mod)
+       { mi_decls = []
+-      , mi_final_exts = ModIfaceBackend
+-        { mi_iface_hash = fingerprint0,
++      , mi_final_exts = ModIfaceBackend {
+           mi_mod_hash = fingerprint0,
+-          mi_flag_hash = fingerprint0,
+-          mi_opt_hash = fingerprint0,
+-          mi_hpc_hash = fingerprint0,
+-          mi_plugin_hash = fingerprint0,
++          mi_self_recomp_backend_info = NoSelfRecompBackend, -- TODO
+           mi_orphan = False,
+           mi_finsts = False,
+           mi_exp_hash = fingerprint0,
+@@ -550,19 +669,31 @@ emptyIfaceHashCache _occ = Nothing
+ -- Take care, this instance only forces to the degree necessary to
+ -- avoid major space leaks.
+ instance (NFData (IfaceBackendExts (phase :: ModIfacePhase)), NFData (IfaceDeclExts (phase :: ModIfacePhase))) => NFData (ModIface_ phase) where
+-  rnf (ModIface f1 f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 f12
++  rnf (ModIface f1 f2 f3 f4 f6 f7 f8 f9 f10 f11 f12
+                 f13 f14 f15 f16 f17 f18 f19 f20 f21 f22 f23 f24) =
+-    rnf f1 `seq` rnf f2 `seq` f3 `seq` f4 `seq` f5 `seq` f6 `seq` rnf f7 `seq` f8 `seq`
++    rnf f1 `seq` rnf f2 `seq` f3 `seq` f4 `seq` f6 `seq` rnf f7 `seq` f8 `seq`
+     f9 `seq` rnf f10 `seq` rnf f11 `seq` rnf f12 `seq` f13 `seq` rnf f14 `seq` rnf f15 `seq` rnf f16 `seq`
+     rnf f17 `seq` f18 `seq` rnf f19 `seq` rnf f20 `seq` f21 `seq` f22 `seq` f23 `seq` rnf f24
+     `seq` ()
+ 
+ 
+ instance NFData (ModIfaceBackend) where
+-  rnf (ModIfaceBackend f1 f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 f12 f13)
++  rnf (ModIfaceBackend f1 f2 f3 f4 f5 f6 f7 f8 f9)
+     = rnf f1 `seq` rnf f2 `seq` rnf f3 `seq` rnf f4 `seq`
+       rnf f5 `seq` rnf f6 `seq` rnf f7 `seq` rnf f8 `seq`
+-      rnf f9 `seq` rnf f10 `seq` rnf f11 `seq` rnf f12 `seq` rnf f13
++      rnf f9
++
++instance NFData ModIfaceSelfRecompBackend where
++  -- Sufficient as all fields are strict (and simple)
++  rnf NoSelfRecompBackend = ()
++  -- Written like this so if you add another field you have to think about it
++  rnf !(ModIfaceSelfRecompBackend _ _ _ _ _) = ()
++instance NFData ModIfaceSelfRecomp where
++  -- Sufficient as all fields are strict (and simple)
++  rnf NoSelfRecomp = ()
++  -- MP: Note does not deeply force Usages but the old ModIface logic didn't either, so
++  -- I left it as a shallow force.
++  rnf (ModIfaceSelfRecomp src_hash usages) = src_hash `seq` usages `seq` ()
+ 
+ 
+ forceModIface :: ModIface -> IO ()
+diff --git a/docs/users_guide/phases.rst b/docs/users_guide/phases.rst
+index aa171c2055b..b9557193985 100644
+--- a/docs/users_guide/phases.rst
++++ b/docs/users_guide/phases.rst
+@@ -653,6 +653,24 @@ Options affecting code generation
+     depend on the optimisation level. Any definitions which are already included in
+     an interface file (via an unfolding for an exported identifier) are reused.
+ 
++.. ghc-flag:: -fwrite-self-recomp-info
++    :shortdesc: Write information for self-recompilation checking in an interface file
++    :type: dynamic
++    :category: codegen
++
++    :default: on
++
++    Include information in an interface file which can be used in future to determine
++    whether we need to recompile a module or can reuse the existing interface.
++
++    This is intended to be turned off in situations where you know you will never try
++    to recompile a module, such as when compiling a package for distribution.
++    The advantage is that by omitting unecessary information to do with dependencies
++    there is less chance of build paths leaking into the interface file and affecting
++    determinism.
++
++
++
+ 
+ .. ghc-flag:: -fobject-code
+     :shortdesc: Generate object code
+diff --git a/docs/users_guide/using-warnings.rst b/docs/users_guide/using-warnings.rst
+index 977bb699410..d61fc46319c 100644
+--- a/docs/users_guide/using-warnings.rst
++++ b/docs/users_guide/using-warnings.rst
+@@ -2355,6 +2355,21 @@ of ``-W(no-)*``.
+     triggered whenever this happens, and can be addressed by enabling the
+     extension.
+ 
++.. ghc-flag:: -Wreify-module-missing-info
++    :shortdesc: warn when `reifyModule`
++    :type: dynamic
++    :reverse: -Wno-reify-module-missing-info
++
++    :since: 9.6.1
++
++    The `reifyModule` function in the Template Haskell API can fail to find the necessary
++    information when an interface file is generated with `-fno-write-self-recomp-info`. This
++    is due to a shortcoming in `reifyModule` tracked by :ghc-ticket:`8489`.
++
++    This flag warns the user when they try to call `reifyModule` on a module where this
++    situation occurs so that they know the traversal has ended prematurely.
++
++
+ If you're feeling really paranoid, the :ghc-flag:`-dcore-lint` option is a good choice.
+ It turns on heavyweight intra-pass sanity-checking within GHC. (It checks GHC's
+ sanity, not yours.)
+diff --git a/testsuite/tests/annotations/should_compile/th/annth_compunits.stderr b/testsuite/tests/annotations/should_compile/th/annth_compunits.stderr
+new file mode 100644
+index 00000000000..417b2a5a567
+--- /dev/null
++++ b/testsuite/tests/annotations/should_compile/th/annth_compunits.stderr
+@@ -0,0 +1,11 @@
++
++annth.hs:12:4: warning: [GHC-89264] [-Wreify-module-missing-info (in -Wdefault)]
++    • GHC.Prim can't be reified due to missing information in its interface file.
++      Possible cause: GHC.Prim was compiled with -fno-write-self-recomp-info
++    • In the untyped splice:
++        $(do anns <- traverseModuleAnnotations
++             runIO $ print (anns :: [String])
++             anns <- reifyAnnotations (AnnLookupName 'testValue)
++             runIO $ print (anns :: [String])
++             anns <- reifyAnnotations (AnnLookupName 'testValueTH)
++             ....)
+diff --git a/testsuite/tests/annotations/should_compile/th/annth_make.stderr b/testsuite/tests/annotations/should_compile/th/annth_make.stderr
+new file mode 100644
+index 00000000000..417b2a5a567
+--- /dev/null
++++ b/testsuite/tests/annotations/should_compile/th/annth_make.stderr
+@@ -0,0 +1,11 @@
++
++annth.hs:12:4: warning: [GHC-89264] [-Wreify-module-missing-info (in -Wdefault)]
++    • GHC.Prim can't be reified due to missing information in its interface file.
++      Possible cause: GHC.Prim was compiled with -fno-write-self-recomp-info
++    • In the untyped splice:
++        $(do anns <- traverseModuleAnnotations
++             runIO $ print (anns :: [String])
++             anns <- reifyAnnotations (AnnLookupName 'testValue)
++             runIO $ print (anns :: [String])
++             anns <- reifyAnnotations (AnnLookupName 'testValueTH)
++             ....)
+diff --git a/testsuite/tests/driver/self-recomp/Makefile b/testsuite/tests/driver/self-recomp/Makefile
+new file mode 100644
+index 00000000000..c6ac89fba19
+--- /dev/null
++++ b/testsuite/tests/driver/self-recomp/Makefile
+@@ -0,0 +1,38 @@
++TOP=../../..
++include $(TOP)/mk/boilerplate.mk
++include $(TOP)/mk/test.mk
++
++TEST_HC_OPTS_NO_RTSOPTS = $(filter-out -rtsopts,$(TEST_HC_OPTS))
++
++# -----------------------------------------------------------------------------
++# One-shot compilations, non-hierarchical modules
++
++# Check that modifying flags doesn't affect interface
++SelfRecomp01:
++	"$(TEST_HC)" $(TEST_HC_OPTS) SelfRecomp01.hs -fno-write-self-recomp-info -v0
++	"$(TEST_HC)" --show-iface SelfRecomp01.hi > iface1
++	rm SelfRecomp01.hi
++	"$(TEST_HC)" $(TEST_HC_OPTS) SelfRecomp01.hs -fno-write-self-recomp-info -Iidir -v0
++	"$(TEST_HC)" --show-iface SelfRecomp01.hi > iface2
++	diff iface1 iface2
++
++# Check that the result of addDependentFile doesn't end up in interface
++SelfRecomp02:
++	"$(TEST_HC)" $(TEST_HC_OPTS) SelfRecomp02.hs -fno-write-self-recomp-info -v0
++	"$(TEST_HC)" --show-iface SelfRecomp02.hi > iface
++	[ -z $(grep iface SelfRecomp02.hs) ]
++
++# Check that modifying source doesn't affect interface
++SelfRecomp03:
++	"$(TEST_HC)" $(TEST_HC_OPTS) SelfRecomp03.hs -fno-write-self-recomp-info -v0
++	"$(TEST_HC)" --show-iface SelfRecomp03.hi > iface1
++	rm SelfRecomp03.hi
++	echo "" >> SelfRecomp03.hs
++	"$(TEST_HC)" $(TEST_HC_OPTS) SelfRecomp03.hs -fno-write-self-recomp-info -v0
++	"$(TEST_HC)" --show-iface SelfRecomp03.hi > iface2
++	diff iface1 iface2
++
++# Check that if you don't have recompilation info then you always recompile.
++SelfRecomp04:
++	"$(TEST_HC)" $(TEST_HC_OPTS) SelfRecomp04.hs -fno-write-self-recomp-info -fhide-source-paths
++	"$(TEST_HC)" $(TEST_HC_OPTS) SelfRecomp04.hs -fno-write-self-recomp-info -fhide-source-paths
+diff --git a/testsuite/tests/driver/self-recomp/SelfRecomp01.hs b/testsuite/tests/driver/self-recomp/SelfRecomp01.hs
+new file mode 100644
+index 00000000000..1d6400e92bc
+--- /dev/null
++++ b/testsuite/tests/driver/self-recomp/SelfRecomp01.hs
+@@ -0,0 +1,2 @@
++module SelfRecomp01 where
++
+diff --git a/testsuite/tests/driver/self-recomp/SelfRecomp02.hs b/testsuite/tests/driver/self-recomp/SelfRecomp02.hs
+new file mode 100644
+index 00000000000..dd38566b398
+--- /dev/null
++++ b/testsuite/tests/driver/self-recomp/SelfRecomp02.hs
+@@ -0,0 +1,6 @@
++{-# LANGUAGE TemplateHaskell #-}
++module SelfRecomp02 where
++
++import Language.Haskell.TH.Syntax
++
++main = $(addDependentFile "SelfRecomp02.hs" >> [| print () |])
+diff --git a/testsuite/tests/driver/self-recomp/SelfRecomp03.hs b/testsuite/tests/driver/self-recomp/SelfRecomp03.hs
+new file mode 100644
+index 00000000000..ca181a1f34c
+--- /dev/null
++++ b/testsuite/tests/driver/self-recomp/SelfRecomp03.hs
+@@ -0,0 +1,2 @@
++module SelfRecomp03 where
++
+diff --git a/testsuite/tests/driver/self-recomp/SelfRecomp04.hs b/testsuite/tests/driver/self-recomp/SelfRecomp04.hs
+new file mode 100644
+index 00000000000..8a956509e90
+--- /dev/null
++++ b/testsuite/tests/driver/self-recomp/SelfRecomp04.hs
+@@ -0,0 +1 @@
++module SelfRecomp04 where
+diff --git a/testsuite/tests/driver/self-recomp/SelfRecomp04.stdout b/testsuite/tests/driver/self-recomp/SelfRecomp04.stdout
+new file mode 100644
+index 00000000000..5dc637533d1
+--- /dev/null
++++ b/testsuite/tests/driver/self-recomp/SelfRecomp04.stdout
+@@ -0,0 +1,2 @@
++[1 of 1] Compiling SelfRecomp04
++[1 of 1] Compiling SelfRecomp04 [Old interface lacks recompilation info]
+diff --git a/testsuite/tests/driver/self-recomp/all.T b/testsuite/tests/driver/self-recomp/all.T
+new file mode 100644
+index 00000000000..91713d459da
+--- /dev/null
++++ b/testsuite/tests/driver/self-recomp/all.T
+@@ -0,0 +1,4 @@
++test('SelfRecomp01', normal, makefile_test, ['SelfRecomp01'])
++test('SelfRecomp02', normal, makefile_test, ['SelfRecomp02'])
++test('SelfRecomp03', [copy_files], makefile_test, ['SelfRecomp03'])
++test('SelfRecomp04', normal, makefile_test, ['SelfRecomp04'])
+-- 
+GitLab
+

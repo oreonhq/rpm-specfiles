@@ -1,0 +1,272 @@
+am-utils-6.2 - convert AC_TRY_COMPILE to AC_COMPILE_IFELSE
+
+From: Ian Kent <raven@themaw.net>
+
+autoconf 2.71 autoreconf tells us AC_TRY_COMPILE is obsolete.
+Convert to use the AC_COMPILE_IFELSE instead.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ m4/macros/c_void_p.m4                       |    9 +++++----
+ m4/macros/check_varargs_macros.m4           |   24 ++++++++++++++----------
+ m4/macros/extern_optarg.m4                  |   11 ++++++-----
+ m4/macros/field_mntent_t_mnt_time_string.m4 |    7 ++++---
+ m4/macros/mount_headers.m4                  |    4 ++--
+ m4/macros/struct_mntent.m4                  |    7 ++++---
+ m4/macros/struct_mnttab.m4                  |    7 ++++---
+ m4/macros/try_compile_anyfs.m4              |    8 +++++---
+ m4/macros/try_compile_nfs.m4                |    7 ++++---
+ m4/macros/try_compile_rpc.m4                |    8 +++++---
+ 10 files changed, 53 insertions(+), 39 deletions(-)
+
+diff --git a/m4/macros/c_void_p.m4 b/m4/macros/c_void_p.m4
+index 3977c9be..64e998ff 100644
+--- a/m4/macros/c_void_p.m4
++++ b/m4/macros/c_void_p.m4
+@@ -6,11 +6,12 @@ AC_CACHE_CHECK(if compiler can handle void *,
+ ac_cv_c_void_p,
+ [
+ # try to compile a program which uses void *
+-AC_TRY_COMPILE(
+-[ ],
+-[
++AC_COMPILE_IFELSE(
++[AC_LANG_PROGRAM(
++[[ ]],
++[[
+ void *vp;
+-], ac_cv_c_void_p=yes, ac_cv_c_void_p=no)
++]])], ac_cv_c_void_p=yes, ac_cv_c_void_p=no)
+ ])
+ if test "$ac_cv_c_void_p" = yes
+ then
+diff --git a/m4/macros/check_varargs_macros.m4 b/m4/macros/check_varargs_macros.m4
+index 44bd3edf..93c26ffc 100644
+--- a/m4/macros/check_varargs_macros.m4
++++ b/m4/macros/check_varargs_macros.m4
+@@ -6,23 +6,27 @@ AC_CACHE_CHECK(if compiler can handle variable-length macros,
+ ac_cv_varargs_macros,
+ [
+ # try C99 style
+-AC_TRY_COMPILE(
+-[
++AC_COMPILE_IFELSE(
++[AC_LANG_PROGRAM(
++[[
+ #define foo(str,size,fmt,...)  bar(__FILE__,__LINE__,(str),(size),(fmt),__VA_ARGS__)
+-],
+-[
++]],
++[[
+ char a[80];
+ foo(a, sizeof(a), "%d,%d", 1, 2);
+-], ac_cv_varargs_macros=c99,
++]]
++)], ac_cv_varargs_macros=c99,
+ # else try gcc style
+-AC_TRY_COMPILE(
+-[
++AC_COMPILE_IFELSE(
++[AC_LANG_PROGRAM(
++[[
+ #define foo(str,size,args...)  bar(__FILE__,__LINE__,(str),(size),(fmt),args)
+-],
+-[
++]],
++[[
+ char a[80];
+ foo(a, sizeof(a), "%d,%d", 1, 2);
+-], ac_cv_varargs_macros=gcc, ac_cv_varargs_macros=none))
++]]
++)], ac_cv_varargs_macros=gcc, ac_cv_varargs_macros=none))
+ ])
+ if test "$ac_cv_varargs_macros" = c99
+ then
+diff --git a/m4/macros/extern_optarg.m4 b/m4/macros/extern_optarg.m4
+index 70cb50ae..b082b061 100644
+--- a/m4/macros/extern_optarg.m4
++++ b/m4/macros/extern_optarg.m4
+@@ -6,8 +6,9 @@ AC_CACHE_CHECK(if external definition for optarg[] exists,
+ ac_cv_extern_optarg,
+ [
+ # try to compile program that uses the variable
+-AC_TRY_COMPILE(
+-[
++AC_COMPILE_IFELSE(
++[AC_LANG_PROGRAM(
++[[
+ #ifdef HAVE_STDIO_H
+ # include <stdio.h>
+ #endif /* HAVE_STDIO_H */
+@@ -23,10 +24,10 @@ AC_TRY_COMPILE(
+ #ifdef HAVE_ERRNO_H
+ # include <errno.h>
+ #endif /* HAVE_ERRNO_H */
+-],
+-[
++]],
++[[
+ char *cp = optarg;
+-], ac_cv_extern_optarg=yes, ac_cv_extern_optarg=no)
++]])], ac_cv_extern_optarg=yes, ac_cv_extern_optarg=no)
+ ])
+ if test "$ac_cv_extern_optarg" = yes
+ then
+diff --git a/m4/macros/field_mntent_t_mnt_time_string.m4 b/m4/macros/field_mntent_t_mnt_time_string.m4
+index 42ad647b..9ed83f46 100644
+--- a/m4/macros/field_mntent_t_mnt_time_string.m4
++++ b/m4/macros/field_mntent_t_mnt_time_string.m4
+@@ -6,7 +6,8 @@ AC_CACHE_CHECK(if mntent_t field mnt_time exist as type string,
+ ac_cv_field_mntent_t_mnt_time_string,
+ [
+ # try to compile a program
+-AC_TRY_COMPILE(
++AC_COMPILE_IFELSE(
++[AC_LANG_PROGRAM(
+ AMU_MOUNT_HEADERS(
+ [
+ /* now set the typedef */
+@@ -20,13 +21,13 @@ typedef struct mnttab mntent_t;
+ # endif /* not HAVE_STRUCT_MNTTAB */
+ #endif /* not HAVE_STRUCT_MNTENT */
+ ]),
+-[
++[[
+ mntent_t mtt;
+ char *cp = "test";
+ int i;
+ mtt.mnt_time = cp;
+ i = mtt.mnt_time[0];
+-], ac_cv_field_mntent_t_mnt_time_string=yes, ac_cv_field_mntent_t_mnt_time_string=no)
++]])], ac_cv_field_mntent_t_mnt_time_string=yes, ac_cv_field_mntent_t_mnt_time_string=no)
+ ])
+ if test "$ac_cv_field_mntent_t_mnt_time_string" = yes
+ then
+diff --git a/m4/macros/mount_headers.m4 b/m4/macros/mount_headers.m4
+index cf7b9103..3a1226f4 100644
+--- a/m4/macros/mount_headers.m4
++++ b/m4/macros/mount_headers.m4
+@@ -1,12 +1,12 @@
+ dnl ######################################################################
+ dnl an M4 macro to include a list of common headers being used everywhere
+ define(AMU_MOUNT_HEADERS,
+-[
++[[
+ #include "${srcdir}/include/mount_headers1.h"
+ #include AMU_NFS_PROTOCOL_HEADER
+ #include "${srcdir}/include/mount_headers2.h"
+ 
+ $1
+-]
++]]
+ )
+ dnl ======================================================================
+diff --git a/m4/macros/struct_mntent.m4 b/m4/macros/struct_mntent.m4
+index d9f48119..9a9ad18b 100644
+--- a/m4/macros/struct_mntent.m4
++++ b/m4/macros/struct_mntent.m4
+@@ -6,12 +6,13 @@ AC_CACHE_CHECK(for struct mntent,
+ ac_cv_have_struct_mntent,
+ [
+ # try to compile a program which may have a definition for the structure
+-AC_TRY_COMPILE(
++AC_COMPILE_IFELSE(
++[AC_LANG_PROGRAM(
+ AMU_MOUNT_HEADERS
+ ,
+-[
++[[
+ struct mntent mt;
+-], ac_cv_have_struct_mntent=yes, ac_cv_have_struct_mntent=no)
++]])], ac_cv_have_struct_mntent=yes, ac_cv_have_struct_mntent=no)
+ ])
+ if test "$ac_cv_have_struct_mntent" = yes
+ then
+diff --git a/m4/macros/struct_mnttab.m4 b/m4/macros/struct_mnttab.m4
+index ed1cb563..4eabbaa4 100644
+--- a/m4/macros/struct_mnttab.m4
++++ b/m4/macros/struct_mnttab.m4
+@@ -6,12 +6,13 @@ AC_CACHE_CHECK(for struct mnttab,
+ ac_cv_have_struct_mnttab,
+ [
+ # try to compile a program which may have a definition for the structure
+-AC_TRY_COMPILE(
++AC_COMPILE_IFELSE(
++[AC_LANG_PROGRAM(
+ AMU_MOUNT_HEADERS
+ ,
+-[
++[[
+ struct mnttab mt;
+-], ac_cv_have_struct_mnttab=yes, ac_cv_have_struct_mnttab=no)
++]])], ac_cv_have_struct_mnttab=yes, ac_cv_have_struct_mnttab=no)
+ ])
+ if test "$ac_cv_have_struct_mnttab" = yes
+ then
+diff --git a/m4/macros/try_compile_anyfs.m4 b/m4/macros/try_compile_anyfs.m4
+index 22a57198..cd34eee4 100644
+--- a/m4/macros/try_compile_anyfs.m4
++++ b/m4/macros/try_compile_anyfs.m4
+@@ -6,8 +6,9 @@ dnl [$2] action to take if the program compiled (3rd arg to AC_TRY_COMPILE)
+ dnl [$3] action to take if program did not compile (4rd arg to AC_TRY_COMPILE)
+ AC_DEFUN([AC_TRY_COMPILE_ANYFS],
+ [# try to compile a program which may have a definition for a structure
+-AC_TRY_COMPILE(
+-[
++AC_COMPILE_IFELSE(
++[AC_LANG_PROGRAM(
++[[
+ #ifdef HAVE_SYS_TYPES_H
+ # include <sys/types.h>
+ #endif /* HAVE_SYS_TYPES_H */
+@@ -180,6 +181,7 @@ struct netexport { int this_is_SO_wrong; }; /* for bsdi-2.1 */
+ #ifdef HAVE_FS_UDF_UDF_MOUNT_H
+ # include <fs/udf/udf_mount.h>
+ #endif /* HAVE_FS_UDF_UDF_MOUNT_H */
+-], [$1], [$2], [$3])
++]], [[$1]]
++)], [$2], [$3])
+ ])
+ dnl ======================================================================
+diff --git a/m4/macros/try_compile_nfs.m4 b/m4/macros/try_compile_nfs.m4
+index d04e1961..9a7a3892 100644
+--- a/m4/macros/try_compile_nfs.m4
++++ b/m4/macros/try_compile_nfs.m4
+@@ -6,8 +6,9 @@ dnl [$2] action to take if the program compiled (3rd arg to AC_TRY_COMPILE)
+ dnl [$3] action to take if program did not compile (4rd arg to AC_TRY_COMPILE)
+ AC_DEFUN([AC_TRY_COMPILE_NFS],
+ [# try to compile a program which may have a definition for a structure
+-AC_TRY_COMPILE(
+-AMU_MOUNT_HEADERS
+-, [$1], [$2], [$3])
++AC_COMPILE_IFELSE(
++[AC_LANG_PROGRAM(
++AMU_MOUNT_HEADERS,
++[[$1]])], [$2], [$3])
+ ])
+ dnl ======================================================================
+diff --git a/m4/macros/try_compile_rpc.m4 b/m4/macros/try_compile_rpc.m4
+index 5c95348c..f98bea7d 100644
+--- a/m4/macros/try_compile_rpc.m4
++++ b/m4/macros/try_compile_rpc.m4
+@@ -6,8 +6,9 @@ dnl [$2] action to take if the program compiled (3rd arg to AC_TRY_COMPILE)
+ dnl [$3] action to take if program did not compile (4rd arg to AC_TRY_COMPILE)
+ AC_DEFUN([AC_TRY_COMPILE_RPC],
+ [# try to compile a program which may have a definition for a structure
+-AC_TRY_COMPILE(
+-[
++AC_COMPILE_IFELSE(
++[AC_LANG_PROGRAM(
++[[
+ #ifdef HAVE_SYS_TYPES_H
+ # include <sys/types.h>
+ #endif /* HAVE_SYS_TYPES_H */
+@@ -18,6 +19,7 @@ AC_TRY_COMPILE(
+ #if defined(HAVE_RPC_XDR_H) && !defined(__XDR_HEADER__)
+ # include <rpc/xdr.h>
+ #endif /* defined(HAVE_RPC_XDR_H) && !defined(__XDR_HEADER__) */
+-], [$1], [$2], [$3])
++]], [[$1]]
++)], [$2], [$3])
+ ])
+ dnl ======================================================================

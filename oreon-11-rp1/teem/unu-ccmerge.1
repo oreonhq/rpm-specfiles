@@ -1,0 +1,111 @@
+.TH UNU\-CCMERGE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-ccmerge \- merge CCs with their neighbors, under various constraints
+.SH SYNOPSIS
+.B unu\ ccmerge
+.RB [ \-d , \-\-directed
+.RI < dir >]
+.RB [ \-s , \-\-size
+.RI < max\ size >]
+.RB [ \-n , \-\-neighbor
+.RI < max\ #\ neigh >]
+.BR \-c , \-\-connect
+.RI < connectivity >
+.RB [ \-revalue ]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-v , \-\-values
+.RI < values >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Merge CCs with their neighbors, under various constraints.
+This operates on the output of
+.BR unu\-ccfind (1).
+Merging of a CC is always done into its largest neighbor.
+Whether or not to merge can be constrained by one or more of: CC size
+.RB (\(lq \-s \(rq),
+original CC value being brighter or darker
+.RB (\(lq \-d \(rq),
+and number of neighbors
+.RB (\(lq \-n \(rq).
+.IP \(bu +2n
+Uses
+.B nrrdCCMerge
+.SH OPTIONS
+.TP
+.B \-d\fR\ <\fIdir\fR>\ ,\ \fB\-\-directed\fR\ <\fIdir\fR>
+do value-driven merging.
+Using (positive)
+.RB \(lq 1 \(rq
+says that dark islands get merged with bright surrounds, while
+.RB \(lq \-1 \(rq
+says the opposite.
+By default, merging can go either way.
+.RI ( int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-s\fR\ <\fImax\ size\fR>\ ,\ \fB\-\-size\fR\ <\fImax\ size\fR>
+a cap on the CC size that will be absorbed into its surround.
+CCs larger than this are deemed too significant to mess with.
+Or, use
+.RB \(lq 0 \(rq
+to remove any such restriction on merging.
+.RI ( int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-n\fR\ <\fImax\ #\ neigh\fR>\ ,\ \fB\-\-neighbor\fR\ <\fImax\ #\ neigh\fR>
+a cap on the number of neighbors that a CC may have if it is to be be merged.
+.RB \(lq 1 \(rq
+allows only islands to be merged,
+.RB \(lq 2 \(rq
+does merging with bigger of two neighbors, etc, while
+.RB \(lq 0 \(rq
+says that number of neighbors is no constraint
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-c\fR\ <\fIconnectivity\fR>\ ,\ \fB\-\-connect\fR\ <\fIconnectivity\fR>
+what kind of connectivity to use: the number of coordinates that vary in order
+to traverse the neighborhood of a given sample.
+In 2D:
+.RB \(lq 1 \(rq:
+4-connected,
+.RB \(lq 2 \(rq:
+8-connected
+.RI ( unsigned\ int )
+.TP
+.B \-revalue
+If this option is given, then after the merging, the CCs are re-assigned their
+original datavalues, as given by the
+.RB \(lq \-v \(rq
+option
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-v\fR\ <\fIvalues\fR>\ ,\ \fB\-\-values\fR\ <\fIvalues\fR>
+result of using
+.BR unu\-ccfind (1) \ \-v ,
+the record of which values were originally associated with each CC.
+This is required for value-directed merging (with non-zero
+.RB \(lq \-d \(rq
+option), or if the
+.B \-revalue
+option is given, but is not needed otherwise
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-ccfind (1),
+.BR unu\-ccadj (1),
+.BR unu\-ccsettle (1)

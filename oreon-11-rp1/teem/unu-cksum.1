@@ -1,0 +1,55 @@
+.TH UNU\-CKSUM "1" "May 2021" "" "User Commands"
+.SH NAME
+unu\-cksum \- compute 32-bit CRC of
+.I nrrd
+data (same as via
+.BR cksum (1))
+.SH SYNOPSIS
+.B unu\ cksum
+.BR \-en , \-\-endian
+.RI < end >
+.RB [ \-pen , \-\-printendian
+.RI < bool >]
+.RI < nin1 \ ...>
+.SH DESCRIPTION
+Compute 32-bit CRC of
+.I nrrd
+data (same as via
+.BR cksum (1)).
+Unlike other commands, this doesn\(cqt produce a
+.IR nrrd .
+It only prints to standard out the CRC and byte counts for the input
+.IR nrrd (s),
+seeking to emulate the formatting of
+.BR cksum (1)
+output.
+.IP \(bu +2n
+Uses
+.B nrrdCRC32
+.SH OPTIONS
+.TP
+.B \-en\fR\ <\fIendian\fR>\ ,\ \fB\-\-endian\fR\ <\fIendian\fR>
+Endianness in which to compute CRC;
+.RB \(lq little \(rq
+for Intel and friends;
+.RB \(lq big \(rq
+for everyone else.
+Defaults to endianness of this machine.
+.TP
+.B \-pen\fR\ <\fIbool\fR>\ ,\ \fB\-\-printendian\fR\ <\fIbool\fR>
+whether or not to indicate after the CRC value the endianness with which the
+CRC was computed; doing so clarifies that the CRC result depends on endianness
+and may remove confusion in comparing results on platforms of different
+endianness
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.RI < nin \ ...>
+input
+.IR nrrd (s)
+(1 or more
+.IR string s)
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR cksum (1)

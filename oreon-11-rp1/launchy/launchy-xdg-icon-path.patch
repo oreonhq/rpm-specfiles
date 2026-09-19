@@ -1,0 +1,11 @@
+diff -uNr launchy-2.5.orig/platforms/unix/platform_unix_util.cpp launchy-2.5/platforms/unix/platform_unix_util.cpp
+--- launchy-2.5.orig/platforms/unix/platform_unix_util.cpp	2010-02-13 20:37:54.000000000 +0100
++++ launchy-2.5/platforms/unix/platform_unix_util.cpp	2010-11-29 12:29:44.905187524 +0100
+@@ -14,6 +14,7 @@
+ 	QStringList spl = line.split("=");
+ 	xdgDataDirs = spl[1].split(":");	
+     }
++    xdgDataDirs += "/usr/share/";
+     xdgDataDirs += "/usr/share/icons/";
+ }
+ 

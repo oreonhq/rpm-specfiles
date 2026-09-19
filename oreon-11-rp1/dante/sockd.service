@@ -1,0 +1,14 @@
+[Unit]
+Description=Dante SOCKS server
+After=syslog.target network.target network-online.target
+Documentation=man:sockd(8) man:sockd.conf(5)
+Wants=network-online.target
+
+[Service]
+Type=forking
+#EnvironmentFile=/etc/sockd.conf
+PIDFile=/run/sockd.pid
+ExecStart=/usr/sbin/sockd -D -p /run/sockd.pid
+
+[Install]
+WantedBy=multi-user.target

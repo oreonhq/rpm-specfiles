@@ -3,7 +3,7 @@
 %global maj 0
 
 Name:           serd
-Version:        0.32.8
+Version:        0.32.10
 Release:        %autorelease
 Summary:        A lightweight C library for RDF syntax
 

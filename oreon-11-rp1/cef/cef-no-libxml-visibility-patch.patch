@@ -1,0 +1,16 @@
+diff --git a/cef/patch/patch.cfg b/cef/patch/patch.cfg
+index 538b2947482e..dbb049351c03 100644
+--- a/cef/patch/patch.cfg
++++ b/cef/patch/patch.cfg
+@@ -558,11 +558,6 @@ patches = [
+     # https://github.com/chromiumembedded/cef/issues/2819
+     'name': 'win_cpp17_msvc_sandbox_2819',
+   },
+-  {
+-    # libxml access is now limited to targets audited by the Security Team.
+-    # https://chromium-review.googlesource.com/c/chromium/src/+/1884750
+-    'name': 'libxml_visibility',
+-  },
+   {
+     # Fix unbound AssociatedRemote error in SetBackgroundOpaque.
+     # https://bugs.chromium.org/p/chromium/issues/detail?id=1070713

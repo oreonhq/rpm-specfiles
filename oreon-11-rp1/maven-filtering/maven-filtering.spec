@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-filtering
-Version:        3.3.2
+Version:        3.5.1
 Release:        %autorelease
 Summary:        Shared component providing resource filtering
 License:        Apache-2.0
@@ -41,7 +41,7 @@ BuildRequires:  mvn(org.slf4j:slf4j-simple)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.3.2-7
+Obsoletes:      %{name}-javadoc < 3.5.1-7
 
 %description
 These Plexus components have been built from the filtering process/code in 

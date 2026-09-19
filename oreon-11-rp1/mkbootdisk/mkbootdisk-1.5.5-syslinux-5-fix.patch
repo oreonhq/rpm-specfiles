@@ -1,0 +1,12 @@
+diff --git a/mkbootdisk b/mkbootdisk
+index ad5259b..76c3c34 100755
+--- a/mkbootdisk
++++ b/mkbootdisk
+@@ -178,6 +178,7 @@ if [ -n "$isoimage" ]; then
+     [ -n "$verbose" ] && echo -n "Installing isolinux... "
+     mkdir $MOUNTDIR/isolinux
+     cp /usr/share/syslinux/isolinux.bin $MOUNTDIR/isolinux
++    [ -f /usr/share/syslinux/ldlinux.c32 ] && cp /usr/share/syslinux/ldlinux.c32 $MOUNTDIR/isolinux
+     [ -n "$verbose" ] && echo done
+ else
+     cfgfile=$MOUNTDIR/syslinux.cfg

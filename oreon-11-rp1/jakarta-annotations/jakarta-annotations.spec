@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           jakarta-annotations
-Version:        1.3.5
+Version:        3.0.0
 Release:        %autorelease
 Summary:        Jakarta Annotations
 License:        EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0
@@ -21,7 +21,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.3.5-41
+Obsoletes:      %{name}-javadoc < 3.0.0-41
 Provides:       glassfish-annotation-api = %{version}-%{release}
 
 %description

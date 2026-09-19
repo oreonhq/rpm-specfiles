@@ -1,0 +1,21 @@
+diff -up frysk-0.4/frysk-sys/frysk/sys/cni/Errno.cxx.gccjint frysk-0.4/frysk-sys/frysk/sys/cni/Errno.cxx
+--- frysk-0.4/frysk-sys/frysk/sys/cni/Errno.cxx.gccjint	2010-03-29 17:19:01.000000000 -0400
++++ frysk-0.4/frysk-sys/frysk/sys/cni/Errno.cxx	2010-03-29 17:22:06.000000000 -0400
+@@ -291,8 +291,15 @@ verifyBounds (jbyteArray bytes, jint sta
+     throw new java::lang::ArrayIndexOutOfBoundsException ();
+   if (length < 0)
+     throw new java::lang::ArrayIndexOutOfBoundsException ();
+-  if (start + length < 0)
++#if 0
++  jint end = start + length;
++#else
++  // Work around GCC bug where test for (MAX_INT+1)<0 fails - the
++  // arrithmetic should have wrapped the value to -ve.
++  long end = start + length;
++#endif
++  if (end < 0)
+     throw new java::lang::ArrayIndexOutOfBoundsException ();
+-  if (start + length > bytes->length)
++  if (end > bytes->length)
+     throw new java::lang::ArrayIndexOutOfBoundsException ();
+ }

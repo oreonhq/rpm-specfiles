@@ -1,0 +1,72 @@
+From 54605115a8f1f0d0d4fd994f7fbd75a0b82c4c6a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?S=C3=A9rgio=20M=2E=20Basto?= <sergio@serjux.com>
+Date: Sat, 18 Sep 2021 17:40:41 +0100
+Subject: [PATCH 2/3] Generate libproject-qt.pc
+
+---
+ .gitignore                           |  1 +
+ configure.ac                         |  1 +
+ src/projectM-qt/Makefile.am          |  5 +++++
+ src/projectM-qt/libprojectM-qt.pc.in | 13 +++++++++++++
+ 4 files changed, 20 insertions(+)
+ create mode 100644 src/projectM-qt/libprojectM-qt.pc.in
+
+diff --git a/.gitignore b/.gitignore
+index 7d057f4a..c3afb331 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -39,6 +39,7 @@ m4/ltversion.m4
+ m4/lt~obsolete.m4
+ /t
+ /src/libprojectM/libprojectM.pc
++/src/projectM-qt/libprojectM-qt.pc
+ /build
+ /dist
+ 
+diff --git a/configure.ac b/configure.ac
+index 528decf8..05107a37 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -78,6 +78,7 @@ AC_CONFIG_FILES([
+   src/projectM-sdl/Makefile
+   src/projectM-emscripten/Makefile
+   src/projectM-qt/Makefile
++  src/projectM-qt/libprojectM-qt.pc
+   src/projectM-pulseaudio/Makefile
+   src/projectM-jack/Makefile
+   src/projectM-test/Makefile
+diff --git a/src/projectM-qt/Makefile.am b/src/projectM-qt/Makefile.am
+index 3ae83258..2397e51f 100644
+--- a/src/projectM-qt/Makefile.am
++++ b/src/projectM-qt/Makefile.am
+@@ -85,3 +85,8 @@ CLEANFILES = \
+ 	application_qrc.cpp \
+ 	${BUILT_SOURCES} \
+ 	${nodist_projectM_qt_moc_sources}
++
++pkgconfigdir = $(libdir)/pkgconfig
++pkgconfig_DATA = libprojectM-qt.pc
++EXTRA_DIST = libprojectM-qt.pc.in
++CLEANFILES += libprojectM-qt.pc
+diff --git a/src/projectM-qt/libprojectM-qt.pc.in b/src/projectM-qt/libprojectM-qt.pc.in
+new file mode 100644
+index 00000000..127833fc
+--- /dev/null
++++ b/src/projectM-qt/libprojectM-qt.pc.in
+@@ -0,0 +1,13 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
++pkgdatadir=@datarootdir@/@PACKAGE_NAME@
++sysconfdir=@datarootdir@/@PACKAGE_NAME@
++
++Name: libprojectM-qt
++Version: @PACKAGE_VERSION@
++Description: projectM Qt lib
++Requires:
++Libs: -L${libdir} -lprojectM -projectM_qt
++Cflags: -I${includedir}
+-- 
+2.31.1
+

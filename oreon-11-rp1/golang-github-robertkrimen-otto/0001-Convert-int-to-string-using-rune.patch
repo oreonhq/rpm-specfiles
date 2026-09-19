@@ -1,0 +1,50 @@
+From 58e27b326c4403cb51042806cbd8c43c8e35fa37 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Sat, 1 Aug 2020 22:47:27 +0200
+Subject: [PATCH] Convert int to string using rune()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+See https://github.com/golang/go/issues/32479
+
+Fix #384.
+
+Signed-off-by: Robert-André Mauchin <zebob.m@gmail.com>
+---
+ builtin.go     | 4 ++--
+ regexp_test.go | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/builtin.go b/builtin.go
+index 256ee3c..5902390 100644
+--- a/builtin.go
++++ b/builtin.go
+@@ -48,9 +48,9 @@ var parseInt_alphabetTable = func() []string {
+ 	for radix := 3; radix <= 36; radix += 1 {
+ 		alphabet := table[radix-1]
+ 		if radix <= 10 {
+-			alphabet += string(radix + 47)
++			alphabet += string(rune(radix + 47))
+ 		} else {
+-			alphabet += string(radix+54) + string(radix+86)
++			alphabet += string(rune(radix+54)) + string(rune(radix+86))
+ 		}
+ 		table = append(table, alphabet)
+ 	}
+diff --git a/regexp_test.go b/regexp_test.go
+index 8e65ee4..364c497 100644
+--- a/regexp_test.go
++++ b/regexp_test.go
+@@ -256,7 +256,7 @@ func TestRegExp_controlCharacter(t *testing.T) {
+ 		test, _ := test()
+ 
+ 		for code := 0x41; code < 0x5a; code++ {
+-			string_ := string(code - 64)
++			string_ := string(rune(code - 64))
+ 			test(fmt.Sprintf(`
+                 var code = 0x%x;
+                 var string = String.fromCharCode(code %% 32);
+-- 
+2.26.2
+

@@ -1,0 +1,22 @@
+From dc3e9f996e834414a61fa0229118f91b878e70ed Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 1 Mar 2026 20:54:34 +0000
+Subject: [PATCH] Update cmake_minimum_required for C to 3.12; support CMake 4
+
+---
+ c/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/c/CMakeLists.txt b/c/CMakeLists.txt
+index cb7c37d0c..6b6082444 100644
+--- a/c/CMakeLists.txt
++++ b/c/CMakeLists.txt
+@@ -14,7 +14,7 @@ else()
+     message(FATAL_ERROR "unable to parse version: ${VERSION}")
+ endif()
+ 
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.12)
+ PROJECT(gherkin VERSION ${VERSION} LANGUAGES C)
+ enable_testing()
+ 

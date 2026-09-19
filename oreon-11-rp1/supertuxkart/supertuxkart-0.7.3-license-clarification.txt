@@ -1,0 +1,14 @@
+data/music/kart_grand_prix.ogg is CC-BY-SA 3.0.
+http://forum.freegamedev.net/viewtopic.php?f=17&t=4082
+
+Jon Ciesla
+2013-02-04
+BZ 891890
+
+ocean and peach skins are now CC-BY-SA 3.0:
+http://supertuxkart.svn.sourceforge.net/viewvc/supertuxkart/main/trunk/data/gui/skins/ocean/License.txt?r1=5993&r2=12069
+http://supertuxkart.svn.sourceforge.net/viewvc/supertuxkart/main/trunk/data/gui/skins/peach/License.txt?r1=5993&r2=12069
+
+Jon Ciesla
+2013-05-07
+BZ 891890

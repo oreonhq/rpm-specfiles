@@ -1,0 +1,8 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+
+Name: MySql.Data
+Description: Connector/Net is a fully-managed ADO.NET driver for MySQL.
+Version: 6.9.9
+Libs: -r:${libdir}/mono/mysql-connector-net/MySql.Data.dll

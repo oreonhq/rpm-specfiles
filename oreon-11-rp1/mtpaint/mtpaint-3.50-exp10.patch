@@ -1,0 +1,31 @@
+diff --git a/src/csel.c b/src/csel.c
+index 64c48dc..b5b05e7 100644
+--- a/src/csel.c
++++ b/src/csel.c
+@@ -99,7 +99,7 @@ static inline double CIElum(double x)
+ 	return (CIE[n] + (CIE[n + 1] - CIE[n]) * (x - n));
+ }
+ 
+-static inline double exp10(double x)
++static inline double mt_exp10(double x)
+ {
+ 	int n;
+ 
+@@ -155,7 +155,7 @@ double rgb2B(double r, double g, double b)
+ 	x *= z;
+ 	z *= y; /* It's not Z now, but y */
+ 	z = 0.256 + (-0.184 + (-2.527 + 4.656 * x * x + 4.657 * z * z * z) * x) * z;
+-	y *= exp10(z) * wy;
++	y *= mt_exp10(z) * wy;
+ 	return (y > 1.0 ? 1.0 : y);
+ }
+ 
+@@ -212,7 +212,7 @@ static void make_rgb_xyz(void)
+ 	bxyz[2] = (1.0 - BLUE_X - BLUE_Y) * wb;
+ 	xyz2XN(wXN, WHITE_X / WHITE_Y, 1.0, (1 - WHITE_X - WHITE_Y) / WHITE_Y);
+ 	/* Normalize brightness of white */
+-	wy = 1.0 / exp10(0.256 + (-0.184 + (-2.527 + 4.656 * WHITE_X * WHITE_X +
++	wy = 1.0 / mt_exp10(0.256 + (-0.184 + (-2.527 + 4.656 * WHITE_X * WHITE_X +
+ 		4.657 * WHITE_Y * WHITE_Y * WHITE_Y) * WHITE_X) * WHITE_Y);
+ }
+ 

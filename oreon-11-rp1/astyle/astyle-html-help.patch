@@ -1,0 +1,12 @@
+diff -up astyle-3.4.12/AStyle/src/astyle_main.cpp.orig astyle-3.4.12/AStyle/src/astyle_main.cpp
+--- astyle-3.4.12/AStyle/src/astyle_main.cpp.orig	2024-02-15 15:46:19.818320901 +0100
++++ astyle-3.4.12/AStyle/src/astyle_main.cpp	2024-02-15 15:49:26.316130715 +0100
+@@ -1532,7 +1532,7 @@ void ASConsole::launchDefaultBrowser(con
+ #else
+ 	std::string htmlDefaultPrefix = "/usr";
+ #endif
+-	std::string htmlDefaultPath = htmlDefaultPrefix + "/share/doc/astyle/html/";
++	std::string htmlDefaultPath = htmlDefaultPrefix + "/share/doc/astyle/";
+ 	std::string htmlDefaultFile = "astyle.html";
+ 	std::string htmlFilePath;
+ 	struct stat statbuf;

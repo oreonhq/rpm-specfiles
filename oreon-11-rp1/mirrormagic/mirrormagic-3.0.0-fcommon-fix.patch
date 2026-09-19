@@ -1,0 +1,52 @@
+diff -up mirrormagic-3.0.0/src/game_sp/export.h~ mirrormagic-3.0.0/src/game_sp/export.h
+--- mirrormagic-3.0.0/src/game_sp/export.h~	2018-04-10 21:44:08.000000000 +0200
++++ mirrormagic-3.0.0/src/game_sp/export.h	2020-03-07 13:54:02.800674685 +0100
+@@ -174,6 +173,7 @@ extern struct LevelInfo_SP native_sp_lev
+ extern struct GraphicInfo_SP graphic_info_sp_object[TILE_MAX][8];
+ extern struct GraphicInfo_SP graphic_info_sp_player[MAX_PLAYERS][SPR_MAX][8];
+ extern struct EngineSnapshotInfo_SP engine_snapshot_sp;
++extern int GfxFrame[SP_MAX_PLAYFIELD_WIDTH][SP_MAX_PLAYFIELD_HEIGHT];
+ 
+ extern void sp_open_all();
+ extern void sp_close_all();
+diff -up mirrormagic-3.0.0/src/game_sp/main_sp.h~ mirrormagic-3.0.0/src/game_sp/main_sp.h
+--- mirrormagic-3.0.0/src/game_sp/main_sp.h~	2018-04-10 21:44:08.000000000 +0200
++++ mirrormagic-3.0.0/src/game_sp/main_sp.h	2020-03-07 13:58:52.070062453 +0100
+@@ -70,7 +70,6 @@ extern Bitmap *bitmap_db_field_sp;
+ extern int GfxElementLast[SP_MAX_PLAYFIELD_WIDTH][SP_MAX_PLAYFIELD_HEIGHT];
+ extern int GfxGraphicLast[SP_MAX_PLAYFIELD_WIDTH][SP_MAX_PLAYFIELD_HEIGHT];
+ extern int GfxGraphic[SP_MAX_PLAYFIELD_WIDTH][SP_MAX_PLAYFIELD_HEIGHT];
+-extern int GfxFrame[SP_MAX_PLAYFIELD_WIDTH][SP_MAX_PLAYFIELD_HEIGHT];
+ 
+ 
+ /* ------------------------------------------------------------------------- */
+diff -up mirrormagic-3.0.0/src/main.c~ mirrormagic-3.0.0/src/main.c
+--- mirrormagic-3.0.0/src/main.c~	2018-04-10 21:44:08.000000000 +0200
++++ mirrormagic-3.0.0/src/main.c	2020-03-07 13:54:13.953689635 +0100
+@@ -69,7 +69,6 @@ short			ExplodeDelay[MAX_LEV_FIELDX][MAX
+ int			RunnerVisit[MAX_LEV_FIELDX][MAX_LEV_FIELDY];
+ int			PlayerVisit[MAX_LEV_FIELDX][MAX_LEV_FIELDY];
+ 
+-int			GfxFrame[MAX_LEV_FIELDX][MAX_LEV_FIELDY];
+ int 			GfxRandom[MAX_LEV_FIELDX][MAX_LEV_FIELDY];
+ int 			GfxElement[MAX_LEV_FIELDX][MAX_LEV_FIELDY];
+ int			GfxAction[MAX_LEV_FIELDX][MAX_LEV_FIELDY];
+@@ -138,7 +137,6 @@ struct LevelInfo	level, level_template;
+ struct PlayerInfo	stored_player[MAX_PLAYERS], *local_player = NULL;
+ struct HiScore		highscore[MAX_SCORE_ENTRIES];
+ struct TapeInfo		tape;
+-struct SetupInfo	setup;
+ struct GameInfo		game;
+ struct GlobalInfo	global;
+ struct BorderInfo	border;
+diff -up mirrormagic-3.0.0/src/main.h~ mirrormagic-3.0.0/src/main.h
+--- mirrormagic-3.0.0/src/main.h~	2018-04-10 21:44:08.000000000 +0200
++++ mirrormagic-3.0.0/src/main.h	2020-03-07 13:55:33.641796458 +0100
+@@ -3554,7 +3554,6 @@ extern short			ExplodeDelay[MAX_LEV_FIEL
+ extern int			RunnerVisit[MAX_LEV_FIELDX][MAX_LEV_FIELDY];
+ extern int			PlayerVisit[MAX_LEV_FIELDX][MAX_LEV_FIELDY];
+ 
+-extern int			GfxFrame[MAX_LEV_FIELDX][MAX_LEV_FIELDY];
+ extern int			GfxRandom[MAX_LEV_FIELDX][MAX_LEV_FIELDY];
+ extern int 			GfxElement[MAX_LEV_FIELDX][MAX_LEV_FIELDY];
+ extern int			GfxAction[MAX_LEV_FIELDX][MAX_LEV_FIELDY];

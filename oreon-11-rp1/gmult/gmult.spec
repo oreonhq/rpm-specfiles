@@ -1,0 +1,66 @@
+%global source0_hash 885e29ce005b64cfe8ae04e3db75e2b2a29c023883111716271ebaa48c286313
+
+%global app_id  app.drey.MultiplicationPuzzle
+
+Name:           gmult
+Version:        16.0
+Release:        %autorelease
+Summary:        Multiplication Puzzle
+# CC0-1.0 applies only to build system files
+License:        GPL-3.0-or-later AND CC-BY-SA-4.0
+URL:            https://gitlab.gnome.org/mterry/gmult
+Source:         %{url}/-/archive/%{version}/gmult-%{version}.tar.bz2
+
+BuildRequires:  blueprint-compiler
+BuildRequires:  desktop-file-utils
+BuildRequires:  gettext
+BuildRequires:  libappstream-glib
+BuildRequires:  meson
+BuildRequires:  pkgconfig(glib-2.0) >= 2.76
+BuildRequires:  pkgconfig(gtk4) >= 4.14
+BuildRequires:  pkgconfig(libadwaita-1) >= 1.8
+BuildRequires:  vala
+
+Requires:       hicolor-icon-theme
+
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    %{ix86}
+
+%description
+Multiplication Puzzle is a simple game inspired by the multiplication game 
+inside the popular editor emacs. You are presented with a long multiplication 
+problem where a 3-digit number is multiplied by a 2-digit number, yielding two 
+intermediate 4-digit number and a final 5-digit answer.  However, all the 
+digits are replaced by letters.  Your job is to discover which letters are 
+which digits.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1
+
+%build
+%meson
+%meson_build
+
+%install
+%meson_install
+
+%find_lang %{name}
+
+%check
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{app_id}.desktop
+appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{app_id}.metainfo.xml
+
+%files -f %{name}.lang
+%license LICENSES/CC-BY-SA-4.0.md LICENSES/GPL-3.0-or-later.md
+%doc MAINTAINERS.md NEWS.md README.md
+%{_bindir}/gmult
+%{_datadir}/applications/%{app_id}.desktop
+%{_datadir}/dbus-1/services/%{app_id}.service
+%{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
+%{_datadir}/icons/hicolor/*/*/%{app_id}*
+%{_metainfodir}/%{app_id}.metainfo.xml
+
+%changelog
+%autochangelog

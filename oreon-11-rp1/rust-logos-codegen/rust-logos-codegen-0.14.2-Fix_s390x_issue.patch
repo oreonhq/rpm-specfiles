@@ -1,0 +1,61 @@
+From aab117ca4475df39a1cb6dc1372abf8956c3df4d Mon Sep 17 00:00:00 2001
+From: Daniel Pfister <80419299+0x2a-42@users.noreply.github.com>
+Date: Tue, 15 Oct 2024 22:39:45 +0200
+Subject: [PATCH 1/2] fix(lib): generate same code on big-endian platforms
+
+---
+ logos-codegen/src/graph/mod.rs | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/logos-codegen/src/graph/mod.rs b/logos-codegen/src/graph/mod.rs
+index f82330f4..1da20c19 100644
+--- a/src/graph/mod.rs
++++ b/src/graph/mod.rs
+@@ -58,9 +58,18 @@ pub trait Disambiguate {
+ 
+ /// Id of a Node in the graph. `NodeId` can be referencing an empty
+ /// slot that is going to be populated later in time.
+-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
++#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+ pub struct NodeId(NonZeroU32);
+ 
++impl Hash for NodeId {
++    fn hash<H: Hasher>(&self, state: &mut H) {
++        // Always use little-endian byte order for hashing to avoid
++        // different code generation on big-endian platforms due to
++        // iteration over a HashMap
++        state.write(&self.0.get().to_le_bytes())
++    }
++}
++
+ impl NodeId {
+     fn get(self) -> usize {
+         self.0.get() as usize
+
+From 1e15faf3b83007e5648df76be1843f1644ad368b Mon Sep 17 00:00:00 2001
+From: Daniel Pfister <80419299+0x2a-42@users.noreply.github.com>
+Date: Wed, 16 Oct 2024 21:03:18 +0200
+Subject: [PATCH 2/2] Update logos-codegen/src/graph/mod.rs
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Co-authored-by: Jérome Eertmans <jeertmans@icloud.com>
+---
+ logos-codegen/src/graph/mod.rs | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/logos-codegen/src/graph/mod.rs b/logos-codegen/src/graph/mod.rs
+index 1da20c19..6d218e8c 100644
+--- a/src/graph/mod.rs
++++ b/src/graph/mod.rs
+@@ -65,7 +65,8 @@ impl Hash for NodeId {
+     fn hash<H: Hasher>(&self, state: &mut H) {
+         // Always use little-endian byte order for hashing to avoid
+         // different code generation on big-endian platforms due to
+-        // iteration over a HashMap
++        // iteration over a HashMap,
++        // see https://github.com/maciejhirsz/logos/issues/427.
+         state.write(&self.0.get().to_le_bytes())
+     }
+ }

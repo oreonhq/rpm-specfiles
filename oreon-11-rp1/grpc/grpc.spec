@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0c3faa83e39d4f1ab55fe1476362b9ac3b81632a46dce7fd4d50271bce816b53
 
 # We need to use C++17 to link against the system abseil-cpp, since it was
 # compiled with C++17 (an intentional abseil-cpp design decision).
@@ -72,6 +72,7 @@
 # A great many of these tests (over 20%) fail. Any help in understanding these
 # well enough to fix them or report them upstream is welcome.
 %bcond python_aio_tests    0
+%bcond google_auth_tests   0
 
 %ifnarch s390x
 # There are currently a significant number of failures like:
@@ -118,7 +119,7 @@
 # documentation. Instead, we have just dropped all documentation.
 
 Name:           grpc
-Version:        1.48.4
+Version:        1.84.0
 Release:        %autorelease
 Summary:        RPC library and framework
 
@@ -130,7 +131,7 @@ Summary:        RPC library and framework
 # CMakeLists.txt: gRPC_CPP_SOVERSION
 # See https://github.com/abseil/abseil-cpp/issues/950#issuecomment-843169602
 # regarding unusual C++ SOVERSION style (not a single number).
-%global cpp_so_version 1.48
+%global cpp_so_version 1.84
 
 # The entire source is Apache-2.0 except the following:
 #
@@ -199,6 +200,7 @@ Source105:      grpc_cli-totext.1
 Source106:      grpc_cli-tojson.1
 Source107:      grpc_cli-tobinary.1
 Source108:      grpc_cli-help.1
+Patch1000:      grpc-spinlock-test-bound.patch
 
 # ~~~~ C (core) and C++ (cpp) ~~~~
 
@@ -286,7 +288,9 @@ BuildRequires:  python3-protobuf < 4
 BuildRequires:  python3dist(protobuf) >= 3.12.0
 
 # grpcio_status (src/python/grpcio_status/setup.py) install_requires:
+%if %{with google_auth_tests}
 BuildRequires:  python3dist(googleapis-common-protos) >= 1.5.5
+%endif
 
 # Several packages have dependencies on grpcio or grpcio_tools—and grpcio-tests
 # depends on all of the other Python packages—which are satisfied within this
@@ -298,7 +302,9 @@ BuildRequires:  python3dist(googleapis-common-protos) >= 1.5.5
 BuildRequires:  python3dist(oauth2client) >= 1.4.7
 
 # grpcio_tests (src/python/grpcio_tests/setup.py) install_requires:
+%if %{with google_auth_tests}
 BuildRequires:  python3dist(google-auth) >= 1.17.2
+%endif
 
 # grpcio_tests (src/python/grpcio_tests/setup.py) install_requires:
 BuildRequires:  python3dist(requests) >= 2.14.2
@@ -391,12 +397,12 @@ Patch:          %{forgeurl}/pull/31671.patch
 #
 # https://github.com/grpc/grpc/pull/33492
 #
-# Backported to 1.48.4.
+# Backported to 1.84.0.
 Patch:          grpc-1.48.4-wrap_socket.patch
 # [Test] Do not use importlib find_module API, removed in Python 3.12
 # https://github.com/grpc/grpc/pull/33506
 #
-# Backported to 1.48.4.
+# Backported to 1.84.0.
 Patch:          grpc-1.48.4-find_module.patch
 # Backport several #include directives
 # These were included in https://github.com/grpc/grpc/pull/30952
@@ -425,7 +431,7 @@ Patch:          grpc-1.48.4-abseil-cpp-includes.patch
 # CVE-2023-32732 grpc: denial of service [fedora-all]
 # https://bugzilla.redhat.com/show_bug.cgi?id=2214470
 #
-# Backported to 1.48.4.
+# Backported to 1.84.0.
 Patch:          0001-http2-Dont-drop-connections-on-metadata-limit-exceed.patch
 # [Python] Specify noexcept for cdef functions (#34242)
 #
@@ -461,6 +467,8 @@ Patch:		grpc-1.48.4-core-tsi-ssl_transport_security.cc.patch
 
 # OpenSSL 4 build fixes
 Patch:          0001-Update-OpenSSL-API-usage-for-compatibility.patch
+Patch:          grpc-python-parallel-absolute-paths.patch
+Patch:          grpc-1.48.4-fast-test-compilation.patch
 
 Requires:       grpc-data = %{version}-%{release}
 
@@ -673,8 +681,8 @@ Provides:       bundled(utf8_range)
 #   - The “validate” package conflicts with one belonging to python-configobj
 #     (in F38+), and it is the latter package that owns
 #     https://pypi.org/project/validate/.
-Obsoletes:      python3-grpcio-admin < 1.48.4-7
-Obsoletes:      python3-grpcio-csds < 1.48.4-7
+Obsoletes:      python3-grpcio-admin < 1.84.0-7
+Obsoletes:      python3-grpcio-csds < 1.84.0-7
 
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_provides_for_importable_modules
 %py_provides python3-grpc
@@ -974,7 +982,29 @@ echo '===== Building C (core) and C++ components =====' 2>&1
     -DgRPC_BUILD_GRPC_PYTHON_PLUGIN:BOOL=ON \
     -DgRPC_BUILD_GRPC_RUBY_PLUGIN:BOOL=ON \
     -GNinja
-%cmake_build
+cmake --build "%{_vpath_builddir}" -j${RPM_BUILD_NCPUS} --target \
+    address_sorting \
+    gpr \
+    grpc \
+    grpc++ \
+    grpc++_alts \
+    grpc++_error_details \
+    grpc++_reflection \
+    grpc++_unsecure \
+    grpc_plugin_support \
+    grpc_unsecure \
+    grpcpp_channelz \
+    grpc_cpp_plugin \
+    grpc_csharp_plugin \
+    grpc_node_plugin \
+    grpc_objective_c_plugin \
+    grpc_php_plugin \
+    grpc_python_plugin \
+    grpc_ruby_plugin \
+    grpc_cli
+%if %{with core_tests}
+cmake --build "%{_vpath_builddir}" -j${RPM_BUILD_NCPUS}
+%endif
 # ~~~~ Python ~~~~
 
 echo '===== Building Python grpcio package =====' 2>&1
@@ -1057,7 +1087,6 @@ do
       -O1 --skip-build --root "${PYROOT}" --prefix %{_prefix}
   popd >/dev/null
 done
-
 
 %install
 # ~~~~ C (core) and C++ (cpp) ~~~~
@@ -1606,11 +1635,12 @@ tls_key_export
 EOF
 } | xargs -r chmod -v a-x
 
+%{__python3} tools/run_tests/start_port_server.py
+
 find %{_vpath_builddir} -type f -perm /0111 -name '*_test' | sort |
   while read -r testexe
   do
     echo "==== $(date -u --iso-8601=ns): $(basename "${testexe}") ===="
-    %{__python3} tools/run_tests/start_port_server.py
 
 %if %{without gdb}
     # There is a history of some tests failing by hanging. We use “timeout” so
@@ -1796,8 +1826,4 @@ fi
 %files -n python3-grpcio-testing
 %{python3_sitelib}/grpc_testing/
 %{python3_sitelib}/grpcio_testing-%{pyversion}-py%{python3_version}.egg-info/
-
-
-%changelog
-%autochangelog
 

@@ -1,0 +1,137 @@
+--- plantri58/fullgen.c.orig	2026-03-04 04:44:33.000000000 -0700
++++ plantri58/fullgen.c	2026-03-09 09:23:10.924668641 -0600
+@@ -1392,7 +1392,7 @@ char *kan;
+ KANTE **sqkanten;
+ KANTE *kpuffer[13];
+ 
+-
++memset(puffer, 0, sizeof(puffer));
+ sequenz=sq->sequenz;
+ kan=sq->k_marks;
+ sqkanten=sq->kanten;
+@@ -2535,7 +2535,7 @@ return;
+ 
+ int bauchbinde_reko(PLANMAP map,KNOTENTYP *code,KANTE *anfangskante)
+ {
+-int i,j,k, patchknz1, patchknz2, test, test2, test3, test4, returnwert;
++int i,j,k, patchknz1, patchknz2, test, test2 = 0, test3, test4, returnwert;
+ KANTE *run;
+ KNOTENTYP code1[8], code2[8], spiegelcode1[8], spiegelcode2[8];
+ KANTE *ministart1[7], *ministart2[7], *spiegelministart1[7], *spiegelministart2[7];
+@@ -3521,11 +3521,11 @@ int minitest(PLANMAP map, KNOTENTYP *cod
+ 
+ {
+ int i, j, ii, m_laenge, ms_laenge, knoten_auf_pfad;
+-int l1, l2, l3, ll1, ll2, ll3, edgemark, middle, lower_border;
++int l1, l2, l3, ll1 = 0, ll2, ll3 = 0, edgemark, middle, lower_border;
+ KANTE *miniliste[120], *mini_spiegel[120];
+-KANTE  *run, *start, *merke_1, *merke_2;
++KANTE  *run, *start, *merke_1 = NULL, *merke_2;
+ long mark[N+1];
+-int zaehler, stelle_1, stelle_2, pfadlaenge;
++int zaehler, stelle_1 = 0, stelle_2 = 0, pfadlaenge;
+ KNOTENTYP cpcode[20];
+ int test, runzaehler;
+ BOOL rekonstruiert;
+@@ -4005,7 +4005,7 @@ if (!symstat) return(1);     /* 1 ist hi
+ 
+ {      /* Klammer zur Abgrenzung der neuen Variablen */
+ KNOTENTYP f[N+1];                    /* f[x] enthaelt den Bildknoten von Knoten x */
+-KNOTENTYP e1,e2,e3;
++KNOTENTYP e1 = 0,e2 = 0,e3;
+ char ordnung[32];                    /* Ordnung einer Drehung */
+      /* Es treten maximal 31 Drehungen auf (bei Ih__ und I__). Zwar werden bei Bauchbinden 
+         zwischenzeitlich einige Drehungen mehrfach gespeichert, jedoch nicht bei I__ und Ih__, 
+@@ -5985,7 +5985,7 @@ int main(int argc, char *argv[])
+   FLAECHENTYP *dummypointer;
+ 
+ #ifndef NOTIMES
+-  clock_t savetime=0, buffertime;
++  clock_t savetime=0, buffertime=0;
+   struct tms TMS;
+ #endif //NOTIMES
+ 
+--- plantri58/plantri.c.orig	2026-03-04 04:44:33.000000000 -0700
++++ plantri58/plantri.c	2026-03-09 09:24:02.082646926 -0600
+@@ -1682,6 +1682,7 @@ canon(int lcolour[], EDGE *can_numbering
+     int numbs = 1, numbs_mirror = 0;
+     int colour[MAXN];
+ 
++    memset(colour, 0, sizeof(colour));
+     for (i=0; i<nv; i++) colour[i]=lcolour[i]+MAXN;
+                                /* to distinguish colours from vertices */
+     last_vertex = nv-1;
+@@ -8245,7 +8246,7 @@ find_extensions_bip(int nbtot, int nbop,
+     EDGE **nb,**nb0,**nblim,**nboplim;
+     int i,v,w;
+     int weight[MAXN],minweight;
+-    int oldPwt,Pv1,Pv2;
++    int oldPwt,Pv1=0,Pv2=0;
+ 
+     Ptot = Qtot = 0;
+     for (i = 0; i < nv; ++i) weight[i] = 0;
+@@ -9704,7 +9705,10 @@ find_extensions_min4_four(int nbtot, EDG
+         }
+     }
+     else
++    {
+         deg1 = 0;
++        deg2 = 0;
++    }
+ 
+     for (v = 0; v < nv; ++v)
+     if (degree[v] > deg1)
+@@ -11539,6 +11543,13 @@ find_extensions_min5(int nbtot, int nbop
+         MARK_V(lastA->prev->end);
+         MARK_V(lastA->next->end);
+     }
++    else
++    {
++        v1 = 0;
++        v2 = 0;
++        d1 = 0;
++        d2 = 0;
++    }
+ 
+     if (nbtot == 1)
+     {
+@@ -16090,7 +16101,10 @@ find_extensions_quad_all(int nbtot, int
+         y = firstedge[nv-1]->next->end;
+     }
+     else
++    {
+         x = -1;
++        y = -1;
++    }
+ 
+     deg2 = 0;
+     for (i = nv; --i >= 0 && deg2 < 3;)
+@@ -16502,7 +16516,10 @@ find_extensions_multiquad(int nbtot, int
+         x = firstedge[nv-1]->end;
+         y = firstedge[nv-1]->next->end;
+     } else
++    {
+         x = -1;
++        y = -1;
++    }
+ 
+     deg1 = 0;
+     deg2 = 0;   /* distinct neighbours */
+@@ -18126,7 +18143,7 @@ quadr_P3_legal(EDGE *ref, EDGE *good_or[
+ {
+     EDGE *e,*elast,*e1;
+     int maxdeg;
+-    int col,col1,col2,maxcol;
++    int col,col1,col2,maxcol=0;
+     int i,j,nor,nmir;
+ 
+ #define QORCOL3(e) \
+@@ -18267,7 +18284,7 @@ quadr_P3_legal_min3(EDGE *ref, EDGE *goo
+ {
+     EDGE *e,*elast,*e1;
+     int maxdeg;
+-    int col,col1,col2,maxcol;
++    int col,col1,col2,maxcol=0;
+     int i,j,nor,nmir;
+ 
+ #define QORCOL3(e) \

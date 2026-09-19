@@ -1,0 +1,19 @@
+[Unit]
+Description=A rule based proxy in Go.
+After=network.target
+
+[Service]
+Type=simple
+Restart=on-abort
+ExecStartPre=/usr/bin/sleep 1s
+ExecStart=/usr/bin/clash-meta -f /etc/clash-meta/config.yaml -d /var/lib/clash-meta
+ExecReload=/usr/bin/kill -HUP $MAINPID
+NoNewPrivileges=true
+ProtectSystem=yes
+LimitNPROC=500
+LimitNOFILE=1000000
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BIND_SERVICE CAP_SYS_TIME CAP_SYS_PTRACE CAP_DAC_READ_SEARCH CAP_DAC_OVERRIDE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BIND_SERVICE CAP_SYS_TIME CAP_SYS_PTRACE CAP_DAC_READ_SEARCH CAP_DAC_OVERRIDE
+
+[Install]
+WantedBy=default.target

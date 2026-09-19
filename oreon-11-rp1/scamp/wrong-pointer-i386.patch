@@ -1,0 +1,12 @@
+diff -ur a/src/chealpixstore.c b/src/chealpixstore.c
+--- a/src/chealpixstore.c	2024-02-07 12:58:16.514440921 +0100
++++ b/src/chealpixstore.c	2024-02-07 12:58:50.243948106 +0100
+@@ -124,7 +124,7 @@
+ 
+         if (store->pixelids_size == store->npixels) {
+             QREALLOC(store->pixelids,
+-                 long, store->pixelids_size * 2);
++                 int64_t, store->pixelids_size * 2);
+             store->pixelids_size *= 2;
+         }
+         store->pixelids[store->npixels] = pixnum;

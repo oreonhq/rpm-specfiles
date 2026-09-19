@@ -1,0 +1,34 @@
+From 747c4d23bc78893c43c425c45d663b9c734c5d74 Mon Sep 17 00:00:00 2001
+From: Joel Capitao <jcapitao@redhat.com>
+Date: Wed, 13 Mar 2024 14:18:18 +0100
+Subject: [PATCH] Disable auto-discovery for setuptools
+
+Since setuptools release (61.0.0) ansible-collection-openstack's
+package build command (python3 setup.py sdist bdist_wheel) is
+finding multiple top-level packages in a flat-layout automatically.
+
+This issue is mentioned in setuptools bug 3197 [1], and the suggested
+workaround is to disable auto-discovery by adding 'py_modules=[]' in
+setup.py.
+
+[1] https://github.com/pypa/setuptools/issues/3197
+
+Change-Id: I4aef1fd59375c4a3bc9e362e7949fa153e4cbcb0
+---
+ setup.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index d6d2ea1..c453a91 100644
+--- a/setup.py
++++ b/setup.py
+@@ -5,4 +5,5 @@ import setuptools
+ 
+ setuptools.setup(
+     setup_requires=['pbr'],
+-    pbr=True)
++    pbr=True,
++    py_modules=[])
+-- 
+2.44.0
+

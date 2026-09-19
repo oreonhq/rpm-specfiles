@@ -1,0 +1,37 @@
+From e01cb06fff5e6b5cf3f43f7230b7a777a04cd4ce Mon Sep 17 00:00:00 2001
+From: Petr Machata <me@pmachata.org>
+Date: Mon, 17 Feb 2020 00:48:35 +0100
+Subject: [PATCH 03/10] libzwerg/dwgrep-gendoc: Do not return std::move
+
+Returning through std::move prevents copy elision.
+
+Signed-off-by: Petr Machata <me@pmachata.org>
+---
+ libzwerg/dwgrep-gendoc.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libzwerg/dwgrep-gendoc.cc b/libzwerg/dwgrep-gendoc.cc
+index 8d8943a..5fe8c32 100644
+--- a/libzwerg/dwgrep-gendoc.cc
++++ b/libzwerg/dwgrep-gendoc.cc
+@@ -107,7 +107,7 @@ split_pfx_recursively (std::map <std::string, std::vector <std::string>> d,
+   nd.insert (std::make_move_iterator (keep.begin ()),
+ 	     std::make_move_iterator (keep.end ()));
+ 
+-  return std::move (nd);
++  return nd;
+ }
+ 
+ static std::vector <std::string>
+@@ -122,7 +122,7 @@ split_pfx (std::vector <std::string> list)
+       h += "*";
+       ret.push_back (std::move (h));
+     }
+-  return std::move (ret);
++  return ret;
+ }
+ 
+ static std::vector <std::pair <std::vector <std::string>, std::string>>
+-- 
+2.51.0
+

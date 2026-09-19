@@ -1,0 +1,12 @@
+diff -up klamav-0.46/src/klamav.desktop.orig klamav-0.46/src/klamav.desktop
+--- klamav-0.46/src/klamav.desktop.orig	2009-02-28 12:27:28.000000000 +0200
++++ klamav-0.46/src/klamav.desktop	2010-01-30 12:55:58.000000000 +0200
+@@ -4,7 +4,7 @@ Name=KlamAV
+ Exec=klamav %i %m -caption "%c"
+ Icon=klamav
+ Type=Application
+-DocPath=klamav/klamav.html
++DocPath=klamav/index.html
+ Comment=An Anti-Virus Manager
+ Comment[cs]=An Anti-Virus Manager
+ Comment[da]=An Anti-Virus Manager

@@ -1,0 +1,42 @@
+From 6407842130dd6430c9e754e6551d6c41ba7c495c Mon Sep 17 00:00:00 2001
+From: Gabriel Somlo <gsomlo@gmail.com>
+Date: Tue, 16 Jul 2024 15:20:56 -0400
+Subject: [PATCH 1/3] fedora yosys-cfginc patch
+
+Fedora-specific patch:
+Change the substitution done when making yosys-config so that it outputs
+CXXFLAGS with -I/usr/include/yosys
+---
+ Makefile                | 2 +-
+ tests/various/plugin.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 507c74a63..1ec01d2e8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -840,7 +840,7 @@ LIBS_NOVERIFIC = $(LIBS)
+ endif
+ 
+ $(PROGRAM_PREFIX)yosys-config: misc/yosys-config.in $(YOSYS_SRC)/Makefile
+-	$(P) $(SED) -e 's#@CXXFLAGS@#$(subst -Ilibs/dlfcn-win32,,$(subst -I. -I"$(YOSYS_SRC)",-I"$(DATDIR)/include",$(strip $(CXXFLAGS_NOVERIFIC))))#;' \
++	$(P) $(SED) -e 's#@CXXFLAGS@#$(subst -Ilibs/dlfcn-win32,,$(subst -I. -I"$(YOSYS_SRC)",-I"$(PREFIX)/include/yosys",$(strip $(CXXFLAGS_NOVERIFIC))))#;' \
+ 			-e 's#@CXX@#$(strip $(CXX))#;' -e 's#@LINKFLAGS@#$(strip $(LINKFLAGS) $(PLUGIN_LINKFLAGS))#;' -e 's#@LIBS@#$(strip $(LIBS_NOVERIFIC) $(PLUGIN_LIBS))#;' \
+ 			-e 's#@BINDIR@#$(strip $(BINDIR))#;' -e 's#@DATDIR@#$(strip $(DATDIR))#;' < $< > $(PROGRAM_PREFIX)yosys-config
+ 	$(Q) chmod +x $(PROGRAM_PREFIX)yosys-config
+diff --git a/tests/various/plugin.sh b/tests/various/plugin.sh
+index 75b4c9e56..ddc8f139f 100644
+--- a/tests/various/plugin.sh
++++ b/tests/various/plugin.sh
+@@ -4,7 +4,7 @@ rm -rf plugin_search
+ CXXFLAGS=$(../../yosys-config --cxxflags)
+ DATDIR=$(../../yosys-config --datdir)
+ DATDIR=${DATDIR//\//\\\/}
+-CXXFLAGS=${CXXFLAGS//$DATDIR/..\/..\/share}
++CXXFLAGS=${CXXFLAGS//\/usr\/include\/yosys/..\/..\/share\/include}
+ ../../yosys-config --exec --cxx ${CXXFLAGS} --ldflags -shared -o plugin.so plugin.cc
+ ../../yosys -m ./plugin.so -p "test" | grep -q "Plugin test passed!"
+ mkdir -p plugin_search
+-- 
+2.52.0
+

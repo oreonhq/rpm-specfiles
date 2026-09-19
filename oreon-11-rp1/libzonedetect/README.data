@@ -1,0 +1,4 @@
+country16.bin: low precision country boundary database
+country21.bin: high precision country boundary database
+timezone16.bin: low precision timezone boundary database
+timezone21.bin: high precision timezone boundary database

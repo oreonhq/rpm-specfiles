@@ -4,11 +4,11 @@
 #%%global git_commit trace-cmd-v2.6.2
 #%%global git_commit 57371aaa2f469d0ba15fd85276deca7bfdd7ce36
 
-%global srcversion 3.3.1
+%global srcversion 3.4
 
 Name: trace-cmd
 Version: %{srcversion}
-Release: 5%{?dist}
+Release: 1%{?dist}
 License: LGPL-2.1-only AND LGPL-2.1-or-later AND GPL-2.0-only AND GPL-2.0-or-later
 Summary: A user interface to Ftrace
 

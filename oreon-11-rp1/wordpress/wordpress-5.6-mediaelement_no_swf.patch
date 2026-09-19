@@ -1,0 +1,38 @@
+diff -up wordpress/wp-includes/js/mediaelement/mediaelement-and-player.js.no wordpress/wp-includes/js/mediaelement/mediaelement-and-player.js
+--- wordpress/wp-includes/js/mediaelement/mediaelement-and-player.js.no	2020-09-29 17:53:06.000000000 +0200
++++ wordpress/wp-includes/js/mediaelement/mediaelement-and-player.js	2020-12-09 09:44:27.954254919 +0100
+@@ -6135,6 +6135,7 @@ if (hasFlash) {
+ 		}
+ 	});
+ 
++/* swf files removed from RPM
+ 	var FlashMediaElementVideoRenderer = {
+ 		name: 'flash_video',
+ 		options: {
+@@ -6219,6 +6220,7 @@ if (hasFlash) {
+ 		create: FlashMediaElementRenderer.create
+ 	};
+ 	_renderer.renderer.add(FlashMediaElementAudioOggRenderer);
++*/
+ }
+ 
+ },{"2":2,"25":25,"27":27,"28":28,"3":3,"5":5,"7":7,"8":8}],21:[function(_dereq_,module,exports){
+diff -up wordpress/wp-includes/js/mediaelement/mediaelement.js.no wordpress/wp-includes/js/mediaelement/mediaelement.js
+--- wordpress/wp-includes/js/mediaelement/mediaelement.js.no	2020-09-29 17:53:06.000000000 +0200
++++ wordpress/wp-includes/js/mediaelement/mediaelement.js	2020-12-09 09:44:38.532227178 +0100
+@@ -1842,6 +1842,7 @@ if (hasFlash) {
+ 		}
+ 	});
+ 
++/* swf files removed from RPM
+ 	var FlashMediaElementVideoRenderer = {
+ 		name: 'flash_video',
+ 		options: {
+@@ -1926,6 +1927,7 @@ if (hasFlash) {
+ 		create: FlashMediaElementRenderer.create
+ 	};
+ 	_renderer.renderer.add(FlashMediaElementAudioOggRenderer);
++*/
+ }
+ 
+ },{"16":16,"18":18,"19":19,"2":2,"3":3,"5":5,"7":7,"8":8}],12:[function(_dereq_,module,exports){

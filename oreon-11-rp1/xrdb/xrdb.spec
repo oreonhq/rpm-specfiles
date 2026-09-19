@@ -1,8 +1,8 @@
 %global source0_hash 31f5fcab231b38f255b00b066cf7ea3b496df712c9eb2d0d50c670b63e5033f4
 
 Name:       xrdb
-Version:    1.2.2
-Release:    7%{?dist}
+Version:    1.2.3
+Release:    1%{?dist}
 Summary:    X server resource database utility
 
 License:    HPND-DEC AND MIT-open-group

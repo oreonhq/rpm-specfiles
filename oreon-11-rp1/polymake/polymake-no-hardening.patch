@@ -1,0 +1,39 @@
+--- support/configure.pl.orig	2021-10-03 13:58:33.371348375 -0600
++++ support/configure.pl	2021-10-03 14:13:35.213311532 -0600
+@@ -1030,6 +1030,7 @@ int main() {
+    }
+ 
+    $LDsharedFLAGS=$Config::Config{lddlflags};
++   $LDsharedFLAGS =~ s/ -specs=\S+redhat-hardened-cc1//g;
+ 
+    if ($^O eq "darwin") {
+       # MacOS magic again: remove multi-architecture options for fat binaries
+@@ -1059,6 +1060,8 @@ int main() {
+ 
+       if ($options{callable} ne ".none.") {
+          $LDcallableFLAGS="$LDsharedFLAGS $Config::Config{ldflags}";
++         $LDcallableFLAGS =~ s/ -specs=\S+redhat-hardened-ld(-errors)?//g;
++         $LDcallableFLAGS =~ s/ -Wl,-z,now//g;
+          $LDsonameFLAGS = "-Wl,-soname,";
+       } else {
+          $LDcallableFLAGS="none";
+@@ -1762,10 +1765,17 @@ sub write_perl_specific_configuration_fi
+    my ($xsubpp) = grep { -e $_ } map { "$Config::Config{$_}/ExtUtils/xsubpp" } qw(privlib vendorlib);
+    my ($typemap) = grep { -e $_ } map { "$Config::Config{$_}/ExtUtils/typemap" } qw(privlib vendorlib);
+ 
++   # Turn off the hardening flags
++   my $GlueFLAGS=$Config::Config{ccflags};
++   $GlueFLAGS =~ s/ -specs=\\S+redhat-hardened-cc1//g;
++   my $PerlFLAGS=$Config::Config{ccdlflags};
++   $PerlFLAGS =~ s/ -specs=\\S+redhat-hardened-ld(-errors)?//g;
++   $PerlFLAGS =~ s/ -Wl,-z,now//g;
++
+    print $conf <<"---";
+ PERL=$Config::Config{perlpath}
+-CXXglueFLAGS=$includePerlCore$Config::Config{archlibexp}/CORE $Config::Config{ccflags} $perlextraflags -DPerlVersion=$PerlVersion $no_warn
+-LIBperlFLAGS=-L$Config::Config{archlib}/CORE -lperl $Config::Config{ccdlflags}
++CXXglueFLAGS=$includePerlCore$Config::Config{archlibexp}/CORE $GlueFLAGS $perlextraflags -DPerlVersion=$PerlVersion $no_warn
++LIBperlFLAGS=-L$Config::Config{archlib}/CORE -lperl $PerlFLAGS
+ ExtUtils_xsubpp=$xsubpp
+ ExtUtils_typemap=$typemap
+ ---

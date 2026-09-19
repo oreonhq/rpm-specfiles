@@ -1,0 +1,94 @@
+diff --git a/resources/install.sh b/resources/install.sh
+index 7c92fe9..78f8042 100644
+--- a/resources/install.sh
++++ b/resources/install.sh
+@@ -1,10 +1,11 @@
+ #!/bin/bash
+ echo "This script copies the following items into your system:" 
+ echo ""
+-echo "icon: wfview.png to /usr/share/pixmaps/"
++echo "icon: unix_icons/wfview.png to /usr/share/icons/hicolor/256x256/apps/"
+ echo "wfview application to /usr/local/bin/"
+ echo "wfview.desktop to /usr/share/applications/"
+-echo "qdarkstyle stylesheet to /usr/share/wfview/stylesheets"
++echo "org.wfview.wfview.metainfo.xml metadata file to /usr/share/metainfo/"
++echo "qdarkstyle stylesheet to /usr/share/wfview/stylesheets/"
+ 
+ echo ""
+ echo "This script MUST be run from the build directory. Do not run it from the source directory!"
+@@ -30,7 +31,8 @@ echo ""
+ 
+ cp wfview /usr/local/bin/wfview
+ cp wfview.desktop /usr/share/applications/
+-cp wfview.png /usr/share/pixmaps/
++cp unix_icons/wfview.png /usr/share/icons/hicolor/256x256/apps/
++cp org.wfview.wfview.metainfo.xml /usr/share/metainfo/
+ mkdir -p /usr/share/wfview/stylesheets
+ cp -r qdarkstyle /usr/share/wfview/stylesheets/
+ 
+diff --git a/wfview.pro b/wfview.pro
+index d9cab8d..0f7720e 100644
+--- a/wfview.pro
++++ b/wfview.pro
+@@ -114,17 +114,22 @@ unix:target.path = $$PREFIX/bin
+ INSTALLS += target
+ 
+ # Why doesn't this seem to do anything?
+-unix:DISTFILES += resources/wfview.png \
++unix:DISTFILES += resources/unix_icons/wfview.png \
+     resources/install.sh
+ unix:DISTFILES += resources/wfview.desktop
++unix:DISTFILES += resources/org.wfview.wfview.metainfo.xml
+ 
+ unix:applications.files = resources/wfview.desktop
+ unix:applications.path = $$PREFIX/share/applications
+ INSTALLS += applications
+ 
+-unix:pixmaps.files = resources/wfview.png
+-unix:pixmaps.path = $$PREFIX/share/pixmaps
+-INSTALLS += pixmaps
++unix:icons.files = resources/unix_icons/wfview.png
++unix:icons.path = $$PREFIX/share/icons/hicolor/256x256/apps
++INSTALLS += icons
++
++unix:metainfo.files = resources/org.wfview.wfview.metainfo.xml
++unix:metainfo.path = $$PREFIX/share/metainfo
++INSTALLS += metainfo
+ 
+ unix:stylesheets.files = qdarkstyle
+ unix:stylesheets.path = $$PREFIX/share/wfview
+diff --git a/resources/org.wfview.wfview.metainfo.xml b/resources/org.wfview.wfview.metainfo.xml
+new file mode 100644
+index 00000000..b2b10fd6
+--- /dev/null
++++ b/resources/org.wfview.wfview.metainfo.xml
+@@ -0,0 +1,29 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<component type="desktop-application">
++  <id>org.wfview.wfview</id>
++  <launchable type="desktop-id">wfview.desktop</launchable>
++  <metadata_license>CC0-1.0</metadata_license>
++  <project_license>GPL-3.0-or-later</project_license>
++  <name>wfview</name>
++  <developer_name>Elliott H. Liggett</developer_name>
++  <summary>Open Source interface for Icom transceivers</summary>
++  <description>
++    <p>
++      wfview is a program developed by amateur radio enthusiasts to control modern Icom ham radios. It provides the user with controls
++      that may be comfortably operated from a keyboard, mouse, or touch screen interface. wfview is free and open source software.
++    </p>
++    <p>
++      wfview has been developed with an eye towards compatibility. Even though our target platform consists of modern-era transceivers,
++      wfview’s command dictionary is focused on commands with the most compatibility. Many of Icom’s transceivers from the last 20 years
++      will work to some degree with wfview, and we are always adding more.
++    </p>
++  </description>
++  <screenshots>
++    <screenshot type="default">
++      <image type="source">https://wfview.org/wp-content/uploads/2021/11/7300-remote-screenshot.png</image>
++    </screenshot>
++  </screenshots>
++  <url type="homepage">https://wfview.org</url>
++  <url type="bugtracker">https://gitlab.com/eliggett/wfview/-/issues</url>
++  <content_rating type="oars-1.1"/>
++</component>

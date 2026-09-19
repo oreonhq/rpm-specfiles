@@ -1,0 +1,12 @@
+diff -up hnb-1.9.18.pre7/src/libcli/cli.c.format-security hnb-1.9.18.pre7/src/libcli/cli.c
+--- hnb-1.9.18.pre7/src/libcli/cli.c.format-security	2004-05-09 17:28:11.000000000 +0200
++++ hnb-1.9.18.pre7/src/libcli/cli.c	2014-02-27 18:47:32.433436484 +0100
+@@ -57,7 +57,7 @@ static void default_output(char *data){
+ 				wp=word;
+ 				*wp='\0';
+ 			} else {
+-				printf(tbuf);printf("\n");
++				printf("%s",tbuf);printf("\n");
+ 				bp=tbuf;
+ 				*bp='\0';
+ 				strcpy(bp,word);

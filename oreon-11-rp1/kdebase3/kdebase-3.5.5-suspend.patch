@@ -1,0 +1,91 @@
+--- kdebase-3.5.5/ksmserver/shutdowndlg.h.tn	2006-11-06 12:50:17.000000000 +0100
++++ kdebase-3.5.5/ksmserver/shutdowndlg.h	2006-11-07 15:50:59.000000000 +0100
+@@ -17,6 +17,9 @@
+ 
+ #include <kapplication.h>
+ 
++#define SUSPEND_TYPE_HIBERNATE 0
++#define SUSPEND_TYPE_STANDBY 1
++
+ // The (singleton) widget that makes the desktop gray.
+ class KSMShutdownFeedback : public QWidget
+ {
+@@ -54,6 +57,7 @@
+     void slotHalt();
+     void slotReboot();
+     void slotReboot(int);
++    void slotSuspend();
+ 
+ protected:
+     ~KSMShutdownDlg() {};
+@@ -64,6 +68,10 @@
+     QString m_bootOption;
+     QPopupMenu *targets;
+     QStringList rebootOptions;
++    KPushButton *btnSuspend;
++    int suspendType;
++    void keyPressEvent( QKeyEvent *e);
++    void keyReleaseEvent( QKeyEvent *e );
+ };
+ 
+ class KSMDelayedPushButton : public KPushButton
+--- kdebase-3.5.5/ksmserver/shutdowndlg.cpp.tn	2006-11-06 12:50:05.000000000 +0100
++++ kdebase-3.5.5/ksmserver/shutdowndlg.cpp	2006-11-07 16:02:27.000000000 +0100
+@@ -87,7 +87,7 @@
+ 
+ KSMShutdownDlg::KSMShutdownDlg( QWidget* parent,
+                                 bool maysd, KApplication::ShutdownType sdtype )
+-  : QDialog( parent, 0, TRUE, WType_Popup ), targets(0)
++  : QDialog( parent, 0, TRUE, WType_Popup ), targets(0), btnSuspend(0)
+     // this is a WType_Popup on purpose. Do not change that! Not
+     // having a popup here has severe side effects.
+ {
+@@ -132,6 +132,13 @@
+ 
+     if (maysd) {
+ 
++        // hibernate and standby
++        suspendType = SUSPEND_TYPE_STANDBY;
++        btnSuspend = new KPushButton( KGuiItem( i18n("&Suspend Computer"), "down"), frame );
++        btnSuspend->setFont( btnFont );
++        buttonlay->addWidget( btnSuspend );
++        connect(btnSuspend, SIGNAL(clicked()), SLOT(slotSuspend()));
++
+         // Shutdown
+         KPushButton* btnHalt = new KPushButton( KGuiItem( i18n("&Turn Off Computer"), "exit"), frame );
+         btnHalt->setFont( btnFont );
+@@ -274,3 +281,34 @@
+   popt->stop();
+   setDown(false);
+ }
++
++void KSMShutdownDlg::slotSuspend()
++{
++    switch ( suspendType ) {
++       case SUSPEND_TYPE_HIBERNATE: system("/usr/bin/pm-hibernate"); break;
++       case SUSPEND_TYPE_STANDBY: system("/usr/bin/pm-suspend"); break;
++    }
++    reject();
++}
++
++void KSMShutdownDlg::keyPressEvent( QKeyEvent *e )
++{
++   switch ( e->key() ) {
++      case Key_Shift:
++         btnSuspend->setText("&Hibernate Computer");
++         suspendType = SUSPEND_TYPE_HIBERNATE;
++      default:
++         e->ignore();
++   }
++}
++
++void KSMShutdownDlg::keyReleaseEvent( QKeyEvent *e )
++{
++   switch( e->key() ) {
++      case Key_Shift:
++         btnSuspend->setText("&Suspend Computer");
++         suspendType = SUSPEND_TYPE_STANDBY;
++      default:
++         e->ignore();
++   }
++}

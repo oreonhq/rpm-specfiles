@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+
+<!-- These patterns are added in Fedora to make GPRconfig recognize the native
+     GCC on Fedora's architectures. -->
+
+<gprconfig>
+
+   <targetset canonical="aarch64-linux">
+      <target>aarch64-.*linux.*</target>
+   </targetset>
+
+   <targetset canonical="ppc64le-linux">
+      <target>ppc64le-.*linux.*</target>
+      <target>powerpc64le-.*linux.*</target>
+   </targetset>
+
+   <targetset canonical="s390x-linux">
+      <target>s390x-.*linux.*</target>
+   </targetset>
+
+</gprconfig>

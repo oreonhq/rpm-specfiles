@@ -1,0 +1,21 @@
+diff -up ./platform/linux/udev/51-kinect.rules.videogroup ./platform/linux/udev/51-kinect.rules
+--- ./platform/linux/udev/51-kinect.rules.videogroup	2018-05-26 15:56:37.668319068 -0400
++++ ./platform/linux/udev/51-kinect.rules	2018-05-26 15:57:31.192438926 -0400
+@@ -1,11 +1,11 @@
+ # ATTR{product}=="Xbox NUI Motor"
+-SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02b0", MODE="0666"
++SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02b0", MODE="0660" GROUP="video"
+ # ATTR{product}=="Xbox NUI Audio"
+-SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02ad", MODE="0666"
++SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02ad", MODE="0660" GROUP="video"
+ # ATTR{product}=="Xbox NUI Camera"
+-SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02ae", MODE="0666"
++SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02ae", MODE="0660" GROUP="video"
+ 
+ # Kinect for Windows
+-SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02c2", MODE="0666"
+-SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02be", MODE="0666"
+-SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02bf", MODE="0666"
++SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02c2", MODE="0660" GROUP="video"
++SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02be", MODE="0660" GROUP="video"
++SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02bf", MODE="0660" GROUP="video"

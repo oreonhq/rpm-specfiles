@@ -1,0 +1,30 @@
+diff -up binutils-2.40/config/intdiv0.m4.config binutils-2.40/config/intdiv0.m4
+--- binutils-2.40/config/intdiv0.m4.config	2023-01-14 01:00:00.000000000 +0100
++++ binutils-2.40/config/intdiv0.m4	2023-02-01 00:18:41.739848290 +0100
+@@ -31,10 +31,10 @@ sigfpe_handler (sig) int sig;
+   exit (sig != SIGFPE);
+ }
+ 
+-int x = 1;
+-int y = 0;
+-int z;
+-int nan;
++volatile int x = 1;
++volatile int y = 0;
++volatile int z;
++volatile int nan;
+ 
+ int main ()
+ {
+diff -up binutils-2.40/libiberty/acinclude.m4.config binutils-2.40/libiberty/acinclude.m4
+--- binutils-2.40/libiberty/acinclude.m4.config	2023-02-01 00:18:41.739848290 +0100
++++ binutils-2.40/libiberty/acinclude.m4	2023-02-01 00:21:33.305019866 +0100
+@@ -163,7 +163,7 @@ AC_CACHE_CHECK(stack direction for C all
+ [AC_TRY_RUN([#include <stdlib.h>
+ 
+ int
+-find_stack_direction (void)
++__attribute__ ((noclone,noinline)) find_stack_direction (void)
+ {
+   static char *addr = 0;
+   auto char dummy;

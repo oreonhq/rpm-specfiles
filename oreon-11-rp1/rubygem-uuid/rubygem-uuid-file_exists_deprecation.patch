@@ -1,0 +1,31 @@
+From 27ae70845ff9f3be71060f473565aa7d1e6ed781 Mon Sep 17 00:00:00 2001
+From: Eric Hodel <drbrain@segment7.net>
+Date: Wed, 12 Feb 2014 15:01:57 -0800
+Subject: [PATCH] File.exists? is deprecated, use File.exist?
+
+---
+ lib/uuid.rb | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/uuid.rb b/lib/uuid.rb
+index 02a1445..6cd9149 100644
+--- a/lib/uuid.rb
++++ b/lib/uuid.rb
+@@ -175,7 +175,7 @@ def self.state_file(mode = 0644)
+ 
+     @state_file = File.join(state_dir, 'ruby-uuid')
+ 
+-    if !File.writable?(state_dir) || (File.exists?(@state_file) && !File.writable?(@state_file)) then
++    if !File.writable?(state_dir) || (File.exist?(@state_file) && !File.writable?(@state_file)) then
+       @state_file = File.expand_path('.ruby-uuid', '~')
+     end
+ 
+@@ -267,7 +267,7 @@ def initialize
+       @sequence = rand 0x10000
+ 
+       # Ensure the mode is respected, even with a restrictive umask
+-      File.open(state_file, 'w') { |f| f.chmod(self.class.mode) } if state_file && !File.exists?(state_file)
++      File.open(state_file, 'w') { |f| f.chmod(self.class.mode) } if state_file && !File.exist?(state_file)
+ 
+       if state_file
+         open_lock 'wb' do |io|

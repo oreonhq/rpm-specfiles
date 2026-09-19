@@ -1,0 +1,49 @@
+diff -urp '--exclude=*~' '--exclude=*pycache*' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/getauthtoken.py gphotoframe-2.0.2-hg2084299dffb6/lib/utils/getauthtoken.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/getauthtoken.py	2021-03-13 14:12:15.228648509 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/utils/getauthtoken.py	2024-08-27 15:11:13.694360559 +0900
+@@ -1,5 +1,5 @@
+ import urllib
+-import cgi
++import urllib.parse
+ 
+ from .oauth import oauth
+ from gi.repository import GObject
+@@ -74,6 +74,6 @@ class Authorization(object):
+         tokendata = stream.read()
+ 
+         token = oauth.OAuthToken.from_string(tokendata)
+-        params = cgi.parse_qs(tokendata, keep_blank_values=False)
++        params = urllib.parse.parse_qs(tokendata, keep_blank_values=False)
+ 
+         return token, params
+diff -urp '--exclude=*~' '--exclude=*pycache*' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/oauth/oauth.py gphotoframe-2.0.2-hg2084299dffb6/lib/utils/oauth/oauth.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/oauth/oauth.py	2021-03-16 11:56:25.815333765 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/utils/oauth/oauth.py	2024-08-27 15:15:26.762816781 +0900
+@@ -22,8 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWAR
+ THE SOFTWARE.
+ """
+ 
+-import cgi
+ import urllib
++import urllib.parse
+ import time
+ import random
+ from urllib.parse import urlparse
+@@ -138,7 +138,7 @@ class OAuthToken(object):
+         """ Returns a token from something like:
+         oauth_token_secret=xxx&oauth_token=xxx
+         """
+-        params = cgi.parse_qs(s, keep_blank_values=False)
++        params = urllib.parse.parse_qs(s, keep_blank_values=False)
+         key = params['oauth_token'][0]
+         secret = params['oauth_token_secret'][0]
+         token = OAuthToken(key, secret)
+@@ -360,7 +359,7 @@ class OAuthRequest(object):
+ 
+     def _split_url_string(param_str):
+         """Turn URL string into parameters."""
+-        parameters = cgi.parse_qs(param_str, keep_blank_values=False)
++        parameters = urllib.parse.parse_qs(param_str, keep_blank_values=False)
+         for k, v in parameters.items():
+             parameters[k] = urllib.unquote(v[0])
+         return parameters

@@ -1,0 +1,47 @@
+commit 379a461fa726498dcc7bf68e446c473eb73e310f
+Author: Emmanuel Seyman <emmanuel@seyman.fr>
+Date:   Sun Oct 29 11:40:19 2023 +0100
+
+    revert commit 499baf9c3689c23dfc49196570fb230076c935de
+    
+    Commit 499baf9 added preprocessor conditionals based on whether
+    CURLOPT_RESOLVE is defined Unfortunately, CURLOPT_RESOLVE is an enum,
+    and NOT a preprocessor macro, so in effect this removed support for
+    CURLOPT_RESOLVE and results in a perl crash if the option is used.
+
+diff --git a/Curl.xs b/Curl.xs
+index cfa282d..8085b49 100644
+--- a/Curl.xs
++++ b/Curl.xs
+@@ -38,9 +38,7 @@ typedef enum {
+     SLIST_HTTPHEADER = 0,
+     SLIST_QUOTE,
+     SLIST_POSTQUOTE,
+-#ifdef CURLOPT_RESOLVE
+     SLIST_RESOLVE,
+-#endif
+     SLIST_LAST
+ } perl_curl_easy_slist_code;
+ 
+@@ -129,11 +127,9 @@ slist_index(int option)
+         case CURLOPT_POSTQUOTE:
+             return SLIST_POSTQUOTE;
+             break;
+-#ifdef CURLOPT_RESOLVE
+         case CURLOPT_RESOLVE:
+             return SLIST_RESOLVE;
+             break;
+-#endif
+     }
+     croak("Bad slist index requested\n");
+     return SLIST_LAST;
+@@ -745,9 +741,7 @@ curl_easy_setopt(self, option, value, push=0)
+             case CURLOPT_HTTPHEADER:
+             case CURLOPT_QUOTE:
+             case CURLOPT_POSTQUOTE:
+-#ifdef CURLOPT_RESOLVE
+             case CURLOPT_RESOLVE:
+-#endif
+             {
+                 /* This is an option specifying a list, which we put in a curl_slist struct */
+                 AV *array = (AV *)SvRV(value);

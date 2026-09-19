@@ -1,0 +1,23 @@
+Use CGAL (>=5.0x) in header mode only
+
+Fixes linking error using CGAL >5.x:
+  /usr/bin/ld: cannot find -lCGAL
+  collect2: error: ld returned 1 exit status
+
+Signed-off-by: Damian Wrobel <dwrobel@ertelnet.rybnik.pl>
+
+Index: crrcsim-code/configure
+===================================================================
+--- crrcsim-code.orig/configure
++++ crrcsim-code/configure
+@@ -6562,8 +6562,8 @@ $as_echo "#define CGAL_VERSION3 1" >>con
+ 
+       has_CGAL="yes  (found CGAL v3)"
+     fi
+-    CGAL_CFLAGS=-frounding-math
+-    CGAL_LIBS=-lCGAL
++    CGAL_CFLAGS="-frounding-math -DCGAL_HEADER_ONLY=1"
++    CGAL_LIBS=
+ 
+ $as_echo "#define WINDDATA3D 1" >>confdefs.h
+ 

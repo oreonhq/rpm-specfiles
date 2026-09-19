@@ -1,0 +1,31 @@
+--- rarpd/rarpd.c.sprintf	2005-07-26 18:14:47.000000000 +0200
++++ rarpd/rarpd.c	2005-07-26 18:18:42.000000000 +0200
+@@ -11,6 +11,7 @@
+  */
+ 
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <syslog.h>
+ #include <dirent.h>
+ #include <malloc.h>
+@@ -457,15 +458,12 @@
+ 		return;
+ 
+ 	ptr = tmpbuf;
+-	for (i=0; i<sll.sll_halen; i++) {
+-		if (i) {
+-			sprintf(ptr, ":%02x", sll.sll_addr[i]);
+-			ptr++;
+-		} else
+-			sprintf(ptr, "%02x", sll.sll_addr[i]);
+-		ptr += 2;
++        snprintf(tmpbuf, 2, "%02x", sll.sll_addr[0]);
++	for (ptr=tmpbuf+2, i=1; i<sll.sll_halen; i++) {
++		snprintf(ptr, 3, ":%02x", sll.sll_addr[i]);
++		ptr += 3;
+ 	}
+-	
++
+ 	for (ifl=ifl_list; ifl; ifl = ifl->next)
+ 		if (ifl->index == sll.sll_ifindex)
+ 			break;

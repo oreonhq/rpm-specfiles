@@ -1,8 +1,8 @@
 %global source0_hash 2fd928ec86538227711e2adf49cfd6a1ef74f6bb3555c5dad4e0425ccd978883
 
 Name:           os-prober
-Version:        1.81
-Release:        11%{?dist}
+Version:        1.85
+Release:        1%{?dist}
 Summary:        Probes disks on the system for installed operating systems
 
 # For more information about licensing, see copyright file.

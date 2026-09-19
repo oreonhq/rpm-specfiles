@@ -1,114 +1,57 @@
-%global source0_hash 0f38b83639958ce1152d02a7f062902c41c8fd20d558b0c34344292d417ae272
+%global source0_hash none
 
-%global pypi_name jsonschema-specifications
-%global pkg_name jsonschema_specifications
-%global with_tests 1
+Name:           python-jsonschema-specifications
+Version:        2025.9.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The JSON Schema meta-schemas and vocabularies, exposed as a Registry
 
-# Some documentation reqs are not yet packaged for EPEL
-%if ! 0%{?rhel}
-%global with_doc 1
-%endif
-
-%global common_description %{expand:
-JSON support files from the JSON Schema Specifications (metaschemas,
-vocabularies, etc.), packaged for runtime access from Python as a
-referencing-based Schema Registry.}
-
-Name:           python-%{pypi_name}
-Summary:        JSON Schema meta-schemas and vocabularies, exposed as a Registry
-Version:        2024.10.1
-Release:        7%{?dist}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/python-jsonschema/jsonschema-specifications
-Source0:        https://files.pythonhosted.org/packages/source/j/jsonschema_specifications/jsonschema_specifications-2024.10.1.tar.gz
+Source:         %{pypi_source jsonschema_specifications}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description %{common_description}
 
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'jsonschema-specifications' generated automatically by pyp2spec.}
 
-%package -n     python3-%{pypi_name}
+%description %_description
+
+%package -n     python3-jsonschema-specifications
 Summary:        %{summary}
-%description -n python3-%{pypi_name} %{common_description}
 
-%if 0%{?with_tests}
-%package  -n    python3-%{pypi_name}-tests
-Summary:        Tests for the JSON Schema specifications
-Requires:       python3-%{pypi_name} = %{version}-%{release}
-
-BuildRequires:  python3dist(pytest)
-Requires:       python3dist(pytest)
-
-%description -n python3-%{pypi_name}-tests
-Tests for the JSON Schema specifications
-%endif
-
-%if 0%{?with_doc}
-%package  -n    python3-%{pypi_name}-doc
-Summary:        Documentation for the JSON Schema specifications
-Group:          Documentation
-
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  python3dist(sphinx-copybutton)
-BuildRequires:  python3dist(sphinxext-opengraph)
-BuildRequires:  python3dist(sphinxcontrib-spelling)
-
-%description -n python3-%{pypi_name}-doc
-Documentation for the JSON Schema specifications
-%endif
+%description -n python3-jsonschema-specifications %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{pkg_name}-%{version}
+%autosetup -p1 -n jsonschema_specifications-%{version}
 
-sed -i "/^file:.*/d" docs/requirements.in
-sed -i "/^pygments-github-lexers/d" docs/requirements.in
-sed -i "s/^pyenchant.*/pyenchant/" docs/requirements.in
 
 %generate_buildrequires
-%if 0%{?with_doc}
-%pyproject_buildrequires docs/requirements.in
-%else
 %pyproject_buildrequires
-%endif
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pkg_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if 0%{?with_doc}
-# generate html docs
-export PYTHONPATH="%{buildroot}/%{python3_sitelib}"
-sphinx-build-3 -b html docs docs/build/html
-# remove the sphinx-build-3 leftovers
-rm -rf docs/build/html/.{doctrees,buildinfo}
-%endif
 
-%if 0%{?with_tests}
 %check
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license COPYING
-%doc README.rst
-%exclude %{python3_sitelib}/%{pkg_name}/tests
 
-%if 0%{?with_tests}
-%files -n python3-%{pypi_name}-tests
-%license COPYING
-%{python3_sitelib}/%{pkg_name}/tests
-%endif
-
-%if 0%{?with_doc}
-%files -n python3-%{pypi_name}-doc
-%doc docs/build/html
-%endif
+%files -n python3-jsonschema-specifications -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2024.10.1-7

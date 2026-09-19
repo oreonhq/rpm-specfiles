@@ -1,0 +1,12 @@
+Index: radiotray-ng-0.2.9/include/radiotray-ng/i_radiotray_ng.hpp
+===================================================================
+--- radiotray-ng-0.2.9.orig/include/radiotray-ng/i_radiotray_ng.hpp
++++ radiotray-ng-0.2.9/include/radiotray-ng/i_radiotray_ng.hpp
+@@ -17,6 +17,7 @@
+ 
+ #pragma once
+ 
++#include <cstdint>
+ #include <string>
+ 
+ 

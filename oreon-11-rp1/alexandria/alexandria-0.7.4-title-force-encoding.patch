@@ -1,0 +1,37 @@
+diff -urp alexandria-book-collection-manager-0.7.4.old/lib/alexandria/ui/book_properties_dialog.rb alexandria-book-collection-manager-0.7.4.new/lib/alexandria/ui/book_properties_dialog.rb
+--- alexandria-book-collection-manager-0.7.4.old/lib/alexandria/ui/book_properties_dialog.rb	2019-10-25 01:20:07.000000000 +0900
++++ alexandria-book-collection-manager-0.7.4.new/lib/alexandria/ui/book_properties_dialog.rb	2020-01-15 14:34:40.160543409 +0900
+@@ -34,9 +34,10 @@ module Alexandria
+         @button_box << help_button
+         @button_box.set_child_secondary(help_button, true)
+ 
+-        @entry_title.text = @book_properties_dialog.title = book.title
++        book_title = book.title.dup.force_encoding('UTF-8')
++        @entry_title.text = @book_properties_dialog.title = book_title
+         @entry_isbn.text = (book.isbn || "")
+-        @entry_publisher.text = book.publisher
++        @entry_publisher.text = book.publisher.dup.force_encoding('UTF-8')
+         @entry_publish_date.text = book.publishing_year.to_s
+         @entry_publish_date.signal_connect("focus-out-event") do
+           text = @entry_publish_date.text
+@@ -54,7 +55,7 @@ module Alexandria
+             end
+           end
+         end
+-        @entry_edition.text = book.edition
++        @entry_edition.text = book.edition ? book.edition.dup.force_encoding('UTF-8') : ""
+         if book.tags
+           @entry_tags.text = book.tags.join(",") # tags are comma-separated
+         end
+diff -urp alexandria-book-collection-manager-0.7.4.old/lib/alexandria/ui/ui_manager.rb alexandria-book-collection-manager-0.7.4.new/lib/alexandria/ui/ui_manager.rb
+--- alexandria-book-collection-manager-0.7.4.old/lib/alexandria/ui/ui_manager.rb	2020-01-14 16:14:43.703190269 +0900
++++ alexandria-book-collection-manager-0.7.4.new/lib/alexandria/ui/ui_manager.rb	2020-01-15 14:30:29.284927911 +0900
+@@ -427,7 +427,7 @@ module Alexandria
+       end
+ 
+       def set_status_label(txt)
+-        @status_label.text = txt
++        @status_label.text = txt.force_encoding('UTF-8')
+       end
+ 
+       def on_books_selection_changed

@@ -1,0 +1,78 @@
+From d6caccf6f6438edd8b3c11c1eb5d0d871dc881d9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Os=C3=A9ias=20Ferreira?= <ferreira.oseias@gmail.com>
+Date: Sat, 16 Nov 2013 20:08:17 -0200
+Subject: [PATCH 1/2] Fixed Makefile for compile on Mac OS X. Tested on 10.7.5
+
+---
+ Makefile | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f47094a..bd73212 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,14 +1,31 @@
++# For MacPorts iconv PREFIX=/opt/local 
++# Set on command if necessary 
++# make PREFIX=/opt/local
++
+ CC = gcc
+ CFLAGS = -Wall -D_FILE_OFFSET_BITS=64
++LDLIBS = -lm
++
++ifdef PREFIX 
++  CFLAGS += -I$(PREFIX)/include
++  LDLIBS += -L$(PREFIX)/lib
++endif
++
++UNAME_S := $(shell uname -s)
++ifeq ($(UNAME_S),Darwin)
++  LDLIBS += -liconv
++endif
++
+ GIMGLIB_SOURCES = gimglib.c util.c sf_typ.c sf_mps.c sf_tre.c sf_rgn.c sf_lbl.c sf_net.c sf_nod.c sf_dem.c sf_mar.c sf_gmp.c
+ GIMGLIB_OBJS = $(GIMGLIB_SOURCES:.c=.o)
+ 
+ all: gimginfo gimgfixcmd gimgxor gimgunlock gimgch gimgextract cmdc
+ 
+ gimginfo: gimginfo.o $(GIMGLIB_OBJS)
++	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
+ 
+ gimgfixcmd: gimgfixcmd.o cmdlib.o $(GIMGLIB_OBJS)
+-	$(CC) -o $@ $^ -lm
++	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
+ 
+ gimgxor: gimgxor.o
+ 
+@@ -19,7 +36,7 @@ gimgch: gimgch.o util_indep.o
+ gimgextract: gimgextract.o util_indep.o
+ 
+ cmdc: cmdc.o
+-	$(CC) -o $@ $< -lm
++	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $< $(LDLIBS)
+ 
+ .PHONY: clean
+ clean:
+
+From 1ad55d2d30312421a885b19d6a487d6b3514571f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Os=C3=A9ias=20Ferreira?= <ferreira.oseias@gmail.com>
+Date: Sat, 16 Nov 2013 20:22:54 -0200
+Subject: [PATCH 2/2] Removed unnecessary $(INCLUDE) variable.
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index bd73212..4d8bf72 100644
+--- a/Makefile
++++ b/Makefile
+@@ -36,7 +36,7 @@ gimgch: gimgch.o util_indep.o
+ gimgextract: gimgextract.o util_indep.o
+ 
+ cmdc: cmdc.o
+-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $< $(LDLIBS)
++	$(CC) $(CFLAGS) -o $@ $< $(LDLIBS)
+ 
+ .PHONY: clean
+ clean:

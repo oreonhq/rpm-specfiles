@@ -1,0 +1,67 @@
+diff --git a/src/xfbbC.c b/src/xfbbC.c
+index 28d09b9..8963eee 100644
+--- a/src/xfbbC.c
++++ b/src/xfbbC.c
+@@ -414,7 +414,7 @@ int main (int ac, char *av[])
+ 	else
+ 	{
+ 		sprintf(buffer, " xfbbC V%s (%s) -  Callsign : %s  -  Remote host : %s", VERSION, __DATE__, mycall, host);
+-#ifdef HAVE_NCURSES
++#ifdef HAVE_CURSES
+ 	if (use_curses)
+ 		init_terminal(mode, buffer);
+ 	else
+@@ -439,7 +439,7 @@ int main (int ac, char *av[])
+ 
+ 		if (FD_ISSET (STDIN_FILENO, &sock_read))
+ 		{
+-#ifdef HAVE_NCURSES
++#ifdef HAVE_CURSES
+ 			if (use_curses)
+ 				nb = read_terminal(buffer, BUFFSIZE);
+ 			else
+@@ -451,7 +451,7 @@ int main (int ac, char *av[])
+ 					perror ("read");
+ 					break;
+ 				}
+-#ifdef HAVE_NCURSES
++#ifdef HAVE_CURSES
+ 			}
+ #endif
+ 			nb = write (sock, buffer, nb);
+@@ -496,7 +496,7 @@ int main (int ac, char *av[])
+ 				if (nb == 0)
+ 				{
+ 					printf ("Connection closed. Terminating\n");
+-#ifdef HAVE_NCURSES
++#ifdef HAVE_CURSES
+ 					if (use_curses)
+ 						end_terminal();
+ #endif
+@@ -524,7 +524,7 @@ int main (int ac, char *av[])
+ 				if (nb == 0)
+ 				{
+ 					printf ("Connection closed. Terminating\n");
+-#ifdef HAVE_NCURSES
++#ifdef HAVE_CURSES
+ 					if (use_curses)
+ 						end_terminal();
+ #endif
+@@ -552,7 +552,7 @@ int main (int ac, char *av[])
+ 						ptr = buffer + 3;
+ 						if (filter)
+ 							total = do_filter (ptr, total);
+-#ifdef HAVE_NCURSES
++#ifdef HAVE_CURSES
+ 						if (use_curses)
+ 							write_terminal(ptr, total);
+ 						else
+@@ -667,7 +667,7 @@ int main (int ac, char *av[])
+ 
+ 	close (sock);
+ 	free (buffer);
+-#ifdef HAVE_NCURSES
++#ifdef HAVE_CURSES
+ 	if (use_curses)
+ 		end_terminal();
+ #endif

@@ -1,0 +1,66 @@
+* Mon Dec 16 2002 Adrian Havill <havill@redhat.com> 0.1.9-11
+- fixed broken reduce-font to test ENCODING x instead of STARTCHAR x
+
+--- bogl-0.1.18/reduce-font.c.rh	2001-12-01 18:04:42.000000000 +0100
++++ bogl-0.1.18/reduce-font.c	2006-11-05 15:30:38.000000000 +0100
+@@ -42,12 +42,31 @@
+     printf (": %d\n", l);
+ }
+ 
++char *
++cat_line(char *sofar, const char *line) {
++	char *buf;
++	size_t length;
++
++	length = sofar == NULL ? 0 : strlen(sofar);
++	length += strlen(line);
++	length++;
++	buf = sofar == NULL
++		? calloc(length, sizeof(char))
++		: realloc(sofar, sizeof(char) * length);
++	if (buf == NULL) {
++		perror(NULL);
++		exit(EXIT_FAILURE);
++	}
++	return strcat(buf, line);
++}
++
+ int
+ main (int argc, char **argv)
+ {
+     FILE *font;
+     char *buffer = NULL;
+     char *locale = setlocale (LC_CTYPE, "");
++    char *onebdffmtchar = NULL;
+     int error = 0;
+ 
+     if (locale == NULL) {
+@@ -152,14 +171,24 @@
+                 if (!header)
+                 {
+                     if (strncmp (buf, "STARTCHAR ", 10) == 0)
++		    {
++			free(onebdffmtchar);
++			onebdffmtchar = NULL;
++		    }
++		    onebdffmtchar = cat_line(onebdffmtchar, buf);
++
++                    if (strncmp (buf, "ENCODING ", 9) == 0)
+                     {
+-                        wc = strtol (buf + 12, NULL, 16);
++                        wc = strtol (buf + 9, NULL, 10);
+ 
+                         docopy = used[wc / 32] & (1 << (wc % 32));
+                     }
+-
+-                    if (docopy)
+-                        fprintf (stdout, buf);
++		    else if (strncmp (buf, "ENDCHAR", 7) == 0)
++		    {
++                        if (docopy)
++                            fputs (onebdffmtchar, stdout);
++			docopy = 0;
++		    }
+                 }
+             }
+ 

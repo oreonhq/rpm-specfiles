@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 610044230df482718ed9476c66905a5200e40d78d6484e88bb1d61ef7a4d6ae2
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kgeography
 Summary: Geography Trainer 
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later
@@ -42,7 +42,7 @@ BuildRequires: cmake(KF6DocTools)
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n kgeography-26.04.1
+%autosetup -n %{name}-%{version}
 
 
 %build

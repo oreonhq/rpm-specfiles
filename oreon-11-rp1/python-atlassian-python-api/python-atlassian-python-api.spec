@@ -1,0 +1,75 @@
+%global source0_hash 8d9cc6068b1d2a48eb434e22e57f6bbd918a47fac9e46b95b7a3cefb00fceacb
+
+%global modname  atlassian
+%global projname %{modname}-python-api
+%global srcname %{modname}_python_api
+
+%bcond_without tests
+
+Name:           python-%{projname}
+Version:        4.0.7
+Release:        %autorelease
+Summary:        Python Atlassian REST API Wrapper
+
+License:        Apache-2.0
+URL:            https://github.com/atlassian-api/%{projname}
+Source0:        %{pypi_source %{srcname}}
+
+BuildArch:      noarch
+
+BuildRequires:  python3-devel
+%if %{with tests}
+BuildRequires:  python3-pytest
+%endif
+
+%global _description %{expand:
+The atlassian-python-api library provides a simple and convenient way to
+interact with Atlassian products (such as Jira Service management, Jira
+Software, Confluence, Bitbucket and apps Insight, X-Ray) using Python. It is
+based on the official REST APIs of these products, as well as additional private
+methods and protocols (such as xml+rpc and raw HTTP requests). This library can
+be used to automate tasks, integrate with other tools and systems, and build
+custom applications that interact with Atlassian products. It supports a wide
+range of Atlassian products, including Jira, Confluence, Bitbucket, StatusPage
+and others, and is compatible with both Atlassian Server and Cloud instances.
+
+Overall, the atlassian-python-api is a useful tool for Python developers who
+want to work with Atlassian products. It is well-documented and actively
+maintained, and provides a convenient way to access the full range of
+functionality offered by the Atlassian REST APIs.}
+
+%description %_description
+
+%package     -n python3-%{projname}
+Summary:        %{summary}
+
+%description -n python3-%{projname} %_description
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{srcname}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files %{modname}
+
+%check
+%if %{with tests}
+%pytest
+%else
+%pyproject_check_import
+%endif
+
+%files -n python3-%{projname} -f %{pyproject_files}
+%license LICENSE
+%doc README.rst
+
+%changelog
+%autochangelog

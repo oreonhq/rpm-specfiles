@@ -1,7 +1,7 @@
 %global source0_hash f974863d1861e7e7b5d19e381a17f22d653dcafa12096ac96d11b2e62a22ea77
 
 Name:		stress-ng
-Version:	0.20.01
+Version:	0.22.00
 Release:	%autorelease
 Summary:	Stress test a computer system in various ways
 

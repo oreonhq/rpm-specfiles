@@ -1,0 +1,41 @@
+From 7e5f81b753147e81fd764aa31e761e366af44443 Mon Sep 17 00:00:00 2001
+From: POTATOGIM <POTATOGIM@cpan.org>
+Date: Thu, 26 Mar 2020 10:34:35 +0100
+Subject: [PATCH] Handle leak
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+I used this package to get SMBIOS data with dmidecode.
+
+Meanwhile, I found some weird leaks when I call probe() method.
+
+On closer examination, It caused by absence of destructor for Parse::DMIDecode::Handle's instance.
+
+I attach a patch in order to resolve this bug.
+
+<https://rt.cpan.org/Ticket/Display.html?id=125088>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Parse/DMIDecode/Handle.pm | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/lib/Parse/DMIDecode/Handle.pm b/lib/Parse/DMIDecode/Handle.pm
+index 4685e40..227ddbb 100644
+--- a/lib/Parse/DMIDecode/Handle.pm
++++ b/lib/Parse/DMIDecode/Handle.pm
+@@ -285,6 +285,10 @@ sub _parse {
+ 	return (\%data,\%keywords);
+ }
+ 
++sub DESTROY {
++	my $self = shift;
++	delete $objstore->{_refaddr($self)};
++}
+ 
+ sub TRACE {
+ 	return unless $DEBUG;
+-- 
+2.21.1
+

@@ -1,171 +1,62 @@
-%global source0_hash 5ca74f37f3369b45e1f6b7b06afb182af1fd5dde009e4ffd831830d98cbe5fe7
+%global source0_hash none
 
-%global srcname SQLAlchemy
-%global canonicalname %{py_dist_name %{srcname}}
-Name:           python-%{canonicalname}
-Version:        2.0.48
-
-# Mypy plugin is deprecated in 2.0. mypy is not in RHEL.
-# Some mypy plugin tests fail with mypy 1.14.1:
-# https://github.com/sqlalchemy/sqlalchemy/issues/12287
-%bcond mypy 0
-
-# The asyncmy Python package isn’t available in x86 (32bit)
-%ifnarch %ix86
-%bcond asyncmy %{undefined rhel}
-%else
-%bcond asyncmy 0
-%endif
-
-# Whether to run tests in parallel. The xdist plugin isn’t available on RHEL
-# and changes to support Python 3.14 break it in version 2.0.40.
-%if %{undefined rhel} && "%version" != "2.0.40"
-%bcond xdist 1
-%else
-%bcond xdist 0
-%endif
-
-%if %{undefined rhel}
-# mysql_connector extra removed to unblock the Python 3.14 rebuild
-# TODO add it back once ready
-# F43FailsToInstall: mysql-connector-python3
-# https://bugzilla.redhat.com/show_bug.cgi?id=2371751
-%if v"0%{?python3_version}" >= v"3.14"
-%bcond py314quirk 1
-%else
-%bcond py314quirk 0
-%endif
-
-%global python_pkg_extras \
-    asyncio \
-    mssql_pymssql \
-    mssql_pyodbc \
-    mysql \
-    %{!?with_py314quirk:mysql_connector} \
-    %{?with_mypy:mypy} \
-    postgresql \
-    postgresql_pg8000 \
-    postgresql_asyncpg \
-    pymysql \
-    aiomysql \
-    aioodbc \
-    aiosqlite \
-    %{?with_asyncmy:asyncmy}
-%endif
-
-# cope with pre-release versions containing tildes
-%global srcversion %{lua: srcversion, num = rpm.expand("%{version}"):gsub("~", ""); print(srcversion);}
+Name:           python-sqlalchemy
+Version:        2.0.54
 Release:        %autorelease
-Summary:        Modular and flexible ORM library for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Database Abstraction Library
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://www.sqlalchemy.org/
-Source0:        https://files.pythonhosted.org/packages/source/s/sqlalchemy/sqlalchemy-2.0.48.tar.gz
+URL:            https://docs.sqlalchemy.org
+Source:         %{pypi_source sqlalchemy}
 
-BuildRequires:  coreutils
-BuildRequires:  findutils
+BuildRequires:  python3-devel
 BuildRequires:  gcc
-BuildRequires:  python3-devel >= 3.7
-# The dependencies needed for testing don’t get auto-generated.
-BuildRequires:  python3dist(pytest)
-%if %{with xdist}
-BuildRequires:  python3dist(pytest-xdist)
-%endif
 
-%description
-SQLAlchemy is an Object Relational Mapper (ORM) that provides a flexible,
-high-level interface to SQL databases.  Database and domain concepts are
-decoupled, allowing both sides maximum flexibility and power. SQLAlchemy
-provides a powerful mapping layer that can work as automatically or as manually
-as you choose, determining relationships based on foreign keys or letting you
-define the join conditions explicitly, to bridge the gap between database and
-domain.
 
-%package -n python3-sqlalchemy
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sqlalchemy' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-sqlalchemy
 Summary:        %{summary}
-%if %{without asyncmy}
-Obsoletes:      python3-sqlalchemy+asyncmy < %{version}-%{release}
-%endif
 
-%description -n python3-sqlalchemy
-SQLAlchemy is an Object Relational Mapper (ORM) that provides a flexible,
-high-level interface to SQL databases.  Database and domain concepts are
-decoupled, allowing both sides maximum flexibility and power. SQLAlchemy
-provides a powerful mapping layer that can work as automatically or as manually
+%description -n python3-sqlalchemy %_description
 
-as you choose, determining relationships based on foreign keys or letting you
-define the join conditions explicitly, to bridge the gap between database and
-domain.
-
-%if %{undefined rhel}
-# Subpackages to ensure dependencies enabling extra functionality
-%pyproject_extras_subpkg -n python3-sqlalchemy %python_pkg_extras
-%endif
-
-%package doc
-Summary:        Documentation for SQLAlchemy
-BuildArch:      noarch
-
-%description doc
-Documentation for SQLAlchemy.
-
-
-%generate_buildrequires
-%pyproject_buildrequires %{!?rhel:-x %{gsub %{quote:%python_pkg_extras} %%s+ ,}}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sqlalchemy aiomysql,aioodbc,aiosqlite,asyncio,asyncmy,mariadb-connector,mssql,mssql-pymssql,mssql-pyodbc,mypy,mysql,mysql-connector,oracle,oracle-oracledb,postgresql,postgresql-asyncpg,postgresql-pg8000,postgresql-psycopg,postgresql-psycopg2binary,postgresql-psycopg2cffi,postgresql-psycopgbinary,pymysql,sqlcipher
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{canonicalname}-%{version}
-%if %{defined rhel}
-# greenlet is only used in conjunction with the asyncio extras; fixed in 2.1
-sed -i -e '/greenlet/d' setup.cfg
-%endif
+%autosetup -p1 -n sqlalchemy-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x aiomysql,aioodbc,aiosqlite,asyncio,asyncmy,mariadb-connector,mssql,mssql-pymssql,mssql-pyodbc,mypy,mysql,mysql-connector,oracle,oracle-oracledb,postgresql,postgresql-asyncpg,postgresql-pg8000,postgresql-psycopg,postgresql-psycopg2binary,postgresql-psycopg2cffi,postgresql-psycopgbinary,pymysql,sqlcipher
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{canonicalname}
-# Work around poetry not listing license files as such in package metadata.
-sed -i -e 's|^\(.*/LICENSE\)|%%license \1|g' %{pyproject_files}
-
-install -d %{buildroot}%{_pkgdocdir}
-cp -a doc examples %{buildroot}%{_pkgdocdir}/
-# remove unnecessary scripts for building documentation
-rm -rf %{buildroot}%{_pkgdocdir}/doc/build
-find %{buildroot}%{_pkgdocdir} | while read long; do
-    short="${long#%{buildroot}}"
-    if [ -d "$long" ]; then
-        echo "%%doc %%dir $short"
-    else
-        if [ "$short" != "${short/copyright/}" ]; then
-            echo "%%license $short"
-        else
-            echo "%%doc $short"
-        fi
-    fi
-done > doc-files.txt
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-select_expression=""
-%if %{without mypy}
-select_expression="${select_expression}${select_expression:+ and }not Mypy"
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%pytest test \
-%if %{with xdist}
-    --numprocesses=auto \
-%endif
-    -k "$select_expression" -m "not memory_intensive"
-
-
-%files doc -f doc-files.txt
 
 %files -n python3-sqlalchemy -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.48-1

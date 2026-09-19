@@ -1,0 +1,12 @@
+--- a/src/bitvector64.h	2017-09-17 00:54:09.335463370 -0400
++++ b/src/bitvector64.h	2017-09-17 00:54:29.161997936 -0400
+@@ -131,7 +131,8 @@
+ 
+     /// Return the number of bits that are one.
+     word_t cnt() const {
+-	if (nset==0) do_cnt(); return (nset+cnt_ones(active.val));
++	if (nset==0) do_cnt();
++	return (nset+cnt_ones(active.val));
+     };
+ 
+     /// Return the total number of bits in the bit sequence.

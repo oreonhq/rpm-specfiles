@@ -1,0 +1,4 @@
+# to be placed in /etc/dnf/libdnf5-plugins/actions.d
+# requires dnf5 5.2.11.0 or later
+pre_base_setup:::raise_error=1:/usr/bin/sh -c /usr/bin/etckeeper\ pre-install\ \|\ /usr/bin/sed\ -e\ 's/^/log.INFO=/'
+post_transaction::::/usr/bin/sh -c /usr/bin/etckeeper\ post-install\ \|\ /usr/bin/sed\ -e\ 's/^/log.INFO=/'

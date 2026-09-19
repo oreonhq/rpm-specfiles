@@ -1,0 +1,11 @@
+--- src/thirdparty/minizip/zip.c.orig	2024-08-05 10:01:44.177174058 +0200
++++ src/thirdparty/minizip/zip.c	2024-08-05 10:28:07.217053683 +0200
+@@ -1252,7 +1252,7 @@
+         unsigned char bufHead[RAND_HEAD_LEN];
+         unsigned int sizeHead;
+         zi->ci.encrypt = 1;
+-        zi->ci.pcrc_32_tab = get_crc_table();
++        zi->ci.pcrc_32_tab = (const long unsigned int*) get_crc_table();
+         /*init_keys(password,zi->ci.keys,zi->ci.pcrc_32_tab);*/
+ 
+         sizeHead=crypthead(password,bufHead,RAND_HEAD_LEN,zi->ci.keys,zi->ci.pcrc_32_tab,crcForCrypting);

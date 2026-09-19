@@ -1,0 +1,65 @@
+.TH FASTAPI "1" "December 2025" "" "User Commands"
+.SH NAME
+.B fastapi
+\(en FastAPI CLI \(en The fastapi command line app. \[u1F60E]
+.SH SYNOPSIS
+.B fastapi
+.RI [ OPTIONS ]
+.I COMMAND
+.RI [ ARGS ]...
+.SH DESCRIPTION
+Manage your FastAPI projects, run your FastAPI apps, and more.
+.SH OPTIONS
+.TP
+.B \-\-version
+Show the version and exit.
+.TP
+.B \-\-verbose\fR, \fB\-\-no\-verbose
+Enable verbose output
+[default: no\-verbose]
+.TP
+.B \-\-install\-completion
+Install completion for the current shell.
+.TP
+.B \-\-show\-completion
+Show completion for the current shell, to copy it or customize the installation.
+.TP
+.B \-\-help
+Show a help message and exit.
+.SS "COMMANDS"
+.TP
+.B dev
+Run a FastAPI app in development mode. \[u1F9EA]
+.TP
+.B run
+Run a FastAPI app in production mode. \[u1F680]
+.TP
+.B deploy
+Deploy a FastAPI app to FastAPI Cloud. \[u1F680]
+.TP
+.B login
+Login to FastAPI Cloud. \[u1F680]
+.TP
+.B cloud
+Manage FastAPI Cloud deployments. \[u1F680]
+.IP
+The
+.B fastapi-cloud-cli
+package must be installed.
+.TP
+.B new
+Create a new FastAPI project in one command. \[u2728]
+.IP
+The
+.B fastapi-new
+package must be installed.
+.SH "SEE ALSO"
+.BR fastapi\-dev (1),
+.BR fastapi\-run (1),
+.BR fastapi\-deploy (1),
+.BR fastapi\-login (1),
+.BR fastapi\-cloud (1),
+.BR fastapi\-new (1)
+.P
+.UR https://fastapi.tiangolo.com/fastapi-cli/
+.UE

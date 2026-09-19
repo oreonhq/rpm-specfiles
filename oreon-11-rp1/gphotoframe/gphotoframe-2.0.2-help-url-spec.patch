@@ -1,0 +1,24 @@
+diff -urp '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/menu.py gphotoframe-2.0.2-hg2084299dffb6.new/lib/menu.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/menu.py	2019-08-21 15:15:01.213767816 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.new/lib/menu.py	2021-03-28 23:25:37.911241100 +0900
+@@ -70,7 +70,7 @@ class PopUpMenu(object):
+         self.preferences.start(*args)
+ 
+     def on_help(self, widget):
+-        Gtk.show_uri(None, 'ghelp:gphotoframe', Gdk.CURRENT_TIME)
++        Gtk.show_uri(None, 'help:gphotoframe', Gdk.CURRENT_TIME)
+ 
+     def on_about(self, *args):
+         self.about.start()
+diff -urp '--exclude=*~' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/preferences/__init__.py gphotoframe-2.0.2-hg2084299dffb6.new/lib/preferences/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/preferences/__init__.py	2019-08-21 01:05:34.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.new/lib/preferences/__init__.py	2021-03-28 23:25:48.903252818 +0900
+@@ -106,7 +106,7 @@ class Preferences(object):
+         self.prefs.destroy()
+ 
+     def on_help_button(self, widget):
+-        Gtk.show_uri(None, 'ghelp:gphotoframe?gphotoframe-preferences', 
++        Gtk.show_uri(None, 'help:gphotoframe/gphotoframe-preferences', 
+                      Gdk.CURRENT_TIME)
+ 
+ 

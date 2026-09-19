@@ -1,0 +1,31 @@
+From cf6ef66ab447c696d465d3d1123685c2f281e8c2 Mon Sep 17 00:00:00 2001
+From: Niko Tyni <ntyni@debian.org>
+Date: Sat, 23 Apr 2016 16:49:57 +0300
+Subject: [PATCH] Use an encryption key in the test suite
+
+While encrypting without calling setkey() used to work before libgcrypt
+1.7.0, this was accidental and not supported.  It causes a SIGSEGV in
+1.7.0 and will return an error in future versions.
+
+See <http://thread.gmane.org/gmane.comp.encryption.gpg.libgcrypt.devel/4487>
+
+Bug-Debian: https://bugs.debian.org/816104
+---
+ t/01-cipher.t | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/t/01-cipher.t b/t/01-cipher.t
+index 3f7de37..0bbdf0a 100644
+--- a/t/01-cipher.t
++++ b/t/01-cipher.t
+@@ -102,6 +102,7 @@ ok(substr($d, 0, length $p) eq $p)
+                             algorithm => 'aes',
+                             padding => 'none'
+     );
++    $c->setkey($key);
+     $c->start('encrypting');
+     ok(!eval {my $e2 = $c->encrypt('aaa'); 1});  # this should die
+     ok(eval { my $e2 = $c->encrypt('aaaaaaaaaaaaaaaa') . $c->finish; 1 });  # this should not die
+-- 
+2.8.0.rc3
+

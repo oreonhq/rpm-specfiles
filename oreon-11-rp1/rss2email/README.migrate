@@ -1,0 +1,7 @@
+rss2email 3.x introduces a new, incompatible format for configuration and
+feed data. Please review the r2e(1) manpage for details on the new
+configuration format.
+
+You can migrate (parts of) your data, using the provided r2e-migrate
+executable: it will set up your default email address, feed list, and
+already-seen database.

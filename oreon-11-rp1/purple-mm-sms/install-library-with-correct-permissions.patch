@@ -1,0 +1,42 @@
+From 45b0b99d0d173b229d0a4b574543bf45f7dfa359 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Wed, 26 Aug 2020 22:03:31 +0000
+Subject: [PATCH] Install library with correct executable permissions
+
+Also use "install -p" to keep timestamps.
+---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 6ea210e..41cd518 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,3 @@
+-
+ CC = gcc
+ LIBS = purple mm-glib
+ PKG_CONFIG = pkg-config
+@@ -8,6 +7,7 @@ CFLAGS += -fPIC -DPIC
+ LDLIBS += $(shell $(PKG_CONFIG) --libs $(LIBS))
+ 
+ DIR_PERM  = 0755
++LIB_PERM  = 0755
+ FILE_PERM = 0644
+ 
+ PLUGIN_DIR_PURPLE	   = $(shell $(PKG_CONFIG) --variable=plugindir purple)
+@@ -29,10 +29,10 @@ clean:
+ 
+ install:
+ 	mkdir   -p $(DESTDIR)$(PLUGIN_DIR_PURPLE)
+-	install -m $(FILE_PERM) $(TARGET) $(DESTDIR)$(PLUGIN_DIR_PURPLE)
++	install -pm $(LIB_PERM) $(TARGET) $(DESTDIR)$(PLUGIN_DIR_PURPLE)
+ 	for i in 16 22 48; do \
+ 	    mkdir   -p $(DESTDIR)$(DATA_ROOT_DIR_PURPLE)/pixmaps/pidgin/protocols/$$i; \
+-	    install -m $(FILE_PERM) icons/mm-sms-$${i}px.png $(DESTDIR)$(DATA_ROOT_DIR_PURPLE)/pixmaps/pidgin/protocols/$$i/mm-sms.png; \
++	    install -pm $(FILE_PERM) icons/mm-sms-$${i}px.png $(DESTDIR)$(DATA_ROOT_DIR_PURPLE)/pixmaps/pidgin/protocols/$$i/mm-sms.png; \
+ 	done
+ 
+ $(TARGET): $(OBJECTS)
+-- 
+2.26.2

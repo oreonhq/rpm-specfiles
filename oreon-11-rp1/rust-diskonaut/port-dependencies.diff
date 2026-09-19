@@ -1,0 +1,250 @@
+diff --git a/src/input/controls.rs b/src/input/controls.rs
+index c643125..d54e00e 100644
+--- a/src/input/controls.rs
++++ b/src/input/controls.rs
+@@ -20,24 +20,28 @@ macro_rules! key {
+         Event::Key(KeyEvent {
+             code: KeyCode::Char($x),
+             modifiers: KeyModifiers::NONE,
++            ..
+         })
+     };
+     (shift $x:expr) => {
+         Event::Key(KeyEvent {
+             code: KeyCode::Char($x),
+             modifiers: KeyModifiers::SHIFT,
++            ..
+         })
+     };
+     (ctrl $x:expr) => {
+         Event::Key(KeyEvent {
+             code: KeyCode::Char($x),
+             modifiers: KeyModifiers::CONTROL,
++            ..
+         })
+     };
+     ($x:ident) => {
+         Event::Key(KeyEvent {
+             code: KeyCode::$x,
+             modifiers: KeyModifiers::NONE,
++            ..
+         })
+     };
+ }
+diff --git a/src/main.rs b/src/main.rs
+index 95b673d..bb8475e 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -21,7 +21,7 @@ use ::std::sync::mpsc::{Receiver, SyncSender};
+ use ::std::sync::Arc;
+ use ::std::thread::park_timeout;
+ use ::std::{thread, time};
+-use ::structopt::StructOpt;
++use ::clap::Parser;
+ 
+ use ::tui::backend::Backend;
+ use crossterm::event::KeyModifiers;
+@@ -46,16 +46,16 @@ const SHOULD_SCAN_HD_FILES_IN_MULTIPLE_THREADS: bool = true;
+ #[cfg(test)]
+ const SHOULD_SCAN_HD_FILES_IN_MULTIPLE_THREADS: bool = false;
+ 
+-#[derive(StructOpt, Debug)]
+-#[structopt(name = "diskonaut")]
++#[derive(Debug, Parser)]
++#[clap(name = "diskonaut")]
+ pub struct Opt {
+-    #[structopt(name = "folder", parse(from_os_str))]
++    #[clap(name = "folder")]
+     /// The folder to scan
+     folder: Option<PathBuf>,
+-    #[structopt(short, long)]
++    #[clap(short, long)]
+     /// Show file sizes rather than their block usage on disk
+     apparent_size: bool,
+-    #[structopt(short, long)]
++    #[clap(short, long)]
+     /// Don't ask for confirmation before deleting
+     disable_delete_confirmation: bool,
+ }
+@@ -71,7 +71,7 @@ fn get_stdout() -> io::Result<io::Stdout> {
+ }
+ 
+ fn try_main() -> Result<(), failure::Error> {
+-    let opts = Opt::from_args();
++    let opts = Opt::parse();
+ 
+     match get_stdout() {
+         Ok(stdout) => {
+@@ -149,14 +149,17 @@ pub fn start<B>(
+                         if let BackEvent::Key(KeyEvent {
+                             code: KeyCode::Char('y'),
+                             modifiers: KeyModifiers::NONE,
++                            ..
+                         })
+                         | BackEvent::Key(KeyEvent {
+                             code: KeyCode::Char('q'),
+                             modifiers: KeyModifiers::NONE,
++                            ..
+                         })
+                         | BackEvent::Key(KeyEvent {
+                             code: KeyCode::Char('c'),
+                             modifiers: KeyModifiers::CONTROL,
++                            ..
+                         }) = evt
+                         {
+                             // not ideal, but works in a pinch
+@@ -189,7 +192,7 @@ pub fn start<B>(
+                 move || {
+                     'scanning: for entry in WalkDir::new(&path)
+                         .parallelism(if SHOULD_SCAN_HD_FILES_IN_MULTIPLE_THREADS {
+-                            RayonDefaultPool
++                            RayonDefaultPool { busy_timeout: std::time::Duration::from_secs(1) }
+                         } else {
+                             Serial
+                         })
+diff --git a/src/tests/cases/test_utils.rs b/src/tests/cases/test_utils.rs
+index 36db4aa..f815cba 100644
+--- a/src/tests/cases/test_utils.rs
++++ b/src/tests/cases/test_utils.rs
+@@ -1,7 +1,7 @@
+ use ::std::iter;
+ use ::std::sync::{Arc, Mutex};
+ use crossterm::event::KeyModifiers;
+-use crossterm::event::{Event, KeyCode, KeyEvent};
++use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind, KeyEventState};
+ 
+ use crate::tests::fakes::{TerminalEvent, TerminalEvents, TestBackend};
+ 
+@@ -10,18 +10,24 @@ macro_rules! key {
+         Event::Key(KeyEvent {
+             code: KeyCode::Char($x),
+             modifiers: KeyModifiers::NONE,
++            kind: KeyEventKind::Press,
++            state: KeyEventState::empty(),
+         })
+     };
+     (ctrl $x:expr) => {
+         Event::Key(KeyEvent {
+             code: KeyCode::Char($x),
+             modifiers: KeyModifiers::CONTROL,
++            kind: KeyEventKind::Press,
++            state: KeyEventState::empty(),
+         })
+     };
+     ($x:ident) => {
+         Event::Key(KeyEvent {
+             code: KeyCode::$x,
+             modifiers: KeyModifiers::NONE,
++            kind: KeyEventKind::Press,
++            state: KeyEventState::empty(),
+         })
+     };
+ }
+diff --git a/src/tests/cases/ui.rs b/src/tests/cases/ui.rs
+index 3f17af1..5c26bac 100644
+--- a/src/tests/cases/ui.rs
++++ b/src/tests/cases/ui.rs
+@@ -6,7 +6,7 @@ use ::std::path::{Path, PathBuf};
+ 
+ use ::insta::assert_snapshot;
+ use crossterm::event::KeyModifiers;
+-use crossterm::event::{Event, KeyCode, KeyEvent};
++use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind, KeyEventState};
+ 
+ use crate::start;
+ use crate::tests::cases::test_utils::*;
+@@ -18,18 +18,24 @@ macro_rules! key {
+         Event::Key(KeyEvent {
+             code: KeyCode::Char($x),
+             modifiers: KeyModifiers::NONE,
++            kind: KeyEventKind::Press,
++            state: KeyEventState::empty(),
+         })
+     };
+     (ctrl $x:expr) => {
+         Event::Key(KeyEvent {
+             code: KeyCode::Char($x),
+             modifiers: KeyModifiers::CONTROL,
++            kind: KeyEventKind::Press,
++            state: KeyEventState::empty(),
+         })
+     };
+     ($x:ident) => {
+         Event::Key(KeyEvent {
+             code: KeyCode::$x,
+             modifiers: KeyModifiers::NONE,
++            kind: KeyEventKind::Press,
++            state: KeyEventState::empty(),
+         })
+     };
+ }
+diff --git a/src/tests/fakes/fake_output.rs b/src/tests/fakes/fake_output.rs
+index 91fdf36..e3bf50e 100644
+--- a/src/tests/fakes/fake_output.rs
++++ b/src/tests/fakes/fake_output.rs
+@@ -1,9 +1,9 @@
+ use ::std::collections::HashMap;
+ use ::std::io;
+ use ::std::sync::{Arc, Mutex};
+-use ::tui::backend::Backend;
++use ::tui::backend::{Backend, WindowSize};
+ use ::tui::buffer::Cell;
+-use ::tui::layout::Rect;
++use ::tui::layout::{Rect, Size};
+ 
+ #[derive(Hash, Debug, PartialEq)]
+ pub enum TerminalEvent {
+@@ -87,7 +87,7 @@ impl Backend for TestBackend {
+                     Some(cell) => {
+                         // this will contain no style information at all
+                         // should be good enough for testing
+-                        string.push_str(&cell.symbol);
++                        string.push_str(cell.symbol());
+                     }
+                     None => {
+                         string.push_str(" ");
+@@ -111,4 +111,17 @@ impl Backend for TestBackend {
+         self.events.lock().unwrap().push(TerminalEvent::Flush);
+         Ok(())
+     }
++
++    fn window_size(&mut self) -> io::Result<WindowSize> {
++        Ok(WindowSize { 
++            columns_rows: Size {
++                width: 80,
++                height: 24,
++            },
++            pixels: Size {
++                width: 0,
++                height: 0,
++            }
++        })
++    }
+ }
+diff --git a/src/ui/display.rs b/src/ui/display.rs
+index 9bf1ea4..db3d7e0 100644
+--- a/src/ui/display.rs
++++ b/src/ui/display.rs
+@@ -75,7 +75,8 @@ where
+                         ]
+                         .as_ref(),
+                     )
+-                    .split(full_screen);
++                    .split(full_screen)
++                    .to_vec();
+ 
+                 // -1 cos we draw starting at offset 1 in both x and y directions
+ 
+diff --git a/src/ui/grid/draw_next_symbol.rs b/src/ui/grid/draw_next_symbol.rs
+index 18e1175..3b91c19 100644
+--- a/src/ui/grid/draw_next_symbol.rs
++++ b/src/ui/grid/draw_next_symbol.rs
+@@ -110,7 +110,7 @@ fn find_next_symbol(first_symbol: &str, second_symbol: &str) -> Option<&'static
+ }
+ 
+ pub fn draw_next_symbol(buf: &mut Buffer, x: u16, y: u16, symbol: &str) {
+-    if let Some(next_symbol) = find_next_symbol(&buf.get(x, y).symbol, symbol) {
++    if let Some(next_symbol) = find_next_symbol(buf.get(x, y).symbol(), symbol) {
+         buf.get_mut(x, y).set_symbol(next_symbol);
+     } else {
+         buf.get_mut(x, y).set_symbol(symbol);

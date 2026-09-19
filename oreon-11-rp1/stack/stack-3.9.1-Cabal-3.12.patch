@@ -1,0 +1,235 @@
+diff -up stack-3.9.1/Setup.hs~ stack-3.9.1/Setup.hs
+--- stack-3.9.1/Setup.hs~	2026-01-04 21:04:25.000000000 +0800
++++ stack-3.9.1/Setup.hs	2026-01-29 11:46:47.843707367 +0800
+@@ -25,7 +25,6 @@ import           Distribution.Simple.Uti
+ import           Distribution.Types.PackageName ( unPackageName )
+ import           Distribution.Types.UnqualComponentName
+                    ( unUnqualComponentName )
+-import           Distribution.Utils.Path ( interpretSymbolicPathCWD )
+ import           Distribution.Verbosity ( Verbosity, normal )
+ import           System.FilePath ( (</>) )
+ 
+@@ -48,7 +47,7 @@ generateBuildModule ::
+   -> LocalBuildInfo
+   -> IO ()
+ generateBuildModule verbosity pkg lbi = do
+-  let dir = interpretSymbolicPathCWD (autogenPackageModulesDir lbi)
++  let dir = autogenPackageModulesDir lbi
+   createDirectoryIfMissingVerbose verbosity True dir
+   withLibLBI pkg lbi $ \_ libcfg -> do
+     withExeLBI pkg lbi $ \exe clbi -> do
+diff -up stack-3.9.1/src/Stack/Component.hs~ stack-3.9.1/src/Stack/Component.hs
+--- stack-3.9.1/src/Stack/Component.hs~	2026-01-04 21:04:25.000000000 +0800
++++ stack-3.9.1/src/Stack/Component.hs	2026-01-29 11:49:55.925105607 +0800
+@@ -35,7 +35,6 @@ import           Distribution.PackageDes
+ import           Distribution.Types.BuildInfo ( BuildInfo )
+ import           Distribution.Package ( mkPackageName )
+ import qualified Distribution.PackageDescription as Cabal
+-import           Distribution.Utils.Path (interpretSymbolicPathCWD)
+ import           GHC.Records ( HasField )
+ import           Stack.Prelude
+ import           Stack.Types.Component
+@@ -74,7 +73,7 @@ stackExecutableFromCabal :: Executable -
+ stackExecutableFromCabal cabalExecutable = StackExecutable
+   { name = fromCabalName cabalExecutable.exeName
+   , buildInfo = stackBuildInfoFromCabal cabalExecutable.buildInfo
+-  , modulePath = interpretSymbolicPathCWD cabalExecutable.modulePath
++  , modulePath = cabalExecutable.modulePath
+   }
+ 
+ stackForeignLibraryFromCabal :: ForeignLib -> StackForeignLibrary
+@@ -108,9 +107,9 @@ stackBuildInfoFromCabal buildInfoV = gat
+   StackBuildInfo
+     { buildable = buildInfoV.buildable
+     , otherModules = buildInfoV.otherModules
+-    , jsSources = map interpretSymbolicPathCWD buildInfoV.jsSources
++    , jsSources = buildInfoV.jsSources
+     , hsSourceDirs = buildInfoV.hsSourceDirs
+-    , cSources = map interpretSymbolicPathCWD buildInfoV.cSources
++    , cSources = buildInfoV.cSources
+     , dependency = mempty
+     , unknownTools = mempty
+     , cppOptions = buildInfoV.cppOptions
+@@ -118,10 +117,10 @@ stackBuildInfoFromCabal buildInfoV = gat
+     , options = buildInfoV.options
+     , allLanguages = Cabal.allLanguages buildInfoV
+     , usedExtensions = Cabal.usedExtensions buildInfoV
+-    , includeDirs = map interpretSymbolicPathCWD buildInfoV.includeDirs
++    , includeDirs = buildInfoV.includeDirs
+     , extraLibs = buildInfoV.extraLibs
+-    , extraLibDirs = map interpretSymbolicPathCWD buildInfoV.extraLibDirs
+-    , frameworks = map interpretSymbolicPathCWD buildInfoV.frameworks
++    , extraLibDirs = buildInfoV.extraLibDirs
++    , frameworks = buildInfoV.frameworks
+     }
+ 
+ -- | Iterate on all three dependency list given, and transform and sort them
+diff -up stack-3.9.1/stack.cabal~ stack-3.9.1/stack.cabal
+--- stack-3.9.1/stack.cabal~	2026-01-29 11:46:18.109159489 +0800
++++ stack-3.9.1/stack.cabal	2026-01-29 11:48:04.888449534 +0800
+@@ -159,7 +159,7 @@ source-repository head
+ 
+ custom-setup
+     setup-depends:
+-        Cabal >=3.14 && <3.18,
++        Cabal >=3.12 && <3.18,
+         base >=4.14.3.0 && <5,
+         filepath >=1.5.4.0
+ 
+@@ -434,7 +434,7 @@ library
+         -optP-Wno-nonportable-include-path -Widentities
+ 
+     build-depends:
+-        Cabal >=3.14 && <3.17,
++        Cabal >=3.12 && <3.17,
+         aeson >=2.0.3.0,
+         aeson-warning-parser >=0.1.1,
+         ansi-terminal >=1.0.2,
+@@ -562,7 +562,7 @@ executable stack
+         -optP-Wno-nonportable-include-path -threaded -rtsopts
+ 
+     build-depends:
+-        Cabal >=3.14 && <3.17,
++        Cabal >=3.12 && <3.17,
+         aeson >=2.0.3.0,
+         aeson-warning-parser >=0.1.1,
+         ansi-terminal >=1.0.2,
+@@ -671,7 +671,7 @@ executable stack-integration-test
+         -with-rtsopts=-N
+ 
+     build-depends:
+-        Cabal >=3.14 && <3.17,
++        Cabal >=3.12 && <3.17,
+         aeson >=2.0.3.0,
+         aeson-warning-parser >=0.1.1,
+         ansi-terminal >=1.0.2,
+@@ -796,7 +796,7 @@ test-suite stack-unit-test
+         -optP-Wno-nonportable-include-path -threaded
+ 
+     build-depends:
+-        Cabal >=3.14 && <3.17,
++        Cabal >=3.12 && <3.17,
+         QuickCheck >=2.15.0.1,
+         aeson >=2.0.3.0,
+         aeson-warning-parser >=0.1.1,
+diff -up stack-3.9.1/src/Stack/ComponentFile.hs.orig stack-3.9.1/src/Stack/ComponentFile.hs
+--- stack-3.9.1/src/Stack/ComponentFile.hs.orig	2026-01-04 21:04:25.000000000 +0800
++++ stack-3.9.1/src/Stack/ComponentFile.hs	2026-01-29 12:03:43.867253279 +0800
+@@ -36,7 +36,7 @@ import           Distribution.PackageDes
+                    ( BenchmarkInterface (..), TestSuiteInterface (..) )
+ import           Distribution.Text ( display )
+ import           Distribution.Utils.Path
+-                   ( Pkg, Source, SymbolicPath, getSymbolicPath )
++                   ( PackageDir, SourceDir, SymbolicPath, getSymbolicPath )
+ import qualified Distribution.Utils.Path as Cabal
+ import           GHC.Records ( HasField )
+ import qualified HiFileParser as Iface
+@@ -92,7 +92,7 @@ stackBenchmarkFiles bench =
+   exposed :: [DotCabalDescriptor]
+   exposed =
+     case bench.interface of
+-      BenchmarkExeV10 _ fp -> [DotCabalMain $ getSymbolicPath fp]
++      BenchmarkExeV10 _ fp -> [DotCabalMain fp]
+       BenchmarkUnsupported _ -> []
+ 
+   bnames :: [DotCabalDescriptor]
+@@ -114,7 +114,7 @@ stackTestSuiteFiles test =
+   exposed :: [DotCabalDescriptor]
+   exposed =
+     case test.interface of
+-      TestSuiteExeV10 _ fp -> [DotCabalMain $ getSymbolicPath fp]
++      TestSuiteExeV10 _ fp -> [DotCabalMain fp]
+       TestSuiteLibV09 _ mn -> [DotCabalModule mn]
+       TestSuiteUnsupported _ -> []
+ 
+@@ -169,7 +169,7 @@ stackLibraryFiles lib =
+ -- | Get all files referenced by the component.
+ resolveComponentFiles ::
+      ( CAndJsSources rec
+-     , HasField "hsSourceDirs" rec [SymbolicPath Pkg (Cabal.Dir Source)]
++     , HasField "hsSourceDirs" rec [SymbolicPath PackageDir SourceDir]
+      )
+   => NamedComponent
+   -> rec
+diff -up stack-3.9.1/src/Stack/Package.hs.orig stack-3.9.1/src/Stack/Package.hs
+--- stack-3.9.1/src/Stack/Package.hs.orig	2026-01-04 21:04:25.000000000 +0800
++++ stack-3.9.1/src/Stack/Package.hs	2026-01-29 12:06:26.423686814 +0800
+@@ -60,7 +60,7 @@ import           Distribution.Simple.Pac
+ import           Distribution.System ( OS (..), Arch, Platform (..) )
+ import           Distribution.Text ( display )
+ import qualified Distribution.Types.CondTree as Cabal
+-import           Distribution.Utils.Path ( makeSymbolicPath, getSymbolicPath )
++import           Distribution.Utils.Path ( getSymbolicPath )
+ import           Distribution.Verbosity ( silent )
+ import           Distribution.Version
+                    ( anyVersion, mkVersion, orLaterVersion )
+@@ -130,8 +130,8 @@ import           RIO.Seq ((|>))
+ --
+ -- NOTE: not to be confused with BuildInfo, an Stack-internal datatype.
+ readDotBuildinfo :: MonadIO m => Path Abs File -> m HookedBuildInfo
+-readDotBuildinfo =
+-  liftIO . readHookedBuildInfo silent Nothing . makeSymbolicPath . toFilePath
++readDotBuildinfo buildinfofp =
++  liftIO $ readHookedBuildInfo silent (toFilePath buildinfofp)
+ 
+ -- | Resolve a parsed Cabal file into a t'Package', which contains all of the
+ -- info needed for Stack to build the t'Package' given the current
+diff -up stack-3.9.1/src/Stack/PackageFile.hs.orig stack-3.9.1/src/Stack/PackageFile.hs
+--- stack-3.9.1/src/Stack/PackageFile.hs.orig	2026-01-04 21:04:25.000000000 +0800
++++ stack-3.9.1/src/Stack/PackageFile.hs	2026-01-29 12:08:25.933270321 +0800
+@@ -20,7 +20,7 @@ import qualified Data.Set as S
+ import           Distribution.CabalSpecVersion ( CabalSpecVersion )
+ import qualified Distribution.PackageDescription as Cabal
+ import           Distribution.Simple.Glob ( matchDirFileGlob )
+-import           Distribution.Utils.Path ( makeSymbolicPath, getSymbolicPath )
++import           Distribution.Utils.Path ( getSymbolicPath )
+ import           Path ( parent, (</>) )
+ import           Path.Extra ( forgivingResolveFile, rejectMissingFile )
+ import           Path.IO ( doesFileExist )
+@@ -122,9 +122,9 @@ resolveGlobFiles cabalFileVersion =
+        FilePath
+     -> FilePath
+     -> RIO GetPackageFileContext [FilePath]
+-  matchDirFileGlob' dir glob = map getSymbolicPath <$> do
++  matchDirFileGlob' dir glob =
+     catch
+-      (liftIO $ matchDirFileGlob minBound cabalFileVersion (Just $ makeSymbolicPath dir) (makeSymbolicPath glob))
++      (liftIO (matchDirFileGlob minBound cabalFileVersion dir glob))
+       ( \(e :: IOException) ->
+         if isUserError e
+           then do
+@@ -184,9 +184,9 @@ getPackageFile pkg cabalFP =
+ stackPackageFileFromCabal :: Cabal.PackageDescription -> StackPackageFile
+ stackPackageFileFromCabal cabalPkg =
+   StackPackageFile
+-    (map getSymbolicPath $ Cabal.extraSrcFiles cabalPkg)
+-    (getSymbolicPath $ Cabal.dataDir cabalPkg)
+-    (map getSymbolicPath $ Cabal.dataFiles cabalPkg)
++    (Cabal.extraSrcFiles cabalPkg)
++    (Cabal.dataDir cabalPkg)
++    (Cabal.dataFiles cabalPkg)
+ 
+ insertComponentFile ::
+      PackageComponentFile
+diff -up stack-3.9.1/src/Stack/Types/Component.hs.orig stack-3.9.1/src/Stack/Types/Component.hs
+--- stack-3.9.1/src/Stack/Types/Component.hs.orig	2026-01-04 21:04:25.000000000 +0800
++++ stack-3.9.1/src/Stack/Types/Component.hs	2026-01-29 12:11:28.163635301 +0800
+@@ -31,8 +31,7 @@ import           Distribution.ModuleName
+ import           Distribution.PackageDescription
+                    ( BenchmarkInterface, Dependency, TestSuiteInterface )
+ import           Distribution.Simple ( Extension, Language )
+-import           Distribution.Utils.Path ( Pkg, Source, SymbolicPath )
+-import qualified Distribution.Utils.Path as Cabal
++import           Distribution.Utils.Path ( PackageDir, SourceDir, SymbolicPath )
+ import           GHC.Records ( HasField (..) )
+ import           Stack.Prelude
+ import           Stack.Types.ComponentUtils
+@@ -134,7 +133,7 @@ data StackBuildInfo = StackBuildInfo
+     -- ^ Only used in file gathering. See usage in "Stack.ComponentFile" module.
+   , jsSources :: [FilePath]
+     -- ^ Only used in file gathering. See usage in "Stack.ComponentFile" module.
+-  , hsSourceDirs :: [SymbolicPath Pkg (Cabal.Dir Source)]
++  , hsSourceDirs :: [SymbolicPath PackageDir SourceDir]
+     -- ^ Only used in file & opts gathering. See usage in "Stack.ComponentFile"
+     -- module for fle gathering.
+   , cSources :: [FilePath]

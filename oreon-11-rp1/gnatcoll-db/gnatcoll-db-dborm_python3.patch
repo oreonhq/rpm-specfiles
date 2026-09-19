@@ -1,0 +1,20 @@
+--- a/gnatcoll_db2ada/gnatcoll-db2ada-main.adb	2018-05-29 07:48:56.000000000 +0200
++++ b/gnatcoll_db2ada/gnatcoll-db2ada-main.adb	2019-03-23 21:54:21.830938736 +0100
+@@ -181,7 +181,7 @@
+
+    procedure Spawn_Dborm (Command : String; Extra_Args : Argument_List) is
+       DbOrm1 : constant String :=   --  official setup
+-        Executable_Location & "share/gnatcoll/dborm.py";
++        "/usr/libexec/gnatcoll/dborm.py";
+       DbOrm2 : constant String :=   --  development setup
+         Executable_Location & "../dborm.py";
+       Status  : aliased Integer;
+@@ -209,7 +209,7 @@
+
+       declare
+          Output : constant String := Get_Command_Output
+-           (Command     => "python",
++           (Command     => "python3",
+             Arguments   => Args,
+             Input       => "",
+             Status      => Status'Access,

@@ -1,0 +1,10 @@
+--- modules/gsl.lsp-orig	2017-01-25 14:42:21.000000000 -0200
++++ modules/gsl.lsp	2017-04-22 04:27:14.236572746 -0300
+@@ -170,6 +170,7 @@
+ 		(= ostype "Windows") "libgsl-0.dll" ; 32-bit or 64-bit
+ 		(= ostype "OSX")   "libgsl.dylib" ; 32-bit or 64-bit
+ 		(= ostype "Linux") "/usr/local/lib/libgsl.so" ; 32-bit or 64-bit
++		(= ostype "Linux") "/usr/lib64/libgmp.so" ; Linux 64
+ 	))
+ 
+ ; load libgslcblas which contans functions referenced by libgsl

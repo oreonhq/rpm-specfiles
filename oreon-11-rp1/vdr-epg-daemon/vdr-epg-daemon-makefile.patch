@@ -1,0 +1,71 @@
+--- a/Make.config.orig	2023-02-12 16:14:53.251507555 +0100
++++ b/Make.config	2023-02-12 16:19:44.765676147 +0100
+@@ -113,14 +113,11 @@
+ endif
+ 
+ ifdef DEBUG
+-  CFLAGS += -ggdb -fno-stack-protector -O0
++  CFLAGS += -ggdb -fno-stack-protector -O
+ endif
+ 
+-CFLAGS += -std=c++17 -D__STDC_FORMAT_MACROS
+-CFLAGS += -fPIC -Wall -Wreturn-type -Wformat -Wextra -Wparentheses -pedantic -Werror=format-security \
+-          -Wunused-variable -Wunused-label -Wunused-value -Wunused-function -Wunused-local-typedefs \
+-          -Wno-unused-parameter
+-CFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE
++CFLAGS += @@OPTFLAGS \
++       -fPIC -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE
+ 
+ ifdef USE_CLANG
+   CFLAGS += -x c++ -Wunused-const-variable
+--- vdr-epg-daemon-1.2.2/epglv/Makefile.orig	2022-01-04 17:16:18.395004606 +0100
++++ vdr-epg-daemon-1.2.2/epglv/Makefile	2022-01-04 17:19:19.243026098 +0100
+@@ -7,14 +7,16 @@
+ include ../Make.config
+ 
+ ARCH := $(shell getconf LONG_BIT)
++INCLUDEDIR := /usr/include
++LIBDIR := @@LIBDIR
+ 
+ ifneq (,$(findstring "arm", $(shell uname -m)))
+-	CPP_FLAGS_32 := -m32
+-	CPP_FLAGS_64 := -m64
++	CFLAGS:= @@OPTFLAGS \
++	-fPIC
+ endif
+ 
+ CPP_FLAGS := $(CPP_FLAGS_$(ARCH)) -Wall \
+-	-fPIC \
++	-fPIC -L$(LIBDIR)/mariadb \
+ 	$(shell $(SQLCFG) --libs) \
+ 	$(shell $(SQLCFG) --include) \
+ 	-DMYSQL_DYNAMIC_PLUGIN \
+@@ -29,7 +31,7 @@
+ all: $(TARGET)
+ 
+ $(TARGET): $(OBJS)
+-	$(CC) $(CPP_FLAGS) -pipe -O3 -shared -o $(TARGET) $(OBJS)
++	$(CC) $(CPP_FLAGS) $(CFLAGS) -shared -o $(TARGET) $(OBJS)
+ 
+ install: $(TARGET)
+ 	strip $(TARGET)
+@@ -47,7 +49,7 @@
+ 
+ %.o: %.c
+ src/%.o: src/%.c
+-	$(CC) -c $(CPP_FLAGS) -pipe -O3 -shared $< -o $@
++	$(CC) -c $(CPP_FLAGS) $(CFLAGS) -shared $< -o $@	
+ 
+ #--------------------------------------------------------
+ # dependencies
+--- a/lib/Makefile.orig	2022-01-04 08:40:01.364369134 +0100
++++ b/lib/Makefile	2022-01-04 08:41:15.619377959 +0100
+@@ -56,7 +56,7 @@
+ endif
+ 
+ ifdef DEBUG
+-  CFLAGS += -ggdb -O0
++  CFLAGS += -ggdb -O
+ endif
+ 
+ CFLAGS += $(shell $(SQLCFG) --include)

@@ -1,0 +1,75 @@
+.TH TEND\-ANVOL "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-anvol \- apply an anisotropy metric to a DT volume
+.SH SYNOPSIS
+.B tend\ anvol
+.B \-a
+.RI < aniso >
+.RB [ \-t
+.RI < thresh >]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Apply an anisotropy metric to a DT volume.
+The anisotropy value will be zero in the locations which don\(cqt meet the
+given confidence threshold.
+.SH OPTIONS
+.TP
+.B \-a\fR <\fIaniso\fR>
+Which anisotropy metric to plot.
+All the Westin metrics come in two versions.
+Currently supported:
+.RS +7n
+.IP \(bu 2
+.RB \(lq cl1 \(rq,
+.RB \(lq cl2 \(rq:
+Westin\(cqs linear
+.IP \(bu 2
+.RB \(lq cp1 \(rq,
+.RB \(lq cp2 \(rq:
+Westin\(cqs planar
+.IP \(bu 2
+.RB \(lq ca1 \(rq,
+.RB \(lq ca2 \(rq:
+Westin\(cqs linear + planar
+.IP \(bu 2
+.RB \(lq cs1 \(rq,
+.RB \(lq cs2 \(rq:
+Westin\(cqs spherical
+.IP \(bu 2
+.RB \(lq ct1 \(rq,
+.RB \(lq ct2 \(rq:
+GK\(cqs anisotropy type (cp/ca)
+.IP \(bu 2
+.RB \(lq ra \(rq:
+Basser/Pierpaoli relative anisotropy/sqrt(2)
+.IP \(bu 2
+.RB \(lq fa \(rq:
+Basser/Pierpaoli fractional anisotropy
+.IP \(bu 2
+.RB \(lq vf \(rq:
+volume fraction = 1\-(Basser/Pierpaoli volume ratio)
+.IP \(bu 2
+.RB \(lq tr \(rq:
+trace
+.RE
+.TP
+.B \-t\fR <\fIthresh\fR>
+confidence threshold
+.RI ( float )
+default:
+.RB \(lq 0.5 \(rq
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

@@ -1,0 +1,11 @@
+--- src/newmenu-fileselector.m.missedcast	2025-02-10 19:59:57.938968813 -0600
++++ src/newmenu-fileselector.m	2025-02-10 20:01:01.047337601 -0600
+@@ -218,7 +218,7 @@
+ 	    offset_y = -selected_file*h;
+     }
+     else {
+-	if (selected_file*h + offset_y > 13.0*h)
++	if ((int)(selected_file*h) + offset_y > 13.0*h)
+ 	    offset_y = 13.0*h - selected_file*h;
+     }
+ 

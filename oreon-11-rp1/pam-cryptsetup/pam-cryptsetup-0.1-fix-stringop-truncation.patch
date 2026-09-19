@@ -1,0 +1,70 @@
+From 99675e648c747bd0c52b1d06a7bd024d7b0c2608 Mon Sep 17 00:00:00 2001
+From: Michel Salim <michel@fb.com>
+Date: Fri, 14 Feb 2020 15:36:56 -0800
+Subject: [PATCH] Suppress invalid stringop-truncation warnings
+
+GCC tries to detect possible losses of the null terminator; see e.g.
+https://developers.redhat.com/blog/2018/05/24/detecting-string-truncation-with-gcc-8/
+
+In this case we already check if the null terminator is missing, and exit the program, but GCC does not detect this workaround.
+
+Just suppress these warnings using #pragma
+
+Before
+------
+Build error on Fedora 31
+```
+In file included from /usr/include/string.h:495,
+                 from /usr/include/glib-2.0/glib/gtestutils.h:30,
+                 from /usr/include/glib-2.0/glib.h:85,
+                 from helper.h:18,
+                 from helper.c:15:
+In function 'strncpy',
+    inlined from 'main' at helper.c:404:9:
+/usr/include/bits/string_fortified.h:106:10: error: '__builtin_strncpy' specified bound 100 equals destination size [-Werror=stringop-truncation]
+  106 |   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function 'strncpy',
+    inlined from 'main' at helper.c:411:17:
+/usr/include/bits/string_fortified.h:106:10: error: '__builtin_strncpy' specified bound 100 equals destination size [-Werror=stringop-truncation]
+  106 |   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+m
+```
+
+After
+-----
+Builds fine
+---
+ src/helper.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/helper.c b/src/helper.c
+index 9a9029e..3b3c0d4 100644
+--- a/src/helper.c
++++ b/src/helper.c
+@@ -383,7 +383,11 @@ int main(int argc, char *argv[]) {
+         }
+ 
+         syslog(LOG_DEBUG, "Reading argument 1");
+-        strncpy(state->crypt_mapper_name, argv[1], STRING_BUFFER_SIZE);
++        // suppress stringop-truncatation warning
++        // we already check for missing \0
++        #pragma GCC diagnostic push
++        #pragma GCC diagnostic ignored "-Wstringop-truncation"
++        (strncpy(state->crypt_mapper_name, argv[1], STRING_BUFFER_SIZE));
+         if (state->crypt_mapper_name[STRING_BUFFER_SIZE - 1] != 0) {
+                 syslog(LOG_ERR, "Crypt device name overran buffer size of %d bytes.", STRING_BUFFER_SIZE);
+                 exit(EX_SOFTWARE);
+@@ -415,6 +419,7 @@ int main(int argc, char *argv[]) {
+                 }
+                 syslog(LOG_INFO, "Setting cache path to %s", state->cache_path);
+         }
++        # pragma GCC diagnostic pop
+ 
+         syslog(LOG_DEBUG, "Reading password from login module.");
+         if (fgets(state->password, PASSWORD_BUFFER_SIZE, stdin) == NULL) {
+-- 
+2.21.1
+

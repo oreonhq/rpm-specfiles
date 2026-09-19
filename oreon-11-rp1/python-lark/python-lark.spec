@@ -1,101 +1,64 @@
-%global source0_hash ca807d0162cd16cef15a8feecb862d7319e7a09bdb13aef927968e45040fed80
+%global source0_hash none
 
 Name:           python-lark
-Version:        1.2.2
+Version:        1.3.1
 Release:        %autorelease
-Summary:        Lark is a modern general-purpose parsing library for Python
-# License breakdown:
-# lark/tools/standalone.py - MPL-2.0
-# lark/__pyinstaller/hook-lark.py - GPL-2.0-or-later
-# the rest is MIT
-License:        MIT AND MPL-2.0 AND GPL-2.0-or-later
-Url:            https://github.com/lark-parser/lark
-Source:        https://files.pythonhosted.org/packages/source/l/lark/lark-1.2.2.tar.gz
-# Python 3.14 compatibility
-Patch:          https://github.com/lark-parser/lark/pull/1483.patch
+# Fill in the actual package summary to submit package to Fedora
+Summary:        a modern parsing library
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/lark-parser/lark
+Source:         %{pypi_source lark}
 
 BuildArch:      noarch
-
-%description
-Lark is a modern general-purpose parsing library for Python.
-
-Lark focuses on simplicity and power. It lets you choose between
-two parsing algorithms:
-
-Earley : Parses all context-free grammars (even ambiguous ones)!
-It is the default.
-
-LALR(1): Only LR grammars. Outperforms PLY and most if not all
-other pure-python parsing libraries.
-
-Both algorithms are written in Python and can be used interchangeably
-with the same grammar (aside for algorithmic restrictions).
-See "Comparison to other parsers" for more details.
-
-Lark can auto magically build an AST from your grammar, without any
-more code on your part.
-
-Features:
-
-- EBNF grammar with a little extra
-- Earley & LALR(1)
-- Builds an AST auto magically based on the grammar
-- Automatic line & column tracking
-- Automatic token collision resolution (unless both tokens are regexps)
-- Python 2 & 3 compatible
-- Unicode fully supported
-
-%package -n python3-lark
-Summary:        %{summary}
 BuildRequires:  python3-devel
-%py_provides    python3-lark-parser
-Obsoletes:      python3-lark-parser < 1
 
-%description -n python3-lark
-Lark is a modern general-purpose parsing library for Python. With Lark, you can
-parse any context-free grammar, efficiently, with very little code.
 
-Main Features:
-    - Builds a parse-tree (AST) automagically, based on 
-      the structure of the grammar
-    - Earley parser
-    - Can parse all context-free grammars
-    - Full support for ambiguous grammars
-    - LALR(1) parser
-    - Fast and light, competitive with PLY
-    - Can generate a stand-alone parser
-    - CYK parser, for highly ambiguous grammars
-    - EBNF grammar
-    - Unicode fully supported
-    - Automatic line & column tracking
-    - Standard library of terminals (strings, numbers, names, etc.)
-    - Import grammars from Nearley.js
-    - Extensive test suite
-    - And much more! Since version 1.0, only Python versions 3.6 and up
-      are supported.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'lark' generated automatically by pyp2spec.}
+
+Patch:          https://github.com/lark-parser/lark/pull/1483.patch
+
+%description %_description
+
+%package -n     python3-lark
+Summary:        %{summary}
+
+%description -n python3-lark %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-lark atomic-cache,interegular,nearley,regex
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n lark-%{version}
 
-# Fix wrong-file-end-of-line-encoding.
-sed -i 's/\r$//' README.md examples/*.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x atomic-cache,interegular,nearley,regex
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files lark
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{python3} -m tests
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-lark -f %{pyproject_files}
-%doc README.md examples
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.2-1

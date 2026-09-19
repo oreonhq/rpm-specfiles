@@ -78,7 +78,6 @@ make test
 %{perl_vendorlib}/Test*
 %{_mandir}/man3/Test::Unit*.3*
 
-
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.29-2
 - Import

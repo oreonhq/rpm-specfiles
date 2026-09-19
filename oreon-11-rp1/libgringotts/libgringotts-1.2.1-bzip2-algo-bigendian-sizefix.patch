@@ -1,0 +1,37 @@
+--- libgringotts-1.2.1.orig/src/libgrg_crypt.c	2003-04-24 20:33:28.000000000 +0900
++++ libgringotts-1.2.1/src/libgrg_crypt.c	2022-11-25 22:45:06.134497797 +0900
+@@ -347,10 +347,14 @@ decrypt_mem (const GRG_CTX gctx, const G
+ 		}
+ 		
+ 		if (gctx->comp_algo)	//bz2
++            {
++			unsigned int destLen = oDim;
+ 			err = BZ2_bzBuffToBuffDecompress ((unsigned char *)
+-							  tmpData, (unsigned int *) &oDim,
++							  tmpData, &destLen,
+ 							  (unsigned char *) curdata, curlen,
+ 							  USE_BZ2_SMALL_MEM, 0);
++			oDim = destLen;
++            }
+ 		else		//zlib
+ 			err = uncompress (tmpData, &oDim, curdata, curlen);
+ 
+@@ -411,13 +415,16 @@ grg_encrypt_mem (const GRG_CTX gctx, con
+ 
+ 		//compress the data
+ 		if (gctx->comp_algo)	//bz2
++            {
++			unsigned int destLen = compDim;
+ 			err = BZ2_bzBuffToBuffCompress (compData,
+-							(unsigned int *)
+-							&compDim,
++							&destLen,
+ 							(unsigned char *)
+ 							origData, uncDim,
+ 							gctx->comp_lvl * 3, 0,
+ 							0);
++			compDim = destLen;
++            }
+ 		else
+ 			err = compress2 (compData, &compDim, origData, uncDim,
+ 					 gctx->comp_lvl * 3);

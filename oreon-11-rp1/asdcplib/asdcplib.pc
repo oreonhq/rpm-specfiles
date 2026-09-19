@@ -1,0 +1,11 @@
+prefix=PREFIX
+libdir=LIBDIR
+includedir=INCLUDEDIR
+
+Name: asdcplib
+Url: http://www.cinecert.com/asdcplib
+Description: AS-DCP file access library
+Requires: openssl > 0.9.7
+Version: VERSION
+Libs: -L${libdir} -lasdcp -lkumu
+Cflags: -I${includedir}

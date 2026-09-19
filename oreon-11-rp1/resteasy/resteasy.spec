@@ -5,8 +5,8 @@
 %global namedversion %{version}%{namedreltag}
 
 Name:           resteasy
-Version:        3.0.26
-Release:        41%{?dist}
+Version:        7.0.4.Final
+Release:        1%{?dist}
 Summary:        Framework for RESTful Web services and Java applications
 License:        Apache-2.0
 URL:            http://resteasy.jboss.org/
@@ -79,16 +79,16 @@ Requires:       pki-%{name}-jackson2-provider   = %{version}-%{release}
 Requires:       pki-%{name}-servlet-initializer = %{version}-%{release}
 
 # subpackages removed in fedora 32
-Obsoletes:      %{name}-fastinfoset-provider < 3.0.26-1
-Obsoletes:      %{name}-jackson-provider < 3.0.26-1
-Obsoletes:      %{name}-jettison-provider < 3.0.26-1
-Obsoletes:      %{name}-json-p-provider < 3.0.26-1
-Obsoletes:      %{name}-multipart-provider < 3.0.26-1
-Obsoletes:      %{name}-netty3 < 3.0.26-1
-Obsoletes:      %{name}-optional < 3.0.26-1
-Obsoletes:      %{name}-test < 3.0.26-1
-Obsoletes:      %{name}-validator-provider-11 < 3.0.26-1
-Obsoletes:      %{name}-yaml-provider < 3.0.26-1
+Obsoletes:      %{name}-fastinfoset-provider < 7.0.4.Final-1
+Obsoletes:      %{name}-jackson-provider < 7.0.4.Final-1
+Obsoletes:      %{name}-jettison-provider < 7.0.4.Final-1
+Obsoletes:      %{name}-json-p-provider < 7.0.4.Final-1
+Obsoletes:      %{name}-multipart-provider < 7.0.4.Final-1
+Obsoletes:      %{name}-netty3 < 7.0.4.Final-1
+Obsoletes:      %{name}-optional < 7.0.4.Final-1
+Obsoletes:      %{name}-test < 7.0.4.Final-1
+Obsoletes:      %{name}-validator-provider-11 < 7.0.4.Final-1
+Obsoletes:      %{name}-yaml-provider < 7.0.4.Final-1
 
 %description -n pki-%{name}
 %{desc}

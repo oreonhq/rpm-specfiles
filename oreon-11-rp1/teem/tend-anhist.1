@@ -1,0 +1,61 @@
+.TH TEND\-ANHIST "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-anhist \- generate barycentric histograms of anisotropy
+.SH SYNOPSIS
+.B tend\ anhist
+.RB [ \-v
+.RI < westin\ version >]
+.RB [ \-w
+.RI < nweight >]
+.B \-r
+.RI < res >
+.RB [ \-right ]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Generate barycentric histograms of anisotropy.
+The barycentric space used is either one of Westin\(cqs triple of spherical,
+linear, and planar anisotropy.
+The bin counts in the histogram are weighted by the confidence value.
+.SH OPTIONS
+.TP
+.B \-v\fR <\fIwestin\ version\fR>
+Which version of Westin\(cqs anisotropy metric triple to use, either
+.RB \(lq 1 \(rq
+or
+.RB \(lq 2 \(rq
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-w\fR <\fInweight\fR>
+how to weigh contributions to histogram.
+By default (not using this option), the increment is one bin count per sample,
+but by giving a
+.IR nrrd ,
+the value in the
+.I nrrd
+at the corresponding location will be the bin count increment; default:
+\(lq\(rq
+.TP
+.B \-r\fR <\fIres\fR>
+resolution of anisotropy plot
+.RI ( int )
+.TP
+.B \-right
+sample a right-triangle-shaped region, instead of a roughly equilateral
+triangle.
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

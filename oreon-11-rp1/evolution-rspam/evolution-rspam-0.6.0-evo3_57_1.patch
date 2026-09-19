@@ -1,0 +1,16 @@
+diff --git a/src/rspam.c b/src/rspam.c
+index 01d9c89..3ee1615 100644
+--- a/src/rspam.c
++++ b/src/rspam.c
+@@ -520,7 +520,11 @@ spamcop_report(CamelMimeMessage *msg, gchar *msgfile)
+ #if EVOLUTION_VERSION < 31303
+ 	text = em_utils_message_to_html (CAMEL_SESSION (session), msg, NULL, 0, NULL, NULL, NULL);
+ #else
++#if EVOLUTION_VERSION < 35701
+ 	text = em_utils_message_to_html (CAMEL_SESSION (session), msg, NULL, 0, NULL, NULL, NULL, NULL);
++#else
++	text = em_utils_message_to_html_ex (CAMEL_SESSION (session), msg, NULL, 0, NULL, NULL, NULL, NULL, NULL);
++#endif
+ #endif
+ #else
+ 	text = em_utils_message_to_html (msg, NULL, 0, NULL, NULL, NULL);

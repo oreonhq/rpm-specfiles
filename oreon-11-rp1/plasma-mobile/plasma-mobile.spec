@@ -1,4 +1,4 @@
-%global source0_hash 5844b148ffc3acf7ffc38f13a706f5436559c095286ef5cd0291b4244f2fbe08
+%global source0_hash 378085f75cb0378a46fa12cc678a0e87f2bf9f1771eb514730da8b0a617e8bec
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           plasma-mobile
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 License:        CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-only AND MIT
 Summary:        General UI components for Plasma Phone including shell, containment and applets
@@ -51,7 +51,7 @@ BuildRequires: cmake(KF6JobWidgets)
 BuildRequires: cmake(KF6KCMUtils)
 BuildRequires: cmake(KF6KIO)
 BuildRequires: cmake(KF6KirigamiAddons)
-BuildRequires: cmake(KF6ModemManagerQt)
+BuildRequires: cmake(KF6ModemManagerQt) >= 6.28.0
 BuildRequires: cmake(KF6NetworkManagerQt)
 BuildRequires: cmake(KF6Notifications)
 BuildRequires: cmake(KF6Package)
@@ -70,7 +70,7 @@ BuildRequires: cmake(Qt6Svg)
 BuildRequires: cmake(Qt6Sensors)
 BuildRequires: cmake(QCoro6)
 BuildRequires: cmake(Qt6WaylandClient)
-BuildRequires: cmake(libkworkspace)
+BuildRequires: cmake(LibKWorkspace)
 BuildRequires: cmake(LayerShellQt)
 BuildRequires: libepoxy-devel
 BuildRequires: wayland-devel
@@ -167,6 +167,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_{mobile_info,mob
 %{_kf6_datadir}/plasma/mobileinitialstart
 %{_kf6_datadir}/applications/*.desktop
 %{_kf6_datadir}/knotifications6/plasma_mobile_quicksetting*.notifyrc
+%{_kf6_datadir}/qlogging-categories6/plasmamobile.categories
 %{_kf6_datadir}/kwin/effects/mobiletaskswitcher
 %{_kf6_datadir}/kwin/scripts/convergentwindows/contents/ui/main.qml
 %{_kf6_datadir}/kwin/scripts/convergentwindows/metadata.json
@@ -174,7 +175,6 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_{mobile_info,mob
 %{_kf6_datadir}/plasma/layout-templates/org.kde.plasma.mobile.defaultNavigationPanel/metadata.json
 %{_kf6_datadir}/plasma/layout-templates/org.kde.plasma.mobile.defaultStatusBar/contents/layout.js
 %{_kf6_datadir}/plasma/layout-templates/org.kde.plasma.mobile.defaultStatusBar/metadata.json
-%{_kf6_qmldir}/org/kde/plasma/mm/*
 %{_kf6_qmldir}/org/kde/plasma/private/mobileshell
 %{_kf6_qmldir}/org/kde/plasma/quicksetting
 %{_kf6_qmldir}/org/kde/plasma/mobileinitialstart
@@ -194,6 +194,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_{mobile_info,mob
 %{_kf6_datadir}/plasma/look-and-feel/org.fedoraproject.fedora.mobile
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.7.4-1
+- Latest upstream release
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

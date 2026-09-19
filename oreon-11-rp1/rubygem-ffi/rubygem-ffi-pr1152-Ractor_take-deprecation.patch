@@ -1,0 +1,245 @@
+From 0c4a5714381fc9f1ea33e2d86d20f9646212c30f Mon Sep 17 00:00:00 2001
+From: Lars Kanis <lars@greiz-reinsdorf.de>
+Date: Fri, 6 Jun 2025 20:25:19 +0200
+Subject: [PATCH] Use Ractor#value instead of deprecated #take
+
+Ractor#take was removed from ruby-3.5 since https://github.com/ruby/ruby/pull/13445
+---
+ samples/hello_ractor.rb          | 7 ++++++-
+ samples/qsort_ractor.rb          | 7 ++++++-
+ spec/ffi/async_callback_spec.rb  | 2 +-
+ spec/ffi/dynamic_library_spec.rb | 4 ++--
+ spec/ffi/enum_spec.rb            | 2 +-
+ spec/ffi/errno_spec.rb           | 2 +-
+ spec/ffi/function_spec.rb        | 4 ++--
+ spec/ffi/library_spec.rb         | 4 ++--
+ spec/ffi/platform_spec.rb        | 2 +-
+ spec/ffi/spec_helper.rb          | 7 +++++++
+ spec/ffi/struct_spec.rb          | 6 +++---
+ spec/ffi/variadic_spec.rb        | 2 +-
+ 12 files changed, 33 insertions(+), 16 deletions(-)
+
+diff --git a/samples/hello_ractor.rb b/samples/hello_ractor.rb
+index 904fe8544..69005de58 100644
+--- a/samples/hello_ractor.rb
++++ b/samples/hello_ractor.rb
+@@ -1,5 +1,10 @@
+ require 'ffi'
+ 
++class Ractor
++  # compat with Ruby-3.4 and older
++  alias value take unless method_defined? :value
++end
++
+ module Foo
+   extend FFI::Library
+   ffi_lib FFI::Library::LIBC
+@@ -8,4 +13,4 @@ module Foo
+ end
+ Ractor.new do
+   Foo.cputs("Hello, World via libc puts using FFI in a Ractor")
+-end.take
++end.value
+diff --git a/samples/qsort_ractor.rb b/samples/qsort_ractor.rb
+index db085de2d..5890646e2 100644
+--- a/samples/qsort_ractor.rb
++++ b/samples/qsort_ractor.rb
+@@ -1,5 +1,10 @@
+ require 'ffi'
+ 
++class Ractor
++  # compat with Ruby-3.4 and older
++  alias value take unless method_defined? :value
++end
++
+ module LibC
+   extend FFI::Library
+   ffi_lib FFI::Library::LIBC
+@@ -23,6 +28,6 @@ module LibC
+     i1 < i2 ? -1 : i1 > i2 ? 1 : 0
+   end
+   puts "After qsort #{p.get_array_of_int32(0, 3).join(', ')}"
+-end.take
++end.value
+ 
+ puts "After ractor termination #{p.get_array_of_int32(0, 3).join(', ')}"
+diff --git a/spec/ffi/async_callback_spec.rb b/spec/ffi/async_callback_spec.rb
+index 23ac5b4c5..c9afa97d5 100644
+--- a/spec/ffi/async_callback_spec.rb
++++ b/spec/ffi/async_callback_spec.rb
+@@ -72,7 +72,7 @@ module LibTest
+       LibTest.testAsyncCallback(cb, 0x7fffffff)
+ 
+       [v, correct_ractor, correct_thread]
+-    end.take
++    end.value
+ 
+     expect(res).to eq([0x7fffffff, true, true])
+   end
+diff --git a/spec/ffi/dynamic_library_spec.rb b/spec/ffi/dynamic_library_spec.rb
+index 088a8226b..768b2b577 100644
+--- a/spec/ffi/dynamic_library_spec.rb
++++ b/spec/ffi/dynamic_library_spec.rb
+@@ -12,7 +12,7 @@
+ 
+     res = Ractor.new(libtest) do |libtest2|
+       libtest2.find_symbol("testClosureVrV").address
+-    end.take
++    end.value
+ 
+     expect( res ).to be > 0
+   end
+@@ -22,7 +22,7 @@
+       libtest = FFI::DynamicLibrary.open(TestLibrary::PATH,
+           FFI::DynamicLibrary::RTLD_LAZY | FFI::DynamicLibrary::RTLD_GLOBAL)
+       libtest.find_symbol("testClosureVrV")
+-    end.take
++    end.value
+ 
+     expect(res.address).to be > 0
+   end
+diff --git a/spec/ffi/enum_spec.rb b/spec/ffi/enum_spec.rb
+index 7a55b0708..34450a9ed 100644
+--- a/spec/ffi/enum_spec.rb
++++ b/spec/ffi/enum_spec.rb
+@@ -449,7 +449,7 @@ module TestEnum4
+         TestEnum4.enum_type(:enum_type6)[0x4242424242424242],
+         TestEnum4.enum_value(:c3)
+       ]
+-    end.take
++    end.value
+     expect( res ).to eq( [0, :c1, :c20, :c1, :c28, 2] )
+   end
+ end
+diff --git a/spec/ffi/errno_spec.rb b/spec/ffi/errno_spec.rb
+index c0207b8b6..f7258e057 100644
+--- a/spec/ffi/errno_spec.rb
++++ b/spec/ffi/errno_spec.rb
+@@ -39,7 +39,7 @@ module LibTest
+     res = Ractor.new do
+       LibTest.setLastError(0x12345678)
+       FFI.errno
+-    end.take
++    end.value
+     expect(res).to eq(0x12345678)
+   end
+ end
+diff --git a/spec/ffi/function_spec.rb b/spec/ffi/function_spec.rb
+index 6c1486511..774966bc5 100644
+--- a/spec/ffi/function_spec.rb
++++ b/spec/ffi/function_spec.rb
+@@ -60,7 +60,7 @@ def self.call(a, b)
+ 
+     res = Ractor.new(add) do |add2|
+       LibTest.testFunctionAdd(10, 10, add2)
+-    end.take
++    end.value
+ 
+     expect( res ).to eq(20)
+   end
+@@ -69,7 +69,7 @@ def self.call(a, b)
+     res = Ractor.new do
+       function_add = FFI::Function.new(:int, [:int, :int]) { |a, b| a + b }
+       LibTest.testFunctionAdd(10, 10, function_add)
+-    end.take
++    end.value
+ 
+     expect( res ).to eq(20)
+   end
+diff --git a/spec/ffi/library_spec.rb b/spec/ffi/library_spec.rb
+index 3905cf5e0..4a90ad2d1 100644
+--- a/spec/ffi/library_spec.rb
++++ b/spec/ffi/library_spec.rb
+@@ -30,7 +30,7 @@ module TestEnumValueRactor
+     it "should be queryable in Ractor", :ractor do
+       res = Ractor.new do
+         TestEnumValueRactor.enum_value(:one)
+-      end.take
++      end.value
+ 
+       expect( res ).to eq(0)
+     end
+@@ -397,7 +397,7 @@ class GlobalStruct < FFI::Struct
+         FFI::CURRENT_PROCESS,
+         FFI::USE_THIS_PROCESS_AS_LIBRARY,
+       ]
+-    end.take
++    end.value
+ 
+     expect( res.size ).to be > 0
+   end
+diff --git a/spec/ffi/platform_spec.rb b/spec/ffi/platform_spec.rb
+index 8890b072a..84a131b84 100644
+--- a/spec/ffi/platform_spec.rb
++++ b/spec/ffi/platform_spec.rb
+@@ -143,7 +143,7 @@
+         FFI::Platform::ARCH,
+         FFI::Platform::OS,
+       ]
+-    end.take
++    end.value
+ 
+     expect( res.size ).to be > 0
+   end
+diff --git a/spec/ffi/spec_helper.rb b/spec/ffi/spec_helper.rb
+index ae987ab84..e0ba368e8 100644
+--- a/spec/ffi/spec_helper.rb
++++ b/spec/ffi/spec_helper.rb
+@@ -7,6 +7,13 @@
+ require 'timeout'
+ require 'objspace'
+ 
++if defined? Ractor
++  class Ractor
++    # compat with Ruby-3.4 and older
++    alias value take unless method_defined? :value
++  end
++end
++
+ RSpec.configure do |c|
+   c.filter_run_excluding gc_dependent: true unless ENV['FFI_TEST_GC'] == 'true'
+   c.filter_run_excluding( :ractor ) unless defined?(Ractor) && RUBY_VERSION >= "3.1" && (RUBY_VERSION !~ /^3.3./ || RUBY_PLATFORM !~ /mingw/)
+diff --git a/spec/ffi/struct_spec.rb b/spec/ffi/struct_spec.rb
+index 6afe47537..690e22efc 100644
+--- a/spec/ffi/struct_spec.rb
++++ b/spec/ffi/struct_spec.rb
+@@ -485,7 +485,7 @@ class TestStruct < FFI::Struct
+         add_proc = lambda { |a, b| a + b }
+         s[:add] = add_proc
+         CallbackMember.struct_call_add_cb(s, 40, 2)
+-      end.take
++      end.value
+ 
+       expect( res ).to eq(42)
+     end
+@@ -567,7 +567,7 @@ class TestStruct < FFI::Struct
+ 
+       res = Ractor.new(a) do |a2|
+         a2[:a]
+-      end.take
++      end.value
+ 
+       expect( res ).to eq(-34)
+     end
+@@ -581,7 +581,7 @@ class TestStructRactor < FFI::Struct
+         s = TestStructRactor.new
+         s[:i] = 0x14
+         LibTest.ptr_ret_int32_t(s, 0)
+-      end.take
++      end.value
+ 
+       expect( res ).to eq(0x14)
+     end
+diff --git a/spec/ffi/variadic_spec.rb b/spec/ffi/variadic_spec.rb
+index 0b5130f31..a42f9e3a3 100644
+--- a/spec/ffi/variadic_spec.rb
++++ b/spec/ffi/variadic_spec.rb
+@@ -119,7 +119,7 @@ def call
+     res = Ractor.new do
+       pr = proc { 42.0 }
+       LibTest.testCallbackVrDva(3.0, :cbVrD, pr)
+-    end.take
++    end.value
+ 
+     expect(res).to be_within(0.0000001).of(45.0)
+   end

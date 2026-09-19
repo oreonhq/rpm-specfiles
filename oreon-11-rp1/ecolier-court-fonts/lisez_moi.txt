@@ -1,0 +1,25 @@
+AVERTISSEMENT
+
+Les 2 polices nommées :
+
+Ecolier court
+Ecolier lignes court
+
+sont placées sous licence OFL (Open Font Licence): http://scripts.sil.org/OFL
+
+Une traduction (non-officielle) en langue française est disponible ici :
+http://fontforge.sourceforge.net/OFL-Unofficial-fr.html
+
+Merci de prendre connaissance des conditions d'utilisation des 2 polices citées ci-dessus.
+
+Si vous souhaitez afficher mes polices sur votre site, merci d'y joindre le logo de la licence OFL (avec son lien) ainsi que la traduction et le fichier lisez-moi.txt.
+
+Vous pouvez également (et c'est souvent préférable), mettre un lien vers mon site :
+http://perso.orange.fr/jm.douteau/
+
+L’auteur met gratuitement ces polices à la disposition de chacun 
+et décline toute responsabilité concernant d’éventuels dysfonctionnements.
+
+Ces polices de caractères ont été créées par Jean-Marie Douteau
+e-mail : douteau.ecolier@orange.fr
+

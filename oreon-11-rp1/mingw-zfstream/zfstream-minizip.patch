@@ -1,0 +1,14 @@
+diff -rupN zfstream-autotools/src/zipstream.cpp zfstream-autotools-new/src/zipstream.cpp
+--- zfstream-autotools/src/zipstream.cpp	2019-02-14 13:20:32.000000000 +0100
++++ zfstream-autotools-new/src/zipstream.cpp	2022-11-18 17:04:02.620009096 +0100
+@@ -30,8 +30,8 @@
+ #include <iostream>
+ #include <string.h>		// for memcpy
+ #include "zipstream.hpp"
+-#include <zip.h>
+-#include <unzip.h>
++#include <minizip/zip.h>
++#include <minizip/unzip.h>
+ 
+ namespace zfstream
+ {

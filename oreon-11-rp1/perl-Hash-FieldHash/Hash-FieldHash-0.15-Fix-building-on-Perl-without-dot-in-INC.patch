@@ -1,0 +1,11 @@
+diff -up Hash-FieldHash-0.15/Build.PL.orig Hash-FieldHash-0.15/Build.PL
+--- Hash-FieldHash-0.15/Build.PL.orig	2017-05-18 12:00:21.298339432 +0200
++++ Hash-FieldHash-0.15/Build.PL	2017-05-18 12:02:29.216586570 +0200
+@@ -9,6 +9,7 @@ use strict;
+ use warnings;
+ use utf8;
+ 
++BEGIN { push @INC, '.'; }
+ use builder::MyBuilder;
+ use File::Basename;
+ use File::Spec;

@@ -1,0 +1,44 @@
+diff -up gxmms2-0.7.1/gmedialib/gmlplaylists.c.093 gxmms2-0.7.1/gmedialib/gmlplaylists.c
+--- gxmms2-0.7.1/gmedialib/gmlplaylists.c.093	2023-09-12 10:59:31.211447961 -0400
++++ gxmms2-0.7.1/gmedialib/gmlplaylists.c	2023-09-12 11:00:03.249897307 -0400
+@@ -46,23 +46,23 @@ static int n_query_playlists(xmmsv_t *va
+ 			case XMMS_COLLECTION_TYPE_IDLIST:
+ 				pl_type = "ID list";
+ 				break;
+-			case XMMS_COLLECTION_TYPE_QUEUE:
+-				pl_type = "Queue";
+-				break;
+-			case XMMS_COLLECTION_TYPE_PARTYSHUFFLE:
+-				pl_type = "Party shuffle";
+-				if (    xmmsv_list_get (xmmsv_coll_operands_get (coll), 0, &v)
+-				    &&  xmmsv_get_coll (v, &operand)
+-				    &&  xmmsv_coll_get_type (operand) == XMMS_COLLECTION_TYPE_REFERENCE)
+-				{
+-					gchar *reference;
+-					xmmsc_coll_attribute_get(operand, "reference", &reference);
+-					snprintf(buf, 511,
+-						 "Party shuffle (Source collection: %s)",
+-						 reference);
+-					pl_type = buf;
+-				}
+-				break;
++			// case XMMS_COLLECTION_TYPE_QUEUE:
++			//	pl_type = "Queue";
++			//	break;
++			// case XMMS_COLLECTION_TYPE_PARTYSHUFFLE:
++			//	pl_type = "Party shuffle";
++			//	if (    xmmsv_list_get (xmmsv_coll_operands_get (coll), 0, &v)
++			//	    &&  xmmsv_get_coll (v, &operand)
++			//	    &&  xmmsv_coll_get_type (operand) == XMMS_COLLECTION_TYPE_REFERENCE)
++			//	{
++			//		gchar *reference;
++			//		xmmsc_coll_attribute_get(operand, "reference", &reference);
++			//		snprintf(buf, 511,
++			//			 "Party shuffle (Source collection: %s)",
++			//			 reference);
++			//		pl_type = buf;
++			//	}
++			//	break;
+ 			default:
+ 				pl_type = "Other";
+ 				break;

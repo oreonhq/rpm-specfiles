@@ -1,0 +1,39 @@
+diff -up Geo-ShapeFile-3.02/Makefile.PL.orig Geo-ShapeFile-3.02/Makefile.PL
+--- Geo-ShapeFile-3.02/Makefile.PL.orig	2023-02-23 14:01:27.059201752 +0100
++++ Geo-ShapeFile-3.02/Makefile.PL	2023-02-23 14:01:45.528344715 +0100
+@@ -23,11 +23,7 @@ WriteMakefile(
+         'autovivification' => 0,
+         @win32_longpath,
+     },
+-    BUILD_REQUIRES => {
+-        'rlib'       => 0,
+-    },
+     TEST_REQUIRES => {
+-        'rlib'       => 0,
+         'Test::Exception' => 0,
+         'Test::More' => 0.96,
+     },
+diff -up Geo-ShapeFile-3.02/t/main_tests.t.orig Geo-ShapeFile-3.02/t/main_tests.t
+--- Geo-ShapeFile-3.02/t/main_tests.t.orig	2023-02-23 14:01:04.157024473 +0100
++++ Geo-ShapeFile-3.02/t/main_tests.t	2023-02-23 14:01:19.904146368 +0100
+@@ -4,7 +4,7 @@
+ use Test::More;
+ use strict;
+ use warnings;
+-use rlib '../lib', './lib';
++use lib 't/lib';
+ 
+ use Geo::ShapeFile;
+ use Geo::ShapeFile::Shape;
+diff -up Geo-ShapeFile-3.02/t/test_unicode_fname.t.orig Geo-ShapeFile-3.02/t/test_unicode_fname.t
+--- Geo-ShapeFile-3.02/t/test_unicode_fname.t.orig	2023-02-23 14:00:25.546725603 +0100
++++ Geo-ShapeFile-3.02/t/test_unicode_fname.t	2023-02-23 14:00:54.263947894 +0100
+@@ -5,7 +5,7 @@ use utf8;
+ use Test::More;
+ use Test::Exception;
+ use File::Copy;
+-use rlib '../lib', './lib';
++use lib 't/lib';
+ 
+ use Geo::ShapeFile;
+ use Geo::ShapeFile::Shape;

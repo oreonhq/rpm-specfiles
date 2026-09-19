@@ -1,0 +1,28 @@
+--- gphotoframe-2.0.1-hg0eed26d75481/lib/image/actor/base.py.pixbuf_23102	2014-12-05 11:50:25.000000000 +0900
++++ gphotoframe-2.0.1-hg0eed26d75481/lib/image/actor/base.py	2015-01-01 12:04:45.984341399 +0900
+@@ -41,7 +41,10 @@
+ 
+         # FIXME
+         tmp_file = os.path.join(CACHE_DIR, 'gphotoframe_tmp.png')
+-        pixbuf.savev(tmp_file, 'png', [], [])
++        try:
++          pixbuf.savev(tmp_file, 'png', [], [])
++        except:
++          pixbuf.save(tmp_file, 'png', [], [])
+         self.set_from_file(tmp_file)
+ 
+ #         self.set_from_rgb_data(
+--- gphotoframe-2.0.1-hg0eed26d75481/lib/image/gtkimage.py.pixbuf_23102	2014-12-05 11:50:25.000000000 +0900
++++ gphotoframe-2.0.1-hg0eed26d75481/lib/image/gtkimage.py	2015-01-01 12:05:12.575522238 +0900
+@@ -131,7 +131,10 @@
+             url = photo.get('url')
+             path = 'thumb_' + url.replace('/', '_')
+             filename = os.path.join(CACHE_DIR, path)
+-            pixbuf.savev(filename, "jpeg", [], [])
++            try:
++              pixbuf.savev(filename, "jpeg", [], [])
++            except:
++              pixbuf.save(filename, "jpeg", [], [])
+ 
+         self.data = pixbuf
+         return True

@@ -1,0 +1,43 @@
+.TH ULID\-BUILD "1" "February 2024" "" "User Commands"
+.SH NAME
+.B ulid\-build
+\(en generate ULIDs from different sources
+.SH SYNOPSIS
+.B ulid\ build
+.RB [ \-h ]
+.RB [ \-\-from\-int\  \fIint ]
+.RB [ \-\-from\-hex\  \fIstr ]
+.RB [ \-\-from\-str\  \fIstr ]
+.RB [ \-\-from\-timestamp\  \fIstr | \fIfloat ]
+.RB [ \-\-from\-datetime\  \fIiso8601 ]
+.RB [ \-\-from\-uuid\  \fIuuid ]
+.SH OPTIONS
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-\-from\-int\ \fIint
+create from integer
+.TP
+.B \-\-from\-hex\ \fIstr
+create from 32 character hex value
+.TP
+.B \-\-from\-str\ \fIstr
+create from base32 encoded string of length 26
+.TP
+.B \-\-from\-timestamp\ \fIint\fR|\fIfloat
+create from timestamp either as float in secs or int as millis
+.TP
+.B \-\-from\-datetime\ \fIiso8601
+create from datetime.
+The timestamp part of the ULID
+will be taken from the datetime.
+.TP
+.B \-\-from\-uuid\ \fIuuid
+create from given UUID. 
+The timestamp part will be random.
+.SH "SEE\ ALSO"
+.BR ulid (1)
+.P
+.BR ulid\-show (1)

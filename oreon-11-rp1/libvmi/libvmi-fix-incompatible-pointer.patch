@@ -1,0 +1,53 @@
+diff -u --recursive libvmi-77a677aa6621927495f1954eded11e601937798b-vanilla/examples/linux-offsets.c libvmi-77a677aa6621927495f1954eded11e601937798b/examples/linux-offsets.c
+--- libvmi-77a677aa6621927495f1954eded11e601937798b-vanilla/examples/linux-offsets.c	2025-12-17 19:49:08.000000000 -0600
++++ libvmi-77a677aa6621927495f1954eded11e601937798b/examples/linux-offsets.c	2025-12-21 12:46:11.877594824 -0600
+@@ -48,7 +48,7 @@
+     vmi_destroy(vmi);
+ }
+ 
+-void sigint_handler()
++void sigint_handler(int signum)
+ {
+     clean_up();
+     exit(1);
+diff -u --recursive libvmi-77a677aa6621927495f1954eded11e601937798b-vanilla/examples/win-offsets.c libvmi-77a677aa6621927495f1954eded11e601937798b/examples/win-offsets.c
+--- libvmi-77a677aa6621927495f1954eded11e601937798b-vanilla/examples/win-offsets.c	2025-12-17 19:49:08.000000000 -0600
++++ libvmi-77a677aa6621927495f1954eded11e601937798b/examples/win-offsets.c	2025-12-21 12:46:28.269463911 -0600
+@@ -81,7 +81,7 @@
+     }
+ }
+ 
+-void sigint_handler()
++void sigint_handler(int signum)
+ {
+     clean_up();
+     exit(1);
+diff -u --recursive libvmi-77a677aa6621927495f1954eded11e601937798b-vanilla/tools/vmifs/vmifs.c libvmi-77a677aa6621927495f1954eded11e601937798b/tools/vmifs/vmifs.c
+--- libvmi-77a677aa6621927495f1954eded11e601937798b-vanilla/tools/vmifs/vmifs.c	2025-12-17 19:49:08.000000000 -0600
++++ libvmi-77a677aa6621927495f1954eded11e601937798b/tools/vmifs/vmifs.c	2025-12-21 12:43:00.143133365 -0600
+@@ -110,7 +110,7 @@
+     return size;
+ }
+ 
+-void vmifs_destroy()
++void vmifs_destroy(void *unused)
+ {
+     if (vmi)
+         vmi_destroy(vmi);
+@@ -162,14 +162,14 @@
+     }
+ 
+     if (VMI_FAILURE == vmi_get_access_mode(NULL, domain, init_flags, init_data, &mode)) {
+-        vmifs_destroy();
++        vmifs_destroy(NULL);
+         return 1;
+     }
+ 
+     /* initialize the libvmi library */
+     if (VMI_FAILURE == vmi_init(&vmi, mode, domain, init_flags, init_data, NULL)) {
+         printf("Failed to init LibVMI library.\n");
+-        vmifs_destroy();
++        vmifs_destroy(NULL);
+         return 1;
+     }
+ 

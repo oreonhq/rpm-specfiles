@@ -1,0 +1,37 @@
+From 7663dd73548a0de71e6a165f51abe8ff5c6e6aea Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Fri, 2 Oct 2020 23:47:34 +0100
+Subject: [PATCH 5/5] Remove src flags
+
+---
+ configure.ac | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index cb8d7c7..d228caf 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -111,20 +111,6 @@ Could not determine proper value for MPI_LDFLAGS.  Please see README.])
+   echo "$MPI_LDFLAGS"
+ fi
+ 
+-CXXFLAGS="-g -O3 -std=c++11"
+-
+-#if test "$ac_test_CXXFLAGS" != set; then
+-#  if test "$CXXFLAGS" = "-O2"; then
+-#    CXXFLAGS="-O3"
+-#  else
+-  #  CXXFLAGS="-O2"
+-#    CXXFLAGS="-g -O0"
+-if test $CXX = g++; then
+-	CXXFLAGS="-pedantic -Wall -Wno-long-long $CXXFLAGS"
+-fi
+-#  fi
+-#fi
+-
+ AC_PROG_CC
+ AC_PROG_LIBTOOL
+ 
+-- 
+2.43.0
+

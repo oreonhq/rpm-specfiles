@@ -1,0 +1,8 @@
+--- unix_socket-0.5.0/Cargo.toml	2015-11-17T06:11:48+00:00
++++ unix_socket-0.5.0/Cargo.toml	2025-01-20T22:37:31.708705+00:00
+@@ -14,4 +14,4 @@
+ cfg-if = "0.1"
+ 
+ [dev-dependencies]
+-tempdir = "0.3"
++tempfile = "3"

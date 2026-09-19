@@ -1,0 +1,153 @@
+#!/usr/bin/python3
+#
+# Migrate data from the rss2email 2.x format to the 3.x format.
+#
+# Copyright (c) 2013, Etienne Millon <me@emillon.org>
+# Redistributable under the GPL version 2 or later
+#
+# Please report bugs and suggestion on the Debian bugtracker using the
+# "reportbug rss2email" command.
+#
+# Changelog:
+#
+#   v6 (2017-12-28)
+#      - ported to Python 3 using 2to3
+#
+#   v5 (2015-07-04)
+#      - support per-feed addresses
+#
+#   v4 (2014-06-10)
+#      - support XDG directories
+#
+#   v3 (2014-02-04)
+#      - Write status file (already-seen DB)
+#      - Fix path in error message
+#
+#   v2 (2013-09-17)
+#      - Preserve paused status (Denis Laxalde)
+#
+#   v1 (2013-08-12)
+#      - Migrate feed names only.
+#
+
+import json
+import os.path
+import pickle
+import string
+import subprocess
+import sys
+import xdg.BaseDirectory
+
+
+class Feed:
+    def __init__(self, url, to):
+        self.url, self.etag, self.modified, self.seen = url, None, None, {}
+        self.active = True
+        self.to = to
+
+    def __repr__(self):
+        fmt = '\n'.join(['Feed(url={url},',
+                         '     etag={etag},',
+                         '     modified={modified},',
+                         '     seen={seen},',
+                         '     active={active},',
+                         '     to={to},',
+                         ')',
+                         ])
+        return fmt.format(**self.__dict__)
+
+
+def not_empty(g):
+    try:
+        next(g)
+        return True
+    except StopIteration:
+        return False
+
+
+def new_db_exists():
+    config = xdg.BaseDirectory.load_config_paths('rss2email.cfg')
+    data = xdg.BaseDirectory.load_data_paths('rss2email.json')
+    return not_empty(config) or not_empty(data)
+
+
+def set_email(s):
+    return subprocess.call(['r2e', 'email', s])
+
+
+def slugify_char(c):
+    allowed = string.ascii_letters + string.digits + '._-'
+    if c in allowed:
+        return c
+    else:
+        return '_'
+
+
+def slugify(s):
+    return ''.join([slugify_char(c) for c in s])
+
+
+def add(url, name, to):
+    extra_args = []
+    if to is not None:
+        extra_args = [to]
+    return subprocess.call(['r2e', 'add', name, url] + extra_args)
+
+
+def pause(name):
+    return subprocess.call(['r2e', 'pause', name])
+
+
+def main():
+    if new_db_exists():
+        print("""
+        It seems that a rss2email 3.x database already exists, exiting.
+        If you want to import your old (rss2email 2.x) database, please remove
+        ~/.config/rss2email.cfg and ~/.local/share/rss2email.json (or XDG
+        equivalents) and re-run r2e-migrate.
+        """)
+        sys.exit(1)
+
+    old_feed_data_file = os.path.expanduser('~/.rss2email/feeds.dat')
+    with open(old_feed_data_file) as f:
+        data = pickle.load(f)
+
+    email = data[0]
+    feeds = data[1:]
+
+    status = {'version': 2,
+              'feeds': [],
+              }
+
+    print('Default email address: {}'.format(email))
+    set_email(email)
+
+    print('Adding feeds:')
+    for feed in feeds:
+        url = feed.url
+        print(url)
+        name = slugify(url)
+        add(url, name, feed.to)
+        if not feed.active:
+            pause(name)
+        modified = None
+        if feed.modified:
+            modified = str(feed.modified)
+        feed_status = {'seen': {},
+                       'etag': feed.etag,
+                       'name': str(name),
+                       'modified': modified,
+                       }
+        for k, v in list(feed.seen.items()):
+            feed_status['seen'][k] = {'id': v}
+        status['feeds'].append(feed_status)
+
+    # save_data_path would work but rss2email uses a bare file
+    data_dir = xdg.BaseDirectory.xdg_data_home
+    new_status_file = os.path.join(data_dir, 'rss2email.json')
+    with open(new_status_file, 'w') as statf:
+        json.dump(status, statf)
+
+
+if __name__ == '__main__':
+    main()

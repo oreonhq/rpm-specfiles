@@ -1,0 +1,66 @@
+From 1c42c1550bff004edd9203d045e95d4e070db95c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jaroslav=20=C5=A0karvada?= <jskarvad@redhat.com>
+Date: Fri, 18 Jan 2019 11:27:47 +0100
+Subject: [PATCH] Generate Expose events when clearing a window
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It seems root-tail doesn't correctly delete the old content. It
+manifests with e.g. the xfdesktop-4.13.2 which switched to gtk3 which
+uses cairo. The root-tail doesn't erase the old content causing that
+the new text is rewritten over the old text which clutters the output
+very soon.
+
+I guess the root-tail should call XClearArea with the Exposure flag
+set to True requesting the redraw of the desktop bellow. This seems to
+fix the problem for me.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ root-tail.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/root-tail.c b/root-tail.c
+index ab5f76d..a85dcb2 100644
+--- a/root-tail.c
++++ b/root-tail.c
+@@ -206,7 +206,7 @@ force_refresh (int dummy)
+ static void
+ blank_window (int dummy)
+ {
+-  XClearArea (disp, root, win_x, win_y, width + MARGIN_OF_ERROR, height, False);
++  XClearArea (disp, root, win_x, win_y, width + MARGIN_OF_ERROR, height, True);
+   XFlush (disp);
+   exit (0);
+ }
+@@ -462,7 +462,7 @@ refresh (int miny, int maxy, int clear, int refresh_all)
+   maxy -= win_y;
+ 
+   if (clear && !opt_noflicker)
+-    XClearArea (disp, root, win_x, win_y, width + MARGIN_OF_ERROR, height, False);
++    XClearArea (disp, root, win_x, win_y, width + MARGIN_OF_ERROR, height, True);
+ 
+   for (line = linelist; line; line = line->next, lin++)
+     {
+@@ -535,7 +535,7 @@ refresh (int miny, int maxy, int clear, int refresh_all)
+                                       width, step_per_line);
+ #else /* DEBUG */
+                       XClearArea (disp, root, win_x, win_y + offset - line->logfile->font_ascent,
+-                                  width + MARGIN_OF_ERROR, step_per_line, False);
++                                  width + MARGIN_OF_ERROR, step_per_line, True);
+ #endif /* DEBUG */
+                     }
+                 }
+@@ -584,7 +584,7 @@ refresh (int miny, int maxy, int clear, int refresh_all)
+                       width, space);
+ #else /* DEBUG */
+       XClearArea (disp, root, win_x, win_y + offset - (opt_reverse ? 0 : space),
+-                  width + MARGIN_OF_ERROR, space, False);
++                  width + MARGIN_OF_ERROR, space, True);
+ #endif
+     }
+ 
+-- 
+2.21.0
+

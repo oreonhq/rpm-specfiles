@@ -1,0 +1,76 @@
+--- src/zfstream.hpp.orig	2007-12-28 17:04:40.000000000 +0100
++++ src/zfstream.hpp	2007-12-28 17:06:16.000000000 +0100
+@@ -45,7 +45,9 @@
+                  */
+         	GZipCompression = ZLibCompression,
+                 /** BZipCompression means to use the zfstream::obzstream class for output streams. */
+-	        BZipCompression = 2
++	        BZipCompression = 2,
++                /** ZipCompression means to use the zfstream::ozipstream class for output streams. */
++	        ZipCompression = 3
+         };
+ 
+         /**
+@@ -81,6 +83,7 @@
+            - std::ifstream
+            - zfstream::gzstream
+            - zfstream::bzstream
++           - zfstream::zipstream
+ 
+            It will return NULL if it cannot open filename, or a
+            std::ifstream if it cannot figure out a decompression
+@@ -110,6 +113,7 @@
+ 
+            - zfstream::ogzstream
+            - zfstream::obzstream
++           - zfstream::ozipstream
+            - std::ofstream
+ 
+            Note that this function only uses filename to pass to the
+--- src/zfstream.cpp.orig	2007-12-28 17:04:49.000000000 +0100
++++ src/zfstream.cpp	2007-12-28 17:11:39.000000000 +0100
+@@ -17,6 +17,7 @@
+ 
+ #if HAVE_ZLIB
+ #  include "gzstream.hpp"
++#  include "zipstream.hpp"
+ #endif
+ #if HAVE_BZLIB
+ #  include "bzstream.hpp"
+@@ -33,6 +34,7 @@
+                   case( NoCompression ): return "NoCompression";  break;
+                   case( ZLibCompression ): return "ZLibCompression"; break;
+                   case( BZipCompression ): return "BZipCompression"; break;
++                  case( ZipCompression ): return "ZipCompression"; break;
+                   default: return ""; break;
+                 }
+         }
+@@ -46,6 +48,7 @@
+ #endif                
+ #if HAVE_ZLIB
+                 if( ZLibCompression == p ) return true;
++                if( ZipCompression == p ) return true;
+ #endif            
+                 return false;
+         }
+@@ -107,6 +110,12 @@
+                         //COUT << "gzip!"<<std::endl;
+                         return new zfstream::igzstream( src.c_str() );
+                 }
++                // zip=504b 0304 (dec: 80 75 3 4)  ascii: PK\003\004
++                if( 0x50 == buff[0] && 0x4b == buff[1] )
++                {
++                        //COUT << "zip!"<<std::endl;
++                        return new zfstream::izipstream( src.c_str() );
++                }
+ #endif            
+                 return new std::ifstream( src.c_str() );
+         }
+@@ -121,6 +130,7 @@
+                   // REMINDER: when/if GZip/ZLib mean different things, this will break!
+                   // C++ won't let me put both in here when they have the same value.
+                   case ZLibCompression: return new zfstream::ogzstream( fname.c_str() );
++                  case ZipCompression: return new zfstream::ozipstream( fname.c_str() );
+ #endif
+ #if HAVE_BZLIB
+                   case BZipCompression: return new zfstream::obzstream( fname.c_str() );

@@ -1,0 +1,12 @@
+diff -rupN --no-dereference setuptools-80.10.2/setuptools/_distutils/sysconfig.py setuptools-80.10.2-new/setuptools/_distutils/sysconfig.py
+--- setuptools-80.10.2/setuptools/_distutils/sysconfig.py	2026-01-25 23:37:53.000000000 +0100
++++ setuptools-80.10.2-new/setuptools/_distutils/sysconfig.py	2026-01-30 23:08:11.837763900 +0100
+@@ -376,7 +376,7 @@ def customize_compiler(compiler: CCompil
+         if 'RANLIB' in os.environ and compiler.executables.get('ranlib', None):
+             compiler.set_executables(ranlib=os.environ['RANLIB'])
+ 
+-        compiler.shared_lib_extension = shlib_suffix
++        # compiler.shared_lib_extension = shlib_suffix
+ 
+ 
+ def get_config_h_filename() -> str:

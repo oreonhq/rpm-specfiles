@@ -34,7 +34,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 cat > os-release << EOF
 NAME="Oreon"
-VERSION="%{version} (%{release_pack})"
+VERSION="%{version}"
 ID=oreon
 VERSION_ID=%{version}
 VERSION_CODENAME="Horizon"

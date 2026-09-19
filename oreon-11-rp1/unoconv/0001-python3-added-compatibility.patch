@@ -1,0 +1,22 @@
+From 21b9a845ac7e8805b41d7dab1a6fbf8076689ae8 Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Sat, 19 Apr 2014 12:06:27 +0200
+Subject: [PATCH] 0001-python3-added-compatibility.3.patch
+
+---
+ unoconv | 248 ++++++++++++++++++++++++++++++++++++----------------------------
+ 1 file changed, 139 insertions(+), 109 deletions(-)
+
+diff --git a/unoconv b/unoconv
+index 30e6706..a13db44 100755
+--- a/unoconv
++++ b/unoconv
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ 
+ ### This program is free software; you can redistribute it and/or modify
+ ### it under the terms of the GNU General Public License as published by
+-- 
+1.9.0
+

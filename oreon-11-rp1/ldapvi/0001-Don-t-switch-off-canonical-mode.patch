@@ -1,0 +1,27 @@
+From af345f1d572d6a8ab9213da103106f13b58f5c79 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Mat=C4=9Bj=20Cepl?= <mcepl@cepl.eu>
+Date: Thu, 4 Jan 2018 23:58:50 +0100
+Subject: [PATCH] =?UTF-8?q?Don=E2=80=99t=20switch=20off=20canonical=20mode?=
+ =?UTF-8?q?.?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+I am not sure what's the point, but certainly it leads to password
+showing up in the audit log.
+
+Signed-off-by: Matěj Cepl <mcepl@cepl.eu>
+---
+ ldapvi/ldapvi.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+--- a/ldapvi.c
++++ b/ldapvi.c
+@@ -98,7 +98,6 @@ cleanup(int rc, char *pathname)
+ 	if (tcgetattr(0, &term) == -1)
+ 		/* oh, running without a terminal */
+ 		return;
+-	term.c_lflag |= ICANON;
+ 	term.c_lflag |= ECHO;
+ 	if (tcsetattr(0, TCSANOW, &term) == -1) syserr();
+ }

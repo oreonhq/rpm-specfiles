@@ -1,0 +1,1068 @@
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/CMakeLists.txt.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/CMakeLists.txt	2025-09-19 12:25:25.426489034 -0600
+@@ -47,7 +47,7 @@ set ( PACKAGE "fluidsynth" )
+ # FluidSynth package version
+ set ( FLUIDSYNTH_VERSION_MAJOR 2 )
+ set ( FLUIDSYNTH_VERSION_MINOR 3 )
+-set ( FLUIDSYNTH_VERSION_MICRO 3 )
++set ( FLUIDSYNTH_VERSION_MICRO 7 )
+ set ( VERSION "${FLUIDSYNTH_VERSION_MAJOR}.${FLUIDSYNTH_VERSION_MINOR}.${FLUIDSYNTH_VERSION_MICRO}" )
+ set ( FLUIDSYNTH_VERSION "\"${VERSION}\"" )
+ 
+@@ -62,7 +62,7 @@ set ( FLUIDSYNTH_VERSION "\"${VERSION}\"
+ # This is not exactly the same algorithm as the libtool one, but the results are the same.
+ set ( LIB_VERSION_CURRENT 3 )
+ set ( LIB_VERSION_AGE 2 )
+-set ( LIB_VERSION_REVISION 1 )
++set ( LIB_VERSION_REVISION 5 )
+ set ( LIB_VERSION_INFO
+       "${LIB_VERSION_CURRENT}.${LIB_VERSION_AGE}.${LIB_VERSION_REVISION}" )
+ 
+@@ -102,7 +102,7 @@ option ( enable-openmp "enable OpenMP su
+ 
+ # Platform specific options
+ if ( CMAKE_SYSTEM MATCHES "Linux|FreeBSD|DragonFly" )
+-    option ( enable-lash "compile LASH support (if it is available)" on )
++    option ( enable-lash "compile LASH support (if it is available)" off )
+     option ( enable-alsa "compile ALSA support (if it is available)" on )
+ endif ( CMAKE_SYSTEM MATCHES "Linux|FreeBSD|DragonFly" )
+ 
+@@ -296,6 +296,7 @@ if ( WIN32 OR CYGWIN )
+     endif()
+   endif ()
+   message ( STATUS "Targeting Windows Version ${windows-version}" )
++  add_definitions ( -D _UNICODE -D UNICODE )
+   add_definitions ( -D _WIN32_WINNT=${windows-version} )
+   add_definitions ( -D WINVER=${windows-version} )
+   list ( APPEND CMAKE_REQUIRED_DEFINITIONS "-DWINVER=${windows-version}" )
+@@ -392,8 +393,7 @@ unset ( DARWIN CACHE )
+ unset ( MACOSX_FRAMEWORK CACHE )
+ if ( CMAKE_SYSTEM MATCHES "Darwin" )
+   set ( DARWIN 1 )
+-  set ( CMAKE_INSTALL_NAME_DIR
+-        ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} )
++  set ( CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR} )
+   if ( enable-coreaudio )
+     check_include_file ( CoreAudio/AudioHardware.h COREAUDIO_FOUND )
+     if ( COREAUDIO_FOUND )
+@@ -548,7 +548,7 @@ endif ( enable-libsndfile )
+ 
+ unset ( PULSE_SUPPORT CACHE )
+ if ( enable-pulseaudio )
+-    find_package ( PulseAudio ${PULSEAUDIO_MINIMUM_VERSION} QUIET )
++    find_package ( PulseAudio ${PULSEAUDIO_MINIMUM_VERSION} )
+     # Upstream config does not search for pulse-simple
+     find_library ( PULSEAUDIO_SIMPLE_LIBRARY NAMES "pulse-simple" )
+     if ( PULSEAUDIO_FOUND AND PULSEAUDIO_SIMPLE_LIBRARY )
+@@ -601,6 +601,7 @@ unset ( LASH_SUPPORT CACHE )
+ if ( enable-lash )
+     find_package ( LASH ${LASH_MINIMUM_VERSION} )
+     if ( LASH_FOUND )
++        message ( WARNING "LASH support has been deprecated and will be removed in fluidsynth 2.4.0" )
+         set ( LASH_SUPPORT 1 )
+         add_definitions ( -DHAVE_LASH )
+         list( APPEND PC_REQUIRES_PRIV "lash-1.0")
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/include/fluidsynth/settings.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/include/fluidsynth/settings.h	2025-09-19 12:04:48.847449077 -0600
+@@ -48,6 +48,9 @@ extern "C" {
+  *       // ...
+  *     }
+  * @endcode
++ * All string settings are encoded in UTF-8. This includes the names
++ * of the audio and MIDI devices, exposed as setting options.
++ * 
+  * @sa @ref CreatingSettings
+  *
+  * @{
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/sonar-project.properties.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/sonar-project.properties	2025-09-19 11:48:42.897821254 -0600
+@@ -1,8 +1,7 @@
+ sonar.projectKey=FluidSynth_fluidsynth
+ sonar.organization=fluidsynth
+ 
+-sonar.cfamily.threads=4
+-sonar.cfamily.cache.enabled=false
++sonar.cfamily.threads=2
+ 
+ 
+ # This is the name and version displayed in the SonarCloud UI.
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/CMakeLists.txt.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/CMakeLists.txt	2025-09-19 11:56:26.676759052 -0600
+@@ -275,6 +275,14 @@ if ( LIBFLUID_CPPFLAGS )
+     PROPERTIES COMPILE_FLAGS ${LIBFLUID_CPPFLAGS} )
+ endif ( LIBFLUID_CPPFLAGS )
+ 
++# The CMake Xcode generator fails to build the framework unless it references
++# a source file. Create an empty one in the build directory to use for this
++# purpose.
++if ( MACOSX_FRAMEWORK )
++  set ( MACOSX_FRAMEWORK_SOURCE_HACK ${CMAKE_BINARY_DIR}/empty_file_for_linking_issue.cpp )
++  file ( TOUCH ${MACOSX_FRAMEWORK_SOURCE_HACK} )
++endif ( MACOSX_FRAMEWORK )
++
+ # Note: by default this target creates a shared object (or dll). To build a
+ # static library instead, set the option BUILD_SHARED_LIBS to FALSE.
+ # Further note: The headers must be explicitly added here to have CMake install
+@@ -283,6 +291,7 @@ add_library ( libfluidsynth
+     $<TARGET_OBJECTS:libfluidsynth-OBJ>
+     ${public_main_HEADER}
+     ${public_HEADERS}
++    ${MACOSX_FRAMEWORK_SOURCE_HACK}
+ )
+ 
+ if ( MACOSX_FRAMEWORK )
+@@ -360,7 +369,8 @@ if ( TARGET SndFile::sndfile AND LIBSNDF
+ endif()
+ 
+ if ( PULSE_SUPPORT )
+-    target_include_directories( libfluidsynth-OBJ PRIVATE ${PULSEAUDIO_INCLUDE_DIRS} )
++    # need to include PULSEAUDIO_INCLUDE_DIR to make it compile with homebrew on Mac
++    target_include_directories( libfluidsynth-OBJ PRIVATE ${PULSEAUDIO_INCLUDE_DIRS} ${PULSEAUDIO_INCLUDE_DIR} )
+     target_link_libraries ( libfluidsynth-OBJ PUBLIC ${PULSEAUDIO_LIBRARIES} )
+ endif()
+ 
+@@ -489,10 +499,6 @@ if ( TARGET PipeWire::PipeWire AND PIPEW
+     target_link_libraries ( fluidsynth PRIVATE PipeWire::PipeWire )
+ endif()
+ 
+-if ( TARGET InstPatch::libinstpatch AND LIBINSTPATCH_SUPPORT )
+-    target_link_libraries ( fluidsynth PRIVATE InstPatch::libinstpatch )
+-endif()
+-
+ if ( TARGET LASH::LASH AND LASH_SUPPORT )
+     target_link_libraries ( fluidsynth PRIVATE LASH::LASH )
+ endif()
+@@ -542,12 +548,19 @@ set (GENTAB_BDIR ${CMAKE_CURRENT_BINARY_
+ # To fix cross-compiling fluidsynth from Win32 to ARM (using vcpkg), we need to pass the current generator
+ # on to the external project, otherwise (for some unknown reason) the target compiler will be used rather
+ # than the host compiler.
++#
++# Some use-cases however cannot rely on this logic, therefore, FLUID_HOST_COMPILER can be specified to
++# force using a particular host compiler, see https://github.com/FluidSynth/fluidsynth/issues/1301
++if ( FLUID_HOST_COMPILER )
++  set ( EXPLICIT_HOST_COMPILER_STR "-DCMAKE_C_COMPILER=${FLUID_HOST_COMPILER}" )
++endif ()
++
+ ExternalProject_Add(gentables
+     DOWNLOAD_COMMAND ""
+     SOURCE_DIR ${GENTAB_SDIR}
+     BINARY_DIR ${GENTAB_BDIR}
+     CONFIGURE_COMMAND
+-        "${CMAKE_COMMAND}" -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE} -G "${CMAKE_GENERATOR}" -B "${GENTAB_BDIR}" "${GENTAB_SDIR}"
++        "${CMAKE_COMMAND}" -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE} ${EXPLICIT_HOST_COMPILER_STR} -G "${CMAKE_GENERATOR}" -B "${GENTAB_BDIR}" "${GENTAB_SDIR}"
+     BUILD_COMMAND
+         "${CMAKE_COMMAND}" --build "${GENTAB_BDIR}"
+     INSTALL_COMMAND ${GENTAB_BDIR}/make_tables.exe "${FluidSynth_BINARY_DIR}/"
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_dsound.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_dsound.c	2025-09-19 12:06:30.286289802 -0600
+@@ -108,7 +108,17 @@ BOOL CALLBACK
+ fluid_dsound_enum_callback(LPGUID guid, LPCTSTR description, LPCTSTR module, LPVOID context)
+ {
+     fluid_settings_t *settings = (fluid_settings_t *) context;
+-    fluid_settings_add_option(settings, "audio.dsound.device", (const char *)description);
++    char *name;
++#if _UNICODE
++    int nsz = WideCharToMultiByte(CP_UTF8, 0, description, -1, 0, 0, 0, 0);
++    name = FLUID_ARRAY(char, nsz);
++    WideCharToMultiByte(CP_UTF8, 0, description, -1, name, nsz, 0, 0);
++#else
++    name = FLUID_STRDUP(description);
++#endif
++    FLUID_LOG(FLUID_DBG, "adding audio.dsound.device=%s", name);
++    fluid_settings_add_option(settings, "audio.dsound.device", name);
++    FLUID_FREE(name);
+ 
+     return TRUE;
+ }
+@@ -122,10 +132,19 @@ BOOL CALLBACK
+ fluid_dsound_enum_callback2(LPGUID guid, LPCTSTR description, LPCTSTR module, LPVOID context)
+ {
+     fluid_dsound_devsel_t *devsel = (fluid_dsound_devsel_t *) context;
+-    FLUID_LOG(FLUID_DBG, "Testing audio device: %s", description);
++    char *name;
++#if _UNICODE
++    int nsz = WideCharToMultiByte(CP_UTF8, 0, description, -1, 0, 0, 0, 0);
++    name = FLUID_ARRAY(char, nsz);
++    WideCharToMultiByte(CP_UTF8, 0, description, -1, name, nsz, 0, 0);
++#else
++    name = FLUID_STRDUP(description);
++#endif
++    FLUID_LOG(FLUID_DBG, "Testing audio device: %s", name);
+ 
+-    if(FLUID_STRCASECMP(devsel->devname, description) == 0)
++    if (FLUID_STRCASECMP(devsel->devname, name) == 0)
+     {
++        FLUID_FREE(name);
+         /* The device exists, return a copy of its GUID */
+         devsel->devGUID = FLUID_NEW(GUID);
+ 
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_oboe.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_oboe.cpp	2025-09-19 12:25:56.802149454 -0600
+@@ -46,7 +46,7 @@ class OboeAudioStreamErrorCallback;
+  * This structure should not be accessed directly. Use audio port
+  * functions instead.
+  */
+-typedef struct
++struct fluid_oboe_audio_driver_t
+ {
+     fluid_audio_driver_t driver;
+     fluid_synth_t *synth = nullptr;
+@@ -62,7 +62,7 @@ typedef struct
+     int performance_mode; // 0: None, 1: PowerSaving, 2: LowLatency
+     oboe::SampleRateConversionQuality srate_conversion_quality;
+     int error_recovery_mode; // 0: Reconnect, 1: Stop
+-} fluid_oboe_audio_driver_t;
++};
+ 
+ 
+ class OboeAudioStreamCallback : public AudioStreamCallback
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_pipewire.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_pipewire.c	2025-09-19 11:58:08.787631475 -0600
+@@ -154,6 +154,7 @@ new_fluid_pipewire_audio_driver2(fluid_s
+     char *media_category = NULL;
+     float *buffer = NULL;
+     const struct spa_pod *params[1];
++    struct pw_properties *props;
+ 
+     drv = FLUID_NEW(fluid_pipewire_audio_driver_t);
+ 
+@@ -196,7 +197,7 @@ new_fluid_pipewire_audio_driver2(fluid_s
+         goto driver_cleanup;
+     }
+ 
+-    struct pw_properties *props = pw_properties_new(PW_KEY_MEDIA_TYPE, media_type, PW_KEY_MEDIA_CATEGORY, media_category, PW_KEY_MEDIA_ROLE, media_role, NULL);
++    props = pw_properties_new(PW_KEY_MEDIA_TYPE, media_type, PW_KEY_MEDIA_CATEGORY, media_category, PW_KEY_MEDIA_ROLE, media_role, NULL);
+ 
+     pw_properties_setf(props, PW_KEY_NODE_LATENCY, "%d/%d", period_size, (int) sample_rate);
+     pw_properties_setf(props, PW_KEY_NODE_RATE, "1/%d", (int) sample_rate);
+@@ -294,6 +295,11 @@ void delete_fluid_pipewire_audio_driver(
+     fluid_pipewire_audio_driver_t *drv = (fluid_pipewire_audio_driver_t *)p;
+     fluid_return_if_fail(drv);
+ 
++    if (drv->pw_loop)
++    {
++        pw_thread_loop_lock(drv->pw_loop);
++    }
++
+     if(drv->pw_stream)
+     {
+         pw_stream_destroy(drv->pw_stream);
+@@ -301,6 +307,7 @@ void delete_fluid_pipewire_audio_driver(
+ 
+     if(drv->pw_loop)
+     {
++        pw_thread_loop_unlock(drv->pw_loop);
+         pw_thread_loop_destroy(drv->pw_loop);
+     }
+ 
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_wasapi.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_wasapi.c	2025-09-19 12:07:33.749501197 -0600
+@@ -788,9 +788,9 @@ static void fluid_wasapi_register_callba
+         int nsz;
+         char *name;
+ 
+-        nsz = WideCharToMultiByte(CP_ACP, 0, var.pwszVal, -1, 0, 0, 0, 0);
+-        name = FLUID_ARRAY(char, nsz + 1);
+-        WideCharToMultiByte(CP_ACP, 0, var.pwszVal, -1, name, nsz, 0, 0);
++        nsz = WideCharToMultiByte(CP_UTF8, 0, var.pwszVal, -1, 0, 0, 0, 0);
++        name = FLUID_ARRAY(char, nsz);
++        WideCharToMultiByte(CP_UTF8, 0, var.pwszVal, -1, name, nsz, 0, 0);
+         fluid_settings_add_option(settings, "audio.wasapi.device", name);
+         FLUID_FREE(name);
+     }
+@@ -828,9 +828,9 @@ static void fluid_wasapi_finddev_callbac
+         goto cleanup;
+     }
+ 
+-    nsz = WideCharToMultiByte(CP_ACP, 0, var.pwszVal, -1, 0, 0, 0, 0);
+-    name = FLUID_ARRAY(char, nsz + 1);
+-    WideCharToMultiByte(CP_ACP, 0, var.pwszVal, -1, name, nsz, 0, 0);
++    nsz = WideCharToMultiByte(CP_UTF8, 0, var.pwszVal, -1, 0, 0, 0, 0);
++    name = FLUID_ARRAY(char, nsz);
++    WideCharToMultiByte(CP_UTF8, 0, var.pwszVal, -1, name, nsz, 0, 0);
+ 
+     if(!FLUID_STRCASECMP(name, d->name))
+     {
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_waveout.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_waveout.c	2025-09-19 12:09:38.212265309 -0600
+@@ -201,9 +201,7 @@ static DWORD WINAPI fluid_waveout_synth_
+ void fluid_waveout_audio_driver_settings(fluid_settings_t *settings)
+ {
+     UINT n, nDevs = waveOutGetNumDevs();
+-#ifdef _UNICODE
+-    char dev_name[MAXPNAMELEN];
+-#endif
++    char *dev_name;
+ 
+     fluid_settings_register_str(settings, "audio.waveout.device", "default", 0);
+     fluid_settings_add_option(settings, "audio.waveout.device", "default");
+@@ -218,13 +216,15 @@ void fluid_waveout_audio_driver_settings
+         if(res == MMSYSERR_NOERROR)
+         {
+ #ifdef _UNICODE
+-            WideCharToMultiByte(CP_UTF8, 0, caps.szPname, -1, dev_name, MAXPNAMELEN, 0, 0);
+-            FLUID_LOG(FLUID_DBG, "Testing audio device: %s", dev_name);
+-            fluid_settings_add_option(settings, "audio.waveout.device", dev_name);
++            int nsz = WideCharToMultiByte(CP_UTF8, 0, caps.szPname, -1, 0, 0, 0, 0);
++            dev_name = FLUID_ARRAY(char, nsz);
++            WideCharToMultiByte(CP_UTF8, 0, caps.szPname, -1, dev_name, nsz, 0, 0);
+ #else
+-            FLUID_LOG(FLUID_DBG, "Testing audio device: %s", caps.szPname);
+-            fluid_settings_add_option(settings, "audio.waveout.device", caps.szPname);
++            dev_name = FLUID_STRDUP(caps.szPname);
+ #endif
++            FLUID_LOG(FLUID_DBG, "Testing audio device: %s", dev_name);
++            fluid_settings_add_option(settings, "audio.waveout.device", dev_name);
++            FLUID_FREE(dev_name);
+         }
+     }
+ }
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_winmidi.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/drivers/fluid_winmidi.c	2025-09-19 12:11:10.979118828 -0600
+@@ -229,14 +229,24 @@ fluid_winmidi_callback(HMIDIIN hmi, UINT
+  * @param dev_name, name of the device.
+  * @return the new device name (that must be freed when finish with it) or
+  *  NULL if memory allocation error.
++ * Note: the returned name will be encoded in UTF8 if built with _UNICODE.
+  */
+-static char *fluid_winmidi_get_device_name(int dev_idx, char *dev_name)
++static char *fluid_winmidi_get_device_name(int dev_idx, TCHAR *input_dev_name)
+ {
+     char *new_dev_name;
++    char *dev_name;
+ 
+     int i =  dev_idx;
+     size_t size = 0; /* index size */
+ 
++#if _UNICODE
++    int nsz = WideCharToMultiByte(CP_UTF8, 0, input_dev_name, -1, 0, 0, 0, 0);
++    dev_name = FLUID_ARRAY(char, nsz);
++    WideCharToMultiByte(CP_UTF8, 0, input_dev_name, -1, dev_name, nsz, 0, 0);
++#else
++    dev_name = FLUID_STRDUP(input_dev_name);
++#endif
++
+     do
+     {
+         size++;
+@@ -256,6 +266,7 @@ static char *fluid_winmidi_get_device_na
+     {
+         FLUID_LOG(FLUID_ERR, "Out of memory");
+     }
++    FLUID_FREE(dev_name);
+ 
+     return new_dev_name;
+ }
+@@ -429,14 +440,7 @@ fluid_winmidi_parse_device_name(fluid_wi
+                         break;
+                     }
+ 
+-#ifdef _UNICODE
+-                    WCHAR wDevName[MAXPNAMELEN];
+-                    MultiByteToWideChar(CP_UTF8, 0, dev_name, -1, wDevName, MAXPNAMELEN);
+-
+-                    str_cmp_res = wcsicmp(wDevName, new_dev_name);
+-#else
+                     str_cmp_res = FLUID_STRCASECMP(dev_name, new_dev_name);
+-#endif
+ 
+                     FLUID_LOG(FLUID_DBG, "Testing midi device \"%s\"", new_dev_name);
+                     FLUID_FREE(new_dev_name);
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/fluidsynth.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/fluidsynth.c	2025-09-19 12:27:42.200930636 -0600
+@@ -29,10 +29,6 @@
+ #define GETOPT_SUPPORT 1
+ #endif
+ 
+-#ifdef LIBINSTPATCH_SUPPORT
+-#include <libinstpatch/libinstpatch.h>
+-#endif
+-
+ #ifdef HAVE_LASH
+ #include "fluid_lash.h"
+ #endif
+@@ -54,6 +50,9 @@ void print_help(fluid_settings_t *settin
+ void print_welcome(void);
+ void print_configure(void);
+ void fluid_wasapi_device_enumerate(void);
++#ifdef _WIN32
++static char* win32_ansi_to_utf8(const char* ansi_null_terminated_string);
++#endif
+ 
+ /*
+  * the globals
+@@ -129,15 +128,24 @@ int process_o_cmd_line_option(fluid_sett
+ 
+         break;
+ 
+-    case FLUID_STR_TYPE:
+-        if(fluid_settings_setstr(settings, optarg, val) != FLUID_OK)
++    case FLUID_STR_TYPE: {
++        char *u8_val = val;
++#if defined(_WIN32)
++        u8_val = win32_ansi_to_utf8(val);
++#endif
++        if(fluid_settings_setstr(settings, optarg, u8_val) != FLUID_OK)
+         {
+             fprintf(stderr, "Failed to set string parameter '%s'\n", optarg);
++#if defined(_WIN32)
++            free(u8_val);
++#endif
+             return FLUID_FAILED;
+         }
+-
++#if defined(_WIN32)
+++        free(u8_val);
+++#endif
+         break;
+-
++    }
+     default:
+         fprintf(stderr, "Setting parameter '%s' not found\n", optarg);
+         return FLUID_FAILED;
+@@ -406,6 +414,13 @@ int main(int argc, char **argv)
+     lash_args = fluid_lash_extract_args(&argc, &argv);
+ #endif
+ 
++#ifdef _WIN32
++    // console output will be utf-8
++    SetConsoleOutputCP(CP_UTF8);
++    // console input, too
++    SetConsoleCP(CP_UTF8);
++#endif
++
+ #if SDL2_SUPPORT
+     // Tell SDL that it shouldn't intercept signals, otherwise SIGINT and SIGTERM won't quit fluidsynth
+     SDL_SetHint(SDL_HINT_NO_SIGNAL_HANDLERS, "1");
+@@ -504,7 +519,7 @@ int main(int argc, char **argv)
+             {
+                 optarg = argv[i];
+ 
+-                if(optarg[0] == '-')
++                if((optarg[0] == '-') && ((optarg[1] != '\0') || (c != 'F')))
+                 {
+                     printf("Expected argument to option -%c found switch instead\n", c);
+                     print_usage();
+@@ -1031,7 +1046,18 @@ int main(int argc, char **argv)
+     /* create the player and add any midi files, if requested */
+     for(i = arg1; i < argc; i++)
+     {
+-        if((argv[i][0] != '-') && fluid_is_midifile(argv[i]))
++        const char *u8_path = argv[i];
++#if defined(_WIN32)
++        /* try to convert ANSI encoding path to UTF8 encoding path */
++        char *u8_buf = win32_ansi_to_utf8(argv[i]);
++        if (u8_buf == NULL)
++        {
++            // error msg. already printed
++            goto cleanup;
++        }
++        u8_path = u8_buf;
++#endif
++        if((u8_path[0] != '-') && fluid_is_midifile(u8_path))
+         {
+             if(player == NULL)
+             {
+@@ -1050,8 +1076,11 @@ int main(int argc, char **argv)
+                 }
+             }
+ 
+-            fluid_player_add(player, argv[i]);
++            fluid_player_add(player, u8_path);
+         }
++#if defined(_WIN32)
++        free(u8_buf);
++#endif
+     }
+ 
+     /* try to load and execute the user or system configuration file */
+@@ -1215,23 +1244,23 @@ cleanup:
+  * print_usage
+  */
+ void
+-print_usage()
++print_usage(void)
+ {
+     fprintf(stderr, "Usage: fluidsynth [options] [soundfonts]\n");
+     fprintf(stderr, "Try -h for help.\n");
+ }
+ 
+ void
+-print_welcome()
++print_welcome(void)
+ {
+     printf("FluidSynth runtime version %s\n"
+-           "Copyright (C) 2000-2023 Peter Hanappe and others.\n"
++           "Copyright (C) 2000-2024 Peter Hanappe and others.\n"
+            "Distributed under the LGPL license.\n"
+            "SoundFont(R) is a registered trademark of Creative Technology Ltd.\n\n",
+            fluid_version_str());
+ }
+ 
+-void print_configure()
++void print_configure(void)
+ {
+     puts("FluidSynth executable version " FLUIDSYNTH_VERSION);
+     puts("Sample type="
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/gentables/CMakeLists.txt.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/gentables/CMakeLists.txt	2025-09-19 12:28:00.040841959 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.5)
+ 
+ # remove $CC from the current environment and by that force cmake to look for a (working) C compiler,
+ # which hopefully will be the host compiler
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/midi/fluid_midi.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/midi/fluid_midi.c	2025-09-19 12:28:40.000567565 -0600
+@@ -142,7 +142,7 @@ new_fluid_midi_file(const char *buffer,
+     FLUID_MEMSET(mf, 0, sizeof(fluid_midi_file));
+ 
+     mf->c = -1;
+-    mf->running_status = -1;
++    mf->running_status = 0;
+ 
+     mf->buffer = buffer;
+     mf->buf_len = (int)length;
+@@ -357,8 +357,13 @@ fluid_midi_file_read_mthd(fluid_midi_fil
+     }
+ 
+     mf->type = mthd[9];
+-    mf->ntracks = (unsigned) mthd[11];
+-    mf->ntracks += (unsigned int)(mthd[10]) << 16;
++    if(!(mf->type == 0 || mf->type == 1))
++    {
++        FLUID_LOG(FLUID_ERR,
++                  "Sorry, but MIDI Format %d is not supported by this player", mf->type);
++        return FLUID_FAILED;
++    }
++    mf->ntracks = (signed)((unsigned)(mthd[10]) << 8 | (unsigned) mthd[11]);
+ 
+     if((signed char)mthd[12] < 0)
+     {
+@@ -632,6 +637,7 @@ fluid_midi_file_read_event(fluid_midi_fi
+     /* read the delta-time of the event */
+     if(fluid_midi_file_read_varlen(mf) != FLUID_OK)
+     {
++        FLUID_LOG(FLUID_DBG, "Reading delta-time failed unexpectedly (track=%d)", track->num);
+         return FLUID_FAILED;
+     }
+ 
+@@ -651,7 +657,7 @@ fluid_midi_file_read_event(fluid_midi_fi
+     {
+         if((mf->running_status & 0x80) == 0)
+         {
+-            FLUID_LOG(FLUID_ERR, "Undefined status and invalid running status");
++            FLUID_LOG(FLUID_ERR, "Undefined status and invalid running status (0x%X, 0x%X)", status, mf->running_status);
+             return FLUID_FAILED;
+         }
+ 
+@@ -660,14 +666,12 @@ fluid_midi_file_read_event(fluid_midi_fi
+     }
+ 
+     /* check what message we have */
+-
+-    mf->running_status = status;
+-
+-    if(status == MIDI_SYSEX)    /* system exclusif */
++    if(status == MIDI_SYSEX)    /* system exclusive */
+     {
+         /* read the length of the message */
+         if(fluid_midi_file_read_varlen(mf) != FLUID_OK)
+         {
++            FLUID_LOG(FLUID_DBG, "Failed to read length of SYSEX msg (track=%d)", track->num);
+             return FLUID_FAILED;
+         }
+ 
+@@ -686,6 +690,7 @@ fluid_midi_file_read_event(fluid_midi_fi
+             /* read the data of the message */
+             if(fluid_midi_file_read(mf, metadata, mf->varlen) != FLUID_OK)
+             {
++                FLUID_LOG(FLUID_DBG, "Failed to read data of SYSEX msg (track=%d)", track->num);
+                 FLUID_FREE(metadata);
+                 return FLUID_FAILED;
+             }
+@@ -733,6 +738,7 @@ fluid_midi_file_read_event(fluid_midi_fi
+         /* get the length of the data part */
+         if(fluid_midi_file_read_varlen(mf) != FLUID_OK)
+         {
++            FLUID_LOG(FLUID_DBG, "Failed to read length of META msg (track=%d)", track->num);
+             return FLUID_FAILED;
+         }
+ 
+@@ -765,6 +771,7 @@ fluid_midi_file_read_event(fluid_midi_fi
+                     FLUID_FREE(dyn_buf);
+                 }
+ 
++                FLUID_LOG(FLUID_DBG, "Failed to read meta msg (track=%d)", track->num);
+                 return FLUID_FAILED;
+             }
+         }
+@@ -932,6 +939,7 @@ fluid_midi_file_read_event(fluid_midi_fi
+             break;
+ 
+         default:
++            FLUID_LOG(FLUID_INFO, "Ignoring unrecognized meta event type 0x%X", type);
+             break;
+         }
+ 
+@@ -946,7 +954,8 @@ fluid_midi_file_read_event(fluid_midi_fi
+     }
+     else     /* channel messages */
+     {
+-
++        // remember current status (not applicable to SYSEX and META events!)
++        mf->running_status = status;
+         type = status & 0xf0;
+         channel = status & 0x0f;
+ 
+@@ -1015,7 +1024,7 @@ fluid_midi_file_read_event(fluid_midi_fi
+ 
+         default:
+             /* Can't possibly happen !? */
+-            FLUID_LOG(FLUID_ERR, "Unrecognized MIDI event");
++            FLUID_LOG(FLUID_ERR, "Unrecognized MIDI event 0x%X", status);
+             return FLUID_FAILED;
+         }
+ 
+@@ -1058,7 +1067,7 @@ fluid_midi_file_get_division(fluid_midi_
+  * @return New MIDI event structure or NULL when out of memory.
+  */
+ fluid_midi_event_t *
+-new_fluid_midi_event()
++new_fluid_midi_event(void)
+ {
+     fluid_midi_event_t *evt;
+     evt = FLUID_NEW(fluid_midi_event_t);
+@@ -1641,6 +1650,23 @@ fluid_player_handle_reset_synth(void *da
+     player->reset_synth_between_songs = value;
+ }
+ 
++static int check_for_on_notes(fluid_synth_t *synth)
++{
++    fluid_voice_t* v[1024];
++    unsigned int i, res=FALSE;
++    fluid_synth_get_voicelist(synth, v, FLUID_N_ELEMENTS(v), -1);
++    for(i=0; i<FLUID_N_ELEMENTS(v) && v[i] != NULL; i++)
++    {
++        fluid_voice_t *vv = v[i];
++        if(vv != NULL && fluid_voice_is_on(vv))
++        {
++            res = TRUE;
++            FLUID_LOG(FLUID_DBG, "Voice is on! channel %d, key %d", fluid_voice_get_channel(vv), fluid_voice_get_key(vv));
++        }
++    }
++    return res;
++}
++
+ /**
+  * Create a new MIDI player.
+  * @param synth Fluid synthesizer instance to create player for
+@@ -2197,10 +2223,16 @@ fluid_player_callback(void *data, unsign
+                 /* The first time we notice we've run out of MIDI events but there are still active voices, disable all hold pedals */
+                 if(!player->end_pedals_disabled)
+                 {
++                    if(check_for_on_notes(synth))
++                    {
++                        FLUID_LOG(FLUID_WARN, "End of the MIDI file reached, but not all notes have received a note off event! OFFing them now! Run with --verbose to spot pending voices.");
++                    }
++
+                     for(i = 0; i < synth->midi_channels; i++)
+                     {
+                         fluid_synth_cc(player->synth, i, SUSTAIN_SWITCH, 0);
+                         fluid_synth_cc(player->synth, i, SOSTENUTO_SWITCH, 0);
++                        fluid_synth_cc(player->synth, i, ALL_NOTES_OFF, 0);
+                     }
+ 
+                     player->end_pedals_disabled = 1;
+@@ -2268,6 +2300,7 @@ fluid_player_play(fluid_player_t *player
+     if(!player->use_system_timer)
+     {
+         fluid_sample_timer_reset(player->synth, player->sample_timer);
++        player->cur_msec = 0;
+     }
+ 
+     /* If we're at the end of the playlist and there are no loops left, loop once */
+@@ -2668,7 +2701,7 @@ int fluid_player_get_midi_tempo(fluid_pl
+  * new_fluid_midi_parser
+  */
+ fluid_midi_parser_t *
+-new_fluid_midi_parser()
++new_fluid_midi_parser(void)
+ {
+     fluid_midi_parser_t *parser;
+     parser = FLUID_NEW(fluid_midi_parser_t);
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/rvoice/fluid_chorus.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/rvoice/fluid_chorus.c	2025-09-19 12:18:58.758740153 -0600
+@@ -169,10 +169,11 @@
+ /* modulator */
+ typedef struct
+ {
+-    fluid_real_t   a1;          /* Coefficient: a1 = 2 * cos(w) */
+-    fluid_real_t   buffer1;     /* buffer1 */
+-    fluid_real_t   buffer2;     /* buffer2 */
+-    fluid_real_t   reset_buffer2;/* reset value of buffer2 */
++    // for sufficient precision members MUST be double! See https://github.com/FluidSynth/fluidsynth/issues/1331
++    double   a1;           /* Coefficient: a1 = 2 * cos(w) */
++    double   buffer1;      /* buffer1 */
++    double   buffer2;      /* buffer2 */
++    double   reset_buffer2;/* reset value of buffer2 */
+ } sinus_modulator;
+ 
+ /*-----------------------------------------------------------------------------
+@@ -236,6 +237,10 @@ struct _fluid_chorus_t
+ /*-----------------------------------------------------------------------------
+  Sets the frequency of sinus oscillator.
+ 
++ For sufficient precision use double precision in set_sinus_frequency() computation !.
++ Never use: fluid_real_t , cosf(), sinf(), FLUID_COS(), FLUID_SIN(), FLUID_M_PI.
++ See https://github.com/FluidSynth/fluidsynth/issues/1331
++
+  @param mod pointer on modulator structure.
+  @param freq frequency of the oscillator in Hz.
+  @param sample_rate sample rate on audio output in Hz.
+@@ -244,16 +249,17 @@ struct _fluid_chorus_t
+ static void set_sinus_frequency(sinus_modulator *mod,
+                                 float freq, float sample_rate, float phase)
+ {
+-    fluid_real_t w = 2 * FLUID_M_PI * freq / sample_rate; /* initial angle */
+-    fluid_real_t a;
++    double w = (2.0 * M_PI) * freq / sample_rate;  /* step phase between each sinus wave sample (in radian) */
++    double a; /* initial phase at which the sinus wave must begin (in radian) */
+ 
+-    mod->a1 = 2 * FLUID_COS(w);
++    // DO NOT use potentially single precision cosf or FLUID_COS here! See https://github.com/FluidSynth/fluidsynth/issues/1331
++    mod->a1 = 2 * cos(w);
+ 
+-    a = (2 * FLUID_M_PI / 360) * phase;
++    a = (2.0 * M_PI / 360.0) * phase;
+ 
+-    mod->buffer2 = FLUID_SIN(a - w); /* y(n-1) = sin(-initial angle) */
+-    mod->buffer1 = FLUID_SIN(a); /* y(n) = sin(initial phase) */
+-    mod->reset_buffer2 = FLUID_SIN(FLUID_M_PI / 2 - w); /* reset value for PI/2 */
++    mod->buffer2 = sin(a - w); /* y(n-1) = sin(-initial angle) */
++    mod->buffer1 = sin(a); /* y(n) = sin(initial phase) */
++    mod->reset_buffer2 = sin((M_PI / 2.0) - w); /* reset value for PI/2 */
+ }
+ 
+ /*-----------------------------------------------------------------------------
+@@ -264,21 +270,21 @@ static void set_sinus_frequency(sinus_mo
+  @param mod pointer on modulator structure.
+  @return current value of the modulator sine wave.
+ -----------------------------------------------------------------------------*/
+-static FLUID_INLINE fluid_real_t get_mod_sinus(sinus_modulator *mod)
++static FLUID_INLINE double get_mod_sinus(sinus_modulator *mod)
+ {
+-    fluid_real_t out;
++    double out;
+     out = mod->a1 * mod->buffer1 - mod->buffer2;
+     mod->buffer2 = mod->buffer1;
+ 
+-    if(out >= 1.0f) /* reset in case of instability near PI/2 */
++    if(out >= 1.0) /* reset in case of instability near PI/2 */
+     {
+-        out = 1.0f; /* forces output to the right value */
++        out = 1.0; /* forces output to the right value */
+         mod->buffer2 = mod->reset_buffer2;
+     }
+ 
+-    if(out <= -1.0f) /* reset in case of instability near -PI/2 */
++    if(out <= -1.0) /* reset in case of instability near -PI/2 */
+     {
+-        out = -1.0f; /* forces output to the right value */
++        out = -1.0; /* forces output to the right value */
+         mod->buffer2 = - mod->reset_buffer2;
+     }
+ 
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/sfloader/fluid_defsfont.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/sfloader/fluid_defsfont.c	2025-09-19 12:19:25.494296065 -0600
+@@ -1746,7 +1746,7 @@ fluid_preset_zone_get_inst(fluid_preset_
+  * new_fluid_inst
+  */
+ fluid_inst_t *
+-new_fluid_inst()
++new_fluid_inst(void)
+ {
+     fluid_inst_t *inst = FLUID_NEW(fluid_inst_t);
+ 
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/sfloader/fluid_sffile.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/sfloader/fluid_sffile.c	2025-09-19 12:29:15.079834476 -0600
+@@ -2500,6 +2500,12 @@ static int fluid_sffile_read_vorbis(SFDa
+         goto error_exit;
+     }
+ 
++    // Avoid clipping for loud samples, see
++    // https://github.com/FluidSynth/fluidsynth/issues/1380
++    // and
++    // https://github.com/libsndfile/libsndfile/issues/194
++    sf_command(sndfile, SFC_SET_SCALE_FLOAT_INT_READ, NULL, SF_TRUE);
++
+     /* Automatically decompresses the Ogg Vorbis data to 16-bit PCM */
+     if(sf_readf_short(sndfile, wav_data, sfinfo.frames) < sfinfo.frames)
+     {
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/sfloader/fluid_sfont.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/sfloader/fluid_sfont.c	2025-09-19 12:19:58.941958911 -0600
+@@ -497,7 +497,7 @@ void delete_fluid_preset(fluid_preset_t
+  * @return  The sample on success, NULL otherwise.
+  */
+ fluid_sample_t *
+-new_fluid_sample()
++new_fluid_sample(void)
+ {
+     fluid_sample_t *sample = NULL;
+ 
+@@ -544,7 +544,7 @@ delete_fluid_sample(fluid_sample_t *samp
+  *
+  * @warning Do NOT allocate samples on the stack and assign them to a voice!
+  */
+-size_t fluid_sample_sizeof()
++size_t fluid_sample_sizeof(void)
+ {
+     return sizeof(fluid_sample_t);
+ }
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/synth/fluid_chan.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/synth/fluid_chan.c	2025-09-19 11:59:58.234544269 -0600
+@@ -325,7 +325,7 @@ fluid_channel_set_bank_msb(fluid_channel
+         /* XG bank, do drum-channel auto-switch */
+         /* The number "120" was based on several keyboards having drums at 120 - 127,
+            reference: https://lists.nongnu.org/archive/html/fluid-dev/2011-02/msg00003.html */
+-        chan->channel_type = (120 <= bankmsb) ? CHANNEL_TYPE_DRUM : CHANNEL_TYPE_MELODIC;
++        chan->channel_type = (120 == bankmsb || 126 == bankmsb || 127 == bankmsb) ? CHANNEL_TYPE_DRUM : CHANNEL_TYPE_MELODIC;
+         return;
+     }
+ 
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/synth/fluid_chan.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/synth/fluid_chan.h	2025-09-19 12:20:36.949610539 -0600
+@@ -105,7 +105,7 @@ struct _fluid_channel_t
+     enum fluid_interp interp_method;                    /**< Interpolation method (enum fluid_interp) */
+ 
+     unsigned char channel_pressure;                 /**< MIDI channel pressure from [0;127] */
+-    unsigned char pitch_wheel_sensitivity;          /**< Current pitch wheel sensitivity */
++    float pitch_wheel_sensitivity;          /**< Current pitch wheel sensitivity */
+     short pitch_bend;                      /**< Current pitch bend value */
+     /* Sostenuto order id gives the order of SostenutoOn event.
+      * This value is useful to known when the sostenuto pedal is depressed
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/synth/fluid_event.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/synth/fluid_event.c	2025-09-19 12:20:54.949477579 -0600
+@@ -56,7 +56,7 @@ fluid_event_clear(fluid_event_t *evt)
+  * @return New sequencer event structure or NULL if out of memory
+  */
+ fluid_event_t *
+-new_fluid_event()
++new_fluid_event(void)
+ {
+     fluid_event_t *evt;
+ 
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/synth/fluid_mod.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/synth/fluid_mod.c	2025-09-19 12:29:39.575967002 -0600
+@@ -480,7 +480,7 @@ fluid_mod_get_value(fluid_mod_t *mod, fl
+  * @return New allocated modulator or NULL if out of memory
+  */
+ fluid_mod_t *
+-new_fluid_mod()
++new_fluid_mod(void)
+ {
+     fluid_mod_t *mod = FLUID_NEW(fluid_mod_t);
+ 
+@@ -511,7 +511,7 @@ delete_fluid_mod(fluid_mod_t *mod)
+  *
+  * Useful in low latency scenarios e.g. to allocate a modulator on the stack.
+  */
+-size_t fluid_mod_sizeof()
++size_t fluid_mod_sizeof(void)
+ {
+     return sizeof(fluid_mod_t);
+ }
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/synth/fluid_synth.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/synth/fluid_synth.c	2025-09-19 12:24:00.387247533 -0600
+@@ -202,16 +202,16 @@ void fluid_synth_settings(fluid_settings
+     fluid_settings_register_int(settings, "synth.verbose", 0, 0, 1, FLUID_HINT_TOGGLED);
+ 
+     fluid_settings_register_int(settings, "synth.reverb.active", 1, 0, 1, FLUID_HINT_TOGGLED);
+-    fluid_settings_register_num(settings, "synth.reverb.room-size", FLUID_REVERB_DEFAULT_ROOMSIZE, 0.0f, 1.0f, 0);
+-    fluid_settings_register_num(settings, "synth.reverb.damp", FLUID_REVERB_DEFAULT_DAMP, 0.0f, 1.0f, 0);
+-    fluid_settings_register_num(settings, "synth.reverb.width", FLUID_REVERB_DEFAULT_WIDTH, 0.0f, 100.0f, 0);
+-    fluid_settings_register_num(settings, "synth.reverb.level", FLUID_REVERB_DEFAULT_LEVEL, 0.0f, 1.0f, 0);
++    fluid_settings_register_num(settings, "synth.reverb.room-size", FLUID_REVERB_DEFAULT_ROOMSIZE, 0.0, 1.0, 0);
++    fluid_settings_register_num(settings, "synth.reverb.damp", FLUID_REVERB_DEFAULT_DAMP, 0.0, 1.0, 0);
++    fluid_settings_register_num(settings, "synth.reverb.width", FLUID_REVERB_DEFAULT_WIDTH, 0.0, 100.0, 0);
++    fluid_settings_register_num(settings, "synth.reverb.level", FLUID_REVERB_DEFAULT_LEVEL, 0.0, 1.0, 0);
+ 
+     fluid_settings_register_int(settings, "synth.chorus.active", 1, 0, 1, FLUID_HINT_TOGGLED);
+     fluid_settings_register_int(settings, "synth.chorus.nr", FLUID_CHORUS_DEFAULT_N, 0, 99, 0);
+-    fluid_settings_register_num(settings, "synth.chorus.level", FLUID_CHORUS_DEFAULT_LEVEL, 0.0f, 10.0f, 0);
+-    fluid_settings_register_num(settings, "synth.chorus.speed", FLUID_CHORUS_DEFAULT_SPEED, 0.1f, 5.0f, 0);
+-    fluid_settings_register_num(settings, "synth.chorus.depth", FLUID_CHORUS_DEFAULT_DEPTH, 0.0f, 256.0f, 0);
++    fluid_settings_register_num(settings, "synth.chorus.level", FLUID_CHORUS_DEFAULT_LEVEL, 0.0, 10.0, 0);
++    fluid_settings_register_num(settings, "synth.chorus.speed", FLUID_CHORUS_DEFAULT_SPEED, 0.1, 5.0, 0);
++    fluid_settings_register_num(settings, "synth.chorus.depth", FLUID_CHORUS_DEFAULT_DEPTH, 0.0, 256.0, 0);
+ 
+     fluid_settings_register_int(settings, "synth.ladspa.active", 0, 0, 1, FLUID_HINT_TOGGLED);
+     fluid_settings_register_int(settings, "synth.lock-memory", 1, 0, 1, FLUID_HINT_TOGGLED);
+@@ -223,12 +223,12 @@ void fluid_synth_settings(fluid_settings
+ 
+     fluid_settings_register_int(settings, "synth.polyphony", 256, 1, 65535, 0);
+     fluid_settings_register_int(settings, "synth.midi-channels", 16, 16, 256, 0);
+-    fluid_settings_register_num(settings, "synth.gain", 0.2f, 0.0f, 10.0f, 0);
++    fluid_settings_register_num(settings, "synth.gain", 0.2, 0.0, 10.0, 0);
+     fluid_settings_register_int(settings, "synth.audio-channels", 1, 1, 128, 0);
+     fluid_settings_register_int(settings, "synth.audio-groups", 1, 1, 128, 0);
+     fluid_settings_register_int(settings, "synth.effects-channels", 2, 2, 2, 0);
+     fluid_settings_register_int(settings, "synth.effects-groups", 1, 1, 128, 0);
+-    fluid_settings_register_num(settings, "synth.sample-rate", 44100.0f, 8000.0f, 384000.0f, 0);
++    fluid_settings_register_num(settings, "synth.sample-rate", 44100.0, 8000.0, 384000.0, 0);
+     fluid_settings_register_int(settings, "synth.device-id", 0, 0, 127, 0);
+ #ifdef ENABLE_MIXER_THREADS
+     fluid_settings_register_int(settings, "synth.cpu-cores", 1, 1, 256, 0);
+@@ -1811,11 +1811,12 @@ fluid_synth_cc_LOCAL(fluid_synth_t *synt
+         break;
+ 
+     case DATA_ENTRY_LSB: /* not allowed to modulate (spec SF 2.01 - 8.2.1) */
+-        break;
+-
+     case DATA_ENTRY_MSB: /* not allowed to modulate (spec SF 2.01 - 8.2.1) */
+     {
+-        int data = (value << 7) + fluid_channel_get_cc(chan, DATA_ENTRY_LSB);
++        /* handle both because msb might come first */
++        int lsb_value = fluid_channel_get_cc(chan, DATA_ENTRY_LSB);
++        int msb_value = fluid_channel_get_cc(chan, DATA_ENTRY_MSB);
++        int data = (msb_value << 7) + lsb_value;
+ 
+         if(chan->nrpn_active)   /* NRPN is active? */
+         {
+@@ -1828,6 +1829,10 @@ fluid_synth_cc_LOCAL(fluid_synth_t *synt
+                 if(nrpn_select < GEN_LAST)
+                 {
+                     float val = fluid_gen_scale_nrpn(nrpn_select, data);
++                    if(synth->verbose)
++                    {
++                        FLUID_LOG(FLUID_INFO, "NRPN\t%d\t%d\t%d\t%f", channum, nrpn_select, data, val);
++                    }
+                     fluid_synth_set_gen_LOCAL(synth, channum, nrpn_select, val);
+                 }
+ 
+@@ -1838,10 +1843,9 @@ fluid_synth_cc_LOCAL(fluid_synth_t *synt
+         {
+             switch(fluid_channel_get_cc(chan, RPN_LSB))
+             {
+-            case RPN_PITCH_BEND_RANGE:    /* Set bend range in semitones */
+-                fluid_channel_set_pitch_wheel_sensitivity(synth->channel[channum], value);
++            case RPN_PITCH_BEND_RANGE:    /* Set bend range in semitones plus cents */
++                fluid_channel_set_pitch_wheel_sensitivity(synth->channel[channum], msb_value + lsb_value / 100.0f); /* 0-127 maps to 0-100 cents */
+                 fluid_synth_update_pitch_wheel_sens_LOCAL(synth, channum);    /* Update bend range */
+-                /* FIXME - Handle LSB? (Fine bend range in cents) */
+                 break;
+ 
+             case RPN_CHANNEL_FINE_TUNE:   /* Fine tune is 14 bit over +/-1 semitone (+/- 100 cents, 8192 = center) */
+@@ -1851,18 +1855,18 @@ fluid_synth_cc_LOCAL(fluid_synth_t *synt
+ 
+             case RPN_CHANNEL_COARSE_TUNE: /* Coarse tune is 7 bit and in semitones (64 is center) */
+                 fluid_synth_set_gen_LOCAL(synth, channum, GEN_COARSETUNE,
+-                                          value - 64);
++                                          msb_value - 64);
+                 break;
+ 
+             case RPN_TUNING_PROGRAM_CHANGE:
+-                fluid_channel_set_tuning_prog(chan, value);
++                fluid_channel_set_tuning_prog(chan, msb_value);
+                 fluid_synth_activate_tuning(synth, channum,
+                                             fluid_channel_get_tuning_bank(chan),
+-                                            value, TRUE);
++                                            msb_value, TRUE);
+                 break;
+ 
+             case RPN_TUNING_BANK_SELECT:
+-                fluid_channel_set_tuning_bank(chan, value);
++                fluid_channel_set_tuning_bank(chan, msb_value);
+                 break;
+ 
+             case RPN_MODULATION_DEPTH_RANGE:
+@@ -2050,8 +2054,8 @@ fluid_synth_sysex(fluid_synth_t *synth,
+                 || data[3] == MIDI_SYSEX_GM2_ON))
+         {
+             int result;
+-            synth->bank_select = FLUID_BANK_STYLE_GM;
+             fluid_synth_api_enter(synth);
++            synth->bank_select = FLUID_BANK_STYLE_GM;
+             result = fluid_synth_system_reset_LOCAL(synth);
+             FLUID_API_RETURN(result);
+         }
+--- MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/utils/fluid_sys.c.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/thirdparty/fluidsynth/fluidsynth-2.3.3/src/utils/fluid_sys.c	2025-09-19 11:48:42.898642816 -0600
+@@ -1662,12 +1662,12 @@ fluid_server_socket_t *
+ new_fluid_server_socket(int port, fluid_server_func_t func, void *data)
+ {
+     fluid_server_socket_t *server_socket;
++    struct sockaddr_in addr4;
+ #ifdef IPV6_SUPPORT
+-    struct sockaddr_in6 addr;
+-#else
+-    struct sockaddr_in addr;
++    struct sockaddr_in6 addr6;
+ #endif
+-
++    const struct sockaddr *addr;
++    size_t addr_size;
+     fluid_socket_t sock;
+ 
+     fluid_return_val_if_fail(func != NULL, NULL);
+@@ -1677,23 +1677,37 @@ new_fluid_server_socket(int port, fluid_
+         return NULL;
+     }
+ 
++    FLUID_MEMSET(&addr4, 0, sizeof(addr4));
++    addr4.sin_family = AF_INET;
++    addr4.sin_port = htons((uint16_t)port);
++    addr4.sin_addr.s_addr = htonl(INADDR_ANY);
++
++#ifdef IPV6_SUPPORT
++    FLUID_MEMSET(&addr6, 0, sizeof(addr6));
++    addr6.sin6_family = AF_INET6;
++    addr6.sin6_port = htons((uint16_t)port);
++    addr6.sin6_addr = in6addr_any;
++#endif
++
+ #ifdef IPV6_SUPPORT
+     sock = socket(AF_INET6, SOCK_STREAM, 0);
++    addr = (const struct sockaddr *) &addr6;
++    addr_size = sizeof(addr6);
+ 
+     if(sock == INVALID_SOCKET)
+     {
+-        FLUID_LOG(FLUID_ERR, "Failed to create server socket: %d", fluid_socket_get_error());
+-        fluid_socket_cleanup();
+-        return NULL;
++        FLUID_LOG(FLUID_WARN, "Failed to create IPv6 server socket: %d (will try with IPv4)", fluid_socket_get_error());
++
++        sock = socket(AF_INET, SOCK_STREAM, 0);
++        addr = (const struct sockaddr *) &addr4;
++        addr_size = sizeof(addr4);
+     }
+ 
+-    FLUID_MEMSET(&addr, 0, sizeof(addr));
+-    addr.sin6_family = AF_INET6;
+-    addr.sin6_port = htons((uint16_t)port);
+-    addr.sin6_addr = in6addr_any;
+ #else
+-
+     sock = socket(AF_INET, SOCK_STREAM, 0);
++    addr = (const struct sockaddr *) &addr4;
++    addr_size = sizeof(addr4);
++#endif
+ 
+     if(sock == INVALID_SOCKET)
+     {
+@@ -1702,13 +1716,7 @@ new_fluid_server_socket(int port, fluid_
+         return NULL;
+     }
+ 
+-    FLUID_MEMSET(&addr, 0, sizeof(addr));
+-    addr.sin_family = AF_INET;
+-    addr.sin_port = htons((uint16_t)port);
+-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+-#endif
+-
+-    if(bind(sock, (const struct sockaddr *) &addr, sizeof(addr)) == SOCKET_ERROR)
++    if(bind(sock, addr, addr_size) == SOCKET_ERROR)
+     {
+         FLUID_LOG(FLUID_ERR, "Failed to bind server socket: %d", fluid_socket_get_error());
+         fluid_socket_close(sock);

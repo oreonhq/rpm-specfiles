@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=machineball
+Comment=A futuristic ball game with simple rules
+Exec=machineball-wrapper
+StartupNotify=false
+Terminal=false
+Type=Application
+Icon=machineball.xpm
+Categories=Game;ActionGame;SportsGame;
+

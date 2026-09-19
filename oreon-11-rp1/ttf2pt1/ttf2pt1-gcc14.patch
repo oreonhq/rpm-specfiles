@@ -1,0 +1,45 @@
+diff -u ft.c{.orig,}
+--- ft.c.orig	2024-01-30 08:59:49.000000000 +0100
++++ ft.c	2024-01-30 09:25:05.000000000 +0100
+@@ -458,7 +458,7 @@
+ 
+ static int
+ outl_moveto(
+-	FT_Vector *to,
++	const FT_Vector *to,
+ 	void *unused
+ )
+ {
+@@ -478,7 +478,7 @@
+ 
+ static int
+ outl_lineto(
+-	FT_Vector *to,
++	const FT_Vector *to,
+ 	void *unused
+ )
+ {
+@@ -494,8 +494,8 @@
+ 
+ static int
+ outl_conicto(
+-	FT_Vector *control1,
+-	FT_Vector *to,
++	const FT_Vector *control1,
++	const FT_Vector *to,
+ 	void *unused
+ )
+ {
+@@ -515,9 +515,9 @@
+ 
+ static int
+ outl_cubicto(
+-	FT_Vector *control1,
+-	FT_Vector *control2,
+-	FT_Vector *to,
++	const FT_Vector *control1,
++	const FT_Vector *control2,
++	const FT_Vector *to,
+ 	void *unused
+ )
+ {

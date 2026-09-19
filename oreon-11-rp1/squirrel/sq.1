@@ -1,0 +1,63 @@
+.TH SQ 1 "August 07, 2023" "Version 3.2" "squirrel"
+.SH NAME
+sq \- Squirrel interpreter
+.SH SYNOPSIS
+.B sq
+[
+.I options
+]
+[
+.I script
+[
+.I args
+]
+]
+.SH DESCRIPTION
+.B sq
+is the standalone Squirrel interpreter. It loads and executes programs
+written in the Squirrel programming language, either in textual source
+form or in precompiled binary form. Precompiled binaries can also be
+generated with
+.B sq
+using the
+.BI \-c
+option.
+.PP
+.B sq
+can be used both interactively and as a batch interpreter.
+.PP
+If
+.B sq
+is called without any options and arguments, interactive mode is entered. If
+.I script
+is specified, but not
+.BI \-c
+, the script is interpreted and the program exits.
+.SH OPTIONS
+.TP
+.BI \-c
+Compile the specified
+.I script
+into bytecode, output it into a file, and exit
+.TP
+.BI \-o " name"
+Output the bytecode
+.BI \-c
+generates into
+.I name
+instead of
+.I out.cnut
+.TP
+.BI \-d
+Generate debug information
+.TP
+.BI \-h
+Display a short help message
+.TP
+.BI \-v
+Display version information
+.SH SEE ALSO
+.BR "/usr/share/doc/squirrel-devel/html/"
+
+The Squirrel website:
+.B http://squirrel-lang.org/

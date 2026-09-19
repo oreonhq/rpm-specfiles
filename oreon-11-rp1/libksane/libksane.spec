@@ -1,13 +1,13 @@
-%global source0_hash none
+%global source0_hash ca86e492328262cc6d89c1b131139edeb6b4e1eeb15b84fba8a172fe09a25f70
 
 Name:    libksane
 Summary: SANE Library interface for KDE
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: CC0-1.0 AND LGPL-2.1-only AND LGPL-3.0-only
 URL:     https://invent.kde.org/graphics/%{name}
-Source0: http://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0: https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: extra-cmake-modules
 BuildRequires: gettext

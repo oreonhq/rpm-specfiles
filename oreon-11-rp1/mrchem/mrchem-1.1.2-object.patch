@@ -1,0 +1,11 @@
+diff -up mrchem-1.1.2/src/CMakeLists.txt.object mrchem-1.1.2/src/CMakeLists.txt
+--- mrchem-1.1.2/src/CMakeLists.txt.object	2023-01-20 16:31:35.587514232 +0000
++++ mrchem-1.1.2/src/CMakeLists.txt	2023-01-22 17:39:01.030780814 +0000
+@@ -1,6 +1,6 @@
+ # <<< Build MRChem library >>>
+ add_library(mrchem
+-  OBJECT
++    STATIC
+     driver.cpp
+     parallel.cpp
+     mrenv.cpp

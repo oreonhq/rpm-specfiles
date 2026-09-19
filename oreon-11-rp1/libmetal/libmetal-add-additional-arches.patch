@@ -1,0 +1,417 @@
+diff --git a/lib/processor/armv7l b/lib/processor/armv7l
+new file mode 120000
+index 0000000..5b6b0c0
+--- /dev/null
++++ b/lib/processor/armv7l
+@@ -0,0 +1 @@
++arm/
+\ No newline at end of file
+diff --git a/lib/processor/i686/CMakeLists.txt b/lib/processor/i686/CMakeLists.txt
+new file mode 100644
+index 0000000..9e9c101
+--- /dev/null
++++ b/lib/processor/i686/CMakeLists.txt
+@@ -0,0 +1,4 @@
++collect (PROJECT_LIB_HEADERS atomic.h)
++collect (PROJECT_LIB_HEADERS cpu.h)
++
++# vim: expandtab:ts=2:sw=2:smartindent
+diff --git a/lib/processor/i686/atomic.h b/lib/processor/i686/atomic.h
+new file mode 100644
+index 0000000..9760d37
+--- /dev/null
++++ b/lib/processor/i686/atomic.h
+@@ -0,0 +1,40 @@
++/*
++ * Copyright (c) 2015, Xilinx Inc. and Contributors. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice,
++ *    this list of conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice,
++ *    this list of conditions and the following disclaimer in the documentation
++ *    and/or other materials provided with the distribution.
++ *
++ * 3. Neither the name of Xilinx nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/*
++ * @file	gcc/atomic.h
++ * @brief	GCC specific atomic primitives for libmetal.
++ */
++
++#ifndef __METAL_I686_ATOMIC__H__
++#define __METAL_I686_ATOMIC__H__
++
++
++#endif /* __METAL_I686_ATOMIC__H__ */
+diff --git a/lib/processor/i686/cpu.h b/lib/processor/i686/cpu.h
+new file mode 100644
+index 0000000..bb8c751
+--- /dev/null
++++ b/lib/processor/i686/cpu.h
+@@ -0,0 +1,41 @@
++/*
++ * Copyright (c) 2015, Xilinx Inc. and Contributors. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice,
++ *    this list of conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice,
++ *    this list of conditions and the following disclaimer in the documentation
++ *    and/or other materials provided with the distribution.
++ *
++ * 3. Neither the name of Xilinx nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/*
++ * @file	cpu.h
++ * @brief	CPU specific primatives
++ */
++
++#ifndef __METAL_I686_CPU__H__
++#define __METAL_I686_CPU__H__
++
++#define metal_cpu_yield() asm volatile("rep; nop")
++
++#endif /* __METAL_I686_CPU__H__ */
+diff --git a/lib/processor/ppc64/CMakeLists.txt b/lib/processor/ppc64/CMakeLists.txt
+new file mode 100644
+index 0000000..9e9c101
+--- /dev/null
++++ b/lib/processor/ppc64/CMakeLists.txt
+@@ -0,0 +1,4 @@
++collect (PROJECT_LIB_HEADERS atomic.h)
++collect (PROJECT_LIB_HEADERS cpu.h)
++
++# vim: expandtab:ts=2:sw=2:smartindent
+diff --git a/lib/processor/ppc64/atomic.h b/lib/processor/ppc64/atomic.h
+new file mode 100644
+index 0000000..dbf5533
+--- /dev/null
++++ b/lib/processor/ppc64/atomic.h
+@@ -0,0 +1,39 @@
++/*
++ * Copyright (c) 2015, Xilinx Inc. and Contributors. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice,
++ *    this list of conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice,
++ *    this list of conditions and the following disclaimer in the documentation
++ *    and/or other materials provided with the distribution.
++ *
++ * 3. Neither the name of Xilinx nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/*
++ * @file	gcc/atomic.h
++ * @brief	GCC specific atomic primitives for libmetal.
++ */
++
++#ifndef __METAL_PPC64_ATOMIC__H__
++#define __METAL_PPC64_ATOMIC__H__
++
++#endif /* __METAL_PPC64_ATOMIC__H__ */
+diff --git a/lib/processor/ppc64/cpu.h b/lib/processor/ppc64/cpu.h
+new file mode 100644
+index 0000000..3432fd5
+--- /dev/null
++++ b/lib/processor/ppc64/cpu.h
+@@ -0,0 +1,41 @@
++/*
++ * Copyright (c) 2015, Xilinx Inc. and Contributors. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice,
++ *    this list of conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice,
++ *    this list of conditions and the following disclaimer in the documentation
++ *    and/or other materials provided with the distribution.
++ *
++ * 3. Neither the name of Xilinx nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/*
++ * @file	cpu.h
++ * @brief	CPU specific primatives
++ */
++
++#ifndef __METAL_PPC64_CPU__H__
++#define __METAL_PPC64_CPU__H__
++
++#define metal_cpu_yield()
++
++#endif /* __METAL_PPC64_CPU__H__ */
+diff --git a/lib/processor/ppc64le/CMakeLists.txt b/lib/processor/ppc64le/CMakeLists.txt
+new file mode 100644
+index 0000000..9e9c101
+--- /dev/null
++++ b/lib/processor/ppc64le/CMakeLists.txt
+@@ -0,0 +1,4 @@
++collect (PROJECT_LIB_HEADERS atomic.h)
++collect (PROJECT_LIB_HEADERS cpu.h)
++
++# vim: expandtab:ts=2:sw=2:smartindent
+diff --git a/lib/processor/ppc64le/atomic.h b/lib/processor/ppc64le/atomic.h
+new file mode 100644
+index 0000000..93f5d15
+--- /dev/null
++++ b/lib/processor/ppc64le/atomic.h
+@@ -0,0 +1,39 @@
++/*
++ * Copyright (c) 2015, Xilinx Inc. and Contributors. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice,
++ *    this list of conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice,
++ *    this list of conditions and the following disclaimer in the documentation
++ *    and/or other materials provided with the distribution.
++ *
++ * 3. Neither the name of Xilinx nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/*
++ * @file	gcc/atomic.h
++ * @brief	GCC specific atomic primitives for libmetal.
++ */
++
++#ifndef __METAL_PPC64LE_ATOMIC__H__
++#define __METAL_PPC64LE_ATOMIC__H__
++
++#endif /* __METAL_PPC64LE_ATOMIC__H__ */
+diff --git a/lib/processor/ppc64le/cpu.h b/lib/processor/ppc64le/cpu.h
+new file mode 100644
+index 0000000..77b4d1c
+--- /dev/null
++++ b/lib/processor/ppc64le/cpu.h
+@@ -0,0 +1,41 @@
++/*
++ * Copyright (c) 2015, Xilinx Inc. and Contributors. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice,
++ *    this list of conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice,
++ *    this list of conditions and the following disclaimer in the documentation
++ *    and/or other materials provided with the distribution.
++ *
++ * 3. Neither the name of Xilinx nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/*
++ * @file	cpu.h
++ * @brief	CPU specific primatives
++ */
++
++#ifndef __METAL_PPC64LE_CPU__H__
++#define __METAL_PPC64LE_CPU__H__
++
++#define metal_cpu_yield()
++
++#endif /* __METAL_PPC64LE_CPU__H__ */
+diff --git a/lib/processor/s390x/CMakeLists.txt b/lib/processor/s390x/CMakeLists.txt
+new file mode 100644
+index 0000000..9e9c101
+--- /dev/null
++++ b/lib/processor/s390x/CMakeLists.txt
+@@ -0,0 +1,4 @@
++collect (PROJECT_LIB_HEADERS atomic.h)
++collect (PROJECT_LIB_HEADERS cpu.h)
++
++# vim: expandtab:ts=2:sw=2:smartindent
+diff --git a/lib/processor/s390x/atomic.h b/lib/processor/s390x/atomic.h
+new file mode 100644
+index 0000000..f05c5c1
+--- /dev/null
++++ b/lib/processor/s390x/atomic.h
+@@ -0,0 +1,39 @@
++/*
++ * Copyright (c) 2015, Xilinx Inc. and Contributors. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice,
++ *    this list of conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice,
++ *    this list of conditions and the following disclaimer in the documentation
++ *    and/or other materials provided with the distribution.
++ *
++ * 3. Neither the name of Xilinx nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/*
++ * @file	gcc/atomic.h
++ * @brief	GCC specific atomic primitives for libmetal.
++ */
++
++#ifndef __METAL_S390X_ATOMIC__H__
++#define __METAL_S390X_ATOMIC__H__
++
++#endif /* __METAL_S390X_ATOMIC__H__ */
+diff --git a/lib/processor/s390x/cpu.h b/lib/processor/s390x/cpu.h
+new file mode 100644
+index 0000000..2964b85
+--- /dev/null
++++ b/lib/processor/s390x/cpu.h
+@@ -0,0 +1,41 @@
++/*
++ * Copyright (c) 2015, Xilinx Inc. and Contributors. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice,
++ *    this list of conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice,
++ *    this list of conditions and the following disclaimer in the documentation
++ *    and/or other materials provided with the distribution.
++ *
++ * 3. Neither the name of Xilinx nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/*
++ * @file	cpu.h
++ * @brief	CPU specific primatives
++ */
++
++#ifndef __METAL_S390X_CPU__H__
++#define __METAL_S390X_CPU__H__
++
++#define metal_cpu_yield()
++
++#endif /* __METAL_S390X_CPU__H__ */

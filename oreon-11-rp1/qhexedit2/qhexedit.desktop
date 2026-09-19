@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Exec=qhexedit
+Name=QHexEdit
+GenericName=Binary Editor
+Terminal=false
+Categories=Development;

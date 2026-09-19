@@ -1,0 +1,19 @@
+From 3c8df1714292549d2fe27fa4a03110657fd647a3 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 14 Feb 2025 10:08:49 -0500
+Subject: [PATCH] Update intersphinx_mapping for Sphinx 8 compatibility (#598)
+
+---
+ docs/conf.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/docs/conf.py b/docs/conf.py
+index 91d1d5f5..343aadd9 100644
+--- a/docs/conf.py
++++ b/docs/conf.py
+@@ -362,4 +362,4 @@
+ 
+ 
+ # Example configuration for intersphinx: refer to the Python standard library.
+-intersphinx_mapping = {"https://docs.python.org/3/": None}
++intersphinx_mapping = {"python": ("https://docs.python.org/3/", None)}

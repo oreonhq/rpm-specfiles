@@ -1,0 +1,35 @@
+From 5bfe453bfef59d6264c8e987b3f3361bd458a9b5 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Mon, 8 Apr 2024 11:56:54 +0100
+Subject: [PATCH 1/7] disable python setups
+
+---
+ doc/CMakeLists.txt | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/doc/CMakeLists.txt b/doc/CMakeLists.txt
+index 14429eba6..bc0bc3771 100644
+--- a/doc/CMakeLists.txt
++++ b/doc/CMakeLists.txt
+@@ -51,12 +51,12 @@ if( BUILD_SLI_DOCS STREQUAL ON AND NOT CMAKE_CROSSCOMPILING )
+ 
+   # Update the global help index to include all help files in
+   # the global installation directory for documentation.
+-  install( CODE
+-    "execute_process(
+-       COMMAND ${Python_EXECUTABLE} -B generate_helpindex.py \"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DOCDIR}\"
+-       WORKING_DIRECTORY \"${PROJECT_SOURCE_DIR}/doc/slihelp_generator\"
+-       )"
+-    )
++  #install( CODE
++  #  "execute_process(
++  #     COMMAND ${Python_EXECUTABLE} -B generate_helpindex.py \"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DOCDIR}\"
++  #     WORKING_DIRECTORY \"${PROJECT_SOURCE_DIR}/doc/slihelp_generator\"
++  #     )"
++  #  )
+ endif ()
+ 
+ # Determine in or out of tree building
+-- 
+2.44.0
+

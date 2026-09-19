@@ -1,0 +1,11 @@
+--- gphotoframe-2.0.2-hg2084299dffb6/lib/utils/urlgetautoproxy.py.libproxy_disable	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/utils/urlgetautoproxy.py	2016-01-11 02:13:45.013244947 +0900
+@@ -1,7 +1,7 @@
+ import urllib
+ 
+ try:
+-    import libproxy
++    import libproxy_DONT_USE_THIS_FOR_NOW
+ except ImportError:
+     libproxy = False
+ 

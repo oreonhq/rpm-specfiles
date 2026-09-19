@@ -1,0 +1,14 @@
+[Unit]
+Description = flexd Server
+After = network.target
+
+[Service]
+# Using Type = simple because forking currently doesn't work,
+# probably due to some bug in systemd
+Type = simple
+PIDFile = /run/flexd.pid
+ExecStart = /usr/sbin/flexd
+ExecReload = /bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy = multi-user.target

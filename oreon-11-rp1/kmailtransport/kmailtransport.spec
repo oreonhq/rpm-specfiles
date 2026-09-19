@@ -1,14 +1,14 @@
-%global source0_hash none
+%global source0_hash 76f24f7ffd037e431e8813cd4404d0f0b61c4a0c4fda18d92855a8cae7ea7706
 
 Name:    kmailtransport
-Version: 26.04.2
+Version: 26.08.0
 Release: 1%{?dist}
 Summary: The KMailTransport Library
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:     https://invent.kde.org/frameworks/%{name}
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0: https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-rpm-macros
@@ -86,4 +86,3 @@ find ./po -type f -name libmailtransport5.po -execdir mv {} libmailtransport6.po
 
 %changelog
 %autochangelog
-

@@ -1,0 +1,14 @@
+diff --git a/extension/g3kb-switch@g3kb-switch.org/metadata.json b/extension/g3kb-switch@g3kb-switch.org/metadata.json
+index 59271f3..d08229e 100644
+--- a/extension/g3kb-switch@g3kb-switch.org/metadata.json
++++ b/extension/g3kb-switch@g3kb-switch.org/metadata.json
+@@ -5,7 +5,8 @@
+     "shell-version": [
+         "45",
+         "46",
+-        "47"
++        "47",
++        "48"
+     ],
+     "url": "https://github.com/lyokha/g3kb-switch",
+     "session-modes" : [

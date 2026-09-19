@@ -10,8 +10,8 @@
 
 Summary: A program for synchronizing files over a network
 Name: rsync
-Version: 3.4.1
-Release: 6%{?prerelease}%{?dist}
+Version: 3.5.0
+Release: 1%{?prerelease}%{?dist}
 URL: https://rsync.samba.org/
 
 Source0:        https://download.samba.org/pub/rsync/src/rsync-%{version}.tar.gz
@@ -77,7 +77,8 @@ This subpackage provides rrsync script and its manpage. rrsync
 may be used to setup a restricted rsync users via ssh logins.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }# TAG: for pre versions use
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# TAG: for pre versions use
 
 %if %isprerelease
 %setup -q -n rsync-%{version}%{?prerelease}

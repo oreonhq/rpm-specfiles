@@ -1,0 +1,1467 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 31 Dec 2025 22:14:53 +0100
+Subject: [PATCH] Make SSL library mandatory
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/.github/workflows/ccpp.yml b/.github/workflows/ccpp.yml
+index f3bf774..d5dcb1b 100644
+--- a/.github/workflows/ccpp.yml
++++ b/.github/workflows/ccpp.yml
+@@ -36,9 +36,13 @@ jobs:
+     steps:
+     - uses: actions/checkout@v6
+     - name: prepare
+-      run: git submodule update --init
++      run: |
++        git submodule update --init
++        brew install openssl@3
+     - name: build
+-      run: ./build.sh --none
++      run: |
++        export OPENSSL_ROOT_DIR=$(brew --prefix openssl@3)
++        ./build.sh --none
+ 
+ 
+   build-static:
+diff --git a/.github/workflows/codeql.yml b/.github/workflows/codeql.yml
+index 3971415..bdbb2d4 100644
+--- a/.github/workflows/codeql.yml
++++ b/.github/workflows/codeql.yml
+@@ -33,7 +33,7 @@ jobs:
+           sudo apt-get install --yes build-essential cmake libpcap-dev openssl libssl-dev libgsl-dev libsctp-dev libncurses-dev libncurses6
+ 
+       - name: Configure
+-        run: cmake . -DUSE_GSL=1 -DUSE_PCAP=1 -DUSE_SSL=1 -DUSE_SCTP=1
++        run: cmake . -DUSE_GSL=1 -DUSE_PCAP=1 -DUSE_SCTP=1
+ 
+       - name: Initialize CodeQL
+         uses: github/codeql-action/init@v4
+diff --git a/.github/workflows/coverity.yml b/.github/workflows/coverity.yml
+index e345daa..082b4b9 100644
+--- a/.github/workflows/coverity.yml
++++ b/.github/workflows/coverity.yml
+@@ -14,7 +14,7 @@ jobs:
+     - uses: actions/checkout@v6
+     - run: sudo apt update
+     - run: sudo apt-get install --yes build-essential cmake libpcap-dev openssl libssl-dev libgsl-dev libsctp-dev libncurses-dev libncurses6
+-    - run:  cmake . -DUSE_GSL=1 -DUSE_PCAP=1 -DUSE_SSL=1 -DUSE_SCTP=1
++    - run:  cmake . -DUSE_GSL=1 -DUSE_PCAP=1 -DUSE_SCTP=1
+     - uses: vapier/coverity-scan-action@v1
+       with:
+         email: ${{ secrets.COVERITY_SCAN_EMAIL }}
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e327b2d..141de0c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -93,11 +93,12 @@ function(apply_common_sipp_dependencies TARGET_NAME)
+     target_link_libraries(${TARGET_NAME} ${GSL_LIBRARY} ${GSLCBLAS_LIBRARY})
+   endif()
+ 
+-  if(USE_SSL AND SSL_LIBRARIES)
+-    target_link_libraries(${TARGET_NAME} ${SSL_LIBRARIES})
+-    if(SSL_INCLUDE_DIRS)
+-      target_include_directories(${TARGET_NAME} SYSTEM PUBLIC ${SSL_INCLUDE_DIRS})
+-    endif()
++  target_link_libraries(${TARGET_NAME} ${SSL_LIBRARIES})
++  if(SSL_LIBRARY_DIRS)
++    target_link_directories(${TARGET_NAME} PRIVATE ${SSL_LIBRARY_DIRS})
++  endif()
++  if(SSL_INCLUDE_DIRS)
++    target_include_directories(${TARGET_NAME} SYSTEM PUBLIC ${SSL_INCLUDE_DIRS})
+   endif()
+ 
+   if(USE_PCAP AND PCAP_LIBRARIES)
+@@ -119,14 +120,25 @@ endfunction()
+ optional_library(SCTP "Build with SCTP support")
+ optional_library(PCAP "Build with PCAP playback support")
+ optional_library(GSL "Build with improved statistical support")
+-set(USE_SSL "DEFAULT" CACHE STRING "Build with SIPS and SHA-256 support")
+-if(USE_SSL STREQUAL "ON" OR USE_SSL STREQUAL "1")
+-  set(USE_SSL 1)
+-elseif(USE_SSL STREQUAL "KL")
+-  set(USE_SSL 1)
+-  set(TLS_KL 1)
+-elseif(USE_SSL STREQUAL "OFF" OR USE_SSL STREQUAL "0")
+-  set(USE_SSL 0)
++
++option(USE_WOLFSSL "Use WolfSSL instead of OpenSSL" OFF)
++option(TLS_KEY_LOGGING "Enable TLS session key logging (OpenSSL only)" OFF)
++
++find_package(PkgConfig QUIET)  # import pkg_check_modules() and friends
++
++if(USE_WOLFSSL)
++    pkg_search_module(SSL REQUIRED wolfssl>=3.15.0)
++    if(TLS_KEY_LOGGING)
++        message(WARNING "TLS key logging is only supported with OpenSSL, ignoring")
++        set(TLS_KEY_LOGGING OFF)
++    endif()
++    add_definitions("-DUSE_WOLFSSL" "-DOPENSSL_ALL")
++else()
++    pkg_search_module(SSL REQUIRED openssl>=1.1.0)
++    add_definitions("-DUSE_OPENSSL")
++    if(TLS_KEY_LOGGING)
++        add_definitions("-DUSE_OPENSSL_KL")
++    endif()
+ endif()
+ 
+ option(BUILD_STATIC "Build a statically-linked binary" OFF)
+@@ -180,61 +192,6 @@ if(NOT USE_PCAP)
+     "${PROJECT_SOURCE_DIR}/src/send_packets.c")
+ endif(NOT USE_PCAP)
+ 
+-find_package(PkgConfig QUIET)  # import pkg_check_modules() and friends
+-if(USE_SSL)
+-  if(PKG_CONFIG_FOUND)
+-    pkg_search_module(SSL openssl>=1.1.0 wolfssl>=3.15.0)
+-  endif()
+-  if(SSL_FOUND)
+-    if("${SSL_LIBRARIES}" MATCHES "wolfssl")
+-      set(WOLFSSL_FOUND True)
+-    else()
+-      set(OPENSSL_FOUND True)
+-    endif()
+-  else()
+-    find_library(OPENSSL_SSL_LIBRARY NAMES ssl)
+-    find_library(OPENSSL_CRYPTO_LIBRARY NAMES crypto)
+-    if(OPENSSL_SSL_LIBRARY AND OPENSSL_CRYPTO_LIBRARY)
+-      set(SSL_LIBRARIES ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
+-      set(OPENSSL_FOUND True)
+-    else()
+-      find_library(WOLFSSL_LIBRARY NAMES wolfssl)
+-      if(WOLFSSL_LIBRARY)
+-        set(SSL_LIBRARIES ${WOLFSSL_LIBRARY})
+-        set(WOLFSSL_FOUND True)
+-      endif()
+-    endif()
+-  endif()
+-  if(OPENSSL_FOUND OR WOLFSSL_FOUND)
+-    if(USE_SSL STREQUAL "DEFAULT")
+-      message(STATUS "Found ${SSL_LIBRARIES}; enabling sips support")
+-    endif()
+-  else()
+-    if(USE_SSL STREQUAL "DEFAULT")
+-      message(STATUS "Neither OpenSSL nor WolfSSL was found; disabling sips support")
+-      set(USE_SSL 0)
+-    else()
+-      message(FATAL_ERROR "Neither OpenSSL nor WolfSSL was found; please install a devel package")
+-    endif()
+-  endif()
+-endif()
+-
+-if(USE_SSL)
+-  add_definitions("-DUSE_TLS" "-DUSE_SHA256")
+-  if(OPENSSL_FOUND)
+-    add_definitions("-DUSE_OPENSSL")
+-    if (TLS_KL)
+-      message(STATUS "Enabling TLS key logging support for OpenSSL Versions >= 1.1.1")
+-      add_definitions("-DUSE_OPENSSL_KL")
+-    endif(TLS_KL)
+-  elseif(WOLFSSL_FOUND)
+-    add_definitions("-DUSE_WOLFSSL" "-DOPENSSL_ALL")
+-  endif()
+-else(USE_SSL)
+-  list(REMOVE_ITEM all_SRCS
+-    "${PROJECT_SOURCE_DIR}/src/sslsocket.cpp")
+-endif(USE_SSL)
+-
+ if(USE_PCAP)
+   add_definitions("-DPCAPPLAY")
+ endif(USE_PCAP)
+diff --git a/README.md b/README.md
+index 0421215..e066ffe 100644
+--- a/README.md
++++ b/README.md
+@@ -46,10 +46,10 @@ SIP-over-SCTP, media playback from PCAP files and the GNU Scientific
+ Libraries for random distributions):
+ 
+ ```
+-cmake . -DUSE_SSL=1 -DUSE_SCTP=1 -DUSE_PCAP=1 -DUSE_GSL=1
++cmake . -DUSE_SCTP=1 -DUSE_PCAP=1 -DUSE_GSL=1
+ ```
+ 
+-To enable TLS key logging pass `-DUSE_SSL=KL` to cmake.
++To enable TLS key logging pass `-DTLS_KEY_LOGGING=1` to cmake.
+ 
+ TLS key logging records the TLS Session Keys to a key log file when the `SSLKEYLOGFILE` environment variable is set. It allows to decrypt SIPS traffic generated or received by SIPp using Wireshark. For more details see: https://wiki.wireshark.org/TLS
+ 
+diff --git a/build.sh b/build.sh
+index b29905f..ad4bbcc 100755
+--- a/build.sh
++++ b/build.sh
+@@ -15,11 +15,11 @@ elif test "$*" = "--help" || test "$*" = "-h"; then
+ fi
+ 
+ if test "$*" = "--none"; then
+-    cmake $SRC_DIR -DUSE_GSL=0 -DUSE_SSL=0 -DUSE_SCTP=0 -DUSE_PCAP=0
++    cmake $SRC_DIR -DUSE_GSL=0 -DUSE_SCTP=0 -DUSE_PCAP=0
+ elif test "$*" = "--common"; then
+-    cmake $SRC_DIR -DUSE_GSL=1 -DUSE_PCAP=1 -DUSE_SSL=0 -DUSE_SCTP=0
++    cmake $SRC_DIR -DUSE_GSL=1 -DUSE_PCAP=1 -DUSE_SCTP=0
+ elif test "$*" = "--full"; then
+-    cmake $SRC_DIR -DUSE_GSL=1 -DUSE_PCAP=1 -DUSE_SSL=1 -DUSE_SCTP=1
++    cmake $SRC_DIR -DUSE_GSL=1 -DUSE_PCAP=1 -DUSE_SCTP=1
+ else
+     # Debug build? Add -DDEBUG=1
+     # Adjusted SIP max size? Add -DSIPP_MAX_MSG_SIZE=262144
+diff --git a/docker/Dockerfile b/docker/Dockerfile
+index 2a9a25d..70d50bb 100644
+--- a/docker/Dockerfile
++++ b/docker/Dockerfile
+@@ -20,7 +20,9 @@ RUN apk add --no-cache \
+   ncurses-dev \
+   ncurses-static \
+   ninja \
+-  ${FULL:+linux-headers lksctp-tools-dev lksctp-tools-static openssl-dev openssl-libs-static}
++  openssl-dev \
++  openssl-libs-static \
++  ${FULL:+linux-headers lksctp-tools-dev lksctp-tools-static}
+ 
+ WORKDIR /sipp
+ COPY CMakeLists.txt ./
+@@ -37,7 +39,7 @@ RUN --mount=type=bind,target=.git,source=.git \
+     -DUSE_PCAP=1 \
+     -DUSE_GSL=1 \
+     ${DEBUG:+-DDEBUG=1} \
+-    ${FULL:+-DUSE_SSL=1 -DUSE_SCTP=1} \
++    ${FULL:+-DUSE_SCTP=1} \
+   && ninja
+ RUN help2man --output=sipp.1 -v -v --no-info \
+   --name='SIP testing tool and traffic generator' ./sipp
+diff --git a/docker/Dockerfile.debian b/docker/Dockerfile.debian
+index 31a8e85..a585d43 100644
+--- a/docker/Dockerfile.debian
++++ b/docker/Dockerfile.debian
+@@ -35,8 +35,9 @@ RUN --mount=type=bind,target=.git,source=.git \
+     -DCMAKE_BUILD_TYPE=Release \
+     -DUSE_PCAP=1 \
+     -DUSE_GSL=1 \
++    ${WOLFSSL:+-DUSE_WOLFSSL=1} \
+     ${DEBUG:+-DDEBUG=1} \
+-    ${FULL:+-DUSE_SSL=1 -DUSE_SCTP=1} \
++    ${FULL:+-DUSE_SCTP=1} \
+   && ninja
+ 
+ FROM debian:12-slim
+diff --git a/docs/installation.rst b/docs/installation.rst
+index 022bbc0..92b494b 100644
+--- a/docs/installation.rst
++++ b/docs/installation.rst
+@@ -63,32 +63,13 @@ Installing SIPp
+ 
+     + C++ Compiler
+     + curses or ncurses library
+-    + For TLS support: OpenSSL >= 1.1.0 or WolfSSL >= 3.15.0
++    + OpenSSL >= 1.1.0 or WolfSSL >= 3.15.0
+     + For pcap play support: libpcap and libnet
+     + For SCTP support: lksctp-tools
+     + For distributed pauses: `Gnu Scientific Libraries`_
+ 
+ + You have four options to compile SIPp:
+ 
+-    + Without TLS (Transport Layer Security), SCTP or PCAP support --
+-      this is the recommended setup if you don't need to handle SCTP, TLS or
+-      PCAP::
+-
+-        tar -xvzf sipp-xxx.tar
+-        cd sipp
+-        cmake .
+-        make
+-
+-    + With TLS and SHA-256 support, you must have installed `OpenSSL library`_
+-      (>=1.1.0) (which may come with your system) or `WolfSSL library`_
+-      (>=3.15.0). Building SIPp consists only of adding the
+-      ``-DUSE_SSL=1`` option to the cmake command::
+-
+-        tar -xvzf sipp-xxx.tar.gz
+-        cd sipp
+-        cmake . -DUSE_SSL=1
+-        make
+-
+     + With PCAP play support::
+ 
+         tar -xvzf sipp-xxx.tar.gz
+@@ -114,7 +95,7 @@ Installing SIPp
+ 
+         tar -xvzf sipp-xxx.tar.gz
+         cd sipp
+-        cmake . -DUSE_GSL=1 -DUSE_PCAP=1 -DUSE_SSL=1 -DUSE_SCTP=1
++        cmake . -DUSE_GSL=1 -DUSE_PCAP=1 -DUSE_SCTP=1
+         make
+ 
+ 
+diff --git a/include/call.hpp b/include/call.hpp
+index 668626a..a4632d3 100644
+--- a/include/call.hpp
++++ b/include/call.hpp
+@@ -196,10 +196,8 @@ protected:
+     SrtpChannel _rxUACVideo;
+     SrtpChannel _txUASVideo;
+     SrtpChannel _rxUASVideo;
+-#ifdef USE_TLS
+     char _pref_audio_cs_out[25];
+     char _pref_video_cs_out[25];
+-#endif // USE_TLS
+ 
+     /* holds the auth header and if the challenge was 401 or 407 */
+     char         * dialog_authentication;
+@@ -333,11 +331,9 @@ protected:
+     void get_remote_media_addr(std::string const &msg);
+ 
+     std::string extract_rtp_remote_addr(const char * message, int &ip_ver, int &audio_port, int &video_port);
+-#ifdef USE_TLS
+     int check_audio_ciphersuite_match(SrtpInfoParams &pA);
+     int check_video_ciphersuite_match(SrtpInfoParams &pV);
+     int extract_srtp_remote_info(const char * msg, SrtpInfoParams &pA, SrtpInfoParams &pV);
+-#endif // USE_TLS
+     void extract_rtp_remote_addr(const char* message);
+ 
+     bool lost(int index);
+@@ -356,10 +352,8 @@ protected:
+     char *debugBuffer;
+     int debugLength;
+ 
+-#ifdef USE_TLS
+     FILE* _srtpctxdebugfile;
+     int logSrtpInfo(const char *fmt, ...);
+-#endif // USE_TLS
+ 
+     SessionState _sessionStateCurrent;
+     SessionState _sessionStateOld;
+diff --git a/include/message.hpp b/include/message.hpp
+index aee2069..1721681 100644
+--- a/include/message.hpp
++++ b/include/message.hpp
+@@ -89,7 +89,6 @@ typedef enum {
+     E_Message_Custom,
+     E_Message_RTPStream_Audio_Port,
+     E_Message_RTPStream_Video_Port,
+-#ifdef USE_TLS
+     E_Message_CryptoTag1Audio,
+     E_Message_CryptoTag2Audio,
+     E_Message_CryptoSuiteAesCm128Sha1801Audio,
+@@ -122,7 +121,6 @@ typedef enum {
+     E_Message_UEAesCm128Sha1802Video,
+     E_Message_UEAesCm128Sha1321Video,
+     E_Message_UEAesCm128Sha1322Video,
+-#endif // USE_TLS
+ } MessageCompType;
+ 
+ class SendingMessage
+diff --git a/include/rtpstream.hpp b/include/rtpstream.hpp
+index 39a5ca4..a503bda 100644
+--- a/include/rtpstream.hpp
++++ b/include/rtpstream.hpp
+@@ -28,7 +28,6 @@
+ 
+ class JLSRTP;
+ 
+-#ifdef USE_TLS
+ struct SrtpInfoParams
+ {
+     bool found;
+@@ -41,7 +40,6 @@ struct SrtpInfoParams
+     bool primary_unencrypted_srtp;
+     bool secondary_unencrypted_srtp;
+ };
+-#endif // USE_TLS
+ 
+ struct threaddata_t;
+ struct taskentry_t;
+@@ -110,11 +108,9 @@ struct taskentry_t
+     int                  video_rtp_socket;
+     int                  video_rtcp_socket;
+ 
+-#ifdef USE_TLS
+     /* audio/video SRTP echo activity indicators */
+     int                  audio_srtp_echo_active;
+     int                  video_srtp_echo_active;
+-#endif // USE_TLS
+ 
+     /* rtp peer address structures */
+     struct sockaddr_storage    remote_audio_rtp_addr;
+@@ -134,12 +130,10 @@ struct taskentry_t
+     int                  audio_active;
+     int                  video_active;
+ 
+-#ifdef USE_TLS
+     SrtpInfoParams  local_srtp_audio_params;
+     SrtpInfoParams  remote_srtp_audio_params;
+     SrtpInfoParams  local_srtp_video_params;
+     SrtpInfoParams  remote_srtp_video_params;
+-#endif // USE_TLS
+ };
+ 
+ struct rtpstream_callinfo_t
+@@ -196,12 +190,10 @@ int rtpstream_get_local_videoport(rtpstream_callinfo_t *callinfo);
+ void rtpstream_set_remote(rtpstream_callinfo_t* callinfo, int ip_ver, const char* ip_addr,
+                           int audio_port, int video_port);
+ 
+-#ifdef USE_TLS
+ int rtpstream_set_srtp_audio_local(rtpstream_callinfo_t *callinfo, SrtpInfoParams &p);
+ int rtpstream_set_srtp_audio_remote(rtpstream_callinfo_t *callinfo, SrtpInfoParams &p);
+ int rtpstream_set_srtp_video_local(rtpstream_callinfo_t *callinfo, SrtpInfoParams &p);
+ int rtpstream_set_srtp_video_remote(rtpstream_callinfo_t *callinfo, SrtpInfoParams &p);
+-#endif // USE_TLS
+ 
+ int rtpstream_cache_file(char *filename,
+                          int mode /* 0: FILE - 1: PATTERN */,
+diff --git a/include/sipp.hpp b/include/sipp.hpp
+index 324f761..ea7a925 100644
+--- a/include/sipp.hpp
++++ b/include/sipp.hpp
+@@ -106,12 +106,10 @@
+ #define T_TLS                      2
+ #define T_SCTP                     3
+ 
+-#ifdef USE_TLS
+ #define DEFAULT_TLS_CERT           "cacert.pem"
+ #define DEFAULT_TLS_KEY            "cakey.pem"
+ #define DEFAULT_TLS_CA             ""
+ #define DEFAULT_TLS_CRL            ""
+-#endif
+ 
+ #define TRANSPORT_TO_STRING(p)     ((p==T_TCP) ? "TCP" : ((p==T_TLS)? "TLS" : ((p==T_UDP)? "UDP" : "SCTP")))
+ 
+@@ -139,10 +137,8 @@
+ #define MAX_PEER_SIZE              4096  /* 3pcc extended mode: max size of peer names */
+ #define MAX_LOCAL_TWIN_SOCKETS     10    /*3pcc extended mode:max number of peers from which
+ cmd messages are received */
+-#ifdef USE_TLS
+ #define DEFAULT_PREFERRED_AUDIO_CRYPTOSUITE ((char*)"AES_CM_128_HMAC_SHA1_80")
+ #define DEFAULT_PREFERRED_VIDEO_CRYPTOSUITE ((char*)"AES_CM_128_HMAC_SHA1_80")
+-#endif // USE_TLS
+ 
+ /******************** Default parameters ***********************/
+ 
+@@ -257,9 +253,7 @@ MAYBE_EXTERN int                rtp_default_payload     DEFVAL(DEFAULT_RTP_PAYLO
+ MAYBE_EXTERN int                rtp_tasks_per_thread    DEFVAL(DEFAULT_RTP_THREADTASKS);
+ MAYBE_EXTERN int                rtp_buffsize            DEFVAL(65536);
+ MAYBE_EXTERN bool               rtpcheck_debug          DEFVAL(0);
+-#ifdef USE_TLS
+ MAYBE_EXTERN bool               srtpcheck_debug         DEFVAL(0);
+-#endif // USE_TLS
+ MAYBE_EXTERN double             audiotolerance          DEFVAL(1.0);
+ MAYBE_EXTERN double             videotolerance          DEFVAL(1.0);
+ 
+@@ -315,13 +309,11 @@ MAYBE_EXTERN unsigned int       tdm_map_z               DEFVAL(0);
+ MAYBE_EXTERN unsigned int       tdm_map_h               DEFVAL(0);
+ MAYBE_EXTERN bool               tdm_map[1024];
+ 
+-#ifdef USE_TLS
+ MAYBE_EXTERN const char       * tls_cert_name           DEFVAL(DEFAULT_TLS_CERT);
+ MAYBE_EXTERN const char       * tls_key_name            DEFVAL(DEFAULT_TLS_KEY);
+ MAYBE_EXTERN const char       * tls_ca_name             DEFVAL(DEFAULT_TLS_CA);
+ MAYBE_EXTERN const char       * tls_crl_name            DEFVAL(DEFAULT_TLS_CRL);
+ MAYBE_EXTERN double             tls_version             DEFVAL(0.0);
+-#endif
+ 
+ #ifdef SO_BINDTODEVICE
+ MAYBE_EXTERN const char       * bind_to_device_name     DEFVAL(nullptr);
+diff --git a/include/socket.hpp b/include/socket.hpp
+index 2f1165d..b3883cd 100644
+--- a/include/socket.hpp
++++ b/include/socket.hpp
+@@ -20,9 +20,7 @@
+ #ifndef __SIPP_SOCKET_H__
+ #define __SIPP_SOCKET_H__
+ 
+-#ifdef USE_TLS
+ #include "sslsocket.hpp"
+-#endif
+ 
+ #ifdef USE_SCTP
+ #define SCTP_DOWN 0
+diff --git a/src/auth.cpp b/src/auth.cpp
+index 314772e..e668c90 100644
+--- a/src/auth.cpp
++++ b/src/auth.cpp
+@@ -41,10 +41,8 @@
+ #include <wolfssl/openssl/evp.h>
+ #endif
+ 
+-#ifdef USE_SHA256
+ #define SHA256_HASH_SIZE 32
+ #define SHA256_HASH_HEX_SIZE 2*SHA256_HASH_SIZE
+-#endif // USE_SHA256
+ 
+ #define MAX_HEADER_LEN  2049
+ #define MD5_HASH_SIZE 16
+@@ -100,13 +98,11 @@ static int createAuthHeaderAKAv1MD5(
+     const char* auth, const char* algo, unsigned int nonce_count,
+     char* result, size_t result_len);
+ 
+-#ifdef USE_SHA256
+ static int createAuthHeaderSHA256(
+     const char* user, const char* password, int password_len,
+     const char* method, const char* uri, const char* msgbody,
+     const char* auth, const char* algo, unsigned int nonce_count,
+     char* result, size_t result_len);
+-#endif // USE_SHA256
+ 
+ /* This function is from RFC 2617 Section 5 */
+ 
+@@ -203,12 +199,10 @@ int createAuthHeader(
+         return createAuthHeaderAKAv1MD5(
+             user, aka_OP, aka_AMF, aka_K, method, uri, msgbody, auth,
+             algo, nonce_count, result, result_len);
+-#ifdef USE_SHA256
+     } else if (strncasecmp(algo, "SHA-256", 7)==0) {
+         return createAuthHeaderSHA256(
+             user, password, strlen(password), method, uri, msgbody,
+             auth, algo, nonce_count, result, result_len);
+-#endif // USE_SHA256
+     } else {
+         snprintf(result, result_len, "createAuthHeader: authentication must use MD5, AKAv1-MD5 or SHA-256");
+         return 0;
+@@ -332,7 +326,6 @@ static int createAuthResponseMD5(
+     return 1;
+ }
+ 
+-#ifdef USE_SHA256
+ static int createAuthResponseSHA256(
+     const char* user, const char* password, int password_len,
+     const char* method, const char* uri, const char* authtype,
+@@ -404,7 +397,6 @@ static int createAuthResponseSHA256(
+     EVP_MD_CTX_free(mdctx);
+     return 1;
+ }
+-#endif // USE_SHA256
+ 
+ int createAuthHeaderMD5(
+     const char* user, const char* password, int password_len,
+@@ -543,7 +535,6 @@ int verifyAuthHeader(const char *user, const char *password, const char *method,
+                 (char*)result,
+                 response);
+         return !strcmp((char *)result, response);
+-#ifdef USE_SHA256
+     } else if (strncasecmp(algo, "SHA-256", 7)==0) {
+         unsigned char result[SHA256_HASH_HEX_SIZE + 1];
+         char response[SHA256_HASH_HEX_SIZE + 1];
+@@ -567,7 +558,6 @@ int verifyAuthHeader(const char *user, const char *password, const char *method,
+                 (char*)result,
+                 response);
+         return !strcmp((char *)result, response);
+-#endif // USE_SHA256
+     } else {
+         WARNING("verifyAuthHeader: authentication must use MD5 or SHA-256, value is '%s'", algo);
+         return 0;
+@@ -893,7 +883,6 @@ static int createAuthHeaderAKAv1MD5(
+     return written;
+ }
+ 
+-#ifdef USE_SHA256
+ int createAuthHeaderSHA256(
+     const char* user, const char* password, int password_len,
+     const char* method, const char* uri, const char* msgbody,
+@@ -987,7 +976,6 @@ int createAuthHeaderSHA256(
+ 
+     return written;
+ }
+-#endif // USE_SHA256
+ 
+ 
+ #ifdef GTEST
+@@ -1027,7 +1015,6 @@ TEST(DigestAuth, BasicVerification) {
+     free(header);
+ }
+ 
+-#if defined(USE_SHA256)
+ TEST(DigestAuth, BasicVerificationSHA256) {
+     char* header = strdup(("Digest \r\n"
+                            " realm=\"testrealm@host.com\",\r\n"
+@@ -1039,7 +1026,6 @@ TEST(DigestAuth, BasicVerificationSHA256) {
+     EXPECT_EQ(1, verifyAuthHeader("testuser", "secret", "REGISTER", result, "hello world"));
+     free(header);
+ }
+-#endif
+ 
+ TEST(DigestAuth, qop) {
+     char result[1024];
+diff --git a/src/call.cpp b/src/call.cpp
+index 97de07a..f818ac5 100644
+--- a/src/call.cpp
++++ b/src/call.cpp
+@@ -334,7 +334,6 @@ std::string call::extract_rtp_remote_addr(const char* msg, int &ip_ver, int &aud
+     return host;
+ }
+ 
+-#ifdef USE_TLS
+ int call::check_audio_ciphersuite_match(SrtpInfoParams &pA)
+ {
+     int audio_cs_len = 0;
+@@ -725,7 +724,6 @@ int call::extract_srtp_remote_info(const char * msg, SrtpInfoParams &pA, SrtpInf
+ 
+     return 0; /* SUCCESS -- parsed SDP SRTP INFO */
+ }
+-#endif // USE_TLS
+ 
+ /******* Very simple hash for retransmission detection  *******/
+ 
+@@ -833,7 +831,6 @@ call *call::add_call(int userId, bool ipv6, struct sockaddr_storage *dest)
+ 
+ void call::init(scenario * call_scenario, SIPpSocket *socket, struct sockaddr_storage *dest, const char * p_id, int userId, bool ipv6, bool isAutomatic, bool isInitCall)
+ {
+-#ifdef USE_TLS
+     _srtpctxdebugfile = nullptr;
+ 
+     if (srtpcheck_debug)
+@@ -853,7 +850,6 @@ void call::init(scenario * call_scenario, SIPpSocket *socket, struct sockaddr_st
+             WARNING("Error encountered opening srtp ctx debug file");
+         }
+     }
+-#endif // USE_TLS
+ 
+     _sessionStateCurrent = eNoSession;
+     _sessionStateOld = eNoSession;
+@@ -907,7 +903,6 @@ void call::init(scenario * call_scenario, SIPpSocket *socket, struct sockaddr_st
+ 
+     next_nonce_count = 1;
+ 
+-#ifdef USE_TLS
+     //
+     // JLSRTP CLIENT context constants
+     //
+@@ -946,7 +941,6 @@ void call::init(scenario * call_scenario, SIPpSocket *socket, struct sockaddr_st
+ 
+     *_pref_audio_cs_out = 0;
+     *_pref_video_cs_out = 0;
+-#endif // USE_TLS
+     /* check and warn on rtpstream_new_call result? -> error alloc'ing mem */
+     rtpstream_new_call(&rtpstream_callinfo);
+ 
+@@ -1219,13 +1213,11 @@ call::~call()
+     free(rtd_done);
+     free(debugBuffer);
+ 
+-#ifdef USE_TLS
+     if (srtpcheck_debug)
+     {
+         fclose(_srtpctxdebugfile);
+         _srtpctxdebugfile = nullptr;
+     }
+-#endif // USE_TLS
+ }
+ 
+ void call::setRtpEchoErrors(int value)
+@@ -2572,7 +2564,6 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
+     char *dest = msg_buffer;
+     bool suppresscrlf = false;
+ 
+-#ifdef USE_TLS
+     bool srtp_audio_updated = false;
+     bool srtp_video_updated = false;
+ 
+@@ -2599,7 +2590,6 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
+     *pV.secondary_cryptokeyparams = 0;
+     pV.primary_unencrypted_srtp = false;
+     pV.secondary_unencrypted_srtp = false;
+-#endif // USE_TLS
+ 
+     msg_buffer[0] = '\0';
+ 
+@@ -2722,9 +2712,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
+           } else if (comp->offset >= 1) {
+               temp_audio_port = rtpstream_callinfo.local_audioport + comp->offset;
+           }
+-#ifdef USE_TLS
+           logSrtpInfo("call::createSendingMessage():  E_Message_RTPStream_Audio_Port: %d\n", temp_audio_port);
+-#endif // USE_TLS
+           dest += snprintf(dest, left, "%d", temp_audio_port);
+         }
+         break;
+@@ -2741,13 +2729,10 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
+           } else if (comp->offset >= 1) {
+               temp_video_port = rtpstream_callinfo.local_videoport + comp->offset;
+           }
+-#ifdef USE_TLS
+           logSrtpInfo("call::createSendingMessage():  E_Message_RTPStream_Video_Port: %d\n", temp_video_port);
+-#endif // USE_TLS
+           dest += snprintf(dest, left, "%d", temp_video_port);
+         }
+         break;
+-#ifdef USE_TLS
+         case E_Message_CryptoTag1Audio:
+         {
+             pA.found = true;
+@@ -3752,7 +3737,6 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
+             srtp_video_updated = true;
+         }
+         break;
+-#endif // USE_TLS
+         case E_Message_Media_IP_Type:
+             dest += snprintf(dest, left, "%s", (media_ip_is_ipv6 ? "6" : "4"));
+             break;
+@@ -4077,7 +4061,6 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
+         SendingMessage::freeMessageComponent(auth_comp);
+     }
+ 
+-#ifdef USE_TLS
+     // PASS OUTGOING SRTP PARAMETERS...
+     if (srtp_audio_updated && (pA.primary_cryptotag != 0))
+     {
+@@ -4111,34 +4094,25 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
+             _rxUACVideo.setID(rxUACV);
+         }
+     }
+-#endif // USE_TLS
+ 
+     if (body &&
+         !strcmp(get_header_content(msg_buffer, (char*)"Content-Type:"), "application/sdp"))
+     {
+         if (getSessionStateCurrent() == eNoSession)
+         {
+-#ifdef USE_TLS
+             logSrtpInfo("call::createSendingMessage():  Switching session state:  eNoSession --> eOfferSent\n");
+-#endif // USE_TLS
+             setSessionState(eOfferSent);
+         }
+         else if (getSessionStateCurrent() == eCompleted)
+         {
+-#ifdef USE_TLS
+             logSrtpInfo("call::createSendingMessage():  Switching session state:  eCompleted --> eOfferSent\n");
+-#endif // USE_TLS
+             setSessionState(eOfferSent);
+         }
+         else if (getSessionStateCurrent() == eOfferReceived)
+         {
+-#ifdef USE_TLS
+             logSrtpInfo("call::createSendingMessage():  Switching session state:  eOfferReceived --> eAnswerSent\n");
+-#endif // USE_TLS
+             setSessionState(eAnswerSent);
+-#ifdef USE_TLS
+             logSrtpInfo("call::createSendingMessage():  Switching session state:  eAnswerSent --> eCompleted\n");
+-#endif // USE_TLS
+             setSessionState(eCompleted);
+         }
+     }
+@@ -4616,10 +4590,8 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
+         int video_port = 0;
+         std::string host;
+ 
+-#ifdef USE_TLS
+         int audio_answer_ciphersuite_match = -1;
+         int video_answer_ciphersuite_match = -1;
+-#endif // USE_TLS
+ 
+         ptr = get_header_content(msg, "Content-Length:");
+ 
+@@ -4627,31 +4599,22 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
+         {
+             if (getSessionStateCurrent() == eNoSession)
+             {
+-#ifdef USE_TLS
+                 logSrtpInfo("call::process_incoming():  Switching session state:  eNoSession --> eOfferReceived\n");
+-#endif // USE_TLS
+                 setSessionState(eOfferReceived);
+             }
+             else if (getSessionStateCurrent() == eCompleted)
+             {
+-#ifdef USE_TLS
+                 logSrtpInfo("call::process_incoming():  Switching session state:  eCompleted --> eOfferReceived\n");
+-#endif // USE_TLS
+                 setSessionState(eOfferReceived);
+             }
+             else if (getSessionStateCurrent() == eOfferSent)
+             {
+-#ifdef USE_TLS
+                 logSrtpInfo("call::process_incoming():  Switching session state:  eOfferSent --> eAnswerReceived\n");
+-#endif // USE_TLS
+                 setSessionState(eAnswerReceived);
+-#ifdef USE_TLS
+                 logSrtpInfo("call::process_incoming();  Switching session state:  eAnswerReceived --> eCompleted\n");
+-#endif // USE_TLS
+                 setSessionState(eCompleted);
+             }
+ 
+-#ifdef USE_TLS
+             // INCOMING SRTP PARAM CONTEXT
+             SrtpInfoParams pA;
+             SrtpInfoParams pV;
+@@ -4675,16 +4638,13 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
+             *pV.secondary_cryptokeyparams = 0;
+             pV.primary_unencrypted_srtp = false;
+             pV.secondary_unencrypted_srtp = false;
+-#endif // USE_TLS
+ 
+             host = extract_rtp_remote_addr(msg, ip_ver, audio_port, video_port);
+ 
+-#ifdef USE_TLS
+             if (extract_srtp_remote_info(msg, pA, pV) < 0) {
+                 WARNING("extract_rtp_remote_addr: error extracting SRTP parameters from SDP message body");
+                 return rejectCall();
+             }
+-#endif // USE_TLS
+ 
+             if ((audio_port==0) && (video_port==0)) {
+                 WARNING("extract_rtp_remote_addr: no m=audio or m=video or m=image line found in SDP message body");
+@@ -4692,7 +4652,6 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
+                 rtpstream_set_remote(&rtpstream_callinfo, ip_ver, host.c_str(), audio_port, video_port);
+             }
+ 
+-#ifdef USE_TLS
+             // PASS INCOMING SRTP PARAMETERS...
+             if (pA.found && (pA.primary_cryptotag != 0))
+             {
+@@ -5192,7 +5151,6 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
+                     }
+                 }
+             }
+-#endif // USE_TLS
+         } // ptr
+     } // Content-Type
+ 
+@@ -6181,7 +6139,6 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
+         } else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_PLAYAPATTERN) {
+             const char *fileName = createSendingMessage(currentAction->getMessage());
+             currentAction->setRTPStreamActInfo(fileName);
+-#ifdef USE_TLS
+             //
+             // TX/RX-UAC-AUDIO SRTP context (a)(b) -- SRTP PAYLOAD SIZE + DERIVE SESSION ENCRYPTION/SALTING/AUTHENTICATION KEYS + SELECT ENCRYPTION KEY + RESET CIPHER STATE
+             // WE ASSUME THE SAME CODEC PAYLOAD SIZE WILL BE USED IN BOTH DIRECTIONS
+@@ -6219,7 +6176,6 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
+             }
+ 
+             logSrtpInfo("call::executeAction():  rtpstream_playapattern\n");
+-#endif // USE_TLS
+             rtpstream_playapattern(&rtpstream_callinfo,currentAction->getRTPStreamActInfo(), _txUACAudio, _rxUACAudio);
+             // Obtain ID of parent thread used for the related RTP task
+             call_scenario->addRtpTaskThreadID(rtpstream_callinfo.threadID);
+@@ -6230,7 +6186,6 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
+         } else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_PLAYVPATTERN) {
+             const char *fileName = createSendingMessage(currentAction->getMessage());
+             currentAction->setRTPStreamActInfo(fileName);
+-#ifdef USE_TLS
+             //
+             // TX/RX-UAC-VIDEO SRTP context (a)(b) -- SRTP PAYLOAD SIZE + DERIVE SESSION ENCRYPTION/SALTING/AUTHENTICATION KEYS + SELECT ENCRYPTION KEY + RESET CIPHER STATE
+             // WE ASSUME THE SAME CODEC PAYLOAD SIZE WILL BE USED IN BOTH DIRECTIONS
+@@ -6268,12 +6223,10 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
+             }
+ 
+             logSrtpInfo("call::executeAction():  rtpstream_playvpattern\n");
+-#endif // USE_TLS
+             rtpstream_playvpattern(&rtpstream_callinfo,currentAction->getRTPStreamActInfo(), _txUACVideo, _rxUACVideo);
+             // Obtain ID of parent thread used for the related RTP task
+             call_scenario->addRtpTaskThreadID(rtpstream_callinfo.threadID);
+         } else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_RTPECHO_STARTAUDIO) {
+-#ifdef USE_TLS
+             if (sendMode == MODE_SERVER)
+             {
+                 //
+@@ -6321,10 +6274,8 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
+             }
+ 
+             logSrtpInfo("call::executeAction() [STARTAUDIO]:  rtpstream_rtpecho_startaudio\n");
+-#endif // USE_TLS
+             rtpstream_rtpecho_startaudio(&rtpstream_callinfo, _rxUASAudio, _txUASAudio);
+         } else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_RTPECHO_UPDATEAUDIO) {
+-#ifdef USE_TLS
+             if (sendMode == MODE_SERVER)
+             {
+                 //
+@@ -6372,22 +6323,16 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
+             }
+ 
+             logSrtpInfo("call::executeAction() [UPDATEAUDIO]:  rtpstream_rtpecho_updateaudio\n");
+-#endif // USE_TLS
+             rtpstream_rtpecho_updateaudio(&rtpstream_callinfo, _rxUASAudio, _txUASAudio);
+         } else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_RTPECHO_STOPAUDIO) {
+-#ifdef USE_TLS
+             logSrtpInfo("call::executeAction() [STOPAUDIO]:  rtpstream_rtpecho_stopaudio\n");
+-#endif // USE_TLS
+             rc = rtpstream_rtpecho_stopaudio(&rtpstream_callinfo);
+             if (rc < 0)
+             {
+-#ifdef USE_TLS
+                 logSrtpInfo("call::executeAction() [STOPAUDIO]:  rtpstream_rtpecho_stopaudio() rc==%d\n", rc);
+-#endif // USE_TLS
+                 return call::E_AR_RTPECHO_ERROR;
+             }
+         } else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_RTPECHO_STARTVIDEO) {
+-#ifdef USE_TLS
+             if (sendMode == MODE_SERVER)
+             {
+                 //
+@@ -6435,10 +6380,8 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
+             }
+ 
+             logSrtpInfo("call::executeAction() [STARTVIDEO]:  rtpstream_rtpecho_startvideo\n");
+-#endif // USE_TLS
+             rtpstream_rtpecho_startvideo(&rtpstream_callinfo, _rxUASVideo, _txUASVideo);
+         } else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_RTPECHO_UPDATEVIDEO) {
+-#ifdef USE_TLS
+             if (sendMode == MODE_SERVER)
+             {
+                 //
+@@ -6486,18 +6429,13 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
+             }
+ 
+             logSrtpInfo("call::executeAction() [UPDATEVIDEO]:  rtpstream_rtpecho_updatevideo\n");
+-#endif // USE_TLS
+             rtpstream_rtpecho_updatevideo(&rtpstream_callinfo, _rxUASVideo, _txUASVideo);
+         } else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_RTPECHO_STOPVIDEO) {
+-#ifdef USE_TLS
+             logSrtpInfo("call::executeAction() [STOPVIDEO]:  rtpstream_rtpecho_stopvideo\n");
+-#endif // USE_TLS
+             rc = rtpstream_rtpecho_stopvideo(&rtpstream_callinfo);
+             if (rc < 0)
+             {
+-#ifdef USE_TLS
+                 logSrtpInfo("call::executeAction() [STOPVIDEO]:  rtpstream_rtpecho_stopvideo() rc==%d\n", rc);
+-#endif // USE_TLS
+                 return call::E_AR_RTPECHO_ERROR;
+             }
+         } else {
+@@ -6806,7 +6744,6 @@ bool call::automaticResponseMode(T_AutoMode P_case, const char* P_recv)
+     return false;
+ }
+ 
+-#ifdef USE_TLS
+ int call::logSrtpInfo(const char *fmt, ...)
+ {
+     va_list args;
+@@ -6820,7 +6757,6 @@ int call::logSrtpInfo(const char *fmt, ...)
+ 
+     return 0;
+ }
+-#endif // USE_TLS
+ 
+ void call::setSessionState(SessionState state)
+ {
+diff --git a/src/message.cpp b/src/message.cpp
+index e139263..2e886de 100644
+--- a/src/message.cpp
++++ b/src/message.cpp
+@@ -60,7 +60,6 @@ struct KeywordMap SimpleKeywords[] = {
+     {"media_ip", E_Message_Media_IP },
+     {"rtpstream_audio_port", E_Message_RTPStream_Audio_Port },
+     {"rtpstream_video_port", E_Message_RTPStream_Video_Port },
+-#ifdef USE_TLS
+     {"cryptotag1audio", E_Message_CryptoTag1Audio },
+     {"cryptotag2audio", E_Message_CryptoTag2Audio },
+     {"cryptosuiteaescm128sha1801audio", E_Message_CryptoSuiteAesCm128Sha1801Audio },
+@@ -93,7 +92,6 @@ struct KeywordMap SimpleKeywords[] = {
+     {"ueaescm128sha1802video" , E_Message_UEAesCm128Sha1802Video },
+     {"ueaescm128sha1321video" , E_Message_UEAesCm128Sha1321Video },
+     {"ueaescm128sha1322video" , E_Message_UEAesCm128Sha1322Video },
+-#endif // USE_TLS
+     {"media_port", E_Message_Media_Port },
+     {"auto_media_port", E_Message_Auto_Media_Port },
+     {"media_ip_type", E_Message_Media_IP_Type },
+diff --git a/src/rtpstream.cpp b/src/rtpstream.cpp
+index ba23437..db984bb 100644
+--- a/src/rtpstream.cpp
++++ b/src/rtpstream.cpp
+@@ -132,7 +132,6 @@ FILE*         debugafile = nullptr;
+ FILE*         debugvfile = nullptr;
+ pthread_mutex_t  debugamutex = PTHREAD_MUTEX_INITIALIZER;
+ pthread_mutex_t  debugvmutex = PTHREAD_MUTEX_INITIALIZER;
+-#ifdef USE_TLS
+ FILE*         debuglsrtpafile = nullptr;
+ FILE*         debugrsrtpafile = nullptr;
+ pthread_mutex_t  debuglsrtpamutex = PTHREAD_MUTEX_INITIALIZER;
+@@ -141,7 +140,6 @@ FILE*         debuglsrtpvfile = nullptr;
+ FILE*         debugrsrtpvfile = nullptr;
+ pthread_mutex_t  debuglsrtpvmutex = PTHREAD_MUTEX_INITIALIZER;
+ pthread_mutex_t  debugrsrtpvmutex = PTHREAD_MUTEX_INITIALIZER;
+-#endif // USE_TLS
+ FILE*         debugrefileaudio = nullptr;
+ FILE*         debugrefilevideo = nullptr;
+ pthread_mutex_t  debugremutexaudio = PTHREAD_MUTEX_INITIALIZER;
+@@ -150,10 +148,8 @@ pthread_mutex_t  debugremutexvideo = PTHREAD_MUTEX_INITIALIZER;
+ // RTPSTREAM ECHO
+ pthread_t    pthread_audioecho_id;
+ pthread_t    pthread_videoecho_id;
+-#ifdef USE_TLS
+ static bool quit_audioecho_thread = false;
+ static bool quit_videoecho_thread = false;
+-#endif
+ pthread_mutex_t quit_mutexaudio = PTHREAD_MUTEX_INITIALIZER;
+ pthread_mutex_t quit_mutexvideo = PTHREAD_MUTEX_INITIALIZER;
+ pthread_cond_t quit_cvaudio = PTHREAD_COND_INITIALIZER;
+@@ -200,7 +196,6 @@ static unsigned long long getThreadId(pthread_t p)
+     return retVal;
+ }
+ 
+-#ifdef USE_TLS
+ static std::string build_rtpecho_filename(const char* mediaName)
+ {
+     std::ostringstream oss;
+@@ -214,7 +209,6 @@ static std::string build_rtpecho_filename(const char* mediaName)
+ 
+     return rtpecho_filename;
+ }
+-#endif // USE_TLS
+ 
+ void printAudioHexUS(char const* note, unsigned char const* string, unsigned int size, unsigned long long extrainfo, int moreinfo)
+ {
+@@ -320,7 +314,6 @@ void printVideoVector(char const* note, std::vector<unsigned long> const &v)
+     }
+ }
+ 
+-#ifdef USE_TLS
+ void printLocalAudioSrtpStuff(SrtpInfoParams &p)
+ {
+     if (debuglsrtpafile != nullptr)
+@@ -392,7 +385,6 @@ void printRemoteVideoSrtpStuff(SrtpInfoParams &p)
+         pthread_mutex_unlock(&debugrsrtpvmutex);
+     }
+ }
+-#endif // USE_TLS
+ 
+ int set_bit(unsigned long* context, int value)
+ {
+@@ -446,11 +438,9 @@ int clear_bit(unsigned long* context, int value)
+ static void rtpstream_free_taskinfo(taskentry_t* taskinfo)
+ {
+     if (taskinfo) {
+-#ifdef USE_TLS
+         /* audio SRTP echo activity indicators */
+         taskinfo->audio_srtp_echo_active = 0;
+         taskinfo->video_srtp_echo_active = 0;
+-#endif // USE_TLS
+ 
+         /* close sockets associated with this call */
+         if (taskinfo->audio_rtp_socket != -1) {
+@@ -499,11 +489,7 @@ static void rtpstream_process_task_flags(taskentry_t* taskinfo)
+             }
+ 
+             if (taskinfo->audio_rtp_socket != -1) {
+-#ifdef USE_TLS
+                 if (!taskinfo->audio_srtp_echo_active) {
+-#else // !USE_TLS
+-                if (1) {
+-#endif // USE_TLS
+                     rc = connect(taskinfo->audio_rtp_socket, (struct sockaddr *) & (taskinfo->remote_audio_rtp_addr), remote_addr_len);
+                     if (rc < 0) {
+                         debugprint("closing audio rtp socket %d due to error %d in rtpstream_process_task_flags taskinfo = %p\n",
+@@ -530,11 +516,7 @@ static void rtpstream_process_task_flags(taskentry_t* taskinfo)
+                 }
+             }
+             if (taskinfo->video_rtp_socket != -1) {
+-#ifdef USE_TLS
+                 if (!taskinfo->video_srtp_echo_active) {
+-#else // !USE_TLS
+-                if (1) {
+-#endif // USE_TLS
+                     rc = connect(taskinfo->video_rtp_socket, (struct sockaddr *) & (taskinfo->remote_video_rtp_addr), remote_addr_len);
+                     if (rc < 0) {
+                         debugprint("closing video rtp socket %d due to error %d in rtpstream_process_task_flags taskinfo = %p\n",
+@@ -638,10 +620,8 @@ static unsigned long rtpstream_playrtptask(taskentry_t* taskinfo,
+     unsigned int host_ssrc = 0;
+     unsigned int audio_in_size = 0;
+     unsigned int video_in_size = 0;
+-#ifdef USE_TLS
+     unsigned short audio_seq_in = 0;
+     unsigned short video_seq_in = 0;
+-#endif
+ 
+     union {
+         rtp_header_t hdr;
+@@ -720,7 +700,6 @@ static unsigned long rtpstream_playrtptask(taskentry_t* taskinfo,
+                 }
+ 
+                 pthread_mutex_lock(&uacAudioMutex);
+-#ifdef USE_TLS
+                 if (g_txUACAudio.getCryptoTag() != 0)
+                 {
+                     // GRAB RTP HEADER
+@@ -735,7 +714,6 @@ static unsigned long rtpstream_playrtptask(taskentry_t* taskinfo,
+                     printAudioHex("TXUACAUDIO -- processOutgoingPacket() rc == ", "", 0, rc, 0);
+                 }
+                 else
+-#endif // USE_TLS
+                 {
+                     // NOENCRYPTION
+                     audio_out.resize(sizeof(rtp_header_t) + taskinfo->audio_bytes_per_packet, 0);
+@@ -778,13 +756,11 @@ static unsigned long rtpstream_playrtptask(taskentry_t* taskinfo,
+                     {
+                         /* this is temp code - will have to reorganize if/when we include echo functionality */
+                         /* just keep listening on rtp socket (is this really required?) - ignore any errors */
+-#ifdef USE_TLS
+                         if (g_rxUACAudio.getCryptoTag() != 0)
+                         {
+                             audio_in_size = sizeof(rtp_header_t) + taskinfo->audio_bytes_per_packet + g_rxUACAudio.getAuthenticationTagSize();
+                         }
+                         else
+-#endif // USE_TLS
+                         {
+                             // NOENCRYPTION
+                             audio_in_size = sizeof(rtp_header_t) + taskinfo->audio_bytes_per_packet;
+@@ -798,7 +774,6 @@ static unsigned long rtpstream_playrtptask(taskentry_t* taskinfo,
+                             rtpstream_abytes_in += rc;
+                             printAudioHexUS("SIPP SUCCESS RECV LOG: ", audio_in.data(), audio_in.size(), rc, rtpstream_apckts);
+                         }
+-#ifdef USE_TLS
+                         if (g_rxUACAudio.getCryptoTag() != 0)
+                         {
+                             // DECRYPT
+@@ -832,7 +807,6 @@ static unsigned long rtpstream_playrtptask(taskentry_t* taskinfo,
+                             memcpy(udp_recv_audio.buffer + sizeof(rtp_header_t), payload_data.data(), payload_data.size());
+                         }
+                         else
+-#endif // USE_TLS
+                         {
+                             // NOENCRYPTION
+                             host_flags = ntohs(((rtp_header_t*)audio_in.data())->flags);
+@@ -970,7 +944,6 @@ static unsigned long rtpstream_playrtptask(taskentry_t* taskinfo,
+                 }
+ 
+                 pthread_mutex_lock(&uacVideoMutex);
+-#ifdef USE_TLS
+                 if (g_txUACVideo.getCryptoTag() != 0)
+                 {
+                     // GRAB RTP HEADER
+@@ -985,7 +958,6 @@ static unsigned long rtpstream_playrtptask(taskentry_t* taskinfo,
+                     printVideoHex("TXUACVIDEO -- processOutgoingPacket() rc == ", "", 0, rc, 0);
+                 }
+                 else
+-#endif // USE_TLS
+                 {
+                     // NOENCRYPTION
+                     video_out.resize(sizeof(rtp_header_t) + taskinfo->video_bytes_per_packet, 0);
+@@ -1028,13 +1000,11 @@ static unsigned long rtpstream_playrtptask(taskentry_t* taskinfo,
+                     {
+                         /* this is temp code - will have to reorganize if/when we include echo functionality */
+                         /* just keep listening on rtp socket (is this really required?) - ignore any errors */
+-#ifdef USE_TLS
+                         if (g_rxUACVideo.getCryptoTag() != 0)
+                         {
+                             video_in_size = sizeof(rtp_header_t) + taskinfo->video_bytes_per_packet + g_rxUACVideo.getAuthenticationTagSize();
+                         }
+                         else
+-#endif // USE_TLS
+                         {
+                             // NOENCRYPTION
+                             video_in_size = sizeof(rtp_header_t) + taskinfo->video_bytes_per_packet;
+@@ -1049,7 +1019,6 @@ static unsigned long rtpstream_playrtptask(taskentry_t* taskinfo,
+                             printVideoHexUS("SIPP SUCCESS RECV LOG: ", video_in.data(), video_in.size(), rc, rtpstream_vpckts);
+                         }
+ 
+-#ifdef USE_TLS
+                         if (g_rxUACVideo.getCryptoTag() != 0)
+                         {
+                             // DECRYPT
+@@ -1082,7 +1051,6 @@ static unsigned long rtpstream_playrtptask(taskentry_t* taskinfo,
+                             memcpy(udp_recv_video.buffer + sizeof(rtp_header_t), payload_data.data(), payload_data.size());
+                         }
+                         else
+-#endif // USE_TLS
+                         {
+                             // NOENCRYPTION
+                             host_flags = ntohs(((rtp_header_t*)video_in.data())->flags);
+@@ -1614,11 +1582,9 @@ int rtpstream_new_call(rtpstream_callinfo_t* callinfo)
+     taskinfo->video_rtp_socket = -1;
+     taskinfo->video_rtcp_socket = -1;
+ 
+-#ifdef USE_TLS
+     /* audio/video SRTP echo activity indicators */
+     taskinfo->audio_srtp_echo_active = 0;
+     taskinfo->video_srtp_echo_active = 0;
+-#endif // USE_TLS
+ 
+     /* rtp stream members */
+     taskinfo->audio_ssrc_id = global_ssrc_id++;
+@@ -2091,7 +2057,6 @@ void rtpstream_set_remote(rtpstream_callinfo_t* callinfo, int ip_ver, const char
+     /* only makes sense if we decide to send 0-filled packets on idle */
+ }
+ 
+-#ifdef USE_TLS
+ int rtpstream_set_srtp_audio_local(rtpstream_callinfo_t* callinfo, SrtpInfoParams &p)
+ {
+     taskentry_t               *taskinfo;
+@@ -2359,7 +2324,6 @@ int rtpstream_set_srtp_video_remote(rtpstream_callinfo_t* callinfo, SrtpInfoPara
+ 
+     return 0;
+ }
+-#endif // USE_TLS
+ 
+ static inline uint32_t uint_val(const char *ptr)
+ {
+@@ -2521,12 +2485,10 @@ void rtpstream_playapattern(rtpstream_callinfo_t* callinfo, rtpstream_actinfo_t*
+     /* set flag that we have a new file to play */
+     taskinfo->flags |= TI_PLAYAPATTERN;
+ 
+-#ifdef USE_TLS
+     pthread_mutex_lock(&uacAudioMutex);
+     g_txUACAudio = txUACAudio;
+     g_rxUACAudio = rxUACAudio;
+     pthread_mutex_unlock(&uacAudioMutex);
+-#endif // USE_TLS
+ }
+ 
+ void rtpstream_pauseapattern(rtpstream_callinfo_t* callinfo)
+@@ -2597,12 +2559,10 @@ void rtpstream_playvpattern(rtpstream_callinfo_t* callinfo, rtpstream_actinfo_t*
+     /* set flag that we have a new file to play */
+     taskinfo->flags |= TI_PLAYVPATTERN;
+ 
+-#ifdef USE_TLS
+     pthread_mutex_lock(&uacVideoMutex);
+     g_txUACVideo = txUACVideo;
+     g_rxUACVideo = rxUACVideo;
+     pthread_mutex_unlock(&uacVideoMutex);
+-#endif // USE_TLS
+ }
+ 
+ void rtpstream_pausevpattern(rtpstream_callinfo_t* callinfo)
+@@ -2626,7 +2586,6 @@ void rtpstream_resumevpattern(rtpstream_callinfo_t* callinfo)
+ void rtpstream_audioecho_thread(void* param)
+ {
+     int exit_code = 0;
+-#ifdef USE_TLS
+     my_unique_ptr<unsigned char[]> msg {
+         reinterpret_cast<unsigned char*>(malloc(media_bufsize)) };
+     ssize_t nr;
+@@ -2879,9 +2838,6 @@ void rtpstream_audioecho_thread(void* param)
+     {
+         exit_code = 0;
+     }
+-#else // !USE_TLS
+-    exit_code = 0; // dummy
+-#endif // USE_TLS
+ 
+     pthread_exit((void*) (intptr_t) exit_code);
+ }
+@@ -2889,7 +2845,6 @@ void rtpstream_audioecho_thread(void* param)
+ void rtpstream_videoecho_thread(void* param)
+ {
+     int exit_code = 0;
+-#ifdef USE_TLS
+     my_unique_ptr<unsigned char[]> msg {
+         reinterpret_cast<unsigned char*>(malloc(media_bufsize)) };
+     ssize_t nr;
+@@ -3141,9 +3096,6 @@ void rtpstream_videoecho_thread(void* param)
+     {
+         exit_code = 0;
+     }
+-#else // !USE_TLS
+-    exit_code = 0; // dummy
+-#endif // USE_TLS
+ 
+     pthread_exit((void*) (intptr_t) exit_code);
+ }
+@@ -3159,7 +3111,6 @@ int rtpstream_rtpecho_startaudio(rtpstream_callinfo_t* callinfo, JLSRTP& rxUASAu
+         return -1; /* no task data structure */
+     }
+ 
+-#ifdef USE_TLS
+     ParamPass p;
+ 
+     taskinfo->audio_srtp_echo_active = 1;
+@@ -3203,7 +3154,6 @@ int rtpstream_rtpecho_startaudio(rtpstream_callinfo_t* callinfo, JLSRTP& rxUASAu
+             return -7;
+         }
+     }
+-#endif // USE_TLS
+ 
+     return 0;
+ }
+@@ -3219,7 +3169,6 @@ int rtpstream_rtpecho_updateaudio(rtpstream_callinfo_t* callinfo, JLSRTP& rxUASA
+         return -1; /* no task data structure */
+     }
+ 
+-#ifdef USE_TLS
+     taskinfo->audio_srtp_echo_active = 1;
+ 
+     pthread_mutex_lock(&debugremutexaudio);
+@@ -3235,7 +3184,6 @@ int rtpstream_rtpecho_updateaudio(rtpstream_callinfo_t* callinfo, JLSRTP& rxUASA
+     g_rxUASAudio = rxUASAudio;
+     g_txUASAudio = txUASAudio;
+     pthread_mutex_unlock(&uasAudioMutex);
+-#endif // USE_TLS
+ 
+     return 0;
+ }
+@@ -3252,7 +3200,6 @@ int rtpstream_rtpecho_stopaudio(rtpstream_callinfo_t* callinfo)
+         return -1; /* no task data structure */
+     }
+ 
+-#ifdef USE_TLS
+     taskinfo->audio_srtp_echo_active = 0;
+ 
+     pthread_mutex_lock(&quit_mutexaudio);
+@@ -3314,9 +3261,6 @@ int rtpstream_rtpecho_stopaudio(rtpstream_callinfo_t* callinfo)
+         }
+     }
+     pthread_mutex_unlock(&debugremutexaudio);
+-#else // !USE_TLS
+-    r.i = 0; // dummy
+-#endif // USE_TLS
+ 
+     return r.i;
+ }
+@@ -3332,7 +3276,6 @@ int rtpstream_rtpecho_startvideo(rtpstream_callinfo_t* callinfo, JLSRTP& rxUASVi
+         return -1; /* no task data structure */
+     }
+ 
+-#ifdef USE_TLS
+     ParamPass p;
+ 
+     taskinfo->video_srtp_echo_active = 1;
+@@ -3376,7 +3319,6 @@ int rtpstream_rtpecho_startvideo(rtpstream_callinfo_t* callinfo, JLSRTP& rxUASVi
+             return -8;
+         }
+     }
+-#endif // USE_TLS
+ 
+     return 0;
+ }
+@@ -3392,7 +3334,6 @@ int rtpstream_rtpecho_updatevideo(rtpstream_callinfo_t* callinfo, JLSRTP& rxUASV
+         return -1; /* no task data structure */
+     }
+ 
+-#ifdef USE_TLS
+     taskinfo->video_srtp_echo_active = 1;
+ 
+     pthread_mutex_lock(&debugremutexvideo);
+@@ -3408,7 +3349,6 @@ int rtpstream_rtpecho_updatevideo(rtpstream_callinfo_t* callinfo, JLSRTP& rxUASV
+     g_rxUASVideo = rxUASVideo;
+     g_txUASVideo = txUASVideo;
+     pthread_mutex_unlock(&uasVideoMutex);
+-#endif // USE_TLS
+ 
+     return 0;
+ }
+@@ -3425,7 +3365,6 @@ int rtpstream_rtpecho_stopvideo(rtpstream_callinfo_t* callinfo)
+         return -1; /* no task data structure */
+     }
+ 
+-#ifdef USE_TLS
+     taskinfo->video_srtp_echo_active = 0;
+ 
+     pthread_mutex_lock(&quit_mutexvideo);
+@@ -3488,9 +3427,6 @@ int rtpstream_rtpecho_stopvideo(rtpstream_callinfo_t* callinfo)
+         }
+     }
+     pthread_mutex_unlock(&debugremutexvideo);
+-#else // !USE_TLS
+-    r.i = 0; // dummy
+-#endif // USE_TLS
+ 
+     return r.i;
+ }
+diff --git a/src/sipp.cpp b/src/sipp.cpp
+index 23b46e5..d2ccb06 100644
+--- a/src/sipp.cpp
++++ b/src/sipp.cpp
+@@ -92,7 +92,6 @@ struct sipp_option {
+ #define SIPP_OPTION_BOOL          10
+ #define SIPP_OPTION_VERSION       11
+ #define SIPP_OPTION_TRANSPORT     12
+-#define SIPP_OPTION_NEED_SSL      13
+ #define SIPP_OPTION_IP            14
+ #define SIPP_OPTION_MAX_SOCKET    15
+ #define SIPP_OPTION_CSEQ          16
+@@ -164,10 +163,8 @@ struct sipp_option options_table[] = {
+         "- ui: UDP with one socket per IP address. The IP addresses must be defined in the injection file.\n"
+         "- t1: TCP with one socket,\n"
+         "- tn: TCP with one socket per call,\n"
+-#ifdef USE_TLS
+         "- l1: TLS with one socket,\n"
+         "- ln: TLS with one socket per call,\n"
+-#endif
+ #ifdef USE_SCTP
+         "- s1: SCTP with one socket,\n"
+         "- sn: SCTP with one socket per call,\n"
+@@ -190,19 +187,11 @@ struct sipp_option options_table[] = {
+     {"reconnect_sleep", "How long (in milliseconds) to sleep between the close and reconnect?", SIPP_OPTION_TIME_MS, &reset_sleep, 1},
+     {"rsa", "Set the remote sending address to host:port for sending the messages.", SIPP_OPTION_RSA, nullptr, 1},
+ 
+-#ifdef USE_TLS
+     {"tls_cert", "Set the name for TLS Certificate file. Default is 'cacert.pem'", SIPP_OPTION_STRING, &tls_cert_name, 1},
+     {"tls_key", "Set the name for TLS Private Key file. Default is 'cakey.pem'", SIPP_OPTION_STRING, &tls_key_name, 1},
+     {"tls_ca", "Set the name for TLS CA file. If not specified, X509 verification is not activated.", SIPP_OPTION_STRING, &tls_ca_name, 1},
+     {"tls_crl", "Set the name for Certificate Revocation List file. If not specified, X509 CRL is not activated.", SIPP_OPTION_STRING, &tls_crl_name, 1},
+     {"tls_version", "Set the TLS protocol version to use (1.0, 1.1, 1.2, 1.3) -- default is autonegotiate", SIPP_OPTION_FLOAT, &tls_version, 1},
+-#else
+-    {"tls_cert", nullptr, SIPP_OPTION_NEED_SSL, nullptr, 1},
+-    {"tls_key", nullptr, SIPP_OPTION_NEED_SSL, nullptr, 1},
+-    {"tls_ca", nullptr, SIPP_OPTION_NEED_SSL, nullptr, 1},
+-    {"tls_crl", nullptr, SIPP_OPTION_NEED_SSL, nullptr, 1},
+-    {"tls_version", nullptr, SIPP_OPTION_NEED_SSL, nullptr, 1},
+-#endif
+ 
+ #ifdef USE_SCTP
+     {"multihome", "Set multihome address for SCTP", SIPP_OPTION_IP, multihome_ip, 1},
+@@ -300,9 +289,7 @@ struct sipp_option options_table[] = {
+     {"rtp_threadtasks", "RTP number of playback tasks per thread.", SIPP_OPTION_INT, &rtp_tasks_per_thread, 1},
+     {"rtp_buffsize", "Set the rtp socket send/receive buffer size.", SIPP_OPTION_INT, &rtp_buffsize, 1},
+     {"rtpcheck_debug", "Write RTP check debug information to file", SIPP_OPTION_SETFLAG, &rtpcheck_debug, 1},
+-#ifdef USE_TLS
+     {"srtpcheck_debug", "Write SRTP check debug information to file", SIPP_OPTION_SETFLAG, &srtpcheck_debug, 1},
+-#endif // USE_TLS
+     {"audiotolerance", "Audio error tolerance for RTP checks (0.0-1.0) -- default: 1.0", SIPP_OPTION_FLOAT, &audiotolerance, 1},
+     {"videotolerance", "Video error tolerance for RTP checks (0.0-1.0) -- default: 1.0", SIPP_OPTION_FLOAT, &videotolerance, 1},
+     {"random_base_ssrc", "Use a random base SSRC for RTP streams instead of default value 0xCA110000", SIPP_OPTION_SETFLAG, &random_base_ssrc, 1},
+@@ -1455,18 +1442,14 @@ int main(int argc, char *argv[])
+                 printf("\n %s.\n\n",
+                        /* SIPp v1.2.3-TLS-PCAP */
+                        "SIPp " SIPP_VERSION
+-#ifdef USE_TLS
+                        "-TLS"
+-#endif
+ #ifdef USE_SCTP
+                        "-SCTP"
+ #endif
+ #ifdef PCAPPLAY
+                        "-PCAP"
+ #endif
+-#ifdef USE_SHA256
+                        "-SHA256"
+-#endif
+                        );
+ 
+                 printf
+@@ -1633,15 +1616,11 @@ int main(int argc, char *argv[])
+ #endif
+                     break;
+                 case 'l':
+-#ifdef USE_TLS
+                     transport = T_TLS;
+                     if (TLS_init() != 1) {
+                         printf("TLS initialization problem\n");
+                         exit(-1);
+                     }
+-#else
+-                    ERROR("To use TLS transport you must compile SIPp with OpenSSL or WolfSSL");
+-#endif
+                     break;
+                 case 'c':
+                     if (strlen(comp_error)) {
+@@ -1673,10 +1652,6 @@ int main(int argc, char *argv[])
+                 CHECK_PASS();
+                 ERROR("SCTP support is required for the %s option.", argv[argi]);
+                 break;
+-            case SIPP_OPTION_NEED_SSL:
+-                CHECK_PASS();
+-                ERROR("TLS support is required for the %s option.", argv[argi]);
+-                break;
+             case SIPP_OPTION_MAX_SOCKET:
+                 REQUIRE_ARG();
+                 CHECK_PASS();
+@@ -2012,11 +1987,9 @@ int main(int argc, char *argv[])
+     }
+     scenario_file = main_scenario->getFileName().c_str();
+ 
+-#ifdef USE_TLS
+     if ((transport == T_TLS) && (TLS_init_context() != TLS_INIT_NORMAL)) {
+         ERROR("FI_init_ssl_context() failed");
+     }
+-#endif
+ 
+     if (useLogf == 1) {
+         rotate_logfile();
+diff --git a/src/socket.cpp b/src/socket.cpp
+index 27473f9..68ad034 100644
+--- a/src/socket.cpp
++++ b/src/socket.cpp
+@@ -1310,9 +1310,6 @@ static int socket_fd(bool use_ipv6, int transport)
+ #endif
+         break;
+     case T_TLS:
+-#ifndef USE_TLS
+-        ERROR("You do not have TLS support enabled!");
+-#endif
+     case T_TCP:
+         socket_type = SOCK_STREAM;
+         protocol = IPPROTO_TCP;

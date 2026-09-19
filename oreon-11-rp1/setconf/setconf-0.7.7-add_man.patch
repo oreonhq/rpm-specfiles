@@ -1,0 +1,18 @@
+From: Jan Macku <jamacku@redhat.com>
+Date: Tue, 7 Jul 2020 11:12:27 +0200
+Subject: [PATCH] setconf-0.7.7-add_man.patch
+diff --git a/setup.py b/setup.py
+index 7d2423a..218ec28 100644
+--- a/setup.py
++++ b/setup.py
+@@ -12,6 +12,7 @@ setup(name="setconf",
+       author_email="xyproto@archlinux.org",
+       license="GPLv2",
+       py_modules=["setconf"],
++      data_files = [("share/man/man1", ["./setconf.1"])],
+       entry_points={
+           "console_scripts": [
+               "setconf = setconf:main",
+-- 
+2.25.4
+

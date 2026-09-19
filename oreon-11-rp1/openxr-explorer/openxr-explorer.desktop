@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=OpenXR Explorer
+Comment=OpenXR explorer GUI
+Type=Application
+Exec=openxr-explorer
+Icon=openxr-explorer
+Terminal=false

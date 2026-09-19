@@ -1,0 +1,22 @@
+--- runtime/Clib/cwriter.c.orig	2025-01-26 23:54:39.000000000 -0700
++++ runtime/Clib/cwriter.c	2025-02-12 16:39:29.864978740 -0700
+@@ -17,7 +17,7 @@
+ /*---------------------------------------------------------------------*/
+ extern obj_t c_constant_string_to_string(char *c_string);
+ extern obj_t llong_to_string(BGL_LONGLONG_T x, long radix);
+-extern obj_t bgl_bignum_to_string(obj_t x, int radix);
++extern obj_t bgl_bignum_to_string(obj_t x, long radix);
+ extern obj_t bgl_write_obj(obj_t, obj_t);
+ extern obj_t bgl_display_obj(obj_t, obj_t);
+ extern obj_t bgl_write(obj_t, unsigned char *, size_t);
+--- runtime/Include/bigloo_pair.h.orig	2025-01-26 23:54:39.000000000 -0700
++++ runtime/Include/bigloo_pair.h	2025-02-12 15:56:08.058124375 -0700
+@@ -60,7 +60,7 @@ struct bgl_epair {
+    obj_t car;       
+    obj_t cdr;
+    /* extended header type */
+-#if ((BGL_GC == BGL_BOEHM_GC) && TAG_PAIR)
++#if (TAG_PAIR)
+    obj_t eheader;
+ #endif   
+    /* extended slot */

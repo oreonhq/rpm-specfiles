@@ -1,0 +1,117 @@
+--- a/CMakeLists.orig.txt	2018-05-05 15:35:52.000000000 +0200
++++ b/CMakeLists.txt	2018-05-05 16:58:07.622886840 +0200
+@@ -1,10 +1,16 @@
+ cmake_minimum_required(VERSION 3.16...4.0)
+ 
+-project( QwtPlot3D
++project( QwtPlot3D-qt6
+   VERSION 0.3.0
+   LANGUAGES CXX
+   )
+ 
++# Soname Version
++set(VERSION_MAJOR "0")
++set(VERSION_MINOR "3")
++set(VERSION_BugFix "0")
++set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BugFix})
++
+ set( CMAKE_CXX_STANDARD 17 )
+ set( CMAKE_CXX_STANDARD_REQUIRED TRUE )
+ set( CMAKE_CXX_EXTENSIONS OFF )
+@@ -105,30 +111,33 @@
+   )
+ configure_file( "include/qwt3d_version.h.in" "qwt3d_version.h" @ONLY )
+ 
+-add_library( qwtplot3d ${SRCS} ${HEADERS} )
++add_library( qwtplot3d-qt6 ${SRCS} ${HEADERS} )
+ 
+-target_link_libraries( qwtplot3d
++target_link_libraries( qwtplot3d-qt6
+   Qt${QT_VERSION_MAJOR}::Core
+   Qt${QT_VERSION_MAJOR}::Gui
+   OpenGL::GLU
+   )
+ 
+ if( QT_VERSION_MAJOR VERSION_GREATER_EQUAL 6 )
+-  target_link_libraries( qwtplot3d Qt${QT_VERSION_MAJOR}::OpenGLWidgets )
++  target_link_libraries( qwtplot3d-qt6 Qt${QT_VERSION_MAJOR}::OpenGLWidgets )
+ else()
+   target_link_libraries( qwtplot3d Qt${QT_VERSION_MAJOR}::OpenGL )
+ endif()
+ 
++set_target_properties(qwtplot3d-qt6 PROPERTIES
++  VERSION ${PROJECT_VERSION} SOVERSION ${VERSION_MAJOR}.${VERSION_MINOR}
++  )
+ 
+-target_include_directories( qwtplot3d PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} )
++target_include_directories( qwtplot3d-qt6 PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} )
+ 
+ if( NOT GL2PS_LIBRARY )
+   enable_language( C )
+   target_sources( qwtplot3d PRIVATE "3rdparty/gl2ps/gl2ps.c" "3rdparty/gl2ps/gl2ps.h" )
+   target_include_directories( qwtplot3d PRIVATE "3rdparty/gl2ps" )
+ else()
+-  target_link_libraries( qwtplot3d ${GL2PS_LIBRARY} )
+-  target_include_directories( qwtplot3d PRIVATE ${GL2PS_INCLUDE_DIR} )
++  target_link_libraries( qwtplot3d-qt6 ${GL2PS_LIBRARY} )
++  target_include_directories( qwtplot3d-qt6 PRIVATE ${GL2PS_INCLUDE_DIR} )
+ endif()
+ 
+ if( WIN32 AND BUILD_SHARED_LIBS )
+@@ -141,14 +150,14 @@
+ 
+ # Don't install qwtplot3d static library and headers if it is built as a subproject
+ if( "${CMAKE_SOURCE_DIR}" STREQUAL "${PROJECT_SOURCE_DIR}" )
+-  install( TARGETS qwtplot3d
++  install( TARGETS qwtplot3d-qt6
+     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qwtplot3d
+     )
+ elseif( BUILD_SHARED_LIBS )
+-  install( TARGETS qwtplot3d
++  install( TARGETS qwtplot3d-qt6
+     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     )
+--- a/examples/simpleplot/CMakeLists.orig.txt	2021-06-13 18:25:24.000000000 +0200
++++ b/examples/simpleplot/CMakeLists.txt	2021-06-22 19:04:58.324803684 +0200
+@@ -1,4 +1,4 @@
+ 
+ add_executable( simpleplot "simpleplot.cpp" ${RC_ICON} )
+ 
+-target_link_libraries( simpleplot qwtplot3d )
++target_link_libraries( simpleplot qwtplot3d-qt6 gl2ps)
+--- a/examples/axes/CMakeLists.orig.txt	2021-06-13 18:25:24.000000000 +0200
++++ b/examples/axes/CMakeLists.txt	2021-06-22 19:07:19.580661799 +0200
+@@ -18,4 +18,4 @@
+   ${RC_ICON}
+   )
+ 
+-target_link_libraries( axes qwtplot3d )
++target_link_libraries( axes qwtplot3d-qt6 gl2ps)
+--- a/examples/enrichments/CMakeLists.orig.txt	2021-06-13 18:25:24.000000000 +0200
++++ b/examples/enrichments/CMakeLists.txt	2021-06-22 19:08:50.273286609 +0200
+@@ -19,4 +19,4 @@
+   ${RC_ICON}
+   )
+ 
+-target_link_libraries( enrichments qwtplot3d )
++target_link_libraries( enrichments qwtplot3d-qt6 gl2ps)
+--- a/examples/autoswitch/CMakeLists.orig.txt	2021-06-13 18:25:24.000000000 +0200
++++ b/examples/autoswitch/CMakeLists.txt	2021-06-22 19:10:15.942987592 +0200
+@@ -1,4 +1,4 @@
+ 
+ add_executable( autoswitch "autoswitch.h" "autoswitch.cpp" ${RC_ICON} )
+ 
+-target_link_libraries( autoswitch qwtplot3d )
++target_link_libraries( autoswitch qwtplot3d-qt6 gl2ps)
+--- a/examples/mesh2/CMakeLists.orig.txt	2021-06-13 18:25:24.000000000 +0200
++++ b/examples/mesh2/CMakeLists.txt	2021-06-22 19:11:55.998470419 +0200
+@@ -28,4 +28,4 @@
+   ${RC_ICON}
+   )
+ 
+-target_link_libraries( mesh2 qwtplot3d )
++target_link_libraries( mesh2 qwtplot3d-qt6 gl2ps)

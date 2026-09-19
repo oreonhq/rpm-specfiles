@@ -1,0 +1,71 @@
+From 7f9162613fd33ae13f2c9287fad0d0ca1e5b0ce3 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Mon, 8 Apr 2024 11:59:43 +0100
+Subject: [PATCH 5/7] install in libdir
+
+---
+ cmake/ConfigureSummary.cmake | 2 +-
+ libnestutil/config.h.in      | 2 +-
+ nest/CMakeLists.txt          | 4 ++--
+ sli/CMakeLists.txt           | 4 ++--
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/cmake/ConfigureSummary.cmake b/cmake/ConfigureSummary.cmake
+index b699d06c0..831aa65ec 100644
+--- a/cmake/ConfigureSummary.cmake
++++ b/cmake/ConfigureSummary.cmake
+@@ -230,7 +230,7 @@ function( NEST_PRINT_CONFIG_SUMMARY )
+   message( "  ${CMAKE_INSTALL_FULL_BINDIR}/" )
+   message( "" )
+   message( "NEST dynamic libraries and user modules will be installed to:" )
+-  message( "  ${CMAKE_INSTALL_FULL_LIBDIR}/nest/" )
++  message( "  ${CMAKE_INSTALL_FULL_LIBDIR}/" )
+   message( "" )
+   if ( BUILD_DOCS )
+     message( "Documentation and examples will be installed to:" )
+diff --git a/libnestutil/config.h.in b/libnestutil/config.h.in
+index 08b425156..ff112908f 100644
+--- a/libnestutil/config.h.in
++++ b/libnestutil/config.h.in
+@@ -43,7 +43,7 @@
+ #define NEST_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@"
+ #define NEST_INSTALL_DATADIR "@CMAKE_INSTALL_DATADIR@"
+ #define NEST_INSTALL_DOCDIR "@CMAKE_INSTALL_DOCDIR@"
+-#define NEST_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@/nest"
++#define NEST_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@"
+ 
+ #define MPIEXEC "@MPIEXEC@"
+ #define MPIEXEC_NUMPROC_FLAG "@MPIEXEC_NUMPROC_FLAG@"
+diff --git a/nest/CMakeLists.txt b/nest/CMakeLists.txt
+index 7a21c573c..f3b534ba9 100644
+--- a/nest/CMakeLists.txt
++++ b/nest/CMakeLists.txt
+@@ -95,8 +95,8 @@ if ( HAVE_PYTHON )
+ endif ()
+ 
+ install( TARGETS nest nest_lib
+-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/nest
+-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/nest
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+     )
+ 
+diff --git a/sli/CMakeLists.txt b/sli/CMakeLists.txt
+index 38391d062..4ee036195 100644
+--- a/sli/CMakeLists.txt
++++ b/sli/CMakeLists.txt
+@@ -138,8 +138,8 @@ target_include_directories( sli_readline PRIVATE
+     )
+ 
+ install( TARGETS sli_readline sli_lib sli
+-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/nest
+-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/nest
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+     )
+ 
+-- 
+2.44.0
+

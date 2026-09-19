@@ -1,0 +1,17 @@
+diff --git a/rtlsdr_scanner/misc.py b/rtlsdr_scanner/misc.py
+index adb2534..6acdeb1 100644
+--- a/rtlsdr_scanner/misc.py
++++ b/rtlsdr_scanner/misc.py
+@@ -78,11 +78,7 @@ class RemoteControl(object):
+ 
+ 
+ def get_resource(resource):
+-    if not hasattr(sys, 'frozen'):
+-        return pkg_resources.resource_filename('rtlsdr_scanner.res',
+-                                               resource)
+-    else:
+-        return os.path.join(sys._MEIPASS, 'res', resource)
++    return os.path.join('/usr/share/rtlsdr-scanner/res', resource)
+ 
+ 
+ def limit(value, minimum, maximum):

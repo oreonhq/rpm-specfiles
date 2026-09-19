@@ -1,0 +1,5 @@
+In the source distribution of Mine Detector 5.0 there was a license file
+included. This file was left out from version 6.0 by mistake. The file
+license.txt in this package is the license file from version 5.0, as suggested
+by the author, Jeffrey R. Carter. The file license_clarification.mbox contains
+the relevant email conversation.

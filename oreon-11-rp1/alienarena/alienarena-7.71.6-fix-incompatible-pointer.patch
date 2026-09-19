@@ -1,0 +1,99 @@
+diff -up alienarena-7.71.6/source/client/menu.c.fix-incompatible-pointer alienarena-7.71.6/source/client/menu.c
+--- alienarena-7.71.6/source/client/menu.c.fix-incompatible-pointer	2024-01-25 09:33:37.000000000 -0500
++++ alienarena-7.71.6/source/client/menu.c	2024-01-25 12:02:14.309977687 -0500
+@@ -4213,7 +4213,7 @@ static void ServerInfo_SubmenuInit (void
+ 	s_servers[serverindex].serverinfo_columns[0][1].generic.type		= MTYPE_TEXT;
+ 	s_servers[serverindex].serverinfo_columns[0][1].generic.flags	= QMF_RIGHT_COLUMN;
+ 	
+-	Menu_MakeTable (&s_servers[serverindex].serverinfo_table, rows, 2, sizes, s_servers[serverindex].serverinfo_rows, s_servers[serverindex].serverinfo_rows, s_servers[serverindex].serverinfo_columns, contents);
++	Menu_MakeTable (&s_servers[serverindex].serverinfo_table, rows, 2, sizes, s_servers[serverindex].serverinfo_rows, s_servers[serverindex].serverinfo_rows, s_servers[serverindex].serverinfo_columns, (const char **) contents);
+ 	
+ 	Menu_AddItem (&s_servers[serverindex].serverinfo_submenu, &s_servers[serverindex].serverinfo_table);
+ 	
+@@ -4312,7 +4312,7 @@ static void PlayerList_SubmenuInit (void
+ 						mservers[serverindex].players, SVDATA_PLAYERINFO,
+ 						sizes, &s_servers[serverindex].playerlist_header,
+ 						s_servers[serverindex].playerlist_rows, s_servers[serverindex].playerlist_columns,
+-						local_player_info_ptrs
++						(const char **) local_player_info_ptrs
+ 					);
+ 	
+ 	Menu_AddItem (&s_servers[serverindex].playerlist_submenu, &s_servers[serverindex].playerlist_scrollingmenu);
+@@ -7058,7 +7058,7 @@ static void Slider_CheckSlide (menuslide
+ 		s->curvalue = s->minvalue;
+ 
+ 	//TO DO - this generates a scary warning - incompatible menuslider_s vs menuitem_s * - there are several similar instances in the menu code.
+-	Menu_ActivateItem (s);
++	Menu_ActivateItem ((menuitem_s *)s);
+ }
+ 
+ static void Menu_DragSlideItem (void)
+diff -up alienarena-7.71.6/source/client/qmenu.c.fix-incompatible-pointer alienarena-7.71.6/source/client/qmenu.c
+--- alienarena-7.71.6/source/client/qmenu.c.fix-incompatible-pointer	2024-01-25 12:02:32.568252225 -0500
++++ alienarena-7.71.6/source/client/qmenu.c	2024-01-25 12:07:28.102695945 -0500
+@@ -173,7 +173,7 @@ void Field_Draw (menufield_s *f, FNT_fon
+ 	menu_box.width = f->generic.visible_length*font->width;
+ 	FNT_BoundedPrint (font, f->buffer, FNT_CMODE_QUAKE_SRS, FNT_ALIGN_LEFT, &menu_box, light_color);
+ 	
+-	if ( cursor.menuitem == f )
++	if ( cursor.menuitem == (menuitem_s *) f )
+ 	{
+ 		if ( ( ( int ) ( Sys_Milliseconds() / 300 ) ) & 1 )
+ 			Draw_StretchPic (menu_box.x + before_cursor_width - font->size / 4, menu_box.y-1, font->size, font->size+4, "menu/field_cursor");
+@@ -185,7 +185,7 @@ qboolean Field_Key (int key)
+ 	menufield_s *f;
+ 	extern int keydown[];
+ 	
+-	f = cursor.menuitem;
++	f = (menufield_s *) cursor.menuitem;
+ 	
+ 	if (f == NULL || f->generic.type != MTYPE_FIELD)
+ 		return false;
+@@ -1001,7 +1001,7 @@ void Menu_AssignCursor (menuframework_s
+ 	if (menu->maxheight != 0 && CHASELINK(menu->height) > menu->maxheight && cursor.x > right)
+ 	{
+ 		// select the scrollbar
+-		item = &menu->vertical_scrollbar;
++		item = (menuitem_s *) &menu->vertical_scrollbar;
+ 		Cursor_MouseSelectItem (item);
+ 	}
+ 	else for ( i = 0; i < menu->nitems; i++ )
+@@ -1464,7 +1464,7 @@ void Menu_SetStatusBar( menuframework_s
+ 
+ void Menu_SlideItem (int dir)
+ {
+-	menucommon_s *item = cursor.menuitem;
++	menucommon_s *item = (menucommon_s *) cursor.menuitem;
+ 	
+ 	if ( item )
+ 	{
+@@ -1512,7 +1512,7 @@ void Slider_DoSlide( menuslider_s *s, in
+ 	else if ( s->curvalue < s->minvalue )
+ 		s->curvalue = s->minvalue;
+ 
+-	Menu_ActivateItem (s);
++	Menu_ActivateItem ((menuitem_s *) s);
+ }
+ 
+ void Slider_Draw (menuslider_s *s, FNT_font_t font)
+@@ -1571,7 +1571,7 @@ void SpinControl_DoSlide( menulist_s *s,
+ 			s->curvalue--;
+ 	}
+ 
+-	Menu_ActivateItem (s);
++	Menu_ActivateItem ((menuitem_s *) s);
+ }
+ 
+ void SpinControl_Draw (menulist_s *s, FNT_font_t font)
+diff -up alienarena-7.71.6/source/unix/minizip/zip.c.fix-incompatible-pointer alienarena-7.71.6/source/unix/minizip/zip.c
+--- alienarena-7.71.6/source/unix/minizip/zip.c.fix-incompatible-pointer	2024-01-25 09:33:39.000000000 -0500
++++ alienarena-7.71.6/source/unix/minizip/zip.c	2024-01-25 12:02:14.310977702 -0500
+@@ -1245,7 +1245,7 @@ extern int ZEXPORT zipOpenNewFileInZip4_
+         unsigned char bufHead[RAND_HEAD_LEN];
+         unsigned int sizeHead;
+         zi->ci.encrypt = 1;
+-        zi->ci.pcrc_32_tab = get_crc_table();
++        zi->ci.pcrc_32_tab = (const unsigned long*)get_crc_table();
+         /*init_keys(password,zi->ci.keys,zi->ci.pcrc_32_tab);*/
+ 
+         sizeHead=crypthead(password,bufHead,RAND_HEAD_LEN,zi->ci.keys,zi->ci.pcrc_32_tab,crcForCrypting);

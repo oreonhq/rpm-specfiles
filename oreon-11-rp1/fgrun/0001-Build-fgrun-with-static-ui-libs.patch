@@ -1,0 +1,29 @@
+From b0ad470491f24cc9ab92e853e20258c2556ceb2e Mon Sep 17 00:00:00 2001
+From: Fabrice Bellet <fabrice@bellet.info>
+Date: Sun, 22 Sep 2013 12:50:32 +0200
+Subject: [PATCH] Build fgrun with static ui libs
+
+---
+ src/CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 8d51267..31da426 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -12,10 +12,10 @@ if (MSVC)
+ endif (MSVC)
+ 
+ FLTK_WRAP_UI(Wizard wizard.fl)
+-add_library(Wizard ${Wizard_FLTK_UI_SRCS})
++add_library(Wizard STATIC ${Wizard_FLTK_UI_SRCS})
+ 
+ FLTK_WRAP_UI(Advanced advanced.fl)
+-add_library(Advanced ${Advanced_FLTK_UI_SRCS})
++add_library(Advanced STATIC ${Advanced_FLTK_UI_SRCS})
+ 
+ set( ui_libs_1_3 Wizard Advanced )
+ 
+-- 
+2.5.0
+

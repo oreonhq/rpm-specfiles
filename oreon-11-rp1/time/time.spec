@@ -4,8 +4,8 @@
 
 Summary:    A GNU utility for monitoring a program's use of system resources
 Name:       time
-Version:    1.9
-Release:    28%{?dist}
+Version:    1.10
+Release:    1%{?dist}
 # src/time.c:               GPL-3.0-or-later
 # COPYING:                  GPL-3.0 text
 # doc/time.texi:            GFDL-1.3-no-invariants-or-later

@@ -1,0 +1,264 @@
+diff -up ./allocator.c.copyright ./allocator.c
+--- ./allocator.c.copyright	2015-08-27 15:28:48.314863563 -0400
++++ ./allocator.c	2015-08-27 15:29:27.052991749 -0400
+@@ -17,8 +17,8 @@
+  *
+  * You should have received a copy of the GNU Library General Public
+  * License along with this library; if not, write to the
+- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+- * Boston, MA 02111-1307, USA.
++ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
+  */
+ 
+ #include <allocator.h>
+diff -up ./allocator.h.copyright ./allocator.h
+--- ./allocator.h.copyright	2015-08-27 15:32:30.348333542 -0400
++++ ./allocator.h	2015-08-27 15:33:07.275409711 -0400
+@@ -17,8 +17,8 @@
+  *
+  * You should have received a copy of the GNU Library General Public
+  * License along with this library; if not, write to the
+- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+- * Boston, MA 02111-1307, USA.
++ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
++ * Boston, MA 02111-1301, USA.
+  */
+ 
+ #ifndef __ALLOCATOR_H__
+diff -up ./getopt1.c.copyright ./getopt1.c
+--- ./getopt1.c.copyright	2015-08-27 15:33:45.347519249 -0400
++++ ./getopt1.c	2015-08-27 15:35:31.535613898 -0400
+@@ -14,7 +14,7 @@
+ 
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+-   Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
++   Foundation, 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.  */
+ 
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+diff -up ./getopt.c.copyright ./getopt.c
+--- ./getopt.c.copyright	2015-08-27 15:35:59.896440420 -0400
++++ ./getopt.c	2015-08-27 15:36:03.872556297 -0400
+@@ -18,7 +18,7 @@
+ 
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+-   Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
++   Foundation, 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.  */
+ 
+ /* This tells Alpha OSF/1 not to define a getopt prototype in <stdio.h>.
+    Ditto for AIX 3.2 and <stdlib.h>.  */
+diff -up ./getopt.h.copyright ./getopt.h
+--- ./getopt.h.copyright	2015-08-27 15:36:34.441447168 -0400
++++ ./getopt.h	2015-08-27 15:36:38.598568320 -0400
+@@ -13,7 +13,7 @@
+ 
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+-   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
++   Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.  */
+ 
+ #ifndef _GETOPT_H
+ #define _GETOPT_H 1
+diff -up ./lispreader.c.copyright ./lispreader.c
+--- ./lispreader.c.copyright	2015-08-27 15:37:12.900567986 -0400
++++ ./lispreader.c	2015-08-27 15:37:55.279803048 -0400
+@@ -15,8 +15,8 @@
+  *
+  * You should have received a copy of the GNU Library General Public
+  * License along with this library; if not, write to the
+- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+- * Boston, MA 02111-1307, USA.
++ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
++ * MA 02110-1301, USA.
+  */
+ 
+ #include <sys/types.h>
+diff -up ./lispreader.h.copyright ./lispreader.h
+--- ./lispreader.h.copyright	2015-08-27 15:46:52.908469174 -0400
++++ ./lispreader.h	2015-08-27 15:47:24.619391744 -0400
+@@ -15,8 +15,8 @@
+  *
+  * You should have received a copy of the GNU Library General Public
+  * License along with this library; if not, write to the
+- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+- * Boston, MA 02111-1307, USA.
++ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, 
++ * Boston, MA 02110-1301, USA.
+  */
+ 
+ #ifndef __LISPREADER_H__
+diff -up ./metapixel.h.copyright ./metapixel.h
+--- ./metapixel.h.copyright	2015-08-27 15:50:33.420884583 -0400
++++ ./metapixel.h	2015-08-27 15:51:01.207692991 -0400
+@@ -17,7 +17,8 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
+  */
+ 
+ #ifndef __METAPIXEL_H__
+diff -up ./pools.h.copyright ./pools.h
+--- ./pools.h.copyright	2015-08-27 15:52:16.330878564 -0400
++++ ./pools.h	2015-08-27 15:52:38.838533384 -0400
+@@ -17,7 +17,8 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
+  */
+ 
+ #ifndef __POOLS_H__
+diff -up ./rwimg/readimage.c.copyright ./rwimg/readimage.c
+--- ./rwimg/readimage.c.copyright	2015-08-27 15:57:22.857796412 -0400
++++ ./rwimg/readimage.c	2015-08-27 15:57:22.859796470 -0400
+@@ -20,7 +20,7 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
+ #include <stdio.h>
+diff -up ./rwimg/readimage.h.copyright ./rwimg/readimage.h
+--- ./rwimg/readimage.h.copyright	2015-08-27 15:57:22.860796499 -0400
++++ ./rwimg/readimage.h	2015-08-27 15:57:22.862796557 -0400
+@@ -19,7 +19,7 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
+ #ifndef __READIMAGE_H__
+diff -up ./rwimg/rwgif.c.copyright ./rwimg/rwgif.c
+--- ./rwimg/rwgif.c.copyright	2015-08-27 15:57:22.891797401 -0400
++++ ./rwimg/rwgif.c	2015-08-27 15:57:22.893797459 -0400
+@@ -19,7 +19,7 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
+ #include <stdio.h>
+diff -up ./rwimg/rwgif.h.copyright ./rwimg/rwgif.h
+--- ./rwimg/rwgif.h.copyright	2015-08-27 15:57:22.894797488 -0400
++++ ./rwimg/rwgif.h	2015-08-27 15:57:22.895797517 -0400
+@@ -19,7 +19,7 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
+ #ifndef __RWGIF_H__
+diff -up ./rwimg/rwjpeg.c.copyright ./rwimg/rwjpeg.c
+--- ./rwimg/rwjpeg.c.copyright	2015-08-27 15:57:22.896797546 -0400
++++ ./rwimg/rwjpeg.c	2015-08-27 15:57:22.898797604 -0400
+@@ -20,7 +20,7 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
+ #include <stdio.h>
+diff -up ./rwimg/rwjpeg.h.copyright ./rwimg/rwjpeg.h
+--- ./rwimg/rwjpeg.h.copyright	2015-08-27 15:57:22.899797633 -0400
++++ ./rwimg/rwjpeg.h	2015-08-27 15:57:22.900797663 -0400
+@@ -20,7 +20,7 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
+ #ifndef __RWJPEG_H__
+diff -up ./rwimg/rwpng.c.copyright ./rwimg/rwpng.c
+--- ./rwimg/rwpng.c.copyright	2015-08-27 15:57:22.901797692 -0400
++++ ./rwimg/rwpng.c	2015-08-27 15:57:22.903797750 -0400
+@@ -19,7 +19,7 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
+ #include <assert.h>
+diff -up ./rwimg/rwpng.h.copyright ./rwimg/rwpng.h
+--- ./rwimg/rwpng.h.copyright	2015-08-27 15:57:22.911797983 -0400
++++ ./rwimg/rwpng.h	2015-08-27 15:57:22.912798012 -0400
+@@ -19,7 +19,7 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
+ #ifndef __RWPNG_H__
+diff -up ./rwimg/writeimage.c.copyright ./rwimg/writeimage.c
+--- ./rwimg/writeimage.c.copyright	2015-08-27 15:57:22.921798274 -0400
++++ ./rwimg/writeimage.c	2015-08-27 15:57:22.922798303 -0400
+@@ -20,7 +20,7 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
+ #include <assert.h>
+diff -up ./rwimg/writeimage.h.copyright ./rwimg/writeimage.h
+--- ./rwimg/writeimage.h.copyright	2015-08-27 15:57:22.924798361 -0400
++++ ./rwimg/writeimage.h	2015-08-27 15:57:22.925798390 -0400
+@@ -19,7 +19,7 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
+ #ifndef __WRITEIMAGE_H__
+diff -up ./vector.h.copyright ./vector.h
+--- ./vector.h.copyright	2015-08-27 15:52:54.911000983 -0400
++++ ./vector.h	2015-08-27 15:53:19.535717395 -0400
+@@ -19,7 +19,8 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
+  */
+ 
+ typedef struct _Vector2D
+diff -up ./zoom.h.copyright ./zoom.h
+--- ./zoom.h.copyright	2015-08-27 15:53:36.123199978 -0400
++++ ./zoom.h	2015-08-27 15:53:55.170754132 -0400
+@@ -19,7 +19,8 @@
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ * Foundation, Inc., 51 Franklin St, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
+  */
+ 
+ #ifndef __ZOOM_H__

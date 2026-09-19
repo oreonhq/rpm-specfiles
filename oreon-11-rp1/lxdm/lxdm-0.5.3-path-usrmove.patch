@@ -1,0 +1,11 @@
+--- lxdm-0.5.3-D20220831git2d4ba970/src/lxdm.c.usrmove	2022-09-11 14:38:34.000000000 +0900
++++ lxdm-0.5.3-D20220831git2d4ba970/src/lxdm.c	2024-08-26 05:36:58.788395189 +0900
+@@ -1482,7 +1482,7 @@ void lxdm_do_login(struct passwd *pw, ch
+ 	if( G_UNLIKELY(path) && path[0] ) /* if PATH is specified in config file */
+ 		env=g_environ_setenv(env, "PATH", path, TRUE); /* override current $PATH with config value */
+ 	else /* don't use the global env, they are bad for user */
+-		env=g_environ_setenv(env, "PATH", "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin", TRUE); /* set proper default */
++		env=g_environ_setenv(env, "PATH", "/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin", TRUE); /* set proper default */
+ 	g_free(path);
+ 	/* optionally override $LANG, $LC_MESSAGES, and $LANGUAGE */
+ 	if( lang && lang[0] )

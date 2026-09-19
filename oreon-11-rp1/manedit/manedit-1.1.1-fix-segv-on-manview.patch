@@ -1,0 +1,24 @@
+--- manedit-1.1.1/manedit/viewer.c.debug	2008-06-17 15:00:00.000000000 +0900
++++ manedit-1.1.1/manedit/viewer.c	2008-06-30 17:17:43.000000000 +0900
+@@ -569,7 +569,11 @@
+ 
+ 	/* Get the list of child objects in this directory */
+ 	names_list = GetDirEntNames(path);
+-	for(i = 0; names_list[i] != NULL; i++)
++	/*
++	names_list may return NULL, for example when user has no
++	right to access path
++	*/
++	for(i = 0; names_list && names_list[i]; i++)
+ 	{
+ 	    name = names_list[i];
+ 
+@@ -822,7 +826,7 @@
+ 	    names_list = StringQSort(names_list, npaths);
+ 
+ 	    /* Iterate through each child */
+-	    for(i = 0; names_list[i] != NULL; i++)
++	    for(i = 0; names_list && names_list[i]; i++)
+ 	    {
+ 		name = names_list[i];
+ 

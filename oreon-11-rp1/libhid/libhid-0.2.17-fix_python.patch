@@ -1,0 +1,23 @@
+diff -up libhid-0.2.17/swig/Makefile.am.orig libhid-0.2.17/swig/Makefile.am
+--- libhid-0.2.17/swig/Makefile.am.orig	2013-01-20 23:18:01.309944623 -0600
++++ libhid-0.2.17/swig/Makefile.am	2013-01-20 23:18:18.407037572 -0600
+@@ -9,7 +9,7 @@ SWIG_INC = -I$(top_srcdir)/include
+ 
+ # swig produces crap code :)
+ ### Remove "-Werror" from CFLAGS for the wrapper:
+-override CFLAGS := $(subst -Werror,,$(CFLAGS))
++override CFLAGS := $(echo $(CFLAGS) | sed -r 's/-Werror\s|-Werror$//g')
+ 
+ dist_noinst_DATA = hid.i
+ 
+@@ -19,8 +19,8 @@ nodist__hid_la_SOURCES = hid_wrap.c
+ _hid_la_LIBADD = ../src/libhid.la
+ _hid_la_LDFLAGS = -module $(PYTHON_LDFLAGS)
+ 
+-nodist_pkgpython_PYTHON = __init__.py
+-pkgpython_PYTHON = hid.py hidwrap.py hid_ctypes.py
++nodist_pkgpyexec_PYTHON = __init__.py
++pkgpyexec_PYTHON = hid.py hidwrap.py hid_ctypes.py
+ 
+ EXTRA_DIST = README
+ 

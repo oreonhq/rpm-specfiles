@@ -1,0 +1,28 @@
+diff -up ./src/SpdxLicenses.php.rpm ./src/SpdxLicenses.php
+--- ./src/SpdxLicenses.php.rpm	2021-11-18 13:15:53.000000000 +0100
++++ ./src/SpdxLicenses.php	2021-11-18 13:22:10.402686746 +0100
+@@ -213,7 +213,7 @@ class SpdxLicenses
+      */
+     public static function getResourcesDir()
+     {
+-        return dirname(__DIR__) . '/res';
++        return (getenv('BUILDROOT_SPDX')?:'') . '/usr/share/php-composer-spdx-licenses';
+     }
+ 
+     /**
+diff -up ./tests/SpdxLicensesTest.php.rpm ./tests/SpdxLicensesTest.php
+--- ./tests/SpdxLicensesTest.php.rpm	2021-11-18 13:15:53.000000000 +0100
++++ ./tests/SpdxLicensesTest.php	2021-11-18 13:21:44.972772614 +0100
+@@ -75,12 +75,6 @@ class SpdxLicensesTest extends TestCase
+             is_dir($dir),
+             'Expected resources directory to exist.'
+         );
+-
+-        $this->assertEquals(
+-            realpath($dir),
+-            realpath(__DIR__ . '/../res'),
+-            'Expected resources directory to be "res" (relative to project root).'
+-        );
+     }
+ 
+     /**

@@ -1,0 +1,11 @@
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.hosttarget mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.hosttarget	2017-07-12 10:42:42.055130656 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs	2017-07-12 10:43:20.485192470 -0400
+@@ -120,6 +120,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+             FullName = Native.Utf8toString(fullname);
+             this.port = (ushort)IPAddress.NetworkToHostOrder((short)port);
+             TxtRecord = new TxtRecord(txtLen, txtRecord);
++            this.hosttarget = hosttarget;
+ 
+             sdRef.Deallocate();
+             

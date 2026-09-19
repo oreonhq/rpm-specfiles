@@ -1,0 +1,115 @@
+diff -up openoffice-python-0.1-20110209/openoffice/config.py.bak openoffice-python-0.1-20110209/openoffice/config.py
+--- openoffice-python-0.1-20110209/openoffice/config.py.bak	2008-06-10 17:43:05.000000000 +0200
++++ openoffice-python-0.1-20110209/openoffice/config.py	2024-06-14 15:22:05.868499002 +0200
+@@ -62,10 +62,10 @@ def getConfigAccess(nodePath, writeAcces
+ 
+ 
+ if __name__ == '__main__':
+-    print '-- AddonUI --'
++    print('-- AddonUI --')
+     cfg = getConfigAccess("/org.openoffice.Office.Addons/AddonUI")
+     for name in cfg.ElementNames:
+-        print name #, cfg.getByName(name)
++        print(name) #, cfg.getByName(name)
+         #print
+     elem = cfg.getByName("AddonMenu")
+     #import pyXray
+@@ -80,12 +80,12 @@ if __name__ == '__main__':
+         
+     #for name in elem.getElementNames():
+ 
+-    print '-- Some user data --'
++    print('-- Some user data --')
+     cfg = getConfigAccess("/org.openoffice.UserProfile/Data")
+-    print 'Organisation', cfg.o
+-    print 'Firstname', cfg.givenname
+-    print 'Lastname', cfg.sn
+-    print 'Initials', cfg.initials
+-    print 'Title', cfg.title
+-    print 'Position', cfg.position
+-    print 'Email', cfg.mail
++    print('Organisation', cfg.o)
++    print('Firstname', cfg.givenname)
++    print('Lastname', cfg.sn)
++    print('Initials', cfg.initials)
++    print('Title', cfg.title)
++    print('Position', cfg.position)
++    print('Email', cfg.mail)
+diff -up openoffice-python-0.1-20110209/openoffice/dialogs.py.bak openoffice-python-0.1-20110209/openoffice/dialogs.py
+--- openoffice-python-0.1-20110209/openoffice/dialogs.py.bak	2008-06-10 18:07:51.000000000 +0200
++++ openoffice-python-0.1-20110209/openoffice/dialogs.py	2024-06-14 15:22:06.128466900 +0200
+@@ -451,7 +451,7 @@ def Test1():
+     testDialog.doModalDialog()
+    
+     # Print out the global button click counters.
+-    print testDialog.cancelClicks, testDialog.okClicks
++    print(testDialog.cancelClicks, testDialog.okClicks)
+ 
+ 
+ 
+@@ -487,7 +487,7 @@ def Test2():
+     testDialog.doModalDialog()
+ 
+     # Print out the global button click counters.
+-    print cancelClicks, okClicks
++    print(cancelClicks, okClicks)
+ 
+ 
+ 
+@@ -555,9 +555,9 @@ def Test3():
+     testDialog.doModalDialog()
+    
+     # Print out the global button click counters.
+-    print testDialog.numDoggies, testDialog.numKitties, testDialog.numMonkeys
+-    print "okay:", testDialog.okay,
+-    print "tails:", testDialog.tails, testDialog.getState("chkTails")
++    print(testDialog.numDoggies, testDialog.numKitties, testDialog.numMonkeys)
++    print("okay:", testDialog.okay, end=' ')
++    print("tails:", testDialog.tails, testDialog.getState("chkTails"))
+ 
+ 
+ 
+diff -up openoffice-python-0.1-20110209/openoffice/__init__.py.bak openoffice-python-0.1-20110209/openoffice/__init__.py
+--- openoffice-python-0.1-20110209/openoffice/__init__.py.bak	2008-06-10 17:24:35.000000000 +0200
++++ openoffice-python-0.1-20110209/openoffice/__init__.py	2024-06-14 15:22:05.828503941 +0200
+@@ -25,4 +25,4 @@ def iter(elems, prefix=''):
+ 
+ def Properties(**kw):
+     return  tuple([PropertyValue(k, 0, v,0)
+-                   for k,v in kw.iteritems()])
++                   for k,v in kw.items()])
+diff -up openoffice-python-0.1-20110209/sample-scripts/odf2pdf.py.bak openoffice-python-0.1-20110209/sample-scripts/odf2pdf.py
+--- openoffice-python-0.1-20110209/sample-scripts/odf2pdf.py.bak	2008-06-08 21:44:25.000000000 +0200
++++ openoffice-python-0.1-20110209/sample-scripts/odf2pdf.py	2024-06-14 15:22:06.318443441 +0200
+@@ -33,7 +33,7 @@ def write_pdf(doc, pdf_filename):
+     pdf_filename = os.path.expanduser(pdf_filename)
+     pdf_filename = os.path.abspath(pdf_filename)
+     pdf_url = unohelper.systemPathToFileUrl(pdf_filename)
+-    print >> sys.stderr, pdf_url
++    print(pdf_url, file=sys.stderr)
+     doc.storeToURL(pdf_url, out_props)
+ 
+ 
+@@ -49,7 +49,7 @@ def convert2pdf(odf_filename, pdf_filena
+     write_pdf(doc, pdf_filename)
+     doc.dispose()
+     if opts.tear_down:
+-        print >> sys.stderr, "Tear down is not yet implemented."
++        print("Tear down is not yet implemented.", file=sys.stderr)
+         #desktop.teardown()
+ 
+ if __name__ == '__main__':
+diff -up openoffice-python-0.1-20110209/sample-scripts/open-stream.py.bak openoffice-python-0.1-20110209/sample-scripts/open-stream.py
+--- openoffice-python-0.1-20110209/sample-scripts/open-stream.py.bak	2008-06-10 16:29:42.000000000 +0200
++++ openoffice-python-0.1-20110209/sample-scripts/open-stream.py	2024-06-14 15:22:06.338440972 +0200
+@@ -18,8 +18,8 @@ def loadAsStream(odf_filename, opts=None
+     stream = open(odf_filename)
+     if 0:
+         # using a file-like object works, too
+-        import StringIO
+-        stream = StringIO.StringIO(stream.read())
++        import io
++        stream = io.StringIO(stream.read())
+ 
+     doc = desktop.openStream(stream, hidden=True)
+     doc.dispose()

@@ -1,0 +1,43 @@
+From cb66f63eba9010ecd867d6ba599f8f88ca10f568 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <petr.pisar@atlas.cz>
+Date: Thu, 23 Nov 2023 20:55:41 +0100
+Subject: [PATCH] Fix building with libxml2-2.12.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+libxml2-2.12.0 shuffled included header files.
+
+Signed-off-by: Petr Písař <petr.pisar@atlas.cz>
+---
+ src/io.c        | 1 +
+ src/shigofumi.c | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/src/io.c b/src/io.c
+index 3135138..5334aae 100644
+--- a/src/io.c
++++ b/src/io.c
+@@ -14,6 +14,7 @@
+ #include <limits.h> /* SSIZE_MAX */
+ #include <stdlib.h> /* mkstemps(3) */
+ #include <isds.h>
++#include <libxml/parser.h> /* For xmlParseMemory() */
+ #include <libxml/xmlsave.h> /* For XML serializator */
+ #include <libxml/xpath.h> /* For XPath */
+ 
+diff --git a/src/shigofumi.c b/src/shigofumi.c
+index dd06d67..c9485a3 100644
+--- a/src/shigofumi.c
++++ b/src/shigofumi.c
+@@ -19,6 +19,7 @@
+ #include <strings.h>
+ #include <time.h>
+ #include <magic.h>
++#include <libxml/parser.h> /* For xmlParserVersion() */
+ 
+ #include "shigofumi.h"
+ #include "completion.h"
+-- 
+2.42.0
+

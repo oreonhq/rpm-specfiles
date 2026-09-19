@@ -1,0 +1,56 @@
+From: Federico Pellegrin <fede@evolware.org>
+Date: Sun Nov 13 05:08:21 PM CET 2022
+Subject: [PATCH] Fix package with newer Numpy versions
+
+Restore functionalities and remove a warning for recent Numpy versions
+
+diff -ruN a/phyghtmap/hgt.py b/phyghtmap/hgt.py
+--- a/phyghtmap/hgt.py	2021-01-08 18:35:56.000000000 +0100
++++ b/phyghtmap/hgt.py	2022-11-13 15:19:37.483992366 +0100
+@@ -272,7 +272,7 @@
+ 				tmpList.append(p)
+ 			if len(tmpList) < 2:
+ 				tmpList = []
+-			return [numpy.array(tmpList), ]
++			return [numpy.array(tmpList, dtype="object"), ]
+ 		# path contains nans (from a polygon or void area or both)
+ 		pathList = []
+ 		tmpList = []
+diff -ruN a/phyghtmap/osmUtil.py b/phyghtmap/osmUtil.py
+--- a/phyghtmap/osmUtil.py	2021-01-08 18:35:56.000000000 +0100
++++ b/phyghtmap/osmUtil.py	2022-11-13 16:08:28.342194355 +0100
+@@ -130,10 +130,12 @@
+ 	if numpy.all(path[0]==path[-1]):  # close contour
+ 		del content[-1]  # remove last node
+ 		del ids[-1]
+-		ids.append(ids[0])
++		if len(ids) > 0:
++			ids.append(ids[0])
+ 		IDCounter.curId -= 1
+ 	# output is eventually a pipe, so we must pass a string
+-	output.write("\n".join(content)+"\n")
++	if content:
++		output.write("\n".join(content)+"\n")
+ 	return ids
+ 
+ def _writeContourNodes(output, contourList, elevation, IDCounter,
+@@ -143,13 +145,14 @@
+ 	the returned.
+ 	"""
+ 	ways = []
+-	for path in contourList:
++	for path in contourList[0]:
+ 		nodeRefs = _makePoints(output, path, IDCounter, versionString,
+ 			timestampString)
+-		if nodeRefs[0] == nodeRefs[-1]:
+-			ways.append((nodeRefs[0], len(nodeRefs)-1, True, elevation))
+-		else:
+-			ways.append((nodeRefs[0], len(nodeRefs), False, elevation))
++		if nodeRefs:
++			if nodeRefs[0] == nodeRefs[-1]:
++				ways.append((nodeRefs[0], len(nodeRefs)-1, True, elevation))
++			else:
++				ways.append((nodeRefs[0], len(nodeRefs), False, elevation))
+ 	return ways
+ 
+ 

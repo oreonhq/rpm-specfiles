@@ -1,8 +1,8 @@
 %global source0_hash 131bf59fce7c7ee7ecbc5d9106d6750f4f597bfe609966573240f7e4952973a1
 
 Name:           xdg-dbus-proxy
-Version:        0.1.6
-Release:        4%{?dist}
+Version:        0.1.8
+Release:        1%{?dist}
 Summary:        Filtering proxy for D-Bus connections
 
 License:        LGPL-2.1-or-later

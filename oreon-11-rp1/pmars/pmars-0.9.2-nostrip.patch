@@ -1,0 +1,20 @@
+--- src/Makefile~	2000-12-24 06:53:39.000000000 -0600
++++ src/Makefile	2010-04-29 06:59:58.366502382 -0500
+@@ -16,7 +16,7 @@
+ # (6)   -DXWINGRAPHX    1                   X-Windows graphics (UNIX)
+ # (7)   -DPERMUTATE                         enables -P switch
+ 
+-CFLAGS = -O -DEXT94 -DXWINGRAPHX -DPERMUTATE
++#CFLAGS = -O -DEXT94 -DXWINGRAPHX -DPERMUTATE
+ LFLAGS = -x
+ # LIB = -lcurses -ltermlib		# enable this one for curses display
+ # LIB = -lvgagl -lvga			# enable this one for Linux/SVGA
+@@ -38,7 +38,7 @@
+ $(MAINFILE): $(OBJ1) $(OBJ2) $(OBJ3)
+ 	@echo Linking $(MAINFILE)
+ 	@$(CC) -o $(MAINFILE) $(OBJ1) $(OBJ2) $(OBJ3) $(LIB)
+-	@strip $(MAINFILE)
++#	@strip $(MAINFILE)
+ 	@echo done
+ 
+ token.o asm.o disasm.o: asm.h

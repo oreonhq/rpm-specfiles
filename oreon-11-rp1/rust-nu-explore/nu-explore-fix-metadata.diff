@@ -1,0 +1,11 @@
+--- nu-explore-0.99.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ nu-explore-0.99.1/Cargo.toml	2026-03-18T14:26:52.440002+00:00
+@@ -35,7 +35,7 @@
+ version = "0.4"
+ 
+ [dependencies.lscolors]
+-version = "0.17"
++version = ">=0.17,<0.22"
+ features = ["nu-ansi-term"]
+ default-features = false
+ 

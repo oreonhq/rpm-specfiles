@@ -1,0 +1,7 @@
+--- clanbomber-1.05/clanbomber/ClanBomber.h~	2006-07-20 15:06:47.000000000 +0200
++++ clanbomber-1.05/clanbomber/ClanBomber.h	2006-07-20 15:06:47.000000000 +0200
+@@ -219,3 +219,4 @@
+ 
+ 
+ 
++using namespace std;

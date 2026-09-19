@@ -1,0 +1,22 @@
+From 570967857b31ff77eb355cdf8eb583fbb4d70177 Mon Sep 17 00:00:00 2001
+From: Davide Cavalca <dcavalca@fedoraproject.org>
+Date: Mon, 5 Sep 2022 15:31:10 +0100
+Subject: [PATCH] cmake: version the shared library
+
+---
+ CMakeLists.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 336a68d..941e58b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -82,6 +82,8 @@ else()
+ endif()
+ 
+ set_target_properties(lzfse PROPERTIES
++  VERSION 1.0
++  SOVERSION 1
+   POSITION_INDEPENDENT_CODE TRUE
+   C_VISIBILITY_PRESET hidden
+   INTERPROCEDURAL_OPTIMIZATION TRUE)

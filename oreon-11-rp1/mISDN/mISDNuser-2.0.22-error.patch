@@ -1,0 +1,60 @@
+diff -up mISDNuser-2.0.22.e/bridge/bridge.c.me mISDNuser-2.0.22.e/bridge/bridge.c
+--- mISDNuser-2.0.22.e/bridge/bridge.c.me	2019-09-25 15:35:54.001786379 +0200
++++ mISDNuser-2.0.22.e/bridge/bridge.c	2019-09-25 15:36:42.409977357 +0200
+@@ -150,7 +150,7 @@ static void ph_control(int sock, int c1,
+ 	unsigned char data[MISDN_HEADER_LEN+sizeof(int)+sizeof(int)];
+ 	struct mISDNhead *hh = (struct mISDNhead *)data;
+ 	int len;
+-	unsigned long *d = (unsigned long *)(data + MISDN_HEADER_LEN);
++	unsigned long *d = (unsigned long *)(data + MISDN_HEADER_LEN - 8);
+ 
+ 	hh->prim = PH_CONTROL_REQ;
+ 	hh->id = 0;
+diff -up mISDNuser-2.0.22.e/lib/layer3/q931.c.me mISDNuser-2.0.22.e/lib/layer3/q931.c
+--- mISDNuser-2.0.22.e/lib/layer3/q931.c.me	2019-09-25 14:47:59.997428144 +0200
++++ mISDNuser-2.0.22.e/lib/layer3/q931.c	2019-09-25 14:50:46.120086436 +0200
+@@ -506,7 +506,7 @@ mi_encode_called_nr(struct l3_msg *l3m,
+ int
+ mi_encode_redirecting_nr(struct l3_msg *l3m, char *nr, int pres, unsigned int type, unsigned int plan, int reason)
+ {
+-	unsigned char ie[24];
++	unsigned char ie[32];
+ 	int l;
+ 
+ 	if (nr == NULL || *nr == 0) /* not provided */
+@@ -537,7 +537,7 @@ mi_encode_redirecting_nr(struct l3_msg *
+ int
+ mi_encode_redirection_nr(struct l3_msg *l3m, char *nr, int pres, unsigned int type, unsigned int plan)
+ {
+-	unsigned char ie[24];
++	unsigned char ie[32];
+ 	int l;
+ 
+ 	if (nr == NULL || *nr == 0) /* not provided */
+diff -up mISDNuser-2.0.22.e/tools/logger_config_parser.l.me mISDNuser-2.0.22.e/tools/logger_config_parser.l
+--- mISDNuser-2.0.22.e/tools/logger_config_parser.l.me	2019-09-25 14:52:15.100439034 +0200
++++ mISDNuser-2.0.22.e/tools/logger_config_parser.l	2019-09-25 14:52:42.624548102 +0200
+@@ -460,9 +460,9 @@ static int setLayer3(int, int);
+ 						if (defController == currentController)
+ 							fprintf(stderr, "dumpfile ignored for global section\n");
+ 						else
+-							strncpy(currentController->dumpfile, yytext, MAX_FILE_NAME);
++							strncpy(currentController->dumpfile, yytext, MAX_FILE_NAME - 1);
+ 					} else if (filetyp == 2) {
+-						strncpy(currentController->logfile, yytext, MAX_FILE_NAME);
++						strncpy(currentController->logfile, yytext, MAX_FILE_NAME - 1);
+ 					} else {
+ 						fprintf(stderr, "Got unhandled filetype %d with %s  - abort\n", filetyp, yytext);
+ 						return -1;
+diff -up mISDNuser-2.0.22.e/tools/rename.c.me mISDNuser-2.0.22.e/tools/rename.c
+--- mISDNuser-2.0.22.e/tools/rename.c.me	2019-09-25 14:51:36.276285186 +0200
++++ mISDNuser-2.0.22.e/tools/rename.c	2019-09-25 14:51:47.160328316 +0200
+@@ -88,7 +88,7 @@ next_dev:
+ 	}
+ found_dev:
+ 	devname.id = i;
+-	strncpy(devname.name, argv[2], MISDN_MAX_IDLEN);
++	strncpy(devname.name, argv[2], MISDN_MAX_IDLEN -1);
+ 	ret = ioctl(sock, IMSETDEVNAME, &devname);
+ 	if (ret < 0) {
+ 		fprintf(stderr, "Cannot set device name for port %d: %s\n", i, strerror(errno));

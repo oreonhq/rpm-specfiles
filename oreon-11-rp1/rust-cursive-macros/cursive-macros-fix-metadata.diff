@@ -1,0 +1,11 @@
+--- cursive-macros-0.1.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ cursive-macros-0.1.0/Cargo.toml	2025-04-16T03:25:38.067521+00:00
+@@ -15,7 +15,7 @@
+ version = "0.1.0"
+ authors = ["Alexandre Bury <alexandre.bury@gmail.com>"]
+ build = false
+-include = ["src/**/*"]
++include = ["src/**/*", "/LICENSE"]
+ autobins = false
+ autoexamples = false
+ autotests = false

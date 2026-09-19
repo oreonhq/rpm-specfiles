@@ -1,0 +1,472 @@
+diff -up freewrl-6.7-20240420gitb3254b1/codegen/VRMLC.pm.fix-function-references freewrl-6.7-20240420gitb3254b1/codegen/VRMLC.pm
+--- freewrl-6.7-20240420gitb3254b1/codegen/VRMLC.pm.fix-function-references	2025-03-27 10:34:29.925182100 -0400
++++ freewrl-6.7-20240420gitb3254b1/codegen/VRMLC.pm	2025-03-27 10:35:07.990437868 -0400
+@@ -287,6 +287,7 @@ sub gen {
+ 		"#include \"Component_Picking.h\" \n".
+ 		"#include \"../list.h\" \n".
+ 		"#include \"../io_http.h\" \n".
++		"#include \"../system_threads.h\" \n".
+ 		" \n".
+ 		" \n".
+ 		"/**********************************************************************************************/ \n".
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/iglobal.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/iglobal.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/iglobal.c.fix-function-references	2025-03-26 11:14:59.020985012 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/iglobal.c	2025-03-26 11:16:46.539704672 -0400
+@@ -81,6 +81,8 @@ void Component_MIDI_init(struct tCompone
+ void Component_MIDI_clear(struct tComponent_MIDI* t);
+ 
+ void Component_KeyDevice_init(struct tComponent_KeyDevice *t);
++void Component_TextureProjector_clear(struct tComponent_TextureProjector *t);
++void Component_TextureProjector_init(struct tComponent_TextureProjector *t);
+ 
+ #ifdef OLDCODE
+ OLDCODEvoid Component_Networking_init(struct tComponent_Networking *t);
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/libFreeWRL.h.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/libFreeWRL.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/libFreeWRL.h.fix-function-references	2025-03-26 10:45:38.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/libFreeWRL.h	2025-03-27 10:00:44.396587885 -0400
+@@ -258,6 +258,7 @@ void fwl_updateScreenDim(int wi, int he)
+ void fwl_doQuitAndWait();
+ void fwl_set_viewer_type(const int type);
+ 
++int fwl_get_modeRecord();
+ void fwl_set_modeRecord();
+ void fwl_set_modePlayback();
+ void set_MIDITransport(int method);
+@@ -301,6 +302,7 @@ void fwl_init_quadrant(void);
+ void fwl_setOrientation2(int degrees);
+ void fwl_set_AnaglyphParameter(const char *optArg);
+ void fwl_set_StereoParameter(const char *optArg);
++int fwl_getDrawBoundingBoxes();
+ void fwl_setDrawBoundingBoxes(int drawbb);
+ void fwl_setJsEngine(char *optarg);
+ // JAS obsolete void fwl_askForRefreshOK();
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.h.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.h.fix-function-references	2025-03-26 12:04:52.657850504 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.h	2025-03-26 12:08:17.764320573 -0400
+@@ -40,4 +40,8 @@ void fwl_gotoCurrentViewPoint();
+ 
+ char *nameLogFileFolderNORMAL(char *logfilename, int size);
+ 
++extern void record_mouse(int mev, int butnum, int mouseX, int mouseY, int windex);
++extern void record_rawkeypress(int key, int type);
++extern void record_touch(int mev, unsigned int ID, int mouseX, int mouseY, int windex);
++
+ #endif /* __FREEWRL_MAINLOOP_MAIN_H__ */
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/main/ProdCon.h.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/main/ProdCon.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/main/ProdCon.h.fix-function-references	2025-03-26 10:45:27.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/main/ProdCon.h	2025-03-26 11:59:30.451310905 -0400
+@@ -36,6 +36,8 @@ int frontendGetsFiles();
+ void resitem_queue_flush();
+ void resitem_queue_exit();
+ void resitem_enqueue_tg(s_list_t *item, void* tg);
++extern int parser_do_parse_gltf(const char *input, const int len, struct X3D_Node *ectx, struct X3D_Node *myParent);
+ bool parser_process_res_VRML_X3D(resource_item_t *res);
++extern void process_mocap(resource_item_t *res);
+ 
+ #endif /* __FREEWRL_PRODCON_MAIN_H__ */
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/opengl/RenderTextures.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/opengl/RenderTextures.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/opengl/RenderTextures.c.fix-function-references	2025-03-27 15:57:21.433546532 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/opengl/RenderTextures.c	2025-03-27 15:57:27.964366219 -0400
+@@ -41,7 +41,7 @@ texture enabling - works for single text
+ #include "../scenegraph/Component_Shape.h"
+ #include "../scenegraph/RenderFuncs.h"
+ #include "../scenegraph/LinearAlgebra.h"
+-#include "../scenegraph/PolyRep.h"
++#include "../scenegraph/Polyrep.h"
+ #include "Textures.h"
+ #include "Material.h"
+ 
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/world_script/jsVRMLClasses_duk.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/world_script/jsVRMLClasses_duk.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/world_script/jsVRMLClasses_duk.c.fix-function-references	2025-03-26 12:20:11.178418653 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/world_script/jsVRMLClasses_duk.c	2025-03-26 12:21:10.840143244 -0400
+@@ -1275,6 +1275,9 @@ int sizeofSForMFduk(int itype) {
+ 	}
+ 	return iz;
+ }
++
++void deleteMallocedFieldValue(int type,union anyVrml *fieldPtr);
++
+ void shallow_copy_field_precision(int sourcetypeIndex, int desttypeIndex, union anyVrml* source, union anyVrml* dest)
+ {
+ 	int i, src_isize, dst_isize;
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_CubeMapTexturing.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_CubeMapTexturing.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_CubeMapTexturing.c.fix-function-references	2025-03-27 10:53:40.508947305 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_CubeMapTexturing.c	2025-03-27 10:54:59.006770114 -0400
+@@ -1316,6 +1316,7 @@ void compile_ImageCubeMapTexture(struct
+ 	MARK_NODE_COMPILED
+ }
+ 
++void set_debug_quad(int which_debug_shader, int textureID);
+ 
+ void render_ImageCubeMapTexture(struct X3D_ImageCubeMapTexture* node) {
+ 	COMPILE_IF_REQUIRED
+@@ -1627,6 +1628,7 @@ void fw_gluPerspective_2(GLDOUBLE xcente
+ void pushnset_viewport(float *vpFraction);
+ void popnset_viewport();
+ void render_bound_background();
++void lightTable_clear();
+ 
+ // called from MainLoop.c
+ #include "../x3d_parser/Bindable.h"
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_DIS.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_DIS.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_DIS.c.fix-function-references	2025-03-27 10:10:08.031097330 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_DIS.c	2025-03-27 10:16:35.362186272 -0400
+@@ -257,7 +257,9 @@ static int dis_verbose = FALSE; // TRUE;
+ void fwl_set_DISverbose(int verbose) {
+ 	dis_verbose = verbose;
+ }
+-
++int disverbose() {
++	return dis_verbose;
++}
+ int fwl_get_allow_DIS(){
+ 	return allow_DIS;
+ }
+@@ -2456,9 +2458,6 @@ struct dis_sensor {
+ };
+ static struct Vector* sensor_send_queue = NULL; //reset .n to 0 after pdu2buf
+ 
+-int disverbose() {
+-	return dis_verbose;
+-}
+ struct Vector* dis_sensors2pdus() {
+ // 2023 multiplayer experiment: sensor event sharing
+ 	//converts queued sensor events into a CommentPdu for sending
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Geospatial.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Geospatial.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Geospatial.c.fix-function-references	2025-03-27 10:55:45.389905445 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Geospatial.c	2025-03-27 10:56:23.359209883 -0400
+@@ -477,6 +477,8 @@ void compile_geoSystem (struct X3D_Node
+ static void gccToGdc (Geosys *geoSystem, struct SFVec3d *gcc, struct SFVec3d *gdc);
+ void calculateViewingSpeed(void);
+ 
++void pop_group_visible();
++
+ struct Planet {
+ 	int ID;
+ 	Stack *gegs;
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_HAnim.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_HAnim.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_HAnim.c.fix-function-references	2025-03-27 10:49:33.221003538 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_HAnim.c	2025-03-27 10:51:11.383580806 -0400
+@@ -45,6 +45,7 @@ X3D H-Anim Component
+ #include "Component_Shape.h"
+ #include "../opengl/Frustum.h"
+ #include "LinearAlgebra.h"
++#include "../ui/common.h"
+ 
+ /* #include "OpenFW_GL_Utils.h" */
+ 
+@@ -1160,6 +1161,7 @@ void compile_HAnimHumanoid(struct X3D_HA
+ 
+ }
+ 
++void rwhat_printf(int rwhat);
+ 
+ void child_HAnimHumanoid(struct X3D_HAnimHumanoid *node) {
+ 	int nc;
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Layering.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Layering.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Layering.c.fix-function-references	2025-03-27 14:55:21.396583999 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Layering.c	2025-03-27 14:55:34.741186085 -0400
+@@ -35,6 +35,7 @@ X3D Layering Component
+ 
+ #include "../x3d_parser/Bindable.h"
+ #include "Children.h"
++#include "LinearAlgebra.h"
+ #include "../opengl/OpenGL_Utils.h"
+ #include "../scenegraph/RenderFuncs.h"
+ #include "Viewer.h"
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Lighting.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Lighting.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Lighting.c.fix-function-references	2025-03-27 10:58:30.781718278 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Lighting.c	2025-03-27 10:58:50.220361862 -0400
+@@ -86,6 +86,8 @@ void lightTable_pop();
+ int lightTable_count();
+ usehit* lightTable_item(int i);
+ void generate_shadowmap_2D(usehit uhit, int index);
++int make_or_get_depth_buffer(int index, struct X3D_Node* node);
++
+ 
+ //LIGHT TABLE
+ void lightTable_clear() {
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Navigation.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Navigation.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Navigation.c.fix-function-references	2025-03-27 11:59:29.232094744 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Navigation.c	2025-03-27 12:51:58.494142080 -0400
+@@ -47,6 +47,7 @@ X3D Navigation Component
+ #include "../opengl/OpenGL_Utils.h"
+ #include "../opengl/Frustum.h"
+ #include "../scenegraph/RenderFuncs.h"
++#include "../ui/common.h"
+ 
+ 
+ struct X3D_Node *getActiveLayerBoundViewpoint();
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_ParticleSystems.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_ParticleSystems.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_ParticleSystems.c.fix-function-references	2025-03-27 14:49:31.794860268 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_ParticleSystems.c	2025-03-27 14:53:07.002383503 -0400
+@@ -42,6 +42,7 @@ X3D Particle Systems Component
+ #include "quaternion.h"
+ #include "Viewer.h"
+ #include "../opengl/Frustum.h"
++#include "../opengl/LoadTextures.h"
+ #include "../opengl/Material.h"
+ #include "../opengl/OpenGL_Utils.h"
+ #include "../input/EAIHelpers.h"	/* for newASCIIString() */
+@@ -2361,6 +2362,9 @@ void render_geom_particle(struct X3D_Par
+ 	//<<<<< BORROWED FROM CHILD_SHAPE
+ 
+ }
++
++void child_HAnimHumanoid(struct X3D_HAnimHumanoid *);
++
+ void render_hanim_particle(struct X3D_ParticleSystem* node, Stack* _particles) {
+ 	double mat[16], xyz[3];
+ 	for (int i = 0; i < vectorSize(_particles); i++) {
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_ProgrammableShaders.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_ProgrammableShaders.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_ProgrammableShaders.c.fix-function-references	2025-03-26 13:05:30.834426402 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_ProgrammableShaders.c	2025-03-26 13:06:15.134487463 -0400
+@@ -101,7 +101,7 @@ FIELDTYPE_MFVec4d
+ #include "../opengl/Textures.h"
+ #include "Component_ProgrammableShaders.h"
+ #include "../scenegraph/RenderFuncs.h"
+-
++#include "system_threads.h"
+ 
+ 
+ #define MAX_EFFECTS 32
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Rendering.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Rendering.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Rendering.c.fix-function-references	2025-03-27 10:37:29.311153494 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Rendering.c	2025-03-27 10:40:26.419584786 -0400
+@@ -932,6 +932,9 @@ static GLfloat quadtris [18] = {-.5f,-.5
+ static GLfloat twotrisnorms [18] = {0.f,0.f,1.f, 0.f,0.f,1.f, 0.f,0.f,1.f,    0.f,0.f,1.f, 0.f,0.f,1.f, 0.f,0.f,1.f,};
+ static GLfloat twotristex [12] = {0.f,0.f, 1.f,0.f, 1.f,1.f,    1.f,1.f, 0.f,1.f, 0.f,0.f};
+ 
++void clearDraw();
++void reallyDrawOnce();
++
+ void render_PointRep(void* _pointrep) {
+ 	struct X3D_PointRep* pointrep = (struct X3D_PointRep*)_pointrep;
+ 	if (getAppearanceProperties()->pointMethod == PM_NONE) {
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.c.fix-function-references	2025-03-27 10:38:07.275462159 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.c	2025-03-27 10:41:45.209145589 -0400
+@@ -1406,6 +1406,7 @@ void update_effect_uniforms();
+ int setupShaderB();
+ void textureTransform_start();
+ void reallyDraw();
++void reallyDrawOnce();
+ void sendProjectorInfo();
+ static struct X3D_Shape* wrap_shape = NULL;
+ void push_shape(struct X3D_Shape* node) {
+@@ -1422,6 +1423,8 @@ struct X3D_HAnimHumanoid* peek_humanoid(
+ void sendSkinningInfo();
+ void clearSkinningInfo();
+ void PRINT_GL_ERROR(GLenum _global_gl_err);
++void clearDraw();
++int peek_group_visible();
+ void child_Shape (struct X3D_Shape *node) {
+ 	struct X3D_Node *tmpNG;  
+ 	//int channels;
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h.fix-function-references	2025-03-26 12:24:52.941099825 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h	2025-03-26 12:25:18.170789540 -0400
+@@ -194,6 +194,8 @@ struct fw_MaterialParameters {
+ 
+ // helpers for sharing sampler2D (and texture units)
+ void clear_material_samplers();
++void clear_materialparameters_per_draw_counts();
++void initialize_front_and_back_material_params();
+ int share_or_next_material_sampler_index_2D(GLint texture);
+ GLint tunit2D(int index);
+ int share_or_next_material_sampler_index_Cube(GLint texture);
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_TextureProjector.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_TextureProjector.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_TextureProjector.c.fix-function-references	2025-03-27 14:56:59.680622396 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_TextureProjector.c	2025-03-27 14:59:12.557842237 -0400
+@@ -43,7 +43,7 @@ along with FreeWRL/FreeX3D.  If not, see
+ #include "../opengl/Textures.h"
+ #include "../opengl/Frustum.h"
+ #include "../opengl/Material.h"
+-#include "Renderfuncs.h"
++#include "RenderFuncs.h"
+ #include "Component_Shape.h"
+ #include "LinearAlgebra.h"
+ #include "Vector.h"
+@@ -531,6 +531,8 @@ void projLookAt(GLDOUBLE eyex, GLDOUBLE
+ void projPerspective(GLDOUBLE fovy, GLDOUBLE aspect, GLDOUBLE zNear, GLDOUBLE zFar, GLDOUBLE *matrix);
+ void printmatrix2(GLDOUBLE* mat,char* description );
+ 
++void set_debug_quad_near_farplane(float nearplane, float farplane);
++
+ void compile_TextureProjector(struct X3D_TextureProjector* node) {
+ 
+ 	node->_intern = set_ProjectorRep(node->_intern);
+@@ -888,6 +890,8 @@ void compile_TextureProjectorPoint(struc
+ 	MARK_NODE_COMPILED;
+ }
+ 
++double* matrix_lookAtfd(float* eye3, float* center3, float* up3, double* matrix);
++
+ void render_TextureProjectorPoint0(struct X3D_Node* parent, struct X3D_TextureProjectorPoint* node) {
+ 	int i, j = 0;
+ 	int flag = 0;
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Texturing.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Texturing.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Texturing.c.fix-function-references	2025-03-27 10:23:16.770081772 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Texturing.c	2025-03-27 10:30:41.882595234 -0400
+@@ -43,6 +43,14 @@ X3D Texturing Component
+ #include "../scenegraph/Polyrep.h"
+ #include "LinearAlgebra.h"
+ 
++void pushnset_framebuffer(int ibuffer);
++void popnset_framebuffer();
++void fw_gluPerspective_2(double xcenter, double fovy, double aspect, double zNear, double zFar);
++void push_globalRenderFlags();
++void pop_globalRenderFlags();
++void printFramebufferStatusIfNotComplete(int status);
++void set_debug_quad(int which_debug_shader, int textureID);
++
+ void render_GeneratedTexture(struct X3D_GeneratedTexture* node) {
+ 	// GeneratedTexture doesn't work (not finished) as of Sep 2023
+ 	// not sure its needed. You could render your sub-scene as a separate scene, 
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_VolumeRendering.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_VolumeRendering.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_VolumeRendering.c.fix-function-references	2025-03-27 10:42:00.484808443 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_VolumeRendering.c	2025-03-27 10:43:48.944656186 -0400
+@@ -36,6 +36,7 @@ X3D Volume Rendering Component
+ 
+ #include "../vrml_parser/Structs.h"
+ #include "../main/headers.h"
++#include "../opengl/Frustum.h"
+ #include "../opengl/OpenGL_Utils.h"
+ #include "../opengl/Textures.h"
+ #include "../scenegraph/Component_Shape.h"
+@@ -1304,6 +1305,7 @@ float *getTransformedClipPlanes();
+ int getClipPlaneCount();
+ void sendFogToShader(s_shader_capabilities_t *me);
+ void sendLightInfo2(s_shader_capabilities_t* me);
++int peek_group_visible();
+ void render_GENERIC_volume_data(s_shader_capabilities_t *caps, struct X3D_Node **renderStyle, int nstyle, struct X3D_Node *voxels, struct X3D_VolumeData *node ) {
+ 	static int once = 0;
+ 	int myProg;
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/gltf_loader.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/gltf_loader.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/gltf_loader.c.fix-function-references	2025-03-27 15:14:36.320392771 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/gltf_loader.c	2025-03-27 15:54:48.189831259 -0400
+@@ -142,6 +142,8 @@ void* set_MeshRep(void* _meshrep) {
+ 	return meshrep;
+ }
+ #include "Component_Shape.h"
++void saveArraysForGPU(int mode, int first, int count);
++void reallyDrawOnce();
+ void render_MeshRep(void* _meshrep) {
+ 	//like render_PointRep
+ 	s_shader_capabilities_t* me = NULL;
+@@ -996,7 +998,7 @@ int parse_gltf_node(struct X3D_Node *ect
+ 				}
+ 				//printf("adding shape to mesh group\n");
+ 				//vector_pushBack(void *, &gr->children, sn);
+-				AddRemoveChildren(X3D_NODE(gr), offsetPointer_deref(void*, gr, offsetof(struct X3D_Group, children)), &X3D_NODE(sn), 1, 1, __FILE__, __LINE__);
++				AddRemoveChildren(X3D_NODE(gr), offsetPointer_deref(void*, gr, offsetof(struct X3D_Group, children)), (struct X3D_Node * *)(X3D_NODE(sn)), 1, 1, __FILE__, __LINE__);
+ 			}
+ 		}
+ 		//printf("adding mesh\n");
+@@ -1262,6 +1264,8 @@ int gltf_load_bin(resource_item_t *res){
+ 	return TRUE;
+ }
+ 
++bool parser_process_res_VRML_X3D(resource_item_t *res);
++
+ int parser_process_res_gltf(resource_item_t *res){
+ 	//these media types (require us to) generate x3d scene nodes and can be a scene unto themselves, 
+ 	// or inline body
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/LinearAlgebra.h.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/LinearAlgebra.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/LinearAlgebra.h.fix-function-references	2025-03-27 10:06:14.908468954 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/LinearAlgebra.h	2025-03-27 10:06:40.925887809 -0400
+@@ -281,6 +281,7 @@ struct point_XYZ* double2pointxyz(struct
+ double *transformAFFINEd(double *r, double *a, const double* mat); /* same as transformAFFINE which is the same as transform() - just different parameter types */
+ double * matrixAFFINE2RotationMatrix(double* rotmat, double *fullmat);
+ void AFFINEmatrix2axisangle(double* axisangle, double* matrix4);
++void AFFINEmatrix2axisangled(double* axisangle, double* matrix4);
+ double *transformUPPER3X3d(double *r, double *a, const double* mat);
+ double *transformFULL4d(double *r4, double *a4, double *mat);
+ 
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/RenderFuncs.h.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/RenderFuncs.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/RenderFuncs.h.fix-function-references	2025-03-26 10:45:38.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/RenderFuncs.h	2025-03-27 10:57:22.875687110 -0400
+@@ -57,9 +57,11 @@ void projectorTable_clear();
+ void sendAttribToGPU(int myType, int mySize, int  xtype, int normalized, int stride, void *pointer, int, char*, int);
+ void sendArraysToGPU (int mode, int first, int count);
+ void sendBindBufferToGPU (GLenum target, GLuint buffer,char *, int);
++void sendElementsToGPU (int mode, int count, int *indices);
+ void sendElementsToGPU0 (int mode, int count, int type, void *indices);
+ void saveElementsForGPU0(int mode, int count, int type, void* indices);
+ void render_hier(struct X3D_Node *p, int rwhat);
++void render_hier2(struct X3D_Node* g, int rwhat);
+ void restoreGlobalShader();
+ 
+ 
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.c.fix-function-references	2025-03-26 13:12:12.421044133 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.c	2025-03-26 13:12:25.285151918 -0400
+@@ -310,6 +310,7 @@ void printStats()
+ 	printStatsBindingStacks();
+ }
+ //char* fwl_requestedVPname(int *is_bound, int *is_reachable, int *count, int *index);
++char* fwl_currentBoundVPname();
+ void
+ print_viewer()
+ {
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.h.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.h.fix-function-references	2025-03-27 10:11:20.046582893 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.h	2025-03-27 10:11:55.679160918 -0400
+@@ -271,6 +271,8 @@ void viewer_postGLinit_init(void);
+ 
+ void viewer_init(X3D_Viewer *viewer, int type);
+ 
++void viewer_getview(double *viewMatrix);
++
+ void print_viewer();
+ int fwl_get_headlight();
+ void fwl_toggle_headlight();
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.c.fix-function-references	2025-03-27 15:59:16.576840371 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.c	2025-03-27 16:01:48.592518083 -0400
+@@ -210,6 +210,12 @@ void fwl_set_modeRecord() {
+ 	p->record_inputs = TRUE;
+ 	last_time = Time1970sec();
+ }
++
++void fwl_do_keyPress0(int key, int type);
++int fwl_handle_mouse0(const int mev, const unsigned int button, int x, int y, int windex);
++int fwl_handle_touch0(int mev, unsigned int ID, int mouseX, int mouseY, int windex);
++void updateCursorStyle0(int cstyle);
++
+ static pthread_t playback_thread;
+ void _playbackthread(ttglobal tglobal) {
+ 	ttglobal tg = tglobal;
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/ui/CursorDraw.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/ui/CursorDraw.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/ui/CursorDraw.c.fix-function-references	2025-03-27 16:02:41.687901567 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/ui/CursorDraw.c	2025-03-27 16:03:10.978702613 -0400
+@@ -31,6 +31,7 @@
+ #include "vrml_parser/Structs.h"
+ #include "scenegraph/Viewer.h"
+ #include "scenegraph/Component_Shape.h"
++#include "opengl/Frustum.h"
+ #include "opengl/OpenGL_Utils.h"
+ #include "opengl/Textures.h"
+ #include "opengl/LoadTextures.h"
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/vrml_parser/CParseParser.h.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/vrml_parser/CParseParser.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/vrml_parser/CParseParser.h.fix-function-references	2025-03-26 12:54:57.441762861 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/vrml_parser/CParseParser.h	2025-03-26 12:55:09.036054191 -0400
+@@ -231,6 +231,7 @@ int type_precision(int itype);
+ BOOL usingBrotos();
+ int X3DMODE(int val);
+ void load_externProtoInstance (struct X3D_Proto *node);
++void load_externProtoDeclare (struct X3D_Proto *node);
+ int getFieldFromNodeAndName(struct X3D_Node* node,const char *fieldname, int *type, int *kind, int *iifield, union anyVrml **value);
+ int getFieldFromNodeAndIndexSource(struct X3D_Node* node, int ifield, int builtIn, const char **fieldname, int *type, int *kind, union anyVrml **value);
+ int getFieldFromNodeAndIndex(struct X3D_Node* node, int ifield, const char **fieldname, int *type, int *kind, union anyVrml **value);
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/x3d_parser/Bindable.c.fix-function-references freewrl-6.7-20240420gitb3254b1/src/lib/x3d_parser/Bindable.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/x3d_parser/Bindable.c.fix-function-references	2025-03-26 12:57:34.534621240 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/x3d_parser/Bindable.c	2025-03-26 12:57:53.027486827 -0400
+@@ -42,6 +42,7 @@ Bindable nodes - Background, TextureBack
+ #include "../vrml_parser/CParseLexer.h"
+ #include "../vrml_parser/CRoutes.h"
+ #include "../opengl/OpenGL_Utils.h"
++#include "../opengl/Textures.h"
+ #include "Bindable.h"
+ #include "../scenegraph/quaternion.h"
+ #include "../scenegraph/Viewer.h"

@@ -1,0 +1,23 @@
+diff -up frysk-0.4/frysk-common/frysk-common.ac.aclocaljavac frysk-0.4/frysk-common/frysk-common.ac
+--- frysk-0.4/frysk-common/frysk-common.ac.aclocaljavac	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-common/frysk-common.ac	2010-03-16 14:41:28.000000000 -0400
+@@ -115,15 +115,15 @@ AC_MSG_RESULT(${ECJ_JAR})
+ 
+ # autoconf doesn't yet know about JAVAC, so define it ourselves.
+ 
+-m4_define([AC_LANG(JAVAC)],
++AC_LANG_DEFINE([Java], [java], [JAVA], [JAVAC], [],
+ [ac_ext=java
+ ac_objext=class
+ ac_compile='$JAVAC $JAVACFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ ac_java_werror_flag=no
+ ])
+-m4_defun([AC_LANG_COMPILER(JAVAC)], [])
+-m4_define([_AC_LANG_ABBREV(JAVAC)], [java])
+-AC_LANG(JAVAC)
++AC_DEFUN([AC_LANG_COMPILER(Java)], [])
++AU_DEFUN([AC_LANG_JAVAC], [AC_LANG(Java)])
++AC_LANG(Java)
+ 
+ 
+ # Two possible compilers: either GCJ (wrapper round ECJ); or ECJ.  In

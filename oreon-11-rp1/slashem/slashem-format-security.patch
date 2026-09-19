@@ -1,0 +1,1622 @@
+diff -up slashem-0.0.8E0F1/src/apply.c.format-security slashem-0.0.8E0F1/src/apply.c
+--- slashem-0.0.8E0F1/src/apply.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/apply.c	2013-12-04 09:04:25.268502628 -0700
+@@ -66,7 +66,7 @@ use_camera(obj)
+ 	if(!getdir((char *)0)) return(0);
+ 
+ 	if (obj->spe <= 0) {
+-		pline(nothing_happens);
++		pline("%s",nothing_happens);
+ 		return (1);
+ 	}
+ 	consume_obj_charge(obj, TRUE);
+@@ -1005,7 +1005,7 @@ struct obj **optr;
+ 		if (!obj->cursed)
+ 		    (void) openit();
+ 		else
+-		    pline(nothing_happens);
++		    pline("%s",nothing_happens);
+ 
+ 	    } else if (obj->cursed) {
+ 		coord mm;
+@@ -1037,7 +1037,7 @@ struct obj **optr;
+ 		}
+ 		res += openit();
+ 		switch (res) {
+-		  case 0:  pline(nothing_happens); break;
++		  case 0:  pline("%s",nothing_happens); break;
+ 		  case 1:  pline("%s opens...", Something);
+ 			   learno = TRUE; break;
+ 		  default: pline("Things open around you...");
+@@ -1049,7 +1049,7 @@ struct obj **optr;
+ 		amii_speaker( obj, "AeFeaeFeAefegw", AMII_OKAY_VOLUME );
+ #endif
+ 		if (findit() != 0) learno = TRUE;
+-		else pline(nothing_happens);
++		else pline("%s",nothing_happens);
+ 	    }
+ 
+ 	}	/* charged BofO */
+@@ -1122,7 +1122,7 @@ struct obj **optr;
+ 	char qbuf[QBUFSZ];
+ 
+ 	if(u.uswallow) {
+-		You(no_elbow_room);
++		You("%s",no_elbow_room);
+ 		return;
+ 	}
+ 	if(Underwater) {
+@@ -1388,7 +1388,7 @@ struct obj *obj;
+ {
+     struct obj *otmp = NULL;
+     if (u.uswallow) {
+-	You(no_elbow_room);
++	You("%s",no_elbow_room);
+ 	return 0;
+     }
+     if (Underwater) {
+@@ -1424,7 +1424,7 @@ light_cocktail(obj)
+ #endif
+ 
+ 	if (u.uswallow) {
+-	    You(no_elbow_room);
++	    You("%s",no_elbow_room);
+ 	    return;
+ 	}
+ 
+@@ -1517,12 +1517,12 @@ dorub()
+ 		update_inventory();
+ 	    } else if (rn2(2) && !Blind)
+ 		You("see a puff of smoke.");
+-	    else pline(nothing_happens);
++	    else pline("%s",nothing_happens);
+ 	} else if (obj->otyp == BRASS_LANTERN) {
+ 	    /* message from Adventure */
+ 	    pline("Rubbing the electric lamp is not particularly rewarding.");
+ 	    pline("Anyway, nothing exciting happens.");
+-	} else pline(nothing_happens);
++	} else pline("%s",nothing_happens);
+ 	return 1;
+ }
+ 
+@@ -1778,13 +1778,13 @@ register struct obj *obj;
+ 	    can->spe = -1;  /* Mark tinned tins. No spinach allowed... */
+ 	    if (carried(corpse)) {
+ 		if (corpse->unpaid)
+-		    verbalize(you_buy_it);
++		    verbalize("%s",you_buy_it);
+ 		useup(corpse);
+ 	    } else if (mcarried(corpse)) {
+ 		m_useup(corpse->ocarry, corpse);
+ 	    } else {
+ 		if (costly_spot(corpse->ox, corpse->oy) && !corpse->no_charge)
+-		    verbalize(you_buy_it);
++		    verbalize("%s",you_buy_it);
+ 		useupf(corpse, 1L);
+ 	    }
+ 	    can = hold_another_object(can, "You make, but cannot pick up, %s.",
+@@ -1863,7 +1863,7 @@ struct obj *obj;
+ 	}
+ 
+ 	if (trouble_count == 0) {
+-	    pline(nothing_happens);
++	    pline("%s",nothing_happens);
+ 	    return;
+ 	} else if (trouble_count > 1) {		/* shuffle */
+ 	    int i, j, k;
+@@ -2432,7 +2432,7 @@ struct obj *tstone;
+     }
+ 
+     if (Blind) {
+-	pline(scritch);
++	pline("%s",scritch);
+ 	return;
+     } else if (Hallucination) {
+ 	pline("Oh wow, man: Fractals!");
+@@ -2514,7 +2514,7 @@ struct obj *tstone;
+     else if (streak_color)
+ 	pline("You see %s streaks on the %s.", streak_color, stonebuf);
+     else
+-	pline(scritch);
++	pline("%s",scritch);
+     return;
+ }
+ 
+@@ -2720,7 +2720,7 @@ struct obj *obj;
+ 		You("wrap your bullwhip around %s on the %s.",
+ 		    an(singular(otmp, xname)), surface(u.ux, u.uy));
+ 		if (rnl(6) || pickup_object(otmp, 1L, TRUE) < 1)
+-		    pline(msg_slipsfree);
++		    pline("%s",msg_slipsfree);
+ 		return 1;
+ 	    }
+ 	}
+@@ -2761,7 +2761,7 @@ struct obj *obj;
+ 		wrapped_what = strcpy(buf, mon_nam(mtmp));
+ 	    } else if (proficient) {
+ 		if (attack(mtmp)) return 1;
+-		else pline(msg_snap);
++		else pline("%s",msg_snap);
+ 	    }
+ 	}
+ 	if (!wrapped_what) {
+@@ -2783,10 +2783,10 @@ struct obj *obj;
+ 		    vision_full_recalc = 1;
+ 		}
+ 	    } else {
+-		pline(msg_slipsfree);
++		pline("%s",msg_slipsfree);
+ 	    }
+ 	    if (mtmp) wakeup(mtmp);
+-	} else pline(msg_snap);
++	} else pline("%s",msg_snap);
+ 
+     } else if (mtmp) {
+ 	if (!canspotmon(mtmp) &&
+@@ -2878,7 +2878,7 @@ struct obj *obj;
+ 		    break;
+ 		}
+ 	    } else {
+-		pline(msg_slipsfree);
++		pline("%s",msg_slipsfree);
+ 	    }
+ 	    wakeup(mtmp);
+ 	} else {
+@@ -2888,7 +2888,7 @@ struct obj *obj;
+ 	    else You("flick your bullwhip towards %s.", mon_nam(mtmp));
+ 	    if (proficient) {
+ 		if (attack(mtmp)) return 1;
+-		else pline(msg_snap);
++		else pline("%s",msg_snap);
+ 	    }
+ 	}
+ 
+@@ -2897,7 +2897,7 @@ struct obj *obj;
+ 	    You("snap your whip through thin air.");
+ 
+     } else {
+-	pline(msg_snap);
++	pline("%s",msg_snap);
+ 
+     }
+     return 1;
+@@ -2925,7 +2925,7 @@ use_pole (obj)
+ 
+ 	/* Are you allowed to use the pole? */
+ 	if (u.uswallow) {
+-	    pline(not_enough_room);
++	    pline("%s",not_enough_room);
+ 	    return (0);
+ 	}
+ 	if (obj != uwep) {
+@@ -2934,7 +2934,7 @@ use_pole (obj)
+ 	}
+ 
+ 	/* Prompt for a location */
+-	pline(where_to_hit);
++	pline("%s",where_to_hit);
+ 	cc.x = u.ux;
+ 	cc.y = u.uy;
+ 	if (getpos(&cc, TRUE, "the spot to hit") < 0)
+@@ -2959,10 +2959,10 @@ use_pole (obj)
+ 	} else if (!cansee(cc.x, cc.y) &&
+ 		   ((mtmp = m_at(cc.x, cc.y)) == (struct monst *)0 ||
+ 		    !canseemon(mtmp))) {
+-	    You(cant_see_spot);
++	    You("%s",cant_see_spot);
+ 	    return (res);
+ 	} else if (!couldsee(cc.x, cc.y)) { /* Eyes of the Overworld */
+-	    You(cant_reach);
++	    You("%s",cant_reach);
+ 	    return res;
+ 	}
+ 
+@@ -3069,7 +3069,7 @@ use_pole (obj)
+ 		u.uconduct.weaphit++;
+ 	} else
+ 	    /* Now you know that nothing is there... */
+-	    pline(nothing_happens);
++	    pline("%s",nothing_happens);
+ 	return (1);
+ }
+ 
+@@ -3123,7 +3123,7 @@ use_grapple (obj)
+ 
+ 	/* Are you allowed to use the hook? */
+ 	if (u.uswallow) {
+-	    pline(not_enough_room);
++	    pline("%s",not_enough_room);
+ 	    return (0);
+ 	}
+ 	if (obj != uwep) {
+@@ -3133,7 +3133,7 @@ use_grapple (obj)
+      /* assert(obj == uwep); */
+ 
+ 	/* Prompt for a location */
+-	pline(where_to_hit);
++	pline("%s",where_to_hit);
+ 	cc.x = u.ux;
+ 	cc.y = u.uy;
+ 	if (getpos(&cc, TRUE, "the spot to hit") < 0)
+@@ -3148,7 +3148,7 @@ use_grapple (obj)
+ 		pline("Too far!");
+ 		return (res);
+ 	} else if (!cansee(cc.x, cc.y)) {
+-		You(cant_see_spot);
++		You("%s",cant_see_spot);
+ 		return (res);
+ 	}
+ 
+@@ -3228,7 +3228,7 @@ use_grapple (obj)
+ 	    }
+ 	    break;
+ 	}
+-	pline(nothing_happens);
++	pline("%s",nothing_happens);
+ 	return (1);
+ }
+ 
+@@ -3304,7 +3304,7 @@ wand_explode(obj, hero_broke)
+     setnotworn(obj);		/* so we need to do this ourselves */
+ 
+     if (obj->spe <= 0) {
+-	pline(nothing_else_happens);
++	pline("%s",nothing_else_happens);
+ 	goto discard_broken_wand;
+     }
+     obj->ox = u.ux;
+@@ -3320,7 +3320,7 @@ wand_explode(obj, hero_broke)
+     case WAN_ENLIGHTENMENT:
+     case WAN_OPENING:
+     case WAN_SECRET_DOOR_DETECTION:
+-	pline(nothing_else_happens);
++	pline("%s",nothing_else_happens);
+ 	goto discard_broken_wand;
+     case WAN_DEATH:
+     case WAN_LIGHTNING:
+@@ -3798,7 +3798,7 @@ doapply()
+ 				if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+ 				You_feel("better.");
+ 				flags.botl = TRUE;
+-			    } else pline(nothing_happens);
++			    } else pline("%s",nothing_happens);
+ 			} else if (!rn2(3))
+ 			    pline("Nothing seems to happen.");
+ 			else if (!Sick)
+@@ -3846,7 +3846,7 @@ doapply()
+ 					       (const char *)0);
+ 		    makeknown(HORN_OF_PLENTY);
+ 		} else
+-		    pline(nothing_happens);
++		    pline("%s",nothing_happens);
+ 		break;
+ 	case LAND_MINE:
+ 	case BEARTRAP:
+diff -up slashem-0.0.8E0F1/src/artifact.c.format-security slashem-0.0.8E0F1/src/artifact.c
+--- slashem-0.0.8E0F1/src/artifact.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/artifact.c	2013-12-04 09:27:31.080393162 -0700
+@@ -1478,7 +1478,7 @@ arti_invoke(obj)
+ 	if(obj->otyp == CRYSTAL_BALL)
+ 	    use_crystal_ball(obj);
+ 	else
+-	    pline(nothing_happens);
++	    pline("%s",nothing_happens);
+ 	return 1;
+     }
+ 
+diff -up slashem-0.0.8E0F1/src/botl.c.format-security slashem-0.0.8E0F1/src/botl.c
+--- slashem-0.0.8E0F1/src/botl.c.format-security	2013-12-04 08:37:37.470992033 -0700
++++ slashem-0.0.8E0F1/src/botl.c	2013-12-04 08:38:26.260703473 -0700
+@@ -224,9 +224,9 @@ botl_player()
+ 			mbot[k] += 'A' - 'a';
+ 		    k++;
+ 		}
+-	Sprintf(eos(nb), mbot);
++	Sprintf(eos(nb), "%s", mbot);
+ 	} else
+-	Sprintf(eos(nb), rank());
++	Sprintf(eos(nb), "%s", rank());
+     return player;
+ }
+ 
+diff -up slashem-0.0.8E0F1/src/cmd.c.format-security slashem-0.0.8E0F1/src/cmd.c
+--- slashem-0.0.8E0F1/src/cmd.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/cmd.c	2013-12-04 08:40:50.705903485 -0700
+@@ -863,7 +863,7 @@ specialpower()      /* Special class abi
+ 			else     u.uhp += (u.ulevel * 4);
+ 			if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+ 			u.unextuse = 3000;
+-		} else pline(nothing_happens);
++		} else pline("%s",nothing_happens);
+ 		break;
+ 	    case 'S':
+ 		You("scream \"KIIILLL!\"");
+@@ -1033,7 +1033,7 @@ wiz_level_change()
+     else ret = sscanf(buf, "%d", &newlevel);
+ 
+     if (ret != 1) {
+-	pline(Never_mind);
++	pline("%s",Never_mind);
+ 	return 0;
+     }
+     if (newlevel == u.ulevel) {
+@@ -3303,7 +3303,7 @@ coord *cc;
+ {
+ 	xchar new_x, new_y;
+ 	if (!getdir(prompt)) {
+-		pline(Never_mind);
++		pline("%s",Never_mind);
+ 		return 0;
+ 	}
+ 	new_x = x + u.dx;
+@@ -3312,7 +3312,7 @@ coord *cc;
+ 		cc->x = new_x;
+ 		cc->y = new_y;
+ 	} else {
+-		if (emsg) pline(emsg);
++		if (emsg) pline("%s",emsg);
+ 		return 0;
+ 	}
+ 	return 1;
+@@ -3625,7 +3625,7 @@ parse()
+ 		    if (multi > 9) {
+ 			clear_nhwindow(WIN_MESSAGE);
+ 			Sprintf(in_line, "Count: %d", multi);
+-			pline(in_line);
++			pline("%s",in_line);
+ 			mark_synch();
+ 		    }
+ 		    last_multi = multi;
+diff -up slashem-0.0.8E0F1/src/detect.c.format-security slashem-0.0.8E0F1/src/detect.c
+--- slashem-0.0.8E0F1/src/detect.c.format-security	2013-12-04 08:42:12.503469557 -0700
++++ slashem-0.0.8E0F1/src/detect.c	2013-12-04 08:46:46.052496266 -0700
+@@ -823,7 +823,7 @@ struct obj *obj;
+ 	case 3 : if (!resists_blnd(&youmonst)) {
+ 		pline("%s your vision!", Tobjnam(obj, "damage"));
+ 		make_blinded(Blinded + rnd(100),FALSE);
+-		if (!Blind) Your(vision_clears);
++		if (!Blind) Your("%s",vision_clears);
+ 	    } else {
+ 		pline("%s your vision.", Tobjnam(obj, "assault"));
+ 		You("are unaffected!");
+@@ -872,7 +872,7 @@ struct obj *obj;
+     ch = yn_function("What do you look for?", (char *)0, '\0');
+     /* Don't filter out ' ' here; it has a use */
+     if ((ch != def_monsyms[S_GHOST]) && index(quitchars,ch)) { 
+-	if (flags.verbose) pline(Never_mind);
++	if (flags.verbose) pline("%s",Never_mind);
+ 	return;
+     }
+     You("peer into %s...", the(xname(obj)));
+diff -up slashem-0.0.8E0F1/src/dig.c.format-security slashem-0.0.8E0F1/src/dig.c
+--- slashem-0.0.8E0F1/src/dig.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/dig.c	2013-12-04 08:43:48.689117735 -0700
+@@ -416,7 +416,7 @@ dig()
+ 		    feel_location(dpx, dpy);
+ 		else
+ 		    newsym(dpx, dpy);
+-		if(digtxt && !digging.quiet) pline(digtxt); /* after newsym */
++		if(digtxt && !digging.quiet) pline("%s",digtxt); /* after newsym */
+ 		if(dmgtxt)
+ 		    pay_for_damage(dmgtxt, FALSE);
+ 
+@@ -655,7 +655,7 @@ int ttyp;
+ 			schedule_goto(&newlevel, FALSE, TRUE, FALSE,
+ 			  You_fall, (char *)0);
+ 		    } else {
+-			pline(You_fall);
++			pline("%s",You_fall);
+ 		    goto_level(&newlevel, FALSE, TRUE, FALSE);
+ 		    /* messages for arriving in special rooms */
+ 		    spoteffects(FALSE);
+diff -up slashem-0.0.8E0F1/src/do.c.format-security slashem-0.0.8E0F1/src/do.c
+--- slashem-0.0.8E0F1/src/do.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/do.c	2013-12-04 08:35:15.745840279 -0700
+@@ -1365,7 +1365,7 @@ boolean at_stairs, falling, portal;
+ 		Sprintf(buf, mesg, !Blind ? "looks" : "seems");
+ 		mesg = buf;
+ 	    }
+-	    if (mesg) pline(mesg);
++	    if (mesg) pline("%s",mesg);
+ 	}
+ 
+ #ifdef REINCARNATION
+@@ -1513,7 +1513,7 @@ deferred_goto()
+ 	    int typmask = u.utotype; /* save it; goto_level zeroes u.utotype */
+ 
+ 	    assign_level(&dest, &u.utolev);
+-	    if (dfr_pre_msg) pline(dfr_pre_msg);
++	    if (dfr_pre_msg) pline("%s",dfr_pre_msg);
+ 	    goto_level(&dest, !!(typmask&1), !!(typmask&2), !!(typmask&4));
+ 	    if (typmask & 0200) {	/* remove portal */
+ 		struct trap *t = t_at(u.ux, u.uy);
+@@ -1523,7 +1523,7 @@ deferred_goto()
+ 		    newsym(u.ux, u.uy);
+ 		}
+ 	    }
+-	    if (dfr_post_msg) pline(dfr_post_msg);
++	    if (dfr_post_msg) pline("%s",dfr_post_msg);
+ 	}
+ 	u.utotype = 0;		/* our caller keys off of this */
+ 	if (dfr_pre_msg)
+diff -up slashem-0.0.8E0F1/src/dothrow.c.format-security slashem-0.0.8E0F1/src/dothrow.c
+--- slashem-0.0.8E0F1/src/dothrow.c.format-security	2013-12-04 08:42:12.507469535 -0700
++++ slashem-0.0.8E0F1/src/dothrow.c	2013-12-04 08:49:09.840928963 -0700
+@@ -899,7 +899,7 @@ boolean hitsroof;
+ 			pline("It blinds you!");
+ 		    u.ucreamed += blindinc;
+ 		    make_blinded(Blinded + (long)blindinc, FALSE);
+-		    if (!Blind) Your(vision_clears);
++		    if (!Blind) Your("%s",vision_clears);
+ 		}
+ 		break;
+ 	default:
+diff -up slashem-0.0.8E0F1/src/dungeon.c.format-security slashem-0.0.8E0F1/src/dungeon.c
+--- slashem-0.0.8E0F1/src/dungeon.c.format-security	2013-12-04 08:51:40.999274208 -0700
++++ slashem-0.0.8E0F1/src/dungeon.c	2013-12-04 08:51:58.575189028 -0700
+@@ -678,7 +678,7 @@ init_dungeons()
+ 	    interject_assistance(1, INTERJECT_PANIC, (genericptr_t)tbuf,
+ 				 (genericptr_t)fqn_prefix[DATAPREFIX]);
+ #endif
+-	    panic(tbuf);
++	    panic("%s",tbuf);
+ 	}
+ 
+ 	/* validate the data's version against the program's version */
+diff -up slashem-0.0.8E0F1/src/eat.c.format-security slashem-0.0.8E0F1/src/eat.c
+--- slashem-0.0.8E0F1/src/eat.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/eat.c	2013-12-04 08:49:33.056833121 -0700
+@@ -471,7 +471,7 @@ boolean message;
+ 	occupation = 0; /* do this early, so newuhs() knows we're done */
+ 	newuhs(FALSE);
+ 	if (nomovemsg) {
+-		if (message) pline(nomovemsg);
++		if (message) pline("%s",nomovemsg);
+ 		nomovemsg = 0;
+ 	} else if (message)
+ 		You("finish %s %s.", victual.piece->odrained ? "draining" :
+@@ -1443,7 +1443,7 @@ struct obj *obj;
+ 	} else if(!rn2(4) && !Blind) {
+ 		pline("Everything suddenly goes dark.");
+ 		make_blinded((long)d(2,10),FALSE);
+-		if (!Blind) Your(vision_clears);
++		if (!Blind) Your("%s",vision_clears);
+ 	} else if(!rn2(3)) {
+ 		const char *what, *where;
+ 		if (!Blind)
+diff -up slashem-0.0.8E0F1/src/engrave.c.format-security slashem-0.0.8E0F1/src/engrave.c
+--- slashem-0.0.8E0F1/src/engrave.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/engrave.c	2013-12-04 08:49:27.095857799 -0700
+@@ -982,7 +982,7 @@ doengrave()
+ 		c = yn_function("Do you want to add to the current engraving?",
+ 				ynqchars, 'y');
+ 		if (c == 'q') {
+-		    pline(Never_mind);
++		    pline("%s",Never_mind);
+ 		    return(0);
+ 		}
+ 	    }
+@@ -1075,7 +1075,7 @@ doengrave()
+ 			  Tobjnam(otmp, "glow"), otense(otmp, "fade"));
+ 		return(1);
+ 	    } else {
+-		pline(Never_mind);
++		pline("%s",Never_mind);
+ 		return(0);
+ 	    }
+ 	}
+@@ -1192,12 +1192,12 @@ doengrave()
+ 
+ 	make_engr_at(u.ux, u.uy, buf, (moves - multi), type);
+ 
+-	if (post_engr_text[0]) pline(post_engr_text);
++	if (post_engr_text[0]) pline("%s",post_engr_text);
+ 
+ 	if (doblind && !resists_blnd(&youmonst)) {
+ 	    You("are blinded by the flash!");
+ 	    make_blinded((long)rnd(50),FALSE);
+-	    if (!Blind) Your(vision_clears);
++	    if (!Blind) Your("%s",vision_clears);
+ 	}
+ 
+ 	return(1);
+diff -up slashem-0.0.8E0F1/src/hack.c.format-security slashem-0.0.8E0F1/src/hack.c
+--- slashem-0.0.8E0F1/src/hack.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/hack.c	2013-12-04 08:59:53.201874641 -0700
+@@ -754,7 +754,7 @@ still_chewing(x,y)
+ 
+     unblock_point(x, y);	/* vision */
+     newsym(x, y);
+-    if (digtxt) You(digtxt);	/* after newsym */
++    if (digtxt) You("%s",digtxt);	/* after newsym */
+     if (dmgtxt) pay_for_damage(dmgtxt, FALSE);
+     (void) memset((genericptr_t)&digging, 0, sizeof digging);
+     return 0;
+@@ -2582,7 +2582,7 @@ const char *msg_override;
+ 	multi = 0;	/* caller will usually have done this already */
+ 	if (msg_override) nomovemsg = msg_override;
+ 	else if (!nomovemsg) nomovemsg = You_can_move_again;
+-	if (*nomovemsg) pline(nomovemsg);
++	if (*nomovemsg) pline("%s",nomovemsg);
+ 	nomovemsg = 0;
+ 	u.usleep = 0;
+ 	if (afternmv) (*afternmv)();
+@@ -2771,7 +2771,7 @@ const char *str;
+ {
+     if(near_capacity() >= EXT_ENCUMBER) {
+ 	if(str)
+-	    pline(str);
++	    pline("%s",str);
+ 	else
+ 	    You_cant("do that while carrying so much stuff.");
+ 	return 1;
+diff -up slashem-0.0.8E0F1/src/invent.c.format-security slashem-0.0.8E0F1/src/invent.c
+--- slashem-0.0.8E0F1/src/invent.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/invent.c	2013-12-04 08:43:21.873202290 -0700
+@@ -1153,7 +1153,7 @@ register const char *let,*word;
+ 		}
+ 		if(index(quitchars,ilet)) {
+ 		    if(flags.verbose)
+-			pline(Never_mind);
++			pline("%s",Never_mind);
+ 		    return((struct obj *)0);
+ 		}
+ 		if(ilet == '-') {
+@@ -1220,7 +1220,7 @@ register const char *let,*word;
+ 			    PICK_ONE, allowall ? allow_all : allow_ugly);
+ 		    if (n<0) {
+ 			if (flags.verbose)
+-			    pline(Never_mind);
++			    pline("%s",Never_mind);
+ 			return (struct obj *)0;
+ 		    } else if (!n)
+ 			continue;
+@@ -1250,7 +1250,7 @@ register const char *let,*word;
+ 		    }
+ 		    if(ilet == '\033') {
+ 			if(flags.verbose)
+-			    pline(Never_mind);
++			    pline("%s",Never_mind);
+ 			return((struct obj *)0);
+ 		    }
+ 		    /* they typed a letter (not a space) at the prompt */
+@@ -2536,7 +2536,7 @@ boolean picked_some;
+ 	}
+ 
+ 	if (!otmp || is_lava(u.ux,u.uy) || (is_pool(u.ux,u.uy) && !Underwater)) {
+-		if (dfeature) pline(fbuf);
++		if (dfeature) pline("%s",fbuf);
+ 		sense_engr_at(u.ux, u.uy, FALSE); /* Eric Backus */
+ 		if (!skip_objects && (Blind || !dfeature))
+ 		    You("%s no objects here.", verb);
+@@ -2545,14 +2545,14 @@ boolean picked_some;
+ 	/* we know there is something here */
+ 
+ 	if (skip_objects) {
+-	    if (dfeature) pline(fbuf);
++	    if (dfeature) pline("%s",fbuf);
+ 	    sense_engr_at(u.ux, u.uy, FALSE); /* Eric Backus */
+ 	    There("are %s%s objects here.",
+ 		  (obj_cnt <= 10) ? "several" : "many",
+ 		  picked_some ? " more" : "");
+ 	} else if (!otmp->nexthere) {
+ 	    /* only one object */
+-	    if (dfeature) pline(fbuf);
++	    if (dfeature) pline("%s",fbuf);
+ 	    sense_engr_at(u.ux, u.uy, FALSE); /* Eric Backus */
+ #ifdef INVISIBLE_OBJECTS
+ 	    if (otmp->oinvis && !See_invisible) verb = "feel";
+@@ -3052,7 +3052,7 @@ doorganize()	/* inventory organizer by D
+ 		Sprintf(qbuf, "Adjust letter to what [%s]?",buf);
+ 		let = yn_function(qbuf, (char *)0, '\0');
+ 		if(index(quitchars,let)) {
+-			pline(Never_mind);
++			pline("%s",Never_mind);
+ 			return(0);
+ 		}
+ 		if (let == '@' || !letter(let))
+diff -up slashem-0.0.8E0F1/src/lock.c.format-security slashem-0.0.8E0F1/src/lock.c
+--- slashem-0.0.8E0F1/src/lock.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/lock.c	2013-12-04 08:35:15.750840248 -0700
+@@ -1157,7 +1157,7 @@ int x, y;
+ 	default: impossible("magic (%d) attempted on door.", otmp->otyp);
+ 	    break;
+ 	}
+-	if (msg && cansee(x,y)) pline(msg);
++	if (msg && cansee(x,y)) pline("%s",msg);
+ 	if (loudness > 0) {
+ 	    /* door was destroyed */
+ 	    wake_nearto(x, y, loudness);
+diff -up slashem-0.0.8E0F1/src/mail.c.format-security slashem-0.0.8E0F1/src/mail.c
+--- slashem-0.0.8E0F1/src/mail.c.format-security	2013-12-04 09:02:47.996993311 -0700
++++ slashem-0.0.8E0F1/src/mail.c	2013-12-04 09:03:11.273875906 -0700
+@@ -319,7 +319,7 @@ md_rush(md,tx,ty)
+ 	if (fx == tx && fy == ty) break;
+ 
+ 	if ((mon = m_at(fx,fy)) != 0)	/* save monster at this position */
+-	    verbalize(md_exclamations());
++	    verbalize("%s",md_exclamations());
+ 	else if (fx == u.ux && fy == u.uy)
+ 	    verbalize("Excuse me.");
+ 
+diff -up slashem-0.0.8E0F1/src/makemon.c.format-security slashem-0.0.8E0F1/src/makemon.c
+--- slashem-0.0.8E0F1/src/makemon.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/makemon.c	2013-12-04 08:35:15.751840242 -0700
+@@ -2507,7 +2507,7 @@ struct obj *bag;
+     if (!bag || bag->otyp != BAG_OF_TRICKS) {
+ 	impossible("bad bag o' tricks");
+     } else if (bag->spe < 1) {
+-	pline(nothing_happens);
++	pline("%s",nothing_happens);
+     } else {
+ 	boolean gotone = FALSE;
+ 	int cnt = 1;
+diff -up slashem-0.0.8E0F1/src/mcastu.c.format-security slashem-0.0.8E0F1/src/mcastu.c
+--- slashem-0.0.8E0F1/src/mcastu.c.format-security	2013-12-04 08:48:14.202154120 -0700
++++ slashem-0.0.8E0F1/src/mcastu.c	2013-12-04 08:49:22.319877552 -0700
+@@ -692,7 +692,7 @@ int spellnum;
+ 		  (num_eyes == 1) ?
+ 		  body_part(EYE) : makeplural(body_part(EYE)));
+ 	    make_blinded(Half_spell_damage ? 100L : 200L, FALSE);
+-	    if (!Blind) Your(vision_clears);
++	    if (!Blind) Your("%s",vision_clears);
+ 	    dmg = 0;
+ 	} else
+ 	    impossible("no reason for monster to cast blindness spell?");
+diff -up slashem-0.0.8E0F1/src/mhitu.c.format-security slashem-0.0.8E0F1/src/mhitu.c
+--- slashem-0.0.8E0F1/src/mhitu.c.format-security	2013-12-04 08:48:14.204154112 -0700
++++ slashem-0.0.8E0F1/src/mhitu.c	2013-12-04 08:49:42.842792392 -0700
+@@ -1315,7 +1315,7 @@ hitmu(mtmp, mattk)
+ 		if (can_blnd(mtmp, &youmonst, mattk->aatyp, (struct obj*)0)) {
+ 		    if (!Blind) pline("%s blinds you!", Monnam(mtmp));
+ 		    make_blinded(Blinded+(long)dmg,FALSE);
+-		    if (!Blind) Your(vision_clears);
++		    if (!Blind) Your("%s",vision_clears);
+ 		}
+ 		dmg = 0;
+ 		break;
+@@ -2112,7 +2112,7 @@ gulpmu(mtmp, mattk)	/* monster swallows
+ 			if(!Blind) {
+ 			    You_cant("see in here!");
+ 			    make_blinded((long)tmp,FALSE);
+-			    if (!Blind) Your(vision_clears);
++			    if (!Blind) Your("%s",vision_clears);
+ 			} else
+ 			    /* keep him blind until disgorged */
+ 			    make_blinded(Blinded+1,FALSE);
+@@ -2228,7 +2228,7 @@ common:
+ 		    if (mon_visible(mtmp) || (rnd(tmp /= 2) > u.ulevel)) {
+ 			You("are blinded by a blast of light!");
+ 			make_blinded((long)tmp, FALSE);
+-			if (!Blind) Your(vision_clears);
++			if (!Blind) Your("%s",vision_clears);
+ 		    } else if (flags.verbose)
+ 			You("get the impression it was not terribly bright.");
+ 		}
+@@ -2355,7 +2355,7 @@ gazemu(mtmp, mattk)	/* monster gazes at
+ 		    /* not blind at this point implies you're wearing
+ 		       the Eyes of the Overworld; make them block this
+ 		       particular stun attack too */
+-		    if (!Blind) Your(vision_clears);
++		    if (!Blind) Your("%s",vision_clears);
+ 		    else make_stunned((long)d(1,3),TRUE);
+ 		}
+ 		break;
+diff -up slashem-0.0.8E0F1/src/mon.c.format-security slashem-0.0.8E0F1/src/mon.c
+--- slashem-0.0.8E0F1/src/mon.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/mon.c	2013-12-04 09:07:39.391523205 -0700
+@@ -1592,7 +1592,7 @@ struct monst *mtmp;
+ 	int visible;
+ 	char buf[BUFSZ];
+ 
+-	sprintf(buf, Monnam(mtmp));
++	sprintf(buf, "%s", Monnam(mtmp));
+ 
+ 	/* If there is a timer == monster was poly'ed */
+ 	if (stop_timer(UNPOLY_MON, (genericptr_t) mtmp)) {
+@@ -2675,7 +2675,7 @@ struct monst *mon;
+ 				You("cannot polymorph %s into that.", mon_nam(mon));
+ 			else break;
+ 		} while(++tries < 5);
+-		if (tries==5) pline(thats_enough_tries);
++		if (tries==5) pline("%s",thats_enough_tries);
+ 	}
+ #endif /*WIZARD*/
+ 	if (mndx == NON_PM) mndx = rn1(SPECIAL_PM - LOW_PM, LOW_PM);
+diff -up slashem-0.0.8E0F1/src/mthrowu.c.format-security slashem-0.0.8E0F1/src/mthrowu.c
+--- slashem-0.0.8E0F1/src/mthrowu.c.format-security	2013-12-04 08:48:14.200154128 -0700
++++ slashem-0.0.8E0F1/src/mthrowu.c	2013-12-04 08:49:18.593892958 -0700
+@@ -533,7 +533,7 @@ m_throw(mon, x, y, dx, dy, range, obj)
+ 	if (blindinc) {
+ 		u.ucreamed += blindinc;
+ 		make_blinded(Blinded + (long)blindinc, FALSE);
+-		if (!Blind) Your(vision_clears);
++		if (!Blind) Your("%s",vision_clears);
+ 	}
+ }
+ 
+diff -up slashem-0.0.8E0F1/src/muse.c.format-security slashem-0.0.8E0F1/src/muse.c
+--- slashem-0.0.8E0F1/src/muse.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/muse.c	2013-12-04 08:35:15.753840230 -0700
+@@ -81,7 +81,7 @@ struct obj *obj;
+ 		    m_useup(mon, obj);
+ 		    mtmp = makemon(&mons[PM_GHOST], cc.x, cc.y, NO_MM_FLAGS);
+ 		    if (!mtmp) {
+-			if (vis) pline(empty);
++			if (vis) pline("%s",empty);
+ 		    } else {
+ 			if (vis) {
+ 			    pline("As %s opens the bottle, an enormous %s emerges!",
+@@ -104,7 +104,7 @@ struct obj *obj;
+ 		m_useup(mon, obj);
+ 		mtmp = makemon(&mons[PM_DJINNI], cc.x, cc.y, NO_MM_FLAGS);
+ 		if (!mtmp) {
+-		    if (vis) pline(empty);
++		    if (vis) pline("%s",empty);
+ 		} else {
+ 		    if (vis)
+ 			pline("In a cloud of smoke, %s emerges!",
+diff -up slashem-0.0.8E0F1/src/polyself.c.format-security slashem-0.0.8E0F1/src/polyself.c
+--- slashem-0.0.8E0F1/src/polyself.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/polyself.c	2013-12-04 08:58:51.644176793 -0700
+@@ -290,7 +290,7 @@ boolean forcecontrol;
+ 	if(!Polymorph_control && !forcecontrol && !draconian && !iswere &&
+ 			!isvamp && !Race_if(PM_DOPPELGANGER)) {
+ 		if (rn2(12) > ACURR(A_CON)) {
+-		You(shudder_for_moment);
++		You("%s",shudder_for_moment);
+ 		losehp(rnd(30), "system shock", KILLED_BY_AN);
+ 		exercise(A_CON, FALSE);
+ 		return;
+@@ -312,7 +312,7 @@ boolean forcecontrol;
+ 				You("cannot polymorph into that.");
+ 			else break;
+ 		} while(++tries < 5);
+-		if (tries==5) pline(thats_enough_tries);
++		if (tries==5) pline("%s",thats_enough_tries);
+ 		/* allow skin merging, even when polymorph is controlled */
+ 		if (draconian &&
+ 		    (mntmp == armor_to_dragon(uarm->otyp) || tries == 5))
+@@ -348,7 +348,7 @@ boolean forcecontrol;
+ 
+ 			else break;
+ 		} while(++tries < 5);
+-		if (tries==5) pline(thats_enough_tries);
++		if (tries==5) pline("%s",thats_enough_tries);
+ 		/* allow skin merging, even when polymorph is controlled */
+ 		if (draconian &&
+ 		    (mntmp == armor_to_dragon(uarm->otyp) || tries == 5))
+diff -up slashem-0.0.8E0F1/src/potion.c.format-security slashem-0.0.8E0F1/src/potion.c
+--- slashem-0.0.8E0F1/src/potion.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/potion.c	2013-12-04 08:49:30.163845039 -0700
+@@ -1135,7 +1135,7 @@ register const char *txt;
+ 		You("have a %s feeling for a moment, then it passes.",
+ 		Hallucination ? "normal" : "strange");
+ 	else
+-		pline(txt);
++		pline("%s",txt);
+ 
+ 	if(!obj)	/* e.g., crystal ball finds no traps */
+ 		return;
+@@ -1609,7 +1609,7 @@ register struct obj *obj;
+ 		    pline("It suddenly gets dark.");
+ 		}
+ 		make_blinded(itimeout_incr(Blinded, rnd(5)), FALSE);
+-		if (!Blind && !u.usleep) Your(vision_clears);
++		if (!Blind && !u.usleep) Your("%s",vision_clears);
+ 		break;
+ 	case POT_WATER:
+ 		if(u.umonnum == PM_GREMLIN) {
+@@ -2774,7 +2774,7 @@ dodip()
+ 		    obj == uball || obj == uskin ||
+ 		    obj_resists(obj->otyp == POT_POLYMORPH ?
+ 				potion : obj, 5, 95)) {
+-		pline(nothing_happens);
++		pline("%s",nothing_happens);
+ 	    } else {
+ 	    	boolean was_wep = FALSE, was_swapwep = FALSE, was_quiver = FALSE;
+ 		short save_otyp = obj->otyp;
+diff -up slashem-0.0.8E0F1/src/pray.c.format-security slashem-0.0.8E0F1/src/pray.c
+--- slashem-0.0.8E0F1/src/pray.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/pray.c	2013-12-04 08:35:15.756840212 -0700
+@@ -1233,7 +1233,7 @@ offer_oracle (mtmp, otmp)
+ 
+ 	/* Make sure it's a corpse */
+     if (otmp->otyp != CORPSE) {
+-		pline(nothing_happens);
++		pline("%s",nothing_happens);
+ 		return (1);
+ 	}
+ 
+@@ -1514,7 +1514,7 @@ verbalize("In return for thy service, I
+     } /* fake Amulet */
+ 
+     if (value == 0) {
+-	pline(nothing_happens);
++	pline("%s",nothing_happens);
+ 	return (1);
+     }
+ 
+diff -up slashem-0.0.8E0F1/src/priest.c.format-security slashem-0.0.8E0F1/src/priest.c
+--- slashem-0.0.8E0F1/src/priest.c.format-security	2013-12-04 09:02:48.000993290 -0700
++++ slashem-0.0.8E0F1/src/priest.c	2013-12-04 09:03:36.555748387 -0700
+@@ -375,8 +375,8 @@ register int roomno;
+ 		    msg1 = buf;
+ 		}
+ 		if (can_speak) {
+-		    verbalize(msg1);
+-		    if (msg2) verbalize(msg2);
++		    verbalize("%s",msg1);
++		    if (msg2) verbalize("%s",msg2);
+ 		}
+ 		if(!sanctum) {
+ 		    /* !tended -> !shrined */
+@@ -445,7 +445,7 @@ register struct monst *priest;
+ 		priest->mcanmove = 1;
+ 	    }
+ 	    priest->mpeaceful = 0;
+-	    verbalize(cranky_msg[rn2(3)]);
++	    verbalize("%s",cranky_msg[rn2(3)]);
+ 	    return;
+ 	}
+ 
+diff -up slashem-0.0.8E0F1/src/questpgr.c.format-security slashem-0.0.8E0F1/src/questpgr.c
+--- slashem-0.0.8E0F1/src/questpgr.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/questpgr.c	2013-12-04 09:11:32.077331945 -0700
+@@ -365,7 +365,7 @@ struct qtmsg *qt_msg;
+ 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
+ 	    (void) dlb_fgets(in_line, 80, msg_file);
+ 	    convert_line();
+-	    pline(out_line);
++	    pline("%s",out_line);
+ 	}
+ 
+ }
+diff -up slashem-0.0.8E0F1/src/read.c.format-security slashem-0.0.8E0F1/src/read.c
+--- slashem-0.0.8E0F1/src/read.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/read.c	2013-12-04 08:43:40.587143575 -0700
+@@ -270,14 +270,14 @@ static void
+ stripspe(obj)
+ register struct obj *obj;
+ {
+-	if (obj->blessed) pline(nothing_happens);
++	if (obj->blessed) pline("%s",nothing_happens);
+ 	else {
+ 		if (obj->spe > 0) {
+ 		    obj->spe = 0;
+ 		    if (obj->otyp == OIL_LAMP || obj->otyp == BRASS_LANTERN)
+ 			obj->age = 0;
+ 		    Your("%s %s briefly.",xname(obj), otense(obj, "vibrate"));
+-		} else pline(nothing_happens);
++		} else pline("%s",nothing_happens);
+ 	}
+ }
+ 
+@@ -391,7 +391,7 @@ int curse_bless;
+ 	} else if (obj->oclass == SPBOOK_CLASS) {
+ 
+ 	    if (obj->otyp == SPE_BOOK_OF_THE_DEAD) {
+-	    	pline(nothing_happens);
++	    	pline("%s",nothing_happens);
+ 		return;
+ 	    }
+    
+@@ -493,7 +493,7 @@ int curse_bless;
+ 		    if (obj->spe < 3)
+ 			Your("marker seems permanently dried out.");
+ 		    else
+-			pline(nothing_happens);
++			pline("%s",nothing_happens);
+ 		} else if (is_blessed) {
+ 		    n = rn1(16,15);		/* 15..30 */
+ 		    if (obj->spe + n <= 50)
+@@ -576,7 +576,7 @@ int curse_bless;
+ 		    if (obj->spe < 5) {
+ 			obj->spe++;
+ 			p_glow1(obj);
+-		    } else pline(nothing_happens);
++		    } else pline("%s",nothing_happens);
+ 		}
+ 		break;
+ 	    case HORN_OF_PLENTY:
+@@ -1597,7 +1597,7 @@ register struct obj	*sobj;
+ 		cc.x = u.ux;
+ 		cc.y = u.uy;
+ 		if (getpos(&cc, TRUE, "the desired position") < 0) {
+-		    pline(Never_mind);
++		    pline("%s",Never_mind);
+ 		    return 0;
+ 		}
+ 		if (!cansee(cc.x, cc.y) || distu(cc.x, cc.y) >= 32) {
+@@ -1755,7 +1755,7 @@ do_class_genocide()
+ 
+ 	for(j=0; ; j++) {
+ 		if (j >= 5) {
+-			pline(thats_enough_tries);
++			pline("%s",thats_enough_tries);
+ 			return;
+ 		}
+ 		do {
+@@ -1945,7 +1945,7 @@ int how;
+ 	} else {
+ 	    for(i = 0; ; i++) {
+ 		if(i >= 5) {
+-		    pline(thats_enough_tries);
++		    pline("%s",thats_enough_tries);
+ 		    return;
+ 		}
+ 		getlin("What monster do you want to genocide? [type the name]",
+@@ -2068,7 +2068,7 @@ int how;
+ 	    if (cnt)
+ 		pline("Sent in some %s.", makeplural(buf));
+ 	    else
+-		pline(nothing_happens);
++		pline("%s",nothing_happens);
+ 	}
+ }
+ 
+@@ -2188,7 +2188,7 @@ create_particular()
+ 	} while (++tries < 5);
+ 
+ 	if (tries == 5) {
+-	    pline(thats_enough_tries);
++	    pline("%s",thats_enough_tries);
+ 	} else {
+ 	    (void) cant_create(&which, FALSE);
+ 	    whichpm = &mons[which];
+diff -up slashem-0.0.8E0F1/src/region.c.format-security slashem-0.0.8E0F1/src/region.c
+--- slashem-0.0.8E0F1/src/region.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/region.c	2013-12-04 08:35:15.758840200 -0700
+@@ -448,7 +448,7 @@ xchar
+ 		!regions[i]->attach_2_u && !inside_region(regions[i], x, y)) {
+ 	    clear_hero_inside(regions[i]);
+ 	    if (regions[i]->leave_msg != NULL)
+-		pline(regions[i]->leave_msg);
++		pline("%s",regions[i]->leave_msg);
+ 	    if ((f_indx = regions[i]->leave_f) != NO_CALLBACK)
+ 		(void) (*callbacks[f_indx])(regions[i], (genericptr_t) 0);
+ 	}
+@@ -459,7 +459,7 @@ xchar
+ 		!regions[i]->attach_2_u && inside_region(regions[i], x, y)) {
+ 	    set_hero_inside(regions[i]);
+ 	    if (regions[i]->enter_msg != NULL)
+-		pline(regions[i]->enter_msg);
++		pline("%s",regions[i]->enter_msg);
+ 	    if ((f_indx = regions[i]->enter_f) != NO_CALLBACK)
+ 		(void) (*callbacks[f_indx])(regions[i], (genericptr_t) 0);
+ 	}
+diff -up slashem-0.0.8E0F1/src/restore.c.format-security slashem-0.0.8E0F1/src/restore.c
+--- slashem-0.0.8E0F1/src/restore.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/restore.c	2013-12-04 08:35:15.759840194 -0700
+@@ -778,7 +778,7 @@ boolean ghostly;
+ 	    else
+ 		Sprintf(trickbuf, "This is level %d, not %d!", dlvl, lev);
+ #ifdef WIZARD
+-	    if (wizard) pline(trickbuf);
++	    if (wizard) pline("%s",trickbuf);
+ #endif
+ 	    trickery(trickbuf);
+ 	}
+diff -up slashem-0.0.8E0F1/src/rumors.c.format-security slashem-0.0.8E0F1/src/rumors.c
+--- slashem-0.0.8E0F1/src/rumors.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/rumors.c	2013-12-04 08:35:15.759840194 -0700
+@@ -152,7 +152,7 @@ int mechanism;
+ 	    	return;
+ 	    else if (Blind) {
+ 		if (mechanism == BY_COOKIE)
+-			pline(fortune_msg);
++			pline("%s",fortune_msg);
+ 		pline("What a pity that you cannot read it!");
+ 	    	return;
+ 	    }
+@@ -170,7 +170,7 @@ int mechanism;
+ 		exercise(A_WIS, TRUE);
+ 		return;
+ 	    case BY_COOKIE:
+-		pline(fortune_msg);
++		pline("%s",fortune_msg);
+ 		/* FALLTHRU */
+ 	    case BY_PAPER:
+ 		pline("It reads:");
+diff -up slashem-0.0.8E0F1/src/shk.c.format-security slashem-0.0.8E0F1/src/shk.c
+--- slashem-0.0.8E0F1/src/shk.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/shk.c	2013-12-04 09:03:55.968650418 -0700
+@@ -644,7 +644,7 @@ register char *enterstring;
+ 	    if (!index(empty_shops, *enterstring) &&
+ 		in_rooms(u.ux, u.uy, SHOPBASE) !=
+ 				  in_rooms(u.ux0, u.uy0, SHOPBASE))
+-		pline(no_shk);
++		pline("%s",no_shk);
+ 	    Strcpy(empty_shops, u.ushops);
+ 	    u.ushops[0] = '\0';
+ 	    return;
+@@ -656,7 +656,7 @@ register char *enterstring;
+ 	    /* dump core when referenced */
+ 	    eshkp->bill_p = (struct bill_x *) -1000;
+ 	    if (!index(empty_shops, *enterstring))
+-		pline(no_shk);
++		pline("%s",no_shk);
+ 	    Strcpy(empty_shops, u.ushops);
+ 	    u.ushops[0] = '\0';
+ 	    return;
+@@ -1671,7 +1671,7 @@ proceed:
+ 		    else Strcat(sbuf,
+ 			   "for gold picked up and the use of merchandise.");
+ 		} else Strcat(sbuf, "for the use of merchandise.");
+-		pline(sbuf);
++		pline("%s",sbuf);
+ #ifndef GOLDOBJ
+ 		if (u.ugold + eshkp->credit < dtmp) {
+ 		    pline("But you don't%s have enough gold%s.",
+@@ -5084,9 +5084,9 @@ struct monst *shkp;
+ 
+     /* Here we go */
+     if (service > 0)
+-	verbalize(we_offer);
++	verbalize("%s",we_offer);
+     else
+-	pline(Never_mind);
++	pline("%s",Never_mind);
+ 
+     switch(service) {
+ 	case 0:
+@@ -5217,7 +5217,7 @@ shk_armor_works(slang, shkp)
+ 	n = select_menu(tmpwin, PICK_ONE, &selected);
+ 	destroy_nhwindow(tmpwin);
+ 
+-	verbalize(we_offer);
++	verbalize("%s",we_offer);
+ 
+ 	if (n > 0)
+ 	switch(selected[0].item.a_int) {
+diff -up slashem-0.0.8E0F1/src/sounds.c.format-security slashem-0.0.8E0F1/src/sounds.c
+--- slashem-0.0.8E0F1/src/sounds.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/sounds.c	2013-12-04 09:17:06.580614512 -0700
+@@ -75,7 +75,7 @@ dosounds()
+ 		"the splashing of a naiad.",
+ 		"a soda fountain!",
+ 	};
+-	You_hear(fountain_msg[rn2(3)+hallu]);
++	You_hear("%s",fountain_msg[rn2(3)+hallu]);
+     }
+ #ifdef SINK
+     if (level.flags.nsinks && !rn2(300)) {
+@@ -84,7 +84,7 @@ dosounds()
+ 		"a gurgling noise.",
+ 		"dishes being washed!",
+ 	};
+-	You_hear(sink_msg[rn2(2)+hallu]);
++	You_hear("%s",sink_msg[rn2(2)+hallu]);
+     }
+ #endif
+     if (level.flags.has_court && !rn2(200)) {
+@@ -103,7 +103,7 @@ dosounds()
+ 		/* finding one is enough, at least for now */
+ 		int which = rn2(3)+hallu;
+ 
+-		if (which != 2) You_hear(throne_msg[which]);
++		if (which != 2) You_hear("%s",throne_msg[which]);
+ 		else		pline(throne_msg[2], uhis());
+ 		return;
+ 	    }
+@@ -115,7 +115,7 @@ dosounds()
+ 		"smell marsh gas!",	/* so it's a smell...*/
+ 		"hear Donald Duck!",
+ 	};
+-	You(swamp_msg[rn2(2)+hallu]);
++	You("%s",swamp_msg[rn2(2)+hallu]);
+ 	return;
+     }
+     if (level.flags.spooky && !rn2(200)) {
+@@ -145,7 +145,7 @@ dosounds()
+ 		"hear someone praising your valor!",
+ 		"hear someone singing: \"Jingle bells, jingle bells...\"",
+ 	};
+-	You(spooky_msg[rn2(15)+hallu*9]);
++	You("%s",spooky_msg[rn2(15)+hallu*9]);
+ 	return;
+     }
+     if (level.flags.has_vault && !rn2(200)) {
+@@ -253,7 +253,7 @@ dosounds()
+ 		mon_in_room(mtmp, BARRACKS) &&
+ 		/* sleeping implies not-yet-disturbed (usually) */
+ 		(mtmp->msleeping || ++count > 5)) {
+-		You_hear(barracks_msg[rn2(3)+hallu]);
++		You_hear("%s",barracks_msg[rn2(3)+hallu]);
+ 		return;
+ 	    }
+ 	}
+@@ -268,7 +268,7 @@ dosounds()
+ 	    if (DEADMONSTER(mtmp)) continue;
+ 	    if ((mtmp->msleeping || is_animal(mtmp->data)) &&
+ 		    mon_in_room(mtmp, ZOO)) {
+-		You_hear(zoo_msg[rn2(2)+hallu]);
++		You_hear("%s",zoo_msg[rn2(2)+hallu]);
+ 		return;
+ 	    }
+ 	}
+@@ -286,7 +286,7 @@ dosounds()
+ 		    "the chime of a cash register.",
+ 		    "Neiman and Marcus arguing!",
+ 	    };
+-	    You_hear(shop_msg[rn2(2)+hallu]);
++	    You_hear("%s",shop_msg[rn2(2)+hallu]);
+ 	}
+ 	return;
+     }
+@@ -306,7 +306,7 @@ dosounds()
+ 	    };
+ 	    /* KMH -- Give funny messages on Groundhog Day */
+ 	    if (flags.groundhogday) hallu = 1;
+-	    You_hear(ora_msg[rn2(3)+hallu*2]);
++	    You_hear("%s",ora_msg[rn2(3)+hallu*2]);
+ 	}
+ 	return;
+     }
+@@ -318,7 +318,7 @@ dosounds()
+         "Somebody whispers: \"Food rations? Only 900 zorkmids.\"",
+         "You feel like searching for more gold.",
+       };
+-      pline(blkmar_msg[rn2(2)+hallu]);
++      pline("%s",blkmar_msg[rn2(2)+hallu]);
+     }
+ #endif /* BLACKMARKET */
+ }
+@@ -942,7 +942,7 @@ register struct monst *mtmp;
+     }
+ 
+     if (pline_msg) pline("%s %s", Monnam(mtmp), pline_msg);
+-    else if (verbl_msg) verbalize(verbl_msg);
++    else if (verbl_msg) verbalize("%s",verbl_msg);
+     return(1);
+ }
+ 
+diff -up slashem-0.0.8E0F1/src/spell.c.format-security slashem-0.0.8E0F1/src/spell.c
+--- slashem-0.0.8E0F1/src/spell.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/spell.c	2013-12-04 08:35:15.763840170 -0700
+@@ -1059,14 +1059,14 @@ boolean atme;
+ 		break;
+ 	case SPE_JUMPING:
+ 		if (!jump(max(role_skill,1)))
+-			pline(nothing_happens);
++			pline("%s",nothing_happens);
+ 		break;
+ 	case SPE_RESIST_POISON:
+ 		if(!(HPoison_resistance & INTRINSIC)) {
+ 			You("feel healthy ..... for the moment at least.");
+ 			incr_itimeout(&HPoison_resistance, rn1(1000, 500) +
+ 				spell_damage_bonus(spellid(spell))*100);
+-		} else pline(nothing_happens);	/* Already have as intrinsic */
++		} else pline("%s",nothing_happens);	/* Already have as intrinsic */
+ 		break;
+ 	case SPE_RESIST_SLEEP:
+ 		if(!(HSleep_resistance & INTRINSIC)) {
+@@ -1076,14 +1076,14 @@ boolean atme;
+ 				You("no longer feel tired.");
+ 			incr_itimeout(&HSleep_resistance, rn1(1000, 500) +
+ 				spell_damage_bonus(spellid(spell))*100);
+-		} else pline(nothing_happens);	/* Already have as intrinsic */
++		} else pline("%s",nothing_happens);	/* Already have as intrinsic */
+ 		break;
+ 	case SPE_ENDURE_COLD:
+ 		if(!(HCold_resistance & INTRINSIC)) {
+ 			You("feel warmer.");
+ 			incr_itimeout(&HCold_resistance, rn1(1000, 500) +
+ 				spell_damage_bonus(spellid(spell))*100);
+-		} else pline(nothing_happens);	/* Already have as intrinsic */
++		} else pline("%s",nothing_happens);	/* Already have as intrinsic */
+ 		break;
+ 	case SPE_ENDURE_HEAT:
+ 		if(!(HFire_resistance & INTRINSIC)) {
+@@ -1093,7 +1093,7 @@ boolean atme;
+ 				You("feel colder.");
+ 			incr_itimeout(&HFire_resistance, rn1(1000, 500) +
+ 				spell_damage_bonus(spellid(spell))*100);
+-		} else pline(nothing_happens);	/* Already have as intrinsic */
++		} else pline("%s",nothing_happens);	/* Already have as intrinsic */
+ 		break;
+ 	case SPE_INSULATE:
+ 		if(!(HShock_resistance & INTRINSIC)) {
+@@ -1103,7 +1103,7 @@ boolean atme;
+ 				You("are not at all shocked by this feeling.");
+ 			incr_itimeout(&HShock_resistance, rn1(1000, 500) +
+ 				spell_damage_bonus(spellid(spell))*100);
+-		} else pline(nothing_happens);	/* Already have as intrinsic */
++		} else pline("%s",nothing_happens);	/* Already have as intrinsic */
+ 		break;
+ 	case SPE_ENLIGHTEN: 
+ 		You("feel self-knowledgeable...");
+diff -up slashem-0.0.8E0F1/src/steed.c.format-security slashem-0.0.8E0F1/src/steed.c
+--- slashem-0.0.8E0F1/src/steed.c.format-security	2013-12-04 08:42:12.505469546 -0700
++++ slashem-0.0.8E0F1/src/steed.c	2013-12-04 08:43:05.043253952 -0700
+@@ -58,7 +58,7 @@ use_saddle(otmp)
+ 
+ 	/* Select an animal */
+ 	if (u.uswallow || Underwater || !getdir((char *)0)) {
+-	    pline(Never_mind);
++	    pline("%s",Never_mind);
+ 	    return 0;
+ 	}
+ 	if (!u.dx && !u.dy) {
+diff -up slashem-0.0.8E0F1/src/tech.c.format-security slashem-0.0.8E0F1/src/tech.c
+--- slashem-0.0.8E0F1/src/tech.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/tech.c	2013-12-04 08:58:34.531260505 -0700
+@@ -735,7 +735,7 @@ int tech_no;
+ 		    healup(techlev(tech_no) * 4, 0, FALSE, FALSE);
+ 		    t_timeout = 3000;
+ 		} else
+-		    pline(nothing_happens);
++		    pline("%s",nothing_happens);
+ 		break;
+             case T_KIII:
+ 		You("scream \"KIIILLL!\"");
+@@ -1098,7 +1098,7 @@ int tech_no;
+ 		break;
+             case T_REVIVE: 
+ 		if (u.uswallow) {
+-		    You(no_elbow_room);
++		    You("%s",no_elbow_room);
+ 		    return 0;
+ 		}
+             	num = 100 - techlev(tech_no); /* WAC make this depend on mon? */
+diff -up slashem-0.0.8E0F1/src/teleport.c.format-security slashem-0.0.8E0F1/src/teleport.c
+--- slashem-0.0.8E0F1/src/teleport.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/teleport.c	2013-12-04 08:59:33.678971034 -0700
+@@ -497,7 +497,7 @@ wiz_debug_cmd() /* in this case, run wpa
+     char buf[BUFSIZ];
+     for(i = 0; ; i++) {
+ 	if(i >= 5) {
+-	    pline(thats_enough_tries);
++	    pline("%s",thats_enough_tries);
+ 	    return;
+ 	}
+ 	getlin("What monster do you want to test? [type the name]", buf);
+@@ -934,7 +934,7 @@ dotele()
+ 		else tele();
+ 		(void) next_to_u();
+ 	} else {
+-		You(shudder_for_moment);
++		You("%s",shudder_for_moment);
+ 		return(0);
+ 	}
+ 	if (!trap) morehungry(10);
+@@ -1066,7 +1066,7 @@ level_tele()
+ 		    Is_blackmarket(&u.uz) ||
+ #endif
+ 		    Is_aligned_quest(&u.uz)) && newlev > 0) {
+-		You(shudder_for_moment);
++		You("%s",shudder_for_moment);
+ 		return;
+ 	    }
+ 	    /* if in Quest, the player sees "Home 1", etc., on the status
+@@ -1083,13 +1083,13 @@ level_tele()
+  random_levtport:
+ 	    newlev = random_teleport_level();
+ 	    if (newlev == depth(&u.uz)) {
+-		You(shudder_for_moment);
++		You("%s",shudder_for_moment);
+ 		return;
+ 	    }
+ 	}
+ 
+ 	if (!next_to_u()) {
+-		You(shudder_for_moment);
++		You("%s",shudder_for_moment);
+ 		return;
+ 	}
+ #ifdef WIZARD
+@@ -1229,7 +1229,7 @@ register struct trap *ttmp;
+ 	struct d_level target_level;
+ 
+ 	if (!next_to_u()) {
+-		You(shudder_for_moment);
++		You("%s",shudder_for_moment);
+ 		return;
+ 	}
+ 
+@@ -1263,7 +1263,7 @@ struct trap *trap;
+ 			shieldeff(u.ux, u.uy);
+ 		You_feel("a wrenching sensation.");
+ 	} else if (!next_to_u()) {
+-		You(shudder_for_moment);
++		You("%s",shudder_for_moment);
+ 	} else if (trap->once) {
+ 		deltrap(trap);
+ 		newsym(u.ux,u.uy);	/* get rid of trap symbol */
+diff -up slashem-0.0.8E0F1/src/timeout.c.format-security slashem-0.0.8E0F1/src/timeout.c
+--- slashem-0.0.8E0F1/src/timeout.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/timeout.c	2013-12-04 08:58:43.258217814 -0700
+@@ -33,7 +33,7 @@ stoned_dialogue()
+ 	register long i = (Stoned & TIMEOUT);
+ 
+ 	if (i > 0L && i <= SIZE(stoned_texts))
+-		pline(stoned_texts[SIZE(stoned_texts) - i]);
++		pline("%s",stoned_texts[SIZE(stoned_texts) - i]);
+ 	if (i == 5L)
+ 		HFast = 0L;
+ 	if (i == 3L) {
+@@ -60,7 +60,7 @@ vomiting_dialogue()
+ 
+ 	if ((((Vomiting & TIMEOUT) % 3L) == 2) && (i >= 0)
+ 	    && (i < SIZE(vomiting_texts)))
+-		You(vomiting_texts[SIZE(vomiting_texts) - i - 1]);
++		You("%s",vomiting_texts[SIZE(vomiting_texts) - i - 1]);
+ 
+ 	switch ((int) i) {
+ 	case 0:
+@@ -107,7 +107,7 @@ choke_dialogue()
+ 		if (index(str, '%'))
+ 		    pline(str, hcolor(NH_BLUE));
+ 		else
+-		    pline(str);
++		    pline("%s",str);
+ 	    }
+ 	}
+ 	exercise(A_STR, FALSE);
+@@ -137,7 +137,7 @@ slime_dialogue()
+ 		} else
+ 		    pline(str, an(Hallucination ? rndmonnam() : "green slime"));
+ 	    } else
+-		pline(str);
++		pline("%s",str);
+ 	}
+ 	if (i == 3L) {	/* limbs becoming oozy */
+ 	    HFast = 0L;	/* lose intrinsic speed */
+diff -up slashem-0.0.8E0F1/src/trap.c.format-security slashem-0.0.8E0F1/src/trap.c
+--- slashem-0.0.8E0F1/src/trap.c.format-security	2013-12-04 08:48:14.198154136 -0700
++++ slashem-0.0.8E0F1/src/trap.c	2013-12-04 08:59:18.059047552 -0700
+@@ -365,7 +365,7 @@ boolean td;	/* td == TRUE : trap door or
+ 	    dont_fall = "are jerked back by your pet!";
+ 	}
+ 	if (dont_fall) {
+-	    You(dont_fall);
++	    You("%s",dont_fall);
+ 	    /* hero didn't fall through, but any objects here might */
+ 	    impact_drop((struct obj *)0, u.ux, u.uy, 0);
+ 	    if (!td) {
+@@ -2613,7 +2613,7 @@ domagictrap()
+ 	  if (!resists_blnd(&youmonst)) {
+ 		You("are momentarily blinded by a flash of light!");
+ 		make_blinded((long)rn1(5,10),FALSE);
+-		if (!Blind) Your(vision_clears);
++		if (!Blind) Your("%s",vision_clears);
+ 	  } else if (!Blind) {
+ 		You("see a flash of light!");
+ 	  }  else
+diff -up slashem-0.0.8E0F1/src/uhitm.c.format-security slashem-0.0.8E0F1/src/uhitm.c
+diff -up slashem-0.0.8E0F1/src/u_init.c.format-security slashem-0.0.8E0F1/src/u_init.c
+diff -up slashem-0.0.8E0F1/src/wizard.c.format-security slashem-0.0.8E0F1/src/wizard.c
+diff -up slashem-0.0.8E0F1/src/zap.c.format-security slashem-0.0.8E0F1/src/zap.c
+--- slashem-0.0.8E0F1/src/zap.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/src/zap.c	2013-12-04 09:20:04.245704225 -0700
+@@ -2180,7 +2180,7 @@ dozap()
+ 	check_unpaid(obj);
+ 
+ 	/* zappable addition done by GAN 11/03/86 */
+-	if(!zappable(obj)) pline(nothing_happens);
++	if(!zappable(obj)) pline("%s",nothing_happens);
+ 	else if(obj->cursed && !rn2(5)) {
+ 		/* WAC made this rn2(5) from rn2(100)*/
+ 		backfire(obj);  /* the wand blows up in your face! */
+@@ -2383,9 +2383,9 @@ boolean ordinary;
+ 		    destroy_item(WAND_CLASS, AD_ELEC);
+ 		    destroy_item(RING_CLASS, AD_ELEC);
+ 		    if (!resists_blnd(&youmonst)) {
+-			    You(are_blinded_by_the_flash);
++			    You("%s",are_blinded_by_the_flash);
+ 			    make_blinded((long)rnd(100),FALSE);
+-			    if (!Blind) Your(vision_clears);
++			    if (!Blind) Your("%s",vision_clears);
+ 		    }
+ 		    break;
+ 
+@@ -2599,10 +2599,10 @@ boolean ordinary;
+ #endif
+ 		    damage += rnd(25);
+ 		    if (!resists_blnd(&youmonst)) {
+-			You(are_blinded_by_the_flash);
++			You("%s",are_blinded_by_the_flash);
+ 			make_blinded((long)damage, FALSE);
+ 			makeknown(obj->otyp);
+-			if (!Blind) Your(vision_clears);
++			if (!Blind) Your("%s",vision_clears);
+ 		    }
+ 		    damage = 0;	/* reset */
+ 		    break;
+@@ -2908,7 +2908,7 @@ struct obj *obj;	/* wand or spell */
+ 	case SPE_STONE_TO_FLESH:
+ 	    if (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz) ||
+ 		     Underwater || (Is_qstart(&u.uz) && u.dz < 0)) {
+-		pline(nothing_happens);
++		pline("%s",nothing_happens);
+ 	    } else if (u.dz < 0) {	/* we should do more... */
+ 		pline("Blood drips on your %s.", body_part(FACE));
+ 	    } else if (u.dz > 0 && !OBJ_AT(u.ux, u.uy)) {
+@@ -2919,7 +2919,7 @@ struct obj *obj;	/* wand or spell */
+ 		e = engr_at(u.ux, u.uy);
+ 		if (!(e && e->engr_type == ENGRAVE)) {
+ 		    if (is_pool(u.ux, u.uy) || is_ice(u.ux, u.uy))
+-			pline(nothing_happens);
++			pline("%s",nothing_happens);
+ 		    else
+ 			pline("Blood %ss %s your %s.",
+ 			      is_lava(u.ux, u.uy) ? "boil" : "pool",
+@@ -4199,9 +4199,9 @@ register int dx,dy;
+ 		pline("%s whizzes by you!", The(fltxt));
+ 	    }
+ 	    if (abstype == ZT_LIGHTNING && !resists_blnd(&youmonst)) {
+-		You(are_blinded_by_the_flash);
++		You("%s",are_blinded_by_the_flash);
+ 		make_blinded((long)d(nd,50),FALSE);
+-		if (!Blind) Your(vision_clears);
++		if (!Blind) Your("%s",vision_clears);
+ 	    }
+ 	    stop_occupation();
+ 	    nomul(0);
+@@ -4374,7 +4374,7 @@ boolean *shopdamage;
+ 		    if (ttmp) ttmp->tseen = 1;
+ 		    if (cansee(x,y)) msgtxt = "The water evaporates.";
+ 		}
+-		Norep(msgtxt);
++		Norep("%s",msgtxt);
+ 		if (lev->typ == ROOM) newsym(x,y);
+ 	    } else if(IS_FOUNTAIN(lev->typ)) {
+ 		    if (cansee(x,y))
+@@ -4506,12 +4506,12 @@ boolean *shopdamage;
+ 		    lev->doormask = new_doormask;
+ 		    unblock_point(x, y);	/* vision */
+ 		    if (cansee(x, y)) {
+-			pline(see_txt);
++			pline("%s",see_txt);
+ 			newsym(x, y);
+ 		    } else if (sense_txt) {
+-			You(sense_txt);
++			You("%s",sense_txt);
+ 		    } else if (hear_txt) {
+-			if (flags.soundok) You_hear(hear_txt);
++			if (flags.soundok) You_hear("%s",hear_txt);
+ 		    }
+ 		    if (picking_at(x, y)) {
+ 			stop_occupation();
+@@ -4941,7 +4941,7 @@ retry:
+ 	if (!otmp) {
+ 	    pline("Nothing fitting that description exists in the game.");
+ 	    if (++tries < 5) goto retry;
+-	    pline(thats_enough_tries);
++	    pline("%s",thats_enough_tries);
+ 	    otmp = readobjnam((char *)0, (struct obj *)0, TRUE);
+ 	    if (!otmp) return;	/* for safety; should never happen */
+ 	} else if (otmp == &nothing) {
+diff -up slashem-0.0.8E0F1/sys/amiga/txt2iff.c.format-security slashem-0.0.8E0F1/sys/amiga/txt2iff.c
+diff -up slashem-0.0.8E0F1/sys/amiga/winchar.c.format-security slashem-0.0.8E0F1/sys/amiga/winchar.c
+diff -up slashem-0.0.8E0F1/sys/amiga/winmenu.c.format-security slashem-0.0.8E0F1/sys/amiga/winmenu.c
+--- slashem-0.0.8E0F1/sys/amiga/winmenu.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/sys/amiga/winmenu.c	2013-12-04 08:35:15.769840133 -0700
+@@ -822,7 +822,7 @@ DoMenuScroll( win, blocking, how, retmip
+ 				reset_counting = TRUE;
+ 			    }
+ 			    sprintf(countString, "Count: %d", count);
+-			    pline(countString);
++			    pline("%s",countString);
+ 			}
+ 		    } else if( code == CTRL('D') || code == CTRL('U') ||
+ 			       code == MENU_NEXT_PAGE || code == MENU_PREVIOUS_PAGE ||
+diff -up slashem-0.0.8E0F1/sys/share/nhlan.c.format-security slashem-0.0.8E0F1/sys/share/nhlan.c
+--- slashem-0.0.8E0F1/sys/share/nhlan.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/sys/share/nhlan.c	2013-12-04 08:35:15.770840127 -0700
+@@ -66,7 +66,7 @@ char *lan_username()
+ # ifdef LAN_MAIL
+ #if 0
+ static void
+-mail_by_pline(msg)
++mail_by_pline("%s",msg)
+ struct lan_mail_struct *msg;
+ {
+ 	long	size;
+@@ -74,7 +74,7 @@ struct lan_mail_struct *msg;
+ 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
+ 	    (void) dlb_fgets(in_line, 80, msg_file);
+ 	    convert_line();
+-	    pline(out_line);
++	    pline("%s",out_line);
+ 	}
+ 
+ }
+diff -up slashem-0.0.8E0F1/sys/vms/vmsmail.c.format-security slashem-0.0.8E0F1/sys/vms/vmsmail.c
+diff -up slashem-0.0.8E0F1/util/makedefs.c.format-security slashem-0.0.8E0F1/util/makedefs.c
+--- slashem-0.0.8E0F1/util/makedefs.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/util/makedefs.c	2013-12-04 08:35:15.771840121 -0700
+@@ -384,7 +384,7 @@ do_rumors()
+ 		perror(filename);
+ 		exit(EXIT_FAILURE);
+ 	}
+-	Fprintf(ofp,Dont_Edit_Data);
++	Fprintf(ofp,"%s",Dont_Edit_Data);
+ 
+ 	Sprintf(infile, DATA_IN_TEMPLATE, RUMOR_FILE);
+ 	Strcat(infile, ".tru");
+@@ -608,7 +608,7 @@ do_date()
+ 		exit(EXIT_FAILURE);
+ 	}
+ 	Fprintf(ofp,"/*\tSCCS Id: @(#)date.h\t3.4\t2002/02/03 */\n\n");
+-	Fprintf(ofp,Dont_Edit_Code);
++	Fprintf(ofp,"%s",Dont_Edit_Code);
+ 
+ #ifdef KR1ED
+ 	(void) time(&clocktim);
+@@ -1388,7 +1388,7 @@ do_dungeon()
+ 		perror(filename);
+ 		exit(EXIT_FAILURE);
+ 	}
+-	Fprintf(ofp,Dont_Edit_Data);
++	Fprintf(ofp,"%s",Dont_Edit_Data);
+ 
+ 	while (fgets(in_line, sizeof in_line, ifp) != 0) {
+ 	    SpinCursor(3);
+@@ -1513,7 +1513,7 @@ do_monstr()
+ 	perror(filename);
+ 	exit(EXIT_FAILURE);
+     }
+-    Fprintf(ofp,Dont_Edit_Code);
++    Fprintf(ofp,"%s",Dont_Edit_Code);
+     Fprintf(ofp,"#include \"config.h\"\n");
+     Fprintf(ofp,"\nconst int monstr[] = {\n");
+     for (ptr = &mons[0], j = 0; ptr->mlet; ptr++) {
+@@ -1554,7 +1554,7 @@ do_permonst()
+ 		exit(EXIT_FAILURE);
+ 	}
+ 	Fprintf(ofp,"/*\tSCCS Id: @(#)pm.h\t3.4\t2002/02/03 */\n\n");
+-	Fprintf(ofp,Dont_Edit_Code);
++	Fprintf(ofp,"%s",Dont_Edit_Code);
+ 	Fprintf(ofp,"#ifndef PM_H\n#define PM_H\n");
+ 
+ 	if (strcmp(mons[0].mname, "playermon") != 0)
+@@ -1869,7 +1869,7 @@ do_objs()
+ 		exit(EXIT_FAILURE);
+ 	}
+ 	Fprintf(ofp,"/*\tSCCS Id: @(#)onames.h\t3.4\t2002/02/03 */\n\n");
+-	Fprintf(ofp,Dont_Edit_Code);
++	Fprintf(ofp,"%s",Dont_Edit_Code);
+ 	Fprintf(ofp,"#ifndef ONAMES_H\n#define ONAMES_H\n\n");
+ 
+ 	for(i = 0; !i || objects[i].oc_class != ILLOBJ_CLASS; i++) {
+@@ -2024,7 +2024,7 @@ do_vision()
+ 	perror(filename);
+ 	exit(EXIT_FAILURE);
+     }
+-    Fprintf(ofp,Dont_Edit_Code);
++    Fprintf(ofp,"%s",Dont_Edit_Code);
+     Fprintf(ofp,"#ifdef VISION_TABLES\n");
+ #ifdef VISION_TABLES
+     H_close_gen();
+@@ -2049,7 +2049,7 @@ do_vision()
+ 	Unlink(filename);
+ 	exit(EXIT_FAILURE);
+     }
+-    Fprintf(ofp,Dont_Edit_Code);
++    Fprintf(ofp,"%s",Dont_Edit_Code);
+     Fprintf(ofp,"#include \"config.h\"\n");
+     Fprintf(ofp,"#ifdef VISION_TABLES\n");
+     Fprintf(ofp,"#include \"vis_tab.h\"\n");
+@@ -2381,7 +2381,7 @@ do_filenames()
+ 		exit(EXIT_FAILURE);
+     }
+     Fprintf(ofp,"/*\tSCCS Id: @(#)filename.h\t3.2\t96/05/17 */\n\n");
+-    Fprintf(ofp,Dont_Edit_Code);
++    Fprintf(ofp,"%s",Dont_Edit_Code);
+ 
+ /*OPEN file*/
+     Sprintf(infile, INCLUDE_TEMPLATE, FILE_H);
+diff -up slashem-0.0.8E0F1/win/proxy/winproxy.c.format-security slashem-0.0.8E0F1/win/proxy/winproxy.c
+--- slashem-0.0.8E0F1/win/proxy/winproxy.c.format-security	2006-12-30 06:04:53.000000000 -0700
++++ slashem-0.0.8E0F1/win/proxy/winproxy.c	2013-12-04 08:35:15.771840121 -0700
+@@ -422,7 +422,7 @@ const char *error;
+ 	(void) fflush(stderr);
+ 	hangup(0);
+     } else {
+-	pline(error);
++	pline("%s",error);
+ 	pline("Program in disorder - perhaps you'd better #quit.");
+     }
+ }
+diff -up slashem-0.0.8E0F1/win/win32/winhack.c.format-security slashem-0.0.8E0F1/win/win32/winhack.c

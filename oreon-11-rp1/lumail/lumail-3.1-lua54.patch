@@ -1,0 +1,240 @@
+diff -up lumail-3.1/src/cache_lua.cc.me lumail-3.1/src/cache_lua.cc
+--- lumail-3.1/src/cache_lua.cc.me	2020-09-28 21:28:55.071478949 +0200
++++ lumail-3.1/src/cache_lua.cc	2020-09-28 21:40:18.433044547 +0200
+@@ -245,10 +245,10 @@ void InitCache(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/config_lua.cc.me lumail-3.1/src/config_lua.cc
+--- lumail-3.1/src/config_lua.cc.me	2020-09-28 21:43:39.187769376 +0200
++++ lumail-3.1/src/config_lua.cc	2020-09-28 21:44:07.964176066 +0200
+@@ -220,10 +220,10 @@ void InitConfig(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/directory_lua.cc.me lumail-3.1/src/directory_lua.cc
+--- lumail-3.1/src/directory_lua.cc.me	2020-09-28 21:44:36.422580552 +0200
++++ lumail-3.1/src/directory_lua.cc	2020-09-28 21:45:10.543049704 +0200
+@@ -153,10 +153,10 @@ void InitDirectory(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/file_lua.cc.me lumail-3.1/src/file_lua.cc
+--- lumail-3.1/src/file_lua.cc.me	2020-09-28 21:45:27.929288415 +0200
++++ lumail-3.1/src/file_lua.cc	2020-09-28 21:46:00.745738991 +0200
+@@ -241,10 +241,10 @@ void InitFile(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.3.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/global_state_lua.cc.me lumail-3.1/src/global_state_lua.cc
+--- lumail-3.1/src/global_state_lua.cc.me	2020-09-28 21:51:23.979037359 +0200
++++ lumail-3.1/src/global_state_lua.cc	2020-09-28 21:51:39.179233421 +0200
+@@ -207,10 +207,10 @@ void InitGlobalState(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/logger_lua.cc.me lumail-3.1/src/logger_lua.cc
+--- lumail-3.1/src/logger_lua.cc.me	2020-09-28 21:53:30.336684440 +0200
++++ lumail-3.1/src/logger_lua.cc	2020-09-28 21:53:46.745001425 +0200
+@@ -100,10 +100,10 @@ void InitLogfile(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/maildir_lua.cc.me lumail-3.1/src/maildir_lua.cc
+--- lumail-3.1/src/maildir_lua.cc.me	2020-09-28 21:53:59.171171238 +0200
++++ lumail-3.1/src/maildir_lua.cc	2020-09-28 21:54:18.914441045 +0200
+@@ -348,10 +348,10 @@ void InitMaildir(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/message_lua.cc.me lumail-3.1/src/message_lua.cc
+--- lumail-3.1/src/message_lua.cc.me	2020-09-28 21:50:47.689561353 +0200
++++ lumail-3.1/src/message_lua.cc	2020-09-28 21:51:02.640757469 +0200
+@@ -509,10 +509,10 @@ void InitMessage(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/message_part_lua.cc.me lumail-3.1/src/message_part_lua.cc
+--- lumail-3.1/src/message_part_lua.cc.me	2020-09-28 21:50:18.792182359 +0200
++++ lumail-3.1/src/message_part_lua.cc	2020-09-28 21:50:35.448400788 +0200
+@@ -294,10 +294,10 @@ void InitMessagePart(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/mime_lua.cc.me lumail-3.1/src/mime_lua.cc
+--- lumail-3.1/src/mime_lua.cc.me	2020-09-28 21:48:59.428149478 +0200
++++ lumail-3.1/src/mime_lua.cc	2020-09-28 21:49:32.748578965 +0200
+@@ -82,10 +82,10 @@ void InitMIME(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/net_lua.cc.me lumail-3.1/src/net_lua.cc
+--- lumail-3.1/src/net_lua.cc.me	2020-09-28 21:51:49.965371998 +0200
++++ lumail-3.1/src/net_lua.cc	2020-09-28 21:52:07.403596041 +0200
+@@ -112,10 +112,10 @@ void InitNet(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/panel_lua.cc.me lumail-3.1/src/panel_lua.cc
+--- lumail-3.1/src/panel_lua.cc.me	2020-09-28 21:49:47.046766342 +0200
++++ lumail-3.1/src/panel_lua.cc	2020-09-28 21:50:04.357993204 +0200
+@@ -235,10 +235,10 @@ void InitPanel(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/regexp_lua.cc.me lumail-3.1/src/regexp_lua.cc
+--- lumail-3.1/src/regexp_lua.cc.me	2020-09-28 21:52:59.831280564 +0200
++++ lumail-3.1/src/regexp_lua.cc	2020-09-28 21:52:33.332929737 +0200
+@@ -166,10 +166,10 @@ void InitRegexp(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/screen_lua.cc.me lumail-3.1/src/screen_lua.cc
+--- lumail-3.1/src/screen_lua.cc.me	2020-09-28 21:47:34.736032770 +0200
++++ lumail-3.1/src/screen_lua.cc	2020-09-28 21:48:00.576388491 +0200
+@@ -264,10 +264,10 @@ void InitScreen(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 || LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);
+diff -up lumail-3.1/src/utf_lua.cc.me lumail-3.1/src/utf_lua.cc
+--- lumail-3.1/src/utf_lua.cc.me	2020-09-28 21:48:18.393627672 +0200
++++ lumail-3.1/src/utf_lua.cc	2020-09-28 21:48:45.297969791 +0200
+@@ -85,10 +85,10 @@ void InitUtf(lua_State * l)
+ 
+ #if LUA_VERSION_NUM == 501
+     luaL_register(l, NULL, sFooRegs);
+-#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503
++#elif LUA_VERSION_NUM == 502 || LUA_VERSION_NUM == 503 | LUA_VERSION_NUM == 504
+     luaL_setfuncs(l, sFooRegs, 0);
+ #else
+-#error We are only tested under Lua 5.1, 5.2, or 5.3.
++#error We are only tested under Lua 5.1, 5.2, 5.3 or 5.4.
+ #endif
+ 
+     lua_pushvalue(l, -1);

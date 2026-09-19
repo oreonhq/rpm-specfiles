@@ -1,0 +1,10 @@
+--- skf-2.10/skf_convert.i.rubycheck	2024-01-05 13:48:57.143063331 +0900
++++ skf-2.10/skf_convert.i	2024-01-05 17:30:28.938429890 +0900
+@@ -526,6 +526,7 @@ struct Skf_localestring *skf_rbstring2sk
+     if ((sstrdef = calloc(1,sizeof(struct Skf_localestring))) == NULL) {
+     	skferr(SKF_MALLOCERR,24,2);
+     } else {
++	if (TYPE(rstr) != T_STRING) {rb_raise(rb_eArgError, "wrong type for arguments"); skferr(SKF_NOTABLE, 0, 0); }
+ 	sstrdef->sstr = (unsigned char *)RSTRING_PTR(rstr);
+ 	sstrdef->length = RSTRING_LEN(rstr);
+ 	sstrdef->codeset = 

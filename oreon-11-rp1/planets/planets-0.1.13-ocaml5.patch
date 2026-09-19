@@ -1,0 +1,101 @@
+--- planets-0.1.13/augMap.ml.orig	2007-06-19 20:20:50.000000000 -0600
++++ planets-0.1.13/augMap.ml	2023-09-09 11:36:59.830066278 -0600
+@@ -56,7 +56,7 @@ struct
+     let rec loop pairlist map = 
+       match pairlist with
+ 	  [] -> map
+-	| (key,data)::tl -> loop tl (add key data map)
++	| (key,data)::tl -> loop tl (add ~key ~data map)
+     in
+       loop pairlist empty
+ 
+--- planets-0.1.13/display.ml.orig	2007-06-19 20:20:50.000000000 -0600
++++ planets-0.1.13/display.ml	2023-09-09 12:00:12.957065364 -0600
+@@ -745,7 +745,7 @@ let handler_to_string h =
+   let matcher = match h.key with
+       Key s -> s
+     | KeySym s -> s
+-    | KeyList slist -> String.concat ", " slist 
++    | KeyList slist -> String.concat ~sep:", " slist
+     | Other -> "Any other key"
+   in
+   "\t" ^ matcher ^
+@@ -754,7 +754,7 @@ let handler_to_string h =
+     
+ let hlist_to_string hlist = 
+   let slist = List.map ~f:handler_to_string hlist in
+-  String.concat "\n" slist
++  String.concat ~sep:"\n" slist
+ 
+ (***********************************************************)
+ 
+@@ -1215,7 +1215,7 @@ and main_key_handler e =
+ 	if (match handler.key with
+ 		Key hkey -> hkey = key
+ 	      | KeySym hkeysym -> hkeysym = keysym
+-	      | KeyList hkeys -> List.mem keysym hkeys
++	      | KeyList hkeys -> List.mem keysym ~set:hkeys
+ 	      | Other -> true )
+ 	then
+ 	  ( debug_msg handler.description;
+@@ -1274,7 +1274,6 @@ let rec timer_cb () =
+     in
+     let time_left_ms = 
+       max 0 (int_of_float (float_of_int gap_ms#v -. MTimer.read_ms full_timer )) in
+-    let full_time_ms = MTimer.read_ms full_timer  in 
+       Timer.set ~ms:time_left_ms ~callback:timer_cb 
+ 
+ 
+--- planets-0.1.13/fast_physics.ml.orig	2007-06-19 20:20:50.000000000 -0600
++++ planets-0.1.13/fast_physics.ml	2023-09-09 11:54:23.569589202 -0600
+@@ -170,7 +170,7 @@ let act_all_on_all_rk ~bounce bodies =
+   in
+ 
+   (* dumb_solver s state.delta#v deriv;  *)
+-  Rk4.step s 0.0 state.delta#v s deriv;   
++  Rk4.step ~y:s ~x:0.0 ~h:state.delta#v ~yout:s ~derivs:deriv;
+   
+   for i = 0 to Array.length bodies - 1 do
+     bodies.(i).x_pos <- s.(4 * i);
+--- planets-0.1.13/Makefile.orig	2023-09-09 15:48:39.403749253 -0600
++++ planets-0.1.13/Makefile	2023-09-09 15:49:18.351215448 -0600
+@@ -11,10 +11,10 @@ ifndef PREFIX
+ 	PREFIX=/usr/local
+ endif
+ 
+-INCLUDES=-I +labltk
++INCLUDES=-I +labltk -I +camlp-streams -I +unix -I +str
+ CAMLP4=-pp $(CAMLP4O)
+ OCAMLDEP=ocamldep
+-CAMLLIBS=unix.cma str.cma labltk.cma # libjpf.cma mylibs.cma
++CAMLLIBS=unix.cma str.cma labltk.cma camlp_streams.cma # libjpf.cma mylibs.cma
+ OCAMLFLAGS=$(INCLUDES) $(CAMLP4) -g $(CAMLLIBS) -cclib -lunix 
+ OCAMLOPTFLAGS=$(INCLUDES) $(CAMLP4) -g $(CAMLLIBS:.cma=.cmxa) -inline 50 -cclib -lunix
+ 
+--- planets-0.1.13/physics.ml.orig	2007-06-19 20:20:50.000000000 -0600
++++ planets-0.1.13/physics.ml	2023-09-09 11:56:54.864626625 -0600
+@@ -181,7 +181,7 @@ let zero_speed () = zero_speed_bodies st
+ let center () = center_bodies state.bodies
+ 
+ let bodies_from_ids ids = 
+-  List.filter ~f:(fun body -> List.mem body.id ids) state.bodies
++  List.filter ~f:(fun body -> List.mem body.id ~set:ids) state.bodies
+ 
+ let zero_speeds_ids ids = zero_speed_bodies (bodies_from_ids ids)
+ let center_ids ids = center_bodies (bodies_from_ids ids)
+--- planets-0.1.13/saveState.ml.orig	2007-06-19 20:20:50.000000000 -0600
++++ planets-0.1.13/saveState.ml	2023-09-09 11:52:36.954973309 -0600
+@@ -185,11 +185,11 @@ let save_directory =
+   try 
+     let home = Sys.getenv "HOME" in
+     let pdir = Filename.concat home ".planets" in
+-    if Sys.file_exists pdir & is_dir pdir
++    if Sys.file_exists pdir && is_dir pdir
+     then pdir
+     else 
+       (* PROBLEM: is 0x1FF really the right mode? *)
+-      try Unix.mkdir pdir 0x1FF; pdir 
++      try Unix.mkdir pdir ~perm:0x1FF; pdir
+       with Unix.Unix_error (err,func,arg) -> ""
+   with
+       Not_found -> ""

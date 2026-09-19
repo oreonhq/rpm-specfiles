@@ -1,0 +1,142 @@
+--- sccache-0.13.0/Cargo.toml	2006-07-24T01:21:28+00:00
++++ sccache-0.13.0/Cargo.toml	2026-01-22T16:30:12.096799+00:00
+@@ -27,7 +27,7 @@
+     "command-line-utilities",
+     "development-tools::build-utils",
+ ]
+-license = "Apache-2.0"
++license = "Apache-2.0 AND (Apache-2.0 OR MIT)"
+ repository = "https://github.com/mozilla/sccache/"
+ 
+ [features]
+@@ -47,7 +47,12 @@
+     "reqsign",
+     "reqwest",
+ ]
+-default = ["all"]
++default = [
++    "dist-client",
++    "memcached",
++    "native-zlib",
++    "webdav"
++]
+ dist-client = [
+     "flate2",
+     "hyper",
+@@ -57,17 +62,8 @@
+     "url",
+     "sha2",
+ ]
+-dist-server = [
+-    "jwt",
+-    "flate2",
+-    "libmount",
+-    "nix",
+-    "openssl",
+-    "reqwest",
+-    "rouille",
+-    "syslog",
+-    "version-compare",
+-]
++dist-server = []
++rouille = []
+ dist-tests = [
+     "dist-client",
+     "dist-server",
+@@ -116,11 +112,6 @@
+ name = "sccache"
+ path = "src/main.rs"
+ 
+-[[bin]]
+-name = "sccache-dist"
+-path = "src/bin/sccache-dist/main.rs"
+-required-features = ["dist-server"]
+-
+ [[test]]
+ name = "cache_hit_rate"
+ path = "tests/cache_hit_rate.rs"
+@@ -132,10 +123,6 @@
+ [[test]]
+ name = "logging"
+ path = "tests/logging.rs"
+-
+-[[test]]
+-name = "oauth"
+-path = "tests/oauth.rs"
+ 
+ [[test]]
+ name = "sccache_args"
+@@ -299,7 +286,7 @@
+ version = "0.37"
+ 
+ [dependencies.opendal]
+-version = "0.54.0"
++version = "0.55"
+ optional = true
+ default-features = false
+ 
+@@ -329,12 +316,6 @@
+ ]
+ optional = true
+ 
+-[dependencies.rouille]
+-version = "3.6"
+-features = ["ssl"]
+-optional = true
+-default-features = false
+-
+ [dependencies.semver]
+ version = "1.0"
+ 
+@@ -343,7 +324,7 @@
+ features = ["derive"]
+ 
+ [dependencies.serde_json]
+-version = ">=1.0, <1.0.147"
++version = ">=1.0, <=1.0.149"
+ 
+ [dependencies.sha2]
+ version = "0.10.8"
+@@ -408,8 +389,10 @@
+ version = "2"
+ 
+ [dependencies.which]
+-version = "6"
+-default-features = false
++version = "8"
++# As of which 8, we need to re-enable default features (currently, real-sys),
++# because sccache uses which::which_in, and this is now gated behind the
++# real-sys feature.
+ 
+ [dependencies.zip]
+ version = "0.6"
+@@ -425,17 +408,13 @@
+ version = "1.0"
+ 
+ [dev-dependencies.chrono]
+-version = "0.4.42"
+-
+-[dev-dependencies.divan]
+-version = "4"
+-package = "codspeed-divan-compat"
++version = "0.4"
+ 
+ [dev-dependencies.filetime]
+ version = "0.2"
+ 
+ [dev-dependencies.predicates]
+-version = "=3.1.0"
++version = "3.1"
+ 
+ [dev-dependencies.serial_test]
+ version = "3.1"
+@@ -445,9 +424,6 @@
+ 
+ [dev-dependencies.test-case]
+ version = "3.3.1"
+-
+-[dev-dependencies.thirtyfour_sync]
+-version = "0.27"
+ 
+ [target.'cfg(not(target_os = "freebsd"))'.dependencies.libmount]
+ version = "0.1.15"

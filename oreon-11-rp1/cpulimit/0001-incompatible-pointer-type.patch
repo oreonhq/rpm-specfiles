@@ -1,0 +1,27 @@
+diff -rU4 source-orig/tests/busy.c source-patched/tests/busy.c
+--- source-orig/tests/busy.c	2015-06-17 08:46:59.000000000 +0200
++++ source-patched/tests/busy.c	2025-01-16 16:14:53.809450499 +0100
+@@ -2,10 +2,12 @@
+ #include <stdlib.h>
+ #include <pthread.h>
+ #include <unistd.h>
+ 
+-void *loop()
++void *loop(void *data)
+ {
++	((void)data);
++
+ 	while(1);
+ }
+ 
+ int main(int argc, char **argv) {
+@@ -22,8 +24,8 @@
+ 			printf("pthread_create() failed. Error code %d\n", ret);
+ 			exit(1);
+ 		}
+ 	}
+-	loop();
++	loop(NULL);
+ 	return 0;
+ }
+ 

@@ -1,0 +1,264 @@
+diff -up tileqt0.4b1/generic/tileQt_Arrows.cpp.BAD tileqt0.4b1/generic/tileQt_Arrows.cpp
+--- tileqt0.4b1/generic/tileQt_Arrows.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Arrows.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ #if 0
+diff -up tileqt0.4b1/generic/tileQt_Background.cpp.BAD tileqt0.4b1/generic/tileQt_Background.cpp
+--- tileqt0.4b1/generic/tileQt_Background.cpp.BAD	2008-12-23 22:36:20.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Background.cpp	2008-12-23 22:36:31.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_Button.cpp.BAD tileqt0.4b1/generic/tileQt_Button.cpp
+--- tileqt0.4b1/generic/tileQt_Button.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Button.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_CheckButton.cpp.BAD tileqt0.4b1/generic/tileQt_CheckButton.cpp
+--- tileqt0.4b1/generic/tileQt_CheckButton.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_CheckButton.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_Combobox.cpp.BAD tileqt0.4b1/generic/tileQt_Combobox.cpp
+--- tileqt0.4b1/generic/tileQt_Combobox.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Combobox.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_Elements.h.BAD tileqt0.4b1/generic/tileQt_Elements.h
+--- tileqt0.4b1/generic/tileQt_Elements.h.BAD	2008-12-23 22:33:56.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Elements.h	2008-12-23 22:34:59.000000000 -0500
+@@ -13,7 +13,7 @@
+  * Aghia Paraskevi, 153 10, Athens, Greece.
+  */
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ 
+ extern int TileQt_Init_Background(Tcl_Interp *interp,
+                                   TileQt_WidgetCache **, Ttk_Theme themePtr);
+diff -up tileqt0.4b1/generic/tileQt_Entry.cpp.BAD tileqt0.4b1/generic/tileQt_Entry.cpp
+--- tileqt0.4b1/generic/tileQt_Entry.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Entry.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_Init.c.BAD tileqt0.4b1/generic/tileQt_Init.c
+--- tileqt0.4b1/generic/tileQt_Init.c.BAD	2008-12-23 22:35:10.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Init.c	2008-12-23 22:35:19.000000000 -0500
+@@ -10,7 +10,7 @@
+ #include "tileQt_Utilities.h"
+ #include "tileQt_Elements.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include <string.h>
+ 
+ static int TileQt_QAppCreated = 0;
+diff -up tileqt0.4b1/generic/tileQt_Labelframe.cpp.BAD tileqt0.4b1/generic/tileQt_Labelframe.cpp
+--- tileqt0.4b1/generic/tileQt_Labelframe.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Labelframe.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_Menubutton.cpp.BAD tileqt0.4b1/generic/tileQt_Menubutton.cpp
+--- tileqt0.4b1/generic/tileQt_Menubutton.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Menubutton.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_Notebook.cpp.BAD tileqt0.4b1/generic/tileQt_Notebook.cpp
+--- tileqt0.4b1/generic/tileQt_Notebook.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Notebook.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_Paned.cpp.BAD tileqt0.4b1/generic/tileQt_Paned.cpp
+--- tileqt0.4b1/generic/tileQt_Paned.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Paned.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_Progress.cpp.BAD tileqt0.4b1/generic/tileQt_Progress.cpp
+--- tileqt0.4b1/generic/tileQt_Progress.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Progress.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_QApp.cpp.BAD tileqt0.4b1/generic/tileQt_QApp.cpp
+--- tileqt0.4b1/generic/tileQt_QApp.cpp.BAD	2008-12-23 22:35:36.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_QApp.cpp	2008-12-23 22:35:44.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_QtHeaders.h"
+ #include "tileQt_Utilities.h"
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ static bool TileQt_qAppOwner = false;
+ 
+ /* In the following variable we store the XErrorHandler, before we install our
+diff -up tileqt0.4b1/generic/tileQt_RadioButton.cpp.BAD tileqt0.4b1/generic/tileQt_RadioButton.cpp
+--- tileqt0.4b1/generic/tileQt_RadioButton.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_RadioButton.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_Scale.cpp.BAD tileqt0.4b1/generic/tileQt_Scale.cpp
+--- tileqt0.4b1/generic/tileQt_Scale.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Scale.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_Scrollbar.cpp.BAD tileqt0.4b1/generic/tileQt_Scrollbar.cpp
+--- tileqt0.4b1/generic/tileQt_Scrollbar.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Scrollbar.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_Separator.cpp.BAD tileqt0.4b1/generic/tileQt_Separator.cpp
+--- tileqt0.4b1/generic/tileQt_Separator.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Separator.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_SizeGrip.cpp.BAD tileqt0.4b1/generic/tileQt_SizeGrip.cpp
+--- tileqt0.4b1/generic/tileQt_SizeGrip.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_SizeGrip.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_ToolButton.cpp.BAD tileqt0.4b1/generic/tileQt_ToolButton.cpp
+--- tileqt0.4b1/generic/tileQt_ToolButton.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_ToolButton.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ /*
+diff -up tileqt0.4b1/generic/tileQt_TreeView.cpp.BAD tileqt0.4b1/generic/tileQt_TreeView.cpp
+--- tileqt0.4b1/generic/tileQt_TreeView.cpp.BAD	2008-12-23 22:39:27.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_TreeView.cpp	2008-12-23 22:39:27.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_Utilities.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ #include "tileQt_WidgetDefaults.h"
+ 
+ #define ITEM_LAYOUT		"Item"
+diff -up tileqt0.4b1/generic/tileQt_Utilities.cpp.BAD tileqt0.4b1/generic/tileQt_Utilities.cpp
+--- tileqt0.4b1/generic/tileQt_Utilities.cpp.BAD	2008-12-23 22:35:56.000000000 -0500
++++ tileqt0.4b1/generic/tileQt_Utilities.cpp	2008-12-23 22:36:04.000000000 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "tileQt_QtHeaders.h"
+ #include <tk.h>
+-#include "tkTheme.h"
++#include <tk-private/generic/ttk/ttkTheme.h>
+ 
+ #ifdef TILEQT_QT_VERSION_3
+ /*

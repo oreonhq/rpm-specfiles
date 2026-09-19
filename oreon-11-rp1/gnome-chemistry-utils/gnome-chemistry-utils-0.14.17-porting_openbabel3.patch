@@ -1,0 +1,11 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -193,7 +193,7 @@
+ PKG_CHECK_MODULES(goffice, [$libgoffice >= 0.10.12])
+ PKG_CHECK_MODULES(chemical_mime_data, [chemical-mime-data >= 0.1.94])
+ PKG_CHECK_MODULES(bodr, [bodr >= 5])
+-PKG_CHECK_MODULES(openbabel, [openbabel-2.0 >= 2.3.0])
++PKG_CHECK_MODULES(openbabel, [openbabel-3 >= 3.0.0])
+ PKG_CHECK_MODULES(x11, [x11 >= 1.0.0])
+ 
+ dnl Not sure we need to test for glu.h and glx.h

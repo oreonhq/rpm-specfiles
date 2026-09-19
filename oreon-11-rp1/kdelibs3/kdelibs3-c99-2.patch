@@ -1,0 +1,24 @@
+diff -ur kdelibs-3.5.10.orig/kdeprint/cups/cupsdconf2/cups-util.c kdelibs-3.5.10/kdeprint/cups/cupsdconf2/cups-util.c
+--- kdelibs-3.5.10.orig/kdeprint/cups/cupsdconf2/cups-util.c	2023-12-18 09:26:49.264613220 +0100
++++ kdelibs-3.5.10/kdeprint/cups/cupsdconf2/cups-util.c	2023-12-18 09:27:16.235342644 +0100
+@@ -513,7 +513,7 @@
+ 	the struct has changed in newer versions - PiggZ (adam@piggz.co.uk)
+   */
+ #if CUPS_VERSION_MAJOR > 1 || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2)
+-        if (!httpAddrLocalhost(http))
++        if (!httpAddrLocalhost(httpGetAddress(http)))
+ #else
+ 	if (ntohl(*(int*)&http->hostaddr.sin_addr) != 0x7f000001 &&
+       strcasecmp(http->hostname, "localhost") != 0)
+diff -ur kdelibs-3.5.10.orig/kdeprint/cups/cupsdoprint.c kdelibs-3.5.10/kdeprint/cups/cupsdoprint.c
+--- kdelibs-3.5.10.orig/kdeprint/cups/cupsdoprint.c	2006-10-01 19:33:43.000000000 +0200
++++ kdelibs-3.5.10/kdeprint/cups/cupsdoprint.c	2023-12-18 09:27:12.852376579 +0100
+@@ -146,7 +146,7 @@
+ 	char	*a;
+ 	cups_option_t	*options = NULL;
+ 	int		num_options = 0;
+-	char*	files[100] = {0};
++	const char*	files[100] = {0};
+ 	int	num_files = 0;
+ 	int	jobID = 0;
+ 

@@ -1,0 +1,56 @@
+From b36f07bfdca75b6f221c56379545ccd0dd0ee0f9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 21 Sep 2015 15:01:50 +0200
+Subject: [PATCH] Link images to local documentation
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/DateTime/Format/Duration.pm | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/lib/DateTime/Format/Duration.pm b/lib/DateTime/Format/Duration.pm
+index 430f709..1faf08c 100755
+--- a/lib/DateTime/Format/Duration.pm
++++ b/lib/DateTime/Format/Duration.pm
+@@ -1016,9 +1016,9 @@ place:
+ 
+ =for comment TODO: replace via Pod::Weaver with the base64'd inline image; see Pod::Weaver::Section::Ditaa
+ 
+-=for html <img src="https://raw.githubusercontent.com/karenetheridge/DateTime-Format-Duration/master/docs/figure1.gif">
++=for html <img src="file:///usr/share/doc/perl-DateTime-Format-Duration/docs/figure1.gif">
+ 
+-=for man See: https://raw.githubusercontent.com/karenetheridge/DateTime-Format-Duration/master/docs/figure1.gif
++=for man See: file:///usr/share/doc/perl-DateTime-Format-Duration/docs/figure1.gif
+ 
+ Figure 1 illustrates that, with the given base, -2 years, +1 month,
+ +22 days, +11 hours, -9 minutes is normalised to -1 year, 10 months, 6 days,
+@@ -1050,9 +1050,9 @@ However, if we add 24 hours, 1 day we end up at 11pm on the next day! Why is thi
+ Because midnight + 24 hours = 11pm (there's 25 hours on this day!), then we add 1
+ day and end up at 11pm on the following day.
+ 
+-=for html <img src="https://raw.githubusercontent.com/karenetheridge/DateTime-Format-Duration/master/docs/figure2.gif">
++=for html <img src="file:///usr/share/doc/perl-DateTime-Format-Duration/docs/figure2.gif">
+ 
+-=for man See: https://raw.githubusercontent.com/karenetheridge/DateTime-Format-Duration/master/docs/figure2.gif
++=for man See: file:///usr/share/doc/perl-DateTime-Format-Duration/docs/figure2.gif
+ 
+ Figure 2 illustrates the above problem on timelines.
+ 
+@@ -1063,9 +1063,9 @@ seconds mean there are minutes that are 61 seconds long, thus 130 seconds can
+ be 2 minutes, 10 seconds or 2 minutes 9 seconds, depending on the base DateTime.
+ Similarly leap years mean a day can have 23, 24 or 25 hours.
+ 
+-=for html <img src="https://raw.githubusercontent.com/karenetheridge/DateTime-Format-Duration/master/docs/figure3.gif">
++=for html <img src="file:///usr/share/doc/perl-DateTime-Format-Duration/docs/figure3.gif">
+ 
+-=for man See: https://raw.githubusercontent.com/karenetheridge/DateTime-Format-Duration/master/docs/figure3.gif
++=for man See: file:///usr/share/doc/perl-DateTime-Format-Duration/docs/figure3.gif
+ 
+ Figure 3 shows how leaps are calculated on timelines.
+ 
+-- 
+2.4.3
+

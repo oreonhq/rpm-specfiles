@@ -1,0 +1,18 @@
+[Unit]
+Description=UnrealIRCd
+After=network.target
+Documentation=https://www.unrealircd.org/docs/
+
+[Service]
+Type=forking
+User=unrealircd
+Group=unrealircd
+PIDFile=/run/unrealircd/unrealircd.pid
+ExecStart=/usr/bin/unrealircd
+# Rehash configuration and reload certificates
+ExecReload=/bin/kill -HUP $MAINPID
+ExecReload=/bin/kill -USR1 $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

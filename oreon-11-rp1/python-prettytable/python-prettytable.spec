@@ -1,74 +1,62 @@
-%global source0_hash 9665594d137fb08a1117518c25551e0ede1687197cf353a4fdc78d27e1073568
+%global source0_hash none
 
-# not available on RHEL
-%bcond lf %{undefined rhel}
-
-%global pypi_name prettytable
-
-Name:           python-%{pypi_name}
-Version:        3.10.0
+Name:           python-prettytable
+Version:        3.18.0
 Release:        %autorelease
-Summary:        Python library to display tabular data in tables
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A simple Python library for easily displaying tabular data in a visually appealing ASCII table format
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://github.com/jazzband/prettytable
-Source0:        https://files.pythonhosted.org/packages/source/p/prettytable/prettytable-3.10.0.tar.gz
+URL:            https://github.com/prettytable/prettytable
+Source:         %{pypi_source prettytable}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-setuptools_scm
-BuildRequires:  sed
-BuildRequires:  python3dist(pytest)
-%if %{with lf}
-BuildRequires:  python3dist(pytest-lazy-fixtures)
-%endif
-BuildRequires:  python3dist(wcwidth)
 
 
-%description
-PrettyTable is a simple Python library designed to make it quick and easy to
-represent tabular data in visually appealing ASCII tables. It was inspired by
-the ASCII tables used in the PostgreSQL shell psql. PrettyTable allows for
-selection of which columns are to be printed, independent alignment of columns
-(left or right justified or centred) and printing of "sub-tables" by specifying
-a row range.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'prettytable' generated automatically by pyp2spec.}
 
-%package -n python3-%{pypi_name}
-Summary:	Python library to display tabular data in tables
+%description %_description
 
-%description -n python3-%{pypi_name}
-PrettyTable is a simple Python library designed to make it quick and easy to
-represent tabular data in visually appealing ASCII tables. It was inspired by
-the ASCII tables used in the PostgreSQL shell psql. PrettyTable allows for
-selection of which columns are to be printed, independent alignment of columns
-(left or right justified or centred) and printing of "sub-tables" by specifying
-a row range.
+%package -n     python3-prettytable
+Summary:        %{summary}
+
+%description -n python3-prettytable %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-prettytable tests
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{pypi_name}-%{version}
-sed -i -e '/^*!\//, 1d' src/prettytable/*.py
-%if %{without lf}
-sed -i -e 's/from pytest_lazy_fixtures import lf/lf = str/' tests/test_prettytable.py
-%endif
+%autosetup -p1 -n prettytable-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files prettytable
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest %{!?with_lf:-k 'not TestBuildEquivalence and not TestMultiPattern'}
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md CHANGELOG.md
+
+%files -n python3-prettytable -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10.0-1

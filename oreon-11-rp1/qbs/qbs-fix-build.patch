@@ -1,0 +1,12 @@
+diff -rupN qbs-src-3.1.2/tests/auto/language/tst_language.cpp qbs-src-3.1.2-new/tests/auto/language/tst_language.cpp
+--- qbs-src-3.1.2/tests/auto/language/tst_language.cpp	2025-11-24 11:12:49.000000000 +0100
++++ qbs-src-3.1.2-new/tests/auto/language/tst_language.cpp	2025-12-13 11:10:48.485103753 +0100
+@@ -1467,7 +1467,7 @@ void TestLanguage::groupConditions()
+     for (size_t i = 0; i < groupCount; ++i) {
+         if (product->groups.at(i)->enabled != groupEnabled.at(i)) {
+             QFAIL(qPrintable(
+-                      QString("groups.at(%1)->enabled != %2").arg(i).arg(groupEnabled.at(i))));
++                      QString("groups.at(%1)->enabled != %2").arg(i).arg(bool(groupEnabled.at(i)))));
+         }
+     }
+ }

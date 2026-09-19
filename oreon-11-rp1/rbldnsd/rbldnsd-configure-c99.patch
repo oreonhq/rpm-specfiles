@@ -1,0 +1,20 @@
+Avoid implicit declarations of gethostbyname and connect in the
+non-autoconf configure script.  This prevents altering the test result
+with compilers which do not support implicit function declarations.
+
+A more elaborate pull request has been submitted upstream:
+
+  <https://github.com/spamhaus/rbldnsd/pull/28>
+
+diff --git a/configure b/configure
+index b0cb655797639dac..978f480e391a46a8 100755
+--- a/configure
++++ b/configure
+@@ -173,6 +173,7 @@ else
+ fi
+ 
+ if ac_library_find_v 'connect()' "" "-lsocket -lnsl" <<EOF
++char gethostbyname(void); char connect(void);
+ int main() { gethostbyname(); connect(); return 0; }
+ EOF
+ then :

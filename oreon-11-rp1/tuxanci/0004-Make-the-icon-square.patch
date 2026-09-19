@@ -1,0 +1,34 @@
+From 8e1a6516a85e400283fe5b411f7793e024eb9705 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Mon, 10 Nov 2014 09:01:46 +0100
+Subject: [PATCH] Make the icon square
+
+---
+ data/tuxanci.svg | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/data/tuxanci.svg b/data/tuxanci.svg
+index 927d3ec..5a1e4c0 100644
+--- a/data/tuxanci.svg
++++ b/data/tuxanci.svg
+@@ -10,7 +10,7 @@
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    width="311.32681"
+-   height="193.36264"
++   height="311.32681"
+    id="svg2"
+    inkscape:label="Pozadí"
+    sodipodi:version="0.32"
+@@ -564,7 +564,7 @@
+      inkscape:label="Vrstva 1"
+      inkscape:groupmode="layer"
+      id="layer1"
+-     transform="translate(-67.396792,-73.22983)">
++     transform="translate(-67.396792,-30)">
+     <g
+        id="g2810"
+        transform="translate(10.101525,32.324881)">
+-- 
+2.1.0
+

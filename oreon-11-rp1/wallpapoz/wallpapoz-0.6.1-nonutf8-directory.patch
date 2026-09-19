@@ -1,0 +1,22 @@
+--- wallpapoz-0.6.1/src/wallpapoz.nonutf8	2011-12-30 15:13:57.000000000 +0900
++++ wallpapoz-0.6.1/src/wallpapoz	2011-12-30 15:19:28.000000000 +0900
+@@ -542,6 +542,9 @@
+         num_of_child = self.store.iter_n_children(iter)
+         # what is the directory?
+         cur_dir = filechooser_widget.get_filename()
++        # get_filename can return NoneType (for non-UTF8 directory)
++        if not cur_dir:
++          return
+         # if recursive, we use walktree
+         if recursive_widget.get_active():
+           # looping with walktree method
+@@ -586,6 +589,9 @@
+         new_index = self.store.get_value(next_iter, 0) + 1
+         # what is the directory?
+         cur_dir = filechooser_widget.get_filename()
++        # get_filename can return NoneType (for non-UTF8 directory)
++        if not cur_dir:
++          return
+         # if recursive, we use walktree
+         if recursive_widget.get_active():
+           # looping with walktree method

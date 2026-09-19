@@ -1,13 +1,13 @@
-%global source0_hash 4228869722c5bb5325b7c5b10555e6b747bde0e36cbd43519d8681fe3b383173
+%global source0_hash 0c5801f9c50d4fea4a183876a887068a4b73d9f5545453dbcd1cd17ec46e2300
 
 %global		framework kcalendarcore
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.29.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 KCalendarCore Library
 License:	BSD-3-Clause AND LGPL-2.0-or-later AND LGPL-3.0-or-later
@@ -84,18 +84,4 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- inline cmake --build (no qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Qt6 qdoc: -html file list via find, tags/index in -devel
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
-
+%autochangelog

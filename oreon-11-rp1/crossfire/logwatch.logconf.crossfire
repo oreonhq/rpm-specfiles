@@ -1,0 +1,13 @@
+##########################################################################
+##########################################################################
+
+# What actual file?  Defaults to LogPath if not absolute path....
+LogFile = /var/log/crossfire/crossfire.log
+
+# Search the rotated log files
+Archive = /var/log/crossfire/crossfire.log.*
+
+# Keep only the lines in the proper date range...
+*ApplyUsDate
+
+# vi: shiftwidth=3 tabstop=3 et

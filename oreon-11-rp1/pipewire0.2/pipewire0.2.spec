@@ -1,6 +1,6 @@
 %global source0_hash bfaa0f6ae6c0791e2e0b59234d399753bf24f1b33dbf587682363a8463dd8df1
 
-%global apiversion   0.2
+%global apiversion   1.6
 %global spaversion   0.1
 
 #global snap       20141103
@@ -16,8 +16,8 @@
 
 Name:           pipewire0.2
 Summary:        Media Sharing Server compat libraries
-Version:        0.2.7
-Release:        17%{?snap:.%{snap}git%{shortcommit}}%{?dist}
+Version:        1.6.9
+Release:        1%{?snap:.%{snap}git%{shortcommit}}%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://pipewire.org/

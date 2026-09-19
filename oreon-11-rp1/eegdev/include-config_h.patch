@@ -1,0 +1,91 @@
+From: Dejan Latinovic <Dejan.Latinovic@imgtec.com>
+Date: Tue, 11 Mar 2014 18:16:39 +0100
+Description: include "config.h" before including system headers
+ The following source files were modified to include "config.h" before
+ including system headers (due to changes in gnulib).
+Debian-Bug: 
+
+--- a/doc/examples/library-usage/acquisition.c
++++ b/doc/examples/library-usage/acquisition.c
+@@ -15,6 +15,9 @@
+     You should have received a copy of the GNU General Public License
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
++#if HAVE_CONFIG_H
++#include <config.h>
++#endif
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <stdint.h>
+--- a/doc/examples/library-usage/eegdev_acq.c
++++ b/doc/examples/library-usage/eegdev_acq.c
+@@ -15,6 +15,9 @@
+     You should have received a copy of the GNU General Public License
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
++#if HAVE_CONFIG_H
++#include <config.h>
++#endif
+ #include <stdint.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+--- a/doc/examples/library-usage/recinxdf.c
++++ b/doc/examples/library-usage/recinxdf.c
+@@ -15,6 +15,9 @@
+     You should have received a copy of the GNU General Public License
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
++#if HAVE_CONFIG_H
++#include <config.h>
++#endif
+ #include <unistd.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+--- a/tests/sysbiosemi.c
++++ b/tests/sysbiosemi.c
+@@ -17,6 +17,9 @@
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ //#include <sys/time.h>
++#if HAVE_CONFIG_H
++#include <config.h>
++#endif
+ #include <time.h>
+ #include <string.h>
+ #include <stdlib.h>
+--- a/tests/syseegfile.c
++++ b/tests/syseegfile.c
+@@ -17,6 +17,9 @@
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ //#include <sys/time.h>
++#if HAVE_CONFIG_H
++#include <config.h>
++#endif
+ #include <time.h>
+ #include <string.h>
+ #include <stdlib.h>
+--- a/tests/sysneurosky.c
++++ b/tests/sysneurosky.c
+@@ -17,6 +17,9 @@
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ //#include <sys/time.h>
++#if HAVE_CONFIG_H
++#include <config.h>
++#endif
+ #include <time.h>
+ #include <string.h>
+ #include <stdlib.h>
+--- a/tests/systobiia.c
++++ b/tests/systobiia.c
+@@ -16,6 +16,9 @@
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ //#include <sys/time.h>
++#if HAVE_CONFIG_H
++#include <config.h>
++#endif
+ #include <time.h>
+ #include <string.h>
+ #include <stdlib.h>

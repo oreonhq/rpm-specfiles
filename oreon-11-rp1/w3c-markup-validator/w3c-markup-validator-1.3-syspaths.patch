@@ -1,0 +1,29 @@
+--- validator-1.3/httpd/cgi-bin/check.org	2012-06-26 14:53:05.874512528 -0600
++++ validator-1.3/httpd/cgi-bin/check	2012-06-26 14:54:51.971907555 -0600
+@@ -222,7 +222,7 @@
+     # Note that setting XML_CATALOG_FILES here does not seem to work with
+     # mod_perl (it doesn't end up being used by XML::LibXML), therefore we do
+     # it in the mod_perl/startup.pl startup file for it too.
+-    local $ENV{XML_CATALOG_FILES} =
++    local $ENV{XML_CATALOG_FILES} = "/etc/xml/catalog " .
+         catfile($CFG->{Paths}->{SGML}->{Library}, 'catalog.xml');
+     require XML::LibXML;
+     XML::LibXML->VERSION(1.73);    # Need 1.73 for rt.cpan.org #66642
+@@ -1239,7 +1239,8 @@
+ 
+     #
+     # Parser configuration
+-    $opensp->search_dirs($CFG->{Paths}->{SGML}->{Library});
++    $opensp->search_dirs($CFG->{Paths}->{SGML}->{Library},
++                         '/usr/share/xml', '/usr/share/sgml');
+     $opensp->catalogs($catalog);
+     $opensp->show_error_numbers(1);
+     $opensp->warnings(@spopt);
+@@ -2080,6 +2081,7 @@
+ 
+     # Do not trap file URIs within our jail.
+     for my $dir ($CFG->{Paths}->{SGML}->{Library},
++        '/etc/xml', '/usr/share/xml', '/usr/share/sgml',
+         split(/\Q$Config{path_sep}\E/o, $ENV{SGML_SEARCH_PATH} || ''))
+     {
+         next unless $dir;

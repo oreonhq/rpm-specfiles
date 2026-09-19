@@ -1,0 +1,31 @@
+--- ochusha-0.6.0.1-cvs20100817T0000/libtscore/tscore.cc.format	2009-01-05 21:16:19.000000000 +0900
++++ ochusha-0.6.0.1-cvs20100817T0000/libtscore/tscore.cc	2013-12-03 17:47:17.237514369 +0900
+@@ -313,7 +313,7 @@ TSCore::output_message(const char *messa
+   if (interaction_output_port->is_output_port())
+     interaction_output_port->get_port()->append(message)->flush();
+   else
+-    printf(message);
++    printf("%s", message);
+ }
+ 
+ 
+--- ochusha-0.6.0.1-cvs20100817T0000/ochusha/bbs_2ch_helper.cc.format	2009-01-01 16:47:06.000000000 +0900
++++ ochusha-0.6.0.1-cvs20100817T0000/ochusha/bbs_2ch_helper.cc	2013-12-03 17:50:17.400365010 +0900
+@@ -354,7 +354,7 @@ BBS2chHelper::login_2ch_be_failed_cb(con
+ 					     GTK_MESSAGE_WARNING,
+ 					     GTK_BUTTONS_OK_CANCEL,
+ 					     _("2ch Be Login failed"));
+-  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), reason);
++  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", reason);
+   gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
+ 
+   g_signal_connect(dialog, "response",
+@@ -486,7 +486,7 @@ BBS2chHelper::login_2ch_viewer_failed_cb
+ 					     GTK_MESSAGE_WARNING,
+ 					     GTK_BUTTONS_OK_CANCEL,
+ 					     _("2ch Viewer Login failed"));
+-  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), reason);
++  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", reason);
+   gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
+ 
+   g_signal_connect(dialog, "response",

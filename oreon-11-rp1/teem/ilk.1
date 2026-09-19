@@ -1,0 +1,180 @@
+.TH ILK "1" "April 2021" "" "User Commands"
+.SH NAME
+ilk \- (I)mage (L)inear Trans(X\-\->K)forms
+.SH SYNOPSIS
+.B ilk
+.RI [ @file \ ...]
+.RB [ \-i
+.RI < image >]
+.RB [ \-0
+.RI < origin >]
+.B \-t
+.RI < xform0 \ ...>
+.RB [ \-k
+.RI < kernel >]
+.RB [ \-min
+.RI < xMin \  yMin >]
+.RB [ \-max
+.RI < xMax \  yMax >]
+.RB [ \-b
+.RI < boundary >]
+.RB [ \-bg
+.RI < bg0 \  bg1 \ ...>]
+.RB [ \-s
+.RI < xSize \  ySize >]
+.RB [ \-a
+.RI < avg\ # >]
+.RB [ \-o
+.RI < filename >]
+.SH DESCRIPTION
+.P
+(I)mage (L)inear Trans(X\-\->K)forms.
+Applies linear (homogenous coordinate) transforms to a given image, using the
+given kernel for resampling.
+.SH OPTIONS
+.TP
+.IR @file \ ...\:
+response file(s) containing command-line arguments
+.TP
+.B \-i\fR <\fIimage\fR>
+input image; default:
+.RB \(lq \- \(rq
+.TP
+.B \-0\fR <\fIorigin\fR>
+where to locate
+.B (0,0)
+prior to applying transforms.
+.RS +7n
+.IP \(bu 2
+.RB \(lq u:<\fIfloat\fB>,<\fIfloat\fB> \(rq
+locate origin in a unit box
+.B [0,1]x[0,1]
+which covers the original image
+.IP \(bu 2
+.RB \(lq p:<\fIfloat\fB>,<\fIfloat\fB> \(rq
+locate origin at a particular pixel location, in the index space of the image
+.P
+default:
+.RB \(lq p:0,0 \(rq
+.RE
+.TP
+.B \-t\fR <\fIxform0\fR\ ...>
+transform(s) to apply to image.
+Transforms are applied in the order in which they appear.
+.RS +7n
+.IP \(bu 2
+.RB \(lq identity \(rq:
+no geometric transform, just resampling
+.IP \(bu 2
+.RB \(lq translate:\fIx\fB,\fIy\fB \(rq:
+shift image by vector
+.BR (\fIx\fB,\fIy\fB) ,
+as measured in pixels
+.IP \(bu 2
+.RB \(lq rotate:\fIang\fB \(rq:
+rotate CCW by
+.I ang
+degrees
+.IP \(bu 2
+.RB \(lq scale:\fIxs\fB,\fIys\fB \(rq:
+scale by
+.I xs
+in X, and
+.I ys
+in Y
+.IP \(bu 2
+.RB \(lq shear:\fIfix\fB,\fIamnt\fB \(rq:
+shear by
+.IR amnt ,
+keeping fixed the pixels along a direction
+.RI < fix >
+degrees from the X axis
+.IP \(bu 2
+.RB \(lq flip:\fIang\fB \(rq:
+flip along axis an angle
+.RI < ang >
+degrees from the X axis
+.IP \(bu 2
+.RB \(lq \fIa\fB,\fIb\fB,\fItx\fB,\fIc\fB,\fId\fB,\fIty\fB \(rq:
+specify the transform explicitly in row-major order (opposite of PostScript)
+(1 or more 2D transforms)
+.RE
+.TP
+.B \-k\fR <\fIkernel\fR>
+reconstruction kernel; default:
+.RB \(lq cubic:0,0.5 \(rq
+.TP
+.B \-min\fR <\fIxMin\fR\ \fIyMin\fR>
+lower bounding corner of output image.
+Default (by not using this option) is the lower corner of input image.
+(2 \fIdouble\fRs)
+.TP
+.B \-max\fR <\fIxMax\fR\ \fIyMax\fR>
+upper bounding corner of output image.
+Default (by not using this option) is the upper corner of input image.
+(2 \fIdouble\fRs)
+.TP
+.B \-b\fR <\fIboundary\fR>
+what to do when sampling outside original image.
+.RS +7n
+.IP \(bu 2
+.RB \(lq bleed \(rq:
+copy values at image border outward
+.IP \(bu 2
+.RB \(lq wrap \(rq:
+do wrap-around on image locations
+.IP \(bu 2
+.RB \(lq pad \(rq:
+use a given background value (via
+.RB \(lq \-bg \(rq)
+.P
+default:
+.RB \(lq bleed \(rq
+.RE
+.TP
+.B \-bg\fR <\fIbg0\fR\ \fIbg1\fR\ ...>
+background color to use with boundary behavior
+.RB \(lq pad \(rq.
+Defaults to all zeroes.
+(1 or more \fIfloat\fRs)
+.TP
+.B \-s\fR <\fIxSize\fR\ \fIySize\fR>
+For each axis, information about how many samples in output:
+.RS +7n
+.IP \(bu 2
+.RB \(lq x\fR<\fIfloat\fR> \(rq:
+number of output samples is some scaling of the number input of samples;
+multiplied by
+.RI < float >
+.IP \(bu 2
+.RB \(lq \fR<\fIint\fR> \(rq:
+specify exact number of samples
+(2 sampling specifications)
+.P
+default:
+.RB \(lq x1\ x1 \(rq
+.RE
+.TP
+.B \-a\fR <\fIavg\ #\fR>
+number of averages (if there there is only one rotation)
+.RI ( unsigned\ int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-o\fR <\fIfilename\fR>
+file to write output
+.I nrrd
+to
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR gprobe (1),
+.BR miter (1),
+.BR mrender (1),
+.BR nrrdSanity (1),
+.BR overrgb (1),
+.BR puller (1),
+.BR tend (1),
+.BR unu (1),
+.BR vprobe (1)

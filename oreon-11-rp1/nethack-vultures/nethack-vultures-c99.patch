@@ -1,0 +1,11 @@
+diff -ur vultures-2.1.2.orig/slashem/src/tech.c vultures-2.1.2/slashem/src/tech.c
+--- vultures-2.1.2.orig/slashem/src/tech.c	2023-04-24 10:19:08.727155124 +0200
++++ vultures-2.1.2/slashem/src/tech.c	2023-04-24 10:19:57.637652280 +0200
+@@ -238,6 +238,7 @@
+ /* Called to prematurely stop a technique */
+ void
+ aborttech(tech)
++	short tech;
+ {
+ 	int i;
+ 

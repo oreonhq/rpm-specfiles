@@ -1,0 +1,19 @@
+Include <stdlib.h> for the exit function.
+
+Submitted upstream: <https://sourceforge.net/p/sing/bugs/7/>
+
+diff --git a/help.c b/help.c
+index f11150a54245c048..67bd1ff115c31aae 100644
+--- a/help.c
++++ b/help.c
+@@ -13,6 +13,10 @@ static const char rcsid[] =
+ 
+ #include <stdio.h>
+ 
++#ifdef STDC_HEADERS
++#include <stdlib.h>
++#endif
++
+ void
+ help(void)
+ {

@@ -1,0 +1,13 @@
+--- hibernate-jpa-2.0-api-1.0.1.Final/pom.xml.orig	2011-06-15 03:35:58.602491000 +0100
++++ hibernate-jpa-2.0-api-1.0.1.Final/pom.xml	2012-06-19 13:50:00.920020067 +0100
+@@ -127,6 +127,10 @@
+                                 <Implementation-Version>${pom.version}</Implementation-Version>
+                                 <Implementation-Vendor>hibernate.org</Implementation-Vendor>
+                                 <Implementation-Title>JPA API</Implementation-Title>
++				<Bundle-Name>hibernate-jpa-2.0-api</Bundle-Name>
++				<Bundle-SymbolicName>org.hibernate.javax.persistence</Bundle-SymbolicName>
++				<Export-Package>javax.persistence, javax.persistence.spi</Export-Package>
++				<Bundle-Version>${pom.version}</Bundle-Version>
+                             </manifestEntries>
+                         </archive>
+                     </configuration>

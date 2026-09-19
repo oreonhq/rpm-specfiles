@@ -1,0 +1,29 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for tclreadline >= 2.4.0 which ensures
+that tclreadline-2.4.0.so gets installed into /usr/lib64 on 64 bit architectures rather on
+/usr/lib as upstream would do.
+
+--- tclreadline-2.4.0/configure.ac			2024-10-22 16:29:37.000000000 +0200
++++ tclreadline-2.4.0/configure.ac.libdir		2025-01-19 03:26:13.928451601 +0100
+@@ -124,9 +124,9 @@
+ if test "${prefix}" = "NONE"; then
+     prefix=$TCL_PREFIX
+ fi
+-TCLRL_LIBDIR="${prefix}/lib"
++TCLRL_LIBDIR="${libdir}"
+ AC_SUBST(TCLRL_LIBDIR)
+-TCLRL_DIR="${TCLRL_LIBDIR}/tclreadline$VERSION"
++TCLRL_DIR="${libdir}"
+ AC_SUBST(TCLRL_DIR)
+ 
+ # HEADERS
+--- tclreadline-2.4.0/Makefile.am			2024-10-22 16:29:37.000000000 +0200
++++ tclreadline-2.4.0/Makefile.am.libdir		2025-01-19 03:26:39.529550385 +0100
+@@ -29,7 +29,7 @@
+ endif
+ libtclreadline_la_LDFLAGS = -release $(MAJOR).$(MINOR).$(PATCHLEVEL)
+ 
+-tclrldir = @TCLRL_DIR@
++tclrldir = @libdir@
+ tclrl_SCRIPTS = pkgIndex.tcl tclreadlineCompleter.tcl tclreadlineInit.tcl tclreadlineSetup.tcl
+ INSTALL_SCRIPT = ${INSTALL_DATA}
+ 

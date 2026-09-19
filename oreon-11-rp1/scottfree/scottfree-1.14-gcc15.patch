@@ -1,0 +1,12 @@
+diff -durN ScottFree.orig/ScottCurses.c ScottFree/ScottCurses.c
+--- ScottFree.orig/ScottCurses.c	1995-04-27 12:03:27.000000000 +0200
++++ ScottFree/ScottCurses.c	2025-02-13 15:43:27.690726493 +0100
+@@ -108,7 +108,7 @@
+ 	exit(1);
+ }
+ 
+-void Aborted()
++void Aborted(int signum)
+ {
+ 	Fatal("User exit");
+ }

@@ -1,0 +1,37 @@
+Avoid implicit function declarations in CMake tests in bundled CVODE.
+Without this change, these tests will fail with future compilers,
+always, without actually testing anything.  Already fixed in CVODE
+upstream.
+
+Submitted to bionetgen: <https://github.com/RuleWorld/bionetgen/issues/262>
+
+diff -up bionetgen-BioNetGen-2.8.4/bng2/Network3/cvode-2.6.0/config/SundialsFortran.cmake.c99 bionetgen-BioNetGen-2.8.4/bng2/Network3/cvode-2.6.0/config/SundialsFortran.cmake
+--- bionetgen-BioNetGen-2.8.4/bng2/Network3/cvode-2.6.0/config/SundialsFortran.cmake.c99	2009-05-10 02:02:59.000000000 +0200
++++ bionetgen-BioNetGen-2.8.4/bng2/Network3/cvode-2.6.0/config/SundialsFortran.cmake	2022-12-11 18:44:28.015918587 +0100
+@@ -26,6 +26,8 @@
+ # CMAKE_Fortran_SCHEME_NO_UNDERSCORES and CMAKE_Fortran_SCHEME_WITH_UNDERSCORES
+ # contain the mangled names for "mysub" and "my_sub", respectively.
+ 
++cmake_minimum_required(VERSION 3.22)
++
+ set(F77_FOUND FALSE)
+ set(F77SCHEME_FOUND FALSE)
+ 
+@@ -111,7 +113,7 @@
+       # Get the current list entry (current scheme)
+       list(GET options ${iopt} opt)
+       # Generate C source which calls the "mysub" function using the current scheme
+-      file(WRITE ${FortranTest_DIR}/ctest1.c "int main(){${opt}();return(0);}\n")
++      file(WRITE ${FortranTest_DIR}/ctest1.c "char ${opt}(void); int main(){${opt}();return(0);}\n")
+       # Use TRY_COMPILE to make the "ctest1" executable from the current C source
+       # and linking to the previously created "flib" library.
+       try_compile(CTEST_OK ${FortranTest_DIR} ${FortranTest_DIR}
+@@ -149,7 +151,7 @@
+     set(iopt 0)
+     while(${iopt} LESS ${imax})   
+       list(GET options ${iopt} opt)
+-      file(WRITE ${FortranTest_DIR}/ctest2.c "int main(){${opt}();return(0);}\n")
++      file(WRITE ${FortranTest_DIR}/ctest2.c "char ${opt}(void); int main(){${opt}();return(0);}\n")
+       try_compile(CTEST_OK ${FortranTest_DIR} ${FortranTest_DIR}
+         ctest2 OUTPUT_VARIABLE MY_OUTPUT)
+       file(REMOVE_RECURSE ${FortranTest_DIR}/CMakeFiles)

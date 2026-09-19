@@ -1,0 +1,23 @@
+From: Dhruv Baldawa <dhruvbaldawa@gmail.com>
+Date: Mon, 26 Oct 2020 18:12:56 +0400
+Subject: [PATCH] Fix issues with py.test
+
+
+diff --git a/setup.cfg b/setup.cfg
+index 6c80fb9..ffadaa0 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -21,11 +21,11 @@ max_line_length = 120
+ [aliases]
+ test = pytest
+ 
+-[pytest]
++[tool:pytest]
+ python_classes = *TestCase
+ 
+ [coverage:report]
+-exclude_lines = 
++exclude_lines =
+ 	pragma: no cover
+ 	def __repr__
+ 	if self.debug:

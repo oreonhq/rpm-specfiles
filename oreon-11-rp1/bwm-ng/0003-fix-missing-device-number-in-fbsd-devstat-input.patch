@@ -1,0 +1,31 @@
+From bd878c0f66ed2ab6245485ae901446f7e8e894db Mon Sep 17 00:00:00 2001
+From: Volker Gropp <volker@gropp.org>
+Date: Sat, 24 Sep 2022 15:11:55 +0200
+Subject: [PATCH 2/3] fix missing device number in fbsd devstat input
+
+---
+ src/input/devstat.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/src/input/devstat.c b/src/input/devstat.c
+index b87130d..77a5800 100644
+--- a/src/input/devstat.c
++++ b/src/input/devstat.c
+@@ -65,7 +65,13 @@ void get_iface_stats_devstat (char verbose) {
+ 		tmp_if_stats.packets.out=dev_ptr->operations[DEVSTAT_WRITE];
+ #endif
+ 		tmp_if_stats.errors.in = tmp_if_stats.errors.out = 0;
+-		hidden_if = process_if_data (hidden_if, tmp_if_stats, &stats, dev_ptr->device_name, current_if_num, verbose,(tmp_if_stats.bytes.in != 0 || tmp_if_stats.bytes.out != 0));
++
++		size_t needed = snprintf(NULL, 0, "%s%d", dev_ptr->device_name,dev_ptr->unit_number);
++		char  *device_fullname = malloc(needed);
++		sprintf(device_fullname,"%s%d", dev_ptr->device_name,dev_ptr->unit_number);
++
++		hidden_if = process_if_data (hidden_if, tmp_if_stats, &stats, device_fullname, current_if_num, verbose,(tmp_if_stats.bytes.in != 0 || tmp_if_stats.bytes.out != 0));
++		free(device_fullname);
+ 		
+ 	}
+ 	finish_iface_stats (verbose, stats, hidden_if,current_if_num);
+-- 
+2.39.2
+

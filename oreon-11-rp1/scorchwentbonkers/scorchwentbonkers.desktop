@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Scorch Went Bonkers
+Comment=Realtime remake of Scorched Earth
+Exec=scorchwentbonkers
+Icon=scorchwentbonkers
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;StrategyGame;
+Keywords=Game;Arcade;Shooter;Retro;Scorch;Bonkers;deathmatch;

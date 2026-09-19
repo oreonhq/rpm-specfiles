@@ -1,0 +1,61 @@
+diff -up dd2-0.2.2/src/control.c~ dd2-0.2.2/src/control.c
+--- dd2-0.2.2/src/control.c~	2026-01-15 21:52:42.000000000 +0100
++++ dd2-0.2.2/src/control.c	2026-01-15 21:53:14.053515008 +0100
+@@ -23,7 +23,7 @@
+ #include "control.h"
+ #include "SDL_plus.h"
+ 
+-extern bool paused;
++extern int paused;
+ 
+ void control_player_joy(SDL_Joystick *joy, pDesc *p)
+ {
+diff -up dd2-0.2.2/src/engine.c~ dd2-0.2.2/src/engine.c
+--- dd2-0.2.2/src/engine.c~	2007-08-14 20:55:16.000000000 +0200
++++ dd2-0.2.2/src/engine.c	2026-01-15 21:53:38.030376728 +0100
+@@ -35,7 +35,7 @@ extern Mix_Music *bgm, *bgm_boss;
+ extern int sound;
+ 
+ int firstInit=0;
+-bool boss=false;
++int boss=false;
+ 
+ pDesc player[2];
+ 
+diff -up dd2-0.2.2/src/main.c~ dd2-0.2.2/src/main.c
+--- dd2-0.2.2/src/main.c~	2026-01-15 21:52:42.000000000 +0100
++++ dd2-0.2.2/src/main.c	2026-01-15 21:53:46.534327685 +0100
+@@ -52,10 +52,10 @@ SDL_Event event;
+ Uint32 tick, ntick;
+ float scroll=0,scroll2=0;
+ 
+-bool paused;
++int paused;
+ Uint32 pause_tick;
+ 
+-extern bool boss;
++extern int boss;
+ 
+ cfg conf;
+ score hiscore[10];
+@@ -63,7 +63,7 @@ score hiscore[10];
+ Mix_Chunk *efx[8]={ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+ Mix_Music *bgm=NULL, *bgm_boss=NULL;
+ int sound;
+-bool done;
++int done;
+ 
+ /* When fullscreen, drawing is done to screen, which then is blitted to 
+    real_screen stretched 2x, because modern LCD's cannot display 320x240,
+diff -up dd2-0.2.2/src/main.h~ dd2-0.2.2/src/main.h
+--- dd2-0.2.2/src/main.h~	2007-08-14 20:55:39.000000000 +0200
++++ dd2-0.2.2/src/main.h	2026-01-15 21:53:33.070405333 +0100
+@@ -21,8 +21,6 @@
+ #ifndef _MAIN_H_
+ #define _MAIN_H_
+ 
+-typedef int bool;
+-
+ #define true 	1
+ #define false 	0
+ 

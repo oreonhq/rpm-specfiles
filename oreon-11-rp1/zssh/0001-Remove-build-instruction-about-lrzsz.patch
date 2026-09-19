@@ -1,0 +1,82 @@
+From: Bart Martens <bart.martens@advalvas.be>
+Date: Tue, 17 Jan 2006 00:23:59 +0100
+Subject: Remove build instruction about lrzsz.
+
+Now that we have removed bundled lrzsz in source tarball, the package's
+build instrctions need patching as well.
+---
+ Makefile.in               | 20 ++------------------
+ fake_readline/Makefile.in |  2 +-
+ test/Makefile.in          |  4 ++--
+ 3 files changed, 5 insertions(+), 21 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 92c7254..6e46a93 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -86,21 +86,6 @@ uninstall :
+ fake_readline : force
+ 	-cd fake_readline && $(MAKE)
+ 
+-lrzsz :
+-	cd lrzsz-0.12.20 && ./configure --prefix=@prefix@
+-	cd lrzsz-0.12.20 && $(MAKE)
+-
+-lrzsz_links :
+-	ln -s @bindir@/lrz @bindir@/rz
+-	ln -s @bindir@/lsz @bindir@/sz
+-	ln -s @bindir@/lrb @bindir@/rb
+-	ln -s @bindir@/lsb @bindir@/sb
+-	ln -s @bindir@/lrx @bindir@/rx
+-	ln -s @bindir@/lsx @bindir@/sx
+-
+-lrzsz_install :
+-	cd lrzsz-0.12.20 && $(MAKE) install
+-
+ # create source archive in ~/backup
+ tgz $(TGZ) : distclean force
+ 	@cdir=`pwd` && cdir=`basename $$cdir` && cd .. && \
+@@ -136,11 +121,10 @@ TAGS :
+ new : clean all
+ 
+ clean :
+-	-rm *.o *~ *.a \#*\# core $(PRGS) typescript nohup.out $(RPMSPEC) $(BACKLINK)
++	-rm -f *.o *~ *.a \#*\# core $(PRGS) typescript nohup.out $(RPMSPEC) $(BACKLINK)
+ 
+ distclean : clean
+-	-rm Makefile config.cache config.status config.log config.scan config.h TAGS
+-	-(cd lrzsz-0.12.20 && $(MAKE) distclean)
++	-rm -f Makefile config.cache config.status config.log config.scan config.h TAGS
+ 	-(cd fake_readline && $(MAKE) distclean)
+ 	-(cd test && $(MAKE) distclean)
+ 
+diff --git a/fake_readline/Makefile.in b/fake_readline/Makefile.in
+index 77eca27..1134a5c 100644
+--- a/fake_readline/Makefile.in
++++ b/fake_readline/Makefile.in
+@@ -28,7 +28,7 @@ new : clean all
+ 
+ 
+ clean :
+-	-rm *.o *~ *.a \#*\# core $(NAME) typescript nohup.out 
++	-rm -f *.o *~ *.a \#*\# core $(NAME) typescript nohup.out 
+ 
+ distclean : clean
+ 
+diff --git a/test/Makefile.in b/test/Makefile.in
+index 30f6dc1..7d8671f 100644
+--- a/test/Makefile.in
++++ b/test/Makefile.in
+@@ -68,10 +68,10 @@ TAGS :
+ new : clean all
+ 
+ clean :
+-	-rm *.o *~ *.a \#*\# core $(PRGS) typescript nohup.out $(RPMSPEC) $(BACKLINK) output.*
++	-rm -f *.o *~ *.a \#*\# core $(PRGS) typescript nohup.out $(RPMSPEC) $(BACKLINK) output.*
+ 
+ distclean : clean
+-	-rm Makefile config.cache config.status config.log config.scan config.h TAGS
++	-rm -f Makefile config.cache config.status config.log config.scan config.h TAGS
+ 
+ autoconf:
+ 	autoconf

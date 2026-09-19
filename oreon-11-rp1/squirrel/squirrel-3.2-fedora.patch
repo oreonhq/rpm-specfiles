@@ -1,0 +1,368 @@
+From 9591e077bb3d27895520dcd51f11140c8a7b8f53 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Sun, 6 Aug 2023 20:26:31 +0200
+Subject: [PATCH 1/7] set soname version to project version
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dc35b6f..2196821 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -51,7 +51,7 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+ endif()
+ 
+ if(NOT DISABLE_DYNAMIC)
+-  set_target_properties(squirrel sqstdlib PROPERTIES SOVERSION 0 VERSION 0.0.0)
++  set_target_properties(squirrel sqstdlib PROPERTIES SOVERSION ${PROJECT_VERSION} VERSION ${PROJECT_VERSION})
+ endif()
+ 
+ if(NOT SQ_DISABLE_INSTALLER AND NOT SQ_DISABLE_HEADER_INSTALLER)
+-- 
+2.41.0
+
+
+From 843df1a5cc2288e80eb3eec9a4259643e29cf517 Mon Sep 17 00:00:00 2001
+From: Ingo Ruhnke <grumbel@gmail.com>
+Date: Tue, 8 Mar 2022 18:25:30 +0100
+Subject: [PATCH 2/7] fixed version number in CMakeLists.txt
+
+(cherry picked from commit af69eb70844d5830c99d24e671352b2e5e0fe255)
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2196821..59563fe 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ cmake_minimum_required(VERSION 3.4)
+-project(squirrel VERSION 3.1 LANGUAGES C CXX)
++project(squirrel VERSION 3.2 LANGUAGES C CXX)
+ 
+ option(DISABLE_STATIC "Avoid building/installing static libraries.")
+ option(LONG_OUTPUT_NAMES "Use longer names for binaries and libraries: squirrel3 (not sq).")
+-- 
+2.41.0
+
+
+From 8e5bdae429a2e38714c19148b0a7cea487448e16 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Sun, 6 Aug 2023 21:18:24 +0200
+Subject: [PATCH 3/7] do not override systemwide compiler options
+
+---
+ CMakeLists.txt | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 59563fe..d360daa 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,10 +23,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
+     -Wextra
+     -pedantic
+     -Wcast-qual
+-    "$<$<CONFIG:Release>:-O3>"
+-    "$<$<CONFIG:RelWithDebInfo>:-O3;-g>"
+-    "$<$<CONFIG:MinSizeRel>:-Os>"
+-    "$<$<CONFIG:Debug>:-pg;-pie;-gstabs;-g3;-Og>"
+     )
+ elseif(MSVC)
+   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+-- 
+2.41.0
+
+
+From df0ed5fa9546572a6fba0edd2c526d25385a37a7 Mon Sep 17 00:00:00 2001
+From: TobiasBohnen <1294616+TobiasBohnen@users.noreply.github.com>
+Date: Thu, 13 Apr 2023 22:41:04 +0200
+Subject: [PATCH 4/7] fixed sq_resume
+
+sq_resume crashes (ci is null) when called on a dead generator.
+
+(cherry picked from commit 6ea6cff922977816ab6e9b2b919612bd44acce88)
+---
+ squirrel/sqvm.cpp | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/squirrel/sqvm.cpp b/squirrel/sqvm.cpp
+index 051b94f..489a0b4 100644
+--- a/squirrel/sqvm.cpp
++++ b/squirrel/sqvm.cpp
+@@ -715,7 +715,13 @@ bool SQVM::Execute(SQObjectPtr &closure, SQInteger nargs, SQInteger stackbase,SQ
+             ci->_root = SQTrue;
+                       }
+             break;
+-        case ET_RESUME_GENERATOR: _generator(closure)->Resume(this, outres); ci->_root = SQTrue; traps += ci->_etraps; break;
++        case ET_RESUME_GENERATOR: 
++            if(!_generator(closure)->Resume(this, outres)) {
++                return false;
++            }
++            ci->_root = SQTrue;
++            traps += ci->_etraps;
++            break;
+         case ET_RESUME_VM:
+         case ET_RESUME_THROW_VM:
+             traps = _suspended_traps;
+-- 
+2.41.0
+
+
+From b5ddfc04708ec37f9f2fee7f510d930daeaa647c Mon Sep 17 00:00:00 2001
+From: Alberto Demichelis <alberto@playgoals.com>
+Date: Fri, 28 Jul 2023 00:16:56 +0200
+Subject: [PATCH 5/7] fix bug in optimizer
+
+(cherry picked from commit cb12a4a704787b82906a39cc74eee0a9cb1f0348)
+---
+ squirrel/sqcompiler.cpp | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/squirrel/sqcompiler.cpp b/squirrel/sqcompiler.cpp
+index 0b17705..fa1df0d 100644
+--- a/squirrel/sqcompiler.cpp
++++ b/squirrel/sqcompiler.cpp
+@@ -839,7 +839,7 @@ public:
+             }
+             break;
+         case _SC('{'):
+-            _fs->AddInstruction(_OP_NEWOBJ, _fs->PushTarget(),0,NOT_TABLE);
++            _fs->AddInstruction(_OP_NEWOBJ, _fs->PushTarget(),0,0,NOT_TABLE);
+             Lex();ParseTableOrClass(_SC(','),_SC('}'));
+             break;
+         case TK_FUNCTION: FunctionExp();break;
+@@ -974,7 +974,7 @@ public:
+             //check if is an attribute
+             if(separator == ';') {
+                 if(_token == TK_ATTR_OPEN) {
+-                    _fs->AddInstruction(_OP_NEWOBJ, _fs->PushTarget(),0,NOT_TABLE); Lex();
++                    _fs->AddInstruction(_OP_NEWOBJ, _fs->PushTarget(),0,0,NOT_TABLE); Lex();
+                     ParseTableOrClass(',',TK_ATTR_CLOSE);
+                     hasattrs = true;
+                 }
+@@ -1059,7 +1059,12 @@ public:
+                 Lex(); Expression();
+                 SQInteger src = _fs->PopTarget();
+                 SQInteger dest = _fs->PushTarget();
+-                if(dest != src) _fs->AddInstruction(_OP_MOVE, dest, src);
++                if (dest != src) {
++                    if (_fs->IsLocal(src)) {
++                        _fs->SnoozeOpt();
++                    }
++                    _fs->AddInstruction(_OP_MOVE, dest, src);
++                }
+             }
+             else{
+                 _fs->AddInstruction(_OP_LOADNULLS, _fs->PushTarget(),1);
+@@ -1482,7 +1487,7 @@ public:
+         }
+         if(_token == TK_ATTR_OPEN) {
+             Lex();
+-            _fs->AddInstruction(_OP_NEWOBJ, _fs->PushTarget(),0,NOT_TABLE);
++            _fs->AddInstruction(_OP_NEWOBJ, _fs->PushTarget(),0,0,NOT_TABLE);
+             ParseTableOrClass(_SC(','),TK_ATTR_CLOSE);
+             attrs = _fs->TopTarget();
+         }
+-- 
+2.41.0
+
+
+From ff8e6e937888079086f6f2ff0faa4ebfbadc6b4c Mon Sep 17 00:00:00 2001
+From: "Haelwenn (lanodan) Monnier" <contact@hacktivis.me>
+Date: Sat, 14 Jan 2023 08:16:19 +0100
+Subject: [PATCH 6/7] CMake: Generate and install squirrel.pc
+
+Closes: https://github.com/albertodemichelis/squirrel/issues/259
+(cherry picked from commit 8bf504ffc6c2c88dec036f6475f35f84d26bf878)
+---
+ CMakeLists.txt          | 38 ++++++++++++++++++++++++++++++++------
+ sqstdlib/CMakeLists.txt |  5 +----
+ squirrel.pc.in          | 12 ++++++++++++
+ squirrel/CMakeLists.txt |  5 +----
+ 4 files changed, 46 insertions(+), 14 deletions(-)
+ create mode 100644 squirrel.pc.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d360daa..9912cc8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,10 @@
+-cmake_minimum_required(VERSION 3.4)
+-project(squirrel VERSION 3.2 LANGUAGES C CXX)
++cmake_minimum_required(VERSION 3.12)
++project(squirrel
++  VERSION 3.2
++  DESCRIPTION "The Squirrel programming language"
++  HOMEPAGE_URL "http://squirrel-lang.org/"
++  LANGUAGES C CXX
++  )
+ 
+ option(DISABLE_STATIC "Avoid building/installing static libraries.")
+ option(LONG_OUTPUT_NAMES "Use longer names for binaries and libraries: squirrel3 (not sq).")
+@@ -29,6 +34,15 @@ elseif(MSVC)
+   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+ endif()
+ 
++# Need to be defined here to be visible to squirrel.pc.in
++if(LONG_OUTPUT_NAMES)
++  set(LIBSQUIRREL_NAME squirrel3)
++  set(SQSTDLIB_NAME sqstdlib3)
++else()
++  set(LIBSQUIRREL_NAME squirrel)
++  set(SQSTDLIB_NAME sqstdlib)
++endif()
++
+ add_subdirectory(squirrel)
+ add_subdirectory(sqstdlib)
+ add_subdirectory(sq)
+@@ -83,10 +97,11 @@ configure_package_config_file(
+   INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/squirrel"
+   )
+ 
+-export(EXPORT squirrel
+-  NAMESPACE squirrel::
+-  FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake/squirrel/squirrel-targets.cmake"
+-  )
++configure_file(
++  "${CMAKE_CURRENT_SOURCE_DIR}/squirrel.pc.in"
++  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc
++  @ONLY
++)
+ 
+ if(NOT SQ_DISABLE_INSTALLER AND NOT SQ_DISABLE_CMAKE_INSTALLER)
+   install(FILES
+@@ -96,6 +111,17 @@ if(NOT SQ_DISABLE_INSTALLER AND NOT SQ_DISABLE_CMAKE_INSTALLER)
+     COMPONENT Development
+     )
+ 
++  # pc(5) only allows static variant to have extra flags, not an entirely new
++  # set of flags. While it's uncommon, a way to do it would be to generate a
++  # ${PROJECT_NAME}_static.pc file.
++  if(NOT DISABLE_DYNAMIC)
++    install(
++      FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc
++      DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
++      COMPONENT Development
++    )
++  endif()
++
+   install(EXPORT squirrel
+     NAMESPACE squirrel::
+     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/squirrel"
+diff --git a/sqstdlib/CMakeLists.txt b/sqstdlib/CMakeLists.txt
+index 34fba82..a606ba8 100644
+--- a/sqstdlib/CMakeLists.txt
++++ b/sqstdlib/CMakeLists.txt
+@@ -11,6 +11,7 @@ if(NOT DISABLE_DYNAMIC)
+   add_library(sqstdlib SHARED ${SQSTDLIB_SRC})
+   add_library(squirrel::sqstdlib ALIAS sqstdlib)
+   set_property(TARGET sqstdlib PROPERTY EXPORT_NAME sqstdlib)
++  set_property(TARGET sqstdlib PROPERTY OUTPUT_NAME ${SQSTDLIB_NAME})
+   target_link_libraries(sqstdlib squirrel)
+   if(NOT SQ_DISABLE_INSTALLER)
+     install(TARGETS sqstdlib EXPORT squirrel
+@@ -42,10 +43,6 @@ if(NOT DISABLE_STATIC)
+ endif()
+ 
+ if(LONG_OUTPUT_NAMES)
+-  if(NOT DISABLE_DYNAMIC)
+-    set_target_properties(sqstdlib PROPERTIES OUTPUT_NAME sqstdlib3)
+-  endif()
+-
+   if(NOT DISABLE_STATIC)
+     set_target_properties(sqstdlib_static PROPERTIES OUTPUT_NAME sqstdlib3_static)
+   endif()
+diff --git a/squirrel.pc.in b/squirrel.pc.in
+new file mode 100644
+index 0000000..ea66485
+--- /dev/null
++++ b/squirrel.pc.in
+@@ -0,0 +1,12 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++
++Name: @PROJECT_NAME@
++Version: @PROJECT_VERSION@
++Description: @PROJECT_DESCRIPTION@
++URL: @PROJECT_HOMEPAGE_URL@
++Requires:
++Provides: squirrel3 = @PROJECT_VERSION@
++Libs: -L${libdir} -l@LIBSQUIRREL_NAME@ -l@SQSTDLIB_NAME@
++Cflags: -I${includedir}
+diff --git a/squirrel/CMakeLists.txt b/squirrel/CMakeLists.txt
+index f96b958..c8a31b9 100644
+--- a/squirrel/CMakeLists.txt
++++ b/squirrel/CMakeLists.txt
+@@ -15,6 +15,7 @@ if(NOT DISABLE_DYNAMIC)
+   add_library(squirrel SHARED ${SQUIRREL_SRC})
+   add_library(squirrel::squirrel ALIAS squirrel)
+   set_property(TARGET squirrel PROPERTY EXPORT_NAME squirrel)
++  set_property(TARGET squirrel PROPERTY OUTPUT_NAME ${LIBSQUIRREL_NAME})
+   if(NOT SQ_DISABLE_INSTALLER)
+     install(TARGETS squirrel EXPORT squirrel
+       RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Libraries
+@@ -45,10 +46,6 @@ if(NOT DISABLE_STATIC)
+ endif()
+ 
+ if(LONG_OUTPUT_NAMES)
+-  if(NOT DISABLE_DYNAMIC)
+-    set_target_properties(squirrel PROPERTIES OUTPUT_NAME squirrel3)
+-  endif()
+-
+   if(NOT DISABLE_STATIC)
+     set_target_properties(squirrel_static PROPERTIES OUTPUT_NAME squirrel3_static)
+   endif()
+-- 
+2.41.0
+
+
+From 890a4461257e3550b83d3ddc24f22049a59ad942 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Sun, 6 Aug 2023 21:13:22 +0200
+Subject: [PATCH 7/7] install headers into squirrel subdirectory
+
+---
+ CMakeLists.txt | 4 ++--
+ squirrel.pc.in | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9912cc8..3e3a7f8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -68,7 +68,7 @@ if(NOT SQ_DISABLE_INSTALLER AND NOT SQ_DISABLE_HEADER_INSTALLER)
+   install(FILES
+     include/sqconfig.h
+     include/squirrel.h
+-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/squirrel
+     COMPONENT Development
+     )
+   install(FILES
+@@ -78,7 +78,7 @@ if(NOT SQ_DISABLE_INSTALLER AND NOT SQ_DISABLE_HEADER_INSTALLER)
+     include/sqstdmath.h
+     include/sqstdstring.h
+     include/sqstdsystem.h
+-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/squirrel
+     COMPONENT Development
+     )
+ endif()
+diff --git a/squirrel.pc.in b/squirrel.pc.in
+index ea66485..beb153a 100644
+--- a/squirrel.pc.in
++++ b/squirrel.pc.in
+@@ -9,4 +9,4 @@ URL: @PROJECT_HOMEPAGE_URL@
+ Requires:
+ Provides: squirrel3 = @PROJECT_VERSION@
+ Libs: -L${libdir} -l@LIBSQUIRREL_NAME@ -l@SQSTDLIB_NAME@
+-Cflags: -I${includedir}
++Cflags: -I${includedir}/squirrel
+-- 
+2.41.0
+

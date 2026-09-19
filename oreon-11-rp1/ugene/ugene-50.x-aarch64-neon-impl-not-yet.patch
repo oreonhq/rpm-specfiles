@@ -1,0 +1,26 @@
+diff --git a/src/libs_3rdparty/samtools/src/samtools_core/htslib/htscodecs/htscodecs/rANS_static4x16pr.c b/src/libs_3rdparty/samtools/src/samtools_core/htslib/htscodecs/htscodecs/rANS_static4x16pr.c
+index be907d85b..820d43cf0 100644
+--- a/src/libs_3rdparty/samtools/src/samtools_core/htslib/htscodecs/htscodecs/rANS_static4x16pr.c
++++ b/src/libs_3rdparty/samtools/src/samtools_core/htslib/htscodecs/htscodecs/rANS_static4x16pr.c
+@@ -1068,8 +1068,8 @@ unsigned char *(*rans_enc_func(int do_simd, int order))
+     if (do_simd) {
+         if ((rans_cpu & RANS_CPU_ENC_NEON) && have_neon())
+             return order & 1
+-                ? rans_compress_O1_32x16_neon
+-                : rans_compress_O0_32x16_neon;
++                ? rans_compress_O1_32x16
++                : rans_compress_O0_32x16;
+         else
+             return order & 1
+                 ? rans_compress_O1_32x16
+@@ -1091,8 +1091,8 @@ unsigned char *(*rans_dec_func(int do_simd, int order))
+     if (do_simd) {
+         if ((rans_cpu & RANS_CPU_DEC_NEON) && have_neon())
+             return order & 1
+-                ? rans_uncompress_O1_32x16_neon
+-                : rans_uncompress_O0_32x16_neon;
++                ? rans_uncompress_O1_32x16
++                : rans_uncompress_O0_32x16;
+         else
+             return order & 1
+                 ? rans_uncompress_O1_32x16

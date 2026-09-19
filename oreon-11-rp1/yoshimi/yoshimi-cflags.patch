@@ -1,0 +1,17 @@
+--- yoshimi-1.7.0/src/CMakeLists.txt	2020-01-18 15:00:29.000000000 +0000
++++ yoshimi-1.7.0.new/src/CMakeLists.txt	2020-01-24 21:45:48.909253933 +0000
+@@ -104,12 +104,12 @@
+ )
+ 
+ set (BuildOptions_X86_64AMD
+-    "-march=athlon64 -m64 -Wall -msse -msse2 -mfpmath=sse -ffast-math -fno-finite-math-only -fomit-frame-pointer"
++    ${CMAKE_C_FLAGS}
+     CACHE STRING "X86_64 compiler options"
+ )
+ 
+ set (BuildOptions_X86_64Core2
+-    "-march=core2 -m64 -Wall -msse -msse2 -mfpmath=sse -ffast-math -fno-finite-math-only -fomit-frame-pointer"
++    ${CMAKE_C_FLAGS}
+     CACHE STRING "X86_64 compiler options"
+ )
+ 

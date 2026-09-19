@@ -1,0 +1,151 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index adaf04c..c68d430 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -81,7 +81,7 @@ IF(NOT OpenIGTLink_INSTALL_INCLUDE_DIR)
+ ENDIF(NOT OpenIGTLink_INSTALL_INCLUDE_DIR)
+ 
+ IF(NOT OpenIGTLink_INSTALL_PACKAGE_DIR)
+-  SET(OpenIGTLink_INSTALL_PACKAGE_DIR ${OpenIGTLink_INSTALL_LIB_DIR}
++  SET(OpenIGTLink_INSTALL_PACKAGE_DIR "${OpenIGTLink_INSTALL_LIB_DIR}/cmake/igtl-${OpenIGTLink_VERSION_MAJOR}.${OpenIGTLink_VERSION_MINOR}"
+     CACHE INTERNAL "")
+ ENDIF(NOT OpenIGTLink_INSTALL_PACKAGE_DIR)
+ 
+@@ -188,9 +188,8 @@ CMAKE_EXPORT_BUILD_SETTINGS(${OpenIGTLink_BINARY_DIR}/OpenIGTLinkBuildSettings.c
+ 
+ INSTALL(FILES
+   ${OpenIGTLink_BINARY_DIR}/OpenIGTLinkBuildSettings.cmake
+-  ${OpenIGTLink_LIBRARY_TARGETS_FILE}
+   ${OpenIGTLink_BINARY_DIR}/UseOpenIGTLink.cmake
+-  ${OpenIGTLink_BINARY_DIR}/OpenIGTLinkConfig.cmake
++  ${OpenIGTLink_BINARY_DIR}/Utilities/OpenIGTLinkConfig.cmake
+   DESTINATION ${OpenIGTLink_INSTALL_PACKAGE_DIR}
+   COMPONENT Development
+   )
+@@ -236,11 +235,15 @@ ENDIF(OpenIGTLink_BUILD_EXAMPLES)
+ 
+ #-----------------------------------------------------------------------------
+ # Export targets
+-export(TARGETS
+-  OpenIGTLink
++export(TARGETS OpenIGTLink
+   FILE "${OpenIGTLink_LIBRARY_TARGETS_FILE}"
+   )
+ 
++# Export targets for install
++INSTALL(EXPORT OpenIGTLink
++  DESTINATION "${OpenIGTLink_INSTALL_PACKAGE_DIR}"
++  FILE "OpenIGTLinkTargets.cmake"
++  )
+ 
+ #-----------------------------------------------------------------------------
+ # Tests
+diff --git a/GenerateOpenIGTLinkConfig.cmake b/GenerateOpenIGTLinkConfig.cmake
+index 94f7d62..90602b9 100644
+--- a/GenerateOpenIGTLinkConfig.cmake
++++ b/GenerateOpenIGTLinkConfig.cmake
+@@ -41,8 +41,11 @@ CONFIGURE_FILE(${OpenIGTLink_SOURCE_DIR}/OpenIGTLinkConfig.cmake.in
+ #-----------------------------------------------------------------------------
+ # Settings specific to the install tree.
+ 
++# store old OpenIGTLink_LIBRARY_TARGETS_FILE
++SET(OpenIGTLink_LIBRARY_TARGETS_FILE_BUILDTREE ${OpenIGTLink_LIBRARY_TARGETS_FILE})
++
+ # The library dependencies file.
+-SET(OpenIGTLink_LIBRARY_DEPENDS_FILE "\${OpenIGTLink_INSTALL_PREFIX}/${OpenIGTLink_INSTALL_PACKAGE_DIR}/OpenIGTLinkLibraryDepends.cmake")
++SET(OpenIGTLink_LIBRARY_TARGETS_FILE "\${OpenIGTLink_INSTALL_PREFIX}/${OpenIGTLink_INSTALL_PACKAGE_DIR}/OpenIGTLinkTargets.cmake")
+ 
+ # The "use" file.
+ SET(OpenIGTLink_USE_FILE \${OpenIGTLink_INSTALL_PREFIX}/${OpenIGTLink_INSTALL_PACKAGE_DIR}/UseOpenIGTLink.cmake)
+@@ -65,20 +68,12 @@ SET(OpenIGTLink_LIBRARY_DIRS_CONFIG "\${OpenIGTLink_INSTALL_PREFIX}/${OpenIGTLin
+ #-----------------------------------------------------------------------------
+ # Configure OpenIGTLinkConfig.cmake for the install tree.
+ 
+-# Construct the proper number of GET_FILENAME_COMPONENT(... PATH)
+-# calls to compute the installation prefix.
+-STRING(REGEX REPLACE "/" ";" OpenIGTLink_INSTALL_PACKAGE_DIR_COUNT
+-  "${OpenIGTLink_INSTALL_PACKAGE_DIR}")
+ SET(OpenIGTLink_CONFIG_CODE "
+-# Compute the installation prefix from this OpenIGTLinkConfig.cmake file location.
+-GET_FILENAME_COMPONENT(OpenIGTLink_INSTALL_PREFIX \"\${CMAKE_CURRENT_LIST_FILE}\" PATH)")
+-FOREACH(p ${OpenIGTLink_INSTALL_PACKAGE_DIR_COUNT})
+-  SET(OpenIGTLink_CONFIG_CODE
+-    "${OpenIGTLink_CONFIG_CODE}\nGET_FILENAME_COMPONENT(OpenIGTLink_INSTALL_PREFIX \"\${OpenIGTLink_INSTALL_PREFIX}\" PATH)"
+-    )
+-ENDFOREACH(p)
+-
++SET(OpenIGTLink_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")")
+ 
+ CONFIGURE_FILE(${OpenIGTLink_SOURCE_DIR}/OpenIGTLinkConfig.cmake.in
+                ${OpenIGTLink_BINARY_DIR}/Utilities/OpenIGTLinkConfig.cmake @ONLY IMMEDIATE)
+ 
++# restore old OpenIGTLink_LIBRARY_TARGETS_FILE
++SET(OpenIGTLink_LIBRARY_TARGETS_FILE ${OpenIGTLink_LIBRARY_TARGETS_FILE_BUILDTREE})
++
+diff --git a/OpenIGTLinkConfig.cmake.in b/OpenIGTLinkConfig.cmake.in
+index 2dc5b00..ad9bcea 100644
+--- a/OpenIGTLinkConfig.cmake.in
++++ b/OpenIGTLinkConfig.cmake.in
+@@ -47,5 +47,5 @@ SET(OpenIGTLink_CableSwig_DIR "@OpenIGTLink_CableSwig_DIR_CONFIG@")
+ SET(OpenIGTLink_LIBRARIES OpenIGTLink)
+ 
+ # The OpenIGTLink library targets.
+-SET(OpenIGTLink_LIBRARY_TARGETS_FILE @OpenIGTLink_LIBRARY_TARGETS_FILE@)
++SET(OpenIGTLink_LIBRARY_TARGETS_FILE "@OpenIGTLink_LIBRARY_TARGETS_FILE@")
+ include(${OpenIGTLink_LIBRARY_TARGETS_FILE})
+diff --git a/Source/CMakeLists.txt b/Source/CMakeLists.txt
+index 536c11f..ddd5d87 100644
+--- a/Source/CMakeLists.txt
++++ b/Source/CMakeLists.txt
+@@ -30,8 +30,7 @@ ENDIF(OpenIGTLink_PLATFORM_WIN32)
+ 
+ ADD_SUBDIRECTORY( igtlutil )
+ 
+-set(OpenIGTLink_INCLUDE_DIRS
+-  PUBLIC
++SET(OpenIGTLink_INCLUDE_DIRS
+   ${CMAKE_BINARY_DIR}
+   ${CMAKE_CURRENT_SOURCE_DIR}
+   ${CMAKE_CURRENT_BINARY_DIR}
+@@ -180,21 +179,16 @@ IF (${OpenIGTLink_PROTOCOL_VERSION} GREATER "1" )
+     )
+ ENDIF ( ${OpenIGTLink_PROTOCOL_VERSION} GREATER "1")
+ 
+-IF( ${CMAKE_GENERATOR} MATCHES "Visual Studio" )
+-ADD_LIBRARY(OpenIGTLink
+-  ${OpenIGTLink_SOURCES}
+-  ${OpenIGTLink_INCLUDE_FILES}
+-  )
+-ELSE ( ${CMAKE_GENERATOR} MATCHES "Visual Studio" )
+-ADD_LIBRARY(OpenIGTLink
+-  ${OpenIGTLink_SOURCES}
+-  )
+-ENDIF( ${CMAKE_GENERATOR} MATCHES "Visual Studio" )
++ADD_LIBRARY(OpenIGTLink ${OpenIGTLink_SOURCES} ${OpenIGTLink_INCLUDE_FILES})
++foreach(p IN LISTS OpenIGTLink_INCLUDE_DIRS)
++  target_include_directories(OpenIGTLink PUBLIC 
++    $<BUILD_INTERFACE:${p}>)
++endforeach()
++target_include_directories(OpenIGTLink PUBLIC 
++  $<INSTALL_INTERFACE:${OpenIGTLink_INSTALL_INCLUDE_DIR}>)
++
++TARGET_LINK_LIBRARIES(OpenIGTLink PUBLIC ${LINK_LIBS})
+ 
+-include_directories(OpenIGTLink ${OpenIGTLink_INCLUDE_DIRS})
+-TARGET_LINK_LIBRARIES(OpenIGTLink
+-  ${LINK_LIBS}
+-  )
+ IF(MSVC)
+   target_compile_options(OpenIGTLink PRIVATE /MP)
+ ENDIF()
+@@ -208,7 +202,7 @@ INSTALL(FILES ${OpenIGTLink_INCLUDE_FILES}
+   DESTINATION ${OpenIGTLink_INSTALL_INCLUDE_DIR}
+   COMPONENT Development)
+ 
+-INSTALL(TARGETS OpenIGTLink
++INSTALL(TARGETS OpenIGTLink EXPORT OpenIGTLink
+   RUNTIME DESTINATION ${OpenIGTLink_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+   LIBRARY DESTINATION ${OpenIGTLink_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+-  ARCHIVE DESTINATION ${OpenIGTLink_INSTALL_LIB_DIR} COMPONENT Development)
+\ No newline at end of file
++  ARCHIVE DESTINATION ${OpenIGTLink_INSTALL_LIB_DIR} COMPONENT Development)

@@ -1,0 +1,10 @@
+diff -up IO-Digest-0.11/Makefile.PL.orig IO-Digest-0.11/Makefile.PL
+--- IO-Digest-0.11/Makefile.PL.orig	2017-05-17 12:13:40.964247266 +0200
++++ IO-Digest-0.11/Makefile.PL	2017-05-17 12:14:08.826136758 +0200
+@@ -1,5 +1,6 @@
+ sub readme_from {}; sub auto_include_deps {}; sub author_tests {}; sub auto_set_repository {};
+ use strict;
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ name 'IO-Digest';

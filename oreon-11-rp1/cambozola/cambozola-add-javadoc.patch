@@ -1,0 +1,23 @@
+--- a/build.xml.origine	2010-12-12 21:09:07.000000000 +0100
++++ b/build.xml	2010-12-22 18:00:10.325907266 +0100
+@@ -129,4 +129,20 @@
+         <delete dir="${package.base}"/>
+         <delete dir="${deploy}"/>
+     </target>
++
++	<target name="javadoc" description="generate javadoc documentation">
++        <javadoc
++            destdir="javadoc"
++            defaultexcludes="yes"
++            author="true"
++            version="true"
++            use="true"
++            access="protected"
++            windowtitle="cambozola javadoc"
++            failonerror="true">
++            <packageset dir="src">
++                <include name="com/charliemouse/cambozola/"/>
++            </packageset>
++        </javadoc>
++        </target>
+ </project>

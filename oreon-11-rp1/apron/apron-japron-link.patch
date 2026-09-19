@@ -1,0 +1,11 @@
+--- japron/Makefile.orig	2023-09-20 13:55:04.000000000 -0600
++++ japron/Makefile	2023-09-22 08:56:10.285592635 -0600
+@@ -171,7 +171,7 @@ apron/%.o: apron/%.c gmp.jar apron.jar g
+ 	$(CC) $(CFLAGSN) -c $(IFLAGS) -Igmp $< -o $@
+ 
+ libjapron.$(EXT_DLL): apron/japron.o $(APRONO)
+-	$(CC) $(CFLAGSN) -shared $+ -o $@ $(LFLAGS) $(APRONLIBS)
++	$(CC) $(CFLAGSN) -shared $+ -o $@ $(LFLAGS) -Wl,-rpath,/usr/lib/java $(APRONLIBS)
+ 
+ libjapron.$(EXT_DLL): libjgmp.$(EXT_DLL)
+ 

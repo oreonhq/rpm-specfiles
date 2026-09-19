@@ -1,0 +1,56 @@
+--- ddnet-19.4.orig/CMakeLists.txt	2025-09-09 03:33:15.000000000 -0300
++++ ddnet-19.4/CMakeLists.txt	2025-09-09 19:22:59.843478529 -0300
+@@ -551,6 +551,8 @@
+   find_package(SSP)
+ endif()
+ 
++pkg_check_modules(JSONPARSER REQUIRED json-parser)
++
+ if(TARGET_OS AND TARGET_OS STREQUAL "mac")
+   find_program(CMAKE_OTOOL otool)
+   find_program(DMGBUILD dmgbuild)
+@@ -632,6 +634,8 @@
+   show_dependency_status("Vulkan" VULKAN)
+ endif()
+ 
++show_dependency_status("json-parser" JSONPARSER)
++
+ if(NOT(CURL_FOUND))
+   message(SEND_ERROR "You must install Curl to compile ${CMAKE_PROJECT_NAME}")
+ endif()
+@@ -818,19 +822,6 @@
+ # DEPENDENCY COMPILATION
+ ########################################################################
+ 
+-set_src(DEP_JSON_SRC GLOB src/engine/external/json-parser json.c json.h)
+-add_library(json EXCLUDE_FROM_ALL OBJECT ${DEP_JSON_SRC})
+-
+-set_src(DEP_MD5_SRC GLOB src/engine/external/md5 md5.c md5.h)
+-add_library(md5 EXCLUDE_FROM_ALL OBJECT ${DEP_MD5_SRC})
+-
+-list(APPEND TARGETS_DEP json md5)
+-set(DEP_JSON $<TARGET_OBJECTS:json>)
+-set(DEP_MD5)
+-if(NOT CRYPTO_FOUND)
+-  set(DEP_MD5 $<TARGET_OBJECTS:md5>)
+-endif()
+-
+ ########################################################################
+ # RUST
+ ########################################################################
+@@ -2202,13 +2193,14 @@
+   src/generated/protocol7.h
+   src/generated/protocolglue.h
+ )
+-set(DEPS ${DEP_JSON} ${DEP_MD5} ${ZLIB_DEP})
++set(DEPS ${ZLIB_DEP})
+ 
+ # Libraries
+ set(LIBS
+   ${CRYPTO_LIBRARIES}
+   ${CURL_LIBRARIES}
+   ${SQLite3_LIBRARIES}
++  ${JSONPARSER_LIBRARIES}
+   ${WEBSOCKETS_LIBRARIES}
+   ${ZLIB_LIBRARIES}
+   ${PLATFORM_LIBS}

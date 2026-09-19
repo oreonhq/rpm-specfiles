@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bc0f4dd7c105b0b78420eb15e581a6c87086a19c7133e9058970086e5cb0eb31
 
 ## NOTE: Lots of files in various subdirectories have the same name (such as
 ## "LICENSE") so this short macro allows us to distinguish them by using their
@@ -13,7 +13,7 @@
 %bcond_without docs
 
 # Clang is preferred: https://skia.org/docs/user/build/#supported-and-preferred-compilers
-%global toolchain clang
+
 
 # We run out of memory if building with LTO enabled on i686.
 %ifarch %{ix86}
@@ -21,7 +21,7 @@
 %endif
 
 Name:           webkitgtk
-Version:        2.53.3
+Version:        2.54.0
 Release:        %autorelease
 Summary:        GTK web content engine library
 
@@ -286,6 +286,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # builders, so only do this for x86_64 and aarch64 to avoid overwhelming
 # builders with less RAM.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1456261
+export CC=clang
+export CXX=clang++
 %global _dwz_max_die_limit_x86_64 250000000
 %global _dwz_max_die_limit_aarch64 250000000
 
@@ -306,6 +308,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %ifarch aarch64
 %global optflags %(echo %{optflags} | sed 's/-mbranch-protection=standard /-mbranch-protection=pac-ret /')
 %endif
+
+# drop gcc-only oreon opt flags if an older oreon-rpm-config leaked them onto clang
+%global optflags %(echo %{optflags} | sed -e 's/ -fipa-pta//g' -e 's/ -fdevirtualize-at-ltrans//g' -e 's/ -falign-jumps=32//g' -e 's/ -frename-registers//g' -e 's/ -fmodulo-sched-allow-regmoves//g' -e 's/ -fmodulo-sched//g')
 
 mkdir webkitgtk-6.0
 pushd webkitgtk-6.0
@@ -338,12 +343,12 @@ popd
 
 pushd webkitgtk-6.0
 export NINJA_STATUS="[1/2][%f/%t %es] "
-%cmake_build %limit_build -m 3072
+cmake --build "%{_vpath_builddir}" %limit_build -m 3072
 popd
 
 pushd webkit2gtk-4.1
 export NINJA_STATUS="[2/2][%f/%t %es] "
-%cmake_build %limit_build -m 3072
+cmake --build "%{_vpath_builddir}" %limit_build -m 3072
 popd
 
 %install
@@ -471,4 +476,3 @@ popd
 
 %changelog
 %autochangelog
-

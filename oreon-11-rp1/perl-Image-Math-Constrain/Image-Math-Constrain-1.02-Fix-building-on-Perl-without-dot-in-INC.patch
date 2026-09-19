@@ -1,0 +1,9 @@
+diff -up Image-Math-Constrain-1.02/Makefile.PL.orig Image-Math-Constrain-1.02/Makefile.PL
+--- Image-Math-Constrain-1.02/Makefile.PL.orig	2017-05-18 12:22:53.157260054 +0200
++++ Image-Math-Constrain-1.02/Makefile.PL	2017-05-18 12:30:17.112318821 +0200
+@@ -1,3 +1,5 @@
++BEGIN { push @INC, '.'; }
++
+ use inc::Module::Install 0.76;
+ 
+ all_from      'lib/Image/Math/Constrain.pm';

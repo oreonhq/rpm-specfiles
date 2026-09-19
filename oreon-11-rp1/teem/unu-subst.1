@@ -1,0 +1,55 @@
+.TH UNU\-SUBST "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-subst \- map
+.I nrrd
+through one univariate substitution table
+.SH SYNOPSIS
+.B unu\ subst
+.BR \-s , \-\-subst
+.RI < subst >
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Map
+.I nrrd
+through one univariate substitution table (itself represented as a
+.IR nrrd ).
+The substitution table is a
+.RI 2\-by\- N
+table: a list of pairs giving the old value (to replace) and the the new value
+(to change to), in that order.
+A plain text file makes this easy.
+Unlike with
+.BR unu\-lut (1),
+.BR unu\-rmap (1),
+and
+.BR unu\-imap (1),
+the output type is the same as the input type, rather than the type of the lut
+or map.
+.IP \(bu +2n
+Uses
+.B nrrdApply1DSubstitution
+.SH OPTIONS
+.TP
+.B \-s\fR\ <\fIsubst\fR>\ ,\ \fB\-\-subst\fR\ <\fIsubst\fR>
+substitution table to map input
+.I nrrd
+through
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-lut (1),
+.BR unu\-rmap (1),
+.BR unu\-imap (1)

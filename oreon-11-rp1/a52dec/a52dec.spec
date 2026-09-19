@@ -2,8 +2,8 @@
 
 Summary:    Small test program for liba52
 Name:       a52dec
-Version:    0.7.4
-Release:    53%{?dist}
+Version:    0.8.0
+Release:    1%{?dist}
 License:    GPL-2.0-only
 URL:        http://liba52.sourceforge.net
 # Debian upstream orig tarball (same a52dec-0.7.4 tree as upstream releases)
@@ -18,22 +18,22 @@ BuildRequires: make
 Requires:   liba52%{?_isa} = %{version}-%{release}
 #Multilib transition
 #Introduced in Fedora 26, can be dropped in Fedora 28
-Obsoletes:  %{name} < 0.7.4-25
+Obsoletes:  %{name} < 0.8.0-25
 
 
 %package -n liba52
 Summary:    A free ATSC A/52 stream decoder, also known as AC-3 or AC3
 #Fix multilibs transition - introduced in f26
-Obsoletes:  a52dec < 0.7.4-25
+Obsoletes:  a52dec < 0.8.0-25
 #Fix others 3rd part repos transition
-Obsoletes:  a52dec-libs < 0.7.4-25
+Obsoletes:  a52dec-libs < 0.8.0-25
 Provides:   a52dec-libs = %{version}-%{release}
 
 %package -n liba52-devel
 Summary:    Development files for liba52
 Requires:   liba52%{?_isa} = %{version}-%{release}
 Provides:   %{name}-devel = %{version}-%{release}
-Obsoletes:  %{name}-devel < 0.7.4-25
+Obsoletes:  %{name}-devel < 0.8.0-25
 
 %description
 Small test program for liba52.

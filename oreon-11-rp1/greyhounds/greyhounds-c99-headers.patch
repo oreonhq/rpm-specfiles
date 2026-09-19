@@ -1,0 +1,24 @@
+Add missing include files to avoid implicit function declarations and
+resulting compile errors on future compilers.
+
+Submitted upstream: <https://sourceforge.net/p/byghound/bugs/4/>
+
+diff -ur greyhounds-0.8-pre-alpha.orig/src/main.c greyhounds-0.8-pre-alpha/src/main.c
+--- greyhounds-0.8-pre-alpha.orig/src/main.c	2022-11-27 17:23:44.579936382 +0100
++++ greyhounds-0.8-pre-alpha/src/main.c	2022-11-27 17:42:59.453179858 +0100
+@@ -3,6 +3,7 @@
+  * Glade will not overwrite this file.
+  */
+ 
++#include <libintl.h>
+ #include "non_gui_defs.h"
+ /* reserve storage for global variables */
+ dog dogs[420];
+@@ -27,6 +28,7 @@
+ GtkWidget *main_window;
+ #include "interface.h"
+ #include "support.h"
++#include "callbacks.h"
+ 
+ int
+ main (int argc, char *argv[])

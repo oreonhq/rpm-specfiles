@@ -1,0 +1,347 @@
+From b609f75e2b9b69d9dab0c4d1e34751180ee18857 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Tue, 23 Jan 2024 11:24:00 -0800
+Subject: [PATCH 22/26] Allow image size specification using any SI or IEC unit
+
+Currently, oz only allows image sizes to be specified as integer
+amounts of gibibytes or tebibytes (that's IEC power-of-two units).
+This is unfortunately inflexible. Consider that storage media are
+typically specified in SI power-of-ten sizes, so a USB stick may
+be 16 gigabytes (SI power-of-ten GB) in size - that's
+16,000,000,000 bytes. Let's say we want to build an image that
+will fit on such a USB stick. oz will only allow us to build an
+image of 15,032,385,536 bytes (14 gibibytes) or 16,106,127,360
+bytes (15 gibibytes). So we're either slightly too big, or leaving
+nearly a gigabyte on the table.
+
+This allows the image size to be specified in the TDL with most
+any IEC or SI unit suffix, from B (bytes) all the way up to YiB
+(yobibytes). A size with no suffix or the suffix "G" is taken as
+gibibytes and a size with the suffix "T" is taken as tebibytes,
+as before, but other ambiguous suffixes are not accepted. All
+casing is accepted. Behind the scenes, we convert the size to
+bytes and specify it that way in the libvirt XML when creating
+the image in _internal_generate_diskimage.
+
+This does change the interface of generate_diskimage(), by making
+the unit for the size argument bytes instead of gibibytes. I can't
+see a clean way to avoid this while allowing flexibility. I have
+checked, and AFAICT, among active projects, only oz itself and
+the ImageFactory TinMan plugin call this function. The TinMan
+plugin will need a trivial change to its fallback default value.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ oz/Fedora.py                                  |  6 +--
+ oz/Guest.py                                   | 16 +++----
+ oz/TDL.py                                     | 47 +++++++++++++------
+ oz/Windows.py                                 |  8 ++--
+ oz/ozutil.py                                  | 17 +++++++
+ oz/tdl.rng                                    |  2 +-
+ tests/guest/test_guest.py                     |  3 +-
+ ... => test-58-disk-size-tebibyte-compat.tdl} |  0
+ tests/tdl/test-63-disk-size-exbibyte.tdl      | 15 ++++++
+ tests/tdl/test-64-disk-size-zettabyte.tdl     | 15 ++++++
+ tests/tdl/test-65-disk-size-byte.tdl          | 15 ++++++
+ tests/tdl/test_tdl.py                         |  5 +-
+ 12 files changed, 117 insertions(+), 32 deletions(-)
+ rename tests/tdl/{test-58-disk-size-terabyte.tdl => test-58-disk-size-tebibyte-compat.tdl} (100%)
+ create mode 100644 tests/tdl/test-63-disk-size-exbibyte.tdl
+ create mode 100644 tests/tdl/test-64-disk-size-zettabyte.tdl
+ create mode 100644 tests/tdl/test-65-disk-size-byte.tdl
+
+diff --git a/oz/Fedora.py b/oz/Fedora.py
+index 89ecca8..c6152f1 100644
+--- a/oz/Fedora.py
++++ b/oz/Fedora.py
+@@ -298,11 +298,11 @@ class FedoraGuest(oz.RedHat.RedHatLinuxCDYumGuest):
+         initrdline += " inst.nosave=output_ks"
+         self._modify_isolinux(initrdline)
+ 
+-    def generate_diskimage(self, size=10, force=False):
++    def generate_diskimage(self, size=10*1024*1024*1024, force=False):
+         """
+         Method to generate a diskimage.  By default, a blank diskimage of
+-        10GB will be created; the caller can override this with the size
+-        parameter, specified in GB.  If force is False (the default), then
++        10 GiB will be created; the caller can override this with the size
++        parameter, specified in bytes.  If force is False (the default), then
+         a diskimage will not be created if a cached JEOS is found.  If
+         force is True, a diskimage will be created regardless of whether a
+         cached JEOS exists.  See the oz-install man page for more
+diff --git a/oz/Guest.py b/oz/Guest.py
+index 249cce0..8a4e485 100644
+--- a/oz/Guest.py
++++ b/oz/Guest.py
+@@ -571,7 +571,7 @@ class Guest(object):
+ 
+         return xml
+ 
+-    def _internal_generate_diskimage(self, size=10, force=False,
++    def _internal_generate_diskimage(self, size=10*1024*1024*1024, force=False,
+                                      create_partition=False,
+                                      image_filename=None,
+                                      backing_filename=None):
+@@ -587,7 +587,7 @@ class Guest(object):
+             # we'll copy the JEOS itself later on
+             return
+ 
+-        self.log.info("Generating %dGB diskimage for %s", size, self.tdl.name)
++        self.log.info("Generating %s diskimage for %s", oz.ozutil.sizeof_fmt(int(size)), self.tdl.name)
+ 
+         diskimage = self.diskimage
+         if image_filename:
+@@ -628,17 +628,17 @@ class Guest(object):
+             # allows creation without an explicit capacity element.
+             qcow_size = oz.ozutil.check_qcow_size(backing_filename)
+             if qcow_size:
+-                capacity = qcow_size / 1024 / 1024 / 1024
++                capacity = qcow_size
+                 backing_format = 'qcow2'
+             else:
+-                capacity = os.path.getsize(backing_filename) / 1024 / 1024 / 1024
++                capacity = os.path.getsize(backing_filename)
+                 backing_format = 'raw'
+             backing = oz.ozutil.lxml_subelement(vol, "backingStore")
+             oz.ozutil.lxml_subelement(backing, "path", backing_filename)
+             oz.ozutil.lxml_subelement(backing, "format", None,
+                                       {"type": backing_format})
+ 
+-        oz.ozutil.lxml_subelement(vol, "capacity", str(int(capacity)), {'unit': 'G'})
++        oz.ozutil.lxml_subelement(vol, "capacity", str(int(capacity)), {'unit': 'B'})
+         vol_xml = lxml.etree.tostring(vol, pretty_print=True, encoding="unicode")
+ 
+         # sigh.  Yes, this is racy; if a pool is defined during this loop, we
+@@ -718,11 +718,11 @@ class Guest(object):
+                 g_handle.create_msdos_partition_table()
+                 g_handle.cleanup()
+ 
+-    def generate_diskimage(self, size=10, force=False):
++    def generate_diskimage(self, size=10*1024*1024*1024, force=False):
+         """
+         Method to generate a diskimage.  By default, a blank diskimage of
+-        10GB will be created; the caller can override this with the size
+-        parameter, specified in GB.  If force is False (the default), then
++        10 GiB will be created; the caller can override this with the size
++        parameter, specified in bytes.  If force is False (the default), then
+         a diskimage will not be created if a cached JEOS is found.  If
+         force is True, a diskimage will be created regardless of whether a
+         cached JEOS exists.  See the oz-install man page for more
+diff --git a/oz/TDL.py b/oz/TDL.py
+index cb373cb..aee74a3 100644
+--- a/oz/TDL.py
++++ b/oz/TDL.py
+@@ -327,20 +327,39 @@ class TDL(object):
+             # a sensible default
+             return None
+ 
+-        match = re.match(r'([0-9]*) *([GT]?)$', size)
+-        if not match or len(match.groups()) != 2:
+-            raise oz.OzException.OzException("Invalid disk size; it must be specified as a size in gigabytes, optionally suffixed with 'G' or 'T'")
+-
+-        number = match.group(1)
+-        suffix = match.group(2)
+-
+-        if not suffix or suffix == 'G':
+-            # for backwards compatibility, we assume G when there is no suffix
+-            size = number
+-        elif suffix == 'T':
+-            size = str(int(number) * 1024)
+-
+-        return size
++        # drop spaces and downcase
++        size = size.replace(" ", "").lower()
++        # isolate digits
++        number = ""
++        suffix = ""
++        for (idx, char) in enumerate(size):
++            if char.isdigit():
++                number += char
++            else:
++                suffix = size[idx:]
++                break
++
++        if not suffix:
++            # for backwards compatibility, we assume GiB when there is no suffix
++            suffix = "gib"
++
++        # also for backwards compatibility with an earlier attempt to support
++        # suffixes, treat "T" and "G" as "TiB" and "GiB"
++        units = {"b": 1, "g": 2**30, "t": 2**40}
++        tenscale = 3
++        twoscale = 10
++        for (i, pref) in enumerate(("k", "m", "g", "t", "p", "e", "z", "y"), start=1):
++            # this is giving us {"gib": 2 ** 30, "gb": 10 ** 9}, etc
++            units[pref + "b"] = (10 ** (i*tenscale))
++            units[pref + "ib"] = (2 ** (i*twoscale))
++
++        factor = units.get(suffix)
++        if not number or not factor:
++            raise oz.OzException.OzException(
++                "Invalid disk size; it must be specified as an integer size with an optional SI or IEC unit suffix, e.g. '10TB' or '16GiB'"
++            )
++
++        return str(int(number) * factor)
+ 
+     def _parse_commands(self, xpath):
+         """
+diff --git a/oz/Windows.py b/oz/Windows.py
+index 78948ac..777a306 100644
+--- a/oz/Windows.py
++++ b/oz/Windows.py
+@@ -78,12 +78,12 @@ class Windows_v5(Windows):
+                                            self.iso_contents],
+                                           printfn=self.log.debug)
+ 
+-    def generate_diskimage(self, size=10, force=False):
++    def generate_diskimage(self, size=10*1024*1024*1024, force=False):
+         """
+         Method to generate a diskimage.  By default, a blank diskimage of
+-        10GB will be created; the caller can override this with the size
+-        parameter, specified in GB.  If force is False (the default), then
+-        a diskimage will not be created if a cached JEOS is found.  If
++        10 GiB will be created; the caller can override this with the size
++        parameter, specified in bytes.  If force is False (the default),
++        then a diskimage will not be created if a cached JEOS is found.  If
+         force is True, a diskimage will be created regardless of whether a
+         cached JEOS exists.  See the oz-install man page for more
+         information about JEOS caching.
+diff --git a/oz/ozutil.py b/oz/ozutil.py
+index 689559f..be27d3f 100644
+--- a/oz/ozutil.py
++++ b/oz/ozutil.py
+@@ -1178,3 +1178,20 @@ def get_free_port():
+     sock.close()
+ 
+     return listen_port
++
++
++def sizeof_fmt(num, suffix="B"):
++    """
++    Give a convenient human-readable representation of a large size in
++    bytes. Initially by Fred Cirera:
++    https://web.archive.org/web/20111010015624/http://blogmag.net/blog/read/38/Print_human_readable_file_size
++    edited by multiple contributors at:
++    https://stackoverflow.com/questions/1094841
++    Per Richard Fontana this is too trivial to be copyrightable, so
++    there are no licensing concerns
++    """
++    for unit in ("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"):
++        if abs(num) < 1024.0:
++            return "%3.1f%s%s" % (num, unit, suffix)
++        num /= 1024.0
++    return "%.1f%s%s" % (num, 'Yi', suffix)
+diff --git a/oz/tdl.rng b/oz/tdl.rng
+index dc29c9a..9ca94cc 100644
+--- a/oz/tdl.rng
++++ b/oz/tdl.rng
+@@ -325,7 +325,7 @@
+ 
+   <define name='disk_size'>
+     <data type="string">
+-      <param name="pattern">([0-9]*) *([GT]?)</param>
++      <param name="pattern">([0-9]*) *([kKmMgGtTpPeEzZyY]?[iI]?[bB]?)</param>
+     </data>
+   </define>
+ 
+diff --git a/tests/guest/test_guest.py b/tests/guest/test_guest.py
+index 625eb67..85f6b03 100644
+--- a/tests/guest/test_guest.py
++++ b/tests/guest/test_guest.py
+@@ -352,7 +352,8 @@ def test_geteltorito_bogus_bootp(tmpdir):
+ def test_init_guest():
+     guest = setup_guest(tdlxml2)
+ 
+-    assert guest.disksize == 20
++    # size without units is taken to be GiB
++    assert guest.disksize == 20*(2**30)
+     assert guest.image_name() == 'tester'
+     assert guest.output_image_path() in (
+         # user's image storage
+diff --git a/tests/tdl/test-58-disk-size-terabyte.tdl b/tests/tdl/test-58-disk-size-tebibyte-compat.tdl
+similarity index 100%
+rename from tests/tdl/test-58-disk-size-terabyte.tdl
+rename to tests/tdl/test-58-disk-size-tebibyte-compat.tdl
+diff --git a/tests/tdl/test-63-disk-size-exbibyte.tdl b/tests/tdl/test-63-disk-size-exbibyte.tdl
+new file mode 100644
+index 0000000..e3f6b12
+--- /dev/null
++++ b/tests/tdl/test-63-disk-size-exbibyte.tdl
+@@ -0,0 +1,15 @@
++<template>
++  <name>help</name>
++  <os>
++    <name>Fedora</name>
++    <version>12</version>
++    <arch>i386</arch>
++    <install type='url'>
++      <url>http://download.fedoraproject.org/pub/fedora/linux/releases/12/Fedora/x86_64/os/</url>
++    </install>
++  </os>
++  <description>My Fedora 12 JEOS image</description>
++  <disk>
++    <size>2EiB</size>
++  </disk>
++</template>
+diff --git a/tests/tdl/test-64-disk-size-zettabyte.tdl b/tests/tdl/test-64-disk-size-zettabyte.tdl
+new file mode 100644
+index 0000000..26b7105
+--- /dev/null
++++ b/tests/tdl/test-64-disk-size-zettabyte.tdl
+@@ -0,0 +1,15 @@
++<template>
++  <name>help</name>
++  <os>
++    <name>Fedora</name>
++    <version>12</version>
++    <arch>i386</arch>
++    <install type='url'>
++      <url>http://download.fedoraproject.org/pub/fedora/linux/releases/12/Fedora/x86_64/os/</url>
++    </install>
++  </os>
++  <description>My Fedora 12 JEOS image</description>
++  <disk>
++    <size>10ZB</size>
++  </disk>
++</template>
+diff --git a/tests/tdl/test-65-disk-size-byte.tdl b/tests/tdl/test-65-disk-size-byte.tdl
+new file mode 100644
+index 0000000..b6e0774
+--- /dev/null
++++ b/tests/tdl/test-65-disk-size-byte.tdl
+@@ -0,0 +1,15 @@
++<template>
++  <name>help</name>
++  <os>
++    <name>Fedora</name>
++    <version>12</version>
++    <arch>i386</arch>
++    <install type='url'>
++      <url>http://download.fedoraproject.org/pub/fedora/linux/releases/12/Fedora/x86_64/os/</url>
++    </install>
++  </os>
++  <description>My Fedora 12 JEOS image</description>
++  <disk>
++    <size>10000000 B</size>
++  </disk>
++</template>
+diff --git a/tests/tdl/test_tdl.py b/tests/tdl/test_tdl.py
+index a94b2c1..366f1bc 100644
+--- a/tests/tdl/test_tdl.py
++++ b/tests/tdl/test_tdl.py
+@@ -92,8 +92,11 @@ tests = {
+     "test-55-files-http-url.tdl": True,
+     "test-56-invalid-disk-size.tdl": False,
+     "test-57-invalid-disk-size.tdl": False,
+-    "test-58-disk-size-terabyte.tdl": True,
++    "test-58-disk-size-tebibyte-compat.tdl": True,
+     "test-59-command-sorting.tdl": True,
++    "test-63-disk-size-exbibyte.tdl": True,
++    "test-64-disk-size-zettabyte.tdl": True,
++    "test-65-disk-size-byte.tdl": True,
+ }
+ 
+ # Test that iterates over all .tdl files
+-- 
+2.46.2
+

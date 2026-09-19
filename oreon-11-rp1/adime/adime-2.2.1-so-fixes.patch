@@ -1,0 +1,29 @@
+--- adime-2.2.1/misc/makefile.uni.soname	2004-09-10 21:34:54.000000000 +0200
++++ adime-2.2.1/misc/makefile.uni	2006-03-12 09:23:54.000000000 +0100
+@@ -53,7 +53,7 @@
+ 
+ # link as a shared object
+ OBJ_DIR = $(OBJ_PLATFORM_ROOT_DIR)/$(PACKAGE5)
+-IMPLIB_BASENAME = lib$(PACKAGE5).so
++IMPLIB_BASENAME = lib$(PACKAGE5).so.0
+ IMPLIB_NAME = $(LIB_DIR)/$(IMPLIB_BASENAME)
+ LIB_NAME = $(IMPLIB_NAME)
+ 
+@@ -236,7 +240,7 @@
+ 
+ LINK_LIB_DEPS =
+ define LINK_LIB
+-gcc $(LFLAGS) -shared -o $(IMPLIB_NAME) $(LIB_OBJS) $(LIB_FLAGS)
++gcc $(LFLAGS) -shared -Wl,-soname=$(IMPLIB_BASENAME) -o $(IMPLIB_NAME) $(LIB_OBJS) $(LIB_FLAGS)
+ endef
+ 
+ LINK_EXE_DEPS =
+@@ -270,7 +274,7 @@
+ 
+ $(SYSTEM_LIB_DIR)/$(IMPLIB_BASENAME): $(IMPLIB_NAME)
+ 	install -m 755 -d $(SYSTEM_LIB_DIR)
+-	install -m 644 $< $@
++	install -m 755 $< $@
+ 
+ $(SYSTEM_INCLUDE_DIR)/adime.h: include/adime.h
+ 	install -m 755 -d $(SYSTEM_INCLUDE_DIR)

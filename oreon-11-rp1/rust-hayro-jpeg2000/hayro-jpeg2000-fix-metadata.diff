@@ -1,0 +1,30 @@
+--- hayro-jpeg2000-0.3.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ hayro-jpeg2000-0.3.3/Cargo.toml	2026-03-10T04:53:43.930003+00:00
+@@ -28,7 +28,7 @@
+ autobenches = false
+ description = "A memory-safe, pure-Rust JPEG 2000 decoder."
+ readme = "README.md"
+-license = "Apache-2.0 OR MIT"
++license = "(Apache-2.0 OR MIT) AND CC0-1.0"
+ repository = "https://github.com/LaurenzV/hayro"
+ resolver = "2"
+ 
+@@ -72,17 +72,13 @@
+ optional = true
+ 
+ [dependencies.moxcms]
+-version = "0.7.11"
++version = "0.7.5"
+ optional = true
+ 
+ [dev-dependencies.image]
+ version = "0.25"
+ features = ["png"]
+ default-features = false
+-
+-[dev-dependencies.indicatif]
+-version = "0.17"
+-features = ["rayon"]
+ 
+ [dev-dependencies.rayon]
+ version = "1.11"

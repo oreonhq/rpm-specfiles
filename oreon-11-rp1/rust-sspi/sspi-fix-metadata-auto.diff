@@ -1,0 +1,47 @@
+--- sspi-0.16.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ sspi-0.16.1/Cargo.toml	2026-01-29T23:21:01.593665+00:00
+@@ -253,43 +253,8 @@
+ [dev-dependencies.whoami]
+ version = "1.6"
+ 
+-[target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies.async-dnssd]
+-version = "0.5"
+-
+-[target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies.futures]
+-version = "0.3"
+-
+-[target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies.tokio]
+-version = "1.47"
+-features = [
+-    "time",
+-    "rt",
+-    "rt-multi-thread",
+-]
+-
+-[target.'cfg(target_arch = "wasm32")'.dependencies.uuid]
+-version = "1.18"
+-features = ["js"]
+-default-features = false
+-
+-[target."cfg(windows)".dependencies.windows]
+-version = "0.61"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_NetworkManagement_Dns",
+-]
+-
+-[target."cfg(windows)".dependencies.windows-registry]
+-version = "0.5"
+-
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.60"
+-features = [
+-    "Win32_Security_Cryptography",
+-    "Win32_Foundation",
+-]
+-
+ [lints.rust.unexpected_cfgs]
+ level = "warn"
+ priority = 0
+ check-cfg = ["cfg(fuzzing)"]
++

@@ -1,13 +1,13 @@
-%global source0_hash 36d5c9cf8a851a63c1064d6a9987e961c0860ebd1396cda99119e570847df721
+%global source0_hash 3e143362bf0f646cecf39fc0a59eb322de7fd8379966ae46eeecf41e4cf2719b
 
 %global framework kxmlgui
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.29.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution for user-configurable main windows
 
@@ -20,19 +20,19 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6GlobalAccel)
+BuildRequires:  cmake(KF6GlobalAccel) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  libX11-devel
 BuildRequires:  qt6-qtbase-devel
-BuildRequires:  cmake(KF6ColorScheme)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6ConfigWidgets)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6ItemViews)
-BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6ColorScheme) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6ConfigWidgets) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6GuiAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6IconThemes) >= %{version}
+BuildRequires:  cmake(KF6ItemViews) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
 BuildRequires:  cmake(Qt6UiPlugin)
 BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  qt6-qtbase-private-devel
@@ -99,6 +99,9 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kxmlgui5/
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

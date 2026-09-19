@@ -1,0 +1,29 @@
+From 3bfd5ac2ab860f2a0917fb40fac09aaa5bacdb0f Mon Sep 17 00:00:00 2001
+From: Peter Stensmyr <peter.stensmyr@aiven.io>
+Date: Fri, 22 Aug 2025 15:56:49 +1000
+Subject: [PATCH] Update pyzmq and psycopg2-binary versions
+
+Update to versions available on the corresponding fedora version.
+---
+ tox.ini | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tox.ini b/tox.ini
+index 9b52d394..a2280dcb 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -73,8 +73,9 @@ deps =
+     py39-{selects,poll,epolls}: pyzmq==21.0.2
+     py{39,310,311}: mysqlclient==2.0.3
+     py39: psycopg2-binary==2.8.4
+-    py{310,311,312,313,314}: psycopg2-binary==2.9.10
+-    py{310,311,312,313,314}: pyzmq==27
++    py{310,311,312}: psycopg2-binary>2.9.8
++    py{310,311,312,313,314}: pyzmq>=27
++    py{313,314}: psycopg2>=2.9.9
+     dnspython1: dnspython<2
+     asyncio: aiohttp
+ usedevelop = True
+-- 
+2.50.1
+

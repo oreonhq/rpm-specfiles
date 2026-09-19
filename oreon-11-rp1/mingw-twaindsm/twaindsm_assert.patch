@@ -1,0 +1,12 @@
+diff -rupN --no-dereference twain-dsm-2.5.1/TWAIN_DSM/src/log.cpp twain-dsm-2.5.1-new/TWAIN_DSM/src/log.cpp
+--- twain-dsm-2.5.1/TWAIN_DSM/src/log.cpp	2023-02-23 10:19:00.573232997 +0100
++++ twain-dsm-2.5.1-new/TWAIN_DSM/src/log.cpp	2023-02-23 10:19:00.754410531 +0100
+@@ -295,7 +295,7 @@ void CTwnDsmLog::Log(const int         _
+   // Do the assert, if asked for...
+   if (_doassert)
+   {
+-    assert(0);
++    // assert(0);
+   }
+ }
+ 

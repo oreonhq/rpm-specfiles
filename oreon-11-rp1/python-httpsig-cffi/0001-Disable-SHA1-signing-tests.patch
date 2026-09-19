@@ -1,0 +1,33 @@
+From 16bb358fa64f1526fc9a6cfc7ba47c375ecdd4dd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Sat, 28 Sep 2024 12:17:20 +0200
+Subject: [PATCH] Disable SHA1 signing tests
+
+---
+ httpsig_cffi/tests/test_verify.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/httpsig_cffi/tests/test_verify.py b/httpsig_cffi/tests/test_verify.py
+index e62aff0..c09b7e6 100755
+--- a/httpsig_cffi/tests/test_verify.py
++++ b/httpsig_cffi/tests/test_verify.py
+@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+ 
+ import json
+ import unittest
++import pytest
+ 
+ from httpsig_cffi.sign import HeaderSigner, Signer
+ from httpsig_cffi.verify import HeaderVerifier, Verifier
+@@ -140,7 +141,7 @@ class TestVerifyHMACSHA512(TestVerifyHMACSHA1):
+         super(TestVerifyHMACSHA512, self).setUp()
+         self.algorithm = "hmac-sha512"
+ 
+-
++@pytest.mark.skip(reason="sha1 is not supported by this backend for RSA signing")
+ class TestVerifyRSASHA1(TestVerifyHMACSHA1):
+     def setUp(self):
+         private_key_path = os.path.join(os.path.dirname(__file__), 'rsa_private.pem')
+-- 
+2.46.1
+

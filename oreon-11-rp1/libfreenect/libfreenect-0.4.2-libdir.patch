@@ -1,0 +1,12 @@
+diff -up ./cmake_modules/SetupDirectories.cmake.libdir ./cmake_modules/SetupDirectories.cmake
+--- ./cmake_modules/SetupDirectories.cmake.libdir	2014-05-05 18:27:34.066386294 -0400
++++ ./cmake_modules/SetupDirectories.cmake	2014-05-05 18:28:14.961891390 -0400
+@@ -8,7 +8,7 @@ ENDIF (PROJECT_OS_WIN)
+ STRING (TOLOWER ${PROJECT_NAME} projectNameLower)
+ SET (PROJECT_INCLUDE_INSTALL_DIR "include/${projectNameLower}")
+ SET (PROJECT_MANPAGE_INSTALL_DIR "share/man")
+-SET (PROJECT_LIBRARY_INSTALL_DIR "lib")
++SET (PROJECT_LIBRARY_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Library installation directory")
+ 
+ MESSAGE (STATUS "${PROJECT_NAME} will be installed to ${CMAKE_INSTALL_PREFIX}")
+ MESSAGE (STATUS "Headers will be installed to ${CMAKE_INSTALL_PREFIX}/${PROJECT_INCLUDE_INSTALL_DIR}")

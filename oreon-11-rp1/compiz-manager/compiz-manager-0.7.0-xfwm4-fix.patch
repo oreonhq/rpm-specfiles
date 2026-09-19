@@ -1,0 +1,13 @@
+diff --git a/compiz-manager b/compiz-manager
+index 9105306..2624821 100755
+--- a/compiz-manager
++++ b/compiz-manager
+@@ -40,7 +40,7 @@ PLUGIN_PATH="$LIBDIR/compiz"
+ GLXINFO="$(which glxinfo 2>/dev/null)"
+ METACITY="$(which metacity 2>/dev/null)"
+ MARCO="$(which marco 2>/dev/null)"
+-XFWM="$(which xfwm 2>/dev/null)"
++XFWM="$(which xfwm4 2>/dev/null)"
+ COMPIZ_NAME="compiz" # Final name for compiz (compiz.real).
+ 
+ # Minimum amount of memory (in kibi bytes) that NVIDIA cards need

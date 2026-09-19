@@ -1,0 +1,55 @@
+From baf759e980ad500e3ce6d5e4c12f1deeab8208b7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 5 Nov 2013 16:34:12 +0100
+Subject: [PATCH] Respect CFLAGS and LDFLAGS
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 38a2056..6b5cb93 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,8 +1,9 @@
+-GCC=/usr/bin/gcc
++CC:=/usr/bin/gcc
+ RM=/bin/rm
+ 
+-CFLAGS=-ggdb
+-LDFLAGS=-lpcap
++CFLAGS:=-ggdb
++
++PCAP_LDFLAGS=`pcap-config --libs`
+ 
+ APR_CFLAGS=`apr-1-config --includes --cppflags --cflags`
+ APR_LDFLAGS=`apr-1-config --link-ld --libs `
+@@ -13,17 +14,17 @@ XML_LDFLAGS=`xml2-config --libs`
+ all: ramond
+ 
+ log.o: src/log.c
+-	$(GCC) -c src/log.c $(CFLAGS) $(APR_CFLAGS) $(XML_CFLAGS)
++	$(CC) -c src/log.c $(CFLAGS) $(APR_CFLAGS) $(XML_CFLAGS)
+ 
+ xmlparser.o: src/xmlparser.c src/type.h
+-	$(GCC) -c src/xmlparser.c $(CFLAGS) $(APR_CFLAGS) $(XML_CFLAGS)
++	$(CC) -c src/xmlparser.c $(CFLAGS) $(APR_CFLAGS) $(XML_CFLAGS)
+ 
+ main.o: src/main.c src/type.h
+-	$(GCC) -c src/main.c $(CFLAGS) $(APR_CFLAGS) $(XML_CFLAGS)
++	$(CC) -c src/main.c $(CFLAGS) $(APR_CFLAGS) $(XML_CFLAGS)
+ 
+ 
+ ramond: main.o xmlparser.o log.o
+-	$(GCC) log.o xmlparser.o main.o -o ramond $(LDFLAGS) $(APR_LDFLAGS) $(XML_LDFLAGS)
++	$(CC) log.o xmlparser.o main.o -o ramond $(LDFLAGS) $(PCAP_LDFLAGS) $(APR_LDFLAGS) $(XML_LDFLAGS)
+ 
+ clean:
+ 	@-$(RM) ramond
+-- 
+1.8.3.1
+

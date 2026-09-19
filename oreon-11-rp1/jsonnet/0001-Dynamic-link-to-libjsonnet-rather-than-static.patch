@@ -1,0 +1,23 @@
+From: Pat Riehecky <riehecky@fnal.gov>
+Date: Fri, 14 Mar 2025 13:11:16 -0500
+Subject: Dynamic link to libjsonnet rather than static
+
+diff --git a/setup.py b/setup.py
+index 0c427fc..4eda677 100644
+--- a/setup.py
++++ b/setup.py
+@@ -115,12 +115,10 @@ setuptools.setup(
+     ext_modules=[
+         setuptools.Extension(
+             "_jsonnet",
+-            sources=LIB_SOURCES,
++            sources=["python/_jsonnet.c", ],
++            extra_objects=['libjsonnet.so.0', ],
+             include_dirs=[
+                 "include",
+-                "third_party/md5",
+-                "third_party/json",
+-                "third_party/rapidyaml",
+             ],
+             language="c++",
+         )

@@ -1,0 +1,28 @@
+--- a/requirements-dev.txt
++++ b/requirements-dev.txt
+@@ -1,4 +1,3 @@
+ nose
+-mock
+ # libxml2-utils
+ sphinx
+--- a/tests/parsers/test_frama_c_parser.py
++++ b/tests/parsers/test_frama_c_parser.py
+@@ -1,6 +1,6 @@
+ import unittest
+ 
+-import mock
++from unittest import mock
+ 
+ from firehose.parsers import frama_c
+ from firehose.model import Issue, Location, File, Point, \
+--- a/tests/parsers/test_gcc_parser.py
++++ b/tests/parsers/test_gcc_parser.py
+@@ -17,7 +17,7 @@
+ 
+ import unittest
+ 
+-import mock
++from unittest import mock
+ 
+ from firehose.parsers import gcc # import parse_warning, parse_file
+ from firehose.model import Analysis, Issue, Location, File, Point, \

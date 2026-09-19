@@ -1,0 +1,34 @@
+diff -ruN libstrophe-0.14.0/src/common.h libstrophe-0.14.0-mod/src/common.h
+--- libstrophe-0.14.0/src/common.h	2025-03-13 15:58:55.000000000 +0300
++++ libstrophe-0.14.0-mod/src/common.h	2025-05-17 15:37:21.111381662 +0300
+@@ -30,12 +30,17 @@
+ #include "snprintf.h"
+ 
+ /** handlers **/
++#if (__STDC_VERSION__ >= 202000L)
++typedef void* xmpp_void_handler;
++#else
++typedef int (*xmpp_void_handler)();
++#endif
+ 
+ typedef struct _xmpp_handlist_t xmpp_handlist_t;
+ struct _xmpp_handlist_t {
+     /* common members */
+     int user_handler;
+-    int (*handler)();
++    xmpp_void_handler handler;
+     void *userdata;
+     int enabled; /* handlers are added disabled and enabled after the
+                   * handler chain is processed to prevent stanzas from
+diff -ruN libstrophe-0.14.0/src/handler.c libstrophe-0.14.0-mod/src/handler.c
+--- libstrophe-0.14.0/src/handler.c	2024-02-05 12:38:49.000000000 +0300
++++ libstrophe-0.14.0-mod/src/handler.c	2025-05-17 15:37:51.415494132 +0300
+@@ -25,8 +25,6 @@
+ #include "common.h"
+ #include "ostypes.h"
+ 
+-typedef int (*xmpp_void_handler)();
+-
+ /* Remove item from the list pointed by head, but don't free it.
+  * There can be a situation when user's handler deletes another handler which
+  * is the previous in the list. handler_fire_stanza() and handler_fire_timed()

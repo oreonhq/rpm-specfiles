@@ -1,0 +1,21 @@
+diff --git a/include/mISDN/mbuffer.h b/include/mISDN/mbuffer.h
+index 96afa5e..4bc477d 100644
+--- a/include/mISDN/mbuffer.h
++++ b/include/mISDN/mbuffer.h
+@@ -153,6 +153,8 @@ static inline void mqueue_tail(struct mqueue *q, struct mbuffer *newm)
+ 
+ static inline struct mbuffer *mdequeue(struct mqueue *q)
+ {
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Warray-bounds"
+ 	struct mbuffer *next, *prev, *result;
+ 
+ 	pthread_mutex_lock(&q->lock);
+@@ -169,6 +171,7 @@ static inline struct mbuffer *mdequeue(struct mqueue *q)
+ 	}
+ 	pthread_mutex_unlock(&q->lock);
+ 	return result;
++#pragma GCC diagnostic pop
+ }
+ 
+ static __inline__ void mqueue_purge(struct mqueue *q)

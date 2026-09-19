@@ -1,0 +1,26 @@
+From 9bb206ae4574c19e0215e7b348246b466b949d08 Mon Sep 17 00:00:00 2001
+From: Didik Supriadi <didiksupriadi41@fedoraproject.org>
+Date: Mon, 26 Jun 2023 19:26:36 +0700
+Subject: [PATCH] Port to jakarta.xml.ws 4.0.0
+
+Signed-off-by: Didik Supriadi <didiksupriadi41@fedoraproject.org>
+---
+ .../jmock/test/unit/internal/ReturnDefaultCollectionTests.java  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/jmock/src/test/java/org/jmock/test/unit/internal/ReturnDefaultCollectionTests.java b/jmock/src/test/java/org/jmock/test/unit/internal/ReturnDefaultCollectionTests.java
+index 5eac60c..efae751 100644
+--- a/jmock/src/test/java/org/jmock/test/unit/internal/ReturnDefaultCollectionTests.java
++++ b/jmock/src/test/java/org/jmock/test/unit/internal/ReturnDefaultCollectionTests.java
+@@ -4,7 +4,7 @@ import org.hamcrest.Matcher;
+ import org.jmock.internal.ReturnDefaultValueAction;
+ import org.junit.Test;
+ 
+-import javax.xml.ws.handler.LogicalMessageContext;
++import jakarta.xml.ws.handler.LogicalMessageContext;
+ import java.beans.beancontext.BeanContext;
+ import java.beans.beancontext.BeanContextServices;
+ import java.util.*;
+-- 
+2.41.0
+

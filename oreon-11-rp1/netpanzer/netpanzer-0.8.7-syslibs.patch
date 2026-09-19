@@ -1,0 +1,93 @@
+diff -U3 -r netpanzer-0.8.7.orig/SConstruct netpanzer-0.8.7/SConstruct
+--- netpanzer-0.8.7.orig/SConstruct	2016-04-09 15:14:00.000000000 -0500
++++ netpanzer-0.8.7/SConstruct	2016-11-14 11:02:03.579789351 -0600
+@@ -166,7 +166,7 @@
+ # Configure Environments
+ ################################################################
+ 
+-env.Append( CPPPATH = [ 'src/Lib', 'src/NetPanzer', 'src/Lib/physfs', 'src/Lib/lua'] )
++env.Append( CPPPATH = [ 'src/Lib', 'src/NetPanzer', '/usr/include/lua-5.1'] )
+ 
+ # for this platform
+ if thisplatform == 'darwin':
+@@ -216,12 +216,10 @@
+ 
+ # BUILDS LUA
+ luaenv.Append(           CPPPATH = [ 'src/Lib/lua'] )
+-MakeStaticLib(          luaenv, 'nplua', 'lua', '*.c')
+ 
+ # BUILDS PHYSFS
+ physfsenv.Append( CFLAGS = [ '-DPHYSFS_SUPPORTS_ZIP=1', '-DZ_PREFIX=1', '-DPHYSFS_NO_CDROM_SUPPORT=1' ] )
+ physfsenv.Append( CPPPATH = [ 'src/Lib/physfs', 'src/Lib/physfs/zlib123' ] )
+-MakeStaticLib(physfsenv, 'npphysfs', 'physfs physfs/platform physfs/archivers physfs/zlib123', '*.c')
+ 
+ # BUILDS 2D
+ env.Append( CFLAGS = [ '-DZ_PREFIX=1' ] )
+@@ -246,7 +244,7 @@
+ if env.has_key('WINICON'):
+     env.Append( NPSOURCES = env['WINICON'] )
+ 
+-env.Prepend( LIBS = ['np2d','nplua','npnetwork','nplibs','npphysfs'] )
++env.Prepend( LIBS = ['np2d','lua-5.1','npnetwork','nplibs','physfs'] )
+ env.Prepend( LIBPATH = libpath )
+ 
+ netpanzer = env.Program( binpath+'netpanzer'+exeappend, env['NPSOURCES'])
+diff -U3 -r netpanzer-0.8.7.orig/src/Lib/2D/Palette.cpp netpanzer-0.8.7/src/Lib/2D/Palette.cpp
+--- netpanzer-0.8.7.orig/src/Lib/2D/Palette.cpp	2016-04-09 15:14:00.000000000 -0500
++++ netpanzer-0.8.7/src/Lib/2D/Palette.cpp	2016-11-14 11:02:42.449592917 -0600
+@@ -30,7 +30,7 @@
+ #include "Util/Exception.hpp"
+ #include "Util/UtilInterface.hpp"
+ 
+-#include "lua/lua.hpp"
++#include <lua.hpp>
+ 
+ float Palette::brightness = 1.0f;
+ 
+diff -U3 -r netpanzer-0.8.7.orig/src/Lib/Util/FileSystem.cpp netpanzer-0.8.7/src/Lib/Util/FileSystem.cpp
+--- netpanzer-0.8.7.orig/src/Lib/Util/FileSystem.cpp	2016-04-09 15:14:00.000000000 -0500
++++ netpanzer-0.8.7/src/Lib/Util/FileSystem.cpp	2016-11-14 11:03:04.448481743 -0600
+@@ -22,7 +22,6 @@
+ #include "Exception.hpp"
+ #include "Log.hpp"
+ #include "FileSystem.hpp"
+-#include "physfs/physfs.h"
+ 
+ namespace filesystem
+ {
+diff -U3 -r netpanzer-0.8.7.orig/src/Lib/Util/FileSystem.hpp netpanzer-0.8.7/src/Lib/Util/FileSystem.hpp
+--- netpanzer-0.8.7.orig/src/Lib/Util/FileSystem.hpp	2016-04-09 15:14:00.000000000 -0500
++++ netpanzer-0.8.7/src/Lib/Util/FileSystem.hpp	2016-11-14 11:03:18.722409607 -0600
+@@ -23,7 +23,7 @@
+ #include "SDL.h"
+ #include <string>
+ #include <stdlib.h>
+-#include "physfs/physfs.h"
++#include <physfs.h>
+ 
+ namespace filesystem
+ {
+diff -U3 -r netpanzer-0.8.7.orig/src/NetPanzer/Core/main.cpp netpanzer-0.8.7/src/NetPanzer/Core/main.cpp
+--- netpanzer-0.8.7.orig/src/NetPanzer/Core/main.cpp	2016-04-09 15:14:00.000000000 -0500
++++ netpanzer-0.8.7/src/NetPanzer/Core/main.cpp	2016-11-14 11:03:39.722303481 -0600
+@@ -19,7 +19,7 @@
+ 
+ #include "Scripts/ScriptManager.hpp"
+ 
+-#include "lua/lua.hpp"
++#include <lua.hpp>
+ 
+ #ifdef WIN32
+ #include <windows.h>
+diff -U3 -r netpanzer-0.8.7.orig/src/NetPanzer/Scripts/ScriptHelper.hpp netpanzer-0.8.7/src/NetPanzer/Scripts/ScriptHelper.hpp
+--- netpanzer-0.8.7.orig/src/NetPanzer/Scripts/ScriptHelper.hpp	2016-04-09 15:14:00.000000000 -0500
++++ netpanzer-0.8.7/src/NetPanzer/Scripts/ScriptHelper.hpp	2016-11-14 11:03:59.967201171 -0600
+@@ -21,7 +21,7 @@
+ #ifndef _SCRIPTHELPER_HPP
+ #define	_SCRIPTHELPER_HPP
+ 
+-#include "lua/lua.hpp"
++#include <lua.hpp>
+ 
+ #define GETSVTYPE_BYTE ScriptHelper::get_byte
+ #define SETSVTYPE_BYTE ScriptHelper::set_byte

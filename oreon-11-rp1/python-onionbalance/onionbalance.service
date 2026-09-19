@@ -1,0 +1,39 @@
+# OnionBalance systemd target
+
+[Unit]
+Description=OnionBalance - Tor Onion Service load balancer
+Documentation=https://github.com/DonnchaC/onionbalance
+After=network.target tor.service tor@.service tor-master.service
+Wants=network-online.target
+ConditionPathExists=/etc/onionbalance/config.yaml
+
+[Service]
+Type=simple
+Environment="ONIONBALANCE_LOG_LOCATION=/var/log/onionbalance/log"
+ExecStart=/usr/bin/onionbalance -c /etc/onionbalance/config.yaml
+ExecReload=/usr/bin/onionbalance reload
+TimeoutStopSec=5
+KillMode=mixed
+
+User=onionbalance
+PermissionsStartOnly=true
+Restart=on-abnormal
+RestartSec=2s
+LimitNOFILE=65536
+
+# Hardening
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_CHOWN CAP_FOWNER
+NoNewPrivileges=yes
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=full
+RuntimeDirectory=onionbalance
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/proc
+ReadWriteDirectories=-/var/lib/onionbalance
+ReadWriteDirectories=-/var/log/onionbalance
+ReadWriteDirectories=-/run/onionbalance
+
+[Install]
+WantedBy=multi-user.target

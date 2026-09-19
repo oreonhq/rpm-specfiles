@@ -1,0 +1,79 @@
+diff --git a/configure.ac b/configure.ac
+index 749bf6f..e233b53 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -104,9 +104,7 @@ AM_COND_IF([X11],
+  [AC_SEARCH_LIBS(XOpenDisplay, [X11])])
+ 
+ dnl Checks for header files.
+-AC_CHECK_HEADERS([unistd.h string.h])
+-AM_COND_IF([WX],,
+- [AC_CHECK_HEADERS([sgtty.h termio.h termcap.h termlib.h curses.h])])
++AC_CHECK_HEADERS([termios.h termio.h termcap.h termlib.h curses.h sys/ioctl.h unistd.h string.h])
+ 
+ dnl Checks for typedefs, structures, and compiler characteristics.
+ AC_TYPE_SIZE_T
+diff --git a/term.c b/term.c
+index c1f596e..e81c0b5 100644
+--- a/term.c
++++ b/term.c
+@@ -33,16 +33,14 @@
+ #include <console.h>
+ #endif
+ 
+-#ifdef HAVE_TERMIO_H
+-#ifdef HAVE_WX
++#ifdef HAVE_TERMIOS_H
+ #include <termios.h>
+-#else
++#elif defined(HAVE_TERMIO_H)
+ #include <termio.h>
+ #endif
+-#else
+-#ifdef HAVE_SGTTY_H
+-#include <sgtty.h>
+-#endif
++
++#ifdef HAVE_SYS_IOCTL_H
++#include <sys/ioctl.h>
+ #endif
+ 
+ #undef TRUE
+@@ -81,7 +79,9 @@ char cm_arr[40];
+ char so_arr[40];
+ char se_arr[40];
+ 
+-#ifdef HAVE_TERMIO_H
++#if defined(HAVE_TERMIOS_H)
++struct termios tty_cooked, tty_cbreak;
++#elif defined(HAVE_TERMIO_H)
+ struct termio tty_cooked, tty_cbreak;
+ #else
+ #ifdef HAVE_SGTTY_H
+@@ -137,7 +137,7 @@ void term_init(void) {
+ #endif /* WIN32 */
+ #else
+     if (interactive) {
+-#ifdef HAVE_TERMIO_H
++#if defined(HAVE_TERMIO_H) || defined(HAVE_TERMIOS_H)
+ 	ioctl(0,TCGETA,(char *)(&tty_cooked));
+ 	tty_cbreak = tty_cooked;
+ 	tty_cbreak.c_cc[VMIN] = '\01';
+@@ -200,7 +200,7 @@ void term_init(void) {
+ void charmode_on() {
+ #ifdef unix
+     if ((readstream == stdin) && interactive && !tty_charmode) {
+-#ifdef HAVE_TERMIO_H
++#if defined(HAVE_TERMIO_H) || defined(HAVE_TERMIOS_H)
+ 	ioctl(0,TCSETA,(char *)(&tty_cbreak));
+ #else /* !HAVE_TERMIO_H */
+ 	ioctl(0,TIOCSETP,(char *)(&tty_cbreak));
+@@ -216,7 +216,7 @@ void charmode_on() {
+ void charmode_off() {
+ #ifdef unix
+     if (tty_charmode) {
+-#ifdef HAVE_TERMIO_H
++#if defined(HAVE_TERMIO_H) || defined(HAVE_TERMIOS_H)
+ 	ioctl(0,TCSETA,(char *)(&tty_cooked));
+ #else /* !HAVE_TERMIO_H */
+ 	ioctl(0,TIOCSETP,(char *)(&tty_cooked));

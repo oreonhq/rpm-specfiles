@@ -1,0 +1,20 @@
+--- hyperestraier-1.4.13/rubynative/src/estraier.c.ruby_functype	2024-01-19 14:54:29.622147689 +0900
++++ hyperestraier-1.4.13/rubynative/src/estraier.c	2024-01-19 15:27:48.272564661 +0900
+@@ -127,7 +127,7 @@ static VALUE cbmaptoobj(CBMAP *map);
+ static CBMAP *objtocbmap(VALUE obj);
+ static void db_informer(const char *message, void *opaque);
+ static VALUE db_informer_process(VALUE arg);
+-static VALUE db_informer_resque(VALUE arg);
++static VALUE db_informer_resque(VALUE arg, VALUE err);
+ 
+ 
+ 
+@@ -1261,7 +1261,7 @@ static VALUE db_informer_process(VALUE a
+ }
+ 
+ 
+-static VALUE db_informer_resque(VALUE arg){
++static VALUE db_informer_resque(VALUE arg, VALUE){
+   return Qnil;
+ }
+ 

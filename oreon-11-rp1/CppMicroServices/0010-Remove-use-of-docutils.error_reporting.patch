@@ -1,0 +1,49 @@
+From bec908d43c246105d3fc376983fc77322dfb2f2f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20P=2E=20Berrang=C3=A9?= <berrange@redhat.com>
+Date: Thu, 29 Jan 2026 14:20:53 +0000
+Subject: [PATCH 10/10] Remove use of docutils.error_reporting
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This was removed in docutils 0.22 stating it is obsolete to use with
+Python 3.
+
+Signed-off-by: Daniel P. Berrangé <berrange@redhat.com>
+---
+ doc/cmake.py | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/doc/cmake.py b/doc/cmake.py
+index d89662d3..de17a71d 100644
+--- a/doc/cmake.py
++++ b/doc/cmake.py
+@@ -7,12 +7,6 @@ import re
+ 
+ from docutils.parsers.rst import Directive, directives
+ from docutils.transforms import Transform
+-try:
+-    from docutils.utils.error_reporting import SafeString, ErrorString
+-except ImportError:
+-    # error_reporting was not in utils before version 0.11:
+-    from docutils.error_reporting import SafeString, ErrorString
+-
+ from docutils import io, nodes
+ 
+ from sphinx.directives import ObjectDescription
+@@ -49,10 +43,10 @@ class CMakeModule(Directive):
+             raise self.severe('Problems with "%s" directive path:\n'
+                               'Cannot encode input file path "%s" '
+                               '(wrong locale?).' %
+-                              (self.name, SafeString(path)))
++                              (self.name, path))
+         except IOError as error:
+             raise self.severe('Problems with "%s" directive path:\n%s.' %
+-                      (self.name, ErrorString(error)))
++                      (self.name, error))
+         raw_lines = f.read().splitlines()
+         f.close()
+         rst = None
+-- 
+2.52.0
+

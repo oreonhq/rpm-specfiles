@@ -1,0 +1,26 @@
+am-utils-6.2 - fix nfsv3 fh length in NFS_FH_DREF()
+
+From: Ian Kent <ikent@redhat.com>
+
+The NFS_FH_DREF() macro for linux uses sizeof(struct nfs_fh) for the
+length of the file handle copy regardless of the version of NFS used.
+
+But NFSv3 file handles are 64 bytes and not copying the whole file
+handle can cause automounts to fail.
+
+Changing this to use the size of the passed nfs file handle fixes
+the problem.
+
+Signed-off-by: Ian Kent <ikent@redhat.com>
+---
+ conf/fh_dref/fh_dref_linux.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/conf/fh_dref/fh_dref_linux.h b/conf/fh_dref/fh_dref_linux.h
+index 7ffa5b50..f8fb1a89 100644
+--- a/conf/fh_dref/fh_dref_linux.h
++++ b/conf/fh_dref/fh_dref_linux.h
+@@ -1,2 +1,2 @@
+ /* $srcdir/conf/fh_dref/fh_dref_linux.h */
+-#define	NFS_FH_DREF(dst, src) memcpy((char *) &(dst.data), (char *) src, sizeof(struct nfs_fh))
++#define	NFS_FH_DREF(dst, src) memcpy((char *) &(dst.data), (char *) src, sizeof(*src))

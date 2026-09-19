@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2019 Artem Polishchuk <ego.cordatus@gmail.com> -->
+<component type="addon">
+  <id>vim-trailing-whitespace</id>
+  <extends>gvim.desktop</extends>
+  <name>vim-trailing-whitespace</name>
+  <summary>Highlights trailing whitespace in red and provides :FixWhitespace to fix it</summary>
+  <url type="homepage">https://github.com/bronson/vim-trailing-whitespace</url>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>CC-BY-SA-3.0</project_license>
+  <updatecontact>ego.cordatus@gmail.com</updatecontact>
+</component>

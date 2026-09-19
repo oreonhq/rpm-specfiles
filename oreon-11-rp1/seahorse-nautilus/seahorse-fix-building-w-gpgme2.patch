@@ -1,0 +1,30 @@
+diff -up meson/gpg_check_version.py.fixgpgme2 meson/gpg_check_version.py
+--- meson/gpg_check_version.py.fixgpgme2     2025-09-11 13:33:33.844142282 +0200
++++ meson/gpg_check_version.py       2025-09-11 13:34:39.186271102 +0200
+@@ -11,12 +11,12 @@ def parse_version(gpg_output):
+ 
+ # Checks whether the GPG version is compatible with the given version.
+ # For GPG, this means that the major and minor version should be equal;
+-# for GPGME, this means only the major version should be equal.
++# for GPGME, this means only the major version should be equal or greater.
+ def check_version(gpg_version, accepted_version, is_gpgme = False):
+     gpg_major, gpg_minor, gpg_micro = [int(ver) for ver in gpg_version.split('.', 2)]
+     acc_major, acc_minor, acc_micro = [int(ver) for ver in accepted_version.split('.', 2)]
+     if is_gpgme:
+-        return gpg_major == acc_major and gpg_minor >= acc_minor and gpg_micro >= acc_micro
++        return gpg_major >= acc_major and gpg_minor >= acc_minor and gpg_micro >= acc_micro
+     else:
+         return gpg_major == acc_major and gpg_minor == acc_minor and gpg_micro >= acc_micro
+ 
+
+diff -up tool/seahorse-pgp-operation.c.fixgpgme2 tool/seahorse-pgp-operation.c
+--- tool/seahorse-pgp-operation.c.fixgpgme2	2025-09-11 14:19:48.148766512 +0200
++++ tool/seahorse-pgp-operation.c	2025-09-11 14:20:07.184806208 +0200
+@@ -300,7 +300,6 @@ event_cb (void *data, gpgme_event_io_t t
+         break;
+ 
+     case GPGME_EVENT_NEXT_KEY:
+-    case GPGME_EVENT_NEXT_TRUSTITEM:
+     default:
+         /* Ignore unsupported event types */
+         break;

@@ -1,21 +1,21 @@
-%global source0_hash 59b4a0656ade61029a185c7348544fb515b2d654c1f268a0f739bd157df5a3db
+%global source0_hash a7e4ec09c25cb971d098875c8d3db1f0aded69d995fd5ec3769e18548eb2ad7e
 
 %global stable_kf6 stable
 %global maj_ver_kf6 26
-%global min_ver_kf6 03
-%global bug_ver_kf6 80
+%global min_ver_kf6 04
+%global bug_ver_kf6 3
 
 
 %global tests 1
 
 Name:           dolphin
 Summary:        KDE File Manager
-Version:        26.03.80
-Release:        4%{?dist}
+Version:        26.08.1
+Release:        1%{?dist}
 
 License:        BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:            https://invent.kde.org/system/dolphin
-Source0:        https://invent.kde.org/system/dolphin/-/archive/v%{version}/%{name}-v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/dolphin-%{version}.tar.xz
 
 # Upstream
 
@@ -100,7 +100,7 @@ Requires:       kf6-kio-devel%{?_isa}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-v%{version} -p1
+%autosetup -n %{name}-%{version} -p1
 
 
 %build
@@ -154,7 +154,8 @@ xvfb-run -a bash -c "%ctest" || :
 %{_kf6_datadir}/zsh/site-functions/_dolphin
 %{_kf6_datadir}/icons/hicolor/scalable/apps/org.kde.dolphin.svg
 %{_kf6_libdir}/kconf_update_bin/dolphin_update_splitviewsettings
-
+/usr/share/kconf_update/dolphin_tab_key_shortcut_for_focus_other_view.py
+/usr/share/kconf_update/dolphin_tab_key_shortcut_for_focus_other_view.upd
 %files libs
 %{_kf6_libdir}/libdolphinprivate.so.*
 %{_kf6_libdir}/libdolphinvcs.so.*
@@ -173,6 +174,9 @@ xvfb-run -a bash -c "%ctest" || :
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

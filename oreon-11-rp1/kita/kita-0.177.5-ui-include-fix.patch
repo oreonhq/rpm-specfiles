@@ -1,0 +1,10 @@
+--- kita-0.177.5/kita/src/prefs/aboneprefbase.ui.debug	2004-09-18 01:32:14.000000000 +0900
++++ kita-0.177.5/kita/src/prefs/aboneprefbase.ui	2018-07-17 15:50:53.962174145 +0900
+@@ -91,4 +91,7 @@
+     </hbox>
+ </widget>
+ <layoutdefaults spacing="6" margin="11"/>
++<includehints>
++    <includehint>ktextedit.h</includehint>
++</includehints>
+ </UI>

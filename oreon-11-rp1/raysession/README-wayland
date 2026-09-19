@@ -1,0 +1,13 @@
+A known issue[1] exists when running RaySession on Wayland. 
+Once started in a terminal, there will be an error message that
+reads "qt.qpa.wayland: Wayland does not support QWindow::requestActivate()"
+which obfuscates numerous other messages that are printed to the terminal.
+In the QT Forum this was discussed[2]
+with the result that using this function call is not allowed
+in wayland.
+
+As such, running RaySession on Wayland is not recommended until the issue
+can be fixed upstream.
+
+[1]https://github.com/Houston4444/RaySession/issues/44
+[2]https://forum.qt.io/topic/90639

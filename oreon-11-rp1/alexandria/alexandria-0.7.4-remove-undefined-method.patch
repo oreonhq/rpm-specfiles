@@ -1,0 +1,12 @@
+diff -urp alexandria-book-collection-manager-0.7.4.old.2/lib/alexandria/ui/book_properties_dialog_base.rb alexandria-book-collection-manager-0.7.4.new/lib/alexandria/ui/book_properties_dialog_base.rb
+--- alexandria-book-collection-manager-0.7.4.old.2/lib/alexandria/ui/book_properties_dialog_base.rb	2020-01-15 14:38:34.849856129 +0900
++++ alexandria-book-collection-manager-0.7.4.new/lib/alexandria/ui/book_properties_dialog_base.rb	2020-01-15 14:39:05.733196547 +0900
+@@ -303,7 +303,7 @@ module Alexandria
+       def on_destroy
+         @book_properties_dialog.hide
+         # Stop notebook trying to set tab labels at this time
+-        @notebook.show_tabs = false
++        #@notebook.show_tabs = false
+       end
+ 
+       def on_loaned

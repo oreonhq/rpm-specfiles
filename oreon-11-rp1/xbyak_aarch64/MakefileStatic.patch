@@ -1,0 +1,21 @@
+--- xbyak_aarch64-1.0.0/MakefileOriginal	2022-11-24 10:39:21.817629786 +0000
++++ xbyak_aarch64-1.0.0/MakefileStatic	2022-11-24 17:29:13.742340862 +0000
+@@ -17,15 +17,15 @@
+ TARGET=lib/libxbyak_aarch64.a
+ all: $(TARGET)
+ 
+-CFLAGS=-std=c++11 -DNDEBUG -g -I ./xbyak_aarch64 -Wall -Wextra -fPIC
++CXXFLAGS+=-std=c++11 -DNDEBUG -g -I ./xbyak_aarch64 -Wall -Wextra -fPIC
+ ifneq ($(DEBUG),1)
+-CFLAGS+=-O2
++CXXFLAGS+=-O2
+ endif
+ 
+ LIB_OBJ=obj/xbyak_aarch64_impl.o obj/util_impl.o
+ 
+ obj/%.o: src/%.cpp
+-	$(CXX) $(CFLAGS) -c $< -o $@ -MMD -MP -MF $(@:.o=.d)
++	$(CXX) $(CXXFLAGS) -c $< -o $@ -MMD -MP -MF $(@:.o=.d)
+ 
+ -include obj/xbyak_aarch64_impl.d
+ 

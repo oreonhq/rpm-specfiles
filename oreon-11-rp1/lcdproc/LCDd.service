@@ -1,0 +1,12 @@
+[Unit]
+Description=LCDd Service
+After=syslog.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/LCDd -c /etc/lcdproc/LCDd.conf
+User=root
+Group=lcdd
+
+[Install]
+WantedBy=multi-user.target

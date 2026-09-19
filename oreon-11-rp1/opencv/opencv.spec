@@ -74,13 +74,13 @@
 %endif
 
 Name:           opencv
-Version:        4.13.0
+Version:        5.0.0
 %global javaver %(foo=%{version}; echo ${foo//./})
 %global majorver %(foo=%{version}; a=(${foo//./ }); echo ${a[0]} )
 %global minorver %(foo=%{version}; a=(${foo//./ }); echo ${a[1]} )
 %global padding  %(digits=00; num=%{minorver}; echo ${digits:${#num}:${#digits}} )
 %global abiver   %(echo %{majorver}%{padding}%{minorver} )
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Collection of algorithms for computer vision
 # This is normal three clause BSD.
 License:        BSD-3-Clause AND Apache-2.0 AND ISC
@@ -98,7 +98,7 @@ Source5:        xorg.conf
 %global wechat_commit 3487ef7cde71d93c6a01bb0b84aa0f22c6128f6b
 %global wechat_shortcommit %(c=%{wechat_commit}; echo ${c:0:7})
 %global wechat_gitdate 20230712
-Source6:        https://github.com/WeChatCV/opencv_3rdparty/archive/%{wechat_commit}/wechat-%{wechat_gitdate}.git%{wechat_shortcommit}.tar.gz#/opencv-4.13.0.tar.gz
+Source6:        https://github.com/WeChatCV/opencv_3rdparty/archive/%{wechat_commit}/wechat-%{wechat_gitdate}.git%{wechat_shortcommit}.tar.gz#/opencv-wechat-%{wechat_gitdate}.tar.gz
 
 Patch0:        opencv-4.1.0-install_3rdparty_licenses.patch
 # Fix build with vtk 9.6 - https://github.com/opencv/opencv_contrib/pull/4085
@@ -391,7 +391,9 @@ This package contains Java bindings for the OpenCV library.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+%if %{with extras_tests}
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
+%endif
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
 # https://github.com/rpm-software-management/rpm/issues/1204
@@ -400,16 +402,15 @@ test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "ore
 _opencv_legal_scrub() {
   find "$1" -iname '*lena*' -delete
   find "$1" -iname '*lenna*' -delete
-  rm -rf "$1/modules/xfeatures2d"
+  find "$1" -type d -name xfeatures2d -prune -exec rm -rf {} +
 }
 _opencv_extra_scrub() {
   find "$1" -iname '*lena*' -delete
   find "$1" -iname '*lenna*' -delete
   find "$1" \( -iname 'len*.*' -o -iname '*lena*.png' -o -iname '*lena*.jpg' \) -delete
 }
-_opencv_legal_scrub opencv-%{version}
-_opencv_legal_scrub opencv_contrib-%{version}
-%{?with_extras_tests:_opencv_extra_scrub opencv_extra-%{version}}
+_opencv_legal_scrub .
+%{?with_extras_tests:_opencv_extra_scrub .}
 
 # we don't use pre-built contribs except quirc
 pushd 3rdparty

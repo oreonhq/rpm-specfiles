@@ -1,0 +1,24 @@
+--- gix-sec-0.14.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ gix-sec-0.14.2/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -65,21 +65,8 @@
+ [dev-dependencies.tempfile]
+ version = "3.26.0"
+ 
+-[target."cfg(not(windows))".dependencies.libc]
+-version = "0.2.186"
+ 
+-[target."cfg(windows)".dependencies.gix-path]
+-version = "^0.12.3"
+ 
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.61.1"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_Security_Authorization",
+-    "Win32_Storage_FileSystem",
+-    "Win32_System_Memory",
+-    "Win32_System_Threading",
+-]
+ 
+ [lints.clippy]
+ bool_to_int_with_if = "allow"

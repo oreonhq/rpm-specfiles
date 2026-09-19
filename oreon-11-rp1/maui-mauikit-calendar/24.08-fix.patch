@@ -1,0 +1,25 @@
+From 55651b16ce680ab46e90d98ea3d489aea17e7815 Mon Sep 17 00:00:00 2001
+From: Antonio Rojas <arojas@archlinux.org>
+Date: Thu, 5 Sep 2024 09:03:44 +0200
+Subject: [PATCH] Fix build with akonadi 24.08
+
+setFetchRelations was removed in https://invent.kde.org/pim/akonadi/-/commit/e2b36ab7bb61a4a48580e4a3dddde297efb634a3
+---
+ src/code/incidencewrapper.cpp | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/code/incidencewrapper.cpp b/src/code/incidencewrapper.cpp
+index f5232f7..55c70f2 100644
+--- a/src/code/incidencewrapper.cpp
++++ b/src/code/incidencewrapper.cpp
+@@ -36,7 +36,6 @@ IncidenceWrapper::IncidenceWrapper(QObject *parent)
+     Akonadi::ItemFetchScope scope;
+     scope.fetchFullPayload();
+     scope.fetchAllAttributes();
+-    scope.setFetchRelations(true);
+     scope.setAncestorRetrieval(Akonadi::ItemFetchScope::Parent);
+     setFetchScope(scope);
+     
+-- 
+GitLab
+

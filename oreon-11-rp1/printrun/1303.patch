@@ -1,0 +1,36 @@
+From f8753f548eaf870e7ccd29fef413815ec4d6cdf1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Thu, 26 Jan 2023 12:13:41 +0100
+Subject: [PATCH] Yet another float/int fix for Python 3.10+, don't assume
+ every problem is unicode related
+
+Fixes https://github.com/kliment/Printrun/issues/1302
+---
+ printrun/pronterface.py | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/printrun/pronterface.py b/printrun/pronterface.py
+index 7a85c4b7..4a3d8c19 100644
+--- a/printrun/pronterface.py
++++ b/printrun/pronterface.py
+@@ -760,7 +760,7 @@ def addtexttolog(self, text):
+             max_length = 20000
+             current_length = self.logbox.GetLastPosition()
+             if current_length > max_length:
+-                self.logbox.Remove(0, current_length / 10)
++                self.logbox.Remove(0, current_length // 10)
+             currentCaretPosition = self.logbox.GetInsertionPoint()
+             currentLengthOfText = self.logbox.GetLastPosition()
+             if self.autoscrolldisable:
+@@ -775,8 +775,10 @@ def addtexttolog(self, text):
+                 self.logbox.SetInsertionPointEnd()
+                 self.logbox.AppendText(text)
+ 
+-        except:
++        except UnicodeError:
+             self.log(_("Attempted to write invalid text to console, which could be due to an invalid baudrate"))
++        except Exception as e:
++            self.log(_("Unhanded exception: "), repr(e))
+ 
+     def clear_log(self, e):
+         self.logbox.Clear()

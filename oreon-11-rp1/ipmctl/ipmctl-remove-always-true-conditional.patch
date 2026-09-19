@@ -1,0 +1,24 @@
+From a84159a28818e1a40fe881eeb9bb989a03db42ba Mon Sep 17 00:00:00 2001
+From: Steven Pontsler <steven.pontsler@intel.com>
+Date: Wed, 24 Aug 2022 17:09:04 -0700
+Subject: [PATCH] Remove conditional that is always true
+
+Signed-off-by: Steven Pontsler <steven.pontsler@intel.com>
+---
+ DcpmPkg/cli/NvmDimmCli.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/DcpmPkg/cli/NvmDimmCli.c b/DcpmPkg/cli/NvmDimmCli.c
+index 423151ec..8fef2da0 100644
+--- a/DcpmPkg/cli/NvmDimmCli.c
++++ b/DcpmPkg/cli/NvmDimmCli.c
+@@ -1027,8 +1027,7 @@ EFI_STATUS showHelp(struct Command *pCmd)
+     else {
+       // if Printer is not setup then may need to do special handling for ESX
+       if ((pPrinterCtx == NULL) &&
+-        (pCmd != NULL) &&
+-        (pCmd->options != NULL)) {
++        (pCmd != NULL)) {
+         for (Index = 0; Index < MAX_OPTIONS; Index++) {
+ 
+           if ((StrICmp(pCmd->options[Index].OptionName, OUTPUT_OPTION) == 0) ||

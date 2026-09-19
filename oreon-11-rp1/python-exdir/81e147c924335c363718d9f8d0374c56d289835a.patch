@@ -1,0 +1,27 @@
+From 81e147c924335c363718d9f8d0374c56d289835a Mon Sep 17 00:00:00 2001
+From: Eric Berquist <eric.berquist@gmail.com>
+Date: Sun, 23 Jun 2024 16:55:58 -0400
+Subject: [PATCH] NumPy: unified setting of scalars and ndarrays
+
+---
+ exdir/core/dataset.py | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/exdir/core/dataset.py b/exdir/core/dataset.py
+index 95bf614..7f5e6ca 100644
+--- a/exdir/core/dataset.py
++++ b/exdir/core/dataset.py
+@@ -132,12 +132,7 @@ def _reset_data(self, value, attrs, meta):
+             shape=value.shape
+         )
+ 
+-        if len(value.shape) == 0:
+-            # scalars need to be set with itemset
+-            self._data_memmap.itemset(value)
+-        else:
+-            # replace the contents with the value
+-            self._data_memmap[:] = value
++        self._data_memmap[...] = value
+ 
+         # update attributes and plugin metadata
+         if attrs:

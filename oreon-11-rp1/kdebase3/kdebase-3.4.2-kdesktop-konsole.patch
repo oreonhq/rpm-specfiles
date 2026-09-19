@@ -1,0 +1,66 @@
+--- kdebase-3.4.2/kdesktop/krootwm.h.kdestop-konsole	2005-05-23 14:14:38.000000000 +0200
++++ kdebase-3.4.2/kdesktop/krootwm.h	2005-07-26 22:22:46.000000000 +0200
+@@ -117,6 +117,7 @@
+   void slotSessionActivated( int );
+   void slotNewSession();
+   void slotLockNNewSession();
++  void slotOpenTerminal();
+ 
+ private:
+   KDesktop* m_pDesktop;
+--- kdebase-3.4.2/kdesktop/krootwm.cc.kdestop-konsole	2005-07-20 12:03:58.000000000 +0200
++++ kdebase-3.4.2/kdesktop/krootwm.cc	2005-09-05 14:41:33.000000000 +0200
+@@ -50,6 +50,7 @@
+ #include <kuser.h>
+ #include <qfile.h>
+ 
++#include <kprocess.h>
+ #include "krootwm.h"
+ #include "kdiconview.h"
+ #include "desktop.h"
+@@ -79,6 +80,9 @@
+   customMenu2 = 0;
+ 
+ 
++  new KAction(i18n("Konsole..." ), "openterm", 0, this, SLOT( slotOpenTerminal() ),
++               m_actionCollection, "open_terminal" );
++
+   // Creates the new menu
+   menuBar = 0; // no menubar yet
+   menuNew = 0;
+@@ -131,6 +135,7 @@
+   {
+      new KAction(i18n("Run Command..."), "run", 0, m_pDesktop, SLOT( slotExecuteCommand() ), m_actionCollection, "exec" );
+   }
++
+   if (!KGlobal::config()->isImmutable())
+   {
+      new KAction(i18n("Configure Desktop..."), "configure", 0, this, SLOT( slotConfigureDesktop() ),
+@@ -366,6 +371,13 @@
+     desktopMenu->disconnect( this );
+     bool needSeparator = false;
+ 
++    action = m_actionCollection->action("open_terminal");
++    if (action)
++    {
++       action->plug( desktopMenu );
++       needSeparator = true;
++    }
++
+     if (menuNew)
+     {
+        menuNew->plug( desktopMenu );
+@@ -693,6 +705,13 @@
+   return args;
+ }
+ 
++void KRootWm::slotOpenTerminal()
++{
++  KProcess proc;
++  proc << locate("exe", "konsole");
++  proc.start(KProcess::DontCare);
++}
++
+ void KRootWm::slotConfigureDesktop() {
+   QStringList args = configModules();
+   args.prepend(i18n("Desktop"));

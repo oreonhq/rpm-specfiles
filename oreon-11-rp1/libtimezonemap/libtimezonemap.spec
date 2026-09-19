@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           libtimezonemap
-Version:        0.4.5.4
-Release:        2%{?dist}
+Version:        0.4.6.orig
+Release:        1%{?dist}
 Summary:        Time zone map widget for Gtk+
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

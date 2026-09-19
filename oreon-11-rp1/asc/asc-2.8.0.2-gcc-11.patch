@@ -1,0 +1,12 @@
+diff -up asc-2.8.0.1/source/libs/sdlmm/src/sdlmm_basesurface.h~ asc-2.8.0.1/source/libs/sdlmm/src/sdlmm_basesurface.h
+--- asc-2.8.0.1/source/libs/sdlmm/src/sdlmm_basesurface.h~	2018-02-27 01:20:08.000000000 +0100
++++ asc-2.8.0.1/source/libs/sdlmm/src/sdlmm_basesurface.h	2021-07-29 22:00:31.785819930 +0200
+@@ -139,7 +139,7 @@ namespace SDLmm {
+     const void *pixels() const { return GetSurface()->pixels; }
+ 
+     //! Returns the hardware-specific surface info.
+-    struct private_hwdata *hwdata() const { return GetSurface()->hwdata; }
++    struct private_hwdata *hwdata() const { return (struct private_hwdata *)(GetSurface()->hwdata); }
+     //@}
+ 
+     //! Set the pixel to the color

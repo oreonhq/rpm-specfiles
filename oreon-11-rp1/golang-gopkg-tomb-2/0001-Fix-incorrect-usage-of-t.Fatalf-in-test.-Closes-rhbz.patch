@@ -1,0 +1,26 @@
+From 1f71548a14eb92a49d3e842a757defb07977c380 Mon Sep 17 00:00:00 2001
+From: Mikel Olasagasti Uranga <mikel@olasagasti.info>
+Date: Wed, 12 Jul 2023 14:55:11 +0200
+Subject: [PATCH] Fix incorrect usage of t.Fatalf() in test. - Closes
+ rhbz#2113397
+
+---
+ tomb_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tomb_test.go b/tomb_test.go
+index a1064df..b6671a6 100644
+--- a/tomb_test.go
++++ b/tomb_test.go
+@@ -95,7 +95,7 @@ func TestKillf(t *testing.T) {
+ 
+ 	err := tb.Killf("BO%s", "OM")
+ 	if s := err.Error(); s != "BOOM" {
+-		t.Fatalf(`Killf("BO%s", "OM"): want "BOOM", got %q`, s)
++		t.Fatalf(`Killf("BO%%s", "OM"): want "BOOM", got %q`, s)
+ 	}
+ 	checkState(t, tb, true, false, err)
+ 
+-- 
+2.41.0
+

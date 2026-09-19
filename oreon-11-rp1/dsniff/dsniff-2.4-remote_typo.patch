@@ -1,0 +1,14 @@
+Patch by Marcos Fouces <mfouces@yahoo.es> for dsniff >= 2.4b1, which fixes
+a minor spelling error in source code.
+
+--- dsniff-2.4/remote.c			2000-11-14 16:51:04.000000000 +0100
++++ dsniff-2.4/remote.c.remote_typo	2017-02-11 23:03:25.420064992 +0100
+@@ -652,7 +652,7 @@
+ 	  if (remote_command_count > 0)
+ 	    {
+ 	      fprintf (stderr,
+-		"%s: the `-id' option must preceed all `-remote' options.\n",
++		"%s: the `-id' option must precede all `-remote' options.\n",
+ 		       progname);
+ 	      usage ();
+ 	      exit (-1);

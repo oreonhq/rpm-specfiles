@@ -1,7 +1,7 @@
 %global source0_hash none
 
 # This spec file has been automatically updated
-Version:	1.1
+Version:	1.4.2
 Release: %{?autorelease}%{!?autorelease:1%{?dist}}
 Name: libunistring
 Summary: GNU Unicode string library

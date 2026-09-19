@@ -1,0 +1,213 @@
+%global source0_hash 53206cecc32b1acfe723fd5cd689e774c4b2af6174ba18b5cf089e728e1c705d
+
+Name:           rpminspect
+Version:        2.1
+Release:        %autorelease
+Summary:        Build deviation analysis and compliance tool
+Group:          Development/Tools
+# librpminspect is licensed under the LGPL-3.0-or-later, and:
+# * 5 source files in the library are from an Apache-2.0 licensed
+#   project
+# * Some code in inspect_unicode.c was taken from a blog post about
+#   using icu4c and Unicode, it is under the MIT license.
+#
+# The rpminspect(1) command line tool is licensed under the
+# GPL-3.0-or-later.
+#
+# The rpminspect-data-generic package is licensed under the
+# CC-BY-4.0 license.
+#
+# Not packaged, but in the source:
+# * include/uthash.h is BSD-1-Clause
+# * include/compat/queue.h is BSD-3-Clause
+# * libxdiff/ is LGPL-2.1-or-later
+# * libtoml/ is BSD-3-Clause
+License:        GPL-3.0-or-later AND LGPL-3.0-or-later AND LGPL-2.1-or-later AND Apache-2.0 AND MIT AND BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND CC-BY-4.0
+URL:            https://github.com/rpminspect/rpminspect
+Source0:        https://github.com/rpminspect/rpminspect/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source1:        https://github.com/rpminspect/rpminspect/releases/download/v%{version}/%{name}-%{version}.tar.gz.asc
+Source2:        gpgkey-62977BB9C841B965.gpg
+Requires:       librpminspect%{?_isa} = %{version}-%{release}
+
+BuildRequires:  meson
+BuildRequires:  ninja-build
+BuildRequires:  gcc
+BuildRequires:  glibc-devel
+BuildRequires:  json-c-devel
+BuildRequires:  xmlrpc-c-devel >= 1.32.5
+BuildRequires:  libxml2-devel
+BuildRequires:  rpm-devel
+BuildRequires:  libarchive-devel
+BuildRequires:  elfutils-devel
+BuildRequires:  kmod-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  zlib-devel
+BuildRequires:  libyaml-devel
+BuildRequires:  file-devel
+BuildRequires:  openssl-devel
+BuildRequires:  libcap-devel
+BuildRequires:  gettext-devel
+BuildRequires:  clamav-devel
+BuildRequires:  libmandoc-devel >= 1.14.5
+BuildRequires:  gnupg2
+BuildRequires:  libicu-devel
+BuildRequires:  libcdson-devel
+%if 0%{?fedora}
+BuildRequires:  libtoml-devel
+%endif
+
+%description
+Build deviation and compliance tool.  This program runs a number of tests
+against one or two builds of source RPM files.  The built artifacts are
+inspected and compared to report changes and validate policy compliance
+against the defined parameters.
+
+%package -n librpminspect
+Summary:        Library providing RPM test API and functionality
+Group:          Development/Tools
+Requires:       desktop-file-utils
+Requires:       gettext
+
+%if 0%{?rhel} >= 8 || 0%{?epel} >= 8 || 0%{?fedora}
+Recommends:     annobin-annocheck
+%else
+Requires:       annobin-annocheck
+%endif
+
+# The clamav data is required for the virus inspection.  Either
+# install the clamav-data or download the data files directly.
+%if 0%{?rhel} >= 8 || 0%{?epel} >= 8 || 0%{?fedora}
+Recommends:     clamav-data
+%else
+Requires:       clamav-data
+%endif
+
+# If these are present, the xml inspection can try DTD validation.
+%if 0%{?rhel} >= 8 || 0%{?fedora}
+Recommends:     xhtml1-dtds
+Recommends:     html401-dtds
+%endif
+
+# Necessary to support preprocessing spec files for parsing.  The
+# package providing this dependency in turn pulls in other packages
+# that define macros.  This is similar to the rpm-build package
+# carrying a Requires on the same package.  It ensures the build
+# environment has all of the necessary macro definitions that the
+# package spec file may use.
+%if 0%{?rhel} >= 8 || 0%{?epel} >= 8 || 0%{?fedora}
+Recommends:     system-rpm-config
+%else
+Requires:       system-rpm-config
+%endif
+
+# These programs are only required for the 'shellsyntax' functionality.
+# You can use rpminspect without these installed, just disable the
+# shellsyntax inspection.
+%if 0%{?rhel} >= 8 || 0%{?epel} >= 8 || 0%{?fedora}
+Recommends:     dash
+Recommends:     ksh
+Recommends:     zsh
+Recommends:     tcsh
+Recommends:     rc
+Recommends:     bash
+%else
+Requires:       dash
+Requires:       ksh
+Requires:       zsh
+Requires:       tcsh
+Requires:       rc
+Requires:       bash
+%endif
+
+# The abidiff and kmidiff inspections require a external executable by
+# the same name, as provided by libabigail.  If it is not present on
+# the system, you can disable the relevant inspections.
+%if 0%{?rhel} >= 8 || 0%{?epel} >= 8 || 0%{?fedora}
+Recommends:     libabigail >= 2.3
+%else
+Requires:       libabigail >= 2.3
+%endif
+
+# The udevrules inspection requires an external executable (udevadm verify)
+# provided by systemd-udev.  If the installed udevadm executable does not
+# provide 'verify' command, the udevrules inspection is skipped.
+%if 0%{?rhel} >= 8 || 0%{?epel} >= 8 || 0%{?fedora}
+Recommends:     systemd-udev
+%else
+Requires:       systemd-udev
+%endif
+
+%description -n librpminspect
+The library providing the backend test functionality and API for the
+rpminspect frontend program.  This library can also be used by other
+programs wanting to incorporate RPM test functionality.
+
+%package -n librpminspect-devel
+Summary:        Header files and development libraries for librpminspect
+Group:          Development/Tools
+Requires:       librpminspect%{?_isa} = %{version}-%{release}
+
+%description -n librpminspect-devel
+The header files and development library links required to build software
+using librpminspect.
+
+%package -n rpminspect-data-generic
+Summary:        Template data files used to drive rpminspect tests
+Group:          Development/Tools
+
+%description -n rpminspect-data-generic
+The rpminspect-data-generic package is meant as a template to build your
+product's own data file.  The files in it contain product-specific
+information.  The files in this package explain how to construct the
+control files.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%autosetup
+
+%build
+%meson -D tests=false %{?fedora:-D with_system_libtoml=true}
+%meson_build
+
+%install
+# Install bundled library docs and licenses
+install -D -m 0644 libxdiff/AUTHORS %{buildroot}%{_pkgdocdir}/libxdiff/AUTHORS
+install -D -m 0644 libxdiff/README %{buildroot}%{_pkgdocdir}/libxdiff/README
+install -D -m 0644 libxdiff/COPYING %{buildroot}%{_defaultlicensedir}/%{name}/libxdiff/COPYING
+
+install -D -m 0644 libtoml/README.md %{buildroot}%{_pkgdocdir}/libtoml/README.md
+install -D -m 0644 libtoml/README.rpminspect %{buildroot}%{_pkgdocdir}/libtoml/README.rpminspect
+install -D -m 0644 libtoml/LICENSE %{buildroot}%{_defaultlicensedir}/%{name}/libtoml/LICENSE
+
+%meson_install
+%find_lang %{name}
+
+%files -f %{name}.lang
+%doc AUTHORS.md CHANGES.md README.md TODO
+%doc %{_pkgdocdir}/libxdiff/AUTHORS
+%doc %{_pkgdocdir}/libxdiff/README
+%doc %{_pkgdocdir}/libtoml/README.md
+%doc %{_pkgdocdir}/libtoml/README.rpminspect
+%license COPYING
+%license %{_defaultlicensedir}/%{name}/libxdiff/COPYING
+%license %{_defaultlicensedir}/%{name}/libtoml/LICENSE
+%{_bindir}/rpminspect
+%{_mandir}/man1/rpminspect.1*
+
+%files -n librpminspect
+%license COPYING.LIB LICENSE-2.0.txt MIT.txt
+%{_libdir}/librpminspect.so.*
+
+%files -n librpminspect-devel
+%license COPYING.LIB
+%{_includedir}/librpminspect
+%{_libdir}/librpminspect.so
+
+%files -n rpminspect-data-generic
+%license CC-BY-4.0.txt
+%{_datadir}/rpminspect
+
+%changelog
+%autochangelog

@@ -1,0 +1,23 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -11,10 +11,6 @@ authors = [
+     { name = "Oleh Prypin", email = "oleh@pryp.in" },
+     { name = "Timothée Mazzucotelli", email = "dev@pawamoy.fr" },
+ ]
+-license = "ISC"
+-license-files = [
+-    "LICENSE",
+-]
+ readme = "README.md"
+ requires-python = ">=3.9"
+ keywords = [
+@@ -49,6 +45,9 @@ dependencies = [
+ ]
+ version = "1.4.3"
+ 
++[project.license]
++text = "ISC"
++
+ [project.urls]
+ Homepage = "https://mkdocstrings.github.io/autorefs"
+ Documentation = "https://mkdocstrings.github.io/autorefs"

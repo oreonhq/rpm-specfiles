@@ -1,0 +1,31 @@
+From 640b739482d05b659d6d35b6fac4a65646000c58 Mon Sep 17 00:00:00 2001
+From: David Bold <dave@ipp.mpg.de>
+Date: Tue, 17 Jun 2025 11:32:34 +0200
+Subject: [PATCH] Switch to SPDX
+
+https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license
+---
+ pyproject.toml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index c4aca13..dc41ff7 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -13,7 +13,6 @@ requires-python = ">=3.9"
+ classifiers = [
+     "Programming Language :: Python",
+     "Intended Audience :: Science/Research",
+-    "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+     "Operating System :: OS Independent",
+     "Programming Language :: Python",
+     "Topic :: Software Development :: Libraries :: Python Modules",
+@@ -27,7 +26,7 @@ keywords = [
+     "data-analysis",
+     "data-visualization",
+ ]
+-license = {text = "GNU Lesser General Public License v3 or later (LGPLv3+)"}
++license = "LGPL-3.0-or-later"
+ authors = [{name = "Ben Dudson", email = "benjamin.dudson@york.ac.uk"}, {name = "BOUT++ team"}]
+ urls = {project = "https://github.com/boutproject/boutdata"}
+ dependencies = [

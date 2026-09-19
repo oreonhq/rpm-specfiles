@@ -1,0 +1,16 @@
+This addition of the release date for version 0.998b fixes the
+version number that rbldnsd reports in its logging output. The
+version is extracted from the NEWS file by the configure script
+but the pattern matching requires the date to be present.
+
+--- NEWS
++++ NEWS
+@@ -1,7 +1,7 @@
+ This file describes user-visible changes in rbldnsd.
+ Newer news is at the top.
+ 
+-0.998b
++0.998b (21 Dec 2016)
+  - Fix for memory errors on very large datasets.
+    Patch by Andrew Clayton
+ 

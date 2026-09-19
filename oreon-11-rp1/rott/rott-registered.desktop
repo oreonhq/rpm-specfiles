@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Rise of the Triad (Registered)
+Comment=RotT Registered launch script, this requires the registered data files
+Exec=rott-registered
+StartupNotify=false
+Terminal=false
+Type=Application
+Icon=rott
+Categories=Game;ActionGame;
+Keywords=game;fps;first;person;shooter;rise;triad;rott;

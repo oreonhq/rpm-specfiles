@@ -1,0 +1,26 @@
+<Directory "@RT_WWWDIR@">
+    Options FollowSymLinks
+    <IfModule mod_authz_core.c>
+      # Apache 2.4
+      Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+      # Apache 2.2
+      Order allow,deny
+      Allow from all
+    </IfModule>
+</Directory>
+
+FcgidConnectTimeout 20
+FcgidMaxRequestLen 1073741824
+
+ScriptAlias /rt "@RT_SBINDIR@/rt-server.fcgi/"
+Alias /rt "@RT_WWWDIR@"
+
+<Location /rt>
+    AddDefaultCharset UTF-8
+
+    Require all granted
+    Options +ExecCGI
+    AddHandler fcgid-script fcgi
+</Location>

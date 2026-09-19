@@ -1,0 +1,12 @@
+diff -up mkbootdisk-1.5.5/mkbootdisk.8.orig mkbootdisk-1.5.5/mkbootdisk.8
+--- mkbootdisk-1.5.5/mkbootdisk.8.orig	2006-04-05 12:36:17.000000000 +0200
++++ mkbootdisk-1.5.5/mkbootdisk.8	2012-09-17 15:42:03.807480928 +0200
+@@ -56,7 +56,7 @@ disk.  If this is not specified, \fBmkbo
+ 
+ .SH "SEE ALSO"
+ .BR grubby (8)
+-.BR mkinitrd (1)
++.BR dracut (8)
+ 
+ .SH AUTHOR
+ .nf

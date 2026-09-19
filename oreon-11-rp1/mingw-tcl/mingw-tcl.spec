@@ -7,7 +7,7 @@
 %global fullver %{majorver}.%{minorver}
 
 Name:          mingw-tcl
-Version:       9.0.3
+Version:       9.0.4
 Release:       1%{?dist}
 Summary:       MinGW Windows Tool Command Language, pronounced tickle
 

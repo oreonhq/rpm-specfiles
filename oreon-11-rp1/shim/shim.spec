@@ -25,13 +25,12 @@ Source1:        shim.conf
 # keep these two lists of sources synched up arch-wise.  That is 0 and 10
 # match, 1 and 11 match, ...
 Source10:        BOOTAA64.CSV
-Source20:        shimaa64.efi
 Source11:        BOOTIA32.CSV
-Source21:        shimia32.efi
 Source12:        BOOTX64.CSV
-Source22:        shimx64.efi
 #Source13:	BOOTARM.CSV
 #Source23:	shimarm.efi
+Source20:       oreonsecurebootca.cer
+Source21:       oreonsecureboot501.cer
 
 %global _libdir %{_exec_prefix}/lib
 
@@ -44,22 +43,25 @@ Source22:        shimx64.efi
 %global debug_package %{nil}
 %global __brp_mangle_shebangs_exclude_from_file %{expand:%{_builddir}/shim-%{efi_arch}-%{version}-%{release}.%{_target_cpu}-shebangs.txt}
 %global vendor_token_str %{expand:%%{nil}%%{?vendor_token_name:-t "%{vendor_token_name}"}}
-%global vendor_cert_str %{expand:%%{!?vendor_cert_nickname:-c "Red Hat Test Certificate"}%%{?vendor_cert_nickname:-c "%%{vendor_cert_nickname}"}}
+%global vendor_cert_str %{expand:%%{!?vendor_cert_nickname:-c "oreonsecureboot501"}%%{?vendor_cert_nickname:-c "%%{vendor_cert_nickname}"}}
 
 %global grub_version 2.06-63
 %global fwupd_version 1.5.8
 
-%define __pesign_client_cert grub2-signer
+%define secureboot_ca_0 %{SOURCE20}
+%define secureboot_key_0 %{SOURCE21}
+%define pesign_name_0 oreonsecureboot501
+%define __pesign_client_cert oreonsecureboot501
 
 %global bootcsvaa64 %{expand:%{SOURCE10}}
 %global bootcsvarm %{expand:%{SOURCE13}}
 %global bootcsvia32 %{expand:%{SOURCE11}}
 %global bootcsvx64 %{expand:%{SOURCE12}}
 
-%global shimefiaa64 %{expand:%{SOURCE20}}
+%global shimefiaa64 %{shimdiraa64}/shimaa64.efi
 %global shimefiarm %{expand:%{SOURCE23}}
-%global shimefiia32 %{expand:%{SOURCE21}}
-%global shimefix64 %{expand:%{SOURCE22}}
+%global shimefiia32 %{shimdiria32}/shimia32.efi
+%global shimefix64 %{shimdirx64}/shimx64.efi
 
 %global shimveraa64 16.1-1
 %global shimverarm 15.4-1.fc34
@@ -132,7 +134,7 @@ version signed by the UEFI signing service.				\
 # -i <input>
 # -o <output>
 %define sign(i:o:)							\
-	%{expand:%%pesign -s -i %{-i*} -o %{-o*}}			\
+	%{expand:%%pesign -s -i %{-i*} -o %{-o*} -a %{secureboot_ca_0} -c %{secureboot_key_0} -n %{pesign_name_0}}			\
 	%{nil}
 
 # -b <binary prefix>
@@ -259,9 +261,9 @@ mkdir shim-%{version}
 
 cd shim-%{version}
 %if %{efi_has_alt_arch}
-%define_build -a %{efi_alt_arch} -A %{efi_alt_arch_upper} -i %{shimefialt} -b no -c %{is_alt_signed} -d %{shimdiralt}
+%define_build -a %{efi_alt_arch} -A %{efi_alt_arch_upper} -i %{shimefialt} -b yes -c %{is_alt_signed} -d %{shimdiralt}
 %endif
-%define_build -a %{efi_arch} -A %{efi_arch_upper} -i %{shimefi} -b no -c %{is_signed} -d %{shimdir}
+%define_build -a %{efi_arch} -A %{efi_arch_upper} -i %{shimefi} -b yes -c %{is_signed} -d %{shimdir}
 
 %install
 rm -rf $RPM_BUILD_ROOT

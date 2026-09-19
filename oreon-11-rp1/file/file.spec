@@ -16,7 +16,7 @@
 
 Summary: Utility for determining file types
 Name: file
-Version: 5.47
+Version: 5.48
 Release: 1%{?dist}
 
 # Main license is BSD-2-Clause-Darwin
@@ -50,7 +50,7 @@ Patch3: file-5.45-readelf-limit-revert.patch
 
 Patch4: file-5.46-fix-tests-rpm-magic.patch
 
-# Fix tabs->spaces in python/magic.py (upstream 5.47 used tabs; rhbz#2419719)
+# Fix tabs->spaces in python/magic.py (upstream 5.48 used tabs; rhbz#2419719)
 Patch5: file-5.47-python-magic-close-fix-whitespace.patch
 
 URL: https://www.darwinsys.com/file/
@@ -187,7 +187,7 @@ cd %{py3dir}
 %check
 export LD_LIBRARY_PATH=$PWD/src/.libs
 %ifarch s390x
-# efi-signature-list-sha256: New in 5.47 (commit 2a457644). EFI Signature List magic
+# efi-signature-list-sha256: New in 5.48 (commit 2a457644). EFI Signature List magic
 # in magic/Magdir/efi uses little-endian types; on big-endian s390x file reports
 # "data" instead of the expected string and the test fails. Remove on s390x until
 # upstream makes the EFI magic endian-safe.

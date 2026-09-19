@@ -1,4 +1,4 @@
-%global source0_hash 45ba9983b51c896406a3d654de81d313b953b76e6391e2797073d543c5f617d5
+%global source0_hash ac5e74d157830eb8bee44c6a6bf3ad49774ef0dd2a72bdad74a8f20308b52a95
 
 %define bcond_meson() %{lua: do
   local option = rpm.expand("%{1}")
@@ -48,7 +48,7 @@ end}
 
 Name:           libdrm
 Summary:        Direct Rendering Manager runtime library
-Version:        2.4.131
+Version:        2.4.134
 Release:        1%{?dist}
 License:        MIT
 
@@ -57,7 +57,7 @@ License:        MIT
 %global lib_version %(echo %{version} | sed "s/.*\\.//")
 
 URL:            https://dri.freedesktop.org
-Source0:        https://dri.freedesktop.org/libdrm/libdrm-2.4.131.tar.xz
+Source0:        %{url}/libdrm/%{name}-%{version}.tar.xz
 Source1:        README.rst
 Source2:        91-drm-modeset.rules
 

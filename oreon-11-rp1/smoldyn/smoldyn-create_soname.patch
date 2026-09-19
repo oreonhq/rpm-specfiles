@@ -1,0 +1,35 @@
+--- CMakeLists.txt.fix_libpaths	2021-05-24 21:00:30.000000000 +0200
++++ CMakeLists.txt	2021-06-02 18:44:48.679744434 +0200
+@@ -495,14 +495,14 @@
+ 
+     if (APPLE_BUILD)
+         set_target_properties(smoldyn_shared PROPERTIES LINK_FLAGS "-framework Glut -framework OpenGL")
+-    elseif (WINDOWS_BUILD)
+-        set_target_properties(smoldyn_shared PROPERTIES PREFIX "lib")
++    elseif (UNIX)
++        set_target_properties(smoldyn_shared PROPERTIES PREFIX "lib" SOVERSION "${SMOLDYN_VERSION_MAJOR}" VERSION "${SMOLDYN_VERSION}")
+     endif ()
+ endif ()
+ 
+ if (OPTION_TARGET_SMOLDYN)
+     add_executable(smoldyn ${MAIN_FILES})
+-    target_link_libraries(smoldyn PUBLIC smoldyn_static)
++    target_link_libraries(smoldyn PUBLIC smoldyn_shared)
+     target_link_libraries(smoldyn PUBLIC ${DEP_LIBS})
+     if(RUN_LIBS)
+         set_target_properties(smoldyn PROPERTIES INSTALL_RPATH ${RUN_LIBS})
+@@ -534,11 +534,9 @@
+     endif()
+ 
+     if (OPTION_TARGET_LIBSMOLDYN)
+-        install(TARGETS smoldyn_shared LIBRARY DESTINATION lib)
+-        install(TARGETS smoldyn_static ARCHIVE DESTINATION lib)
+-        install(FILES source/Smoldyn/libsmoldyn.h source/Smoldyn/smoldyn.h
+-            ${CMAKE_CURRENT_BINARY_DIR}/smoldynconfigure.h
+-            DESTINATION include)
++        install(TARGETS smoldyn_shared LIBRARY DESTINATION lib${LIB_SUFFIX})
++        install(TARGETS smoldyn_static ARCHIVE DESTINATION lib${LIB_SUFFIX})
++        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/../source/Smoldyn/libsmoldyn.h ${CMAKE_CURRENT_BINARY_DIR}/../source/Smoldyn/smoldyn.h ${CMAKE_CURRENT_BINARY_DIR}/smoldynconfigure.h DESTINATION include/smoldyn)
+     endif ()
+ endif ()
+ 

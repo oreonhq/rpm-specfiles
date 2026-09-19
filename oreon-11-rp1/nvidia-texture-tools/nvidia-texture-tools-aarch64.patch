@@ -1,0 +1,24 @@
+diff -up src/nvcore/nvcore.h.orig src/nvcore/nvcore.h
+--- src/nvcore/nvcore.h.orig	2021-02-25 10:27:37.067879391 -0300
++++ src/nvcore/nvcore.h	2021-02-25 10:28:11.034088040 -0300
+@@ -112,7 +112,7 @@
+ #elif defined POSH_CPU_STRONGARM
+ #   define NV_CPU_ARM 1
+ #elif defined POSH_CPU_AARCH64
+-#   define NV_CPU_ARM_64 1
++#   define NV_CPU_AARCH64 1
+ #elif defined POSH_CPU_E2K
+ #   define NV_CPU_E2K 1
+ #elif defined POSH_CPU_MIPS
+diff -up extern/poshlib/posh.h.orig extern/poshlib/posh.h
+--- extern/poshlib/posh.h.orig	2021-02-25 10:27:44.795926865 -0300
++++ extern/poshlib/posh.h	2021-02-25 10:28:34.666233220 -0300
+@@ -514,7 +514,7 @@ LCC predefines the following:
+ #  define POSH_CPU_STRING "ARM"
+ #endif
+ 
+-#if defined __aarch64__
++#if defined __aarch64__ || defined __arm64__
+ #  define POSH_CPU_AARCH64 1
+ #  define POSH_CPU_STRING "ARM64"
+ #endif

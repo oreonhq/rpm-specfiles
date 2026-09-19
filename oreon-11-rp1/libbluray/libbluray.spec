@@ -7,8 +7,8 @@
 %endif
 
 Name:           libbluray
-Version:        1.4.0
-Release:        3%{?dist}
+Version:        1.5.0
+Release:        1%{?dist}
 Summary:        Library to access Blu-Ray disks for video playback 
 License:        LGPL-2.0-or-later
 URL:            https://www.videolan.org/developers/libbluray.html

@@ -1,0 +1,33 @@
+From 5957c7ec5bbdf542ee98ccd9e076e1ef65eb2a73 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 18 Jan 2016 14:42:45 +0100
+Subject: [PATCH] Convert README to UTF-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr PÃ­saÅ™ <ppisar@redhat.com>
+---
+ README | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/README b/README
+index d1f271f..2c9636f 100755
+--- a/README
++++ b/README
+@@ -41,9 +41,9 @@ However you will need to have Net::Cmd from libnet installed
+ 
+ COPYRIGHT
+ 
+-  © 1995-2001 Graham Barr. All rights reserved.
+-  © 2001-2003 Derek J. Balling. All rights reserved.
+-  © 2003-2004 Al Tobey. All rights reserved.
++  Â© 1995-2001 Graham Barr. All rights reserved.
++  Â© 2001-2003 Derek J. Balling. All rights reserved.
++  Â© 2003-2004 Al Tobey. All rights reserved.
+ 
+ This library is free software; you can redistribute it and/or modify
+ it under the same terms as Perl itself.
+-- 
+2.5.0
+

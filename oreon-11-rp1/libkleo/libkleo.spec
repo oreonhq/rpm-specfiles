@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 47772211be61a31947474f871e190f36344a87defec7bc97a468ed6a15b50c09
 
 Name:    libkleo
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: KDE PIM cryptographic library
 
@@ -51,11 +51,6 @@ Requires:       cmake(QGpgmeQt6)
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%package        doc
-Summary:        Developer Documentation files for %{name}
-BuildArch:      noarch
-%description    doc
-Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
@@ -83,11 +78,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_libdir}/cmake/KPim6Libkleo/
 %{_kf6_datadir}/KPim6Libkleo/
 %{_includedir}/KPim6/Libkleo/
-%{_qt6_docdir}/*.tags
- 
-%files doc
-%{_qt6_docdir}/*.qch
-
 %changelog
 %autochangelog
 

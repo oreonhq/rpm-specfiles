@@ -1,0 +1,29 @@
+diff -up MySQL-zrm-3.0/usr/bin/mysql-zrm-backup.command-log MySQL-zrm-3.0/usr/bin/mysql-zrm-backup
+--- MySQL-zrm-3.0/usr/bin/mysql-zrm-backup.command-log	2017-09-19 09:42:39.143044915 -0600
++++ MySQL-zrm-3.0/usr/bin/mysql-zrm-backup	2017-09-22 11:32:44.124933075 -0600
+@@ -1816,7 +1816,6 @@ sub doMySqlDump()
+  	my $filename = catfile( $inputs{"destination"},  $bkpFile );
+     	my $command = " ".$_[0].$cmpCmd." > \"".$filename."\"";
+         $command .= " 2>>$CMDERR";
+-        $command = $p.$command;
+ 	if( $verbose ) {
+ 		&printLog( "Command used for logical backup is ".$p.$command."\n" );
+ 	}
+@@ -1824,7 +1823,7 @@ sub doMySqlDump()
+                 &abortAndDie( );
+         }
+ 	my $ti = time();
+-	my $r = &systemPipe($command);
++	my $r = &systemPipe($p.$command);
+ 	my $t1 = (time() - $ti);
+ 	$readLocksTime = $readLocksTime + $t1;
+ 	$logicalCet = $t1;
+@@ -1834,7 +1833,7 @@ sub doMySqlDump()
+         
+         if( $r > 0 ) {
+         	&printLog("Command exit status is : $r \n" );
+-        	&printCommandOutputToLog( "ERROR", "command is : $command", $CMDERR );
++        	&printCommandOutputToLog( "ERROR", "command is : $p.$command", $CMDERR );
+         	&printAndDie("mysqldump did not succeed.\n");
+         }elsif ( -s $CMDERR ) {
+                 &printCommandOutputToLog( ($CMDERR =~ /warning/i) ? "INFO" : "WARNING", "mysqldump output for command : $command", $CMDERR );

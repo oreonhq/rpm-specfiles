@@ -1,0 +1,21 @@
+diff -up whisper-1.1.10/test_whisper.py.orig whisper-1.1.10/test_whisper.py
+--- whisper-1.1.10/test_whisper.py.orig	2023-08-07 15:44:46.293541340 -0600
++++ whisper-1.1.10/test_whisper.py	2023-08-07 16:02:53.635902508 -0600
+@@ -831,7 +831,7 @@ class TestWhisper(WhisperTestBase):
+         for d in data[1]:
+             self.assertIsNotNone(d)
+         # resize from high to low
+-        os.system('whisper-resize.py %s 60s:1d 300s:2d --aggregate --nobackup >/dev/null' % self.filename)  # noqa
++        os.system('PYTHONPATH=. python3 bin/whisper-resize.py %s 60s:1d 300s:2d --aggregate --nobackup >/dev/null' % self.filename)  # noqa
+         data_low = whisper.fetch(
+             self.filename, fromTime=now_timestamp - 3600 * 25,
+             untilTime=now_timestamp - 3600 * 25 + 60 * 10)
+@@ -846,7 +846,7 @@ class TestWhisper(WhisperTestBase):
+         self.assertEqual(len(data_high[1]), 10)
+         self.assertEqual(data_high[0][2], 60)  # high retention == 60
+         # resize from low to high
+-        os.system('whisper-resize.py %s 60s:2d --aggregate --nobackup >/dev/null' % self.filename) # noqa
++        os.system('PYTHONPATH=. python3 bin/whisper-resize.py %s 60s:2d --aggregate --nobackup >/dev/null' % self.filename) # noqa
+         data1 = whisper.fetch(
+             self.filename, fromTime=now_timestamp - 3600 * 25,
+             untilTime=now_timestamp - 3600 * 25 + 60 * 10)

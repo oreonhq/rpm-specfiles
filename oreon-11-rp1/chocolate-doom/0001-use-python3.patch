@@ -1,0 +1,40 @@
+diff -U4 -r chocolate-doom-3.0.1--orig/data/convert-icon chocolate-doom-3.0.1--patched/data/convert-icon
+--- chocolate-doom-3.0.1--orig/data/convert-icon	2020-04-04 21:49:05.000000000 +0200
++++ chocolate-doom-3.0.1--patched/data/convert-icon	2022-02-01 18:32:23.177315007 +0100
+@@ -1,5 +1,5 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ #
+ # Copyright(C) 2005-2014 Simon Howard
+ #
+ # This program is free software; you can redistribute it and/or
+diff -U4 -r chocolate-doom-3.0.1--orig/man/docgen chocolate-doom-3.0.1--patched/man/docgen
+--- chocolate-doom-3.0.1--orig/man/docgen	2020-06-25 05:10:06.000000000 +0200
++++ chocolate-doom-3.0.1--patched/man/docgen	2022-02-01 18:32:42.741437121 +0100
+@@ -1,5 +1,5 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # 
+ # Chocolate Doom self-documentation tool.  This works similar to javadoc
+ # or doxygen, but documents command line parameters and configuration
+ # file values, generating documentation in Unix manpage, wikitext and
+diff -U4 -r chocolate-doom-3.0.1--orig/man/simplecpp chocolate-doom-3.0.1--patched/man/simplecpp
+--- chocolate-doom-3.0.1--orig/man/simplecpp	2020-04-04 21:49:05.000000000 +0200
++++ chocolate-doom-3.0.1--patched/man/simplecpp	2022-02-01 18:32:33.854381649 +0100
+@@ -1,5 +1,5 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ #
+ # Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+ # Contributors to the Freedoom project.  All rights reserved.
+ #
+diff -U4 -r chocolate-doom-3.0.1--orig/textscreen/fonts/convert-font chocolate-doom-3.0.1--patched/textscreen/fonts/convert-font
+--- chocolate-doom-3.0.1--orig/textscreen/fonts/convert-font	2020-04-04 21:49:06.000000000 +0200
++++ chocolate-doom-3.0.1--patched/textscreen/fonts/convert-font	2022-02-01 18:29:15.403142913 +0100
+@@ -1,5 +1,5 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ #
+ # Copyright(C) 2016 Simon Howard
+ #
+ # This program is free software; you can redistribute it and/or

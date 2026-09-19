@@ -2,7 +2,7 @@
 
 Name:       m17n-db
 Summary:    Multilingualization datafiles for m17n-lib
-Version:    1.8.11
+Version:    1.8.14
 Release:    %autorelease
 License:    LGPL-2.1-or-later
 URL:        http://www.nongnu.org/m17n

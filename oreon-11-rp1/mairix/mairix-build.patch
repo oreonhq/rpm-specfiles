@@ -1,0 +1,32 @@
+diff -up mairix-638a690a2a7e479d8212c9d97f07615503611bdb/Makefile.in.build mairix-638a690a2a7e479d8212c9d97f07615503611bdb/Makefile.in
+--- mairix-638a690a2a7e479d8212c9d97f07615503611bdb/Makefile.in.build	2022-04-26 14:18:43.832627656 +0200
++++ mairix-638a690a2a7e479d8212c9d97f07615503611bdb/Makefile.in	2022-04-26 14:19:59.022610422 +0200
+@@ -107,13 +107,13 @@ install:
+ 	[ -d $(man5dir) ] || mkdir -p $(man5dir)
+ 	[ -d $(zshdir) ] || mkdir -p $(zshdir)
+ 	cp -f mairix $(bindir)
+-	chmod 555 $(bindir)/mairix
++	chmod 755 $(bindir)/mairix
+ 	cp -f mairix.1 $(man1dir)
+-	chmod 444 $(man1dir)/mairix.1
++	chmod 644 $(man1dir)/mairix.1
+ 	cp -f mairixrc.5 $(man5dir)
+-	chmod 444 $(man5dir)/mairixrc.5
++	chmod 644 $(man5dir)/mairixrc.5
+ 	cp -f _mairix $(zshdir)
+-	chmod 444 $(zshdir)/_mairix
++	chmod 644 $(zshdir)/_mairix
+ 
+ check: mairix
+ 	if [ -d test ]; then cd test ; $(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" check ; else echo "No test subdirectory?" ; exit 1 ; fi
+diff -up mairix-638a690a2a7e479d8212c9d97f07615503611bdb/configure.build mairix-638a690a2a7e479d8212c9d97f07615503611bdb/configure
+--- mairix-638a690a2a7e479d8212c9d97f07615503611bdb/configure.build	2022-04-23 19:16:10.000000000 +0200
++++ mairix-638a690a2a7e479d8212c9d97f07615503611bdb/configure	2022-04-26 14:18:43.832627656 +0200
+@@ -335,7 +335,6 @@ do
+     ;;
+   * )
+     printf "Unrecognized option : $option\n"
+-    bad_options=yes
+     ;;
+   esac
+ done

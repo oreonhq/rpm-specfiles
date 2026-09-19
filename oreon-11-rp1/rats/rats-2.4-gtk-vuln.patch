@@ -1,0 +1,26 @@
+diff -Naur rats-2.4-orig/rats-c.xml rats-2.4/rats-c.xml
+--- rats-2.4-orig/rats-c.xml	2013-12-27 07:31:41.628500112 +0100
++++ rats-2.4/rats-c.xml	2013-12-27 07:33:23.521908145 +0100
+@@ -2830,5 +2830,22 @@
+       <Severity>High</Severity>
+     </Info>
+   </Vulnerability>
++
++  <!--  GTK/GLib specific problems, added by Steve Kemp -->
++  <Vulnerability>
++    <Name>g_get_tmp_dir</Name>
++    <Info>
++      <Description>This function returns the contents of the environmental variable TMP and can be any length, containing arbitary characters.  It should be treated as getenv.</Description>
++      <Severity>High</Severity>
++    </Info>
++  </Vulnerability>
++  <Vulnerability>
++    <Name>g_get_home_dir</Name>
++    <Info>
++      <Description>This function returns the contents of the environmental variable HOME and can be any length, containing arbitary characters, it should be treated as getenv.</Description>
++      <Severity>High</Severity>
++    </Info>
++  </Vulnerability>
++
+ </VulnDB>
+ 

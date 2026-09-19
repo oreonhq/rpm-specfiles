@@ -1,0 +1,22 @@
+compat-flex for Fedora
+----------------------
+
+The package compat-flex is provided as a safe default for cases, where
+new flex (2.5.33 at the time of this writing) fails to work for some
+reason.  It is possible to have this package installed alongside flex,
+and pick whichever of them you need at the moment.
+
+You need to do the following to compile your project with compat-flex:
+
+ + Process the .l file with either flex-2.5.4a, or flex-2.5.4a++,
+   depending on whether you want C or C++ scanner.
+
+ + Use -I/usr/include/flex-2.5.4a compilation flag when you use
+   <FlexLexer.h> header file.
+
+ + Use -L/usr/lib/flex-2.5.4a (or -L/usr/lib64/flex-2.5.4a on 64bits)
+   linker flag when linking against -lfl.
+
+If the build system supports this, all you need to do is provide the
+right values of FLEX, CFLAGS or CPPFLAGS, and LDFLAGS environment
+variables.

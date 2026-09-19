@@ -1,0 +1,85 @@
+.TH UNU\-CROP "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-crop \- crop along each axis to make a smaller
+.I nrrd
+.SH SYNOPSIS
+.B unu\ crop
+.RB [ \-min , \-\-minimum
+.RI [< pos0 \ ...>]]
+.RB [ \-max , \-\-maximum
+.RI [< pos0 \ ...>]]
+.RB [ \-b , \-\-bounds
+.RI < filename >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Crop along each axis to make a smaller
+.IR nrrd .
+.IP \(bu +2n
+Uses
+.B nrrdCrop
+.SH OPTIONS
+.TP
+.B \-min\fR\ [<\fIpos0\fR\ ...>]\ ,\ \fB\-\-minimum\fR\ [<\fIpos0\fR\ ...>]
+low corner of bounding box.
+.RS +7n
+.IP \(bu +2n
+.RI < int >
+gives 0-based index
+.IP \(bu +2n
+.BR M ,
+.BR M+ <\fIint\fR>,
+.BR M\- <\fIint\fR>
+give index relative to the last sample on the axis
+.RB ( M== \fI#samples \-1 ).
+.RE
+.IP
+(0 or more
+.IR position s).
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-max\fR\ [<\fIpos0\fR\ ...>]\ ,\ \fB\-\-maximum\fR\ [<\fIpos0\fR\ ...>]
+high corner of bounding box.
+Besides the specification styles described above, there\(cqs also:
+.RS +7n
+.IP \(bu +2n
+.BR m+ <\fIint\fR>
+give index relative to minimum.
+.RE
+.IP
+(0 or more
+.IR position s).
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-b\fR\ <\fIfilename\fR>\ ,\ \fB\-\-bounds\fR\ <\fIfilename\fR>
+a filename given here overrides the
+.B \-min
+and
+.B \-max
+options (they don\(cqt need to be used) and provides the cropping bounds as a
+2\-D array; first scanline is for
+.BR \-min ,
+second is for
+.BR \-max .
+Unfortunately the
+.RB \(lq m \(rq
+and
+.RB \(lq M \(rq
+semantics (above) are currently not supported in the bounds file.
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

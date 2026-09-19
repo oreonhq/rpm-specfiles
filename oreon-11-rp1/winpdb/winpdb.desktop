@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Winpdb
+GenericName=Python Debugger
+Comment=Advanced python debugger
+Exec=winpdb
+Icon=winpdb
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Development;Debugger;
+X-Desktop-File-Install-Version=0.4

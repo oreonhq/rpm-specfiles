@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Ankur Sinha <ankursinha AT fedoraproject DOT org> -->
+<component type="font">
+    <id>anka-coder-narrow</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <name>Anka/Coder Narrow</name>
+    <extends>anka-coder</extends>
+</component>
+

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Khmer Busra</target>
+    <like>
+      <family>Khmer Busra MOE</family>
+      <family>Khmer Busra dict</family>
+      <family>Khmer Busra high</family>
+      <family>Khmer Busra Bunong</family>
+      <family>Khmer Busra xspace</family>
+      <family>Khmer Busra diagnostic</family>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

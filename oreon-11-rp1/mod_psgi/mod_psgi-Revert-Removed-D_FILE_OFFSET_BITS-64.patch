@@ -1,0 +1,32 @@
+From 16ecba719b4cd7f51136deeda2d63b33967dfd71 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 8 Nov 2018 16:00:42 +0100
+Subject: [PATCH] Revert "Removed -D_FILE_OFFSET_BITS=64"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit 59b444b3a91503c07f50c4c87db29e5e3794be45. This was
+a RHEL5 bug. We want to preserve perl cflags.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index a824ea2..0666d6b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -44,7 +44,7 @@ HAS_EXTUTILS_EMBED=`$PERL -MExtUtils::Embed -e 'print "yes"'`
+ if test "$HAS_EXTUTILS_EMBED" != "yes"; then
+     AC_MSG_ERROR([ExtUtils::Embed not found. Please install it.])
+ fi
+-PERL_CCOPTS=`$PERL -MExtUtils::Embed -e ccopts | sed -e 's/-D_FILE_OFFSET_BITS=64//'`
++PERL_CCOPTS=`$PERL -MExtUtils::Embed -e ccopts`
+ PERL_LDOPTS=`$PERL -MExtUtils::Embed -e ldopts`
+ AC_SUBST(PERL_CCOPTS)
+ AC_SUBST(PERL_LDOPTS)
+-- 
+2.17.2
+

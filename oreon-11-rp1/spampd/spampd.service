@@ -1,0 +1,13 @@
+[Unit]
+Description=spampd daemon
+After=syslog.target network.target
+Wants=sa-update.timer
+
+[Service]
+User=spampd
+Group=spampd
+EnvironmentFile=/etc/sysconfig/spampd
+ExecStart=/usr/sbin/spampd --nodetach -u spampd -g spampd --homedir /var/spool/spampd $SPAMPD_OPTIONS
+
+[Install]
+WantedBy=multi-user.target

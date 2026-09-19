@@ -1,0 +1,20 @@
+--- fr-2.4.13/doc/fr.xml.orig	2024-01-11 11:46:16.000000000 -0700
++++ fr-2.4.13/doc/fr.xml	2025-09-18 14:26:27.984563650 -0600
+@@ -493,7 +493,7 @@ either as a permutation or as a transfor
+ will return a permutation if possible, and otherwise a transformation.
+ </Section>
+ 
+-<Section Label="frmachine-products"><Heading>Products of machines</Heading>
++<Section Label="frmachineproducts"><Heading>Products of machines</Heading>
+ 
+ Machines can be combined in different manners. If two machines act on
+ the same alphabet, then their <E>sum</E> and <E>product</E> are
+@@ -630,7 +630,7 @@ elements. In practise, it is better to w
+ often as possible.
+ 
+ <P/> Products of Mealy machines behave in the same way as products of
+-general FR machines, see <Ref Label="frmachine-products"/>. The only
++general FR machines, see <Ref Label="frmachineproducts"/>. The only
+ difference is that now the sum and products of statesets are distinct;
+ the sum of statesets being their disjoint union, and their product
+ being their cartesian product.

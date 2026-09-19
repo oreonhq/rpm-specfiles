@@ -1,0 +1,21 @@
+From fb0a0ab2710e1d323b7d9b41cb417e0ea67ba4f9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Sat, 5 Jul 2025 21:05:55 +0200
+Subject: [PATCH 4/5] Add missing include to fix build with newer gcc
+
+---
+ src/sbml/html2md/html2md.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/sbml/html2md/html2md.h b/src/sbml/html2md/html2md.h
+index 8fd66c3b44..71f3913d16 100644
+--- a/src/sbml/html2md/html2md.h
++++ b/src/sbml/html2md/html2md.h
+@@ -4,6 +4,7 @@
+ #ifndef HTML2MD_H
+ #define HTML2MD_H
+ 
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ #include <unordered_map>

@@ -1,0 +1,11 @@
+--- a/cat.c
++++ b/cat.c
+@@ -24,7 +24,7 @@
+ #include "cat.h"
+ 
+ /* Runtime config data */
+-rc_data_t rc_data;
++extern rc_data_t rc_data;
+ 
+ /*------------------------------------------------------------------------*/
+ 

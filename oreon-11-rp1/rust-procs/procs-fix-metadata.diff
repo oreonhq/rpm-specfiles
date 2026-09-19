@@ -1,0 +1,50 @@
+--- procs-0.14.10/Cargo.toml	1970-01-01T00:00:01+00:00
++++ procs-0.14.10/Cargo.toml	2026-01-03T21:40:37.217249+00:00
+@@ -86,11 +86,7 @@
+ repository = "dalance/procs"
+ 
+ [features]
+-default = ["docker"]
+-docker = [
+-    "dockworker",
+-    "tokio",
+-]
++default = []
+ 
+ [[bin]]
+ name = "procs"
+@@ -115,14 +111,10 @@
+ version = "4.4"
+ 
+ [dependencies.console]
+-version = "0.15.11"
++version = ">=0.15.11,<0.17.0"
+ 
+ [dependencies.directories]
+-version = "6.0.0"
+-
+-[dependencies.dockworker]
+-version = "0.6.0"
+-optional = true
++version = ">=5,<7"
+ 
+ [dependencies.getch]
+ version = "0.3.1"
+@@ -174,7 +166,7 @@
+ version = "0.16.1"
+ 
+ [target.'cfg(any(target_os = "linux", target_os = "android"))'.dependencies.procfs]
+-version = "0.17.0"
++version = ">=0.17.0, <0.19.0"
+ 
+ [target.'cfg(any(target_os = "linux", target_os = "android"))'.dependencies.regex]
+ version = "1.11"
+@@ -183,7 +175,7 @@
+ version = "0.12"
+ 
+ [target.'cfg(any(target_os = "linux", target_os = "android"))'.dependencies.which]
+-version = "7"
++version = ">=7, <9"
+ 
+ [profile.release]
+ lto = true

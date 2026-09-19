@@ -1,0 +1,22 @@
+From 680a086a928a36449e7c1580e72af41f19bc3abe Mon Sep 17 00:00:00 2001
+From: olekw <olek-dev@wojnar.org>
+Date: Sat, 21 Nov 2015 19:44:11 -0500
+Subject: [PATCH] Remove reference to object_slot.h
+
+This header has been removed in newer versions of sigc++ and the removal causes a build failure for libwfut. Interestingly, the header file was essentially empty (at least in sigc++ version 2.4.1). Since it does not appear that this header served any useful function, the easiest solution seems to be to remove it. I was able to compile libwfut successfully without this line. If no one has any insight as to why this is included, I recommend that we remove it.
+---
+ python/WFUT.i | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/python/WFUT.i b/python/WFUT.i
+index c02b54c..9c7e2f2 100644
+--- a/python/WFUT.i
++++ b/python/WFUT.i
+@@ -17,7 +17,6 @@
+ #include <libwfut/IO.h>
+ #include <libwfut/WFUT.h>
+ #include <sigc++/bind.h>
+-#include <sigc++/object_slot.h>
+ 
+ //Fix for missing SWIGPY_SLICE_ARG with some versions of swig.
+ #if PY_VERSION_HEX >= 0x03020000

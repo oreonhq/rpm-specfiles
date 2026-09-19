@@ -1,0 +1,184 @@
+From f2889393f9b9c945c84c122ebaa15762e717fa0f Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Thu, 30 Jan 2025 12:51:19 -0800
+Subject: [PATCH] Add missing string includes for memcpy
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ source/glest_game/global/core_data.cpp                | 2 ++
+ source/glest_game/network/network_types.h             | 1 +
+ source/shared_lib/include/platform/sdl/window.h       | 1 +
+ source/shared_lib/sources/graphics/JPGReader.cpp      | 1 +
+ source/shared_lib/sources/graphics/PNGReader.cpp      | 1 +
+ source/shared_lib/sources/graphics/gl/opengl.cpp      | 1 +
+ source/shared_lib/sources/graphics/model.cpp          | 1 +
+ source/shared_lib/sources/graphics/pixmap.cpp         | 1 +
+ source/shared_lib/sources/graphics/texture.cpp        | 2 ++
+ source/shared_lib/sources/map/map_preview.cpp         | 1 +
+ source/shared_lib/sources/sound/sound_file_loader.cpp | 2 ++
+ source/shared_lib/sources/util/conversion.cpp         | 1 +
+ source/shared_lib/sources/util/string_utils.cpp       | 1 +
+ 13 files changed, 16 insertions(+)
+
+diff --git a/source/glest_game/global/core_data.cpp b/source/glest_game/global/core_data.cpp
+index df38329db..97082ebc2 100644
+--- a/source/glest_game/global/core_data.cpp
++++ b/source/glest_game/global/core_data.cpp
+@@ -11,6 +11,8 @@
+ 
+ #include "core_data.h"
+ 
++#include <cstring>
++
+ #include "logger.h"
+ #include "renderer.h"
+ #include "graphics_interface.h"
+diff --git a/source/glest_game/network/network_types.h b/source/glest_game/network/network_types.h
+index 224935821..29e98261f 100644
+--- a/source/glest_game/network/network_types.h
++++ b/source/glest_game/network/network_types.h
+@@ -18,6 +18,7 @@
+ #endif
+ 
+ #include <string>
++#include <cstring>
+ #include "data_types.h"
+ #include "vec.h"
+ #include "command.h"
+diff --git a/source/shared_lib/include/platform/sdl/window.h b/source/shared_lib/include/platform/sdl/window.h
+index 0945616d6..b3c81f606 100644
+--- a/source/shared_lib/include/platform/sdl/window.h
++++ b/source/shared_lib/include/platform/sdl/window.h
+@@ -15,6 +15,7 @@
+ 
+ #include <map>
+ #include <string>
++#include <cstring>
+ #include <SDL.h>
+ #include <cassert>
+ #include "data_types.h"
+diff --git a/source/shared_lib/sources/graphics/JPGReader.cpp b/source/shared_lib/sources/graphics/JPGReader.cpp
+index 37e2fd903..010a7788e 100644
+--- a/source/shared_lib/sources/graphics/JPGReader.cpp
++++ b/source/shared_lib/sources/graphics/JPGReader.cpp
+@@ -14,6 +14,7 @@
+ 
+ #include "data_types.h"
+ #include "pixmap.h"
++#include <cstring>
+ #include <stdexcept>
+ #include <jpeglib.h>
+ #include <setjmp.h>
+diff --git a/source/shared_lib/sources/graphics/PNGReader.cpp b/source/shared_lib/sources/graphics/PNGReader.cpp
+index 1af6899ec..039a8d832 100644
+--- a/source/shared_lib/sources/graphics/PNGReader.cpp
++++ b/source/shared_lib/sources/graphics/PNGReader.cpp
+@@ -13,6 +13,7 @@
+ 
+ #include "data_types.h"
+ #include "pixmap.h"
++#include <cstring>
+ #include <stdexcept>
+ #include <png.h>
+ #include <setjmp.h>
+diff --git a/source/shared_lib/sources/graphics/gl/opengl.cpp b/source/shared_lib/sources/graphics/gl/opengl.cpp
+index f76327c6d..3d560db4c 100644
+--- a/source/shared_lib/sources/graphics/gl/opengl.cpp
++++ b/source/shared_lib/sources/graphics/gl/opengl.cpp
+@@ -12,6 +12,7 @@
+ #include "opengl.h"
+ 
+ #include <stdexcept>
++#include <cstring>
+ 
+ #include "graphics_interface.h"
+ #include "context_gl.h"
+diff --git a/source/shared_lib/sources/graphics/model.cpp b/source/shared_lib/sources/graphics/model.cpp
+index ddfe68f51..a2f9f3b94 100644
+--- a/source/shared_lib/sources/graphics/model.cpp
++++ b/source/shared_lib/sources/graphics/model.cpp
+@@ -14,6 +14,7 @@
+ #include <cstdio>
+ #include <cassert>
+ #include <stdexcept>
++#include <cstring>
+ 
+ #include "interpolation.h"
+ #include "conversion.h"
+diff --git a/source/shared_lib/sources/graphics/pixmap.cpp b/source/shared_lib/sources/graphics/pixmap.cpp
+index 0d0e81e2c..b6291c53a 100644
+--- a/source/shared_lib/sources/graphics/pixmap.cpp
++++ b/source/shared_lib/sources/graphics/pixmap.cpp
+@@ -15,6 +15,7 @@
+ #include <stdexcept>
+ #include <cstdio>
+ #include <cassert>
++#include <cstring>
+ 
+ #include "util.h"
+ #include "math_util.h"
+diff --git a/source/shared_lib/sources/graphics/texture.cpp b/source/shared_lib/sources/graphics/texture.cpp
+index d87679a36..661b3cabb 100644
+--- a/source/shared_lib/sources/graphics/texture.cpp
++++ b/source/shared_lib/sources/graphics/texture.cpp
+@@ -15,6 +15,8 @@
+ #include "platform_util.h"
+ #include "leak_dumper.h"
+ 
++#include <cstring>
++
+ using namespace Shared::Util;
+ using namespace Shared::Platform;
+ 
+diff --git a/source/shared_lib/sources/map/map_preview.cpp b/source/shared_lib/sources/map/map_preview.cpp
+index 30dc10e96..728df9a83 100644
+--- a/source/shared_lib/sources/map/map_preview.cpp
++++ b/source/shared_lib/sources/map/map_preview.cpp
+@@ -14,6 +14,7 @@
+ 
+ #include "math_wrapper.h"
+ #include <cstdlib>
++#include <cstring>
+ #include <stdexcept>
+ #include <set>
+ #include <iterator>
+diff --git a/source/shared_lib/sources/sound/sound_file_loader.cpp b/source/shared_lib/sources/sound/sound_file_loader.cpp
+index ccf24ce49..3e74c75fd 100644
+--- a/source/shared_lib/sources/sound/sound_file_loader.cpp
++++ b/source/shared_lib/sources/sound/sound_file_loader.cpp
+@@ -11,6 +11,8 @@
+ 
+ #include "sound_file_loader.h"
+ 
++#include <cstring>
++
+ #include <vorbis/codec.h>
+ #include <vorbis/vorbisfile.h>
+ 
+diff --git a/source/shared_lib/sources/util/conversion.cpp b/source/shared_lib/sources/util/conversion.cpp
+index ba8568fd0..44ae71e14 100644
+--- a/source/shared_lib/sources/util/conversion.cpp
++++ b/source/shared_lib/sources/util/conversion.cpp
+@@ -14,6 +14,7 @@
+ #include <stdexcept>
+ #include <cstdio>
+ #include <cstdlib>
++#include <cstring>
+ #include "platform_common.h"
+ #include <sstream>
+ #include <iostream>
+diff --git a/source/shared_lib/sources/util/string_utils.cpp b/source/shared_lib/sources/util/string_utils.cpp
+index e0bc8d60f..f3387e972 100644
+--- a/source/shared_lib/sources/util/string_utils.cpp
++++ b/source/shared_lib/sources/util/string_utils.cpp
+@@ -19,6 +19,7 @@
+ #include "string_utils.h"
+ 
+ #include <algorithm>
++#include <cstring>
+ #include <assert.h>
+ 
+ namespace Shared { namespace Util {
+-- 
+2.47.1
+

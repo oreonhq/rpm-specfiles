@@ -1,0 +1,111 @@
+From: František Dvořák <valtri@civ.zcu.cz>
+Date: Thu, 8 May 2014 12:09:34 +0000 (+0200)
+Subject: Better work with local static variables, fixes double free on re-initialiazation.
+X-Git-Url: http://scientific.zcu.cz/git/?p=log4c.git;a=commitdiff_plain;h=113e1dd0cef9e411ff52d75363bfe6f44be25987
+
+Better work with local static variables, fixes double free on re-initialiazation.
+---
+
+diff --git a/src/log4c/appender.c b/src/log4c/appender.c
+index aa939b2..e49f85b 100644
+--- a/src/log4c/appender.c
++++ b/src/log4c/appender.c
+@@ -31,22 +31,21 @@ struct __log4c_appender
+ };
+ 
+ sd_factory_t* log4c_appender_factory = NULL;
++static sd_hash_t* appender_types = NULL;
+ 
+ /*******************************************************************************/
+ static sd_hash_t* log4c_appender_types(void)
+ {
+-  static sd_hash_t* types = NULL;
+-  
+-  if (!types)
+-    types = sd_hash_new(20, NULL);
+-  
+-  return types;
++	if (!appender_types)
++		appender_types = sd_hash_new(20, NULL);
++
++	return appender_types;
+ }
+ 
+ extern void log4c_appender_types_free( void ) {
+-	sd_hash_t * types = log4c_appender_types();
+-	if ( types != NULL ) {
+-		sd_hash_delete( types );
++	if (appender_types) {
++		sd_hash_delete( appender_types );
++		appender_types = NULL;
+ 	}
+ }
+ 
+diff --git a/src/log4c/layout.c b/src/log4c/layout.c
+index 764b285..d260f7c 100644
+--- a/src/log4c/layout.c
++++ b/src/log4c/layout.c
+@@ -27,22 +27,21 @@ struct __log4c_layout
+ };
+ 
+ sd_factory_t* log4c_layout_factory = NULL;
++static sd_hash_t* layout_types = NULL;
+ 
+ /*******************************************************************************/
+ static sd_hash_t* log4c_layout_types(void)
+ {
+-    static sd_hash_t* types = NULL;
++	if (!layout_types)
++		layout_types = sd_hash_new(20, NULL);
+ 
+-    if (!types)
+-	types = sd_hash_new(20, NULL);
+-    
+-    return types;
++	return layout_types;
+ }
+ 
+ extern void log4c_layout_types_free( void ) {
+-	sd_hash_t * types = log4c_layout_types();
+-	if ( types != NULL ) {
+-		sd_hash_delete( types );
++	if (layout_types) {
++		sd_hash_delete( layout_types );
++		layout_types = NULL;
+ 	}
+ }
+ 
+diff --git a/src/log4c/rollingpolicy.c b/src/log4c/rollingpolicy.c
+index 3c445a2..ccec3da 100644
+--- a/src/log4c/rollingpolicy.c
++++ b/src/log4c/rollingpolicy.c
+@@ -30,21 +30,20 @@ struct __log4c_rollingpolicy
+ };
+ 
+ sd_factory_t* log4c_rollingpolicy_factory = NULL;
++static sd_hash_t* rollingpolicy_types = NULL;
+ 
+ /*******************************************************************************/
+ static sd_hash_t* log4c_rollingpolicy_types(void){
+-  static sd_hash_t* types = NULL;
+-  
+-  if (!types)
+-    types = sd_hash_new(20, NULL);
+-  
+-  return types;
++	if (!rollingpolicy_types)
++		rollingpolicy_types = sd_hash_new(20, NULL);
++
++	return rollingpolicy_types;
+ }
+ 
+ extern void log4c_rollingpolicy_types_free( void ) {
+-	sd_hash_t * types = log4c_rollingpolicy_types();
+-	if ( types != NULL ) {
+-		sd_hash_delete( types );
++	if (rollingpolicy_types) {
++		sd_hash_delete( rollingpolicy_types );
++		rollingpolicy_types = NULL;
+ 	}
+ }
+ 

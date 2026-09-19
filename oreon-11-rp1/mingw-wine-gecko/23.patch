@@ -1,0 +1,435 @@
+From e94d4bafcfc4261c2da546f19f30c8d5475c9adf Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Sun, 17 Sep 2023 13:46:38 +0200
+Subject: [PATCH 1/3] condifure: Don't use CC/CXX/CPP values to force -mwindows
+ flags.
+
+This is meant only for linking and current Clang is more strict about that.
+---
+ js/src/old-configure.in | 3 ---
+ old-configure.in        | 3 ---
+ 2 files changed, 6 deletions(-)
+
+diff --git a/js/src/old-configure.in b/js/src/old-configure.in
+index fc51bfe7636d..0365e5fe772b 100644
+--- a/js/src/old-configure.in
++++ b/js/src/old-configure.in
+@@ -1510,9 +1510,6 @@ ia64*-hpux*)
+     RC=rc.exe
+     MC=mc.exe
+     if test -n "$GNU_CC" -o -n "$CLANG_CC"; then
+-        CC="$CC -mwindows"
+-        CXX="$CXX -mwindows"
+-        CPP="$CPP -mwindows"
+         LD=""
+         CFLAGS="$CFLAGS -mms-bitfields"
+         CXXFLAGS="$CXXFLAGS -mms-bitfields"
+diff --git a/old-configure.in b/old-configure.in
+index 8c747dc3245c..db0479a1cbce 100644
+--- a/old-configure.in
++++ b/old-configure.in
+@@ -2041,9 +2041,6 @@ ia64*-hpux*)
+     # certain versions of cygwin's makedepend barf on the
+     # #include <string> vs -I./dist/include/string issue so don't use it
+     if test -n "$GNU_CC" -o -n "$CLANG_CC"; then
+-        CC="$CC -mwindows"
+-        CXX="$CXX -mwindows"
+-        CPP="$CPP -mwindows"
+         LD=""
+         CFLAGS="$CFLAGS -mms-bitfields"
+         CXXFLAGS="$CXXFLAGS -mms-bitfields"
+-- 
+GitLab
+
+
+From d392d22d5ee80737b6cdfb78cf9880ae71d57ed0 Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Sun, 17 Sep 2023 13:48:02 +0200
+Subject: [PATCH 2/3] nss: Don't use -mwindows in OS_CFLAGS.
+
+---
+ security/nss/coreconf/WIN32.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/nss/coreconf/WIN32.mk b/security/nss/coreconf/WIN32.mk
+index 67f67926dc4c..18d1b5fef200 100644
+--- a/security/nss/coreconf/WIN32.mk
++++ b/security/nss/coreconf/WIN32.mk
+@@ -104,7 +104,7 @@ endif
+ DLL_SUFFIX   = dll
+ 
+ ifdef NS_USE_GCC
+-    OS_CFLAGS += -mwindows -mms-bitfields
++    OS_CFLAGS += -mms-bitfields
+     _GEN_IMPORT_LIB=-Wl,--out-implib,$(IMPORT_LIBRARY)
+     DLLFLAGS  += -mwindows -o $@ -shared -Wl,--export-all-symbols -Wl,--nxcompat $(if $(IMPORT_LIBRARY),$(_GEN_IMPORT_LIB))
+     ifdef BUILD_OPT
+-- 
+GitLab
+
+
+From 661498710e3bc91029d61984ef80c167f7f1694b Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Sun, 17 Sep 2023 13:53:01 +0200
+Subject: [PATCH 3/3] nsprpub: Don't add -mwindows to CC/CXX variables.
+
+---
+ nsprpub/configure    | 84 +++++++++++++++++++++-----------------------
+ nsprpub/configure.in |  2 --
+ 2 files changed, 40 insertions(+), 46 deletions(-)
+
+diff --git a/nsprpub/configure b/nsprpub/configure
+index 0ff06ecface2..adf6b589f5ac 100755
+--- a/nsprpub/configure
++++ b/nsprpub/configure
+@@ -1945,7 +1945,7 @@ else
+ #define $2 innocuous_$2
+ 
+ /* System header to define __stub macros and hopefully few prototypes,
+-    which can conflict with char $2 (); below.
++    which can conflict with char $2 (void); below.
+     Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+     <limits.h> exists even on freestanding compilers.  */
+ 
+@@ -1963,7 +1963,7 @@ else
+ #ifdef __cplusplus
+ extern "C"
+ #endif
+-char $2 ();
++char $2 (void);
+ /* The GNU C library defines this for functions which it implements
+     to always fail with ENOSYS.  Some functions are actually named
+     something starting with __ and the normal name is an alias.  */
+@@ -1972,7 +1972,7 @@ choke me
+ #endif
+ 
+ int
+-main ()
++main (void)
+ {
+ return $2 ();
+   ;
+@@ -3506,7 +3506,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -3646,7 +3646,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ #include <stdio.h>
+ int
+-main ()
++main (void)
+ {
+ FILE *f = fopen ("conftest.out", "w");
+  return ferror (f) || fclose (f) != 0;
+@@ -3710,7 +3710,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -3761,7 +3761,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ #ifndef __GNUC__
+        choke me
+@@ -3802,7 +3802,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -3817,7 +3817,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -3833,7 +3833,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -3882,9 +3882,7 @@ struct stat;
+ /* Most of the following tests are stolen from RCS 5.7's src/conf.sh.  */
+ struct buf { int x; };
+ FILE * (*rcsopen) (struct buf *, struct stat *, int);
+-static char *e (p, i)
+-     char **p;
+-     int i;
++static char *e (char **p, int i)
+ {
+   return p[i];
+ }
+@@ -3919,7 +3917,7 @@ int pairnames (int, char **, FILE *(*)(struct buf *, struct stat *, int), int, i
+ int argc;
+ char **argv;
+ int
+-main ()
++main (void)
+ {
+ return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];
+   ;
+@@ -4155,7 +4153,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ #ifndef __GNUC__
+        choke me
+@@ -4196,7 +4194,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -4211,7 +4209,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -4227,7 +4225,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -4601,7 +4599,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ return 0;
+   ;
+@@ -4769,7 +4767,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ #ifndef __GNUC__
+        choke me
+@@ -4810,7 +4808,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -4825,7 +4823,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -4841,7 +4839,7 @@ else
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -5393,7 +5391,7 @@ if test -n "$GNU_CC" && test -n "$GNU_CXX" && test -n "$GNU_AS"; then
+ /* end confdefs.h.  */
+  #include <stdio.h>
+ int
+-main ()
++main (void)
+ {
+ printf("Hello World\n");
+   ;
+@@ -5433,7 +5431,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ return 0;
+   ;
+@@ -5854,7 +5852,7 @@ no)
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ return sizeof(__thumb2__);
+   ;
+@@ -5938,7 +5936,7 @@ $as_echo_n "checking whether alignment flag ($align_flag) is supported... " >&6;
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -5964,7 +5962,7 @@ $as_echo_n "checking whether the chosen combination of compiler flags ($all_flag
+ /* end confdefs.h.  */
+ 
+ int
+-main ()
++main (void)
+ {
+ return 0;
+   ;
+@@ -6161,7 +6159,7 @@ else
+ #include <float.h>
+ 
+ int
+-main ()
++main (void)
+ {
+ 
+   ;
+@@ -6231,7 +6229,7 @@ else
+ 
+ #define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
+ int
+-main ()
++main (void)
+ {
+   int i;
+   for (i = 0; i < 256; i++)
+@@ -6390,9 +6388,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ #ifdef __cplusplus
+ extern "C"
+ #endif
+-char gethostbyaddr ();
++char gethostbyaddr (void);
+ int
+-main ()
++main (void)
+ {
+ return gethostbyaddr ();
+   ;
+@@ -7060,8 +7058,6 @@ tools are selected during the Xcode/Developer Tools installation." "$LINENO" 5
+     RESOLVE_LINK_SYMBOLS=1
+ 
+     if test -n "$GNU_CC"; then
+-        CC="$CC -mwindows"
+-        CXX="$CXX -mwindows"
+         DLL_SUFFIX=dll
+         MKSHLIB='$(CC) -shared -Wl,--export-all-symbols -Wl,--out-implib -Wl,$(IMPORT_LIBRARY) $(DLLBASE) -o $(subst $(OBJDIR)/,,$(SHARED_LIBRARY))'
+         RC=$WINDRES
+@@ -7811,9 +7807,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ #ifdef __cplusplus
+ extern "C"
+ #endif
+-char dlopen ();
++char dlopen (void);
+ int
+-main ()
++main (void)
+ {
+ return dlopen ();
+   ;
+@@ -8043,9 +8039,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ #ifdef __cplusplus
+ extern "C"
+ #endif
+-char pthread_create ();
++char pthread_create (void);
+ int
+-main ()
++main (void)
+ {
+ return pthread_create ();
+   ;
+@@ -8082,9 +8078,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ #ifdef __cplusplus
+ extern "C"
+ #endif
+-char pthread_create ();
++char pthread_create (void);
+ int
+-main ()
++main (void)
+ {
+ return pthread_create ();
+   ;
+@@ -8121,9 +8117,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ #ifdef __cplusplus
+ extern "C"
+ #endif
+-char pthread_create ();
++char pthread_create (void);
+ int
+-main ()
++main (void)
+ {
+ return pthread_create ();
+   ;
+@@ -8160,9 +8156,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ #ifdef __cplusplus
+ extern "C"
+ #endif
+-char pthread_create ();
++char pthread_create (void);
+ int
+-main ()
++main (void)
+ {
+ return pthread_create ();
+   ;
+diff --git a/nsprpub/configure.in b/nsprpub/configure.in
+index 2ab2383361d9..dce699abb936 100644
+--- a/nsprpub/configure.in
++++ b/nsprpub/configure.in
+@@ -1866,8 +1866,6 @@ tools are selected during the Xcode/Developer Tools installation.])
+     RESOLVE_LINK_SYMBOLS=1
+ 
+     if test -n "$GNU_CC"; then
+-        CC="$CC -mwindows"
+-        CXX="$CXX -mwindows"
+         DLL_SUFFIX=dll
+         MKSHLIB='$(CC) -shared -Wl,--export-all-symbols -Wl,--out-implib -Wl,$(IMPORT_LIBRARY) $(DLLBASE) -o $(subst $(OBJDIR)/,,$(SHARED_LIBRARY))'
+         RC=$WINDRES
+-- 
+GitLab
+

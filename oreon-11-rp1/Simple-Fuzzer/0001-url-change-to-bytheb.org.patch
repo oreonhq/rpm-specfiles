@@ -1,0 +1,61 @@
+From b05bf3f0af97ec3eeb66c69ff38aae47049ecd3f Mon Sep 17 00:00:00 2001
+From: Aaron Conole <aconole@redhat.com>
+Date: Sat, 18 Feb 2017 10:41:11 -0500
+Subject: [PATCH] url: change to bytheb.org
+
+Brad's site has been down for almost 2 years now.  Time to fix this.
+
+Signed-off-by: Aaron Conole <aconole@redhat.com>
+---
+ configure             | 6 +++---
+ sfuzz.c               | 2 +-
+ simple-fuzzer.spec.in | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/configure b/configure
+index 36da13a..f29246e 100755
+--- a/configure
++++ b/configure
+@@ -46,10 +46,10 @@ MD5SUM=`$WHICH md5sum 2> /dev/null`
+ 
+ GIT=`$WHICH git 2> /dev/null`
+ 
+-if [ ! -e $GIT -o ! -e .git/ ]; then
+-   MAINT="Aaron Conole <apconole@yahoo.com>"
+-else
++if [ -e "$GIT" -a -e ".git/" ]; then
+    MAINT="$($GIT config user.name) <$($GIT config user.email)>"
++else
++   MAINT="Aaron Conole <apconole@yahoo.com>"
+ fi
+ 
+ ARCH=`$UNAME -m`
+diff --git a/sfuzz.c b/sfuzz.c
+index a5f4f7a..aabb321 100644
+--- a/sfuzz.c
++++ b/sfuzz.c
+@@ -95,7 +95,7 @@ void print_help()
+ {
+     printf("\t\tSimple Fuzzer\nBy:\t Aaron Conole\n");
+     print_version();
+-    printf("url:\t http://aconole.brad-x.com/programs/sfuzz.html\n");
++    printf("url:\t http://aaron.bytheb.org/programs/sfuzz.html\n");
+     printf("EMAIL:\t apconole@yahoo.com\n");
+ #ifndef __WIN32__
+     printf("Build-prefix: %s", PREFIX);
+diff --git a/simple-fuzzer.spec.in b/simple-fuzzer.spec.in
+index 27f7d33..99939d0 100644
+--- a/simple-fuzzer.spec.in
++++ b/simple-fuzzer.spec.in
+@@ -4,7 +4,7 @@ Version: VERSION
+ Release: RELEASE
+ License: BSD
+ Group: Applications/System
+-URL: http://aconole.brad-x.com/programs/sfuzz.html
++URL: http://aaron.bytheb.org/programs/sfuzz.html
+ Source: http://aaron.bytheb.org/files/sfuzz-MAINVER-dist/sfuzz-%{version}.tar.bz2
+ 
+ %description
+-- 
+2.9.3
+

@@ -1,0 +1,28 @@
+From 06a057a0fca47e2ab49d7490644d0af4369087ae Mon Sep 17 00:00:00 2001
+From: David Faure <faure@kde.org>
+Date: Wed, 13 Jan 2016 10:53:21 +0100
+Subject: [PATCH 28/31] Better error message in case of an ical parse error.
+
+---
+ kcalcore/icalformat.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kcalcore/icalformat.cpp b/kcalcore/icalformat.cpp
+index 362710d..e11ff6c 100644
+--- a/kcalcore/icalformat.cpp
++++ b/kcalcore/icalformat.cpp
+@@ -154,9 +154,9 @@ bool ICalFormat::fromRawString(const Calendar::Ptr &cal, const QByteArray &strin
+     icalcomponent *calendar;
+ 
+     // Let's defend const correctness until the very gates of hell^Wlibical
+-    calendar = icalcomponent_new_from_string(const_cast<char*>((const char *)string));
++    calendar = icalcomponent_new_from_string(const_cast<char*>(string.constData()));
+     if (!calendar) {
+-        kError() << "parse error ; string is empty?" << string.isEmpty();
++        kError() << "parse error from icalcomponent_new_from_string. string=" << QString::fromLatin1(string);
+         setException(new Exception(Exception::ParseErrorIcal));
+         return false;
+     }
+-- 
+2.5.0
+

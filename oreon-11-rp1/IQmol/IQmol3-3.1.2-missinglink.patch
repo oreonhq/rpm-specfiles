@@ -1,0 +1,12 @@
+diff -up IQmol3-3.1.2/src/Layer/CMakeLists.txt.missinglink IQmol3-3.1.2/src/Layer/CMakeLists.txt
+--- IQmol3-3.1.2/src/Layer/CMakeLists.txt.missinglink	2023-02-09 05:00:10.000000000 +0000
++++ IQmol3-3.1.2/src/Layer/CMakeLists.txt	2023-02-23 12:03:15.129284736 +0000
+@@ -89,6 +89,8 @@ add_library(${LIB} ${SOURCES})
+ 
+ target_link_libraries(${LIB} PUBLIC
+    Configurator
++   Fort
++   Grid
+    Util
+ )
+ 

@@ -1,0 +1,12 @@
+diff -up radius-engine-1.1/acinclude.m4.compat-lua radius-engine-1.1/acinclude.m4
+--- radius-engine-1.1/acinclude.m4.compat-lua	2013-08-10 17:45:34.638386235 -0400
++++ radius-engine-1.1/acinclude.m4	2013-08-10 17:45:46.336386411 -0400
+@@ -393,7 +393,7 @@ AC_DEFUN([AM_PATH_LUA],
+   LUA_CFLAGS=''
+   LUA_LIBS=''
+ 
+-  PKG_CHECK_MODULES([LUA], [lua], [HAVE_LUA=yes])
++  PKG_CHECK_MODULES([LUA], [lua-5.1], [HAVE_LUA=yes])
+ 
+   AC_LANG_PUSH([C])
+   AC_LANG_POP()

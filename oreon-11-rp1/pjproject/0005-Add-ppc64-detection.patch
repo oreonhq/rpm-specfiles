@@ -1,0 +1,56 @@
+From fc1d773b46159e5c085f34a623a260c876c6b106 Mon Sep 17 00:00:00 2001
+From: Peter Robinson <pbrobinson@gmail.com>
+Date: Wed, 4 Oct 2023 21:20:47 -0500
+Subject: [PATCH 5/7] Add ppc64 detection
+
+---
+ pjlib/include/pj/config.h                | 10 +++++++++-
+ third_party/webrtc/src/webrtc/typedefs.h | 11 +++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/pjlib/include/pj/config.h b/pjlib/include/pj/config.h
+index 892d0dc5b..68ef340b6 100644
+--- a/pjlib/include/pj/config.h
++++ b/pjlib/include/pj/config.h
+@@ -315,7 +315,15 @@
+ #   define PJ_M_NAME            "powerpc"
+ #   define PJ_HAS_PENTIUM       0
+ #   if !PJ_IS_LITTLE_ENDIAN && !PJ_IS_BIG_ENDIAN
+-#       error Endianness must be declared for this processor
++#       if (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
++#          define PJ_IS_LITTLE_ENDIAN	1
++#          define PJ_IS_BIG_ENDIAN	0
++#       elif (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
++#          define PJ_IS_LITTLE_ENDIAN	0
++#          define PJ_IS_BIG_ENDIAN	1
++#       else
++#          error Endianness must be declared for this processor
++#       endif
+ #   endif
+ 
+ #elif defined (PJ_M_NIOS2) || defined(__nios2) || defined(__nios2__) || \
+diff --git a/third_party/webrtc/src/webrtc/typedefs.h b/third_party/webrtc/src/webrtc/typedefs.h
+index 9385befc9..76552a581 100644
+--- a/third_party/webrtc/src/webrtc/typedefs.h
++++ b/third_party/webrtc/src/webrtc/typedefs.h
+@@ -47,6 +47,17 @@
+ #elif defined(__pnacl__)
+ #define WEBRTC_ARCH_32_BITS
+ #define WEBRTC_ARCH_LITTLE_ENDIAN
++#elif defined(__powerpc__)
++# if defined(__powerpc64__)
++#  define WEBRTC_ARCH_64_BITS
++# else
++#  define WEBRTC_ARCH_32_BITS
++# endif
++# if (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
++#  define WEBRTC_ARCH_LITTLE_ENDIAN
++# elif (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
++#  define WEBRTC_ARCH_BIG_ENDIAN
++# endif
+ #else
+ #error Please add support for your architecture in typedefs.h
+ #endif
+-- 
+2.41.0
+

@@ -5,8 +5,8 @@
 
 Name:         ipmitool
 Summary:      Utility for IPMI control
-Version:      1.8.19
-Release:      12%{?dist}
+Version:      1_8_19
+Release:      1%{?dist}
 License:      BSD-3-Clause-Sun
 URL:          http://ipmitool.sourceforge.net/
 Source0:        https://github.com/%{name}/%{name}/archive/refs/tags/%{gitname}_%{gitversion}.tar.gz#/%{name}-%{version}.tar.gz

@@ -1,0 +1,22 @@
+From 87cfbf2f37b8334529564c311bb6d5c95905a4a4 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 1 Oct 2025 14:44:03 +0100
+Subject: [PATCH] Add the license to the package metadata (PEP 639)
+
+https://packaging.python.org/en/latest/guides/licensing-examples-and-user-scenarios/
+---
+ pyproject.toml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index e1fa385..67ed58e 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -10,6 +10,7 @@ dependencies = [
+     "snakemake-interface-executor-plugins>=9.3.2",
+     "snakemake-interface-logger-plugins>=1.0.0",
+ ]
++license = "MIT"
+ 
+ [project.optional-dependencies]
+ dev = ["pytest>=8.3.5", "snakemake>=9.0.1", "ruff>=0.9.10", "mypy>=1.0.0"]

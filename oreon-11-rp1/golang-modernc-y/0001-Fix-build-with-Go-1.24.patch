@@ -1,0 +1,42 @@
+From bbd9d9728cad829a031e2792e31c350b80141865 Mon Sep 17 00:00:00 2001
+From: "W. Michael Petullo" <mike@flyn.org>
+Date: Tue, 21 Jan 2025 14:31:17 -0600
+Subject: [PATCH] Fix build with Go 1.24
+
+Go 1.24 provides stricter checking that forbids passing a variable as a
+format string to Printf-like functions with no other arguments. Remove
+instances of this. See also:
+
+https://tip.golang.org/doc/go1.24#vet
+
+Signed-off-by: W. Michael Petullo <mike@flyn.org>
+---
+ CONTRIBUTORS | 1 +
+ y.go         | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/CONTRIBUTORS b/CONTRIBUTORS
+index 5e86f06..7a347ac 100644
+--- a/CONTRIBUTORS
++++ b/CONTRIBUTORS
+@@ -7,3 +7,4 @@
+ # Please keep the list sorted.
+ 
+ Jan Mercl <0xjnml@gmail.com>
++W. Michael Petullo <mike@flyn.org>
+diff --git a/y.go b/y.go
+index 5c1afff..76fbd24 100644
+--- a/y.go
++++ b/y.go
+@@ -1943,7 +1943,7 @@ func (y *y) xerrors() error {
+ 		y.fset.AddFile(y.opts.XErrorsName, -1, n),
+ 		y.opts.XErrorsSrc,
+ 		func(pos token.Position, msg string) {
+-			y.errp(pos, msg)
++			y.errp(pos, "%s", msg)
+ 		},
+ 		0, // Ignore comments
+ 	)
+-- 
+2.48.1
+

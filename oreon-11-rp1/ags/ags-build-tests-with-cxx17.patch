@@ -1,0 +1,36 @@
+diff -up ags-3.6.2.13/Common/CMakeLists.txt.cxx17 ags-3.6.2.13/Common/CMakeLists.txt
+--- ags-3.6.2.13/Common/CMakeLists.txt.cxx17	2025-09-04 10:13:12.000000000 +0200
++++ ags-3.6.2.13/Common/CMakeLists.txt	2025-09-05 00:52:47.300264039 +0200
+@@ -241,7 +241,7 @@ if(AGS_TESTS)
+         test/version_test.cpp
+     )
+     set_target_properties(common_test PROPERTIES
+-        CXX_STANDARD 11
++        CXX_STANDARD 17
+         CXX_EXTENSIONS NO
+         C_STANDARD 11
+         C_EXTENSIONS NO
+diff -up ags-3.6.2.13/Compiler/CMakeLists.txt.cxx17 ags-3.6.2.13/Compiler/CMakeLists.txt
+--- ags-3.6.2.13/Compiler/CMakeLists.txt.cxx17	2025-09-04 10:13:12.000000000 +0200
++++ ags-3.6.2.13/Compiler/CMakeLists.txt	2025-09-05 00:54:51.632435890 +0200
+@@ -92,7 +92,7 @@ if(AGS_TESTS)
+             test/cc_test_helper.h
+     )
+     set_target_properties(compiler_test PROPERTIES
+-            CXX_STANDARD 11
++            CXX_STANDARD 17
+             CXX_EXTENSIONS NO
+             C_STANDARD 11
+             C_EXTENSIONS NO
+diff -up ags-3.6.2.13/Engine/CMakeLists.txt.cxx17 ags-3.6.2.13/Engine/CMakeLists.txt
+--- ags-3.6.2.13/Engine/CMakeLists.txt.cxx17	2025-09-04 10:13:12.000000000 +0200
++++ ags-3.6.2.13/Engine/CMakeLists.txt	2025-09-05 00:55:12.224488252 +0200
+@@ -649,7 +649,7 @@ if(AGS_TESTS)
+         test/systemimports_test.cpp
+     )
+     set_target_properties(engine_test PROPERTIES
+-        CXX_STANDARD 11
++        CXX_STANDARD 17
+         CXX_EXTENSIONS NO
+         C_STANDARD 11
+         C_EXTENSIONS NO

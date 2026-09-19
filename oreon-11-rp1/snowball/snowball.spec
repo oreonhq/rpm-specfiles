@@ -14,8 +14,8 @@
 %global snowball_data_git 381b447563f9bef87b218ebbedde3159afdc3032
 
 Name:           snowball
-Version:        3.0.1
-Release:        3%{?dist}
+Version:        3.1.1
+Release:        1%{?dist}
 Summary:        Snowball compiler and stemming algorithms
 
 License:        BSD-3-Clause

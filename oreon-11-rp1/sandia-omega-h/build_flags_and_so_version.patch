@@ -1,0 +1,109 @@
+diff --git a/cmake/bob.cmake b/cmake/bob.cmake
+index 22f9e961..9a138fe9 100644
+--- a/cmake/bob.cmake
++++ b/cmake/bob.cmake
+@@ -8,9 +8,9 @@ function(bob_always_full_rpath)
+   set(CMAKE_BUILD_WITH_INSTALL_RPATH False PARENT_SCOPE)
+   # the RPATH to be used when installing, but only if it's not a system directory
+   list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
+-       "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
++       "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" isSystemDir)
+   if("${isSystemDir}" STREQUAL "-1")
+-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib" PARENT_SCOPE)
++    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" PARENT_SCOPE)
+   endif()
+   # add the automatically determined parts of the RPATH
+   # which point to directories outside the build tree to the install RPATH
+@@ -78,7 +78,7 @@ macro(bob_begin_package)
+     set(BOB_LIB_DESTINATION "bin")
+ 	set(BOB_BIN_DESTINATION "bin")
+   else()
+-    set(BOB_LIB_DESTINATION "lib")
++    set(BOB_LIB_DESTINATION "lib${LIB_SUFFIX}")
+ 	set(BOB_BIN_DESTINATION "bin")
+   endif()
+ endmacro(bob_begin_package)
+@@ -368,7 +368,7 @@ macro(bob_add_dependency)
+           ARCHIVE DESTINATION "${BOB_LIB_DESTINATION}"
+           RUNTIME DESTINATION "${BOB_LIB_DESTINATION}")
+       install(EXPORT ${tgt}-target
+-              DESTINATION lib/cmake/${PROJECT_NAME})
++              DESTINATION ${BOB_LIB_DESTINATION}/cmake/${PROJECT_NAME})
+       set(${PROJECT_NAME}_EXPORTED_TARGETS
+           ${${PROJECT_NAME}_EXPORTED_TARGETS}
+           ${tgt})
+@@ -418,7 +418,7 @@ function(bob_export_target tgt_name)
+     else()
+       install(TARGETS ${tgt_name} EXPORT ${tgt_name}-target DESTINATION "${BOB_LIB_DESTINATION}")
+       install(EXPORT ${tgt_name}-target NAMESPACE ${PROJECT_NAME}::
+-              DESTINATION lib/cmake/${PROJECT_NAME})
++              DESTINATION ${BOB_LIB_DESTINATION}/cmake/${PROJECT_NAME})
+       set(${PROJECT_NAME}_EXPORTED_TARGETS
+           ${${PROJECT_NAME}_EXPORTED_TARGETS} ${tgt_name} PARENT_SCOPE)
+     endif()
+@@ -529,7 +529,7 @@ function(bob_install_provenance)
+        "${${PROJECT_NAME}_CMAKE_ARGS}")
+   install(FILES
+       ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_cmake_args.txt
+-      DESTINATION lib/cmake/${PROJECT_NAME})
++      DESTINATION ${BOB_LIB_DESTINATION}/cmake/${PROJECT_NAME})
+   get_property(languages GLOBAL PROPERTY ENABLED_LANGUAGES)
+   string(TOUPPER "${CMAKE_BUILD_TYPE}" build_type_upper)
+   foreach(lang IN LISTS languages)
+@@ -537,7 +537,7 @@ function(bob_install_provenance)
+          "${CMAKE_${lang}_COMPILER} ${CMAKE_${lang}_FLAGS} ${CMAKE_${lang}_FLAGS_${build_type_upper}}")
+     install(FILES
+         ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_${lang}_compile_line.txt
+-        DESTINATION lib/cmake/${PROJECT_NAME})
++        DESTINATION ${BOB_LIB_DESTINATION}/cmake/${PROJECT_NAME})
+   endforeach()
+   foreach(tgt IN LISTS ${PROJECT_NAME}_EXPORTED_TARGETS)
+     get_target_property(tgt_type "${tgt}" TYPE)
+@@ -547,7 +547,7 @@ function(bob_install_provenance)
+            "${link_libs}")
+       install(FILES
+           ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_${tgt}_libs.txt
+-          DESTINATION lib/cmake/${PROJECT_NAME})
++          DESTINATION ${BOB_LIB_DESTINATION}/cmake/${PROJECT_NAME})
+     endif()
+   endforeach()
+ endfunction(bob_install_provenance)
+@@ -631,7 +631,7 @@ set(${KEY_${TYPE}} \"${val}\")")
+ ")
+   install(FILES
+     "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+-    DESTINATION lib/cmake/${PROJECT_NAME})
++    DESTINATION ${BOB_LIB_DESTINATION}/cmake/${PROJECT_NAME})
+   if(PROJECT_VERSION)
+     file(WRITE
+         ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+@@ -642,7 +642,7 @@ set(${KEY_${TYPE}} \"${val}\")")
+         COMPATIBILITY SameMajorVersion)
+     install(FILES
+       "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+-      DESTINATION lib/cmake/${PROJECT_NAME})
++      DESTINATION ${BOB_LIB_DESTINATION}/cmake/${PROJECT_NAME})
+   endif()
+   bob_install_provenance()
+ endfunction(bob_end_package)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index aa57e8bb..c20de4fb 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -173,6 +173,8 @@ add_library(omega_h ${Omega_h_SOURCES})
+ set_property(TARGET omega_h PROPERTY CXX_STANDARD "14")
+ set_property(TARGET omega_h PROPERTY CXX_STANDARD_REQUIRED ON)
+ set_property(TARGET omega_h PROPERTY CXX_EXTENSIONS OFF)
++set_property(TARGET omega_h PROPERTY VERSION ${PROJECT_VERSION})
++set_property(TARGET omega_h PROPERTY SOVERSION ${PROJECT_VERSION_MAJOR})
+ 
+ bob_library_includes(omega_h)
+ 
+@@ -181,6 +183,7 @@ target_include_directories(omega_h PRIVATE $<BUILD_INTERFACE:${TPL_PATH}>)
+ 
+ if (Omega_h_USE_OpenMP)
+   target_compile_options(omega_h PUBLIC -fopenmp)
++  target_link_options(omega_h PUBLIC -fopenmp)
+ endif()
+ 
+ bob_link_dependency(omega_h PUBLIC Kokkos)

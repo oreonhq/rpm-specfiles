@@ -1,0 +1,15 @@
+--- Makefile~	2025-05-26 06:00:19.000000000 -0500
++++ Makefile	2025-05-27 10:47:01.481843511 -0500
+@@ -1060,9 +1060,9 @@
+ 	  xdg-desktop-menu install tux4kids-tuxpaint-fullscreen.desktop ; \
+ 	  rm ./tux4kids-tuxpaint-fullscreen.desktop ; \
+ 	fi
+-	@if [ "x$(shell which update-desktop-database)" != "x" ]; then \
+-	  update-desktop-database ; \
+-	fi
++	#@if [ "x$(shell which update-desktop-database)" != "x" ]; then \
++	#  update-desktop-database ; \
++	#fi
+ 	mkdir -p $(METAINFO_PREFIX)
+ 	cp -a src/org.tuxpaint.Tuxpaint.appdata.xml $(METAINFO_PREFIX)
+ 	# ^ Instead of: install --mode=0644 -Dt $(METAINFO_PREFIX) src/org.tuxpaint.Tuxpaint.appdata.xml

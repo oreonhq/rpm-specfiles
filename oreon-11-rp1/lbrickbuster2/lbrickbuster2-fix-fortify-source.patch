@@ -1,0 +1,21 @@
+diff -u lbreakout2-2.6.5/gui/stk.c.orig lbreakout2-2.6.5/gui/stk.c
+--- lbreakout2-2.6.5/gui/stk.c.orig	2024-01-06 11:07:35.209249556 +0100
++++ lbreakout2-2.6.5/gui/stk.c	2024-01-06 11:07:46.784327417 +0100
+@@ -645,7 +645,7 @@
+         ptr = path + strlen( path );
+     }
+     va_start( args, format );
+-    vsnprintf( ptr, 511 - (path-ptr), format, args );
++    vsnprintf( ptr, sizeof(path) - (ptr - path), format, args );
+     va_end( args );
+ #ifdef STK_DEBUG
+     printf( "loading %s\n", path );
+@@ -1352,7 +1352,7 @@
+         ptr = path + strlen( path );
+     }
+     va_start( args, format );
+-    vsnprintf( ptr, 511 - (path-ptr), format, args );
++    vsnprintf( ptr, sizeof(path) - (ptr - path), format, args );
+     va_end( args );
+ #ifdef STK_DEBUG
+     printf( "loading %s\n", path );

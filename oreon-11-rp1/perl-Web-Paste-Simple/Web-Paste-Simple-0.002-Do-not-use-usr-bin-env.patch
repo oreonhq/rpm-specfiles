@@ -1,0 +1,26 @@
+From 34e5566810580986d1d85bfce1c46ab2b1947743 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 10 Sep 2015 13:13:02 +0200
+Subject: [PATCH] Do not use /usr/bin/env
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ bin/web-paste-simple.psgi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bin/web-paste-simple.psgi b/bin/web-paste-simple.psgi
+index 7ca66ee..c4a3e79 100644
+--- a/bin/web-paste-simple.psgi
++++ b/bin/web-paste-simple.psgi
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env plackup
++#!/usr/bin/plackup
+ 
+ use Web::Paste::Simple;
+ Web::Paste::Simple->new->app;
+-- 
+2.4.3
+

@@ -1,0 +1,89 @@
+#!/bin/bash
+ubuntuori () {
+   sudo wget "https://bitbucket.org/amidevous/fedora-rpm/raw/master/pbuilder/debian/pbuilderrc" -O /etc/pbuilderrc
+   sudo wget "https://bitbucket.org/amidevous/fedora-rpm/raw/master/pbuilder/debian/pbuilder-ubuntu-stable" -O /usr/bin/pbuilder-$1
+   chmod +x /usr/bin/pbuilder-$1
+   sudo pbuilder-$1 create
+}
+ubuntuarc () {
+   sudo wget "https://bitbucket.org/amidevous/fedora-rpm/raw/master/pbuilder/debian/pbuilderrc" -O /etc/pbuilderrc
+   sudo wget "https://bitbucket.org/amidevous/fedora-rpm/raw/master/pbuilder/debian/pbuilder-ubuntu-old" -O /usr/bin/pbuilder-$1
+   chmod +x /usr/bin/pbuilder-$1
+   sudo pbuilder-$1 create
+}
+ubuntuarc2 () {
+   sudo wget "https://bitbucket.org/amidevous/fedora-rpm/raw/master/pbuilder/debian/pbuilderrc" -O /etc/pbuilderrc
+   sudo wget "https://bitbucket.org/amidevous/fedora-rpm/raw/master/pbuilder/debian/pbuilder-ubuntu-old2" -O /usr/bin/pbuilder-$1
+   chmod +x /usr/bin/pbuilder-$1
+   sudo pbuilder-$1 create
+}
+debianori () {
+   sudo wget "https://bitbucket.org/amidevous/fedora-rpm/raw/master/pbuilder/debian/pbuilderrc" -O /etc/pbuilderrc
+   sudo wget "https://bitbucket.org/amidevous/fedora-rpm/raw/master/pbuilder/debian/pbuilder-debian-stable" -O /usr/bin/pbuilder-$1
+   chmod +x /usr/bin/pbuilder-$1
+   sudo pbuilder-$1 create
+}
+# Ubuntu 24.04 The Noble Numbat (le Noble numbat) support Avril 2029
+sudo rm -f /usr/share/debootstrap/scripts/noble
+sudo cp /usr/share/debootstrap/scripts/jammy /usr/share/debootstrap/scripts/noble
+ubuntuori noble
+#Ubuntu 23.10 The Mantic Minotaur (le Minotaure mantique) support Juillet 2024
+sudo rm -f /usr/share/debootstrap/scripts/mantic
+sudo cp /usr/share/debootstrap/scripts/jammy /usr/share/debootstrap/scripts/mantic
+#ubuntuori mantic
+#Ubuntu 23.04 The Lunar Lobster (le Homard lunaire) support Janvier 2024
+sudo rm -f /usr/share/debootstrap/scripts/lunar
+sudo cp /usr/share/debootstrap/scripts/jammy /usr/share/debootstrap/scripts/lunar
+#ubuntuori lunar
+#Ubuntu 22.10 The Kinetic Kudu (le Koudou cinétique) support 20 Juillet 2023 
+sudo rm -f /usr/share/debootstrap/scripts/kinetic
+sudo cp /usr/share/debootstrap/scripts/jammy /usr/share/debootstrap/scripts/kinetic
+#ubuntuarc kinetic
+#Ubuntu 22.04 LTS The Jammy Jellyfish (la méduse chanceuse) support Avril 2027
+ubuntuori jammy
+#Ubuntu 21.10 The Impish Indri (indri espiègle)
+#ubuntuarc impish
+#Ubuntu 21.04 The Hirsute Hippo (l'hippopotame hirsute)
+#ubuntuarc hirsute
+#Ubuntu 20.10 The Groovy Gorilla (le gorille sensationnel) 
+#ubuntuarc groovy
+#Ubuntu 20.04 LTS The Focal Fossa (le fossa focal)
+ubuntuori focal
+#Ubuntu 19.10 The Eoan Ermine (l'ermine de l'aube)
+#ubuntuarc eoan
+#Ubuntu 19.04 The Disco Dingo (le dingo disco)
+#ubuntuarc disco
+#Ubuntu 18.10 The Cosmic Cuttlefish (la seiche cosmique)
+#ubuntuarc cosmic
+#Ubuntu 18.04 LTS The Bionic Beaver (le castor bionique) 
+#ubuntuori bionic
+#Ubuntu 17.10 The Artful Aardvark (l'oryctérope du Cap astucieux )
+#ubuntuarc artful
+#Ubuntu 17.04 The Zesty Zapus (le zapus plaisant)
+#ubuntuarc zesty
+#Ubuntu 16.10 The Yakkety Yak (le yak bavard) 
+#ubuntuarc yakkety
+# Ubuntu 16.04 LTS The Xenial Xerus (le xerus hospitalier) 
+#ubuntuori xenial
+#Ubuntu 15.10 The Wily Werewolf (le loup-garou rusé) 
+#ubuntuarc wily
+#Ubuntu 15.04 The Vivid Vervet (le vervet vif)
+#ubuntuarc vivid
+#Ubuntu 14.10 The Utopic Unicorn (la licorne utopique)
+#ubuntuarc utopic
+#Ubuntu 14.04 LTS The Trusty Tahr (le bélier confiant)
+#ubuntuori trusty
+#Ubuntu 13.10 The Saucy Salamander (la salamandre délurée)
+#ubuntuarc saucy
+#Ubuntu 13.04 The Raring Ringtail (le bassaris enthousiaste)
+#ubuntuarc raring
+#Ubuntu 12.10 The Quantal Quetzal (le quetzal quantique) 
+#ubuntuarc quantal
+#Ubuntu 12.04 LTS The Precise Pangolin (le pangolin précis)
+#ubuntuarc2 precise
+#Ubuntu 11.10 The Oneiric Ocelot (l'ocelot onirique) 
+#ubuntuarc2 oneiric
+# Debian 12 Bookworm (Rat de bibliothèque)
+#debianori bookworm
+# Debian 11 Bullseye (Bulle)
+#debianori bullseye

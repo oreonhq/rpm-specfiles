@@ -1,0 +1,91 @@
+diff -up a2ps-4.15.3/doc/a2ps.texi.glibcpaper a2ps-4.15.3/doc/a2ps.texi
+--- a2ps-4.15.3/doc/a2ps.texi.glibcpaper	2023-04-25 15:55:46.783621115 +0200
++++ a2ps-4.15.3/doc/a2ps.texi	2023-04-25 16:01:07.004225790 +0200
+@@ -1359,6 +1359,12 @@ use output medium @var{medium}.  See the
+ default; see the man page of @code{paper} for how this is configured.
+ The default paper size may also be requested explicitly with the name
+ @samp{libpaper}.
++
++The special @var{medium} @samp{_glibc} (which, in this Red Hat Linux
++version of @samp{a2ps}, is the default) means that you want the medium
++to be determined by the locale category @samp{LC_PAPER}.  Note that this
++information is obtained from environment variables which may not be set
++up in non-interactive environments (such as in a cron job).
+ @end defvr
+ 
+ @defvr {Option}  -r
+diff -up a2ps-4.15.3/liba2ps/jobs.c.glibcpaper a2ps-4.15.3/liba2ps/jobs.c
+--- a2ps-4.15.3/liba2ps/jobs.c.glibcpaper	2023-04-25 15:55:46.781621105 +0200
++++ a2ps-4.15.3/liba2ps/jobs.c	2023-04-25 15:56:51.340944620 +0200
+@@ -119,6 +119,7 @@ a2ps_job_new (void)
+   setlocale (LC_TIME, "");
+   setlocale (LC_MESSAGES, "");
+   setlocale (LC_CTYPE, "");
++  setlocale (LC_PAPER, "");
+ 
+   bindtextdomain (PACKAGE, LOCALEDIR);
+   bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
+diff -up a2ps-4.15.3/liba2ps/options.c.glibcpaper a2ps-4.15.3/liba2ps/options.c
+--- a2ps-4.15.3/liba2ps/options.c.glibcpaper	2023-03-19 18:22:01.000000000 +0100
++++ a2ps-4.15.3/liba2ps/options.c	2023-04-25 15:57:18.942082933 +0200
+@@ -41,6 +41,8 @@
+ #include "quotearg.h"
+ #include "filalign.h"
+ #include "version-etc.h"
++#include <locale.h>
++#include <langinfo.h>
+ 
+ #define MAN_LINES               66	/* no lines for a man */
+ extern char *program_name;
+@@ -267,7 +269,8 @@ a2ps_handle_options (a2ps_job * job, int
+   struct opt_optarg *opt_optarg_head = NULL;
+   struct opt_optarg *opt_optarg = NULL;
+   int res;
+-
++  unsigned int paper_height=0;
++  
+   /* Reset optind so that getopt is reinitialized. */
+   optind = 0;
+ 
+@@ -515,7 +518,14 @@ a2ps_handle_options (a2ps_job * job, int
+ 	break;
+ 
+       case 'M':                 		/* select a medium */
+-	xstrcpy (job->medium_request, optarg);
++          if(strcasecmp("_glibc",optarg)==0){
++              paper_height = ((union { char *string; unsigned int word; })nl_langinfo(_NL_PAPER_HEIGHT)).word;
++              if(paper_height==279) /* US Letter */
++                  strcpy(optarg,"letter");
++              else /* Everyone else */
++                  strcpy(optarg,"a4");
++          }
++          xstrcpy (job->medium_request, optarg);
+ 	break;
+ 
+       case 'n':				/* n copies */
+diff -up a2ps-4.15.3/man/a2ps.1.glibcpaper a2ps-4.15.3/man/a2ps.1
+--- a2ps-4.15.3/man/a2ps.1.glibcpaper	2023-04-25 15:55:46.783621115 +0200
++++ a2ps-4.15.3/man/a2ps.1	2023-04-25 16:01:48.946435970 +0200
+@@ -67,6 +67,11 @@ Sheets:
+ .TP
+ \fB\-M\fR, \fB\-\-medium\fR=\fI\,NAME\/\fR
+ use output medium NAME
++
++The default behaviour is to use the locale category
++\fBLC_PAPER\fR to determine the medium to use.  Note that this
++information is obtained from environment variables which may not be set
++up in non-interactive environments (such as in a cron job).
+ .TP
+ \fB\-r\fR, \fB\-\-landscape\fR
+ print in landscape mode
+diff -up a2ps-4.15.3/src/main.c.glibcpaper a2ps-4.15.3/src/main.c
+--- a2ps-4.15.3/src/main.c.glibcpaper	2023-04-25 15:55:46.782621110 +0200
++++ a2ps-4.15.3/src/main.c	2023-04-25 15:57:45.302215028 +0200
+@@ -933,6 +933,7 @@ main (int argc, char *argv[])
+   setlocale (LC_TIME, "");
+   setlocale (LC_MESSAGES, "");
+   setlocale (LC_CTYPE, "");
++  setlocale (LC_PAPER, "");
+ 
+   bindtextdomain (PACKAGE, LOCALEDIR);
+   bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);

@@ -1,0 +1,37 @@
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_RigidBodyPhysics.c.fix-cast freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_RigidBodyPhysics.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_RigidBodyPhysics.c.fix-cast	2025-03-26 10:45:38.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_RigidBodyPhysics.c	2025-03-26 12:42:58.300018978 -0400
+@@ -1058,9 +1058,9 @@ void rbp_run_physics(){
+ 					contact.surface.soft_erp = ct->softnessErrorCorrection;
+ 					contact.surface.motion1 = ct->surfaceSpeed.c[0];
+ 					contact.surface.motion2 = ct->surfaceSpeed.c[1];
+-					float2double(contact.geom.pos,ct->position.c,3);
+-					float2double(contact.fdir1,ct->frictionDirection.c,2);
+-					float2double(contact.geom.normal,ct->contactNormal.c,3);
++					float2double((double *)contact.geom.pos,ct->position.c,3);
++					float2double((double *)contact.fdir1,ct->frictionDirection.c,2);
++					float2double((double *)contact.geom.normal,ct->contactNormal.c,3);
+ 
+ 					body1 = (struct X3D_RigidBody*)ct->body1;
+ 					body2 = (struct X3D_RigidBody*)ct->body2;
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/x3d_parser/X3DParser.c.fix-cast freewrl-6.7-20240420gitb3254b1/src/lib/x3d_parser/X3DParser.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/x3d_parser/X3DParser.c.fix-cast	2025-03-26 12:48:19.013808664 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/x3d_parser/X3DParser.c	2025-03-26 12:51:45.069434824 -0400
+@@ -1509,7 +1509,7 @@ void startProto_B(void* ud, const char*
+ 					value = NULL;
+ 					builtIn = FALSE;
+ 					if (fname) {
+-						ok = getFieldFromNodeAndNameC(node, fname, &type, &kind, &iifield, &builtIn, &value, &cname);
++						ok = getFieldFromNodeAndNameC(node, fname, &type, &kind, &iifield, &builtIn, &value, (const char **)&cname);
+ 					}
+ 					if (cname && value && svalue) {
+ 						deleteMallocedFieldValue(type, value);
+@@ -2299,7 +2299,7 @@ static void XMLCALL X3DstartElement(void
+ 	*/
+ 	struct X3D_Proto* isProto = availableBroto(ud, name);
+ 	if(isProto){
+-		startProto_B(ud, name, isProto, myAtts);
++		startProto_B(ud, name, isProto, (const xmlChar **)myAtts);
+ 		return;
+ 	}
+ 

@@ -1,13 +1,13 @@
-%global source0_hash b14e81143aed25ee62413f9c2b3742c558f5b6a1da6c5b92ca9a95bb6341e964
+%global source0_hash 2051e7a9c357106617ae0c666d2c4331c59f3b07b54a55a1063e7af705d82100
 
 %global framework kdeclarative
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon for Qt declarative
 
@@ -20,16 +20,16 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6GlobalAccel)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6Package)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6GlobalAccel) >= %{version}
+BuildRequires:  cmake(KF6GuiAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6IconThemes) >= %{version}
+BuildRequires:  cmake(KF6KIO) >= %{version}
+BuildRequires:  cmake(KF6Notifications) >= %{version}
+BuildRequires:  cmake(KF6Package) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  cmake(Qt6ShaderTools)
 BuildRequires:  libepoxy-devel
@@ -84,6 +84,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

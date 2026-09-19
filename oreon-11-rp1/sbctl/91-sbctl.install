@@ -1,0 +1,58 @@
+#!/bin/sh
+
+COMMAND="$1"
+KERNEL_VERSION="$2"
+ENTRY_DIR_ABS="$3"
+KERNEL_IMAGE="$4"
+
+SBCTL=/usr/bin/sbctl
+
+if [ "$KERNEL_INSTALL_LAYOUT" = "uki" ]; then
+	UKI_DIR="$KERNEL_INSTALL_BOOT_ROOT/EFI/Linux"
+	TRIES_FILE="${KERNEL_INSTALL_CONF_ROOT:-/etc/kernel}/tries"
+
+	if [ -f "$TRIES_FILE" ]; then
+		read -r TRIES <"$TRIES_FILE"
+		if ! echo "$TRIES" | grep -q '^[0-9][0-9]*$'; then
+			echo "$TRIES_FILE does not contain an integer." >&2
+			exit 1
+		fi
+		IMAGE_FILE="$UKI_DIR/$KERNEL_INSTALL_ENTRY_TOKEN-$KERNEL_VERSION+$TRIES.efi"
+	else
+		IMAGE_FILE="$UKI_DIR/$KERNEL_INSTALL_ENTRY_TOKEN-$KERNEL_VERSION.efi"
+	fi
+elif [ "$KERNEL_INSTALL_LAYOUT" = "grub" ]; then
+	IMAGE_FILE="/boot/kernel-${KERNEL_VERSION}"
+elif [ -f "/boot/vmlinuz-${KERNEL_VERSION}" ]; then
+	IMAGE_FILE="/boot/vmlinuz-${KERNEL_VERSION}"
+elif [ -f "$ENTRY_DIR_ABS/linux" ]; then
+	IMAGE_FILE="$ENTRY_DIR_ABS/linux"
+elif [ -f "$KERNEL_IMAGE" ]; then
+	IMAGE_FILE="$KERNEL_IMAGE"
+else
+	printf 'sbctl: no kernel image found for %s\n' "$KERNEL_VERSION" >&2
+	exit 1
+fi
+
+case "$COMMAND" in
+add)
+	printf 'sbctl: Signing kernel %s\n' "$IMAGE_FILE"
+
+	if ! [ "$("$SBCTL" setup --print-state --json | awk '/installed/ { gsub(/,$/,"",$2); print $2 }')" = "true" ]; then
+		echo "Secureboot key directory doesn't exist, not signing!"
+		exit 0
+	fi
+
+	if [ ! -f "$IMAGE_FILE" ]; then
+		printf 'sbctl: %s does not exist\n' "$IMAGE_FILE" >&2
+		exit 1
+	fi
+
+	"$SBCTL" sign -s "$IMAGE_FILE" 1>/dev/null
+	;;
+remove)
+	[ "${KERNEL_INSTALL_VERBOSE:-0}" -gt 0 ] &&
+		printf 'sbctl: Removing kernel %s from signing database\n' "$IMAGE_FILE"
+	"$SBCTL" remove-file "$IMAGE_FILE" 1>/dev/null || :
+	;;
+esac

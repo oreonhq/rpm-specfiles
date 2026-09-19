@@ -1,0 +1,121 @@
+diff -urp pads-1.2.orig/src/monnet.c pads-1.2/src/monnet.c
+--- pads-1.2.orig/src/monnet.c	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/monnet.c	2008-07-11 14:06:36.000000000 -0400
+@@ -214,3 +214,23 @@ short check_monnet (const struct in_addr
+     /* Asset does not fall within a monitored network. */
+     return 0;
+ }
++
++/* ----------------------------------------------------------
++ * FUNCTION     : end_monnet
++ * DESCRIPTION  : This function will free all the records
++ *              : placed in the monnet data structure.
++ * INPUT        : None!
++ * RETURN       : None!
++ * ---------------------------------------------------------- */
++void end_monnet (void)
++{
++    struct mon_net *next;
++
++    /* Free records in monnet list (mn). */
++    while (mn != NULL) {
++        next = mn->next;
++        free (mn);
++        mn = next;
++    }
++}
++
+diff -urp pads-1.2.orig/src/monnet.h pads-1.2/src/monnet.h
+--- pads-1.2.orig/src/monnet.h	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/monnet.h	2008-07-11 14:06:36.000000000 -0400
+@@ -44,6 +44,6 @@ void parse_networks (char *cmdline);
+ void init_netmasks (unsigned int nm[33]);
+ void add_monnet(char *network, char *netmask);
+ short check_monnet (const struct in_addr ip_addr);
+-
++void end_monnet (void);
+ 
+ /* GLOBALS ----------------------------------------- */
+diff -urp pads-1.2.orig/src/output/output-prelude.c pads-1.2/src/output/output-prelude.c
+--- pads-1.2.orig/src/output/output-prelude.c	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/output/output-prelude.c	2008-07-11 14:06:49.000000000 -0400
+@@ -117,7 +117,7 @@ static int init_prelude(void)
+ static int new_alert_common(idmef_message_t **idmef, idmef_alert_t **alert)
+ {
+         int ret;
+-        idmef_time_t *ctime;
++        idmef_time_t *dt_time, *cr_time;
+ 
+         ret = idmef_message_new(idmef);
+         PRELUDE_FAIL_CHECK;
+@@ -130,10 +130,12 @@ static int new_alert_common(idmef_messag
+                         IDMEF_LIST_PREPEND);
+ 
+         // Set time this was created
+-        ret = idmef_time_new_from_gettimeofday(&ctime);
++        ret = idmef_time_new_from_gettimeofday(&dt_time);
+         PRELUDE_FAIL_CHECK;
+-        idmef_alert_set_detect_time(*alert, ctime);
+-        idmef_alert_set_create_time(*alert, ctime);
++        ret = idmef_time_clone(dt_time, &cr_time);
++        PRELUDE_FAIL_CHECK;
++        idmef_alert_set_detect_time(*alert, dt_time);
++        idmef_alert_set_create_time(*alert, cr_time);
+ 
+         return 0;
+  err:
+@@ -287,6 +289,7 @@ static int asset_alert(Asset *a, idmef_m
+ 	PRELUDE_FAIL_CHECK;
+ 	ret = prelude_string_set_dup(name, (char *)bdata(a->service));
+ 	PRELUDE_FAIL_CHECK;
++        idmef_service_set_name(service, name);
+ 	if (bdata(a->application) != NULL) {
+ 		ret = idmef_alert_new_additional_data(alert, &data,
+ 			IDMEF_LIST_APPEND);
+@@ -508,6 +511,7 @@ end_output_prelude ()
+ 
+     if (client)
+         prelude_client_destroy(client, PRELUDE_CLIENT_EXIT_STATUS_SUCCESS);
++    prelude_deinit();
+     free(profile);
+ 
+     return 0;
+diff -urp pads-1.2.orig/src/pads.c pads-1.2/src/pads.c
+--- pads-1.2.orig/src/pads.c	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/pads.c	2008-07-11 14:06:36.000000000 -0400
+@@ -392,6 +392,7 @@ end_pads(void)
+     if (gc.handle) {
+         log_message("Closing PCAP Connection");
+         pcap_close(gc.handle);
++        pcap_freecode(&gc.filter);
+     }
+ 
+     /* Remove PID File */
+@@ -407,10 +408,13 @@ end_pads(void)
+ #ifndef DISABLE_VENDOR
+     end_mac_resolution();
+ #endif
++    end_monnet();
+ 
+     /* Garbage Collect GC Variable */
+     if (gc.conf_file != NULL)
+         bdestroy(gc.conf_file);
++    if (gc.dev != NULL)
++        free(gc.dev);
+     if (gc.report_file != NULL)
+         bdestroy(gc.report_file);
+     if (gc.fifo_file != NULL)
+diff -urp pads-1.2.orig/src/packet.c pads-1.2/src/packet.c
+--- pads-1.2.orig/src/packet.c	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/packet.c	2008-07-10 13:04:38.000000000 -0400
+@@ -95,6 +95,10 @@ void process_sll (const struct pcap_pkth
+     /* Extract the sll header from the packet. */
+     sllh = (struct sll_header*) packet;
+ 
++    /* Avoid bogus packets */
++    if (pkthdr->caplen < ETH_HLEN)
++	return;
++
+     /* Determine what type of sll packet this is. */
+     switch(ntohs(sllh->sll_protocol)) {
+ 	/* IP */

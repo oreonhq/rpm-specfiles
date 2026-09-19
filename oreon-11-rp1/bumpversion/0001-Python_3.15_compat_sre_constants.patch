@@ -1,0 +1,39 @@
+diff -ruN a/bumpversion/cli.py b/bumpversion/cli.py
+--- a/bumpversion/cli.py	2020-10-07 20:33:32.000000000 +0200
++++ b/bumpversion/cli.py	2025-11-24 06:50:06.246863718 +0100
+@@ -6,7 +6,6 @@
+ import logging
+ import os
+ import re
+-import sre_constants
+ import sys
+ import warnings
+ from configparser import (
+@@ -429,7 +428,7 @@
+             replace=known_args.replace,
+             part_configs=part_configs,
+         )
+-    except sre_constants.error:
++    except re.PatternError:
+         # TODO: use re.error here mayhaps, also: should we log?
+         sys.exit(1)
+     return version_config
+diff -ruN a/bumpversion/version_part.py b/bumpversion/version_part.py
+--- a/bumpversion/version_part.py	2020-10-07 20:33:32.000000000 +0200
++++ b/bumpversion/version_part.py	2025-11-24 06:50:22.246115747 +0100
+@@ -1,6 +1,5 @@
+ import logging
+ import re
+-import sre_constants
+ import string
+ 
+ from bumpversion.exceptions import (
+@@ -137,7 +136,7 @@
+ 
+         try:
+             self.parse_regex = re.compile(parse, re.VERBOSE)
+-        except sre_constants.error as e:
++        except re.PatternError as e:
+             # TODO: use re.error here mayhaps
+             logger.error("--parse '%s' is not a valid regex", parse)
+             raise e

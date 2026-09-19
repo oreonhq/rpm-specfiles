@@ -1,0 +1,11 @@
+# Global options for postfwd(8)
+
+# Default postfwd rules configuration file
+#CFG=/etc/postfwd/postfwd.cf
+
+# Server listen on IP address or Unix socket
+# Example: tcp:localhost:10040 or unix::/run/postfwd/postfwd-server.sock
+#SERVER_SOCKET=tcp:localhost:10040
+
+# Extra arguments recommented by upstream
+#ARGS=--shortlog --summary 600 --cache 600 --cache-rbl-timeout 3600 --cleanup-requests 1200 --cleanup-rbls 1800 --cleanup-rates 1200

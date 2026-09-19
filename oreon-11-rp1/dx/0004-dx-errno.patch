@@ -1,0 +1,24 @@
+From a258e060e074bfdd10e3d866b9eb1db96e0df73b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Wed, 17 Feb 2016 15:16:08 +0100
+Subject: [PATCH 4/9] dx-errno
+
+---
+ src/exec/dpexec/lex.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/exec/dpexec/lex.c b/src/exec/dpexec/lex.c
+index b421c57..37032e1 100644
+--- a/src/exec/dpexec/lex.c
++++ b/src/exec/dpexec/lex.c
+@@ -504,6 +504,7 @@ int yylex(YYSTYPE *lvalp)
+     for (;;)
+     {
+ 	yyleng = 0;
++	errno = 0;
+  
+ 	c = input();
+  
+-- 
+2.9.3
+

@@ -1,0 +1,11 @@
+--- setup.py	2023-09-09 17:50:25.197611139 +0100
++++ setup-patched.py	2023-09-09 17:49:22.028298910 +0100
+@@ -11,7 +11,7 @@
+ 
+ import codecs
+ import os
+-from distutils.core import setup, Command, Extension
++from setuptools import setup, Command, Extension
+ 
+ nmap = Extension(
+     'nmap',

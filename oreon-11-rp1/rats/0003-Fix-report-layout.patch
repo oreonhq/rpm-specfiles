@@ -1,0 +1,335 @@
+From 65b7fbc66a92edf06133c0b7f336fb11b5d1c0b9 Mon Sep 17 00:00:00 2001
+From: Christopher Meng <i@cicku.me>
+Date: Thu, 3 Jul 2014 14:41:47 +0800
+Subject: [PATCH] Fix report layout
+
+---
+ report.c | 167 ++++++++++++++++++++++++++++++++++-----------------------------
+ 1 file changed, 91 insertions(+), 76 deletions(-)
+
+diff --git a/report.c b/report.c
+index 614158a..9982f1a 100644
+--- a/report.c
++++ b/report.c
+@@ -769,24 +769,28 @@ void html_report_inputs(void)
+     if (!(flags & INPUT_MODE))
+         return;
+ 
++    printf( "<ul>\n" );
++
+     for (ptr = input_head;  ptr != (input_t *)NULL;  ptr = next)  
+     {
+         next = ptr->next;
+         if (!lookup_ignore(ptr->filename, ptr->lineno, ptr->data->Name))
+         {
+             count++;
+-            printf("<b>%s</b>: Line %d: function %s<br>\n", ptr->filename, ptr->lineno, ptr->data->Name);
++            printf("<li><b>%s</b>: Line %d: function %s</li>\n", ptr->filename, ptr->lineno, ptr->data->Name);
+         }
+         free(ptr);
+-    } 
++    }
+     input_head = input_tail = (input_t *)NULL; 
+- 
++
++    printf( "</ul>\n" );
++
+     if (count > 0)
+     {
+-        printf("<br>Double check to be sure that all input accepted from an external data source\n");
++        printf("<p>Double check to be sure that all input accepted from an external data source\n");
+         printf("does not exceed the limits of the variable being used to hold it. Also make\n");
+         printf("sure that the input cannot be used in such a manner as to alter your program's\n");
+-	    printf("behaviour in an undesirable way.<br>\n");
++	    printf("behaviour in an undesirable way.</p>\n");
+     }
+ }
+ 
+@@ -957,106 +961,114 @@ static void build_html_vulnerability(vulnerability_t *ptr) {
+             debug_vuln_dump(ptr);
+     
+     /* Output the severity */
+-    printf("  <b>Severity: %s</b><br/>\n",
+-	   severities[ptr->severity]);
+ 
+     switch (ptr->type)
+     {
+     case BOProblem:
+       if (ptr->data->BOProblem->FormatArg > 0)
+ 	{
+-	  printf("  Issue: %s<br/>\n",
++	  printf("<p>Issue: <tt>%s</tt></p>\n",
+ 		 ptr->data->Name);
+-	  printf("    Check to be sure that the format string passed as argument %d to this\n", ptr->data->BOProblem->FormatArg);
+-	  printf("    function call does not come from an untrusted source that could have added\n");
+-	  printf("    formatting characters that the code is not prepared to handle.\n");
+-	  printf("    Additionally, the format string could contain `%%s' without precision that\n");
+-	  printf("    could result in a buffer overflow.\n");
+-	  printf("  <br/>\n");
++          printf("<p>Severity: <b>%s</b></p>\n",
++          severities[ptr->severity]);
++          printf("<p>Check to be sure that the format string passed as argument %d to this\n", ptr->data->BOProblem->FormatArg);
++          printf("function call does not come from an untrusted source that could have added\n");
++          printf("formatting characters that the code is not prepared to handle.\n");
++          printf("Additionally, the format string could contain `%%s' without precision that\n");
++          printf("could result in a buffer overflow.\n");
++          printf("</p>\n");
+ 	}
+       if (ptr->data->BOProblem->SrcBufArg > 0)
+ 	{
+-	  printf("  Issue: %s<br/>\n",
++	  printf("<p>Issue: <tt>%s</tt></p>\n",
+ 		 ptr->data->Name);
+-	  printf("    Check to be sure that argument %d passed to this function call will not\n", ptr->data->BOProblem->SrcBufArg);
+-	  printf("    copy more data than can be handled, resulting in a buffer overflow.\n");
+-	  printf("  <br/>\n");
++          printf("<p>Severity: <b>%s</b></p>\n",
++          severities[ptr->severity]);
++          printf("<p>Check to be sure that argument %d passed to this function call will not\n", ptr->data->BOProblem->SrcBufArg);
++          printf("copy more data than can be handled, resulting in a buffer overflow.\n");
++          printf("</p>\n");
+ 	}
+       break;
+ 
+     case FSProblem:
+-      printf("  Issue: %s<br/>\n",
++      printf("<p>Issue: <tt>%s</tt></p>\n",
+ 	     ptr->data->Name);
+-      printf("    Check to be sure that the non-constant format string passed as argument %d \n", ptr->data->FSProblem->Arg);
+-      printf("    to this function call does not come from an untrusted source that could\n");
+-      printf("    have added formatting characters that the code is not prepared to handle.\n");
+-      printf("  <br/>\n");
++      printf("<p>Severity: <b>%s</b></p>\n",
++             severities[ptr->severity]);
++      printf("<p>Check to be sure that the non-constant format string passed as argument %d \n", ptr->data->FSProblem->Arg);
++      printf("to this function call does not come from an untrusted source that could\n");
++      printf("have added formatting characters that the code is not prepared to handle.\n");
++      printf("</p>\n");
+       break;
+ 
+     case InputProblem:
+-      printf("  Issue: %s<br/>\n",
++      printf("<p>Issue: <tt>%s</tt></p>\n",
+ 	     ptr->data->Name);
+-      printf("    Argument %d to this function call should be checked to ensure that it does\n", ptr->data->InputProblem->Arg);
+-      printf("    not come from an untrusted source without first verifying that it contains\n");
+-      printf("    nothing dangerous.\n");
+-      printf("  <br/>\n");
++      printf("<p>Severity: <b>%s</b></p>\n",
++             severities[ptr->severity]);
++      printf("<p>Argument %d to this function call should be checked to ensure that it does\n", ptr->data->InputProblem->Arg);
++      printf("not come from an untrusted source without first verifying that it contains\n");
++      printf("nothing dangerous.\n");
++      printf("</p>\n");
+       break;
+ 
+     case Info:
+-      printf("  Issue: %s<br/>\n",
++      printf("<p>Issue: <tt>%s</tt></p>\n",
+ 	     ptr->data->Name);
++      printf("<p>Severity: <b>%s</b></p>\n",
++             severities[ptr->severity]);
+       if (ptr->data->Info->Description != (char *)NULL) {
+ 	cleanup_string(ptr->data->Info->Description);
+-	printf("    %s\n", ptr->data->Info->Description);
++	printf("<p>%s</p>\n", ptr->data->Info->Description);
+       }
+       if (ptr->data->Info->URL != (char *)NULL)	{
+ 	cleanup_string(ptr->data->Info->URL);
+ 	/* This should possibly be made into it's own tag -- Robert */
+-	printf("    See also:\n %s\n", ptr->data->Info->URL);
++	printf("<p>   See also:\n %s</p>\n", ptr->data->Info->URL);
+       }
+-      printf("  <br/>\n");
+       break;
+ 
+     case RaceConditionCheck:
+-      printf("  Issue: %s<br/>\n",
++      printf("<p>Issue: %s</p>\n",
+ 	     ptr->data->Name);
+-      printf("    A potential TOCTOU (Time Of Check, Time Of Use) vulnerability exists.\n");
+-      printf("    This is the first line where a check has occured.");
++      printf("<p>Severity: <b>%s</b></p>\n",
++             severities[ptr->severity]);
++      printf("<p>A potential TOCTOU (Time Of Check, Time Of Use) vulnerability exists.\n");
++      printf("This is the first line where a check has occured.</p>");
+       if (ptr->uses != (toctou_use_t *)NULL && ptr->uses[0].lineno != 0)
+ 	{
+-	  printf("\n    The following line(s) contain uses that may match up with this check:\n");
++	  printf("<p>The following line(s) contain uses that may match up with this check:\n");
+ 	  for (i = 0;  ptr->uses[i].lineno != 0;  i++)
+ 	    printf("    %s%d (%s)", (i == 0 ? "" : ", "), ptr->uses[i].lineno, ptr->uses[i].name);
+-	  printf("\n");
++	  printf("</p>\n");
+ 	}
+       else
+ 	{
+-	  printf("    No matching uses were detected.\n");
++	  printf("<p>No matching uses were detected.</p>\n");
+ 	}
+-      printf("  <br/>\n");
+       break;
+ 
+     case RaceConditionUse:
+-      printf("  Issue: fixed size local buffer<br/>\n");
+-      printf("    A potential race condition vulnerability exists here.  Normally a call\n");
+-      printf("    to this function is vulnerable only when a match check precedes it.  No\n");
+-      printf("    check was detected, however one could still exist that could not be\n");
+-      printf("    detected.\n");
+-      printf("  <br/>\n");
++      printf("<p>Issue: fixed size local buffer</p>\n");
++      printf("<p>A potential race condition vulnerability exists here.  Normally a call\n");
++      printf("to this function is vulnerable only when a match check precedes it.  No\n");
++      printf("check was detected, however one could still exist that could not be\n");
++      printf("detected.</p>\n");
+       break;
+ 
+     case StaticLocalBuffer:
+-      printf("  Issue: fixed size global buffer<br/>\n");
+-      printf("    Extra care should be taken to ensure that character arrays that are\n");
+-      printf("    allocated on the stack are used safely.  They are prime targets for\n");
+-      printf("    buffer overflow attacks.\n");
+-      printf("  <br/>\n");
++      printf("<p>Issue: fixed size global buffer</p>\n");
++      printf("<p>Extra care should be taken to ensure that character arrays that are\n");
++      printf("allocated on the stack are used safely.  They are prime targets for\n");
++      printf("buffer overflow attacks.</p>\n");
+       break;
+ 
+     case StaticGlobalBuffer:
+-      printf("  Issue: %s<br/>\n",
++      printf("<p>Issue: %s</p>\n",
+ 	     ptr->data->Name);
+-      printf("    Extra care should be taken to ensure that character arrays that are\n");
++      printf("<p>Severity: <b>%s</b></p>\n",
++             severities[ptr->severity]);
++      printf("<p>Extra care should be taken to ensure that character arrays that are\n");
+       printf("    allocated with a static size are used safely.  This appears to be a\n");
+       printf("    global allocation and is less dangerous than a similar one on the stack.\n");
+       printf("    Extra caution is still advised, however.\n");
+@@ -1064,17 +1076,21 @@ static void build_html_vulnerability(vulnerability_t *ptr) {
+       break;
+ 
+     case Reference:
+-      printf("  Issue: %s<br/>\n",
++      printf("<p>Issue: %s</p>\n",
+ 	     ptr->data->Name);
+-      printf("    A function call is not being made here, but a reference is being made to\n");
++      printf("<p>Severity: <b>%s</b></p>\n",
++             severities[ptr->severity]);
++      printf("<p>A function call is not being made here, but a reference is being made to\n");
+       printf("    a name that is normally a vulnerable function.  It could be being\n");
+       printf("    assigned as a pointer to function.\n\n");
+-      printf("  <br/>\n");
++      printf("  </p>\n");
+       break;
+ 
+     case PythonBacktick:
+-      printf("  Issue: backtick<br/>\n");
+-      printf("    Do not use a variable that has been derived from untrusted sources\n");
++      printf("<p>Issue: backtick</p>\n");
++      printf("<p>Severity: <b>%s</b></p>\n",
++             severities[ptr->severity]);
++      printf("<p>Do not use a variable that has been derived from untrusted sources\n");
+       printf("    within a backtick.  Doing so could allow an attacker to execute\n");
+       printf("    arbitrary python code.\n");
+       printf("  <br/>\n");
+@@ -1083,18 +1099,21 @@ static void build_html_vulnerability(vulnerability_t *ptr) {
+     case PhpBacktick:
+     case PerlBacktick:
+ 	case RubyBacktick:
+-      printf("  Issue: backtick<br/>\n");
+-      printf("    The backtick will act just like an call to exec(), so care should be\n");
++      printf("<p>Issue: backtick</p>\n");
++      printf("<p>Severity: <b>%s</b></p>\n",
++             severities[ptr->severity]);
++      printf("<p>The backtick will act just like an call to exec(), so care should be\n");
+       printf("    exercised that the string being backtick evaluated does not come from an\n");
+       printf("    untrusted source.\n");
+-      printf("  <br/>\n");
++      printf("  </p>\n");
+       break;
+ 
+     case None:
+-      printf("  Issue: %s<br/>\n",
++      printf("<p>Issue: %s</p>\n",
+ 	     ptr->data->Name);
+-      printf("    Unknown!?!?\n\n");
+-      printf("  <br/>\n");
++      printf("<p>Severity: <b>%s</b></p>\n",
++             severities[ptr->severity]);
++      printf("<p>    Unknown!?!?</p>\n\n");
+       break;
+     }
+ }
+@@ -1104,7 +1123,7 @@ void generate_html() {
+   vulnerability_t *   ptr;
+ 
+   /* Initial necessary cruft */
+-  printf("<h2>RATS results.\n</h2><br>\n");
++  printf("<h2>RATS results.\n</h2>\n");
+ 
+   /* Loop iterates through all of the problems found */
+   for (ptr = list_head;  ptr != (vulnerability_t *)NULL;  ptr = ptr->next) {
+@@ -1133,7 +1152,7 @@ void generate_html() {
+        printf("<ul>\n");
+        if (!(flags & SHOW_CONTEXT))
+        {
+-         printf("File: <b>%s</b><br/>Lines: \n",
++         printf("<li>File: <b>%s</b><br/>Lines: \n",
+ 	     ptr->filename);
+        }
+     }
+@@ -1151,11 +1170,12 @@ void generate_html() {
+       printf("File: <b>%s</b> Line:<b>%d", ptr->filename, ptr->lineno);
+       if (flags & SHOW_COLUMNS)
+         printf("[%d]", ptr->column);
+-      printf("</b><br>\n");
++      printf("</b>\n");
+       ctx = getctx(ptr->filename, ptr->lineno);
+       if(ctx)
+       {
+-        printf("%s<br>\n", ctx);
++                 ctx = xml_escape(ctx);
++        printf("%s\n", ctx);
+         free(ctx);
+       }   
+     }
+@@ -1167,7 +1187,7 @@ void generate_html() {
+     if(ptr->next==(vulnerability_t *)NULL||
+        strcmp(ptr->filename,ptr->next->filename)|| ptr->type == RaceConditionCheck ||
+        ptr->next->type != ptr->type || ptr->next->data != ptr->data) {
+-      printf("  </ul>\n");
++      printf("</li>\n  </ul>\n");
+     }
+ 
+     /* If the next vuln is different reset the vuln_reported variable to 0 so
+@@ -1182,12 +1202,7 @@ void generate_html() {
+   
+   printf("<h3>Inputs detected at the following points</h3>\n");
+   
+-  printf("<ul>\n");
+   html_report_inputs();
+-  printf("</ul>\n");
+-
+-  printf("<br><br>\n");
+-
+  
+   if (!(flags & NO_FOOTER))
+   {
+@@ -1208,9 +1223,9 @@ void generate_html() {
+ #endif
+ 
+ 
+-    printf("Total lines analyzed: <b>%d</b><br>\n", total_lines);
+-    printf("Total time <b>%f</b> seconds<br>\n", fsecs);
+-    printf("<b>%d</b> lines per second<br>\n", (int)(total_lines/fsecs));
++        printf("<p>Total lines analyzed: <b>%d</b></p>\n", total_lines);
++        printf("<p>Total time <b>%f</b> seconds</p>\n", fsecs);
++        printf("<p><b>%d</b> lines per second</p>\n", (int)(total_lines/fsecs));
+     }
+ 
+   printf("</body></html>\n");
+-- 
+2.0.0
+

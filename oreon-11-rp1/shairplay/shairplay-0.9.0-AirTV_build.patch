@@ -1,0 +1,28 @@
+diff -up ./AirTV-Qt/AirTV.pro.orig ./AirTV-Qt/AirTV.pro
+--- ./AirTV-Qt/AirTV.pro.orig	2016-01-01 09:25:49.000000000 +0100
++++ ./AirTV-Qt/AirTV.pro	2016-02-12 04:19:20.367277373 +0100
+@@ -21,8 +21,8 @@ macx {
+     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
+ }
+ 
+-LIBS += -lshairplay
+-INCLUDEPATH += ../src/include/ ../src/bindings/qt4/
++LIBS += -lshairplay -L../src/lib/.libs/
++INCLUDEPATH += ../src/include/ ../src/bindings/qt4/ ../include/
+ SOURCES += main.cpp\
+     ../src/bindings/qt4/raopservice.cpp \
+     ../src/bindings/qt4/raopcallbackhandler.cpp \
+diff -up ./AirTV-Qt/mainapplication.cpp.orig ./AirTV-Qt/mainapplication.cpp
+--- ./AirTV-Qt/mainapplication.cpp.orig	2016-01-01 09:25:49.000000000 +0100
++++ ./AirTV-Qt/mainapplication.cpp	2016-02-12 05:26:30.162517868 +0100
+@@ -42,8 +42,8 @@ bool MainApplication::start()
+         return false;
+     }
+ 
+-    char chwaddr[] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB };
+-    QByteArray hwaddr(chwaddr, sizeof(chwaddr));
++    unsigned char chwaddr[] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB };
++    QByteArray hwaddr((char*)chwaddr, sizeof(chwaddr));
+ 
+     raopService->start(5000, hwaddr);
+     dnssdService->registerRaop("Shairplay", 5000, hwaddr);

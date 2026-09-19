@@ -1,0 +1,24 @@
+Declare curobj for GCC 10 as static (RHBZ#1800271, thanks to Jens Thoms Toerring)
+
+--- xforms-1.2.4/fdesign/sp_spinner.c		2013-12-14 14:26:25.000000000 +0100
++++ xforms-1.2.4/fdesign/sp_spinner.c.gcc10	2020-02-10 21:36:31.032128122 +0100
+@@ -29,7 +29,7 @@
+ #include "spec/spinner_spec.h"
+ 
+ static FD_spinnerattrib * spn_attrib;
+-FL_OBJECT *curobj;
++static FL_OBJECT *curobj;
+ 
+ 
+ /***************************************
+--- xforms-1.2.4/fdesign/sp_twheel.c		2014-06-28 22:34:29.000000000 +0200
++++ xforms-1.2.4/fdesign/sp_twheel.c.gcc10	2020-02-10 21:36:07.910351664 +0100
+@@ -38,7 +38,7 @@
+ #include "spec/twheel_spec.h"
+ 
+ static FD_twheelattrib * twheel_attrib;
+-FL_OBJECT * curobj;
++static FL_OBJECT * curobj;
+ 
+ 
+ /***************************************

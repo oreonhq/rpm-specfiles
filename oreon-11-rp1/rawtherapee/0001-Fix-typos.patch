@@ -1,0 +1,39 @@
+From d12ca94d42c1370d70fb14cc185d46aaca9c05ac Mon Sep 17 00:00:00 2001
+From: Daniel Gao <daniel.gao.work@gmail.com>
+Date: Sun, 24 Aug 2025 11:37:06 -0400
+Subject: [PATCH] Fix typos
+
+---
+ rtgui/filepanel.cc | 2 +-
+ rtgui/main.cc      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/rtgui/filepanel.cc b/rtgui/filepanel.cc
+index f069f099e..28bee9839 100644
+--- a/rtgui/filepanel.cc
++++ b/rtgui/filepanel.cc
+@@ -208,7 +208,7 @@ void FilePanel::init ()
+     dirBrowser->fillDirTree ();
+     placesBrowser->refreshPlacesList ();
+ 
+-    if (!App::get().argv0().empty() && Glib::file_test (App::get().argv1(), Glib::FILE_TEST_EXISTS)) {
++    if (!App::get().argv1().empty() && Glib::file_test (App::get().argv1(), Glib::FILE_TEST_EXISTS)) {
+         Glib::ustring d(App::get().argv1());
+         if (!Glib::file_test(d, Glib::FILE_TEST_IS_DIR)) {
+             d = Glib::path_get_dirname(d);
+diff --git a/rtgui/main.cc b/rtgui/main.cc
+index ded7076be..180e43f5d 100644
+--- a/rtgui/main.cc
++++ b/rtgui/main.cc
+@@ -139,7 +139,7 @@ int processLineParams ( int argc, char **argv )
+                     if (currParam == "-gimp") {
+                         app.setIsGimpPlugin(true);
+                         app.setIsSimpleEditor(true);
+-                        app.setIsRemote(true);
++                        app.setIsRemote(false);
+                         break;
+                     }
+ 
+-- 
+2.51.1
+

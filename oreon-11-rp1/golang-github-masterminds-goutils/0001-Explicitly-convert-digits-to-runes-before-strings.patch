@@ -1,0 +1,74 @@
+From 843efe7775e5aa8f75cad7503d314045711bd004 Mon Sep 17 00:00:00 2001
+From: Alex Hill <alexander.d.hill.89@gmail.com>
+Date: Mon, 19 Oct 2020 18:33:33 -0700
+Subject: [PATCH 1/2] Explicitly convert digits to runes before strings
+
+In Go 1.15, converting from non-byte or -rune integer types directly to
+a string became a `go vet` warning, enabled by default when running
+`go test`. Goutils was using this conversion correctly, so mechanically
+wrapping an additional conversion to `rune` (as suggested by the Go 1.15
+changelog) at the warning sites allows `go test` to run without errors
+on recent Go toolchains.
+---
+ cryptorandomstringutils.go | 2 +-
+ randomstringutils.go       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cryptorandomstringutils.go b/cryptorandomstringutils.go
+index 177dd86..388659d 100644
+--- a/cryptorandomstringutils.go
++++ b/cryptorandomstringutils.go
+@@ -115,7 +115,7 @@ func CryptoRandomAlphaNumeric(count int) (string, error) {
+ 		//Get the position between 0 and the length of the string-1  to insert a random number
+ 		position := getCryptoRandomInt(count)
+ 		//Insert a random number between [0-9] in the position
+-		RandomString = RandomString[:position] + string('0' + getCryptoRandomInt(10)) + RandomString[position + 1:]
++		RandomString = RandomString[:position] + string(rune('0' + getCryptoRandomInt(10))) + RandomString[position + 1:]
+ 		return RandomString, err
+ 	}
+ 	return RandomString, err
+diff --git a/randomstringutils.go b/randomstringutils.go
+index 1364e0c..7596c0c 100644
+--- a/randomstringutils.go
++++ b/randomstringutils.go
+@@ -115,7 +115,7 @@ func RandomAlphaNumeric(count int) (string, error) {
+ 		//Get the position between 0 and the length of the string-1  to insert a random number
+ 		position := rand.Intn(count)
+ 		//Insert a random number between [0-9] in the position
+-		RandomString = RandomString[:position] + string('0'+rand.Intn(10)) + RandomString[position+1:]
++		RandomString = RandomString[:position] + string(rune('0'+rand.Intn(10))) + RandomString[position+1:]
+ 		return RandomString, err
+ 	}
+ 	return RandomString, err
+
+From 915a85b5000abdcb0de0a129b17ada1f2ba985a7 Mon Sep 17 00:00:00 2001
+From: Alex Hill <alexander.d.hill.89@gmail.com>
+Date: Mon, 19 Oct 2020 18:37:40 -0700
+Subject: [PATCH 2/2] Run go fmt
+
+---
+ cryptorandomstringutils.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cryptorandomstringutils.go b/cryptorandomstringutils.go
+index 388659d..d1e34d1 100644
+--- a/cryptorandomstringutils.go
++++ b/cryptorandomstringutils.go
+@@ -115,7 +115,7 @@ func CryptoRandomAlphaNumeric(count int) (string, error) {
+ 		//Get the position between 0 and the length of the string-1  to insert a random number
+ 		position := getCryptoRandomInt(count)
+ 		//Insert a random number between [0-9] in the position
+-		RandomString = RandomString[:position] + string(rune('0' + getCryptoRandomInt(10))) + RandomString[position + 1:]
++		RandomString = RandomString[:position] + string(rune('0'+getCryptoRandomInt(10))) + RandomString[position+1:]
+ 		return RandomString, err
+ 	}
+ 	return RandomString, err
+@@ -204,7 +204,7 @@ func CryptoRandom(count int, start int, end int, letters bool, numbers bool, cha
+ 		if chars == nil {
+ 			ch = rune(getCryptoRandomInt(gap) + int64(start))
+ 		} else {
+-			ch = chars[getCryptoRandomInt(gap) + int64(start)]
++			ch = chars[getCryptoRandomInt(gap)+int64(start)]
+ 		}
+ 
+ 		if letters && unicode.IsLetter(ch) || numbers && unicode.IsDigit(ch) || !letters && !numbers {

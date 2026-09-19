@@ -1,0 +1,15 @@
+Avoid implicit ints, to improve compatibility with future compilers
+which may rejected them by default.
+
+diff --git a/null.c b/null.c
+index 435025ded8ecb0b7..7ba7ed2bcfbb8715 100644
+--- a/null.c
++++ b/null.c
+@@ -179,6 +179,7 @@ int f;
+ }
+ 
+ int minmaxfb(f,fb)
++int f,fb;
+ {
+   int i,j=-1;
+ 

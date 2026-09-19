@@ -1,0 +1,157 @@
+From c91e1638ff0a2385a37c3190d0e0022009b20088 Mon Sep 17 00:00:00 2001
+From: Felipe Zimmerle <felipe@zimmerle.org>
+Date: Thu, 13 Aug 2020 00:36:10 -0300
+Subject: [PATCH 1/8] Cosmetics: addresses some issues reported by cppcheck
+
+---
+ src/libinjection.h       |  4 ++--
+ src/libinjection_html5.c |  2 +-
+ src/libinjection_sqli.c  |  2 +-
+ src/libinjection_sqli.h  | 22 +++++++++++-----------
+ src/libinjection_xss.c   |  2 +-
+ 5 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/src/libinjection.h b/src/libinjection.h
+index 6b40b1d..2a4428c 100644
+--- a/src/libinjection.h
++++ b/src/libinjection.h
+@@ -47,7 +47,7 @@ const char* libinjection_version(void);
+  * \param[out] fingerprint buffer of 8+ characters.  c-string,
+  * \return 1 if SQLi, 0 if benign.  fingerprint will be set or set to empty string.
+  */
+-int libinjection_sqli(const char* s, size_t slen, char fingerprint[]);
++int libinjection_sqli(const char* input, size_t slen, char fingerprint[]);
+ 
+ /** ALPHA version of xss detector.
+  *
+@@ -58,7 +58,7 @@ int libinjection_sqli(const char* s, size_t slen, char fingerprint[]);
+  * \return 1 if XSS found, 0 if benign
+  *
+  */
+-int libinjection_xss(const char* s, size_t slen);
++int libinjection_xss(const char* s, size_t len);
+ 
+ LIBINJECTION_END_DECLS
+ 
+diff --git a/src/libinjection_html5.c b/src/libinjection_html5.c
+index a380ca0..abf3f60 100644
+--- a/src/libinjection_html5.c
++++ b/src/libinjection_html5.c
+@@ -29,7 +29,7 @@
+ /* prototypes */
+ 
+ static int h5_skip_white(h5_state_t* hs);
+-static int h5_is_white(char c);
++static int h5_is_white(char ch);
+ static int h5_state_eof(h5_state_t* hs);
+ static int h5_state_data(h5_state_t* hs);
+ static int h5_state_tag_open(h5_state_t* hs);
+diff --git a/src/libinjection_sqli.c b/src/libinjection_sqli.c
+index cecbbea..a3e0822 100644
+--- a/src/libinjection_sqli.c
++++ b/src/libinjection_sqli.c
+@@ -1202,7 +1202,7 @@ const char* libinjection_version()
+     return LIBINJECTION_VERSION;
+ }
+ 
+-int libinjection_sqli_tokenize(struct libinjection_sqli_state * sf)
++int libinjection_sqli_tokenize(struct libinjection_sqli_state *sf)
+ {
+     pt2Function fnptr;
+     size_t *pos = &sf->pos;
+diff --git a/src/libinjection_sqli.h b/src/libinjection_sqli.h
+index b974655..a6c96ff 100644
+--- a/src/libinjection_sqli.h
++++ b/src/libinjection_sqli.h
+@@ -175,7 +175,7 @@ struct libinjection_sqli_state {
+ typedef struct libinjection_sqli_state sfilter;
+ 
+ struct libinjection_sqli_token* libinjection_sqli_get_token(
+-    struct libinjection_sqli_state* sqlistate, int i);
++    struct libinjection_sqli_state* sql_state, int i);
+ 
+ /*
+  * Version info.
+@@ -193,8 +193,8 @@ const char* libinjection_version(void);
+ /**
+  *
+  */
+-void libinjection_sqli_init(struct libinjection_sqli_state* sql_state,
+-                            const char* s, size_t slen,
++void libinjection_sqli_init(struct libinjection_sqli_state *sf,
++                            const char* s, size_t len,
+                             int flags);
+ 
+ /**
+@@ -210,7 +210,7 @@ int libinjection_is_sqli(struct libinjection_sqli_state* sql_state);
+ /*  FOR HACKERS ONLY
+  *   provides deep hooks into the decision making process
+  */
+-void libinjection_sqli_callback(struct libinjection_sqli_state*  sql_state,
++void libinjection_sqli_callback(struct libinjection_sqli_state *sf,
+                                 ptr_lookup_fn fn,
+                                 void* userdata);
+ 
+@@ -218,7 +218,7 @@ void libinjection_sqli_callback(struct libinjection_sqli_state*  sql_state,
+ /*
+  * Resets state, but keeps initial string and callbacks
+  */
+-void libinjection_sqli_reset(struct libinjection_sqli_state* sql_state,
++void libinjection_sqli_reset(struct libinjection_sqli_state *sf,
+                              int flags);
+ 
+ /**
+@@ -236,17 +236,17 @@ void libinjection_sqli_reset(struct libinjection_sqli_state* sql_state,
+  *          do not free!
+  *
+  */
+-const char* libinjection_sqli_fingerprint(struct libinjection_sqli_state* sql_state,
++const char* libinjection_sqli_fingerprint(struct libinjection_sqli_state *sql_state,
+                                           int flags);
+ 
+ /**
+  * The default "word" to token-type or fingerprint function.  This
+  * uses a ASCII case-insensitive binary tree.
+  */
+-char libinjection_sqli_lookup_word(struct libinjection_sqli_state* sql_state,
++char libinjection_sqli_lookup_word(struct libinjection_sqli_state *sql_state,
+                                    int lookup_type,
+-                                   const char* s,
+-                                   size_t slen);
++                                   const char* str,
++                                   size_t len);
+ 
+ /* Streaming tokenization interface.
+  *
+@@ -255,13 +255,13 @@ char libinjection_sqli_lookup_word(struct libinjection_sqli_state* sql_state,
+  * \returns 1, has a token, keep going, or 0 no tokens
+  *
+  */
+-int  libinjection_sqli_tokenize(struct libinjection_sqli_state * sql_state);
++int  libinjection_sqli_tokenize(struct libinjection_sqli_state *sf);
+ 
+ /**
+  * parses and folds input, up to 5 tokens
+  *
+  */
+-int libinjection_sqli_fold(struct libinjection_sqli_state * sql_state);
++int libinjection_sqli_fold(struct libinjection_sqli_state *sf);
+ 
+ /** The built-in default function to match fingerprints
+  *  and do false negative/positive analysis.  This calls the following
+diff --git a/src/libinjection_xss.c b/src/libinjection_xss.c
+index f0df4d8..1de4ab8 100644
+--- a/src/libinjection_xss.c
++++ b/src/libinjection_xss.c
+@@ -20,7 +20,7 @@ static int is_black_tag(const char* s, size_t len);
+ static int is_black_url(const char* s, size_t len);
+ static int cstrcasecmp_with_null(const char *a, const char *b, size_t n);
+ static int html_decode_char_at(const char* src, size_t len, size_t* consumed);
+-static int htmlencode_startswith(const char* prefix, const char *src, size_t n);
++static int htmlencode_startswith(const char *a/* prefix */, const char *b /* src */, size_t n);
+ 
+ 
+ typedef struct stringtype {
+-- 
+2.27.0
+

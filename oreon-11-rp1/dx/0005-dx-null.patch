@@ -1,0 +1,27 @@
+From d3f3bf105b64a47a995c5e4c1bd4f18761250702 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Wed, 17 Feb 2016 15:16:29 +0100
+Subject: [PATCH 5/9] dx-null
+
+---
+ src/exec/libdx/xwindow.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/exec/libdx/xwindow.c b/src/exec/libdx/xwindow.c
+index ab25786..48e195c 100644
+--- a/src/exec/libdx/xwindow.c
++++ b/src/exec/libdx/xwindow.c
+@@ -29,7 +29,9 @@ Error
+ DXRegisterWindowHandlerWithCheckProc(Error (*proc) (int, Pointer),
+ 		int (*check)(int, Pointer), Display *d, Pointer arg)
+ {
+-    int fd = ConnectionNumber(d);
++    int fd;
++    if (d) fd = ConnectionNumber(d);
++    else return ERROR;
+ 
+     if (! DXRegisterInputHandlerWithCheckProc(proc, check, fd, arg))
+ 	return ERROR;
+-- 
+2.9.3
+

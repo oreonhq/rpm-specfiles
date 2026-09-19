@@ -1,0 +1,14 @@
+diff --git a/build_shared/makefile b/build_shared/makefile
+index 4872ba1..a7983da 100644
+--- a/build_shared/makefile
++++ b/build_shared/makefile
+@@ -73,7 +73,8 @@ wisdom.o\
+ zetahat.o
+ 
+ libwdsp.so: $(OBJS)
+-	$(CC) -shared -o ../libwdsp.so $(OBJS) $(LIBS)
++	$(CC) -shared -Wl,-soname,libwdsp.so.0.1 -z noexecstack $(LDFLAGS) -o ../libwdsp.so.0.1 $(OBJS) $(LIBS)
++	ln -s ./libwdsp.so.0.1 ../libwdsp.so
+
+ # Define the location for dependency files
+ DEPDIR = deps

@@ -1,8 +1,8 @@
 %global source0_hash 82ad632d31ee05da13b537c124f819eb88e18851d9cb0c30ae0552084811588c
 
 Name:           hiredis
-Version:        1.2.0
-Release:        9%{?dist}
+Version:        1.4.1
+Release:        1%{?dist}
 Summary:        Minimalistic C client library for Redis
 License:        LicenseRef-Callaway-BSD
 URL:            https://github.com/redis/hiredis

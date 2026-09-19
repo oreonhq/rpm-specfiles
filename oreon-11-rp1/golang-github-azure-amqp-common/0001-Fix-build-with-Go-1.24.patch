@@ -1,0 +1,32 @@
+From ea4feff4fdf35d583b8ecca48a9d4c4220dbd49e Mon Sep 17 00:00:00 2001
+From: "W. Michael Petullo" <mike@flyn.org>
+Date: Tue, 21 Jan 2025 12:18:24 -0600
+Subject: [PATCH] Fix build with Go 1.24
+
+Go 1.24 provides stricter checking that forbids passing a variable as a
+format string to Printf-like functions with no other arguments. Remove
+instances of this. See also:
+
+https://tip.golang.org/doc/go1.24#vet
+
+Signed-off-by: W. Michael Petullo <mike@flyn.org>
+---
+ sas/sas_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sas/sas_test.go b/sas/sas_test.go
+index 9154894..23ab4d1 100644
+--- a/sas/sas_test.go
++++ b/sas/sas_test.go
+@@ -64,7 +64,7 @@ func parseSig(sigStr string) (*sig, error) {
+ 		case "skn":
+ 			parsed.skn = keyValue[1]
+ 		default:
+-			return nil, fmt.Errorf(fmt.Sprintf("unknown key / value: %q", keyValue))
++			return nil, fmt.Errorf("unknown key / value: %q", keyValue)
+ 		}
+ 	}
+ 	return parsed, nil
+-- 
+2.48.1
+

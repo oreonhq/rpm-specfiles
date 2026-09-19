@@ -1,0 +1,82 @@
+diff -urBNw rss-glx_0.9.1/ChangeLog rss-glx_0.9.1.p/ChangeLog
+--- rss-glx_0.9.1/ChangeLog	2010-01-05 03:57:27.000000000 +0100
++++ rss-glx_0.9.1.p/ChangeLog	2010-01-18 12:38:23.000000000 +0100
+@@ -1,3 +1,7 @@
++****************************** Version 0.9.1.p  ********************************
++
++	Removed matrixview
++
+ ******************************* Version 0.9.1  *********************************
+ 
+ 	Added port of Pixel City, originally by Shamus Young,
+diff -urBNw rss-glx_0.9.1/configure.in rss-glx_0.9.1.p/configure.in
+--- rss-glx_0.9.1/configure.in	2010-01-05 03:59:13.000000000 +0100
++++ rss-glx_0.9.1.p/configure.in	2010-01-18 12:38:41.000000000 +0100
+@@ -1,6 +1,6 @@
+ # Process this file with autoconf to produce a configure script.
+ AC_INIT(src/driver.c)
+-AM_INIT_AUTOMAKE(rss-glx,0.9.0)
++AM_INIT_AUTOMAKE(rss-glx,0.9.0.p)
+ AM_CONFIG_HEADER(config.h)
+ 
+ # Checks for programs.
+diff -urBNw rss-glx_0.9.1/README.xscreensaver rss-glx_0.9.1.p/README.xscreensaver
+--- rss-glx_0.9.1/README.xscreensaver	2010-01-05 03:38:14.000000000 +0100
++++ rss-glx_0.9.1.p/README.xscreensaver	2010-01-18 12:47:02.000000000 +0100
+@@ -28,7 +28,6 @@
+   GL:                   "BioF"  biof --root                                 \n\
+   GL:            "BusySpheres"  busyspheres --root                          \n\
+   GL:            "SpirographX"  spirographx --root                          \n\
+-  GL:             "MatrixView"  matrixview --root                           \n\
+   GL:                 "Lorenz"  lorenz --root                               \n\
+   GL:               "Drempels"  drempels --root                             \n\
+   GL:               "Feedback"  feedback --root                             \n\
+diff -urBNw rss-glx_0.9.1/src/Makefile.am rss-glx_0.9.1.p/src/Makefile.am
+--- rss-glx_0.9.1/src/Makefile.am	2010-01-04 01:44:04.000000000 +0100
++++ rss-glx_0.9.1.p/src/Makefile.am	2010-01-18 12:47:58.000000000 +0100
+@@ -3,7 +3,7 @@
+ INCLUDES = -I$(top_srcdir)/src
+ AM_LDFLAGS = @GLEW@
+ 
+-bin_PROGRAMS = biof busyspheres colorfire cyclone drempels euphoria feedback fieldlines flocks flux helios hufo_smoke hufo_tunnel hyperspace lattice lorenz matrixview pixelcity plasma skyrocket solarwinds spirographx sundancer2
++bin_PROGRAMS = biof busyspheres colorfire cyclone drempels euphoria feedback fieldlines flocks flux helios hufo_smoke hufo_tunnel hyperspace lattice lorenz pixelcity plasma skyrocket solarwinds spirographx sundancer2
+ 
+ biof_SOURCES = driver.c biof.c
+ busyspheres_SOURCES = driver.c busyspheres.c
+@@ -33,9 +33,6 @@
+ lattice_LDADD = @BZIP2@
+ lorenz_SOURCES = driver.c lorenz.cpp
+ lorenz_LDADD = -LrsMath -lrsMath
+-matrixview_SOURCES = driver.c matrixview.c matrixview_textures.c
+-matrixview_CFLAGS = @Wand_CFLAGS@
+-matrixview_LDADD = @BZIP2@ @PTHREAD_LIBS@ @Wand_LIBS@
+ plasma_SOURCES = driver.c plasma.cpp rsDefines.h rsRand.h
+ pixelcity_SOURCES = driver.c
+ pixelcity_LDADD = @quesoglc_LIBS@ -LPixelCity -lPixelCity
+@@ -75,9 +72,6 @@
+ lattice_textures.c: stringify lattice_textures/brasstex lattice_textures/chrometex lattice_textures/circuittex lattice_textures/crystex lattice_textures/doughtex lattice_textures/ghostlytex lattice_textures/indtex1 lattice_textures/indtex2 lattice_textures/shinytex
+ 	./stringify lattice_textures/brasstex lattice_textures/chrometex lattice_textures/circuittex lattice_textures/crystex lattice_textures/doughtex lattice_textures/ghostlytex lattice_textures/indtex1 lattice_textures/indtex2 lattice_textures/shinytex > lattice_textures.c
+ 
+-matrixview_textures.c: stringify matrixview_textures/cfont matrixview_textures/cpics
+-	./stringify matrixview_textures/cfont matrixview_textures/cpics > matrixview_textures.c
+-
+ skyrocket_textures.cpp: stringify skyrocket_textures/cloudmap skyrocket_textures/earthnearmap skyrocket_textures/earthfarmap skyrocket_textures/earthlightmap skyrocket_textures/moontint skyrocket_textures/moonalpha skyrocket_textures/presmoke1 skyrocket_textures/presmoke2 skyrocket_textures/presmoke3 skyrocket_textures/presmoke4 skyrocket_textures/presmoke5
+ 	./stringify skyrocket_textures/cloudmap skyrocket_textures/earthnearmap skyrocket_textures/earthfarmap skyrocket_textures/earthlightmap skyrocket_textures/moontint skyrocket_textures/moonalpha skyrocket_textures/presmoke1 skyrocket_textures/presmoke2 skyrocket_textures/presmoke3 skyrocket_textures/presmoke4 skyrocket_textures/presmoke5 > skyrocket_textures.cpp
+ 
+@@ -115,4 +109,4 @@
+ skyrocket_LDADD = @BZIP2@ -LrsMath -lrsMath
+ endif
+ 
+-CLEANFILES = colorfire_textures.cpp euphoria_textures.c hufo_tunnel_textures.cpp lattice_textures.c matrixview_textures.c skyrocket_textures.cpp skyrocket_boomsound.cpp skyrocket_launchsound.cpp skyrocket_nukesound.cpp skyrocket_poppersound.cpp skyrocket_sucksound.cpp skyrocket_whistlesound.cpp spheremap.cpp nebulamap.cpp
++CLEANFILES = colorfire_textures.cpp euphoria_textures.c hufo_tunnel_textures.cpp lattice_textures.c skyrocket_textures.cpp skyrocket_boomsound.cpp skyrocket_launchsound.cpp skyrocket_nukesound.cpp skyrocket_poppersound.cpp skyrocket_sucksound.cpp skyrocket_whistlesound.cpp spheremap.cpp nebulamap.cpp
+diff -urBNw rss-glx_0.9.1/utils/rss-glx_install.pl rss-glx_0.9.1.p/utils/rss-glx_install.pl
+--- rss-glx_0.9.1/utils/rss-glx_install.pl	2010-01-05 03:38:40.000000000 +0100
++++ rss-glx_0.9.1.p/utils/rss-glx_install.pl	2010-01-18 12:48:17.000000000 +0100
+@@ -26,7 +26,6 @@
+ $screensavers->{'biof'} 	= '  GL:                   "BioF"  biof --root                                 \\n\\';
+ $screensavers->{'busyspheres'} 	= '  GL:            "BusySpheres"  busyspheres --root                          \\n\\';
+ $screensavers->{'spirographx'} 	= '  GL:            "SpirographX"  spirographx --root                          \\n\\';
+-$screensavers->{'matrixview'} 	= '  GL:             "MatrixView"  matrixview --root                           \\n\\';
+ $screensavers->{'lorenz'}	= '  GL:                 "Lorenz"  lorenz --root                               \\n\\';
+ $screensavers->{'drempels'}	= '  GL:               "Drempels"  drempels --root                             \\n\\';
+ $screensavers->{'feedback'}	= '  GL:               "Feedback"  feedback --root                             \\n\\';

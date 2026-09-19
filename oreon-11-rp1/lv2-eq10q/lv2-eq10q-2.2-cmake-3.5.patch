@@ -1,0 +1,10 @@
+diff -up eq10q-2.2/CMakeLists.txt.cmake-2.8.12 eq10q-2.2/CMakeLists.txt
+--- eq10q-2.2/CMakeLists.txt.cmake-2.8.12	2021-11-11 18:22:31.275950692 +0100
++++ eq10q-2.2/CMakeLists.txt	2021-11-11 18:22:55.507084225 +0100
+@@ -1,5 +1,5 @@
+ ##EQ10Q TopLevel CMake
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ PROJECT(eq10q)
+ 
+ ##ADD_DEFINITIONS(-Wall -O3 -fPIC -finline-functions -finline-functions-called-once  -msse -mfpmath=sse -std=c99)

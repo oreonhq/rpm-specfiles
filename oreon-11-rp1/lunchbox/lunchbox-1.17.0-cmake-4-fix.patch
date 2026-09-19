@@ -1,0 +1,76 @@
+diff --git a/CMake/common/Common.cmake b/CMake/common/Common.cmake
+index 081bdac..154db65 100644
+--- a/CMake/common/Common.cmake
++++ b/CMake/common/Common.cmake
+@@ -19,7 +19,7 @@
+ # - A <project>-all target to build only the given (sub)project
+ # - A <project>-install target to build and install the given (sub)project
+ 
+-cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+ 
+ if(CMAKE_INSTALL_PREFIX STREQUAL PROJECT_BINARY_DIR)
+   message(FATAL_ERROR "Cannot install into build directory")
+@@ -29,7 +29,6 @@ cmake_policy(SET CMP0020 NEW) # Automatically link Qt executables to qtmain targ
+ cmake_policy(SET CMP0037 NEW) # Target names should not be reserved and should match a validity pattern.
+ cmake_policy(SET CMP0038 NEW) # Targets may not link directly to themselves.
+ cmake_policy(SET CMP0048 NEW) # The project() command manages VERSION variables.
+-cmake_policy(SET CMP0054 OLD) # Only interpret if() arguments as variables or keywords when unquoted.
+ 
+ # WAR for CMake >=3.1 bug (observed with 3.2.3)
+ # If not set to false, any call to pkg_check_modules() or pkg_search_module()
+diff --git a/CMake/common/CommonLibrary.cmake b/CMake/common/CommonLibrary.cmake
+index 4ec9d9f..c887b30 100644
+--- a/CMake/common/CommonLibrary.cmake
++++ b/CMake/common/CommonLibrary.cmake
+@@ -44,6 +44,7 @@
+ 
+ include(CommonCheckTargets)
+ include(InstallFiles)
++include(GNUInstallDirs)
+ 
+ set(COMMON_LIBRARY_TYPE SHARED CACHE STRING
+   "Library type {any combination of SHARED, STATIC}")
+@@ -142,14 +143,14 @@ function(common_library Name)
+         install(TARGETS ${LibName}
+           ARCHIVE DESTINATION lib COMPONENT dev
+           RUNTIME DESTINATION bin COMPONENT lib
+-          LIBRARY DESTINATION lib COMPONENT lib
++          LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT lib
+           INCLUDES DESTINATION include)
+       else()
+         install(TARGETS ${LibName}
+           EXPORT ${PROJECT_NAME}Targets
+           ARCHIVE DESTINATION lib COMPONENT dev
+           RUNTIME DESTINATION bin COMPONENT lib
+-          LIBRARY DESTINATION lib COMPONENT lib
++          LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT lib
+           INCLUDES DESTINATION include)
+       endif()
+     endif()
+diff --git a/CMake/common/FindNumPy.cmake b/CMake/common/FindNumPy.cmake
+index 4d729b2..94cee86 100644
+--- a/CMake/common/FindNumPy.cmake
++++ b/CMake/common/FindNumPy.cmake
+@@ -3,7 +3,7 @@
+ # PYTHON_NUMPY_FOUND
+ # will be set by this script
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.5)
+ 
+ if(NOT PYTHON_EXECUTABLE)
+   if(NumPy_FIND_QUIETLY)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bc3b399..4ac991d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ 
+ # Copyright (c) 2012-2017 Stefan Eilemann <eile@eyescale.ch>
+ 
+-cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+ project(Lunchbox VERSION 1.17.0)
+ set(Lunchbox_VERSION_ABI 10)
+ 

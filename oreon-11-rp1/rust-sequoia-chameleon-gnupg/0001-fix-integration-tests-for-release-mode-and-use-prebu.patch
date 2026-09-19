@@ -1,0 +1,191 @@
+From a426a80e145e36d3bce62585d06e49413d2c1b33 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Tue, 19 Mar 2024 18:25:04 +0100
+Subject: [PATCH] fix integration tests for release mode and use prebuilt
+ binary
+
+---
+ tests/gpg.rs         | 49 ++-----------------------------------------
+ tests/integration.rs | 50 ++------------------------------------------
+ 2 files changed, 4 insertions(+), 95 deletions(-)
+
+diff --git a/tests/gpg.rs b/tests/gpg.rs
+index c2817d6..7c2b8a2 100644
+--- a/tests/gpg.rs
++++ b/tests/gpg.rs
+@@ -80,7 +80,7 @@ fn gpg_chameleon() -> &'static Vec<String> {
+                 std::env::current_dir().unwrap()
+                     .join("target")
+             }
+-            .join("debug/gpg-sq")
++            .join(if cfg!(debug_assertions) { "debug/gpg-sq" } else { "release/gpg-sq" })
+             .display().to_string()
+         ])
+ }
+@@ -95,21 +95,14 @@ fn gpgv_chameleon() -> &'static Vec<String> {
+                 std::env::current_dir().unwrap()
+                     .join("target")
+             }
+-            .join("debug/gpgv-sq")
++            .join(if cfg!(debug_assertions) { "debug/gpgv-sq" } else { "release/gpgv-sq" })
+             .display().to_string()
+         ])
+ }
+ 
+-const GPG_CHAMELEON_BUILD: &[&str] = &["cargo", "build", "--quiet"];
+-
+ pub const STDOUT_EDIT_DISTANCE_THRESHOLD: usize = 20;
+ pub const STDERR_EDIT_DISTANCE_THRESHOLD: usize = 20;
+ 
+-/// Sets up the test environment.
+-fn setup() {
+-    build();
+-}
+-
+ /// Makes sure that we're talking to the right oracle.
+ fn check_gpg_oracle() {
+     use std::sync::Once;
+@@ -136,43 +129,6 @@ fn check_gpg_oracle() {
+     });
+ }
+ 
+-/// Makes sure that the chameleon is built once.
+-fn build() {
+-    use std::sync::Once;
+-
+-    static START: Once = Once::new();
+-    START.call_once(|| {
+-        let mut prog = GPG_CHAMELEON_BUILD.to_vec();
+-
+-        if cfg!(feature = "crypto-nettle") {
+-            prog.push("--no-default-features");
+-            prog.push("--features=crypto-nettle");
+-        } else if cfg!(feature = "crypto-openssl") {
+-            prog.push("--no-default-features");
+-            prog.push("--features=crypto-openssl");
+-        } else if cfg!(feature = "crypto-botan") {
+-            prog.push("--no-default-features");
+-            prog.push("--features=crypto-botan");
+-        } else if cfg!(feature = "crypto-botan2") {
+-            prog.push("--no-default-features");
+-            prog.push("--features=crypto-botan2");
+-        } else if cfg!(feature = "crypto-cng") {
+-            prog.push("--no-default-features");
+-            prog.push("--features=crypto-cng");
+-        }
+-
+-        eprintln!("  - Building the chameleon:");
+-        eprintln!("    {:?}", prog);
+-
+-        let mut c = std::process::Command::new(&prog[0]);
+-        c.args(prog[1..].iter());
+-        let status = c.status().unwrap();
+-        if ! status.success() {
+-            panic!("Building the chameleon failed: {:?}", status);
+-        }
+-    });
+-}
+-
+ /// A context for GnuPG.
+ ///
+ /// Creates a temporary directory and cleans it up on Drop.
+@@ -202,7 +158,6 @@ impl Context {
+ 
+     /// Returns a context for the chameleon.
+     pub fn chameleon() -> Result<Self> {
+-        setup();
+         Context::new(gpg_chameleon().clone(), gpgv_chameleon().clone())
+     }
+ 
+diff --git a/tests/integration.rs b/tests/integration.rs
+index edf3619..5382aca 100644
+--- a/tests/integration.rs
++++ b/tests/integration.rs
+@@ -75,7 +75,7 @@ fn gpg_chameleon() -> &'static Vec<String> {
+                 std::env::current_dir().unwrap()
+                     .join("target")
+             }
+-            .join("debug/gpg-sq")
++            .join(if cfg!(debug_assertions) { "debug/gpg-sq" } else { "release/gpg-sq" })
+             .display().to_string()
+         ])
+ }
+@@ -90,58 +90,14 @@ fn gpgv_chameleon() -> &'static Vec<String> {
+                 std::env::current_dir().unwrap()
+                     .join("target")
+             }
+-            .join("debug/gpgv-sq")
++            .join(if cfg!(debug_assertions) { "debug/gpgv-sq" } else { "release/gpgv-sq" })
+             .display().to_string()
+         ])
+ }
+ 
+-const GPG_CHAMELEON_BUILD: &[&str] = &["cargo", "build", "--quiet"];
+-
+ pub const STDOUT_EDIT_DISTANCE_THRESHOLD: usize = 20;
+ pub const STDERR_EDIT_DISTANCE_THRESHOLD: usize = 20;
+ 
+-/// Sets up the test environment.
+-fn setup() {
+-    build();
+-}
+-
+-/// Makes sure that the chameleon is built once.
+-fn build() {
+-    use std::sync::Once;
+-
+-    static START: Once = Once::new();
+-    START.call_once(|| {
+-        let mut prog = GPG_CHAMELEON_BUILD.to_vec();
+-
+-        if cfg!(feature = "crypto-nettle") {
+-            prog.push("--no-default-features");
+-            prog.push("--features=crypto-nettle");
+-        } else if cfg!(feature = "crypto-openssl") {
+-            prog.push("--no-default-features");
+-            prog.push("--features=crypto-openssl");
+-        } else if cfg!(feature = "crypto-botan") {
+-            prog.push("--no-default-features");
+-            prog.push("--features=crypto-botan");
+-        } else if cfg!(feature = "crypto-botan2") {
+-            prog.push("--no-default-features");
+-            prog.push("--features=crypto-botan2");
+-        } else if cfg!(feature = "crypto-cng") {
+-            prog.push("--no-default-features");
+-            prog.push("--features=crypto-cng");
+-        }
+-
+-        eprintln!("Spawning {:?} to build the chameleon...",
+-                  prog);
+-
+-        let mut c = std::process::Command::new(&prog[0]);
+-        c.args(prog[1..].iter());
+-        let status = c.status().unwrap();
+-        if ! status.success() {
+-            panic!("Building the chameleon failed: {:?}", status);
+-        }
+-    });
+-}
+-
+ /// Opens a pipe.
+ fn pipe() -> Result<(tokio::fs::File, tokio::fs::File)> {
+     use interprocess::unnamed_pipe::pipe;
+@@ -203,7 +159,6 @@ impl<'env> Context<'env> {
+     pub fn new(recorder_dir: PathBuf, env: &'env BTreeMap<String, OsString>)
+                -> Result<Self>
+     {
+-        setup();
+         Ok(Context {
+             env,
+             gpg: gpg_chameleon().clone(),
+@@ -615,7 +570,6 @@ struct Experiment {
+ 
+ impl Experiment {
+     fn new(name: &str) -> Result<Self> {
+-        setup();
+         let tmp = tempfile::tempdir()?;
+         let tar = fs::File::open(Self::archive_file(name))
+             .with_context(|| format!("failed to open archive {}",
+-- 
+2.44.0
+

@@ -1,0 +1,28 @@
+From 2fbe0d763f5b8a85d8ab869b79b0691425fa8509 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sun, 9 Nov 2014 23:38:33 +0100
+Subject: [PATCH 2/2] dlopen is used outside server too
+
+---
+ src/CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 7891c95..292333a 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -7,9 +7,9 @@ IF ( Server )
+ 	LINK_LIBRARIES (  ${ZZIP_LIBRARY} ${CMAKE_DL_LIBS} )
+ ELSE ( Server )
+ 	IF  ( NO_Audio )
+-		LINK_LIBRARIES ( ${ZZIP_LIBRARY} ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLTTF_LIBRARY} )
++		LINK_LIBRARIES ( ${ZZIP_LIBRARY} ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLTTF_LIBRARY} ${CMAKE_DL_LIBS} )
+ 	ELSE ( NO_Audio )
+-		LINK_LIBRARIES ( ${ZZIP_LIBRARY} ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLTTF_LIBRARY} )
++		LINK_LIBRARIES ( ${ZZIP_LIBRARY} ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLTTF_LIBRARY} ${CMAKE_DL_LIBS} )
+ 	ENDIF ( NO_Audio )
+ ENDIF ( Server )
+ 
+-- 
+2.1.0
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>strife-demo.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>proprietary</project_license>
+  <name>Strife demo installer</name>
+  <summary>Strife, classic first person shooter, demo installer</summary>
+  <description>
+    <p>
+     Strife is Rogue Entertainment's classic first person shooter with
+     role-playing game elements. The Strife engine is Open Source. The original
+     Strife datafiles however are not Open Source. There is a gratis, but not
+     Open Source demo version available on the internet.
+    </p>
+    <p>
+     This package contains an applications menu entry for playing Strife
+     demo using the vavoom engine. The first time you click this menu
+     entry, it will offer to download and install the Strife demo
+     datafiles for you.
+    </p>
+  </description>
+  <url type="homepage">https://en.wikipedia.org/wiki/Strife_%28video_game%29</url>
+  <screenshots>
+    <screenshot type="default">http://vavoom-engine.com/images/shots/shot07.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

@@ -1,0 +1,19 @@
+diff -urp puppet-lint-4.2.1.orig/lib/puppet-lint/data.rb puppet-lint-4.2.1/lib/puppet-lint/data.rb
+--- puppet-lint-4.2.1.orig/lib/puppet-lint/data.rb	2024-12-03 23:07:41.960448498 +0900
++++ puppet-lint-4.2.1/lib/puppet-lint/data.rb	2024-12-04 16:54:28.470355266 +0900
+@@ -49,12 +49,13 @@ class PuppetLint::Data
+                          end
+                        else
+                          begin
+-                           caller(0..0).first[%r{`.*'}][1..-2]
++                           caller(0..0).first[%r{[`'].*'}][1..-2]
+                          rescue NoMethodError
+-                           caller(1..1).first[%r{`.*'}][1..-2]
++                           caller(1..1).first[%r{[`'].*'}][1..-2]
+                          end
+                        end
+ 
++      calling_method.gsub!(/^.*[#\.]/, "")
+       if calling_method == 'check'
+         @tokens.dup
+       else

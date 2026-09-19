@@ -1,0 +1,14 @@
+diff -rU4 n2n-3.1.1--orig/src/n2n_port_mapping.c n2n-3.1.1/src/n2n_port_mapping.c
+--- n2n-3.1.1--orig/src/n2n_port_mapping.c	2022-03-31 14:39:11.000000000 +0200
++++ n2n-3.1.1/src/n2n_port_mapping.c	2026-03-15 19:25:21.195744219 +0100
+@@ -109,9 +109,9 @@
+         traceEvent(TRACE_INFO, "    st: %s", device->st);
+         traceEvent(TRACE_INFO, "    usn: %s", device->usn);
+     }
+ 
+-    ret = UPNP_GetValidIGD(devlist, urls, data, lanaddr, N2N_NETMASK_STR_SIZE);
++    ret = UPNP_GetValidIGD(devlist, urls, data, lanaddr, N2N_NETMASK_STR_SIZE, nullptr, 0);
+     if(ret == 0) {
+         traceEvent(TRACE_WARNING, "UPnP get valid IGD failed, code %d (%s)", ret, strupnperror(ret));
+         freeUPNPDevlist(devlist);
+         devlist = NULL;

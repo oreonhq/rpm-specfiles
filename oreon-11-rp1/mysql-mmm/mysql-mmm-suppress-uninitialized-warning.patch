@@ -1,0 +1,564 @@
+diff --git a/bin/agent/check_ip b/bin/agent/check_ip
+index 8a91cf3..cbcdc32 100755
+--- a/bin/agent/check_ip
++++ b/bin/agent/check_ip
+@@ -3,6 +3,7 @@
+ # Use mandatory external modules
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Agent::Helpers::Actions;
+ 
+ # Check arguments
+diff --git a/bin/agent/clear_ip b/bin/agent/clear_ip
+index e5cb697..c31d200 100755
+--- a/bin/agent/clear_ip
++++ b/bin/agent/clear_ip
+@@ -3,6 +3,7 @@
+ # Use mandatory external modules
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Agent::Helpers::Actions;
+ 
+ # Check arguments
+diff --git a/bin/agent/configure_ip b/bin/agent/configure_ip
+index f8d2aab..9017020 100755
+--- a/bin/agent/configure_ip
++++ b/bin/agent/configure_ip
+@@ -3,6 +3,7 @@
+ # Use mandatory external modules
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Agent::Helpers::Actions;
+ 
+ # Check arguments
+diff --git a/bin/agent/mysql_allow_write b/bin/agent/mysql_allow_write
+index 9383b69..d33bb7b 100755
+--- a/bin/agent/mysql_allow_write
++++ b/bin/agent/mysql_allow_write
+@@ -3,6 +3,7 @@
+ # Use mandatory external modules
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Common::Config;
+ use MMM::Agent::Helpers::Actions;
+ 
+diff --git a/bin/agent/mysql_deny_write b/bin/agent/mysql_deny_write
+index d9692d2..ad73cf0 100755
+--- a/bin/agent/mysql_deny_write
++++ b/bin/agent/mysql_deny_write
+@@ -3,6 +3,7 @@
+ # Use mandatory external modules
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Common::Config;
+ use MMM::Agent::Helpers::Actions;
+ 
+diff --git a/bin/agent/mysql_may_write b/bin/agent/mysql_may_write
+index 417742b..e3f9043 100755
+--- a/bin/agent/mysql_may_write
++++ b/bin/agent/mysql_may_write
+@@ -3,6 +3,7 @@
+ # Use mandatory external modules
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Common::Config;
+ use MMM::Agent::Helpers::Actions;
+ 
+diff --git a/bin/agent/set_active_master b/bin/agent/set_active_master
+index 9cd306e..df985d1 100755
+--- a/bin/agent/set_active_master
++++ b/bin/agent/set_active_master
+@@ -3,6 +3,7 @@
+ # Use mandatory external modules
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Common::Config;
+ use MMM::Agent::Helpers::Actions;
+ 
+diff --git a/bin/agent/sync_with_master b/bin/agent/sync_with_master
+index cc52712..06ebb5f 100755
+--- a/bin/agent/sync_with_master
++++ b/bin/agent/sync_with_master
+@@ -3,6 +3,7 @@
+ # Use mandatory external modules
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Common::Config;
+ use MMM::Agent::Helpers::Actions;
+ 
+diff --git a/bin/agent/turn_off_slave b/bin/agent/turn_off_slave
+index 0a468d3..b7b4214 100755
+--- a/bin/agent/turn_off_slave
++++ b/bin/agent/turn_off_slave
+@@ -3,6 +3,7 @@
+ # Use mandatory external modules
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Common::Config;
+ use MMM::Agent::Helpers::Actions;
+ 
+diff --git a/bin/agent/turn_on_slave b/bin/agent/turn_on_slave
+index d6ac262..3b2fb47 100755
+--- a/bin/agent/turn_on_slave
++++ b/bin/agent/turn_on_slave
+@@ -3,6 +3,7 @@
+ # Use mandatory external modules
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Common::Config;
+ use MMM::Agent::Helpers::Actions;
+ 
+diff --git a/bin/monitor/checker b/bin/monitor/checker
+index 345abf6..e7e30d7 100755
+--- a/bin/monitor/checker
++++ b/bin/monitor/checker
+@@ -3,6 +3,7 @@
+ # Use mandatory external modules
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw( OUTPUT_AUTOFLUSH );
+ use Log::Log4perl qw(:easy);
+ 
+diff --git a/bin/tools/create_snapshot b/bin/tools/create_snapshot
+index 7538789..fe19ebd 100755
+--- a/bin/tools/create_snapshot
++++ b/bin/tools/create_snapshot
+@@ -2,6 +2,7 @@
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use DBI;
+ use MMM::Common::Config;
+ use MMM::Tools::Snapshot::LVM;
+diff --git a/bin/tools/remove_snapshot b/bin/tools/remove_snapshot
+index 59f8d91..db24c3e 100755
+--- a/bin/tools/remove_snapshot
++++ b/bin/tools/remove_snapshot
+@@ -2,6 +2,7 @@
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Common::Config;
+ use MMM::Tools::Snapshot::LVM;
+ 
+diff --git a/lib/Agent/Agent.pm b/lib/Agent/Agent.pm
+index c98f39a..31fa22c 100644
+--- a/lib/Agent/Agent.pm
++++ b/lib/Agent/Agent.pm
+@@ -2,6 +2,7 @@ package MMM::Agent::Agent;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw(EVAL_ERROR);
+ use Algorithm::Diff;
+ use DBI;
+diff --git a/lib/Agent/Helpers.pm b/lib/Agent/Helpers.pm
+index c0155e4..33f3b91 100644
+--- a/lib/Agent/Helpers.pm
++++ b/lib/Agent/Helpers.pm
+@@ -2,6 +2,7 @@ package MMM::Agent::Helpers;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ 
+ our $VERSION = 	'0.01';
+diff --git a/lib/Agent/Helpers/Actions.pm b/lib/Agent/Helpers/Actions.pm
+index c39b674..33e2102 100644
+--- a/lib/Agent/Helpers/Actions.pm
++++ b/lib/Agent/Helpers/Actions.pm
+@@ -2,6 +2,7 @@ package MMM::Agent::Helpers::Actions;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Agent::Helpers::Network;
+ 
+ our $VERSION = '0.01';
+diff --git a/lib/Agent/Helpers/Network.pm b/lib/Agent/Helpers/Network.pm
+index b0d5a8b..38619bf 100644
+--- a/lib/Agent/Helpers/Network.pm
++++ b/lib/Agent/Helpers/Network.pm
+@@ -2,6 +2,7 @@ package MMM::Agent::Helpers::Network;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw( OSNAME );
+ 
+ our $VERSION = '0.01';
+diff --git a/lib/Agent/Role.pm b/lib/Agent/Role.pm
+index b9723c2..a4e69cd 100644
+--- a/lib/Agent/Role.pm
++++ b/lib/Agent/Role.pm
+@@ -3,6 +3,7 @@ use base 'MMM::Common::Role';
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ use MMM::Agent::Helpers;
+ 
+diff --git a/lib/Common/Angel.pm b/lib/Common/Angel.pm
+index 7ad7e88..ac49309 100644
+--- a/lib/Common/Angel.pm
++++ b/lib/Common/Angel.pm
+@@ -2,6 +2,7 @@ package MMM::Common::Angel;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw( CHILD_ERROR ERRNO );
+ use Log::Log4perl qw(:easy);
+ use Errno qw( EINTR );
+diff --git a/lib/Common/Config.pm b/lib/Common/Config.pm
+index 6c0af28..948a728 100644
+--- a/lib/Common/Config.pm
++++ b/lib/Common/Config.pm
+@@ -2,6 +2,7 @@ package MMM::Common::Config;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw( NR );
+ use Log::Log4perl qw(:easy);
+ 
+diff --git a/lib/Common/Log.pm b/lib/Common/Log.pm
+index ae3910b..3b527e5 100644
+--- a/lib/Common/Log.pm
++++ b/lib/Common/Log.pm
+@@ -2,6 +2,7 @@ package MMM::Common::Log;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ use English qw( PROGRAM_NAME );
+ 
+diff --git a/lib/Common/PidFile.pm b/lib/Common/PidFile.pm
+index 2de55eb..70b39b6 100644
+--- a/lib/Common/PidFile.pm
++++ b/lib/Common/PidFile.pm
+@@ -2,6 +2,7 @@ package MMM::Common::PidFile;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw( PROCESS_ID );
+ use Log::Log4perl qw(:easy);
+ 
+diff --git a/lib/Common/Role.pm b/lib/Common/Role.pm
+index 211ab5f..4f48172 100644
+--- a/lib/Common/Role.pm
++++ b/lib/Common/Role.pm
+@@ -2,6 +2,7 @@ package MMM::Common::Role;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ 
+ our $VERSION = '0.01';
+ 
+diff --git a/lib/Common/Socket.pm b/lib/Common/Socket.pm
+index 38e1f7b..a072ca9 100644
+--- a/lib/Common/Socket.pm
++++ b/lib/Common/Socket.pm
+@@ -2,6 +2,7 @@ package MMM::Common::Socket;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ use IO::Socket::INET;
+ 
+diff --git a/lib/Common/Uptime.pm b/lib/Common/Uptime.pm
+index 4b7c71c..c8e0c55 100644
+--- a/lib/Common/Uptime.pm
++++ b/lib/Common/Uptime.pm
+@@ -2,6 +2,7 @@ package MMM::Common::Uptime;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw( OSNAME );
+ use Log::Log4perl qw(:easy);
+ 
+diff --git a/lib/Monitor/Agent.pm b/lib/Monitor/Agent.pm
+index a72c98c..f12a93a 100644
+--- a/lib/Monitor/Agent.pm
++++ b/lib/Monitor/Agent.pm
+@@ -2,6 +2,7 @@ package MMM::Monitor::Agent;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ use MMM::Common::Socket;
+ use MMM::Monitor::ChecksStatus;
+diff --git a/lib/Monitor/Agents.pm b/lib/Monitor/Agents.pm
+index d1ba80a..12f3f99 100644
+--- a/lib/Monitor/Agents.pm
++++ b/lib/Monitor/Agents.pm
+@@ -3,6 +3,7 @@ use base 'Class::Singleton';
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ use IO::Handle;
+ use File::Temp;
+diff --git a/lib/Monitor/CheckResult.pm b/lib/Monitor/CheckResult.pm
+index cde4184..ec42a02 100644
+--- a/lib/Monitor/CheckResult.pm
++++ b/lib/Monitor/CheckResult.pm
+@@ -2,6 +2,7 @@ package MMM::Monitor::CheckResult;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ use threads;
+ use threads::shared;
+diff --git a/lib/Monitor/Checker.pm b/lib/Monitor/Checker.pm
+index a4f2ea7..1a5fe52 100644
+--- a/lib/Monitor/Checker.pm
++++ b/lib/Monitor/Checker.pm
+@@ -2,6 +2,7 @@ package MMM::Monitor::Checker;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ use IPC::Open2;
+ use MMM::Monitor::CheckResult;
+diff --git a/lib/Monitor/Checker/Checks.pm b/lib/Monitor/Checker/Checks.pm
+index 6e200b6..2eeeae3 100644
+--- a/lib/Monitor/Checker/Checks.pm
++++ b/lib/Monitor/Checker/Checks.pm
+@@ -2,6 +2,7 @@ package MMM::Monitor::Checker::Checks;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw(OSNAME EFFECTIVE_USER_ID);
+ use DBI;
+ use Net::Ping;
+diff --git a/lib/Monitor/ChecksStatus.pm b/lib/Monitor/ChecksStatus.pm
+index a68e159..6b1a9ca 100644
+--- a/lib/Monitor/ChecksStatus.pm
++++ b/lib/Monitor/ChecksStatus.pm
+@@ -3,6 +3,7 @@ use base 'Class::Singleton';
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ use MMM::Monitor::Checker
+ 
+diff --git a/lib/Monitor/Commands.pm b/lib/Monitor/Commands.pm
+index 9503c8d..972fdac 100644
+--- a/lib/Monitor/Commands.pm
++++ b/lib/Monitor/Commands.pm
+@@ -2,6 +2,7 @@ package MMM::Monitor::Commands;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ use List::Util qw(max);
+ use threads;
+diff --git a/lib/Monitor/Monitor.pm b/lib/Monitor/Monitor.pm
+index 7cf7dbf..f96503b 100644
+--- a/lib/Monitor/Monitor.pm
++++ b/lib/Monitor/Monitor.pm
+@@ -2,6 +2,7 @@ package MMM::Monitor::Monitor;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use threads;
+ use threads::shared;
+ use Algorithm::Diff;
+diff --git a/lib/Monitor/NetworkChecker.pm b/lib/Monitor/NetworkChecker.pm
+index 8529d11..1a6d2e2 100644
+--- a/lib/Monitor/NetworkChecker.pm
++++ b/lib/Monitor/NetworkChecker.pm
+@@ -2,6 +2,7 @@ package MMM::Monitor::NetworkChecker;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ use MMM::Monitor::Checker;
+ 
+diff --git a/lib/Monitor/Role.pm b/lib/Monitor/Role.pm
+index ec1ce46..725cce3 100644
+--- a/lib/Monitor/Role.pm
++++ b/lib/Monitor/Role.pm
+@@ -2,6 +2,7 @@ package MMM::Monitor::Role;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use MMM::Common::Role;
+ 
+ our $VERSION = '0.01';
+diff --git a/lib/Monitor/Roles.pm b/lib/Monitor/Roles.pm
+index c5fcda8..68b3d44 100644
+--- a/lib/Monitor/Roles.pm
++++ b/lib/Monitor/Roles.pm
+@@ -3,6 +3,7 @@ use base 'Class::Singleton';
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ use MMM::Monitor::Agents;
+ use MMM::Monitor::Role;
+diff --git a/lib/Monitor/StartupStatus.pm b/lib/Monitor/StartupStatus.pm
+index b4ab43e..0051a03 100644
+--- a/lib/Monitor/StartupStatus.pm
++++ b/lib/Monitor/StartupStatus.pm
+@@ -2,6 +2,7 @@ package MMM::Monitor::StartupStatus;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use List::Util qw(max);
+ use Log::Log4perl qw(:easy);
+ use MMM::Common::Role;
+diff --git a/lib/Tools/MySQL.pm b/lib/Tools/MySQL.pm
+index 505c162..4c2e81a 100644
+--- a/lib/Tools/MySQL.pm
++++ b/lib/Tools/MySQL.pm
+@@ -2,6 +2,7 @@ package MMM::Tools::MySQL;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use DBI;
+ use Log::Log4perl qw(:easy);
+ 
+diff --git a/lib/Tools/Snapshot/LVM.pm b/lib/Tools/Snapshot/LVM.pm
+index 8cad596..e9408e2 100644
+--- a/lib/Tools/Snapshot/LVM.pm
++++ b/lib/Tools/Snapshot/LVM.pm
+@@ -2,6 +2,7 @@ package MMM::Tools::Snapshot::LVM;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Log::Log4perl qw(:easy);
+ 
+ 
+diff --git a/lib/Tools/Snapshot/MySQL.pm b/lib/Tools/Snapshot/MySQL.pm
+index 85300c0..510b916 100644
+--- a/lib/Tools/Snapshot/MySQL.pm
++++ b/lib/Tools/Snapshot/MySQL.pm
+@@ -2,6 +2,7 @@ package MMM::Tools::Snapshot::MySQL;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use Data::Dumper;
+ use DBI;
+ use Log::Log4perl qw(:easy);
+diff --git a/lib/Tools/Tools.pm b/lib/Tools/Tools.pm
+index 5820cb9..b7f350c 100644
+--- a/lib/Tools/Tools.pm
++++ b/lib/Tools/Tools.pm
+@@ -2,6 +2,7 @@ package MMM::Tools::Tools;
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw(FORMAT_NAME);
+ use Path::Class qw(dir);
+ use Log::Log4perl qw(:easy);
+diff --git a/sbin/mmm_agentd b/sbin/mmm_agentd
+index 343f5c1..af6a6b9 100755
+--- a/sbin/mmm_agentd
++++ b/sbin/mmm_agentd
+@@ -2,6 +2,7 @@
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw( PROGRAM_NAME );
+ use File::Basename;
+ use Proc::Daemon;
+diff --git a/sbin/mmm_backup b/sbin/mmm_backup
+index fc7ae50..a105648 100755
+--- a/sbin/mmm_backup
++++ b/sbin/mmm_backup
+@@ -2,6 +2,7 @@
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw( PROGRAM_NAME );
+ use File::Basename;
+ use Log::Log4perl qw(:easy);
+diff --git a/sbin/mmm_clone b/sbin/mmm_clone
+index 5217314..73c1ea8 100755
+--- a/sbin/mmm_clone
++++ b/sbin/mmm_clone
+@@ -2,6 +2,7 @@
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw( PROGRAM_NAME );
+ use File::Basename;
+ use Log::Log4perl qw(:easy);
+diff --git a/sbin/mmm_control b/sbin/mmm_control
+index 597b9a1..95a2264 100755
+--- a/sbin/mmm_control
++++ b/sbin/mmm_control
+@@ -2,6 +2,7 @@
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw( PROGRAM_NAME );
+ use File::Basename;
+ use Log::Log4perl qw(:easy);
+diff --git a/sbin/mmm_mond b/sbin/mmm_mond
+index 6f9643b..9ed50c2 100755
+--- a/sbin/mmm_mond
++++ b/sbin/mmm_mond
+@@ -2,6 +2,7 @@
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use threads;
+ use threads::shared;
+ use Config;
+diff --git a/sbin/mmm_restore b/sbin/mmm_restore
+index 6dc9248..d80adaf 100755
+--- a/sbin/mmm_restore
++++ b/sbin/mmm_restore
+@@ -2,6 +2,7 @@
+ 
+ use strict;
+ use warnings FATAL => 'all';
++no warnings 'uninitialized';
+ use English qw( PROGRAM_NAME FORMAT_NAME );
+ use File::Basename;
+ use Log::Log4perl qw(:easy);

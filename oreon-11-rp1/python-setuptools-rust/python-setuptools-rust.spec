@@ -1,84 +1,41 @@
-%global source0_hash d94a93f0c97751c17014565f07bdc324bee45d396cd1bba83d8e7af92b945f0c
-
-# RHEL does not have packaged rust libraries
-%bcond packaged_rust_libraries %[ %{undefined rhel} || %{defined epel} ]
-# The integration tests depend on the presence of these libraries
-%bcond integration_tests %{with packaged_rust_libraries}
-# Regex of integration tests to skip.
-#  * html-py-ever requires unpackaged rust crates
-%global integration_tests_exc '^(html-py-ever)'
+%global source0_hash none
 
 Name:           python-setuptools-rust
-Version:        1.12.0
+Version:        1.13.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Setuptools Rust extension plugin
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/PyO3/setuptools-rust
-Source0:        https://files.pythonhosted.org/packages/source/s/setuptools_rust/setuptools_rust-1.12.0.tar.gz
-
-# Allow building examples with PyO3 0.26, 0.27, and 0.28:
-# https://github.com/PyO3/setuptools-rust/commit/6868a518681cfd99544c45c33ccd8d752d386c1c
-# https://github.com/PyO3/setuptools-rust/commit/7b4279c196117c59c80d98e1d7d3cad70f6ed6c3
-# https://github.com/PyO3/setuptools-rust/commit/112be5ce8a82d955fb0b8bea9653f24173d1e475
-# https://github.com/PyO3/setuptools-rust/commit/608006f30addc03341daca6ee0d4d4a6439b1302
-# https://github.com/PyO3/setuptools-rust/commit/8a76c7dd45af4cdaced3da756b4f898a34035bf5
-# https://github.com/PyO3/setuptools-rust/pull/576
-Patch:          setuptools_rust-1.12.0-pyo3-0.28.patch
+Source:         %{pypi_source setuptools_rust}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  %{py3_dist pytest}
-%if %{undefined rhel} || %{defined epel}
-BuildRequires:  cargo-rpm-macros >= 24
-%else
-# RHEL has rust-toolset instead of cargo-rpm-macros
-BuildRequires:  rust-toolset >= 1.45
-%endif
-%if %{with integration_tests}
-BuildRequires:  %{py3_dist cffi}
-%endif
 
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Setuptools helpers for Rust Python extensions. Compile and distribute Python
-extensions written in Rust as easily as if they were written in C.}
+This is package 'setuptools-rust' generated automatically by pyp2spec.}
 
-%description %{_description}
+Patch:          setuptools_rust-1.12.0-pyo3-0.28.patch
 
+%description %_description
 
 %package -n     python3-setuptools-rust
 Summary:        %{summary}
-Requires:       cargo
 
-%description -n python3-setuptools-rust %{_description}
+%description -n python3-setuptools-rust %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n setuptools_rust-%{version}
-
-%cargo_prep
-
-%if %{with integration_tests}
-for example in $(ls examples/ | grep -vE %{integration_tests_exc}); do
-    cd "examples/${example}"
-    %cargo_prep
-    cd -
-done
-%endif
 
 
 %generate_buildrequires
 %pyproject_buildrequires
-%if %{with integration_tests}
-for example in $(ls examples/ | grep -vE %{integration_tests_exc}); do
-    cd "examples/${example}"
-    %cargo_generate_buildrequires
-    cd - >&2
-done
-%endif
 
 
 %build
@@ -87,45 +44,16 @@ done
 
 %install
 %pyproject_install
-%pyproject_save_files -l setuptools_rust
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pyproject_check_import
-# Disable tests that require internet access and/or test Windows functionality
-%global test_ignores %{shrink:
-        not test_adjusted_local_rust_target_windows_msvc
-    and not test_get_lib_name_namespace_package
-}
-
-%if %{without packaged_rust_libraries}
-%global test_ignores %{shrink:%{test_ignores}
-    and not test_metadata_contents
-    and not test_metadata_cargo_log
-}
-%endif
-
-%pytest tests/ setuptools_rust/ --import-mode importlib -k '%{test_ignores}'
-
-%if %{with integration_tests}
-export %{py3_test_envvars}
-%global _pyproject_wheeldir dist
-for example in $(ls examples/ | grep -vE %{integration_tests_exc}); do
-    cd "examples/${example}"
-    %pyproject_wheel
-    if [ -d "tests/" ]; then
-        %{python3} -m venv venv --system-site-packages
-        ./venv/bin/pip install dist/*.whl
-        ./venv/bin/python -Pm pytest tests/
-    fi
-    cd -
-done
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
 %files -n python3-setuptools-rust -f %{pyproject_files}
-%doc README.md CHANGELOG.md
-
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12.0-1

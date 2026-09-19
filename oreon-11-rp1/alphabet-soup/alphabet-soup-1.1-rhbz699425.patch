@@ -1,0 +1,30 @@
+--- alphabet-soup-1.1/dictionary.c	2011-07-16 17:33:05.156782507 +0200
++++ new/dictionary.c	2011-07-16 17:32:56.727782244 +0200
+@@ -98,25 +98,15 @@
+ void dictionary_load(DICTIONARY * dp, char * fn)
+ {
+ 	PACKFILE * fp;
+-	char word[128];
++	char word[WORD_MAX_LENGTH];
+ 	int i;
+ 	
+ 	dp->words = 0;
+ 	dp->word_min = 64;
+ 	dp->word_max = 0;
+ 	fp = pack_fopen(fn, "r");
+-	while(!pack_feof(fp))
++	while(pack_fgets(word, WORD_MAX_LENGTH, fp))
+ 	{
+-		for(i = 0; i < 32; i++)
+-		{
+-			word[i] = pack_getc(fp);
+-			if(word[i] == '\r')
+-			{
+-				word[i] = '\0';
+-				pack_getc(fp);
+-				break;
+-			}
+-		}
+ 		if(strlen(word) > 0)
+ 		{
+ 			dictionary_add(dp, word);

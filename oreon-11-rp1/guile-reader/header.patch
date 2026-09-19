@@ -1,0 +1,12 @@
+diff -ruN guile-reader-0.6.3/src/compat.c guile-reader-0.6.3-dep/src/compat.c
+--- guile-reader-0.6.3/src/compat.c	2020-07-27 01:44:34.000000000 +0300
++++ guile-reader-0.6.3-dep/src/compat.c	2024-09-30 14:10:07.382998153 +0300
+@@ -21,6 +21,8 @@
+ #endif
+ 
+ #include <libguile.h>
++// https://gitweb.gentoo.org/repo/gentoo.git/diff/dev-scheme/guile-reader/files/guile-reader-0.6.3-implicit-fn-decl.patch
++#include <libguile/deprecation.h>
+ #include <compat.h>
+ #include <string.h>
+ #include <stdio.h>

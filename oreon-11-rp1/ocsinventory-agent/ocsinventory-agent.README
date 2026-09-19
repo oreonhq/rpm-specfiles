@@ -1,0 +1,34 @@
+Thie RPM install the OCS Inventory NG client
+It is configure to generate a local report:
+
+	/var/lib/ocsinventory-agent/<DEVIDE_ID>.ocs
+
+If you want it to automaticaly and regularly transfer the 
+result to your organization communication server, edit the 
+configuration file:
+
+	/etc/sysconfig/ocsinventory-agent
+
+You may choose how often to run the 'cron' script via
+the provided systemd timers.
+
+The 'cron' script will respect the server PROLOQ_FREQ.
+
+An hourly run will report back to the server when the
+PROLOQ_FREQ is over, but will prevent some hibernation.
+
+The less frequent runs may result in clients that do not
+report back within certian time frames.
+
+If you want to deploy this client on a important number of
+computer, you can generate a already configured RPM with
+
+rpmbuild -bb \
+	--define "ocstag    tagvalue" \
+	--define "ocsserver ocsserver.domain.tld:port" \
+	ocsinventory-agent-<version>.src.rpm
+
+Result will be : ocsinventory-agent-<version>.<tagvalue>.noarch.rpm
+
+When using a personalized RPM, the cron is enabled by default.
+

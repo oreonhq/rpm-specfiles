@@ -1,0 +1,14 @@
+diff --git a/discovery/azure/azure_test.go b/discovery/azure/azure_test.go
+index a6e3a6713..14c029460 100644
+--- a/discovery/azure/azure_test.go
++++ b/discovery/azure/azure_test.go
+@@ -45,7 +45,7 @@ const defaultMockNetworkID string = "/subscriptions/{subscriptionId}/resourceGro
+ 
+ func TestMain(m *testing.M) {
+ 	goleak.VerifyTestMain(m,
+-		goleak.IgnoreTopFunction("github.com/Code-Hex/go-generics-cache.(*janitor).run.func1"),
++		goleak.IgnoreTopFunction("github.com/prometheus/prometheus/vendor/github.com/Code-Hex/go-generics-cache.(*janitor).run.func1"),
+ 	)
+ }
+ 
+

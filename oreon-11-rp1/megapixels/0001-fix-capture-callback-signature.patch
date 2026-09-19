@@ -1,0 +1,25 @@
+From 57244c666e622c01f1e22603da467856d36c50a2 Mon Sep 17 00:00:00 2001
+From: Sandipan Roy <sandipan@redhat.com>
+Date: Wed, 13 Aug 2025 21:30:39 +0530
+Subject: [PATCH] Fix capture callback signature
+
+---
+ src/process_pipeline.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/process_pipeline.c b/src/process_pipeline.c
+index cbe374d..d9ace69 100644
+--- a/src/process_pipeline.c
++++ b/src/process_pipeline.c
+@@ -964,7 +964,7 @@ mp_process_pipeline_process_image(MPBuffer buffer)
+ }
+ 
+ static void
+-capture()
++capture(MPPipeline *pipeline, const void *data)
+ {
+         char template[] = "/tmp/megapixels.XXXXXX";
+         char *tempdir;
+-- 
+2.50.1
+

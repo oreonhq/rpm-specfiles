@@ -1,0 +1,12 @@
+[Unit]
+Description=IP Sentinel
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/sysconfig/ip-sentinel
+Type=forking
+User=ip-sentinel
+ExecStart=/usr/sbin/ip-sentinel IPS_DEVICE
+
+[Install]
+WantedBy=multi-user.target

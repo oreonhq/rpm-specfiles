@@ -3,7 +3,7 @@
 %bcond bootstrap 0
 
 Name:           jline
-Version:        3.30.4
+Version:        4.4.5
 Release:        %autorelease
 Summary:        Java library for handling console input
 License:        BSD-3-Clause AND Apache-2.0
@@ -52,7 +52,8 @@ and tcsh) will find most of the command editing features of JLine to be
 familiar.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }# GitHub archive of tag jline-%%{version} unpacks as jline3-jline-%%{version}, not jline-%%{version}.
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# GitHub archive of tag jline-%%{version} unpacks as jline3-jline-%%{version}, not jline-%%{version}.
 %autosetup -p1 -n jline3-jline-%{version}
 cp -p console-ui/LICENSE.txt LICENSE-APACHE.txt
 

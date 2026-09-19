@@ -1,0 +1,206 @@
+diff -up xgalaga-2.0.34/data.c.alsa xgalaga-2.0.34/data.c
+--- xgalaga-2.0.34/data.c.alsa	2009-11-05 12:28:20.000000000 +0100
++++ xgalaga-2.0.34/data.c	2009-11-05 12:28:20.000000000 +0100
+@@ -67,7 +67,7 @@ int movespeed = MINSPEED;
+ #ifdef SOUND
+ char *unixSoundPath=SOUNDDIR;
+ #ifndef NAS_SOUND
+-char *unixSoundDev=SOUNDDEV;
++char *unixSoundDev="default";
+ #endif
+ int playSounds=1;
+ #endif
+diff -up xgalaga-2.0.34/xgal.sndsrv.alsa xgalaga-2.0.34/xgal.sndsrv
+diff -up xgalaga-2.0.34/xgal.sndsrv.linux.c.alsa xgalaga-2.0.34/xgal.sndsrv.linux.c
+--- xgalaga-2.0.34/xgal.sndsrv.linux.c.alsa	2009-11-05 12:28:20.000000000 +0100
++++ xgalaga-2.0.34/xgal.sndsrv.linux.c	2009-11-05 12:34:22.000000000 +0100
+@@ -1,9 +1,9 @@
+ /*
+- * xgal.sndsrv.c - VoxWare(tm) Compatible Sound - Apr. 1995
+- *                 PC Speaker  Compatible Sound 
+- *                 This server is OSS Specific.
++ * xgal.sndsrv.c - ALSA Compatible Sound
++ *                 This server is ALSA Specific.
+  *
+  * Copyright 1994-1995 Sujal M. Patel (smpatel@wam.umd.edu)
++ * Copyright 2009 Hans de Goede <hdegoede@redhat.com>
+  * Conditions in "copyright.h"
+  */
+ 
+@@ -16,15 +16,10 @@
+ #include <unistd.h>
+ #include <fcntl.h>
+ #include <sys/ioctl.h>
+-#include <sys/soundcard.h>
+-/*#include "linux_pcsp.h"       /usr/include/linux/pcsp.h      */
+ #include <sys/time.h>
+ #include <signal.h>
+ #include <string.h>
+-
+-#ifndef PCSP_ONLY
+-#define PCSP_ONLY 0
+-#endif
++#include <alsa/asoundlib.h>
+ 
+ char *FILENAME[] = {
+                      "/explode.raw",
+@@ -41,8 +36,8 @@ char *FILENAME[] = {
+ 
+ char *sound_buffer[NUM_SOUNDS];
+ int sound_size[NUM_SOUNDS];
+-int fragsize;
+ 
++const int fragsize = 256;
+ 
+ /* Terminate: Signal Handler */
+ void quit ()
+@@ -80,61 +75,34 @@ void init (int argc, char **argv)
+ 
+ 
+ /*
+-   Setup DSP: Opens /dev/dsp or /dev/pcdsp
+-              Sets fragment size on VoxWare
++   Setup PCM:
+               Sets speed to 8000hz
+               Should set mono mode
+               Error checking                
+ */
+-int setup_dsp (char *dspdev,int *is_pcsp)
++snd_pcm_t *setup_pcm(char *device)
+ {
+-  int dsp, frag, value;
+-  int mixer;
++  int err;
++  snd_pcm_t *handle;
+ 
+-  dsp = open(dspdev, O_RDWR);
+-  if (dsp < 0)
+-  {
+-    fprintf (stderr, "xgal.sndsrv: Couldn't open DSP %s\n",dspdev);
+-    return -1;
++  if ((err = snd_pcm_open(&handle, device, SND_PCM_STREAM_PLAYBACK, 0)) < 0) {
++    fprintf(stderr, "Playback open error: %s\n", snd_strerror(err));
++    return NULL;
+   }
+- 
+-  *is_pcsp = 0;
+-  fragsize = 0;
+-
+-  frag = 0x00020009;   /* try 512 bytes, for 1/16 second frag size */
+-  ioctl(dsp, SNDCTL_DSP_SETFRAGMENT, &frag);
+-  value = 8010;
+-  if (ioctl(dsp, SNDCTL_DSP_SPEED, &value))
+-  {
+-      fprintf (stderr, "xgal.sndsrv: Couldn't set DSP rate!\n");
+-  };
+-  value = 0;
+-  ioctl(dsp, SNDCTL_DSP_STEREO, &value);
+-  ioctl(dsp, SNDCTL_DSP_GETBLKSIZE, &fragsize);
+-/*  fprintf(stderr,"xgal.sndsrv: fragment set to %d\n",fragsize);*/
+-
+-  if (!fragsize || PCSP_ONLY)
+-  { 
+-    /* Don't Assume just because you can't set the fragment, use proper IOCTL */
+-    fprintf (stderr, "xgal.sndsrv: Couldn't set Fragment Size.\nAssuming PC Speaker!\n");
+-    fragsize = 128;
+-    *is_pcsp = 1;
+-  } else {
+-      mixer = open("/dev/mixer",O_RDWR | O_NONBLOCK);
+-      if(mixer==-1)  {
+-          fprintf(stderr,"xgal.sndsrv: Couldn't open mixer %s\n","/dev/mixer");
+-          return(-1);
+-      };
+-#if 0
+-      value=0x6464;
+-      ioctl(mixer,SOUND_MIXER_WRITE_PCM,&value);
+-      ioctl(mixer,SOUND_MIXER_WRITE_VOLUME,&value);  /*what does this do?*/
+-#endif
+-      close(mixer);
+ 
++  if ((err = snd_pcm_set_params(handle,
++              SND_PCM_FORMAT_U8,
++              SND_PCM_ACCESS_RW_INTERLEAVED,
++              1,
++              8000,
++              1,
++              50000)) < 0) {   /* 0.05sec */
++    fprintf(stderr, "Playback open error: %s\n", snd_strerror(err));
++    snd_pcm_close(handle);
++    return NULL;
+   }
+-  
+-  return dsp;
++
++  return handle;
+ }
+ 
+ int read_sound(int k)
+@@ -173,7 +141,7 @@ int read_sound(int k)
+ }
+ 
+ 
+-void do_everything (int dsp, int is_pcsp)
++void do_everything (snd_pcm_t *handle)
+ {
+   signed char k;
+   int i, j ;
+@@ -184,6 +152,8 @@ void do_everything (int dsp, int is_pcsp
+   unsigned char final[fragsize];       /* Final Mixing Buffer                                   */
+   int premix[fragsize];           /* Use fragsize in case sound card sets it big. -- JEH */
+   char *sample;
++  snd_pcm_sframes_t frames;
++  int first_short_write = 1;
+ 
+   for(;;)  {
+     terminate = -1;
+@@ -191,7 +161,7 @@ void do_everything (int dsp, int is_pcsp
+     i=read(STDIN_FILENO,&k,sizeof(k));
+     if(i==0)  {   /* EOF on pipe means parent has closed its end */
+         /*fprintf(stderr,"xgal.sndsrv: shutting down\n"); */
+-        kill(getpid(), SIGTERM);
++        return;
+     };
+     if(i!=-1)  {  /* there was something in the pipe */
+         /*fprintf(stderr,"Just read a %d from pipe\n",(int)k);*/ /*DEBUG*/
+@@ -241,7 +211,18 @@ void do_everything (int dsp, int is_pcsp
+         */
+         memset(final,128,sizeof(final));
+     };
+-    i = write (dsp, final, fragsize);
++    frames = snd_pcm_writei(handle, final, sizeof(final));
++    if (frames < 0)
++      frames = snd_pcm_recover(handle, frames, 0);
++    if (frames < 0)
++      fprintf(stderr, "snd_pcm_writei failed: %s\n", snd_strerror(frames));
++    if (frames > 0 && frames < (long)sizeof(final)) {
++      if (first_short_write) {
++        first_short_write = 0;
++        continue;
++      }
++      fprintf(stderr, "Short write (expected %li, wrote %li)\n", (long)sizeof(final), frames);
++    }
+     /*
+        The sound server is in a tight loop, EXCEPT for this
+        write which blocks.  Any optimizations in the above
+@@ -257,14 +238,17 @@ int main (argc, argv)
+ int argc;
+ char **argv;
+ {
+-  int dsp, is_pcsp;
++  snd_pcm_t *handle;
+ 
+   fcntl(STDIN_FILENO,F_SETFL,O_NONBLOCK);
+   init (argc, argv);
+-  dsp = setup_dsp (argv[2],&is_pcsp);
++  handle = setup_pcm(argv[2]);
+ 
+-  if (dsp<0) exit(1);
++  if (!handle) exit(1);
+   
+-  do_everything (dsp, is_pcsp);
++  do_everything(handle);
++
++  snd_pcm_close(handle);
++
+   return 0;
+ }

@@ -1,0 +1,30 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Thu, 1 Jan 2026 14:11:24 +0100
+Subject: [PATCH] Remove unused gmock - we don't use it
+
+The `GMOCK_FLAG(verbose)` line references gmock symbols. Since the
+codebase has no mock objects, this line was dead code anyway.
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+Assisted-by: Claude (Anthropic) <https://claude.ai>
+
+diff --git a/src/sipp_unittest.cpp b/src/sipp_unittest.cpp
+index aa59931..af77879 100644
+--- a/src/sipp_unittest.cpp
++++ b/src/sipp_unittest.cpp
+@@ -20,7 +20,6 @@
+ #include "sipp.hpp"
+ 
+ #include "gtest/gtest.h"
+-#include "gmock/gmock.h"
+ #include <string.h>
+ 
+ int main(int argc, char* argv[])
+@@ -29,7 +28,6 @@ int main(int argc, char* argv[])
+     userVariables = new AllocVariableTable(globalVariables);
+     main_scenario = new scenario(0, 0);
+ 
+-    ::testing::GMOCK_FLAG(verbose) = "verbose";
+     ::testing::InitGoogleTest(&argc, argv);
+     return RUN_ALL_TESTS();
+ }

@@ -1,0 +1,190 @@
+%global source0_hash d5db0542ec49ababa874927205300184780947ee8c7db38f99f58db43b9a5c27
+
+%{?mingw_package_header}
+
+%global qt_module qtactiveqt
+#global pre rc
+
+#global commit 435fac3bc7d12771a3c80556e748a2388e914cf7
+#global shortcommit %(c=%{commit}; echo ${c:0:7})
+
+%if 0%{?commit:1}
+%global source_folder %{qt_module}-%{commit}
+%else
+%global source_folder %{qt_module}-everywhere-src-%{qt_version}%{?pre:-%{pre}}
+%endif
+
+# first two digits of version
+%define release_version %(echo %{version} | awk -F. '{print $1"."$2}')
+%define qt_version %(echo %{version} | cut -d~ -f1)
+
+Name:           mingw-qt6-%{qt_module}
+Version:        6.10.2
+Release:        1%{?dist}
+Summary:        Qt6 for Windows - QtActiveQt component
+
+License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
+URL:            http://qt.io/
+
+%if 0%{?commit:1}
+Source0:        https://github.com/qt/%{qt_module}/archive/%{commit}/%{qt_module}-everywhere-src-%{commit}.tar.gz
+%else
+Source0:        http://download.qt.io/%{?pre:development}%{?!pre:official}_releases/qt/%{release_version}/%{qt_version}%{?pre:-%pre}/submodules/%{qt_module}-everywhere-src-%{qt_version}%{?pre:-%pre}.tar.xz
+%endif
+# Add -qt6 suffix to tools to avoid collision with qt5 tools
+Patch0:         qtactiveqt_qt6suffix.patch
+# From ArchLinux package: Fix compile error about missing QStringView overload
+Patch1:         0001-Handle-win64-in-dumpcpp-and-MetaObjectGenerator-read.patch
+# From ArchLinux package: don't attempt to build non-portable tools on host platform
+Patch2:         0002-Build-tools-for-the-target-platform.patch
+
+BuildArch:      noarch
+
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  ninja-build
+
+BuildRequires:  mingw32-filesystem >= 96
+BuildRequires:  mingw32-gcc-c++
+BuildRequires:  mingw32-qt6-qtbase = %{version}
+BuildRequires:  mingw32-qt6-qtdeclarative = %{version}
+
+BuildRequires:  mingw64-filesystem >= 96
+BuildRequires:  mingw64-gcc-c++
+BuildRequires:  mingw64-qt6-qtbase = %{version}
+BuildRequires:  mingw64-qt6-qtdeclarative = %{version}
+
+%description
+This package contains the Qt software toolkit for developing
+cross-platform applications.
+
+This is the Windows version of Qt, for use in conjunction with the
+Fedora Windows cross-compiler.
+
+# Win32
+%package -n mingw32-qt6-%{qt_module}
+Summary:        Qt6 for Windows - QtActiveQt component
+
+%description -n mingw32-qt6-%{qt_module}
+This package contains the Qt software toolkit for developing
+cross-platform applications.
+
+This is the 32-bit Windows version of Qt, for use in conjunction with the
+Fedora Windows cross-compiler.
+
+# Win64
+%package -n mingw64-qt6-%{qt_module}
+Summary:        Qt6 for Windows - QtActiveQt component
+
+%description -n mingw64-qt6-%{qt_module}
+This package contains the Qt software toolkit for developing
+cross-platform applications.
+
+This is the 64-bit Windows version of Qt, for use in conjunction with the
+Fedora Windows cross-compiler.
+
+%{?mingw_debug_package}
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n %{source_folder}
+
+%build
+export MINGW32_CXXFLAGS="%{mingw32_cflags} -msse2"
+export MINGW64_CXXFLAGS="%{mingw64_cflags} -msse2"
+# Need QT_BUILD_TOOLS_WHEN_CROSSCOMPILING to avoid cmake aborting with Qt6::idc target not found
+%mingw_cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo
+%mingw_ninja
+
+%install
+%mingw_ninja_install
+
+# Win32
+%files -n mingw32-qt6-%{qt_module}
+%license LICENSES/*GPL*
+%{mingw32_bindir}/dumpcpp-qt6.exe
+%{mingw32_bindir}/dumpdoc-qt6.exe
+%{mingw32_bindir}/idc-qt6.exe
+%{mingw32_includedir}/qt6/ActiveQt/
+%{mingw32_includedir}/qt6/QtAxBase/
+%{mingw32_includedir}/qt6/QtAxContainer/
+%{mingw32_includedir}/qt6/QtAxServer/
+%{mingw32_libdir}/cmake/Qt6ActiveQt/
+%{mingw32_libdir}/cmake/Qt6ActiveQtPrivate/
+%{mingw32_libdir}/cmake/Qt6AxBasePrivate/
+%{mingw32_libdir}/cmake/Qt6AxContainer/
+%{mingw32_libdir}/cmake/Qt6AxContainerPrivate/
+%{mingw32_libdir}/cmake/Qt6AxServer/
+%{mingw32_libdir}/cmake/Qt6AxServerPrivate/
+%{mingw32_libdir}/cmake/Qt6BuildInternals/StandaloneTests/QtActiveQtTestsConfig.cmake
+%{mingw32_libdir}/pkgconfig/Qt6ActiveQt.pc
+%{mingw32_libdir}/pkgconfig/Qt6AxContainer.pc
+%{mingw32_libdir}/pkgconfig/Qt6AxServer.pc
+%{mingw32_libdir}/libQt6AxBase.a
+%{mingw32_libdir}/libQt6AxContainer.a
+%{mingw32_libdir}/libQt6AxServer.a
+%{mingw32_libdir}/Qt6AxBase.prl
+%{mingw32_libdir}/Qt6AxContainer.prl
+%{mingw32_libdir}/Qt6AxServer.prl
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_activeqt.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_activeqt_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_axbase_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_axcontainer.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_axcontainer_private.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_axserver.pri
+%{mingw32_libdir}/qt6/mkspecs/modules/qt_lib_axserver_private.pri
+%{mingw32_libdir}/qt6/metatypes/qt6axbaseprivate_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt6axcontainer_metatypes.json
+%{mingw32_libdir}/qt6/metatypes/qt6axserver_metatypes.json
+%{mingw32_libdir}/qt6/modules/ActiveQt.json
+%{mingw32_libdir}/qt6/modules/AxBasePrivate.json
+%{mingw32_libdir}/qt6/modules/AxContainer.json
+%{mingw32_libdir}/qt6/modules/AxServer.json
+%{mingw32_libdir}/qt6/sbom/%{qt_module}-%{qt_version}.spdx
+
+# Win64
+%files -n mingw64-qt6-%{qt_module}
+%license LICENSES/*GPL*
+%{mingw64_bindir}/dumpcpp-qt6.exe
+%{mingw64_bindir}/dumpdoc-qt6.exe
+%{mingw64_bindir}/idc-qt6.exe
+%{mingw64_includedir}/qt6/ActiveQt/
+%{mingw64_includedir}/qt6/QtAxBase/
+%{mingw64_includedir}/qt6/QtAxContainer/
+%{mingw64_includedir}/qt6/QtAxServer/
+%{mingw64_libdir}/cmake/Qt6ActiveQt/
+%{mingw64_libdir}/cmake/Qt6ActiveQtPrivate/
+%{mingw64_libdir}/cmake/Qt6AxBasePrivate/
+%{mingw64_libdir}/cmake/Qt6AxContainer/
+%{mingw64_libdir}/cmake/Qt6AxContainerPrivate/
+%{mingw64_libdir}/cmake/Qt6AxServer/
+%{mingw64_libdir}/cmake/Qt6AxServerPrivate/
+%{mingw64_libdir}/cmake/Qt6BuildInternals/StandaloneTests/QtActiveQtTestsConfig.cmake
+%{mingw64_libdir}/pkgconfig/Qt6ActiveQt.pc
+%{mingw64_libdir}/pkgconfig/Qt6AxContainer.pc
+%{mingw64_libdir}/pkgconfig/Qt6AxServer.pc
+%{mingw64_libdir}/libQt6AxBase.a
+%{mingw64_libdir}/libQt6AxContainer.a
+%{mingw64_libdir}/libQt6AxServer.a
+%{mingw64_libdir}/Qt6AxBase.prl
+%{mingw64_libdir}/Qt6AxContainer.prl
+%{mingw64_libdir}/Qt6AxServer.prl
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_activeqt.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_activeqt_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_axbase_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_axcontainer.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_axcontainer_private.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_axserver.pri
+%{mingw64_libdir}/qt6/mkspecs/modules/qt_lib_axserver_private.pri
+%{mingw64_libdir}/qt6/metatypes/qt6axbaseprivate_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt6axcontainer_metatypes.json
+%{mingw64_libdir}/qt6/metatypes/qt6axserver_metatypes.json
+%{mingw64_libdir}/qt6/modules/ActiveQt.json
+%{mingw64_libdir}/qt6/modules/AxBasePrivate.json
+%{mingw64_libdir}/qt6/modules/AxContainer.json
+%{mingw64_libdir}/qt6/modules/AxServer.json
+%{mingw64_libdir}/qt6/sbom/%{qt_module}-%{qt_version}.spdx
+
+%changelog
+%autochangelog

@@ -1,0 +1,94 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 05ae99f..c713051 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -7,6 +7,8 @@
+ 
+ cmake_minimum_required(VERSION 3.6.3)
+ 
++include(GNUInstallDirs)
++
+ project(MPark.Patterns VERSION 0.1.0 LANGUAGES CXX)
+ 
+ # Option.
+@@ -24,7 +26,7 @@ include(CMakePackageConfigHelpers)
+ configure_package_config_file(
+   cmake/mpark_patterns-config.cmake.in
+   "${CMAKE_CURRENT_BINARY_DIR}/cmake/mpark_patterns-config.cmake"
+-  INSTALL_DESTINATION lib/cmake/mpark_patterns
++  INSTALL_DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/mpark_patterns
+   NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+ 
+ write_basic_package_version_file(
+@@ -42,7 +44,7 @@ install(TARGETS mpark_patterns EXPORT mpark_patterns)
+ install(
+   EXPORT mpark_patterns
+   FILE mpark_patterns-targets.cmake
+-  DESTINATION lib/cmake/mpark_patterns)
++  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/mpark_patterns)
+ 
+ install(DIRECTORY include/mpark DESTINATION include)
+ 
+@@ -50,7 +52,7 @@ install(
+   FILES
+   "${CMAKE_CURRENT_BINARY_DIR}/cmake/mpark_patterns-config.cmake"
+   "${CMAKE_CURRENT_BINARY_DIR}/cmake/mpark_patterns-config-version.cmake"
+-  DESTINATION lib/cmake/mpark_patterns)
++  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/mpark_patterns)
+ 
+ if(MPARK_PATTERNS_INCLUDE_TESTS)
+   enable_testing()
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 4ea1a6e..fd3bace 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -7,6 +7,14 @@
+ 
+ cmake_minimum_required(VERSION 3.6.3)
+ 
++find_package(GTest REQUIRED)
++find_path(GTEST_INCLUDE_DIRS gtest/gtest.h)
++find_library(GTEST_LIBRARIES gtest)
++find_path(GMOCK_INCLUDE_DIRS gmock/gmock.h)
++find_library(GMOCK_LIBRARIES gmock)
++
++include_directories(${GMOCK_INCLUDE_DIRS} ${GTEST_INCLUDE_DIRS})
++
+ option(MPARK_PATTERNS_EXCEPTIONS
+        "Build the tests with exceptions support." ON)
+ 
+@@ -16,7 +24,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang" OR
+   add_compile_options("-std=c++17")
+ 
+   add_compile_options(-Wall)
+-  add_compile_options(-Werror)
+   add_compile_options(-Wextra)
+   add_compile_options(-pedantic)
+   add_compile_options(-Wno-shadow)
+@@ -32,10 +39,6 @@ endif()
+ add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
+ add_definitions(-DGTEST_HAS_STD_TUPLE=1)
+ 
+-add_subdirectory(${CMAKE_SOURCE_DIR}/3rdparty/googletest/googletest
+-                 ${CMAKE_BINARY_DIR}/3rdparty/googletest/googletest)
+-
+-config_compiler_and_linker()
+ 
+ if(MPARK_VARIANT_EXCEPTIONS)
+   set(compile_flags ${cxx_strict})
+@@ -47,7 +50,6 @@ set(MPARK_TESTS
+   aggregate
+   array
+   as
+-  balance
+   calc
+   ds
+   identifier
+@@ -62,6 +64,6 @@ set(MPARK_TESTS
+ foreach(test ${MPARK_TESTS})
+   add_executable(${test} ${test}.cpp)
+   set_target_properties(${test} PROPERTIES COMPILE_FLAGS "${compile_flags}")
+-  target_link_libraries(${test} gtest_main mpark_patterns)
++  target_link_libraries(${test} gtest_main ${GTEST_LIBRARIES} mpark_patterns)
+   add_test(${test} ${test} --gtest_color=yes)
+ endforeach()

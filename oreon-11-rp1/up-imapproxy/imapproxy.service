@@ -1,0 +1,11 @@
+[Unit]
+Description=SquirrelMail IMAP Proxy
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/in.imapproxyd
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

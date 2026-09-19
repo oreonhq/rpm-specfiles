@@ -1,0 +1,12 @@
+diff -up grafX2-v2.8/src/loadrecoil.c.r6 grafX2-v2.8/src/loadrecoil.c
+--- grafX2-v2.8/src/loadrecoil.c.r6	2021-04-21 18:07:30.990828046 -0400
++++ grafX2-v2.8/src/loadrecoil.c	2021-04-21 18:07:55.559234793 -0400
+@@ -153,7 +153,7 @@ void Load_Recoil_Image(T_IO_Context *con
+       {
+         // try to convert to 8bpp image
+         File_error = 0;
+-        palette = RECOIL_ToPalette(recoil, pixels);
++        palette = RECOIL_ToPalette(recoil);
+         if (palette == NULL)
+         {
+           // 24bits

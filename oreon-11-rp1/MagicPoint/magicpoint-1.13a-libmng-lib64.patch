@@ -1,0 +1,30 @@
+diff -up magicpoint-1.13a/configure~ magicpoint-1.13a/configure
+--- magicpoint-1.13a/configure~	2021-02-15 17:02:17.000000000 +0100
++++ magicpoint-1.13a/configure	2021-02-15 17:06:33.304594700 +0100
+@@ -5785,6 +5785,8 @@ for i in /usr/pkg /usr/local /usr; do
+ 			DEPLIBS="$DEPLIBS $i/lib/libmng.a"
+ 		elif test -f $i/lib/libmng.so ; then
+ 			DEPLIBS="$DEPLIBS $i/lib/libmng.so"
++		elif test -f $i/lib64/libmng.so ; then
++			DEPLIBS="$DEPLIBS $i/lib64/libmng.so"
+ 		else
+ 			break;
+ 		fi
+@@ -5796,7 +5798,7 @@ if test "${ac_cv_lib_mng_mng_initialize+
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lmng  $LIBS"
++LIBS="-lmng -ljpeg $LIBS"
+ cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF
+@@ -5852,7 +5854,7 @@ fi
+ { echo "$as_me:$LINENO: result: $ac_cv_lib_mng_mng_initialize" >&5
+ echo "${ECHO_T}$ac_cv_lib_mng_mng_initialize" >&6; }
+ if test $ac_cv_lib_mng_mng_initialize = yes; then
+-  LIBS="$LIBS -lmng"
++  LIBS="$LIBS -lmng -ljpeg"
+ 			 cat >>confdefs.h <<\_ACEOF
+ #define MNG 1
+ _ACEOF

@@ -1,0 +1,18 @@
+diff -up linpsk/asoundrc.old ./linpsk/asoundrc
+--- linpsk/asoundrc.old	2010-02-20 06:43:01.000000000 -0500
++++ linpsk/asoundrc	2010-05-02 01:39:21.846811854 -0400
+@@ -1,12 +1,12 @@
+ pcm.LinPSK_card {
+         type hw
+ #	Replace the following line by the name of your card
+-        card M5455
++        card 0
+ 		}
+ ctl.LinPSK_card {
+         type hw
+ #	Replace the following line by the name of your card
+-        card M5455
++        card 0
+         }
+ pcm.LinPSK_Play {
+         type plug

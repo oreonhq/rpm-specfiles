@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>freedoom-freedm.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>BSD-3-Clause</project_license>
+  <name>Freedoom: DeathMatch</name>
+  <summary>Doom styled first person shooter deathmatch game</summary>
+  <description>
+    <p>
+      Freedoom: FreeDM is a 32-level Doom styled first person shooter
+      game designed for competitive deathmatch play. 
+    </p>
+    <p>
+      Freedoom: FreeDM uses all Free as in freedoom content combined with
+      the Open Source Doom engine.
+    </p>
+  </description>
+  <url type="homepage">http://freedoom.github.io/</url>
+  <screenshots>
+    <screenshot type="default">https://freedoom.github.io/img/screenshots/freedm-0.10_01.png</screenshot>
+    <screenshot>https://freedoom.github.io/img/screenshots/freedm-0.10_02.png</screenshot>
+    <screenshot>https://freedoom.github.io/img/screenshots/freedm-0.10_03.png</screenshot>
+    <screenshot>https://freedoom.github.io/img/screenshots/freedm-0.10_04.png</screenshot>
+    <screenshot>https://freedoom.github.io/img/screenshots/freedm-0.10_05.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

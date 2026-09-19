@@ -1,0 +1,24 @@
+diff -u --recursive cart-1.2.3-vanilla/cart/cart.py cart-1.2.3/cart/cart.py
+--- cart-1.2.3-vanilla/cart/cart.py	2025-02-10 11:12:25.000000000 -0600
++++ cart-1.2.3/cart/cart.py	2025-04-20 17:50:23.072450190 -0500
+@@ -12,7 +12,7 @@
+ from typing import AsyncIterable, Callable, Tuple, Union
+ 
+ # noinspection PyPackageRequirements
+-from Crypto.Cipher import ARC4
++from Cryptodome.Cipher import ARC4
+ 
+ import cart.version as version
+ from cart.peeker import AsyncReader
+diff -u --recursive cart-1.2.3-vanilla/setup.py cart-1.2.3/setup.py
+--- cart-1.2.3-vanilla/setup.py	2025-02-10 11:12:25.000000000 -0600
++++ cart-1.2.3/setup.py	2025-04-20 17:50:42.707972468 -0500
+@@ -34,7 +34,7 @@
+     ],
+     keywords="neutering format malware cart stix development gc canada cse-cst cse cst cccs cyber",
+     packages=find_packages(exclude=["docs", "pipelines", "unittests"]),
+-    install_requires=["pycryptodome"],
++    install_requires=["pycryptodomex"],
+     entry_points={
+         "console_scripts": [
+             "cart=cart:main",

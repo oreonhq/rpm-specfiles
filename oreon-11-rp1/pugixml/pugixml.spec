@@ -1,8 +1,8 @@
 #global prerel rc
 
 Name:           pugixml
-Version:        1.15
-Release:        2%{?dist}
+Version:        1.16
+Release:        1%{?dist}
 Summary:        A light-weight C++ XML processing library
 License:        MIT
 URL:            https://pugixml.org/

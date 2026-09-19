@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Bellota Text</target>
+    <like>
+      <family>Bellota</family>
+      <family>Snippet</family>
+      <family>fantasy</family>
+    </like>
+  </group>
+</fontconfig>
+

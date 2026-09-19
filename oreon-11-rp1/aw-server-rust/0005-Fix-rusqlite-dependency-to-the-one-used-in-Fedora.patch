@@ -1,0 +1,26 @@
+From 5932aed095cdb911b8a1d85b38e912c8105f5406 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Wojni=C5=82owicz?=
+ <lukasz.wojnilowicz@gmail.com>
+Date: Mon, 9 Dec 2024 17:47:23 +0100
+Subject: [PATCH 5/8] Fix rusqlite dependency to the one used in Fedora
+
+---
+ aw-datastore/Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/aw-datastore/Cargo.toml b/aw-datastore/Cargo.toml
+index 73d768b..076d023 100644
+--- a/aw-datastore/Cargo.toml
++++ b/aw-datastore/Cargo.toml
+@@ -13,7 +13,7 @@ dirs = "6"
+ serde = "1.0"
+ serde_json = "1.0"
+ chrono = { version = "0.4", features = ["serde"] }
+-rusqlite = { version = "0.30", features = ["chrono", "serde_json", "bundled"]  }
++rusqlite = { version = "0.31", features = ["chrono", "serde_json"]  }
+ mpsc_requests = "0.3"
+ log = "0.4"
+ 
+-- 
+2.51.1
+

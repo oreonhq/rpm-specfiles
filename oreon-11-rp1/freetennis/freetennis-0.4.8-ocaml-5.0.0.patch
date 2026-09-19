@@ -1,0 +1,38 @@
+diff -up freetennis-0.4.8/freetennis.ml~ freetennis-0.4.8/freetennis.ml
+--- freetennis-0.4.8/freetennis.ml~	2023-08-04 22:07:03.000000000 +0200
++++ freetennis-0.4.8/freetennis.ml	2023-08-04 22:09:20.678842690 +0200
+@@ -6651,12 +6651,12 @@ let _ =
+ 		else if 0 = compare n "ivan" then Some Ivan 
+ 		else None 
+ 	    in
+-	    let mayb = translateName (String.lowercase !p0Name ) in
++	    let mayb = translateName (String.lowercase_ascii !p0Name ) in
+ 	    match mayb with
+ 		| None -> 
+ 		      ArgumentError ("name " ^ !p0Name ^" invalid.")
+ 		| Some p0 ->
+-		      let mayb = translateName (String.lowercase !p1Name) in
++		      let mayb = translateName (String.lowercase_ascii !p1Name) in
+ 		      match mayb with
+ 			  | None ->
+ 				ArgumentError ("name " ^ !p1Name ^" invalid.")
+@@ -6669,7 +6669,7 @@ let _ =
+ 					else if 0 = compare s "clay" then Some Clay 
+ 					else if 0= compare s "grass" then Some Grass
+ 					else None in
+-				    translateSurf (String.lowercase !surf) in
++				    translateSurf (String.lowercase_ascii !surf) in
+ 				match mayb with 
+ 				    | None ->
+ 					  ArgumentError ("surface " ^ !surf ^" is invalid.")
+@@ -7272,8 +7272,8 @@ let _ =
+ 								   Gpointer.get_byte pixels ~pos:(offs + 2),
+ 								   Gpointer.get_byte pixels ~pos:(offs + 3) )in
+ 							  getpixel x y s in
+-						      r = 255 && g = 0 & b = 255 && a = 255 (* needed! Transparent pixels still have colors, and that
+-											       color could be magenta *) in
++						      r = 255 && g = 0 && b = 255 && a = 255 (* needed! Transparent pixels still have colors, and that
++											        color could be magenta *) in
+ 						  List.filter  isHotspot pairs in
+ 					      match hotspots with
+ 						  | [] -> raise HotSpotNotFound

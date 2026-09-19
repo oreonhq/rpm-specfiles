@@ -1,0 +1,609 @@
+From e9f06f3103ad9edf19845130846fd59cd369cd98 Mon Sep 17 00:00:00 2001
+From: Gerd Stolpmann <gerd@gerd-stolpmann.de>
+Date: Wed, 1 May 2024 15:35:43 +0000
+Subject: [PATCH 5/8] more build fixes for OCaml-5
+
+---
+ code/src/netgss-system/gssapi.c         | 42 ++++++++++++-------------
+ code/src/netgss-system/reconfigure      |  2 +-
+ code/src/nethttpd/nethttpd_services.ml  |  4 +--
+ code/src/netsys/netsys_c_ioprio.c       | 10 +++---
+ code/src/netsys/netsys_c_sem.c          |  4 +--
+ code/src/netsys/netsys_c_spawn.c        |  8 ++---
+ code/src/nettls-gnutls/gnutls.c         | 30 +++++++++---------
+ code/src/nettls-gnutls/gnutls.descr     |  2 +-
+ code/src/nettls-gnutls/nettle.c         | 12 +++----
+ code/src/nettls-gnutls/nettls_gnutls.ml |  2 +-
+ code/src/nettls-gnutls/reconfigure      |  4 +--
+ code/tools/stubgen.ml                   | 24 +++++++-------
+ 12 files changed, 72 insertions(+), 72 deletions(-)
+
+diff --git a/code/src/netgss-system/gssapi.c b/code/src/netgss-system/gssapi.c
+index 62be2a1..3fb1ce9 100644
+--- a/code/src/netgss-system/gssapi.c
++++ b/code/src/netgss-system/gssapi.c
+@@ -59,7 +59,7 @@ static void netgss_free_buffer_contents(long tag, gss_buffer_t buf) {
+                 fprintf(stderr, "Netgss: error from gss_release_buffer\n");
+         } else {
+             if (tag == 1) {
+-                stat_free(buf->value);
++                caml_stat_free(buf->value);
+             }
+         }
+     }
+@@ -71,13 +71,13 @@ static void netgss_free_buffer_contents(long tag, gss_buffer_t buf) {
+ static void netgss_free_buffer(long tag, gss_buffer_t buf) {
+     netgss_free_buffer_contents(tag, buf);
+     /* The descriptor is always allocated by us: */
+-    stat_free(buf);
++    caml_stat_free(buf);
+ }
+ 
+ 
+ static gss_buffer_t netgss_alloc_buffer(void) {
+     gss_buffer_t buf;
+-    buf = (gss_buffer_t) stat_alloc(sizeof(gss_buffer_desc));
++    buf = (gss_buffer_t) caml_stat_alloc(sizeof(gss_buffer_desc));
+     buf->value = NULL;
+     buf->length = 0;
+     return buf;
+@@ -105,10 +105,10 @@ CAMLprim value netgss_buffer_of_string(value s, value pos, value len) {
+     gss_buffer_t buf;
+     if (Long_val(len) < 0 || Long_val(pos) < 0 ||
+         Long_val(pos) > caml_string_length(s) - Long_val(len))
+-        invalid_argument("buffer_of_string");
++        caml_invalid_argument("buffer_of_string");
+     buf = netgss_alloc_buffer();
+     buf->length = Long_val(len);
+-    buf->value = stat_alloc(buf->length);
++    buf->value = caml_stat_alloc(buf->length);
+     memcpy(buf->value, String_val(s) + Long_val(pos), buf->length);
+     return twrap_gss_buffer_t(1, buf);
+ }
+@@ -155,14 +155,14 @@ static void netgss_free_oid(long tag, gss_OID buf) {
+     if (tag == 0 || buf == GSS_C_NO_OID) {
+         /* OIDs from the provider are to be considered as read-only */
+     } else {
+-        stat_free(buf->elements);
+-        stat_free(buf);
++        caml_stat_free(buf->elements);
++        caml_stat_free(buf);
+     }
+ }
+ 
+ 
+ static gss_OID netgss_alloc_oid(void) {
+-    return (gss_OID) stat_alloc(sizeof(gss_OID_desc));
++    return (gss_OID) caml_stat_alloc(sizeof(gss_OID_desc));
+ }
+ 
+ 
+@@ -173,7 +173,7 @@ static gss_OID netgss_copy_oid(gss_OID buf) {
+     } else {
+         out = netgss_alloc_oid();
+         out->length = buf->length;
+-        out->elements = stat_alloc(buf->length);
++        out->elements = caml_stat_alloc(buf->length);
+         memcpy(out->elements, buf->elements, buf->length);
+     }
+     return out;
+@@ -184,7 +184,7 @@ CAMLprim value netgss_oid_of_string(value s) {
+     gss_OID buf;
+     buf = netgss_alloc_oid();
+     buf->length = caml_string_length(s);
+-    buf->elements = stat_alloc(buf->length);
++    buf->elements = caml_stat_alloc(buf->length);
+     memcpy(buf->elements, String_val(s), buf->length);
+     return twrap_gss_OID(1, buf);
+ }
+@@ -213,14 +213,14 @@ static void netgss_free_oid_set(long tag, gss_OID_set set) {
+         for (k=0; k < set->count; k++) {
+             netgss_free_oid(1, set->elements+k);
+         }
+-        stat_free(set->elements);
+-        stat_free(set);
++        caml_stat_free(set->elements);
++        caml_stat_free(set);
+     }
+ }
+ 
+ 
+ static gss_OID_set netgss_alloc_oid_set(void) {
+-    return (gss_OID_set) stat_alloc(sizeof(gss_OID_set_desc));
++    return (gss_OID_set) caml_stat_alloc(sizeof(gss_OID_set_desc));
+ }
+ 
+ 
+@@ -254,7 +254,7 @@ CAMLprim value netgss_oid_set_of_array(value varg) {
+         return twrap_gss_OID_set(1, GSS_C_NO_OID_SET);
+     set = netgss_alloc_oid_set();
+     set->count = Wosize_val(varg);
+-    set->elements = stat_alloc(sizeof(gss_OID) * set->count);
++    set->elements = caml_stat_alloc(sizeof(gss_OID) * set->count);
+     for (k=0; k<set->count; k++) {
+         v1 = Field(varg, k);
+         buf = unwrap_gss_OID(v1);
+@@ -308,17 +308,17 @@ CAMLprim value netgss_map_cb(value iaddrty, value iaddr, value aaddrty,
+     aaddr_len = caml_string_length(aaddr);
+     data_len = caml_string_length(data);
+     cb = (gss_channel_bindings_t)
+-            stat_alloc(sizeof(struct gss_channel_bindings_struct));
++            caml_stat_alloc(sizeof(struct gss_channel_bindings_struct));
+     cb->initiator_addrtype = Int_val(iaddrty);
+     cb->initiator_address.length = iaddr_len;
+-    cb->initiator_address.value = stat_alloc(iaddr_len);
++    cb->initiator_address.value = caml_stat_alloc(iaddr_len);
+     memcpy(cb->initiator_address.value, String_val(iaddr), iaddr_len);
+     cb->acceptor_addrtype = Int_val(aaddrty);
+     cb->acceptor_address.length = aaddr_len;
+-    cb->acceptor_address.value = stat_alloc(aaddr_len);
++    cb->acceptor_address.value = caml_stat_alloc(aaddr_len);
+     memcpy(cb->acceptor_address.value, String_val(aaddr), aaddr_len);
+     cb->application_data.length = data_len;
+-    cb->application_data.value = stat_alloc(data_len);
++    cb->application_data.value = caml_stat_alloc(data_len);
+     memcpy(cb->application_data.value, String_val(data), data_len);
+     return wrap_gss_channel_bindings_t(cb);
+ }
+@@ -364,8 +364,8 @@ CAMLprim value netgss_no_oid_set(value dummy) {
+ 
+ static void netgss_free_cb(gss_channel_bindings_t x) {
+     if (x != NULL) {
+-        stat_free(x->initiator_address.value);
+-        stat_free(x->acceptor_address.value);
+-        stat_free(x->application_data.value);
++        caml_stat_free(x->initiator_address.value);
++        caml_stat_free(x->acceptor_address.value);
++        caml_stat_free(x->application_data.value);
+     }
+ }
+diff --git a/code/src/netgss-system/reconfigure b/code/src/netgss-system/reconfigure
+index 66d315f..5f67287 100755
+--- a/code/src/netgss-system/reconfigure
++++ b/code/src/netgss-system/reconfigure
+@@ -133,7 +133,7 @@ echo "Generating stubs"
+ 
+ rm -f config_checks.sh
+ echo "$ ocaml -I ../../tools gssapi.descr" >>$log
+-ocaml -I ../../tools gssapi.descr || exit 1
++ocaml -I +str -I ../../tools gssapi.descr || exit 1
+ 
+ . ./config_checks.sh
+ 
+diff --git a/code/src/nethttpd/nethttpd_services.ml b/code/src/nethttpd/nethttpd_services.ml
+index 9a338b2..b365d33 100644
+--- a/code/src/nethttpd/nethttpd_services.ml
++++ b/code/src/nethttpd/nethttpd_services.ml
+@@ -107,10 +107,10 @@ object(self)
+       try
+ 	let req_name = env # input_header_field "Host" in
+ 	let (req_host, req_port_opt) = split_host_port req_name in
+-	let req_host = String.lowercase req_host in
++        let req_host = String.lowercase_ascii req_host in
+ 	let req_port = match req_port_opt with Some p -> p | None -> 80 in  (* CHECK *)
+ 	List.find
+-	  (fun (n,p) -> (n = "*" || String.lowercase n = req_host) && 
++          (fun (n,p) -> (n = "*" || String.lowercase_ascii n = req_host) &&
+ 	                (p = 0 || p = req_port))
+ 	  host.server_names
+       with
+diff --git a/code/src/netsys/netsys_c_ioprio.c b/code/src/netsys/netsys_c_ioprio.c
+index f4eb9eb..99c2a0f 100644
+--- a/code/src/netsys/netsys_c_ioprio.c
++++ b/code/src/netsys/netsys_c_ioprio.c
+@@ -89,7 +89,7 @@ CAMLprim value netsys_ioprio_get(value target) {
+ 	ioprio = ioprio_get(IOPRIO_WHO_USER, Int_val(Field(target, 0)));
+ 	break;
+     default:
+-	failwith("netsys_ioprio_get: internal error");
++	caml_failwith("netsys_ioprio_get: internal error");
+     }
+ 
+     if (ioprio == -1)
+@@ -114,7 +114,7 @@ CAMLprim value netsys_ioprio_get(value target) {
+ 	result = Val_long(1);
+ 	break;
+     default:
+-	failwith("netsys_ioprio_get: Unexpected result");
++	caml_failwith("netsys_ioprio_get: Unexpected result");
+     }
+     
+     return result;
+@@ -145,7 +145,7 @@ CAMLprim value netsys_ioprio_set(value target, value ioprio_arg) {
+ 	    ioprio_data = Int_val(Field(ioprio_arg, 0));
+ 	    break;
+ 	default:
+-	    failwith("netsys_ioprio_set: internal error");
++	    caml_failwith("netsys_ioprio_set: internal error");
+ 	}
+     } else {
+ 	switch (Long_val(ioprio_arg)) {
+@@ -159,7 +159,7 @@ CAMLprim value netsys_ioprio_set(value target, value ioprio_arg) {
+ 	    ioprio_data = 7;
+ 	    break;
+ 	default:
+-	    failwith("netsys_ioprio_set: internal error");
++	    caml_failwith("netsys_ioprio_set: internal error");
+ 	}
+     };
+ 
+@@ -176,7 +176,7 @@ CAMLprim value netsys_ioprio_set(value target, value ioprio_arg) {
+ 	sysres = ioprio_set(IOPRIO_WHO_USER, Int_val(Field(target, 0)), ioprio);
+ 	break;
+     default:
+-	failwith("netsys_ioprio_set: internal error");
++	caml_failwith("netsys_ioprio_set: internal error");
+     }
+ 
+     if (sysres == -1)
+diff --git a/code/src/netsys/netsys_c_sem.c b/code/src/netsys/netsys_c_sem.c
+index 081c3da..9295b23 100644
+--- a/code/src/netsys/netsys_c_sem.c
++++ b/code/src/netsys/netsys_c_sem.c
+@@ -175,7 +175,7 @@ CAMLprim value netsys_sem_init(value memv,
+     value r;
+ 
+     init = Long_val(initv);
+-    s = (sem_t *) (((char *) Bigarray_val(memv)->data) + Long_val(posv));
++    s = (sem_t *) (((char *) Caml_ba_array_val(memv)->data) + Long_val(posv));
+     code = sem_init(s, Bool_val(psharedv), init);
+     if (code == -1) caml_uerror("sem_init", Nothing);
+     r = alloc_sem_block(s, 0);
+@@ -192,7 +192,7 @@ CAMLprim value netsys_as_sem(value memv,
+     sem_t *s;
+     value r;
+ 
+-    s = (sem_t *) (((char *) Bigarray_val(memv)->data) + Long_val(posv));
++    s = (sem_t *) (((char *) Caml_ba_array_val(memv)->data) + Long_val(posv));
+     r = alloc_sem_block(s, 0);
+     return r;
+ #else
+diff --git a/code/src/netsys/netsys_c_spawn.c b/code/src/netsys/netsys_c_spawn.c
+index d00612b..e8396ee 100644
+--- a/code/src/netsys/netsys_c_spawn.c
++++ b/code/src/netsys/netsys_c_spawn.c
+@@ -61,8 +61,8 @@ CAMLprim value netsys_spawn_nat(value v_chdir,
+     int cleanup_bsection;
+ 
+     pid_t pid;
+-    unsigned char **sub_argv;
+-    unsigned char **sub_env;
++    char **sub_argv;
++    char **sub_env;
+     int cleanup_sub_argv;
+     int cleanup_sub_env;;
+ 
+@@ -357,8 +357,8 @@ CAMLprim value netsys_spawn_nat(value v_chdir,
+ 
+     /* exec the new program: */
+     code = execve(String_val(v_cmd),
+-		  sub_argv,
+-		  sub_env);
++		  (char * const *) sub_argv,
++		  (char * const *) sub_env);
+     if (code == -1) SUB_ERROR(errno, "netsys_spawn/execve [290]");
+ 
+     SUB_ERROR(EINVAL, "netsys_spawn/assert_execve [291]");
+diff --git a/code/src/nettls-gnutls/gnutls.c b/code/src/nettls-gnutls/gnutls.c
+index d8a0f05..90f5f5d 100644
+--- a/code/src/nettls-gnutls/gnutls.c
++++ b/code/src/nettls-gnutls/gnutls.c
+@@ -111,26 +111,26 @@ static value wrap_str_datum_p(const gnutls_datum_t *d) {
+ static gnutls_datum_t unwrap_str_datum(value v) {
+     gnutls_datum_t d;
+     d.size = caml_string_length(v);
+-    d.data = stat_alloc(d.size);
++    d.data = caml_stat_alloc(d.size);
+     memcpy(d.data, String_val(v), d.size);
+     return d;
+ }
+    
+ static gnutls_datum_t * unwrap_str_datum_p(value v) {
+     gnutls_datum_t *d;
+-    d = stat_alloc(sizeof(gnutls_datum_t));
++    d = caml_stat_alloc(sizeof(gnutls_datum_t));
+     *d = unwrap_str_datum(v);
+     return d;
+ }
+    
+ static void free_str_datum(gnutls_datum_t d) {
+-    if (d.data != NULL) { stat_free(d.data); d.data = NULL; };
++    if (d.data != NULL) { caml_stat_free(d.data); d.data = NULL; };
+ }
+ 
+ static void free_str_datum_p(gnutls_datum_t *d) {
+     if (d != NULL) {
+-        if (d->data != NULL) stat_free(d->data);
+-        stat_free(d);
++        if (d->data != NULL) caml_stat_free(d->data);
++        caml_stat_free(d);
+     }
+ }
+    
+@@ -405,7 +405,7 @@ static void attach_session_callbacks (gnutls_session_t s) {
+     b_session_callbacks_t cb;
+ 
+     cb = (b_session_callbacks_t) 
+-            stat_alloc(sizeof(struct b_session_callbacks_st));
++            caml_stat_alloc(sizeof(struct b_session_callbacks_st));
+     cb->session = s;
+     cb->pull_fun = Val_int(0);
+     cb->pull_timeout_fun = Val_int(0);
+@@ -458,7 +458,7 @@ static void b_free_session(gnutls_session_t s) {
+     caml_remove_generational_global_root(&(cb->db_store_fun));
+     caml_remove_generational_global_root(&(cb->db_remove_fun));
+ 
+-    stat_free(cb);
++    caml_stat_free(cb);
+     gnutls_deinit(s);
+ }
+ 
+@@ -484,7 +484,7 @@ CAMLprim value net_b_set_pull_timeout_callback(value sv, value fun) {
+     caml_modify_generational_global_root(&(cb->pull_timeout_fun), fun);
+     return Val_unit;
+ #else
+-    invalid_argument("b_set_pull_timeout_callback");
++    caml_invalid_argument("b_set_pull_timeout_callback");
+ #endif
+ }
+ 
+@@ -510,7 +510,7 @@ CAMLprim value net_b_set_verify_callback(value sv, value fun) {
+     caml_modify_generational_global_root(&(cb->verify_fun), fun);
+     return Val_unit;
+ #else
+-    invalid_argument("b_set_verify_callback");
++    caml_invalid_argument("b_set_verify_callback");
+ #endif
+ }
+ 
+@@ -602,7 +602,7 @@ CAMLprim value net_gnutls_credentials_set(value sess, value creds) {
+                                    );
+         break;
+     default:
+-        failwith("net_gnutls_credentials_set");
++        caml_failwith("net_gnutls_credentials_set");
+     };
+     net_gnutls_error_check(error_code);
+     attach_gnutls_session_t(sess, creds);
+@@ -633,7 +633,7 @@ CAMLprim value net_gnutls_x509_crt_list_import(value datav, value formatv,
+     code = gnutls_x509_crt_list_import(certs, &n, &data, format, 
+                     flags | GNUTLS_X509_CRT_LIST_IMPORT_FAIL_IF_EXCEED);
+     if (code == GNUTLS_E_SHORT_MEMORY_BUFFER) {
+-        certs = (gnutls_x509_crt_t *) stat_alloc(n * sizeof(void *));
++        certs = (gnutls_x509_crt_t *) caml_stat_alloc(n * sizeof(void *));
+         alloc_certs = 1;
+         code = gnutls_x509_crt_list_import(certs, &n, &data, format, 
+                                            flags);
+@@ -646,7 +646,7 @@ CAMLprim value net_gnutls_x509_crt_list_import(value datav, value formatv,
+         };
+     };
+     if (alloc_certs)
+-        stat_free(certs);
++        caml_stat_free(certs);
+     net_gnutls_error_check(code);
+     CAMLreturn(array);
+ }
+@@ -676,7 +676,7 @@ CAMLprim value net_gnutls_x509_crl_list_import(value datav, value formatv,
+     code = gnutls_x509_crl_list_import(certs, &n, &data, format, 
+                     flags | GNUTLS_X509_CRT_LIST_IMPORT_FAIL_IF_EXCEED);
+     if (code == GNUTLS_E_SHORT_MEMORY_BUFFER) {
+-        certs = (gnutls_x509_crl_t *) stat_alloc(n * sizeof(void *));
++        certs = (gnutls_x509_crl_t *) caml_stat_alloc(n * sizeof(void *));
+         alloc_certs = 1;
+         code = gnutls_x509_crl_list_import(certs, &n, &data, format, 
+                                            flags);
+@@ -689,11 +689,11 @@ CAMLprim value net_gnutls_x509_crl_list_import(value datav, value formatv,
+         };
+     };
+     if (alloc_certs)
+-        stat_free(certs);
++        caml_stat_free(certs);
+     net_gnutls_error_check(code);
+     CAMLreturn(array);
+ #else
+-    invalid_argument("gnutls_x509_crl_list_import");
++    caml_invalid_argument("gnutls_x509_crl_list_import");
+ #endif
+ }
+ 
+diff --git a/code/src/nettls-gnutls/gnutls.descr b/code/src/nettls-gnutls/gnutls.descr
+index 68cd1ea..a395209 100644
+--- a/code/src/nettls-gnutls/gnutls.descr
++++ b/code/src/nettls-gnutls/gnutls.descr
+@@ -560,7 +560,7 @@ let functions =
+       ~options: [
+         `Pre("if (data_size__c < 0 || \
+                   data_size__c > caml_ba_byte_size(Caml_ba_array_val(data))) \
+-                      invalid_argument(\"gnutls_record_send\");"
++                      caml_invalid_argument(\"gnutls_record_send\");"
+             )
+       ]
+       "error_code/uint gnutls_record_send \
+diff --git a/code/src/nettls-gnutls/nettle.c b/code/src/nettls-gnutls/nettle.c
+index 77d00ff..95ecae2 100644
+--- a/code/src/nettls-gnutls/nettle.c
++++ b/code/src/nettls-gnutls/nettle.c
+@@ -39,12 +39,12 @@ static void net_nettle_null_pointer(void) {
+ static net_nettle_cipher_ctx_t
+          net_nettle_create_cipher_ctx(net_nettle_cipher_t cipher) {
+     void *p;
+-    p = stat_alloc(cipher->context_size);
++    p = caml_stat_alloc(cipher->context_size);
+     return p;
+ }
+ 
+ static void net_nettle_free(void *ctx) {
+-    stat_free(ctx);
++    caml_stat_free(ctx);
+ }
+ 
+ static void net_nettle_destroy_cipher(net_nettle_cipher_t cipher) {
+@@ -57,7 +57,7 @@ static void net_nettle_set_encrypt_key(net_nettle_cipher_t cipher,
+                                        const uint8_t *key) {
+ #ifdef HAVE_NETTLE_SET_KEY_WITH_TWO_ARGS
+     if (length != cipher->key_size)
+-        failwith("net_nettl_set_encrypt_key: key has wrong size");
++        caml_failwith("net_nettl_set_encrypt_key: key has wrong size");
+     cipher->set_encrypt_key(ctx, key);
+ #else
+     cipher->set_encrypt_key(ctx, length, key);
+@@ -71,7 +71,7 @@ static void net_nettle_set_decrypt_key(net_nettle_cipher_t cipher,
+                                        const uint8_t *key) {
+ #ifdef HAVE_NETTLE_SET_KEY_WITH_TWO_ARGS
+     if (length != cipher->key_size)
+-        failwith("net_nettl_set_decrypt_key: key has wrong size");
++        caml_failwith("net_nettl_set_decrypt_key: key has wrong size");
+     cipher->set_decrypt_key(ctx, key);
+ #else
+     cipher->set_decrypt_key(ctx, length, key);
+@@ -292,7 +292,7 @@ static void net_ext_ciphers(net_nettle_cipher_t **ciphers,
+ 
+ static net_nettle_gcm_aes_ctx_t net_nettle_gcm_aes_init(void) {
+ #ifdef HAVE_NETTLE_GCM_H
+-    return stat_alloc(sizeof(struct gcm_aes_ctx));
++    return caml_stat_alloc(sizeof(struct gcm_aes_ctx));
+ #else
+     return NULL;
+ #endif
+@@ -321,7 +321,7 @@ static const char *net_nettle_hash_name(net_nettle_hash_t hash) {
+ static net_nettle_hash_ctx_t
+          net_nettle_create_hash_ctx(net_nettle_hash_t hash) {
+     void *p;
+-    p = stat_alloc(hash->context_size);
++    p = caml_stat_alloc(hash->context_size);
+     return p;
+ }
+ 
+diff --git a/code/src/nettls-gnutls/nettls_gnutls.ml b/code/src/nettls-gnutls/nettls_gnutls.ml
+index e916181..38ee5c9 100644
+--- a/code/src/nettls-gnutls/nettls_gnutls.ml
++++ b/code/src/nettls-gnutls/nettls_gnutls.ml
+@@ -4,7 +4,7 @@ open Printf
+ 
+ module StrMap = Map.Make(String)
+ module StrSet = Set.Make(String)
+-module OID = struct type t = Netoid.t let compare = Pervasives.compare end
++module OID = struct type t = Netoid.t let compare = compare end
+ module OIDMap = Map.Make(OID)
+ 
+ module type GNUTLS_PROVIDER =
+diff --git a/code/src/nettls-gnutls/reconfigure b/code/src/nettls-gnutls/reconfigure
+index c701e7b..5b3f363 100755
+--- a/code/src/nettls-gnutls/reconfigure
++++ b/code/src/nettls-gnutls/reconfigure
+@@ -216,10 +216,10 @@ echo "Generating stubs"
+ 
+ rm -f config_checks.sh
+ echo "$ ocaml -I ../../tools gnutls.descr" >>$log
+-ocaml -I ../../tools gnutls.descr || exit 1
++ocaml -I +str -I ../../tools gnutls.descr || exit 1
+ 
+ echo "$ ocaml -I ../../tools nettle.descr" >>$log
+-ocaml -I ../../tools nettle.descr || exit 1
++ocaml -I +str -I ../../tools nettle.descr || exit 1
+ 
+ init_checks
+ . ./config_checks.sh
+diff --git a/code/tools/stubgen.ml b/code/tools/stubgen.ml
+index 3cd35c4..336752c 100644
+--- a/code/tools/stubgen.ml
++++ b/code/tools/stubgen.ml
+@@ -447,7 +447,7 @@ let gen_abstract_ptr c mli ml tyname abs ~optional =
+   fprintf c "  CAMLparam0();\n";
+   fprintf c "  CAMLlocal2(v,r);\n";
+   if not abs.abs_nullok then
+-    fprintf c "  if (x == NULL) failwith(\"wrap_%s: NULL pointer\");\n" tyname;
++    fprintf c "  if (x == NULL) caml_failwith(\"wrap_%s: NULL pointer\");\n" tyname;
+   fprintf c "  v = caml_alloc_custom(&abs_%s_ops, \
+                                      sizeof(struct absstruct_%s), 0, 1);\n"
+          tyname tyname;
+@@ -503,10 +503,10 @@ let ml_name_of_enum n0 =
+   try
+     let l = String.length n in
+     let p = String.index n '|' in
+-    String.capitalize (String.lowercase (String.sub n (p+1) (l-p-1)))
++    String.capitalize_ascii (String.lowercase_ascii (String.sub n (p+1) (l-p-1)))
+   with
+     | Not_found ->
+-         String.capitalize (String.lowercase n)
++        String.capitalize_ascii (String.lowercase_ascii n)
+ 
+ 
+ let is_opt_case n =
+@@ -550,7 +550,7 @@ let gen_enum c mli ml tyname cases ~optional =
+     cases;
+   fprintf c "    default: break;\n";
+   fprintf c "  };\n";
+-  fprintf c "  failwith(\"wrap_%s: unexpected value\");\n" tyname;
++  fprintf c "  caml_failwith(\"wrap_%s: unexpected value\");\n" tyname;
+   fprintf c "}\n\n";
+ 
+   fprintf c "static %s unwrap_%s(value v) {\n" tyname tyname;
+@@ -568,9 +568,9 @@ let gen_enum c mli ml tyname cases ~optional =
+          fprintf c "#endif\n"
+     )
+     cases;
+-  fprintf c "    default: invalid_argument(\"unwrap_%s\");\n" tyname;
++  fprintf c "    default: caml_invalid_argument(\"unwrap_%s\");\n" tyname;
+   fprintf c "  };\n";
+-  fprintf c "  failwith(\"unwrap_%s: unexpected value\");\n" tyname;
++  fprintf c "  caml_failwith(\"unwrap_%s: unexpected value\");\n" tyname;
+   fprintf c "}\n";
+ 
+   if optional then
+@@ -983,7 +983,7 @@ let gen_fun c mli ml name args directives free init =
+                   let i1 = new_local() in
+                   c_decls := sprintf "long %s;" i1 :: !c_decls;
+                   let code1 =
+-                    [ sprintf "%s = (%s) stat_alloc(Wosize_val(%s)*sizeof(%s));" 
++                    [ sprintf "%s = (%s) caml_stat_alloc(Wosize_val(%s)*sizeof(%s));"
+                               n1 c_ty n el_c_ty;
+                       sprintf "for (%s=0; %s < Wosize_val(%s); %s++) {"
+                               i1 i1 n i1;
+@@ -1000,7 +1000,7 @@ let gen_fun c mli ml name args directives free init =
+                          sprintf "};"
+                        ]
+                      else []) @
+-                      [ sprintf "stat_free(%s);" n1 ] in
++                      [ sprintf "caml_stat_free(%s);" n1 ] in
+                   c_code_post_prio := List.rev code2 @ !c_code_post_prio;
+              | `Array_size(n_array, ty) ->
+                   let code =
+@@ -1358,14 +1358,14 @@ let gen_fun c mli ml name args directives free init =
+       fprintf c "    long n__stub;\n";
+       fprintf c "    %s__c++;\n" n_strbuf_size;
+       fprintf c "    n__stub = %s__c;\n" n_strbuf_size;
+-      fprintf c "    %s__c = stat_alloc(%s__c+1);\n" n_strbuf n_strbuf_size;
++      fprintf c "    %s__c = caml_stat_alloc(%s__c+1);\n" n_strbuf n_strbuf_size;
+       fprintf c "    ";
+       emit_call();
+       fprintf c "    if (%s == 0) {\n" ret_var;
+       fprintf c "      ((char *) %s__c)[n__stub] = 0;\n" n_strbuf;
+       fprintf c "      %s = caml_copy_string(%s__c);\n" n_strbuf n_strbuf;
+       fprintf c "    };\n";
+-      fprintf c "    stat_free(%s__c);\n" n_strbuf;
++      fprintf c "    caml_stat_free(%s__c);\n" n_strbuf;
+       fprintf c "  };\n";      
+     )
+     else (
+@@ -1414,7 +1414,7 @@ let gen_fun c mli ml name args directives free init =
+ 
+   if optional then (
+     fprintf c "#else\n";
+-    fprintf c "  invalid_argument(\"%s\");\n" name;
++    fprintf c "  caml_invalid_argument(\"%s\");\n" name;
+     fprintf c "#endif\n";
+   );
+ 
+@@ -1483,7 +1483,7 @@ let gen_c_head c =
+ 
+ let gen_c_head2 c =
+   fprintf c "static unsigned int uint_val(value v) {\n\
+-             \032   if (Int_val(v) < 0) invalid_argument(\"negative integer\");\n\
++             \032   if (Int_val(v) < 0) caml_invalid_argument(\"negative integer\");\n\
+              \032   return (unsigned int) Int_val(v);\n\
+              }\n\
+              \n\
+-- 
+2.50.1
+

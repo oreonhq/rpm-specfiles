@@ -1,0 +1,73 @@
+--- manedit-1.2.1/manedit/editor.c.manpages	2008-10-12 08:00:00.000000000 +0900
++++ manedit-1.2.1/manedit/editor.c	2008-10-16 03:31:03.000000000 +0900
+@@ -31,6 +31,8 @@
+ #include "me_cfg_list.h"
+ #include "config.h"
+ 
++#include "mansuffix.h"
++
+ #include "images/icon_manedit_editor_48x48.xpm"
+ #include "images/icon_manedit_editor_16x16.xpm"
+ #include "images/icon_manedit_editor_20x20.xpm"
+@@ -749,7 +751,7 @@
+ 	/* Create the file types list */
+ 	FileBrowserTypeListNew(
+ 	    &ftypes_list, &nftypes,
+-	    ".1 .2 .3 .4 .5 .6 .7 .8 .9 .bz2 .gz",
++	    MANPAGE_SUFFIX,
+ 	    "Manual page"
+ 	);
+ 	FileBrowserTypeListNew(
+@@ -907,7 +909,7 @@
+ 	/* Create the file types list */
+ 	FileBrowserTypeListNew(
+ 	    &ftypes_list, &nftypes,
+-	    ".1 .2 .3 .4 .5 .6 .7 .8 .9 .bz2 .gz",
++	    MANPAGE_SUFFIX,
+ 	    "Manual page"
+ 	);
+ 	FileBrowserTypeListNew(
+--- manedit-1.2.1/manedit/mansuffix.h.manpages	2008-10-16 03:25:25.000000000 +0900
++++ manedit-1.2.1/manedit/mansuffix.h	2008-10-16 03:27:41.000000000 +0900
+@@ -0,0 +1,8 @@
++#ifndef		MANSUFFIX_H
++#define		MANSUFFIX_H
++
++#define  MANPAGE_SUFFIX \
++	".1 .2 .3 .4 .5 .6 .7 .8 .9 .bz2 .gz" \
++	" .1x .2x .3x .4x .5x .6x .7x .8x .9x"
++
++#endif
+--- manedit-1.2.1/manedit/me_core.c.manpages	2008-10-12 08:00:00.000000000 +0900
++++ manedit-1.2.1/manedit/me_core.c	2008-10-16 03:37:00.000000000 +0900
+@@ -112,6 +112,10 @@
+ 	string_list = CFGStringListNew(NULL);
+ 	string_list->list = g_list_append(
+ 	    string_list->list,
++	    g_strdup("/usr/kerberos/man")
++	);
++	string_list->list = g_list_append(
++	    string_list->list,
+ 	    g_strdup("/usr/man")
+ 	);
+ 	string_list->list = g_list_append(
+--- manedit-1.2.1/manedit/viewer_cb.c.manpages	2008-10-12 08:00:00.000000000 +0900
++++ manedit-1.2.1/manedit/viewer_cb.c	2008-10-16 03:30:27.000000000 +0900
+@@ -26,6 +26,8 @@
+ #include "me_cfg_list.h"
+ #include "config.h"
+ 
++#include "mansuffix.h"
++
+ 
+ gint ViewerDeleteEventCB(GtkWidget *widget, GdkEvent *event, gpointer data);
+ void ViewerCloseCB(GtkWidget *widget, gpointer data);
+@@ -637,7 +639,7 @@
+ 	    /* Query the user to open a manual page */
+ 	    FileBrowserTypeListNew(
+ 		&ftypes_list, &nftypes,
+-		".1 .2 .3 .4 .5 .6 .7 .8 .9 .bz2 .gz",
++		MANPAGE_SUFFIX,
+ 		"Manual page"
+ 	    );
+ 	    FileBrowserTypeListNew(

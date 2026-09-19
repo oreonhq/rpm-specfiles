@@ -1,0 +1,14 @@
+--- vultures/GNUmakefile.orig	2021-03-09 19:25:59.614652250 -0600
++++ vultures/GNUmakefile	2021-03-09 19:28:37.170645182 -0600
+@@ -68,9 +68,8 @@
+ $(BUILDDIR)/vultures_tileconfig.parser.c $(BUILDDIR)/vultures_tileconfig.parser.h: vultures_tileconfig.parser.y
+ 	@echo generating parser
+ 	@mkdir -p $(BUILDDIR)
+-	@bison --no-lines -d vultures_tileconfig.parser.y -o $(BUILDDIR)/vultures_tileconfig.parser.tmp.c
+-	@mv $(BUILDDIR)/vultures_tileconfig.parser.tmp.c $(BUILDDIR)/vultures_tileconfig.parser.c
+-	@mv $(BUILDDIR)/vultures_tileconfig.parser.tmp.h $(BUILDDIR)/vultures_tileconfig.parser.h
++	@rm -f $(BUILDDIR)/vultures_tileconfig.parser.h $(BUILDDIR)/vultures_tileconfig.parser.c
++	@bison --no-lines -d vultures_tileconfig.parser.y -o $(BUILDDIR)/vultures_tileconfig.parser.c
+ 
+ $(BUILDDIR)/vultures_tileconfig.lexer.c: vultures_tileconfig.lexer.l
+ 	@echo generating lexer

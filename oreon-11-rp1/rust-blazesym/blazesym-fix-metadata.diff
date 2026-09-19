@@ -1,0 +1,76 @@
+--- blazesym-0.2.0-rc.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ blazesym-0.2.0-rc.0/Cargo.toml	2025-11-04T22:17:05.009513+00:00
+@@ -78,18 +78,18 @@
+ harness = false
+ 
+ [dependencies.cpp_demangle]
+-version = "0.4"
++version = "0.5"
+ optional = true
+ 
+ [dependencies.gimli]
+-version = "0.30"
++version = "0.32"
+ optional = true
+ 
+ [dependencies.libc]
+ version = "0.2.137"
+ 
+ [dependencies.miniz_oxide]
+-version = "0.7"
++version = "0.8"
+ features = [
+     "simd",
+     "with-alloc",
+@@ -121,7 +121,7 @@
+ package = "simd-adler32"
+ 
+ [dev-dependencies.addr2line]
+-version = "=0.23.0"
++version = "0.25.0"
+ 
+ [dev-dependencies.anyhow]
+ version = "1.0.71"
+@@ -144,27 +144,8 @@
+ [dev-dependencies.test-tag]
+ version = "0.1.3"
+ 
+-[build-dependencies.dump_syms]
+-version = "2.3"
+-optional = true
+-default-features = false
+-
+ [build-dependencies.libc]
+ version = "0.2.137"
+-
+-[build-dependencies.reqwest]
+-version = "0.12.0"
+-features = ["blocking"]
+-optional = true
+-
+-[build-dependencies.xz2]
+-version = "0.1.7"
+-optional = true
+-
+-[build-dependencies.zip]
+-version = "2.0.0"
+-optional = true
+-default-features = false
+ 
+ [features]
+ apk = []
+@@ -183,14 +164,8 @@
+ dont-generate-unit-test-files = []
+ dwarf = ["dep:gimli"]
+ generate-large-test-files = [
+-    "dump_syms",
+-    "reqwest",
+-    "xz2",
+ ]
+ generate-unit-test-files = [
+-    "dump_syms",
+-    "xz2",
+-    "zip",
+ ]
+ gsym = []
+ nightly = []

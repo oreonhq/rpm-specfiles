@@ -1,0 +1,33 @@
+From 2cef69d05e60ecaa497f50d6764f046a097a2e81 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 7 Nov 2016 15:52:51 +0100
+Subject: [PATCH] Disable build-time check for Root
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+We ensure Root presence by RPM dependencies. Checking the Root at
+build-time prevents from building this architecture-agnosic package on
+platforms where Root is unsupported.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Build.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Build.PL b/Build.PL
+index f521a64..38fd5bf 100644
+--- a/Build.PL
++++ b/Build.PL
+@@ -83,7 +83,7 @@ use Alien::ROOT;
+ my $aroot = Alien::ROOT->new();
+ $builder->notes(build_ROOT => 0);
+ 
+-if (not $aroot->installed or $USER_CONFIG->{force_recompile}) {
++if (0) {
+   if ($ENV{AUTOMATED_TESTING}) {
+     exit(0); # Do not create pain for CPAN testers...
+   }
+-- 
+2.7.4
+

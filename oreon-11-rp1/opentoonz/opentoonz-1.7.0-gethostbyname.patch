@@ -1,0 +1,256 @@
+diff --git a/toonz/sources/toonzfarm/tfarm/tfarmtask.cpp b/toonz/sources/toonzfarm/tfarm/tfarmtask.cpp
+index 836266be..9f9cf8e2 100644
+--- a/toonz/sources/toonzfarm/tfarm/tfarmtask.cpp
++++ b/toonz/sources/toonzfarm/tfarm/tfarmtask.cpp
+@@ -22,13 +22,13 @@
+ #elif defined(MACOSX)
+ #include "tversion.h"
+ using namespace TVER;
+-#include <netdb.h>      // gethostbyname
++#include <netdb.h>      // getaddrinfo
+ #include <arpa/inet.h>  // inet_ntoa
+ #else
+ // these were included for OSX, i'm not sure if they are required for linux or
+ // not? leaving them in as linux was building successfully already. damies13 -
+ // 2017-04-15.
+-#include <netdb.h>      // gethostbyname
++#include <netdb.h>      // getaddrinfo
+ #include <arpa/inet.h>  // inet_ntoa
+ #endif
+ 
+@@ -488,6 +488,11 @@ QString TFarmTask::getCommandLinePrgName() const {
+ QString TFarmTask::getCommandLineArguments() const {
+   QString cmdline = "";
+ 
++  struct addrinfo *ai = NULL;
++  struct addrinfo hints;
++  memset(&hints, 0, sizeof(struct addrinfo));
++  hints.ai_family = AF_INET;
++
+   if (!m_taskFilePath.isEmpty())
+     cmdline += " \"" +
+                QString::fromStdWString(
+@@ -495,9 +500,12 @@ QString TFarmTask::getCommandLineArguments() const {
+                "\"";
+ 
+   if (m_callerMachineName != "") {
+-    struct hostent *he = gethostbyname(m_callerMachineName.toLatin1());
+-    if (he) {
+-      char *ipAddress = inet_ntoa(*(struct in_addr *)*(he->h_addr_list));
++    int suc = getaddrinfo(m_callerMachineName.toLatin1(), NULL, &hints, &ai);
++    if (suc == 0) {
++      struct sockaddr_in *ai_addr;
++      ai_addr = (struct sockaddr_in *)ai->ai_addr;
++
++      char *ipAddress = inet_ntoa((struct in_addr)ai_addr->sin_addr);
+       cmdline += " -tmsg " + QString::fromUtf8(ipAddress);
+     }
+   }
+diff --git a/toonz/sources/toonzfarm/tfarm/tserverproxy.cpp b/toonz/sources/toonzfarm/tfarm/tserverproxy.cpp
+index 035296c1..2ee4ba95 100644
+--- a/toonz/sources/toonzfarm/tfarm/tserverproxy.cpp
++++ b/toonz/sources/toonzfarm/tfarm/tserverproxy.cpp
+@@ -28,16 +28,23 @@ enum {
+ //=============================================================================
+ 
+ int askServer(string hostName, int portId, string question, string &answer) {
+-  struct hostent *he = gethostbyname(hostName.c_str());
+-  if (!he) return HOST_UNKNOWN;
+-
++  struct addrinfo *ai = NULL;
++  struct addrinfo hints;
++  memset(&hints, 0, sizeof(struct addrinfo));
++  hints.ai_family = AF_INET;
++
++  int suc = getaddrinfo(hostName.c_str(), NULL, &hints, &ai);
++  if (suc != 0) return HOST_UNKNOWN;
++ 
+   int socket_id = socket(AF_INET, SOCK_STREAM, 0);
+-
++  struct sockaddr_in *ai_addr;
++  ai_addr = (struct sockaddr_in *)ai->ai_addr;
++ 
+   struct sockaddr_in addr;
+   memset((char *)&addr, 0, sizeof addr);
+-  addr.sin_family = he->h_addrtype;
+-  addr.sin_port   = htons(portId);
+-  memcpy((char *)&(addr.sin_addr), he->h_addr, he->h_length);
++  addr.sin_family = ai_addr->sin_family;
++  addr.sin_port   = htons(port);
++  addr.sin_addr = ai_addr->sin_addr;
+ 
+   int rcConnect = connect(socket_id, (struct sockaddr *)&(addr), sizeof addr);
+   if (rcConnect == SOCKET_ERROR) return CONNECTION_FAILED;
+@@ -82,16 +89,23 @@ TServerProxy::~TServerProxy() {
+ //-----------------------------------------------------------------------------
+ 
+ bool TServerProxy::testConnection() const {
+-  struct hostent *he = gethostbyname(m_hostName.c_str());
+-  if (!he) return false;
+-
++  addrinfo *ai = NULL;
++  struct addrinfo hints;
++  memset(&hints, 0, sizeof(struct addrinfo));
++  hints.ai_family = AF_INET;
++
++  int suc = getaddrinfo(m_hostName.c_str(), NULL, &hints, &ai);
++  if (suc != 0) return false;
++ 
+   int socket_id = socket(AF_INET, SOCK_STREAM, 0);
++  struct sockaddr_in *ai_addr;
++  ai_addr = (struct sockaddr_in *)ai->ai_addr;
+ 
+   struct sockaddr_in addr;
+   memset((char *)&addr, 0, sizeof addr);
+-  addr.sin_family = he->h_addrtype;
+-  addr.sin_port   = htons(m_portId);
+-  memcpy((char *)&(addr.sin_addr), he->h_addr, he->h_length);
++  addr.sin_family = ai_addr->sin_family;
++  addr.sin_port   = htons(port);
++  addr.sin_addr = ai_addr->sin_addr;
+ 
+   bool ret = (SOCKET_ERROR !=
+               connect(socket_id, (struct sockaddr *)&(addr), sizeof addr));
+diff --git a/toonz/sources/toonzfarm/tfarm/ttcpipclient.cpp b/toonz/sources/toonzfarm/tfarm/ttcpipclient.cpp
+index f8a76450..89671de8 100644
+--- a/toonz/sources/toonzfarm/tfarm/ttcpipclient.cpp
++++ b/toonz/sources/toonzfarm/tfarm/ttcpipclient.cpp
+@@ -49,8 +49,13 @@ int TTcpIpClient::connect(const QString &hostName, const QString &addrStr,
+       unsigned long ipAddr = inet_addr(addrStr.c_str());
+     }
+   */
+-  struct hostent *he = gethostbyname(hostName.toUtf8());
+-  if (!he) {
++  struct addrinfo *ai = NULL;
++  struct addrinfo hints;
++  memset(&hints, 0, sizeof(struct addrinfo));
++  hints.ai_family = AF_INET;
++
++  int suc = getaddrinfo(hostName.toUtf8(), NULL, &hints, &ai);
++  if (suc != 0) {
+ #ifdef _WIN32
+     int err = WSAGetLastError();
+ #else
+@@ -59,12 +64,14 @@ int TTcpIpClient::connect(const QString &hostName, const QString &addrStr,
+   }
+ 
+   int socket_id = socket(AF_INET, SOCK_STREAM, 0);
++  struct sockaddr_in *ai_addr;
++  ai_addr = (struct sockaddr_in *)ai->ai_addr;
+ 
+   struct sockaddr_in addr;
+   memset((char *)&addr, 0, sizeof addr);
+-  addr.sin_family = he->h_addrtype;
++  addr.sin_family = ai_addr->sin_family;
+   addr.sin_port   = htons(port);
+-  memcpy((char *)&(addr.sin_addr), he->h_addr, he->h_length);
++  addr.sin_addr = ai_addr->sin_addr;
+ 
+   int rcConnect = ::connect(socket_id, (struct sockaddr *)&(addr), sizeof addr);
+   if (rcConnect == SOCKET_ERROR) {
+diff --git a/toonz/sources/toonzfarm/tfarm/ttcpipserver.cpp b/toonz/sources/toonzfarm/tfarm/ttcpipserver.cpp
+index ac6df6ee..d76242f6 100644
+--- a/toonz/sources/toonzfarm/tfarm/ttcpipserver.cpp
++++ b/toonz/sources/toonzfarm/tfarm/ttcpipserver.cpp
+@@ -447,15 +447,21 @@ void TTcpIpServer::sendReply(int socket, const QString &reply) {
+ int establish(unsigned short portnum, int &sock) {
+   char myname[MAXHOSTNAME + 1];
+   struct sockaddr_in sa;
+-  struct hostent *hp;
++  struct addrinfo *ai = NULL;
++  struct addrinfo hints;
++  memset(&hints, 0, sizeof(struct addrinfo));
++  hints.ai_family = AF_INET;
+ 
+   memset(&sa, 0, sizeof(struct sockaddr_in)); /* clear our address */
+   gethostname(myname, MAXHOSTNAME);           /* who are we? */
+-  hp = gethostbyname(myname);                 /* get our address info */
+-  if (hp == NULL)                             /* we don't exist !? */
++  int suc = getaddrinfo(myname, NULL, &hints, &ai); /* get our address info */
++  if (suc != 0)                             /* we don't exist !? */
+     return (-1);
+ 
+-  sa.sin_family = hp->h_addrtype; /* this is our host address */
++  struct sockaddr_in *ai_addr;
++  ai_addr = (struct sockaddr_in *)ai->ai_addr;
++
++  sa.sin_family = ai_addr->sin_family; /* this is our host address */
+   sa.sin_port   = htons(portnum); /* this is our port number */
+   if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) /* create socket */
+   {
+diff --git a/toonz/sources/toonzfarm/tfarmcontroller/tfarmcontroller_shutdown.cpp b/toonz/sources/toonzfarm/tfarmcontroller/tfarmcontroller_shutdown.cpp
+index 1e7005cc..32087d18 100644
+--- a/toonz/sources/toonzfarm/tfarmcontroller/tfarmcontroller_shutdown.cpp
++++ b/toonz/sources/toonzfarm/tfarmcontroller/tfarmcontroller_shutdown.cpp
+@@ -16,21 +16,28 @@
+ 
+ int call_socket(char *hostname, unsigned short portnum) {
+   struct sockaddr_in sa;
+-  struct hostent *hp;
++  struct addrinfo *ai = NULL;
++  struct addrinfo hints;
++  memset(&hints, 0, sizeof(struct addrinfo));
++  hints.ai_family = AF_INET;
+   int s;
+ 
+-  if ((hp = gethostbyname(hostname)) == NULL) /* do we know the host's */
++  int suc = getaddrinfo(hostname, NULL, &hints, &ai);
++  if (suc != 0) /* do we know the host's */
+   {
+     errno = ECONNREFUSED; /* address? */
+     return (-1);          /* no */
+   }
+ 
++  struct sockaddr_in *ai_addr;
++  ai_addr = (struct sockaddr_in *)ai->ai_addr;
++
+   memset(&sa, 0, sizeof(sa));
+-  memcpy((char *)&sa.sin_addr, hp->h_addr, hp->h_length); /* set address */
+-  sa.sin_family = hp->h_addrtype;
++  sa.sin_addr = ai_addr->sin_addr;
++  sa.sin_family = ai_addr->sin_family;
+   sa.sin_port   = htons((u_short)portnum);
+ 
+-  if ((s = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0) /* get socket */
++  if ((s = socket(ai_addr->sin_family, SOCK_STREAM, 0)) < 0) /* get socket */
+     return (-1);
+   if (connect(s, (struct sockaddr *)&sa, sizeof sa) < 0) /* connect */
+   {
+diff --git a/toonz/sources/toonzfarm/tfarmserver/tfarmserver_shutdown.cpp b/toonz/sources/toonzfarm/tfarmserver/tfarmserver_shutdown.cpp
+index a3ff6fc6..7d22c760 100644
+--- a/toonz/sources/toonzfarm/tfarmserver/tfarmserver_shutdown.cpp
++++ b/toonz/sources/toonzfarm/tfarmserver/tfarmserver_shutdown.cpp
+@@ -16,21 +16,28 @@
+ 
+ int call_socket(char *hostname, unsigned short portnum) {
+   struct sockaddr_in sa;
+-  struct hostent *hp;
++  struct addrinfo *ai = NULL;
++  struct addrinfo hints;
++  memset(&hints, 0, sizeof(struct addrinfo));
++  hints.ai_family = AF_INET;
+   int s;
+ 
+-  if ((hp = gethostbyname(hostname)) == NULL) /* do we know the host's */
++  int suc = getaddrinfo(hostname, NULL, &hints, &ai);
++  if (suc != 0) /* do we know the host's */
+   {
+     errno = ECONNREFUSED; /* address? */
+     return (-1);          /* no */
+   }
+ 
++  struct sockaddr_in *ai_addr;
++  ai_addr = (struct sockaddr_in *)ai->ai_addr;
++
+   memset(&sa, 0, sizeof(sa));
+-  memcpy((char *)&sa.sin_addr, hp->h_addr, hp->h_length); /* set address */
+-  sa.sin_family = hp->h_addrtype;
++  sa.sin_addr = ai_addr->sin_addr;
++  sa.sin_family = ai_addr->sin_family;
+   sa.sin_port   = htons((u_short)portnum);
+ 
+-  if ((s = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0) /* get socket */
++  if ((s = socket(ai_addr->sin_family, SOCK_STREAM, 0)) < 0) /* get socket */
+     return (-1);
+   if (connect(s, (struct sockaddr *)&sa, sizeof sa) < 0) /* connect */
+   {

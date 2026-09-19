@@ -1,61 +1,59 @@
-%global source0_hash 0e56ee44222d2df37c337c376973861af300a7f86b8ff9dc199c2b3349a3d204
-
-# NOTE: tests are disabled since should_be has not yet been packaged.
+%global source0_hash none
 
 Name:           python-gssapi
-Version:        1.7.3
-Release:        16%{?dist}
-Summary:        Python Bindings for GSSAPI (RFC 2743/2744 and extensions)
+Version:        1.12.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python GSSAPI Wrapper
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC
 URL:            https://github.com/pythongssapi/python-gssapi
-Source0:        https://github.com/pythongssapi/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
-# https://github.com/pythongssapi/python-gssapi/pull/321
-Patch0:         cython3.patch
+Source:         %{pypi_source gssapi}
 
-BuildRequires:  krb5-devel >= 1.19
-BuildRequires:  gcc
 BuildRequires:  python3-devel
-BuildRequires:  python3-Cython
+BuildRequires:  gcc
 
-# For autosetup
-BuildRequires: git-core
 
-%global _description\
-A set of Python bindings to the GSSAPI C library providing both\
-a high-level pythonic interfaces and a low-level interfaces\
-which more closely matches RFC 2743.  Includes support for\
-RFC 2743, as well as multiple extensions.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'gssapi' generated automatically by pyp2spec.}
+
+Patch0:         cython3.patch
 
 %description %_description
 
-%package -n python3-gssapi
-Summary:        Python 3 Bindings for GSSAPI (RFC 2743/2744 and extensions)
-Requires:       krb5-libs >= 1.19
+%package -n     python3-gssapi
+Summary:        %{summary}
 
 %description -n python3-gssapi %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git -n %{name}-%{version}
+%autosetup -p1 -n gssapi-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files gssapi
 
 %check
-# Check import everything except the tests, as we don't have the tests deps
-%pyproject_check_import -e 'gssapi.tests*'
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-gssapi -f %{pyproject_files}
-%doc README.txt
 
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.3-16

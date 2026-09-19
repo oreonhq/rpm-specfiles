@@ -1,0 +1,54 @@
+.TH GEOTILER\-ROUTE "1" "November 2021" "" "User Commands"
+.SH NAME
+.B geotiler\-route
+\(en read positions from set of GPX files and draw them on a map
+.SH SYNOPSIS
+.B geotiler\-route
+.RB [ \-h ]
+.RB [ \-v ]
+.RB [ \-p\  {}]
+.RB [ \-s\ \fISIZE\fB\ \fISIZE\fR]
+.RB [ \-r\ \fIRADIUS ]
+.RB [ \-a\ \fIALPHA ]
+.RB [ \-\-cache\  { redis }]
+.I filename
+.RI [ filename \ ...]
+.I output
+.SH DESCRIPTION
+ Read positions from set of GPX files and draw them on a map.
+The map size is set to 1920x1080
+and can be changed with commandline parameter.
+The zoom and extents of the map are calculated automatically.
+.SH OPTIONS
+.SS "POSITIONAL ARGUMENTS"
+.TP
+.I filename
+GPX file
+.TP
+.I output
+Output PNG file
+.SS "OPTIONAL ARGUMENTS"
+.TP
+.BR \-h ,\  \-\-help
+Show a help message and exit
+.TP
+.BR \-v ,\  \-\-verbose
+Make a bunch of noise
+.TP
+.BR \-p\  {},\  \-\-provider\  {}
+map provider id
+.TP
+.BI \-s\  SIZE \  SIZE\fR, \ \-\-size\  SIZE \  SIZE
+size of map image
+.TP
+.BI \-r\  RADIUS\fR, \ \-\-radius\  RADIUS
+radius of drawn point of a position
+.TP
+.BI \-a\  ALPHA\fR, \ \-\-alpha\  ALPHA
+color alpha of drawn point of a position
+.TP
+.BR \-\-cache\  { redis }
+specify caching strategy
+.SH "SEE ALSO"
+.BR geotiler\-fetch (1),
+.BR geotiler\-lint (1)

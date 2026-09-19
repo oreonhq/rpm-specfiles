@@ -1,0 +1,40 @@
+From ace05ce4e3bcee8ff4d6204f4dac835f86f17d4a Mon Sep 17 00:00:00 2001
+From: Matthew Dwyer <Mluckydwyer@users.noreply.github.com>
+Date: Tue, 25 Oct 2022 02:07:41 -0500
+Subject: [PATCH] Fix Linux aarch64 support on GCC with lax vector conversions
+
+---
+ CMakeLists.txt         | 7 +++++++
+ common/cmake/gnu.cmake | 1 +
+ 2 files changed, 8 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 36f77a5520..86343eaae6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -167,6 +167,13 @@ IF (APPLE)
+   ENDIF()
+ ENDIF()
+ 
++IF (UNIX)
++    IF (CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
++        MESSAGE(STATUS "Building for ARM64")
++        SET(EMBREE_ARM ON)
++    ENDIF()
++ENDIF()
++
+ SET(EMBREE_TASKING_SYSTEM "TBB" CACHE STRING "Selects tasking system")
+ SET(EMBREE_TBB_COMPONENT "tbb" CACHE STRING "The TBB component/library name.")
+ 
+diff --git a/common/cmake/gnu.cmake b/common/cmake/gnu.cmake
+index 1b2682d9eb..00ace8152d 100644
+--- a/common/cmake/gnu.cmake
++++ b/common/cmake/gnu.cmake
+@@ -28,6 +28,7 @@ ENDIF()
+ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+ IF (EMBREE_ARM)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsigned-char")             # treat 'char' as 'signed char'
++  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flax-vector-conversions")  # allow lax SIMD vector type conversions (required for aarch64 support)
+ ENDIF (EMBREE_ARM)
+ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")                       # enables most warnings
+ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat -Wformat-security")  # enables string format vulnerability warnings

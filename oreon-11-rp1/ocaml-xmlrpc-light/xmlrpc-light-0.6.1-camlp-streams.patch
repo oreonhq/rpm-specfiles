@@ -1,0 +1,24 @@
+--- xmlrpc-light-0.6.1/Makefile.orig	2015-02-18 04:20:07.614033224 -0700
++++ xmlrpc-light-0.6.1/Makefile	2023-06-27 15:49:48.954388752 -0600
+@@ -2,9 +2,9 @@ OCAMLMAKEFILE = OCamlMakefile
+ 
+ RESULT = xmlrpc-light
+ SOURCES = XmlRpcBase64.mli XmlRpcBase64.ml XmlRpcDateTime.mli XmlRpcDateTime.ml XmlRpc.mli XmlRpc.ml XmlRpcServer.mli XmlRpcServer.ml
+-PACKS = xml-light,netclient,netplex,netcgi2,nethttpd
++PACKS = xml-light,netclient,netplex,netcgi2,nethttpd,camlp-streams
+ LIBINSTALL_FILES = XmlRpcBase64.mli XmlRpcBase64.cmi XmlRpcDateTime.mli XmlRpcDateTime.cmi XmlRpc.mli XmlRpc.cmi XmlRpcServer.mli XmlRpcServer.cmi xmlrpc-light.cma xmlrpc-light.cmxa xmlrpc-light.a
+-OCAMLDOC = ocamlfind ocamldoc -package xml-light,netplex,netcgi2,nethttpd
++OCAMLDOC = ocamlfind ocamldoc -package xml-light,netplex,netcgi2,nethttpd,ocamlp-streams
+ DOC_FILES = XmlRpc.mli XmlRpcServer.mli XmlRpcDateTime.mli XmlRpcBase64.mli
+ 
+ all: native-code-library byte-code-library
+--- xmlrpc-light-0.6.1/META.orig	2015-02-18 04:20:03.269020209 -0700
++++ xmlrpc-light-0.6.1/META	2023-06-27 15:49:18.786945839 -0600
+@@ -1,6 +1,6 @@
+ name = "xmlrpc-light"
+ version = "0.6.1"
+ description = "XML-RPC client based on Xml-Light"
+-requires = "xml-light,netclient,netplex,netcgi2,nethttpd"
++requires = "xml-light,netclient,netplex,netcgi2,nethttpd,camlp-streams"
+ archive(byte) = "xmlrpc-light.cma"
+ archive(native) = "xmlrpc-light.cmxa"

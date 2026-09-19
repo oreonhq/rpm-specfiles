@@ -1,5 +1,5 @@
-%global source0_hash 49c8ccace7f9095b88b7d3b21f3483d0ea530d9381839e923d0838d5dbfee60e
-%global source1_hash 1854843900a7e22b3363a56a95c31302a06657d6add95bb9875cdf8390b34b04
+%global source0_hash 68fff717d021971424e40595db094183a80a5698a084e6cfee9e5132cec17fed6b1b7b42a111fa3325bde59f8357f4112435eae11e9ccc1d07d6475b1fd2e638
+%global source1_hash 49031f2c2b863d6275a35f23936486b10f5a692f06289fef5353d75868c99e36b1523d3a1cb66aa5e7753332701382f102847df557d4404c9abf85634b148147
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
 Name:           texlive-zhnumber
@@ -10,8 +10,8 @@ Summary:        Typeset Chinese representations of numbers
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhnumber.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhnumber.doc.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zhnumber.tar.xz#/zhnumber.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zhnumber.doc.tar.xz#/zhnumber.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-zhnumber-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-zhnumber-doc <= 11:%{version}
@@ -22,8 +22,8 @@ Provides:       tex(zhnumber.sty)
 %description
 Typeset Chinese representations of numbers.
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %build
 %install
 mkdir -p %{buildroot}%{_texmf_main}

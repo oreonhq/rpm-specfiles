@@ -1,0 +1,28 @@
+.TH TEND\-EXP "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-exp \- calculates \fBexp()\fR of the tensor
+.SH SYNOPSIS
+.B tend\ exp
+.RB [ \-i
+.RI < nin >]
+.B \-o
+.RI < nout >
+.SH DESCRIPTION
+Calculates
+.B exp()
+of the tensor, which is based on
+.B exp()
+of the eigenvalues.
+.SH OPTIONS
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output image
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

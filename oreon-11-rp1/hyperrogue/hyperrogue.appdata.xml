@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Alexandre Moine <nobrakal@gmail.com> -->
+<component type="desktop">
+  <id>hyperrogue.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+
+  <project_license>GPL-2.0 and BSD-3-Clause and Zlib and CC-BY-SA-3.0</project_license>
+  <name>Hyperrogue</name>
+  <summary>An SDL roguelike in a non-euclidean world</summary>
+  <description>
+    <p>
+  You are a lone outsider in a strange, non-Euclidean world.
+  Fight to find treasures and get the fabulous Orbs of Yendor!
+  </p>
+    <p>
+  Hyperrogue can work in SDL, Escher or ASCII mode. It can also run on 
+different modes, like Chaos, Tactical or even Shmup!
+  </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://roguetemple.com/z/shots/hyper-wide1.png</image>
+      <caption>In-game view</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://roguetemple.com/z/shots/hyper-wide2.png</image>
+      <caption>In-game view</caption>
+    </screenshot>
+  </screenshots>
+  <update_contact>nobrakal@gmail.com</update_contact>
+  <url type="homepage">http://www.roguetemple.com/z/hyper/</url>
+
+  <developer_name>Zeno Rogue</developer_name>
+
+  <url type="bugtracker">https://github.com/zenorogue/hyperrogue/issues</url>
+
+  <url type="donation">http://www.roguetemple.com/z/donate.php?id=HyperRogue</url>
+
+  <url type="help">http://www.roguetemple.com/z/hyper/faq.php</url>
+
+    <content_rating type="oars-1.0">
+    <content_attribute id="violence-cartoon">moderate</content_attribute>
+    <content_attribute id="violence-fantasy">moderate</content_attribute>
+    <content_attribute id="violence-realistic">mild</content_attribute>
+    <content_attribute id="violence-bloodshed">mild</content_attribute>
+    <content_attribute id="violence-sexual">none</content_attribute>
+    <content_attribute id="drugs-alcohol">none</content_attribute>
+    <content_attribute id="drugs-narcotics">none</content_attribute>
+    <content_attribute id="drugs-tobacco">none</content_attribute>
+    <content_attribute id="sex-nudity">none</content_attribute>
+    <content_attribute id="sex-themes">none</content_attribute>
+    <content_attribute id="language-profanity">mild</content_attribute>
+    <content_attribute id="language-humor">none</content_attribute>
+    <content_attribute id="language-discrimination">none</content_attribute>
+    <content_attribute id="social-chat">none</content_attribute>
+    <content_attribute id="social-info">none</content_attribute>
+    <content_attribute id="social-audio">none</content_attribute>
+    <content_attribute id="social-location">none</content_attribute>
+    <content_attribute id="social-contacts">none</content_attribute>
+    <content_attribute id="money-purchasing">none</content_attribute>
+    <content_attribute id="money-gambling">none</content_attribute>
+  </content_rating>
+
+</component>

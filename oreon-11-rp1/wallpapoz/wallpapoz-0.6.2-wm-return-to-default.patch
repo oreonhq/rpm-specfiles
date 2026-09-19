@@ -1,0 +1,20 @@
+--- wallpapoz-0.6.2/share/wallpapoz/lib/wallpapoz_system.py.default	2012-09-18 12:31:45.855406125 +0900
++++ wallpapoz-0.6.2/share/wallpapoz/lib/wallpapoz_system.py	2012-09-18 12:37:03.387072341 +0900
+@@ -108,6 +108,7 @@
+     if wm_name=='Xfwm4':
+       self.window_manager = 'XFCE4'
+     else:
++     try:
+       output = os.popen("gnome-session --version")
+       result = output.readlines()
+       version = result[0].split()[1].split('.')[0]
+@@ -115,6 +116,9 @@
+         self.window_manager = 'Gnome'
+       elif version == '3':
+         self.window_manager = 'Gnome3'
++     except:
++      # If something went wrong, just ignore
++      pass
+ 
+   ## class method to find amount of workspaces in user desktop
+   def finding_total_workspaces(self):

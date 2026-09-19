@@ -1,0 +1,42 @@
+diff -up grafX2-v2.8/src/tifformat.c.fix-tiff-saving grafX2-v2.8/src/tifformat.c
+--- grafX2-v2.8/src/tifformat.c.fix-tiff-saving	2021-03-24 16:54:59.000000000 -0400
++++ grafX2-v2.8/src/tifformat.c	2022-12-29 13:21:09.379084739 -0500
+@@ -684,6 +684,7 @@ void Save_TIFF_Sub(T_IO_Context * contex
+   snprintf(version, sizeof(version), "GrafX2 %s.%s", Program_version, SVN_revision);
+   width = context->Width;
+   height = context->Height;
++  // Convert the palette from 8 bits per component to 16 bits per compenent
+   for (i = 0; i < 256; i++)
+   {
+     colormap.r[i] = 0x101 * context->Palette[i].R;
+@@ -731,7 +732,12 @@ void Save_TIFF_Sub(T_IO_Context * contex
+ #else
+     for (y = 0, strip = 0; y < height; y += rowsperstrip, strip++)
+     {
+-      if (TIFFWriteEncodedStrip(tif, strip, context->Target_address + y*context->Pitch, rowsperstrip * context->Pitch) < 0)
++      tsize_t size; // bytes to write
++      if (y + rowsperstrip > height)
++        size = (height - y) * context->Pitch;
++      else
++        size = rowsperstrip * context->Pitch;
++      if (TIFFWriteEncodedStrip(tif, strip, context->Target_address + y * context->Pitch, size) < 0)
+         return;
+     }
+ #endif
+@@ -739,14 +745,14 @@ void Save_TIFF_Sub(T_IO_Context * contex
+ 
+     if (layer >= context->Nb_layers)
+     {
+-      TIFFFlushData(tif);
++      //TIFFFlushData(tif);
+       File_error = 0; // everything was fine
+       return;
+     }
+     Set_saving_layer(context, layer);
+     if (!TIFFWriteDirectory(tif))
+       return;
+-    TIFFFlushData(tif);
++    //TIFFFlushData(tif);
+   }
+ }
+ 

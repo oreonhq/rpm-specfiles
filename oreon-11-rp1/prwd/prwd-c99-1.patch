@@ -1,0 +1,41 @@
+Partial backport (minus the version changes) of:
+
+commit cc8a7bfc6252a1e69d9ae9c2a76918155e9cd7f0
+Author: Bertrand Janin <b@janin.com>
+Date:   Fri Nov 13 17:55:50 2020 +0100
+
+    Fix compilation on recent macOS.
+
+    Apparently strlcpy is part of it now, but it needs a header.
+
+diff --git a/configure b/configure
+index 7c7dcb4e58ee1825..45ebe938467f0af4 100755
+--- a/configure
++++ b/configure
+@@ -184,6 +184,7 @@ rm -f fake_cc*
+ # Check if we have strlcpy
+ echo -n "strlcpy... "
+ cat <<EOF > fake_strlcpy.c
++#include <string.h>
+ main() { char buf[32]; strlcpy(buf, "woot", sizeof(buf)); }
+ EOF
+ if ! ${CC} fake_strlcpy.c -o /dev/null 1>/dev/null 2>/dev/null; then
+diff --git a/src/alias.c b/src/alias.c
+index 1b32b7cabb451079..1a573b431c33238e 100644
+--- a/src/alias.c
++++ b/src/alias.c
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright (c) 2013-2015 Bertrand Janin <b@janin.com>
++ * Copyright (c) 2013-2020 Bertrand Janin <b@janin.com>
+  *
+  * Permission to use, copy, modify, and distribute this software for any
+  * purpose with or without fee is hereby granted, provided that the above
+@@ -16,6 +16,7 @@
+ 
+ #include <sys/param.h>
+ 
++#include <err.h>
+ #include <wchar.h>
+ 
+ #include "alias.h"

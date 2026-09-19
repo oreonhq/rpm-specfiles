@@ -1,0 +1,12 @@
+diff --git a/src/klftools/klfflowlistwidget_p.h b/src/klftools/klfflowlistwidget_p.h
+index 770eb5a..fc14fce 100644
+--- a/src/klftools/klfflowlistwidget_p.h
++++ b/src/klftools/klfflowlistwidget_p.h
+@@ -34,6 +34,7 @@
+ #include <QWidget>
+ #include <QLabel>
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QMouseEvent>
+ #include <QHoverEvent>
+ #include <QTimer>

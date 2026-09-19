@@ -1,0 +1,23 @@
+From ff82ec5bfc3952dc895dd486a350e303aa45093d Mon Sep 17 00:00:00 2001
+From: Scott K Logan <logans@cottsay.net>
+Date: Mon, 3 Jun 2019 09:23:13 -0700
+Subject: [PATCH] Use 'tool:pytest' in place of 'pytest' in setup.cfg
+
+The use of 'pytest' was deprecated in pytest 3, and removed in pytest 4.
+See pytest-dev/pytest#3086.
+---
+ setup.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.cfg b/setup.cfg
+index 752171c..1daff5b 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -1,6 +1,6 @@
+ [bdist_wheel]
+ universal=1
+ 
+-[pytest]
++[tool:pytest]
+ norecursedirs = .git .* *.egg* old docs dist build
+ addopts = -rw

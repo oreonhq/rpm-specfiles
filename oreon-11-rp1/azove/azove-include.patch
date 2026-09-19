@@ -1,0 +1,11 @@
+--- ./conBDD.cpp.orig	2007-04-07 07:14:29.000000000 -0600
++++ ./conBDD.cpp	2007-04-07 07:14:29.000000000 -0600
+@@ -22,7 +22,7 @@
+ #include "conBDD.hpp"
+ 
+ #include <stack>
+-
++#include <limits>
+ 
+ using namespace std;
+ 

@@ -1,0 +1,25 @@
+From dbd0b3dc7330e74971fe9f79cca49da3ff3bd6ae Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Mon, 3 Feb 2025 12:01:22 -0500
+Subject: [PATCH 5/5] Link Catch2::Catch2WithMain instead of Catch2::Catch2
+
+---
+ tests/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 45a5e7c..a07e657 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -19,7 +19,7 @@ target_link_libraries(unittests
+     PRIVATE
+     sonata_shared
+     HighFive
+-    Catch2::Catch2
++    Catch2::Catch2WithMain
+     nlohmann_json::nlohmann_json
+ )
+ add_test(NAME unittests COMMAND unittests WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+-- 
+2.48.1
+

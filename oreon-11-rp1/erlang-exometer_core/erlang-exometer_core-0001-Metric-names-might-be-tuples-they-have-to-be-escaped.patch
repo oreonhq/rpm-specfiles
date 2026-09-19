@@ -1,0 +1,20 @@
+From: Karolis Petrauskas <karolis.petrauskas@erisata.lt>
+Date: Thu, 4 Jul 2024 10:16:15 +0300
+Subject: [PATCH] Metric names might be tuples, they have to be escaped in
+ match specs.
+
+Signed-off-by: Karolis Petrauskas <karolis.petrauskas@erisata.lt>
+
+diff --git a/src/exometer_admin.erl b/src/exometer_admin.erl
+index ae0e4b8..f7dc089 100644
+--- a/src/exometer_admin.erl
++++ b/src/exometer_admin.erl
+@@ -612,7 +612,7 @@ find_auto_template(Name) ->
+ make_patterns(Type, Name) when is_list(Name) ->
+     Prefixes = prefixes(Name),
+     [{ #exometer_entry{name = {default,Type,[V || {_,V} <- Pfx]}, _ = '_'},
+-       [{'or',{'=:=',V,X},{'=:=',V,''}} || {X,V} <- Pfx], ['$_'] }
++       [{'or',{'=:=',V,{const,X}},{'=:=',V,''}} || {X,V} <- Pfx], ['$_'] }
+      || Pfx <- Prefixes].
+ 
+ prefixes(L) ->

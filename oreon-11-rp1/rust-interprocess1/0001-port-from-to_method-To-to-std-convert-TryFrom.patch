@@ -1,0 +1,289 @@
+diff --git a/src/os/unix/fdops.rs b/src/os/unix/fdops.rs
+index d80355e..470f893 100644
+--- a/src/os/unix/fdops.rs
++++ b/src/os/unix/fdops.rs
+@@ -1,10 +1,10 @@
+ use super::imports::*;
+ use std::{
++    convert::TryFrom,
+     io::{self, IoSlice, IoSliceMut},
+     marker::PhantomData,
+     mem::ManuallyDrop,
+ };
+-use to_method::To;
+ 
+ #[repr(transparent)]
+ pub(super) struct FdOps(pub(super) c_int, PhantomData<*mut ()>);
+@@ -27,7 +27,7 @@ impl FdOps {
+     }
+     pub fn read_vectored(&self, bufs: &mut [IoSliceMut<'_>]) -> io::Result<usize> {
+         let (success, bytes_read) = unsafe {
+-            let num_bufs = bufs.len().try_to::<c_int>().unwrap_or(c_int::MAX);
++            let num_bufs = c_int::try_from(bufs.len()).unwrap_or(c_int::MAX);
+             let size_or_err =
+                 libc::readv(self.as_raw_fd(), bufs.as_mut_ptr() as *const _, num_bufs);
+             (size_or_err >= 0, size_or_err as usize)
+@@ -53,7 +53,7 @@ impl FdOps {
+     }
+     pub fn write_vectored(&self, bufs: &[IoSlice<'_>]) -> io::Result<usize> {
+         let (success, bytes_written) = unsafe {
+-            let num_bufs = bufs.len().try_to::<c_int>().unwrap_or(c_int::MAX);
++            let num_bufs = c_int::try_from(bufs.len()).unwrap_or(c_int::MAX);
+             let size_or_err = libc::writev(self.as_raw_fd(), bufs.as_ptr() as *const _, num_bufs);
+             (size_or_err >= 0, size_or_err as usize)
+         };
+diff --git a/src/os/unix/signal.rs b/src/os/unix/signal.rs
+index f7a0a67..09c63f7 100644
+--- a/src/os/unix/signal.rs
++++ b/src/os/unix/signal.rs
+@@ -145,7 +145,6 @@ use std::{
+     mem::zeroed,
+     panic, process,
+ };
+-use to_method::To;
+ 
+ cfg_if! {
+     if #[cfg(any(
+@@ -735,9 +734,7 @@ impl From<SignalHook> for fn() {
+ /// # Ok(()) }
+ /// ```
+ pub fn send(signal: impl Into<Option<SignalType>>, pid: impl Into<u32>) -> io::Result<()> {
+-    let pid = pid
+-        .to::<u32>()
+-        .try_to::<i32>()
++    let pid = i32::try_from(pid.into())
+         .unwrap_or_else(|_| panic!("process identifier out of range"));
+     debug_assert_ne!(
+         pid, 0,
+@@ -765,9 +762,7 @@ pub fn send(signal: impl Into<Option<SignalType>>, pid: impl Into<u32>) -> io::R
+ /// # Ok(()) }
+ /// ```
+ pub fn send_rt(signal: impl Into<Option<u32>>, pid: impl Into<u32>) -> io::Result<()> {
+-    let pid = pid
+-        .to::<u32>()
+-        .try_to::<i32>()
++    let pid = i32::try_from(pid.into())
+         .unwrap_or_else(|_| panic!("process identifier out of range"));
+     debug_assert_ne!(
+         pid, 0,
+@@ -800,9 +795,7 @@ pub fn send_rt(signal: impl Into<Option<u32>>, pid: impl Into<u32>) -> io::Resul
+ /// ```
+ pub fn send_to_group(signal: impl Into<Option<SignalType>>, pid: impl Into<u32>) -> io::Result<()> {
+     #[allow(clippy::neg_multiply)] // "it's more readable to just negate"? how about no
+-    let pid = pid
+-        .to::<u32>()
+-        .try_to::<i32>()
++    let pid = i32::try_from(pid.into())
+         .unwrap_or_else(|_| panic!("process group identifier out of range"))
+         * -1;
+     let success = unsafe { libc::kill(signal.into().map_or(0, Into::into), pid) != -1 };
+@@ -828,9 +821,7 @@ pub fn send_to_group(signal: impl Into<Option<SignalType>>, pid: impl Into<u32>)
+ /// ```
+ pub fn send_rt_to_group(signal: impl Into<Option<u32>>, pid: impl Into<u32>) -> io::Result<()> {
+     #[allow(clippy::neg_multiply)]
+-    let pid = pid
+-        .to::<u32>()
+-        .try_to::<i32>()
++    let pid = i32::try_from(pid.into())
+         .unwrap_or_else(|_| panic!("process identifier out of range"))
+         * -1;
+     debug_assert_ne!(
+diff --git a/src/os/unix/udsocket/listener.rs b/src/os/unix/udsocket/listener.rs
+index cc2ac15..482094a 100644
+--- a/src/os/unix/udsocket/listener.rs
++++ b/src/os/unix/udsocket/listener.rs
+@@ -2,12 +2,12 @@
+ use super::c_wrappers;
+ use super::{imports::*, PathDropGuard, ToUdSocketPath, UdSocketPath, UdStream};
+ use std::{
++    convert::TryFrom,
+     fmt::{self, Debug, Formatter},
+     io,
+     iter::FusedIterator,
+     mem::zeroed,
+ };
+-use to_method::To;
+ 
+ /// A Unix domain byte stream socket server, listening for connections.
+ ///
+@@ -83,7 +83,7 @@ impl UdStreamListener {
+         keep_drop_guard: bool,
+         nonblocking: bool,
+     ) -> io::Result<Self> {
+-        let addr = path.borrow().try_to::<sockaddr_un>()?;
++        let addr = sockaddr_un::try_from(path.borrow())?;
+ 
+         let fd = c_wrappers::create_uds(SOCK_STREAM, nonblocking)?;
+         unsafe {
+diff --git a/src/os/unix/udsocket/socket.rs b/src/os/unix/udsocket/socket.rs
+index 2b3939f..5a7ed2f 100644
+--- a/src/os/unix/udsocket/socket.rs
++++ b/src/os/unix/udsocket/socket.rs
+@@ -12,9 +12,8 @@ use std::{
+     fmt::{self, Debug, Formatter},
+     io::{self, IoSlice, IoSliceMut},
+     iter,
+-    mem::{size_of_val, zeroed},
++    mem::{size_of_val, zeroed}, convert::TryFrom,
+ };
+-use to_method::To;
+ 
+ /// A datagram socket in the Unix domain.
+ ///
+@@ -51,7 +50,7 @@ impl UdSocket {
+         Self::_bind(path.to_socket_path()?, true)
+     }
+     fn _bind(path: UdSocketPath<'_>, keep_drop_guard: bool) -> io::Result<Self> {
+-        let addr = path.borrow().try_to::<sockaddr_un>()?;
++        let addr = sockaddr_un::try_from(path.borrow())?;
+ 
+         let fd = c_wrappers::create_uds(SOCK_DGRAM, false)?;
+         unsafe {
+@@ -97,7 +96,7 @@ impl UdSocket {
+         self._set_destination(&path)
+     }
+     fn _set_destination(&self, path: &UdSocketPath<'_>) -> io::Result<()> {
+-        let addr = path.borrow().try_to::<sockaddr_un>()?;
++        let addr = sockaddr_un::try_from(path.borrow())?;
+ 
+         unsafe {
+             // SAFETY: addr is well-constructed
+@@ -293,7 +292,7 @@ creates unusable socket that is not bound to any address, use `.set_destination(
+         let mut addr_buf_staging = unsafe { zeroed::<sockaddr_un>() };
+         // It's a void* so the doublecast is mandatory
+         hdr.msg_name = &mut addr_buf_staging as *mut _ as *mut _;
+-        hdr.msg_namelen = size_of_val(&addr_buf_staging).try_to::<u32>().unwrap();
++        hdr.msg_namelen = u32::try_from(size_of_val(&addr_buf_staging)).unwrap();
+         fill_out_msghdr_r(&mut hdr, bufs, abuf.as_mut())?;
+         let (success, bytes_read) = unsafe {
+             let result = libc::recvmsg(self.as_raw_fd(), &mut hdr as *mut _, 0);
+diff --git a/src/os/unix/udsocket/stream.rs b/src/os/unix/udsocket/stream.rs
+index c239e59..54a4ab6 100644
+--- a/src/os/unix/udsocket/stream.rs
++++ b/src/os/unix/udsocket/stream.rs
+@@ -6,12 +6,12 @@ use super::{
+     AncillaryData, AncillaryDataBuf, EncodedAncillaryData, ToUdSocketPath, UdSocketPath,
+ };
+ use std::{
++    convert::TryFrom,
+     fmt::{self, Debug, Formatter},
+     io::{self, IoSlice, IoSliceMut, Read, Write},
+     iter,
+     net::Shutdown,
+ };
+-use to_method::To;
+ 
+ /// A Unix domain socket byte stream, obtained either from [`UdStreamListener`](super::UdStreamListener) or by connecting to an existing server.
+ ///
+@@ -49,7 +49,7 @@ impl UdStream {
+         Self::_connect(path.to_socket_path()?, true)
+     }
+     fn _connect(path: UdSocketPath<'_>, nonblocking: bool) -> io::Result<Self> {
+-        let addr = path.try_to::<sockaddr_un>()?;
++        let addr = sockaddr_un::try_from(path)?;
+ 
+         let fd = c_wrappers::create_uds(SOCK_STREAM, nonblocking)?;
+         unsafe {
+diff --git a/src/os/unix/udsocket/util.rs b/src/os/unix/udsocket/util.rs
+index 8bf78dd..46e3b9f 100644
+--- a/src/os/unix/udsocket/util.rs
++++ b/src/os/unix/udsocket/util.rs
+@@ -1,12 +1,12 @@
+ use super::imports::*;
+ use cfg_if::cfg_if;
+ use std::{
++    convert::TryFrom,
+     ffi::{CStr, CString},
+     hint::unreachable_unchecked,
+     io::{self, IoSlice, IoSliceMut},
+     mem::zeroed,
+ };
+-use to_method::To;
+ 
+ #[cfg(unix)]
+ #[allow(dead_code)]
+@@ -39,7 +39,7 @@ cfg_if! {
+ 
+ #[cfg(unix)]
+ pub fn to_msghdr_iovlen(iovlen: usize) -> io::Result<MsghdrIovlen> {
+-    iovlen.try_to::<MsghdrIovlen>().map_err(|_| {
++    MsghdrIovlen::try_from(iovlen).map_err(|_| {
+         io::Error::new(
+             io::ErrorKind::InvalidInput,
+             format!(
+@@ -51,7 +51,7 @@ pub fn to_msghdr_iovlen(iovlen: usize) -> io::Result<MsghdrIovlen> {
+ }
+ #[cfg(unix)]
+ pub fn to_msghdr_controllen(controllen: usize) -> io::Result<MsghdrControllen> {
+-    controllen.try_to::<MsghdrControllen>().map_err(|_| {
++    MsghdrControllen::try_from(controllen).map_err(|_| {
+         io::Error::new(
+             io::ErrorKind::InvalidInput,
+             format!(
+diff --git a/src/os/windows/named_pipe/listener.rs b/src/os/windows/named_pipe/listener.rs
+index dfea240..1819829 100644
+--- a/src/os/windows/named_pipe/listener.rs
++++ b/src/os/windows/named_pipe/listener.rs
+@@ -18,7 +18,6 @@ use {
+             Mutex,
+         },
+     },
+-    to_method::To,
+ };
+ 
+ /// The server for a named pipe, listening for connections to clients and producing pipe streams.
+@@ -300,7 +299,7 @@ cannot create pipe server that has byte type but reads messages – have you for
+ 
+     fn to_open_mode(&self, first: bool, role: PipeStreamRole, overlapped: bool) -> DWORD {
+         let mut open_mode = 0_u32;
+-        open_mode |= role.direction_as_server().to::<DWORD>();
++        open_mode |= DWORD::from(role.direction_as_server());
+         if first {
+             open_mode |= FILE_FLAG_FIRST_PIPE_INSTANCE;
+         }
+diff --git a/tests/local_socket/no_server.rs b/tests/local_socket/no_server.rs
+index 7887630..461853f 100644
+--- a/tests/local_socket/no_server.rs
++++ b/tests/local_socket/no_server.rs
+@@ -5,8 +5,8 @@ use {super::util::*, anyhow::*, interprocess::local_socket::LocalSocketStream, s
+ pub fn run_and_verify_error(prefer_namespaced: bool) -> TestResult {
+     use io::ErrorKind::*;
+     let err = match client(prefer_namespaced) {
+-        Err(e) => e.downcast::<io::Error>()?,
+-        Ok(()) => bail!("client successfully connected to nonexistent server"),
++        std::result::Result::Err(e) => e.downcast::<io::Error>()?,
++        std::result::Result::Ok(()) => bail!("client successfully connected to nonexistent server"),
+     };
+     ensure!(
+         matches!(err.kind(), NotFound | ConnectionRefused),
+diff --git a/tests/util/mod.rs b/tests/util/mod.rs
+index 38e7af3..7ff5c1a 100644
+--- a/tests/util/mod.rs
++++ b/tests/util/mod.rs
+@@ -18,13 +18,13 @@ const NUM_CONCURRENT_CLIENTS: u32 = 4;
+ 
+ use {
+     std::{
++        convert::TryFrom,
+         sync::{
+             mpsc::{channel, /*Receiver,*/ Sender},
+             Arc,
+         },
+         thread,
+     },
+-    to_method::*,
+ };
+ 
+ pub type TestResult = anyhow::Result<()>;
+@@ -69,7 +69,7 @@ where
+     let client = Arc::new(client);
+     let client_wrapper = move |msg| {
+         let msg = Arc::new(msg);
+-        let mut client_threads = Vec::with_capacity(NUM_CLIENTS.try_to().unwrap());
++        let mut client_threads = Vec::with_capacity(usize::try_from(NUM_CLIENTS).unwrap());
+         for _ in 0..NUM_CLIENTS {
+             let choke_guard = choke.take();
+             let clientc = Arc::clone(&client);
+-- 
+2.43.0
+

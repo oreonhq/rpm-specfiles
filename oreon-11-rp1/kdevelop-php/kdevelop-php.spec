@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 4d312b811bdee7016f6273df8c355f7ed89b60aa0c88eba666a880d997b140f4
 
 %global stable_kf6 stable
 
 
 Name:           kdevelop-php
 Summary:        Php language and documentation plugins for KDevelop
-Version:        26.04.1
+Version:        26.08.0
 Release:        1%{?dist}
 
 # Most files LGPLv2+/GPLv2+
@@ -70,5 +70,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.04.1-1
 - Import

@@ -1,0 +1,93 @@
+--- include/CoCoA/TmpGPoly.H.orig	2024-03-29 05:25:21.000000000 -0600
++++ include/CoCoA/TmpGPoly.H	2024-03-29 08:58:33.354052968 -0600
+@@ -29,6 +29,7 @@
+ #include "CoCoA/TmpGTypes.H"
+ #include "CoCoA/utils.H"
+ 
++#include<functional>
+ #include<list>
+ // using std::list; // for GPolyList; GPolyPtrList;
+ #include<vector>
+@@ -46,6 +47,11 @@ enum ClearMarker {clear};
+ 
+ class GPoly;
+ 
++extern bool handlersEnabled;
++extern std::function<void(ConstRefRingElem p, ConstRefRingElem q, ConstRefRingElem s)> sPolyHandler;
++extern std::function<void(ConstRefRingElem p)> reductionStartHandler;
++extern std::function<void(ConstRefRingElem q)> reductionStepHandler;
++extern std::function<void(ConstRefRingElem r)> reductionEndHandler;
+ 
+ typedef std::list<GPoly> GPolyList;
+ 
+--- src/AlgebraicCore/PolyRing-content.C.orig	2024-03-29 05:25:36.000000000 -0600
++++ src/AlgebraicCore/PolyRing-content.C	2024-03-29 08:58:33.355052951 -0600
+@@ -33,6 +33,7 @@
+ #include "CoCoA/convert.H"
+ #include "CoCoA/error.H"
+ #include "CoCoA/utils.H"  // for len
++#include "CoCoA/TmpGPoly.H"
+ 
+ 
+ #include <vector>
+@@ -128,7 +129,9 @@ namespace CoCoA
+   {
+     const PolyRing Rx = owner(f);
+     RingElem ans(Rx);
++    if (handlersEnabled) reductionStartHandler(f);
+     Rx->myMonic(raw(ans), raw(f));
++    if (handlersEnabled) reductionEndHandler(ans);
+     return ans;
+   }
+ 
+--- src/AlgebraicCore/SparsePolyOps-reduce.C.orig	2024-03-29 05:25:41.000000000 -0600
++++ src/AlgebraicCore/SparsePolyOps-reduce.C	2024-03-29 08:58:33.355052951 -0600
+@@ -145,6 +145,7 @@ degree HereForProfilingOnlyWDeg(ConstRef
+       s->myUpdate(F, *g);
+       //      std::cout << "ReduceActiveLM after s->myUpdate" << std::endl;
+       F->myReduce(poly(*g), NumTerms(*g));
++      if ( handlersEnabled ) reductionStepHandler(poly(*g));
+     }//while
+   }//ReduceActiveLM
+ 
+@@ -283,6 +284,7 @@ degree HereForProfilingOnlyWDeg(ConstRef
+   void GPoly::myReduce(const Reductors& theReductors)
+   {
+     if ( IsZero(*this) ) return;
++    if ( handlersEnabled ) reductionStartHandler(myPoly());
+     ReductionCog F = ChooseReductionCogGeobucket(myGRingInfo());
+     //    std::cout << "myreduce1: F is " << F << std::endl;
+     F->myAssignReset(myPolyValue, myNumTerms); // myPolyValue gets 0
+@@ -298,6 +300,7 @@ degree HereForProfilingOnlyWDeg(ConstRef
+     if ( !IsZero(*this) && !IsOne(myLCValue) ) // makes myPolyValue monic
+       if ( myGRingInfo().myCoeffRingType()==CoeffEncoding::Field )
+         myGRingInfo().myNewSPR()->myDivByCoeff(raw(myPolyValue), raw(myLCValue));
++    if ( handlersEnabled ) reductionEndHandler(myPoly());
+     // if CoeffEncoding::Field myRelease does NOT make poly monic
+     // if CoeffEncoding::FrFldOfGCDDomain myRelease makes poly content free
+   }
+--- src/AlgebraicCore/TmpGPoly.C.orig	2024-03-29 05:25:42.000000000 -0600
++++ src/AlgebraicCore/TmpGPoly.C	2024-03-29 08:58:33.355052951 -0600
+@@ -47,6 +47,11 @@ using std::vector;
+ namespace CoCoA
+ {  
+ 
++  bool handlersEnabled = false;
++  std::function<void(ConstRefRingElem p, ConstRefRingElem q, ConstRefRingElem s)> sPolyHandler = nullptr;
++  std::function<void(ConstRefRingElem p)> reductionStartHandler = nullptr;
++  std::function<void(ConstRefRingElem q)> reductionStepHandler = nullptr;
++  std::function<void(ConstRefRingElem r)> reductionEndHandler = nullptr;
+ 
+   //---------class GPoly-------------------------------
+ 
+@@ -291,7 +296,10 @@ void GPoly::myUpdateLenLPPLCDegComp()
+     if (the_gp.IsInputPoly())
+       myPolyValue = poly(the_gp.myFirstGPoly());
+     else
++    {
+       myPolySetSPoly(the_gp.myFirstGPoly(), the_gp.mySecondGPoly());
++      if ( handlersEnabled ) sPolyHandler(the_gp.myFirstGPoly().myPoly(), the_gp.mySecondGPoly().myPoly(), myPoly());
++    }
+     myUpdateLenLPPLCDegComp();
+     myAge = the_age;
+     // MAX: do these things only if necessary.

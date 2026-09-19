@@ -1,0 +1,21 @@
+diff -Naur bitcoin-28.0.old/contrib/verify-binaries/verify.py bitcoin-28.0/contrib/verify-binaries/verify.py
+--- bitcoin-28.0.old/contrib/verify-binaries/verify.py	2024-10-08 14:52:30.556849257 +0200
++++ bitcoin-28.0/contrib/verify-binaries/verify.py	2024-10-08 14:52:39.167915828 +0200
+@@ -135,7 +135,7 @@
+ ) -> tuple[int, str]:
+     with tempfile.NamedTemporaryFile() as status_file:
+         args = [
+-            'gpg', '--yes', '--verify', '--verify-options', 'show-primary-uid-only', "--status-file", status_file.name,
++            'gpg', '--no-default-keyring', '--keyring', './bitcoin-offline-pubring.gpg', '--yes', '--verify', '--verify-options', 'show-primary-uid-only', "--status-file", status_file.name,
+             '--output', output_filename if output_filename else '', signature_filename, filename]
+ 
+         env = dict(os.environ, LANGUAGE='en')
+@@ -338,7 +338,7 @@
+         for unsig in unknown:
+             if prompt_yn(f" ? Retrieve key {unsig.key} ({unsig.name})? (y/N) "):
+                 ran = subprocess.run(
+-                    ["gpg", "--keyserver", args.keyserver, "--recv-keys", unsig.key])
++                    ["gpg", "--no-default-keyring", "--keyring", "./bitcoin-offline-pubring.gpg", "--keyserver", args.keyserver, "--recv-keys", unsig.key])
+ 
+                 if ran.returncode != 0:
+                     log.warning(f"failed to retrieve key {unsig.key}")

@@ -1,0 +1,32 @@
+--- nethack/include/system.h.orig	2025-02-11 04:19:16.366714699 -0600
++++ nethack/include/system.h	2025-02-11 04:47:40.278967921 -0600
+@@ -55,6 +55,9 @@
+ #if !defined(OS2) && (defined(_MSC_VER) || defined(__TURBOC__) || defined(__SC__) || defined(WIN32))
+ # define SIG_RET_TYPE void (__cdecl *)(int)
+ #endif
++#if defined(LINUX)
++#define SIG_RET_TYPE __sighandler_t
++#endif
+ #ifndef SIG_RET_TYPE
+ # if defined(NHSTDC) || defined(POSIX_TYPES) || defined(OS2) || defined(__DECC)
+ #  define SIG_RET_TYPE void (*)()
+@@ -88,7 +91,9 @@
+ # endif
+ #else
+ E long lrand48();
++# if !defined(LINUX)
+ E void srand48();
++# endif
+ #endif /* BSD || ULTRIX || RANDOM */
+ 
+ #if !defined(BSD) || defined(ultrix)
+@@ -346,7 +351,9 @@
+ E void sleep();
+ #endif
+ #if defined(ULTRIX) || defined(SYSV)
++# if !defined(LINUX)
+ E unsigned sleep();
++# endif
+ #endif
+ #if defined(HPUX)
+ E unsigned int FDECL(sleep, (unsigned int));

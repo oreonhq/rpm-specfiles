@@ -1,0 +1,22 @@
+diff --git a/src/file.c b/src/file.c
+index fc9dd13..0b9198a 100644
+--- a/src/file.c
++++ b/src/file.c
+@@ -69,7 +69,7 @@ public void FileFreeLine( file_t *f )
+ }
+ 
+ #ifdef USE_INTERNAL_IOBUF
+-public inline int IobufGetc( iobuf_t *iobuf )
++extern public inline int IobufGetc( iobuf_t *iobuf )
+ {
+   if( iobuf->cur >= iobuf->last ){
+     /* no stream buffer, reset and fill now */
+@@ -82,7 +82,7 @@ public inline int IobufGetc( iobuf_t *iobuf )
+   return iobuf->buf[ iobuf->cur++ ];
+ }
+ 
+-public inline int IobufUngetc( int ch, iobuf_t *iobuf )
++extern public inline int IobufUngetc( int ch, iobuf_t *iobuf )
+ {
+   if( iobuf->cur == 0 ){
+     /* XXX: it should be tied to fp sanely */

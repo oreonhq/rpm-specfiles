@@ -1,0 +1,29 @@
+diff -up FoX-4.1.2/arch.make.in.DESTDIR FoX-4.1.2/arch.make.in
+--- FoX-4.1.2/arch.make.in.DESTDIR	2012-01-05 05:04:10.000000000 -0500
++++ FoX-4.1.2/arch.make.in	2014-05-29 16:43:58.585460970 -0400
+@@ -8,6 +8,7 @@ compile_prefix=@OBJSDIR@
+ install_prefix=@prefix@
+ LIB_DIR=$(compile_prefix)/lib
+ MOD_DIR=$(compile_prefix)/finclude
++DESTDIR=@DESTDIR@
+ 
+ FPP=@FPP@
+ FC=@FC@
+diff -up FoX-4.1.2/Makefile.DESTDIR FoX-4.1.2/Makefile
+--- FoX-4.1.2/Makefile.DESTDIR	2012-01-05 05:04:10.000000000 -0500
++++ FoX-4.1.2/Makefile	2014-05-29 16:44:53.705039759 -0400
+@@ -9,10 +9,10 @@ objsdir:
+ 	mkdir -p objs/lib objs/finclude
+ #
+ install: objsdir $(BUILD_TARGETS)
+-	$(MKDIR_P) $(install_prefix)/lib $(install_prefix)/finclude $(install_prefix)/bin
+-	$(INSTALL) objs/lib/* $(install_prefix)/lib
+-	$(INSTALL) -m 644 objs/finclude/* $(install_prefix)/finclude
+-	$(INSTALL) FoX-config $(install_prefix)/bin
++	$(MKDIR_P) $(DESTDIR)$(install_prefix)/lib $(DESTDIR)$(install_prefix)/finclude $(DESTDIR)$(install_prefix)/bin
++	$(INSTALL) objs/lib/* $(DESTDIR)$(install_prefix)/lib
++	$(INSTALL) -m 644 objs/finclude/* $(DESTDIR)$(install_prefix)/finclude
++	$(INSTALL) FoX-config $(DESTDIR)$(install_prefix)/bin
+ #
+ examples_build: $(BUILD_TARGETS)
+ 	if test -d examples; then (cd examples; $(MAKE) VPATH=$(VPATH)/examples) fi

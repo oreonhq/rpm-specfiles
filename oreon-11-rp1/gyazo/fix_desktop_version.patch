@@ -1,0 +1,13 @@
+--- src/gyazo.desktop
++++ src/gyazo.desktop
+@@ -1,8 +1,7 @@
+ [Desktop Entry]
+ Name=Gyazo
+-Version=1.2
+ Comment=Seriously Instant Screen-Grabbing
++Exec=/usr/bin/gyazo
+-Exec=gyazo
+ Terminal=false
+ Type=Application
+ Icon=gyazo
+

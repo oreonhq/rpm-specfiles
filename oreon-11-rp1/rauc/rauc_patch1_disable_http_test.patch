@@ -1,0 +1,10 @@
+--- test/meson.build.org	2026-01-31 16:03:38.449376598 +0100
++++ test/meson.build	2026-01-31 16:03:49.857020069 +0100
+@@ -84,7 +84,6 @@
+     'convert',
+     'encrypt',
+     'extract',
+-    'http',
+     'info',
+     'install',
+     'mark',

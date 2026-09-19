@@ -1,0 +1,19 @@
+--- a/src/mod_mono.h	2010-09-30 16:19:04.000000000 +0100
++++ b/src/mod_mono.h	2010-10-09 19:28:06.497024896 +0100
+@@ -92,13 +92,13 @@
+ #define MODMONO_SERVER_BASEPATH MONO_PREFIX "/bin/mod-mono-server"
+ #define MONO_DEFAULT_FRAMEWORK  "2.0"
+ #define MODMONO_SERVER_PATH	MODMONO_SERVER_BASEPATH "2"
+-#define WAPIDIR			"/tmp"
++#define WAPIDIR			"/var/run/mod_mono"
+ #define DOCUMENT_ROOT		NULL
+ #define APPCONFIG_FILE		NULL
+ #define APPCONFIG_DIR		NULL
+-#define SOCKET_FILE		"/tmp/mod_mono_server"
++#define SOCKET_FILE		"/var/run/mod_mono/mod_mono_server"
+ #define LISTEN_ADDRESS		"127.0.0.1"
+-#define DASHBOARD_FILE		"/tmp/mod_mono_dashboard"
++#define DASHBOARD_FILE		"/var/run/mod_mono/mod_mono_dashboard"
+ #define GLOBAL_SERVER_NAME	"XXGLOBAL"
+ #define MAX_ACTIVE_REQUESTS	0
+ #define MAX_WAITING_REQUESTS	150

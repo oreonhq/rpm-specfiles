@@ -1,69 +1,62 @@
-%global source0_hash 1dd098483eb1c7ee8e32eb2e99ad1910baefa4b75c3aff3a82f4d78688993b10
-
-%bcond_without check
+%global source0_hash none
 
 Name:           python-humanize
-Version:        4.15.0
+Version:        4.16.0
 Release:        %autorelease
-Summary:        Turns dates in to human readable format, e.g '3 minutes ago'
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python humanize utilities
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/python-humanize/humanize
-Source0:        https://files.pythonhosted.org/packages/source/h/humanize/humanize-4.15.0.tar.gz
+Source:         %{pypi_source humanize}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _description\
-This modest package contains various common humanization utilities, like turning\
-a number into a fuzzy human readable duration ('3 minutes ago') or into a human\
-readable size or throughput.\
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'humanize' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-humanize
-Summary: %summary
+%package -n     python3-humanize
+Summary:        %{summary}
 
-%description -n python3-humanize
-This modest package contains various common humanization utilities, like turning
-a number into a fuzzy human readable duration ('3 minutes ago') or into a human
-readable size or throughput.
+%description -n python3-humanize %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-humanize tests
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n humanize-%{version}
+%autosetup -p1 -n humanize-%{version}
 
-# Remove shebangs from libs.
-for lib in src/humanize/filesize.py; do
- sed '1{\@^#!/usr/bin/env python@d}' $lib > $lib.new &&
- touch -r $lib $lib.new && mv $lib.new $lib
-done
-
-# Remove .po files
-find -name '*.po' -delete
-
-# Don't run coverage report during %%check
-sed -i '/pytest-cov/d' pyproject.toml
-sed -i '/core:coverage.exceptions.CoverageWarning/d' pyproject.toml
-sed -Ei 's/ ?--cov(-[^ ]+)? +[^ ]+//g' tox.ini
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_check:-t}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files humanize
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-humanize -f %{pyproject_files}
-%doc README.md
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.15.0-1

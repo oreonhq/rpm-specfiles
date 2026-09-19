@@ -1,0 +1,17 @@
+diff -up quake3-1.36/code/renderer/tr_image_jpg.c~ quake3-1.36/code/renderer/tr_image_jpg.c
+--- quake3-1.36/code/renderer/tr_image_jpg.c~	2011-07-28 10:55:28.000000000 +0200
++++ quake3-1.36/code/renderer/tr_image_jpg.c	2011-07-28 11:10:16.575647654 +0200
+@@ -35,12 +35,7 @@ Foundation, Inc., 51 Franklin St, Fifth 
+ #endif
+ 
+ #include <jpeglib.h>
+-
+-#ifndef USE_INTERNAL_JPEG
+-#  if JPEG_LIB_VERSION < 80
+-#    error Need system libjpeg >= 80
+-#  endif
+-#endif
++#include "jpeg_memsrc.c"
+ 
+ static void R_JPGErrorExit(j_common_ptr cinfo)
+ {

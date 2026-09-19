@@ -1,0 +1,2 @@
+u     smfs   -   "Smart Sendmail Filters"     /run/smfs   /sbin/nologin
+g     smfs   -

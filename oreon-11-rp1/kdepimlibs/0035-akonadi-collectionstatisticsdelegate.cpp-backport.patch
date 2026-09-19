@@ -1,0 +1,47 @@
+From fcc6697a78ba40b538e96055e5b009e247684022 Mon Sep 17 00:00:00 2001
+From: Allen Winter <winter@kde.org>
+Date: Mon, 16 May 2016 12:00:58 -0400
+Subject: [PATCH 35/35] akonadi/collectionstatisticsdelegate.cpp - backport Git
+ commit 109c10c29d47cdb39f728882dc85b204754a2cf0 by David Faure. Committed on
+ 14/05/2016 at 07:47. Pushed by dfaure into branch 'master'.
+
+Replace assert with early return, in case the collection was deleted meanwhile.
+
+Another comment in the same file says
+ // Do not assert on invalid collections, since a collection may be deleted
+ // in the meantime and deleted collections are invalid.
+Therefore it looks like this is expected.
+
+MERGE: none
+---
+ akonadi/collectionstatisticsdelegate.cpp | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/akonadi/collectionstatisticsdelegate.cpp b/akonadi/collectionstatisticsdelegate.cpp
+index 0902a54..7d89a15 100644
+--- a/akonadi/collectionstatisticsdelegate.cpp
++++ b/akonadi/collectionstatisticsdelegate.cpp
+@@ -205,7 +205,7 @@ void CollectionStatisticsDelegate::paint(QPainter *painter,
+     // in initStyleOption(), which gets called by QStyledItemDelegate::paint().
+     QStyledItemDelegate::paint(painter, option, index);
+ 
+-    // No, we retrieve the correct style option by calling intiStyleOption from
++    // Now, we retrieve the correct style option by calling initStyleOption from
+     // the superclass.
+     QStyleOptionViewItemV4 option4 = option;
+     QStyledItemDelegate::initStyleOption(&option4, index);
+@@ -230,10 +230,9 @@ void CollectionStatisticsDelegate::paint(QPainter *painter,
+ 
+     if (!collection.isValid()) {
+         kError() << "Invalid collection: " << collection;
++        return;
+     }
+ 
+-    Q_ASSERT(collection.isValid());   // TODO: I seem to hit this when removing a duplicated "Personal Contacts" or "Personal Calendar"
+-
+     CollectionStatistics statistics = collection.statistics();
+ 
+     qint64 unreadCount = qMax(0LL, statistics.unreadCount());
+-- 
+1.9.3
+

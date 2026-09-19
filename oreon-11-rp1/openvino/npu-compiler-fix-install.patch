@@ -1,0 +1,47 @@
+--- a/src/vpux_driver_compiler/CMakeLists.txt
++++ b/src/vpux_driver_compiler/CMakeLists.txt
+@@ -16,7 +16,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+ add_subdirectory(src)
+ add_subdirectory(test)
+ 
+-install(
++#[[install(
+     FILES
+         "${InferenceEngineVPUXPlugin_SOURCE_DIR}/src/vpux_driver_compiler/CHANGES.txt"
+     DESTINATION cid
+@@ -26,4 +26,4 @@ install(
+     FILES
+         "${InferenceEngineVPUXPlugin_SOURCE_DIR}/src/vpux_driver_compiler/README.md"
+     DESTINATION cid
+-    COMPONENT ${CID_COMPONENT})
++    COMPONENT ${CID_COMPONENT})]]
+--- a/src/vpux_driver_compiler/src/loader/CMakeLists.txt
++++ b/src/vpux_driver_compiler/src/loader/CMakeLists.txt
+@@ -75,7 +75,7 @@ ov_add_api_validator_post_build_step(TARGET ${TARGET_NAME})
+ # loader folder | -> include/ | -> vpux_headers/ -> 1 hpp
+ #               |             | -> vpux_loader/  -> 1 hpp
+ 
+-install(DIRECTORY "${LOADER_DIR_INC}/vpux_headers"
++#[[install(DIRECTORY "${LOADER_DIR_INC}/vpux_headers"
+         DESTINATION cid/vpux_elf/loader/include/
+         COMPONENT ${CID_COMPONENT})
+ 
+@@ -207,4 +207,4 @@ install(TARGETS npu_elf
+         CONFIGURATIONS RelWithDebInfo
+         LIBRARY DESTINATION cid/vpux_elf/lib/RelWithDebInfo COMPONENT ${CID_COMPONENT}
+         ARCHIVE DESTINATION cid/vpux_elf/lib/RelWithDebInfo COMPONENT ${CID_COMPONENT}
+-        RUNTIME DESTINATION cid/vpux_elf/lib/RelWithDebInfo COMPONENT ${CID_COMPONENT})
++        RUNTIME DESTINATION cid/vpux_elf/lib/RelWithDebInfo COMPONENT ${CID_COMPONENT})]]
+--- a/src/vpux_compiler/CMakeLists.txt	2025-05-05 19:36:13.333749375 +0300
++++ b/src/vpux_compiler/CMakeLists.txt	2025-05-05 19:37:04.718216709 +0300
+@@ -241,8 +241,8 @@
+ 
+ # Note not included in OpenVINOTargets export!
+ 
+-if(BUILD_SHARED_LIBS)
++#[[if(BUILD_SHARED_LIBS)
+ install(TARGETS ${TARGET_NAME}
+         ARCHIVE DESTINATION ${OV_CPACK_ARCHIVEDIR} COMPONENT ${VPUX_INTERNAL_COMPONENT}
+         LIBRARY DESTINATION ${OV_CPACK_RUNTIMEDIR} COMPONENT ${VPUX_INTERNAL_COMPONENT})
+-endif()
++endif()]]

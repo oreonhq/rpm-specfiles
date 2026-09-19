@@ -1,0 +1,39 @@
+From aa33098dbe1246bc4d19843a63f25f799442f74a Mon Sep 17 00:00:00 2001
+From: "Blanchard, Todd" <todd.blanchard@hp.com>
+Date: Fri, 17 Nov 2017 09:39:09 -0800
+Subject: [PATCH] llconf, entry: fix use after free condition
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Use after free causes random faults. This was a very narrow window, but can cause random failures in cnf_del_branch.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/entry.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/entry.c b/src/entry.c
+index 5e57c3b..d326660 100644
+--- a/src/entry.c
++++ b/src/entry.c
+@@ -316,11 +316,15 @@ int cnf_del_branch(struct cnfnode *cn_root, const char *path, int del_empty)
+ 			/* must be done after unlink_(), so it does not find this one in the search
+ 			   below, and before destroy_(), because we still need to access the structure. */
+ 			struct cnfnode *cn;
++			struct cnfnode *cn_next;
+ 
+-			for(cn = cn_top->parent; cn->parent && cn != cn_root; cn = cn->parent){
++			for(cn = cn_top->parent; cn->parent && cn != cn_root; cn = cn_next){
+ 				if(cn->first_child == NULL){
+ 					unlink_node(cn);
++					cn_next = cn->parent;
+ 					destroy_cnftree(cn);
++				} else {
++					cn_next = cn->parent;
+ 				}
+ 			}
+ 		}
+-- 
+2.14.3
+

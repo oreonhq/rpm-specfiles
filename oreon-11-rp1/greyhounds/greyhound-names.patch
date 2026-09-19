@@ -1,0 +1,11 @@
+--- src/startup.c.orig	2003-12-14 11:38:58.000000000 -0600
++++ src/startup.c	2020-02-09 06:19:29.560664996 -0600
+@@ -98,7 +98,7 @@
+     gint kennel_names[19];
+     gint dog_names[500];
+     FILE *fil;
+-    gchar names[8423][19];
++    gchar names[8424][19];
+     gchar trash[2];
+ 
+     gtk_widget_show(progress_window);

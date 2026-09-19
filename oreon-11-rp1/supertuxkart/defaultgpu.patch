@@ -1,0 +1,7 @@
+--- a/data/supertuxkart.desktop~	2022-10-31 16:00:44.000000000 -0500
++++ b/data/supertuxkart.desktop	2025-02-17 11:16:22.388645602 -0600
+@@ -89,4 +89,3 @@
+ Keywords[zh_HK]=tux;game;race;
+ Keywords[zh_TW]=tux;game;race;
+ Keywords=tux;game;race;
+-PrefersNonDefaultGPU=true

@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 4e1d93fb57c4b8e79bf998743985257979e3df2086108a2fc82c0237d16e2e4f
 
 %global stable_kf6 stable
 
 
 Name:    kmail
 Summary: Mail client
-Version: 26.03.80
+Version: 26.08.1
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only)
@@ -157,7 +157,7 @@ done
 %{_kf6_datadir}/knotifications6/akonadi_sendlater_agent.notifyrc
 %{_kf6_bindir}/ktnef
 %{_kf6_datadir}/applications/org.kde.ktnef.desktop
-
+/usr/share/knotifications6/kontact.notifyrc
 %files libs
 %{_kf6_libdir}/libkmailprivate.so.*
 %{_kf6_qtplugindir}/pim6/kcms/kmail/*
@@ -171,6 +171,9 @@ done
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

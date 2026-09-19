@@ -1,0 +1,26 @@
+From c11031cb15f1568e91a53b3b57a6752cc1e9f176 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 12 Feb 2013 16:44:15 +0100
+Subject: [PATCH] Fix test to use renamed requires_xs()
+
+<https://rt.cpan.org/Public/Bug/Display.html?id=77780>
+---
+ example/MyMakefile.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/example/MyMakefile.PL b/example/MyMakefile.PL
+index f6b1adc..e52644f 100644
+--- a/example/MyMakefile.PL
++++ b/example/MyMakefile.PL
+@@ -15,7 +15,7 @@ BEGIN{
+ 
+ all_from 'lib/Foo.pm';
+ 
+-requires_xs 'B::Hooks::OP::Annotation'; # for testing only
++requires_xs_module 'B::Hooks::OP::Annotation'; # for testing only
+ 
+ use_ppport 3.19;
+ use_xshelper -clean;
+-- 
+1.8.1.2
+

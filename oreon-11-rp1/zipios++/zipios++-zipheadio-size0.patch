@@ -1,0 +1,10 @@
+--- zipios++-0.1.5.9+cvs.2007.04.28/zipios++/zipheadio.h.debug	2000-09-21 02:46:59.000000000 +0900
++++ zipios++-0.1.5.9+cvs.2007.04.28/zipios++/zipheadio.h	2018-04-10 22:34:10.191446483 +0900
+@@ -150,6 +150,7 @@ inline void readByteSeq ( istream &is, v
+ }
+ 
+ inline void writeByteSeq ( ostream &os, const vector < unsigned char > &vec ) {
++  if (vec.size() > 0)
+   os.rdbuf()->sputn( reinterpret_cast< const char * >( &( vec[ 0 ] ) ), vec.size() ) ;
+ }
+ 

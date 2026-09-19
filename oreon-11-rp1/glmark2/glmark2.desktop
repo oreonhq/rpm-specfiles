@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Glmark2
+GenericName=Glmark2 OpenGL ES 2.0 benchmark
+Comment=Popular OpenGL 2.0 API benchmark
+Exec=glmark2
+Icon=glmark2
+Terminal=false
+Type=Application
+Categories=Graphics;

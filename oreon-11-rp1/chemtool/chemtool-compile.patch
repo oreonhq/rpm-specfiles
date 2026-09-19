@@ -1,0 +1,72 @@
+diff -up chemtool-1.6.12/src-cht/cht-2.5.c.compile chemtool-1.6.12/src-cht/cht-2.5.c
+--- chemtool-1.6.12/src-cht/cht-2.5.c.compile	2007-11-10 22:12:35.000000000 +0100
++++ chemtool-1.6.12/src-cht/cht-2.5.c	2009-08-22 13:49:26.000000000 +0200
+@@ -121,11 +121,6 @@
+ #define LACK_MEMMOVE
+ #define LACK_MEMCPY
+ 
+-#else
+-
+-#define LACK_LABS       /* Undefine these if your library has these */
+-#define LACK_MEMMOVE
+-
+ #endif
+ #endif
+ 
+@@ -593,13 +588,15 @@ char **argv;
+ 
+ /* In case your system lacks these... */
+ 
++#ifdef LACK_LABS
+ long my_labs(x)
+ long x;
+ {
+     return((x > 0) ? x : -x);
+ }
++#endif /* LACK_LABS */
+ 
+-
++#ifdef LACK_MEMMOVE
+ #ifdef __STDC__
+ Anyptr my_memmove(Anyptr d, Const Anyptr s, size_t n)
+ #else
+@@ -623,8 +620,9 @@ register int n;
+     }
+     return d;
+ }
++#endif /* LACK_MEMMOVE */
+ 
+-
++#ifdef LACK_MEMCPY
+ #ifdef __STDC__
+ Anyptr my_memcpy(Anyptr d, Const Anyptr s, size_t n)
+ #else
+@@ -638,7 +636,9 @@ register int n;
+ 	*dd++ = *ss++;
+     return d;
+ }
++#endif /* LACK_MEMCPY */
+ 
++#ifdef LACK_MEMCMP
+ #ifdef __STDC__
+ int my_memcmp(Const Anyptr s1, Const Anyptr s2, size_t n)
+ #else
+@@ -654,7 +654,9 @@ register int n;
+ 	    return i;
+     return 0;
+ }
++#endif /* LACK_MEMCMP */
+ 
++#ifdef LACK_MEMSET
+ #ifdef __STDC__
+ Anyptr my_memset(Anyptr d, int c, size_t n)
+ #else
+@@ -669,7 +671,7 @@ register int n;
+ 	*dd++ = c;
+     return d;
+ }
+-
++#endif /* LACK_MEMSET */
+ 
+ int my_toupper(c)
+ int c;

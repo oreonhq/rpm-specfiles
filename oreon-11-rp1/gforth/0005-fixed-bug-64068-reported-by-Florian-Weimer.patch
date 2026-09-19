@@ -1,0 +1,30 @@
+From: Anton Ertl <anton@mips.complang.tuwien.ac.at>
+Date: Wed, 19 Apr 2023 10:23:13 +0200
+Subject: [PATCH] fixed bug #64068, reported by Florian Weimer
+
+
+diff --git a/configure.in b/configure.in
+index 237f38cd..8a45e631 100644
+--- a/configure.in
++++ b/configure.in
+@@ -196,7 +196,7 @@ OLDLDFLAGS=$LDFLAGS
+ LDFLAGS="$LDFLAGS -export-dynamic"
+ dnl AC_TRY_LINK gives false positive on rs6000-ibm-aix4.2.1.0
+ dnl AC_TRY_LINK(,,ac_export_dynamic=yes,ac_export_dynamic=no)
+-AC_TRY_RUN(main(){exit(0);},ac_export_dynamic=yes,ac_export_dynamic=no,ac_export_dynamic=no)
++AC_TRY_RUN(int main(void){return 0;},ac_export_dynamic=yes,ac_export_dynamic=no,ac_export_dynamic=no)
+ test $ac_export_dynamic = yes|| LDFLAGS=$OLDLDFLAGS
+ AC_MSG_RESULT($ac_export_dynamic)
+ 
+@@ -756,9 +756,9 @@ if test -z "$skipcode"; then
+     do
+ 	AC_TRY_RUN(
+ [int foo(int,int,int);
+-main()
++int main()
+ {
+-  exit(foo(0,0,0)!=16);
++  return foo(0,0,0)!=16;
+ }
+ int foo(int x, int y, int z)
+ {

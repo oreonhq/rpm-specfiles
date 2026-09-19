@@ -1,0 +1,65 @@
+--- cvc5-cvc5-1.3.1/test/api/cpp/issues/CMakeLists.txt.orig	2025-09-24 08:43:04.000000000 -0600
++++ cvc5-cvc5-1.3.1/test/api/cpp/issues/CMakeLists.txt	2025-09-25 08:34:20.392502538 -0600
+@@ -49,8 +49,8 @@ cvc5_add_api_test(proj-issue666 "issues"
+ 
+ if (NOT ENABLE_SAFE_MODE AND NOT ENABLE_STABLE_MODE)
+   cvc5_add_api_test(issue4889 "issues")
+-  cvc5_add_api_test(proj-issue344 "issues")
+-  cvc5_add_api_test(proj-issue345 "issues")
++  #cvc5_add_api_test(proj-issue344 "issues")
++  #cvc5_add_api_test(proj-issue345 "issues")
+   cvc5_add_api_test(proj-issue377 "issues")
+   cvc5_add_api_test(proj-issue388 "issues")
+   cvc5_add_api_test(proj-issue413 "issues")
+--- cvc5-cvc5-1.3.1/test/regress/cli/CMakeLists.txt.orig	2025-09-24 08:43:04.000000000 -0600
++++ cvc5-cvc5-1.3.1/test/regress/cli/CMakeLists.txt	2025-09-25 08:34:20.392970530 -0600
+@@ -4028,8 +4028,8 @@ set(regress_3_tests
+   regress3/arith/abz5_1400.smtv1.smt2
+   regress3/arith_prp-13-24.smt2
+   regress3/auflia-fuzz06.smtv1.smt2
+-  regress3/bags/reduce_constants_dup.smt2
+-  regress3/bmc-ibm-1.smtv1.smt2
++  #regress3/bags/reduce_constants_dup.smt2
++  #regress3/bmc-ibm-1.smtv1.smt2
+   regress3/bmc-ibm-2.smtv1.smt2
+   regress3/bmc-ibm-5.smtv1.smt2
+   regress3/bmc-ibm-7.smtv1.smt2
+@@ -4044,7 +4044,7 @@ set(regress_3_tests
+   regress3/bv-core-ext_con_004_001_1024.smtv1.smt2
+   regress3/bv-fuzz15.smtv1.smt2
+   regress3/bv-fuzz16.smtv1.smt2
+-  regress3/bv-fuzz17.smtv1.smt2
++  #regress3/bv-fuzz17.smtv1.smt2
+   regress3/cegisunif-depth1.sy
+   regress3/decision-uflia-xs-09-16-3-4-1-5.smtv1.smt2
+   regress3/DRAGON_1.lus.sy
+@@ -4057,7 +4057,7 @@ set(regress_3_tests
+   regress3/interpol2.smt2
+   regress3/inv_gen_n_c11.sy
+   regress3/issue11616.smt2
+-  regress3/issue4170.smt2
++  #regress3/issue4170.smt2
+   regress3/issue4707-bv-to-bool-large.smt2
+   regress3/lpsat-goal-9.smt2
+   regress3/nia-max-square.sy
+@@ -4070,7 +4070,7 @@ set(regress_3_tests
+   regress3/qwh.35.405.shuffled-as.sat03-1651.smtv1.smt2
+   regress3/sixfuncs.sy
+   regress3/specsharp-WindowsCard.15.RTE.Terminate_System.Int32.smt2
+-  regress3/strings-any-term.sy
++  #regress3/strings-any-term.sy
+   regress3/strings/extf_d_perf.smt2
+   regress3/strings/issue8926-sygus-inst.smt2
+   regress3/strings/norn-dis-0707-3.smt2
+@@ -4083,9 +4083,9 @@ set(regress_3_tests
+ 
+ set(regress_4_tests
+   regress4/bug143.smtv1.smt2
+-  regress4/C880mul.miter.shuffled-as.sat03-348.smtv1.smt2
++  #regress4/C880mul.miter.shuffled-as.sat03-348.smtv1.smt2
+   regress4/fischer3-mutex-16.smtv1.smt2
+-  regress4/instance_1151.smtv1.smt2
++  #regress4/instance_1151.smtv1.smt2
+   regress4/NEQ016_size5.smtv1.smt2
+   regress4/siegel-nl-bases.smt2
+   regress4/swap_t1_pp_nf_ai_00010_004.cvc.smt2

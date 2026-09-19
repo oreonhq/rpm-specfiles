@@ -1,0 +1,109 @@
+From 752f9d4344527d94e6b28f31d876fa81e1697716 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Wed, 11 Apr 2018 05:15:58 -0400
+Subject: [PATCH 1/3] Skip version checks.
+
+We're building from a tarball, not a git repo, so we can't check if the
+script version matches the git version anyway.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ Makefile     | 31 -------------------------------
+ tests/cmd.py | 44 --------------------------------------------
+ 2 files changed, 75 deletions(-)
+ delete mode 100644 tests/cmd.py
+
+diff --git a/Makefile b/Makefile
+index 0abbf01..ec50051 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,36 +1,5 @@
+ SYSTEM = $(shell python2.7 -c 'import platform; print platform.system()')
+ include helper/GIT-VERSION.mk
+-ifeq ($(SYSTEM),Windows)
+-GIT_REPO = https://github.com/git-for-windows/git
+-GIT_VERSION := $(WINDOWS_GIT_VERSION)
+-else
+-GIT_REPO = $(shell sed -n 's/.*url = //p' .gitmodules)
+-endif
+-SUBMODULE_STATUS := $(shell git submodule status git-core 2> /dev/null || echo no)
+-
+-define exec
+-$$(shell echo $1 >&2)
+-ifeq (fail,$$(shell $1 >&2 || echo fail))
+-$$(error failed)
+-endif
+-endef
+-
+-ifeq ($(SUBMODULE_STATUS),no)
+-$(eval $(call exec,git clone -n $(GIT_REPO) git-core))
+-$(eval $(call exec,git -C git-core checkout $(GIT_VERSION)))
+-else
+-ifneq ($(shell git -C git-core rev-parse HEAD),$(shell git -C git-core rev-parse --revs-only $(GIT_VERSION)^{commit}))
+-$(eval $(call exec,git submodule update --init))
+-ifeq ($(SYSTEM),Windows)
+-$(eval $(call exec,git -C git-core remote add git4win $(GIT_REPO)))
+-$(eval $(call exec,git -C git-core fetch git4win --tags))
+-$(eval $(call exec,git -C git-core checkout $(GIT_VERSION)))
+-endif
+-endif
+-endif
+-ifneq ($(shell git -C git-core rev-parse HEAD),$(shell git -C git-core rev-parse --revs-only $(GIT_VERSION)^{commit}))
+-$(error git-core is not checked out at $(GIT_VERSION))
+-endif
+ 
+ .PHONY: helper
+ helper:
+diff --git a/tests/cmd.py b/tests/cmd.py
+deleted file mode 100644
+index 5e98392..0000000
+--- a/tests/cmd.py
++++ /dev/null
+@@ -1,44 +0,0 @@
+-from __future__ import absolute_import, unicode_literals
+-import os
+-import unittest
+-from cinnabar.cmd.util import Version as CmdVersion
+-from cinnabar.git import (
+-    Git,
+-    split_ls_tree,
+-)
+-from cinnabar.util import one
+-from distutils.version import StrictVersion
+-
+-
+-class Version(StrictVersion):
+-    def __init__(self, v):
+-        if isinstance(v, bytes):
+-            v = v.decode('ascii')
+-        if v.endswith('a'):
+-            v += '0'
+-        StrictVersion.__init__(self, v)
+-
+-
+-class TestVersion(unittest.TestCase):
+-    def test_cinnabar_version(self):
+-        desc = one(Git.iter('describe', '--tags', 'HEAD'))
+-        version = Version(CmdVersion.cinnabar_version())
+-        if b'-' in desc:
+-            last_tag, n, sha1 = desc.rsplit(b'-', 2)
+-            self.assertGreater(version, Version(last_tag))
+-        else:
+-            self.assertEqual(version, Version(desc))
+-
+-    def test_module_version(self):
+-        module = one(Git.iter(
+-            'ls-tree', 'HEAD', 'cinnabar',
+-            cwd=os.path.join(os.path.dirname(__file__), '..')))
+-        self.assertEqual(CmdVersion.module_version(),
+-                         split_ls_tree(module)[2].decode('ascii'))
+-
+-    def test_helper_version(self):
+-        helper = one(Git.iter(
+-            'ls-tree', 'HEAD', 'helper',
+-            cwd=os.path.join(os.path.dirname(__file__), '..')))
+-        self.assertEqual(CmdVersion.helper_version()[1],
+-                         split_ls_tree(helper)[2].decode('ascii'))
+-- 
+2.36.1
+

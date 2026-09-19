@@ -1,0 +1,24 @@
+From aa46d3cbcec14ae46a176165852089558c524ff2 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Fri, 10 Jul 2015 12:55:13 +0200
+Subject: [PATCH] libreoffice (or OO.o) has never had wps export
+
+---
+ unoconv | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/unoconv b/unoconv
+index 2e56d3c..1158374 100755
+--- a/unoconv
++++ b/unoconv
+@@ -377,7 +377,6 @@ fmts.add('document', 'uot', 'uot', 'Unified Office Format text','UOF text') ###
+ fmts.add('document', 'vor', 'vor', 'StarWriter 5.0 Template', 'StarWriter 5.0 Vorlage/Template') ### 6
+ fmts.add('document', 'vor4', 'vor', 'StarWriter 4.0 Template', 'StarWriter 4.0 Vorlage/Template') ### 5
+ fmts.add('document', 'vor3', 'vor', 'StarWriter 3.0 Template', 'StarWriter 3.0 Vorlage/Template') ### 4
+-fmts.add('document', 'wps', 'wps', 'Microsoft Works', 'MS_Works')
+ fmts.add('document', 'xhtml', 'html', 'XHTML Document', 'XHTML Writer File') ### 33
+ fmts.add('document', 'epub', 'epub', 'Electronic Publication', 'EPUB')
+ 
+-- 
+2.1.0
+

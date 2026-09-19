@@ -1,0 +1,53 @@
+From 7b7e5bce5f41da5a511b87df416fd20e670313b4 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Mon, 8 Apr 2024 11:57:28 +0100
+Subject: [PATCH 2/7] tweak PYEXECDIR
+
+---
+ bin/nest_vars.sh.in          | 2 +-
+ cmake/ConfigureSummary.cmake | 2 +-
+ pynest/CMakeLists.txt        | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/bin/nest_vars.sh.in b/bin/nest_vars.sh.in
+index 6e33190cd..bc07787ce 100644
+--- a/bin/nest_vars.sh.in
++++ b/bin/nest_vars.sh.in
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ 
+ # Make PyNEST available by prepending its path to PYTHONPATH in a safe way.
+-export PYTHONPATH="@CMAKE_INSTALL_PREFIX@/@PYEXECDIR@${PYTHONPATH:+:$PYTHONPATH}"
++export PYTHONPATH="@PYEXECDIR@${PYTHONPATH:+:$PYTHONPATH}"
+ 
+ # Make NEST executables available by prepending their path to PATH.
+ export PATH="@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_BINDIR@:${PATH}"
+diff --git a/cmake/ConfigureSummary.cmake b/cmake/ConfigureSummary.cmake
+index 0e3eba620..b699d06c0 100644
+--- a/cmake/ConfigureSummary.cmake
++++ b/cmake/ConfigureSummary.cmake
+@@ -239,7 +239,7 @@ function( NEST_PRINT_CONFIG_SUMMARY )
+   endif()
+   if ( HAVE_PYTHON )
+     message( "PyNEST will be installed to:" )
+-    message( "    ${CMAKE_INSTALL_PREFIX}/${PYEXECDIR}" )
++    message( "    ${PYEXECDIR}" )
+     message( "" )
+   endif ()
+   message( "To set necessary environment variables, add the following line" )
+diff --git a/pynest/CMakeLists.txt b/pynest/CMakeLists.txt
+index 6d3129419..9a1f831db 100644
+--- a/pynest/CMakeLists.txt
++++ b/pynest/CMakeLists.txt
+@@ -74,7 +74,7 @@ if ( HAVE_PYTHON )
+       )
+ 
+   install(DIRECTORY  nest/ ${PROJECT_BINARY_DIR}/pynest/nest/
+-      DESTINATION ${CMAKE_INSTALL_PREFIX}/${PYEXECDIR}/nest
++      DESTINATION ${PYEXECDIR}/nest
+       PATTERN "versionchecker.py.in" EXCLUDE
+   )
+   install( TARGETS pynestkernel DESTINATION ${PYEXECDIR}/nest/ )
+-- 
+2.44.0
+

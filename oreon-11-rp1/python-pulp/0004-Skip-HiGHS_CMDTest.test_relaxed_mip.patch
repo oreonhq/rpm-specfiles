@@ -1,0 +1,28 @@
+From 5cfd032221c40f6021b4188ae34bdc3a9384699a Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 7 Dec 2025 09:13:55 +0000
+Subject: [PATCH 4/4] Skip HiGHS_CMDTest.test_relaxed_mip
+
+A temporary downstream workaround for
+https://github.com/coin-or/pulp/issues/887#issuecomment-3621838359
+---
+ pulp/tests/test_pulp.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/pulp/tests/test_pulp.py b/pulp/tests/test_pulp.py
+index 41be258..93b07ea 100644
+--- a/pulp/tests/test_pulp.py
++++ b/pulp/tests/test_pulp.py
+@@ -2345,6 +2345,9 @@ class HiGHS_CMDTest(BaseSolverTest.PuLPTest):
+     test_time_limit_no_solution = unittest.skip(
+         "https://github.com/coin-or/pulp/issues/832"
+     )(BaseSolverTest.PuLPTest.test_time_limit_no_solution)
++    test_relaxed_mip = unittest.skip(
++        "https://github.com/coin-or/pulp/issues/887#issuecomment-3621838359"
++    )(BaseSolverTest.PuLPTest.test_relaxed_mip)
+ 
+ 
+ class COPTTest(BaseSolverTest.PuLPTest):
+-- 
+2.52.0
+

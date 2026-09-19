@@ -1,0 +1,12 @@
+diff -up ansible-pylibssh-1.2.2/packaging/pep517_backend/_backend.py.debug ansible-pylibssh-1.2.2/packaging/pep517_backend/_backend.py
+--- ansible-pylibssh-1.2.2/packaging/pep517_backend/_backend.py.debug	2025-10-06 18:34:26.713221021 -0600
++++ ansible-pylibssh-1.2.2/packaging/pep517_backend/_backend.py	2025-10-06 18:42:48.561143013 -0600
+@@ -292,7 +292,7 @@ def build_wheel(
+     """
+     with _prebuild_c_extensions(
+             line_trace_cython_when_unset=False,  # noqa: WPS318
+-            build_inplace=False,
++            build_inplace=True,
+             config_settings=config_settings,
+     ):
+         return _setuptools_build_wheel(

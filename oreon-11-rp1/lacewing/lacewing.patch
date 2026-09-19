@@ -1,0 +1,699 @@
+diff -urN lacewing.orig/Makefile lacewing/Makefile
+--- lacewing.orig/Makefile	1970-01-01 01:00:00.000000000 +0100
++++ lacewing/Makefile	2006-01-20 13:14:27.000000000 +0100
+@@ -0,0 +1,28 @@
++PREFIX  = /home/opt
++DATADIR = $(PREFIX)/share/$(TARGET)
++CFLAGS  = -g -Wall -O2
++LDFLAGS = `allegro-config --libs` -lm
++DEFINES = -DDATADIR=\"$(DATADIR)/\"
++OBJS    = actor.o bullet.o cloud.o cmds.o displ_in.o display.o eclass.o \
++          enemy.o game.o input.o levels.o main.o menu.o palette.o pickup.o \
++          score.o ships.o sound.o stars.o stuff.o upgrades.o
++TARGET  = lacewing
++
++$(TARGET): $(OBJS)
++	$(CC) $(LDFLAGS) -o $@ $^
++
++%.o: %.c
++	$(CC) $(CFLAGS) $(DEFINES) -o $@ -c $<
++
++install: $(TARGET)
++	mkdir -p $(PREFIX)/bin
++	mkdir -p $(DATADIR)/gfx
++	mkdir -p $(DATADIR)/sound/ambi
++	install -p -m 755 $(TARGET) $(PREFIX)/bin
++	install -p -m 644 lacew.cfg $(DATADIR)
++	install -p -m 644 gfx/* $(DATADIR)/gfx
++	install -p -m 644 sound/*.wav $(DATADIR)/sound
++	install -p -m 644 sound/ambi/* $(DATADIR)/sound/ambi
++	
++clean:
++	rm -f $(OBJS) $(TARGET) *~
+diff -urN lacewing.orig/config.h lacewing/config.h
+--- lacewing.orig/config.h	2003-11-24 21:54:40.000000000 +0100
++++ lacewing/config.h	2006-01-20 14:34:10.000000000 +0100
+@@ -37,6 +37,8 @@
+ 
+ #define ATTACK_NONE -1
+ 
++#define MAX_FRAMESKIP 4
++
+ struct armoury
+ {
+  char *name;
+@@ -1067,3 +1069,13 @@
+ 
+ 
+ 
++/* compat defines */
++#include <stdio.h>
++
++#ifndef DATADIR
++#define DATADIR
++#endif
++
++#define PI M_PI
++#define itoa(integer, buf, bufsize) \
++ (snprintf(buf, bufsize, "%d", integer), buf)
+diff -urN lacewing.orig/displ_in.c lacewing/displ_in.c
+--- lacewing.orig/displ_in.c	2003-11-25 01:25:16.000000000 +0100
++++ lacewing/displ_in.c	2006-01-20 00:28:03.000000000 +0100
+@@ -89,7 +89,7 @@
+  RGB temp_palette [256];
+  RGB temp_palette3 [1024];
+ 
+- DATAFILE *datf = load_datafile("gfx\\data.dat");
++ DATAFILE *datf = load_datafile(DATADIR "gfx/data.dat");
+  if (datf == NULL)
+  {
+   set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+@@ -107,7 +107,7 @@
+  textprintf_centre(screen, font, 320, 200, COLOUR_GREEN8, "Loading}...");
+  textprintf_centre(screen, font2, 320, 200, COLOUR_YELLOW8, "Loading}...");
+ 
+- BITMAP *temp_bitmap = load_bitmap("gfx\\ship8_i.bmp", temp_palette);
++ BITMAP *temp_bitmap = load_bitmap(DATADIR "gfx/ship8_i.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap");
+@@ -205,7 +205,7 @@
+ 
+ // Load in enemy bitmaps:
+ 
+- temp_bitmap = load_bitmap("gfx\\enemy1.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/enemy1.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (enemy1.bmp not loaded correctly?)");
+@@ -251,7 +251,7 @@
+ 
+  destroy_bitmap(temp_bitmap);
+ 
+- temp_bitmap = load_bitmap("gfx\\enemy3.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/enemy3.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (enemy3.bmp not loaded correctly?)");
+@@ -273,7 +273,7 @@
+  destroy_bitmap(temp_bitmap);
+ // destroy_bitmap(temp_bitmap2);
+ 
+- temp_bitmap = load_bitmap("gfx\\small1.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/small1.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (small1.bmp not loaded correctly?)");
+@@ -287,7 +287,7 @@
+  destroy_bitmap(temp_bitmap);
+ 
+ 
+- temp_bitmap = load_bitmap("gfx\\small2.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/small2.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (small2.bmp not loaded correctly?)");
+@@ -300,7 +300,7 @@
+ 
+  destroy_bitmap(temp_bitmap);
+ 
+- temp_bitmap = load_bitmap("gfx\\enemy2.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/enemy2.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (enemy2.bmp not loaded correctly?)");
+@@ -313,7 +313,7 @@
+ 
+  destroy_bitmap(temp_bitmap);
+  
+- temp_bitmap = load_bitmap("gfx\\lships.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/lships.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (lships.bmp not loaded correctly?)");
+diff -urN lacewing.orig/display.c lacewing/display.c
+--- lacewing.orig/display.c	2003-11-25 01:27:20.000000000 +0100
++++ lacewing/display.c	2006-01-20 14:32:31.000000000 +0100
+@@ -53,7 +53,6 @@
+ BITMAP *player2;
+ //extern volatile int frames_per_second;
+ extern volatile int ticked;
+-extern int slacktime;
+ 
+ extern struct optionstruct options;
+ 
+@@ -3093,12 +3092,10 @@
+ // textprintf(bmp, small_font, 20, 110, 5, "Xs %i  Ys %i  TS %f  DS %f  Drag %i",
+ //  actor[player[play].actor_controlled].x_speed, actor[player[play].actor_controlled].y_speed, hypot(actor[player[play].actor_controlled].x_speed, actor[player[play].actor_controlled].y_speed), hypot(actor[player[play].actor_controlled].x_speed, actor[player[play].actor_controlled].y_speed) * game.drag, actor[player[play].actor_controlled].drag_amount);
+ // textprintf(bmp, small_font, 20, 60, 5, "Stack %i", stackavail());
+-// textprintf(bmp, small_font, 20, 90, 5, "Slack %i", slacktime);
+ // textprintf(bmp, small_font, 20, 100, 5, "Lock %i", actor[0].lock);
+ //textprintf(bmp, smallfont, 20, 50, 5, "Fps} %i", frames_per_second);
+ /* textprintf(bmp, font, 20, 50, 5, "Fps} %i", frames_per_second);
+  textprintf(bmp, font2, 20, 50, 5, "Fps} %i", frames_per_second);
+- textprintf(bmp, font, 20, 80, 5, "Slack} %i", slacktime);
+  textprintf(bmp, font, 20, 110, 5, "Xs} %i  Ys} %i  Drag} %i",
+   actor[player[play].actor_controlled].x_speed, actor[player[play].actor_controlled].y_speed, actor[player[play].actor_controlled].drag_amount);
+  textprintf(bmp, font, 20, 140, 5, "X} %i  Y} %i ",
+@@ -3107,7 +3104,6 @@
+   enemy[0].angle, enemy[0].attribute [ATTRIB_SWERVER_ANGLE], enemy[0].attacking, enemy[0].recycle);
+  textprintf(bmp, font, 20, 200, 5, "Lock} %i ", actor[0].lock);*/
+ /* textprintf(bmp, small_font, 20, 50, 5, "FPS %i", frames_per_second);
+- textprintf(bmp, small_font, 20, 60, 5, "SLACK %i", slacktime);
+  textprintf(bmp, small_font, 20, 70, 5, "XS %i  YS %i  DRAG %i",
+   actor[player[play].actor_controlled].x_speed, actor[player[play].actor_controlled].y_speed, actor[player[play].actor_controlled].drag_amount);
+  textprintf(bmp, small_font, 20, 80, 5, "X %i  Y %i ",
+@@ -3128,10 +3124,11 @@
+ 
+ void level_announcement(void)
+ {
++ int frames_skipped = 0;
++ int waiting = 30;
+ 
+  clear_bitmap(screen);
+ 
+- int waiting = 30;
+ 
+  if (arena.level == 1)
+   waiting = 60;
+@@ -3142,11 +3139,20 @@
+ 
+  do
+  {
+-  while(ticked > 0)
++  while(ticked == 0)
++   rest(0);
++    
++  waiting--;
++  ticked--;
++
++  /* skip drawing if we can't keep up */
++  if (ticked && (frames_skipped < MAX_FRAMESKIP))
+   {
+-   waiting --;
+-   ticked --;
+-  };
++   frames_skipped++;
++   continue;
++  }
++  frames_skipped = 0;
++
+   if ((waiting / 5) % 2 == 0)
+   {
+    textprintf_centre(screen, font, 320, 240, COLOUR_GREEN4 + (waiting / 2) % 4, "Get}  Ready}");
+diff -urN lacewing.orig/game.c lacewing/game.c
+--- lacewing.orig/game.c	2003-10-06 00:35:54.000000000 +0200
++++ lacewing/game.c	2006-01-20 14:32:11.000000000 +0100
+@@ -64,12 +64,12 @@
+ 
+ extern volatile unsigned char ticked;
+ extern volatile int framecounter;
+-extern int slacktime;
+ 
+ 
+ void game_loop(void)
+ {
+  int playing = 1;
++ int frames_skipped = 0;
+  
+  counter = 0;
+ 
+@@ -168,19 +168,20 @@
+ 
+      
+    }
+-   
+-  if (ticked == 0)
++
++  /* only draw if we can keepup */
++  if ( (ticked == 0) || (frames_skipped > MAX_FRAMESKIP))
+   {
+    run_display();
++   frames_skipped = 0;
+ //   framecounter++;
+   }
++  else
++   frames_skipped++;
++
++  while(ticked == 0)
++   rest(0);
+ 
+-  slacktime = 0;
+-  
+-  do
+-  {
+-   slacktime ++;
+-  } while(ticked == 0);
+   ticked --;
+ 
+   counter ++;
+diff -urN lacewing.orig/main.c lacewing/main.c
+--- lacewing.orig/main.c	2003-11-22 13:33:22.000000000 +0100
++++ lacewing/main.c	2006-01-20 14:03:49.000000000 +0100
+@@ -96,11 +96,10 @@
+ 
+ #include "allegro.h"
+ 
+-#include <conio.h>
+ #include <string.h>
+ #include <stdlib.h>
+-#include <pc.h>
+ #include <math.h>
++#include <stdio.h>
+ 
+ #include "config.h"
+ 
+@@ -150,17 +149,16 @@
+ //volatile int framecounter;
+ //volatile int frames_per_second;
+ 
+-volatile int inputcounter = 0;
+-volatile int inputs_per_second = 0;
++//volatile int inputcounter = 0;
++//volatile int inputs_per_second = 0;
+ 
+-volatile int turncounter = 0;
+-volatile int turns_per_second = 0;
++//volatile int turncounter = 0;
++//volatile int turns_per_second = 0;
+ 
+ void tickover(void);
+ 
+ volatile unsigned char ticked;
+ //volatile unsigned char tick_counter;
+-int slacktime;
+ // --- end timer interupt
+ 
+ 
+@@ -199,33 +197,13 @@
+ 
+ int main(void)
+ {
+-
+- cprintf("\n\rHello and welcome to Lacewing version 1.10!");
+- cprintf("\n\rCopyright 2003 by Linley Henzell & Captain Pork.\n\r");
+- cprintf("\n\rLacewing is free software published under the");
+- cprintf("\n\rGeneral Public Licence. It can be modified and");
+- cprintf("\n\rredistributed under certain conditions and comes");
+- cprintf("\n\rwith no warranties of any kind.");
+- cprintf("\n\rPlease read the LICENCE.TXT file for more information.\n\r");
+- cprintf("\n\rPress Q to Quit, or any other key to continue...\n\r");
+-
+- char rkey;
+-
+- int randcount; // doesn't matter if it's not initialised - better, actually
+-
+- do
+- {
+-   randcount ++;
+- }
+-  while(kbhit() == 0);
+-  
+- rkey = getch();
+- if (rkey == 'q' || rkey == 'Q')
+-  return 0;
+- if (rkey == 0)
+-  getch();
+-
+- srandom(randcount);
++ printf("Hello and welcome to Lacewing version 1.10!");
++ printf("\nCopyright 2003 by Linley Henzell & Captain Pork.\n");
++ printf("\nLacewing is free software published under the");
++ printf("\nGeneral Public Licence. It can be modified and");
++ printf("\nredistributed under certain conditions and comes");
++ printf("\nwith no warranties of any kind.");
++ printf("\nPlease read the LICENCE.TXT file for more information.\n");
+ 
+  init_at_startup();
+ 
+@@ -242,9 +220,9 @@
+ {
+ 
+    allegro_init();
+-
+-   set_config_file("lacew.cfg");
+    
++   init_config();
++
+    install_keyboard();
+    install_timer();
+ 
+@@ -257,8 +235,8 @@
+ //   LOCK_VARIABLE (tick_counter);
+ //   LOCK_VARIABLE (frames_per_second);
+ //   LOCK_VARIABLE (framecounter);
+-   LOCK_VARIABLE (turns_per_second);
+-   LOCK_VARIABLE (turncounter);
++//   LOCK_VARIABLE (turns_per_second);
++//   LOCK_VARIABLE (turncounter);
+ //   LOCK_VARIABLE (inputs_per_second);
+ //   LOCK_VARIABLE (inputcounter);
+ 
+diff -urN lacewing.orig/menu.c lacewing/menu.c
+--- lacewing.orig/menu.c	2003-11-25 01:53:04.000000000 +0100
++++ lacewing/menu.c	2006-01-20 14:33:30.000000000 +0100
+@@ -138,7 +138,6 @@
+ int option_index(void);
+ void enter_keystroke(void);
+ int option_jump(int direction);
+-void init_config(void);
+ void save_config(void);
+ 
+ void choose_ships(void);
+@@ -205,7 +204,6 @@
+ void init_menus_once_only(void)
+ {
+  text_mode(-1);
+- init_config();
+ 
+  menu_bmp = create_bitmap(640, 480);
+ 
+@@ -226,7 +224,7 @@
+ 
+  RGB temp_palette [256];
+ 
+- BITMAP *temp_bmp = load_bitmap("gfx\\title_i.bmp", temp_palette);
++ BITMAP *temp_bmp = load_bitmap(DATADIR "gfx/title_i.bmp", temp_palette);
+ 
+  if (!temp_bmp)
+  {
+@@ -246,7 +244,7 @@
+ 
+  destroy_bitmap(temp_bmp);
+ 
+- temp_bmp = load_bitmap("gfx\\title_o.bmp", temp_palette);
++ temp_bmp = load_bitmap(DATADIR "gfx/title_o.bmp", temp_palette);
+ 
+  if (!temp_bmp)
+  {
+@@ -266,7 +264,7 @@
+ 
+  destroy_bitmap(temp_bmp);
+ 
+- temp_bmp = load_bitmap("gfx\\title_s.bmp", temp_palette);
++ temp_bmp = load_bitmap(DATADIR "gfx/title_s.bmp", temp_palette);
+ 
+  if (!temp_bmp)
+  {
+@@ -286,7 +284,7 @@
+ 
+  destroy_bitmap(temp_bmp);
+ 
+- upgrade_box1 = load_bitmap("gfx\\upg_box.bmp", temp_palette);
++ upgrade_box1 = load_bitmap(DATADIR "gfx/upg_box.bmp", temp_palette);
+ 
+  if (!upgrade_box1)
+  {
+@@ -295,7 +293,7 @@
+       exit(1);
+  }
+ 
+- upgrade_box2 = load_bitmap("gfx\\upg_box2.bmp", temp_palette);
++ upgrade_box2 = load_bitmap(DATADIR "gfx/upg_box2.bmp", temp_palette);
+ 
+  if (!upgrade_box2)
+  {
+@@ -304,7 +302,7 @@
+       exit(1);
+  }
+ 
+- upgrade_box3 = load_bitmap("gfx\\upg_box3.bmp", temp_palette);
++ upgrade_box3 = load_bitmap(DATADIR "gfx/upg_box3.bmp", temp_palette);
+ 
+  if (!upgrade_box3)
+  {
+@@ -324,7 +322,8 @@
+ 
+ void menu_loop(void)
+ {
+-
++ int frames_skipped = 0;
++ 
+  which_menu = MENU_MAIN;
+  menu_index_max = 4;
+  menu_index_min = 0;
+@@ -347,20 +346,21 @@
+   if (which_menu == MENU_SCORES || which_menu == MENU_ENTER_SCORES)
+    make_bouncies_move();
+ 
+-  if (ticked == 0)
++  /* only draw if we can keepup */
++  if ( (ticked == 0) || (frames_skipped > MAX_FRAMESKIP))
+   {
+    clear_bitmap(menu_bmp);
+    menu_display();
+    blit(menu_bmp, screen, 0, 0, 0, 0, 640, 480);
++   frames_skipped = 0;
+   }
++  else
++   frames_skipped++;
+ 
+   menu_input();
+ 
+-  slacktime = 0;
+-  do
+-  {
+-   slacktime ++;
+-  } while(ticked == 0);
++  while(ticked == 0)
++   rest(0);
+   ticked --;
+ 
+  } while(TRUE);
+@@ -1431,8 +1431,6 @@
+  game.single_player = 0;
+  game.users = 1;
+ 
+- int county = 0;
+-
+  int keypress_wait1 = KP_WAIT_SHORT;
+  int keypress_wait2 = KP_WAIT_SHORT;
+  int waiting = 5;
+@@ -1577,10 +1575,8 @@
+    blit(menu_bmp, screen, 0, 0, 0, 0, 640, 480);
+   }
+ 
+-  do
+-  {
+-   county ++;
+-  } while (ticked == 0);
++  while (ticked == 0)
++   rest(0);
+ 
+   ticked --;
+ 
+@@ -2451,7 +2447,7 @@
+ 
+       set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+ //      clrscr();
+-      allegro_message("\n\rBye bye!                           ");
++//      allegro_message("\n\rBye bye!                           ");
+ //      free(palet);
+       exit(0);
+ 
+@@ -2762,17 +2758,69 @@
+ 
+ }
+ 
++/* Function(s) to find the homedir of a user under Unix */
++#ifdef __unix__
++#include <pwd.h>
++#include <unistd.h>
++#include <sys/types.h>
++#if defined(__DECC) && defined(VMS)
++#include <unixlib.h>
++static char *vms_to_unix_buffer = NULL;
++static int convert_vms_to_unix(char *vms_dir_name)
++{
++	vms_to_unix_buffer = vms_dir_name;
++}
++#endif
++
++/* 
++ * Locate user's home directory.
++ */
++char *get_home_dir(void)
++{
++	struct passwd *pw;
++
++	if (!(pw = getpwuid(getuid())))
++	{ 
++		fprintf(stderr, "Who are you? Not found in passwd database!!\n");
++		return NULL;
++	}
++
++#if defined(__DECC) && defined(VMS)
++	/* Convert The OpenVMS Formatted "$HOME" Directory Path Into Unix
++	   Format. */
++	decc$from_vms(pw->pw_dir, convert_vms_to_unix, 1);
++	return vms_to_unix_buffer;
++#else
++	return pw->pw_dir;
++#endif
++}
++#endif /* defined __unix__ */
++
+ void init_config(void)
+ {
+-
+-set_config_file("lacew.cfg");
+-
+-
+  char miscstring [40];
+  char wstring [40];
+  char itstring [40];
+  int i;
+-
++#ifdef __unix__   
++ char config_file_name[512];
++ char *home_dir = get_home_dir();
++ int using_global_cfg = 1;
++   
++ snprintf(config_file_name, sizeof(config_file_name)/sizeof(char), "%s/.%s",
++  home_dir? home_dir:".", "lacew.cfg");
++      
++ /* does the cfg file exist? */
++ if (access(config_file_name, R_OK) == 0)
++ {
++  override_config_file(config_file_name);
++  using_global_cfg = 0;
++ }
++ else
++#endif   
++  override_config_file(DATADIR "lacew.cfg");
++  
++ srandom(get_config_int("Misc", "Seed", 0));
+ 
+  options.sound_init = get_config_int("Options", "Sound_init", 1);
+  options.sound_mode = get_config_int("Options", "Sound_mode", SOUNDMODE_STEREO);
+@@ -2835,7 +2883,12 @@
+   strcat(miscstring, itoa(i, itstring, 10));
+   strcpy(hs_coop[i].name, get_config_string(wstring, miscstring, "CaptainP"));
+  }
+-
++#ifdef __unix__
++ /* make sure any changes get written to the per user file and not to
++    the global file */
++ if (using_global_cfg)
++  override_config_file(config_file_name);
++#endif
+ }
+ 
+ void save_config(void)
+@@ -2845,6 +2898,8 @@
+  char itstring [40];
+  int i;
+ 
++ set_config_int("Misc", "Seed", random());
++
+ // options.sound_init = get_config_int("Options", "Sound_init", 1);
+  set_config_int("Options", "Sound_mode", options.sound_mode);
+  set_config_int("Options", "Run_vsync", options.run_vsync);
+@@ -3102,7 +3157,6 @@
+ void display_victory_screen(void)
+ {
+ 
+- int county = 0;
+  int county2 = 0;
+ 
+  do
+@@ -3128,11 +3182,8 @@
+    blit(menu_bmp, screen, 0, 0, 0, 0, 640, 480);
+   }
+ 
+-  do
+-  {
+-   county ++;
+-  } while (ticked == 0);
+-
++  while (ticked == 0)
++   rest(0);
+   ticked --;
+ 
+   county2 ++;
+diff -urN lacewing.orig/menu.h lacewing/menu.h
+--- lacewing.orig/menu.h	2003-09-04 19:28:36.000000000 +0200
++++ lacewing/menu.h	2006-01-20 13:10:33.000000000 +0100
+@@ -1,3 +1,5 @@
+ void init_menus_once_only(void);
+ 
+ void menu_loop(void);
++
++void init_config(void);
+diff -urN lacewing.orig/ships.c lacewing/ships.c
+--- lacewing.orig/ships.c	2003-09-04 20:51:46.000000000 +0200
++++ lacewing/ships.c	2006-01-18 22:10:54.000000000 +0100
+@@ -55,7 +55,8 @@
+ 0, // system 3 status 2
+ BRAKES_DRAG, // brake type
+ 5, // brake strength
+-1000 // armour                   },
++1000 // armour
++},
+ {
+ "Arrow",
+ 6000, // radius
+diff -urN lacewing.orig/sound.c lacewing/sound.c
+--- lacewing.orig/sound.c	2003-10-06 22:22:16.000000000 +0200
++++ lacewing/sound.c	2006-01-20 00:33:01.000000000 +0100
+@@ -41,7 +41,6 @@
+ #include "config.h"
+ #include "globvars.h"
+ 
+-#include "conio.h"
+ #include "math.h"
+ //DATAFILE *soundf;
+ 
+@@ -114,7 +113,7 @@
+ 
+    
+    sound_active = 1;
+-
++   
+    if (options.sound_init == 0)
+    {
+ //    cprintf("\n\r\n\rSound disabled in proj.cfg.");
+@@ -128,12 +127,8 @@
+    reserve_voices(10, 0);
+    if (install_sound (DIGI_AUTODETECT, MIDI_AUTODETECT, NULL) == -1)
+    {
+-//    allegro_message("\n\r\n\rSound autodetect failed.");
++    printf("Warning: %s, sound disabled\n", allegro_error);
+     sound_active = 0;
+-    rest(300);
+-    do
+-    {
+-    } while (keypressed() == 0);
+    }
+    set_volume(255, 0);
+ 
+@@ -263,7 +258,7 @@
+ 
+  char sfile_name [50];
+ 
+- strcpy(sfile_name, ".\\sound\\");
++ strcpy(sfile_name, DATADIR "sound/");
+  strcat(sfile_name, sfile);
+  strcat(sfile_name, ".wav");
+ 
+@@ -678,7 +673,7 @@
+ 
+  char sfile_name [50];
+ 
+- strcpy(sfile_name, ".\\sound\\ambi\\");
++ strcpy(sfile_name, DATADIR "sound/ambi/");
+  strcat(sfile_name, sfile);
+  strcat(sfile_name, ".wav");
+ 
+diff -urN lacewing.orig/stars.c lacewing/stars.c
+--- lacewing.orig/stars.c	2003-08-06 01:32:04.000000000 +0200
++++ lacewing/stars.c	2006-01-18 22:13:12.000000000 +0100
+@@ -56,7 +56,7 @@
+  int j = 0;
+  int k = 1;
+ 
+- if (game[0].users == 2)
++ if (game.users == 2)
+   k = 2;
+ 
+  for (j = 0; j < k; j ++)

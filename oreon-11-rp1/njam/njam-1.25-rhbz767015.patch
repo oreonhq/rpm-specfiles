@@ -1,0 +1,100 @@
+diff -up njam-1.25-src/src/njam.cpp~ njam-1.25-src/src/njam.cpp
+--- njam-1.25-src/src/njam.cpp~	2011-12-13 20:18:40.000000000 +0100
++++ njam-1.25-src/src/njam.cpp	2011-12-13 20:29:08.795427328 +0100
+@@ -55,7 +55,6 @@ int main(int argc, char *argv[])
+ {
+  	bool Fullscreen = true;
+  	bool SWSurface = true;
+-	bool UseDGA = false;
+ 	gid_t realgid;
+ 	
+ 	highscore_fp = fopen("/var/lib/games/njam.hs", "r+");
+@@ -76,8 +75,6 @@ int main(int argc, char *argv[])
+ 					Fullscreen = false;	// use njam.exe -w windowed mode
+ 				else if (argv[i][1] == 'h')
+ 					SWSurface = false;	// use -h for hardware surfaces
+-				else if (argv[i][1] == 'd')
+-					UseDGA = true;
+ 				else
+ 					ok = false;
+ 			}
+@@ -89,7 +86,6 @@ int main(int argc, char *argv[])
+ 				printf("Usage:  njam -[w|d|h]\n\n");
+ 				printf("-w  start in Windowed mode (as opposed to fullscreen).\n");;
+ 				printf("-h  use Hardware surfaces (faster, doesn't work well with all graphic cards).\n");
+-				printf("-d  use DGA driver on Linux, (much faster, but must run as root).\n");
+ 				return 1;
+ 			}
+ 		}
+@@ -118,7 +114,7 @@ int main(int argc, char *argv[])
+ #endif
+ 
+ 	NjamEngine Engine;
+-	if (!Engine.Init(Fullscreen, SWSurface, UseDGA))
++	if (!Engine.Init(Fullscreen, SWSurface))
+ 	{
+ 		LogFile("Failed.\n");
+ 		return 1;
+@@ -171,12 +167,6 @@ NjamEngine::NjamEngine()
+ //-----------------------------------------------------------------------------
+ NjamEngine::~NjamEngine()
+ {
+-#ifdef __linux__
+-	char bufsdl[30];
+-	sprintf(bufsdl, "SDL_VIDEODRIVER=%s", linux_sdl_driver);
+-	putenv(bufsdl);
+-#endif
+-
+  	if (script_file)
+ 		fclose(script_file);
+ 
+@@ -345,7 +335,7 @@ void NjamEngine::DoScript(void)		// load
+     }
+ }
+ //-----------------------------------------------------------------------------
+-bool NjamEngine::Init(bool Fullscreen, bool SoftwareSurface, bool UseDGA)
++bool NjamEngine::Init(bool Fullscreen, bool SoftwareSurface)
+ {
+ #ifdef __linux__
+ 	// Check if $HOME/.njam-levels exists and if it doesn't create it
+@@ -353,20 +343,6 @@ bool NjamEngine::Init(bool Fullscreen, b
+ 	char *home = NjamGetHomeDir();
+ 	snprintf(buf, sizeof(buf), "%s/.njam-levels", home? home:"");
+ 	NjamCheckAndCreateDir(buf);
+-	
+-	sprintf(linux_sdl_driver, "x11\0");
+-	char *driver_name = getenv("SDL_VIDEODRIVER");
+-	if (driver_name)
+-		sprintf(linux_sdl_driver, "%s\0", driver_name);
+-
+-	if (UseDGA)
+-	{
+-		printf("You must be root to run DGA\nType ./njam -? for help\n");
+-		putenv("SDL_VIDEODRIVER=dga");
+-	}
+-#else
+-	if (UseDGA)
+-		printf("Parameter -d is ignored for non-Linux platforms.\n");
+ #endif
+ 
+  	LogFile("Initializing SDL: VIDEO & AUDIO...", true);
+diff -up njam-1.25-src/src/njam.h~ njam-1.25-src/src/njam.h
+--- njam-1.25-src/src/njam.h~	2011-12-13 20:18:40.000000000 +0100
++++ njam-1.25-src/src/njam.h	2011-12-13 20:29:31.131148076 +0100
+@@ -112,7 +112,6 @@ private:
+ 
+  	bool m_SDL;						// whether SDL is initialized or not
+ 	bool m_AudioAvailable;			// so we know wheter to try to play music/sfx
+-	char linux_sdl_driver[10];
+ 	SDL_Surface *m_Screen;
+ 
+ 	tGameOptions m_GameOptions;
+@@ -202,7 +201,7 @@ private:
+ public:
+ 	NjamEngine();
+ 	~NjamEngine();
+-	bool Init(bool,bool,bool);				// initialize everything except for networking
++	bool Init(bool,bool);				// initialize everything except for networking
+ 	void Start();					// start the music and main menu loop
+ };
+ //-----------------------------------------------------------------------------

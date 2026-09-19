@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>lxqt-archiver.desktop</id>
+  <metadata_license>GPL-2.0+</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>lxqt-archiver</name>
+  <summary>A simple and lightweight desktop-agnostic Qt file archiver</summary>
+  <description>
+    <p>
+      LXQt Archiver is a simple and lightweight desktop-agnostic Qt file archiver.
+    </p>
+  </description>
+  <url type="homepage">https://github.com/lxqt/lxqt-archiver</url>
+</component>
+
+

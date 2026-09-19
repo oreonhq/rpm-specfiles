@@ -1,0 +1,13 @@
+diff -urp mathgl-2.4.1/CMakeLists.txt mathgl-2.4.1-no_hdf4-and-hdf5-simultaneously/CMakeLists.txt
+--- mathgl-2.4.1/CMakeLists.txt	2017-12-05 11:55:05.173632219 +0700
++++ mathgl-2.4.1-no_hdf4-and-hdf5-simultaneously/CMakeLists.txt	2017-12-05 11:56:38.303638637 +0700
+@@ -179,7 +179,8 @@ CMAKE_DEPENDENT_OPTION(enable-zlib "Enab
+ CMAKE_DEPENDENT_OPTION(enable-png "Enable png support" ON "NOT enable-all" ON)
+ CMAKE_DEPENDENT_OPTION(enable-jpeg "Enable jpeg support" OFF "NOT enable-all" ON)
+ MGL_DEPENDENT_OPTION(enable-gsl "Enable gsl support" OFF "NOT enable-lgpl" ON "NOT enable-all" ON)
+-MGL_DEPENDENT_OPTION(enable-hdf4 "Enable hdf4 support" OFF "NOT enable-lgpl" ON "NOT enable-all" ON)
++#MGL_DEPENDENT_OPTION(enable-hdf4 "Enable hdf4 support" OFF "NOT enable-lgpl" ON "NOT enable-all" ON)
++SET(enable-hdf4 OFF)
+ MGL_DEPENDENT_OPTION(enable-hdf5 "Enable hdf5 support" OFF "NOT enable-lgpl" ON "NOT enable-all" ON)
+ CMAKE_DEPENDENT_OPTION(enable-pdf "Enable pdf support" OFF "NOT enable-all" ON)
+ CMAKE_DEPENDENT_OPTION(enable-gif "Enable gif support" OFF "NOT enable-all" ON)

@@ -1,132 +1,56 @@
 %global source0_hash none
 
-%{!?sources_gpg: %{!?dlrn:%global sources_gpg 1} }
-%global sources_gpg_sign 0xf8675126e2411e7748dd46662fc2093e4682645f
-%{!?upstream_version: %global upstream_version %{version}%{?milestone}}
-# we are excluding some BRs from automatic generator
-%global excluded_brs doc8 bandit pre-commit hacking flake8-import-order
+Name:           python-sushy
+Version:        5.13.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Sushy is a small Python library to communicate with Redfish based systems
 
-%global with_doc 1
-%global sname sushy
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://docs.openstack.org/sushy/latest/
+Source:         %{pypi_source sushy}
 
-%global common_desc \
-Sushy is a Python library to communicate with Redfish based systems (http://redfish.dmtf.org)
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%global common_desc_tests Tests for Sushy
 
-Name: python-%{sname}
-Version: 5.2.0
-Release: 7%{?dist}
-Summary: Sushy is a Python library to communicate with Redfish based systems
-License: Apache-2.0
-URL: http://launchpad.net/%{sname}/
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sushy' generated automatically by pyp2spec.}
 
-Source0:        http://tarballs.openstack.org/sushy/sushy-%{upstream_version}.tar.gz
-# Required for tarball sources verification
-%if 0%{?sources_gpg} == 1
-Source101:        http://tarballs.openstack.org/sushy/sushy-%{upstream_version}.tar.gz.asc
-Source102:        https://releases.openstack.org/_static/0xf8675126e2411e7748dd46662fc2093e4682645f.txt
-%endif
+%description %_description
 
-BuildArch: noarch
+%package -n     python3-sushy
+Summary:        %{summary}
 
-# Required for tarball sources verification
-%if 0%{?sources_gpg} == 1
-BuildRequires:  /usr/bin/gpgv2
-%endif
+%description -n python3-sushy %_description
 
-%description
-%{common_desc}
-
-%package -n python3-%{sname}
-Summary: Sushy is a Python library to communicate with Redfish based systems
-
-BuildRequires: git-core
-BuildRequires: python3-devel
-BuildRequires: pyproject-rpm-macros
-
-%description -n python3-%{sname}
-%{common_desc}
-
-%package -n python3-%{sname}-tests
-Summary: Sushy tests
-Requires: python3-%{sname} = %{version}-%{release}
-
-Requires: python3-oslotest
-Requires: python3-stestr
-
-%description -n python3-%{sname}-tests
-%{common_desc_tests}
-
-%if 0%{?with_doc}
-%package -n python-%{sname}-doc
-Summary: Sushy documentation
-
-%description -n python-%{sname}-doc
-Documentation for Sushy
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }# Required for tarball sources verification
-%if 0%{?sources_gpg} == 1
-%{gpgverify}  --keyring=%{SOURCE102} --signature=%{SOURCE101} --data=%{SOURCE0}
-%endif
-%autosetup -n %{sname}-%{upstream_version} -S git
+%autosetup -p1 -n sushy-%{version}
 
 
-sed -i /^[[:space:]]*-c{env:.*_CONSTRAINTS_FILE.*/d tox.ini
-sed -i "s/^deps = -c{env:.*_CONSTRAINTS_FILE.*/deps =/" tox.ini
-sed -i /^minversion.*/d tox.ini
-sed -i /^requires.*virtualenv.*/d tox.ini
-
-# Exclude some bad-known BRs
-for pkg in %{excluded_brs};do
-  for reqfile in doc/requirements.txt test-requirements.txt; do
-    if [ -f $reqfile ]; then
-      sed -i /^${pkg}.*/d $reqfile
-    fi
-  done
-done
-
-# Automatic BR generation
 %generate_buildrequires
-%if 0%{?with_doc}
-  %pyproject_buildrequires -t -e %{default_toxenv},docs
-%else
-  %pyproject_buildrequires -t -e %{default_toxenv}
-%endif
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
-%if 0%{?with_doc}
-# generate html docs
-%tox -e docs
-# remove the sphinx-build-3 leftovers
-rm -rf doc/build/html/.{doctrees,buildinfo}
-%endif
-
-%check
-%tox -e %{default_toxenv}
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{sname}
-%license LICENSE
-%{python3_sitelib}/%{sname}
-%{python3_sitelib}/%{sname}-*.dist-info
-%exclude %{python3_sitelib}/%{sname}/tests
 
-%files -n python3-%{sname}-tests
-%license LICENSE
-%{python3_sitelib}/%{sname}/tests
+%check
+%_pyproject_check_import_allow_no_modules -t
 
-%if 0%{?with_doc}
-%files -n python-%{sname}-doc
-%license LICENSE
-%doc doc/build/html README.rst
-%endif
+
+%files -n python3-sushy -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.2.0-7

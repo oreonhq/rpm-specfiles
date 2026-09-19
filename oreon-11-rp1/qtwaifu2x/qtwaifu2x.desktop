@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Qtwaifu2x
+Comment=Image Super-Resolution for Anime-Style Art
+Exec=qtwaifu2x
+Icon=qtwaifu2x
+Terminal=false
+Type=Application
+Categories=Graphics;ImageProcessing;

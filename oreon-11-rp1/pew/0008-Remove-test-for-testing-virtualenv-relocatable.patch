@@ -1,0 +1,34 @@
+From 5b5eb0bf01f80cc0a60c6dd49e99c558cd4e8a99 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Jane=C5=BE?= <tadej.j@nez.si>
+Date: Thu, 26 Aug 2021 11:55:37 +0200
+Subject: [PATCH 08/15] Remove test for testing 'virtualenv --relocatable'
+
+Virtualenv 20+ doesn't support --relocatable anymore and nothing in Pew
+really depended on that.
+---
+ tests/test_cp.py | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/tests/test_cp.py b/tests/test_cp.py
+index f41061a..30517d1 100644
+--- a/tests/test_cp.py
++++ b/tests/test_cp.py
+@@ -36,15 +36,6 @@ def test_virtualenv_variable(copied_env):
+     assert str(copied_env) == envname
+ 
+ 
+-def test_source_relocatable(workon_home, testpackageenv):
+-    check_call([executable, '-m', 'virtualenv', '--relocatable',
+-                str(workon_home / 'source')])
+-    invoke('cp', 'source', 'destination', '-d')
+-    testscript = Path(invoke('workon', 'destination', inp='which testscript.py').out.strip())
+-    assert workon_home / 'destination' / 'bin' / 'testscript.py' == testscript
+-    invoke('rm', 'destination')
+-
+-
+ def test_source_does_not_exists(workon_home):
+     err = invoke('cp', 'virtualenvthatdoesntexist', 'foo').err.strip()
+     assert 'Please provide a valid virtualenv to copy' == err
+-- 
+2.31.1
+

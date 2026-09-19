@@ -1,0 +1,29 @@
+From e7b961276017413fa67a72f29deee7fe3f6894ba Mon Sep 17 00:00:00 2001
+From: Luca Boccassi <luca.boccassi@gmail.com>
+Date: Wed, 17 Dec 2025 16:03:39 +0000
+Subject: [PATCH] verity: do not copy signing cert in
+ addons/portables/extensions
+
+It makes no sense to include these in portables or addons
+or extensions, it's for the rootfs so pid1 can use it
+
+Follow-up for 4bdb47b6dafec4f258a2dca446d67ee662dbedd4
+---
+ mkosi/__init__.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/mkosi/__init__.py b/mkosi/__init__.py
+index f4766ae712..b95b3dc8ca 100644
+--- a/mkosi/__init__.py
++++ b/mkosi/__init__.py
+@@ -512,6 +512,10 @@ def configure_verity_certificate(context: Context) -> None:
+     if context.config.verity_certificate_source.type != CertificateSourceType.file:
+         return
+ 
++    # Makes no sense to ship this in extensions/addons/etc, it's for the rootfs
++    if context.config.output_format.is_extension_or_portable_image():
++        return
++
+     veritydir = context.root / "usr/lib/verity.d"
+     with umask(~0o755):
+         veritydir.mkdir(parents=True, exist_ok=True)

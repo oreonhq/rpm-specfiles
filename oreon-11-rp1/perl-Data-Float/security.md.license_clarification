@@ -1,0 +1,205 @@
+From noreply@github.com Mon Mar 31 16:03:12 2025
+Delivered-To: ppisar@gapps.redhat.com
+Received: by 2002:a5d:53c8:0:b0:39b:f01e:ba53 with SMTP id a8csp1805247wrw;
+        Mon, 31 Mar 2025 07:03:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=2; AJvYcCVPdba5sc9DXDrG0DYcmRQzbJdIlT826VOltOFpwcN2s3b2hOpODGPtOf7PSeD+KWErhBR1gLg=@gapps.redhat.com
+X-Google-Smtp-Source: AGHT+IG6Mwb9tBj0WM6vgN4cM4+UzOT23cXZx6T945hAHkiNC6LiG51qCNK4HMqCBGkghX5pDC9W
+X-Received: by 2002:a05:6808:15a5:b0:3f6:8fa2:1c6f with SMTP id 5614622812f47-3ff0f50f50fmr5552003b6e.10.1743429792574;
+        Mon, 31 Mar 2025 07:03:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1743429792; cv=none;
+        d=google.com; s=arc-20240605;
+        b=icbOrySWbGj8h0FSknYQTAecrm+n8sTqaCOVVV6H+0HJh5kIIWAO57ug4OTtPY6FQl
+         kSPi9Qe3z8IYjdKa9fFak6aVvPnUaCM33C0taBRoDcz4a7uxuRVIHOXO8lwQ35NemDO+
+         QdRKnx67UGFnezLDOfZFjFaalzsC7GBXiRzHPRudSi0gSAnFJcE6VIAfO1SMR+hFhO+p
+         ySaHrMIgilWL0Q+fSGWILB2bkCArh25GtDQ0V/xFcQvSskJS4U2KKRsvjuiAKEV2Vzb3
+         YWumrQq+6F/r21mQN5of63nzdEMe5go8WiCnVjRyYh2Isk6izQ9AIZBps31v36sMNPj0
+         b6/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=destinations:list-unsubscribe-post:list-unsubscribe:list-post
+         :list-archive:list-id:precedence:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:reply-to:from:date:delivered-to;
+        bh=2MQtO6Mtxw/qaj58sgXIJhby5qxhlK+YUT00hda+vKI=;
+        fh=FtgJv2q+S0ynV33W/9ufom4XnfrGAl5Rccnws6nQZDw=;
+        b=jtfrE/wn29tumOHqH1bjIxu0Xl44W2zwmS89Xlb/LLx1hXgPJJsuXJmikj5bqJsA42
+         9ElWA+Va7QlPS9zcVQSq6MA4vBM4MlCdtmlWXycMlasbQdJxNUPZiOqGm0Mpu6tUW1Uo
+         0xGreP1PQrtUZ2llRTkSC8BtyL0jsvz07R6/YotmnZs7sR9hNHOSFdOTNPp+7LnV7F4I
+         lLAePErXjnDRZeXI1byBiW8sjkD4Usig95G+mQDfGtR5WgKTjkuqPh4MooDZcbjpr9QG
+         bf7TYXsPQfJdgC2orWXvNOxl0sIZu5bVk81rnjLXy3QYcY16+cByE0hqBEF0isLO9f3M
+         y2Fg==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       spf=pass (google.com: domain of noreply@github.com designates 192.30.252.202 as permitted sender) smtp.mailfrom=noreply@github.com
+Return-Path: <noreply@github.com>
+Received: from us-smtp-inbound-delivery-1.mimecast.com (us-smtp-inbound-delivery-1.mimecast.com. [170.10.132.61])
+        by mx.google.com with ESMTPS id 5614622812f47-3ff0526271dsi5140092b6e.129.2025.03.31.07.03.11
+        for <ppisar@gapps.redhat.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Mar 2025 07:03:12 -0700 (PDT)
+Received-SPF: pass (google.com: domain of noreply@github.com designates 192.30.252.202 as permitted sender) client-ip=192.30.252.202;
+Authentication-Results: mx.google.com;
+       spf=pass (google.com: domain of noreply@github.com designates 192.30.252.202 as permitted sender) smtp.mailfrom=noreply@github.com
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-114-M97A-mAZNC-QRjNPx6Hb8A-1; Mon,
+ 31 Mar 2025 10:03:09 -0400
+X-MC-Unique: M97A-mAZNC-QRjNPx6Hb8A-1
+X-Mimecast-MFC-AGG-ID: M97A-mAZNC-QRjNPx6Hb8A_1743429789
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 19CE319560AB
+	for <ppisar@gapps.redhat.com>; Mon, 31 Mar 2025 14:03:09 +0000 (UTC)
+Received: by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix)
+	id 130891828AAD; Mon, 31 Mar 2025 14:03:09 +0000 (UTC)
+Delivered-To: ppisar@redhat.com
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.124])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0F3B0180B489
+	for <ppisar@redhat.com>; Mon, 31 Mar 2025 14:03:09 +0000 (UTC)
+Received: from us-smtp-inbound-delivery-1.mimecast.com (us-smtp-inbound-delivery-1.mimecast.com [170.10.132.61])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C16BC180025A
+	for <ppisar@redhat.com>; Mon, 31 Mar 2025 14:03:08 +0000 (UTC)
+Received: from out-19.smtp.github.com (out-19.smtp.github.com
+ [192.30.252.202]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-594-Lwf8COt2M5yZWFm0I8sWwg-1; Mon, 31 Mar 2025 10:03:05 -0400
+X-MC-Unique: Lwf8COt2M5yZWFm0I8sWwg-1
+X-Mimecast-MFC-AGG-ID: Lwf8COt2M5yZWFm0I8sWwg_1743429784
+Received: from github.com (hubbernetes-node-e98d5fd.va3-iad.github.net [10.48.138.20])
+	by smtp.github.com (Postfix) with ESMTPA id C4FE7E0C4B
+	for <ppisar@redhat.com>; Mon, 31 Mar 2025 07:03:04 -0700 (PDT)
+Date: Mon, 31 Mar 2025 07:03:04 -0700
+From: Robert Rothenberg <notifications@github.com>
+Reply-To: robrwo/Data-Float <reply+AAID73UP5PJ4UWQXQFHTS36F62AZREVBNHHLA4PPJM@reply.github.com>
+To: robrwo/Data-Float <Data-Float@noreply.github.com>
+Cc: Petr Pisar <ppisar@redhat.com>, 
+ Author <author@noreply.github.com>
+Message-ID: <robrwo/Data-Float/issues/3/2766344822@github.com>
+In-Reply-To: <robrwo/Data-Float/issues/3@github.com>
+References: <robrwo/Data-Float/issues/3@github.com>
+Subject: Re: [robrwo/Data-Float] SECURITY.md license (Issue #3)
+Mime-Version: 1.0
+Precedence: list
+X-GitHub-Sender: robrwo
+X-GitHub-Recipient: ppisar
+X-GitHub-Reason: author
+List-ID: robrwo/Data-Float <Data-Float.robrwo.github.com>
+List-Archive: https://github.com/robrwo/Data-Float
+List-Post: <mailto:reply+AAID73UP5PJ4UWQXQFHTS36F62AZREVBNHHLA4PPJM@reply.github.com>
+List-Unsubscribe: <mailto:unsub+AAID73UP5PJ4UWQXQFHTS36F62AZREVBNHHLA4PPJM@reply.github.com>,
+ <https://github.com/notifications/unsubscribe/one-click/AAID73ST3DW5EWDL66J6QRT2XFDJRANCNFSM6AAAAAB2ECEPOE>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+X-Auto-Response-Suppress: All
+destinations: ppisar@redhat.com
+X-GitHub-Recipient-Address: ppisar@redhat.com
+X-Mimecast-MFC-PROC-ID: Mc8aXUk0NX6c8-QbdxHWa8WnUT_B-X5HbvXner73670_1743429784
+X-Mimecast-Impersonation-Protect: Policy=CLT - Impersonation Protection Definition;Similar Internal Domain=false;Similar Monitored External Domain=false;Custom External Domain=false;Mimecast External Domain=false;Newly Observed Domain=false;Internal User Name=false;Custom Display Name List=false;Reply-to Address Mismatch=false;Targeted Threat Dictionary=false;Mimecast Threat Dictionary=false;Custom Threat Dictionary=false
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Mimecast-Spam-Score: 1
+X-Mimecast-MFC-PROC-ID: fOvXfMEIc5GX-XA7IWMBIB4W3JvpemfvQ4tK19JSOnM_1743429789
+X-Mimecast-Originator: github.com
+Content-Type: multipart/alternative;
+ boundary="--==_mimepart_67eaa098c230d_bc10281462ee";
+ charset=UTF-8
+Status: RO
+Content-Length: 4481
+Lines: 93
+
+----==_mimepart_67eaa098c230d_bc10281462ee
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+robrwo left a comment (robrwo/Data-Float#3)
+
+That is a misunderstanding. The guide to writing a security policy is licensed by CC. But it is a guide to *writing a policy* with sample text. The actual policies written based on the guide are not covered by CC license. 
+
+
+-- 
+Reply to this email directly or view it on GitHub:
+https://github.com/robrwo/Data-Float/issues/3#issuecomment-2766344822
+You are receiving this because you authored the thread.
+
+Message ID: <robrwo/Data-Float/issues/3/2766344822@github.com>
+----==_mimepart_67eaa098c230d_bc10281462ee
+Content-Type: text/html;
+ charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<span style=3D"color: transparent; display: none; height: 0; max-height: 0;=
+ max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hid=
+den; width: 0;">
+  <p dir=3D"auto">That is a misunderstanding. The guide to writing a securi=
+ty policy is licensed by CC. But it is a guide to <em>writing a policy</em>=
+ with sample text. The actual policies written based on the guide are not c=
+overed by CC license.</p><p style=3D"font-size:small;-webkit-text-size-adju=
+st:none;color:#666;">&mdash;<br />Reply to this email directly, <a href=3D"=
+https://github.com/robrwo/Data-Float/issues/3#issuecomment-2766344822">view=
+ it on GitHub</a>, or <a href=3D"https://github.com/notifications/unsubscri=
+be-auth/AAID73V2OEBHEA67CX23DPD2XFDJRAVCNFSM6AAAAAB2ECEPOGVHI2DSMVQWIX3LMV4=
+3OSLTON2WKQ3PNVWWK3TUHMZDONRWGM2DIOBSGI">unsubscribe</a>.<br />You are rece=
+iving this because you authored the thread.<img src=3D"https://github.com/n=
+otifications/beacon/AAID73T72CI36LGSJCNJU7D2XFDJRA5CNFSM6AAAAAB2ECEPOGWGG33=
+NNVSW45C7OR4XAZNMJFZXG5LFINXW23LFNZ2KUY3PNVWWK3TUL5UWJTVE4MJHM.gif" height=
+=3D"1" width=3D"1" alt=3D"" /><span style=3D"color: transparent; font-size:=
+ 0; display: none; visibility: hidden; overflow: hidden; opacity: 0; width:=
+ 0; height: 0; max-width: 0; max-height: 0; mso-hide: all">Message ID: <spa=
+n>&lt;robrwo/Data-Float/issues/3/2766344822</span><span>@</span><span>githu=
+b</span><span>.</span><span>com&gt;</span></span></p>
+</span>
+
+
+<div style=3D"display: flex; flex-wrap: wrap; white-space: pre-wrap; align-=
+items: center; "><img alt=3D"robrwo" height=3D"20" width=3D"20" style=3D"bo=
+rder-radius:50%; margin-right: 4px;" decoding=3D"async" src=3D"https://avat=
+ars.githubusercontent.com/u/294409?s=3D20&amp;v=3D4" /><strong>robrwo</stro=
+ng> left a comment <a href=3D"https://github.com/robrwo/Data-Float/issues/3=
+#issuecomment-2766344822">(robrwo/Data-Float#3)</a></div>
+<p dir=3D"auto">That is a misunderstanding. The guide to writing a security=
+ policy is licensed by CC. But it is a guide to <em>writing a policy</em> w=
+ith sample text. The actual policies written based on the guide are not cov=
+ered by CC license.</p>
+
+<p style=3D"font-size:small;-webkit-text-size-adjust:none;color:#666;">&mda=
+sh;<br />Reply to this email directly, <a href=3D"https://github.com/robrwo=
+/Data-Float/issues/3#issuecomment-2766344822">view it on GitHub</a>, or <a =
+href=3D"https://github.com/notifications/unsubscribe-auth/AAID73V2OEBHEA67C=
+X23DPD2XFDJRAVCNFSM6AAAAAB2ECEPOGVHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHMZD=
+ONRWGM2DIOBSGI">unsubscribe</a>.<br />You are receiving this because you au=
+thored the thread.<img src=3D"https://github.com/notifications/beacon/AAID7=
+3T72CI36LGSJCNJU7D2XFDJRA5CNFSM6AAAAAB2ECEPOGWGG33NNVSW45C7OR4XAZNMJFZXG5LF=
+INXW23LFNZ2KUY3PNVWWK3TUL5UWJTVE4MJHM.gif" height=3D"1" width=3D"1" alt=3D"=
+" /><span style=3D"color: transparent; font-size: 0; display: none; visibil=
+ity: hidden; overflow: hidden; opacity: 0; width: 0; height: 0; max-width: =
+0; max-height: 0; mso-hide: all">Message ID: <span>&lt;robrwo/Data-Float/is=
+sues/3/2766344822</span><span>@</span><span>github</span><span>.</span><spa=
+n>com&gt;</span></span></p>
+
+<script type=3D"application/ld+json">[
+{
+"@context": "http://schema.org",
+"@type": "EmailMessage",
+"potentialAction": {
+"@type": "ViewAction",
+"target": "https://github.com/robrwo/Data-Float/issues/3#issuecomment-27663=
+44822",
+"url": "https://github.com/robrwo/Data-Float/issues/3#issuecomment-27663448=
+22",
+"name": "View Issue"
+},
+"description": "View this Issue on GitHub",
+"publisher": {
+"@type": "Organization",
+"name": "GitHub",
+"url": "https://github.com"
+}
+}
+]</script>
+
+----==_mimepart_67eaa098c230d_bc10281462ee--
+
+

@@ -1,0 +1,25 @@
+From f0fad0adb1ad16f6a4ba2df3e794541478e217d9 Mon Sep 17 00:00:00 2001
+From: Steve Cossette <farchord@gmail.com>
+Date: Fri, 8 Nov 2024 14:45:52 -0500
+Subject: [PATCH] Fixed the path to the 'private' folder
+
+---
+ src/controls.6/linux/ImageEditor.qml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/controls.6/linux/ImageEditor.qml b/src/controls.6/linux/ImageEditor.qml
+index 7499882..d3486b2 100644
+--- a/src/controls.6/linux/ImageEditor.qml
++++ b/src/controls.6/linux/ImageEditor.qml
+@@ -6,7 +6,7 @@ import org.mauikit.controls as Maui
+ 
+ import org.kde.kquickimageeditor as KQuickImageEditor
+ 
+-import "private" as Private
++import "../private" as Private
+ 
+ 
+ /**
+-- 
+GitLab
+

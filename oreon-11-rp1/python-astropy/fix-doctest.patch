@@ -1,0 +1,11 @@
+diff -ur a/docs/nddata/index.rst b/docs/nddata/index.rst
+--- a/docs/nddata/index.rst	2025-12-23 01:58:51.525903895 +0100
++++ b/docs/nddata/index.rst	2025-12-23 01:59:38.039644694 +0100
+@@ -386,6 +386,7 @@
+ 
+ .. doctest-requires:: skimage
+ 
++    >>> import matplotlib.pyplot as plt
+     >>> from astropy.nddata import block_reduce, block_replicate
+     >>> smaller = block_reduce(ccd, 4)  # doctest: +IGNORE_WARNINGS
+     >>> smaller

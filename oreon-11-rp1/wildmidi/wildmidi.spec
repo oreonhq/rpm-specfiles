@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           wildmidi
-Version:        0.4.6
-Release:        6%{?dist}
+Version:        0.5.0
+Release:        1%{?dist}
 Summary:        Softsynth midi player
 License:        GPL-3.0-or-later
 URL:            https://github.com/Mindwerks/wildmidi

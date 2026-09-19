@@ -1,9 +1,9 @@
-%global source0_hash 2b737a61737e73650cd0b40d9e246a182dcccc6c8ae8121cfcb9415433ee41ae
+%global source0_hash ab28187332c2e4af1706999bc1fb51256f32dc2ebd28bc21081062b8ff1e4ce7
 
 %global framework ktexteditor
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 %ifarch aarch64
 %global _lto_cflags %{nil}
@@ -11,7 +11,7 @@
 %endif
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 with advanced embeddable text editor
 
@@ -24,21 +24,21 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-BuildRequires:  cmake(KF6Archive)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6Parts)
-BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6Archive) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6GuiAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6IconThemes) >= %{version}
+BuildRequires:  cmake(KF6KIO) >= %{version}
+BuildRequires:  cmake(KF6Parts) >= %{version}
+BuildRequires:  cmake(KF6ColorScheme) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  pkgconfig(Qt6TextToSpeech)
 BuildRequires:  pkgconfig(Qt6Widgets)
 BuildRequires:  pkgconfig(Qt6PrintSupport)
 BuildRequires:  pkgconfig(Qt6Qml)
 BuildRequires:  pkgconfig(Qt6Xml)
-BuildRequires:  cmake(KF6SyntaxHighlighting)
+BuildRequires:  cmake(KF6SyntaxHighlighting) >= %{version}
 BuildRequires:  pkgconfig(libgit2) >= 0.22.0
 BuildRequires:  pkgconfig(editorconfig)
 BuildRequires:  pkgconfig(xkbcommon)
@@ -102,6 +102,9 @@ rm -f %{buildroot}%{_kf6_datadir}/katepart5/script/README.md
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
 - aarch64: no LTO, -j2 to avoid OOM (cc1plus Killed)
 
@@ -119,4 +122,3 @@ rm -f %{buildroot}%{_kf6_datadir}/katepart5/script/README.md
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

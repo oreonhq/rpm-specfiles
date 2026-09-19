@@ -1,0 +1,12 @@
+diff -up Class-MakeMethods-1.01/tests/xemulator/class_methodmaker/Test.pm.orig Class-MakeMethods-1.01/tests/xemulator/class_methodmaker/Test.pm
+--- Class-MakeMethods-1.01/tests/xemulator/class_methodmaker/Test.pm.orig	2022-06-17 11:59:54.911425112 +0200
++++ Class-MakeMethods-1.01/tests/xemulator/class_methodmaker/Test.pm	2022-06-17 12:01:25.078658691 +0200
+@@ -48,7 +48,7 @@ sub COUNT_TESTS {
+   open(IN, $file) or die "Can't open $file: $!";
+   while (<IN>) {
+     /^\s*#/ and next;
+-    $c += s/(TEST\s{)/$1/g;
++    $c += s/(TEST\s\{)/$1/g;
+   }
+   $c;
+ }

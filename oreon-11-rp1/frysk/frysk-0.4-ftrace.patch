@@ -1,0 +1,38 @@
+diff -up frysk-0.4/frysk-core/frysk/bindir/ftrace.xml-in.ftrace frysk-0.4/frysk-core/frysk/bindir/ftrace.xml-in
+--- frysk-0.4/frysk-core/frysk/bindir/ftrace.xml-in.ftrace	2010-03-30 14:56:44.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/bindir/ftrace.xml-in	2010-03-30 15:01:54.000000000 -0400
+@@ -77,7 +77,8 @@
+   <refsynopsisdiv>
+     <cmdsynopsis>
+       <command>ftrace</command>
+-      <arg choice="opt">-c</arg>
++      <arg choice="opt">-f</arg>
++      <arg choice="opt">-follow</arg>
+       <arg choice="opt">-dl</arg>
+       <arg choice="opt">-m</arg>
+       <arg choice="opt">-o=<replaceable>FILE</replaceable></arg>
+@@ -118,9 +119,10 @@
+ 	    </varlistentry>
+ 
+ 	    <varlistentry>
+-		<term>-c</term>
++		<term>-f</term>
++		<term>-follow</term>
+ 		<listitem>
+-		    <para>Trace children: automatically attach to forks of
++		    <para>Follow children: automatically attach to forks of
+ 		    traced process.</para>
+ 		</listitem>
+ 	    </varlistentry>
+diff -up frysk-0.4/frysk-core/frysk/bindir/TestFtrace.java.ftrace frysk-0.4/frysk-core/frysk/bindir/TestFtrace.java
+--- frysk-0.4/frysk-core/frysk/bindir/TestFtrace.java.ftrace	2010-03-30 14:56:36.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/bindir/TestFtrace.java	2010-03-30 15:00:32.000000000 -0400
+@@ -65,7 +65,7 @@ public class TestFtrace extends TestLib 
+ 		"-sys=",
+ 		"/bin/ls"
+ 	    });
+-	e.expect("execve");
++	e.expect("attached");
+ 	e.expect("close");
+     }
+ 

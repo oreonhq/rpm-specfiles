@@ -2,7 +2,7 @@
 
 Summary:        Library for controlling CEC-enabled devices over HDMI
 Name:           libcec
-Version:        7.1.1
+Version:        8.1.7
 Release:        1%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://libcec.pulse-eight.com/
@@ -12,7 +12,7 @@ BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  p8-platform-devel
-BuildRequires:  udev-devel
+BuildRequires:  libudev-devel
 BuildRequires:  lockdev-devel
 BuildRequires:  swig
 BuildRequires:  python3-devel
@@ -34,9 +34,17 @@ Headers and pkgconfig file for building against libcec.
 %package utils
 Summary:        Command line client for libcec
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       python3-%{name}%{?_isa} = %{version}-%{release}
 
 %description utils
 The cec-client command line tool for testing and controlling CEC devices.
+
+%package -n python3-%{name}
+Summary:        Python 3 bindings for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n python3-%{name}
+Python 3 bindings for libCEC.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
@@ -48,6 +56,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %cmake_install
+rm -f %{buildroot}%{_libdir}/libcec.a
 
 %files
 %license LICENSE.md
@@ -61,7 +70,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %files utils
 %{_bindir}/cec-client
+%{_bindir}/cec-client-%{version}
 %{_bindir}/cecc-client
+%{_bindir}/cecc-client-%{version}
+%{_bindir}/pyCecClient
+
+%files -n python3-%{name}
+%{python3_sitearch}/cec.py
+%{python3_sitearch}/_pycec.so
+%{python3_sitearch}/__pycache__/cec*.pyc
 
 %changelog
 %autochangelog

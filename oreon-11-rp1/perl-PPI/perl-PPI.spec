@@ -13,7 +13,7 @@ Release:        1%{?dist}
 Summary:        Parse, Analyze and Manipulate Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/PPI
-Source0:        https://cpan.metacpan.org/modules/by-module/PPI/PPI-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MI/MITHALDU/PPI-%{version}.tar.gz
 BuildArch:      noarch
 # =============== Module Build ======================
 BuildRequires:  coreutils
@@ -70,10 +70,10 @@ Requires:       perl(Task::Weaken)
 # Filter out redundant unversioned provides
 %global __provides_exclude ^perl\\(PPI::.+\\)$
 
-Provides:       perl(PPI)
-Provides:       perl(PPI::Util)
-Provides:       perl(PPI::Dumper)
-Provides:       perl(PPI::Document)
+Provides:       perl(PPI) = %{version}
+Provides:       perl(PPI::Util) = %{version}
+Provides:       perl(PPI::Dumper) = %{version}
+Provides:       perl(PPI::Document) = %{version}
 %description
 Parse, analyze and manipulate Perl (without perl).
 

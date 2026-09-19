@@ -3,7 +3,7 @@
 %define glib2_version 2.44.0
 
 Name:           dconf
-Version:        0.49.0
+Version:        51.0
 Release:        %autorelease
 Summary:        A configuration system
 

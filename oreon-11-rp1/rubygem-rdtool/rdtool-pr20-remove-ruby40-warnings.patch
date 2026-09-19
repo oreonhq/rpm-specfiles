@@ -1,0 +1,116 @@
+From 715c12e68dd49b6feffc63e97e2170f5bfb209f2 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Sun, 22 Mar 2026 17:52:04 +0900
+Subject: [PATCH 1/2] Use uplus operator for string literal to be modified
+
+Fix ruby4.0 warnings like:
+
+```
+lib/rd/element.rb:135: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information
+```
+---
+ lib/rd/block-element.rb  | 2 +-
+ lib/rd/desclist.rb       | 2 +-
+ lib/rd/element.rb        | 2 +-
+ lib/rd/inline-element.rb | 4 ++--
+ lib/rd/rdinlineparser.ry | 2 +-
+ 5 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/lib/rd/block-element.rb b/lib/rd/block-element.rb
+index 826d277..36fcd91 100644
+--- a/lib/rd/block-element.rb
++++ b/lib/rd/block-element.rb
+@@ -33,7 +33,7 @@ def accept(visitor)
+     end
+ 
+     def calculate_label
+-      ret = ""
++      ret = +""
+       @title.each do |i|
+ 	ret << i.to_label
+       end
+diff --git a/lib/rd/desclist.rb b/lib/rd/desclist.rb
+index 35d349c..494b39b 100644
+--- a/lib/rd/desclist.rb
++++ b/lib/rd/desclist.rb
+@@ -35,7 +35,7 @@ def initialize
+       end
+ 
+       def calculate_label
+-	ret = ""
++	ret = +""
+ 	children.each do |i|
+ 	  ret.concat(i.to_label)
+ 	end
+diff --git a/lib/rd/element.rb b/lib/rd/element.rb
+index 261498d..a3fd349 100644
+--- a/lib/rd/element.rb
++++ b/lib/rd/element.rb
+@@ -131,7 +131,7 @@ def under_temporary_document_structure(document_struct)
+     end
+ 
+     def indent2(str)
+-      buf = ''
++      buf = +''
+       str.each_line{|i| buf << "  " << i }
+       buf
+     end
+diff --git a/lib/rd/inline-element.rb b/lib/rd/inline-element.rb
+index 9a270c7..4b9ec34 100644
+--- a/lib/rd/inline-element.rb
++++ b/lib/rd/inline-element.rb
+@@ -34,7 +34,7 @@ def children
+     end
+ 
+     def to_label
+-      ret = ""
++      ret = +""
+       children.each do |i|
+ 	ret << i.to_label
+       end
+@@ -221,7 +221,7 @@ def renew_label
+       end
+ 
+       def extract_label(elements)
+-	ret = ""
++	ret = +""
+ 	elements.each do |i|
+ 	  ret << i.to_label
+ 	end
+diff --git a/lib/rd/rdinlineparser.ry b/lib/rd/rdinlineparser.ry
+index 2931a1a..334844e 100644
+--- a/lib/rd/rdinlineparser.ry
++++ b/lib/rd/rdinlineparser.ry
+@@ -367,7 +367,7 @@ def_delegator(:@blockp, :tree)
+ 
+ def parse(src)
+   @src = StringScanner.new(src)
+-  @pre = ""
++  @pre = +""
+   @yydebug = true
+   do_parse
+ end
+
+From 6b2a3823404b5f057a9f17f36e3c4a0b7bf3e7e7 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Sun, 22 Mar 2026 18:13:34 +0900
+Subject: [PATCH 2/2] Use cgi/escape only to remove warnings for ruby4.0
+
+cgi/escape is available on ruby2.3 .
+---
+ lib/rd/rd2html-lib.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/rd/rd2html-lib.rb b/lib/rd/rd2html-lib.rb
+index 415739d..9db093b 100644
+--- a/lib/rd/rd2html-lib.rb
++++ b/lib/rd/rd2html-lib.rb
+@@ -2,7 +2,7 @@
+ = rd2html-lib.rb
+ =end
+ 
+-require "cgi"
++require "cgi/escape"
+ require "rd/rdvisitor"
+ require "rd/version"
+ 

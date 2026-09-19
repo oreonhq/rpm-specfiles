@@ -1,0 +1,50 @@
+From 3400b9c048706c572373e4617b4d5fcdb8dd2505 Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Mon, 6 Dec 2021 08:02:22 +0000
+Subject: [PATCH 1/2] src/pamix_ui.cpp: always use "%s"-style format for
+ printf()-style functions
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+`ncuses-6.3` added printf-style function attributes and now makes
+it easier to catch cases when user input is used in palce of format
+string when built with CFLAGS=-Werror=format-security:
+
+    PAmix/src/pamix_ui.cpp:106:52:
+     error: format not a string literal and no format arguments [-Werror=format-security]
+      106 |   mvprintw(lineNumber++, 1, applicationName.c_str());
+          |                                                    ^
+
+Let's wrap all the missing places with "%s" format.
+
+Signed-off-by: Petr Šabata <contyk@redhat.com>
+---
+ src/pamix_ui.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/pamix_ui.cpp b/src/pamix_ui.cpp
+index c1acb2b..423d2ba 100644
+--- a/src/pamix_ui.cpp
++++ b/src/pamix_ui.cpp
+@@ -103,7 +103,7 @@ void pamix_ui::redrawAll() {
+ 		string_maxlen_pct(applicationName, 0.4);
+ 		if (isSelectedEntry)
+ 			attron(A_STANDOUT);
+-		mvprintw(lineNumber++, 1, applicationName.c_str());
++		mvprintw(lineNumber++, 1, "%s", applicationName.c_str());
+ 		attroff(A_STANDOUT);
+ 
+ 		bool isMuted = entry->m_Mute || averageVolume == PA_VOLUME_MUTED;
+@@ -121,7 +121,7 @@ void pamix_ui::redrawAll() {
+ 			remainingChars -= displayName.length();
+ 		}
+ 
+-		mvprintw(curY, curX + remainingChars + 1, displayName.c_str());
++		mvprintw(curY, curX + remainingChars + 1, "%s", displayName.c_str());
+ 		lineNumber++;
+ 	}
+ 
+-- 
+2.38.1
+

@@ -1,8 +1,8 @@
 %global source0_hash 6e56760b2bbd3c461f065ac060a12436b0478f202704a3cfe59f65f16e27dc67
 
 Name:           jdependency
-Version:        2.12
-Release:        4%{?dist}
+Version:        2.16
+Release:        1%{?dist}
 Summary:        Class dependency analysis library for Java
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

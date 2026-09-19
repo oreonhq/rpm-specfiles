@@ -1,0 +1,147 @@
+%global source0_hash e0d8deff8f9c6410c035a51dc7cac709ec8304022c9e872b1110d8835bca6f90
+
+%if 0%{?epel}
+# EPEL status as of 2025-01-23:
+# EPEL 9: fails on a weird error in %%pyproject_install
+# EPEL 10: missing rust-uzers
+%bcond optimized_init 0
+# No python-mcp yet in EPEL
+%bcond mcp 0
+%else
+%bcond optimized_init 1
+%bcond mcp %[0%{?fedora} >= 43]
+%endif
+
+%global forgeurl https://github.com/arighi/virtme-ng
+
+Version:        1.40
+%forgemeta
+Name:           virtme-ng
+Release:        %autorelease
+Summary:        Quickly build and run kernels inside a virtualized snapshot of your live system
+# Code license:
+# - GPL-2.0-only
+# - GPL-3.0-only (virtme_ng_init)
+# Rust dependency licenses:
+# - MIT
+# - MIT OR Apache-2.0
+License:        GPL-2.0-only AND GPL-3.0-only AND MIT AND (MIT OR Apache-2.0)
+URL:            %forgeurl
+Source:         %forgesource
+
+%if !%{with optimized_init}
+BuildArch:      noarch
+%endif
+
+BuildRequires:  python3-devel
+BuildRequires:  argparse-manpage
+%if %{with optimized_init}
+BuildRequires:  cargo-rpm-macros >= 24
+BuildRequires:  glibc-static
+%endif
+
+Recommends:     qemu-kvm
+Recommends:     busybox
+Recommends:     virtiofsd >= 1.7.0
+
+# virtme-ng provides a mostly compatible CLI w.r.t. the original virtme,
+# which is dead upstream, so obsolete it in favor of the new package.
+Obsoletes:      virtme < 0.1.1-25
+Provides:       virtme = %{version}-%{release}
+
+%description
+virtme-ng is a tool that allows to easily and quickly recompile and test a Linux
+kernel, starting from the source code.
+
+It allows to recompile the kernel in few minutes (rather than hours), then the
+kernel is automatically started in a virtualized environment that is an exact
+copy-on-write copy of your live system, which means that any changes made to the
+virtualized environment do not affect the host system.
+
+In order to do this a minimal config is produced (with the bare minimum support
+to test the kernel inside qemu), then the selected kernel is automatically built
+and started inside qemu, using the filesystem of the host as a copy-on-write
+snapshot.
+
+This means that you can safely destroy the entire filesystem, crash the kernel,
+etc. without affecting the host.
+
+Kernels produced with virtme-ng are lacking lots of features, in order to reduce
+the build time to the minimum and still provide you a usable kernel capable of
+running your tests and experiments.
+
+virtme-ng is based on virtme, written by Andy Lutomirski <luto@kernel.org>.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%forgeautosetup -p1
+
+%if %{with optimized_init}
+# Don't strip the debuginfo - let the rpm macros do it.
+sed -i 's/\["strip", /["true", /' setup.py
+
+cd virtme_ng_init
+%cargo_prep
+%endif
+
+%generate_buildrequires
+%pyproject_buildrequires %{?with_mcp:-x mcp}
+%if %{with optimized_init}
+cd virtme_ng_init
+%cargo_generate_buildrequires
+%endif
+
+%build
+%if %{with optimized_init}
+export BUILD_VIRTME_NG_INIT=1
+%endif
+%pyproject_wheel
+
+%if %{with optimized_init}
+cd virtme_ng_init
+%cargo_license_summary
+%{cargo_license} > LICENSE.dependencies
+%endif
+
+%install
+%pyproject_install
+
+# Man page already installs in the right place, remove the sitelib copy
+rm -rf %{buildroot}%{python3_sitelib}%{_mandir}
+# These need to be moved into the right place
+mv %{buildroot}%{python3_sitelib}/usr/share/* %{buildroot}%{_datadir}
+rm -rf %{buildroot}%{python3_sitelib}/usr
+
+%pyproject_save_files virtme virtme_ng
+
+%check
+%pyproject_check_import %{!?with_mcp:-e virtme_ng.mcp}
+
+%files -f %{pyproject_files}
+%license LICENSE
+%if %{with optimized_init}
+%license virtme_ng_init/LICENSE.dependencies
+%endif
+%doc README.md
+%ghost %{_sysconfdir}/virtme-ng.conf
+%{_bindir}/vng
+%{_bindir}/virtme-ng
+%{_bindir}/virtme-run
+%{_bindir}/virtme-configkernel
+%{_bindir}/virtme-mkinitramfs
+%{_bindir}/virtme-prep-kdir-mods
+%{_bindir}/virtme-ssh-proxy
+%{bash_completions_dir}/{virtme-ng,vng}-prompt
+%{_mandir}/man1/vng.1*
+%if !%{with mcp}
+%exclude %{_bindir}/vng-mcp
+%endif
+
+%if %{with mcp}
+%pyproject_extras_subpkg -n %{name} mcp
+%{_bindir}/vng-mcp
+%endif
+
+%changelog
+%autochangelog

@@ -1,0 +1,12 @@
+diff -up libmikmod-3.3.12/libmikmod-config.in.multilib libmikmod-3.3.12/libmikmod-config.in
+--- libmikmod-3.3.12/libmikmod-config.in.multilib	2013-11-28 03:00:00.000000000 -0500
++++ libmikmod-3.3.12/libmikmod-config.in	2025-01-09 18:56:24.078591155 -0500
+@@ -50,7 +50,7 @@ while test $# -gt 0 ; do
+ 		echo @LIB_LDADD@
+ 	;;
+ 	--libs)
+-		echo -L@libdir@ -lmikmod @LIBRARY_LIB@
++		echo -lmikmod @LIBRARY_LIB@
+ 	;;
+ 	*)
+ 		echo "${usage}" 1>&2

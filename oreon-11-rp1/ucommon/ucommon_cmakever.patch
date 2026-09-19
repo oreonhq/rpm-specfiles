@@ -1,0 +1,12 @@
+diff -rupN ucommon-7.0.0/CMakeLists.txt ucommon-7.0.0-new/CMakeLists.txt
+--- ucommon-7.0.0/CMakeLists.txt	2015-12-13 12:28:25.000000000 +0100
++++ ucommon-7.0.0-new/CMakeLists.txt	2025-07-17 20:53:21.196126866 +0200
+@@ -17,7 +17,7 @@
+ # meant for generating project files for those working with IDE's to do
+ # otherwise generic builds of the library and supporting applications.
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.5)
+ PROJECT(ucommon)
+ set (VERSION 7.0.0)
+ 

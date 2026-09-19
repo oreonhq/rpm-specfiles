@@ -1,0 +1,26 @@
+From 59b863773627781ccc3edfc6308474f51a0d993d Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 8 May 2024 12:15:20 -0400
+Subject: [PATCH] Downstream-only: run test_script without coverage
+
+https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
+---
+ tests/test_cli.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/test_cli.py b/tests/test_cli.py
+index 44c14d2..9138a79 100644
+--- a/tests/test_cli.py
++++ b/tests/test_cli.py
+@@ -216,7 +216,7 @@ def test_version() -> None:
+ 
+ def test_script() -> None:
+     result = subprocess.run(
+-        [sys.executable, "-m", "coverage", "run", "-m", "fastapi_cli", "--help"],
++        [sys.executable, "-m", "fastapi_cli", "--help"],
+         capture_output=True,
+         encoding="utf-8",
+     )
+-- 
+2.44.0
+

@@ -1,0 +1,20 @@
+From e0777398e7f5e285bf88fbd0b048f2eeb3d9ceaa Mon Sep 17 00:00:00 2001
+From: Daizu <daizutabi@gmail.com>
+Date: Sun, 27 Jul 2025 00:17:25 +0000
+Subject: [PATCH] build: update uv_build requirement to latest version
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 11b4b3ba..f9f0774b 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ["uv_build>=0.7.19,<0.8.0"]
++requires = ["uv_build"]
+ build-backend = "uv_build"
+ 
+ [project]

@@ -1,0 +1,27 @@
+Fixes this warning:
+
+spasm_util.c: In function 'spasm_human_format':
+spasm_util.c:36:37: warning: format '%lld' expects argument of type 'long long int', but argument 3 has type 'int64_t' {aka 'long int'} [-Wformat=]
+   36 |                 sprintf(target, "%lld", n);
+      |                                  ~~~^   ~
+      |                                     |   |
+      |                                     |   int64_t {aka long int}
+      |                                     long long int
+      |                                  %ld
+
+--- spasm-1.2/src/spasm_util.c.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/src/spasm_util.c	2023-11-12 11:34:14.946518113 -0700
+@@ -1,3 +1,4 @@
++#include <inttypes.h>
+ #include <sys/time.h>
+ #include <err.h>
+ #include "spasm.h"
+@@ -33,7 +34,7 @@ int spasm_nnz(const spasm * A) {
+ /* return a string representing n in 4 bytes */
+ void spasm_human_format(int64_t n, char *target) {
+ 	if (n < 1000) {
+-		sprintf(target, "%lld", n);
++		sprintf(target, "%" PRId64, n);
+ 		return;
+ 	}
+ 	if (n < 1000000) {

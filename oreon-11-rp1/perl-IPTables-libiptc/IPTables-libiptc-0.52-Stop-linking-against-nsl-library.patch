@@ -1,0 +1,38 @@
+From e47c9bfbfc007abbbb007dc6856824aad4b80580 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 16 Jan 2018 08:48:37 +0100
+Subject: [PATCH] Stop linking against nsl library
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+There is not need for it and it will be removed from glibc.
+
+CPAN RT#124095
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 959f86b..31907d8 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -249,10 +249,10 @@ WriteMakefile(
+     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
+       (ABSTRACT_FROM  => 'lib/IPTables/libiptc.pm', # retrieve abstract from module
+        AUTHOR         => 'Jesper Dangaard Brouer <hawk@comx.dk>') : ()),
+-##  LIBS              => ['-ldl -lnsl -liptc'], # e.g., '-lm'
++##  LIBS              => ['-ldl -liptc'], # e.g., '-lm'
+     # Notice, perl Makefile.PL will detect if ip4tc is available
+-    LIBS              => ['-ldl -lnsl -liptc -lip4tc -lxtables'], # e.g., '-lm'
+-##  LIBS              => ['-ldl -lnsl'], # e.g., '-lm'
++    LIBS              => ['-ldl -liptc -lip4tc -lxtables'], # e.g., '-lm'
++##  LIBS              => ['-ldl ], # e.g., '-lm'
+     LDDLFLAGS         => '-shared -L$(PREFIX)/lib',
+ ##  LDDLFLAGS         => '-shared $(LOCAL_LIB_IPTC) -L$(PREFIX)/lib',
+     LDFLAGS           => '-L$(PREFIX)/lib',
+-- 
+2.13.6
+

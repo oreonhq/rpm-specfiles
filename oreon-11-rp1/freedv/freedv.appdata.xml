@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Richard Shaw <hobbes1069@gmail.com> -->
+<component type="desktop">
+ <id>freedv.desktop</id>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>GPL-2.0+</project_license>
+ <name>FreeDV</name>
+ <summary>Open Source HF Digital Voice</summary>
+ <description>
+  <p>
+FreeDV is a GUI application for Windows and Linux that allows any SSB radio to
+be used for low bit rate digital voice.</p>
+  <p>
+Speech is compressed down to 1400 bit/s then modulated onto a 1100 Hz wide QPSK
+signal which is sent to the Mic input of a SSB radio. On receive, the signal is
+received by the SSB radio, then demodulated and decoded by FreeDV.</p>
+  <p>
+FreeDV was built by an international team of Radio Amateurs working together on
+coding, design, user interface and testing. FreeDV is open source software,
+released under the GNU Public License version 2.1. The FDMDV modem and Codec 2
+Speech codec used in FreeDV are also open source.  
+  </p>
+ </description>
+ <screenshots>
+  <screenshot type="default">
+   <image>http://svn.code.sf.net/p/freetel/code/freedv-dev/contrib/freedv_screenshot.png</image>
+   <caption>The main window showing the application in action</caption>
+  </screenshot>
+ </screenshots>
+ <url type="homepage">http://freedv.org</url>
+ <updatecontact>hobbes1069@gmail.com</updatecontact>
+</component>

@@ -1,0 +1,12 @@
+/var/log/prosody/prosody.log /var/log/prosody/prosody.err {
+	missingok
+	compress
+	delaycompress
+	notifempty
+	postrotate
+		systemctl try-reload-or-restart prosody.service
+	endscript
+	create 0640 prosody prosody
+	sharedscripts
+	su prosody prosody
+}

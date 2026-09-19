@@ -24,7 +24,7 @@
 %global major_minor_version %(echo %{version} | cut -d "." -f 1-2)
 
 Name:    gvfs
-Version: 1.60.0
+Version: 1.62.0
 Release: %autorelease
 Summary: Backends for the gio framework in GLib
 

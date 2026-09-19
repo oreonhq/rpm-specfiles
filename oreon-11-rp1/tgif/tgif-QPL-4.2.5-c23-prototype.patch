@@ -1,0 +1,17 @@
+diff --git a/mainloop.c b/mainloop.c
+index 77a7e2e..82c35fb 100644
+--- a/mainloop.c
++++ b/mainloop.c
+@@ -134,9 +134,9 @@ int AddExtraWinInfo(win, mapped, raise, expose_handler, ev_handler,
+       cleanup_routine, userdata)
+    Window win;
+    int mapped, raise;
+-   void (*expose_handler)();
+-   int (*ev_handler)();
+-   void (*cleanup_routine)();
++   void (*expose_handler)(XEvent*, struct WinInfoRec *);
++   int (*ev_handler)(XEvent*, struct WinInfoRec *);
++   void (*cleanup_routine)(struct WinInfoRec *);
+    void *userdata;
+ {
+    register int i;

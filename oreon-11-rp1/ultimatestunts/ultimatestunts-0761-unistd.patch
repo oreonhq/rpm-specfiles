@@ -1,0 +1,11 @@
+diff -up ultimatestunts-srcdata-0761/simulation/metaserver.cpp.unistd ultimatestunts-srcdata-0761/simulation/metaserver.cpp
+--- ultimatestunts-srcdata-0761/simulation/metaserver.cpp.unistd	2012-01-15 11:43:31.000000000 +0100
++++ ultimatestunts-srcdata-0761/simulation/metaserver.cpp	2012-01-15 11:43:39.000000000 +0100
+@@ -20,6 +20,7 @@
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+ #include <netdb.h>
++#include <unistd.h>
+ 
+ #ifdef HAVE_CONFIG_H
+ #include "config.h"

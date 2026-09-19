@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 086e61a1d05b94a50e27b5412b01b35c89158c27ff8601f9d59e94c52e931a5e
 
 %global stable_kf6 stable
 
@@ -10,7 +10,7 @@
 ExcludeArch: %{ix86}
 
 Name:           kasts
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 
 # Automatically converted from old format: GPLv2 and GPLv2+ and GPLv3+ and BSD and LGPLv3+ - review is highly recommended.

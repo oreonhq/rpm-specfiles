@@ -1,0 +1,9 @@
+diff -rupN jansson-2.14.1/CMakeLists.txt jansson-2.14.1-new/CMakeLists.txt
+--- jansson-2.14.1/CMakeLists.txt	2026-01-04 17:00:03.781862969 +0100
++++ jansson-2.14.1-new/CMakeLists.txt	2026-01-04 17:03:44.295470886 +0100
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.1)
++cmake_minimum_required(VERSION 3.12...4.0)
+ project(jansson C)
+ 
+ # Options

@@ -1,0 +1,20 @@
+--- ocaml-linenoise-1.5.1/src/dune.orig	2024-03-20 13:12:17.000000000 -0600
++++ ocaml-linenoise-1.5.1/src/dune	2024-07-11 15:09:38.626734392 -0600
+@@ -5,4 +5,5 @@
+   (modules LNoise)
+   (wrapped false)
+   (flags :standard -warn-error -3)
+-  (c_names linenoise_src linenoise_stubs))
++  (c_library_flags -llinenoise)
++  (c_names linenoise_stubs))
+--- ocaml-linenoise-1.5.1/src/linenoise_stubs.c.orig	2024-03-20 13:12:17.000000000 -0600
++++ ocaml-linenoise-1.5.1/src/linenoise_stubs.c	2024-07-11 16:07:07.321358220 -0600
+@@ -8,7 +8,7 @@
+ #include <errno.h>
+ #include <assert.h>
+ 
+-#include "linenoise_src.h"
++#include <linenoise.h>
+ 
+ // Ripped from ctypes
+ #define Val_none Val_int(0)

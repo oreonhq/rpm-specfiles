@@ -1,0 +1,32 @@
+From 2a67470baaec4df047a02475afae979775960fab Mon Sep 17 00:00:00 2001
+From: "W. Michael Petullo" <mike@flyn.org>
+Date: Wed, 22 Jan 2025 16:33:51 -0600
+Subject: [PATCH] Fix build with Go 1.24
+
+Go 1.24 provides stricter checking that forbids passing a variable as a
+format string to Printf-like functions with no other arguments. Remove
+instances of this. See also:
+
+https://tip.golang.org/doc/go1.24#vet
+
+Signed-off-by: W. Michael Petullo <mike@flyn.org>
+---
+ render.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/render.go b/render.go
+index 0342b78..46698ed 100644
+--- a/render.go
++++ b/render.go
+@@ -238,7 +238,7 @@ func (r *renderGo) transitions(l *lex.L, state *lexer.NfaState) {
+ 		case *lexer.RuneEdge:
+ 			s = fmt.Sprintf("%s == %s", l.YYC, q(uint32(edge.Rune)))
+ 		case *lexer.RangesEdge:
+-			s = fmt.Sprintf(r.rangesEdgeString(edge, l))
++			s = fmt.Sprint(r.rangesEdgeString(edge, l))
+ 		}
+ 		a = append(a, s)
+ 		m[s] = edge0.Target().Index
+-- 
+2.48.1
+

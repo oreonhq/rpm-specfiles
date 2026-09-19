@@ -1,0 +1,14 @@
+--- cabal-file-th-0.2.7/Distribution/PackageDescription/TH.hs~	2001-09-09 09:46:40.000000000 +0800
++++ cabal-file-th-0.2.7/Distribution/PackageDescription/TH.hs	2023-08-14 12:37:00.010380276 +0800
+@@ -42,7 +42,11 @@
+ -- which was introduced in Cabal-2.0.0.2.
+ -- readPackageDescription was removed in Cabal-2.2.0.0
+ #if MIN_VERSION_Cabal(2,2,0)
++#if MIN_VERSION_Cabal(3,8,0)
++import Distribution.Simple.PackageDescription (readGenericPackageDescription)
++#else
+ import Distribution.PackageDescription.Parsec (readGenericPackageDescription)
++#endif
+ readPkgDesc = readGenericPackageDescription
+ #else
+ import Distribution.PackageDescription.Parse (readPackageDescription)

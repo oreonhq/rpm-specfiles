@@ -11,7 +11,7 @@
 %global libdecor_majver 0
 
 Name:           SDL2
-Version:        2.28.5
+Version:        2.32.10
 Release:        1%{?dist}
 Summary:        Cross-platform multimedia library
 License:        Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 OR MIT)

@@ -1,0 +1,38 @@
+diff -urpN a/drat-trim.c b/drat-trim.c
+--- a/drat-trim.c	2024-04-27 16:28:41.000000000 -0600
++++ b/drat-trim.c	2024-06-06 11:01:18.196604920 -0600
+@@ -61,7 +61,7 @@ struct solver { FILE *inputFile, *proofF
+       nLemmas, maxRAT, *preRAT, maxDependencies, nDependencies, bar, backforce, reduce,
+       *dependencies, maxVar, maxSize, mode, verb, unitSize, unitStackSize, prep, *current, nRemoved, warning,
+       delProof, *setMap, *setTruth, rupOnly;
+-    char *coreStr, *lemmaStr;
++    const char *coreStr, *lemmaStr;
+     struct timeval start_time;
+     long mem_used, time, nClauses, nStep, nOpt, nAlloc, *unitStack, *reason, lemmas, nResolve, *RATset,
+          nReads, nWrites, lratSize, lratAlloc, *lratLookup, **wlist, *optproof, *formula, *proof;  };
+@@ -1364,7 +1364,7 @@ int binChar (int c) {
+   return 0;
+ }
+ 
+-int main (int argc, char** argv) {
++int run_drat_trim (int argc, const char** argv) {
+   struct solver S;
+ 
+   S.inputFile  = NULL;
+diff -urpN a/drat-trim.h b/drat-trim.h
+--- a/drat-trim.h	2021-06-21 06:53:06.281589044 -0600
++++ b/drat-trim.h	2021-06-21 06:53:06.281589044 -0600
+@@ -0,0 +1,3 @@
++#pragma once
++
++extern int run_drat_trim (int argc, const char **argv);
+diff -urpN a/drat-trim-main.c b/drat-trim-main.c
+--- a/drat-trim-main.c	2021-06-21 06:53:06.295830186 -0600
++++ b/drat-trim-main.c	2021-06-21 06:53:06.295830186 -0600
+@@ -0,0 +1,6 @@
++#include "drat-trim.h"
++
++int main (int argc, char *argv[])
++{
++  return run_drat_trim (argc, (const char **)argv);
++}

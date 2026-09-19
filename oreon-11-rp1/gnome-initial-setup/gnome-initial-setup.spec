@@ -16,7 +16,7 @@
 %endif
 
 Name:           gnome-initial-setup
-Version:        50~rc
+Version:        51.0
 Release:        %autorelease
 Summary:        Bootstrapping your OS
 

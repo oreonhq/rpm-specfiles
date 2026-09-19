@@ -1,0 +1,438 @@
+diff --git a/src/org-gnome-sa-rspam.eplug.xml b/src/org-gnome-sa-rspam.eplug.xml
+index a883a34..644068e 100644
+--- a/src/org-gnome-sa-rspam.eplug.xml
++++ b/src/org-gnome-sa-rspam.eplug.xml
+@@ -26,54 +26,10 @@ is more difficult.
+          <event target="upgrade" id="upgrade.done" handle="org_gnome_sa_rspam_startup"/>
+     </hook>
+ 
+-
+-    <!-- hook into the uri popup menu for revoke-->
+-    <hook class="org.gnome.evolution.mail.popup:1.0">
+-      <menu id="org.gnome.evolution.mail.folderview.popup" target="select">
+-	<item
+-	  type="item"
+-	  path="revoke.test"
+-	  icon="mail-mark-notjunk"
+-	  _label="Revo_ke SPAM"
+-	  activate="org_gnome_sa_revoke"/>
+-      </menu>
+-    </hook>
+-    
+-    <!-- hook into the uri popup menu for report-->
+-    <hook class="org.gnome.evolution.mail.popup:1.0">
+-      <menu id="org.gnome.evolution.mail.folderview.popup" target="select">
+-	<item
+-	  type="item"
+-	  path="report.test"
+-	  icon="stock_spam"
+-	  _label="_Report as SPAM"
+-	  activate="org_gnome_sa_rspam"/>
+-      </menu>
++    <hook class="org.gnome.evolution.ui:1.0">
++        <ui-manager id="org.gnome.evolution.mail"/>
+     </hook>
+ 
+-<hook class="org.gnome.evolution.ui:1.0">
+-<ui-manager id="org.gnome.evolution.mail">
+-	<menubar name='main-menu'>
+-	<placeholder name='custom-menus'>
+-		<menu action="mail-message-menu">
+-		<placeholder name="mail-message-actions">
+-			<separator/>
+-			<menuitem action="report-as-spam"/>
+-			<menuitem action="revoke-spam"/>
+-		</placeholder>
+-		</menu>
+-	</placeholder>
+-	</menubar>
+-	<popup name="mail-message-popup">
+-		<placeholder name="mail-message-popup-actions">
+-			<separator/>
+-			<menuitem action="report-as-spam-popup"/>
+-			<menuitem action="revoke-spam-popup"/>
+-		</placeholder>
+-	</popup>
+-</ui-manager>
+-</hook>
+-
+ <!--	  visible="one"-->
+     
+     <!-- hook into the 'mail properties' menu -->
+diff --git a/src/rspam.c b/src/rspam.c
+index e0d81ee..1914d7c 100644
+--- a/src/rspam.c
++++ b/src/rspam.c
+@@ -57,6 +57,7 @@
+ 
+ #include <shell/e-shell-view.h>
+ #include <mail/e-mail-reader.h>
++#include <mail/e-mail-view.h>
+ #include <mail/em-utils.h>
+ #include <mail/message-list.h>
+ #include <mail/em-folder-selector.h>
+@@ -391,6 +392,17 @@ rspam_command(CamelMimeMessage *msg, gchar *name, gint command) //command: 1 - s
+ 	return 1;
+ }
+ 
++static EMailReader *
++rspam_ref_mail_reader (EShellView *shell_view)
++{
++	EMailView *mail_view = NULL;
++	EShellContent *shell_content;
++
++	shell_content = e_shell_view_get_shell_content (shell_view);
++	g_object_get (G_OBJECT (shell_content), "mail-view", &mail_view, NULL);
++
++	return E_MAIL_READER (mail_view);
++}
+ 
+ void
+ spamcop_report(CamelMimeMessage *msg, gchar *msgfile)
+@@ -401,8 +413,7 @@ spamcop_report(CamelMimeMessage *msg, gchar *msgfile)
+ #if EVOLUTION_VERSION >= 30303
+ 	EMailBackend *backend;
+ 	EMailSession *session;
+-	EMailReader *reader;
+-	EShellContent *shell_content;
++	EMailReader *reader = NULL;
+ #endif
+ #if EVOLUTION_VERSION > 30501
+ 	EShell *shell;
+@@ -445,8 +456,7 @@ spamcop_report(CamelMimeMessage *msg, gchar *msgfile)
+ 	}
+ 
+ #if EVOLUTION_VERSION >= 30303
+-	shell_content = e_shell_view_get_shell_content (main_shell_view);
+-	reader = E_MAIL_READER (shell_content);
++	reader = rspam_ref_mail_reader (main_shell_view);
+ 	backend = e_mail_reader_get_backend (reader);
+ 	session = e_mail_backend_get_session (backend);
+ #endif
+@@ -761,7 +771,8 @@ spamcop_report(CamelMimeMessage *msg, gchar *msgfile)
+ 
+ 		update_stats(1);
+ 	}
+-fail:	return;
++fail:
++	g_clear_object (&reader);
+ }
+ 
+ guint
+@@ -872,19 +883,13 @@ mark_junk(gchar *uid, CamelFolder *folder)
+ 		CAMEL_MESSAGE_JUNK);
+ }
+ 
+-void
+-#if EVOLUTION_VERSION < 22900
+-org_gnome_sa_rspam(void *ep, EMPopupTargetSelect *t);
+-#else
+-org_gnome_sa_rspam (GtkAction *action,
+-		EShellView *shell_view);
+-#endif
+-
+-void
++static void
+ #if EVOLUTION_VERSION < 22900
+ org_gnome_sa_rspam(void *ep, EMPopupTargetSelect *t)
+ #else
+-org_gnome_sa_rspam(GtkAction *action, EShellView *shell_view)
++org_gnome_sa_rspam (EUIAction *action,
++		    GVariant *parameter,
++		    gpointer user_data)
+ #endif
+ {
+ 	CamelFolder *folder;
+@@ -894,7 +899,7 @@ org_gnome_sa_rspam(GtkAction *action, EShellView *shell_view)
+ 	uids = t->uids;
+ 	folder = t->folder;
+ #else
+-	EShellContent *shell_content;
++	EShellView *shell_view = user_data;
+ 	EMailReader *reader;
+ #if EVOLUTION_VERSION >= 30101
+ 	EActivity *activity;
+@@ -902,9 +907,7 @@ org_gnome_sa_rspam(GtkAction *action, EShellView *shell_view)
+ 	RSSEMailReaderClosure *closure;
+ #endif
+ 
+-	shell_content = e_shell_view_get_shell_content (shell_view);
+-
+-	reader = E_MAIL_READER (shell_content);
++	reader = rspam_ref_mail_reader (shell_view);
+ #if EVOLUTION_VERSION >= 31190
+ 	folder = e_mail_reader_ref_folder(reader);
+ #else
+@@ -954,11 +957,7 @@ org_gnome_sa_rspam(GtkAction *action, EShellView *shell_view)
+ #if EVOLUTION_VERSION >= 30303
+ 		EMailBackend *backend;
+ 		EMailSession *session;
+-		EMailReader *reader;
+-		EShellContent *shell_content;
+ 
+-		shell_content = e_shell_view_get_shell_content (main_shell_view);
+-		reader = E_MAIL_READER (shell_content);
+ 		backend = e_mail_reader_get_backend (reader);
+ 		session = e_mail_backend_get_session (backend);
+ #endif
+@@ -985,23 +984,17 @@ org_gnome_sa_rspam(GtkAction *action, EShellView *shell_view)
+ 
+ #if EVOLUTION_VERSION >= 31190
+ 	g_clear_object (&folder);
++	g_clear_object (&reader);
+ #endif
+ }
+ 
+-void
+-#if EVOLUTION_VERSION < 22900
+-org_gnome_sa_revoke(void *ep, EMPopupTargetSelect *t);
+-#else
+-org_gnome_sa_revoke (GtkAction *action,
+-		EShellView *shell_view);
+-#endif
+-
+-void
++static void
+ #if EVOLUTION_VERSION < 22900
+ org_gnome_sa_revoke(void *ep, EMPopupTargetSelect *t)
+ #else
+-org_gnome_sa_revoke (GtkAction *action,
+-		EShellView *shell_view)
++org_gnome_sa_revoke (EUIAction *action,
++		     GVariant *parameter,
++		     gpointer user_data)
+ #endif
+ {
+ 	CamelFolder *folder;
+@@ -1013,12 +1006,11 @@ org_gnome_sa_revoke (GtkAction *action,
+ 	uids = t->uids;
+ 	folder = t->folder;
+ #else
+-	EShellContent *shell_content;
++	EShellView *shell_view = user_data;
+ 	EMailReader *reader;
+ 	GtkWidget *message_list;
+-	shell_content = e_shell_view_get_shell_content (shell_view);
+ 
+-	reader = E_MAIL_READER (shell_content);
++	reader = rspam_ref_mail_reader (shell_view);
+ 	message_list = e_mail_reader_get_message_list (reader);
+ #if EVOLUTION_VERSION >= 31190
+ 	folder = message_list_ref_folder (MESSAGE_LIST(message_list));
+@@ -1070,6 +1062,7 @@ org_gnome_sa_revoke (GtkAction *action,
+ 
+ #if EVOLUTION_VERSION >= 31190
+ 	g_clear_object (&folder);
++	g_clear_object (&reader);
+ #endif
+ }
+ 
+@@ -1656,12 +1649,10 @@ rspam_page_factory (EPlugin *ep, EConfigHookItemFactoryData *hook_data)
+ #if EVOLUTION_VERSION >= 30101
+ 		EMailBackend *backend;
+ 		EMailReader *reader;
+-		EShellContent *shell_content;
+ 		CamelStore *store;
+ 		EMailSession *session;
+ 
+-		shell_content = e_shell_view_get_shell_content (main_shell_view);
+-		reader = E_MAIL_READER (shell_content);
++		reader = rspam_ref_mail_reader (main_shell_view);
+ 		backend = e_mail_reader_get_backend (reader);
+ 		session = e_mail_backend_get_session (backend);
+ 		e_mail_folder_uri_parse (
+@@ -1673,6 +1664,7 @@ rspam_page_factory (EPlugin *ep, EConfigHookItemFactoryData *hook_data)
+ 		g_free(fld);
+ 		gtk_label_set_text(GTK_LABEL(label1), folder);
+ 		g_free(folder);
++		g_clear_object (&reader);
+ 	} else
+ 		gtk_label_set_text(GTK_LABEL(label1), _("Select..."));
+ 	g_signal_connect (
+@@ -1805,12 +1797,10 @@ rspam_folder_cb (GtkWidget *widget, gpointer data)
+ #endif
+ 	gchar *folder_name = NULL;
+ 	EMailReader *reader;
+-	EShellContent *shell_content;
+ 
+ 	gchar *text = (gchar *)gtk_label_get_text(GTK_LABEL(data));
+ 
+-	shell_content = e_shell_view_get_shell_content (main_shell_view);
+-	reader = E_MAIL_READER (shell_content);
++	reader = rspam_ref_mail_reader (main_shell_view);
+ 
+ #if EVOLUTION_VERSION >= 30101
+ 	backend = e_mail_reader_get_backend (reader);
+@@ -1902,6 +1892,7 @@ rspam_folder_cb (GtkWidget *widget, gpointer data)
+ 	if (error != NULL) {
+ 		g_warning ("%s", error->message);
+ 		g_error_free (error);
++		g_clear_object (&reader);
+ 		g_free (cfd);
+ 		return;
+ 	}
+@@ -1909,20 +1900,12 @@ rspam_folder_cb (GtkWidget *widget, gpointer data)
+ 
+ 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
+ #if EVOLUTION_VERSION >= 30101
+-		EMailBackend *backend;
+-		EMailReader *reader;
+-		EShellContent *shell_content;
+-		CamelStore *store;
+-		EMailSession *session;
++		CamelStore *store = NULL;
+ #endif
+ 		uri = em_folder_selector_get_selected_uri (
+ 			EM_FOLDER_SELECTOR (dialog));
+ 
+ #if EVOLUTION_VERSION >= 30101
+-		shell_content = e_shell_view_get_shell_content (main_shell_view);
+-		reader = E_MAIL_READER (shell_content);
+-		backend = e_mail_reader_get_backend (reader);
+-		session = e_mail_backend_get_session (backend);
+ 		e_mail_folder_uri_parse (
+ 			CAMEL_SESSION(session), uri,
+ 			&store, &folder_name, NULL);
+@@ -1943,6 +1926,7 @@ rspam_folder_cb (GtkWidget *widget, gpointer data)
+ 	}
+ 
+ 	gtk_widget_destroy (dialog);
++	g_clear_object (&reader);
+ }
+ 
+ #if EVOLUTION_VERSION >= 31190
+@@ -2003,23 +1987,6 @@ out:    g_free(stfile);
+ 	return ret;
+ }
+ 
+-#if EVOLUTION_VERSION >= 29101
+-EMailSession*
+-_get_mail_session(void);
+-
+-EMailSession*
+-_get_mail_session(void)
+-{
+-	EMailBackend *backend;
+-	EMailReader *reader;
+-	EShellContent *shell_content;
+-	shell_content = e_shell_view_get_shell_content (main_shell_view);
+-	reader = E_MAIL_READER (shell_content);
+-	backend = e_mail_reader_get_backend (reader);
+-	return e_mail_backend_get_session (backend);
+-}
+-#endif
+-
+ void
+ #if (DATASERVER_VERSION >= 2031002)
+ rs_online(EShell *shell)
+@@ -2056,50 +2023,58 @@ rs_online(CamelObject *o, void *event_data, void *data)
+ 	}
+ }
+ 
+-static GtkActionEntry entries[] = {
+-	{ "report-as-spam",
+-	"stock_spam",
+-	N_("_Report as SPAM"),
+-	NULL,
+-	N_("Report current message to various spam filtering networks"),
+-	G_CALLBACK (org_gnome_sa_rspam) },
+-
+-	{ "revoke-spam",
+-	"mail-mark-notjunk",
+-	N_("Revo_ke SPAM"),
+-	NULL,
+-	N_("Whithdraws reported message as being spam"),
+-	G_CALLBACK (org_gnome_sa_revoke) },
+-};
+-
+ #if EVOLUTION_VERSION >= 22900 //kb//
+-static EPopupActionEntry popup_entries[] = {
+-	{ "report-as-spam-popup",
+-	NULL,
+-	"report-as-spam" },
+-
+-	{ "revoke-spam-popup",
+-	NULL,
+-	"revoke-spam" },
+-};
+ 
+ gboolean
+-e_plugin_ui_init (GtkUIManager *ui_manager,
+-		EShellView *shell_view);
++e_plugin_ui_init (EUIManager *ui_manager,
++		  EShellView *shell_view);
+ 
+ gboolean
+-e_plugin_ui_init (GtkUIManager *ui_manager,
+-		EShellView *shell_view)
++e_plugin_ui_init (EUIManager *ui_manager,
++		  EShellView *shell_view)
+ {
+-	EShellWindow *shell_window;
+-	GtkActionGroup *action_group;
++	const gchar *eui =
++		"<eui>"
++		  "<menu id='main-menu'>"
++		    "<placeholder id='custom-menus'>"
++		      "<submenu action='mail-message-menu'>"
++			"<placeholder id='mail-message-actions'>"
++			  "<separator/>"
++			  "<item action='report-as-spam'/>"
++			  "<item action='revoke-spam'/>"
++			"</placeholder>"
++		      "</submenu>"
++		    "</placeholder>"
++		  "</menu>"
++		  "<menu id='mail-message-popup'>"
++		    "<placeholder id='mail-message-popup-actions'>"
++		      "<separator/>"
++		      "<item action='report-as-spam'/>"
++		      "<item action='revoke-spam'/>"
++		    "</placeholder>"
++		  "</menu>"
++		"</eui>";
++
++	static const EUIActionEntry entries[] = {
++		{ "report-as-spam",
++		"mail-mark-junk",
++		N_("_Report as SPAM"),
++		NULL,
++		N_("Report current message to various spam filtering networks"),
++		org_gnome_sa_rspam, NULL, NULL, NULL },
++
++		{ "revoke-spam",
++		"mail-mark-notjunk",
++		N_("Revo_ke SPAM"),
++		NULL,
++		N_("Whithdraws reported message as being spam"),
++		org_gnome_sa_revoke, NULL, NULL, NULL },
++	};
+ 
+-	shell_window = e_shell_view_get_shell_window (shell_view);
+-	action_group = e_shell_window_get_action_group (
+-				shell_window,
+-				"mail");
+ 	main_shell_view = shell_view;
+ 
++	e_ui_manager_add_actions_with_eui_data (ui_manager, "mail", GETTEXT_PACKAGE,
++		entries, G_N_ELEMENTS (entries), shell_view, eui);
+ 
+ #if EVOLUTION_VERSION >= 30101
+ 	shell_backend = e_shell_view_get_shell_backend (shell_view);
+@@ -2131,16 +2106,6 @@ e_plugin_ui_init (GtkUIManager *ui_manager,
+ 		NULL);
+ #endif
+ 
+-	gtk_action_group_add_actions (
+-		action_group,
+-		entries,
+-		G_N_ELEMENTS (entries),
+-		shell_view);
+-	e_action_group_add_popup_actions (
+-		action_group,
+-		popup_entries,
+-		G_N_ELEMENTS (popup_entries));
+-
+ //        g_signal_connect (
+ //              shell_view, "update-actions",
+ //            G_CALLBACK (update_actions_cb), NULL);

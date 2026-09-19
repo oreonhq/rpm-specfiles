@@ -1,0 +1,38 @@
+diff -up ./epc/tests/test_py2py.py.orig ./epc/tests/test_py2py.py
+--- ./epc/tests/test_py2py.py.orig	2013-06-22 21:13:39.000000000 +0200
++++ ./epc/tests/test_py2py.py	2025-03-18 18:02:39.067004241 +0100
+@@ -15,7 +15,7 @@
+ 
+ 
+ import os
+-import nose
++import unittest
+ 
+ from ..client import EPCClient
+ from ..server import ThreadingEPCServer
+@@ -192,7 +192,7 @@ class TestEPCPy2Py(ThreadingPy2Py, BaseT
+                 assert_return(method, [i], f)
+         except Queue.Empty:
+             if i > self.fibonacci_min:
+-                raise nose.SkipTest(
++                raise self.skipTest(
+                     "Test for {0} fails at {1} (> {2}), but it's OK."
+                     .format(method, i, self.fibonacci_min))
+             else:
+diff -up ./epc/tests/utils.py.orig ./epc/tests/utils.py
+--- ./epc/tests/utils.py.orig	2013-06-22 21:13:39.000000000 +0200
++++ ./epc/tests/utils.py	2025-03-18 18:07:48.283220106 +0100
+@@ -95,12 +95,10 @@ class BaseTestCase(unittest.TestCase):
+ 
+ 
+ def skip(reason):
+-    from nose import SkipTest
+-
+     def decorator(func):
+         @functools.wraps(func)
+         def wrapper(*args, **kwds):
+-            raise SkipTest("Skipping {0} because: {1}"
++            raise unittest.SkipTest("Skipping {0} because: {1}"
+                            .format(func.__name__, reason))
+         return wrapper
+     return decorator

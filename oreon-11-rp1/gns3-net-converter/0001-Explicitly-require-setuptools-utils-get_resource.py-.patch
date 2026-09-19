@@ -1,0 +1,26 @@
+From e1a1c27a68345b8fc2ab5cd60903783faa61718a Mon Sep 17 00:00:00 2001
+From: Tomas Hrnciar <thrnciar@redhat.com>
+Date: Wed, 31 Mar 2021 12:08:42 +0200
+Subject: [PATCH] Explicitly require setuptools, utils/get_resource.py imports
+ pkg_resources
+
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 749487f..8f0563b 100644
+--- a/setup.py
++++ b/setup.py
+@@ -40,7 +40,7 @@ setup(
+                 'newer version 1+ JSON format',
+     long_description=open("README.rst", "r").read(),
+     test_suite='tests',
+-    install_requires=['configobj'],
++    install_requires=['configobj', 'setuptools'],
+     package_data={'gns3converter': ['configspec']},
+     entry_points={
+         'console_scripts': ['gns3-converter = gns3converter.main:main']
+-- 
+2.29.2
+

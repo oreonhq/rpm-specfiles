@@ -1,0 +1,11 @@
+diff -up ags-3.6.2.13/CMake/FindLocalOpenAL.cmake.orig ags-3.6.2.13/CMake/FindLocalOpenAL.cmake
+--- ags-3.6.2.13/CMake/FindLocalOpenAL.cmake.orig	2025-09-04 10:13:12.000000000 +0200
++++ ags-3.6.2.13/CMake/FindLocalOpenAL.cmake	2025-10-09 13:07:24.743943475 +0200
+@@ -1,6 +1,6 @@
+ # Grab system openAL or use embedded mojoAL
+ 
+-if(WIN32 OR LINUX OR MACOS OR FREEBSD)
++if(WIN32 OR MACOS OR FREEBSD)
+     set(AGS_USE_MOJO_AL TRUE)
+ endif()
+ 

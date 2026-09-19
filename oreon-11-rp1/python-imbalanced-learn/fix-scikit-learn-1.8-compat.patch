@@ -1,0 +1,153 @@
+From c263ef00c93ffbb771f95b1ba68f559cb0f862b2 Mon Sep 17 00:00:00 2001
+From: Charalampos Stratakis <cstratak@redhat.com>
+Date: Thu, 4 Dec 2025 00:22:15 +0100
+Subject: [PATCH 1/2] Fix compatibility with scikit-learn 1.8+
+
+scikit-learn 1.8.0+ removed the algorithm parameter from AdaBoostClassifier
+
+https://github.com/scikit-learn/scikit-learn/pull/32262
+
+The changes maintain compatibility with previous version of scikit-learn
+---
+ doc/ensemble.rst                                         | 3 +--
+ examples/ensemble/plot_comparison_ensemble_classifier.py | 8 +++++++-
+ imblearn/ensemble/_easy_ensemble.py                      | 6 ++++--
+ 3 files changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/doc/ensemble.rst b/doc/ensemble.rst
+index e79be14d8..85524e7ef 100644
+--- a/doc/ensemble.rst
++++ b/doc/ensemble.rst
+@@ -97,8 +97,7 @@ Several methods taking advantage of boosting have been designed.
+ a boosting iteration :cite:`seiffert2009rusboost`::
+ 
+   >>> from imblearn.ensemble import RUSBoostClassifier
+-  >>> rusboost = RUSBoostClassifier(n_estimators=200, algorithm='SAMME.R',
+-  ...                               random_state=0)
++  >>> rusboost = RUSBoostClassifier(n_estimators=200, random_state=0)
+   >>> rusboost.fit(X_train, y_train)
+   RUSBoostClassifier(...)
+   >>> y_pred = rusboost.predict(X_test)
+diff --git a/examples/ensemble/plot_comparison_ensemble_classifier.py b/examples/ensemble/plot_comparison_ensemble_classifier.py
+index 8c318e5bc..856cb3a33 100644
+--- a/examples/ensemble/plot_comparison_ensemble_classifier.py
++++ b/examples/ensemble/plot_comparison_ensemble_classifier.py
+@@ -194,10 +194,16 @@
+ 
+ # %%
+ from sklearn.ensemble import AdaBoostClassifier
++from sklearn.utils.fixes import parse_version
+ 
+ from imblearn.ensemble import EasyEnsembleClassifier, RUSBoostClassifier
++from imblearn.utils._sklearn_compat import sklearn_version
++
++if sklearn_version < parse_version("1.6"):
++    estimator = AdaBoostClassifier(n_estimators=10, algorithm="SAMME")
++else:
++    estimator = AdaBoostClassifier(n_estimators=10)
+ 
+-estimator = AdaBoostClassifier(n_estimators=10, algorithm="SAMME")
+ eec = EasyEnsembleClassifier(n_estimators=10, estimator=estimator)
+ eec.fit(X_train, y_train)
+ y_pred_eec = eec.predict(X_test)
+diff --git a/imblearn/ensemble/_easy_ensemble.py b/imblearn/ensemble/_easy_ensemble.py
+index afd0cae22..7d5398424 100644
+--- a/imblearn/ensemble/_easy_ensemble.py
++++ b/imblearn/ensemble/_easy_ensemble.py
+@@ -226,12 +226,14 @@ def _validate_y(self, y):
+             self._sampling_strategy = self.sampling_strategy
+         return y_encoded
+ 
+-    def _validate_estimator(self, default=AdaBoostClassifier(algorithm="SAMME")):
++    def _validate_estimator(self, default=None):
+         """Check the estimator and the n_estimator attribute, set the
+         `estimator_` attribute."""
+         if self.estimator is not None:
+             estimator = clone(self.estimator)
+         else:
++            if default is None:
++                default = self._get_estimator()
+             estimator = clone(default)
+ 
+         sampler = RandomUnderSampler(
+@@ -279,7 +281,7 @@ def base_estimator_(self):
+ 
+     def _get_estimator(self):
+         if self.estimator is None:
+-            if parse_version("1.4") <= sklearn_version < parse_version("1.6"):
++            if sklearn_version < parse_version("1.6"):
+                 return AdaBoostClassifier(algorithm="SAMME")
+             else:
+                 return AdaBoostClassifier()
+
+From 2685b68c3ac2d775dac3eb5ed8b1b705a4f07512 Mon Sep 17 00:00:00 2001
+From: Charalampos Stratakis <cstratak@redhat.com>
+Date: Thu, 4 Dec 2025 01:58:53 +0100
+Subject: [PATCH 2/2] Support scikit-learn 1.8+ _check_targets API change
+
+In scikit-learn 1.8, the _check_targets() function signature changed
+to accept and return sample_weight as an extra value.
+
+See: https://github.com/scikit-learn/scikit-learn/pull/31701
+
+This commit adds version checking to handle both APIs.
+
+This maintains backward compatibility with scikit-learn < 1.8.
+---
+ imblearn/metrics/_classification.py | 25 +++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/imblearn/metrics/_classification.py b/imblearn/metrics/_classification.py
+index 17797a9a7..a222e95a3 100644
+--- a/imblearn/metrics/_classification.py
++++ b/imblearn/metrics/_classification.py
+@@ -25,10 +25,11 @@
+ from sklearn.metrics._classification import _check_targets, _prf_divide
+ from sklearn.preprocessing import LabelEncoder
+ from sklearn.utils._param_validation import Interval, StrOptions
++from sklearn.utils.fixes import parse_version
+ from sklearn.utils.multiclass import unique_labels
+ from sklearn.utils.validation import check_consistent_length, column_or_1d
+ 
+-from ..utils._sklearn_compat import validate_params
++from ..utils._sklearn_compat import sklearn_version, validate_params
+ 
+ 
+ @validate_params(
+@@ -166,7 +167,12 @@ def sensitivity_specificity_support(
+     if average not in average_options and average != "binary":
+         raise ValueError("average has to be one of " + str(average_options))
+ 
+-    y_type, y_true, y_pred = _check_targets(y_true, y_pred)
++    if sklearn_version >= parse_version("1.8"):
++        y_type, y_true, y_pred, sample_weight = _check_targets(
++            y_true, y_pred, sample_weight
++        )
++    else:
++        y_type, y_true, y_pred = _check_targets(y_true, y_pred)
+     present_labels = unique_labels(y_true, y_pred)
+ 
+     if average == "binary":
+@@ -1119,11 +1125,18 @@ def macro_averaged_mean_absolute_error(y_true, y_pred, *, sample_weight=None):
+     >>> macro_averaged_mean_absolute_error(y_true_imbalanced, y_pred)
+     0.16...
+     """
+-    _, y_true, y_pred = _check_targets(y_true, y_pred)
+-    if sample_weight is not None:
+-        sample_weight = column_or_1d(sample_weight)
++    if sklearn_version >= parse_version("1.8"):
++        _, y_true, y_pred, sample_weight = _check_targets(
++            y_true, y_pred, sample_weight
++        )
++        if sample_weight is None:
++            sample_weight = np.ones(y_true.shape)
+     else:
+-        sample_weight = np.ones(y_true.shape)
++        _, y_true, y_pred = _check_targets(y_true, y_pred)
++        if sample_weight is not None:
++            sample_weight = column_or_1d(sample_weight)
++        else:
++            sample_weight = np.ones(y_true.shape)
+     check_consistent_length(y_true, y_pred, sample_weight)
+     labels = unique_labels(y_true, y_pred)
+     mae = []

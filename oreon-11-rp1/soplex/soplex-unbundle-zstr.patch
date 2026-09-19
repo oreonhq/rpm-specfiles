@@ -1,0 +1,58 @@
+--- soplex-8.0.0/CMakeLists.txt.orig	2025-11-23 04:51:55.000000000 -0700
++++ soplex-8.0.0/CMakeLists.txt	2025-11-25 11:58:24.148851157 -0700
+@@ -124,12 +124,12 @@ if(COVERAGE)
+ endif()
+ 
+ if(ZLIB)
+-    find_package(ZLIB)
++    find_package(zlib-ng)
+ endif()
+-if(ZLIB_FOUND)
++if(zlib-ng_FOUND)
+     set(SOPLEX_WITH_ZLIB on)
+-    set(libs ${libs} ${ZLIB_LIBRARIES})
+-    include_directories(${ZLIB_INCLUDE_DIRS})
++    set(libs ${libs} z-ng)
++    include_directories(${zlib-ng_INCLUDE_DIR})
+ endif()
+ 
+ if(GMP)
+--- soplex-8.0.0/src/CMakeLists.txt.orig	2025-11-25 12:37:19.272208668 -0700
++++ soplex-8.0.0/src/CMakeLists.txt	2025-11-25 12:54:34.693549386 -0700
+@@ -192,13 +192,6 @@ install(FILES
+      ${PROJECT_SOURCE_DIR}/src/soplex/external/fmt/ranges.h
+      DESTINATION include/soplex/external/fmt)
+ 
+-# TODO this is necessary only if ZLIB_FOUND?
+-install(FILES
+-     ${PROJECT_SOURCE_DIR}/src/soplex/external/zstr/zstr.hpp
+-     ${PROJECT_SOURCE_DIR}/src/soplex/external/zstr/strict_fstream.hpp
+-     DESTINATION include/soplex/external/zstr)
+-install(FILES ${PROJECT_SOURCE_DIR}/src/soplex/external/zstr/License.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/soplex/zstr)
+-
+ # install the binary and the library to appropriate lcoations and add them to an export group
+ install(TARGETS soplex libsoplex EXPORT soplex-targets
+     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+--- soplex-8.0.0/src/depend.orig	2025-11-23 04:51:55.000000000 -0700
++++ soplex-8.0.0/src/depend	2025-11-25 11:58:35.483136988 -0700
+@@ -17,8 +17,7 @@ $(BINOBJDIR)/soplexmain.o: src/soplexmai
+  src/soplex/lprowbase.h src/soplex/lpcolbase.h src/soplex/lprowsetbase.h \
+  src/soplex/lpcolsetbase.h src/soplex/nameset.h \
+  src/soplex/datahashtable.h src/soplex/didxset.h src/soplex/spxfileio.h \
+- src/soplex/external/zstr/zstr.hpp \
+- src/soplex/external/zstr/strict_fstream.hpp src/soplex/spxscaler.h \
++ src/soplex/spxscaler.h \
+  src/soplex/vector.h src/soplex/svector.h src/soplex/svset.h \
+  src/soplex/dsvector.h src/soplex/dvector.h src/soplex/spxscaler.hpp \
+  src/soplex/spxlpbase_real.hpp src/soplex/mpsinput.h \
+--- soplex-8.0.0/src/soplex/spxfileio.h.orig	2025-11-23 04:51:55.000000000 -0700
++++ soplex-8.0.0/src/soplex/spxfileio.h	2025-11-25 11:58:35.483335568 -0700
+@@ -41,7 +41,7 @@
+  *-----------------------------------------------------------------------------
+  */
+ #ifdef SOPLEX_WITH_ZLIB
+-#include "soplex/external/zstr/zstr.hpp"
++#include <zstr/zstr.hpp>
+ #endif // WITH_GSZSTREAM
+ 
+ namespace soplex

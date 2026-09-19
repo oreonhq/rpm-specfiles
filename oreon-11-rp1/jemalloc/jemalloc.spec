@@ -3,7 +3,7 @@
 %global forgeurl https://github.com/jemalloc/jemalloc
 
 Name:           jemalloc
-Version:        5.3.1
+Version:        5.4.0
 
 Release:        1%{?dist}
 Summary:        General-purpose scalable concurrent malloc implementation

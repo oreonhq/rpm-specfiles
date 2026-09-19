@@ -1,0 +1,227 @@
+From fe6141721a3e28b355dbcb8f4070333e533ffad6 Mon Sep 17 00:00:00 2001
+From: Mathieu Bridon <bochecha@fedoraproject.org>
+Date: Wed, 20 Feb 2013 15:15:41 +0800
+Subject: [PATCH] Unbundle re2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+We want to build against the system version of the library.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ MANIFEST         | 114 -----------------------------------------------
+ Makefile.PL      |  12 +----
+ t/00.re2-tests.t |  35 ---------------
+ 3 files changed, 2 insertions(+), 159 deletions(-)
+ delete mode 100644 t/00.re2-tests.t
+
+diff --git a/MANIFEST b/MANIFEST
+index f6fa800..12c6e37 100644
+--- a/MANIFEST
++++ b/MANIFEST
+@@ -5,124 +5,10 @@ MANIFEST			This list of files
+ MANIFEST.SKIP
+ ppport.h
+ RE2.xs
+-re2/AUTHORS
+-re2/BUILD
+-re2/CMakeLists.txt
+-re2/CONTRIBUTING.md
+-re2/CONTRIBUTORS
+-re2/doc/mksyntaxgo
+-re2/doc/mksyntaxhtml
+-re2/doc/mksyntaxwiki
+-re2/doc/syntax.html
+-re2/doc/syntax.txt
+-re2/lib/git/commit-msg.hook
+-re2/libre2.symbols
+-re2/libre2.symbols.darwin
+-re2/LICENSE
+-re2/Makefile
+-re2/re2.pc
+-re2/re2/bitmap256.h
+-re2/re2/bitstate.cc
+-re2/re2/compile.cc
+-re2/re2/dfa.cc
+-re2/re2/filtered_re2.cc
+-re2/re2/filtered_re2.h
+-re2/re2/fuzzing/compiler-rt/include/fuzzer/FuzzedDataProvider.h
+-re2/re2/fuzzing/compiler-rt/LICENSE
+-re2/re2/fuzzing/re2_fuzzer.cc
+-re2/re2/make_perl_groups.pl
+-re2/re2/make_unicode_casefold.py
+-re2/re2/make_unicode_groups.py
+-re2/re2/mimics_pcre.cc
+-re2/re2/nfa.cc
+-re2/re2/onepass.cc
+-re2/re2/parse.cc
+-re2/re2/perl_groups.cc
+-re2/re2/pod_array.h
+-re2/re2/prefilter.cc
+-re2/re2/prefilter.h
+-re2/re2/prefilter_tree.cc
+-re2/re2/prefilter_tree.h
+-re2/re2/prog.cc
+-re2/re2/prog.h
+-re2/re2/re2.cc
+-re2/re2/re2.h
+-re2/re2/regexp.cc
+-re2/re2/regexp.h
+-re2/re2/set.cc
+-re2/re2/set.h
+-re2/re2/simplify.cc
+-re2/re2/sparse_array.h
+-re2/re2/sparse_set.h
+-re2/re2/stringpiece.cc
+-re2/re2/stringpiece.h
+-re2/re2/testing/backtrack.cc
+-re2/re2/testing/charclass_test.cc
+-re2/re2/testing/compile_test.cc
+-re2/re2/testing/dfa_test.cc
+-re2/re2/testing/dump.cc
+-re2/re2/testing/exhaustive1_test.cc
+-re2/re2/testing/exhaustive2_test.cc
+-re2/re2/testing/exhaustive3_test.cc
+-re2/re2/testing/exhaustive_test.cc
+-re2/re2/testing/exhaustive_tester.cc
+-re2/re2/testing/exhaustive_tester.h
+-re2/re2/testing/filtered_re2_test.cc
+-re2/re2/testing/mimics_pcre_test.cc
+-re2/re2/testing/null_walker.cc
+-re2/re2/testing/parse_test.cc
+-re2/re2/testing/possible_match_test.cc
+-re2/re2/testing/random_test.cc
+-re2/re2/testing/re2_arg_test.cc
+-re2/re2/testing/re2_test.cc
+-re2/re2/testing/regexp_benchmark.cc
+-re2/re2/testing/regexp_generator.cc
+-re2/re2/testing/regexp_generator.h
+-re2/re2/testing/regexp_test.cc
+-re2/re2/testing/required_prefix_test.cc
+-re2/re2/testing/search_test.cc
+-re2/re2/testing/set_test.cc
+-re2/re2/testing/simplify_test.cc
+-re2/re2/testing/string_generator.cc
+-re2/re2/testing/string_generator.h
+-re2/re2/testing/string_generator_test.cc
+-re2/re2/testing/tester.cc
+-re2/re2/testing/tester.h
+-re2/re2/tostring.cc
+-re2/re2/unicode.py
+-re2/re2/unicode_casefold.cc
+-re2/re2/unicode_casefold.h
+-re2/re2/unicode_groups.cc
+-re2/re2/unicode_groups.h
+-re2/re2/walker-inl.h
+-re2/README
+-re2/runtests
+-re2/SECURITY.md
+-re2/testinstall.cc
+-re2/ucs2.diff
+-re2/util/benchmark.cc
+-re2/util/benchmark.h
+-re2/util/flags.h
+-re2/util/fuzz.cc
+-re2/util/logging.h
+-re2/util/malloc_counter.h
+-re2/util/mix.h
+-re2/util/mutex.h
+-re2/util/pcre.cc
+-re2/util/pcre.h
+-re2/util/rune.cc
+-re2/util/strutil.cc
+-re2/util/strutil.h
+-re2/util/test.cc
+-re2/util/test.h
+-re2/util/utf.h
+-re2/util/util.h
+-re2/WORKSPACE
+ re2_xs.cc
+ re2_xs.h
+ README
+ t/00.compile.t
+-t/00.re2-tests.t
+ t/01.basic.t
+ t/02.chars.t
+ t/03.modifiers.t
+diff --git a/Makefile.PL b/Makefile.PL
+index c50ed80..77b9ed2 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -8,7 +8,7 @@ use ExtUtils::CppGuess;
+ 
+ # TODO: Optionally use system libre2, via ExtUtils::Liblist?
+ 
+-my @objects = qw(RE2.o re2_xs.o re2/obj/libre2.a);
++my @objects = qw(RE2.o re2_xs.o);
+ 
+ my $guess = ExtUtils::CppGuess->new;
+ 
+@@ -18,7 +18,7 @@ my %opt = (
+   VERSION_FROM       => 'lib/re/engine/RE2.pm',
+   ABSTRACT_FROM      => 'lib/re/engine/RE2.pm',
+   LICENSE            => 'perl',
+-  INC                => '-Ire2',
++  LIBS               => '-lre2',
+   PMLIBDIRS          => ["lib"],
+   OBJECT             => join(" ", @objects),
+   test               => {TESTS => 't/*.t t/ree-pcre/*.t'},
+@@ -149,13 +149,5 @@ sub clang_version {
+ sub MY::postamble {
+   return <<MAKE_FRAG;
+ 
+-RE2_FLAGS = CC="\$(CC)" CXXFLAGS="\$(CCFLAGS) \$(CCCDLFLAGS) \$(OPTIMIZE) \$(DEFINE) -DUSE_CXX0X" LDFLAGS="\$(OTHERLDFLAGS) \$(LDLOADLIBS)"
+-
+-re2/obj/libre2.a: re2/Makefile
+-	$MAKE -C re2 obj/libre2.a \$(RE2_FLAGS)
+-
+-re2-tests:
+-	$MAKE -C re2 static-test \$(RE2_FLAGS) LDFLAGS="\$(OTHERLDFLAGS) \$(LDLOADLIBS) -lm -lpthread"
+-
+ MAKE_FRAG
+ }
+diff --git a/t/00.re2-tests.t b/t/00.re2-tests.t
+deleted file mode 100644
+index e81a6df..0000000
+--- a/t/00.re2-tests.t
++++ /dev/null
+@@ -1,35 +0,0 @@
+-use Test::More;
+-no warnings;
+-
+-# Avoid running for everyone, these tests are quite slow, but useful for CPAN
+-# testers to run. cpanminus sets automated testing when it isn't, so ignore
+-# in that case too.
+-plan skip_all => "Only for automated tests"
+-  unless $ENV{AUTOMATED_TESTING} and not $ENV{PERL5_CPANM_IS_RUNNING};
+-
+-my $make = $ENV{MAKE} || "make";
+-
+-my @results = qx{$make re2-tests};
+-
+-for(@results) {
+-  if(my($test, $result, $diag) = $_ =~ /^(obj[^ ]+)\s+(PASS|FAIL)(.*)/) {
+-    if($result eq 'PASS') {
+-      pass $test;
+-    } else {
+-      fail "$test$diag";
+-
+-      if($diag =~ /output in (.*)/) {
+-        my $file = "re2/$1";
+-        open my $log_fh, "<", $file or do { diag "$file: $!"; next };
+-        diag <$log_fh>;
+-      }
+-    }
+-  }
+-}
+-
+-if("@results" !~ /PASS|FAIL/) {
+-  diag @results;
+-  plan skip_all => "Unable to compile RE2 tests for some reason";
+-}
+-
+-done_testing;
+-- 
+2.41.0
+

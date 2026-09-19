@@ -1,0 +1,31 @@
+Fixes these errors:
+
+  In file included from ../src/transform/transformmodule.c:46:
+  ../src/transform/arraycopy.c: In function ‘PyGSL_Shadow_array’:
+  ../src/transform/arraycopy.c:413:11: error: assignment to ‘PyArrayObject *’ {aka ‘struct tagPyArrayObject *’} from incompatible pointer type ‘PyObject *’ {aka ‘struct _object *’} [-Wincompatible-pointer-types]
+    413 |         m = master;
+        |           ^
+  ../src/transform/arraycopy.c:435:27: error: assignment to ‘PyArrayObject *’ {aka ‘struct tagPyArrayObject *’} from incompatible pointer type ‘PyObject *’ {aka ‘struct _object *’} [-Wincompatible-pointer-types]
+    435 |                         s = shadow;
+        |                           ^
+
+--- pygsl-2.6.4/src/transform/arraycopy.c.orig	2025-11-02 03:11:24.000000000 -0700
++++ pygsl-2.6.4/src/transform/arraycopy.c	2025-11-02 06:44:05.443140480 -0700
+@@ -410,7 +410,7 @@ PyGSL_Shadow_array(PyObject *shadow, PyO
+ 		goto fail;
+ 	}
+ 
+-	m = master;
++	m = (PyArrayObject *)master;
+ 	assert(m);
+ 	assert(
+ 	    PyArray_TYPE(m) == PyGSL_TRANSFORM_MODE_SWITCH(mode, NPY_CDOUBLE, NPY_CFLOAT)
+@@ -432,7 +432,7 @@ PyGSL_Shadow_array(PyObject *shadow, PyO
+ 		}else{
+ 			FUNC_MESS("Copying input to output array");
+ 			/* Check if it is an array of the approbriate size */
+-			s = shadow;
++			s = (PyArrayObject *)shadow;
+ 			if((PyGSL_array_check((PyObject *) s)) && (PyArray_NDIM(s) == 1)
+ 			   && (PyArray_TYPE(s) == PyArray_TYPE(m))
+ 			   && (PyArray_DIM(s, 0) == PyArray_DIM(m, 0))){

@@ -1,13 +1,13 @@
-%global source0_hash 84ce2acd5565a9510d74945ea2311f8c099cb031393255d1c8d399665d57b914
+%global source0_hash bcb204c0cca063b071e4bc986ef418b03b57e28cfc7fea45e368d1cb8b56b3f2
 
 %global		framework kholidays
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.29.0
 Release:        1%{?dist}
 Summary:	The KHolidays Library
 
@@ -65,18 +65,4 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- inline cmake --build (no qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Qt6 qdoc: -html file list via find, tags/index in -devel
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
-
+%autochangelog

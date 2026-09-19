@@ -1,0 +1,127 @@
+am-utils-6.2 - add NFSv3 rpc request validation
+
+From: Ian Kent <raven@themaw.net>
+
+The NFS v2 internal server uses several validation checks for each
+RPC request it receives, also add this validation for the NFS v3
+internal server.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/nfs_prot_svc.c |   65 +++++++++++++++++++++++++++++++---------------------
+ 1 file changed, 39 insertions(+), 26 deletions(-)
+
+diff --git a/amd/nfs_prot_svc.c b/amd/nfs_prot_svc.c
+index 29b7551..cae12d4 100644
+--- a/amd/nfs_prot_svc.c
++++ b/amd/nfs_prot_svc.c
+@@ -71,30 +71,9 @@ dispatcher_t nfs_dispatcher = nfs_program_2;
+ typedef char *(*nfssvcproc_t)(voidp, struct svc_req *);
+ 
+ 
+-void
+-nfs_program_2(struct svc_req *rqstp, SVCXPRT *transp)
++static int
++validate_rpc_request(struct svc_req *rqstp, SVCXPRT *transp)
+ {
+-  union {
+-    am_nfs_fh		nfsproc_getattr_2_arg;
+-    nfssattrargs	nfsproc_setattr_2_arg;
+-    nfsdiropargs	nfsproc_lookup_2_arg;
+-    am_nfs_fh		nfsproc_readlink_2_arg;
+-    nfsreadargs		nfsproc_read_2_arg;
+-    nfswriteargs	nfsproc_write_2_arg;
+-    nfscreateargs	nfsproc_create_2_arg;
+-    nfsdiropargs	nfsproc_remove_2_arg;
+-    nfsrenameargs	nfsproc_rename_2_arg;
+-    nfslinkargs		nfsproc_link_2_arg;
+-    nfssymlinkargs	nfsproc_symlink_2_arg;
+-    nfscreateargs	nfsproc_mkdir_2_arg;
+-    nfsdiropargs	fsproc_rmdir_2_arg;
+-    nfsreaddirargs	nfsproc_readdir_2_arg;
+-    am_nfs_fh		nfsproc_statfs_2_arg;
+-  } argument;
+-  char *result;
+-  xdrproc_t xdr_argument, xdr_result;
+-  nfssvcproc_t local;
+-
+ #ifdef HAVE_TRANSPORT_TYPE_TLI
+   /*
+    * On TLI systems we don't use an INET network type, but a "ticlts" (see
+@@ -109,7 +88,7 @@ nfs_program_2(struct svc_req *rqstp, SVCXPRT *transp)
+   extern int __rpc_get_local_uid(SVCXPRT *transp, uid_t *uid);
+   if (__rpc_get_local_uid(transp, &u) >= 0  &&  u != 0) {
+     plog(XLOG_WARNING, "ignoring request from UID %ld, must be 0", (long) u);
+-    return;
++    return 0;
+   }
+ # else /* not HAVE___RPC_GET_LOCAL_UID */
+   dlog("cannot verify local uid for rpc request");
+@@ -126,7 +105,7 @@ nfs_program_2(struct svc_req *rqstp, SVCXPRT *transp)
+     plog(XLOG_WARNING, "ignoring request from %s:%u, port not reserved",
+ 	 inet_dquad(dq, sizeof(dq), sinp->sin_addr.s_addr),
+ 	 ntohs(sinp->sin_port));
+-    return;
++    return 0;
+   }
+ # endif /* MNT2_NFS_OPT_RESVPORT */
+   /* if the address does not match, ignore the request */
+@@ -136,16 +115,47 @@ nfs_program_2(struct svc_req *rqstp, SVCXPRT *transp)
+ 	plog(XLOG_WARNING, "ignoring request from %s:%u, not a local interface",
+ 	     inet_dquad(dq, sizeof(dq), sinp->sin_addr.s_addr),
+ 	     ntohs(sinp->sin_port));
++             return 0;
+       }
+     } else {
+       plog(XLOG_WARNING, "ignoring request from %s:%u, expected %s",
+ 	   inet_dquad(dq, sizeof(dq), sinp->sin_addr.s_addr),
+ 	   ntohs(sinp->sin_port),
+ 	   inet_dquad(dq2, sizeof(dq2), myipaddr.s_addr));
+-      return;
++      return 0;
+     }
+   }
+ #endif /* not HAVE_TRANPORT_TYPE_TLI */
++  return 1;
++}
++
++
++void
++nfs_program_2(struct svc_req *rqstp, SVCXPRT *transp)
++{
++  union {
++    am_nfs_fh		nfsproc_getattr_2_arg;
++    nfssattrargs	nfsproc_setattr_2_arg;
++    nfsdiropargs	nfsproc_lookup_2_arg;
++    am_nfs_fh		nfsproc_readlink_2_arg;
++    nfsreadargs		nfsproc_read_2_arg;
++    nfswriteargs	nfsproc_write_2_arg;
++    nfscreateargs	nfsproc_create_2_arg;
++    nfsdiropargs	nfsproc_remove_2_arg;
++    nfsrenameargs	nfsproc_rename_2_arg;
++    nfslinkargs		nfsproc_link_2_arg;
++    nfssymlinkargs	nfsproc_symlink_2_arg;
++    nfscreateargs	nfsproc_mkdir_2_arg;
++    nfsdiropargs	fsproc_rmdir_2_arg;
++    nfsreaddirargs	nfsproc_readdir_2_arg;
++    am_nfs_fh		nfsproc_statfs_2_arg;
++  } argument;
++  char *result;
++  xdrproc_t xdr_argument, xdr_result;
++  nfssvcproc_t local;
++
++  if (!validate_rpc_request(rqstp, transp))
++    return;
+ 
+   current_transp = NULL;
+ 
+@@ -327,6 +337,9 @@ nfs_program_3(struct svc_req *rqstp, register SVCXPRT *transp)
+   xdrproc_t _xdr_argument, _xdr_result;
+   nfssvcproc_t local;
+ 
++  if (!validate_rpc_request(rqstp, transp))
++    return;
++
+   current_transp = NULL;
+ 
+   switch (rqstp->rq_proc) {

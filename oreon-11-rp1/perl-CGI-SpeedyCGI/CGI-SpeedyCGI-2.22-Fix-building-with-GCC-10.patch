@@ -1,0 +1,36 @@
+From c6b63a86e10bca5496f7877832baa5fc053f9340 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 29 Jan 2020 13:55:43 +0100
+Subject: [PATCH] Fix building with GCC 10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+GCC 10 defaults to -fno-common option resulting in a linker error like
+this:
+
+gcc -o speedy_backend speedy_backend_main.o speedy_perl.o speedy_util.o speedy_sig.o speedy_frontend.o speedy_backend.o speedy_file.o speedy_slot.o speedy_poll.o speedy_ipc.o speedy_group.o speedy_script.o speedy_opt.o speedy_optdefs.o xsinit.o  -Wl,--enable-new-dtags -Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -fstack-protector-strong -L/usr/local/lib  -L/usr/lib64/perl5/CORE -lperl -lpthread -lresolv -ldl -lm -lcrypt -lutil -lc
+/usr/bin/ld: speedy_perl.o: in function `$d':
+/builddir/build/BUILD/CGI-SpeedyCGI-2.22/speedy_backend/../src/speedy_perl.h:24: multiple definition of `my_perl'; speedy_backend_main.o:/builddir/build/BUILD/CGI-SpeedyCGI-2.22/speedy_backend/../src/speedy_perl.h:24: first defined here
+
+This commit corrects the my_perl declaration to be indeed
+a declaration and not a definition.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/speedy_perl.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/speedy_perl.h b/src/speedy_perl.h
+index 2778aa2..2a72d9d 100644
+--- a/src/speedy_perl.h
++++ b/src/speedy_perl.h
+@@ -21,4 +21,4 @@ void speedy_perl_init(void);
+ void speedy_perl_run(slotnum_t _gslotnum, slotnum_t _bslotnum);
+ int speedy_perl_fork(void);
+ 
+-PerlInterpreter  *my_perl;
++extern PerlInterpreter  *my_perl;
+-- 
+2.21.1
+

@@ -1,0 +1,54 @@
+diff -ru thttpd-2.25b.orig/thttpd.c thttpd-2.25b/thttpd.c
+--- thttpd-2.25b.orig/thttpd.c	2005-06-29 18:50:59.000000000 +0100
++++ thttpd-2.25b/thttpd.c	2016-01-16 21:55:10.772082121 +0100
+@@ -331,6 +331,7 @@
+ re_open_logfile( void )
+     {
+     FILE* logfp;
++    int retchmod;
+ 
+     if ( no_log || hs == (httpd_server*) 0 )
+ 	return;
+@@ -340,7 +341,8 @@
+ 	{
+ 	syslog( LOG_NOTICE, "re-opening logfile" );
+ 	logfp = fopen( logfile, "a" );
+-	if ( logfp == (FILE*) 0 )
++	retchmod = chmod( logfile, S_IRUSR|S_IWUSR );
++	if ( logfp == (FILE*) 0 || retchmod != 0 )
+ 	    {
+ 	    syslog( LOG_CRIT, "re-opening %.80s - %m", logfile );
+ 	    return;
+@@ -360,6 +362,7 @@
+     gid_t gid = 32767;
+     char cwd[MAXPATHLEN+1];
+     FILE* logfp;
++    int retchmod;
+     int num_ready;
+     int cnum;
+     connecttab* c;
+@@ -429,7 +432,8 @@
+ 	else
+ 	    {
+ 	    logfp = fopen( logfile, "a" );
+-	    if ( logfp == (FILE*) 0 )
++	    retchmod = chmod( logfile, S_IRUSR|S_IWUSR );
++	    if ( logfp == (FILE*) 0 || retchmod != 0 )
+ 		{
+ 		syslog( LOG_CRIT, "%.80s - %m", logfile );
+ 		perror( logfile );
+@@ -446,11 +450,11 @@
+ 		/* If we are root then we chown the log file to the user we'll
+ 		** be switching to.
+ 		*/
+-		if ( fchown( fileno( logfp ), uid, gid ) < 0 )
++		/*if ( fchown( fileno( logfp ), uid, gid ) < 0 )
+ 		    {
+ 		    syslog( LOG_WARNING, "fchown logfile - %m" );
+ 		    perror( "fchown logfile" );
+-		    }
++		    }*/
+ 		}
+ 	    }
+ 	}
+Only in thttpd-2.25b: thttpd.c.orig

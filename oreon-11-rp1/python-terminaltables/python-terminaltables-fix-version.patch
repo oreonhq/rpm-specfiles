@@ -1,0 +1,12 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index ff4b190..bf5518c 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,6 +1,6 @@
+ [tool.poetry]
+ name = "terminaltables"
+-version = "3.1.9"
++version = "3.1.10"
+ description = "Generate simple tables in terminals from a nested list of strings."
+ authors = [
+     "Robpol86 <robpol86@gmail.com>",

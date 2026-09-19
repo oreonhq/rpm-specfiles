@@ -1,0 +1,94 @@
+From 15c7867e88c5278f61896b5531ac2b544add8220 Mon Sep 17 00:00:00 2001
+From: Alex Richardson <arichardson.kde@gmail.com>
+Date: Fri, 26 Feb 2016 15:59:21 +0000
+Subject: [PATCH 8/8] Allow compilation with older polkit versions
+
+Return an invalid user from SystemBusNameSubject::user() if
+polkit_system_bus_name_get_user_sync is missing
+
+REVIEW: 126813
+---
+ CMakeLists.txt             | 3 +++
+ core/polkitqt1-subject.cpp | 6 ++++++
+ core/polkitqt1-subject.h   | 3 ++-
+ polkitqt1-config.h.cmake   | 1 +
+ 4 files changed, 12 insertions(+), 1 deletion(-)
+ create mode 100644 polkitqt1-config.h.cmake
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a60dfa2..13d9dbd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -101,6 +101,7 @@ include_directories(
+     ${CMAKE_CURRENT_SOURCE_DIR}
+     ${CMAKE_CURRENT_SOURCE_DIR}/core
+     ${CMAKE_CURRENT_SOURCE_DIR}/includes
++    ${CMAKE_CURRENT_BINARY_DIR}
+ )
+ if(NOT USE_QT5)
+     include_directories(
+@@ -113,6 +114,7 @@ set(CMAKE_REQUIRED_INCLUDES ${POLKIT_INCLUDE_DIR} ${POLKIT_AGENT_INCLUDE_DIR})
+ set(CMAKE_REQUIRED_LIBRARIES ${POLKIT_LIBRARIES} ${POLKIT_AGENT_LIBRARY})
+ check_function_exists(polkit_agent_listener_register HAVE_POLKIT_AGENT_LISTENER_REGISTER)
+ check_function_exists(polkit_authority_get_sync HAVE_POLKIT_AUTHORITY_GET_SYNC)
++check_function_exists(polkit_system_bus_name_get_user_sync HAVE_POLKIT_SYSTEM_BUS_NAME_GET_USER_SYNC)
+ 
+ if (NOT HAVE_POLKIT_AGENT_LISTENER_REGISTER OR NOT HAVE_POLKIT_AUTHORITY_GET_SYNC)
+     message(STATUS "You have an older polkit-1 version: Polkit-Qt-1 will be built in compatibility mode")
+@@ -134,6 +136,7 @@ set(POLKITQT-1_LIBRARY_VERSION "${POLKITQT-1_ABI_VERSION}.${POLKITQT-1_VERSION_M
+ set(POLKITQT-1_LIB_NAMESPACE ${POLKITQT-1_CAMEL_NAME})
+ 
+ configure_file(polkitqt1-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1-version.h)
++configure_file(polkitqt1-config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1-config.h)
+ 
+ install(FILES
+     gui/polkitqt1-gui-action.h
+diff --git a/core/polkitqt1-subject.cpp b/core/polkitqt1-subject.cpp
+index ecb4c0e..ea10828 100644
+--- a/core/polkitqt1-subject.cpp
++++ b/core/polkitqt1-subject.cpp
+@@ -20,6 +20,7 @@
+ 
+ #include "polkitqt1-subject.h"
+ #include "polkitqt1-identity.h"
++#include "polkitqt1-config.h"
+ 
+ #include <QtCore/QDebug>
+ #include <polkit/polkit.h>
+@@ -183,7 +184,12 @@ void SystemBusNameSubject::setName(const QString &name)
+ 
+ UnixUserIdentity SystemBusNameSubject::user()
+ {
++#if HAVE_POLKIT_SYSTEM_BUS_NAME_GET_USER_SYNC
+     return UnixUserIdentity(polkit_system_bus_name_get_user_sync((PolkitSystemBusName *) subject(), NULL, NULL));
++#else
++    qWarning("Polkit is too old, returning invalid user from SystemBusNameSubject::user()!");
++    return UnixUserIdentity();
++#endif
+ }
+ 
+ // ----- SystemSession
+diff --git a/core/polkitqt1-subject.h b/core/polkitqt1-subject.h
+index 03028f6..01323a2 100644
+--- a/core/polkitqt1-subject.h
++++ b/core/polkitqt1-subject.h
+@@ -214,7 +214,8 @@ public:
+     /**
+      * Returns the UnixUserIdentity for this subject.
+      *
+-     * The ownership of the returned pointer is passed to the caller.
++     * \note This can be an invalid UnixUserIdentity so be sure to check before using it
++     *
+      * \since 0.113
+      **/
+     UnixUserIdentity user();
+diff --git a/polkitqt1-config.h.cmake b/polkitqt1-config.h.cmake
+new file mode 100644
+index 0000000..fed40a9
+--- /dev/null
++++ b/polkitqt1-config.h.cmake
+@@ -0,0 +1 @@
++#cmakedefine01 HAVE_POLKIT_SYSTEM_BUS_NAME_GET_USER_SYNC
+-- 
+2.5.0
+

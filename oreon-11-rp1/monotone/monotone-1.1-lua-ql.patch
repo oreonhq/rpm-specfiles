@@ -1,0 +1,15 @@
+The LUA_QL macro was removed in lua 5.4.0.  Make the same transformation
+as was made in the lua code itself.
+
+diff -up monotone-1.1/src/lua_hooks.cc.orig monotone-1.1/src/lua_hooks.cc
+--- monotone-1.1/src/lua_hooks.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/lua_hooks.cc	2020-06-30 10:22:58.480017092 -0600
+@@ -90,7 +90,7 @@ extern "C"
+         s = lua_tostring(LS, -1);
+         if (s == NULL)
+           return luaL_error(
+-            LS, LUA_QL("tostring") " must return a string to ", LUA_QL("print")
++            LS, "'tostring' must return a string to 'print'"
+           );
+ 
+         if (i > 1)

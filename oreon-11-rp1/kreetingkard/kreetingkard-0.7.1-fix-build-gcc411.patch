@@ -1,0 +1,11 @@
+--- kreetingkard-0.7.1/src/kktemplate/kktthumbnailview.h~	2005-08-11 15:17:27.000000000 +0200
++++ kreetingkard-0.7.1/src/kktemplate/kktthumbnailview.h	2006-07-02 20:48:42.000000000 +0200
+@@ -28,7 +28,7 @@
+ 	{
+ 		Q_OBJECT
+ 	public:
+-		KKTThumbnailView::KKTThumbnailView( QWidget* parent = 0, const char* name = 0 );
++		KKTThumbnailView( QWidget* parent = 0, const char* name = 0 );
+ 		virtual ~KKTThumbnailView();
+ 
+ 	public slots:

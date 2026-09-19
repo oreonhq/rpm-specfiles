@@ -1,0 +1,12 @@
+diff -up guitone-1.0rc5/src/util/DebugLog.cpp.orig guitone-1.0rc5/src/util/DebugLog.cpp
+--- guitone-1.0rc5/src/util/DebugLog.cpp.orig	2017-08-08 12:07:33.174662139 +0200
++++ guitone-1.0rc5/src/util/DebugLog.cpp	2017-08-08 12:07:53.933457770 +0200
+@@ -156,7 +156,7 @@ void DebugLog::doLog(Type t, QString msg
+     {
+         foreach (const QString & line, intro())
+         {
+-            fprintf(stderr, format(Info, line).constData());
++            fprintf(stderr, "%s", format(Info, line).constData());
+         }
+         loggedToConsole = true;
+     }

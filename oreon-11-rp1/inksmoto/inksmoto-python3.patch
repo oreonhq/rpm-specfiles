@@ -1,0 +1,2089 @@
+diff -U3 -r extensions.orig/addLayerInfosGtk.py extensions/addLayerInfosGtk.py
+--- extensions.orig/addLayerInfosGtk.py	2009-12-07 11:15:48.000000000 -0600
++++ extensions/addLayerInfosGtk.py	2019-08-27 10:30:48.023561851 -0500
+@@ -24,7 +24,7 @@
+ from inksmoto import log
+ from inksmoto.inkex import addNS, NSS
+ from inksmoto import xmGuiGtk
+-import gtk
++from gi.repository import Gtk
+ 
+ def isBoxChecked(box):
+     if box.get() == 1:
+@@ -76,14 +76,14 @@
+             widgetsInfos[prefix+'y'] = WidgetInfos('layer', prefix+'y', 1)
+ 
+             # create the widgets and add them to the table
+-            layersTable.attach(gtk.Label(layerId+'(%d)' % layerIndex),
++            layersTable.attach(Gtk.Label(label=layerId+'(%d)' % layerIndex),
+                                0, 1, row, row+1)
+                                 
+-            layersTable.attach(gtk.Label(layerLabel),
++            layersTable.attach(Gtk.Label(label=layerLabel),
+                                1, 2, row, row+1)
+ 
+             def addCheck(prefix, key):
+-                check = gtk.CheckButton()
++                check = Gtk.CheckButton()
+                 check.set_name(prefix+key)
+                 isUsed = (getValue(self.label, 'layer', prefix+key) == 'true')
+                 check.set_active(isUsed)
+@@ -97,7 +97,7 @@
+             layersTable.attach(check, 3, 4, row, row+1)
+ 
+             def addScale(prefix, key):
+-                scale = gtk.HScale()
++                scale = Gtk.HScale()
+                 scale.set_name(prefix+key)
+                 scale.set_increments(0.01, 0.01)
+                 scale.set_range(0, 2)
+diff -U3 -r extensions.orig/inksmoto/aabb.py extensions/inksmoto/aabb.py
+--- extensions.orig/inksmoto/aabb.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/aabb.py	2019-08-27 10:30:46.623563210 -0500
+@@ -19,9 +19,9 @@
+ 
+ """ A simple aabb. Can apply a transform on it """
+ 
+-from transform import Transform
+-from bezier import Bezier
+-from parametricArc import ParametricArc
++from .transform import Transform
++from .bezier import Bezier
++from .parametricArc import ParametricArc
+ 
+ class AABB:
+     """ Axis aligned bounding box """
+@@ -71,9 +71,10 @@
+         self.addPoint(x1, y1)
+         self.addPoint(x2, y2)
+ 
+-    def addBezier(self, (lastX, lastY), params):
++    def addBezier(self, xxx_todo_changeme, params):
+         # to acces values with simplepath format
+-        (Cx1, Cy1, Cx2, Cy2, Cx, Cy) = range(-6, 0)
++        (lastX, lastY) = xxx_todo_changeme
++        (Cx1, Cy1, Cx2, Cy2, Cx, Cy) = list(range(-6, 0))
+ 
+         x1, y1 = params[Cx1], params[Cy1]
+         x2, y2 = params[Cx2], params[Cy2]
+@@ -81,9 +82,10 @@
+         bezVer = Bezier(((lastX, lastY), (x1, y1), (x2, y2), (x, y))).splitCurve()
+         [self.addPoint(x, y) for x, y in bezVer]
+ 
+-    def addArc(self, (lastX, lastY), params):
++    def addArc(self, xxx_todo_changeme1, params):
+         # to acces values with simplepath format
+-        (Arx, Ary, Aaxis, Aarc, Asweep, Ax, Ay) = range(-7, 0)
++        (lastX, lastY) = xxx_todo_changeme1
++        (Arx, Ary, Aaxis, Aarc, Asweep, Ax, Ay) = list(range(-7, 0))
+ 
+         x,  y  = params[Ax],  params[Ay]
+         rx, ry = params[Arx], params[Ary]
+diff -U3 -r extensions.orig/inksmoto/addEntity.py extensions/inksmoto/addEntity.py
+--- extensions.orig/inksmoto/addEntity.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/addEntity.py	2019-08-27 10:30:47.075562771 -0500
+@@ -17,7 +17,7 @@
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ """
+ 
+-from xmotoExtension import XmExt
++from .xmotoExtension import XmExt
+ 
+ class AddEntity(XmExt):
+     def __init__(self, typeid):
+diff -U3 -r extensions.orig/inksmoto/addJoint.py extensions/inksmoto/addJoint.py
+--- extensions.orig/inksmoto/addJoint.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/addJoint.py	2019-08-27 10:30:46.366563459 -0500
+@@ -17,11 +17,11 @@
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ """
+ 
+-from xmotoExtension import XmExt
+-from inkex import addNS
+-from svgnode import createNewNode, getJointPath, XmNode
+-from xmotoTools import createIfAbsent
+-import log
++from .xmotoExtension import XmExt
++from .inkex import addNS
++from .svgnode import createNewNode, getJointPath, XmNode
++from .xmotoTools import createIfAbsent
++from . import log
+ 
+ class AddJoint(XmExt):
+     def __init__(self, jointType):
+@@ -36,7 +36,7 @@
+             return False
+ 
+         # check that the objects are paths or rectangles
+-        for node in self.selected.values():
++        for node in list(self.selected.values()):
+             if node.tag not in [addNS('path', 'svg'), addNS('rect', 'svg')]:
+                 msg = "You need to select path and rectangle only."
+                 log.outMsg(msg)
+diff -U3 -r extensions.orig/inksmoto/availableElements.py extensions/inksmoto/availableElements.py
+--- extensions.orig/inksmoto/availableElements.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/availableElements.py	2019-08-27 10:30:46.856562984 -0500
+@@ -18,20 +18,18 @@
+ """
+ 
+ import log, logging
+-from singleton import Singleton
++from .singleton import Singleton
+ import sys
+-from xmotoTools import loadFile
+-
+-class AvailableElements:
+-    __metaclass__ = Singleton
++from .xmotoTools import loadFile
+ 
++class AvailableElements(metaclass=Singleton):
+     def __init__(self):
+         self.load()
+ 
+     def load(self):
+         self.vars = {}
+         vars = loadFile('listAvailableElements.py')
+-        for var, value in vars.iteritems():
++        for var, value in vars.items():
+             self.vars[var.upper()] = value
+ 
+     def __getitem__(self, var):
+diff -U3 -r extensions.orig/inksmoto/bezier.py extensions/inksmoto/bezier.py
+--- extensions.orig/inksmoto/bezier.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/bezier.py	2019-08-27 10:30:47.408562448 -0500
+@@ -18,7 +18,7 @@
+ """
+ 
+ from math import sqrt, ceil
+-from bezmisc import bezierlength
++from .bezmisc import bezierlength
+ 
+ class Point:
+     def __init__(self, point):
+@@ -60,6 +60,6 @@
+         length = self.realLength()
+         if length > maxSegmentLength:
+             splits = int(ceil(length / maxSegmentLength))
+-            return [self.pointAt(step * 1.0/splits) for step in xrange(1, splits+1)]
++            return [self.pointAt(step * 1.0/splits) for step in range(1, splits+1)]
+         else:
+             return [(self.point2.x, self.point2.y)]
+diff -U3 -r extensions.orig/inksmoto/bezmisc.py extensions/inksmoto/bezmisc.py
+--- extensions.orig/inksmoto/bezmisc.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/bezmisc.py	2019-08-27 10:30:46.712563124 -0500
+@@ -34,8 +34,9 @@
+         return 1.0*(-d/c),
+     return ()
+ 
+-def bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))):
++def bezierparameterize(xxx_todo_changeme):
+     #parametric bezier
++    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme
+     x0=bx0
+     y0=by0
+     cx=3*(bx1-x0)
+@@ -48,8 +49,10 @@
+     return ax,ay,bx,by,cx,cy,x0,y0
+     #ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
+ 
+-def linebezierintersect(((lx1,ly1),(lx2,ly2)),((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))):
++def linebezierintersect(xxx_todo_changeme1, xxx_todo_changeme2):
+     #parametric line
++    ((lx1,ly1),(lx2,ly2)) = xxx_todo_changeme1
++    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme2
+     dd=lx1
+     cc=lx2-lx1
+     bb=ly1
+@@ -78,19 +81,23 @@
+             retval.append(i)
+     return retval
+ 
+-def bezierpointatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),t):
++def bezierpointatt(xxx_todo_changeme3,t):
++    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme3
+     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
+     x=ax*(t**3)+bx*(t**2)+cx*t+x0
+     y=ay*(t**3)+by*(t**2)+cy*t+y0
+     return x,y
+ 
+-def bezierslopeatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),t):
++def bezierslopeatt(xxx_todo_changeme4,t):
++    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme4
+     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
+     dx=3*ax*(t**2)+2*bx*t+cx
+     dy=3*ay*(t**2)+2*by*t+cy
+     return dx,dy
+ 
+-def beziertatslope(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),(dy,dx)):
++def beziertatslope(xxx_todo_changeme5, xxx_todo_changeme6):
++    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme5
++    (dy,dx) = xxx_todo_changeme6
+     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
+     #quadratic coefficents of slope formula
+     if dx:
+@@ -115,9 +122,12 @@
+             retval.append(i)
+     return retval
+ 
+-def tpoint((x1,y1),(x2,y2),t):
++def tpoint(xxx_todo_changeme7, xxx_todo_changeme8,t):
++    (x1,y1) = xxx_todo_changeme7
++    (x2,y2) = xxx_todo_changeme8
+     return x1+t*(x2-x1),y1+t*(y2-y1)
+-def beziersplitatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),t):
++def beziersplitatt(xxx_todo_changeme9,t):
++    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme9
+     m1=tpoint((bx0,by0),(bx1,by1),t)
+     m2=tpoint((bx1,by1),(bx2,by2),t)
+     m3=tpoint((bx2,by2),(bx3,by3),t)
+@@ -146,7 +156,9 @@
+ mat-report no. 1992-10, Mathematical Institute, The Technical
+ University of Denmark. 
+ '''
+-def pointdistance((x1,y1),(x2,y2)):
++def pointdistance(xxx_todo_changeme10, xxx_todo_changeme11):
++    (x1,y1) = xxx_todo_changeme10
++    (x2,y2) = xxx_todo_changeme11
+     return math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2))
+ def Gravesen_addifclose(b, len, error = 0.001):
+     box = 0
+@@ -187,19 +199,21 @@
+         asum += bsum
+         bsum = 0.0
+         est0 = est1
+-        for i in xrange(1, n, 2):
++        for i in range(1, n, 2):
+             bsum += f(a + (i * interval))
+             est1 = multiplier * (endsum + (2.0 * asum) + (4.0 * bsum))
+     #print multiplier, endsum, interval, asum, bsum, est1, est0
+     return est1
+ 
+-def bezierlengthSimpson(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)), tolerance = 0.001):
++def bezierlengthSimpson(xxx_todo_changeme12, tolerance = 0.001):
++    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme12
+     global balfax,balfbx,balfcx,balfay,balfby,balfcy
+     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
+     balfax,balfbx,balfcx,balfay,balfby,balfcy = 3*ax,2*bx,cx,3*ay,2*by,cy
+     return Simpson(balf, 0.0, 1.0, 4096, tolerance)
+ 
+-def beziertatlength(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)), l = 0.5, tolerance = 0.001):
++def beziertatlength(xxx_todo_changeme13, l = 0.5, tolerance = 0.001):
++    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme13
+     global balfax,balfbx,balfcx,balfay,balfby,balfcy
+     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
+     balfax,balfbx,balfcx,balfay,balfby,balfcy = 3*ax,2*bx,cx,3*ay,2*by,cy
+@@ -247,4 +261,4 @@
+         print s, st
+     '''
+     for curve in curves:
+-        print beziertatlength(curve,0.5)
++        print(beziertatlength(curve,0.5))
+diff -U3 -r extensions.orig/inksmoto/block_element.py extensions/inksmoto/block_element.py
+--- extensions.orig/inksmoto/block_element.py	2009-09-30 03:42:57.000000000 -0500
++++ extensions/inksmoto/block_element.py	2019-08-27 10:30:46.883562958 -0500
+@@ -18,13 +18,13 @@
+ """
+ 
+ import log, logging
+-from factory  import Factory
+-from vector   import Vector
+-from bezier   import Bezier
+-from elements import Element
+-from parametricArc  import ParametricArc
+-from xmotoTools import getValue, createIfAbsent, delWoExcept, getIfPresent
+-from xmotoTools import getBoolValue
++from .factory  import Factory
++from .vector   import Vector
++from .bezier   import Bezier
++from .elements import Element
++from .parametricArc  import ParametricArc
++from .xmotoTools import getValue, createIfAbsent, delWoExcept, getIfPresent
++from .xmotoTools import getBoolValue
+ from math import fabs
+ 
+ def smooth2limit(smooth):
+@@ -175,8 +175,8 @@
+                 and vertex[2][0] == 'A'):
+ 
+                 # to acces values with simplepath format
+-                (Arx, Ary, Aaxis, Aarc, Asweep, Ax, Ay) = range(-7, 0)
+-                (Mx, My) = range(-2, 0)
++                (Arx, Ary, Aaxis, Aarc, Asweep, Ax, Ay) = list(range(-7, 0))
++                (Mx, My) = list(range(-2, 0))
+ 
+                 values = vertex[0][1]
+                 (x, y) = values[Mx], values[My]
+@@ -217,9 +217,9 @@
+         limit = smooth2limit(self.smooth) * 10
+ 
+         # to acces values with simplepath format
+-        (Cx1, Cy1, Cx2, Cy2, Cx, Cy) = range(-6, 0)
+-        (Arx, Ary, Aaxis, Aarc, Asweep, Ax, Ay) = range(-7, 0)
+-        (x, y) = range(-2, 0)
++        (Cx1, Cy1, Cx2, Cy2, Cx, Cy) = list(range(-6, 0))
++        (Arx, Ary, Aaxis, Aarc, Asweep, Ax, Ay) = list(range(-7, 0))
++        (x, y) = list(range(-2, 0))
+ 
+         newBlocks = []
+         for vertex in self.blocks:
+@@ -337,7 +337,7 @@
+         firstVertice = vertex[0]
+         vertex.append(firstVertice)
+ 
+-        for i in xrange(len(vertex)-1):
++        for i in range(len(vertex)-1):
+             x1, y1 = vertex[i]
+             x2, y2 = vertex[i+1]
+ 
+@@ -367,7 +367,7 @@
+ 
+         limit = smooth2limit(self.smooth)
+         angleLimit = 0.0314
+-        for i in xrange(1, len(vertex)-1):
++        for i in range(1, len(vertex)-1):
+             x2, y2 = vertex[i]
+             x3, y3 = vertex[i+1]
+             angle = angleBetweenThreePoints((lastX, lastY),
+diff -U3 -r extensions.orig/inksmoto/confGenerator.py extensions/inksmoto/confGenerator.py
+--- extensions.orig/inksmoto/confGenerator.py	2010-05-17 12:01:40.000000000 -0500
++++ extensions/inksmoto/confGenerator.py	2019-08-27 10:30:47.147562701 -0500
+@@ -19,12 +19,10 @@
+ 
+ from os.path import join
+ from os import makedirs
+-from xmotoTools import getHomeDir, loadFile
+-from singleton import Singleton
+-
+-class Conf:
+-    __metaclass__ = Singleton
++from .xmotoTools import getHomeDir, loadFile
++from .singleton import Singleton
+ 
++class Conf(metaclass=Singleton):
+     def __init__(self):
+         self.read()
+ 
+@@ -45,7 +43,7 @@
+             makedirs(userDir)
+         confFile = join(userDir, 'xmConf.py')
+         f = open(confFile, 'wb')
+-        for key, value in self.vars.iteritems():
++        for key, value in self.vars.items():
+             if type(value) == str:
+                 value = "'%s'" % value
+             f.write('%s = %s\n' % (key, value))
+diff -U3 -r extensions.orig/inksmoto/convertAvailableElements.py extensions/inksmoto/convertAvailableElements.py
+--- extensions.orig/inksmoto/convertAvailableElements.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/convertAvailableElements.py	2019-08-27 10:30:46.687563148 -0500
+@@ -18,13 +18,13 @@
+ """
+ 
+ import log, logging
+-from parsers import XMLParser
++from .parsers import XMLParser
+ 
+ def handleBitmap(attrs):
+     out = ""
+ 
+     out += "\n'%s': {" % attrs['id']
+-    for name, value in attrs.iteritems():
++    for name, value in attrs.items():
+         if name == 'id':
+             continue
+         out += "'%s': '%s', " % (name, value)
+@@ -80,7 +80,7 @@
+                     out += handleVersion(attrs)
+                 else:
+                     out += "'%s', " % attrs['id']
+-            except Exception, e:
++            except Exception as e:
+                 logging.info("Exception while getting groups content.\n%s" % e)
+ 
+         # remove last ','
+diff -U3 -r extensions.orig/inksmoto/defaultValues.py extensions/inksmoto/defaultValues.py
+--- extensions.orig/inksmoto/defaultValues.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/defaultValues.py	2019-08-27 10:30:46.736563100 -0500
+@@ -18,11 +18,11 @@
+ """
+ 
+ import log, logging
+-from parsers import LabelParser
+-from xmotoTools import getValue, setOrDelBool, setOrDelBitmap
+-from xmotoTools import delWoExcept, updateInfos, setOrDelColor
+-from xmotoTools import setOrDelValue
+-from inkex import addNS
++from .parsers import LabelParser
++from .xmotoTools import getValue, setOrDelBool, setOrDelBitmap
++from .xmotoTools import delWoExcept, updateInfos, setOrDelColor
++from .xmotoTools import setOrDelValue
++from .inkex import addNS
+ 
+ class DefaultValues:
+     def __init__(self):
+@@ -33,7 +33,7 @@
+     def addElementLabel(self, label):
+         """ load default values only for new elements with no xmoto_label
+         """
+-        if len(label.keys()) != 0:
++        if len(list(label.keys())) != 0:
+             self.useDefault = False
+ 
+     def load(self, svg):
+@@ -46,7 +46,7 @@
+     def unload(self, label):
+         updateInfos(self.defaultValues, label)
+ 
+-        if len(self.defaultValues.keys()) == 0:
++        if len(list(self.defaultValues.keys())) == 0:
+             return
+ 
+         defaultLabel = LabelParser().unparse(self.defaultValues)
+diff -U3 -r extensions.orig/inksmoto/elements.py extensions/inksmoto/elements.py
+--- extensions.orig/inksmoto/elements.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/elements.py	2019-08-27 10:30:46.832563007 -0500
+@@ -18,10 +18,10 @@
+ """
+ 
+ import log, logging
+-from factory import Factory
+-from aabb import AABB
+-from xmotoTools import getValue
+-from matrix import isIdentity
++from .factory import Factory
++from .aabb import AABB
++from .xmotoTools import getValue
++from .matrix import isIdentity
+ 
+ class Element:
+     def __init__(self, **kwargs):
+@@ -80,17 +80,17 @@
+         self.addToAABB()
+ 
+     def addElementParams(self):
+-        for key, value in self.infos.iteritems():
++        for key, value in self.infos.items():
+             if type(value) == dict:
+                 if key.startswith('_'):
+                     continue
+                 elif key == 'param':
+-                    for key, value in value.iteritems():
++                    for key, value in value.items():
+                         line = "\t\t<param name=\"%s\" value=\"%s\"/>"
+                         self.content.append(line % (key, value))
+                 else:
+                     xmlLine = "\t\t<%s" % key
+-                    for key, value in value.iteritems():
++                    for key, value in value.items():
+                         if key.startswith('_'):
+                             continue
+                         xmlLine += " %s=\"%s\"" % (key, value)
+diff -U3 -r extensions.orig/inksmoto/entity_element.py extensions/inksmoto/entity_element.py
+--- extensions.orig/inksmoto/entity_element.py	2010-05-13 14:08:19.000000000 -0500
++++ extensions/inksmoto/entity_element.py	2019-08-27 10:30:46.908562933 -0500
+@@ -17,11 +17,11 @@
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ """
+ 
+-from factory import Factory
+-from elements import Element
+-from xmotoTools import createIfAbsent, getValue
+-from availableElements import AvailableElements
+-from confGenerator import Conf
++from .factory import Factory
++from .elements import Element
++from .xmotoTools import createIfAbsent, getValue
++from .availableElements import AvailableElements
++from .confGenerator import Conf
+ ENTITY_RADIUS = Conf()['ENTITY_RADIUS']
+ 
+ class Entity(Element):
+diff -U3 -r extensions.orig/inksmoto/factory.py extensions/inksmoto/factory.py
+--- extensions.orig/inksmoto/factory.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/factory.py	2019-08-27 10:30:47.247562604 -0500
+@@ -18,11 +18,9 @@
+ """
+ 
+ import log, logging
+-from singleton import Singleton
+-
+-class Factory:
+-    __metaclass__ = Singleton
++from .singleton import Singleton
+ 
++class Factory(metaclass=Singleton):
+     def __init__(self):
+         self.objects = {}
+ 
+diff -U3 -r extensions.orig/inksmoto/inkex.py extensions/inksmoto/inkex.py
+--- extensions.orig/inksmoto/inkex.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/inkex.py	2019-08-27 10:30:46.461563367 -0500
+@@ -23,21 +23,21 @@
+ 
+ #a dictionary of all of the xmlns prefixes in a standard inkscape doc
+ NSS = {
+-u'sodipodi' :u'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd',
+-u'cc'       :u'http://web.resource.org/cc/',
+-u'svg'      :u'http://www.w3.org/2000/svg',
+-u'dc'       :u'http://purl.org/dc/elements/1.1/',
+-u'rdf'      :u'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+-u'inkscape' :u'http://www.inkscape.org/namespaces/inkscape',
+-u'xlink'    :u'http://www.w3.org/1999/xlink',
+-u'xml'      :u'http://www.w3.org/XML/1998/namespace'
++'sodipodi' :'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd',
++'cc'       :'http://web.resource.org/cc/',
++'svg'      :'http://www.w3.org/2000/svg',
++'dc'       :'http://purl.org/dc/elements/1.1/',
++'rdf'      :'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
++'inkscape' :'http://www.inkscape.org/namespaces/inkscape',
++'xlink'    :'http://www.w3.org/1999/xlink',
++'xml'      :'http://www.w3.org/XML/1998/namespace'
+ }
+ 
+ #a dictionary of unit to user unit conversion factors
+ uuconv = {'in':90.0, 'pt':1.25, 'px':1, 'mm':3.5433070866, 'cm':35.433070866, 'pc':15.0}
+ def unittouu(string):
+     '''Returns userunits given a string representation of units in another system'''
+-    unit = re.compile('(%s)$' % '|'.join(uuconv.keys()))
++    unit = re.compile('(%s)$' % '|'.join(list(uuconv.keys())))
+     param = re.compile(r'(([-+]?[0-9]+(\.[0-9]*)?|[-+]?\.[0-9]+)([eE][-+]?[0-9]+)?)')
+ 
+     p = param.match(string)
+@@ -72,7 +72,7 @@
+ 
+ def addNS(tag, ns=None):
+     val = tag
+-    if ns!=None and len(ns)>0 and NSS.has_key(ns) and len(tag)>0 and tag[0]!='{':
++    if ns!=None and len(ns)>0 and ns in NSS and len(tag)>0 and tag[0]!='{':
+         val = "{%s}%s" % (NSS[ns], tag)
+     return val
+ 
+diff -U3 -r extensions.orig/inksmoto/inksmoto_unittests/xmotoTestCase.py extensions/inksmoto/inksmoto_unittests/xmotoTestCase.py
+--- extensions.orig/inksmoto/inksmoto_unittests/xmotoTestCase.py	2009-09-22 11:38:32.000000000 -0500
++++ extensions/inksmoto/inksmoto_unittests/xmotoTestCase.py	2019-08-27 10:30:47.117562730 -0500
+@@ -26,14 +26,14 @@
+ 
+ # duplicate from inkex
+ NSS = {
+-u'sodipodi' :u'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd',
+-u'cc'       :u'http://web.resource.org/cc/',
+-u'svg'      :u'http://www.w3.org/2000/svg',
+-u'dc'       :u'http://purl.org/dc/elements/1.1/',
+-u'rdf'      :u'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+-u'inkscape' :u'http://www.inkscape.org/namespaces/inkscape',
+-u'xlink'    :u'http://www.w3.org/1999/xlink',
+-u'xml'      :u'http://www.w3.org/XML/1998/namespace'
++'sodipodi' :'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd',
++'cc'       :'http://web.resource.org/cc/',
++'svg'      :'http://www.w3.org/2000/svg',
++'dc'       :'http://purl.org/dc/elements/1.1/',
++'rdf'      :'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
++'inkscape' :'http://www.inkscape.org/namespaces/inkscape',
++'xlink'    :'http://www.w3.org/1999/xlink',
++'xml'      :'http://www.w3.org/XML/1998/namespace'
+ }
+ 
+ # duplicate from svgnode so that we don't have to import svgnode and
+@@ -97,8 +97,8 @@
+         return True
+ 
+     if node1.tag != node2.tag:
+-        print "tag: \ncorrect[%s]\n != \ntotest[%s]\n" % (str(node1.tag),
+-                                                          str(node2.tag))
++        print("tag: \ncorrect[%s]\n != \ntotest[%s]\n" % (str(node1.tag),
++                                                          str(node2.tag)))
+         return False
+ 
+     # filter out inkscape and sodipodi items
+@@ -109,8 +109,8 @@
+                   for item in sorted(node2.items())
+                   if checkNamespace(node2, item[0]) == False]
+     if node1Items != node2Items:
+-        print "items: \ncorrect[%s]\n != \ntotest[%s]\n" % (str(node1Items),
+-                                                            str(node2Items))
++        print("items: \ncorrect[%s]\n != \ntotest[%s]\n" % (str(node1Items),
++                                                            str(node2Items)))
+         return False
+ 
+ #    if node1.text != node2.text:
+@@ -171,7 +171,7 @@
+         toTestSvg = e.document
+         correctSvg = getSvg(join('out', test['out']))
+ 
+-        self.assert_(areSvgsEqual(correctSvg, toTestSvg))
++        self.assertTrue(areSvgsEqual(correctSvg, toTestSvg))
+ 
+ 
+ def getAllTestSuites():
+@@ -206,19 +206,19 @@
+                 try:
+                     code = 'allSuites.append(' + module + '.getTestSuite()' + ')'
+                     exec(code)
+-                except Exception, e:
+-                    print "ERROR::cant load tests from module '%s'\n\
+-  error=%s" % (module, e)
++                except Exception as e:
++                    print("ERROR::cant load tests from module '%s'\n\
++  error=%s" % (module, e))
+                 else:
+-                    print "tests from module '%s' loaded" % module
++                    print("tests from module '%s' loaded" % module)
+ 
+                 sys.path = sys.path[1:]
+                 os.chdir(oldDir)
+ 
+-            except Exception, e:
+-                print "ERROR::cant import module '%s'\n\
++            except Exception as e:
++                print("ERROR::cant import module '%s'\n\
+   error=%s\n\
+-  cwd=%s" % (module, e, os.getcwd())
++  cwd=%s" % (module, e, os.getcwd()))
+ 
+     return unittest.TestSuite(tuple(allSuites))
+ 
+diff -U3 -r extensions.orig/inksmoto/layer.py extensions/inksmoto/layer.py
+--- extensions.orig/inksmoto/layer.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/layer.py	2019-08-27 10:30:46.328563496 -0500
+@@ -18,11 +18,11 @@
+ """
+ 
+ import log, logging
+-from transform import Transform
+-from matrix import Matrix
+-from path import Path
+-from svgnode import rectAttrsToPathAttrs
+-from inkex import addNS
++from .transform import Transform
++from .matrix import Matrix
++from .path import Path
++from .svgnode import rectAttrsToPathAttrs
++from .inkex import addNS
+ 
+ class Layer:
+     def __init__(self, attrs, matrix):
+diff -U3 -r extensions.orig/inksmoto/level.py extensions/inksmoto/level.py
+--- extensions.orig/inksmoto/level.py	2009-11-12 08:32:34.000000000 -0600
++++ extensions/inksmoto/level.py	2019-08-27 10:30:47.470562388 -0500
+@@ -19,12 +19,12 @@
+ 
+ import log, logging
+ from datetime import date
+-from version  import Version
+-from xmotoTools import NOTSET_BITMAP, getValue, delWoExcept
+-from xmotoTools import NOTSET, createIfAbsent
+-import block_element, zone_element, entity_element
+-from confGenerator import Conf
+-from svgDoc import SvgDoc
++from .version  import Version
++from .xmotoTools import NOTSET_BITMAP, getValue, delWoExcept
++from .xmotoTools import NOTSET, createIfAbsent
++from . import block_element, zone_element, entity_element
++from .confGenerator import Conf
++from .svgDoc import SvgDoc
+ from os.path import isdir, exists
+ 
+ class Level:
+@@ -195,7 +195,7 @@
+     def printContentToStdout(self):
+         """ print the lvl on stdout so inkscape gets it """
+         for line in self.content:
+-            print line.encode("utf-8")
++            print(line.encode("utf-8"))
+ 
+     def writeLevelScript(self, scriptName):
+         if isdir(scriptName) or not exists(scriptName):
+@@ -271,7 +271,7 @@
+                 tex = ''
+             delWoExcept(self.options['sky'], 'tex')
+ 
+-            for skyParam, value in self.options['sky'].iteritems():
++            for skyParam, value in self.options['sky'].items():
+                 if not skyParam.startswith('_') and value != '':
+                     sky += ' %s="%s"' % (skyParam, value)
+ 
+@@ -300,7 +300,7 @@
+             first = True
+ 
+             line = "\t\t<sprite_replacement old_name=\"%s\" new_name=\"%s\"/>"
+-            for key, value in self.options['remplacement'].iteritems():
++            for key, value in self.options['remplacement'].items():
+                 if (value not in NOTSET
+                     and key.find('Scale') == -1
+                     and key != value):
+diff -U3 -r extensions.orig/inksmoto/log.py extensions/inksmoto/log.py
+--- extensions.orig/inksmoto/log.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/log.py	2019-08-27 10:30:47.277562575 -0500
+@@ -27,7 +27,7 @@
+     logging.basicConfig(filename = LOGFILE,
+                         format   = '%(asctime)s %(levelname)s %(message)s',
+                         level    = logging.INFO)
+-except Exception, e:
++except Exception as e:
+     pass
+ 
+ def eraseLogFile():
+diff -U3 -r extensions.orig/inksmoto/parametricArc.py extensions/inksmoto/parametricArc.py
+--- extensions.orig/inksmoto/parametricArc.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/parametricArc.py	2019-08-27 10:30:46.593563239 -0500
+@@ -17,12 +17,15 @@
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ """
+ 
+-from vector import Vector
++from .vector import Vector
+ import math
+ 
+ class ParametricArc:
+-    def __init__(self, (x1, y1), (x2, y2), (rx, ry), x_rot, fA, fS):
++    def __init__(self, xxx_todo_changeme, xxx_todo_changeme1, xxx_todo_changeme2, x_rot, fA, fS):
+         # http://www.w3.org/TR/SVG/implnote.html#ArcImplementationNotes
++        (x1, y1) = xxx_todo_changeme
++        (x2, y2) = xxx_todo_changeme1
++        (rx, ry) = xxx_todo_changeme2
+         if rx == 0.0 or ry == 0.0:
+             self.ok = False
+             return
+diff -U3 -r extensions.orig/inksmoto/parsers.py extensions/inksmoto/parsers.py
+--- extensions.orig/inksmoto/parsers.py	2010-05-17 13:20:38.000000000 -0500
++++ extensions/inksmoto/parsers.py	2019-08-27 10:30:47.043562802 -0500
+@@ -18,20 +18,18 @@
+ """
+ 
+ import log, logging
+-from singleton import Singleton
++from .singleton import Singleton
+ from lxml import etree
+-from layer import Layer
+-from factory import Factory
+-from unit import UnitsConvertor
+-from inkex import addNS, NSS
+-from xmotoTools import createIfAbsent
+-from level import Level
+-from svgnode import convertToXmNode, XmNode
+-from simplepath import parsePath
+-
+-class TransformParser:
+-    __metaclass__ = Singleton
++from .layer import Layer
++from .factory import Factory
++from .unit import UnitsConvertor
++from .inkex import addNS, NSS
++from .xmotoTools import createIfAbsent
++from .level import Level
++from .svgnode import convertToXmNode, XmNode
++from .simplepath import parsePath
+ 
++class TransformParser(metaclass=Singleton):
+     def lexTransform(self, transform):
+         import re
+ 
+@@ -60,7 +58,7 @@
+                 yield ('param', transform[offset:m.end()])
+                 offset = m.end()
+                 continue
+-            raise Exception, 'Invalid transform data!'
++            raise Exception('Invalid transform data!')
+ 
+     def parse(self, inData):
+         """ input: 'translate(234.43,54545.65) skewX(43.43) ...'
+@@ -74,7 +72,7 @@
+         self.curParams = []
+         while True:
+             try:
+-                (type, value) = self.lexer.next()
++                (type, value) = next(self.lexer)
+                 if type == 'cmd':
+                     if self.curCmd is None:
+                         self.curCmd = value
+@@ -104,7 +102,7 @@
+             result += str(inData.pop(0)) + '('
+             nbParam   = inData.pop(0)
+             # there's at least one parameter
+-            for i in xrange(nbParam-1):
++            for i in range(nbParam-1):
+                 result += str(inData.pop(0)) + ','
+             result += str(inData.pop(0))
+              
+@@ -115,9 +113,7 @@
+ 
+         return result
+ 
+-class LabelParser:
+-    __metaclass__ = Singleton
+-
++class LabelParser(metaclass=Singleton):
+     def parse(self, label):
+         """ label must be with the form:
+         type5=val5|namespace1:type1=val1|namespace2:type2=val2|namespace2:type3|namespace3:type4=val4
+@@ -145,11 +141,11 @@
+ 
+     def unparse(self, dic):
+         result = []
+-        for (name, value) in dic.iteritems():
++        for (name, value) in dic.items():
+             if type(value) == dict:
+                 namespace    = name
+                 namespaceDic = value
+-                for (name, value) in namespaceDic.iteritems():
++                for (name, value) in namespaceDic.items():
+                     result.append("%s:%s=%s" % (namespace, name, value))
+             else:
+                 result.append("%s=%s" % (name, value))
+@@ -171,11 +167,9 @@
+     return elementSep.join([keyValueSep.join([str(value)
+                                               for value in param
+                                               if value != None])
+-                            for param in dic.items()])
++                            for param in list(dic.items())])
+ 
+-class StyleParser:
+-    __metaclass__ = Singleton
+-    
++class StyleParser(metaclass=Singleton):
+     def parse(self, style):
+         """ style is in the form:
+             key:value;key:value
+@@ -187,9 +181,7 @@
+     def unparse(self, dic):
+         return unparse(dic, ';', ':')
+ 
+-class PathParser:
+-    __metaclass__ = Singleton
+-
++class PathParser(metaclass=Singleton):
+     def parse(self, d):
+         """ transform a string "M 123,123 L 213 345 L 43 54"
+         into a sequence [("M", {'x':123, 'y':123}), ("L", {'':, '':}), ("L", ......]
+@@ -199,7 +191,7 @@
+         parsedPaths = []
+         # cut paths
+         lastIdx = 0
+-        for idx in xrange(len(parsedPath)):
++        for idx in range(len(parsedPath)):
+             if parsedPath[idx][0] == 'Z':
+                 parsedPaths.append(parsedPath[lastIdx:idx])
+                 lastIdx = idx+1
+@@ -209,9 +201,7 @@
+ 
+         return parsedPaths
+ 
+-class XMLParser:
+-    __metaclass__ = Singleton
+-
++class XMLParser(metaclass=Singleton):
+     def getChildren(self, node, childName, childNS=''):
+         """ returns them as a list
+         """
+@@ -284,7 +274,7 @@
+                     # add the circle
+                     try:
+                         circle = dom_layerChild.getCircleChild()
+-                    except Exception, e:
++                    except Exception as e:
+                         logging.warning("The node %s.%s is a sublayer but \
+ is neither a colored block nor a bitmap." % (dom_layerChild.tag,
+                                              dom_layerChild.get('id', '')))
+diff -U3 -r extensions.orig/inksmoto/path.py extensions/inksmoto/path.py
+--- extensions.orig/inksmoto/path.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/path.py	2019-08-27 10:30:47.379562476 -0500
+@@ -17,9 +17,9 @@
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ """
+ 
+-from transform import Transform
+-from factory import Factory
+-from inkex import addNS
++from .transform import Transform
++from .factory import Factory
++from .inkex import addNS
+ 
+ class Path:
+     def __init__(self, attrs, matrix):
+diff -U3 -r extensions.orig/inksmoto/simplepath.py extensions/inksmoto/simplepath.py
+--- extensions.orig/inksmoto/simplepath.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/simplepath.py	2019-08-27 10:30:46.784563054 -0500
+@@ -49,7 +49,7 @@
+             offset = m.end()
+             continue
+         #TODO: create new exception
+-        raise Exception, 'Invalid path data!'
++        raise Exception('Invalid path data!')
+ '''
+ pathdefs = {commandfamily:
+     [
+@@ -87,14 +87,14 @@
+     
+     while 1:
+         try:
+-            token, isCommand = lexer.next()
++            token, isCommand = next(lexer)
+         except StopIteration:
+             break
+         params = []
+         needParam = True
+         if isCommand:
+             if not lastCommand and token.upper() != 'M':
+-                raise Exception, 'Invalid path, must begin with moveto.'    
++                raise Exception('Invalid path, must begin with moveto.')    
+             else:                
+                 command = token
+         else:
+@@ -107,16 +107,16 @@
+                 else:
+                     command = pathdefs[lastCommand.upper()][0].lower()
+             else:
+-                raise Exception, 'Invalid path, no initial command.'    
++                raise Exception('Invalid path, no initial command.')    
+         numParams = pathdefs[command.upper()][1]
+         while numParams > 0:
+             if needParam:
+                 try: 
+-                    token, isCommand = lexer.next()
++                    token, isCommand = next(lexer)
+                     if isCommand:
+-                        raise Exception, 'Invalid number of parameters'
++                        raise Exception('Invalid number of parameters')
+                 except StopIteration:
+-                    raise Exception, 'Unexpected end of path'
++                    raise Exception('Unexpected end of path')
+             cast = pathdefs[command.upper()][2][-numParams]
+             param = cast(token)
+             if command.islower():
+diff -U3 -r extensions.orig/inksmoto/svgDoc.py extensions/inksmoto/svgDoc.py
+--- extensions.orig/inksmoto/svgDoc.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/svgDoc.py	2019-08-27 10:30:46.563563268 -0500
+@@ -18,11 +18,11 @@
+ """
+ 
+ from lxml.etree import Element
+-from inkex import addNS, NSS
++from .inkex import addNS, NSS
+ import log, logging
+-from svgnode import newImageNode, getImageId, newUseNode, newGradientNode
+-from svgnode import newRotatedGradientNode
+-from xmotoTools import getValue
++from .svgnode import newImageNode, getImageId, newUseNode, newGradientNode
++from .svgnode import newRotatedGradientNode
++from .xmotoTools import getValue
+ 
+ class SvgDoc():
+     def __init__(self, document=None):
+@@ -135,8 +135,8 @@
+ 
+         textureName = textureName.strip(' \n')
+         patternId = 'pattern_%s' % textureName
+-        if patternId not in self.patterns.keys():
+-            if textureName not in textures.keys():
++        if patternId not in list(self.patterns.keys()):
++            if textureName not in list(textures.keys()):
+                 msg = 'The texture %s is not an existing one.' % textureName
+                 log.outMsg(msg)
+                 raise Exception(msg)
+@@ -166,7 +166,7 @@
+             scaledPatternId = 'pattern_%s_%.2f' % (textureName, scale)
+             scale = inkscape2xmoto(scale)
+ 
+-            if scaledPatternId not in self.patterns.keys():
++            if scaledPatternId not in list(self.patterns.keys()):
+                 pattern = Element(addNS('pattern', 'svg'))
+                 for name, value in [('id',
+                                      scaledPatternId),
+@@ -191,8 +191,8 @@
+         self.getImages()
+ 
+         imageId = getImageId(imageName, width, height)
+-        if imageId not in self.images.keys():
+-            if imageName not in bitmaps.keys():
++        if imageId not in list(self.images.keys()):
++            if imageName not in list(bitmaps.keys()):
+                 msg = 'The image %s is not an existing one.' % imageName
+                 logging.warning(msg)
+                 return None
+@@ -219,7 +219,7 @@
+         # metadata layerId -> layerIndex
+         oldLayersIdToIndex = {}
+         maxLayerIndex = -1
+-        for (key, layerId) in layersInfos.iteritems():
++        for (key, layerId) in layersInfos.items():
+             if key[-3:] != '_id':
+                 continue
+             layerIndex = extractIndexFromKey(key)
+@@ -240,7 +240,7 @@
+ 
+         # existing layers in the right order
+         layersIdToIndexToSave = []
+-        for layerIndex in reversed(xrange(nblayers)):
++        for layerIndex in reversed(range(nblayers)):
+             # get old layer index or create a new one if it's a new layer
+             layerLabel = layersLabel[layerIndex][1]
+             if layerLabel == "":
+@@ -324,14 +324,14 @@
+             stop2 = ('ff0000', 1, 1)
+ 
+         gradientId = 'linearGradient_%s_%d_%d' % stop2
+-        if gradientId not in self.gradients.keys():
++        if gradientId not in list(self.gradients.keys()):
+             gradient = newGradientNode(gradientId, stop1, stop2)
+             self.gradients[gradientId] = gradient
+             self.defs.append(gradient)
+ 
+         angle = float(getValue(edges, 'angle', default=270.0))
+         rotGradId = '%s_%.2f' % (gradientId, angle)
+-        if rotGradId not in self.gradients.keys():
++        if rotGradId not in list(self.gradients.keys()):
+             rotGrad = newRotatedGradientNode(rotGradId, gradientId, angle)
+             self.gradients[rotGradId] = rotGrad
+             self.defs.append(rotGrad)
+diff -U3 -r extensions.orig/inksmoto/svgnode.py extensions/inksmoto/svgnode.py
+--- extensions.orig/inksmoto/svgnode.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/svgnode.py	2019-08-27 10:30:47.312562541 -0500
+@@ -19,17 +19,17 @@
+ 
+ import log, logging
+ import base64
+-from transform import Transform
+-from factory   import Factory
+-from aabb import AABB
++from .transform import Transform
++from .factory   import Factory
++from .aabb import AABB
+ from lxml import etree
+-from inkex import addNS
+-from xmotoTools import getExistingImageFullPath, getValue
++from .inkex import addNS
++from .xmotoTools import getExistingImageFullPath, getValue
+ from lxml.etree import Element
+-from availableElements import AvailableElements
+-from matrix import Matrix
+-from vector import Vector
+-from confGenerator import Conf
++from .availableElements import AvailableElements
++from .matrix import Matrix
++from .vector import Vector
++from .confGenerator import Conf
+ ENTITY_RADIUS = Conf()['ENTITY_RADIUS']
+ SVG2LVL_RATIO = Conf()['SVG2LVL_RATIO']
+ 
+@@ -105,7 +105,7 @@
+     def duplicate(self, newId):
+         parentNode = self.getparent()
+         newNode = createNewNode(parentNode, newId, self.tag, self.svg)
+-        for key, value in self.items():
++        for key, value in list(self.items()):
+             if self.checkNamespace(key) == False:
+                 newNode.set(key, value)
+         newNode.set('id', newId)
+@@ -122,7 +122,7 @@
+         lastY = 0
+ 
+         # to acces values with simplepath format
+-        (x, y) = range(-2, 0)
++        (x, y) = list(range(-2, 0))
+ 
+         if self.tag == addNS('path', 'svg'):
+             blocks = Factory().create('path_parser').parse(self.get('d'))
+@@ -205,7 +205,7 @@
+     def removeInkscapeAttribute(self):
+         # if you only change the 'd' attribute the shape won't be
+         # update in inkscape as inkscape uses it's own attributes
+-        for key in self.attrib.keys():
++        for key in list(self.attrib.keys()):
+             if self.checkNamespace(key) == True:
+                 del self.attrib[key]
+ 
+@@ -233,7 +233,8 @@
+         for child in self.getchildren():
+             self.remove(child)
+ 
+-    def transform(self, rotation, reversed_, (tx, ty)):
++    def transform(self, rotation, reversed_, xxx_todo_changeme):
++        (tx, ty) = xxx_todo_changeme
+         matrix = Matrix()
+         if 'transform' in self.attrib:
+             del self.attrib['transform']
+@@ -354,7 +355,7 @@
+ 
+         try:
+             circle = g.getCircleChild()
+-        except Exception, e:
++        except Exception as e:
+             _id = g.get('id', '')
+ 
+             logging.warning("Sprite [%s] is an empty layer. \
+@@ -428,7 +429,7 @@
+                 # insert the use as the first child so that
+                 # it get displayed before the circle in inkscape
+                 g.insert(0, use)
+-            except Exception, e:
++            except Exception as e:
+                 logging.info("Can't create image for sprite %s.\n%s"
+                              % (texName, e))
+         else:
+@@ -523,7 +524,9 @@
+ def getImageId(bitmapName, width, height):
+     return 'image_%s_%.2f_%.2f' % (bitmapName, width, height)
+ 
+-def newImageNode(textureFilename, (w, h), (x, y), textureName):
++def newImageNode(textureFilename, xxx_todo_changeme1, xxx_todo_changeme2, textureName):
++    (w, h) = xxx_todo_changeme1
++    (x, y) = xxx_todo_changeme2
+     image = Element(addNS('image', 'svg'))
+     imageAbsURL = getExistingImageFullPath(textureFilename)
+     if imageAbsURL is None:
+diff -U3 -r extensions.orig/inksmoto/testsCreator.py extensions/inksmoto/testsCreator.py
+--- extensions.orig/inksmoto/testsCreator.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/testsCreator.py	2019-08-27 10:30:46.497563332 -0500
+@@ -18,17 +18,15 @@
+ """
+ 
+ import log, logging
+-from singleton import Singleton
++from .singleton import Singleton
+ from os.path import join, basename
+ from os import remove, chdir
+ import sys, glob
+-from xmotoTools import getHomeDir, createDirsOfFile
+-from confGenerator import Conf
++from .xmotoTools import getHomeDir, createDirsOfFile
++from .confGenerator import Conf
+ from shutil  import copyfile
+ 
+-class TestsCreator:
+-    __metaclass__ = Singleton
+-
++class TestsCreator(metaclass=Singleton):
+     def __init__(self):
+         self.conf = Conf()
+         relTestsDir = join('cur_tests', self.conf['recordingSession'])
+@@ -72,7 +70,7 @@
+ 
+         f.write(testHeader)
+ 
+-        for testId, testValues in tests.iteritems():
++        for testId, testValues in tests.items():
+             f.write(testTest % (testId, testValues))
+ 
+         f.write(testFooter)
+diff -U3 -r extensions.orig/inksmoto/transform.py extensions/inksmoto/transform.py
+--- extensions.orig/inksmoto/transform.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/transform.py	2019-08-27 10:30:47.350562504 -0500
+@@ -17,13 +17,11 @@
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ """
+ 
+-from singleton import Singleton
+-from factory   import Factory
+-from matrix    import Matrix
+-
+-class Transform:
+-    __metaclass__ = Singleton
++from .singleton import Singleton
++from .factory   import Factory
++from .matrix    import Matrix
+ 
++class Transform(metaclass=Singleton):
+     def __init__(self):
+         self.parser = Factory().create('transform_parser')
+ 
+@@ -36,7 +34,7 @@
+             transform = transformElements.pop(0)
+             nbParam   = transformElements.pop(0)
+             params    = []
+-            for i in xrange(nbParam):
++            for i in range(nbParam):
+                 params.append(transformElements.pop(0))
+ 
+             function = getattr(matrix, 'add_'+transform, matrix.error_add)
+diff -U3 -r extensions.orig/inksmoto/version.py extensions/inksmoto/version.py
+--- extensions.orig/inksmoto/version.py	2010-05-13 14:08:58.000000000 -0500
++++ extensions/inksmoto/version.py	2019-08-27 10:30:46.933562909 -0500
+@@ -18,8 +18,8 @@
+ """
+ 
+ import log, logging
+-from availableElements import AvailableElements
+-from xmotoTools import getValue, NOTSET
++from .availableElements import AvailableElements
++from .xmotoTools import getValue, NOTSET
+ from os.path import isdir, exists
+ 
+ FUNCTIONS2VERSIONS = AvailableElements()['FUNCTIONS2VERSIONS']
+@@ -44,7 +44,7 @@
+         if getValue(self.options, 'level', 'music') not in NOTSET:
+             self.addVersion((0, 2, 5))
+         if 'remplacement' in self.options:
+-            for value in self.options['remplacement'].values():
++            for value in list(self.options['remplacement'].values()):
+                 if value not in NOTSET:
+                     self.addVersion((0, 2, 5))
+                     break
+@@ -89,7 +89,7 @@
+                     functions[line[m.start():m.end()]] = ""
+                     offset = m.end()
+ 
+-        for function in functions.iterkeys():
++        for function in functions.keys():
+             if 'function' in FUNCTIONS2VERSIONS:
+                 version = FUNCTIONS2VERSIONS[function]
+                 self.addVersion(version)
+@@ -102,9 +102,9 @@
+             self.analyseLevelElements(child)
+ 
+         for element in layer.elements:
+-            for namespace, params in element.infos.iteritems():
++            for namespace, params in element.infos.items():
+                 if type(params) == dict:
+-                    for paramKey in params.iterkeys():
++                    for paramKey in params.keys():
+                         if (namespace, paramKey) in PARAMS2VERSIONS:
+                             version = PARAMS2VERSIONS[(namespace, paramKey)]
+                             self.addVersion(version)
+diff -U3 -r extensions.orig/inksmoto/xmExtGtk.py extensions/inksmoto/xmExtGtk.py
+--- extensions.orig/inksmoto/xmExtGtk.py	2019-08-27 10:17:37.093330728 -0500
++++ extensions/inksmoto/xmExtGtk.py	2019-08-27 10:30:47.503562356 -0500
+@@ -18,17 +18,17 @@
+ """
+ 
+ import log, logging
+-from xmotoExtension import XmExt
+-from defaultValues import DefaultValues
+-from xmotoTools import createIfAbsent, applyOnElements, delWoExcept
+-from xmotoTools import getExistingImageFullPath, conv8to16, conv16to8
+-from xmotoTools import setOrDelBool, setOrDelValue, setOrDelColor, getValue
+-from xmotoTools import setOrDelBitmap, getIndexInList
+-from inkex import addNS
+-from parsers import LabelParser
+-import xmGuiGtk
++from .xmotoExtension import XmExt
++from .defaultValues import DefaultValues
++from .xmotoTools import createIfAbsent, applyOnElements, delWoExcept
++from .xmotoTools import getExistingImageFullPath, conv8to16, conv16to8
++from .xmotoTools import setOrDelBool, setOrDelValue, setOrDelColor, getValue
++from .xmotoTools import setOrDelBitmap, getIndexInList
++from .inkex import addNS
++from .parsers import LabelParser
++from . import xmGuiGtk
+ from inksmoto.availableElements import AvailableElements
+-from testsCreator import TestsCreator
++from .testsCreator import TestsCreator
+ from inksmoto.confGenerator import Conf
+ from os.path import exists
+ 
+@@ -80,12 +80,12 @@
+             self.registerSignals(signals)
+ 
+     def mainLoop(self):
+-        import testcommands
++        from . import testcommands
+         if len(testcommands.testCommands) != 0:
+-            import gtk
++            from gi.repository import Gtk
+             for cmd in testcommands.testCommands:
+                 exec(cmd)
+-            # has gtk.main() has not been called, gtk.main_quit()
++            # has Gtk.main() has not been called, Gtk.main_quit()
+             # doesnt work for destroying the window. destroy it
+             # manually
+             self.get(self.windowName).destroy()
+@@ -103,7 +103,7 @@
+         return widget
+ 
+     def registerSignals(self, signals):
+-        for signal, func in signals.iteritems():
++        for signal, func in signals.items():
+             self.wTree.signal_connect(signal, func)
+ 
+     def fillWindowValues(self, values):
+@@ -111,17 +111,17 @@
+             accessors). For each widget in the dict, get the value
+             from the svg and set it to the widget
+         """
+-        import gtk
++        from gi.repository import Gtk
+ 
+-        for widgetName, widgetInfos in values.iteritems():
++        for widgetName, widgetInfos in values.items():
+             (ns, key, default, accessors, items, dontDel) = widgetInfos.get()
+             value = self.getValue(ns, key, default)
+             widget = self.get(widgetName)
+-            if widget.__class__ == gtk.CheckButton:
++            if widget.__class__ == Gtk.CheckButton:
+                 # CheckButton
+                 value = (value == 'true')
+                 widget.set_active(value)
+-            elif widget.__class__ == gtk.HScale:
++            elif widget.__class__ == Gtk.HScale:
+                 # HScale
+                 if value is not None:
+                     if accessors is not None:
+@@ -130,7 +130,7 @@
+                     else:
+                         value = float(value)
+                     widget.set_value(value)
+-            elif widget.__class__ == gtk.Button:
++            elif widget.__class__ == Gtk.Button:
+                 # Button
+                 label = self.get(widgetName+'Label')
+                 if label is not None:
+@@ -149,30 +149,30 @@
+                             break
+                     if img is not None:
+                         xmGuiGtk.addImgToBtn(widget, label, imgName, bitmapDict)
+-            elif widget.__class__ == gtk.ColorButton:
++            elif widget.__class__ == Gtk.ColorButton:
+                 # ColorButton
+                 r = self.getValue(ns, key+'_r', default)
+                 g = self.getValue(ns, key+'_g', default)
+                 b = self.getValue(ns, key+'_b', default)
+                 a = self.getValue(ns, key+'_a', default)
+-                widget.set_color(gtk.gdk.Color(conv8to16(int(r)),
++                widget.set_color(Gdk.Color(conv8to16(int(r)),
+                                                conv8to16(int(g)),
+                                                conv8to16(int(b))))
+                 widget.set_alpha(conv8to16(int(a)))
+-            elif widget.__class__ == gtk.Entry:
++            elif widget.__class__ == Gtk.Entry:
+                 # Entry
+                 widget.set_text(value)
+-            elif widget.__class__ == gtk.FileChooserButton:
++            elif widget.__class__ == Gtk.FileChooserButton:
+                 # FileChooserButton
+                 if exists(value):
+                     widget.set_filename(value)
+-            elif widget.__class__ == gtk.ComboBox:
++            elif widget.__class__ == Gtk.ComboBox:
+                 # ComboBox
+-                import gobject
++                from gi.repository import GObject
+                 # big code snippet needed...
+-                listStore = gtk.ListStore(gobject.TYPE_STRING)
++                listStore = Gtk.ListStore(GObject.TYPE_STRING)
+                 widget.set_model(listStore)
+-                cell = gtk.CellRendererText()
++                cell = Gtk.CellRendererText()
+                 widget.pack_start(cell, True)
+                 widget.add_attribute(cell, 'text', 0)
+ 
+@@ -182,36 +182,36 @@
+                 widget.set_active(selection)
+ 
+     def fillResults(self, dict_):
+-        import gtk
++        from gi.repository import Gtk
+ 
+         if self.widgetsInfos is None:
+             return
+ 
+         self.fillResultsPreHook()
+ 
+-        for widgetName in self.widgetsInfos.keys():
++        for widgetName in list(self.widgetsInfos.keys()):
+             widget = self.get(widgetName)
+             (ns, key, default, accessors, items, dontDel) = self.widgetsInfos[widgetName].get()
+             createIfAbsent(dict_, ns)
+ 
+-            if widget.__class__ == gtk.CheckButton:
++            if widget.__class__ == Gtk.CheckButton:
+                 # CheckButton
+                 bool_ = widget.get_active()
+                 self.setOrDelBool(ns, key, bool_, dontDel)
+-            elif widget.__class__ == gtk.HScale:
++            elif widget.__class__ == Gtk.HScale:
+                 # HScale
+                 value = widget.get_value()
+                 if accessors is not None:
+                     (setter, getter) = accessors
+                     value = getter(value)
+                 self.setOrDelValue(ns, key, value, default)
+-            elif widget.__class__ == gtk.Button:
++            elif widget.__class__ == Gtk.Button:
+                 # Button
+                 label = self.get(widgetName+'Label')
+                 if label is not None:
+                     bitmap = label.get_text()
+                     self.setOrDelBitmap(ns, key, bitmap)
+-            elif widget.__class__ == gtk.ColorButton:
++            elif widget.__class__ == Gtk.ColorButton:
+                 # ColorButton
+                 color = widget.get_color()
+                 (r, g, b) = (conv16to8(color.red),
+@@ -219,15 +219,15 @@
+                              conv16to8(color.blue))
+                 a = conv16to8(widget.get_alpha())
+                 self.setOrDelColor(ns, key, (r, g, b, a))
+-            elif widget.__class__ == gtk.Entry:
++            elif widget.__class__ == Gtk.Entry:
+                 # Entry
+                 text = widget.get_text()
+                 self.setOrDelValue(ns, key, text, default)
+-            elif widget.__class__ == gtk.FileChooserButton:
++            elif widget.__class__ == Gtk.FileChooserButton:
+                 # FileChooserButton
+                 fileName = widget.get_filename()
+                 self.setOrDelValue(ns, key, fileName, default)
+-            elif widget.__class__ == gtk.ComboBox:
++            elif widget.__class__ == Gtk.ComboBox:
+                 # ComboBox
+                 # call get_active to record it (if in a session recording)
+                 # as there's no set_active_text method
+@@ -239,7 +239,7 @@
+ 
+     def removeUnusedNs(self, dict_):
+         toDel = []
+-        for ns in dict_.iterkeys():
++        for ns in dict_.keys():
+             if dict_[ns] == {}:
+                 toDel.append(ns)
+         for ns in toDel:
+@@ -253,24 +253,24 @@
+                 return ret
+             return __log
+ 
+-        import gtk
++        from gi.repository import Gtk
+ 
+         logger = traceCalls
+ 
+-        for widgetName, widgetInfos in widgets.iteritems():
++        for widgetName, widgetInfos in widgets.items():
+             (ns, key, default, accessors, items, dontDel) = widgetInfos.get()
+             widget = self.get(widgetName)
+-            if widget.__class__ == gtk.CheckButton:
++            if widget.__class__ == Gtk.CheckButton:
+                 # CheckButton
+                 get_active = getattr(widget, 'get_active')
+                 setattr(widget, 'get_active',
+                         _log(get_active, widgetName, paramType=bool))
+-            elif widget.__class__ == gtk.HScale:
++            elif widget.__class__ == Gtk.HScale:
+                 # HScale
+                 get_value = getattr(widget, 'get_value')
+                 setattr(widget, 'get_value',
+                         _log(get_value, widgetName, paramType=float))
+-            elif widget.__class__ == gtk.Button:
++            elif widget.__class__ == Gtk.Button:
+                 # Button
+                 labelName = widgetName+'Label'
+                 label = self.get(labelName)
+@@ -278,25 +278,25 @@
+                     get_text = getattr(label, 'get_text')
+                     setattr(label, 'get_text',
+                             _log(get_text, labelName, paramType=str))
+-            elif widget.__class__ == gtk.ColorButton:
++            elif widget.__class__ == Gtk.ColorButton:
+                 # ColorButton
+                 get_color = getattr(widget, 'get_color')
+                 setattr(widget, 'get_color',
+-                        _log(get_color, widgetName, paramType=gtk.gdk.Color))
++                        _log(get_color, widgetName, paramType=Gdk.Color))
+                 get_alpha = getattr(widget, 'get_alpha')
+                 setattr(widget, 'get_alpha',
+                         _log(get_alpha, widgetName, paramType=int))
+-            elif widget.__class__ == gtk.Entry:
++            elif widget.__class__ == Gtk.Entry:
+                 # Entry
+                 get_text = getattr(widget, 'get_text')
+                 setattr(widget, 'get_text',
+                         _log(get_text, widgetName, paramType=str))
+-            elif widget.__class__ == gtk.FileChooserButton:
++            elif widget.__class__ == Gtk.FileChooserButton:
+                 # FileChooserButton
+                 get_filename = getattr(widget, 'get_filename')
+                 setattr(widget, 'get_filename',
+                         _log(get_filename, widgetName, paramType=str))
+-            elif widget.__class__ == gtk.ComboBox:
++            elif widget.__class__ == Gtk.ComboBox:
+                 # ComboBox
+                 get_active = getattr(widget, 'get_active')
+                 setattr(widget, 'get_active',
+@@ -333,7 +333,7 @@
+ 
+ 
+ def traceCalls(meth, widgetName, paramType, args, kw, ret):
+-    import gtk
++    from gi.repository import Gtk
+ 
+     testsCreator = TestsCreator()
+ 
+@@ -348,12 +348,12 @@
+             cmd += '%f)' % (ret)
+         elif paramType == int:
+             cmd += '%d)' % (ret)
+-        elif paramType == gtk.gdk.Color:
+-            cmd += 'gtk.gdk.Color(red=%d, green=%d, blue=%d))' % (ret.red, ret.green, ret.blue)
++        elif paramType == Gdk.Color:
++            cmd += 'Gdk.Color(red=%d, green=%d, blue=%d))' % (ret.red, ret.green, ret.blue)
+         else:
+             raise Exception("type %s not handled cmd=[%s]" % (str(paramType), cmd))
+         testsCreator.addGtkCmd(cmd)
+-    except Exception, e:
++    except Exception as e:
+         logging.info("Exeption while tracing a gtk function call\n%s" % e)
+ 
+ class XmExtGtkLevel(XmExtGtk):
+@@ -367,7 +367,7 @@
+         try:
+             self.fillResults(self.label)
+             self.updateLabelData()
+-        except Exception, e:
++        except Exception as e:
+             logging.error(str(e))
+             xmGuiGtk.errorMessageBox(str(e))
+             return
+@@ -429,7 +429,7 @@
+             try:
+                 self.fillResults(self.comVals)
+                 self.label = self.getUserChanges()
+-            except Exception, e:
++            except Exception as e:
+                 logging.error(str(e))
+                 xmGuiGtk.errorMessageBox(str(e))
+                 return
+@@ -467,7 +467,7 @@
+         self.defVals.addElementLabel(label)
+ 
+         elementId = path.get('id', '')
+-        for name, value in label.iteritems():
++        for name, value in label.items():
+             if type(value) == dict:
+                 namespace    = name
+                 namespaceDic = value
+@@ -478,13 +478,13 @@
+                     and namespace not in self.namespacesInCommon):
+                     createIfAbsent(self.originalValues, elementId)
+                     createIfAbsent(self.originalValues[elementId], namespace)
+-                    for var, value in namespaceDic.iteritems():
++                    for var, value in namespaceDic.items():
+                         self.originalValues[elementId][namespace][var] = value
+                     continue
+ 
+                 createIfAbsent(self.comVals, namespace)
+ 
+-                for (name, value) in namespaceDic.iteritems():
++                for (name, value) in namespaceDic.items():
+                     if name in self.comVals[namespace]:
+                         if self.comVals[namespace][name] != value:
+                             self.comVals[namespace][name] = None
+@@ -502,9 +502,9 @@
+ 
+         if _id in self.originalValues:
+             savedLabel = self.label.copy()
+-            for namespace, namespaceDic in self.originalValues[_id].iteritems():
++            for namespace, namespaceDic in self.originalValues[_id].items():
+                 createIfAbsent(self.label, namespace)
+-                for var, value in namespaceDic.iteritems():
++                for var, value in namespaceDic.items():
+                     self.label[namespace][var] = value
+ 
+         style = self.generateStyle(self.label)
+diff -U3 -r extensions.orig/inksmoto/xmGuiGtk.py extensions/inksmoto/xmGuiGtk.py
+--- extensions.orig/inksmoto/xmGuiGtk.py	2019-08-27 10:17:37.097330725 -0500
++++ extensions/inksmoto/xmGuiGtk.py	2019-08-27 10:30:46.960562883 -0500
+@@ -27,16 +27,16 @@
+         gtkDllPath = os.path.join(os.getcwd())
+         if os.path.exists(gtkDllPath) == True:
+             os.environ['PATH'] += gtkDllPath
+-    import gtk
+-    import gtk.glade
+-except Exception, e:
++    from gi.repository import Gtk
++    import Gtk.glade
++except Exception as e:
+     log.outMsg("You need to install PyGtk\nError::[%s]" % str(e))
+     sys.exit(1)
+ 
+ from os.path import join, exists
+-from xmotoTools import getSystemDir, getExistingImageFullPath
+-from xmotoTools import alphabeticSortOfKeys, getHomeDir
+-from availableElements import AvailableElements
++from .xmotoTools import getSystemDir, getExistingImageFullPath
++from .xmotoTools import alphabeticSortOfKeys, getHomeDir
++from .availableElements import AvailableElements
+ 
+ TEXTURES = AvailableElements()['TEXTURES']
+ EDGETEXTURES = AvailableElements()['EDGETEXTURES']
+@@ -49,21 +49,21 @@
+ 
+ def quit(widget=None):
+     """ the widget param is present when called from a gtk signal.
+-    during session replaying, the gtk.main() is not called, so the
+-    window is not created, so calling gtk.main_quit raises an
++    during session replaying, the Gtk.main() is not called, so the
++    window is not created, so calling Gtk.main_quit raises an
+     exception
+     """
+     try:
+-        gtk.main_quit()
++        Gtk.main_quit()
+     except:
+         pass
+ 
+ def mainLoop():
+-    gtk.main()
++    Gtk.main()
+ 
+ def errorMessageBox(msg):
+-    dlg = gtk.MessageDialog(parent=None, flags=gtk.DIALOG_MODAL,
+-                            type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE,
++    dlg = Gtk.MessageDialog(parent=None, flags=Gtk.DialogFlags.MODAL,
++                            type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CLOSE,
+                             message_format=msg)
+     dlg.run()
+     dlg.destroy()
+@@ -71,10 +71,10 @@
+ def createWindow(gladeFile, windowName):
+     path = join(getHomeDir(), 'inksmoto', 'glade', gladeFile)
+     if exists(path):
+-        return gtk.glade.XML(path, windowName)
++        return Gtk.glade.XML(path, windowName)
+ 
+     path = join(getSystemDir(), 'glade', gladeFile)
+-    return gtk.glade.XML(path, windowName)
++    return Gtk.glade.XML(path, windowName)
+ 
+ def addImgToBtn(button, label, imgName, bitmapDict):
+     imgFile = bitmapDict[imgName]['file']
+@@ -85,8 +85,8 @@
+         imgFile = '__missing__.png'
+         imgFullFile = getExistingImageFullPath(imgFile)
+ 
+-    img = gtk.Image()
+-    pixBuf = gtk.gdk.pixbuf_new_from_file(imgFullFile)
++    img = Gtk.Image()
++    pixBuf = GdkPixbuf.Pixbuf.new_from_file(imgFullFile)
+     img.set_from_pixbuf(pixBuf)
+ 
+     button.set_image(img)
+@@ -95,7 +95,7 @@
+     img.show()
+ 
+ def resetColor(button):
+-    button.set_color(gtk.gdk.color_parse('white'))
++    button.set_color(Gdk.color_parse('white'))
+     button.set_alpha(65535)
+ 
+ class bitmapSelectWindow:
+@@ -105,11 +105,11 @@
+         wTree = createWindow('bitmapSelection.glade', 'bitmapSelection')
+         self.window = wTree.get_widget('bitmapSelection')
+         self.window.set_title(title)
+-        self.window.connect("destroy", gtk.main_quit)
++        self.window.connect("destroy", Gtk.main_quit)
+ 
+-        self.keys = alphabeticSortOfKeys(bitmaps.keys())
++        self.keys = alphabeticSortOfKeys(list(bitmaps.keys()))
+ 
+-        store = gtk.ListStore(str, gtk.gdk.Pixbuf)
++        store = Gtk.ListStore(str, GdkPixbuf.Pixbuf)
+         store.clear()
+ 
+         # skeep the __biker__.png image used for PlayerStart
+@@ -122,11 +122,11 @@
+                 if imgFullFile is None:
+                     imgFile = '__missing__.png'
+                     imgFullFile = getExistingImageFullPath(imgFile)
+-                pixBuf = gtk.gdk.pixbuf_new_from_file(imgFullFile)
++                pixBuf = GdkPixbuf.Pixbuf.new_from_file(imgFullFile)
+ 
+                 store.append([name, pixBuf])
+ 
+-            except Exception, e:
++            except Exception as e:
+                 logging.info("Can't create bitmap for %s\n%s" % (name, e))
+                 store.append([name, None])
+ 
+@@ -138,10 +138,10 @@
+ 
+     def run(self):
+         self.window.show_all()
+-        gtk.main()
++        Gtk.main()
+         return self.selectedImage
+ 
+     def bitmapSelected(self, iconView, imageIdx):
+         self.selectedImage = self.keys[imageIdx[0]]
+         self.window.destroy()
+-        gtk.main_quit()
++        Gtk.main_quit()
+diff -U3 -r extensions.orig/inksmoto/xmObject.py extensions/inksmoto/xmObject.py
+--- extensions.orig/inksmoto/xmObject.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/xmObject.py	2019-08-27 10:30:46.294563529 -0500
+@@ -17,8 +17,8 @@
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ """
+ 
+-from parsers import LabelParser, StyleParser
+-from factory import Factory
++from .parsers import LabelParser, StyleParser
++from .factory import Factory
+ 
+ class xmIn:
+     def __init__(self, node):
+diff -U3 -r extensions.orig/inksmoto/xmotoExtension.py extensions/inksmoto/xmotoExtension.py
+--- extensions.orig/inksmoto/xmotoExtension.py	2010-05-13 14:10:22.000000000 -0500
++++ extensions/inksmoto/xmotoExtension.py	2019-08-27 10:30:46.532563298 -0500
+@@ -19,20 +19,20 @@
+ 
+ import log, logging
+ import sys, random
+-from inkex import Effect, NSS, addNS
+-from parsers import LabelParser, StyleParser
+-from xmotoTools import createIfAbsent, applyOnElements, getBoolValue
+-from xmotoTools import getValue, dec2hex, hex2dec, updateInfos, color2Hex
+-from svgnode import XmNode, convertToXmNode
+-from factory import Factory
+-from svgDoc import SvgDoc
+-from testsCreator import TestsCreator
++from .inkex import Effect, NSS, addNS
++from .parsers import LabelParser, StyleParser
++from .xmotoTools import createIfAbsent, applyOnElements, getBoolValue
++from .xmotoTools import getValue, dec2hex, hex2dec, updateInfos, color2Hex
++from .svgnode import XmNode, convertToXmNode
++from .factory import Factory
++from .svgDoc import SvgDoc
++from .testsCreator import TestsCreator
+ 
+-from confGenerator import Conf
++from .confGenerator import Conf
+ ENTITY_RADIUS = Conf()['ENTITY_RADIUS']
+ SVG2LVL_RATIO = Conf()['SVG2LVL_RATIO']
+ 
+-from availableElements import AvailableElements
++from .availableElements import AvailableElements
+ TEXTURES = AvailableElements()['TEXTURES']
+ SPRITES = AvailableElements()['SPRITES']
+ PARTICLESOURCES = AvailableElements()['PARTICLESOURCES']
+@@ -40,11 +40,11 @@
+ class XmExt(Effect):
+     def __init__(self):
+         Effect.__init__(self)
+-        NSS[u'xmoto'] = u'http://xmoto.tuxfamily.org/'
++        NSS['xmoto'] = 'http://xmoto.tuxfamily.org/'
+         # in the svgs created by inkscape 0.46, in the cc:Work node,
+         # the cc refers to the creativecommons namespace, not the
+         # web.resource one put in inkex
+-        NSS[u'cc'] = u'http://creativecommons.org/ns#'
++        NSS['cc'] = 'http://creativecommons.org/ns#'
+         # todo::get perfect values for width and height
+         SPRITES['PlayerStart'] = {'file':'__biker__.png',
+                                   'width':'2.10',
+@@ -260,7 +260,7 @@
+                     patternId = self.svg.addPattern(label['usetexture']['id'],
+                                                     TEXTURES, scale)
+                     style['fill'] = 'url(#%s)' % patternId
+-                except Exception, e:
++                except Exception as e:
+                     logging.info("Can't create pattern for texture %s.\n%s"
+                                  % (label['usetexture']['id'], e))
+                     style['fill-opacity'] = '1'
+diff -U3 -r extensions.orig/inksmoto/xmotoTools.py extensions/inksmoto/xmotoTools.py
+--- extensions.orig/inksmoto/xmotoTools.py	2010-05-17 11:54:55.000000000 -0500
++++ extensions/inksmoto/xmotoTools.py	2019-08-27 10:30:46.662563172 -0500
+@@ -19,14 +19,14 @@
+ 
+ import log, logging
+ from os.path import expanduser, join, isdir, exists, dirname, normpath
+-from inkex import addNS, NSS
++from .inkex import addNS, NSS
+ import os, re
+ 
+ NOTSET_BITMAP = ['_None_', '', None, 'None']
+ NOTSET = ['', None, 'None']
+ 
+ def applyOnElements(root, elements, function):
+-    for root._id, element in elements.iteritems():
++    for root._id, element in elements.items():
+         if element.tag in [addNS('g', 'svg')]:
+             # store sprites as sublayer containing a path and an image
+             if element.get(addNS('xmoto_label', 'xmoto')) is not None:
+@@ -51,10 +51,10 @@
+     loadedVars = {}
+     try:
+         homeFile = join(getHomeDir(), 'inksmoto', name)
+-        execfile(homeFile, {}, loadedVars)
++        exec(compile(open(homeFile, "rb").read(), homeFile, 'exec'), {}, loadedVars)
+     except:
+         sysFile = join(getSystemDir(), name)
+-        execfile(sysFile, {}, loadedVars)
++        exec(compile(open(sysFile, "rb").read(), sysFile, 'exec'), {}, loadedVars)
+ 
+     return loadedVars
+ 
+@@ -171,7 +171,7 @@
+ def alphabeticSortOfKeys(sequence):
+     compareFunc = lambda x, y: cmp(x.lower(), y.lower())
+     if type(sequence) == dict:
+-        keys = sequence.keys()
++        keys = list(sequence.keys())
+         keys.sort(cmp=compareFunc)
+         return keys
+     else:
+@@ -249,10 +249,10 @@
+     return x >> 8
+ 
+ def updateInfos(toUpdate, newValues):
+-    for key, value in newValues.iteritems():
++    for key, value in newValues.items():
+         if type(value) == dict:
+             namespace = key
+-            for key, value in value.iteritems():
++            for key, value in value.items():
+                 createIfAbsent(toUpdate, namespace)
+                 toUpdate[namespace][key] = value
+         else:
+diff -U3 -r extensions.orig/inksmoto/zone_element.py extensions/inksmoto/zone_element.py
+--- extensions.orig/inksmoto/zone_element.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/inksmoto/zone_element.py	2019-08-27 10:30:46.430563397 -0500
+@@ -17,8 +17,8 @@
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ """
+ 
+-from factory  import Factory
+-from elements import Element
++from .factory  import Factory
++from .elements import Element
+ 
+ class Zone(Element):
+     def writeContent(self, options, level):
+diff -U3 -r extensions.orig/installKeys.py extensions/installKeys.py
+--- extensions.orig/installKeys.py	2010-05-17 11:31:20.000000000 -0500
++++ extensions/installKeys.py	2019-08-27 10:30:47.797562070 -0500
+@@ -46,13 +46,13 @@
+         try:
+             if not isdir(destDir):
+                 makedirs(destDir)
+-        except Exception, e:
++        except Exception as e:
+             log.outMsg("Can't create the directory [%s]\n%s" % (destDir, e))
+             return False
+ 
+         try:
+             copyfile(src, dest)
+-        except Exception, e:
++        except Exception as e:
+             log.outMsg("Can't copy the shorcuts file \
+ from [%s] to [%s].\n%s" % (src, dest, e))
+         else:
+diff -U3 -r extensions.orig/jointedline.py extensions/jointedline.py
+--- extensions.orig/jointedline.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/jointedline.py	2019-08-27 10:30:47.894561976 -0500
+@@ -44,13 +44,13 @@
+             log.outMsg("You have to select only one object.")
+             return False
+ 
+-        for node in self.selected.values():
++        for node in list(self.selected.values()):
+             if node.tag not in [addNS('path', 'svg'), addNS('rect', 'svg')]:
+                 log.outMsg("You need to select path and rectangle only.")
+                 return False
+ 
+         # there's only one selected object
+-        node = self.selected.values()[0]
++        node = list(self.selected.values())[0]
+ 
+         self.jointType = self.options.joint
+         self.space     = self.options.space
+@@ -79,7 +79,7 @@
+             jointHeight = aabb.height()/2.0
+ 
+         ex = AddJoint(self.jointType)
+-        for no in xrange(1, self.numBlocks+1):
++        for no in range(1, self.numBlocks+1):
+             node = node.duplicate(blockPrefix+str(no))
+             node.translate(offset, 0)
+ 
+diff -U3 -r extensions.orig/launchXmoto.py extensions/launchXmoto.py
+--- extensions.orig/launchXmoto.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/launchXmoto.py	2019-08-27 10:30:47.738562128 -0500
+@@ -44,7 +44,7 @@
+             if not isfile(xmotopath):
+                 givenXmotoPresent = False
+                 logging.info("path[%s] is not a valid file" % xmotopath)
+-        except Exception, e:
++        except Exception as e:
+             givenXmotoPresent = False
+             logging.info("path[%s] is not a valid file.\n%s" % (xmotopath, e))
+ 
+@@ -52,7 +52,7 @@
+         lvlfileName = join(getHomeDir(), 'last.lvl')
+         try:
+             svg2lvl(self.args[-1], lvlfileName)
+-        except Exception, e:
++        except Exception as e:
+             log.outMsg("%s\nSee log for more informations." % str(e))
+             logging.warning(format_exc())
+             return False
+@@ -66,12 +66,12 @@
+                                                              lvlfileName))
+             try:
+                 os.execl(xmotopath, *params)
+-            except Exception, e:
++            except Exception as e:
+                 log.outMsg("Cant execute %s.\n%s" % (xmotopath, e))
+         else:
+             try:
+                 os.execlp('xmoto', *params)
+-            except Exception, e:
++            except Exception as e:
+                 log.outMsg("The xmoto executable is present neither in the \
+ given location (%s) nor in the PATH.\n%s" % (xmotopath, e))
+ 
+diff -U3 -r extensions.orig/recreateLvl.py extensions/recreateLvl.py
+--- extensions.orig/recreateLvl.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/recreateLvl.py	2019-08-27 10:30:47.709562156 -0500
+@@ -34,7 +34,7 @@
+         lvlfileName = join(getHomeDir(), 'last.lvl')
+         try:
+             svg2lvl(self.args[-1], lvlfileName)
+-        except Exception, e:
++        except Exception as e:
+             log.outMsg("%s\nSee log for more informations." % str(e))
+             logging.warning(format_exc())
+ 
+diff -U3 -r extensions.orig/refreshMenu.py extensions/refreshMenu.py
+--- extensions.orig/refreshMenu.py	2010-05-17 12:39:16.000000000 -0500
++++ extensions/refreshMenu.py	2019-08-27 10:30:47.599562263 -0500
+@@ -25,7 +25,7 @@
+ from inksmoto.xmotoTools import getExistingImageFullPath, createDirsOfFile
+ from os.path import join, basename, isdir
+ import bz2, md5
+-import urllib2
++import urllib.request, urllib.error, urllib.parse
+ import glob, os
+ 
+ class RefreshMenu(XmExt):
+@@ -53,12 +53,12 @@
+         """ urlopen with try/except
+         """
+         try:
+-            content = urllib2.urlopen(url).read()
+-        except urllib2.HTTPError, exc:
++            content = urllib.request.urlopen(url).read()
++        except urllib.error.HTTPError as exc:
+             log.outMsg("HTTP request failed with error code %d (%s)."
+                        % (exc.code, exc.msg))
+             raise Exception("Error accessing to the url: %s" % url)
+-        except urllib2.URLError, exc:
++        except urllib.error.URLError as exc:
+             log.outMsg("URL error. Cause: %s." % exc.reason)
+             raise Exception("Error accessing to the url: %s" % url)
+         return content
+@@ -72,7 +72,8 @@
+             localMd5content = md5.new(self.localXmlContent).hexdigest()
+             localXmlFile.close()
+             logging.info('Local xml file found and md5 sum calculated.')
+-        except IOError, (errno, strerror):
++        except IOError as xxx_todo_changeme:
++            (errno, strerror) = xxx_todo_changeme.args
+             logging.info('No local xml file found.\n%d-%s' % (errno, strerror))
+             self.localXmlContent = ""
+             localMd5content = ""
+@@ -132,21 +133,21 @@
+                 logging.info('proxydic: %s' % str(proxyDic))
+ 
+             try:
+-                proxy_support = urllib2.ProxyHandler(proxyDic)
+-            except urllib2.URLError, exc:
++                proxy_support = urllib.request.ProxyHandler(proxyDic)
++            except urllib.error.URLError as exc:
+                 log.outMsg("Error while creating proxy handler.. Cause: %s."
+                            % exc.reason)
+                 raise Exception("FATAL ERROR::can't create proxy handler")
+ 
+             try:
+-                opener = urllib2.build_opener(proxy_support)
+-            except Exception, e:
++                opener = urllib.request.build_opener(proxy_support)
++            except Exception as e:
+                 log.outMsg('Error while creating proxy opener.\n%s' % e)
+                 raise Exception("FATAL ERROR::can't create proxy opener")
+ 
+             try:
+-                urllib2.install_opener(opener)
+-            except Exception, e:
++                urllib.request.install_opener(opener)
++            except Exception as e:
+                 log.outMsg('Error while installing proxy opener.\n%s' % e)
+                 raise Exception("FATAL ERROR::can't install proxy opener")
+ 	    
+@@ -171,7 +172,7 @@
+             # from the xml
+             try:
+                 content = fromXML(self.localXmlContent)
+-            except Exception, e:
++            except Exception as e:
+                 log.outMsg("Error parsing the xml file.\n%s" % str(e))
+                 return False
+ 
+@@ -215,7 +216,7 @@
+         missingImagesFiles = []
+ 
+         for images in [SPRITES, TEXTURES, EDGETEXTURES]:
+-            for properties in images.values():
++            for properties in list(images.values()):
+                 if 'file' not in properties:
+                     continue
+                 imageFile = properties['file']
+@@ -244,7 +245,7 @@
+         url += distantFile
+         try:
+             webContent = self.urlopenread(url)
+-        except Exception, e:
++        except Exception as e:
+             logging.info("Can't download file [%s].\nCheck your connection.\n%s"
+                          % (url, e))
+             return 0
+@@ -257,7 +258,7 @@
+             localFileHandle = open(filename, 'wb')
+             localFileHandle.write(webContent)
+             localFileHandle.close()
+-        except Exception, e:
++        except Exception as e:
+             logging.info("Can't create local file [%s].\n%s" % (filename, e))
+             return 0
+ 
+diff -U3 -r extensions.orig/showInfo.py extensions/showInfo.py
+--- extensions.orig/showInfo.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/showInfo.py	2019-08-27 10:30:48.105561771 -0500
+@@ -27,14 +27,14 @@
+ 
+         # current id is set by applyOnElements
+         infos = "%s is a %s\n" % (self._id, objectType)
+-        for key, value in label.iteritems():
++        for key, value in label.items():
+             if type(value) == dict:
+                 if key == 'param':
+-                    for key, value in value.iteritems():
++                    for key, value in value.items():
+                         infos += "\tparam name=%s value=%s\n" % (key, value)
+                 else:
+                     infos += "\t%s\n" % key
+-                    for key, value in value.iteritems():
++                    for key, value in value.items():
+                         infos += "\t\t%s=%s\n" % (key, value)
+ 
+         sys.stderr.write(infos)
+diff -U3 -r extensions.orig/svg2lvl.py extensions/svg2lvl.py
+--- extensions.orig/svg2lvl.py	2009-09-29 14:56:51.000000000 -0500
++++ extensions/svg2lvl.py	2019-08-27 10:30:47.566562295 -0500
+@@ -34,7 +34,7 @@
+     lastName = join(getHomeDir(), 'last.svg')
+     try:
+         copyfile(svgFileName, lastName)
+-    except Exception, e:
++    except Exception as e:
+         logging.info("Last svg not saved in %s.\n%s" % (lastName, e))
+ 
+     parser = Factory().create('XmlSvg_parser')
+@@ -54,9 +54,9 @@
+ 
+ if __name__ == "__main__":
+     import sys
+-    NSS[u'xmoto'] = u'http://xmoto.tuxfamily.org/'
++    NSS['xmoto'] = 'http://xmoto.tuxfamily.org/'
+ 
+     try:
+         svg2lvl(sys.argv[-1])
+-    except Exception, exc:
++    except Exception as exc:
+         log.outMsg(str(exc))

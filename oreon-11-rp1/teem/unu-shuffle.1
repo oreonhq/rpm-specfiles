@@ -1,0 +1,57 @@
+.TH UNU\-SHUFFLE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-shuffle \- permute slices along one axis
+.SH SYNOPSIS
+.B unu\ shuffle
+.RI [ @file \ ...]
+.BR \-p , \-\-permute
+.RI < slc0 \  slc1 \ ...>
+.RB [ \-inv , \-\-inverse ]
+.BR \-a , \-\-axis
+.RI < axis >
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Permute slices along one axis.
+Slices along one axis are re-arranged as units according to the given
+permutation (or its inverse).
+The permutation tells which old slice to put at each new position.
+For example, the shuffle 0->1, 1->2, 2->0 would be
+.RB \(lq 2\ 0\ 1 \(rq.
+Obviously, if you have to rearrange the many slices of a large dataset, you
+should probably store the permutation in a plain text file and use it as a
+\(lqresponse file\rq).
+.IP \(bu +2n
+Uses
+.B nrrdShuffle
+.SH OPTIONS
+.TP
+.IR @file \ ...
+response file(s) containing command-line arguments
+.TP
+.B \-p\fR\ <\fIslc0\fR\ \fIslc1\fR\ ...>\ ,\ \fB\-\-permute\fR\ <\fIslc0\fR\ \fIslc1\fR\ ...>
+new slice ordering (1 or more
+.IR unsigned\ int s)
+.TP
+.B \-inv\fR\ ,\ \fB\-\-inverse
+use inverse of given permutation
+.TP
+.B \-a\fR\ <\fIaxis\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxis\fR>
+axis to shuffle along
+.RI ( unsigned\ int )
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-flip (1)

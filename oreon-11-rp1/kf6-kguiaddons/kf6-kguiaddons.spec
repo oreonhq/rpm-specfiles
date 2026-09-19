@@ -1,12 +1,12 @@
-%global source0_hash 29b043480c45d3e51c57cac74fd83589cc7729c907a6585b72880cbf07feaf82
+%global source0_hash 6d0c4a4ddc7d4833ae537b1bf146896beba76135ec4b8bcf2a9525e33e39b3a4
 
 %global 	framework kguiaddons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.30
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.30.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with various classes on top of QtGui
 
@@ -40,6 +40,7 @@ BuildRequires:  python3-wheel
 BuildRequires:  clang-devel
 BuildRequires:  cmake(Shiboken6)
 BuildRequires:  cmake(PySide6)
+BuildRequires:  python3-pyside6-devel >= 6.11.1-25
 
 Requires:       kf6-filesystem
 
@@ -91,6 +92,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 
@@ -105,4 +109,3 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

@@ -1,0 +1,13 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -253,9 +253,8 @@
+ ## The remainder of the object files
+ libcryptopp_la_DEPENDENCIES += $(libothers_la_OBJECTS)
+ 
+-## Man, did Autotools fuck this up royally...
+ ## https://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
+-libcryptopp_la_LDFLAGS = $(AM_LDFLAGS) -release 8.8.0 -version-info 8:8
++libcryptopp_la_LDFLAGS = $(AM_LDFLAGS) -version-info 16:0:8
+ 
+ ## Source files with special needs
+ libcryptlib_la_SOURCES = cryptlib.cpp

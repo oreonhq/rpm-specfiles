@@ -11,7 +11,7 @@
 
 Summary: A fast, lightweight Source Control Management system
 Name: mercurial
-Version: 7.2
+Version: 7.2.4
 Release: 1%{?dist}
 
 # Release: 1.rc1%%{?dist}

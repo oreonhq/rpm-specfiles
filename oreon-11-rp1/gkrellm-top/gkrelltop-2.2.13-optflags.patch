@@ -1,0 +1,84 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for gkrelltop >= 2.2.13, which
+adds the missing $RPM_OPT_FLAGS and $RPM_LD_FLAGS to the Makefile and updates the
+CC/CFLAGS usage for GNU make 4.4 compatibility.
+
+--- gkrelltop-2.2.13.orig/Makefile		2009-07-24 07:09:39.000000000 +0200
++++ gkrelltop-2.2.13.orig/Makefile.optflags	2023-01-22 18:06:07.121434961 +0100
+@@ -43,14 +43,12 @@
+ 
+ ifeq ($(GKRELL1FLAG),0)
+ # Parameters for gkrellm version 2.*
+-CFLAGS2 = -g -D$(OSFLAG) -DGKRELLM2 -fPIC -Wall `pkg-config gtk+-2.0 --cflags`
++CFLAGSM = -g -D$(OSFLAG) -DGKRELLM2 -fPIC -Wall `pkg-config gtk+-2.0 --cflags` $(RPM_OPT_FLAGS) $(RPM_LD_FLAGS)
+ LIBS =  
+-CC=/usr/bin/gcc $(CFLAGS2)
+ 
+ else 
+ # Parameters for gkrellm version 1.*
+-CC=/usr/bin/cc
+-CFLAGS = -D$(OSFLAG) -Wall -fPIC `gtk-config --cflags` `imlib-config --cflags-gdk` 
++CFLAGSM = -D$(OSFLAG) -Wall -fPIC `gtk-config --cflags` `imlib-config --cflags-gdk` $(RPM_OPT_FLAGS) $(RPM_LD_FLAGS)
+ LIBS=
+ 
+ endif
+@@ -65,12 +63,12 @@
+ endif
+ 
+ ifeq ($(WANT_GLIB12),yes)
+-CFLAGSD = -I/usr/X11R6/include -D$(OSFLAG) -fPIC -Wall `glib-config --cflags`
++CFLAGSD = -I/usr/X11R6/include -D$(OSFLAG) -fPIC -Wall `glib-config --cflags` $(RPM_OPT_FLAGS) $(RPM_LD_FLAGS)
+ LIBSD = `glib-config --libs`
+ LIBSD = 
+ CONFIGURE_ARGS += --with-glib12
+ else
+-CFLAGSD = -D$(OSFLAG) -fPIC -Wall `pkg-config glib-2.0 --cflags`
++CFLAGSD = -D$(OSFLAG) -fPIC -Wall `pkg-config glib-2.0 --cflags` $(RPM_OPT_FLAGS) $(RPM_LD_FLAGS)
+ LIBSD = `pkg-config glib-2.0 --libs`
+ LIBSD = 
+ endif
+@@ -78,7 +76,6 @@
+ ifeq ($(INSTALLDIRD),)
+ 	INSTALLDIRD=$(HOME)/.gkrellm2/plugins-gkrellmd
+ endif
+-CCD=/usr/bin/gcc $(CFLAGSD)
+ OBJD = gkrelltopd.o top_three.o
+ 
+ DUMMY_VAR := $(shell ./configure $(CONFIGURE_ARGS))
+@@ -100,23 +97,23 @@
+ warn: ; $(WARN)
+ 
+ $(GKRELLTOP): $(OBJ) warn
+-	$(CC)  -shared $(OBJ) -o $(GKRELLTOP) 
++	$(CC) $(CFLAGSM) -shared $(OBJ) -o $(GKRELLTOP) 
+ 
+ # Compile gkrelltopd.so server plugin
+ server: $(GKRELLTOPD) warn
+ 	@echo ""
+ 
+ $(GKRELLTOPD): $(OBJD) 
+-	$(CCD)  $(LIBSD) -shared $(OBJD) -o $(GKRELLTOPD)
++	$(CC) $(CFLAGSD) $(LIBSD) -shared $(OBJD) -o $(GKRELLTOPD)
+ 
+ gkrelltop.o: gkrelltop.c
+-	$(CC) -c gkrelltop.c -o gkrelltop.o
++	$(CC) $(CFLAGSM) -c gkrelltop.c -o gkrelltop.o
+ 
+ top_three.o: top_three.c
+-	$(CC) -c top_three.c -o top_three.o
++	$(CC) $(CFLAGSM) -c top_three.c -o top_three.o
+ 
+ gkrelltopd.o: gkrelltopd.c
+-	$(CCD) -c gkrelltopd.c -o gkrelltopd.o
++	$(CC) $(CFLAGSD) -c gkrelltopd.c -o gkrelltopd.o
+ 
+ install: $(GKRELLTOP)
+ 	install -c -m 644 $(GKRELLTOP) $(INSTALLDIR)
+@@ -125,7 +122,7 @@
+ 	install -c -m 644 $(GKRELLTOPD) $(INSTALLDIRD)
+ 
+ ttest: top_three.o ttest.o 
+-	$(CC)  top_three.o ttest.o -o ttest
++	$(CC) $(CFLAGSM) top_three.o ttest.o -o ttest
+ 
+ view: $(GKRELLTOP)
+ 	gkrellm -p $(GKRELLTOP)

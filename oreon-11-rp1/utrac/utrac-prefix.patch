@@ -1,0 +1,11 @@
+--- Makefile.old	2005-09-27 12:50:03.000000000 +0200
++++ Makefile	2005-11-08 09:32:12.000000000 +0100
+@@ -29,7 +29,7 @@
+ 
+ LIBS = -lm
+ 
+-PREFIX_PATH = /usr/local
++PREFIX_PATH = /usr
+ LIB_PATH = ${PREFIX_PATH}/lib
+ INC_PATH = ${PREFIX_PATH}/include
+ BIN_PATH = ${PREFIX_PATH}/bin

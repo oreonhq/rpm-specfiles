@@ -1,0 +1,11 @@
+--- gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/base/base.py.py312	2019-08-21 00:07:03.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/base/base.py	2023-07-24 16:37:49.559930305 +0900
+@@ -107,7 +107,7 @@ class PhotoList(object):
+             print ("Interval for API access should be greater than 10 minutes.")
+             min = 10
+ 
+-        delay = min * 60 / 20 # 5%
++        delay = min * 60 // 20 # 5%
+         interval = min * 60 + random.randint(delay*-1, delay)
+         self._timer = GLib.timeout_add_seconds(interval, self.prepare)
+ 

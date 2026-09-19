@@ -1,0 +1,152 @@
+From 2ddae60ef9e83f004482d9ad6ee9ac7c87423ae6 Mon Sep 17 00:00:00 2001
+From: suve <veg@svgames.pl>
+Date: Sat, 4 Jan 2025 02:01:06 +0100
+Subject: [PATCH] BUG/TST: Use little-endian dtype in tests (#21)
+
+When reading a file, wavio stores samples using the '<i4', '<i2' or
+'<i1' dtypes - small-endian, 4/2/1 byte integers. The test suite
+includes a number of assertions, including dtype checks. However,
+these checks are done against the 'numpy.int32' and 'numpy.int16'
+aliases, which correspond to native-endian integers. As a result,
+the test suite runs fine on little-endian architecures, but fails
+on big-endian platforms due to dtype mismatch.
+
+The '<i1' / numpy.uint8 tests are not affected, since endianness
+does not affect 1-byte values.
+---
+ tests/test_wavio.py | 32 +++++++++++++++++---------------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
+
+diff --git a/tests/test_wavio.py b/tests/test_wavio.py
+index 7d8dc81..5866755 100644
+--- a/tests/test_wavio.py
++++ b/tests/test_wavio.py
+@@ -6,13 +6,15 @@
+ import numpy as np
+ import wavio
+ 
++int32le = np.dtype('<i4')
++int16le = np.dtype('<i2')
+ 
+ data1 = np.array([1, -2,
+                   3, -4,
+                   2**16, -2**16,
+                   -2**20, 2**20,
+                   2**23-1, -2**23],
+-                 dtype=np.int32)
++                 dtype=int32le)
+ 
+ 
+ def check_basic(filename, nchannels, sampwidth, framerate):
+@@ -45,7 +47,7 @@ def test0(self):
+             check_basic(filename, nchannels=1, sampwidth=3,
+                         framerate=44100)
+             check_wavio_read(filename, rate=44100, sampwidth=3,
+-                             dtype=np.int32, shape=(len(data1), 1),
++                             dtype=int32le, shape=(len(data1), 1),
+                              data=data1)
+ 
+     @pytest.mark.parametrize('data', [data1[:, None],
+@@ -59,7 +61,7 @@ def test1(self, data):
+             check_basic(filename, nchannels=data.shape[1], sampwidth=3,
+                         framerate=44100)
+             check_wavio_read(filename, rate=44100, sampwidth=3,
+-                             dtype=np.int32, shape=data.shape,
++                             dtype=int32le, shape=data.shape,
+                              data=data)
+ 
+     def test2(self):
+@@ -71,42 +73,42 @@ def test2(self):
+ 
+             check_basic(filename, nchannels=2, sampwidth=3, framerate=44100)
+             check_wavio_read(filename, rate=44100, sampwidth=3,
+-                             dtype=np.int32, shape=data2.shape,
++                             dtype=int32le, shape=data2.shape,
+                              data=data2)
+ 
+     def test3(self):
+         filename = 'test3data.wav'
+         with tempfile.TemporaryDirectory() as d:
+             os.chdir(d)
+-            data = np.zeros(32, dtype=np.int16)
++            data = np.zeros(32, dtype=int16le)
+             data[1::4] = 10000
+             data[3::4] = -10000
+             wavio.write(filename, data, 44100)
+ 
+             check_basic(filename, nchannels=1, sampwidth=2, framerate=44100)
+             check_wavio_read(filename, rate=44100, sampwidth=2,
+-                             dtype=np.int16, shape=(32, 1),
++                             dtype=int16le, shape=(32, 1),
+                              data=data)
+ 
+     def test5(self):
+         filename = 'test5data.wav'
+         with tempfile.TemporaryDirectory() as d:
+             os.chdir(d)
+-            data = np.zeros(32, dtype=np.int16)
++            data = np.zeros(32, dtype=int16le)
+             data[1::4] = 10000
+             data[3::4] = -10000
+             wavio.write(filename, data, 44100, sampwidth=2)
+ 
+             check_basic(filename, nchannels=1, sampwidth=2, framerate=44100)
+             check_wavio_read(filename, rate=44100, sampwidth=2,
+-                             dtype=np.int16, shape=(32, 1),
++                             dtype=int16le, shape=(32, 1),
+                              data=data.reshape(-1, 1))
+ 
+     def test6(self):
+         filename = 'test6data.wav'
+         with tempfile.TemporaryDirectory() as d:
+             os.chdir(d)
+-            data = np.zeros(32, dtype=np.int16)
++            data = np.zeros(32, dtype=int16le)
+             data[1::4] = 10000
+             data[3::4] = -10000
+             wavio.write(filename, data, 44100, sampwidth=1, clip='ignore')
+@@ -169,12 +171,12 @@ def test_16bit_full_range_round_trip(self):
+         with tempfile.TemporaryDirectory() as d:
+             os.chdir(d)
+             data = np.array([-2**15, -2**8, -1, 0, 1, 2**8, 2**15-1],
+-                            dtype=np.int16)
++                            dtype=int16le)
+             wavio.write(filename, data, 44100)
+ 
+             check_basic(filename, nchannels=1, sampwidth=2, framerate=44100)
+             check_wavio_read(filename, rate=44100, sampwidth=2,
+-                             dtype=np.int16, shape=(len(data), 1),
++                             dtype=int16le, shape=(len(data), 1),
+                              data=data.reshape(-1, 1))
+ 
+     def test_24bit_full_range_round_trip(self):
+@@ -183,12 +185,12 @@ def test_24bit_full_range_round_trip(self):
+         with tempfile.TemporaryDirectory() as d:
+             os.chdir(d)
+             data = np.array([-2**23, -2**16, -1, 0, 1, 2**16, 2**23-1],
+-                            dtype=np.int32)
++                            dtype=int32le)
+             wavio.write(filename, data, 44100, sampwidth=3)
+ 
+             check_basic(filename, nchannels=1, sampwidth=3, framerate=44100)
+             check_wavio_read(filename, rate=44100, sampwidth=3,
+-                             dtype=np.int32, shape=(len(data), 1),
++                             dtype=int32le, shape=(len(data), 1),
+                              data=data.reshape(-1, 1))
+ 
+     def test_32bit_full_range_round_trip(self):
+@@ -197,12 +199,12 @@ def test_32bit_full_range_round_trip(self):
+         with tempfile.TemporaryDirectory() as d:
+             os.chdir(d)
+             data = np.array([-2**31, -2**16, -1, 0, 1, 2**16, 2**31-1],
+-                            dtype=np.int32)
++                            dtype=int32le)
+             wavio.write(filename, data, 44100)
+ 
+             check_basic(filename, nchannels=1, sampwidth=4, framerate=44100)
+             check_wavio_read(filename, rate=44100, sampwidth=4,
+-                             dtype=np.int32, shape=(len(data), 1),
++                             dtype=int32le, shape=(len(data), 1),
+                              data=data.reshape(-1, 1))
+ 
+     def test_clipping_exception_float(self):

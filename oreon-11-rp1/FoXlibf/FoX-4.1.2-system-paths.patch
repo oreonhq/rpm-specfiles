@@ -1,0 +1,42 @@
+diff -up FoX-4.1.2/arch.make.in.system FoX-4.1.2/arch.make.in
+--- FoX-4.1.2/arch.make.in.system	2014-05-29 17:01:10.637670403 -0400
++++ FoX-4.1.2/arch.make.in	2014-05-29 17:01:59.473308676 -0400
+@@ -9,6 +9,7 @@ install_prefix=@prefix@
+ LIB_DIR=$(compile_prefix)/lib
+ MOD_DIR=$(compile_prefix)/finclude
+ DESTDIR=@DESTDIR@
++LIBDIR=@libdir@
+ 
+ FPP=@FPP@
+ FC=@FC@
+diff -up FoX-4.1.2/FoX-config.in.system FoX-4.1.2/FoX-config.in
+--- FoX-4.1.2/FoX-config.in.system	2012-01-05 05:04:10.000000000 -0500
++++ FoX-4.1.2/FoX-config.in	2014-05-29 17:02:24.876120567 -0400
+@@ -1,8 +1,8 @@
+ #!/bin/sh
+ 
+-comp_prefix=@OBJSDIR@
+-moddir=`@CYGPATH_W@ $comp_prefix/finclude`
+-libdir=`@CYGPATH_W@ $comp_prefix/lib`
++comp_prefix=@prefix@
++moddir=`@CYGPATH_W@ $comp_prefix/include/FoX`
++libdir=`@CYGPATH_W@ @libdir@`
+ version=@PACKAGE_VERSION@
+ 
+ usage()
+diff -up FoX-4.1.2/Makefile.system FoX-4.1.2/Makefile
+--- FoX-4.1.2/Makefile.system	2014-05-29 16:59:28.348432243 -0400
++++ FoX-4.1.2/Makefile	2014-05-29 17:03:03.955831247 -0400
+@@ -9,9 +9,9 @@ objsdir:
+ 	mkdir -p objs/lib objs/finclude
+ #
+ install: objsdir $(BUILD_TARGETS)
+-	$(MKDIR_P) $(DESTDIR)$(install_prefix)/lib $(DESTDIR)$(install_prefix)/finclude $(DESTDIR)$(install_prefix)/bin
+-	$(INSTALL) objs/lib/* $(DESTDIR)$(install_prefix)/lib
+-	$(INSTALL) -m 644 objs/finclude/* $(DESTDIR)$(install_prefix)/finclude
++	$(MKDIR_P) $(DESTDIR)$(LIBDIR) $(DESTDIR)$(install_prefix)/include/FoX $(DESTDIR)$(install_prefix)/bin
++	$(INSTALL) objs/lib/* $(DESTDIR)$(LIBDIR)
++	$(INSTALL) -m 644 objs/finclude/* $(DESTDIR)$(install_prefix)/include/FoX
+ 	$(INSTALL) FoX-config $(DESTDIR)$(install_prefix)/bin
+ #
+ examples_build: $(BUILD_TARGETS)

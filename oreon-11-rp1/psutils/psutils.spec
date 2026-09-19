@@ -4,8 +4,8 @@
 %bcond psutils_enables_unbundling_gnulib %{undefined rhel}
 
 Name:       psutils
-Version:    2.10
-Release:    10%{?dist}
+Version:    3.3.17
+Release:    1%{?dist}
 Summary:    PostScript utilities
 # COPYING:          GPLv3 text
 # epsffit.1:        GPLv3+

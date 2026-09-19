@@ -1,58 +1,37 @@
 %global source0_hash none
 
-%global pypi_name nihtest
-%global forgeurl https://github.com/nih-at/nihtest
+Name:           python-nihtest
+Version:        1.11.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A testing tool for command line utilities.
 
-%bcond_without tests
-
-Name:           python-%{pypi_name}
-Version:        1.9.1
-Release:        %{autorelease}
-Summary:        A testing tool for command line utilities
-%forgemeta
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            %forgeurl
-Source:         %forgesource
-Patch:          run_tests_using_cmake_and_ctest.patch
+URL:            https://github.com/nih-at/nihtest
+Source:         %{pypi_source nihtest}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  git-core
-# For generating manpages
-BuildRequires:  make, mandoc
-# For running tests using CMake
-%if %{with tests}
-BuildRequires:  cmake, gcc
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is nihtest, a testing tool for command line utilities.
+This is package 'nihtest' generated automatically by pyp2spec.}
 
-Tests are run in a sandbox directory to guarantee a clean separation of
-the test.
-
-It checks that exit code, standard and error outputs are as expected
-and compares the files in the sandbox after the run with the expected
-results.}
+Patch:          run_tests_using_cmake_and_ctest.patch
 
 %description %_description
 
-
-%package -n python3-%{pypi_name}
+%package -n     python3-nihtest
 Summary:        %{summary}
-Provides:       nihtest = %{?epoch:%{epoch}:}%{version}-%{release}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-nihtest %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{pypi_name}-%{version} -S git
-
-# Work around issue with package discovery due to SPECPARTS dir
-# https://github.com/rpm-software-management/rpm/issues/2532
-# Another option seems to be to remove that dir
-echo -e '\n[tool.setuptools]\npackages = ["nihtest"]\n' >> pyproject.toml
+%autosetup -p1 -n nihtest-%{version}
 
 
 %generate_buildrequires
@@ -62,48 +41,20 @@ echo -e '\n[tool.setuptools]\npackages = ["nihtest"]\n' >> pyproject.toml
 %build
 %pyproject_wheel
 
-# Generate man pages and docs
-pushd manpages
-make %{?_smp_mflags}
-popd
-
 
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
-
-mkdir -p %{buildroot}/%{_mandir}/man{1,5}
-mv manpages/nihtest.man manpages/nihtest.1
-mv manpages/nihtest-case.man manpages/nihtest-case.5
-mv manpages/nihtest.conf.man manpages/nihtest.conf.5
-cp -a manpages/*.1 %{buildroot}/%{_mandir}/man1
-cp -a manpages/*.5 %{buildroot}/%{_mandir}/man5
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pyproject_check_import
-
-# Run tests using CMake
-%if %{with tests}
-  # Solution for running tests provided by Benson Muite
-  touch check.sh
-  echo "PATH=%{buildroot}%{_bindir}:${PATH} PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib}:${PYTHONPATH} %{python3} %{buildroot}%{_bindir}/nihtest -v \$1 " >> check.sh
-  sed -i 's|${NIHTEST}|bash %{_builddir}/%{pypi_name}-%{version}/check.sh|g' tests/CMakeLists.txt
-  sed -i 's|ENVIRONMENT "PATH=${path}"|ENVIRONMENT "PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib}:$ENV{PYTHONPATH}"|g' tests/CMakeLists.txt
-  echo "PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib}" >> tests/nihtest.conf.in
-  %cmake
-  %cmake_build
-  %ctest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.*
-%doc manpages/*.html
-%{_bindir}/%{pypi_name}
-%{_mandir}/man1/%{pypi_name}.1*
-%{_mandir}/man5/%{pypi_name}*.5*
-
+%files -n python3-nihtest -f %{pyproject_files}
+%{_bindir}/nihtest
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.1-1

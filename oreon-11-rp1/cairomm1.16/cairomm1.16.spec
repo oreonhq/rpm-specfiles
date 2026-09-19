@@ -10,7 +10,7 @@
 
 Name:           cairomm%{apiver}
 Summary:        C++ API for the cairo graphics library
-Version:        1.18.0
+Version:        1.18.1
 Release:        %autorelease
 
 URL:            https://www.cairographics.org

@@ -1,0 +1,65 @@
+Remove the use of / need for -DALLEGRO_FIX_ALIASES
+
+Starting with gcc 15 the default C-level is -std=gnu23 this enables
+the fsub, fadd, fcos, etc function protypes in math.h causing
+a conflict with the use of ALLEGRO_FIX_ALIASES which adds aliased
+for allegro's fixed math functions back to the old allegro names
+which conflict with the math.h prototypes.
+
+Since zasx only uses fcos, this can be fixed by dropping the use of
+ALLEGRO_FIX_ALIASES, combined with s/fcos/fixcos/
+
+diff -up Zasx/Makefile~ Zasx/Makefile
+--- Zasx/Makefile~	2025-08-07 22:08:56.000000000 +0200
++++ Zasx/Makefile	2025-08-07 23:05:43.640169740 +0200
+@@ -1,6 +1,6 @@
+ PREFIX  = /usr/local
+ DATADIR = $(PREFIX)/share/$(TARGET)
+-CFLAGS  = -g -Wall -Wno-deprecated-declarations -O2 -fsigned-char -DALLEGRO_FIX_ALIASES
++CFLAGS  = -g -Wall -Wno-deprecated-declarations -O2 -fsigned-char
+ LDFLAGS = `allegro-config --libs` -ldumb -laldmb -lm -lpthread
+ DEFINES = -DDATADIR=\"$(DATADIR)/\" -Iinclude
+ OBJS    = obj/anim.o obj/dataload.o obj/gamemenu.o obj/input.o obj/log.o \
+diff -up Zasx/src/scorer.c~ Zasx/src/scorer.c
+--- Zasx/src/scorer.c~	2025-08-07 22:08:56.000000000 +0200
++++ Zasx/src/scorer.c	2025-08-07 23:04:39.992540810 +0200
+@@ -39,28 +39,28 @@ void ShowCredits() {
+ 	do {
+ 		DrawBG();
+ 
+-		textout(BackBuffer, font, " Programming and Design", 10 + fixtoi(10 * fcos(itofix(GameTime - start_tick) / 10)),
++		textout(BackBuffer, font, " Programming and Design", 10 + fixtoi(10 * fixcos(itofix(GameTime - start_tick) / 10)),
+ 			30, makecol(255, 255, 255));
+-		textout(BackBuffer, font, "   Robert J Ohannessian",  10 + fixtoi(10 * fcos(itofix(GameTime - start_tick + 50) / 10)),
++		textout(BackBuffer, font, "   Robert J Ohannessian",  10 + fixtoi(10 * fixcos(itofix(GameTime - start_tick + 50) / 10)),
+ 			40, makecol(255, 255, 255));
+-		textout(BackBuffer, font, " Music:", 10 + fixtoi(10 * fcos(itofix(GameTime - start_tick + 150) / 10)),
++		textout(BackBuffer, font, " Music:", 10 + fixtoi(10 * fixcos(itofix(GameTime - start_tick + 150) / 10)),
+ 			60, makecol(255, 255, 255));
+-		textout(BackBuffer, font, "   Ben Davis",  10 + fixtoi(10 * fcos(itofix(GameTime - start_tick + 200) / 10)),
++		textout(BackBuffer, font, "   Ben Davis",  10 + fixtoi(10 * fixcos(itofix(GameTime - start_tick + 200) / 10)),
+ 			70, makecol(255, 255, 255));
+-		textout(BackBuffer, font, " Graphics:",   10 + fixtoi(10 * fcos(itofix(GameTime - start_tick + 300) / 10)),
++		textout(BackBuffer, font, " Graphics:",   10 + fixtoi(10 * fixcos(itofix(GameTime - start_tick + 300) / 10)),
+ 			90, makecol(255, 255, 255));
+-		textout(BackBuffer, font, "   Robert J Ohannessian", 10 + fixtoi(10 * fcos(itofix(GameTime - start_tick + 350) / 10)),
++		textout(BackBuffer, font, "   Robert J Ohannessian", 10 + fixtoi(10 * fixcos(itofix(GameTime - start_tick + 350) / 10)),
+ 			100, makecol(255, 255, 255));
+-		textout(BackBuffer, font, "   Jonathan Soulard", 10 + fixtoi(10 * fcos(itofix(GameTime - start_tick + 400) / 10)),
++		textout(BackBuffer, font, "   Jonathan Soulard", 10 + fixtoi(10 * fixcos(itofix(GameTime - start_tick + 400) / 10)),
+ 			110, makecol(255, 255, 255));
+ 
+-		textout(BackBuffer, font, " Special thanks to:", 10 + fixtoi(10 * fcos(itofix(GameTime - start_tick + 500) / 10)),
++		textout(BackBuffer, font, " Special thanks to:", 10 + fixtoi(10 * fixcos(itofix(GameTime - start_tick + 500) / 10)),
+ 			130, makecol(255, 255, 255));
+-		textout(BackBuffer, font, "   Shawn Hargreaves, (Allegro, one asteroid graphics and some sound effects)", 10 + fixtoi(10 * fcos(itofix(GameTime - start_tick + 550) / 10)),
++		textout(BackBuffer, font, "   Shawn Hargreaves, (Allegro, one asteroid graphics and some sound effects)", 10 + fixtoi(10 * fixcos(itofix(GameTime - start_tick + 550) / 10)),
+ 			140, makecol(255, 255, 255));
+-		textout(BackBuffer, font, "   Ivan Baldo, (PPCol)", 10 + fixtoi(10 * fcos(itofix(GameTime - start_tick + 600) / 10)),
++		textout(BackBuffer, font, "   Ivan Baldo, (PPCol)", 10 + fixtoi(10 * fixcos(itofix(GameTime - start_tick + 600) / 10)),
+ 			150, makecol(255, 255, 255));
+-		textout(BackBuffer, font, "   Jeffery Guan, (JGMOD)", 10 + fixtoi(10 * fcos(itofix(GameTime - start_tick + 650) / 10)),
++		textout(BackBuffer, font, "   Jeffery Guan, (JGMOD)", 10 + fixtoi(10 * fixcos(itofix(GameTime - start_tick + 650) / 10)),
+ 			160, makecol(255, 255, 255));
+ 
+ 

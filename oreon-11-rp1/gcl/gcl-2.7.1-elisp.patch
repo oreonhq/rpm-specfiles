@@ -1,0 +1,320 @@
+--- gcl-2.7.1/elisp/dbl.el.orig	2024-01-28 08:37:48.892732085 -0700
++++ gcl-2.7.1/elisp/dbl.el	2025-04-11 15:04:45.981983817 -0600
+@@ -505,11 +505,11 @@ If a non process buffer, just return cur
+   (let* ((buffer (dbl-find-file true-file))
+ 	 (window (display-buffer buffer t))
+ 	 (pos))
+-    (save-excursion
+-      (set-buffer buffer)
++    (with-current-buffer buffer
+       (save-restriction
+ 	(widen)
+-	(goto-line line)
++	(goto-char (point-min))
++	(forward-line (1- line))
+ 	(setq pos (point))
+ 	(setq overlay-arrow-string "=>")
+ 	(or overlay-arrow-position
+--- gcl-2.7.1/elisp/doc-to-texi.el.orig	2024-01-28 08:37:48.892732085 -0700
++++ gcl-2.7.1/elisp/doc-to-texi.el	2025-04-11 15:05:49.125031662 -0600
+@@ -51,7 +51,7 @@
+ 	   (let ((fun (get-match 1))
+ 		 (type (get-match 2))
+ 		 (package (get-match 3))
+-		 args body)
++		 body)
+ 	     (goto-char (match-end 0))
+ 	     (setq body (buffer-substring (point) (- end 1)))
+ 	     (delete-region beg end )
+@@ -78,22 +78,22 @@
+ 			  (?d .  "{Declaration}"))))))
+       (if u (replace-match u)))))
+ 
+-(setq b-alist '((?n . "number.texi")
+-		(?s . "sequence.texi")
+-		(?c . "character.texi")
+-		(?l . "list.texi")
+-		(?i . "io.texi")
+-		(?a . "internal.texi")
+-		(?f . "form.texi")
+-		(?C . "compile.texi")
+-		(?S . "symbol.texi")
+-		(?t . "system.texi")
+-		(?d . "structure.texi")
+-		(?I . "iteration.texi")
+-		(?u . "user-interface.texi")
+-		(?d . "doc.texi")
+-		(?b . "type.texi")
+-		))
++(defvar b-alist '((?n . "number.texi")
++		  (?s . "sequence.texi")
++		  (?c . "character.texi")
++		  (?l . "list.texi")
++		  (?i . "io.texi")
++		  (?a . "internal.texi")
++		  (?f . "form.texi")
++		  (?C . "compile.texi")
++		  (?S . "symbol.texi")
++		  (?t . "system.texi")
++		  (?d . "structure.texi")
++		  (?I . "iteration.texi")
++		  (?u . "user-interface.texi")
++		  (?d . "doc.texi")
++		  (?b . "type.texi")
++		  ))
+ (defun try1 ()
+   (interactive)
+   (while (re-search-forward "\n@def" nil t)
+@@ -114,7 +114,7 @@
+       
+ 
+       
+-(setq xall	  (mapcar 'cdr  b-alist))
++(defvar xall	  (mapcar 'cdr  b-alist))
+ 
+ ;(let ((all xall)) (while all (set-buffer (car all))  (write-file (car all)) (setq all (cdr all))))
+ ;(let ((all xall)) (while all   (find-file (car all)) (setq all (cdr all))))	
+--- gcl-2.7.1/elisp/gcl.el.orig	2024-01-28 08:37:48.892732085 -0700
++++ gcl-2.7.1/elisp/gcl.el	2025-04-11 15:12:08.377897491 -0600
+@@ -14,6 +14,7 @@
+ ;; M-p complete the current input by looking back through the buffer to see what was last typed
+ ;;        using this prompt and this beginning.   Useful in shell, in lisp, in gdb,...
+ 
++(require 'inf-lisp)
+ 
+ (setq lisp-mode-hook  'remote-lisp)
+ 
+@@ -23,6 +24,9 @@
+ ;(global-set-key "p" 'lisp-complete)
+ (global-set-key "p" 'smart-complete)
+ 
++(defvar lisp-package nil)
++(defvar lisp-process nil)
++
+ (defun remote-lisp (&rest l)
+   (and (boundp 'lisp-mode-map)
+        lisp-mode-map
+@@ -158,12 +162,12 @@ by get-buffer-package.
+ 	))
+     
+ 
+-    (send-string this-lisp-process
+-		 (concat ";;end of form" "\n" telnet-new-line))
++    (process-send-string this-lisp-process
++			 (concat ";;end of form" "\n" telnet-new-line))
+     (cond (arg
+ 	   (if (numberp arg) (setq arg "compile"))
+-	   (send-string this-lisp-process (concat "(" arg "'" fun ")"
+-						  telnet-new-line))))
++	   (process-send-string this-lisp-process (concat "(" arg "'" fun ")"
++							  telnet-new-line))))
+     (and time-to-throw-away
+ 	 (string-match "telnet"(buffer-name (process-buffer proc)))
+ 	 (dump-output proc time-to-throw-away))
+@@ -194,7 +198,7 @@ by get-buffer-package.
+ 
+ (defun my-send-region (proc beg end)
+   (cond ((or (string-match "telnet" (process-name proc)))
+-	 (send-region proc beg end))
++	 (process-send-region proc beg end))
+ 	(t
+ 	 (let ((package (get-buffer-package)))
+ 	   (save-excursion
+@@ -213,7 +217,7 @@ by get-buffer-package.
+ 		 (write-region (point-min) (point-max) tmp-lisp-file nil nil)))
+ 	   (write-region beg end tmp-lisp-file t nil)
+ 	   (message "sending ..")
+-	   (send-string
++	   (process-send-string
+ 	    proc
+ 	    (concat "(lisp::let ((*load-verbose* nil)) (#+sdebug si::nload #-sdebug load \""
+ 		    tmp-lisp-file
+@@ -268,9 +272,9 @@ by get-buffer-package.
+ 		       (prog2 (other-window 1)
+ 			      (get-buffer-process (current-buffer))
+ 			      (other-window 1)))))
+-	(send-string current-lisp-process "(macroexpand '")
+-	(send-region current-lisp-process  beg (point) )
+-	(send-string current-lisp-process ")\n")))))
++	(process-send-string current-lisp-process "(macroexpand '")
++	(process-send-region current-lisp-process  beg (point) )
++	(process-send-string current-lisp-process ")\n")))))
+ 
+ (defun delete-comment-char (arg) 
+   (while (and (> arg 0) (looking-at comment-start)) (delete-char 1) 
+@@ -333,8 +337,8 @@ so a second comment-region adds another
+  (interactive "P") 
+  (save-excursion 
+    (let ((beg (dot)) 
+-	 (ok t)(end (mark)))
+-          (comment-region1 beg end arg))))
++	 (end (mark)))
++     (comment-region1 beg end arg))))
+ 
+ (defun comment-region1 (beg end arg)
+   (let ((ok t))
+@@ -347,7 +351,7 @@ so a second comment-region adds another
+ 	   (while ok 
+ 	     (cond (arg 
+ 		    (delete-comment-char arg)) 
+-		   (t   (insert-string comment-start)))
++		   (t   (insert comment-start)))
+ 	     (if (< end (dot)) (setq ok nil)
+ 	       (if  (search-forward "\n" end t) nil (setq ok nil))) )
+ 	 (widen))))
+@@ -363,9 +367,9 @@ so a second comment-region adds another
+ 	     (current-lisp-process (or  proc lisp-process)))
+ 	(other-window 1)
+ 	(message "Tracing: %s" (buffer-substring (point) end))
+-	(send-string current-lisp-process "(trace ")
+-	(send-region current-lisp-process (point) end)
+-	(send-string current-lisp-process ")\n")))))
++	(process-send-string current-lisp-process "(trace ")
++	(process-send-region current-lisp-process (point) end)
++	(process-send-string current-lisp-process ")\n")))))
+ 
+ (defun gcl-mode ()
+   (interactive)
+--- gcl-2.7.1/elisp/man1-to-texi.el.orig	2024-01-28 08:37:48.892732085 -0700
++++ gcl-2.7.1/elisp/man1-to-texi.el	2025-04-11 15:12:08.378257130 -0600
+@@ -106,6 +106,8 @@
+ ;	End of indented unfilled display.
+ ; 
+ 
++(require 'makeinfo)
++
+ (defun do-replace (lis &optional not-in-string)
+   (let (x case-fold-search)
+     (while lis
+@@ -229,7 +231,9 @@
+       (kill-buffer (get-buffer "foo.info")))
+ 
+   (find-file "foo.n")
+-  (toggle-read-only 0)
++  (if (featurep 'xemacs)
++      (toggle-read-only 0)
++    (read-only-mode 1))
+   (doit)
+   (write-file "foo.texi")
+   (makeinfo-buffer ))
+@@ -285,15 +289,14 @@
+     (while (< i (length vec)) (setq tot (+ (aref vec i) tot)) (setq i (+ i 1)))
+     (setq surplus (/ (- 70 tot) (+ 1 (length (car items)))))
+     (while items
+-      (setq tem (car items))
+-      (setq i 0)
+-      (let (ans x)
++      (let ((tem (car items)))
++	(setq i 0)
+ 	(insert "")
+-	(while tem
+-	  (insert (tex-center (car tem) (+ (aref vec i) surplus) 'left
+-			      (real-length (car tem))))
+-	  (setq tem (cdr tem)) (setq i (+ i 1)))
+-	(insert "\n"))
++	(dolist (elem tem)
++	  (insert (tex-center elem (+ (aref vec i) surplus) 'left
++			      (real-length elem)))
++	  (setq i (+ i 1))))
++      (insert "\n")
+       (setq items (cdr items)))
+     )
+   )
+@@ -330,22 +333,7 @@
+ 	(insert "@w{" ) (end-of-line) (insert "}")
+ 	    (forward-line 1) (beginning-of-line))))
+ 
+-(defun add-keywords ()
+-  (let ((tem tk-control-options)x lis l y)
+-    (while tem
+-      (setq l (car tem))
+-      (setq tem (cdr tem))
+-      (setq x (symbol-name (car l )))
+-      (setq lis (car (cdr l)))
+-      (while lis
+-	(cond ((atom lis) (setq lis nil))
+-	      (t (setq y (symbol-name (car lis)))
+-		 (do-replace (list (list (concat x  " "y "")
+-					 (concat x " :"y "")
+-					 )))))
+-	(setq lis (cdr lis))))))
+-
+-(setq tk-control-options
++(defvar tk-control-options
+       '((after fixnum) 
+ 	(exit fixnum) 
+ 	(lower window) 
+@@ -375,7 +363,22 @@
+ 	(update (idletasks)) 
+ 	))
+ 
+-(setq tk-widget-options
++(defun add-keywords ()
++  (let ((tem tk-control-options)x lis l y)
++    (while tem
++      (setq l (car tem))
++      (setq tem (cdr tem))
++      (setq x (symbol-name (car l )))
++      (setq lis (car (cdr l)))
++      (while lis
++	(cond ((atom lis) (setq lis nil))
++	      (t (setq y (symbol-name (car lis)))
++		 (do-replace (list (list (concat x  " "y "")
++					 (concat x " :"y "")
++					 )))))
++	(setq lis (cdr lis))))))
++
++(defvar tk-widget-options
+       '(
+ 	(button (activate configure deactivate flash invoke)) 
+ 	(listbox ( configure curselection delete get insert nearest
+@@ -404,7 +407,7 @@
+ 	(toplevel ( configure)) 
+ 	))
+ 
+-(setq manual-sections
++(defvar manual-sections
+       '(after bind button canvas checkbutton destroy  entry exit focus foo frame grab label lbSingSel listbox lower menu menubar menubutton message option options pack-old pack place radiobutton raise scale scrollbar selection send text tk tkerror tkvars tkwait toplevel update winfo wm))
+ 
+ ;(setq widgets (sort (mapcar 'car tk-widget-options) 'string-lessp))
+--- gcl-2.7.1/elisp/smart-complete.el.orig	2023-12-26 06:24:03.060022520 -0700
++++ gcl-2.7.1/elisp/smart-complete.el	2025-04-11 15:12:08.378551098 -0600
+@@ -85,8 +85,7 @@
+ 	(pat (concat (regexp-for-this-prompt prompt)
+ 		     "\\(" (regexp-quote str) "\\)" ))
+ 	offered (not-yet t)
+-	)
+-    (setq bill pat)
++	at this)
+     (while (and  not-yet
+ 		 (re-search-backward pat nil t))
+       (goto-char (match-beginning 1))
+--- gcl-2.7.1/elisp/sshell.el.orig	2024-01-28 08:37:48.892732085 -0700
++++ gcl-2.7.1/elisp/sshell.el	2025-04-11 15:12:08.378738517 -0600
+@@ -119,9 +119,9 @@ and lisp-send-defun."
+ 	 (ff
+ 	  (save-excursion
+ 	    (skip-chars-backward "[a-z---_0-9$/A-Z~#.]")
+-	    (buffer-substring (setq beg (point)) p))))
+-    (setq dir (or (file-name-directory ff) default-directory))
+-    (setq file (file-name-nondirectory ff))
++	    (buffer-substring (setq beg (point)) p)))
++	 (dir (or (file-name-directory ff) default-directory))
++	 (file (file-name-nondirectory ff)))
+     (cond ((and (setq tem (file-name-completion (or file "") dir))
+ 		(not (equal tem file)))
+ 	   (cond ((eq tem t))
+@@ -181,11 +181,10 @@ If yours does, you will probably want to
+ 
+ (defun make-sshell (name program &optional startfile &rest switches)
+   (let ((buffer (get-buffer-create (concat "*" name "*")))
+-	proc status size)
++	proc status)
+     (setq proc (get-buffer-process buffer))
+     (if proc (setq status (process-status proc)))
+-    (save-excursion
+-      (set-buffer buffer)
++    (with-current-buffer buffer
+       ;;    (setq size (buffer-size))
+       (if (memq status '(run stop))
+ 	  nil

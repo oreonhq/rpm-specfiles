@@ -1,0 +1,82 @@
+From 005750e3bdacc90781dad4d98341ec54539f5b53 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micha=C5=82=20G=C3=B3rny?= <mgorny@gentoo.org>
+Date: Mon, 17 Mar 2025 12:10:45 +0100
+Subject: [PATCH 1/2] Fix formatting output data with NumPy 2.x
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fix the common `_write_data()` function to use a regular formatting
+rather than `repr()` when writing numbers to a file.  With NumPy 2.x,
+the latter resulted in literal `np.float64(…)` ending up in the data
+file.
+
+Part of bug #1499
+---
+ src/meshio/gmsh/common.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/meshio/gmsh/common.py b/src/meshio/gmsh/common.py
+index 717e82ee2..adcae2411 100644
+--- a/src/meshio/gmsh/common.py
++++ b/src/meshio/gmsh/common.py
+@@ -273,7 +273,7 @@ def _write_data(fh, tag, name, data, binary):
+         tmp.tofile(fh)
+         fh.write(b"\n")
+     else:
+-        fmt = " ".join(["{}"] + ["{!r}"] * num_components) + "\n"
++        fmt = " ".join(["{}"] * (num_components + 1)) + "\n"
+         # TODO unify
+         if num_components == 1:
+             for k, x in enumerate(data):
+
+From ce61c9bc0627707e03890fac0d7fc36c2030f975 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micha=C5=82=20G=C3=B3rny?= <mgorny@gentoo.org>
+Date: Mon, 17 Mar 2025 12:17:40 +0100
+Subject: [PATCH 2/2] Fix other formatters using `repr()` as well
+
+---
+ src/meshio/dolfin/_dolfin.py | 2 +-
+ src/meshio/mdpa/_mdpa.py     | 2 +-
+ src/meshio/ugrid/_ugrid.py   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/meshio/dolfin/_dolfin.py b/src/meshio/dolfin/_dolfin.py
+index e43dbd546..0a2c1eaa7 100644
+--- a/src/meshio/dolfin/_dolfin.py
++++ b/src/meshio/dolfin/_dolfin.py
+@@ -207,7 +207,7 @@ def _write_cell_data(filename, dim, cell_data):
+     )
+ 
+     for k, value in enumerate(cell_data):
+-        ET.SubElement(mesh_function, "entity", index=str(k), value=repr(value))
++        ET.SubElement(mesh_function, "entity", index=str(k), value=str(value))
+ 
+     tree = ET.ElementTree(dolfin)
+     tree.write(filename)
+diff --git a/src/meshio/mdpa/_mdpa.py b/src/meshio/mdpa/_mdpa.py
+index afa39eca1..e49358af0 100644
+--- a/src/meshio/mdpa/_mdpa.py
++++ b/src/meshio/mdpa/_mdpa.py
+@@ -418,7 +418,7 @@ def _write_data(fh, tag, name, data, binary):
+         data = data[:, 0]
+ 
+     # Actually write the data
+-    fmt = " ".join(["{}"] + ["{!r}"] * num_components) + "\n"
++    fmt = " ".join(["{}"] * (num_components + 1)) + "\n"
+     # TODO unify
+     if num_components == 1:
+         for k, x in enumerate(data):
+diff --git a/src/meshio/ugrid/_ugrid.py b/src/meshio/ugrid/_ugrid.py
+index 6fa57c09f..f1d5818df 100644
+--- a/src/meshio/ugrid/_ugrid.py
++++ b/src/meshio/ugrid/_ugrid.py
+@@ -145,7 +145,7 @@ def read_buffer(f, file_type):
+ def _write_section(f, file_type, array, dtype):
+     if file_type["type"] == "ascii":
+         ncols = array.shape[1]
+-        fmt = " ".join(["%r"] * ncols)
++        fmt = " ".join(["%s"] * ncols)
+         np.savetxt(f, array, fmt=fmt)
+     else:
+         array.astype(dtype).tofile(f)

@@ -1,0 +1,46 @@
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.hostbyteorder mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.hostbyteorder	2017-07-12 09:59:56.727184258 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs	2017-07-12 10:00:19.926417945 -0400
+@@ -113,7 +113,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+             
+             InterfaceIndex = interfaceIndex;
+             FullName = fullname;
+-            this.port = port;
++            this.port = (ushort)IPAddress.NetworkToHostOrder((short)port);
+             TxtRecord = new TxtRecord(txtLen, txtRecord);
+ 
+             sdRef.Deallocate();
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs.hostbyteorder mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs.hostbyteorder	2017-07-12 09:58:34.960495648 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs	2017-07-12 09:59:07.127622339 -0400
+@@ -27,6 +27,7 @@
+ //
+ 
+ using System;
++using System.Net;
+ using System.Threading;
+ using System.Runtime.InteropServices;
+ 
+@@ -106,7 +107,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+             
+             ServiceError error = Native.DNSServiceRegister(out sd_ref, 
+                 auto_rename ? ServiceFlags.None : ServiceFlags.NoAutoRename, InterfaceIndex,
+-                Name, RegType, ReplyDomain, HostTarget, port, txt_rec_length, txt_rec,
++                Name, RegType, ReplyDomain, HostTarget, (ushort)IPAddress.HostToNetworkOrder((short)port), txt_rec_length, txt_rec,
+                 register_reply_handler, IntPtr.Zero);
+ 
+             if(error != ServiceError.NoError) {
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/Service.cs.hostbyteorder mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/Service.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/Service.cs.hostbyteorder	2017-07-12 09:59:17.960308259 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/Service.cs	2017-07-12 09:59:47.831442181 -0400
+@@ -133,8 +133,8 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         }
+ 
+         public ushort UPort {
+-            get { return (ushort)IPAddress.NetworkToHostOrder((int)port); }
+-            set { port = (ushort)IPAddress.HostToNetworkOrder((int)value); }
++            get { return port; }
++            set { port = value; }
+         }
+     }
+ }

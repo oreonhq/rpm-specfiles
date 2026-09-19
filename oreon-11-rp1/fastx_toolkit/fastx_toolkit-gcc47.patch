@@ -1,0 +1,10 @@
+--- fastx_toolkit-0.0.13/src/libfastx/sequence_alignment.h	2010-01-29 22:32:21.000000000 +0000
++++ fastx_toolkit-0.0.13.new/src/libfastx/sequence_alignment.h	2012-01-09 11:09:36.142686410 +0000
+@@ -19,6 +19,7 @@
+ #define __SEQUENCE_ALIGNMENT_HEADER__
+ 
+ #include <err.h>
++#include <unistd.h>
+ 
+ struct SequenceAlignmentResults
+ {

@@ -1,0 +1,22 @@
+From e452524ea4a40c33e2eafde0a3277cbf8c1d70f0 Mon Sep 17 00:00:00 2001
+From: Frederic Meeuwissen <frederic.meeuwissen@gmail.com>
+Date: Fri, 27 Jan 2023 13:24:08 +0100
+Subject: [PATCH] Fix GenericDesktopControls Rz
+
+---
+ hid_parser/data.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/hid_parser/data.py b/hid_parser/data.py
+index 11254f0..addd5e1 100644
+--- a/hid_parser/data.py
++++ b/hid_parser/data.py
+@@ -209,7 +209,7 @@ class GenericDesktopControls(_Data):
+     Z = 0x32, 'Z', UsageTypes.DV
+     RX = 0x33, 'Rx', UsageTypes.DV
+     RY = 0x34, 'Ry', UsageTypes.DV
+-    RX = 0x35, 'Rz', UsageTypes.DV
++    RZ = 0x35, 'Rz', UsageTypes.DV
+     SLIDER = 0x36, 'Slider', UsageTypes.DV
+     DIAL = 0x37, 'Dial', UsageTypes.DV
+     WHEEL = 0x38, 'Wheel', UsageTypes.DV

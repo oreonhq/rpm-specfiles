@@ -1,12 +1,12 @@
-%global source0_hash e28036eba9bf94f62466eaff66f49305fff9dd576a317df2474d6bfe5bfbc759
+%global source0_hash f5a00d13eaf0401e9e4f3ffccda4876e2bcf84fb8dc2613a5d087971b377df1f
 
 %global framework syndication
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version:	6.29.0
 Release:        1%{?dist}
 Summary: The Syndication Library
 
@@ -19,12 +19,12 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
-BuildRequires:  cmake(KF6Codecs)
+BuildRequires:  cmake(KF6Codecs) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  cmake
 BuildRequires:  qt6-qtbase-devel
 
-BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6KIO) >= %{version}
 Requires:  kf6-filesystem
 
 %description
@@ -59,18 +59,4 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- inline cmake --build (no qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Qt6 qdoc: -html file list via find, tags/index in -devel
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
-
+%autochangelog

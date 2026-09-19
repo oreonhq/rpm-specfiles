@@ -1,0 +1,42 @@
+--- CMakeLists.txt.fix_libpaths	2021-05-24 21:00:30.000000000 +0200
++++ CMakeLists.txt	2021-06-02 18:34:02.336369885 +0200
+@@ -258,7 +258,7 @@
+     elseif()
+         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-deprecated -mmacosx-version-min=10.9")
+     endif()
+-    set(BNG2_PATH "/usr/local/bin/BioNetGen/BNG2.pl")
++    set(BNG2_PATH "${PERL_VENDORLIB}/BioNetGen/BNG2.pl")
+ elseif (WIN32)
+     set(WINDOWS_BUILD ON)
+     if(MSVC)
+@@ -274,7 +274,7 @@
+ else ()
+     set(NIX_BUILD ON)
+     message(STATUS "Compiling on a Linux computer")
+-    set(BNG2_PATH "/usr/local/bin/BioNetGen/BNG2.pl")
++    set(BNG2_PATH "${PERL_VENDORLIB}/BioNetGen/BNG2.pl")
+ endif ()
+ 
+ message(STATUS "CMAKE_CXX_FLAGS variable: '${CMAKE_CXX_FLAGS}'")
+@@ -443,7 +443,8 @@
+         find_path(ZLIB_INCLUDE_DIRS zlib.h)
+         find_library(ZLIB_LIBRARIES libz.a)
+     else()
+-        include(FindZlib)
++        find_path(ZLIB_INCLUDE_DIRS zlib.h PATHS ${INCLUDE_INSTALL_DIR})
++        find_library(ZLIB_LIBRARIES libz.so PATHS ${CMAKE_INSTALL_LIBDIR})
+     endif()
+ 
+     if(ZLIB_INCLUDE_DIRS AND ZLIB_LIBRARIES)
+@@ -526,9 +527,8 @@
+     else()
+         find_package(Python3 ${PYTHON_VERSION} EXACT COMPONENTS Interpreter Development REQUIRED)
+     endif()
+-    set(PYBIND11_SOURCE_DIR ${CMAKE_SOURCE_DIR}/source/pybind11)
+-    add_subdirectory(${PYBIND11_SOURCE_DIR})
+-    add_subdirectory(${CMAKE_SOURCE_DIR}/source/python)
++        find_package(pybind11)
++        add_subdirectory(${CMAKE_SOURCE_DIR}/source/python)
+ endif ()
+ 
+ 

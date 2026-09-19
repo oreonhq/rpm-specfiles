@@ -1,0 +1,25 @@
+From bd4a6be7fd74fe3e51fcbadc723d099bb8f0af73 Mon Sep 17 00:00:00 2001
+From: Marian Koncek <mkoncek@redhat.com>
+Date: Wed, 14 Aug 2024 00:23:15 +0200
+Subject: [PATCH 1/3] Add -fPIE compiler flag
+
+Signed-off-by: Jan200101 <sentrycraft123@gmail.com>
+---
+ build.zig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/build.zig b/build.zig
+index cb16dea..58189ba 100644
+--- a/build.zig
++++ b/build.zig
+@@ -79,6 +79,7 @@ fn addExecutable(b: *std.Build, options: struct {
+         .target = options.target,
+         .optimize = options.optimize,
+     });
++    exe.pie = true;
+     try attachModules(exe);
+     return exe;
+ }
+-- 
+2.51.0
+

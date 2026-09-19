@@ -1,0 +1,42 @@
+The builtin output formats for wgrib are
+
+      binary: single precision CPU native format
+      ieee:   single precision big-endian IEEE (32 bits)
+      grib:
+      text:
+
+Someone had the need to produce double precision output.  One
+may question their wisdom because probably all GRIB data have 
+less precision than the single precision floating point
+format.  Nevertheless it was easy to modify wgrib to output 
+double precision floating point numbers as the standard binary
+format. (Writing dp ieee is much more difficult.)
+
+
+
+Kludge number 102:
+
+Edit the file wgrib.c by changing all occurances of float
+to double.  Change the line
+
+    #include <double.h>
+
+back to 
+
+    #include <float.h>
+
+Remember that you must change ALL occurances of "float" and 
+that word may occur more than once on a line.
+
+Compile normally and if all goes well, the "-bin" option
+will now produce double precision floating output.  Don't
+forget the default format is "-bin".
+
+Note:  The kludge looks good but hasn't been examined with
+a fine-tooth comb.  I should probably change "float" to
+FLOAT and use a typedef.  However, this change is really
+low priority.
+
+
+END OF KLUDGE NUMBER 102
+

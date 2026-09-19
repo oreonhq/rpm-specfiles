@@ -1,0 +1,11 @@
+diff -up berusky-1.7.1/src/level_game.cpp.old berusky-1.7.1/src/level_game.cpp
+--- berusky-1.7.1/src/level_game.cpp.old	2021-08-04 09:42:56.871954202 +0200
++++ berusky-1.7.1/src/level_game.cpp	2021-08-04 09:43:33.925999192 +0200
+@@ -25,6 +25,7 @@
+  *
+  */
+ 
++#include <cstddef>
+ #include "portability.h"
+ 
+ #ifdef LINUX

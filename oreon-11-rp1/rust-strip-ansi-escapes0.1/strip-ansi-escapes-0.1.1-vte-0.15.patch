@@ -1,0 +1,15 @@
+diff --git a/src/lib.rs b/src/lib.rs
+index 6edc750..ee8989c 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -129,9 +129,7 @@ where
+     W: Write,
+ {
+     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+-        for b in buf.iter() {
+-            self.parser.advance(&mut self.performer, *b)
+-        }
++        self.parser.advance(&mut self.performer, buf);
+         match self.performer.err.take() {
+             Some(e) => Err(e),
+             None => Ok(buf.len()),

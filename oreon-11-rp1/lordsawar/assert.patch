@@ -1,0 +1,15 @@
+--- src/tileset.h.orig	2020-05-12 00:39:31.451296564 -0500
++++ src/tileset.h	2020-05-12 00:40:10.739294802 -0500
+@@ -238,10 +238,10 @@
+ 	void setSmallSelectorMask(guint32 i, PixMask *p) {smallselectormask[i] = p;}
+ 
+ 	//! Sets the number of animation frames in the big selector.
+-	void setNumberOfSelectorFrames(guint32 s) {selector.reserve(s); selectormask.reserve(s); number_of_selector_frames = s;}
++	void setNumberOfSelectorFrames(guint32 s) {selector.resize(s); selectormask.resize(s); number_of_selector_frames = s;}
+ 
+ 	//! Sets the number of animation frames in the small selector.
+-	void setNumberOfSmallSelectorFrames(guint32 s) {smallselector.reserve(s);smallselectormask.reserve(s); number_of_small_selector_frames = s;}
++	void setNumberOfSmallSelectorFrames(guint32 s) {smallselector.resize(s);smallselectormask.resize(s); number_of_small_selector_frames = s;}
+ 
+         void clearRoadsImage (bool clear_name = true);
+         void clearStonesImage (bool clear_name = true);

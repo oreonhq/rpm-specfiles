@@ -1,0 +1,28 @@
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 6d35c10..50d2c72 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -69,7 +69,9 @@ else ()
+ endif ()
+ 
+ set(CXX_STD "c++11")
+-if (GTest_VERSION VERSION_GREATER_EQUAL "1.13.0")
++if (GTest_VERSION VERSION_GREATER_EQUAL "1.17.0")
++        set(CXX_STD "c++17")
++elseif (GTest_VERSION VERSION_GREATER_EQUAL "1.13.0")
+ 	set(CXX_STD "c++14")
+ else ()
+ 	get_filename_component(GTEST_PATH ${GTEST_LIBRARY} DIRECTORY ABSOLUTE)
+@@ -79,8 +81,10 @@ else ()
+ 	if (${GTEST_VERSION_RESULT} EQUAL "0")
+ 		string(REPLACE " " ";" GTEST_VERSION_STR ${GTEST_VERSION_OUTPUT})
+ 		list(GET GTEST_VERSION_STR 1 GTEST_VERSION)
+-		if (${GTEST_VERSION} VERSION_GREATER_EQUAL "1.13.0")
+-			set(CXX_STD "c++14")
++		if (${GTEST_VERSION} VERSION_GREATER_EQUAL "1.17.0")
++		    set(CXX_STD "c++17")
++		elseif (GTest_VERSION VERSION_GREATER_EQUAL "1.13.0")
++		    set(CXX_STD "c++14")
+ 		endif ()
+ 	endif ()
+ endif ()

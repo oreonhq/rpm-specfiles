@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Yanone Kaffeesatz</target>
+    <family>Yanone Kaffeesatz ExtraLight</family>
+    <like>
+      <family>FF Kava Pro</family>
+      <family>FF Kava Std</family>
+      <family>FF Kava OT</family>
+      <family>fantasy</family>
+    </like>
+  </group>
+</fontconfig>
+

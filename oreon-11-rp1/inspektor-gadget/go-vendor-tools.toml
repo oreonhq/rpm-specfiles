@@ -1,0 +1,43 @@
+[archive]
+
+[[licensing.licenses]]
+path = "LICENSE-bpf.txt"
+sha256sum = "7a83d7bd42c0c13bb77d9b4e76a08d3aa8b0ca71189573ddc8bb1d06d094abf0"
+expression = "GPL-2.0-only WITH Linux-syscall-note"
+[[licensing.licenses]]
+path = "vendor/github.com/go-errors/errors/LICENSE.MIT"
+sha256sum = "4c1b2259f160d975ec6594b602be5db4e6c0c06afe312ca3cd7cff91b75c7c26"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/github.com/BurntSushi/toml/COPYING"
+sha256sum = "d21cb1c60785d6d3a84a7059323ccafc45c645b1bbda281c76a62d66ad2d7dc3"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/gopkg.in/yaml.v2/LICENSE.libyaml"
+sha256sum = "a94710b55e03b5285f77d048c5ba61bb9d6ee04a06c0eb90e68821e11b0c707a"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/go.yaml.in/yaml/v2/LICENSE.libyaml"
+sha256sum = "a94710b55e03b5285f77d048c5ba61bb9d6ee04a06c0eb90e68821e11b0c707a"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/github.com/cyphar/filepath-securejoin/LICENSE.BSD"
+sha256sum = "26be8a79415737dfe8edf1be62e71afeb8c770ed5a5605a06270d5701830f47c"
+expression = "BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/github.com/cyphar/filepath-securejoin/LICENSE.MPL-2.0"
+sha256sum = "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04"
+expression = "MPL-2.0"
+
+[licensing]
+detector = "trivy"
+exclude_files = [
+    "vendor/k8s.io/code-generator/generate-groups.sh",
+    "vendor/k8s.io/code-generator/generate-internal-groups.sh",
+    "vendor/k8s.io/code-generator/kube_codegen.sh",
+]
+
+pre_commands = [
+    ["rm", "-rf", "tools"],
+    ["rm", "-rf", "hacks"],
+]

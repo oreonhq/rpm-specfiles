@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <id>rott-registered.desktop</id>
+  <extends>rott-shareware.desktop</extends>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Engine for Rise of the Triad registered</name>
+  <summary>
+   Place the registered Rise of the Triad datafiles under /usr/share/rott/
+  </summary>
+  <url type="homepage">http://icculus.org/rott/</url>
+  <updatecontact>jwrdegoede_at_gmail.com</updatecontact>
+</component>

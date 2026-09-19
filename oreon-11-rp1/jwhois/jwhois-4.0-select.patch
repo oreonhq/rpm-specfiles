@@ -1,0 +1,28 @@
+diff -up jwhois-4.0/src/whois.c.orig jwhois-4.0/src/whois.c
+--- jwhois-4.0/src/whois.c.orig	2007-06-26 09:00:29.000000000 +0200
++++ jwhois-4.0/src/whois.c	2019-02-21 14:14:01.018771387 +0100
+@@ -115,6 +115,8 @@ whois_read(int fd, char **ptr, const cha
+   unsigned int count, start_count;
+   int ret;
+   char data[MAXBUFSIZE];
++  fd_set rfds;
++  struct timeval timeout = { connect_timeout, 0 };
+ 
+   count = 0;
+ 
+@@ -124,7 +126,15 @@ whois_read(int fd, char **ptr, const cha
+ 
+   do
+     {
++      FD_ZERO(&rfds);
++      FD_SET(fd, &rfds);
++      ret = select(fd + 1, &rfds, NULL, NULL, &timeout);
++
++      if (ret <= 0)
++        return -1;
++
+       ret = read(fd, data, MAXBUFSIZE-1);
++
+       if (ret >= 0)
+ 	{
+ 	  count += ret;

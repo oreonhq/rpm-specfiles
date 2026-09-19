@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 47a29bd37b8aebe46b5f7fa011a511dbe0252813bcd02fe4ffaeffa64f4418cf
 
 %global stable_kf6 stable
 
@@ -12,7 +12,7 @@ ExcludeArch: %{ix86}
 
 Name:    kiten
 Summary: Japanese Reference/Study Tool
-Version: 26.04.1
+Version: 26.08.1
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND BSD-3-Clause AND CC-BY-SA-3.0 AND CC-BY-SA-4.0
@@ -66,7 +66,7 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n kiten-26.04.1
+%autosetup -p1 -n %{name}-%{version}
 
 
 %build

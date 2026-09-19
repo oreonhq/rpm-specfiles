@@ -1,0 +1,31 @@
+From 2941c475a0ff0ea4cd53d03214eee0338ce758bb Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Mon, 8 Apr 2024 00:14:58 +0200
+Subject: [PATCH] Catch exception from XGetWindowProperty
+
+This should gracefully handle BadWindow and other errors returned from
+XGetWindowProperty.
+
+diff --git a/src/SetBG.cc b/src/SetBG.cc
+index 8eb7694..ba6f6d7 100644
+--- a/src/SetBG.cc
++++ b/src/SetBG.cc
+@@ -118,9 +118,15 @@ std::vector<SetBG::RootWindowData> SetBG::find_desktop_windows(Display *xdisp, W
+     Atom propatom = XInternAtom(xdisp, "_NET_WM_WINDOW_TYPE", False);
+     Atom propval  = XInternAtom(xdisp, "_NET_WM_WINDOW_TYPE_DESKTOP", False);
+ 
+-    XGetWindowProperty(xdisp, curwindow, propatom, 0L, 32L, False,
+-            XA_ATOM, &ret_type, &ret_format, &ret_items, &ret_bytesleft,
+-            (unsigned char**) &prop_return);
++    try {
++        XGetWindowProperty(xdisp, curwindow, propatom, 0L, 32L, False,
++                XA_ATOM, &ret_type, &ret_format, &ret_items, &ret_bytesleft,
++                (unsigned char**) &prop_return);
++    } catch (std::exception& e) {
++        std::cerr << "ERROR: Couldn't get WindowProperty from X\n"
++                  << e.what()
++                  << "\n";
++    }
+ 
+     if (ret_type == XA_ATOM && ret_format == 32 && ret_items == 1) {
+         if (prop_return[0] == propval) {

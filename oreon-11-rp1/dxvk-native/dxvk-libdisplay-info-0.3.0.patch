@@ -1,0 +1,12 @@
+diff -rup dxvk-2.3.1.orig/meson.build dxvk-2.3.1/meson.build
+--- dxvk-2.3.1.orig/meson.build	2024-03-20 05:48:30.000000000 -0700
++++ dxvk-2.3.1/meson.build	2024-06-23 22:58:07.674463732 -0700
+@@ -48,7 +48,7 @@ endif
+ 
+ dep_displayinfo = dependency(
+   'libdisplay-info',
+-  version: ['>= 0.0.0', '< 0.2.0'],
++  version: ['>= 0.0.0', '< 0.4.0'],
+   fallback: ['libdisplay-info', 'di_dep'],
+   default_options: ['default_library=static'],
+ )

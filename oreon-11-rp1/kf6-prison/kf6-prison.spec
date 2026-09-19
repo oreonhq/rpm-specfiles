@@ -1,13 +1,13 @@
-%global source0_hash 760903e9ae401f8bcdb9efc9ad6548982642e7411a223c8ceb41e5491a6b1135
+%global source0_hash 8d34da7a7a55d35bcc5824245e2dbec2611977d164d57bef2dcccee6004443a7
 
 %define framework prison
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.29
 
 Name:		kf6-%{framework}
 Summary:	KDE Frameworks 6 Tier 1 barcode library
-Version:	6.27.0
+Version:	6.29.0
 Release:        1%{?dist}
 License:	BSD-3-Clause AND CC0-1.0 AND MIT
 URL:		https://invent.kde.org/frameworks/%{framework}
@@ -69,6 +69,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

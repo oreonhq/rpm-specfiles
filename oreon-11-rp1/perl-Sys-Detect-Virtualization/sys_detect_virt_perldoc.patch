@@ -1,0 +1,35 @@
+diff -Naur old/script/virtdetect new/script/virtdetect
+--- old/script/virtdetect	2010-02-25 08:43:50.000000000 +1100
++++ new/script/virtdetect	2014-05-11 18:54:01.916440022 +1000
+@@ -1,4 +1,7 @@
+ #!/usr/bin/perl -w
++
++eval 'exec /usr/bin/perl -w -S $0 ${1+"$@"}'
++    if 0; # not running under some shell
+ use strict;
+ use warnings;
+ use Getopt::Long;
+@@ -51,17 +54,17 @@
+ 
+ =over 4
+ 
+-=item 0
++=item *
+ 
+-No virtualization detected
++0 - No virtualization detected
+ 
+-=item 1
++=item *
+ 
+-Virtualization detected
++1 - Virtualization detected
+ 
+-=item 2
++=item *
+ 
+-More than one kind of virtualization detected
++2 - More than one kind of virtualization detected
+ 
+ =back
+ 

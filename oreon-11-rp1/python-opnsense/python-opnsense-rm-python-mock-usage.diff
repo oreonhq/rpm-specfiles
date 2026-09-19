@@ -1,0 +1,11 @@
+--- a/pyopnsense/tests/test_client.py
++++ b/pyopnsense/tests/test_client.py
+@@ -18,7 +18,7 @@
+ 
+ import json
+ 
+-import mock
++from unittest import mock
+ 
+ from pyopnsense import client
+ from pyopnsense import exceptions

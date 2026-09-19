@@ -1,12 +1,12 @@
 %global source0_hash 2c187055e2206e62cef4559845e7c2ec6ec5a07ce1e0a6044e4342e0c5d7771d
 
 Name:           zchunk
-Version:        1.5.1
-Release:        4%{?dist}
+Version:        1.5.4
+Release:        1%{?dist}
 Summary:        Compressed file format that allows easy deltas
 License:        BSD-2-Clause AND MIT
 URL:            https://github.com/zchunk/zchunk
-Source0:        https://github.com/zchunk/zchunk/archive/refs/tags/1.5.1.tar.gz#/zchunk-1.5.1.tar.gz
+Source0:        https://github.com/zchunk/zchunk/archive/refs/tags/1.5.4.tar.gz#/zchunk-1.5.1.tar.gz
 BuildRequires:  gcc
 BuildRequires:  pkgconfig(libzstd)
 BuildRequires:  pkgconfig(libcurl)

@@ -1,0 +1,51 @@
+From 842e35e0faf06aff948c1eaae0bf2ebe7a2a4629 Mon Sep 17 00:00:00 2001
+From: Aleksei Bavshin <alebastr89@gmail.com>
+Date: Sun, 23 Jun 2024 17:28:28 -0700
+Subject: [PATCH] Use stdlib importlib.resources on python >= 3.12
+
+---
+ rbtools/commands/setup_completion.py | 7 +++++--
+ setup.py                             | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/rbtools/commands/setup_completion.py b/rbtools/commands/setup_completion.py
+index e7a26126eab96c856f42c07dd8a6347a2ada4af6..cce522c893285e1af1b5f9e277fa779680c8f61d 100644
+--- a/rbtools/commands/setup_completion.py
++++ b/rbtools/commands/setup_completion.py
+@@ -6,7 +6,10 @@ import platform
+ import sys
+ from typing import Optional
+ 
+-import importlib_resources
++if sys.version_info[:2] >= (3, 12):
++    from importlib.resources import files
++else:
++    from importlib_resources import files
+ 
+ from rbtools.commands.base import BaseCommand, CommandError
+ 
+@@ -55,7 +58,7 @@ class SetupCompletion(BaseCommand):
+ 
+         try:
+             script = (
+-                importlib_resources.files('rbtools')
++                files('rbtools')
+                 .joinpath('commands', 'conf', 'completions', shell)
+                 .read_text()
+             )
+diff --git a/setup.py b/setup.py
+index 6dd1afd8f4f578492df2bd57af3322a0817a3256..3eee4d0446ca6f273496253f29927c6171af379f 100755
+--- a/setup.py
++++ b/setup.py
+@@ -176,7 +176,7 @@ setup(
+         # importlib.resources compatibility import.
+         #
+         # 5.9 is equivalent to importlib.resources in Python 3.12.
+-        'importlib-resources>=5.9',
++        'importlib-resources>=5.9; python_version<"3.12"',
+     ],
+     packages=find_packages(exclude=['tests']),
+     include_package_data=True,
+-- 
+2.45.2
+

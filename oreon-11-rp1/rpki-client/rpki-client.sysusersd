@@ -1,0 +1,2 @@
+#Type  Name        ID  GECOS                     Home directory        Shell
+u      rpki-client -   "OpenBSD RPKI validator"  /var/lib/rpki-client  -

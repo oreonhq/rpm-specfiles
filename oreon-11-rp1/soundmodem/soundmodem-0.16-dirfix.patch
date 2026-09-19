@@ -1,0 +1,19 @@
+--- soundmodem-0.16/configapp/src/main.c	2010-10-30 18:49:09.000000000 +0200
++++ soundmodem-0.16-mod/configapp/src/main.c	2012-10-14 22:43:56.626890193 +0200
+@@ -11,6 +11,7 @@
+ 
+ #include "getopt.h"
+ 
++#include <glib/gstdio.h>
+ #include <gtk/gtk.h>
+ 
+ #include "interface.h"
+@@ -655,6 +656,8 @@
+ 	gtk_main();
+ #ifdef WIN32
+ #else /* WIN32 */
++	if (!g_file_test(g_path_get_dirname(cfgfile), G_FILE_TEST_IS_DIR))
++			g_mkdir_with_parents(g_path_get_dirname(cfgfile), 0755);
+ 	if (!xmlSaveFormatFile(cfgfile, doc, 1)) 
+ 	    g_printerr("SoundModem Config: error saving configuration file %s\n", cfgfile);
+         xmlFreeDoc(doc);

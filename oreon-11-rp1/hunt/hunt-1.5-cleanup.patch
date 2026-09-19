@@ -1,0 +1,51 @@
+2005-03-03 Enrico Scholz <enrico.scholz@informatik.tu-chemnitz.de>
+	* util.c, hunt.h: remove unused log2() function as it conflicts
+	  with the built-in log2(3) one
+	* timer.c: include <stdlib.h> for declaration of exit(3)
+
+--- hunt-1.5/util.c.cleanup	2000-05-30 15:02:27.000000000 +0200
++++ hunt-1.5/util.c	2005-03-03 13:35:26.000000000 +0100
+@@ -70,23 +70,6 @@ int is_power2(unsigned int i)
+ 	return i ? 0 : 1;
+ }
+ 
+-int log2(unsigned int i)
+-{
+-	int l = 0;
+-
+-	if (!i)
+-		return -1;
+-	while (!(i & 1)) {
+-		l++;
+-		i >>= 1;
+-	}
+-	i >>= 1;
+-	if (i)
+-		return 0;
+-	else
+-		return l;
+-}
+-
+ int count_mask(unsigned int mask)
+ {
+ 	int retval;
+--- hunt-1.5/hunt.h.cleanup	2000-05-30 14:54:54.000000000 +0200
++++ hunt-1.5/hunt.h	2005-03-03 13:35:26.000000000 +0100
+@@ -401,7 +401,6 @@ void set_tty_color(enum TTY_COLOR color)
+ void set_tty_color_bg(enum TTY_COLOR fg, enum TTY_COLOR bg);
+ 
+ int is_power2(unsigned int i);
+-int log2(unsigned int i);
+ int count_mask(unsigned int mask);
+ 
+ 
+--- hunt-1.5/timer.c.cleanup	1999-02-15 14:31:20.000000000 +0100
++++ hunt-1.5/timer.c	2005-03-03 13:36:16.000000000 +0100
+@@ -8,6 +8,7 @@
+  */
+ #include <stdio.h>
+ #include <unistd.h>
++#include <stdlib.h>
+ #include "hunt.h"
+ 
+ struct list timejob_list = LIST_INIT(struct timejob, j_next);

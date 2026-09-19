@@ -1,0 +1,37 @@
+--- rfd-0.15.4/Cargo.toml	1970-01-01T00:00:01+00:00
++++ rfd-0.15.4/Cargo.toml	2025-08-27T20:27:51.185776+00:00
+@@ -42,11 +42,6 @@
+     "async-std",
+ ]
+ file-handle-inner = []
+-gtk3 = [
+-    "gtk-sys",
+-    "glib-sys",
+-    "gobject-sys",
+-]
+ tokio = ["ashpd?/tokio"]
+ xdg-portal = [
+     "ashpd",
+@@ -92,21 +87,8 @@
+ optional = true
+ default-features = false
+ 
+-[target.'cfg(any(target_os = "linux", target_os = "freebsd", target_os = "dragonfly", target_os = "netbsd", target_os = "openbsd"))'.dependencies.glib-sys]
+-version = "0.18.0"
+-optional = true
+-
+-[target.'cfg(any(target_os = "linux", target_os = "freebsd", target_os = "dragonfly", target_os = "netbsd", target_os = "openbsd"))'.dependencies.gobject-sys]
+-version = "0.18.0"
+-optional = true
+-
+-[target.'cfg(any(target_os = "linux", target_os = "freebsd", target_os = "dragonfly", target_os = "netbsd", target_os = "openbsd"))'.dependencies.gtk-sys]
+-version = "0.18.0"
+-features = ["v3_24"]
+-optional = true
+-
+ [target.'cfg(any(target_os = "linux", target_os = "freebsd", target_os = "dragonfly", target_os = "netbsd", target_os = "openbsd"))'.dependencies.pollster]
+-version = "0.4"
++version = ">=0.3,<0.5"
+ optional = true
+ 
+ [target.'cfg(any(target_os = "linux", target_os = "freebsd", target_os = "dragonfly", target_os = "netbsd", target_os = "openbsd"))'.dependencies.urlencoding]

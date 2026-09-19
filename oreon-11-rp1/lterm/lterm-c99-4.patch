@@ -1,0 +1,19 @@
+Type is called GtkGreeView, not struct GtkTreeView
+
+Fixes a C type error and compilation failure with current compilers.
+
+Submitted upstream: <https://github.com/FabLeo451/lterm/pull/2>
+
+diff --git a/src/main.c b/src/main.c
+index 11da089685cda12d..0076a5ec865ac3a0 100755
+--- a/src/main.c
++++ b/src/main.c
+@@ -218,7 +218,7 @@ lterm_iteration (void)
+           break;
+ 
+         case ITERATION_REFRESH_TREE_VIEW:
+-          refresh_connection_tree_view ((struct GtkTreeView *) ifr_function.user_data);
++          refresh_connection_tree_view ((GtkTreeView *) ifr_function.user_data);
+           break;
+ 
+         case ITERATION_REFRESH_SFTP_PANEL:

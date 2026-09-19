@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Slingshot
+Exec=slingshot
+Comment=A Newtoninan strategy game
+Icon=slingshot.png
+Terminal=false
+Categories=Game;ActionGame;
+StartupNotify=false

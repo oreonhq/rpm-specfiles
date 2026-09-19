@@ -1,0 +1,33 @@
+--- a/ruby/ext/hdf/neo_cs.c~	2025-12-04 13:44:43.562206807 -0600
++++ b/ruby/ext/hdf/neo_cs.c	2025-12-04 13:46:41.761369049 -0600
+@@ -19,7 +19,7 @@
+ 
+ VALUE r_neo_error(NEOERR *err);
+ 
+-#define Srb_raise(val) rb_raise(eHdfError, "%s/%d %s",__FILE__,__LINE__,RARRAY_PTR(RSTRING(val)))
++#define Srb_raise(val) rb_raise(eHdfError, "%s/%d %s",__FILE__,__LINE__,RARRAY_PTR((long unsigned int)RSTRING(val)))
+ 
+ static void c_free (CSPARSE *csd) {
+   if (csd) {
+--- a/ruby/ext/hdf/neo_util.c~	2025-12-04 13:49:43.973765235 -0600
++++ b/ruby/ext/hdf/neo_util.c	2025-12-04 13:52:00.268321930 -0600
+@@ -19,7 +19,7 @@
+ VALUE eHdfError;
+ static ID id_to_s;
+ 
+-#define Srb_raise(val) rb_raise(eHdfError, "%s/%d %s",__FILE__,__LINE__,RARRAY_PTR(RSTRING(val)))
++#define Srb_raise(val) rb_raise(eHdfError, "%s/%d %s",__FILE__,__LINE__,RARRAY_PTR((long unsigned int)RSTRING(val)))
+ 
+ VALUE r_neo_error (NEOERR *err)
+ {
+--- a/ruby/ext/hdf/neo_util.c~	2025-12-04 14:01:16.310146761 -0600
++++ b/ruby/ext/hdf/neo_util.c	2025-12-04 14:09:12.422898073 -0600
+@@ -619,7 +619,7 @@
+   rb_define_method(cHdf, "set_symlink", h_set_symlink, 2);
+ 
+   rb_define_singleton_method(cHdf, "escape", h_escape, 3);
+-  rb_define_singleton_method(cHdf, "unescape", h_unescape, 3);
++  rb_define_singleton_method(cHdf, "unescape", (VALUE (*)(VALUE,  VALUE,  VALUE,  VALUE))h_unescape, 3);
+ 
+   eHdfError = rb_define_class_under(mNeotonic, "HdfError",
+ #if RUBY_VERSION_MINOR >= 6

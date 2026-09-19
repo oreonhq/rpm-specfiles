@@ -1,0 +1,80 @@
+diff -up joe-4.6/acinclude.m4.c99 joe-4.6/acinclude.m4
+--- joe-4.6/acinclude.m4.c99	2023-01-31 12:50:13.919548308 +0100
++++ joe-4.6/acinclude.m4	2023-01-31 12:50:43.082798201 +0100
+@@ -9,7 +9,7 @@ AC_DEFUN([joe_ISBLANK],
+ int main() {
+   int a = 0;
+   isblank(a++);
+-  exit(a != 1);
++  return a != 1;
+ }
+ 			],
+ 			[joe_cv_isblank=yes],
+@@ -34,7 +34,7 @@ AC_DEFUN([joe_SETPGRP],
+ #endif
+ int main() {
+ 	/* exit succesfully if setpgrp() takes two args (*BSD systems) */
+-	exit(setpgrp(0, 0) != 0);
++	return setpgrp(0, 0) != 0;
+ }],
+ 			[joe_cv_setpgrp_void=no],
+ 			[joe_cv_setpgrp_void=yes],
+@@ -95,7 +95,7 @@ int main() {
+ 	kill((int)getpid(), SIGINT);
+ 	kill((int)getpid(), SIGINT);
+ 	/* exit succesfully if don't have to reinstall sighandler when invoked */
+-	exit(nsigint != 2);
++	return nsigint != 2;
+ }],
+ 			[joe_cv_reinstall_sighandlers=no],
+ 			[joe_cv_reinstall_sighandlers=yes],
+diff -up joe-4.6/configure.c99 joe-4.6/configure
+--- joe-4.6/configure.c99	2023-01-31 12:54:45.343816396 +0100
++++ joe-4.6/configure	2023-01-31 12:55:41.717280135 +0100
+@@ -5953,7 +5953,7 @@ else
+ #endif
+ int main() {
+ 	/* exit succesfully if setpgrp() takes two args (*BSD systems) */
+-	exit(setpgrp(0, 0) != 0);
++	return setpgrp(0, 0) != 0;
+ }
+ _ACEOF
+ if ac_fn_c_try_run "$LINENO"; then :
+@@ -6388,7 +6388,7 @@ else
+ int main() {
+   int a = 0;
+   isblank(a++);
+-  exit(a != 1);
++  return a != 1;
+ }
+ 
+ _ACEOF
+@@ -8113,7 +8113,7 @@ int main() {
+ 	kill((int)getpid(), SIGINT);
+ 	kill((int)getpid(), SIGINT);
+ 	/* exit succesfully if don't have to reinstall sighandler when invoked */
+-	exit(nsigint != 2);
++	return nsigint != 2;
+ }
+ _ACEOF
+ if ac_fn_c_try_run "$LINENO"; then :
+diff -up joe-4.6/joe/selinux.c.c99 joe-4.6/joe/selinux.c
+--- joe-4.6/joe/selinux.c.c99	2023-01-31 13:00:55.859864382 +0100
++++ joe-4.6/joe/selinux.c	2023-01-31 13:05:56.044333774 +0100
+@@ -8,6 +8,7 @@
+ 
+ #ifdef HAVE_SELINUX
+ #include <selinux/selinux.h>
++#include <error.h>
+ static int selinux_enabled = -1;
+ #endif
+ 
+@@ -108,7 +109,7 @@ int reset_default_security_context()
+ 		return 0;
+ 
+ 	if (setfscreatecon(0) < 0) {
+-		error(0, errno, joe_gettext(_("Could not reset default security context")));
++		error(0, errno, "%s", joe_gettext(_("Could not reset default security context")));
+ 		return 1;
+ 	}
+ #endif

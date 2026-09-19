@@ -1,0 +1,35 @@
+From f3dbb30c27f61c72eaea1a961d089f27e24fdbbc Mon Sep 17 00:00:00 2001
+From: Michal Schmidt <mschmidt@redhat.com>
+Date: Sat, 22 Mar 2025 22:06:56 +0100
+Subject: [PATCH] etc/enigma.desktop: use standard-specified Categories
+
+Application's Categories listed in the *.desktop file should follow the
+Freedesktop specification. Categories fitting Enigma are:
+ Game - main category for "A game" [1]
+ LogicGame - additional category for "Logic games like puzzles, etc" [2]
+
+With standard categories, there is no need for extensions ("X-").
+"desktop-file-validate etc/enigma.desktop" is happy.
+
+[1] https://specifications.freedesktop.org/menu-spec/latest/category-registry.html
+[2] https://specifications.freedesktop.org/menu-spec/latest/additional-category-registry.html
+
+Fixes: 0db9df0aea0c ("Fix .desktop to success the desktop-filde-validate")
+---
+ etc/enigma.desktop | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/etc/enigma.desktop b/etc/enigma.desktop
+index cf6720a892bf..1d9b725bb05f 100644
+--- a/etc/enigma.desktop
++++ b/etc/enigma.desktop
+@@ -44,5 +44,4 @@ Terminal=false
+ StartupNotify=false
+ Icon=enigma
+ Type=Application
+-X-Categories=Application;Game;PuzzleGame;
+-
++Categories=Game;LogicGame;
+-- 
+2.49.0
+

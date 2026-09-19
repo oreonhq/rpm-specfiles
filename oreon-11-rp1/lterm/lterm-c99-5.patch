@@ -1,0 +1,17 @@
+Missing return value in xml_parse
+
+Submitted upstream: <https://github.com/FabLeo451/lterm/pull/2>
+
+diff --git a/src/xml.c b/src/xml.c
+index 370fb0536694c7e6..0e64b8001c61ae55 100755
+--- a/src/xml.c
++++ b/src/xml.c
+@@ -647,7 +647,7 @@ xml_parse (char *doc, XML *p_xml)
+   if (!g_markup_parse_context_parse (p_xml->context, doc, strlen (doc), NULL))
+     {
+       g_markup_parse_context_free (p_xml->context);
+-      return;
++      return p_xml->error.code;
+     }
+ 
+   g_markup_parse_context_free (p_xml->context);

@@ -1,0 +1,46 @@
+From b958f102848b73edeec7bb92fff8d4d002ae4b23 Mon Sep 17 00:00:00 2001
+From: Maxwell G <maxwell@gtmx.me>
+Date: Thu, 18 Jun 2026 21:19:45 -0500
+Subject: [PATCH 2/2] Restore compatibility with pytest < 9
+
+---
+ pyproject.toml                   | 4 +---
+ test/test_downloader_external.py | 2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 8128fb3..8bb3631 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -467,14 +467,12 @@ select = [
+ ]
+ exclude = "*/extractor/lazy_extractors.py,*venv*,*/test/testdata/sigs/player-*.js,.idea,.vscode"
+ 
+-[tool.pytest]
++[tool.pytest.ini_options]
+ addopts = [
+     "-ra",  # summary: all except passed
+     "--tb=short",
+ ]
+ verbosity_test_cases = "1"
+-strict_config = true
+-strict_markers = true
+ markers = [
+     "download",
+ ]
+diff --git a/test/test_downloader_external.py b/test/test_downloader_external.py
+index 0b51c96..d318d3c 100644
+--- a/test/test_downloader_external.py
++++ b/test/test_downloader_external.py
+@@ -132,7 +132,7 @@ class TestDownloaderCookieBehavior:
+         pytest.param(WgetFD, marks=pytest.mark.skipif(not WgetFD.available(), reason='wget unavailable')),
+         pytest.param(Aria2cFD, marks=pytest.mark.skipif(not Aria2cFD.available(), reason='aria2c unavailable')),
+     ])
+-    def test_cookie_behavior(self, /, downloader_cls):
++    def test_cookie_behavior(self, downloader_cls):
+         with FakeYDL() as ydl:
+             downloader = downloader_cls(ydl, {})
+ 
+-- 
+2.54.0
+

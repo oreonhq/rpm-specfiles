@@ -1,0 +1,22 @@
+diff -up ./CMakeLists.txt.orig ./CMakeLists.txt
+--- ./CMakeLists.txt.orig	2025-03-11 22:36:32.849429990 -0400
++++ ./CMakeLists.txt	2025-03-11 23:12:28.075977865 -0400
+@@ -1,5 +1,5 @@
+-cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+ find_package(ECM 1.8.0 REQUIRED NO_MODULE)
+ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+ include(SetKDbCMakePolicies NO_POLICY_SCOPE)
+ 
+diff -up ./cmake/modules/SetKDbCMakePolicies.cmake.orig ./cmake/modules/SetKDbCMakePolicies.cmake
+--- ./cmake/modules/SetKDbCMakePolicies.cmake.orig	2019-03-26 14:44:44.282817848 -0400
++++ ./cmake/modules/SetKDbCMakePolicies.cmake	2025-03-11 23:13:38.579438034 -0400
+@@ -9,7 +9,7 @@ cmake_policy(SET CMP0053 NEW) # TODO rem
+                               # "Simplify variable reference and escape sequence evaluation"
+ 
+ if(POLICY CMP0059) # Don’t treat DEFINITIONS as a built-in directory property.
+-    cmake_policy(SET CMP0059 OLD)
++    cmake_policy(SET CMP0059 NEW)
+ endif()
+ if(POLICY CMP0063) # Honor visibility properties for all target types (since cmake 3.3)
+     cmake_policy(SET CMP0063 NEW)
