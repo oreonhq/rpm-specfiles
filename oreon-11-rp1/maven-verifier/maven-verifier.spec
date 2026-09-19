@@ -4,7 +4,7 @@
 %global upstream_version 2.0.0-M1
 
 Name:           maven-verifier
-Version:        2.0.0-M1
+Version:        2.0.0~M1
 Release:        %autorelease
 Summary:        Apache Maven Verifier Component
 License:        Apache-2.0
