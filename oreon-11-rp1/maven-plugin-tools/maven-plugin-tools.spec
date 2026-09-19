@@ -1,9 +1,9 @@
-%global source0_hash 1510f6a3d28e9fde3b7503948f124dedf996767586fa9a6817f2be6eb7627df0
+%global source0_hash cd6aecc881ea3cc28d8d31f1db42d84dc124672dd2d98c0758fd879f5d77c982
 
 %bcond_without bootstrap
 
 Name:           maven-plugin-tools
-Version:        4.0.0-beta-3
+Version:        3.16.0
 Release:        %autorelease
 Summary:        Maven Plugin Tools
 License:        Apache-2.0
