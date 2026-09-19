@@ -1,10 +1,10 @@
-%global source0_hash 840149746e597166c58f3537ea4b4954ce6d50dcd50c158ddba16746fd6bdcd6
+%global source0_hash aeb951964c2f7ecc08174cb5517962d157595e9e3f38fc4a130b91dc2f9fec18
 
 %global tarball_name xkbcommon
 
 Name:           libxkbcommon
-Version:        1.14.0-beta2
-Release:        1%{?dist}
+Version:        1.13.2
+Release:        1%{?gitdate:.%{gitdate}}%{?dist}
 Summary:        X.Org X11 XKB parsing library
 License:        MIT AND X11 AND MIT-CMU
 URL:            http://www.x.org
