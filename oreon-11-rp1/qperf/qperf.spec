@@ -2,8 +2,8 @@
 
 Name:           qperf
 Summary:        Measure socket and RDMA performance
-Version:        0.4.9
-Release:        33%{?dist}
+Version:        0.4.11
+Release:        1%{?dist}
 # Automatically converted from old format: GPLv2 or BSD - review is highly recommended.
 License:        GPL-2.0-only OR LicenseRef-Callaway-BSD
 Source:        http://www.openfabrics.org/downloads/%{name}/%{name}-%{version}.tar.gz

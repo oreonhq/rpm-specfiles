@@ -1,8 +1,8 @@
 %global source0_hash b33647cbb4b2f2fcfbde4f8bb4383d0ac95c2f89c4c5770eb691f1643a337aad
 
 Name:           perl-Test-File-ShareDir
-Version:        1.001002
-Release:        26%{?dist}
+Version:        6.06
+Release:        1%{?dist}
 Summary:        Create a Fake ShareDir for your modules for testing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-File-ShareDir

@@ -3,8 +3,8 @@
 %global srcname smmap
 
 Name:           python-%{srcname}
-Version:        5.0.1
-Release:        7%{?dist}
+Version:        5.0.3
+Release:        1%{?dist}
 Summary:        Sliding window memory map manager
 
 License:        BSD-3-Clause

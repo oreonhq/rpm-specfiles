@@ -1,8 +1,8 @@
 %global source0_hash 4848679a3f201e3f3b0c5f6f9526e602af52923ffa471a2a3657db786bd3bdc5
 
 Name:           perl-PerlIO-gzip
-Version:        0.20
-Release:        31%{?dist}
+Version:        1.100860
+Release:        1%{?dist}
 Summary:        Perl extension to provide a PerlIO layer to gzip/gunzip
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/PerlIO-gzip

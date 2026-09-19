@@ -1,7 +1,7 @@
 %global source0_hash bbe96fc50f6e1cc6bea1e35e9c04fd4b0ec0501b6cf86bbadabd9e144b0a8bd7
 
 Name:           perl-Mail-Sendmail
-Version:        0.83
+Version:        2020.02
 Release:        1%{?dist}
 Summary:        Simple platform independent mailer for Perl
 

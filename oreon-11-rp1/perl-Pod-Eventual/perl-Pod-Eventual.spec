@@ -1,8 +1,8 @@
 %global source0_hash 7f060cc34d11656ce069db061e3d60edc0cabc8f89a4a2dc7eaae95dac856d2d
 
 Name:           perl-Pod-Eventual
-Version:        0.094003
-Release:        9%{?dist}
+Version:        6.002
+Release:        1%{?dist}
 Summary:        Read a POD document as a series of trivial events
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Eventual

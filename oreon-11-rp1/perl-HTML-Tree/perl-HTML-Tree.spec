@@ -9,8 +9,8 @@
 
 Name:           perl-HTML-Tree
 Epoch:          1
-Version:        5.07
-Release:        30%{?dist}
+Version:        6.06
+Release:        1%{?dist}
 Summary:        HTML tree handling modules for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTML-Tree

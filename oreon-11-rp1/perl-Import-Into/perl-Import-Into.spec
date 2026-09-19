@@ -1,8 +1,8 @@
 %global source0_hash bd9e77a3fb662b40b43b18d3280cd352edf9fad8d94283e518181cc1ce9f0567
 
 Name:           perl-Import-Into
-Version:        1.002005
-Release:        30%{?dist}
+Version:        5.90129
+Release:        1%{?dist}
 Summary:        Import packages into other packages
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Import-Into

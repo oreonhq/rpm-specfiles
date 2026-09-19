@@ -1,8 +1,8 @@
 %global source0_hash 6ece97234a19a6f627481b44ec28a71374a95e6fc94d417d2dccb397a00aa706
 
 Name:           perl-Taint-Runtime
-Version:        0.03
-Release:        58%{?dist}
+Version:        0.09
+Release:        1%{?dist}
 Summary:        Runtime enable taint checking
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Taint-Runtime

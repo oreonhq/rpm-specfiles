@@ -6,7 +6,7 @@
 %bcond_with perl_libwww_perl_enables_internet_test
 
 Name:           perl-libwww-perl
-Version:        6.83
+Version:        7.04
 Release:        1%{?dist}
 Summary:        A Perl interface to the World-Wide Web
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

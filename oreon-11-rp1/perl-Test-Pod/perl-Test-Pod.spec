@@ -1,8 +1,8 @@
 %global source0_hash 60a8dbcc60168bf1daa5cc2350236df9343e9878f4ab9830970a5dde6fe8e5fc
 
 Name:           perl-Test-Pod
-Version:        1.52
-Release:        24%{?dist}
+Version:        6.36
+Release:        1%{?dist}
 Summary:        Test POD files for correctness
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Pod

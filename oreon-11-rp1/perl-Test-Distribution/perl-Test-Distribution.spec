@@ -1,8 +1,8 @@
 %global source0_hash 50ecd07fb6cab7b2b2a73b5526ee43b90e77734c9bcec95ce8822b9c0a912b68
 
 Name:		perl-Test-Distribution
-Version:	2.00
-Release:	50%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Perform tests on all modules of a distribution
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Distribution

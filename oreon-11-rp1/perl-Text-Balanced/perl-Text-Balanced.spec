@@ -1,8 +1,8 @@
 %global source0_hash 7c5d81bd8d6b2cddbf60cef66d7f9f6af417412e5eb24e87a5a197c311e330cf
 
 Name:           perl-Text-Balanced
-Version:        2.07
-Release:        2%{?dist}
+Version:        5.43.6
+Release:        1%{?dist}
 Summary:        Extract delimited text sequences from strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-Balanced

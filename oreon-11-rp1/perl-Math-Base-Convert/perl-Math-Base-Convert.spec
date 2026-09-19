@@ -1,8 +1,8 @@
 %global source0_hash 289c0c33bc9886db3dc2cf949d8e0ab24e36c67b9e833355941d70aaf3519ed2
 
 Name:           perl-Math-Base-Convert
-Version:        0.13
-Release:        2%{?dist}
+Version:        4.079
+Release:        1%{?dist}
 Summary:        Very fast base to base conversion
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Math-Base-Convert

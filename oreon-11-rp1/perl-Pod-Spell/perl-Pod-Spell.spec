@@ -1,8 +1,8 @@
 %global source0_hash 7ef56c9229f3efbc71a0462ce44490c0dd49fbf3b21fe85bb08b1eeac6f7b063
 
 Name:           perl-Pod-Spell
-Version:        1.27
-Release:        4%{?dist}
+Version:        6.002
+Release:        1%{?dist}
 Summary:        A formatter for spell-checking POD
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Pod-Spell

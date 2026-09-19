@@ -1,8 +1,8 @@
 %global source0_hash 8ba24b0b459b01d6c5e5b0408829c7d5dfe47ff79b3548c813759048099b175e
 
 Name:           perl-XML-DOM
-Version:        1.46
-Release:        28%{?dist}
+Version:        2.1
+Release:        1%{?dist}
 Summary:        DOM extension to XML::Parser
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

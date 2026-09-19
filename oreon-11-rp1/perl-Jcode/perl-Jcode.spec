@@ -1,8 +1,8 @@
 %global source0_hash ed1ce473ec869089e52016cfc8355165ebc37be9694ba4e829c7eb4ba1c45f8d
 
 Name:		perl-Jcode
-Version:	2.07
-Release:	47%{?dist}
+Version:	3.24
+Release:	1%{?dist}
 Summary:	Perl extension interface for converting Japanese text
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Jcode

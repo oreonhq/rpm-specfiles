@@ -4,8 +4,8 @@
 %bcond_without perl_Perl_OSType_enables_optional_test
 
 Name:		perl-Perl-OSType
-Version:	1.010
-Release:	522%{?dist}
+Version:	100.00
+Release:	1%{?dist}
 Summary:	Map Perl operating system names to generic types
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Perl-OSType

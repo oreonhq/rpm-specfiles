@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-namespace-autoclean
-Version:        0.31
-Release:        4%{?dist}
+Version:        0.0101
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:        Keep imports out of your namespace
 URL:            https://metacpan.org/release/namespace-autoclean

@@ -1,8 +1,8 @@
 %global source0_hash fb2bf94ed8dbc1f4a95d9fc8f710cb67b3f796c6efc9c4bb4c2cfa3ebaa1c5fa
 
 Name:		perl-Regexp-Trie
-Version:	0.02
-Release:	22%{?dist}
+Version:	5.36
+Release:	1%{?dist}
 Summary:	Build trie-ized regexp
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Regexp-Trie

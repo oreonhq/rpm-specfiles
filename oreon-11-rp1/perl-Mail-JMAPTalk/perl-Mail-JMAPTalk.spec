@@ -1,8 +1,8 @@
 %global source0_hash a99d5837a1f88da4e2fcdc227430a6c80d1aaa0706088cd16e9be09c96682f6f
 
 Name:           perl-Mail-JMAPTalk
-Version:        0.17
-Release:        3%{?dist}
+Version:        1.29
+Release:        1%{?dist}
 Summary:        Perl client for JMAP protocol
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Mail-JMAPTalk

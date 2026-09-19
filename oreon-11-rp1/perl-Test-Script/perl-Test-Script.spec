@@ -1,8 +1,8 @@
 %global source0_hash 44053b183a5b0188199cbddbb5ac0b1ba9e506afb3d4c5698ef2514c28ccd347
 
 Name:           perl-Test-Script
-Version:        1.31
-Release:        2%{?dist}
+Version:        100.00
+Release:        1%{?dist}
 Summary:        Cross-platform basic tests for scripts
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Script

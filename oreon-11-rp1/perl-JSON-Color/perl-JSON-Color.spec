@@ -1,8 +1,8 @@
 %global source0_hash a74241d9592892f60f36788fd26627a17325c257c7e146e4870da0e8c399b948
 
 Name:           perl-JSON-Color
-Version:        0.134
-Release:        8%{?dist}
+Version:        20260626.0.0
+Release:        1%{?dist}
 Summary:        Encode to colored JSON
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/JSON-Color/

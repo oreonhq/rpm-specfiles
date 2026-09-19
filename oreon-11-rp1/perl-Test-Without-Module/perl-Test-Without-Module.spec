@@ -1,8 +1,8 @@
 %global source0_hash 8289e1cd7f57017a816ab4127e29ecd7a754ae7cd5c037c41b3b3bf849c21d21
 
 Name:           perl-Test-Without-Module
-Version:        0.23
-Release:        4%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Test fallback behavior in absence of modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 

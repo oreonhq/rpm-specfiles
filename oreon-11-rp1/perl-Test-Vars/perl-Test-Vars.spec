@@ -2,7 +2,7 @@
 %global source0_hash 56ddacbb663cf542673aa65525ef50980b53f207770e743a1d18614bd8268178
 
 Name:           perl-Test-Vars
-Version:        0.017
+Version:        6.15
 Release:        1%{?dist}
 Summary:        Detects unused variables in perl modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

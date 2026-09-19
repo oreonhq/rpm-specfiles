@@ -1,8 +1,8 @@
 %global source0_hash 63b1f7842cd42d9b538d1e34e0330de5ff1559e4c2737342506418276f646527
 
 Name:		perl-List-MoreUtils
-Version:	0.430
-Release:	15%{?dist}
+Version:	2.028003
+Release:	1%{?dist}
 Summary:	Provide the stuff missing in List::Util
 # All code present in version 0.416: GPL-1.0-or-later OR Artistic-1.0-Perl
 # All new code from version 0.417 onwards: Apache-2.0

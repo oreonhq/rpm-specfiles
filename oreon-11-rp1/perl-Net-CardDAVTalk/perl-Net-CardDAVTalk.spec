@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Net-CardDAVTalk
-Version:        0.09
-Release:        24%{?dist}
+Version:        1.29
+Release:        1%{?dist}
 Summary:        CardDAV client
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Net-CardDAVTalk

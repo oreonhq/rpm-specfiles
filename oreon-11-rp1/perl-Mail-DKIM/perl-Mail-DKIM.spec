@@ -1,8 +1,8 @@
 %global source0_hash 45de46f5dc4d23bcb6ad6401759881dd43968eab20e73f6f79d9557467de20ee
 
 Name:           perl-Mail-DKIM
-Version:        1.20240923
-Release:        4%{?dist}
+Version:        4.20260915
+Release:        1%{?dist}
 Summary:        Sign and verify Internet mail with DKIM/DomainKey signatures
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://dkimproxy.sourceforge.net/

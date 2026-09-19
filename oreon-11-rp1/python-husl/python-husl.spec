@@ -3,8 +3,8 @@
 %global upname husl
 
 Name: python-%{upname}
-Version: 4.0.3
-Release: 38%{?dist}
+Version: 5.0.4
+Release: 1%{?dist}
 Summary: A Python implementation of HUSL
 License: MIT
 

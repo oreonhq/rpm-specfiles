@@ -1,7 +1,7 @@
-%global source0_hash a3b7c7b593b279c46d25a48b583371ab762968e98b6a46457d8d52a755852eb9
+%global source0_hash a27ed4c7311616516b56015cc74fa06c6431f5c8ebadaf331c0e08150d1a84ce
 
 Name: slirp4netns
-Version: 1.3.1
+Version: 1.3.5
 Release: %autorelease
 License: GPL-2.0-only
 Summary: slirp for network namespaces

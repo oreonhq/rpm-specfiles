@@ -28,7 +28,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 6.0.1
+%global rpmver 6.1.0-release
 #global snapver rc1
 %global baserelease 5
 %global sover 10

@@ -1,8 +1,8 @@
 %global source0_hash fae9b99117700cc87cf8fdc8b8ec69bfd1d835ab88c5d140f0526a95ac54b9ed
 
 Name:           perl-Inline-Files
-Version:        0.71
-Release:        21%{?dist}
+Version:        2.16
+Release:        1%{?dist}
 Summary:        Allows for multiple inline files in a single Perl file
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Inline-Files

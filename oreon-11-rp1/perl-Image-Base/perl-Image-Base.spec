@@ -1,8 +1,8 @@
 %global source0_hash f6d0d4d03026ba6a19d2ac3495171fc123522345630cadc7f43b53a667b95f81
 
 Name:           perl-Image-Base
-Version:        1.17
-Release:        33%{?dist}
+Version:        3.022000
+Release:        1%{?dist}
 Summary:        Base class for loading, manipulating and saving images in Perl
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

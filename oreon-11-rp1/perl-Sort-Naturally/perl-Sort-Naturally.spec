@@ -1,8 +1,8 @@
 %global source0_hash eaab1c5c87575a7826089304ab1f8ffa7f18e6cd8b3937623e998e865ec1e746
 
 Name:       perl-Sort-Naturally 
-Version:    1.03
-Release:    39%{?dist}
+Version:    9.99
+Release:    1%{?dist}
 # see lib/Sort/Naturally.pm 
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    Sort lexically, but sort numeral parts numerically 

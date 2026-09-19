@@ -1,8 +1,8 @@
 %global source0_hash 283199d7fb27807fe2226af7b12571c6dc2508d8e5c0feb505d089d31720afc4
 
 Name:		perl-Test-EOL
-Version:	2.02
-Release:	15%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Check the correct line endings in your project
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-EOL

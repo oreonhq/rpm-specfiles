@@ -1,8 +1,8 @@
 %global source0_hash e374ff7b237919ce5ea9245f356d1cb52cc87fd26b3a5a38b3f3e5ff82a01491
 
 Name:           perl-Text-LevenshteinXS
-Version:        0.03
-Release:        58%{?dist}
+Version:        0.05
+Release:        1%{?dist}
 Summary:        XS implementation of the Levenshtein edit distance
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

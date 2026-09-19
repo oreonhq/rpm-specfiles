@@ -1,8 +1,8 @@
 %global source0_hash b912d426e9aeba5491a5e502e7c5c039c5daa575428ac9bdc82afff39ec6f07a
 
 Name:           perl-PHP-Serialization
-Version:        0.34
-Release:        43%{?dist}
+Version:        5.90019
+Release:        1%{?dist}
 Summary:        Converts between PHP's serialize() output and the equivalent Perl structure
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

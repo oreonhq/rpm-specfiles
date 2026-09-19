@@ -1,8 +1,8 @@
 %global source0_hash 9ac60d00b957e849bafe90a8defdeee2e5ffab1c87ac5a4abc452875e9904863
 
 Name:           perl-Mail-SPF
-Version:        3.20250505
-Release:        3%{?dist}
+Version:        4.20260915
+Release:        1%{?dist}
 Summary:        Object-oriented implementation of Sender Policy Framework
 License:        BSD-3-Clause
 URL:            https://metacpan.org/release/Mail-SPF

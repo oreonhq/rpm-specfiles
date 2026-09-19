@@ -1,8 +1,8 @@
 %global source0_hash 66cb355ba4ef47c10ca738bd35999723644386ac853abbeb5132841f5e8a2ad0
 
 Name:           perl-XML-SAX-Base
-Version:        1.09
-Release:        27%{?dist}
+Version:        3.09
+Release:        1%{?dist}
 Summary:        Base class SAX drivers and filters
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-SAX-Base

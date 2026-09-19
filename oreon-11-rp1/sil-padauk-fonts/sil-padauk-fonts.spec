@@ -1,7 +1,7 @@
-%global source0_hash b47b2639489d7cec5ad38d025f181b061767e4e161a41f19528e910f79fd03a1
+%global source0_hash 4f5fd3e50292d07467cea545cceb326506d6d4efeefcc1204375c0c2a3ebcad9
 
-Version:  3.003
-Release:  21%{?dist}
+Version:  6.000
+Release:  1%{?dist}
 URL:      https://software.sil.org/padauk/
 
 %global         foundry         SIL

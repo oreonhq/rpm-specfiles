@@ -1,8 +1,8 @@
 %global source0_hash abb8ce74483a63d73fe1ef603b7ce0a6d47c98ede731955d735784fad1dc4fcc
 
 Name:           perl-Test-TrailingSpace
-Version:        0.0601
-Release:        13%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Test for trailing space in source files
 License:        MIT
 URL:            https://metacpan.org/release/Test-TrailingSpace

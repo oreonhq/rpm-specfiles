@@ -1,7 +1,7 @@
 %global source0_hash 65c5662d4fe8ef3039a1b32f641634d0aae6ab10eabbb24f740c75332f2caf30
 
 Name:           perl-Text-CSV_XS
-Version:        1.64
+Version:        1.653
 Release:        1%{?dist}
 Summary:        Comma-separated values manipulation routines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

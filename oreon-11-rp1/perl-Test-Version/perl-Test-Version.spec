@@ -1,8 +1,8 @@
 %global source0_hash 9ce1dd2897a5f30e1b7f8966ec66f57d8d8f280f605f28c7ca221fa79aca38e0
 
 Name:		perl-Test-Version
-Version:	2.09
-Release:	28%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Check to see that versions in modules are sane
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Test-Version

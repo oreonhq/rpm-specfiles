@@ -1,8 +1,8 @@
 %global source0_hash 1492e1491aaf1aa9c299bf39b6ac22574f0c212c9bc2553fbdbb3d230ad1ad75
 
 Name:           perl-Tk-ObjScanner
-Version:        2.018
-Release:        7%{?dist}
+Version:        4.010
+Release:        1%{?dist}
 Summary:        Tk data scanner
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 

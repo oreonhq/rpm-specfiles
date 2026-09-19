@@ -4,8 +4,8 @@
 %global __python %{nil}
 
 Name:           perl-v6
-Version:        0.047
-Release:        28%{?dist}
+Version:        9.028
+Release:        1%{?dist}
 Summary:        Perl 6 implementation
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

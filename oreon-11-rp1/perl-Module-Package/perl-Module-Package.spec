@@ -1,8 +1,8 @@
 %global source0_hash 7c3c89e779baa83afaf0dc9599c20f90b3e613ea3ece0328931257ab7cc24a99
 
 Name:           perl-Module-Package
-Version:        0.30
-Release:        39%{?dist}
+Version:        1.11111111111
+Release:        1%{?dist}
 Summary:        Postmodern Perl Module Packaging
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Package

@@ -1,8 +1,8 @@
 %global source0_hash b33179ce4dd73dfcde7d46808804b9ffbb11db0245fe455a7d001747562feaca
 
 Name:           perl-Module-Path
-Version:        0.19
-Release:        32%{?dist}
+Version:        2020.02
+Release:        1%{?dist}
 Summary:        Get the full path to a locally installed module
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

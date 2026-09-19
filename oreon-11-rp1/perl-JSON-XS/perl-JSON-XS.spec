@@ -3,8 +3,8 @@
 Name:           perl-JSON-XS
 Summary:        JSON serializing/de-serializing, done correctly and fast
 Epoch:          1
-Version:        4.04
-Release:        2%{?dist}
+Version:        7.001
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/JSON-XS
 Source0:        https://cpan.metacpan.org/modules/by-module/JSON/JSON-XS-%{version}.tar.gz

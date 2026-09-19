@@ -9,8 +9,8 @@
 
 Name:		perl-namespace-clean
 Summary:	Keep your namespace tidy
-Version:	0.27
-Release:	30%{?dist}
+Version:	1.91
+Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/namespace-clean
 Source0:        https://cpan.metacpan.org/authors/id/R/RI/RIBASUSHI/namespace-clean-%{version}.tar.gz

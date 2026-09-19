@@ -1,8 +1,8 @@
 %global source0_hash e094daa909afdf6489a9e2b32733f685a2c1cb5cc8876061075486109b0def59
 
 Name: 		perl-Module-Refresh
-Version: 	0.18
-Release: 	12%{?dist}
+Version: 	7.001
+Release: 	1%{?dist}
 Summary: 	Refresh %INC files when updated on disk
 License: 	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/Module-Refresh

@@ -1,8 +1,8 @@
 %global source0_hash 20017096c6464fbd59ae7549fbc663bfb0c9014d7ac3a457a81a7e408268f62c
 
 Name:           perl-Mock-Config
-Version:        0.05
-Release:        2%{?dist}
+Version:        6.4801
+Release:        1%{?dist}
 Summary:        Temporarily set Config or XSConfig values
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Mock-Config

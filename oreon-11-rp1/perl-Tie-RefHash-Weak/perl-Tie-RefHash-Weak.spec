@@ -1,8 +1,8 @@
 %global source0_hash bcb4fb2b7575e4caec320577e21e500b0f3ad29fede380d5b54bb84543e76988
 
 Name:		perl-Tie-RefHash-Weak
-Version:	0.09
-Release:	48%{?dist}
+Version:	804.036
+Release:	1%{?dist}
 Summary:	Tie::RefHash subclass with weakened references in the keys
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Tie-RefHash-Weak

@@ -8,7 +8,7 @@
 %endif
 
 Name:           perl-YAML-Syck
-Version:        1.45
+Version:        1.100810
 Release:        1%{?dist}
 Summary:        Fast, lightweight YAML loader and dumper
 # gram.*: GPL-2.0-or-later

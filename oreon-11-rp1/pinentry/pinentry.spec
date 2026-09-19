@@ -10,7 +10,7 @@
 
 
 Name:    pinentry
-Version: 1.3.3
+Version: 4.0.1
 Release: 1%{?dist}
 Summary: Collection of simple PIN or passphrase entry dialogs
 

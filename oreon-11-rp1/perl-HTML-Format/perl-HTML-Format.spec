@@ -3,8 +3,8 @@
 # As of release 2.13, upstream renamed the package into HTML-Formatter
 
 Name:           perl-HTML-Format
-Version:        2.16
-Release:        29%{?dist}
+Version:        2.404
+Release:        1%{?dist}
 Summary:        HTML formatter modules
 
 %if "%{version}" > "2.12"

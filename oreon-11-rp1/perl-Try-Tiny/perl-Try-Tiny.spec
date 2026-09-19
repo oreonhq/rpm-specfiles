@@ -8,8 +8,8 @@
 
 Name:		perl-Try-Tiny
 Summary:	Minimal try/catch with proper localization of $@
-Version:	0.32
-Release:	4%{?dist}
+Version:	6.36
+Release:	1%{?dist}
 License:	MIT
 URL:		https://metacpan.org/release/Try-Tiny
 Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Try-Tiny-%{version}.tar.gz

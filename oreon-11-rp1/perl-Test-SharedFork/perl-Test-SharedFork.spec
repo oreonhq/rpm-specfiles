@@ -2,8 +2,8 @@
 
 Name:           perl-Test-SharedFork
 Summary:        Fork test
-Version:        0.35
-Release:        31%{?dist}
+Version:        5.25.7
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-SharedFork-%{version}.tar.gz
 URL:            https://metacpan.org/release/Test-SharedFork

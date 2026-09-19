@@ -15,7 +15,7 @@
 %{?perl_default_filter}
 
 Name:           perl-IO-Compress
-Version:        2.217
+Version:        4.81
 Release:        1%{?dist}
 Summary:        Read and write compressed data
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

@@ -1,8 +1,8 @@
 %global source0_hash bba7b32a1cc0d58ce2ec20b200a7347c69631641e8cae8ff4567ad24ef1e833e
 
 Name:		perl-Test-RequiresInternet
-Version:	0.05
-Release:	32%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Easily test network connectivity
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-RequiresInternet

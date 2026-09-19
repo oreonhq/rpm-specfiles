@@ -1,8 +1,8 @@
 %global source0_hash b27a2753daae6498854d71d76ec8efb9da6b91a842d1d765af664d306a07dc1e
 
 Name:           perl-Tk-Canvas-GradientColor
-Version:        1.06
-Release:        35%{?dist}
+Version:        1.22
+Release:        1%{?dist}
 Summary:        To create a Canvas widget with background gradient color
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tk-Canvas-GradientColor

@@ -1,8 +1,8 @@
 %global source0_hash db9a8fb867d50753c380889a5e54075651b5e08c9b3b721cb7220c0883547de8
 
 Name:           perl-Hash-MoreUtils
-Version:        0.06
-Release:        24%{?dist}
+Version:        4.103
+Release:        1%{?dist}
 Summary:        Provide the stuff missing in Hash::Util
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Hash-MoreUtils

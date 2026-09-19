@@ -4,8 +4,8 @@
 %{bcond_without perl_HTTP_Daemon_enables_optional_test}
 
 Name:           perl-HTTP-Daemon
-Version:        6.16
-Release:        8%{?dist}
+Version:        7.04
+Release:        1%{?dist}
 Summary:        Simple HTTP server class
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Daemon

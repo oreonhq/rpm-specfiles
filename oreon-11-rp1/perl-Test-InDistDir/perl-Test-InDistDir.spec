@@ -1,8 +1,8 @@
 %global source0_hash 922c5c63314f406f4cbb35ec423ac2154d2c2b71a65addb7732c9d240a83fefb
 
 Name:           perl-Test-InDistDir
-Version:        1.112071
-Release:        28%{?dist}
+Version:        2.40
+Release:        1%{?dist}
 Summary:        Test environment setup for development with IDE
 License:        WTFPL
 URL:            https://metacpan.org/release/Test-InDistDir

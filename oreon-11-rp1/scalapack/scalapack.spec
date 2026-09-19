@@ -1,4 +1,4 @@
-%global source0_hash a2f0c9180a210bf7ffe126c9cb81099cf337da1a7120ddb4cbe4894eb7b7d022
+%global source0_hash 5d93701eca663925e98010dd8d0f45fd79b2191d74e5afa5711d587370a8b9dd
 
 %if 0%{?fedora} >= 40
 %ifarch %{ix86}
@@ -58,8 +58,8 @@
 
 Summary: A subset of LAPACK routines redesigned for heterogeneous computing
 Name: scalapack
-Version: 2.2.2
-Release: 6%{?dist}
+Version: 2.2.3
+Release: 1%{?dist}
 License: BSD-3-Clause-Open-MPI
 URL: http://www.netlib.org/scalapack/
 Source0: https://github.com/Reference-ScaLAPACK/scalapack/archive/v%{version}.tar.gz

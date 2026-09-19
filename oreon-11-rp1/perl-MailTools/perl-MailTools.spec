@@ -2,8 +2,8 @@
 
 Summary:	Various ancient mail-related perl modules
 Name:		perl-MailTools
-Version:	2.22
-Release:	4%{?dist}
+Version:	4.05
+Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/MailTools
 Source0:        https://cpan.metacpan.org/authors/id/M/MA/MARKOV/MailTools-%{version}.tar.gz

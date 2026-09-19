@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-YAML-Tiny
-Version:        1.76
-Release:        4%{?dist}
+Version:        1.100810
+Release:        1%{?dist}
 Summary:        Read/Write YAML files with as little code as possible
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/YAML-Tiny

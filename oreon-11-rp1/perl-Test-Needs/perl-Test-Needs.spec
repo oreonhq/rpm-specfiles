@@ -1,8 +1,8 @@
 %global source0_hash 923ffdc78fcba96609753e4bae26b0ba0186893de4a63cd5236e012c7c90e208
 
 Name:           perl-Test-Needs
-Version:        0.002010
-Release:        10%{?dist}
+Version:        5.90129
+Release:        1%{?dist}
 Summary:        Skip tests when modules not available
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 

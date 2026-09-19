@@ -1,8 +1,8 @@
 %global source0_hash eed03a887f21e2bede71c07645357a26cabde487365ac17fa3366baaeb0ea8d6
 
 Name:           perl-perlfaq
-Version:        5.20250619
-Release:        521%{?dist}
+Version:        6.36
+Release:        1%{?dist}
 Summary:        Frequently asked questions about Perl
 # Code examples are Public Domain
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Public-Domain

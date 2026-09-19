@@ -3,8 +3,8 @@
 %bcond perl_Moo_enables_optional_test %{undefined rhel}
 
 Name:           perl-Moo
-Version:        2.005005
-Release:        11%{?dist}
+Version:        5.90129
+Release:        1%{?dist}
 Summary:        Minimalist Object Orientation (with Moose compatibility)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 

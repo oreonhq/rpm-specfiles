@@ -9,8 +9,8 @@
 
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
-Version:	0.17
-Release:	24%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-LeakTrace
 Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-LeakTrace-%{version}.tar.gz

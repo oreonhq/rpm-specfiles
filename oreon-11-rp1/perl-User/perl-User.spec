@@ -1,8 +1,8 @@
 %global source0_hash 5bab18034cbd9a07bcb1292fcdba67d5d0912d33db0fade21819d7d935c88fd9
 
 Name:           perl-User
-Version:        1.9
-Release:        44%{?dist}
+Version:        7.5
+Release:        1%{?dist}
 
 Summary:        API for locating user information regardless of OS
 

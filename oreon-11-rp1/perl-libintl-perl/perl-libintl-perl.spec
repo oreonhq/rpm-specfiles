@@ -2,7 +2,7 @@
 
 Summary:        Internationalization library for Perl, compatible with gettext
 Name:           perl-libintl-perl
-Version:        1.37
+Version:        2.01
 Release:        1%{?dist}
 # gettext_xs/gettext_xs.pm:     GPL-3.0-or-later
 # gettext_xs/Makefile.PL:       LGPL-2.0-or-later

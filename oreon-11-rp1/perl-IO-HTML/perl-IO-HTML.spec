@@ -1,8 +1,8 @@
 %global source0_hash c87b2df59463bbf2c39596773dfb5c03bde0f7e1051af339f963f58c1cbd8bf5
 
 Name:           perl-IO-HTML
-Version:        1.004
-Release:        16%{?dist}
+Version:        6.000
+Release:        1%{?dist}
 Summary:        Open an HTML file with automatic character set detection
 # examples/detect-encoding.pl: Public Domain
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Fedora-Public-Domain

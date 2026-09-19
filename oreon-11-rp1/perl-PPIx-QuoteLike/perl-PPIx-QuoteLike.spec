@@ -4,7 +4,7 @@
 %bcond_without perl_PPIx_QuoteLike_enables_PPIx_Regexp
 
 Name:           perl-PPIx-QuoteLike
-Version:        0.024
+Version:        1.907
 Release:        1%{?dist}
 Summary:        Parse Perl string literals and string-literal-like things
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

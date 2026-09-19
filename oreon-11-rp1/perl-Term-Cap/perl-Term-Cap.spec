@@ -1,8 +1,8 @@
 %global source0_hash 7d5b155824223b4c5cc2587b9dea15f7a5c8f7fd9eaf704a9a6828557a527d0a
 
 Name:           perl-Term-Cap
-Version:        1.18
-Release:        521%{?dist}
+Version:        2.38
+Release:        1%{?dist}
 Summary:        Perl termcap interface
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Term-Cap

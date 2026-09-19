@@ -1,8 +1,8 @@
 %global source0_hash 83da4cab1e4ea4ded8daddf45988bd581416431c907b0e18a3238e950a9c9107
 
 Name:           perl-Unix-Process
-Version:        1.3101
-Release:        26%{?dist}
+Version:        2.9410
+Release:        1%{?dist}
 Summary:        Perl extension to get PID information from ps command
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+

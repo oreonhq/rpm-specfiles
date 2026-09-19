@@ -1,8 +1,8 @@
 %global source0_hash eb54cc23cdec860d3ad8ac8a697cbf038d0dec95229912d975c301890ca83ee2
 
 Name:		perl-Test-XML
-Version:	0.08
-Release:	33%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Compare XML in perl tests
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-XML

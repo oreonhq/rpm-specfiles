@@ -1,8 +1,8 @@
 %global source0_hash b71d3ab7ed0811109a50d284e333628ef212e5602844bbe47935ddd38a6f8578
 
 Name:           perl-Pod-Coverage-Moose
-Version:        0.08
-Release:        7%{?dist}
+Version:        6.002
+Release:        1%{?dist}
 Summary:        Pod::Coverage extension for Moose
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Coverage-Moose

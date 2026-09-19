@@ -1,8 +1,8 @@
 %global source0_hash f2ac2444a74e762783bbd36c486352f96340434d34ae7926d6ab234966540f49
 
 Name:           perl-Linux-Pid
-Version:        0.04
-Release:        61%{?dist}
+Version:        2014.0623
+Release:        1%{?dist}
 Summary:        Get the native PID and the PPID on Linux 
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

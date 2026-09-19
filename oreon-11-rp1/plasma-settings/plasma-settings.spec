@@ -1,7 +1,7 @@
-%global source0_hash ee2e913bbb2117bb24aebcf60c0542d1f9df3f2f48c13e5463d92ce4b8f45ed1
+%global source0_hash b7049f7ea4c2fd69cf8632cf276d9d1c04d2d30a8fce247c7d3fb2cfd66ac374
 
 Name:           plasma-settings
-Version: 26.08.0
+Version: 26.08.1
 Release: 1%{?dist}
 License:        BSD-2-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only
 Summary:        Convergent Plasma Mobile settings application

@@ -1,8 +1,8 @@
 %global source0_hash 319601feec17fae344988a5ee91cfc6a0bcfe742af77dba254724c3268b2a60f
 
 Name:           perl-Time-Piece-MySQL
-Version:        0.06
-Release:        29%{?dist}
+Version:        2015.103
+Release:        1%{?dist}
 Summary:        MySQL-specific methods for Time::Piece
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Time-Piece-MySQL

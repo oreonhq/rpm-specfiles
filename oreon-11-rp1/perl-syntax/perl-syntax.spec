@@ -1,8 +1,8 @@
 %global source0_hash fe19b6da8a8f43a5aa2ee571441bc0e339fb156d0081c157a1a24e9812c7d365
 
 Name:           perl-syntax
-Version:        0.004
-Release:        38%{?dist}
+Version:        1.001002
+Release:        1%{?dist}
 Summary:        Activate syntax extensions
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/syntax

@@ -7,8 +7,8 @@
 %global _python_bytecompile_errors_terminate_build 0
 
 Name:           qt-creator
-Version:        20.0.0
-Release:        0.3%{?prerelease:.%prerelease}%{?dist}
+Version:        20.0.1
+Release:        1%{?dist}
 Summary:        Cross-platform IDE for Qt
 
 # 

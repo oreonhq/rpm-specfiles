@@ -15,7 +15,7 @@ Part of the implementation has been adapted, improved and fixed from Molten.}
 
 Name:           python-%{pypi_name}
 Summary:        Style preserving TOML library
-Version:        0.13.2
+Version:        0.15.1
 Release:        %autorelease
 License:        MIT
 

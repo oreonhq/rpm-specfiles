@@ -1,8 +1,8 @@
 %global source0_hash df1990096036085c8e2d45904fe180f82bfed40f1a7e05243f334ea10090fc54
 
 Name:           perl-XML-RegExp
-Version:        0.04
-Release:        37%{?dist}
+Version:        2.1
+Release:        1%{?dist}
 Summary:        Regular expressions for XML tokens
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

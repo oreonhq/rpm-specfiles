@@ -1,8 +1,8 @@
 %global source0_hash 88efbe2e9a642dceaa186430fedfcf999aaf0e06f6cced28a714b8e56b514921
 
 Name:           perl-Module-CPANfile
-Version:        1.1004
-Release:        24%{?dist}
+Version:        5.13.6
+Release:        1%{?dist}
 Summary:        Parse cpanfile
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-CPANfile

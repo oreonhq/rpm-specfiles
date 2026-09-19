@@ -8,7 +8,7 @@
 %endif
 
 Name:		perl-IO-Compress-Lzma
-Version:	2.217
+Version:	4.81
 Release:	1%{?dist}
 Summary:	Read and write lzma compressed data
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl

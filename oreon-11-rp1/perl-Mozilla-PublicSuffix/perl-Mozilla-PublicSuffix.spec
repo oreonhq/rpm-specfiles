@@ -1,8 +1,8 @@
 %global source0_hash 6815e292161ba8192b434398db295e229b3e61574e6a61994e90f359a2c71b21
 
 Name:           perl-Mozilla-PublicSuffix
-Version:        1.0.7
-Release:        4%{?dist}
+Version:        1.4
+Release:        1%{?dist}
 Summary:        Get a domain name's public suffix via the Mozilla Public Suffix List
 License:        MIT
 URL:            https://metacpan.org/release/Mozilla-PublicSuffix

@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-botocore
-Version:        1.43.97
+Version:        1.43.98
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Low-level, data-driven core of boto 3.

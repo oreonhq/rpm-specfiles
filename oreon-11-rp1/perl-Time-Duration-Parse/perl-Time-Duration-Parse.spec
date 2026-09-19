@@ -1,8 +1,8 @@
 %global source0_hash 1084a6463ee2790f99215bd76b135ca45afe2bfa6998fa6fd5470b69e1babc12
 
 Name:       perl-Time-Duration-Parse
-Version:    0.16
-Release:    14%{?dist}
+Version:    2020.02
+Release:    1%{?dist}
 # see lib/Time/Duration/Parse.pm
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    Parse string that represents time duration

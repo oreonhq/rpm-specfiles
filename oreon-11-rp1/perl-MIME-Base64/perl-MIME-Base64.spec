@@ -1,8 +1,8 @@
 %global source0_hash 77f73d6f7aeb8d33be08b0d8c2617f9b6c77fb7fc45422d507ca8bafe4246017
 
 Name:           perl-MIME-Base64
-Version:        3.16
-Release:        521%{?dist}
+Version:        9999.32
+Release:        1%{?dist}
 Summary:        Encoding and decoding of Base64 and quoted-printable strings
 # Base.xs:      (GPL-1.0-or-later OR Artistic-1.0-Perl) AND metamail
 # Other files:  GPL-1.0-or-later OR Artistic-1.0-Perl

@@ -1,8 +1,8 @@
 %global source0_hash 8c9a541a4a39f6c0c7e3d0b700b05dfdb830bd490a1b1942a7dedd1b50d9a8c8
 
 Name:           perl-HTTP-Cookies
-Version:        6.11
-Release:        7%{?dist}
+Version:        7.04
+Release:        1%{?dist}
 Summary:        HTTP cookie jars
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Cookies

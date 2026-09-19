@@ -1,8 +1,8 @@
 %global source0_hash 15a840ea1c8a76cd3c865fbbf2fec33b03615c0daa50f9c800c54e0cf0659d46
 
 Name:           perl-Pod-LaTeX
-Version:        0.61
-Release:        326%{?dist}
+Version:        4.25
+Release:        1%{?dist}
 Summary:        Convert POD data to formatted LaTeX
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-LaTeX

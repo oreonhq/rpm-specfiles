@@ -4,8 +4,8 @@
 %bcond_without perl_Lexical_SealRequireHints_enables_optional_test
 
 Name:           perl-Lexical-SealRequireHints
-Version:        0.012
-Release:        12%{?dist}
+Version:        1.023
+Release:        1%{?dist}
 Summary:        Prevent leakage of lexical hints
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Lexical-SealRequireHints

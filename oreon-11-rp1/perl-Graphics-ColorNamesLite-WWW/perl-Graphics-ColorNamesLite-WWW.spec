@@ -1,8 +1,8 @@
 %global source0_hash 0b85aa04277a986086970a9e5f7b968c784262bbcb4a2bd9ea0792f892276f33
 
 Name:           perl-Graphics-ColorNamesLite-WWW
-Version:        1.14.000
-Release:        16%{?dist}
+Version:        20260626.0.0
+Release:        1%{?dist}
 Summary:        WWW color names and equivalent RGB values
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Graphics-ColorNamesLite-WWW/

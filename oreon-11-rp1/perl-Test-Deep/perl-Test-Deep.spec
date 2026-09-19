@@ -1,8 +1,8 @@
 %global source0_hash 42781e9943a7a215e662c4973b9feafdc019fd16469bdb849a8537ee58956273
 
 Name:           perl-Test-Deep
-Version:        1.205
-Release:        3%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Extremely flexible deep comparison
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Deep

@@ -1,8 +1,8 @@
 %global source0_hash b4e4740b8d4cb783591273c636bd68304892e28d89e88abf9273b1de17f552f7
 
 Name:		perl-Want
-Version:	0.29
-Release:	34%{?dist}
+Version:	2.5
+Release:	1%{?dist}
 Summary:	Perl module implementing a generalisation of wantarray
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Want

@@ -1,8 +1,8 @@
 %global source0_hash 1c729c1ea63100e878405cda7d66f9adfd3ed4f1d6cacaca0ee9152df728e016
 
 Name:           perl-HTTP-Negotiate
-Version:        6.01
-Release:        42%{?dist}
+Version:        6.06
+Release:        1%{?dist}
 Summary:        Choose a variant to serve
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Negotiate

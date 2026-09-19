@@ -8,8 +8,8 @@
 %{bcond_without perl_Net_HTTP_enables_ssl}
 
 Name:           perl-Net-HTTP
-Version:        6.24
-Release:        2%{?dist}
+Version:        7.04
+Release:        1%{?dist}
 Summary:        Low-level HTTP connection (client)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-HTTP

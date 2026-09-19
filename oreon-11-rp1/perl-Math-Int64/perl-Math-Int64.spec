@@ -1,8 +1,8 @@
 %global source0_hash 12c60111c1cfceb257ac2ccc5b2e1721879efa09a1b0a73e8836afca107a7d75
 
 Name:           perl-Math-Int64
-Version:        0.57
-Release:        7%{?dist}
+Version:        2023.111.1
+Release:        1%{?dist}
 Summary:        Manipulate 64 bits integers in Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Fedora-Public-Domain AND BSD-3-Clause
 URL:            https://metacpan.org/release/Math-Int64

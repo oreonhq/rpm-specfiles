@@ -1,8 +1,8 @@
 %global source0_hash 3a8db00f38148f3afadbe5330dc5490d9933f9cae137e842ec225a4d3adb2d9f
 
 Name:           perl-accessors
-Version:        1.01
-Release:        47%{?dist}
+Version:        3.20
+Release:        1%{?dist}
 Summary:        Create accessor methods in caller's package
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/accessors

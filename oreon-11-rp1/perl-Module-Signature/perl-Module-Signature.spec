@@ -4,8 +4,8 @@
 %global gnupghome %(mktemp --directory)
 
 Name:           perl-Module-Signature
-Version:        0.93
-Release:        3%{?dist}
+Version:        7.001
+Release:        1%{?dist}
 Summary:        CPAN signature management utilities and modules
 License:        CC0-1.0
 URL:            https://metacpan.org/release/Module-Signature

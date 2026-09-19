@@ -1,8 +1,8 @@
 %global source0_hash ae0522f76539608b61dde14670e79677e0f391036832f70a21f31adde2538644
 
 Name:           perl-Hash-Merge
-Version:        0.302
-Release:        16%{?dist}
+Version:        2.00
+Release:        1%{?dist}
 Summary:        Merges arbitrary deep hashes into a single hash
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Hash-Merge

@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-argon2-cffi-bindings
-Version:        25.1.0
+Version:        26.1.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Low-level CFFI bindings for Argon2

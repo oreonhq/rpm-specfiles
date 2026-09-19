@@ -1,7 +1,7 @@
 %global source0_hash a2bdfb312dd6ef711ad8bb6c22e44a0a7c135577d12024911b30c87cce480d21
 
 Name:           python-ruamel-yaml-clib
-Version:        0.2.15
+Version:        0.19.1
 Release:        %autorelease
 Summary:        C version of reader, parser and emitter for ruamel.yaml derived from libyaml
 

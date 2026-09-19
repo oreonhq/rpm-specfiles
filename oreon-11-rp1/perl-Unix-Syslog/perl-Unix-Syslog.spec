@@ -4,8 +4,8 @@
 %bcond_with test
 
 Name:           perl-Unix-Syslog
-Version:        1.1
-Release:        55%{?dist}
+Version:        4.567.89
+Release:        1%{?dist}
 Summary:        Perl interface to the UNIX syslog(3) calls
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Unix-Syslog

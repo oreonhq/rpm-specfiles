@@ -1,8 +1,8 @@
 %global source0_hash dfcaec925a788b0ba41e51bc6d16e21b0e98b4c7af9b79395090add75f5e506f
 
 Name:       perl-Text-CSV
-Version:    2.06
-Release:    2%{?dist}
+Version:    4.18
+Release:    1%{?dist}
 Summary:    Comma-separated values manipulator
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:        https://metacpan.org/release/Text-CSV

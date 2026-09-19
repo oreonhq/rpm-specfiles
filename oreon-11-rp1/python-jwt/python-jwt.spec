@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-pyjwt
-Version:        2.14.0
+Version:        4.1.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        JSON Web Token implementation in Python

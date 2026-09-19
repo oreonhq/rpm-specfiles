@@ -22,7 +22,7 @@
 %global        __provides_exclude_from %{_libdir}/pgsql
 
 Name:          postgresql%{pgversion}-postgis
-Version:       3.6.4
+Version:       3.7.0rc2
 Release:       1%{?dist}
 Summary:       Geographic Information Systems Extensions to PostgreSQL
 License:       GPL-2.0-or-later
@@ -436,6 +436,7 @@ fi
 %{_mandir}/man1/shp2pgsql.1*
 
 %if 0%{?fedora} || (0%{?oreon} >= 11)
+%{_mandir}/man1/raster2pgsql.1.*
 %files -n %{pkgname}-gui
 %{_bindir}/shp2pgsql-gui
 %{_datadir}/applications/shp2pgsql-gui.desktop

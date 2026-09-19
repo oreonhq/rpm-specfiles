@@ -3,8 +3,8 @@
 %global srcname gitdb
 
 Name:           python-%{srcname}
-Version:        4.0.11
-Release:        7%{?dist}
+Version:        4.0.12
+Release:        1%{?dist}
 Summary:        Git Object Database
 
 License:        BSD-3-Clause

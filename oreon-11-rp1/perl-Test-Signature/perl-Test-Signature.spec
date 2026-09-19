@@ -10,8 +10,8 @@
 %global gnupghome %(mktemp --directory)
 
 Name:           perl-Test-Signature
-Version:        1.11
-Release:        36%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Automated SIGNATURE testing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Signature

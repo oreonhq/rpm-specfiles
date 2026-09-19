@@ -1,8 +1,8 @@
 %global source0_hash ed4930577fd1a29d6435b5875533d3b28f5c1258a35833fe6ca2cb6a2685a49b
 
 Name:           perl-Net-DNS-Resolver-Mock
-Version:        1.20230216
-Release:        8%{?dist}
+Version:        4.20260915
+Release:        1%{?dist}
 Summary:        Mock a DNS Resolver object for testing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-DNS-Resolver-Mock

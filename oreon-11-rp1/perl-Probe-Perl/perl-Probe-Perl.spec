@@ -1,8 +1,8 @@
 %global source0_hash d9e4d21e2e77638559045fa09046b1b6fff6c403b949929db213e30abe8a3c31
 
 Name:           perl-Probe-Perl
-Version:        0.03
-Release:        34%{?dist}
+Version:        3.2701
+Release:        1%{?dist}
 Summary:        Information about the currently running perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Probe-Perl

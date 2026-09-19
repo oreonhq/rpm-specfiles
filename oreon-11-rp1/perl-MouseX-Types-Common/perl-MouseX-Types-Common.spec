@@ -1,8 +1,8 @@
 %global source0_hash f8346f684571fd5897dd2a294aecfc6e72fa4f1ee64aef46371f5937d6998e6c
 
 Name:           perl-MouseX-Types-Common
-Version:        0.001000
-Release:        12%{?dist}
+Version:        44.0
+Release:        1%{?dist}
 Summary:        Set of commonly-used type constraints
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://metacpan.org/dist/MouseX-Types-Common/

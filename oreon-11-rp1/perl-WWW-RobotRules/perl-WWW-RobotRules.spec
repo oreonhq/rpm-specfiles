@@ -1,8 +1,8 @@
 %global source0_hash 46b502e7a288d559429891eeb5d979461dd3ecc6a5c491ead85d165b6e03a51e
 
 Name:           perl-WWW-RobotRules
-Version:        6.02
-Release:        43%{?dist}
+Version:        6.06
+Release:        1%{?dist}
 Summary:        Database of robots.txt-derived permissions
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/WWW-RobotRules

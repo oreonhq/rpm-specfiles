@@ -14,8 +14,8 @@
 %global gnupghome %(mktemp --directory)
 
 Name:		perl-Test-Assert
-Version:	0.0504
-Release:	46%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Assertion methods for those who like JUnit
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Assert

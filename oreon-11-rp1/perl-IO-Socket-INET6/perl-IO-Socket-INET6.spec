@@ -7,8 +7,8 @@
 %endif
 
 Name:           perl-IO-Socket-INET6
-Version:        2.73
-Release:        12%{?dist}
+Version:        4.81
+Release:        1%{?dist}
 Summary:        Perl Object interface for AF_INET|AF_INET6 domain sockets
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Socket-INET6

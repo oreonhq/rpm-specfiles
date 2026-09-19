@@ -22,9 +22,9 @@
 # THE SOFTWARE.
 #
 %global upstreamname rocprofiler-register
-%global rocm_release 7.1
+%global rocm_release 20250912-42
 %global rocm_patch 0
-%global rocm_version %{rocm_release}.%{rocm_patch}
+%global rocm_version 20250912-42
 
 %bcond_with compat
 %if %{with compat}
@@ -62,7 +62,7 @@
 
 Name:           rocprofiler-register%{pkg_suffix}
 Version:        %{rocm_version}
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        A rocprofiler helper library
 License:        MIT AND BSD-3-Clause
 

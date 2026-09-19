@@ -2,8 +2,8 @@
 
 Summary:	Manage IO on many file handles
 Name:		perl-IO-Multiplex
-Version:	1.16
-Release:	31%{?dist}
+Version:	4.81
+Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/IO-Multiplex
 Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-Multiplex-%{version}.tar.gz

@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-Params-ValidationCompiler
-Version:	0.31
-Release:	9%{?dist}
+Version:	2.00
+Release:	1%{?dist}
 Summary:	Build an optimized subroutine parameter validator once, use it forever
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Params-ValidationCompiler

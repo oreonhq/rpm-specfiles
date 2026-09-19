@@ -2,8 +2,8 @@
 
 %define upstream_name Test-Some
 Name:       perl-%{upstream_name}
-Version:    0.2.1
-Release:    16%{?dist}
+Version:    3.1.0
+Release:    1%{?dist}
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Group:      Development/Libraries

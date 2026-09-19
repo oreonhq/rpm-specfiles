@@ -1,8 +1,8 @@
 %global source0_hash 7b29c45add19d3d5084b751f7ba89a8e40479a446ce21cfd9cc741e558332a00
 
 Name:           perl-Net-SMTP-SSL
-Version:        1.04
-Release:        28%{?dist}
+Version:        20121119.02
+Release:        1%{?dist}
 Summary:        SSL support for Net::SMTP
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-SMTP-SSL

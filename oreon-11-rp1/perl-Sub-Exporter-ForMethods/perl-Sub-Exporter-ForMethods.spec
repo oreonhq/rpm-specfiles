@@ -1,8 +1,8 @@
 %global source0_hash 791f4203ba7c0f7d8380bc01bec20215f7c8bc70d7ed03e552eee44541abe94e
 
 Name:           perl-Sub-Exporter-ForMethods
-Version:        0.100055
-Release:        9%{?dist}
+Version:        2.006009
+Release:        1%{?dist}
 Summary:        Helper routines for using Sub::Exporter to build methods
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sub-Exporter-ForMethods

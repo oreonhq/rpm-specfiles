@@ -4,8 +4,8 @@
 %bcond_without perl_Lexical_Var_enables_optional_test
 
 Name:           perl-Lexical-Var
-Version:        0.010
-Release:        11%{?dist}
+Version:        1.023
+Release:        1%{?dist}
 Summary:        Static variables without name space pollution
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Lexical-Var

@@ -1,8 +1,8 @@
 %global source0_hash 732fcfd3c1ba8bb314d7df92d14209e066d19b4c45f8451e58d684f0ddfe6bf3
 
 Name:           perl-PAR
-Version:        1.021
-Release:        2%{?dist}
+Version:        1.064
+Release:        1%{?dist}
 Summary:        Perl Archive Toolkit
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/PAR

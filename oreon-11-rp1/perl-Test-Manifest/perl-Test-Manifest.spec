@@ -2,8 +2,8 @@
 
 Summary:        Test case module for Perl
 Name:           perl-Test-Manifest
-Version:        2.026
-Release:        3%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Test-Manifest
 Source0:        https://www.cpan.org/modules/by-module/Test/Test-Manifest-%{version}.tar.gz

@@ -1,8 +1,8 @@
 %global source0_hash c97cb1122cc6e3e4a079059da71e12f65760bfb0671d19d25a7ec7c5f1f240fb
 
 Name:		perl-Test2-Plugin-NoWarnings
-Version:	0.10
-Release:	5%{?dist}
+Version:	9999.13
+Release:	1%{?dist}
 Summary:	Fail if tests warn
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Test2-Plugin-NoWarnings

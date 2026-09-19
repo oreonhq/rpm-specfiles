@@ -1,8 +1,8 @@
 %global source0_hash 6c24f14ddc1d20e26161c207b73ca184eed2ef57f08b5fb2ee196e6e2e88b1c6
 
 Name:           perl-Text-Unidecode
-Version:        1.30
-Release:        28%{?dist}
+Version:        2024.001
+Release:        1%{?dist}
 Summary:        US-ASCII transliterations of Unicode text
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-Unidecode

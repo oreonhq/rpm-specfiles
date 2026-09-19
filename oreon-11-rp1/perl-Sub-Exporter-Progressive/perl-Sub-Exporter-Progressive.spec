@@ -1,8 +1,8 @@
 %global source0_hash d535b7954d64da1ac1305b1fadf98202769e3599376854b2ced90c382beac056
 
 Name:		perl-Sub-Exporter-Progressive
-Version:	0.001013
-Release:	28%{?dist}
+Version:	2.006009
+Release:	1%{?dist}
 Summary:	Only use Sub::Exporter if you need it
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Exporter-Progressive

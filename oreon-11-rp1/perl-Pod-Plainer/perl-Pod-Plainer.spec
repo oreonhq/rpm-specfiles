@@ -4,8 +4,8 @@
 %bcond_without perl_Pod_Plainer_enables_optional_test
 
 Name:       perl-Pod-Plainer
-Version:    1.04
-Release:    31%{?dist}
+Version:    2.02
+Release:    1%{?dist}
 Summary:    Perl extension for converting modern POD to old-style POD
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:        https://metacpan.org/release/Pod-Plainer

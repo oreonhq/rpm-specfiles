@@ -1,7 +1,7 @@
 %global source0_hash 9bdf067633b5913127820f4e8035edc53d08372faace56ba6bfa00c968a25377
 
 Name:           perl-Getopt-Tabular
-Version:        0.3
+Version:        0.34
 Release:        %autorelease
 Summary:        Table-driven argument parsing for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

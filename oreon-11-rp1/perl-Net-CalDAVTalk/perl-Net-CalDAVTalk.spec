@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Net-CalDAVTalk
-Version:        0.12
-Release:        25%{?dist}
+Version:        1.29
+Release:        1%{?dist}
 Summary:        CalDAV client with JSON data interface
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Net-CalDAVTalk

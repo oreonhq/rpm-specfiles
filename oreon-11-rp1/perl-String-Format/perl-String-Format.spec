@@ -1,8 +1,8 @@
 %global source0_hash 9e417a8f8d9ea623beea2d13a47c0d5a696fc8602c0509b826cd45f97b76e778
 
 Name:           perl-String-Format
-Version:        1.18
-Release:        23%{?dist}
+Version:        2010.002
+Release:        1%{?dist}
 Summary:        Sprintf-like string formatting capabilities with arbitrary format definitions
 
 License:        GPL-2.0-only

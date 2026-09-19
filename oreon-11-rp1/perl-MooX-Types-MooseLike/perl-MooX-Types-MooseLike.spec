@@ -1,8 +1,8 @@
 %global source0_hash 1d3780aa9bea430afbe65aa8c76e718f1045ce788aadda4116f59d3b7a7ad2b4
 
 Name:           perl-MooX-Types-MooseLike
-Version:        0.29
-Release:        31%{?dist}
+Version:        1.16
+Release:        1%{?dist}
 Summary:        Some Moosish types and a type builder
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

@@ -1,8 +1,8 @@
 %global source0_hash 5ac61e309d65281b14fb215e70e2c53a9e06ee2be38fac793a54747bfb62031b
 
 Name:           perl-XML-Fast
-Version:        0.17
-Release:        31%{?dist}
+Version:        0.0603
+Release:        1%{?dist}
 Summary:        Simple and very fast XML to hash conversion
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Fast

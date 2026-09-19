@@ -1,8 +1,8 @@
 %global source0_hash 2bfe771173c38b69eeb089504e3f76511b8e45e6a9e6dac3e616e400ea67bcf0
 
 Name:           perl-Test-Pod-LinkCheck
-Version:        0.008
-Release:        40%{?dist}
+Version:        2.001
+Release:        1%{?dist}
 Summary:        Tests POD for invalid links
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Pod-LinkCheck

@@ -1,8 +1,8 @@
 %global source0_hash a71f2fe8b96ab8bfc2760aa1d3135ea049a5b20dcb105457b769a1195c7a2509
 
 Name:           perl-Test-UseAllModules
-Version:        0.17
-Release:        32%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Do use_ok() for all the MANIFESTed modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-UseAllModules

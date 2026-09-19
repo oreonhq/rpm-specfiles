@@ -1,8 +1,8 @@
 %global source0_hash 069ccd49d3f0a2dedb115f4bdc9fbac07a83592840953d1fcdfc39eb9d305287
 
 Name: 		perl-Text-Glob
-Version: 	0.11
-Release: 	27%{?dist}
+Version: 	3.12
+Release: 	1%{?dist}
 Summary: 	Perl module to match globbing patterns against text
 License: 	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/Text-Glob

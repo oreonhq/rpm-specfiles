@@ -2,8 +2,8 @@
 
 Name:           perl-inc-latest
 Epoch:          2
-Version:        0.500
-Release:        32%{?dist}
+Version:        5.23.6
+Release:        1%{?dist}
 Summary:        Use modules bundled in inc/ if they are newer than installed ones
 License:        Apache-2.0
 URL:            https://metacpan.org/release/inc-latest

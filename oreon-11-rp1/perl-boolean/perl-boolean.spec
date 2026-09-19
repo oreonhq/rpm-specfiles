@@ -1,8 +1,8 @@
 %global source0_hash 95c088085c3e83bf680fe6ce16d8264ec26310490f7d1680e416ea7a118f156a
 
 Name:           perl-boolean
-Version:        0.46
-Release:        27%{?dist}
+Version:        1.11111111111
+Release:        1%{?dist}
 Summary:        Boolean support for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/boolean

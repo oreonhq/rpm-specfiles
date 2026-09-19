@@ -1,4 +1,4 @@
-%global source0_hash c33a0f512e6cb89849b6591548928e7b850295672166c5181613480cc5deb6d3
+%global source0_hash 4c480818e9839cf03ca9c9cecfe4bc864a779cca742a3479a47d33f40579ff90
 
 %global oname rtslib-fb
 
@@ -8,8 +8,8 @@
 Name:             python-rtslib
 License:          Apache-2.0
 Summary:          API for Linux kernel LIO SCSI target
-Version:          2.2.3
-Release:          5%{?dist}
+Version:          2.2.4
+Release:          1%{?dist}
 URL:              https://github.com/open-iscsi/%{oname}
 Source:        https://github.com/open-iscsi/rtslib-fb/archive/v2.2.3/rtslib-fb-2.2.3.tar.gz#/python-rtslib-2.2.3.tar.gz
 Patch0:           0001-disable-xen_pvscsi.patch

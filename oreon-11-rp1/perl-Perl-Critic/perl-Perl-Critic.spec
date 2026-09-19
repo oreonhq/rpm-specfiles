@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-Perl-Critic
-Version:	1.156
-Release:	5%{?dist}
+Version:	100.00
+Release:	1%{?dist}
 Summary:	Critique Perl source code for best-practices
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Perl-Critic

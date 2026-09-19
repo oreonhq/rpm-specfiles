@@ -1,8 +1,8 @@
 %global source0_hash 16adeb617b963d010179922c2e4e8762df77c75232e17320b459868c4970c44b
 
 Name:           perl-MooX-Types-MooseLike-Numeric
-Version:        1.03
-Release:        28%{?dist}
+Version:        1.16
+Release:        1%{?dist}
 Summary:        Moo types for numbers
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/MooX-Types-MooseLike-Numeric

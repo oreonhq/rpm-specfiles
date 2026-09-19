@@ -1,8 +1,8 @@
 %global source0_hash 67ac509adffb1d2b256a8f8c0523e00761d960166192c6070298f7088a9ae9c9
 
 Name:		perl-Test-CPAN-Meta-JSON
-Version:	0.16
-Release:	32%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Validate a META.json file within a CPAN distribution
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Test-CPAN-Meta-YAML

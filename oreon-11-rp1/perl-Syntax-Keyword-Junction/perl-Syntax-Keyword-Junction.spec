@@ -4,8 +4,8 @@
 %bcond_without perl_Syntax_Keyword_Junction_enables_optional_test
 
 Name:           perl-Syntax-Keyword-Junction
-Version:        0.003009
-Release:        4%{?dist}
+Version:        5.90129
+Release:        1%{?dist}
 Summary:        Perl6 style Junction operators in Perl5
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Syntax-Keyword-Junction

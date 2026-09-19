@@ -1,8 +1,8 @@
 %global source0_hash 4b23542491af010d44a5c7c861244738acc74ababae6b8838d354dfb19462b5e
 
 Name:		perl-Readonly
-Version:	2.05
-Release:	30%{?dist}
+Version:	3.00
+Release:	1%{?dist}
 Summary:	Facility for creating read-only scalars, arrays, hashes
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Readonly

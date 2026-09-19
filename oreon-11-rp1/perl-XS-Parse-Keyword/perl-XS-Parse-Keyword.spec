@@ -4,8 +4,8 @@
 %bcond_without perl_XS_Parse_Keyword_enables_optional_test
 
 Name:           perl-XS-Parse-Keyword
-Version:        0.49
-Release:        2%{?dist}
+Version:        5.45.1
+Release:        1%{?dist}
 Summary:        XS functions to assist in parsing keyword syntax
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XS-Parse-Keyword

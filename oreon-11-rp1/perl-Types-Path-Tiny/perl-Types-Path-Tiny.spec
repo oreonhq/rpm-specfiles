@@ -1,8 +1,8 @@
 %global source0_hash 593fc9faedbc69280659c0cce85168f8e7a1714cacdf8e9e6b7489be18dfe280
 
 Name:           perl-Types-Path-Tiny
-Version:        0.006
-Release:        24%{?dist}
+Version:        5.23.6
+Release:        1%{?dist}
 Summary:        Path::Tiny types and coercions for Moose and Moo
 License:        Apache-2.0
 URL:            https://metacpan.org/release/Types-Path-Tiny

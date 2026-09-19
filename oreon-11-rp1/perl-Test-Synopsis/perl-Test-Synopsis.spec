@@ -7,8 +7,8 @@
 %undefine _package_note_file
 
 Name:		perl-Test-Synopsis
-Version:	0.17
-Release:	14%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Test your SYNOPSIS code
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Synopsis

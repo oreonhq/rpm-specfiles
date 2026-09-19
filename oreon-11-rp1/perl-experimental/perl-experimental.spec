@@ -1,8 +1,8 @@
 %global source0_hash 42612937c20f0c758547d0519bf535d7f378aa2a01fb20453b2a015a14d6720c
 
 Name:           perl-experimental
-Version:        0.036
-Release:        3%{?dist}
+Version:        5.44.0
+Release:        1%{?dist}
 Summary:        Experimental features made easy
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/experimental

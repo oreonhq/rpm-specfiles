@@ -1,8 +1,8 @@
 %global source0_hash 34c4ddf91fc93d1090d86da14df706d175b1610c67372c01e12ce9555d4dd1dc
 
 Name:           perl-Guard
-Version:        1.023
-Release:        36%{?dist}
+Version:        7.17
+Release:        1%{?dist}
 Summary:        Safe cleanup blocks
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Guard

@@ -1,8 +1,8 @@
 %global source0_hash 66ec08871b0288949cb2d0244a2bbdfe24d8f66d5839605fee74e54511e19d37
 
 Name:           perl-Test-MemoryGrowth
-Version:        0.05
-Release:        4%{?dist}
+Version:        5.45.1
+Release:        1%{?dist}
 Summary:        Assert that code does not cause growth in memory usage
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-MemoryGrowth

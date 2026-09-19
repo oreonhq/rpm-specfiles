@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:		perl-Switch
-Version:	2.17
-Release:	35%{?dist}
+Version:	3.30
+Release:	1%{?dist}
 Summary:	A switch statement for Perl
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl

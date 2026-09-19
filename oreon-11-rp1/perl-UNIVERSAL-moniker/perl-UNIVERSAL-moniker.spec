@@ -1,8 +1,8 @@
 %global source0_hash 94ce27a546cd57cb52e080a8f2533a7cc2350028388582485bd1039a37871f9c
 
 Name:           perl-UNIVERSAL-moniker
-Version:        0.08
-Release:        55%{?dist}
+Version:        1.20171012
+Release:        1%{?dist}
 Summary:        Real world naming for classes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/UNIVERSAL-moniker

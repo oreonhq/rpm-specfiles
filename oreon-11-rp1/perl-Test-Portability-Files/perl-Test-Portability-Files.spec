@@ -1,8 +1,8 @@
 %global source0_hash 08e4b432492dc1b44b55d5db57952eb76379c7f434ee8f16aca64d491f401a16
 
 Name:           perl-Test-Portability-Files
-Version:        0.10
-Release:        22%{?dist}
+Version:        2.400002
+Release:        1%{?dist}
 Summary:        Check file names portability
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Portability-Files

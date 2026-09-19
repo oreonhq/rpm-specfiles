@@ -1,8 +1,8 @@
 %global source0_hash 0555bb7ac67d839747056054669065e1305ff4b4e7283d9ac43b7a62cd007cbd
 
 Name:           perl-Test-HasVersion
-Version:        0.014
-Release:        30%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Check Perl modules have version numbers
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-HasVersion

@@ -1,8 +1,8 @@
 %global source0_hash b0c819ec83999b258b248f82059fa5975a0cee365423abbee0efaca5401c5ec6
 
 Name:           perl-MooseX-AttributeHelpers
-Version:        0.25
-Release:        30%{?dist}
+Version:        2.05
+Release:        1%{?dist}
 Summary:        Extended Moose attribute interfaces (deprecated)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/MooseX-AttributeHelpers

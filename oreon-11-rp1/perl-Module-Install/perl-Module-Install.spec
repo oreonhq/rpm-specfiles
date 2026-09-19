@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Module-Install
-Version:        1.21
-Release:        8%{?dist}
+Version:        6.36
+Release:        1%{?dist}
 Summary:        Standalone, extensible Perl module installer
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install

@@ -1,8 +1,8 @@
 %global source0_hash 3cde0138a23a29bd7a46b62fa775a8a82fc6692bea2a2dc2113660dd26e4bf60
 
 Name:           perl-MooseX-GlobRef
-Version:        0.0701
-Release:        42%{?dist}
+Version:        0.5101
+Release:        1%{?dist}
 Summary:        Store a Moose object in glob reference
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/MooseX-GlobRef

@@ -1,8 +1,8 @@
 %global source0_hash cd583e4983039f35052d490f0c4439124ba667d4f09c4e3aec47de5200f9921a
 
 Name:           perl-Type-Tiny
-Version:        2.010001
-Release:        2%{?dist}
+Version:        8.000001
+Release:        1%{?dist}
 Summary:        Tiny, yet Moo(se)-compatible type constraint
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Type-Tiny

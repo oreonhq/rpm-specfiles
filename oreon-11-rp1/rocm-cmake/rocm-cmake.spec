@@ -25,9 +25,9 @@
 # there is no debug package - this is just cmake modules
 %global debug_package %{nil}
 
-%global rocm_release 7.1
+%global rocm_release 20250912-42
 %global rocm_patch 0
-%global rocm_version %{rocm_release}.%{rocm_patch}
+%global rocm_version 20250912-42
 
 %bcond_with compat
 %if %{with compat}
@@ -42,7 +42,7 @@
 
 Name:     %{pkg_name}
 Version:  %{rocm_version}
-Release:  3%{?dist}
+Release:  1%{?dist}
 Summary:  CMake modules for common build and development tasks for ROCm
 License:  MIT
 URL:      https://github.com/ROCm/rocm-cmake

@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Sub-Install
-Version:        0.929
-Release:        9%{?dist}
+Version:        20221231.000
+Release:        1%{?dist}
 Summary:        Install subroutines into packages easily
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sub-Install

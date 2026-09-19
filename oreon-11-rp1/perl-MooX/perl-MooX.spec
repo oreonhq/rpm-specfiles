@@ -1,8 +1,8 @@
 %global source0_hash 2ff91a656e78aae0aca42293829d7a7e5acb9bf22b0401635b2ab6c870de32d5
 
 Name:           perl-MooX
-Version:        0.101
-Release:        37%{?dist}
+Version:        20160218.000
+Release:        1%{?dist}
 Summary:        Using Moo and MooX:: packages the most lazy way
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/MooX

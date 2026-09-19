@@ -1,7 +1,7 @@
 %global source0_hash a8fbdfa1833bd8e926295030adc05390b45ca5392cb54933d4a733d83f277ae7
 
 Name:           python-utils
-Version:        3.9.1
+Version:        4.0.1
 Release:        %autorelease
 Summary:        Python Utils is a module with some convenient utilities
 

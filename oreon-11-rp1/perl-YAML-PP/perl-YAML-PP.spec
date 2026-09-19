@@ -1,7 +1,7 @@
 %global source0_hash 3ddfb2bdd2e7ef2d949dbd8ffb51439164c84d22bff615e47dbd8ea48ba75cae
 
 Name:           perl-YAML-PP
-Version:        0.41.0
+Version:        1.321
 Release:        1%{?dist}
 Summary:        YAML 1.2 processor
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

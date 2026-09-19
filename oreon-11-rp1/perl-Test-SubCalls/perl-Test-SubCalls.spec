@@ -1,8 +1,8 @@
 %global source0_hash cbc1e9b35a05e71febc13e5ef547a31c8249899bb6011dbdc9d9ff366ddab6c2
 
 Name:           perl-Test-SubCalls
-Version:        1.10
-Release:        24%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Track the number of times subs are called
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-SubCalls

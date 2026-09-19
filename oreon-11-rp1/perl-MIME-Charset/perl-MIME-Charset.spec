@@ -3,8 +3,8 @@
 %bcond perl_MIME_Charset_enables_optional_test %{undefined rhel}
 
 Name:           perl-MIME-Charset
-Version:        1.013.1
-Release:        10%{?dist}
+Version:        2025.004
+Release:        1%{?dist}
 Summary:        Charset Informations for MIME
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/MIME-Charset

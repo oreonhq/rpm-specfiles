@@ -2,8 +2,8 @@
 
 Name:           perl-Scope-Upper
 Summary:        Act on upper scopes
-Version:        0.34
-Release:        11%{?dist}
+Version:        1.19
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Source0:        https://cpan.metacpan.org/authors/id/V/VP/VPIT/Scope-Upper-%{version}.tar.gz 
 URL:            https://metacpan.org/release/Scope-Upper
