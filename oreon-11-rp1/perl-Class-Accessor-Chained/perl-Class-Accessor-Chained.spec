@@ -1,8 +1,8 @@
 %global source0_hash a5bf49d3804f83ad25a1b16f327d14d4cbee2270132104b28705031dbccc34d2
 
 Name:           perl-Class-Accessor-Chained
-Version:        0.01
-Release:        56%{?dist}
+Version:        3.12
+Release:        1%{?dist}
 Summary:        Make chained accessors
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Accessor-Chained

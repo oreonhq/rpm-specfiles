@@ -1,8 +1,8 @@
 %global source0_hash 02e1e7275df00682d3ca8ea1c27a30591d6dd08b3e3865c0958afae911635a66
 
 Name:           perl-ExtUtils-HasCompiler
-Version:        0.025
-Release:        5%{?dist}
+Version:        5.44.0
+Release:        1%{?dist}
 Summary:        Check for the presence of a compiler
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-HasCompiler

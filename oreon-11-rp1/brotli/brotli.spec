@@ -1,8 +1,8 @@
 %global source0_hash 816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec
 
 Name:           brotli
-Version:        1.2.0
-Release:        3%{?dist}
+Version:        9.0.0
+Release:        1%{?dist}
 Summary:        Lossless compression algorithm
 
 License:        MIT

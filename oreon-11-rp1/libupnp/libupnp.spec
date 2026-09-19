@@ -1,6 +1,6 @@
 %global source0_hash none
 
-Version: 1.18.5
+Version: 22.1.0
 Summary: Universal Plug and Play (UPnP) SDK
 Name: libupnp
 Release: 1%{?dist}

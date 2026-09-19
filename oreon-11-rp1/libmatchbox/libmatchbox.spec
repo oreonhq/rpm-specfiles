@@ -2,8 +2,8 @@
 
 Summary:        Libraries for the Matchbox Desktop
 Name:           libmatchbox 
-Version:        1.9
-Release:        41%{?dist}
+Version:        1.14
+Release:        1%{?dist}
 Url:            http://projects.o-hand.com/matchbox/
 License:        LGPL-2.1-or-later
 Source:        https://downloads.yoctoproject.org/releases/matchbox/libmatchbox/1.9/libmatchbox-1.9.tar.bz2

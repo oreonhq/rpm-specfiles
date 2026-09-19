@@ -12,7 +12,7 @@ Name:             dogtag-pki
 
 # Upstream version number:
 %global           major_version 11
-%global           minor_version 9
+%global           minor_version 10
 %global           update_version 1
 
 # Downstream release number:

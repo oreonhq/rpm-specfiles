@@ -1,8 +1,8 @@
 %global source0_hash 68c1dac2187421f0eb7abf71452a06f190181b8fc4b28ededf5b90296fb943cc
 
 Name:           perl-Digest-SHA1
-Version:        2.13
-Release:        49%{?dist}
+Version:        6.06
+Release:        1%{?dist}
 Summary:        Digest-SHA1 Perl module
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

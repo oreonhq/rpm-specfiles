@@ -1,8 +1,8 @@
 %global source0_hash 85e2f805bfc81cd738c294316b27a515397036f397a0ff1c6c8d754c38530306
 
 Name:           perl-DBIx-ContextualFetch
-Version:        1.03
-Release:        55%{?dist}
+Version:        3.12
+Release:        1%{?dist}
 Summary:        Add contextual fetches to DBI
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

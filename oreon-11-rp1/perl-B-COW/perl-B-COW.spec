@@ -1,8 +1,8 @@
 %global source0_hash 1290daf227e8b09889a31cf182e29106f1cf9f1a4e9bf7752f9de92ed1158b44
 
 Name:		perl-B-COW
-Version:	0.007
-Release:	12%{?dist}
+Version:	2.07
+Release:	1%{?dist}
 Summary:	Additional B helpers to check Copy On Write status
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/B-COW

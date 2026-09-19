@@ -1,8 +1,8 @@
 %global source0_hash 7e99afe4a9d992fcef1dfea42e1f95475706aed94f185068a89f729b512735f8
 
 Name:           perl-File-Find-Object
-Version:        0.3.9
-Release:        4%{?dist}
+Version:        9999.32
+Release:        1%{?dist}
 Summary:        Object oriented File::Find replacement
 License:        GPL-2.0-or-later OR Artistic-2.0
 URL:            https://metacpan.org/release/File-Find-Object

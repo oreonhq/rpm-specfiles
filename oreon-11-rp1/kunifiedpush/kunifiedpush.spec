@@ -1,8 +1,8 @@
 %global source0_hash 247ccc7bcc4277e2fc63a753c367d0ca10efe3b4916f60a44d9ca2da403c4fe5
 
 Name:           kunifiedpush
-Version:        26.04.3
-Release:        2%{?dist}
+Version:        26.08.1
+Release:        1%{?dist}
 Summary:        UnifiedPush client library and distributor daemon
 License:        BSD-2-Clause AND CC0-1.0 AND BSD-3-Clause AND LGPL-2.0-or-later
 URL:            https://invent.kde.org/libraries/kunifiedpush

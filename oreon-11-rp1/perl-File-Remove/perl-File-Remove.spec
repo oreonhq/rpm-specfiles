@@ -1,8 +1,8 @@
 %global source0_hash fd857f585908fc503461b9e48b3c8594e6535766bc14beb17c90ba58d5dc4975
 
 Name:		perl-File-Remove
-Version:	1.61
-Release:	11%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Convenience module for removing files and directories
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 

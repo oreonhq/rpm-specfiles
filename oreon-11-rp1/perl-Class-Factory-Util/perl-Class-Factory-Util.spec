@@ -1,8 +1,8 @@
 %global source0_hash 6c516b445b44f87363fb3a148431d31e9ecb5e6f21fb6481c89b2406b6692e26
 
 Name:           perl-Class-Factory-Util
-Version:        1.7
-Release:        50%{?dist}
+Version:        4.18
+Release:        1%{?dist}
 Summary:        Provide utility methods for factory classes 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Factory-Util            

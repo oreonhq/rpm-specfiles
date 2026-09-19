@@ -1,4 +1,4 @@
-%global source0_hash 8cfb30784d196e9fed885736bb560d82e49a7f96122c9c28ad768572a8078fe8
+%global source0_hash b29cb94ed43469196707c7f2100487fb71649a46767f8ccb1210356e0a9dd042
 %global source1_hash 03a33b50e468271dd1d7a525b8eed2a369e5d86da5135375633d06698638176a
 
 #
@@ -58,8 +58,8 @@ Summary:        Web Console for Linux servers
 License:        LGPL-2.1-or-later AND GPL-3.0-or-later AND MIT AND CC-BY-SA-3.0 AND BSD-3-Clause
 URL:            https://cockpit-project.org/
 
-Version:        357
-Release:        2%{?dist}
+Version:        367
+Release:        1%{?dist}
 Source0:        https://github.com/cockpit-project/cockpit/releases/download/%{version}/cockpit-%{version}.tar.xz
 Source1:        https://github.com/cockpit-project/cockpit/releases/download/%{version}/cockpit-node-%{version}.tar.xz
 

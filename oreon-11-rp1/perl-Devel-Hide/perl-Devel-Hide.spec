@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Devel-Hide
-Version:        0.0016
-Release:        2%{?dist}
+Version:        20110802.00
+Release:        1%{?dist}
 Summary:        Forces the unavailability of specified Perl modules (for testing)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-Hide

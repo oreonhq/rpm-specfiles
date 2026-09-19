@@ -1,8 +1,8 @@
 %global source0_hash 43a2bf2f787a3f1b881179063162b2aa3e7cb044f6e5e76ec6466ae90a861138
 
 Name:           perl-Devel-FindPerl
-Version:        0.016
-Release:        11%{?dist}
+Version:        5.44.0
+Release:        1%{?dist}
 Summary:        Find the path to the current Perl interpreter
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-FindPerl

@@ -1,8 +1,8 @@
 %global source0_hash 269f3df865692596de214fe42b92dcf87d6a6bc22ddb7ed2abc7f48b82e45e6c
 
 Name:           perl-Convert-Bencode
-Version:        1.03
-Release:        43%{?dist}
+Version:        4.03
+Release:        1%{?dist}
 Summary:        Functions for converting to/from bencoded strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Convert-Bencode

@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           httpcomponents-client
-Version:        4.5.14
+Version:        5.6.4
 Release:        %autorelease
 Summary:        HTTP agent implementation based on httpcomponents HttpCore
 License:        Apache-2.0

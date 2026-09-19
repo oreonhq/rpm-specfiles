@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-libvorbis
-Version:        1.3.7
-Release:        16%{?dist}
+Version:        1.4.3
+Release:        1%{?dist}
 Summary:        MinGW Windows libvorbis library
 
 # Automatically converted from old format: BSD - review is highly recommended.

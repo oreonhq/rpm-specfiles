@@ -1,8 +1,8 @@
 %global source0_hash 452995beeabf0e923e65fdc627a725dbb12c9e10c00d8018c16d10ba62757f1e
 
 Name:		perl-File-Slurp-Tiny
-Version:	0.004
-Release:	30%{?dist}
+Version:	9999.32
+Release:	1%{?dist}
 Summary:	A simple, sane and efficient file slurper
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/File-Slurp-Tiny

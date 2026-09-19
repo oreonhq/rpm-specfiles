@@ -1,8 +1,8 @@
 %global source0_hash 3c422bb69dff33ae884c746e6015ed2da19deb2804b59c4c7978428c49def1bf
 
 Name:           perl-Data-ICal-TimeZone
-Version:        1.23
-Release:        28%{?dist}
+Version:        3.12
+Release:        1%{?dist}
 Summary:        Time zones for Data::ICal
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-ICal-TimeZone

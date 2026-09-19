@@ -1,8 +1,8 @@
 %global source0_hash a571b24181baaa76c96704e92acffc6934ff593e380dade274db4e43c140ad51
 
 Name:           perl-Crypt-OpenSSL-Random
-Version:        0.17
-Release:        6%{?dist}
+Version:        6.4801
+Release:        1%{?dist}
 Summary:        OpenSSL/LibreSSL pseudo-random number generator access
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Crypt-OpenSSL-Random

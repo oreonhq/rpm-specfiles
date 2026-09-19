@@ -1,8 +1,8 @@
 %global source0_hash 176fa02771f542a4efb1dbc2a4c928e8f4391bf4078473bd6040d8f11adb0ec1
 
 Name:           perl-Encode-Locale
-Version:        1.05
-Release:        33%{?dist}
+Version:        6.06
+Release:        1%{?dist}
 Summary:        Determine the locale encoding
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Encode-Locale

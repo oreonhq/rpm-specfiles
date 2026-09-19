@@ -1,10 +1,10 @@
-%global source0_hash 61300f603798ecf1d7786570789f0ff3f5a1acf075a6fb9f756837d166e37d14
+%global source0_hash d1008fb78dcae1323ddab664bcb352a61f022b1b131bd8018548e021d975ec7a
 %global source1_hash 05220b4b4f1c6c56d3b4acf6998d79768dccd22c379639a6cf3589fbbd54ba1d
 
 Summary: A text file browser similar to more, but better
 Name: less
-Version: 692
-Release: 3%{?dist}
+Version: 710
+Release: 1%{?dist}
 # less dual license GPL-3.0-only OR BSD-2-Clause
 # lesspipe GPL-2.0-or-later
 License: (GPL-3.0-only OR BSD-2-Clause) AND GPL-2.0-or-later

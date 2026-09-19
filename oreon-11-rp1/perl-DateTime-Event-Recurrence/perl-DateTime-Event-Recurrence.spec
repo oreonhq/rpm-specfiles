@@ -1,8 +1,8 @@
 %global source0_hash f9408789a461107766ca1a232bb3ec1e702eec7ca8167401ea6ec3f4b6d0b5a5
 
 Name:           perl-DateTime-Event-Recurrence
-Version:        0.19
-Release:        26%{?dist}
+Version:        9.028
+Release:        1%{?dist}
 Summary:        DateTime::Set extension for create basic recurrence sets
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Event-Recurrence

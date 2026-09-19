@@ -1,8 +1,8 @@
 %global source0_hash 61d41599b481164edf9b8becabbef2d23f622a9727f6c18365e92b5782d4fa37
 
 Name:           perl-File-NFSLock
-Version:        1.29
-Release:        21%{?dist}
+Version:        7.00
+Release:        1%{?dist}
 Summary:        Perl module to do NFS (or not) locking
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-NFSLock

@@ -1,8 +1,8 @@
 %global source0_hash 53da4384ef5cf30ee87dc0131f4b6eee2121cc0eba347162a328b9bcfaf475ea
 
 Name:           perl-DateTime-Event-ICal
-Version:        0.13
-Release:        29%{?dist}
+Version:        9.028
+Release:        1%{?dist}
 Summary:        Perl DateTime extension for computing rfc2445 recurrences
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Event-ICal

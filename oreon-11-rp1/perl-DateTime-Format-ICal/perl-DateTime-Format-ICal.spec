@@ -1,8 +1,8 @@
 %global source0_hash 8b09f6539f5e9c0df0e6135031699ed4ef9eef8165fc80aefeecc817ef997c33
 
 Name:           perl-DateTime-Format-ICal
-Version:        0.09
-Release:        48%{?dist}
+Version:        9999.13
+Release:        1%{?dist}
 Summary:        Parse and format iCal datetime and duration strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Format-ICal

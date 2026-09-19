@@ -1,8 +1,8 @@
 %global source0_hash b01b203a97f9a3bf36a027c13ddfc59292730552e62722d690d33bd5c24f5497
 
 Name:           hfsplus-tools
-Version:        540.1.linux3
-Release:        37%{?dist}
+Version:        757
+Release:        1%{?dist}
 Summary:        Tools to create/check Apple HFS+ filesystems
 
 # Automatically converted from old format: APSL 2.0 - review is highly recommended.

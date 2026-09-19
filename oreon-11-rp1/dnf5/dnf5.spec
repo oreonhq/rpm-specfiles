@@ -1,15 +1,15 @@
-%global source0_hash 9e8ed27088daaaaf9e76120a06cb320e2d6b5c50e75762facf2e5227d946e063
+%global source0_hash fdfd7d9cdf0bb2e2235815869b574ccf7cc6082e8a27af9eb87c7f5cb6c8f6a6
 
 %global project_version_prime 5
 %global project_version_major 4
-%global project_version_minor 0
+%global project_version_minor 5
 %global project_version_micro 0
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
 
 Name:           dnf5
 Version:        %{project_version_prime}.%{project_version_major}.%{project_version_minor}.%{project_version_micro}
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf5

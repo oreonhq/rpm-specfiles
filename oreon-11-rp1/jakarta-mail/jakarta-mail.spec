@@ -1,9 +1,9 @@
-%global source0_hash 3f3eb57cb6c9bc1a8714bf5f0eaa780a1201bc183f95f1ba18f9cfc09be8a809
+%global source0_hash b1633d16a7d0cbda6959c1f405433ad289e33264dc378d7abc9bc77e64ac0fbc
 
 %bcond_with bootstrap
 
 Name:           jakarta-mail
-Version:        2.1.5
+Version:        2.2.0-M1
 Release:        %autorelease
 Summary:        Jakarta Mail API
 License:        EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0

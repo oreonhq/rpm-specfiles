@@ -1,9 +1,9 @@
-%global source0_hash e59a7fc8179f0cd659875d94c396020a66f1c8c2b716c00ef9d39623b2926f97
+%global source0_hash a3cd4135c0358fdc7ec7bd96be40edc3d0fe127e6493b06f87c384dc6690a14c
 
 %bcond_without bootstrap
 
 Name:           maven-plugin-testing
-Version:        3.5.1
+Version:        4.0.0-beta-1
 Release:        %autorelease
 Summary:        Maven Plugin Testing
 License:        Apache-2.0

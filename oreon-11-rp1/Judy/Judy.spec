@@ -1,8 +1,8 @@
 %global source0_hash d2704089f85fdb6f2cd7e77be21170ced4b4375c03ef1ad4cf1075bd414a63eb
 
 Name:		Judy
-Version:	1.0.5
-Release:	42%{?dist}
+Version:	2.0.8
+Release:	1%{?dist}
 Summary:	General purpose dynamic array
 License:	LGPL-2.0-or-later
 URL:		http://sourceforge.net/projects/judy/

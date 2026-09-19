@@ -1,8 +1,8 @@
 %global source0_hash 47f6e51fb45ce7be561e01481add0c2e1c0cd85df4b9e212f3923cd3064d1cad
 
 Name:           perl-Data-Dump-Streamer
-Version:        2.42
-Release:        11%{?dist}
+Version:        20182514.062550
+Release:        1%{?dist}
 Summary:        Accurately serialize a data structure as Perl code
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-Dump-Streamer

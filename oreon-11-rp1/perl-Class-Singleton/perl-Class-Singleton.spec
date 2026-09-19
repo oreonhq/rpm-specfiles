@@ -1,8 +1,8 @@
 %global source0_hash 27ba13f0d9512929166bbd8c9ef95d90d630fc80f0c9a1b7458891055e9282a4
 
 Name:           perl-Class-Singleton
-Version:        1.6
-Release:        15%{?dist}
+Version:        4.18
+Release:        1%{?dist}
 Summary:        Implementation of a "Singleton" class
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Singleton

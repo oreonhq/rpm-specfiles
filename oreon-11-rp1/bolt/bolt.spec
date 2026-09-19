@@ -1,7 +1,7 @@
 %global source0_hash 0e9646ff153f4445d85bfaac1b0d77d86df9c639f84888f15ee7b0f1fa892b58
 
 Name:          bolt
-Version:       0.9.11
+Version:       1.3.1
 Release:       %autorelease
 Summary:       Thunderbolt device manager
 License:       LGPL-2.1-or-later

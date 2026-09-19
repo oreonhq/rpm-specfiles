@@ -8,7 +8,7 @@
 %global dnf_conflict 4.11.0
 %global swig_version 3.0.12
 %global libdnf_major_version 0
-%global libdnf_minor_version 75
+%global libdnf_minor_version 76
 %global libdnf_micro_version 0
 
 %define __cmake_in_source_build 1
@@ -60,7 +60,7 @@
 
 Name:           libdnf
 Version:        %{libdnf_major_version}.%{libdnf_minor_version}.%{libdnf_micro_version}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Library providing simplified C and Python API to libsolv
 License:        LGPL-2.1-or-later
 URL:            https://github.com/rpm-software-management/libdnf

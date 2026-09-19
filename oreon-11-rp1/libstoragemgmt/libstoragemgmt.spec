@@ -1,4 +1,4 @@
-%global source0_hash 66ccac385eb2759e47422d35d5325d2d8f077e4693a6663be12d100ebf608a10
+%global source0_hash 07fd9c8e498a052b7ed201c56936120910ec4992fa1f3ade88a0c66e088bdc93
 
 # pywbem is not included in RHEL
 %bcond smis %{undefined rhel}
@@ -6,7 +6,7 @@
 %bcond test 0
 
 Name:           libstoragemgmt
-Version:        1.10.3
+Version:        1.11.0
 Release:        1%{?dist}
 Summary:        Storage array management library
 License:        LGPL-2.1-or-later

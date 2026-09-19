@@ -12,8 +12,8 @@
 %{bcond_without perl_File_MimeInfo_enables_usage}
 
 Name:           perl-File-MimeInfo
-Version:        0.36
-Release:        2%{?dist}
+Version:        4.048
+Release:        1%{?dist}
 Summary:        Determine file type and open application
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-MimeInfo

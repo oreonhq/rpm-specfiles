@@ -21,7 +21,7 @@
 %global krb5_version_major 1
 %global krb5_version_minor 22
 # For a release without a patch number set to %%nil
-%global krb5_version_patch 2
+%global krb5_version_patch 2-final
 
 %global krb5_version_major_minor %{krb5_version_major}.%{krb5_version_minor}
 %global krb5_version %{krb5_version_major_minor}

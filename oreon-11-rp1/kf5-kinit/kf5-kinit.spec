@@ -5,8 +5,8 @@
 %global rpm_macros_dir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:           kf5-%{framework}
-Version: 5.116.0
-Release: 7%{?dist}
+Version: 5.116.1
+Release: 1%{?dist}
 Summary:        KDE Frameworks 5 tier 3 solution for process launching
 
 License:        BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

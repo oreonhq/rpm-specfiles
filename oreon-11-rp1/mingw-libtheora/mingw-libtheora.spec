@@ -5,7 +5,7 @@
 %global base libtheora
 
 Name:           mingw-%{base}
-Version:        1.2.0
+Version:        1.2.0beta1
 Release:        1%{?dist}
 Summary:        Theora Video Compression Codec
 

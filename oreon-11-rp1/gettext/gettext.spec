@@ -9,7 +9,7 @@
 
 Summary: GNU tools and libraries for localized translated messages
 Name: gettext
-Version: 1.0
+Version: 2.1.0
 Release: 1%{?dist}
 
 # The following are licensed under LGPLv2+:

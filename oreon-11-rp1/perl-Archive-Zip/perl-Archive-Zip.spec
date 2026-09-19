@@ -1,8 +1,8 @@
 %global source0_hash 984e185d785baf6129c6e75f8eb44411745ac00bf6122fb1c8e822a3861ec650
 
 Name:           perl-Archive-Zip
-Version:        1.68
-Release:        18%{?dist}
+Version:        2.0.8
+Release:        1%{?dist}
 Summary:        Perl library for accessing Zip archives
 # lib/Archive/Zip/Member.pm:    (GPL-1.0-or-later OR Artistic-1.0-Perl) and Info-ZIP
 #                               (The _mapPermissionsToUnix() comments are

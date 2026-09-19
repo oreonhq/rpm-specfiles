@@ -1,7 +1,7 @@
 %global source0_hash 1c48e9b00bc32578b2176e6f79c4a11713d875befa8fbb7f48b7a9c8172fe8bd
 
 Name:           perl-Business-ISMN
-Version:        1.205
+Version:        6.15
 Release:        %autorelease
 Summary:        Perl library for International Standard Music Numbers
 License:        Artistic-2.0

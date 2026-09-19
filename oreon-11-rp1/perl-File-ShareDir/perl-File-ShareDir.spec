@@ -4,8 +4,8 @@
 %bcond_without perl_File_ShareDir_enables_optional_deps
 
 Name:           perl-File-ShareDir
-Version:        1.118
-Release:        15%{?dist}
+Version:        4.103
+Release:        1%{?dist}
 Summary:        Locate per-dist and per-module shared files
 # other files:              GPL+ or Artistic
 ## not in binary packages

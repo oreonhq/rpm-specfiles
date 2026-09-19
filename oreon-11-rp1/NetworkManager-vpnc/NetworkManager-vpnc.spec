@@ -3,7 +3,7 @@
 Summary:   NetworkManager VPN plugin for vpnc
 Name:      NetworkManager-vpnc
 Epoch:     1
-Version:   1.4.0
+Version:   1.4.1-dev
 Release:   1%{?dist}
 License:   GPL-2.0-or-later
 URL:       https://wiki.gnome.org/Projects/NetworkManager/VPN

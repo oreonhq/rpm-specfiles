@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Compress-Bzip2
-Version:        2.28
-Release:        25%{?dist}
+Version:        6.4801
+Release:        1%{?dist}
 Summary:        Interface to Bzip2 compression library
 # bzlib-src/win-tst-dlltest.c (unbundled):  Public Domain
 # bzlib-src/LICENSE (unbundled):            BSD-4-Clause

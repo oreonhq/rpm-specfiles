@@ -1,8 +1,8 @@
 %global source0_hash 1510b7f10d67201037cd50d22c9d6b26eeca55ededa4cdb46bbca27e59a4ea16
 
 Name:           perl-Email-Address-XS
-Version:        1.05
-Release:        12%{?dist}
+Version:        1.24
+Release:        1%{?dist}
 Summary:        Parse and format RFC 2822 email addresses and groups
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND MIT
 URL:            https://metacpan.org/release/Email-Address-XS

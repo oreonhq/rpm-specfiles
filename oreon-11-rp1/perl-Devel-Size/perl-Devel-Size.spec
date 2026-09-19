@@ -8,7 +8,7 @@
 %endif
 
 Name:           perl-Devel-Size
-Version:        0.86
+Version:        5.8.9
 Release:        1%{?dist}
 Summary:        Perl extension for finding the memory usage of Perl variables
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

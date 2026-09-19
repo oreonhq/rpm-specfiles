@@ -26,7 +26,7 @@ and should not be used on production systems.
 
 Summary:  Dynamic host configuration protocol software
 Name:     dhcp
-Version:  4.4.3
+Version:  4.4.3-P1
 Release:  %autorelease
 
 # We want to get rid of DHCP in favour of Kea package, because ISC has announced

@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Crypt-DES
-Version:        2.07
-Release:        43%{?dist}
+Version:        3.07
+Release:        1%{?dist}
 Summary:        Perl DES encryption module
 License:        BSD-Systemics
 URL:            https://metacpan.org/release/Crypt-DES

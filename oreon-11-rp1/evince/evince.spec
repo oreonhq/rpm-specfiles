@@ -18,7 +18,7 @@
 %global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           evince
-Version:        48.4
+Version:        49.alpha
 Release:        1%{?dist}
 Summary:        Document viewer
 

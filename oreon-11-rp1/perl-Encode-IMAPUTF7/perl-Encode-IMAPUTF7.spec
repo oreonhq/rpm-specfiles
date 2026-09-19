@@ -3,8 +3,8 @@
 %global remove_lf() for i in %*; do tr -d '\\r' < $i > $i. && touch -r $i $i. && mv -f $i. $i; done
 
 Name:           perl-Encode-IMAPUTF7
-Version:        1.07
-Release:        31%{?dist}
+Version:        20221231.000
+Release:        1%{?dist}
 Summary:        Process the special UTF-7 variant required by IMAP
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Encode-IMAPUTF7

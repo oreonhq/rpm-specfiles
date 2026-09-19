@@ -1,7 +1,7 @@
-%global source0_hash eb87b4c2c1137959025b355296fa556b4d5a09c480e75918ee4b13c354eae29d
+%global source0_hash e5cc8d74e5f88cfe74622b14d1d28e85710dec898b754c2c78969f25147bbb55
 
 Name:		gssntlmssp
-Version:	1.3.1
+Version:	1.3.2
 Release:	%autorelease
 Summary:	GSSAPI NTLMSSP Mechanism
 

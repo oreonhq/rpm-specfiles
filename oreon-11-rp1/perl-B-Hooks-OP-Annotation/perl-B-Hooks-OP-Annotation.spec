@@ -1,8 +1,8 @@
 %global source0_hash 6e26f99367f4ea944169cf6e05cf4d067832082424ca8ecefccb7b5a63217b16
 
 Name:           perl-B-Hooks-OP-Annotation
-Version:        0.44
-Release:        45%{?dist}
+Version:        2.07
+Release:        1%{?dist}
 Summary:        Annotate and delegate hooked OPs
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/B-Hooks-OP-Annotation

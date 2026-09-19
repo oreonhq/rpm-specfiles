@@ -1,8 +1,8 @@
 %global source0_hash 94f41c3924aafde4ef7fa6b58e0595d4038d8ac5ffd62ba111b13c5f4dbc0946
 
 Name:           perl-DateTime-Set
-Version:        0.3900
-Release:        27%{?dist}
+Version:        9.028
+Release:        1%{?dist}
 Summary:        Datetime sets and set math
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Set

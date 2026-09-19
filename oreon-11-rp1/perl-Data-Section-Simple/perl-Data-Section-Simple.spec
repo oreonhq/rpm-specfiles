@@ -1,8 +1,8 @@
 %global source0_hash 0b3035ffdb909aa1f7ded6b608fa9d894421c82c097d51e7171170d67579a9cb
 
 Name:		perl-Data-Section-Simple
-Version:	0.07
-Release:	34%{?dist}
+Version:	20182514.062550
+Release:	1%{?dist}
 Summary:	Read data from __DATA__
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Data-Section-Simple

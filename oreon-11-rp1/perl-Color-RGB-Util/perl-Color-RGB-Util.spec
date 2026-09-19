@@ -1,8 +1,8 @@
 %global source0_hash b301f24d61fe2a634f62004d2c198556ffdc743f39a96b766c09d6fe45c41aad
 
 Name:           perl-Color-RGB-Util
-Version:        0.609
-Release:        3%{?dist}
+Version:        20260626.0.0
+Release:        1%{?dist}
 Summary:        Utilities related to RGB colors
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Color-RGB-Util/

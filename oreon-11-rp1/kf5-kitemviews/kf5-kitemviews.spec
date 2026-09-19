@@ -4,8 +4,8 @@
 %global framework kitemviews
 
 Name:           kf5-%{framework}
-Version: 5.116.0
-Release: 5%{?dist}
+Version: 5.116.1
+Release: 1%{?dist}
 Summary:        KDE Frameworks 5 Tier 1 addon with item views
 
 License:        CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later

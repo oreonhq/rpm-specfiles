@@ -8,8 +8,8 @@ Name:           perl-FCGI
 Summary:        FastCGI Perl bindings
 # needed to properly replace/obsolete fcgi-perl
 Epoch:          1
-Version:        0.82
-Release:        18%{?dist}
+Version:        6.36
+Release:        1%{?dist}
 # eg/echo.pl:   "See the LICENSE file"
 # fastcgi.h:    "See the LICENSE file"
 # FCGI.pm:      "See the LICENSE file"

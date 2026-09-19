@@ -1,8 +1,8 @@
 %global source0_hash 33725bafbed3829d613e4c651c2e1ad120670c7d2ac5cf05f83757fc975d6ff2
 
 Name:           perl-ExtUtils-Install
-Version:        2.22
-Release:        521%{?dist}
+Version:        9.99
+Release:        1%{?dist}
 Summary:        Install Perl files from here to there
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-Install

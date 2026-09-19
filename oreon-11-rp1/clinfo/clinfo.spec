@@ -2,7 +2,7 @@
 
 Name:           clinfo
 Summary:        Enumerate OpenCL platforms and devices
-Version:        3.0.25.02.14
+Version:        20170207
 Release:        %autorelease
 # Automatically converted from old format: CC0 - review is highly recommended.
 License:        CC0-1.0

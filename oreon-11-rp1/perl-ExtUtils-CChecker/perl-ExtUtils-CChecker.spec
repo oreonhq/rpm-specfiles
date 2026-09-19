@@ -1,8 +1,8 @@
 %global source0_hash 8b87d145337dec1ee754d30871d0b105c180ad4c92c7dc0c7fadd76cec8c57d3
 
 Name:           perl-ExtUtils-CChecker
-Version:        0.12
-Release:        5%{?dist}
+Version:        7.76
+Release:        1%{?dist}
 Summary:        Configure-time utilities for using C headers, libraries, or OS features
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-CChecker

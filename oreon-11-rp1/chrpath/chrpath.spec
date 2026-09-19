@@ -3,8 +3,8 @@
 %define _lto_cflags %{nil}
 
 Name:           chrpath
-Version:        0.16
-Release:        28%{?dist}
+Version:        0.18
+Release:        1%{?dist}
 Summary:        Modify rpath of compiled programs
 
 License:        GPL-2.0-or-later

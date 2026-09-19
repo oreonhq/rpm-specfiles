@@ -4,7 +4,7 @@
 %global major_minor_version %(echo %{tarball_version} | cut -d "." -f 1-2)
 
 Name:           libgweather
-Version:        4.6.0
+Version:        4.8.0
 Release:        %autorelease
 Summary:        A library for weather information
 

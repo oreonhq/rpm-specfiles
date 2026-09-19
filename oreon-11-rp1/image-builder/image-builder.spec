@@ -1,4 +1,4 @@
-%global source0_hash e2f3196f505b81fe75f5d436ae2185994fd1ec4a89c65f449b6662df3731d4bd
+%global source0_hash 851b9888a5be46726109a63e0ad3c736202857b06f2cb0242b2aa285cf252ea6
 
 # The minimum required osbuild version, note that this used to be 129
 # but got bumped to 138 for librepo support which is not strictly
@@ -9,7 +9,7 @@
 
 %global goipath         github.com/osbuild/image-builder-cli
 
-Version:        53
+Version:        69
 
 %gometa
 

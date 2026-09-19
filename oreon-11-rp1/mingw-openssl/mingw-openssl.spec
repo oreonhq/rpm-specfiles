@@ -1,4 +1,4 @@
-%global source0_hash b23ad7fd9f73e43ad1767e636040e88ba7c9e5775bfa5618436a0dd2c17c3716
+%global source0_hash 160271e66902844ee37e776b98df59a903739cd22a44f43126dab9fe9efd59bd
 
 %global mingw_build_ucrt64 1
 %{?mingw_package_header}
@@ -17,7 +17,7 @@
 %global run_tests 0
 
 Name:           mingw-openssl
-Version:        4.0.2
+Version:        4.1.0-alpha1
 Release:        1%{?dist}
 Summary:        MinGW port of the OpenSSL toolkit
 

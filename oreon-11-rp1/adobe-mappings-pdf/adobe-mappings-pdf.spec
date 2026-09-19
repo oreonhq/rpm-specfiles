@@ -1,9 +1,9 @@
-%global source0_hash 33f00829263610fd0e73ace9a1137e109435b52ac8f94179a6476d6e784865ff
+%global source0_hash a94b66aaa851ae5de9427904e6fd1a8be2246d66572fa38104bf8fc1d7f5593a
 
 Name:             adobe-mappings-pdf
 Summary:          PDF mapping resources from Adobe
-Version:          20190401
-Release:          12%{?dist}
+Version:          20230118
+Release:          1%{?dist}
 License:          BSD-3-Clause
 
 URL:              https://www.adobe.com/

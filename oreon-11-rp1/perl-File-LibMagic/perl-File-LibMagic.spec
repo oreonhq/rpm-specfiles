@@ -4,8 +4,8 @@
 %{?perl_default_filter}
 
 Name:		perl-File-LibMagic
-Version:	1.23
-Release:	18%{?dist}
+Version:	9999.32
+Release:	1%{?dist}
 Summary:	Perl wrapper/interface for libmagic
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/File-LibMagic

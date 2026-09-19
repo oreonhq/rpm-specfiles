@@ -5,8 +5,8 @@
 
 Name:           perl-DateTime-Format-Mail
 Epoch:          1
-Version:        0.403
-Release:        28%{?dist}
+Version:        4.11
+Release:        1%{?dist}
 Summary:        Convert between DateTime and RFC2822/822 formats
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Format-Mail            

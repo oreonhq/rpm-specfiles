@@ -3,7 +3,7 @@
 %{?mingw_package_header}
 
 Name:           mingw-SDL2_mixer
-Version:        2.8.2
+Version:        3.2.4
 Release:        1%{?dist}
 Summary:        MinGW Windows port of Simple DirectMedia Layer's Sample Mixer Library
 

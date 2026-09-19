@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-Archive-Any-Lite
-Version:	0.11
-Release:	30%{?dist}
+Version:	3.04
+Release:	1%{?dist}
 Summary:	Simple CPAN package extractor 
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Archive-Any-Lite

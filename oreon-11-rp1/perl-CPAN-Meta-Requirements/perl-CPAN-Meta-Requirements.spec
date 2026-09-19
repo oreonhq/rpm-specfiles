@@ -4,8 +4,8 @@
 %bcond_without perl_CPAN_Meta_Requirements_enables_optional_test
 
 Name:           perl-CPAN-Meta-Requirements
-Version:        2.145
-Release:        3%{?dist}
+Version:        20221231.000
+Release:        1%{?dist}
 Summary:        Set of version requirements for a CPAN dist
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CPAN-Meta-Requirements

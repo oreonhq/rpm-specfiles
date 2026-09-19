@@ -1,7 +1,7 @@
 %global source0_hash 0e9247ab1c4e64110024e34082ce8401f089f7df8e40de0b1ce6a03641302d56
 
 Name:           libtommath
-Version:        1.3.1~rc1
+Version:        1.3.1-rc1
 Release:        %autorelease
 Summary:        A portable number theoretic multiple-precision integer library
 License:        Unlicense

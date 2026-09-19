@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name: libmypaint
-Version: 1.6.1
-Release: 16%{?dist}
+Version: 2.0.0-beta.1
+Release: 1%{?dist}
 Summary: Library for making brush strokes
 
 # Compute some version related macros.

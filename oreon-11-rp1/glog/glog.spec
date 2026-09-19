@@ -1,7 +1,7 @@
 %global source0_hash 00e4a87e87b7e7612f519a41e491f16623b12423620006f59f5688bfd8d13b08
 
 Name:           glog
-Version:        0.7.1
+Version:        1.2.5
 Release:        1%{?dist}
 Summary:        A C++ application logging library
 # main source code is BSD-3-Clause

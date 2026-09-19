@@ -1,8 +1,8 @@
 %global source0_hash abcb3610fca06d9a1d9916ab6980743a61d85af55f9fd376bea6712a89a69c78
 
 Name:           perl-Data-Taxi
-Version:        0.96
-Release:        43%{?dist}
+Version:        1.26
+Release:        1%{?dist}
 Summary:        Taint-aware, XML-ish data serialization
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-Taxi

@@ -4,8 +4,8 @@ Name:           perl-Array-Diff
 # Because 0.08 compares newer than 0.05002 in Perl world
 # but not in RPM world :-(
 Epoch:          1
-Version:        0.09
-Release:        21%{?dist}
+Version:        4.2
+Release:        1%{?dist}
 Summary:        Find the differences between two arrays
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Array-Diff

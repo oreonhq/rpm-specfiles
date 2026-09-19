@@ -2,7 +2,7 @@
 %global source30_hash 4172a1f7df3836d4af8153d88b53fb0f7176083372ad35695725f49e8c9fbd0a
 
 %global nspr_version 4.38.2
-%global nss_version 3.123.1
+%global nss_version 3.129
 # NOTE: To avoid NVR clashes of nspr* packages:
 # - reset %%{nspr_release} to 1, when updating %%{nspr_version}
 # - increment %%{nspr_version}, when updating the NSS part only

@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-Class-Load
-Version:	0.25
-Release:	29%{?dist}
+Version:	4.18
+Release:	1%{?dist}
 Summary:	A working (require "Class::Name") and more
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Class-Load

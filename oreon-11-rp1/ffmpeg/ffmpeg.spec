@@ -1,4 +1,4 @@
-%global source0_hash b072aed6871998cce9b36e7774033105ca29e33632be5b6347f3206898e0756a
+%global source0_hash 8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e
 
 %global source2_key_fpr FCF986EA15E6E293A5644F10B4322F04D67658D8
 
@@ -107,7 +107,7 @@
 Name:           ffmpeg
 %global pkg_name %{name}%{?pkg_suffix}
 
-Version:        9.0.1
+Version:        9.0.2
 Release:        1%{?dist}
 Summary:        A complete solution to record, convert and stream audio and video
 License:        GPL-3.0-or-later

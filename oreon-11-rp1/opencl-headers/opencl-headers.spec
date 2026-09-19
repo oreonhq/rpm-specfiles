@@ -5,8 +5,8 @@
 %global cl_hpp_ver 2025.07.22
 
 Name:           opencl-headers
-Version:        3.0
-Release:        2%{?dist}
+Version:        2026.05.29
+Release:        1%{?dist}
 Summary:        OpenCL (Open Computing Language) header files
 
 License:        Apache-2.0

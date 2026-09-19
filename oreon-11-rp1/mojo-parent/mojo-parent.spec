@@ -1,9 +1,9 @@
-%global source0_hash fb2504cc93149d3dbe8ee9ddbf3136414a062c42bcfcf5fc65f12ccc1d16f589
+%global source0_hash 4a3760863105581c05ddcb344afea06019eb4c10120330e0dbdc47e9ca445962
 
 %bcond_without bootstrap
 
 Name:           mojo-parent
-Version:        85
+Version:        97
 Release:        %autorelease
 Summary:        Codehaus MOJO parent project pom file
 License:        Apache-2.0

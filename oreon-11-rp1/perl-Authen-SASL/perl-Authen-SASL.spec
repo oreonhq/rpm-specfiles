@@ -1,7 +1,7 @@
 %global source0_hash 8cdf5a7f185448b614471675dae5b26f8c6e330b62264c3ff5d91172d6889b99
 
 Name:           perl-Authen-SASL
-Version:        2.2000
+Version:        3.12
 Release:        1%{?dist}
 Summary:        SASL Authentication framework for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

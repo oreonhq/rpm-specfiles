@@ -6,8 +6,8 @@
 
 Summary:       Hardware lister
 Name:          lshw
-Version:       B.02.20
-Release:       11%{?dist}
+Version:       02.20
+Release:       1%{?dist}
 License:       GPL-2.0-only
 URL:           https://github.com/lyonel/lshw
 Source0:        https://github.com/lyonel/lshw/archive/refs/tags/%{version}.tar.gz#/lshw-B.02.20.tar.gz

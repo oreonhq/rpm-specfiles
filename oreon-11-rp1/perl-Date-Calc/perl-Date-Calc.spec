@@ -1,8 +1,8 @@
 %global source0_hash 7ce137b2e797b7c0901f3adf1a05a19343356cd1f04676aa1c56a9f624f859ad
 
 Name:           perl-Date-Calc
-Version:        6.4
-Release:        32%{?dist}
+Version:        7.4
+Release:        1%{?dist}
 Summary:        Gregorian calendar date calculations
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Date-Calc

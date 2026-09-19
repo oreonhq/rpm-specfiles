@@ -17,7 +17,7 @@
 %bcond datetime_tests %{undefined rhel}
 
 Name:           babel
-Version:        2.18.0
+Version:        8.0.6
 Release:        %autorelease
 Summary:        Tools for internationalizing Python applications
 

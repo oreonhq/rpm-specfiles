@@ -1,7 +1,7 @@
 %global source0_hash 0561009778513a95d91dac33cee8418d6622f710450a7cb56a74636d53b588cb
 
 Name:           libid3tag
-Version:        0.16.3
+Version:        0.16.4
 Release:        %autorelease
 Summary:        ID3 tag manipulation library
 

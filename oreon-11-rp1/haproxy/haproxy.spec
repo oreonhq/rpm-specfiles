@@ -9,7 +9,7 @@
 %global _hardened_build 1
 
 Name:           haproxy
-Version:        3.0.17
+Version:        3.4.4
 Release:        1%{?dist}
 Summary:        HAProxy reverse proxy for high availability environments
 

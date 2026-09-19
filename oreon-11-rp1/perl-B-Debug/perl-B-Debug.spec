@@ -13,8 +13,8 @@
 %endif
 
 Name:           perl-B-Debug
-Version:        1.26
-Release:        444%{?dist}
+Version:        6.4801
+Release:        1%{?dist}
 Summary:        Walk Perl syntax tree, print debug information about op-codes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/B-Debug

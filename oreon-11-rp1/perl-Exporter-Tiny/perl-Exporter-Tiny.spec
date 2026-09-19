@@ -1,8 +1,8 @@
 %global source0_hash 6499f09a6432cf87b133fb9580a8a9a9a6c566821346b1fdee95f7b64c0317b1
 
 Name:		perl-Exporter-Tiny
-Version:	1.006003
-Release:	2%{?dist}
+Version:	5.78
+Release:	1%{?dist}
 Summary:	An exporter with the features of Sub::Exporter but only core dependencies
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://exportertiny.github.io/

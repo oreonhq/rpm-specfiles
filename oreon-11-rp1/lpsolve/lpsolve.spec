@@ -1,8 +1,8 @@
 %global source0_hash a4bbdc881128bdbe920a38e134c9add5db47f9aa814a0a018ba940b0f3c278c3
 
 Name:       lpsolve
-Version:    5.5.2.14
-Release:    2%{?dist}
+Version:    5.6.23
+Release:    1%{?dist}
 Summary:    Mixed Integer Linear Programming (MILP) solver
 # bfp/bfp_LUSOL/lp_LUSOL.c:             LGPL-2.1-or-later
 # LICENSE:          LGPL-2.1 text

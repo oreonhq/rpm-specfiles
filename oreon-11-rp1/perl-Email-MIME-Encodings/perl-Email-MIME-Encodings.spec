@@ -1,8 +1,8 @@
 %global source0_hash 4a9a41671a9d1504c4da241be419a9503fa3486262526edb81eca9e2ebea0baf
 
 Name:           perl-Email-MIME-Encodings
-Version:        1.317
-Release:        8%{?dist}
+Version:        3.010
+Release:        1%{?dist}
 Summary:        Unified interface to MIME encoding and decoding
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Email-MIME-Encodings

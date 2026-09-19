@@ -12,8 +12,8 @@
 
 Summary: Basic networking tools
 Name: net-tools
-Version: 2.0
-Release: 0.77.%{checkout}%{?dist}
+Version: 2.10
+Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL: http://sourceforge.net/projects/net-tools/
 

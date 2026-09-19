@@ -2,9 +2,9 @@
 
 Name:           perl-Devel-StackTrace
 Summary:        Perl module implementing stack trace and stack trace frame objects
-Version:        2.05
+Version:        9999.13
 Epoch:          1
-Release:        7%{?dist}
+Release:        1%{?dist}
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Devel-StackTrace
 Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Devel-StackTrace-%{version}.tar.gz

@@ -1,7 +1,7 @@
 %global source0_hash d9c86c6b5dbddb43a3e08270c5844fc5177d19442cf5b8df4be7c07cd5fa3831
 
 %global glibcsrcdir glibc-2.43
-%global glibcversion 2.43
+%global glibcversion 2.44
 # Pre-release tarballs are pulled in from git using a command that is
 # effectively:
 #

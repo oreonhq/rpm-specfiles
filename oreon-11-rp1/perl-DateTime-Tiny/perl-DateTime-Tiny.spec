@@ -1,8 +1,8 @@
 %global source0_hash eaff931132fa8aa7a2e1688fd3d6d7ec55ea6eb071cacd4aaeb0cf91ce1af7d6
 
 Name:           perl-DateTime-Tiny
-Version:        1.08
-Release:        3%{?dist}
+Version:        5.23.6
+Release:        1%{?dist}
 Summary:        Date object, with as little code as possible
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Tiny

@@ -1,8 +1,8 @@
 %global source0_hash 4e7e82211f3749a73f6f2556f7048cff0725c7d7e52cb819fd51b1bba9fa0b58
 
 Name:           perl-DateTime-Format-HTTP
-Version:        0.43
-Release:        4%{?dist}
+Version:        4.11
+Release:        1%{?dist}
 Summary:        HTTP protocol date conversion routines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Format-HTTP

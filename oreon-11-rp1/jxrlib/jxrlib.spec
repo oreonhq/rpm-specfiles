@@ -1,8 +1,8 @@
 %global source0_hash 3e3c9d3752b0bbf018ed9ce01b43dcd4be866521dc2370dc9221520b5bd440d4
 
 Name:           jxrlib
-Version:        1.2
-Release:        0.5.git20170615%{?dist}
+Version:        1.4.3
+Release:        1%{?dist}
 Summary:        JPEG XR reference library
 License:        BSD-2-Clause
 URL:            https://git.debian.org/git/phototools/jxrlib.git

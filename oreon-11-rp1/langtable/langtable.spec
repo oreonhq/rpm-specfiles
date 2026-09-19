@@ -1,7 +1,7 @@
-%global source0_hash 725b94121856a3b76d2345e8596954b82ed1eda78513e55ac55fbe4a4823e66e
+%global source0_hash f9d39c06d5182ea14eb4576bf1da8875af1d44efb166e55d6865b3b59b8ac617
 
 Name:           langtable
-Version:        0.0.70
+Version:        0.0.71
 Release:        %autorelease
 Summary:        Guessing reasonable defaults for locale, keyboard layout, territory, and language.
 # the translations in languages.xml and territories.xml are (mostly)

@@ -1,7 +1,7 @@
-%global source0_hash c1040d4928308b85b3576a418c5cbd6622f199208f80d4a153d1b829ee8508b8
+%global source0_hash 54feb7607811d1d2bcc1ca49941ffd5bbd49f3e45544242e5d25ddf75d799c17
 
 Name:       ibus-table
-Version:    1.17.16
+Version:    1.18.0
 Release:    %autorelease
 Summary:    The Table engine for IBus platform
 License:    LGPL-2.1-or-later

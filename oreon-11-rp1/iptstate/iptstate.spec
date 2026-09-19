@@ -2,8 +2,8 @@
 
 Name: iptstate
 Summary: A top-like display of IP Tables state table entries
-Version: 2.2.7
-Release: 11%{?dist}
+Version: 2.3.0
+Release: 1%{?dist}
 Source:        https://github.com/jaymzh/iptstate/releases/download/v%{version}/iptstate-%{version}.tar.bz2
 Patch01: 0001-Makefile-respect-LDFLAGS.patch
 Patch02: 0002-Makefile-Use-pkg-config.patch

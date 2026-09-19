@@ -1,8 +1,8 @@
 %global source0_hash 2b14b6a301412aa73fff8fe2e275c755828de2e4c5463ffc73b184c2d33b8cdc
 
 Name:           perl-Class-Inner
-Version:        0.200001
-Release:        43%{?dist}
+Version:        1.000001
+Release:        1%{?dist}
 Summary:        A perlish implementation of Java like inner classes
 
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.

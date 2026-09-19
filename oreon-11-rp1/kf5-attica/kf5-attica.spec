@@ -3,8 +3,8 @@
 %global framework attica
 
 Name:   kf5-attica
-Version: 5.116.0
-Release: 5%{?dist}
+Version: 5.116.1
+Release: 1%{?dist}
 Summary: KDE Frameworks Tier 1 Addon with Open Collaboration Services API
 
 License: CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

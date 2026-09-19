@@ -1,8 +1,8 @@
 %global source0_hash 5623481f58cee8edb96cd202aad0df5622d427e5f748b253851dfd62e5123632
 
 Name:           perl-Clone-Choose
-Version:        0.010
-Release:        24%{?dist}
+Version:        1.08
+Release:        1%{?dist}
 Summary:        Choose appropriate clone utility
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Clone-Choose

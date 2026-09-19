@@ -10,8 +10,8 @@
 %endif
 
 Name:           perl-DynaLoader-Functions
-Version:        0.004
-Release:        8%{?dist}
+Version:        5.17.0
+Release:        1%{?dist}
 Summary:        Deconstructed dynamic C library loading
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DynaLoader-Functions

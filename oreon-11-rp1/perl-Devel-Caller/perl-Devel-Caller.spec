@@ -1,8 +1,8 @@
 %global source0_hash b679a2b18034b0b720de82c3708724c364b10a6ca164cbc67cdc3af283f3503f
 
 Name:           perl-Devel-Caller
-Version:        2.07
-Release:        11%{?dist}
+Version:        20110802.00
+Release:        1%{?dist}
 Summary:        Meatier versions of caller
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-Caller

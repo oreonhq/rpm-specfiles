@@ -1,7 +1,7 @@
 %global source0_hash 9d481117b97afa5324bf3ea0ad79f5c2939ae94ba0d0f5f8eb23aee16d9ec58d
 
 Name:           exiv2
-Version:        0.28.6
+Version:        0.28.9
 Release:        %autorelease
 Summary:        Exif, IPTC and XMP metadata manipulation library
 

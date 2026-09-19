@@ -1,8 +1,8 @@
 %global source0_hash ba022a05b1adbec73712c46f233d8489fe13a1b9fc40a1fcceed9b52f90defc1
 
 Name:           perl-Digest-CRC
-Version:        0.24
-Release:        13%{?dist}
+Version:        6.04
+Release:        1%{?dist}
 Summary:        Generic CRC functions
 License:        LicenseRef-Fedora-Public-Domain
 URL:            https://metacpan.org/release/Digest-CRC

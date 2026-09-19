@@ -1,8 +1,8 @@
 %global source0_hash 3c457b65d98e5ff40bdb9cf814b0d5983eb0c53fb8696bda3ba035ad2acd6802
 
 Name:           perl-Config-IniFiles
-Version:        3.000003
-Release:        18%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        A module for reading .ini-style configuration files
 # LICENSE:                              GPL+ or Artistic
 # lib/Config/IniFiles.pm:               GPL+ or Artistic

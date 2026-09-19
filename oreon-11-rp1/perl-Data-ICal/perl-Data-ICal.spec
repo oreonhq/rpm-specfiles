@@ -1,8 +1,8 @@
 %global source0_hash 7331c7c84886c53337c0db823615e0e7134a8f13efd284e5c20726d5bcd52dff
 
 Name:           perl-Data-ICal
-Version:        0.24
-Release:        19%{?dist}
+Version:        2026.0219
+Release:        1%{?dist}
 Summary:        Generates iCalendar (RFC 2445) calendar files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-ICal

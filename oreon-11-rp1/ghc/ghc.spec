@@ -21,10 +21,10 @@
 
 # disable to allow parallel install of ghcX.Y-X.Y.(Z+1) and ghc-X.Y.Z
 %if 1
-%global ghc_major 9.10
+%global ghc_major 10.0
 %global ghc_obsoletes_name ghc%{ghc_major}
 %endif
-%global ghc_patchlevel 3
+%global ghc_patchlevel 1-alpha1
 
 %global base_ver 4.20.2.0
 %global Cabal_ver 3.12.1.0
@@ -69,7 +69,7 @@ Version: %{ghc_major}.%{ghc_patchlevel}
 # - release can only be reset if *all* library versions get bumped simultaneously
 #   (sometimes after a major release)
 # - minor release numbers for a branch should be incremented monotonically
-Release: 155%{?dist}
+Release: 1%{?dist}
 Summary: Glasgow Haskell Compiler
 
 License: BSD-3-Clause AND HaskellReport

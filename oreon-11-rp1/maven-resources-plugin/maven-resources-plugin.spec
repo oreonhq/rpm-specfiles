@@ -1,9 +1,9 @@
-%global source0_hash 84e8c90032551b79c392596cf7231ff6ce9403c5644d6433c51029ac506f944d
+%global source0_hash 4425d3a7fe8d63587cd770303606e5807612e19c27eea581034c18d1fb0c0c1b
 
 %bcond_without bootstrap
 
 Name:           maven-resources-plugin
-Version:        3.5.0
+Version:        4.0.0-beta-1
 Release:        %autorelease
 Summary:        Maven Resources Plugin
 License:        Apache-2.0

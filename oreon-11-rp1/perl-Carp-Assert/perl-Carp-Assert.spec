@@ -1,8 +1,8 @@
 %global source0_hash 807ea97c6bed76ac2e4969efba7dae48fefeb9f28797f112671b3ac8a49355f7
 
 Name:           perl-Carp-Assert
-Version:        0.22
-Release:        9%{?dist}
+Version:        5.37.10
+Release:        1%{?dist}
 Summary:        Executable comments
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

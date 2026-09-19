@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-cairo
-Version:        1.18.4
-Release:        3%{?dist}
+Version:        1.20
+Release:        1%{?dist}
 Summary:        MinGW Windows Cairo library
 
 License:        LGPL-2.1-only OR MPL-1.1

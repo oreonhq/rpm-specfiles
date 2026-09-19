@@ -4,7 +4,7 @@
 %global debug_package %{nil}
 
 Name:          antlr
-Version:       2.7.7
+Version:       3.2
 Release:       %autorelease
 Summary:       ANother Tool for Language Recognition
 License:       ANTLR-PD

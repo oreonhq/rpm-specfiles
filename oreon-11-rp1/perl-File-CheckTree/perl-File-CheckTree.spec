@@ -1,8 +1,8 @@
 %global source0_hash 66fb417f8ff8a5e5b7ea25606156e70e204861c59fa8c3831925b4dd3f155f8a
 
 Name:           perl-File-CheckTree
-Version:        4.42
-Release:        324%{?dist}
+Version:        20221231.000
+Release:        1%{?dist}
 Summary:        Run many file-test checks on a tree
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-CheckTree

@@ -1,8 +1,8 @@
 %global source0_hash 432b7c83ff88749af128003f5257c573aec1a463418db90ed22843cbbc258b4f
 
 Name:           perl-Email-Date-Format
-Version:        1.008
-Release:        8%{?dist}
+Version:        20221231.000
+Release:        1%{?dist}
 Summary:        Produce RFC 2822 date strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Email-Date-Format

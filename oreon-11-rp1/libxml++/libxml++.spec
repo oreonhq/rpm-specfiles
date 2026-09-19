@@ -2,7 +2,7 @@
 %global api_ver 2.6
 
 Name:           libxml++
-Version:        2.42.4
+Version:        5.6.1
 Release:        1%{?dist}
 Summary:        C++ wrapper for the libxml2 XML parser library
 

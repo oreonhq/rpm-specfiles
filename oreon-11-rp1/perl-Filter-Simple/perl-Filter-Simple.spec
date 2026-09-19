@@ -2,8 +2,8 @@
 
 %global base_version 0.94
 Name:           perl-Filter-Simple
-Version:        0.96
-Release:        521%{?dist}
+Version:        6.3
+Release:        1%{?dist}
 Summary:        Simplified Perl source filtering
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Filter-Simple

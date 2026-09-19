@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-File-DesktopEntry
-Version:        0.23
-Release:        2%{?dist}
+Version:        4.048
+Release:        1%{?dist}
 Summary:        Object to handle .desktop files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-DesktopEntry

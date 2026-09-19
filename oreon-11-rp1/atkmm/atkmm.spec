@@ -7,7 +7,7 @@
 %global glibmm24_version 2.46.2
 
 Name:           atkmm
-Version:        2.28.5
+Version:        2.36.4
 Release:        %autorelease
 Summary:        C++ interface for the ATK library
 

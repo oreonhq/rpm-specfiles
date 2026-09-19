@@ -17,7 +17,7 @@
 
 
 Name:           lttng-ust
-Version:        2.16.0
+Version:        2.17.0-pre
 Release:        1%{?dist}
 
 License:        LGPL-2.1-only AND MIT AND GPL-2.0-only AND BSD-3-Clause AND BSD-2-Clause

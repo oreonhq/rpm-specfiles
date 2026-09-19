@@ -1,8 +1,8 @@
 %global source0_hash 2dce1d68fde99d53db9ca43e211b69b169ba2efaecf87a55cb33a9336047c96d
 
 Name:           perl-Email-Simple
-Version:        2.218
-Release:        9%{?dist}
+Version:        3.010
+Release:        1%{?dist}
 Summary:        Simple parsing of RFC2822 message format and headers
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Email-Simple

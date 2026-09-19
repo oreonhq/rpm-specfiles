@@ -8,8 +8,8 @@ ExcludeArch: %{ix86}
 %endif
 
 Name:           ocaml-findlib
-Version:        1.9.8
-Release:        8%{?dist}
+Version:        4.1.9
+Release:        1%{?dist}
 Summary:        Objective CAML package manager and build helper
 License:        MIT
 

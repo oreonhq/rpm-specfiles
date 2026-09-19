@@ -6,7 +6,7 @@
 
 Summary: SELinux Translation Daemon
 Name: mcstrans
-Version: 3.11
+Version: 20200710
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 Url: https://github.com/SELinuxProject/selinux/wiki

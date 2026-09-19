@@ -6,8 +6,8 @@
 %{!?version_no_tilde: %define version_no_tilde %{shrink:%(echo '%{version}' | tr '~' '-')}}
 
 Name:           btrfs-progs
-Version:        6.19.1
-Release:        2%{?dist}
+Version:        7.1
+Release:        1%{?dist}
 Summary:        Userspace programs for btrfs
 
 License:        GPL-2.0-only

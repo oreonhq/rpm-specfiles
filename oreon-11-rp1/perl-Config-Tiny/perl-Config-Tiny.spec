@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-Config-Tiny
-Version:	2.30
-Release:	7%{?dist}
+Version:	4.58
+Release:	1%{?dist}
 Summary:	Perl module for reading and writing .ini style configuration files
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Config-Tiny

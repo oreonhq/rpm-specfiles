@@ -1,8 +1,8 @@
 %global source0_hash bf12a3e5de5a2c6e8a447b364f4f5a050bf74624c56e315022ae7992ff2f411c
 
 Name:           perl-Class-Accessor
-Version:        0.51
-Release:        24%{?dist}
+Version:        1.04
+Release:        1%{?dist}
 Summary:        Automated accessor generation
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Accessor

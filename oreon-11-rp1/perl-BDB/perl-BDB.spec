@@ -1,11 +1,11 @@
 %global source0_hash a3f2ca9d2baefc1aaa40908b2f9cb9292fda3e7d797e38bbd78eabb9d9daeb6b
 
-%global cpan_version 1.92
+%global cpan_version 7.17
 
 Name:           perl-BDB
 # Extend to 2 digits to get higher RPM package version than 1.88
 Version:        %{cpan_version}
-Release:        29%{?dist}
+Release:        1%{?dist}
 Summary:        Asynchronous Berkeley DB access
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/BDB

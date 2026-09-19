@@ -1,8 +1,8 @@
 %global source0_hash 8816f34e9a38e849a10df756030dccf9fe061a196c11ac3faafd7113c929b964
 
 Name:           perl-Class-ISA
-Version:        0.36
-Release:        1045%{?dist}
+Version:        6.3
+Release:        1%{?dist}
 Summary:        Report the search path for a class's ISA tree
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-ISA

@@ -4,7 +4,7 @@
 
 Name:           apache-resource-bundles
 Epoch:          1
-Version:        1.5
+Version:        39
 Release:        %autorelease
 Summary:        Apache Resource Bundles
 License:        Apache-2.0
