@@ -1,4 +1,4 @@
-%global source0_hash 2db1ebb5837b4cb20051c0ee5b733b4453e3137df0a92306034c867621edd7e7
+%global source0_hash 149cdc0a14e944b4cc5eefb7560c78d8cb25254f9f9774547c880355a7e9f40c
 
 # Perform optional tests
 %if 0%{?rhel} > 8
@@ -8,12 +8,12 @@
 %endif
 
 Name:           perl-Crypt-DES
-Version:        2.07
-Release:        43%{?dist}
+Version:        2.09
+Release:        1%{?dist}
 Summary:        Perl DES encryption module
 License:        BSD-Systemics
 URL:            https://metacpan.org/release/Crypt-DES
-Source0:        https://cpan.metacpan.org/modules/by-module/Crypt/Crypt-DES-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/Crypt-DES-2.09.tar.gz
 
 
 

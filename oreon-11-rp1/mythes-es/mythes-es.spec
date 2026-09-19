@@ -2,9 +2,9 @@
 
 Name: mythes-es
 Summary: Spanish thesaurus
-Version: 2.8
+Version: 2.9
 Release: 1%{?dist}
-Source:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_ANY.oxt
+Source: https://codeload.github.com/sbosio/rla-es/tar.gz/refs/tags/v2.9
 URL: https://github.com/sbosio/rla-es/tree/master/sinonimos
 License: LGPL-2.1-or-later
 BuildArch: noarch

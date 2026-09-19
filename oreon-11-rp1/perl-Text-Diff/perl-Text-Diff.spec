@@ -1,15 +1,15 @@
-%global source0_hash e8baa07b1b3f53e00af3636898bbf73aec9a0ff38f94536ede1dbe96ef086f04
+%global source0_hash 3fc983e3140fa2580250bbcf2b52e2acbdbc5abda4374c3be78235905d8ca8eb
 
 Name:           perl-Text-Diff
-Version:        1.45
-Release:        25%{?dist}
+Version:        1.46
+Release:        1%{?dist}
 Summary:        Perform diffs on files and record sets
 # lib/Text/Diff.pm - GPL-2.0-or-later OR Artistic-1.0-Perl
 # lib/Text/Diff/Config.pm - MIT
 # lib/Text/Diff/Table.pm - GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND (GPL-2.0-or-later OR Artistic-1.0-Perl) AND MIT
 URL:            https://metacpan.org/release/Text-Diff
-Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEILB/Text-Diff-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/N/NE/NEILB/Text-Diff-1.46.tar.gz
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-interpreter

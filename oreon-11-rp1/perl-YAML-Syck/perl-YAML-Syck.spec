@@ -1,4 +1,4 @@
-%global source0_hash f2de1afb4f0c56c36e6d5260aa0bd2c8f18e4d85009dcf5842204ea2a7fbc3df
+%global source0_hash 672196ca1c021e3c68f4b5f7b4aec305ad471bbbf448c53c7e40034d6ebb7e1d
 
 # Run optional test
 %if ! 0%{?rhel} || (0%{?oreon} >= 11)
@@ -8,7 +8,7 @@
 %endif
 
 Name:           perl-YAML-Syck
-Version:        1.45
+Version:        1.47
 Release:        1%{?dist}
 Summary:        Fast, lightweight YAML loader and dumper
 # gram.*: GPL-2.0-or-later
@@ -16,7 +16,7 @@ Summary:        Fast, lightweight YAML loader and dumper
 # Note that libsyck COPYING file describes itself as BSD but it's actually MIT
 License:        GPL-2.0-or-later AND MIT
 URL:            https://metacpan.org/release/YAML-Syck
-Source0:        https://cpan.metacpan.org/modules/by-module/YAML/YAML-Syck-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/T/TO/TODDR/YAML-Syck-1.47.tar.gz
 
 
 

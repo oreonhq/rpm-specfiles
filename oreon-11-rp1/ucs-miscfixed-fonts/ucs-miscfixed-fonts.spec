@@ -8,8 +8,8 @@ The usc-fixed-fonts package provides bitmap fonts for\
 locations such as terminals.
 
 Name: %{fontname}-fonts
-Version: 0.3
-Release: 37%{?dist}
+Version: 1.5
+Release: 1%{?dist}
 License: LicenseRef-Fedora-Public-Domain
 URL: http://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html
 Source0: https://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts.tar.gz

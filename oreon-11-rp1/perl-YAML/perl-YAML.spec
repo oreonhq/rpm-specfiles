@@ -1,4 +1,4 @@
-%global source0_hash a0ce30381657dce8e694df9a09e95d818d13beb03698fd2cf79d0c8d564a9b8e
+%global source0_hash d461167b8b4aa9244f736a7a740830141e61dddee301e456bf642e81d3cea193
 
 # Run test
 %if ! (0%{?rhel}) || (0%{?oreon} >= 11)
@@ -14,12 +14,12 @@
 %endif
 
 Name:           perl-YAML
-Version:        1.31
-Release:        7%{?dist}
+Version:        1.321
+Release:        1%{?dist}
 Summary:        YAML Ain't Markup Language (tm)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/YAML
-Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/YAML-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-1.321.tar.gz
 # Script to remove non-free content from upstream tarball
 # Usage: YAML-free YAML-%%{version}.tar.gz
 Source1:        YAML-free

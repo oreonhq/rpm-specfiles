@@ -1,7 +1,7 @@
-%global source0_hash 86f96a8195b0fd874bd67847f52435ac3c6bdbbfb8cb9a10a626711e6c9f616a
+%global source0_hash d5019f4e9068bee8b2f69d13870c51c2f32275aeec7396b966561419842a3473
 
 Name:           python-openslide
-Version:        1.4.3
+Version:        1.4.6
 Release:        %autorelease
 Summary:        Python bindings for the OpenSlide library
 

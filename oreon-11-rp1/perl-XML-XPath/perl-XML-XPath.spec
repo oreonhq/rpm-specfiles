@@ -1,4 +1,4 @@
-%global source0_hash 7bc75be36b239e5b2e700a9570d2b53b43093d467f2abe6a743f9ff9093790cd
+%global source0_hash 9c84a51be4cdb47bf88766ecab051fe092016472969e39f4acdba009885faabe
 
 # Run optional tests
 %if ! (0%{?rhel})
@@ -10,14 +10,14 @@
 %endif
 
 Name:           perl-XML-XPath
-Version:        1.48
-Release:        11%{?dist}
+Version:        1.49
+Release:        1%{?dist}
 Summary:        XPath parser and evaluator for Perl
 # XML/XPath.pm, XML/XPath/PerlSAX.pm, REAME: GPL-1.0-or-later OR Artistic-1.0-Perl
 # Others: Artistic-2.0
 License:        Artistic-2.0 AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/XML-XPath
-Source0:        https://cpan.metacpan.org/authors/id/M/MA/MANWAR/XML-XPath-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/M/MA/MANWAR/XML-XPath-1.49.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  coreutils

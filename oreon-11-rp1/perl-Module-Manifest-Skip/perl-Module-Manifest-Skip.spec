@@ -1,12 +1,12 @@
-%global source0_hash 2c5fc7860c44f7d3a049b624b248112b146761775d92e5e431eaa60e880513be
+%global source0_hash 6bac0e659f71e239d3dd09b2d370f9dbea301fc6e76f3b64552da5c3978ede4f
 
 Name:           perl-Module-Manifest-Skip
-Version:        0.23
-Release:        35%{?dist}
+Version:        0.24
+Release:        1%{?dist}
 Summary:        MANIFEST.SKIP Manangement for Modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Manifest-Skip
-Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Module-Manifest-Skip-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/I/IN/INGY/Module-Manifest-Skip-0.24.tar.gz
 # Adapt to changes in Moo-2.004000, bug #1826148,
 # <https://github.com/ingydotnet/module-manifest-skip-pm/issues/7>
 Patch0:         Module-Manifest-Skip-0.23-Adapt-to-changes-in-Moo-2.004000.patch

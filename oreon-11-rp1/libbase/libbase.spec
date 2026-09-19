@@ -1,8 +1,8 @@
-%global source0_hash 9983f1cbd391352b143226635df4164cfab285cf630963f7fe4a17bc183894f6
+%global source0_hash aa2cce74fecf4920c2cece77cd553ea127520f39debcf0d5712badc2905cbd8d
 
 Name: libbase
-Version: 1.1.3
-Release: 47%{?dist}
+Version: 1.2.4
+Release: 1%{?dist}
 Summary: JFree Base Services
 License: LGPL-2.1-only
 #Original source: https://downloads.sourceforge.net/jfreereport/%%{name}-%%{version}.zip

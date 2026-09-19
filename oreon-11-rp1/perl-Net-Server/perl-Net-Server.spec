@@ -1,12 +1,12 @@
-%global source0_hash 3406b9ca5a662a0075eed47fb78de1316b601c94f62a0ee34a5544db9baa3720
+%global source0_hash 4d6bd1adb0de600d6b44b9a8629b943fe86700b055186791ea397b7cf3a456b3
 
 Name:           perl-Net-Server
-Version:        2.014
-Release:        10%{?dist}
+Version:        2.018
+Release:        1%{?dist}
 Summary:        Extensible, general Perl server engine
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-Server
-Source0:        https://cpan.metacpan.org/modules/by-module/Net/Net-Server-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/B/BB/BBB/Net-Server-2.018.tar.gz
 
 
 

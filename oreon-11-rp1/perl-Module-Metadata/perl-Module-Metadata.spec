@@ -1,12 +1,12 @@
-%global source0_hash b599d8770a9a9fa0a8ae3cd0ed395a9cf71b4eb53aed82989a6bece33485a9cd
+%global source0_hash b53620c268537d3741c72252e3d890824a20ed3cbb085d2e2eee62f7efc1cf2e
 
 Name:		perl-Module-Metadata
-Version:	1.000038
-Release:	521%{?dist}
+Version:	1.000040
+Release:	1%{?dist}
 Summary:	Gather package and POD information from perl module files
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Module-Metadata
-Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Metadata-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/E/ET/ETHER/Module-Metadata-1.000040.tar.gz
 
 
 

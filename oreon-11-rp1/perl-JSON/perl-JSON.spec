@@ -1,12 +1,12 @@
-%global source0_hash df8b5143d9a7de99c47b55f1a170bd1f69f711935c186a6dc0ab56dd05758e35
+%global source0_hash 713bdbe724dbb915ed50265ffe47e079a511980cb2427aa19076788bb64c3182
 
 Name:           perl-JSON
 Summary:        Parse and convert to JSON (JavaScript Object Notation)
-Version:        4.10
-Release:        9%{?dist}
+Version:        4.11
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/JSON
-Source0:        https://cpan.metacpan.org/modules/by-module/JSON/JSON-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.11.tar.gz
 
 
 

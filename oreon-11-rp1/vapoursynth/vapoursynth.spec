@@ -1,7 +1,7 @@
-%global source0_hash 650f77feebfd08842b521273f59e0c88f7ba9d7cb5f151d89b79b8dfdd4ce633
+%global source0_hash 604c6965f061f061439e8784caa2626b1bd38768c1030ed244a63b7bcd6bd2c6
 
 Name:       vapoursynth
-Version:    72
+Version:    80A3
 Release:    %autorelease
 Summary:    Video processing framework with simplicity in mind
 License:    LGPL-2.1-only

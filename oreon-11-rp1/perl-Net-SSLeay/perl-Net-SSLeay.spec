@@ -1,4 +1,4 @@
-%global source0_hash 9d7be8a56d1bedda05c425306cc504ba134307e0c09bda4a788c98744ebcd95d
+%global source0_hash ab213691685fb2a576c669cbc8d9266f8165a31563ad15b7c4030b94adfc0753
 
 %if ! (0%{?rhel})
 %{bcond_without perl_Net_SSLeay_enables_optional_test}
@@ -13,12 +13,12 @@
 %endif
 
 Name:		perl-Net-SSLeay
-Version:	1.94
-Release:	12%{?dist}
+Version:	1.96
+Release:	1%{?dist}
 Summary:	Perl extension for using OpenSSL
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Net-SSLeay
-Source0:        https://cpan.metacpan.org/modules/by-module/Net/Net-SSLeay-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.96.tar.gz
 
 
 

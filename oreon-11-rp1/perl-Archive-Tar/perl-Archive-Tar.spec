@@ -1,4 +1,4 @@
-%global source0_hash ba6b8addbedc43a463edcddf7b93accb7676c7b79c40f425b619d99545c4cb8c
+%global source0_hash 0114ef39b65f49f8968283ab47719d7e88f98d7360fe3649be331c7f53d5832c
 
 # Run optional test
 %if ! (0%{?rhel})
@@ -8,12 +8,12 @@
 %endif
 
 Name:           perl-Archive-Tar
-Version:        3.04
-Release:        522%{?dist}
+Version:        3.12
+Release:        1%{?dist}
 Summary:        A module for Perl manipulation of .tar files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Archive-Tar
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Archive-Tar-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Archive-Tar-3.12.tar.gz
 # Remove annoying sleep after warnings in the build script
 Patch0:         Archive-Tar-2.02-Do-not-sleep-in-Makefile.PL.patch
 BuildArch:      noarch

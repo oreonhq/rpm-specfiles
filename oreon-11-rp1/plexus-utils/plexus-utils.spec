@@ -1,9 +1,9 @@
-%global source0_hash cb2b59f6c9c97ec39aec5d117dd480da34a5521978d9589e2098877dda940119
+%global source0_hash 3da47a1ca309dde39198a5286efafe53ec995cbb038586a1ae3399b87b372645
 
 %bcond_without bootstrap
 
 Name:           plexus-utils
-Version:        3.6.2
+Version:        4.1.0
 Release:        %autorelease
 Summary:        Plexus Common Utilities
 # ASL 1.1: several files in src/main/java/org/codehaus/plexus/util/
@@ -40,8 +40,8 @@ is like a J2EE application server, without all the baggage.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n plexus-utils-plexus-utils-3.5.1
-%autosetup -p1 -n plexus-utils-plexus-utils-3.5.1
+%setup -q -n plexus-utils-plexus-utils-%{version}
+%autosetup -p1 -n plexus-utils-plexus-utils-%{version}
 
 %mvn_file : plexus/utils
 %mvn_alias : plexus:plexus-utils

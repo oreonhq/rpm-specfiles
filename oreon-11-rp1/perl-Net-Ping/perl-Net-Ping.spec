@@ -5,8 +5,8 @@
 %bcond_without perl_Net_Ping_enables_optional_test
 
 Name:           perl-Net-Ping
-Version:        2.76
-Release:        521%{?dist}
+Version:        6.4801
+Release:        1%{?dist}
 Summary:        Check a remote host for reachability
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-Ping/

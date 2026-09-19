@@ -1,15 +1,15 @@
-%global source0_hash aeb59ac39d2f7bcbc6d09dd94ff5621e03d8a95abb12b49b392ccd35088c8ac1
+%global source0_hash 1df1a8caecbf97a2cbe002a655e0fe21d4cd5bbee9e40656a3a602423f98eaef
 
 # Run optional test
 %bcond_without perl_HTTP_Tiny_enables_optional_deps
 
 Name:           perl-HTTP-Tiny
-Version:        0.092
-Release:        2%{?dist}
+Version:        0.096
+Release:        1%{?dist}
 Summary:        Small, simple, correct HTTP/1.1 client
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Tiny
-Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/HTTP-Tiny-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/H/HA/HAARG/HTTP-Tiny-0.096.tar.gz
 # Check for write failure, bug #1031096, refused by upstream,
 # <https://github.com/chansen/p5-http-tiny/issues/32>
 Patch1:         HTTP-Tiny-0.070-Croak-on-failed-write-into-a-file.patch

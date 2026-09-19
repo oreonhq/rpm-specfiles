@@ -1,4 +1,4 @@
-%global source0_hash 9fd1093b917a21fb79ae1607db53d113b4e0ad8fe0ae776cb077a7e50044fdf3
+%global source0_hash fa0e7cdc10925db925a82f8eb9608a701f1c2bf5e88d512d9acd46977e174056
 
 %if ! (0%{?rhel})
 # Run extra test
@@ -11,12 +11,12 @@
 %endif
 
 Name:           perl-Data-OptList
-Version:        0.114
-Release:        8%{?dist}
+Version:        0.115
+Release:        1%{?dist}
 Summary:        Parse and validate simple name/value option pairs
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-OptList
-Source0:        https://cpan.metacpan.org/modules/by-module/Data/Data-OptList-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Data-OptList-0.115.tar.gz
 
 
 

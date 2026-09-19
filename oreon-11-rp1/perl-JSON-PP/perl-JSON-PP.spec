@@ -1,16 +1,16 @@
-%global source0_hash 8bc2f162bafc42645c489905ad72540f0d3c284b360c96299095183c30cc9789
+%global source0_hash 9c7bcb238183c4240db5548b1910ce8428e0464d05e413df5893998e67bf602c
 
 # Perform optional tests
 %bcond_without perl_JSON_PP_enables_optional_test
 
 Name:		perl-JSON-PP
 Epoch:		1
-Version:	4.16
-Release:	523%{?dist}
+Version:	4.18
+Release:	1%{?dist}
 Summary:	JSON::XS compatible pure-Perl module
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/JSON-PP
-Source0:        https://cpan.metacpan.org/modules/by-module/JSON/JSON-PP-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.18.tar.gz
 
 
 

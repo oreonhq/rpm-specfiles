@@ -1,10 +1,10 @@
-%global source0_hash 7243dd525200ff0335cdae96721369d222432b175a83a62f8370184102b18b4c
+%global source0_hash 1b80cefcddd86eb423ed5a233a92c4d610b7c8e448f96c2850ae1ab35bee2975
 
 %bcond_without bootstrap
 
 Name:           maven-resolver
 Epoch:          1
-Version:        1.9.27
+Version:        2.0.23
 Release:        %autorelease
 Summary:        Apache Maven Artifact Resolver library
 License:        Apache-2.0

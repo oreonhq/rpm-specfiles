@@ -1,4 +1,4 @@
-%global source0_hash b8d2cccf9ee467271bc478f9cf7eba49545452be9302ae359bc538b8bf687cd6
+%global source0_hash d8f6b6c87bb399a7d60c295a94a4b741a85b23889cfd6b72f1ff62f0c55cf70b
 
 %if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 # Run extra test
@@ -12,11 +12,11 @@
 
 Summary:	Incredibly simple helpers for testing code with exceptions 
 Name:		perl-Test-Fatal
-Version:	0.018
-Release:	2%{?dist}
+Version:	0.019
+Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Fatal
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Fatal-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Test-Fatal-0.019.tar.gz
 
 
 

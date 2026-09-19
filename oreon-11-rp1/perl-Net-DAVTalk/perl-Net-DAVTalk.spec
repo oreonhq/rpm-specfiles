@@ -1,12 +1,12 @@
-%global source0_hash 9fe6512333d14568823526a92474f8f217fb3665e916ec25b847ae104019a793
+%global source0_hash 7560d3a9321bd8fc5077d1bc8a24d71d2bc33d2350fa18f0a66f1177a068bf95
 
 Name:           perl-Net-DAVTalk
-Version:        0.24
+Version:        0.25
 Release:        1%{?dist}
 Summary:        Client for DAV servers
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Net-DAVTalk
-Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-DAVTalk-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-DAVTalk-0.25.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

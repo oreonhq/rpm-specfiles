@@ -1,4 +1,4 @@
-%global source0_hash de64c779a212ff1821896c5ca2bb69e74767d2674cee411e777deea7a22604a8
+%global source0_hash 5a8750ddd8ee743d7cc89bebdd542a9b78a34023164ebe19dea0c248e121c21e
 
 # Support isbn URN via Business::ISBN that needs gd library
 %if 0%{?rhel} || (0%{?oreon} >= 11)
@@ -10,12 +10,12 @@
 %endif
 
 Name:           perl-URI
-Version:        5.34
-Release:        3%{?dist}
+Version:        5.37
+Release:        1%{?dist}
 Summary:        A Perl module implementing URI parsing and manipulation
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/URI
-Source0:        https://cpan.metacpan.org/modules/by-module/URI/URI-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/O/OA/OALDERS/URI-5.37.tar.gz
 
 
 

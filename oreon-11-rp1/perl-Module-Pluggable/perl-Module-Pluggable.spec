@@ -1,4 +1,4 @@
-%global source0_hash 58512bb9c654746d0937770b98b559b30872d85ac24073485e5830890dd1b2a0
+%global source0_hash 970fd13accd3d538e637db080ebbd9898020c8b5591837c8493a39edd737922d
 
 # Run optional test
 %if ! (0%{?rhel})
@@ -9,8 +9,8 @@
 
 Name:           perl-Module-Pluggable
 Epoch:          2
-Version:        6.3
-Release:        4%{?dist}
+Version:        6.4
+Release:        1%{?dist}
 Summary:        Automatically give your module the ability to have plugins
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Pluggable
