@@ -1,4 +1,4 @@
-%global source0_hash 674117771ec8bae121513876e8cadb1cef354d8867576373c7994224c925d770
+%global source0_hash b7b41a159960dfc464cf7035db1a424302d43ea12e6a835ee96633bedf6b3bc6
 
 # Module Magic Number
 %{!?_httpd_mmn: %global _httpd_mmn %(cat %{_includedir}/httpd/.mmn 2>/dev/null || echo 0-0)}
@@ -6,7 +6,7 @@
 %{!?_httpd_statedir: %global _httpd_statedir %{_localstatedir}/lib/httpd}
 
 Name:           mod_md
-Version:        2.6.7
+Version:        2.6.11
 Release:        %autorelease
 Summary:        Certificate provisioning using ACME for the Apache HTTP Server
 License:        Apache-2.0

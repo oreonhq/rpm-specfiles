@@ -1,10 +1,10 @@
-%global source0_hash 175193156b2ec3748861f638eb6401161f18b57a19ba0771032b228c7b91d1a3
+%global source0_hash 418a147ff3b368d4edf9261e4af482a2f78418e523fc7bc04a978929656bd3ad
 %global source1_hash 5de56a55da00e2909fc9a56aa881592501fb329416f9934c86d89b7e5de8d3d6
 
 %global         forgeurl https://github.com/osbuild/osbuild
 %global         selinuxtype targeted
 
-Version:        176
+Version:        193
 %global         osbuild_initrd_version 0.1
 
 %forgemeta

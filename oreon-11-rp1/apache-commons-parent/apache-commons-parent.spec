@@ -1,9 +1,9 @@
-%global source0_hash 18ea71fef1ecef690c9d86f4ffdfd83ee68a6ff41b6bc7e7b7a6be0b8f5ae000
+%global source0_hash 47316b3574af9c7413e4f75c72f78a8551a8a1a39f126377c6cfde1dcbfe9828
 
 %bcond_with bootstrap
 
 Name:           apache-commons-parent
-Version:        89
+Version:        105
 Release:        %autorelease
 Summary:        Apache Commons Parent Pom
 License:        Apache-2.0

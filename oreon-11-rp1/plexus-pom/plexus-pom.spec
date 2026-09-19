@@ -1,9 +1,9 @@
-%global source0_hash 09c20b62d3bc85413581b15867e20d1a9513a8ef67b6eee53948077c67795f38
+%global source0_hash 6ca0d8dc0ad0211146c55d7805a3ab6531f91cf76e9dcc4312ec63dc507eac47
 
 %bcond_without bootstrap
 
 Name:           plexus-pom
-Version:        22
+Version:        27
 Release:        %autorelease
 Summary:        Root Plexus Projects POM
 License:        Apache-2.0

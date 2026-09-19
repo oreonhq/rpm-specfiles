@@ -1,10 +1,10 @@
-%global source0_hash fe5383204467828cd495ee8d1d3c037a7eba1389c22bc6a041f627976f9061cc
+%global source0_hash f7a444d1ac5c3c21a8fa8130d0d616f9e5218b215a25c69ba8de053d695add44
 
 %{?mingw_package_header}
 
 Name:           mingw-readline
-Version:        8.3
-Release:        3%{?dist}
+Version:        8.3-rc2
+Release:        1%{?dist}
 Summary:        MinGW port of readline for editing typed command lines
 
 License:        GPL-2.0-or-later

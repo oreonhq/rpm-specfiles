@@ -1,12 +1,12 @@
-%global source0_hash 9a301cf94a8ddcb380b901e7aac852780b826595075577bb967004050c835056
+%global source0_hash 7e7eaf580ec77f1a392ff1ab1013c13d3b04a6716f002f697f67f3c1113f0530
 
 %{?mingw_package_header}
 
 %global pkgname protobuf
 
 Name:          mingw-%{pkgname}
-Version:       3.19.6
-Release:       11%{?dist}
+Version:       36.2
+Release:       1%{?dist}
 Summary:       MinGW Windows protobuf library
 
 BuildArch:     noarch
@@ -96,8 +96,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{mingw32_bindir}/libprotoc-30.dll
 %dir %{mingw32_includedir}/google
 %{mingw32_includedir}/google/protobuf/
-%{mingw32_libdir}/pkgconfig/protobuf-lite.pc
-%{mingw32_libdir}/pkgconfig/protobuf.pc
 %{mingw32_libdir}/libprotobuf-lite.dll.a
 %{mingw32_libdir}/libprotobuf.dll.a
 %{mingw32_libdir}/libprotoc.dll.a
@@ -117,8 +115,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{mingw64_bindir}/libprotoc-30.dll
 %dir %{mingw64_includedir}/google
 %{mingw64_includedir}/google/protobuf/
-%{mingw64_libdir}/pkgconfig/protobuf-lite.pc
-%{mingw64_libdir}/pkgconfig/protobuf.pc
 %{mingw64_libdir}/libprotobuf-lite.dll.a
 %{mingw64_libdir}/libprotobuf.dll.a
 %{mingw64_libdir}/libprotoc.dll.a

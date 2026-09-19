@@ -2,8 +2,8 @@
 
 Name: hyphen-fr
 Summary: French hyphenation rules
-Version: 3.0
-Release: 20%{?dist}
+Version: 4.0
+Release: 1%{?dist}
 Source: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 URL: https://github.com/LibreOffice/dictionaries
 License: LGPL-2.1-or-later

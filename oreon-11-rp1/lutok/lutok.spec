@@ -2,8 +2,8 @@
 
 Summary: Lightweight C++ API library for Lua
 Name: lutok
-Version: 0.4
-Release: 31%{?dist}
+Version: 0.6.3
+Release: 1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL: http://code.google.com/p/lutok/

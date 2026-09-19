@@ -1,9 +1,9 @@
-%global source0_hash 6eef96011f3674fc1720fa61c6d1d5b276e96bb8902f33b5e28df0ee7b6ea47e
+%global source0_hash 8f3061cfc91c9f6c2852a3a0d170715ded214dc3c3254c0bcb45d874ea1f4d1a
 
 %bcond_without bootstrap
 
 Name:           maven-parent
-Version:        43
+Version:        49
 Release:        %autorelease
 Summary:        Apache Maven parent POM
 License:        Apache-2.0

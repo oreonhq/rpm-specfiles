@@ -1,9 +1,9 @@
-%global source0_hash 56c5cbaa160fc9e754b8d2d93b8d8584c8468726e6b16075a6d8a0f6c61fad25
+%global source0_hash d4b8ad0887b43447cea7c03495c9424d4b75c933a35fef985190d8669a24b235
 
 %bcond_with bootstrap
 
 Name:           google-guice
-Version:        6.0.0
+Version:        7.0.0
 Release:        %autorelease
 Summary:        Lightweight dependency injection framework for Java 5 and above
 License:        Apache-2.0

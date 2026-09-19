@@ -1,10 +1,10 @@
-%global source0_hash f3a3082a23b37c293a4fcd1053147b371f2ff91fa7ea1b2a52e335676bac82dc
+%global source0_hash 7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4
 
 %{?mingw_package_header}
 
 Name:		mingw-libffi
-Version:	3.5.2
-Release:	2%{?dist}
+Version:	3.8.0
+Release:	1%{?dist}
 Summary:	A portable foreign function interface library for MinGW
 
 License:	MIT

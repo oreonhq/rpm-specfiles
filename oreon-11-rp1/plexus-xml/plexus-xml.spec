@@ -1,9 +1,9 @@
-%global source0_hash 82359f0a2e638a7cd30f46888dc892b262915a7145a57303b0256d01fac2c9d8
+%global source0_hash 2898dae0e3fdb9746622c8b8ed57343615c3960c3dda0c51c0f81582df1f10c3
 
 %bcond bootstrap 0
 
 Name:           plexus-xml
-Version:        4.0.4
+Version:        4.2.0
 Release:        %autorelease
 Summary:        Plexus XML Utilities
 # Licensing breakdown:

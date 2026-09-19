@@ -1,4 +1,4 @@
-%global source0_hash cfbd003512ae94dc1778e6655cea9d77cfb5c860b5bf3016015f8286205573b5
+%global source0_hash 3fe962a98a4abdef71d3938d8b460764a748c5a850405f247b62476ba5c9676d
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           keysmith
-Version:        26.04.3
+Version:        26.08.1
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later

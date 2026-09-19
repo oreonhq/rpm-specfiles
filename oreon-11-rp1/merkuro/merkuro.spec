@@ -1,10 +1,10 @@
-%global source0_hash 136d63ecd4180569e502b71fd5ac3f8154ee015abd65c0f405a035175c1ac7f0
+%global source0_hash 036df52be52c1fc7b239ada44bd45eb7f875c13f59b5009e7029d303b152a16e
 
 %global stable_kf6 stable
 
 
 Name: merkuro
-Version: 26.04.3
+Version: 26.08.1
 Release: 1%{?dist}
 Summary: A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)
 

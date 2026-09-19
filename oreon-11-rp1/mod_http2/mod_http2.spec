@@ -1,10 +1,10 @@
-%global source0_hash dd12cbff378deaf192ec60b8b003aa409994fda46c9acbc5e2b757e5eefc1e61
+%global source0_hash 3a5c296ab23ebabf6774eb93a06b91762abf5230f4f97dd040c3313fea7c1c06
 
 # Module Magic Number
 %{!?_httpd_mmn: %global _httpd_mmn %(cat %{_includedir}/httpd/.mmn 2>/dev/null || echo 0-0)}
 
 Name:		mod_http2
-Version:	2.0.37
+Version:	2.0.42
 Release:	%autorelease
 Summary:	module implementing HTTP/2 for Apache 2
 License:	Apache-2.0

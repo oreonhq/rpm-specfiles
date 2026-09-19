@@ -1,8 +1,8 @@
-%global source0_hash 2f5d2519ee3bb75e176c85087004a2e1fb993b644518afbcf3fe91a93b87d6f7
+%global source0_hash a4de75b7a08ea531122e22f11bc59b6ee2197ac2e97dd7be4e51acfbcf1af3c0
 
 Name:    akonadi-calendar-tools
 Summary: Akonadi Calendar Tools
-Version: 26.08.0
+Version: 26.08.1
 Release: 1%{?dist}
 
 # code (generally) GPLv2, docs GFDL

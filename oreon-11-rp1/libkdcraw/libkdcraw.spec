@@ -1,11 +1,11 @@
-%global source0_hash 23b220f14bbaa21858b6f8e18169499389835b6693e73a877f8e0d788f4499af
+%global source0_hash cf49479043a75557f82b0213019c45291d612267e454b66d939f04b189c4f182
 
 %global stable_kf6 stable
 
 Name:    libkdcraw
 Summary: A C++ interface around LibRaw library
-Version: 25.12.3
-Release: 5%{?dist}
+Version: 26.08.1
+Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later
 URL:     https://invent.kde.org/graphics/%{name}

@@ -1,8 +1,8 @@
-%global source0_hash e013b6525b10994fb9be6c3559d5b7e32c7d12df7bfb38d03c5cda729a1836e9
+%global source0_hash 64a6fa9709776b34f366446745296efe221042bc340c9931bdd882c39d949f84
 
 Name:           weld-parent
-Version:        46
-Release:        13%{?dist}
+Version:        58
+Release:        1%{?dist}
 Summary:        Parent POM for Weld
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

@@ -1,9 +1,9 @@
-%global source0_hash f4e41de4397a05bbda69ff0d027edecc456e9f7dbc3d3bc7cd378f2ac0d6976d
+%global source0_hash ce70ac28427a7ace63390d912058852e63a7927d02dfc154f203e6bda880b9ba
 
 %bcond_with bootstrap
 
 Name:           plexus-io
-Version:        3.7.0
+Version:        3.8.0
 Release:        %autorelease
 Summary:        Plexus IO Components
 License:        Apache-2.0

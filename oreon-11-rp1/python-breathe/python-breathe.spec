@@ -1,4 +1,4 @@
-%global source0_hash 94fc2277e639929e898cb95559d9d2c51cf764b787eaf6fa04f848a6550c2ff5
+%global source0_hash 301af89afa3d2fa6a14895170b6b6dbe30718d3f544aaa9b5a7954df52ebb601
 
 %global owner michaeljones
 %global srcname breathe
@@ -10,7 +10,7 @@ render the Doxygen xml output.
 %bcond doc %{undefined rhel}
 
 Name:           python-%{srcname}
-Version:        4.36.0
+Version:        5.0.0a2
 Release:        %autorelease
 Summary:        Adds support for Doxygen xml output to reStructuredText and Sphinx
 

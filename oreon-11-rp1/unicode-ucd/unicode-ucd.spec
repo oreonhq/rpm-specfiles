@@ -1,4 +1,4 @@
-%global source0_hash 2066d1909b2ea93916ce092da1c0ee4808ea3ef8407c94b4f14f5b7eb263d28e
+%global source0_hash 7b3e555514060b92290d154f53655c5eb0fa62b16eb04c03434ff72d1a66a0d8
 %global source1_hash f7a48b2b545acfaa77b2d607ae28747404ce02baefee16396c5d2d7a8ef34b5e
 
 # for other future directories from http://www.unicode.org/Public
@@ -6,8 +6,8 @@
 %global ucddir %{unicodedir}/ucd
 
 Name:           unicode-ucd
-Version:        17.0.0
-Release:        2%{?dist}
+Version:        18.0.0
+Release:        1%{?dist}
 Summary:        Unicode Character Database
 
 # http://www.unicode.org/terms_of_use.html in ReadMe.txt redirects to:

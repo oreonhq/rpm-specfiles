@@ -1,4 +1,4 @@
-%global source0_hash 8b9bbb3366c9b0959006fc7813017c8219eb50817c399e55bc6c8edb4a2b4214
+%global source0_hash 43744cd293876ec10a931c5371d0d5d4a78e20393cf973a6fbf37bea5c7d556b
 
 # Turn off automatic python byte compilation because these are Ansible
 # roles and the files are transferred to the node and compiled there with
@@ -13,8 +13,8 @@
 
 Summary: Roles and playbooks to deploy FreeIPA servers, replicas and clients
 Name: ansible-freeipa
-Version: 1.16.0
-Release: 3%{?dist}
+Version: 1.17.0
+Release: 1%{?dist}
 URL: https://github.com/freeipa/ansible-freeipa
 License: GPL-3.0-or-later
 Source:        https://github.com/freeipa/ansible-freeipa/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz

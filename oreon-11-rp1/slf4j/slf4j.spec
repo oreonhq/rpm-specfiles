@@ -1,4 +1,4 @@
-%global source0_hash a2deaffa191c81abbf830d4060eb84129f31b9b3b945b7791344e8875b595286
+%global source0_hash 15577dc482c8664745a7c0384051d51b6ea170afacf71b3c6c70605ad6fa1e7c
 
 %bcond_with bootstrap
 
@@ -32,7 +32,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 Name:           slf4j
-Version:        2.0.19
+Version:        2.1.0-alpha1
 Release:        %autorelease
 Summary:        Simple Logging Facade for Java
 # the log4j-over-slf4j and jcl-over-slf4j submodules are ASL 2.0, rest is MIT

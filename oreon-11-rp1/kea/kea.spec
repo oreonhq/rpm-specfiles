@@ -1,8 +1,8 @@
-%global source0_hash 09702ddb078b637e85de9236cbedd3fb9d7af7c6e797026c538b45748ad4d631
+%global source0_hash 0b59d53dd89e175b1edb35c10048edec865697511ca73c2a4347d01372a7981f
 %global source2_hash bf79d401b6f1b507713615ad49ecfdd372ac715d426b5fc0f42ce2dcef1f9960
 
 Name:           kea
-Version:        3.2.0
+Version:        3.3.1
 Release:        %autorelease
 Summary:        DHCPv4, DHCPv6 and DDNS server from ISC
 License:        MPL-2.0 AND BSL-1.0

@@ -2,7 +2,7 @@
 %global commit0 5e9be272f96e00f15a2f3c5f8ba7e124862aec38
 
 Name:           aribb24
-Version:        1.0.3
+Version:        1.0.4
 Release:        %autorelease
 Summary:        A library for ARIB STD-B24
 

@@ -1,7 +1,7 @@
-%global source0_hash ca36f6ddcf14ee4cb3ad5a850d444566a97ccb6762243f23a5f0448c9f8fc088
+%global source0_hash 110523c2c476d096ee17e49f077a7f449a02b466d7666d5f78cd60c8f34ca0d3
 
 Name:           cockpit-image-builder
-Version:        94
+Version:        110
 Release:        1%{?dist}
 Summary:        Image builder plugin for Cockpit
 
@@ -50,6 +50,10 @@ appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/*
 %{_datadir}/cockpit/cockpit-image-builder
 %{_datadir}/metainfo/*
 
+%{_mandir}/man1/cssesc.1.*
+%{_mandir}/man1/he.1.*
+%{_mandir}/man1/jsesc.1.*
+%{_mandir}/man1/marked.1.*
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 94-1
 - Prepare for Oreon 11 (RP1)

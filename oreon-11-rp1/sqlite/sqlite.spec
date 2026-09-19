@@ -11,7 +11,7 @@
 %define majorver 3
 %define realver 3520000
 %define docver 3520000
-%define rpmver 3.52.0
+%define rpmver 3.53.4
 %define year 2026
 
 Summary: Library that implements an embeddable SQL database engine

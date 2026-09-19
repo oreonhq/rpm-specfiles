@@ -1,9 +1,9 @@
-%global source0_hash 924337a2a8e5be043ebaea2a78365c7427ac6e9cee24610a0780808b2ba7579b
+%global source0_hash 9a09b8b5968d6df29ad9f0941334fb7d04cd921b9f832546767c2152dae8aad2
 
 Summary: Open implementation of Service Location Protocol V2
 Name:    openslp
-Version: 2.0.0
-Release: 41%{?dist}
+Version: 2.0.0.a1
+Release: 1%{?dist}
 
 License: BSD-3-Clause
 URL:     http://sourceforge.net/projects/openslp/
