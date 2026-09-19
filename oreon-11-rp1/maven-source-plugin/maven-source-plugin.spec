@@ -1,9 +1,9 @@
-%global source0_hash 7caa15c5ed5abe55bb0dba353e83e0133c3b0f8180a309ca9dec2eebf40098d9
+%global source0_hash b8a42b463576763ea4d7b8dcf2679ea2de2c265728f71cc760a2706f9bdbfb97
 
 %bcond_without bootstrap
 
 Name:           maven-source-plugin
-Version:        4.0.0-beta-1
+Version:        3.4.0
 Release:        %autorelease
 Summary:        Plugin creating source JAR
 License:        Apache-2.0
