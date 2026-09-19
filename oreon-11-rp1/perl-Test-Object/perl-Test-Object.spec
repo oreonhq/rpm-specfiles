@@ -1,8 +1,8 @@
 %global source0_hash 65278964147837313f4108e55b59676e8a364d6edf01b3dc198aee894ab1d0bb
 
 Name:           perl-Test-Object
-Version:        0.08
-Release:        26%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Thoroughly testing objects via registered handlers
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Object

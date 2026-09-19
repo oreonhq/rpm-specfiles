@@ -1,7 +1,7 @@
 %global source0_hash 9fe6512333d14568823526a92474f8f217fb3665e916ec25b847ae104019a793
 
 Name:           perl-Net-DAVTalk
-Version:        0.24
+Version:        1.29
 Release:        1%{?dist}
 Summary:        Client for DAV servers
 License:        Artistic-2.0

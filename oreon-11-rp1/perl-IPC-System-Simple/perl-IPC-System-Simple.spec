@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-IPC-System-Simple
-Version:	1.30
-Release:	17%{?dist}
+Version:	20250809.0
+Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:	Run commands simply, with detailed diagnostics
 URL:		https://metacpan.org/release/IPC-System-Simple

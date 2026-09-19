@@ -4,7 +4,7 @@
 
 
 Name:           tokodon 
-Version:        26.04.3
+Version:        26.08.1
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv3 and CC0 and BSD and LGPLv2+ and GPLv3+ and GPLv2 - review is highly recommended.
 License:        GPL-3.0-only AND CC0-1.0 AND LicenseRef-Callaway-BSD AND LicenseRef-Callaway-LGPLv2+ AND GPL-3.0-or-later AND GPL-2.0-only

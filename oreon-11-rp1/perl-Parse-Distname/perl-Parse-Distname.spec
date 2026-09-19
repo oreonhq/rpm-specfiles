@@ -1,8 +1,8 @@
 %global source0_hash a5fa93bec2dab76d883da12d4f344b73bf8beb0cc4b66c24376f3e0f387aef07
 
 Name:		perl-Parse-Distname
-Version:	0.05
-Release:	12%{?dist}
+Version:	7.5
+Release:	1%{?dist}
 Summary:	Parse a distribution name
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/dist/Parse-Distname

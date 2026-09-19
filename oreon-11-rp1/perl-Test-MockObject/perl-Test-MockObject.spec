@@ -1,8 +1,8 @@
 %global source0_hash 2b7f80da87f5a6fe0360d9ee521051053017442c3a26e85db68dfac9f8307623
 
 Name:           perl-Test-MockObject
-Version:        1.20200122
-Release:        19%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Perl extension for emulating troublesome interfaces
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

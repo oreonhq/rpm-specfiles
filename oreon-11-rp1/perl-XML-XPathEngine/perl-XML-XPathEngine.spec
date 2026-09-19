@@ -4,8 +4,8 @@
 %bcond_without perl_XML_XPathEngine_enables_optional_test
 
 Name:           perl-XML-XPathEngine
-Version:        0.14
-Release:        34%{?dist}
+Version:        11.11
+Release:        1%{?dist}
 Summary:        Re-usable XPath engine for DOM-like trees
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-XPathEngine

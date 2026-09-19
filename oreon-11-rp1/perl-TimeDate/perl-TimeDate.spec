@@ -1,7 +1,7 @@
 %global source0_hash 4571da8fad4393e7051be0098bd3ad028b3c60c2d75adf88b1f81b912154d6d2
 
 Name:           perl-TimeDate
-Version:        2.34
+Version:        5.37.2
 Epoch:          1
 Release:        1%{?dist}
 Summary:        A Perl module for time and date manipulation

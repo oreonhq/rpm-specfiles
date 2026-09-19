@@ -1,8 +1,8 @@
 %global source0_hash 5bd263365f0375ceb988cab6d3e4418695afa3ece770db12768974cee77aefe0
 
 Name:           perl-Module-Install-AutoLicense
-Version:        0.10
-Release:        26%{?dist}
+Version:        9.99
+Release:        1%{?dist}
 Summary:        Module::Install extension to automatically generate LICENSE files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-AutoLicense

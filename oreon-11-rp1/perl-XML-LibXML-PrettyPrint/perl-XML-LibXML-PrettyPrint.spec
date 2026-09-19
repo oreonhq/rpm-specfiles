@@ -1,8 +1,8 @@
 %global source0_hash 89fb31725e90ecde0fc3623cb1e22decbaa4dbe30d6af56d38a0a8b45c4789f0
 
 Name:           perl-XML-LibXML-PrettyPrint
-Version:        0.006
-Release:        26%{?dist}
+Version:        8.000001
+Release:        1%{?dist}
 Summary:        Add pleasant white space to an XML tree
 # CONTRIBUTING: GPL+ or Artistic or CC-BY-SA
 # COPYRIGHT:    Public Domain

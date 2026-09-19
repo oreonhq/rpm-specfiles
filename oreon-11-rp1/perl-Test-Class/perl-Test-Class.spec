@@ -1,8 +1,8 @@
 %global source0_hash 40c1b1d388f0a8674769c27529f0cc3634ca0fd9d8f72b196c0531611934bc82
 
 Name:           perl-Test-Class
-Version:        0.52
-Release:        14%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Easily create test classes in an xUnit/JUnit style
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Class

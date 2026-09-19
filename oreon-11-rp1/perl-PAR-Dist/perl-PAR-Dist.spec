@@ -1,8 +1,8 @@
 %global source0_hash 04cbc81e786968f9a4109ad6c2f9b81e879ac0c6b6080a9d217443b61dfd2498
 
 Name:           perl-PAR-Dist
-Version:        0.53
-Release:        5%{?dist}
+Version:        1.064
+Release:        1%{?dist}
 Summary:        Toolkit for creating and manipulating Perl PAR distributions
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/PAR-Dist

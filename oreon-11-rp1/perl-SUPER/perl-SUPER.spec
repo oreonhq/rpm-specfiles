@@ -1,8 +1,8 @@
 %global source0_hash 685d1ee76e7f0e9006942923bf7df8b11c107132992917593dcf7397d417d39a
 
 Name:		perl-SUPER
-Version:	1.20190531
-Release:	21%{?dist}
+Version:	1.20250607
+Release:	1%{?dist}
 Summary:	Sane superclass method dispatcher
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/SUPER

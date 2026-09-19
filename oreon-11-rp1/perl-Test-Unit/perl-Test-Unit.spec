@@ -1,8 +1,8 @@
 %global source0_hash 02f86e62206e5f8eb5665ca2627e2a2480c92f34adee7ed3f5193e69f068891a
 
 Name:           perl-Test-Unit
-Version:        0.29
-Release:        2%{?dist}
+Version:        20221231.000
+Release:        1%{?dist}
 Summary:        The PerlUnit testing framework
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

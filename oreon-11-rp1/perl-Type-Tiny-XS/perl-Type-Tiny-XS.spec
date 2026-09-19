@@ -1,8 +1,8 @@
 %global source0_hash 9a61450dda90294f606cd7a3fa44f3b1a366bcd88a419917b054ee5e23d148bd
 
 Name:           perl-Type-Tiny-XS
-Version:        0.025
-Release:        13%{?dist}
+Version:        8.000001
+Release:        1%{?dist}
 Summary:        Provides an XS boost for some of Type::Tiny's built-in type constraints
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/dist/Type-Tiny-XS/

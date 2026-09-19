@@ -9,7 +9,7 @@ Name:           perl-XML-LibXML
 # https://bugzilla.redhat.com/show_bug.cgi?id=469480
 # it might not be needed anymore
 # this module is maintained, the other is not
-Version:        2.0213
+Version:        20260402.0
 Release:        1%{?dist}
 Epoch:          1
 Summary:        Perl interface to the libxml2 library

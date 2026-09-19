@@ -1,8 +1,8 @@
 %global source0_hash 30b7a0b0c942f44a7552c0d34e9b1f2e0ba0b67955c61e3b1589ec369074b107
 
 Name:           perl-Pod-Coverage
-Version:        0.23
-Release:        36%{?dist}
+Version:        3.12
+Release:        1%{?dist}
 Summary:        Checks if the documentation of a module is comprehensive
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Coverage

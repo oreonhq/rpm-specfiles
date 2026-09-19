@@ -1,8 +1,8 @@
 %global source0_hash 2c5fc7860c44f7d3a049b624b248112b146761775d92e5e431eaa60e880513be
 
 Name:           perl-Module-Manifest-Skip
-Version:        0.23
-Release:        35%{?dist}
+Version:        1.11111111111
+Release:        1%{?dist}
 Summary:        MANIFEST.SKIP Manangement for Modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Manifest-Skip

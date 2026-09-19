@@ -1,8 +1,8 @@
 %global source0_hash 1c9a824ab323e3e58d9808011c10ad27589dba1202806278215012ca7f522875
 
 Name:           perl-bignum
-Version:        0.67
-Release:        522%{?dist}
+Version:        2.005003
+Release:        1%{?dist}
 Summary:        Transparent big number support for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/bignum

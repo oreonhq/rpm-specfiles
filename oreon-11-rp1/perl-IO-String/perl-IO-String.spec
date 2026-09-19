@@ -1,8 +1,8 @@
 %global source0_hash 2a3f4ad8442d9070780e58ef43722d19d1ee21a803bf7c8206877a10482de5a0
 
 Name:           perl-IO-String
-Version:        1.08
-Release:        54%{?dist}
+Version:        6.06
+Release:        1%{?dist}
 Summary:        Emulate file interface for in-core strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-String

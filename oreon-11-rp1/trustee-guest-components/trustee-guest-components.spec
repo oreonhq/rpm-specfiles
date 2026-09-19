@@ -6,7 +6,7 @@
 %global projectname guest-components
 
 Name:           trustee-guest-components
-Version:        0.17.0
+Version:        0.22.0
 Release:        %autorelease
 Summary:        Tools that run in confidential VMs, attest and get secrets from Trustee
 

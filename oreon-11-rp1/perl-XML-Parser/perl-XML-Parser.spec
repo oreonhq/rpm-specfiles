@@ -1,8 +1,8 @@
 %global source0_hash ad4aae643ec784f489b956abe952432871a622d4e2b5c619e8855accbfc4d1d8
 
 Name:           perl-XML-Parser
-Version:        2.47
-Release:        9%{?dist}
+Version:        20260402.0
+Release:        1%{?dist}
 Summary:        Perl module for parsing XML documents
 
 License:        Artistic-2.0

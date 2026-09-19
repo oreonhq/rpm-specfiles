@@ -1,8 +1,8 @@
 %global source0_hash 55da78fccf4c19d3d173fab38fc6ce6df0078f839a8a3e699199e4ef19428803
 
 Name:           perl-Image-Xpm
-Version:        1.13
-Release:        28%{?dist}
+Version:        202402.28
+Release:        1%{?dist}
 Summary:        Load, create, manipulate and save xpm image files in Perl
 License:        GPL-1.0-or-later
 URL:            https://metacpan.org/release/Image-Xpm

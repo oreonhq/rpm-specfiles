@@ -1,8 +1,8 @@
 %global source0_hash 8080a2ab776629585911af1179bdb7c4dc2bebfd4b5efd77b11d1dac62454bf8
 
 Name:           perl-Net-DNS-Resolver-Programmable
-Version:        0.009
-Release:        24%{?dist}
+Version:        20121119.02
+Release:        1%{?dist}
 Summary:        Programmable DNS resolver class for offline emulation of DNS
 # License contradicts itself, saying "same as perl" (which would be (GPL-1.0-or-later OR Artistic-1.0-Perl))
 # but then going on to clarify that as "either the GNU General Public License (version 2 or later) or the Artistic License"

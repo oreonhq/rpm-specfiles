@@ -1,8 +1,8 @@
 %global source0_hash 784f4e55efa149f8910400de71309047cdb561ef123bd3c3a6b8015356a88e1f
 
 Name:           perl-MooseX-InsideOut
-Version:        0.106
-Release:        42%{?dist}
+Version:        2.05
+Release:        1%{?dist}
 Summary:        Inside-out objects with Moose
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/MooseX-InsideOut

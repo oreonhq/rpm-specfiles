@@ -1,8 +1,8 @@
 %global source0_hash a626e99bcd4e7d214e43d4722a54e3aafac3713862f7479cfb94a0e2879f8442
 
 Name:           perl-Pod-Markdown
-Version:        3.400
-Release:        7%{?dist}
+Version:        6.002
+Release:        1%{?dist}
 Summary:        Convert POD to Markdown
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Markdown

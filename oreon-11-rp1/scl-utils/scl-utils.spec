@@ -1,11 +1,11 @@
-%global source0_hash a24edd604522b9a06a320a3c49f6f544bd88d2a6e40012ece3527fd53473aa8b
+%global source0_hash c0df444b773d8668d1263b6ea79a3cff7dfd05ac75a36d288d800f5c63c524c4
 
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:       scl-utils
 Epoch:      1
-Version:    2.0.3
-Release:    8%{dist}
+Version:    20140815
+Release:    1%{?dist}
 Summary:    Utilities for alternative packaging
 
 License:    GPL-2.0-or-later

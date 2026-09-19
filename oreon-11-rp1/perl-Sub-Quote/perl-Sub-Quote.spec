@@ -1,8 +1,8 @@
 %global source0_hash 967282d54d2d51b198c67935594f93e4dea3e54d1e5bced158c94e29be868a4b
 
 Name:           perl-Sub-Quote
-Version:        2.006009
-Release:        2%{?dist}
+Version:        5.90129
+Release:        1%{?dist}
 Summary:        Efficient generation of subroutines via string eval
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sub-Quote

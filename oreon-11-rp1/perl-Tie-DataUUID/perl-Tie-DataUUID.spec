@@ -1,8 +1,8 @@
 %global source0_hash 670201ab9076b200856e0e17cf8a8fe3be4c1a2049d7e469b386465d5852170b
 
 Name:           perl-Tie-DataUUID
-Version:        1.02
-Release:        28%{?dist}
+Version:        2.50
+Release:        1%{?dist}
 Summary:        Tie interface to Data::UUID
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tie-DataUUID

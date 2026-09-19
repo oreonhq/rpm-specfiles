@@ -1,8 +1,8 @@
 %global source0_hash 96d716f2b2832cf42875e3a4f81752a025be94c3114a382887dc2eb4515a302e
 
 Name:           perl-List-Pairwise
-Version:        1.03
-Release:        33%{?dist}
+Version:        1.11
+Release:        1%{?dist}
 Summary:        Map/grep arrays and hashes pairwise
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/List-Pairwise

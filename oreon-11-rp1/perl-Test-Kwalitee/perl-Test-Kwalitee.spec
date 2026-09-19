@@ -1,8 +1,8 @@
 %global source0_hash b4536cdd755b59772232d4325da7bd4fb7f5be50b4585dbbaf758eec306243a3
 
 Name:		perl-Test-Kwalitee
-Version:	1.28
-Release:	20%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Test the Kwalitee of a distribution before you release it
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		http://metacpan.org/module/Test::Kwalitee

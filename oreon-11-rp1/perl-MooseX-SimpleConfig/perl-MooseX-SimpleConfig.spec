@@ -1,8 +1,8 @@
 %global source0_hash 42c83f4b92ef2785fa8dbcfae69d5d28d5be10141d171472ccf37288682c79ad
 
 Name:           perl-MooseX-SimpleConfig
-Version:        0.11
-Release:        32%{?dist}
+Version:        2.05
+Release:        1%{?dist}
 Summary:        Moose role for setting attributes from a simple configfile
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/MooseX-SimpleConfig

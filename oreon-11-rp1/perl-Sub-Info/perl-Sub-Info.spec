@@ -1,8 +1,8 @@
 %global source0_hash ea3056d696bdeff21a99d340d5570887d39a8cc47bff23adfc82df6758cdd0ea
 
 Name:           perl-Sub-Info
-Version:        0.002
-Release:        28%{?dist}
+Version:        5.25.7
+Release:        1%{?dist}
 Summary:        Tool for inspecting Perl subroutines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sub-Info

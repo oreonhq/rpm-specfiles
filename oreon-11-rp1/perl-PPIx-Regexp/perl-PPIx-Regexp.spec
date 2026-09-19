@@ -4,7 +4,7 @@
 %bcond_with perl_PPIx_Regexp_enables_optional_test
 
 Name:           perl-PPIx-Regexp
-Version:        0.092
+Version:        1.907
 Release:        1%{?dist}
 Summary:        Represent a regular expression of some sort
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

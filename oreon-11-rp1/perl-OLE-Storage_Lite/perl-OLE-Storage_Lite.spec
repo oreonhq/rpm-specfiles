@@ -1,8 +1,8 @@
 %global source0_hash 71c3b6ef082176c9585e620dd48f0f4782c282be73f2a653ea4b618f757bb3fd
 
 Name:		perl-OLE-Storage_Lite
-Version:	0.24
-Release:	2%{?dist}
+Version:	2.40
+Release:	1%{?dist}
 Summary:	Simple Class for OLE document interface
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/OLE-Storage_Lite

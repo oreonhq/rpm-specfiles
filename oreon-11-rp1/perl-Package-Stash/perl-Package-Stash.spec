@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-Package-Stash
-Version:	0.40
-Release:	11%{?dist}
+Version:	5.03
+Release:	1%{?dist}
 Summary:	Routines for manipulating stashes
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Package-Stash

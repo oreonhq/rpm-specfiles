@@ -1,8 +1,8 @@
 %global source0_hash 07bc880734492de40b4a3a8b5a331762f64e69b4629029fd9a9d357b25b87e1f
 
 Name:           perl-Set-Infinite
-Version:        0.65
-Release:        44%{?dist}
+Version:        9.028
+Release:        1%{?dist}
 Summary:        Sets of intervals
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Set-Infinite

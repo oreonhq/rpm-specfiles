@@ -1,8 +1,8 @@
 %global source0_hash 98ca32e7f2f5ea89b8bfb9a0609977f3d153e242e2e51705126cb954f1a06b57
 
 Name:           perl-Test-Warn
-Version:        0.37
-Release:        9%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Perl extension to test methods for warnings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Warn

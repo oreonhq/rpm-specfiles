@@ -1,8 +1,8 @@
 %global source0_hash cd98c8104b70d7672bfa26b4513b78adf2b4b9220e586aa8beb1a508500365a6
 
 Name:           perl-XML-LibXML-Simple
-Version:        1.01
-Release:        19%{?dist}
+Version:        4.05
+Release:        1%{?dist}
 Summary:        Read XML strings or files
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

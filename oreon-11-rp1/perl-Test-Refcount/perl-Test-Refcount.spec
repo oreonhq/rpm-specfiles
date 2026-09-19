@@ -1,8 +1,8 @@
 %global source0_hash 0457c20a4956473d157c4faaff8814154bc93f6e2b543c2812a19ff8e3370eb2
 
 Name:           perl-Test-Refcount
-Version:        0.10
-Release:        20%{?dist}
+Version:        5.45.1
+Release:        1%{?dist}
 Summary:        Assert reference counts on objects
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

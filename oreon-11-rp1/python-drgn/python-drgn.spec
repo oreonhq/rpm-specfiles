@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-drgn
-Version:        0.2.0
+Version:        1.1.99
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Programmable debugger

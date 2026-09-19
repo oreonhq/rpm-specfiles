@@ -3,8 +3,8 @@
 Name:           perl-Module-Load
 # Epoch to compete with perl.spec
 Epoch:          1
-Version:        0.36
-Release:        521%{?dist}
+Version:        7.001
+Release:        1%{?dist}
 Summary:        Run-time require of both modules and files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Load

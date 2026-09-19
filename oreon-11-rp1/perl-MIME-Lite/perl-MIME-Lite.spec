@@ -1,7 +1,7 @@
 %global source0_hash 06eb47db74d594d2256cf4794f2c259e9f3f54b9f61b900544e6e1d879e244f5
 
 Name:           perl-MIME-Lite
-Version:        3.038
+Version:        20221231.000
 Release:        %autorelease
 Summary:        MIME::Lite - low-calorie MIME generator
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

@@ -1,8 +1,8 @@
 %global source0_hash ffa9c8a2f099660a81361eb8bac56a335793b3e160fa5b1d97078b83142ce8cb
 
 Name:           perl-Perl-MinimumVersion
-Version:        1.44
-Release:        2%{?dist}
+Version:        3.009
+Release:        1%{?dist}
 Summary:        Find a minimum required version of perl for Perl code
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Perl-MinimumVersion

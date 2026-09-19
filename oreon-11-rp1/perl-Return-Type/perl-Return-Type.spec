@@ -1,8 +1,8 @@
 %global source0_hash 0dffa4e3a7a63885da029d8f04e79d99d04e0f48b3b890d4509e209bb865e1b4
 
 Name:           perl-Return-Type
-Version:        0.007
-Release:        16%{?dist}
+Version:        8.000001
+Release:        1%{?dist}
 Summary:        Specify a return type for a function
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Return-Type

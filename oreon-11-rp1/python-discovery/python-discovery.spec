@@ -1,7 +1,7 @@
 %global source0_hash 8f3746c4b4968d22afbb97d36e1a0e5b66e6c0f297290f2e95f05b9b8bf18690
 
 Name:           python-discovery
-Version:        1.4.2
+Version:        1.6.1
 Release:        %autorelease
 Summary:        Python discovery helper library
 

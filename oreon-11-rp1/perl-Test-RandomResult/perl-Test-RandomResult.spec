@@ -1,8 +1,8 @@
 %global source0_hash 06d948be8fbb4ed8854e70fc79cd50b9b3fb161e3feb6e3967c341ba572c1eae
 
 Name:           perl-Test-RandomResult
-Version:        0.001
-Release:        16%{?dist}
+Version:        20260626.0.0
+Release:        1%{?dist}
 Summary:        Test that results of a running code look random
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-RandomResult/

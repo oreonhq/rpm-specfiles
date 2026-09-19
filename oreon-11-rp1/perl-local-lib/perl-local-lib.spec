@@ -1,8 +1,8 @@
 %global source0_hash 8df87a10c14c8e909c5b47c5701e4b8187d519e5251e87c80709b02bb33efdd7
 
 Name:           perl-local-lib
-Version:        2.000029
-Release:        11%{?dist}
+Version:        5.90129
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:        Create and use a local lib/ for perl modules
 Url:            https://metacpan.org/release/local-lib

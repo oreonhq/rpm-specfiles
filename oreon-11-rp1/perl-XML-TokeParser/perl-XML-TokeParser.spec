@@ -1,8 +1,8 @@
 %global source0_hash 8539b4f98436b1a6d088341a8b4530b7922acd651f3f29377f8b1948c7e2d7c2
 
 Name:           perl-XML-TokeParser
-Version:        0.05
-Release:        48%{?dist}
+Version:        1.010
+Release:        1%{?dist}
 Summary:        Simplified interface to XML::Parser
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 

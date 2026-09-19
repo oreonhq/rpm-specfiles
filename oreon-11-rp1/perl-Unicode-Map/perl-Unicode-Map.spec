@@ -1,8 +1,8 @@
 %global source0_hash 10f0c2f12ebba57dcd4f46d24cf242c1915d31ec0a4ec36b4df18c9ca0cb4a5a
 
 Name:           perl-Unicode-Map
-Version:        0.112
-Release:        69%{?dist}
+Version:        2025.004
+Release:        1%{?dist}
 Summary:        Perl module for mapping charsets from and to utf16 unicode
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Unicode-Map

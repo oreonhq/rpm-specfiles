@@ -1,7 +1,7 @@
 %global source0_hash 7b6cb912bb3a22cfa7dcf005925dcb62883024db0c09099486e7d6851185c9b8
 
 Name:          rest
-Version:       0.10.2
+Version:       2.6.9
 Release:       %autorelease
 Summary:       A library for access to RESTful web services
 

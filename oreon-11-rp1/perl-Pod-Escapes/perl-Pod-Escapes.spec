@@ -3,8 +3,8 @@
 Name:           perl-Pod-Escapes
 # Compete with perl.spec
 Epoch:          1
-Version:        1.07
-Release:        521%{?dist}
+Version:        2020.02
+Release:        1%{?dist}
 Summary:        Resolve POD escape sequences
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Escapes

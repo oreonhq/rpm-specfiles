@@ -1,8 +1,8 @@
 %global source0_hash bf5f3307406ebe2581237f025982e8c84f6f6625dd774e457c03f8994efd2eaa
 
 Name:           perl-Sort-Versions
-Version:        1.62
-Release:        32%{?dist}
+Version:        4.01
+Release:        1%{?dist}
 Summary:        Perl module for sorting of revision-like numbers
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sort-Versions

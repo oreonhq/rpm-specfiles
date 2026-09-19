@@ -1,8 +1,8 @@
 %global source0_hash b291ab5e0f987c5172560a692234711a75e4596d83475f72d01278369532f82a
 
 Name:           perl-Text-vFile-asData
-Version:        0.08
-Release:        40%{?dist}
+Version:        3.12
+Release:        1%{?dist}
 Summary:        Parse vFile formatted files into data structures
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-vFile-asData

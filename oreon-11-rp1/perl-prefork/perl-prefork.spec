@@ -1,8 +1,8 @@
 %global source0_hash 6d87bcdfa63b28cefcfa870803a519b6590e3ea19c300f98cecb0e190bb19305
 
 Name: 		perl-prefork
-Version: 	1.05
-Release: 	22%{?dist}
+Version: 	6.36
+Release: 	1%{?dist}
 Summary: 	Optimized module loading for forking or non-forking processes
 License: 	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/prefork

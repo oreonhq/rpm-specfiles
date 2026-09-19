@@ -6,8 +6,8 @@
 %bcond_without perl_Term_Table_enables_unicode
 
 Name:           perl-Term-Table
-Version:        0.028
-Release:        2%{?dist}
+Version:        5.25.7
+Release:        1%{?dist}
 Summary:        Format a header and rows into a table
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Term-Table

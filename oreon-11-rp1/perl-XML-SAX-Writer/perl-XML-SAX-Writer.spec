@@ -1,8 +1,8 @@
 %global source0_hash 3d61d07ef43b0126f5b4de4f415a256fa859fa88dc4fdabaad70b7be7c682cf0
 
 Name:           perl-XML-SAX-Writer
-Version:        0.57
-Release:        25%{?dist}
+Version:        11.11
+Release:        1%{?dist}
 Summary:        SAX2 Writer
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

@@ -1,8 +1,8 @@
 %global source0_hash 5caeaada66ab4afdfdae56c023e099880543a9a7c1f931f20a834d5881c15ecb
 
 Name:           perl-Sub-Infix
-Version:        0.004
-Release:        27%{?dist}
+Version:        8.000001
+Release:        1%{?dist}
 Summary:        Create a fake infix operator
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sub-Infix

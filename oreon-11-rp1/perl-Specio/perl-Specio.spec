@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-Specio
-Version:	0.53
-Release:	2%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Type constraints and coercions for Perl
 # lib/Specio/PartialDump.pm:	GPL-1.0-or-later OR Artistic-1.0-Perl
 #				<https://github.com/houseabsolute/Specio/issues/17>

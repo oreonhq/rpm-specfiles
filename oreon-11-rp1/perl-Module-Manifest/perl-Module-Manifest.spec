@@ -1,8 +1,8 @@
 %global source0_hash a395f80ff15ea0e66fd6c453844b6787ed4a875a3cd8df9f7e29280250bd539b
 
 Name:           perl-Module-Manifest
-Version:        1.09
-Release:        25%{?dist}
+Version:        7.001
+Release:        1%{?dist}
 Summary:        Parse and examine a Perl distribution MANIFEST file
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Manifest

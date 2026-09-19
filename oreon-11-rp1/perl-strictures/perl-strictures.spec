@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-strictures
-Version:        2.000006
-Release:        23%{?dist}
+Version:        5.90129
+Release:        1%{?dist}
 Summary:        Turn on strict and make most warnings fatal
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/strictures

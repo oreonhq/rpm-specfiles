@@ -1,7 +1,7 @@
 %global source0_hash 6228bd38e884550a076f8303c32c07dc53f04d0a334dd0e65e1d80ef5102c604
 
 Name:           perl-Sub-Exporter-Lexical
-Version:        1.001
+Version:        20221231.000
 Release:        1%{?dist}
 Summary:        Export lexically-available subs with Sub::Exporter
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

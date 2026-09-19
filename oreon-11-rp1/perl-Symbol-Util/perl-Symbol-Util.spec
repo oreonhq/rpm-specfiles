@@ -1,8 +1,8 @@
 %global source0_hash 55b661dd22f9ce9b9be5a7e0a3f5289ac00cd254c21e3d8603289a565ae6dc32
 
 Name:           perl-Symbol-Util
-Version:        0.0203
-Release:        39%{?dist}
+Version:        1.07
+Release:        1%{?dist}
 Summary:        Additional utilities for Perl symbols manipulation
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Symbol-Util

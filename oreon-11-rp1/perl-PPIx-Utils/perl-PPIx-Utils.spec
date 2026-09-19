@@ -1,8 +1,8 @@
 %global source0_hash 336918d56ac9482d248d2ca6e79ed7f2cc67403fbdecdd73a9c414a034adb3cf
 
 Name:           perl-PPIx-Utils
-Version:        0.004
-Release:        2%{?dist}
+Version:        3.009
+Release:        1%{?dist}
 Summary:        Utility functions for PPI
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 

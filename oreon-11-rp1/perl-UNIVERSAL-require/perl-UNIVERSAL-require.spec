@@ -1,8 +1,8 @@
 %global source0_hash d467cd26e06c8c3b203fd3bc0796ae6c837ac5e310093c82267ff5df850f1a03
 
 Name:           perl-UNIVERSAL-require
-Version:        0.19
-Release:        14%{?dist}
+Version:        1.20171012
+Release:        1%{?dist}
 Summary:        Require() modules from a variable
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/UNIVERSAL-require

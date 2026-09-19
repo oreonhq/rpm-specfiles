@@ -4,7 +4,7 @@
 %bcond_without perl_Sereal_Decoder_enables_optional_test
 
 Name:           perl-Sereal-Decoder
-Version:        5.008
+Version:        5.37.10
 Release:        1%{?dist}
 Summary:        Perl deserialization for Sereal format
 # lib/Sereal/Decoder.pm:    GPL+ or Artistic

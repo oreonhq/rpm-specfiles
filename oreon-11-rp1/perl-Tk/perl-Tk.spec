@@ -7,8 +7,8 @@
 %bcond perl_Tk_enables_optional_test %{undefined rhel}
 
 Name:           perl-Tk
-Version:        804.036
-Release:        24%{?dist}
+Version:        202402.28
+Release:        1%{?dist}
 Summary:        Perl Graphical User Interface ToolKit
 
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND SWL

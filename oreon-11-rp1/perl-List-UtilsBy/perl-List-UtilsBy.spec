@@ -1,8 +1,8 @@
 %global source0_hash fff1281fd469fe982b1a58044becfd970f313bff3a26e1c7b2b3f4c0a5ed71e0
 
 Name:           perl-List-UtilsBy
-Version:        0.12
-Release:        13%{?dist}
+Version:        5.45.1
+Release:        1%{?dist}
 Summary:        Higher-order list utility functions
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/List-UtilsBy

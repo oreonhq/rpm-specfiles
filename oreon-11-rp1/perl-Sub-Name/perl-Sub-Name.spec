@@ -5,8 +5,8 @@
 %bcond_without perl_Sub_Name_enables_optional_test
 
 Name:		perl-Sub-Name
-Version:	0.28
-Release:	5%{?dist}
+Version:	2.006009
+Release:	1%{?dist}
 Summary:	Name - or rename - a sub
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Name

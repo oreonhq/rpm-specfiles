@@ -4,8 +4,8 @@
 %bcond tests 0
 
 Name:           shell-color-prompt
-Version:        0.7.1
-Release:        3%{?dist}
+Version:        0.96.2
+Release:        1%{?dist}
 Summary:        Color prompt for bash shell
 
 License:        GPL-2.0-or-later

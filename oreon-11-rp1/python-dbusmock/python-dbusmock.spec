@@ -3,7 +3,7 @@
 %global modname dbusmock
 
 Name:             python-%{modname}
-Version:          0.38.0
+Version:          0.38.1
 Release:          1%{?dist}
 Summary:          Mock D-Bus objects
 

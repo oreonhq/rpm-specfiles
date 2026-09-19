@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Test-NoWarnings
-Version:        1.06
-Release:        12%{?dist}
+Version:        5.90129
+Release:        1%{?dist}
 Summary:        Make sure you didn't emit any warnings while testing
 License:        LGPL-2.1-or-later
 URL:            https://metacpan.org/release/Test-NoWarnings

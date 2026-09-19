@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-Package-Stash-XS
-Version:	0.30
-Release:	13%{?dist}
+Version:	5.03
+Release:	1%{?dist}
 Summary:	Faster and more correct implementation of the Package::Stash API
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Package-Stash-XS

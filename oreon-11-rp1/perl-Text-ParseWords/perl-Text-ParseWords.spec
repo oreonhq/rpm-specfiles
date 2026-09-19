@@ -1,8 +1,8 @@
 %global source0_hash 2ae555ba084d75b2b8feeeb8d1a00911276815ada86bccb1452236964d5a2fc7
 
 Name:           perl-Text-ParseWords
-Version:        3.31
-Release:        521%{?dist}
+Version:        2020.02
+Release:        1%{?dist}
 Summary:        Parse text into an array of tokens or array of arrays
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-ParseWords

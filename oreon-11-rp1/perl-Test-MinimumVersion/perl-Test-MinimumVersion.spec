@@ -1,8 +1,8 @@
 %global source0_hash 32a1ebcd803fa10eefca553bc3cedd43596a759dc3975adebd22688823c36aea
 
 Name:		perl-Test-MinimumVersion
-Version:	0.101083
-Release:	9%{?dist}
+Version:	20221231.000
+Release:	1%{?dist}
 Summary:	Check whether your code requires a newer perl
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-MinimumVersion

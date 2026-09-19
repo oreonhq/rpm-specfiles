@@ -1,7 +1,7 @@
 %global source0_hash d0ea851c02eb27003d8242547837552539ff61d4f087028cdead0076fbbd463a
 
 Name:           perl-Module-CPANTS-Analyse
-Version:        1.03
+Version:        4.18
 Release:        1%{?dist}
 Summary:        Generate Kwalitee ratings for a distribution
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

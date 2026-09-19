@@ -5,7 +5,7 @@
 %global xfceversion 4.20
 
 Name:           tumbler
-Version:        4.20.2
+Version:        4.21.1
 Release:        %autorelease
 Summary:        D-Bus service for applications to request thumbnails
 

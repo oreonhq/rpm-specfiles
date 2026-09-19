@@ -4,8 +4,8 @@
 %bcond_without perl_Parse_PMFile_enables_optional_test
 
 Name:           perl-Parse-PMFile
-Version:        0.47
-Release:        5%{?dist}
+Version:        4.18
+Release:        1%{?dist}
 Summary:        Parses .pm file as PAUSE does
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Parse-PMFile

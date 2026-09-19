@@ -1,8 +1,8 @@
 %global source0_hash 9d53ddfdc964cd8454cb0da4c695b6a3ae47b45839291c34cb9d8d1cfaab3202
 
 Name:           perl-Test-Memory-Cycle
-Version:        1.06
-Release:        30%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Check for memory leaks and circular memory references
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Test-Memory-Cycle

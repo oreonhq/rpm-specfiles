@@ -1,8 +1,8 @@
 %global source0_hash 300b2e244f83b9a54a95f8404c1cd3af0635b4fae974ca65390ee428ec668591
 
 Name:           perl-Module-Install-ReadmeMarkdownFromPod
-Version:        0.04
-Release:        26%{?dist}
+Version:        1.16
+Release:        1%{?dist}
 Summary:        Create README.mkdn from POD
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-ReadmeMarkdownFromPod

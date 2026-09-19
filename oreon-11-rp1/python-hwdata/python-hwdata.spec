@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:		python-hwdata
-Version:	2.4.3
-Release:	6%{?dist}
+Version:	2.4.3-1
+Release:	1%{?dist}
 Summary:	Python bindings to hwdata package
 BuildArch:  noarch
 License:	GPL-2.0-or-later

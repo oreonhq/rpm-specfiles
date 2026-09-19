@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Test-MockModule
-Version:        0.180.0
-Release:        3%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Override subroutines in a module for unit testing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-MockModule

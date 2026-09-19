@@ -1,8 +1,8 @@
 %global source0_hash 2d99975685242980d0a9904f639144c059d6ece15899efde4acb742d3253f105
 
 Name:           perl-autovivification
-Version:        0.18
-Release:        28%{?dist}
+Version:        1.19
+Release:        1%{?dist}
 Summary:        Lexically disable autovivification
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/autovivification

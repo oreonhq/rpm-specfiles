@@ -1,8 +1,8 @@
 %global source0_hash 522da9f274786fe2cba99bc77cc1c81d2161947903d7fad10bd62dfb7f11990f
 
 Name:           perl-UNIVERSAL-can
-Version:        1.20140328
-Release:        32%{?dist}
+Version:        1.20171012
+Release:        1%{?dist}
 Summary:        Hack around people calling UNIVERSAL::can() as a function
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

@@ -1,7 +1,7 @@
 %global source0_hash 043d0bef0afba404eaff236a400a17265cbb609aa2112743212e1f9ee29039f1
 
 Name:           perl-Tie-Cycle
-Version:        1.233
+Version:        20260914.001
 Release:        %autorelease
 Summary:        Cycle through a list of values via a scalar
 License:        Artistic-2.0

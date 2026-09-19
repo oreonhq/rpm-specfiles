@@ -4,8 +4,8 @@
 %bcond_without perl_Text_Template_enables_optional_test
 
 Name:           perl-Text-Template
-Version:        1.61
-Release:        9%{?dist}
+Version:        3.32
+Release:        1%{?dist}
 Summary:        Expand template text with embedded Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-Template

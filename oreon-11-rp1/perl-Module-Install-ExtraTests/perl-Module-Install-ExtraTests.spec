@@ -1,8 +1,8 @@
 %global source0_hash 643d528490df5f4fd8c9cf6afe431d32465f2d27b24bdddc0a53b02618e57db0
 
 Name:       perl-Module-Install-ExtraTests 
-Version:    0.008
-Release:    37%{?dist}
+Version:    20221231.000
+Release:    1%{?dist}
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    Ignorable, contextual test support for Module::Install
 Url:        https://metacpan.org/release/Module-Install-ExtraTests

@@ -1,8 +1,8 @@
 %global source0_hash c72c51a1da70c306562f3f1cd5e5591266a0ba3e7590812b6a7dbfb8acfd5552
 
 Name:		perl-Module-Package-Au
-Version:	2
-Release:	33%{?dist}
+Version:	1257439830.94865
+Release:	1%{?dist}
 Summary:	Reusable Module::Install bits
 License:	CC0-1.0
 URL:		https://metacpan.org/release/Module-Package-Au

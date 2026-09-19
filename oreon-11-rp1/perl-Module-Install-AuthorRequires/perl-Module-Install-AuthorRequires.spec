@@ -1,8 +1,8 @@
 %global source0_hash cc6321537d745d2a83a8286f85ef3346745939cc3b34102045bec8560e8f4cec
 
 Name:           perl-Module-Install-AuthorRequires
-Version:        0.02
-Release:        39%{?dist}
+Version:        20110802.00
+Release:        1%{?dist}
 Summary:        Declare author-only dependencies
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-AuthorRequires

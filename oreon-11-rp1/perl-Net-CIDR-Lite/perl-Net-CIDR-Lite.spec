@@ -1,8 +1,8 @@
 %global source0_hash 4317d8cb341a617b9e0888da43c09cdffffcb0c9edf7b8c9928d742a563b8517
 
 Name:           perl-Net-CIDR-Lite
-Version:        0.22
-Release:        14%{?dist}
+Version:        20121119.02
+Release:        1%{?dist}
 Summary:        Perl extension for merging IPv4 or IPv6 CIDR addresses
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-CIDR-Lite

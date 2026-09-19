@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-XML-Simple
-Version:        2.25
-Release:        24%{?dist}
+Version:        3.09
+Release:        1%{?dist}
 Summary:        Easy API to maintain XML in Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Simple

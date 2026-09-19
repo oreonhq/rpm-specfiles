@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-IO-Socket-IP
-Version:        0.43
-Release:        522%{?dist}
+Version:        5.45.1
+Release:        1%{?dist}
 Summary:        Drop-in replacement for IO::Socket::INET supporting both IPv4 and IPv6
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Socket-IP

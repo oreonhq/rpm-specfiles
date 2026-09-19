@@ -1,8 +1,8 @@
 %global source0_hash 44292cf72b9caccab142452c95c5a6651fa9c305c3f94d3e2e56805ddf774116
 
 Name:           perl-Regexp-Pattern
-Version:        0.2.14
-Release:        18%{?dist}
+Version:        20260626.0.0
+Release:        1%{?dist}
 Summary:        Collection of regexp patterns
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 

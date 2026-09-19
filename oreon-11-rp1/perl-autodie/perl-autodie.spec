@@ -4,8 +4,8 @@
 %bcond_without perl_autodie_enables_optional_test
 
 Name:           perl-autodie
-Version:        2.37
-Release:        522%{?dist}
+Version:        20260402.0
+Release:        1%{?dist}
 Summary:        Replace functions with ones that succeed or die
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/autodie

@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-List-MoreUtils-XS
-Version:	0.430
-Release:	19%{?dist}
+Version:	2.028003
+Release:	1%{?dist}
 Summary:	Provide compiled List::MoreUtils functions
 # Code from List-MoreUtils < 0.417 is GPL-1.0-or-later OR Artistic-1.0-Perl
 # Anything after that is Apache-2.0

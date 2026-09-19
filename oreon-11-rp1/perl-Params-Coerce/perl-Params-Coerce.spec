@@ -1,8 +1,8 @@
 %global source0_hash 03bc2471a7e6aa927ba313eda7d73c50820694e801a5bbe2fddcded8f493b67f
 
 Name:		perl-Params-Coerce
-Version:	0.15
-Release:	16%{?dist}
+Version:	2.00
+Release:	1%{?dist}
 Summary:	Allows your classes to do coercion of parameters
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Params-Coerce

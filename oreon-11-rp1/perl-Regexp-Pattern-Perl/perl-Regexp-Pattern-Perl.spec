@@ -1,8 +1,8 @@
 %global source0_hash b59ee18f758b51b92a5c25532bbcd3a4d800f4b9b9d4318bdbf8af04a61c3165
 
 Name:           perl-Regexp-Pattern-Perl
-Version:        0.007
-Release:        9%{?dist}
+Version:        20260626.0.0
+Release:        1%{?dist}
 Summary:        Regexp patterns related to Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Regexp-Pattern-Perl/

@@ -7,8 +7,8 @@
 %undefine _package_note_file
 
 Name:		perl-Test-Mojibake
-Version:	1.3
-Release:	35%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 Summary:	Check your source for encoding misbehavior
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Mojibake

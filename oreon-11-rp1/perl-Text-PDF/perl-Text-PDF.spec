@@ -1,8 +1,8 @@
 %global source0_hash df9f515ee159804b0d5a75d5adb93c4584c7ec401d8c59c27e9f73925d8dac68
 
 Name:       perl-Text-PDF
-Version:    0.31
-Release:    28%{?dist}
+Version:    1.06
+Release:    1%{?dist}
 # lib/Text/PDF.pm -> GPL+ or Artistic
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    Module for manipulating PDF files

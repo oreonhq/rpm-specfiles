@@ -1,8 +1,8 @@
 %global source0_hash 38c659f03a4d7362e16832a3489d17f86a2ea36471d335e17ce323457df5bc60
 
 Name:           perl-Test-Spelling
-Version:        0.25
-Release:        20%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Check for spelling errors in POD files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Spelling

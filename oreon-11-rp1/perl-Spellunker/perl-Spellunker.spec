@@ -1,8 +1,8 @@
 %global source0_hash 9ca19f3b65b7acd8da72dbb8f70ada6e875aa7bffc20b0b7e6eb6b109d3a8c9d
 
 Name:           perl-Spellunker
-Version:        0.4.0
-Release:        34%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Pure perl spelling checker implementation
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Spellunker

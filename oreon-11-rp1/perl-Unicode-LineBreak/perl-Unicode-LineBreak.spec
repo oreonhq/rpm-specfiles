@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Unicode-LineBreak
-Version:        2019.001
-Release:        26%{?dist}
+Version:        2025.004
+Release:        1%{?dist}
 Summary:        UAX #14 Unicode Line Breaking Algorithm
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Unicode-LineBreak

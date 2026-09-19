@@ -1,8 +1,8 @@
 %global source0_hash 67b64024d25b7152e5cb01f43e3218845dba254676fa2acb937997c73735d138
 
 Name:           perl-XML-Spice
-Version:        0.05
-Release:        28%{?dist}
+Version:        4.04
+Release:        1%{?dist}
 Summary:        Generating XML in Perl way
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Spice

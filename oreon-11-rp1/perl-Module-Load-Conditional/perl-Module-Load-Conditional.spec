@@ -1,8 +1,8 @@
 %global source0_hash 54c354a9393820f1ebc2a095da084ea0392dcbccb0cb38a187a71831cc60a730
 
 Name:           perl-Module-Load-Conditional
-Version:        0.74
-Release:        521%{?dist}
+Version:        7.001
+Release:        1%{?dist}
 Summary:        Looking up module information / loading at run-time
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Load-Conditional

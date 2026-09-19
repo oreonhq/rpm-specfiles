@@ -1,9 +1,9 @@
-%global source0_hash 3c77e014170dfffbd816e6ffc205e9842efb10be9f58ec16d3e8675b4925cddb
+%global source0_hash f7da4709c36b9ab5594216426d4c82a9f3d9629138120dbe7befbdd1a1dd1d44
 
 Summary: Python serial port access library
 Name: pyserial
-Version: 3.5
-Release: 16%{?dist}
+Version: 3.5b0
+Release: 1%{?dist}
 Source0:        https://files.pythonhosted.org/packages/source/p/pyserial/pyserial-3.5.tar.gz
 License: BSD-3-Clause
 URL: http://pypi.python.org/pypi/pyserial

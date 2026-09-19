@@ -1,8 +1,8 @@
 %global source0_hash fab30372e4c67bf5a46062da38d1d0c8756279feada866eb439fa29571a2dc7b
 
 Name:           perl-List-SomeUtils
-Version:        0.59
-Release:        9%{?dist}
+Version:        9999.13
+Release:        1%{?dist}
 Summary:        Provide the stuff missing in List::Util
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/List-SomeUtils

@@ -1,8 +1,8 @@
 %global source0_hash f6dd55b4280b25dea978221839864382560074e1d6933395faee2510c2db60ed
 
 Name:           perl-Text-Soundex
-Version:        3.05
-Release:        36%{?dist}
+Version:        20221231.000
+Release:        1%{?dist}
 Summary:        Implementation of the soundex algorithm
 # The original license was (Copyright only). Since 3.05 somebody (RJBS?)
 # added Perl license but kept the original license text.

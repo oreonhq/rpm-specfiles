@@ -1,8 +1,8 @@
 %global source0_hash 491ea1fb977de1c440d0a0c085f5148c11bbc39b4f5bc68ae5a5727399b07e08
 
 Name:           perl-Image-Xbm
-Version:        1.11
-Release:        4%{?dist}
+Version:        202402.28
+Release:        1%{?dist}
 Summary:        Load, create, manipulate and save xbm image files in Perl
 # t/xbm.t : GNU General Public License
 # t/xbm-badfile.t : Perl 5 License

@@ -2,8 +2,8 @@
 
 Summary:            Perl extension for generating XML
 Name:               perl-XML-Generator
-Version:            1.13
-Release:            8%{?dist}
+Version:            3.07
+Release:            1%{?dist}
 License:            GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:                https://metacpan.org/release/XML-Generator
 Source0:        https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/XML-Generator-%{version}.tar.gz

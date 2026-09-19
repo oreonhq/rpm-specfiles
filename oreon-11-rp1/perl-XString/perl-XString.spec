@@ -1,8 +1,8 @@
 %global source0_hash f247f55c19aee6ba4a1ae73c0804259452e02ea85a9be07f8acf700a5138f884
 
 Name:		perl-XString
-Version:	0.005
-Release:	18%{?dist}
+Version:	5.37.2
+Release:	1%{?dist}
 Summary:	Isolated String helpers from B
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/XString

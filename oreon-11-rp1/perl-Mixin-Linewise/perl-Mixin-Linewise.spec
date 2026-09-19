@@ -1,8 +1,8 @@
 %global source0_hash d28e88516ce9b5295c31631dcccdc0fc8f2ab7d8a5cc876bb1b20131087b01db
 
 Name:           perl-Mixin-Linewise
-Version:        0.111
-Release:        9%{?dist}
+Version:        20221231.000
+Release:        1%{?dist}
 Summary:        Write your linewise code for handles; this does the rest
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Mixin-Linewise

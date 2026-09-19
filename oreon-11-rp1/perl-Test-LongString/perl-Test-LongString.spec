@@ -1,8 +1,8 @@
 %global source0_hash abc4349eaf04d1bec1e464166a3018591ea846d8f3c5c9c8af4ac4905d3e974f
 
 Name:		perl-Test-LongString
-Version:	0.17
-Release:	33%{?dist}
+Version:	5.10.0
+Release:	1%{?dist}
 Summary:	Perl module to test long strings
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-LongString

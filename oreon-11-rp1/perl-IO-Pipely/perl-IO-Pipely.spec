@@ -1,8 +1,8 @@
 %global source0_hash 0e3fcd841a327efb549fa01b2083dc3695e72ea0c63303e56ed5161bf810413b
 
 Name:           perl-IO-Pipely
-Version:        0.006
-Release:        11%{?dist}
+Version:        1.367
+Release:        1%{?dist}
 Summary:        Portably create pipe() or pipe-like handles, one way or another
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Pipely

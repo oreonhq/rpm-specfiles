@@ -1,8 +1,8 @@
 %global source0_hash 83293737e803b43112830443fb5208ec5208a2e6ea512ed54ef8e4dd2b880827
 
 Name: 		perl-Number-Compare
-Version: 	0.03
-Release: 	42%{?dist}
+Version: 	3.12
+Release: 	1%{?dist}
 Summary: 	Perl module for numeric comparisons
 License: 	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/Number-Compare

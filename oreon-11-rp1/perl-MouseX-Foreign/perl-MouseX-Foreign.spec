@@ -1,8 +1,8 @@
 %global source0_hash ef4cfc50323bdfd0f13377bfb98f0860b4ad1dd91adf5e874401886bebd1fd8a
 
 Name:           perl-MouseX-Foreign
-Version:        1.000
-Release:        30%{?dist}
+Version:        44.0
+Release:        1%{?dist}
 Summary:        Extends non-Mouse classes as well as Mouse classes
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

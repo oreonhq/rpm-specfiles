@@ -1,7 +1,7 @@
 %global source0_hash 9a53c1b7c7f160e898e6cb5be9948d64141d2819ade2d7a873d0e87d1e83f666
 
 Name:           perl-Mail-AuthenticationResults
-Version:        2.20260216
+Version:        5.54
 Release:        1%{?dist}
 Summary:        Object Oriented Authentication-Results Headers
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

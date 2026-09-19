@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-Package-Generator
-Version:	1.106
-Release:	35%{?dist}
+Version:	5.03
+Release:	1%{?dist}
 Summary:	Generate new packages quickly and easily
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Package-Generator

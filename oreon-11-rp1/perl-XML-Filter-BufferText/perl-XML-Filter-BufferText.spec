@@ -1,8 +1,8 @@
 %global source0_hash 8fd2126d3beec554df852919f4739e689202cbba6a17506e9b66ea165841a75c
 
 Name:           perl-XML-Filter-BufferText
-Version:        1.01
-Release:        52%{?dist}
+Version:        11.11
+Release:        1%{?dist}
 Summary:        Filter to put all characters() in one event
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

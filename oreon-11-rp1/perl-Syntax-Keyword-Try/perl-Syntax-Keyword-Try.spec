@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Syntax-Keyword-Try
-Version:        0.31
-Release:        2%{?dist}
+Version:        5.45.1
+Release:        1%{?dist}
 Summary:        try/catch/finally syntax for perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Syntax-Keyword-Try/

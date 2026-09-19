@@ -4,8 +4,8 @@
 %bcond_without perl_Tie_RefHash_enables_optional_test
 
 Name:           perl-Tie-RefHash
-Version:        1.41
-Release:        521%{?dist}
+Version:        6.36
+Release:        1%{?dist}
 Summary:        Use references as hash keys
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tie-RefHash

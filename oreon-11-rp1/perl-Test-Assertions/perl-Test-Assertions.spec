@@ -1,8 +1,8 @@
 %global source0_hash fcdce41d57273881581adf680a20a6adf51a4c3b7e31c3f69866fb9109370280
 
 Name:           perl-Test-Assertions
-Version:        1.054
-Release:        48%{?dist}
+Version:        1.070
+Release:        1%{?dist}
 Summary:        Simple set of building blocks for both unit and runtime testing
 License:        GPL-2.0-only
 URL:            https://metacpan.org/release/Test-Assertions

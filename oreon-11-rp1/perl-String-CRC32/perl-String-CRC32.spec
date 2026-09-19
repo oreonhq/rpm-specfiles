@@ -1,8 +1,8 @@
 %global source0_hash 9706093b2d068b6715d35b4c58f51558e37960083202129fbb00a57e19a74713
 
 Name:           perl-String-CRC32
-Version:        2.100
-Release:        17%{?dist}
+Version:        2010.002
+Release:        1%{?dist}
 Summary:        Perl interface for cyclic redundancy check generation
 License:        LicenseRef-Fedora-Public-Domain
 URL:            https://metacpan.org/release/String-CRC32

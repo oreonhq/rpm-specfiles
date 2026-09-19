@@ -1,8 +1,8 @@
 %global source0_hash b2ed849d2f4cdd66467512daa3f143266d6df810c5fae9175b252c57bc1536dc
 
 Name:           perl-Package-Variant
-Version:        1.003002
-Release:        29%{?dist}
+Version:        6.59
+Release:        1%{?dist}
 Summary:        Parameterizable packages
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Package-Variant

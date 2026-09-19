@@ -1,8 +1,8 @@
 %global source0_hash da34ef9029f6849d6026201d49127d054ee6ac4b979c82210315f5721964a96f
 
 Name:           perl-Test-FailWarnings
-Version:        0.008
-Release:        37%{?dist}
+Version:        5.23.6
+Release:        1%{?dist}
 Summary:        Add test failures if warnings are caught
 License:        Apache-2.0
 

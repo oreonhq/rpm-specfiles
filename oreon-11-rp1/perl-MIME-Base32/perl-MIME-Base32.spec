@@ -1,7 +1,7 @@
 %global source0_hash ab21fa99130e33a0aff6cdb596f647e5e565d207d634ba2ef06bdbef50424e99
 
 Name:           perl-MIME-Base32
-Version:        1.303
+Version:        4.103
 Release:        1%{?dist}
 Summary:        Base32 encoder / decoder
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

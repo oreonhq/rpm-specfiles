@@ -1,8 +1,8 @@
 %global source0_hash d81e26ff6f8db10261f0087f96dc54367dcb49a9f3de8d53238f834ece19624b
 
 Name:           perl-MooX-TypeTiny
-Version:        0.002003
-Release:        14%{?dist}
+Version:        5.90129
+Release:        1%{?dist}
 Summary:        Optimized type checks for Moo + Type::Tiny
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

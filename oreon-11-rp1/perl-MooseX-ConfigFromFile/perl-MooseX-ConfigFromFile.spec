@@ -1,8 +1,8 @@
 %global source0_hash 9ad343cd9f86d714be9b54b9c68a443d8acc6501b6ad6b15e9ca0130b2e96f08
 
 Name:           perl-MooseX-ConfigFromFile
-Version:        0.14
-Release:        34%{?dist}
+Version:        2.05
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:        An abstract Moose role for setting attributes from a configfile
 URL:            https://metacpan.org/release/MooseX-ConfigFromFile

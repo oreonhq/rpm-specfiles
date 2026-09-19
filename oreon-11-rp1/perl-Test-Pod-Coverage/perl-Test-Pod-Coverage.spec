@@ -1,8 +1,8 @@
 %global source0_hash 48c9cca9f7d99eee741176445b431adf09c029e1aa57c4703c9f46f7601d40d4
 
 Name:           perl-Test-Pod-Coverage
-Version:        1.10
-Release:        32%{?dist}
+Version:        2020.02
+Release:        1%{?dist}
 Summary:        Check for pod coverage in your distribution
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Test-Pod-Coverage

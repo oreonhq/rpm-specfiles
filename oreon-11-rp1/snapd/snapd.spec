@@ -4,7 +4,7 @@
 
 Summary:        Tools to interact with snaps and the snap store
 Name:           snapd
-Version:        2.75.2
+Version:        2.78
 Release:        1%{?dist}
 License:        GPL-3.0-only
 URL:            https://snapcraft.io/

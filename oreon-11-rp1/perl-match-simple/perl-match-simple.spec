@@ -1,8 +1,8 @@
 %global source0_hash b7349a9fa926d503472998d1e0b8c3a7fcae0edc7ce30ada4ee756cdb252a37c
 
 Name:           perl-match-simple
-Version:        0.012
-Release:        8%{?dist}
+Version:        8.000001
+Release:        1%{?dist}
 Summary:        Simplified clone of smartmatch operator
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://search.cpan.org/dist/match-simple/

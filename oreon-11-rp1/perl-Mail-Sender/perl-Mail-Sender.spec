@@ -1,11 +1,11 @@
 %global source0_hash 4413eb49f520a8318151811ccb05a8d542973aada20aa503ad32f9ffc98a39bf
 
 Name:           perl-Mail-Sender
-Version:        0.903
+Version:        9999.32
 # I really wish CPAN maintainers would stop fscking around with versions.
 # we went from 0.900003 to 0.901
 Epoch:          1
-Release:        28%{?dist}
+Release:        1%{?dist}
 Summary:        Module for sending mails with attachments through an SMTP server
 
 # There is also a clause which says that it may not be used for SPAM.

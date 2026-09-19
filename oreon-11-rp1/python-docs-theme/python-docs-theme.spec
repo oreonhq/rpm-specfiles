@@ -1,7 +1,7 @@
 %global source0_hash 13e155fced78ede772857cb363d50ba14fe6ecef3a0f487d5de290350cc4be72
 
 Name:           python-docs-theme
-Version:        2025.12
+Version:        2026.7
 Release:        %autorelease
 Summary:        The Sphinx theme for the CPython docs and related projects
 

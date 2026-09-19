@@ -3,8 +3,8 @@
 Name:           perl-Params-Check
 # Epoch to compete with perl.spec
 Epoch:          1
-Version:        0.38
-Release:        521%{?dist}
+Version:        2.00
+Release:        1%{?dist}
 Summary:        Generic input parsing/checking mechanism
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Params-Check

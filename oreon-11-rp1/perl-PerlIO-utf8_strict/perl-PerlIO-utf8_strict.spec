@@ -1,8 +1,8 @@
 %global source0_hash bcd2848b72df290b5e984fae8b1a6ca96f6d072003cf222389a8c9e8e1c570cd
 
 Name:           perl-PerlIO-utf8_strict
-Version:        0.010
-Release:        12%{?dist}
+Version:        1.100860
+Release:        1%{?dist}
 Summary:        Fast and correct UTF-8 I/O
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/PerlIO-utf8_strict

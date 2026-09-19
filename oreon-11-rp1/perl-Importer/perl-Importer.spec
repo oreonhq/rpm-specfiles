@@ -1,8 +1,8 @@
 %global source0_hash e08fa84e13cb998b7a897fc8ec9c3459fcc1716aff25cc343e36ef875891b0ef
 
 Name:           perl-Importer
-Version:        0.026
-Release:        16%{?dist}
+Version:        5.25.7
+Release:        1%{?dist}
 Summary:        Alternative interface to modules that export symbols
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Importer

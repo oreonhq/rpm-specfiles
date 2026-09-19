@@ -2,8 +2,8 @@
 
 Name:		perl-Test-Perl-Critic
 Summary:	Use Perl::Critic in test programs
-Version:	1.04
-Release:	26%{?dist}
+Version:	20190309.001
+Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Perl-Critic
 Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-Perl-Critic-%{version}.tar.gz

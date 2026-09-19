@@ -1,10 +1,10 @@
-%global source0_hash 7e68e90b01f9eff71332b25001f85c75495fc4e3a836701876183c4bcfd0540a
+%global source0_hash 68c9d82dfe95fa65712e107010c9344e7d8b4afe8c975a7be0d273d939583a93
 
 %global pypi_name pytest_timeout
 
 Name:           python-pytest-timeout
-Version:        2.4.0
-Release:        6%{?dist}
+Version:        2.5.0
+Release:        1%{?dist}
 Summary:        py.test plugin to abort hanging tests
 
 # SPDX

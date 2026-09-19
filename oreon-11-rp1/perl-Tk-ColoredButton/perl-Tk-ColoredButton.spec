@@ -1,8 +1,8 @@
 %global source0_hash f217783a8960f255dd42c8d5e8e90bf9f115855f0f37c9226478c9f2e3eecf42
 
 Name:           perl-Tk-ColoredButton
-Version:        1.05
-Release:        41%{?dist}
+Version:        1.22
+Release:        1%{?dist}
 Summary:        Button widget with background gradient color
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tk-ColoredButton

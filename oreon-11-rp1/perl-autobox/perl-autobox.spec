@@ -1,8 +1,8 @@
 %global source0_hash 70751531ba78d768d6f4f77a32b1ea2d1959e76e37b6f89e5ce6930c06c60bf6
 
 Name:           perl-autobox
-Version:        3.0.2
-Release:        5%{?dist}
+Version:        20090426.1746
+Release:        1%{?dist}
 Summary:        Call methods on native types
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/autobox

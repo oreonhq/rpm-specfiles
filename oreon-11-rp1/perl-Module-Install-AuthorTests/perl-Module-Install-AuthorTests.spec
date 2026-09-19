@@ -1,8 +1,8 @@
 %global source0_hash 4025722de6357edf53c28501b00e7da92cd2f9fc611ba0753761a0e1dff32d88
 
 Name:           perl-Module-Install-AuthorTests
-Version:        0.002
-Release:        39%{?dist}
+Version:        20221231.000
+Release:        1%{?dist}
 Summary:        Designate tests only run by module authors
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-AuthorTests

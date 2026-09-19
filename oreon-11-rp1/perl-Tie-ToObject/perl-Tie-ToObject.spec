@@ -1,8 +1,8 @@
 %global source0_hash a31a0d4430fe14f59622f31db7f25b2275dad2ec52f1040beb030d3e83ad3af4
 
 Name:           perl-Tie-ToObject
-Version:        0.03
-Release:        51%{?dist}
+Version:        2.03
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:        Tie to an existing object
 Source:         https://cpan.metacpan.org/authors/id/N/NU/NUFFIN/Tie-ToObject-%{version}.tar.gz

@@ -1,8 +1,8 @@
 %global source0_hash a6bf0b23c5f6a938f74d73329384b059b5bf59f6bbb90385a414a1dc565b5905
 
 Name:           perl-Tk-Getopt
-Version:        0.52
-Release:        4%{?dist}
+Version:        202402.28
+Release:        1%{?dist}
 Summary:        User configuration window for Tk with interface to Getopt::Long
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tk-Getopt

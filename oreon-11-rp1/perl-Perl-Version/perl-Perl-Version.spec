@@ -1,7 +1,7 @@
 %global source0_hash a45a6e3f0d92fcb33214248a52d443e2b8ffd5fffdaf09b54cb7cb9dff588004
 
 Name:           perl-Perl-Version
-Version:        1.019
+Version:        20260914.001
 Release:        1%{?dist}
 Summary:        Parse and manipulate Perl version strings
 License:        Artistic-2.0

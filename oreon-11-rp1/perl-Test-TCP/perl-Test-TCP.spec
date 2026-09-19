@@ -1,8 +1,8 @@
 %global source0_hash 3e53c3c06d6d0980a2bfeb915602b714e682ee211ae88c11748cf2cc714e7b57
 
 Name:           perl-Test-TCP
-Version:        2.22
-Release:        19%{?dist}
+Version:        5.13.6
+Release:        1%{?dist}
 Summary:        Testing TCP program
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-TCP

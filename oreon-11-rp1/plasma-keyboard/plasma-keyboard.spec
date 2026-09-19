@@ -8,7 +8,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-keyboard
-Version:        6.7.4
+Version:        6.7.90
 Release: 1%{?dist}
 Summary: Virtual keyboard for Plasma based on Qt Virtual Keyboard
 

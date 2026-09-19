@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Params-Classify
-Version:        0.015
-Release:        28%{?dist}
+Version:        2.00
+Release:        1%{?dist}
 Summary:        Argument type classification
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Params-Classify

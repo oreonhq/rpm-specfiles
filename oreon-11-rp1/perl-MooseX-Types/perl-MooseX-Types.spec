@@ -1,8 +1,8 @@
 %global source0_hash a5374c7b0273220239b19dda88b824dd73b95398c913c5c9e305edbdb5e0270f
 
 Name:           perl-MooseX-Types
-Version:        0.51
-Release:        3%{?dist}
+Version:        6.36
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:        Organize your Moose types in libraries
 URL:            https://metacpan.org/dist/MooseX-Types

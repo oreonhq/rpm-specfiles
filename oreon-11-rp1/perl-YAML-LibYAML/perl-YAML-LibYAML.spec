@@ -9,8 +9,8 @@
 
 Name:           perl-YAML-LibYAML
 Epoch:          1
-Version:        0.904.0
-Release:        5%{?dist}
+Version:        1.321
+Release:        1%{?dist}
 Summary:        Perl YAML Serialization using XS and libyaml
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/YAML-LibYAML

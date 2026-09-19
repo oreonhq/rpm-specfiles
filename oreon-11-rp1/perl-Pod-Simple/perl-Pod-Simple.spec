@@ -1,10 +1,10 @@
-%global source0_hash ab3e3845337b78ee14b50fdbc68197c71f5ea66ebdde0870dee4e642c305c514
+%global source0_hash 3297cf3c078de9d8297942423ec6ab59e85e30dfb38b782242699e386727c63a
 
 Name:           perl-Pod-Simple
 # Epoch to compete with perl.spec
 Epoch:          1
-Version:        3.47
-Release:        4%{?dist}
+Version:        3.48
+Release:        1%{?dist}
 Summary:        Framework for parsing POD documentation
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Simple

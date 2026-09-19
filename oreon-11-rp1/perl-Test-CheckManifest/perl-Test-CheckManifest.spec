@@ -1,8 +1,8 @@
 %global source0_hash 092df9d93150c115fb071fad7ce521152c50bb5c5f9d1315f7298349201517db
 
 Name:           perl-Test-CheckManifest
-Version:        1.43
-Release:        8%{?dist}
+Version:        5.39.8
+Release:        1%{?dist}
 Summary:        Check if your Manifest matches your distro
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Test-CheckManifest

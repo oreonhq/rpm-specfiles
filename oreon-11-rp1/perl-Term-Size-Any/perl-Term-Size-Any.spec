@@ -4,8 +4,8 @@
 %bcond_without perl_Term_Size_Any_enabels_optional_test
 
 Name:           perl-Term-Size-Any
-Version:        0.002
-Release:        46%{?dist}
+Version:        5.63
+Release:        1%{?dist}
 Summary:        Retrieve terminal size
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Term-Size-Any

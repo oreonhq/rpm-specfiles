@@ -1,8 +1,8 @@
 %global source0_hash c9ecc13376d0ff7dba481977337c33ea74e5d266a428b6af31552a2919ef7ef8
 
 Name:           perl-MooseX-MarkAsMethods
-Version:        0.15
-Release:        38%{?dist}
+Version:        2.003
+Release:        1%{?dist}
 Summary:        Mark overload code symbols as methods
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+

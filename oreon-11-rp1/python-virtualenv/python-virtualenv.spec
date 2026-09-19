@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-virtualenv
-Version:        21.7.11
+Version:        21.7.15
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Virtual Python Environment builder
