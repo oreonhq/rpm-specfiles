@@ -1,9 +1,9 @@
-%global source0_hash 6105dd5ec6369a99b525f9bcd72557011efce932d8dcf4b44fa881a35e8b5165
+%global source0_hash ab8a1ca83aeaf57360023ac6e7fcfff531b99dbc197181a22a9ea14982c0e828
 
 %bcond_without bootstrap
 
 Name:           maven-filtering
-Version:        4.0.0-beta-1
+Version:        3.5.1
 Release:        %autorelease
 Summary:        Shared component providing resource filtering
 License:        Apache-2.0
