@@ -1,10 +1,10 @@
-%global source0_hash 79c3ea3902fff20705e3fcda104f19f5b0c1b94c751a0fee995068f17fe2524f
+%global source0_hash 1ac6e1dba048930f71fa152796b8a580d1b90e0af754542dcabd5bd731e4c66c
 
 %global stable_kf6 stable
 
 
 Name:           tokodon 
-Version:        26.04.3
+Version:        26.08.1
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv3 and CC0 and BSD and LGPLv2+ and GPLv3+ and GPLv2 - review is highly recommended.
 License:        GPL-3.0-only AND CC0-1.0 AND LicenseRef-Callaway-BSD AND LicenseRef-Callaway-LGPLv2+ AND GPL-3.0-or-later AND GPL-2.0-only

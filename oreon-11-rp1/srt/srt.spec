@@ -3,8 +3,8 @@
 %global rc %{nil}
 
 Name:           srt
-Version:        1.5.4
-Release:        4%{?dist}
+Version:        1.5.7
+Release:        1%{?dist}
 Summary:        Secure Reliable Transport protocol tools
 
 License:        MPL-2.0

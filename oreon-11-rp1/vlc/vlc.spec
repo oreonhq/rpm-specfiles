@@ -41,7 +41,7 @@
 
 Name:		vlc
 Epoch:		1
-Version:	3.0.23
+Version:	3.0.24-rc1
 Release:	%autorelease
 Summary:	The cross-platform open-source multimedia framework, player and server
 License:	GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause

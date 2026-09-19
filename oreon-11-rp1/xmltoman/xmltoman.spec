@@ -1,8 +1,8 @@
 %global source0_hash 948794a316aaecd13add60e17e476beae86644d066cb60171fc6b779f2df14b0
 
 Name:           xmltoman
-Version:        0.4
-Release:        34%{?dist}
+Version:        0.6
+Release:        1%{?dist}
 Summary:        Scripts for converting XML to roff or HTML
 
 License:        GPL-2.0-or-later

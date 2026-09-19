@@ -7,7 +7,7 @@
 %global commitdate 20230603
 
 Name:           vid.stab
-Version:        1.1.1
+Version:        1.1.2
 Release:        %autorelease
 Summary:        Video stabilize library for fmpeg, mlt or transcode
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

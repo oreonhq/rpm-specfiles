@@ -1,8 +1,8 @@
 %global source0_hash 3e15d4f0e22d8ddbfbb9f5d77db43eacd7a304029bf25a6166cc63caa96d04ba
 
 Name:		xcb-util-renderutil
-Version:	0.3.10
-Release:	9%{?dist}
+Version:	1.17.0
+Release:	1%{?dist}
 Summary:	Convenience functions for the Render extension
 License:	X11-distribute-modifications-variant AND HPND-sell-variant
 URL:		http://xcb.freedesktop.org

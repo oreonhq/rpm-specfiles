@@ -15,8 +15,8 @@ Speex, WavPack, TrueAudio files, as well as APE Tags.}
 
 Name:       taglib
 Summary:    Audio Meta-Data Library
-Version:    2.3
-Release:    2%{?dist}
+Version:    2.3.2
+Release:    1%{?dist}
 License:    (LGPL-2.1-only OR MPL-1.1) AND BSD-2-Clause AND LGPL-2.1-only
 URL:        https://taglib.github.io/
 Source0:    https://taglib.github.io/releases/taglib-%{version}%{?beta}.tar.gz

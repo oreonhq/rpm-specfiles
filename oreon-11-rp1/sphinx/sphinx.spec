@@ -21,7 +21,7 @@
 
 
 Name:		sphinx
-Version:	2.2.11-release-release
+Version:	2.3.2-beta
 Release:	1%{?dist}
 Summary:	Free open-source SQL full-text search engine
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

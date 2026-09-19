@@ -1,8 +1,8 @@
 %global source0_hash aae608dfe8213dfd05d909a57718ef82f30722c392344583d3f39050c7f29a80
 
 Name:		xxhash
-Version:	0.8.3
-Release:	4%{?dist}
+Version:	2.3.0
+Release:	1%{?dist}
 Summary:	Extremely fast hash algorithm
 
 #		The source for the library (xxhash.c and xxhash.h) is BSD-2-Clause

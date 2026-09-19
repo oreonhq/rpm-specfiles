@@ -15,7 +15,7 @@
 # Instead, I think the cleaner approach is to package them individually, unless their numbers explode.
 #
 
-%global tl_version 2025
+%global tl_version 2026
 
 Name:           texlive
 Epoch:          12

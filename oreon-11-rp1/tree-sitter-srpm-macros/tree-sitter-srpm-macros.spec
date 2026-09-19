@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           tree-sitter-srpm-macros
-Version:        0.4.2
+Version:        0.27.0
 Release:        %autorelease
 Summary:        RPM macros for Tree-sitter parsers
 License:        MIT

@@ -3,7 +3,7 @@
 #define _version_suffix
 
 Name:           spice-gtk
-Version:        0.42
+Version:        0.43
 Release:        %autorelease
 Summary:        A GTK+ widget for SPICE clients
 

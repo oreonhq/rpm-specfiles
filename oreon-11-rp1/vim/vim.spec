@@ -41,7 +41,7 @@
 %define baseversion 9.2
 # get bug url from /etc/os-release
 %define bugurl %(source /etc/os-release; echo ${BUG_REPORT_URL})
-%define patchlevel 148
+%define patchlevel 1119
 %define vimdir vim92
 # Git tags use zero-padded patch (v9.2.0148), archive dir vim-9.2.0148 (same tree as vim.org unix tarball)
 %define vim_github_tag v%{baseversion}.%(LANG=C printf '%%04d' %{patchlevel})
@@ -57,7 +57,7 @@ Summary: The VIM editor
 URL:     https://www.vim.org/
 Name: vim
 Version: %{baseversion}.%{patchlevel}
-Release: 4%{?dist}
+Release: 1%{?dist}
 Epoch: 2
 # swift.vim contains Apache 2.0 with runtime library exception:
 # which is taken as Apache-2.0 WITH Swift-exception - reported to legal as https://gitlab.com/fedora/legal/fedora-license-data/-/issues/188

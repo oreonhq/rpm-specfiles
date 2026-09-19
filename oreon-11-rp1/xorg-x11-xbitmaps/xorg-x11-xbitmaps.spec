@@ -6,7 +6,7 @@
 
 Summary: X.Org X11 application bitmaps
 Name: xorg-x11-%{pkgname}
-Version: 1.1.4
+Version: 2.5.1
 Release: 1%{?dist}
 License: HPND AND ICU
 URL: http://www.x.org

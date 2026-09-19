@@ -5,8 +5,8 @@
 
 
 Name:           spirv-headers
-Version:        1.5.5
-Release:        2%{?dist}
+Version:        2026.08.0
+Release:        1%{?dist}
 Summary:        Header files from the SPIR-V registry
 
 License:        MIT
