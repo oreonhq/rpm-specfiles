@@ -76,7 +76,7 @@ export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %ldconfig_scriptlets
 
 %files
-%doc docs/COPYING* ChangeLog README TODO
+%doc docs/COPYING* ChangeLog README.md TODO
 %{_libdir}/*.so.*
 %exclude %{_datadir}/zziplib/*.cmake
 %exclude %{_libdir}/cmake/zziplib/*.cmake
