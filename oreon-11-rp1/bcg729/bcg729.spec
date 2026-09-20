@@ -12,9 +12,7 @@ Source0:       https://github.com/BelledonneCommunications/bcg729/archive/%{vers
 # Source1:       http://www.belledonne-communications.com/downloads/bcg729-patterns.zip
 
 # Fix cmake installation dir
-Patch0:        bcg729_cmakedir.patch
 # Increase minimum cmake version to 3.5
-Patch1:        bcg729_cmakever.patch
 
 BuildRequires: cmake
 BuildRequires: gcc
