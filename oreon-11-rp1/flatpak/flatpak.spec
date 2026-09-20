@@ -267,6 +267,8 @@ fi
 %{_unitdir}/flatpak-add-flathub-repo.service
 %endif
 
+%{_datadir}/flatpak/triggers/
+%{_datadir}/selinux/devel/include/distributed/flatpak.if
 %files devel
 %{_datadir}/gir-1.0/Flatpak-1.0.gir
 %{_datadir}/gtk-doc/
