@@ -64,7 +64,7 @@ make install DESTDIR=%{buildroot} doc_DATA= testsdir=%{_testsdir}
 rm %{buildroot}%{_libdir}/liblutok.la
 
 %files
-%doc AUTHORS COPYING NEWS README
+%doc AUTHORS COPYING NEWS README.md
 %{_libdir}/liblutok.so.3
 %{_libdir}/liblutok.so.3.0.0
 

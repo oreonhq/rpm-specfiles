@@ -232,7 +232,6 @@ fi
 %{_datadir}/dbus-1/system.d/org.freedesktop.Flatpak.SystemHelper.conf
 %{_datadir}/dbus-1/system-services/org.freedesktop.Flatpak.SystemHelper.service
 %{_datadir}/fish/
-%{_datadir}/%{name}
 %{_datadir}/polkit-1/actions/org.freedesktop.Flatpak.policy
 %{_datadir}/polkit-1/rules.d/org.freedesktop.Flatpak.rules
 %{_datadir}/zsh/site-functions
@@ -282,7 +281,6 @@ fi
 
 %files selinux
 %{_datadir}/selinux/packages/flatpak.pp.bz2
-%{_datadir}/selinux/devel/include/contrib/flatpak.if
 
 %files session-helper
 %license COPYING

@@ -71,6 +71,7 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.d
 %{_kf6_datadir}/icons/hicolor/*/apps/org.kde.%{name}.*
 %{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
 
+%{_datadir}/config.kcfg/ktripsettings.kcfg
 %changelog
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
