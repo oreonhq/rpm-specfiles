@@ -8,9 +8,9 @@
 %endif
 
 Name:           perl-BSD-Resource
-Version:        1.291.100
+Version:        5.8.1
 %global module_version 1.2911
-Release:        31%{?dist}
+Release:        1%{?dist}
 Summary:        BSD process resource limit and priority functions
 # No matter what the pm and xs headers say, this is stated in the POD and,
 # according to upstream changelog for 1.2905, is correct.
@@ -50,7 +50,7 @@ and priorities.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n BSD-Resource-%{module_version} 
+%setup -q -n BSD-Resource-1.2911 
 
 %build
 perl Makefile.PL INSTALLDIRS=vendor OPTIMIZE="%{optflags}" NO_PACKLIST=1

@@ -1,4 +1,4 @@
-%global source0_hash 1c1285d911027d276f235b32a888ee7425c9ab356ee62cd126c4b3ee3ea659b3
+%global source0_hash a8e285cd14bc7f40daae8028bc912e1d0c53bb9ac464659ad64a36cc5e2bf35f
 %global source1_hash 114543d9f19a6bfeb5bca43686aea173d38755a3db1f2eec112647ae92c6f544
 
 # Run optional test
@@ -8,7 +8,7 @@
 %global tzversion 2026b
 
 Name:           perl-DateTime-TimeZone
-Version:        2.68
+Version:        2.69
 Release:        1%{?dist}
 Summary:        Time zone object base class and factory
 # tzdata%%{tzversion}.tar.gz archive:   LicenseRef-Public-Domain
@@ -17,7 +17,7 @@ Summary:        Time zone object base class and factory
 # upstream or locally:                  LicenseRef-Public-Domain
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Public-Domain
 URL:            https://metacpan.org/release/DateTime-TimeZone
-Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-TimeZone-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.69.tar.gz
 %if %{defined tzversion}
 Source1:        https://data.iana.org/time-zones/releases/tzdata%{tzversion}.tar.gz
 %endif
@@ -139,7 +139,7 @@ with "%{_libexecdir}/%{name}/test".
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %if !%{defined perl_bootstrap} && %{defined tzversion}
-%setup -q -T -a 1 -c -n tzdata-%{tzversion}
+%setup -q -T -a 1 -c -n DateTime-TimeZone-%{version}
 %endif
 %setup -q -T -b 0 -n DateTime-TimeZone-%{version}
 %patch -P0 -p1

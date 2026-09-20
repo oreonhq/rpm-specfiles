@@ -1,4 +1,4 @@
-%global source0_hash 32b8a565b70b6ba81d9ad68070de4561dfc8462be12288725a267a90423c0fa6
+%global source0_hash 2a74cbf1e49984cb01f75ac4b19a237f24de6ce199766858aeb9ab3aae2b95fa
 
 %global libname solv
 
@@ -172,7 +172,7 @@ Python 3 version.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n libsolv-%{version}
 
 %build
 %cmake -GNinja                                            \

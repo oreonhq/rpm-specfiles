@@ -1,14 +1,14 @@
-%global source0_hash b59998e0e7f2b683d04999d968ef29f9b9933cdb2c85ffc83cf1505bc3efccf1
+%global source0_hash b974291dbd87ec067801667d738b5f08ced9ad2cd5cfc64b9b06366cb4aca982
 
 %global goipath github.com/snapcore/snapd
 
 Summary:        Tools to interact with snaps and the snap store
 Name:           snapd
-Version:        2.75.2
+Version:        2.78
 Release:        1%{?dist}
 License:        GPL-3.0-only
 URL:            https://snapcraft.io/
-Source0:        https://github.com/canonical/snapd/releases/download/%{version}/%{name}_%{version}.vendor.tar.xz
+Source0: https://codeload.github.com/canonical/snapd/tar.gz/refs/tags/2.78
 
 BuildRequires:  golang
 BuildRequires:  systemd-devel

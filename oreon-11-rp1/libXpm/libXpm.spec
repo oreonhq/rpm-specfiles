@@ -1,4 +1,4 @@
-%global source0_hash 64b31f81019e7d388c822b0b28af8d51c4622b83f1f0cb6fa3fc95e271226e43
+%global source0_hash ad3576d689221a39dc728f0e0dc02ca7bb6a0d724c9a77fd1bfa1e9af83be900
 
 Summary: X.Org X11 libXpm runtime library
 Name: libXpm

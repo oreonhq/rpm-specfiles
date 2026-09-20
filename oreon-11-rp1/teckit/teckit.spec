@@ -132,7 +132,7 @@ cp -p %{SOURCE0} teckit-%{version}.tar.xz
 cp %{SOURCE3} .
 bash repackage.sh %{version}
 test -f "$_repack" || { echo "teckit repackage failed: $_repack missing" >&2; exit 1; }
-%setup -q -c -T -D -n teckit-%{version}_repackaged
+%setup -q -c -T -D -n %{name}-%{version}
 tar xJf "$_repack" --strip-components=1
 # Remove bundled libraries
 rm -r zlib-*/*.{c,h} SFconv/expat

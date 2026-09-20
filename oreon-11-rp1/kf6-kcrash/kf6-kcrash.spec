@@ -1,4 +1,4 @@
-%global source0_hash decb363261fe5f6df984fa0cfa42243aca9eea352045b18ffe1b86a0bd5b1736
+%global source0_hash b17f8242309e1502119c48b1ef5059a396a3068596a84fb79fdef6d9e2cd4f49
 
 %global framework kcrash
 
@@ -42,7 +42,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kcrash-%{version} -p1
 
 
 %build

@@ -1,4 +1,4 @@
-%global source0_hash cd4c88c9b7311cb6785db71c0ed64f5430c9d5b3454e0158314b2ef25ace3e61
+%global source0_hash 1dbaac44e7579d5bc8847ca8db4b2e8b9fd3961041f35ee20def4958301e1089
 
 Name:           openal-soft
 Version:        1.25.2

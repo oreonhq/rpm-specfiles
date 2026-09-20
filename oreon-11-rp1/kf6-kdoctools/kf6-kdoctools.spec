@@ -1,4 +1,4 @@
-%global source0_hash 1e1cb8bbf53e4f0482a916e1db9e202c8a8e8f4f2264dbcf98e837876ef83fae
+%global source0_hash b90b42ab222a3034729e517d0c06258abf6bdc28591ec78ad56f24aebbaaed94
 
 %global framework kdoctools
 
@@ -48,7 +48,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kdoctools-%{version} -p1
 
 %build
 %cmake_kf6

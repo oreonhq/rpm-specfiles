@@ -1,4 +1,4 @@
-%global source0_hash 6cba2f9f2cd887d905faeb99e0e51a307b217920d1bbf3e9cfbb2e8178a2deda
+%global source0_hash 2783a032f443cc886dad41aa6d5fae3dabf23dec00ee7ec2cfb27ef67ebcf529
 %global source1_hash 92061b323cd1ee76fa33a052a91c7c43bc211772085c374b4135aada24fe9135
 
 Summary: Command-line tools and library for transforming PDF files

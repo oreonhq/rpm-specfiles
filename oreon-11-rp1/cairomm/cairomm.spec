@@ -10,7 +10,7 @@
 
 Name:           cairomm
 Summary:        C++ API for the cairo graphics library
-Version:        1.18.1
+Version:        1.19.1
 Release:        %autorelease
 
 URL:            https://www.cairographics.org
@@ -165,7 +165,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{gpgverify} \
     --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
-%autosetup -p1
+%autosetup -p1 -n cairomm-1.14.5
 # Fix stray executable bit:
 chmod -v a-x NEWS
 

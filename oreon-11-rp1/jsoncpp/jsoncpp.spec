@@ -1,4 +1,4 @@
-%global source0_hash f93b6dd7ce796b13d02c108bc9f79812245a82e577581c4c9aabe57075c90ea2
+%global source0_hash 51828cf3574281d2b79ec2a1c56a9e4c20cc1103711321ea96384cffb8d2d904
 
 # Build documentation in HTML with images
 %bcond_without jsoncpp_enables_doc

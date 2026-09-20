@@ -1,4 +1,4 @@
-%global source0_hash 66a47fc170ea074cce8b916fa313f309d7c9497bd2132e0598d4b63bbad2ac88
+%global source0_hash 93cb9c1df2630807c04bf8c30312e75ae3bb466c77dd9b29bb2c752e71d34a26
 
 %global framework kwallet
 
@@ -73,7 +73,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kwallet-%{version} -p1
 
 %build
 %cmake_kf6

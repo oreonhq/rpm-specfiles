@@ -10,8 +10,8 @@
 
 Name:           perl-DateTime-Format-Builder
 # 0.83 in reality, but rpm can't get it
-Version:        0.8300
-Release:        17%{?dist}
+Version:        9999.13
+Release:        1%{?dist}
 Summary:        Create DateTime parser classes and objects        
 # examples/W3CDTF.pm:               GPL-1.0-or-later OR Artistic-1.0-Perl
 # examples/MySQL.pm:                GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -72,7 +72,7 @@ is expected.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n DateTime-Format-Builder-%{real_version}
+%setup -q -n DateTime-Format-Builder-0.83
 
 # POD doesn't like E<copy> very much...
 perl -pi -e 's/E<copy>/(C)/' `find lib/ -type f`

@@ -1,4 +1,4 @@
-%global source0_hash 2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333
+%global source0_hash 1c4b4068d67061f2a2231ad2b5422e77acea1487ea9890f6320af614f4373dce
 
 Name:           compat-lua
 Version:        5.5.1

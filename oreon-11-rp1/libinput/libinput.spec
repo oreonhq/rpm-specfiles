@@ -1,4 +1,4 @@
-%global source0_hash af04645cef8ec4ef9b571664828086ea5a610c6f3e872880055c7fe2c9377de5
+%global source0_hash 3a6065c07b118c08d0c7b7b85a265ecb050a8cfc91eeb360890d768a51b4cce9
 
 %global udevdir %(pkg-config --variable=udevdir udev)
 

@@ -1,15 +1,15 @@
-%global source0_hash d0b128ec34152540f05187b8412808ed3661aa57e81c1cf959d06c35295b1f3a
+%global source0_hash 461fe5f6a189e6dc85f8776f7534fdb9821ecb3e04d839268d31353f9b429d7e
 
 # Store keys in a temp directory
 %global gnupghome %(mktemp --directory)
 
 Name:           perl-Module-Signature
-Version:        0.93
-Release:        3%{?dist}
+Version:        0.96
+Release:        1%{?dist}
 Summary:        CPAN signature management utilities and modules
 License:        CC0-1.0
 URL:            https://metacpan.org/release/Module-Signature
-Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Signature-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/Module-Signature-0.96.tar.gz
 
 
 

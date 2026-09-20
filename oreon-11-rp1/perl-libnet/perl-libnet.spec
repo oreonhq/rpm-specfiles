@@ -14,8 +14,8 @@
 %bcond_without perl_libnet_enables_ssl
 
 Name:           perl-libnet
-Version:        3.15
-Release:        522%{?dist}
+Version:        5.43.6
+Release:        1%{?dist}
 Summary:        Perl clients for various network protocols
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/libnet
@@ -108,7 +108,7 @@ protocols used in the internet community.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n libnet-%{base_version}
+%setup -q -n libnet-3.15
 %patch -P0 -p1
 %patch -P1 -p1
 

@@ -1,4 +1,4 @@
-%global source0_hash e1ac2fab1e3a6d2d998d3440c600067365bdc7dbf0c8f2b2059cbce4b4c83173
+%global source0_hash 38067bdf10c96487f99730f42d03193c3d446726711eca8d1552170439b32714
 
 # Run extra test
 %if ! (0%{?rhel})
@@ -9,11 +9,11 @@
 
 Name:		perl-Cpanel-JSON-XS
 Summary:	JSON::XS for Cpanel, fast and correct serializing
-Version:	4.42
+Version:	4.52
 Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Cpanel-JSON-XS
-Source0:	https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.52.tar.gz
 Patch0:		Cpanel-JSON-XS-4.20-signature.patch
 # Module Build
 BuildRequires:	coreutils

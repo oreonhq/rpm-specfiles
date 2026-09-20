@@ -1,4 +1,4 @@
-%global source0_hash 513051dff8417da1819d6ae89d6c21a03654c9a60891df60df6aba13df19d21b
+%global source0_hash 4ae9ef9cf1fc55fef59328d25a70b28572b6f6a787394c3d292f5ed378f19840
 
 %global framework kirigami-addons
 %global orig_name kirigami-addons
@@ -82,7 +82,7 @@ and header files for developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version}
+%autosetup -n kirigami-addons-%{version}
 
 %build
 %cmake_kf6 \

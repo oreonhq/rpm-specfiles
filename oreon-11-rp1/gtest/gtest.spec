@@ -1,4 +1,4 @@
-%global source0_hash 65fab701d9829d38cb77c14acdc431d2108bfdbf8979e40eb8ae567edf10b27c
+%global source0_hash 6e3191c1455468b3fc35a417fb565c1c5071aee1b7e7f85e30cf48a98d37d8b5
 
 Summary:        Google C++ testing framework
 Name:           gtest

@@ -1,4 +1,4 @@
-%global source0_hash ff97fdfb7f561d3e6813b4f6a2145259e7c2eff43cc0e63f3fd031d0b6266032
+%global source0_hash 767d2275254ce0efeaeac64419ff9f4f0ad470d134ef672f5c556b2abb786bcb
 
 Name:          gssdp
 Version:       1.6.6

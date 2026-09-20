@@ -1,4 +1,4 @@
-%global source0_hash 8c2b6fb279b5b42e9ac92ade71832e485852647b53607c43baaafbbcecea04e4
+%global source0_hash c1012c8871d71b65872fd5ff1a9d6b0838a55683a03e85ba97479ce57129c736
 
 Name:           libfido2
 

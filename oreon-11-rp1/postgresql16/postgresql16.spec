@@ -516,7 +516,7 @@ test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "o
   sha256sum -c %{SOURCE17}
 %endif
 )
-%setup -q -a 12 -n postgresql-%{version}
+%setup -q -a 12 -n postgresql-16.13
 %patch 1 -p1
 %patch 2 -p1
 %patch 5 -p1

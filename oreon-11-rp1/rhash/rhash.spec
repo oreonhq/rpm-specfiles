@@ -1,4 +1,4 @@
-%global source0_hash 6db837e7bbaa7c72c5fd43ca5af04b1d370c5ce32367b9f6a1f7b49b2338c09a
+%global source0_hash 9f6019cfeeae8ace7067ad22da4e4f857bb2cfa6c2deaa2258f55b2227ec937a
 
 Name:           rhash
 Version:        1.4.6
@@ -54,7 +54,7 @@ developing applications that use lib%{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n RHash-%{version}
+%setup -q -n %{name}-%{version}
 sed -i -e '/^INSTALL_SHARED/s/644/755/' librhash/Makefile
 
 

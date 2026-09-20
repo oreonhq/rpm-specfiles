@@ -1,4 +1,4 @@
-%global source0_hash fe40bcf0ae1a09070eba24088a5eb9810efe57453779ec1e20a55080c6dc2c87
+%global source0_hash 8bdf310967f484503fa51714cf97bff0723d9b673e0eecbf92b3f97c060c8ccb
 
 Summary: X Composite Extension library
 Name: libXcomposite

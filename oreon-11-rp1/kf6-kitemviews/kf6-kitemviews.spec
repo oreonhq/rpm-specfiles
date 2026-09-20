@@ -1,4 +1,4 @@
-%global source0_hash 9e6355cf1264756d3b38254181e46e3103e531f0f1613ae1c158d4f9e541576e
+%global source0_hash 9452f2b0cc5dd0214b88c4ce33297866be89af4177af14f5390cfb616e49c153
 
 %global		framework kitemviews
 
@@ -40,7 +40,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kitemviews-%{version} -p1
 
 %build
 %cmake_kf6

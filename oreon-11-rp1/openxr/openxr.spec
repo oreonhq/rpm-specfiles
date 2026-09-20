@@ -1,4 +1,4 @@
-%global source0_hash 89105178608351340325177b9d54922cf38db2c0bbf5e13e9b0dc88e9e49f397
+%global source0_hash a3b97a36f11abe256a7ea1668a0a468aac9b738e94bea6b468f0ae31ad537a46
 
 %global         pkgname        OpenXR-SDK-Source
 %global         libmajor 1
@@ -49,7 +49,7 @@ Headers and development files for OpenXR.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{pkgname}-release-%{version}
+%autosetup -n OpenXR-SDK-Source-release-%{version}
 %generate_buildrequires
 
 %build

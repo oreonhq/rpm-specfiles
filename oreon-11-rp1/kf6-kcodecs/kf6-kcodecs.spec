@@ -1,4 +1,4 @@
-%global source0_hash 0480fc5319346b0e24c6e363abce883a889735a7b71ad56d75eae2f7ae553d99
+%global source0_hash a42c79ff3237b73789d1c63cdfd848c0d59671ce5e93723a2efa128f00cb3450
 
 %global		framework kcodecs
 
@@ -39,7 +39,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kcodecs-%{version} -p1
 
 %build
 %cmake_kf6

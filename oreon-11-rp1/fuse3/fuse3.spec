@@ -76,7 +76,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 signify -V -m  '%{SOURCE0}' -p '%{SOURCE2}'
 %endif
 
-%autosetup -p1 -n fuse-%{version}
+%autosetup -p1 -n fuse-3.18.3
 
 %build
 export LC_ALL=en_US.UTF-8

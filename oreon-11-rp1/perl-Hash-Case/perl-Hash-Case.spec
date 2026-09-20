@@ -3,7 +3,7 @@
 %global cpan_version 1.07
 
 Name:           perl-Hash-Case
-Version:        1.70.0
+Version:        4.05
 Release:        1%{?dist}
 Summary:        Base class for hashes with key-casing requirements
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -46,7 +46,7 @@ with "%{_libexecdir}/%{name}/test".
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%setup -q -n Hash-Case-%{cpan_version}
+%setup -q -n Hash-Case-1.07
 
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

@@ -1,4 +1,4 @@
-%global source0_hash 340be509137103677ea30798d6ffe64a991148dae333b79a5bc0744e219fde2f
+%global source0_hash 8eb93c14740146e04c28ac25874e106b61c7d3ab66a36d07099e938985ef0680
 
 Name: rdma-core
 Version: 65.0

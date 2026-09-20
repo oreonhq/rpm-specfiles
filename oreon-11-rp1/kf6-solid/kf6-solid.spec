@@ -1,4 +1,4 @@
-%global source0_hash 1f46e8a508cc39ae20736861b2d19a73148333f2e23495c115aa2680538a86c2
+%global source0_hash bdbfdc9f26b87e12b951097825af2956f2dee3f14c701d780277b69701f2c74e
 
 %global framework solid
 
@@ -55,7 +55,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n solid-%{version} -p1
 
 %build
 %cmake_kf6

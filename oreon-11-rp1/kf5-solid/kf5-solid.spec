@@ -66,7 +66,7 @@ developing applications that use %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n solid-%{version} -p1
 # do not build the solid-power executable, it conflicts with KF6 Solid
 sed -i -e 's/if(WITH_NEW_SOLID_JOB AND WITH_NEW_POWER_ASYNC_API)/if(0)/g' \
   src/tools/CMakeLists.txt

@@ -1,4 +1,4 @@
-%global source0_hash a9b63eea997abb9ee6a8b4fbb515831c841f471af845a09de443b28003874bec
+%global source0_hash 7f71884e5faf56fb0e823f3848599cf9b5a9afce51c90982baeb64f635233ebf
 
 Summary: X.Org X11 libxkbfile runtime library
 Name: libxkbfile

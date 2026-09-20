@@ -1,4 +1,4 @@
-%global source0_hash cd05c9589b9f86ecf044c10a2269822bc9eb001eced2582cfffd658b0a50c243
+%global source0_hash c926ff491cbd9a331a589160811bd97ab1749b4d5198a519338f2cdfabe6940a
 
 # pkgconf acts as pkgconfig
 %bcond pkgconfig_compat 1

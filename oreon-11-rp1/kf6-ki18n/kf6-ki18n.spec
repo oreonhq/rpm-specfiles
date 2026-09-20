@@ -1,4 +1,4 @@
-%global source0_hash 9037f3caa67768869f00ee257dbb35b81febe6ad600ed0bd3ffdf293c36252ba
+%global source0_hash dfbfc8af89b3bc68810b094bf87746db87c3eeb35b75caeb1882681ebed563bd
 
 %global		framework ki18n
 
@@ -44,7 +44,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n ki18n-%{version} -p1
 
 
 %build

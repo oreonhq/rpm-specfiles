@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 
 Name:           vulkan-utility-libraries
-Version:        1.4.362
+Version:        1.4.363
 Release:        %autorelease
 Summary:        Vulkan utility libraries
 
@@ -32,7 +32,7 @@ Provides:       vulkan-validation-layers-devel%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n Vulkan-Utility-Libraries-vulkan-sdk-%{version}
+%autosetup -p1 -n Vulkan-Utility-Libraries-vulkan-sdk-1.4.341.0
 
 %build
 %cmake -DCMAKE_BUILD_TYPE=Release \

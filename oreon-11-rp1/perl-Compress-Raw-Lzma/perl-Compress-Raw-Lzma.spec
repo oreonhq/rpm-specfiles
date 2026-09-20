@@ -1,15 +1,15 @@
-%global source0_hash e8b2d17c7f29b3e4f286cc3d3f5353df8e811615c42298eedad7cdbfec4aed7f
+%global source0_hash 4c37742614ecf2f94d3413d59632a9229ba7cf6c590298145f3385d8250bb256
 
 # Perform optional tests
 %bcond_without perl_Compress_Raw_Lzma_enables_optional_test
 
 Name:		perl-Compress-Raw-Lzma
-Version:	2.221
+Version:	2.224
 Release:	1%{?dist}
 Summary:	Low-level interface to lzma compression library
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Compress-Raw-Lzma
-Source0:        https://cpan.metacpan.org/modules/by-module/Compress/Compress-Raw-Lzma-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/P/PM/PMQS/Compress-Raw-Lzma-2.224.tar.gz
 
 
 

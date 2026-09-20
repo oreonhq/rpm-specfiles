@@ -1,4 +1,4 @@
-%global source0_hash 9f06313cd7d6cdde8db43067126d650fc5cc904b6f0b89159274a03e4805a91a
+%global source0_hash c19cbd4878347b67a9e05ee6541083f51dd90f9e58ee245b4d7634e09f9c04b2
 
 %global framework kio
 
@@ -160,7 +160,7 @@ Requires:       %{name}-core%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kio-%{version} -p1
 
 
 %build

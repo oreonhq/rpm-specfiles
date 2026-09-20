@@ -1,4 +1,4 @@
-%global source0_hash 1492dfef8dd6c3036446ac3b340005d92ab92f7d48ee3271b5dac1d36945d3d9
+%global source0_hash 03e9be69a30be4011f559da75328b6d7cea8ad921fabfbd551ce10bf45cdc992
 
 Name:           jpegxl
 Version:        0.12.0

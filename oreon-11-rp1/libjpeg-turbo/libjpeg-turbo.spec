@@ -1,4 +1,4 @@
-%global source0_hash 075920b826834ac4ddf97661cc73491047855859affd671d52079c6867c1c6c0
+%global source0_hash 980dd81f425082aa6d7c9e47fef27554ce7a9ffc8e2f6e863b97d263c5c50858
 
 Name:           libjpeg-turbo
 Version:        3.2.0

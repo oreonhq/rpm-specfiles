@@ -1,4 +1,4 @@
-%global source0_hash edb59fa23994e405fdc5b400afdf5820ae6160b94f35e3dc3da4457a16e89753
+%global source0_hash 6c643c7035cdacf67afd68f25d01b90ef889d546c9fcd7c0adf7c2cf91e3a32d
 
 %global tarball libXext
 #global gitdate 20130524
@@ -42,7 +42,7 @@ X.Org X11 libXext development package
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
+%setup -q -n %{name}-%{version}
 
 %build
 autoreconf -v --install --force

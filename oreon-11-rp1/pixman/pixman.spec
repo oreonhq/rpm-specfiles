@@ -1,4 +1,4 @@
-%global source0_hash d075209d18728b1ca5d0bb864aa047a262a1fde206da8a677d6af75b2ee1ae98
+%global source0_hash a098c33924754ad43f981b740f6d576c70f9ed1006e12221b1845431ebce1239
 
 %define gitdate 20070827
 %define gitrev 8ff7213f39edc1b2b8b60d6b0cc5d5f14ca1928d

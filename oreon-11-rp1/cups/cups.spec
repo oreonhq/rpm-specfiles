@@ -1,4 +1,4 @@
-%global source0_hash 0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d
+%global source0_hash 89fa632529d3e6a7cb9787ef29e39c4997be0323cc936e05cdb4c79387a35e8e
 
 %global use_alternatives 1
 %global lspp 1 
@@ -274,7 +274,7 @@ to CUPS daemon. This solution will substitute printer drivers and raw queues in 
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n cups-%{VERSION}
+%setup -q -n %{name}-%{version}
 # Prevent multilib conflict in cups-config script.
 %patch -P 1 -p1 -b .multilib
 # Ignore rpm save/new files in the banners directory.

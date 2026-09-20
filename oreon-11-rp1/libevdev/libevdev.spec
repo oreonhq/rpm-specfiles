@@ -1,4 +1,4 @@
-%global source0_hash 73f215eccbd8233f414737ac06bca2687e67c44b97d2d7576091aa9718551110
+%global source0_hash 0caf824971108f15bb2ad356433bae198d7d3bf1e82d43f63626e069e060bfa6
 
 Name:           libevdev
 Version:        1.13.7

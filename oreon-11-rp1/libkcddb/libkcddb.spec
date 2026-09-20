@@ -1,10 +1,10 @@
-%global source0_hash c5af21abfc86438c576c84846f95d895c10e9be9d5f40bac5df45000b993c38d
+%global source0_hash 2d86bd59ff8d1d5474e594ca0a8ce2ef5a1cabf9a27f357c6e83c9920dd1dafb
 
 %global stable_kf6 stable
 
 
 Name:    libkcddb 
-Version: 26.04.3
+Version: 26.08.1
 Release: 1%{?dist}
 Summary: CDDB retrieval library
 

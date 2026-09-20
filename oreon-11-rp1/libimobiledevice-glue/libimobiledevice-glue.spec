@@ -1,4 +1,4 @@
-%global source0_hash 6e2849f221e6ab970566a115d42f3c20f8848e4d40c2ed61ac20dc85f40fa54f
+%global source0_hash 1f780f40797e84ee60840a47d828f390071a0fb30501cb9ea092c2e8be6a874d
 
 Name:           libimobiledevice-glue
 Version:        1.3.2

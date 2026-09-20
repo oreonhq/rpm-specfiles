@@ -1,4 +1,4 @@
-%global source0_hash 9e9ec69110c2427a262c9afb0fc46a8bea7387a8386d7b51b80a9805b8327aa4
+%global source0_hash 680120f09929d51da0a65e96a1f7d20ffbbdd2795a165719b0d07e00475e77c4
 
 %global framework kbookmarks
 
@@ -48,7 +48,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kbookmarks-%{version} -p1
 
 
 %build

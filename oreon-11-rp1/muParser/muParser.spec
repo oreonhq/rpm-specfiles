@@ -32,7 +32,7 @@ Development files and the documentation
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n %{lcname}-%{version}
+%autosetup -n %{name}-%{version}
 
 %build
 %cmake .. -DENABLE_SAMPLES=ON -DENABLE_OPENMP=ON -DBUILD_SHARED_LIBS=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5

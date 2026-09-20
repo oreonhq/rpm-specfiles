@@ -1,15 +1,15 @@
-%global source0_hash 76c5ed142abba1f1df2335849681c83d83cc0842fe854af71081d2c411efb0bb
+%global source0_hash 76c226c0d611741b6afbf35c68059014d517a36a32a96937cccb92767586501b
 
 # Perform optional tests
 %bcond_without perl_XS_Parse_Keyword_enables_optional_test
 
 Name:           perl-XS-Parse-Keyword
-Version:        0.49
-Release:        2%{?dist}
+Version:        0.50
+Release:        1%{?dist}
 Summary:        XS functions to assist in parsing keyword syntax
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XS-Parse-Keyword
-Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/XS-Parse-Keyword-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.50.tar.gz
 Source1:        macros.perl-XS-Parse-Keyword
 BuildRequires:  coreutils
 BuildRequires:  perl-devel

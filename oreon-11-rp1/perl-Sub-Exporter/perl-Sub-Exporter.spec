@@ -1,4 +1,4 @@
-%global source0_hash 2a95695d35c5d0d5373a7e145c96b9b016113b74e94116835ac05450cae4d445
+%global source0_hash 31d1b7016390528f3ed2cda379f4026a4e7fbad2aa40c8c9a1808961bf642c67
 
 # Run extra test
 %if ! (0%{?rhel})
@@ -8,12 +8,12 @@
 %endif
 
 Name:		perl-Sub-Exporter
-Version:	0.991
-Release:	7%{?dist}
+Version:	0.992
+Release:	1%{?dist}
 Summary:	Sophisticated exporter for custom-built routines
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Exporter
-Source0:        https://cpan.metacpan.org/modules/by-module/Sub/Sub-Exporter-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Sub-Exporter-0.992.tar.gz
 
 
 

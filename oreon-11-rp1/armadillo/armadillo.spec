@@ -1,4 +1,4 @@
-%global source0_hash 2781dd3a6cc5f9a49c91a4519dde2b1c24335a5bfe0cc1c9881b6363142452b4
+%global source0_hash 58fa258d0e1f93074c9afa792027fc259b85cb974ccc0b932b061d4ada5bd83a
 
 Name:           armadillo
 Version:        15.4.2

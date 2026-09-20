@@ -1,4 +1,4 @@
-%global source0_hash 0ebde9435d0c0badecec2f96daef972de7b5600d92dddbfc1f5f81c01cfff87c
+%global source0_hash e63062504ede4ebfda4c93e3484a63817731e1157cdcac6e33fb47fe6abc1657
 
 %global framework kservice
 
@@ -50,7 +50,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kservice-%{version} -p1
 
 %build
 %cmake_kf6

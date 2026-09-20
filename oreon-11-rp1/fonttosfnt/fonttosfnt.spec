@@ -1,4 +1,4 @@
-%global source0_hash 249635f67fb94fabd46837283c40ba8dd5e7b774df2bac03d5026a3480766372
+%global source0_hash 2e251e66e8753c08aa280b26fd4a10d0d88e7d9bba5c8aac3d3fb36705e5918e
 
 Name:       fonttosfnt
 Version:    1.2.5

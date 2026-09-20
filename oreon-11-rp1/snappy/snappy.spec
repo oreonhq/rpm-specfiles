@@ -1,4 +1,4 @@
-%global source0_hash 90f74bc1fbf78a6c56b3c4a082a05103b3a56bb17bca1a27e052ea11723292dc
+%global source0_hash 695d585b7679489a5dc9f5148a91781c8a14f4a9a5dbcdb5672ce0e761468b23
 
 # Drop google-benchmark, gtest on RHEL
 %bcond gbench %[ !0%{?rhel} ]

@@ -1,15 +1,15 @@
-%global source0_hash 321d4cd1078e19519600abd7bda2991b468603c58455479e3d2e25a5acb1911f
+%global source0_hash f9732a4a857974db30905233589113003301b585b0cecda29a21cfba5bb014f9
 
 # Perform optional tests
 %bcond_without perl_Clone_enables_optional_test
 
 Name:           perl-Clone
-Version:        0.48
+Version:        0.50
 Release:        1%{?dist}
 Summary:        Recursively copy perl data types
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Clone
-Source0:        https://cpan.metacpan.org/modules/by-module/Clone/Clone-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/Clone-0.50.tar.gz
 
 
 

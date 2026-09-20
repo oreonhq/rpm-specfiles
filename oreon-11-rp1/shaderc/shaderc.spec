@@ -1,4 +1,4 @@
-%global source0_hash b938f85dec78ca7eb8139dcd1f613930eb7a84a8ce5ea944b6f861c291d916bc
+%global source0_hash f06ce5bcca94e5df7f34e115743597d0ad2e13c5fe9213c67dc8c76031241947
 
 # Glslang revision from packaged version
 %global glslang_version 301b4ede53d59b68bf55f95bb26412d9233c8187
@@ -69,7 +69,7 @@ Static libraries for libshaderc.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{glslang_version}
+%autosetup -p1 -n %{name}-%{version}
 
 rm -r third_party
 

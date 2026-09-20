@@ -1,4 +1,4 @@
-%global source0_hash 762943ea8eff8c27a5b89bc483aef0af5955b716270b0820e0addae2c38392a6
+%global source0_hash 0159f80d030ac250b0b353113a55c013ed7e38cb0b678df44d2f0d0b2aca944c
 
 %global framework kcmutils
 
@@ -56,7 +56,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kcmutils-%{version} -p1
 
 %build
 %cmake_kf6

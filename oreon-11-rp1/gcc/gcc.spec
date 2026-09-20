@@ -975,7 +975,7 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 _newlib="newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz"
 _git_tarball https://sourceware.org/git/newlib-cygwin.git %{newlib_cygwin_gitrev} "$_newlib" "newlib-cygwin-%{newlib_cygwin_gitrev}/"
-%setup -q -n %{gcc_tree}
+%setup -q -n gcc-16-20260808
 tar -xf %{SOURCE1}
 tar -xf "$_newlib"
 tar -xf %{SOURCE3}

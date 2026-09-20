@@ -1,4 +1,4 @@
-%global source0_hash 1c8b5fcb78718173e67d76e51ad423f5113a9ff68463f2566195ae46396089e3
+%global source0_hash 8dcb70adb5cf072335115a6b091f4113710bdc73abaadaa3f9e9c1e55957b149
 
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 %global maj 0

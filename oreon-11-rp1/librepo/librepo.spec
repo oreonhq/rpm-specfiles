@@ -1,4 +1,4 @@
-%global source0_hash c21dd3caefe97ea58bc865f92095a9d2db2ec8aab49d0c714d4742094db930b6
+%global source0_hash 85a9dec2f48976b0d800aa7692346fc2967b6195c0e524195f02a110535010e0
 
 %global libcurl_version 7.52.0
 

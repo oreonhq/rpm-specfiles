@@ -2,8 +2,8 @@
 
 %global base_version 3.13
 Name:           perl-Thread-Queue
-Version:        3.14
-Release:        521%{?dist}
+Version:        6.23
+Release:        1%{?dist}
 Summary:        Thread-safe queues
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Thread-Queue
@@ -48,7 +48,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n Thread-Queue-%{base_version}
+%setup -q -n Thread-Queue-3.13
 %patch -P0 -p1
 # Correct shell bang
 perl -MConfig -pi -e 's|^#!.*perl|$Config{startperl}|' examples/queue.pl

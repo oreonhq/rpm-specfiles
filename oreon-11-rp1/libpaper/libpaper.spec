@@ -1,4 +1,4 @@
-%global source0_hash a4e1297b69b9fd1054ee7f5bcc55f4d56da152d41d2eabdf18727a9cddc1f402
+%global source0_hash 882b1c7636052fc9a318caa20292b35616b588824b70e7053018262b29b1409a
 
 Name:		libpaper
 Version:	2.3.0

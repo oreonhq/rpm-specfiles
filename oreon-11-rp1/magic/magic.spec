@@ -1,4 +1,4 @@
-%global source0_hash cedf2e66f9d2844727bff450b7cd7972c2122a05734a5300a10844a24682bb20
+%global source0_hash 56d26fa0ba325fe2f7d7a95d33491fdcfa7f89dea3127f55732514f90a884ac0
 
 %undefine   __brp_mangle_shebangs
 

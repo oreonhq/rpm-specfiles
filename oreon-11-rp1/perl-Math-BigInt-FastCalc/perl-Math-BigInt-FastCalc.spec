@@ -2,8 +2,8 @@
 
 Name:           perl-Math-BigInt-FastCalc
 %global cpan_version 0.5020
-Version:        0.502.000
-Release:        521%{?dist}
+Version:        2.005003
+Release:        1%{?dist}
 Summary:        Math::BigInt::Calc with some XS for more speed
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Math-BigInt-FastCalc
@@ -51,7 +51,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n Math-BigInt-FastCalc-%{cpan_version}
+%setup -q -n Math-BigInt-FastCalc-0.5020
 
 # Remove bundled libraries
 rm -r inc

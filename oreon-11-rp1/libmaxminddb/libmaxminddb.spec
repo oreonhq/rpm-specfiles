@@ -1,4 +1,4 @@
-%global source0_hash a66502ea76eadbe17f2cd6fd708946777253972d2ae8157dee1b23a2fb528171
+%global source0_hash ca5c87d41339f8bc4daabb53e8a9356b3c995f2d2419b85d7bff823b2ecc252d
 
 Summary:        C library for reading MaxMind DB files
 Name:           libmaxminddb

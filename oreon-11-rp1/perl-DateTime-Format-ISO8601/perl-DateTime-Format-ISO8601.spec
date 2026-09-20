@@ -1,13 +1,13 @@
-%global source0_hash 04899f3b1896b2e0933a1d728b3094ccd2f7d09e434c4eac2696cd931bbf0551
+%global source0_hash 104fe5f79523cde5494ba7654b6b4357a2d8bb71f18ca6eb836e1475a70bcc1b
 
 Name:       perl-DateTime-Format-ISO8601 
-Version:    0.17
-Release:    3%{?dist}
+Version:    0.19
+Release:    1%{?dist}
 # LICENSE, lib/DateTime/Format/ISO8601.pod -> GPL+ or Artistic
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    Parses ISO8601 date-time formats
 Url:        https://metacpan.org/release/DateTime-Format-ISO8601
-Source:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-Format-ISO8601-%{version}.tar.gz
+Source: https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/DateTime-Format-ISO8601-0.19.tar.gz
 BuildArch:  noarch
 BuildRequires:  coreutils
 BuildRequires:  make

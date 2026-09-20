@@ -1,4 +1,4 @@
-%global source0_hash 52506935f70e247ed2777e3c65f20e86f79208c2a2d0e180ae7475daf11c96ef
+%global source0_hash b6be77c60765a8456335de991eeaf6ffec55256984e4a9ecc6a97c37bbfe85bf
 
 # CGAL is a header-only library, with dependencies.
 %global debug_package %{nil}
@@ -82,7 +82,7 @@ CGAL algorithms.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n %{name}-%{fullversion}
+%autosetup -p1 -n %{name}-%{version}
 
 # Fix some file permissions
 #chmod a-x include/CGAL/export/ImageIO.h

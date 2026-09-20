@@ -1,4 +1,4 @@
-%global source0_hash f698d94f3103da8ca7438d84e0344e453fe0ba3b7486e04c5bf7a9a3fabe9b69
+%global source0_hash 672bd7d10aee4606171afb864f3570b83340f6a33e2c186dc0512f7145ffdf6a
 
 Summary:       Library of functions for manipulating TIFF format image files
 Name:          libtiff

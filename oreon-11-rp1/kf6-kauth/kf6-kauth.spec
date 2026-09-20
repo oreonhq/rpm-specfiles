@@ -1,4 +1,4 @@
-%global source0_hash 40a7ec156aa1842216e1377b327efe173a737c0e6434b1dda66d2b098a307824
+%global source0_hash 60b75e02abc2bfbb247c586e3ab94def7ecd7b4e1ddb8260358951d84d9ea8c9
 
 %global framework kauth
 
@@ -43,7 +43,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kauth-%{version} -p1
 
 %build
 %cmake_kf6

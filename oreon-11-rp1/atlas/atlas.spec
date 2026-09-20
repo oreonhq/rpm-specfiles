@@ -1,4 +1,4 @@
-%global source0_hash 2688eb733a6c5f78a18ef32144039adcd62fabce66f2eb51dd59dde806a6d2b7
+%global source0_hash 477d567a8d683e891d786e9e8bb6ad6659daa9ba18e8dd0e2f70b7a54095f8de
 %global source12_hash none
 
 %define enable_native_atlas 0

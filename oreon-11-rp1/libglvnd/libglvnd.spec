@@ -148,7 +148,7 @@ libGL and libGLX are the common dispatch interface for the GLX API.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-v%{version}-%{?commit0}
+%autosetup -p1 -n libglvnd-v1.7.0-faa23f21fc677af5792825dc30cb1ccef4bf33a6
 autoreconf -vif
 
 %build

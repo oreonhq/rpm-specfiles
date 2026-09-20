@@ -1,4 +1,4 @@
-%global source0_hash 8b7b82fdeba48769b69433e8e3fbb984a5f6bf368b0d5f47abeec49de3e58efb
+%global source0_hash f042a370666815e7b941e9b7019024755bd1c6c2954afbfa515af378251799e2
 
 Summary: X.Org X11 libXfont2 runtime library
 Name: libXfont2

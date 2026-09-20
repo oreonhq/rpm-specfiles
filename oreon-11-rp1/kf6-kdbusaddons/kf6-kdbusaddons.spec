@@ -1,4 +1,4 @@
-%global source0_hash a3d2de669bfad5de3f86cc8c6448a02f7567e4ad04aa6099ccfaa2df5f07e8f8
+%global source0_hash 063ef80460f76d86dc4b033ef04b65b69ba82ee0de410440fe609465e7f5a997
 
 %global framework	kdbusaddons
 
@@ -40,7 +40,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kdbusaddons-%{version} -p1
 
 %build
 %cmake_kf6

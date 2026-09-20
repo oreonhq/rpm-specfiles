@@ -4,8 +4,8 @@
 Name:           perl-ExtUtils-ParseXS
 # Epoch to compete with perl.spec
 Epoch:          1
-Version:        3.61
-Release:        2%{?dist}
+Version:        5.44.0
+Release:        1%{?dist}
 Summary:        Module and a script for converting Perl XS code into C code
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-ParseXS
@@ -66,7 +66,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n ExtUtils-ParseXS-%{cpan_version}
+%setup -q -n ExtUtils-ParseXS-3.61
 
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

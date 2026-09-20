@@ -4,8 +4,8 @@
 
 Name:           perl-Time-HiRes
 Epoch:          4
-Version:        1.9778
-Release:        521%{?dist}
+Version:        5.37.2
+Release:        1%{?dist}
 Summary:        High resolution alarm, sleep, gettimeofday, interval timers
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Time-HiRes
@@ -62,7 +62,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n Time-HiRes-%{base_version}
+%autosetup -p1 -n Time-HiRes-1.9764
 
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

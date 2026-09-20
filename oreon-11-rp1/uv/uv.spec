@@ -1,4 +1,4 @@
-%global source0_hash 12f5f6ce0c4e1e80424329098786dd33195df1c342c926f499f8599d1d2ec694
+%global source0_hash 2232ede2d645f347bf6d412563b581e90bdb33b60bd295130cb64e56a65d4640
 
 %bcond check 1
 # Should we run integration tests, many of which require specific Python

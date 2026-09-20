@@ -1,4 +1,4 @@
-%global source0_hash 802e9bb2b14f66e8c638f54857ccb84d3536144b0ae18b9f568bbf2314d2de88
+%global source0_hash 7595ac70c08027075d48332587a1b0999f8cbb03d02d100dc053a8bd9f47d8ba
 
 %global _description %{expand:
 The Scalable Video Technology for AV1 Encoder (SVT-AV1 Encoder) is an
@@ -66,7 +66,7 @@ This package contains the documentation for development of SVT-AV1.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n SVT-AV1-v%{version}
+%autosetup -p1 -n SVT-AV1-v4.2.0-cqp-extended
 
 # Mitigate name collisions
 mv third_party/fastfeat/LICENSE LICENSE.fastfeat

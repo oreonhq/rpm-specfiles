@@ -1,4 +1,4 @@
-%global source0_hash 96af414c73ce1d5449ad04be7f9f27fa8330f844b6dda843ef22e3e1befb3ee3
+%global source0_hash ae50c0f669e0af5a67cc4cd0f54f21d64a64d2660af883e80e95d3fe51b945d8
 
 %global tarball libXxf86vm
 #global gitdate 20130524
@@ -39,7 +39,7 @@ X.Org X11 libXxf86vm development package
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
+%setup -q -n %{name}-%{version}
 
 %build
 autoreconf -v --install --force

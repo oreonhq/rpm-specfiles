@@ -1,4 +1,4 @@
-%global source0_hash 8d55c7ec1a9ad4e70fe91fbe129a1d4dd288bce766f466cba07a29452b3cecd8
+%global source0_hash febfdb532819bbf36b1b04e74d3ef328ad0f0f2db6224ddb7640fce6bd0014f4
 
 Name:           xevd
 Version:        0.7.0

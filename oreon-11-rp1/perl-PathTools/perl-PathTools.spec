@@ -3,8 +3,8 @@
 %global base_version 3.75
 
 Name:           perl-PathTools
-Version:        3.94
-Release:        521%{?dist}
+Version:        5.35.10
+Release:        1%{?dist}
 Summary:        PathTools Perl module (Cwd, File::Spec)
 # Cwd.xs:                   BSD-3-Clause
 # other files:              GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -76,7 +76,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n PathTools-%{base_version}
+%autosetup -p1 -n PathTools-3.75
 
 # Do not distribute File::Spec::VMS as it works on VMS only (bug #973713)
 rm lib/File/Spec/VMS.pm

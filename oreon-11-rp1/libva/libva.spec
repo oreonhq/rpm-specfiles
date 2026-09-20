@@ -1,4 +1,4 @@
-%global source0_hash b10aceb30e93ddf13b2030eb70079574ba437be9b3b76065caf28a72c07e23e7
+%global source0_hash 0b4a3649ee8d683b9cce2ef094df4fb039d276c0cef7e49337c43d3b297b9f42
 
 #global pre_release .pre1
 
@@ -47,7 +47,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{version}%{?pre_release}
+%autosetup -p1 -n %{name}-%{version}
 
 %build
 %meson \

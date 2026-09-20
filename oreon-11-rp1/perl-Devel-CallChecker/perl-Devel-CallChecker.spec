@@ -1,4 +1,4 @@
-%global source0_hash 7a46caef9c48908f00fe8985dcecc4ec55f42e6c4efaafce9dbdaf9d45a37bc4
+%global source0_hash 66de557a97a88609f82a0aad9ad3597d1d3333b68e732c9100839e06914dcbe4
 
 # This file is licensed under the terms of GNU GPLv2+.
 
@@ -10,12 +10,12 @@
 %endif
 
 Name:           perl-Devel-CallChecker
-Version:        0.009
-Release:        11%{?dist}
+Version:        0.010
+Release:        1%{?dist}
 Summary:        Custom op checking attached to subroutines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-CallChecker
-Source0:        https://cpan.metacpan.org/modules/by-module/Devel/Devel-CallChecker-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/S/SH/SHINGO/Devel-CallChecker-0.010.tar.gz
 
 
 

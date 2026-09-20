@@ -1,8 +1,8 @@
-%global source0_hash eacf71c5eb49e0e590de797f1982d7fb95d8481e4d13c3ce79eb32ef9373b3db
+%global source0_hash e4ff0be00ef14c42754c9db2fee41a053e9d4613db6405e98cd0e0e5be740362
 
 # Because encoding sub-package has an independent version, version macro gets
 # redefined.
-%global cpan_version 3.21
+%global cpan_version 3.24
 Name:           perl-Encode
 Epoch:          4
 Version:        %{cpan_version}
@@ -10,7 +10,7 @@ Version:        %{cpan_version}
 # perl-encoding sub-package has independent version which does not change
 # often and consecutive builds would clash on perl-encoding NEVRA. This is the
 # same case as in perl.spec.
-Release:        521%{?dist}
+Release:        1%{?dist}
 Summary:        Character encodings in Perl
 # ucm:          license in this repository can be ingored based on
 # https://gitlab.com/fedora/legal/fedora-license-data/-/issues/30#note_1435176617
@@ -147,7 +147,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n Encode-%{cpan_version}
+%setup -q -n Encode-3.24
 
 # Help generators to recognize Perl scripts
 for F in t/*.t t/*.pl; do

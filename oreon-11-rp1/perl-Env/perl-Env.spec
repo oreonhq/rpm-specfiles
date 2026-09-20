@@ -2,8 +2,8 @@
 
 %global base_version 1.04
 Name:           perl-Env
-Version:        1.06
-Release:        521%{?dist}
+Version:        5.90004
+Release:        1%{?dist}
 Summary:        Perl module that imports environment variables as scalars or arrays
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Env
@@ -44,7 +44,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n Env-%{base_version}
+%setup -q -n Env-1.04
 %patch -P0 -p1
 %patch -P1 -p1
 

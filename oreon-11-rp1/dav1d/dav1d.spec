@@ -1,4 +1,4 @@
-%global source0_hash e099f53253f6c247580c554d53a13f1040638f2066edc3c740e4c2f15174ce22
+%global source0_hash 258c548481abbdd3a9a0efbe0b1229b8c5fd9a0802e010d1707b676eda375a32
 
 Name:           dav1d
 Version:        1.5.4
@@ -37,7 +37,7 @@ Development files for dav1d, the AV1 cross-platform Decoder.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{version}
+%autosetup -p1 -n dav1d-1.5.4-54706fc6bc0cdecab7e9593974a4039cc038fca7
 
 %build
 %meson

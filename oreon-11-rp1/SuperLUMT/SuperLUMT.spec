@@ -127,7 +127,7 @@ This package contains common documentation files for SuperLUMT.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%setup -q -n superlu_mt-%{majorver}.1
+%setup -q -n superlu_mt-4.0.1
 
 rm -fr SRC/mc64ad.f.bak
 find . -type f | sed -e "/TESTING/d" | xargs chmod a-x

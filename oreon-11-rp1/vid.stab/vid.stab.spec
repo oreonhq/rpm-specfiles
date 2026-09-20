@@ -1,4 +1,4 @@
-%global source0_hash 6b51f3efd6b8500c92f3c5d25e158f813d3be078c31c9b480c7ea791b6725e5e
+%global source0_hash 9001b6df73933555e56deac19a0f225aae152abbc0e97dc70034814a1943f3d4
 
 %undefine __cmake_in_source_build
 # https://github.com/georgmartius/vid.stab/commit/05829db776069b7478dd2d90b6e0081668a41abc
@@ -36,7 +36,7 @@ This package contains the development files (library and header files).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{name}-%{commit}
+%setup -q -n %{name}-%{version}
 # remove SSE2 flags
 sed -i 's|-DUSE_SSE2 -msse2||' tests/CMakeLists.txt
 # fxi warning _FORTIFY_SOURCE requires compiling with optimization (-O)

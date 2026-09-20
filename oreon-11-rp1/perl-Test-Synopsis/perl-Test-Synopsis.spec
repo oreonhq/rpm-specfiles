@@ -1,4 +1,4 @@
-%global source0_hash d268c98b33d2fa14dbb22b20d6561bab489ee82587dfbe19ad277620c7b8b6de
+%global source0_hash e7cb9cbb03cb62184e59183c1d0a7ea3a76f972bd1bf0af13f16b7f59960b1f0
 
 # noarch, but to avoid debug* files interfering with manifest test:
 %global debug_package %{nil}
@@ -7,12 +7,12 @@
 %undefine _package_note_file
 
 Name:		perl-Test-Synopsis
-Version:	0.17
-Release:	14%{?dist}
+Version:	0.18
+Release:	1%{?dist}
 Summary:	Test your SYNOPSIS code
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Synopsis
-Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-Synopsis-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/Z/ZO/ZOFFIX/Test-Synopsis-0.18.tar.gz
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

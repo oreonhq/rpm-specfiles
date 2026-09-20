@@ -25,7 +25,7 @@ ellsearch and ellidentify.
 # Verify the source file
 %{gpgverify} --data=%{SOURCE0} --signature=%{SOURCE1} --keyring=%{SOURCE2}
 
-%autosetup -c
+%autosetup -c -n data
 
 # We'll ship the README as %%doc
 mv data/elldata/README .

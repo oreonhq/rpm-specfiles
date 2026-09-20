@@ -1,4 +1,4 @@
-%global source0_hash 7df5c08d952ba33f9b6bdabdb06a61a78b2cf62d2122c2d1d03a91a79832aa3c
+%global source0_hash d77f68f48879510e79a2f65977ccc68981781ea0923e5bdffac2a193ea3d660e
 
 Name: libgcrypt
 Version: 1.12.4

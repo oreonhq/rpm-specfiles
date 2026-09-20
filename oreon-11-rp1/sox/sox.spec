@@ -97,7 +97,7 @@ which will use the SoX sound file format converter.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%setup -q -n %{name}-downstream-%{name}-%{version}.modified
+%setup -q -n sox-downstream-sox-14.4.2.0.modified
 %patch -P0 -p1
 %patch -P1 -p1 -b .lpc
 %patch -P2 -p1

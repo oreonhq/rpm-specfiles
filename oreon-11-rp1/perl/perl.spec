@@ -1,4 +1,4 @@
-%global source0_hash 0a585eeb9e363c0f80482ddb3571625250c2c86aeb408853e8ea50805cfb14bb
+%global source0_hash 505cf43912e9480495c344c70260452e32aa2a73c546a026b3f100053b23ce91
 
 %global perl_version    5.44.0
 %global perl_epoch      4
@@ -4371,7 +4371,7 @@ you're not running VMS, this module does nothing.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n perl-%{perl_version}
+%setup -q -n perl-5.44.0
 %patch -P1 -p1
 %ifarch %{multilib_64_archs}
 %patch -P2 -p1

@@ -178,7 +178,7 @@ in production systems, under a variety of names, since 1981.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{pkgversion}-source
+%setup -q -n Firebird-5.0.4.1812-0-source
 %patch -P101 -p1
 %patch -P203 -p1
 %patch -P205 -p1

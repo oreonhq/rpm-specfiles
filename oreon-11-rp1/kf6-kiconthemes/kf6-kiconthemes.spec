@@ -1,4 +1,4 @@
-%global source0_hash 233de4cd2fef5b7b4ce1e317196407d25300b767614a93e160b45ac34710223d
+%global source0_hash c0c684823d0e087f35168cd79f1053fd358bb8fb47b27996a11c7d7ee3da6f4d
 
 %global framework kiconthemes
 
@@ -53,7 +53,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kiconthemes-%{version} -p1
 
 %build
 %cmake_kf6

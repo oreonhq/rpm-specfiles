@@ -1,4 +1,4 @@
-%global source0_hash 23f2736fb8f3f0a3ee2f2f1944720206a4d5c532cf7a0a00c8f73aa69d75f588
+%global source0_hash f6ba5f54d413ea0b2642207a6ebd0803e7cb8392b91fcf8a1679fd0c21062865
 
 %undefine __cmake_in_source_build
 
@@ -55,7 +55,7 @@ that use NetworkManager.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n networkmanager-qt-%{version} -p1
 
 %build
 %cmake_kf6

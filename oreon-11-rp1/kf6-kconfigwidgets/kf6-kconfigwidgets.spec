@@ -1,4 +1,4 @@
-%global source0_hash 449d7b4df04209669b8ad00c74fbf7e0d14cb103fbfa12a642995057cc56b35d
+%global source0_hash 6efd9fc7786a7e979b32904aeadf1d2d8e69a5da110f8ebd45f95ec02de41f77
 
 %global framework kconfigwidgets
 
@@ -56,7 +56,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kconfigwidgets-%{version} -p1
 
 
 %build

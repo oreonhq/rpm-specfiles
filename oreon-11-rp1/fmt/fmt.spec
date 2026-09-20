@@ -1,4 +1,4 @@
-%global source0_hash bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af
+%global source0_hash 8b852bb5aa6e7d8564f9e81394055395dd1d1936d38dfd3a17792a02bebd7af0
 
 Name:           fmt
 Version:        12.2.0

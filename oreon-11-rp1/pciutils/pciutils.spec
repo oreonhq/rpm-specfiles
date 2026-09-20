@@ -1,4 +1,4 @@
-%global source0_hash e7713409882813991d2269d125e40dad1f54a019a52b78b3962941c1d4a6f86f
+%global source0_hash c02940f430841ecf158d5d9a50007afc4d5353c8678a2455003ca0b2c4e9f5ff
 
 Name:		pciutils
 Version:	3.15.0

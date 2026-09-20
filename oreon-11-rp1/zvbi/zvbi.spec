@@ -1,4 +1,4 @@
-%global source0_hash bca620ab670328ad732d161e4ce8d9d9fc832533cb7440e98c50e112b805ac5e
+%global source0_hash e6c954fde2a5a635187f19e1ab870a88c1a982012c5f1b33b8f2513e0ab7a50e
 %define fontdir %{_datadir}/fonts/%{name}
 %define catalogue %{_sysconfdir}/X11/fontpath.d
 

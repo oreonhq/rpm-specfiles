@@ -1,4 +1,4 @@
-%global source0_hash afabd686fb83d3ebf49ee453974f9122f3eec9b25ff8d2ddf4f12de92af1e5e2
+%global source0_hash ba237fe792c93e8c13879c58fead45de2d1185e53793b792db1a3c9e77dd7b55
 
 # Run optional test
 %if ! (0%{?rhel})
@@ -9,12 +9,12 @@
 
 Name:           perl-DateTime
 Epoch:          2
-Version:        1.66
-Release:        5%{?dist}
+Version:        1.67
+Release:        1%{?dist}
 Summary:        Date and time object for Perl
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/DateTime
-Source0:        https://cpan.metacpan.org/modules/by-module/DateTime/DateTime-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-1.67.tar.gz
 
 
 

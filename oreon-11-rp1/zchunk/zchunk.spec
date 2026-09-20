@@ -1,4 +1,4 @@
-%global source0_hash 2c187055e2206e62cef4559845e7c2ec6ec5a07ce1e0a6044e4342e0c5d7771d
+%global source0_hash 7e4515412a331b31ebfaef91978c01e937fc907149fd1ab21a4661f4e3799cee
 
 Name:           zchunk
 Version:        1.5.4

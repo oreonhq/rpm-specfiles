@@ -1,12 +1,12 @@
-%global source0_hash 46b502e7a288d559429891eeb5d979461dd3ecc6a5c491ead85d165b6e03a51e
+%global source0_hash 8522b532935a11bfa688c2e113bac66729df4851be50c2c26d4b06f45fade472
 
 Name:           perl-WWW-RobotRules
-Version:        6.02
-Release:        43%{?dist}
+Version:        6.03
+Release:        1%{?dist}
 Summary:        Database of robots.txt-derived permissions
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/WWW-RobotRules
-Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/WWW-RobotRules-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/O/OA/OALDERS/WWW-RobotRules-6.03.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

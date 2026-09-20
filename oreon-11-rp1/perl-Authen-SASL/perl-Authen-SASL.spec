@@ -1,12 +1,12 @@
-%global source0_hash 8cdf5a7f185448b614471675dae5b26f8c6e330b62264c3ff5d91172d6889b99
+%global source0_hash 4f0f100aeed34b52977a94b7df973e7f0b8f92d167b09f2b249bab81e8590e57
 
 Name:           perl-Authen-SASL
-Version:        2.2000
+Version:        2.2100
 Release:        1%{?dist}
 Summary:        SASL Authentication framework for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Authen-SASL
-Source0:        https://cpan.metacpan.org/authors/id/E/EH/EHUELS/Authen-SASL-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/E/EH/EHUELS/Authen-SASL-2.2100.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils

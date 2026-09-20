@@ -1,4 +1,4 @@
-%global source0_hash 3f49c53a8dfd231cd40232dae9518e1c74e60707c80d86f6feacd6123c758f76
+%global source0_hash 2219a37cb3cd9ab5ae271c7a03c5dc0d2458ffb922f67def5b89a3a065662697
 
 # Do not terminate build if language files are empty.
 %define _empty_manifest_terminate_build 0

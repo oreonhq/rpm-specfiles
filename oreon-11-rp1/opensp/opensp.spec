@@ -38,7 +38,7 @@ Header files and libtool library for developing applications that use OpenSP.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n OpenSP-%{version}
+%setup -q -n %{name}-%{version}
 %patch -P0 -p1 -b .multilib
 %patch -P1 -p1 -b .nodeids
 %patch -P2 -p1 -b .sigsegv

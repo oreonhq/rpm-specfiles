@@ -2,8 +2,8 @@
 
 %global base_version 1.50
 Name:           perl-Carp
-Version:        1.54
-Release:        521%{?dist}
+Version:        5.35.10
+Release:        1%{?dist}
 Summary:        Alternative warn and die for modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Carp
@@ -59,7 +59,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n Carp-%{base_version}
+%setup -q -n Carp-1.50
 %patch -P0 -p1
 %patch -P1 -p1
 

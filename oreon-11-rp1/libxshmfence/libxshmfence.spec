@@ -1,4 +1,4 @@
-%global source0_hash 870df257bc40b126d91b5a8f1da6ca8a524555268c50b59c0acd1a27f361606f
+%global source0_hash d4a4df096aba96fea02c029ee3a44e11a47eb7f7213c1a729be83e85ec3fde10
 
 Name:           libxshmfence
 Version:        1.3.3

@@ -1,4 +1,4 @@
-%global source0_hash e935eded7d81631a538bfae703fd1e293aad1c7fd3407ba00440c95105d2011e
+%global source0_hash 1020f184046187baa2985dbde38e0691f49c44088bca7a1842b0236c6081dc0a
 
 %global somajor 9
 %global sominor 0
@@ -51,7 +51,7 @@ and decoder.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n libvpx-%{version}
+%setup -q -n %{name}-%{version}
 %patch -P0 -p1 -b .fortify-source-on
 %patch -P1 -p1 -b .0001
 

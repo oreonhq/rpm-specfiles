@@ -1,4 +1,4 @@
-%global source0_hash 37f1580200ab78305d1fc872d89241aaee0c93cbe85bc559bf332737a60d3be8
+%global source0_hash 5f5907d3a3ca1e37c2d6d4027b4ccda5bbad61873751fb78ebecaca5744218a5
 
 %bcond_with rc
 %if %{with rc}
@@ -59,7 +59,7 @@ This package provides the high-level "Feature API" library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version}%{?candidate:-%{candidate}} -p1
+%autosetup -n %{name}-%{version} -p1
 
 %build
 # Use built-in tpm-udev.rules, with specified installation path and prefix.

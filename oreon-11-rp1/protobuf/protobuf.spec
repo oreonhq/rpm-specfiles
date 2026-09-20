@@ -294,7 +294,7 @@ descriptions in the Emacs editor.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
-%setup -q -n protobuf-%{version}%{?rcver} -a 3
+%setup -q -n protobuf-3.19.6 -a 3
 %ifarch %{ix86}
 # IoTest.LargeOutput fails on 32bit arches
 # https://github.com/protocolbuffers/protobuf/issues/8082
@@ -308,7 +308,7 @@ test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "ore
 %patch 6 -p1 -b .gcc15
 
 # Copy in the needed gtest/gmock implementations.
-%setup -q -T -D -b 3 -n protobuf-%{version}%{?rcver}
+%setup -q -T -D -b 3 -n protobuf-3.19.6
 rm -rvf 'third_party/googletest'
 mv '../%{gtest_dir}' 'third_party/googletest'
 

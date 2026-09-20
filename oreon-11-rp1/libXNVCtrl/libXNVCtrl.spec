@@ -1,7 +1,7 @@
 %global source0_hash e735d24135629dfa70001b50e2b7e812300a20f312a0587b7cc03016c278815b
 
 Name:           libXNVCtrl
-Version:        580.178.04
+Version:        615.71.09
 Release:        %autorelease
 Summary:        Library providing the NV-CONTROL API
 License:        GPL-2.0-or-later
@@ -42,7 +42,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n nvidia-settings-%{version}
+%autosetup -p1 -n nvidia-settings-580.82.09
 
 
 %build

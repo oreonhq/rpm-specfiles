@@ -27,7 +27,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # Verify the source file
 %{gpgverify} --keyring=%{SOURCE2} --signature=%{SOURCE1} --data=%{SOURCE0}
 
-%autosetup -c
+%autosetup -c -n data
 mv data/galpol/README .
 
 %build

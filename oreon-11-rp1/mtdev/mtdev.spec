@@ -1,4 +1,4 @@
-%global source0_hash 15d7b28da8ac71d8bc8c9287c2045fd174267bc740bec10cfda332dc1204e0e0
+%global source0_hash a107adad2101fecac54ac7f9f0e0a0dd155d954193da55c2340c97f2ff1d814e
 
 %global tarball mtdev
 #global gitdate 20110105
@@ -40,7 +40,7 @@ Multitouch protocol translation library development package.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
+%setup -q -n %{name}-%{version}
 
 %build
 autoreconf --force -v --install || exit 1

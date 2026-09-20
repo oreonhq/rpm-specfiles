@@ -1,12 +1,12 @@
-%global source0_hash 7b685191c6acc3e773d1fc02c95ee1f9fae94f77783175f5e78c181cc92d2b52
+%global source0_hash b57d80ca6d821c6949ca48b27467d45aba7a9c77346562306facca781a003e44
 
 Name:           perl-HTTP-Date
-Version:        6.06
-Release:        8%{?dist}
+Version:        6.08
+Release:        1%{?dist}
 Summary:        Date conversion routines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Date
-Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTTP-Date-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTTP-Date-6.08.tar.gz
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators

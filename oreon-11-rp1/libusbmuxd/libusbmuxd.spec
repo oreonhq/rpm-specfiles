@@ -1,4 +1,4 @@
-%global source0_hash c35bf68f8e248434957bd5b234c389b02206a06ecd9303a7fb931ed7a5636b16
+%global source0_hash bcc185615a0f4ba80b617696235a084c64b68a1bf546a1dedd85da6b62b8cfbe
 
 %global forgeurl https://github.com/libimobiledevice/libusbmuxd
 

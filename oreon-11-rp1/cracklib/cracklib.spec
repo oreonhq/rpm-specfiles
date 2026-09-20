@@ -1,4 +1,4 @@
-%global source0_hash 6213b986a5209fc0d4ca93734e349b8f66b36bfe9a3fae6eead14a15d82a68dc
+%global source0_hash 877b823198eb29aa1778b16a70cad05f7b54b164b3bf7ab656fc326c393f4c85
 
 # Reflects the values hard-coded in various Makefile.am's in the source tree.
 %define dictdir %{_datadir}/cracklib

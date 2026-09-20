@@ -142,7 +142,7 @@ excluded tests for each ASIC, and a convenience script to run the test suite.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n %{upstreamname} -p3
+%autosetup -n rocr-runtime -p3
 
 # Use llvm's static libs kfdtest
 sed -i -e 's@LLVM_LINK_LLVM_DYLIB@0@' libhsakmt/tests/kfdtest/CMakeLists.txt

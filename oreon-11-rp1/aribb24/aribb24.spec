@@ -2,7 +2,7 @@
 %global commit0 5e9be272f96e00f15a2f3c5f8ba7e124862aec38
 
 Name:           aribb24
-Version:        1.0.3
+Version:        1.0.4
 Release:        %autorelease
 Summary:        A library for ARIB STD-B24
 
@@ -30,7 +30,7 @@ Development files and headers for the ARIB STD-B24 library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n aribb24-%{commit0}
+%autosetup -p1 -n aribb24-5e9be272f96e00f15a2f3c5f8ba7e124862aec38
 
 %build
 autoreconf -vif

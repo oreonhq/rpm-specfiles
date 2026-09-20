@@ -1,4 +1,4 @@
-%global source0_hash 4d075e04eeef3c451f5e7f572ebd695738bad033e8cd32cf519c68edb3f39dc7
+%global source0_hash 76e54ae93e96ee6ff68ed78760fdcc8621d133ff375fec43f10e19d5a1516857
 
 # Run time expensive tests
 %bcond_without long_tests
@@ -15,12 +15,12 @@
 %{?perl_default_filter}
 
 Name:           perl-IO-Compress
-Version:        2.217
+Version:        2.224
 Release:        1%{?dist}
 Summary:        Read and write compressed data
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Compress
-Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-Compress-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/P/PM/PMQS/IO-Compress-2.224.tar.gz
 
 
 

@@ -1,4 +1,4 @@
-%global source0_hash 67be9ee3169366589c92dc7c22809b90f51911dd9de22520c39c9a64fb047c9c
+%global source0_hash 66fa17a29270cb25ceaf189430ea38037c066652c2989b58d7ef6120b1a208d3
 
 %global forgeurl https://github.com/libimobiledevice/libplist
 
@@ -40,7 +40,7 @@ Requires: python3
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n libplist-2.6.0
+%autosetup -p1 -n %{name}-%{version}
 
 %build
 export PYTHON_VERSION="%{python3_version}"

@@ -9,9 +9,9 @@
 
 Name:           perl-version
 Epoch:          9
-Version:        0.99.33
+Version:        5.44.0
 %global module_version 0.9933
-Release:        522%{?dist}
+Release:        1%{?dist}
 Summary:        Perl extension for Version Objects
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/version
@@ -89,7 +89,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n version-%{module_version}
+%setup -q -n version-0.9933
 
 # Help file to recognise the Perl scripts
 for F in t/*.t t/survey_locales; do

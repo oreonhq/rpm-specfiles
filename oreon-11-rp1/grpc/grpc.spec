@@ -1,4 +1,4 @@
-%global source0_hash 0c3faa83e39d4f1ab55fe1476362b9ac3b81632a46dce7fd4d50271bce816b53
+%global source0_hash 17a4d25717f4871eb71cfdf191f7491f66a59c8ebc782ab53d52fcbfc478959f
 
 # We need to use C++17 to link against the system abseil-cpp, since it was
 # compiled with C++17 (an intentional abseil-cpp design decision).
@@ -793,7 +793,7 @@ Testing utilities for gRPC Python.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n grpc-%{srcversion}
+%autosetup -p1 -n %{name}-%{version}
 
 cp -p third_party/upb/third_party/utf8_range/LICENSE LICENSE-utf8_range
 
@@ -816,7 +816,7 @@ sed -r -i \
 echo '===== Preparing gtest/gmock =====' 2>&1
 %if %{without system_gtest}
 # Copy in the needed gtest/gmock implementations.
-%setup -q -T -D -b 1 -n grpc-%{srcversion}
+%setup -q -T -D -b 1 -n %{name}-%{version}
 rm -rvf 'third_party/googletest'
 mv '../%{gtest_dir}' 'third_party/googletest'
 %else
@@ -848,10 +848,10 @@ sed -r -i '/((RE2|ABSL)_INCLUDE|libabsl_)/s|/usr|%{_prefix}|' setup.py
 
 # Extract the source tarballs needed for their .proto files, which upstream
 # expects to download at build time.
-%setup -q -T -D -b 2 -n grpc-%{srcversion}
-%setup -q -T -D -b 3 -n grpc-%{srcversion}
-%setup -q -T -D -b 4 -n grpc-%{srcversion}
-%setup -q -T -D -b 5 -n grpc-%{srcversion}
+%setup -q -T -D -b 2 -n %{name}-%{version}
+%setup -q -T -D -b 3 -n %{name}-%{version}
+%setup -q -T -D -b 4 -n %{name}-%{version}
+%setup -q -T -D -b 5 -n %{name}-%{version}
 {
   awk '$1 ~ /^(#|$)/ { next }; 1' <<'EOF'
 ../%{envoy_api_dir}/ third_party/envoy-api/

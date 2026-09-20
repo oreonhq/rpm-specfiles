@@ -5,7 +5,7 @@
 %global sdkver 1.4.341.0
 
 Name:           spirv-tools
-Version:        2026.1
+Version:        2026.4.rc2
 Release:        %autorelease
 Summary:        API and commands for processing SPIR-V modules
 
@@ -49,7 +49,7 @@ Development files for %{name}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n SPIRV-Tools-vulkan-sdk-%{sdkver}
+%autosetup -p1 -n SPIRV-Tools-vulkan-sdk-1.4.341.0
 
 %build
 %cmake -DCMAKE_BUILD_TYPE=Release \

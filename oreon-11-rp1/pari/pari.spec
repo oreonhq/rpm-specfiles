@@ -1,4 +1,4 @@
-%global source0_hash 8d9c4fcd584c468d27e0f23c36836587284452094c4b1c404c20c4b810462dcb
+%global source0_hash 02651d99c391007d384b3fadbc20abc6916b77036f9e496c99e9ce8688ca4b53
 
 Name:           pari
 Version:        2.17.4

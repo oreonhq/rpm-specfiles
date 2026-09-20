@@ -1,4 +1,4 @@
-%global source0_hash f8dd7566adb74147fab9964680b6bbadee87cf406a7fcff51718a5e6949b841c
+%global source0_hash 2cafccb2aaf2491a4068676117a0d4f90ab307724b96fffc54cd1da953779400
 
 Name:       xrandr
 Version:    1.5.4

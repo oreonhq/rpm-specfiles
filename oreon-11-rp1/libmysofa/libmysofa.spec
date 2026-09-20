@@ -2,7 +2,7 @@
 %global commit 4585a0ae5bc98894750baf70e7f7989360e5a376
 
 Name:           libmysofa
-Version:        1.3.3
+Version:        1.3.5
 Release:        %autorelease
 Summary:        C functions for reading HRTFs
 
@@ -42,7 +42,7 @@ Tools for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n libmysofa-%{commit}
+%autosetup -p1 -n libmysofa-4585a0ae5bc98894750baf70e7f7989360e5a376
 
 
 %build

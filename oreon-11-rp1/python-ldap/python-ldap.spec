@@ -1,4 +1,4 @@
-%global source0_hash b2f6ef1c37fe2c6a5a85212efe71311ee21847766a7d45fcb711f3b270a5f79a
+%global source0_hash 18dc7460470c6ff64ed5c04ee21c56dbfee7ab433a53213ba91e407eea44c34c
 
 ### Abstract ###
 %bcond servers %{undefined rhel}
@@ -8,7 +8,7 @@
 %global openldap_version 2.4.45-4
 
 Name: python-ldap
-Version: 3.4.5
+Version: 3.4.8
 Release: %autorelease
 License: python-ldap
 Summary: An object-oriented API to access LDAP directory servers
@@ -52,7 +52,7 @@ Provides:  python3-pyldap%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n python_ldap-%{version}%{?prerelease} -N
+%autosetup -p1 -n python_ldap-%{version} -N
 %autopatch -p1 -M100
 %if %{without servers}
 %autopatch -p1 101

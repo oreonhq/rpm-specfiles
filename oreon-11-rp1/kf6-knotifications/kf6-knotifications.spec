@@ -1,4 +1,4 @@
-%global source0_hash 883e0139fcbc692070287e47de5368c78eb91c8bdbb52fb6f8398183f6aace8f
+%global source0_hash 09ad50570b26aada0408bb9ccfaabf629c56ec89a9972c8b0e155ab780f577cf
 
 %global framework knotifications
 
@@ -51,7 +51,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n knotifications-%{version} -p1
 
 %build
 %cmake_kf6 -DBUILD_PYTHON_BINDINGS=OFF

@@ -1,4 +1,4 @@
-%global source0_hash 71a2c5b1218f60c4c6d2f1954c7eb20132156cae90bdb90b566c24db002782a6
+%global source0_hash a9d4df463d36a6e5f9c29bd6f4967312d17e996c1854f3511f833924eb1993cf
 
 Summary:       A library of functions for manipulating PNG image format files
 Name:          libpng

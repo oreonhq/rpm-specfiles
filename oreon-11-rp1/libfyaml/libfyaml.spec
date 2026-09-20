@@ -1,4 +1,4 @@
-%global source0_hash 9f813cad43777803dc3618d31a2efe3a03fafacf2592fabb383fffa5e185f2ce
+%global source0_hash 2d016379a69f6cf6beaf06d12bcefe1ad1784bab28fbb41a6fa8d49d25f1bc0a
 
 Name:           libfyaml
 Version:        0.9.6

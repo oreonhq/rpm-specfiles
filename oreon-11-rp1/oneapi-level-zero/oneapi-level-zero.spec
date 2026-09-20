@@ -1,8 +1,8 @@
 %global source0_hash none
 
 %global srcname level-zero
-%global lib_version 1.28
-%global patch_version 6
+%global lib_version 1.34
+%global patch_version 0
 %global _lto_cflags %nil
 
 Name:           oneapi-%{srcname}
@@ -51,7 +51,7 @@ of the oneAPI Level-Zero driver and dumping out the basic device and driver char
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{srcname}-%{version}
+%autosetup -p1 -n level-zero-1.34.0
 
 %build
 # spdlog uses fmt, but since this doesn't setup linking, use it in header only mode

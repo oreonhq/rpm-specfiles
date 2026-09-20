@@ -56,7 +56,7 @@ the performance of Blosc, and compares it with memcpy.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n c-%{name}-%{version} -p1
+%autosetup -n c-blosc-%{version} -p1
 rm -r internal-complibs/lz4* internal-complibs/zstd*
 
 # Fix rpath issue

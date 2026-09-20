@@ -5,8 +5,8 @@
 %bcond_without perl_Net_Ping_enables_optional_test
 
 Name:           perl-Net-Ping
-Version:        2.76
-Release:        521%{?dist}
+Version:        6.4801
+Release:        1%{?dist}
 Summary:        Check a remote host for reachability
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-Ping/
@@ -78,7 +78,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n Net-Ping-%{base_version}
+%setup -q -n Net-Ping-2.75
 %patch -P0 -p1
 # Remove author tests
 rm t/6*.t

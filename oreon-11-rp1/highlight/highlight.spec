@@ -1,8 +1,8 @@
-%global source0_hash 11c01ec5965ae9b0319bd7cb1a04ffd85ad8586176033a1fbe9a82f08e99ed56
+%global source0_hash 310785a78bd054c4592ff012924c0542826ab53b7afd68d207462321c409a999
 
 Name:           highlight
 Summary:        Universal source code to formatted text converter
-Version:        4.19
+Version:        4.21
 Release:        %autorelease
 License:        GPL-3.0-only
 URL:            http://www.andre-simon.de/

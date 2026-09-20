@@ -1,4 +1,4 @@
-%global source0_hash 99f144540c6070591e4c53bcb977eb42664c62b7b36cb35a29cf72ded339621d
+%global source0_hash 26bdcf2cebd7310c6f598850606b037ef0c515fe6608ebc54d22c50c4c32b35f
 
 %if 0%{?fedora} || 0%{?rhel} <= 8
 %bcond_without deprecated

@@ -3,8 +3,8 @@
 %global base_version 2.183
 
 Name:           perl-Data-Dumper
-Version:        2.191
-Release:        522%{?dist}
+Version:        5.8.9
+Release:        1%{?dist}
 Summary:        Stringify perl data structures, suitable for printing and eval
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-Dumper
@@ -79,7 +79,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n Data-Dumper-%{base_version}
+%setup -q -n Data-Dumper-2.183
 %patch -P0 -p1
 %patch -P1 -p1
 %patch -P2 -p1

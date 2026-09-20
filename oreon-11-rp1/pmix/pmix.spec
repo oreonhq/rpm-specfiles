@@ -1,12 +1,12 @@
-%global source0_hash b9e6ad482fcdcb58c9b9553ae56956b6d7df875d5605b6ecb96adaff16b2b07a
+%global source0_hash 8a41801cef3762a87a75d6e7635926886d7e95f4d6e2eef6b514dd0f275abe8b
 
 Name:           pmix
-Version:        6.1.0
+Version:        6.1.1rc2
 Release:        1%{?dist}
 Summary:        Process Management Interface Exascale (PMIx)
 License:        BSD-3-Clause
 URL:            https://pmix.org/
-Source0:        https://github.com/openpmix/openpmix/releases/download/v%{version}/%{name}-%{version}.tar.bz2
+Source0: https://codeload.github.com/openpmix/openpmix/tar.gz/refs/tags/v6.1.1rc2
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -62,7 +62,7 @@ based starters (e.g., mpirun).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n openpmix-%{version}
 
 # touch lexer sources to recompile them
 find src -name \*.l -print -exec touch --no-create {} \;

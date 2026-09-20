@@ -4,8 +4,8 @@
 Name:           perl-File-Temp
 Epoch:          1
 # Normalized version, compete with perl.spec
-Version:        0.231.200
-Release:        2%{?dist}
+Version:        6.36
+Release:        1%{?dist}
 Summary:        Return name and handle of a temporary file safely
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Temp
@@ -65,7 +65,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n File-Temp-%{cpan_version}
+%setup -q -n File-Temp-0.2312
 chmod -x misc/benchmark.pl
 perl -MConfig -p -i -e 's|\A#!/usr/local/bin/perl\b|$Config{startperl}|' \
     misc/benchmark.pl

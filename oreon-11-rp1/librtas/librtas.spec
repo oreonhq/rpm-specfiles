@@ -1,4 +1,4 @@
-%global source0_hash b88ca9ac5acafb924cd0aaf56c89a7f149c84ade0fc6840f3ef8356ab96a1254
+%global source0_hash 8999580c13889955a7901b8a5ed00c20797922e1e7679082e38e38fae8e1cefc
 
 Summary: Libraries to provide access to RTAS calls and RTAS events
 Name:    librtas

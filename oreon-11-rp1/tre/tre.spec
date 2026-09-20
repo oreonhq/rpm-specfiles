@@ -1,4 +1,4 @@
-%global source0_hash 31d5776d8c56186704ec272b97fadf52a0a7ae9caca19487a0c3b17ef1626340
+%global source0_hash 5b7e5a730f041c6b0dab8f66576cda917577ec06bb393f156b169c51bca170d1
 
 %global commit d0e0c997336b3210f05b3e1daa7bb5cb9900d274
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
@@ -72,7 +72,7 @@ regexps of any length, any number of errors, and non-uniform costs.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %if 0%{?git}
-%setup -q -n tre-%{commit}
+%setup -q -n %{name}-%{version}
 %else
 %setup -q
 %endif

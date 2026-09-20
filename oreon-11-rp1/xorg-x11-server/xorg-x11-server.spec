@@ -18,7 +18,7 @@
 
 Summary:    X.Org X11 X server
 Name:       xorg-x11-server
-Version:    21.1.24
+Version:    26.0.99.902
 Release:    1%{?dist}
 URL:        http://www.x.org
 # SPDX
@@ -225,7 +225,7 @@ Xserver source code needed to build VNC server (Xvnc).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{pkgname}-%{version}
+%autosetup -p1 -n xorg-server-21.1.22
 
 # check the ABI in the source against what we expect.
 getmajor() {

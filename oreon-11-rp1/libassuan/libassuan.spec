@@ -1,4 +1,4 @@
-%global source0_hash 0103081ffc27838a2e50479153ca105e873d3d65d8a9593282e9c94c7e6afb76
+%global source0_hash d2931cdad266e633510f9970e1a2f346055e351bb19f9b78912475b8074c36f6
 
 Name:    libassuan
 Summary: GnuPG IPC library

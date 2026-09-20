@@ -1,4 +1,4 @@
-%global source0_hash 1ad5b065375f4a85915aa60611cc6407c060492a214d7f9daf214be752c3b4d3
+%global source0_hash 72b922c2e765434e9e9f0960148070bd4504b288263e2868a4ccce1b7cf2767a
 
 %global tarball libXrandr
 #global gitdate 20130524
@@ -42,7 +42,7 @@ X.Org X11 libXrandr development package
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
+%setup -q -n %{name}-%{version}
 
 %build
 autoreconf -v --install --force

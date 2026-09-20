@@ -1,4 +1,4 @@
-%global source0_hash 78f1179b838d025e9c26e8fef33f8092f65611444ffa1bfc0cfac6a33511a05a
+%global source0_hash 2dca25c0e0c837ddf00b52011b3f82cac1e4ddd3ad018227806b0c2288864acc
 
 Name:           libass
 Version:        0.17.5

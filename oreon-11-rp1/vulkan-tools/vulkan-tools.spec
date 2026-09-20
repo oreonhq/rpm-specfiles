@@ -1,7 +1,7 @@
 %global source0_hash dc65f1ea97dd0b2155c2281a79e87d27183c0737fb96377744091a3c8460ae1e
 
 Name:           vulkan-tools
-Version:        1.4.362
+Version:        1.4.363
 Release:        %autorelease
 Summary:        Vulkan tools
 
@@ -35,7 +35,7 @@ Vulkan tools
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n Vulkan-Tools-vulkan-sdk-%{version} -p1
+%autosetup -n Vulkan-Tools-vulkan-sdk-1.4.341.0 -p1
 
 
 %build

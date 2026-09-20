@@ -6,8 +6,8 @@ Name:           perl-ExtUtils-CBuilder
 # Compete with perl.spec
 Epoch:          1
 # Mimic perl.spec
-Version:        0.280242
-Release:        521%{?dist}
+Version:        2.16
+Release:        1%{?dist}
 Summary:        Compile and link C code for Perl modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-CBuilder
@@ -81,7 +81,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n ExtUtils-CBuilder-%{base_version}
+%autosetup -p1 -n ExtUtils-CBuilder-0.280236
 
 # Normalize shebangs
 for F in t/*.t; do

@@ -1,4 +1,4 @@
-%global source0_hash 0013877c6bd23c2dbe42ad7c70a053d0e449be66736574e37867c49c5f905a4f
+%global source0_hash 80931fa472a77b9a164f6740e3c0b444fac6770054632d35a7ff9d679e5e7b9f
 
 %if 0%{?fedora}
 %global with_broadway 1

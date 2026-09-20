@@ -1,4 +1,4 @@
-%global source0_hash c065f040afdff3177680600f249727e41a1afc22fccf27222f15f5306faa1f03
+%global source0_hash 64176eaa46e4969903e286f8e5ef8331affc17fdf03ac9b58381d2b23162b7a3
 
 Name:           wayland
 Version:        1.26.0

@@ -5,8 +5,8 @@
 
 Name:           perl-Function-Parameters
 %global cpan_version 2.002006
-Version:        2.2.6
-Release:        2%{?dist}
+Version:        2.002006
+Release:        1%{?dist}
 Summary:        Subroutine definitions with parameter lists
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Function-Parameters
@@ -58,7 +58,7 @@ and doesn't require a source filter.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n Function-Parameters-%{cpan_version}
+%setup -q -n Function-Parameters-%{version}
 
 %build
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1 OPTIMIZE="%{optflags}"

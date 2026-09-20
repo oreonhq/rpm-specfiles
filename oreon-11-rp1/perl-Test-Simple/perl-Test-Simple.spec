@@ -1,4 +1,4 @@
-%global source0_hash 7cf84a18d6c9450e53ae8b4de5d5fa32c9fe99f3cebbe408fe59433f19921ec2
+%global source0_hash 9b5eefd82a9544582d43d2fb4e3d07e3f97d93293568593b41ad5010afccc785
 
 # Disable non-core dependencies when bootstrapping a core module
 # Run optional tests with additional dependencies
@@ -16,14 +16,14 @@
 Name:           perl-Test-Simple
 Summary:        Basic utilities for writing tests
 Epoch:          3
-Version:        1.302222
-Release:        2%{?dist}
+Version:        1.302225
+Release:        1%{?dist}
 # CC0-1.0: lib/ok.pm
 # Public Domain: lib/Test/Tutorial.pod
 # GPL-1.0-or-later OR Artistic-1.0-Perl: the rest of the distribution
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND CC0-1.0 AND LicenseRef-Public-Domain
 URL:            https://metacpan.org/release/Test-Simple
-Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-Simple-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-Simple-1.302225.tar.gz
 
 
 

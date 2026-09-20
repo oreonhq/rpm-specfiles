@@ -1,4 +1,4 @@
-%global source0_hash 76285d03cdc06f0647afbbc89f31ab5aa766cbc3c6eb177e3f8a0441444e3068
+%global source0_hash ab1333c258678caa7562120a1c03bb71779f7232f1a0e75b9525d921dee3e0a3
 
 %global		framework kwidgetsaddons
 
@@ -55,7 +55,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{framework}-%{version} -p1
+%autosetup -n kwidgetsaddons-%{version} -p1
 
 %build
 %cmake_kf6

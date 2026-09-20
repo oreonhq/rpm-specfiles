@@ -1,4 +1,4 @@
-%global source0_hash 52733c1f5262fca35f64e7d5060c6fcd81a880ba8e1e65c9621cf0727afb5d11
+%global source0_hash 127067f521d3ee467b97bcb145aeba1078e2454d448e8748eb984d5b397bde24
 
 Summary: X Damage extension library
 Name: libXdamage

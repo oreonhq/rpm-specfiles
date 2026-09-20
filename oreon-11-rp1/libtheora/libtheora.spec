@@ -1,4 +1,4 @@
-%global source0_hash f36da409947aa2b3dcc6af0a8c2e3144bc19db2ed547d64e9171c59c66561c61
+%global source0_hash ebdf77a8f5c0a8f7a9e42323844fa09502b34eb1d1fece7b5f54da41fe2122ec
 
 # enable bootstrap mode (e.g. disables doc generation)
 %bcond bootstrap 0

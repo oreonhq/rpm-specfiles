@@ -1,4 +1,4 @@
-%global source0_hash d60931937426130ddad9f1975c010543f0da99e67edb1c6070656b7947f633b6
+%global source0_hash 4de3e2faf1e8307fb282e4a43f443191810f6a6b0a484fffa7995ba1c814c6ec
 
 %global mfx_major 2
 %global mfx_minor 16
@@ -67,7 +67,7 @@ This package contains sample programs and applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n libvpl-%{version}
+%autosetup -p1 -n %{name}-%{version}
 
 %build
 %cmake \

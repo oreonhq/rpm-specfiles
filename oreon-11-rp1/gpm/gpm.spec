@@ -70,7 +70,7 @@ mouse support to text-based Linux applications.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n gpm-%{version}
+%autosetup -p1 -n %{name}-%{version}
 
 %build
 export CFLAGS="$CFLAGS -std=gnu17 -Wno-unused-result -Wno-sign-compare -Wno-pointer-sign"

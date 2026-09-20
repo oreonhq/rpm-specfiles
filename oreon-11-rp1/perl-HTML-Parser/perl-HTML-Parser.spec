@@ -1,11 +1,11 @@
-%global source0_hash 7278ce9791256132b26a71a5719451844704bb9674b58302c3486df43584f8c0
+%global source0_hash 5305e1d5faa70ee0aa282d85a5c9aa93911e8c7afa590ad1ced5703a544e20f6
 
 Name:           perl-HTML-Parser
 Summary:        Perl module for parsing HTML
-Version:        3.83
-Release:        5%{?dist}
+Version:        3.86
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
-Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTML-Parser-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTML-Parser-3.86.tar.gz
 URL:            https://metacpan.org/release/HTML-Parser
 BuildRequires:  coreutils
 BuildRequires:  findutils

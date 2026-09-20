@@ -1,4 +1,4 @@
-%global source0_hash a19bc5087fd97026d93cb4b45d51638d1a25202a5e1fbc3905799f424cfa6134
+%global source0_hash 7a85413f2bc354f4f8aa832b718af122e48965e9e0eb9012ee659c13c6385c93
 
 Name: libgpg-error
 Version: 1.61

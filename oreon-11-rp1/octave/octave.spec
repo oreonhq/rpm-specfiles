@@ -218,7 +218,7 @@ BuildArch:      noarch
 This package contains documentation for Octave.
 
 %prep
-%autosetup -p1 -n %{name}-%{version}%{?rctag}
+%autosetup -p1 -n %{name}-%{version}
 %if %{with blas64}
 sed -i -e 's/OCTAVE_CHECK_LIB(suitesparseconfig,/OCTAVE_CHECK_LIB(suitesparseconfig64,/' configure.ac
 %endif

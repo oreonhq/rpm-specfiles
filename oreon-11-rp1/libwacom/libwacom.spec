@@ -1,4 +1,4 @@
-%global source0_hash 7dbb9ab37df9df47ae2fdbb644916c986728291749bcd5ad8bcaa26f1e15f002
+%global source0_hash 370b45b5e05a91960df0aeb9c9481ae05846aab92ab2d4ec66945a0da4216888
 
 Name:           libwacom
 Version:        2.20.0

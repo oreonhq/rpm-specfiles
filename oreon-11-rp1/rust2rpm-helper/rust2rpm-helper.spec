@@ -1,4 +1,4 @@
-%global source0_hash e15d0dba01f486f3e039e41300585d8d893dbf29047c3c90575f1f9bd8f1d2a2
+%global source0_hash c4b770629624640cf1d22d90d22f0db76318cf3769115e513ec4d7c51ff3538c
 
 %bcond check 1
 
@@ -30,7 +30,7 @@ Helper program for rust2rpm.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n %{name} -p1
+%autosetup -n rust2rpm-helper -p1
 %cargo_prep
 
 %generate_buildrequires

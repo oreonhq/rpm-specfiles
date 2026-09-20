@@ -1,4 +1,4 @@
-%global source0_hash 0db62283742617ef80d9f19705a034dc639840d87296b4cd6a7f082ce88dad6a
+%global source0_hash ff8723dd0a416654420173a9bdecf075da78d4ea916267b4a0b535cd60219656
 
 # Run optional test
 %if ! (0%{?rhel})
@@ -8,12 +8,12 @@
 %endif
 
 Name:           perl-Net-CalDAVTalk
-Version:        0.12
-Release:        25%{?dist}
+Version:        0.18
+Release:        1%{?dist}
 Summary:        CalDAV client with JSON data interface
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Net-CalDAVTalk
-Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-CalDAVTalk-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-CalDAVTalk-0.18.tar.gz
 # Fix using Data::Dumper, CPAN RT#123646
 Patch0:         Net-CalDAVTalk-0.12-Load-Data-Dumper.patch
 BuildArch:      noarch

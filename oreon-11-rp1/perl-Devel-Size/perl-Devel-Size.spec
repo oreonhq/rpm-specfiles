@@ -1,4 +1,4 @@
-%global source0_hash db2f7787f62ee2e5094b2f60238ad767edd8743bfd5215e869eb4bc51f339b30
+%global source0_hash c89fe04c9d0e5ced6c1d334311d576de609f3c8a41220919d4551e9eb0191f47
 
 # Run optional test
 %if ! (0%{?rhel})
@@ -8,12 +8,12 @@
 %endif
 
 Name:           perl-Devel-Size
-Version:        0.86
+Version:        0.87
 Release:        1%{?dist}
 Summary:        Perl extension for finding the memory usage of Perl variables
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-Size
-Source0:        https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/Devel-Size-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/Devel-Size-0.87.tar.gz
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc

@@ -7953,7 +7953,7 @@ test "%{source465_hash}" = "none" || { f="%{SOURCE465}"; test -f "$f" || { echo 
 test "%{source466_hash}" = "none" || { f="%{SOURCE466}"; test -f "$f" || { echo "oreon: missing Source466 $f" >&2; exit 1; }; h_expected="%{source466_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source466_hash}" || { echo "oreon: Source466 hash mismatch" >&2; exit 1; }; }
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h_expected="%{source2_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
-%setup -q -c -T
+%setup -q -c -T -n texlive-20260301-source
 # xz -dc %%{SOURCE0} | tar x
 tar xf %{SOURCE0}
 [ -e %{source_name} ] && mv %{source_name} source

@@ -6,7 +6,7 @@
 %global nmlibdir %{_prefix}/lib/NetworkManager
 
 Name:           nvme-cli
-Version:        3.0-b.5
+Version:        3.1
 Release:        1%{?dist}
 Summary:        NVMe management command line interface
 
@@ -40,7 +40,7 @@ nvme-cli provides NVM-Express user space tooling for Linux.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{version_no_tilde}
+%autosetup -p1 -n nvme-cli-2.16
 
 
 %build

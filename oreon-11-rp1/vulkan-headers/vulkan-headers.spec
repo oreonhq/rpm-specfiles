@@ -2,7 +2,7 @@
 
 %global __python %{__python3}
 Name:           vulkan-headers
-Version:        1.4.362
+Version:        1.4.363
 Release:        %autorelease
 Summary:        Vulkan Header files and API registry
 
@@ -21,7 +21,7 @@ Vulkan Header files and API registry
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n Vulkan-Headers-vulkan-sdk-%{version}
+%autosetup -n Vulkan-Headers-vulkan-sdk-1.4.341.0
 
 
 %build

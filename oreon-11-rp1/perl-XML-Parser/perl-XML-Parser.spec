@@ -1,13 +1,13 @@
-%global source0_hash ad4aae643ec784f489b956abe952432871a622d4e2b5c619e8855accbfc4d1d8
+%global source0_hash a358fd7c49f5e27717a644a9102bd21dc7fc25a415983279c59b1580e2b62a58
 
 Name:           perl-XML-Parser
-Version:        2.47
-Release:        9%{?dist}
+Version:        2.59
+Release:        1%{?dist}
 Summary:        Perl module for parsing XML documents
 
 License:        Artistic-2.0
 Url:            https://metacpan.org/release/XML-Parser
-Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-%{version}.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-2.59.tar.gz
 
 # Build
 BuildRequires:  coreutils

@@ -1,4 +1,4 @@
-%global source0_hash bbf67d51446a98eb8fc98c9c6de49a2605c709d3a14ba39f09a09f8e57527099
+%global source0_hash fbd712903d61306ad00d5fa5029a9882630c7311ca487f48d2d76000956e8ff9
 
 Name:		CharLS
 Version:	2.4.4
@@ -36,7 +36,7 @@ CharLS Library Header Files and Link Libraries.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n charls-%{version}
+%autosetup -n %{name}-%{version}
 
 %build
 %cmake -DBUILD_SHARED_LIBS:BOOL=ON \

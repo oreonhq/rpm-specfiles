@@ -1,6 +1,6 @@
 %global source0_hash 1f1a63767bc36e4758b06db0daae556733530fec543775082bbe477655c20db1
 
-%define		mainver		0.996
+%define		mainver		0.996.13
 #%%define		betaver		pre3
 %define		baserelease	11
 
