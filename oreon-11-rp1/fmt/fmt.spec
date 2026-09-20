@@ -58,6 +58,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc ChangeLog.md README.md
 %{_libdir}/lib%{name}.so.12*
 
+%{_libdir}/libfmt-c.a
 %files devel
 %{_includedir}/%{name}
 %{_libdir}/lib%{name}.so
