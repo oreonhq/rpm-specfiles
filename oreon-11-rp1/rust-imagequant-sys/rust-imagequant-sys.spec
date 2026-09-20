@@ -1,4 +1,4 @@
-%global source0_hash 399d307ead010ceffc6f45346b325f9de672da0fe05cfdfa5dec0e5551925e52
+%global source0_hash b5361d7aab1d0c5623172cd6d18920bf21ef56f6e21d7290f1e31e0794c4a76e
 
 %bcond_without check
 
@@ -107,7 +107,7 @@ developing applications that use %{lib}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{crate}-%{version} -p1
+%autosetup -n imagequant-sys-%{version} -p1
 %cargo_prep
 
 %generate_buildrequires

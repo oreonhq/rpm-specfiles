@@ -577,7 +577,7 @@ Summary:        Python runtime libraries
 # Combined manually from https://docs.python.org/3.14/license.html
 # Hash of Doc/license.rst which is compared in %%prep, generated with:
 # $ sha256sum Doc/license.rst | cut -f1 -d" "
-%global license_file_hash c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd
+%global license_file_hash 7e32597b99e5d9a39abed35de4693fa169df3e5850d4c334337ffd6a19a36db6
 # Licenses of incorporated software:
 # Mersenne Twister in _random C extension contains code under BSD-3-Clause
 # socket.getaddrinfo() and socket.getnameinfo() are BSD-3-Clause
@@ -990,7 +990,7 @@ extension modules.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git_am -n Python-%{upstream_version}
+%autosetup -S git_am -n Python-3.14.5
 
 # Verify the second level of bundled provides is up to date
 # Arguably this should be done in %%check, but %%prep has a faster feedback loop
