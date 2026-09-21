@@ -27,7 +27,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q
 
 %build
-%configure --disable-rpath --disable-static
+%configure --disable-rpath --disable-static --disable-werror
 %make_build
 
 %check
@@ -57,5 +57,4 @@ mkdir -p $RPM_BUILD_ROOT/%{_datadir}/mythes
 %{_bindir}/th_gen_idx.pl
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.5-10
-- Prepare for Oreon 11 (RP1)
+%autochangelog

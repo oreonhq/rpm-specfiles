@@ -68,6 +68,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find src -name \*.l -print -exec touch --no-create {} \;
 
 %build
+autoreconf -fi
 export CFLAGS="%{build_cflags} -Wno-unused-function -Wno-attributes"
 %configure \
     --prefix=%{_prefix} \
@@ -120,5 +121,4 @@ find %{buildroot} -name '*.la' | xargs rm -f
 %{_bindir}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0.7-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -52,6 +52,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n SPIRV-Tools-vulkan-sdk-1.4.341.0
 
 %build
+export CXXFLAGS="%{build_cxxflags} -Wno-error=array-bounds"
+export CFLAGS="%{build_cflags} -Wno-error=array-bounds"
 %cmake -DCMAKE_BUILD_TYPE=Release \
        -DCMAKE_INSTALL_LIBDIR=%{_lib} \
        -DSPIRV-Headers_SOURCE_DIR=%{_prefix} \
@@ -97,5 +99,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/pkgconfig/SPIRV-Tools.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2026.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

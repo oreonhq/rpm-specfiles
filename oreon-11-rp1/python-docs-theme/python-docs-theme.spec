@@ -11,6 +11,8 @@ Source: https://codeload.github.com/python/python-docs-theme/tar.gz/refs/tags/20
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
+BuildRequires:  python3-babel
+BuildRequires:  /usr/bin/pybabel
 
 %global _description Python Docs Sphinx Theme is the theme for the Python documentation.
 

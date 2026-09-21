@@ -1,6 +1,6 @@
-%global source0_hash 652a98ca833ed638809a52bec225a7f37799f71a995778f9ccb68ad03bd1fc11
-%global source1_hash 6f0d517e0c47e6446c74cf5503c87312181b80f04c95743f99f05af3ccc5e5a6
-%global source2_hash f6b50b0c103392af32a8be15b2b9d25959de9a00a70c3979128aafeaa5338b3f
+%global source0_hash d18fa15aec74d8c17e1463f861095adc01b5ad190256acb4f91d22f0368d232b
+%global source1_hash a1d0f5de57485d062796ed7e67daff0758b50d00001a0f233a2c15aaf40bbdc8
+%global source2_hash 0e9483900e92cd5de8fd48d16bf9200145a61f7fd5be542a5ac81d8a9516eb9c
 
 # bcond default logic is nicely backwards...
 %bcond_without tcl
@@ -9,8 +9,8 @@
 %bcond_without check
 
 %define majorver 3
-%define realver 3520000
-%define docver 3520000
+%define realver 3530400
+%define docver 3530400
 %define rpmver 3.53.4
 %define year 2026
 
@@ -21,9 +21,9 @@ Release: 1%{?dist}
 License: blessing
 URL: http://www.sqlite.org/
 
-Source0:        https://www.sqlite.org/2026/sqlite-src-3520000.zip
-Source1:        https://www.sqlite.org/2026/sqlite-doc-3520000.zip
-Source2:        https://www.sqlite.org/2026/sqlite-autoconf-3520000.tar.gz
+Source0:        https://www.sqlite.org/2026/sqlite-src-3530400.zip
+Source1:        https://www.sqlite.org/2026/sqlite-doc-3530400.zip
+Source2:        https://www.sqlite.org/2026/sqlite-autoconf-3530400.tar.gz
 # Support a system-wide lemon template
 Patch1: sqlite-3.6.23-lemon-system-template.patch
 Patch2: sqlite-3.49.0-fix-lemon-missing-cflags.patch
@@ -293,7 +293,8 @@ rm -f $RPM_BUILD_ROOT/%{_libdir}/*.{la,a}
 
 # This is needed since rpath removal using sed won't work for tcl library for some reason
 chrpath --delete $RPM_BUILD_ROOT/%{tcl_sitearch}/sqlite*/*.so
-chrpath --delete $RPM_BUILD_ROOT/%{_libdir}/*.so.%{version}
+ls -1 $RPM_BUILD_ROOT/%{_libdir}/libsqlite3.so.[0-9]* >/dev/null
+chrpath --delete $RPM_BUILD_ROOT/%{_libdir}/libsqlite3.so.%{version}
 
 chrpath --delete $RPM_BUILD_ROOT/%{_bindir}/sqlite3
 chrpath --delete $RPM_BUILD_ROOT/%{_bindir}/sqlite3-debug
@@ -363,5 +364,4 @@ make test
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{rpmver}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

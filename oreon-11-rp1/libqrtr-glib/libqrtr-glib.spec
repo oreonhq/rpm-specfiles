@@ -37,13 +37,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
-%meson
+%meson -Dgtk_doc=true
 %meson_build
 
 
 %install
 %meson_install
-find %{buildroot}%{_datadir}/gtk-doc |xargs touch --reference meson.build
+if [ -d %{buildroot}%{_datadir}/gtk-doc ]; then find %{buildroot}%{_datadir}/gtk-doc -print0 | xargs -0 -r touch --reference meson.build; fi
 
 
 %check
@@ -69,5 +69,4 @@ find %{buildroot}%{_datadir}/gtk-doc |xargs touch --reference meson.build
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.2-9
-- Prepare for Oreon 11 (RP1)
+%autochangelog

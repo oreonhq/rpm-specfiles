@@ -36,6 +36,8 @@ confinement checks at runtime.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version}
+# Upstream tag vendor/ is inconsistent with go.mod; refresh before build
+go mod vendor
 
 %build
 export GOFLAGS="-mod=vendor"
@@ -44,14 +46,15 @@ export GOPATH=%{_builddir}/go
 mkdir -p "$GOPATH/src/github.com/snapcore"
 ln -sfn "$(pwd)" "$GOPATH/src/github.com/snapcore/snapd"
 version="%{version}"
-go build -buildmode=pie -ldflags "-X %{goipath}/cmd/snap.Version=${version} -X %{goipath}/cmd/snapd.Version=${version}" -o bin/snapd ./cmd/snapd
-go build -buildmode=pie -ldflags "-X %{goipath}/cmd/snap.Version=${version}" -o bin/snap ./cmd/snap
+# 2.78+ uses a multi-call snapd binary (daemon when argv0=snapd, CLI otherwise)
+go build -buildmode=pie -ldflags "-X %{goipath}/cmd/snapd.Version=${version}" -o bin/snapd ./cmd/snapd
 go build -buildmode=pie -o bin/snapctl ./cmd/snapctl
 
 %install
 install -D -p -m 0755 bin/snapd %{buildroot}%{_libexecdir}/snapd/snapd
-install -D -p -m 0755 bin/snap %{buildroot}%{_bindir}/snap
 install -D -p -m 0755 bin/snapctl %{buildroot}%{_libexecdir}/snapd/snapctl
+# argv0-based multi-call: /usr/bin/snap -> snapd runs the CLI
+ln -s %{_libexecdir}/snapd/snapd %{buildroot}%{_bindir}/snap
 ln -s %{_libexecdir}/snapd/snapctl %{buildroot}%{_bindir}/snapctl
 
 install -d -m 0755 %{buildroot}%{_sharedstatedir}/snapd/snaps

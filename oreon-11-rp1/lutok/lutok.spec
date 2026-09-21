@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5f33fdf8be36c2d95b866947ff49aa4a90ffd6f10a6172d9ed9243f6a6b42f18
 
 Summary: Lightweight C++ API library for Lua
 Name: lutok
@@ -45,13 +45,13 @@ cp -p %{SOURCE1} README.Fedora
 %configure --docdir=%{_defaultdocdir}/lutok-doc-%{version} \
            --disable-static \
            --htmldir=%{_defaultdocdir}/lutok-doc-%{version}/html \
-           --without-doxygen
+           --without-doxygen \
+           --enable-atf
 # Drop the default RPATH
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/#_beware_of_rpath
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags} testsdir=%{_testsdir}
-
 %check
 # In order to enable this, we need to add a BuildRequires on kyua-cli.  The
 # problem is that kyua-cli depends on lutok.  Introducing a circular dependency
@@ -113,5 +113,4 @@ details on how to run the installed tests.
 %{_testsdir}
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.4-31
-- Import
+%autochangelog

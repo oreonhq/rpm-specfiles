@@ -72,11 +72,14 @@ export CMAKE_POLICY_VERSION_MINIMUM=3.5
 
 %install
 %cmake_install
+# Upstream installs README.MD; do not ship a missing README.md path
+rm -f %{buildroot}%{_docdir}/%{name}/README.md
+if [ -f %{buildroot}%{_docdir}/%{name}/README.MD ]; then :; fi
 
 %ldconfig_scriptlets
 
 %files
-%doc docs/COPYING* ChangeLog README TODO
+%doc README.MD docs/COPYING* docs/README.MD ChangeLog TODO
 %{_libdir}/*.so.*
 %exclude %{_datadir}/zziplib/*.cmake
 %exclude %{_libdir}/cmake/zziplib/*.cmake
@@ -94,5 +97,4 @@ export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %{_mandir}/man3/*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.13.78-4
-- Import
+%autochangelog

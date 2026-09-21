@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 410cf990e841bf6fe69668c201eb0235dcf2677544bcadbe4536f94cd4ff615f
 
 Version: 22.1.0
 Summary: Universal Plug and Play (UPnP) SDK
@@ -10,7 +10,9 @@ Source: %{url}/archive/release-%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make
-BuildRequires: libtool
+BuildRequires: cmake
+BuildRequires: ninja-build
+BuildRequires:  openssl-devel
 
 
 %description
@@ -33,27 +35,22 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
-autoreconf -vif
-%configure \
-  --enable-static=no \
-  --enable-ipv6
-
-# remove rpath from libtool
-sed -i.rpath 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-sed -i.rpath 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-
-%make_build
+%cmake -GNinja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_TESTING=OFF \
+    -DUPNP_ENABLE_OPEN_SSL=ON
+%cmake_build
 
 %install
-%make_install
+%cmake_install
 
-%{__rm} %{buildroot}%{_libdir}/{libixml.la,libupnp.la}
+%ldconfig_scriptlets
 
 %files
 %license COPYING
 %doc THANKS
-%{_libdir}/libixml.so.11*
-%{_libdir}/libupnp.so.20*
+%{_libdir}/libixml.so.*
+%{_libdir}/libupnp.so.*
 
 %files devel
 %{_includedir}/upnp/
