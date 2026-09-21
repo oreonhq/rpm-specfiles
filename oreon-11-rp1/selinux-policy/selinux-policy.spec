@@ -1,5 +1,5 @@
 %global source0_hash 8d93cc19401020dbeb145f78b23b521ebec752f676ae6e16a2ffc7f36cbb06bb
-%global source4_hash 40838e73978af24ffa4be6c9754df59e26e776c41bb7c81cd11d87079a3f6f3a
+%global source4_hash 25b437d6e4ae23890d716d0889545f0f53c4850d2c8b99e03453753c27347c0e
 
 # Conditionals for policy types (all built by default)
 %bcond targeted 1
@@ -12,7 +12,7 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %global macro_expander_commit 76939da7d8246c9b21a60b3b96ca04d6288d4a25
-%global container_selinux_commit add9f4a543f9fd3407f54717752ab640354654b2
+%global container_selinux_commit 4ac019955c8885496ffbd978520c905434d4273e
 
 %define distro redhat
 %define polyinstatiate n
