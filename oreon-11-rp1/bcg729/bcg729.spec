@@ -66,9 +66,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_includedir}/%{name}/
 %{_libdir}/lib%{name}.so
 %{_libdir}/pkgconfig/lib%{name}.pc
-%{_libdir}/cmake/Bcg729/
 
 
+%{_datadir}/BCG729/cmake/
 %changelog
 %autochangelog
 
