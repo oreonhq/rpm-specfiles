@@ -1,7 +1,6 @@
-diff -up gperftools-2.17/configure.ac.dynload gperftools-2.17/configure.ac
---- gperftools-2.17/configure.ac.dynload	2025-08-05 13:05:50.390004596 -0400
-+++ gperftools-2.17/configure.ac	2025-08-05 13:05:20.644258524 -0400
-@@ -506,6 +506,17 @@ AS_IF([test "x$enable_aggressive_decommi
+--- gperftools-2.18.90/configure.ac.dynload	2026-09-22 19:45:54.955286103 -0700
++++ gperftools-2.18.90/configure.ac	2026-09-22 19:45:54.984058974 -0700
+@@ -536,6 +536,17 @@ AS_IF([test "x$enable_aggressive_decommi
                   1,
                   [enable aggressive decommit by default])])
  
@@ -19,15 +18,14 @@ diff -up gperftools-2.17/configure.ac.dynload gperftools-2.17/configure.ac
  AC_PATH_PROG(PPROF_PATH, pprof)
  AM_CONDITIONAL(SKIP_PPROF_TESTS, [test "x$PPROF_PATH" = "x"])
  AS_IF([test "x$PPROF_PATH" = "x"],
-diff -up gperftools-2.17/src/base/basictypes.h.dynload gperftools-2.17/src/base/basictypes.h
---- gperftools-2.17/src/base/basictypes.h.dynload	2025-08-05 13:05:59.341787961 -0400
-+++ gperftools-2.17/src/base/basictypes.h	2025-08-05 13:06:52.289818648 -0400
+--- gperftools-2.18.90/src/base/basictypes.h.dynload	2026-09-22 19:45:54.956528850 -0700
++++ gperftools-2.18.90/src/base/basictypes.h	2026-09-22 19:45:54.984398426 -0700
 @@ -84,7 +84,7 @@
- # define ATTRIBUTE_UNUSED
+ #define ATTRIBUTE_UNUSED
  #endif
  
 -#if defined(HAVE___ATTRIBUTE__)
 +#if defined(HAVE___ATTRIBUTE__) && defined(ENABLE_GENERIC_DYNAMIC_TLS)
- #define ATTR_INITIAL_EXEC __attribute__ ((tls_model ("initial-exec")))
+ #define ATTR_INITIAL_EXEC __attribute__((tls_model("initial-exec")))
  #else
  #define ATTR_INITIAL_EXEC
