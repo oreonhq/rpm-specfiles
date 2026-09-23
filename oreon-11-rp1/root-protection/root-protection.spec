@@ -11,6 +11,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  systemd-rpm-macros
+BuildRequires:  python3-devel
 Requires:       rsync
 Requires:       grub2-tools
 Requires:       tar
@@ -44,9 +45,7 @@ install -d %{buildroot}%{_libexecdir}/root-protection
 install -d %{buildroot}/boot/root-protection/bls
 # dnf4 plugin path varies; also drop a copy under libexec for the hook
 install -D -m 0644 hooks/dnf/root_protection.conf %{buildroot}%{_sysconfdir}/dnf/plugins/root_protection.conf
-# try common dnf plugin dirs
-install -D -m 0644 hooks/dnf/root_protection.py %{buildroot}%{_prefix}/lib/python3.12/site-packages/dnf-plugins/root_protection.py || true
-install -D -m 0644 hooks/dnf/root_protection.py %{buildroot}%{_datadir}/dnf-plugins/root_protection.py
+install -D -m 0644 hooks/dnf/root_protection.py %{buildroot}%{python3_sitelib}/dnf-plugins/root_protection.py
 install -D -m 0755 hooks/dnf5/dnf-hook %{buildroot}%{_libexecdir}/root-protection/dnf-hook
 install -D -m 0644 hooks/dnf5/rp-conf-get.awk %{buildroot}%{_libexecdir}/root-protection/rp-conf-get.awk
 if [ -f hooks/dnf5/root-protection.actions ]; then
@@ -127,8 +126,8 @@ fi
 %{_datadir}/applications/org.oreon.RootProtection.desktop
 %{_datadir}/polkit-1/actions/org.oreon.RootProtection.policy
 %{_datadir}/root-protection/
-%{_datadir}/dnf-plugins/root_protection.py
-%{_prefix}/lib/python3.12/site-packages/dnf-plugins/root_protection.py
+%{python3_sitelib}/dnf-plugins/root_protection.py
+%{_datadir}/dnf5/libdnf5-plugins/actions.d/root-protection.actions
 %dir %{_localstatedir}/lib/root-protection
 %dir %{_localstatedir}/lib/root-protection/snaps
 %dir %{_localstatedir}/lib/root-protection/backups
