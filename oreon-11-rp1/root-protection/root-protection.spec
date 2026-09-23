@@ -37,6 +37,7 @@ snapshots. Protect root without making it immutable.
 
 %install
 %cmake_install
+rm -f %{buildroot}%{_datadir}/doc/%{name}/LICENSE
 install -d %{buildroot}%{_sysconfdir}/root-protection
 install -d %{buildroot}%{_localstatedir}/lib/root-protection/snaps
 install -d %{buildroot}%{_localstatedir}/lib/root-protection/backups

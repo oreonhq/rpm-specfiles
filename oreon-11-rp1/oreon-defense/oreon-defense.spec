@@ -38,6 +38,7 @@ Straightforward protection and visibility with real-time alerts.
 %cmake_install
 install -D -m 0755 scripts/trigger-scan.sh %{buildroot}%{_libexecdir}/oreon-defense/trigger-scan.sh
 install -D -m 0644 config/config.json.example %{buildroot}%{_sysconfdir}/oreon-defense/config.json
+install -D -m 0644 data/oreon-defense-autostart.desktop %{buildroot}%{_sysconfdir}/xdg/autostart/oreon-defense-autostart.desktop
 mkdir -p %{buildroot}%{_localstatedir}/lib/oreon-defense/quarantine
 
 %post
