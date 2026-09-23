@@ -4,7 +4,7 @@
  "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
 <policyconfig>
   <vendor>Oreon</vendor>
-  <vendor_url>https://oreon.org</vendor_url>
+  <vendor_url>https://oreonhq.com</vendor_url>
   <action id="org.oreon.SystemManager.pkexec">
     <description>Run Oreon System Manager privileged helper</description>
     <message>Authentication is required to manage packages and system settings</message>

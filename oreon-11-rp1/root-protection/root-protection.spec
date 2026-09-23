@@ -1,7 +1,7 @@
 Name:           root-protection
 Version:        2.0.0
 Release:        1%{?dist}
-Summary:        Universal backup/restore and root protection for Oreon
+Summary:        Universal backup, restore, and root protection for Oreon Linux
 License:        GPL-3.0-only
 URL:            https://oreonhq.com
 Source0:        https://tarballs.oreonhq.com/%{name}-%{version}.tar.gz
@@ -21,7 +21,11 @@ Recommends:     python3-dnf
 Recommends:      breeze
 
 %description
-Universal backup/restore and root protection for Oreon
+Oreon Root Protection takes space-efficient hardlink snapshots of / on any
+filesystem that supports hardlinks (ext4, xfs, btrfs), optional native btrfs
+subvolume snapshots, external tar+zstd backups, GRUB overlay rollback,
+permanent merge restore, soft interactive root guard, and dnf transaction
+snapshots. Protect root without making it immutable.
 
 %prep
 %autosetup -n %{name}-%{version}
@@ -62,8 +66,6 @@ install -D -m 0644 systemd/root-protection-snapshot.service %{buildroot}%{_unitd
 install -D -m 0644 systemd/root-protection-snapshot.timer %{buildroot}%{_unitdir}/root-protection-snapshot.timer
 install -D -m 0644 systemd/root-protection-health.service %{buildroot}%{_unitdir}/root-protection-health.service
 install -D -m 0644 systemd/root-protection-health.timer %{buildroot}%{_unitdir}/root-protection-health.timer
-%{_unitdir}/root-protection-weekly.service
-%{_unitdir}/root-protection-weekly.timer
 install -D -m 0644 systemd/root-protection-weekly.service %{buildroot}%{_unitdir}/root-protection-weekly.service
 install -D -m 0644 systemd/root-protection-weekly.timer %{buildroot}%{_unitdir}/root-protection-weekly.timer
 install -D -m 0644 systemd/orpd.service %{buildroot}%{_unitdir}/orpd.service
@@ -133,5 +135,4 @@ fi
 %dir %{_localstatedir}/log/root-protection
 
 %changelog
-* Sun Sep 20 2026 Oreon HQ <dev@oreonlinux.org> - 2.0.0-1
-- Complete C++ rewrite: hardlink + btrfs engine, backups, Qt6 GUI, CLI, daemon
+%autochangelog

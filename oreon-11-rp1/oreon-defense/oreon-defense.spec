@@ -1,5 +1,5 @@
 Name:           oreon-defense
-Version:        1.0.0
+Version:        1.0.2
 Release:        1%{?dist}
 Summary:        Oreon security system with real-time protection
 License:        GPL-3.0-or-later
@@ -12,6 +12,7 @@ BuildRequires:  pkgconfig
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  openssl-devel
 BuildRequires:  yaml-cpp-devel
+BuildRequires:  json-devel
 BuildRequires:  systemd-rpm-macros
 
 Requires:       qt6-qtbase
@@ -82,5 +83,4 @@ fi
 %dir %{_localstatedir}/lib/oreon-defense/quarantine
 
 %changelog
-* Sun Sep 20 2026 Oreon <security@oreon.local> - 1.0.0-1
-- Initial release of Oreon Defense
+%autochangelog

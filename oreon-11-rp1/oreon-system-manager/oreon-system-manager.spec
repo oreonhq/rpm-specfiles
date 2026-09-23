@@ -70,5 +70,4 @@ fi
 %{_datadir}/polkit-1/actions/org.oreon.SystemManager.policy
 
 %changelog
-* Sun Sep 20 2026 Oreon Team <dev@oreon.org> - 1.0.0-1
-- Initial Qt6 release of Oreon System Manager
+%autochangelog
