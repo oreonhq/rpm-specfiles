@@ -126,7 +126,7 @@ fi
 %{_datadir}/applications/org.oreon.RootProtection.desktop
 %{_datadir}/polkit-1/actions/org.oreon.RootProtection.policy
 %{_datadir}/root-protection/
-%{python3_sitelib}/dnf-plugins/root_protection.py
+%pycached %{python3_sitelib}/dnf-plugins/root_protection.py
 %{_datadir}/dnf5/libdnf5-plugins/actions.d/root-protection.actions
 %dir %{_localstatedir}/lib/root-protection
 %dir %{_localstatedir}/lib/root-protection/snaps

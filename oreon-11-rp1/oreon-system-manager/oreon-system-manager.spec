@@ -1,5 +1,5 @@
 Name:           oreon-system-manager
-Version:        1.0.2
+Version:        1.0.3
 Release:        1%{?dist}
 Summary:        Qt6 system manager for Oreon packages, repos, containers, and drivers
 License:        GPL-3.0-or-later

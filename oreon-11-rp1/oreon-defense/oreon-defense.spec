@@ -1,5 +1,5 @@
 Name:           oreon-defense
-Version:        1.0.1
+Version:        1.0.2
 Release:        1%{?dist}
 Summary:        Oreon security system with real-time protection
 License:        GPL-3.0-or-later
@@ -71,6 +71,7 @@ fi
 %{_bindir}/oreon-defense-daemon
 %{_libexecdir}/oreon-defense/trigger-scan.sh
 %{_datadir}/applications/oreon-defense.desktop
+%{_sysconfdir}/xdg/autostart/oreon-defense-autostart.desktop
 %{_datadir}/oreon-defense/
 %{_datadir}/icons/hicolor/*/apps/oreon-defense.*
 %{_datadir}/polkit-1/actions/org.oreon.defense.policy
