@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Root Protection
+GenericName=System Snapshots and Restore
+Comment=Protect root without making it immutable
+Exec=oreon-root-protection
+Icon=security-high
+Terminal=false
+Categories=System;Settings;Security;
+Keywords=snapshot;backup;restore;rollback;root;
+StartupNotify=true
+X-KDE-StartupNotify=true

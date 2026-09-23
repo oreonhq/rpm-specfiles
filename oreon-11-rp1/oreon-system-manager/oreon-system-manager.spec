@@ -1,55 +1,74 @@
-%global commit 0ece2e11960fed2b0aada10ea73efbda4773055c
-%global source0_hash 2de662c4c84b16e9ab6a13165d9efc60b5ee996b2ab283091aa5c575b5ce6636
-
 Name:           oreon-system-manager
-Version:        0.1.1
-Release:        2%{?dist}
-Summary:        Oreon system management GUI
+Version:        1.0.2
+Release:        1%{?dist}
+Summary:        Qt6 system manager for Oreon packages, repos, containers, and drivers
 License:        GPL-3.0-or-later
-URL:            https://github.com/oreonhq/oreon-system-manager
-Source0:        https://github.com/oreonhq/oreon-system-manager/archive/%{commit}.tar.gz#/oreon-system-manager-%{commit}.tar.gz
+URL:            https://oreonhq.com
+Source0:        https://tarballs.oreonhq.com/%{name}-%{version}.tar.gz
 
-BuildRequires:  cargo-rpm-macros
-BuildRequires:  gcc
-BuildRequires:  pkg-config
-BuildRequires:  gtk4-devel
-BuildRequires:  glib2-devel
-BuildRequires:  graphene-devel
-BuildRequires:  pango-devel
-BuildRequires:  cairo-devel
-BuildRequires:  gdk-pixbuf2-devel
+BuildRequires:  cmake >= 3.16
+BuildRequires:  gcc-c++
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtsvg-devel
 
-Requires:       gtk4%{?_isa}
-Requires:       dnf
+Requires:       qt6-qtbase
 Requires:       polkit
+Requires:       dnf
+Requires:       (breeze or plasma-breeze or kf6-breeze or qt6ct)
 Recommends:     docker
-Recommends:     distrobox
+Recommends:      distrobox
+Recommends:      flatpak
 
 %description
-GTK4 GUI for package, repo, driver, and container management on Oreon.
+Manage DNF packages and repositories, Docker and Distrobox containers, Flatpak,
+and hardware driver suggestions with a Qt6 GUI.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n oreon-system-manager-%{commit}
-%cargo_prep
-
-%generate_buildrequires
-%cargo_generate_buildrequires
+%autosetup -n %{name}-%{version}
 
 %build
-%cargo_build
+%cmake -DCMAKE_BUILD_TYPE=Release
+%cmake_build
 
 %install
-install -Dpm 0755 target/release/oreon-system-manager %{buildroot}%{_bindir}/oreon-system-manager
-install -Dpm 0644 packaging/oreon-system-manager.desktop %{buildroot}%{_datadir}/applications/oreon-system-manager.desktop
-install -Dpm 0644 assets/logo.png %{buildroot}%{_datadir}/icons/hicolor/200x200/apps/oreon-system-manager.png
+%cmake_install
+# cmake already installs binary/desktop/icon/policy; ensure paths exist
+install -Dm644 packaging/oreon-system-manager.desktop \
+  %{buildroot}%{_datadir}/applications/oreon-system-manager.desktop
+install -Dm644 assets/logo.png \
+  %{buildroot}%{_datadir}/icons/hicolor/200x200/apps/oreon-system-manager.png
+install -Dm644 packaging/org.oreon.SystemManager.policy \
+  %{buildroot}%{_datadir}/polkit-1/actions/org.oreon.SystemManager.policy
+
+%post
+# desktop mime / icon cache; nothing destructive
+if command -v update-desktop-database >/dev/null 2>&1; then
+  update-desktop-database %{_datadir}/applications >/dev/null 2>&1 || :
+fi
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+  gtk-update-icon-cache -f %{_datadir}/icons/hicolor >/dev/null 2>&1 || :
+fi
+if command -v update-mime-database >/dev/null 2>&1; then
+  update-mime-database %{_datadir}/mime >/dev/null 2>&1 || :
+fi
+echo "Oreon System Manager %{version} ready. Launch from the menu or run oreon-system-manager."
+
+%postun
+if command -v update-desktop-database >/dev/null 2>&1; then
+  update-desktop-database %{_datadir}/applications >/dev/null 2>&1 || :
+fi
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+  gtk-update-icon-cache -f %{_datadir}/icons/hicolor >/dev/null 2>&1 || :
+fi
 
 %files
 %license LICENSE
 %doc README.md
 %{_bindir}/oreon-system-manager
 %{_datadir}/applications/oreon-system-manager.desktop
-%{_datadir}/icons/hicolor/200x200/apps/oreon-system-manager.png
+%{_datadir}/icons/hicolor/*/apps/oreon-system-manager.png
+%{_datadir}/polkit-1/actions/org.oreon.SystemManager.policy
 
 %changelog
-%autochangelog
+* Sun Sep 20 2026 Oreon Team <dev@oreon.org> - 1.0.0-1
+- Initial Qt6 release of Oreon System Manager
