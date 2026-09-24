@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-urwid
-Version:        4.1.4
+Version:        4.1.7
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        A full-featured console _xterm et al._ user interface library

@@ -1,8 +1,8 @@
-%global source0_hash 0a800e9e94dca2ab702d65d72777ae8cae078e3d74d0bcbed64ba0849e8029a1
+%global source0_hash 619a2187405f02c5f57682f3478bffc75326803cd08839e39d434250c5518b15
 
 Summary:        List SCSI devices (or hosts) and associated information
 Name:           lsscsi
-Version:        0.33
+Version:        030
 Release:        1%{?dist}
 License:        GPL-2.0-or-later
 # official git repository: https://github.com/doug-gilbert/lsscsi

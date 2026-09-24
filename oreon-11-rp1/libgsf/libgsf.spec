@@ -1,4 +1,4 @@
-%global source0_hash 9d21d30df1d12feaf03e181afd6067f65e3048ab69cb6ad174a3c5b72b92d297
+%global source0_hash 0d03cb6fadfe735caa13498a024ccd8fdb6cab77df6d9d283a64410c96f2fa49
 
 %global with_mingw 0
 
@@ -7,7 +7,7 @@
 %endif
 
 Name: libgsf
-Version: 1.14.58
+Version: 1.14.59
 Release: 1%{?dist}
 Summary: GNOME Structured File library
 

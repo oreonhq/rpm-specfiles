@@ -1,9 +1,9 @@
-%global source0_hash a95771124823fd8ea38310a50314359041ba58e5812a105e3fa9a2e33d5cc18f
+%global source0_hash d99bdfa227d8871560b92dd90026280b185ce8f28b0d3fe295b871f0eca8d4f1
 
 %global giturl  https://github.com/scipopt/zimpl
 
 Name:           zimpl
-Version:        3.7.1
+Version:        362
 Release:        %autorelease
 Summary:        Zuse Institut Mathematical Programming Language
 

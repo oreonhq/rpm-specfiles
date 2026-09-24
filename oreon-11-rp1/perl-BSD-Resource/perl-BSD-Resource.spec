@@ -8,9 +8,9 @@
 %endif
 
 Name:           perl-BSD-Resource
-Version:        1.291.100
+Version:        1.2911
 %global module_version 1.2911
-Release:        31%{?dist}
+Release:        1%{?dist}
 Summary:        BSD process resource limit and priority functions
 # No matter what the pm and xs headers say, this is stated in the POD and,
 # according to upstream changelog for 1.2905, is correct.

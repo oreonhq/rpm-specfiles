@@ -2,8 +2,8 @@
 
 Name: mythes-uk
 Summary: Ukrainian thesaurus
-Version: 1.6.5
-Release: 32%{?dist}
+Version: 25.2.3.2
+Release: 1%{?dist}
 Source:        https://download.documentfoundation.org/libreoffice/src/25.2.3/libreoffice-dictionaries-25.2.3.2.tar.xz#/libreoffice-25.2.3.2.tar.xz
 URL: http://sourceforge.net/projects/ispell-uk
 #unused myspell dicts are under GPLv2+ or LGPLv2+ or MPLv1.1
@@ -20,7 +20,7 @@ Ukrainian thesaurus.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n libreoffice-25.2.3.2
+%autosetup -n libreoffice-%{version}
 
 %build
 cd dictionaries/uk_UA

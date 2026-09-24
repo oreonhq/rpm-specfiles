@@ -20,7 +20,7 @@
 
 Summary:    A dynamic, any to any, pixel format conversion library
 Name:       babl
-Version:    0.1.124
+Version:    0.1.128
 Release:    %autorelease
 
 # Compute some version related macros
@@ -50,7 +50,7 @@ Release:    %autorelease
 # The gggl codes contained in this package are under the GPL, with exceptions allowing their use under libraries covered under the LGPL
 License:    LGPL-3.0-or-later AND GPL-3.0-or-later
 URL:        https://www.gegl.org/babl/
-Source0:        https://download.gimp.org/pub/babl/%{apiver}/%{name}-%{plain_version}.tar.xz
+Source0: https://download.gimp.org/pub/babl/0.1/babl-0.1.128.tar.xz
 %if %defined git_rev
 Patch:      babl-%{plain_version}-git%{git_rev}.patch
 %endif

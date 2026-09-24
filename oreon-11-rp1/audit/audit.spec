@@ -1,12 +1,12 @@
-%global source0_hash 866a659c91746ee4436fa6f99d4f80768fc1a3aa92e6ec2081e353fcfc79589f
+%global source0_hash 42876d195ee2ded19e5f72d7664096eee314928aa36ad346719ba5b25818fc84
 
 Summary: User space tools for kernel auditing
 Name: audit
-Version: 4.1.3
-Release: 2%{?dist}
+Version: 4.2.1
+Release: 1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 URL: https://github.com/linux-audit/audit-userspace/
-Source0:        https://github.com/linux-audit/audit-userspace/archive/refs/tags/v4.1.3.tar.gz#/audit-userspace-4.1.3.tar.gz
+Source0: https://github.com/linux-audit/audit-userspace/archive/refs/tags/v4.2.1.tar.gz#/audit-userspace-4.2.1.tar.gz
 Source1: https://www.gnu.org/licenses/lgpl-2.1.txt
 BuildRequires: make gcc
 BuildRequires: autoconf automake libtool

@@ -36,7 +36,7 @@
 
 %global major_version 4
 %global minor_version 6
-%global patch_version 0
+%global patch_version 1
 
 Name:           R
 Version:        %{major_version}.%{minor_version}.%{patch_version}
@@ -314,7 +314,7 @@ from the R project.  This package provides the static libRmath library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%setup -q -n R-4.6.1
 %patch -P0 -p1 -b .fixpath
 # A bunch of macOS stuff in v4.5.2's archive
 find . -name '._*' -delete

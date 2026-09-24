@@ -1,18 +1,18 @@
-%global source0_hash 98f0a3ea26b4aec051e533cb1750db2998ab8e82eda97269ed6efe66ec94a240
+%global source0_hash d9e6c48357de5002da11ce45de600e0c3ffe6ab4f628a3b9fe2b38603161658a
 %global source1_hash c1031afde6e9eb042e6fcfbc17078f4b437a7e8d55482a1ca6e0fa762d262a89
 
 %global cl_ver 2025.07.22
 %global cl_hpp_ver 2025.07.22
 
 Name:           opencl-headers
-Version:        3.0
-Release:        2%{?dist}
+Version:        2026.05.29
+Release:        1%{?dist}
 Summary:        OpenCL (Open Computing Language) header files
 
 License:        Apache-2.0
 URL:            https://www.khronos.org/registry/cl/
 
-Source0:        https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/v%{cl_ver}.tar.gz#/OpenCL-Headers-v%{cl_ver}.tar.gz
+Source0: https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/v2026.05.29.tar.gz#/OpenCL-Headers-v2026.05.29.tar.gz
 Source1:        https://github.com/KhronosGroup/OpenCL-CLHPP/archive/refs/tags/v%{cl_hpp_ver}.tar.gz#/OpenCL-CLHPP-v%{cl_hpp_ver}.tar.gz
 
 BuildArch:      noarch

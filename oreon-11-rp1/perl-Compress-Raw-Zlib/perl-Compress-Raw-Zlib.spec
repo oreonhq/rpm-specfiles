@@ -1,4 +1,4 @@
-%global source0_hash 1dfd7d511a655627c81815d30d3babc28fa5b88455ff03f8b04099dcb51286b8
+%global source0_hash c17d0fb139eba9b8ad6a1dc42942c812dae7dae96ed1337b3ca950542810d8fc
 
 # Run optional test
 %if ! (0%{?rhel})
@@ -9,7 +9,7 @@
 
 
 Name:           perl-Compress-Raw-Zlib
-Version:        2.222
+Version:        2.224
 Release:        1%{?dist}
 Summary:        Low-level interface to the zlib compression library
 # Zlib.xs:  (GPL-1.0-or-later OR Artistic-1.0-Perl) AND Zlib

@@ -1,11 +1,11 @@
-%global source0_hash 2e27b0118ca4248a646101c5c318dc02e4ca2866d6bc42e84045dbb851555a76
+%global source0_hash 334373d392fde0fdf95af5c3f1661885fa10c52167b14593eb856289e1855062
 
 %global srcname types-pyyaml
 %global modname types_PyYAML
 %global pypi_name types-PyYAML
 
 Name:           python-%{srcname}
-Version:        6.0.1
+Version:        6.0.12.12
 Release:        %autorelease
 Summary:        Typing stubs for PyYAML
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

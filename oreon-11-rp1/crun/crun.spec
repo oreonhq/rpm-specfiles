@@ -1,4 +1,4 @@
-%global source0_hash 8218cf0f59c6cf2931b4ba8d19dbab1efc1557cbb94662903d17d6787442244d
+%global source0_hash 421df2df9f025e2ac9debaf9402aaefedb0b8b1a7e265fe7046c50717f1eab05
 
 %global krun_opts %{nil}
 %global wasmedge_opts %{nil}
@@ -41,10 +41,10 @@ Epoch: 102
 # If that's what you're reading, Version must be 0, and will be updated by Packit for
 # copr and koji builds.
 # If you're reading this on dist-git, the version is automatically filled in by Packit.
-Version: 1.29.1
+Version: 1.30
 Release: %autorelease
 URL: https://github.com/containers/%{name}
-Source0:        https://github.com/containers/crun/releases/download/1.29.1/crun-1.26.tar.zst
+Source0: https://codeload.github.com/containers/crun/tar.gz/refs/tags/1.30
 License: GPL-2.0-only
 %if %{defined golang_arches_future}
 ExclusiveArch: %{golang_arches_future}

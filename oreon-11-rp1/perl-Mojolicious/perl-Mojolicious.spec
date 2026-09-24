@@ -1,7 +1,7 @@
-%global source0_hash 4cd8a39318a380466d081b98955fdead61789c5b08d223585b1ca56cfdaf4472
+%global source0_hash 281933d4f9b821f669a3e93a466daaad5596443ea2cb167fa7c019752bce6d66
 
 Name:           perl-Mojolicious
-Version:        9.47
+Version:        9.49
 Release:        1%{?dist}
 Summary:        A next generation web framework for Perl
 License:        Artistic-2.0

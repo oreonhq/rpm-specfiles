@@ -1,4 +1,4 @@
-%global source0_hash 7de0efcc361c573f2537ee7ceabdb3bc64b19b61304cfa25e828caa7db8ae1a4
+%global source0_hash 35a5eeef9874ca606fdf26eb2daefcfde633fd8b91585f7f84f15a40427446a2
 
 # python-cattrs is too old in Fedora 40:
 %bcond cattrs %{undefined fc40}
@@ -10,7 +10,7 @@ Summary:        A library to deal with UFO font sources
 
 License:        Apache-2.0
 URL:            https://github.com/fonttools/ufoLib2
-Source:         %{pypi_source ufolib2 %{version}}
+Source: https://codeload.github.com/fonttools/ufoLib2/tar.gz/refs/tags/v0.18.1
 
 BuildArch:      noarch
 

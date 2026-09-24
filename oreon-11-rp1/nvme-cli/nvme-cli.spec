@@ -1,4 +1,4 @@
-%global source0_hash 989682ed7b250a2c7a8127e362ffc5d29f5c370127abe405be09c73216da2b97
+%global source0_hash 8a6879f1f2af53743c03a8f77f247261306300d3f3b0edfd242c5f646bdfdccb
 
 # RHEL 8 compatibility
 %{!?version_no_tilde: %define version_no_tilde %{shrink:%(echo '%{version}' | tr '~' '-')}}
@@ -6,13 +6,13 @@
 %global nmlibdir %{_prefix}/lib/NetworkManager
 
 Name:           nvme-cli
-Version:        3.0-b.5
+Version:        3.1
 Release:        1%{?dist}
 Summary:        NVMe management command line interface
 
 License:        GPL-2.0-only
 URL:            https://github.com/linux-nvme/nvme-cli
-Source0:        https://github.com/linux-nvme/nvme-cli/archive/refs/tags/v2.16.tar.gz#/nvme-cli-2.16.tar.gz
+Source0: https://github.com/linux-nvme/nvme-cli/archive/refs/tags/v3.1.tar.gz#/nvme-cli-3.1.tar.gz
 Source1:        99-nvme-nbft-connect.sh
 Source2:        99-nvme-nbft-no-ignore-carrier.conf
 

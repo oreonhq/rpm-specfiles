@@ -1,4 +1,4 @@
-%global source0_hash 039aef84f2b0994aeda3f4fcfc3d02ec9d7a9bbb9020ea264c43f446c860f606
+%global source0_hash 4ac34c47db2540ffb2713943f8d891ff1702e0ba6934525a493b7d1cad43145a
 
 # For a stable, released kernel, released_kernel should be 1. For rawhide
 # and/or a kernel built from an rc or git snapshot, released_kernel should
@@ -6,8 +6,8 @@
 %global released_kernel 1
 
 # define buildid .local
-%define specversion 7.2.6
-%define tarfile_release 7.2.6
+%define specversion 7.2.7
+%define tarfile_release 7.2.7
 # This is needed to do merge window version magic
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 200%{?buildid}%{?dist}
@@ -60,7 +60,7 @@ cross-glibc package.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -c
+%setup -q -c -n linux-7.2.7
 
 %build
 

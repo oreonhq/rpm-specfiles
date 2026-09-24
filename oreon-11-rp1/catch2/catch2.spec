@@ -1,10 +1,10 @@
-%global source0_hash d54a712b7b1d7708bc7a819a8e6e47b2fde9536f487b89ccbca295072a7d9943
+%global source0_hash 0957cae5821b17ce07f0833aaa52b5137643a8382203221f363a8303c109af34
 
 %global debug_package %{nil}
 
 Name:           catch2
-Version:        2.13.10
-Release:        9%{?dist}
+Version:        3.16.0
+Release:        1%{?dist}
 Summary:        Modern, C++-native, header-only, framework for unit-tests, TDD and BDD
 
 License:        BSL-1.0

@@ -4,13 +4,13 @@
 %bcond tests 0
 
 Name:           shell-color-prompt
-Version:        0.7.1
-Release:        3%{?dist}
+Version:        0.96.2
+Release:        1%{?dist}
 Summary:        Color prompt for bash shell
 
 License:        GPL-2.0-or-later
 URL:            https://github.com/juhp/bash-color-prompt
-Source0:        bash-color-prompt.sh.in
+Source0: https://codeload.github.com/juhp/bash-color-prompt/tar.gz/refs/tags/v0.96.2
 Source1:        README.md
 Source2:        COPYING
 Source3:        Makefile
@@ -37,7 +37,7 @@ Default colored bash prompt.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -c -T
+%setup -c -T -n bash-color-prompt-%{version}
 cp %{SOURCE0} %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} .
 
 

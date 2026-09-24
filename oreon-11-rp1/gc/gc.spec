@@ -2,7 +2,7 @@
 
 Summary: Garbage collector for C and C++
 Name:    gc
-Version: 8.2.8
+Version: 8.2.12
 Release: 1%{?dist}
 
 # Automatically converted from old format: BSD - review is highly recommended.

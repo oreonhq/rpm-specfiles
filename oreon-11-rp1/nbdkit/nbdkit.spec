@@ -1,4 +1,4 @@
-%global source0_hash d15ac0ebff651fa19a984835b9621e442a7febafcc0b67aafa6a3e80438d0ac9
+%global source0_hash 959b7f060ce3f4430fb8f691bdf6a6dc82faeea8680fbed8310cec879e8d038c
 
 %global source2_key_fpr F7774FB1AD074A7E8C8767EA91738F73E1B768A0
 
@@ -72,7 +72,7 @@ URL:            https://gitlab.com/nbdkit/nbdkit
 ExcludeArch:    i686
 %endif
 
-Source0:        https://libguestfs.org/download/nbdkit/%{source_directory}/%{name}-%{version}.tar.gz
+Source0: https://gitlab.com/nbdkit/nbdkit/-/archive/v1.49.3/nbdkit-v1.49.3.tar.gz
 %if 0%{verify_tarball_signature}
 Source1:        https://libguestfs.org/download/nbdkit/%{source_directory}/%{name}-%{version}.tar.gz.sig
 # Keyring used to verify tarball signature.

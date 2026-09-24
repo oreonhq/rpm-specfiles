@@ -1,8 +1,8 @@
-%global source0_hash c0e0bead458224b9ac5bb32ed2b1fa088963b565521c1bb1a6a3566d522c2e35
+%global source0_hash 606894fc2e9f7cd13d9ec099aaac103a8f0943d1d80c2c486bae14730a39b7fc
 
 Name:           perl-Parallel-ForkManager
-Version:        2.03
-Release:        4%{?dist}
+Version:        2.04
+Release:        1%{?dist}
 Summary:        Simple parallel processing fork manager
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Parallel-ForkManager

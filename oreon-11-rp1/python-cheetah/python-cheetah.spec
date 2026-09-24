@@ -1,7 +1,7 @@
-%global source0_hash 0f1fb60c0df8acec48561ba561d023b55498bd04e7b3763d4ca14adaf3d62405
+%global source0_hash 63822ef6bfe5644c169bfc7ff225252f0769c86b6957a4aa2f08493a8173929b
 
 Name:           python-cheetah
-Version:        3.4.0
+Version:        3.4.0.post5
 Release:        %autorelease
 Summary:        Template engine and code generator
 

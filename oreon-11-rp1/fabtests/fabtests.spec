@@ -1,7 +1,7 @@
-%global source0_hash d19d526e26e4620ae4fdc13f89d3e79b39df5fca643787c8b2e62151152ee4fd
+%global source0_hash 3dba5030e52db5f9f985217ce2e9557ffebf50934537fa56f9d08796189c271b
 
 Name:           fabtests
-Version:        2.3.1
+Version:        2.7.0
 Release:        %autorelease
 Summary:        Test suite for libfabric API
 # COPYING says the license is your choice of BSD or GPLv2.

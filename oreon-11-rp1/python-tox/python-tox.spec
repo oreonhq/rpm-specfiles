@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-tox
-Version:        4.61.5
+Version:        4.64.1
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        tox is a generic virtualenv management and test command line tool

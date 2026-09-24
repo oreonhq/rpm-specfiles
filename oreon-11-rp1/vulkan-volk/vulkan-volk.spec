@@ -1,15 +1,15 @@
-%global source0_hash 42df539c70ffdaea259e317aef73524512f4093f6f4dafb36fa6cf2680c823b9
+%global source0_hash 5cdfb882137e40c0e20f676f9264d94dace952c8622e38cd31cca7d4add54b64
 
 %global debug_package %{nil}
 
 Name:           vulkan-volk
-Version:        1.4.341.0
+Version:        1.4.350
 Release:        %autorelease
 Summary:        Meta loader for Vulkan API
 
 License:        MIT
 URL:            https://github.com/zeux/volk
-Source0:        https://github.com/zeux/volk/archive/vulkan-sdk-1.4.341.0.tar.gz#/Vulkan-Volk-sdk-1.4.341.0.tar.gz
+Source0:        https://github.com/zeux/volk/archive/vulkan-sdk-1.4.350.tar.gz#/Vulkan-Volk-sdk-1.4.350.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  cmake

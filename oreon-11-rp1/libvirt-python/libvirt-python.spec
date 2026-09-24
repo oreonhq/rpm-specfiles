@@ -1,4 +1,4 @@
-%global source0_hash 7b4de7d2dde2bc380cf4e108d1eeb8aad50beb3ae351ab9265a7fedc587742bc
+%global source0_hash 03a6800a3cc7657267e2516f579ce95c93d6351182caf03f92a49556685bf8bf
 
 # -*- rpm-spec -*-
 
@@ -18,7 +18,7 @@
 
 Summary: The libvirt virtualization API python3 binding
 Name: libvirt-python
-Version: 12.0.0
+Version: 12.7.0
 Release: 1%{?dist}
 Source0:        https://libvirt.org/sources/python/%{dist_name}-%{version}.tar.gz
 Url: https://libvirt.org

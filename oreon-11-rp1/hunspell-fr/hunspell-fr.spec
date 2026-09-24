@@ -1,4 +1,4 @@
-%global source0_hash 2dd9ce5fa04641ac0a8a70048fd0502b619765dbdaeae55f3dfd8f1e0e1aece6
+%global source0_hash 8f595a322bd942816d5d4087d420a8bb414e5369c9f89df6ffa3cf60d5ae56e6
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
@@ -8,9 +8,9 @@
 
 Name: hunspell-fr
 Summary: French hunspell dictionaries
-Version: 7.7
+Version: 7.7.orig
 Release: 1%{?dist}
-Source:        https://deb.debian.org/debian/pool/main/h/hunspell-fr/hunspell-fr_7.0.orig.tar.xz
+Source: https://deb.debian.org/debian/pool/main/h/hunspell-fr/hunspell-fr_7.7.orig.tar.xz
 URL: https://grammalecte.net/
 License: MPL-2.0
 BuildArch: noarch

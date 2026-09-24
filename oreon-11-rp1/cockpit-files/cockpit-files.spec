@@ -1,8 +1,8 @@
-%global source0_hash 0d67375ece3f4609e97244b5fc9b9a1146117a6c48e088bd5b14d667fbfdcb3d
-%global source1_hash 01ab936f75135fd8f910b95b47c566d6ed0b96106806455e4e96b12edaf84f8c
+%global source0_hash cb4a7746b240148716e18d9fea42a5a4602155377a609765efc993651e691802
+%global source1_hash 050e9acf1844695345603e4c1bdabf422eb6371aeea15c3f4561653ddc92f429
 
 Name: cockpit-files
-Version: 41
+Version: 45
 Release: 1%{?dist}
 Summary: A filesystem browser for Cockpit
 License: LGPL-2.1-or-later

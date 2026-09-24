@@ -1,15 +1,15 @@
-%global source0_hash 8774e9a12c70b0180b95d6b0b563c5aa4bea8d5960c15e18ae3b6d2521d64f8b
+%global source0_hash 59356b229b768e6e2b09a701448bfa222c37b797a84f87f864f97462d8dbc7c5
 
 Summary: General dimension convex hull programs
 Name: qhull
-Version: 8.0.2
+Version: 2020.2
 # Add epoch, because upstream changed their versioning scheme:
 # - Older releases used year.month
 # - Newer releases use x.y.z
 Epoch: 1
-Release: 9%{?dist}
+Release: 1%{?dist}
 License: Qhull
-Source0:        https://github.com/qhull/qhull/archive/v%{version}.tar.gz#/qhull-%{version}.tar.gz
+Source0: https://codeload.github.com/qhull/qhull/tar.gz/refs/tags/2020.2#/qhull-2020.2.tar.gz
 
 # Install cmake and pkgconfig file into proper libdir
 # https://github.com/qhull/qhull/pull/123

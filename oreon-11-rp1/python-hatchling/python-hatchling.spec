@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-hatchling
-Version:        1.32.3
+Version:        1.32.4
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Modern, extensible Python build backend

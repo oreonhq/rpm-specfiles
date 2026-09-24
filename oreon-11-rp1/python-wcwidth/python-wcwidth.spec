@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-wcwidth
-Version:        0.8.4
+Version:        0.9.1
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Measures the displayed width of unicode strings in a terminal

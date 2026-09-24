@@ -1,10 +1,10 @@
-%global source0_hash dceeb6c0028fdb6734471eb07c0cd2aae706ccaecab45965ee83f11c8d3b1f62
+%global source0_hash 4d9debb8b99007ae47165abc08670bd74cb74b5227dda7f643eccc4e9eb5642c
 
 %global srcname smmap
 
 Name:           python-%{srcname}
-Version:        5.0.1
-Release:        7%{?dist}
+Version:        5.0.3
+Release:        1%{?dist}
 Summary:        Sliding window memory map manager
 
 License:        BSD-3-Clause

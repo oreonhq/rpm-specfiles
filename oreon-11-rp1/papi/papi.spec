@@ -16,12 +16,12 @@
 %endif
 Summary: Performance Application Programming Interface
 Name: papi
-Version: 7.2.0
-Release: 3%{?dist}
+Version: 7.2.0.orig
+Release: 1%{?dist}
 License: BSD-3-Clause
 Requires: papi-libs = %{version}-%{release}
 URL: http://icl.cs.utk.edu/papi/
-Source0:        https://deb.debian.org/debian/pool/main/p/papi/papi_7.2.0.orig.tar.gz
+Source0: https://deb.debian.org/debian/pool/main/p/papi/papi_7.2.0.orig.tar.gz
 Patch1: papi-nostatic.patch
 Patch2: papi-avail-path-fix.patch
 Patch3: papi-revert-event-depr.patch

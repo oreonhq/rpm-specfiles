@@ -1,10 +1,10 @@
-%global source0_hash a95eb21eb0f5f0266835951c10763d0a6811f33fc717431eb9b7b18d4f564a57
+%global source0_hash 44d467963349b7a830f21751879b5d7f8e7710043ea085ee9ff14be9680b8b69
 
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Name:           system-storage-manager
-Version:        1.3
-Release:        27%{?dist}
+Version:        1.4
+Release:        1%{?dist}
 Summary:        A single tool to manage your storage
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

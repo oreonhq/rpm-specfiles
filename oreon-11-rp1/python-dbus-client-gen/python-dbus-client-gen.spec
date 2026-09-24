@@ -1,15 +1,15 @@
-%global source0_hash 2fd53bf85955cf9bc76f8bbbdb9968fc891401bea247b31d702a35f5a3bd8bba
+%global source0_hash 19006c799fa0f5e198bc1371d551e672b03c799d67dea61d0670edc88e0df971
 
 %global srcname dbus-client-gen
 
 Name:           python-%{srcname}
-Version:        0.5.1
+Version:        0.5.2
 Release:        %autorelease
 Summary:        Library for Generating D-Bus Client Code
 
 License:        MPL-2.0
 URL:            https://github.com/stratis-storage/dbus-client-gen
-Source0:        https://github.com/stratis-storage/dbus-client-gen/archive/refs/tags/v0.5.1.tar.gz#/dbus-client-gen-0.5.1.tar.gz
+Source0: https://github.com/stratis-storage/dbus-client-gen/archive/refs/tags/v0.5.2.tar.gz#/dbus-client-gen-0.5.2.tar.gz
 
 BuildArch:      noarch
 

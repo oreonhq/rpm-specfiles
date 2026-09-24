@@ -1,10 +1,10 @@
-%global source0_hash bf5421126136d6d0af55bc1e7c1af1c397a34f5b7bd79e776cd3e89785c2b04b
+%global source0_hash 5ef71f855d191a3326fcfbc0d5da835f26b13fbcba60c32c21091c349ffdb571
 
 %global srcname gitdb
 
 Name:           python-%{srcname}
-Version:        4.0.11
-Release:        7%{?dist}
+Version:        4.0.12
+Release:        1%{?dist}
 Summary:        Git Object Database
 
 License:        BSD-3-Clause

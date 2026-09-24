@@ -1,4 +1,4 @@
-%global source0_hash 926142efed6834d8dec696b57eec42fbc2aa1c293222e2e97894ca2738fc3bd9
+%global source0_hash e9d55b8d601d8285412db94aef98b2c88ead5f6d26c0f737bfe5d20720302f19
 
 %global desc %{expand: \
 Pyflakes is similar to PyChecker in scope, but differs in that it does\
@@ -9,7 +9,7 @@ check on style.}
 
 Name:           pyflakes
 # WARNING: When updating pyflakes, check not to break flake8!
-Version:        3.4.0
+Version:        4.0.0
 Release:        1%{?dist}
 Summary:        A simple program which checks Python source files for errors
 

@@ -1,13 +1,13 @@
 %global source0_hash none
 
 Name: xmlto
-Version: 0.0.29
-Release: 5%{?dist}
+Version: 0.0.29.orig
+Release: 1%{?dist}
 Summary: A tool for converting XML files to various formats
 
 License: GPL-2.0-or-later
 URL: https://pagure.io/xmlto/
-Source0:        https://deb.debian.org/debian/pool/main/x/xmlto/xmlto_%{version}.orig.tar.bz2#/xmlto-%{version}.tar.gz
+Source0: https://deb.debian.org/debian/pool/main/x/xmlto/xmlto_0.0.29.orig.tar.bz2#/xmlto-0.0.29.orig.tar.gz
 BuildRequires: make
 BuildRequires: docbook-xsl
 BuildRequires: libxslt

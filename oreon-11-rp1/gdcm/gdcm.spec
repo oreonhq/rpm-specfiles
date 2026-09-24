@@ -1,4 +1,4 @@
-%global source0_hash d88519a094797c645ca34797a24a14efc10965829c4c3352c8ef33782a556336
+%global source0_hash b7b17b70c009677cf244cc7837b88386441e097f8861fdeee83aa27d1bc1b090
 
 # Enabled by default
 %bcond_without tests
@@ -11,7 +11,7 @@
 %bcond_with texdocs
 
 Name:       gdcm
-Version:    3.0.24
+Version:    3.2.7
 Release:    %autorelease
 Summary:    Grassroots DiCoM is a C++ library to parse DICOM medical files
 # SPDX
@@ -200,25 +200,25 @@ make test -C %{__cmake_builddir} || exit 0
 %doc AUTHORS README.md
 %license Copyright.txt README.Copyright.txt
 %{_libdir}/libgdcmCommon.so.3.0
-%{_libdir}/libgdcmCommon.so.3.0.24
+%{_libdir}/libgdcmCommon.so.3.2.7
 %{_libdir}/libgdcmDICT.so.3.0
-%{_libdir}/libgdcmDICT.so.3.0.24
+%{_libdir}/libgdcmDICT.so.3.2.7
 %{_libdir}/libgdcmDSED.so.3.0
-%{_libdir}/libgdcmDSED.so.3.0.24
+%{_libdir}/libgdcmDSED.so.3.2.7
 %{_libdir}/libgdcmIOD.so.3.0
-%{_libdir}/libgdcmIOD.so.3.0.24
+%{_libdir}/libgdcmIOD.so.3.2.7
 %{_libdir}/libgdcmMEXD.so.3.0
-%{_libdir}/libgdcmMEXD.so.3.0.24
+%{_libdir}/libgdcmMEXD.so.3.2.7
 %{_libdir}/libgdcmMSFF.so.3.0
-%{_libdir}/libgdcmMSFF.so.3.0.24
+%{_libdir}/libgdcmMSFF.so.3.2.7
 %{_libdir}/libgdcmjpeg12.so.3.0
-%{_libdir}/libgdcmjpeg12.so.3.0.24
+%{_libdir}/libgdcmjpeg12.so.3.2.7
 %{_libdir}/libgdcmjpeg16.so.3.0
-%{_libdir}/libgdcmjpeg16.so.3.0.24
+%{_libdir}/libgdcmjpeg16.so.3.2.7
 %{_libdir}/libgdcmjpeg8.so.3.0
-%{_libdir}/libgdcmjpeg8.so.3.0.24
+%{_libdir}/libgdcmjpeg8.so.3.2.7
 %{_libdir}/libgdcmmd5.so.3.0
-%{_libdir}/libgdcmmd5.so.3.0.24
+%{_libdir}/libgdcmmd5.so.3.2.7
 %{_libdir}/libsocketxx.so.1.2
 %{_libdir}/libsocketxx.so.1.2.0
 %dir %{_datadir}/%{name}-3.0/

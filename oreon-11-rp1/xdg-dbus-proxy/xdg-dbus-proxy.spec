@@ -1,7 +1,7 @@
-%global source0_hash 131bf59fce7c7ee7ecbc5d9106d6750f4f597bfe609966573240f7e4952973a1
+%global source0_hash 5450dda586ec3bb3ca709d311e845487883faa3b09cf562608d7e84f4311dced
 
 Name:           xdg-dbus-proxy
-Version:        0.1.8
+Version:        0.1.9
 Release:        1%{?dist}
 Summary:        Filtering proxy for D-Bus connections
 

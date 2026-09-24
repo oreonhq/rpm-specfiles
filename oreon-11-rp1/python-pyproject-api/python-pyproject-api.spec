@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-pyproject-api
-Version:        1.11.1
+Version:        1.11.2
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        API to interact with the python pyproject.toml based projects

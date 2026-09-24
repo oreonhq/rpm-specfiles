@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-filelock
-Version:        4.0.0
+Version:        4.0.3
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        A platform independent file lock.

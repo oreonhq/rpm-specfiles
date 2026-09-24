@@ -1,7 +1,7 @@
-%global source0_hash 6d64d3be1429cc1eb4e88a8f2022fec910ea3e0792da4fe58d3edf7695c46ca2
+%global source0_hash 45c9bc5a7319987cb3ec19ed31ed602df27aadecefda144a5667c9721e94df01
 
 Name:           perl-GD
-Version:        2.86
+Version:        2.91
 Release:        1%{?dist}
 Summary:        Perl interface to the GD graphics library
 License:        GPL-1.0-or-later OR Artistic-2.0

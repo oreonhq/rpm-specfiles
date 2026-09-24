@@ -1,4 +1,4 @@
-%global source0_hash c6272a48972a0f2fdd3f39560d698f3c5abd3d8a4de40d52f9772f3a03ae1f48
+%global source0_hash 1d38a7258796015a92a5a6eee293340b924e4ff68e4e8e845b8bdbb5f4f7d9e8
 
 Name:           parallel
 Summary:        Shell tool for executing jobs in parallel

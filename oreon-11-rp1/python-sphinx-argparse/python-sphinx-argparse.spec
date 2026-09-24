@@ -1,10 +1,10 @@
-%global source0_hash e5352f8fa894b6fb6fda0498ba28a9f8d435971ef4bbc1a6c9c6414e7644f032
+%global source0_hash f8be167aedf5670bd7c812ef515968ff4717c63cfc9cb4df5f34b54fd5649c37
 
 %global upname sphinx-argparse
 %global srcname sphinx_argparse
 
 Name: python-%{upname}
-Version: 0.5.2
+Version: 0.6.1
 Release: %autorelease
 Summary: Sphinx extension that automatically documents argparse commands and options
 BuildArch: noarch

@@ -1,16 +1,16 @@
-%global source0_hash b47df3cfd9692ccd0071ad39fe74718ebc32f59701556a604fd15a09f09e0d74
+%global source0_hash 280ac87370f553e5fa5dd60e3b5433108b471064a7ee0df784b909a5f2b862c7
 
 %global base_version 2.75
 # Perform optional tests
 %bcond_without perl_Net_Ping_enables_optional_test
 
 Name:           perl-Net-Ping
-Version:        2.76
-Release:        521%{?dist}
+Version:        2.77
+Release:        1%{?dist}
 Summary:        Check a remote host for reachability
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-Ping/
-Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Net-Ping-2.75.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Net-Ping-2.77.tar.gz
 # Unbundled from perl 5.37.11
 Patch0:         Net-Ping-2.75-Upgrade-to-2.76.patch
 BuildArch:      noarch

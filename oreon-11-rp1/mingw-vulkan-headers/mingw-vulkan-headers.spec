@@ -1,4 +1,4 @@
-%global source0_hash c465aa56757e7746ac707f582b6e2d51546569a4a2488c1172fb543aa5fdfc2c
+%global source0_hash 84439181b6f30a512c8e760d0ce4aaeacf2e398477bff78e68696f728683c0c0
 
 %{?mingw_package_header}
 
@@ -6,7 +6,7 @@
 %global srcname Vulkan-Headers
 
 Name:          mingw-%{pkgname}
-Version:       1.4.362
+Version:       1.4.363
 Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname}
 

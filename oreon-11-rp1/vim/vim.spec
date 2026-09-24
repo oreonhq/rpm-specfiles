@@ -41,7 +41,7 @@
 %define baseversion 9.2
 # get bug url from /etc/os-release
 %define bugurl %(source /etc/os-release; echo ${BUG_REPORT_URL})
-%define patchlevel 148
+%define patchlevel 1129
 %define vimdir vim92
 # Git tags use zero-padded patch (v9.2.0148), archive dir vim-9.2.0148 (same tree as vim.org unix tarball)
 %define vim_github_tag v%{baseversion}.%(LANG=C printf '%%04d' %{patchlevel})
@@ -57,7 +57,7 @@ Summary: The VIM editor
 URL:     https://www.vim.org/
 Name: vim
 Version: %{baseversion}.%{patchlevel}
-Release: 4%{?dist}
+Release: 1%{?dist}
 Epoch: 2
 # swift.vim contains Apache 2.0 with runtime library exception:
 # which is taken as Apache-2.0 WITH Swift-exception - reported to legal as https://gitlab.com/fedora/legal/fedora-license-data/-/issues/188
@@ -70,7 +70,7 @@ Epoch: 2
 License: Vim AND LGPL-2.1-or-later AND MIT AND GPL-1.0-only AND (GPL-2.0-only OR Vim) AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-or-later AND GPL-3.0-or-later AND OPUBL-1.0 AND Apache-2.0 WITH Swift-exception
 # GitHub tag matches vim.org releases (workers that cannot resolve ftp.vim.org still reach github.com)
 # #/ forces local name vim-9.2.0148.tar.gz (not v9.2.0148.tar.gz) so %%prep and appstream date match SOURCES
-Source0:        https://github.com/vim/vim/archive/refs/tags/%{vim_github_tag}.tar.gz#/vim-%{version}.tar.bz2
+Source0: https://codeload.github.com/vim/vim/tar.gz/refs/tags/v9.2.1129#/vim-9.2.1129.tar.bz2
 Source1:        virc
 Source2:        vimrc
 Source3:        gvim16.png

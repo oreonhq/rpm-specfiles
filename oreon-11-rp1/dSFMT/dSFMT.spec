@@ -1,8 +1,8 @@
-%global source0_hash fba11fe3ffbd7c0c82a338f210c1387ed3b4a9a5a73b4a24667e1311d6002475
+%global source0_hash b7bc498cd140b4808963b1ff9f33b42a491870f54775c1060ecad0e02bcaffb4
 
 Name:           dSFMT
-Version:        2.2.3
-Release:        29%{?dist}
+Version:        2.2.5
+Release:        1%{?dist}
 Summary:        Double precision SIMD-oriented Fast Mersenne Twister
 
 # Automatically converted from old format: BSD - review is highly recommended.

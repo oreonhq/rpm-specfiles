@@ -1,6 +1,6 @@
-%global source0_hash 0a585eeb9e363c0f80482ddb3571625250c2c86aeb408853e8ea50805cfb14bb
+%global source0_hash aae073cc3f1320d18e179ed5e1ae6222244ba6261681383b76eb1368e1fa0a4e
 
-%global perl_version    5.44.0
+%global perl_version    5.45.2
 %global perl_epoch      4
 %global perl_arch_stem -thread-multi
 %global perl_archname %{_arch}-%{_os}%{perl_arch_stem}

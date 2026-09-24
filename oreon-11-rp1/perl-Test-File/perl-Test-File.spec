@@ -2,12 +2,12 @@
 
 # This module usually ships with version numbers having two digits after the decimal point
 %global cpan_version 1.995
-%global rpm_version 1.99.5
+%global rpm_version 1.995
 
 Summary:	Test file attributes through Test::Builder
 Name:		perl-Test-File
 Version:	%{rpm_version}
-Release:	3%{?dist}
+Release:	1%{?dist}
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Test-File
 Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-File-%{cpan_version}.tar.gz

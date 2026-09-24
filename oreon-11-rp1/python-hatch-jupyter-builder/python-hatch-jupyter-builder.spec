@@ -1,8 +1,8 @@
-%global source0_hash 79278198d124c646b799c5e8dca8504aed9dcaaa88d071a09eb0b5c2009a58ad
+%global source0_hash 144f6a7afd7f837071eca81141313d736643be4f6734b45f30661bcb922bd80a
 
 Name:           python-hatch-jupyter-builder
-Version:        0.9.1
-Release:        6%{?dist}
+Version:        0.10.0
+Release:        1%{?dist}
 Summary:        A hatch plugin to help build Jupyter packages
 License:        BSD-3-Clause
 URL:            https://pypi.org/project/hatch-jupyter-builder/

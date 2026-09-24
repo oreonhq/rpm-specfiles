@@ -1,13 +1,13 @@
-%global source0_hash 75a8b99c28a5dad50dd7f8ccdd447a121ddb3892da9e53d1ca5cca3106d58d65
+%global source0_hash c00dca57bca26fa62a6d7d0a9fcce65f3e026e9bfe33e9c538fd3fbb2144fd9e
 
 Name:           python-sphinx-theme-alabaster
-Version:        0.7.16
+Version:        1.0.0
 Release:        %autorelease -b 3
 Summary:        Configurable sidebar-enabled Sphinx theme
 
 License:        BSD-3-Clause
 URL:            https://pypi.python.org/pypi/alabaster
-Source:        https://files.pythonhosted.org/packages/source/a/alabaster/alabaster-0.7.16.tar.gz
+Source:        https://files.pythonhosted.org/packages/source/a/alabaster/alabaster-1.0.0.tar.gz
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
 

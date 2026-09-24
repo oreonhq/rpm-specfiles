@@ -1,7 +1,7 @@
-%global source0_hash a83e8e28f416d9a3f70afee8a37cb0ac1515cbf941c677e9f1f97b643bffedab
+%global source0_hash fd03a3ead6a71041d429a488309383fc13e171129b69503f7e91f4c329acfcdc
 
 Name:           perl-Config-Perl-V
-Version:        0.39
+Version:        0.40
 Release:        1%{?dist}
 Summary:        Structured data retrieval of perl -V output
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

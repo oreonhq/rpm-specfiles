@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-multidict
-Version:        6.8.0
+Version:        6.9.1
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        multidict implementation

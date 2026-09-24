@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-sentry-sdk
-Version:        2.69.2
+Version:        2.70.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Python client for Sentry _https://sentry.io_

@@ -9,13 +9,13 @@
 
 Name:           ntfs-3g
 Epoch:          2
-Version:        2026.7.7
+Version:        2026.9.18
 Release:        1%{?dist}
 Summary:        Linux NTFS userspace driver
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://github.com/tuxera/ntfs-3g
-Source0:        http://tuxera.com/opensource/%{name}_ntfsprogs-%{version}%{?subver}.tgz
+Source0: https://codeload.github.com/tuxera/ntfs-3g/tar.gz/refs/tags/2026.9.18
 Patch0:         ntfs-3g_ntfsprogs-2011.10.9-RC-ntfsck-unsupported-return-0.patch
 # Upstream seems mostly gone, but there are some patches merged after 2026.7.7
 Patch1:		https://github.com/tuxera/ntfs-3g/commit/e73d481a76a5814076ff78a1c3a70e9b7da7c0e9.patch

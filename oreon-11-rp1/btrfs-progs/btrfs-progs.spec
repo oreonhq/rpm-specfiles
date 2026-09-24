@@ -1,4 +1,4 @@
-%global source0_hash bb27e1ec54e7c3c0b7b2e596f853a73c07a3d72f21bc94042073c24dbf045796
+%global source0_hash d1f55cc2971398c9142eaa79d203e63d586a3b4b867f956664a1d68322cd4e34
 
 %global source2_key_fpr F2B41200C54EFB30380C1756C565D5F9D76D583B
 
@@ -6,13 +6,13 @@
 %{!?version_no_tilde: %define version_no_tilde %{shrink:%(echo '%{version}' | tr '~' '-')}}
 
 Name:           btrfs-progs
-Version:        6.19.1
-Release:        2%{?dist}
+Version:        7.1
+Release:        1%{?dist}
 Summary:        Userspace programs for btrfs
 
 License:        GPL-2.0-only
 URL:            https://btrfs.readthedocs.io
-Source0:        https://www.kernel.org/pub/linux/kernel/people/kdave/%{name}/%{name}-v%{version_no_tilde}.tar.xz
+Source0: https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v7.1.tar.xz
 Source1:        https://www.kernel.org/pub/linux/kernel/people/kdave/%{name}/%{name}-v%{version_no_tilde}.tar.sign
 Source2:        gpgkey-F2B41200C54EFB30380C1756C565D5F9D76D583B.gpg
 

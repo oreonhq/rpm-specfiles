@@ -1,10 +1,10 @@
-%global source0_hash da83444c058008e87b6505883e4f40569ebe833b8cd9d9ef6541e3942ea1c8ba
+%global source0_hash e5a6fa94749ba460c56898d2b9649e3779b9f20f225d75be2fdff0ec43a3449d
 
 # RHEL does not include the test dependencies
 %bcond tests %{undefined rhel}
 
 Name:           python-poetry-core
-Version:        2.4.1
+Version:        2.5.0
 Release:        %autorelease
 Summary:        Poetry PEP 517 Build Backend
 # SPDX

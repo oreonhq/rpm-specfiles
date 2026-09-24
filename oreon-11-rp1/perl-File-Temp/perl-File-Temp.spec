@@ -4,8 +4,8 @@
 Name:           perl-File-Temp
 Epoch:          1
 # Normalized version, compete with perl.spec
-Version:        0.231.200
-Release:        2%{?dist}
+Version:        0.2312
+Release:        1%{?dist}
 Summary:        Return name and handle of a temporary file safely
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Temp

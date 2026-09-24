@@ -1,11 +1,11 @@
-%global source0_hash 32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc
+%global source0_hash 36bc4f1cc413335368ee656c42afca65c5a3987e8768cc28cf11ba775e785a5f
 
 %{?mingw_package_header}
 
 Name:           mingw-freetype
 # NOTE See comment for Patch2 below
-Version:        2.14.1
-Release:        2%{?dist}
+Version:        2.14.3
+Release:        1%{?dist}
 Summary:        Free and portable font rendering engine
 
 License:        FTL OR GPL-2.0-or-later

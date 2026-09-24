@@ -1,4 +1,4 @@
-%global source0_hash a6b7b0b6df0a380783ce5b29150c2d30352746f027a3e294d37183995d3f23ed
+%global source0_hash c090ee6cb2c9e0a86074be9c288915ea3519e0992c77c5fb3b00fbfe61d50d1f
 
 %global srcname sphinx-autodoc-typehints
 %global altname sphinx_autodoc_typehints
@@ -8,7 +8,7 @@ This extension allows you to use Python 3 annotations for documenting
 acceptable argument types and return value types of functions.}
 
 Name:           python-%{srcname}
-Version:        3.1.0
+Version:        3.13.7
 Release:        %autorelease
 Summary:        Type hints support for the Sphinx autodoc extension
 

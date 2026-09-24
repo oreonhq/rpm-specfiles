@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-pycodestyle
-Version:        2.14.0
+Version:        2.15.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Python style guide checker

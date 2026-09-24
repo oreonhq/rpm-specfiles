@@ -1,13 +1,13 @@
-%global source0_hash fe982697c780a950641bfcf94707135c26c501352242d285fa95d087d691292e
+%global source0_hash 82e00968afa2f6d7ffbb07e3739297993fd94a7373b9a6a08df4b9238e038043
 
 Name:           vulkan-loader
-Version:        1.4.362
+Version:        1.4.363
 Release:        %autorelease
 Summary:        Vulkan ICD desktop loader
 
 License:        Apache-2.0
 URL:            https://github.com/KhronosGroup/Vulkan-Loader
-Source0:        https://github.com/KhronosGroup/Vulkan-Loader/archive/vulkan-sdk-1.4.341.0.tar.gz#/Vulkan-Loader-sdk-1.4.341.0.tar.gz
+Source0: https://github.com/KhronosGroup/Vulkan-Loader/archive/vulkan-sdk-1.4.363.tar.gz#/Vulkan-Loader-sdk-1.4.363.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

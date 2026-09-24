@@ -1,4 +1,4 @@
-%global source0_hash 5e84ecb942e136944eb9812f19cff7bcf05a85637482a32da55b892914c397d1
+%global source0_hash e4e1dccc92cb4be7c34dc513216f0ffc3610fe071d87e28ceecf784b43d6ccf3
 
 %global         majorminor      1.0
 
@@ -18,7 +18,7 @@
 %endif
 
 Name:           gstreamer1
-Version:        1.28.7
+Version:        1.29.2
 Release:        1%{?dist}
 Summary:        GStreamer streaming media framework runtime
 

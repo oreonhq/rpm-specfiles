@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-soupsieve
-Version:        2.9.2
+Version:        2.10
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        A modern CSS selector implementation for Beautiful Soup.

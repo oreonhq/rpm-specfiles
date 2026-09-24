@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           dlm
-Version:        4.3.0
-Release:        8%{?dist}
+Version:        4.3.0.orig
+Release:        1%{?dist}
 License:	GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary:        dlm control daemon and tool
 URL:            https://pagure.io/dlm
@@ -14,7 +14,7 @@ BuildRequires:  libxml2-devel
 BuildRequires:  systemd-units
 BuildRequires:  systemd-devel
 BuildRequires: make
-Source0:        https://deb.debian.org/debian/pool/main/d/dlm/dlm_%{version}.orig.tar.gz#/dlm-%{version}.tar.gz
+Source0: https://deb.debian.org/debian/pool/main/d/dlm/dlm_4.3.0.orig.tar.gz#/dlm-4.3.0.orig.tar.gz
 %if 0%{?rhel} && 0%{?rhel} <= 7
 ExclusiveArch: i686 x86_64
 %endif

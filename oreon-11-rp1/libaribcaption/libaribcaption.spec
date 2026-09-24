@@ -1,7 +1,7 @@
-%global source0_hash 278d03a0a662d00a46178afc64f32535ede2d78c603842b6fd1c55fa9cd44683
+%global source0_hash 649b50bde99272b97c66af2a8400163e2f84eae072d252daa26baaaf0866a1c2
 
 Name:           libaribcaption
-Version:        1.1.1
+Version:        1.1.2
 Release:        %autorelease
 Summary:        Portable ARIB STD-B24 Caption Decoder/Renderer
 

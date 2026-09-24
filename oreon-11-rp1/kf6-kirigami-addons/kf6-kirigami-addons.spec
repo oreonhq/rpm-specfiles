@@ -1,4 +1,4 @@
-%global source0_hash 513051dff8417da1819d6ae89d6c21a03654c9a60891df60df6aba13df19d21b
+%global source0_hash 1e4b3402d7f8744c903b0c0b907fa379379b848deda413b5a940dbaf4714cb32
 
 %global framework kirigami-addons
 %global orig_name kirigami-addons
@@ -9,7 +9,7 @@
 %endif
 
 Name:           kf6-%{framework}
-Version:        1.14.0
+Version:        1.14.2
 Release:	1%{?dist}
 License:        BSD-2-Clause AND CC-BY-SA-4.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND LicenseRef-KFQF-Accepted-GPL
 Summary:        Convergent visual components ("widgets") for Kirigami-based applications

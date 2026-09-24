@@ -1,4 +1,4 @@
-%global source0_hash ebf6217f48f537ae9a78126f0ecb4baa3d4820e3e26153ce250f3bffd05f6d0b
+%global source0_hash dc39242154baf276a9b4802a2a56b9e769a8ec67b4c2fb7e089b68e3666cf289
 
 # Run optional test
 %if ! (0%{?rhel})
@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-IO-Socket-IP
-Version:        0.43
-Release:        522%{?dist}
+Version:        0.44
+Release:        1%{?dist}
 Summary:        Drop-in replacement for IO::Socket::INET supporting both IPv4 and IPv6
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Socket-IP

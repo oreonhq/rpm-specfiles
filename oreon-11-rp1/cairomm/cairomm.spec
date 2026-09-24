@@ -1,4 +1,4 @@
-%global source0_hash 70136203540c884e89ce1c9edfb6369b9953937f6cd596d97c78c9758a5d48db
+%global source0_hash 06881a0167d84962c74db318427c5be663d30b8ea5c60740a9dc36a9c1961b54
 
 %global so_version 1
 %global apiver 1.0
@@ -10,7 +10,7 @@
 
 Name:           cairomm
 Summary:        C++ API for the cairo graphics library
-Version:        1.18.1
+Version:        1.19.1
 Release:        %autorelease
 
 URL:            https://www.cairographics.org
@@ -44,7 +44,7 @@ SourceLicense:  %{shrink:
                 }
 
 %global src_base https://www.cairographics.org/releases
-Source0:        https://www.cairographics.org/releases/cairomm-1.14.5.tar.xz
+Source0: https://www.cairographics.org/releases/cairomm-1.19.1.tar.xz
 # No keyring with authorized GPG signing keys is published
 # (https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/331), but we
 # are able to verify the signature using the key for Kjell Ahlstedt from

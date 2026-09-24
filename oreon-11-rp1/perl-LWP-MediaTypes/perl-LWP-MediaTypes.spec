@@ -1,11 +1,11 @@
-%global source0_hash 8f1bca12dab16a1c2a7c03a49c5e58cce41a6fec9519f0aadfba8dad997919d9
+%global source0_hash abb2dcfbf069317fe65b098e3b2ad58c5eb33e9a839b9190cce6d371f8966cc1
 
 # Use system-wide mailcap database
 %bcond_without perl_LWP_MediaTypes_enables_mailcap
 
 Name:           perl-LWP-MediaTypes
-Version:        6.04
-Release:        22%{?dist}
+Version:        6.05
+Release:        1%{?dist}
 Summary:        Guess media type for a file or a URL
 # lib/LWP/media.types:      CC0-1.0
 # lib/LWP/MediaTypes.pm:    GPL-1.0-or-later OR Artistic-1.0-Perl

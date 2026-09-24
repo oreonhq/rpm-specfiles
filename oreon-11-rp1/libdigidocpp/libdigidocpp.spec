@@ -1,9 +1,9 @@
-%global source0_hash 773a6ad8f3eed3a3859a58c9bcd808c27c20b374850c7f14644707c3340a5038
+%global source0_hash a5ed46a195b285e5fb2779335eee7ee5176803164c7191a9937e2ce3916a6058
 
 Name:           libdigidocpp
 
-Version:        4.3.0
-Release:        2%{?dist}
+Version:        4.5.1
+Release:        1%{?dist}
 
 Summary:        Library offers creating, signing and verification of digitally signed documents
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

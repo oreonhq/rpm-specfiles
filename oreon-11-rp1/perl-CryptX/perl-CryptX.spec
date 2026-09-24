@@ -1,4 +1,4 @@
-%global source0_hash 1f7e7327aeccf01c503f895749507c3296521437115dc26e47e3a07ee6ccae5f
+%global source0_hash 3a82d5cf786985e5de5339d1236ce4b27306db5e6b1ed5fa15038ded6d44859a
 
 # Enable JSON support
 %bcond_without perl_CryptX_enables_json
@@ -6,7 +6,7 @@
 %bcond_without perl_CryptX_enables_optional_test
 
 Name:           perl-CryptX
-Version:        0.090
+Version:        0.091
 Release:        1%{?dist}
 Summary:        Cryptographic toolkit
 # src/ltc/*:    Unlicense

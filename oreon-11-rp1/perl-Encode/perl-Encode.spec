@@ -1,8 +1,8 @@
-%global source0_hash eacf71c5eb49e0e590de797f1982d7fb95d8481e4d13c3ce79eb32ef9373b3db
+%global source0_hash e4ff0be00ef14c42754c9db2fee41a053e9d4613db6405e98cd0e0e5be740362
 
 # Because encoding sub-package has an independent version, version macro gets
 # redefined.
-%global cpan_version 3.21
+%global cpan_version 3.24
 Name:           perl-Encode
 Epoch:          4
 Version:        %{cpan_version}
@@ -10,7 +10,7 @@ Version:        %{cpan_version}
 # perl-encoding sub-package has independent version which does not change
 # often and consecutive builds would clash on perl-encoding NEVRA. This is the
 # same case as in perl.spec.
-Release:        521%{?dist}
+Release:        1%{?dist}
 Summary:        Character encodings in Perl
 # ucm:          license in this repository can be ingored based on
 # https://gitlab.com/fedora/legal/fedora-license-data/-/issues/30#note_1435176617
@@ -18,7 +18,7 @@ Summary:        Character encodings in Perl
 # other files:  GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND Artistic-2.0
 URL:            https://metacpan.org/release/Encode
-Source0:        https://cpan.metacpan.org/authors/id/D/DA/DANKOGAI/Encode-3.21.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DA/DANKOGAI/Encode-3.24.tar.gz
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc

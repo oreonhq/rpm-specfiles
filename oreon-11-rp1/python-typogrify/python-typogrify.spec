@@ -1,10 +1,10 @@
-%global source0_hash 8be4668cda434163ce229d87ca273a11922cb1614cb359970b7dc96eed13cb38
+%global source0_hash f0aa004e98032a6e6be4c9da65e7eb7150e36ca3bf508adbcda82b4d003e61ee
 
 %global pypi_name typogrify
 
 Name:           python-%{pypi_name}
-Version:        2.0.7
-Release:        28%{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        Filters to enhance web typography, with support for Django & Jinja templates
 
 # typogrify/packages/titlecase/__init__.py is MIT

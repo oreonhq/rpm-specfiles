@@ -1,9 +1,9 @@
-%global source0_hash be0102fdcea8d43f1b02ef2ef94345ac4bbc7b6c66ece2ddd1a3593d8371ba1b
+%global source0_hash 236aab8262e928d05be0bb0a68fae9e829913f9d3fa4bb6aebba9e30edb189ad
 
 Name:           perl-Socket
 Epoch:          4
-Version:        2.040
-Release:        3%{?dist}
+Version:        2.043
+Release:        1%{?dist}
 Summary:        Networking constants and support functions
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Socket
