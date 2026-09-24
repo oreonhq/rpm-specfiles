@@ -1,4 +1,4 @@
-%global source0_hash 95841282a49bbad508c51e8c8af17d909cb0671486d600785256fe5b5a45336d
+%global source0_hash 72fc363bd594040b13322159dd65c29b7d638e37d88f222db5b6302e2d8a7fce
 
 %global git_commit 6067afde563c3946eebd94f146b3824ab7a97a9c
 %global git_date 20260213
