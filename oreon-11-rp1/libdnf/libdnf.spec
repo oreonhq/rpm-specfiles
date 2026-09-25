@@ -8,7 +8,7 @@
 %global dnf_conflict 4.11.0
 %global swig_version 3.0.12
 %global libdnf_major_version 0
-%global libdnf_minor_version 75
+%global libdnf_minor_version 76
 %global libdnf_micro_version 0
 
 %define __cmake_in_source_build 1
@@ -60,11 +60,11 @@
 
 Name:           libdnf
 Version:        %{libdnf_major_version}.%{libdnf_minor_version}.%{libdnf_micro_version}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Library providing simplified C and Python API to libsolv
 License:        LGPL-2.1-or-later
 URL:            https://github.com/rpm-software-management/libdnf
-Source0:        https://github.com/rpm-software-management/libdnf/releases/download/0.75.0/libdnf-0.75.0.tar.gz
+Source0:        https://github.com/rpm-software-management/libdnf/releases/download/0.76.0/libdnf-0.76.0.tar.gz
 Source1:        libdnf-0.75.0.tar.gz.asc
 # Key exported from Petr Pisar's keyring
 Source2:        gpgkey-E3F42FCE156830A80358E6E94FD1AEC3365AF7BF.gpg
@@ -199,7 +199,7 @@ Python 3 bindings for the hawkey library.
 %prep
 %(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-%autosetup -p1
+%autosetup -p1 -n libdnf-0.76.0
 %if %{with python2}
 mkdir build-py2
 %endif

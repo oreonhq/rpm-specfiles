@@ -8,10 +8,10 @@
 Name:             python-rtslib
 License:          Apache-2.0
 Summary:          API for Linux kernel LIO SCSI target
-Version:          2.2.3
-Release:          5%{?dist}
+Version:          2.2.4
+Release:          1%{?dist}
 URL:              https://github.com/open-iscsi/%{oname}
-Source:        https://github.com/open-iscsi/rtslib-fb/archive/v2.2.3/rtslib-fb-2.2.3.tar.gz#/python-rtslib-2.2.3.tar.gz
+Source:        https://github.com/open-iscsi/rtslib-fb/archive/v2.2.3/rtslib-fb-2.2.4.tar.gz#/python-rtslib-2.2.4.tar.gz
 Patch0:           0001-disable-xen_pvscsi.patch
 BuildArch:        noarch
 %if %{with apidocs}

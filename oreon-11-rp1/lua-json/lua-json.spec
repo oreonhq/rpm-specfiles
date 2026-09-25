@@ -1,11 +1,11 @@
-%global source0_hash aff67d64027f747b4611646fd0421802eda60397da9076e3f7fb17227e542e99
+%global source0_hash d6f4a354c8325ff965170a7c273bcf3a54736ff09d742008086d19462262368f
 
 %global commit 7a86bc22066858afeb23845a191a6ab680b46233
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           lua-json
-Version:        1.3.4
-Release:        12%{?dist}
+Version:        1.3.5
+Release:        1%{?dist}
 Summary:        JSON Parser/Constructor for Lua
 License:        MIT
 URL:            https://github.com/harningt/luajson

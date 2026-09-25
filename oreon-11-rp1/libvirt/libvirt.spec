@@ -296,8 +296,8 @@
 
 Summary: Library providing a simple virtualization API
 Name: libvirt
-Version: 12.0.0
-Release: 3%{?dist}
+Version: 12.7.0
+Release: 1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND OFL-1.1
 URL: https://libvirt.org/
 
@@ -1174,7 +1174,7 @@ MinGW Windows libvirt virtualization library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git_am -n libvirt-12.0.0
+%autosetup -S git_am -n libvirt-%{version}
 
 %build
 %if 0%{?fedora} >= %{min_fedora} || 0%{?rhel} >= %{min_rhel} || (0%{?oreon} >= 11)

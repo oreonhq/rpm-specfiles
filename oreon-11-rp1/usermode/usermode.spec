@@ -10,11 +10,11 @@
 
 Summary: Tools for certain user account management tasks
 Name: usermode
-Version: 1.114
-Release: 16%{?dist}
+Version: 1.114.orig
+Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL: https://pagure.io/%{name}/
-Source:        https://deb.debian.org/debian/pool/main/u/usermode/usermode_%{version}.orig.tar.xz#/usermode-%{version}.tar.xz
+Source: https://deb.debian.org/debian/pool/main/u/usermode/usermode_1.114.orig.tar.xz#/usermode-1.114.orig.tar.xz
 Source1: config-util
 Patch1: fix-sast.patch
 Requires: pam, passwd, util-linux

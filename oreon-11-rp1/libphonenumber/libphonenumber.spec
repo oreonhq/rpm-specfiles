@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name: libphonenumber
-Version: 9.0.39
+Version: 9.0.40
 Release: %autorelease
 Summary: Library to handle international phone numbers
 # The project itself is ASL 2.0 but contains files from Chromium which are BSD and MIT.
@@ -80,8 +80,8 @@ popd
 %files
 %doc cpp/README
 %license cpp/LICENSE
-%{_libdir}/libgeocoding.so.8*
-%{_libdir}/libphonenumber.so.8*
+%{_libdir}/libgeocoding.so.9*
+%{_libdir}/libphonenumber.so.9*
 
 
 %files devel

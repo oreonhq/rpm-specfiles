@@ -1,15 +1,15 @@
-%global source0_hash 4438cd451b51b5cd13de924bd9d5015c35a06a69e4423452edf79bad646f0469
+%global source0_hash f85caaab9a6334015972e21d94883537ce8f99f9dd4bd0062a0d6147f62c5edc
 
 %global debug_package %{nil}
 
 Name:           vulkan-utility-libraries
-Version:        1.4.362
+Version:        1.4.363
 Release:        %autorelease
 Summary:        Vulkan utility libraries
 
 License:        Apache-2.0
 URL:            https://github.com/KhronosGroup/Vulkan-Utility-Libraries
-Source0:        https://github.com/KhronosGroup/Vulkan-Utility-Libraries/archive/vulkan-sdk-1.4.341.0.tar.gz#/Vulkan-Utility-Libraries-sdk-1.4.341.0.tar.gz
+Source0: https://github.com/KhronosGroup/Vulkan-Utility-Libraries/archive/vulkan-sdk-1.4.363.tar.gz#/Vulkan-Utility-Libraries-sdk-1.4.363.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -50,9 +50,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc README.md
 %{_includedir}/vulkan/
 %{_libdir}/cmake/VulkanUtilityLibraries/*.cmake
-%{_libdir}/libVulkanLayerSettings.a
-%{_libdir}/libVulkanSafeStruct.a
 
+%{_libdir}/libVulkanLayerSettings.so
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.341.0-1
 - Prepare for Oreon 11 (RP1)

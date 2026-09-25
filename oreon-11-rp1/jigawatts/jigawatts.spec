@@ -1,4 +1,4 @@
-%global source0_hash ce7d6457409925cf5beca2ee8502ac764d0331e257758ffbf986a9103e1e84d2
+%global source0_hash 628c563685ea3721c42db3ccf9d159a497e21739a0d7f900050ab20fcb5fc4d3
 
 %global uname         jigawatts
 %global uversion      6c78499af1a1d536368267e5ab5449232b05f878
@@ -9,13 +9,13 @@
 
 
 Name:    %{uname}
-Version: 0.2
-Release: 0.18.%{commitdate}%{shortcommit}%{?dist}
+Version: 1.21.0.0.0
+Release: 1%{?dist}
 Summary: Java CRIU helper
 # Automatically converted from old format: GPLv2 with exceptions - review is highly recommended.
 License: LicenseRef-Callaway-GPLv2-with-exceptions
 URL:     https://github.com/chflood/%{uname}
-Source0:        https://github.com/chflood/jigawatts/archive/refs/tags/6c78499af1a1d536368267e5ab5449232b05f878.tar.gz#/jigawatts-0.2.tar.gz
+Source0: https://codeload.github.com/chflood/jigawatts/tar.gz/refs/tags/1.21.0.0.0#/jigawatts-1.21.0.0.0.tar.gz
 
 # Pathces to move library out of the jar. This must be usptreamed in one or another way
 Patch0:  output_loc.patch

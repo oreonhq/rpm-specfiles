@@ -1,10 +1,10 @@
-%global source0_hash 69f48fd490c4fd21a0077657ea5462a8b7c41acaa75fc897b91cbed5bb855a00
+%global source0_hash a2efd7ae0eabfa43c3da2a8f2b34bbc53f6d7b067c697ada569cf1fa21f36346
 
 %global extension   no-overview
 %global uuid        %{extension}@fthx
 
 Name:           gnome-shell-extension-%{extension}
-Version:        49
+Version:        51
 Release:        %autorelease
 Summary:        GNOME Shell extension for no overview at start-up
 License:        GPL-3.0-only

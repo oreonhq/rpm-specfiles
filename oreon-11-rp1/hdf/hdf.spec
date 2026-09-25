@@ -1,4 +1,4 @@
-%global source0_hash a6639a556650e6ea8632a17b8188a69de844bdff54ce121a1fd5b92c8dd06cb1
+%global source0_hash 21b789eea106188455e37c0446204aed675ede3e8ae8481d2691f367c7f9b0ee
 
 # No more Java on i686
 %ifarch %{java_arches}
@@ -8,13 +8,13 @@
 %endif
 
 Name: hdf
-Version: 4.3.0
-Release: 5%{?dist}
+Version: 42r4
+Release: 1%{?dist}
 Summary: A general purpose library and file format for storing scientific data
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL: https://portal.hdfgroup.org/
-Source0: https://github.com/HDFGroup/hdf4/archive/refs/tags/hdf%{version}.tar.gz
+Source0: https://codeload.github.com/HDFGroup/hdf4/tar.gz/refs/tags/v42r4
 Source1: h4comp
 # Fix java build
 Patch1: hdf-build.patch

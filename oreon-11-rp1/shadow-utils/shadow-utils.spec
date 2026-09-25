@@ -1,13 +1,13 @@
-%global source0_hash 11a8f358910712cf957dd4fd205063fce7e386b68fc7dfe3a0e1e53155ec53c5
+%global source0_hash 623be9429f64fa2165bfc5957c6a642ec309c5cf23c0d53855c99f7591922297
 
 Summary: Utilities for managing accounts and shadow password files
 Name: shadow-utils
-Version: 4.20.2
+Version: 4.20.3
 Release: 1%{?dist}
 Epoch: 2
 License: BSD-3-Clause AND GPL-2.0-or-later
 URL: https://github.com/shadow-maint/shadow
-Source0: https://github.com/shadow-maint/shadow/releases/download/4.20.2/shadow-4.19.3.tar.xz
+Source0: https://github.com/shadow-maint/shadow/releases/download/4.20.3/shadow-4.20.3.tar.xz
 Source1: https://github.com/shadow-maint/shadow/releases/download/4.20.2/shadow-4.19.3.tar.xz.asc
 Source2: shadow-utils.useradd
 Source3: shadow-utils.login.defs
@@ -109,7 +109,7 @@ Development files for shadow-utils-subid.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p 1 -S git -n shadow-4.19.3
+%autosetup -p 1 -S git -n shadow-%{version}
 
 iconv -f ISO88591 -t utf-8  doc/HOWTO > doc/HOWTO.utf8
 cp -f doc/HOWTO.utf8 doc/HOWTO

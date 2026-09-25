@@ -1,4 +1,4 @@
-%global source0_hash 8751562a8d179d81bb98190d0789ab72b881508b4d0a42ae371bee8d9628e104
+%global source0_hash 58bd6c64954f5c9ffb2f8026468f0553a8ffc6def45017d071701bfba73fce72
 
 %global varnishver %(pkg-config --silence-errors --modversion varnishapi || echo 0)
 
@@ -11,7 +11,7 @@
 %endif
 
 Name:    varnish-modules
-Version: 0.28.0
+Version: 0.29.0
 Release: 1%{?dist}
 Summary: A collection of modules ("vmods") extending Varnish VCL
 

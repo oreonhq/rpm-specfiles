@@ -2,13 +2,13 @@
 
 Summary: The standard UNIX FTP (File Transfer Protocol) client
 Name: ftp
-Version: 0.17
-Release: 100%{?dist}
+Version: 0.17.orig
+Release: 1%{?dist}
 License: BSD-4-Clause-UC
 # The Upstream of ftp is no longer active.
 # The source file for ftp is no longer available anywhere
 # else than in Fedora repos.
-Source0: https://ftp.debian.org/debian/pool/main/n/netkit-ftp/netkit-ftp_%{version}.orig.tar.gz#/netkit-ftp-%{version}.tar.gz
+Source0: https://ftp.debian.org/debian/pool/main/n/netkit-ftp/netkit-ftp_0.17.orig.tar.gz#/netkit-ftp-0.17.orig.tar.gz
 Patch1: netkit-ftp-0.17-pre20000412.pasv-security.patch
 Patch2: netkit-ftp-0.17-acct.patch
 Patch3: netkit-ftp.usagi-ipv6.patch

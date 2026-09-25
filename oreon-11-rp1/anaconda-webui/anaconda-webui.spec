@@ -1,8 +1,8 @@
-%global source0_hash e5b56ff90c86d7d7ac2c4a540c37ab38942b6f27a62b43204d2db0099153cb6a
+%global source0_hash b7698b5f87918e9e4b275595c90db725e54900f234943470bed36fe245edb272
 
 Name:           anaconda-webui
-Version:        68
-Release:        2%{?dist}
+Version:        84
+Release:        1%{?dist}
 Summary:        Anaconda installer Web interface
 License:        LGPL-2.1-or-later AND MIT
 URL:            https://github.com/rhinstaller/%{name}
@@ -139,6 +139,8 @@ exit 0
 
 
 # The changelog is automatically generated and merged
+%{_sysconfdir}/anaconda/cockpit/cockpit.conf
+%{_datadir}/anaconda/cockpit/conf.d/50-remote-auth.conf
 %changelog
 * Tue Mar 24 2026 Packit <hello@packit.dev> - 68-1
 - Log Bugzilla bug number when crash report is created (Resolves: rhbz#2443015)

@@ -1,9 +1,9 @@
-%global source0_hash 01a7b881bd220bfdf615f97b8718f80bdfd3f6add385b993dcf6efd14e8c0ac6
+%global source0_hash 9aa0cc780dec156b8282844833b342ab7cb08c25d2cd9a1869cdd0df31deff48
 
 Summary: GNU data compression program
 Name: gzip
-Version: 1.14
-Release: 3%{?dist}
+Version: 1.15
+Release: 1%{?dist}
 # info pages are under GFDL license
 License: GPL-3.0-or-later AND GFDL-1.3-only
 Source0:        https://mirrors.kernel.org/gnu/gzip/gzip-%{version}.tar.xz

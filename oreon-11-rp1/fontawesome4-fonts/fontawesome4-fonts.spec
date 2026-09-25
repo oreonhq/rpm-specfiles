@@ -1,4 +1,4 @@
-%global source0_hash 35d79ae86c8d4fd0f931843ec969191700940875bb941044a4c860eb200f166c
+%global source0_hash d5a20554faa1ad30148b05f090a556e23495c446435c8dfc1624d3c0e3c2640b
 
 %global fontname fontawesome4
 %global fontconf 60-fontawesome.conf
@@ -6,13 +6,13 @@
 
 Name:		fontawesome4-fonts
 Epoch:		1
-Version:	4.7.0
-Release:	26%{?dist}
+Version:	7.3.1
+Release:	1%{?dist}
 
 Summary:	Iconic font set
 License:	OFL-1.1-RFN
 URL:		https://github.com/FortAwesome/Font-Awesome
-Source0:        https://github.com/FortAwesome/Font-Awesome/archive/refs/tags/v%{version}.zip#/fontawesome4-fonts-4.7.0.zip
+Source0: https://codeload.github.com/FortAwesome/Font-Awesome/tar.gz/refs/tags/7.3.1#/fontawesome4-fonts-4.7.0.zip
 Source1:	%{name}-fontconfig.conf
 Source2:	README-Trademarks.txt
 BuildArch:	noarch

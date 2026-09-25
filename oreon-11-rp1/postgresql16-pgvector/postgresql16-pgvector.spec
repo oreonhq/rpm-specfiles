@@ -1,4 +1,4 @@
-%global source0_hash a11cc249a9f3f3d7b13069a1696f2915ac28991a72d7ba4e2bcfdceddbaeae49
+%global source0_hash 10bf9938906e5d643bbc4a7eea104b6f57ba4898e5b76b20e60484ea1d5a7f8f
 
 %{!?postgresql_default:%global postgresql_default 0}
 
@@ -13,8 +13,8 @@
 %endif
 
 Name:		postgresql%{pgversion}-%{sname}
-Version:	0.6.2
-Release:	7%{?dist}
+Version:	0.8.6
+Release:	1%{?dist}
 Summary:	Open-source vector similarity search for Postgres
 License:	PostgreSQL
 URL:		https://github.com/%{sname}/%{sname}/
@@ -83,6 +83,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/pgsql/extension//%{pname}.control
 %{_datadir}/pgsql/extension/%{pname}*sql
 %if %llvm
+%{_includedir}/pgsql/server/extension/vector/halfvec.h
 %files -n %{pkgname}-llvmjit
 %{_libdir}/pgsql/bitcode/%{pname}*.bc
 %{_libdir}/pgsql/bitcode/%{pname}/src/*.bc

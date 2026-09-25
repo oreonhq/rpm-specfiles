@@ -1,9 +1,9 @@
-%global source0_hash 1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c
+%global source0_hash 6949dcde27d41cebad1fd741fcafc36d55a1020d2d872d4a6eb3914caabbada2
 
 Summary: Library implementing the Unicode Bidirectional Algorithm
 Name: fribidi
-Version: 1.0.16
-Release: 4%{?dist}
+Version: 1.0.17
+Release: 1%{?dist}
 URL: https://github.com/fribidi/fribidi/
 Source:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 License: LGPL-2.1-or-later AND Unicode-DFS-2016

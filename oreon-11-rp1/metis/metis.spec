@@ -1,4 +1,4 @@
-%global source0_hash c860b393f61ef017f288692b00fd26eec2d3fdbc7a2bb3bed8b0f01e836e53cf
+%global source0_hash 6e6975e60d3fc865d9389bda9934b27b844a5f96c04f0b717ea8ebb52f75a608
 
 %undefine _ld_as_needed
 
@@ -9,7 +9,7 @@
 %endif
 
 Name:    metis
-Version: 5.1.0.3
+Version: 5.2.1.4
 Release: %autorelease
 Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering
 License: Apache-2.0 AND LGPL-2.0-or-later
@@ -81,7 +81,7 @@ OpenMP version (64bit INTEGER).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -qc 
+%setup -qc -n %{name}-%{version}
  
 pushd METIS-%{version}
 rm -rf archive

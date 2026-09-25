@@ -1,4 +1,4 @@
-%global source0_hash 3d86b6383fb5fd9eb9578d2cd47d92801191f4bf3f9bc61419bfefc8aa1e531a
+%global source0_hash 2ce4765fd49df6693771ef2941f81e33d8ee14b94a81a5c7b369aa3b137b85a5
 %global source2_hash none
 
 %bcond nis %[!(0%{?rhel} >= 9)]
@@ -16,8 +16,8 @@
 
 Summary: An extensible library which provides authentication for applications
 Name: pam
-Version: 1.7.2
-Release: 2%{?dist}
+Version: 1.7.3
+Release: 1%{?dist}
 # The library is BSD licensed with option to relicense as GPLv2+
 # - this option is redundant as the BSD license allows that anyway.
 # pam_timestamp and pam_loginuid modules are GPLv2+.

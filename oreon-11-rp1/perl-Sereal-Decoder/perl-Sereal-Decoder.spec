@@ -1,10 +1,10 @@
-%global source0_hash bc002d405ed18f7a15711918ab766af1e7278576f0661704329205bb9b9a1b3e
+%global source0_hash b0e419b53eaabe38e6188c8afbb3b8fa86d9dd922e0f36ea53fd626973d9cb25
 
 # Perform optinal tests
 %bcond_without perl_Sereal_Decoder_enables_optional_test
 
 Name:           perl-Sereal-Decoder
-Version:        5.008
+Version:        5.010
 Release:        1%{?dist}
 Summary:        Perl deserialization for Sereal format
 # lib/Sereal/Decoder.pm:    GPL+ or Artistic

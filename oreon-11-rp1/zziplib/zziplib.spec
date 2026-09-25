@@ -1,12 +1,12 @@
-%global source0_hash feaeee7c34f18aa27bd3da643cc6a47d04d2c41753a59369d09102d79b9b0a31
+%global source0_hash 21f40d111c0f7a398cfee3b0a30b20c5d92124b08ea4290055fbfe7bdd53a22c
 
 # FTBFS with GCC 14, reported upstream, no fix yet
 # https://bugzilla.redhat.com/show_bug.cgi?id=2256917
 
 Summary: Lightweight library to easily extract data from zip files
 Name: zziplib
-Version: 0.13.78
-Release: 4%{?dist}
+Version: 0.13.80
+Release: 1%{?dist}
 License: LGPL-2.0-or-later OR MPL-1.1
 URL: http://zziplib.sourceforge.net/
 Source:        https://github.com/gdraheim/zziplib/archive/v%{version}.tar.gz#/zziplib-%{version}.tar.gz
@@ -76,7 +76,7 @@ export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %ldconfig_scriptlets
 
 %files
-%doc docs/COPYING* ChangeLog README TODO
+%doc docs/COPYING* ChangeLog README.md TODO
 %{_libdir}/*.so.*
 %exclude %{_datadir}/zziplib/*.cmake
 %exclude %{_libdir}/cmake/zziplib/*.cmake

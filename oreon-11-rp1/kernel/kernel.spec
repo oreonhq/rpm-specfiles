@@ -1,4 +1,4 @@
-%global source0_hash 039aef84f2b0994aeda3f4fcfc3d02ec9d7a9bbb9020ea264c43f446c860f606
+%global source0_hash 4ac34c47db2540ffb2713943f8d891ff1702e0ba6934525a493b7d1cad43145a
 
 # All Global changes to build and install go here.
 # Per the below section about __spec_install_pre, any rpm
@@ -174,13 +174,13 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.2.6
-%define specversion 7.2.6
+%define specrpmversion 7.2.7
+%define specversion 7.2.7
 %define patchversion 7.2
 %define kernel_org_dir %(perl -e '@p=split /\\./,shift; print($p[1]==0 ? "v$p[0].x" : "v@{[join q{.}, @p]}")' %{patchversion})
 %define pkgrelease 201
 %define kversion 7
-%define tarfile_release 7.2.6
+%define tarfile_release 7.2.7
 # This is needed to do merge window version magic
 %define patchlevel 2
 # This allows pkg_release to have configurable %%{?dist} tag

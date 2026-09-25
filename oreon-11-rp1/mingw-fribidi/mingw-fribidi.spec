@@ -1,12 +1,12 @@
-%global source0_hash 1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c
+%global source0_hash 6949dcde27d41cebad1fd741fcafc36d55a1020d2d872d4a6eb3914caabbada2
 
 %{?mingw_package_header}
 
 %global pkgname fribidi
 
 Name:          mingw-%{pkgname}
-Version:       1.0.16
-Release:       4%{?dist}
+Version:       1.0.17
+Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname} library
 
 License:       LGPL-2.0-or-later

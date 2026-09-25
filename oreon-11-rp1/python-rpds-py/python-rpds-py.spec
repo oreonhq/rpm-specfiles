@@ -1,10 +1,10 @@
-%global source0_hash dd8ff7cf90014af0c0f787eea34794ebf6415242ee1d6fa91eaba725cc441e84
+%global source0_hash 1cebd1337c242e4ec2293e541f712b2da849b29f48f0c293684b71c0632625d4
 
 %global srcname rpds-py
 %global modname rpds_py
 
 Name:           python-rpds-py
-Version:        0.30.0
+Version:        2026.6.3
 Release:        %autorelease
 Summary:        Python bindings to the Rust rpds crate
 # Full license breakdown in LICENSES.dependencies

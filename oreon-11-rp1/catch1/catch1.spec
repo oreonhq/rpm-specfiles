@@ -1,9 +1,9 @@
-%global source0_hash 27bf01d20692e534a8963f96c6ca797df2b4ba6551db0379510c376558d75e3c
+%global source0_hash 0957cae5821b17ce07f0833aaa52b5137643a8382203221f363a8303c109af34
 
 %global debug_package %{nil}
 
 Name:           catch1
-Version:        1.12.2
+Version:        3.16.0
 Release:        %autorelease
 Summary:        A modern, C++-native, header-only, framework for unit-tests, TDD and BDD
 

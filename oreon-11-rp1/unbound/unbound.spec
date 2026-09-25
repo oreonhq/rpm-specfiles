@@ -42,12 +42,12 @@
 
 Summary: Validating, recursive, and caching DNS(SEC) resolver
 Name: unbound
-Version: 1.24.2
+Version: 1.26.1
 Release: %autorelease %{?extra_version:-e %{extra_version}}
 License: BSD-3-Clause
 Url: https://nlnetlabs.nl/projects/unbound/
 VCS: git:%{forgeurl0}
-Source:        https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2%{?extra_version}.tar.gz
+Source:        https://nlnetlabs.nl/downloads/unbound/unbound-1.26.1%{?extra_version}.tar.gz
 Source1: unbound.service
 Source3: unbound.munin
 Source4: unbound_munin_

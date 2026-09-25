@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-boto3
-Version:        1.43.97
+Version:        1.43.102
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        The AWS SDK for Python _Boto3_

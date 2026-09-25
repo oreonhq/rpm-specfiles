@@ -1,9 +1,9 @@
-%global source0_hash f5453a3cdc8c7f82ad4155be9356339a579ac6cea21c10b64ca8cfe636854931
+%global source0_hash 4e0b7bdc147dbdfaf3733bc3b4e879261eb259b21ad17ee6bcbf4d5b8fd368ac
 
 Summary: A tool for generating SELinux security policies for containers
 Name: udica
-Version: 0.2.8
-Release: 12%{?dist}
+Version: 0.2.9
+Release: 1%{?dist}
 Source0:        https://github.com/containers/udica/archive/refs/tags/v%{version}.tar.gz#/udica-0.2.8.tar.gz
 
 #git format-patch -N v0.2.8 -- . ':!.cirrus.yml' ':!.github'

@@ -1,4 +1,4 @@
-%global source0_hash dc07d9388ca3d3f67146312904bcdb35fe416bb30056158f80df3281a94fae58
+%global source0_hash 9a782d3534c486393e2b190151f6ed64a5083fd76fa142915ae094eb1cc99c04
 
 # Run optional test
 %if ! (0%{?rhel})
@@ -9,13 +9,13 @@
 
 Name:           perl-version
 Epoch:          9
-Version:        0.99.33
+Version:        0.9934
 %global module_version 0.9933
-Release:        522%{?dist}
+Release:        1%{?dist}
 Summary:        Perl extension for Version Objects
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/version
-Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/version-0.9933.tar.gz
+Source0: https://cpan.metacpan.org/authors/id/L/LE/LEONT/version-0.9934.tar.gz
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils

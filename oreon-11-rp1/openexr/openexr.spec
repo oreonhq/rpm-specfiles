@@ -1,8 +1,8 @@
-%global source0_hash 81e6518f2c4656fdeaf18a018f135e96a96e7f66dbe1c1f05860dd94772176cc
+%global source0_hash 0dc41a9dd84c868ad89c892382f75f6835a73decbefab9366d6f168bf9322954
 %global sover 31
 
 Name:           openexr
-Version:        3.4.15
+Version:        3.5.0
 Release:        1%{?dist}
 Summary:        Tools and libraries for ILM's OpenEXR high dynamic-range image format
 License:        BSD-3-Clause

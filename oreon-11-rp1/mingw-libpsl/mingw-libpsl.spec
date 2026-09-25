@@ -1,14 +1,14 @@
-%global source0_hash 41bd1c75a375b85c337b59783f5deb93dbb443fb0a52d257f403df7bd653ee12
+%global source0_hash 6ae8b6bd4d8632ca0808f496d490f92adf27fee1b4747505ee1a1f2d42a278b9
 
 %{?mingw_package_header}
 
 Name: mingw-libpsl
-Version: 0.21.0
-Release: 17%{?dist}
+Version: 0.23.3
+Release: 1%{?dist}
 Summary: MinGW port of C library for the Publix Suffix List
 License: MIT
 URL: https://rockdaboot.github.io/libpsl
-Source0: https://github.com/rockdaboot/libpsl/releases/download/libpsl-%{version}/libpsl-%{version}.tar.gz
+Source0: https://codeload.github.com/rockdaboot/libpsl/tar.gz/refs/tags/0.23.3
 
 BuildArch: noarch
 

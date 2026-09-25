@@ -6,11 +6,11 @@
 
 Summary: A library for text mode user interfaces
 Name: newt
-Version: 0.52.25
-Release: 6%{?dist}
+Version: 0.52.25.orig
+Release: 1%{?dist}
 License: LGPL-2.0-only
 URL: https://pagure.io/newt
-Source:        https://deb.debian.org/debian/pool/main/n/newt/newt_%{version}.orig.tar.xz#/newt-%{version}.tar.gz
+Source: https://deb.debian.org/debian/pool/main/n/newt/newt_0.52.25.orig.tar.xz#/newt-0.52.25.orig.tar.gz
 BuildRequires: make
 BuildRequires: gcc popt-devel python3-devel slang-devel
 %{?with_python2:BuildRequires: python2-devel}

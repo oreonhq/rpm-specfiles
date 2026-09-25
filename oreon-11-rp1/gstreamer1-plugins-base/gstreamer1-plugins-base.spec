@@ -1,4 +1,4 @@
-%global source0_hash 27880f3d87efa3bb5aa5f99f7ef6e4be7c95229f44eee928c1633d32e87d0099
+%global source0_hash eaaaa0bb455812e2277d14c9be8dd3136e2c607e34efd401a33d4b384b2f0253
 
 %bcond cdparanoia %{undefined rhel}
 %bcond libvisual %{undefined rhel}
@@ -506,6 +506,7 @@ chrpath --delete $RPM_BUILD_ROOT%{_bindir}/gst-play-1.0
 %{_libdir}/pkgconfig/*.pc
 
 %if 0
+%{_includedir}/gstreamer-1.0/gst/video/gsth274.h
 %files devel-docs
 %doc %{_datadir}/gtk-doc/html/gst-plugins-base-libs-%{majorminor}
 %doc %{_datadir}/gtk-doc/html/gst-plugins-base-plugins-%{majorminor}

@@ -1,4 +1,4 @@
-%global source0_hash 7cbece26ad94bd375eb81fee2b540d0ef68bbeb0994358e57bd588173f96b8ec
+%global source0_hash 451c07f9639055d340f473bdf4a4deef286e6eda52a395facce4280742430224
 
 Name:           libcerf
 Version:        3.8

@@ -1,4 +1,4 @@
-%global source0_hash 94fc2277e639929e898cb95559d9d2c51cf764b787eaf6fa04f848a6550c2ff5
+%global source0_hash 51b3433123d85a36a7dde2c932b157783336eb4fbc256b27680122496b4a8ae8
 
 %global owner michaeljones
 %global srcname breathe
@@ -10,13 +10,13 @@ render the Doxygen xml output.
 %bcond doc %{undefined rhel}
 
 Name:           python-%{srcname}
-Version:        4.36.0
+Version:        5.0.0
 Release:        %autorelease
 Summary:        Adds support for Doxygen xml output to reStructuredText and Sphinx
 
 License:        BSD-3-Clause
 URL:            https://github.com/%{owner}/%{srcname}
-Source0:        https://github.com/michaeljones/breathe/archive/refs/tags/v4.36.0.tar.gz#/python-breathe-4.36.0.tar.gz
+Source0: https://github.com/michaeljones/breathe/archive/refs/tags/v5.0.0.tar.gz#/python-breathe-5.0.0.tar.gz
 
 BuildArch:      noarch
 

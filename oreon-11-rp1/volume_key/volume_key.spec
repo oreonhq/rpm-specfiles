@@ -33,13 +33,13 @@
 
 Summary: An utility for manipulating storage encryption keys and passphrases
 Name: volume_key
-Version: 0.3.12
-Release: 30%{?dist}
+Version: 0.3.12.orig
+Release: 1%{?dist}
 License: GPL-2.0-only AND (MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.1-or-later)
 URL: https://pagure.io/%{name}/
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
-Source0:        https://deb.debian.org/debian/pool/main/v/volume-key/volume-key_%{version}.orig.tar.xz#/volume_key-%{version}.tar.xz
+Source0: https://deb.debian.org/debian/pool/main/v/volume-key/volume-key_0.3.12.orig.tar.xz#/volume_key-0.3.12.orig.tar.xz
 # Support all LUKS devices
 # - backport of 26c09768662d8958debe8c9410dae9fda02292c3
 Patch0: volume_key-0.3.12-support_LUKS2_and_more.patch

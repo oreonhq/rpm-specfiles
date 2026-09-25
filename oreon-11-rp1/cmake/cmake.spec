@@ -1,4 +1,4 @@
-%global source0_hash 7efaccde8c5a6b2968bad6ce0fe60e19b6e10701a12fce948c2bf79bac8a11e9
+%global source0_hash f1fbcf2756029e14fb4ff37b4582d6c81a51f43d5ffa7b0849fccbf53cf39bf9
 
 # Do we add appdata-files?
 # consider conditional on whether %%_metainfodir is defined or not instead -- rex
@@ -74,7 +74,7 @@
 
 %global major_version 4
 %global minor_version 2
-%global patch_version 3
+%global patch_version 8
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
 %global baserelease 2
@@ -108,7 +108,7 @@ Summary:        Cross-platform make system
 # exception granting redistribution under terms of your choice
 License:        BSD-3-Clause AND MIT-open-group AND Zlib%{?with_bundled_cppdap: AND Apache-2.0}
 URL:            http://www.cmake.org
-Source0:        https://www.cmake.org/files/v4.2/cmake-4.2.3.tar.gz
+Source0:        https://www.cmake.org/files/v4.2/cmake-4.2.8.tar.gz
 Source1:        %{name}-init.el
 Source2:        macros.%{name}.in
 Source3:        macros.aaa-%{name}-srpm

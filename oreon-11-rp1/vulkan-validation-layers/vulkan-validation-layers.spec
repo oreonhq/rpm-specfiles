@@ -1,13 +1,13 @@
-%global source0_hash 7f521490495e43561f70fe8b6317fd5cc13d4083413f1abf891f50cbabe12238
+%global source0_hash 7b1dde2f34f1427eea96058b93478f07d63f7a42981847d4f884b40b9340758c
 
 Name:           vulkan-validation-layers
-Version:        1.4.362
+Version:        1.4.363
 Release:        %autorelease
 Summary:        Vulkan validation layers
 
 License:        Apache-2.0
 URL:            https://github.com/KhronosGroup/Vulkan-ValidationLayers
-Source0:        https://github.com/KhronosGroup/Vulkan-ValidationLayers/archive/vulkan-sdk-1.4.341.0.tar.gz#/Vulkan-ValidationLayers-sdk-1.4.341.0.tar.gz
+Source0: https://github.com/KhronosGroup/Vulkan-ValidationLayers/archive/vulkan-sdk-1.4.363.tar.gz#/Vulkan-ValidationLayers-sdk-1.4.363.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

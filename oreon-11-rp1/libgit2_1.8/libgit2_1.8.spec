@@ -1,4 +1,4 @@
-%global source0_hash 49d0fc50ab931816f6bfc1ac68f8d74b760450eebdb5374e803ee36550f26774
+%global source0_hash 1a4fbe7589e814777ae76b64734ad80f4ecad22cd33a22682a2aaea4ae5375e7
 
 # libssh2 is not available on RHEL
 %if 0%{?rhel}
@@ -8,7 +8,7 @@
 %endif
 
 Name:           libgit2_1.8
-Version:        1.8.4
+Version:        1.9.7
 Release:        %autorelease
 Summary:        C implementation of the Git core methods as a library with a solid API
 # Automatically converted from old format: GPLv2 with exceptions - review is highly recommended.
@@ -91,8 +91,9 @@ popd
 
 %files
 %license COPYING
-%{_libdir}/libgit2.so.1.8*
 
+%{_libdir}/libgit2.so.1.9.7
+%{_libdir}/cmake/libgit2/
 %files devel
 %doc AUTHORS docs examples README.md
 %{_libdir}/libgit2.so

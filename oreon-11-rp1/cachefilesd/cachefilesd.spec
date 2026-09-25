@@ -3,12 +3,12 @@
 # % define buildid .local
 
 Name:		cachefilesd
-Version:	0.10.10
-Release:	23%{?dist}%{?buildid}
+Version:	0.10.10.orig
+Release:	1%{?dist}
 Summary:	CacheFiles user-space management daemon
 License:	GPL-2.0-or-later
 URL:		http://people.redhat.com/~dhowells/fscache/
-Source0:        https://deb.debian.org/debian/pool/main/c/cachefilesd/cachefilesd_%{version}.orig.tar.bz2#/cachefilesd-%{version}.tar.bz2
+Source0: https://deb.debian.org/debian/pool/main/c/cachefilesd/cachefilesd_0.10.10.orig.tar.bz2#/cachefilesd-0.10.10.orig.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires: systemd-units
