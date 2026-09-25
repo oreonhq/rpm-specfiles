@@ -1,12 +1,12 @@
-%global source0_hash 05597a124b54aeaae69d556d000975b698bd64c73acd3ba398d8a7b4da3f377c
+%global source0_hash 7c68bf05f196153b1b1669a7d17e5bfba6253e7cafb69f67d30a0d17e7facecb
 
 # SPDX-License-Identifier: MIT
 
 %global libqat_soversion  4
 %global libusdm_soversion 0
 Name:             qatlib
-Version:          26.08.0
-Release:          1%{?dist}
+Version:          26.02.0
+Release:          2%{?dist}
 Summary:          Intel QuickAssist user space library
 # The entire source code is released under BSD.
 # For a breakdown of inbound licenses see the INSTALL file.
