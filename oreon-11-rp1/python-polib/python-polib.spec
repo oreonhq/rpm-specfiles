@@ -1,4 +1,4 @@
-%global source0_hash f3ef94aefed6e183e342a8a269ae1fc4742ba193186ad76f175938621dbfc26b
+%global source0_hash f451b24722828d43e8e032d2419467050ddce7bb72e4ac45559a5c114b9ba161
 
 %global srcname polib
 
@@ -9,7 +9,7 @@ Summary:        A library to parse and manage gettext catalogs
 
 License:        MIT
 URL:            https://github.com/izimobil/polib
-Source0:        %pypi_source
+Source0: https://codeload.github.com/izimobil/polib/tar.gz/refs/tags/1.2.0
 
 BuildArch:      noarch
 
