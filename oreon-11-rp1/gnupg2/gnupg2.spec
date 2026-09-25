@@ -6,8 +6,8 @@
 
 Summary: Utility for secure communication and data storage
 Name:    gnupg2
-Version: 2.5.24
-Release: 1%{?dist}
+Version: 2.4.9
+Release: 5%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND (BSD-3-Clause OR LGPL-3.0-or-later OR GPL-2.0-or-later) AND CC-BY-4.0 AND MIT
 Source0:        https://gnupg.org/ftp/gcrypt/%{?pre:alpha/}gnupg/gnupg-%{version}%{?pre}.tar.bz2

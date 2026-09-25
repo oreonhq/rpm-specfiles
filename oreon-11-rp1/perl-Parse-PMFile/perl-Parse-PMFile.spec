@@ -1,11 +1,11 @@
-%global source0_hash b459d0b73e18d3c69f15f58acf018cdb599d54482344de570b877874b33cbc53
+%global source0_hash 26817cf3d72e245452375dcff9e923a061ee0a40bbf060d3a08ebe60a334aaae
 
 # Run optional test
 %bcond_without perl_Parse_PMFile_enables_optional_test
 
 Name:           perl-Parse-PMFile
-Version:        0.48
-Release:        1%{?dist}
+Version:        0.47
+Release:        5%{?dist}
 Summary:        Parses .pm file as PAUSE does
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Parse-PMFile

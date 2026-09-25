@@ -1,8 +1,8 @@
-%global source0_hash 82fa839897b88e9c245b6265f3be26d3bc879cae4c7a8151fad4a307c3366822
+%global source0_hash 917f7312532f8f4af4f3acbf6ba10e0151f8577d2ef1f38e1035229be86eb6f4
 
 Name:           perl-Crypt-OpenSSL-RSA
-Version:        0.41
-Release:        1%{?dist}
+Version:        0.37
+Release:        2%{?dist}
 Summary:        Perl interface to OpenSSL for RSA
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Crypt-OpenSSL-RSA
@@ -56,7 +56,7 @@ make test
 
 %files
 %license LICENSE
-%doc Changes README.md
+%doc Changes README
 %{perl_vendorarch}/auto/*
 %{perl_vendorarch}/Crypt/
 %{_mandir}/man3/*

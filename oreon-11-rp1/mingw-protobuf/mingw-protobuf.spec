@@ -1,12 +1,12 @@
-%global source0_hash 7e7eaf580ec77f1a392ff1ab1013c13d3b04a6716f002f697f67f3c1113f0530
+%global source0_hash 9a301cf94a8ddcb380b901e7aac852780b826595075577bb967004050c835056
 
 %{?mingw_package_header}
 
 %global pkgname protobuf
 
 Name:          mingw-%{pkgname}
-Version:       36.2
-Release:       1%{?dist}
+Version:       3.19.6
+Release:       11%{?dist}
 Summary:       MinGW Windows protobuf library
 
 BuildArch:     noarch

@@ -1,4 +1,4 @@
-%global source0_hash 7f5951375c7cae8698db7bf64e8c7068bed20be645e67f3a9ad8c2bd62a1c57f
+%global source0_hash dade3fffa441b75a0d2dc216ac8fbf8a392e5b85344bfb618bd6d02216177bb3
 
 # defining macros needed by SELinux
 %global selinuxtype targeted
@@ -7,8 +7,8 @@
 %global modulename tabrmd
 
 Name: tpm2-abrmd-selinux
-Version: 3.0.0
-Release: 1%{?dist}
+Version: 2.3.1
+Release: 15%{?dist}
 Summary: SELinux policies for tpm2-abrmd
 
 License: BSD-2-Clause

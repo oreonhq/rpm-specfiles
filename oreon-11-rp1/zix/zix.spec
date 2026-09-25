@@ -1,9 +1,9 @@
-%global source0_hash 4c73aab0f8cbbfe56b00c8c6d648316021e699c5ae6cbf254391ef309047e67b
+%global source0_hash e9b6fe3ede984fa53f2edcebdabb35fb99ace807722772156aea49c079cad191
 
 %global         maj 0
 
 Name:           zix
-Version:        0.8.2
+Version:        0.8.0
 Release:        %autorelease
 Summary:        A lightweight C library of portability wrappers and data structures
 

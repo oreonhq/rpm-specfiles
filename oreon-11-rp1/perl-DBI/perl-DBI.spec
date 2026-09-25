@@ -1,4 +1,4 @@
-%global source0_hash a98c21fd37eed8f841172875d175d972fe87f063d7d0d2a3b7765908bb25eb58
+%global source0_hash 0df16af8e5b3225a68b7b592ab531004ddb35a9682b50300ce50174ad867d9aa
 
 # According to documentation, module using Coro is just:
 # A PROOF-OF-CONCEPT IMPLEMENTATION FOR EXPERIMENTATION.
@@ -32,8 +32,8 @@
 %endif
 
 Name:           perl-DBI
-Version:        1.653
-Release:        1%{?dist}
+Version:        1.647
+Release:        6%{?dist}
 Summary:        A database access API for perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://dbi.perl.org/

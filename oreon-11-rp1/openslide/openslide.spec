@@ -1,4 +1,4 @@
-%global source0_hash df82f6b264f98d11eeb80d85bbb10c7935fcd69c7abae1d610ce49b9a0437faf
+%global source0_hash cc227c44316abb65fb28f1c967706eb7254f91dbfab31e9ae6a48db6cf4ae562
 
 Name:		openslide
 Version:	4.0.1

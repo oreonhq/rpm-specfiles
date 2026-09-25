@@ -1,4 +1,4 @@
-%global source0_hash 3ab6e4a41667aa1edc87697dfcc0dc7d517d047d4366abafd8858d22e02d4f2f
+%global source0_hash 04e2437c41404782fa31cd74a881b475d75a6e692e4c88a24bf48cf5d263a93d
 
 # Architectures that have libquadmath
 %ifarch %{x86_64} %{power64}
@@ -15,7 +15,7 @@
 %global giturl  https://github.com/scipopt/papilo/
 
 Name:           papilo
-Version:        3.0.2
+Version:        3.0.1
 Release:        %autorelease
 Summary:        Parallel presolve for integer and linear optimization
 

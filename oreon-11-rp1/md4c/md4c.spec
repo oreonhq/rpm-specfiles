@@ -1,13 +1,13 @@
 %global source0_hash none
 
-Version:        0.6.0
+Version:        0.5.3
 Name:           md4c
 Release:        1%{?dist}
 Summary:        Markdown for C
 
 License:        MIT
 URL:            https://github.com/mity/md4c
-Source0: https://codeload.github.com/mity/md4c/tar.gz/refs/tags/v0.6.0
+Source0:        %{url}/archive/release-%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires: cmake
 BuildRequires: gcc 

@@ -5,13 +5,13 @@
 
 
 Name:           virt-what
-Version:        1.27.orig
-Release:        1%{?dist}
+Version:        1.27
+Release:        5%{?dist}
 Summary:        Detect if we are running in a virtual machine
 License:        GPL-2.0-or-later
 
 URL:            https://libguestfs.org/
-Source0: https://deb.debian.org/debian/pool/main/v/virt-what/virt-what_1.27.orig.tar.gz#/virt-what-1.27.orig.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/v/virt-what/virt-what_%{version}.orig.tar.gz#/%{name}-%{version}.tar.gz
 
 # Keyring used to verify tarball signature.
 Source2:       libguestfs.keyring

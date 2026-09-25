@@ -1,4 +1,4 @@
-%global source0_hash f1a6c9d391e661cc5b8d39861ff077a7dc24dc23833ccee564b234b81c82dfe3
+%global source0_hash 129a341b0a85a7db7879e22acd66902fda67882db771754574338898b2d5d86f
 
 # TODO adjust once this is implemented:
 # https://bugzilla.redhat.com/show_bug.cgi?id=1935266
@@ -17,7 +17,7 @@
 %endif
 
 Name:           python-%{pkgname}
-Version:        6.1.2
+Version:        6.1.0
 Release:        %autorelease
 Summary:        Context managers by jaraco
 

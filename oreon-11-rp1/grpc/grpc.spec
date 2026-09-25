@@ -1,4 +1,4 @@
-%global source0_hash 17a4d25717f4871eb71cfdf191f7491f66a59c8ebc782ab53d52fcbfc478959f
+%global source0_hash 0c3faa83e39d4f1ab55fe1476362b9ac3b81632a46dce7fd4d50271bce816b53
 
 # We need to use C++17 to link against the system abseil-cpp, since it was
 # compiled with C++17 (an intentional abseil-cpp design decision).
@@ -182,7 +182,7 @@ Summary:        RPC library and framework
 License:        Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT
 URL:            https://www.grpc.io
 %global forgeurl https://github.com/grpc/grpc/
-Source0: https://github.com/grpc/grpc/archive/v1.84.0/grpc-1.84.0.tar.gz
+Source0:        %{forgeurl}/archive/v%{srcversion}/grpc-%{srcversion}.tar.gz
 Source1:        %{gtest_url}/archive/%{gtest_commit}/%{gtest_dir}.tar.gz
 #Source1:        #{gtest_url}/archive/release-#{gtest_version}/#{gtest_dir}.tar.gz
 Source2:        %{envoy_api_url}/archive/%{envoy_api_commit}/%{envoy_api_dir}.tar.gz

@@ -9,7 +9,7 @@
 %global cargo_install_lib 0
 
 Name:           clevis-pin-tpm2
-Version:        0.5.5
+Version:        0.5.4
 Release:        1%{?dist}
 Summary:        Clevis PIN for unlocking with TPM2 supporting Authorized Policies
 
@@ -28,7 +28,7 @@ License:        MIT AND Apache-2.0 AND EUPL-1.2 AND Unicode-DFS-2016 AND (0BSD O
 # LICENSE.dependencies contains a full license breakdown
 
 URL:            https://github.com/fedora-iot/clevis-pin-tpm2/
-Source:        https://github.com/fedora-iot/clevis-pin-tpm2//archive/refs/tags/v0.5.4/clevis-pin-tpm2-0.5.5.tar.gz#/clevis-pin-tpm2-0.5.5.tar.gz
+Source:        https://github.com/fedora-iot/clevis-pin-tpm2//archive/refs/tags/v0.5.4/clevis-pin-tpm2-0.5.4.tar.gz#/clevis-pin-tpm2-0.5.4.tar.gz
 # To create the vendor tarball:
 #   tar xf %%{name}-%%{version}.crate ; pushd %%{name}-%%{version} ; \
 #   cargo vendor && tar Jcvf ../%%{name}-%%{version}-vendor.tar.xz vendor/ ; popd

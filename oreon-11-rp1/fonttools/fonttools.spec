@@ -1,4 +1,4 @@
-%global source0_hash 173c699de874dbf6f92f6198b3ab6da8195d0236390011f82bc38fd1a51ffe27
+%global source0_hash 9207dc3e2a8e3212986b1cdbe0696f6cebcf1a1d6de93cce11c2d85afb2a35dc
 
 %bcond tests 1
 
@@ -32,14 +32,14 @@ an XML text format, which is also called TTX. It supports TrueType, OpenType,
 AFM and to an extent Type 1 and some Mac-specific formats.}
 
 Name:           fonttools
-Version:        4.66.0
+Version:        4.65.0
 Release:        1%{?dist}
 Summary:        Tools to manipulate font files
 
 # https://spdx.org/licenses/MIT.html
 License:        MIT
 URL:            https://github.com/fonttools/fonttools/
-Source: https://github.com/fonttools/fonttools/archive/refs/tags/4.66.0/fonttools-4.66.0.tar.gz#/fonttools-4.66.0.tar.gz
+Source:        https://github.com/fonttools/fonttools//archive/refs/tags/4.65.0/fonttools-4.62.1.tar.gz#/fonttools-4.62.1.tar.gz
 
 Requires:       python3-fonttools = %{version}-%{release}
 Provides:       ttx = %{version}-%{release}

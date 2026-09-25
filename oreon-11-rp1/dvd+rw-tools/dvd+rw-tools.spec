@@ -1,14 +1,14 @@
 %global source0_hash f8d60f822e914128bcbc5f64fbe3ed131cbff9045dca7e12c5b77b26edde72ca
 
 Name:		dvd+rw-tools
-Version:	7.1.orig
-Release:	1%{?dist}
+Version:	7.1
+Release:	46%{?dist}
 Summary:	Toolchain to master DVD+RW/+R media
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:	GPL-2.0-only
 URL:		http://fy.chalmers.se/~appro/linux/DVD+RW/
 
-Source: https://deb.debian.org/debian/pool/main/d/dvd+rw-tools/dvd+rw-tools_7.1.orig.tar.gz#/dvd+rw-tools-7.1.orig.tar.gz
+Source:        https://deb.debian.org/debian/pool/main/d/dvd+rw-tools/dvd+rw-tools_%{version}.orig.tar.gz#/dvd+rw-tools-%{version}.tar.gz
 Source1:	index.html
 Patch1:		dvd+rw-tools-7.0.manpatch
 Patch2:		dvd+rw-tools-7.0-wexit.patch

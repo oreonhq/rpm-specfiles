@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-hypothesis
-Version:        6.168.1
+Version:        6.168.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        The property-based testing library for Python

@@ -1,4 +1,4 @@
-%global source0_hash 2b0d17a6e016f47b86f9c00e2cb82600041b1ea1f7d2a00c2d46ae542cbfed3c
+%global source0_hash 7bd4e79ce18b1d47517e7e91fbb7cf19d4f01942804a519bc7c0bf32b6325dd5
 
 Name:           plutovg
 Version:        1.3.3

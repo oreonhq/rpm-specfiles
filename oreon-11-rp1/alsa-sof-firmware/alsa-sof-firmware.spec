@@ -7,7 +7,7 @@
 %global _firmwarepath  /usr/lib/firmware
 %global _xz_opts -9 --check=crc32
 
-%global sof_ver 2026.09.1
+%global sof_ver 2026.09
 #global sof_ver_pre rc1
 %global sof_ver_rel %{?sof_ver_pre:.%{sof_ver_pre}}
 %global sof_ver_pkg0 %{sof_ver}%{?sof_ver_pre:-%{sof_ver_pre}}
@@ -21,11 +21,11 @@
 Summary:        Firmware and topology files for Sound Open Firmware project
 Name:           alsa-sof-firmware
 Version:        %{sof_ver}
-Release:        1%{?dist}
+Release:        1%{?sof_ver_rel}%{?dist}
 # See later in the spec for a breakdown of licensing
 License:        BSD-3-Clause AND Apache-2.0
 URL:            https://github.com/thesofproject/sof-bin
-Source: https://codeload.github.com/thesofproject/sof-bin/tar.gz/refs/tags/v2026.09.1
+Source:        https://github.com/thesofproject/sof-bin/releases/download/v2025.12.2%{?sof_ver_pre:-%{sof_ver_pre}}/sof-bin-2025.12.2%{?sof_ver_pre:-%{sof_ver_pre}}.tar.gz
 %if 0%{?with_sof_addon}
 Source3:        https://github.com/thesofproject/sof-bin/releases/download/v0/sof-tplg-v0.tar.gz
 %endif

@@ -1,4 +1,4 @@
-%global source0_hash 3be49950c75d3fd9318ba775e8253248dd9e08c61ea955fca81b6b89c02d6b2b
+%global source0_hash 79996de959d28ca82ef070c382304683f5cdaf04cbe2953a74587160a3710a36
 
 %global somajor 1
 # this is used for breaking a self-dependency on build:
@@ -15,13 +15,13 @@
 %bcond bootstrap 0
 
 Name:           libheif
-Version:        1.23.5
+Version:        1.23.4
 Release:        %autorelease
 Summary:        HEIF and AVIF file format decoder and encoder
 
 License:        LGPL-3.0-or-later and MIT
 URL:            https://github.com/strukturag/libheif
-Source0: https://github.com/strukturag/libheif/archive/refs/tags/v1.23.5.tar.gz#/libheif-1.23.5.tar.gz
+Source0:        https://github.com/strukturag/libheif/archive/refs/tags/v1.21.2.tar.gz#/libheif-1.21.2.tar.gz
 Patch0:         libheif-no-hevc-tests.patch
 
 BuildRequires:  cmake

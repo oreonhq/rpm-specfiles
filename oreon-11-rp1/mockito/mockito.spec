@@ -1,9 +1,9 @@
-%global source0_hash 7e2614a4fe1f463cc3b64907b18309b734971ca57a64036804aef77a7471e159
+%global source0_hash 45cd816c8213ae8b39feb7ab2241f27731b784bfb54fa02d3428e3202a129812
 
 %bcond_with bootstrap
 
 Name:           mockito
-Version:        5.24.0
+Version:        5.23.0
 Release:        %autorelease
 Summary:        Tasty mocking framework for unit tests in Java
 License:        MIT

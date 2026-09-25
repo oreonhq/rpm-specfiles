@@ -4,14 +4,14 @@
 
 Summary:    Job spooling tools
 Name:       at
-Version:    3.2.5.orig
-Release:    1%{?dist}
+Version:    3.2.5
+Release:    21%{?dist}
 # http://packages.debian.org/changelogs/pool/main/a/at/current/copyright
 # + install-sh is MIT license with changes under Public Domain
 License:    GPL-3.0-or-later AND GPL-2.0-or-later AND ISC
 URL:        http://ftp.debian.org/debian/pool/main/a/at
 
-Source: http://software.calhariz.com/at/at_3.2.5.orig.tar.gz
+Source:        http://software.calhariz.com/at/at_%{version}.orig.tar.gz
 # git upstream source git://git.debian.org/git/collab-maint/at.git
 Source1:    pam_atd
 Source2:    at-tmpfiles.conf

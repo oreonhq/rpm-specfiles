@@ -1,9 +1,9 @@
-%global source0_hash d4b8ad0887b43447cea7c03495c9424d4b75c933a35fef985190d8669a24b235
+%global source0_hash 56c5cbaa160fc9e754b8d2d93b8d8584c8468726e6b16075a6d8a0f6c61fad25
 
 %bcond_with bootstrap
 
 Name:           google-guice
-Version:        7.0.0
+Version:        6.0.0
 Release:        %autorelease
 Summary:        Lightweight dependency injection framework for Java 5 and above
 License:        Apache-2.0
@@ -12,7 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./create-tarball.sh %%{version}
-Source0:        https://github.com/google/guice/archive/refs/tags/7.0.0.tar.gz#/google-guice-5.1.0.tar.gz
+Source0:        https://github.com/google/guice/archive/refs/tags/6.0.0.tar.gz#/google-guice-5.1.0.tar.gz
 Source1:        https://raw.githubusercontent.com/google/guice/HEAD/create-tarball.sh
 
 BuildRequires:  jurand
@@ -121,7 +121,7 @@ and above. This package provides Bill of Materials module for Guice.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n guice-%{version}
+%autosetup -p1 -n guice-5.1.0
 
 %java_remove_annotations core/src/ \
   -p ^com.google.common.annotations. \

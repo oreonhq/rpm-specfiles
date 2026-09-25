@@ -3,8 +3,8 @@
 %global source2_key_fpr 7F49314A26E0DE78427680E05F1B2A0789F12B11
 
 Name:           babeltrace
-Version:        2.0.0
-Release:        1%{?dist}
+Version:        1.5.11
+Release:        17%{?dist}
 Summary:        Trace Viewer and Converter, mainly for the Common Trace Format
 License:        MIT AND GPL-3.0-or-later WITH Bison-exception-2.2 AND LGPL-2.1-only AND BSD-4-Clause-UC
 URL:            https://www.efficios.com/babeltrace

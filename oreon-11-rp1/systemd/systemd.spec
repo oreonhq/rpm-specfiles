@@ -1,4 +1,4 @@
-%global source0_hash 6aa77506c0644aa67f940a48e3d3a7368601f787e4f249139516d353f107bcab
+%global source0_hash a42da890bf4e523fea1eb8b3bea45f03482e9453bf1134af70c599df63bfe1dc
 
 # We ship a .pc file but don't want to have a dep on pkg-config. We
 # strip the automatically generated dep here and instead co-own the
@@ -78,7 +78,7 @@ Url:            https://systemd.io
 # But don't do that on OBS, otherwise the version subst fails, and will be
 # like 257-123-gabcd257.1 instead of 257-123-gabcd
 %if %{without obs}
-Version:        %{?version_override}%{!?version_override:262}
+Version:        %{?version_override}%{!?version_override:260}
 %else
 Version:        %{?version_override}%{!?version_override:%(cat meson.version)}
 %endif
@@ -96,7 +96,7 @@ Summary:        System and Service Manager
 # packit will always rewrite the first Source0 it finds, ignoring any conditionals so list
 # the fallback source that's used if neither %%branch, %%commit or %%obs are defined first.
 %if %{undefined branch} && %{undefined commit} && %{without obs}
-Source0: https://github.com/systemd/systemd/archive/v262/systemd-262.tar.gz
+Source0:        https://github.com/systemd/systemd/archive/v%{version_no_tilde}/%{name}-%{version_no_tilde}.tar.gz
 %elif %{defined branch}
 Source0:        https://github.com/systemd/systemd/archive/refs/heads/%{branch}.tar.gz
 %elif %{defined commit}

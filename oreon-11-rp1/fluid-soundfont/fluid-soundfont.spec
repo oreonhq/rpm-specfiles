@@ -1,8 +1,8 @@
 %global source0_hash 2621acaa1c78e4abdb24bdd163230cc577e61276936d6aa6e3180582142f0343
 
 Name:           fluid-soundfont
-Version:        3.1.orig
-Release:        1%{?dist}
+Version:        3.1
+Release:        36%{?dist}
 Summary:        Pro-quality GM/GS soundfont
 License:        MIT
 # The original URL (http://www.powermage.com/fluid) seems dead. Therefore we point
@@ -15,7 +15,7 @@ URL:            http://www.hammersound.com/cgi-bin/soundlink.pl?action=view_cate
 # This page explains how this conversion is done:
 #    http://vsr.informatik.tu-chemnitz.de/staff/jan/nted/doc/ch01s46.html
 # Debian folks already did this and we will borrow their source tarball:
-Source0: http://ftp.debian.org/debian/pool/main/f/fluid-soundfont/fluid-soundfont_3.1.orig.tar.gz
+Source0:        http://ftp.debian.org/debian/pool/main/f/%{name}/%{name}_%{version}.orig.tar.gz
 # Optimized cfg files for fluid usage with timidity, written by Saito, one of
 # the TiMidity++ developers
 Source2:        timidity++.cfg

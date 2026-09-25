@@ -1,4 +1,4 @@
-%global source0_hash 0dc41a9dd84c868ad89c892382f75f6835a73decbefab9366d6f168bf9322954
+%global source0_hash db261a7fcc046ec6634e4c5696a2fc2ce8b55f50aac6abe034308f54c8495f55
 
 %global sover 25
 %global imfsover 26
@@ -6,8 +6,8 @@
 %global pkgname %{srcname}2
 
 Name:           %{pkgname}
-Version:        3.5.0
-Release:        1%{?dist}
+Version:        2.5.8
+Release:        12%{?dist}
 Summary:        Provides the specification and reference implementation of the EXR file format
 
 License:        BSD-3-Clause

@@ -1,4 +1,4 @@
-%global source0_hash 96db34d48a9e3aa13736a48744b56dfb76731ac9bb5193c716de8534c9fd709d
+%global source0_hash 6b51f3efd6b8500c92f3c5d25e158f813d3be078c31c9b480c7ea791b6725e5e
 
 %undefine __cmake_in_source_build
 # https://github.com/georgmartius/vid.stab/commit/05829db776069b7478dd2d90b6e0081668a41abc
@@ -7,13 +7,13 @@
 %global commitdate 20230603
 
 Name:           vid.stab
-Version:        1.1.2
+Version:        1.1.1
 Release:        %autorelease
 Summary:        Video stabilize library for fmpeg, mlt or transcode
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://public.hronopik.de/vid.stab
-Source0: https://codeload.github.com/georgmartius/vid.stab/tar.gz/refs/tags/v1.1.2
+Source0:        https://github.com/georgmartius/vid.stab/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

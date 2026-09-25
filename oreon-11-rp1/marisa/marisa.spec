@@ -1,8 +1,8 @@
-%global source0_hash 986ed5e2967435e3a3932a8c95980993ae5a196111e377721f0849cad4e807f3
+%global source0_hash a3057d0c2da0a9a57f43eb8e07b73715bc5ff053467ee8349844d01da91b5efb
 
 Name:          marisa
-Version:       0.3.1
-Release:       1%{?dist}
+Version:       0.3.0
+Release:       7%{?dist}
 Summary:       Static and spece-efficient trie data structure library
 
 License:       BSD-2-Clause OR LGPL-2.1-or-later

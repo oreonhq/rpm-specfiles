@@ -8,10 +8,10 @@
 
 Name: hunspell-es
 Summary: Spanish hunspell dictionaries
-Version: 26.8.0.3.orig
-Release: 1%{?dist}
+Version: 25.2.3
+Release: 4%{?dist}
 Epoch: 1
-Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_26.8.0.3.orig.tar.xz#/libreoffice-dictionaries-26.8.0.3.orig.tar.xz
+Source0:        https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/es
 License: LGPL-3.0-or-later OR GPL-3.0-or-later OR MPL-1.1
@@ -211,7 +211,7 @@ Venezuelan Spanish hunspell dictionary
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n libreoffice-%{version}
+%setup -q -n libreoffice-25.2.3.2
 
 %build
 

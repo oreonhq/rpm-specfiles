@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-awscrt
-Version:        0.37.0
+Version:        0.36.4
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        A common runtime for AWS Python projects

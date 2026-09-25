@@ -1,15 +1,15 @@
-%global source0_hash 5c079ad69262ff92a8127f0610f6ba2e2aa1d9ad25e21f3db9d4cbce9faf31f3
+%global source0_hash 8a1d622565a01ca553a87f52de97244f33d04c20d9e4d0dac76ddfeccb6850b9
 
 %global upname husl
 
 Name: python-%{upname}
-Version: 5.0.4
-Release: 1%{?dist}
+Version: 4.0.3
+Release: 38%{?dist}
 Summary: A Python implementation of HUSL
 License: MIT
 
 URL: http://github.com/boronine/pyhusl
-Source0: https://codeload.github.com/boronine/pyhusl/tar.gz/refs/tags/v5.0.4
+Source0: https://pypi.python.org/packages/source/h/husl/husl-%{version}.tar.gz
 # By mistake the license is not packaged (fixed in devel version upstream)
 Source1: https://raw.githubusercontent.com/husl-colors/husl-python/master/LICENSE.txt
 BuildArch: noarch

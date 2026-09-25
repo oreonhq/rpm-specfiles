@@ -1,4 +1,4 @@
-%global source0_hash 82adcff9e71b4fc02ad6132f9ccd79137ad390e4d3392c7f681a85246c0cdc01
+%global source0_hash 2652cf3ae0abff5fb233aa77f18e70014cc2c70b94a8693c099a3cad9bbb4b20
 
 # Perform developer tests which exhibit a biber executable
 %bcond_without biber_enables_extra_test

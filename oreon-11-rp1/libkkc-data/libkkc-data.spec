@@ -3,15 +3,15 @@
 %global debug_package %{nil}
 
 Name:		libkkc-data
-Version:	0.3.5
-Release:	1%{?dist}
+Version:	0.2.7
+Release:	31%{?dist}
 Epoch:		1
 Summary:	Language model data for libkkc
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:	GPL-3.0-or-later
 URL:		https://github.com/ueno/libkkc/
-Source0: https://codeload.github.com/ueno/libkkc/tar.gz/refs/tags/v0.3.5
+Source0:        https://github.com/ueno/libkkc/releases/download/v0.3.5/%{name}-%{version}.tar.xz
 Patch0:		https://github.com/ueno/libkkc/commit/ba1c1bd3eb86d887fc3689c3142732658071b5f7.patch
 
 BuildRequires:	gcc
@@ -26,7 +26,7 @@ at run time.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n libkkc-%{version}
+%setup -q
 %patch -P0 -p4 -b .orig
 
 

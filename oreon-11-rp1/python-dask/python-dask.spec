@@ -1,4 +1,4 @@
-%global source0_hash 8a94c37b5de6d869343340dc26c3c3acca7ec48a3abdabe00ea3abb1125884d5
+%global source0_hash 8d478f2aabd025e2453cf733ad64559de90cf328c20209e4574e9543707c3e1b
 
 %global srcname dask
 
@@ -14,7 +14,7 @@
 %global debug_package %{nil}
 
 Name:           python-%{srcname}
-Version:        2026.8.0
+Version:        2025.12.0
 %global tag     %{version}
 Release:        %autorelease
 Summary:        Parallel PyData with Task Scheduling

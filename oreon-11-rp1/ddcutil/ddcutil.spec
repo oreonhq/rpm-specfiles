@@ -1,9 +1,9 @@
-%global source0_hash d6b2a42378233aaff6188a0a5ff9fa0e959cb95742367e2cdfa2c6a023c7fe26
+%global source0_hash ff8eb39b4559fcbc83de7b16834a010262dfa825938625272212fcaeefaef692
 
 %bcond_without build_lib
 
 Name:       ddcutil
-Version:    3.0.2
+Version:    3.0.1
 Release:    1%{?dist}
 Summary:    Query and update monitor settings
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

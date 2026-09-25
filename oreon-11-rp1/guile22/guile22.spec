@@ -1,4 +1,4 @@
-%global source0_hash 818c79d236657a7fa96fb364137cc7b41b3bdee0d65c6174ca03769559579460
+%global source0_hash cdf776ea5f29430b1258209630555beea6d2be5481f9da4d64986b077ff37504
 
 # Guile produces ELF images that are just containers for guile and don't
 # include build-ids. https://wingolog.org/archives/2014/01/19/elf-in-guile
@@ -7,8 +7,8 @@
 %global mver 2.2
 
 Name: guile22
-Version: 3.0.11
-Release: 1%{?dist}
+Version: 2.2.7
+Release: 18%{?dist}
 Summary: A GNU implementation of Scheme for application extensibility
 Source: https://ftp.gnu.org/gnu/guile/guile-%{version}.tar.xz
 URL: http://www.gnu.org/software/guile/

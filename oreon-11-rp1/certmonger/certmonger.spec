@@ -29,13 +29,13 @@
 %bcond_with xmlrpc
 
 Name:		certmonger
-Version:	0.79.21.orig
-Release:	1%{?dist}
+Version:	0.79.21
+Release:	4%{?dist}
 Summary:	Certificate status monitor and PKI enrollment client
 
 License:	GPL-3.0-or-later
 URL:		http://pagure.io/certmonger/
-Source0: https://deb.debian.org/debian/pool/main/c/certmonger/certmonger_0.79.21.orig.tar.gz#/certmonger-0.79.21.orig.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/c/certmonger/certmonger_%{version}.orig.tar.gz#/certmonger-%{version}.tar.gz
 #Source1:	http://releases.pagure.org/certmonger/certmonger-%%{version}.tar.gz.sig
 
 Patch0001:	0001-Replace-deprecated-OpenSSL-3.0.0-function-calls.patch

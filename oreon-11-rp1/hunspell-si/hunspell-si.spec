@@ -8,11 +8,11 @@
 
 Name: hunspell-si
 Summary: Sinhala hunspell dictionaries
-Version: 26.8.0.3.orig
+Version: 26.8.0.3
 Release: 1%{?dist}
 License: LGPL-2.1-or-later OR GPL-2.0-or-later OR MPL-1.1
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/si_LK
-Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_26.8.0.3.orig.tar.xz#/libreoffice-dictionaries-26.8.0.3.orig.tar.xz
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell-filesystem
@@ -23,7 +23,7 @@ Sinhala hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n libreoffice-%{version}
+%setup -q -n libreoffice-25.2.3.2
 
 %build
 

@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-trove-classifiers
-Version:        2026.9.21.13
+Version:        2026.6.1.19
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Canonical source for classifiers on PyPI _pypi.org_.

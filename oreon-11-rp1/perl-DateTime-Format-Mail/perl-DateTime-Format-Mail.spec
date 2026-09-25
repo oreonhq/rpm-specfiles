@@ -1,12 +1,12 @@
-%global source0_hash b3f36b15442ae3e47bf91f45bcdc23e3311dcd2a3c6bc5c691004ad95986af72
+%global source0_hash 8df8e35c4477388ff5c7ce8b3e8b6ae4ed30209c7a5051d41737bd14d755fcb0
 
 # Run extra tests
 %bcond_without perl_DateTime_Format_Mail_enables_extra_test
 
 Name:           perl-DateTime-Format-Mail
 Epoch:          1
-Version:        0.3001
-Release:        1%{?dist}
+Version:        0.403
+Release:        28%{?dist}
 Summary:        Convert between DateTime and RFC2822/822 formats
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Format-Mail            

@@ -1,7 +1,7 @@
 %global source0_hash 1e7f595d42411ae2b1423af31f78fea94d0932e5e1abed01eeba04d90505c824
 
 Name:           nauty
-Version:        2.9.3.orig
+Version:        2.9.3
 Release:        %autorelease
 Summary:        Graph canonical labeling and automorphism group computation
 
@@ -16,7 +16,7 @@ Summary:        Graph canonical labeling and automorphism group computation
 # CM-Super: GPL-1.0-or-later
 License:        Apache-2.0 AND LicenseRef-Fedora-Public-Domain AND Knuth-CTAN AND GPL-1.0-or-later
 URL:            https://pallini.di.uniroma1.it/
-Source: https://deb.debian.org/debian/pool/main/n/nauty/nauty_2.9.3.orig.tar.gz
+Source:         https://deb.debian.org/debian/pool/main/n/nauty/nauty_2.9.3.orig.tar.gz
 
 # Debian patch to fix the gt_numorbits declaration
 Patch:          %{name}-fix-gt_numorbits.patch
@@ -161,17 +161,17 @@ LD_LIBRARY_PATH=$PWD/.libs PATH=$PWD:$PATH make check
 %files -n libnauty
 %doc changes24-29.txt formats.txt
 %license COPYRIGHT LICENSE-2.0.txt
-%{_libdir}/libnauty-2.9.3.orig.so
-%{_libdir}/libnautyS-2.9.3.orig.so
-%{_libdir}/libnautyW-2.9.3.orig.so
-%{_libdir}/libnautyL-2.9.3.orig.so
-%{_libdir}/libnauty1-2.9.3.orig.so
-%{_libdir}/libnautyS1-2.9.3.orig.so
-%{_libdir}/libnautyW1-2.9.3.orig.so
-%{_libdir}/libnautyL1-2.9.3.orig.so
+%{_libdir}/libnauty-2.9.3.so
+%{_libdir}/libnautyS-2.9.3.so
+%{_libdir}/libnautyW-2.9.3.so
+%{_libdir}/libnautyL-2.9.3.so
+%{_libdir}/libnauty1-2.9.3.so
+%{_libdir}/libnautyS1-2.9.3.so
+%{_libdir}/libnautyW1-2.9.3.so
+%{_libdir}/libnautyL1-2.9.3.so
 %if 0%{?__isa_bits} == 64
-%{_libdir}/libnautyQ-2.9.3.orig.so
-%{_libdir}/libnautyQ1-2.9.3.orig.so
+%{_libdir}/libnautyQ-2.9.3.so
+%{_libdir}/libnautyQ1-2.9.3.so
 %endif
 
 %files -n libnauty-devel

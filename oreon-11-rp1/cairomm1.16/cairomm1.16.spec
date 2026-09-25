@@ -1,4 +1,4 @@
-%global source0_hash 06881a0167d84962c74db318427c5be663d30b8ea5c60740a9dc36a9c1961b54
+%global source0_hash b81255394e3ea8e8aa887276d22afa8985fc8daef60692eb2407d23049f03cfb
 
 %global so_version 1
 %global apiver 1.16
@@ -10,7 +10,7 @@
 
 Name:           cairomm%{apiver}
 Summary:        C++ API for the cairo graphics library
-Version:        1.19.1
+Version:        1.18.1
 Release:        %autorelease
 
 URL:            https://www.cairographics.org

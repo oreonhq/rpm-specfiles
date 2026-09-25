@@ -1,9 +1,9 @@
-%global source0_hash 97bd2ba5738aebdba1bc31f30f1be42f1404386c94105ad5990d839a1311c8a5
+%global source0_hash 19279f70707bbe5ffa619f2dc319f888cec0c4a8d339dc0a21330517bd6f521d
 
 Name:      mythes
 Summary:   A thesaurus library
-Version:   1.2.6
-Release:   1%{?dist}
+Version:   1.2.5
+Release:   10%{?dist}
 Source:        https://github.com/hunspell/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 URL:       https://github.com/hunspell/mythes
 License:   BSD-3-Clause-Modification AND MIT

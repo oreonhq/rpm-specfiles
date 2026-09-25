@@ -1,4 +1,4 @@
-%global source0_hash dce5698de521b250aabbe7a2540fc8fc3fb2f838b3a6604e1711b560e7b887f0
+%global source0_hash 4d11f7ca6791a7ed3c3069984cb76418335c253563e264e8c178d8033302e421
 
 # http://fedoraproject.org/wiki/Packaging:Guidelines#PIE
 # http://fedoraproject.org/wiki/Hardened_Packages
@@ -58,8 +58,8 @@
 
 Summary: Automatic bug detection and reporting tool
 Name: abrt
-Version: 2.17.9
-Release: 1%{?dist}
+Version: 2.17.8
+Release: 3%{?dist}
 License: GPL-2.0-or-later
 URL: https://abrt.readthedocs.org/
 Source:        https://github.com/abrt/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz

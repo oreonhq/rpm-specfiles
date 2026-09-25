@@ -1,11 +1,11 @@
-%global source0_hash 988e8afeda320ebe0a3e632ef6b6bce5d3a08346c2e100a173a585c9521d1fa5
+%global source0_hash d53ef985f2d0b15ba25c512c4ce967dce07b94fd4422c95bd04c4c1a055fe738
 
 %{!?postgresql_default:%global postgresql_default 0}
 
 %global majorname pgaudit
 %global pgversion 16
 Name:		postgresql%{pgversion}-%{majorname}
-Version:	18.0
+Version:	17.1rc1
 Release:	1%{?dist}
 Summary:	PostgreSQL Audit Extension
 

@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-url-normalize
-Version:        3.0.1
+Version:        3.0.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        URL normalization for Python

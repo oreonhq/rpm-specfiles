@@ -4,8 +4,8 @@
 %define _warning_options -Wall -Werror=format-security -Wno-deprecated-declarations -Wno-maybe-uninitialized
 
 Name:          sbsigntools
-Version:       0.9.5.orig
-Release:       1%{?dist}
+Version:       0.9.5
+Release:       14%{?dist}
 Summary:       Signing utility for UEFI secure boot
 # Most source code is GPL-3.0-or-later, except:
 # LicenseRef-Fedora-Public-Domain:
@@ -31,7 +31,7 @@ Summary:       Signing utility for UEFI secure boot
 #   lib/ccan/ccan/time
 License:       GPL-3.0-or-later AND LicenseRef-Fedora-Public-Domain AND LGPL-2.1-or-later AND LGPL-3.0-only AND MIT
 URL:           https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git
-Source0: https://deb.debian.org/debian/pool/main/s/sbsigntool/sbsigntool_0.9.5.orig.tar.gz#/sbsigntools-0.9.5.orig.tar.gz
+Source0:       https://deb.debian.org/debian/pool/main/s/sbsigntool/sbsigntool_%{version}.orig.tar.gz#/%{name}-%{version}.tar.gz
 Source1:       %{name}-mktarball.sh
 # don't fetch ccan or run git from autogen.sh
 Patch0:        %{name}-no-git.patch

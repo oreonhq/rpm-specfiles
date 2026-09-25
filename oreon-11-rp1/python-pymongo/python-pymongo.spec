@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-pymongo
-Version:        4.18.2
+Version:        4.18.1
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        PyMongo - the Official MongoDB Python driver

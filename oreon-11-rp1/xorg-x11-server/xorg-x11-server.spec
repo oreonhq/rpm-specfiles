@@ -1,4 +1,4 @@
-%global source0_hash 5995610bbf2acac0d42e1aeaee7f3f571ff04967594755690244203b555d87e7
+%global source0_hash 1a242c8917c49ba29ccc1f6021613d8a2b9805dd0d271a66ae9d09f4b0bb06b3
 
 # X.org requires lazy relocations to work.
 %undefine _hardened_build
@@ -18,13 +18,13 @@
 
 Summary:    X.Org X11 X server
 Name:       xorg-x11-server
-Version:    26.0.99.902
+Version:    21.1.24
 Release:    1%{?dist}
 URL:        http://www.x.org
 # SPDX
 License:    Adobe-Display-PostScript AND BSD-3-Clause AND DEC-3-Clause AND HPND AND HPND-sell-MIT-disclaimer-xserver AND HPND-sell-variant AND ICU AND ISC AND MIT AND MIT-open-group AND NTP AND SGI-B-2.0 AND SMLNJ AND X11 AND X11-distribute-modifications-variant
 
-Source0: https://xorg.freedesktop.org/archive/individual/xserver/xorg-server-26.0.99.902.tar.xz
+Source0:        https://xorg.freedesktop.org/archive/individual/xserver/xorg-server-21.1.22.tar.xz
 Source10:        xserver.pamd
 # "useful" xvfb-run script
 Source20:   https://svn.exactcode.de/t2/trunk/package/xorg/xorg-server/xvfb-run.sh

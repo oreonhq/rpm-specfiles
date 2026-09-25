@@ -1,17 +1,17 @@
 %global source0_hash 4c9007426b125290599d931df410e2def51e68a8aeebd89b4a61c7c96c09a4b4
-%global source100_hash 087d6552c965a7c6aab07a8e116a94e1e88ac2e2e4146ff0a815d4597351f712
-%global source101_hash 91cdc16966cdacefd75032dad20618a82eb3ea257771f63402492db45d8f8d06
-%global source200_hash f403cff0cc9d6f700de390d531b64f281514e7708f54f8a1a737f0f202aa2799
-%global source202_hash f4031d80f3ec20cea84a7450b5665c7949aab386b5fc80575910a43178cd4346
-%global source220_hash 209a65bf5f0b296d0437d3248fc93e0d35cdbedff766dab5046b8d8920b192ad
-%global source221_hash cd01cc5746959be2ee4e123c235ecefb33429d4b13116499624283b3117a8fb3
-%global source222_hash 77446fdc64e397c51ec456a644fbba4844252a43642d14068e07e46dfa67ab20
-%global source223_hash 9cda7e08628fbd6c96abc090b234e3d6f32fa089ab7ba60a4b7a3ed347c949fc
-%global source224_hash b9b381555a9a6e28dbac71b3c1255d5445a8927e061778db165324c1ae5092fd
-%global source225_hash 52968e39e8e91fb678e78273eda54c93419bc94ef5844e6fb0bf6e510d18067d
+%global source100_hash e7c6e3642dbd5b0d64942bc015a986fdd6244a79e51ec2e8309e63d569e49ea3
+%global source101_hash c19430919bca45d5368cd4c82af6153fbcc96a487ebd30b78b5f3c08718b7c07
+%global source200_hash 7a357c34086fbba8b813f9750f6b5ba13e2a00478a0a2e78a97981cb76395578
+%global source202_hash a017ef70f6d3e64d51d3772ab438eb47a26b529b456dae3cea18936925ec20e8
+%global source220_hash d8c4c8042571001ed07ada6588fa20f266fedef326a5e824bdf87d4c8306b5c9
+%global source221_hash 5b2cdd41f75ad20cf77ed6ecec497da72d5cc6a095e0f67409f0f536882f8827
+%global source222_hash c61f539444b6edb127ae4352632fcf5decdbce80a6132c88d51c809cabc6e357
+%global source223_hash 49a0060c3252148b8942c7c0c9e2e7c7b7ef22475fa1871772bfdc39c2896f5f
+%global source224_hash d67f0678b2fbbceae73dcf01acb560262bf41171e02e171e81bc16db4d0a347c
+%global source225_hash 9f5377db127fe9ce6e9307e821ee45566cce1f4a6c209b9a3c3393a241cbf8a4
 
 Name: festival
-Version: 2.5.0.orig
+Version: 2.5.0
 Release: %autorelease
 Summary: Speech synthesis and text-to-speech system
 
@@ -26,7 +26,7 @@ Obsoletes: festival-speechtools-utils < %{version}-%{release}
 
 # Files needed for everything...
 %global baseURL  http://festvox.org/packed/festival/2.5
-Source0: https://deb.debian.org/debian/pool/main/f/festival/festival_2.5.0.orig.tar.gz#/festival-2.5.0.orig-release.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/f/festival/festival_%{version}.orig.tar.gz#/festival-%{version}-release.tar.gz
 
 ### DICTIONARIES
 # Generic English dictionary

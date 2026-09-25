@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-setuptools-scm
-Version:        10.3.4
+Version:        10.2.3
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        the blessed package to manage your versions by scm tags

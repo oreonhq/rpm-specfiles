@@ -1,4 +1,4 @@
-%global source0_hash 47771d96dc506b62aac01569c4494385ce41f08d2e43928230f27bee7bbb91c5
+%global source0_hash 63d83bfdd9a23e35b9c6a3261412324f964c2ec8dcd8d3c6916ee9373e0befcd
 
 %global srcname execnet
 
@@ -13,7 +13,7 @@ Release:        4%{?dist}
 Summary:        Distributed Python deployment and communication
 License:        MIT
 URL:            https://github.com/pytest-dev/execnet
-Source0: https://codeload.github.com/pytest-dev/execnet/tar.gz/refs/tags/v2.1.2
+Source0:        %pypi_source
 
 BuildArch:      noarch
 BuildRequires:  make

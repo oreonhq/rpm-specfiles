@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-sqlalchemy
-Version:        2.1.0
+Version:        2.0.54
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Database Abstraction Library

@@ -1,7 +1,7 @@
-%global source0_hash b7132e148358a45185c9feafd049dbaf243649d3c44414b3534d9c95d18592b9
+%global source0_hash e7f3b8bac3fdcc529985be8e84fbd65c675ac47ee58512b15a5dd620c79ffe2a
 
 Name:           harfbuzz
-Version:        14.5.0
+Version:        14.4.0
 Release:        1%{?dist}
 Summary:        Text shaping library
 

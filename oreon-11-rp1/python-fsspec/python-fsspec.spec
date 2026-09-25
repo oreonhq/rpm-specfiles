@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-fsspec
-Version:        2026.9.0
+Version:        2026.7.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        File-system specification

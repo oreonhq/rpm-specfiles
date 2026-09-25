@@ -1,9 +1,9 @@
-%global source0_hash 2a56b2fa179af35431ca7c3e12ecb7aad3cba8eb08011cacf2b813f8042c07c1
+%global source0_hash abf11e86f5d2025a8f5652e818ff02eb60e41bcf61f6ad4d2ddbe6762ac7f7d0
 
 %global giturl  https://github.com/scipopt/scip
 
 Name:           scip
-Version:        10.1.0
+Version:        10.0.1
 Release:        %autorelease
 Summary:        Solving Constraint Integer Programs
 

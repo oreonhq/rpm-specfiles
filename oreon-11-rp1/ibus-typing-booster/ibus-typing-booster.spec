@@ -1,7 +1,7 @@
-%global source0_hash 8469fbc41817c566e0a8746a154f4697fea9595a9d089ff881c8397d5b1858c7
+%global source0_hash 8e73b5f704466f1f915ae1e656e781eac0439bc40a45ef1ed26422341d54f256
 
 Name:       ibus-typing-booster
-Version:    2.31.1
+Version:    2.31.0
 Release:    %autorelease
 Summary:    A completion input method
 License:    GPL-3.0-or-later AND Apache-2.0

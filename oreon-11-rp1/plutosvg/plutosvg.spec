@@ -1,4 +1,4 @@
-%global source0_hash 49d5cfe772d3aa10cd4879f2f6e189f5083c08e4c8ea01bf3d5b87c97dfca7d2
+%global source0_hash 78561b571ac224030cdc450ca2986b4de915c2ba7616004a6d71a379bffd15f3
 
 Name:           plutosvg
 Version:        0.0.8

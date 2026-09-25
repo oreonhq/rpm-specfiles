@@ -1,7 +1,7 @@
-%global source0_hash 14627f93bb02fe14eeda0163434a7cb9b1f316c0f1727f0bdf6323a831ffe80d
+%global source0_hash 670d43797b37e067e0317e90e2c05eedeeb8ab630cf794c2abc1079a84120a68
 
 Name:           autotrace
-Version:        0.31.10
+Version:        0.31.9
 Release:        %autorelease
 Summary:        Utility for converting bitmaps to vector graphics
 License:        GPL-2.0-or-later and LGPL-2.1-or-later

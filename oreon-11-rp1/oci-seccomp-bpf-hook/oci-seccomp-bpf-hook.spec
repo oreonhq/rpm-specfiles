@@ -1,4 +1,4 @@
-%global source0_hash 9bb0b6d26fa179e57d339e2a2ab0fc034c8e79bafedf4027829ff2d0cdd20d40
+%global source0_hash f8518ff7c16481d63b9d6d305cf5d666889da4ee5d0a7950189933f2825704ff
 
 %global with_debug 1
 
@@ -12,7 +12,7 @@
 %global gomodulesmode GO111MODULE=on
 
 Name: oci-seccomp-bpf-hook
-Version: 1.3.0
+Version: 1.2.10
 License: Apache-2.0 and BSD-2-Clause and BSD-3-Clause and ISC and MIT
 Release: %autorelease
 # use the same arch definitions as present in the bcc package
@@ -20,7 +20,7 @@ ExclusiveArch: x86_64 %{power64} aarch64 s390x armv7hl
 Summary: OCI Hook to generate seccomp json files based on EBF syscalls used by container
 URL: https://github.com/containers/%{name}
 # Tarball fetched from upstream
-Source0: https://github.com/containers/oci-seccomp-bpf-hook/archive/refs/tags/v1.3.0.tar.gz#/oci-seccomp-bpf-hook-1.3.0.tar.gz
+Source0:        https://github.com/containers/oci-seccomp-bpf-hook/archive/refs/tags/v1.2.10.tar.gz#/oci-seccomp-bpf-hook-1.2.10.tar.gz
 
 BuildRequires: golang
 BuildRequires: go-md2man

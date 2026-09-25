@@ -1,9 +1,9 @@
-%global source0_hash 191288b52e1e6b17198000b64d77d194bb65e791be46ebc606e9b091781e2070
+%global source0_hash ebc4f6aa47972daed1f7bf71d100ae5bf6931c2e3144cf299c8cc7d041dca2f3
 
 Name:    tbb2020.3
 Summary: The Threading Building Blocks library abstracts low-level threading details
-Version: 2023.1.0
-Release: 1%{?dist}
+Version: 2020.3
+Release: 8%{?dist}
 License: Apache-2.0 AND BSD-3-Clause
 URL:     http://threadingbuildingblocks.org/
 

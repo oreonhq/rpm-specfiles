@@ -1,4 +1,4 @@
-%global source0_hash 6541ab66e993f69630caf97bd72bdd8c4c7435b37786c5deaf44f35a4bc52069
+%global source0_hash 4811586e2963442d4a3b3517d9fd14a8247bd878b1dc54e63b49afc472377f43
 
 Name:           libslirp
 Version:        4.9.4
@@ -8,7 +8,7 @@ Summary:        A general purpose TCP-IP emulator
 # check the SPDX tags in source files for details
 License:        BSD-3-Clause AND MIT
 URL:            https://gitlab.freedesktop.org/slirp/%{name}
-Source0: https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v4.9.1/libslirp-4.9.4.tar.xz
+Source0:        https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v4.9.1/libslirp-4.9.1.tar.xz
 
 BuildRequires:  git-core
 BuildRequires:  meson

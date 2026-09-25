@@ -1,10 +1,10 @@
-%global source0_hash 361c7c1eee8cf66812958f975f26ef2e2272a0c6221d2043477cb9c22b8d1c23
+%global source0_hash 44eec2da147ba0511090871b0ca82f69794376bc31e8c76d1040961ba57f59b8
 
 # Perform tests that need the Internet
 %bcond_with perl_LWP_Protocol_https_enables_internet_test
 
 Name:           perl-LWP-Protocol-https
-Version:        6.17
+Version:        6.15
 Release:        1%{?dist}
 Summary:        Provide HTTPS support for LWP::UserAgent
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

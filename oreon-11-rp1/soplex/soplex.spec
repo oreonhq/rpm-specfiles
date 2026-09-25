@@ -1,4 +1,4 @@
-%global source0_hash 5aad34f158d251549e2aadbfbef706629f38652fcd027c12b0a8b2d3c8ff0719
+%global source0_hash f989f650e0d489f4e84037af2a50b1d0928f62ab79179ef566111d9197c2b6c8
 
 # Architectures that have libquadmath
 %ifarch %{x86_64} %{power64}
@@ -10,7 +10,7 @@
 %global giturl  https://github.com/scipopt/soplex
 
 Name:           soplex
-Version:        8.1.0
+Version:        8.0.3
 Release:        %autorelease
 Summary:        Sequential object-oriented simplex
 

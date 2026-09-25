@@ -1,10 +1,10 @@
-%global source0_hash 16c5ad917bde2ed795942dacba76654819ddc6a1566842325ef34e0b553ef138
+%global source0_hash 698a7b28b711270314e396e248ae86087cfeaed01372009063995be6e1dc85ba
 
 %global wayland_min_version 1.4
 %global debug_package %{nil}
 
 Name:    plasma-wayland-protocols
-Version: 1.23.0
+Version: 1.22.0
 Release: 1%{?dist}
 Summary: Plasma Specific Protocols for Wayland
 

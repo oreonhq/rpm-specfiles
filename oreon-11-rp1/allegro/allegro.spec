@@ -1,8 +1,8 @@
-%global source0_hash aba4679a5b1f2bf62482eba6e8814a94de7ffc86de5f8587ba199fcc61b4a04f
+%global source0_hash ec19dbc9a021244582b4819b3583ee594b50141f9fcf6944a4ed8069cbf8d4d4
 
 Name:           allegro
-Version:        5.2.11.3
-Release:        1%{?dist}
+Version:        4.4.3.1
+Release:        20%{?dist}
 
 Summary:        A game programming library
 Summary(es):    Una libreria de programacion de juegos

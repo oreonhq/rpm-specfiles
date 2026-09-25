@@ -1,11 +1,11 @@
-%global source0_hash 16281580c40e23108d028434698b5d7d53637bf904c9df822481e253cbec920c
+%global source0_hash b38d092725e6fa4e0c4dc2a47e157070491bafa0dbe16c78a358e806aa7e173d
 
 # Perform optional tests
 %{bcond_without perl_HTTP_Daemon_enables_optional_test}
 
 Name:           perl-HTTP-Daemon
-Version:        6.17
-Release:        1%{?dist}
+Version:        6.16
+Release:        8%{?dist}
 Summary:        Simple HTTP server class
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Daemon

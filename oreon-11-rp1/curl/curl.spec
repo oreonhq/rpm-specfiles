@@ -1,4 +1,4 @@
-%global source0_hash f7ef3ae8a22e521f289803fe93543eb64c329b58aa73a9e224dfd915a2a5f4f7
+%global source0_hash 40df79166e74aa20149365e11ee4c798a46ad57c34e4f68fd13100e2c9a91946
 
 # OpenSSL ENGINE support
 # This is deprecated by OpenSSL since OpenSSL 3.0 and by Fedora since Fedora 41
@@ -13,10 +13,10 @@
 
 Summary: A utility for getting files from remote servers (FTP, HTTP, and others)
 Name: curl
-Version: 8.22.0
-Release: 1%{?dist}
+Version: 8.18.0
+Release: 6%{?dist}
 License: curl
-Source0: https://curl.se/download/curl-8.22.0.tar.xz
+Source0:        https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz
 Source1:        https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz.asc
 # The curl download page ( https://curl.se/download.html ) links
 # to Daniel's address page https://daniel.haxx.se/address.html for the GPG Key,

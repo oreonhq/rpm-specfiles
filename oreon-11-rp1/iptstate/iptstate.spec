@@ -1,10 +1,10 @@
-%global source0_hash d3e6a3843064ace8e70d72152ce6408bb1b4a9fa852122cdb3c87376731dee90
+%global source0_hash 896df0602885456a2631f795d634fc21311e505f8c910348e6312860f2097955
 
 Name: iptstate
 Summary: A top-like display of IP Tables state table entries
-Version: 2.3.0
-Release: 1%{?dist}
-Source: https://codeload.github.com/jaymzh/iptstate/tar.gz/refs/tags/v2.3.0
+Version: 2.2.7
+Release: 11%{?dist}
+Source:        https://github.com/jaymzh/iptstate/releases/download/v%{version}/iptstate-%{version}.tar.bz2
 Patch01: 0001-Makefile-respect-LDFLAGS.patch
 Patch02: 0002-Makefile-Use-pkg-config.patch
 Patch03: 0003-Makefile-don-t-override-CPPFLAGS.patch

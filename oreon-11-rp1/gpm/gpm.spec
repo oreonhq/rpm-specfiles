@@ -1,8 +1,8 @@
-%global source0_hash 9b743dd32ddb3d85e6344a4c42fbda492b6dabfdad8365f76718176156ac4382
+%global source0_hash fa199e5c7745506df32ebe84d5454385cd6b82cc5036e9247763e41eb4983259
 
 Summary: A mouse server for the Linux console
 Name: gpm
-Version: 1.99.7
+Version: 1.20.7
 Release: %autorelease
 License: GPL-2.0-or-later AND LicenseRef-OFSFDL
 URL: http://www.nico.schottelius.org/software/gpm/
@@ -17,7 +17,7 @@ URL: http://www.nico.schottelius.org/software/gpm/
 # 4.] rm -rf %%{name}-%%{version}/doc/specs
 # 5.] tar cJf %%{name}-%%{version}.tar.xz %%{name}-%%{version}
 
-Source0:        https://github.com/telmich/gpm/archive/1.99.7/gpm-1.99.7.tar.gz
+Source0:        https://github.com/telmich/gpm/archive/1.20.7/gpm-1.20.7.tar.gz
 Source1:        gpm.service
 Patch0: https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
 

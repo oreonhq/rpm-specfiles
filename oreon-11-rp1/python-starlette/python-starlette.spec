@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-starlette
-Version:        1.7.0
+Version:        1.6.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        The little ASGI library that shines.

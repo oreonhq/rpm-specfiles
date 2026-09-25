@@ -1,4 +1,4 @@
-%global source0_hash a4b2b10bd560cf9b4c50c282bd04bb74486ff6c78bebd51427f779fe985fc1bb
+%global source0_hash b20ea65afc5a58ea1cea019bd51a5d84eb9042d25d3eb82c55010c8815732d84
 
 %global with_debug 1
 
@@ -77,7 +77,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64 riscv64
 Summary: Manage Pods, Containers and Container Images
 URL: https://%{name}.io/
 # All SourceN files fetched from upstream
-Source0: https://github.com/containers/podman/archive/refs/tags/v6.1.2.tar.gz#/podman-5.8.2.tar.gz
+Source0:        https://github.com/containers/podman/archive/refs/tags/v%{version_no_tilde}.tar.gz#/podman-5.8.2.tar.gz
 Provides: %{name}-manpages = %{epoch}:%{version}-%{release}
 BuildRequires: %{_bindir}/envsubst
 %if %{defined build_with_btrfs}

@@ -1,12 +1,12 @@
-%global source0_hash d3251dfcb03467c3ae71a7d248e24fa264d49c61c54be7c8f07e18bedf4e04d5
+%global source0_hash 1dfe42d83a51282260afb6f2438b345198dc483d287a791d9f716306a0372c89
 
 Name:           package-notes
-Version:        0.20
+Version:        0.17
 Release:        %autorelease
 Summary:        ELF Package and Dlopen Notes
 License:        0BSD
 URL:            https://github.com/systemd/package-notes
-Source: https://github.com/systemd/package-notes/archive/refs/tags/v0.20.tar.gz#/package-notes-0.20.tar.gz
+Source:        https://github.com/systemd/package-notes/archive/refs/tags/v%{version_no_tilde}.tar.gz#/%{name}-%{version_no_tilde}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  make
