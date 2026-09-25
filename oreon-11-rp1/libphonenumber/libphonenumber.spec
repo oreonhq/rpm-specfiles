@@ -80,8 +80,8 @@ popd
 %files
 %doc cpp/README
 %license cpp/LICENSE
-%{_libdir}/libgeocoding.so.8*
-%{_libdir}/libphonenumber.so.8*
+%{_libdir}/libgeocoding.so.9*
+%{_libdir}/libphonenumber.so.9*
 
 
 %files devel

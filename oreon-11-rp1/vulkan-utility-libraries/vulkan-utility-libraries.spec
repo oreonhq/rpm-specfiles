@@ -50,9 +50,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc README.md
 %{_includedir}/vulkan/
 %{_libdir}/cmake/VulkanUtilityLibraries/*.cmake
-%{_libdir}/libVulkanLayerSettings.a
-%{_libdir}/libVulkanSafeStruct.a
 
+%{_libdir}/libVulkanLayerSettings.so
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.341.0-1
 - Prepare for Oreon 11 (RP1)

@@ -57,5 +57,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/pkgconfig/catch2.pc
 %{_libdir}/cmake/Catch2/
 
+%{_libdir}/libCatch2.a
+%{_datadir}/pkgconfig/catch2-with-main.pc
 %changelog
 %autochangelog

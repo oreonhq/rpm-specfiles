@@ -56,7 +56,7 @@ make test
 
 %files
 %license LICENSE
-%doc Changes README
+%doc Changes README.md
 %{perl_vendorarch}/auto/*
 %{perl_vendorarch}/Crypt/
 %{_mandir}/man3/*

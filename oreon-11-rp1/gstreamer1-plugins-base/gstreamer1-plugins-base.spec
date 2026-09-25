@@ -506,6 +506,7 @@ chrpath --delete $RPM_BUILD_ROOT%{_bindir}/gst-play-1.0
 %{_libdir}/pkgconfig/*.pc
 
 %if 0
+%{_includedir}/gstreamer-1.0/gst/video/gsth274.h
 %files devel-docs
 %doc %{_datadir}/gtk-doc/html/gst-plugins-base-libs-%{majorminor}
 %doc %{_datadir}/gtk-doc/html/gst-plugins-base-plugins-%{majorminor}

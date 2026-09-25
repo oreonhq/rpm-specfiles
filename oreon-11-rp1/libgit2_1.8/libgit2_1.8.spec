@@ -91,8 +91,9 @@ popd
 
 %files
 %license COPYING
-%{_libdir}/libgit2.so.1.8*
 
+%{_libdir}/libgit2.so.1.9.7
+%{_libdir}/cmake/libgit2/
 %files devel
 %doc AUTHORS docs examples README.md
 %{_libdir}/libgit2.so

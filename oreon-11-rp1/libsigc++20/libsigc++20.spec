@@ -65,7 +65,6 @@ chmod -x NEWS
 %files
 %license COPYING
 %doc NEWS README.md
-%{_libdir}/libsigc-2.0.so.0*
 
 %files devel
 %{_includedir}/sigc++-2.0/

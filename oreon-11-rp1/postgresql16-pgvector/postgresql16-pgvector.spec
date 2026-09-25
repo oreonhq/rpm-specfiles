@@ -83,6 +83,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/pgsql/extension//%{pname}.control
 %{_datadir}/pgsql/extension/%{pname}*sql
 %if %llvm
+%{_includedir}/pgsql/server/extension/vector/halfvec.h
 %files -n %{pkgname}-llvmjit
 %{_libdir}/pgsql/bitcode/%{pname}*.bc
 %{_libdir}/pgsql/bitcode/%{pname}/src/*.bc

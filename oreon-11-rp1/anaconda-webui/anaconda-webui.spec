@@ -139,6 +139,8 @@ exit 0
 
 
 # The changelog is automatically generated and merged
+%{_sysconfdir}/anaconda/cockpit/cockpit.conf
+%{_datadir}/anaconda/cockpit/conf.d/50-remote-auth.conf
 %changelog
 * Tue Mar 24 2026 Packit <hello@packit.dev> - 68-1
 - Log Bugzilla bug number when crash report is created (Resolves: rhbz#2443015)
