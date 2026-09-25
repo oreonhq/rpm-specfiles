@@ -1,4 +1,4 @@
-%global source0_hash faf19801c3742ed5a05a8ce388e0d8fe1a07f8d095c82201eb904f5d27ad571f
+%global source0_hash e554d8c81d0b0113f8a3664a736b08c56a4cffa0ecd7d16389917a0c396966f1
 
 %global srcname inflect
 Name:           python-%{srcname}
@@ -8,7 +8,7 @@ Summary:        Correctly generate plurals, singular nouns, ordinals and indefin
 
 License:        MIT
 URL:            https://github.com/jazzband/inflect
-Source0:        %pypi_source
+Source0: https://codeload.github.com/jazzband/inflect/tar.gz/refs/tags/v7.5.0
 
 Patch1:         0001-Remove-test-dependencies-on-linters.patch
 
